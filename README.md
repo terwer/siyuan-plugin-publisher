@@ -32,7 +32,7 @@ yarn dev
 
 ## Tool Version
 
-| 工具   | 版本       |
+| Tool | Version  |
 |------|----------| 
 | node | v16.16.0 |
 | yarn | 1.22.19  |
@@ -41,4 +41,10 @@ yarn dev
 
 ```bash
 yarn create vite
+```
+
+## Deploy
+
+```bash
+yarn deploy
 ```
