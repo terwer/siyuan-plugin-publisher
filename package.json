@@ -10,6 +10,7 @@
     "deploy": "bash deploy.sh"
   },
   "dependencies": {
+    "element-plus": "^2.2.11",
     "vue": "^3.2.37",
     "vue-i18n": "9"
   },
