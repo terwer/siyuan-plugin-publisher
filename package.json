@@ -1,7 +1,7 @@
 {
   "name": "sy-post-publisher",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,7 +10,8 @@
     "deploy": "bash deploy.sh"
   },
   "dependencies": {
-    "vue": "^3.2.37"
+    "vue": "^3.2.37",
+    "vue-i18n": "9"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^3.0.0",
