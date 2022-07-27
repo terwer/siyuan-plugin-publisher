@@ -1,31 +1,27 @@
-<script setup lang="ts">
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
   <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+    <img alt="Vue logo" src="./assets/vue.svg"/>
   </div>
-  <HelloWorld msg="Vite + Vue" />
+  <div>
+    <a href="javascript:void(0)" @click="change('zh_CN')">中文</a> -
+    <a href="javascript:void(0)" @click="change('en_US')">English</a>
+  </div>
+  <div>{{ $t('message.hello') }}</div>
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
+<script lang="ts">
+import {useI18n} from 'vue-i18n'
+
+export default {
+  name: 'App',
+  setup() {
+    const {locale} = useI18n()
+
+    function change(type: string) {
+      locale.value = type;
+    }
+
+    return {change}
+  }
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-</style>
+</script>
