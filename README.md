@@ -4,6 +4,8 @@ Publish siyuan article to supported open platforms
 
 At present, it supports two open API standard blog platforms, <code>metaweblog api</code> and <code>xmlrpc</code> remote call API based on <code>wordpress</code>
 
+[中文版说明](README-zh_CN.md)
+
 ## Vue 3 + TypeScript + Vite
 
 This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
@@ -30,7 +32,7 @@ yarn dev
 
 ## Tool Version
 
-| 工具   | 版本       |
+| Tool | Version  |
 |------|----------| 
 | node | v16.16.0 |
 | yarn | 1.22.19  |
@@ -39,4 +41,10 @@ yarn dev
 
 ```bash
 yarn create vite
+```
+
+## Deploy
+
+```bash
+yarn deploy
 ```

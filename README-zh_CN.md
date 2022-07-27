@@ -34,3 +34,9 @@ yarn dev
 ```bash
 yarn create vite
 ```
+
+## 部署
+
+```bash
+yarn deploy
+```
