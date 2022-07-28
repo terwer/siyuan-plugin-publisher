@@ -9,9 +9,7 @@
       <plantform-setting :is-reload="isReloadSetting"/>
     </el-tab-pane>
     <el-tab-pane name="post-bind" :label="$t('service.tab.post.bind')">
-      <!--
       <post-bind/>
-      -->
     </el-tab-pane>
     <el-tab-pane :label="$t('service.tab.service.switch')">
       <service-switch/>
@@ -25,6 +23,7 @@
 <script lang="ts" setup>
 import log from "../lib/logUtil";
 import {ref} from "vue";
+import PostBind from "./PostBind.vue";
 
 let isReloadSetting = ref(false)
 
