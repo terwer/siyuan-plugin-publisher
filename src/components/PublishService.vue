@@ -16,9 +16,7 @@
       -->
     </el-tab-pane>
     <el-tab-pane :label="$t('service.tab.service.switch')">
-      <!--
-      <service-switch/>
-      -->
+     <service-switch/>
     </el-tab-pane>
     <el-tab-pane :label="$t('service.tab.change.local')">
       <change-locale/>
@@ -26,12 +24,13 @@
   </el-tabs>
 </template>
 
-<script>
+<script lang="ts">
 import ChangeLocale from "./ChangeLocale.vue";
+import ServiceSwitch from "./ServiceSwitch.vue";
 
 export default {
   name: "PublishService",
-  components: {ChangeLocale}
+  components: {ServiceSwitch, ChangeLocale}
 }
 </script>
 
