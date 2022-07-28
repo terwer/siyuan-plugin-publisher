@@ -10,34 +10,37 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import {useI18n} from "vue-i18n";
+import {onMounted} from "vue";
+import log from "../lib/logUtil";
 
-export default {
-  name: 'locale-changer',
-  setup() {
-    const {locale} = useI18n()
-    const langs = [
-      {
-        value: 'zh_CN',
-        label: "简体中文"
-      },
-      {
-        value: 'en_US',
-        label: "English"
-      }
-    ]
-
-    function langChanged(lang: string) {
-      console.log("langChanged=>", lang);
-      localStorage.Lang = lang;
-      locale.value = lang;
-    }
-
-    // 设置默认语言
-    if (localStorage.Lang != null) locale.value = localStorage.Lang;
-
-    return {langs, langChanged}
+const {locale} = useI18n()
+const langs = [
+  {
+    value: 'zh_CN',
+    label: "简体中文"
+  },
+  {
+    value: 'en_US',
+    label: "English"
   }
+]
+
+const langChanged = (lang: string) => {
+  log.logInfo("langChanged=>", lang);
+  localStorage.Lang = lang;
+  locale.value = lang;
+}
+
+onMounted(() => {
+  // 设置默认语言
+  if (localStorage.Lang != null) locale.value = localStorage.Lang;
+});
+</script>
+
+<script lang="ts">
+export default {
+  name: 'locale-changer'
 }
 </script>
