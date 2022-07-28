@@ -7,7 +7,7 @@ declare module '*.vue' {
 }
 
 interface ImportMetaEnv {
-  readonly VITE_LOG_INFO_ENABLED: boolean
+  readonly VITE_LOG_INFO_ENABLED: string
   // more env variables...
 }
 
