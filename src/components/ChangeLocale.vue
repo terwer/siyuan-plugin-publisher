@@ -11,43 +11,33 @@
 </template>
 
 <script lang="ts">
-// import {useI18n} from 'vue-i18n'
+import {useI18n} from "vue-i18n";
 
 export default {
   name: 'locale-changer',
-  // setup() {
-  //   const {locale} = useI18n()
-  //
-  //   function langChanged(type: string) {
-  //     console.log("langChanged=>", lang);
-  //     localStorage.Lang = lang;
-  //     locale.value = type;
-  //   }
-  //
-  //   return {langChanged}
-  // },
-  data() {
-    return {
-      langs: [
-        {
-          value: 'zh_CN',
-          label: "简体中文"
-        },
-        {
-          value: 'en_US',
-          label: "English"
-        }
-      ]
-    }
-  },
-  methods: {
-    langChanged(lang) {
+  setup() {
+    const {locale} = useI18n()
+    const langs = [
+      {
+        value: 'zh_CN',
+        label: "简体中文"
+      },
+      {
+        value: 'en_US',
+        label: "English"
+      }
+    ]
+
+    function langChanged(lang: string) {
       console.log("langChanged=>", lang);
       localStorage.Lang = lang;
+      locale.value = lang;
     }
-  },
-  mounted() {
-    if (localStorage.Lang != null) this.$i18n.locale = localStorage.Lang;
+
+    // 设置默认语言
+    if (localStorage.Lang != null) locale.value = localStorage.Lang;
+
+    return {langs, langChanged}
   }
 }
 </script>
