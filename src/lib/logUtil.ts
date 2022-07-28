@@ -1,7 +1,9 @@
 // 开发阶段开启所有日志
 // 发布阶段只开启WARN和ERROR日志
 
-const LOG_INFO_ENABLED = import.meta.env.DEV || (import.meta.env.VITE_LOG_INFO_ENABLED.toLowerCase() === "true")
+import {getBooleanEnv} from "./envUtil";
+
+const LOG_INFO_ENABLED = import.meta.env.DEV || getBooleanEnv("ENV_LOG_INFO_ENABLED")
 const LOG_WARN_ENABLED = true
 const LOG_ERROR_ENABLED = true
 

@@ -1,19 +1,19 @@
 <template>
   <el-tabs type="border-card">
     <el-tab-pane :label="$t('setting.vuepress')" v-if="vuepressEnabled">
-      vuepress
+      Vuepress
     </el-tab-pane>
     <el-tab-pane :label="$t('setting.jvue')" v-if="jvueEnabled">
-      jvue
+      <j-vue-setting/>
     </el-tab-pane>
     <el-tab-pane :label="$t('setting.conf')" v-if="confEnabled">
       Confluence
     </el-tab-pane>
     <el-tab-pane :label="$t('setting.cnblogs')" v-if="cnblogsEnabled">
-      cnblogs
+      Cnblogs
     </el-tab-pane>
     <el-tab-pane :label="$t('setting.wordpress')" v-if="wordpressEnabled">
-      wordpress
+      Wordpress
     </el-tab-pane>
   </el-tabs>
 </template>
@@ -23,6 +23,7 @@ import {ref, watch} from "vue";
 import {getConf, setConf} from "../lib/config";
 import SWITCH_CONSTANTS from "../constants/switchConstants";
 import log from "../lib/logUtil";
+import JVueSetting from "./setting/JVueSetting.vue";
 
 const vuepressEnabled = ref(true)
 const jvueEnabled = ref(false)
