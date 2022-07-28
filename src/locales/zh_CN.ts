@@ -58,6 +58,7 @@ export default {
     "service.switch.jvue": "JVue",
     "service.switch.conf": "Confluence",
     "service.switch.cnblogs": "博客园",
+    "service.switch.must.select.one": "您必须选择一个至少平台",
     "post.bind.vuepress.slug": "Vuepress别名",
     "post.bind.cnblogs.postid": "博客园别名/ID",
     "post.bind.jvue.postid": "JVue的ID",

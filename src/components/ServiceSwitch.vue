@@ -1,19 +1,19 @@
 <template>
   <el-form label-width="120px">
     <el-form-item :label="$t('service.switch.vuepress')">
-      <el-switch v-model="vuepressEnabled" :before-change="beforeChange" @change="onChange"/>
+      <el-switch v-model="vuepressEnabled" disabled/>
     </el-form-item>
 
     <el-form-item :label="$t('service.switch.jvue')">
-      <el-switch v-model="jvueEnabled" @change="onChange"/>
+      <el-switch v-model="jvueEnabled" @change="jvueOnChange"/>
     </el-form-item>
 
     <el-form-item :label="$t('service.switch.conf')">
-      <el-switch v-model="confEnabled" @change="onChange"/>
+      <el-switch v-model="confEnabled" @change="confOnChange"/>
     </el-form-item>
 
     <el-form-item :label="$t('service.switch.cnblogs')">
-      <el-switch v-model="cnblogsEnabled" @change="onChange"/>
+      <el-switch v-model="cnblogsEnabled" @change="cnblogsOnChange"/>
     </el-form-item>
   </el-form>
 </template>
@@ -21,29 +21,34 @@
 <script lang="ts" setup>
 import {ref} from 'vue'
 import {ElMessage} from "element-plus";
+import {useI18n} from "vue-i18n";
 
-let selectCount = 1
+const {t} = useI18n()
 const vuepressEnabled = ref(true)
 const jvueEnabled = ref(false)
 const confEnabled = ref(false)
 const cnblogsEnabled = ref(false)
 
-const beforeChange = () => {
-  return new Promise((resolve, reject) => {
-    if (selectCount == 1) {
-      ElMessage.warning('You must add at least one plantform')
-      reject(new Error('You must add at least one plantform'))
-      return
-    }
-    return resolve(true)
-  })
+const jvueOnChange = (val: boolean) => {
+  if (val) {
+    ElMessage.success("jvueOnChange=>" + val)
+  } else {
+    ElMessage.warning("jvueOnChange=>" + val)
+  }
 }
 
-const onChange = (val: boolean) => {
+const confOnChange = (val: any) => {
   if (val) {
-    ++selectCount;
+    ElMessage.success("confOnChange=>" + val)
   } else {
-    --selectCount
+    ElMessage.warning("confOnChange=>" + val)
+  }
+}
+const cnblogsOnChange = (val: any) => {
+  if (val) {
+    ElMessage.success("cnblogsOnChange=>" + val)
+  } else {
+    ElMessage.warning("cnblogsOnChange=>" + val)
   }
 }
 </script>
