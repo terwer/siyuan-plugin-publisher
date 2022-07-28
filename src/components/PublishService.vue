@@ -1,9 +1,7 @@
 <template>
   <el-tabs tab-position="left" @tab-change="serviceTabChange">
     <el-tab-pane name="plantform-main" :label="$t('service.tab.publish.service')">
-      <!--
       <plantform-main/>
-      -->
     </el-tab-pane>
     <el-tab-pane name="plantform-setting" :label="$t('service.tab.publish.setting')">
       <plantform-setting :is-reload="isReloadSetting"/>
@@ -24,6 +22,7 @@
 import log from "../lib/logUtil";
 import {ref} from "vue";
 import PostBind from "./PostBind.vue";
+import PlantformMain from "./PlantformMain.vue";
 
 let isReloadSetting = ref(false)
 

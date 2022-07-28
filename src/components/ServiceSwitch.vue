@@ -25,7 +25,7 @@
 <script lang="ts" setup>
 import {ref} from 'vue'
 import {useI18n} from "vue-i18n";
-import {setConf, getConf} from "../lib/config";
+import {setBooleanConf, getBooleanConf} from "../lib/config";
 import SWITCH_CONSTANTS from "../constants/switchConstants";
 
 const {t} = useI18n()
@@ -36,28 +36,28 @@ const cnblogsEnabled = ref(false)
 const wordpressEnabled = ref(false)
 
 const jvueOnChange = (val: boolean) => {
-  setConf(SWITCH_CONSTANTS.SWITCH_JVUE_KEY, val)
+  setBooleanConf(SWITCH_CONSTANTS.SWITCH_JVUE_KEY, val)
 }
 const confOnChange = (val: any) => {
-  setConf(SWITCH_CONSTANTS.SWITCH_CONF_KEY, val)
+  setBooleanConf(SWITCH_CONSTANTS.SWITCH_CONF_KEY, val)
 }
 const cnblogsOnChange = (val: any) => {
-  setConf(SWITCH_CONSTANTS.SWITCH_CNBLOGS_KEY, val)
+  setBooleanConf(SWITCH_CONSTANTS.SWITCH_CNBLOGS_KEY, val)
 }
 const wordpressOnChange = (val: any) => {
-  setConf(SWITCH_CONSTANTS.SWITCH_WORDPRESS_KEY, val)
+  setBooleanConf(SWITCH_CONSTANTS.SWITCH_WORDPRESS_KEY, val)
 }
 
 const initConf = () => {
-  vuepressEnabled.value = getConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY) || false
-  jvueEnabled.value = getConf(SWITCH_CONSTANTS.SWITCH_JVUE_KEY) || false
-  confEnabled.value = getConf(SWITCH_CONSTANTS.SWITCH_CONF_KEY) || false
-  cnblogsEnabled.value = getConf(SWITCH_CONSTANTS.SWITCH_CNBLOGS_KEY) || false
-  wordpressEnabled.value = getConf(SWITCH_CONSTANTS.SWITCH_WORDPRESS_KEY) || false
+  vuepressEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY)
+  jvueEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_JVUE_KEY)
+  confEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_CONF_KEY)
+  cnblogsEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_CNBLOGS_KEY)
+  wordpressEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_WORDPRESS_KEY)
 }
 
 // 默认选中vuepress
-setConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY, true)
+setBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY, true)
 // 初始化
 initConf()
 </script>

@@ -20,7 +20,7 @@
 
 <script lang="ts" setup>
 import {ref, watch} from "vue";
-import {getConf, setConf} from "../lib/config";
+import {getBooleanConf, setBooleanConf} from "../lib/config";
 import SWITCH_CONSTANTS from "../constants/switchConstants";
 import log from "../lib/logUtil";
 import JVueSetting from "./setting/JVueSetting.vue";
@@ -32,11 +32,11 @@ const cnblogsEnabled = ref(false)
 const wordpressEnabled = ref(false)
 
 const initConf = () => {
-  vuepressEnabled.value = getConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY) || false
-  jvueEnabled.value = getConf(SWITCH_CONSTANTS.SWITCH_JVUE_KEY) || false
-  confEnabled.value = getConf(SWITCH_CONSTANTS.SWITCH_CONF_KEY) || false
-  cnblogsEnabled.value = getConf(SWITCH_CONSTANTS.SWITCH_CNBLOGS_KEY) || false
-  wordpressEnabled.value = getConf(SWITCH_CONSTANTS.SWITCH_WORDPRESS_KEY) || false
+  vuepressEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY)
+  jvueEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_JVUE_KEY)
+  confEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_CONF_KEY)
+  cnblogsEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_CNBLOGS_KEY)
+  wordpressEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_WORDPRESS_KEY)
   log.logInfo("平台设置初始化")
 }
 
@@ -51,7 +51,7 @@ watch(() => props.isReload, /**/(oldValue, newValue) => {
   // Here you can add you functionality
   // as described in the name you will get old and new value of watched property
   // 默认选中vuepress
-  setConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY, true)
+  setBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY, true)
   initConf();
   log.logInfo("plantform-setting初始化")
 })
