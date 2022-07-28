@@ -14,7 +14,7 @@ export function getBooleanConf(key: string) {
 
     log.logInfo("从localStorage获取Boolean数据=>")
     log.logInfo(valueObj)
-    log.logInfo("------------------------------\n")
+    log.logInfo("------------------------------")
     return valueObj;
 }
 
@@ -29,12 +29,16 @@ export function getJSONConf(key: string) {
     let valueObj = {}
     let value = getConf(key)
     if (typeof value === "string") {
-        valueObj = JSON.parse(value);
+        try {
+            valueObj = JSON.parse(value);
+        } catch (e) {
+            log.logInfo("JSON格式不正确", e)
+        }
     }
 
     log.logInfo("从localStorage获取JSON数据=>")
     log.logInfo(valueObj)
-    log.logInfo("------------------------------\n")
+    log.logInfo("------------------------------")
     return valueObj;
 }
 
@@ -67,7 +71,7 @@ export function setBooleanConf(key: string, value: any) {
 
     const boolString = value.toString()
     setConf(key, boolString)
-    log.logInfo("++++++++++++++++++++++++++++++\n")
+    log.logInfo("++++++++++++++++++++++++++++++")
 }
 
 /**
@@ -83,7 +87,7 @@ export function setJSONConf(key: string, value: any) {
 
     const valueString = JSON.stringify(value)
     setConf(key, valueString)
-    log.logInfo("++++++++++++++++++++++++++++++\n")
+    log.logInfo("++++++++++++++++++++++++++++++")
 }
 
 /**

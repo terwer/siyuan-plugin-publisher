@@ -1,5 +1,5 @@
 <template>
-  <el-tabs tab-position="left" @tab-change="serviceTabChange">
+  <el-tabs model-value="plantform-main" tab-position="left" @tab-change="serviceTabChange">
     <el-tab-pane name="plantform-main" :label="$t('service.tab.publish.service')">
       <plantform-main/>
     </el-tab-pane>
