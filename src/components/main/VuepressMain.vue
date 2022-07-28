@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-aside width="45%">
-      <el-form label-width="120px">
+      <el-form label-width="75px">
         <el-form-item :label="$t('main.slug')">
           <el-input v-model="formData.customSlug"/>
         </el-form-item>
@@ -10,6 +10,8 @@
           <el-checkbox-group v-model="formData.checkList">
             <el-checkbox label="1">{{ $t('main.use.google.translate') }}</el-checkbox>
           </el-checkbox-group>
+        </el-form-item>
+        <el-form-item>
           <el-button type="primary" class="make-slug-btn" @click="makeSlug">{{ $t('main.auto.fetch.slug') }}</el-button>
         </el-form-item>
 
@@ -71,6 +73,8 @@
             }}
           </el-button>
           <el-button>{{ $t('main.cancel') }}</el-button>
+        </el-form-item>
+        <el-form-item>
           <el-button type="danger" text>
             {{ isPublished ? $t('main.publish.status.published') : $t('main.publish.status.unpublish') }}
           </el-button>
@@ -78,7 +82,7 @@
       </el-form>
     </el-aside>
     <el-main>
-      <el-form label-width="120px">
+      <el-form label-width="75px">
         <el-form-item>
           {{ $t('main.yaml.formatter') }}
         </el-form-item>
@@ -89,7 +93,11 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="convertAttrToYAML">{{ $t('main.siyuan.to.yaml') }}</el-button>
+        </el-form-item>
+        <el-form-item>
           <el-button type="primary" @click="convertYAMLToAttr">{{ $t('main.yaml.to.siyuan') }}</el-button>
+        </el-form-item>
+        <el-form-item>
           <el-button type="primary" @click="copyToClipboard">{{ $t('main.copy') }}</el-button>
         </el-form-item>
       </el-form>
@@ -446,7 +454,4 @@ export default {
 </script>
 
 <style scoped>
-.make-slug-btn {
-  margin-left: 10px;
-}
 </style>
