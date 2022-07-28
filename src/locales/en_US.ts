@@ -58,6 +58,7 @@ export default {
     "service.switch.jvue": "JVue",
     "service.switch.conf": "Confluence",
     "service.switch.cnblogs": "Cnblogs",
+    "service.switch.wordpress": "Wordpress",
     "service.switch.must.select.one":"You must add at least one plantform",
     "post.bind.vuepress.slug": "Vuepress slug",
     "post.bind.cnblogs.postid": "Cnblogs ID",

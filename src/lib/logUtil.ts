@@ -1,8 +1,7 @@
 // 开发阶段开启所有日志
 // 发布阶段只开启WARN和ERROR日志
 
-alert(process.env.DEV)
-const LOG_INFO_ENABLED = true
+const LOG_INFO_ENABLED = import.meta.env.DEV
 const LOG_WARN_ENABLED = true
 const LOG_ERROR_ENABLED = true
 

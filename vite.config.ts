@@ -32,6 +32,7 @@ export default defineConfig(({mode}) => {
             ]
         },
         // https://github.com/vitejs/vite/issues/1930
+        // https://vitejs.dev/guide/env-and-mode.html#env-files
         define: processEnvValues
     }
 })
