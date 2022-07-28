@@ -1,7 +1,7 @@
 <template>
   <el-tabs model-value="plantform-main" tab-position="left" @tab-change="serviceTabChange">
     <el-tab-pane name="plantform-main" :label="$t('service.tab.publish.service')">
-      <plantform-main/>
+      <plantform-main :is-reload="isReloadMain"/>
     </el-tab-pane>
     <el-tab-pane name="plantform-setting" :label="$t('service.tab.publish.setting')">
       <plantform-setting :is-reload="isReloadSetting"/>
@@ -25,6 +25,7 @@ import PostBind from "./PostBind.vue";
 import PlantformMain from "./PlantformMain.vue";
 
 let isReloadSetting = ref(false)
+let isReloadMain = ref(false)
 
 const serviceTabChange = (name: string) => {
   log.logInfo("serviceTabChange=>", name)
@@ -32,6 +33,10 @@ const serviceTabChange = (name: string) => {
     // 切换强制刷新
     isReloadSetting.value = !isReloadSetting.value;
     log.logInfo("plantform-setting change=>")
+  } else if ("plantform-main" == name) {
+    // 切换强制刷新
+    isReloadMain.value = !isReloadMain.value;
+    log.logInfo("plantform-main change=>")
   }
 }
 
