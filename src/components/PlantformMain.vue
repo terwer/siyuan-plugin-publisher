@@ -1,7 +1,7 @@
 <template>
   <el-tabs type="border-card">
     <el-tab-pane :label="$t('main.publish.to.vuepress')" v-if="vuepressEnabled">
-      Vuepress
+      <vuepress-main/>
     </el-tab-pane>
     <el-tab-pane :label="$t('main.publish.to.jvue')" v-if="jvueEnabled">
       JVue
@@ -63,9 +63,11 @@ onMounted(() => {
 </script>
 
 <script lang="ts">
+import VuepressMain from "./main/VuepressMain.vue";
+
 export default {
   name: "PlantformMain",
-  components: {}
+  components: {VuepressMain}
 }
 </script>
 
