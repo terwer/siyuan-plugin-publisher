@@ -29,6 +29,7 @@ import {setBooleanConf, getBooleanConf} from "../lib/config";
 import SWITCH_CONSTANTS from "../constants/switchConstants";
 
 const {t} = useI18n()
+
 let vuepressEnabled = ref(true)
 const jvueEnabled = ref(false)
 const confEnabled = ref(false)

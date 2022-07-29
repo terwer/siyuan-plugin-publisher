@@ -110,6 +110,11 @@ import {onBeforeMount, ref} from "vue";
 import {getPage, getPageAttrs, getPageId} from "../../lib/siyuan/siyuanUtil";
 import log from "../../lib/logUtil"
 import {SIYUAN_PAGE_ATTR_KEY} from "../../constants/siyuanPageConstants"
+import {pingyinSlugify, zhSlugify} from "../../lib/util";
+import {useI18n} from "vue-i18n";
+import {ElMessage} from "element-plus";
+
+const {t} = useI18n()
 
 const isPublished = ref(false)
 const formData = ref({
@@ -177,9 +182,26 @@ async function initPage() {
   formData.value.desc = siyuanData.meta[SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_DESC_KEY];
 }
 
-const makeSlug = () => {
-
+async function makeSlug() {
+  // 获取最新属性
+  siyuanData.meta = await getPageAttrs(siyuanData.pageId)
+  // 获取标题
+  // @ts-ignore
+  const title = siyuanData.meta.title;
+  if (formData.value.checkList.length > 0) {
+    // 调用Google翻译API
+    const result = await zhSlugify(title);
+    log.logInfo("result=>", result)
+    if (result) {
+      formData.value.customSlug = result
+    } else {
+      ElMessage.success(t('main.opt.failure'))
+    }
+  } else {
+    formData.value.customSlug = await pingyinSlugify(title);
+  }
 }
+
 const makeDesc = () => {
 
 }

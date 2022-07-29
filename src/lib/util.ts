@@ -25,7 +25,7 @@ export function getPublishStatus(apiType: string, meta: any) {
 
 /**
  * 中文翻译成英文别名
- * @param q
+ * @param q 中文名
  * @returns {Promise<unknown>}
  */
 export async function zhSlugify(q: string) {
@@ -36,6 +36,14 @@ export async function zhSlugify(q: string) {
     res = res.replaceAll(/-/g, "");
     log.logInfo("res=>", res)
     return slugify(res);
+}
+
+/**
+ * 拼音转别名
+ * @param q 中文名
+ */
+export async function pingyinSlugify(q: string) {
+    return slugify(q);
 }
 
 export function yaml2Obj(yaml: string) {
@@ -135,7 +143,7 @@ export const formatIsoToNumDate = (str: string, isAddTimeZone?: boolean) => {
         if (isAddTimeZone) {
             log.logInfo("修复时区，ISO日期默认晚8小时")
             // ISO日期默认晚8小时
-           log.logInfo(addHoursToDate(new Date(match), 8))
+            log.logInfo(addHoursToDate(new Date(match), 8))
             newmatch = addHoursToDate(new Date(match), 8).toISOString()
         }
 
