@@ -4,19 +4,19 @@
       <el-switch v-model="vuepressEnabled" disabled/>
     </el-form-item>
 
-    <el-form-item :label="$t('service.switch.jvue')">
+    <el-form-item :label="$t('service.switch.jvue')" v-if="false">
       <el-switch v-model="jvueEnabled" @change="jvueOnChange"/>
     </el-form-item>
 
-    <el-form-item :label="$t('service.switch.conf')">
+    <el-form-item :label="$t('service.switch.conf')" v-if="false">
       <el-switch v-model="confEnabled" @change="confOnChange"/>
     </el-form-item>
 
-    <el-form-item :label="$t('service.switch.cnblogs')">
+    <el-form-item :label="$t('service.switch.cnblogs')" v-if="false">
       <el-switch v-model="cnblogsEnabled" @change="cnblogsOnChange"/>
     </el-form-item>
 
-    <el-form-item :label="$t('service.switch.wordpress')">
+    <el-form-item :label="$t('service.switch.wordpress')" v-if="false">
       <el-switch v-model="wordpressEnabled" @change="wordpressOnChange"/>
     </el-form-item>
   </el-form>

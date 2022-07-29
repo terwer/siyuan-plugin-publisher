@@ -46,7 +46,7 @@ export async function pingyinSlugify(q: string) {
     return slugify(q);
 }
 
-export function yaml2Obj(yaml: string) {
+export function yaml2Obj(yaml: string): any {
     let doc = "";
     // Get document, or throw exception on error
     try {

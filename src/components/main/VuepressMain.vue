@@ -67,6 +67,11 @@
           <el-button type="primary" @click="saveAttrToSiyuan">{{ $t('main.save.attr.to.siyuan') }}</el-button>
         </el-form-item>
 
+        <br/>
+        <br/>
+        <el-form-item>
+          <el-button @click="oneclickAttr">{{ $t('main.publish.oneclick.attr') }}</el-button>
+        </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="publishPage">{{
               isPublished ? $t('main.update') : $t('main.publish')
@@ -119,6 +124,7 @@ import {
   covertStringToDate,
   formatIsoToZhDate,
   obj2yaml,
+  yaml2Obj,
   getPublishStatus
 } from "../../lib/util";
 import {useI18n} from "vue-i18n";
@@ -136,7 +142,7 @@ const formData = ref({
   customSlug: "",
   desc: "",
   created: "",
-  checkList: [],
+  checkList: ['1'],
   tag: {
     inputValue: "",
     dynamicTags: <string[]>([]),
@@ -202,7 +208,10 @@ async function initPage() {
   const tagstr = siyuanData.value.meta.tags || ""
   const tgarr = tagstr.split(",")
   for (let i = 0; i < tgarr.length; i++) {
-    formData.value.tag.dynamicTags.push(tgarr[i])
+    const tg = tgarr[i]
+    if (tg != "") {
+      formData.value.tag.dynamicTags.push(tgarr[i])
+    }
   }
 
   // 表单属性转换为HTML
@@ -212,7 +221,7 @@ async function initPage() {
   isPublished.value = getPublishStatus(PUBLISH_TYPE_CONSTANTS.API_TYPE_VUEPRESS, siyuanData.value.meta)
 }
 
-async function makeSlug() {
+async function makeSlug(hideTip?: boolean) {
   // 获取最新属性
   const page = await getPage(siyuanData.value.pageId)
   // BUG：目前attr的title不会即时更新
@@ -237,10 +246,11 @@ async function makeSlug() {
     formData.value.customSlug = await pingyinSlugify(title);
   }
 
-  ElMessage.success(t("main.opt.success"))
-}
+  if (hideTip != true) {
+    ElMessage.success(t('main.opt.success'))
+  }}
 
-async function makeDesc() {
+async function makeDesc(hideTip?: boolean) {
   const data = await getPageMd(siyuanData.value.pageId);
 
   const md = data.content
@@ -248,7 +258,9 @@ async function makeDesc() {
   // formData.value.desc = html;
   formData.value.desc = parseHtml(html, CONSTANTS.MAX_PREVIEW_LENGTH, true)
 
-  ElMessage.success(t("main.opt.success"))
+  if (hideTip != true) {
+    ElMessage.success(t('main.opt.success'))
+  }
 }
 
 const createTimeChanged = (val: any) => {
@@ -278,7 +290,7 @@ const tagHandleInputConfirm = () => {
   formData.value.tag.inputValue = ''
 }
 
-async function fetchTag() {
+async function fetchTag(hideTip?: boolean) {
   const data = await getPageMd(siyuanData.value.pageId);
 
   const md = data.content
@@ -295,8 +307,9 @@ async function fetchTag() {
     }
   }
 
-  ElMessage.success(t("main.opt.success"))
-}
+  if (hideTip != true) {
+    ElMessage.success(t('main.opt.success'))
+  }}
 
 async function saveAttrToSiyuan(hideTip?: boolean) {
   const customAttr = {
@@ -344,7 +357,34 @@ const convertAttrToYAML = () => {
   vuepressData.value.vuepressFullContent = vuepressData.value.formatter;
 }
 const convertYAMLToAttr = () => {
+  vuepressData.value.formatter = vuepressData.value.vuepressFullContent
+  vuepressData.value.yamlObj = yaml2Obj(vuepressData.value.formatter)
 
+  // yamlObj转表单属性
+  log.logInfo("convertYAMLToAttr,yamlObj=>", vuepressData.value.yamlObj)
+  formData.value.title = vuepressData.value.yamlObj.title
+  formData.value.customSlug = vuepressData.value.yamlObj.permalink.replace("/pages/", "")
+      .replace("/post/", "").replace(".html", "")
+      .replace("/", "")
+  formData.value.created = formatIsoToZhDate(vuepressData.value.yamlObj.date.toISOString(), false)
+
+  const yamlMeta = vuepressData.value.yamlObj.meta
+  for (let i = 0; i < yamlMeta.length; i++) {
+    const m = yamlMeta[i]
+    if (m.name === "description") {
+      formData.value.desc = m.content
+      break
+    }
+  }
+
+  for (let j = 0; j < vuepressData.value.yamlObj.tags.length; j++) {
+    const tag = vuepressData.value.yamlObj.tags[j]
+    if (!formData.value.tag.dynamicTags.includes(tag) && tag != "") {
+      formData.value.tag.dynamicTags.push(tag)
+    }
+  }
+
+  formData.value.categories = vuepressData.value.yamlObj.categories
 }
 const fmtRefInput = ref()
 const copyToClipboard = () => {
@@ -375,6 +415,16 @@ async function publishPage() {
   log.logWarn("发布内容完成")
 
   ElMessage.success(t('main.opt.status.publish'))
+}
+
+async function oneclickAttr(){
+  await makeSlug(true)
+
+  await makeDesc(true)
+
+  await fetchTag(true)
+
+  ElMessage.success(t('main.publish.oneclick.attr.finish'))
 }
 
 async function cancelPublish() {
