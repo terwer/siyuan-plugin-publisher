@@ -4,7 +4,7 @@
 
 目前支持 Vuepress ~~以及 2 种博客平台标准、metaweblog api 和基于 Wordpress 的 xmlrpc 远程调用 api （延期到v0.0.2）~~
 
-![点击查看操作演示](img/v001.gif)
+<a href="https://img1.terwergreen.com/api/public/20220729233245.gif" target="_blank" >点击查看操作演示</a>
 
 ## 支持平台
 
