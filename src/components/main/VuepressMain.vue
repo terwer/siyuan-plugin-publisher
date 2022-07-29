@@ -130,10 +130,10 @@ const formData = ref({
   },
   categories: ["默认分类"]
 })
-const siyuanData = {
+const siyuanData = ref({
   pageId: "",
   meta: {}
-}
+})
 const vuepressData = {
   yamlObj: {
     title: "",
@@ -171,23 +171,29 @@ async function initPage() {
   log.logWarn("VuepressMain获取主文档", page)
 
   // 思源笔记数据
-  siyuanData.pageId = pageId;
-  siyuanData.meta = await getPageAttrs(pageId)
+  siyuanData.value.pageId = pageId;
+  siyuanData.value.meta = await getPageAttrs(pageId)
 
   // 表单数据
   formData.value.title = page.content;
   // @ts-ignore
-  formData.value.customSlug = siyuanData.meta[SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_SLUG_KEY];
+  formData.value.customSlug = siyuanData.value.meta[SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_SLUG_KEY];
   // @ts-ignore
-  formData.value.desc = siyuanData.meta[SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_DESC_KEY];
+  formData.value.desc = siyuanData.value.meta[SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_DESC_KEY];
 }
 
 async function makeSlug() {
   // 获取最新属性
-  siyuanData.meta = await getPageAttrs(siyuanData.pageId)
+  const page = await getPage(siyuanData.value.pageId)
+  // BUG：目前attr的title不会即时更新
+  // siyuanData.value.meta = await getPageAttrs(siyuanData.value.pageId)
+  // log.logInfo("meta=>", siyuanData.value.meta)
+  log.logInfo("page=>", page)
   // 获取标题
   // @ts-ignore
-  const title = siyuanData.meta.title;
+  // const title = siyuanData.value.meta.title;
+  const title = page.content;
+  log.logInfo("title=>", title)
   if (formData.value.checkList.length > 0) {
     // 调用Google翻译API
     const result = await zhSlugify(title);
