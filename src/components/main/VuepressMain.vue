@@ -53,6 +53,7 @@
               size="small"
               @keyup.enter="tagHandleInputConfirm"
               @blur="tagHandleInputConfirm"
+              autofocus
           />
           <el-button v-else class="button-new-tag ml-1 el-tag" size="small" @click="tagShowInput">
             {{ $t('main.tag.new') }}
@@ -107,12 +108,15 @@
 
 <script lang="ts" setup>
 import {onBeforeMount, ref} from "vue";
-import {getPage, getPageAttrs, getPageId} from "../../lib/siyuan/siyuanUtil";
+import {getPage, getPageAttrs, getPageId, getPageMd} from "../../lib/siyuan/siyuanUtil";
 import log from "../../lib/logUtil"
 import {SIYUAN_PAGE_ATTR_KEY} from "../../constants/siyuanPageConstants"
-import {pingyinSlugify, zhSlugify} from "../../lib/util";
+import {pingyinSlugify, zhSlugify, formatNumToZhDate} from "../../lib/util";
 import {useI18n} from "vue-i18n";
 import {ElMessage} from "element-plus";
+import {CONSTANTS} from "../../constants/constants";
+import {mdToHtml, parseHtml} from "../../lib/htmlUtil";
+import {nextTick} from 'vue'
 
 const {t} = useI18n()
 
@@ -121,18 +125,20 @@ const formData = ref({
   title: "",
   customSlug: "",
   desc: "",
-  created: new Date(),
+  created: "",
   checkList: [],
   tag: {
     inputValue: "",
-    dynamicTags: [],
+    dynamicTags: <string[]>([]),
     inputVisible: false
   },
   categories: ["默认分类"]
 })
 const siyuanData = ref({
   pageId: "",
-  meta: {}
+  meta: {
+    tags: ""
+  }
 })
 const vuepressData = {
   yamlObj: {
@@ -180,6 +186,14 @@ async function initPage() {
   formData.value.customSlug = siyuanData.value.meta[SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_SLUG_KEY];
   // @ts-ignore
   formData.value.desc = siyuanData.value.meta[SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_DESC_KEY];
+  formData.value.created = formatNumToZhDate(page.created)
+
+  formData.value.tag.dynamicTags = [];
+  const tagstr = siyuanData.value.meta.tags || ""
+  const tgarr = tagstr.split(",")
+  for (let i = 0; i < tgarr.length; i++) {
+    formData.value.tag.dynamicTags.push(tgarr[i])
+  }
 }
 
 async function makeSlug() {
@@ -208,20 +222,39 @@ async function makeSlug() {
   }
 }
 
-const makeDesc = () => {
+async function makeDesc() {
+  const data = await getPageMd(siyuanData.value.pageId);
 
+  const md = data.content
+  let html = mdToHtml(md)
+  // formData.value.desc = html;
+  formData.value.desc = parseHtml(html, CONSTANTS.MAX_PREVIEW_LENGTH, true)
 }
-const createTimeChanged = (val: any) => {
 
+const createTimeChanged = (val: any) => {
+  log.logInfo("createTimeChanged=>", val)
 }
 const tagHandleClose = (tag: any) => {
-
+  formData.value.tag.dynamicTags.splice(formData.value.tag.dynamicTags.indexOf(tag), 1)
 }
+// https://stackoverflow.com/questions/64774113/vue-js-3-use-autofocus-on-input-with-ref-inside-a-method
+// https://stackoverflow.com/questions/64774113/vue-js-3-use-autofocus-on-input-with-ref-inside-a-method
+// https://www.helloworld.net/p/2721375043
+const tagRefInput = ref();
 const tagShowInput = () => {
+  formData.value.tag.inputVisible = true
 
+  // this.$refs.tagRefInput.focus()
+  nextTick(() => {
+    tagRefInput.value.focus();
+  });
 }
 const tagHandleInputConfirm = () => {
-
+  if (formData.value.tag.inputValue) {
+    formData.value.tag.dynamicTags.push(formData.value.tag.inputValue)
+  }
+  formData.value.tag.inputVisible = false
+  formData.value.tag.inputValue = ''
 }
 const fetchTag = () => {
 

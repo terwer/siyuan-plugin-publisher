@@ -210,7 +210,7 @@ export const formatIsoToZhDate = (str: string, isAddTimeZone: boolean) => {
  * @param str '20220718142548'
  * @returns {string|*}
  */
-export const formatNumToZhDate = (str: string) => {
+export const formatNumToZhDate = (str: string): string => {
     if (!str) {
         return "";
     }
