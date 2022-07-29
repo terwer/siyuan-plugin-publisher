@@ -107,7 +107,7 @@
 
 <script lang="ts" setup>
 import {onBeforeMount} from "vue";
-import {getSiyuanPage} from "../../lib/siyuan/siyuanUtil";
+import {getPageId} from "../../lib/siyuan/siyuanUtil";
 import log from "../../lib/logUtil"
 
 const isPublished = false
@@ -196,9 +196,9 @@ const publishPage = () => {
 }
 
 onBeforeMount(async () => {
-  const page = await getSiyuanPage()
-  log.logInfo("page=>", page)
-  if(!page){
+  const pageId = await getPageId(true)
+  log.logInfo("VuepressMain pageId=>", pageId)
+  if (!pageId || pageId == "") {
     return
   }
 })
