@@ -4,7 +4,7 @@ Publish siyuan article to supported open platforms
 
 At present, it supports vuepress ~~and two open API standard blog platforms, <code>metaweblog api</code> and <code>xmlrpc</code> remote call API based on <code>wordpress</code> ( will release in v0.0.2)~~
 
-![](img/v001.gif)
+![点击查看操作演示](img/v001.gif)
 
 [中文版说明](README-zh_CN.md)
 
