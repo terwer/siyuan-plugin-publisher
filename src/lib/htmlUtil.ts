@@ -17,9 +17,15 @@ export function mdToHtml(md: string) {
  * @returns {*|string} 删除后的字符
  */
 export function removeWidgetTag(str: string) {
+    // 旧版发布挂件
     const publisherRegex = /<iframe.*src="\/widgets\/publisher.*<\/iframe>/g;
     str = str.replaceAll(publisherRegex, "")
 
+    // 新版发布挂件
+    const syPublisherRegex = /<iframe.*src="\/widgets\/sy-post-publisher.*<\/iframe>/g;
+    str = str.replaceAll(syPublisherRegex, "")
+
+    // 文章属性挂件
     const noteAttrRegex = /<iframe.*\/widgets\/Note*\sAttrs.*\/iframe>/g
     str = str.replaceAll(noteAttrRegex, "")
     return str

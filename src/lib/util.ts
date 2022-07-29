@@ -60,7 +60,7 @@ export function yaml2Obj(yaml: string) {
     return doc;
 }
 
-export function obj2yaml(obj: string) {
+export function obj2yaml(obj: any) {
     // https://npmmirror.com/package/js-yaml
     let res = jsYaml.dump(obj);
     res = "---\n" + res + "---"

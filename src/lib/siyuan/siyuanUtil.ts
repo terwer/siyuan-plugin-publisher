@@ -3,7 +3,7 @@
  * @returns {Promise<string>}
  */
 import {getJSONConf, setJSONConf} from "../config";
-import {getBlockByID, getBlockAttrs, exportMdContent} from "./siYuanApi.js";
+import {getBlockByID, getBlockAttrs, setBlockAttrs, exportMdContent} from "./siYuanApi.js";
 import log from "../logUtil";
 import {getEnv} from "../envUtil";
 
@@ -131,6 +131,15 @@ export async function getPage(pageId: string) {
  */
 export async function getPageAttrs(pageId: string) {
     return await getBlockAttrs(pageId)
+}
+
+/**
+ * 保存页面属性
+ * @param pageId 页面ID
+ * @param attrs 属性对象
+ */
+export async function setPageAttrs(pageId: string, attrs: any) {
+    return await setBlockAttrs(pageId, attrs)
 }
 
 /**

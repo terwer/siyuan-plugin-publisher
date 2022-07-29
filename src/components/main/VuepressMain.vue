@@ -53,7 +53,6 @@
               size="small"
               @keyup.enter="tagHandleInputConfirm"
               @blur="tagHandleInputConfirm"
-              autofocus
           />
           <el-button v-else class="button-new-tag ml-1 el-tag" size="small" @click="tagShowInput">
             {{ $t('main.tag.new') }}
@@ -73,10 +72,10 @@
               isPublished ? $t('main.update') : $t('main.publish')
             }}
           </el-button>
-          <el-button>{{ $t('main.cancel') }}</el-button>
+          <el-button @click="cancelPublish">{{ $t('main.cancel') }}</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button type="danger" text>
+          <el-button type="danger" text disabled>
             {{ isPublished ? $t('main.publish.status.published') : $t('main.publish.status.unpublish') }}
           </el-button>
         </el-form-item>
@@ -108,19 +107,29 @@
 
 <script lang="ts" setup>
 import {onBeforeMount, ref} from "vue";
-import {getPage, getPageAttrs, getPageId, getPageMd} from "../../lib/siyuan/siyuanUtil";
+import {getPage, getPageAttrs, setPageAttrs, getPageId, getPageMd} from "../../lib/siyuan/siyuanUtil";
 import log from "../../lib/logUtil"
 import {SIYUAN_PAGE_ATTR_KEY} from "../../constants/siyuanPageConstants"
-import {pingyinSlugify, zhSlugify, formatNumToZhDate} from "../../lib/util";
+import {
+  pingyinSlugify,
+  zhSlugify,
+  formatNumToZhDate,
+  cutWords,
+  jiebaToHotWords,
+  covertStringToDate,
+  formatIsoToZhDate,
+  obj2yaml,
+  getPublishStatus
+} from "../../lib/util";
 import {useI18n} from "vue-i18n";
 import {ElMessage} from "element-plus";
 import {CONSTANTS} from "../../constants/constants";
-import {mdToHtml, parseHtml} from "../../lib/htmlUtil";
+import {mdToHtml, parseHtml, removeWidgetTag} from "../../lib/htmlUtil";
 import {nextTick} from 'vue'
+import {PUBLISH_POSTID_KEY_CONSTANTS, PUBLISH_TYPE_CONSTANTS} from "../../lib/publishUtil";
 
 const {t} = useI18n()
-
-const isPublished = ref(false)
+let isPublished = ref(false)
 const formData = ref({
   title: "",
   customSlug: "",
@@ -140,7 +149,7 @@ const siyuanData = ref({
     tags: ""
   }
 })
-const vuepressData = {
+const vuepressData = ref({
   yamlObj: {
     title: "",
     date: new Date(),
@@ -155,8 +164,8 @@ const vuepressData = {
         content: ""
       }
     ],
-    categories: [],
-    tags: [],
+    categories: <string[]>([]),
+    tags: <string[]>([]),
     author: {
       name: "terwer",
       link: "https://github.com/terwer"
@@ -165,7 +174,7 @@ const vuepressData = {
   formatter: "",
   vuepressContent: "",
   vuepressFullContent: ""
-}
+})
 
 async function initPage() {
   const pageId = await getPageId(true)
@@ -194,6 +203,12 @@ async function initPage() {
   for (let i = 0; i < tgarr.length; i++) {
     formData.value.tag.dynamicTags.push(tgarr[i])
   }
+
+  // 表单属性转换为HTML
+  convertAttrToYAML()
+
+  // 发布状态
+  isPublished.value = getPublishStatus(PUBLISH_TYPE_CONSTANTS.API_TYPE_VUEPRESS, siyuanData.value.meta)
 }
 
 async function makeSlug() {
@@ -220,6 +235,8 @@ async function makeSlug() {
   } else {
     formData.value.customSlug = await pingyinSlugify(title);
   }
+
+  ElMessage.success(t("main.opt.success"))
 }
 
 async function makeDesc() {
@@ -229,11 +246,14 @@ async function makeDesc() {
   let html = mdToHtml(md)
   // formData.value.desc = html;
   formData.value.desc = parseHtml(html, CONSTANTS.MAX_PREVIEW_LENGTH, true)
+
+  ElMessage.success(t("main.opt.success"))
 }
 
 const createTimeChanged = (val: any) => {
   log.logInfo("createTimeChanged=>", val)
 }
+
 const tagHandleClose = (tag: any) => {
   formData.value.tag.dynamicTags.splice(formData.value.tag.dynamicTags.indexOf(tag), 1)
 }
@@ -256,14 +276,71 @@ const tagHandleInputConfirm = () => {
   formData.value.tag.inputVisible = false
   formData.value.tag.inputValue = ''
 }
-const fetchTag = () => {
 
-}
-const saveAttrToSiyuan = () => {
+async function fetchTag() {
+  const data = await getPageMd(siyuanData.value.pageId);
 
+  const md = data.content
+  const genTags = await cutWords(md)
+  log.logInfo("genTags=>", genTags)
+
+  const hotTags = jiebaToHotWords(genTags, 5)
+  log.logInfo("hotTags=>", hotTags)
+
+  // 如果标签不存在，保存新标签到表单
+  for (let i = 0; i < hotTags.length; i++) {
+    if (!formData.value.tag.dynamicTags.includes(hotTags[i])) {
+      formData.value.tag.dynamicTags.push(hotTags[i])
+    }
+  }
+
+  ElMessage.success(t("main.opt.success"))
 }
+
+async function saveAttrToSiyuan(hideTip?: boolean) {
+  const customAttr = {
+    [SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_SLUG_KEY]: formData.value.customSlug,
+    [PUBLISH_POSTID_KEY_CONSTANTS.VUEPRESS_POSTID_KEY]: formData.value.customSlug,
+    [SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_DESC_KEY]: formData.value.desc,
+    tags: formData.value.tag.dynamicTags.join(",")
+  };
+  await setPageAttrs(siyuanData.value.pageId, customAttr)
+  log.logWarn("VuepressMain保存属性到思源笔记,meta=>", customAttr);
+
+  // 刷新属性数据
+  await initPage();
+
+  if (hideTip != true) {
+    ElMessage.success(t('main.opt.success'))
+  }
+}
+
 const convertAttrToYAML = () => {
+  // 表单属性转yamlObj
+  log.logInfo("convertAttrToYAML,formData=>", formData)
+  vuepressData.value.yamlObj.title = formData.value.title;
+  vuepressData.value.yamlObj.permalink = "/post/" + formData.value.customSlug + ".html";
+  vuepressData.value.yamlObj.date = covertStringToDate(formData.value.created)
+  const meta = [
+    {
+      name: "keywords",
+      content: formData.value.tag.dynamicTags.join(" ")
+    },
+    {
+      name: "description",
+      content: formData.value.desc
+    }
+  ];
+  vuepressData.value.yamlObj.meta = meta;
+  vuepressData.value.yamlObj.tags = formData.value.tag.dynamicTags;
+  vuepressData.value.yamlObj.categories = formData.value.categories;
 
+  // formatter
+  let yaml = obj2yaml(vuepressData.value.yamlObj);
+  // 修复yaml的ISO日期格式（js-yaml转换的才需要）
+  yaml = formatIsoToZhDate(yaml, true)
+  vuepressData.value.formatter = yaml
+  vuepressData.value.vuepressFullContent = vuepressData.value.formatter;
 }
 const convertYAMLToAttr = () => {
 
@@ -271,8 +348,35 @@ const convertYAMLToAttr = () => {
 const copyToClipboard = () => {
 
 }
-const publishPage = () => {
 
+async function publishPage() {
+  // 发布属性
+  await saveAttrToSiyuan(true)
+  log.logWarn("发布属性完成")
+
+  // 发布内容
+  const data = await getPageMd(siyuanData.value.pageId);
+  const md = removeWidgetTag(data.content)
+
+  vuepressData.value.vuepressContent = md;
+  vuepressData.value.vuepressFullContent = vuepressData.value.formatter + "\n" + vuepressData.value.vuepressContent;
+
+  log.logWarn("发布内容完成")
+
+  ElMessage.success(t('main.opt.status.publish'))
+}
+
+async function cancelPublish() {
+  const customAttr = {
+    [PUBLISH_POSTID_KEY_CONSTANTS.VUEPRESS_POSTID_KEY]: ""
+  };
+  await setPageAttrs(siyuanData.value.pageId, customAttr)
+  log.logWarn("VuepressMain取消发布,meta=>", customAttr);
+
+  // 刷新属性数据
+  await initPage();
+
+  ElMessage.warning(t('main.opt.status.cancel'))
 }
 
 onBeforeMount(async () => {

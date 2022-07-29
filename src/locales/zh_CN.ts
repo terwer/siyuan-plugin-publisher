@@ -33,6 +33,8 @@ export default {
     "main.publish.to.cnblogs": "发布到博客园",
     "main.opt.success": "操作成功",
     "main.opt.failure": "操作失败",
+    "main.opt.status.publish": "文章已发布",
+    "main.opt.status.cancel": "文章发布已取消",
     "setting.vuepress": "Vuepress",
     "setting.blog.type": "博客类型",
     "setting.blog.type.placeholder": "请选择博客类型",
