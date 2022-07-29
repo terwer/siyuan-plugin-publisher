@@ -127,6 +127,7 @@ import {CONSTANTS} from "../../constants/constants";
 import {mdToHtml, parseHtml, removeWidgetTag} from "../../lib/htmlUtil";
 import {nextTick} from 'vue'
 import {PUBLISH_POSTID_KEY_CONSTANTS, PUBLISH_TYPE_CONSTANTS} from "../../lib/publishUtil";
+import copy from "copy-to-clipboard"
 
 const {t} = useI18n()
 let isPublished = ref(false)
@@ -345,8 +346,18 @@ const convertAttrToYAML = () => {
 const convertYAMLToAttr = () => {
 
 }
+const fmtRefInput = ref()
 const copyToClipboard = () => {
+  // this.$refs.fmtRefInput.focus();
+  // document.execCommand('copy');
 
+  nextTick(() => {
+    fmtRefInput.value.focus();
+
+    copy(vuepressData.value.vuepressFullContent)
+
+    ElMessage.success(t('main.opt.success'))
+  });
 }
 
 async function publishPage() {
