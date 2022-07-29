@@ -1,7 +1,7 @@
 <template>
   <el-tabs type="border-card">
     <el-tab-pane :label="$t('setting.vuepress')" v-if="vuepressEnabled">
-      Vuepress
+      <vuepress-setting/>
     </el-tab-pane>
     <el-tab-pane :label="$t('setting.jvue')" v-if="jvueEnabled">
       <j-vue-setting/>
@@ -24,6 +24,7 @@ import {getBooleanConf, setBooleanConf} from "../lib/config";
 import SWITCH_CONSTANTS from "../constants/switchConstants";
 import log from "../lib/logUtil";
 import JVueSetting from "./setting/JVueSetting.vue";
+import VuepressSetting from "./setting/VuepressSetting.vue";
 
 const vuepressEnabled = ref(true)
 const jvueEnabled = ref(false)

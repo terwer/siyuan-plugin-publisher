@@ -64,7 +64,7 @@ const initConf = () => {
   log.logInfo("Jvue配置初始化")
   const conf = getJSONConf(PUBLISH_TYPE_CONSTANTS.API_TYPE_JVUE)
   if (conf) {
-    console.log("jvue conf=>", conf)
+    log.logInfo("jvue conf=>", conf)
 
     // @ts-ignore
     home.value = conf[PUBLISH_HOME_KEY_CONSTANTS.JVUE_HOME_KEY]
