@@ -6,6 +6,8 @@
 
 <a href="https://img1.terwergreen.com/api/public/20220729233245.gif" target="_blank" >点击查看操作演示</a>
 
+![](img/v001.gif)
+
 ## 支持平台
 
 * [X] Vuepress-v0.0.1版本支持，2022-07-29发布

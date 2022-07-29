@@ -6,6 +6,8 @@ At present, it supports vuepress ~~and two open API standard blog platforms, <co
 
 <a href="https://img1.terwergreen.com/api/public/20220729233245.gif" target="_blank" >Click me</a>
 
+![](img/v001.gif)
+
 [中文版说明](README-zh_CN.md)
 
 ## Support plantforms
