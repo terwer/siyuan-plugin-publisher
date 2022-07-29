@@ -2,9 +2,19 @@
 
 Publish siyuan article to supported open platforms
 
-At present, it supports two open API standard blog platforms, <code>metaweblog api</code> and <code>xmlrpc</code> remote call API based on <code>wordpress</code>
+At present, it supports vuepress ~~and two open API standard blog platforms, <code>metaweblog api</code> and <code>xmlrpc</code> remote call API based on <code>wordpress</code> ( will release in v0.0.2)~~
+
+![](https://img1.terwergreen.com/api/public/20220729233245.gif)
 
 [中文版说明](README-zh_CN.md)
+
+## Support plantforms
+
+* [X] Vuepress-v0.0.1 support，2022-07-29 release
+
+* [ ] Cnblogs-relay on v0.0.2 version，will release on 2022-10-31
+* [ ] Liandi-relay on v0.0.2 version，will release on 2022-10-31
+* [ ] Yueque-relay on v0.0.2 version，will release on 2022-10-31
 
 ## Vue 3 + TypeScript + Vite
 
@@ -12,7 +22,7 @@ This template should help get you started developing with Vue 3 and TypeScript i
 
 ## Recommended IDE Setup
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
+* [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
 
 ## Type Support For `.vue` Imports in TS
 
@@ -32,10 +42,10 @@ yarn dev
 
 ## Tool Version
 
-| Tool | Version  |
-|------|----------| 
-| node | v16.16.0 |
-| yarn | 1.22.19  |
+|Tool|Version|
+| ------| ----------|
+|node|v16.16.0|
+|yarn|1.22.19|
 
 ## Init Project
 

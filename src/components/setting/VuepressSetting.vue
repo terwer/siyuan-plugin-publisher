@@ -2,7 +2,7 @@
 <div>{{$t('setting.noneed')}}</div>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   name: "VuepressSetting"
 }
