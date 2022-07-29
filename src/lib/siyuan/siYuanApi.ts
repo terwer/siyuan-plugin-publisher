@@ -1,8 +1,10 @@
+// noinspection NonAsciiCharacters
+
 /* 思源 API 调用
    REF [cc-baselib/siYuanApi.js at main · leolee9086/cc-baselib](https://github.com/leolee9086/cc-baselib/blob/main/src/siYuanApi.js)
  */
 
-import {config} from './siYuanConfig';
+import {config} from "./siYuanConfig"
 
 export {
     向思源请求数据 as request,
@@ -51,7 +53,7 @@ export {
     以id获取思源块信息 as getBlockByID,
 };
 
-async function 向思源请求数据(url, data) {
+async function 向思源请求数据(url: string, data: any) {
     let resData = null
     await fetch(url, {
         body: JSON.stringify(data),
@@ -65,13 +67,13 @@ async function 向思源请求数据(url, data) {
     return resData
 }
 
-async function 解析响应体(response) {
+async function 解析响应体(response: any) {
     let r = await response
-    // console.log(r)
+    // log.logInfo(r)
     return r.code === 0 ? r.data : null
 }
 
-async function 以sql向思源请求块数据(sql) {
+async function 以sql向思源请求块数据(sql: string) {
     let sqldata = {
         stmt: sql,
     }
@@ -81,25 +83,26 @@ async function 以sql向思源请求块数据(sql) {
 
 async function 向思源请求笔记本列表() {
     // eslint-disable-next-line no-undef
+    // @ts-ignore
     let sqldata = {stmt: sql语句}
     let url = '/api/notebook/lsNotebooks'
     return 解析响应体(向思源请求数据(url, sqldata))
 }
 
-async function 获取思源块链接锚文本(链接源文本) {
+async function 获取思源块链接锚文本(链接源文本: string) {
     链接源文本 = 链接源文本.replace("((", "").replace("))", "")
     let sql = `select *
                from blocks
                where id = '${链接源文本}'`
     let 临时块属性 = await 以sql向思源请求块数据(sql)
-    //  console.log ("临时块属性",临时块属性)
+    //  log.logInfo ("临时块属性",临时块属性)
     let anchor = ""
     if (临时块属性) {
         try {
-            if (临时块属性[0][
-                name]) {
-                anchor = 临时块属性[0][
-                    name]
+            // @ts-ignore
+            if (临时块属性[0][name]) {
+                // @ts-ignore
+                anchor = 临时块属性[0][name]
             } else if (临时块属性[0]["content"]) {
                 anchor = 临时块属性[0]["content"]
             } else {
@@ -109,11 +112,11 @@ async function 获取思源块链接锚文本(链接源文本) {
             anchor = "解析错误"
         }
     }
-    //   console.log("锚文本",anchor)
+    //   log.logInfo("锚文本",anchor)
     return anchor
 }
 
-async function 打开思源笔记本(笔记本id) {
+async function 打开思源笔记本(笔记本id: string) {
     let data = {
         notebook: 笔记本id,
     }
@@ -122,7 +125,7 @@ async function 打开思源笔记本(笔记本id) {
     //返回空数据
 }
 
-async function 关闭思源笔记本(笔记本id) {
+async function 关闭思源笔记本(笔记本id: string) {
     let data = {
         notebook: 笔记本id,
     }
@@ -131,7 +134,7 @@ async function 关闭思源笔记本(笔记本id) {
     //返回空数据
 }
 
-async function 重命名思源笔记本(笔记本id, 笔记本的新名称) {
+async function 重命名思源笔记本(笔记本id: string, 笔记本的新名称: string) {
     let data = {
         notebook: 笔记本id,
         name: 笔记本的新名称,
@@ -141,7 +144,7 @@ async function 重命名思源笔记本(笔记本id, 笔记本的新名称) {
     //返回空数据
 }
 
-async function 新建思源笔记本(笔记本名称) {
+async function 新建思源笔记本(笔记本名称: string) {
     let data = {
         name: 笔记本名称,
     }
@@ -150,28 +153,28 @@ async function 新建思源笔记本(笔记本名称) {
     //返回空数据
 }
 
-async function 删除思源笔记本(笔记本id) {
+async function 删除思源笔记本(笔记本id: string) {
     let data = {notebook: 笔记本id}
     let url = '/api/notebook/removeNotebook'
     return 解析响应体(向思源请求数据(url, data))
     //返回空数据
 }
 
-async function 获取思源笔记本配置(笔记本id) {
+async function 获取思源笔记本配置(笔记本id: string) {
     let data = {notebook: 笔记本id}
     let url = '/api/notebook/getNotebookConf'
     return 解析响应体(向思源请求数据(url, data))
     //返回笔记本配置
 }
 
-async function 保存思源笔记本配置(笔记本id) {
+async function 保存思源笔记本配置(笔记本id: string) {
     let data = {notebook: 笔记本id}
     let url = '/api/notebook/setNotebookConf'
     return 解析响应体(向思源请求数据(url, data))
     //返回笔记本配置
 }
 
-async function 重命名思源文档(笔记本id, 文档路径, 文档新标题) {
+async function 重命名思源文档(笔记本id: string, 文档路径: string, 文档新标题: string) {
     let data = {
         notebook: 笔记本id,
         path: 文档路径,
@@ -182,7 +185,7 @@ async function 重命名思源文档(笔记本id, 文档路径, 文档新标题)
     //返回空数据
 }
 
-async function 删除思源文档(笔记本id, 文档路径) {
+async function 删除思源文档(笔记本id: string, 文档路径: string) {
     let data = {
         notebook: 笔记本id,
         path: 文档路径,
@@ -192,7 +195,7 @@ async function 删除思源文档(笔记本id, 文档路径) {
     //返回空数据
 }
 
-async function 移动思源文档(源笔记本ID, 源路径, 目标笔记本ID, 目标路径) {
+async function 移动思源文档(源笔记本ID: string, 源路径: string, 目标笔记本ID: string, 目标路径: string) {
     let data = {
         fromNotebook: 源笔记本ID,
         fromPath: 源路径,
@@ -204,7 +207,7 @@ async function 移动思源文档(源笔记本ID, 源路径, 目标笔记本ID, 
     //返回空数据
 }
 
-async function 根据思源路径获取人类可读路径(笔记本ID, 路径) {
+async function 根据思源路径获取人类可读路径(笔记本ID: string, 路径: string) {
     let data = {
         Notebook: 笔记本ID,
         Path: 路径,
@@ -216,7 +219,7 @@ async function 根据思源路径获取人类可读路径(笔记本ID, 路径) {
 
 //暂缺上传文件
 
-async function 以id获取思源块属性(内容块id) {
+async function 以id获取思源块属性(内容块id: string) {
     let data = {
         id: 内容块id,
     }
@@ -224,7 +227,7 @@ async function 以id获取思源块属性(内容块id) {
     return 解析响应体(向思源请求数据(url, data))
 }
 
-async function 以id获取思源块信息(内容块id) {
+async function 以id获取思源块信息(内容块id: string) {
     let sql = `select *
                from blocks
                where id = '${内容块id}'`
@@ -232,7 +235,7 @@ async function 以id获取思源块信息(内容块id) {
     return data[0]
 }
 
-async function 设置思源块属性(内容块id, 属性对象) {
+async function 设置思源块属性(内容块id: string, 属性对象: string) {
     let url = '/api/attr/setBlockAttrs'
     return 解析响应体(向思源请求数据(url, {
         id: 内容块id,
@@ -240,7 +243,7 @@ async function 设置思源块属性(内容块id, 属性对象) {
     }))
 }
 
-async function 以id获取文档块markdown(文档id) {
+async function 以id获取文档块markdown(文档id: string) {
     let data = {
         id: 文档id,
     }
@@ -249,7 +252,7 @@ async function 以id获取文档块markdown(文档id) {
     //文档hepath与Markdown 内容
 }
 
-async function 列出指定路径下文档(路径) {
+async function 列出指定路径下文档(路径: string) {
     let data = {
         path: 路径,
     }
@@ -259,16 +262,17 @@ async function 列出指定路径下文档(路径) {
 }
 
 // eslint-disable-next-line no-unused-vars
-function html转义(原始字符串) {
+function html转义(原始字符串: string) {
     var 临时元素 = document.createElement("div");
     临时元素.innerHTML = 原始字符串;
     var output = 临时元素.innerText || 临时元素.textContent;
+    // @ts-ignore
     临时元素 = null;
-    // console.log(output)
+    // log.logInfo(output)
     return output;
 }
 
-async function 以id获取反向链接(id) {
+async function 以id获取反向链接(id: string) {
     let data = {
         id: id,
         beforeLen: 10,
@@ -279,7 +283,7 @@ async function 以id获取反向链接(id) {
     return 解析响应体(向思源请求数据(url, data))
 }
 
-async function 以sql获取嵌入块内容(外部id数组, sql) {
+async function 以sql获取嵌入块内容(外部id数组: any, sql: string) {
     let data = {
         stmt: sql,
         excludeIDs: 外部id数组,
@@ -289,7 +293,7 @@ async function 以sql获取嵌入块内容(外部id数组, sql) {
 
 }
 
-async function 以id获取文档内容(id) {
+async function 以id获取文档内容(id: string) {
     let data = {
         id: id,
         k: "",
@@ -300,7 +304,7 @@ async function 以id获取文档内容(id) {
     return 解析响应体(向思源请求数据(url, data))
 }
 
-async function 以id获取文档聚焦内容(id) {
+async function 以id获取文档聚焦内容(id: string) {
     let data = {
         id: id,
         k: "",
@@ -317,7 +321,7 @@ async function 获取标签列表() {
     return 解析响应体(向思源请求数据(url, data))
 }
 
-async function 以id获取局部图谱(k, id, conf, reqId) {
+async function 以id获取局部图谱(k: string, id: string, conf: any, reqId: string) {
     let data = {
         id: id,
         k: k,
@@ -328,7 +332,7 @@ async function 以id获取局部图谱(k, id, conf, reqId) {
     return 解析响应体(向思源请求数据(url, data))
 }
 
-async function 获取全局图谱(k, conf, reqId) {
+async function 获取全局图谱(k: string, conf: any, reqId: string) {
     let data = {
         k: k,
         conf: conf,
@@ -338,7 +342,7 @@ async function 获取全局图谱(k, conf, reqId) {
     return 解析响应体(向思源请求数据(url, data))
 }
 
-async function 以关键词搜索文档(k) {
+async function 以关键词搜索文档(k: string) {
     let data = {
         k: k,
     }
@@ -346,7 +350,7 @@ async function 以关键词搜索文档(k) {
     return 解析响应体(向思源请求数据(url, data))
 }
 
-async function 以关键词搜索块(query) {
+async function 以关键词搜索块(query: string) {
     let data = {
         "query": query,
     }
@@ -354,7 +358,7 @@ async function 以关键词搜索块(query) {
     return 解析响应体(向思源请求数据(url, data))
 }
 
-async function 以关键词搜索模板(k) {
+async function 以关键词搜索模板(k: string) {
     let data = {
         k: k,
     }
@@ -362,7 +366,7 @@ async function 以关键词搜索模板(k) {
     return 解析响应体(向思源请求数据(url, data))
 }
 
-async function 通过markdown创建文档(notebook, path, markdown) {
+async function 通过markdown创建文档(notebook: string, path: string, markdown: string) {
     let data = {
         notebook: notebook,
         path: path,
@@ -372,12 +376,12 @@ async function 通过markdown创建文档(notebook, path, markdown) {
     return 解析响应体(向思源请求数据(url, data))
 }
 
-async function 渲染模板(data) {
+async function 渲染模板(data: any) {
     let url = '/api/template/render'
     return 解析响应体(向思源请求数据(url, data))
 }
 
-async function 插入块(previousID, dataType, data) {
+async function 插入块(previousID: string, dataType: string, data: any) {
     let url = '/api/block/insertBlock'
     return 解析响应体(向思源请求数据(
         // eslint-disable-next-line no-self-assign
@@ -390,7 +394,7 @@ async function 插入块(previousID, dataType, data) {
     ))
 }
 
-async function 插入前置子块(parentID, dataType, data) {
+async function 插入前置子块(parentID: string, dataType: string, data: any) {
     let url = '/api/block/prependBlock'
     return 解析响应体(向思源请求数据(
         // eslint-disable-next-line no-self-assign
@@ -403,7 +407,7 @@ async function 插入前置子块(parentID, dataType, data) {
     ))
 }
 
-async function 插入后置子块(parentID, dataType, data) {
+async function 插入后置子块(parentID: string, dataType: string, data: any) {
     let url = '/api/block/appendBlock'
     return 解析响应体(向思源请求数据(
         // eslint-disable-next-line no-self-assign
@@ -416,7 +420,7 @@ async function 插入后置子块(parentID, dataType, data) {
     ))
 }
 
-async function 更新块(id, dataType, data) {
+async function 更新块(id: string, dataType: string, data: any) {
     let url = '/api/block/updateBlock'
     return 解析响应体(向思源请求数据(
         // eslint-disable-next-line no-self-assign
@@ -429,12 +433,13 @@ async function 更新块(id, dataType, data) {
     ))
 }
 
-async function 删除块(id) {
+async function 删除块(id: string) {
     let url = '/api/block/deleteBlock'
     return 解析响应体(向思源请求数据(
         // eslint-disable-next-line no-self-assign
         url = url,
         // eslint-disable-next-line no-undef
+        // @ts-ignore
         data = {
             id: id,
         },

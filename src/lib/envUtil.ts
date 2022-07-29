@@ -15,7 +15,7 @@ export function getBooleanEnv(key: string) {
  * @param key key
  */
 export function getEnv(key: string) {
-    let env = null
+    let env = ""
     if (import.meta.env[key]) {
         env = import.meta.env[key]
     }

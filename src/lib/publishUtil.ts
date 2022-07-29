@@ -1,4 +1,5 @@
 import {getJSONConf} from "./config.js";
+import log from "./logUtil";
 
 const API_TYPE_CNBLPGS = "cnblogs";
 const API_TYPE_WORDPRESS = "wordpress";
@@ -278,7 +279,7 @@ export function getApiParams(apiType: string) {
         postidKey
     }
 
-    console.log("获取最新apiParams=>", {
+    log.logInfo("获取最新apiParams=>", {
         home,
         apiUrl,
         appKey,

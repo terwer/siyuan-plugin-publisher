@@ -4,6 +4,7 @@ import {slugify} from 'transliteration';
 import jsYaml from "js-yaml";
 import {mdToPlanText} from "./htmlUtil";
 import {getApiParams} from "./publishUtil";
+import log from "./logUtil";
 
 // const nodejieba = require("nodejieba");
 
@@ -15,10 +16,10 @@ import {getApiParams} from "./publishUtil";
 export function getPublishStatus(apiType: string, meta: any) {
     const postidKey = getApiParams(apiType).postidKey;
     const postId = meta[postidKey] || "";
-    console.log("平台=>", apiType)
-    console.log("meta=>", meta)
-    console.log("postidKey=>", postidKey)
-    console.log("postidKey的值=>", postId)
+    log.logInfo("平台=>", apiType)
+    log.logInfo("meta=>", meta)
+    log.logInfo("postidKey=>", postidKey)
+    log.logInfo("postidKey的值=>", postId)
     return postId !== "";
 }
 
@@ -33,7 +34,7 @@ export async function zhSlugify(q: string) {
     let json = await v.json()
     let res = json[0][0];
     res = res.replaceAll(/-/g, "");
-    console.log("res=>", res)
+    log.logInfo("res=>", res)
     return slugify(res);
 }
 
@@ -44,7 +45,7 @@ export function yaml2Obj(yaml: string) {
         yaml = yaml.replace("---\n", "")
         yaml = yaml.replace("---", "")
         doc = jsYaml.load(yaml);
-        // console.log(doc);
+        // log.logInfo(doc);
     } catch (e) {
         console.error(e);
     }
@@ -85,12 +86,12 @@ export function obj2yaml(obj: string) {
 //         }
 //     };
 //     const yamlResult = obj2yaml(obj)
-//     console.log("yamlResult=>")
-//     console.log(yamlResult)
+//     log.logInfo("yamlResult=>")
+//     log.logInfo(yamlResult)
 //
 //     const objResult = yaml2Obj(yamlResult)
-//     console.log("objResult=>")
-//     console.log(objResult)
+//     log.logInfo("objResult=>")
+//     log.logInfo(objResult)
 // }
 //
 // test()
@@ -132,9 +133,9 @@ export const formatIsoToNumDate = (str: string, isAddTimeZone?: boolean) => {
 
         let newmatch = match;
         if (isAddTimeZone) {
-            console.warn("修复时区，ISO日期默认晚8小时")
+            log.logInfo("修复时区，ISO日期默认晚8小时")
             // ISO日期默认晚8小时
-            console.log(addHoursToDate(new Date(match), 8))
+           log.logInfo(addHoursToDate(new Date(match), 8))
             newmatch = addHoursToDate(new Date(match), 8).toISOString()
         }
 
@@ -145,8 +146,8 @@ export const formatIsoToNumDate = (str: string, isAddTimeZone?: boolean) => {
         const result = d + t;
 
         newstr = newstr.replace(match, result)
-        console.log("formatIsoDate match=>", match)
-        console.log("formatIsoDate result=>", result)
+        log.logInfo("formatIsoDate match=>", match)
+        log.logInfo("formatIsoDate result=>", result)
     }
 
     return newstr;
@@ -177,7 +178,7 @@ export const formatIsoToZhDate = (str: string, isAddTimeZone: boolean) => {
         let newmatch = match;
         if (isAddTimeZone) {
             // ISO日期默认晚8小时
-            console.log(addHoursToDate(new Date(match), 8))
+            log.logInfo(addHoursToDate(new Date(match), 8))
             newmatch = addHoursToDate(new Date(match), 8).toISOString()
         }
 
@@ -188,11 +189,11 @@ export const formatIsoToZhDate = (str: string, isAddTimeZone: boolean) => {
         const result = d + " " + t;
 
         newstr = newstr.replace(match, result)
-        console.log("formatZhDate match=>", match)
-        console.log("formatZhDate result=>", result)
+        log.logInfo("formatZhDate match=>", match)
+        log.logInfo("formatZhDate result=>", result)
     }
 
-    // console.log("formatZhDate=>", newstr)
+    // log.logInfo("formatZhDate=>", newstr)
     return newstr;
 }
 
@@ -208,7 +209,7 @@ export const formatNumToZhDate = (str: string) => {
     let newstr = str;
 
     const onlyNumbers = newstr.replace(/\D/g, "");
-    // console.log("onlyNumbers=>", onlyNumbers)
+    // log.logInfo("onlyNumbers=>", onlyNumbers)
     const year = onlyNumbers.slice(0, 4)
     const month = onlyNumbers.slice(4, 6)
     const day = onlyNumbers.slice(6, 8)
@@ -231,8 +232,8 @@ export const formatNumToZhDate = (str: string) => {
         datestr = year + "-" + month + "-" + day + " " + hour + ":" + min + ":" + sec
     }
 
-    console.log("formatNumToZhDate str=>", str)
-    console.log("formatNumToZhDate datestr=>", datestr)
+    log.logInfo("formatNumToZhDate str=>", str)
+    log.logInfo("formatNumToZhDate datestr=>", datestr)
     return datestr;
 }
 
@@ -261,7 +262,7 @@ function changeTimeZone(date: any, timeZone: string) {
 export function covertStringToDate(dateString: string) {
     const datestr = formatNumToZhDate(dateString);
 
-    // console.log("datestr=>", datestr)
+    // log.logInfo("datestr=>", datestr)
     return changeTimeZone(datestr, 'Asia/Shanghai')
 }
 
@@ -270,24 +271,24 @@ export function covertStringToDate(dateString: string) {
 // // const datestr = date.toLocaleString('zh-CN', {
 // //     timeZone,
 // // });
-// console.log("date.toISOString=>")
-// console.log(date.toISOString())
+// log.logInfo("date.toISOString=>")
+// log.logInfo(date.toISOString())
 //
 // const obj = {
 //     title: "测试，这里有T，也有.000Z啊",
 //     date: date
 // }
 // const yaml = obj2yaml(obj)
-// console.log("yaml=>")
-// console.log(yaml)
+// log.logInfo("yaml=>")
+// log.logInfo(yaml)
 //
 // const fmt = formatIsoToZhDate(yaml)
-// console.log("fmt=>")
-// console.log(fmt)
+// log.logInfo("fmt=>")
+// log.logInfo(fmt)
 //
 // const fmt2 = formatIsoToNumDate(yaml)
-// console.log("fmt2=>")
-// console.log(fmt2)
+// log.logInfo("fmt2=>")
+// log.logInfo(fmt2)
 
 /**
  * 文本分词
@@ -296,7 +297,7 @@ export function covertStringToDate(dateString: string) {
 export async function cutWords(words: string) {
     // https://github.com/yanyiwu/nodejieba
     words = mdToPlanText(words)
-    console.log("准备开始分词，原文=>", words)
+    log.logInfo("准备开始分词，原文=>", words)
     // https://github.com/ddsol/speedtest.net/issues/112
     // 浏览器和webpack不支持，只有node能用
     // const result = nodejieba.cut(words);
@@ -306,7 +307,7 @@ export async function cutWords(words: string) {
     let json = await v.json()
     // const result = "浏览器和webpack不支持，只有node能用，作者仓库： https://github.com/yanyiwu/nodejieba ，在线版本：http://cppjieba-webdemo.herokuapp.com 。"
     // alert(result)
-    console.log("分词完毕，结果=>", json.result);
+    log.logInfo("分词完毕，结果=>", json.result);
     return json.result;
 }
 
@@ -318,7 +319,7 @@ export async function cutWords(words: string) {
  */
 function countWords(words: Array<string>, len: number) {
     const unUseWords = ['页面']
-    console.warn("文本清洗，统计，排序，去除无意义的单词unUseWords=>", unUseWords)
+    log.logInfo("文本清洗，统计，排序，去除无意义的单词unUseWords=>", unUseWords)
 
     // 统计
     // @ts-ignore
@@ -342,7 +343,7 @@ function countWords(words: Array<string>, len: number) {
         // @ts-ignore
         return wordobj[b] - wordobj[a];
     });
-    console.warn("文本清洗结束wordarr=>", wordarr)
+    log.logInfo("文本清洗结束wordarr=>", wordarr)
 
     if (!len || len === 0) {
         return wordarr
@@ -358,7 +359,7 @@ export function jiebaToHotWords(words: Array<string>, len: number) {
     // const len = 5
 
     const res = countWords(words, len);
-    // console.log(res)
+    // log.logInfo(res)
     return res;
 }
 

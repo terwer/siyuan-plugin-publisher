@@ -106,6 +106,10 @@
 </template>
 
 <script lang="ts" setup>
+import {onBeforeMount} from "vue";
+import {getSiyuanPage} from "../../lib/siyuan/siyuanUtil";
+import log from "../../lib/logUtil"
+
 const isPublished = false
 const formData = {
   title: "",
@@ -190,6 +194,14 @@ const copyToClipboard = () => {
 const publishPage = () => {
 
 }
+
+onBeforeMount(async () => {
+  const page = await getSiyuanPage()
+  log.logInfo("page=>", page)
+  if(!page){
+    return
+  }
+})
 </script>
 
 <script lang="ts">
@@ -272,7 +284,7 @@ export default {
   //       return
   //     }
   //     const page = await getBlockByID(pageId)
-  //     console.log("VuepressMain获取主文档", page)
+  //     log.logInfo("VuepressMain获取主文档", page)
   //
   //     // 思源笔记数据
   //     this.siyuanData.pageId = pageId;
@@ -289,7 +301,7 @@ export default {
   //       this.formData.tag.dynamicTags.push(tgarr[i])
   //     }
   //     this.formData.created = formatNumToZhDate(page.created)
-  //     console.log("VuepressMain初始化页面,meta=>", this.siyuanData.meta);
+  //     log.logInfo("VuepressMain初始化页面,meta=>", this.siyuanData.meta);
   //
   //     // 表单属性转换为HTML
   //     this.convertAttrToYAML()
@@ -305,7 +317,7 @@ export default {
   //     if (this.formData.checkList.length > 0) {
   //       // 调用Google翻译API
   //       const result = await zhSlugify(title);
-  //       console.log("result=>", result)
+  //       log.logInfo("result=>", result)
   //       if (result) {
   //         this.formData.customSlug = result
   //       } else {
@@ -324,7 +336,7 @@ export default {
   //     this.formData.desc = parseHtml(html, CONSTANTS.MAX_PREVIEW_LENGTH, true)
   //   },
   //   createTimeChanged(val) {
-  //     console.log("createTimeChanged=>", val)
+  //     log.logInfo("createTimeChanged=>", val)
   //   },
   //   tagHandleClose(tag) {
   //     this.formData.tag.dynamicTags.splice(this.formData.tag.dynamicTags.indexOf(tag), 1)
@@ -347,10 +359,10 @@ export default {
   //
   //     const md = data.content
   //     const genTags = await cutWords(md)
-  //     console.log("genTags=>", genTags)
+  //     log.logInfo("genTags=>", genTags)
   //
   //     const hotTags = jiebaToHotWords(genTags, 5)
-  //     console.log("hotTags=>", hotTags)
+  //     log.logInfo("hotTags=>", hotTags)
   //
   //     // 如果标签不存在，保存新标签到表单
   //     for (let i = 0; i < hotTags.length; i++) {
@@ -367,7 +379,7 @@ export default {
   //       tags: this.formData.tag.dynamicTags.join(",")
   //     };
   //     await setBlockAttrs(this.siyuanData.pageId, customAttr)
-  //     console.log("VuepressMain保存属性到思源笔记,meta=>", customAttr);
+  //     log.logInfo("VuepressMain保存属性到思源笔记,meta=>", customAttr);
   //
   //     // 刷新属性数据
   //     await this.initPage();
@@ -375,9 +387,9 @@ export default {
   //     alert(this.$t('main.opt.success'))
   //   },
   //   convertAttrToYAML() {
-  //     console.log("convertAttrToYAML")
+  //     log.logInfo("convertAttrToYAML")
   //     // 表单属性转yamlObj
-  //     console.log("convertAttrToYAML,formData=>", this.formData)
+  //     log.logInfo("convertAttrToYAML,formData=>", this.formData)
   //     this.vuepressData.yamlObj.title = this.formData.title;
   //     this.vuepressData.yamlObj.permalink = "/post/" + this.formData.customSlug + ".html";
   //     this.vuepressData.yamlObj.date = covertStringToDate(this.formData.created)
@@ -403,12 +415,12 @@ export default {
   //     this.vuepressData.vuepressFullContent = this.vuepressData.formatter;
   //   },
   //   async convertYAMLToAttr() {
-  //     console.log("convertYAMLToAttr")
+  //     log.logInfo("convertYAMLToAttr")
   //     this.vuepressData.formatter = this.vuepressData.vuepressFullContent
   //     this.vuepressData.yamlObj = yaml2Obj(this.vuepressData.formatter)
   //
   //     // yamlObj转表单属性
-  //     console.log("convertYAMLToAttr,yamlObj=>", this.vuepressData.yamlObj)
+  //     log.logInfo("convertYAMLToAttr,yamlObj=>", this.vuepressData.yamlObj)
   //     this.formData.title = this.vuepressData.yamlObj.title
   //     this.formData.customSlug = this.vuepressData.yamlObj.permalink.replace("/pages/", "")
   //         .replace("/post/", "").replace(".html", "")
