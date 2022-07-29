@@ -107,13 +107,14 @@
 
 <script lang="ts" setup>
 import {onBeforeMount, ref} from "vue";
-import {getPageId, getPage} from "../../lib/siyuan/siyuanUtil";
+import {getPage, getPageAttrs, getPageId} from "../../lib/siyuan/siyuanUtil";
 import log from "../../lib/logUtil"
+import {SIYUAN_PAGE_ATTR_KEY} from "../../constants/siyuanPageConstants"
 
-const isPublished = false
-const formData = {
+const isPublished = ref(false)
+const formData = ref({
   title: "",
-  customSlug: ref(""),
+  customSlug: "",
   desc: "",
   created: new Date(),
   checkList: [],
@@ -123,7 +124,7 @@ const formData = {
     inputVisible: false
   },
   categories: ["默认分类"]
-}
+})
 const siyuanData = {
   pageId: "",
   meta: {}
@@ -155,9 +156,27 @@ const vuepressData = {
   vuepressFullContent: ""
 }
 
-const initPage = () => {
+async function initPage() {
+  const pageId = await getPageId(true)
+  log.logInfo("VuepressMain pageId=>", pageId)
+  if (!pageId || pageId == "") {
+    return
+  }
+  const page = await getPage(pageId)
+  log.logWarn("VuepressMain获取主文档", page)
 
+  // 思源笔记数据
+  siyuanData.pageId = pageId;
+  siyuanData.meta = await getPageAttrs(pageId)
+
+  // 表单数据
+  formData.value.title = page.content;
+  // @ts-ignore
+  formData.value.customSlug = siyuanData.meta[SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_SLUG_KEY];
+  // @ts-ignore
+  formData.value.desc = siyuanData.meta[SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_DESC_KEY];
 }
+
 const makeSlug = () => {
 
 }
@@ -196,274 +215,13 @@ const publishPage = () => {
 }
 
 onBeforeMount(async () => {
-  const pageId = await getPageId(true)
-  log.logInfo("VuepressMain pageId=>", pageId)
-  if (!pageId || pageId == "") {
-    return
-  }
-  const page = await getPage(pageId)
-  log.logWarn("VuepressMain获取主文档", page)
+  await initPage()
 })
 </script>
 
 <script lang="ts">
-
-// import {
-//   covertStringToDate, cutWords,
-//   formatIsoToZhDate, formatNumToZhDate, getPublishStatus,
-//   jiebaToHotWords,
-//   obj2yaml,
-//   yaml2Obj,
-//   zhSlugify
-// } from "../../lib/util";
-// import {exportMdContent, getBlockAttrs, getBlockByID, setBlockAttrs} from "../../lib/siyuan/siYuanApi.js";
-// import {PUBLISH_POSTID_KEY_CONSTANTS, PUBLISH_TYPE_CONSTANTS} from "../../lib/publishUtil";
-// import {slugify} from 'transliteration';
-// import {mdToHtml, parseHtml, removeWidgetTag} from "../../lib/htmlUtil";
-// import {CONSTANTS} from "../../constants/constants";
-// import copy from 'copy-to-clipboard';
-// import {getSiyuanPageId} from "../../lib/siyuan/siyuanUtil.js";
-
 export default {
   name: "VuepressMain",
-  // data() {
-  //   return {
-  //     isPublished: false,
-  //     formData: {
-  //       title: "",
-  //       customSlug: "",
-  //       desc: "",
-  //       created: new Date(),
-  //       checkList: [],
-  //       tag: {
-  //         inputValue: "",
-  //         dynamicTags: [],
-  //         inputVisible: false
-  //       },
-  //       categories: ["默认分类"]
-  //     },
-  //     siyuanData: {
-  //       pageId: "",
-  //       meta: {}
-  //     },
-  //     vuepressData: {
-  //       yamlObj: {
-  //         title: "",
-  //         date: new Date(),
-  //         permalink: "/post/convert-npm-dependencies-to-local.html",
-  //         meta: [
-  //           {
-  //             name: "keywords",
-  //             content: ""
-  //           },
-  //           {
-  //             name: "description",
-  //             content: ""
-  //           }
-  //         ],
-  //         categories: [],
-  //         tags: [],
-  //         author: {
-  //           name: "terwer",
-  //           link: "https://github.com/terwer"
-  //         }
-  //       },
-  //       formatter: "",
-  //       vuepressContent: "",
-  //       vuepressFullContent: ""
-  //     }
-  //   }
-  // },
-  // async created() {
-  //   await this.initPage();
-  // },
-  // async mounted() {
-  // },
-  // methods: {
-  //   async initPage() {
-  //     const pageId = await getSiyuanPageId(false);
-  //     if (!pageId || pageId === "") {
-  //       return
-  //     }
-  //     const page = await getBlockByID(pageId)
-  //     log.logInfo("VuepressMain获取主文档", page)
-  //
-  //     // 思源笔记数据
-  //     this.siyuanData.pageId = pageId;
-  //     this.siyuanData.meta = await getBlockAttrs(pageId)
-  //
-  //     // 表单数据
-  //     this.formData.title = page.content;
-  //     this.formData.customSlug = this.siyuanData.meta["custom-slug"];
-  //     this.formData.desc = this.siyuanData.meta["custom-desc"];
-  //     this.formData.tag.dynamicTags = [];
-  //     const tagstr = this.siyuanData.meta.tags || ""
-  //     const tgarr = tagstr.split(",")
-  //     for (let i = 0; i < tgarr.length; i++) {
-  //       this.formData.tag.dynamicTags.push(tgarr[i])
-  //     }
-  //     this.formData.created = formatNumToZhDate(page.created)
-  //     log.logInfo("VuepressMain初始化页面,meta=>", this.siyuanData.meta);
-  //
-  //     // 表单属性转换为HTML
-  //     this.convertAttrToYAML()
-  //
-  //     // 发布状态
-  //     this.isPublished = getPublishStatus(PUBLISH_TYPE_CONSTANTS.API_TYPE_VUEPRESS, this.siyuanData.meta)
-  //   },
-  //   async makeSlug() {
-  //     // 获取最新属性
-  //     this.siyuanData.meta = await getBlockAttrs(this.siyuanData.pageId)
-  //     // 获取标题
-  //     const title = this.siyuanData.meta.title;
-  //     if (this.formData.checkList.length > 0) {
-  //       // 调用Google翻译API
-  //       const result = await zhSlugify(title);
-  //       log.logInfo("result=>", result)
-  //       if (result) {
-  //         this.formData.customSlug = result
-  //       } else {
-  //         alert(this.$t('main.opt.failure'))
-  //       }
-  //     } else {
-  //       this.formData.customSlug = slugify(title);
-  //     }
-  //   },
-  //   async makeDesc() {
-  //     const data = await exportMdContent(this.siyuanData.pageId);
-  //
-  //     const md = data.content
-  //     let html = mdToHtml(md)
-  //     // this.formData.desc = html;
-  //     this.formData.desc = parseHtml(html, CONSTANTS.MAX_PREVIEW_LENGTH, true)
-  //   },
-  //   createTimeChanged(val) {
-  //     log.logInfo("createTimeChanged=>", val)
-  //   },
-  //   tagHandleClose(tag) {
-  //     this.formData.tag.dynamicTags.splice(this.formData.tag.dynamicTags.indexOf(tag), 1)
-  //   },
-  //   tagShowInput() {
-  //     this.formData.tag.inputVisible = true
-  //     this.$nextTick(function () {
-  //       this.$refs.tagRefInput.focus()
-  //     })
-  //   },
-  //   tagHandleInputConfirm() {
-  //     if (this.formData.tag.inputValue) {
-  //       this.formData.tag.dynamicTags.push(this.formData.tag.inputValue)
-  //     }
-  //     this.formData.tag.inputVisible = false
-  //     this.formData.tag.inputValue = ''
-  //   },
-  //   async fetchTag() {
-  //     const data = await exportMdContent(this.siyuanData.pageId);
-  //
-  //     const md = data.content
-  //     const genTags = await cutWords(md)
-  //     log.logInfo("genTags=>", genTags)
-  //
-  //     const hotTags = jiebaToHotWords(genTags, 5)
-  //     log.logInfo("hotTags=>", hotTags)
-  //
-  //     // 如果标签不存在，保存新标签到表单
-  //     for (let i = 0; i < hotTags.length; i++) {
-  //       if (!this.formData.tag.dynamicTags.includes(hotTags[i])) {
-  //         this.formData.tag.dynamicTags.push(hotTags[i])
-  //       }
-  //     }
-  //   },
-  //   async saveAttrToSiyuan() {
-  //     const customAttr = {
-  //       "custom-slug": this.formData.customSlug,
-  //       [PUBLISH_POSTID_KEY_CONSTANTS.VUEPRESS_POSTID_KEY]: this.formData.customSlug,
-  //       "custom-desc": this.formData.desc,
-  //       tags: this.formData.tag.dynamicTags.join(",")
-  //     };
-  //     await setBlockAttrs(this.siyuanData.pageId, customAttr)
-  //     log.logInfo("VuepressMain保存属性到思源笔记,meta=>", customAttr);
-  //
-  //     // 刷新属性数据
-  //     await this.initPage();
-  //
-  //     alert(this.$t('main.opt.success'))
-  //   },
-  //   convertAttrToYAML() {
-  //     log.logInfo("convertAttrToYAML")
-  //     // 表单属性转yamlObj
-  //     log.logInfo("convertAttrToYAML,formData=>", this.formData)
-  //     this.vuepressData.yamlObj.title = this.formData.title;
-  //     this.vuepressData.yamlObj.permalink = "/post/" + this.formData.customSlug + ".html";
-  //     this.vuepressData.yamlObj.date = covertStringToDate(this.formData.created)
-  //     const meta = [
-  //       {
-  //         name: "keywords",
-  //         content: this.formData.tag.dynamicTags.join(" ")
-  //       },
-  //       {
-  //         name: "description",
-  //         content: this.formData.desc
-  //       }
-  //     ];
-  //     this.vuepressData.yamlObj.meta = meta;
-  //     this.vuepressData.yamlObj.tags = this.formData.tag.dynamicTags;
-  //     this.vuepressData.yamlObj.categories = this.formData.categories;
-  //
-  //     // formatter
-  //     let yaml = obj2yaml(this.vuepressData.yamlObj);
-  //     // 修复yaml的ISO日期格式（js-yaml转换的才需要）
-  //     yaml = formatIsoToZhDate(yaml, true)
-  //     this.vuepressData.formatter = yaml
-  //     this.vuepressData.vuepressFullContent = this.vuepressData.formatter;
-  //   },
-  //   async convertYAMLToAttr() {
-  //     log.logInfo("convertYAMLToAttr")
-  //     this.vuepressData.formatter = this.vuepressData.vuepressFullContent
-  //     this.vuepressData.yamlObj = yaml2Obj(this.vuepressData.formatter)
-  //
-  //     // yamlObj转表单属性
-  //     log.logInfo("convertYAMLToAttr,yamlObj=>", this.vuepressData.yamlObj)
-  //     this.formData.title = this.vuepressData.yamlObj.title
-  //     this.formData.customSlug = this.vuepressData.yamlObj.permalink.replace("/pages/", "")
-  //         .replace("/post/", "").replace(".html", "")
-  //         .replace("/", "")
-  //     this.formData.created = formatIsoToZhDate(this.vuepressData.yamlObj.date.toISOString(), false)
-  //
-  //     const yamlMeta = this.vuepressData.yamlObj.meta
-  //     for (let i = 0; i < yamlMeta.length; i++) {
-  //       const m = yamlMeta[i]
-  //       if (m.name === "description") {
-  //         this.formData.desc = m.content
-  //         break
-  //       }
-  //     }
-  //
-  //     for (let j = 0; j < this.vuepressData.yamlObj.tags.length; j++) {
-  //       const tag = this.vuepressData.yamlObj.tags[j]
-  //       if (!this.formData.tag.dynamicTags.includes(tag)) {
-  //         this.formData.tag.dynamicTags.push(tag)
-  //       }
-  //     }
-  //
-  //     this.formData.categories = this.vuepressData.yamlObj.categories
-  //   },
-  //   copyToClipboard() {
-  //     this.$refs.fmtRefInput.focus();
-  //     // document.execCommand('copy');
-  //     copy(this.vuepressData.vuepressFullContent)
-  //
-  //     alert(this.$t('main.opt.success'))
-  //   },
-  //   async publishPage() {
-  //     const data = await exportMdContent(this.siyuanData.pageId);
-  //     const md = removeWidgetTag(data.content)
-  //
-  //     this.vuepressData.vuepressContent = md;
-  //     this.vuepressData.vuepressFullContent = this.vuepressData.formatter + "\n" + this.vuepressData.vuepressContent;
-  //
-  //     alert(this.$t('main.opt.success'))
-  //   }
-  // }
 }
 </script>
 

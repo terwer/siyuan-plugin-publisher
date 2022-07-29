@@ -3,7 +3,7 @@
  * @returns {Promise<string>}
  */
 import {getJSONConf, setJSONConf} from "../config";
-import {getBlockByID} from "./siYuanApi.js";
+import {getBlockByID, getBlockAttrs} from "./siYuanApi.js";
 import log from "../logUtil";
 import {getEnv} from "../envUtil";
 
@@ -123,4 +123,12 @@ export async function getPageId(force?: boolean, pageId?: string) {
  */
 export async function getPage(pageId: string) {
     return await getBlockByID(pageId)
+}
+
+/**
+ * 获取页面属性
+ * @param pageId 页面ID
+ */
+export async function getPageAttrs(pageId: string) {
+    return await getBlockAttrs(pageId)
 }
