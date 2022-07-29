@@ -53,18 +53,40 @@ export {
     以id获取思源块信息 as getBlockByID,
 };
 
-async function 向思源请求数据(url: string, data: any) {
+/**
+ * 向思源请求数据
+ * @param url url
+ * @param data 数据
+ * @param method 请求方法 GET | POST
+ * @param useToken 权限TOKEN
+ */
+async function 向思源请求数据(url: string, data: any, method?: string, useToken?: boolean) {
     let resData = null
     if (config.baseUrl != "") {
         url = config.baseUrl + url
     }
-    await fetch(url, {
+
+    let m = "POST"
+    if (method) {
+        m = method;
+    }
+
+    let fetchOps = {
         body: JSON.stringify(data),
-        method: 'POST',
-        headers: {
-            Authorization: `Token ${config.token}`,
+        method: m
+    }
+    if (useToken) {
+        fetchOps = {
+            body: JSON.stringify(data),
+            method: m,
+            // @ts-ignore
+            headers: {
+                Authorization: `Token ${config.token}`,
+            }
         }
-    }).then(function (response) {
+    }
+
+    await fetch(url, fetchOps).then(function (response) {
         resData = response.json()
     })
     return resData
