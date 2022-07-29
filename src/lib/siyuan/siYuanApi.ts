@@ -55,6 +55,9 @@ export {
 
 async function 向思源请求数据(url: string, data: any) {
     let resData = null
+    if (config.baseUrl != "") {
+        url = config.baseUrl + url
+    }
     await fetch(url, {
         body: JSON.stringify(data),
         method: 'POST',

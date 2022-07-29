@@ -106,14 +106,14 @@
 </template>
 
 <script lang="ts" setup>
-import {onBeforeMount} from "vue";
-import {getPageId} from "../../lib/siyuan/siyuanUtil";
+import {onBeforeMount, ref} from "vue";
+import {getPageId, getPage} from "../../lib/siyuan/siyuanUtil";
 import log from "../../lib/logUtil"
 
 const isPublished = false
 const formData = {
   title: "",
-  customSlug: "",
+  customSlug: ref(""),
   desc: "",
   created: new Date(),
   checkList: [],
@@ -201,6 +201,8 @@ onBeforeMount(async () => {
   if (!pageId || pageId == "") {
     return
   }
+  const page = await getPage(pageId)
+  log.logWarn("VuepressMain获取主文档", page)
 })
 </script>
 
