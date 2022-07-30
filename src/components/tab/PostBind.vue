@@ -63,21 +63,23 @@ const props = defineProps({
   }
 })
 /*监听props*/
-watch(() => props.isReload, /**/(oldValue, newValue) => {
+watch(() => props.isReload, /**/async (oldValue, newValue) => {
   // Here you can add you functionality
   // as described in the name you will get old and new value of watched property
   // 默认选中vuepress
   setBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY, true)
   initConf();
+  await initPage()
+
   log.logInfo("post-bind初始化")
 })
 
 onBeforeMount(async () => {
   setBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY, true)
   initConf();
-  log.logInfo("post-bind初始化 onMounted")
-
   await initPage()
+
+  log.logInfo("post-bind初始化 onMounted")
 })
 
 onMounted(() => {
