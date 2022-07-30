@@ -64,11 +64,19 @@ export default {
     "service.switch.conf": "Confluence",
     "service.switch.cnblogs": "Cnblogs",
     "service.switch.wordpress": "Wordpress",
-    "service.switch.must.select.one":"You must add at least one plantform",
+    "service.switch.yuque": "Yuque",
+    "service.switch.liandi": "Liandi",
+    "service.switch.wechat": "WeChat",
+    "service.switch.wemp": "WeMedia",
+    "service.switch.zhihu": "Zhihu",
+    "service.switch.must.select.one": "You must add at least one plantform",
     "post.bind.vuepress.slug": "Vuepress slug",
     "post.bind.cnblogs.postid": "Cnblogs ID",
     "post.bind.jvue.postid": "JVue ID",
     "post.bind.conf.postid": "Conf ID",
+    "post.bind.wordpress.postid": "WP ID",
     "post.bind.conf.save": "Save",
-    "post.bind.conf.cancel": "Cancel"
+    "post.bind.conf.cancel": "Cancel",
+    "form.validate.name.required": "Please input name",
+    "form.validate.name.length": "Length should be 0 to 1"
 }

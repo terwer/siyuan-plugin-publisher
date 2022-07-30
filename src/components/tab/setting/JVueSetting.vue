@@ -29,15 +29,15 @@
 
 <script lang="ts" setup>
 import {ref} from "vue";
-import log from "../../lib/logUtil";
-import {getJSONConf, setJSONConf} from "../../lib/config";
+import log from "../../../lib/logUtil";
+import {getJSONConf, setJSONConf} from "../../../lib/config";
 import {
   PUBLISH_TYPE_CONSTANTS,
   PUBLISH_HOME_KEY_CONSTANTS,
   PUBLISH_API_URL_KEY_CONSTANTS,
   PUBLISH_USERNAME_KEY_CONSTANTS,
   PUBLISH_PASSWORD_KEY_CONSTANTS
-} from "../../lib/publishUtil"
+} from "../../../lib/publishUtil"
 import {ElMessage} from "element-plus";
 import {useI18n} from "vue-i18n";
 

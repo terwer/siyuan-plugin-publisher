@@ -1,22 +1,22 @@
 <template>
-  <el-form label-width="120px">
+  <el-form label-width="100px" inline>
     <el-form-item :label="$t('service.switch.vuepress')">
       <el-switch v-model="vuepressEnabled" disabled/>
     </el-form-item>
 
-    <el-form-item :label="$t('service.switch.jvue')" v-if="false">
+    <el-form-item :label="$t('service.switch.jvue')">
       <el-switch v-model="jvueEnabled" @change="jvueOnChange"/>
     </el-form-item>
 
-    <el-form-item :label="$t('service.switch.conf')" v-if="false">
+    <el-form-item :label="$t('service.switch.conf')">
       <el-switch v-model="confEnabled" @change="confOnChange"/>
     </el-form-item>
 
-    <el-form-item :label="$t('service.switch.cnblogs')" v-if="false">
+    <el-form-item :label="$t('service.switch.cnblogs')">
       <el-switch v-model="cnblogsEnabled" @change="cnblogsOnChange"/>
     </el-form-item>
 
-    <el-form-item :label="$t('service.switch.wordpress')" v-if="false">
+    <el-form-item :label="$t('service.switch.wordpress')">
       <el-switch v-model="wordpressEnabled" @change="wordpressOnChange"/>
     </el-form-item>
   </el-form>
@@ -25,8 +25,8 @@
 <script lang="ts" setup>
 import {ref} from 'vue'
 import {useI18n} from "vue-i18n";
-import {setBooleanConf, getBooleanConf} from "../lib/config";
-import SWITCH_CONSTANTS from "../constants/switchConstants";
+import {setBooleanConf, getBooleanConf} from "../../lib/config";
+import SWITCH_CONSTANTS from "../../constants/switchConstants";
 
 const {t} = useI18n()
 

@@ -112,9 +112,9 @@
 
 <script lang="ts" setup>
 import {onBeforeMount, ref} from "vue";
-import {getPage, getPageAttrs, setPageAttrs, getPageId, getPageMd} from "../../lib/siyuan/siyuanUtil";
-import log from "../../lib/logUtil"
-import {SIYUAN_PAGE_ATTR_KEY} from "../../constants/siyuanPageConstants"
+import {getPage, getPageAttrs, setPageAttrs, getPageId, getPageMd} from "../../../lib/siyuan/siyuanUtil";
+import log from "../../../lib/logUtil"
+import {SIYUAN_PAGE_ATTR_KEY} from "../../../constants/siyuanPageConstants"
 import {
   pingyinSlugify,
   zhSlugify,
@@ -126,13 +126,13 @@ import {
   obj2yaml,
   yaml2Obj,
   getPublishStatus
-} from "../../lib/util";
+} from "../../../lib/util";
 import {useI18n} from "vue-i18n";
 import {ElMessage} from "element-plus";
-import {CONSTANTS} from "../../constants/constants";
-import {mdToHtml, parseHtml, removeWidgetTag} from "../../lib/htmlUtil";
+import {CONSTANTS} from "../../../constants/constants";
+import {mdToHtml, parseHtml, removeWidgetTag} from "../../../lib/htmlUtil";
 import {nextTick} from 'vue'
-import {PUBLISH_POSTID_KEY_CONSTANTS, PUBLISH_TYPE_CONSTANTS} from "../../lib/publishUtil";
+import {PUBLISH_POSTID_KEY_CONSTANTS, PUBLISH_TYPE_CONSTANTS} from "../../../lib/publishUtil";
 import copy from "copy-to-clipboard"
 
 const {t} = useI18n()

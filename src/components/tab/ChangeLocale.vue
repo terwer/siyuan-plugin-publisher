@@ -13,7 +13,7 @@
 <script lang="ts" setup>
 import {useI18n} from "vue-i18n";
 import {onMounted} from "vue";
-import log from "../lib/logUtil";
+import log from "../../lib/logUtil";
 
 const {locale} = useI18n()
 const langs = [

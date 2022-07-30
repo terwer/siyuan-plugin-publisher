@@ -1,30 +1,28 @@
 <template>
   <el-tabs type="border-card">
-    <el-tab-pane :label="$t('setting.vuepress')" v-if="vuepressEnabled">
-      <vuepress-setting/>
+    <el-tab-pane :label="$t('main.publish.to.vuepress')" v-if="vuepressEnabled">
+      <vuepress-main/>
     </el-tab-pane>
-    <el-tab-pane :label="$t('setting.jvue')" v-if="jvueEnabled">
-      <j-vue-setting/>
+    <el-tab-pane :label="$t('main.publish.to.jvue')" v-if="jvueEnabled">
+      JVue
     </el-tab-pane>
-    <el-tab-pane :label="$t('setting.conf')" v-if="confEnabled">
+    <el-tab-pane :label="$t('main.publish.to.conf')" v-if="confEnabled">
       Confluence
     </el-tab-pane>
-    <el-tab-pane :label="$t('setting.cnblogs')" v-if="cnblogsEnabled">
+    <el-tab-pane :label="$t('main.publish.to.cnblogs')" v-if="cnblogsEnabled">
       Cnblogs
     </el-tab-pane>
-    <el-tab-pane :label="$t('setting.wordpress')" v-if="wordpressEnabled">
+    <el-tab-pane :label="$t('main.publish.to.wordpress')" v-if="wordpressEnabled">
       Wordpress
     </el-tab-pane>
   </el-tabs>
 </template>
 
 <script lang="ts" setup>
-import {ref, watch} from "vue";
-import {getBooleanConf, setBooleanConf} from "../lib/config";
-import SWITCH_CONSTANTS from "../constants/switchConstants";
-import log from "../lib/logUtil";
-import JVueSetting from "./setting/JVueSetting.vue";
-import VuepressSetting from "./setting/VuepressSetting.vue";
+import {onMounted, ref, watch} from "vue";
+import {getBooleanConf, setBooleanConf} from "../../lib/config";
+import SWITCH_CONSTANTS from "../../constants/switchConstants";
+import log from "../../lib/logUtil";
 
 const vuepressEnabled = ref(true)
 const jvueEnabled = ref(false)
@@ -54,14 +52,22 @@ watch(() => props.isReload, /**/(oldValue, newValue) => {
   // 默认选中vuepress
   setBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY, true)
   initConf();
-  log.logInfo("plantform-setting初始化")
+  log.logInfo("plantform-main初始化")
+})
+
+onMounted(() => {
+  setBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY, true)
+  initConf();
+  log.logInfo("plantform-main初始化 onMounted")
 })
 </script>
 
 <script lang="ts">
+import VuepressMain from "./main/VuepressMain.vue";
+
 export default {
-  name: "PlantformSetting",
-  components: {}
+  name: "PlantformMain",
+  components: {VuepressMain}
 }
 </script>
 

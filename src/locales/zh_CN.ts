@@ -64,11 +64,19 @@ export default {
     "service.switch.conf": "Confluence",
     "service.switch.cnblogs": "博客园",
     "service.switch.wordpress": "Wordpress",
+    "service.switch.yuque": "语雀",
+    "service.switch.liandi": "链滴",
+    "service.switch.wechat": "微信聊天",
+    "service.switch.wemp": "微信公众号",
+    "service.switch.zhihu": "知乎",
     "service.switch.must.select.one": "您必须选择一个至少平台",
     "post.bind.vuepress.slug": "Vuepress别名",
-    "post.bind.cnblogs.postid": "博客园别名/ID",
+    "post.bind.cnblogs.postid": "博客园别名",
     "post.bind.jvue.postid": "JVue的ID",
     "post.bind.conf.postid": "Conf的ID",
+    "post.bind.wordpress.postid": "WP的ID",
     "post.bind.conf.save": "保存",
-    "post.bind.conf.cancel": "取消"
+    "post.bind.conf.cancel": "取消",
+    "form.validate.name.required":"请输入名称",
+    "form.validate.name.length":"长度必须在0到1之间"
 }
