@@ -22,7 +22,8 @@ export default defineConfig(({mode}) => {
     return {
         plugins: [
             vue(),
-            vitePluginRequireTransform.default({}),
+            // @ts-ignore
+            vitePluginRequireTransform.default(),
         ],
         base: './',
         resolve: {

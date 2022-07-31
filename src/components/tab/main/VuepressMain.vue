@@ -132,7 +132,8 @@ import {ElMessage} from "element-plus";
 import {CONSTANTS} from "../../../lib/constants/constants";
 import {mdToHtml, parseHtml, removeWidgetTag} from "../../../lib/htmlUtil";
 import {nextTick} from 'vue'
-import {PUBLISH_POSTID_KEY_CONSTANTS, PUBLISH_TYPE_CONSTANTS} from "../../../lib/publishUtil";
+import {API_TYPE_CONSTANTS} from "../../../lib/constants/apiTypeConstants";
+import {PUBLISH_POSTID_KEY_CONSTANTS} from "../../../lib/publishUtil";
 import copy from "copy-to-clipboard"
 
 const {t} = useI18n()
@@ -218,7 +219,7 @@ async function initPage() {
   convertAttrToYAML()
 
   // 发布状态
-  isPublished.value = getPublishStatus(PUBLISH_TYPE_CONSTANTS.API_TYPE_VUEPRESS, siyuanData.value.meta)
+  isPublished.value = getPublishStatus(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS, siyuanData.value.meta)
 }
 
 async function makeSlug(hideTip?: boolean) {

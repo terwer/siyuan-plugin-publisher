@@ -28,7 +28,7 @@ export function getJSONConf<T>(key: string): T {
 
     let valueObj = <T>{}
     let value = getConf(key)
-    if (typeof value === "string") {
+    if (typeof value === "string" && value != "") {
         try {
             valueObj = JSON.parse(value);
         } catch (e) {

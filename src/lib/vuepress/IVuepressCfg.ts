@@ -17,11 +17,11 @@ export interface IVuepressCfg {
     /**
      * 文章存储的默认目录（相对于仓库根目录的相对路径，例如：docs/_posts/）
      */
-    defaultPath?: string
+    defaultPath: string
     /**
      * 默认提交信息
      */
-    defaultMsg?: string
+    defaultMsg: string
     /**
      * 作者
      */

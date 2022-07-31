@@ -1,81 +1,105 @@
-import {Octokit} from "@octokit/core";
-import {getJSONConf} from "../config";
+// import {Octokit} from "@octokit/core";
 import {IVuepressCfg} from "./IVuepressCfg";
-import {API_TYPE_CONSTANTS} from "../constants/apiTypeConstants";
-
-// 读取配置
-const vuepressCfg = getJSONConf<IVuepressCfg>(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS)
-
-// Octokit.js
-// https://github.com/octokit/core.js#readme
-const octokit = new Octokit({
-    auth: vuepressCfg.githubToken
-})
-
-/**
- * 获取Github文件的sha，如果文件不存在返回undefined，存在返回sha
- * src.terwer.github.io/docs/_posts/测试.md
- * @param docPath
- * @returns {Promise<*>}
- */
-export async function getPage(docPath: string) {
-    let sha
-
-    let res
-    try {
-        const route = 'GET /repos/' + vuepressCfg.githubUser + '/' + vuepressCfg.githubRepo + '/contents/' + docPath;
-        console.log("getPage route=>", route)
-        res = await octokit.request(route, {
-            owner: vuepressCfg.githubUser,
-            repo: vuepressCfg.githubRepo,
-            path: docPath
-        })
-        console.log("getPage res=>", res)
-    } catch (e) {
-        console.log("getPage error=>", e)
-    }
-
-    if (res) {
-        sha = res.data.sha
-    }
-    return sha;
+//
+// /**
+//  * Vuepress V1 API
+//  */
+// class VuepressApiV1 {
+//     // 读取配置
+//     vuepressCfg: IVuepressCfg = <IVuepressCfg>{}
+//
+//     // Octokit.js
+//     // https://github.com/octokit/core.js#readme
+//     octokit: Octokit = <Octokit>{}
+//
+//     constructor(vuepressCfg: IVuepressCfg, octokit: Octokit) {
+//         this.vuepressCfg = vuepressCfg;
+//         this.octokit = octokit;
+//     }
+//
+//     /**
+//      * 获取Github文件的sha，如果文件不存在返回undefined，存在返回sha
+//      * @param docPath 完整文件路径，例如：docs/_posts/测试.md
+//      */
+//     async getPage(docPath: string): Promise<string> {
+//         let sha
+//
+//         let res
+//         try {
+//             const route = 'GET /repos/' + this.vuepressCfg.githubUser + '/' + this.vuepressCfg.githubRepo + '/contents/' + docPath;
+//             console.log("getPage route=>", route)
+//             res = await this.octokit.request(route, {
+//                 owner: this.vuepressCfg.githubUser,
+//                 repo: this.vuepressCfg.githubRepo,
+//                 path: docPath
+//             })
+//             console.log("getPage res=>", res)
+//         } catch (e) {
+//             console.log("getPage error=>", e)
+//         }
+//
+//         if (res) {
+//             sha = res.data.sha
+//         }
+//         return sha;
+//     }
+//
+//     /**
+//      * 创建或更新页面
+//      * @param docPath 页面路径，相对于根仓库的完整路径
+//      * @param mdContent Markdown文本
+//      * @param sha 文件的sha，undefined表示新建，更新需要传sha字符串
+//      */
+//     async createOrUpdatePage(docPath: string, mdContent: string, sha: any) {
+//         let res
+//         try {
+//             const base64 = Buffer.from(mdContent).toString('base64');
+//             const route = 'PUT /repos/' + this.vuepressCfg.githubUser + '/' + this.vuepressCfg.githubRepo + '/contents/' + docPath;
+//             let options = {
+//                 owner: this.vuepressCfg.githubUser,
+//                 repo: this.vuepressCfg.githubRepo,
+//                 path: docPath,
+//                 message: this.vuepressCfg.defaultMsg,
+//                 committer: {
+//                     name: this.vuepressCfg.author,
+//                     email: this.vuepressCfg.email
+//                 },
+//                 content: base64
+//             }
+//             if (sha) {
+//                 Object.assign(options, {
+//                     sha: sha
+//                 })
+//             }
+//
+//             res = await this.octokit.request(route, options)
+//             console.log("createOrUpdatePage res=>", res)
+//         } catch (e) {
+//             console.log("createOrUpdatePage error=>", e)
+//         }
+//         return res
+//     }
+// }
+//
+// const octokit = new Octokit({
+//     // auth: vuepressCfg.githubToken
+// })
+//
+// /**
+//  * 发布文章到Vuepress V1
+//  * @param vuepressCfg Vuepress发布配置
+//  * @param docPath 相对于根仓库的完整路径，包括文件名和扩展名
+//  * @param mdContent Markdown文本
+//  */
+export async function publishPage(vuepressCfg: IVuepressCfg, docPath: string, mdContent: string) {
+//     // const octokit = new Octokit({
+//     //     auth: vuepressCfg.githubToken
+//     // })
+//     const v1 = new VuepressApiV1(vuepressCfg, octokit);
+//     const sha = await v1.getPage(docPath)
+//
+//     const res = await v1.createOrUpdatePage(docPath, mdContent, sha)
+//     console.log("Vuepress V1 publishPage,res=>", res)
 }
 
-/**
- * 创建或更新页面
- * @param docPath 页面路径，相对于根仓库的完整路径
- * @param mdContent Markdown文本
- * @param sha 文件的sha，undefined表示新建，更新需要传sha字符串
- * @param msg 提交信息
- * @param author 作者
- * @param email 作者邮箱
- */
-export async function createOrUpdatePage(docPath: string, mdContent: string, sha: any, msg: string, author: string, email: string) {
-    let res
-    try {
-        const base64 = Buffer.from(mdContent).toString('base64');
-        const route = 'PUT /repos/' + vuepressCfg.githubUser + '/' + vuepressCfg.githubRepo + '/contents/' + docPath;
-        let options = {
-            owner: vuepressCfg.githubUser,
-            repo: vuepressCfg.githubRepo,
-            path: docPath,
-            message: msg,
-            committer: {
-                name: author,
-                email: email
-            },
-            content: base64
-        }
-        if (sha) {
-            Object.assign(options, {
-                sha: sha
-            })
-        }
-
-        res = await octokit.request(route, options)
-        console.log("createOrUpdatePage res=>", res)
-    } catch (e) {
-        console.log("createOrUpdatePage error=>", e)
-    }
-    return res
-}
+export default {}

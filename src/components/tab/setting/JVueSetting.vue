@@ -31,8 +31,8 @@
 import {ref} from "vue";
 import log from "../../../lib/logUtil";
 import {getJSONConf, setJSONConf} from "../../../lib/config";
+import {API_TYPE_CONSTANTS} from "../../../lib/constants/apiTypeConstants";
 import {
-  PUBLISH_TYPE_CONSTANTS,
   PUBLISH_HOME_KEY_CONSTANTS,
   PUBLISH_API_URL_KEY_CONSTANTS,
   PUBLISH_USERNAME_KEY_CONSTANTS,
@@ -50,7 +50,7 @@ const password = ref("")
 
 const saveConf = () => {
   log.logInfo("Jvue保存配置")
-  setJSONConf(PUBLISH_TYPE_CONSTANTS.API_TYPE_JVUE, {
+  setJSONConf(API_TYPE_CONSTANTS.API_TYPE_JVUE, {
         [PUBLISH_HOME_KEY_CONSTANTS.JVUE_HOME_KEY]: home.value,
         [PUBLISH_API_URL_KEY_CONSTANTS.JVUE_API_URL_KEY]: apiUrl.value,
         [PUBLISH_USERNAME_KEY_CONSTANTS.JVUE_USERNAME_KEY]: username.value,
@@ -62,7 +62,7 @@ const saveConf = () => {
 
 const initConf = () => {
   log.logInfo("Jvue配置初始化")
-  const conf = getJSONConf(PUBLISH_TYPE_CONSTANTS.API_TYPE_JVUE)
+  const conf = getJSONConf(API_TYPE_CONSTANTS.API_TYPE_JVUE)
   if (conf) {
     log.logInfo("jvue conf=>", conf)
 
