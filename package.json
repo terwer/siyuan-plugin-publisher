@@ -13,6 +13,8 @@
     "@octokit/core": "^4.0.4",
     "copy-to-clipboard": "^3.3.1",
     "element-plus": "^2.2.11",
+    "isomorphic-fetch": "^3.0.0",
+    "js-base64": "^3.7.2",
     "js-yaml": "^4.1.0",
     "showdown": "^2.1.0",
     "transliteration": "^2.3.5",

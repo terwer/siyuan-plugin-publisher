@@ -61,7 +61,7 @@ export default {
     "setting.blog.type.vuepress.github.author": "作者",
     "setting.blog.type.vuepress.github.author.tip": "作者，例如：terwer",
     "setting.blog.type.vuepress.github.email": "邮箱",
-    "setting.blog.type.vuepress.github.email.tip": "邮箱，例如：youweics@163.com",
+    "setting.blog.type.vuepress.github.email.tip": "邮箱",
     "setting.blog.url": "博客网址",
     "setting.blog.username": "账号",
     "setting.blog.password": "密码",

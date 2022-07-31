@@ -20,7 +20,24 @@ At present, it supports vuepress ~~and two open API standard blog platforms, <co
 
 * [ ] Yueque-relay on v0.0.2 version，will release on 2022-10-31
 
-[Click here to see development progress](https://github.com/users/terwer/projects/1/views/1)
+## Updates
+
+[Click here to view development progress](https://github.com/users/terwer/projects/1/views/1)
+
+### v0.0.2
+
+- [#19](https://github.com/terwer/src-sy-post-publisher/issues/19) 增强Vuepress支持，如果设置了Github参数，使用Github API实现自动发布，否则自行复制文本
+
+    - 1、add aupport for Github rest api
+
+    - 2、TS generic implementation Vuepress release parameter configuration
+
+    - 3、Fix Octokit to build an error in vite, replace `node-fetch` as `isomorphic-fetch`
+
+### v0.0.1
+
+- [#13](https://github.com/terwer/src-sy-post-publisher/issues/13) Vuepress基本支持
+
 
 ## Vue 3 + TypeScript + Vite
 

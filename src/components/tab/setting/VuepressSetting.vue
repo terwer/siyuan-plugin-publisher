@@ -32,7 +32,7 @@
 
     <el-form-item>
       <el-button type="primary" @click="submitForm(formRef)">{{ $t('setting.blog.save') }}</el-button>
-      <el-button type="primary" @click="valiConf">{{ $t('setting.blog.save') }}</el-button>
+      <el-button type="primary" @click="valiConf">{{ $t('setting.blog.vali') }}</el-button>
       <el-button @click="resetForm(formRef)">{{ $t('setting.blog.cancel') }}</el-button>
     </el-form-item>
   </el-form>
@@ -43,7 +43,7 @@ import {onBeforeMount, reactive, ref} from "vue";
 import {FormInstance, FormRules} from "element-plus";
 import {useI18n} from "vue-i18n";
 import log from "../../../lib/logUtil";
-import {getJSONConf} from "../../../lib/config";
+import {getJSONConf, setJSONConf} from "../../../lib/config";
 import {API_TYPE_CONSTANTS} from "../../../lib/constants/apiTypeConstants";
 import {IVuepressCfg} from "../../../lib/vuepress/IVuepressCfg";
 import {publishPage} from "../../../lib/vuepress/v1";
@@ -51,6 +51,7 @@ import {VuepressCfg} from "../../../lib/vuepress/VuepressCfg";
 import {formatNumToZhDate} from "../../../lib/util";
 
 const {t} = useI18n()
+import {ElMessage} from "element-plus";
 
 const formSize = ref('default')
 const formRef = ref<FormInstance>()
@@ -122,6 +123,12 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   if (!result) {
     return
   }
+
+  // 保存配置
+  const vuepressCfg = new VuepressCfg(formData.githubUser, formData.githubRepo, formData.githubToken, formData.defaultPath,
+      formData.msg, formData.author, formData.email);
+  setJSONConf<IVuepressCfg>(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS, vuepressCfg)
+  ElMessage.success(t('main.opt.success'))
 }
 const valiConf = async () => {
   const vuepressCfg = new VuepressCfg(formData.githubUser, formData.githubRepo, formData.githubToken, formData.defaultPath,
@@ -129,7 +136,10 @@ const valiConf = async () => {
   // const vuepressCfg = getJSONConf<IVuepressCfg>(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS)
   const docPath = formData.defaultPath + "test.md"
   const mdContent = "Hello World!" + formatNumToZhDate(new Date().toISOString())
-  await publishPage(vuepressCfg, docPath, mdContent)
+  const res = await publishPage(vuepressCfg, docPath, mdContent)
+  if (!res) {
+    ElMessage.error(t('main.opt.failure'))
+  }
 }
 const resetForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return

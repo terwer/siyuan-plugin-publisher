@@ -61,7 +61,7 @@ export default {
     "setting.blog.type.vuepress.github.author": "Author",
     "setting.blog.type.vuepress.github.author.tip": "Author, eg:terwer",
     "setting.blog.type.vuepress.github.email": "Email",
-    "setting.blog.type.vuepress.github.email.tip": "Email, eg:youweics@163.com",
+    "setting.blog.type.vuepress.github.email.tip": "Email",
     "setting.blog.url": "Blog addr",
     "setting.blog.username": "Username",
     "setting.blog.password": "Password",

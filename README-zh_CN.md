@@ -18,7 +18,23 @@
 
 * [ ] 语雀-延期到v0.0.2版本，预计2022-10-31发布
 
+## 最近更新
+
 [点击这里查看开发进度](https://github.com/users/terwer/projects/1/views/1)
+
+### v0.0.2
+
+- [#19](https://github.com/terwer/src-sy-post-publisher/issues/19) 增强Vuepress支持，如果设置了Github参数，使用Github API实现自动发布，否则自行复制文本
+
+    - 1、新增Github的rest api
+  
+    - 2、ts泛型实现Vuepress发布参数配置
+  
+    - 3、修复 octokit 在 vite 构建报错问题，替换 `node-fetch` 为 `isomorphic-fetch`
+
+### v0.0.1
+
+- [#13](https://github.com/terwer/src-sy-post-publisher/issues/13) Vuepress基本支持
 
 ## Vue 3 + TypeScript + Vite
 

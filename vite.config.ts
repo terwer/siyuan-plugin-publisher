@@ -26,15 +26,21 @@ export default defineConfig(({mode}) => {
             vitePluginRequireTransform.default(),
         ],
         base: './',
+        // resolve: {
+        //     alias: [
+        //         // https://github.com/intlify/vue-i18n-next/issues/789
+        //         // 修复国际化警告
+        //         {
+        //             find: 'vue-i18n',
+        //             replacement: 'vue-i18n/dist/vue-i18n.cjs.js',
+        //         }
+        //     ]
+        // },
         resolve: {
-            alias: [
-                // https://github.com/intlify/vue-i18n-next/issues/789
-                // 修复国际化警告
-                {
-                    find: 'vue-i18n',
-                    replacement: 'vue-i18n/dist/vue-i18n.cjs.js',
-                }
-            ]
+            alias: {
+                'vue-i18n': 'vue-i18n/dist/vue-i18n.cjs.js',
+                'node-fetch': 'isomorphic-fetch',
+            },
         },
         // https://github.com/vitejs/vite/issues/1930
         // https://vitejs.dev/guide/env-and-mode.html#env-files
