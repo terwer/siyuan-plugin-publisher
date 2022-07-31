@@ -15,7 +15,9 @@ At present, it supports vuepress ~~and two open API standard blog platforms, <co
 * [X] Vuepress-v0.0.1 support，2022-07-29 release
 
 * [ ] Cnblogs-relay on v0.0.2 version，will release on 2022-10-31
+
 * [ ] Liandi-relay on v0.0.2 version，will release on 2022-10-31
+
 * [ ] Yueque-relay on v0.0.2 version，will release on 2022-10-31
 
 [Click here to see development progress](https://github.com/users/terwer/projects/1/views/1)
@@ -33,6 +35,7 @@ This template should help get you started developing with Vue 3 and TypeScript i
 Since TypeScript cannot handle type information for `.vue` imports, they are shimmed to be a generic Vue component type by default. In most cases this is fine if you don't really care about component prop types outside of templates. However, if you wish to get actual prop types in `.vue` imports (for example to get props validation when using manual `h(...)` calls), you can enable Volar's Take Over mode by following these steps:
 
 1. Run `Extensions: Show Built-in Extensions` from VS Code's command palette, look for `TypeScript and JavaScript Language Features`, then right click and select `Disable (Workspace)`. By default, Take Over mode will enable itself if the default TypeScript extension is disabled.
+
 2. Reload the VS Code window by running `Developer: Reload Window` from the command palette.
 
 You can learn more about Take Over mode [here](https://github.com/johnsoncodehk/volar/discussions/471).
