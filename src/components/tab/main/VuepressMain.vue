@@ -9,6 +9,8 @@
               $t('main.publish.vuepress.editmode.simple')
             }}
           </el-button>
+        </el-form-item>
+        <el-form-item>
           <el-button :type="editMode?'primary':'default'" @click="complexMode">{{
               $t('main.publish.vuepress.editmode.complex')
             }}
@@ -97,8 +99,8 @@
         -->
 
         <!-- 一键生成属性-->
-        <el-form-item>
-          <el-button @click="oneclickAttr" :loading="isGenLoading">
+        <el-form-item :label="$t('main.opt.quick')">
+          <el-button type="primary" @click="oneclickAttr" :loading="isGenLoading">
             {{ isGenLoading ? $t('main.opt.loading') : $t('main.publish.oneclick.attr') }}
           </el-button>
         </el-form-item>
@@ -142,7 +144,7 @@
           {{ $t('main.yaml.formatter') }}
         </el-form-item>
         <el-form-item>
-          <el-input v-model="vuepressData.vuepressFullContent" :autosize="{ minRows: 12, maxRows: 15 }"
+          <el-input v-model="vuepressData.vuepressFullContent" :autosize="{ minRows: 5, maxRows: 8 }"
                     v-on:focus="$event.target.select()" ref="fmtRefInput"
                     type="textarea"/>
         </el-form-item>

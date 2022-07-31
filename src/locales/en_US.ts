@@ -48,6 +48,7 @@ export default {
     "main.publish.to.cnblogs": "Send to Cnblogs",
     "main.opt.success": "Success",
     "main.opt.failure": "Error",
+    "main.opt.quick": "Quick",
     "main.opt.status.publish": "Post published success",
     "main.opt.status.cancel": "Post publishing has been canceled",
     "main.opt.loading": "Doding...",

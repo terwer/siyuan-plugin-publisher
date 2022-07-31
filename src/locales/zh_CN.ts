@@ -48,6 +48,7 @@ export default {
     "main.publish.to.cnblogs": "发布到博客园",
     "main.opt.success": "操作成功",
     "main.opt.failure": "操作失败",
+    "main.opt.quick": "快捷操作",
     "main.opt.status.publish": "文章已发布",
     "main.opt.status.cancel": "文章发布已取消",
     "main.opt.loading": "操作中...",
