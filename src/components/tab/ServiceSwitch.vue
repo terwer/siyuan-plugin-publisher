@@ -26,7 +26,7 @@
 import {ref} from 'vue'
 import {useI18n} from "vue-i18n";
 import {setBooleanConf, getBooleanConf} from "../../lib/config";
-import SWITCH_CONSTANTS from "../../constants/switchConstants";
+import SWITCH_CONSTANTS from "../../lib/constants/switchConstants";
 
 const {t} = useI18n()
 

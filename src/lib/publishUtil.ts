@@ -1,14 +1,6 @@
 import {getJSONConf} from "./config.js";
 import log from "./logUtil";
-
-const API_TYPE_CNBLPGS = "cnblogs";
-const API_TYPE_WORDPRESS = "wordpress";
-const API_TYPE_CONFLUENCE = "confluence";
-const API_TYPE_JVUE = "jvue";
-const API_TYPE_YUQUE = "yuque";
-const API_TYPE_WECHAT = "wechat";
-const API_TYPE_LIANDI = "liandi";
-const API_TYPE_VUEPRESS = "vuepress";
+import {API_TYPE_CONSTANTS} from "./constants/apiTypeConstants";
 
 const CNBLOGS_HOME_KEY = "cnblogs-home";
 const WORDPRESS_HOME_KEY = "wordpress-home";
@@ -64,19 +56,7 @@ const WECHAT_PASSWORD_KEY = "wechat-publish-password";
 const LIANDI_PASSWORD_KEY = "liandi-publish-password";
 const VUEPRESS_PASSWORD_KEY = "vuepress-publish-password";
 
-/**
- * 平台类型
- */
-export const PUBLISH_TYPE_CONSTANTS = {
-    API_TYPE_CNBLPGS,
-    API_TYPE_WORDPRESS,
-    API_TYPE_CONFLUENCE,
-    API_TYPE_JVUE,
-    API_TYPE_YUQUE,
-    API_TYPE_WECHAT,
-    API_TYPE_LIANDI,
-    API_TYPE_VUEPRESS
-};
+
 
 /**
  * 平台主页
@@ -148,13 +128,13 @@ export const PUBLISH_POSTID_KEY_CONSTANTS = {
     VUEPRESS_POSTID_KEY
 }
 
-export function getApiParams(apiType: string) {
+function getApiParamsOld(apiType: string) {
     // ==================
     // 修改这个切换api
     // ==================
     // cnblogs
-    let conf = getJSONConf(API_TYPE_CNBLPGS)
-    let appKey = API_TYPE_CNBLPGS;
+    let conf = getJSONConf(API_TYPE_CONSTANTS.API_TYPE_CNBLPGS)
+    let appKey = API_TYPE_CONSTANTS.API_TYPE_CNBLPGS;
     // @ts-ignore
     let home = conf[CNBLOGS_HOME_KEY] || ""
     // @ts-ignore
@@ -166,9 +146,9 @@ export function getApiParams(apiType: string) {
     let postidKey = CNBLOGS_POSTID_KEY;
 
     // wordpress
-    if (API_TYPE_WORDPRESS === apiType) {
-        conf = getJSONConf(API_TYPE_WORDPRESS)
-        appKey = API_TYPE_WORDPRESS;
+    if (API_TYPE_CONSTANTS.API_TYPE_WORDPRESS === apiType) {
+        conf = getJSONConf(API_TYPE_CONSTANTS.API_TYPE_WORDPRESS)
+        appKey = API_TYPE_CONSTANTS.API_TYPE_WORDPRESS;
         // @ts-ignore
         home = conf[WORDPRESS_HOME_KEY] || ""
         // @ts-ignore
@@ -181,9 +161,9 @@ export function getApiParams(apiType: string) {
     }
 
     // confluence
-    if (API_TYPE_CONFLUENCE === apiType) {
-        conf = getJSONConf(API_TYPE_CONFLUENCE)
-        appKey = API_TYPE_CONFLUENCE;
+    if (API_TYPE_CONSTANTS.API_TYPE_CONFLUENCE === apiType) {
+        conf = getJSONConf(API_TYPE_CONSTANTS.API_TYPE_CONFLUENCE)
+        appKey = API_TYPE_CONSTANTS.API_TYPE_CONFLUENCE;
         // @ts-ignore
         home = conf[CONFLUENCE_HOME_KEY] || ""
         // @ts-ignore
@@ -196,9 +176,9 @@ export function getApiParams(apiType: string) {
     }
 
     // jvue
-    if (API_TYPE_JVUE === apiType) {
-        conf = getJSONConf(API_TYPE_JVUE)
-        appKey = API_TYPE_JVUE;
+    if (API_TYPE_CONSTANTS.API_TYPE_JVUE === apiType) {
+        conf = getJSONConf(API_TYPE_CONSTANTS.API_TYPE_JVUE)
+        appKey = API_TYPE_CONSTANTS.API_TYPE_JVUE;
         // @ts-ignore
         home = conf[JVUE_HOME_KEY] || ""
         // @ts-ignore
@@ -211,9 +191,9 @@ export function getApiParams(apiType: string) {
     }
 
     // yuque
-    if (API_TYPE_YUQUE === apiType) {
-        conf = getJSONConf(API_TYPE_YUQUE)
-        appKey = API_TYPE_YUQUE;
+    if (API_TYPE_CONSTANTS.API_TYPE_YUQUE === apiType) {
+        conf = getJSONConf(API_TYPE_CONSTANTS.API_TYPE_YUQUE)
+        appKey = API_TYPE_CONSTANTS.API_TYPE_YUQUE;
         // @ts-ignore
         home = conf[YUQUE_HOME_KEY] || ""
         // @ts-ignore
@@ -226,9 +206,9 @@ export function getApiParams(apiType: string) {
     }
 
     // wechat
-    if (API_TYPE_WECHAT === apiType) {
-        conf = getJSONConf(API_TYPE_WECHAT)
-        appKey = API_TYPE_WECHAT;
+    if (API_TYPE_CONSTANTS.API_TYPE_WECHAT === apiType) {
+        conf = getJSONConf(API_TYPE_CONSTANTS.API_TYPE_WECHAT)
+        appKey = API_TYPE_CONSTANTS.API_TYPE_WECHAT;
         // @ts-ignore
         home = conf[WECHAT_HOME_KEY] || ""
         // @ts-ignore
@@ -241,9 +221,9 @@ export function getApiParams(apiType: string) {
     }
 
     // liandi
-    if (API_TYPE_LIANDI === apiType) {
-        conf = getJSONConf(API_TYPE_LIANDI)
-        appKey = API_TYPE_LIANDI;
+    if (API_TYPE_CONSTANTS.API_TYPE_LIANDI === apiType) {
+        conf = getJSONConf(API_TYPE_CONSTANTS.API_TYPE_LIANDI)
+        appKey = API_TYPE_CONSTANTS.API_TYPE_LIANDI;
         // @ts-ignore
         home = conf[LIANDI_HOME_KEY] || ""
         // @ts-ignore
@@ -256,9 +236,9 @@ export function getApiParams(apiType: string) {
     }
 
     // vuepress
-    if (API_TYPE_VUEPRESS === apiType) {
-        conf = getJSONConf(API_TYPE_VUEPRESS)
-        appKey = API_TYPE_VUEPRESS;
+    if (API_TYPE_CONSTANTS.API_TYPE_VUEPRESS === apiType) {
+        conf = getJSONConf(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS)
+        appKey = API_TYPE_CONSTANTS.API_TYPE_VUEPRESS;
         // @ts-ignore
         home = conf[VUEPRESS_HOME_KEY] || ""
         // @ts-ignore
@@ -288,4 +268,16 @@ export function getApiParams(apiType: string) {
     })
 
     return apiParams;
+}
+
+/**
+ * 新版获取apiParams参数的方法，使用ts泛型
+ * @param apiType 参数类型
+ */
+export function getApiParams<T>(apiType: string): T {
+    if (apiType != API_TYPE_CONSTANTS.API_TYPE_VUEPRESS) {
+        // @ts-ignore
+        return getApiParamsOld(apiType);
+    }
+    return getJSONConf<T>(apiType);
 }

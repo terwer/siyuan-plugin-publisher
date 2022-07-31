@@ -10,6 +10,7 @@
     "deploy": "bash deploy.sh"
   },
   "dependencies": {
+    "@octokit/core": "^4.0.4",
     "copy-to-clipboard": "^3.3.1",
     "element-plus": "^2.2.11",
     "js-yaml": "^4.1.0",

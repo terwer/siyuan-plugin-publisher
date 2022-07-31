@@ -21,7 +21,7 @@
 <script lang="ts" setup>
 import {onMounted, ref, watch} from "vue";
 import {getBooleanConf, setBooleanConf} from "../../lib/config";
-import SWITCH_CONSTANTS from "../../constants/switchConstants";
+import SWITCH_CONSTANTS from "../../lib/constants/switchConstants";
 import log from "../../lib/logUtil";
 
 const vuepressEnabled = ref(true)

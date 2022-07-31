@@ -30,12 +30,12 @@
 <script lang="ts" setup>
 import {onBeforeMount, onMounted, reactive, ref, watch} from "vue";
 import {getBooleanConf, setBooleanConf} from "../../lib/config";
-import SWITCH_CONSTANTS from "../../constants/switchConstants";
+import SWITCH_CONSTANTS from "../../lib/constants/switchConstants";
 import log from "../../lib/logUtil";
 import type {FormInstance, FormRules} from 'element-plus'
 import {useI18n} from "vue-i18n";
 import {ElMessage} from "element-plus";
-import {SIYUAN_PAGE_ATTR_KEY} from "../../constants/siyuanPageConstants";
+import {SIYUAN_PAGE_ATTR_KEY} from "../../lib/constants/siyuanPageConstants";
 import {PUBLISH_POSTID_KEY_CONSTANTS} from "../../lib/publishUtil";
 import {getPageAttrs, getPageId, setPageAttrs} from "../../lib/siyuan/siyuanUtil";
 
