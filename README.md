@@ -33,7 +33,10 @@ At present, it supports vuepress ~~and two open API standard blog platforms, <co
     - 2、TS generic implementation Vuepress release parameter configuration
 
     - 3、Fix Octokit to build an error in vite, replace `node-fetch` as `isomorphic-fetch`
+  
+    - 4、Add config valifation
 
+    - 5、Time-consuming button operation add `loading`
 ### v0.0.1
 
 - [#13](https://github.com/terwer/src-sy-post-publisher/issues/13) Vuepress基本支持

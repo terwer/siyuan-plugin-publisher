@@ -31,7 +31,10 @@
     - 2、ts泛型实现Vuepress发布参数配置
   
     - 3、修复 octokit 在 vite 构建报错问题，替换 `node-fetch` 为 `isomorphic-fetch`
-
+  
+    - 4、新增配置验证 
+  
+    - 5、耗时的按钮操作添加 `loading`
 ### v0.0.1
 
 - [#13](https://github.com/terwer/src-sy-post-publisher/issues/13) Vuepress基本支持
