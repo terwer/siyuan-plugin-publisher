@@ -37,6 +37,16 @@ At present, it supports vuepress ~~and two open API standard blog platforms, <co
     - 4、Add config valifation
 
     - 5、Time-consuming button operation add `loading`
+  
+    - 6、If the GitHub parameter is set, the GitHub API is set to be automatically published, otherwise the text will be copied by yourself
+  
+    - 7、Support selection of custom release directory
+  
+    - 8、Support modified file name
+  
+    - 9、Vuepress's slug add hash to avoid the conflict of repeated articles
+  
+    - 10、Support simple and complex mode
 ### v0.0.1
 
 - [#13](https://github.com/terwer/src-sy-post-publisher/issues/13) Vuepress基本支持

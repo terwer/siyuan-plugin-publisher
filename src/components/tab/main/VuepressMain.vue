@@ -1,33 +1,51 @@
 <template>
   <el-container>
     <el-aside width="45%">
+      <el-alert class="top-version-tip" :title="$t('main.publish.vuepress.tip')" type="success" :closable="false"/>
       <el-form label-width="100px">
-        <el-form-item :label="$t('main.slug')">
-          <el-input v-model="formData.customSlug"/>
+        <!-- 编辑模式 -->
+        <el-form-item :label="$t('main.publish.vuepress.editmode')">
+          <el-button :type="editMode?'default':'primary'" @click="simpleMode">{{
+              $t('main.publish.vuepress.editmode.simple')
+            }}
+          </el-button>
+          <el-button :type="editMode?'primary':'default'" @click="complexMode">{{
+              $t('main.publish.vuepress.editmode.complex')
+            }}
+          </el-button>
         </el-form-item>
 
-        <el-form-item>
+        <!-- 别名 -->
+        <el-form-item :label="$t('main.slug')" v-if="editMode">
+          <el-input v-model="formData.customSlug"/>
+        </el-form-item>
+        <el-form-item v-if="editMode">
           <el-checkbox-group v-model="formData.checkList">
             <el-checkbox label="1">{{ $t('main.use.google.translate') }}</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
-        <el-form-item>
+        <el-form-item :label="$t('main.use.hash')" v-if="editMode">
+          <el-switch v-model="slugHashEnabled"/>
+          <el-alert :title="$t('main.use.hash.tip')" type="warning" :closable="false" v-if="!slugHashEnabled"/>
+        </el-form-item>
+        <el-form-item v-if="editMode">
           <el-button type="primary" class="make-slug-btn" @click="makeSlug" :loading="isSlugLoading">
             {{ isSlugLoading ? $t('main.opt.loading') : $t('main.auto.fetch.slug') }}
           </el-button>
         </el-form-item>
 
-        <el-form-item :label="$t('main.desc')">
+        <!-- 文章摘要 -->
+        <el-form-item :label="$t('main.desc')" v-if="editMode">
           <el-input type="textarea" v-model="formData.desc"/>
         </el-form-item>
-
-        <el-form-item>
+        <el-form-item v-if="editMode">
           <el-button type="primary" @click="makeDesc" :loading="isDescLoading">
             {{ isDescLoading ? $t('main.opt.loading') : $t('main.auto.fetch.desc') }}
           </el-button>
         </el-form-item>
 
-        <el-form-item :label="$t('main.create.time')">
+        <!-- 发布时间 -->
+        <el-form-item :label="$t('main.create.time')" v-if="editMode">
           <el-date-picker
               type="datetime"
               v-model="formData.created"
@@ -38,7 +56,8 @@
           />
         </el-form-item>
 
-        <el-form-item :label="$t('main.tag')">
+        <!-- 标签  -->
+        <el-form-item :label="$t('main.tag')" v-if="editMode">
           <el-tag
               v-for="tag in formData.tag.dynamicTags"
               :key="tag"
@@ -62,34 +81,45 @@
             {{ $t('main.tag.new') }}
           </el-button>
         </el-form-item>
-
-        <el-form-item>
+        <el-form-item v-if="editMode">
           <el-button type="primary" @click="fetchTag" :loading="isTagLoading">
             {{ isTagLoading ? $t('main.opt.loading') : $t('main.auto.fetch.tag') }}
           </el-button>
         </el-form-item>
 
-        <el-form-item>
+        <!-- 保存属性 -->
+        <el-form-item v-if="editMode">
           <el-button type="primary" @click="saveAttrToSiyuan">{{ $t('main.save.attr.to.siyuan') }}</el-button>
         </el-form-item>
 
-        <br/>
-        <br/>
+        <!--
+        ----------------------------------------------------------------------
+        -->
+
+        <!-- 一键生成属性-->
         <el-form-item>
           <el-button @click="oneclickAttr" :loading="isGenLoading">
             {{ isGenLoading ? $t('main.opt.loading') : $t('main.publish.oneclick.attr') }}
           </el-button>
         </el-form-item>
 
+        <!-- 启用Github发布 -->
         <el-form-item :label="$t('main.publish.vuepress.github')">
-          <el-switch v-model="vuepressGithubEnabled"/>
-          <span v-if="vuepressGithubEnabled">{{ $t('main.publish.vuepress.github.tip')}}</span>
+          <el-switch v-model="vuepressGithubEnabled" @change="githubOnChange"/>
+          <el-alert :title="$t('main.publish.vuepress.github.tip')" type="info" :closable="false"
+                    v-if="vuepressGithubEnabled"/>
         </el-form-item>
-
+        <!-- 选择目录 -->
         <el-form-item :label="$t('main.publish.vuepress.choose.path')" v-if="vuepressGithubEnabled">
           menu
         </el-form-item>
-
+        <!-- 设置文件名 -->
+        <el-form-item :label="$t('main.publish.vuepress.choose.title')" v-if="vuepressGithubEnabled">
+          <el-input v-model="formData.title"/>
+          <el-alert :title="$t('main.publish.vuepress.choose.title.tip')" type="error" :closable="false"
+                    v-if="vuepressGithubEnabled"/>
+        </el-form-item>
+        <!-- 发布操作 -->
         <el-form-item label="">
           <el-button type="primary" @click="publishPage" :loading="isPublishLoading">{{
               isPublishLoading ? $t('main.publish.loading') :
@@ -98,7 +128,7 @@
           </el-button>
           <el-button @click="cancelPublish">{{ $t('main.cancel') }}</el-button>
         </el-form-item>
-
+        <!-- 文章状态 -->
         <el-form-item>
           <el-button type="danger" text disabled>
             {{ isPublished ? $t('main.publish.status.published') : $t('main.publish.status.unpublish') }}
@@ -155,6 +185,7 @@ import {nextTick} from 'vue'
 import {API_TYPE_CONSTANTS} from "../../../lib/constants/apiTypeConstants";
 import {PUBLISH_POSTID_KEY_CONSTANTS} from "../../../lib/publishUtil";
 import copy from "copy-to-clipboard"
+import shortHash from "shorthash2";
 
 const {t} = useI18n()
 
@@ -164,8 +195,11 @@ const isTagLoading = ref(false)
 const isGenLoading = ref(false)
 const isPublishLoading = ref(false)
 
-const vuepressGithubEnabled = ref(true)
+let editMode = ref(false)
+const slugHashEnabled = ref(false)
+const vuepressGithubEnabled = ref(false)
 let isPublished = ref(false)
+
 const formData = ref({
   title: "",
   customSlug: "",
@@ -212,6 +246,13 @@ const vuepressData = ref({
   vuepressFullContent: ""
 })
 
+const simpleMode = () => {
+  editMode.value = false
+}
+const complexMode = () => {
+  editMode.value = true
+}
+
 async function initPage() {
   const pageId = await getPageId(true)
   log.logInfo("VuepressMain pageId=>", pageId)
@@ -226,7 +267,7 @@ async function initPage() {
   siyuanData.value.meta = await getPageAttrs(pageId)
 
   // 表单数据
-  formData.value.title = page.content;
+  formData.value.title = page.content + ".md";
   // @ts-ignore
   formData.value.customSlug = siyuanData.value.meta[SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_SLUG_KEY];
   // @ts-ignore
@@ -274,6 +315,12 @@ async function makeSlug(hideTip?: boolean) {
     }
   } else {
     formData.value.customSlug = await pingyinSlugify(title);
+  }
+  // add hash
+  if (slugHashEnabled.value) {
+    const newstr = page.content + (new Date().toISOString())
+    const hashstr = "-" + shortHash(newstr).toLowerCase()
+    formData.value.customSlug += hashstr
   }
 
   isSlugLoading.value = false
@@ -369,7 +416,7 @@ async function saveAttrToSiyuan(hideTip?: boolean) {
 const convertAttrToYAML = () => {
   // 表单属性转yamlObj
   log.logInfo("convertAttrToYAML,formData=>", formData)
-  vuepressData.value.yamlObj.title = formData.value.title;
+  vuepressData.value.yamlObj.title = formData.value.title.replace(".md", "");
   vuepressData.value.yamlObj.permalink = "/post/" + formData.value.customSlug + ".html";
   vuepressData.value.yamlObj.date = covertStringToDate(formData.value.created)
   const meta = [
@@ -399,7 +446,7 @@ const convertYAMLToAttr = () => {
 
   // yamlObj转表单属性
   log.logInfo("convertYAMLToAttr,yamlObj=>", vuepressData.value.yamlObj)
-  formData.value.title = vuepressData.value.yamlObj.title
+  formData.value.title = vuepressData.value.yamlObj.title + ".md"
   formData.value.customSlug = vuepressData.value.yamlObj.permalink.replace("/pages/", "")
       .replace("/post/", "").replace(".html", "")
       .replace("/", "")
@@ -435,6 +482,14 @@ const copyToClipboard = () => {
 
     ElMessage.success(t('main.opt.success'))
   });
+}
+
+const githubOnChange = (val: boolean) => {
+  if (val) {
+    slugHashEnabled.value = true
+  } else {
+    slugHashEnabled.value = false
+  }
 }
 
 async function publishPage() {
@@ -501,4 +556,11 @@ export default {
 </script>
 
 <style scoped>
+.top-version-tip {
+  margin: 10px 0;
+}
+
+.el-alert {
+  margin-top: 10px;
+}
 </style>

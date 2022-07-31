@@ -35,6 +35,16 @@
     - 4、新增配置验证 
   
     - 5、耗时的按钮操作添加 `loading`
+  
+    - 6、如果设置了Github参数，使用Github API实现自动发布，否则自行复制文本
+  
+    - 7、支持选择自定义发布目录
+  
+    - 8、支持修改发布后的文件名
+  
+    - 9、Vuepress的slug添加hash避免文章重复的冲突问题
+  
+    - 10、支持简洁模式与详细模式
 ### v0.0.1
 
 - [#13](https://github.com/terwer/src-sy-post-publisher/issues/13) Vuepress基本支持

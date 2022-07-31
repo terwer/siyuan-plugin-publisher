@@ -918,6 +918,11 @@ rollup@^2.75.6:
   optionalDependencies:
     fsevents "~2.3.2"
 
+shorthash2@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.npmmirror.com/shorthash2/-/shorthash2-1.0.3.tgz#fd05b1d8eefc72879c35f52db18d4b95250ce0a3"
+  integrity sha512-oB8s64JsyJ2xhHJlnTwGg++Y3BTF6XnXeXMC7OygD8vtNcCRDiMxEGONvUOeZbxfwEXENmRlqPDouMR/OtGDsw==
+
 showdown@^2.1.0:
   version "2.1.0"
   resolved "https://registry.npmmirror.com/showdown/-/showdown-2.1.0.tgz#1251f5ed8f773f0c0c7bfc8e6fd23581f9e545c5"
