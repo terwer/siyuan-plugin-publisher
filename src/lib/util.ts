@@ -14,6 +14,7 @@ import log from "./logUtil";
  * @param meta 元数据
  */
 export function getPublishStatus(apiType: string, meta: any) {
+    // @ts-ignore
     const postidKey = getApiParams(apiType).postidKey;
     const postId = meta[postidKey] || "";
     log.logInfo("平台=>", apiType)

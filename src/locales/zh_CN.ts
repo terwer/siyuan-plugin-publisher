@@ -54,6 +54,8 @@ export default {
     "setting.blog.type.vuepress.github.token": "Github令牌",
     "setting.blog.type.vuepress.github.token.tip": "Github令牌，例如：ghp_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
     "setting.blog.type.vuepress.github.token.gen": "Github 个人令牌生成地址",
+    "setting.blog.type.vuepress.github.default.branch": "默认分支",
+    "setting.blog.type.vuepress.github.default.branch.tip": "默认分支（旧版仓库为master，新版仓库默认为main），例如：main",
     "setting.blog.type.vuepress.github.default.path": "存储目录",
     "setting.blog.type.vuepress.github.default.path.tip": "存储目录（相对于仓库根目录的相对路径，默认所有文章都发布在这里），例如：docs/_posts/",
     "setting.blog.type.vuepress.github.msg": "提交信息",

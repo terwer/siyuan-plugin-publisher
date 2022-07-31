@@ -9,11 +9,15 @@ export interface IVuepressCfg {
     /**
      * Github仓库名称
      */
-    githubRepo: string
+    githubRepo: string,
     /**
      * Github个人Token令牌
      */
     githubToken: string
+    /**
+     * 默认分支
+     */
+    defaultBranch: string
     /**
      * 文章存储的默认目录（相对于仓库根目录的相对路径，例如：docs/_posts/）
      */

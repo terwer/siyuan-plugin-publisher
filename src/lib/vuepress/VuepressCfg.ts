@@ -7,6 +7,7 @@ export class VuepressCfg implements IVuepressCfg {
     constructor(public githubUser: string,
                 public githubRepo: string,
                 public githubToken: string,
+                public defaultBranch:string,
                 public defaultPath: string,
                 public defaultMsg: string,
                 public author: string,
@@ -14,6 +15,7 @@ export class VuepressCfg implements IVuepressCfg {
         this.githubUser = githubUser;
         this.githubRepo = githubRepo;
         this.githubToken = githubToken;
+        this.defaultBranch=defaultBranch;
         this.defaultPath = defaultPath;
         this.defaultMsg = defaultMsg;
         this.author = author;

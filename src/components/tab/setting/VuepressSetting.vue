@@ -18,6 +18,12 @@
     <el-form-item :label="$t('setting.blog.type.vuepress.github.default.path')" prop="defaultPath">
       <el-input v-model="formData.defaultPath" :placeholder="$t('setting.blog.type.vuepress.github.default.path.tip')"/>
     </el-form-item>
+
+    <el-form-item :label="$t('setting.blog.type.vuepress.github.default.branch')" prop="defaultBranch">
+      <el-input v-model="formData.defaultBranch"
+                :placeholder="$t('setting.blog.type.vuepress.github.default.branch.tip')"/>
+    </el-form-item>
+
     <el-form-item :label="$t('setting.blog.type.vuepress.github.msg')" prop="msg">
       <el-input v-model="formData.msg" :placeholder="$t('setting.blog.type.vuepress.github.msg.tip')"/>
     </el-form-item>
@@ -35,12 +41,15 @@
       <el-button type="primary" @click="valiConf">{{ $t('setting.blog.vali') }}</el-button>
       <el-button @click="resetForm(formRef)">{{ $t('setting.blog.cancel') }}</el-button>
     </el-form-item>
+    <el-form-item>
+      <a :href="formData.previewUrl" target="_blank">{{ formData.previewUrl }}</a>
+    </el-form-item>
   </el-form>
 </template>
 
 <script lang="ts" setup>
 import {onBeforeMount, reactive, ref} from "vue";
-import {FormInstance, FormRules} from "element-plus";
+import {ElMessage, FormInstance, FormRules} from "element-plus";
 import {useI18n} from "vue-i18n";
 import log from "../../../lib/logUtil";
 import {getJSONConf, setJSONConf} from "../../../lib/config";
@@ -48,10 +57,9 @@ import {API_TYPE_CONSTANTS} from "../../../lib/constants/apiTypeConstants";
 import {IVuepressCfg} from "../../../lib/vuepress/IVuepressCfg";
 import {publishPage} from "../../../lib/vuepress/v1";
 import {VuepressCfg} from "../../../lib/vuepress/VuepressCfg";
-import {formatNumToZhDate} from "../../../lib/util";
+import {formatIsoToZhDate} from "../../../lib/util";
 
 const {t} = useI18n()
-import {ElMessage} from "element-plus";
 
 const formSize = ref('default')
 const formRef = ref<FormInstance>()
@@ -59,10 +67,12 @@ const formData = reactive({
   githubUser: "",
   githubRepo: "",
   githubToken: "",
+  defaultBranch: "main",
   defaultPath: "docs/_posts/",
   msg: "auto published by sy-post-publisher",
   author: "terwer",
-  email: "youweics@163.com"
+  email: "youweics@163.com",
+  previewUrl: "#preview"
 })
 const rules = reactive<FormRules>({
   githubUser: [
@@ -78,6 +88,12 @@ const rules = reactive<FormRules>({
     }
   ],
   githubToken: [
+    {
+      required: true,
+      message: () => t('form.validate.name.required')
+    }
+  ],
+  defaultBranch: [
     {
       required: true,
       message: () => t('form.validate.name.required')
@@ -125,21 +141,29 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   }
 
   // 保存配置
-  const vuepressCfg = new VuepressCfg(formData.githubUser, formData.githubRepo, formData.githubToken, formData.defaultPath,
-      formData.msg, formData.author, formData.email);
+  const vuepressCfg = new VuepressCfg(formData.githubUser, formData.githubRepo, formData.githubToken,
+      formData.defaultBranch, formData.defaultPath, formData.msg, formData.author, formData.email);
   setJSONConf<IVuepressCfg>(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS, vuepressCfg)
   ElMessage.success(t('main.opt.success'))
 }
 const valiConf = async () => {
-  const vuepressCfg = new VuepressCfg(formData.githubUser, formData.githubRepo, formData.githubToken, formData.defaultPath,
-      formData.msg, formData.author, formData.email);
+  const vuepressCfg = new VuepressCfg(formData.githubUser, formData.githubRepo, formData.githubToken,
+      formData.defaultBranch, formData.defaultPath, formData.msg, formData.author, formData.email);
   // const vuepressCfg = getJSONConf<IVuepressCfg>(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS)
-  const docPath = formData.defaultPath + "test.md"
-  const mdContent = "Hello World!" + formatNumToZhDate(new Date().toISOString())
+  const testFile = "test.md"
+
+  const docPath = formData.defaultPath + testFile
+  const mdContent = "Hello World!" + formatIsoToZhDate(new Date().toISOString(),true)
   const res = await publishPage(vuepressCfg, docPath, mdContent)
   if (!res) {
     ElMessage.error(t('main.opt.failure'))
+    return
   }
+
+  // 预览
+  formData.previewUrl = "https://github.com/" + formData.githubUser + "/" + formData.githubRepo
+      + "/blob/" + formData.defaultBranch + "/" + formData.defaultPath + testFile
+  ElMessage.success(t('main.opt.success'))
 }
 const resetForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
@@ -154,6 +178,7 @@ const initConf = () => {
     formData.githubUser = conf.githubUser
     formData.githubRepo = conf.githubRepo
     formData.githubToken = conf.githubToken
+    formData.defaultBranch = conf.defaultBranch
     formData.defaultPath = conf.defaultPath
     formData.msg = conf.defaultMsg
     formData.author = conf.author
