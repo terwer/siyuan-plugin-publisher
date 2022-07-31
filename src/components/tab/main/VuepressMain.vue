@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-aside width="45%">
-      <el-form label-width="75px">
+      <el-form label-width="100px">
         <el-form-item :label="$t('main.slug')">
           <el-input v-model="formData.customSlug"/>
         </el-form-item>
@@ -12,7 +12,9 @@
           </el-checkbox-group>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" class="make-slug-btn" @click="makeSlug">{{ $t('main.auto.fetch.slug') }}</el-button>
+          <el-button type="primary" class="make-slug-btn" @click="makeSlug" :loading="isSlugLoading">
+            {{ isSlugLoading ? $t('main.opt.loading') : $t('main.auto.fetch.slug') }}
+          </el-button>
         </el-form-item>
 
         <el-form-item :label="$t('main.desc')">
@@ -20,7 +22,9 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" @click="makeDesc">{{ $t('main.auto.fetch.desc') }}</el-button>
+          <el-button type="primary" @click="makeDesc" :loading="isDescLoading">
+            {{ isDescLoading ? $t('main.opt.loading') : $t('main.auto.fetch.desc') }}
+          </el-button>
         </el-form-item>
 
         <el-form-item :label="$t('main.create.time')">
@@ -60,7 +64,9 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" @click="fetchTag">{{ $t('main.auto.fetch.tag') }}</el-button>
+          <el-button type="primary" @click="fetchTag" :loading="isTagLoading">
+            {{ isTagLoading ? $t('main.opt.loading') : $t('main.auto.fetch.tag') }}
+          </el-button>
         </el-form-item>
 
         <el-form-item>
@@ -70,15 +76,29 @@
         <br/>
         <br/>
         <el-form-item>
-          <el-button @click="oneclickAttr">{{ $t('main.publish.oneclick.attr') }}</el-button>
+          <el-button @click="oneclickAttr" :loading="isGenLoading">
+            {{ isGenLoading ? $t('main.opt.loading') : $t('main.publish.oneclick.attr') }}
+          </el-button>
         </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="publishPage">{{
-              isPublished ? $t('main.update') : $t('main.publish')
+
+        <el-form-item :label="$t('main.publish.vuepress.github')">
+          <el-switch v-model="vuepressGithubEnabled"/>
+          <span v-if="vuepressGithubEnabled">{{ $t('main.publish.vuepress.github.tip')}}</span>
+        </el-form-item>
+
+        <el-form-item :label="$t('main.publish.vuepress.choose.path')" v-if="vuepressGithubEnabled">
+          menu
+        </el-form-item>
+
+        <el-form-item label="">
+          <el-button type="primary" @click="publishPage" :loading="isPublishLoading">{{
+              isPublishLoading ? $t('main.publish.loading') :
+                  isPublished ? $t('main.update') : $t('main.publish')
             }}
           </el-button>
           <el-button @click="cancelPublish">{{ $t('main.cancel') }}</el-button>
         </el-form-item>
+
         <el-form-item>
           <el-button type="danger" text disabled>
             {{ isPublished ? $t('main.publish.status.published') : $t('main.publish.status.unpublish') }}
@@ -137,6 +157,14 @@ import {PUBLISH_POSTID_KEY_CONSTANTS} from "../../../lib/publishUtil";
 import copy from "copy-to-clipboard"
 
 const {t} = useI18n()
+
+const isSlugLoading = ref(false)
+const isDescLoading = ref(false)
+const isTagLoading = ref(false)
+const isGenLoading = ref(false)
+const isPublishLoading = ref(false)
+
+const vuepressGithubEnabled = ref(true)
 let isPublished = ref(false)
 const formData = ref({
   title: "",
@@ -223,6 +251,7 @@ async function initPage() {
 }
 
 async function makeSlug(hideTip?: boolean) {
+  isSlugLoading.value = true
   // 获取最新属性
   const page = await getPage(siyuanData.value.pageId)
   // BUG：目前attr的title不会即时更新
@@ -247,11 +276,14 @@ async function makeSlug(hideTip?: boolean) {
     formData.value.customSlug = await pingyinSlugify(title);
   }
 
+  isSlugLoading.value = false
   if (hideTip != true) {
     ElMessage.success(t('main.opt.success'))
-  }}
+  }
+}
 
 async function makeDesc(hideTip?: boolean) {
+  isDescLoading.value = true
   const data = await getPageMd(siyuanData.value.pageId);
 
   const md = data.content
@@ -259,6 +291,7 @@ async function makeDesc(hideTip?: boolean) {
   // formData.value.desc = html;
   formData.value.desc = parseHtml(html, CONSTANTS.MAX_PREVIEW_LENGTH, true)
 
+  isDescLoading.value = false
   if (hideTip != true) {
     ElMessage.success(t('main.opt.success'))
   }
@@ -292,6 +325,7 @@ const tagHandleInputConfirm = () => {
 }
 
 async function fetchTag(hideTip?: boolean) {
+  isTagLoading.value = true
   const data = await getPageMd(siyuanData.value.pageId);
 
   const md = data.content
@@ -308,9 +342,11 @@ async function fetchTag(hideTip?: boolean) {
     }
   }
 
+  isTagLoading.value = false
   if (hideTip != true) {
     ElMessage.success(t('main.opt.success'))
-  }}
+  }
+}
 
 async function saveAttrToSiyuan(hideTip?: boolean) {
   const customAttr = {
@@ -402,6 +438,10 @@ const copyToClipboard = () => {
 }
 
 async function publishPage() {
+  isPublishLoading.value = true
+
+  // 生成属性
+  await oneclickAttr(true)
   // 发布属性
   await saveAttrToSiyuan(true)
   log.logWarn("发布属性完成")
@@ -413,19 +453,27 @@ async function publishPage() {
   vuepressData.value.vuepressContent = md;
   vuepressData.value.vuepressFullContent = vuepressData.value.formatter + "\n" + vuepressData.value.vuepressContent;
 
+  // 根据选项决定是否发送到Vuepress的Github参考
   log.logWarn("发布内容完成")
 
+  isPublishLoading.value = false
   ElMessage.success(t('main.opt.status.publish'))
 }
 
-async function oneclickAttr(){
+async function oneclickAttr(hideTip?: boolean) {
+  isGenLoading.value = true
   await makeSlug(true)
 
   await makeDesc(true)
 
   await fetchTag(true)
 
-  ElMessage.success(t('main.publish.oneclick.attr.finish'))
+  convertAttrToYAML()
+
+  isGenLoading.value = false
+  if (hideTip != true) {
+    ElMessage.success(t('main.publish.oneclick.attr.finish'))
+  }
 }
 
 async function cancelPublish() {

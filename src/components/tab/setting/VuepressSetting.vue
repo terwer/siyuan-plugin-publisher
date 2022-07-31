@@ -38,7 +38,9 @@
 
     <el-form-item>
       <el-button type="primary" @click="submitForm(formRef)">{{ $t('setting.blog.save') }}</el-button>
-      <el-button type="primary" @click="valiConf">{{ $t('setting.blog.vali') }}</el-button>
+      <el-button type="primary" @click="valiConf" :loading="isLoading">
+        {{ isLoading ? $t('setting.blog.vali.ing') : $t('setting.blog.vali') }}
+      </el-button>
       <el-button @click="resetForm(formRef)">{{ $t('setting.blog.cancel') }}</el-button>
     </el-form-item>
     <el-form-item>
@@ -61,6 +63,7 @@ import {formatIsoToZhDate} from "../../../lib/util";
 
 const {t} = useI18n()
 
+const isLoading = ref(false)
 const formSize = ref('default')
 const formRef = ref<FormInstance>()
 const formData = reactive({
@@ -147,13 +150,14 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   ElMessage.success(t('main.opt.success'))
 }
 const valiConf = async () => {
+  isLoading.value = true;
   const vuepressCfg = new VuepressCfg(formData.githubUser, formData.githubRepo, formData.githubToken,
       formData.defaultBranch, formData.defaultPath, formData.msg, formData.author, formData.email);
   // const vuepressCfg = getJSONConf<IVuepressCfg>(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS)
   const testFile = "test.md"
 
   const docPath = formData.defaultPath + testFile
-  const mdContent = "Hello World!" + formatIsoToZhDate(new Date().toISOString(),true)
+  const mdContent = "Hello World!" + formatIsoToZhDate(new Date().toISOString(), true)
   const res = await publishPage(vuepressCfg, docPath, mdContent)
   if (!res) {
     ElMessage.error(t('main.opt.failure'))
@@ -163,6 +167,7 @@ const valiConf = async () => {
   // 预览
   formData.previewUrl = "https://github.com/" + formData.githubUser + "/" + formData.githubRepo
       + "/blob/" + formData.defaultBranch + "/" + formData.defaultPath + testFile
+  isLoading.value = false
   ElMessage.success(t('main.opt.success'))
 }
 const resetForm = (formEl: FormInstance | undefined) => {
