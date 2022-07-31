@@ -18,6 +18,8 @@ At present, it supports vuepress ~~and two open API standard blog platforms, <co
 * [ ] Liandi-relay on v0.0.2 version，will release on 2022-10-31
 * [ ] Yueque-relay on v0.0.2 version，will release on 2022-10-31
 
+[Click here to see development progress](https://github.com/users/terwer/projects/1/views/1)
+
 ## Vue 3 + TypeScript + Vite
 
 This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.

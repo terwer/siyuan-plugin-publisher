@@ -16,6 +16,8 @@
 * [ ] 链滴社区-延期到v0.0.2版本，预计2022-10-31发布
 * [ ] 语雀-延期到v0.0.2版本，预计2022-10-31发布
 
+[点击这里查看开发进度](https://github.com/users/terwer/projects/1/views/1)
+
 ## Vue 3 + TypeScript + Vite
 
 项目使用 Vue 3 框架，TypeScript 开发语言，Vite 作为构建工具。
