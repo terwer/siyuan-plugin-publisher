@@ -7,12 +7,12 @@
       <plantform-setting :is-reload="isReloadSetting"/>
     </el-tab-pane>
     <el-tab-pane name="post-bind" :label="$t('service.tab.post.bind')">
-      <post-bind/>
+     <post-bind :is-reload="isReloadPostBind"/>
     </el-tab-pane>
-    <el-tab-pane :label="$t('service.tab.service.switch')">
+    <el-tab-pane name="service-switch" :label="$t('service.tab.service.switch')">
       <service-switch/>
     </el-tab-pane>
-    <el-tab-pane :label="$t('service.tab.change.local')">
+    <el-tab-pane name="change-local" :label="$t('service.tab.change.local')">
       <change-locale/>
     </el-tab-pane>
   </el-tabs>
@@ -21,11 +21,10 @@
 <script lang="ts" setup>
 import log from "../lib/logUtil";
 import {ref} from "vue";
-import PostBind from "./PostBind.vue";
-import PlantformMain from "./PlantformMain.vue";
 
 let isReloadSetting = ref(false)
 let isReloadMain = ref(false)
+let isReloadPostBind = ref(false)
 
 const serviceTabChange = (name: string) => {
   log.logInfo("serviceTabChange=>", name)
@@ -37,19 +36,25 @@ const serviceTabChange = (name: string) => {
     // 切换强制刷新
     isReloadMain.value = !isReloadMain.value;
     log.logInfo("plantform-main change=>")
+  } else if ("post-bind" == name) {
+    // 切换强制刷新
+    isReloadPostBind.value = !isReloadPostBind.value;
+    log.logInfo("post-bind change=>")
   }
 }
 
 </script>
 
 <script lang="ts">
-import ChangeLocale from "./ChangeLocale.vue";
-import ServiceSwitch from "./ServiceSwitch.vue";
-import PlantformSetting from "./PlantformSetting.vue";
+import ChangeLocale from "./tab/ChangeLocale.vue";
+import ServiceSwitch from "./tab/ServiceSwitch.vue";
+import PlantformSetting from "./tab/PlantformSetting.vue";
+import PostBind from "./tab/PostBind.vue";
+import PlantformMain from "./tab/PlantformMain.vue";
 
 export default {
   name: "PublishService",
-  components: {PlantformSetting, ServiceSwitch, ChangeLocale}
+  components: {PlantformSetting, ServiceSwitch, ChangeLocale, PostBind, PlantformMain}
 }
 </script>
 

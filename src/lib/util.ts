@@ -5,6 +5,8 @@ import jsYaml from "js-yaml";
 import {mdToPlanText} from "./htmlUtil";
 import {getApiParams} from "./publishUtil";
 import log from "./logUtil";
+import {API_TYPE_CONSTANTS} from "./constants/apiTypeConstants";
+import {IVuepressCfg} from "./vuepress/IVuepressCfg";
 
 // const nodejieba = require("nodejieba");
 
@@ -14,13 +16,18 @@ import log from "./logUtil";
  * @param meta 元数据
  */
 export function getPublishStatus(apiType: string, meta: any) {
-    const postidKey = getApiParams(apiType).postidKey;
-    const postId = meta[postidKey] || "";
-    log.logInfo("平台=>", apiType)
-    log.logInfo("meta=>", meta)
-    log.logInfo("postidKey=>", postidKey)
-    log.logInfo("postidKey的值=>", postId)
-    return postId !== "";
+    if (apiType == API_TYPE_CONSTANTS.API_TYPE_VUEPRESS) {
+        const postidKey = getApiParams<IVuepressCfg>(apiType).posidKey;
+        const postId = meta[postidKey] || "";
+        log.logInfo("平台=>", apiType)
+        log.logInfo("meta=>", meta)
+        log.logInfo("postidKey=>", postidKey)
+        log.logInfo("postidKey的值=>", postId)
+        return postId !== "";
+    }
+
+    // @ts-ignore
+    return getApiParamsOld(apiType);
 }
 
 /**
