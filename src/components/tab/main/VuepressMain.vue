@@ -114,7 +114,7 @@
                     v-if="!vuepressGithubEnabled"/>
         </el-form-item>
         <!-- 是否使用默认目录 -->
-        <el-form-item :label="$t('main.publish.vuepress.choose.path.use.default')">
+        <el-form-item :label="$t('main.publish.vuepress.choose.path.use.default')" v-if="vuepressGithubEnabled">
           <el-switch v-model="useDefaultPath" @change="defaultPathOnChange"/>
           <el-alert :title="$t('main.publish.vuepress.choose.path.use.default.tip')" type="info" :closable="false"
                     v-if="useDefaultPath"/>
@@ -131,7 +131,7 @@
         </el-form-item>
         <!-- 发布操作 -->
         <el-form-item label="">
-          <el-button type="primary" @click="publishPage" :loading="isPublishLoading">{{
+          <el-button type="primary" @click="doPublish" :loading="isPublishLoading">{{
               isPublishLoading ? $t('main.publish.loading') :
                   isPublished ? $t('main.update') : $t('main.publish')
             }}
@@ -196,7 +196,9 @@ import {PUBLISH_POSTID_KEY_CONSTANTS} from "../../../lib/publishUtil";
 import copy from "copy-to-clipboard"
 import shortHash from "shorthash2";
 import {API_STATUS_CONSTANTS} from "../../../lib/constants/apiStatusConstants";
-import {getBooleanConf} from "../../../lib/config";
+import {getBooleanConf, getJSONConf, setBooleanConf} from "../../../lib/config";
+import {IVuepressCfg} from "../../../lib/vuepress/IVuepressCfg";
+import {publishPage} from "../../../lib/vuepress/v1";
 
 const {t} = useI18n()
 
@@ -540,7 +542,7 @@ const defaultPathOnChange = (val: boolean) => {
   useDefaultPath.value = val
 }
 
-async function publishPage() {
+async function doPublish() {
   isPublishLoading.value = true
 
   // 生成属性
@@ -548,13 +550,6 @@ async function publishPage() {
   // 发布属性
   await saveAttrToSiyuan(true)
   log.logWarn("发布属性完成")
-
-  // 发布内容
-  const data = await getPageMd(siyuanData.value.pageId);
-  const md = removeWidgetTag(data.content)
-
-  // vuepressData.value.vuepressContent = md;
-  // vuepressData.value.vuepressFullContent = vuepressData.value.formatter + "\n" + vuepressData.value.vuepressContent;
 
   // 根据选项决定是否发送到Vuepress的Github参考
   const isOk = getBooleanConf(API_STATUS_CONSTANTS.API_STATUS_VUEPRESS)
@@ -566,11 +561,41 @@ async function publishPage() {
     isPublishLoading.value = false
     ElMessage.error("检测到api不可用或者配置错误，无法发布到Github，请自行复制文本")
     return
-  }
-  // api可用并且开启了发布
-  if (isOk && vuepressGithubEnabled.value) {
-    alert("开始真正调用api发布打破Github")
+  } else if (isOk && vuepressGithubEnabled.value) {
+    // api可用并且开启了发布
+    log.logWarn("开始真正调用api发布到Github")
 
+    const vuepressCfg = getJSONConf<IVuepressCfg>(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS)
+
+    const mdFile = formData.value.title
+    let docPath = vuepressCfg.defaultPath + mdFile
+    if (!useDefaultPath.value) {
+      // 如果选择了自定义的目录
+      alert("选择了自定义的目录")
+    }
+
+    // 发布内容
+    const data = await getPageMd(siyuanData.value.pageId);
+    const mdContent = removeWidgetTag(data.content)
+
+    const res = await publishPage(vuepressCfg, docPath, mdContent)
+
+    // 成功与失败都提供复制功能
+    // 刷新属性数据
+    await initPage();
+
+    if (!res) {
+      // 发布失败
+      ElMessage.error(t('main.publish.vuepress.failure'))
+      return
+    }
+
+    // 这里是发布成功之后
+    // 保存文章发布目录，并更新发布状态
+    const previewUrl = "https://github.com/" + vuepressCfg.githubUser + "/" + vuepressCfg.githubRepo
+        + "/blob/" + vuepressCfg.defaultBranch + "/" + docPath
+    console.warn("文章预览链接=>", previewUrl)
+  } else {
     // 刷新属性数据
     await initPage();
   }
