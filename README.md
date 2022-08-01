@@ -47,6 +47,17 @@ At present, it supports vuepress ~~and two open API standard blog platforms, <co
     - 9、Vuepress's slug add hash to avoid the conflict of repeated articles
   
     - 10、Support simple and complex mode
+  
+    - 11、New API status to ensure the availability of the API
+  
+    - 12、Configuration switch automatically takes effect
+  
+    - 13、Default directory switch
+  
+    - 14、Page initialization is also additional content
+  
+    - 15、Support article cancellation and release
+  
 ### v0.0.1
 
 - [#13](https://github.com/terwer/src-sy-post-publisher/issues/13) Vuepress基本支持

@@ -44,7 +44,18 @@
   
     - 9、Vuepress的slug添加hash避免文章重复的冲突问题
   
-    - 10、支持简洁模式与详细模式
+    - 10、支持简洁模式与详细模式 
+  
+    - 11、新增api状态，确保api可用性 
+  
+    - 12、配置开关自动生效 
+  
+    - 13、默认目录开关 
+  
+    - 14、页面初始化也附加内容 
+  
+    - 15、支持文章取消发布
+  
 ### v0.0.1
 
 - [#13](https://github.com/terwer/src-sy-post-publisher/issues/13) Vuepress基本支持
