@@ -110,9 +110,17 @@
           <el-switch v-model="vuepressGithubEnabled" @change="githubOnChange"/>
           <el-alert :title="$t('main.publish.vuepress.github.tip')" type="info" :closable="false"
                     v-if="vuepressGithubEnabled"/>
+          <el-alert :title="$t('main.publish.vuepress.github.no.tip')" type="warning" :closable="false"
+                    v-if="!vuepressGithubEnabled"/>
+        </el-form-item>
+        <!-- 是否使用默认目录 -->
+        <el-form-item :label="$t('main.publish.vuepress.choose.path.use.default')">
+          <el-switch v-model="useDefaultPath" @change="defaultPathOnChange"/>
+          <el-alert :title="$t('main.publish.vuepress.choose.path.use.default.tip')" type="info" :closable="false"
+                    v-if="useDefaultPath"/>
         </el-form-item>
         <!-- 选择目录 -->
-        <el-form-item :label="$t('main.publish.vuepress.choose.path')" v-if="vuepressGithubEnabled">
+        <el-form-item :label="$t('main.publish.vuepress.choose.path')" v-if="vuepressGithubEnabled && !useDefaultPath">
           menu
         </el-form-item>
         <!-- 设置文件名 -->
@@ -163,34 +171,32 @@
 </template>
 
 <script lang="ts" setup>
-import {onBeforeMount, ref, watch} from "vue";
-import {getPage, getPageAttrs, setPageAttrs, getPageId, getPageMd} from "../../../lib/siyuan/siyuanUtil";
+import {nextTick, onBeforeMount, ref, watch} from "vue";
+import {getPage, getPageAttrs, getPageId, getPageMd, setPageAttrs} from "../../../lib/siyuan/siyuanUtil";
 import log from "../../../lib/logUtil"
 import {SIYUAN_PAGE_ATTR_KEY} from "../../../lib/constants/siyuanPageConstants"
 import {
-  pingyinSlugify,
-  zhSlugify,
-  formatNumToZhDate,
-  cutWords,
-  jiebaToHotWords,
   covertStringToDate,
+  cutWords,
   formatIsoToZhDate,
+  formatNumToZhDate,
+  getPublishStatus,
+  jiebaToHotWords,
   obj2yaml,
+  pingyinSlugify,
   yaml2Obj,
-  getPublishStatus
+  zhSlugify
 } from "../../../lib/util";
 import {useI18n} from "vue-i18n";
 import {ElMessage} from "element-plus";
 import {CONSTANTS} from "../../../lib/constants/constants";
 import {mdToHtml, parseHtml, removeWidgetTag} from "../../../lib/htmlUtil";
-import {nextTick} from 'vue'
 import {API_TYPE_CONSTANTS} from "../../../lib/constants/apiTypeConstants";
 import {PUBLISH_POSTID_KEY_CONSTANTS} from "../../../lib/publishUtil";
 import copy from "copy-to-clipboard"
 import shortHash from "shorthash2";
 import {API_STATUS_CONSTANTS} from "../../../lib/constants/apiStatusConstants";
-import {getBooleanConf, setBooleanConf} from "../../../lib/config";
-import SWITCH_CONSTANTS from "../../../lib/constants/switchConstants";
+import {getBooleanConf} from "../../../lib/config";
 
 const {t} = useI18n()
 
@@ -223,6 +229,7 @@ const isPublishLoading = ref(false)
 let editMode = ref(false)
 const slugHashEnabled = ref(false)
 const vuepressGithubEnabled = ref(false)
+const useDefaultPath = ref(true)
 let isPublished = ref(false)
 
 const formData = ref({
@@ -309,8 +316,14 @@ async function initPage() {
     }
   }
 
-  // 表单属性转换为HTML
+  // 表单属性转换为YAML
   convertAttrToYAML()
+
+  // 文章内容同步到YAMl
+  const data = await getPageMd(siyuanData.value.pageId);
+  const md = removeWidgetTag(data.content)
+  vuepressData.value.vuepressContent = md;
+  vuepressData.value.vuepressFullContent = vuepressData.value.formatter + "\n" + vuepressData.value.vuepressContent;
 
   // 发布状态
   isPublished.value = getPublishStatus(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS, siyuanData.value.meta)
@@ -436,10 +449,11 @@ async function saveAttrToSiyuan(hideTip?: boolean) {
   await setPageAttrs(siyuanData.value.pageId, customAttr)
   log.logWarn("VuepressMain保存属性到思源笔记,meta=>", customAttr);
 
-  // 刷新属性数据
-  await initPage();
-
+  // 单独调用才去刷新数据，否则自行刷新数据
   if (hideTip != true) {
+    // 刷新属性数据
+    await initPage();
+
     ElMessage.success(t('main.opt.success'))
   }
 }
@@ -516,11 +530,14 @@ const copyToClipboard = () => {
 }
 
 const githubOnChange = (val: boolean) => {
-  if (val) {
-    slugHashEnabled.value = true
-  } else {
-    slugHashEnabled.value = false
-  }
+  // 开启Github需要开启hash避免重复
+  slugHashEnabled.value = val;
+  // Github开启状态同步给其他地方用
+  vuepressGithubEnabled.value = val
+}
+
+const defaultPathOnChange = (val: boolean) => {
+  useDefaultPath.value = val
 }
 
 async function publishPage() {
@@ -536,10 +553,27 @@ async function publishPage() {
   const data = await getPageMd(siyuanData.value.pageId);
   const md = removeWidgetTag(data.content)
 
-  vuepressData.value.vuepressContent = md;
-  vuepressData.value.vuepressFullContent = vuepressData.value.formatter + "\n" + vuepressData.value.vuepressContent;
+  // vuepressData.value.vuepressContent = md;
+  // vuepressData.value.vuepressFullContent = vuepressData.value.formatter + "\n" + vuepressData.value.vuepressContent;
 
   // 根据选项决定是否发送到Vuepress的Github参考
+  const isOk = getBooleanConf(API_STATUS_CONSTANTS.API_STATUS_VUEPRESS)
+  // api不可用但是开启了发布
+  if (!isOk && vuepressGithubEnabled.value) {
+    // 未开启也生成数据
+    // 刷新属性数据
+    await initPage();
+    isPublishLoading.value = false
+    ElMessage.error("检测到api不可用或者配置错误，无法发布到Github，请自行复制文本")
+    return
+  }
+  // api可用并且开启了发布
+  if (isOk && vuepressGithubEnabled.value) {
+    alert("开始真正调用api发布打破Github")
+
+    // 刷新属性数据
+    await initPage();
+  }
   log.logWarn("发布内容完成")
 
   isPublishLoading.value = false

@@ -12,8 +12,11 @@ export default {
     "main.publish.vuepress.editmode.simple": "简洁模式",
     "main.publish.vuepress.editmode.complex": "详细模式",
     "main.publish.vuepress.github": "发布Github",
-    "main.publish.vuepress.github.tip": "自动将文章的markdown文本发布到Vuepress对应的Github仓库（需要先进行相关配置），不勾选请复制右侧文本",
+    "main.publish.vuepress.github.tip": "自动将文章的markdown文本发布到Vuepress对应的Github仓库（需要先进行相关配置）",
+    "main.publish.vuepress.github.no.tip": "您未开启Github发布，请在点击发布之后自行复制右侧文本",
     "main.publish.vuepress.choose.path": "请选择目录",
+    "main.publish.vuepress.choose.path.use.default": "默认目录",
+    "main.publish.vuepress.choose.path.use.default.tip": "使用默认目录，则默认所有文章都发布在配置好的默认目录下，无需每次发布的时候来选择目录",
     "main.publish.vuepress.choose.title": "文件名",
     "main.publish.vuepress.choose.title.tip": "Vuepress-theme-vdoing支持文件名加上序号来标识，如果你不清楚此用法，请不要修改文件名",
     "main.publish.to.wordpress": "发布到Wordpress",
@@ -113,6 +116,6 @@ export default {
     "post.bind.wordpress.postid": "WP的ID",
     "post.bind.conf.save": "保存",
     "post.bind.conf.cancel": "取消",
-    "form.validate.name.required":"请输入名称",
-    "form.validate.name.length":"长度必须在0到1之间"
+    "form.validate.name.required": "请输入名称",
+    "form.validate.name.length": "长度必须在0到1之间"
 }
