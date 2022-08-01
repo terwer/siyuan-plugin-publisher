@@ -1,7 +1,7 @@
 <template>
   <el-tabs type="border-card">
     <el-tab-pane :label="$t('main.publish.to.vuepress')" v-if="vuepressEnabled">
-      <vuepress-main/>
+      <vuepress-main :is-reload="isReloadVuepressMain"/>
     </el-tab-pane>
     <el-tab-pane :label="$t('main.publish.to.jvue')" v-if="jvueEnabled">
       JVue
@@ -30,6 +30,8 @@ const confEnabled = ref(false)
 const cnblogsEnabled = ref(false)
 const wordpressEnabled = ref(false)
 
+const isReloadVuepressMain = ref(false)
+
 const initConf = () => {
   vuepressEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY)
   jvueEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_JVUE_KEY)
@@ -53,6 +55,11 @@ watch(() => props.isReload, /**/(oldValue, newValue) => {
   setBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY, true)
   initConf();
   log.logInfo("plantform-main初始化")
+
+  // 如果开启了Vuepress，需要刷新Vuepress
+  if(vuepressEnabled.value){
+    isReloadVuepressMain.value = !isReloadVuepressMain.value
+  }
 })
 
 onMounted(() => {

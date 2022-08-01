@@ -163,7 +163,7 @@
 </template>
 
 <script lang="ts" setup>
-import {onBeforeMount, ref} from "vue";
+import {onBeforeMount, ref, watch} from "vue";
 import {getPage, getPageAttrs, setPageAttrs, getPageId, getPageMd} from "../../../lib/siyuan/siyuanUtil";
 import log from "../../../lib/logUtil"
 import {SIYUAN_PAGE_ATTR_KEY} from "../../../lib/constants/siyuanPageConstants"
@@ -189,9 +189,30 @@ import {PUBLISH_POSTID_KEY_CONSTANTS} from "../../../lib/publishUtil";
 import copy from "copy-to-clipboard"
 import shortHash from "shorthash2";
 import {API_STATUS_CONSTANTS} from "../../../lib/constants/apiStatusConstants";
-import {getBooleanConf} from "../../../lib/config";
+import {getBooleanConf, setBooleanConf} from "../../../lib/config";
+import SWITCH_CONSTANTS from "../../../lib/constants/switchConstants";
 
 const {t} = useI18n()
+
+const props = defineProps({
+  isReload: {
+    type: Boolean,
+    default: false
+  }
+})
+/*监听props*/
+watch(() => props.isReload, async (oldValue, newValue) => {
+  // Here you can add you functionality
+  // as described in the name you will get old and new value of watched property
+
+  // 初始化
+  await initPage()
+  log.logWarn("VuepressMain检测到更新操作，刷新页面")
+})
+
+onBeforeMount(async () => {
+  await initPage()
+})
 
 const isSlugLoading = ref(false)
 const isDescLoading = ref(false)
@@ -296,9 +317,9 @@ async function initPage() {
 
   // api状态
   const isOk = getBooleanConf(API_STATUS_CONSTANTS.API_STATUS_VUEPRESS)
-  if (isOk) {
-    vuepressGithubEnabled.value = true
-  }
+  vuepressGithubEnabled.value = isOk
+  log.logInfo("Vuepress的api状态=>")
+  log.logInfo(isOk)
 }
 
 async function makeSlug(hideTip?: boolean) {
@@ -553,10 +574,6 @@ async function cancelPublish() {
 
   ElMessage.warning(t('main.opt.status.cancel'))
 }
-
-onBeforeMount(async () => {
-  await initPage()
-})
 </script>
 
 <script lang="ts">
