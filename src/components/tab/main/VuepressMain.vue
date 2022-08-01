@@ -136,13 +136,15 @@
                   isPublished ? $t('main.update') : $t('main.publish')
             }}
           </el-button>
-          <el-button @click="cancelPublish">{{ $t('main.cancel') }}</el-button>
+          <el-button @click="cancelPublish" :loading="isCancelLoading">{{ $t('main.cancel') }}</el-button>
         </el-form-item>
         <!-- 文章状态 -->
         <el-form-item>
           <el-button type="danger" text disabled>
             {{ isPublished ? $t('main.publish.status.published') : $t('main.publish.status.unpublish') }}
           </el-button>
+          <a :href="previewUrl" :title="previewUrl" target="_blank"
+             v-if="isPublished">{{ $t('main.publish.vuepress.see.preview') }}</a>
         </el-form-item>
       </el-form>
     </el-aside>
@@ -188,17 +190,18 @@ import {
   zhSlugify
 } from "../../../lib/util";
 import {useI18n} from "vue-i18n";
-import {ElMessage} from "element-plus";
+import {ElMessage, ElMessageBox} from "element-plus";
 import {CONSTANTS} from "../../../lib/constants/constants";
 import {mdToHtml, parseHtml, removeWidgetTag} from "../../../lib/htmlUtil";
 import {API_TYPE_CONSTANTS} from "../../../lib/constants/apiTypeConstants";
-import {PUBLISH_POSTID_KEY_CONSTANTS} from "../../../lib/publishUtil";
 import copy from "copy-to-clipboard"
 import shortHash from "shorthash2";
 import {API_STATUS_CONSTANTS} from "../../../lib/constants/apiStatusConstants";
-import {getBooleanConf, getJSONConf, setBooleanConf} from "../../../lib/config";
+import {getBooleanConf, getJSONConf} from "../../../lib/config";
 import {IVuepressCfg} from "../../../lib/vuepress/IVuepressCfg";
-import {publishPage} from "../../../lib/vuepress/v1";
+import {deletePage, publishPage} from "../../../lib/vuepress/v1";
+import {POSTID_KEY_CONSTANTS} from "../../../lib/constants/postidKeyConstants";
+import {getApiParams} from "../../../lib/publishUtil";
 
 const {t} = useI18n()
 
@@ -227,12 +230,14 @@ const isDescLoading = ref(false)
 const isTagLoading = ref(false)
 const isGenLoading = ref(false)
 const isPublishLoading = ref(false)
+const isCancelLoading = ref(false)
 
-let editMode = ref(false)
+const editMode = ref(false)
 const slugHashEnabled = ref(false)
 const vuepressGithubEnabled = ref(false)
 const useDefaultPath = ref(true)
-let isPublished = ref(false)
+const isPublished = ref(false)
+const previewUrl = ref("")
 
 const formData = ref({
   title: "",
@@ -330,11 +335,27 @@ async function initPage() {
   // 发布状态
   isPublished.value = getPublishStatus(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS, siyuanData.value.meta)
 
+  // 更新预览链接
+  if (isPublished.value) {
+    const vuepressCfg = getJSONConf<IVuepressCfg>(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS)
+    const docPath = getDocPath()
+
+    previewUrl.value = "https://github.com/" + vuepressCfg.githubUser + "/" + vuepressCfg.githubRepo
+        + "/blob/" + vuepressCfg.defaultBranch + "/" + docPath
+  }
+
   // api状态
   const isOk = getBooleanConf(API_STATUS_CONSTANTS.API_STATUS_VUEPRESS)
   vuepressGithubEnabled.value = isOk
   log.logInfo("Vuepress的api状态=>")
   log.logInfo(isOk)
+}
+
+function getDocPath() {
+  const postidKey = getApiParams<IVuepressCfg>(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS).posidKey;
+  const meta: any = siyuanData.value.meta
+  const docPath = meta[postidKey] || "";
+  return docPath;
 }
 
 async function makeSlug(hideTip?: boolean) {
@@ -444,7 +465,6 @@ async function fetchTag(hideTip?: boolean) {
 async function saveAttrToSiyuan(hideTip?: boolean) {
   const customAttr = {
     [SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_SLUG_KEY]: formData.value.customSlug,
-    [PUBLISH_POSTID_KEY_CONSTANTS.VUEPRESS_POSTID_KEY]: formData.value.customSlug,
     [SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_DESC_KEY]: formData.value.desc,
     tags: formData.value.tag.dynamicTags.join(",")
   };
@@ -581,20 +601,24 @@ async function doPublish() {
     const res = await publishPage(vuepressCfg, docPath, mdContent)
 
     // 成功与失败都提供复制功能
-    // 刷新属性数据
-    await initPage();
-
     if (!res) {
+      // 刷新属性数据
+      await initPage();
       // 发布失败
       ElMessage.error(t('main.publish.vuepress.failure'))
       return
     }
 
     // 这里是发布成功之后
-    // 保存文章发布目录，并更新发布状态
-    const previewUrl = "https://github.com/" + vuepressCfg.githubUser + "/" + vuepressCfg.githubRepo
-        + "/blob/" + vuepressCfg.defaultBranch + "/" + docPath
-    console.warn("文章预览链接=>", previewUrl)
+    const customAttr = {
+      [POSTID_KEY_CONSTANTS.VUEPRESS_POSTID_KEY]: docPath,
+    };
+    await setPageAttrs(siyuanData.value.pageId, customAttr)
+    log.logInfo("VuepressMain发布成功，保存路径,meta=>", customAttr);
+
+    // 刷新属性数据
+    await initPage();
+    log.logInfo("文章预览链接=>", previewUrl)
   } else {
     // 刷新属性数据
     await initPage();
@@ -622,16 +646,44 @@ async function oneclickAttr(hideTip?: boolean) {
 }
 
 async function cancelPublish() {
-  const customAttr = {
-    [PUBLISH_POSTID_KEY_CONSTANTS.VUEPRESS_POSTID_KEY]: ""
-  };
-  await setPageAttrs(siyuanData.value.pageId, customAttr)
-  log.logWarn("VuepressMain取消发布,meta=>", customAttr);
+  isCancelLoading.value = true;
 
-  // 刷新属性数据
-  await initPage();
+  ElMessageBox.confirm(
+      t('main.opt.warning.tip'),
+      t('main.opt.warning'),
+      {
+        confirmButtonText: t('main.opt.ok'),
+        cancelButtonText: t('main.opt.cancel'),
+        type: 'warning',
+      }
+  ).then(async () => {
+    const vuepressCfg = getJSONConf<IVuepressCfg>(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS)
+    const docPath = getDocPath()
+    log.logInfo("准备取消发布，docPath=>", docPath)
 
-  ElMessage.warning(t('main.opt.status.cancel'))
+    await deletePage(vuepressCfg, docPath)
+
+    const customAttr = {
+      [POSTID_KEY_CONSTANTS.VUEPRESS_POSTID_KEY]: ""
+    };
+    await setPageAttrs(siyuanData.value.pageId, customAttr)
+    log.logWarn("VuepressMain取消发布,meta=>", customAttr);
+
+    // 刷新属性数据
+    await initPage();
+
+    isCancelLoading.value = false;
+
+    ElMessage.warning(t('main.opt.status.cancel'))
+  }).catch(() => {
+    // ElMessage({
+    //   type: 'error',
+    //   message: t("main.opt.failure"),
+    // })
+    isCancelLoading.value = false;
+
+    log.logInfo("操作已取消")
+  })
 }
 </script>
 

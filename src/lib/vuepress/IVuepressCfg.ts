@@ -34,4 +34,8 @@ export interface IVuepressCfg {
      * 邮箱
      */
     email: string
+    /**
+     * 文章别名key
+     */
+    posidKey: string
 }

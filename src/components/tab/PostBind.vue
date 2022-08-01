@@ -33,11 +33,10 @@ import {getBooleanConf, setBooleanConf} from "../../lib/config";
 import SWITCH_CONSTANTS from "../../lib/constants/switchConstants";
 import log from "../../lib/logUtil";
 import type {FormInstance, FormRules} from 'element-plus'
-import {useI18n} from "vue-i18n";
 import {ElMessage} from "element-plus";
-import {SIYUAN_PAGE_ATTR_KEY} from "../../lib/constants/siyuanPageConstants";
-import {PUBLISH_POSTID_KEY_CONSTANTS} from "../../lib/publishUtil";
+import {useI18n} from "vue-i18n";
 import {getPageAttrs, getPageId, setPageAttrs} from "../../lib/siyuan/siyuanUtil";
+import {POSTID_KEY_CONSTANTS} from "../../lib/constants/postidKeyConstants";
 
 const {t} = useI18n()
 
@@ -154,11 +153,11 @@ async function initPage() {
   siyuanData.meta = meta
 
   // 表单数据
-  ruleForm.vuepressSlug = meta[PUBLISH_POSTID_KEY_CONSTANTS.VUEPRESS_POSTID_KEY]
-  ruleForm.jvuePostid = meta[PUBLISH_POSTID_KEY_CONSTANTS.JVUE_POSTID_KEY]
-  ruleForm.confPostid = meta[PUBLISH_POSTID_KEY_CONSTANTS.CONFLUENCE_POSTID_KEY]
-  ruleForm.cnblogsPostid = meta[PUBLISH_POSTID_KEY_CONSTANTS.CNBLOGS_POSTID_KEY]
-  ruleForm.wordpressPostid = meta[PUBLISH_POSTID_KEY_CONSTANTS.WORDPRESS_POSTID_KEY]
+  ruleForm.vuepressSlug = meta[POSTID_KEY_CONSTANTS.VUEPRESS_POSTID_KEY]
+  ruleForm.jvuePostid = meta[POSTID_KEY_CONSTANTS.JVUE_POSTID_KEY]
+  ruleForm.confPostid = meta[POSTID_KEY_CONSTANTS.CONFLUENCE_POSTID_KEY]
+  ruleForm.cnblogsPostid = meta[POSTID_KEY_CONSTANTS.CNBLOGS_POSTID_KEY]
+  ruleForm.wordpressPostid = meta[POSTID_KEY_CONSTANTS.WORDPRESS_POSTID_KEY]
 }
 
 const submitForm = async (formEl: FormInstance | undefined) => {
@@ -181,35 +180,35 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   // Vuepress
   if (vuepressEnabled.value && ruleForm.vuepressSlug != "") {
     Object.assign(customAttr, {
-      [PUBLISH_POSTID_KEY_CONSTANTS.VUEPRESS_POSTID_KEY]: ruleForm.vuepressSlug
+      [POSTID_KEY_CONSTANTS.VUEPRESS_POSTID_KEY]: ruleForm.vuepressSlug
     })
   }
 
   // JVue
   if (jvueEnabled.value && ruleForm.jvuePostid != "") {
     Object.assign(customAttr, {
-      [PUBLISH_POSTID_KEY_CONSTANTS.JVUE_POSTID_KEY]: ruleForm.jvuePostid
+      [POSTID_KEY_CONSTANTS.JVUE_POSTID_KEY]: ruleForm.jvuePostid
     })
   }
 
   // Confluence
   if (confEnabled.value && ruleForm.confPostid != "") {
     Object.assign(customAttr, {
-      [PUBLISH_POSTID_KEY_CONSTANTS.CONFLUENCE_POSTID_KEY]: ruleForm.confPostid
+      [POSTID_KEY_CONSTANTS.CONFLUENCE_POSTID_KEY]: ruleForm.confPostid
     })
   }
 
   // Cnblogs
   if (cnblogsEnabled.value && ruleForm.cnblogsPostid != "") {
     Object.assign(customAttr, {
-      [PUBLISH_POSTID_KEY_CONSTANTS.CNBLOGS_POSTID_KEY]: ruleForm.cnblogsPostid
+      [POSTID_KEY_CONSTANTS.CNBLOGS_POSTID_KEY]: ruleForm.cnblogsPostid
     })
   }
 
   // Wordpress
   if (wordpressEnabled.value && ruleForm.wordpressPostid != "") {
     Object.assign(customAttr, {
-      [PUBLISH_POSTID_KEY_CONSTANTS.WORDPRESS_POSTID_KEY]: ruleForm.wordpressPostid
+      [POSTID_KEY_CONSTANTS.WORDPRESS_POSTID_KEY]: ruleForm.wordpressPostid
     })
   }
 

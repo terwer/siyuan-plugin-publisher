@@ -1,6 +1,7 @@
 import {getJSONConf} from "./config.js";
 import log from "./logUtil";
 import {API_TYPE_CONSTANTS} from "./constants/apiTypeConstants";
+import {POSTID_KEY_CONSTANTS} from "./constants/postidKeyConstants";
 
 const CNBLOGS_HOME_KEY = "cnblogs-home";
 const WORDPRESS_HOME_KEY = "wordpress-home";
@@ -29,14 +30,7 @@ const WECHAT_API_URL = "https://xmlrpc.terwergreen.com/api/xmlrpc?t=wechat";
 const LIANDI_API_URL = "https://xmlrpc.terwergreen.com/api/xmlrpc?t=liandi";
 const VUEPRESS_API_URL = "https://github.com/terwer/src.terwer.github.io";
 
-const CNBLOGS_POSTID_KEY = "custom-cnblogs-post-id";
-const WORDPRESS_POSTID_KEY = "custom-wordpress-post-id";
-const CONFLUENCE_POSTID_KEY = "custom-conf-post-id";
-const JVUE_POSTID_KEY = "custom-jvue-post-id";
-const YUQUE_POSTID_KEY = "custom-yuque-post-id";
-const WECHAT_POSTID_KEY = "custom-wechat-post-id";
-const LIANDI_POSTID_KEY = "custom-liandi-post-id";
-const VUEPRESS_POSTID_KEY = "custom-vuepress-slug";
+
 
 const CNBLOGS_USERNAME_KEY = "cnblogs-publish-username";
 const WORDPRESS_USERNAME_KEY = "wordpress-publish-username";
@@ -114,20 +108,6 @@ export const PUBLISH_PASSWORD_KEY_CONSTANTS = {
     VUEPRESS_PASSWORD_KEY
 }
 
-/**
- * 文档ID
- */
-export const PUBLISH_POSTID_KEY_CONSTANTS = {
-    CNBLOGS_POSTID_KEY,
-    WORDPRESS_POSTID_KEY,
-    CONFLUENCE_POSTID_KEY,
-    JVUE_POSTID_KEY,
-    YUQUE_POSTID_KEY,
-    WECHAT_POSTID_KEY,
-    LIANDI_POSTID_KEY,
-    VUEPRESS_POSTID_KEY
-}
-
 function getApiParamsOld(apiType: string) {
     // ==================
     // 修改这个切换api
@@ -143,7 +123,7 @@ function getApiParamsOld(apiType: string) {
     let username = conf[CNBLOGS_USERNAME_KEY] || "";
     // @ts-ignore
     let password = conf[CNBLOGS_PASSWORD_KEY] || "";
-    let postidKey = CNBLOGS_POSTID_KEY;
+    let postidKey = POSTID_KEY_CONSTANTS.CNBLOGS_POSTID_KEY;
 
     // wordpress
     if (API_TYPE_CONSTANTS.API_TYPE_WORDPRESS === apiType) {
@@ -157,7 +137,7 @@ function getApiParamsOld(apiType: string) {
         username = conf[WORDPRESS_USERNAME_KEY] || "terwer";
         // @ts-ignore
         password = conf[WORDPRESS_PASSWORD_KEY] || "123456";
-        postidKey = WORDPRESS_POSTID_KEY;
+        postidKey = POSTID_KEY_CONSTANTS.WORDPRESS_POSTID_KEY;
     }
 
     // confluence
@@ -172,7 +152,7 @@ function getApiParamsOld(apiType: string) {
         username = conf[CONFLUENCE_USERNAME_KEY] || "";
         // @ts-ignore
         password = conf[CONFLUENCE_PASSWORD_KEY] || "";
-        postidKey = CONFLUENCE_POSTID_KEY;
+        postidKey = POSTID_KEY_CONSTANTS.CONFLUENCE_POSTID_KEY;
     }
 
     // jvue
@@ -187,7 +167,7 @@ function getApiParamsOld(apiType: string) {
         username = conf[JVUE_USERNAME_KEY] || "";
         // @ts-ignore
         password = conf[JVUE_PASSWORD_KEY] || "";
-        postidKey = JVUE_POSTID_KEY;
+        postidKey = POSTID_KEY_CONSTANTS.JVUE_POSTID_KEY;
     }
 
     // yuque
@@ -202,7 +182,7 @@ function getApiParamsOld(apiType: string) {
         username = conf[YUQUE_USERNAME_KEY] || "";
         // @ts-ignore
         password = conf[YUQUE_PASSWORD_KEY] || "";
-        postidKey = YUQUE_POSTID_KEY;
+        postidKey = POSTID_KEY_CONSTANTS.YUQUE_POSTID_KEY;
     }
 
     // wechat
@@ -217,7 +197,7 @@ function getApiParamsOld(apiType: string) {
         username = conf[WECHAT_USERNAME_KEY] || "";
         // @ts-ignore
         password = conf[WECHAT_PASSWORD_KEY] || "";
-        postidKey = WECHAT_POSTID_KEY;
+        postidKey = POSTID_KEY_CONSTANTS.WECHAT_POSTID_KEY;
     }
 
     // liandi
@@ -232,7 +212,7 @@ function getApiParamsOld(apiType: string) {
         username = conf[LIANDI_USERNAME_KEY] || "";
         // @ts-ignore
         password = conf[LIANDI_PASSWORD_KEY] || "";
-        postidKey = LIANDI_POSTID_KEY;
+        postidKey = POSTID_KEY_CONSTANTS.LIANDI_POSTID_KEY;
     }
 
     // vuepress
@@ -247,7 +227,7 @@ function getApiParamsOld(apiType: string) {
         username = conf[VUEPRESS_USERNAME_KEY] || "";
         // @ts-ignore
         password = conf[VUEPRESS_PASSWORD_KEY] || "";
-        postidKey = VUEPRESS_POSTID_KEY;
+        postidKey = POSTID_KEY_CONSTANTS.VUEPRESS_POSTID_KEY;
     }
 
     const apiParams = {
