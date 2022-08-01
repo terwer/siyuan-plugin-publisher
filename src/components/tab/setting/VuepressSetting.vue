@@ -37,10 +37,15 @@
     </el-form-item>
 
     <el-form-item>
-      <el-button type="primary" @click="submitForm(formRef)">{{ $t('setting.blog.save') }}</el-button>
       <el-button type="primary" @click="valiConf" :loading="isLoading">
         {{ isLoading ? $t('setting.blog.vali.ing') : $t('setting.blog.vali') }}
       </el-button>
+      <el-alert :title="$t('setting.blog.vali.tip')" type="warning" :closable="false" v-if="!apiStatus"/>
+      <el-alert :title="$t('setting.blog.vali.ok')" type="success" :closable="false" v-if="apiStatus"/>
+    </el-form-item>
+
+    <el-form-item>
+      <el-button type="primary" @click="submitForm(formRef)">{{ $t('setting.blog.save') }}</el-button>
       <el-button @click="resetForm(formRef)">{{ $t('setting.blog.cancel') }}</el-button>
     </el-form-item>
     <el-form-item>
@@ -54,16 +59,19 @@ import {onBeforeMount, reactive, ref} from "vue";
 import {ElMessage, FormInstance, FormRules} from "element-plus";
 import {useI18n} from "vue-i18n";
 import log from "../../../lib/logUtil";
-import {getJSONConf, setJSONConf} from "../../../lib/config";
+import {getBooleanConf, getJSONConf, setBooleanConf, setJSONConf} from "../../../lib/config";
 import {API_TYPE_CONSTANTS} from "../../../lib/constants/apiTypeConstants";
 import {IVuepressCfg} from "../../../lib/vuepress/IVuepressCfg";
 import {publishPage} from "../../../lib/vuepress/v1";
 import {VuepressCfg} from "../../../lib/vuepress/VuepressCfg";
 import {formatIsoToZhDate} from "../../../lib/util";
+import {API_STATUS_CONSTANTS} from "../../../lib/constants/apiStatusConstants";
 
 const {t} = useI18n()
 
 const isLoading = ref(false)
+const apiStatus = ref(false)
+
 const formSize = ref('default')
 const formRef = ref<FormInstance>()
 const formData = reactive({
@@ -151,6 +159,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 }
 const valiConf = async () => {
   isLoading.value = true;
+
   const vuepressCfg = new VuepressCfg(formData.githubUser, formData.githubRepo, formData.githubToken,
       formData.defaultBranch, formData.defaultPath, formData.msg, formData.author, formData.email);
   // const vuepressCfg = getJSONConf<IVuepressCfg>(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS)
@@ -159,15 +168,24 @@ const valiConf = async () => {
   const docPath = formData.defaultPath + testFile
   const mdContent = "Hello World!" + formatIsoToZhDate(new Date().toISOString(), true)
   const res = await publishPage(vuepressCfg, docPath, mdContent)
+
+  isLoading.value = false
+
   if (!res) {
+    // 验证不通过，更新验证状态
+    apiStatus.value = false
+    setBooleanConf(API_STATUS_CONSTANTS.API_STATUS_VUEPRESS, apiStatus.value)
     ElMessage.error(t('main.opt.failure'))
     return
   }
 
+  // 验证通过，更新验证状态
+  apiStatus.value = true
+  setBooleanConf(API_STATUS_CONSTANTS.API_STATUS_VUEPRESS, apiStatus.value)
+
   // 预览
   formData.previewUrl = "https://github.com/" + formData.githubUser + "/" + formData.githubRepo
       + "/blob/" + formData.defaultBranch + "/" + formData.defaultPath + testFile
-  isLoading.value = false
   ElMessage.success(t('main.opt.success'))
 }
 const resetForm = (formEl: FormInstance | undefined) => {
@@ -189,6 +207,9 @@ const initConf = () => {
     formData.author = conf.author
     formData.email = conf.email
   }
+
+  // api状态
+  apiStatus.value = getBooleanConf(API_STATUS_CONSTANTS.API_STATUS_VUEPRESS);
 }
 onBeforeMount(async () => {
   initConf();
@@ -203,5 +224,7 @@ export default {
 </script>
 
 <style scoped>
-
+.el-alert {
+  margin-top: 10px;
+}
 </style>

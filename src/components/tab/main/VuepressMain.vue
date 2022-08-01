@@ -188,6 +188,8 @@ import {API_TYPE_CONSTANTS} from "../../../lib/constants/apiTypeConstants";
 import {PUBLISH_POSTID_KEY_CONSTANTS} from "../../../lib/publishUtil";
 import copy from "copy-to-clipboard"
 import shortHash from "shorthash2";
+import {API_STATUS_CONSTANTS} from "../../../lib/constants/apiStatusConstants";
+import {getBooleanConf} from "../../../lib/config";
 
 const {t} = useI18n()
 
@@ -291,6 +293,12 @@ async function initPage() {
 
   // 发布状态
   isPublished.value = getPublishStatus(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS, siyuanData.value.meta)
+
+  // api状态
+  const isOk = getBooleanConf(API_STATUS_CONSTANTS.API_STATUS_VUEPRESS)
+  if (isOk) {
+    vuepressGithubEnabled.value = true
+  }
 }
 
 async function makeSlug(hideTip?: boolean) {
