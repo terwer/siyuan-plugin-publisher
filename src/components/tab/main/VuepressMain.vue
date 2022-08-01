@@ -121,7 +121,8 @@
         </el-form-item>
         <!-- 选择目录 -->
         <el-form-item :label="$t('main.publish.vuepress.choose.path')" v-if="vuepressGithubEnabled && !useDefaultPath">
-          menu
+          <el-tree-select v-model="formData.customPath" lazy check-strictly="true" :load="customLoad"
+                          :props="customProps"/>
         </el-form-item>
         <!-- 设置文件名 -->
         <el-form-item :label="$t('main.publish.vuepress.choose.title')" v-if="vuepressGithubEnabled">
@@ -199,9 +200,10 @@ import shortHash from "shorthash2";
 import {API_STATUS_CONSTANTS} from "../../../lib/constants/apiStatusConstants";
 import {getBooleanConf, getJSONConf} from "../../../lib/config";
 import {IVuepressCfg} from "../../../lib/vuepress/IVuepressCfg";
-import {deletePage, publishPage} from "../../../lib/vuepress/v1";
+import {deletePage, getPageTreeNode, publishPage} from "../../../lib/vuepress/v1";
 import {POSTID_KEY_CONSTANTS} from "../../../lib/constants/postidKeyConstants";
 import {getApiParams} from "../../../lib/publishUtil";
+import {deflateRaw} from "zlib";
 
 const {t} = useI18n()
 
@@ -250,6 +252,7 @@ const formData = ref({
     dynamicTags: <string[]>([]),
     inputVisible: false
   },
+  customPath: "",
   categories: ["默认分类"]
 })
 const siyuanData = ref({
@@ -323,6 +326,14 @@ async function initPage() {
     }
   }
 
+  // api状态
+  const isOk = getBooleanConf(API_STATUS_CONSTANTS.API_STATUS_VUEPRESS)
+  vuepressGithubEnabled.value = isOk
+  // Github默认开启hash
+  slugHashEnabled.value = vuepressGithubEnabled.value;
+  log.logInfo("Vuepress的api状态=>")
+  log.logInfo(isOk)
+
   // 表单属性转换为YAML
   convertAttrToYAML()
 
@@ -340,15 +351,13 @@ async function initPage() {
     const vuepressCfg = getJSONConf<IVuepressCfg>(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS)
     const docPath = getDocPath()
 
+    // 自定义目录
+    useDefaultPath.value = false
+    formData.value.customPath = docPath;
+
     previewUrl.value = "https://github.com/" + vuepressCfg.githubUser + "/" + vuepressCfg.githubRepo
         + "/blob/" + vuepressCfg.defaultBranch + "/" + docPath
   }
-
-  // api状态
-  const isOk = getBooleanConf(API_STATUS_CONSTANTS.API_STATUS_VUEPRESS)
-  vuepressGithubEnabled.value = isOk
-  log.logInfo("Vuepress的api状态=>")
-  log.logInfo(isOk)
 }
 
 function getDocPath() {
@@ -562,14 +571,44 @@ const defaultPathOnChange = (val: boolean) => {
   useDefaultPath.value = val
 }
 
+// 树形目录选择
+const customProps = {
+  label: 'label',
+  children: 'children',
+  isLeaf: 'isLeaf',
+}
+let id = 0
+const customLoad = async (node: any, resolve: any) => {
+  if (node.isLeaf) return resolve([])
+
+  log.logInfo("目前已保存路径=>", formData.value.customPath)
+  log.logInfo("当前节点=>", node.data)
+
+  const vuepressCfg = getJSONConf<IVuepressCfg>(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS)
+
+  let docPath
+  let parentDocPath = node.data.value || ""
+  // 第一次加载并且保存过目录
+  // if (parentDocPath == "" && formData.value.customPath != "") {
+  //   docPath = formData.value.customPath
+  // } else {
+  // 非首次加载或者首次加载但是没保存过目录
+  if (parentDocPath == "") {
+    parentDocPath = "docs/"
+  }
+  // 子目录加载
+  docPath = parentDocPath
+  // }
+
+  const treeNode = await getPageTreeNode(vuepressCfg, docPath);
+  resolve(treeNode);
+}
+
 async function doPublish() {
   isPublishLoading.value = true
 
   // 生成属性
   await oneclickAttr(true)
-  // 发布属性
-  await saveAttrToSiyuan(true)
-  log.logWarn("发布属性完成")
 
   // 根据选项决定是否发送到Vuepress的Github参考
   const isOk = getBooleanConf(API_STATUS_CONSTANTS.API_STATUS_VUEPRESS)
@@ -591,7 +630,9 @@ async function doPublish() {
     let docPath = vuepressCfg.defaultPath + mdFile
     if (!useDefaultPath.value) {
       // 如果选择了自定义的目录
-      alert("选择了自定义的目录")
+      docPath = formData.value.customPath + "/" + mdFile
+      log.logInfo(formData.value.customPath)
+      log.logWarn("文章讲发布于以下路径=>", docPath)
     }
 
     // 发布内容
@@ -638,6 +679,10 @@ async function oneclickAttr(hideTip?: boolean) {
   await fetchTag(true)
 
   convertAttrToYAML()
+
+  // 发布属性
+  await saveAttrToSiyuan(true)
+  log.logWarn("发布属性完成")
 
   isGenLoading.value = false
   if (hideTip != true) {

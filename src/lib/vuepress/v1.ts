@@ -1,6 +1,7 @@
 import {IVuepressCfg} from "./IVuepressCfg";
 import {Octokit} from "@octokit/core";
 import {Base64} from 'js-base64';
+import log from "../logUtil";
 
 /**
  * Vuepress V1 API
@@ -22,8 +23,22 @@ class VuepressApiV1 {
      * 获取Github文件的sha，如果文件不存在返回undefined，存在返回sha
      * @param docPath 完整文件路径，例如：docs/_posts/测试.md
      */
-    async getPage(docPath: string): Promise<string> {
+    async getPageSha(docPath: string): Promise<string> {
         let sha
+
+        const data = await this.getPageData(docPath)
+        if (data) {
+            sha = data.sha
+        }
+        return sha;
+    }
+
+    /**
+     * 获取Github文件的sha，如果文件不存在返回undefined，存在返回sha
+     * @param docPath 完整文件路径，例如：docs/_posts/测试.md
+     */
+    async getPageData(docPath: string): Promise<any> {
+        let data
 
         let res
         try {
@@ -40,9 +55,9 @@ class VuepressApiV1 {
         }
 
         if (res) {
-            sha = res.data.sha
+            data = res.data
         }
-        return sha;
+        return data;
     }
 
     /**
@@ -123,7 +138,7 @@ export async function publishPage(vuepressCfg: IVuepressCfg, docPath: string, md
         auth: vuepressCfg.githubToken
     })
     const v1 = new VuepressApiV1(vuepressCfg, octokit);
-    const sha = await v1.getPage(docPath)
+    const sha = await v1.getPageSha(docPath)
 
     let res
     res = await v1.createOrUpdatePage(docPath, mdContent, sha)
@@ -141,10 +156,49 @@ export async function deletePage(vuepressCfg: IVuepressCfg, docPath: string) {
         auth: vuepressCfg.githubToken
     })
     const v1 = new VuepressApiV1(vuepressCfg, octokit);
-    const sha = await v1.getPage(docPath)
+    const sha = await v1.getPageSha(docPath)
 
     let res
     res = await v1.deletePage(docPath, sha)
     console.log("Vuepress V1 deletePage,res=>", res)
     return res;
+}
+
+/**
+ * 获取Github文件的sha，如果文件不存在返回undefined，存在返回sha
+ * @param vuepressCfg Vuepress配置
+ * @param docPath 完整文件路径，例如：docs/_posts/测试.md
+ */
+export async function getPageTreeNode(vuepressCfg: IVuepressCfg, docPath: string): Promise<Array<any>> {
+    const octokit = new Octokit({
+        auth: vuepressCfg.githubToken
+    })
+    const v1 = new VuepressApiV1(vuepressCfg, octokit);
+    const data = await v1.getPageData(docPath)
+
+    let treeNode = <Array<any>>[]
+
+    if (data && data.length > 0) {
+        for (let i = 0; i < data.length; i++) {
+            const item = data[i]
+            if (item.name.indexOf(".vuepress") > -1) {
+                continue;
+            }
+            if (item.name.indexOf("@pages") > -1) {
+                continue;
+            }
+            if (item.name.indexOf("_posts") > -1) {
+                continue;
+            }
+            let node = {
+                value: item.path,
+                label: item.name,
+                isLeaf: item.name.indexOf(".md") > -1
+            }
+            treeNode.push(node)
+        }
+        log.logInfo("getPageTreeNode,data=>", data)
+    }
+
+    return treeNode
 }
