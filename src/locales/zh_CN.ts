@@ -8,6 +8,7 @@ export default {
     "service.tab.change.local": "语言设置",
     "main.publish.to.vuepress": "发布到Vuepress",
     "main.publish.vuepress.tip": "推荐Vuepress的V1版本，配合 vuepress-theme-vdoing 使用，后续bug也只会对V1和此主题进行更新",
+    "main.publish.vuepress.error.tip": "由于Github的rest的API问题，导致更新暂时无法处理，如需更新请先点取消删除再新增即可，可以查看这里等待修复进度：https://github.com/terwer/src-sy-post-publisher/issues/21。",
     "main.publish.vuepress.editmode": "编辑模式",
     "main.publish.vuepress.editmode.simple": "简洁模式",
     "main.publish.vuepress.editmode.complex": "详细模式",

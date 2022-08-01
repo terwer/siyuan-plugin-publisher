@@ -8,6 +8,7 @@ export default {
     "service.tab.change.local": "Change language",
     "main.publish.to.vuepress": "Send to Vuepress",
     "main.publish.vuepress.tip": "Recommends use it with vuepress-theme-vdoing , and the subsequent bug will only update this theme",
+    "main.publish.vuepress.error.tip": "Due to the API of GitHub's REST, the update cannot be treated for the time being. If you need to update, please click Delete and then add it. You can check here for the restoration progress: https: //github.com/terwer/src-sy-post -Publisher/ISSUES/21.",
     "main.publish.vuepress.editmode": "Edit mode",
     "main.publish.vuepress.editmode.simple": "Simple",
     "main.publish.vuepress.editmode.complex": "Complex",

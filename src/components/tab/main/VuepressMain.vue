@@ -2,6 +2,8 @@
   <el-container>
     <el-aside width="45%">
       <el-alert class="top-version-tip" :title="$t('main.publish.vuepress.tip')" type="success" :closable="false"/>
+      <el-alert class="top-version-tip" :title="$t('main.publish.vuepress.error.tip')" type="error" :closable="false"/>
+
       <el-form label-width="100px">
         <!-- 编辑模式 -->
         <el-form-item :label="$t('main.publish.vuepress.editmode')">
@@ -121,7 +123,7 @@
         </el-form-item>
         <!-- 选择目录 -->
         <el-form-item :label="$t('main.publish.vuepress.choose.path')" v-if="vuepressGithubEnabled && !useDefaultPath">
-          <el-tree-select v-model="formData.customPath" lazy check-strictly="true" :load="customLoad"
+          <el-tree-select v-model="formData.customPath" lazy :check-strictly="true" :load="customLoad"
                           :props="customProps"/>
         </el-form-item>
         <!-- 设置文件名 -->
@@ -492,7 +494,14 @@ async function saveAttrToSiyuan(hideTip?: boolean) {
 const convertAttrToYAML = () => {
   // 表单属性转yamlObj
   log.logInfo("convertAttrToYAML,formData=>", formData)
-  vuepressData.value.yamlObj.title = formData.value.title.replace(".md", "");
+  let fmtTitle = formData.value.title
+  if (fmtTitle.indexOf(".md") > -1) {
+    fmtTitle = fmtTitle.replace(/\.md/g, "")
+  }
+  if (fmtTitle.indexOf(".") > -1) {
+    fmtTitle = fmtTitle.replace(/\d*\./g, "");
+  }
+  vuepressData.value.yamlObj.title = fmtTitle;
   vuepressData.value.yamlObj.permalink = "/post/" + formData.value.customSlug + ".html";
   vuepressData.value.yamlObj.date = covertStringToDate(formData.value.created)
   const meta = [
@@ -637,7 +646,14 @@ async function doPublish() {
 
     // 发布内容
     const data = await getPageMd(siyuanData.value.pageId);
-    const mdContent = removeWidgetTag(data.content)
+    // 纯正文
+    const md = removeWidgetTag(data.content)
+    // 包含formatter和正文
+    const mdContent = vuepressData.value.formatter + "\n" + md;
+    vuepressData.value.vuepressContent = md;
+    vuepressData.value.vuepressFullContent = mdContent;
+
+    log.logWarn("即将发布的内容，mdContent=>", {"mdContent": mdContent})
 
     const res = await publishPage(vuepressCfg, docPath, mdContent)
 
