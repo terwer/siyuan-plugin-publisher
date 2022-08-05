@@ -57,7 +57,11 @@ At present, it supports vuepress ~~and two open API standard blog platforms, <co
     - 14、Page initialization is also additional content
   
     - 15、Support article cancellation and release
-  
+
+
+- [#15](https://github.com/terwer/src-sy-post-publisher/issues/15)
+
+  - 1、  
 ### v0.0.1
 
 - [#13](https://github.com/terwer/src-sy-post-publisher/issues/13) Vuepress基本支持
