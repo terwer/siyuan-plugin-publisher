@@ -55,7 +55,12 @@
     - 14、页面初始化也附加内容 
   
     - 15、支持文章取消发布
-  
+
+
+ - [#15](https://github.com/terwer/src-sy-post-publisher/issues/15)
+
+    - 1、
+
 ### v0.0.1
 
 - [#13](https://github.com/terwer/src-sy-post-publisher/issues/13) Vuepress基本支持

@@ -331,8 +331,11 @@ async function initPage() {
   // api状态
   const isOk = getBooleanConf(API_STATUS_CONSTANTS.API_STATUS_VUEPRESS)
   vuepressGithubEnabled.value = isOk
+
+  // 默认开启hash
+  slugHashEnabled.value = true
   // Github默认开启hash
-  slugHashEnabled.value = vuepressGithubEnabled.value;
+  // slugHashEnabled.value = vuepressGithubEnabled.value;
   log.logInfo("Vuepress的api状态=>")
   log.logInfo(isOk)
 
@@ -491,16 +494,26 @@ async function saveAttrToSiyuan(hideTip?: boolean) {
   }
 }
 
-const convertAttrToYAML = () => {
-  // 表单属性转yamlObj
-  log.logInfo("convertAttrToYAML,formData=>", formData)
-  let fmtTitle = formData.value.title
+/**
+ * 文件名转title
+ * @param fmtTitle
+ */
+const mdFileToTitle = (fmtTitle: string): string => {
   if (fmtTitle.indexOf(".md") > -1) {
     fmtTitle = fmtTitle.replace(/\.md/g, "")
   }
   if (fmtTitle.indexOf(".") > -1) {
     fmtTitle = fmtTitle.replace(/\d*\./g, "");
   }
+  return fmtTitle;
+}
+
+const convertAttrToYAML = () => {
+  // 表单属性转yamlObj
+  log.logInfo("convertAttrToYAML,formData=>", formData)
+  let fmtTitle = formData.value.title
+  fmtTitle = mdFileToTitle(fmtTitle)
+
   vuepressData.value.yamlObj.title = fmtTitle;
   vuepressData.value.yamlObj.permalink = "/post/" + formData.value.customSlug + ".html";
   vuepressData.value.yamlObj.date = covertStringToDate(formData.value.created)
@@ -614,6 +627,13 @@ const customLoad = async (node: any, resolve: any) => {
 }
 
 async function doPublish() {
+  const fmtTitle = mdFileToTitle(formData.value.title)
+  if (/[\s*|\\.]/g.test(fmtTitle)) {
+    log.logInfo("fmtTitle=>", fmtTitle)
+    ElMessage.error("文件名不能包含空格或者特殊字符")
+    return
+  }
+
   isPublishLoading.value = true
 
   // 生成属性
