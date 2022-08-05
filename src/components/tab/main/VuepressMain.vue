@@ -331,8 +331,11 @@ async function initPage() {
   // api状态
   const isOk = getBooleanConf(API_STATUS_CONSTANTS.API_STATUS_VUEPRESS)
   vuepressGithubEnabled.value = isOk
+
+  // 默认开启hash
+  slugHashEnabled.value = true
   // Github默认开启hash
-  slugHashEnabled.value = vuepressGithubEnabled.value;
+  // slugHashEnabled.value = vuepressGithubEnabled.value;
   log.logInfo("Vuepress的api状态=>")
   log.logInfo(isOk)
 
