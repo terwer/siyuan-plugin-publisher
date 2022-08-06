@@ -3,7 +3,7 @@
  * @returns {Promise<string>}
  */
 import {getJSONConf, setJSONConf} from "../config";
-import {getBlockByID, getBlockAttrs, setBlockAttrs, exportMdContent} from "./siYuanApi.js";
+import {getBlockByID, getBlockAttrs, setBlockAttrs, exportMdContent, lsNotebooks} from "./siYuanApi.js";
 import log from "../logUtil";
 import {getEnv} from "../envUtil";
 
@@ -148,4 +148,11 @@ export async function setPageAttrs(pageId: string, attrs: any) {
  */
 export async function getPageMd(pageId: string) {
     return await exportMdContent(pageId);
+}
+
+/**
+ * 列出笔记本
+ */
+export async function getNotebooks(){
+    return await lsNotebooks()
 }
