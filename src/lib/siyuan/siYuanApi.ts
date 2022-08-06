@@ -101,7 +101,7 @@ async function request(url: string, data: any, method?: string, useToken?: boole
         body: JSON.stringify(data),
         method: m
     }
-    if (!import.meta.env.DEV && useToken != false) {
+    if (useToken != false) {
         Object.assign(fetchOps, {
             headers: {
                 Authorization: `Token ${config.token}`,
