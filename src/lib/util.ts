@@ -379,3 +379,10 @@ export function jiebaToHotWords(words: Array<string>, len: number) {
 }
 
 // jiebaToHotWords()
+
+/**
+ * 是否在浏览器
+ */
+export function inBrowser() {
+    return typeof window !== 'undefined';
+}

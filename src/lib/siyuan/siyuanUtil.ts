@@ -3,12 +3,12 @@
  * @returns {Promise<string>}
  */
 import {getJSONConf, setJSONConf} from "../config";
-import {getBlockByID, getBlockAttrs, setBlockAttrs, exportMdContent, lsNotebooks} from "./siYuanApi.js";
+import {exportMdContent, getBlockAttrs, getBlockByID, lsNotebooks, setBlockAttrs} from "./siYuanApi.js";
 import log from "../logUtil";
 import {getEnv} from "../envUtil";
+import {inBrowser} from "../util";
 
 async function getWidgetId() {
-    // @ts-ignore
     if (!window.frameElement
         || !window.frameElement.parentElement
         || !window.frameElement.parentElement.parentElement) {
@@ -106,10 +106,19 @@ export async function getPageId(force?: boolean, pageId?: string) {
         if (pageId) {
             syPageId = pageId
         }
+
         //  开发模式模拟传递一个ID
-        if (!pageId && import.meta.env.DEV) {
-            // log.logWarn("env=>", getEnv("VITE_SIYUAN_DEV_PAGE_ID"))
-            syPageId = getEnv("VITE_SIYUAN_DEV_PAGE_ID")
+        if (!pageId) {
+            const testPageId = getEnv("VITE_SIYUAN_DEV_PAGE_ID")
+            if (!testPageId && inBrowser()) {
+                // 尝试从url参数解析ID
+                const curl = window.location.href
+                const urlIdx = curl.lastIndexOf("/")
+                const qPageId = curl.substring(urlIdx + 1, curl.length)
+                if (qPageId != "") {
+                    syPageId = qPageId
+                }
+            }
         }
     }
 
@@ -153,6 +162,6 @@ export async function getPageMd(pageId: string) {
 /**
  * 列出笔记本
  */
-export async function getNotebooks(){
+export async function getNotebooks() {
     return await lsNotebooks()
 }
