@@ -113,7 +113,7 @@ export async function getPageId(force?: boolean, pageId?: string) {
             if (!testPageId && inBrowser()) {
                 // 尝试从url参数解析ID
                 const curl = window.location.href
-                const urlIdx = curl.lastIndexOf("/")
+                const urlIdx = curl.lastIndexOf("=")
                 const qPageId = curl.substring(urlIdx + 1, curl.length)
                 if (qPageId != "") {
                     syPageId = qPageId
