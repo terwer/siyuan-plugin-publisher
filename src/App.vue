@@ -6,8 +6,8 @@
 // import {onMounted} from "vue";
 // import {getNotebooks} from "./lib/siyuan/siyuanUtil";
 // import log from "./lib/logUtil";
-
-// 测试代码，移除
+//
+// // 测试代码，移除
 // onMounted(async () => {
 //   const notebooks = await getNotebooks()
 //   log.logWarn("notebooks=>")
