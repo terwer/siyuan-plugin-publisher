@@ -386,3 +386,22 @@ export function jiebaToHotWords(words: Array<string>, len: number) {
 export function inBrowser() {
     return typeof window !== 'undefined';
 }
+
+/**
+ * 获取url参数
+ * @param sParam 参数
+ */
+export function getQueryString(sParam: string) {
+    if (!inBrowser()) {
+        return ""
+    }
+    var sPageURL = window.location.search.substring(1);
+    var sURLVariables = sPageURL.split('&');
+
+    for (var i = 0; i < sURLVariables.length; i++) {
+        var sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] == sParam) {
+            return sParameterName[1];
+        }
+    }
+}

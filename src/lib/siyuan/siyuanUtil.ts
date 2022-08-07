@@ -118,6 +118,8 @@ export async function getPageId(force?: boolean, pageId?: string) {
                 if (qPageId != "") {
                     syPageId = qPageId
                 }
+            }else{
+                syPageId = testPageId
             }
         }
     }
