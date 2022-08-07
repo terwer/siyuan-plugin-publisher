@@ -2,7 +2,7 @@
   <div><h1>对不起，您没有该操作的权限</h1></div>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   name: "NoAuth"
 }
