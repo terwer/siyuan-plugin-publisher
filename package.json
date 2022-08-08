@@ -16,6 +16,7 @@
     "isomorphic-fetch": "^3.0.0",
     "js-base64": "^3.7.2",
     "js-yaml": "^4.1.0",
+    "metaweblog-api": "^1.2.0",
     "shorthash2": "^1.0.3",
     "showdown": "^2.1.0",
     "transliteration": "^2.3.5",

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Lute JavaScript endpoint</title>
+</head>
+<body>
+<script src="lute.min.js"></script>
+<script>
+  const lute = Lute.New();
+  const html2MdRenderer = {
+    renderLinkDest: function (node, entering) {
+      if (entering) {
+        console.log('重写 LinkDest 节点', node.__internal_object__.typ, node.TokensStr(), entering);
+        return [node.TokensStr(), Lute.WalkContinue]
+      } else {
+        return ["", Lute.WalkContinue]
+      }
+    },
+    renderBang: function (node, entering) {
+      if (entering) {
+        console.log('重写 Bang 节点', node.TokensStr(), entering);
+        return ["!", Lute.WalkContinue]
+      } else {
+        return ["", Lute.WalkContinue]
+      }
+    },
+  };
+  lute.SetJSRenderers({
+    "renderers": {
+      "HTML2Md": html2MdRenderer,
+    }
+  });
+
+  function onMarkdown(it) {
+    const result = lute.MarkdownStr("", it.value);
+    console.log(result)
+    document.getElementById('output').innerHTML = result;
+
+    console.log(lute.HTML2Md(result));
+  }
+</script>
+
+<textarea id="input" rows="10" cols="150" oninput="onMarkdown(this)">**Lute** - A structured markdown engine.</textarea>
+<div id="output"></div>
+<script>
+  const result = lute.MarkdownStr("", document.getElementById('input').value);
+  document.getElementById('output').innerHTML = result;
+</script>
+</body>
+</html>

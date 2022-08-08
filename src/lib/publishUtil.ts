@@ -113,8 +113,8 @@ function getApiParamsOld(apiType: string) {
     // 修改这个切换api
     // ==================
     // cnblogs
-    let conf = getJSONConf(API_TYPE_CONSTANTS.API_TYPE_CNBLPGS)
-    let appKey = API_TYPE_CONSTANTS.API_TYPE_CNBLPGS;
+    let conf = getJSONConf(API_TYPE_CONSTANTS.API_TYPE_CNBLOGS)
+    let appKey = API_TYPE_CONSTANTS.API_TYPE_CNBLOGS;
     // @ts-ignore
     let home = conf[CNBLOGS_HOME_KEY] || ""
     // @ts-ignore

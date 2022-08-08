@@ -9,6 +9,7 @@ import {getEnv} from "./lib/envUtil";
 // import {getNotebooks} from "./lib/siyuan/siyuanUtil";
 import log from "./lib/logUtil";
 import {getQueryString} from "./lib/util";
+import {getWidgetId} from "./lib/siyuan/siyuanUtil";
 
 const isAuth = ref(false)
 
@@ -17,6 +18,14 @@ onMounted(async () => {
   // log.logWarn("notebooks=>")
   // log.logWarn(notebooks)
 
+  // 挂件模式不校验
+  const widgetResult = await getWidgetId()
+  if (widgetResult.isInSiyuan) {
+    isAuth.value = true
+    return
+  }
+
+  // 非挂件模式需要校验
   const optPwd = getEnv("VITE_OPT_PWD") || ""
   const pwd = getQueryString("pwd") || ""
   if (pwd != "" && pwd == optPwd) {
