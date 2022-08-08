@@ -1,7 +1,7 @@
-import {IApi} from "../api";
-import {MetaWeblogApiAdaptor} from "./metaWeblogApiAdaptor";
+import {IApi} from "../../api";
+import {MetaWeblogApiAdaptor} from "../metaWeblogApiAdaptor";
 import MetaWeblog from "metaweblog-api";
-import {API_TYPE_CONSTANTS} from "../constants/apiTypeConstants";
+import {API_TYPE_CONSTANTS} from "../../constants/apiTypeConstants";
 
 /**
  * JVue的API适配器

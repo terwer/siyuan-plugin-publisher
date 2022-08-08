@@ -28,20 +28,26 @@
 </template>
 
 <script lang="ts" setup>
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import log from "../../../lib/logUtil";
 import {getJSONConf, setJSONConf} from "../../../lib/config";
-import {API_TYPE_CONSTANTS} from "../../../lib/constants/apiTypeConstants";
-import {
-  PUBLISH_HOME_KEY_CONSTANTS,
-  PUBLISH_API_URL_KEY_CONSTANTS,
-  PUBLISH_USERNAME_KEY_CONSTANTS,
-  PUBLISH_PASSWORD_KEY_CONSTANTS
-} from "../../../lib/publishUtil"
 import {ElMessage} from "element-plus";
 import {useI18n} from "vue-i18n";
+import {IMetaweblogCfg} from "../../../lib/metaweblog/IMetaweblogCfg";
+import {MetaweblogCfg} from "../../../lib/metaweblog/MetaweblogCfg";
 
 const {t} = useI18n()
+
+const props = defineProps({
+  isReload: {
+    type: Boolean,
+    default: false
+  },
+  apiType: {
+    type: String,
+    default: ""
+  }
+})
 
 const home = ref("")
 const apiUrl = ref("")
@@ -49,42 +55,39 @@ const username = ref("")
 const password = ref("")
 
 const saveConf = () => {
-  log.logInfo("Jvue保存配置")
-  setJSONConf(API_TYPE_CONSTANTS.API_TYPE_JVUE, {
-        [PUBLISH_HOME_KEY_CONSTANTS.JVUE_HOME_KEY]: home.value,
-        [PUBLISH_API_URL_KEY_CONSTANTS.JVUE_API_URL_KEY]: apiUrl.value,
-        [PUBLISH_USERNAME_KEY_CONSTANTS.JVUE_USERNAME_KEY]: username.value,
-        [PUBLISH_PASSWORD_KEY_CONSTANTS.JVUE_PASSWORD_KEY]: password.value
-      }
-  )
+  log.logInfo("通用Setting保存配置")
+
+  const cfg = new MetaweblogCfg(home.value, apiUrl.value, username.value, password.value)
+  // 是否可用
+  cfg.apiStatus = false
+  setJSONConf(props.apiType, cfg)
+
   ElMessage.success(t('main.opt.success'))
 }
 
 const initConf = () => {
-  log.logInfo("Jvue配置初始化")
-  const conf = getJSONConf(API_TYPE_CONSTANTS.API_TYPE_JVUE)
+  log.logInfo("通用Setting配置初始化")
+  const conf = getJSONConf<IMetaweblogCfg>(props.apiType)
   if (conf) {
-    log.logInfo("jvue conf=>", conf)
+    log.logInfo("get setting conf=>", conf)
 
-    // @ts-ignore
-    home.value = conf[PUBLISH_HOME_KEY_CONSTANTS.JVUE_HOME_KEY]
-    // @ts-ignore
-    apiUrl.value = conf[PUBLISH_API_URL_KEY_CONSTANTS.JVUE_API_URL_KEY]
-    // @ts-ignore
-    username.value = conf[PUBLISH_USERNAME_KEY_CONSTANTS.JVUE_USERNAME_KEY]
-    // @ts-ignore
-    password.value = conf[PUBLISH_PASSWORD_KEY_CONSTANTS.JVUE_PASSWORD_KEY]
+    home.value = conf.home
+    apiUrl.value = conf.apiUrl
+    username.value = conf.username
+    password.value = conf.password
   }
 }
 
-// 初始化
-initConf()
+onMounted(async () => {
+  // 初始化
+  initConf()
+})
 
 </script>
 
 <script lang="ts">
 export default {
-  name: "JVueSetting"
+  name: "MetaweblogSetting"
 }
 </script>
 

@@ -1,6 +1,6 @@
-import {IApi} from "../api";
-import {MetaWeblogApiAdaptor} from "./metaWeblogApiAdaptor";
-import {API_TYPE_CONSTANTS} from "../constants/apiTypeConstants";
+import {IApi} from "../../api";
+import {MetaWeblogApiAdaptor} from "../metaWeblogApiAdaptor";
+import {API_TYPE_CONSTANTS} from "../../constants/apiTypeConstants";
 import MetaWeblog from "metaweblog-api";
 
 /**
