@@ -2,10 +2,10 @@
   <el-container>
     <el-main>
       <el-form label-width="120px">
+        <!-- 文章别名 -->
         <el-form-item :label="$t('main.slug')">
-          <el-input v-model="formData.customSlug"/>
+          <el-input v-model="formData.customSlug" />
         </el-form-item>
-
         <el-form-item>
           <el-checkbox-group v-model="formData.checkList">
             <el-checkbox label="1">{{ $t('main.use.google.translate') }}</el-checkbox>
@@ -17,22 +17,19 @@
           </el-button>
         </el-form-item>
 
+        <!-- 摘要 -->
         <el-form-item :label="$t('main.desc')">
-          <el-input type="textarea" v-model="formData.desc"/>
+          <el-input type="textarea" v-model="formData.desc" />
         </el-form-item>
-
         <el-form-item>
-          <el-button type="primary">{{ $t('main.auto.fetch.desc') }}</el-button>
+          <el-button type="primary" @click="makeDesc" :loading="isDescLoading">
+            {{ isDescLoading ? $t('main.opt.loading') : $t('main.auto.fetch.desc') }}
+          </el-button>
         </el-form-item>
 
         <el-form-item :label="$t('main.create.time')">
-          <el-date-picker
-              type="datetime"
-              v-model="formData.created"
-              format="YYYY-MM-DD HH:mm:ss"
-              value-format="YYYY-MM-DD HH:mm:ss"
-              :placeholder="$t('main.create.time.placeholder')"
-          />
+          <el-date-picker type="datetime" v-model="formData.created" format="YYYY-MM-DD HH:mm:ss"
+            value-format="YYYY-MM-DD HH:mm:ss" :placeholder="$t('main.create.time.placeholder')" />
         </el-form-item>
 
         <el-form-item :label="$t('main.tag')">
@@ -62,17 +59,20 @@
 </template>
 
 <script lang="ts" setup>
-import {onMounted, reactive, ref} from "vue"
-import {getPage, getPageAttrs, getPageId, setPageAttrs} from "../../../lib/siyuan/siyuanUtil";
-import {ElMessage} from "element-plus";
-import {useI18n} from "vue-i18n";
-import {SIYUAN_PAGE_ATTR_KEY} from "../../../lib/constants/siyuanPageConstants";
-import {formatNumToZhDate, pingyinSlugify, zhSlugify} from "../../../lib/util";
+import { onMounted, reactive, ref } from "vue"
+import { getPage, getPageAttrs, getPageId, getPageMd, setPageAttrs } from "../../../lib/siyuan/siyuanUtil";
+import { ElMessage } from "element-plus";
+import { useI18n } from "vue-i18n";
+import { SIYUAN_PAGE_ATTR_KEY } from "../../../lib/constants/siyuanPageConstants";
+import { formatNumToZhDate, pingyinSlugify, zhSlugify } from "../../../lib/util";
 import log from "../../../lib/logUtil";
+import { mdToHtml, parseHtml } from "../../../lib/htmlUtil";
+import { CONSTANTS } from "../../../lib/constants/constants";
 
-const {t} = useI18n()
+const { t } = useI18n()
 
 const isSlugLoading = ref(false)
+const isDescLoading = ref(false)
 
 const formData = reactive({
   customSlug: "",
@@ -142,6 +142,21 @@ const makeSlug = async (hideTip?: boolean) => {
   }
 }
 
+const makeDesc = async (hideTip?: boolean) => {
+  isDescLoading.value = true
+  const data = await getPageMd(siyuanData.pageId);
+
+  const md = data.content
+  let html = mdToHtml(md)
+  // formData.value.desc = html;
+  formData.desc = parseHtml(html, CONSTANTS.MAX_PREVIEW_LENGTH, true)
+
+  isDescLoading.value = false
+  if (hideTip != true) {
+    ElMessage.success(t('main.opt.success'))
+  }
+}
+
 const saveAttrToSiyuan = async () => {
   const customAttr = {
     "custom-slug": formData.customSlug,
@@ -169,5 +184,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>
