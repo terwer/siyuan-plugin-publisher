@@ -1,4 +1,4 @@
-require("./lute/javascript/lute.min")
+// require("./lute/javascript/lute.min.js")
 
 /**
  * 渲染Markdown

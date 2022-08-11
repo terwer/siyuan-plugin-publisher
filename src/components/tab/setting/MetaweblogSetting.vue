@@ -35,6 +35,7 @@ import {ElMessage} from "element-plus";
 import {useI18n} from "vue-i18n";
 import {IMetaweblogCfg} from "../../../lib/metaweblog/IMetaweblogCfg";
 import {MetaweblogCfg} from "../../../lib/metaweblog/MetaweblogCfg";
+import {API} from "../../../lib/api";
 
 const {t} = useI18n()
 
@@ -54,12 +55,35 @@ const apiUrl = ref("")
 const username = ref("")
 const password = ref("")
 
+const getCfg = ()=>{
+  let cfg = getJSONConf<IMetaweblogCfg>(props.apiType)
+  if (!cfg) {
+    cfg = new MetaweblogCfg(home.value, apiUrl.value, username.value, password.value)
+  }
+  return cfg
+}
+
+const valiConf = async () => {
+  const cfg = getCfg()
+
+  const api = new API(props.apiType)
+  const usersBlogs = await api.getUsersBlogs()
+  if (usersBlogs && usersBlogs.length > 0) {
+    cfg.apiStatus = true
+  }
+  setJSONConf(props.apiType, cfg)
+  log.logInfo("通用Setting验证完毕")
+}
+
 const saveConf = () => {
   log.logInfo("通用Setting保存配置")
 
-  const cfg = new MetaweblogCfg(home.value, apiUrl.value, username.value, password.value)
+  const cfg = getCfg()
+
   // 是否可用
-  cfg.apiStatus = false
+  if(!cfg.apiStatus){
+    ElMessage.warning(t('main.opt.success'))
+  }
   setJSONConf(props.apiType, cfg)
 
   ElMessage.success(t('main.opt.success'))
