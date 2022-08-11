@@ -6,6 +6,7 @@ const YUQUE_POSTID_KEY = "custom-yuque-post-id";
 const WECHAT_POSTID_KEY = "custom-wechat-post-id";
 const LIANDI_POSTID_KEY = "custom-liandi-post-id";
 const VUEPRESS_POSTID_KEY = "custom-vuepress-slug";
+const KMS_POSTID_KEY = "custom-kms-post-id";
 
 /**
  * 文章别名key常量定义
@@ -18,5 +19,6 @@ export const POSTID_KEY_CONSTANTS = {
     YUQUE_POSTID_KEY,
     WECHAT_POSTID_KEY,
     LIANDI_POSTID_KEY,
-    VUEPRESS_POSTID_KEY
+    VUEPRESS_POSTID_KEY,
+    KMS_POSTID_KEY
 }

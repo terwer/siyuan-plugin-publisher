@@ -3,7 +3,7 @@ import {Post} from "../common/post";
 import {UserBlog} from "../common/userBlog";
 
 /**
- * 博客园的API适配器
+ * 支持Metaweblog的通用API适配器
  */
 export class MetaWeblogApiAdaptor implements IApi {
     protected metaWeblog: any
@@ -36,7 +36,7 @@ export class MetaWeblogApiAdaptor implements IApi {
      * https://codex.wordpress.org/XML-RPC_MetaWeblog_API#metaWeblog.getRecentPosts
      * @param numOfPosts
      */
-    public async getRecentPosts(numOfPosts: number): Promise<Array<any>> {
+    public async getRecentPosts(numOfPosts: number): Promise<Array<Post>> {
         let result: Array<Post> = []
         const blogPosts = await this.metaWeblog.getRecentPosts(this.appkey, this.username, this.password, numOfPosts);
         for (let i = 0; i < blogPosts.length; i++) {
@@ -63,7 +63,7 @@ export class MetaWeblogApiAdaptor implements IApi {
      * https://codex.wordpress.org/XML-RPC_MetaWeblog_API#metaWeblog.getPost
      *
      */
-    public async getPost(postid: string): Promise<any> {
+    public async getPost(postid: string): Promise<Post> {
         const data = await this.metaWeblog.getPost(postid, this.username, this.password)
         return data;
     }

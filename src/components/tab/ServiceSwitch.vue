@@ -19,11 +19,15 @@
     <el-form-item :label="$t('service.switch.wordpress')">
       <el-switch v-model="wordpressEnabled" @change="wordpressOnChange"/>
     </el-form-item>
+
+    <el-form-item :label="$t('service.switch.kms')">
+      <el-switch v-model="kmsEnabled" @change="kmsOnChange"/>
+    </el-form-item>
   </el-form>
 </template>
 
 <script lang="ts" setup>
-import {ref} from 'vue'
+import {onMounted, ref} from 'vue'
 import {useI18n} from "vue-i18n";
 import {setBooleanConf, getBooleanConf} from "../../lib/config";
 import SWITCH_CONSTANTS from "../../lib/constants/switchConstants";
@@ -35,6 +39,7 @@ const jvueEnabled = ref(false)
 const confEnabled = ref(false)
 const cnblogsEnabled = ref(false)
 const wordpressEnabled = ref(false)
+const kmsEnabled = ref(false)
 
 const jvueOnChange = (val: boolean) => {
   setBooleanConf(SWITCH_CONSTANTS.SWITCH_JVUE_KEY, val)
@@ -48,6 +53,9 @@ const cnblogsOnChange = (val: any) => {
 const wordpressOnChange = (val: any) => {
   setBooleanConf(SWITCH_CONSTANTS.SWITCH_WORDPRESS_KEY, val)
 }
+const kmsOnChange = (val: any) => {
+  setBooleanConf(SWITCH_CONSTANTS.SWITCH_KMS_KEY, val)
+}
 
 const initConf = () => {
   vuepressEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY)
@@ -55,12 +63,16 @@ const initConf = () => {
   confEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_CONF_KEY)
   cnblogsEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_CNBLOGS_KEY)
   wordpressEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_WORDPRESS_KEY)
+  kmsEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_KMS_KEY)
 }
 
-// 默认选中vuepress
-setBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY, true)
-// 初始化
-initConf()
+onMounted(async () => {
+  // 默认选中vuepress
+  setBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY, true)
+  // 初始化
+  initConf()
+})
+
 </script>
 
 <script lang="ts">

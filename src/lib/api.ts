@@ -1,10 +1,11 @@
 import {SiYuanApiAdaptor} from "./siyuan/siYuanApiAdaptor";
 import {API_TYPE_CONSTANTS} from "./constants/apiTypeConstants";
-import {JvueApiAdaptor} from "./metaweblog/jvueApiAdaptor";
-import {ConfApiAdaptor} from "./metaweblog/confApiAdaptor";
-import {CnblogsApiAdaptor} from "./metaweblog/cnblogsApiAdaptor";
+import {JVueApiAdaptor} from "./metaweblog/adaptor/jvueApiAdaptor";
+import {ConfApiAdaptor} from "./metaweblog/adaptor/confApiAdaptor";
+import {CnblogsApiAdaptor} from "./metaweblog/adaptor/cnblogsApiAdaptor";
 import {Post} from "./common/post";
 import {UserBlog} from "./common/userBlog";
+import {KmsApiAdaptor} from "./kms/kmsApiAdaptor";
 
 export interface IApi {
     /**
@@ -18,16 +19,19 @@ export interface IApi {
      * @param page 页码（可选，部分平台不支持分页）
      * @param keyword 关键字（可选，部分平台不支持搜索）
      */
-    getRecentPosts(numOfPosts: number, page?: number, keyword?: string): Promise<Array<any>>
+    getRecentPosts(numOfPosts: number, page?: number, keyword?: string): Promise<Array<Post>>
 
     /**
      * 文章详情
      * @param postid
      * @param useSlug 是否使用的是别名（可选，部分平台不支持）
      */
-    getPost(postid: string, useSlug?: boolean): Promise<any>
+    getPost(postid: string, useSlug?: boolean): Promise<Post>
 }
 
+/**
+ * 统一API入口
+ */
 export class API implements IApi {
     type: string
     private apiAdaptor: IApi
@@ -39,7 +43,7 @@ export class API implements IApi {
                 this.apiAdaptor = new SiYuanApiAdaptor()
                 break;
             case API_TYPE_CONSTANTS.API_TYPE_JVUE:
-                this.apiAdaptor = new JvueApiAdaptor()
+                this.apiAdaptor = new JVueApiAdaptor()
                 break;
             case API_TYPE_CONSTANTS.API_TYPE_CONFLUENCE:
                 this.apiAdaptor = new ConfApiAdaptor()
@@ -47,6 +51,9 @@ export class API implements IApi {
             case API_TYPE_CONSTANTS.API_TYPE_CNBLOGS:
                 this.apiAdaptor = new CnblogsApiAdaptor()
                 break;
+            case API_TYPE_CONSTANTS.API_TYPE_KMS:
+                this.apiAdaptor = new KmsApiAdaptor()
+                break
             default:
                 throw new Error("未找到接口适配器，请检查参数")
         }

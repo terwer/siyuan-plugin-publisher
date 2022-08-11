@@ -6,7 +6,7 @@ import {API_TYPE_CONSTANTS} from "../../constants/apiTypeConstants";
 /**
  * JVue的API适配器
  */
-export class JvueApiAdaptor extends MetaWeblogApiAdaptor implements IApi {
+export class JVueApiAdaptor extends MetaWeblogApiAdaptor implements IApi {
     constructor() {
         super();
 

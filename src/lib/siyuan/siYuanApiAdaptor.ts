@@ -22,8 +22,8 @@ export class SiYuanApiAdaptor implements IApi {
         return result;
     }
 
-    public async getRecentPosts(numOfPosts: number, page: number, keyword?: string): Promise<Array<any>> {
-        let result: any[] = []
+    public async getRecentPosts(numOfPosts: number, page: number, keyword?: string): Promise<Array<Post>> {
+        let result: Post[] = []
 
         let pg = 0
         if (page) {
@@ -65,7 +65,7 @@ export class SiYuanApiAdaptor implements IApi {
         return Promise.resolve(result);
     }
 
-    public async getPost(postid: string, useSlug?: boolean): Promise<any> {
+    public async getPost(postid: string, useSlug?: boolean): Promise<Post> {
         let pid = postid
         if (useSlug) {
             const pidObj = await getBlockBySlug(postid)
