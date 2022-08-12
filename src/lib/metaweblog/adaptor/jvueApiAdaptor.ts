@@ -1,6 +1,5 @@
 import {IApi} from "../../api";
 import {MetaWeblogApiAdaptor} from "../metaWeblogApiAdaptor";
-import MetaWeblog from "metaweblog-api";
 import {API_TYPE_CONSTANTS} from "../../constants/apiTypeConstants";
 
 /**
@@ -8,11 +7,6 @@ import {API_TYPE_CONSTANTS} from "../../constants/apiTypeConstants";
  */
 export class JVueApiAdaptor extends MetaWeblogApiAdaptor implements IApi {
     constructor() {
-        super();
-
-        this.metaWeblog = new MetaWeblog(process.env.JVUE_API_URL || "");
-        this.username = process.env.JVUE_USERNAME || ""
-        this.password = process.env.JVUE_PASSWORD || ""
-        this.appkey = API_TYPE_CONSTANTS.API_TYPE_JVUE
+        super(API_TYPE_CONSTANTS.API_TYPE_JVUE);
     }
 }

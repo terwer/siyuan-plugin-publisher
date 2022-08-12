@@ -775,11 +775,4 @@ export default {
 </script>
 
 <style scoped>
-.top-version-tip {
-  margin: 10px 0;
-}
-
-.el-alert {
-  margin-top: 10px;
-}
 </style>

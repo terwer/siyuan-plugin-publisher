@@ -1,5 +1,5 @@
 export default {
-    "lang.choose": "Choose language",
+    "lang.choose": "Choose lang",
     "lang.choose.placeholder": "Please select language",
     "service.tab.publish.service": "Publish service",
     "service.tab.publish.setting": "Publish setting",
@@ -94,8 +94,11 @@ export default {
     "setting.blog.save": "Save",
     "setting.blog.vali": "Validate",
     "setting.blog.vali.tip": "Please verify the configuration to ensure the availability of the API, and it will not be used without verification.",
+    "setting.blog.vali.tip.metaweblog": "Please verify the configuration to ensure the availability of the API, and it will not be used without verification.",
     "setting.blog.vali.ing": "Validating...",
     "setting.blog.vali.ok": "Available",
+    "setting.blog.vali.error": "Validate error",
+    "setting.blog.platform.support.metaweblog": "Current metaweblog supported platform:",
     "setting.blog.cancel": "Cancel",
     "setting.jvue": "JVue",
     "setting.conf": "Confluence",

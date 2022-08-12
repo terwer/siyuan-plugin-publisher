@@ -1,5 +1,7 @@
 <template>
   <el-form label-width="120px">
+    <el-alert class="top-version-tip" :title="apiTypeInfo" type="info"
+              :closable="false"/>
     <el-form-item :label="$t('setting.blog.url')">
       <el-input v-model="home"/>
     </el-form-item>
@@ -17,7 +19,11 @@
     </el-form-item>
 
     <el-form-item>
-      <el-button type="primary">{{ $t('setting.blog.validate') }}</el-button>
+      <el-button type="primary" @click="valiConf" :loading="isLoading">
+        {{ isLoading ? $t('setting.blog.vali.ing') : $t('setting.blog.vali') }}
+      </el-button>
+      <el-alert :title="$t('setting.blog.vali.tip.metaweblog')" type="warning" :closable="false" v-if="!apiStatus"/>
+      <el-alert :title="$t('setting.blog.vali.ok')" type="success" :closable="false" v-if="apiStatus"/>
     </el-form-item>
 
     <el-form-item>
@@ -50,12 +56,17 @@ const props = defineProps({
   }
 })
 
+const apiTypeInfo = ref(t('setting.blog.platform.support.metaweblog') + props.apiType)
+
+const isLoading = ref(false)
+const apiStatus = ref(false)
+
 const home = ref("")
 const apiUrl = ref("")
 const username = ref("")
 const password = ref("")
 
-const getCfg = ()=>{
+const getCfg = () => {
   let cfg = getJSONConf<IMetaweblogCfg>(props.apiType)
   if (!cfg) {
     cfg = new MetaweblogCfg(home.value, apiUrl.value, username.value, password.value)
@@ -64,14 +75,33 @@ const getCfg = ()=>{
 }
 
 const valiConf = async () => {
-  const cfg = getCfg()
+  isLoading.value = true;
 
-  const api = new API(props.apiType)
-  const usersBlogs = await api.getUsersBlogs()
-  if (usersBlogs && usersBlogs.length > 0) {
-    cfg.apiStatus = true
+  try {
+
+    const cfg = getCfg()
+
+    const api = new API(props.apiType)
+    const usersBlogs = await api.getUsersBlogs()
+    if (usersBlogs && usersBlogs.length > 0) {
+      cfg.apiStatus = true
+      apiStatus.value = true
+
+      // 验证通过才保存
+      setJSONConf(props.apiType, cfg)
+    }
+  } catch (e) {
+    console.error(e)
   }
-  setJSONConf(props.apiType, cfg)
+
+  if (!apiStatus.value) {
+    ElMessage.error(t('setting.blog.vali.error'))
+  } else {
+    ElMessage.error(t('main.opt.success'))
+  }
+
+  isLoading.value = false
+
   log.logInfo("通用Setting验证完毕")
 }
 
@@ -79,11 +109,12 @@ const saveConf = () => {
   log.logInfo("通用Setting保存配置")
 
   const cfg = getCfg()
+  cfg.home = home.value
+  cfg.username = username.value
+  cfg.password = password.value
+  cfg.apiUrl = apiUrl.value
+  cfg.apiStatus = apiStatus.value
 
-  // 是否可用
-  if(!cfg.apiStatus){
-    ElMessage.warning(t('main.opt.success'))
-  }
   setJSONConf(props.apiType, cfg)
 
   ElMessage.success(t('main.opt.success'))
@@ -99,6 +130,7 @@ const initConf = () => {
     apiUrl.value = conf.apiUrl
     username.value = conf.username
     password.value = conf.password
+    apiStatus.value = conf.apiStatus
   }
 }
 
@@ -116,5 +148,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

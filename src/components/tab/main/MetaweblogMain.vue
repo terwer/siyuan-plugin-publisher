@@ -1,10 +1,12 @@
 <template>
   <el-container>
-    <el-main>
+    <el-main class="blog-main">
+      <el-alert class="top-version-tip" :title="apiTypeInfo" type="info"
+                :closable="false"/>
       <el-form label-width="120px">
         <!-- 文章别名 -->
         <el-form-item :label="$t('main.slug')">
-          <el-input v-model="formData.customSlug" />
+          <el-input v-model="formData.customSlug"/>
         </el-form-item>
         <el-form-item>
           <el-checkbox-group v-model="formData.checkList">
@@ -19,7 +21,7 @@
 
         <!-- 摘要 -->
         <el-form-item :label="$t('main.desc')">
-          <el-input type="textarea" v-model="formData.desc" />
+          <el-input type="textarea" v-model="formData.desc"/>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="makeDesc" :loading="isDescLoading">
@@ -29,7 +31,7 @@
 
         <el-form-item :label="$t('main.create.time')">
           <el-date-picker type="datetime" v-model="formData.created" format="YYYY-MM-DD HH:mm:ss"
-            value-format="YYYY-MM-DD HH:mm:ss" :placeholder="$t('main.create.time.placeholder')" />
+                          value-format="YYYY-MM-DD HH:mm:ss" :placeholder="$t('main.create.time.placeholder')"/>
         </el-form-item>
 
         <el-form-item :label="$t('main.tag')">
@@ -59,17 +61,30 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, reactive, ref } from "vue"
-import { getPage, getPageAttrs, getPageId, getPageMd, setPageAttrs } from "../../../lib/siyuan/siyuanUtil";
-import { ElMessage } from "element-plus";
-import { useI18n } from "vue-i18n";
-import { SIYUAN_PAGE_ATTR_KEY } from "../../../lib/constants/siyuanPageConstants";
-import { formatNumToZhDate, pingyinSlugify, zhSlugify } from "../../../lib/util";
+import {onMounted, reactive, ref} from "vue"
+import {getPage, getPageAttrs, getPageId, getPageMd, setPageAttrs} from "../../../lib/siyuan/siyuanUtil";
+import {ElMessage} from "element-plus";
+import {useI18n} from "vue-i18n";
+import {SIYUAN_PAGE_ATTR_KEY} from "../../../lib/constants/siyuanPageConstants";
+import {formatNumToZhDate, pingyinSlugify, zhSlugify} from "../../../lib/util";
 import log from "../../../lib/logUtil";
-import { mdToHtml, parseHtml } from "../../../lib/htmlUtil";
-import { CONSTANTS } from "../../../lib/constants/constants";
+import {mdToHtml, parseHtml} from "../../../lib/htmlUtil";
+import {CONSTANTS} from "../../../lib/constants/constants";
 
-const { t } = useI18n()
+const {t} = useI18n()
+
+const props = defineProps({
+  isReload: {
+    type: Boolean,
+    default: false
+  },
+  apiType: {
+    type: String,
+    default: ""
+  }
+})
+
+const apiTypeInfo = ref(t('setting.blog.platform.support.metaweblog') + props.apiType)
 
 const isSlugLoading = ref(false)
 const isDescLoading = ref(false)
@@ -184,4 +199,7 @@ export default {
 </script>
 
 <style scoped>
+.blog-main{
+  padding: 0;
+}
 </style>

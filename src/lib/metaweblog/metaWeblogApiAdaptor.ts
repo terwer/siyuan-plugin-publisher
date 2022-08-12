@@ -1,6 +1,10 @@
 import {IApi} from "../api";
 import {Post} from "../common/post";
 import {UserBlog} from "../common/userBlog";
+import log from "../logUtil";
+import {IMetaweblogCfg} from "./IMetaweblogCfg";
+import {getJSONConf} from "../config";
+import MetaWeblog from "metaweblog-api";
 
 /**
  * 支持Metaweblog的通用API适配器
@@ -11,11 +15,13 @@ export class MetaWeblogApiAdaptor implements IApi {
     protected password: string
     protected appkey: string
 
-    constructor() {
-        this.metaWeblog = null;
-        this.username = ""
-        this.password = ""
-        this.appkey = ""
+    constructor(apiType: string) {
+        const cfg = getJSONConf<IMetaweblogCfg>(apiType)
+
+        this.metaWeblog = new MetaWeblog(cfg.apiUrl);
+        this.username = cfg.username
+        this.password = cfg.password
+        this.appkey = apiType
     }
 
     /**
@@ -27,8 +33,9 @@ export class MetaWeblogApiAdaptor implements IApi {
         let result: Array<UserBlog> = []
         const data = await this.metaWeblog.getUsersBlogs(this.appkey, this.username, this.password);
         // TODO
-
-        return result;
+        log.logInfo("getUsersBlogs=>")
+        log.logInfo(data)
+        return data;
     }
 
     /**
