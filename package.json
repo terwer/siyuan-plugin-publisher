@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
-    "deploy": "bash deploy.sh"
+    "deploy": "bash deploy.sh",
+    "deploy-win": "pwsh deploy.ps1"
   },
   "dependencies": {
     "@octokit/core": "^4.0.4",

@@ -50,7 +50,9 @@ export default defineConfig(({mode}) => {
                 url: 'rollup-plugin-node-polyfills/polyfills/url',
                 util: 'rollup-plugin-node-polyfills/polyfills/util',
                 buffer: 'rollup-plugin-node-polyfills/polyfills/buffer-es6',
-                process: 'rollup-plugin-node-polyfills/polyfills/process-es6'
+                process: 'rollup-plugin-node-polyfills/polyfills/process-es6',
+                querystring: 'rollup-plugin-node-polyfills/polyfills/qs',
+                punycode: 'rollup-plugin-node-polyfills/polyfills/punycode',
             },
         },
         // https://github.com/vitejs/vite/issues/1930
