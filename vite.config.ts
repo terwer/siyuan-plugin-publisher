@@ -8,6 +8,7 @@ import vue from '@vitejs/plugin-vue'
 // @ts-ignore
 // import {NodeModulesPolyfillPlugin} from '@esbuild-plugins/node-modules-polyfill'
 // import rollupNodePolyFill from 'rollup-plugin-node-polyfills'
+// import {NodeGlobalsPolyfillPlugin} from '@esbuild-plugins/node-globals-polyfill'
 
 // https://vitejs.dev/config/
 export default defineConfig(({mode}) => {
@@ -46,6 +47,11 @@ export default defineConfig(({mode}) => {
             alias: {
                 'vue-i18n': 'vue-i18n/dist/vue-i18n.cjs.js',
                 'node-fetch': 'isomorphic-fetch',
+                // 'buffer': 'buffer',
+                // 'https': 'https-browserify',
+                // 'http': 'stream-http',
+                // 'util': 'util',
+
                 // events: 'rollup-plugin-node-polyfills/polyfills/events',
                 // url: 'rollup-plugin-node-polyfills/polyfills/url',
                 // util: 'rollup-plugin-node-polyfills/polyfills/util',
@@ -57,7 +63,25 @@ export default defineConfig(({mode}) => {
         },
         // https://github.com/vitejs/vite/issues/1930
         // https://vitejs.dev/guide/env-and-mode.html#env-files
-        define: processEnvValues,
+        // 在这里自定义变量
+        define: Object.assign(processEnvValues, {
+            // https://github.com/element-plus/element-plus/issues/4884
+            // global: "window",
+        }),
+        // optimizeDeps: {
+        //     esbuildOptions: {
+        //         // Node.js global to browser globalThis
+        //         define: {
+        //             global: 'globalThis'
+        //         },
+        //         // Enable esbuild polyfill plugins
+        //         plugins: [
+        //             NodeGlobalsPolyfillPlugin({
+        //                 buffer: true
+        //             })
+        //         ]
+        //     }
+        // }
         // optimizeDeps: {
         //     esbuildOptions: {
         //         // Node.js global to browser globalThis
