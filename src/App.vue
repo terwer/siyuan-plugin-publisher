@@ -17,13 +17,13 @@ onMounted(async () => {
   log.logWarn("MODE=>", import.meta.env.MODE)
 
   // 调试模式
-  const debugMode = getBooleanEnv("VITE_DEBUG_MODE")
-  if (debugMode) {
-    log.logWarn("正在开始调试模式，请修改test/test.ts下面的test方法查看效果")
-    await test()
-    log.logWarn("测试结束")
-    return
-  }
+  // const debugMode = getBooleanEnv("VITE_DEBUG_MODE")
+  // if (debugMode) {
+  //   log.logWarn("正在开始调试模式，请修改test/test.ts下面的test方法查看效果")
+  //   await test()
+  //   log.logWarn("测试结束")
+  //   return
+  // }
 
   // 挂件模式不校验
   const widgetResult = await getWidgetId()
