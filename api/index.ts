@@ -5,7 +5,10 @@ app.get('/api', (req: any, res: any) => {
     const path = `/api/item/${v4()}`;
     res.setHeader('Content-Type', 'text/html');
     res.setHeader('Cache-Control', 's-max-age=1, stale-while-revalidate');
-    res.end(`Hello! Go to item: <a href="${path}">${path}</a>`);
+    res.end(`Hello! Go to item: <a href="${path}">${path}</a>
+        <br /> or visit xmlrpc middleware <br />
+        <a href="/api/middleware/xmlrpc/metaweblog">/api/middleware/xmlrpc/metaweblog</a>
+    `);
 });
 
 app.get('/api/item/:slug', (req: any, res: any) => {
