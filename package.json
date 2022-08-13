@@ -10,7 +10,7 @@
     "deploy": "bash deploy.sh",
     "deploy-win": "pwsh deploy.ps1",
     "ts-test": "ts-node-esm test/test.ts",
-    "ts-express": "ts-node-esm api/index.ts"
+    "ts-express": "ts-node-esm test/testServer.ts"
   },
   "dependencies": {
     "@octokit/core": "^4.0.4",
