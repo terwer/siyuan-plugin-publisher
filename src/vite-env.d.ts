@@ -12,7 +12,7 @@ interface ImportMetaEnv {
   readonly VITE_SIYUAN_CONFIG_TOKEN: string
   readonly VITE_SIYUAN_DEV_PAGE_ID: string
   readonly VITE_OPT_PWD: string
-  // more env variables...
+  readonly VITE_DEBUG_MODE: string
 }
 
 interface ImportMeta {
