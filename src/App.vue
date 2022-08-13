@@ -9,7 +9,7 @@ import {getBooleanEnv, getEnv} from "./lib/envUtil";
 import log from "./lib/logUtil";
 import {getQueryString} from "./lib/util";
 import {getWidgetId} from "./lib/siyuan/siyuanUtil";
-import test from "../test/test";
+// import test from "../test/test";
 
 const isAuth = ref(false)
 
