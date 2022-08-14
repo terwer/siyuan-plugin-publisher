@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-main class="blog-main">
-      <el-alert class="top-version-tip" :title="apiTypeInfo" type="info"
+      <el-alert class="top-version-tip" :title="apiTypeInfo + blogName" type="info"
                 :closable="false"/>
       <el-form label-width="120px">
         <!-- 文章别名 -->
@@ -70,6 +70,8 @@ import {formatNumToZhDate, pingyinSlugify, zhSlugify} from "../../../lib/util";
 import log from "../../../lib/logUtil";
 import {mdToHtml, parseHtml} from "../../../lib/htmlUtil";
 import {CONSTANTS} from "../../../lib/constants/constants";
+import {getJSONConf} from "../../../lib/config";
+import {IMetaweblogCfg} from "../../../lib/metaweblog/IMetaweblogCfg";
 
 const {t} = useI18n()
 
@@ -84,7 +86,8 @@ const props = defineProps({
   }
 })
 
-const apiTypeInfo = ref(t('setting.blog.platform.support.metaweblog') + props.apiType)
+const blogName = ref("")
+const apiTypeInfo = ref(t('setting.blog.platform.support.metaweblog') + props.apiType + " ")
 
 const isSlugLoading = ref(false)
 const isDescLoading = ref(false)
@@ -105,6 +108,12 @@ const initPage = async () => {
   const pageId = await getPageId(true);
   if (!pageId || pageId === "") {
     return
+  }
+
+  // conf
+  const conf = getJSONConf<IMetaweblogCfg>(props.apiType)
+  if (conf) {
+    blogName.value = conf.blogName
   }
 
   // 思源笔记数据

@@ -4,12 +4,13 @@ import {UserBlog} from "../common/userBlog";
 import log from "../logUtil";
 import {IMetaweblogCfg} from "./IMetaweblogCfg";
 import {getJSONConf} from "../config";
+import {MetaWeblogApi} from "./metaWeblogApi";
 
 /**
  * 支持Metaweblog的通用API适配器
  */
 export class MetaWeblogApiAdaptor implements IApi {
-    protected metaWeblog: any
+    protected MetaWeblogApi: MetaWeblogApi
     protected username: string
     protected password: string
     protected appkey: string
@@ -17,7 +18,7 @@ export class MetaWeblogApiAdaptor implements IApi {
     constructor(apiType: string) {
         const cfg = getJSONConf<IMetaweblogCfg>(apiType)
 
-        this.metaWeblog = null // cfg.apiUrl;
+        this.MetaWeblogApi =new MetaWeblogApi(apiType)
         this.username = cfg.username
         this.password = cfg.password
         this.appkey = apiType
@@ -30,7 +31,7 @@ export class MetaWeblogApiAdaptor implements IApi {
      */
     public async getUsersBlogs(): Promise<Array<UserBlog>> {
         let result: Array<UserBlog> = []
-        const data = await this.metaWeblog.getUsersBlogs(this.appkey, this.username, this.password);
+        const data = await this.MetaWeblogApi.getUsersBlogs(this.appkey, this.username, this.password);
         log.logInfo("getUsersBlogs=>")
         log.logInfo(data)
         return data;
@@ -43,7 +44,7 @@ export class MetaWeblogApiAdaptor implements IApi {
      */
     public async getRecentPosts(numOfPosts: number): Promise<Array<Post>> {
         let result: Array<Post> = []
-        const blogPosts = await this.metaWeblog.getRecentPosts(this.appkey, this.username, this.password, numOfPosts);
+        const blogPosts = await this.MetaWeblogApi.getRecentPosts(this.appkey, this.username, this.password, numOfPosts);
         for (let i = 0; i < blogPosts.length; i++) {
             const blogPost = blogPosts[i]
 
@@ -69,7 +70,7 @@ export class MetaWeblogApiAdaptor implements IApi {
      *
      */
     public async getPost(postid: string): Promise<Post> {
-        const data = await this.metaWeblog.getPost(postid, this.username, this.password)
+        const data = await this.MetaWeblogApi.getPost(postid, this.username, this.password)
         return data;
     }
 }

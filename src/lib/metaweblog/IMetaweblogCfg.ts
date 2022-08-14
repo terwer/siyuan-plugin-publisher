@@ -22,4 +22,8 @@ export interface IMetaweblogCfg {
      * 是否发布
      */
     apiStatus: boolean
+    /**
+     * 博客名（API获取）
+     */
+    blogName:string
 }

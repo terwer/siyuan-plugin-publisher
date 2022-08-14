@@ -1,6 +1,6 @@
 <template>
   <el-form label-width="120px">
-    <el-alert class="top-version-tip" :title="apiTypeInfo" type="info"
+    <el-alert class="top-version-tip" :title="apiTypeInfo + blogName" type="info"
               :closable="false"/>
     <el-form-item :label="$t('setting.blog.url')">
       <el-input v-model="home"/>
@@ -42,6 +42,7 @@ import {useI18n} from "vue-i18n";
 import {IMetaweblogCfg} from "../../../lib/metaweblog/IMetaweblogCfg";
 import {MetaweblogCfg} from "../../../lib/metaweblog/MetaweblogCfg";
 import {API} from "../../../lib/api";
+import {UserBlog} from "../../../lib/common/userBlog";
 
 const {t} = useI18n()
 
@@ -56,11 +57,6 @@ const props = defineProps({
   }
 })
 
-const apiTypeInfo = ref(t('setting.blog.platform.support.metaweblog') + props.apiType)
-
-const isLoading = ref(false)
-const apiStatus = ref(false)
-
 const home = ref("")
 const apiUrl = ref("")
 const username = ref("")
@@ -74,20 +70,37 @@ const getCfg = () => {
   return cfg
 }
 
+const isLoading = ref(false)
+const apiStatus = ref(false)
+const blogName = ref("")
+
+const apiTypeInfo = ref(t('setting.blog.platform.support.metaweblog') + props.apiType + " ")
+
 const valiConf = async () => {
   isLoading.value = true;
 
   try {
-
-    const cfg = getCfg()
+    const cfg = new MetaweblogCfg(home.value, apiUrl.value, username.value, password.value)
+    setJSONConf(props.apiType, cfg)
 
     const api = new API(props.apiType)
-    const usersBlogs = await api.getUsersBlogs()
+    const usersBlogs:Array<UserBlog> = await api.getUsersBlogs()
     if (usersBlogs && usersBlogs.length > 0) {
+      const userBlog = usersBlogs[0]
+
       cfg.apiStatus = true
       apiStatus.value = true
 
-      // 验证通过才保存
+      cfg.blogName = userBlog.blogName
+      blogName.value = userBlog.blogName
+
+      // 验证通过刷新状态
+      setJSONConf(props.apiType, cfg)
+    } else {
+      cfg.apiStatus = false
+      apiStatus.value = false
+
+      // 验证失败刷新状态
       setJSONConf(props.apiType, cfg)
     }
   } catch (e) {
@@ -97,7 +110,7 @@ const valiConf = async () => {
   if (!apiStatus.value) {
     ElMessage.error(t('setting.blog.vali.error'))
   } else {
-    ElMessage.error(t('main.opt.success'))
+    ElMessage.success(t('main.opt.success'))
   }
 
   isLoading.value = false
@@ -114,6 +127,7 @@ const saveConf = () => {
   cfg.password = password.value
   cfg.apiUrl = apiUrl.value
   cfg.apiStatus = apiStatus.value
+  cfg.blogName = blogName.value
 
   setJSONConf(props.apiType, cfg)
 
@@ -131,6 +145,7 @@ const initConf = () => {
     username.value = conf.username
     password.value = conf.password
     apiStatus.value = conf.apiStatus
+    blogName.value = conf.blogName
   }
 }
 
