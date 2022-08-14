@@ -56,7 +56,7 @@ export class XmlrpcClient {
             method: "POST",
             body: xmlbody,
             headers: {
-                Authorization: `Token ${config.token}`,
+                "Content-Type": "text/xml"
             }
         }
         let response: Response
@@ -88,7 +88,21 @@ export class XmlrpcClient {
         username = cfg.username
         password = cfg.password
 
-        let xmlbody = "body"
+        let xmlbody = `<?xml version="1.0"?>
+<methodCall>
+    <methodName>metaWeblog.getUsersBlogs</methodName>
+    <params>
+        <param>
+            <value><string>cnblogs</string></value>
+        </param>
+        <param>
+            <value><string>${username}</string></value>
+        </param>
+        <param>
+            <value><string>${password}</string></value>
+        </param>
+    </params>
+</methodCall>`
 
         const result = await this.fetchXmlrpc(apiUrl, xmlbody)
 

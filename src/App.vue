@@ -10,6 +10,7 @@ import log from "./lib/logUtil";
 import {getQueryString} from "./lib/util";
 import {getWidgetId} from "./lib/siyuan/siyuanUtil";
 import {XmlrpcClient} from "./lib/metaweblog/xmlrpc";
+// import {XmlrpcClient} from "./lib/metaweblog/xmlrpc";
 
 const isAuth = ref(false)
 

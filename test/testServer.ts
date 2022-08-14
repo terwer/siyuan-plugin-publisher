@@ -1,5 +1,6 @@
 import express, * as express_test from "express"
 import {Request, Response} from "express";
+// @ts-ignore
 import fetch from 'node-fetch';
 
 // Create a new express application instance

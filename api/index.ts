@@ -1,4 +1,5 @@
 import express, {Request, Response} from "express";
+// @ts-ignore
 import fetch from 'node-fetch';
 
 const app = require('express')();
@@ -42,6 +43,7 @@ app.post('/api/middleware/xmlrpc', async (req: Request, res: Response) => {
     const rres = await fetch(body.fetchParams.apiUrl, body.fetchParams.fetchOption)
     const rresult = await rres.text()
     console.log("请求完成，准备返回真实结果")
+    console.log(rresult)
 
     res.end(rresult);
 });
