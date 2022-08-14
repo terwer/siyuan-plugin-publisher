@@ -60,10 +60,13 @@ export async function fetchElectron(apiUrl: string, reqMethod: string, reqParams
     let jsonResult: any = {}
     switch (reqMethod) {
         // 博客信息
-        case METAWEBLOG_METHOD_CONSTANTS.GET_USERS_BLOGS:
+        case METAWEBLOG_METHOD_CONSTANTS.GET_USERS_BLOGS: {
             const usersBlogs = parse_GetUsersBlogs(parseResult)
+            log.logWarn("GetUsersBlogs组装完成准备返回=>")
+            log.logWarn(usersBlogs)
             jsonResult = JSON.stringify(usersBlogs)
             break;
+        }
         default:
             break;
     }
@@ -83,15 +86,22 @@ function parse_GetUsersBlogs(parseResult: any) {
 
     const methodResponse = parseResult.methodResponse
     const resValues = methodResponse.params.param.value.array.data.value.struct.member
+    log.logInfo("解析GetUsersBlogs，resValues=>")
+    log.logInfo(resValues)
     let userBlog = new UserBlog()
     for (let i = 0; i < resValues.length; i++) {
         const item = resValues[i]
-        if (item.name == "blogid") {
-            userBlog.blogid = item.value
-        } else if (item.name == "url") {
-            userBlog.url = item.value
-        } else if (item.name == "blogName") {
-            item.blogName = item.value
+        const itemKey = item.name
+        // cnbllogs=>item.value.string
+        // jvue || item.value
+        const itemValue = item.value.string || item.value
+
+        if (itemKey == "blogid") {
+            userBlog.blogid = itemValue
+        } else if (itemKey == "url") {
+            userBlog.url = itemValue
+        } else if (itemKey == "blogName") {
+            userBlog.blogName = itemValue
         }
     }
     usersBlogs.push(userBlog)

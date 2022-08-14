@@ -63,8 +63,8 @@ app.post('/api/middleware/xmlrpc', (req: Request, res: Response) => {
         console.error(xmlrpcCORSParams.reqParams)
         const methodPromise = methodCallDirect(client, xmlrpcCORSParams.reqMethod, xmlrpcCORSParams.reqParams)
         methodPromise.then((resolve: any) => {
-            console.log("methodPromise resolve=>")
-            console.log(resolve)
+            console.warn("methodPromise resolve=>")
+            console.warn(resolve)
 
             console.log("请求完成，准备返回真实结果")
             writeData(res, resolve)
