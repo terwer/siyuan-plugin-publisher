@@ -102,3 +102,11 @@ yarn create vite
 ```bash
 yarn deploy
 ```
+
+## Vercel CLI
+
+```
+npm i -g vercel
+```
+
+[Vercel CLI](https://vercel.com/docs/cli#introduction/installing-the-cli)

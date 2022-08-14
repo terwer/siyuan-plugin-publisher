@@ -10,7 +10,8 @@
     "deploy": "bash deploy.sh",
     "deploy-win": "pwsh deploy.ps1",
     "test": "ts-node-esm test/test.ts",
-    "testServer": "ts-node-esm test/testServer.ts"
+    "testServer": "ts-node-esm test/testServer.ts",
+    "vdev": "vercel dev"
   },
   "dependencies": {
     "@octokit/core": "^4.0.4",
