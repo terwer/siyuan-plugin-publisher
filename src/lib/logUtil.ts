@@ -3,7 +3,7 @@
 
 import {getBooleanEnv} from "./envUtil";
 
-const LOG_INFO_ENABLED = import.meta.env.DEV || getBooleanEnv("ENV_LOG_INFO_ENABLED")
+const LOG_INFO_ENABLED = import.meta.env.DEV || getBooleanEnv("VITE_LOG_INFO_ENABLED")
 const LOG_WARN_ENABLED = true
 const LOG_ERROR_ENABLED = true
 

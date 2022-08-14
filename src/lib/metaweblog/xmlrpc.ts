@@ -1,6 +1,7 @@
 import {getWidgetId} from "../siyuan/siyuanUtil";
 import log from "../logUtil";
 import {getEnv} from "../envUtil";
+import {fetchElectron} from "./electronXmlrpc";
 
 /**
  * Xmlrpc客户端封装类
@@ -21,12 +22,17 @@ export class XmlrpcClient {
     /**
      * 请求中转支持浏览器跨域
      * @param apiUrl 端点
-     * @param fetchCORSParams 中转参数
+     * @param reqMethod 方法
+     * @param reqParams 参数
      */
-    private async fetchCORS(apiUrl: string, fetchCORSParams: object): Promise<Response> {
+    private async fetchCORS(apiUrl: string, reqMethod: string, reqParams: Array<string>): Promise<string> {
         const middleApiUrl = getEnv("VITE_MIDDLEWARE_URL") || "/api/middleware/xmlrpc"
         log.logInfo("apiUrl=>")
         log.logInfo(apiUrl)
+        const fetchCORSParams = {
+            reqMethod: reqMethod,
+            reqParams: reqParams
+        }
         log.logInfo("fetchCORSParams=>")
         log.logInfo(fetchCORSParams)
 
@@ -50,7 +56,8 @@ export class XmlrpcClient {
         log.logInfo("middleFetchOption=>")
         log.logInfo(middleFetchOption)
 
-        return await fetch(middleApiUrl, middleFetchOption);
+        const response: Response = await fetch(middleApiUrl, middleFetchOption);
+        return await response.text()
     }
 
     /**
@@ -60,31 +67,24 @@ export class XmlrpcClient {
      * @param reqParams 参数数组
      */
     private async fetchXmlrpc(apiUrl: string, reqMethod: string, reqParams: Array<string>) {
-
-        let response: Response
+        let result
 
         const widgetResult = await getWidgetId()
         if (widgetResult.isInSiyuan) {
-            const fetchOption = {
-                method: "POST",
-                body: "",
-                headers: {
-                    "Content-Type": "text/xml"
-                }
-            }
-            response = await fetch(apiUrl, fetchOption);
+            log.logWarn("当前处于挂件模式，使用electron的fetch获取数据")
+            result = await fetchElectron(apiUrl, reqMethod, reqParams)
         } else {
-            const fetchCORSParams = {
-                reqMethod: reqMethod,
-                reqParams: reqParams
-            }
             log.logWarn("当前处于非挂件模式，已开启请求代理解决CORS跨域问题")
-            response = await this.fetchCORS(apiUrl, fetchCORSParams)
+            result = await this.fetchCORS(apiUrl, reqMethod, reqParams)
         }
-        let result = await response.text()
+
         if (!result || result == "") {
             throw new Error("请求错误或者返回结果为空")
         }
+
+        log.logWarn("最终返回给前端的数据=>")
+        log.logWarn(result)
+
         return result
     }
 

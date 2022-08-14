@@ -3,8 +3,8 @@ import {getJSONConf} from "../config";
 import {XmlrpcClient} from "./xmlrpc";
 import {UserBlog} from "../common/userBlog";
 import {Post} from "../common/post";
-import {XMLParser} from "fast-xml-parser";
 import log from "../logUtil";
+import {METAWEBLOG_METHOD_CONSTANTS} from "../constants/metaweblogMethodConstants";
 
 export class MetaWeblogApi {
     private readonly apiType: string
@@ -19,7 +19,7 @@ export class MetaWeblogApi {
 
     public async getUsersBlogs(appkey: string, username: string, password: string): Promise<Array<UserBlog>> {
         const usersBlogs: Array<UserBlog> = []
-        const ret = await this.xmlrpcClient.methodCallEntry("blogger.getUsersBlogs",
+        const ret = await this.xmlrpcClient.methodCallEntry(METAWEBLOG_METHOD_CONSTANTS.GET_USERS_BLOGS,
             [this.apiType, username, password])
         log.logInfo("ret=>")
         log.logInfo(ret)
