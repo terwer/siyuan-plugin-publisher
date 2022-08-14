@@ -1,7 +1,6 @@
 import {defineConfig} from 'vite'
 import {loadEnv} from "vite";
 import vue from '@vitejs/plugin-vue'
-import vitePluginRequireTransform from 'vite-plugin-require-transform';
 
 // https://vitejs.dev/config/
 export default defineConfig(({mode}) => {
@@ -22,28 +21,17 @@ export default defineConfig(({mode}) => {
     return {
         plugins: [
             vue(),
-            // @ts-ignore
-            vitePluginRequireTransform.default(),
         ],
         base: './',
-        // resolve: {
-        //     alias: [
-        //         // https://github.com/intlify/vue-i18n-next/issues/789
-        //         // 修复国际化警告
-        //         {
-        //             find: 'vue-i18n',
-        //             replacement: 'vue-i18n/dist/vue-i18n.cjs.js',
-        //         }
-        //     ]
-        // },
+        // https://github.com/vitejs/vite/issues/1930
+        // https://vitejs.dev/guide/env-and-mode.html#env-files
+        // 在这里自定义变量
+        define: Object.assign(processEnvValues, {}),
         resolve: {
             alias: {
                 'vue-i18n': 'vue-i18n/dist/vue-i18n.cjs.js',
                 'node-fetch': 'isomorphic-fetch',
             },
         },
-        // https://github.com/vitejs/vite/issues/1930
-        // https://vitejs.dev/guide/env-and-mode.html#env-files
-        define: processEnvValues
     }
 })

@@ -8,7 +8,7 @@ import log from "../logUtil";
 import {getEnv} from "../envUtil";
 import {inBrowser} from "../util";
 
-async function getWidgetId() {
+export async function getWidgetId() {
     if (!window.frameElement
         || !window.frameElement.parentElement
         || !window.frameElement.parentElement.parentElement) {

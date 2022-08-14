@@ -20,6 +20,10 @@
       <el-input v-model="ruleForm.wordpressPostid"/>
     </el-form-item>
 
+    <el-form-item :label="$t('post.bind.kms.postid')" prop="kmsEnabled" v-if="kmsEnabled">
+      <el-input v-model="ruleForm.kmsPostid"/>
+    </el-form-item>
+
     <el-form-item>
       <el-button type="primary" @click="submitForm(ruleFormRef)">{{ $t('post.bind.conf.save') }}</el-button>
       <el-button @click="resetForm(ruleFormRef)">{{ $t('post.bind.conf.cancel') }}</el-button>
@@ -45,6 +49,7 @@ const jvueEnabled = ref(false)
 const confEnabled = ref(false)
 const cnblogsEnabled = ref(false)
 const wordpressEnabled = ref(false)
+const kmsEnabled = ref(false)
 
 const initConf = () => {
   vuepressEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY)
@@ -52,6 +57,7 @@ const initConf = () => {
   confEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_CONF_KEY)
   cnblogsEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_CNBLOGS_KEY)
   wordpressEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_WORDPRESS_KEY)
+  kmsEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_KMS_KEY)
   log.logInfo("平台设置初始化")
 }
 
@@ -96,7 +102,8 @@ const ruleForm = reactive({
   jvuePostid: '',
   cnblogsPostid: '',
   confPostid: '',
-  wordpressPostid: ''
+  wordpressPostid: '',
+  kmsPostid: ''
 })
 const rules = reactive<FormRules>({
   vuepressSlug: [
@@ -137,6 +144,12 @@ const rules = reactive<FormRules>({
       required: true,
       message: () => t('form.validate.name.required')
     }
+  ],
+  kmsPostid: [
+    {
+      required: true,
+      message: () => t('form.validate.name.required')
+    }
   ]
 });
 
@@ -158,6 +171,7 @@ async function initPage() {
   ruleForm.confPostid = meta[POSTID_KEY_CONSTANTS.CONFLUENCE_POSTID_KEY]
   ruleForm.cnblogsPostid = meta[POSTID_KEY_CONSTANTS.CNBLOGS_POSTID_KEY]
   ruleForm.wordpressPostid = meta[POSTID_KEY_CONSTANTS.WORDPRESS_POSTID_KEY]
+  ruleForm.kmsPostid = meta[POSTID_KEY_CONSTANTS.KMS_POSTID_KEY]
 }
 
 const submitForm = async (formEl: FormInstance | undefined) => {
@@ -209,6 +223,13 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   if (wordpressEnabled.value && ruleForm.wordpressPostid != "") {
     Object.assign(customAttr, {
       [POSTID_KEY_CONSTANTS.WORDPRESS_POSTID_KEY]: ruleForm.wordpressPostid
+    })
+  }
+
+  // Kms
+  if (kmsEnabled.value && ruleForm.kmsPostid != "") {
+    Object.assign(customAttr, {
+      [POSTID_KEY_CONSTANTS.KMS_POSTID_KEY]: ruleForm.kmsPostid
     })
   }
 

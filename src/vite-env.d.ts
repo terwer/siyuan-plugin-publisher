@@ -8,7 +8,12 @@ declare module '*.vue' {
 
 interface ImportMetaEnv {
   readonly VITE_LOG_INFO_ENABLED: string
-  // more env variables...
+  readonly VITE_SIYUAN_API_URL: string
+  readonly VITE_SIYUAN_CONFIG_TOKEN: string
+  readonly VITE_SIYUAN_DEV_PAGE_ID: string
+  readonly VITE_OPT_PWD: string
+  readonly VITE_DEBUG_MODE: string
+  readonly VITE_MIDDLEWARE_URL: string
 }
 
 interface ImportMeta {

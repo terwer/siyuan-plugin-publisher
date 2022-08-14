@@ -4,13 +4,13 @@
       <vuepress-main :is-reload="isReloadVuepressMain"/>
     </el-tab-pane>
     <el-tab-pane :label="$t('main.publish.to.jvue')" v-if="jvueEnabled">
-      JVue
+      <j-vue-main/>
     </el-tab-pane>
     <el-tab-pane :label="$t('main.publish.to.conf')" v-if="confEnabled">
       Confluence
     </el-tab-pane>
     <el-tab-pane :label="$t('main.publish.to.cnblogs')" v-if="cnblogsEnabled">
-      Cnblogs
+      <cnblogs-main/>
     </el-tab-pane>
     <el-tab-pane :label="$t('main.publish.to.wordpress')" v-if="wordpressEnabled">
       Wordpress
@@ -23,6 +23,7 @@ import {onMounted, ref, watch} from "vue";
 import {getBooleanConf, setBooleanConf} from "../../lib/config";
 import SWITCH_CONSTANTS from "../../lib/constants/switchConstants";
 import log from "../../lib/logUtil";
+import CnblogsMain from "./main/mainadaptor/CnblogsMain.vue";
 
 const vuepressEnabled = ref(true)
 const jvueEnabled = ref(false)
@@ -57,7 +58,7 @@ watch(() => props.isReload, /**/(oldValue, newValue) => {
   log.logInfo("plantform-main初始化")
 
   // 如果开启了Vuepress，需要刷新Vuepress
-  if(vuepressEnabled.value){
+  if (vuepressEnabled.value) {
     isReloadVuepressMain.value = !isReloadVuepressMain.value
   }
 })
@@ -71,10 +72,11 @@ onMounted(() => {
 
 <script lang="ts">
 import VuepressMain from "./main/VuepressMain.vue";
+import JVueMain from "./main/mainadaptor/JVueMain.vue";
 
 export default {
   name: "PlantformMain",
-  components: {VuepressMain}
+  components: {VuepressMain, JVueMain}
 }
 </script>
 

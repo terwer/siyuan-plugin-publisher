@@ -1,6 +1,6 @@
 import {createApp} from 'vue'
-import './style.css'
 import App from './App.vue'
+import './style.css'
 // 国际化
 import i18n from "./locales";
 

@@ -1,5 +1,5 @@
-const showdown = require("showdown")
-const converter = new showdown.Converter();
+// const showdown = require("showdown")
+// const converter = new showdown.Converter();
 
 /**
  * 将Markdown转换为HTML
@@ -7,7 +7,7 @@ const converter = new showdown.Converter();
  * @returns {*} HTML
  */
 export function mdToHtml(md: string) {
-    let html = converter.makeHtml(md);
+    let html = "<h1>No markdown parser,see src/lib/htmlUtil.ts</h1>"// converter.makeHtml(md);
     return removeWidgetTag(html);
 }
 

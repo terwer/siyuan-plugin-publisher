@@ -10,7 +10,7 @@
       Confluence
     </el-tab-pane>
     <el-tab-pane :label="$t('setting.cnblogs')" v-if="cnblogsEnabled">
-      Cnblogs
+      <cnblogs-setting/>
     </el-tab-pane>
     <el-tab-pane :label="$t('setting.wordpress')" v-if="wordpressEnabled">
       Wordpress
@@ -57,12 +57,13 @@ watch(() => props.isReload, /**/(oldValue, newValue) => {
 </script>
 
 <script lang="ts">
-import JVueSetting from "./setting/JVueSetting.vue";
+import JVueSetting from "./setting/settingadaptor/JVueSetting.vue";
 import VuepressSetting from "./setting/VuepressSetting.vue";
+import CnblogsSetting from "./setting/settingadaptor/CnblogsSetting.vue";
 
 export default {
   name: "PlantformSetting",
-  components: {VuepressSetting, JVueSetting}
+  components: {VuepressSetting, JVueSetting, CnblogsSetting}
 }
 </script>
 
