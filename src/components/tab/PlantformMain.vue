@@ -15,6 +15,15 @@
     <el-tab-pane :label="$t('main.publish.to.wordpress')" v-if="wordpressEnabled">
       <wordpress-main/>
     </el-tab-pane>
+    <el-tab-pane :label="$t('main.publish.to.liandi')" v-if="liandiEnabled">
+      <liandi-main/>
+    </el-tab-pane>
+    <el-tab-pane :label="$t('main.publish.to.yuque')" v-if="yuqueEnabled">
+      <yuque-main/>
+    </el-tab-pane>
+    <el-tab-pane :label="$t('main.publish.to.kms')" v-if="kmsEnabled">
+      <kms-main/>
+    </el-tab-pane>
   </el-tabs>
 </template>
 
@@ -29,6 +38,9 @@ const jvueEnabled = ref(false)
 const confEnabled = ref(false)
 const cnblogsEnabled = ref(false)
 const wordpressEnabled = ref(false)
+const liandiEnabled = ref(false)
+const yuqueEnabled = ref(false)
+const kmsEnabled = ref(false)
 
 const isReloadVuepressMain = ref(false)
 
@@ -38,6 +50,9 @@ const initConf = () => {
   confEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_CONF_KEY)
   cnblogsEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_CNBLOGS_KEY)
   wordpressEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_WORDPRESS_KEY)
+  liandiEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_LIANDI_KEY)
+  yuqueEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_YUQUE_KEY)
+  kmsEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_KMS_KEY)
   log.logInfo("平台设置初始化")
 }
 
@@ -75,10 +90,13 @@ import JVueMain from "./main/mainadaptor/JVueMain.vue";
 import CnblogsMain from "./main/mainadaptor/CnblogsMain.vue";
 import ConfluenceMain from "./main/mainadaptor/ConfluenceMain.vue";
 import WordpressMain from "./main/WordpressMain.vue";
+import LiandiMain from "./main/LiandiMain.vue";
+import YuqueMain from "./main/YuqueMain.vue";
+import KmsMain from "./main/KmsMain.vue";
 
 export default {
   name: "PlantformMain",
-  components: {VuepressMain, JVueMain, CnblogsMain, ConfluenceMain, WordpressMain}
+  components: {VuepressMain, JVueMain, CnblogsMain, ConfluenceMain, WordpressMain, LiandiMain, YuqueMain, KmsMain}
 }
 </script>
 
