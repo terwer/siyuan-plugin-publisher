@@ -7,7 +7,7 @@
 
       <el-form label-width="100px">
         <!-- 强制刷新 -->
-        <el-form-item :label="$t('main.force.refresh')">
+        <el-form-item :label="$t('main.force.refresh')" v-if="editMode">
           <el-switch v-model="forceRefresh"/>
           <el-alert :title="$t('main.force.refresh.tip')" type="warning" :closable="false" v-if="!forceRefresh"/>
         </el-form-item>
