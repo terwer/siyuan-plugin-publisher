@@ -138,7 +138,9 @@ export async function publishPage(vuepressCfg: IVuepressCfg, docPath: string, md
         auth: vuepressCfg.githubToken
     })
     const v1 = new VuepressApiV1(vuepressCfg, octokit);
-    const sha = await v1.getPageSha(docPath)
+    // 因为是删除，所以这里始终新建，避免路径错误
+    // https://github.com/terwer/src-sy-post-publisher/issues/21
+    const sha = undefined // await v1.getPageSha(docPath)
 
     let res
     res = await v1.createOrUpdatePage(docPath, mdContent, sha)

@@ -2,7 +2,8 @@
   <el-container>
     <el-aside width="45%">
       <el-alert class="top-version-tip" :title="$t('main.publish.vuepress.tip')" type="success" :closable="false"/>
-      <el-alert class="top-version-tip" :title="$t('main.publish.vuepress.error.tip')" type="error" :closable="false"/>
+      <el-alert class="top-version-tip" :title="$t('main.publish.vuepress.error.tip')" type="error" :closable="false"
+                v-if="false"/>
 
       <el-form label-width="100px">
         <!-- 编辑模式 -->
@@ -627,14 +628,17 @@ const customLoad = async (node: any, resolve: any) => {
 }
 
 async function doPublish() {
+  isPublishLoading.value = true
+
+  // 先删除
+  await doCancel(false)
+
   const fmtTitle = mdFileToTitle(formData.value.title)
   if (/[\s*|\\.]/g.test(fmtTitle)) {
     log.logInfo("fmtTitle=>", fmtTitle)
     ElMessage.error("文件名不能包含空格或者特殊字符")
     return
   }
-
-  isPublishLoading.value = true
 
   // 生成属性
   await oneclickAttr(true)
@@ -659,7 +663,12 @@ async function doPublish() {
     let docPath = vuepressCfg.defaultPath + mdFile
     if (!useDefaultPath.value) {
       // 如果选择了自定义的目录
-      docPath = formData.value.customPath + "/" + mdFile
+      if (formData.value.customPath.indexOf(".md") > -1) {
+        log.logWarn("已经有完整路径，不拼接")
+      } else {
+        docPath = formData.value.customPath + "/" + mdFile
+      }
+
       log.logInfo(formData.value.customPath)
       log.logWarn("文章讲发布于以下路径=>", docPath)
     }
@@ -675,10 +684,13 @@ async function doPublish() {
 
     log.logWarn("即将发布的内容，mdContent=>", {"mdContent": mdContent})
 
+    // 发布
     const res = await publishPage(vuepressCfg, docPath, mdContent)
 
     // 成功与失败都提供复制功能
     if (!res) {
+      isPublishLoading.value = false
+
       // 刷新属性数据
       await initPage();
       // 发布失败
@@ -738,20 +750,7 @@ async function cancelPublish() {
         type: 'warning',
       }
   ).then(async () => {
-    const vuepressCfg = getJSONConf<IVuepressCfg>(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS)
-    const docPath = getDocPath()
-    log.logInfo("准备取消发布，docPath=>", docPath)
-
-    await deletePage(vuepressCfg, docPath)
-
-    const customAttr = {
-      [POSTID_KEY_CONSTANTS.VUEPRESS_POSTID_KEY]: ""
-    };
-    await setPageAttrs(siyuanData.value.pageId, customAttr)
-    log.logWarn("VuepressMain取消发布,meta=>", customAttr);
-
-    // 刷新属性数据
-    await initPage();
+    await doCancel(true)
 
     isCancelLoading.value = false;
 
@@ -765,6 +764,26 @@ async function cancelPublish() {
 
     log.logInfo("操作已取消")
   })
+}
+
+// 实际删除逻辑
+async function doCancel(isInit: boolean) {
+  const vuepressCfg = getJSONConf<IVuepressCfg>(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS)
+  const docPath = getDocPath()
+  log.logInfo("准备取消发布，docPath=>", docPath)
+
+  await deletePage(vuepressCfg, docPath)
+
+  const customAttr = {
+    [POSTID_KEY_CONSTANTS.VUEPRESS_POSTID_KEY]: ""
+  };
+  await setPageAttrs(siyuanData.value.pageId, customAttr)
+  log.logWarn("VuepressMain取消发布,meta=>", customAttr);
+
+  // 刷新属性数据
+  if (isInit) {
+    await initPage();
+  }
 }
 </script>
 
