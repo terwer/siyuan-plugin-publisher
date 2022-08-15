@@ -27,6 +27,8 @@ export default {
     "main.use.google.translate": "Use Google translate API",
     "main.use.hash": "Use hash",
     "main.use.hash.tip": "Do not use HASH to show more meaningful URLs, but it may cause the only path of the article to repeat (the consequence is that Vuepress will build a failure unless manual solution to the other problem), please know",
+    "main.force.refresh": "Force refresh",
+    "main.force.refresh.tip": "In order to prevent the wrongdoing aliases by mistake, the attribute will not be updated by default. If you need to update, please check for compulsory refresh.",
     "main.desc": "Post desc",
     "main.auto.fetch.desc": "Auto fetch desc",
     "main.create.time": "Pub time",

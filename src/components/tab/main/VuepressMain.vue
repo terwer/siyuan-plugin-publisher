@@ -6,6 +6,12 @@
                 v-if="false"/>
 
       <el-form label-width="100px">
+        <!-- 强制刷新 -->
+        <el-form-item :label="$t('main.force.refresh')">
+          <el-switch v-model="forceRefresh"/>
+          <el-alert :title="$t('main.force.refresh.tip')" type="warning" :closable="false" v-if="!forceRefresh"/>
+        </el-form-item>
+
         <!-- 编辑模式 -->
         <el-form-item :label="$t('main.publish.vuepress.editmode')">
           <el-button :type="editMode?'default':'primary'" @click="simpleMode">{{
@@ -243,6 +249,7 @@ const vuepressGithubEnabled = ref(false)
 const useDefaultPath = ref(true)
 const isPublished = ref(false)
 const previewUrl = ref("")
+const forceRefresh = ref(false)
 
 const formData = ref({
   title: "",
@@ -373,7 +380,22 @@ function getDocPath() {
   return docPath;
 }
 
+function checkForce() {
+  // 别名不为空，默认不刷新
+  if (formData.value.customSlug != "" && !forceRefresh.value) {
+    // ElMessage.warning(t('main.force.refresh.tip'))
+    log.logWarn(t('main.force.refresh.tip'))
+    return false
+  }
+
+  return true
+}
+
 async function makeSlug(hideTip?: boolean) {
+  if (!checkForce()) {
+    return
+  }
+
   isSlugLoading.value = true
   // 获取最新属性
   const page = await getPage(siyuanData.value.pageId)
@@ -412,6 +434,10 @@ async function makeSlug(hideTip?: boolean) {
 }
 
 async function makeDesc(hideTip?: boolean) {
+  if (!checkForce()) {
+    return
+  }
+
   isDescLoading.value = true
   const data = await getPageMd(siyuanData.value.pageId);
 
@@ -454,6 +480,10 @@ const tagHandleInputConfirm = () => {
 }
 
 async function fetchTag(hideTip?: boolean) {
+  if (!checkForce()) {
+    return
+  }
+
   isTagLoading.value = true
   const data = await getPageMd(siyuanData.value.pageId);
 

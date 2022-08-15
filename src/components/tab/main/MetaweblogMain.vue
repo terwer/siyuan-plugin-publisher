@@ -4,6 +4,12 @@
       <el-alert class="top-version-tip" :title="apiTypeInfo + blogName" type="info"
                 :closable="false"/>
       <el-form label-width="120px">
+        <!-- 强制刷新 -->
+        <el-form-item :label="$t('main.force.refresh')">
+          <el-switch v-model="forceRefresh"/>
+          <el-alert :title="$t('main.force.refresh.tip')" type="warning" :closable="false" v-if="!forceRefresh"/>
+        </el-form-item>
+
         <!-- 文章别名 -->
         <el-form-item :label="$t('main.slug')">
           <el-input v-model="formData.customSlug"/>
@@ -17,6 +23,10 @@
           <el-button type="primary" class="make-slug-btn" @click="makeSlug" :loading="isSlugLoading">
             {{ isSlugLoading ? $t('main.opt.loading') : $t('main.auto.fetch.slug') }}
           </el-button>
+        </el-form-item>
+        <el-form-item :label="$t('main.use.hash')">
+          <el-switch v-model="slugHashEnabled"/>
+          <el-alert :title="$t('main.use.hash.tip')" type="warning" :closable="false" v-if="!slugHashEnabled"/>
         </el-form-item>
 
         <!-- 摘要 -->
@@ -72,6 +82,7 @@ import {mdToHtml, parseHtml} from "../../../lib/htmlUtil";
 import {CONSTANTS} from "../../../lib/constants/constants";
 import {getJSONConf} from "../../../lib/config";
 import {IMetaweblogCfg} from "../../../lib/platform/metaweblog/IMetaweblogCfg";
+import shortHash from "shorthash2";
 
 const {t} = useI18n()
 
@@ -91,6 +102,9 @@ const apiTypeInfo = ref(t('setting.blog.platform.support.metaweblog') + props.ap
 
 const isSlugLoading = ref(false)
 const isDescLoading = ref(false)
+
+const forceRefresh = ref(false)
+const slugHashEnabled = ref(false)
 
 const formData = reactive({
   customSlug: "",
@@ -116,6 +130,9 @@ const initPage = async () => {
     blogName.value = conf.blogName
   }
 
+  // 默认开启hash
+  slugHashEnabled.value = true
+
   // 思源笔记数据
   siyuanData.pageId = pageId;
   siyuanData.meta = await getPageAttrs(pageId)
@@ -134,7 +151,22 @@ onMounted(async () => {
   await initPage()
 })
 
+function checkForce() {
+  // 别名不为空，默认不刷新
+  if (formData.customSlug != "" && !forceRefresh.value) {
+    // ElMessage.warning(t('main.force.refresh.tip'))
+    log.logWarn(t('main.force.refresh.tip'))
+    return false
+  }
+
+  return true
+}
+
 const makeSlug = async (hideTip?: boolean) => {
+  if (!checkForce()) {
+    return
+  }
+
   isSlugLoading.value = true
   // 获取最新属性
   const page = await getPage(siyuanData.pageId)
@@ -160,6 +192,13 @@ const makeSlug = async (hideTip?: boolean) => {
     formData.customSlug = await pingyinSlugify(title);
   }
 
+  // add hash
+  if (slugHashEnabled.value) {
+    const newstr = page.content + (new Date().toISOString())
+    const hashstr = "-" + shortHash(newstr).toLowerCase()
+    formData.customSlug += hashstr
+  }
+
   isSlugLoading.value = false
   if (hideTip != true) {
     ElMessage.success(t('main.opt.success'))
@@ -167,6 +206,10 @@ const makeSlug = async (hideTip?: boolean) => {
 }
 
 const makeDesc = async (hideTip?: boolean) => {
+  if (!checkForce()) {
+    return
+  }
+
   isDescLoading.value = true
   const data = await getPageMd(siyuanData.pageId);
 
