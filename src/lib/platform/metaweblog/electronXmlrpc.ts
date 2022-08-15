@@ -1,6 +1,6 @@
-import log from "../logUtil";
-import {METAWEBLOG_METHOD_CONSTANTS} from "../constants/metaweblogMethodConstants";
-import {UserBlog} from "../common/userBlog";
+import log from "../../logUtil";
+import {METAWEBLOG_METHOD_CONSTANTS} from "../../constants/metaweblogMethodConstants";
+import {UserBlog} from "../../common/userBlog";
 
 // 序列化
 const xmlSerializer = require('xmlrpc/lib/serializer')

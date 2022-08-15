@@ -6,7 +6,7 @@ import {mdToPlanText} from "./htmlUtil";
 import {getApiParams} from "./publishUtil";
 import log from "./logUtil";
 import {API_TYPE_CONSTANTS} from "./constants/apiTypeConstants";
-import {IVuepressCfg} from "./vuepress/IVuepressCfg";
+import {IVuepressCfg} from "./platform/vuepress/IVuepressCfg";
 
 // const nodejieba = require("nodejieba");
 

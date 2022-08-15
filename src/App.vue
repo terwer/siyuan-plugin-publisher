@@ -8,7 +8,7 @@ import {ref, onMounted} from "vue";
 import {getBooleanEnv, getEnv} from "./lib/envUtil";
 import log from "./lib/logUtil";
 import {getQueryString} from "./lib/util";
-import {getWidgetId} from "./lib/siyuan/siyuanUtil";
+import {getWidgetId} from "./lib/platform/siyuan/siyuanUtil";
 
 const isAuth = ref(false)
 

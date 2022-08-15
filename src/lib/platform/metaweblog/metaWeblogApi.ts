@@ -1,10 +1,10 @@
 import {IMetaweblogCfg} from "./IMetaweblogCfg";
-import {getJSONConf} from "../config";
+import {getJSONConf} from "../../config";
 import {XmlrpcClient} from "./xmlrpc";
-import {UserBlog} from "../common/userBlog";
-import {Post} from "../common/post";
-import log from "../logUtil";
-import {METAWEBLOG_METHOD_CONSTANTS} from "../constants/metaweblogMethodConstants";
+import {UserBlog} from "../../common/userBlog";
+import {Post} from "../../common/post";
+import log from "../../logUtil";
+import {METAWEBLOG_METHOD_CONSTANTS} from "../../constants/metaweblogMethodConstants";
 
 export class MetaWeblogApi {
     private readonly apiType: string

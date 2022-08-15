@@ -61,9 +61,9 @@ import {useI18n} from "vue-i18n";
 import log from "../../../lib/logUtil";
 import {getBooleanConf, getJSONConf, setBooleanConf, setJSONConf} from "../../../lib/config";
 import {API_TYPE_CONSTANTS} from "../../../lib/constants/apiTypeConstants";
-import {IVuepressCfg} from "../../../lib/vuepress/IVuepressCfg";
-import {publishPage} from "../../../lib/vuepress/v1";
-import {VuepressCfg} from "../../../lib/vuepress/VuepressCfg";
+import {IVuepressCfg} from "../../../lib/platform/vuepress/IVuepressCfg";
+import {publishPage} from "../../../lib/platform/vuepress/v1";
+import {VuepressCfg} from "../../../lib/platform/vuepress/VuepressCfg";
 import {formatIsoToZhDate} from "../../../lib/util";
 import {API_STATUS_CONSTANTS} from "../../../lib/constants/apiStatusConstants";
 

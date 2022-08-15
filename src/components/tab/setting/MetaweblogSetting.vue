@@ -39,8 +39,8 @@ import log from "../../../lib/logUtil";
 import {getJSONConf, setJSONConf} from "../../../lib/config";
 import {ElMessage} from "element-plus";
 import {useI18n} from "vue-i18n";
-import {IMetaweblogCfg} from "../../../lib/metaweblog/IMetaweblogCfg";
-import {MetaweblogCfg} from "../../../lib/metaweblog/MetaweblogCfg";
+import {IMetaweblogCfg} from "../../../lib/platform/metaweblog/IMetaweblogCfg";
+import {MetaweblogCfg} from "../../../lib/platform/metaweblog/MetaweblogCfg";
 import {API} from "../../../lib/api";
 import {UserBlog} from "../../../lib/common/userBlog";
 

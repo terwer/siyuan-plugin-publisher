@@ -1,5 +1,5 @@
 import {config} from "./siYuanConfig"
-import log from "../logUtil";
+import log from "../../logUtil";
 
 /**
  * 思源API v2.0.27

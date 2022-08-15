@@ -13,7 +13,7 @@
       <cnblogs-main/>
     </el-tab-pane>
     <el-tab-pane :label="$t('main.publish.to.wordpress')" v-if="wordpressEnabled">
-      Wordpress
+      <wordpress-main/>
     </el-tab-pane>
   </el-tabs>
 </template>
@@ -74,10 +74,11 @@ import VuepressMain from "./main/VuepressMain.vue";
 import JVueMain from "./main/mainadaptor/JVueMain.vue";
 import CnblogsMain from "./main/mainadaptor/CnblogsMain.vue";
 import ConfluenceMain from "./main/mainadaptor/ConfluenceMain.vue";
+import WordpressMain from "./main/WordpressMain.vue";
 
 export default {
   name: "PlantformMain",
-  components: {VuepressMain, JVueMain, CnblogsMain, ConfluenceMain}
+  components: {VuepressMain, JVueMain, CnblogsMain, ConfluenceMain, WordpressMain}
 }
 </script>
 

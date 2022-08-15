@@ -1,6 +1,6 @@
 import {getWidgetId} from "../siyuan/siyuanUtil";
-import log from "../logUtil";
-import {getEnv} from "../envUtil";
+import log from "../../logUtil";
+import {getEnv} from "../../envUtil";
 import {fetchElectron} from "./electronXmlrpc";
 
 /**

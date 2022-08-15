@@ -62,7 +62,7 @@
 
 <script lang="ts" setup>
 import {onMounted, reactive, ref} from "vue"
-import {getPage, getPageAttrs, getPageId, getPageMd, setPageAttrs} from "../../../lib/siyuan/siyuanUtil";
+import {getPage, getPageAttrs, getPageId, getPageMd, setPageAttrs} from "../../../lib/platform/siyuan/siyuanUtil";
 import {ElMessage} from "element-plus";
 import {useI18n} from "vue-i18n";
 import {SIYUAN_PAGE_ATTR_KEY} from "../../../lib/constants/siyuanPageConstants";
@@ -71,7 +71,7 @@ import log from "../../../lib/logUtil";
 import {mdToHtml, parseHtml} from "../../../lib/htmlUtil";
 import {CONSTANTS} from "../../../lib/constants/constants";
 import {getJSONConf} from "../../../lib/config";
-import {IMetaweblogCfg} from "../../../lib/metaweblog/IMetaweblogCfg";
+import {IMetaweblogCfg} from "../../../lib/platform/metaweblog/IMetaweblogCfg";
 
 const {t} = useI18n()
 

@@ -13,7 +13,7 @@
       <cnblogs-setting/>
     </el-tab-pane>
     <el-tab-pane :label="$t('setting.wordpress')" v-if="wordpressEnabled">
-      Wordpress
+      <wordpress-setting/>
     </el-tab-pane>
   </el-tabs>
 </template>
@@ -61,10 +61,11 @@ import JVueSetting from "./setting/settingadaptor/JVueSetting.vue";
 import VuepressSetting from "./setting/VuepressSetting.vue";
 import CnblogsSetting from "./setting/settingadaptor/CnblogsSetting.vue";
 import ConfluenceSetting from "./setting/settingadaptor/ConfluenceSetting.vue";
+import WordpressSetting from "./setting/WordpressSetting.vue";
 
 export default {
   name: "PlantformSetting",
-  components: {VuepressSetting, JVueSetting, CnblogsSetting, ConfluenceSetting}
+  components: {VuepressSetting, JVueSetting, CnblogsSetting, ConfluenceSetting, WordpressSetting}
 }
 </script>
 

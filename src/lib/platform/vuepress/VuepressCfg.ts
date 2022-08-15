@@ -1,5 +1,5 @@
 import {IVuepressCfg} from "./IVuepressCfg";
-import {POSTID_KEY_CONSTANTS} from "../constants/postidKeyConstants";
+import {POSTID_KEY_CONSTANTS} from "../../constants/postidKeyConstants";
 
 /**
  * Vuepress配置类

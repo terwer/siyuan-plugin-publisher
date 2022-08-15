@@ -1,9 +1,9 @@
-import {IApi} from "../api";
-import {Post} from "../common/post";
-import {UserBlog} from "../common/userBlog";
-import log from "../logUtil";
+import {IApi} from "../../api";
+import {Post} from "../../common/post";
+import {UserBlog} from "../../common/userBlog";
+import log from "../../logUtil";
 import {IMetaweblogCfg} from "./IMetaweblogCfg";
-import {getJSONConf} from "../config";
+import {getJSONConf} from "../../config";
 import {MetaWeblogApi} from "./metaWeblogApi";
 
 /**
