@@ -6,7 +6,7 @@
 import {API_TYPE_CONSTANTS} from "../../../../lib/constants/apiTypeConstants";
 import {ref} from "vue";
 
-const apiType = ref(API_TYPE_CONSTANTS.API_TYPE_CNBLOGS)
+const apiType = ref(API_TYPE_CONSTANTS.API_TYPE_CONFLUENCE)
 
 </script>
 
@@ -14,7 +14,7 @@ const apiType = ref(API_TYPE_CONSTANTS.API_TYPE_CNBLOGS)
 import MetaweblogMain from "../MetaweblogMain.vue";
 
 export default {
-  name: "CnblogsMain",
+  name: "ConfluenceMain",
   components: {MetaweblogMain}
 }
 </script>

@@ -7,7 +7,7 @@
       <j-vue-setting/>
     </el-tab-pane>
     <el-tab-pane :label="$t('setting.conf')" v-if="confEnabled">
-      Confluence
+      <confluence-setting/>
     </el-tab-pane>
     <el-tab-pane :label="$t('setting.cnblogs')" v-if="cnblogsEnabled">
       <cnblogs-setting/>
@@ -60,10 +60,11 @@ watch(() => props.isReload, /**/(oldValue, newValue) => {
 import JVueSetting from "./setting/settingadaptor/JVueSetting.vue";
 import VuepressSetting from "./setting/VuepressSetting.vue";
 import CnblogsSetting from "./setting/settingadaptor/CnblogsSetting.vue";
+import ConfluenceSetting from "./setting/settingadaptor/ConfluenceSetting.vue";
 
 export default {
   name: "PlantformSetting",
-  components: {VuepressSetting, JVueSetting, CnblogsSetting}
+  components: {VuepressSetting, JVueSetting, CnblogsSetting, ConfluenceSetting}
 }
 </script>
 
