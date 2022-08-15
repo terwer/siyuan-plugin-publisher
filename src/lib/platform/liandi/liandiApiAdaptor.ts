@@ -1,11 +1,11 @@
 /**
- * 知识仓库的API适配器
+ * 链滴的API适配器
  */
 import {IApi} from "../../api";
 import {Post} from "../../common/post";
 import {UserBlog} from "../../common/userBlog";
 
-export class KmsApiAdaptor implements IApi {
+export class LiandiApiAdaptor implements IApi {
 
     constructor() {
     }

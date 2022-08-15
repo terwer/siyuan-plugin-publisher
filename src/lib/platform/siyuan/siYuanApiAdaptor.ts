@@ -112,4 +112,12 @@ export class SiYuanApiAdaptor implements IApi {
 
         return commonPost
     }
+
+    public async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
+        return Promise.resolve(false)
+    }
+
+    public async newPost(post: Post, publish?: boolean): Promise<string> {
+        return Promise.resolve("")
+    }
 }

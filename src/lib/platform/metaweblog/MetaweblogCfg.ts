@@ -15,6 +15,11 @@ export class MetaweblogCfg implements IMetaweblogCfg {
      */
     blogName:string
 
+    /**
+     * 文章别名key
+     */
+    posidKey: string
+
     constructor(public home: string,
                 public apiUrl: string,
                 public username: string,
@@ -25,5 +30,6 @@ export class MetaweblogCfg implements IMetaweblogCfg {
         this.password = password
         this.apiStatus = false
         this.blogName = ""
+        this.posidKey = ""
     }
 }

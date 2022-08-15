@@ -18,7 +18,7 @@ export class MetaWeblogApiAdaptor implements IApi {
     constructor(apiType: string) {
         const cfg = getJSONConf<IMetaweblogCfg>(apiType)
 
-        this.MetaWeblogApi =new MetaWeblogApi(apiType)
+        this.MetaWeblogApi = new MetaWeblogApi(apiType)
         this.username = cfg.username
         this.password = cfg.password
         this.appkey = apiType
@@ -73,4 +73,22 @@ export class MetaWeblogApiAdaptor implements IApi {
         const data = await this.MetaWeblogApi.getPost(postid, this.username, this.password)
         return data;
     }
+
+    /**
+     * editPost
+     * https://codex.wordpress.org/XML-RPC_MetaWeblog_API#metaWeblog.editPost
+     */
+    public async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
+        return Promise.resolve(false)
+    }
+
+    /**
+     * newPost
+     * https://codex.wordpress.org/XML-RPC_MetaWeblog_API#metaWeblog.newPost
+     */
+    public async newPost(post: Post, publish?: boolean): Promise<string> {
+        return Promise.resolve("")
+    }
+
+
 }

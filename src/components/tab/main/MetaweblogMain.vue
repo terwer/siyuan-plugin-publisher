@@ -129,6 +129,8 @@ import {CONSTANTS} from "../../../lib/constants/constants";
 import {getJSONConf} from "../../../lib/config";
 import {IMetaweblogCfg} from "../../../lib/platform/metaweblog/IMetaweblogCfg";
 import shortHash from "shorthash2";
+import {API} from "../../../lib/api";
+import {Post} from "../../../lib/common/post";
 
 const {t} = useI18n()
 
@@ -392,6 +394,35 @@ const publishPage = async () => {
 
   // 生成属性
   await oneclickAttr(true)
+
+  // api可用并且开启了发布
+  // TODO
+  const api = new API(props.apiType)
+
+  // 组装文章数据
+  const post = new Post()
+  post.title = "自动发布测试"
+  post.description = "自动发布的测试内容"
+  post.categories = ["标签1", "标签2"]
+  post.dateCreated = new Date()
+  // post.link = ""
+  // post.permalink = ""
+  // post.postid = ""
+
+  const postid = await api.newPost(post)
+  log.logWarn("文章发布成功，postid=>", postid)
+
+  // 这里是发布成功之后
+  // 属性获取postidKey
+  const metaweblogCfg = getJSONConf<IMetaweblogCfg>(props.apiType)
+  const customAttr = {
+    [metaweblogCfg.posidKey]: postid,
+  };
+  // await setPageAttrs(siyuanData.pageId, customAttr)
+  log.logInfo("MetaweblogMain发布成功，保存postid,meta=>", customAttr);
+
+  // 刷新属性数据
+  //  initPage();
 
   isPublishLoading.value = false
   ElMessage.success(t('main.opt.success'))

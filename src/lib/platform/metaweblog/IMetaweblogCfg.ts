@@ -26,4 +26,8 @@ export interface IMetaweblogCfg {
      * 博客名（API获取）
      */
     blogName:string
+    /**
+     * 文章别名key
+     */
+    posidKey: string
 }
