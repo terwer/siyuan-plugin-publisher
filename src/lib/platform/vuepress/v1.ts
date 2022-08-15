@@ -1,7 +1,7 @@
 import {IVuepressCfg} from "./IVuepressCfg";
 import {Octokit} from "@octokit/core";
 import {Base64} from 'js-base64';
-import log from "../logUtil";
+import log from "../../logUtil";
 
 /**
  * Vuepress V1 API

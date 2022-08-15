@@ -177,7 +177,7 @@
 
 <script lang="ts" setup>
 import {nextTick, onBeforeMount, ref, watch} from "vue";
-import {getPage, getPageAttrs, getPageId, getPageMd, setPageAttrs} from "../../../lib/siyuan/siyuanUtil";
+import {getPage, getPageAttrs, getPageId, getPageMd, setPageAttrs} from "../../../lib/platform/siyuan/siyuanUtil";
 import log from "../../../lib/logUtil"
 import {SIYUAN_PAGE_ATTR_KEY} from "../../../lib/constants/siyuanPageConstants"
 import {
@@ -201,8 +201,8 @@ import copy from "copy-to-clipboard"
 import shortHash from "shorthash2";
 import {API_STATUS_CONSTANTS} from "../../../lib/constants/apiStatusConstants";
 import {getBooleanConf, getJSONConf} from "../../../lib/config";
-import {IVuepressCfg} from "../../../lib/vuepress/IVuepressCfg";
-import {deletePage, getPageTreeNode, publishPage} from "../../../lib/vuepress/v1";
+import {IVuepressCfg} from "../../../lib/platform/vuepress/IVuepressCfg";
+import {deletePage, getPageTreeNode, publishPage} from "../../../lib/platform/vuepress/v1";
 import {POSTID_KEY_CONSTANTS} from "../../../lib/constants/postidKeyConstants";
 import {getApiParams} from "../../../lib/publishUtil";
 import {deflateRaw} from "zlib";

@@ -2,11 +2,11 @@
  * 获取挂件所在的块ID
  * @returns {Promise<string>}
  */
-import {getJSONConf, setJSONConf} from "../config";
+import {getJSONConf, setJSONConf} from "../../config";
 import {exportMdContent, getBlockAttrs, getBlockByID, lsNotebooks, setBlockAttrs} from "./siYuanApi.js";
-import log from "../logUtil";
-import {getEnv} from "../envUtil";
-import {inBrowser} from "../util";
+import log from "../../logUtil";
+import {getEnv} from "../../envUtil";
+import {inBrowser} from "../../util";
 
 export async function getWidgetId() {
     if (!window.frameElement

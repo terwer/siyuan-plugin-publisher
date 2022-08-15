@@ -1,11 +1,11 @@
-import {SiYuanApiAdaptor} from "./siyuan/siYuanApiAdaptor";
+import {SiYuanApiAdaptor} from "./platform/siyuan/siYuanApiAdaptor";
 import {API_TYPE_CONSTANTS} from "./constants/apiTypeConstants";
-import {JVueApiAdaptor} from "./metaweblog/adaptor/jvueApiAdaptor";
-import {ConfApiAdaptor} from "./metaweblog/adaptor/confApiAdaptor";
-import {CnblogsApiAdaptor} from "./metaweblog/adaptor/cnblogsApiAdaptor";
+import {JVueApiAdaptor} from "./platform/metaweblog/adaptor/jvueApiAdaptor";
+import {ConfApiAdaptor} from "./platform/metaweblog/adaptor/confApiAdaptor";
+import {CnblogsApiAdaptor} from "./platform/metaweblog/adaptor/cnblogsApiAdaptor";
 import {Post} from "./common/post";
 import {UserBlog} from "./common/userBlog";
-import {KmsApiAdaptor} from "./kms/kmsApiAdaptor";
+import {KmsApiAdaptor} from "./platform/kms/kmsApiAdaptor";
 
 export interface IApi {
     /**

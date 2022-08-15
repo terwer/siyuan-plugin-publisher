@@ -39,7 +39,7 @@ import log from "../../lib/logUtil";
 import type {FormInstance, FormRules} from 'element-plus'
 import {ElMessage} from "element-plus";
 import {useI18n} from "vue-i18n";
-import {getPageAttrs, getPageId, setPageAttrs} from "../../lib/siyuan/siyuanUtil";
+import {getPageAttrs, getPageId, setPageAttrs} from "../../lib/platform/siyuan/siyuanUtil";
 import {POSTID_KEY_CONSTANTS} from "../../lib/constants/postidKeyConstants";
 
 const {t} = useI18n()

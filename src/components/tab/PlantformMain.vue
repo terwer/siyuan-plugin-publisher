@@ -7,13 +7,13 @@
       <j-vue-main/>
     </el-tab-pane>
     <el-tab-pane :label="$t('main.publish.to.conf')" v-if="confEnabled">
-      Confluence
+      <confluence-main/>
     </el-tab-pane>
     <el-tab-pane :label="$t('main.publish.to.cnblogs')" v-if="cnblogsEnabled">
       <cnblogs-main/>
     </el-tab-pane>
     <el-tab-pane :label="$t('main.publish.to.wordpress')" v-if="wordpressEnabled">
-      Wordpress
+      <wordpress-main/>
     </el-tab-pane>
   </el-tabs>
 </template>
@@ -23,7 +23,6 @@ import {onMounted, ref, watch} from "vue";
 import {getBooleanConf, setBooleanConf} from "../../lib/config";
 import SWITCH_CONSTANTS from "../../lib/constants/switchConstants";
 import log from "../../lib/logUtil";
-import CnblogsMain from "./main/mainadaptor/CnblogsMain.vue";
 
 const vuepressEnabled = ref(true)
 const jvueEnabled = ref(false)
@@ -73,10 +72,13 @@ onMounted(() => {
 <script lang="ts">
 import VuepressMain from "./main/VuepressMain.vue";
 import JVueMain from "./main/mainadaptor/JVueMain.vue";
+import CnblogsMain from "./main/mainadaptor/CnblogsMain.vue";
+import ConfluenceMain from "./main/mainadaptor/ConfluenceMain.vue";
+import WordpressMain from "./main/WordpressMain.vue";
 
 export default {
   name: "PlantformMain",
-  components: {VuepressMain, JVueMain}
+  components: {VuepressMain, JVueMain, CnblogsMain, ConfluenceMain, WordpressMain}
 }
 </script>
 

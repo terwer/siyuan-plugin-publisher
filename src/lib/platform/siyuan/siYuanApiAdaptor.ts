@@ -1,10 +1,10 @@
-import {IApi} from "../api";
+import {IApi} from "../../api";
 import {exportMdContent, getBlockAttrs, getBlockByID, getBlockBySlug, getRootBlocks} from "./siYuanApi";
-import {Post} from "../common/post";
-import {UserBlog} from "../common/userBlog";
-import {API_TYPE_CONSTANTS} from "../constants/apiTypeConstants";
-import {render} from "../markdownUtil";
-import {removeWidgetTag} from "../htmlUtil";
+import {Post} from "../../common/post";
+import {UserBlog} from "../../common/userBlog";
+import {API_TYPE_CONSTANTS} from "../../constants/apiTypeConstants";
+import {render} from "../../markdownUtil";
+import {removeWidgetTag} from "../../htmlUtil";
 
 /**
  * 思源笔记API适配器

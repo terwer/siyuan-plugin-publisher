@@ -7,13 +7,13 @@
       <j-vue-setting/>
     </el-tab-pane>
     <el-tab-pane :label="$t('setting.conf')" v-if="confEnabled">
-      Confluence
+      <confluence-setting/>
     </el-tab-pane>
     <el-tab-pane :label="$t('setting.cnblogs')" v-if="cnblogsEnabled">
       <cnblogs-setting/>
     </el-tab-pane>
     <el-tab-pane :label="$t('setting.wordpress')" v-if="wordpressEnabled">
-      Wordpress
+      <wordpress-setting/>
     </el-tab-pane>
   </el-tabs>
 </template>
@@ -60,10 +60,12 @@ watch(() => props.isReload, /**/(oldValue, newValue) => {
 import JVueSetting from "./setting/settingadaptor/JVueSetting.vue";
 import VuepressSetting from "./setting/VuepressSetting.vue";
 import CnblogsSetting from "./setting/settingadaptor/CnblogsSetting.vue";
+import ConfluenceSetting from "./setting/settingadaptor/ConfluenceSetting.vue";
+import WordpressSetting from "./setting/WordpressSetting.vue";
 
 export default {
   name: "PlantformSetting",
-  components: {VuepressSetting, JVueSetting, CnblogsSetting}
+  components: {VuepressSetting, JVueSetting, CnblogsSetting, ConfluenceSetting, WordpressSetting}
 }
 </script>
 
