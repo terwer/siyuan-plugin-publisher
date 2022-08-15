@@ -664,6 +664,7 @@ async function doPublish() {
     if (!useDefaultPath.value) {
       // 如果选择了自定义的目录
       if (formData.value.customPath.indexOf(".md") > -1) {
+        docPath = formData.value.customPath
         log.logWarn("已经有完整路径，不拼接")
       } else {
         docPath = formData.value.customPath + "/" + mdFile
