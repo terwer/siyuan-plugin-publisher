@@ -20,7 +20,15 @@
       <el-input v-model="ruleForm.wordpressPostid"/>
     </el-form-item>
 
-    <el-form-item :label="$t('post.bind.kms.postid')" prop="kmsEnabled" v-if="kmsEnabled">
+    <el-form-item :label="$t('post.bind.liandi.postid')" prop="liandiPostid" v-if="liandiEnabled">
+      <el-input v-model="ruleForm.liandiPostid"/>
+    </el-form-item>
+
+    <el-form-item :label="$t('post.bind.yuque.postid')" prop="yuquePostid" v-if="yuqueEnabled">
+      <el-input v-model="ruleForm.yuquePostid"/>
+    </el-form-item>
+
+    <el-form-item :label="$t('post.bind.kms.postid')" prop="kmsPostid" v-if="kmsEnabled">
       <el-input v-model="ruleForm.kmsPostid"/>
     </el-form-item>
 
@@ -49,6 +57,8 @@ const jvueEnabled = ref(false)
 const confEnabled = ref(false)
 const cnblogsEnabled = ref(false)
 const wordpressEnabled = ref(false)
+const liandiEnabled = ref(false)
+const yuqueEnabled = ref(false)
 const kmsEnabled = ref(false)
 
 const initConf = () => {
@@ -57,6 +67,8 @@ const initConf = () => {
   confEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_CONF_KEY)
   cnblogsEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_CNBLOGS_KEY)
   wordpressEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_WORDPRESS_KEY)
+  liandiEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_LIANDI_KEY)
+  yuqueEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_YUQUE_KEY)
   kmsEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_KMS_KEY)
   log.logInfo("平台设置初始化")
 }
@@ -103,6 +115,8 @@ const ruleForm = reactive({
   cnblogsPostid: '',
   confPostid: '',
   wordpressPostid: '',
+  liandiPostid: '',
+  yuquePostid: '',
   kmsPostid: ''
 })
 const rules = reactive<FormRules>({
@@ -145,6 +159,18 @@ const rules = reactive<FormRules>({
       message: () => t('form.validate.name.required')
     }
   ],
+  liandiPostid: [
+    {
+      required: true,
+      message: () => t('form.validate.name.required')
+    }
+  ],
+  yuquePostid: [
+    {
+      required: true,
+      message: () => t('form.validate.name.required')
+    }
+  ],
   kmsPostid: [
     {
       required: true,
@@ -171,6 +197,8 @@ async function initPage() {
   ruleForm.confPostid = meta[POSTID_KEY_CONSTANTS.CONFLUENCE_POSTID_KEY]
   ruleForm.cnblogsPostid = meta[POSTID_KEY_CONSTANTS.CNBLOGS_POSTID_KEY]
   ruleForm.wordpressPostid = meta[POSTID_KEY_CONSTANTS.WORDPRESS_POSTID_KEY]
+  ruleForm.liandiPostid = meta[POSTID_KEY_CONSTANTS.LIANDI_POSTID_KEY]
+  ruleForm.yuquePostid = meta[POSTID_KEY_CONSTANTS.YUQUE_POSTID_KEY]
   ruleForm.kmsPostid = meta[POSTID_KEY_CONSTANTS.KMS_POSTID_KEY]
 }
 
@@ -223,6 +251,20 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   if (wordpressEnabled.value && ruleForm.wordpressPostid != "") {
     Object.assign(customAttr, {
       [POSTID_KEY_CONSTANTS.WORDPRESS_POSTID_KEY]: ruleForm.wordpressPostid
+    })
+  }
+
+  // Liandi
+  if (liandiEnabled.value && ruleForm.liandiPostid != "") {
+    Object.assign(customAttr, {
+      [POSTID_KEY_CONSTANTS.LIANDI_POSTID_KEY]: ruleForm.liandiPostid
+    })
+  }
+
+  // Yuque
+  if (yuqueEnabled.value && ruleForm.yuquePostid != "") {
+    Object.assign(customAttr, {
+      [POSTID_KEY_CONSTANTS.YUQUE_POSTID_KEY]: ruleForm.yuquePostid
     })
   }
 

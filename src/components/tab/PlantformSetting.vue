@@ -15,6 +15,15 @@
     <el-tab-pane :label="$t('setting.wordpress')" v-if="wordpressEnabled">
       <wordpress-setting/>
     </el-tab-pane>
+    <el-tab-pane :label="$t('setting.liandi')" v-if="liandiEnabled">
+      <liandi-setting/>
+    </el-tab-pane>
+    <el-tab-pane :label="$t('setting.yuque')" v-if="yuqueEnabled">
+      <yuque-setting/>
+    </el-tab-pane>
+    <el-tab-pane :label="$t('setting.kms')" v-if="kmsEnabled">
+      <kms-setting/>
+    </el-tab-pane>
   </el-tabs>
 </template>
 
@@ -29,6 +38,9 @@ const jvueEnabled = ref(false)
 const confEnabled = ref(false)
 const cnblogsEnabled = ref(false)
 const wordpressEnabled = ref(false)
+const liandiEnabled = ref(false)
+const yuqueEnabled = ref(false)
+const kmsEnabled = ref(false)
 
 const initConf = () => {
   vuepressEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY)
@@ -36,6 +48,9 @@ const initConf = () => {
   confEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_CONF_KEY)
   cnblogsEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_CNBLOGS_KEY)
   wordpressEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_WORDPRESS_KEY)
+  liandiEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_LIANDI_KEY)
+  yuqueEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_YUQUE_KEY)
+  kmsEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_KMS_KEY)
   log.logInfo("平台设置初始化")
 }
 
@@ -62,10 +77,22 @@ import VuepressSetting from "./setting/VuepressSetting.vue";
 import CnblogsSetting from "./setting/settingadaptor/CnblogsSetting.vue";
 import ConfluenceSetting from "./setting/settingadaptor/ConfluenceSetting.vue";
 import WordpressSetting from "./setting/WordpressSetting.vue";
+import LiandiSetting from "./setting/LiandiSetting.vue";
+import YuqueSetting from "./setting/YuqueSetting.vue";
+import KmsSetting from "./setting/KmsSetting.vue";
 
 export default {
   name: "PlantformSetting",
-  components: {VuepressSetting, JVueSetting, CnblogsSetting, ConfluenceSetting, WordpressSetting}
+  components: {
+    VuepressSetting,
+    JVueSetting,
+    CnblogsSetting,
+    ConfluenceSetting,
+    WordpressSetting,
+    LiandiSetting,
+    YuqueSetting,
+    KmsSetting
+  }
 }
 </script>
 

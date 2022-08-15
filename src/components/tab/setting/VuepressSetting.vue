@@ -36,6 +36,10 @@
       <el-input v-model="formData.email" :placeholder="$t('setting.blog.type.vuepress.github.email.tip')"/>
     </el-form-item>
 
+    <el-form-item :label="$t('form.validate.vuepress.auto.delete')">
+      <el-switch v-model="autoDeleteTest" @change="testOnChange"/>
+    </el-form-item>
+
     <el-form-item>
       <el-button type="primary" @click="valiConf" :loading="isLoading">
         {{ isLoading ? $t('setting.blog.vali.ing') : $t('setting.blog.vali') }}
@@ -62,7 +66,7 @@ import log from "../../../lib/logUtil";
 import {getBooleanConf, getJSONConf, setBooleanConf, setJSONConf} from "../../../lib/config";
 import {API_TYPE_CONSTANTS} from "../../../lib/constants/apiTypeConstants";
 import {IVuepressCfg} from "../../../lib/platform/vuepress/IVuepressCfg";
-import {publishPage} from "../../../lib/platform/vuepress/v1";
+import {deletePage, publishPage} from "../../../lib/platform/vuepress/v1";
 import {VuepressCfg} from "../../../lib/platform/vuepress/VuepressCfg";
 import {formatIsoToZhDate} from "../../../lib/util";
 import {API_STATUS_CONSTANTS} from "../../../lib/constants/apiStatusConstants";
@@ -71,6 +75,8 @@ const {t} = useI18n()
 
 const isLoading = ref(false)
 const apiStatus = ref(false)
+
+const autoDeleteTest = ref(true)
 
 const formSize = ref('default')
 const formRef = ref<FormInstance>()
@@ -136,6 +142,10 @@ const rules = reactive<FormRules>({
   ]
 })
 
+const testOnChange = (val: any) => {
+  autoDeleteTest.value = val
+}
+
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   const result = await formEl.validate((valid, fields) => {
@@ -157,6 +167,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   setJSONConf<IVuepressCfg>(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS, vuepressCfg)
   ElMessage.success(t('main.opt.success'))
 }
+
 const valiConf = async () => {
   isLoading.value = true;
 
@@ -177,6 +188,11 @@ const valiConf = async () => {
     setBooleanConf(API_STATUS_CONSTANTS.API_STATUS_VUEPRESS, apiStatus.value)
     ElMessage.error(t('main.opt.failure'))
     return
+  }
+
+  // 自动删除测试文章
+  if(autoDeleteTest.value){
+    await deletePage(vuepressCfg,docPath)
   }
 
   // 验证通过，更新验证状态

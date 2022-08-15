@@ -52,6 +52,9 @@ export default {
     "main.publish.to.jvue": "发布到JVue",
     "main.publish.to.conf": "发布到Confluence",
     "main.publish.to.cnblogs": "发布到博客园",
+    "main.publish.to.liandi": "发布到链滴",
+    "main.publish.to.yuque": "发布到语雀",
+    "main.publish.to.kms": "发布到KMS",
     "main.opt.success": "操作成功",
     "main.opt.failure": "操作失败",
     "main.opt.quick": "快捷操作",
@@ -107,6 +110,9 @@ export default {
     "setting.conf": "Confluence",
     "setting.cnblogs": "博客园",
     "setting.wordpress": "Wordpress",
+    "setting.liandi": "链滴",
+    "setting.yuque": "语雀",
+    "setting.kms": "KMS",
     "setting.other1": "其他1",
     "service.switch.vuepress": "Vuepress",
     "service.switch.jvue": "JVue",
@@ -125,9 +131,12 @@ export default {
     "post.bind.jvue.postid": "JVue的ID",
     "post.bind.conf.postid": "Conf的ID",
     "post.bind.wordpress.postid": "WP的ID",
+    "post.bind.liandi.postid": "链滴的ID",
+    "post.bind.yuque.postid": "语雀的ID",
     "post.bind.kms.postid": "KMS的ID",
     "post.bind.conf.save": "保存",
     "post.bind.conf.cancel": "取消",
     "form.validate.name.required": "请输入名称",
-    "form.validate.name.length": "长度必须在0到1之间"
+    "form.validate.name.length": "长度必须在0到1之间",
+    "form.validate.vuepress.auto.delete": "自动删除"
 }

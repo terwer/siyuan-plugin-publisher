@@ -51,6 +51,9 @@ export default {
     "main.publish.to.jvue": "Send to JVue",
     "main.publish.to.conf": "Send to Confluence",
     "main.publish.to.cnblogs": "Send to Cnblogs",
+    "main.publish.to.liandi": "Send to Liandi",
+    "main.publish.to.yuque": "Send to Yuque",
+    "main.publish.to.kms": "Send to KMS",
     "main.opt.success": "Success",
     "main.opt.failure": "Error",
     "main.opt.quick": "Quick",
@@ -104,6 +107,9 @@ export default {
     "setting.conf": "Confluence",
     "setting.cnblogs": "Cnblogs",
     "setting.wordpress": "Wordpress",
+    "setting.liandi": "Liandi",
+    "setting.yuque": "Yuque",
+    "setting.kms": "KMS",
     "setting.other1": "Other1",
     "service.switch.vuepress": "Vuepress",
     "service.switch.jvue": "JVue",
@@ -122,9 +128,12 @@ export default {
     "post.bind.jvue.postid": "JVue ID",
     "post.bind.conf.postid": "Conf ID",
     "post.bind.wordpress.postid": "WP ID",
+    "post.bind.liandi.postid": "Liandi ID",
+    "post.bind.yuque.postid": "Yuque ID",
     "post.bind.kms.postid": "KMS ID",
     "post.bind.conf.save": "Save",
     "post.bind.conf.cancel": "Cancel",
     "form.validate.name.required": "Please input name",
-    "form.validate.name.length": "Length should be 0 to 1"
+    "form.validate.name.length": "Length should be 0 to 1",
+    "form.validate.vuepress.auto.delete": "Auto delete"
 }

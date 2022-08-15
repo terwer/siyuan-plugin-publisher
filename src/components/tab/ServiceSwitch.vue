@@ -20,6 +20,14 @@
       <el-switch v-model="wordpressEnabled" @change="wordpressOnChange"/>
     </el-form-item>
 
+    <el-form-item :label="$t('service.switch.liandi')">
+      <el-switch v-model="liandiEnabled" @change="liandiOnChange"/>
+    </el-form-item>
+
+    <el-form-item :label="$t('service.switch.yuque')">
+      <el-switch v-model="yuqueEnabled" @change="yuqueOnChange"/>
+    </el-form-item>
+
     <el-form-item :label="$t('service.switch.kms')">
       <el-switch v-model="kmsEnabled" @change="kmsOnChange"/>
     </el-form-item>
@@ -39,6 +47,8 @@ const jvueEnabled = ref(false)
 const confEnabled = ref(false)
 const cnblogsEnabled = ref(false)
 const wordpressEnabled = ref(false)
+const liandiEnabled = ref(false)
+const yuqueEnabled = ref(false)
 const kmsEnabled = ref(false)
 
 const jvueOnChange = (val: boolean) => {
@@ -53,6 +63,12 @@ const cnblogsOnChange = (val: any) => {
 const wordpressOnChange = (val: any) => {
   setBooleanConf(SWITCH_CONSTANTS.SWITCH_WORDPRESS_KEY, val)
 }
+const liandiOnChange = (val: any) => {
+  setBooleanConf(SWITCH_CONSTANTS.SWITCH_LIANDI_KEY, val)
+}
+const yuqueOnChange = (val: any) => {
+  setBooleanConf(SWITCH_CONSTANTS.SWITCH_YUQUE_KEY, val)
+}
 const kmsOnChange = (val: any) => {
   setBooleanConf(SWITCH_CONSTANTS.SWITCH_KMS_KEY, val)
 }
@@ -63,6 +79,8 @@ const initConf = () => {
   confEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_CONF_KEY)
   cnblogsEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_CNBLOGS_KEY)
   wordpressEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_WORDPRESS_KEY)
+  liandiEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_LIANDI_KEY)
+  yuqueEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_YUQUE_KEY)
   kmsEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_KMS_KEY)
 }
 
