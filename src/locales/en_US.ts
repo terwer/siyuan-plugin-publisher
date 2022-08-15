@@ -134,5 +134,6 @@ export default {
     "post.bind.conf.save": "Save",
     "post.bind.conf.cancel": "Cancel",
     "form.validate.name.required": "Please input name",
-    "form.validate.name.length": "Length should be 0 to 1"
+    "form.validate.name.length": "Length should be 0 to 1",
+    "form.validate.vuepress.auto.delete": "Auto delete"
 }

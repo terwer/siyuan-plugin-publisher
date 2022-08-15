@@ -137,5 +137,6 @@ export default {
     "post.bind.conf.save": "保存",
     "post.bind.conf.cancel": "取消",
     "form.validate.name.required": "请输入名称",
-    "form.validate.name.length": "长度必须在0到1之间"
+    "form.validate.name.length": "长度必须在0到1之间",
+    "form.validate.vuepress.auto.delete": "自动删除"
 }
