@@ -1,14 +1,21 @@
 <template>
-  <el-form label-width="120px">
-    <el-form-item>
-      WordpressMain
-    </el-form-item>
-  </el-form>
+  <metaweblog-main :api-type="apiType"/>
 </template>
 
-<script>
+<script lang="ts" setup>
+import {API_TYPE_CONSTANTS} from "../../../lib/constants/apiTypeConstants";
+import {ref} from "vue";
+
+const apiType = ref(API_TYPE_CONSTANTS.API_TYPE_WORDPRESS)
+
+</script>
+
+<script lang="ts">
+import MetaweblogMain from "./MetaweblogMain.vue";
+
 export default {
-  name: "WordpressMain"
+  name: "WordpressMain",
+  components:{MetaweblogMain}
 }
 </script>
 

@@ -1,14 +1,21 @@
 <template>
-  <el-form label-width="120px">
-    <el-form-item>
-      WordpressSetting
-    </el-form-item>
-  </el-form>
+  <metaweblog-setting :api-type="apiType"/>
 </template>
 
-<script>
+<script lang="ts" setup>
+import {API_TYPE_CONSTANTS} from "../../../lib/constants/apiTypeConstants";
+import {ref} from "vue";
+
+const apiType = ref(API_TYPE_CONSTANTS.API_TYPE_WORDPRESS)
+
+</script>
+
+<script lang="ts">
+import MetaweblogSetting from "./MetaweblogSetting.vue";
+
 export default {
-  name: "WordpressSetting"
+  name: "WordpressSetting",
+  components: {MetaweblogSetting}
 }
 </script>
 

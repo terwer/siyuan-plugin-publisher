@@ -6,7 +6,11 @@ import {CnblogsApiAdaptor} from "./platform/metaweblog/adaptor/cnblogsApiAdaptor
 import {Post} from "./common/post";
 import {UserBlog} from "./common/userBlog";
 import {KmsApiAdaptor} from "./platform/kms/kmsApiAdaptor";
+import {WordpressApiAdaptor} from "./platform/wordpress/wordpressApiAdaptor";
 
+/**
+ * 所有平台统一API接口（Vuepress比较特殊，除外）
+ */
 export interface IApi {
     /**
      * 博客配置列表
@@ -50,6 +54,9 @@ export class API implements IApi {
                 break;
             case API_TYPE_CONSTANTS.API_TYPE_CNBLOGS:
                 this.apiAdaptor = new CnblogsApiAdaptor()
+                break;
+            case API_TYPE_CONSTANTS.API_TYPE_WORDPRESS:
+                this.apiAdaptor = new WordpressApiAdaptor()
                 break;
             case API_TYPE_CONSTANTS.API_TYPE_KMS:
                 this.apiAdaptor = new KmsApiAdaptor()
