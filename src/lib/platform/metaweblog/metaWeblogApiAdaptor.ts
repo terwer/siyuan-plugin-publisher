@@ -89,4 +89,12 @@ export class MetaWeblogApiAdaptor implements IApi {
     public async newPost(post: Post, publish?: boolean): Promise<string> {
         return await this.metaWeblogApi.newPost(this.appkey, this.username, this.password, post, publish || true)
     }
+
+    /**
+     * deletePost
+     * https://codex.wordpress.org/XML-RPC_MetaWeblog_API#metaWeblog.deletePost
+     */
+    public async deletePost(postid: string): Promise<boolean> {
+        return await this.metaWeblogApi.deletePost(this.appkey, postid, this.username, this.password, true)
+    }
 }

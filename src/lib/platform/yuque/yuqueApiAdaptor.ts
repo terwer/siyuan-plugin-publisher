@@ -10,23 +10,27 @@ export class YuqueApiAdaptor implements IApi {
     constructor() {
     }
 
-    getPost(postid: string, useSlug?: boolean): Promise<Post> {
+    public getPost(postid: string, useSlug?: boolean): Promise<Post> {
         throw new Error("Method Not Implemented")
     }
 
-    getRecentPosts(numOfPosts: number, page?: number, keyword?: string): Promise<Array<Post>> {
+    public getRecentPosts(numOfPosts: number, page?: number, keyword?: string): Promise<Array<Post>> {
         throw new Error("Method Not Implemented")
     }
 
-    getUsersBlogs(): Promise<Array<UserBlog>> {
+    public getUsersBlogs(): Promise<Array<UserBlog>> {
         throw new Error("Method Not Implemented")
     }
 
-    editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
+    public editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
         throw new Error("Method Not Implemented")
     }
 
-    newPost(post: Post, publish?: boolean): Promise<string> {
+    public newPost(post: Post, publish?: boolean): Promise<string> {
         throw new Error("Method Not Implemented")
+    }
+
+    public async deletePost(postid: string): Promise<boolean> {
+        return Promise.resolve(false)
     }
 }

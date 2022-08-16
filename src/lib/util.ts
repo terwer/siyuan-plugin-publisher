@@ -8,6 +8,7 @@ import log from "./logUtil";
 import {API_TYPE_CONSTANTS} from "./constants/apiTypeConstants";
 import {IVuepressCfg} from "./platform/vuepress/IVuepressCfg";
 import {IMetaweblogCfg} from "./platform/metaweblog/IMetaweblogCfg";
+import {strict} from "assert";
 
 // const nodejieba = require("nodejieba");
 
@@ -416,4 +417,25 @@ export function getQueryString(sParam: string) {
             return sParameterName[1];
         }
     }
+}
+
+export function isEmptyObject(obj: any) {
+    if (!obj) {
+        return true;
+    }
+    return (
+        Object.getPrototypeOf(obj) === Object.prototype &&
+        Object.getOwnPropertyNames(obj).length === 0 &&
+        Object.getOwnPropertySymbols(obj).length === 0
+    );
+}
+
+export function isEmptyString(str: any) {
+    if (!str) {
+        return true;
+    }
+    if (!(typeof str === 'string')) {
+        return true
+    }
+    return str.trim().length == 0
 }

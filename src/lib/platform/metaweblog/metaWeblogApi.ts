@@ -91,4 +91,13 @@ export class MetaWeblogApi {
 
         return ret;
     }
+
+   public async deletePost (appKey:string, postid:string, username:string, password:string, publish:boolean) {
+       const ret = await this.xmlrpcClient.methodCallEntry(METAWEBLOG_METHOD_CONSTANTS.DELETE_POST,
+           [appKey, postid, username, password, publish])
+       log.logInfo("ret=>")
+       log.logInfo(ret)
+
+       return ret;
+    };
 }

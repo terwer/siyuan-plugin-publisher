@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-aside width="45%">
-      <el-alert class="top-version-tip" :title="$t('main.publish.vuepress.tip')" type="success" :closable="false"/>
+      <el-alert class="top-version-tip" :title="$t('main.publish.vuepress.tip')" type="info" :closable="false"/>
       <el-alert class="top-version-tip" :title="$t('main.publish.vuepress.error.tip')" type="error" :closable="false"
                 v-if="false"/>
 
@@ -194,7 +194,7 @@ import {
   cutWords,
   formatIsoToZhDate,
   formatNumToZhDate,
-  getPublishStatus,
+  getPublishStatus, isEmptyString,
   jiebaToHotWords,
   obj2yaml,
   pingyinSlugify,
@@ -383,8 +383,16 @@ function getDocPath() {
 }
 
 function checkForce() {
+  // 空值跳过
+  if (isEmptyString(formData.value.customSlug)
+      || isEmptyString(formData.value.desc)
+      || formData.value.tag.dynamicTags.length == 0
+  ) {
+    return true
+  }
+
   // 别名不为空，默认不刷新
-  if (formData.value.customSlug != "" && !forceRefresh.value) {
+  if (!forceRefresh.value) {
     // ElMessage.warning(t('main.force.refresh.tip'))
     log.logWarn(t('main.force.refresh.tip'))
     return false

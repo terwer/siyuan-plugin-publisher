@@ -92,6 +92,13 @@ export interface IApi {
      * @returns {Promise<boolean>}
      */
     editPost(postid: string, post: Post, publish?: boolean): Promise<boolean>
+
+    /**
+     * 删除文章
+     * https://codex.wordpress.org/XML-RPC_MetaWeblog_API#metaWeblog.deletePost
+     * @param postid 文章ID
+     */
+    deletePost(postid: string): Promise<boolean>
 }
 
 /**
@@ -151,6 +158,10 @@ export class API implements IApi {
 
     async newPost(post: Post, publish?: boolean): Promise<string> {
         return await this.apiAdaptor.newPost(post, publish)
+    }
+
+    async deletePost(postid: string): Promise<boolean> {
+        return await this.apiAdaptor.deletePost(postid)
     }
 }
 

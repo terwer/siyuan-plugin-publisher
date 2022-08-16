@@ -43,6 +43,7 @@ import {IMetaweblogCfg} from "../../../lib/platform/metaweblog/IMetaweblogCfg";
 import {MetaweblogCfg} from "../../../lib/platform/metaweblog/MetaweblogCfg";
 import {API} from "../../../lib/api";
 import {UserBlog} from "../../../lib/common/userBlog";
+import {isEmptyObject} from "../../../lib/util";
 
 const {t} = useI18n()
 
@@ -138,7 +139,7 @@ const initConf = () => {
   log.logInfo("通用Setting配置初始化")
   let conf = getJSONConf<IMetaweblogCfg>(props.apiType)
   // 如果没有配置。读取默认配置
-  if(!conf){
+  if (isEmptyObject(conf)) {
     conf = props.cfg
   }
   if (conf) {

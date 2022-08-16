@@ -120,63 +120,63 @@ const ruleForm = reactive({
   kmsPostid: ''
 })
 const rules = reactive<FormRules>({
-  vuepressSlug: [
-    {
-      required: true,
-      // https://github.com/ElemeFE/element/issues/18823
-      // message: t('form.validate.name.required'),
-      message: () => t('form.validate.name.required'),
-      trigger: 'blur'
-    },
-    {
-      min: 3,
-      max: 200,
-      message: () => t('form.validate.name.length').replace('0', '3').replace('1', '200'),
-      trigger: 'blur'
-    },
-  ],
-  jvuePostid: [
-    {
-      required: true,
-      message: () => t('form.validate.name.required')
-    }
-  ],
-  cnblogsPostid: [
-    {
-      required: true,
-      message: () => t('form.validate.name.required')
-    }
-  ],
-  confPostid: [
-    {
-      required: true,
-      message: () => t('form.validate.name.required')
-    }
-  ],
-  wordpressPostid: [
-    {
-      required: true,
-      message: () => t('form.validate.name.required')
-    }
-  ],
-  liandiPostid: [
-    {
-      required: true,
-      message: () => t('form.validate.name.required')
-    }
-  ],
-  yuquePostid: [
-    {
-      required: true,
-      message: () => t('form.validate.name.required')
-    }
-  ],
-  kmsPostid: [
-    {
-      required: true,
-      message: () => t('form.validate.name.required')
-    }
-  ]
+  // vuepressSlug: [
+  //   {
+  //     required: true,
+  //     // https://github.com/ElemeFE/element/issues/18823
+  //     // message: t('form.validate.name.required'),
+  //     message: () => t('form.validate.name.required'),
+  //     trigger: 'blur'
+  //   },
+  //   {
+  //     min: 3,
+  //     max: 200,
+  //     message: () => t('form.validate.name.length').replace('0', '3').replace('1', '200'),
+  //     trigger: 'blur'
+  //   },
+  // ],
+  // jvuePostid: [
+  //   {
+  //     required: true,
+  //     message: () => t('form.validate.name.required')
+  //   }
+  // ],
+  // cnblogsPostid: [
+  //   {
+  //     required: true,
+  //     message: () => t('form.validate.name.required')
+  //   }
+  // ],
+  // confPostid: [
+  //   {
+  //     required: true,
+  //     message: () => t('form.validate.name.required')
+  //   }
+  // ],
+  // wordpressPostid: [
+  //   {
+  //     required: true,
+  //     message: () => t('form.validate.name.required')
+  //   }
+  // ],
+  // liandiPostid: [
+  //   {
+  //     required: true,
+  //     message: () => t('form.validate.name.required')
+  //   }
+  // ],
+  // yuquePostid: [
+  //   {
+  //     required: true,
+  //     message: () => t('form.validate.name.required')
+  //   }
+  // ],
+  // kmsPostid: [
+  //   {
+  //     required: true,
+  //     message: () => t('form.validate.name.required')
+  //   }
+  // ]
 });
 
 async function initPage() {

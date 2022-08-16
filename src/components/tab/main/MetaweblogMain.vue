@@ -3,6 +3,8 @@
     <el-main class="blog-main">
       <el-alert class="top-version-tip" :title="apiTypeInfo + blogName" type="info"
                 :closable="false"/>
+      <el-alert class="top-version-tip" :title="$t('setting.blog.vali.tip.metaweblog')" type="error" :closable="false"
+                v-if="!apiStatus"/>
       <el-form label-width="120px">
         <!-- 强制刷新 -->
         <el-form-item :label="$t('main.force.refresh')" v-if="editMode">
@@ -138,7 +140,7 @@ import {SIYUAN_PAGE_ATTR_KEY} from "../../../lib/constants/siyuanPageConstants";
 import {
   cutWords,
   formatNumToZhDate,
-  getPublishStatus,
+  getPublishStatus, isEmptyObject, isEmptyString,
   jiebaToHotWords,
   pingyinSlugify,
   zhSlugify
@@ -152,6 +154,7 @@ import shortHash from "shorthash2";
 import {API} from "../../../lib/api";
 import {Post} from "../../../lib/common/post";
 import {render} from "../../../lib/markdownUtil";
+import {API_TYPE_CONSTANTS} from "../../../lib/constants/apiTypeConstants";
 
 const {t} = useI18n()
 
@@ -168,6 +171,7 @@ const props = defineProps({
 
 const blogName = ref("")
 const apiTypeInfo = ref(t('setting.blog.platform.support.metaweblog') + props.apiType + " ")
+const apiStatus = ref(false)
 
 const isSlugLoading = ref(false)
 const isDescLoading = ref(false)
@@ -219,8 +223,8 @@ const initPage = async () => {
   }
 
   // conf
-  const conf = getJSONConf<IMetaweblogCfg>(props.apiType)
-  if (conf) {
+  let conf = getJSONConf<IMetaweblogCfg>(props.apiType)
+  if (!isEmptyObject(conf)) {
     blogName.value = conf.blogName
   }
 
@@ -268,6 +272,8 @@ const initPage = async () => {
 
     previewUrl.value = fullPreviewUrl.replace(/\/\//g, "/")
   }
+
+  apiStatus.value = conf.apiStatus
 }
 
 onMounted(async () => {
@@ -275,8 +281,16 @@ onMounted(async () => {
 })
 
 function checkForce() {
+  // 空值跳过
+  if (isEmptyString(formData.customSlug)
+      || isEmptyString(formData.desc)
+      || formData.tag.dynamicTags.length == 0
+  ) {
+    return true
+  }
+
   // 别名不为空，默认不刷新
-  if (formData.customSlug != "" && !forceRefresh.value) {
+  if (!forceRefresh.value) {
     // ElMessage.warning(t('main.force.refresh.tip'))
     log.logWarn(t('main.force.refresh.tip'))
     return false
@@ -435,6 +449,11 @@ const oneclickAttr = async (hideTip?: boolean) => {
 }
 
 const doPublish = async () => {
+  if(!apiStatus.value){
+    ElMessage.error(t('setting.blog.vali.tip.metaweblog'))
+    return
+  }
+
   isPublishLoading.value = true
 
   // 生成属性
@@ -443,7 +462,6 @@ const doPublish = async () => {
   // api可用并且开启了发布
   const metaweblogCfg = getJSONConf<IMetaweblogCfg>(props.apiType)
 
-  // TODO
   const api = new API(props.apiType)
 
   // 组装文章数据
@@ -458,8 +476,13 @@ const doPublish = async () => {
   // ===============================
   const post = new Post()
   post.title = formData.title
+  post.wp_slug = formData.customSlug
   post.description = content
   post.categories = formData.tag.dynamicTags
+  // 博客园的Markdown
+  if (props.apiType == API_TYPE_CONSTANTS.API_TYPE_CNBLOGS) {
+    post.categories.push("[Markdown]")
+  }
   post.dateCreated = new Date()
   // 默认是已发布，publish字段是博客园接口必备
   // post.post_status = POST_STATUS_CONSTANTS.POST_STATUS_PUBLISH
@@ -527,17 +550,22 @@ const cancelPublish = async () => {
 
 // 实际删除逻辑
 const doCancel = async (isInit: boolean) => {
-  // const vuepressCfg = getJSONConf<IVuepressCfg>(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS)
-  // const docPath = getDocPath()
-  // log.logInfo("准备取消发布，docPath=>", docPath)
-  //
-  // await deletePage(vuepressCfg, docPath)
-  //
-  // const customAttr = {
-  //   [POSTID_KEY_CONSTANTS.VUEPRESS_POSTID_KEY]: ""
-  // };
-  // await setPageAttrs(siyuanData.value.pageId, customAttr)
-  // log.logWarn("VuepressMain取消发布,meta=>", customAttr);
+  const metaweblogCfg = getJSONConf<IMetaweblogCfg>(props.apiType)
+  log.logInfo("准备取消发布，postid=>", formData.postid)
+
+  const api = new API(props.apiType)
+  const flag = await api.deletePost(formData.postid)
+  if (!flag) {
+    ElMessage.error("文章删除失败")
+    throw new Error("文章删除失败")
+  }
+
+  // 清空ID
+  const customAttr = {
+    [metaweblogCfg.posidKey]: ""
+  };
+  await setPageAttrs(siyuanData.pageId, customAttr)
+  log.logWarn("MetaweblogMain取消发布,meta=>", customAttr);
 
   // 刷新属性数据
   if (isInit) {

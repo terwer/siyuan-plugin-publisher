@@ -5,6 +5,7 @@ import {UserBlog} from "../../common/userBlog";
 import {API_TYPE_CONSTANTS} from "../../constants/apiTypeConstants";
 import {render} from "../../markdownUtil";
 import {removeWidgetTag} from "../../htmlUtil";
+import {POST_STATUS_CONSTANTS} from "../../constants/postStatusConstants";
 
 /**
  * 思源笔记API适配器
@@ -106,8 +107,8 @@ export class SiYuanApiAdaptor implements IApi {
         commonPost.description = html || ""
         commonPost.shortDesc = shortDesc || ""
         commonPost.mt_keywords = attrs.tags || ""
-        commonPost.isPublished = isPublished
-        commonPost.postPassword = postPassword
+        commonPost.post_status = isPublished ? POST_STATUS_CONSTANTS.POST_STATUS_PUBLISH : POST_STATUS_CONSTANTS.POST_TYPE_DRAFT
+        commonPost.wp_password = postPassword
         // commonPost.dateCreated
 
         return commonPost
@@ -119,5 +120,9 @@ export class SiYuanApiAdaptor implements IApi {
 
     public async newPost(post: Post, publish?: boolean): Promise<string> {
         return Promise.resolve("")
+    }
+
+    public async deletePost(postid: string): Promise<boolean> {
+        return Promise.resolve(false)
     }
 }
