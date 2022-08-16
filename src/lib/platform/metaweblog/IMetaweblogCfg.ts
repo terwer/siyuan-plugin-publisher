@@ -1,3 +1,8 @@
+export enum PageType {
+    Markdown,
+    Html
+}
+
 /**
  * Metaweblog配置接口
  */
@@ -25,5 +30,17 @@ export interface IMetaweblogCfg {
     /**
      * 博客名（API获取）
      */
-    blogName:string
+    blogName: string
+    /**
+     * 文章别名key
+     */
+    posidKey: string
+    /**
+     * 文章预览链接
+     */
+    previewUrl: string
+    /**
+     * 文章类型
+     */
+    pageType: PageType
 }

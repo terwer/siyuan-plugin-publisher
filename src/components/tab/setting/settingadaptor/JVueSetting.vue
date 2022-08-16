@@ -1,12 +1,14 @@
 <template>
-  <metaweblog-setting :api-type="apiType"/>
+  <metaweblog-setting :api-type="apiType" :cfg="cfg"/>
 </template>
 
 <script lang="ts" setup>
 import {API_TYPE_CONSTANTS} from "../../../../lib/constants/apiTypeConstants";
 import {ref} from "vue";
+import {JVueCfg} from "../../../../lib/platform/metaweblog/config/jvueCfg";
 
 const apiType = ref(API_TYPE_CONSTANTS.API_TYPE_JVUE)
+const cfg = ref(new JVueCfg())
 
 </script>
 

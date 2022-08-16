@@ -1,11 +1,17 @@
 <template>
   <el-container>
     <el-aside width="45%">
-      <el-alert class="top-version-tip" :title="$t('main.publish.vuepress.tip')" type="success" :closable="false"/>
+      <el-alert class="top-version-tip" :title="$t('main.publish.vuepress.tip')" type="info" :closable="false"/>
       <el-alert class="top-version-tip" :title="$t('main.publish.vuepress.error.tip')" type="error" :closable="false"
                 v-if="false"/>
 
       <el-form label-width="100px">
+        <!-- 强制刷新 -->
+        <el-form-item :label="$t('main.force.refresh')" v-if="editMode">
+          <el-switch v-model="forceRefresh"/>
+          <el-alert :title="$t('main.force.refresh.tip')" type="warning" :closable="false" v-if="!forceRefresh"/>
+        </el-form-item>
+
         <!-- 编辑模式 -->
         <el-form-item :label="$t('main.publish.vuepress.editmode')">
           <el-button :type="editMode?'default':'primary'" @click="simpleMode">{{
@@ -133,6 +139,7 @@
           <el-alert :title="$t('main.publish.vuepress.choose.title.tip')" type="error" :closable="false"
                     v-if="vuepressGithubEnabled"/>
         </el-form-item>
+
         <!-- 发布操作 -->
         <el-form-item label="">
           <el-button type="primary" @click="doPublish" :loading="isPublishLoading">{{
@@ -142,6 +149,7 @@
           </el-button>
           <el-button @click="cancelPublish" :loading="isCancelLoading">{{ $t('main.cancel') }}</el-button>
         </el-form-item>
+
         <!-- 文章状态 -->
         <el-form-item>
           <el-button type="danger" text disabled>
@@ -186,7 +194,7 @@ import {
   cutWords,
   formatIsoToZhDate,
   formatNumToZhDate,
-  getPublishStatus,
+  getPublishStatus, isEmptyString,
   jiebaToHotWords,
   obj2yaml,
   pingyinSlugify,
@@ -243,6 +251,7 @@ const vuepressGithubEnabled = ref(false)
 const useDefaultPath = ref(true)
 const isPublished = ref(false)
 const previewUrl = ref("")
+const forceRefresh = ref(false)
 
 const formData = ref({
   title: "",
@@ -373,7 +382,30 @@ function getDocPath() {
   return docPath;
 }
 
+function checkForce() {
+  // 空值跳过
+  if (isEmptyString(formData.value.customSlug)
+      || isEmptyString(formData.value.desc)
+      || formData.value.tag.dynamicTags.length == 0
+  ) {
+    return true
+  }
+
+  // 别名不为空，默认不刷新
+  if (!forceRefresh.value) {
+    // ElMessage.warning(t('main.force.refresh.tip'))
+    log.logWarn(t('main.force.refresh.tip'))
+    return false
+  }
+
+  return true
+}
+
 async function makeSlug(hideTip?: boolean) {
+  if (!checkForce()) {
+    return
+  }
+
   isSlugLoading.value = true
   // 获取最新属性
   const page = await getPage(siyuanData.value.pageId)
@@ -412,6 +444,10 @@ async function makeSlug(hideTip?: boolean) {
 }
 
 async function makeDesc(hideTip?: boolean) {
+  if (!checkForce()) {
+    return
+  }
+
   isDescLoading.value = true
   const data = await getPageMd(siyuanData.value.pageId);
 
@@ -454,6 +490,10 @@ const tagHandleInputConfirm = () => {
 }
 
 async function fetchTag(hideTip?: boolean) {
+  if (!checkForce()) {
+    return
+  }
+
   isTagLoading.value = true
   const data = await getPageMd(siyuanData.value.pageId);
 

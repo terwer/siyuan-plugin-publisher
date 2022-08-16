@@ -7,6 +7,8 @@ import {getApiParams} from "./publishUtil";
 import log from "./logUtil";
 import {API_TYPE_CONSTANTS} from "./constants/apiTypeConstants";
 import {IVuepressCfg} from "./platform/vuepress/IVuepressCfg";
+import {IMetaweblogCfg} from "./platform/metaweblog/IMetaweblogCfg";
+import {strict} from "assert";
 
 // const nodejieba = require("nodejieba");
 
@@ -16,6 +18,10 @@ import {IVuepressCfg} from "./platform/vuepress/IVuepressCfg";
  * @param meta 元数据
  */
 export function getPublishStatus(apiType: string, meta: any) {
+    const metaweblogTypeArray = [API_TYPE_CONSTANTS.API_TYPE_JVUE, API_TYPE_CONSTANTS.API_TYPE_CONFLUENCE,
+        API_TYPE_CONSTANTS.API_TYPE_CNBLOGS, API_TYPE_CONSTANTS.API_TYPE_WORDPRESS
+    ]
+
     if (apiType == API_TYPE_CONSTANTS.API_TYPE_VUEPRESS) {
         const postidKey = getApiParams<IVuepressCfg>(apiType).posidKey;
         const postId = meta[postidKey] || "";
@@ -24,10 +30,17 @@ export function getPublishStatus(apiType: string, meta: any) {
         log.logInfo("postidKey=>", postidKey)
         log.logInfo("postidKey的值=>", postId)
         return postId !== "";
+    } else if (metaweblogTypeArray.includes(apiType)) {
+        const postidKey = getApiParams<IMetaweblogCfg>(apiType).posidKey;
+        const postId = meta[postidKey] || "";
+        log.logInfo("平台=>", apiType)
+        log.logInfo("meta=>", meta)
+        log.logInfo("postidKey=>", postidKey)
+        log.logInfo("postidKey的值=>", postId)
+        return postId !== "";
     }
 
-    // @ts-ignore
-    return getApiParamsOld(apiType);
+    return false;
 }
 
 /**
@@ -404,4 +417,25 @@ export function getQueryString(sParam: string) {
             return sParameterName[1];
         }
     }
+}
+
+export function isEmptyObject(obj: any) {
+    if (!obj) {
+        return true;
+    }
+    return (
+        Object.getPrototypeOf(obj) === Object.prototype &&
+        Object.getOwnPropertyNames(obj).length === 0 &&
+        Object.getOwnPropertySymbols(obj).length === 0
+    );
+}
+
+export function isEmptyString(str: any) {
+    if (!str) {
+        return true;
+    }
+    if (!(typeof str === 'string')) {
+        return true
+    }
+    return str.trim().length == 0
 }

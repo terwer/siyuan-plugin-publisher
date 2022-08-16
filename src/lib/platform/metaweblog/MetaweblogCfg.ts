@@ -1,4 +1,4 @@
-import {IMetaweblogCfg} from "./IMetaweblogCfg";
+import {IMetaweblogCfg, PageType} from "./IMetaweblogCfg";
 
 /**
  * Metaweblog配置类
@@ -15,6 +15,21 @@ export class MetaweblogCfg implements IMetaweblogCfg {
      */
     blogName:string
 
+    /**
+     * 文章别名key
+     */
+    posidKey: string
+
+    /**
+     * 文章预览链接
+     */
+    previewUrl: string
+
+    /**
+     * 文章类型
+     */
+    pageType: PageType
+
     constructor(public home: string,
                 public apiUrl: string,
                 public username: string,
@@ -25,5 +40,8 @@ export class MetaweblogCfg implements IMetaweblogCfg {
         this.password = password
         this.apiStatus = false
         this.blogName = ""
+        this.posidKey = ""
+        this.previewUrl = ""
+        this.pageType = PageType.Markdown
     }
 }
