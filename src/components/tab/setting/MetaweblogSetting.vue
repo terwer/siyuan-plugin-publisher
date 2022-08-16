@@ -23,7 +23,7 @@
         {{ isLoading ? $t('setting.blog.vali.ing') : $t('setting.blog.vali') }}
       </el-button>
       <el-alert :title="$t('setting.blog.vali.tip.metaweblog')" type="warning" :closable="false" v-if="!apiStatus"/>
-      <el-alert :title="$t('setting.blog.vali.ok')" type="success" :closable="false" v-if="apiStatus"/>
+      <el-alert :title="$t('setting.blog.vali.ok.metaweblog')" type="success" :closable="false" v-if="apiStatus"/>
     </el-form-item>
 
     <el-form-item>
@@ -54,6 +54,10 @@ const props = defineProps({
   apiType: {
     type: String,
     default: ""
+  },
+  cfg: {
+    type: MetaweblogCfg,
+    default: null
   }
 })
 
@@ -61,14 +65,6 @@ const home = ref("")
 const apiUrl = ref("")
 const username = ref("")
 const password = ref("")
-
-const getCfg = () => {
-  let cfg = getJSONConf<IMetaweblogCfg>(props.apiType)
-  if (!cfg) {
-    cfg = new MetaweblogCfg(home.value, apiUrl.value, username.value, password.value)
-  }
-  return cfg
-}
 
 const isLoading = ref(false)
 const apiStatus = ref(false)
@@ -80,11 +76,13 @@ const valiConf = async () => {
   isLoading.value = true;
 
   try {
-    const cfg = new MetaweblogCfg(home.value, apiUrl.value, username.value, password.value)
-    setJSONConf(props.apiType, cfg)
+    // 先保存
+    saveConf(true)
+
+    const cfg = getJSONConf<IMetaweblogCfg>(props.apiType)
 
     const api = new API(props.apiType)
-    const usersBlogs:Array<UserBlog> = await api.getUsersBlogs()
+    const usersBlogs: Array<UserBlog> = await api.getUsersBlogs()
     if (usersBlogs && usersBlogs.length > 0) {
       const userBlog = usersBlogs[0]
 
@@ -118,10 +116,10 @@ const valiConf = async () => {
   log.logInfo("通用Setting验证完毕")
 }
 
-const saveConf = () => {
+const saveConf = (hideTip?: boolean) => {
   log.logInfo("通用Setting保存配置")
 
-  const cfg = getCfg()
+  const cfg = props.cfg
   cfg.home = home.value
   cfg.username = username.value
   cfg.password = password.value
@@ -131,12 +129,18 @@ const saveConf = () => {
 
   setJSONConf(props.apiType, cfg)
 
-  ElMessage.success(t('main.opt.success'))
+  if (hideTip != true) {
+    ElMessage.success(t('main.opt.success'))
+  }
 }
 
 const initConf = () => {
   log.logInfo("通用Setting配置初始化")
-  const conf = getJSONConf<IMetaweblogCfg>(props.apiType)
+  let conf = getJSONConf<IMetaweblogCfg>(props.apiType)
+  // 如果没有配置。读取默认配置
+  if(!conf){
+    conf = props.cfg
+  }
   if (conf) {
     log.logInfo("get setting conf=>", conf)
 

@@ -102,6 +102,7 @@ export default {
     "setting.blog.vali.tip.metaweblog": "Please verify the configuration to ensure the availability of the API, and it will not be used without verification.",
     "setting.blog.vali.ing": "Validating...",
     "setting.blog.vali.ok": "Available",
+    "setting.blog.vali.ok.metaweblog": "The configuration has been saved and verified",
     "setting.blog.vali.error": "Validate error",
     "setting.blog.platform.support.metaweblog": "Current metaweblog supported platform:",
     "setting.blog.cancel": "Cancel",

@@ -1,12 +1,14 @@
 <template>
-<metaweblog-setting :api-type="apiType"/>
+<metaweblog-setting :api-type="apiType" :cfg="cfg"/>
 </template>
 
 <script lang="ts" setup>
 import {API_TYPE_CONSTANTS} from "../../../../lib/constants/apiTypeConstants";
 import {ref} from "vue";
+import {CnblogsCfg} from "../../../../lib/platform/metaweblog/config/cnblogsCfg";
 
 const apiType = ref(API_TYPE_CONSTANTS.API_TYPE_CNBLOGS)
+const cfg = ref(new CnblogsCfg())
 
 </script>
 

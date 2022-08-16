@@ -415,6 +415,7 @@ const publishPage = async () => {
   // 这里是发布成功之后
   // 属性获取postidKey
   const metaweblogCfg = getJSONConf<IMetaweblogCfg>(props.apiType)
+  log.logWarn("当前保存的posidKey=>", metaweblogCfg.posidKey)
   const customAttr = {
     [metaweblogCfg.posidKey]: postid,
   };
