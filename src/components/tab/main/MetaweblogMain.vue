@@ -144,15 +144,14 @@ import {
   zhSlugify
 } from "../../../lib/util";
 import log from "../../../lib/logUtil";
-import {mdToHtml, parseHtml} from "../../../lib/htmlUtil";
+import {mdToHtml, parseHtml, removeWidgetTag} from "../../../lib/htmlUtil";
 import {CONSTANTS} from "../../../lib/constants/constants";
 import {getJSONConf} from "../../../lib/config";
-import {IMetaweblogCfg} from "../../../lib/platform/metaweblog/IMetaweblogCfg";
+import {IMetaweblogCfg, PageType} from "../../../lib/platform/metaweblog/IMetaweblogCfg";
 import shortHash from "shorthash2";
 import {API} from "../../../lib/api";
 import {Post} from "../../../lib/common/post";
-import {POST_STATUS_CONSTANTS} from "../../../lib/constants/postStatusConstants";
-import {API_TYPE_CONSTANTS} from "../../../lib/constants/apiTypeConstants";
+import {render} from "../../../lib/markdownUtil";
 
 const {t} = useI18n()
 
@@ -186,6 +185,7 @@ const previewUrl = ref("")
 const formData = reactive({
   // 新增时候这个值是空的
   postid: "",
+  title: "",
   customSlug: "",
   desc: "",
   created: "",
@@ -234,6 +234,7 @@ const initPage = async () => {
   console.log("MetaweblogMain初始化页面,meta=>", siyuanData.meta);
 
   // 表单数据
+  formData.title = page.content
   // @ts-ignore
   formData.customSlug = siyuanData.meta[SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_SLUG_KEY];
   // @ts-ignore
@@ -440,14 +441,25 @@ const doPublish = async () => {
   await oneclickAttr(true)
 
   // api可用并且开启了发布
+  const metaweblogCfg = getJSONConf<IMetaweblogCfg>(props.apiType)
+
   // TODO
   const api = new API(props.apiType)
 
   // 组装文章数据
+  // ===============================
+  // 发布内容
+  const data = await getPageMd(siyuanData.pageId);
+  const md = removeWidgetTag(data.content)
+  let content = md
+  if (PageType.Html == metaweblogCfg.pageType) {
+    content = render(md)
+  }
+  // ===============================
   const post = new Post()
-  post.title = "自动发布测试23333"
-  post.description = "自动发布的测试内容"
-  post.categories = ["标签1", "标签2"]
+  post.title = formData.title
+  post.description = content
+  post.categories = formData.tag.dynamicTags
   post.dateCreated = new Date()
   // 默认是已发布，publish字段是博客园接口必备
   // post.post_status = POST_STATUS_CONSTANTS.POST_STATUS_PUBLISH
@@ -468,7 +480,6 @@ const doPublish = async () => {
     postid = await api.newPost(post, publish)
     // 这里是发布成功之后
     // 属性获取postidKey
-    const metaweblogCfg = getJSONConf<IMetaweblogCfg>(props.apiType)
     log.logWarn("当前保存的posidKey=>", metaweblogCfg.posidKey)
     const customAttr = {
       [metaweblogCfg.posidKey]: postid,
