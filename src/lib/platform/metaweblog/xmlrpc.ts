@@ -93,7 +93,7 @@ export class XmlrpcClient {
      * @param reqMethod 方法
      * @param reqMarams 参数
      */
-    public async methodCallEntry(reqMethod: string, reqMarams: Array<string>) {
+    public async methodCallEntry(reqMethod: string, reqMarams: Array<any>) {
         const result = await this.fetchXmlrpc(this.apiUrl, reqMethod, reqMarams)
         log.logInfo("请求结果，result=>")
         log.logInfo(result)

@@ -8,5 +8,6 @@ export class WordpressCfg extends MetaweblogCfg {
     constructor() {
         super("", "", "", "");
         this.posidKey = POSTID_KEY_CONSTANTS.WORDPRESS_POSTID_KEY
+        this.previewUrl = "/post/[postid].html"
     }
 }

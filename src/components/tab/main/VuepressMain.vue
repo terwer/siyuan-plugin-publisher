@@ -139,6 +139,7 @@
           <el-alert :title="$t('main.publish.vuepress.choose.title.tip')" type="error" :closable="false"
                     v-if="vuepressGithubEnabled"/>
         </el-form-item>
+
         <!-- 发布操作 -->
         <el-form-item label="">
           <el-button type="primary" @click="doPublish" :loading="isPublishLoading">{{
@@ -148,6 +149,7 @@
           </el-button>
           <el-button @click="cancelPublish" :loading="isCancelLoading">{{ $t('main.cancel') }}</el-button>
         </el-form-item>
+
         <!-- 文章状态 -->
         <el-form-item>
           <el-button type="danger" text disabled>

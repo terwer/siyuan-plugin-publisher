@@ -9,5 +9,6 @@ export class CnblogsCfg extends MetaweblogCfg {
     constructor() {
         super("", "", "", "");
         this.posidKey = POSTID_KEY_CONSTANTS.CNBLOGS_POSTID_KEY
+        this.previewUrl = "/p/[postid].html"
     }
 }

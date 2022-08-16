@@ -20,6 +20,11 @@ export class MetaweblogCfg implements IMetaweblogCfg {
      */
     posidKey: string
 
+    /**
+     * 文章预览链接
+     */
+    previewUrl: string
+
     constructor(public home: string,
                 public apiUrl: string,
                 public username: string,
@@ -31,5 +36,6 @@ export class MetaweblogCfg implements IMetaweblogCfg {
         this.apiStatus = false
         this.blogName = ""
         this.posidKey = ""
+        this.previewUrl = ""
     }
 }

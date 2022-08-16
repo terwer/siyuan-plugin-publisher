@@ -8,5 +8,6 @@ export class JVueCfg extends MetaweblogCfg {
     constructor() {
         super("", "", "", "");
         this.posidKey = POSTID_KEY_CONSTANTS.JVUE_POSTID_KEY
+        this.previewUrl = "/post/[postid].html"
     }
 }

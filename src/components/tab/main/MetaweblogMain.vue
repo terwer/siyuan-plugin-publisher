@@ -106,10 +106,23 @@
           </el-button>
         </el-form-item>
 
+        <!-- 发布操作 -->
+        <el-form-item label="">
+          <el-button type="primary" @click="doPublish" :loading="isPublishLoading">{{
+              isPublishLoading ? $t('main.publish.loading') :
+                  isPublished ? $t('main.update') : $t('main.publish')
+            }}
+          </el-button>
+          <el-button @click="cancelPublish" :loading="isCancelLoading">{{ $t('main.cancel') }}</el-button>
+        </el-form-item>
+
+        <!-- 文章状态 -->
         <el-form-item>
-          <el-button type="primary" @click="publishPage">{{ $t('main.publish') }}</el-button>
-          <el-button>{{ $t('main.cancel') }}</el-button>
-          <el-button type="danger" text>{{ $t('main.publish.status.unpublish') }}</el-button>
+          <el-button type="danger" text disabled>
+            {{ isPublished ? $t('main.publish.status.published') : $t('main.publish.status.unpublish') }}
+          </el-button>
+          <a :href="previewUrl" :title="previewUrl" target="_blank"
+             v-if="isPublished">{{ $t('main.publish.vuepress.see.preview') }}</a>
         </el-form-item>
       </el-form>
     </el-main>
@@ -119,10 +132,17 @@
 <script lang="ts" setup>
 import {nextTick, onMounted, reactive, ref} from "vue"
 import {getPage, getPageAttrs, getPageId, getPageMd, setPageAttrs} from "../../../lib/platform/siyuan/siyuanUtil";
-import {ElMessage} from "element-plus";
+import {ElMessage, ElMessageBox} from "element-plus";
 import {useI18n} from "vue-i18n";
 import {SIYUAN_PAGE_ATTR_KEY} from "../../../lib/constants/siyuanPageConstants";
-import {cutWords, formatNumToZhDate, jiebaToHotWords, pingyinSlugify, zhSlugify} from "../../../lib/util";
+import {
+  cutWords,
+  formatNumToZhDate,
+  getPublishStatus,
+  jiebaToHotWords,
+  pingyinSlugify,
+  zhSlugify
+} from "../../../lib/util";
 import log from "../../../lib/logUtil";
 import {mdToHtml, parseHtml} from "../../../lib/htmlUtil";
 import {CONSTANTS} from "../../../lib/constants/constants";
@@ -131,6 +151,8 @@ import {IMetaweblogCfg} from "../../../lib/platform/metaweblog/IMetaweblogCfg";
 import shortHash from "shorthash2";
 import {API} from "../../../lib/api";
 import {Post} from "../../../lib/common/post";
+import {POST_STATUS_CONSTANTS} from "../../../lib/constants/postStatusConstants";
+import {API_TYPE_CONSTANTS} from "../../../lib/constants/apiTypeConstants";
 
 const {t} = useI18n()
 
@@ -153,12 +175,17 @@ const isDescLoading = ref(false)
 const isTagLoading = ref(false)
 const isGenLoading = ref(false)
 const isPublishLoading = ref(false)
+const isCancelLoading = ref(false)
 
 const editMode = ref(false)
 const forceRefresh = ref(false)
 const slugHashEnabled = ref(false)
+const isPublished = ref(false)
+const previewUrl = ref("")
 
 const formData = reactive({
+  // 新增时候这个值是空的
+  postid: "",
   customSlug: "",
   desc: "",
   created: "",
@@ -222,6 +249,23 @@ const initPage = async () => {
     if (tg != "") {
       formData.tag.dynamicTags.push(tgarr[i])
     }
+  }
+
+  // 发布状态
+  isPublished.value = getPublishStatus(props.apiType, siyuanData.meta)
+
+  // 更新预览链接
+  if (isPublished.value) {
+    // 读取postid
+    const metaweblogCfg = getJSONConf<IMetaweblogCfg>(props.apiType)
+    const meta: any = siyuanData.meta
+    formData.postid = meta[metaweblogCfg.posidKey]
+
+    // 替换文章链接
+    const postUrl = metaweblogCfg.previewUrl.replace("[postid]", formData.postid)
+    const fullPreviewUrl = metaweblogCfg.home + postUrl
+
+    previewUrl.value = fullPreviewUrl.replace(/\/\//g, "/")
   }
 }
 
@@ -389,7 +433,7 @@ const oneclickAttr = async (hideTip?: boolean) => {
   }
 }
 
-const publishPage = async () => {
+const doPublish = async () => {
   isPublishLoading.value = true
 
   // 生成属性
@@ -401,32 +445,93 @@ const publishPage = async () => {
 
   // 组装文章数据
   const post = new Post()
-  post.title = "自动发布测试"
+  post.title = "自动发布测试23333"
   post.description = "自动发布的测试内容"
   post.categories = ["标签1", "标签2"]
   post.dateCreated = new Date()
-  // post.link = ""
-  // post.permalink = ""
-  // post.postid = ""
+  // 默认是已发布，publish字段是博客园接口必备
+  // post.post_status = POST_STATUS_CONSTANTS.POST_STATUS_PUBLISH
+  const publish = true
 
-  const postid = await api.newPost(post)
-  log.logWarn("文章发布成功，postid=>", postid)
+  let postid
+  if (isPublished.value) {
+    postid = formData.postid
 
-  // 这里是发布成功之后
-  // 属性获取postidKey
-  const metaweblogCfg = getJSONConf<IMetaweblogCfg>(props.apiType)
-  log.logWarn("当前保存的posidKey=>", metaweblogCfg.posidKey)
-  const customAttr = {
-    [metaweblogCfg.posidKey]: postid,
-  };
-  // await setPageAttrs(siyuanData.pageId, customAttr)
-  log.logInfo("MetaweblogMain发布成功，保存postid,meta=>", customAttr);
+    const flag = await api.editPost(postid, post, true)
+    if (!flag) {
+      ElMessage.error("文章更新失败")
+      throw new Error("文章更新失败=>" + postid)
+    }
+
+    log.logWarn("文章已更新，postid=>", postid)
+  } else {
+    postid = await api.newPost(post, publish)
+    // 这里是发布成功之后
+    // 属性获取postidKey
+    const metaweblogCfg = getJSONConf<IMetaweblogCfg>(props.apiType)
+    log.logWarn("当前保存的posidKey=>", metaweblogCfg.posidKey)
+    const customAttr = {
+      [metaweblogCfg.posidKey]: postid,
+    };
+    await setPageAttrs(siyuanData.pageId, customAttr)
+    log.logInfo("MetaweblogMain发布成功，保存postid,meta=>", customAttr);
+
+    log.logWarn("文章发布成功，postid=>", postid)
+  }
 
   // 刷新属性数据
-  //  initPage();
+  await initPage();
 
   isPublishLoading.value = false
   ElMessage.success(t('main.opt.success'))
+}
+
+const cancelPublish = async () => {
+  isCancelLoading.value = true;
+
+  ElMessageBox.confirm(
+      t('main.opt.warning.tip'),
+      t('main.opt.warning'),
+      {
+        confirmButtonText: t('main.opt.ok'),
+        cancelButtonText: t('main.opt.cancel'),
+        type: 'warning',
+      }
+  ).then(async () => {
+    await doCancel(true)
+
+    isCancelLoading.value = false;
+
+    ElMessage.warning(t('main.opt.status.cancel'))
+  }).catch(() => {
+    // ElMessage({
+    //   type: 'error',
+    //   message: t("main.opt.failure"),
+    // })
+    isCancelLoading.value = false;
+
+    log.logInfo("操作已取消")
+  })
+}
+
+// 实际删除逻辑
+const doCancel = async (isInit: boolean) => {
+  // const vuepressCfg = getJSONConf<IVuepressCfg>(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS)
+  // const docPath = getDocPath()
+  // log.logInfo("准备取消发布，docPath=>", docPath)
+  //
+  // await deletePage(vuepressCfg, docPath)
+  //
+  // const customAttr = {
+  //   [POSTID_KEY_CONSTANTS.VUEPRESS_POSTID_KEY]: ""
+  // };
+  // await setPageAttrs(siyuanData.value.pageId, customAttr)
+  // log.logWarn("VuepressMain取消发布,meta=>", customAttr);
+
+  // 刷新属性数据
+  if (isInit) {
+    await initPage();
+  }
 }
 </script>
 
