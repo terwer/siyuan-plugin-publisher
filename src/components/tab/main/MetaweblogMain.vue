@@ -268,9 +268,8 @@ const initPage = async () => {
 
     // 替换文章链接
     const postUrl = metaweblogCfg.previewUrl.replace("[postid]", formData.postid)
-    const fullPreviewUrl = metaweblogCfg.home + postUrl
-
-    previewUrl.value = fullPreviewUrl.replace(/\/\//g, "/")
+    
+    previewUrl.value = metaweblogCfg.home + postUrl
   }
 
   apiStatus.value = conf.apiStatus
@@ -449,7 +448,7 @@ const oneclickAttr = async (hideTip?: boolean) => {
 }
 
 const doPublish = async () => {
-  if(!apiStatus.value){
+  if (!apiStatus.value) {
     ElMessage.error(t('setting.blog.vali.tip.metaweblog'))
     return
   }

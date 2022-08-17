@@ -12,6 +12,7 @@
     "test": "ts-node-esm test/test.ts",
     "testServer": "ts-node-esm test/testServer.ts",
     "vdev": "vercel dev --listen 5005",
+    "vbuild": "vercel build",
     "wd": "yarn deploy-win"
   },
   "dependencies": {
