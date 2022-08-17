@@ -26,7 +26,9 @@ export class MetaWeblogApi {
         log.logInfo(ret)
 
         // JSON格式规范化
-        ret = JSON.stringify(ret)
+        if (typeof ret == "string") {
+            alert(1)
+        }
 
         // 错误处理
         const dataObj = JSON.parse(ret) || []
@@ -72,8 +74,9 @@ export class MetaWeblogApi {
             post.post_status = POST_STATUS_CONSTANTS.POST_TYPE_DRAFT
         }
 
+        const postStruct = this.createPostStruct(post)
         let ret = await this.xmlrpcClient.methodCallEntry(METAWEBLOG_METHOD_CONSTANTS.NEW_POST,
-            [this.apiType, username, password, post, publish])
+            [this.apiType, username, password, postStruct, publish])
         ret = ret.replace(/"/g, "")
         log.logInfo("ret=>")
         log.logInfo(ret)
@@ -81,26 +84,45 @@ export class MetaWeblogApi {
         return ret;
     }
 
-    public async editPost(postid:string, username:string, password:string, post:Post, publish:boolean):Promise<boolean> {
+    public async editPost(postid: string, username: string, password: string, post: Post, publish: boolean): Promise<boolean> {
         // 草稿
         if (!publish) {
             post.post_status = POST_STATUS_CONSTANTS.POST_TYPE_DRAFT
         }
 
+        const postStruct = this.createPostStruct(post)
         const ret = await this.xmlrpcClient.methodCallEntry(METAWEBLOG_METHOD_CONSTANTS.EDIT_POST,
-            [postid, username, password, post, publish])
+            [postid, username, password, postStruct, publish])
         log.logInfo("ret=>")
         log.logInfo(ret)
 
         return ret;
     }
 
-   public async deletePost (appKey:string, postid:string, username:string, password:string, publish:boolean) {
-       const ret = await this.xmlrpcClient.methodCallEntry(METAWEBLOG_METHOD_CONSTANTS.DELETE_POST,
-           [appKey, postid, username, password, publish])
-       log.logInfo("ret=>")
-       log.logInfo(ret)
+    public async deletePost(appKey: string, postid: string, username: string, password: string, publish: boolean) {
+        const ret = await this.xmlrpcClient.methodCallEntry(METAWEBLOG_METHOD_CONSTANTS.DELETE_POST,
+            [appKey, postid, username, password, publish])
+        log.logInfo("ret=>")
+        log.logInfo(ret)
 
-       return ret;
+        return ret;
     };
+
+    /**
+     * 适配文章字段
+     * @param post 原始文章
+     * @private
+     */
+    private createPostStruct(post: Post): object {
+        return {
+            title: post.title || '',
+            mt_keywords: post.mt_keywords || '',
+            description: post.description || '',
+            wp_slug: post.wp_slug || '',
+            dateCreated: post.dateCreated.toISOString() || new Date().toISOString(),
+            categories: post.categories || [],
+            post_status: post.post_status || POST_STATUS_CONSTANTS.POST_STATUS_PUBLISH,
+            wp_password: post.wp_password || ''
+        }
+    }
 }

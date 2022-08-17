@@ -1,7 +1,6 @@
 import log from "../../logUtil";
 
 const xmlrpc = require('xmlrpc');
-const Serializer = require('xmlrpc/lib/serializer')
 
 export async function fetchNode(apiUrl: string, reqMethod: string, reqParams: Array<string>) {
     let client
@@ -13,17 +12,17 @@ export async function fetchNode(apiUrl: string, reqMethod: string, reqParams: Ar
         client = xmlrpc.createClient(apiUrl);
     }
 
-    let err
     try {
-        log.logInfo("xmlrpcNodeParams.reqMethod=>")
-        log.logInfo(reqMethod)
-        log.logInfo("xmlrpcNodeParams.reqParams=>")
-        log.logInfo(reqParams)
-        return await methodCallDirectNode(client, reqMethod, reqParams)
+        log.logWarn("methodCallDirectNode开始")
+        log.logWarn("xmlrpcNodeParams.reqMethod=>")
+        log.logWarn(reqMethod)
+        log.logWarn("xmlrpcNodeParams.reqParams=>")
+        log.logWarn(reqParams)
+        const data = await methodCallDirectNode(client, reqMethod, reqParams)
+        const dataJson = JSON.stringify(data)
+        return dataJson
     } catch (e) {
-        err = e
         log.logError(e)
-        console.log("请求处理异常")
         throw new Error("请求处理异常")
     }
 }
