@@ -141,7 +141,7 @@ import {
   cutWords,
   formatNumToZhDate,
   getPublishStatus, isEmptyObject, isEmptyString,
-  jiebaToHotWords,
+  jiebaToHotWords, pathJoin,
   pingyinSlugify,
   zhSlugify
 } from "../../../lib/util";
@@ -268,8 +268,8 @@ const initPage = async () => {
 
     // 替换文章链接
     const postUrl = metaweblogCfg.previewUrl.replace("[postid]", formData.postid)
-    
-    previewUrl.value = metaweblogCfg.home + postUrl
+    // 路径组合
+    previewUrl.value = pathJoin(metaweblogCfg.home, postUrl)
   }
 
   apiStatus.value = conf.apiStatus
