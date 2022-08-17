@@ -111,6 +111,7 @@ export default {
     "setting.blog.cancel": "取消",
     "setting.jvue": "JVue",
     "setting.conf": "Confluence",
+    "setting.conf.tip": "发布到Confluence需要配合我的另一个适配器项目使用（强烈推荐），请参考：https://github.com/terwer/node-metaweblog-api-adaptor",
     "setting.cnblogs": "博客园",
     "setting.wordpress": "Wordpress",
     "setting.liandi": "链滴",

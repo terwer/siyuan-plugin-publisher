@@ -8,18 +8,28 @@ const xmlSerializer = require('xmlrpc/lib/serializer')
 // 反序列化
 // this.xmlDeserializer = require('xmlrpc/lib/deserializer')
 // this.xmlParser = require('xml2json');
-const {XMLParser} = require('fast-xml-parser');
-const options = {
-    ignoreAttributes: true,
-    ignoreDeclaration: true,
-    ignorePiTags: true
-};
-const xmlParser = new XMLParser(options);
+// const {XMLParser} = require('fast-xml-parser');
+// const options = {
+//     ignoreAttributes: true,
+//     ignoreDeclaration: true,
+//     ignorePiTags: true
+// };
+// const xmlParser = new XMLParser(options);
+const Parser = require('xml2js').Parser;
+const xmlParser = new Parser({});
 
+/**
+ * @deprecated The method should not be used, use `fetchNode` insdead which no need to parse xml yourself
+ * @param apiUrl
+ * @param reqMethod
+ * @param reqParams
+ */
 export async function fetchElectron(apiUrl: string, reqMethod: string, reqParams: Array<string>) {
     let result
 
     const methodBody = xmlSerializer.serializeMethodCall(reqMethod, reqParams, "utf8")
+    log.logWarn("apiUrl=>", apiUrl)
+    log.logWarn("methodBody=>", methodBody)
 
     const fetchOption = {
         method: "POST",
@@ -52,8 +62,10 @@ export async function fetchElectron(apiUrl: string, reqMethod: string, reqParams
     // const parseResult = JSON.parse(this.xmlParser.toJson(reqXml)) || {}
 
     // fast-xml-parser
-    const parseResult = xmlParser.parse(reqXml);
+    // xmlParser.parse(reqXml);
 
+    // xml2js
+    const parseResult = await xmlParser.parseStringPromise(reqXml)
     log.logWarn("尝试获取反序列结果=>")
     log.logWarn(parseResult)
 

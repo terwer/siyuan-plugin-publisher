@@ -5,6 +5,8 @@
                 :closable="false"/>
       <el-alert class="top-version-tip" :title="$t('setting.blog.vali.tip.metaweblog')" type="error" :closable="false"
                 v-if="!apiStatus"/>
+      <el-alert class="top-version-tip" :title="$t('setting.conf.tip')" type="error" :closable="false"
+                v-if="useAdaptor"/>
       <el-form label-width="120px">
         <!-- 强制刷新 -->
         <el-form-item :label="$t('main.force.refresh')" v-if="editMode">
@@ -166,7 +168,11 @@ const props = defineProps({
   apiType: {
     type: String,
     default: ""
-  }
+  },
+  useAdaptor: {
+    type: Boolean,
+    default: false
+  },
 })
 
 const blogName = ref("")
@@ -455,68 +461,76 @@ const doPublish = async () => {
 
   isPublishLoading.value = true
 
-  // 生成属性
-  await oneclickAttr(true)
+  try {
 
-  // api可用并且开启了发布
-  const metaweblogCfg = getJSONConf<IMetaweblogCfg>(props.apiType)
+    // 生成属性
+    await oneclickAttr(true)
 
-  const api = new API(props.apiType)
+    // api可用并且开启了发布
+    const metaweblogCfg = getJSONConf<IMetaweblogCfg>(props.apiType)
 
-  // 组装文章数据
-  // ===============================
-  // 发布内容
-  const data = await getPageMd(siyuanData.pageId);
-  const md = removeWidgetTag(data.content)
-  let content = md
-  if (PageType.Html == metaweblogCfg.pageType) {
-    content = render(md)
-  }
-  // ===============================
-  const post = new Post()
-  post.title = formData.title
-  post.wp_slug = formData.customSlug
-  post.description = content
-  post.categories = formData.tag.dynamicTags
-  // 博客园的Markdown
-  if (props.apiType == API_TYPE_CONSTANTS.API_TYPE_CNBLOGS) {
-    post.categories.push("[Markdown]")
-  }
-  post.dateCreated = new Date()
-  // 默认是已发布，publish字段是博客园接口必备
-  // post.post_status = POST_STATUS_CONSTANTS.POST_STATUS_PUBLISH
-  const publish = true
+    const api = new API(props.apiType)
 
-  let postid
-  if (isPublished.value) {
-    postid = formData.postid
+    // 组装文章数据
+    // ===============================
+    // 发布内容
+    const data = await getPageMd(siyuanData.pageId);
+    const md = removeWidgetTag(data.content)
+    let content = md
+    if (PageType.Html == metaweblogCfg.pageType) {
+      content = render(md)
+    }
+    // ===============================
+    const post = new Post()
+    post.title = formData.title
+    post.wp_slug = formData.customSlug
+    post.description = content
+    post.categories = formData.categories
+    post.mt_keywords = formData.tag.dynamicTags.join(",")
+    // 博客园的Markdown
+    if (props.apiType == API_TYPE_CONSTANTS.API_TYPE_CNBLOGS) {
+      post.categories.push("[Markdown]")
+    }
+    post.dateCreated = new Date()
+    // 默认是已发布，publish字段是博客园接口必备
+    // post.post_status = POST_STATUS_CONSTANTS.POST_STATUS_PUBLISH
+    const publish = true
 
-    const flag = await api.editPost(postid, post, true)
-    if (!flag) {
-      ElMessage.error("文章更新失败")
-      throw new Error("文章更新失败=>" + postid)
+    let postid
+    if (isPublished.value) {
+      postid = formData.postid
+
+      const flag = await api.editPost(postid, post, true)
+      if (!flag) {
+        ElMessage.error("文章更新失败")
+        throw new Error("文章更新失败=>" + postid)
+      }
+
+      log.logWarn("文章已更新，postid=>", postid)
+    } else {
+      postid = await api.newPost(post, publish)
+      // 这里是发布成功之后
+      // 属性获取postidKey
+      log.logWarn("当前保存的posidKey=>", metaweblogCfg.posidKey)
+      const customAttr = {
+        [metaweblogCfg.posidKey]: postid,
+      };
+      await setPageAttrs(siyuanData.pageId, customAttr)
+      log.logInfo("MetaweblogMain发布成功，保存postid,meta=>", customAttr);
+
+      log.logWarn("文章发布成功，postid=>", postid)
     }
 
-    log.logWarn("文章已更新，postid=>", postid)
-  } else {
-    postid = await api.newPost(post, publish)
-    // 这里是发布成功之后
-    // 属性获取postidKey
-    log.logWarn("当前保存的posidKey=>", metaweblogCfg.posidKey)
-    const customAttr = {
-      [metaweblogCfg.posidKey]: postid,
-    };
-    await setPageAttrs(siyuanData.pageId, customAttr)
-    log.logInfo("MetaweblogMain发布成功，保存postid,meta=>", customAttr);
+    // 刷新属性数据
+    await initPage();
 
-    log.logWarn("文章发布成功，postid=>", postid)
+    ElMessage.success(t('main.opt.success'))
+  } catch (e) {
+    log.logError("发布异常")
+    ElMessage.success(t('main.opt.failure'))
   }
 
-  // 刷新属性数据
-  await initPage();
-
   isPublishLoading.value = false
-  ElMessage.success(t('main.opt.success'))
 }
 
 const cancelPublish = async () => {

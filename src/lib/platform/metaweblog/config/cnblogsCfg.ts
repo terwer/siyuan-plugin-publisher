@@ -7,7 +7,7 @@ import {PageType} from "../IMetaweblogCfg";
  */
 export class CnblogsCfg extends MetaweblogCfg {
     constructor() {
-        super("https://www.cnblogs.com/yourblog", "https://rpc.cnblogs.com/metaweblog/yourblog", "", "");
+        super("https://www.cnblogs.com/[yourblog]", "https://rpc.cnblogs.com/metaweblog/[yourblog]", "", "");
         this.posidKey = POSTID_KEY_CONSTANTS.CNBLOGS_POSTID_KEY
         this.previewUrl = "/p/[postid].html"
         this.pageType = PageType.Markdown

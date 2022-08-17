@@ -1,5 +1,5 @@
 <template>
-  <metaweblog-main :api-type="apiType"/>
+  <metaweblog-main :api-type="apiType" :use-adaptor="true"/>
 </template>
 
 <script lang="ts" setup>
