@@ -1,7 +1,8 @@
 import {getWidgetId} from "../siyuan/siyuanUtil";
 import log from "../../logUtil";
 import {getEnv} from "../../envUtil";
-import {fetchElectron} from "./electronXmlrpc";
+// import {fetchElectron} from "./electronXmlrpc";
+import {fetchNode} from "./nodeXmlrpc";
 
 /**
  * Xmlrpc客户端封装类
@@ -72,7 +73,9 @@ export class XmlrpcClient {
         const widgetResult = await getWidgetId()
         if (widgetResult.isInSiyuan) {
             log.logWarn("当前处于挂件模式，使用electron的fetch获取数据")
-            result = await fetchElectron(apiUrl, reqMethod, reqParams)
+            // 不解析了，直接使用Node兼容调用
+            // result = await fetchElectron(apiUrl, reqMethod, reqParams)
+            result = await fetchNode(apiUrl, reqMethod, reqParams)
         } else {
             log.logWarn("当前处于非挂件模式，已开启请求代理解决CORS跨域问题")
             result = await this.fetchCORS(apiUrl, reqMethod, reqParams)

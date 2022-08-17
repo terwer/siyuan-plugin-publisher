@@ -20,10 +20,13 @@ export class MetaWeblogApi {
 
     public async getUsersBlogs(appkey: string, username: string, password: string): Promise<Array<UserBlog>> {
         const usersBlogs: Array<UserBlog> = []
-        const ret = await this.xmlrpcClient.methodCallEntry(METAWEBLOG_METHOD_CONSTANTS.GET_USERS_BLOGS,
+        let ret = await this.xmlrpcClient.methodCallEntry(METAWEBLOG_METHOD_CONSTANTS.GET_USERS_BLOGS,
             [this.apiType, username, password])
         log.logInfo("ret=>")
         log.logInfo(ret)
+
+        // JSON格式规范化
+        ret = JSON.stringify(ret)
 
         // 错误处理
         const dataObj = JSON.parse(ret) || []

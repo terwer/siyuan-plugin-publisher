@@ -1,4 +1,4 @@
-export function pathJoin(path1: string, path2: string) {
+function pathJoin(path1: string, path2: string) {
     let path = path1
     const path1LastIdx = path1.lastIndexOf("/")
     // console.log("path1.length=>", path1.length)
