@@ -108,6 +108,7 @@ export default {
     "setting.blog.cancel": "Cancel",
     "setting.jvue": "JVue",
     "setting.conf": "Confluence",
+    "setting.conf.tip": "Published to Confluice needs to cooperate with my other adapter project (strong recommendation), please refer to:https://github.com/terwer/node-metaweblog-api-adaptor",
     "setting.cnblogs": "Cnblogs",
     "setting.wordpress": "Wordpress",
     "setting.liandi": "Liandi",

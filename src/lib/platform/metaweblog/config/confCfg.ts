@@ -7,9 +7,9 @@ import {PageType} from "../IMetaweblogCfg";
  */
 export class ConfCfg extends MetaweblogCfg {
     constructor() {
-        super("", "", "", "");
+        super("https://youweics.atlassian.net/wiki/spaces/[spaceKey]", "http://localhost:3000/api/xmlrpc", "", "");
         this.posidKey = POSTID_KEY_CONSTANTS.CONFLUENCE_POSTID_KEY
-        this.previewUrl = "/post/[postid].html"
+        this.previewUrl = "pages/[postid]"
         this.pageType = PageType.Html
     }
 }

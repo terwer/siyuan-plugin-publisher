@@ -6,6 +6,7 @@ import {Post} from "../../common/post";
 import log from "../../logUtil";
 import {METAWEBLOG_METHOD_CONSTANTS} from "../../constants/metaweblogMethodConstants";
 import {POST_STATUS_CONSTANTS} from "../../constants/postStatusConstants";
+import {isEmptyString} from "../../util";
 
 export class MetaWeblogApi {
     private readonly apiType: string
@@ -26,9 +27,8 @@ export class MetaWeblogApi {
         log.logInfo(ret)
 
         // JSON格式规范化
-        if (typeof ret == "string") {
-            alert(1)
-        }
+        // if (typeof ret == "string") {
+        // }
 
         // 错误处理
         const dataObj = JSON.parse(ret) || []
@@ -75,6 +75,8 @@ export class MetaWeblogApi {
         }
 
         const postStruct = this.createPostStruct(post)
+        log.logWarn("postStruct=>")
+        log.logWarn(postStruct)
         let ret = await this.xmlrpcClient.methodCallEntry(METAWEBLOG_METHOD_CONSTANTS.NEW_POST,
             [this.apiType, username, password, postStruct, publish])
         ret = ret.replace(/"/g, "")
@@ -91,6 +93,8 @@ export class MetaWeblogApi {
         }
 
         const postStruct = this.createPostStruct(post)
+        log.logWarn("postStruct=>")
+        log.logWarn(postStruct)
         const ret = await this.xmlrpcClient.methodCallEntry(METAWEBLOG_METHOD_CONSTANTS.EDIT_POST,
             [postid, username, password, postStruct, publish])
         log.logInfo("ret=>")
@@ -114,15 +118,60 @@ export class MetaWeblogApi {
      * @private
      */
     private createPostStruct(post: Post): object {
-        return {
-            title: post.title || '',
-            mt_keywords: post.mt_keywords || '',
-            description: post.description || '',
-            wp_slug: post.wp_slug || '',
-            dateCreated: post.dateCreated.toISOString() || new Date().toISOString(),
-            categories: post.categories || [],
-            post_status: post.post_status || POST_STATUS_CONSTANTS.POST_STATUS_PUBLISH,
-            wp_password: post.wp_password || ''
+        let postObj = {}
+
+        if (!isEmptyString(post.title)) {
+            Object.assign(postObj, {
+                title: post.title
+            })
         }
+
+        if (!isEmptyString(post.mt_keywords)) {
+            Object.assign(postObj, {
+                mt_keywords: post.mt_keywords
+            })
+        }
+
+        if (!isEmptyString(post.description)) {
+            Object.assign(postObj, {
+                description: post.description
+            })
+        }
+
+        if (!isEmptyString(post.wp_slug)) {
+            Object.assign(postObj, {
+                wp_slug: post.wp_slug
+            })
+        }
+
+        Object.assign(postObj, {
+            dateCreated: post.dateCreated.toISOString() || new Date().toISOString()
+        })
+
+        Object.assign(postObj, {
+            categories: post.categories || [],
+        })
+
+        Object.assign(postObj, {
+            post_status: post.post_status || POST_STATUS_CONSTANTS.POST_STATUS_PUBLISH,
+        })
+
+        if (!isEmptyString(post.wp_password)) {
+            Object.assign(postObj, {
+                wp_password: post.wp_password
+            })
+        }
+
+        return postObj;
+        // return {
+        //     title: post.title || '',
+        //     mt_keywords: post.mt_keywords || '',
+        //     description: post.description || '',
+        //     wp_slug: post.wp_slug || '',
+        //     dateCreated: post.dateCreated.toISOString() || new Date().toISOString(),
+        //     categories: post.categories || [],
+        //     post_status: post.post_status || POST_STATUS_CONSTANTS.POST_STATUS_PUBLISH,
+        //     wp_password: post.wp_password || ''
+        // }
     }
 }

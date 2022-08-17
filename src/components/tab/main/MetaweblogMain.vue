@@ -5,6 +5,8 @@
                 :closable="false"/>
       <el-alert class="top-version-tip" :title="$t('setting.blog.vali.tip.metaweblog')" type="error" :closable="false"
                 v-if="!apiStatus"/>
+      <el-alert class="top-version-tip" :title="$t('setting.conf.tip')" type="error" :closable="false"
+                v-if="useAdaptor"/>
       <el-form label-width="120px">
         <!-- 强制刷新 -->
         <el-form-item :label="$t('main.force.refresh')" v-if="editMode">
@@ -166,7 +168,11 @@ const props = defineProps({
   apiType: {
     type: String,
     default: ""
-  }
+  },
+  useAdaptor: {
+    type: Boolean,
+    default: false
+  },
 })
 
 const blogName = ref("")
@@ -479,7 +485,8 @@ const doPublish = async () => {
     post.title = formData.title
     post.wp_slug = formData.customSlug
     post.description = content
-    post.categories = formData.tag.dynamicTags
+    post.categories = formData.categories
+    post.mt_keywords = formData.tag.dynamicTags.join(",")
     // 博客园的Markdown
     if (props.apiType == API_TYPE_CONSTANTS.API_TYPE_CNBLOGS) {
       post.categories.push("[Markdown]")

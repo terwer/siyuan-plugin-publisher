@@ -7,7 +7,7 @@ import {PageType} from "../IMetaweblogCfg";
  */
 export class JVueCfg extends MetaweblogCfg {
     constructor() {
-        super("https://your-jvue-site", "https://your-jvue-site/xmlrpc", "", "");
+        super("https://[your-jvue-site]", "https://[your-jvue-site]/xmlrpc", "", "");
         this.posidKey = POSTID_KEY_CONSTANTS.JVUE_POSTID_KEY
         this.previewUrl = "/post/[postid].html"
         this.pageType = PageType.Markdown
