@@ -49,6 +49,7 @@ import {ElMessage} from "element-plus";
 import {useI18n} from "vue-i18n";
 import {getPageAttrs, getPageId, setPageAttrs} from "../../lib/platform/siyuan/siyuanUtil";
 import {POSTID_KEY_CONSTANTS} from "../../lib/constants/postidKeyConstants";
+import {isEmptyString} from "../../lib/util";
 
 const {t} = useI18n()
 
@@ -202,6 +203,25 @@ async function initPage() {
   ruleForm.kmsPostid = meta[POSTID_KEY_CONSTANTS.KMS_POSTID_KEY]
 }
 
+/**
+ * 禁用模块或者未填写清空文章绑定
+ * @param enabled
+ * @param customAttr
+ * @param key
+ * @param value
+ */
+const assignPostid = (enabled: boolean, customAttr: object, key: any, value: string) => {
+  if (enabled && !isEmptyString(value)) {
+    Object.assign(customAttr, {
+      [key]: value
+    })
+  } else {
+    Object.assign(customAttr, {
+      [key]: ""
+    })
+  }
+}
+
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   const result = await formEl.validate((valid, fields) => {
@@ -218,62 +238,22 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   }
 
   const customAttr = {};
-
   // Vuepress
-  if (vuepressEnabled.value && ruleForm.vuepressSlug != "") {
-    Object.assign(customAttr, {
-      [POSTID_KEY_CONSTANTS.VUEPRESS_POSTID_KEY]: ruleForm.vuepressSlug
-    })
-  }
-
+  assignPostid(vuepressEnabled.value, customAttr, POSTID_KEY_CONSTANTS.VUEPRESS_POSTID_KEY, ruleForm.vuepressSlug)
   // JVue
-  if (jvueEnabled.value && ruleForm.jvuePostid != "") {
-    Object.assign(customAttr, {
-      [POSTID_KEY_CONSTANTS.JVUE_POSTID_KEY]: ruleForm.jvuePostid
-    })
-  }
-
+  assignPostid(jvueEnabled.value, customAttr, POSTID_KEY_CONSTANTS.JVUE_POSTID_KEY, ruleForm.jvuePostid)
   // Confluence
-  if (confEnabled.value && ruleForm.confPostid != "") {
-    Object.assign(customAttr, {
-      [POSTID_KEY_CONSTANTS.CONFLUENCE_POSTID_KEY]: ruleForm.confPostid
-    })
-  }
-
+  assignPostid(confEnabled.value, customAttr, POSTID_KEY_CONSTANTS.CONFLUENCE_POSTID_KEY, ruleForm.confPostid)
   // Cnblogs
-  if (cnblogsEnabled.value && ruleForm.cnblogsPostid != "") {
-    Object.assign(customAttr, {
-      [POSTID_KEY_CONSTANTS.CNBLOGS_POSTID_KEY]: ruleForm.cnblogsPostid
-    })
-  }
-
+  assignPostid(cnblogsEnabled.value, customAttr, POSTID_KEY_CONSTANTS.CNBLOGS_POSTID_KEY, ruleForm.cnblogsPostid)
   // Wordpress
-  if (wordpressEnabled.value && ruleForm.wordpressPostid != "") {
-    Object.assign(customAttr, {
-      [POSTID_KEY_CONSTANTS.WORDPRESS_POSTID_KEY]: ruleForm.wordpressPostid
-    })
-  }
-
+  assignPostid(wordpressEnabled.value, customAttr, POSTID_KEY_CONSTANTS.WORDPRESS_POSTID_KEY, ruleForm.wordpressPostid)
   // Liandi
-  if (liandiEnabled.value && ruleForm.liandiPostid != "") {
-    Object.assign(customAttr, {
-      [POSTID_KEY_CONSTANTS.LIANDI_POSTID_KEY]: ruleForm.liandiPostid
-    })
-  }
-
+  assignPostid(liandiEnabled.value, customAttr, POSTID_KEY_CONSTANTS.LIANDI_POSTID_KEY, ruleForm.liandiPostid)
   // Yuque
-  if (yuqueEnabled.value && ruleForm.yuquePostid != "") {
-    Object.assign(customAttr, {
-      [POSTID_KEY_CONSTANTS.YUQUE_POSTID_KEY]: ruleForm.yuquePostid
-    })
-  }
-
+  assignPostid(yuqueEnabled.value, customAttr, POSTID_KEY_CONSTANTS.YUQUE_POSTID_KEY, ruleForm.yuquePostid)
   // Kms
-  if (kmsEnabled.value && ruleForm.kmsPostid != "") {
-    Object.assign(customAttr, {
-      [POSTID_KEY_CONSTANTS.KMS_POSTID_KEY]: ruleForm.kmsPostid
-    })
-  }
+  assignPostid(kmsEnabled.value, customAttr, POSTID_KEY_CONSTANTS.KMS_POSTID_KEY, ruleForm.kmsPostid)
 
   log.logWarn("PostBind保存属性到思源笔记,meta=>", customAttr);
 
