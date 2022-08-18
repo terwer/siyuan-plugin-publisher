@@ -45,10 +45,10 @@ const {t} = useI18n()
 let vuepressEnabled = ref(true)
 const jvueEnabled = ref(false)
 const confEnabled = ref(false)
-const cnblogsEnabled = ref(false)
+const cnblogsEnabled = ref(true)
 const wordpressEnabled = ref(false)
-const liandiEnabled = ref(false)
-const yuqueEnabled = ref(false)
+const liandiEnabled = ref(true)
+const yuqueEnabled = ref(true)
 const kmsEnabled = ref(false)
 
 const jvueOnChange = (val: boolean) => {
@@ -85,8 +85,18 @@ const initConf = () => {
 }
 
 onMounted(async () => {
-  // 默认选中vuepress
+  // 默认选中vuepress且不可取消
   setBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY, true)
+  // 博客园、链滴、语雀默认开放
+  if(cnblogsEnabled.value){
+    setBooleanConf(SWITCH_CONSTANTS.SWITCH_CNBLOGS_KEY, true)
+  }
+  if(liandiEnabled.value){
+    setBooleanConf(SWITCH_CONSTANTS.SWITCH_LIANDI_KEY, true)
+  }
+  if(yuqueEnabled.value){
+    setBooleanConf(SWITCH_CONSTANTS.SWITCH_YUQUE_KEY, true)
+  }
   // 初始化
   initConf()
 })

@@ -418,6 +418,24 @@ export function getQueryString(sParam: string) {
     }
 }
 
+/**
+ * 设置url参数
+ * @param urlstring
+ * @param key
+ * @param value
+ */
+export function setUrlParameter(urlstring: string, key: string, value: string) {
+    if (!inBrowser()) {
+        return ""
+    }
+    // 已经有参数了，不重复添加
+    if (urlstring.indexOf(key) > -1) {
+        return urlstring
+    }
+    urlstring += (urlstring.match(/[?]/g) ? '&' : '?') + key + '=' + value;
+    return urlstring
+}
+
 export function isEmptyObject(obj: any) {
     if (!obj) {
         return true;

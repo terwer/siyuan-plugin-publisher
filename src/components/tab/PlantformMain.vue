@@ -15,6 +15,19 @@
     <el-tab-pane :label="$t('main.publish.to.wordpress')" v-if="wordpressEnabled">
       <wordpress-main/>
     </el-tab-pane>
+
+
+
+
+
+    <el-tab-pane v-for="dynamicMain in dynamicMains" label="动态平台">
+      <common-blog-main/>
+    </el-tab-pane>
+
+
+
+
+
     <el-tab-pane :label="$t('main.publish.to.liandi')" v-if="liandiEnabled">
       <liandi-main/>
     </el-tab-pane>
@@ -28,7 +41,7 @@
 </template>
 
 <script lang="ts" setup>
-import {onMounted, ref, watch} from "vue";
+import {onMounted, reactive, ref, watch} from "vue";
 import {getBooleanConf, setBooleanConf} from "../../lib/config";
 import SWITCH_CONSTANTS from "../../lib/constants/switchConstants";
 import log from "../../lib/logUtil";
@@ -41,6 +54,10 @@ const wordpressEnabled = ref(false)
 const liandiEnabled = ref(false)
 const yuqueEnabled = ref(false)
 const kmsEnabled = ref(false)
+
+const dynamicMains = reactive([
+    "1","2"
+])
 
 const isReloadVuepressMain = ref(false)
 
@@ -93,10 +110,11 @@ import WordpressMain from "./main/metaweblogmainadaptor/WordpressMain.vue";
 import LiandiMain from "./main/commonblogmainadaptor/LiandiMain.vue";
 import YuqueMain from "./main/commonblogmainadaptor/YuqueMain.vue";
 import KmsMain from "./main/commonblogmainadaptor/KmsMain.vue";
+import CommonBlogMain from "./main/CommonBlogMain.vue";
 
 export default {
   name: "PlantformMain",
-  components: {VuepressMain, JVueMain, CnblogsMain, ConfluenceMain, WordpressMain, LiandiMain, YuqueMain, KmsMain}
+  components: {VuepressMain, JVueMain, CnblogsMain, ConfluenceMain, WordpressMain,CommonBlogMain, LiandiMain, YuqueMain, KmsMain}
 }
 </script>
 
