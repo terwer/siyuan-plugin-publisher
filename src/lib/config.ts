@@ -1,4 +1,5 @@
 import log from "./logUtil";
+import {isEmptyObject} from "./util";
 
 /**
  * 获取Boolean配置
@@ -16,6 +17,19 @@ export function getBooleanConf(key: string): boolean {
     log.logInfo(valueObj)
     log.logInfo("------------------------------")
     return valueObj;
+}
+
+/**
+ * 获取JSON配置
+ * @param key key
+ */
+export function getArrayJSONConf<T>(key: string): T {
+    let conf = getJSONConf<T>(key)
+    if (isEmptyObject(conf)) {
+        // @ts-ignore
+        conf = []
+    }
+    return conf
 }
 
 /**

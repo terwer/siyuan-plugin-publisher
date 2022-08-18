@@ -43,7 +43,7 @@
     <el-main>
       <el-form-item>
         <el-alert class="top-version-tip" :title="currentTip" type="info" :closable="false" v-if="currentRow"/>
-        <el-button type="danger" @click="delRow">删除选中</el-button>
+        <el-button type="danger" @click="delRow">{{ $t('dynamic.platform.opt.del.select') }}</el-button>
       </el-form-item>
 
       <el-table :data="tableData" :key="num" border stripe highlight-current-row
@@ -61,7 +61,7 @@ import {onMounted, reactive, ref} from "vue";
 import log from "../../lib/logUtil";
 import {ElMessage, FormInstance, FormRules} from "element-plus";
 import {useI18n} from "vue-i18n";
-import {checkKeyExists, getJSONConf, setJSONConf} from "../../lib/config";
+import {checkKeyExists, getArrayJSONConf, getJSONConf, setJSONConf} from "../../lib/config";
 import {CONSTANTS} from "../../lib/constants/constants";
 import {inBrowser, isEmptyObject, setUrlParameter} from "../../lib/util";
 
@@ -166,11 +166,11 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 const tableData: DynamicConfig[] = []
 const num = ref(0)
 const currentRow = ref()
-const currentTip = ref("未选择")
+const currentTip = ref(t('ynamic.platform.opt.item.select'))
 
 const handleCurrentChange = (val: DynamicConfig | undefined) => {
   currentRow.value = val
-  currentTip.value = "当前选择的是：" + currentRow.value.plantformName
+  currentTip.value = t('dynamic.platform.opt.item.select.tip') + currentRow.value.plantformName
   log.logInfo(currentRow.value)
 }
 
@@ -187,7 +187,7 @@ const isDynamicKeyExists = (key: string) => {
 
 const delRow = async () => {
   if (!currentRow.value || !currentRow.value.plantformKey) {
-    ElMessage.error("请选择要删除的行")
+    ElMessage.error(t('ynamic.platform.opt.item.no.select.tip'))
   }
 
   for (let i = 0; i < dynamicConfigArray.length; i++) {
@@ -206,10 +206,7 @@ const delRow = async () => {
 }
 
 const initPage = async () => {
-  dynamicConfigArray = getJSONConf<Array<DynamicConfig>>(CONSTANTS.DYNAMIC_CONFIG_KEY)
-  if (isEmptyObject(dynamicConfigArray)) {
-    dynamicConfigArray = []
-  }
+  dynamicConfigArray = getArrayJSONConf<Array<DynamicConfig>>(CONSTANTS.DYNAMIC_CONFIG_KEY)
 
   // 渲染table
   for (let i = 0; i < dynamicConfigArray.length; i++) {

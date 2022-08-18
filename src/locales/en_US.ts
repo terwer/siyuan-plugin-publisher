@@ -153,4 +153,8 @@ export default {
     "dynamic.platform.opt.add": "Submit",
     "dynamic.platform.opt.noselect": "Please select plantform type",
     "dynamic.platform.opt.key.exist": "Plantform key exists",
+    "dynamic.platform.opt.del.select": "Delete selected",
+    "dynamic.platform.opt.item.select": "Item no select",
+    "dynamic.platform.opt.item.select.tip": "The current selection is:",
+    "dynamic.platform.opt.item.no.select.tip": "Please select the line to be deleted",
 }

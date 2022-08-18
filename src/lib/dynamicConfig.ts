@@ -1,5 +1,9 @@
 export class DynamicConfig {
     /**
+     * 用于某些控件的临时变量
+     */
+    modelValue?: any
+    /**
      * 平台Key
      */
     plantformKey: string
