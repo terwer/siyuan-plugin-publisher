@@ -72,14 +72,14 @@ watch(() => props.isReload, /**/(oldValue, newValue) => {
 </script>
 
 <script lang="ts">
-import JVueSetting from "./setting/settingadaptor/JVueSetting.vue";
+import JVueSetting from "./setting/metaweblogsettingadaptor/JVueSetting.vue";
 import VuepressSetting from "./setting/VuepressSetting.vue";
-import CnblogsSetting from "./setting/settingadaptor/CnblogsSetting.vue";
-import ConfluenceSetting from "./setting/settingadaptor/ConfluenceSetting.vue";
-import WordpressSetting from "./setting/WordpressSetting.vue";
-import LiandiSetting from "./setting/LiandiSetting.vue";
-import YuqueSetting from "./setting/YuqueSetting.vue";
-import KmsSetting from "./setting/KmsSetting.vue";
+import CnblogsSetting from "./setting/metaweblogsettingadaptor/CnblogsSetting.vue";
+import ConfluenceSetting from "./setting/metaweblogsettingadaptor/ConfluenceSetting.vue";
+import WordpressSetting from "./setting/metaweblogsettingadaptor/WordpressSetting.vue";
+import LiandiSetting from "./setting/commonsettingadaptor/LiandiSetting.vue";
+import YuqueSetting from "./setting/commonsettingadaptor/YuqueSetting.vue";
+import KmsSetting from "./setting/commonsettingadaptor/KmsSetting.vue";
 
 export default {
   name: "PlantformSetting",

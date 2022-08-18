@@ -5,10 +5,10 @@ import {ConfApiAdaptor} from "./platform/metaweblog/adaptor/confApiAdaptor";
 import {CnblogsApiAdaptor} from "./platform/metaweblog/adaptor/cnblogsApiAdaptor";
 import {Post} from "./common/post";
 import {UserBlog} from "./common/userBlog";
-import {KmsApiAdaptor} from "./platform/kms/kmsApiAdaptor";
-import {WordpressApiAdaptor} from "./platform/wordpress/wordpressApiAdaptor";
-import {LiandiApiAdaptor} from "./platform/liandi/liandiApiAdaptor";
-import {YuqueApiAdaptor} from "./platform/yuque/yuqueApiAdaptor";
+import {KmsApiAdaptor} from "./platform/commonblog/kms/kmsApiAdaptor";
+import {WordpressApiAdaptor} from "./platform/metaweblog/adaptor/wordpressApiAdaptor";
+import {LiandiApiAdaptor} from "./platform/commonblog/liandi/liandiApiAdaptor";
+import {YuqueApiAdaptor} from "./platform/commonblog/yuque/yuqueApiAdaptor";
 
 /**
  * 所有平台统一API接口（Vuepress比较特殊，除外）

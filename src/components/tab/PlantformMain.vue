@@ -86,13 +86,13 @@ onMounted(() => {
 
 <script lang="ts">
 import VuepressMain from "./main/VuepressMain.vue";
-import JVueMain from "./main/mainadaptor/JVueMain.vue";
-import CnblogsMain from "./main/mainadaptor/CnblogsMain.vue";
-import ConfluenceMain from "./main/mainadaptor/ConfluenceMain.vue";
-import WordpressMain from "./main/WordpressMain.vue";
-import LiandiMain from "./main/LiandiMain.vue";
-import YuqueMain from "./main/YuqueMain.vue";
-import KmsMain from "./main/KmsMain.vue";
+import JVueMain from "./main/metaweblogmainadaptor/JVueMain.vue";
+import CnblogsMain from "./main/metaweblogmainadaptor/CnblogsMain.vue";
+import ConfluenceMain from "./main/metaweblogmainadaptor/ConfluenceMain.vue";
+import WordpressMain from "./main/metaweblogmainadaptor/WordpressMain.vue";
+import LiandiMain from "./main/commonblogmainadaptor/LiandiMain.vue";
+import YuqueMain from "./main/commonblogmainadaptor/YuqueMain.vue";
+import KmsMain from "./main/commonblogmainadaptor/KmsMain.vue";
 
 export default {
   name: "PlantformMain",

@@ -1,9 +1,9 @@
 /**
  * 语雀的API适配器
  */
-import {IApi} from "../../api";
-import {Post} from "../../common/post";
-import {UserBlog} from "../../common/userBlog";
+import {IApi} from "../../../api";
+import {Post} from "../../../common/post";
+import {UserBlog} from "../../../common/userBlog";
 
 export class YuqueApiAdaptor implements IApi {
 

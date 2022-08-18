@@ -1,5 +1,5 @@
-import log from "../../logUtil";
-import {isEmptyObject} from "../../util";
+import log from "../../../logUtil";
+import {isEmptyObject} from "../../../util";
 import 'isomorphic-fetch';
 
 /**

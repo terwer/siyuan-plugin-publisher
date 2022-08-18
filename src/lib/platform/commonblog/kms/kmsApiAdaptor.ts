@@ -1,19 +1,13 @@
-import {IApi} from "../../api";
-import {Post} from "../../common/post";
-import {UserBlog} from "../../common/userBlog";
-import {LiandiApi} from "./liandiApi";
-import {config} from "./liandiConfig";
-
 /**
- * 链滴的API适配器
- * https://ld246.com/article/1488603534762
+ * 知识仓库的API适配器
  */
-export class LiandiApiAdaptor implements IApi {
+import {IApi} from "../../../api";
+import {Post} from "../../../common/post";
+import {UserBlog} from "../../../common/userBlog";
 
-    private readonly liandiApi: LiandiApi
+export class KmsApiAdaptor implements IApi {
 
     constructor() {
-        this.liandiApi = new LiandiApi(config.baseUrl, config.token)
     }
 
     public getPost(postid: string, useSlug?: boolean): Promise<Post> {

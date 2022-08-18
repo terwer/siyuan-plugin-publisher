@@ -1,4 +1,4 @@
-import {LiandiApi} from "../src/lib/platform/liandi/liandiApi";
+import {LiandiApi} from "../src/lib/platform/commonblog/liandi/liandiApi";
 import {initTestEnv} from "./testEnv";
 
 // 初始化测试环境变量
