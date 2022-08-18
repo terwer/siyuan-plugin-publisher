@@ -7,9 +7,9 @@ import {PageType} from "../metaweblog/IMetaweblogCfg";
  */
 export class WordpressCfg extends MetaweblogCfg {
     constructor() {
-        super("", "", "", "");
+        super("http://localhost:8000", "http://localhost:8000/xmlrpc.php", "", "");
         this.posidKey = POSTID_KEY_CONSTANTS.WORDPRESS_POSTID_KEY
-        this.previewUrl = "/post/[postid].html"
+        this.previewUrl = "/?p=[postid]"
         this.pageType = PageType.Html
     }
 }
