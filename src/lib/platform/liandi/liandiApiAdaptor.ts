@@ -1,13 +1,19 @@
-/**
- * 链滴的API适配器
- */
 import {IApi} from "../../api";
 import {Post} from "../../common/post";
 import {UserBlog} from "../../common/userBlog";
+import {LiandiApi} from "./liandiApi";
+import {config} from "./liandiConfig";
 
+/**
+ * 链滴的API适配器
+ * https://ld246.com/article/1488603534762
+ */
 export class LiandiApiAdaptor implements IApi {
 
+    private readonly liandiApi: LiandiApi
+
     constructor() {
+        this.liandiApi = new LiandiApi(config.baseUrl, config.token)
     }
 
     public getPost(postid: string, useSlug?: boolean): Promise<Post> {

@@ -8,7 +8,6 @@ import log from "./logUtil";
 import {API_TYPE_CONSTANTS} from "./constants/apiTypeConstants";
 import {IVuepressCfg} from "./platform/vuepress/IVuepressCfg";
 import {IMetaweblogCfg} from "./platform/metaweblog/IMetaweblogCfg";
-import {strict} from "assert";
 
 // const nodejieba = require("nodejieba");
 
