@@ -128,7 +128,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 
   // 保证开关变量key不重复
   const switchKey = "switch-" + ptypeKey
-  const postidKey = "custom-postid-" + ptypeKey
+  const postidKey = "custom-" + ptypeKey + "-post-id"
   // 保证文章绑定id的key不重复
   if (checkKeyExists(pkey)
       || checkKeyExists(ptypeKey)

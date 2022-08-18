@@ -32,7 +32,8 @@
       <el-switch v-model="kmsEnabled" @change="kmsOnChange"/>
     </el-form-item>
 
-    <el-form-item v-for="cfg in formData.dynamicConfigArray" :label="cfg.plantformName">
+    <!-- 动态配置 -->
+    <el-form-item v-for="cfg in formData.dynamicConfigArray" :label="'[AUTO]'+cfg.plantformName">
       <el-switch v-model="cfg.modelValue" :active-value="cfg.plantformKey+'_true'"
                  :inactive-value="cfg.plantformKey+'_false'" @change="dynamicOnChange"/>
     </el-form-item>
@@ -114,7 +115,7 @@ const initConf = () => {
     item.modelValue = item.plantformKey + "_" + switchValue
     formData.dynamicConfigArray.push(item)
   });
-  log.logError(formData.dynamicConfigArray)
+  log.logInfo(formData.dynamicConfigArray)
 }
 
 onMounted(async () => {

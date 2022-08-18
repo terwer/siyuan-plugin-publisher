@@ -1,6 +1,10 @@
 export class DynamicConfig {
     /**
-     * 用于某些控件的临时变量
+     * 用于文章绑定的临时变量
+     */
+    posid?: any
+    /**
+     * 用于平台开关的临时变量
      */
     modelValue?: any
     /**
