@@ -145,7 +145,10 @@ export class MetaWeblogApi {
         }
 
         Object.assign(postObj, {
-            dateCreated: post.dateCreated.toISOString() || new Date().toISOString()
+            // 这里要注意时间格式
+            // http://www.ab-weblog.com/en/create-new-posts-with-publishing-date-in-wordpress-using-xml-rpc-and-php/
+            // dateCreated: post.dateCreated.toISOString() || new Date().toISOString()
+            dateCreated: post.dateCreated || new Date()
         })
 
         Object.assign(postObj, {

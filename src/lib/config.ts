@@ -1,4 +1,5 @@
 import log from "./logUtil";
+import {isEmptyObject} from "./util";
 
 /**
  * 获取Boolean配置
@@ -19,6 +20,20 @@ export function getBooleanConf(key: string): boolean {
 }
 
 /**
+ * 获取JSON配置，不建议使用，建议包裹一层存储object
+ * @deprecated
+ * @param key key
+ */
+export function getArrayJSONConf<T>(key: string): T {
+    let conf = getJSONConf<T>(key)
+    if (isEmptyObject(conf)) {
+        // @ts-ignore
+        conf = []
+    }
+    return conf
+}
+
+/**
  * 获取JSON配置
  * @param key key
  */
@@ -26,9 +41,9 @@ export function getJSONConf<T>(key: string): T {
     log.logInfo("------------------------------")
     log.logInfo("尝试从localStorage获取JSON数据，key=>", key)
 
-    let valueObj = <T>{}
+    let valueObj = <T>({} || [])
     let value = getConf(key)
-    if (typeof value === "string" && value != "") {
+    if (value != "") {
         try {
             valueObj = JSON.parse(value);
         } catch (e) {
@@ -43,7 +58,7 @@ export function getJSONConf<T>(key: string): T {
 }
 
 /**
- * 获取配置
+ * 获取配置：这个是所有数据保存的根方法
  * @param key key
  */
 export function getConf(key: string): string {
@@ -91,7 +106,7 @@ export function setJSONConf<T>(key: string, value: T): void {
 }
 
 /**
- * 保存配置
+ * 保存配置：这个是所有数据保存的根方法
  * @param key
  * @param value
  */
@@ -100,8 +115,28 @@ export function setConf(key: string, value: string): void {
         log.logWarn("空值，不保存")
         return
     }
+
     log.logInfo("尝试保存数据到localStorage里key=>", key)
     log.logInfo("保存数据到localStorage=>", value)
 
     localStorage.setItem(key, value)
+}
+
+/**
+ * 检测key是否冲突
+ * @param key
+ */
+export function checkKeyExists(key: string): boolean {
+    let flag = false
+
+    for (let i = 0; i < localStorage.length; i++) {
+        // 获取key 索引从0开始
+        const getKey = localStorage.key(i);
+        if (key === getKey) {
+            flag = true;
+            break;
+        }
+    }
+
+    return flag;
 }

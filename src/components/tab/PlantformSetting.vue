@@ -24,14 +24,30 @@
     <el-tab-pane :label="$t('setting.kms')" v-if="kmsEnabled">
       <kms-setting/>
     </el-tab-pane>
+
+    <!-- 动态平台发布配置 -->
+    <el-tab-pane v-for="mcfg in formData.metaweblogArray"
+                 :label="mcfg.plantformName+'_'+mcfg.plantformType.toUpperCase().substring(0,1)">
+      <metaweblog-setting :api-type="mcfg.plantformKey"
+                          :cfg="new DynamicMCfg('custom-' + mcfg.plantformKey + '-post-id')"/>
+    </el-tab-pane>
+    <el-tab-pane v-for="wcfg in formData.wordpressArray"
+                 :label="wcfg.plantformName+'_'+wcfg.plantformType.toUpperCase().substring(0,1)">
+      <wordpress-setting :api-type="wcfg.plantformKey"
+                         :cfg="new DynamicWCfg('custom-' + wcfg.plantformKey + '-post-id')"/>
+    </el-tab-pane>
+
   </el-tabs>
 </template>
 
 <script lang="ts" setup>
-import {ref, watch} from "vue";
+import {reactive, ref, watch} from "vue";
 import {getBooleanConf, setBooleanConf} from "../../lib/config";
 import SWITCH_CONSTANTS from "../../lib/constants/switchConstants";
 import log from "../../lib/logUtil";
+import {DynamicConfig, getDynamicJsonCfg} from "../../lib/dynamicConfig";
+import {DynamicMCfg} from "../../lib/platform/metaweblog/config/dynamicMCfg";
+import {DynamicWCfg} from "../../lib/platform/metaweblog/config/dynamicWCfg";
 
 const vuepressEnabled = ref(true)
 const jvueEnabled = ref(false)
@@ -42,6 +58,28 @@ const liandiEnabled = ref(false)
 const yuqueEnabled = ref(false)
 const kmsEnabled = ref(false)
 
+let formData = reactive({
+  dynamicConfigArray: <Array<DynamicConfig>>[],
+  metaweblogArray: <Array<DynamicConfig>>[],
+  wordpressArray: <Array<DynamicConfig>>[]
+})
+
+const initDynCfg = (dynCfg: DynamicConfig[]): DynamicConfig[] => {
+  const newCfg: DynamicConfig[] = []
+
+  dynCfg.forEach(item => {
+    const newItem = new DynamicConfig(item.plantformType, item.plantformKey, item.plantformName)
+    const switchKey = "switch-" + item.plantformKey
+    const switchValue = getBooleanConf(switchKey)
+    newItem.modelValue = switchValue
+    if (switchValue) {
+      newCfg.push(newItem)
+    }
+  })
+
+  return newCfg
+}
+
 const initConf = () => {
   vuepressEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY)
   jvueEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_JVUE_KEY)
@@ -51,6 +89,14 @@ const initConf = () => {
   liandiEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_LIANDI_KEY)
   yuqueEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_YUQUE_KEY)
   kmsEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_KMS_KEY)
+
+  const dynamicJsonCfg = getDynamicJsonCfg()
+  formData.dynamicConfigArray = initDynCfg(dynamicJsonCfg.totalCfg)
+  formData.metaweblogArray = initDynCfg(dynamicJsonCfg.metaweblogCfg)
+  formData.wordpressArray = initDynCfg(dynamicJsonCfg.wordpressCfg)
+  log.logInfo("dynamicJsonCfg=>")
+  log.logInfo(JSON.stringify(dynamicJsonCfg))
+
   log.logInfo("平台设置初始化")
 }
 
@@ -72,14 +118,15 @@ watch(() => props.isReload, /**/(oldValue, newValue) => {
 </script>
 
 <script lang="ts">
-import JVueSetting from "./setting/settingadaptor/JVueSetting.vue";
+import JVueSetting from "./setting/metaweblogsettingadaptor/JVueSetting.vue";
 import VuepressSetting from "./setting/VuepressSetting.vue";
-import CnblogsSetting from "./setting/settingadaptor/CnblogsSetting.vue";
-import ConfluenceSetting from "./setting/settingadaptor/ConfluenceSetting.vue";
-import WordpressSetting from "./setting/WordpressSetting.vue";
-import LiandiSetting from "./setting/LiandiSetting.vue";
-import YuqueSetting from "./setting/YuqueSetting.vue";
-import KmsSetting from "./setting/KmsSetting.vue";
+import CnblogsSetting from "./setting/metaweblogsettingadaptor/CnblogsSetting.vue";
+import ConfluenceSetting from "./setting/metaweblogsettingadaptor/ConfluenceSetting.vue";
+import LiandiSetting from "./setting/commonsettingadaptor/LiandiSetting.vue";
+import YuqueSetting from "./setting/commonsettingadaptor/YuqueSetting.vue";
+import KmsSetting from "./setting/commonsettingadaptor/KmsSetting.vue";
+import MetaweblogSetting from "./setting/MetaweblogSetting.vue";
+import WordpressSetting from "./setting/metaweblogsettingadaptor/WordpressSetting.vue";
 
 export default {
   name: "PlantformSetting",
@@ -88,10 +135,11 @@ export default {
     JVueSetting,
     CnblogsSetting,
     ConfluenceSetting,
-    WordpressSetting,
     LiandiSetting,
     YuqueSetting,
-    KmsSetting
+    KmsSetting,
+    MetaweblogSetting,
+    WordpressSetting,
   }
 }
 </script>

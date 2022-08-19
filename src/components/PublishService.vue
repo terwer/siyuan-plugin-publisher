@@ -1,5 +1,5 @@
 <template>
-  <el-tabs model-value="plantform-main" tab-position="left" @tab-change="serviceTabChange">
+  <el-tabs :model-value="defaultTab" tab-position="left" @tab-change="serviceTabChange">
     <el-tab-pane name="plantform-main" :label="$t('service.tab.publish.service')">
       <plantform-main :is-reload="isReloadMain"/>
     </el-tab-pane>
@@ -7,10 +7,13 @@
       <plantform-setting :is-reload="isReloadSetting"/>
     </el-tab-pane>
     <el-tab-pane name="post-bind" :label="$t('service.tab.post.bind')">
-     <post-bind :is-reload="isReloadPostBind"/>
+      <post-bind :is-reload="isReloadPostBind"/>
     </el-tab-pane>
     <el-tab-pane name="service-switch" :label="$t('service.tab.service.switch')">
       <service-switch/>
+    </el-tab-pane>
+    <el-tab-pane name="dynamicp-platform" :label="$t('dynamic.platform.new')">
+      <dynamic-plantform/>
     </el-tab-pane>
     <el-tab-pane name="change-local" :label="$t('service.tab.change.local')">
       <change-locale/>
@@ -20,7 +23,10 @@
 
 <script lang="ts" setup>
 import log from "../lib/logUtil";
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
+import {getQueryString} from "../lib/util";
+
+let defaultTab = ref("plantform-main")
 
 let isReloadSetting = ref(false)
 let isReloadMain = ref(false)
@@ -43,6 +49,10 @@ const serviceTabChange = (name: string) => {
   }
 }
 
+onMounted(() => {
+  defaultTab.value = getQueryString("tab") || defaultTab.value
+})
+
 </script>
 
 <script lang="ts">
@@ -51,10 +61,11 @@ import ServiceSwitch from "./tab/ServiceSwitch.vue";
 import PlantformSetting from "./tab/PlantformSetting.vue";
 import PostBind from "./tab/PostBind.vue";
 import PlantformMain from "./tab/PlantformMain.vue";
+import DynamicPlantform from "./tab/DynamicPlantform.vue";
 
 export default {
   name: "PublishService",
-  components: {PlantformSetting, ServiceSwitch, ChangeLocale, PostBind, PlantformMain}
+  components: {PlantformSetting, ServiceSwitch, ChangeLocale, PostBind, PlantformMain, DynamicPlantform}
 }
 </script>
 

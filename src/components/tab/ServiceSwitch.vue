@@ -31,25 +31,38 @@
     <el-form-item :label="$t('service.switch.kms')">
       <el-switch v-model="kmsEnabled" @change="kmsOnChange"/>
     </el-form-item>
+
+    <!-- 动态配置 -->
+    <el-form-item v-for="cfg in formData.dynamicConfigArray"
+                  :label="cfg.plantformName+'_'+cfg.plantformType.toUpperCase().substring(0,1)">
+      <el-switch v-model="cfg.modelValue" :active-value="cfg.plantformKey+'_true'"
+                 :inactive-value="cfg.plantformKey+'_false'" @change="dynamicOnChange"/>
+    </el-form-item>
   </el-form>
 </template>
 
 <script lang="ts" setup>
-import {onMounted, ref} from 'vue'
+import {onMounted, reactive, ref} from 'vue'
 import {useI18n} from "vue-i18n";
-import {setBooleanConf, getBooleanConf} from "../../lib/config";
+import {setBooleanConf, getBooleanConf, getConf} from "../../lib/config";
 import SWITCH_CONSTANTS from "../../lib/constants/switchConstants";
+import {DynamicConfig, getDynamicJsonCfg} from "../../lib/dynamicConfig";
+import log from "../../lib/logUtil";
 
 const {t} = useI18n()
 
 let vuepressEnabled = ref(true)
 const jvueEnabled = ref(false)
 const confEnabled = ref(false)
-const cnblogsEnabled = ref(false)
+const cnblogsEnabled = ref(true)
 const wordpressEnabled = ref(false)
-const liandiEnabled = ref(false)
-const yuqueEnabled = ref(false)
+const liandiEnabled = ref(true)
+const yuqueEnabled = ref(true)
 const kmsEnabled = ref(false)
+
+let formData = reactive({
+  dynamicConfigArray: <Array<DynamicConfig>>[]
+})
 
 const jvueOnChange = (val: boolean) => {
   setBooleanConf(SWITCH_CONSTANTS.SWITCH_JVUE_KEY, val)
@@ -72,6 +85,14 @@ const yuqueOnChange = (val: any) => {
 const kmsOnChange = (val: any) => {
   setBooleanConf(SWITCH_CONSTANTS.SWITCH_KMS_KEY, val)
 }
+const dynamicOnChange = (val: any) => {
+  log.logInfo("dynamicOnChange,val=>", val)
+  const valArr = val.split("_")
+  const switchKey = "switch-" + valArr[0]
+  const switchStatus = valArr[1]
+
+  setBooleanConf(switchKey, switchStatus)
+}
 
 const initConf = () => {
   vuepressEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY)
@@ -82,11 +103,34 @@ const initConf = () => {
   liandiEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_LIANDI_KEY)
   yuqueEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_YUQUE_KEY)
   kmsEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_KMS_KEY)
+
+  const dynamicJsonCfg = getDynamicJsonCfg()
+  const results = dynamicJsonCfg.totalCfg || []
+  formData.dynamicConfigArray = []
+  results.forEach(item => {
+
+    const switchKey = "switch-" + item.plantformKey
+    const switchValue = getConf(switchKey)
+
+    item.modelValue = item.plantformKey + "_" + switchValue
+    formData.dynamicConfigArray.push(item)
+  });
+  log.logInfo(formData.dynamicConfigArray)
 }
 
 onMounted(async () => {
-  // 默认选中vuepress
+  // 默认选中vuepress且不可取消
   setBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY, true)
+  // 博客园、链滴、语雀默认开放
+  if (cnblogsEnabled.value) {
+    setBooleanConf(SWITCH_CONSTANTS.SWITCH_CNBLOGS_KEY, true)
+  }
+  if (liandiEnabled.value) {
+    setBooleanConf(SWITCH_CONSTANTS.SWITCH_LIANDI_KEY, true)
+  }
+  if (yuqueEnabled.value) {
+    setBooleanConf(SWITCH_CONSTANTS.SWITCH_YUQUE_KEY, true)
+  }
   // 初始化
   initConf()
 })

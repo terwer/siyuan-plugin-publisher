@@ -2,6 +2,8 @@
  * 获取Boolean类型的环境变量
  * @param key
  */
+import log from "./logUtil";
+
 export function getBooleanEnv(key: string) {
     let env = false
     if (getEnv(key)) {
@@ -16,8 +18,13 @@ export function getBooleanEnv(key: string) {
  */
 export function getEnv(key: string) {
     let env = ""
-    if (import.meta.env[key]) {
-        env = import.meta.env[key]
+    try {
+        if (import.meta.env[key]) {
+            env = import.meta.env[key]
+        }
+    } catch (e) {
+        log.logWarn(e)
     }
+
     return env
 }

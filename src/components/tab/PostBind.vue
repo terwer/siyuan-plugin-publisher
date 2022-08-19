@@ -32,6 +32,11 @@
       <el-input v-model="ruleForm.kmsPostid"/>
     </el-form-item>
 
+    <!-- 动态配置 -->
+    <el-form-item v-for="cfg in formData.dynamicConfigArray" :label="cfg.plantformName+'_'+cfg.plantformType.toUpperCase().substring(0,1)+' ID'" v-show="cfg.modelValue">
+      <el-input v-model="cfg.posid"/>
+    </el-form-item>
+
     <el-form-item>
       <el-button type="primary" @click="submitForm(ruleFormRef)">{{ $t('post.bind.conf.save') }}</el-button>
       <el-button @click="resetForm(ruleFormRef)">{{ $t('post.bind.conf.cancel') }}</el-button>
@@ -49,6 +54,8 @@ import {ElMessage} from "element-plus";
 import {useI18n} from "vue-i18n";
 import {getPageAttrs, getPageId, setPageAttrs} from "../../lib/platform/siyuan/siyuanUtil";
 import {POSTID_KEY_CONSTANTS} from "../../lib/constants/postidKeyConstants";
+import {isEmptyString} from "../../lib/util";
+import {DynamicConfig, getDynamicJsonCfg} from "../../lib/dynamicConfig";
 
 const {t} = useI18n()
 
@@ -61,6 +68,10 @@ const liandiEnabled = ref(false)
 const yuqueEnabled = ref(false)
 const kmsEnabled = ref(false)
 
+let formData = reactive({
+  dynamicConfigArray: <Array<DynamicConfig>>[]
+})
+
 const initConf = () => {
   vuepressEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY)
   jvueEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_JVUE_KEY)
@@ -70,6 +81,19 @@ const initConf = () => {
   liandiEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_LIANDI_KEY)
   yuqueEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_YUQUE_KEY)
   kmsEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_KMS_KEY)
+
+  const dynamicJsonCfg = getDynamicJsonCfg()
+  const results = dynamicJsonCfg.totalCfg || []
+  formData.dynamicConfigArray = []
+  results.forEach(item => {
+
+    const switchKey = "switch-" + item.plantformKey
+    const switchValue = getBooleanConf(switchKey)
+    item.modelValue = switchValue
+    formData.dynamicConfigArray.push(item)
+  });
+  log.logInfo(formData.dynamicConfigArray)
+
   log.logInfo("平台设置初始化")
 }
 
@@ -200,6 +224,34 @@ async function initPage() {
   ruleForm.liandiPostid = meta[POSTID_KEY_CONSTANTS.LIANDI_POSTID_KEY]
   ruleForm.yuquePostid = meta[POSTID_KEY_CONSTANTS.YUQUE_POSTID_KEY]
   ruleForm.kmsPostid = meta[POSTID_KEY_CONSTANTS.KMS_POSTID_KEY]
+
+  // 组装动态文章ID
+  const results = formData.dynamicConfigArray
+  formData.dynamicConfigArray = []
+  results.forEach(item => {
+    const posidKey = "custom-" + item.plantformKey + "-post-id"
+    item.posid = meta[posidKey] || ""
+    formData.dynamicConfigArray.push(item)
+  });
+}
+
+/**
+ * 禁用模块或者未填写清空文章绑定
+ * @param enabled
+ * @param customAttr
+ * @param key
+ * @param value
+ */
+const assignPostid = (enabled: boolean, customAttr: object, key: any, value: string) => {
+  if (enabled && !isEmptyString(value)) {
+    Object.assign(customAttr, {
+      [key]: value
+    })
+  } else {
+    Object.assign(customAttr, {
+      [key]: ""
+    })
+  }
 }
 
 const submitForm = async (formEl: FormInstance | undefined) => {
@@ -218,62 +270,28 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   }
 
   const customAttr = {};
-
   // Vuepress
-  if (vuepressEnabled.value && ruleForm.vuepressSlug != "") {
-    Object.assign(customAttr, {
-      [POSTID_KEY_CONSTANTS.VUEPRESS_POSTID_KEY]: ruleForm.vuepressSlug
-    })
-  }
-
+  assignPostid(vuepressEnabled.value, customAttr, POSTID_KEY_CONSTANTS.VUEPRESS_POSTID_KEY, ruleForm.vuepressSlug)
   // JVue
-  if (jvueEnabled.value && ruleForm.jvuePostid != "") {
-    Object.assign(customAttr, {
-      [POSTID_KEY_CONSTANTS.JVUE_POSTID_KEY]: ruleForm.jvuePostid
-    })
-  }
-
+  assignPostid(jvueEnabled.value, customAttr, POSTID_KEY_CONSTANTS.JVUE_POSTID_KEY, ruleForm.jvuePostid)
   // Confluence
-  if (confEnabled.value && ruleForm.confPostid != "") {
-    Object.assign(customAttr, {
-      [POSTID_KEY_CONSTANTS.CONFLUENCE_POSTID_KEY]: ruleForm.confPostid
-    })
-  }
-
+  assignPostid(confEnabled.value, customAttr, POSTID_KEY_CONSTANTS.CONFLUENCE_POSTID_KEY, ruleForm.confPostid)
   // Cnblogs
-  if (cnblogsEnabled.value && ruleForm.cnblogsPostid != "") {
-    Object.assign(customAttr, {
-      [POSTID_KEY_CONSTANTS.CNBLOGS_POSTID_KEY]: ruleForm.cnblogsPostid
-    })
-  }
-
+  assignPostid(cnblogsEnabled.value, customAttr, POSTID_KEY_CONSTANTS.CNBLOGS_POSTID_KEY, ruleForm.cnblogsPostid)
   // Wordpress
-  if (wordpressEnabled.value && ruleForm.wordpressPostid != "") {
-    Object.assign(customAttr, {
-      [POSTID_KEY_CONSTANTS.WORDPRESS_POSTID_KEY]: ruleForm.wordpressPostid
-    })
-  }
-
+  assignPostid(wordpressEnabled.value, customAttr, POSTID_KEY_CONSTANTS.WORDPRESS_POSTID_KEY, ruleForm.wordpressPostid)
   // Liandi
-  if (liandiEnabled.value && ruleForm.liandiPostid != "") {
-    Object.assign(customAttr, {
-      [POSTID_KEY_CONSTANTS.LIANDI_POSTID_KEY]: ruleForm.liandiPostid
-    })
-  }
-
+  assignPostid(liandiEnabled.value, customAttr, POSTID_KEY_CONSTANTS.LIANDI_POSTID_KEY, ruleForm.liandiPostid)
   // Yuque
-  if (yuqueEnabled.value && ruleForm.yuquePostid != "") {
-    Object.assign(customAttr, {
-      [POSTID_KEY_CONSTANTS.YUQUE_POSTID_KEY]: ruleForm.yuquePostid
-    })
-  }
-
+  assignPostid(yuqueEnabled.value, customAttr, POSTID_KEY_CONSTANTS.YUQUE_POSTID_KEY, ruleForm.yuquePostid)
   // Kms
-  if (kmsEnabled.value && ruleForm.kmsPostid != "") {
-    Object.assign(customAttr, {
-      [POSTID_KEY_CONSTANTS.KMS_POSTID_KEY]: ruleForm.kmsPostid
-    })
-  }
+  assignPostid(kmsEnabled.value, customAttr, POSTID_KEY_CONSTANTS.KMS_POSTID_KEY, ruleForm.kmsPostid)
+
+  // 动态绑定文章
+  formData.dynamicConfigArray.forEach(item => {
+    const posidKey = "custom-" + item.plantformKey + "-post-id"
+    assignPostid(item.modelValue, customAttr, posidKey, item.posid)
+  });
 
   log.logWarn("PostBind保存属性到思源笔记,meta=>", customAttr);
 

@@ -8,7 +8,6 @@ import log from "./logUtil";
 import {API_TYPE_CONSTANTS} from "./constants/apiTypeConstants";
 import {IVuepressCfg} from "./platform/vuepress/IVuepressCfg";
 import {IMetaweblogCfg} from "./platform/metaweblog/IMetaweblogCfg";
-import {strict} from "assert";
 
 // const nodejieba = require("nodejieba");
 
@@ -417,6 +416,24 @@ export function getQueryString(sParam: string) {
             return sParameterName[1];
         }
     }
+}
+
+/**
+ * 设置url参数
+ * @param urlstring
+ * @param key
+ * @param value
+ */
+export function setUrlParameter(urlstring: string, key: string, value: string) {
+    if (!inBrowser()) {
+        return ""
+    }
+    // 已经有参数了，不重复添加
+    if (urlstring.indexOf(key) > -1) {
+        return urlstring
+    }
+    urlstring += (urlstring.match(/[?]/g) ? '&' : '?') + key + '=' + value;
+    return urlstring
 }
 
 export function isEmptyObject(obj: any) {
