@@ -86,9 +86,9 @@ const initConf = () => {
   kmsEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_KMS_KEY)
 
   const dynamicJsonCfg = getDynamicJsonCfg()
-  formData.dynamicConfigArray = initDynCfg(dynamicJsonCfg.totalCfg)
-  formData.metaweblogArray = initDynCfg(dynamicJsonCfg.metaweblogCfg)
-  formData.wordpressArray = initDynCfg(dynamicJsonCfg.wordpressCfg)
+  formData.dynamicConfigArray = initDynCfg(dynamicJsonCfg.totalCfg || [])
+  formData.metaweblogArray = initDynCfg(dynamicJsonCfg.metaweblogCfg || [])
+  formData.wordpressArray = initDynCfg(dynamicJsonCfg.wordpressCfg || [])
   log.logInfo("dynamicJsonCfg=>")
   log.logInfo(JSON.stringify(dynamicJsonCfg))
 

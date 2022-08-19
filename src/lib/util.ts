@@ -8,6 +8,8 @@ import log from "./logUtil";
 import {API_TYPE_CONSTANTS} from "./constants/apiTypeConstants";
 import {IVuepressCfg} from "./platform/vuepress/IVuepressCfg";
 import {IMetaweblogCfg} from "./platform/metaweblog/IMetaweblogCfg";
+import {getDynamicJsonCfg} from "./dynamicConfig";
+import {getBooleanConf} from "./config";
 
 // const nodejieba = require("nodejieba");
 
@@ -20,6 +22,31 @@ export function getPublishStatus(apiType: string, meta: any) {
     const metaweblogTypeArray = [API_TYPE_CONSTANTS.API_TYPE_JVUE, API_TYPE_CONSTANTS.API_TYPE_CONFLUENCE,
         API_TYPE_CONSTANTS.API_TYPE_CNBLOGS, API_TYPE_CONSTANTS.API_TYPE_WORDPRESS
     ]
+    // 读取动态类型
+    const dynamicJsonCfg = getDynamicJsonCfg()
+    // const dynamicConfigArray = dynamicJsonCfg.totalCfg || []
+    const metaweblogArray = dynamicJsonCfg.metaweblogCfg || []
+    const wordpressArray = dynamicJsonCfg.wordpressCfg || []
+    // metaweblog
+    metaweblogArray.forEach(item => {
+        const apiType = item.plantformKey
+        // const postidKey = 'custom-' + item.plantformKey + '-post-id'
+        const switchKey = "switch-" + item.plantformKey
+        const switchValue = getBooleanConf(switchKey)
+        if (switchValue) {
+            metaweblogTypeArray.push(apiType)
+        }
+    })
+    // wordpress
+    wordpressArray.forEach(item => {
+        const apiType = item.plantformKey
+        // const postidKey = 'custom-' + item.plantformKey + '-post-id'
+        const switchKey = "switch-" + item.plantformKey
+        const switchValue = getBooleanConf(switchKey)
+        if (switchValue) {
+            metaweblogTypeArray.push(apiType)
+        }
+    })
 
     if (apiType == API_TYPE_CONSTANTS.API_TYPE_VUEPRESS) {
         const postidKey = getApiParams<IVuepressCfg>(apiType).posidKey;

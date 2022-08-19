@@ -29,12 +29,12 @@
     <el-tab-pane v-for="mcfg in formData.metaweblogArray"
                  :label="mcfg.plantformName+'_'+mcfg.plantformType.toUpperCase().substring(0,1)">
       <metaweblog-setting :api-type="mcfg.plantformKey"
-                          :cfg="new DynamicMCfg('custom-' + mcfg.plantformKey + '-post-id')"/>
+                          :cfg="createMCfg(mcfg)"/>
     </el-tab-pane>
     <el-tab-pane v-for="wcfg in formData.wordpressArray"
                  :label="wcfg.plantformName+'_'+wcfg.plantformType.toUpperCase().substring(0,1)">
       <wordpress-setting :api-type="wcfg.plantformKey"
-                         :cfg="new DynamicWCfg('custom-' + wcfg.plantformKey + '-post-id')"/>
+                         :cfg="createWCfg(wcfg)"/>
     </el-tab-pane>
 
   </el-tabs>
@@ -64,6 +64,13 @@ let formData = reactive({
   wordpressArray: <Array<DynamicConfig>>[]
 })
 
+const createMCfg = reactive((mcfg: DynamicConfig) => {
+  return new DynamicMCfg('custom-' + mcfg.plantformKey + '-post-id')
+})
+const createWCfg = reactive((wcfg: DynamicConfig) => {
+  return new DynamicWCfg('custom-' + wcfg.plantformKey + '-post-id')
+})
+
 const initDynCfg = (dynCfg: DynamicConfig[]): DynamicConfig[] => {
   const newCfg: DynamicConfig[] = []
 
@@ -91,9 +98,9 @@ const initConf = () => {
   kmsEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_KMS_KEY)
 
   const dynamicJsonCfg = getDynamicJsonCfg()
-  formData.dynamicConfigArray = initDynCfg(dynamicJsonCfg.totalCfg)
-  formData.metaweblogArray = initDynCfg(dynamicJsonCfg.metaweblogCfg)
-  formData.wordpressArray = initDynCfg(dynamicJsonCfg.wordpressCfg)
+  formData.dynamicConfigArray = initDynCfg(dynamicJsonCfg.totalCfg || [])
+  formData.metaweblogArray = initDynCfg(dynamicJsonCfg.metaweblogCfg || [])
+  formData.wordpressArray = initDynCfg(dynamicJsonCfg.wordpressCfg || [])
   log.logInfo("dynamicJsonCfg=>")
   log.logInfo(JSON.stringify(dynamicJsonCfg))
 
