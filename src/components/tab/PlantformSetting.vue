@@ -27,12 +27,12 @@
 
     <!-- 动态平台发布配置 -->
     <el-tab-pane v-for="mcfg in formData.metaweblogArray"
-                 :label="mcfg.plantformName+mcfg.plantformName+'_'+mcfg.plantformType.toUpperCase().substring(0,1)">
+                 :label="mcfg.plantformName+'_'+mcfg.plantformType.toUpperCase().substring(0,1)">
       <metaweblog-setting :api-type="mcfg.plantformKey"
                           :cfg="new DynamicMCfg('custom-' + mcfg.plantformKey + '-post-id')"/>
     </el-tab-pane>
     <el-tab-pane v-for="wcfg in formData.wordpressArray"
-                 :label="wcfg.plantformName+wcfg.plantformName+'_'+wcfg.plantformType.toUpperCase().substring(0,1)">
+                 :label="wcfg.plantformName+'_'+wcfg.plantformType.toUpperCase().substring(0,1)">
       <wordpress-setting :api-type="wcfg.plantformKey"
                          :cfg="new DynamicWCfg('custom-' + wcfg.plantformKey + '-post-id')"/>
     </el-tab-pane>

@@ -9,6 +9,8 @@ import {KmsApiAdaptor} from "./platform/commonblog/kms/kmsApiAdaptor";
 import {WordpressApiAdaptor} from "./platform/metaweblog/adaptor/wordpressApiAdaptor";
 import {LiandiApiAdaptor} from "./platform/commonblog/liandi/liandiApiAdaptor";
 import {YuqueApiAdaptor} from "./platform/commonblog/yuque/yuqueApiAdaptor";
+import {PlantformType} from "./dynamicConfig";
+import {MetaWeblogApiAdaptor} from "./platform/metaweblog/metaWeblogApiAdaptor";
 
 /**
  * 所有平台统一API接口（Vuepress比较特殊，除外）
@@ -110,6 +112,25 @@ export class API implements IApi {
 
     constructor(type: string) {
         this.type = type;
+
+        // 动态平台key的规则是-分割第一部分是平台类型
+        if (type.indexOf("-") > -1) {
+            const typeArr = type.split("-")
+            if (typeArr.length > 0) {
+                const ptype = typeArr[0]
+                if (ptype == PlantformType.Metaweblog.toLowerCase()) {
+                    // Metaweblog
+                    this.apiAdaptor = new MetaWeblogApiAdaptor(type)
+                    return
+                } else if (ptype == PlantformType.Wordpress.toLowerCase()) {
+                    // Wordpress
+                    this.apiAdaptor = new MetaWeblogApiAdaptor(type)
+                    return;
+                }
+            }
+        }
+
+        // 下面是固定平台
         switch (this.type) {
             case API_TYPE_CONSTANTS.API_TYPE_SIYUAN:
                 this.apiAdaptor = new SiYuanApiAdaptor()
