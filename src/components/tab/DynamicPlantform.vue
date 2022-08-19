@@ -48,6 +48,7 @@
 
       <el-table :data="tableData" :key="num" border stripe highlight-current-row
                 @current-change="handleCurrentChange">
+        <el-table-column prop="plantformType" :label="$t('dynamic.platform.type')"/>
         <el-table-column prop="plantformKey" :label="$t('dynamic.platform.key')"/>
         <el-table-column prop="plantformName" :label="$t('dynamic.platform.name')"/>
       </el-table>

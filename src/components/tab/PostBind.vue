@@ -33,7 +33,7 @@
     </el-form-item>
 
     <!-- 动态配置 -->
-    <el-form-item v-for="cfg in formData.dynamicConfigArray" :label="cfg.plantformName+' ID'" v-show="cfg.modelValue">
+    <el-form-item v-for="cfg in formData.dynamicConfigArray" :label="cfg.plantformName+'_'+cfg.plantformType.toUpperCase().substring(0,1)+' ID'" v-show="cfg.modelValue">
       <el-input v-model="cfg.posid"/>
     </el-form-item>
 

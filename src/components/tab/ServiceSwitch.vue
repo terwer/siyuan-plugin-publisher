@@ -33,7 +33,8 @@
     </el-form-item>
 
     <!-- 动态配置 -->
-    <el-form-item v-for="cfg in formData.dynamicConfigArray" :label="'[C]'+cfg.plantformName">
+    <el-form-item v-for="cfg in formData.dynamicConfigArray"
+                  :label="cfg.plantformName+'_'+cfg.plantformType.toUpperCase().substring(0,1)">
       <el-switch v-model="cfg.modelValue" :active-value="cfg.plantformKey+'_true'"
                  :inactive-value="cfg.plantformKey+'_false'" @change="dynamicOnChange"/>
     </el-form-item>

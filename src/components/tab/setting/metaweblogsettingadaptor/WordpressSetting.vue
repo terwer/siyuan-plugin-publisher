@@ -6,9 +6,33 @@
 import {API_TYPE_CONSTANTS} from "../../../../lib/constants/apiTypeConstants";
 import {ref} from "vue";
 import {WordpressCfg} from "../../../../lib/platform/metaweblog/config/wordpressCfg";
+import {MetaweblogCfg} from "../../../../lib/platform/metaweblog/MetaweblogCfg";
+
+const props = defineProps({
+  isReload: {
+    type: Boolean,
+    default: false
+  },
+  apiType: {
+    type: String,
+    default: ""
+  },
+  cfg: {
+    type: MetaweblogCfg,
+    default: null
+  }
+})
 
 const apiType = ref(API_TYPE_CONSTANTS.API_TYPE_WORDPRESS)
 const cfg = ref(new WordpressCfg())
+
+// 如果传递了值使用传递后的
+if (props.apiType) {
+  apiType.value = props.apiType
+}
+if (props.cfg) {
+  cfg.value = props.cfg
+}
 
 </script>
 
