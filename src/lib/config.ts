@@ -20,7 +20,8 @@ export function getBooleanConf(key: string): boolean {
 }
 
 /**
- * 获取JSON配置
+ * 获取JSON配置，不建议使用，建议包裹一层存储object
+ * @deprecated
  * @param key key
  */
 export function getArrayJSONConf<T>(key: string): T {

@@ -33,7 +33,7 @@
     </el-form-item>
 
     <!-- 动态配置 -->
-    <el-form-item v-for="cfg in formData.dynamicConfigArray" :label="'[AUTO]'+cfg.plantformName">
+    <el-form-item v-for="cfg in formData.dynamicConfigArray" :label="'[C]'+cfg.plantformName">
       <el-switch v-model="cfg.modelValue" :active-value="cfg.plantformKey+'_true'"
                  :inactive-value="cfg.plantformKey+'_false'" @change="dynamicOnChange"/>
     </el-form-item>
@@ -43,10 +43,9 @@
 <script lang="ts" setup>
 import {onMounted, reactive, ref} from 'vue'
 import {useI18n} from "vue-i18n";
-import {setBooleanConf, getBooleanConf, getArrayJSONConf, getConf} from "../../lib/config";
+import {setBooleanConf, getBooleanConf, getConf} from "../../lib/config";
 import SWITCH_CONSTANTS from "../../lib/constants/switchConstants";
-import {DynamicConfig} from "../../lib/dynamicConfig";
-import {CONSTANTS} from "../../lib/constants/constants";
+import {DynamicConfig, getDynamicJsonCfg} from "../../lib/dynamicConfig";
 import log from "../../lib/logUtil";
 
 const {t} = useI18n()
@@ -104,8 +103,8 @@ const initConf = () => {
   yuqueEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_YUQUE_KEY)
   kmsEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_KMS_KEY)
 
-  // formData.dynamicConfigArray = getArrayJSONConf<Array<DynamicConfig>>(CONSTANTS.DYNAMIC_CONFIG_KEY)
-  const results = getArrayJSONConf<Array<DynamicConfig>>(CONSTANTS.DYNAMIC_CONFIG_KEY)
+  const dynamicJsonCfg = getDynamicJsonCfg()
+  const results = dynamicJsonCfg.totalCfg || []
   formData.dynamicConfigArray = []
   results.forEach(item => {
 

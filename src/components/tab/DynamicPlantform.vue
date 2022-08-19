@@ -56,30 +56,24 @@
 </template>
 
 <script lang="ts" setup>
-import {DynamicConfig} from "../../lib/dynamicConfig";
+import {DynamicConfig, getDynamicJsonCfg, PlantformType, setDynamicJsonCfg} from "../../lib/dynamicConfig";
 import {onMounted, reactive, ref} from "vue";
 import log from "../../lib/logUtil";
 import {ElMessage, FormInstance, FormRules} from "element-plus";
 import {useI18n} from "vue-i18n";
-import {checkKeyExists, getArrayJSONConf, getJSONConf, setJSONConf} from "../../lib/config";
-import {CONSTANTS} from "../../lib/constants/constants";
-import {inBrowser, isEmptyObject, setUrlParameter} from "../../lib/util";
+import {checkKeyExists} from "../../lib/config";
+import {inBrowser, setUrlParameter} from "../../lib/util";
 
 const {t} = useI18n()
 
-enum PlantformType {
-  Metaweblog = "Metaweblog",
-  Wordpress = "Wordpress",
-  Custom = "Custom"
-}
-
-const pType = ref("Metaweblog")
+const pType = ref()
+pType.value = PlantformType.Metaweblog
 const showForm = ref(true)
 
 let dynamicConfigArray = reactive(<Array<DynamicConfig>>[])
 
 const formRef = ref<FormInstance>()
-const formData = reactive(new DynamicConfig("", ""))
+const formData = reactive(new DynamicConfig(PlantformType.Metaweblog, "", ""))
 const rules = reactive<FormRules>({
   plantformKey: [
     {
@@ -154,10 +148,10 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   }
 
   // 保存配置
-  const newCfg = new DynamicConfig(ptypeKey, formData.plantformName)
+  const newCfg = new DynamicConfig(pType.value, ptypeKey, formData.plantformName)
   dynamicConfigArray.push(newCfg)
+  setDynamicJsonCfg(dynamicConfigArray)
 
-  setJSONConf<Array<DynamicConfig>>(CONSTANTS.DYNAMIC_CONFIG_KEY, dynamicConfigArray)
   // 刷新页面
   reloadTabPage()
   ElMessage.success(t('main.opt.success'))
@@ -176,6 +170,8 @@ const handleCurrentChange = (val: DynamicConfig | undefined) => {
 
 const isDynamicKeyExists = (key: string) => {
   let flag = false
+  log.logInfo("isDynamicKeyExists,dynamicConfigArray=>")
+  log.logInfo(dynamicConfigArray)
   for (let i = 0; i < dynamicConfigArray.length; i++) {
     if (dynamicConfigArray[i].plantformKey == key) {
       flag = true;
@@ -187,7 +183,7 @@ const isDynamicKeyExists = (key: string) => {
 
 const delRow = async () => {
   if (!currentRow.value || !currentRow.value.plantformKey) {
-    ElMessage.error(t('ynamic.platform.opt.item.no.select.tip'))
+    ElMessage.error(t('dynamic.platform.opt.item.no.select.tip'))
   }
 
   for (let i = 0; i < dynamicConfigArray.length; i++) {
@@ -199,14 +195,14 @@ const delRow = async () => {
     }
   }
 
-  setJSONConf<Array<DynamicConfig>>(CONSTANTS.DYNAMIC_CONFIG_KEY, dynamicConfigArray)
+  setDynamicJsonCfg(dynamicConfigArray)
   // 刷新页面
   reloadTabPage()
   ElMessage.success(t('main.opt.success'))
 }
 
 const initPage = async () => {
-  dynamicConfigArray = getArrayJSONConf<Array<DynamicConfig>>(CONSTANTS.DYNAMIC_CONFIG_KEY)
+  dynamicConfigArray = getDynamicJsonCfg().totalCfg || []
 
   // 渲染table
   for (let i = 0; i < dynamicConfigArray.length; i++) {

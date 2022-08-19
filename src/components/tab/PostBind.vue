@@ -46,7 +46,7 @@
 
 <script lang="ts" setup>
 import {onBeforeMount, onMounted, reactive, ref, watch} from "vue";
-import {getArrayJSONConf, getBooleanConf, getConf, setBooleanConf} from "../../lib/config";
+import {getBooleanConf, setBooleanConf} from "../../lib/config";
 import SWITCH_CONSTANTS from "../../lib/constants/switchConstants";
 import log from "../../lib/logUtil";
 import type {FormInstance, FormRules} from 'element-plus'
@@ -55,8 +55,7 @@ import {useI18n} from "vue-i18n";
 import {getPageAttrs, getPageId, setPageAttrs} from "../../lib/platform/siyuan/siyuanUtil";
 import {POSTID_KEY_CONSTANTS} from "../../lib/constants/postidKeyConstants";
 import {isEmptyString} from "../../lib/util";
-import {DynamicConfig} from "../../lib/dynamicConfig";
-import {CONSTANTS} from "../../lib/constants/constants";
+import {DynamicConfig, getDynamicJsonCfg} from "../../lib/dynamicConfig";
 
 const {t} = useI18n()
 
@@ -83,8 +82,8 @@ const initConf = () => {
   yuqueEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_YUQUE_KEY)
   kmsEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_KMS_KEY)
 
-  // formData.dynamicConfigArray = getArrayJSONConf<Array<DynamicConfig>>(CONSTANTS.DYNAMIC_CONFIG_KEY)
-  const results = getArrayJSONConf<Array<DynamicConfig>>(CONSTANTS.DYNAMIC_CONFIG_KEY)
+  const dynamicJsonCfg = getDynamicJsonCfg()
+  const results = dynamicJsonCfg.totalCfg || []
   formData.dynamicConfigArray = []
   results.forEach(item => {
 
