@@ -6,7 +6,7 @@ import {Post} from "../../common/post";
 import log from "../../logUtil";
 import {METAWEBLOG_METHOD_CONSTANTS} from "../../constants/metaweblogMethodConstants";
 import {POST_STATUS_CONSTANTS} from "../../constants/postStatusConstants";
-import {isEmptyString} from "../../util";
+import {inBrowser, isEmptyString} from "../../util";
 
 export class MetaWeblogApi {
     private readonly apiType: string
@@ -144,12 +144,15 @@ export class MetaWeblogApi {
             })
         }
 
-        Object.assign(postObj, {
-            // 这里要注意时间格式
-            // http://www.ab-weblog.com/en/create-new-posts-with-publishing-date-in-wordpress-using-xml-rpc-and-php/
-            // dateCreated: post.dateCreated.toISOString() || new Date().toISOString()
-            dateCreated: post.dateCreated || new Date()
-        })
+        // 浏览器端的date转换有问题
+        if (!inBrowser()) {
+            Object.assign(postObj, {
+                // 这里要注意时间格式
+                // http://www.ab-weblog.com/en/create-new-posts-with-publishing-date-in-wordpress-using-xml-rpc-and-php/
+                // dateCreated: post.dateCreated.toISOString() || new Date().toISOString()
+                dateCreated: post.dateCreated || new Date()
+            })
+        }
 
         Object.assign(postObj, {
             categories: post.categories || [],
