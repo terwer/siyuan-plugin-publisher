@@ -157,4 +157,12 @@ export default {
     "dynamic.platform.opt.item.select": "Item no select",
     "dynamic.platform.opt.item.select.tip": "The current selection is:",
     "dynamic.platform.opt.item.no.select.tip": "Please select the line to be deleted",
+    "setting.common.home":"Home",
+    "setting.common.apiurl":"API",
+    "setting.common.token":"Token",
+    "setting.common.token.gen":"Token addr",
+    "setting.common.username":"Username",
+    "setting.common.username.gen":"Username setting",
+    "setting.common.password":"Password",
+    "setting.blog.platform.support.common": "Current platform：",
 }

@@ -14,8 +14,6 @@ interface ImportMetaEnv {
     readonly VITE_OPT_PWD: string
     readonly VITE_DEBUG_MODE: string
     readonly VITE_MIDDLEWARE_URL: string
-    readonly VITE_LIANDI_API_URL: string
-    readonly VITE_LIANDI_CONFIG_TOKEN: string
 }
 
 interface ImportMeta {

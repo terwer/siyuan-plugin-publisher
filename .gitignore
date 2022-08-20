@@ -27,3 +27,4 @@ dist-ssr
 .vercel
 *.private.env.json
 __snapshots__
+test/data/

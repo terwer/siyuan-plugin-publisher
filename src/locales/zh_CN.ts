@@ -160,4 +160,12 @@ export default {
     "dynamic.platform.opt.item.select": "未选择",
     "dynamic.platform.opt.item.select.tip": "当前选择的是：",
     "dynamic.platform.opt.item.no.select.tip": "请选择要删除的行",
+    "setting.common.home":"平台首页",
+    "setting.common.apiurl":"API地址",
+    "setting.common.token":"鉴权token",
+    "setting.common.token.gen":"Token生成地址",
+    "setting.common.username":"用户名",
+    "setting.common.username.gen":"访问策略设置",
+    "setting.common.password":"密码",
+    "setting.blog.platform.support.common": "您当前操作的平台是：",
 }
