@@ -1,3 +1,5 @@
+import {PageType} from "../metaweblog/IMetaweblogCfg";
+
 /**
  * 通用平台配置接口
  */
@@ -11,9 +13,17 @@ export interface ICommonblogCfg {
      */
     apiUrl: string,
     /**
+     * 用户名
+     */
+    username?: string,
+    /**
+     * 密码
+     */
+    password?: string,
+    /**
      * 鉴权token
      */
-    token: string,
+    token?: string,
     /**
      * 是否发布
      */
@@ -30,6 +40,10 @@ export interface ICommonblogCfg {
      * 文章预览链接
      */
     previewUrl?: string
+    /**
+     * token设置地址
+     */
+    tokenSettingUrl?: string
 }
 
 /**
@@ -45,6 +59,15 @@ export class CommonblogCfg implements ICommonblogCfg {
      * API 地址
      */
     apiUrl: string
+
+    /**
+     * 用户名
+     */
+    username: string
+    /**
+     * 密码
+     */
+    password: string
 
     /**
      * 鉴权token
@@ -67,14 +90,26 @@ export class CommonblogCfg implements ICommonblogCfg {
      * 文章预览链接
      */
     previewUrl: string
+    /**
+     * 文章类型
+     */
+    pageType: PageType
+    /**
+     * token设置地址
+     */
+    tokenSettingUrl: string
 
-    constructor(apiUrl: string, token: string) {
+    constructor() {
         this.home = "";
-        this.apiUrl = apiUrl;
-        this.token = token;
+        this.apiUrl = "";
+        this.username = ""
+        this.password = ""
+        this.token = "";
         this.apiStatus = false;
         this.blogName = "";
         this.posidKey = "";
         this.previewUrl = "";
+        this.pageType = PageType.Markdown
+        this.tokenSettingUrl = ""
     }
 }

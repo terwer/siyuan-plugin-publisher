@@ -114,11 +114,11 @@ const valiConf = async () => {
 
   isLoading.value = false
 
-  logUtil.logInfo("通用Setting验证完毕")
+  logUtil.logInfo("Metaweblog通用Setting验证完毕")
 }
 
 const saveConf = (hideTip?: boolean) => {
-  logUtil.logInfo("通用Setting保存配置")
+  logUtil.logInfo("Metaweblog通用Setting保存配置")
 
   const cfg = props.cfg
   cfg.home = home.value
@@ -136,7 +136,7 @@ const saveConf = (hideTip?: boolean) => {
 }
 
 const initConf = () => {
-  logUtil.logInfo("通用Setting配置初始化")
+  logUtil.logInfo("Metaweblog通用Setting配置初始化")
   let conf = getJSONConf<IMetaweblogCfg>(props.apiType)
   // 如果没有配置。读取默认配置
   if (isEmptyObject(conf)) {

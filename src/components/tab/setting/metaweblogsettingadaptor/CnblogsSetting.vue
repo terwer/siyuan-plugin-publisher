@@ -8,7 +8,8 @@ import {ref} from "vue";
 import {CnblogsCfg} from "../../../../lib/platform/metaweblog/config/cnblogsCfg";
 
 const apiType = ref(API_TYPE_CONSTANTS.API_TYPE_CNBLOGS)
-const cfg = ref(new CnblogsCfg())
+const cnblogsCfg = new CnblogsCfg()
+const cfg = ref(cnblogsCfg)
 
 </script>
 
