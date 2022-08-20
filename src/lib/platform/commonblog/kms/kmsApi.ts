@@ -2,6 +2,8 @@ import {Base64} from "js-base64";
 
 /**
  * KMS的API
+ *
+ * http://localhost:9564/kms16_release/kms/multidoc/restservice/kmsMultidocDocHelp.jsp?name=%E6%96%87%E6%A1%A3%E7%9F%A5%E8%AF%86%E5%BA%93%E6%96%87%E6%A1%A3%E7%BB%B4%E6%8A%A4rest%E6%9C%8D%E5%8A%A1(%E6%96%B0)&s_css=default
  */
 export class KmsApi {
     private readonly baseUrl: string

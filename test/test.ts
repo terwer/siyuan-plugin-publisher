@@ -14,8 +14,12 @@
 // const result = curlFileToFetch("src/lib/platform/commonblog/kms/test/curl.local")
 // console.log(result)
 
-import {testKmsFetch} from "./testKmsFetch";
+// import {testKmsFetch} from "./testKmsFetch";
+//
+// await testKmsFetch()
 
-await testKmsFetch()
+import {testYuqueFetch} from "./testYuqueFetch";
+
+await testYuqueFetch()
 
 export default {}

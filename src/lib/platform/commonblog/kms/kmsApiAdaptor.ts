@@ -14,8 +14,8 @@ export class KmsApiAdaptor extends CommonblogApiAdaptor implements IApi {
 
         const baseUrl = "http://localhost:9564/kms16_release/api/kms-multidoc/kmsMultidocKnowledgeRestService"
 
-        const kmsUsername = "terwer"
-        const kmsPassword = "123456"
+        const kmsUsername = ""
+        const kmsPassword = ""
         const basicToken = Base64.toBase64(`${kmsUsername}:${kmsPassword}`)
 
         this.kmsApi = new KmsApi(baseUrl, basicToken)
