@@ -3,8 +3,7 @@
 
 import {getBooleanEnv} from "./envUtil";
 
-const isDev = import.meta.env ? import.meta.env.DEV : true
-const LOG_INFO_ENABLED = isDev || getBooleanEnv("VITE_LOG_INFO_ENABLED")
+const LOG_INFO_ENABLED = getBooleanEnv("VITE_LOG_INFO_ENABLED")
 const LOG_WARN_ENABLED = true
 const LOG_ERROR_ENABLED = true
 
@@ -54,10 +53,10 @@ const logError = (msg: any, param?: any) => {
 /**
  * 日志记录
  */
-const log = {
+const logUtil = {
     logInfo,
     logWarn,
     logError
 }
 
-export default log
+export default logUtil

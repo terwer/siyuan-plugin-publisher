@@ -1,5 +1,5 @@
 import {config} from "./siYuanConfig"
-import log from "../../logUtil";
+import logUtil from "../../logUtil";
 
 /**
  * 思源API v2.0.27
@@ -109,11 +109,11 @@ async function request(url: string, data: any, method?: string, useToken?: boole
         })
     }
 
-    log.logInfo("向思源请求数据，url=>", url)
-    log.logInfo("向思源请求数据，fetchOps=>", fetchOps)
+    logUtil.logInfo("向思源请求数据，url=>", url)
+    logUtil.logInfo("向思源请求数据，fetchOps=>", fetchOps)
     await fetch(url, fetchOps).then(function (response) {
         resData = response.json()
-        log.logInfo("向思源请求数据，resData=>", resData)
+        logUtil.logInfo("向思源请求数据，resData=>", resData)
     })
     return resData
 }
@@ -403,7 +403,7 @@ async function exportMdContent(docId: string) {
 //                from blocks
 //                where id = '${链接源文本}'`
 //     let 临时块属性 = await 以sql向思源请求块数据(sql)
-//     //  log.logInfo ("临时块属性",临时块属性)
+//     //  logUtil.logInfo ("临时块属性",临时块属性)
 //     let anchor = ""
 //     if (临时块属性) {
 //         try {
@@ -420,7 +420,7 @@ async function exportMdContent(docId: string) {
 //             anchor = "解析错误"
 //         }
 //     }
-//     //   log.logInfo("锚文本",anchor)
+//     //   logUtil.logInfo("锚文本",anchor)
 //     return anchor
 // }
 //
@@ -481,7 +481,7 @@ async function getDoc(id: string) {
 //     var output = 临时元素.innerText || 临时元素.textContent;
 //     // @ts-ignore
 //     临时元素 = null;
-//     // log.logInfo(output)
+//     // logUtil.logInfo(output)
 //     return output;
 // }
 //

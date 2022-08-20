@@ -16,7 +16,7 @@ export function render(md: string) {
     const renderers = {
         // renderText: (node: any, entering: any) => {
         //     if (entering) {
-        //         console.log("    render text")
+        //         console.logUtil("    render text")
         //         // @ts-ignore
         //         return [node.Text() + " via Lute", Lute.WalkContinue]
         //     }
@@ -24,12 +24,12 @@ export function render(md: string) {
         //     return ["", Lute.WalkContinue]
         // },
         // renderStrong: (node: any, entering: any) => {
-        //     entering ? console.log("    start render strong") : console.log("    end render strong")
+        //     entering ? console.logUtil("    start render strong") : console.logUtil("    end render strong")
         //     // @ts-ignore
         //     return ["", Lute.WalkContinue]
         // },
         // renderParagraph: (node: any, entering: any) => {
-        //     entering ? console.log("    start render paragraph") : console.log("    end render paragraph")
+        //     entering ? console.logUtil("    start render paragraph") : console.logUtil("    end render paragraph")
         //     // @ts-ignore
         //     return ["", Lute.WalkContinue]
         // }

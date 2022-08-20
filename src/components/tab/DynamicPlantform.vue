@@ -59,7 +59,7 @@
 <script lang="ts" setup>
 import {DynamicConfig, getDynamicJsonCfg, PlantformType, setDynamicJsonCfg} from "../../lib/dynamicConfig";
 import {onMounted, reactive, ref} from "vue";
-import log from "../../lib/logUtil";
+import logUtil from "../../lib/logUtil";
 import {ElMessage, FormInstance, FormRules} from "element-plus";
 import {useI18n} from "vue-i18n";
 import {checkKeyExists} from "../../lib/config";
@@ -93,7 +93,7 @@ const rules = reactive<FormRules>({
 const onPlantformTypeChange = (val: PlantformType) => {
   pType.value = val
   showForm.value = pType.value == PlantformType.Metaweblog || pType.value == PlantformType.Wordpress
-  log.logInfo(pType.value)
+  logUtil.logInfo(pType.value)
 }
 
 const reloadTabPage = () => {
@@ -115,7 +115,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   const pkey = formData.plantformKey
   // 最终存储的key
   const ptypeKey = pType.value.toLowerCase() + "-" + formData.plantformKey
-  log.logWarn("将要保存的平台key", ptypeKey)
+  logUtil.logWarn("将要保存的平台key", ptypeKey)
   if (isDynamicKeyExists(ptypeKey)) {
     ElMessage.error(t('dynamic.platform.opt.key.exist'))
     return
@@ -137,9 +137,9 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   const result = await formEl.validate((valid, fields) => {
     if (valid) {
-      log.logInfo("校验成功")
+      logUtil.logInfo("校验成功")
     } else {
-      log.logError(t('main.opt.failure'), fields)
+      logUtil.logError(t('main.opt.failure'), fields)
       // ElMessage.error(t('main.opt.failure'))
       return
     }
@@ -166,13 +166,13 @@ const currentTip = ref(t('ynamic.platform.opt.item.select'))
 const handleCurrentChange = (val: DynamicConfig | undefined) => {
   currentRow.value = val
   currentTip.value = t('dynamic.platform.opt.item.select.tip') + currentRow.value.plantformName
-  log.logInfo(currentRow.value)
+  logUtil.logInfo(currentRow.value)
 }
 
 const isDynamicKeyExists = (key: string) => {
   let flag = false
-  log.logInfo("isDynamicKeyExists,dynamicConfigArray=>")
-  log.logInfo(dynamicConfigArray)
+  logUtil.logInfo("isDynamicKeyExists,dynamicConfigArray=>")
+  logUtil.logInfo(dynamicConfigArray)
   for (let i = 0; i < dynamicConfigArray.length; i++) {
     if (dynamicConfigArray[i].plantformKey == key) {
       flag = true;
@@ -188,9 +188,9 @@ const delRow = async () => {
   }
 
   for (let i = 0; i < dynamicConfigArray.length; i++) {
-    log.logInfo(currentRow.value.plantformKey)
-    log.logInfo(dynamicConfigArray[i].plantformKey)
-    log.logInfo("------------------------")
+    logUtil.logInfo(currentRow.value.plantformKey)
+    logUtil.logInfo(dynamicConfigArray[i].plantformKey)
+    logUtil.logInfo("------------------------")
     if (currentRow.value.plantformKey == dynamicConfigArray[i].plantformKey) {
       dynamicConfigArray.splice(i, 1);
     }
@@ -211,7 +211,7 @@ const initPage = async () => {
   }
   num.value = dynamicConfigArray.length
 
-  log.logInfo("dynamic init page=>", dynamicConfigArray)
+  logUtil.logInfo("dynamic init page=>", dynamicConfigArray)
 }
 
 onMounted(async () => {

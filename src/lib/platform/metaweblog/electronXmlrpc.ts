@@ -1,4 +1,4 @@
-import log from "../../logUtil";
+import logUtil from "../../logUtil";
 import {METAWEBLOG_METHOD_CONSTANTS} from "../../constants/metaweblogMethodConstants";
 import {UserBlog} from "../../common/userBlog";
 
@@ -28,8 +28,8 @@ export async function fetchElectron(apiUrl: string, reqMethod: string, reqParams
     let result
 
     const methodBody = xmlSerializer.serializeMethodCall(reqMethod, reqParams, "utf8")
-    log.logWarn("apiUrl=>", apiUrl)
-    log.logWarn("methodBody=>", methodBody)
+    logUtil.logWarn("apiUrl=>", apiUrl)
+    logUtil.logWarn("methodBody=>", methodBody)
 
     const fetchOption = {
         method: "POST",
@@ -41,8 +41,8 @@ export async function fetchElectron(apiUrl: string, reqMethod: string, reqParams
     // @ts-ignore
     const response: Response = await fetch(apiUrl, fetchOption);
     let reqXml = await response.text()
-    log.logInfo("reqXml=>")
-    log.logInfo(reqXml)
+    logUtil.logInfo("reqXml=>")
+    logUtil.logInfo(reqXml)
 
     // 反序列化xml为合法json字符串
 
@@ -56,7 +56,7 @@ export async function fetchElectron(apiUrl: string, reqMethod: string, reqParams
     //         resolve(result)
     //     })
     // })
-    // log.logWarn(desData)
+    // logUtil.logWarn(desData)
 
     // xml2json也不行
     // const parseResult = JSON.parse(this.xmlParser.toJson(reqXml)) || {}
@@ -66,16 +66,16 @@ export async function fetchElectron(apiUrl: string, reqMethod: string, reqParams
 
     // xml2js
     const parseResult = await xmlParser.parseStringPromise(reqXml)
-    log.logWarn("尝试获取反序列结果=>")
-    log.logWarn(parseResult)
+    logUtil.logWarn("尝试获取反序列结果=>")
+    logUtil.logWarn(parseResult)
 
     let jsonResult: any = {}
     switch (reqMethod) {
         // 博客信息
         case METAWEBLOG_METHOD_CONSTANTS.GET_USERS_BLOGS: {
             const usersBlogs = parse_GetUsersBlogs(parseResult)
-            log.logWarn("GetUsersBlogs组装完成准备返回=>")
-            log.logWarn(usersBlogs)
+            logUtil.logWarn("GetUsersBlogs组装完成准备返回=>")
+            logUtil.logWarn(usersBlogs)
             jsonResult = JSON.stringify(usersBlogs)
             break;
         }
@@ -98,8 +98,8 @@ function parse_GetUsersBlogs(parseResult: any) {
 
     const methodResponse = parseResult.methodResponse
     const resValues = methodResponse.params.param.value.array.data.value.struct.member
-    log.logInfo("解析GetUsersBlogs，resValues=>")
-    log.logInfo(resValues)
+    logUtil.logInfo("解析GetUsersBlogs，resValues=>")
+    logUtil.logInfo(resValues)
     let userBlog = new UserBlog()
     for (let i = 0; i < resValues.length; i++) {
         const item = resValues[i]

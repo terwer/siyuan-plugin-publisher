@@ -30,9 +30,9 @@ app.get('/api/item/:slug', (req: Request, res: Response) => {
  */
 app.post('/api/middleware/xmlrpc', (req: Request, res: Response) => {
     const headers = req.headers;
-    // console.log(headers)
+    // console.logUtil(headers)
     const body = req.body
-    // console.log(body)
+    // console.logUtil(body)
 
     // 获取代理参数
     console.log("body.fetchParams.apiUrl=>")

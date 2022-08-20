@@ -35,7 +35,7 @@
 
 <script lang="ts" setup>
 import {onMounted, ref} from "vue";
-import log from "../../../lib/logUtil";
+import logUtil from "../../../lib/logUtil";
 import {getJSONConf, setJSONConf} from "../../../lib/config";
 import {ElMessage} from "element-plus";
 import {useI18n} from "vue-i18n";
@@ -114,11 +114,11 @@ const valiConf = async () => {
 
   isLoading.value = false
 
-  log.logInfo("通用Setting验证完毕")
+  logUtil.logInfo("通用Setting验证完毕")
 }
 
 const saveConf = (hideTip?: boolean) => {
-  log.logInfo("通用Setting保存配置")
+  logUtil.logInfo("通用Setting保存配置")
 
   const cfg = props.cfg
   cfg.home = home.value
@@ -136,14 +136,14 @@ const saveConf = (hideTip?: boolean) => {
 }
 
 const initConf = () => {
-  log.logInfo("通用Setting配置初始化")
+  logUtil.logInfo("通用Setting配置初始化")
   let conf = getJSONConf<IMetaweblogCfg>(props.apiType)
   // 如果没有配置。读取默认配置
   if (isEmptyObject(conf)) {
     conf = props.cfg
   }
   if (conf) {
-    log.logInfo("get setting conf=>", conf)
+    logUtil.logInfo("get setting conf=>", conf)
 
     home.value = conf.home
     apiUrl.value = conf.apiUrl

@@ -147,7 +147,7 @@ import {
   pingyinSlugify,
   zhSlugify
 } from "../../../lib/util";
-import log from "../../../lib/logUtil";
+import logUtil from "../../../lib/logUtil";
 import {mdToHtml, parseHtml, removeWidgetTag} from "../../../lib/htmlUtil";
 import {CONSTANTS} from "../../../lib/constants/constants";
 import {getJSONConf} from "../../../lib/config";
@@ -297,7 +297,7 @@ function checkForce() {
   // 别名不为空，默认不刷新
   if (!forceRefresh.value) {
     // ElMessage.warning(t('main.force.refresh.tip'))
-    log.logWarn(t('main.force.refresh.tip'))
+    logUtil.logWarn(t('main.force.refresh.tip'))
     return false
   }
 
@@ -314,17 +314,17 @@ const makeSlug = async (hideTip?: boolean) => {
   const page = await getPage(siyuanData.pageId)
   // BUG：目前attr的title不会即时更新
   // siyuanData.value.meta = await getPageAttrs(siyuanData.value.pageId)
-  // log.logInfo("meta=>", siyuanData.value.meta)
-  log.logInfo("page=>", page)
+  // logUtil.logInfo("meta=>", siyuanData.value.meta)
+  logUtil.logInfo("page=>", page)
   // 获取标题
   // @ts-ignore
   // const title = siyuanData.value.meta.title;
   const title = page.content;
-  log.logInfo("title=>", title)
+  logUtil.logInfo("title=>", title)
   if (formData.checkList.length > 0) {
     // 调用Google翻译API
     const result = await zhSlugify(title);
-    log.logInfo("result=>", result)
+    logUtil.logInfo("result=>", result)
     if (result) {
       formData.customSlug = result
     } else {
@@ -399,10 +399,10 @@ async function fetchTag(hideTip?: boolean) {
 
   const md = data.content
   const genTags = await cutWords(md)
-  log.logInfo("genTags=>", genTags)
+  logUtil.logInfo("genTags=>", genTags)
 
   const hotTags = jiebaToHotWords(genTags, 5)
-  log.logInfo("hotTags=>", hotTags)
+  logUtil.logInfo("hotTags=>", hotTags)
 
   // 如果标签不存在，保存新标签到表单
   for (let i = 0; i < hotTags.length; i++) {
@@ -445,7 +445,7 @@ const oneclickAttr = async (hideTip?: boolean) => {
 
   // 发布属性
   await saveAttrToSiyuan(true)
-  log.logWarn("发布属性完成")
+  logUtil.logWarn("发布属性完成")
 
   isGenLoading.value = false
   if (hideTip != true) {
@@ -506,19 +506,19 @@ const doPublish = async () => {
         throw new Error("文章更新失败=>" + postid)
       }
 
-      log.logWarn("文章已更新，postid=>", postid)
+      logUtil.logWarn("文章已更新，postid=>", postid)
     } else {
       postid = await api.newPost(post, publish)
       // 这里是发布成功之后
       // 属性获取postidKey
-      log.logWarn("当前保存的posidKey=>", metaweblogCfg.posidKey)
+      logUtil.logWarn("当前保存的posidKey=>", metaweblogCfg.posidKey)
       const customAttr = {
         [metaweblogCfg.posidKey]: postid,
       };
       await setPageAttrs(siyuanData.pageId, customAttr)
-      log.logInfo("MetaweblogMain发布成功，保存postid,meta=>", customAttr);
+      logUtil.logInfo("MetaweblogMain发布成功，保存postid,meta=>", customAttr);
 
-      log.logWarn("文章发布成功，postid=>", postid)
+      logUtil.logWarn("文章发布成功，postid=>", postid)
     }
 
     // 刷新属性数据
@@ -526,7 +526,7 @@ const doPublish = async () => {
 
     ElMessage.success(t('main.opt.success'))
   } catch (e) {
-    log.logError("发布异常")
+    logUtil.logError("发布异常")
     ElMessage.success(t('main.opt.failure'))
   }
 
@@ -557,14 +557,14 @@ const cancelPublish = async () => {
     // })
     isCancelLoading.value = false;
 
-    log.logInfo("操作已取消")
+    logUtil.logInfo("操作已取消")
   })
 }
 
 // 实际删除逻辑
 const doCancel = async (isInit: boolean) => {
   const metaweblogCfg = getJSONConf<IMetaweblogCfg>(props.apiType)
-  log.logInfo("准备取消发布，postid=>", formData.postid)
+  logUtil.logInfo("准备取消发布，postid=>", formData.postid)
 
   const api = new API(props.apiType)
   const flag = await api.deletePost(formData.postid)
@@ -578,7 +578,7 @@ const doCancel = async (isInit: boolean) => {
     [metaweblogCfg.posidKey]: ""
   };
   await setPageAttrs(siyuanData.pageId, customAttr)
-  log.logWarn("MetaweblogMain取消发布,meta=>", customAttr);
+  logUtil.logWarn("MetaweblogMain取消发布,meta=>", customAttr);
 
   // 刷新属性数据
   if (isInit) {

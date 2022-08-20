@@ -102,7 +102,7 @@ export default {
     "setting.blog.save": "保存",
     "setting.blog.vali": "验证",
     "setting.blog.vali.tip": "强烈建议保存之前先验证配置以保证api的可用性，验证过程中将发送一篇测试文章，您可以稍后在平台手动删除它。您也可以先保存，稍后修改，但是在验证通过之前该api将不可使用。",
-    "setting.blog.vali.tip.metaweblog": "配置错误或者api的不可用，请检查",
+    "setting.blog.vali.tip.metaweblog": "配置错误或者api不可用，请检查。若修改过配置，请刷新页面",
     "setting.blog.vali.ing": "验证中...",
     "setting.blog.vali.ok": "验证通过，不要忘了点击下方保存哟(*^▽^*)",
     "setting.blog.vali.ok.metaweblog": "配置已保存并验证通过",

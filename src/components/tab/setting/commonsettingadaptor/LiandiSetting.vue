@@ -1,10 +1,13 @@
 <template>
-  <div>LiandiSetting</div>
+  <common-blog-setting/>
 </template>
 
 <script lang="ts">
+import CommonBlogSetting from "../CommonBlogSetting.vue";
+
 export default {
-  name: "LiandiSetting"
+  name: "LiandiSetting",
+  components: {CommonBlogSetting}
 }
 </script>
 

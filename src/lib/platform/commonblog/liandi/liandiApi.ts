@@ -1,6 +1,5 @@
-import log from "../../../logUtil";
+import logUtil from "../../../logUtil";
 import {isEmptyObject} from "../../../util";
-import 'isomorphic-fetch';
 
 /**
  * 链滴API
@@ -72,8 +71,8 @@ export class LiandiApi {
         }
 
         // 发送请求
-        log.logInfo("向链滴请求数据，apiUrl=>", apiUrl)
-        log.logInfo("向链滴请求数据，fetchOps=>", fetchOps)
+        logUtil.logInfo("向链滴请求数据，apiUrl=>", apiUrl)
+        logUtil.logInfo("向链滴请求数据，fetchOps=>", fetchOps)
         const response = await fetch(apiUrl, fetchOps)
         if (!response) {
             throw new Error("请求异常")
@@ -83,7 +82,7 @@ export class LiandiApi {
         const statusCode = await response.status
 
         // const resText = await response.text()
-        // log.logInfo("向链滴请求数据，resText=>", resText)
+        // logUtil.logInfo("向链滴请求数据，resText=>", resText)
 
         if (200 != statusCode) {
             if (401 == statusCode) {
@@ -94,7 +93,7 @@ export class LiandiApi {
         }
 
         const resJson = await response.json()
-        log.logInfo("向链滴请求数据，resJson=>", resJson)
+        logUtil.logInfo("向链滴请求数据，resJson=>", resJson)
         return resJson.code === 0 ? resJson.data : null
     }
 }

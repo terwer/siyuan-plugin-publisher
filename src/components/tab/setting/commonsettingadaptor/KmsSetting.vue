@@ -1,10 +1,13 @@
 <template>
-  <div>KmsSetting</div>
+  <common-blog-setting/>
 </template>
 
 <script lang="ts">
+import CommonBlogSetting from "../CommonBlogSetting.vue";
+
 export default {
-  name: "KmsSetting"
+  name: "KmsSetting",
+  components: {CommonBlogSetting}
 }
 </script>
 

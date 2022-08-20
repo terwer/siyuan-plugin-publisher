@@ -62,7 +62,7 @@
 import {onBeforeMount, reactive, ref} from "vue";
 import {ElMessage, FormInstance, FormRules} from "element-plus";
 import {useI18n} from "vue-i18n";
-import log from "../../../lib/logUtil";
+import logUtil from "../../../lib/logUtil";
 import {getBooleanConf, getJSONConf, setBooleanConf, setJSONConf} from "../../../lib/config";
 import {API_TYPE_CONSTANTS} from "../../../lib/constants/apiTypeConstants";
 import {IVuepressCfg} from "../../../lib/platform/vuepress/IVuepressCfg";
@@ -150,9 +150,9 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   const result = await formEl.validate((valid, fields) => {
     if (valid) {
-      log.logInfo("校验成功")
+      logUtil.logInfo("校验成功")
     } else {
-      log.logError(t('main.opt.failure'), fields)
+      logUtil.logError(t('main.opt.failure'), fields)
       // ElMessage.error(t('main.opt.failure'))
       return
     }
@@ -210,10 +210,10 @@ const resetForm = (formEl: FormInstance | undefined) => {
 }
 
 const initConf = () => {
-  log.logInfo("Vuepress配置初始化")
+  logUtil.logInfo("Vuepress配置初始化")
   const conf = getJSONConf<IVuepressCfg>(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS)
   if (conf) {
-    log.logInfo("vuepress conf=>", conf)
+    logUtil.logInfo("vuepress conf=>", conf)
     formData.githubUser = conf.githubUser
     formData.githubRepo = conf.githubRepo
     formData.githubToken = conf.githubToken

@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts" setup>
-import log from "../lib/logUtil";
+import logUtil from "../lib/logUtil";
 import {onMounted, ref} from "vue";
 import {getQueryString} from "../lib/util";
 
@@ -33,19 +33,19 @@ let isReloadMain = ref(false)
 let isReloadPostBind = ref(false)
 
 const serviceTabChange = (name: string) => {
-  log.logInfo("serviceTabChange=>", name)
+  logUtil.logInfo("serviceTabChange=>", name)
   if ("plantform-setting" == name) {
     // 切换强制刷新
     isReloadSetting.value = !isReloadSetting.value;
-    log.logInfo("plantform-setting change=>")
+    logUtil.logInfo("plantform-setting change=>")
   } else if ("plantform-main" == name) {
     // 切换强制刷新
     isReloadMain.value = !isReloadMain.value;
-    log.logInfo("plantform-main change=>")
+    logUtil.logInfo("plantform-main change=>")
   } else if ("post-bind" == name) {
     // 切换强制刷新
     isReloadPostBind.value = !isReloadPostBind.value;
-    log.logInfo("post-bind change=>")
+    logUtil.logInfo("post-bind change=>")
   }
 }
 

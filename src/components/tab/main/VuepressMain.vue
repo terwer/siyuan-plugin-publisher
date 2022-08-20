@@ -187,7 +187,7 @@
 <script lang="ts" setup>
 import {nextTick, onBeforeMount, ref, watch} from "vue";
 import {getPage, getPageAttrs, getPageId, getPageMd, setPageAttrs} from "../../../lib/platform/siyuan/siyuanUtil";
-import log from "../../../lib/logUtil"
+import logUtil from "../../../lib/logUtil"
 import {SIYUAN_PAGE_ATTR_KEY} from "../../../lib/constants/siyuanPageConstants"
 import {
   covertStringToDate,
@@ -231,7 +231,7 @@ watch(() => props.isReload, async (oldValue, newValue) => {
 
   // 初始化
   await initPage()
-  log.logWarn("VuepressMain检测到更新操作，刷新页面")
+  logUtil.logWarn("VuepressMain检测到更新操作，刷新页面")
 })
 
 onBeforeMount(async () => {
@@ -309,12 +309,12 @@ const complexMode = () => {
 
 async function initPage() {
   const pageId = await getPageId(true)
-  log.logInfo("VuepressMain pageId=>", pageId)
+  logUtil.logInfo("VuepressMain pageId=>", pageId)
   if (!pageId || pageId == "") {
     return
   }
   const page = await getPage(pageId)
-  log.logWarn("VuepressMain获取主文档", page)
+  logUtil.logWarn("VuepressMain获取主文档", page)
 
   // 思源笔记数据
   siyuanData.value.pageId = pageId;
@@ -346,8 +346,8 @@ async function initPage() {
   slugHashEnabled.value = true
   // Github默认开启hash
   // slugHashEnabled.value = vuepressGithubEnabled.value;
-  log.logInfo("Vuepress的api状态=>")
-  log.logInfo(isOk)
+  logUtil.logInfo("Vuepress的api状态=>")
+  logUtil.logInfo(isOk)
 
   // 表单属性转换为YAML
   convertAttrToYAML()
@@ -394,7 +394,7 @@ function checkForce() {
   // 别名不为空，默认不刷新
   if (!forceRefresh.value) {
     // ElMessage.warning(t('main.force.refresh.tip'))
-    log.logWarn(t('main.force.refresh.tip'))
+    logUtil.logWarn(t('main.force.refresh.tip'))
     return false
   }
 
@@ -411,17 +411,17 @@ async function makeSlug(hideTip?: boolean) {
   const page = await getPage(siyuanData.value.pageId)
   // BUG：目前attr的title不会即时更新
   // siyuanData.value.meta = await getPageAttrs(siyuanData.value.pageId)
-  // log.logInfo("meta=>", siyuanData.value.meta)
-  log.logInfo("page=>", page)
+  // logUtil.logInfo("meta=>", siyuanData.value.meta)
+  logUtil.logInfo("page=>", page)
   // 获取标题
   // @ts-ignore
   // const title = siyuanData.value.meta.title;
   const title = page.content;
-  log.logInfo("title=>", title)
+  logUtil.logInfo("title=>", title)
   if (formData.value.checkList.length > 0) {
     // 调用Google翻译API
     const result = await zhSlugify(title);
-    log.logInfo("result=>", result)
+    logUtil.logInfo("result=>", result)
     if (result) {
       formData.value.customSlug = result
     } else {
@@ -463,7 +463,7 @@ async function makeDesc(hideTip?: boolean) {
 }
 
 const createTimeChanged = (val: any) => {
-  log.logInfo("createTimeChanged=>", val)
+  logUtil.logInfo("createTimeChanged=>", val)
 }
 
 const tagHandleClose = (tag: any) => {
@@ -499,10 +499,10 @@ async function fetchTag(hideTip?: boolean) {
 
   const md = data.content
   const genTags = await cutWords(md)
-  log.logInfo("genTags=>", genTags)
+  logUtil.logInfo("genTags=>", genTags)
 
   const hotTags = jiebaToHotWords(genTags, 5)
-  log.logInfo("hotTags=>", hotTags)
+  logUtil.logInfo("hotTags=>", hotTags)
 
   // 如果标签不存在，保存新标签到表单
   for (let i = 0; i < hotTags.length; i++) {
@@ -524,7 +524,7 @@ async function saveAttrToSiyuan(hideTip?: boolean) {
     tags: formData.value.tag.dynamicTags.join(",")
   };
   await setPageAttrs(siyuanData.value.pageId, customAttr)
-  log.logWarn("VuepressMain保存属性到思源笔记,meta=>", customAttr);
+  logUtil.logWarn("VuepressMain保存属性到思源笔记,meta=>", customAttr);
 
   // 单独调用才去刷新数据，否则自行刷新数据
   if (hideTip != true) {
@@ -551,7 +551,7 @@ const mdFileToTitle = (fmtTitle: string): string => {
 
 const convertAttrToYAML = () => {
   // 表单属性转yamlObj
-  log.logInfo("convertAttrToYAML,formData=>", formData)
+  logUtil.logInfo("convertAttrToYAML,formData=>", formData)
   let fmtTitle = formData.value.title
   fmtTitle = mdFileToTitle(fmtTitle)
 
@@ -584,7 +584,7 @@ const convertYAMLToAttr = () => {
   vuepressData.value.yamlObj = yaml2Obj(vuepressData.value.formatter)
 
   // yamlObj转表单属性
-  log.logInfo("convertYAMLToAttr,yamlObj=>", vuepressData.value.yamlObj)
+  logUtil.logInfo("convertYAMLToAttr,yamlObj=>", vuepressData.value.yamlObj)
   formData.value.title = vuepressData.value.yamlObj.title + ".md"
   formData.value.customSlug = vuepressData.value.yamlObj.permalink.replace("/pages/", "")
       .replace("/post/", "").replace(".html", "")
@@ -644,8 +644,8 @@ let id = 0
 const customLoad = async (node: any, resolve: any) => {
   if (node.isLeaf) return resolve([])
 
-  log.logInfo("目前已保存路径=>", formData.value.customPath)
-  log.logInfo("当前节点=>", node.data)
+  logUtil.logInfo("目前已保存路径=>", formData.value.customPath)
+  logUtil.logInfo("当前节点=>", node.data)
 
   const vuepressCfg = getJSONConf<IVuepressCfg>(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS)
 
@@ -675,7 +675,7 @@ async function doPublish() {
 
   const fmtTitle = mdFileToTitle(formData.value.title)
   if (/[\s*|\\.]/g.test(fmtTitle)) {
-    log.logInfo("fmtTitle=>", fmtTitle)
+    logUtil.logInfo("fmtTitle=>", fmtTitle)
     ElMessage.error("文件名不能包含空格或者特殊字符")
     return
   }
@@ -695,7 +695,7 @@ async function doPublish() {
     return
   } else if (isOk && vuepressGithubEnabled.value) {
     // api可用并且开启了发布
-    log.logWarn("开始真正调用api发布到Github")
+    logUtil.logWarn("开始真正调用api发布到Github")
 
     const vuepressCfg = getJSONConf<IVuepressCfg>(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS)
 
@@ -705,13 +705,13 @@ async function doPublish() {
       // 如果选择了自定义的目录
       if (formData.value.customPath.indexOf(".md") > -1) {
         docPath = formData.value.customPath
-        log.logWarn("已经有完整路径，不拼接")
+        logUtil.logWarn("已经有完整路径，不拼接")
       } else {
         docPath = formData.value.customPath + "/" + mdFile
       }
 
-      log.logInfo(formData.value.customPath)
-      log.logWarn("文章讲发布于以下路径=>", docPath)
+      logUtil.logInfo(formData.value.customPath)
+      logUtil.logWarn("文章讲发布于以下路径=>", docPath)
     }
 
     // 发布内容
@@ -723,7 +723,7 @@ async function doPublish() {
     vuepressData.value.vuepressContent = md;
     vuepressData.value.vuepressFullContent = mdContent;
 
-    log.logWarn("即将发布的内容，mdContent=>", {"mdContent": mdContent})
+    logUtil.logWarn("即将发布的内容，mdContent=>", {"mdContent": mdContent})
 
     // 发布
     const res = await publishPage(vuepressCfg, docPath, mdContent)
@@ -744,16 +744,16 @@ async function doPublish() {
       [POSTID_KEY_CONSTANTS.VUEPRESS_POSTID_KEY]: docPath,
     };
     await setPageAttrs(siyuanData.value.pageId, customAttr)
-    log.logInfo("VuepressMain发布成功，保存路径,meta=>", customAttr);
+    logUtil.logInfo("VuepressMain发布成功，保存路径,meta=>", customAttr);
 
     // 刷新属性数据
     await initPage();
-    log.logInfo("文章预览链接=>", previewUrl)
+    logUtil.logInfo("文章预览链接=>", previewUrl)
   } else {
     // 刷新属性数据
     await initPage();
   }
-  log.logWarn("发布内容完成")
+  logUtil.logWarn("发布内容完成")
 
   isPublishLoading.value = false
   ElMessage.success(t('main.opt.status.publish'))
@@ -771,7 +771,7 @@ async function oneclickAttr(hideTip?: boolean) {
 
   // 发布属性
   await saveAttrToSiyuan(true)
-  log.logWarn("发布属性完成")
+  logUtil.logWarn("发布属性完成")
 
   isGenLoading.value = false
   if (hideTip != true) {
@@ -803,7 +803,7 @@ async function cancelPublish() {
     // })
     isCancelLoading.value = false;
 
-    log.logInfo("操作已取消")
+    logUtil.logInfo("操作已取消")
   })
 }
 
@@ -811,7 +811,7 @@ async function cancelPublish() {
 async function doCancel(isInit: boolean) {
   const vuepressCfg = getJSONConf<IVuepressCfg>(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS)
   const docPath = getDocPath()
-  log.logInfo("准备取消发布，docPath=>", docPath)
+  logUtil.logInfo("准备取消发布，docPath=>", docPath)
 
   await deletePage(vuepressCfg, docPath)
 
@@ -819,7 +819,7 @@ async function doCancel(isInit: boolean) {
     [POSTID_KEY_CONSTANTS.VUEPRESS_POSTID_KEY]: ""
   };
   await setPageAttrs(siyuanData.value.pageId, customAttr)
-  log.logWarn("VuepressMain取消发布,meta=>", customAttr);
+  logUtil.logWarn("VuepressMain取消发布,meta=>", customAttr);
 
   // 刷新属性数据
   if (isInit) {

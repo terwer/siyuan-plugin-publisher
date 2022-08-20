@@ -2,14 +2,9 @@ import {defineConfig} from 'vite'
 import {loadEnv} from "vite";
 import vue from '@vitejs/plugin-vue'
 import vitePluginRequireTransform from 'vite-plugin-require-transform';
-// yarn add --dev @esbuild-plugins/node-globals-polyfill
-// @ts-ignore
 import {NodeGlobalsPolyfillPlugin} from '@esbuild-plugins/node-globals-polyfill'
-// yarn add --dev @esbuild-plugins/node-modules-polyfill
-// @ts-ignore
 import {NodeModulesPolyfillPlugin} from '@esbuild-plugins/node-modules-polyfill'
 // You don't need to add this to deps, it's included by @esbuild-plugins/node-modules-polyfill
-// @ts-ignore
 import rollupNodePolyFill from 'rollup-plugin-node-polyfills'
 
 // https://vitejs.dev/config/
@@ -45,7 +40,7 @@ export default defineConfig(({mode}) => {
         resolve: {
             alias: {
                 'vue-i18n': 'vue-i18n/dist/vue-i18n.cjs.js',
-                'node-fetch': 'isomorphic-fetch',
+                'node-fetch': 'cross-fetch',
                 // This Rollup aliases are extracted from @esbuild-plugins/node-modules-polyfill,
                 // see https://github.com/remorses/esbuild-plugins/blob/master/node-modules-polyfill/src/polyfills.ts
                 // process and buffer are excluded because already managed
@@ -105,6 +100,11 @@ export default defineConfig(({mode}) => {
                     rollupNodePolyFill()
                 ]
             }
-        }
+        },
+        test: {
+            globals: true,
+            environment: 'node',
+            setupFiles: ['./test/setup.ts'],
+        },
     }
 })

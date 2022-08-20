@@ -4,10 +4,12 @@ import {slugify} from 'transliteration';
 import jsYaml from "js-yaml";
 import {mdToPlanText} from "./htmlUtil";
 import {getApiParams} from "./publishUtil";
-import log from "./logUtil";
+import logUtil from "./logUtil";
 import {API_TYPE_CONSTANTS} from "./constants/apiTypeConstants";
 import {IVuepressCfg} from "./platform/vuepress/IVuepressCfg";
 import {IMetaweblogCfg} from "./platform/metaweblog/IMetaweblogCfg";
+import {getDynamicJsonCfg} from "./dynamicConfig";
+import {getBooleanConf} from "./config";
 
 // const nodejieba = require("nodejieba");
 
@@ -20,22 +22,47 @@ export function getPublishStatus(apiType: string, meta: any) {
     const metaweblogTypeArray = [API_TYPE_CONSTANTS.API_TYPE_JVUE, API_TYPE_CONSTANTS.API_TYPE_CONFLUENCE,
         API_TYPE_CONSTANTS.API_TYPE_CNBLOGS, API_TYPE_CONSTANTS.API_TYPE_WORDPRESS
     ]
+    // 读取动态类型
+    const dynamicJsonCfg = getDynamicJsonCfg()
+    // const dynamicConfigArray = dynamicJsonCfg.totalCfg || []
+    const metaweblogArray = dynamicJsonCfg.metaweblogCfg || []
+    const wordpressArray = dynamicJsonCfg.wordpressCfg || []
+    // metaweblog
+    metaweblogArray.forEach(item => {
+        const apiType = item.plantformKey
+        // const postidKey = 'custom-' + item.plantformKey + '-post-id'
+        const switchKey = "switch-" + item.plantformKey
+        const switchValue = getBooleanConf(switchKey)
+        if (switchValue) {
+            metaweblogTypeArray.push(apiType)
+        }
+    })
+    // wordpress
+    wordpressArray.forEach(item => {
+        const apiType = item.plantformKey
+        // const postidKey = 'custom-' + item.plantformKey + '-post-id'
+        const switchKey = "switch-" + item.plantformKey
+        const switchValue = getBooleanConf(switchKey)
+        if (switchValue) {
+            metaweblogTypeArray.push(apiType)
+        }
+    })
 
     if (apiType == API_TYPE_CONSTANTS.API_TYPE_VUEPRESS) {
         const postidKey = getApiParams<IVuepressCfg>(apiType).posidKey;
         const postId = meta[postidKey] || "";
-        log.logInfo("平台=>", apiType)
-        log.logInfo("meta=>", meta)
-        log.logInfo("postidKey=>", postidKey)
-        log.logInfo("postidKey的值=>", postId)
+        logUtil.logInfo("平台=>", apiType)
+        logUtil.logInfo("meta=>", meta)
+        logUtil.logInfo("postidKey=>", postidKey)
+        logUtil.logInfo("postidKey的值=>", postId)
         return postId !== "";
     } else if (metaweblogTypeArray.includes(apiType)) {
         const postidKey = getApiParams<IMetaweblogCfg>(apiType).posidKey;
         const postId = meta[postidKey] || "";
-        log.logInfo("平台=>", apiType)
-        log.logInfo("meta=>", meta)
-        log.logInfo("postidKey=>", postidKey)
-        log.logInfo("postidKey的值=>", postId)
+        logUtil.logInfo("平台=>", apiType)
+        logUtil.logInfo("meta=>", meta)
+        logUtil.logInfo("postidKey=>", postidKey)
+        logUtil.logInfo("postidKey的值=>", postId)
         return postId !== "";
     }
 
@@ -53,7 +80,7 @@ export async function zhSlugify(q: string) {
     let json = await v.json()
     let res = json[0][0];
     res = res.replaceAll(/-/g, "");
-    log.logInfo("res=>", res)
+    logUtil.logInfo("res=>", res)
     return slugify(res);
 }
 
@@ -72,7 +99,7 @@ export function yaml2Obj(yaml: string): any {
         yaml = yaml.replace("---\n", "")
         yaml = yaml.replace("---", "")
         doc = jsYaml.load(yaml);
-        // log.logInfo(doc);
+        // logUtil.logInfo(doc);
     } catch (e) {
         console.error(e);
     }
@@ -113,12 +140,12 @@ export function obj2yaml(obj: any) {
 //         }
 //     };
 //     const yamlResult = obj2yaml(obj)
-//     log.logInfo("yamlResult=>")
-//     log.logInfo(yamlResult)
+//     logUtil.logInfo("yamlResult=>")
+//     logUtil.logInfo(yamlResult)
 //
 //     const objResult = yaml2Obj(yamlResult)
-//     log.logInfo("objResult=>")
-//     log.logInfo(objResult)
+//     logUtil.logInfo("objResult=>")
+//     logUtil.logInfo(objResult)
 // }
 //
 // test()
@@ -160,9 +187,9 @@ export const formatIsoToNumDate = (str: string, isAddTimeZone?: boolean) => {
 
         let newmatch = match;
         if (isAddTimeZone) {
-            log.logInfo("修复时区，ISO日期默认晚8小时")
+            logUtil.logInfo("修复时区，ISO日期默认晚8小时")
             // ISO日期默认晚8小时
-            log.logInfo(addHoursToDate(new Date(match), 8))
+            logUtil.logInfo(addHoursToDate(new Date(match), 8))
             newmatch = addHoursToDate(new Date(match), 8).toISOString()
         }
 
@@ -173,8 +200,8 @@ export const formatIsoToNumDate = (str: string, isAddTimeZone?: boolean) => {
         const result = d + t;
 
         newstr = newstr.replace(match, result)
-        log.logInfo("formatIsoDate match=>", match)
-        log.logInfo("formatIsoDate result=>", result)
+        logUtil.logInfo("formatIsoDate match=>", match)
+        logUtil.logInfo("formatIsoDate result=>", result)
     }
 
     return newstr;
@@ -205,7 +232,7 @@ export const formatIsoToZhDate = (str: string, isAddTimeZone: boolean) => {
         let newmatch = match;
         if (isAddTimeZone) {
             // ISO日期默认晚8小时
-            log.logInfo(addHoursToDate(new Date(match), 8))
+            logUtil.logInfo(addHoursToDate(new Date(match), 8))
             newmatch = addHoursToDate(new Date(match), 8).toISOString()
         }
 
@@ -216,11 +243,11 @@ export const formatIsoToZhDate = (str: string, isAddTimeZone: boolean) => {
         const result = d + " " + t;
 
         newstr = newstr.replace(match, result)
-        log.logInfo("formatZhDate match=>", match)
-        log.logInfo("formatZhDate result=>", result)
+        logUtil.logInfo("formatZhDate match=>", match)
+        logUtil.logInfo("formatZhDate result=>", result)
     }
 
-    // log.logInfo("formatZhDate=>", newstr)
+    // logUtil.logInfo("formatZhDate=>", newstr)
     return newstr;
 }
 
@@ -236,7 +263,7 @@ export const formatNumToZhDate = (str: string): string => {
     let newstr = str;
 
     const onlyNumbers = newstr.replace(/\D/g, "");
-    // log.logInfo("onlyNumbers=>", onlyNumbers)
+    // logUtil.logInfo("onlyNumbers=>", onlyNumbers)
     const year = onlyNumbers.slice(0, 4)
     const month = onlyNumbers.slice(4, 6)
     const day = onlyNumbers.slice(6, 8)
@@ -259,8 +286,8 @@ export const formatNumToZhDate = (str: string): string => {
         datestr = year + "-" + month + "-" + day + " " + hour + ":" + min + ":" + sec
     }
 
-    log.logInfo("formatNumToZhDate str=>", str)
-    log.logInfo("formatNumToZhDate datestr=>", datestr)
+    logUtil.logInfo("formatNumToZhDate str=>", str)
+    logUtil.logInfo("formatNumToZhDate datestr=>", datestr)
     return datestr;
 }
 
@@ -289,7 +316,7 @@ function changeTimeZone(date: any, timeZone: string) {
 export function covertStringToDate(dateString: string) {
     const datestr = formatNumToZhDate(dateString);
 
-    // log.logInfo("datestr=>", datestr)
+    // logUtil.logInfo("datestr=>", datestr)
     return changeTimeZone(datestr, 'Asia/Shanghai')
 }
 
@@ -298,24 +325,24 @@ export function covertStringToDate(dateString: string) {
 // // const datestr = date.toLocaleString('zh-CN', {
 // //     timeZone,
 // // });
-// log.logInfo("date.toISOString=>")
-// log.logInfo(date.toISOString())
+// logUtil.logInfo("date.toISOString=>")
+// logUtil.logInfo(date.toISOString())
 //
 // const obj = {
 //     title: "测试，这里有T，也有.000Z啊",
 //     date: date
 // }
 // const yaml = obj2yaml(obj)
-// log.logInfo("yaml=>")
-// log.logInfo(yaml)
+// logUtil.logInfo("yaml=>")
+// logUtil.logInfo(yaml)
 //
 // const fmt = formatIsoToZhDate(yaml)
-// log.logInfo("fmt=>")
-// log.logInfo(fmt)
+// logUtil.logInfo("fmt=>")
+// logUtil.logInfo(fmt)
 //
 // const fmt2 = formatIsoToNumDate(yaml)
-// log.logInfo("fmt2=>")
-// log.logInfo(fmt2)
+// logUtil.logInfo("fmt2=>")
+// logUtil.logInfo(fmt2)
 
 /**
  * 文本分词
@@ -324,7 +351,7 @@ export function covertStringToDate(dateString: string) {
 export async function cutWords(words: string) {
     // https://github.com/yanyiwu/nodejieba
     words = mdToPlanText(words)
-    log.logInfo("准备开始分词，原文=>", words)
+    logUtil.logInfo("准备开始分词，原文=>", words)
     // https://github.com/ddsol/speedtest.net/issues/112
     // 浏览器和webpack不支持，只有node能用
     // const result = nodejieba.cut(words);
@@ -334,7 +361,7 @@ export async function cutWords(words: string) {
     let json = await v.json()
     // const result = "浏览器和webpack不支持，只有node能用，作者仓库： https://github.com/yanyiwu/nodejieba ，在线版本：http://cppjieba-webdemo.herokuapp.com 。"
     // alert(result)
-    log.logInfo("分词完毕，结果=>", json.result);
+    logUtil.logInfo("分词完毕，结果=>", json.result);
     return json.result;
 }
 
@@ -346,7 +373,7 @@ export async function cutWords(words: string) {
  */
 function countWords(words: Array<string>, len: number) {
     const unUseWords = ['页面']
-    log.logInfo("文本清洗，统计，排序，去除无意义的单词unUseWords=>", unUseWords)
+    logUtil.logInfo("文本清洗，统计，排序，去除无意义的单词unUseWords=>", unUseWords)
 
     // 统计
     // @ts-ignore
@@ -370,7 +397,7 @@ function countWords(words: Array<string>, len: number) {
         // @ts-ignore
         return wordobj[b] - wordobj[a];
     });
-    log.logInfo("文本清洗结束wordarr=>", wordarr)
+    logUtil.logInfo("文本清洗结束wordarr=>", wordarr)
 
     if (!len || len === 0) {
         return wordarr
@@ -386,7 +413,7 @@ export function jiebaToHotWords(words: Array<string>, len: number) {
     // const len = 5
 
     const res = countWords(words, len);
-    // log.logInfo(res)
+    // logUtil.logInfo(res)
     return res;
 }
 
@@ -465,14 +492,14 @@ export function isEmptyString(str: any) {
 export function pathJoin(path1: string, path2: string) {
     let path = path1
     const path1LastIdx = path1.lastIndexOf("/")
-    // console.log("path1.length=>", path1.length)
-    // console.log("path1LastIdx=>", path1LastIdx)
+    // console.logUtil("path1.length=>", path1.length)
+    // console.logUtil("path1LastIdx=>", path1LastIdx)
     if (path1LastIdx + 1 == path1.length) {
         path = path1.substring(0, path1LastIdx)
     }
 
     const path2Idx = path2.indexOf("/")
-    // console.log("path2Idx=>", path2Idx)
+    // console.logUtil("path2Idx=>", path2Idx)
     if (path2Idx > 0) {
         path = path + "/" + path2
     } else {

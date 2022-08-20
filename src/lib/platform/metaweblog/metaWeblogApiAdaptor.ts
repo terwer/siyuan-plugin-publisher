@@ -1,7 +1,7 @@
 import {IApi} from "../../api";
 import {Post} from "../../common/post";
 import {UserBlog} from "../../common/userBlog";
-import log from "../../logUtil";
+import logUtil from "../../logUtil";
 import {IMetaweblogCfg} from "./IMetaweblogCfg";
 import {getJSONConf} from "../../config";
 import {MetaWeblogApi} from "./metaWeblogApi";
@@ -32,8 +32,8 @@ export class MetaWeblogApiAdaptor implements IApi {
     public async getUsersBlogs(): Promise<Array<UserBlog>> {
         let result: Array<UserBlog> = []
         const data = await this.metaWeblogApi.getUsersBlogs(this.appkey, this.username, this.password);
-        log.logInfo("getUsersBlogs=>")
-        log.logInfo(data)
+        logUtil.logInfo("getUsersBlogs=>")
+        logUtil.logInfo(data)
         return data;
     }
 

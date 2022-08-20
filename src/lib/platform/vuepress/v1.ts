@@ -1,7 +1,7 @@
 import {IVuepressCfg} from "./IVuepressCfg";
 import {Octokit} from "@octokit/core";
 import {Base64} from 'js-base64';
-import log from "../../logUtil";
+import logUtil from "../../logUtil";
 
 /**
  * Vuepress V1 API
@@ -199,7 +199,7 @@ export async function getPageTreeNode(vuepressCfg: IVuepressCfg, docPath: string
             }
             treeNode.push(node)
         }
-        log.logInfo("getPageTreeNode,data=>", data)
+        logUtil.logInfo("getPageTreeNode,data=>", data)
     }
 
     return treeNode

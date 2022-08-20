@@ -32,7 +32,7 @@ export class SiYuanApiAdaptor implements IApi {
         }
         let k = keyword || ""
         const siyuanPosts = await getRootBlocks(pg, numOfPosts, k)
-        // log.logInfo(siyuanPosts)
+        // logUtil.logInfo(siyuanPosts)
 
         for (let i = 0; i < siyuanPosts.length; i++) {
             const siyuanPost = siyuanPosts[i]

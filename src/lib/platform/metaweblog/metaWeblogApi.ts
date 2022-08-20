@@ -3,10 +3,10 @@ import {getJSONConf} from "../../config";
 import {XmlrpcClient} from "./xmlrpc";
 import {UserBlog} from "../../common/userBlog";
 import {Post} from "../../common/post";
-import log from "../../logUtil";
+import logUtil from "../../logUtil";
 import {METAWEBLOG_METHOD_CONSTANTS} from "../../constants/metaweblogMethodConstants";
 import {POST_STATUS_CONSTANTS} from "../../constants/postStatusConstants";
-import {isEmptyString} from "../../util";
+import {inBrowser, isEmptyString} from "../../util";
 
 export class MetaWeblogApi {
     private readonly apiType: string
@@ -23,8 +23,8 @@ export class MetaWeblogApi {
         const usersBlogs: Array<UserBlog> = []
         let ret = await this.xmlrpcClient.methodCallEntry(METAWEBLOG_METHOD_CONSTANTS.GET_USERS_BLOGS,
             [this.apiType, username, password])
-        log.logInfo("ret=>")
-        log.logInfo(ret)
+        logUtil.logInfo("ret=>")
+        logUtil.logInfo(ret)
 
         // JSON格式规范化
         // if (typeof ret == "string") {
@@ -75,13 +75,13 @@ export class MetaWeblogApi {
         }
 
         const postStruct = this.createPostStruct(post)
-        log.logWarn("postStruct=>")
-        log.logWarn(postStruct)
+        logUtil.logWarn("postStruct=>")
+        logUtil.logWarn(postStruct)
         let ret = await this.xmlrpcClient.methodCallEntry(METAWEBLOG_METHOD_CONSTANTS.NEW_POST,
             [this.apiType, username, password, postStruct, publish])
         ret = ret.replace(/"/g, "")
-        log.logInfo("ret=>")
-        log.logInfo(ret)
+        logUtil.logInfo("ret=>")
+        logUtil.logInfo(ret)
 
         return ret;
     }
@@ -93,12 +93,12 @@ export class MetaWeblogApi {
         }
 
         const postStruct = this.createPostStruct(post)
-        log.logWarn("postStruct=>")
-        log.logWarn(postStruct)
+        logUtil.logWarn("postStruct=>")
+        logUtil.logWarn(postStruct)
         const ret = await this.xmlrpcClient.methodCallEntry(METAWEBLOG_METHOD_CONSTANTS.EDIT_POST,
             [postid, username, password, postStruct, publish])
-        log.logInfo("ret=>")
-        log.logInfo(ret)
+        logUtil.logInfo("ret=>")
+        logUtil.logInfo(ret)
 
         return ret;
     }
@@ -106,8 +106,8 @@ export class MetaWeblogApi {
     public async deletePost(appKey: string, postid: string, username: string, password: string, publish: boolean) {
         const ret = await this.xmlrpcClient.methodCallEntry(METAWEBLOG_METHOD_CONSTANTS.DELETE_POST,
             [appKey, postid, username, password, publish])
-        log.logInfo("ret=>")
-        log.logInfo(ret)
+        logUtil.logInfo("ret=>")
+        logUtil.logInfo(ret)
 
         return ret;
     };
@@ -144,12 +144,15 @@ export class MetaWeblogApi {
             })
         }
 
-        Object.assign(postObj, {
-            // 这里要注意时间格式
-            // http://www.ab-weblog.com/en/create-new-posts-with-publishing-date-in-wordpress-using-xml-rpc-and-php/
-            // dateCreated: post.dateCreated.toISOString() || new Date().toISOString()
-            dateCreated: post.dateCreated || new Date()
-        })
+        // 浏览器端的date转换有问题
+        if (!inBrowser()) {
+            Object.assign(postObj, {
+                // 这里要注意时间格式
+                // http://www.ab-weblog.com/en/create-new-posts-with-publishing-date-in-wordpress-using-xml-rpc-and-php/
+                // dateCreated: post.dateCreated.toISOString() || new Date().toISOString()
+                dateCreated: post.dateCreated || new Date()
+            })
+        }
 
         Object.assign(postObj, {
             categories: post.categories || [],

@@ -48,7 +48,7 @@
 import {onBeforeMount, onMounted, reactive, ref, watch} from "vue";
 import {getBooleanConf, setBooleanConf} from "../../lib/config";
 import SWITCH_CONSTANTS from "../../lib/constants/switchConstants";
-import log from "../../lib/logUtil";
+import logUtil from "../../lib/logUtil";
 import type {FormInstance, FormRules} from 'element-plus'
 import {ElMessage} from "element-plus";
 import {useI18n} from "vue-i18n";
@@ -92,9 +92,9 @@ const initConf = () => {
     item.modelValue = switchValue
     formData.dynamicConfigArray.push(item)
   });
-  log.logInfo(formData.dynamicConfigArray)
+  logUtil.logInfo(formData.dynamicConfigArray)
 
-  log.logInfo("平台设置初始化")
+  logUtil.logInfo("平台设置初始化")
 }
 
 const props = defineProps({
@@ -112,7 +112,7 @@ watch(() => props.isReload, /**/async (oldValue, newValue) => {
   initConf();
   await initPage()
 
-  log.logInfo("post-bind初始化")
+  logUtil.logInfo("post-bind初始化")
 })
 
 onBeforeMount(async () => {
@@ -120,7 +120,7 @@ onBeforeMount(async () => {
   initConf();
   await initPage()
 
-  log.logInfo("post-bind初始化 onMounted")
+  logUtil.logInfo("post-bind初始化 onMounted")
 })
 
 onMounted(() => {
@@ -205,7 +205,7 @@ const rules = reactive<FormRules>({
 
 async function initPage() {
   const pageId = await getPageId(true)
-  log.logInfo("PostBind pageId=>", pageId)
+  logUtil.logInfo("PostBind pageId=>", pageId)
   if (!pageId || pageId == "") {
     return
   }
@@ -258,9 +258,9 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   const result = await formEl.validate((valid, fields) => {
     if (valid) {
-      log.logInfo("校验成功")
+      logUtil.logInfo("校验成功")
     } else {
-      log.logError(t('main.opt.failure'), fields)
+      logUtil.logError(t('main.opt.failure'), fields)
       // ElMessage.error(t('main.opt.failure'))
       return
     }
@@ -293,7 +293,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
     assignPostid(item.modelValue, customAttr, posidKey, item.posid)
   });
 
-  log.logWarn("PostBind保存属性到思源笔记,meta=>", customAttr);
+  logUtil.logWarn("PostBind保存属性到思源笔记,meta=>", customAttr);
 
   await setPageAttrs(siyuanData.pageId, customAttr)
   ElMessage.success(t('main.opt.success'))
