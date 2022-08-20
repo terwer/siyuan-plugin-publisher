@@ -1,10 +1,13 @@
 <template>
-  <div>YuqueSetting</div>
+  <common-blog-setting/>
 </template>
 
 <script lang="ts">
+import CommonBlogSetting from "../CommonBlogSetting.vue";
+
 export default {
-  name: "YuqueSetting"
+  name: "YuqueSetting",
+  components: {CommonBlogSetting}
 }
 </script>
 
