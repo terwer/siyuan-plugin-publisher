@@ -63,7 +63,7 @@ export class KmsApi {
             method: "POST"
         })
         // const resText = await response.text()
-        // log.logInfo("向KMS请求数据，resText=>", resText)
+        // logUtil.logInfo("向KMS请求数据，resText=>", resText)
 
         const json = await response.json()
 

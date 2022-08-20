@@ -13,7 +13,7 @@
 <script lang="ts" setup>
 import {useI18n} from "vue-i18n";
 import {onMounted} from "vue";
-import log from "../../lib/logUtil";
+import logUtil from "../../lib/logUtil";
 
 const {locale} = useI18n()
 const langs = [
@@ -28,7 +28,7 @@ const langs = [
 ]
 
 const langChanged = (lang: string) => {
-  log.logInfo("langChanged=>", lang);
+  logUtil.logInfo("langChanged=>", lang);
   localStorage.Lang = lang;
   locale.value = lang;
 }

@@ -47,7 +47,7 @@ import {useI18n} from "vue-i18n";
 import {setBooleanConf, getBooleanConf, getConf} from "../../lib/config";
 import SWITCH_CONSTANTS from "../../lib/constants/switchConstants";
 import {DynamicConfig, getDynamicJsonCfg} from "../../lib/dynamicConfig";
-import log from "../../lib/logUtil";
+import logUtil from "../../lib/logUtil";
 
 const {t} = useI18n()
 
@@ -86,7 +86,7 @@ const kmsOnChange = (val: any) => {
   setBooleanConf(SWITCH_CONSTANTS.SWITCH_KMS_KEY, val)
 }
 const dynamicOnChange = (val: any) => {
-  log.logInfo("dynamicOnChange,val=>", val)
+  logUtil.logInfo("dynamicOnChange,val=>", val)
   const valArr = val.split("_")
   const switchKey = "switch-" + valArr[0]
   const switchStatus = valArr[1]
@@ -115,7 +115,7 @@ const initConf = () => {
     item.modelValue = item.plantformKey + "_" + switchValue
     formData.dynamicConfigArray.push(item)
   });
-  log.logInfo(formData.dynamicConfigArray)
+  logUtil.logInfo(formData.dynamicConfigArray)
 }
 
 onMounted(async () => {

@@ -44,7 +44,7 @@
 import {reactive, ref, watch} from "vue";
 import {getBooleanConf, setBooleanConf} from "../../lib/config";
 import SWITCH_CONSTANTS from "../../lib/constants/switchConstants";
-import log from "../../lib/logUtil";
+import logUtil from "../../lib/logUtil";
 import {DynamicConfig, getDynamicJsonCfg} from "../../lib/dynamicConfig";
 import {DynamicMCfg} from "../../lib/platform/metaweblog/config/dynamicMCfg";
 import {DynamicWCfg} from "../../lib/platform/metaweblog/config/dynamicWCfg";
@@ -101,10 +101,10 @@ const initConf = () => {
   formData.dynamicConfigArray = initDynCfg(dynamicJsonCfg.totalCfg || [])
   formData.metaweblogArray = initDynCfg(dynamicJsonCfg.metaweblogCfg || [])
   formData.wordpressArray = initDynCfg(dynamicJsonCfg.wordpressCfg || [])
-  log.logInfo("dynamicJsonCfg=>")
-  log.logInfo(JSON.stringify(dynamicJsonCfg))
+  logUtil.logInfo("dynamicJsonCfg=>")
+  logUtil.logInfo(JSON.stringify(dynamicJsonCfg))
 
-  log.logInfo("平台设置初始化")
+  logUtil.logInfo("平台设置初始化")
 }
 
 const props = defineProps({
@@ -120,7 +120,7 @@ watch(() => props.isReload, /**/(oldValue, newValue) => {
   // 默认选中vuepress
   setBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY, true)
   initConf();
-  log.logInfo("plantform-setting初始化")
+  logUtil.logInfo("plantform-setting初始化")
 })
 </script>
 

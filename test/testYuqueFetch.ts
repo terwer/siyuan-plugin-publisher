@@ -1,5 +1,3 @@
-import "isomorphic-fetch"
-
 export async function testYuqueFetch() {
     const token = ""
 

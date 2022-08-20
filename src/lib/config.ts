@@ -1,4 +1,4 @@
-import log from "./logUtil";
+import logUtil from "./logUtil";
 import {isEmptyObject} from "./util";
 
 /**
@@ -6,16 +6,16 @@ import {isEmptyObject} from "./util";
  * @param key key
  */
 export function getBooleanConf(key: string): boolean {
-    log.logInfo("------------------------------")
-    log.logInfo("尝试从localStorage获取Boolean数据，key=>", key)
+    logUtil.logInfo("------------------------------")
+    logUtil.logInfo("尝试从localStorage获取Boolean数据，key=>", key)
 
     let valueObj = false
     let value = getConf(key)
     valueObj = value.toLowerCase() === "true"
 
-    log.logInfo("从localStorage获取Boolean数据=>")
-    log.logInfo(valueObj)
-    log.logInfo("------------------------------")
+    logUtil.logInfo("从localStorage获取Boolean数据=>")
+    logUtil.logInfo(valueObj)
+    logUtil.logInfo("------------------------------")
     return valueObj;
 }
 
@@ -38,8 +38,8 @@ export function getArrayJSONConf<T>(key: string): T {
  * @param key key
  */
 export function getJSONConf<T>(key: string): T {
-    log.logInfo("------------------------------")
-    log.logInfo("尝试从localStorage获取JSON数据，key=>", key)
+    logUtil.logInfo("------------------------------")
+    logUtil.logInfo("尝试从localStorage获取JSON数据，key=>", key)
 
     let valueObj = <T>({} || [])
     let value = getConf(key)
@@ -47,13 +47,13 @@ export function getJSONConf<T>(key: string): T {
         try {
             valueObj = JSON.parse(value);
         } catch (e) {
-            log.logInfo("JSON格式不正确", e)
+            logUtil.logInfo("JSON格式不正确", e)
         }
     }
 
-    log.logInfo("从localStorage获取JSON数据=>")
-    log.logInfo(valueObj)
-    log.logInfo("------------------------------")
+    logUtil.logInfo("从localStorage获取JSON数据=>")
+    logUtil.logInfo(valueObj)
+    logUtil.logInfo("------------------------------")
     return valueObj;
 }
 
@@ -62,14 +62,14 @@ export function getJSONConf<T>(key: string): T {
  * @param key key
  */
 export function getConf(key: string): string {
-    log.logInfo("尝试从localStorage获取数据，key=>", key)
+    logUtil.logInfo("尝试从localStorage获取数据，key=>", key)
 
     const value = localStorage.getItem(key)
     if (!value) {
-        log.logWarn("未找到对应数据，key=>", key)
+        logUtil.logWarn("未找到对应数据，key=>", key)
         return "";
     }
-    log.logInfo("从localStorage获取数据=>", value)
+    logUtil.logInfo("从localStorage获取数据=>", value)
     return value;
 }
 
@@ -79,14 +79,14 @@ export function getConf(key: string): string {
  * @param value
  */
 export function setBooleanConf(key: string, value: boolean): void {
-    log.logInfo("++++++++++++++++++++++++++++++")
-    log.logInfo("尝试保存Boolean数据到localStorage里key=>", key)
-    log.logInfo("保存Boolean数据到localStorage=>")
-    log.logInfo(value)
+    logUtil.logInfo("++++++++++++++++++++++++++++++")
+    logUtil.logInfo("尝试保存Boolean数据到localStorage里key=>", key)
+    logUtil.logInfo("保存Boolean数据到localStorage=>")
+    logUtil.logInfo(value)
 
     const boolString = value.toString()
     setConf(key, boolString)
-    log.logInfo("++++++++++++++++++++++++++++++")
+    logUtil.logInfo("++++++++++++++++++++++++++++++")
 }
 
 /**
@@ -95,14 +95,14 @@ export function setBooleanConf(key: string, value: boolean): void {
  * @param value
  */
 export function setJSONConf<T>(key: string, value: T): void {
-    log.logInfo("++++++++++++++++++++++++++++++")
-    log.logInfo("尝试保存JSON数据到localStorage里key=>", key)
-    log.logInfo("保存JSON数据到localStorage=>")
-    log.logInfo(value)
+    logUtil.logInfo("++++++++++++++++++++++++++++++")
+    logUtil.logInfo("尝试保存JSON数据到localStorage里key=>", key)
+    logUtil.logInfo("保存JSON数据到localStorage=>")
+    logUtil.logInfo(value)
 
     const valueString = JSON.stringify(value)
     setConf(key, valueString)
-    log.logInfo("++++++++++++++++++++++++++++++")
+    logUtil.logInfo("++++++++++++++++++++++++++++++")
 }
 
 /**
@@ -112,12 +112,12 @@ export function setJSONConf<T>(key: string, value: T): void {
  */
 export function setConf(key: string, value: string): void {
     if (!value || value == "") {
-        log.logWarn("空值，不保存")
+        logUtil.logWarn("空值，不保存")
         return
     }
 
-    log.logInfo("尝试保存数据到localStorage里key=>", key)
-    log.logInfo("保存数据到localStorage=>", value)
+    logUtil.logInfo("尝试保存数据到localStorage里key=>", key)
+    logUtil.logInfo("保存数据到localStorage=>", value)
 
     localStorage.setItem(key, value)
 }

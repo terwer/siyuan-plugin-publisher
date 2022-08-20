@@ -1,4 +1,4 @@
-import log from "../../logUtil";
+import logUtil from "../../logUtil";
 
 const xmlrpc = require('xmlrpc');
 
@@ -13,16 +13,16 @@ export async function fetchNode(apiUrl: string, reqMethod: string, reqParams: Ar
     }
 
     try {
-        log.logWarn("methodCallDirectNode开始")
-        log.logWarn("xmlrpcNodeParams.reqMethod=>")
-        log.logWarn(reqMethod)
-        log.logWarn("xmlrpcNodeParams.reqParams=>")
-        log.logWarn(reqParams)
+        logUtil.logWarn("methodCallDirectNode开始")
+        logUtil.logWarn("xmlrpcNodeParams.reqMethod=>")
+        logUtil.logWarn(reqMethod)
+        logUtil.logWarn("xmlrpcNodeParams.reqParams=>")
+        logUtil.logWarn(reqParams)
         const data = await methodCallDirectNode(client, reqMethod, reqParams)
         const dataJson = JSON.stringify(data)
         return dataJson
     } catch (e) {
-        log.logError(e)
+        logUtil.logError(e)
         throw new Error("请求处理异常")
     }
 }
@@ -38,8 +38,8 @@ async function methodCallDirectNode(client: any, methodName: string, params: any
     return new Promise(function (resolve, reject) {
         client.methodCall(methodName, params, function (error: any, data: any) {
             if (!error) {
-                log.logInfo("resolve=>")
-                log.logInfo(data)
+                logUtil.logInfo("resolve=>")
+                logUtil.logInfo(data)
                 resolve(data);
             } else {
                 reject(error);

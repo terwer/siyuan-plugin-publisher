@@ -1,5 +1,5 @@
 import {getWidgetId} from "../siyuan/siyuanUtil";
-import log from "../../logUtil";
+import logUtil from "../../logUtil";
 import {getEnv} from "../../envUtil";
 // import {fetchElectron} from "./electronXmlrpc";
 import {fetchNode} from "./nodeXmlrpc";
@@ -28,14 +28,14 @@ export class XmlrpcClient {
      */
     private async fetchCORS(apiUrl: string, reqMethod: string, reqParams: Array<string>): Promise<string> {
         const middleApiUrl = getEnv("VITE_MIDDLEWARE_URL") || "/api/middleware/xmlrpc"
-        log.logInfo("apiUrl=>")
-        log.logInfo(apiUrl)
+        logUtil.logInfo("apiUrl=>")
+        logUtil.logInfo(apiUrl)
         const fetchCORSParams = {
             reqMethod: reqMethod,
             reqParams: reqParams
         }
-        log.logInfo("fetchCORSParams=>")
-        log.logInfo(fetchCORSParams)
+        logUtil.logInfo("fetchCORSParams=>")
+        logUtil.logInfo(fetchCORSParams)
 
         const data = {
             fetchParams: {
@@ -52,10 +52,10 @@ export class XmlrpcClient {
             body: JSON.stringify(data)
         }
 
-        log.logInfo("middleApiUrl=>")
-        log.logInfo(middleApiUrl)
-        log.logInfo("middleFetchOption=>")
-        log.logInfo(middleFetchOption)
+        logUtil.logInfo("middleApiUrl=>")
+        logUtil.logInfo(middleApiUrl)
+        logUtil.logInfo("middleFetchOption=>")
+        logUtil.logInfo(middleFetchOption)
 
         const response: Response = await fetch(middleApiUrl, middleFetchOption);
         return await response.text()
@@ -72,12 +72,12 @@ export class XmlrpcClient {
 
         const widgetResult = await getWidgetId()
         if (widgetResult.isInSiyuan) {
-            log.logWarn("当前处于挂件模式，使用electron的fetch获取数据")
+            logUtil.logWarn("当前处于挂件模式，使用electron的fetch获取数据")
             // 不解析了，直接使用Node兼容调用
             // result = await fetchElectron(apiUrl, reqMethod, reqParams)
             result = await fetchNode(apiUrl, reqMethod, reqParams)
         } else {
-            log.logWarn("当前处于非挂件模式，已开启请求代理解决CORS跨域问题")
+            logUtil.logWarn("当前处于非挂件模式，已开启请求代理解决CORS跨域问题")
             result = await this.fetchCORS(apiUrl, reqMethod, reqParams)
         }
 
@@ -85,8 +85,8 @@ export class XmlrpcClient {
             throw new Error("请求错误或者返回结果为空")
         }
 
-        log.logWarn("最终返回给前端的数据=>")
-        log.logWarn(result)
+        logUtil.logWarn("最终返回给前端的数据=>")
+        logUtil.logWarn(result)
 
         return result
     }
@@ -98,8 +98,8 @@ export class XmlrpcClient {
      */
     public async methodCallEntry(reqMethod: string, reqMarams: Array<any>) {
         const result = await this.fetchXmlrpc(this.apiUrl, reqMethod, reqMarams)
-        log.logInfo("请求结果，result=>")
-        log.logInfo(result)
+        logUtil.logInfo("请求结果，result=>")
+        logUtil.logInfo(result)
         return result
     }
 }

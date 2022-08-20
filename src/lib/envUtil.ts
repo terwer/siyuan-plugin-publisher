@@ -2,7 +2,7 @@
  * 获取Boolean类型的环境变量
  * @param key
  */
-import log from "./logUtil";
+import logUtil from "./logUtil";
 
 export function getBooleanEnv(key: string) {
     let env = false
@@ -23,7 +23,7 @@ export function getEnv(key: string) {
             env = import.meta.env[key]
         }
     } catch (e) {
-        log.logWarn(e)
+        logUtil.logWarn(e)
     }
 
     return env

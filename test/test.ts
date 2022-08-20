@@ -7,12 +7,12 @@
 // // @ts-ignore
 // const liandiApi = new LiandiApi(process.env.VITE_LIANDI_API_URL, process.env.VITE_LIANDI_CONFIG_TOKEN)
 // const result = await liandiApi.getUser()
-// console.log(result)
+// console.logUtil(result)
 
 // import {curlFileToFetch} from "./testCurl2Fetch";
 //
 // const result = curlFileToFetch("src/lib/platform/commonblog/kms/test/curl.local")
-// console.log(result)
+// console.logUtil(result)
 
 // import {testKmsFetch} from "./testKmsFetch";
 //

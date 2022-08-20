@@ -6,20 +6,20 @@
 <script lang="ts" setup>
 import {ref, onMounted} from "vue";
 import {getBooleanEnv, getEnv} from "./lib/envUtil";
-import log from "./lib/logUtil";
+import logUtil from "./lib/logUtil";
 import {getQueryString} from "./lib/util";
 import {getWidgetId} from "./lib/platform/siyuan/siyuanUtil";
 
 const isAuth = ref(false)
 
 onMounted(async () => {
-  log.logWarn("MODE=>", import.meta.env.MODE)
+  logUtil.logWarn("MODE=>", import.meta.env.MODE)
 
   // // 调试模式
   // const debugMode = getBooleanEnv("VITE_DEBUG_MODE")
   // if (debugMode) {
-  //   log.logWarn("正在开始调试模式，请修改test/test.ts下面的test方法查看效果")
-  //   log.logWarn("测试结束")
+  //   logUtil.logWarn("正在开始调试模式，请修改test/test.ts下面的test方法查看效果")
+  //   logUtil.logWarn("测试结束")
   //   return
   // }
 

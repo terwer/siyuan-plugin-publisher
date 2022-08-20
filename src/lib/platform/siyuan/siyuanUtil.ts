@@ -4,7 +4,7 @@
  */
 import {getJSONConf, setJSONConf} from "../../config";
 import {exportMdContent, getBlockAttrs, getBlockByID, lsNotebooks, setBlockAttrs} from "./siYuanApi.js";
-import log from "../../logUtil";
+import logUtil from "../../logUtil";
 import {getEnv} from "../../envUtil";
 import {inBrowser} from "../../util";
 
@@ -12,7 +12,7 @@ export async function getWidgetId() {
     if (!window.frameElement
         || !window.frameElement.parentElement
         || !window.frameElement.parentElement.parentElement) {
-        log.logWarn("正在已非挂件模式运行，部分功能将不可用，请知悉")
+        logUtil.logWarn("正在已非挂件模式运行，部分功能将不可用，请知悉")
         return {
             isInSiyuan: false,
             widgetId: ""
@@ -21,7 +21,7 @@ export async function getWidgetId() {
 
     let self = window.frameElement.parentElement.parentElement;
     if (!self) {
-        log.logWarn("正在已非挂件模式运行，部分功能将不可用，请知悉")
+        logUtil.logWarn("正在已非挂件模式运行，部分功能将不可用，请知悉")
         return {
             isInSiyuan: false,
             widgetId: ""
@@ -30,14 +30,14 @@ export async function getWidgetId() {
 
     const widgetId = self.getAttribute('data-node-id')
     if (!widgetId) {
-        log.logWarn("正在已非挂件模式运行，部分功能将不可用，请知悉")
+        logUtil.logWarn("正在已非挂件模式运行，部分功能将不可用，请知悉")
         return {
             isInSiyuan: false,
             widgetId: ""
         }
     }
 
-    log.logWarn("恭喜你，正在已挂件模式运行")
+    logUtil.logWarn("恭喜你，正在已挂件模式运行")
     return {
         isInSiyuan: true,
         widgetId: widgetId
@@ -56,11 +56,11 @@ async function getWidgetPage(force?: boolean) {
     }
 
     const widgetId = widgetResult.widgetId
-    log.logInfo("获取挂件的widgetId=>", widgetId)
+    logUtil.logInfo("获取挂件的widgetId=>", widgetId)
     // 默认读取缓存
     const pageObj = getJSONConf(widgetId);
     if (!force && pageObj) {
-        log.logInfo("获取本地缓存的思源笔记页面信息（不是实时的）=>", pageObj)
+        logUtil.logInfo("获取本地缓存的思源笔记页面信息（不是实时的）=>", pageObj)
         return pageObj;
     }
 
@@ -68,7 +68,7 @@ async function getWidgetPage(force?: boolean) {
     const page = await getBlockByID(widgetId);
     if (page) {
         setJSONConf(widgetId, page)
-        log.logInfo("调用API设置查询思源页面信息并更新本地缓存", page)
+        logUtil.logInfo("调用API设置查询思源页面信息并更新本地缓存", page)
     }
     return page;
 }
@@ -87,7 +87,7 @@ async function getSiyuanPageId(force?: boolean) {
     }
 
     const pageId = page.root_id
-    log.logInfo("获取思源笔记页面ID=>", pageId)
+    logUtil.logInfo("获取思源笔记页面ID=>", pageId)
     return pageId
 }
 
@@ -99,10 +99,10 @@ async function getSiyuanPageId(force?: boolean) {
 export async function getPageId(force?: boolean, pageId?: string) {
     // 默认尝试读取挂件的ID
     let syPageId = await getSiyuanPageId(force)
-    // log.logWarn("syPageId=>", syPageId)
+    // logUtil.logWarn("syPageId=>", syPageId)
     if (!syPageId) {
         //如果其他地方想使用，也可以显式的传入一个页面ID
-        // log.logWarn("pageId=>", pageId)
+        // logUtil.logWarn("pageId=>", pageId)
         if (pageId) {
             syPageId = pageId
         }
@@ -124,7 +124,7 @@ export async function getPageId(force?: boolean, pageId?: string) {
         }
     }
 
-    log.logWarn("当前页面ID是=>", syPageId)
+    logUtil.logWarn("当前页面ID是=>", syPageId)
     return syPageId;
 }
 
