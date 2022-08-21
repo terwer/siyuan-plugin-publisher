@@ -15,6 +15,6 @@ export class YuqueCfg extends CommonblogCfg {
         this.tokenSettingUrl = "https://www.yuque.com/settings/tokens"
         this.posidKey = POSTID_KEY_CONSTANTS.YUQUE_POSTID_KEY
         this.previewUrl = "https://www.yuque.com/terwer/[notebook]/[postid]"
-        this.pageType = PageType.Html
+        this.pageType = PageType.Markdown
     }
 }

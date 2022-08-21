@@ -514,7 +514,7 @@ const doPublish = async () => {
         [commonblogCfg.posidKey || ""]: postid,
       };
       await setPageAttrs(siyuanData.pageId, customAttr)
-      logUtil.logInfo("MetaweblogMain发布成功，保存postid,meta=>", customAttr);
+      logUtil.logInfo("CommonblogMain发布成功，保存postid,meta=>", customAttr);
 
       logUtil.logWarn("文章发布成功，postid=>", postid)
     }

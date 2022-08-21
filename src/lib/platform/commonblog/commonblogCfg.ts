@@ -33,6 +33,10 @@ export interface ICommonblogCfg {
      */
     blogName?: string
     /**
+     * 博客标识（API获取，部分平台需要）
+     */
+    blogid?: string
+    /**
      * 文章别名key
      */
     posidKey?: string
@@ -87,6 +91,10 @@ export class CommonblogCfg implements ICommonblogCfg {
      */
     blogName: string
     /**
+     * 博客标识（API获取，部分平台需要）
+     */
+    blogid: string
+    /**
      * 文章别名key
      */
     posidKey: string
@@ -111,6 +119,7 @@ export class CommonblogCfg implements ICommonblogCfg {
         this.token = "";
         this.apiStatus = false;
         this.blogName = "";
+        this.blogid = "";
         this.posidKey = "";
         this.previewUrl = "";
         this.pageType = PageType.Markdown
