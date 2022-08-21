@@ -4,7 +4,6 @@ import {Base64} from "js-base64";
 import {KmsApi} from "./kmsApi";
 import {API_TYPE_CONSTANTS} from "../../../constants/apiTypeConstants";
 import {UserBlog} from "../../../common/userBlog";
-import logUtil from "../../../logUtil";
 
 /**
  * 知识仓库的API适配器
@@ -24,9 +23,6 @@ export class KmsApiAdaptor extends CommonblogApiAdaptor implements IApi {
 
     async getUsersBlogs(): Promise<Array<UserBlog>> {
         let result: Array<UserBlog> = []
-
-        const doc = await this.kmsApi.addDoc()
-        logUtil.logInfo("doc=>", doc)
 
         const userblog: UserBlog = new UserBlog()
         userblog.blogid = this.apiType
