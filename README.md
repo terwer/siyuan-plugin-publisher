@@ -2,7 +2,9 @@
 
 Publish siyuan article to supported open platforms
 
-At present, it supports vuepress ~~and two open API standard blog platforms, <code>metaweblog api</code> and <code>xmlrpc</code> remote call API based on <code>wordpress</code> ( will release in v0.0.2)~~
+At present, it supports vuepress and two open API standard blog platforms, <code>metaweblog api</code> and <code>xmlrpc</code> remote call API based on <code>wordpress</code>
+
+ALso provide a [common API adaptor](https://github.com/terwer/src-sy-post-publisher/blob/main/src/lib/api.ts) , make every plantform posiable.
 
 <a href="https://img1.terwergreen.com/api/public/20220729233245.gif" target="_blank" >Click me</a>
 
@@ -14,18 +16,43 @@ At present, it supports vuepress ~~and two open API standard blog platforms, <co
 
 * [X] Vuepress-v0.0.1 support，2022-07-29 release
 
-* [ ] Cnblogs-relay on v0.0.2 version，will release on 2022-10-31
+* [X] Cnblogs-relay on v0.0.2 version，~~will release on 2022-10-31~~，released now on 2022-08-21
 
-* [ ] Liandi-relay on v0.0.2 version，will release on 2022-10-31
+* [X] Liandi-relay on v0.0.2 version，~~will release on 2022-10-31~~，released now on 2022-08-21
 
-* [ ] Yueque-relay on v0.0.2 version，will release on 2022-10-31
+* [X] Yueque-relay on v0.0.2 version，~~will release on 2022-10-31~~，released now on 2022-08-21
+
+* [X] Metaweblog API on v0.0.2，released now on 2022-08-21
+
+* [X] Wordpress on v0.0.2，released now on 2022-08-21
 
 ## Updates
 
 [Click here to view development progress](https://github.com/users/terwer/projects/1/views/1)
 
 ### v0.0.2
+- [X] [#15](https://github.com/terwer/src-sy-post-publisher/issues/15) Published to other platforms-blog parks, WordPress, chain drop community, etc.
 
+  - [x] [#18](https://github.com/terwer/src-sy-post-publisher/issues/18) Implement MetaWeblog-API client
+
+  - [x] [#24](https://github.com/terwer/src-sy-post-publisher/issues/24) Non-pendant server version, you need to pass the document ID. It is recommended to cooperate with my other work [node-siyuan](https://github.com/terwer/node-siyuan) use
+
+  - [x] [#25](https://github.com/terwer/src-sy-post-publisher/issues/25) Vercel deploy
+
+  - [X] [#38](https://github.com/terwer/src-sy-post-publisher/issues/38) Some platforms support cancel the release
+
+  - [X] [#39](https://github.com/terwer/src-sy-post-publisher/issues/39) Support ELETRON interface
+
+  - [X] [#40](https://github.com/terwer/src-sy-post-publisher/issues/40) Published to Confluence, you need to cooperate with my project [node-metaweblog-api-adaptor](https://github.com/terwer/node-metaweblog-api-adaptor)
+
+  - [x] [#41](https://github.com/terwer/src-sy-post-publisher/issues/41) Send to Wordpess
+
+  - [x] [#42](https://github.com/terwer/src-sy-post-publisher/issues/42) Sendto Liandi
+
+  - [x] [#43](https://github.com/terwer/src-sy-post-publisher/issues/43) Send to Yuque
+
+  - [x] [#44](https://github.com/terwer/src-sy-post-publisher/issues/44) Send to KMS
+  
 - [#19](https://github.com/terwer/src-sy-post-publisher/issues/19) 增强Vuepress支持，如果设置了Github参数，使用Github API实现自动发布，否则自行复制文本
 
     - 1、add aupport for Github rest api
@@ -58,14 +85,9 @@ At present, it supports vuepress ~~and two open API standard blog platforms, <co
   
     - 15、Support article cancellation and release
 
-
-- [#15](https://github.com/terwer/src-sy-post-publisher/issues/15)
-
-  - 1、  
 ### v0.0.1
 
 - [#13](https://github.com/terwer/src-sy-post-publisher/issues/13) Vuepress基本支持
-
 
 ## Vue 3 + TypeScript + Vite
 
