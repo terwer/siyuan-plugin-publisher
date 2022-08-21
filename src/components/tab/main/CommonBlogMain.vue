@@ -274,6 +274,7 @@ const initPage = async () => {
     // 替换文章链接
     const purl = commonCfg.previewUrl || ""
     const postUrl = purl.replace("[postid]", formData.postid)
+        .replace("[notebook]", commonCfg.blogid || "")
     // 路径组合
     previewUrl.value = pathJoin(commonCfg.home || "", postUrl)
   }

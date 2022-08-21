@@ -10,11 +10,11 @@ export class YuqueCfg extends CommonblogCfg {
     constructor() {
         super();
 
-        this.home = "https://www.yuque.com/[user]"
+        this.home = "https://www.yuque.com/"
         this.apiUrl = "https://www.yuque.com/api/v2"
         this.tokenSettingUrl = "https://www.yuque.com/settings/tokens"
         this.posidKey = POSTID_KEY_CONSTANTS.YUQUE_POSTID_KEY
-        this.previewUrl = "https://www.yuque.com/terwer/[notebook]/[postid]"
+        this.previewUrl = "/[notebook]/[postid]"
         this.pageType = PageType.Markdown
     }
 }
