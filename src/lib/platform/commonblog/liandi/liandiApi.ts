@@ -1,5 +1,7 @@
 import logUtil from "../../../logUtil";
 import {isEmptyObject} from "../../../util";
+import {CommonblogApi} from "../commonblogApi";
+import {getWidgetId} from "../../siyuan/siyuanUtil";
 
 /**
  * 链滴API
@@ -9,7 +11,7 @@ import {isEmptyObject} from "../../../util";
  *
  * https://ld246.com/article/1488603534762
  */
-export class LiandiApi {
+export class LiandiApi extends CommonblogApi {
     private readonly baseUrl: string
     private readonly token: string
 
@@ -19,6 +21,7 @@ export class LiandiApi {
      * @param token
      */
     constructor(baseUrl: string, token: string) {
+        super();
         this.baseUrl = baseUrl;
         this.token = token;
     }
@@ -33,12 +36,17 @@ export class LiandiApi {
         // 示例：https://ld246.com/api/v2/user
     }
 
-    /* 向思源请求数据
-    * @param url url
-    * @param data 数据
-    * @param method 请求方法 GET | POST
-    * @param useToken 权限TOKEN
-    */
+
+    // ==========================================================================
+    // ==========================================================================
+    /**
+     * 向链滴请求数据
+     * @param url url
+     * @param data 数据
+     * @param method 请求方法 GET | POST
+     * @param useToken 权限TOKEN
+     * @private
+     */
     private async request(url: string, data?: any, method?: string, useToken?: boolean) {
         let resData = null
 
@@ -73,13 +81,14 @@ export class LiandiApi {
         // 发送请求
         logUtil.logInfo("向链滴请求数据，apiUrl=>", apiUrl)
         logUtil.logInfo("向链滴请求数据，fetchOps=>", fetchOps)
-        const response = await fetch(apiUrl, fetchOps)
+        // const response = await fetch(apiUrl, fetchOps)
+        const response = await this.fetchEntry(apiUrl, fetchOps)
         if (!response) {
             throw new Error("请求异常")
         }
 
         // 解析响应体并返回响应结果
-        const statusCode = await response.status
+        const statusCode = response.status
 
         // const resText = await response.text()
         // logUtil.logInfo("向链滴请求数据，resText=>", resText)
@@ -92,8 +101,21 @@ export class LiandiApi {
             }
         }
 
-        const resJson = await response.json()
+        let resJson
+        const widgetResult = await getWidgetId()
+
+        if (widgetResult.isInSiyuan) {
+            resJson = await response.json()
+        } else {
+            const corsJson = await response.json()
+            resJson = this.parseCORSBody(corsJson)
+        }
+
         logUtil.logInfo("向链滴请求数据，resJson=>", resJson)
         return resJson.code === 0 ? resJson.data : null
+    }
+
+    private parseCORSBody(corsjson: any) {
+        return corsjson.body;
     }
 }

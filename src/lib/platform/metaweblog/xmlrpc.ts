@@ -27,7 +27,8 @@ export class XmlrpcClient {
      * @param reqParams 参数
      */
     private async fetchCORS(apiUrl: string, reqMethod: string, reqParams: Array<string>): Promise<string> {
-        const middleApiUrl = getEnv("VITE_MIDDLEWARE_URL") || "/api/middleware/xmlrpc"
+        const middleWareUrl = getEnv("VITE_MIDDLEWARE_URL") || "/api/middleware"
+        const middleApiUrl = middleWareUrl + "/xmlrpc"
         logUtil.logInfo("apiUrl=>")
         logUtil.logInfo(apiUrl)
         const fetchCORSParams = {

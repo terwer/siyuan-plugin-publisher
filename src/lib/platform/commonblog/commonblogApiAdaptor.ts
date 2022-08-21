@@ -8,9 +8,11 @@ import {ICommonblogCfg} from "./commonblogCfg";
  * 通用平台接口适配器
  */
 export class CommonblogApiAdaptor implements IApi {
-    protected cfg: ICommonblogCfg
+    protected readonly apiType: string
+    protected readonly cfg: ICommonblogCfg
 
     constructor(apiType: string) {
+        this.apiType = apiType
         this.cfg = getJSONConf<ICommonblogCfg>(apiType)
     }
 

@@ -169,6 +169,7 @@ const initConf = () => {
     apiUrl.value = conf.apiUrl || ""
     username.value = conf.username || ""
     password.value = conf.password || ""
+    token.value = conf.token || ""
     apiStatus.value = conf.apiStatus || false
     blogName.value = conf.blogName || ""
     tokenSettingUrl.value = conf.tokenSettingUrl || ""
