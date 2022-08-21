@@ -274,6 +274,7 @@ const initPage = async () => {
     // 替换文章链接
     const purl = commonCfg.previewUrl || ""
     const postUrl = purl.replace("[postid]", formData.postid)
+        .replace("[notebook]", commonCfg.blogid || "")
     // 路径组合
     previewUrl.value = pathJoin(commonCfg.home || "", postUrl)
   }
@@ -514,7 +515,7 @@ const doPublish = async () => {
         [commonblogCfg.posidKey || ""]: postid,
       };
       await setPageAttrs(siyuanData.pageId, customAttr)
-      logUtil.logInfo("MetaweblogMain发布成功，保存postid,meta=>", customAttr);
+      logUtil.logInfo("CommonblogMain发布成功，保存postid,meta=>", customAttr);
 
       logUtil.logWarn("文章发布成功，postid=>", postid)
     }

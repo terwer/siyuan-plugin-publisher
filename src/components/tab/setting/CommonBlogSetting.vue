@@ -111,6 +111,7 @@ const valiConf = async () => {
 
       cfg.blogName = userBlog.blogName
       blogName.value = userBlog.blogName
+      cfg.blogid = userBlog.blogid
 
       // 验证通过刷新状态
       setJSONConf(props.apiType, cfg)

@@ -7,7 +7,7 @@ describe('kmsApi test', () => {
         const baseUrl = ""
         const basicToken = ""
         const kmsApi = new KmsApi(baseUrl, basicToken)
-        const result = kmsApi.addDoc()
+        const result = kmsApi.addDoc("测试标题", "测试内容")
         logUtil.logInfo(result)
     })
 })

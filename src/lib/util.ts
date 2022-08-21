@@ -10,8 +10,7 @@ import {IVuepressCfg} from "./platform/vuepress/IVuepressCfg";
 import {IMetaweblogCfg} from "./platform/metaweblog/IMetaweblogCfg";
 import {getDynamicJsonCfg} from "./dynamicConfig";
 import {getBooleanConf} from "./config";
-
-// const nodejieba = require("nodejieba");
+import {ICommonblogCfg} from "./platform/commonblog/commonblogCfg";
 
 /**
  * 根据平台类型获取发布状态
@@ -19,11 +18,16 @@ import {getBooleanConf} from "./config";
  * @param meta 元数据
  */
 export function getPublishStatus(apiType: string, meta: any) {
+    // 固定的平台
     const metaweblogTypeArray = [API_TYPE_CONSTANTS.API_TYPE_JVUE, API_TYPE_CONSTANTS.API_TYPE_CONFLUENCE,
-        API_TYPE_CONSTANTS.API_TYPE_CNBLOGS, API_TYPE_CONSTANTS.API_TYPE_WORDPRESS,
-        API_TYPE_CONSTANTS.API_TYPE_LIANDI, API_TYPE_CONSTANTS.API_TYPE_YUQUE,
+        API_TYPE_CONSTANTS.API_TYPE_CNBLOGS, API_TYPE_CONSTANTS.API_TYPE_WORDPRESS
+    ]
+
+    // 通用自定义平台
+    const commonblogTypeArray = [API_TYPE_CONSTANTS.API_TYPE_LIANDI, API_TYPE_CONSTANTS.API_TYPE_YUQUE,
         API_TYPE_CONSTANTS.API_TYPE_KMS
     ]
+
     // 读取动态类型
     const dynamicJsonCfg = getDynamicJsonCfg()
     // const dynamicConfigArray = dynamicJsonCfg.totalCfg || []
@@ -61,6 +65,14 @@ export function getPublishStatus(apiType: string, meta: any) {
     } else if (metaweblogTypeArray.includes(apiType)) {
         const postidKey = getApiParams<IMetaweblogCfg>(apiType).posidKey;
         const postId = meta[postidKey] || "";
+        logUtil.logInfo("平台=>", apiType)
+        logUtil.logInfo("meta=>", meta)
+        logUtil.logInfo("postidKey=>", postidKey)
+        logUtil.logInfo("postidKey的值=>", postId)
+        return postId !== "";
+    } else if (commonblogTypeArray.includes(apiType)) {
+        const postidKey = getApiParams<ICommonblogCfg>(apiType).posidKey;
+        const postId = meta[postidKey || ""] || "";
         logUtil.logInfo("平台=>", apiType)
         logUtil.logInfo("meta=>", meta)
         logUtil.logInfo("postidKey=>", postidKey)
@@ -362,7 +374,6 @@ export async function cutWords(words: string) {
     const v = await fetch('https://api.terwer.space/api/jieba?q=' + words);
     let json = await v.json()
     // const result = "浏览器和webpack不支持，只有node能用，作者仓库： https://github.com/yanyiwu/nodejieba ，在线版本：http://cppjieba-webdemo.herokuapp.com 。"
-    // alert(result)
     logUtil.logInfo("分词完毕，结果=>", json.result);
     return json.result;
 }

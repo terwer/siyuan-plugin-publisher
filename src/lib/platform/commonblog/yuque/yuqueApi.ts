@@ -9,20 +9,86 @@ import {CommonblogApi} from "../commonblogApi";
  */
 export class YuqueApi extends CommonblogApi {
     private readonly baseUrl: string
+    private readonly blogid: string
     private readonly username: string
     private readonly token: string
 
-    constructor(baseUrl: string, username: string, token: string) {
+    constructor(baseUrl: string, blogid: string, username: string, token: string) {
         super();
         this.baseUrl = baseUrl;
+        this.blogid = blogid;
         this.username = username
         this.token = token;
     }
 
-    public repos() {
+    /**
+     * 语雀知识库列表
+     */
+    public async repos() {
         let url = "/users/" + this.username + "/repos"
         let data = {}
-        return this.yuqueRequest(url, data, "GET")
+        return await this.yuqueRequest(url, data, "GET")
+    }
+
+    /**
+     * 向默认知识库添加文档
+     * @param title 标题
+     * @param slug 别名
+     * @param content 内容
+     */
+    public async addDoc(title: string, slug: string, content: string): Promise<string> {
+        let url = "/repos/" + this.blogid + "/docs"
+        let data = {
+            title: title,
+            slug: slug,
+            format: "markdown",
+            body: content
+        }
+        const result = await this.yuqueRequest(url, data, "POST")
+        logUtil.logInfo("yuqueRequest addDoc=>", result)
+        if (!result) {
+            throw new Error("请求语雀API异常")
+        }
+
+        return result.id + ""
+    }
+
+    /**
+     * 更新语雀文档
+     * @param docId 文档ID
+     * @param title 标题
+     * @param slug 别名
+     * @param content 内容
+     */
+    public async updateDoc(docId: string, title: string, slug: string, content: string): Promise<boolean> {
+        let url = "/repos/" + this.blogid + "/docs/" + docId
+        let data = {
+            title: title,
+            slug: slug,
+            body: content,
+            _force_asl: 1
+        }
+        const result = await this.yuqueRequest(url, data, "PUT")
+        if (!result) {
+            throw new Error("请求语雀API异常")
+        }
+
+        return true
+    }
+
+    /**
+     * 删除yuque文档
+     * @param docId 文档ID
+     */
+    public async delDoc(docId: string): Promise<boolean> {
+        let url = "/repos/" + this.blogid + "/docs/" + docId
+        let data = {}
+        const result = await this.yuqueRequest(url, data, "DELETE")
+        if (!result) {
+            throw new Error("请求语雀API异常")
+        }
+
+        return true
     }
 
     // ==========================================================================
@@ -58,6 +124,7 @@ export class YuqueApi extends CommonblogApi {
 
         Object.assign(fetchOps, {
             headers: {
+                'Content-Type': 'application/json',
                 "X-Auth-Token": this.token,
                 "User-Agent": "Terwer/0.0.2"
             }

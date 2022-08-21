@@ -35,14 +35,14 @@ export class KmsApiAdaptor extends CommonblogApiAdaptor implements IApi {
     }
 
     async deletePost(postid: string): Promise<boolean> {
-        return super.deletePost(postid);
+        return await this.kmsApi.delDoc(postid)
     }
 
     async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
-        return super.editPost(postid, post, publish);
+        return await this.kmsApi.updateDoc(postid, post.title, post.description)
     }
 
     async newPost(post: Post, publish?: boolean): Promise<string> {
-        return super.newPost(post, publish);
+        return await this.kmsApi.addDoc(post.title, post.description)
     }
 }

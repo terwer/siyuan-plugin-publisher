@@ -14,7 +14,7 @@ export class YuqueApiAdaptor extends CommonblogApiAdaptor implements IApi {
 
     constructor() {
         super(API_TYPE_CONSTANTS.API_TYPE_YUQUE);
-        this.yuqueApi = new YuqueApi(this.cfg.apiUrl, this.cfg.username || "", this.cfg.token || "")
+        this.yuqueApi = new YuqueApi(this.cfg.apiUrl, this.cfg.blogid || "", this.cfg.username || "", this.cfg.token || "")
     }
 
     public async getUsersBlogs(): Promise<Array<UserBlog>> {
@@ -26,7 +26,7 @@ export class YuqueApiAdaptor extends CommonblogApiAdaptor implements IApi {
         // 数据适配
         repos.forEach((item: any) => {
             const userblog: UserBlog = new UserBlog()
-            userblog.blogid = item.slug
+            userblog.blogid = item.namespace
             userblog.blogName = item.name
             userblog.url = item.namespace
             result.push(userblog)
@@ -36,14 +36,14 @@ export class YuqueApiAdaptor extends CommonblogApiAdaptor implements IApi {
     }
 
     async deletePost(postid: string): Promise<boolean> {
-        return super.deletePost(postid);
+        return await this.yuqueApi.delDoc(postid)
     }
 
     async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
-        return super.editPost(postid, post, publish);
+        return await this.yuqueApi.updateDoc(postid, post.title, post.wp_slug, post.description)
     }
 
     async newPost(post: Post, publish?: boolean): Promise<string> {
-        return super.newPost(post, publish);
+        return await this.yuqueApi.addDoc(post.title, post.wp_slug, post.description)
     }
 }
