@@ -86,8 +86,7 @@ export class XmlrpcClient {
             throw new Error("请求错误或者返回结果为空")
         }
 
-        logUtil.logWarn("最终返回给前端的数据=>")
-        logUtil.logWarn(result)
+        logUtil.logInfo("最终返回给前端的数据=>",result)
 
         return result
     }

@@ -525,9 +525,10 @@ const doPublish = async () => {
     await initPage();
 
     ElMessage.success(t('main.opt.success'))
-  } catch (e) {
+  } catch (e: any) {
     logUtil.logError("发布异常")
-    ElMessage.success(t('main.opt.failure'))
+    ElMessage.error(t('main.opt.failure'))
+    throw new Error(e)
   }
 
   isPublishLoading.value = false

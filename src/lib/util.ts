@@ -20,7 +20,9 @@ import {getBooleanConf} from "./config";
  */
 export function getPublishStatus(apiType: string, meta: any) {
     const metaweblogTypeArray = [API_TYPE_CONSTANTS.API_TYPE_JVUE, API_TYPE_CONSTANTS.API_TYPE_CONFLUENCE,
-        API_TYPE_CONSTANTS.API_TYPE_CNBLOGS, API_TYPE_CONSTANTS.API_TYPE_WORDPRESS
+        API_TYPE_CONSTANTS.API_TYPE_CNBLOGS, API_TYPE_CONSTANTS.API_TYPE_WORDPRESS,
+        API_TYPE_CONSTANTS.API_TYPE_LIANDI, API_TYPE_CONSTANTS.API_TYPE_YUQUE,
+        API_TYPE_CONSTANTS.API_TYPE_KMS
     ]
     // 读取动态类型
     const dynamicJsonCfg = getDynamicJsonCfg()

@@ -4,6 +4,7 @@ import {Base64} from "js-base64";
 import {KmsApi} from "./kmsApi";
 import {API_TYPE_CONSTANTS} from "../../../constants/apiTypeConstants";
 import {UserBlog} from "../../../common/userBlog";
+import {Post} from "../../../common/post";
 
 /**
  * 知识仓库的API适配器
@@ -31,5 +32,17 @@ export class KmsApiAdaptor extends CommonblogApiAdaptor implements IApi {
         result.push(userblog)
 
         return result
+    }
+
+    async deletePost(postid: string): Promise<boolean> {
+        return super.deletePost(postid);
+    }
+
+    async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
+        return super.editPost(postid, post, publish);
+    }
+
+    async newPost(post: Post, publish?: boolean): Promise<string> {
+        return super.newPost(post, publish);
     }
 }

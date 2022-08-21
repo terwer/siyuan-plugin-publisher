@@ -1,7 +1,6 @@
 import logUtil from "../../../logUtil";
 import {isEmptyObject} from "../../../util";
 import {CommonblogApi} from "../commonblogApi";
-import {getWidgetId} from "../../siyuan/siyuanUtil";
 
 /**
  * 链滴API
@@ -12,17 +11,23 @@ import {getWidgetId} from "../../siyuan/siyuanUtil";
  * https://ld246.com/article/1488603534762
  */
 export class LiandiApi extends CommonblogApi {
+    private readonly rewardContent = "如果您觉得此文章不错，请随意打赏哦~"
+    private readonly rewardCount = 5;
+
     private readonly baseUrl: string
+    private readonly username: string
     private readonly token: string
 
     /**
      * 初始化链滴API
      * @param baseUrl
+     * @param username
      * @param token
      */
-    constructor(baseUrl: string, token: string) {
+    constructor(baseUrl: string, username: string, token: string) {
         super();
         this.baseUrl = baseUrl;
+        this.username = username;
         this.token = token;
     }
 
@@ -34,6 +39,58 @@ export class LiandiApi extends CommonblogApi {
         let data = {}
         return this.liandiRequest(url, data, "GET", true)
         // 示例：https://ld246.com/api/v2/user
+    }
+
+    /**
+     * 发布帖子
+     */
+    public async addArticle(title: string, content: string, tags: string): Promise<string> {
+        let url = "/article"
+        let data = {
+            "articleTitle": title,
+            "articleTags": tags, // 用英文逗号分隔
+            "articleContent": content,
+            "articleRewardContent": this.rewardContent, // 打赏区内容
+            "articleRewardPoint": this.rewardCount // 打赏积分
+        }
+
+        let postid
+        await this.liandiRequest(url, data, "POST", true)
+        postid = await this.getFirstArticleId();
+        logUtil.logInfo("liandi addArticle postid=>", postid)
+
+        return postid
+    }
+
+    /**
+     * 由于发帖子的接口不支持返回ID，我们自己查最新的ID
+     */
+    private async getFirstArticleId(): Promise<any> {
+        let url = "/user/" + this.username + "/articles?p=1"
+        let data = {}
+        const result = await this.liandiRequest(url, data, "GET", true)
+        const articles = result.articles
+        if (articles.length == 0) {
+            throw new Error("未获取到帖子")
+        }
+        return articles[0].oId
+    }
+
+    /**
+     * 发布帖子
+     */
+    public async updateArticle(articleId: string, title: string, content: string, tags: string): Promise<boolean> {
+        let url = "/article/" + articleId
+        let data = {
+            "articleTitle": title,
+            "articleTags": tags, // 用英文逗号分隔
+            "articleContent": content,
+            "articleRewardContent": this.rewardContent, // 打赏区内容
+            "articleRewardPoint": this.rewardCount // 打赏积分
+        }
+
+        await this.liandiRequest(url, data, "PUT", true)
+        return true
     }
 
     // ==========================================================================
@@ -85,6 +142,10 @@ export class LiandiApi extends CommonblogApi {
         const resJson = await this.doFetch(apiUrl, fetchOps)
 
         logUtil.logInfo("向链滴请求数据，resJson=>", resJson)
-        return resJson.code === 0 ? resJson.data : null
+        if (resJson.code == 0) {
+            return resJson.data
+        } else {
+            throw new Error("发布帖子受限或者系统异常")
+        }
     }
 }

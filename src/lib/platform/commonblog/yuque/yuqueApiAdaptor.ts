@@ -4,6 +4,7 @@ import {YuqueApi} from "./yuqueApi";
 import {API_TYPE_CONSTANTS} from "../../../constants/apiTypeConstants";
 import {UserBlog} from "../../../common/userBlog";
 import logUtil from "../../../logUtil";
+import {Post} from "../../../common/post";
 
 /**
  * 语雀的API适配器
@@ -32,5 +33,17 @@ export class YuqueApiAdaptor extends CommonblogApiAdaptor implements IApi {
         })
 
         return result
+    }
+
+    async deletePost(postid: string): Promise<boolean> {
+        return super.deletePost(postid);
+    }
+
+    async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
+        return super.editPost(postid, post, publish);
+    }
+
+    async newPost(post: Post, publish?: boolean): Promise<string> {
+        return super.newPost(post, publish);
     }
 }
