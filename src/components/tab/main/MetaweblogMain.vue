@@ -525,9 +525,10 @@ const doPublish = async () => {
     await initPage();
 
     ElMessage.success(t('main.opt.success'))
-  } catch (e) {
+  } catch (e: any) {
     logUtil.logError("发布异常")
-    ElMessage.success(t('main.opt.failure'))
+    ElMessage.error(t('main.opt.failure'))
+    throw new Error(e)
   }
 
   isPublishLoading.value = false
@@ -550,14 +551,14 @@ const cancelPublish = async () => {
     isCancelLoading.value = false;
 
     ElMessage.warning(t('main.opt.status.cancel'))
-  }).catch(() => {
-    // ElMessage({
-    //   type: 'error',
-    //   message: t("main.opt.failure"),
-    // })
+  }).catch((e) => {
+    ElMessage({
+      type: 'error',
+      message: t("main.opt.failure"),
+    })
     isCancelLoading.value = false;
 
-    logUtil.logInfo("操作已取消")
+    throw new Error(e)
   })
 }
 

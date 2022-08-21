@@ -1,5 +1,6 @@
 import logUtil from "../../../logUtil";
 import {isEmptyObject} from "../../../util";
+import {CommonblogApi} from "../commonblogApi";
 
 /**
  * 链滴API
@@ -9,17 +10,24 @@ import {isEmptyObject} from "../../../util";
  *
  * https://ld246.com/article/1488603534762
  */
-export class LiandiApi {
+export class LiandiApi extends CommonblogApi {
+    private readonly rewardContent = "如果您觉得此文章不错，请随意打赏哦~"
+    private readonly rewardCount = 5;
+
     private readonly baseUrl: string
+    private readonly username: string
     private readonly token: string
 
     /**
      * 初始化链滴API
      * @param baseUrl
+     * @param username
      * @param token
      */
-    constructor(baseUrl: string, token: string) {
+    constructor(baseUrl: string, username: string, token: string) {
+        super();
         this.baseUrl = baseUrl;
+        this.username = username;
         this.token = token;
     }
 
@@ -29,17 +37,73 @@ export class LiandiApi {
     public async getUser() {
         let url = "/user"
         let data = {}
-        return this.request(url, data, "GET", true)
+        return this.liandiRequest(url, data, "GET", true)
         // 示例：https://ld246.com/api/v2/user
     }
 
-    /* 向思源请求数据
-    * @param url url
-    * @param data 数据
-    * @param method 请求方法 GET | POST
-    * @param useToken 权限TOKEN
-    */
-    private async request(url: string, data?: any, method?: string, useToken?: boolean) {
+    /**
+     * 发布帖子
+     */
+    public async addArticle(title: string, content: string, tags: string): Promise<string> {
+        let url = "/article"
+        let data = {
+            "articleTitle": title,
+            "articleTags": tags, // 用英文逗号分隔
+            "articleContent": content,
+            "articleRewardContent": this.rewardContent, // 打赏区内容
+            "articleRewardPoint": this.rewardCount // 打赏积分
+        }
+
+        let postid
+        await this.liandiRequest(url, data, "POST", true)
+        postid = await this.getFirstArticleId();
+        logUtil.logInfo("liandi addArticle postid=>", postid)
+
+        return postid
+    }
+
+    /**
+     * 由于发帖子的接口不支持返回ID，我们自己查最新的ID
+     */
+    private async getFirstArticleId(): Promise<any> {
+        let url = "/user/" + this.username + "/articles?p=1"
+        let data = {}
+        const result = await this.liandiRequest(url, data, "GET", true)
+        const articles = result.articles
+        if (articles.length == 0) {
+            throw new Error("未获取到帖子")
+        }
+        return articles[0].oId
+    }
+
+    /**
+     * 发布帖子
+     */
+    public async updateArticle(articleId: string, title: string, content: string, tags: string): Promise<boolean> {
+        let url = "/article/" + articleId
+        let data = {
+            "articleTitle": title,
+            "articleTags": tags, // 用英文逗号分隔
+            "articleContent": content,
+            "articleRewardContent": this.rewardContent, // 打赏区内容
+            "articleRewardPoint": this.rewardCount // 打赏积分
+        }
+
+        await this.liandiRequest(url, data, "PUT", true)
+        return true
+    }
+
+    // ==========================================================================
+    // ==========================================================================
+    /**
+     * 向链滴请求数据
+     * @param url url
+     * @param data 数据
+     * @param method 请求方法 GET | POST
+     * @param useToken 是否使用权限TOKEN
+     * @private
+     */
+    private async liandiRequest(url: string, data?: any, method?: string, useToken?: boolean) {
         let resData = null
 
         // 设置请求参数
@@ -73,27 +137,15 @@ export class LiandiApi {
         // 发送请求
         logUtil.logInfo("向链滴请求数据，apiUrl=>", apiUrl)
         logUtil.logInfo("向链滴请求数据，fetchOps=>", fetchOps)
-        const response = await fetch(apiUrl, fetchOps)
-        if (!response) {
-            throw new Error("请求异常")
-        }
 
-        // 解析响应体并返回响应结果
-        const statusCode = await response.status
+        // 使用兼容的fetch调用并返回统一的JSON数据
+        const resJson = await this.doFetch(apiUrl, fetchOps)
 
-        // const resText = await response.text()
-        // logUtil.logInfo("向链滴请求数据，resText=>", resText)
-
-        if (200 != statusCode) {
-            if (401 == statusCode) {
-                throw new Error("因权限不足操作已被禁止")
-            } else {
-                throw new Error("请求错误")
-            }
-        }
-
-        const resJson = await response.json()
         logUtil.logInfo("向链滴请求数据，resJson=>", resJson)
-        return resJson.code === 0 ? resJson.data : null
+        if (resJson.code == 0) {
+            return resJson.data
+        } else {
+            throw new Error("发布帖子受限或者系统异常")
+        }
     }
 }

@@ -20,7 +20,9 @@ import {getBooleanConf} from "./config";
  */
 export function getPublishStatus(apiType: string, meta: any) {
     const metaweblogTypeArray = [API_TYPE_CONSTANTS.API_TYPE_JVUE, API_TYPE_CONSTANTS.API_TYPE_CONFLUENCE,
-        API_TYPE_CONSTANTS.API_TYPE_CNBLOGS, API_TYPE_CONSTANTS.API_TYPE_WORDPRESS
+        API_TYPE_CONSTANTS.API_TYPE_CNBLOGS, API_TYPE_CONSTANTS.API_TYPE_WORDPRESS,
+        API_TYPE_CONSTANTS.API_TYPE_LIANDI, API_TYPE_CONSTANTS.API_TYPE_YUQUE,
+        API_TYPE_CONSTANTS.API_TYPE_KMS
     ]
     // 读取动态类型
     const dynamicJsonCfg = getDynamicJsonCfg()
@@ -492,14 +494,14 @@ export function isEmptyString(str: any) {
 export function pathJoin(path1: string, path2: string) {
     let path = path1
     const path1LastIdx = path1.lastIndexOf("/")
-    // console.logUtil("path1.length=>", path1.length)
-    // console.logUtil("path1LastIdx=>", path1LastIdx)
+    // logUtil.logInfo("path1.length=>", path1.length)
+    // logUtil.logInfo("path1LastIdx=>", path1LastIdx)
     if (path1LastIdx + 1 == path1.length) {
         path = path1.substring(0, path1LastIdx)
     }
 
     const path2Idx = path2.indexOf("/")
-    // console.logUtil("path2Idx=>", path2Idx)
+    // logUtil.logInfo("path2Idx=>", path2Idx)
     if (path2Idx > 0) {
         path = path + "/" + path2
     } else {

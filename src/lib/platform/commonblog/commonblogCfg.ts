@@ -41,6 +41,10 @@ export interface ICommonblogCfg {
      */
     previewUrl?: string
     /**
+     * 文章类型
+     */
+    pageType: PageType
+    /**
      * token设置地址
      */
     tokenSettingUrl?: string

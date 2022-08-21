@@ -15,7 +15,8 @@ const LOG_ERROR_ENABLED = true
 const logInfo = (msg: any, param?: any) => {
     if (LOG_INFO_ENABLED) {
         if (param) {
-            console.log(msg, param)
+            console.log(msg)
+            console.log(param)
         } else {
             console.log(msg)
         }
@@ -29,7 +30,8 @@ const logInfo = (msg: any, param?: any) => {
 const logWarn = (msg: any, param?: any) => {
     if (LOG_WARN_ENABLED) {
         if (param) {
-            console.warn(msg, param)
+            console.warn(msg)
+            console.warn(param)
         } else {
             console.warn(msg)
         }
@@ -43,7 +45,8 @@ const logWarn = (msg: any, param?: any) => {
 const logError = (msg: any, param?: any) => {
     if (LOG_ERROR_ENABLED) {
         if (param) {
-            console.error(msg, param)
+            console.error(msg)
+            console.error(param)
         } else {
             console.error(msg)
         }

@@ -1,6 +1,6 @@
 import express, {Request, Response} from "express";
-// @ts-ignore
-import fetch from 'node-fetch';
+import fetch from 'cross-fetch';
+import logUtil from "../src/lib/logUtil";
 
 const app = require('express')();
 const {v4} = require('uuid');
@@ -30,9 +30,9 @@ app.get('/api/item/:slug', (req: Request, res: Response) => {
  */
 app.post('/api/middleware/xmlrpc', (req: Request, res: Response) => {
     const headers = req.headers;
-    // console.logUtil(headers)
+    // logUtil.logInfo(headers)
     const body = req.body
-    // console.logUtil(body)
+    // logUtil.logInfo(body)
 
     // 获取代理参数
     console.log("body.fetchParams.apiUrl=>")
@@ -85,6 +85,86 @@ app.post('/api/middleware/xmlrpc', (req: Request, res: Response) => {
     // ========================================
 });
 
+app.post('/api/middleware/fetch', (req: Request, res: Response) => {
+    const headers = req.headers;
+    // logUtil.logInfo(headers)
+    const body = req.body
+    // logUtil.logInfo(body)
+
+    // 获取代理参数
+    console.log("body.fetchParams.apiUrl=>")
+    console.log(body.fetchParams.apiUrl)
+    console.log("body.fetchParams.fetchOptions=>")
+    console.log(body.fetchParams.fetchOptions)
+    console.log("body.fetchParams.formJson=>")
+    console.log(body.fetchParams.formJson)
+
+    // =====================================
+    // =====================================
+    // 发送真实请求并获取结果
+    console.log("开的发送真实请求并获取结果")
+
+    const fetchCORSApiUrl = body.fetchParams.apiUrl
+    const fetchCORSOptions = body.fetchParams.fetchOptions
+    const formJson = body.fetchParams.formJson
+
+    // 如果是form请求，进行转换
+    if (formJson) {
+        // 将formJson转换为formData
+        const form = new URLSearchParams();
+        formJson.forEach((item: any) => {
+            form.append(item.key, item.value)
+        })
+        fetchCORSOptions.body = form
+    }
+
+    let err
+    console.error("fetchCORS.apiUrl=>")
+    console.error(fetchCORSApiUrl)
+    console.error("fetchCORS.fetchOptions=>")
+    console.error(fetchCORSOptions)
+
+    fetch(fetchCORSApiUrl, fetchCORSOptions)
+        .then((response) => {
+            try {
+                response.text().then((resText) => {
+                    console.log("请求完成，准备返回真实结果")
+                    let resJson = {}
+                    try {
+                        resJson = JSON.parse(resText)
+                    } catch (e) {
+                        console.error(e)
+                    }
+                    console.log(resJson)
+
+                    const finalRes = {
+                        headers: {
+                            status: response.status,
+                            statusText: response.statusText
+                        },
+                        body: resJson
+                    }
+                    console.log(finalRes)
+                    writeStatusData(res, finalRes, response.status)
+                    console.log("请求处理已成功")
+                })
+            } catch (e) {
+                err = e
+                console.error(e)
+                writeStatusError(res, err, response.status)
+                console.log("请求处理异常")
+            }
+        })
+        .catch((reason: any) => {
+            console.log("methodPromise catch=>")
+            console.log(reason)
+            writeError(res, reason)
+            console.log("请求处理失败")
+        })
+    // ========================================
+    // ========================================
+});
+
 /**
  * 输出数据
  * @param res
@@ -98,8 +178,12 @@ function writeData(res: any, data: any) {
     // });
     // res.end(resXml)
 
+    writeStatusData(res, data, 200)
+}
+
+function writeStatusData(res: any, data: any, status: number) {
     const dataJson = JSON.stringify(data)
-    res.writeHead(200, {
+    res.writeHead(status, {
         'Content-Length': Buffer.byteLength(dataJson),
         'Content-Type': 'application/json'
     });
@@ -119,8 +203,12 @@ function writeError(res: any, err: any) {
     // });
     // res.end(errorXml)
     //
+    writeStatusError(res, err, 500)
+}
+
+function writeStatusError(res: any, err: any, status: number) {
     const errorJson = JSON.stringify(err)
-    res.writeHead(200, {
+    res.writeHead(status, {
         'Content-Length': Buffer.byteLength(errorJson),
         'Content-Type': 'application/json'
     });

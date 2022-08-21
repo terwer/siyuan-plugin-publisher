@@ -9,6 +9,13 @@ import {getEnv} from "../../envUtil";
 import {inBrowser} from "../../util";
 
 export async function getWidgetId() {
+    if (import.meta.env.MODE == "test") {
+        return {
+            isInSiyuan: true,
+            widgetId: getEnv("VITE_SIYUAN_DEV_PAGE_ID")
+        }
+    }
+
     if (!window.frameElement
         || !window.frameElement.parentElement
         || !window.frameElement.parentElement.parentElement) {
@@ -118,7 +125,7 @@ export async function getPageId(force?: boolean, pageId?: string) {
                 if (qPageId != "") {
                     syPageId = qPageId
                 }
-            }else{
+            } else {
                 syPageId = testPageId
             }
         }

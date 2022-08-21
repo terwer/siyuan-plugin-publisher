@@ -1,5 +1,5 @@
 <template>
-  <common-blog-setting :api-type="apiType" :token-enabled="true" :cfg="cfg"/>
+  <common-blog-setting :api-type="apiType" :username-enabled="true" :token-enabled="true" :cfg="cfg"/>
 </template>
 
 <script lang="ts" setup>
