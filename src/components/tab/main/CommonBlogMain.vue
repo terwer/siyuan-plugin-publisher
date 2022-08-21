@@ -152,7 +152,7 @@ import {mdToHtml, parseHtml, removeWidgetTag} from "../../../lib/htmlUtil";
 import {CONSTANTS} from "../../../lib/constants/constants";
 import {ElMessageBox} from "element-plus";
 import {API} from "../../../lib/api";
-import {PageType} from "../../../lib/platform/metaweblog/IMetaweblogCfg";
+import {IMetaweblogCfg, PageType} from "../../../lib/platform/metaweblog/IMetaweblogCfg";
 import {render} from "../../../lib/markdownUtil";
 import {Post} from "../../../lib/common/post";
 import {API_TYPE_CONSTANTS} from "../../../lib/constants/apiTypeConstants";
@@ -551,20 +551,40 @@ const cancelPublish = async () => {
     isCancelLoading.value = false;
 
     ElMessage.warning(t('main.opt.status.cancel'))
-  }).catch(() => {
-    // ElMessage({
-    //   type: 'error',
-    //   message: t("main.opt.failure"),
-    // })
+  }).catch((e) => {
+    ElMessage({
+      type: 'error',
+      message: t("main.opt.failure"),
+    })
     isCancelLoading.value = false;
 
-    logUtil.logInfo("操作已取消")
+    throw new Error(e)
   })
 }
 
 // 实际删除逻辑
 const doCancel = async (isInit: boolean) => {
+  const commonblogCfg = getJSONConf<ICommonblogCfg>(props.apiType)
+  logUtil.logInfo("准备取消发布，postid=>", formData.postid)
 
+  const api = new API(props.apiType)
+  const flag = await api.deletePost(formData.postid)
+  if (!flag) {
+    ElMessage.error("文章删除失败")
+    throw new Error("文章删除失败")
+  }
+
+  // 清空ID
+  const customAttr = {
+    [commonblogCfg.posidKey || ""]: ""
+  };
+  await setPageAttrs(siyuanData.pageId, customAttr)
+  logUtil.logWarn("MetaweblogMain取消发布,meta=>", customAttr);
+
+  // 刷新属性数据
+  if (isInit) {
+    await initPage();
+  }
 }
 </script>
 
