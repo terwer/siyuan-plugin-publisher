@@ -96,6 +96,8 @@ app.post('/api/middleware/fetch', (req: Request, res: Response) => {
     console.log(body.fetchParams.apiUrl)
     console.log("body.fetchParams.fetchOptions=>")
     console.log(body.fetchParams.fetchOptions)
+    console.log("body.fetchParams.formJson=>")
+    console.log(body.fetchParams.formJson)
 
     // =====================================
     // =====================================
@@ -104,6 +106,17 @@ app.post('/api/middleware/fetch', (req: Request, res: Response) => {
 
     const fetchCORSApiUrl = body.fetchParams.apiUrl
     const fetchCORSOptions = body.fetchParams.fetchOptions
+    const formJson = body.fetchParams.formJson
+
+    // 如果是form请求，进行转换
+    if (formJson) {
+        // 将formJson转换为formData
+        const form = new URLSearchParams();
+        formJson.forEach((item: any) => {
+            form.append(item.key, item.value)
+        })
+        fetchCORSOptions.body = form
+    }
 
     let err
     console.error("fetchCORS.apiUrl=>")

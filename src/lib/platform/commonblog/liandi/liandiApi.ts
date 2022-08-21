@@ -32,10 +32,9 @@ export class LiandiApi extends CommonblogApi {
     public async getUser() {
         let url = "/user"
         let data = {}
-        return this.request(url, data, "GET", true)
+        return this.liandiRequest(url, data, "GET", true)
         // 示例：https://ld246.com/api/v2/user
     }
-
 
     // ==========================================================================
     // ==========================================================================
@@ -44,10 +43,10 @@ export class LiandiApi extends CommonblogApi {
      * @param url url
      * @param data 数据
      * @param method 请求方法 GET | POST
-     * @param useToken 权限TOKEN
+     * @param useToken 是否使用权限TOKEN
      * @private
      */
-    private async request(url: string, data?: any, method?: string, useToken?: boolean) {
+    private async liandiRequest(url: string, data?: any, method?: string, useToken?: boolean) {
         let resData = null
 
         // 设置请求参数
@@ -81,41 +80,11 @@ export class LiandiApi extends CommonblogApi {
         // 发送请求
         logUtil.logInfo("向链滴请求数据，apiUrl=>", apiUrl)
         logUtil.logInfo("向链滴请求数据，fetchOps=>", fetchOps)
-        // const response = await fetch(apiUrl, fetchOps)
-        const response = await this.fetchEntry(apiUrl, fetchOps)
-        if (!response) {
-            throw new Error("请求异常")
-        }
 
-        // 解析响应体并返回响应结果
-        const statusCode = response.status
-
-        // const resText = await response.text()
-        // logUtil.logInfo("向链滴请求数据，resText=>", resText)
-
-        if (200 != statusCode) {
-            if (401 == statusCode) {
-                throw new Error("因权限不足操作已被禁止")
-            } else {
-                throw new Error("请求错误")
-            }
-        }
-
-        let resJson
-        const widgetResult = await getWidgetId()
-
-        if (widgetResult.isInSiyuan) {
-            resJson = await response.json()
-        } else {
-            const corsJson = await response.json()
-            resJson = this.parseCORSBody(corsJson)
-        }
+        // 使用兼容的fetch调用并返回统一的JSON数据
+        const resJson = await this.doFetch(apiUrl, fetchOps)
 
         logUtil.logInfo("向链滴请求数据，resJson=>", resJson)
         return resJson.code === 0 ? resJson.data : null
-    }
-
-    private parseCORSBody(corsjson: any) {
-        return corsjson.body;
     }
 }

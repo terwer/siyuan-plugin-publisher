@@ -25,7 +25,7 @@ export class LiandiApiAdaptor extends CommonblogApiAdaptor implements IApi {
         // 数据适配
         const userblog: UserBlog = new UserBlog()
         userblog.blogid = this.apiType
-        userblog.blogName = this.cfg.blogName || "链滴"
+        userblog.blogName = user.user.userName || this.cfg.blogName || "链滴"
         userblog.url = this.cfg.apiUrl
         result.push(userblog)
 
