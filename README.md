@@ -2,7 +2,9 @@
 
 Publish siyuan article to supported open platforms
 
-At present, it supports vuepress ~~and two open API standard blog platforms, <code>metaweblog api</code> and <code>xmlrpc</code> remote call API based on <code>wordpress</code> ( will release in v0.0.2)~~
+At present, it supports vuepress and two open API standard blog platforms, <code>metaweblog api</code> and <code>xmlrpc</code> remote call API based on <code>wordpress</code>
+
+ALso provide a [common API adaptor](https://github.com/terwer/src-sy-post-publisher/blob/main/src/lib/api.ts) , make every plantform posiable.
 
 <a href="https://img1.terwergreen.com/api/public/20220729233245.gif" target="_blank" >Click me</a>
 
@@ -14,18 +16,43 @@ At present, it supports vuepress ~~and two open API standard blog platforms, <co
 
 * [X] Vuepress-v0.0.1 support，2022-07-29 release
 
-* [ ] Cnblogs-relay on v0.0.2 version，will release on 2022-10-31
+* [X] Cnblogs-relay on v0.0.2 version，~~will release on 2022-10-31~~，released now on 2022-08-21
 
-* [ ] Liandi-relay on v0.0.2 version，will release on 2022-10-31
+* [X] Liandi-relay on v0.0.2 version，`will release on 2022-10-3`1，released now on 2022-08-21
 
-* [ ] Yueque-relay on v0.0.2 version，will release on 2022-10-31
+* [X] Yueque-relay on v0.0.2 version，`will release on 2022-10-31`，released now on 2022-08-21
+
+* [X] Metaweblog API on v0.0.2，released now on 2022-08-21
+
+* [X] Wordpress on v0.0.2，released now on 2022-08-21
 
 ## Updates
 
 [Click here to view development progress](https://github.com/users/terwer/projects/1/views/1)
 
 ### v0.0.2
+- [X] #15
 
+  - [x] #18
+
+  - [x] #24
+
+  - [x] #25
+
+  - [X] #38
+
+  - [X] #39
+
+  - [X] #40
+
+  - [x] #41
+
+  - [x] #42
+
+  - [x] #43
+
+  - [x] #44
+  
 - [#19](https://github.com/terwer/src-sy-post-publisher/issues/19) 增强Vuepress支持，如果设置了Github参数，使用Github API实现自动发布，否则自行复制文本
 
     - 1、add aupport for Github rest api
@@ -58,14 +85,9 @@ At present, it supports vuepress ~~and two open API standard blog platforms, <co
   
     - 15、Support article cancellation and release
 
-
-- [#15](https://github.com/terwer/src-sy-post-publisher/issues/15)
-
-  - 1、  
 ### v0.0.1
 
 - [#13](https://github.com/terwer/src-sy-post-publisher/issues/13) Vuepress基本支持
-
 
 ## Vue 3 + TypeScript + Vite
 

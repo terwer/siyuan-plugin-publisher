@@ -2,7 +2,9 @@
 
 将思源笔记的文章发布到支持的开放平台的**思源笔记挂件**
 
-目前支持 Vuepress ~~以及 2 种博客平台标准、metaweblog api 和基于 Wordpress 的 xmlrpc 远程调用 api （延期到v0.0.2）~~
+目前支持 Vuepress 以及 2 种博客平台标准、metaweblog api 和基于 Wordpress 的 xmlrpc 远程调用 api
+
+同时提供了一个 [统一通用的API适配器](https://github.com/terwer/src-sy-post-publisher/blob/main/src/lib/api.ts) ，让适配任何平台成为可能。
 
 <a href="https://img1.terwergreen.com/api/public/20220729233245.gif" target="_blank" >点击查看操作演示</a>
 
@@ -12,17 +14,38 @@
 
 * [X] Vuepress-v0.0.1版本支持，2022-07-29发布
 
-* [ ] 博客园-延期到v0.0.2版本，预计2022-10-31发布
+* [X] 博客园-延期到v0.0.2版本，~~预计2022-10-31发布~~，已提前，2022-08-21发布
 
-* [ ] 链滴社区-延期到v0.0.2版本，预计2022-10-31发布
+* [X] 链滴社区-延期到v0.0.2版本，~~预计2022-10-31发布~~，已提前，2022-08-21发布
 
-* [ ] 语雀-延期到v0.0.2版本，预计2022-10-31发布
+* [X] 语雀-延期到v0.0.2版本，~~预计2022-10-31发布~~，已提前，2022-08-21发布
 
 ## 最近更新
 
 [点击这里查看开发进度](https://github.com/users/terwer/projects/1/views/1)
 
 ### v0.0.2
+- [X] #15
+
+  - [x] #18
+
+  - [x] #24
+
+  - [x] #25
+
+  - [X] #38
+
+  - [X] #39
+
+  - [X] #40
+
+  - [x] #41
+
+  - [x] #42
+
+  - [x] #43
+
+  - [x] #44
 
 - [#19](https://github.com/terwer/src-sy-post-publisher/issues/19) 增强Vuepress支持，如果设置了Github参数，使用Github API实现自动发布，否则自行复制文本
 
@@ -55,11 +78,6 @@
     - 14、页面初始化也附加内容 
   
     - 15、支持文章取消发布
-
-
- - [#15](https://github.com/terwer/src-sy-post-publisher/issues/15)
-
-    - 1、
 
 ### v0.0.1
 
