@@ -18,7 +18,7 @@ export class KmsApi extends CommonblogApi {
     /**
      * 新增文档
      */
-    public async addDoc() {
+    public async addDoc(title: string, content: string) {
         let url = "/addDoc"
         const formJson = [
             {
@@ -27,11 +27,11 @@ export class KmsApi extends CommonblogApi {
             },
             {
                 key: "docSubject",
-                value: "测试文档标题"
+                value: title
             },
             {
                 key: "docContent",
-                value: "测试文档内容"
+                value: content
             },
             {
                 key: "fdDocCreator",
@@ -47,8 +47,7 @@ export class KmsApi extends CommonblogApi {
             },
         ]
 
-        return this.kmsRequestForm(url, formJson)
-
+        const result = await this.kmsRequestForm(url, formJson)
         // 这里返回的是response.data
         // 下面是完整返回
         // response
@@ -64,6 +63,69 @@ export class KmsApi extends CommonblogApi {
         //      },
         //     "msg": "操作成功！"
         // }
+        return result.fdId
+    }
+
+    /**
+     * 新增文档
+     */
+    public async updateDoc(fdId: string, title: string, content: string) {
+        let url = "/updateDoc"
+        const formJson = [
+            {
+                key: "fdId",
+                value: fdId
+            },
+            {
+                key: "docSubject",
+                value: title
+            },
+            {
+                key: "docContent",
+                value: content
+            }
+        ]
+
+        const result = await this.kmsRequestForm(url, formJson)
+        // 这里返回的是response.data
+        // 下面是完整返回
+        // response
+        // {
+        //     "code": "200",
+        //     "success": "success",
+        //     "data": {
+        //         "docContent": "测试文档内容",
+        //         "docCreateTime": "2022-08-20 17:15",
+        //         "fdId": "182ba88e8d8f4e3ad36314943b189939",
+        //         "docSubject": "测试文档标题",
+        //         "docCreatorId": "180f58069509ef61dd964994e4591dab"
+        //      },
+        //     "msg": "操作成功！"
+        // }
+        return result.fdId
+    }
+
+    /**
+     * 删除文档
+     * @param fdId 文档ID
+     */
+    public async delDoc(fdId: string) {
+        let url = "/delDoc"
+        const formJson = {
+            "fdId": fdId
+        }
+
+        await this.kmsRequestJson(url, formJson)
+        // 这里返回的是response.data
+        // 下面是完整返回
+        // response
+        // {
+        //     "code": "200",
+        //     "success": "success",
+        //     "data": [],
+        //     "msg": "操作成功"
+        // }
+        return true
     }
 
     // ==========================================================================
@@ -88,6 +150,44 @@ export class KmsApi extends CommonblogApi {
         // logUtil.logInfo("向KMS请求数据，resText=>", resText)
 
         const json = await this.doFormFetch(apiUrl, fetchOps, formJson)
+
+        // 解析响应体并返回响应结果
+        const statusCode = json.code
+        const msg = json.msg
+
+        if (200 != statusCode) {
+            if (401 == statusCode) {
+                throw new Error("因权限不足操作已被禁止：" + msg)
+            } else {
+                throw new Error("请求错误")
+            }
+        }
+
+        return json.data
+    }
+
+    /**
+     * 使用JSON方式向KMS请求数据
+     * @param url 请求地址，例如 "/delDoc"
+     * @param formJson
+     * @private
+     */
+    private async kmsRequestJson(url: string, formJson: any) {
+        const apiUrl = this.baseUrl + url
+        const fetchOps = {
+            body: JSON.stringify(formJson),
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Basic ${this.basicToken}`
+            },
+            method: "POST"
+        }
+
+        // const response = await fetch(apiUrl, fetchOps)
+        // const resText = await response.text()
+        // logUtil.logInfo("向KMS请求数据，resText=>", resText)
+
+        const json = await this.doFetch(apiUrl, fetchOps)
 
         // 解析响应体并返回响应结果
         const statusCode = json.code
