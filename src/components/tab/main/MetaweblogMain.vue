@@ -241,7 +241,7 @@ const initPage = async () => {
   siyuanData.pageId = pageId;
   siyuanData.meta = await getPageAttrs(pageId)
   const page = await getPage(pageId)
-  console.log("MetaweblogMain初始化页面,meta=>", siyuanData.meta);
+  logUtil.logInfo("MetaweblogMain初始化页面,meta=>", siyuanData.meta);
 
   // 表单数据
   formData.title = page.content
@@ -424,7 +424,7 @@ const saveAttrToSiyuan = async (hideTip?: boolean) => {
     tags: formData.tag.dynamicTags.join(",")
   };
   await setPageAttrs(siyuanData.pageId, customAttr)
-  console.log("MetaweblogMain保存属性到思源笔记,meta=>", customAttr);
+  logUtil.logInfo("MetaweblogMain保存属性到思源笔记,meta=>", customAttr);
 
   // 单独调用才去刷新数据，否则自行刷新数据
   if (hideTip != true) {

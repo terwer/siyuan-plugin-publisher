@@ -359,7 +359,7 @@ async function getBlockByID(blockId: string) {
                 from blocks
                 where id = '${blockId}'`
     let data = await sql(stmt)
-    console.log(data)
+    logUtil.logInfo(data)
     return data[0]
 }
 
@@ -372,7 +372,7 @@ async function getBlockBySlug(slug: string) {
                where name='custom-slug' and value='${slug}' 
                limit 1`
     let data = await sql(stmt)
-    console.log(data)
+    logUtil.logInfo(data)
     return data[0]
 }
 

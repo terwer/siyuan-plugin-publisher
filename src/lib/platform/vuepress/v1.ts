@@ -43,15 +43,15 @@ class VuepressApiV1 {
         let res
         try {
             const route = 'GET /repos/' + this.vuepressCfg.githubUser + '/' + this.vuepressCfg.githubRepo + '/contents/' + docPath;
-            console.log("getPage route=>", route)
+            logUtil.logInfo("getPage route=>", route)
             res = await this.octokit.request(route, {
                 owner: this.vuepressCfg.githubUser,
                 repo: this.vuepressCfg.githubRepo,
                 path: docPath
             })
-            console.log("getPage res=>", res)
+            logUtil.logInfo("getPage res=>", res)
         } catch (e) {
-            console.log("getPage error=>", e)
+            logUtil.logError("getPage error=>", e)
         }
 
         if (res) {
@@ -90,9 +90,9 @@ class VuepressApiV1 {
             }
 
             res = await this.octokit.request(route, options)
-            console.log("createOrUpdatePage res=>", res)
+            logUtil.logInfo("createOrUpdatePage res=>", res)
         } catch (e) {
-            console.log("createOrUpdatePage error=>", e)
+            logUtil.logError("createOrUpdatePage error=>", e)
         }
         return res
     }
@@ -119,9 +119,9 @@ class VuepressApiV1 {
             }
 
             res = await this.octokit.request(route, options)
-            console.log("deletePage res=>", res)
+            logUtil.logInfo("deletePage res=>", res)
         } catch (e) {
-            console.log("deletePage error=>", e)
+            logUtil.logError("deletePage error=>", e)
         }
         return res
     }
@@ -144,7 +144,7 @@ export async function publishPage(vuepressCfg: IVuepressCfg, docPath: string, md
 
     let res
     res = await v1.createOrUpdatePage(docPath, mdContent, sha)
-    console.log("Vuepress V1 publishPage,res=>", res)
+    logUtil.logInfo("Vuepress V1 publishPage,res=>", res)
     return res;
 }
 
@@ -162,7 +162,7 @@ export async function deletePage(vuepressCfg: IVuepressCfg, docPath: string) {
 
     let res
     res = await v1.deletePage(docPath, sha)
-    console.log("Vuepress V1 deletePage,res=>", res)
+    logUtil.logInfo("Vuepress V1 deletePage,res=>", res)
     return res;
 }
 
