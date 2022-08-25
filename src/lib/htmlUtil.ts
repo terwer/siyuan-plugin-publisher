@@ -38,7 +38,10 @@ export function removeWidgetTag(str: string) {
     const h1Regex = /<h1.*\/h1>/g
     newstr = newstr.replace(h1Regex, "")
 
-    return str
+    const mdH1Rehex = /#\s[0-9]+.*/g
+    newstr = newstr.replace(mdH1Rehex, "")
+
+    return newstr
 }
 
 /**
