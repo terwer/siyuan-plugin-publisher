@@ -142,8 +142,11 @@ import {SIYUAN_PAGE_ATTR_KEY} from "../../../lib/constants/siyuanPageConstants";
 import {
   cutWords,
   formatNumToZhDate,
-  getPublishStatus, isEmptyObject, isEmptyString,
-  jiebaToHotWords, pathJoin,
+  getPublishStatus,
+  isEmptyObject,
+  isEmptyString,
+  jiebaToHotWords,
+  pathJoin,
   pingyinSlugify,
   zhSlugify
 } from "../../../lib/util";
@@ -319,11 +322,15 @@ const makeSlug = async (hideTip?: boolean) => {
   // 获取标题
   // @ts-ignore
   // const title = siyuanData.value.meta.title;
-  const title = page.content;
-  logUtil.logInfo("title=>", title)
+  // 标题处理
+  let fmtTitle = page.content
+  if (fmtTitle.indexOf(".") > -1) {
+    fmtTitle = fmtTitle.replace(/\d*\./g, "");
+  }
+  logUtil.logInfo("fmtTitle=>", fmtTitle)
   if (formData.checkList.length > 0) {
     // 调用Google翻译API
-    const result = await zhSlugify(title);
+    const result = await zhSlugify(fmtTitle);
     logUtil.logInfo("result=>", result)
     if (result) {
       formData.customSlug = result
@@ -331,7 +338,7 @@ const makeSlug = async (hideTip?: boolean) => {
       ElMessage.success(t('main.opt.failure'))
     }
   } else {
-    formData.customSlug = await pingyinSlugify(title);
+    formData.customSlug = await pingyinSlugify(fmtTitle);
   }
 
   // add hash
@@ -473,6 +480,11 @@ const doPublish = async () => {
 
     // 组装文章数据
     // ===============================
+    // 标题处理
+    let fmtTitle = formData.title
+    if (fmtTitle.indexOf(".") > -1) {
+      fmtTitle = fmtTitle.replace(/\d*\./g, "");
+    }
     // 发布内容
     const data = await getPageMd(siyuanData.pageId);
     const md = removeWidgetTag(data.content)
@@ -482,7 +494,7 @@ const doPublish = async () => {
     }
     // ===============================
     const post = new Post()
-    post.title = formData.title
+    post.title = fmtTitle
     post.wp_slug = formData.customSlug
     post.description = content
     post.categories = formData.categories
