@@ -194,7 +194,8 @@ import {
   cutWords,
   formatIsoToZhDate,
   formatNumToZhDate,
-  getPublishStatus, isEmptyString,
+  getPublishStatus,
+  isEmptyString,
   jiebaToHotWords,
   obj2yaml,
   pingyinSlugify,
@@ -214,7 +215,6 @@ import {IVuepressCfg} from "../../../lib/platform/vuepress/IVuepressCfg";
 import {deletePage, getPageTreeNode, publishPage} from "../../../lib/platform/vuepress/v1";
 import {POSTID_KEY_CONSTANTS} from "../../../lib/constants/postidKeyConstants";
 import {getApiParams} from "../../../lib/publishUtil";
-import {deflateRaw} from "zlib";
 
 const {t} = useI18n()
 
@@ -416,11 +416,12 @@ async function makeSlug(hideTip?: boolean) {
   // 获取标题
   // @ts-ignore
   // const title = siyuanData.value.meta.title;
-  const title = page.content;
-  logUtil.logInfo("title=>", title)
+  let fmtTitle = page.content
+  fmtTitle = mdFileToTitle(fmtTitle)
+  logUtil.logInfo("fmtTitle=>", fmtTitle)
   if (formData.value.checkList.length > 0) {
     // 调用Google翻译API
-    const result = await zhSlugify(title);
+    const result = await zhSlugify(fmtTitle);
     logUtil.logInfo("result=>", result)
     if (result) {
       formData.value.customSlug = result
@@ -428,7 +429,7 @@ async function makeSlug(hideTip?: boolean) {
       ElMessage.success(t('main.opt.failure'))
     }
   } else {
-    formData.value.customSlug = await pingyinSlugify(title);
+    formData.value.customSlug = await pingyinSlugify(fmtTitle);
   }
   // add hash
   if (slugHashEnabled.value) {
