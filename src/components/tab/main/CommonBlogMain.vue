@@ -480,6 +480,11 @@ const doPublish = async () => {
 
     // 组装文章数据
     // ===============================
+    // 文章标题
+    let fmtTitle = formData.title
+    if (fmtTitle.indexOf(".") > -1) {
+      fmtTitle = fmtTitle.replace(/\d*\./g, "");
+    }
     // 发布内容
     const data = await getPageMd(siyuanData.pageId);
     const md = removeWidgetTag(data.content)
@@ -489,7 +494,7 @@ const doPublish = async () => {
     }
     // ===============================
     const post = new Post()
-    post.title = formData.title
+    post.title = fmtTitle
     post.wp_slug = formData.customSlug
     post.description = content
     post.categories = formData.categories
