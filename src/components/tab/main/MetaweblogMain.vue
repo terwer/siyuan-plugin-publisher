@@ -151,7 +151,7 @@ import {
   zhSlugify
 } from "../../../lib/util";
 import logUtil from "../../../lib/logUtil";
-import {mdToHtml, parseHtml, removeWidgetTag} from "../../../lib/htmlUtil";
+import {mdToHtml, mdToPlainText, parseHtml, removeTitleNumber, removeWidgetTag} from "../../../lib/htmlUtil";
 import {CONSTANTS} from "../../../lib/constants/constants";
 import {getJSONConf} from "../../../lib/config";
 import {IMetaweblogCfg, PageType} from "../../../lib/platform/metaweblog/IMetaweblogCfg";
@@ -363,9 +363,8 @@ const makeDesc = async (hideTip?: boolean) => {
   const data = await getPageMd(siyuanData.pageId);
 
   const md = data.content
-  let html = mdToHtml(md)
-  // formData.value.desc = html;
-  formData.desc = parseHtml(html, CONSTANTS.MAX_PREVIEW_LENGTH, true)
+  const plainText = mdToPlainText(md)
+  formData.desc = parseHtml(plainText, CONSTANTS.MAX_PREVIEW_LENGTH, true)
 
   isDescLoading.value = false
   if (hideTip != true) {
@@ -481,16 +480,13 @@ const doPublish = async () => {
     // 组装文章数据
     // ===============================
     // 标题处理
-    let fmtTitle = formData.title
-    if (fmtTitle.indexOf(".") > -1) {
-      fmtTitle = fmtTitle.replace(/\d*\./g, "");
-    }
+    let fmtTitle = removeTitleNumber(formData.title)
     // 发布内容
     const data = await getPageMd(siyuanData.pageId);
     const md = removeWidgetTag(data.content)
     let content = md
     if (PageType.Html == metaweblogCfg.pageType) {
-      content = render(md)
+      content = mdToHtml(md)
     }
     // ===============================
     const post = new Post()
