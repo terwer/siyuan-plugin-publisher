@@ -205,7 +205,7 @@ import {
 import {useI18n} from "vue-i18n";
 import {ElMessage, ElMessageBox} from "element-plus";
 import {CONSTANTS} from "../../../lib/constants/constants";
-import {mdToHtml, parseHtml, removeWidgetTag} from "../../../lib/htmlUtil";
+import {mdToHtml, mdToPlainText, parseHtml, removeMdWidgetTag, removeWidgetTag} from "../../../lib/htmlUtil";
 import {API_TYPE_CONSTANTS} from "../../../lib/constants/apiTypeConstants";
 import copy from "copy-to-clipboard"
 import shortHash from "shorthash2";
@@ -453,8 +453,7 @@ async function makeDesc(hideTip?: boolean) {
   const data = await getPageMd(siyuanData.value.pageId);
 
   const md = data.content
-  let html = mdToHtml(md)
-  // formData.value.desc = html;
+  let html = mdToPlainText(md)
   formData.value.desc = parseHtml(html, CONSTANTS.MAX_PREVIEW_LENGTH, true)
 
   isDescLoading.value = false
@@ -718,7 +717,7 @@ async function doPublish() {
     // 发布内容
     const data = await getPageMd(siyuanData.value.pageId);
     // 纯正文
-    const md = removeWidgetTag(data.content)
+    const md = removeMdWidgetTag(data.content)
     // 包含formatter和正文
     const mdContent = vuepressData.value.formatter + "\n" + md;
     vuepressData.value.vuepressContent = md;

@@ -148,7 +148,14 @@ import {SIYUAN_PAGE_ATTR_KEY} from "../../../lib/constants/siyuanPageConstants";
 import logUtil from "../../../lib/logUtil";
 import {ElMessage} from "element-plus/es";
 import shortHash from "shorthash2";
-import {mdToHtml, parseHtml, removeWidgetTag} from "../../../lib/htmlUtil";
+import {
+  mdToHtml,
+  mdToPlainText,
+  parseHtml,
+  removeMdWidgetTag,
+  removeTitleNumber,
+  removeWidgetTag
+} from "../../../lib/htmlUtil";
 import {CONSTANTS} from "../../../lib/constants/constants";
 import {ElMessageBox} from "element-plus";
 import {API} from "../../../lib/api";
@@ -361,8 +368,7 @@ const makeDesc = async (hideTip?: boolean) => {
   const data = await getPageMd(siyuanData.pageId);
 
   const md = data.content
-  let html = mdToHtml(md)
-  // formData.value.desc = html;
+  let html = mdToPlainText(md)
   formData.desc = parseHtml(html, CONSTANTS.MAX_PREVIEW_LENGTH, true)
 
   isDescLoading.value = false
@@ -481,16 +487,13 @@ const doPublish = async () => {
     // 组装文章数据
     // ===============================
     // 文章标题
-    let fmtTitle = formData.title
-    if (fmtTitle.indexOf(".") > -1) {
-      fmtTitle = fmtTitle.replace(/\d*\./g, "");
-    }
+    let fmtTitle = removeTitleNumber(formData.title)
     // 发布内容
     const data = await getPageMd(siyuanData.pageId);
-    const md = removeWidgetTag(data.content)
+    const md = removeMdWidgetTag(data.content)
     let content = md
     if (PageType.Html == commonblogCfg.pageType) {
-      content = render(md)
+      content = mdToHtml(md)
     }
     // ===============================
     const post = new Post()

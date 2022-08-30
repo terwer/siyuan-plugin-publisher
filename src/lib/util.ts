@@ -2,7 +2,7 @@
 import {slugify} from 'transliteration';
 // @ts-ignore
 import jsYaml from "js-yaml";
-import {mdToPlanText} from "./htmlUtil";
+import {mdToPlainText} from "./htmlUtil";
 import {getApiParams} from "./publishUtil";
 import logUtil from "./logUtil";
 import {API_TYPE_CONSTANTS} from "./constants/apiTypeConstants";
@@ -364,7 +364,7 @@ export function covertStringToDate(dateString: string) {
  */
 export async function cutWords(words: string) {
     // https://github.com/yanyiwu/nodejieba
-    words = mdToPlanText(words)
+    words = mdToPlainText(words)
     logUtil.logInfo("准备开始分词，原文=>", words)
     // https://github.com/ddsol/speedtest.net/issues/112
     // 浏览器和webpack不支持，只有node能用

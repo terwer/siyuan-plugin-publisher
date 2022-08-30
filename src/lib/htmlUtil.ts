@@ -4,15 +4,17 @@
 import {render} from "./markdownUtil";
 
 /**
- * 将Markdown转换为HTML
- * @param md Markdown
- * @returns {*} HTML
+ * 移除标题数字
+ * @param str
  */
-export function mdToHtml(md: string) {
-    let html = "<h1>No markdown parser,see src/lib/htmlUtil.ts</h1>"
-    // html = converter.makeHtml(md);
-    html = render(md)
-    return removeWidgetTag(html);
+export function removeTitleNumber(str: string) {
+    let newstr = str
+
+    // 移除序号
+    const publisherRegex = /([0-9]*)\./g;
+    newstr = newstr.replace(publisherRegex, "")
+
+    return newstr
 }
 
 /**
@@ -25,18 +27,29 @@ export function removeWidgetTag(str: string) {
 
     // 旧版发布挂件
     const publisherRegex = /<iframe.*src="\/widgets\/publisher.*<\/iframe>/g;
-    newstr = newstr.replaceAll(publisherRegex, "")
+    newstr = newstr.replace(publisherRegex, "")
 
     // 新版发布挂件
     const syPublisherRegex = /<iframe.*src="\/widgets\/sy-post-publisher.*<\/iframe>/g;
-    newstr = newstr.replaceAll(syPublisherRegex, "")
+    newstr = newstr.replace(syPublisherRegex, "")
 
     // 文章属性挂件
     const noteAttrRegex = /<iframe.*\/widgets\/Note*\sAttrs.*\/iframe>/g
-    newstr = newstr.replaceAll(noteAttrRegex, "")
+    newstr = newstr.replace(noteAttrRegex, "")
 
     const h1Regex = /<h1.*\/h1>/g
     newstr = newstr.replace(h1Regex, "")
+
+    return newstr
+}
+
+/**
+ * 删除Markdown文本的挂件的HTML
+ * @param str 原字符
+ * @returns {*|string} 删除后的字符
+ */
+export function removeMdWidgetTag(str: string) {
+    let newstr = str
 
     const mdH1Rehex = /#\s[0-9]+.*/g
     newstr = newstr.replace(mdH1Rehex, "")
@@ -106,11 +119,23 @@ function filterHtml(str: string) {
 }
 
 /**
+ * 将Markdown转换为HTML
+ * @param md Markdown
+ * @returns {*} HTML
+ */
+export function mdToHtml(md: string) {
+    // let html = "<h1>No markdown parser,see src/lib/htmlUtil.ts</h1>"
+    // html = converter.makeHtml(md);
+    const html = render(md)
+    return removeWidgetTag(html);
+}
+
+/**
  * 将Markdown转换为纯文本
  * @param md
  * @returns {string}
  */
-export function mdToPlanText(md: string) {
+export function mdToPlainText(md: string) {
     let html = mdToHtml(md)
     html = removeWidgetTag(html)
     return filterHtml(html)
