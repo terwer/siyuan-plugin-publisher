@@ -354,7 +354,7 @@ async function initPage() {
 
   // 文章内容同步到YAMl
   const data = await getPageMd(siyuanData.value.pageId);
-  const md = removeWidgetTag(data.content)
+  const md = removeMdWidgetTag(data.content)
   vuepressData.value.vuepressContent = md;
   vuepressData.value.vuepressFullContent = vuepressData.value.formatter + "\n" + vuepressData.value.vuepressContent;
 
