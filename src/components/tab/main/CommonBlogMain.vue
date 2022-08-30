@@ -494,6 +494,8 @@ const doPublish = async () => {
     let content = md
     if (PageType.Html == commonblogCfg.pageType) {
       content = mdToHtml(md)
+    }else{
+      content = removeMdWidgetTag(content)
     }
     // ===============================
     const post = new Post()

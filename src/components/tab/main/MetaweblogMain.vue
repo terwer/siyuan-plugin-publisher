@@ -151,7 +151,14 @@ import {
   zhSlugify
 } from "../../../lib/util";
 import logUtil from "../../../lib/logUtil";
-import {mdToHtml, mdToPlainText, parseHtml, removeTitleNumber, removeWidgetTag} from "../../../lib/htmlUtil";
+import {
+  mdToHtml,
+  mdToPlainText,
+  parseHtml,
+  removeMdWidgetTag,
+  removeTitleNumber,
+  removeWidgetTag
+} from "../../../lib/htmlUtil";
 import {CONSTANTS} from "../../../lib/constants/constants";
 import {getJSONConf} from "../../../lib/config";
 import {IMetaweblogCfg, PageType} from "../../../lib/platform/metaweblog/IMetaweblogCfg";
@@ -487,6 +494,8 @@ const doPublish = async () => {
     let content = md
     if (PageType.Html == metaweblogCfg.pageType) {
       content = mdToHtml(md)
+    } else {
+      content = removeMdWidgetTag(content)
     }
     // ===============================
     const post = new Post()
