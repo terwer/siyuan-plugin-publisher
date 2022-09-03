@@ -10,6 +10,6 @@ export class WordpressCfg extends MetaweblogCfg {
         super("http://localhost:8000", "http://localhost:8000/xmlrpc.php", "", "");
         this.posidKey = POSTID_KEY_CONSTANTS.WORDPRESS_POSTID_KEY
         this.previewUrl = "/?p=[postid]"
-        this.pageType = PageType.Html
+        this.pageType = PageType.Markdown
     }
 }
