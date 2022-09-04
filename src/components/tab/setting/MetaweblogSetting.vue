@@ -18,6 +18,13 @@
       <el-input v-model="apiUrl"/>
     </el-form-item>
 
+    <el-form-item :label="$t('setting.blog.pageType')">
+      <el-radio-group v-model="ptype" class="ml-4">
+        <el-radio :label="0" size="large">Markdown</el-radio>
+        <el-radio :label="1" size="large">HTML</el-radio>
+      </el-radio-group>
+    </el-form-item>
+
     <el-form-item>
       <el-button type="primary" @click="valiConf" :loading="isLoading">
         {{ isLoading ? $t('setting.blog.vali.ing') : $t('setting.blog.vali') }}
@@ -39,7 +46,7 @@ import logUtil from "../../../lib/logUtil";
 import {getJSONConf, setJSONConf} from "../../../lib/config";
 import {ElMessage} from "element-plus";
 import {useI18n} from "vue-i18n";
-import {IMetaweblogCfg} from "../../../lib/platform/metaweblog/IMetaweblogCfg";
+import {IMetaweblogCfg, PageType} from "../../../lib/platform/metaweblog/IMetaweblogCfg";
 import {MetaweblogCfg} from "../../../lib/platform/metaweblog/MetaweblogCfg";
 import {API} from "../../../lib/api";
 import {UserBlog} from "../../../lib/common/userBlog";
@@ -62,10 +69,14 @@ const props = defineProps({
   }
 })
 
+const ptype_md = parseInt(PageType.Markdown.toString())
+const ptype_html = parseInt(PageType.Html.toString())
+
 const home = ref("")
 const apiUrl = ref("")
 const username = ref("")
 const password = ref("")
+const ptype = ref(ptype_md)
 
 const isLoading = ref(false)
 const apiStatus = ref(false)
@@ -127,6 +138,7 @@ const saveConf = (hideTip?: boolean) => {
   cfg.apiUrl = apiUrl.value
   cfg.apiStatus = apiStatus.value
   cfg.blogName = blogName.value
+  cfg.pageType = ptype.value
 
   setJSONConf(props.apiType, cfg)
 
@@ -151,6 +163,7 @@ const initConf = () => {
     password.value = conf.password
     apiStatus.value = conf.apiStatus
     blogName.value = conf.blogName
+    ptype.value = conf.pageType
   }
 }
 
