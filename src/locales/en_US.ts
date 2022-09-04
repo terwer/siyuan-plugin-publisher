@@ -95,6 +95,7 @@ export default {
     "setting.blog.username": "Username",
     "setting.blog.password": "Password",
     "setting.blog.apiurl": "API Url",
+    "setting.blog.pageType": "Page Type",
     "setting.blog.validate": "Validate",
     "setting.blog.save": "Save",
     "setting.blog.vali": "Validate",

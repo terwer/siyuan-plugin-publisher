@@ -98,6 +98,7 @@ export default {
     "setting.blog.username": "账号",
     "setting.blog.password": "密码",
     "setting.blog.apiurl": "API地址",
+    "setting.blog.pageType": "发布格式",
     "setting.blog.validate": "验证",
     "setting.blog.save": "保存",
     "setting.blog.vali": "验证",
