@@ -89,6 +89,7 @@ const token = ref("")
 const isLoading = ref(false)
 const apiStatus = ref(false)
 const blogName = ref("")
+const blogid = ref("")
 const tokenSettingUrl = ref("")
 
 const apiTypeInfo = ref(t('setting.blog.platform.support.common') + props.apiType + " ")
@@ -112,6 +113,7 @@ const valiConf = async () => {
       cfg.blogName = userBlog.blogName
       blogName.value = userBlog.blogName
       cfg.blogid = userBlog.blogid
+      blogid.value = userBlog.blogid
 
       // 验证通过刷新状态
       setJSONConf(props.apiType, cfg)
@@ -148,6 +150,7 @@ const saveConf = (hideTip?: boolean) => {
   cfg.apiUrl = apiUrl.value
   cfg.apiStatus = apiStatus.value
   cfg.blogName = blogName.value
+  cfg.blogid = blogid.value
 
   setJSONConf(props.apiType, cfg)
 
@@ -173,6 +176,7 @@ const initConf = () => {
     token.value = conf.token || ""
     apiStatus.value = conf.apiStatus || false
     blogName.value = conf.blogName || ""
+    blogid.value = conf.blogid || ""
     tokenSettingUrl.value = conf.tokenSettingUrl || ""
   }
 }
