@@ -11,6 +11,7 @@ import {LiandiApiAdaptor} from "./platform/commonblog/liandi/liandiApiAdaptor";
 import {YuqueApiAdaptor} from "./platform/commonblog/yuque/yuqueApiAdaptor";
 import {PlantformType} from "./dynamicConfig";
 import {MetaWeblogApiAdaptor} from "./platform/metaweblog/metaWeblogApiAdaptor";
+import {CategoryInfo} from "./common/categoryInfo";
 
 /**
  * 所有平台统一API接口（Vuepress比较特殊，除外）
@@ -101,6 +102,11 @@ export interface IApi {
      * @param postid 文章ID
      */
     deletePost(postid: string): Promise<boolean>
+
+    /**
+     * 获取分类列表
+     */
+    getCategories(): Promise<CategoryInfo[]>
 }
 
 /**
@@ -183,6 +189,10 @@ export class API implements IApi {
 
     async deletePost(postid: string): Promise<boolean> {
         return await this.apiAdaptor.deletePost(postid)
+    }
+
+    async getCategories(): Promise<CategoryInfo[]> {
+        return await this.apiAdaptor.getCategories()
     }
 }
 

@@ -3,6 +3,7 @@ import {Post} from "../../common/post";
 import {UserBlog} from "../../common/userBlog";
 import {getJSONConf} from "../../config";
 import {ICommonblogCfg} from "./commonblogCfg";
+import {CategoryInfo} from "../../common/categoryInfo";
 
 /**
  * 通用平台接口适配器
@@ -38,5 +39,9 @@ export class CommonblogApiAdaptor implements IApi {
 
     public async newPost(post: Post, publish?: boolean): Promise<string> {
         throw new Error("该功能未实现，请在子类重写该方法")
+    }
+
+    public async getCategories(): Promise<CategoryInfo[]> {
+        return Promise.resolve([]);
     }
 }
