@@ -7,6 +7,7 @@ import logUtil from "../../logUtil";
 import {METAWEBLOG_METHOD_CONSTANTS} from "../../constants/metaweblogMethodConstants";
 import {POST_STATUS_CONSTANTS} from "../../constants/postStatusConstants";
 import {inBrowser, isEmptyString} from "../../util";
+import {CategoryInfo} from "../../common/categoryInfo";
 
 export class MetaWeblogApi {
     private readonly apiType: string
@@ -57,7 +58,27 @@ export class MetaWeblogApi {
     }
 
     public async getPost(postid: string, username: string, password: string): Promise<Post> {
-        return Promise.resolve(new Post())
+        let result:Post = new Post()
+
+        try {
+            let ret = await this.xmlrpcClient.methodCallEntry(METAWEBLOG_METHOD_CONSTANTS.GET_POST,
+                [postid, username, password])
+            logUtil.logInfo("getCategories ret=>", ret)
+
+            const dataObj = JSON.parse(ret) || []
+            if (dataObj.faultCode) {
+                logUtil.logError("请求分类异常，错误信息如下：",dataObj.faultString)
+            }
+
+            // 数据适配
+            logUtil.logInfo("获取的文章信息，dataObj=>", dataObj)
+            // 暂时只用到了分类，其他属性先不适配
+            result.categories = dataObj.categories
+        }catch (e) {
+            logUtil.logError("文章信息获取失败", e)
+        }
+
+        return result
     }
 
     /**
@@ -179,5 +200,36 @@ export class MetaWeblogApi {
         //     post_status: post.post_status || POST_STATUS_CONSTANTS.POST_STATUS_PUBLISH,
         //     wp_password: post.wp_password || ''
         // }
+    }
+
+    public async getCategories(blogid: string, username: string, password: string,): Promise<CategoryInfo[]> {
+        let result = <Array<CategoryInfo>>[]
+
+        try {
+            let ret = await this.xmlrpcClient.methodCallEntry(METAWEBLOG_METHOD_CONSTANTS.GET_CATEGORIES,
+                [this.apiType, username, password])
+            logUtil.logInfo("getCategories ret=>", ret)
+
+            // 错误处理
+            const dataObj = JSON.parse(ret) || []
+            if (dataObj.faultCode) {
+               logUtil.logError("请求分类异常，错误信息如下：",dataObj.faultString)
+            }
+
+            // 数据适配
+            const dataArr = JSON.parse(ret) || []
+            logUtil.logInfo("获取的分类信息，dataArr=>", dataArr)
+
+            dataArr.forEach((item: any) => {
+                const cat = new CategoryInfo()
+                cat.description = item.description
+                cat.categoryId = item.categoryId
+                result.push(cat)
+            })
+        }catch (e) {
+            logUtil.logError("分类获取失败", e)
+        }
+
+        return result
     }
 }

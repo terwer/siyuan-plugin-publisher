@@ -64,7 +64,7 @@
         </el-form-item>
 
         <!-- 标签  -->
-        <el-form-item :label="$t('main.tag')" v-if="editMode">
+        <el-form-item :label="$t('main.tag')">
           <el-tag
               v-for="tag in formData.tag.dynamicTags"
               :key="tag"
@@ -92,6 +92,25 @@
           <el-button type="primary" @click="fetchTag" :loading="isTagLoading">
             {{ isTagLoading ? $t('main.opt.loading') : $t('main.auto.fetch.tag') }}
           </el-button>
+        </el-form-item>
+
+        <!-- 分类 -->
+        <el-form-item :label="$t('main.cat')" style="width: 100%;">
+          <el-tree-select
+              style="width: 100%"
+              v-model="formData.cat.categorySelected"
+              :data="formData.cat.categoryList"
+              multiple
+              tag-type="info"
+              :check-on-click-node="true"
+              :render-after-expand="false"
+              show-checkbox
+              :placeholder="$t('main.cat.select')"
+              :empty-text="$t('main.cat.empty')"
+              :no-data-text="$t('main.cat.empty')"
+              @node-click="handleCatNodeClick"
+              @check="handleCatNodeCheck"
+          />
         </el-form-item>
 
         <!-- 操作 -->
@@ -165,8 +184,8 @@ import {IMetaweblogCfg, PageType} from "../../../lib/platform/metaweblog/IMetawe
 import shortHash from "shorthash2";
 import {API} from "../../../lib/api";
 import {Post} from "../../../lib/common/post";
-import {render} from "../../../lib/markdownUtil";
 import {API_TYPE_CONSTANTS} from "../../../lib/constants/apiTypeConstants";
+import {CategoryInfo} from "../../../lib/common/categoryInfo";
 
 const {t} = useI18n()
 
@@ -214,6 +233,10 @@ const formData = reactive({
     inputValue: "",
     dynamicTags: <string[]>([]),
     inputVisible: false
+  },
+  cat: {
+    categorySelected: [],
+    categoryList: []
   },
   categories: ["默认分类"]
 })
@@ -275,10 +298,17 @@ const initPage = async () => {
   // 发布状态
   isPublished.value = getPublishStatus(props.apiType, siyuanData.meta)
 
+  // ============================
+  // 依赖于特定平台的数据初始化开始
+  // ===========================
+  const metaweblogCfg = getJSONConf<IMetaweblogCfg>(props.apiType)
+  const api = new API(props.apiType)
+  // 选中的分类
+  let catData: any = []
+
   // 更新预览链接
   if (isPublished.value) {
     // 读取postid
-    const metaweblogCfg = getJSONConf<IMetaweblogCfg>(props.apiType)
     const meta: any = siyuanData.meta
     formData.postid = meta[metaweblogCfg.posidKey]
 
@@ -286,7 +316,38 @@ const initPage = async () => {
     const postUrl = metaweblogCfg.previewUrl.replace("[postid]", formData.postid)
     // 路径组合
     previewUrl.value = pathJoin(metaweblogCfg.home, postUrl)
+
+    // 如果文章选择了分类，初始化分类
+    const post: Post = await api.getPost(formData.postid.toString())
+    catData = post.categories
+
+    logUtil.logInfo("postid=>", formData.postid)
+    logUtil.logInfo("post=>", post)
+    logUtil.logInfo("初始化选择过的分类,catData=>", catData)
   }
+
+  // 全部文章分类请求
+  const catInfo: CategoryInfo[] = await api.getCategories()
+  logUtil.logInfo("catInfo=>", catInfo)
+
+  // 组装分类
+  let catArr: any = []
+  if (catInfo && catInfo.length && catInfo.length > 0) {
+    catInfo.forEach(item => {
+      const cat = {
+        value: item.description,
+        label: item.description
+      }
+      catArr.push(cat)
+    })
+    formData.cat.categoryList = catArr
+  }
+
+  formData.cat.categorySelected = catData
+  formData.categories = catData
+  // ============================
+  // 依赖于特定平台的数据初始化结束
+  // ===========================
 
   apiStatus.value = conf.apiStatus
 }
@@ -447,6 +508,25 @@ const saveAttrToSiyuan = async (hideTip?: boolean) => {
     ElMessage.success(t('main.opt.success'))
   }
 }
+
+const handleCatNodeClick = (event: any, data: any, node: any, nodeItem: any) => {
+  // console.log("data=>", data)
+  // console.log("node=>", node)
+}
+
+const handleCatNodeCheck = (data: any, status: any) => {
+  console.log("data=>", data)
+  console.log("status=>", status)
+
+  let cats: any = []
+  const values = status.checkedKeys
+  values.forEach((item: any) => {
+    cats.push(item.toString())
+  })
+  formData.categories = cats
+  logUtil.logInfo(" formData.categories=>", formData.categories)
+}
+
 
 const oneclickAttr = async (hideTip?: boolean) => {
   isGenLoading.value = true

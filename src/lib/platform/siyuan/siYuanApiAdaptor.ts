@@ -6,6 +6,7 @@ import {API_TYPE_CONSTANTS} from "../../constants/apiTypeConstants";
 import {render} from "../../markdownUtil";
 import {removeWidgetTag} from "../../htmlUtil";
 import {POST_STATUS_CONSTANTS} from "../../constants/postStatusConstants";
+import {CategoryInfo} from "../../common/categoryInfo";
 
 /**
  * 思源笔记API适配器
@@ -124,5 +125,9 @@ export class SiYuanApiAdaptor implements IApi {
 
     public async deletePost(postid: string): Promise<boolean> {
         return Promise.resolve(false)
+    }
+
+    public async getCategories(): Promise<CategoryInfo[]> {
+        return Promise.resolve([]);
     }
 }

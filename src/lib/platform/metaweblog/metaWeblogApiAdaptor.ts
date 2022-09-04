@@ -5,6 +5,7 @@ import logUtil from "../../logUtil";
 import {IMetaweblogCfg} from "./IMetaweblogCfg";
 import {getJSONConf} from "../../config";
 import {MetaWeblogApi} from "./metaWeblogApi";
+import {CategoryInfo} from "../../common/categoryInfo";
 
 /**
  * 支持Metaweblog的通用API适配器
@@ -96,5 +97,17 @@ export class MetaWeblogApiAdaptor implements IApi {
      */
     public async deletePost(postid: string): Promise<boolean> {
         return await this.metaWeblogApi.deletePost(this.appkey, postid, this.username, this.password, true)
+    }
+
+    /**
+     * getCategories
+     * https://codex.wordpress.org/XML-RPC_MetaWeblog_API#metaWeblog.getCategories
+     *
+     * @returns {Promise<CategoryInfo[]>}
+     */
+    public async getCategories(): Promise<CategoryInfo[]> {
+        const cats = await this.metaWeblogApi.getCategories(this.appkey, this.username, this.password)
+        logUtil.logInfo("获取分类列表=>", cats)
+        return cats
     }
 }
