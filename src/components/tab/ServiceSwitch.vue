@@ -39,7 +39,7 @@
                  :inactive-value="cfg.plantformKey+'_false'" @change="dynamicOnChange"/>
     </el-form-item>
 
-    <div v-if="(enabledCount==0)">
+    <div v-if="showSwitchTip">
       <p>
         <el-alert :title="$t('plantform.must.select.one')" type="error" :closable="false"/>
       </p>
@@ -59,6 +59,7 @@ import {getQueryString, reloadTabPage} from "../../lib/util";
 const {t} = useI18n()
 
 let enabledCount = 0
+let showSwitchTip = ref(false)
 
 const vuepressEnabled = ref(false)
 const jvueEnabled = ref(false)
@@ -75,27 +76,35 @@ let formData = reactive({
 
 const vuepressOnChange = (val: boolean) => {
   setBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY, val)
+  initConf()
 }
 const jvueOnChange = (val: boolean) => {
   setBooleanConf(SWITCH_CONSTANTS.SWITCH_JVUE_KEY, val)
+  initConf()
 }
 const confOnChange = (val: any) => {
   setBooleanConf(SWITCH_CONSTANTS.SWITCH_CONF_KEY, val)
+  initConf()
 }
 const cnblogsOnChange = (val: any) => {
   setBooleanConf(SWITCH_CONSTANTS.SWITCH_CNBLOGS_KEY, val)
+  initConf()
 }
 const wordpressOnChange = (val: any) => {
   setBooleanConf(SWITCH_CONSTANTS.SWITCH_WORDPRESS_KEY, val)
+  initConf()
 }
 const liandiOnChange = (val: any) => {
   setBooleanConf(SWITCH_CONSTANTS.SWITCH_LIANDI_KEY, val)
+  initConf()
 }
 const yuqueOnChange = (val: any) => {
   setBooleanConf(SWITCH_CONSTANTS.SWITCH_YUQUE_KEY, val)
+  initConf()
 }
 const kmsOnChange = (val: any) => {
   setBooleanConf(SWITCH_CONSTANTS.SWITCH_KMS_KEY, val)
+  initConf()
 }
 const dynamicOnChange = (val: any) => {
   logUtil.logInfo("dynamicOnChange,val=>", val)
@@ -104,6 +113,7 @@ const dynamicOnChange = (val: any) => {
   const switchStatus = valArr[1]
 
   setBooleanConf(switchKey, switchStatus)
+  initConf()
 }
 
 const counter = (count: number, isAdd: boolean) => {
@@ -114,6 +124,7 @@ const counter = (count: number, isAdd: boolean) => {
 }
 
 const initConf = () => {
+  enabledCount = 0;
   vuepressEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY)
   enabledCount = counter(enabledCount, vuepressEnabled.value)
 
@@ -152,6 +163,13 @@ const initConf = () => {
     const dynEnabled = switchValue.toLowerCase() === "true"
     enabledCount = counter(enabledCount, dynEnabled)
   });
+
+  // 未启用，跳转设置页面
+  if(enabledCount == 0){
+    showSwitchTip.value = true
+  }else{
+    showSwitchTip.value = false
+  }
 }
 
 const checkPlantform = () => {
@@ -162,7 +180,6 @@ const checkPlantform = () => {
   if (ctab == undefined && enabledCount > 0) {
     return
   }
-  // 未启用，跳转设置页面
   if (enabledCount == 0 && ctab != "service-switch") {
     reloadTabPage("service-switch")
   } else if (enabledCount > 0 && ctab != "plantform-main") {
