@@ -169,4 +169,5 @@ export default {
     "setting.common.username.gen":"Username setting",
     "setting.common.password":"Password",
     "setting.blog.platform.support.common": "Current platform：",
+    "plantform.must.select.one": "You must enable at least one plantform",
 }

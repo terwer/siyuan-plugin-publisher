@@ -107,8 +107,6 @@ const props = defineProps({
 watch(() => props.isReload, /**/async (oldValue, newValue) => {
   // Here you can add you functionality
   // as described in the name you will get old and new value of watched property
-  // 默认选中vuepress
-  setBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY, true)
   initConf();
   await initPage()
 
@@ -116,7 +114,6 @@ watch(() => props.isReload, /**/async (oldValue, newValue) => {
 })
 
 onBeforeMount(async () => {
-  setBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY, true)
   initConf();
   await initPage()
 

@@ -44,7 +44,7 @@ import SWITCH_CONSTANTS from "../../lib/constants/switchConstants";
 import logUtil from "../../lib/logUtil";
 import {DynamicConfig, getDynamicJsonCfg} from "../../lib/dynamicConfig";
 
-const vuepressEnabled = ref(true)
+const vuepressEnabled = ref(false)
 const jvueEnabled = ref(false)
 const confEnabled = ref(false)
 const cnblogsEnabled = ref(false)
@@ -105,21 +105,11 @@ const props = defineProps({
 })
 /*监听props*/
 watch(() => props.isReload, /**/(oldValue, newValue) => {
-  // Here you can add you functionality
-  // as described in the name you will get old and new value of watched property
-  // 默认选中vuepress
-  setBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY, true)
   initConf();
   logUtil.logInfo("plantform-main初始化")
-
-  // 如果开启了Vuepress，需要刷新Vuepress
-  if (vuepressEnabled.value) {
-    isReloadVuepressMain.value = !isReloadVuepressMain.value
-  }
 })
 
 onMounted(() => {
-  setBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY, true)
   initConf();
   logUtil.logInfo("plantform-main初始化 onMounted")
 })

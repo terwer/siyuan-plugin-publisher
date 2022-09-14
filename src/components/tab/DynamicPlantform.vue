@@ -63,7 +63,7 @@ import logUtil from "../../lib/logUtil";
 import {ElMessage, FormInstance, FormRules} from "element-plus";
 import {useI18n} from "vue-i18n";
 import {checkKeyExists} from "../../lib/config";
-import {inBrowser, setUrlParameter} from "../../lib/util";
+import {inBrowser, reloadTabPage, setUrlParameter} from "../../lib/util";
 
 const {t} = useI18n()
 
@@ -94,15 +94,6 @@ const onPlantformTypeChange = (val: PlantformType) => {
   pType.value = val
   showForm.value = pType.value == PlantformType.Metaweblog || pType.value == PlantformType.Wordpress
   logUtil.logInfo(pType.value)
-}
-
-const reloadTabPage = () => {
-  setTimeout(function () {
-    if (inBrowser()) {
-      const url = window.location.href
-      window.location.href = setUrlParameter(url, "tab", "dynamicp-platform")
-    }
-  }, 1000)
 }
 
 const submitForm = async (formEl: FormInstance | undefined) => {
@@ -154,7 +145,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   setDynamicJsonCfg(dynamicConfigArray)
 
   // 刷新页面
-  reloadTabPage()
+  reloadTabPage("dynamicp-platform")
   ElMessage.success(t('main.opt.success'))
 }
 
@@ -198,7 +189,7 @@ const delRow = async () => {
 
   setDynamicJsonCfg(dynamicConfigArray)
   // 刷新页面
-  reloadTabPage()
+  reloadTabPage("dynamicp-platform")
   ElMessage.success(t('main.opt.success'))
 }
 
