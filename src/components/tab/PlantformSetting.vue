@@ -118,7 +118,7 @@ watch(() => props.isReload, /**/(oldValue, newValue) => {
   // Here you can add you functionality
   // as described in the name you will get old and new value of watched property
   // 默认选中vuepress
-  setBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY, true)
+  // setBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY, true)
   initConf();
   logUtil.logInfo("plantform-setting初始化")
 })

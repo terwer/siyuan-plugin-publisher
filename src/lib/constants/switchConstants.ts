@@ -1,4 +1,4 @@
-const SWITCH_VUEPRESS_KEY = "switch-wordprss";
+const SWITCH_VUEPRESS_KEY = "switch-vuepress";
 const SWITCH_JVUE_KEY = "switch-jvue";
 const SWITCH_CONF_KEY = "switch-conf";
 const SWITCH_CNBLOGS_KEY = "switch-cnblogs";

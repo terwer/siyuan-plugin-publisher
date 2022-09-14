@@ -1,7 +1,7 @@
 <template>
   <el-form label-width="100px" inline>
     <el-form-item :label="$t('service.switch.vuepress')">
-      <el-switch v-model="vuepressEnabled" disabled/>
+      <el-switch v-model="vuepressEnabled" @change="vuepressOnChange"/>
     </el-form-item>
 
     <el-form-item :label="$t('service.switch.jvue')">
@@ -38,32 +38,44 @@
       <el-switch v-model="cfg.modelValue" :active-value="cfg.plantformKey+'_true'"
                  :inactive-value="cfg.plantformKey+'_false'" @change="dynamicOnChange"/>
     </el-form-item>
+
+    <div v-if="(enabledCount==0)">
+      <p>
+        <el-alert :title="$t('plantform.must.select.one')" type="error" :closable="false"/>
+      </p>
+    </div>
   </el-form>
 </template>
 
 <script lang="ts" setup>
 import {onMounted, reactive, ref} from 'vue'
 import {useI18n} from "vue-i18n";
-import {setBooleanConf, getBooleanConf, getConf} from "../../lib/config";
+import {getBooleanConf, getConf, setBooleanConf} from "../../lib/config";
 import SWITCH_CONSTANTS from "../../lib/constants/switchConstants";
 import {DynamicConfig, getDynamicJsonCfg} from "../../lib/dynamicConfig";
 import logUtil from "../../lib/logUtil";
+import {getQueryString, reloadTabPage} from "../../lib/util";
 
 const {t} = useI18n()
 
-let vuepressEnabled = ref(true)
+let enabledCount = 0
+
+const vuepressEnabled = ref(false)
 const jvueEnabled = ref(false)
 const confEnabled = ref(false)
-const cnblogsEnabled = ref(true)
+const cnblogsEnabled = ref(false)
 const wordpressEnabled = ref(false)
-const liandiEnabled = ref(true)
-const yuqueEnabled = ref(true)
+const liandiEnabled = ref(false)
+const yuqueEnabled = ref(false)
 const kmsEnabled = ref(false)
 
 let formData = reactive({
   dynamicConfigArray: <Array<DynamicConfig>>[]
 })
 
+const vuepressOnChange = (val: boolean) => {
+  setBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY, val)
+}
 const jvueOnChange = (val: boolean) => {
   setBooleanConf(SWITCH_CONSTANTS.SWITCH_JVUE_KEY, val)
 }
@@ -94,15 +106,37 @@ const dynamicOnChange = (val: any) => {
   setBooleanConf(switchKey, switchStatus)
 }
 
+const counter = (count: number, isAdd: boolean) => {
+  if (isAdd) {
+    ++count;
+  }
+  return count
+}
+
 const initConf = () => {
   vuepressEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY)
+  enabledCount = counter(enabledCount, vuepressEnabled.value)
+
   jvueEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_JVUE_KEY)
+  enabledCount = counter(enabledCount, jvueEnabled.value)
+
   confEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_CONF_KEY)
+  enabledCount = counter(enabledCount, confEnabled.value)
+
   cnblogsEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_CNBLOGS_KEY)
+  enabledCount = counter(enabledCount, cnblogsEnabled.value)
+
   wordpressEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_WORDPRESS_KEY)
+  enabledCount = counter(enabledCount, wordpressEnabled.value)
+
   liandiEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_LIANDI_KEY)
+  enabledCount = counter(enabledCount, liandiEnabled.value)
+
   yuqueEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_YUQUE_KEY)
+  enabledCount = counter(enabledCount, yuqueEnabled.value)
+
   kmsEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_KMS_KEY)
+  enabledCount = counter(enabledCount, kmsEnabled.value)
 
   const dynamicJsonCfg = getDynamicJsonCfg()
   const results = dynamicJsonCfg.totalCfg || []
@@ -114,25 +148,35 @@ const initConf = () => {
 
     item.modelValue = item.plantformKey + "_" + switchValue
     formData.dynamicConfigArray.push(item)
+
+    const dynEnabled = switchValue.toLowerCase() === "true"
+    enabledCount = counter(enabledCount, dynEnabled)
   });
-  logUtil.logInfo(formData.dynamicConfigArray)
 }
 
-onMounted(async () => {
-  // 默认选中vuepress且不可取消
-  setBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY, true)
-  // 博客园、链滴、语雀默认开放
-  if (cnblogsEnabled.value) {
-    setBooleanConf(SWITCH_CONSTANTS.SWITCH_CNBLOGS_KEY, true)
+const checkPlantform = () => {
+  // 未设置平台跳转到设置，否则跳转到主界面
+  logUtil.logInfo("开启的平台数=>" + enabledCount)
+  const ctab = getQueryString("tab")
+  // 有启用的平台，直接返回
+  if (ctab == undefined && enabledCount > 0) {
+    return
   }
-  if (liandiEnabled.value) {
-    setBooleanConf(SWITCH_CONSTANTS.SWITCH_LIANDI_KEY, true)
+  // 未启用，跳转设置页面
+  if (enabledCount == 0 && ctab != "service-switch") {
+    reloadTabPage("service-switch")
+  } else if (enabledCount > 0 && ctab != "plantform-main") {
+    // 有启用的平台，但是打开的别的tab，跳转到主界面
+    reloadTabPage("plantform-main")
   }
-  if (yuqueEnabled.value) {
-    setBooleanConf(SWITCH_CONSTANTS.SWITCH_YUQUE_KEY, true)
-  }
+}
+
+onMounted(() => {
   // 初始化
   initConf()
+
+  // 检测开启的平台数
+  checkPlantform()
 })
 
 </script>

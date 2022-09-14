@@ -1,6 +1,6 @@
 <template>
   <el-container>
-    <el-main class="blog-main">
+    <el-main class="common-main">
       <el-alert class="top-version-tip" :title="apiTypeInfo + blogName" type="info" :closable="false"/>
       <el-alert class="top-version-tip" :title="$t('setting.blog.vali.tip.metaweblog')" type="error" :closable="false"
                 v-if="!apiStatus"/>
@@ -610,5 +610,7 @@ export default {
 </script>
 
 <style scoped>
-
+.common-main{
+  padding: 0;
+}
 </style>

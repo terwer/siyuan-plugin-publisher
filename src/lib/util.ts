@@ -458,6 +458,18 @@ export function getQueryString(sParam: string) {
     }
 }
 
+function replaceUrlParam(url: string, paramName: string, paramValue: string) {
+    if (paramValue == null) {
+        paramValue = '';
+    }
+    var pattern = new RegExp('\\b(' + paramName + '=).*?(&|#|$)');
+    if (url.search(pattern) >= 0) {
+        return url.replace(pattern, '$1' + paramValue + '$2');
+    }
+    url = url.replace(/[?#]$/, '');
+    return url + (url.indexOf('?') > 0 ? '&' : '?') + paramName + '=' + paramValue;
+}
+
 /**
  * 设置url参数
  * @param urlstring
@@ -470,7 +482,7 @@ export function setUrlParameter(urlstring: string, key: string, value: string) {
     }
     // 已经有参数了，不重复添加
     if (urlstring.indexOf(key) > -1) {
-        return urlstring
+        return replaceUrlParam(urlstring, key, value)
     }
     urlstring += (urlstring.match(/[?]/g) ? '&' : '?') + key + '=' + value;
     return urlstring
@@ -520,4 +532,17 @@ export function pathJoin(path1: string, path2: string) {
     }
 
     return path;
+}
+
+/**
+ * 重新加载指定tab
+ * @param tabname
+ */
+export const reloadTabPage = (tabname: string) => {
+    setTimeout(function () {
+        if (inBrowser()) {
+            const url = window.location.href
+            window.location.href = setUrlParameter(url, "tab", tabname)
+        }
+    }, 200)
 }
