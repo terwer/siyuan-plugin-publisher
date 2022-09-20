@@ -4,11 +4,13 @@
 </template>
 
 <script lang="ts" setup>
-import {ref, onMounted} from "vue";
-import {getBooleanEnv, getEnv} from "./lib/envUtil";
-import logUtil from "./lib/logUtil";
-import {getQueryString} from "./lib/util";
-import {getWidgetId} from "./lib/platform/siyuan/siyuanUtil";
+import {onMounted, ref} from "vue";
+import {getEnv} from "../../lib/envUtil";
+import logUtil from "../../lib/logUtil";
+import {getQueryString} from "../../lib/util";
+import {getWidgetId} from "../../lib/platform/siyuan/siyuanUtil";
+import PublishService from "../../components/PublishService.vue";
+import NoAuth from "../../components/NoAuth.vue";
 
 const isAuth = ref(false)
 
@@ -40,11 +42,7 @@ onMounted(async () => {
 </script>
 
 <script lang="ts">
-import PublishService from "./components/PublishService.vue";
-import NoAuth from "./components/NoAuth.vue";
-
 export default {
-  name: 'App',
-  components: {PublishService, NoAuth}
+  name: 'App'
 }
 </script>

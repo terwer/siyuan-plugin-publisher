@@ -1,6 +1,6 @@
 <template>
   <el-container>
-    <el-main class="blog-main">
+    <el-main class="blog-main" v-if="!isInitLoadding">
       <el-alert class="top-version-tip" :title="apiTypeInfo + blogName" type="info"
                 :closable="false"/>
       <el-alert class="top-version-tip" :title="$t('setting.blog.vali.tip.metaweblog')" type="error" :closable="false"
@@ -149,6 +149,7 @@
         </el-form-item>
       </el-form>
     </el-main>
+    <el-skeleton :loading="isInitLoadding" :rows="5" animated />
   </el-container>
 </template>
 
@@ -214,6 +215,7 @@ const isTagLoading = ref(false)
 const isGenLoading = ref(false)
 const isPublishLoading = ref(false)
 const isCancelLoading = ref(false)
+const isInitLoadding = ref(false)
 
 const editMode = ref(false)
 const forceRefresh = ref(false)
@@ -256,6 +258,8 @@ const complexMode = () => {
 }
 
 const initPage = async () => {
+  isInitLoadding.value = true
+
   const pageId = await getPageId(true);
   if (!pageId || pageId === "") {
     return
@@ -350,6 +354,8 @@ const initPage = async () => {
   // ===========================
 
   apiStatus.value = conf.apiStatus
+
+  isInitLoadding.value = false
 }
 
 onMounted(async () => {
