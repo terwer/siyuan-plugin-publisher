@@ -11,20 +11,20 @@ chrome.runtime.onInstalled.addListener(async () => {
     console.log("Installed")
 });
 
-function createPage() {
-    // While we could have used `let url = "index.html"`, using runtime.getURL is a bit more robust as
-    // it returns a full URL rather than just a path that Chrome needs to be resolved contextually at
-    // runtime.
-    let url = chrome.runtime.getURL("index.html");
-    window.open(url)
-    console.log(`Created tab`);
-}
+// function createPage() {
+//     // While we could have used `let url = "index.html"`, using runtime.getURL is a bit more robust as
+//     // it returns a full URL rather than just a path that Chrome needs to be resolved contextually at
+//     // runtime.
+//     let url = chrome.runtime.getURL("index.html");
+//     window.open(url)
+//     console.log(`Created tab`);
+// }
 
-chrome.action.onClicked.addListener((tab) => {
-    // if (!tab.url.includes("chrome://")) {
-    chrome.scripting.executeScript({
-        target: {tabId: tab.id},
-        function: createPage
-    });
-    // }
-});
+// chrome.action.onClicked.addListener((tab) => {
+//     if (!tab.url.includes("chrome://")) {
+//         chrome.scripting.executeScript({
+//             target: {tabId: tab.id},
+//             function: createPage
+//         });
+//     }
+// });

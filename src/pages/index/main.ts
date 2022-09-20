@@ -2,7 +2,7 @@ import {createApp} from 'vue'
 import App from './App.vue'
 import './style.css'
 // 国际化
-import i18n from "./locales";
+import i18n from "../../locales";
 
 // Element-Plus
 import ElementPlus from 'element-plus'

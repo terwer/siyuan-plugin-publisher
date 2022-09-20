@@ -1,0 +1,48 @@
+<template>
+  <publish-service v-if="isAuth"/>
+  <no-auth v-else/>
+</template>
+
+<script lang="ts" setup>
+import {onMounted, ref} from "vue";
+import {getEnv} from "../../lib/envUtil";
+import logUtil from "../../lib/logUtil";
+import {getQueryString} from "../../lib/util";
+import {getWidgetId} from "../../lib/platform/siyuan/siyuanUtil";
+import PublishService from "../../components/PublishService.vue";
+import NoAuth from "../../components/NoAuth.vue";
+
+const isAuth = ref(false)
+
+onMounted(async () => {
+  logUtil.logWarn("MODE=>", import.meta.env.MODE)
+
+  // // 调试模式
+  // const debugMode = getBooleanEnv("VITE_DEBUG_MODE")
+  // if (debugMode) {
+  //   logUtil.logWarn("正在开始调试模式，请修改test/test.ts下面的test方法查看效果")
+  //   logUtil.logWarn("测试结束")
+  //   return
+  // }
+
+  // 挂件模式不校验
+  const widgetResult = await getWidgetId()
+  if (widgetResult.isInSiyuan) {
+    isAuth.value = true
+    return
+  }
+
+  // 非挂件模式需要校验
+  const optPwd = getEnv("VITE_OPT_PWD") || ""
+  const pwd = getQueryString("pwd") || ""
+  if (pwd != "" && pwd == optPwd) {
+    isAuth.value = true
+  }
+})
+</script>
+
+<script lang="ts">
+export default {
+  name: 'App'
+}
+</script>

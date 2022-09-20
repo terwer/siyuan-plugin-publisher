@@ -14,12 +14,15 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "index.html"
+        "index/index.html",
+        "service/index.html"
       ],
       "matches": [
         "<all_urls>"
       ]
     }
   ],
-  "action": {}
+  "action": {
+    "default_popup": "index/index.html"
+  }
 }
