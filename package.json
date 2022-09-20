@@ -16,7 +16,8 @@
     "deploy-win": "pwsh deploy.ps1",
     "wd": "yarn deploy-win",
     "vdev": "vercel dev --listen 5005",
-    "vbuild": "vercel build"
+    "vbuild": "vercel build",
+    "ext": "bash ext.sh"
   },
   "dependencies": {
     "@intlify/vite-plugin-vue-i18n": "^6.0.1",

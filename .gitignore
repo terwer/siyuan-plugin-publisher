@@ -28,3 +28,4 @@ dist-ssr
 *.private.env.json
 __snapshots__
 test/data/
+extension/
