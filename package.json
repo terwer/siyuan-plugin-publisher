@@ -19,6 +19,7 @@
     "vbuild": "vercel build"
   },
   "dependencies": {
+    "@intlify/vite-plugin-vue-i18n": "^6.0.1",
     "@octokit/core": "^4.0.4",
     "copy-to-clipboard": "^3.3.1",
     "cross-fetch": "^3.1.5",
@@ -30,7 +31,7 @@
     "transliteration": "^2.3.5",
     "uuid": "^8.3.2",
     "vue": "^3.2.37",
-    "vue-i18n": "9",
+    "vue-i18n": "^9.2.2",
     "xmlrpc": "^1.3.2"
   },
   "devDependencies": {

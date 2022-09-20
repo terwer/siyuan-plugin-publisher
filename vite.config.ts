@@ -1,16 +1,19 @@
 import {defineConfig} from 'vite'
 import {loadEnv} from "vite";
+import { resolve, dirname } from 'node:path'
+import { fileURLToPath } from 'url'
 import vue from '@vitejs/plugin-vue'
 import vitePluginRequireTransform from 'vite-plugin-require-transform';
 import {NodeGlobalsPolyfillPlugin} from '@esbuild-plugins/node-globals-polyfill'
 import {NodeModulesPolyfillPlugin} from '@esbuild-plugins/node-modules-polyfill'
 // You don't need to add this to deps, it's included by @esbuild-plugins/node-modules-polyfill
 import rollupNodePolyFill from 'rollup-plugin-node-polyfills'
+// @ts-ignore
+import vueI18n from '@intlify/vite-plugin-vue-i18n'
 
 // https://vitejs.dev/config/
 export default defineConfig(({mode}) => {
     const env = loadEnv(mode, process.cwd())
-
     const processEnvValues = {
         'process.env': Object.entries(env).reduce(
             (prev, [key, val]) => {
@@ -22,6 +25,7 @@ export default defineConfig(({mode}) => {
             {},
         )
     }
+    console.log(env.DEV)
 
     return {
         plugins: [
@@ -31,6 +35,12 @@ export default defineConfig(({mode}) => {
             vitePluginRequireTransform.default({
                 fileRegex: /.ts$|.vue$/
             }),
+            vueI18n({
+                // if you want to use Vue I18n Legacy API, you need to set `compositionOnly: false`
+                // compositionOnly: false,
+                // you need to set i18n resource including paths !
+                include: resolve(dirname(fileURLToPath(import.meta.url)), 'src/locales/index.ts'),
+            })
         ],
         base: './',
         // https://github.com/vitejs/vite/issues/1930
@@ -39,7 +49,8 @@ export default defineConfig(({mode}) => {
         define: Object.assign(processEnvValues, {}),
         resolve: {
             alias: {
-                'vue-i18n': 'vue-i18n/dist/vue-i18n.cjs.js',
+                // 'vue-i18n': 'vue-i18n/dist/vue-i18n.runtime.esm-bundler.js',
+                // 'vue-i18n': 'vue-i18n/dist/vue-i18n.cjs.js',
                 'node-fetch': 'cross-fetch',
                 // This Rollup aliases are extracted from @esbuild-plugins/node-modules-polyfill,
                 // see https://github.com/remorses/esbuild-plugins/blob/master/node-modules-polyfill/src/polyfills.ts
