@@ -225,9 +225,10 @@ export const formatIsoToNumDate = (str: string, isAddTimeZone?: boolean) => {
  * 转换ISO日期为中文日期
  * @param str '2022-07-18T06:25:48.000Z
  * @param isAddTimeZone 是否增加时区（默认不增加）
+ * @param isShort 是否只返回日期
  * @returns {string|*}
  */
-export const formatIsoToZhDate = (str: string, isAddTimeZone: boolean) => {
+export const formatIsoToZhDate = (str: string, isAddTimeZone?: boolean, isShort?: boolean) => {
     if (!str) {
         return "";
     }
@@ -254,7 +255,10 @@ export const formatIsoToZhDate = (str: string, isAddTimeZone: boolean) => {
         const d = dts[0]
         const t = dts[1].split(".")[0]
 
-        const result = d + " " + t;
+        let result = d + " " + t;
+        if (isShort) {
+            result = d;
+        }
 
         newstr = newstr.replace(match, result)
         logUtil.logInfo("formatZhDate match=>", match)
