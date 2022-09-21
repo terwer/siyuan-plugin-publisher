@@ -1,6 +1,9 @@
 export default {
     "lang.choose": "Choose lang",
     "lang.choose.placeholder": "Please select language",
+    "theme.mode.choose": "Mode",
+    "theme.mode.dark": "Dark mode",
+    "theme.mode.light": "Light mode",
     "service.tab.publish.service": "Publish service",
     "service.tab.publish.setting": "Publish setting",
     "service.tab.post.bind": "Post bind",

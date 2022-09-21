@@ -1,13 +1,13 @@
 <template>
-  <div>
-    <h1>Index</h1>
-    <a href="./index.html?pwd=123456&id=20220917154709-4aqccxm"></a>
-  </div>
+  <BlogIndex/>
 </template>
 
 <script lang="ts">
+import BlogIndex from "./blog/BlogIndex.vue";
+
 export default {
-  name: "Index.vue"
+  name: "Index.vue",
+  components: {BlogIndex}
 }
 </script>
 

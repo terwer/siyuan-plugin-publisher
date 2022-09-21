@@ -25,7 +25,11 @@ body {
   margin: 0;
 }
 
-#app {
+html{
+  --custom-app-bg-color: #ffffff;
+}
+#app{
+  background: var(--custom-app-bg-color);
   padding: 10px;
 }
 
