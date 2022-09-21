@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-alert class="top-data-tip" :title="$t('blog.list.toptip')" type="info" :closable="false" v-if="false"/>
+    <el-alert class="top-data-tip" title="预览和发布会打开新页面，此窗口将关闭。如果您想在预览之后继续查看其他内容，可点击左侧使用展开模式进行预览。" type="warning" :closable="false"/>
 
     <el-autocomplete
         class="s-input"
@@ -10,11 +10,6 @@
         placeholder="请输入关键字"
         @select="handleSelect"
     >
-      <template #suffix>
-        <el-icon class="el-input__icon" @click="handleIconClick">
-          <edit/>
-        </el-icon>
-      </template>
       <template #default="{ item }">
         <div class="value">{{ item.value }}</div>
         <span class="link">{{ item.link }}</span>
@@ -24,6 +19,19 @@
 
     <el-table class="tb-data" :data="tableData" :key="num" border stripe highlight-current-row
               @row-click="handleRowClick" style="width: 100%;min-width: 600px;">
+      <el-table-column type="expand">
+        <template #default="props">
+          <div m="4" style="padding-left: 10px;">
+            <p m="t-0 b-2">ID: {{ props.row.postid }}</p>
+            <p m="t-0 b-2">发布时间: {{ props.row.dateCreated }}</p>
+            <p m="t-0 b-2">标题: {{ props.row.title }}</p>
+            <p m="t-0 b-2">正文: {{ props.row.description == "" ? "暂无内容" : props.row.description}}</p>
+            <!--
+            <p m="t-0 b-2">标签: {{ props.row.mt_keywords }}</p>
+            -->
+          </div>
+        </template>
+      </el-table-column>
       <!--
       <el-table-column prop="postid" label="ID" width="200"/>
       -->
@@ -60,6 +68,10 @@ import {API} from "../../../../lib/api";
 import {API_TYPE_CONSTANTS} from "../../../../lib/constants/apiTypeConstants";
 import {removeTitleNumber} from "../../../../lib/htmlUtil";
 import {goToPage} from "../../../../lib/chrome/ChromeUtil";
+import {ElMessageBox} from "element-plus/es";
+import {useI18n} from "vue-i18n";
+
+const {t} = useI18n()
 
 // search
 interface LinkItem {
@@ -99,10 +111,6 @@ const handleSelect = (item: LinkItem) => {
   console.log(item)
 }
 
-const handleIconClick = (ev: Event) => {
-  console.log(ev)
-}
-
 const handleBtnSearch = () => {
   console.log("handleBtnSearch")
 }
@@ -118,7 +126,23 @@ const filterTableData = () => {
 
 const handleView = (index: number, row: any) => {
   // goToPage("/detail/index.html?id=" + row.postid)
-  console.log(index, row)
+  ElMessageBox.confirm(
+      "预览会打开新页面，此窗口将关闭，是否继续？",
+      t('main.opt.warning'),
+      {
+        confirmButtonText: t('main.opt.ok'),
+        cancelButtonText: t('main.opt.cancel'),
+        type: 'warning',
+      }
+  ).then(async () => {
+    console.log(index, row)
+  }).catch(() => {
+    // ElMessage({
+    //   type: 'error',
+    //   message: t("main.opt.failure"),
+    // })
+    logUtil.logInfo("操作已取消")
+  });
 }
 
 const handleEdit = (index: number, row: any) => {
@@ -146,7 +170,8 @@ const initPage = async () => {
       postid: item.postid,
       title: title,
       shortTitle: shortTitle,
-      dateCreated: formatIsoToZhDate(item.dateCreated.toISOString(), true, true)
+      dateCreated: formatIsoToZhDate(item.dateCreated.toISOString(), true, true),
+      description: item.description
     }
     tableData.push(tableRow)
   }
@@ -176,6 +201,7 @@ export default {
 <style scoped>
 .top-data-tip {
   margin-bottom: 10px;
+  padding-left: 4px;
 }
 
 /* search */
