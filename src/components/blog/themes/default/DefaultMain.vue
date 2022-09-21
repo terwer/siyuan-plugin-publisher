@@ -2,6 +2,26 @@
   <div>
     <el-alert class="top-data-tip" :title="$t('blog.list.toptip')" type="info" :closable="false" v-if="false"/>
 
+    <el-autocomplete
+        class="s-input"
+        v-model="state"
+        :fetch-suggestions="querySearch"
+        popper-class="my-autocomplete"
+        placeholder="请输入关键字"
+        @select="handleSelect"
+    >
+      <template #suffix>
+        <el-icon class="el-input__icon" @click="handleIconClick">
+          <edit/>
+        </el-icon>
+      </template>
+      <template #default="{ item }">
+        <div class="value">{{ item.value }}</div>
+        <span class="link">{{ item.link }}</span>
+      </template>
+    </el-autocomplete>
+    <el-button class="s-btn" type="primary" @click="handleBtnSearch">搜索</el-button>
+
     <el-table class="tb-data" :data="tableData" :key="num" border stripe highlight-current-row
               @row-click="handleRowClick" style="width: 100%;min-width: 600px;">
       <!--
@@ -41,6 +61,53 @@ import {API_TYPE_CONSTANTS} from "../../../../lib/constants/apiTypeConstants";
 import {removeTitleNumber} from "../../../../lib/htmlUtil";
 import {goToPage} from "../../../../lib/chrome/ChromeUtil";
 
+// search
+interface LinkItem {
+  value: string
+  link: string
+}
+
+const state = ref('')
+const links = ref<LinkItem[]>([])
+
+const querySearch = (queryString: string, cb: any) => {
+  const results = queryString
+      ? links.value.filter(createFilter(queryString))
+      : links.value
+  // call callback function to return suggestion objects
+  cb(results)
+}
+const createFilter = (queryString: any) => {
+  return (restaurant: any) => {
+    return (
+        restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
+    )
+  }
+}
+const loadAll = () => {
+  return [
+    {value: 'vue', link: 'https://github.com/vuejs/vue'},
+    {value: 'element', link: 'https://github.com/ElemeFE/element'},
+    {value: 'cooking', link: 'https://github.com/ElemeFE/cooking'},
+    {value: 'mint-ui', link: 'https://github.com/ElemeFE/mint-ui'},
+    {value: 'vuex', link: 'https://github.com/vuejs/vuex'},
+    {value: 'vue-router', link: 'https://github.com/vuejs/vue-router'},
+    {value: 'babel', link: 'https://github.com/babel/babel'},
+  ]
+}
+const handleSelect = (item: LinkItem) => {
+  console.log(item)
+}
+
+const handleIconClick = (ev: Event) => {
+  console.log(ev)
+}
+
+const handleBtnSearch = () => {
+  console.log("handleBtnSearch")
+}
+
+// table
 const tableData: Array<any> = []
 const num = ref(0)
 
@@ -89,6 +156,8 @@ const initPage = async () => {
 }
 
 onMounted(async () => {
+  links.value = loadAll()
+
   await initPage()
 })
 </script>
@@ -99,11 +168,41 @@ export default {
 }
 </script>
 
+<style>
+.s-input{
+  min-width: 500px !important;
+}
+</style>
 <style scoped>
 .top-data-tip {
   margin-bottom: 10px;
 }
 
+/* search */
+.my-autocomplete li {
+  line-height: normal;
+  padding: 7px;
+}
+
+.my-autocomplete li .name {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.my-autocomplete li .addr {
+  font-size: 12px;
+  color: #b4b4b4;
+}
+
+.my-autocomplete li .highlighted .addr {
+  color: #ddd;
+}
+
+.s-btn{
+  margin-left: 20px;
+}
+
+/* table */
 .tb-data {
   margin-top: 10px;
 }
