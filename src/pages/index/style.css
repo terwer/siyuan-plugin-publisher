@@ -48,3 +48,7 @@ body {
 .el-alert {
   margin-top: 10px !important;
 }
+
+.el-header{
+  --el-header-height: 20px !important;
+}
