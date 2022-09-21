@@ -1,6 +1,11 @@
 <template>
-  <publish-service v-if="isAuth"/>
-  <no-auth v-else/>
+  <div>
+    <publish-service/>
+    <!--
+    <publish-service v-if="isAuth"/>
+    <no-auth v-else/>
+    -->
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -11,11 +16,12 @@ import {getQueryString} from "../../lib/util";
 import {getWidgetId} from "../../lib/platform/siyuan/siyuanUtil";
 import PublishService from "../../components/PublishService.vue";
 import NoAuth from "../../components/NoAuth.vue";
+import {useDark, useToggle} from '@vueuse/core'
 
-const isAuth = ref(false)
+// const isAuth = ref(false)
 
 onMounted(async () => {
-  logUtil.logWarn("MODE=>", import.meta.env.MODE)
+  logUtil.logInfo("MODE=>", import.meta.env.MODE)
 
   // // 调试模式
   // const debugMode = getBooleanEnv("VITE_DEBUG_MODE")
@@ -25,19 +31,19 @@ onMounted(async () => {
   //   return
   // }
 
-  // 挂件模式不校验
-  const widgetResult = await getWidgetId()
-  if (widgetResult.isInSiyuan) {
-    isAuth.value = true
-    return
-  }
-
-  // 非挂件模式需要校验
-  const optPwd = getEnv("VITE_OPT_PWD") || ""
-  const pwd = getQueryString("pwd") || ""
-  if (pwd != "" && pwd == optPwd) {
-    isAuth.value = true
-  }
+  // // 挂件模式不校验
+  // const widgetResult = await getWidgetId()
+  // if (widgetResult.isInSiyuan) {
+  //   isAuth.value = true
+  //   return
+  // }
+  //
+  // // 非挂件模式需要校验
+  // const optPwd = getEnv("VITE_OPT_PWD") || ""
+  // const pwd = getQueryString("pwd") || ""
+  // if (pwd != "" && pwd == optPwd) {
+  //   isAuth.value = true
+  // }
 })
 </script>
 

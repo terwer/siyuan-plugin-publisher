@@ -7,6 +7,8 @@ import i18n from "../../locales";
 // Element-Plus
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
+import 'element-plus/theme-chalk/dark/css-vars.css'
+import './styles/dark/css-vars.css'
 
 // Vue初始化
 const app = createApp(App)
