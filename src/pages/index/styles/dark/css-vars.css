@@ -7,3 +7,11 @@ html.dark {
 html.dark .el-header h1{
   --custom-title-text-color: #ffffff;
 }
+
+html.dark .el-page-header__left{
+  color: #ffffff;
+}
+
+html.dark .post-detail-content-box{
+  color: #ffffff;
+}

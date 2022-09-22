@@ -51,6 +51,7 @@ export class SiYuanApiAdaptor implements IApi {
 
             // 某些属性详情页控制即可
             const attrs = await getBlockAttrs(siyuanPost.root_id)
+            const page = await this.getPost(siyuanPost.root_id)
 
             // // 发布状态
             // let isPublished = true
@@ -71,7 +72,8 @@ export class SiYuanApiAdaptor implements IApi {
             commonPost.title = siyuanPost.content
             commonPost.permalink = customSlug == "" ? "/post/" + siyuanPost.root_id : "/post/" + customSlug + ".html"
             // commonPost.isPublished = isPublished
-            // commonPost.mt_keywords = attrs.tags || ""
+            commonPost.mt_keywords = page.mt_keywords
+            commonPost.description = page.description
             result.push(commonPost)
         }
 

@@ -1,69 +1,72 @@
 <template>
   <div>
-    <el-autocomplete
-        class="s-input"
-        v-model="state"
-        :fetch-suggestions="querySearch"
-        popper-class="my-autocomplete"
-        placeholder="请输入关键字"
-        @change="handleBtnSearch"
-        @select="handleSelect"
-    >
-      <template #default="{ item }">
-        <div class="value">{{ item.value }}</div>
-      </template>
-    </el-autocomplete>
-    <el-button class="s-btn" type="primary" @click="handleBtnSearch">搜索</el-button>
+    <div id="post-list" v-if="!showDetail">
+      <el-autocomplete
+          class="s-input"
+          v-model="state"
+          :fetch-suggestions="querySearch"
+          popper-class="my-autocomplete"
+          placeholder="请输入关键字"
+          @change="handleBtnSearch"
+          @select="handleSelect"
+      >
+        <template #default="{ item }">
+          <div class="value">{{ item.value }}</div>
+        </template>
+      </el-autocomplete>
+      <el-button class="s-btn" type="primary" @click="handleBtnSearch">搜索</el-button>
 
-    <el-table class="tb-data" :data="tableData" :key="num" border stripe highlight-current-row
-              empty-text="笔记数据为空或者思源笔记未启动！"
-              @row-click="handleRowClick" style="width: 100%;min-width: 600px;">
-      <el-table-column type="expand">
-        <template #default="props">
-          <div m="4" style="padding-left: 10px;">
-            <p m="t-0 b-2">ID: {{ props.row.postid }}</p>
-            <p m="t-0 b-2">发布时间: {{ props.row.dateCreated }}</p>
-            <p m="t-0 b-2">标题: {{ props.row.title }}</p>
-            <p m="t-0 b-2">正文: {{ props.row.description == "" ? "暂无内容" : props.row.description }}</p>
-            <!--
-            <p m="t-0 b-2">标签: {{ props.row.mt_keywords }}</p>
-            -->
-          </div>
-        </template>
-      </el-table-column>
-      <!--
-      <el-table-column prop="postid" label="ID" width="200"/>
-      -->
-      <el-table-column prop="title" label="标题"/>
-      <!--
-      <el-table-column prop="dateCreated" label="发布时间" width="150"/>
-      -->
-      <el-table-column align="right" width="150">
-        <template #header>
-          <div style="text-align: center;">操作</div>
-        </template>
-        <template #default="scope">
-          <el-button size="small" @click="handleView(scope.$index, scope.row)">预览</el-button>
-          <el-button size="small" type="primary" @click="handleEdit(scope.$index, scope.row)">发布</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <!-- 分页 -->
-    <el-pagination
-        small
-        background
-        layout="prev, pager, next"
-        :total="total"
-        class="mt-4"
-        :page-size="MAX_PAGE_SIZE"
-        @prev-click="handlePrevPage"
-        @next-click="handleNextPage"
-        @current-change="handleCurrentPage"
-    />
+      <el-table class="tb-data" :data="tableData" :key="num" border stripe highlight-current-row
+                empty-text="笔记数据为空或者思源笔记未启动！"
+                @row-click="handleRowClick" style="width: 100%;min-width: 600px;">
+        <el-table-column type="expand">
+          <template #default="props">
+            <div m="4" style="padding-left: 10px;">
+              <p m="t-0 b-2">ID: {{ props.row.postid }}</p>
+              <p m="t-0 b-2">发布时间: {{ props.row.dateCreated }}</p>
+              <p m="t-0 b-2">标题: {{ props.row.title }}</p>
+              <p m="t-0 b-2">标签: {{ props.row.mt_keywords == "" ? "暂无标签" : props.row.mt_keywords }}</p>
+            </div>
+          </template>
+        </el-table-column>
+        <!--
+        <el-table-column prop="postid" label="ID" width="200"/>
+        -->
+        <el-table-column prop="title" label="标题"/>
+        <!--
+        <el-table-column prop="dateCreated" label="发布时间" width="150"/>
+        -->
+        <el-table-column align="right" width="150">
+          <template #header>
+            <div style="text-align: center;">操作</div>
+          </template>
+          <template #default="scope">
+            <el-button size="small" @click="handleView(scope.$index, scope.row)">预览</el-button>
+            <el-button size="small" type="primary" @click="handleEdit(scope.$index, scope.row)">发布</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <!-- 分页 -->
+      <el-pagination
+          small
+          background
+          layout="prev, pager, next"
+          :total="total"
+          class="mt-4"
+          :page-size="MAX_PAGE_SIZE"
+          @prev-click="handlePrevPage"
+          @next-click="handleNextPage"
+          @current-change="handleCurrentPage"
+      />
 
-    <el-alert class="top-data-tip"
-              title="温馨提示：1. 请保证思源笔记启动并且打开伺服，默认伺服地址：http://127.0.0.1:6806。2. 预览和发布会打开新页面，此窗口将关闭。如果您想在预览之后继续查看其他内容，可点击左侧使用展开模式进行预览。"
-              type="info" :closable="false"/>
+      <el-alert class="top-data-tip"
+                title="温馨提示：1. 请保证思源笔记启动并且打开伺服，默认伺服地址：http://127.0.0.1:6806。2. 发布操作会打开新页面，此窗口将关闭。"
+                type="info" :closable="false"/>
+    </div>
+
+    <div id="post-detail" v-else>
+      <DefaultPostDetail :post="postDetail" @on-change="emitFn"/>
+    </div>
   </div>
 </template>
 
@@ -73,13 +76,17 @@ import {onMounted, ref} from "vue";
 import {formatIsoToZhDate} from "../../../../lib/util";
 import {API} from "../../../../lib/api";
 import {API_TYPE_CONSTANTS} from "../../../../lib/constants/apiTypeConstants";
-import {removeTitleNumber} from "../../../../lib/htmlUtil";
+import {mdToHtml, removeTitleNumber} from "../../../../lib/htmlUtil";
 import {goToPage} from "../../../../lib/chrome/ChromeUtil";
 import {ElMessageBox} from "element-plus/es";
 import {useI18n} from "vue-i18n";
 import {getRootBlocksCount} from "../../../../lib/platform/siyuan/siYuanApi";
+import DefaultPostDetail from "./DefaultPostDetail.vue";
+import {Post} from "../../../../lib/common/post";
 
 const {t} = useI18n()
+const showDetail = ref(false)
+const postDetail = ref()
 
 // search
 interface LinkItem {
@@ -137,23 +144,37 @@ const handleCurrentPage = async (curPage: number) => {
 
 const handleView = (index: number, row: any) => {
   // goToPage("/detail/index.html?id=" + row.postid)
-  ElMessageBox.confirm(
-      "预览会打开新页面，此窗口将关闭，是否继续？",
-      t('main.opt.warning'),
-      {
-        confirmButtonText: t('main.opt.ok'),
-        cancelButtonText: t('main.opt.cancel'),
-        type: 'warning',
-      }
-  ).then(async () => {
-    console.log(index, row)
-  }).catch(() => {
-    // ElMessage({
-    //   type: 'error',
-    //   message: t("main.opt.failure"),
-    // })
-    logUtil.logInfo("操作已取消")
-  });
+  // ElMessageBox.confirm(
+  //     "预览会打开新页面，此窗口将关闭，是否继续？",
+  //     t('main.opt.warning'),
+  //     {
+  //       confirmButtonText: t('main.opt.ok'),
+  //       cancelButtonText: t('main.opt.cancel'),
+  //       type: 'warning',
+  //     }
+  // ).then(async () => {
+  //   console.log(index, row)
+  // }).catch(() => {
+  //   // ElMessage({
+  //   //   type: 'error',
+  //   //   message: t("main.opt.failure"),
+  //   // })
+  //   logUtil.logInfo("操作已取消")
+  // });
+  const post = new Post();
+  post.postid = row.postid
+  post.title = row.title
+  post.dateCreated = row.dateCreated
+  post.mt_keywords = row.mt_keywords
+  post.description = row.description
+  postDetail.value = post
+
+  showDetail.value = true;
+}
+
+const emitFn = () => {
+  showDetail.value = false;
+  // console.log("emitFn");
 }
 
 const handleEdit = (index: number, row: any) => {
@@ -174,7 +195,7 @@ const initPage = async () => {
 const reloadTableData = async () => {
   const api = new API(API_TYPE_CONSTANTS.API_TYPE_SIYUAN)
   const postList = await api.getRecentPosts(MAX_PAGE_SIZE, currentPage.value - 1, state.value)
-  console.log("postList=>", postList)
+  // console.log("postList=>", postList)
 
   // 总数
   total.value = await getRootBlocksCount(state.value)
@@ -186,12 +207,15 @@ const reloadTableData = async () => {
 
     let title = removeTitleNumber(item.title)
     let shortTitle = title
+    let content = mdToHtml(item.description)
+
     const tableRow = {
       postid: item.postid,
       title: title,
       shortTitle: shortTitle,
       dateCreated: formatIsoToZhDate(item.dateCreated.toISOString(), true, true),
-      description: item.description
+      mt_keywords: item.mt_keywords,
+      description: content.trim() == "" ? "暂无内容" : content
     }
     tableData.push(tableRow)
   }
@@ -214,6 +238,15 @@ export default {
 <style>
 .s-input {
   min-width: 500px !important;
+}
+
+/* 预览样式 */
+.tb-preview-body {
+
+}
+
+.tb-preview-body img {
+  max-width: 99%;
 }
 </style>
 <style scoped>
