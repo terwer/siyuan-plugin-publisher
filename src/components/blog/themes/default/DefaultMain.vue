@@ -24,7 +24,7 @@
             <p m="t-0 b-2">ID: {{ props.row.postid }}</p>
             <p m="t-0 b-2">发布时间: {{ props.row.dateCreated }}</p>
             <p m="t-0 b-2">标题: {{ props.row.title }}</p>
-            <p m="t-0 b-2">正文: {{ props.row.description == "" ? "暂无内容" : props.row.description}}</p>
+            <p m="t-0 b-2">正文: {{ props.row.description == "" ? "暂无内容" : props.row.description }}</p>
             <!--
             <p m="t-0 b-2">标签: {{ props.row.mt_keywords }}</p>
             -->
@@ -53,11 +53,16 @@
         small
         background
         layout="prev, pager, next"
-        :total="num"
+        :total="total"
         class="mt-4"
+        @prev-click="handlePrevPage"
+        @next-click="handleNextPage"
+        @current-change="handleCurrentPage"
     />
 
-    <el-alert class="top-data-tip" title="温馨提示：1. 请保证思源笔记启动并且打开伺服，默认伺服地址：http://127.0.0.1:6806。2. 预览和发布会打开新页面，此窗口将关闭。如果您想在预览之后继续查看其他内容，可点击左侧使用展开模式进行预览。" type="info" :closable="false"/>
+    <el-alert class="top-data-tip"
+              title="温馨提示：1. 请保证思源笔记启动并且打开伺服，默认伺服地址：http://127.0.0.1:6806。2. 预览和发布会打开新页面，此窗口将关闭。如果您想在预览之后继续查看其他内容，可点击左侧使用展开模式进行预览。"
+              type="info" :closable="false"/>
   </div>
 </template>
 
@@ -115,14 +120,25 @@ const handleSelect = (item: LinkItem) => {
 const handleBtnSearch = () => {
   console.log("handleBtnSearch")
 }
-
-// table
-const tableData: Array<any> = []
+let tableData: Array<any> = []
 const num = ref(0)
+const total = ref(0)
+const currentPage = ref(1)
 
-const search = ref('')
-const filterTableData = () => {
-  console.log("filterTableData")
+const handlePrevPage = async (curPage: number) => {
+  currentPage.value = curPage;
+  logUtil.logInfo("handlePrevPage, currentPage=>", currentPage.value)
+  await reloadTableData();
+}
+const handleNextPage = async (curPage: number) => {
+  currentPage.value = curPage;
+  logUtil.logInfo("handleNextPage, currentPage=>", currentPage.value)
+  await reloadTableData();
+}
+const handleCurrentPage = async (curPage: number) => {
+  currentPage.value = curPage;
+  logUtil.logInfo("handleCurrentPage, currentPage=>", currentPage.value)
+  await reloadTableData();
 }
 
 const handleView = (index: number, row: any) => {
@@ -157,11 +173,18 @@ const handleRowClick = (row: any, column: any, event: any) => {
 }
 
 const initPage = async () => {
+  await reloadTableData()
+  logUtil.logInfo("Post init page=>", tableData)
+}
+
+const reloadTableData = async () => {
+  const MAX_PAGE_SIZE = 5;
   const api = new API(API_TYPE_CONSTANTS.API_TYPE_SIYUAN)
-  const postList = await api.getRecentPosts(5, 0)
+  const postList = await api.getRecentPosts(MAX_PAGE_SIZE, currentPage.value - 1)
   console.log("postList=>", postList)
 
   // 渲染table
+  tableData.splice(0, tableData.length);
   for (let i = 0; i < postList.length; i++) {
     let item = postList[i]
 
@@ -176,9 +199,10 @@ const initPage = async () => {
     }
     tableData.push(tableRow)
   }
-  num.value = tableData.length + 100
+  total.value = tableData.length + 20
 
-  logUtil.logInfo("Post init page=>", tableData)
+  // table的key改变才会刷新
+  num.value++;
 }
 
 onMounted(async () => {
@@ -195,7 +219,7 @@ export default {
 </script>
 
 <style>
-.s-input{
+.s-input {
   min-width: 500px !important;
 }
 </style>
@@ -225,7 +249,7 @@ export default {
   color: #ddd;
 }
 
-.s-btn{
+.s-btn {
   margin-left: 20px;
 }
 
