@@ -222,8 +222,13 @@ const props = defineProps({
   isReload: {
     type: Boolean,
     default: false
+  },
+  pageId: {
+    type: String,
+    default: undefined
   }
 })
+
 /*监听props*/
 watch(() => props.isReload, async (oldValue, newValue) => {
   // Here you can add you functionality
@@ -308,12 +313,16 @@ const complexMode = () => {
 }
 
 async function initPage() {
-  const pageId = await getPageId(true)
+  const pageId = await getPageId(true, props.pageId)
   logUtil.logInfo("VuepressMain pageId=>", pageId)
   if (!pageId || pageId == "") {
     return
   }
   const page = await getPage(pageId)
+  if (!page) {
+    ElMessage.error("网络异常，数据获取失败")
+    throw new Error("网络异常，数据获取失败")
+  }
   logUtil.logWarn("VuepressMain获取主文档", page)
 
   // 思源笔记数据

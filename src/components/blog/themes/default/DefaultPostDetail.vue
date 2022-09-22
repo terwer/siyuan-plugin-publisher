@@ -53,6 +53,15 @@ export default {
 }
 </script>
 
+<style>
+/* 预览样式 */
+#post-detail-content {
+}
+
+#post-detail-content img {
+  max-width: 99%;
+}
+</style>
 <style scoped>
 #post-detail-body {
   min-width: 600px !important;

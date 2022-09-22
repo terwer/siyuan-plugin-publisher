@@ -123,13 +123,6 @@ manual `h(...)` calls), you can enable Volar's Take Over mode by following these
 
 You can learn more about Take Over mode [here](https://github.com/johnsoncodehk/volar/discussions/471).
 
-## Devlopment
-
-```bash
-yarn
-yarn dev
-```
-
 ## Tool Version
 
 |Tool|Version|
@@ -137,10 +130,14 @@ yarn dev
 |node|v16.16.0|
 |yarn|1.22.19|
 
-## Init Project
+## Devlopment
 
 ```bash
-yarn create vite
+npm i -g vercel
+npm i -g yarn
+# yarn create vite
+yarn
+yarn vdev
 ```
 
 ## Deploy
@@ -157,11 +154,4 @@ yarn w
 yarn e
 ```
 
-## ~~Vercel CLI~~
-
-```
-npm i -g vercel
-```
-
 [Vercel CLI](https://vercel.com/docs/cli#introduction/installing-the-cli)
-

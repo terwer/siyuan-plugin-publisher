@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="post-list" v-if="!showDetail">
+    <div id="post-list" v-if="showHome">
       <el-autocomplete
           class="s-input"
           v-model="state"
@@ -36,13 +36,15 @@
         <!--
         <el-table-column prop="dateCreated" label="发布时间" width="150"/>
         -->
-        <el-table-column align="right" width="150">
+        <el-table-column align="right" width="250">
           <template #header>
             <div style="text-align: center;">操作</div>
           </template>
           <template #default="scope">
             <el-button size="small" @click="handleView(scope.$index, scope.row)">预览</el-button>
             <el-button size="small" type="primary" @click="handleEdit(scope.$index, scope.row)">发布</el-button>
+            <el-button size="small" type="primary" @click="handleNewWinEdit(scope.$index, scope.row)">新窗口发布
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -60,12 +62,16 @@
       />
 
       <el-alert class="top-data-tip"
-                title="温馨提示：1. 请保证思源笔记启动并且打开伺服，默认伺服地址：http://127.0.0.1:6806。2. 发布操作会打开新页面，此窗口将关闭。"
+                title="温馨提示：请保证思源笔记启动并且打开伺服，默认伺服地址：http://127.0.0.1:6806。"
                 type="info" :closable="false"/>
     </div>
 
-    <div id="post-detail" v-else>
+    <div id="post-detail" v-if="showDetail">
       <DefaultPostDetail :post="postDetail" @on-change="emitFn"/>
+    </div>
+
+    <div id="post-publisher" v-if="showPublish">
+      <default-publish :publish-data="publishData" @on-change="emitPublishBackFn"/>
     </div>
   </div>
 </template>
@@ -77,16 +83,21 @@ import {formatIsoToZhDate} from "../../../../lib/util";
 import {API} from "../../../../lib/api";
 import {API_TYPE_CONSTANTS} from "../../../../lib/constants/apiTypeConstants";
 import {mdToHtml, removeTitleNumber} from "../../../../lib/htmlUtil";
-import {goToPage} from "../../../../lib/chrome/ChromeUtil";
-import {ElMessageBox} from "element-plus/es";
 import {useI18n} from "vue-i18n";
 import {getRootBlocksCount} from "../../../../lib/platform/siyuan/siYuanApi";
-import DefaultPostDetail from "./DefaultPostDetail.vue";
 import {Post} from "../../../../lib/common/post";
+import DefaultPostDetail from "./DefaultPostDetail.vue";
+import DefaultPublish from "./DefaultPublish.vue";
+import {goToPage} from "../../../../lib/chrome/ChromeUtil";
+import {ElMessageBox} from "element-plus";
 
 const {t} = useI18n()
+
+const showHome = ref(true)
 const showDetail = ref(false)
+const showPublish = ref(false)
 const postDetail = ref()
+const publishData = ref()
 
 // search
 interface LinkItem {
@@ -169,17 +180,54 @@ const handleView = (index: number, row: any) => {
   post.description = row.description
   postDetail.value = post
 
+  showPublish.value = false;
+  showHome.value = false;
   showDetail.value = true;
 }
 
 const emitFn = () => {
+  showPublish.value = false;
+  showHome.value = true;
   showDetail.value = false;
   // console.log("emitFn");
 }
 
+const emitPublishBackFn = () => {
+  emitFn()
+}
+
 const handleEdit = (index: number, row: any) => {
-  goToPage("/index.html?id=" + row.postid)
-  console.log(index, row)
+  // goToPage("/index.html?id=" + row.postid)
+  // console.log(index, row)
+  const post = new Post();
+  post.postid = row.postid
+  post.title = row.title
+  publishData.value = post
+
+  showPublish.value = true;
+  showHome.value = false;
+  showDetail.value = false;
+}
+
+const handleNewWinEdit = (index: number, row: any) => {
+  ElMessageBox.confirm(
+      "此操作会打开新页面，此窗口将关闭，是否继续？",
+      t('main.opt.warning'),
+      {
+        confirmButtonText: t('main.opt.ok'),
+        cancelButtonText: t('main.opt.cancel'),
+        type: 'warning',
+      }
+  ).then(async () => {
+    goToPage("/index.html?id=" + row.postid)
+    console.log(index, row)
+  }).catch(() => {
+    // ElMessage({
+    //   type: 'error',
+    //   message: t("main.opt.failure"),
+    // })
+    logUtil.logInfo("操作已取消")
+  });
 }
 
 const handleRowClick = (row: any, column: any, event: any) => {
@@ -238,15 +286,6 @@ export default {
 <style>
 .s-input {
   min-width: 500px !important;
-}
-
-/* 预览样式 */
-.tb-preview-body {
-
-}
-
-.tb-preview-body img {
-  max-width: 99%;
 }
 </style>
 <style scoped>

@@ -193,7 +193,7 @@ onMounted(() => {
   initConf()
 
   // 检测开启的平台数
-  checkPlantform()
+  // checkPlantform()
 })
 
 </script>

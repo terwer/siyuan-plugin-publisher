@@ -6,6 +6,7 @@
   "packageManager": "yarn@1.22.19",
   "scripts": {
     "dev": "vite",
+    "vdev": "vercel dev",
     "build": "vue-tsc --noEmit && vite build",
     "build-siyuan": "vue-tsc --noEmit && BUILD_TYPE=siyuan vite build",
     "preview": "vite preview",

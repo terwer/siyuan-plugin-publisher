@@ -1,6 +1,6 @@
 <template>
   <div>
-    <publish-service/>
+    <publish-service :page-id="undefined"/>
   </div>
 </template>
 

@@ -3,6 +3,7 @@ import logUtil from "../../logUtil";
 import {getEnv} from "../../envUtil";
 // import {fetchElectron} from "./electronXmlrpc";
 import {fetchNode} from "./nodeXmlrpc";
+import {isInChromeExtension} from "../../chrome/ChromeUtil";
 
 /**
  * Xmlrpc客户端封装类
@@ -77,6 +78,9 @@ export class XmlrpcClient {
             // 不解析了，直接使用Node兼容调用
             // result = await fetchElectron(apiUrl, reqMethod, reqParams)
             result = await fetchNode(apiUrl, reqMethod, reqParams)
+        } else if (isInChromeExtension()) {
+            logUtil.logWarn("当前处于Chrome插件中，需要模拟fetch解决CORS跨域问题")
+
         } else {
             logUtil.logWarn("当前处于非挂件模式，已开启请求代理解决CORS跨域问题")
             result = await this.fetchCORS(apiUrl, reqMethod, reqParams)
@@ -86,7 +90,7 @@ export class XmlrpcClient {
             throw new Error("请求错误或者返回结果为空")
         }
 
-        logUtil.logInfo("最终返回给前端的数据=>",result)
+        logUtil.logInfo("最终返回给前端的数据=>", result)
 
         return result
     }

@@ -1,13 +1,13 @@
 <template>
   <el-tabs :model-value="defaultTab" tab-position="left" @tab-change="serviceTabChange">
     <el-tab-pane name="plantform-main" :label="$t('service.tab.publish.service')">
-      <plantform-main :is-reload="isReloadMain"/>
+      <plantform-main :is-reload="isReloadMain" :page-id="props.pageId"/>
     </el-tab-pane>
     <el-tab-pane name="plantform-setting" :label="$t('service.tab.publish.setting')">
       <plantform-setting :is-reload="isReloadSetting"/>
     </el-tab-pane>
     <el-tab-pane name="post-bind" :label="$t('service.tab.post.bind')">
-      <post-bind :is-reload="isReloadPostBind"/>
+      <post-bind :is-reload="isReloadPostBind" :page-id="props.pageId"/>
     </el-tab-pane>
     <el-tab-pane name="service-switch" :label="$t('service.tab.service.switch')">
       <service-switch/>
@@ -32,6 +32,17 @@ let isReloadSetting = ref(false)
 let isReloadMain = ref(false)
 let isReloadPostBind = ref(false)
 
+const props = defineProps({
+  isReload: {
+    type: Boolean,
+    default: false
+  },
+  pageId: {
+    type: String,
+    default: undefined
+  }
+})
+
 const serviceTabChange = (name: string) => {
   logUtil.logInfo("serviceTabChange=>", name)
   if ("plantform-setting" == name) {
@@ -50,7 +61,7 @@ const serviceTabChange = (name: string) => {
 }
 
 onMounted(() => {
-  defaultTab.value = getQueryString("tab") || defaultTab.value
+  // defaultTab.value = getQueryString("tab") || defaultTab.value
 })
 
 </script>

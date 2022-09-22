@@ -203,6 +203,10 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
+  pageId: {
+    type: String,
+    default: undefined
+  }
 })
 
 const blogName = ref("")
@@ -260,7 +264,7 @@ const complexMode = () => {
 const initPage = async () => {
   isInitLoadding.value = true
 
-  const pageId = await getPageId(true);
+  const pageId = await getPageId(true, props.pageId);
   if (!pageId || pageId === "") {
     return
   }
