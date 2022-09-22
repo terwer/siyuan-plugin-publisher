@@ -247,7 +247,7 @@ export const formatIsoToZhDate = (str: string, isAddTimeZone?: boolean, isShort?
         let newmatch = match;
         if (isAddTimeZone) {
             // ISO日期默认晚8小时
-            logUtil.logInfo(addHoursToDate(new Date(match), 8))
+            // logUtil.logInfo(addHoursToDate(new Date(match), 8))
             newmatch = addHoursToDate(new Date(match), 8).toISOString()
         }
 
@@ -261,8 +261,8 @@ export const formatIsoToZhDate = (str: string, isAddTimeZone?: boolean, isShort?
         }
 
         newstr = newstr.replace(match, result)
-        logUtil.logInfo("formatZhDate match=>", match)
-        logUtil.logInfo("formatZhDate result=>", result)
+        // logUtil.logInfo("formatZhDate match=>", match)
+        // logUtil.logInfo("formatZhDate result=>", result)
     }
 
     // logUtil.logInfo("formatZhDate=>", newstr)

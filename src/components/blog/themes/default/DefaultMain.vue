@@ -189,7 +189,7 @@ const handleRowClick = (row: any, column: any, event: any) => {
 
 const initPage = async () => {
   await reloadTableData()
-  logUtil.logInfo("Post init page=>", tableData)
+  // logUtil.logInfo("Post init page=>", tableData)
 }
 
 const reloadTableData = async () => {
