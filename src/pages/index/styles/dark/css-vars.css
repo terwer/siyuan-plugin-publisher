@@ -1,0 +1,9 @@
+html.dark {
+  /* 自定义深色背景颜色 */
+  //--af-bg-color: #000000;
+  --custom-app-bg-color: #000000;
+}
+
+html.dark .el-header h1{
+  --custom-title-text-color: #ffffff;
+}

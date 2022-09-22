@@ -14,4 +14,7 @@ export default {
 </script>
 
 <style scoped>
+h1{
+  color: var(--el-table-text-color);
+}
 </style>

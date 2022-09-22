@@ -1,7 +1,5 @@
 <template>
   <div>
-    <el-alert class="top-data-tip" title="预览和发布会打开新页面，此窗口将关闭。如果您想在预览之后继续查看其他内容，可点击左侧使用展开模式进行预览。" type="warning" :closable="false"/>
-
     <el-autocomplete
         class="s-input"
         v-model="state"
@@ -18,6 +16,7 @@
     <el-button class="s-btn" type="primary" @click="handleBtnSearch">搜索</el-button>
 
     <el-table class="tb-data" :data="tableData" :key="num" border stripe highlight-current-row
+              empty-text="笔记数据为空或者思源笔记未启动！"
               @row-click="handleRowClick" style="width: 100%;min-width: 600px;">
       <el-table-column type="expand">
         <template #default="props">
@@ -57,6 +56,8 @@
         :total="num"
         class="mt-4"
     />
+
+    <el-alert class="top-data-tip" title="温馨提示：1. 请保证思源笔记启动并且打开伺服，默认伺服地址：http://127.0.0.1:6806。2. 预览和发布会打开新页面，此窗口将关闭。如果您想在预览之后继续查看其他内容，可点击左侧使用展开模式进行预览。" type="info" :closable="false"/>
   </div>
 </template>
 

@@ -26,7 +26,13 @@ body {
 }
 
 #app {
+  background: var(--custom-app-bg-color);
   padding: 10px;
+}
+
+.el-header h1{
+  --custom-title-text-color: #000000;
+  color: var(--custom-title-text-color);
 }
 
 @media (prefers-color-scheme: light) {
