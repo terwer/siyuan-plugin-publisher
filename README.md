@@ -2,9 +2,11 @@
 
 Publish siyuan article to supported open platforms
 
-At present, it supports vuepress and two open API standard blog platforms, <code>metaweblog api</code> and <code>xmlrpc</code> remote call API based on <code>wordpress</code>
+At present, it supports vuepress and two open API standard blog platforms, <code>metaweblog api</code> and <code>
+xmlrpc</code> remote call API based on <code>wordpress</code>
 
-ALso provide a [common API adaptor](https://github.com/terwer/src-sy-post-publisher/blob/main/src/lib/api.ts) , make every plantform posiable.
+ALso provide a [common API adaptor](https://github.com/terwer/src-sy-post-publisher/blob/main/src/lib/api.ts) , make
+every plantform posiable.
 
 <a href="https://img1.terwergreen.com/api/public/20220729233245.gif" target="_blank" >Click me</a>
 
@@ -31,58 +33,65 @@ ALso provide a [common API adaptor](https://github.com/terwer/src-sy-post-publis
 [Click here to view development progress](https://github.com/users/terwer/projects/1/views/1)
 
 ### v0.0.2
-- [X] [#15](https://github.com/terwer/src-sy-post-publisher/issues/15) Published to other platforms-blog parks, WordPress, chain drop community, etc.
 
-  - [x] [#18](https://github.com/terwer/src-sy-post-publisher/issues/18) Implement MetaWeblog-API client
+- [X] [#15](https://github.com/terwer/src-sy-post-publisher/issues/15) Published to other platforms-blog parks,
+  WordPress, chain drop community, etc.
 
-  - [x] [#24](https://github.com/terwer/src-sy-post-publisher/issues/24) Non-pendant server version, you need to pass the document ID. It is recommended to cooperate with my other work [node-siyuan](https://github.com/terwer/node-siyuan) use
+    - [x] [#18](https://github.com/terwer/src-sy-post-publisher/issues/18) Implement MetaWeblog-API client
 
-  - [x] [#25](https://github.com/terwer/src-sy-post-publisher/issues/25) Vercel deploy
+    - [x] [#24](https://github.com/terwer/src-sy-post-publisher/issues/24) Non-pendant server version, you need to pass
+      the document ID. It is recommended to cooperate with my other
+      work [node-siyuan](https://github.com/terwer/node-siyuan) use
 
-  - [X] [#38](https://github.com/terwer/src-sy-post-publisher/issues/38) Some platforms support cancel the release
+    - [x] [#25](https://github.com/terwer/src-sy-post-publisher/issues/25) Vercel deploy
 
-  - [X] [#39](https://github.com/terwer/src-sy-post-publisher/issues/39) Support ELETRON interface
+    - [X] [#38](https://github.com/terwer/src-sy-post-publisher/issues/38) Some platforms support cancel the release
 
-  - [X] [#40](https://github.com/terwer/src-sy-post-publisher/issues/40) Published to Confluence, you need to cooperate with my project [node-metaweblog-api-adaptor](https://github.com/terwer/node-metaweblog-api-adaptor)
+    - [X] [#39](https://github.com/terwer/src-sy-post-publisher/issues/39) Support ELETRON interface
 
-  - [x] [#41](https://github.com/terwer/src-sy-post-publisher/issues/41) Send to Wordpess
+    - [X] [#40](https://github.com/terwer/src-sy-post-publisher/issues/40) Published to Confluence, you need to
+      cooperate with my project [node-metaweblog-api-adaptor](https://github.com/terwer/node-metaweblog-api-adaptor)
 
-  - [x] [#42](https://github.com/terwer/src-sy-post-publisher/issues/42) Sendto Liandi
+    - [x] [#41](https://github.com/terwer/src-sy-post-publisher/issues/41) Send to Wordpess
 
-  - [x] [#43](https://github.com/terwer/src-sy-post-publisher/issues/43) Send to Yuque
+    - [x] [#42](https://github.com/terwer/src-sy-post-publisher/issues/42) Sendto Liandi
 
-  - [x] [#44](https://github.com/terwer/src-sy-post-publisher/issues/44) Send to KMS
-  
-- [#19](https://github.com/terwer/src-sy-post-publisher/issues/19) 增强Vuepress支持，如果设置了Github参数，使用Github API实现自动发布，否则自行复制文本
+    - [x] [#43](https://github.com/terwer/src-sy-post-publisher/issues/43) Send to Yuque
+
+    - [x] [#44](https://github.com/terwer/src-sy-post-publisher/issues/44) Send to KMS
+
+- [#19](https://github.com/terwer/src-sy-post-publisher/issues/19) 增强Vuepress支持，如果设置了Github参数，使用Github
+  API实现自动发布，否则自行复制文本
 
     - 1、add aupport for Github rest api
 
     - 2、TS generic implementation Vuepress release parameter configuration
 
     - 3、Fix Octokit to build an error in vite, replace `node-fetch` as `isomorphic-fetch`
-  
+
     - 4、Add config valifation
 
     - 5、Time-consuming button operation add `loading`
-  
-    - 6、If the GitHub parameter is set, the GitHub API is set to be automatically published, otherwise the text will be copied by yourself
-  
+
+    - 6、If the GitHub parameter is set, the GitHub API is set to be automatically published, otherwise the text will be
+      copied by yourself
+
     - 7、Support selection of custom release directory
-  
+
     - 8、Support modified file name
-  
+
     - 9、Vuepress's slug add hash to avoid the conflict of repeated articles
-  
+
     - 10、Support simple and complex mode
-  
+
     - 11、New API status to ensure the availability of the API
-  
+
     - 12、Configuration switch automatically takes effect
-  
+
     - 13、Default directory switch
-  
+
     - 14、Page initialization is also additional content
-  
+
     - 15、Support article cancellation and release
 
 ### v0.0.1
@@ -91,7 +100,9 @@ ALso provide a [common API adaptor](https://github.com/terwer/src-sy-post-publis
 
 ## Vue 3 + TypeScript + Vite
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue
+3 `<script setup>` SFCs, check out
+the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
 
 ## Recommended IDE Setup
 
@@ -99,9 +110,14 @@ This template should help get you started developing with Vue 3 and TypeScript i
 
 ## Type Support For `.vue` Imports in TS
 
-Since TypeScript cannot handle type information for `.vue` imports, they are shimmed to be a generic Vue component type by default. In most cases this is fine if you don't really care about component prop types outside of templates. However, if you wish to get actual prop types in `.vue` imports (for example to get props validation when using manual `h(...)` calls), you can enable Volar's Take Over mode by following these steps:
+Since TypeScript cannot handle type information for `.vue` imports, they are shimmed to be a generic Vue component type
+by default. In most cases this is fine if you don't really care about component prop types outside of templates.
+However, if you wish to get actual prop types in `.vue` imports (for example to get props validation when using
+manual `h(...)` calls), you can enable Volar's Take Over mode by following these steps:
 
-1. Run `Extensions: Show Built-in Extensions` from VS Code's command palette, look for `TypeScript and JavaScript Language Features`, then right click and select `Disable (Workspace)`. By default, Take Over mode will enable itself if the default TypeScript extension is disabled.
+1. Run `Extensions: Show Built-in Extensions` from VS Code's command palette, look
+   for `TypeScript and JavaScript Language Features`, then right click and select `Disable (Workspace)`. By default,
+   Take Over mode will enable itself if the default TypeScript extension is disabled.
 
 2. Reload the VS Code window by running `Developer: Reload Window` from the command palette.
 
@@ -129,11 +145,19 @@ yarn create vite
 
 ## Deploy
 
+### Build for siyuan widget
+
 ```bash
-yarn deploy
+yarn w
 ```
 
-## Vercel CLI
+### Build for chrome extension
+
+```bash
+yarn e
+```
+
+## ~~Vercel CLI~~
 
 ```
 npm i -g vercel

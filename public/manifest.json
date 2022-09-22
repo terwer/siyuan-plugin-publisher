@@ -14,8 +14,8 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "index/index.html",
-        "service/index.html"
+        "blog/index.html",
+        "index.html"
       ],
       "matches": [
         "<all_urls>"
@@ -23,6 +23,6 @@
     }
   ],
   "action": {
-    "default_popup": "index/index.html"
+    "default_popup": "blog/index.html"
   }
 }

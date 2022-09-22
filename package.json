@@ -7,17 +7,16 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
+    "build-siyuan": "vue-tsc --noEmit && BUILD_TYPE=siyuan vite build",
     "preview": "vite preview",
     "test": "vitest --watch",
     "coverage": "vitest run --coverage",
     "webstorm-integration": "vitest --watch --reporter=dot --reporter=json --outputFile=.vitest-result.json",
-    "deploy": "bash deploy.sh",
-    "d": "yarn deploy",
-    "deploy-win": "pwsh deploy.ps1",
-    "wd": "yarn deploy-win",
-    "vdev": "vercel dev --listen 5005",
-    "vbuild": "vercel build",
-    "ext": "bash ext.sh"
+    "deploy-siyuan": "bash deploy.sh",
+    "ext": "bash ext.sh",
+    "widget": "bash widget.sh",
+    "e": "yarn ext",
+    "w": "yarn widget"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.0.9",

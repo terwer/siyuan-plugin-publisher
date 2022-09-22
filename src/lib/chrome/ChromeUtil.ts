@@ -1,6 +1,6 @@
 /**
  * 在chrome插件打开网页
- * @param pageUrl 例如：/service/index.html
+ * @param pageUrl 例如：//index.html
  */
 export function goToPage(pageUrl: string) {
     // While we could have used `let url = "index.html"`, using runtime.getURL is a bit more robust as
@@ -12,6 +12,8 @@ export function goToPage(pageUrl: string) {
     if (typeof chrome.runtime != "undefined") {
         // @ts-ignore
         url = chrome.runtime.getURL(url);
+    } else {
+        url = window.location.protocol + "//" + window.location.host + "/" + url;
     }
     window.open(url)
     // console.log(`Created tab`);

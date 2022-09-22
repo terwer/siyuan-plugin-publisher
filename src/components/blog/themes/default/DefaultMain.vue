@@ -178,12 +178,12 @@ const emitFn = () => {
 }
 
 const handleEdit = (index: number, row: any) => {
-  goToPage("/service/index.html?id=" + row.postid)
+  goToPage("/index.html?id=" + row.postid)
   console.log(index, row)
 }
 
 const handleRowClick = (row: any, column: any, event: any) => {
-  // goToPage("/service/index.html?id=aaa")
+  // goToPage("/index.html?id=aaa")
   // console.log("handleRowClick", row)
 }
 
