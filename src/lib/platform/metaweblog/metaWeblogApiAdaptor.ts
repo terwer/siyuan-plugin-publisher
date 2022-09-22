@@ -28,7 +28,6 @@ export class MetaWeblogApiAdaptor implements IApi {
     /**
      * getUsersBlogs
      * https://codex.wordpress.org/XML-RPC_MetaWeblog_API#metaWeblog.getUsersBlogs
-     *
      */
     public async getUsersBlogs(): Promise<Array<UserBlog>> {
         let result: Array<UserBlog> = []
@@ -36,6 +35,14 @@ export class MetaWeblogApiAdaptor implements IApi {
         logUtil.logInfo("getUsersBlogs=>")
         logUtil.logInfo(data)
         return data;
+    }
+
+    /**
+     * Not supported
+     * @param keyword
+     */
+    public async getRecentPostsCount(keyword?: string): Promise<number> {
+        return Promise.resolve(0);
     }
 
     /**

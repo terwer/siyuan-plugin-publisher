@@ -1,5 +1,12 @@
 import {IApi} from "../../api";
-import {exportMdContent, getBlockAttrs, getBlockByID, getBlockBySlug, getRootBlocks} from "./siYuanApi";
+import {
+    exportMdContent,
+    getBlockAttrs,
+    getBlockByID,
+    getBlockBySlug,
+    getRootBlocks,
+    getRootBlocksCount
+} from "./siYuanApi";
 import {Post} from "../../common/post";
 import {UserBlog} from "../../common/userBlog";
 import {API_TYPE_CONSTANTS} from "../../constants/apiTypeConstants";
@@ -22,6 +29,10 @@ export class SiYuanApiAdaptor implements IApi {
         result.push(userBlog)
 
         return result;
+    }
+
+    public async getRecentPostsCount(keyword?: string): Promise<number> {
+        return await getRootBlocksCount(keyword || "");
     }
 
     public async getRecentPosts(numOfPosts: number, page: number, keyword?: string): Promise<Array<Post>> {

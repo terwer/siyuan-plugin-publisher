@@ -44,4 +44,12 @@ export class CommonblogApiAdaptor implements IApi {
     public async getCategories(): Promise<CategoryInfo[]> {
         return Promise.resolve([]);
     }
+
+    /**
+     * Not supported
+     * @param keyword
+     */
+    public async getRecentPostsCount(keyword?: string): Promise<number> {
+        return Promise.resolve(0);
+    }
 }

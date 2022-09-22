@@ -6,11 +6,11 @@
         :fetch-suggestions="querySearch"
         popper-class="my-autocomplete"
         placeholder="请输入关键字"
+        @change="handleBtnSearch"
         @select="handleSelect"
     >
       <template #default="{ item }">
         <div class="value">{{ item.value }}</div>
-        <span class="link">{{ item.link }}</span>
       </template>
     </el-autocomplete>
     <el-button class="s-btn" type="primary" @click="handleBtnSearch">搜索</el-button>
@@ -55,6 +55,7 @@
         layout="prev, pager, next"
         :total="total"
         class="mt-4"
+        :page-size="MAX_PAGE_SIZE"
         @prev-click="handlePrevPage"
         @next-click="handleNextPage"
         @current-change="handleCurrentPage"
@@ -76,6 +77,7 @@ import {removeTitleNumber} from "../../../../lib/htmlUtil";
 import {goToPage} from "../../../../lib/chrome/ChromeUtil";
 import {ElMessageBox} from "element-plus/es";
 import {useI18n} from "vue-i18n";
+import {getRootBlocksCount} from "../../../../lib/platform/siyuan/siYuanApi";
 
 const {t} = useI18n()
 
@@ -102,25 +104,17 @@ const createFilter = (queryString: any) => {
     )
   }
 }
-const loadAll = () => {
-  return [
-    {value: 'vue', link: 'https://github.com/vuejs/vue'},
-    {value: 'element', link: 'https://github.com/ElemeFE/element'},
-    {value: 'cooking', link: 'https://github.com/ElemeFE/cooking'},
-    {value: 'mint-ui', link: 'https://github.com/ElemeFE/mint-ui'},
-    {value: 'vuex', link: 'https://github.com/vuejs/vuex'},
-    {value: 'vue-router', link: 'https://github.com/vuejs/vue-router'},
-    {value: 'babel', link: 'https://github.com/babel/babel'},
-  ]
-}
+
 const handleSelect = (item: LinkItem) => {
   console.log(item)
 }
 
 const handleBtnSearch = () => {
   console.log("handleBtnSearch")
+  reloadTableData()
 }
 let tableData: Array<any> = []
+const MAX_PAGE_SIZE = 5;
 const num = ref(0)
 const total = ref(0)
 const currentPage = ref(1)
@@ -178,10 +172,12 @@ const initPage = async () => {
 }
 
 const reloadTableData = async () => {
-  const MAX_PAGE_SIZE = 5;
   const api = new API(API_TYPE_CONSTANTS.API_TYPE_SIYUAN)
-  const postList = await api.getRecentPosts(MAX_PAGE_SIZE, currentPage.value - 1)
+  const postList = await api.getRecentPosts(MAX_PAGE_SIZE, currentPage.value - 1, state.value)
   console.log("postList=>", postList)
+
+  // 总数
+  total.value = await getRootBlocksCount(state.value)
 
   // 渲染table
   tableData.splice(0, tableData.length);
@@ -199,15 +195,12 @@ const reloadTableData = async () => {
     }
     tableData.push(tableRow)
   }
-  total.value = tableData.length + 20
 
   // table的key改变才会刷新
   num.value++;
 }
 
 onMounted(async () => {
-  links.value = loadAll()
-
   await initPage()
 })
 </script>
