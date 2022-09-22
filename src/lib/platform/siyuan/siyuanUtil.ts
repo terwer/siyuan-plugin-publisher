@@ -100,20 +100,33 @@ async function getSiyuanPageId(force?: boolean) {
 
 /**
  * 获取页面ID，如果不是挂件模式，可以自己提供一个页面ID
+ * 优先级
+ * 1、挂件ID
+ * 2、自己显式的传递一个ID
+ * 3、浏览器参数id=传递的ID
+ * 4、VITE_SIYUAN_DEV_PAGE_ID写死的测试ID
  * @param force 是否强制刷新
  * @param pageId 页面ID，可选的（挂件模式无需传递，开发阶段或者非挂件模式可以传递ID模拟运行）
  */
 export async function getPageId(force?: boolean, pageId?: string) {
-    // 默认尝试读取挂件的ID
-    let syPageId = await getSiyuanPageId(force)
+    let syPageId
+
+    // 先兼容挂件
+    const widgetResult = await getWidgetId()
+    if (widgetResult.isInSiyuan) {
+        // 尝试读取挂件的ID
+        syPageId = await getSiyuanPageId(force)
+    }
+
+    //如果其他地方想使用，也可以显式的传入一个页面ID
+    // logUtil.logWarn("pageId=>", pageId)
+    if (!syPageId) {
+        logUtil.logWarn("显示指定pageId=>", pageId)
+        syPageId = pageId
+    }
+
     // logUtil.logWarn("syPageId=>", syPageId)
     if (!syPageId) {
-        //如果其他地方想使用，也可以显式的传入一个页面ID
-        // logUtil.logWarn("pageId=>", pageId)
-        if (pageId) {
-            syPageId = pageId
-        }
-
         //  开发模式模拟传递一个ID
         if (!pageId) {
             const testPageId = getEnv("VITE_SIYUAN_DEV_PAGE_ID")

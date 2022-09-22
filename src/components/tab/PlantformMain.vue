@@ -1,7 +1,7 @@
 <template>
   <el-tabs type="border-card">
     <el-tab-pane :label="$t('main.publish.to.vuepress')" v-if="vuepressEnabled">
-      <vuepress-main :is-reload="isReloadVuepressMain"/>
+      <vuepress-main :is-reload="isReloadVuepressMain" :page-id="props.pageId"/>
     </el-tab-pane>
     <el-tab-pane :label="$t('main.publish.to.jvue')" v-if="jvueEnabled">
       <j-vue-main/>
@@ -10,7 +10,7 @@
       <confluence-main/>
     </el-tab-pane>
     <el-tab-pane :label="$t('main.publish.to.cnblogs')" v-if="cnblogsEnabled">
-      <cnblogs-main/>
+      <cnblogs-main :page-id="props.pageId"/>
     </el-tab-pane>
     <el-tab-pane :label="$t('main.publish.to.wordpress')" v-if="wordpressEnabled">
       <wordpress-main/>
@@ -101,8 +101,13 @@ const props = defineProps({
   isReload: {
     type: Boolean,
     default: false
+  },
+  pageId: {
+    type: String,
+    default: undefined
   }
 })
+
 /*监听props*/
 watch(() => props.isReload, /**/(oldValue, newValue) => {
   initConf();

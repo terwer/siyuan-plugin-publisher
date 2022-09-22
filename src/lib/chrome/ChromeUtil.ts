@@ -18,3 +18,11 @@ export function goToPage(pageUrl: string) {
     window.open(url)
     // console.log(`Created tab`);
 }
+
+/**
+ * 检测是否运行在Chrome插件中
+ */
+export function isInChromeExtension() {
+    // @ts-ignore
+    return typeof chrome.runtime != "undefined";
+}

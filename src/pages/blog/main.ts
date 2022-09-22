@@ -10,6 +10,11 @@ import 'element-plus/dist/index.css'
 import 'element-plus/theme-chalk/dark/css-vars.css'
 import './styles/dark/css-vars.css'
 
+// hljs
+import "../../lib/vue-hljs/vue-hljs.js"
+// @ts-ignore
+import vueHljs from "../../lib/vue-hljs/lib/vue-hljs/main.js";
+
 // Vue初始化
 const app = createApp(App)
 
@@ -18,6 +23,8 @@ const app = createApp(App)
 app.use(i18n)
 // Element-Plus
 app.use(ElementPlus)
+// vueHljs
+app.use(vueHljs)
 
 // Register a global custom directive called `v-focus`
 app.directive('focus', {

@@ -127,18 +127,19 @@ export default defineConfig(({command, mode, ssrBuild}) => {
             cssCodeSplit: true,
             // 构建后是否生成 source map 文件
             sourcemap: false,
-            // 不压缩，用于调试
-            minify: false,
-            // @rollup/plugin-commonjs 插件的选项
-            commonjsOptions: {},
-
-            // 当设置为 true, 构建后将会生成 manifest.json 文件
-            manifest: false,
 
             // 设置为 false 可以禁用最小化混淆
             // 或是用来指定是应用哪种混淆器
             // boolean | 'terser' | 'esbuild'
             // minify: 'terser',
+            // 不压缩，用于调试
+            minify: false,
+
+            // @rollup/plugin-commonjs 插件的选项
+            commonjsOptions: {},
+
+            // 当设置为 true, 构建后将会生成 manifest.json 文件
+            manifest: false,
 
             // 传递给 Terser 的更多 minify 选项
             terserOptions: {},

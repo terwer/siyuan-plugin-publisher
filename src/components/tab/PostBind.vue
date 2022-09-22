@@ -33,7 +33,9 @@
     </el-form-item>
 
     <!-- 动态配置 -->
-    <el-form-item v-for="cfg in formData.dynamicConfigArray" :label="cfg.plantformName+'_'+cfg.plantformType.toUpperCase().substring(0,1)+' ID'" v-show="cfg.modelValue">
+    <el-form-item v-for="cfg in formData.dynamicConfigArray"
+                  :label="cfg.plantformName+'_'+cfg.plantformType.toUpperCase().substring(0,1)+' ID'"
+                  v-show="cfg.modelValue">
       <el-input v-model="cfg.posid"/>
     </el-form-item>
 
@@ -101,8 +103,13 @@ const props = defineProps({
   isReload: {
     type: Boolean,
     default: false
+  },
+  pageId: {
+    type: String,
+    default: undefined
   }
 })
+
 /*监听props*/
 watch(() => props.isReload, /**/async (oldValue, newValue) => {
   // Here you can add you functionality
@@ -201,7 +208,7 @@ const rules = reactive<FormRules>({
 });
 
 async function initPage() {
-  const pageId = await getPageId(true)
+  const pageId = await getPageId(true, props.pageId)
   logUtil.logInfo("PostBind pageId=>", pageId)
   if (!pageId || pageId == "") {
     return

@@ -178,6 +178,10 @@ const props = defineProps({
   cfg: {
     type: CommonblogCfg,
     default: null
+  },
+  pageId: {
+    type: String,
+    default: undefined
   }
 })
 

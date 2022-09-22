@@ -343,7 +343,7 @@ async function getRootBlocksCount(keyword: string) {
         AND ((b1.content LIKE '%${keyword}%') OR (b1.tag LIKE '%${keyword}%')
     )`;
     let data = await sql(stmt)
-    logUtil.logError("getRootBlocksCount data=>", data[0].count)
+    // logUtil.logError("getRootBlocksCount data=>", data[0].count)
     return data[0].count
 }
 
