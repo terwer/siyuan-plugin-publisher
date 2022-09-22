@@ -1,5 +1,12 @@
 import {IApi} from "../../api";
-import {exportMdContent, getBlockAttrs, getBlockByID, getBlockBySlug, getRootBlocks} from "./siYuanApi";
+import {
+    exportMdContent,
+    getBlockAttrs,
+    getBlockByID,
+    getBlockBySlug,
+    getRootBlocks,
+    getRootBlocksCount
+} from "./siYuanApi";
 import {Post} from "../../common/post";
 import {UserBlog} from "../../common/userBlog";
 import {API_TYPE_CONSTANTS} from "../../constants/apiTypeConstants";
@@ -24,6 +31,10 @@ export class SiYuanApiAdaptor implements IApi {
         return result;
     }
 
+    public async getRecentPostsCount(keyword?: string): Promise<number> {
+        return await getRootBlocksCount(keyword || "");
+    }
+
     public async getRecentPosts(numOfPosts: number, page: number, keyword?: string): Promise<Array<Post>> {
         let result: Post[] = []
 
@@ -40,6 +51,7 @@ export class SiYuanApiAdaptor implements IApi {
 
             // 某些属性详情页控制即可
             const attrs = await getBlockAttrs(siyuanPost.root_id)
+            const page = await this.getPost(siyuanPost.root_id)
 
             // // 发布状态
             // let isPublished = true
@@ -60,7 +72,8 @@ export class SiYuanApiAdaptor implements IApi {
             commonPost.title = siyuanPost.content
             commonPost.permalink = customSlug == "" ? "/post/" + siyuanPost.root_id : "/post/" + customSlug + ".html"
             // commonPost.isPublished = isPublished
-            // commonPost.mt_keywords = attrs.tags || ""
+            commonPost.mt_keywords = page.mt_keywords
+            commonPost.description = page.description
             result.push(commonPost)
         }
 

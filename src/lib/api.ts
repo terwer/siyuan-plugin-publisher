@@ -23,6 +23,12 @@ export interface IApi {
     getUsersBlogs(): Promise<Array<UserBlog>>
 
     /**
+     * 最新文章数目
+     * @param keyword 关键字（可选，部分平台不支持搜索）
+     */
+    getRecentPostsCount(keyword?: string): Promise<number>
+
+    /**
      * 最新文章
      * @param numOfPosts 文章数目
      * @param page 页码（可选，部分平台不支持分页）
@@ -165,6 +171,10 @@ export class API implements IApi {
             default:
                 throw new Error("未找到接口适配器，请检查参数")
         }
+    }
+
+    async getRecentPostsCount(keyword?: string): Promise<number> {
+        return await this.apiAdaptor.getRecentPostsCount(keyword);
     }
 
     async getRecentPosts(numOfPosts: number, page?: number, keyword?: string): Promise<Array<Post>> {

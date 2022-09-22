@@ -1,7 +1,7 @@
 import {defineConfig} from 'vite'
 import {loadEnv} from "vite";
-import { resolve, dirname } from 'node:path'
-import { fileURLToPath } from 'url'
+import {resolve, dirname} from 'node:path'
+import {fileURLToPath} from 'url'
 import vue from '@vitejs/plugin-vue'
 import vitePluginRequireTransform from 'vite-plugin-require-transform';
 import {NodeGlobalsPolyfillPlugin} from '@esbuild-plugins/node-globals-polyfill'
@@ -14,7 +14,9 @@ import mpa from 'vite-plugin-mpa'
 import * as path from "path";
 
 // https://vitejs.dev/config/
-export default defineConfig(({mode}) => {
+export default defineConfig(({command, mode, ssrBuild}) => {
+    console.log("command=>", command)
+
     const env = loadEnv(mode, process.cwd())
     const processEnvValues = {
         'process.env': Object.entries(env).reduce(
@@ -27,7 +29,8 @@ export default defineConfig(({mode}) => {
             {},
         )
     }
-    console.log(env.DEV)
+    const isSiyuanBuild = process.env.BUILD_TYPE == "siyuan"
+    console.log("isSiyuanBuild=>", isSiyuanBuild)
 
     return {
         plugins: [
@@ -50,7 +53,7 @@ export default defineConfig(({mode}) => {
         // root: process.cwd(),
         root: './',
         // 项目部署的基础路径
-        base: '/',
+        base: isSiyuanBuild ? 'http://127.0.0.1:6806/widgets/sy-post-publisher/' : "",
         // 静态资源服务文件夹
         publicDir: 'public',
         // https://github.com/vitejs/vite/issues/1930
@@ -151,8 +154,8 @@ export default defineConfig(({mode}) => {
 
             rollupOptions: {
                 input: {
-                    index: path.resolve(__dirname, 'pages/index/index.html'),
-                    popup: path.resolve(__dirname, 'pages/service/index.html'),
+                    siyuanIndex: path.resolve(__dirname, 'index.html'),
+                    index: path.resolve(__dirname, 'pages/blog/index.html'),
                 },
                 output: {
                     chunkFileNames: 'static/js/[name]-[hash].js',

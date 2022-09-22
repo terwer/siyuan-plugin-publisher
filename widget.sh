@@ -1,5 +1,5 @@
 pwd
-yarn build
+yarn build-siyuan
 # 删除Chrome插件专属文件
 rm ./dist/background.js
 rm ./dist/manifest.json

@@ -33,6 +33,13 @@ export class LiandiApiAdaptor extends CommonblogApiAdaptor implements IApi {
         return result;
     }
 
+    /**
+     * Not supported
+     * @param keyword
+     */
+    public async getRecentPostsCount(keyword?: string): Promise<number> {
+        return Promise.resolve(0);
+    }
 
     async deletePost(postid: string): Promise<boolean> {
         throw new Error("链滴社区API不支持删除帖子")
