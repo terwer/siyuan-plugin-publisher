@@ -233,7 +233,7 @@ const complexMode = () => {
 }
 
 const initPage = async () => {
-  const pageId = await getPageId(true);
+  const pageId = await getPageId(true, props.pageId);
   if (!pageId || pageId === "") {
     return
   }

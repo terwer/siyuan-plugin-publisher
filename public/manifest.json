@@ -15,6 +15,7 @@
     {
       "resources": [
         "blog/index.html",
+        "detail/index.html",
         "index.html"
       ],
       "matches": [

@@ -251,7 +251,7 @@ const handleNewWinEdit = (index: number, row: any) => {
         type: 'warning',
       }
   ).then(async () => {
-    goToPage("/index.html?id=" + row.postid)
+    goToPage("/index.html?id=" + row.postid, "/")
     console.log(index, row)
   }).catch(() => {
     // ElMessage({

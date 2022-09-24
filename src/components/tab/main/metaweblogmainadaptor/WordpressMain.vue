@@ -1,5 +1,5 @@
 <template>
-  <metaweblog-main :api-type="apiType"/>
+  <metaweblog-main :api-type="apiType" :page-id="props.pageId"/>
 </template>
 
 <script lang="ts" setup>
@@ -8,6 +8,12 @@ import {ref} from "vue";
 
 const apiType = ref(API_TYPE_CONSTANTS.API_TYPE_WORDPRESS)
 
+const props = defineProps({
+  pageId: {
+    type: String,
+    default: undefined
+  }
+})
 </script>
 
 <script lang="ts">
