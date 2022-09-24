@@ -36,13 +36,15 @@
         <!--
         <el-table-column prop="dateCreated" label="发布时间" width="150"/>
         -->
-        <el-table-column align="right" width="250">
+        <el-table-column align="right" width="350">
           <template #header>
             <div style="text-align: center;">操作</div>
           </template>
           <template #default="scope">
             <el-button size="small" @click="handleView(scope.$index, scope.row)">预览</el-button>
-            <el-button size="small" type="primary" @click="handleEdit(scope.$index, scope.row)">发布</el-button>
+            <el-button size="small" type="primary" @click="handleNewWinView(scope.$index, scope.row)">新窗口预览
+            </el-button>
+            <el-button size="small" @click="handleEdit(scope.$index, scope.row)">发布</el-button>
             <el-button size="small" type="primary" @click="handleNewWinEdit(scope.$index, scope.row)">新窗口发布
             </el-button>
           </template>
@@ -67,7 +69,7 @@
     </div>
 
     <div id="post-detail" v-if="showDetail">
-      <DefaultPostDetail :post="postDetail" @on-change="emitFn"/>
+      <DefaultPostDetail :post="postDetail" @on-change="emitFn" @on-publish-change="emitPublishPageFn"/>
     </div>
 
     <div id="post-publisher" v-if="showPublish">
@@ -184,6 +186,26 @@ const handleView = (index: number, row: any) => {
   showHome.value = false;
   showDetail.value = true;
 }
+const handleNewWinView = (index: number, row: any) => {
+  ElMessageBox.confirm(
+      "预览会打开新页面，此窗口将关闭，是否继续？",
+      t('main.opt.warning'),
+      {
+        confirmButtonText: t('main.opt.ok'),
+        cancelButtonText: t('main.opt.cancel'),
+        type: 'warning',
+      }
+  ).then(async () => {
+    goToPage("/detail/index.html?id=" + row.postid)
+    console.log(index, row)
+  }).catch(() => {
+    // ElMessage({
+    //   type: 'error',
+    //   message: t("main.opt.failure"),
+    // })
+    logUtil.logInfo("操作已取消")
+  });
+}
 
 const emitFn = () => {
   showPublish.value = false;
@@ -194,6 +216,16 @@ const emitFn = () => {
 
 const emitPublishBackFn = () => {
   emitFn()
+}
+
+const emitPublishPageFn = (post: Post) => {
+  post.postid = post.postid
+  post.title = post.title
+  publishData.value = post
+
+  showPublish.value = true;
+  showHome.value = false;
+  showDetail.value = false;
 }
 
 const handleEdit = (index: number, row: any) => {

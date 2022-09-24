@@ -1,6 +1,6 @@
 <template>
   <el-container>
-    <el-header height="250px">
+    <el-header height="250px" class="publish-dyn-header">
       <el-form label-width="180px" ref="formRef" :model="formData" :rules="rules">
         <el-alert class="top-version-tip" :title="$t('dynamic.platform.tip')" type="info" :closable="false"/>
 
@@ -47,6 +47,7 @@
       </el-form-item>
 
       <el-table :data="tableData" :key="num" border stripe highlight-current-row
+                empty-text="暂无数据"
                 @current-change="handleCurrentChange">
         <el-table-column prop="plantformType" :label="$t('dynamic.platform.type')"/>
         <el-table-column prop="plantformKey" :label="$t('dynamic.platform.key')"/>
@@ -217,5 +218,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

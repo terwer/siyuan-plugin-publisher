@@ -1,6 +1,6 @@
 <template>
   <el-container>
-    <el-aside width="45%">
+    <el-aside width="45%" class="p-aside">
       <el-alert class="top-version-tip" :title="$t('main.publish.vuepress.tip')" type="info" :closable="false"/>
       <el-alert class="top-version-tip" :title="$t('main.publish.vuepress.error.tip')" type="error" :closable="false"
                 v-if="false"/>
@@ -141,12 +141,14 @@
         </el-form-item>
 
         <!-- 发布操作 -->
-        <el-form-item label="">
+        <el-form-item>
           <el-button type="primary" @click="doPublish" :loading="isPublishLoading">{{
               isPublishLoading ? $t('main.publish.loading') :
                   isPublished ? $t('main.update') : $t('main.publish')
             }}
           </el-button>
+        </el-form-item>
+        <el-form-item>
           <el-button @click="cancelPublish" :loading="isCancelLoading">{{ $t('main.cancel') }}</el-button>
         </el-form-item>
 
@@ -163,7 +165,7 @@
     <el-main>
       <el-form label-width="75px">
         <el-form-item>
-          {{ $t('main.yaml.formatter') }}
+          <el-alert class="top-data-tip" :title="$t('main.yaml.formatter')" type="info" :closable="false"/>
         </el-form-item>
         <el-form-item>
           <el-input v-model="vuepressData.vuepressFullContent" :autosize="{ minRows: 5, maxRows: 8 }"
@@ -844,4 +846,7 @@ export default {
 </script>
 
 <style scoped>
+.p-aside{
+  overflow-x: hidden;
+}
 </style>
