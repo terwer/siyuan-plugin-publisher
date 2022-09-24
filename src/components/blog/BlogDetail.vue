@@ -7,7 +7,9 @@
     <!-- 文章详情 -->
     <DefaultPostDetailService :page-id="pid"/>
 
-    <locale-changer/>
+    <div id="dt-tool">
+      <locale-changer/>
+    </div>
   </div>
 </template>
 
@@ -53,6 +55,11 @@ export default {
 }
 </script>
 
+<style>
+#dt-tool .el-form-item__label{
+  width: unset !important;
+}
+</style>
 <style scoped>
 .post-detail-content-box {
   padding: 10px;
