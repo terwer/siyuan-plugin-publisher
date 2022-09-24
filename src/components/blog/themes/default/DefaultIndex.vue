@@ -1,9 +1,7 @@
 <template>
   <div class="common-layout">
     <el-container>
-      <el-header>
-        <DefaultHeader/>
-      </el-header>
+      <DefaultHeader/>
       <el-main>
         <DefaultMain/>
       </el-main>

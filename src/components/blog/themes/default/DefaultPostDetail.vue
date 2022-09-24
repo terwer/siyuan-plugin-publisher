@@ -10,7 +10,8 @@
 
     <div class="post-detail-content-box">
       <div class="btn-publish">
-        <el-button size="small" type="primary" @click="handlePublish">发布到其他平台</el-button>
+        <el-button size="small" @click="handlePublish">发布到其他平台</el-button>
+        <el-button size="small" type="primary" @click="handleNewWinPublish">新窗口发布到其他平台</el-button>
       </div>
 
       <div class="post-detail-content-box">
@@ -35,13 +36,17 @@ const props = defineProps({
   },
 })
 const emit = defineEmits<{
-  (e: 'on-change'): void
+  (e: 'on-change'): void,
+  (e: 'on-publish-change', post: Post): void
 }>()
 
 const onBack = () => {
   emit("on-change");
 }
-const handlePublish = (e:any) => {
+const handlePublish = (e: any) => {
+  emit('on-publish-change', props.post)
+}
+const handleNewWinPublish = (e: any) => {
   e.preventDefault()
   goToPage("/index.html?id=" + props.post?.postid)
 }

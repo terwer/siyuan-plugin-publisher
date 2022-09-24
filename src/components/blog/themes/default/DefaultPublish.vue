@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="publish-body">
     <el-page-header class="publish-header" :icon="ArrowLeft" title="返回" @click="onBack">
       <template #content>
         <div class="flex items-center">
@@ -41,5 +41,8 @@ export default {
 <style scoped>
 .publish-header{
   margin-bottom: 16px;
+}
+#publish-body {
+  min-width: 600px !important;
 }
 </style>

@@ -10,12 +10,9 @@
 
       <el-form-item :label="$t('theme.mode.choose')">
         <!-- 暗黑模式 -->
-        <div class="dark-mode-choose">
-          <button @click="toggleDark()">
-            <i inline-block align-middle i="dark:carbon-moon carbon-sun"/>
-            <span class="ml-2">{{ isDark ? $t('theme.mode.light') : $t('theme.mode.dark') }}</span>
-          </button>
-        </div>
+        <el-button type="primary" @click="toggleDark()">
+          {{ isDark ? $t('theme.mode.light') : $t('theme.mode.dark') }}
+        </el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -61,29 +58,4 @@ export default {
 </script>
 
 <style scoped>
-.dark-mode-choose button {
-  --custom-mode-btn-color: #ffffff;
-  --custom-mode-btn-bg-color: #44bd87;
-  --custom-mode-btn-border-color: #44bd87;
-}
-
-html.dark .dark-mode-choose button {
-  --custom-mode-btn-color: #ffffff;
-  --custom-mode-btn-bg-color: #44bd87;
-  --custom-mode-btn-border-color: #44bd87;
-}
-
-.dark-mode-choose button {
-  padding: 3px 10px;
-  background-color: var(--custom-mode-btn-bg-color);
-  border: none;
-  outline: none;
-  color: var(--custom-mode-btn-color);
-  border: 1px solid var(--custom-mode-btn-border-color);
-  text-shadow: 1px 1px 1px var(--custom-mode-btn-border-color);
-  border-radius: 4px;
-  font-size: 1rem;
-  box-sizing: border-box;
-  vertical-align: middle;
-}
 </style>
