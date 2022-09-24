@@ -4,25 +4,25 @@
       <vuepress-main :is-reload="isReloadVuepressMain" :page-id="props.pageId"/>
     </el-tab-pane>
     <el-tab-pane :label="$t('main.publish.to.jvue')" v-if="jvueEnabled">
-      <j-vue-main/>
+      <j-vue-main :page-id="props.pageId"/>
     </el-tab-pane>
     <el-tab-pane :label="$t('main.publish.to.conf')" v-if="confEnabled">
-      <confluence-main/>
+      <confluence-main :page-id="props.pageId"/>
     </el-tab-pane>
     <el-tab-pane :label="$t('main.publish.to.cnblogs')" v-if="cnblogsEnabled">
       <cnblogs-main :page-id="props.pageId"/>
     </el-tab-pane>
     <el-tab-pane :label="$t('main.publish.to.wordpress')" v-if="wordpressEnabled">
-      <wordpress-main/>
+      <wordpress-main :page-id="props.pageId"/>
     </el-tab-pane>
     <el-tab-pane :label="$t('main.publish.to.liandi')" v-if="liandiEnabled">
-      <liandi-main/>
+      <liandi-main :page-id="props.pageId"/>
     </el-tab-pane>
     <el-tab-pane :label="$t('main.publish.to.yuque')" v-if="yuqueEnabled">
-      <yuque-main/>
+      <yuque-main :page-id="props.pageId"/>
     </el-tab-pane>
     <el-tab-pane :label="$t('main.publish.to.kms')" v-if="kmsEnabled">
-      <kms-main/>
+      <kms-main :page-id="props.pageId"/>
     </el-tab-pane>
 
     <!-- 动态平台发布 -->
@@ -32,7 +32,7 @@
     </el-tab-pane>
     <el-tab-pane v-for="wcfg in formData.wordpressArray"
                  :label="wcfg.plantformName+'_'+wcfg.plantformType.toUpperCase().substring(0,1)">
-      <metaweblog-main :api-type="wcfg.plantformKey"/>
+      <metaweblog-main :api-type="wcfg.plantformKey" :page-id="props.pageId"/>
     </el-tab-pane>
   </el-tabs>
 </template>

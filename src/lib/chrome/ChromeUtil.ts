@@ -1,8 +1,12 @@
 /**
  * 在chrome插件打开网页
- * @param pageUrl 例如：//index.html
+ *
+ * 注意：非chrome环境，pageUrl：/index.html，split：/，实际url为：//index.html
+ * @param pageUrl 例如：/index.html
+ * @param splt 例如：/，但部分情况下无需传递此参数
+ *
  */
-export function goToPage(pageUrl: string) {
+export function goToPage(pageUrl: string, split?: string) {
     // While we could have used `let url = "index.html"`, using runtime.getURL is a bit more robust as
     // it returns a full URL rather than just a path that Chrome needs to be resolved contextually at
     // runtime.
@@ -13,7 +17,11 @@ export function goToPage(pageUrl: string) {
         // @ts-ignore
         url = chrome.runtime.getURL(url);
     } else {
-        url = window.location.protocol + "//" + window.location.host + "/" + url;
+        if (split && split != "") {
+            url = window.location.protocol + "//" + window.location.host + split + url;
+        } else {
+            url = window.location.protocol + "//" + window.location.host + url;
+        }
     }
     window.open(url)
     // console.log(`Created tab`);

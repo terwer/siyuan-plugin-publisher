@@ -14,12 +14,8 @@
         <el-button size="small" type="primary" @click="handleNewWinPublish">新窗口发布到其他平台</el-button>
       </div>
 
-      <div class="post-detail-content-box">
-        <div id="post-detail-content"
-             v-highlight
-             v-html="post.description"
-        ></div>
-      </div>
+      <!-- 文章详情 -->
+      <DefaultPostDetailService :page-id="props.post.postid"/>
     </div>
   </div>
 </template>
@@ -28,6 +24,7 @@
 import {Post} from "../../../../lib/common/post";
 import {ArrowLeft} from '@element-plus/icons-vue'
 import {goToPage} from "../../../../lib/chrome/ChromeUtil";
+import DefaultPostDetailService from "./DefaultPostDetailService.vue";
 
 const props = defineProps({
   post: {
@@ -48,7 +45,7 @@ const handlePublish = (e: any) => {
 }
 const handleNewWinPublish = (e: any) => {
   e.preventDefault()
-  goToPage("/index.html?id=" + props.post?.postid)
+  goToPage("/index.html?id=" + props.post?.postid, "/")
 }
 </script>
 
@@ -58,15 +55,6 @@ export default {
 }
 </script>
 
-<style>
-/* 预览样式 */
-#post-detail-content {
-}
-
-#post-detail-content img {
-  max-width: 99%;
-}
-</style>
 <style scoped>
 #post-detail-body {
   min-width: 600px !important;

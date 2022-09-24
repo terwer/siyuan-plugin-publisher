@@ -157,6 +157,7 @@ export default defineConfig(({command, mode, ssrBuild}) => {
                 input: {
                     siyuanIndex: path.resolve(__dirname, 'index.html'),
                     index: path.resolve(__dirname, 'pages/blog/index.html'),
+                    detail: path.resolve(__dirname, 'pages/detail/index.html'),
                 },
                 output: {
                     chunkFileNames: 'static/js/[name]-[hash].js',
