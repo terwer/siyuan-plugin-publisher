@@ -322,8 +322,8 @@ async function initPage() {
   }
   const page = await getPage(pageId)
   if (!page) {
-    ElMessage.error("网络异常，数据获取失败")
-    throw new Error("网络异常，数据获取失败")
+    ElMessage.error(t('config.error.msg') + "_vuepress")
+    throw new Error(t('config.error.msg') + "_vuepress")
   }
   logUtil.logInfo("VuepressMain获取主文档", page)
 
@@ -846,7 +846,7 @@ export default {
 </script>
 
 <style scoped>
-.p-aside{
+.p-aside {
   overflow-x: hidden;
 }
 </style>

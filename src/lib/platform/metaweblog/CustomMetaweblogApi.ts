@@ -203,7 +203,7 @@ export class CustomMetaWeblogApi {
         // 错误处理
         this.doFault(ret)
 
-        let retStr = ret.params.param.value.string || ""
+        let retStr = ret.params.param.value.string || ret.params.param.value || ""
         logUtil.logInfo("newPost retStr=>", retStr.toString())
 
         return retStr.toString();
@@ -224,7 +224,7 @@ export class CustomMetaWeblogApi {
         // 错误处理
         this.doFault(ret)
 
-        let retBool = ret.params.param.value.boolean || ""
+        let retBool = ret.params.param.value.boolean || ret.params.param.value || 0
         logUtil.logInfo("editPost retBool=>", retBool)
 
         return retBool;
@@ -237,7 +237,7 @@ export class CustomMetaWeblogApi {
         // 错误处理
         this.doFault(ret)
 
-        let retBool = ret.params.param.value.boolean || ""
+        let retBool = ret.params.param.value.boolean || ret.params.param.value || 0
         logUtil.logInfo("deletePost retBool=>", retBool)
 
         return retBool;

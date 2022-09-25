@@ -251,6 +251,10 @@ const initPage = async () => {
   siyuanData.pageId = pageId;
   siyuanData.meta = await getPageAttrs(pageId)
   const page = await getPage(pageId)
+  if (!page) {
+    ElMessage.error(t('config.error.msg') + "_" + props.apiType)
+    throw new Error(t('config.error.msg') + "_" + props.apiType)
+  }
   logUtil.logInfo("CommonblogMain初始化页面,meta=>", siyuanData.meta);
 
   // 表单数据
@@ -498,7 +502,7 @@ const doPublish = async () => {
     let content = md
     if (PageType.Html == commonblogCfg.pageType) {
       content = mdToHtml(md)
-    }else{
+    } else {
       content = removeMdWidgetTag(content)
     }
     // ===============================
@@ -614,7 +618,7 @@ export default {
 </script>
 
 <style scoped>
-.common-main{
+.common-main {
   padding: 0;
 }
 </style>
