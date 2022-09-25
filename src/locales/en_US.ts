@@ -173,5 +173,6 @@ export default {
     "setting.common.password":"Password",
     "setting.blog.platform.support.common": "Current platform：",
     "plantform.must.select.one": "You must enable at least one plantform",
-    "blog.list.toptip": "Reminder: Click the table line to enter the article details page. The details page has the release button! (〃'▽'〃)"
+    "blog.list.toptip": "Reminder: Click the table line to enter the article details page. The details page has the release button! (〃'▽'〃)",
+    "config.error.msg": "Network or config error, no data fetched"
 }

@@ -149,7 +149,7 @@
         </el-form-item>
       </el-form>
     </el-main>
-    <el-skeleton :loading="isInitLoadding" :rows="5" animated />
+    <el-skeleton :loading="isInitLoadding" :rows="5" animated/>
   </el-container>
 </template>
 
@@ -282,6 +282,11 @@ const initPage = async () => {
   siyuanData.pageId = pageId;
   siyuanData.meta = await getPageAttrs(pageId)
   const page = await getPage(pageId)
+  if (!page) {
+    isInitLoadding.value = false
+    ElMessage.error(t('config.error.msg') + "_" + props.apiType)
+    throw new Error(t('config.error.msg') + "_" + props.apiType)
+  }
   logUtil.logInfo("MetaweblogMain初始化页面,meta=>", siyuanData.meta);
 
   // 表单数据

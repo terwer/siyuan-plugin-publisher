@@ -198,8 +198,12 @@ export class CustomMetaWeblogApi {
 
         let ret = await this.xmlrpcClient.methodCallEntry(METAWEBLOG_METHOD_CONSTANTS.NEW_POST,
             [this.apiType, username, password, postStruct, publish])
+        logUtil.logInfo("newPost ret=>", ret)
 
-        let retStr = ret.params.param.value.string || ""
+        // 错误处理
+        this.doFault(ret)
+
+        let retStr = ret.params.param.value.string || ret.params.param.value || ""
         logUtil.logInfo("newPost retStr=>", retStr.toString())
 
         return retStr.toString();
@@ -217,7 +221,10 @@ export class CustomMetaWeblogApi {
         const ret = await this.xmlrpcClient.methodCallEntry(METAWEBLOG_METHOD_CONSTANTS.EDIT_POST,
             [postid, username, password, postStruct, publish])
 
-        let retBool = ret.params.param.value.boolean || ""
+        // 错误处理
+        this.doFault(ret)
+
+        let retBool = ret.params.param.value.boolean || ret.params.param.value || 0
         logUtil.logInfo("editPost retBool=>", retBool)
 
         return retBool;
@@ -227,7 +234,10 @@ export class CustomMetaWeblogApi {
         const ret = await this.xmlrpcClient.methodCallEntry(METAWEBLOG_METHOD_CONSTANTS.DELETE_POST,
             [appKey, postid, username, password, publish])
 
-        let retBool = ret.params.param.value.boolean || ""
+        // 错误处理
+        this.doFault(ret)
+
+        let retBool = ret.params.param.value.boolean || ret.params.param.value || 0
         logUtil.logInfo("deletePost retBool=>", retBool)
 
         return retBool;
