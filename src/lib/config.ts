@@ -66,7 +66,7 @@ export function getConf(key: string): string {
 
     const value = localStorage.getItem(key)
     if (!value) {
-        logUtil.logWarn("未找到对应数据，key=>", key)
+        logUtil.logInfo("未找到对应数据，key=>", key)
         return "";
     }
     logUtil.logInfo("从localStorage获取数据=>", value)
@@ -112,7 +112,7 @@ export function setJSONConf<T>(key: string, value: T): void {
  */
 export function setConf(key: string, value: string): void {
     if (!value || value == "") {
-        logUtil.logWarn("空值，不保存")
+        logUtil.logInfo("空值，不保存")
         return
     }
 

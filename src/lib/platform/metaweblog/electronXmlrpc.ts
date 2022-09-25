@@ -28,8 +28,8 @@ export async function fetchElectron(apiUrl: string, reqMethod: string, reqParams
     let result
 
     const methodBody = xmlSerializer.serializeMethodCall(reqMethod, reqParams, "utf8")
-    logUtil.logWarn("apiUrl=>", apiUrl)
-    logUtil.logWarn("methodBody=>", methodBody)
+    logUtil.logInfo("apiUrl=>", apiUrl)
+    logUtil.logInfo("methodBody=>", methodBody)
 
     const fetchOption = {
         method: "POST",
@@ -56,7 +56,7 @@ export async function fetchElectron(apiUrl: string, reqMethod: string, reqParams
     //         resolve(result)
     //     })
     // })
-    // logUtil.logWarn(desData)
+    // logUtil.logInfo(desData)
 
     // xml2json也不行
     // const parseResult = JSON.parse(this.xmlParser.toJson(reqXml)) || {}
@@ -66,16 +66,16 @@ export async function fetchElectron(apiUrl: string, reqMethod: string, reqParams
 
     // xml2js
     const parseResult = await xmlParser.parseStringPromise(reqXml)
-    logUtil.logWarn("尝试获取反序列结果=>")
-    logUtil.logWarn(parseResult)
+    logUtil.logInfo("尝试获取反序列结果=>")
+    logUtil.logInfo(parseResult)
 
     let jsonResult: any = {}
     switch (reqMethod) {
         // 博客信息
         case METAWEBLOG_METHOD_CONSTANTS.GET_USERS_BLOGS: {
             const usersBlogs = parse_GetUsersBlogs(parseResult)
-            logUtil.logWarn("GetUsersBlogs组装完成准备返回=>")
-            logUtil.logWarn(usersBlogs)
+            logUtil.logInfo("GetUsersBlogs组装完成准备返回=>")
+            logUtil.logInfo(usersBlogs)
             jsonResult = JSON.stringify(usersBlogs)
             break;
         }

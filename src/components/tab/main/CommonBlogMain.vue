@@ -309,7 +309,7 @@ function checkForce() {
   // 别名不为空，默认不刷新
   if (!forceRefresh.value) {
     // ElMessage.warning(t('main.force.refresh.tip'))
-    logUtil.logWarn(t('main.force.refresh.tip'))
+    logUtil.logInfo(t('main.force.refresh.tip'))
     return false
   }
 
@@ -462,7 +462,7 @@ const oneclickAttr = async (hideTip?: boolean) => {
 
   // 发布属性
   await saveAttrToSiyuan(true)
-  logUtil.logWarn("发布属性完成")
+  logUtil.logInfo("发布属性完成")
 
   isGenLoading.value = false
   if (hideTip != true) {
@@ -523,19 +523,19 @@ const doPublish = async () => {
         throw new Error("文章更新失败=>" + postid)
       }
 
-      logUtil.logWarn("文章已更新，postid=>", postid)
+      logUtil.logInfo("文章已更新，postid=>", postid)
     } else {
       postid = await api.newPost(post, publish)
       // 这里是发布成功之后
       // 属性获取postidKey
-      logUtil.logWarn("当前保存的posidKey=>", commonblogCfg.posidKey)
+      logUtil.logInfo("当前保存的posidKey=>", commonblogCfg.posidKey)
       const customAttr = {
         [commonblogCfg.posidKey || ""]: postid,
       };
       await setPageAttrs(siyuanData.pageId, customAttr)
       logUtil.logInfo("CommonblogMain发布成功，保存postid,meta=>", customAttr);
 
-      logUtil.logWarn("文章发布成功，postid=>", postid)
+      logUtil.logInfo("文章发布成功，postid=>", postid)
     }
 
     // 刷新属性数据
@@ -598,7 +598,7 @@ const doCancel = async (isInit: boolean) => {
     [commonblogCfg.posidKey || ""]: ""
   };
   await setPageAttrs(siyuanData.pageId, customAttr)
-  logUtil.logWarn("MetaweblogMain取消发布,meta=>", customAttr);
+  logUtil.logInfo("MetaweblogMain取消发布,meta=>", customAttr);
 
   // 刷新属性数据
   if (isInit) {

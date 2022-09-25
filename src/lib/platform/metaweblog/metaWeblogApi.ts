@@ -96,8 +96,8 @@ export class MetaWeblogApi {
         }
 
         const postStruct = this.createPostStruct(post)
-        logUtil.logWarn("postStruct=>")
-        logUtil.logWarn(postStruct)
+        logUtil.logInfo("postStruct=>")
+        logUtil.logInfo(postStruct)
         let ret = await this.xmlrpcClient.methodCallEntry(METAWEBLOG_METHOD_CONSTANTS.NEW_POST,
             [this.apiType, username, password, postStruct, publish])
         ret = ret.replace(/"/g, "")
@@ -114,8 +114,8 @@ export class MetaWeblogApi {
         }
 
         const postStruct = this.createPostStruct(post)
-        logUtil.logWarn("postStruct=>")
-        logUtil.logWarn(postStruct)
+        logUtil.logInfo("postStruct=>")
+        logUtil.logInfo(postStruct)
         const ret = await this.xmlrpcClient.methodCallEntry(METAWEBLOG_METHOD_CONSTANTS.EDIT_POST,
             [postid, username, password, postStruct, publish])
         logUtil.logInfo("ret=>")

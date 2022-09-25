@@ -98,14 +98,14 @@ export class CommonblogApi {
 
         const widgetResult = await getWidgetId()
         if (widgetResult.isInSiyuan) {
-            logUtil.logWarn("当前处于挂件模式，使用electron的fetch获取数据")
+            logUtil.logInfo("当前处于挂件模式，使用electron的fetch获取数据")
             // 不解析了，直接使用Node兼容调用
             result = await fetch(apiUrl, fetchOptions)
         } else if (isInChromeExtension()) {
-            logUtil.logWarn("当前处于Chrome插件中，需要模拟fetch解决CORS跨域问题")
+            logUtil.logInfo("当前处于Chrome插件中，需要模拟fetch解决CORS跨域问题")
             result = await this.fetchChromeCORS(apiUrl, fetchOptions, formJson)
         } else {
-            logUtil.logWarn("当前处于非挂件模式，已开启请求代理解决CORS跨域问题")
+            logUtil.logInfo("当前处于非挂件模式，已开启请求代理解决CORS跨域问题")
             logUtil.logInfo("formJson=>", formJson)
             result = await this.fetchCORS(apiUrl, fetchOptions, formJson)
         }

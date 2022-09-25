@@ -79,7 +79,7 @@ export class CustomMetaWeblogApi {
                     val = obj.value
                     break
                 } else {
-                    val = obj.value.string || obj.value.int || obj.value.i4
+                    val = obj.value.string || obj.value.int || obj.value.i4 || obj.value
                     break
                 }
             }
@@ -138,7 +138,21 @@ export class CustomMetaWeblogApi {
         post.mt_excerpt = this.parseFieldValue(postObj, "mt_excerpt")
         post.wp_slug = this.parseFieldValue(postObj, "wp_slug")
         post.dateCreated = this.parseFieldValue(postObj, "dateCreated")
-        post.categories = this.parseFieldValue(postObj, "categories")
+
+        let pcats = <any[]>[]
+        const cats = this.parseFieldValue(postObj, "categories")?.array?.data?.value || []
+        if (typeof cats?.string == 'string') {
+            pcats.push(cats.string)
+        } else {
+            // logUtil.logInfo("cats=>", cats)
+            cats.forEach((cat: any) => {
+                const item = cat.string
+                pcats.push(item)
+            })
+        }
+        // logUtil.logInfo("pcats=>", pcats)
+        post.categories = pcats
+
         post.mt_text_more = this.parseFieldValue(postObj, "mt_text_more")
 
         return post
@@ -149,8 +163,7 @@ export class CustomMetaWeblogApi {
 
         const ret = await this.xmlrpcClient.methodCallEntry(METAWEBLOG_METHOD_CONSTANTS.GET_POST,
             [postid, username, password])
-        logUtil.logInfo("getPost ret=>")
-        logUtil.logInfo(ret)
+        logUtil.logInfo("getPost ret=>", ret)
 
         // 错误处理
         this.doFault(ret)
@@ -161,6 +174,7 @@ export class CustomMetaWeblogApi {
         // 这里原样返回，到适配器再去自己处理
         // post.description = render(post.description)
 
+        logUtil.logInfo("getPost post=>", post)
         return Promise.resolve(post)
     }
 
@@ -179,15 +193,16 @@ export class CustomMetaWeblogApi {
         }
 
         const postStruct = this.createPostStruct(post)
-        logUtil.logWarn("postStruct=>")
-        logUtil.logWarn(postStruct)
+        logUtil.logInfo("postStruct=>")
+        logUtil.logInfo(postStruct)
+
         let ret = await this.xmlrpcClient.methodCallEntry(METAWEBLOG_METHOD_CONSTANTS.NEW_POST,
             [this.apiType, username, password, postStruct, publish])
-        ret = ret.replace(/"/g, "")
-        logUtil.logInfo("newPost ret=>")
-        logUtil.logInfo(ret)
 
-        return ret;
+        let retStr = ret.params.param.value.string || ""
+        logUtil.logInfo("newPost retStr=>", retStr.toString())
+
+        return retStr.toString();
     }
 
     public async editPost(postid: string, username: string, password: string, post: Post, publish: boolean): Promise<boolean> {
@@ -197,23 +212,25 @@ export class CustomMetaWeblogApi {
         }
 
         const postStruct = this.createPostStruct(post)
-        logUtil.logWarn("postStruct=>")
-        logUtil.logWarn(postStruct)
+        logUtil.logInfo("postStruct=>")
+        logUtil.logInfo(postStruct)
         const ret = await this.xmlrpcClient.methodCallEntry(METAWEBLOG_METHOD_CONSTANTS.EDIT_POST,
             [postid, username, password, postStruct, publish])
-        logUtil.logInfo("editPost ret=>")
-        logUtil.logInfo(ret)
 
-        return ret;
+        let retBool = ret.params.param.value.boolean || ""
+        logUtil.logInfo("editPost retBool=>", retBool)
+
+        return retBool;
     }
 
     public async deletePost(appKey: string, postid: string, username: string, password: string, publish: boolean) {
         const ret = await this.xmlrpcClient.methodCallEntry(METAWEBLOG_METHOD_CONSTANTS.DELETE_POST,
             [appKey, postid, username, password, publish])
-        logUtil.logInfo("deletePost ret=>")
-        logUtil.logInfo(ret)
 
-        return ret;
+        let retBool = ret.params.param.value.boolean || ""
+        logUtil.logInfo("deletePost retBool=>", retBool)
+
+        return retBool;
     };
 
     /**
@@ -290,7 +307,7 @@ export class CustomMetaWeblogApi {
 
         let ret = await this.xmlrpcClient.methodCallEntry(METAWEBLOG_METHOD_CONSTANTS.GET_CATEGORIES,
             [this.apiType, username, password])
-        logUtil.logInfo("getCategories ret=>", ret)
+        // logUtil.logInfo("getCategories ret=>", ret)
 
         // 错误处理
         this.doFault(ret)
@@ -301,6 +318,7 @@ export class CustomMetaWeblogApi {
             result.push(cat)
         })
 
+        // logUtil.logInfo("getCategories result=>", result)
         return result
     }
 

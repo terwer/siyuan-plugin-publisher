@@ -7,6 +7,7 @@ import {exportMdContent, getBlockAttrs, getBlockByID, lsNotebooks, setBlockAttrs
 import logUtil from "../../logUtil";
 import {getEnv} from "../../envUtil";
 import {inBrowser} from "../../util";
+import {isInChromeExtension} from "../../chrome/ChromeUtil";
 
 export async function getWidgetId() {
     if (import.meta.env.MODE == "test") {
@@ -19,7 +20,7 @@ export async function getWidgetId() {
     if (!window.frameElement
         || !window.frameElement.parentElement
         || !window.frameElement.parentElement.parentElement) {
-        logUtil.logWarn("正在已非挂件模式运行，部分功能将不可用，请知悉")
+        logUtil.logInfo("正在已非挂件模式运行，部分功能将不可用，请知悉")
         return {
             isInSiyuan: false,
             widgetId: ""
@@ -28,7 +29,7 @@ export async function getWidgetId() {
 
     let self = window.frameElement.parentElement.parentElement;
     if (!self) {
-        logUtil.logWarn("正在已非挂件模式运行，部分功能将不可用，请知悉")
+        logUtil.logInfo("正在已非挂件模式运行，部分功能将不可用，请知悉")
         return {
             isInSiyuan: false,
             widgetId: ""
@@ -37,14 +38,14 @@ export async function getWidgetId() {
 
     const widgetId = self.getAttribute('data-node-id')
     if (!widgetId) {
-        logUtil.logWarn("正在已非挂件模式运行，部分功能将不可用，请知悉")
+        logUtil.logInfo("正在已非挂件模式运行，部分功能将不可用，请知悉")
         return {
             isInSiyuan: false,
             widgetId: ""
         }
     }
 
-    logUtil.logWarn("恭喜你，正在已挂件模式运行")
+    logUtil.logInfo("恭喜你，正在已挂件模式运行")
     return {
         isInSiyuan: true,
         widgetId: widgetId
@@ -119,13 +120,13 @@ export async function getPageId(force?: boolean, pageId?: string) {
     }
 
     //如果其他地方想使用，也可以显式的传入一个页面ID
-    // logUtil.logWarn("pageId=>", pageId)
+    // logUtil.logInfo("pageId=>", pageId)
     if (!syPageId) {
-        logUtil.logWarn("显示指定pageId=>", pageId)
+        logUtil.logInfo("显示指定pageId=>", pageId)
         syPageId = pageId
     }
 
-    // logUtil.logWarn("syPageId=>", syPageId)
+    // logUtil.logInfo("syPageId=>", syPageId)
     if (!syPageId) {
         //  开发模式模拟传递一个ID
         if (!pageId) {
@@ -143,8 +144,6 @@ export async function getPageId(force?: boolean, pageId?: string) {
             }
         }
     }
-
-    logUtil.logWarn("当前页面ID是=>", syPageId)
     return syPageId;
 }
 

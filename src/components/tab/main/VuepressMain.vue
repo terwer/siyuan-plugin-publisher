@@ -238,7 +238,7 @@ watch(() => props.isReload, async (oldValue, newValue) => {
 
   // 初始化
   await initPage()
-  logUtil.logWarn("VuepressMain检测到更新操作，刷新页面")
+  logUtil.logInfo("VuepressMain检测到更新操作，刷新页面")
 })
 
 onBeforeMount(async () => {
@@ -325,7 +325,7 @@ async function initPage() {
     ElMessage.error("网络异常，数据获取失败")
     throw new Error("网络异常，数据获取失败")
   }
-  logUtil.logWarn("VuepressMain获取主文档", page)
+  logUtil.logInfo("VuepressMain获取主文档", page)
 
   // 思源笔记数据
   siyuanData.value.pageId = pageId;
@@ -405,7 +405,7 @@ function checkForce() {
   // 别名不为空，默认不刷新
   if (!forceRefresh.value) {
     // ElMessage.warning(t('main.force.refresh.tip'))
-    logUtil.logWarn(t('main.force.refresh.tip'))
+    logUtil.logInfo(t('main.force.refresh.tip'))
     return false
   }
 
@@ -535,7 +535,7 @@ async function saveAttrToSiyuan(hideTip?: boolean) {
     tags: formData.value.tag.dynamicTags.join(",")
   };
   await setPageAttrs(siyuanData.value.pageId, customAttr)
-  logUtil.logWarn("VuepressMain保存属性到思源笔记,meta=>", customAttr);
+  logUtil.logInfo("VuepressMain保存属性到思源笔记,meta=>", customAttr);
 
   // 单独调用才去刷新数据，否则自行刷新数据
   if (hideTip != true) {
@@ -706,7 +706,7 @@ async function doPublish() {
     return
   } else if (isOk && vuepressGithubEnabled.value) {
     // api可用并且开启了发布
-    logUtil.logWarn("开始真正调用api发布到Github")
+    logUtil.logInfo("开始真正调用api发布到Github")
 
     const vuepressCfg = getJSONConf<IVuepressCfg>(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS)
 
@@ -716,13 +716,13 @@ async function doPublish() {
       // 如果选择了自定义的目录
       if (formData.value.customPath.indexOf(".md") > -1) {
         docPath = formData.value.customPath
-        logUtil.logWarn("已经有完整路径，不拼接")
+        logUtil.logInfo("已经有完整路径，不拼接")
       } else {
         docPath = formData.value.customPath + "/" + mdFile
       }
 
       logUtil.logInfo(formData.value.customPath)
-      logUtil.logWarn("文章讲发布于以下路径=>", docPath)
+      logUtil.logInfo("文章讲发布于以下路径=>", docPath)
     }
 
     // 发布内容
@@ -734,7 +734,7 @@ async function doPublish() {
     vuepressData.value.vuepressContent = md;
     vuepressData.value.vuepressFullContent = mdContent;
 
-    logUtil.logWarn("即将发布的内容，mdContent=>", {"mdContent": mdContent})
+    logUtil.logInfo("即将发布的内容，mdContent=>", {"mdContent": mdContent})
 
     // 发布
     const res = await publishPage(vuepressCfg, docPath, mdContent)
@@ -764,7 +764,7 @@ async function doPublish() {
     // 刷新属性数据
     await initPage();
   }
-  logUtil.logWarn("发布内容完成")
+  logUtil.logInfo("发布内容完成")
 
   isPublishLoading.value = false
   ElMessage.success(t('main.opt.status.publish'))
@@ -782,7 +782,7 @@ async function oneclickAttr(hideTip?: boolean) {
 
   // 发布属性
   await saveAttrToSiyuan(true)
-  logUtil.logWarn("发布属性完成")
+  logUtil.logInfo("发布属性完成")
 
   isGenLoading.value = false
   if (hideTip != true) {
@@ -830,7 +830,7 @@ async function doCancel(isInit: boolean) {
     [POSTID_KEY_CONSTANTS.VUEPRESS_POSTID_KEY]: ""
   };
   await setPageAttrs(siyuanData.value.pageId, customAttr)
-  logUtil.logWarn("VuepressMain取消发布,meta=>", customAttr);
+  logUtil.logInfo("VuepressMain取消发布,meta=>", customAttr);
 
   // 刷新属性数据
   if (isInit) {

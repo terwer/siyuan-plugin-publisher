@@ -13,11 +13,11 @@ export async function fetchNode(apiUrl: string, reqMethod: string, reqParams: Ar
     }
 
     try {
-        logUtil.logWarn("methodCallDirectNode开始")
-        logUtil.logWarn("xmlrpcNodeParams.reqMethod=>")
-        logUtil.logWarn(reqMethod)
-        logUtil.logWarn("xmlrpcNodeParams.reqParams=>")
-        logUtil.logWarn(reqParams)
+        logUtil.logInfo("methodCallDirectNode开始")
+        logUtil.logInfo("xmlrpcNodeParams.reqMethod=>")
+        logUtil.logInfo(reqMethod)
+        logUtil.logInfo("xmlrpcNodeParams.reqParams=>")
+        logUtil.logInfo(reqParams)
         const data = await methodCallDirectNode(client, reqMethod, reqParams)
         const dataJson = JSON.stringify(data)
         return dataJson

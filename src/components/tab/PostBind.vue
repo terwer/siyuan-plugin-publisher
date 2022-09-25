@@ -297,7 +297,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
     assignPostid(item.modelValue, customAttr, posidKey, item.posid)
   });
 
-  logUtil.logWarn("PostBind保存属性到思源笔记,meta=>", customAttr);
+  logUtil.logInfo("PostBind保存属性到思源笔记,meta=>", customAttr);
 
   await setPageAttrs(siyuanData.pageId, customAttr)
   ElMessage.success(t('main.opt.success'))
