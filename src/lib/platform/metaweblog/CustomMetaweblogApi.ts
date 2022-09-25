@@ -198,6 +198,10 @@ export class CustomMetaWeblogApi {
 
         let ret = await this.xmlrpcClient.methodCallEntry(METAWEBLOG_METHOD_CONSTANTS.NEW_POST,
             [this.apiType, username, password, postStruct, publish])
+        logUtil.logInfo("newPost ret=>", ret)
+
+        // 错误处理
+        this.doFault(ret)
 
         let retStr = ret.params.param.value.string || ""
         logUtil.logInfo("newPost retStr=>", retStr.toString())
@@ -217,6 +221,9 @@ export class CustomMetaWeblogApi {
         const ret = await this.xmlrpcClient.methodCallEntry(METAWEBLOG_METHOD_CONSTANTS.EDIT_POST,
             [postid, username, password, postStruct, publish])
 
+        // 错误处理
+        this.doFault(ret)
+
         let retBool = ret.params.param.value.boolean || ""
         logUtil.logInfo("editPost retBool=>", retBool)
 
@@ -226,6 +233,9 @@ export class CustomMetaWeblogApi {
     public async deletePost(appKey: string, postid: string, username: string, password: string, publish: boolean) {
         const ret = await this.xmlrpcClient.methodCallEntry(METAWEBLOG_METHOD_CONSTANTS.DELETE_POST,
             [appKey, postid, username, password, publish])
+
+        // 错误处理
+        this.doFault(ret)
 
         let retBool = ret.params.param.value.boolean || ""
         logUtil.logInfo("deletePost retBool=>", retBool)
