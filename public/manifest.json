@@ -11,6 +11,7 @@
     "activeTab",
     "scripting"
   ],
+  "host_permissions": [ "*://*/*" ],
   "web_accessible_resources": [
     {
       "resources": [
