@@ -34,3 +34,14 @@ export function isInChromeExtension() {
     // @ts-ignore
     return typeof chrome.runtime != "undefined";
 }
+
+/**
+ * 向Chrome发送消息
+ * @param message 消息
+ */
+export function sendChromeMessage(message: any) {
+    return new Promise((resolve) => {
+        // @ts-ignore
+        chrome.runtime.sendMessage(message, resolve)
+    })
+}

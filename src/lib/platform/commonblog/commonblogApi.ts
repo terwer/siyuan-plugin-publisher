@@ -1,6 +1,7 @@
 import logUtil from "../../logUtil";
 import {getWidgetId} from "../siyuan/siyuanUtil";
 import {getEnv} from "../../envUtil";
+import {isInChromeExtension, sendChromeMessage} from "../../chrome/ChromeUtil";
 
 export class CommonblogApi {
     constructor() {
@@ -52,6 +53,41 @@ export class CommonblogApi {
     }
 
     /**
+     * 请求中转支持Chrome插件跨域
+     * @param apiUrl 请求地址
+     * @param fetchOptions 请求参数
+     * @param formJson 可选，发送form请求才需要
+     */
+    private async fetchChromeCORS(apiUrl: string, fetchOptions: RequestInit, formJson?: any[]): Promise<string> {
+        let result
+        logUtil.logInfo("fetchChrome apiUrl=>")
+        logUtil.logInfo(apiUrl)
+
+        const fetchCORSOptions = fetchOptions
+        // 如果是form请求，进行转换
+        if (formJson) {
+            // 将formJson转换为formData
+            const form = new URLSearchParams();
+            formJson.forEach((item: any) => {
+                form.append(item.key, item.value)
+            })
+            fetchCORSOptions.body = form
+        }
+        logUtil.logInfo("fetchChrome apiUrl=>", fetchCORSOptions)
+
+        const resJson = await sendChromeMessage({
+            // 里面的值应该可以自定义，用于判断哪个请求之类的
+            type: 'fetchChromeJson',
+            apiUrl: apiUrl, // 需要请求的url
+            fetchCORSOptions: fetchCORSOptions
+        });
+        logUtil.logInfo("fetchChromeJson resJson=>", resJson)
+
+        // @ts-ignore
+        return resJson;
+    }
+
+    /**
      * 同时兼容浏览器和思源宿主环境的fetch API，支持浏览器跨域
      * @param apiUrl 请求地址
      * @param fetchOptions 请求参数
@@ -62,11 +98,14 @@ export class CommonblogApi {
 
         const widgetResult = await getWidgetId()
         if (widgetResult.isInSiyuan) {
-            logUtil.logWarn("当前处于挂件模式，使用electron的fetch获取数据")
+            logUtil.logInfo("当前处于挂件模式，使用electron的fetch获取数据")
             // 不解析了，直接使用Node兼容调用
             result = await fetch(apiUrl, fetchOptions)
+        } else if (isInChromeExtension()) {
+            logUtil.logInfo("当前处于Chrome插件中，需要模拟fetch解决CORS跨域问题")
+            result = await this.fetchChromeCORS(apiUrl, fetchOptions, formJson)
         } else {
-            logUtil.logWarn("当前处于非挂件模式，已开启请求代理解决CORS跨域问题")
+            logUtil.logInfo("当前处于非挂件模式，已开启请求代理解决CORS跨域问题")
             logUtil.logInfo("formJson=>", formJson)
             result = await this.fetchCORS(apiUrl, fetchOptions, formJson)
         }
@@ -75,7 +114,7 @@ export class CommonblogApi {
             throw new Error("请求错误或者返回结果为空")
         }
 
-        logUtil.logInfo("最终返回给前端的数据=>",result)
+        logUtil.logInfo("最终返回给前端的数据=>", result)
 
         return result
     }
@@ -86,7 +125,7 @@ export class CommonblogApi {
      * @param fetchOptions 请求参数
      * @param formJson 可选，发送form请求才需要
      */
-    private async fetchEntry(apiUrl: string, fetchOptions: RequestInit, formJson?: any[]): Promise<Response> {
+    private async fetchEntry(apiUrl: string, fetchOptions: RequestInit, formJson?: any[]): Promise<Response | string> {
         const result = await this.fetchCall(apiUrl, fetchOptions, formJson)
         logUtil.logInfo("请求结果，result=>")
         logUtil.logInfo(result)
@@ -116,29 +155,36 @@ export class CommonblogApi {
             throw new Error("请求异常")
         }
 
-        // 解析响应体并返回响应结果
-        const statusCode = response.status
+        let resJson
 
-        // const resText = await response.text()
-        // logUtil.logInfo("向链滴请求数据，resText=>", resText)
+        if (typeof response == "string") {
+            console.log(response)
+            throw new Error("未解析")
+        } else {
+            // 解析响应体并返回响应结果
+            const statusCode = response.status
 
-        if (200 != statusCode) {
-            if (401 == statusCode) {
-                throw new Error("因权限不足操作已被禁止")
+            // const resText = await response.text()
+            // logUtil.logInfo("向链滴请求数据，resText=>", resText)
+
+            if (200 != statusCode) {
+                if (401 == statusCode) {
+                    throw new Error("因权限不足操作已被禁止")
+                } else {
+                    throw new Error("请求错误")
+                }
+            }
+
+            const widgetResult = await getWidgetId()
+
+            if (widgetResult.isInSiyuan) {
+                resJson = await response.json()
             } else {
-                throw new Error("请求错误")
+                const corsJson = await response.json()
+                resJson = this.parseCORSBody(corsJson)
             }
         }
 
-        let resJson
-        const widgetResult = await getWidgetId()
-
-        if (widgetResult.isInSiyuan) {
-            resJson = await response.json()
-        } else {
-            const corsJson = await response.json()
-            resJson = this.parseCORSBody(corsJson)
-        }
 
         return resJson
     }

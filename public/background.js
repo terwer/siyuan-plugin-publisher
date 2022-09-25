@@ -8,23 +8,33 @@
 //
 // See https://developer.chrome.com/docs/extensions/reference/events/ for additional details.
 chrome.runtime.onInstalled.addListener(async () => {
-    console.log("Installed")
+    console.log("Chrome Extension Installed")
 });
 
-// function createPage() {
-//     // While we could have used `let url = "index.html"`, using runtime.getURL is a bit more robust as
-//     // it returns a full URL rather than just a path that Chrome needs to be resolved contextually at
-//     // runtime.
-//     let url = chrome.runtime.getURL("index.html");
-//     window.open(url)
-//     console.log(`Created tab`);
-// }
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    switch (request.type) {
+        case 'fetchChromeXmlrpc':
+            (async () => {
+                const response = await fetch(request.apiUrl, request.fetchCORSParams);
+                const resText = await response.text()
+                // console.log("chrome.runtime.onMessage.addListener fetchChromeXmlrpc response:", resText)
+                sendResponse(resText);
+            })();
+            break;
+        case 'fetchChromeJson':
+            (async () => {
+                const response = await fetch(request.apiUrl, request.fetchCORSOptions);
+                const resJson = await response.json()
+                console.log("chrome.runtime.onMessage.addListener fetchChromeJson response:", resJson)
+                sendResponse(resJson);
+            })();
+            break;
+        // 你可以定义任意内容，使用sendResponse()来返回它
+        case 'test':
+            sendResponse({'msg': 'test'});
+            break;
+    }
 
-// chrome.action.onClicked.addListener((tab) => {
-//     if (!tab.url.includes("chrome://")) {
-//         chrome.scripting.executeScript({
-//             target: {tabId: tab.id},
-//             function: createPage
-//         });
-//     }
-// });
+    return true; // keep the messaging channel open for sendResponse
+});
+

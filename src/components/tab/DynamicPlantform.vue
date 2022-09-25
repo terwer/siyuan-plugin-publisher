@@ -109,7 +109,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   const pkey = formData.plantformKey
   // 最终存储的key
   const ptypeKey = pType.value.toLowerCase() + "-" + formData.plantformKey
-  logUtil.logWarn("将要保存的平台key", ptypeKey)
+  logUtil.logInfo("将要保存的平台key", ptypeKey)
   if (isDynamicKeyExists(ptypeKey)) {
     ElMessage.error(t('dynamic.platform.opt.key.exist'))
     return

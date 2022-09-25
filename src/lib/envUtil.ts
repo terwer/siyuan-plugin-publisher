@@ -22,7 +22,6 @@ export function getEnv(key: string) {
         }
     } catch (e:any) {
         throw new Error(e)
-        // logUtil.logWarn(e)
     }
 
     return env
