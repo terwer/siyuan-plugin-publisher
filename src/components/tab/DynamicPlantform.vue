@@ -155,7 +155,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 const tableData: DynamicConfig[] = []
 const num = ref(0)
 const currentRow = ref()
-const currentTip = ref(t('ynamic.platform.opt.item.select'))
+const currentTip = ref(t('dynamic.platform.opt.item.select'))
 
 const handleCurrentChange = (val: DynamicConfig | undefined) => {
   currentRow.value = val
