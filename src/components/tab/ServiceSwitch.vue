@@ -50,25 +50,28 @@
 <script lang="ts" setup>
 import {onMounted, reactive, ref} from 'vue'
 import {useI18n} from "vue-i18n";
-import {getBooleanConf, getConf, setBooleanConf} from "../../lib/config";
+import {setBooleanConf} from "../../lib/config";
 import SWITCH_CONSTANTS from "../../lib/constants/switchConstants";
 import {DynamicConfig, getDynamicJsonCfg} from "../../lib/dynamicConfig";
 import logUtil from "../../lib/logUtil";
-import {getQueryString, reloadTabPage} from "../../lib/util";
+import {useTabCount} from "../../composables/tabCountCom";
 
+// use
 const {t} = useI18n()
+const {
+  tabCountStore,
+  vuepressEnabled,
+  jvueEnabled,
+  confEnabled,
+  cnblogsEnabled,
+  wordpressEnabled,
+  liandiEnabled,
+  yuqueEnabled,
+  kmsEnabled,
+  doCount
+} = useTabCount()
 
-let enabledCount = 0
 let showSwitchTip = ref(false)
-
-const vuepressEnabled = ref(false)
-const jvueEnabled = ref(false)
-const confEnabled = ref(false)
-const cnblogsEnabled = ref(false)
-const wordpressEnabled = ref(false)
-const liandiEnabled = ref(false)
-const yuqueEnabled = ref(false)
-const kmsEnabled = ref(false)
 
 let formData = reactive({
   dynamicConfigArray: <Array<DynamicConfig>>[]
@@ -116,76 +119,40 @@ const dynamicOnChange = (val: any) => {
   initConf()
 }
 
-const counter = (count: number, isAdd: boolean) => {
-  if (isAdd) {
-    ++count;
-  }
-  return count
-}
-
 const initConf = () => {
-  enabledCount = 0;
-  vuepressEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY)
-  enabledCount = counter(enabledCount, vuepressEnabled.value)
+  doCount()
 
-  jvueEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_JVUE_KEY)
-  enabledCount = counter(enabledCount, jvueEnabled.value)
-
-  confEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_CONF_KEY)
-  enabledCount = counter(enabledCount, confEnabled.value)
-
-  cnblogsEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_CNBLOGS_KEY)
-  enabledCount = counter(enabledCount, cnblogsEnabled.value)
-
-  wordpressEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_WORDPRESS_KEY)
-  enabledCount = counter(enabledCount, wordpressEnabled.value)
-
-  liandiEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_LIANDI_KEY)
-  enabledCount = counter(enabledCount, liandiEnabled.value)
-
-  yuqueEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_YUQUE_KEY)
-  enabledCount = counter(enabledCount, yuqueEnabled.value)
-
-  kmsEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_KMS_KEY)
-  enabledCount = counter(enabledCount, kmsEnabled.value)
-
+  // 动态加载配置开关
   const dynamicJsonCfg = getDynamicJsonCfg()
   const results = dynamicJsonCfg.totalCfg || []
   formData.dynamicConfigArray = []
   results.forEach(item => {
-
-    const switchKey = "switch-" + item.plantformKey
-    const switchValue = getConf(switchKey)
-
-    item.modelValue = item.plantformKey + "_" + switchValue
     formData.dynamicConfigArray.push(item)
-
-    const dynEnabled = switchValue.toLowerCase() === "true"
-    enabledCount = counter(enabledCount, dynEnabled)
-  });
+  })
 
   // 未启用，跳转设置页面
-  if(enabledCount == 0){
+  if (tabCountStore.tabCount == 0) {
     showSwitchTip.value = true
-  }else{
+  } else {
     showSwitchTip.value = false
   }
 }
 
 const checkPlantform = () => {
   // 未设置平台跳转到设置，否则跳转到主界面
-  logUtil.logInfo("开启的平台数=>" + enabledCount)
-  const ctab = getQueryString("tab")
-  // 有启用的平台，直接返回
-  if (ctab == undefined && enabledCount > 0) {
-    return
-  }
-  if (enabledCount == 0 && ctab != "service-switch") {
-    reloadTabPage("service-switch")
-  } else if (enabledCount > 0 && ctab != "plantform-main") {
-    // 有启用的平台，但是打开的别的tab，跳转到主界面
-    reloadTabPage("plantform-main")
-  }
+  // alert(totalCount.value)
+  // logUtil.logWarn("开启的平台数=>" + totalCount.value)
+  // const ctab = getQueryString("tab")
+  // // 有启用的平台，直接返回
+  // if (ctab == undefined && enabledCount > 0) {
+  //   return
+  // }
+  // if (enabledCount == 0 && ctab != "service-switch") {
+  //   reloadTabPage("service-switch")
+  // } else if (enabledCount > 0 && ctab != "plantform-main") {
+  //   // 有启用的平台，但是打开的别的tab，跳转到主界面
+  //   reloadTabPage("plantform-main")
+  // }
 }
 
 onMounted(() => {
@@ -193,7 +160,7 @@ onMounted(() => {
   initConf()
 
   // 检测开启的平台数
-  // checkPlantform()
+  checkPlantform()
 })
 
 </script>

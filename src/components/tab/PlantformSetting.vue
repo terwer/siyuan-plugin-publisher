@@ -1,5 +1,5 @@
 <template>
-  <el-tabs type="border-card">
+  <el-tabs type="border-card" v-if="tabCountStore.tabCount>0">
     <el-tab-pane :label="$t('setting.vuepress')" v-if="vuepressEnabled">
       <vuepress-setting/>
     </el-tab-pane>
@@ -38,6 +38,9 @@
     </el-tab-pane>
 
   </el-tabs>
+  <div v-else>
+    <el-alert class="top-version-tip" :title="$t('config.platform.none')" type="error" :closable="false"/>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -48,15 +51,21 @@ import logUtil from "../../lib/logUtil";
 import {DynamicConfig, getDynamicJsonCfg} from "../../lib/dynamicConfig";
 import {DynamicMCfg} from "../../lib/platform/metaweblog/config/dynamicMCfg";
 import {DynamicWCfg} from "../../lib/platform/metaweblog/config/dynamicWCfg";
+import {useTabCount} from "../../composables/tabCountCom";
 
-const vuepressEnabled = ref(true)
-const jvueEnabled = ref(false)
-const confEnabled = ref(false)
-const cnblogsEnabled = ref(false)
-const wordpressEnabled = ref(false)
-const liandiEnabled = ref(false)
-const yuqueEnabled = ref(false)
-const kmsEnabled = ref(false)
+//use
+const {
+  tabCountStore,
+  vuepressEnabled,
+  jvueEnabled,
+  confEnabled,
+  cnblogsEnabled,
+  wordpressEnabled,
+  liandiEnabled,
+  yuqueEnabled,
+  kmsEnabled,
+  doCount
+} = useTabCount()
 
 let formData = reactive({
   dynamicConfigArray: <Array<DynamicConfig>>[],
@@ -64,10 +73,10 @@ let formData = reactive({
   wordpressArray: <Array<DynamicConfig>>[]
 })
 
-const createMCfg = reactive((mcfg: DynamicConfig) => {
+const createMCfg = ref((mcfg: DynamicConfig) => {
   return new DynamicMCfg('custom-' + mcfg.plantformKey + '-post-id')
 })
-const createWCfg = reactive((wcfg: DynamicConfig) => {
+const createWCfg = ref((wcfg: DynamicConfig) => {
   return new DynamicWCfg('custom-' + wcfg.plantformKey + '-post-id')
 })
 
@@ -88,14 +97,7 @@ const initDynCfg = (dynCfg: DynamicConfig[]): DynamicConfig[] => {
 }
 
 const initConf = () => {
-  vuepressEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY)
-  jvueEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_JVUE_KEY)
-  confEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_CONF_KEY)
-  cnblogsEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_CNBLOGS_KEY)
-  wordpressEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_WORDPRESS_KEY)
-  liandiEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_LIANDI_KEY)
-  yuqueEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_YUQUE_KEY)
-  kmsEnabled.value = getBooleanConf(SWITCH_CONSTANTS.SWITCH_KMS_KEY)
+  doCount()
 
   const dynamicJsonCfg = getDynamicJsonCfg()
   formData.dynamicConfigArray = initDynCfg(dynamicJsonCfg.totalCfg || [])
