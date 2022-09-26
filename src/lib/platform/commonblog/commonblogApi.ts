@@ -58,24 +58,28 @@ export class CommonblogApi {
      * @param fetchOptions 请求参数
      * @param formJson 可选，发送form请求才需要
      */
-    private async fetchChromeCORS(apiUrl: string, fetchOptions: RequestInit): Promise<string> {
-        let result
-        logUtil.logInfo("fetchChrome apiUrl=>")
-        logUtil.logInfo(apiUrl)
+    private async fetchChromeCORS(apiUrl: string, fetchOptions: RequestInit, formJson?: any[]): Promise<string> {
+        try {
+            const reqOps = {
+                // 里面的值应该可以自定义，用于判断哪个请求之类的
+                type: 'fetchChromeJson',
+                apiUrl: apiUrl, // 需要请求的url
+                fetchCORSOptions: fetchOptions,
+            }
+            if (formJson) {
+                Object.assign(reqOps, {
+                    formJson: JSON.stringify(formJson)
+                })
+            }
+            logUtil.logInfo("fetchChrome reqOps=>", reqOps)
+            const resJson = await sendChromeMessage(reqOps);
+            logUtil.logInfo("fetchChromeJson resJson=>", resJson)
 
-        const fetchCORSOptions = fetchOptions
-        logUtil.logWarn("fetchChrome fetchCORSOptions=>", fetchCORSOptions)
-
-        const resJson = await sendChromeMessage({
-            // 里面的值应该可以自定义，用于判断哪个请求之类的
-            type: 'fetchChromeJson',
-            apiUrl: apiUrl, // 需要请求的url
-            fetchCORSOptions: fetchCORSOptions
-        });
-        logUtil.logInfo("fetchChromeJson resJson=>", resJson)
-
-        // @ts-ignore
-        return resJson;
+            // @ts-ignore
+            return resJson;
+        } catch (e: any) {
+            throw new Error("请求异常", e)
+        }
     }
 
     /**
@@ -94,7 +98,7 @@ export class CommonblogApi {
             result = await fetch(apiUrl, fetchOptions)
         } else if (isInChromeExtension()) {
             logUtil.logInfo("当前处于Chrome插件中，需要模拟fetch解决CORS跨域问题")
-            result = await this.fetchChromeCORS(apiUrl, fetchOptions)
+            result = await this.fetchChromeCORS(apiUrl, fetchOptions, formJson)
         } else {
             logUtil.logInfo("当前处于非挂件模式，已开启请求代理解决CORS跨域问题")
             logUtil.logInfo("formJson=>", formJson)
@@ -187,7 +191,7 @@ export class CommonblogApi {
      */
     protected async doFormFetch(apiUrl: string, fetchOptions: RequestInit, formJson: any[]): Promise<any> {
         const widgetResult = await getWidgetId()
-        if (widgetResult.isInSiyuan || isInChromeExtension()) {
+        if (widgetResult.isInSiyuan) {
             // 将formJson转换为formData
             const form = new URLSearchParams();
             formJson.forEach((item) => {
@@ -195,6 +199,9 @@ export class CommonblogApi {
             })
             fetchOptions.body = form
             return await this.doFetch(apiUrl, fetchOptions)
+        }
+        if (isInChromeExtension()) {
+            return await this.doFetch(apiUrl, fetchOptions, formJson)
         } else {
             return await this.doFetch(apiUrl, fetchOptions, formJson)
         }
