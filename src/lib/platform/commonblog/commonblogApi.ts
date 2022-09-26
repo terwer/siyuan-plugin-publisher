@@ -58,22 +58,13 @@ export class CommonblogApi {
      * @param fetchOptions 请求参数
      * @param formJson 可选，发送form请求才需要
      */
-    private async fetchChromeCORS(apiUrl: string, fetchOptions: RequestInit, formJson?: any[]): Promise<string> {
+    private async fetchChromeCORS(apiUrl: string, fetchOptions: RequestInit): Promise<string> {
         let result
         logUtil.logInfo("fetchChrome apiUrl=>")
         logUtil.logInfo(apiUrl)
 
         const fetchCORSOptions = fetchOptions
-        // 如果是form请求，进行转换
-        if (formJson) {
-            // 将formJson转换为formData
-            const form = new URLSearchParams();
-            formJson.forEach((item: any) => {
-                form.append(item.key, item.value)
-            })
-            fetchCORSOptions.body = form
-        }
-        logUtil.logInfo("fetchChrome apiUrl=>", fetchCORSOptions)
+        logUtil.logWarn("fetchChrome fetchCORSOptions=>", fetchCORSOptions)
 
         const resJson = await sendChromeMessage({
             // 里面的值应该可以自定义，用于判断哪个请求之类的
@@ -103,7 +94,7 @@ export class CommonblogApi {
             result = await fetch(apiUrl, fetchOptions)
         } else if (isInChromeExtension()) {
             logUtil.logInfo("当前处于Chrome插件中，需要模拟fetch解决CORS跨域问题")
-            result = await this.fetchChromeCORS(apiUrl, fetchOptions, formJson)
+            result = await this.fetchChromeCORS(apiUrl, fetchOptions)
         } else {
             logUtil.logInfo("当前处于非挂件模式，已开启请求代理解决CORS跨域问题")
             logUtil.logInfo("formJson=>", formJson)
@@ -157,10 +148,7 @@ export class CommonblogApi {
 
         let resJson
 
-        if (typeof response == "string") {
-            console.log(response)
-            throw new Error("未解析")
-        } else {
+        if (response instanceof Response) {
             // 解析响应体并返回响应结果
             const statusCode = response.status
 
@@ -183,8 +171,9 @@ export class CommonblogApi {
                 const corsJson = await response.json()
                 resJson = this.parseCORSBody(corsJson)
             }
+        } else {
+            resJson = response
         }
-
 
         return resJson
     }
@@ -198,7 +187,7 @@ export class CommonblogApi {
      */
     protected async doFormFetch(apiUrl: string, fetchOptions: RequestInit, formJson: any[]): Promise<any> {
         const widgetResult = await getWidgetId()
-        if (widgetResult.isInSiyuan) {
+        if (widgetResult.isInSiyuan || isInChromeExtension()) {
             // 将formJson转换为formData
             const form = new URLSearchParams();
             formJson.forEach((item) => {

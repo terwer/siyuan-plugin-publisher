@@ -340,7 +340,13 @@ const initPage = async () => {
   }
 
   // 全部文章分类请求
-  const catInfo: CategoryInfo[] = await api.getCategories()
+  let catInfo: CategoryInfo[] = []
+  try {
+    catInfo = await api.getCategories()
+  } catch (e) {
+    isInitLoadding.value = false
+    logUtil.logError("分类获取失败", e)
+  }
   logUtil.logInfo("catInfo=>", catInfo)
 
   // 组装分类
