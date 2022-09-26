@@ -30,7 +30,22 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             (async () => {
                 let resJson
                 try {
-                    const response = await fetch(request.apiUrl, request.fetchCORSOptions);
+                    const fetchCORSOptions = request.fetchCORSOptions
+                    const formJsonText = request.formJson
+                    // console.log("formJsonText=>", formJsonText)
+                    if (formJsonText) {
+                        const formJson = JSON.parse(formJsonText)
+                        // 将formJson转换为formData
+                        const form = new URLSearchParams();
+                        formJson.forEach(function (item) {
+                            form.append(item.key, item.value)
+                        })
+                        fetchCORSOptions.body = form
+                        // console.log("fetchCORSOptions.body=>", form)
+                    }
+                    // console.log("chrome.runtime fetchChromeJson apiUrl", request.apiUrl)
+                    // console.log("chrome.runtime fetchChromeJson reqOps", fetchCORSOptions)
+                    const response = await fetch(request.apiUrl, fetchCORSOptions);
                     resJson = await response.json()
                     // console.log("chrome.runtime.onMessage.addListener fetchChromeJson response:", resJson)
                 } catch (e) {
