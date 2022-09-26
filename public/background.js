@@ -15,17 +15,27 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     switch (request.type) {
         case 'fetchChromeXmlrpc':
             (async () => {
-                const response = await fetch(request.apiUrl, request.fetchCORSParams);
-                const resText = await response.text()
-                // console.log("chrome.runtime.onMessage.addListener fetchChromeXmlrpc response:", resText)
+                let resText
+                try {
+                    const response = await fetch(request.apiUrl, request.fetchCORSParams);
+                    resText = await response.text()
+                    // console.log("chrome.runtime.onMessage.addListener fetchChromeXmlrpc response:", resText)
+                } catch (e) {
+                    console.error("chrome.runtime fetchChromeXmlrpc request error", e)
+                }
                 sendResponse(resText);
             })();
             break;
         case 'fetchChromeJson':
             (async () => {
-                const response = await fetch(request.apiUrl, request.fetchCORSOptions);
-                const resJson = await response.json()
-                console.log("chrome.runtime.onMessage.addListener fetchChromeJson response:", resJson)
+                let resJson
+                try {
+                    const response = await fetch(request.apiUrl, request.fetchCORSOptions);
+                    resJson = await response.json()
+                    // console.log("chrome.runtime.onMessage.addListener fetchChromeJson response:", resJson)
+                } catch (e) {
+                    console.error("chrome.runtime fetchChromeJson request error", e)
+                }
                 sendResponse(resJson);
             })();
             break;

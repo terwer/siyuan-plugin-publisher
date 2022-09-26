@@ -37,6 +37,10 @@ export class CustomMetaWeblogApi {
             const faultString = this.parseFieldValue(fault, "faultString")
             throw new Error("发生异常，错误码=>" + faultCode + "，错误信息=>" + faultString)
         }
+
+        if(!ret || !ret.params){
+            throw new Error("发生异常=>数据为空")
+        }
     }
 
     public async getUsersBlogs(appkey: string, username: string, password: string): Promise<Array<UserBlog>> {

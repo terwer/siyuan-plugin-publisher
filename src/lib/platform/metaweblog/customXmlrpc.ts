@@ -44,11 +44,16 @@ export async function fetchCustom(apiUrl: string, reqMethod: string, reqParams: 
         });
         logUtil.logInfo("fetchChromeXmlrpc resXml=>", resXml)
 
-        const parseResult: any = xmlParser.parse(resXml)
-        logUtil.logInfo("parseResult=>", parseResult)
+        let resJson
+        if (resXml) {
+            const parseResult: any = xmlParser.parse(resXml)
+            logUtil.logInfo("parseResult=>", parseResult)
 
-        const resJson = parseResult.methodResponse || {}
-        logUtil.logInfo("resJson=>", JSON.stringify(resJson))
+            resJson = parseResult.methodResponse || {}
+            logUtil.logInfo("resJson=>", JSON.stringify(resJson))
+        } else {
+            resJson = {}
+        }
 
         return resJson
     } catch (e: any) {
