@@ -140,29 +140,22 @@ import {
   formatNumToZhDate,
   getPublishStatus,
   isEmptyObject,
-  isEmptyString, jiebaToHotWords,
-  pathJoin, pingyinSlugify,
+  isEmptyString,
+  jiebaToHotWords,
+  pathJoin,
+  pingyinSlugify,
   zhSlugify
 } from "../../../lib/util";
 import {SIYUAN_PAGE_ATTR_KEY} from "../../../lib/constants/siyuanPageConstants";
 import logUtil from "../../../lib/logUtil";
 import {ElMessage} from "element-plus/es";
 import shortHash from "shorthash2";
-import {
-  mdToHtml,
-  mdToPlainText,
-  parseHtml,
-  removeMdWidgetTag,
-  removeTitleNumber,
-  removeWidgetTag
-} from "../../../lib/htmlUtil";
+import {mdToHtml, mdToPlainText, parseHtml, removeMdWidgetTag, removeTitleNumber} from "../../../lib/htmlUtil";
 import {CONSTANTS} from "../../../lib/constants/constants";
 import {ElMessageBox} from "element-plus";
 import {API} from "../../../lib/api";
-import {IMetaweblogCfg, PageType} from "../../../lib/platform/metaweblog/IMetaweblogCfg";
-import {render} from "../../../lib/markdownUtil";
+import {PageType} from "../../../lib/platform/metaweblog/IMetaweblogCfg";
 import {Post} from "../../../lib/common/post";
-import {API_TYPE_CONSTANTS} from "../../../lib/constants/apiTypeConstants";
 
 const {t} = useI18n()
 
@@ -250,7 +243,13 @@ const initPage = async () => {
   // 思源笔记数据
   siyuanData.pageId = pageId;
   siyuanData.meta = await getPageAttrs(pageId)
-  const page = await getPage(pageId)
+  let page
+  try {
+    page = await getPage(pageId)
+  } catch (e) {
+    logUtil.logError("页面信息获取失败", e)
+    throw new Error("页面信息获取失败")
+  }
   if (!page) {
     ElMessage.error(t('config.error.msg') + "_" + props.apiType)
     throw new Error(t('config.error.msg') + "_" + props.apiType)

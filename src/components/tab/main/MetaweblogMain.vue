@@ -330,13 +330,18 @@ const initPage = async () => {
     // 路径组合
     previewUrl.value = pathJoin(metaweblogCfg.home, postUrl)
 
-    // 如果文章选择了分类，初始化分类
-    const post: Post = await api.getPost(formData.postid.toString())
-    catData = post.categories
+    try {
+      // 如果文章选择了分类，初始化分类
+      const post: Post = await api.getPost(formData.postid.toString())
+      catData = post.categories
 
-    logUtil.logInfo("postid=>", formData.postid)
-    logUtil.logInfo("post=>", post)
-    logUtil.logInfo("初始化选择过的分类,catData=>", catData)
+      logUtil.logInfo("postid=>", formData.postid)
+      logUtil.logInfo("post=>", post)
+      logUtil.logInfo("初始化选择过的分类,catData=>", catData)
+    } catch (e) {
+      isInitLoadding.value = false
+      logUtil.logError("文章新获取失败", e)
+    }
   }
 
   // 全部文章分类请求
