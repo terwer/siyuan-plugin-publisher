@@ -38,7 +38,7 @@ export class CustomMetaWeblogApi {
             throw new Error("发生异常，错误码=>" + faultCode + "，错误信息=>" + faultString)
         }
 
-        if(!ret || !ret.params){
+        if (!ret || !ret.params) {
             throw new Error("发生异常=>数据为空")
         }
     }
@@ -145,14 +145,17 @@ export class CustomMetaWeblogApi {
 
         let pcats = <any[]>[]
         const cats = this.parseFieldValue(postObj, "categories")?.array?.data?.value || []
-        if (typeof cats?.string == 'string') {
-            pcats.push(cats.string)
+        const catstr = cats?.string || cats
+        if (typeof catstr == 'string') {
+            pcats.push(catstr)
         } else {
             // logUtil.logInfo("cats=>", cats)
-            cats.forEach((cat: any) => {
-                const item = cat.string
-                pcats.push(item)
-            })
+            if (cats && cats.length > 0) {
+                cats.forEach((cat: any) => {
+                    const item = cat.string
+                    pcats.push(item)
+                })
+            }
         }
         // logUtil.logInfo("pcats=>", pcats)
         post.categories = pcats

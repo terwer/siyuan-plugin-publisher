@@ -135,6 +135,9 @@
         <!-- 选择目录 -->
         <el-form-item :label="$t('main.publish.vuepress.choose.path')" v-if="vuepressGithubEnabled && !useDefaultPath">
           <el-tree-select v-model="formData.customPath" lazy :check-strictly="true" :load="customLoad"
+                          :placeholder="$t('main.cat.select')"
+                          :empty-text="$t('main.cat.empty')"
+                          :no-data-text="$t('main.cat.empty')"
                           :props="customProps"/>
         </el-form-item>
         <!-- 设置文件名 -->

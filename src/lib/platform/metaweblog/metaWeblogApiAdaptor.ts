@@ -8,11 +8,13 @@ import {MetaWeblogApi} from "./metaWeblogApi";
 import {CategoryInfo} from "../../common/categoryInfo";
 import {CustomMetaWeblogApi} from "./CustomMetaweblogApi";
 import {isInChromeExtension} from "../../chrome/ChromeUtil";
+import {pathJoin} from "../../util";
 
 /**
  * 支持Metaweblog的通用API适配器
  */
 export class MetaWeblogApiAdaptor implements IApi {
+    private readonly cfg: IMetaweblogCfg
     protected metaWeblogApi: MetaWeblogApi
     protected username: string
     protected password: string
@@ -22,14 +24,14 @@ export class MetaWeblogApiAdaptor implements IApi {
     protected customMetaWeblogApi: CustomMetaWeblogApi
 
     constructor(apiType: string) {
-        const cfg = getJSONConf<IMetaweblogCfg>(apiType)
+        this.cfg = getJSONConf<IMetaweblogCfg>(apiType)
 
         this.metaWeblogApi = new MetaWeblogApi(apiType)
-        this.username = cfg.username
-        this.password = cfg.password
+        this.username = this.cfg.username
+        this.password = this.cfg.password
         this.appkey = apiType
 
-        this.customMetaWeblogApi = new CustomMetaWeblogApi(apiType, cfg.apiUrl, cfg.username, cfg.password)
+        this.customMetaWeblogApi = new CustomMetaWeblogApi(apiType, this.cfg.apiUrl, this.cfg.username, this.cfg.password)
     }
 
     /**
@@ -161,5 +163,13 @@ export class MetaWeblogApiAdaptor implements IApi {
         }
         logUtil.logInfo("获取分类列表=>", cats)
         return cats
+    }
+
+    public async getPrevireUrl(postid: string): Promise<string> {
+        let previewUrl
+        const postUrl = this.cfg.previewUrl.replace("[postid]", postid)
+        previewUrl = pathJoin(this.cfg.home || "", postUrl)
+        logUtil.logInfo("previewUrl", previewUrl)
+        return previewUrl;
     }
 }

@@ -1,8 +1,8 @@
 import {getBooleanConf, getConf} from "../lib/config";
 import SWITCH_CONSTANTS from "../lib/constants/switchConstants";
-import {ref} from "vue";
+import {reactive, ref} from "vue";
 import {useTabCountStore} from "../stores/tabCountStore";
-import {getDynamicJsonCfg} from "../lib/dynamicConfig";
+import {DynamicConfig, getDynamicJsonCfg} from "../lib/dynamicConfig";
 
 
 export function useTabCount() {
@@ -16,6 +16,10 @@ export function useTabCount() {
     const liandiEnabled = ref(false)
     const yuqueEnabled = ref(false)
     const kmsEnabled = ref(false)
+
+    let switchFormData = reactive({
+        dynamicConfigArray: <Array<DynamicConfig>>[]
+    })
 
     function doCount() {
         // 重新计数
@@ -47,16 +51,17 @@ export function useTabCount() {
 
         const dynamicJsonCfg = getDynamicJsonCfg()
         const results = dynamicJsonCfg.totalCfg || []
+        switchFormData.dynamicConfigArray = []
         results.forEach(item => {
             const switchKey = "switch-" + item.plantformKey
             const switchValue = getConf(switchKey)
             item.modelValue = item.plantformKey + "_" + switchValue
             const dynEnabled = switchValue.toLowerCase() === "true"
-
             tabCountStore.incrementIf(dynEnabled)
+
+            switchFormData.dynamicConfigArray.push(item)
         });
     }
-
 
     return {
         tabCountStore,
@@ -68,6 +73,7 @@ export function useTabCount() {
         liandiEnabled,
         yuqueEnabled,
         kmsEnabled,
+        switchFormData,
         doCount
     }
 }
