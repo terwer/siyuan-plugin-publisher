@@ -1,6 +1,6 @@
 <template>
   <el-container>
-    <el-main class="common-main">
+    <el-main class="common-main" v-if="!isInitLoadding">
       <el-alert class="top-version-tip" :title="apiTypeInfo + blogName" type="info" :closable="false"/>
       <el-alert class="top-version-tip" :title="$t('setting.blog.vali.tip.metaweblog')" type="error" :closable="false"
                 v-if="!apiStatus"/>
@@ -61,7 +61,7 @@
         </el-form-item>
 
         <!-- 标签  -->
-        <el-form-item :label="$t('main.tag')" v-if="editMode">
+        <el-form-item :label="$t('main.tag')">
           <el-tag
               v-for="tag in formData.tag.dynamicTags"
               :key="tag"
@@ -89,6 +89,21 @@
           <el-button type="primary" @click="fetchTag" :loading="isTagLoading">
             {{ isTagLoading ? $t('main.opt.loading') : $t('main.auto.fetch.tag') }}
           </el-button>
+        </el-form-item>
+
+        <!-- 分类 -->
+        <el-form-item :label="$t('main.cat')" style="width: 100%;">
+          <el-select v-model="formData.cat.categorySelected"
+                     class="m-2" placeholder="Select" size="default"
+                     @change="handleCatNodeSingleCheck"
+          >
+            <el-option
+                v-for="item in formData.cat.categoryList"
+                :key="item.value"
+                :label="item.label"
+                :value="item"
+            />
+          </el-select>
         </el-form-item>
 
         <!-- 操作 -->
@@ -126,6 +141,7 @@
         </el-form-item>
       </el-form>
     </el-main>
+    <el-skeleton :loading="isInitLoadding" :rows="5" animated/>
   </el-container>
 </template>
 
@@ -134,7 +150,7 @@ import {CommonblogCfg, ICommonblogCfg} from "../../../lib/platform/commonblog/co
 import {nextTick, onMounted, reactive, ref} from "vue";
 import {useI18n} from "vue-i18n";
 import {getPage, getPageAttrs, getPageId, getPageMd, setPageAttrs} from "../../../lib/platform/siyuan/siyuanUtil";
-import {getJSONConf} from "../../../lib/config";
+import {getJSONConf, setJSONConf} from "../../../lib/config";
 import {
   cutWords,
   formatNumToZhDate,
@@ -156,6 +172,7 @@ import {ElMessageBox} from "element-plus";
 import {API} from "../../../lib/api";
 import {PageType} from "../../../lib/platform/metaweblog/IMetaweblogCfg";
 import {Post} from "../../../lib/common/post";
+import {CategoryInfo} from "../../../lib/common/categoryInfo";
 
 const {t} = useI18n()
 
@@ -188,6 +205,7 @@ const isTagLoading = ref(false)
 const isGenLoading = ref(false)
 const isPublishLoading = ref(false)
 const isCancelLoading = ref(false)
+const isInitLoadding = ref(false)
 
 const editMode = ref(false)
 const forceRefresh = ref(false)
@@ -208,7 +226,12 @@ const formData = reactive({
     dynamicTags: <string[]>([]),
     inputVisible: false
   },
-  categories: ["默认分类"]
+  cat: {
+    categorySelected: <string>"",
+    categoryList: []
+  },
+  categories: ["默认分类"],
+  cat_slugs: []
 })
 
 const siyuanData = reactive({
@@ -226,6 +249,8 @@ const complexMode = () => {
 }
 
 const initPage = async () => {
+  isInitLoadding.value = true
+
   const pageId = await getPageId(true, props.pageId);
   if (!pageId || pageId === "") {
     return
@@ -247,10 +272,12 @@ const initPage = async () => {
   try {
     page = await getPage(pageId)
   } catch (e) {
+    isInitLoadding.value = false
     logUtil.logError("页面信息获取失败", e)
     throw new Error("页面信息获取失败")
   }
   if (!page) {
+    isInitLoadding.value = false
     ElMessage.error(t('config.error.msg') + "_" + props.apiType)
     throw new Error(t('config.error.msg') + "_" + props.apiType)
   }
@@ -278,10 +305,17 @@ const initPage = async () => {
   // 发布状态
   isPublished.value = getPublishStatus(props.apiType, siyuanData.meta)
 
+  // ============================
+  // 依赖于特定平台的数据初始化开始
+  // ============================
+  // 读取postid
+  const commonCfg = getJSONConf<ICommonblogCfg>(props.apiType)
+  const api = new API(props.apiType)
+  // 选中的分类
+  let catData: any = []
+
   // 更新预览链接
   if (isPublished.value) {
-    // 读取postid
-    const commonCfg = getJSONConf<ICommonblogCfg>(props.apiType)
     const meta: any = siyuanData.meta
     formData.postid = meta[commonCfg.posidKey || ""]
 
@@ -291,9 +325,54 @@ const initPage = async () => {
         .replace("[notebook]", commonCfg.blogid || "")
     // 路径组合
     previewUrl.value = pathJoin(commonCfg.home || "", postUrl)
+
+    try {
+      // 如果文章选择了分类，初始化分类
+      const post: Post = await api.getPost(formData.postid.toString())
+      catData = post.categories
+
+      logUtil.logInfo("postid=>", formData.postid)
+      logUtil.logInfo("post=>", post)
+      logUtil.logInfo("初始化选择过的分类,catData=>", catData)
+    } catch (e) {
+      isInitLoadding.value = false
+      logUtil.logError("文章新获取失败", e)
+    }
   }
 
+  // 全部文章分类请求
+  let catInfo: CategoryInfo[] = []
+  try {
+    catInfo = await api.getCategories()
+  } catch (e) {
+    isInitLoadding.value = false
+    logUtil.logError("分类获取失败", e)
+  }
+  logUtil.logInfo("catInfo=>", catInfo)
+
+  // 组装分类
+  let catArr: any = []
+  if (catInfo && catInfo.length && catInfo.length > 0) {
+    catInfo.forEach(item => {
+      const cat = {
+        value: item.categoryId,
+        label: item.description
+      }
+      catArr.push(cat)
+    })
+    formData.cat.categoryList = catArr
+  }
+
+  formData.cat.categorySelected = catData.length > 0 ? catData[0] : ""
+  blogName.value = formData.cat.categorySelected
+  formData.categories = catData
+  // ============================
+  // 依赖于特定平台的数据初始化结束
+  // ===========================
+
   apiStatus.value = conf.apiStatus || false
+
+  isInitLoadding.value = false
 }
 
 onMounted(async () => {
@@ -384,7 +463,6 @@ const makeDesc = async (hideTip?: boolean) => {
   }
 }
 
-
 const tagHandleClose = (tag: any) => {
   formData.tag.dynamicTags.splice(formData.tag.dynamicTags.indexOf(tag), 1)
 }
@@ -436,6 +514,21 @@ async function fetchTag(hideTip?: boolean) {
   }
 }
 
+const handleCatNodeSingleCheck = (val: any) => {
+  logUtil.logInfo("val=>", val)
+
+  let cats: any = []
+  let catSlugs: any = []
+  cats.push(val.label)
+  cats.push(val.value)
+
+  blogName.value = val.label
+
+  formData.categories = cats
+  formData.cat_slugs = catSlugs
+  logUtil.logInfo(" formData.categories=>", formData.categories)
+}
+
 const saveAttrToSiyuan = async (hideTip?: boolean) => {
   const customAttr = {
     [SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_SLUG_KEY]: formData.customSlug,
@@ -453,7 +546,6 @@ const saveAttrToSiyuan = async (hideTip?: boolean) => {
     ElMessage.success(t('main.opt.success'))
   }
 }
-
 
 const oneclickAttr = async (hideTip?: boolean) => {
   isGenLoading.value = true

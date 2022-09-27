@@ -91,6 +91,21 @@ export class YuqueApi extends CommonblogApi {
         return true
     }
 
+    /**
+     * 获取yuque文档
+     * @param docId 文档ID
+     */
+    public async getDoc(docId: string): Promise<any> {
+        let url = "/repos/" + this.blogid + "/docs/" + docId
+        let data = {}
+        const result = await this.yuqueRequest(url, data, "GET")
+        if (!result) {
+            throw new Error("请求语雀API异常")
+        }
+
+        return result
+    }
+
     // ==========================================================================
     // ==========================================================================
     /**
