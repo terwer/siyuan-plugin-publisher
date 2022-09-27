@@ -143,4 +143,8 @@ export class SiYuanApiAdaptor implements IApi {
     public async getCategories(): Promise<CategoryInfo[]> {
         return Promise.resolve([]);
     }
+
+    public async getPrevireUrl(postid: string): Promise<string> {
+        return Promise.resolve("");
+    }
 }

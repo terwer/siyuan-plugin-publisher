@@ -6,6 +6,7 @@ import {UserBlog} from "../../../common/userBlog";
 import logUtil from "../../../logUtil";
 import {Post} from "../../../common/post";
 import {CategoryInfo} from "../../../common/categoryInfo";
+import {pathJoin} from "../../../util";
 
 /**
  * 语雀的API适配器
@@ -98,6 +99,22 @@ export class YuqueApiAdaptor extends CommonblogApiAdaptor implements IApi {
         }
 
         return cats;
+    }
+
+    async getPrevireUrl(postid: string): Promise<string> {
+        let previewUrl
+
+        // 替换文章链接
+        const purl = this.cfg.previewUrl || ""
+        const yuquePostidKey = this.getYuquePostKey(postid);
+        const docId = yuquePostidKey.docId
+        const repo = yuquePostidKey.docRepo || this.cfg.blogid || ""
+        const postUrl = purl.replace("[postid]", docId)
+            .replace("[notebook]", repo)
+        // 路径组合
+        previewUrl = pathJoin(this.cfg.home || "", postUrl)
+
+        return previewUrl
     }
 
     /**

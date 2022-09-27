@@ -18,6 +18,10 @@
       <el-input v-model="apiUrl"/>
     </el-form-item>
 
+    <el-form-item :label="$t('setting.blog.previewUrl')">
+      <el-input v-model="previewUrl"/>
+    </el-form-item>
+
     <el-form-item :label="$t('setting.blog.pageType')">
       <el-radio-group v-model="ptype" class="ml-4">
         <el-radio :label="0" size="large">Markdown</el-radio>
@@ -74,6 +78,7 @@ const ptype_html = parseInt(PageType.Html.toString())
 
 const home = ref("")
 const apiUrl = ref("")
+const previewUrl = ref("")
 const username = ref("")
 const password = ref("")
 const ptype = ref(ptype_md)
@@ -136,6 +141,7 @@ const saveConf = (hideTip?: boolean) => {
   cfg.username = username.value
   cfg.password = password.value
   cfg.apiUrl = apiUrl.value
+  cfg.previewUrl = previewUrl.value
   cfg.apiStatus = apiStatus.value
   cfg.blogName = blogName.value
   cfg.pageType = ptype.value
@@ -159,6 +165,7 @@ const initConf = () => {
 
     home.value = conf.home
     apiUrl.value = conf.apiUrl
+    previewUrl.value = conf.previewUrl
     username.value = conf.username
     password.value = conf.password
     apiStatus.value = conf.apiStatus

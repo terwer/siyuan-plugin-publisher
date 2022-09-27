@@ -33,7 +33,7 @@
     </el-form-item>
 
     <!-- 动态配置 -->
-    <el-form-item v-for="cfg in formData.dynamicConfigArray"
+    <el-form-item v-for="cfg in switchFormData.dynamicConfigArray"
                   :label="cfg.plantformName+'_'+cfg.plantformType.toUpperCase().substring(0,1)">
       <el-switch v-model="cfg.modelValue" :active-value="cfg.plantformKey+'_true'"
                  :inactive-value="cfg.plantformKey+'_false'" @change="dynamicOnChange"/>
@@ -48,11 +48,10 @@
 </template>
 
 <script lang="ts" setup>
-import {onMounted, reactive, ref} from 'vue'
+import {onMounted, ref} from 'vue'
 import {useI18n} from "vue-i18n";
 import {setBooleanConf} from "../../lib/config";
 import SWITCH_CONSTANTS from "../../lib/constants/switchConstants";
-import {DynamicConfig, getDynamicJsonCfg} from "../../lib/dynamicConfig";
 import logUtil from "../../lib/logUtil";
 import {useTabCount} from "../../composables/tabCountCom";
 
@@ -68,14 +67,11 @@ const {
   liandiEnabled,
   yuqueEnabled,
   kmsEnabled,
+  switchFormData,
   doCount
 } = useTabCount()
 
 let showSwitchTip = ref(false)
-
-let formData = reactive({
-  dynamicConfigArray: <Array<DynamicConfig>>[]
-})
 
 const vuepressOnChange = (val: boolean) => {
   setBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY, val)
@@ -110,7 +106,7 @@ const kmsOnChange = (val: any) => {
   initConf()
 }
 const dynamicOnChange = (val: any) => {
-  logUtil.logInfo("dynamicOnChange,val=>", val)
+  logUtil.logWarn("dynamicOnChange,val=>", val)
   const valArr = val.split("_")
   const switchKey = "switch-" + valArr[0]
   const switchStatus = valArr[1]
@@ -122,14 +118,6 @@ const dynamicOnChange = (val: any) => {
 const initConf = () => {
   doCount()
 
-  // 动态加载配置开关
-  const dynamicJsonCfg = getDynamicJsonCfg()
-  const results = dynamicJsonCfg.totalCfg || []
-  formData.dynamicConfigArray = []
-  results.forEach(item => {
-    formData.dynamicConfigArray.push(item)
-  })
-
   // 未启用，跳转设置页面
   if (tabCountStore.tabCount == 0) {
     showSwitchTip.value = true
@@ -138,29 +126,29 @@ const initConf = () => {
   }
 }
 
-const checkPlantform = () => {
-  // 未设置平台跳转到设置，否则跳转到主界面
-  // alert(totalCount.value)
-  // logUtil.logWarn("开启的平台数=>" + totalCount.value)
-  // const ctab = getQueryString("tab")
-  // // 有启用的平台，直接返回
-  // if (ctab == undefined && enabledCount > 0) {
-  //   return
-  // }
-  // if (enabledCount == 0 && ctab != "service-switch") {
-  //   reloadTabPage("service-switch")
-  // } else if (enabledCount > 0 && ctab != "plantform-main") {
-  //   // 有启用的平台，但是打开的别的tab，跳转到主界面
-  //   reloadTabPage("plantform-main")
-  // }
-}
+// const checkPlantform = () => {
+// 未设置平台跳转到设置，否则跳转到主界面
+// alert(totalCount.value)
+// logUtil.logWarn("开启的平台数=>" + totalCount.value)
+// const ctab = getQueryString("tab")
+// // 有启用的平台，直接返回
+// if (ctab == undefined && enabledCount > 0) {
+//   return
+// }
+// if (enabledCount == 0 && ctab != "service-switch") {
+//   reloadTabPage("service-switch")
+// } else if (enabledCount > 0 && ctab != "plantform-main") {
+//   // 有启用的平台，但是打开的别的tab，跳转到主界面
+//   reloadTabPage("plantform-main")
+// }
+// }
 
 onMounted(() => {
   // 初始化
   initConf()
 
   // 检测开启的平台数
-  checkPlantform()
+  // checkPlantform()
 })
 
 </script>

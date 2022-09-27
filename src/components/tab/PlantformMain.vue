@@ -28,7 +28,7 @@
     <!-- 动态平台发布 -->
     <el-tab-pane v-for="mcfg in formData.metaweblogArray"
                  :label="mcfg.plantformName+'_'+mcfg.plantformType.toUpperCase().substring(0,1)">
-      <metaweblog-main :api-type="mcfg.plantformKey"/>
+      <metaweblog-main :api-type="mcfg.plantformKey" :page-id="props.pageId"/>
     </el-tab-pane>
     <el-tab-pane v-for="wcfg in formData.wordpressArray"
                  :label="wcfg.plantformName+'_'+wcfg.plantformType.toUpperCase().substring(0,1)">

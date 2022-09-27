@@ -113,6 +113,12 @@ export interface IApi {
      * 获取分类列表
      */
     getCategories(): Promise<CategoryInfo[]>
+
+    /**
+     * 获取预览链接
+     * @param postid 文章ID
+     */
+    getPrevireUrl(postid: string): Promise<string>
 }
 
 /**
@@ -203,6 +209,10 @@ export class API implements IApi {
 
     async getCategories(): Promise<CategoryInfo[]> {
         return await this.apiAdaptor.getCategories()
+    }
+
+    async getPrevireUrl(postid: string): Promise<string> {
+        return await this.apiAdaptor.getPrevireUrl(postid)
     }
 }
 

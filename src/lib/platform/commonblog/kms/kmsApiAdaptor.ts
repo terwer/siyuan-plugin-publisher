@@ -5,6 +5,7 @@ import {KmsApi} from "./kmsApi";
 import {API_TYPE_CONSTANTS} from "../../../constants/apiTypeConstants";
 import {UserBlog} from "../../../common/userBlog";
 import {Post} from "../../../common/post";
+import {pathJoin} from "../../../util";
 
 /**
  * 知识仓库的API适配器
@@ -44,5 +45,17 @@ export class KmsApiAdaptor extends CommonblogApiAdaptor implements IApi {
 
     async newPost(post: Post, publish?: boolean): Promise<string> {
         return await this.kmsApi.addDoc(post.title, post.description)
+    }
+
+    async getPrevireUrl(postid: string): Promise<string> {
+        let previewUrl
+
+        // 替换文章链接
+        const purl = this.cfg.previewUrl || ""
+        const postUrl = purl.replace("[postid]", postid)
+        // 路径组合
+        previewUrl = pathJoin(this.cfg.home || "", postUrl)
+
+        return previewUrl
     }
 }

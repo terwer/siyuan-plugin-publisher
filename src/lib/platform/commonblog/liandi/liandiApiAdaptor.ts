@@ -5,6 +5,7 @@ import {API_TYPE_CONSTANTS} from "../../../constants/apiTypeConstants";
 import {UserBlog} from "../../../common/userBlog";
 import logUtil from "../../../logUtil";
 import {Post} from "../../../common/post";
+import {pathJoin} from "../../../util";
 
 /**
  * 链滴的API适配器
@@ -61,5 +62,17 @@ export class LiandiApiAdaptor extends CommonblogApiAdaptor implements IApi {
         }
 
         return result || ""
+    }
+
+    async getPrevireUrl(postid: string): Promise<string> {
+        let previewUrl
+
+        // 替换文章链接
+        const purl = this.cfg.previewUrl || ""
+        const postUrl = purl.replace("[postid]", postid)
+        // 路径组合
+        previewUrl = pathJoin(this.cfg.home || "", postUrl)
+
+        return previewUrl
     }
 }

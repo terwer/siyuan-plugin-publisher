@@ -550,3 +550,11 @@ export const reloadTabPage = (tabname: string) => {
         }
     }, 200)
 }
+
+export const reloadPage = (tabname: string) => {
+    setTimeout(function () {
+        if (inBrowser()) {
+            window.location.reload()
+        }
+    }, 200)
+}

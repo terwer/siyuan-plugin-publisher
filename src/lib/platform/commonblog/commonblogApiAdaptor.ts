@@ -52,4 +52,8 @@ export class CommonblogApiAdaptor implements IApi {
     public async getRecentPostsCount(keyword?: string): Promise<number> {
         return Promise.resolve(0);
     }
+
+    public async getPrevireUrl(postid: string): Promise<string> {
+        return Promise.resolve("");
+    }
 }

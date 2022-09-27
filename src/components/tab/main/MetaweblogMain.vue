@@ -331,10 +331,8 @@ const initPage = async () => {
     const meta: any = siyuanData.meta
     formData.postid = meta[metaweblogCfg.posidKey]
 
-    // 替换文章链接
-    const postUrl = metaweblogCfg.previewUrl.replace("[postid]", formData.postid)
     // 路径组合
-    previewUrl.value = pathJoin(metaweblogCfg.home, postUrl)
+    previewUrl.value = await api.getPrevireUrl(formData.postid.toString())
 
     try {
       // 如果文章选择了分类，初始化分类

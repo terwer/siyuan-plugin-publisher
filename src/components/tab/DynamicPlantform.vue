@@ -64,7 +64,7 @@ import logUtil from "../../lib/logUtil";
 import {ElMessage, FormInstance, FormRules} from "element-plus";
 import {useI18n} from "vue-i18n";
 import {checkKeyExists} from "../../lib/config";
-import {inBrowser, reloadTabPage, setUrlParameter} from "../../lib/util";
+import {reloadPage} from "../../lib/util";
 
 const {t} = useI18n()
 
@@ -146,7 +146,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   setDynamicJsonCfg(dynamicConfigArray)
 
   // 刷新页面
-  reloadTabPage("dynamicp-platform")
+  reloadPage("dynamicp-platform")
   ElMessage.success(t('main.opt.success'))
 }
 
@@ -190,7 +190,7 @@ const delRow = async () => {
 
   setDynamicJsonCfg(dynamicConfigArray)
   // 刷新页面
-  reloadTabPage("dynamicp-platform")
+  reloadPage("dynamicp-platform")
   ElMessage.success(t('main.opt.success'))
 }
 
