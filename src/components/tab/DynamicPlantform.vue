@@ -14,14 +14,12 @@
                        @click="onPlantformTypeChange(PlantformType.Wordpress)">
               {{ $t('dynamic.platform.type.wordpress') }}
             </el-button>
+            <el-button :type="pType===PlantformType.Custom?'primary':''"
+                       @click="onPlantformTypeChange(PlantformType.Custom)">{{
+                $t('dynamic.platform.type.custom')
+              }}
+            </el-button>
           </el-button-group>
-        </el-form-item>
-        <el-form-item>
-          <el-button :type="pType===PlantformType.Custom?'primary':''"
-                     @click="onPlantformTypeChange(PlantformType.Custom)">{{
-              $t('dynamic.platform.type.custom')
-            }}
-          </el-button>
         </el-form-item>
 
         <el-form-item v-if="!showForm">

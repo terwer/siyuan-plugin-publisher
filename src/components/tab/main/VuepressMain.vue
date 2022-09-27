@@ -1,29 +1,29 @@
 <template>
-  <el-container>
+  <el-container v-if="!isInitLoadding">
     <el-aside width="45%" class="p-aside">
       <el-alert class="top-version-tip" :title="$t('main.publish.vuepress.tip')" type="info" :closable="false"/>
       <el-alert class="top-version-tip" :title="$t('main.publish.vuepress.error.tip')" type="error" :closable="false"
                 v-if="false"/>
 
       <el-form label-width="100px">
+        <!-- 编辑模式 -->
+        <el-form-item :label="$t('main.publish.vuepress.editmode')">
+          <el-button-group>
+            <el-button :type="editMode?'default':'primary'" @click="simpleMode">{{
+                $t('main.publish.vuepress.editmode.simple')
+              }}
+            </el-button>
+            <el-button :type="editMode?'primary':'default'" @click="complexMode">{{
+                $t('main.publish.vuepress.editmode.complex')
+              }}
+            </el-button>
+          </el-button-group>
+        </el-form-item>
+
         <!-- 强制刷新 -->
         <el-form-item :label="$t('main.force.refresh')" v-if="editMode">
           <el-switch v-model="forceRefresh"/>
           <el-alert :title="$t('main.force.refresh.tip')" type="warning" :closable="false" v-if="!forceRefresh"/>
-        </el-form-item>
-
-        <!-- 编辑模式 -->
-        <el-form-item :label="$t('main.publish.vuepress.editmode')">
-          <el-button :type="editMode?'default':'primary'" @click="simpleMode">{{
-              $t('main.publish.vuepress.editmode.simple')
-            }}
-          </el-button>
-        </el-form-item>
-        <el-form-item>
-          <el-button :type="editMode?'primary':'default'" @click="complexMode">{{
-              $t('main.publish.vuepress.editmode.complex')
-            }}
-          </el-button>
         </el-form-item>
 
         <!-- 别名 -->
@@ -67,8 +67,12 @@
           />
         </el-form-item>
 
+        <!--
+        ----------------------------------------------------------------------
+        -->
+
         <!-- 标签  -->
-        <el-form-item :label="$t('main.tag')" v-if="editMode">
+        <el-form-item :label="$t('main.tag')">
           <el-tag
               v-for="tag in formData.tag.dynamicTags"
               :key="tag"
@@ -97,21 +101,21 @@
             {{ isTagLoading ? $t('main.opt.loading') : $t('main.auto.fetch.tag') }}
           </el-button>
         </el-form-item>
-
-        <!-- 保存属性 -->
-        <el-form-item v-if="editMode">
-          <el-button type="primary" @click="saveAttrToSiyuan">{{ $t('main.save.attr.to.siyuan') }}</el-button>
+        <!-- 标签开关 -->
+        <el-form-item :label="$t('main.tag.auto.switch')">
+          <el-switch v-model="tagSwitch"/>
         </el-form-item>
-
-        <!--
-        ----------------------------------------------------------------------
-        -->
 
         <!-- 一键生成属性-->
         <el-form-item :label="$t('main.opt.quick')">
           <el-button type="primary" @click="oneclickAttr" :loading="isGenLoading">
             {{ isGenLoading ? $t('main.opt.loading') : $t('main.publish.oneclick.attr') }}
           </el-button>
+        </el-form-item>
+
+        <!-- 保存属性 -->
+        <el-form-item>
+          <el-button type="primary" @click="saveAttrToSiyuan">{{ $t('main.save.attr.to.siyuan') }}</el-button>
         </el-form-item>
 
         <!-- 启用Github发布 -->
@@ -184,6 +188,7 @@
       </el-form>
     </el-main>
   </el-container>
+  <el-skeleton :loading="isInitLoadding" :rows="5" animated/>
 </template>
 
 <script lang="ts" setup>
@@ -251,6 +256,7 @@ const isTagLoading = ref(false)
 const isGenLoading = ref(false)
 const isPublishLoading = ref(false)
 const isCancelLoading = ref(false)
+const isInitLoadding = ref(false)
 
 const editMode = ref(false)
 const slugHashEnabled = ref(false)
@@ -259,6 +265,7 @@ const useDefaultPath = ref(true)
 const isPublished = ref(false)
 const previewUrl = ref("")
 const forceRefresh = ref(false)
+const tagSwitch = ref(true)
 
 const formData = ref({
   title: "",
@@ -315,13 +322,17 @@ const complexMode = () => {
 }
 
 async function initPage() {
+  isInitLoadding.value = true
+
   const pageId = await getPageId(true, props.pageId)
   logUtil.logInfo("VuepressMain pageId=>", pageId)
   if (!pageId || pageId == "") {
+    isInitLoadding.value = false
     return
   }
   const page = await getPage(pageId)
   if (!page) {
+    isInitLoadding.value = false
     ElMessage.error(t('config.error.msg') + "_vuepress")
     throw new Error(t('config.error.msg') + "_vuepress")
   }
@@ -384,6 +395,8 @@ async function initPage() {
     previewUrl.value = "https://github.com/" + vuepressCfg.githubUser + "/" + vuepressCfg.githubRepo
         + "/blob/" + vuepressCfg.defaultBranch + "/" + docPath
   }
+
+  isInitLoadding.value = false
 }
 
 function getDocPath() {
@@ -395,10 +408,7 @@ function getDocPath() {
 
 function checkForce() {
   // 空值跳过
-  if (isEmptyString(formData.value.customSlug)
-      || isEmptyString(formData.value.desc)
-      || formData.value.tag.dynamicTags.length == 0
-  ) {
+  if (isEmptyString(formData.value.customSlug)) {
     return true
   }
 
@@ -456,10 +466,6 @@ async function makeSlug(hideTip?: boolean) {
 }
 
 async function makeDesc(hideTip?: boolean) {
-  if (!checkForce()) {
-    return
-  }
-
   isDescLoading.value = true
   const data = await getPageMd(siyuanData.value.pageId);
 
@@ -501,8 +507,8 @@ const tagHandleInputConfirm = () => {
 }
 
 async function fetchTag(hideTip?: boolean) {
-  if (!checkForce()) {
-    return
+  if (!tagSwitch.value) {
+    ElMessage.warning(t('main.tag.auto.switch.no.tip'))
   }
 
   isTagLoading.value = true

@@ -35,9 +35,14 @@ export class YuqueApi extends CommonblogApi {
      * @param title 标题
      * @param slug 别名
      * @param content 内容
+     * @param repo 知识库（可选）
      */
-    public async addDoc(title: string, slug: string, content: string): Promise<string> {
+    public async addDoc(title: string, slug: string, content: string, repo?: string): Promise<string> {
         let url = "/repos/" + this.blogid + "/docs"
+        if (repo) {
+            url = "/repos/" + repo + "/docs"
+            logUtil.logWarn("yuque addDoc with repo", repo)
+        }
         let data = {
             title: title,
             slug: slug,
@@ -59,9 +64,14 @@ export class YuqueApi extends CommonblogApi {
      * @param title 标题
      * @param slug 别名
      * @param content 内容
+     * @param repo 知识库（可选）
      */
-    public async updateDoc(docId: string, title: string, slug: string, content: string): Promise<boolean> {
+    public async updateDoc(docId: string, title: string, slug: string, content: string, repo?: string): Promise<boolean> {
         let url = "/repos/" + this.blogid + "/docs/" + docId
+        if (repo) {
+            url = "/repos/" + repo + "/docs/" + docId
+            logUtil.logWarn("yuque updateDoc with repo", repo)
+        }
         let data = {
             title: title,
             slug: slug,
@@ -79,9 +89,14 @@ export class YuqueApi extends CommonblogApi {
     /**
      * 删除yuque文档
      * @param docId 文档ID
+     * @param repo 知识库（可选）
      */
-    public async delDoc(docId: string): Promise<boolean> {
+    public async delDoc(docId: string, repo?: string): Promise<boolean> {
         let url = "/repos/" + this.blogid + "/docs/" + docId
+        if (repo) {
+            url = "/repos/" + repo + "/docs/" + docId
+            logUtil.logWarn("yuque delDoc with repo", repo)
+        }
         let data = {}
         const result = await this.yuqueRequest(url, data, "DELETE")
         if (!result) {
@@ -89,6 +104,26 @@ export class YuqueApi extends CommonblogApi {
         }
 
         return true
+    }
+
+    /**
+     * 获取yuque文档
+     * @param docId 文档ID
+     * @param repo 知识库（可选）
+     */
+    public async getDoc(docId: string, repo?: string): Promise<any> {
+        let url = "/repos/" + this.blogid + "/docs/" + docId
+        if (repo) {
+            url = "/repos/" + repo + "/docs/" + docId
+            logUtil.logWarn("yuque getDoc with repo", repo)
+        }
+        let data = {}
+        const result = await this.yuqueRequest(url, data, "GET")
+        if (!result) {
+            throw new Error("请求语雀API异常")
+        }
+
+        return result
     }
 
     // ==========================================================================

@@ -18,6 +18,10 @@ export class Post {
     wp_slug: string
     dateCreated: Date
     categories: Array<string>
+    /**
+     * 分类别名，大部分平台不需要
+     */
+    cate_slugs?: Array<string>
     mt_text_more?: string
     post_status?:string
     wp_password: string
@@ -31,6 +35,7 @@ export class Post {
         this.wp_slug = ""
         this.dateCreated = new Date()
         this.categories = []
+        this.cate_slugs = []
         this.post_status = POST_STATUS_CONSTANTS.POST_STATUS_PUBLISH
         this.wp_password = ""
     }

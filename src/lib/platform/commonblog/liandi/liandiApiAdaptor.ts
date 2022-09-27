@@ -52,8 +52,14 @@ export class LiandiApiAdaptor extends CommonblogApiAdaptor implements IApi {
     }
 
     async newPost(post: Post, publish?: boolean): Promise<string> {
-        const result = await this.liandiApi.addArticle(post.title, post.description, post.mt_keywords)
-        logUtil.logInfo("liandi newPost=>", result)
-        return result
+        let result
+        try {
+            const result = await this.liandiApi.addArticle(post.title, post.description, post.mt_keywords)
+            logUtil.logWarn("liandi newPost=>", result)
+        } catch (e: any) {
+            throw new Error(e)
+        }
+
+        return result || ""
     }
 }

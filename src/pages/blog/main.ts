@@ -1,6 +1,10 @@
 import {createApp} from 'vue'
 import App from './App.vue'
 import './style.css'
+
+// pinia
+import {createPinia} from "pinia";
+
 // 国际化
 import i18n from "../../locales";
 
@@ -17,6 +21,10 @@ import vueHljs from "../../lib/vue-hljs/lib/vue-hljs/main.js";
 
 // Vue初始化
 const app = createApp(App)
+
+// pinia
+const pinia = createPinia()
+app.use(pinia) //再挂载pinia
 
 // 组件注册
 // 国际化

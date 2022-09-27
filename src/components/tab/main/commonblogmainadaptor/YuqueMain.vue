@@ -1,5 +1,5 @@
 <template>
-  <CommonBlogMain :api-type="apiType" :page-id="props.pageId"/>
+  <CommonBlogMain :api-type="apiType" :page-id="props.pageId" :use-cat="true"/>
 </template>
 
 <script lang="ts" setup>

@@ -8,24 +8,24 @@
       <el-alert class="top-version-tip" :title="$t('setting.conf.tip')" type="error" :closable="false"
                 v-if="useAdaptor"/>
       <el-form label-width="120px">
+        <!-- 编辑模式 -->
+        <el-form-item :label="$t('main.publish.vuepress.editmode')">
+          <el-button-group>
+            <el-button :type="editMode?'default':'primary'" @click="simpleMode">{{
+                $t('main.publish.vuepress.editmode.simple')
+              }}
+            </el-button>
+            <el-button :type="editMode?'primary':'default'" @click="complexMode">{{
+                $t('main.publish.vuepress.editmode.complex')
+              }}
+            </el-button>
+          </el-button-group>
+        </el-form-item>
+
         <!-- 强制刷新 -->
         <el-form-item :label="$t('main.force.refresh')" v-if="editMode">
           <el-switch v-model="forceRefresh"/>
           <el-alert :title="$t('main.force.refresh.tip')" type="warning" :closable="false" v-if="!forceRefresh"/>
-        </el-form-item>
-
-        <!-- 编辑模式 -->
-        <el-form-item :label="$t('main.publish.vuepress.editmode')">
-          <el-button :type="editMode?'default':'primary'" @click="simpleMode">{{
-              $t('main.publish.vuepress.editmode.simple')
-            }}
-          </el-button>
-        </el-form-item>
-        <el-form-item>
-          <el-button :type="editMode?'primary':'default'" @click="complexMode">{{
-              $t('main.publish.vuepress.editmode.complex')
-            }}
-          </el-button>
         </el-form-item>
 
         <!-- 文章别名 -->
@@ -93,6 +93,10 @@
             {{ isTagLoading ? $t('main.opt.loading') : $t('main.auto.fetch.tag') }}
           </el-button>
         </el-form-item>
+        <!-- 标签开关 -->
+        <el-form-item :label="$t('main.tag.auto.switch')">
+          <el-switch v-model="tagSwitch"/>
+        </el-form-item>
 
         <!-- 分类 -->
         <el-form-item :label="$t('main.cat')" style="width: 100%;">
@@ -114,10 +118,6 @@
         </el-form-item>
 
         <!-- 操作 -->
-        <el-form-item v-if="editMode">
-          <el-button type="primary" @click="saveAttrToSiyuan">{{ $t('main.save.attr.to.siyuan') }}</el-button>
-        </el-form-item>
-
         <!--
         ----------------------------------------------------------------------
         -->
@@ -127,6 +127,11 @@
           <el-button type="primary" @click="oneclickAttr" :loading="isGenLoading">
             {{ isGenLoading ? $t('main.opt.loading') : $t('main.publish.oneclick.attr') }}
           </el-button>
+        </el-form-item>
+
+        <!-- 保存属性 -->
+        <el-form-item>
+          <el-button type="primary" @click="saveAttrToSiyuan">{{ $t('main.save.attr.to.siyuan') }}</el-button>
         </el-form-item>
 
         <!-- 发布操作 -->
@@ -226,6 +231,7 @@ const forceRefresh = ref(false)
 const slugHashEnabled = ref(false)
 const isPublished = ref(false)
 const previewUrl = ref("")
+const tagSwitch = ref(true)
 
 const formData = reactive({
   // 新增时候这个值是空的
@@ -330,13 +336,21 @@ const initPage = async () => {
     // 路径组合
     previewUrl.value = pathJoin(metaweblogCfg.home, postUrl)
 
-    // 如果文章选择了分类，初始化分类
-    const post: Post = await api.getPost(formData.postid.toString())
-    catData = post.categories
+    try {
+      // 如果文章选择了分类，初始化分类
+      const post: Post = await api.getPost(formData.postid.toString())
+      catData = post.categories
 
-    logUtil.logInfo("postid=>", formData.postid)
-    logUtil.logInfo("post=>", post)
-    logUtil.logInfo("初始化选择过的分类,catData=>", catData)
+      logUtil.logInfo("postid=>", formData.postid)
+      logUtil.logInfo("post=>", post)
+      logUtil.logInfo("初始化选择过的分类,catData=>", catData)
+    } catch (e) {
+      // 强制删除
+      ElMessage.error(t('post.delete.by.platform'))
+
+      isInitLoadding.value = false
+      logUtil.logError("文章新获取失败", e)
+    }
   }
 
   // 全部文章分类请求
@@ -379,10 +393,7 @@ onMounted(async () => {
 
 function checkForce() {
   // 空值跳过
-  if (isEmptyString(formData.customSlug)
-      || isEmptyString(formData.desc)
-      || formData.tag.dynamicTags.length == 0
-  ) {
+  if (isEmptyString(formData.customSlug)) {
     return true
   }
 
@@ -444,10 +455,6 @@ const makeSlug = async (hideTip?: boolean) => {
 }
 
 const makeDesc = async (hideTip?: boolean) => {
-  if (!checkForce()) {
-    return
-  }
-
   isDescLoading.value = true
   const data = await getPageMd(siyuanData.pageId);
 
@@ -485,8 +492,8 @@ const tagHandleInputConfirm = () => {
 }
 
 async function fetchTag(hideTip?: boolean) {
-  if (!checkForce()) {
-    return
+  if (!tagSwitch.value) {
+    ElMessage.warning(t('main.tag.auto.switch.no.tip'))
   }
 
   isTagLoading.value = true
@@ -685,19 +692,24 @@ const doCancel = async (isInit: boolean) => {
   const metaweblogCfg = getJSONConf<IMetaweblogCfg>(props.apiType)
   logUtil.logInfo("准备取消发布，postid=>", formData.postid)
 
-  const api = new API(props.apiType)
-  const flag = await api.deletePost(formData.postid)
-  if (!flag) {
-    ElMessage.error("文章删除失败")
-    throw new Error("文章删除失败")
-  }
-
-  // 清空ID
+  // 先清空ID
   const customAttr = {
     [metaweblogCfg.posidKey]: ""
   };
   await setPageAttrs(siyuanData.pageId, customAttr)
   logUtil.logInfo("MetaweblogMain取消发布,meta=>", customAttr);
+
+  // 在平台强行删除一次
+  try {
+    const api = new API(props.apiType)
+    const flag = await api.deletePost(formData.postid)
+    if (!flag) {
+      ElMessage.error("文章删除失败")
+      // throw new Error("文章删除失败")
+    }
+  } catch (e) {
+    logUtil.logError("强行删除一次", e)
+  }
 
   // 刷新属性数据
   if (isInit) {
