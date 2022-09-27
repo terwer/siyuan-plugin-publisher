@@ -6,24 +6,24 @@
                 v-if="false"/>
 
       <el-form label-width="100px">
+        <!-- 编辑模式 -->
+        <el-form-item :label="$t('main.publish.vuepress.editmode')">
+          <el-button-group>
+            <el-button :type="editMode?'default':'primary'" @click="simpleMode">{{
+                $t('main.publish.vuepress.editmode.simple')
+              }}
+            </el-button>
+            <el-button :type="editMode?'primary':'default'" @click="complexMode">{{
+                $t('main.publish.vuepress.editmode.complex')
+              }}
+            </el-button>
+          </el-button-group>
+        </el-form-item>
+
         <!-- 强制刷新 -->
         <el-form-item :label="$t('main.force.refresh')" v-if="editMode">
           <el-switch v-model="forceRefresh"/>
           <el-alert :title="$t('main.force.refresh.tip')" type="warning" :closable="false" v-if="!forceRefresh"/>
-        </el-form-item>
-
-        <!-- 编辑模式 -->
-        <el-form-item :label="$t('main.publish.vuepress.editmode')">
-          <el-button :type="editMode?'default':'primary'" @click="simpleMode">{{
-              $t('main.publish.vuepress.editmode.simple')
-            }}
-          </el-button>
-        </el-form-item>
-        <el-form-item>
-          <el-button :type="editMode?'primary':'default'" @click="complexMode">{{
-              $t('main.publish.vuepress.editmode.complex')
-            }}
-          </el-button>
         </el-form-item>
 
         <!-- 别名 -->
