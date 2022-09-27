@@ -37,19 +37,28 @@ export class YuqueApiAdaptor extends CommonblogApiAdaptor implements IApi {
     }
 
     async deletePost(postid: string): Promise<boolean> {
-        return await this.yuqueApi.delDoc(postid)
+        const yuquePostidKey = this.getYuquePostKey(postid);
+        return await this.yuqueApi.delDoc(yuquePostidKey.docId, yuquePostidKey.docRepo)
     }
 
     async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
-        return await this.yuqueApi.updateDoc(postid, post.title, post.wp_slug, post.description)
+        const yuquePostidKey = this.getYuquePostKey(postid);
+        return await this.yuqueApi.updateDoc(yuquePostidKey.docId, post.title, post.wp_slug, post.description, yuquePostidKey.docRepo)
     }
 
     async newPost(post: Post, publish?: boolean): Promise<string> {
-        return await this.yuqueApi.addDoc(post.title, post.wp_slug, post.description)
+        if (post.cate_slugs && post.cate_slugs.length > 0) {
+            const repo = post.cate_slugs[0]
+            return await this.yuqueApi.addDoc(post.title, post.wp_slug, post.description, repo)
+        } else {
+            return await this.yuqueApi.addDoc(post.title, post.wp_slug, post.description)
+        }
     }
 
     async getPost(postid: string, useSlug?: boolean): Promise<Post> {
-        const yuqueDoc = await this.yuqueApi.getDoc(postid)
+        const yuquePostidKey = this.getYuquePostKey(postid);
+
+        const yuqueDoc = await this.yuqueApi.getDoc(yuquePostidKey.docId, yuquePostidKey.docRepo)
         logUtil.logInfo("yuqueDoc=>", yuqueDoc);
 
         const commonPost = new Post();
@@ -58,8 +67,13 @@ export class YuqueApiAdaptor extends CommonblogApiAdaptor implements IApi {
 
         const book = yuqueDoc.book
         const cats = []
+        const catSlugs = []
+
         cats.push(book.name)
         commonPost.categories = cats
+
+        catSlugs.push(book.namespace)
+        commonPost.cate_slugs = catSlugs
 
         return commonPost;
     }
@@ -84,5 +98,28 @@ export class YuqueApiAdaptor extends CommonblogApiAdaptor implements IApi {
         }
 
         return cats;
+    }
+
+    /**
+     * 获取封装的postid
+     * @param postid
+     * @private postid
+     */
+    private getYuquePostKey(postid: string) {
+        let docId
+        let docRepo
+        if (postid.indexOf("_") > 0) {
+            const idArr = postid.split("_")
+            docId = idArr[0]
+            docRepo = idArr[1]
+            // docRepo就是book.namespac
+        } else {
+            docId = postid
+        }
+
+        return {
+            docId,
+            docRepo
+        }
     }
 }

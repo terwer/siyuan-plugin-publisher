@@ -9,7 +9,7 @@
                 v-if="useAdaptor"/>
       <el-form label-width="120px">
         <!-- 强制刷新 -->
-        <el-form-item :label="$t('main.force.refresh')" v-if="editMode">
+        <el-form-item :label="$t('main.force.refresh')">
           <el-switch v-model="forceRefresh"/>
           <el-alert :title="$t('main.force.refresh.tip')" type="warning" :closable="false" v-if="!forceRefresh"/>
         </el-form-item>
@@ -114,10 +114,6 @@
         </el-form-item>
 
         <!-- 操作 -->
-        <el-form-item v-if="editMode">
-          <el-button type="primary" @click="saveAttrToSiyuan">{{ $t('main.save.attr.to.siyuan') }}</el-button>
-        </el-form-item>
-
         <!--
         ----------------------------------------------------------------------
         -->
@@ -127,6 +123,11 @@
           <el-button type="primary" @click="oneclickAttr" :loading="isGenLoading">
             {{ isGenLoading ? $t('main.opt.loading') : $t('main.publish.oneclick.attr') }}
           </el-button>
+        </el-form-item>
+
+        <!-- 保存属性 -->
+        <el-form-item>
+          <el-button type="primary" @click="saveAttrToSiyuan">{{ $t('main.save.attr.to.siyuan') }}</el-button>
         </el-form-item>
 
         <!-- 发布操作 -->
@@ -339,6 +340,9 @@ const initPage = async () => {
       logUtil.logInfo("post=>", post)
       logUtil.logInfo("初始化选择过的分类,catData=>", catData)
     } catch (e) {
+      // 强制删除
+      ElMessage.error(t('post.delete.by.platform'))
+
       isInitLoadding.value = false
       logUtil.logError("文章新获取失败", e)
     }
@@ -690,19 +694,24 @@ const doCancel = async (isInit: boolean) => {
   const metaweblogCfg = getJSONConf<IMetaweblogCfg>(props.apiType)
   logUtil.logInfo("准备取消发布，postid=>", formData.postid)
 
-  const api = new API(props.apiType)
-  const flag = await api.deletePost(formData.postid)
-  if (!flag) {
-    ElMessage.error("文章删除失败")
-    throw new Error("文章删除失败")
-  }
-
-  // 清空ID
+  // 先清空ID
   const customAttr = {
     [metaweblogCfg.posidKey]: ""
   };
   await setPageAttrs(siyuanData.pageId, customAttr)
   logUtil.logInfo("MetaweblogMain取消发布,meta=>", customAttr);
+
+  // 在平台强行删除一次
+  try {
+    const api = new API(props.apiType)
+    const flag = await api.deletePost(formData.postid)
+    if (!flag) {
+      ElMessage.error("文章删除失败")
+      // throw new Error("文章删除失败")
+    }
+  } catch (e) {
+    logUtil.logError("强行删除一次", e)
+  }
 
   // 刷新属性数据
   if (isInit) {

@@ -2,11 +2,15 @@
   <el-container>
     <el-main class="common-main" v-if="!isInitLoadding">
       <el-alert class="top-version-tip" :title="apiTypeInfo + blogName" type="info" :closable="false"/>
+      <el-alert class="top-version-tip"
+                title="仅支持新建修改，暂时不支持编辑所属知识库。如果您想移动文档，请先点击取消删除该文档，然后重新选择新的知识库发布。"
+                type="warning" :closable="false"
+                v-if="useCat && isPublished"/>
       <el-alert class="top-version-tip" :title="$t('setting.blog.vali.tip.metaweblog')" type="error" :closable="false"
                 v-if="!apiStatus"/>
       <el-form label-width="120px">
         <!-- 强制刷新 -->
-        <el-form-item :label="$t('main.force.refresh')" v-if="editMode">
+        <el-form-item :label="$t('main.force.refresh')">
           <el-switch v-model="forceRefresh"/>
           <el-alert :title="$t('main.force.refresh.tip')" type="warning" :closable="false" v-if="!forceRefresh"/>
         </el-form-item>
@@ -92,9 +96,25 @@
         </el-form-item>
 
         <!-- 分类 -->
-        <el-form-item :label="$t('main.cat')" style="width: 100%;">
-          <el-select v-model="formData.cat.categorySelected"
-                     class="m-2" placeholder="Select" size="default"
+        <el-form-item :label="$t('main.cat')" style="width: 100%;" v-if="props.useCat">
+          <el-select v-if="catEnabled"
+                     v-model="formData.cat.categorySelected"
+                     placeholder="请选择" no-data-text="暂无数据"
+                     class="m-2" size="default"
+                     @change="handleCatNodeSingleCheck"
+          >
+            <el-option
+                v-for="item in formData.cat.categoryList"
+                :key="item.value"
+                :label="item.label"
+                :value="item"
+            />
+          </el-select>
+          <el-select v-else
+                     v-model="formData.cat.categorySelected"
+                     disabled
+                     placeholder="请选择" no-data-text="暂无数据"
+                     class="m-2" size="default"
                      @change="handleCatNodeSingleCheck"
           >
             <el-option
@@ -106,11 +126,6 @@
           </el-select>
         </el-form-item>
 
-        <!-- 操作 -->
-        <el-form-item v-if="editMode">
-          <el-button type="primary" @click="saveAttrToSiyuan">{{ $t('main.save.attr.to.siyuan') }}</el-button>
-        </el-form-item>
-
         <!--
         ----------------------------------------------------------------------
         -->
@@ -119,6 +134,11 @@
           <el-button type="primary" @click="oneclickAttr" :loading="isGenLoading">
             {{ isGenLoading ? $t('main.opt.loading') : $t('main.publish.oneclick.attr') }}
           </el-button>
+        </el-form-item>
+
+        <!-- 保存属性 -->
+        <el-form-item>
+          <el-button type="primary" @click="saveAttrToSiyuan">{{ $t('main.save.attr.to.siyuan') }}</el-button>
         </el-form-item>
 
         <!-- 发布操作 -->
@@ -181,6 +201,10 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
+  useCat: {
+    type: Boolean,
+    default: false
+  },
   apiType: {
     type: String,
     default: ""
@@ -213,6 +237,8 @@ const slugHashEnabled = ref(false)
 const isPublished = ref(false)
 const previewUrl = ref("")
 
+const catEnabled = ref(false)
+
 const formData = reactive({
   // 新增时候这个值是空的
   postid: "",
@@ -228,7 +254,7 @@ const formData = reactive({
   },
   cat: {
     categorySelected: <string>"",
-    categoryList: []
+    categoryList: <any[]>[]
   },
   categories: ["默认分类"],
   cat_slugs: []
@@ -304,6 +330,8 @@ const initPage = async () => {
 
   // 发布状态
   isPublished.value = getPublishStatus(props.apiType, siyuanData.meta)
+  // 只支持新建选择笔记本
+  catEnabled.value = !isPublished.value
 
   // ============================
   // 依赖于特定平台的数据初始化开始
@@ -313,6 +341,7 @@ const initPage = async () => {
   const api = new API(props.apiType)
   // 选中的分类
   let catData: any = []
+  let catSlugData: any = []
 
   // 更新预览链接
   if (isPublished.value) {
@@ -326,46 +355,68 @@ const initPage = async () => {
     // 路径组合
     previewUrl.value = pathJoin(commonCfg.home || "", postUrl)
 
-    try {
-      // 如果文章选择了分类，初始化分类
-      const post: Post = await api.getPost(formData.postid.toString())
-      catData = post.categories
+    if (props.useCat) {
+      try {
+        // 如果文章选择了分类，初始化分类
+        const post: Post = await api.getPost(formData.postid.toString())
+        catData = post.categories
+        catSlugData = post.cate_slugs
 
-      logUtil.logInfo("postid=>", formData.postid)
-      logUtil.logInfo("post=>", post)
-      logUtil.logInfo("初始化选择过的分类,catData=>", catData)
-    } catch (e) {
-      isInitLoadding.value = false
-      logUtil.logError("文章新获取失败", e)
+        logUtil.logInfo("postid=>", formData.postid)
+        logUtil.logInfo("post=>", post)
+        logUtil.logInfo("初始化选择过的分类,catData=>", catData)
+      } catch (e) {
+        // 强制删除
+        ElMessage.error(t('post.delete.by.platform'))
+
+        isInitLoadding.value = false
+        logUtil.logError("平台文章新获取失败", e)
+      }
+    }
+  } else {
+    if (props.useCat && !isEmptyString(commonCfg.blogName)) {
+      const defaultCats = []
+      const defaultCatSlugs = []
+
+      defaultCats.push(commonCfg.blogName)
+      catData = defaultCats
+
+      defaultCatSlugs.push(commonCfg.blogid)
+      catSlugData = defaultCatSlugs
     }
   }
 
   // 全部文章分类请求
-  let catInfo: CategoryInfo[] = []
-  try {
-    catInfo = await api.getCategories()
-  } catch (e) {
-    isInitLoadding.value = false
-    logUtil.logError("分类获取失败", e)
-  }
-  logUtil.logInfo("catInfo=>", catInfo)
+  if (props.useCat) {
+    let catInfo: CategoryInfo[] = []
+    try {
+      catInfo = await api.getCategories()
+    } catch (e) {
+      isInitLoadding.value = false
+      logUtil.logError("分类获取失败", e)
+    }
+    logUtil.logInfo("catInfo=>", catInfo)
 
-  // 组装分类
-  let catArr: any = []
-  if (catInfo && catInfo.length && catInfo.length > 0) {
-    catInfo.forEach(item => {
-      const cat = {
-        value: item.categoryId,
-        label: item.description
-      }
-      catArr.push(cat)
-    })
-    formData.cat.categoryList = catArr
+
+    // 组装分类
+    let catArr: any = []
+    if (catInfo && catInfo.length && catInfo.length > 0) {
+      catInfo.forEach(item => {
+        const cat = {
+          value: item.categoryId,
+          label: item.description
+        }
+        catArr.push(cat)
+      })
+      formData.cat.categoryList = catArr
+    }
+
+    formData.cat.categorySelected = catData.length > 0 ? catData[0] : ""
+    blogName.value = formData.cat.categorySelected
+    formData.categories = catData
+    formData.cat_slugs = catSlugData
   }
 
-  formData.cat.categorySelected = catData.length > 0 ? catData[0] : ""
-  blogName.value = formData.cat.categorySelected
-  formData.categories = catData
   // ============================
   // 依赖于特定平台的数据初始化结束
   // ===========================
@@ -516,17 +567,21 @@ async function fetchTag(hideTip?: boolean) {
 
 const handleCatNodeSingleCheck = (val: any) => {
   logUtil.logInfo("val=>", val)
+  const conf = getJSONConf<ICommonblogCfg>(props.apiType)
 
   let cats: any = []
   let catSlugs: any = []
+
   cats.push(val.label)
-  cats.push(val.value)
+  formData.categories = cats
+
+  catSlugs.push(conf.username + "/" + val.value)
+  formData.cat_slugs = catSlugs
 
   blogName.value = val.label
 
-  formData.categories = cats
-  formData.cat_slugs = catSlugs
   logUtil.logInfo(" formData.categories=>", formData.categories)
+  logUtil.logInfo(" formData.cat_slugs=>", formData.cat_slugs)
 }
 
 const saveAttrToSiyuan = async (hideTip?: boolean) => {
@@ -602,6 +657,7 @@ const doPublish = async () => {
     post.wp_slug = formData.customSlug
     post.description = content
     post.categories = formData.categories
+    post.cate_slugs = formData.cat_slugs
     post.mt_keywords = formData.tag.dynamicTags.join(",")
     post.dateCreated = new Date()
     // 默认是已发布
@@ -622,6 +678,18 @@ const doPublish = async () => {
     } else {
       postid = await api.newPost(post, publish)
       // 这里是发布成功之后
+      if (post.cate_slugs && post.cate_slugs.length > 0) {
+        const repo = post.cate_slugs[0]
+        // const repoName = post.categories[0]
+        // const conf = getJSONConf<ICommonblogCfg>(props.apiType)
+        // if (!isEmptyObject(conf)) {
+        //   conf.blogid = repo
+        //   conf.blogName = repoName
+        //   setJSONConf<ICommonblogCfg>(props.apiType, conf)
+        // }
+        postid = postid + "_" + repo
+      }
+
       // 属性获取postidKey
       logUtil.logInfo("当前保存的posidKey=>", commonblogCfg.posidKey)
       const customAttr = {
@@ -681,19 +749,24 @@ const doCancel = async (isInit: boolean) => {
   const commonblogCfg = getJSONConf<ICommonblogCfg>(props.apiType)
   logUtil.logInfo("准备取消发布，postid=>", formData.postid)
 
-  const api = new API(props.apiType)
-  const flag = await api.deletePost(formData.postid)
-  if (!flag) {
-    ElMessage.error("文章删除失败")
-    throw new Error("文章删除失败")
-  }
-
-  // 清空ID
+  // 先清空ID
   const customAttr = {
     [commonblogCfg.posidKey || ""]: ""
   };
   await setPageAttrs(siyuanData.pageId, customAttr)
   logUtil.logInfo("MetaweblogMain取消发布,meta=>", customAttr);
+
+  // 强制在平台删除一次
+  try {
+    const api = new API(props.apiType)
+    const flag = await api.deletePost(formData.postid)
+    if (!flag) {
+      ElMessage.error("文章删除失败")
+      throw new Error("文章删除失败")
+    }
+  } catch (e) {
+    logUtil.logError("强行删除一次", e)
+  }
 
   // 刷新属性数据
   if (isInit) {

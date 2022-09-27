@@ -32,7 +32,7 @@ export default {
     "main.use.hash": "使用hash",
     "main.use.hash.tip": "不使用hash会展示更有意义的url，但是可能导致文章别名重复（后果是Vuepress会Build失败除非手动解决别名唯一问题），请知悉。",
     "main.force.refresh": "强制刷新",
-    "main.force.refresh.tip": "为了防止误操作更新别名，别名不为空的时候默认不会更新属性，如需更新，请勾选强制刷新或者清空对应字段。",
+    "main.force.refresh.tip": "为了防止误操作更新别名，别名不为空的时候默认不会更新属性，如需更新，请勾选。",
     "main.desc": "文章摘要",
     "main.auto.fetch.desc": "自动提取摘要",
     "main.create.time": "发布时间",
@@ -178,5 +178,6 @@ export default {
     "plantform.must.select.one": "哇哦，离使用就差一步啦 o(╥﹏╥)o ，您必须启用至少一个平台。如果上面列出的平台没有你想要的，可以在新增平台动态添加，支持Wordpress和Metaweblog API（例如博客园、oschina、51cto等）。有任何疑问欢迎邮件 youweics#163.com ",
     "blog.list.toptip": "温馨提示：单击表格行可以进入文章详情页，详情页有发布按钮哦! (〃'▽'〃)",
     "config.error.msg": "网络异常或者配置错误，数据获取失败",
-    "config.platform.none": "没有启用的发布平台，请前往服务开关开启"
+    "config.platform.none": "没有启用的发布平台，请前往服务开关开启",
+    "post.delete.by.platform": "文章已被平台自行删除，请点击取消强制解除关联"
 }
