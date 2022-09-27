@@ -1,188 +1,192 @@
 <template>
   <el-container v-if="!isInitLoadding">
-      <el-aside width="45%" class="p-aside">
-        <el-alert class="top-version-tip" :title="$t('main.publish.vuepress.tip')" type="info" :closable="false"/>
-        <el-alert class="top-version-tip" :title="$t('main.publish.vuepress.error.tip')" type="error" :closable="false"
-                  v-if="false"/>
+    <el-aside width="45%" class="p-aside">
+      <el-alert class="top-version-tip" :title="$t('main.publish.vuepress.tip')" type="info" :closable="false"/>
+      <el-alert class="top-version-tip" :title="$t('main.publish.vuepress.error.tip')" type="error" :closable="false"
+                v-if="false"/>
 
-        <el-form label-width="100px">
-          <!-- 强制刷新 -->
-          <el-form-item :label="$t('main.force.refresh')">
-            <el-switch v-model="forceRefresh"/>
-            <el-alert :title="$t('main.force.refresh.tip')" type="warning" :closable="false" v-if="!forceRefresh"/>
-          </el-form-item>
+      <el-form label-width="100px">
+        <!-- 强制刷新 -->
+        <el-form-item :label="$t('main.force.refresh')" v-if="editMode">
+          <el-switch v-model="forceRefresh"/>
+          <el-alert :title="$t('main.force.refresh.tip')" type="warning" :closable="false" v-if="!forceRefresh"/>
+        </el-form-item>
 
-          <!-- 编辑模式 -->
-          <el-form-item :label="$t('main.publish.vuepress.editmode')">
-            <el-button :type="editMode?'default':'primary'" @click="simpleMode">{{
-                $t('main.publish.vuepress.editmode.simple')
-              }}
-            </el-button>
-          </el-form-item>
-          <el-form-item>
-            <el-button :type="editMode?'primary':'default'" @click="complexMode">{{
-                $t('main.publish.vuepress.editmode.complex')
-              }}
-            </el-button>
-          </el-form-item>
+        <!-- 编辑模式 -->
+        <el-form-item :label="$t('main.publish.vuepress.editmode')">
+          <el-button :type="editMode?'default':'primary'" @click="simpleMode">{{
+              $t('main.publish.vuepress.editmode.simple')
+            }}
+          </el-button>
+        </el-form-item>
+        <el-form-item>
+          <el-button :type="editMode?'primary':'default'" @click="complexMode">{{
+              $t('main.publish.vuepress.editmode.complex')
+            }}
+          </el-button>
+        </el-form-item>
 
-          <!-- 别名 -->
-          <el-form-item :label="$t('main.slug')" v-if="editMode">
-            <el-input v-model="formData.customSlug"/>
-          </el-form-item>
-          <el-form-item v-if="editMode">
-            <el-checkbox-group v-model="formData.checkList">
-              <el-checkbox label="1">{{ $t('main.use.google.translate') }}</el-checkbox>
-            </el-checkbox-group>
-          </el-form-item>
-          <el-form-item :label="$t('main.use.hash')" v-if="editMode">
-            <el-switch v-model="slugHashEnabled"/>
-            <el-alert :title="$t('main.use.hash.tip')" type="warning" :closable="false" v-if="!slugHashEnabled"/>
-          </el-form-item>
-          <el-form-item v-if="editMode">
-            <el-button type="primary" class="make-slug-btn" @click="makeSlug" :loading="isSlugLoading">
-              {{ isSlugLoading ? $t('main.opt.loading') : $t('main.auto.fetch.slug') }}
-            </el-button>
-          </el-form-item>
+        <!-- 别名 -->
+        <el-form-item :label="$t('main.slug')" v-if="editMode">
+          <el-input v-model="formData.customSlug"/>
+        </el-form-item>
+        <el-form-item v-if="editMode">
+          <el-checkbox-group v-model="formData.checkList">
+            <el-checkbox label="1">{{ $t('main.use.google.translate') }}</el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
+        <el-form-item :label="$t('main.use.hash')" v-if="editMode">
+          <el-switch v-model="slugHashEnabled"/>
+          <el-alert :title="$t('main.use.hash.tip')" type="warning" :closable="false" v-if="!slugHashEnabled"/>
+        </el-form-item>
+        <el-form-item v-if="editMode">
+          <el-button type="primary" class="make-slug-btn" @click="makeSlug" :loading="isSlugLoading">
+            {{ isSlugLoading ? $t('main.opt.loading') : $t('main.auto.fetch.slug') }}
+          </el-button>
+        </el-form-item>
 
-          <!-- 文章摘要 -->
-          <el-form-item :label="$t('main.desc')" v-if="editMode">
-            <el-input type="textarea" v-model="formData.desc"/>
-          </el-form-item>
-          <el-form-item v-if="editMode">
-            <el-button type="primary" @click="makeDesc" :loading="isDescLoading">
-              {{ isDescLoading ? $t('main.opt.loading') : $t('main.auto.fetch.desc') }}
-            </el-button>
-          </el-form-item>
+        <!-- 文章摘要 -->
+        <el-form-item :label="$t('main.desc')" v-if="editMode">
+          <el-input type="textarea" v-model="formData.desc"/>
+        </el-form-item>
+        <el-form-item v-if="editMode">
+          <el-button type="primary" @click="makeDesc" :loading="isDescLoading">
+            {{ isDescLoading ? $t('main.opt.loading') : $t('main.auto.fetch.desc') }}
+          </el-button>
+        </el-form-item>
 
-          <!-- 发布时间 -->
-          <el-form-item :label="$t('main.create.time')" v-if="editMode">
-            <el-date-picker
-                type="datetime"
-                v-model="formData.created"
-                format="YYYY-MM-DD HH:mm:ss"
-                value-format="YYYY-MM-DD HH:mm:ss"
-                @change="createTimeChanged"
-                :placeholder="$t('main.create.time.placeholder')"
-            />
-          </el-form-item>
+        <!-- 发布时间 -->
+        <el-form-item :label="$t('main.create.time')" v-if="editMode">
+          <el-date-picker
+              type="datetime"
+              v-model="formData.created"
+              format="YYYY-MM-DD HH:mm:ss"
+              value-format="YYYY-MM-DD HH:mm:ss"
+              @change="createTimeChanged"
+              :placeholder="$t('main.create.time.placeholder')"
+          />
+        </el-form-item>
 
-          <!--
-          ----------------------------------------------------------------------
-          -->
+        <!--
+        ----------------------------------------------------------------------
+        -->
 
-          <!-- 标签  -->
-          <el-form-item :label="$t('main.tag')">
-            <el-tag
-                v-for="tag in formData.tag.dynamicTags"
-                :key="tag"
-                class="mx-1"
-                closable
-                :disable-transitions="false"
-                @close="tagHandleClose(tag)"
-            >
-              {{ tag }}
-            </el-tag>
-            <el-input
-                v-if="formData.tag.inputVisible"
-                ref="tagRefInput"
-                v-model="formData.tag.inputValue"
-                class="ml-1 w-20"
-                size="small"
-                @keyup.enter="tagHandleInputConfirm"
-                @blur="tagHandleInputConfirm"
-            />
-            <el-button v-else class="button-new-tag ml-1 el-tag" size="small" @click="tagShowInput">
-              {{ $t('main.tag.new') }}
-            </el-button>
-          </el-form-item>
-          <el-form-item v-if="editMode">
-            <el-button type="primary" @click="fetchTag" :loading="isTagLoading">
-              {{ isTagLoading ? $t('main.opt.loading') : $t('main.auto.fetch.tag') }}
-            </el-button>
-          </el-form-item>
+        <!-- 标签  -->
+        <el-form-item :label="$t('main.tag')">
+          <el-tag
+              v-for="tag in formData.tag.dynamicTags"
+              :key="tag"
+              class="mx-1"
+              closable
+              :disable-transitions="false"
+              @close="tagHandleClose(tag)"
+          >
+            {{ tag }}
+          </el-tag>
+          <el-input
+              v-if="formData.tag.inputVisible"
+              ref="tagRefInput"
+              v-model="formData.tag.inputValue"
+              class="ml-1 w-20"
+              size="small"
+              @keyup.enter="tagHandleInputConfirm"
+              @blur="tagHandleInputConfirm"
+          />
+          <el-button v-else class="button-new-tag ml-1 el-tag" size="small" @click="tagShowInput">
+            {{ $t('main.tag.new') }}
+          </el-button>
+        </el-form-item>
+        <el-form-item v-if="editMode">
+          <el-button type="primary" @click="fetchTag" :loading="isTagLoading">
+            {{ isTagLoading ? $t('main.opt.loading') : $t('main.auto.fetch.tag') }}
+          </el-button>
+        </el-form-item>
+        <!-- 标签开关 -->
+        <el-form-item :label="$t('main.tag.auto.switch')">
+          <el-switch v-model="tagSwitch"/>
+        </el-form-item>
 
-          <!-- 一键生成属性-->
-          <el-form-item :label="$t('main.opt.quick')">
-            <el-button type="primary" @click="oneclickAttr" :loading="isGenLoading">
-              {{ isGenLoading ? $t('main.opt.loading') : $t('main.publish.oneclick.attr') }}
-            </el-button>
-          </el-form-item>
+        <!-- 一键生成属性-->
+        <el-form-item :label="$t('main.opt.quick')">
+          <el-button type="primary" @click="oneclickAttr" :loading="isGenLoading">
+            {{ isGenLoading ? $t('main.opt.loading') : $t('main.publish.oneclick.attr') }}
+          </el-button>
+        </el-form-item>
 
-          <!-- 保存属性 -->
-          <el-form-item>
-            <el-button type="primary" @click="saveAttrToSiyuan">{{ $t('main.save.attr.to.siyuan') }}</el-button>
-          </el-form-item>
+        <!-- 保存属性 -->
+        <el-form-item>
+          <el-button type="primary" @click="saveAttrToSiyuan">{{ $t('main.save.attr.to.siyuan') }}</el-button>
+        </el-form-item>
 
-          <!-- 启用Github发布 -->
-          <el-form-item :label="$t('main.publish.vuepress.github')">
-            <el-switch v-model="vuepressGithubEnabled" @change="githubOnChange"/>
-            <el-alert :title="$t('main.publish.vuepress.github.tip')" type="info" :closable="false"
-                      v-if="vuepressGithubEnabled"/>
-            <el-alert :title="$t('main.publish.vuepress.github.no.tip')" type="warning" :closable="false"
-                      v-if="!vuepressGithubEnabled"/>
-          </el-form-item>
-          <!-- 是否使用默认目录 -->
-          <el-form-item :label="$t('main.publish.vuepress.choose.path.use.default')" v-if="vuepressGithubEnabled">
-            <el-switch v-model="useDefaultPath" @change="defaultPathOnChange"/>
-            <el-alert :title="$t('main.publish.vuepress.choose.path.use.default.tip')" type="info" :closable="false"
-                      v-if="useDefaultPath"/>
-          </el-form-item>
-          <!-- 选择目录 -->
-          <el-form-item :label="$t('main.publish.vuepress.choose.path')" v-if="vuepressGithubEnabled && !useDefaultPath">
-            <el-tree-select v-model="formData.customPath" lazy :check-strictly="true" :load="customLoad"
-                            :props="customProps"/>
-          </el-form-item>
-          <!-- 设置文件名 -->
-          <el-form-item :label="$t('main.publish.vuepress.choose.title')" v-if="vuepressGithubEnabled">
-            <el-input v-model="formData.title"/>
-            <el-alert :title="$t('main.publish.vuepress.choose.title.tip')" type="error" :closable="false"
-                      v-if="vuepressGithubEnabled"/>
-          </el-form-item>
+        <!-- 启用Github发布 -->
+        <el-form-item :label="$t('main.publish.vuepress.github')">
+          <el-switch v-model="vuepressGithubEnabled" @change="githubOnChange"/>
+          <el-alert :title="$t('main.publish.vuepress.github.tip')" type="info" :closable="false"
+                    v-if="vuepressGithubEnabled"/>
+          <el-alert :title="$t('main.publish.vuepress.github.no.tip')" type="warning" :closable="false"
+                    v-if="!vuepressGithubEnabled"/>
+        </el-form-item>
+        <!-- 是否使用默认目录 -->
+        <el-form-item :label="$t('main.publish.vuepress.choose.path.use.default')" v-if="vuepressGithubEnabled">
+          <el-switch v-model="useDefaultPath" @change="defaultPathOnChange"/>
+          <el-alert :title="$t('main.publish.vuepress.choose.path.use.default.tip')" type="info" :closable="false"
+                    v-if="useDefaultPath"/>
+        </el-form-item>
+        <!-- 选择目录 -->
+        <el-form-item :label="$t('main.publish.vuepress.choose.path')" v-if="vuepressGithubEnabled && !useDefaultPath">
+          <el-tree-select v-model="formData.customPath" lazy :check-strictly="true" :load="customLoad"
+                          :props="customProps"/>
+        </el-form-item>
+        <!-- 设置文件名 -->
+        <el-form-item :label="$t('main.publish.vuepress.choose.title')" v-if="vuepressGithubEnabled">
+          <el-input v-model="formData.title"/>
+          <el-alert :title="$t('main.publish.vuepress.choose.title.tip')" type="error" :closable="false"
+                    v-if="vuepressGithubEnabled"/>
+        </el-form-item>
 
-          <!-- 发布操作 -->
-          <el-form-item>
-            <el-button type="primary" @click="doPublish" :loading="isPublishLoading">{{
-                isPublishLoading ? $t('main.publish.loading') :
-                    isPublished ? $t('main.update') : $t('main.publish')
-              }}
-            </el-button>
-          </el-form-item>
-          <el-form-item>
-            <el-button @click="cancelPublish" :loading="isCancelLoading">{{ $t('main.cancel') }}</el-button>
-          </el-form-item>
+        <!-- 发布操作 -->
+        <el-form-item>
+          <el-button type="primary" @click="doPublish" :loading="isPublishLoading">{{
+              isPublishLoading ? $t('main.publish.loading') :
+                  isPublished ? $t('main.update') : $t('main.publish')
+            }}
+          </el-button>
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="cancelPublish" :loading="isCancelLoading">{{ $t('main.cancel') }}</el-button>
+        </el-form-item>
 
-          <!-- 文章状态 -->
-          <el-form-item>
-            <el-button type="danger" text disabled>
-              {{ isPublished ? $t('main.publish.status.published') : $t('main.publish.status.unpublish') }}
-            </el-button>
-            <a :href="previewUrl" :title="previewUrl" target="_blank"
-               v-if="isPublished">{{ $t('main.publish.vuepress.see.preview') }}</a>
-          </el-form-item>
-        </el-form>
-      </el-aside>
-      <el-main>
-        <el-form label-width="75px">
-          <el-form-item>
-            <el-alert class="top-data-tip" :title="$t('main.yaml.formatter')" type="info" :closable="false"/>
-          </el-form-item>
-          <el-form-item>
-            <el-input v-model="vuepressData.vuepressFullContent" :autosize="{ minRows: 5, maxRows: 8 }"
-                      v-on:focus="$event.target.select()" ref="fmtRefInput"
-                      type="textarea"/>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="convertAttrToYAML">{{ $t('main.siyuan.to.yaml') }}</el-button>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="convertYAMLToAttr">{{ $t('main.yaml.to.siyuan') }}</el-button>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="copyToClipboard">{{ $t('main.copy') }}</el-button>
-          </el-form-item>
-        </el-form>
-      </el-main>
+        <!-- 文章状态 -->
+        <el-form-item>
+          <el-button type="danger" text disabled>
+            {{ isPublished ? $t('main.publish.status.published') : $t('main.publish.status.unpublish') }}
+          </el-button>
+          <a :href="previewUrl" :title="previewUrl" target="_blank"
+             v-if="isPublished">{{ $t('main.publish.vuepress.see.preview') }}</a>
+        </el-form-item>
+      </el-form>
+    </el-aside>
+    <el-main>
+      <el-form label-width="75px">
+        <el-form-item>
+          <el-alert class="top-data-tip" :title="$t('main.yaml.formatter')" type="info" :closable="false"/>
+        </el-form-item>
+        <el-form-item>
+          <el-input v-model="vuepressData.vuepressFullContent" :autosize="{ minRows: 5, maxRows: 8 }"
+                    v-on:focus="$event.target.select()" ref="fmtRefInput"
+                    type="textarea"/>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="convertAttrToYAML">{{ $t('main.siyuan.to.yaml') }}</el-button>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="convertYAMLToAttr">{{ $t('main.yaml.to.siyuan') }}</el-button>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="copyToClipboard">{{ $t('main.copy') }}</el-button>
+        </el-form-item>
+      </el-form>
+    </el-main>
   </el-container>
   <el-skeleton :loading="isInitLoadding" :rows="5" animated/>
 </template>
@@ -261,6 +265,7 @@ const useDefaultPath = ref(true)
 const isPublished = ref(false)
 const previewUrl = ref("")
 const forceRefresh = ref(false)
+const tagSwitch = ref(true)
 
 const formData = ref({
   title: "",
@@ -403,10 +408,7 @@ function getDocPath() {
 
 function checkForce() {
   // 空值跳过
-  if (isEmptyString(formData.value.customSlug)
-      || isEmptyString(formData.value.desc)
-      || formData.value.tag.dynamicTags.length == 0
-  ) {
+  if (isEmptyString(formData.value.customSlug)) {
     return true
   }
 
@@ -464,10 +466,6 @@ async function makeSlug(hideTip?: boolean) {
 }
 
 async function makeDesc(hideTip?: boolean) {
-  if (!checkForce()) {
-    return
-  }
-
   isDescLoading.value = true
   const data = await getPageMd(siyuanData.value.pageId);
 
@@ -509,8 +507,8 @@ const tagHandleInputConfirm = () => {
 }
 
 async function fetchTag(hideTip?: boolean) {
-  if (!checkForce()) {
-    return
+  if (!tagSwitch.value) {
+    ElMessage.warning(t('main.tag.auto.switch.no.tip'))
   }
 
   isTagLoading.value = true

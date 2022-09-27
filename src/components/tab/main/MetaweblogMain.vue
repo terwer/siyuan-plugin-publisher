@@ -9,7 +9,7 @@
                 v-if="useAdaptor"/>
       <el-form label-width="120px">
         <!-- 强制刷新 -->
-        <el-form-item :label="$t('main.force.refresh')">
+        <el-form-item :label="$t('main.force.refresh')" v-if="editMode">
           <el-switch v-model="forceRefresh"/>
           <el-alert :title="$t('main.force.refresh.tip')" type="warning" :closable="false" v-if="!forceRefresh"/>
         </el-form-item>
@@ -92,6 +92,10 @@
           <el-button type="primary" @click="fetchTag" :loading="isTagLoading">
             {{ isTagLoading ? $t('main.opt.loading') : $t('main.auto.fetch.tag') }}
           </el-button>
+        </el-form-item>
+        <!-- 标签开关 -->
+        <el-form-item :label="$t('main.tag.auto.switch')">
+          <el-switch v-model="tagSwitch"/>
         </el-form-item>
 
         <!-- 分类 -->
@@ -227,6 +231,7 @@ const forceRefresh = ref(false)
 const slugHashEnabled = ref(false)
 const isPublished = ref(false)
 const previewUrl = ref("")
+const tagSwitch = ref(true)
 
 const formData = reactive({
   // 新增时候这个值是空的
@@ -388,10 +393,7 @@ onMounted(async () => {
 
 function checkForce() {
   // 空值跳过
-  if (isEmptyString(formData.customSlug)
-      || isEmptyString(formData.desc)
-      || formData.tag.dynamicTags.length == 0
-  ) {
+  if (isEmptyString(formData.customSlug)) {
     return true
   }
 
@@ -453,10 +455,6 @@ const makeSlug = async (hideTip?: boolean) => {
 }
 
 const makeDesc = async (hideTip?: boolean) => {
-  if (!checkForce()) {
-    return
-  }
-
   isDescLoading.value = true
   const data = await getPageMd(siyuanData.pageId);
 
@@ -494,8 +492,8 @@ const tagHandleInputConfirm = () => {
 }
 
 async function fetchTag(hideTip?: boolean) {
-  if (!checkForce()) {
-    return
+  if (!tagSwitch.value) {
+    ElMessage.warning(t('main.tag.auto.switch.no.tip'))
   }
 
   isTagLoading.value = true

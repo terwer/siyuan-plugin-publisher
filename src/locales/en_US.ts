@@ -39,6 +39,8 @@ export default {
     "main.tag": "Post tag",
     "main.tag.new": "New tag",
     "main.auto.fetch.tag": "Auto fetch tag",
+    "main.tag.auto.switch": "Tag switch",
+    "main.tag.auto.switch.no.tip": "Auto tag is cloed",
     "main.cat": "Category",
     "main.cat.empty": "No Category",
     "main.cat.select": "Please select category",
