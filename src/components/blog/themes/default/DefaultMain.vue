@@ -92,6 +92,7 @@ import DefaultPostDetail from "./DefaultPostDetail.vue";
 import DefaultPublish from "./DefaultPublish.vue";
 import {goToPage} from "../../../../lib/chrome/ChromeUtil";
 import {ElMessageBox} from "element-plus";
+import {getWidgetId} from "../../../../lib/platform/siyuan/siyuanUtil";
 
 const {t} = useI18n()
 
@@ -251,7 +252,13 @@ const handleNewWinEdit = (index: number, row: any) => {
         type: 'warning',
       }
   ).then(async () => {
-    goToPage("/index.html?id=" + row.postid, "/")
+    // goToPage("/index.html?id=" + row.postid, "/")
+    const widgetResult = await getWidgetId()
+    if (widgetResult.isInSiyuan) {
+      goToPage("/index.html?id=" + row.postide, "/")
+    } else {
+      goToPage("/publish/index.html?id=" + row.postid, "/")
+    }
     console.log(index, row)
   }).catch(() => {
     // ElMessage({
