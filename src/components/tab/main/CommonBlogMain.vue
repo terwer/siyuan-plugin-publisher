@@ -241,7 +241,7 @@ const forceRefresh = ref(false)
 const slugHashEnabled = ref(false)
 const isPublished = ref(false)
 const previewUrl = ref("")
-const tagSwitch = ref(true)
+const tagSwitch = ref(false)
 
 const catEnabled = ref(false)
 
@@ -535,6 +535,7 @@ const tagHandleInputConfirm = () => {
 async function fetchTag(hideTip?: boolean) {
   if (!tagSwitch.value) {
     ElMessage.warning(t('main.tag.auto.switch.no.tip'))
+    return
   }
 
   isTagLoading.value = true

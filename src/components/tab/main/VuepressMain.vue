@@ -268,7 +268,7 @@ const useDefaultPath = ref(true)
 const isPublished = ref(false)
 const previewUrl = ref("")
 const forceRefresh = ref(false)
-const tagSwitch = ref(true)
+const tagSwitch = ref(false)
 
 const formData = ref({
   title: "",
@@ -512,6 +512,7 @@ const tagHandleInputConfirm = () => {
 async function fetchTag(hideTip?: boolean) {
   if (!tagSwitch.value) {
     ElMessage.warning(t('main.tag.auto.switch.no.tip'))
+    return
   }
 
   isTagLoading.value = true
