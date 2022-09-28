@@ -646,13 +646,15 @@ const doPublish = async () => {
     // 文章标题
     let fmtTitle = removeTitleNumber(formData.title)
     // 发布内容
-    const md = await getPageMd(siyuanData.pageId);
-    let content = md
+    let content
+    const data = await getPageMd(siyuanData.pageId);
+    const md = data.content
     if (PageType.Html == commonblogCfg.pageType) {
-      const html = mdToHtml(content)
+      const html = mdToHtml(md)
       content = removeWidgetTag(html)
     } else {
-      content = removeMdWidgetTag(content)
+      // logUtil.logWarn("md=>", md)
+      content = removeMdWidgetTag(md)
     }
     // ===============================
     const post = new Post()
