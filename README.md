@@ -177,7 +177,7 @@ yarn w
 yarn e
 ```
 
-压缩 `extension` 文件夹为 `.zip`, 上架 Google Chrome 应用商店。
+压缩 `extension` 文件夹为 `.crx`, 上架 Google Chrome 应用商店。
 
 ### 方式 3、部署到服务器后台服务
 
