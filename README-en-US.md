@@ -8,9 +8,9 @@ At present, it supports vuepress and two open API standard blog platforms, `meta
 Also provide a [common API adaptor](https://github.com/terwer/src-sy-post-publisher/blob/main/src/lib/api.ts) , make
 every plantform posiable.
 
-Click to see Help doc
+[Click to see Help doc](https://mp.terwer.space/post/readme-1j4ltp.html)
 
-Click to see config video
+[Click to see config video](https://mp.terwer.space/post/configure-entry-video-brpm9.html)
 
 ## Updates
 
@@ -56,7 +56,7 @@ Click to see config video
     * [ ] 支持发布到印象笔记
     * [ ] 支持详情页导出Anki记忆卡【非挂件模式】
     * [ ] 支持微信消息、微信公众号、CSDN、简书、知乎（预研，目前没有公开API，可能需要借助cookie模拟登陆）
-    * [ ] 支持Github pages、HUGO、Jekyll
+    * [ ] 支持Github pages、HUGO、Jekyll、Next.js content、Nuxt.js content
     * [ ] 集成PicGO，可直接粘贴图片自动上传。旧文档的非图床图片，在发布时候使用PicGO上传然后再发布
     * [ ] 详情页支持下载所有图片到本地，并打包成带assets文件夹和md文件的zip包，这个主要是某些分享场景网络不畅通可能有用
     * [ ] 支持发布时候选择一键剔除外链图片，主要是个别平台不允许外链图片
