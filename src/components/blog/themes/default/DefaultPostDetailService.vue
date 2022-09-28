@@ -52,6 +52,7 @@ export default {
 <style>
 /* 预览样式 */
 #post-detail-content {
+  font-size: 14px;
 }
 
 #post-detail-content img {
