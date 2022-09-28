@@ -161,7 +161,7 @@ export class YuqueApi extends CommonblogApi {
             headers: {
                 'Content-Type': 'application/json',
                 "X-Auth-Token": this.token,
-                "User-Agent": "Terwer/0.0.2"
+                "User-Agent": "Terwer/0.0.3"
             }
         })
 

@@ -1,12 +1,12 @@
 {
   "name": "sy-post-publisher",
   "private": true,
-  "version": "0.0.2",
+  "version": "0.0.3",
   "type": "module",
   "packageManager": "yarn@1.22.19",
   "scripts": {
     "dev": "vite",
-    "vdev": "vercel dev",
+    "vdev": "vercel dev --listen 3000",
     "build": "vue-tsc --noEmit && vite build",
     "build-siyuan": "vue-tsc --noEmit && BUILD_TYPE=siyuan vite build",
     "preview": "vite preview",
@@ -17,7 +17,9 @@
     "ext": "bash ext.sh",
     "widget": "bash widget.sh",
     "e": "yarn ext",
-    "w": "yarn widget"
+    "w": "yarn widget",
+    "pm2": "pm2 start pm2.json",
+    "pm2s": "pm2 stop pm2.json"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.0.9",

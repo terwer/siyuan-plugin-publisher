@@ -1,157 +1,152 @@
 # sy-post-publisher
 
-Publish siyuan article to supported open platforms
+将思源笔记的文章发布到支持的开放平台的**思源笔记挂件**
 
-At present, it supports vuepress and two open API standard blog platforms, <code>metaweblog api</code> and <code>
-xmlrpc</code> remote call API based on <code>wordpress</code>
+目前支持 Vuepress 以及 2 种博客平台标准、metaweblog api 和基于 Wordpress 的 xmlrpc 远程调用 api
 
-ALso provide a [common API adaptor](https://github.com/terwer/src-sy-post-publisher/blob/main/src/lib/api.ts) , make
-every plantform posiable.
+同时提供了一个 [统一通用的API适配器](https://github.com/terwer/src-sy-post-publisher/blob/main/src/lib/api.ts)
+，让适配任何平台成为可能。
 
-<a href="https://img1.terwergreen.com/api/public/20220729233245.gif" target="_blank" >Click me</a>
+**[点击查看帮助文档]()**
 
-![](img/v001.gif)
+**[点击查看配置视频教程]()**
 
-[中文版说明](README-zh_CN.md)
+## 最近更新
 
-## Support plantforms
+[点击这里查看开发进度](https://github.com/users/terwer/projects/1/views/1)
 
-* [X] Vuepress-v0.0.1 support，2022-07-29 release
+- 0.0.3 key fatures
 
-* [X] Cnblogs-relay on v0.0.2 version，~~will release on 2022-10-31~~，released now on 2022-08-21
+- [X] #1
 
-* [X] Liandi-relay on v0.0.2 version，~~will release on 2022-10-31~~，released now on 2022-08-21
+[历史更新日志](Changelog.md)
 
-* [X] Yueque-relay on v0.0.2 version，~~will release on 2022-10-31~~，released now on 2022-08-21
+## 支持平台
 
-* [X] Metaweblog API on v0.0.2，released now on 2022-08-21
+* [X] Vuepress
 
-* [X] Wordpress on v0.0.2，released now on 2022-08-21
+* [X] 博客园
 
-## Updates
+* [X] 链滴社区
 
-[Click here to view development progress](https://github.com/users/terwer/projects/1/views/1)
+* [X] 语雀
 
-### v0.0.2
+* [X] Wordpress
 
-- [X] [#15](https://github.com/terwer/src-sy-post-publisher/issues/15) Published to other platforms-blog parks,
-  WordPress, chain drop community, etc.
-
-    - [x] [#18](https://github.com/terwer/src-sy-post-publisher/issues/18) Implement MetaWeblog-API client
-
-    - [x] [#24](https://github.com/terwer/src-sy-post-publisher/issues/24) Non-pendant server version, you need to pass
-      the document ID. It is recommended to cooperate with my other
-      work [node-siyuan](https://github.com/terwer/node-siyuan) use
-
-    - [x] [#25](https://github.com/terwer/src-sy-post-publisher/issues/25) Vercel deploy
-
-    - [X] [#38](https://github.com/terwer/src-sy-post-publisher/issues/38) Some platforms support cancel the release
-
-    - [X] [#39](https://github.com/terwer/src-sy-post-publisher/issues/39) Support ELETRON interface
-
-    - [X] [#40](https://github.com/terwer/src-sy-post-publisher/issues/40) Published to Confluence, you need to
-      cooperate with my project [node-metaweblog-api-adaptor](https://github.com/terwer/node-metaweblog-api-adaptor)
-
-    - [x] [#41](https://github.com/terwer/src-sy-post-publisher/issues/41) Send to Wordpess
-
-    - [x] [#42](https://github.com/terwer/src-sy-post-publisher/issues/42) Sendto Liandi
-
-    - [x] [#43](https://github.com/terwer/src-sy-post-publisher/issues/43) Send to Yuque
-
-    - [x] [#44](https://github.com/terwer/src-sy-post-publisher/issues/44) Send to KMS
-
-- [#19](https://github.com/terwer/src-sy-post-publisher/issues/19) 增强Vuepress支持，如果设置了Github参数，使用Github
-  API实现自动发布，否则自行复制文本
-
-    - 1、add aupport for Github rest api
-
-    - 2、TS generic implementation Vuepress release parameter configuration
-
-    - 3、Fix Octokit to build an error in vite, replace `node-fetch` as `isomorphic-fetch`
-
-    - 4、Add config valifation
-
-    - 5、Time-consuming button operation add `loading`
-
-    - 6、If the GitHub parameter is set, the GitHub API is set to be automatically published, otherwise the text will be
-      copied by yourself
-
-    - 7、Support selection of custom release directory
-
-    - 8、Support modified file name
-
-    - 9、Vuepress's slug add hash to avoid the conflict of repeated articles
-
-    - 10、Support simple and complex mode
-
-    - 11、New API status to ensure the availability of the API
-
-    - 12、Configuration switch automatically takes effect
-
-    - 13、Default directory switch
-
-    - 14、Page initialization is also additional content
-
-    - 15、Support article cancellation and release
-
-### v0.0.1
-
-- [#13](https://github.com/terwer/src-sy-post-publisher/issues/13) Vuepress基本支持
+* [X] Metaweblog API
 
 ## Vue 3 + TypeScript + Vite
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue
-3 `<script setup>` SFCs, check out
-the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+项目使用 Vue 3 框架，TypeScript 开发语言，Vite 作为构建工具。
 
-## Recommended IDE Setup
+项目使用了 Vue 3 的 `<script setup>`
+，可以查看文档 [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) 了解更多。
+
+## 推荐开发工具
 
 * [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
 
-## Type Support For `.vue` Imports in TS
+* IntelliJ IDEA 或者 WebStorm
 
-Since TypeScript cannot handle type information for `.vue` imports, they are shimmed to be a generic Vue component type
-by default. In most cases this is fine if you don't really care about component prop types outside of templates.
-However, if you wish to get actual prop types in `.vue` imports (for example to get props validation when using
-manual `h(...)` calls), you can enable Volar's Take Over mode by following these steps:
+## 依赖版本
 
-1. Run `Extensions: Show Built-in Extensions` from VS Code's command palette, look
-   for `TypeScript and JavaScript Language Features`, then right click and select `Disable (Workspace)`. By default,
-   Take Over mode will enable itself if the default TypeScript extension is disabled.
+| 工具     | 版本       |
+|--------|----------|
+| node   | v16.16.0 |
+| yarn   | 1.22.19  |
+| vercel | 28.0.1   |
+| pm2    | 5.2.0    |
 
-2. Reload the VS Code window by running `Developer: Reload Window` from the command palette.
+## 环境变量
 
-You can learn more about Take Over mode [here](https://github.com/johnsoncodehk/volar/discussions/471).
+**设置环境变量**
 
-## Tool Version
-
-|Tool|Version|
-| ------| ----------|
-|node|v16.16.0|
-|yarn|1.22.19|
-
-## Devlopment
+复制 `.env.local.example` 文件到 `.env.local` (会被git忽略):
 
 ```bash
-npm i -g vercel
+cp .env.local.example .env.local
+```
+
+打开 `.env.local` 并且设置 SIYUAN_API_URL。例如：
+http://127.0.0.1:6806。
+
+你的 `.env.local` 文件大概像下面这样：
+
+```properties
+# log level
+VITE_LOG_INFO_ENABLED=false
+# siyuan api
+VITE_SIYUAN_API_URL=http://127.0.0.1:6806
+VITE_SIYUAN_CONFIG_TOKEN=
+# middlware to support cors, optional
+# VITE_MIDDLEWARE_URL=
+```
+
+你也可以设置`.env.development.local`, `.env.production.local`, `.env.test.local` 用于不同环境，开发、测试、构建等。
+
+参考 [Vite .env 设置文档](https://cn.vitejs.dev/guide/env-and-mode.html#env-files)
+
+## 开发
+
+准备
+
+```bash
 npm i -g yarn
+npm i -g vercel
+```
+
+开发阶段运行
+
+```bash
 # yarn create vite
 yarn
 yarn vdev
 ```
 
-## Deploy
+## 部署
 
-### Build for siyuan widget
+从0.0.3版本开始，思源笔记发布辅助工具提供3种部署方式。
+
+### 方式1、部署到思源笔记挂件
 
 ```bash
 yarn w
 ```
 
-### Build for chrome extension
+压缩 `dist` 文件夹为 `.zip`, 上架思源笔记挂件集市。
+
+### 方式2、部署到Google Chrome浏览器插件
 
 ```bash
 yarn e
 ```
 
-[Vercel CLI](https://vercel.com/docs/cli#introduction/installing-the-cli)
+压缩 `extension` 文件夹为 `.zip`, 上架Google Chrome应用商店。
+
+### 方式3、部署到服务器后台服务
+
+准备
+
+```bash
+npm i -g yarn
+npm i -g vercel
+npm i -g pm2
+```
+
+启动
+
+```bash
+yarn pm2
+```
+
+停止
+
+```bash
+yarn pm2s
+```
+
+查看
+
+```bash
+pm2 ls
+```

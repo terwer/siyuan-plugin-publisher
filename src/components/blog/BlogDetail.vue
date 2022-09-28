@@ -15,7 +15,7 @@
 
 <script lang="ts" setup>
 import {goToPage} from "../../lib/chrome/ChromeUtil";
-import {getPageId} from "../../lib/platform/siyuan/siyuanUtil";
+import {getPageId, getWidgetId} from "../../lib/platform/siyuan/siyuanUtil";
 import {onMounted, ref} from "vue";
 import LocaleChanger from "../tab/ChangeLocale.vue";
 
@@ -28,9 +28,14 @@ const props = defineProps({
 
 const pid = ref("")
 
-const handlePublish = (e: any) => {
+const handlePublish = async (e: any) => {
   e.preventDefault()
-  goToPage("/index.html?id=" + pid.value, "/")
+  const widgetResult = await getWidgetId()
+  if (widgetResult.isInSiyuan) {
+    goToPage("/index.html?id=" + pid.value, "/")
+  } else {
+    goToPage("/publish/index.html?id=" + pid.value, "/")
+  }
 }
 
 const initPage = async () => {
