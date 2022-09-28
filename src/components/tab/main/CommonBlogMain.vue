@@ -191,7 +191,14 @@ import {SIYUAN_PAGE_ATTR_KEY} from "../../../lib/constants/siyuanPageConstants";
 import logUtil from "../../../lib/logUtil";
 import {ElMessage} from "element-plus/es";
 import shortHash from "shorthash2";
-import {mdToHtml, mdToPlainText, parseHtml, removeMdWidgetTag, removeTitleNumber} from "../../../lib/htmlUtil";
+import {
+  mdToHtml,
+  mdToPlainText,
+  parseHtml,
+  removeMdWidgetTag,
+  removeTitleNumber,
+  removeWidgetTag
+} from "../../../lib/htmlUtil";
 import {CONSTANTS} from "../../../lib/constants/constants";
 import {ElMessageBox} from "element-plus";
 import {API} from "../../../lib/api";
@@ -639,11 +646,11 @@ const doPublish = async () => {
     // 文章标题
     let fmtTitle = removeTitleNumber(formData.title)
     // 发布内容
-    const data = await getPageMd(siyuanData.pageId);
-    const md = removeMdWidgetTag(data.content)
+    const md = await getPageMd(siyuanData.pageId);
     let content = md
     if (PageType.Html == commonblogCfg.pageType) {
-      content = mdToHtml(md)
+      const html = mdToHtml(content)
+      content = removeWidgetTag(html)
     } else {
       content = removeMdWidgetTag(content)
     }

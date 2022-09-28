@@ -61,7 +61,7 @@ every plantform posiable.
     * [ ] 详情页支持下载所有图片到本地，并打包成带assets文件夹和md文件的zip包，这个主要是某些分享场景网络不畅通可能有用
     * [ ] 支持发布时候选择一键剔除外链图片，主要是个别平台不允许外链图片
 
-[Full changelog](Changelog-en-US.md)
+[Full changelog](Changelog-en_US.md)
 
 ## Support plantforms
 
