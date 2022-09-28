@@ -29,3 +29,6 @@ dist-ssr
 __snapshots__
 test/data/
 extension/
+*.crx
+*.pem
+backup/
