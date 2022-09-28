@@ -2,6 +2,7 @@
 // const converter = new showdown.Converter();
 
 import {render} from "./markdownUtil";
+import logUtil from "./logUtil";
 
 /**
  * 移除标题数字
@@ -23,7 +24,8 @@ export function removeTitleNumber(str: string) {
  * @returns {*|string} 删除后的字符
  */
 export function removeWidgetTag(str: string) {
-    let newstr = str
+    let newstr = str.toString()
+    // logUtil.logWarn("newstr=>", newstr)
 
     // 旧版发布挂件
     const publisherRegex = /<iframe.*src="\/widgets\/publisher.*<\/iframe>/g;
@@ -49,7 +51,7 @@ export function removeWidgetTag(str: string) {
  * @returns {*|string} 删除后的字符
  */
 export function removeMdWidgetTag(str: string) {
-    let newstr = str
+    let newstr = str.toString()
 
     const mdH1Rehex = /#\s[0-9]+.*/g
     newstr = newstr.replace(mdH1Rehex, "")

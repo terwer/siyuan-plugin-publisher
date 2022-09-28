@@ -378,9 +378,12 @@ async function initPage() {
   convertAttrToYAML()
 
   // 文章内容同步到YAMl
+  // 发布内容
+  let content
   const data = await getPageMd(siyuanData.value.pageId);
-  const md = removeMdWidgetTag(data.content)
-  vuepressData.value.vuepressContent = md;
+  const md = data.content
+  content = removeMdWidgetTag(md)
+  vuepressData.value.vuepressContent = content;
   vuepressData.value.vuepressFullContent = vuepressData.value.formatter + "\n" + vuepressData.value.vuepressContent;
 
   // 发布状态
