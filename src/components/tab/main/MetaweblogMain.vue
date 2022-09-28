@@ -596,11 +596,11 @@ const doPublish = async () => {
     // 标题处理
     let fmtTitle = removeTitleNumber(formData.title)
     // 发布内容
-    const data = await getPageMd(siyuanData.pageId);
-    const md = removeWidgetTag(data.content)
+    const md = await getPageMd(siyuanData.pageId);
     let content = md
     if (PageType.Html == metaweblogCfg.pageType) {
-      content = mdToHtml(md)
+      const html = mdToHtml(content)
+      content = removeWidgetTag(html)
     } else {
       content = removeMdWidgetTag(content)
     }
