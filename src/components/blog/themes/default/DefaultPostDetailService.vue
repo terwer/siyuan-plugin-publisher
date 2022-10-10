@@ -58,7 +58,22 @@ export default {
 #post-detail-content img {
   max-width: 99%;
 }
+
+#post-detail-content ol{
+  padding-inline-start: 24px;
+}
+
+#post-detail-content blockquote {
+  display: block;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 4px;
+  margin-inline-end: 24px;
+  border: solid 1px green;
+  border-radius: 4px;
+  padding: 0 10px;
+  background: var(--custom-app-bg-color);
+}
 </style>
 <style scoped>
-
 </style>
