@@ -4,7 +4,7 @@
       "name": "sy-post-publisher",
       "script": "yarn",
       "args" : "vdev",
-      "instances": "max",
+      "instances": 1,
       "exec_mode": "cluster"
     }
   ]

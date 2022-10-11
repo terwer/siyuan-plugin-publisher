@@ -192,13 +192,13 @@ npm i -g pm2
 启动
 
 ```bash
-yarn pm2
+pm2 start pm2.json
 ```
 
 停止
 
 ```bash
-yarn pm2s
+pm2 stop pm2.json
 ```
 
 查看
