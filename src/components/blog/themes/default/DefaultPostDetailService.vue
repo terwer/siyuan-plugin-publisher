@@ -59,7 +59,7 @@ export default {
   max-width: 99%;
 }
 
-#post-detail-content ol{
+#post-detail-content ol, #post-detail-content ul{
   padding-inline-start: 24px;
 }
 

@@ -3,6 +3,9 @@ import App from './App.vue'
 import './style.css'
 import './styles/dark/css-vars.css'
 
+// LXGW
+import 'lxgw-wenkai-webfont/style.css';
+
 // pinia
 import {createPinia} from "pinia";
 
