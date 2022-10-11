@@ -11,7 +11,9 @@
     "activeTab",
     "scripting"
   ],
-  "host_permissions": [ "*://*/*" ],
+  "host_permissions": [
+    "*://*/*"
+  ],
   "web_accessible_resources": [
     {
       "resources": [
@@ -25,6 +27,9 @@
       ]
     }
   ],
+  "options_ui": {
+    "chrome_style": false
+  },
   "action": {
     "default_popup": "blog/index.html"
   }
