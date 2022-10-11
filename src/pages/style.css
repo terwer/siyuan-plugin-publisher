@@ -1,5 +1,5 @@
 :root {
-  font-family: "-apple-system", "Wenquanyi Micro Hei", "Wenquanyi Micro Hei Mono", "Microsoft YaHei", "LXGW WenKai", "PT Sans", "Liberation Mono", monospace, dejavu sans mono, Fira Code, Microsoft Yahei, Consolas, Courier New, monospace, Menlo, Monaco !important;
+  font-family: "LXGW WenKai", "-apple-system", "Wenquanyi Micro Hei", "Wenquanyi Micro Hei Mono", "Microsoft YaHei", "LXGW WenKai", "PT Sans", "Liberation Mono", monospace, dejavu sans mono, Fira Code, Microsoft Yahei, Consolas, Courier New, monospace, Menlo, Monaco !important;
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
@@ -10,6 +10,11 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+}
+
+/* Mono font (optional) */
+pre,code {
+  font-family: "LXGW WenKai Mono", sans-serif !important;
 }
 
 a {
@@ -23,6 +28,7 @@ a:hover {
 
 body {
   margin: 0;
+  font-size: 100%;
 }
 
 html{
