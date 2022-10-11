@@ -174,11 +174,11 @@ npm i -g pm2
 start
 
 ```bash
-yarn pm2
+pm2 start pm2.json
 ```
 
 stop
 
 ```bash
-yarn pm2s
+pm2 stop pm2.json
 ```

@@ -1,5 +1,5 @@
 html{
-  --el-font-family: "LXGW WenKai", "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  --el-font-family: "LXGW WenKai", "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif !important;
 }
 html.dark {
   /* 自定义深色背景颜色 */

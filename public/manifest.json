@@ -27,9 +27,6 @@
       ]
     }
   ],
-  "options_ui": {
-    "chrome_style": false
-  },
   "action": {
     "default_popup": "blog/index.html"
   }
