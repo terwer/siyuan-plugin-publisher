@@ -2,6 +2,8 @@ import Hljs from "highlight.js";
 import { CopyButtonPlugin } from "../codecopy";
 import "../codecopy/codecopy.css";
 import "./vs.css";
+// const plantumlEncoder = require('plantuml-encoder')
+import * as plantumlEncoder from 'plantuml-encoder'
 
 const vueHljs = {};
 
@@ -75,6 +77,21 @@ vueHljs.install = Vue => {
         // console.log("tab")
       }
     });
+
+    // plantuml
+    const umlBlocks = el.querySelectorAll("div.language-plantuml")
+    umlBlocks.forEach(item => {
+      const encoded = plantumlEncoder.encode(item.innerHTML)
+      // const encoded = "SrJGjLDmibBmICt9oGS0"
+      const plantUMLServer = process.env.PLANT_UML_SERVR || "https://www.plantuml.com/plantuml/svg/"
+      const url = plantUMLServer + encoded
+
+      const newNode = document.createElement("img")
+      newNode.setAttribute("src", url)
+      item?.parentNode?.insertBefore(newNode, item)
+      item.remove()
+    })
+
   });
 };
 

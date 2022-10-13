@@ -7,9 +7,14 @@
     <!-- 文章详情 -->
     <DefaultPostDetailService :page-id="pid"/>
 
+    <!--
     <div id="dt-tool">
       <locale-changer/>
     </div>
+    -->
+    <el-footer>
+      <DefaultFooter/>
+    </el-footer>
   </div>
 </template>
 
@@ -18,6 +23,7 @@ import {goToPage} from "../../lib/chrome/ChromeUtil";
 import {getPageId, getWidgetId} from "../../lib/platform/siyuan/siyuanUtil";
 import {onMounted, ref} from "vue";
 import LocaleChanger from "../tab/ChangeLocale.vue";
+import DefaultFooter from "./themes/default/DefaultFooter.vue";
 
 const props = defineProps({
   pageId: {
