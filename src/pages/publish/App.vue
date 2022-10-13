@@ -7,7 +7,7 @@
 <script lang="ts" setup>
 import {onMounted} from "vue";
 import logUtil from "../../lib/logUtil";
-import PublishService from "../components/PublishService.vue";
+import PublishService from "../../components/PublishService.vue";
 import {isInChromeExtension} from "../../lib/chrome/ChromeUtil";
 import {getWidgetId} from "../../lib/platform/siyuan/siyuanUtil";
 

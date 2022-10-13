@@ -31,6 +31,7 @@ html{
 #app{
   background: var(--custom-app-bg-color);
   padding: 10px;
+  min-height: 940px;
 }
 
 @media (prefers-color-scheme: light) {

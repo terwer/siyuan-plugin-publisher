@@ -35,6 +35,7 @@ body {
 #app {
     background: var(--custom-app-bg-color);
     padding: 10px;
+    min-height: 940px;
 }
 
 .el-header h1 {
