@@ -7,7 +7,7 @@
 
 <script lang="ts" setup>
 import {Post} from "../../../../lib/common/post";
-import {onMounted, ref, watch} from "vue";
+import {nextTick, onMounted, ref, watch} from "vue";
 import {API} from "../../../../lib/api";
 import {API_TYPE_CONSTANTS} from "../../../../lib/constants/apiTypeConstants";
 import logUtil from "../../../../lib/logUtil";
@@ -33,6 +33,10 @@ const defaultPost = new Post()
 const post = ref(defaultPost)
 
 const initPage = async () => {
+  if (!props.pageId || props.pageId == "") {
+    return
+  }
+
   const api = new API(API_TYPE_CONSTANTS.API_TYPE_SIYUAN)
   const siyuanPost = await api.getPost(props.pageId || "")
   post.value = siyuanPost
@@ -60,7 +64,7 @@ export default {
   max-width: 99%;
 }
 
-#post-detail-content ol, #post-detail-content ul{
+#post-detail-content ol, #post-detail-content ul {
   padding-inline-start: 24px;
 }
 

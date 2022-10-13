@@ -5,7 +5,7 @@
   "type": "module",
   "packageManager": "yarn@1.22.19",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --port 6006",
     "vdev": "vercel dev --listen 6006",
     "build": "vue-tsc --noEmit && vite build",
     "build-siyuan": "vue-tsc --noEmit && BUILD_TYPE=siyuan vite build",
