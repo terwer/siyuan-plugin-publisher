@@ -67,6 +67,9 @@ export default {
 #post-detail-content ol, #post-detail-content ul {
   padding-inline-start: 24px;
 }
+#post-detail-content ol li, #post-detail-content ul li{
+  padding: 5px 0;
+}
 
 #post-detail-content blockquote {
   display: block;
@@ -78,6 +81,10 @@ export default {
   border-radius: 4px;
   padding: 0 10px;
   background: var(--custom-app-bg-color);
+}
+
+#post-detail-content mjx-container[jax="SVG"][display="true"]{
+  text-align: left;
 }
 </style>
 <style scoped>

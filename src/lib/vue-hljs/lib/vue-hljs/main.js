@@ -4,6 +4,7 @@ import "../codecopy/codecopy.css";
 import "./vs.css";
 // const plantumlEncoder = require('plantuml-encoder')
 import * as plantumlEncoder from 'plantuml-encoder'
+import {unescapeHTML} from "../../../strUtil.ts";
 
 const vueHljs = {};
 
@@ -81,7 +82,8 @@ vueHljs.install = Vue => {
         // plantuml
         const umlBlocks = el.querySelectorAll("div.language-plantuml")
         umlBlocks.forEach(item => {
-            const encoded = plantumlEncoder.encode(item.innerHTML)
+            const umlstr = unescapeHTML(item.innerHTML)
+            const encoded = plantumlEncoder.encode(umlstr)
             // const encoded = "SrJGjLDmibBmICt9oGS0"
             const plantUMLServer = process.env.PLANT_UML_SERVR || "https://www.plantuml.com/plantuml/svg/"
             const url = plantUMLServer + encoded
@@ -98,11 +100,11 @@ vueHljs.install = Vue => {
             const newHtml = "$" + item.innerHTML + "$";
             item.innerHTML = newHtml;
         })
-        console.log("inlineMathBlocks count=>", inlineMathBlocks.length)
+        // console.log("inlineMathBlocks count=>", inlineMathBlocks.length)
 
         // block mathjax
         const mathBlocks = el.querySelectorAll("div.language-math")
-        console.log("mathBlocks count=>", mathBlocks.length)
+        // console.log("mathBlocks count=>", mathBlocks.length)
         mathBlocks.forEach(item => {
             const newHtml = "$$" + item.innerHTML + "$$";
             item.innerHTML = newHtml;
