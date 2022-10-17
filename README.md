@@ -2,13 +2,13 @@
 
 将思源笔记的文章发布到支持的开放平台的**思源笔记挂件**
 
-目前支持 `Vuepress` 以及 2 种博客平台标准、`metaweblog api` 和基于 `Wordpress` 的 `xmlrpc` 远程调用 api
+目前支持 `Vuepress` 、 以及 2 种博客平台标准、`metaweblog api` 和基于 `Wordpress` 的 `xmlrpc` 远程调用 api
 
 同时提供了一个 [统一通用的API适配器](https://github.com/terwer/src-sy-post-publisher/blob/main/src/lib/api.ts)，让适配任何平台成为可能。
 
-![](public/preview.png)
+![](https://static-rs-terwer.oss-cn-beijing.aliyuncs.com/project/sy-post-publisher/preview.png)
 
-![](public/preview-light.png)
+![](https://static-rs-terwer.oss-cn-beijing.aliyuncs.com/project/sy-post-publisher/preview-light.png)
 
 [点击查看帮助文档](https://mp.terwer.space/post/readme-1j4ltp.html)
 
