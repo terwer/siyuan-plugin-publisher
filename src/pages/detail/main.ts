@@ -2,9 +2,6 @@ import {createApp} from 'vue'
 import App from './App.vue'
 import './style.css'
 
-// LXGW
-import 'lxgw-wenkai-webfont/style.css';
-
 // 国际化
 import i18n from "../../locales";
 

@@ -1,6 +1,8 @@
-:root {
-  font-family: "LXGW WenKai", "-apple-system", "Wenquanyi Micro Hei", "Wenquanyi Micro Hei Mono", "Microsoft YaHei", "LXGW WenKai", "PT Sans", "Liberation Mono", monospace, dejavu sans mono, Fira Code, Microsoft Yahei, Consolas, Courier New, monospace, Menlo, Monaco !important;
+@import "./webfont.css";
 
+:root {
+  --g-font-family: "JetBrains Mono", "LXGW WenKai", "-apple-system", "Wenquanyi Micro Hei", "Wenquanyi Micro Hei Mono", "Microsoft YaHei", "PT Sans", "Liberation Mono", monospace, dejavu sans mono, Fira Code, Microsoft Yahei, Consolas, Courier New, monospace, Menlo, Monaco;
+  font-family: var(--g-font-family) !important;
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
@@ -14,7 +16,7 @@
 
 /* Mono font (optional) */
 pre,code {
-  font-family: "LXGW WenKai Mono", sans-serif !important;
+  font-family: var(--g-font-family) !important;
 }
 
 a {
