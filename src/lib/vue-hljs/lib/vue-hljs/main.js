@@ -5,6 +5,7 @@ import "./vs.css";
 // const plantumlEncoder = require('plantuml-encoder')
 import * as plantumlEncoder from 'plantuml-encoder'
 import {unescapeHTML} from "../../../strUtil.ts";
+import {isInChromeExtension} from "../../../chrome/ChromeUtil.ts";
 
 const vueHljs = {};
 
@@ -97,8 +98,21 @@ vueHljs.install = Vue => {
         // inline mathjax
         const inlineMathBlocks = el.querySelectorAll("span.language-math")
         inlineMathBlocks.forEach(item => {
-            const newHtml = "$" + item.innerHTML + "$";
-            item.innerHTML = newHtml;
+            if (isInChromeExtension()) {
+                let html = item.innerHTML;
+                html = html.replace(/，/g, ",");
+                html = html.replace(/。/g, ".");
+                html = html.replace(/并且/g, "AND");
+                html = html.replace(/或者/g, "OR");
+                html = encodeURIComponent(html);
+                const newHtml = "<img src=\"" +
+                    "https://latex.codecogs.com/svg.image?" + html +
+                    "\" />"
+                item.innerHTML = newHtml;
+            } else {
+                const newHtml = "$" + item.innerHTML + "$";
+                item.innerHTML = newHtml;
+            }
         })
         // console.log("inlineMathBlocks count=>", inlineMathBlocks.length)
 
@@ -106,12 +120,27 @@ vueHljs.install = Vue => {
         const mathBlocks = el.querySelectorAll("div.language-math")
         // console.log("mathBlocks count=>", mathBlocks.length)
         mathBlocks.forEach(item => {
-            const newHtml = "$$" + item.innerHTML + "$$";
-            item.innerHTML = newHtml;
+            if (isInChromeExtension()) {
+                let html = item.innerHTML;
+                html = html.replace(/，/g, ",");
+                html = html.replace(/。/g, ".");
+                html = html.replace(/并且/g, "AND");
+                html = html.replace(/或者/g, "OR");
+                html = encodeURIComponent(html);
+                const newHtml = "<img src=\"" +
+                    "https://latex.codecogs.com/svg.image?" + html +
+                    "\" />"
+                item.innerHTML = newHtml;
+            } else {
+                const newHtml = "$$" + item.innerHTML + "$$";
+                item.innerHTML = newHtml;
+            }
         })
 
         // 渲染
-        MathJax.typeset()
+        if (!isInChromeExtension()) {
+            MathJax.typeset()
+        }
     });
 };
 
