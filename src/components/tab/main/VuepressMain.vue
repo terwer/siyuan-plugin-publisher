@@ -165,7 +165,7 @@
             {{ isPublished ? $t('main.publish.status.published') : $t('main.publish.status.unpublish') }}
           </el-button>
           <a :href="previewUrl" :title="previewUrl" target="_blank"
-             v-if="isPublished">{{ $t('main.publish.vuepress.see.preview') }}</a>
+             v-if="isPublished">{{ $t('main.publish.vuepress.see.md.preview') }}</a>
         </el-form-item>
         <el-form-item>
           <a :href="previewRealUrl" :title="previewRealUrl" target="_blank"
@@ -403,9 +403,11 @@ async function initPage() {
     useDefaultPath.value = false
     formData.value.customPath = docPath;
 
+    // "https://terwergreen.com"
+    const vdomain = "https://terwer.space/";
     previewUrl.value = "https://github.com/" + vuepressCfg.githubUser + "/" + vuepressCfg.githubRepo
         + "/blob/" + vuepressCfg.defaultBranch + "/" + docPath
-    previewRealUrl.value = "https://terwergreen.com" + vuepressData.value.yamlObj.permalink
+    previewRealUrl.value = vdomain + vuepressData.value.yamlObj.permalink
   }
 
   isInitLoadding.value = false

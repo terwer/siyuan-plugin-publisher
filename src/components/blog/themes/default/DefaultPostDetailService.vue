@@ -68,7 +68,7 @@ export default {
   padding-inline-start: 24px;
 }
 #post-detail-content ol li, #post-detail-content ul li{
-  padding: 5px 0;
+  /*padding: 5px 0;*/
 }
 
 #post-detail-content blockquote {
