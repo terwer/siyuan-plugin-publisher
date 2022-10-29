@@ -5,7 +5,7 @@
                 :closable="false"/>
       <el-alert class="top-version-tip" :title="$t('setting.blog.vali.tip.metaweblog')" type="error" :closable="false"
                 v-if="!apiStatus"/>
-      <el-alert class="top-version-tip" :title="$t('setting.conf.tip')" type="error" :closable="false"
+      <el-alert class="top-version-tip" :title="$t('setting.conf.tip')" type="info" :closable="false"
                 v-if="useAdaptor"/>
       <el-form label-width="120px">
         <!-- 编辑模式 -->

@@ -4,7 +4,8 @@
       <el-switch v-model="vuepressEnabled" @change="vuepressOnChange"/>
     </el-form-item>
 
-    <el-form-item :label="$t('service.switch.jvue')">
+    <!-- 废弃 -->
+    <el-form-item :label="$t('service.switch.jvue')" v-if="false">
       <el-switch v-model="jvueEnabled" @change="jvueOnChange"/>
     </el-form-item>
 
