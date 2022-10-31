@@ -17,6 +17,7 @@
 /* Mono font (optional) */
 pre,code {
   font-family: var(--g-font-family) !important;
+  tab-size: 4;
 }
 
 a {
@@ -36,6 +37,7 @@ body {
 html{
   --custom-app-bg-color: #ffffff;
 }
+
 #app{
   background: var(--custom-app-bg-color);
   padding: 10px;

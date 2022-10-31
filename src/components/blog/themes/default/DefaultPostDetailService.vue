@@ -29,7 +29,7 @@ watch(() => props.pageId, /**/(oldValue, newValue) => {
   logUtil.logInfo("文章详情查看初始化")
 })
 
-const defaultPost = new Post()
+const defaultPost: Post = new Post()
 const post = ref(defaultPost)
 
 const initPage = async () => {

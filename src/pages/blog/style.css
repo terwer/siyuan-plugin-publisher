@@ -17,6 +17,7 @@
 /* Mono font (optional) */
 pre,code {
     font-family: var(--g-font-family) !important;
+    tab-size: 4;
 }
 
 a {
