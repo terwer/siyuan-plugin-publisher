@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="src-sy-post-publisher-v0.x">
+        <wb-resource deploy-path="/" source-path="/public"/>
+        <property name="context-root" value="src-sy-post-publisher-v0.x"/>
+    </wb-module>
+</project-modules>
