@@ -10,6 +10,9 @@
       "strict_min_version": "47.0"
     }
   },
+  "background": {
+    "scripts": ["background.js"]
+  },
   "externally_connectable": {
     "matches": [
       "*://*/*"
