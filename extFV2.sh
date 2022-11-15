@@ -5,6 +5,7 @@ rm ./dist/widget.json
 
 # 火狐配置
 mv ./dist/manifest-v2-for-firefox.json ./dist/manifest.json
+rm ./dist/background.js
 
 rm -rf ./extension/firefox/v2/*
 mkdir -p extension/firefox/v2
