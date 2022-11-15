@@ -4,6 +4,17 @@
   "manifest_version": 2,
   "author": "terwer",
   "description": "思源笔记发布辅助工具，支持博客式只读浏览，多平台文章发布。",
+  "applications": {
+    "gecko": {
+      "id": "terwer@terwer.space",
+      "strict_min_version": "47.0"
+    }
+  },
+  "externally_connectable": {
+    "matches": [
+      "*://*/*"
+    ]
+  },
   "web_accessible_resources": [
     "blog/index.html",
     "detail/index.html",

@@ -4,6 +4,7 @@ yarn build
 rm ./dist/widget.json
 # 删除火狐配置
 rm ./dist/manifest-v2-for-firefox.json
+rm ./dist/background-v2-for-firefox.js
 
 rm -rf ./extension/chrome/*
 mkdir -p extension/chrome
