@@ -13,11 +13,6 @@
   "background": {
     "scripts": ["background.js"]
   },
-  "externally_connectable": {
-    "matches": [
-      "*://*/*"
-    ]
-  },
   "web_accessible_resources": [
     "blog/index.html",
     "detail/index.html",

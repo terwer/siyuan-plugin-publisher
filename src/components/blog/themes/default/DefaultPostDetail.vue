@@ -23,7 +23,7 @@
 <script lang="ts" setup>
 import {Post} from "../../../../lib/common/post";
 import {ArrowLeft} from '@element-plus/icons-vue'
-import {goToPage} from "../../../../lib/chrome/ChromeUtil";
+import {goToPage} from "../../../../lib/browser/ChromeUtil";
 import DefaultPostDetailService from "./DefaultPostDetailService.vue";
 
 const props = defineProps({

@@ -16,7 +16,7 @@
 
 <script lang="ts" setup>
 import {useDark, useToggle} from "@vueuse/core";
-import {goToPage} from "../../../../lib/chrome/ChromeUtil";
+import {goToPage} from "../../../../lib/browser/ChromeUtil";
 
 const isDark = useDark()
 const toggleDark = useToggle(isDark)

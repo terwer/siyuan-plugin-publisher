@@ -2,8 +2,9 @@ import {getWidgetId} from "../siyuan/siyuanUtil";
 import logUtil from "../../logUtil";
 import {getEnv} from "../../envUtil";
 import {fetchNode} from "./nodeXmlrpc";
-import {isInChromeExtension} from "../../chrome/ChromeUtil";
+import {isInChromeExtension} from "../../browser/ChromeUtil";
 import {fetchCustom} from "./customXmlrpc";
+import {isInFirefoxExtension} from "../../browser/FirefoxUtil";
 
 /**
  * Xmlrpc客户端封装类
@@ -108,7 +109,7 @@ export class XmlrpcClient {
 
         const widgetResult = await getWidgetId()
         if (widgetResult.isInSiyuan) {
-            logUtil.logInfo("当前处于挂件模式，使用electron的fetch获取数据")
+            logUtil.logInfo("当前处于挂件模式，使用electron的fetch获取数据or firefox")
             // 不解析了，直接使用Node兼容调用
             // result = await fetchElectron(apiUrl, reqMethod, reqParams)
             result = await fetchNode(apiUrl, reqMethod, reqParams)

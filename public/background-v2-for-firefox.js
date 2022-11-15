@@ -1,5 +1,7 @@
 // https://github.com/mdn/webextensions-examples/blob/master/page-to-extension-messaging/content-script.js
 // https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/externally_connectable
+// https://developer.chrome.com/docs/extensions/mv3/mv3-migration/
+// https://blog.csdn.net/chirpmonster/article/details/124611556
 
 /*
 Listen for messages from the page.

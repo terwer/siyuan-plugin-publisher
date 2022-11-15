@@ -1,5 +1,5 @@
 import logUtil from "../../logUtil";
-import {sendChromeMessage} from "../../chrome/ChromeUtil";
+import {sendChromeMessage} from "../../browser/ChromeUtil";
 
 const Serializer = require('xmlrpc/lib/serializer')
 const {XMLParser} = require('fast-xml-parser');

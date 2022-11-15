@@ -6,6 +6,8 @@
  * @param splt 例如：/，但部分情况下无需传递此参数
  *
  */
+import {isInFirefoxExtension} from "./FirefoxUtil";
+
 export function goToPage(pageUrl: string, split?: string) {
     // While we could have used `let url = "index.html"`, using runtime.getURL is a bit more robust as
     // it returns a full URL rather than just a path that Chrome needs to be resolved contextually at
@@ -31,8 +33,12 @@ export function goToPage(pageUrl: string, split?: string) {
  * 检测是否运行在Chrome插件中
  */
 export function isInChromeExtension() {
+    // 误判处理
+    if (isInFirefoxExtension()) {
+        return false;
+    }
     // @ts-ignore
-    return typeof chrome.runtime != "undefined";
+    return !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
 }
 
 /**

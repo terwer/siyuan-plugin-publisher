@@ -8,7 +8,7 @@
 import {onMounted} from "vue";
 import logUtil from "../lib/logUtil";
 import PublishService from "../components/PublishService.vue";
-import {isInChromeExtension} from "../lib/chrome/ChromeUtil";
+import {isInChromeExtension} from "../lib/browser/ChromeUtil";
 import {getWidgetId} from "../lib/platform/siyuan/siyuanUtil";
 
 onMounted(async () => {
