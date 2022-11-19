@@ -4,11 +4,12 @@
       <div>
         <span class="text"> &copy;2011-2022 </span>
         <span class="s-dark" @click="goGithub()"> sy-post-publisher </span>
-        <span class="text"> v0.0.3. </span>
+        <span class="text"> v0.1.0. </span>
         <span class="text s-dark" @click="toggleDark()">{{
             isDark ? $t('theme.mode.light') : $t('theme.mode.dark')
           }}</span>
-        <span class="text">.</span> <span class="text s-dark" @click="newWin()"> 新窗口打开 </span>
+        <span class="text">.</span> <span class="text s-dark" @click="newWin()"> {{ $t('blog.newwin.open') }} </span>
+        <span class="text">.</span> <span class="text s-dark" @click="changeSuyuanApi()"> {{ $t('blog.change.siyuan.api') }} </span>
       </div>
     </div>
   </div>
@@ -26,6 +27,9 @@ const goGithub = () => {
 }
 const newWin = () => {
   goToPage("/blog/index.html")
+}
+const changeSuyuanApi = () => {
+  alert(1)
 }
 </script>
 

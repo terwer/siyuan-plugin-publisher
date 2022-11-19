@@ -129,7 +129,7 @@ export class LiandiApi extends CommonblogApi {
             Object.assign(fetchOps, {
                 headers: {
                     Authorization: `token ${this.token}`,
-                    "User-Agent": "Terwer/0.0.3"
+                    "User-Agent": "Terwer/0.1.0"
                 }
             })
         }

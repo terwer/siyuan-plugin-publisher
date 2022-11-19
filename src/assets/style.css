@@ -41,6 +41,8 @@ body {
 #app{
   background: var(--custom-app-bg-color);
   padding: 10px;
+  min-width: 600px;
+  min-height: 960px;
 }
 
 @media (prefers-color-scheme: light) {
