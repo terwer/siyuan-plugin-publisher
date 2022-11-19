@@ -8,6 +8,6 @@ import Detail from "../../components/Detail.vue";
 
 <script lang="ts">
 export default {
-  name: 'App'
+  name: 'detail'
 }
 </script>

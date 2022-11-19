@@ -14,6 +14,6 @@ onMounted(async () => {
 
 <script lang="ts">
 export default {
-  name: 'App'
+  name: 'blog'
 }
 </script>

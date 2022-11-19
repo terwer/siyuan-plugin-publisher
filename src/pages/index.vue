@@ -6,10 +6,10 @@
 
 <script lang="ts" setup>
 import {onMounted} from "vue";
-import logUtil from "../../lib/logUtil";
-import PublishService from "../../components/PublishService.vue";
-import {isInChromeExtension} from "../../lib/browser/ChromeUtil";
-import {getWidgetId} from "../../lib/platform/siyuan/siyuanUtil";
+import logUtil from "../lib/logUtil";
+import PublishService from "../components/PublishService.vue";
+import {isInChromeExtension} from "../lib/browser/ChromeUtil";
+import {getWidgetId} from "../lib/platform/siyuan/siyuanUtil";
 
 onMounted(async () => {
   logUtil.logWarn("MODE=>", import.meta.env.MODE)
@@ -28,6 +28,6 @@ onMounted(async () => {
 
 <script lang="ts">
 export default {
-  name: 'App'
+  name: 'index'
 }
 </script>
