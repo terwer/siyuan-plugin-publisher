@@ -15,8 +15,10 @@
     "webstorm-integration": "vitest --watch --reporter=dot --reporter=json --outputFile=.vitest-result.json",
     "deploy-siyuan": "bash deploy.sh",
     "ext": "bash ext.sh",
+    "extFirfoxV2": "bash extFV2.sh",
     "widget": "bash widget.sh",
     "e": "yarn ext",
+    "ef2": "yarn extFirfoxV2",
     "w": "yarn widget"
   },
   "dependencies": {

@@ -7,7 +7,6 @@ import {exportMdContent, getBlockAttrs, getBlockByID, lsNotebooks, setBlockAttrs
 import logUtil from "../../logUtil";
 import {getEnv} from "../../envUtil";
 import {inBrowser} from "../../util";
-import {isInChromeExtension} from "../../chrome/ChromeUtil";
 
 export async function getWidgetId() {
     if (import.meta.env.MODE == "test") {

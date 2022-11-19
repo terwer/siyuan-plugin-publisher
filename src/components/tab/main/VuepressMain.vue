@@ -165,7 +165,11 @@
             {{ isPublished ? $t('main.publish.status.published') : $t('main.publish.status.unpublish') }}
           </el-button>
           <a :href="previewUrl" :title="previewUrl" target="_blank"
-             v-if="isPublished">{{ $t('main.publish.vuepress.see.preview') }}</a>
+             v-if="isPublished">{{ $t('main.publish.vuepress.see.md.preview') }}</a>
+        </el-form-item>
+        <el-form-item>
+          <a :href="previewRealUrl" :title="previewRealUrl" target="_blank"
+             v-if="isPublished">{{ $t('main.publish.vuepress.see.real.preview') }}</a>
         </el-form-item>
       </el-form>
     </el-aside>
@@ -267,6 +271,7 @@ const vuepressGithubEnabled = ref(false)
 const useDefaultPath = ref(true)
 const isPublished = ref(false)
 const previewUrl = ref("")
+const previewRealUrl = ref("")
 const forceRefresh = ref(false)
 const tagSwitch = ref(false)
 
@@ -398,8 +403,11 @@ async function initPage() {
     useDefaultPath.value = false
     formData.value.customPath = docPath;
 
+    // "https://terwergreen.com"
+    const vdomain = "https://terwer.space/";
     previewUrl.value = "https://github.com/" + vuepressCfg.githubUser + "/" + vuepressCfg.githubRepo
         + "/blob/" + vuepressCfg.defaultBranch + "/" + docPath
+    previewRealUrl.value = vdomain + vuepressData.value.yamlObj.permalink
   }
 
   isInitLoadding.value = false

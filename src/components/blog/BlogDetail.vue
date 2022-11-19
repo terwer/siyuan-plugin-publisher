@@ -19,10 +19,9 @@
 </template>
 
 <script lang="ts" setup>
-import {goToPage} from "../../lib/chrome/ChromeUtil";
+import {goToPage} from "../../lib/browser/ChromeUtil";
 import {getPageId, getWidgetId} from "../../lib/platform/siyuan/siyuanUtil";
 import {onMounted, ref} from "vue";
-import LocaleChanger from "../tab/ChangeLocale.vue";
 import DefaultFooter from "./themes/default/DefaultFooter.vue";
 
 const props = defineProps({

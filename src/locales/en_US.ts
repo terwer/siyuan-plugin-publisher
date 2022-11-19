@@ -24,6 +24,8 @@ export default {
     "main.publish.vuepress.choose.title": "File name",
     "main.publish.vuepress.choose.title.tip": "Vuepress-theme-VDoing support file name plus serial number to identify. If you don’t know this usage, please do not modify the file name",
     "main.publish.vuepress.see.preview": "Click here see new post",
+    "main.publish.vuepress.see.md.preview": "Click here see new md file",
+    "main.publish.vuepress.see.real.preview": "Click here see new post",
     "main.publish.to.wordpress": "Sendto WP",
     "main.slug": "Post slug",
     "main.auto.fetch.slug": "Auto fetch slug",

@@ -5,7 +5,7 @@ import "./vs.css";
 // const plantumlEncoder = require('plantuml-encoder')
 import * as plantumlEncoder from 'plantuml-encoder'
 import {unescapeHTML} from "../../../strUtil.ts";
-import {isInChromeExtension} from "../../../chrome/ChromeUtil.ts";
+import {isInChromeExtension} from "../../../browser/ChromeUtil.ts";
 
 const vueHljs = {};
 

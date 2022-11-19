@@ -29,7 +29,7 @@ watch(() => props.pageId, /**/(oldValue, newValue) => {
   logUtil.logInfo("文章详情查看初始化")
 })
 
-const defaultPost = new Post()
+const defaultPost: Post = new Post()
 const post = ref(defaultPost)
 
 const initPage = async () => {
@@ -68,7 +68,7 @@ export default {
   padding-inline-start: 24px;
 }
 #post-detail-content ol li, #post-detail-content ul li{
-  padding: 5px 0;
+  /*padding: 5px 0;*/
 }
 
 #post-detail-content blockquote {

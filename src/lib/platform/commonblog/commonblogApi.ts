@@ -1,7 +1,7 @@
 import logUtil from "../../logUtil";
 import {getWidgetId} from "../siyuan/siyuanUtil";
 import {getEnv} from "../../envUtil";
-import {isInChromeExtension, sendChromeMessage} from "../../chrome/ChromeUtil";
+import {isInChromeExtension, sendChromeMessage} from "../../browser/ChromeUtil";
 
 export class CommonblogApi {
     constructor() {

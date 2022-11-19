@@ -7,7 +7,7 @@ import {getJSONConf} from "../../config";
 import {MetaWeblogApi} from "./metaWeblogApi";
 import {CategoryInfo} from "../../common/categoryInfo";
 import {CustomMetaWeblogApi} from "./CustomMetaweblogApi";
-import {isInChromeExtension} from "../../chrome/ChromeUtil";
+import {isInChromeExtension} from "../../browser/ChromeUtil";
 import {pathJoin} from "../../util";
 
 /**

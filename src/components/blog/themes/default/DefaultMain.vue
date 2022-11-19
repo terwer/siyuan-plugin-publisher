@@ -90,7 +90,7 @@ import {getRootBlocksCount} from "../../../../lib/platform/siyuan/siYuanApi";
 import {Post} from "../../../../lib/common/post";
 import DefaultPostDetail from "./DefaultPostDetail.vue";
 import DefaultPublish from "./DefaultPublish.vue";
-import {goToPage} from "../../../../lib/chrome/ChromeUtil";
+import {goToPage} from "../../../../lib/browser/ChromeUtil";
 import {ElMessageBox} from "element-plus";
 import {getWidgetId} from "../../../../lib/platform/siyuan/siyuanUtil";
 

@@ -6,6 +6,9 @@
  * @param splt 例如：/，但部分情况下无需传递此参数
  *
  */
+import {firefoxXmlHttpRequest, isInFirefoxExtension} from "./FirefoxUtil";
+import logUtil from "../logUtil";
+
 export function goToPage(pageUrl: string, split?: string) {
     // While we could have used `let url = "index.html"`, using runtime.getURL is a bit more robust as
     // it returns a full URL rather than just a path that Chrome needs to be resolved contextually at
@@ -31,8 +34,11 @@ export function goToPage(pageUrl: string, split?: string) {
  * 检测是否运行在Chrome插件中
  */
 export function isInChromeExtension() {
+    if (isInFirefoxExtension()) {
+        return false;
+    }
     // @ts-ignore
-    return typeof chrome.runtime != "undefined";
+    return !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
 }
 
 /**
@@ -41,6 +47,25 @@ export function isInChromeExtension() {
  */
 export function sendChromeMessage(message: any) {
     return new Promise((resolve) => {
+        // Firefox处理
+        // if (isInFirefoxExtension()) {
+        //     logUtil.logWarn("Firefox发送消息", message)
+        //     // @ts-ignore
+        //     // browser.runtime.sendMessage(message, resolve)
+        //
+        //     if (message.type == "fetchChromeXmlrpc") {
+        //         try {
+        //             firefoxXmlHttpRequest({url: message.apiUrl}).then(function (r) {
+        //                 resolve(r)
+        //             })
+        //         } catch (e) {
+        //             logUtil.logError("Firefox request error")
+        //             resolve("error")
+        //         }
+        //
+        //     }
+        // }
+
         // @ts-ignore
         chrome.runtime.sendMessage(message, resolve)
     })

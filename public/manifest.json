@@ -7,10 +7,6 @@
   "background": {
     "service_worker": "background.js"
   },
-  "permissions": [
-    "activeTab",
-    "scripting"
-  ],
   "host_permissions": [
     "*://*/*"
   ],
