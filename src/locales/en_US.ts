@@ -181,5 +181,8 @@ export default {
     "blog.list.toptip": "Reminder: Click the table line to enter the article details page. The details page has the release button! (〃'▽'〃)",
     "config.error.msg": "Network or config error, no data fetched",
     "config.platform.none": "No available platform, please go to switch",
-    "post.delete.by.platform": "The article has been deleted by the platform by itself, please click to cancel the compulsory lifting connection"
+    "post.delete.by.platform": "The article has been deleted by the platform by itself, please click to cancel the compulsory lifting connection",
+    "blog.top-data-tip":"Reminder: Please ensure that the Siyuan notes are started and opened the servo. The default servo address: http://127.0.0.0.1: 6806.0.0. Note: The modification will cover the value of the startup setting.",
+    "blog.newwin.open":"Open in a new window",
+    "blog.change.siyuan.api":"Modify Siyuan API address"
 }

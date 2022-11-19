@@ -58,6 +58,7 @@ export default {
 #post-detail-content {
   font-size: 14px;
   padding: 10px 0;
+  min-height: 600px;
 }
 
 #post-detail-content img {

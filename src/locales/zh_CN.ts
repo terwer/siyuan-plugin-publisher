@@ -184,5 +184,8 @@ export default {
     "blog.list.toptip": "温馨提示：单击表格行可以进入文章详情页，详情页有发布按钮哦! (〃'▽'〃)",
     "config.error.msg": "配置错误，请前往对应发布配置修改",
     "config.platform.none": "没有启用的发布平台，请前往服务开关开启",
-    "post.delete.by.platform": "文章已被平台自行删除，请点击取消强制解除关联"
+    "post.delete.by.platform": "文章已被平台自行删除，请点击取消强制解除关联",
+    "blog.top-data-tip":"温馨提示：请保证思源笔记启动并且打开伺服，默认伺服地址：http://127.0.0.1:6806。1.0.0+ 以后，您能可以在本页面底部点击【修改思源API地址】来修改默认配置，注意：此处修改会覆盖启动设置的值。",
+    "blog.newwin.open":"新窗口打开",
+    "blog.change.siyuan.api":"修改思源API地址"
 }

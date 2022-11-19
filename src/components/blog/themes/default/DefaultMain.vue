@@ -63,9 +63,7 @@
           @current-change="handleCurrentPage"
       />
 
-      <el-alert class="top-data-tip"
-                title="温馨提示：请保证思源笔记启动并且打开伺服，默认伺服地址：http://127.0.0.1:6806。"
-                type="info" :closable="false"/>
+      <el-alert class="top-data-tip" :title="$t('blog.top-data-tip')" type="info" :closable="false"/>
     </div>
 
     <div id="post-detail" v-if="showDetail">
