@@ -55,6 +55,6 @@
     "vite-plugin-mpa": "^1.1.4",
     "vite-plugin-require-transform": "^1.0.3",
     "vitest": "^0.22.1",
-    "vue-tsc": "^0.38.4"
+    "vue-tsc": "^1.0.9"
   }
 }
