@@ -9,7 +9,7 @@
 import {firefoxXmlHttpRequest, isInFirefoxExtension} from "./FirefoxUtil";
 import logUtil from "../logUtil";
 
-export function goToPage(pageUrl: string, split?: string) {
+function getPageUrl(pageUrl: string, split?: string) {
     // While we could have used `let url = "index.html"`, using runtime.getURL is a bit more robust as
     // it returns a full URL rather than just a path that Chrome needs to be resolved contextually at
     // runtime.
@@ -26,8 +26,22 @@ export function goToPage(pageUrl: string, split?: string) {
             url = window.location.protocol + "//" + window.location.host + url;
         }
     }
+
+    return url;
+}
+
+export function goToPage(pageUrl: string, split?: string) {
+    const url = getPageUrl(pageUrl, split);
     window.open(url)
-    // console.log(`Created tab`);
+}
+
+export function goToPageWithTarget(pageUrl: string, target?: string, split?: string) {
+    const url = getPageUrl(pageUrl, split);
+    if (target == "_self") {
+        window.location.href = url;
+    } else {
+        window.open(url)
+    }
 }
 
 /**
