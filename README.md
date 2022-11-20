@@ -16,14 +16,14 @@
 
 ## 快速上手
 
-|                             商店                             |                             版本                             | 上架状态 |
-| :----------------------------------------------------------: | :----------------------------------------------------------: | :------: |
-| ![](https://static-rs-terwer.oss-cn-beijing.aliyuncs.com/icons/browser/edge20.svg) | [v0.0.3](https://microsoftedge.microsoft.com/addons/detail/%E6%80%9D%E6%BA%90%E7%AC%94%E8%AE%B0%E5%8F%91%E5%B8%83%E8%BE%85%E5%8A%A9%E5%B7%A5%E5%85%B7/aejmkigifflimhjlhjkdckclhabbilee) |  已上架  |
-|![](https://static-rs-terwer.oss-cn-beijing.aliyuncs.com/icons/browser/chrome20.svg) | [v0.0.3](https://chrome.google.com/webstore/detail/%E6%80%9D%E6%BA%90%E7%AC%94%E8%AE%B0%E5%8F%91%E5%B8%83%E8%BE%85%E5%8A%A9%E5%B7%A5%E5%85%B7/gemlnnppcphbiimfjnobfgdkohjmgifm) |  已上架  |
-| ![](https://static-rs-terwer.oss-cn-beijing.aliyuncs.com/icons/browser/firefox20.png) |                             ---                              |  审核中  |
-| ![](https://static-rs-terwer.oss-cn-beijing.aliyuncs.com/icons/browser/360-20.png)|                             ---                              |  审核中  |
-|    [网页版](https://publish.terwer.space/blog/index.html)    |    [v0.0.3](https://publish.terwer.space/blog/index.html)    |  可使用  |
-| [离线zip](https://github.com/terwer/src-sy-post-publisher/releases/download/v0.0.3/sy-post-publisher-chrome-0.0.3.zip) | [v0.0.3](https://github.com/terwer/src-sy-post-publisher/releases/download/v0.0.3/sy-post-publisher-chrome-0.0.3.zip) |  可下载  |
+|                                          商店                                           |                                                                                           版本                                                                                            | 上架状态 |
+|:-------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:----:|
+|  ![](https://static-rs-terwer.oss-cn-beijing.aliyuncs.com/icons/browser/edge20.svg)   | [v0.0.3](https://microsoftedge.microsoft.com/addons/detail/%E6%80%9D%E6%BA%90%E7%AC%94%E8%AE%B0%E5%8F%91%E5%B8%83%E8%BE%85%E5%8A%A9%E5%B7%A5%E5%85%B7/aejmkigifflimhjlhjkdckclhabbilee) | 已上架  |
+| ![](https://static-rs-terwer.oss-cn-beijing.aliyuncs.com/icons/browser/chrome20.svg)  |     [v0.0.3](https://chrome.google.com/webstore/detail/%E6%80%9D%E6%BA%90%E7%AC%94%E8%AE%B0%E5%8F%91%E5%B8%83%E8%BE%85%E5%8A%A9%E5%B7%A5%E5%85%B7/gemlnnppcphbiimfjnobfgdkohjmgifm)     | 已上架  |
+| ![](https://static-rs-terwer.oss-cn-beijing.aliyuncs.com/icons/browser/firefox20.png) |                                                                                           ---                                                                                           | 审核中  |
+|  ![](https://static-rs-terwer.oss-cn-beijing.aliyuncs.com/icons/browser/360-20.png)   |                                                                                           ---                                                                                           | 审核中  |
+|                                          网页版                                          |                                                                 [v0.0.3](https://publish.terwer.space/blog/index.html)                                                                  | 可使用  |
+|                                         离线zip                                         |                                  [v0.0.3](https://github.com/terwer/src-sy-post-publisher/releases/download/v0.0.3/sy-post-publisher-chrome-0.0.3.zip)                                  | 可下载  |
 
 小贴士：
 
