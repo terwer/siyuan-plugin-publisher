@@ -1,6 +1,6 @@
 # sy-post-publisher
 
-将思源笔记的文章发布到支持的开放平台的**思源笔记挂件**
+将 [思源笔记](https://github.com/siyuan-note/siyuan) 的文章发布到支持的开放平台的 **思源笔记挂件**
 
 目前支持 `Vuepress` 、 以及 2 种博客平台标准、`metaweblog api` 和基于 `Wordpress` 的 `xmlrpc` 远程调用 api
 
@@ -8,11 +8,38 @@
 
 ![](https://static-rs-terwer.oss-cn-beijing.aliyuncs.com/project/sy-post-publisher/preview.png)
 
-![](https://static-rs-terwer.oss-cn-beijing.aliyuncs.com/project/sy-post-publisher/preview-light.png)
+[点击查看项目源码](https://github.com/terwer/src-sy-post-publisher)
 
 [点击查看帮助文档](https://mp.terwer.space/post/readme-1j4ltp.html)
 
-[点击查看配置视频教程](https://mp.terwer.space/post/configure-entry-video-brpm9.html)
+[点击查看新手小白级视频教程](https://mp.terwer.space/post/configure-entry-video-brpm9.html)
+
+## 快速上手
+
+|                                                          商店                                                          |                                                                                           版本                                                                                            | 上架状态 |
+|:--------------------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:----:|
+|     <img src="https://static-rs-terwer.oss-cn-beijing.aliyuncs.com/icons/browser/edge.svg" style="zoom:10%;" />      | [v0.0.3](https://microsoftedge.microsoft.com/addons/detail/%E6%80%9D%E6%BA%90%E7%AC%94%E8%AE%B0%E5%8F%91%E5%B8%83%E8%BE%85%E5%8A%A9%E5%B7%A5%E5%85%B7/aejmkigifflimhjlhjkdckclhabbilee) | 已上架  |
+|    <img src="https://static-rs-terwer.oss-cn-beijing.aliyuncs.com/icons/browser/chrome.svg" style="zoom:10%;" />     |     [v0.0.3](https://chrome.google.com/webstore/detail/%E6%80%9D%E6%BA%90%E7%AC%94%E8%AE%B0%E5%8F%91%E5%B8%83%E8%BE%85%E5%8A%A9%E5%B7%A5%E5%85%B7/gemlnnppcphbiimfjnobfgdkohjmgifm)     | 已上架  |
+|    <img src="https://static-rs-terwer.oss-cn-beijing.aliyuncs.com/icons/browser/firefox.png" style="zoom:16%;" />    |                                                                                           ---                                                                                           | 审核中  |
+|      <img src="https://static-rs-terwer.oss-cn-beijing.aliyuncs.com/icons/browser/360.png" style="zoom:50%;" />      |                                                                                           ---                                                                                           | 审核中  |
+|                                 [网页版](https://publish.terwer.space/blog/index.html)                                  |                                                                 [v0.0.3](https://publish.terwer.space/blog/index.html)                                                                  | 可使用  |
+| [离线zip](https://github.com/terwer/src-sy-post-publisher/releases/download/v0.0.3/sy-post-publisher-chrome-0.0.3.zip) |                                  [v0.0.3](https://github.com/terwer/src-sy-post-publisher/releases/download/v0.0.3/sy-post-publisher-chrome-0.0.3.zip)                                  | 可下载  |
+
+小贴士：
+
+1. 推荐直接从 Chrome 或者 Edge 官方商店下载使用。
+
+   由于技术限制，Firefox插件目前不支持Minifist V3以及 background messsage事件这个关键特性，需要额外使用请求代理，性能会差一点，但是功能完全可用。
+
+2. 如果您想临时尝鲜可以从网页版直接使用，网页版访问地址：https://publish.terwer.space/blog/index.html
+
+   只要修改思源API地址和token即可，网页版需要填写外网地址。 
+
+   **本插件承诺：所有配置均存储在浏览器本地，本程序不会收集任何敏感资料，请放心使用。本程序不会开发，将来也永远不会开发云端功能。**
+
+3. 离线zip使用方法=>将zip文件解压到某个目录，打开浏览器插件开发者模式，点击加载已解压的扩展程序，选择刚刚解压的目录即可。
+
+4. 因为所有配置是配置直接存储在浏览器本地，切换浏览器数据不会共享。卸载插件也会清空所有的配置数据，后续会考虑配置备份功能(需要调研实现这个需求的必要性)。
 
 ## 最近更新
 
@@ -105,19 +132,26 @@
 cp .env.local.example .env.local
 ```
 
-打开 `.env.local` 并且设置 SIYUAN_API_URL。例如：
+打开 `.env.local` 并且设置 VITE_SIYUAN_API_URL 。例如：
 http://127.0.0.1:6806。
 
 你的 `.env.local` 文件大概像下面这样：
 
 ```properties
-# log level
+# 是否开启info日志，true | false，建议生产环境设置为false
 VITE_LOG_INFO_ENABLED=false
-# siyuan api
+
+# 思源笔记授权api
 VITE_SIYUAN_API_URL=http://127.0.0.1:6806
+# 思源笔记授权token
 VITE_SIYUAN_CONFIG_TOKEN=
-# middlware to support cors, optional
-# VITE_MIDDLEWARE_URL=
+
+# 开发阶段模拟的页面ID，仅限调试使用，生产环境无需此配置
+# VITE_SIYUAN_DEV_PAGE_ID=
+
+# 非挂件模式需要中间服务器实现跨域，生产环境可不设置，使用本项目
+# VITE_MIDDLEWARE_URL=https://publish.terwer.space/api/middleware
+VITE_MIDDLEWARE_URL=
 ```
 
 你也可以设置 `.env.development.local`, `.env.production.local`, `.env.test.local` 用于不同环境，开发、测试、构建等。
@@ -177,7 +211,7 @@ yarn w
 yarn e
 ```
 
-压缩 `extension` 文件夹为 `.crx`, 上架 Google Chrome 应用商店。
+将密钥文件修改为 key.pem 放到 extension/chrome 文件夹 , 然后压缩 `extension/chrome` 文件夹里面的所有文件为 `.zip`, 上架 Google Chrome 应用商店。
 
 ### 方式 3、部署到服务器后台服务
 
