@@ -2,7 +2,7 @@ import {getSiyuanCfg} from "./siYuanConfig"
 import logUtil from "../../logUtil";
 
 /**
- * 思源API v2.0.27
+ * 思源API v2.5.0
  *
  * @author terwer
  * @date 2022-08-02 23:17
@@ -33,7 +33,7 @@ export {
     // 更新块 as updateBlock,
     // 删除块 as deleteBlock,
 
-    // getBlockKramdown, ///api/block/getBlockKramdown
+    // getBlockKramdown, // /api/block/getBlockKramdown
 
     getBlockAttrs,
     setBlockAttrs,
@@ -57,6 +57,11 @@ export {
     getRootBlocksCount,
     getBlockByID,
     getBlockBySlug,
+
+    // 获取子文档数目
+    getSubdocCount,
+    // 获取子文档
+    getSubdocs,
 
     // --------------
     // 下面的api未经验证
@@ -335,7 +340,6 @@ async function getHPathByID(blockId: string) {
 
 /**
  * 分页获取根文档
- * @param page 页码
  * @param keyword 关键字
  */
 async function getRootBlocksCount(keyword: string) {
@@ -381,8 +385,56 @@ async function getRootBlocks(page: number, pagesize: number, keyword: string) {
 }
 
 /**
+ * 获取该文档下面的子文档个数
+ *
+ * SELECT COUNT(DISTINCT b1.root_id) AS count
+ * FROM blocks b1
+ * WHERE b1.path LIKE '%/20220927094918-1d85uyp%';
+ *
+ * @param docId 文档ID
+ */
+async function getSubdocCount(docId: string) {
+    let stmt = `SELECT COUNT(DISTINCT b1.root_id) AS count
+        FROM blocks b1
+        WHERE b1.path LIKE '%/${docId}%'`;
+    let data = await sql(stmt)
+    return data[0].count
+}
+
+/**
+ * 分页获取根文档
+ *
+ * SELECT DISTINCT b2.root_id,b2.content,b2.path FROM blocks b2
+ * WHERE b2.id IN (
+ *   SELECT DISTINCT b1.root_id
+ *      FROM blocks b1
+ *      WHERE b1.path like '%/20220927094918-1d85uyp%'
+ *      AND ((b1.content LIKE '%文档%') OR (b1.tag LIKE '%文档%'))
+ *      ORDER BY b1.updated DESC,b1.created DESC LIMIT 0,10
+ * )
+ * ORDER BY b2.updated DESC,b2.created DESC
+ * @param docId 文档ID
+ * @param page 页码
+ * @param pagesize 数目
+ * @param keyword 关键字
+ */
+async function getSubdocs(docId: string, page: number, pagesize: number, keyword: string) {
+    let stmt = `SELECT DISTINCT b2.root_id,b2.content,b2.path FROM blocks b2
+        WHERE b2.id IN (
+          SELECT DISTINCT b1.root_id
+             FROM blocks b1
+             WHERE b1.path like '%/${docId}%'
+             AND ((b1.content LIKE '%${keyword}%') OR (b1.tag LIKE '%${keyword}%'))
+             ORDER BY b1.updated DESC,b1.created DESC LIMIT ${page},${pagesize}
+        )
+        ORDER BY b2.updated DESC,b2.created DESC`
+    let data = await sql(stmt)
+    return data
+}
+
+/**
  * 以id获取思源块信息
- * @param 内容块id
+ * @param blockId
  */
 async function getBlockByID(blockId: string) {
     let stmt = `select *

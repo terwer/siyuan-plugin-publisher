@@ -15,7 +15,8 @@ import * as path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig(({command, mode, ssrBuild}) => {
-    console.log("command=>", command)
+    const isTest = process.env.TEST == "true"
+    console.log("isTest=>", isTest)
 
     const env = loadEnv(mode, process.cwd())
     const processEnvValues = {
@@ -47,7 +48,7 @@ export default defineConfig(({command, mode, ssrBuild}) => {
                 include: resolve(dirname(fileURLToPath(import.meta.url)), 'src/locales/index.ts'),
             }),
             // @ts-ignore
-            mpa.default(),
+            isTest ? '' : mpa.default(),
         ],
         // 项目根目录
         // root: process.cwd(),

@@ -11,6 +11,11 @@
  */
 export function render(md: string) {
     // @ts-ignore
+    if(typeof Lute == "undefined"){
+        return md;
+    }
+
+    // @ts-ignore
     const lute = Lute.New()
 
     const renderers = {
