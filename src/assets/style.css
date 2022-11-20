@@ -42,7 +42,7 @@ body {
   background: var(--custom-app-bg-color);
   padding: 10px;
   min-width: 600px;
-  min-height: 960px;
+  min-height: 500px;
 }
 
 @media (prefers-color-scheme: light) {
@@ -91,4 +91,10 @@ body {
 
 .el-alert {
   margin-top: 10px !important;
+}
+
+.el-dialog{
+  --el-dialog-width: 88% !important;
+  --el-dialog-margin-top: 10vh;
+  margin: var(--el-dialog-margin-top,15vh) auto 0 5.5%;
 }

@@ -184,5 +184,8 @@ export default {
     "post.delete.by.platform": "The article has been deleted by the platform by itself, please click to cancel the compulsory lifting connection",
     "blog.top-data-tip":"Reminder: Please ensure that the Siyuan notes are started and opened the servo. The default servo address: http://127.0.0.0.1: 6806.0.0. Note: The modification will cover the value of the startup setting.",
     "blog.newwin.open":"Open in a new window",
-    "blog.change.siyuan.api":"Modify Siyuan API address"
+    "blog.change.siyuan.api":"Modify Siyuan API address",
+    "setting.blog.siyuan.password": "Siyuan Note token, please copying from【set up-> about 】",
+    "setting.blog.siyuan.apiurl": "The API address of Siyuan Note, including ports, for example: http://127.0.0.0.1: 6806",
+    "setting.blog.siyuan.current.apiurl": "Current apiUrl=>",
 }

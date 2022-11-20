@@ -3,7 +3,7 @@
     <el-page-header :icon="ArrowLeft" title="返回" @click="onBack">
       <template #content>
         <div class="flex items-center">
-          <span class="text-large font-600 mr-3"> {{ post.title }} </span>
+          <span class="text-large font-600 mr-3" :title="post.title"> {{ shortTitle }} </span>
         </div>
       </template>
     </el-page-header>
@@ -25,6 +25,7 @@ import {Post} from "../../../../lib/common/post";
 import {ArrowLeft} from '@element-plus/icons-vue'
 import {goToPage} from "../../../../lib/browser/ChromeUtil";
 import DefaultPostDetailService from "./DefaultPostDetailService.vue";
+import {getByLength} from "../../../../lib/strUtil";
 
 const props = defineProps({
   post: {
@@ -36,6 +37,8 @@ const emit = defineEmits<{
   (e: 'on-change'): void,
   (e: 'on-publish-change', post: Post): void
 }>()
+
+const shortTitle = getByLength(props.post?.title,10,false)
 
 const onBack = () => {
   emit("on-change");

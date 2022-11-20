@@ -1,12 +1,14 @@
 # sy-post-publisher
 
-Publish siyuan article to supported open platforms
+Publish [siyuan](https://github.com/siyuan-note/siyuan) article to supported open platforms
 
 At present, it supports vuepress and two open API standard blog platforms, `metaweblog api` and  
 `xmlrpc` remote call API based on <code>wordpress</code>
 
 Also provide a [common API adaptor](https://github.com/terwer/src-sy-post-publisher/blob/main/src/lib/api.ts) , make
 every plantform posiable.
+
+[Click to view source](https://github.com/terwer/src-sy-post-publisher)
 
 [Click to see Help doc](https://mp.terwer.space/post/readme-1j4ltp.html)
 
@@ -93,7 +95,7 @@ Copy the .env.local.example file in this directory to .env.local (which will be 
 cp .env.local.example .env.local
 ```
 
-Then open `.env.local` and set SIYUAN_API_URL to be the URL to your siyuan-note endpoint. For
+Then open `.env.local` and set VITE_SIYUAN_API_URL to be the URL to your siyuan-note endpoint. For
 example: http://127.0.0.1:6806.
 
 Your `.env.local` file should look like this:
@@ -101,11 +103,16 @@ Your `.env.local` file should look like this:
 ```properties
 # log level
 VITE_LOG_INFO_ENABLED=false
+
 # siyuan api
 VITE_SIYUAN_API_URL=http://127.0.0.1:6806
 VITE_SIYUAN_CONFIG_TOKEN=
+
+# only in debug mode, no need to set in production
+# VITE_SIYUAN_DEV_PAGE_ID=
+
 # middlware to support cors, optional
-# VITE_MIDDLEWARE_URL=
+VITE_MIDDLEWARE_URL=
 ```
 
 You can also set `.env.development.local`, `.env.production.local`, `.env.test.local` for different modes
