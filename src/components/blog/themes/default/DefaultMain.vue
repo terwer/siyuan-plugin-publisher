@@ -32,7 +32,7 @@
         <!--
         <el-table-column prop="postid" label="ID" width="200"/>
         -->
-        <el-table-column prop="title" label="标题"/>
+        <el-table-column prop="shortTitle" label="标题"/>
         <!--
         <el-table-column prop="dateCreated" label="发布时间" width="150"/>
         -->
@@ -91,6 +91,7 @@ import DefaultPublish from "./DefaultPublish.vue";
 import {goToPage} from "../../../../lib/browser/ChromeUtil";
 import {ElMessageBox} from "element-plus";
 import {getWidgetId} from "../../../../lib/platform/siyuan/siyuanUtil";
+import {getByLength} from "../../../../lib/strUtil";
 
 const {t} = useI18n()
 
@@ -291,7 +292,7 @@ const reloadTableData = async () => {
     let item = postList[i]
 
     let title = removeTitleNumber(item.title)
-    let shortTitle = title
+    let shortTitle = getByLength(title,10,false)
     let content = mdToHtml(item.description)
 
     const tableRow = {

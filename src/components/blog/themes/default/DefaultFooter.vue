@@ -21,11 +21,14 @@
             </el-form-item>
             <el-form-item :label="$t('setting.blog.middlewareUrl')" :label-width="formLabelWidth" prop="middlewareUrl">
               <el-input v-model="siyuanApiChangeForm.middlewareUrl" autocomplete="off" :placeholder="$t('setting.blog.middlewareUrl.tip')"/>
-              <el-alert class="top-data-tip" :title="$t('setting.blog.middlewareUrl.my.tip')" type="success" :closable="false"/>
+            </el-form-item>
+            <el-form-item>
+              <el-alert class="top-data-tip middleware-tip" :title="$t('setting.blog.middlewareUrl.my.tip')" type="success" :closable="false"/>
             </el-form-item>
           </el-form>
 
           <template #footer>
+
             <span class="dialog-footer">
               <el-button @click="siyuanApiChangeFormVisible = false">{{ $t('main.opt.cancel') }}</el-button>
               <el-button type="primary" @click="handleSiyuanApiSetting(siyuanApiSettingFormRef)">{{ $t('main.opt.ok') }}</el-button>
@@ -126,5 +129,9 @@ export default {
 .s-dark {
   color: var(--el-color-primary);
   cursor: pointer;
+}
+
+.middleware-tip{
+  text-align: left;
 }
 </style>

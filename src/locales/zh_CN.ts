@@ -193,5 +193,5 @@ export default {
     "setting.blog.siyuan.current.apiurl": "当前API地址=>",
     "setting.blog.middlewareUrl": "跨域请求代理",
     "setting.blog.middlewareUrl.tip": "某些场景下需要（例如Firefox插件、自部署模式），其他情况可忽略",
-    "setting.blog.middlewareUrl.my.tip": "如果没有可以使用我的：https://publish.terwer.space/api/middleware",
+    "setting.blog.middlewareUrl.my.tip": "如果没有部署代理，可以使用我的共享地址：https://publish.terwer.space/api/middleware 。出于性能考虑，建议自己部署一份。",
 }
