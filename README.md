@@ -30,7 +30,7 @@
 
 1. 推荐直接从 `思源笔记集市`、 `Chrome商店` 或者 `Edge商店` 等官方商店下载使用。
 
-   由于技术限制，`Firefox插件` 目前不支持 `Minifist V3` 以及 `background messsage` 事件这个关键特性，需要额外使用请求代理，参照 #143 。这样的话，性能会差一点，但是功能完全可用。代理地址为：https://publish.terwer.space/api/middleware
+   由于技术限制，`Firefox插件` 目前不支持 `Minifist V3` 以及 `background messsage` 事件这个关键特性，需要额外使用请求代理，参照 [#143](https://github.com/terwer/src-sy-post-publisher/issues/143) 。这样的话，性能会差一点，但是功能完全可用。代理地址为：https://publish.terwer.space/api/middleware
 
 2. 如果您想临时尝鲜可以从网页版直接使用，网页版访问地址：https://publish.terwer.space/blog/index.html
 
