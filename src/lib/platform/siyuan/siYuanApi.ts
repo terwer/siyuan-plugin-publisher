@@ -1,4 +1,4 @@
-import {config} from "./siYuanConfig"
+import {getSiyuanCfg} from "./siYuanConfig"
 import logUtil from "../../logUtil";
 
 /**
@@ -89,8 +89,10 @@ export {
  */
 async function request(url: string, data: any, method?: string, useToken?: boolean) {
     let resData = null
-    if (config.baseUrl != "") {
-        url = config.baseUrl + url
+    const siyuanCfg = getSiyuanCfg();
+
+    if (siyuanCfg.baseUrl != "") {
+        url = siyuanCfg.baseUrl + url
     }
 
     let m = "POST"
@@ -105,7 +107,7 @@ async function request(url: string, data: any, method?: string, useToken?: boole
     if (useToken != false) {
         Object.assign(fetchOps, {
             headers: {
-                Authorization: `Token ${config.token}`,
+                Authorization: `Token ${siyuanCfg.token}`,
             }
         })
     }
