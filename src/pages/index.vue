@@ -1,15 +1,20 @@
 <template>
   <div>
-    <publish-service :page-id="undefined"/>
+    <publish-service :page-id="undefined" :v-if="isPublish"/>
+    <blog-index :v-if="!isPublish"/>
   </div>
 </template>
 
 <script lang="ts" setup>
-import {onMounted} from "vue";
+import {onMounted, ref} from "vue";
 import logUtil from "../lib/logUtil";
 import PublishService from "../components/PublishService.vue";
 import {isInChromeExtension} from "../lib/browser/ChromeUtil";
 import {getWidgetId} from "../lib/platform/siyuan/siyuanUtil";
+import BlogIndex from "../components/blog/BlogIndex.vue";
+import {SiYuanApiAdaptor} from "../lib/platform/siyuan/siYuanApiAdaptor";
+
+const isPublish = ref(false)
 
 onMounted(async () => {
   logUtil.logWarn("MODE=>", import.meta.env.MODE)
@@ -18,16 +23,20 @@ onMounted(async () => {
   if (widgetResult.isInSiyuan) {
     logUtil.logWarn("当前页面ID是=>", widgetResult.widgetId)
     logUtil.logWarn("当前处于挂件模式，使用electron的fetch获取数据")
+    const api = new SiYuanApiAdaptor()
+    const postid = widgetResult.widgetId
+    const result = await api.getSubPostCount(postid)
+    if (result > 1) {
+      isPublish.value = false;
+      logUtil.logWarn("检测到子文档，将转到显示列表页面")
+    } else {
+      logUtil.logWarn("没有子文档显示发布页面")
+    }
+
   } else if (isInChromeExtension()) {
     logUtil.logWarn("当前处于Chrome插件中，需要模拟fetch解决CORS跨域问题")
   } else {
     logUtil.logWarn("当前处于非挂件模式，已开启请求代理解决CORS跨域问题")
   }
 })
-</script>
-
-<script lang="ts">
-export default {
-  name: 'index'
-}
 </script>
