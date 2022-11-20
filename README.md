@@ -32,7 +32,7 @@
 
    由于技术限制，`Firefox插件` 目前不支持 `Minifist V3` 以及 `background messsage` 事件这个关键特性，需要额外使用请求代理，参照 [#143](https://github.com/terwer/src-sy-post-publisher/issues/143) 。这样的话，性能会差一点，但是功能完全可用。代理地址为：https://publish.terwer.space/api/middleware
 
-2. 如果您想临时尝鲜可以从网页版直接使用，网页版访问地址：https://publish.terwer.space/blog/index.html
+2. 如果您想 `临时尝鲜新版无需等待版本发布` 可以从网页版直接使用，网页版访问地址：https://publish.terwer.space/blog/index.html
 
    只要修改思源API地址和token即可，网页版需要填写外网地址。
 
