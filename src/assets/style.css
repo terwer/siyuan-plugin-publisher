@@ -42,7 +42,7 @@ body {
   background: var(--custom-app-bg-color);
   padding: 10px;
   min-width: 600px;
-  min-height: 960px;
+  min-height: 500px;
 }
 
 @media (prefers-color-scheme: light) {
