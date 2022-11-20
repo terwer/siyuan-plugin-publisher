@@ -14,6 +14,14 @@
 
 [点击查看新手小白级视频教程](https://mp.terwer.space/post/configure-entry-video-brpm9.html)
 
+## 尝鲜体验
+
+从 0.1.0+ 版本开始，增加临时尝鲜版，直接体验最新特性，无需等待版本发布，支持自定义配置思源笔记的API地址。只要修改思源API地址和token即可，网页版需要填写外网地址。所有配置均存储在浏览器本地。切换浏览器或者换电脑配置不共享。
+
+猛击入口体验：https://publish.terwer.space/blog/index.html
+
+共享说明：https://publish.terwer.space/detail/index.html?id=20221120201546-daxmt2z
+
 ## 快速上手
 
 |                                          商店                                           |                                                                                           版本                                                                                            | 上架状态 |
