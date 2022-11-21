@@ -62,14 +62,14 @@
 import {onBeforeMount, reactive, ref} from "vue";
 import {ElMessage, FormInstance, FormRules} from "element-plus";
 import {useI18n} from "vue-i18n";
-import logUtil from "../../../../lib/logUtil";
-import {getBooleanConf, getJSONConf, setBooleanConf, setJSONConf} from "../../../../lib/config";
-import {API_TYPE_CONSTANTS} from "../../../../lib/constants/apiTypeConstants";
-import {IVuepressCfg} from "../../../../lib/platform/vuepress/IVuepressCfg";
-import {deletePage, publishPage} from "../../../../lib/platform/vuepress/v1";
-import {VuepressCfg} from "../../../../lib/platform/vuepress/VuepressCfg";
-import {formatIsoToZhDate} from "../../../../lib/util";
-import {API_STATUS_CONSTANTS} from "../../../../lib/constants/apiStatusConstants";
+import logUtil from "../../../../utils/logUtil";
+import {getBooleanConf, getJSONConf, setBooleanConf, setJSONConf} from "../../../../utils/config";
+import {API_TYPE_CONSTANTS} from "../../../../utils/constants/apiTypeConstants";
+import {IVuepressCfg} from "../../../../utils/platform/vuepress/IVuepressCfg";
+import {deletePage, publishPage} from "../../../../utils/platform/vuepress/v1";
+import {VuepressCfg} from "../../../../utils/platform/vuepress/VuepressCfg";
+import {formatIsoToZhDate} from "../../../../utils/util";
+import {API_STATUS_CONSTANTS} from "../../../../utils/constants/apiStatusConstants";
 
 const {t} = useI18n()
 

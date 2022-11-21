@@ -62,13 +62,13 @@
 </template>
 
 <script lang="ts" setup>
-import {DynamicConfig, getDynamicJsonCfg, PlantformType, setDynamicJsonCfg} from "../../../lib/dynamicConfig";
+import {DynamicConfig, getDynamicJsonCfg, PlantformType, setDynamicJsonCfg} from "../../../utils/dynamicConfig";
 import {onMounted, reactive, ref} from "vue";
-import logUtil from "../../../lib/logUtil";
+import logUtil from "../../../utils/logUtil";
 import {ElMessage, FormInstance, FormRules} from "element-plus";
 import {useI18n} from "vue-i18n";
-import {checkKeyExists} from "../../../lib/config";
-import {reloadPage} from "../../../lib/util";
+import {checkKeyExists} from "../../../utils/config";
+import {reloadPage} from "../../../utils/util";
 
 const {t} = useI18n()
 

@@ -1,11 +1,11 @@
 import {describe} from "vitest";
-import logUtil from "../../../../../src/lib/logUtil";
-import {LiandiApiAdaptor} from "../../../../../src/lib/platform/commonblog/liandi/liandiApiAdaptor";
-import {CommonblogApiAdaptor} from "../../../../../src/lib/platform/commonblog/commonblogApiAdaptor";
-import {setJSONConf} from "../../../../../src/lib/config";
-import {LiandiCfg} from "../../../../../src/lib/platform/commonblog/liandi/liandiCfg";
-import {API_TYPE_CONSTANTS} from "../../../../../src/lib/constants/apiTypeConstants";
-import {getEnv} from "../../../../../src/lib/envUtil";
+import logUtil from "../../../../../src/utils/logUtil";
+import {LiandiApiAdaptor} from "../../../../../src/utils/platform/commonblog/liandi/liandiApiAdaptor";
+import {CommonblogApiAdaptor} from "../../../../../src/utils/platform/commonblog/commonblogApiAdaptor";
+import {setJSONConf} from "../../../../../src/utils/config";
+import {LiandiCfg} from "../../../../../src/utils/platform/commonblog/liandi/liandiCfg";
+import {API_TYPE_CONSTANTS} from "../../../../../src/utils/constants/apiTypeConstants";
+import {getEnv} from "../../../../../src/utils/envUtil";
 
 describe("liandiApi", async () => {
 

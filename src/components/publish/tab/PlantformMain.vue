@@ -42,10 +42,10 @@
 
 <script lang="ts" setup>
 import {onMounted, reactive, ref, watch} from "vue";
-import {getBooleanConf, setBooleanConf} from "../../../lib/config";
-import SWITCH_CONSTANTS from "../../../lib/constants/switchConstants";
-import logUtil from "../../../lib/logUtil";
-import {DynamicConfig, getDynamicJsonCfg} from "../../../lib/dynamicConfig";
+import {getBooleanConf, setBooleanConf} from "../../../utils/config";
+import SWITCH_CONSTANTS from "../../../utils/constants/switchConstants";
+import logUtil from "../../../utils/logUtil";
+import {DynamicConfig, getDynamicJsonCfg} from "../../../utils/dynamicConfig";
 import {useTabCount} from "../../../composables/tabCountCom";
 
 // use

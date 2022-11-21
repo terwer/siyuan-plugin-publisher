@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts" setup>
-import {API_TYPE_CONSTANTS} from "../../../../../lib/constants/apiTypeConstants";
+import {API_TYPE_CONSTANTS} from "../../../../../utils/constants/apiTypeConstants";
 import {ref} from "vue";
 
 const apiType = ref(API_TYPE_CONSTANTS.API_TYPE_CNBLOGS)

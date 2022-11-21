@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts" setup>
-import logUtil from "../../lib/logUtil";
+import logUtil from "../../utils/logUtil";
 import {onMounted, ref} from "vue";
 
 let defaultTab = ref("plantform-main")

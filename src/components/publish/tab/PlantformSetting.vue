@@ -45,12 +45,12 @@
 
 <script lang="ts" setup>
 import {reactive, ref, watch} from "vue";
-import {getBooleanConf, setBooleanConf} from "../../../lib/config";
-import SWITCH_CONSTANTS from "../../../lib/constants/switchConstants";
-import logUtil from "../../../lib/logUtil";
-import {DynamicConfig, getDynamicJsonCfg} from "../../../lib/dynamicConfig";
-import {DynamicMCfg} from "../../../lib/platform/metaweblog/config/dynamicMCfg";
-import {DynamicWCfg} from "../../../lib/platform/metaweblog/config/dynamicWCfg";
+import {getBooleanConf, setBooleanConf} from "../../../utils/config";
+import SWITCH_CONSTANTS from "../../../utils/constants/switchConstants";
+import logUtil from "../../../utils/logUtil";
+import {DynamicConfig, getDynamicJsonCfg} from "../../../utils/dynamicConfig";
+import {DynamicMCfg} from "../../../utils/platform/metaweblog/config/dynamicMCfg";
+import {DynamicWCfg} from "../../../utils/platform/metaweblog/config/dynamicWCfg";
 import {useTabCount} from "../../../composables/tabCountCom";
 
 //use

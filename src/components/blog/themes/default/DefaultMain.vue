@@ -79,22 +79,22 @@
 </template>
 
 <script lang="ts" setup>
-import logUtil from "../../../../lib/logUtil";
+import logUtil from "../../../../utils/logUtil";
 import {onMounted, ref} from "vue";
-import {formatIsoToZhDate} from "../../../../lib/util";
-import {API} from "../../../../lib/api";
-import {API_TYPE_CONSTANTS} from "../../../../lib/constants/apiTypeConstants";
-import {mdToHtml, removeTitleNumber} from "../../../../lib/htmlUtil";
+import {formatIsoToZhDate} from "../../../../utils/util";
+import {API} from "../../../../utils/api";
+import {API_TYPE_CONSTANTS} from "../../../../utils/constants/apiTypeConstants";
+import {mdToHtml, removeTitleNumber} from "../../../../utils/htmlUtil";
 import {useI18n} from "vue-i18n";
-import {getRootBlocksCount} from "../../../../lib/platform/siyuan/siYuanApi";
-import {Post} from "../../../../lib/common/post";
+import {getRootBlocksCount} from "../../../../utils/platform/siyuan/siYuanApi";
+import {Post} from "../../../../utils/common/post";
 import DefaultPostDetail from "./DefaultPostDetail.vue";
 import DefaultPublish from "./DefaultPublish.vue";
-import {goToPage} from "../../../../lib/browser/ChromeUtil";
+import {goToPage} from "../../../../utils/browser/ChromeUtil";
 import {ElMessageBox} from "element-plus";
-import {getPageId, inSiyuan} from "../../../../lib/platform/siyuan/siyuanUtil";
-import {getByLength} from "../../../../lib/strUtil";
-import {SiYuanApiAdaptor} from "../../../../lib/platform/siyuan/siYuanApiAdaptor";
+import {getPageId, inSiyuan} from "../../../../utils/platform/siyuan/siyuanUtil";
+import {getByLength} from "../../../../utils/strUtil";
+import {SiYuanApiAdaptor} from "../../../../utils/platform/siyuan/siYuanApiAdaptor";
 
 const {t} = useI18n()
 

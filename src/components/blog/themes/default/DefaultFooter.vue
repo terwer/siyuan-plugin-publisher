@@ -46,15 +46,15 @@
 
 <script lang="ts" setup>
 import {useDark, useToggle} from "@vueuse/core";
-import {goToPage, goToPageWithTarget} from "../../../../lib/browser/ChromeUtil";
+import {goToPage, goToPageWithTarget} from "../../../../utils/browser/ChromeUtil";
 import {onMounted, reactive, ref} from "vue";
 import {ElMessage, FormInstance, FormRules} from "element-plus";
-import logUtil from "../../../../lib/logUtil";
+import logUtil from "../../../../utils/logUtil";
 import {useI18n} from "vue-i18n";
-import {getSiyuanCfg, SiYuanConfig} from "../../../../lib/platform/siyuan/siYuanConfig";
-import {setJSONConf} from "../../../../lib/config";
-import {SIYUAN_CONSTANTS} from "../../../../lib/constants/siyuanConstants";
-import {inSiyuan} from "../../../../lib/platform/siyuan/siyuanUtil";
+import {getSiyuanCfg, SiYuanConfig} from "../../../../utils/platform/siyuan/siYuanConfig";
+import {setJSONConf} from "../../../../utils/config";
+import {SIYUAN_CONSTANTS} from "../../../../utils/constants/siyuanConstants";
+import {inSiyuan} from "../../../../utils/platform/siyuan/siyuanUtil";
 
 const {t} = useI18n()
 

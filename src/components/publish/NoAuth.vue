@@ -14,7 +14,7 @@
 
 <script lang="ts" setup>
 import {ref} from "vue";
-import {inBrowser} from "../../lib/util";
+import {inBrowser} from "../../utils/util";
 
 const pwd = ref("")
 

@@ -3,9 +3,9 @@
 </template>
 
 <script lang="ts" setup>
-import {API_TYPE_CONSTANTS} from "../../../../../lib/constants/apiTypeConstants";
+import {API_TYPE_CONSTANTS} from "../../../../../utils/constants/apiTypeConstants";
 import {ref} from "vue";
-import {CnblogsCfg} from "../../../../../lib/platform/metaweblog/config/cnblogsCfg";
+import {CnblogsCfg} from "../../../../../utils/platform/metaweblog/config/cnblogsCfg";
 
 const apiType = ref(API_TYPE_CONSTANTS.API_TYPE_CNBLOGS)
 const cnblogsCfg = new CnblogsCfg()

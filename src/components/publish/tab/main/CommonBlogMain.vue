@@ -171,11 +171,11 @@
 </template>
 
 <script lang="ts" setup>
-import {CommonblogCfg, ICommonblogCfg} from "../../../../lib/platform/commonblog/commonblogCfg";
+import {CommonblogCfg, ICommonblogCfg} from "../../../../utils/platform/commonblog/commonblogCfg";
 import {nextTick, onMounted, reactive, ref} from "vue";
 import {useI18n} from "vue-i18n";
-import {getPage, getPageAttrs, getPageId, getPageMd, setPageAttrs} from "../../../../lib/platform/siyuan/siyuanUtil";
-import {getJSONConf, setJSONConf} from "../../../../lib/config";
+import {getPage, getPageAttrs, getPageId, getPageMd, setPageAttrs} from "../../../../utils/platform/siyuan/siyuanUtil";
+import {getJSONConf, setJSONConf} from "../../../../utils/config";
 import {
   cutWords,
   formatNumToZhDate,
@@ -186,9 +186,9 @@ import {
   pathJoin,
   pingyinSlugify,
   zhSlugify
-} from "../../../../lib/util";
-import {SIYUAN_PAGE_ATTR_KEY} from "../../../../lib/constants/siyuanPageConstants";
-import logUtil from "../../../../lib/logUtil";
+} from "../../../../utils/util";
+import {SIYUAN_PAGE_ATTR_KEY} from "../../../../utils/constants/siyuanPageConstants";
+import logUtil from "../../../../utils/logUtil";
 import {ElMessage} from "element-plus/es";
 import shortHash from "shorthash2";
 import {
@@ -198,13 +198,13 @@ import {
   removeMdWidgetTag,
   removeTitleNumber,
   removeWidgetTag
-} from "../../../../lib/htmlUtil";
-import {CONSTANTS} from "../../../../lib/constants/constants";
+} from "../../../../utils/htmlUtil";
+import {CONSTANTS} from "../../../../utils/constants/constants";
 import {ElMessageBox} from "element-plus";
-import {API} from "../../../../lib/api";
-import {PageType} from "../../../../lib/platform/metaweblog/IMetaweblogCfg";
-import {Post} from "../../../../lib/common/post";
-import {CategoryInfo} from "../../../../lib/common/categoryInfo";
+import {API} from "../../../../utils/api";
+import {PageType} from "../../../../utils/platform/metaweblog/IMetaweblogCfg";
+import {Post} from "../../../../utils/common/post";
+import {CategoryInfo} from "../../../../utils/common/categoryInfo";
 
 const {t} = useI18n()
 

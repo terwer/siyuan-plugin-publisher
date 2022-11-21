@@ -1,10 +1,10 @@
 import {describe, it} from "vitest";
-import {WordpressCfg} from "../../../../../src/lib/platform/metaweblog/config/wordpressCfg";
-import {getEnv} from "../../../../../src/lib/envUtil";
-import {setJSONConf} from "../../../../../src/lib/config";
-import {API_TYPE_CONSTANTS} from "../../../../../src/lib/constants/apiTypeConstants";
-import {WordpressApiAdaptor} from "../../../../../src/lib/platform/metaweblog/adaptor/wordpressApiAdaptor";
-import logUtil from "../../../../../src/lib/logUtil";
+import {WordpressCfg} from "../../../../../src/utils/platform/metaweblog/config/wordpressCfg";
+import {getEnv} from "../../../../../src/utils/envUtil";
+import {setJSONConf} from "../../../../../src/utils/config";
+import {API_TYPE_CONSTANTS} from "../../../../../src/utils/constants/apiTypeConstants";
+import {WordpressApiAdaptor} from "../../../../../src/utils/platform/metaweblog/adaptor/wordpressApiAdaptor";
+import logUtil from "../../../../../src/utils/logUtil";
 
 describe('WordpressApiAtaptor test', () => {
     // 这个执行一次即可，后面就不用了

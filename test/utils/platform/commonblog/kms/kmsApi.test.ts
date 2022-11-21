@@ -1,6 +1,6 @@
 import {describe, it} from 'vitest'
-import {KmsApi} from "../../../../../src/lib/platform/commonblog/kms/kmsApi";
-import logUtil from "../../../../../src/lib/logUtil";
+import {KmsApi} from "../../../../../src/utils/platform/commonblog/kms/kmsApi";
+import logUtil from "../../../../../src/utils/logUtil";
 
 describe('kmsApi test', () => {
     it('kmsFetch', () => {

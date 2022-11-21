@@ -15,9 +15,9 @@ import '../assets/style.css'
 import '../assets/style.dark.css'
 
 // hljs
-import "../lib/vue-hljs/vue-hljs.js"
+import ".//vue-hljs/vue-hljs.js"
 // @ts-ignore
-import vueHljs from "../lib/vue-hljs/lib/vue-hljs/main.js";
+import vueHljs from ".//vue-hljs/lib/vue-hljs/main.js";
 
 /**
  * 统一的Vue实例创建入口

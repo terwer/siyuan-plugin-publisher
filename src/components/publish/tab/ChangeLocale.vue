@@ -21,7 +21,7 @@
 <script lang="ts" setup>
 import {useI18n} from "vue-i18n";
 import {onMounted} from "vue";
-import logUtil from "../../../lib/logUtil";
+import logUtil from "../../../utils/logUtil";
 import {useDark, useToggle} from "@vueuse/core";
 
 const {locale} = useI18n()

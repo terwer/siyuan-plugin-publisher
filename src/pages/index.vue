@@ -12,12 +12,12 @@
 
 <script lang="ts" setup>
 import {onMounted, ref} from "vue";
-import logUtil from "../lib/logUtil";
+import logUtil from "../utils/logUtil";
 import PublishService from "../components/publish/PublishService.vue";
-import {isInChromeExtension} from "../lib/browser/ChromeUtil";
-import {getPageId, getWidgetId} from "../lib/platform/siyuan/siyuanUtil";
+import {isInChromeExtension} from "../utils/browser/ChromeUtil";
+import {getPageId, getWidgetId} from "../utils/platform/siyuan/siyuanUtil";
 import BlogIndex from "../components/blog/BlogIndex.vue";
-import {SiYuanApiAdaptor} from "../lib/platform/siyuan/siYuanApiAdaptor";
+import {SiYuanApiAdaptor} from "../utils/platform/siyuan/siYuanApiAdaptor";
 
 const isPublish = ref(false)
 

@@ -1,6 +1,6 @@
 import {describe, it} from "vitest";
-import logUtil from "../../src/lib/logUtil";
-import {pathJoin} from "../../src/lib/util";
+import logUtil from "../../src/utils/logUtil";
+import {pathJoin} from "../../src/utils/util";
 
 describe('util test', () => {
     it('pathJoin', () => {

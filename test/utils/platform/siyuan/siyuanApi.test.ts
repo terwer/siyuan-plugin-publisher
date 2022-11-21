@@ -1,6 +1,6 @@
 import {describe, it} from "vitest";
-import logUtil from "../../../../src/lib/logUtil";
-import {SiYuanApiAdaptor} from "../../../../src/lib/platform/siyuan/siYuanApiAdaptor";
+import logUtil from "../../../../src/utils/logUtil";
+import {SiYuanApiAdaptor} from "../../../../src/utils/platform/siyuan/siYuanApiAdaptor";
 
 describe('SiyuanApi test', () => {
     it('getUsersBlogs', async () => {

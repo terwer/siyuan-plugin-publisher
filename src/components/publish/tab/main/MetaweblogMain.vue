@@ -160,10 +160,10 @@
 
 <script lang="ts" setup>
 import {nextTick, onMounted, reactive, ref} from "vue"
-import {getPage, getPageAttrs, getPageId, getPageMd, setPageAttrs} from "../../../../lib/platform/siyuan/siyuanUtil";
+import {getPage, getPageAttrs, getPageId, getPageMd, setPageAttrs} from "../../../../utils/platform/siyuan/siyuanUtil";
 import {ElMessage, ElMessageBox} from "element-plus";
 import {useI18n} from "vue-i18n";
-import {SIYUAN_PAGE_ATTR_KEY} from "../../../../lib/constants/siyuanPageConstants";
+import {SIYUAN_PAGE_ATTR_KEY} from "../../../../utils/constants/siyuanPageConstants";
 import {
   cutWords,
   formatNumToZhDate,
@@ -174,8 +174,8 @@ import {
   pathJoin,
   pingyinSlugify,
   zhSlugify
-} from "../../../../lib/util";
-import logUtil from "../../../../lib/logUtil";
+} from "../../../../utils/util";
+import logUtil from "../../../../utils/logUtil";
 import {
   mdToHtml,
   mdToPlainText,
@@ -183,15 +183,15 @@ import {
   removeMdWidgetTag,
   removeTitleNumber,
   removeWidgetTag
-} from "../../../../lib/htmlUtil";
-import {CONSTANTS} from "../../../../lib/constants/constants";
-import {getJSONConf} from "../../../../lib/config";
-import {IMetaweblogCfg, PageType} from "../../../../lib/platform/metaweblog/IMetaweblogCfg";
+} from "../../../../utils/htmlUtil";
+import {CONSTANTS} from "../../../../utils/constants/constants";
+import {getJSONConf} from "../../../../utils/config";
+import {IMetaweblogCfg, PageType} from "../../../../utils/platform/metaweblog/IMetaweblogCfg";
 import shortHash from "shorthash2";
-import {API} from "../../../../lib/api";
-import {Post} from "../../../../lib/common/post";
-import {API_TYPE_CONSTANTS} from "../../../../lib/constants/apiTypeConstants";
-import {CategoryInfo} from "../../../../lib/common/categoryInfo";
+import {API} from "../../../../utils/api";
+import {Post} from "../../../../utils/common/post";
+import {API_TYPE_CONSTANTS} from "../../../../utils/constants/apiTypeConstants";
+import {CategoryInfo} from "../../../../utils/common/categoryInfo";
 
 const {t} = useI18n()
 

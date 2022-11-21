@@ -46,15 +46,15 @@
 
 <script lang="ts" setup>
 import {onMounted, ref} from "vue";
-import logUtil from "../../../../lib/logUtil";
-import {getJSONConf, setJSONConf} from "../../../../lib/config";
+import logUtil from "../../../../utils/logUtil";
+import {getJSONConf, setJSONConf} from "../../../../utils/config";
 import {ElMessage} from "element-plus";
 import {useI18n} from "vue-i18n";
-import {IMetaweblogCfg, PageType} from "../../../../lib/platform/metaweblog/IMetaweblogCfg";
-import {MetaweblogCfg} from "../../../../lib/platform/metaweblog/MetaweblogCfg";
-import {API} from "../../../../lib/api";
-import {UserBlog} from "../../../../lib/common/userBlog";
-import {isEmptyObject} from "../../../../lib/util";
+import {IMetaweblogCfg, PageType} from "../../../../utils/platform/metaweblog/IMetaweblogCfg";
+import {MetaweblogCfg} from "../../../../utils/platform/metaweblog/MetaweblogCfg";
+import {API} from "../../../../utils/api";
+import {UserBlog} from "../../../../utils/common/userBlog";
+import {isEmptyObject} from "../../../../utils/util";
 
 const {t} = useI18n()
 

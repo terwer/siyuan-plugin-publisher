@@ -1,5 +1,5 @@
 import {describe, expect, it} from 'vitest'
-import {getEnv} from "../../src/lib/envUtil";
+import {getEnv} from "../../src/utils/envUtil";
 
 describe("env test", () => {
     it("getEnv", () => {

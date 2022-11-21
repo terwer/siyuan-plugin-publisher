@@ -41,15 +41,15 @@
 
 <script lang="ts" setup>
 
-import {CommonblogCfg, ICommonblogCfg} from "../../../../lib/platform/commonblog/commonblogCfg";
+import {CommonblogCfg, ICommonblogCfg} from "../../../../utils/platform/commonblog/commonblogCfg";
 import {onMounted, ref} from "vue";
 import {useI18n} from "vue-i18n";
-import logUtil from "../../../../lib/logUtil";
-import {getJSONConf, setJSONConf} from "../../../../lib/config";
+import logUtil from "../../../../utils/logUtil";
+import {getJSONConf, setJSONConf} from "../../../../utils/config";
 import {ElMessage} from "element-plus";
-import {isEmptyObject} from "../../../../lib/util";
-import {API} from "../../../../lib/api";
-import {UserBlog} from "../../../../lib/common/userBlog";
+import {isEmptyObject} from "../../../../utils/util";
+import {API} from "../../../../utils/api";
+import {UserBlog} from "../../../../utils/common/userBlog";
 
 const {t} = useI18n()
 

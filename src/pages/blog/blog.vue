@@ -4,7 +4,7 @@
 
 <script lang="ts" setup>
 import {onMounted} from "vue";
-import logUtil from "../../lib/logUtil";
+import logUtil from "../../utils/logUtil";
 import BlogIndex from "../../components/blog/BlogIndex.vue";
 
 onMounted(async () => {

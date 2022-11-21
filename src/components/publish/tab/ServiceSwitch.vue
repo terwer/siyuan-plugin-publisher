@@ -51,9 +51,9 @@
 <script lang="ts" setup>
 import {onMounted, ref} from 'vue'
 import {useI18n} from "vue-i18n";
-import {setBooleanConf} from "../../../lib/config";
-import SWITCH_CONSTANTS from "../../../lib/constants/switchConstants";
-import logUtil from "../../../lib/logUtil";
+import {setBooleanConf} from "../../../utils/config";
+import SWITCH_CONSTANTS from "../../../utils/constants/switchConstants";
+import logUtil from "../../../utils/logUtil";
 import {useTabCount} from "../../../composables/tabCountCom";
 
 // use

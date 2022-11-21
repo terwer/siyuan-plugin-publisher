@@ -1,6 +1,6 @@
 import {assert, describe, it} from 'vitest'
-import {getConf, setConf} from "../../src/lib/config";
-import logUtil from "../../src/lib/logUtil";
+import {getConf, setConf} from "../../src/utils/config";
+import logUtil from "../../src/utils/logUtil";
 
 describe('config test', () => {
     it('setConf', () => {

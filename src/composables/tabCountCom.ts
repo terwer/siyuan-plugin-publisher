@@ -1,8 +1,8 @@
-import {getBooleanConf, getConf} from "../lib/config";
-import SWITCH_CONSTANTS from "../lib/constants/switchConstants";
+import {getBooleanConf, getConf} from "../utils/config";
+import SWITCH_CONSTANTS from "../utils/constants/switchConstants";
 import {reactive, ref} from "vue";
 import {useTabCountStore} from "../stores/tabCountStore";
-import {DynamicConfig, getDynamicJsonCfg} from "../lib/dynamicConfig";
+import {DynamicConfig, getDynamicJsonCfg} from "../utils/dynamicConfig";
 
 export function useTabCount() {
     const tabCountStore = useTabCountStore()

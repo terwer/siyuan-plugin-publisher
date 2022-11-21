@@ -21,11 +21,11 @@
 </template>
 
 <script lang="ts" setup>
-import {Post} from "../../../../lib/common/post";
+import {Post} from "../../../../utils/common/post";
 import {ArrowLeft} from '@element-plus/icons-vue'
-import {goToPage} from "../../../../lib/browser/ChromeUtil";
+import {goToPage} from "../../../../utils/browser/ChromeUtil";
 import DefaultPostDetailService from "./DefaultPostDetailService.vue";
-import {getByLength} from "../../../../lib/strUtil";
+import {getByLength} from "../../../../utils/strUtil";
 
 const props = defineProps({
   post: {

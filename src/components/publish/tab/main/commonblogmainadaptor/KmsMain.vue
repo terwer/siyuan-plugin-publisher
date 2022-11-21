@@ -4,7 +4,7 @@
 
 <script lang="ts" setup>
 import {ref} from "vue";
-import {API_TYPE_CONSTANTS} from "../../../../../lib/constants/apiTypeConstants";
+import {API_TYPE_CONSTANTS} from "../../../../../utils/constants/apiTypeConstants";
 
 const apiType = ref(API_TYPE_CONSTANTS.API_TYPE_KMS)
 

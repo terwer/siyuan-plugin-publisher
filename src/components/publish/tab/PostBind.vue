@@ -51,15 +51,15 @@
 
 <script lang="ts" setup>
 import {onBeforeMount, onMounted, reactive, ref, watch} from "vue";
-import {getBooleanConf} from "../../../lib/config";
-import logUtil from "../../../lib/logUtil";
+import {getBooleanConf} from "../../../utils/config";
+import logUtil from "../../../utils/logUtil";
 import type {FormInstance, FormRules} from 'element-plus'
 import {ElMessage} from "element-plus";
 import {useI18n} from "vue-i18n";
-import {getPageAttrs, getPageId, setPageAttrs} from "../../../lib/platform/siyuan/siyuanUtil";
-import {POSTID_KEY_CONSTANTS} from "../../../lib/constants/postidKeyConstants";
-import {isEmptyString} from "../../../lib/util";
-import {DynamicConfig, getDynamicJsonCfg} from "../../../lib/dynamicConfig";
+import {getPageAttrs, getPageId, setPageAttrs} from "../../../utils/platform/siyuan/siyuanUtil";
+import {POSTID_KEY_CONSTANTS} from "../../../utils/constants/postidKeyConstants";
+import {isEmptyString} from "../../../utils/util";
+import {DynamicConfig, getDynamicJsonCfg} from "../../../utils/dynamicConfig";
 import {useTabCount} from "../../../composables/tabCountCom";
 
 // use
