@@ -1,7 +1,12 @@
+<!--suppress VueDuplicateTag -->
 <template>
   <div>
-    <publish-service :page-id="undefined" :v-if="isPublish"/>
-    <blog-index :v-if="!isPublish"/>
+    <div v-if="isPublish">
+      <publish-service :page-id="undefined"/>
+    </div>
+    <div v-else>
+      <blog-index/>
+    </div>
   </div>
 </template>
 
@@ -10,7 +15,7 @@ import {onMounted, ref} from "vue";
 import logUtil from "../lib/logUtil";
 import PublishService from "../components/PublishService.vue";
 import {isInChromeExtension} from "../lib/browser/ChromeUtil";
-import {getWidgetId} from "../lib/platform/siyuan/siyuanUtil";
+import {getPageId, getWidgetId} from "../lib/platform/siyuan/siyuanUtil";
 import BlogIndex from "../components/blog/BlogIndex.vue";
 import {SiYuanApiAdaptor} from "../lib/platform/siyuan/siYuanApiAdaptor";
 
@@ -19,20 +24,22 @@ const isPublish = ref(false)
 onMounted(async () => {
   logUtil.logWarn("MODE=>", import.meta.env.MODE)
 
-  const widgetResult = await getWidgetId()
+  const widgetResult = getWidgetId()
   if (widgetResult.isInSiyuan) {
-    logUtil.logWarn("当前页面ID是=>", widgetResult.widgetId)
+    const postid = await getPageId()
+    logUtil.logWarn("当前页面ID是=>", postid)
     logUtil.logWarn("当前处于挂件模式，使用electron的fetch获取数据")
+
     const api = new SiYuanApiAdaptor()
-    const postid = widgetResult.widgetId
     const result = await api.getSubPostCount(postid)
+    logUtil.logError("子文档个数", result)
     if (result > 1) {
-      isPublish.value = false;
+      isPublish.value = false
       logUtil.logWarn("检测到子文档，将转到显示列表页面")
     } else {
+      isPublish.value = true
       logUtil.logWarn("没有子文档显示发布页面")
     }
-
   } else if (isInChromeExtension()) {
     logUtil.logWarn("当前处于Chrome插件中，需要模拟fetch解决CORS跨域问题")
   } else {

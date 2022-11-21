@@ -6,7 +6,9 @@
  * @param splt 例如：/，但部分情况下无需传递此参数
  *
  */
-import {firefoxXmlHttpRequest, isInFirefoxExtension} from "./FirefoxUtil";
+import {isInFirefoxExtension} from "./FirefoxUtil";
+import {inSiyuan} from "../platform/siyuan/siyuanUtil";
+import {getQueryString, setUrlParameter} from "../util";
 import logUtil from "../logUtil";
 
 function getPageUrl(pageUrl: string, split?: string) {
@@ -20,6 +22,17 @@ function getPageUrl(pageUrl: string, split?: string) {
         // @ts-ignore
         url = chrome.runtime.getURL(url);
     } else {
+        const from = getQueryString("from")
+        if (inSiyuan() || from == "siyuan") {
+            if (split && split != "") {
+                url = "widgets/sy-post-publisher" + url;
+            } else {
+                url = "/widgets/sy-post-publisher" + url;
+            }
+
+            url = setUrlParameter(url, "from", "siyuan")
+        }
+
         if (split && split != "") {
             url = window.location.protocol + "//" + window.location.host + split + url;
         } else {
@@ -27,11 +40,12 @@ function getPageUrl(pageUrl: string, split?: string) {
         }
     }
 
+    logUtil.logWarn("将要打开页面=>", url)
     return url;
 }
 
 export function goToPage(pageUrl: string, split?: string) {
-    const url = getPageUrl(pageUrl, split);
+    let url = getPageUrl(pageUrl, split);
     window.open(url)
 }
 

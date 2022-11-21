@@ -8,7 +8,15 @@ import logUtil from "../../logUtil";
 import {getEnv} from "../../envUtil";
 import {inBrowser} from "../../util";
 
-export async function getWidgetId() {
+/**
+ * 检测是否处于思源笔记环境中
+ */
+export function inSiyuan(): boolean {
+    const widgetResult = getWidgetId()
+    return widgetResult.isInSiyuan
+}
+
+export function getWidgetId() {
     if (import.meta.env.MODE == "test") {
         return {
             isInSiyuan: true,
@@ -57,7 +65,7 @@ export async function getWidgetId() {
  * @returns {Promise<any>}
  */
 async function getWidgetPage(force?: boolean) {
-    const widgetResult = await getWidgetId()
+    const widgetResult = getWidgetId()
     if (!widgetResult.isInSiyuan) {
         return
     }
@@ -112,7 +120,7 @@ export async function getPageId(force?: boolean, pageId?: string) {
     let syPageId
 
     // 先兼容挂件
-    const widgetResult = await getWidgetId()
+    const widgetResult = getWidgetId()
     if (widgetResult.isInSiyuan) {
         // 尝试读取挂件的ID
         syPageId = await getSiyuanPageId(force)

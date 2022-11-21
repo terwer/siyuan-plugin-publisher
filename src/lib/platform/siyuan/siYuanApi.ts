@@ -377,7 +377,7 @@ async function getRootBlocks(page: number, pagesize: number, keyword: string) {
                 FROM blocks b1
                 WHERE 1 = 1
                 AND ((b1.content LIKE '%${keyword}%') OR (b1.tag LIKE '%${keyword}%'))
-                ORDER BY b1.updated DESC,b1.created DESC LIMIT ${page},${pagesize}
+                ORDER BY b1.updated DESC,b1.created DESC LIMIT ${page*pagesize},${pagesize}
         )
         ORDER BY b2.updated DESC,b2.created DESC`
     let data = await sql(stmt)
@@ -402,7 +402,7 @@ async function getSubdocCount(docId: string) {
 }
 
 /**
- * 分页获取根文档
+ * 分页获取子文档
  *
  * SELECT DISTINCT b2.root_id,b2.content,b2.path FROM blocks b2
  * WHERE b2.id IN (
@@ -425,9 +425,9 @@ async function getSubdocs(docId: string, page: number, pagesize: number, keyword
              FROM blocks b1
              WHERE b1.path like '%/${docId}%'
              AND ((b1.content LIKE '%${keyword}%') OR (b1.tag LIKE '%${keyword}%'))
-             ORDER BY b1.updated DESC,b1.created DESC LIMIT ${page},${pagesize}
+             ORDER BY b1.updated DESC,b1.created DESC LIMIT ${page*pagesize},${pagesize}
         )
-        ORDER BY b2.updated DESC,b2.created DESC`
+        ORDER BY b2.updated DESC,b2.created DESC,id`
     let data = await sql(stmt)
     return data
 }

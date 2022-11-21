@@ -63,7 +63,9 @@
           @current-change="handleCurrentPage"
       />
 
-      <el-alert class="top-data-tip" :title="$t('blog.top-data-tip')" type="info" :closable="false"/>
+      <div v-if="!isInSiyuan">
+        <el-alert class="top-data-tip" :title="$t('blog.top-data-tip')" type="info" :closable="false"/>
+      </div>
     </div>
 
     <div id="post-detail" v-if="showDetail">
@@ -90,8 +92,9 @@ import DefaultPostDetail from "./DefaultPostDetail.vue";
 import DefaultPublish from "./DefaultPublish.vue";
 import {goToPage} from "../../../../lib/browser/ChromeUtil";
 import {ElMessageBox} from "element-plus";
-import {getWidgetId} from "../../../../lib/platform/siyuan/siyuanUtil";
+import {getPageId, inSiyuan} from "../../../../lib/platform/siyuan/siyuanUtil";
 import {getByLength} from "../../../../lib/strUtil";
+import {SiYuanApiAdaptor} from "../../../../lib/platform/siyuan/siYuanApiAdaptor";
 
 const {t} = useI18n()
 
@@ -100,6 +103,7 @@ const showDetail = ref(false)
 const showPublish = ref(false)
 const postDetail = ref()
 const publishData = ref()
+const isInSiyuan = ref(false)
 
 // search
 interface LinkItem {
@@ -197,7 +201,7 @@ const handleNewWinView = (index: number, row: any) => {
       }
   ).then(async () => {
     goToPage("/detail/index.html?id=" + row.postid)
-    console.log(index, row)
+    // console.log(index, row)
   }).catch(() => {
     // ElMessage({
     //   type: 'error',
@@ -251,14 +255,8 @@ const handleNewWinEdit = (index: number, row: any) => {
         type: 'warning',
       }
   ).then(async () => {
-    // goToPage("/index.html?id=" + row.postid, "/")
-    const widgetResult = await getWidgetId()
-    if (widgetResult.isInSiyuan) {
-      goToPage("/index.html?id=" + row.postide, "/")
-    } else {
       goToPage("/publish/index.html?id=" + row.postid, "/")
-    }
-    console.log(index, row)
+      // console.log(index, row)
   }).catch(() => {
     // ElMessage({
     //   type: 'error',
@@ -274,17 +272,39 @@ const handleRowClick = (row: any, column: any, event: any) => {
 }
 
 const initPage = async () => {
+  isInSiyuan.value = await inSiyuan();
   await reloadTableData()
   // logUtil.logInfo("Post init page=>", tableData)
 }
 
 const reloadTableData = async () => {
-  const api = new API(API_TYPE_CONSTANTS.API_TYPE_SIYUAN)
-  const postList = await api.getRecentPosts(MAX_PAGE_SIZE, currentPage.value - 1, state.value)
-  // console.log("postList=>", postList)
+  let postCount: number = 1
+  let postList: Array<Post> = []
+  let hasSubdoc = false
+
+  if (isInSiyuan.value) {
+    const postid = await getPageId()
+
+    const siyuanApi = new SiYuanApiAdaptor()
+    postCount = await siyuanApi.getSubPostCount(postid)
+    if (postCount > 1) {
+      hasSubdoc = true
+    }
+
+    if (hasSubdoc) {
+      postList = await siyuanApi.getSubPosts(postid, MAX_PAGE_SIZE, currentPage.value - 1, state.value)
+    }
+  } else {
+    const api = new API(API_TYPE_CONSTANTS.API_TYPE_SIYUAN)
+    postCount = await getRootBlocksCount(state.value)
+    postList = await api.getRecentPosts(MAX_PAGE_SIZE, currentPage.value - 1, state.value)
+    // console.log("postList=>", postList)
+  }
+
+  // =======================================================================
 
   // 总数
-  total.value = await getRootBlocksCount(state.value)
+  total.value = postCount
 
   // 渲染table
   tableData.splice(0, tableData.length);
@@ -292,7 +312,7 @@ const reloadTableData = async () => {
     let item = postList[i]
 
     let title = removeTitleNumber(item.title)
-    let shortTitle = getByLength(title,10,false)
+    let shortTitle = getByLength(title, 10, false)
     let content = mdToHtml(item.description)
 
     const tableRow = {

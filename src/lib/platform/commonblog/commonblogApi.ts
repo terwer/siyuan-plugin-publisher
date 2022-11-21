@@ -91,7 +91,7 @@ export class CommonblogApi {
     private async fetchCall(apiUrl: string, fetchOptions: RequestInit, formJson?: any[]) {
         let result
 
-        const widgetResult = await getWidgetId()
+        const widgetResult = getWidgetId()
         if (widgetResult.isInSiyuan) {
             logUtil.logInfo("当前处于挂件模式，使用electron的fetch获取数据")
             // 不解析了，直接使用Node兼容调用
@@ -167,7 +167,7 @@ export class CommonblogApi {
                 }
             }
 
-            const widgetResult = await getWidgetId()
+            const widgetResult = getWidgetId()
 
             if (widgetResult.isInSiyuan) {
                 resJson = await response.json()
@@ -190,7 +190,7 @@ export class CommonblogApi {
      * @protected
      */
     protected async doFormFetch(apiUrl: string, fetchOptions: RequestInit, formJson: any[]): Promise<any> {
-        const widgetResult = await getWidgetId()
+        const widgetResult = getWidgetId()
         if (widgetResult.isInSiyuan) {
             // 将formJson转换为formData
             const form = new URLSearchParams();
