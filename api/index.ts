@@ -2,34 +2,17 @@ import express, {Request, Response} from "express";
 import fetch from 'cross-fetch';
 
 const app = require('express')();
-// const {v4} = require('uuid');
 const xmlrpc = require('xmlrpc');
-// const Serializer = require('xmlrpc/lib/serializer')
 
 // 解决req.body undefined
 app.use(express.json());
-
-// app.get('/api', (req: Request, res: Response) => {
-//     const path = `/api/item/${v4()}`;
-//     res.setHeader('Content-Type', 'text/html');
-//     res.setHeader('Cache-Control', 's-max-age=1, stale-while-revalidate');
-//     res.end(`Hello! Go to item: <a href="${path}">${path}</a>
-//         <br /> or visit xmlrpc middleware <br />
-//         <a href="/api/middleware/xmlrpc">/api/middleware/xmlrpc</a>
-//     `);
-// });
-//
-// app.get('/api/item/:slug', (req: Request, res: Response) => {
-//     const {slug} = req.params;
-//     res.end(`Item: ${slug}`);
-// });
 
 /**
  * xmlrpc请求中间代理层
  */
 app.post('/api/middleware/xmlrpc', (req: Request, res: Response) => {
     // const headers = req.headers;
-    // logUtil.logInfo(headers)
+    // console.log(headers)
     const body = req.body
     // logUtil.logInfo(body)
 
@@ -70,7 +53,7 @@ app.post('/api/middleware/xmlrpc', (req: Request, res: Response) => {
             // console.log("请求处理已成功")
         }).catch((reason: any) => {
             // console.log("methodPromise catch=>")
-            console.error(reason)
+            console.error("xmlrpc middleware error", reason)
             writeError(res, reason)
             // console.log("请求处理失败")
         })
@@ -156,7 +139,7 @@ app.post('/api/middleware/fetch', (req: Request, res: Response) => {
         })
         .catch((reason: any) => {
             // console.log("methodPromise catch=>")
-            console.error(reason)
+            console.error("fetch middleware error=>", reason)
             writeError(res, reason)
             // console.log("请求处理失败")
         })
@@ -170,13 +153,6 @@ app.post('/api/middleware/fetch', (req: Request, res: Response) => {
  * @param data
  */
 function writeData(res: any, data: any) {
-    // const resXml = Serializer.serializeMethodResponse(resolve)
-    // res.writeHead(200, {
-    //     'Content-Length': Buffer.byteLength(resXml),
-    //     'Content-Type': 'text/xml'
-    // });
-    // res.end(resXml)
-
     writeStatusData(res, data, 200)
 }
 
@@ -195,13 +171,6 @@ function writeStatusData(res: any, data: any, status: number) {
  * @param err
  */
 function writeError(res: any, err: any) {
-    // const errorXml = Serializer.serializeFault(err)
-    // res.writeHead(200, {
-    //     'Content-Length': Buffer.byteLength(errorXml),
-    //     'Content-Type': 'text/xml'
-    // });
-    // res.end(errorXml)
-    //
     writeStatusError(res, err, 500)
 }
 
