@@ -427,7 +427,7 @@ async function getSubdocs(docId: string, page: number, pagesize: number, keyword
              AND ((b1.content LIKE '%${keyword}%') OR (b1.tag LIKE '%${keyword}%'))
              ORDER BY b1.updated DESC,b1.created DESC LIMIT ${page*pagesize},${pagesize}
         )
-        ORDER BY b2.updated DESC,b2.created DESC,id`
+        ORDER BY b2.content,b2.updated DESC,b2.created DESC,id`
     let data = await sql(stmt)
     return data
 }

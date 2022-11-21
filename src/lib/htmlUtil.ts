@@ -1,7 +1,7 @@
 // const showdown = require("showdown")
 // const converter = new showdown.Converter();
 
-import {render} from "./markdownUtil";
+import {renderHTML} from "./markdownUtil";
 import logUtil from "./logUtil";
 
 /**
@@ -131,7 +131,7 @@ function filterHtml(str: string) {
 export function mdToHtml(md: string) {
     // let html = "<h1>No markdown parser,see src/lib/htmlUtil.ts</h1>"
     // html = converter.makeHtml(md);
-    const html = render(md)
+    const html = renderHTML(md)
     return removeWidgetTag(html);
 }
 

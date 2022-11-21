@@ -10,7 +10,7 @@ import {
 import {Post} from "../../common/post";
 import {UserBlog} from "../../common/userBlog";
 import {API_TYPE_CONSTANTS} from "../../constants/apiTypeConstants";
-import {render} from "../../markdownUtil";
+import {renderHTML} from "../../markdownUtil";
 import {removeWidgetTag} from "../../htmlUtil";
 import {POST_STATUS_CONSTANTS} from "../../constants/postStatusConstants";
 import {CategoryInfo} from "../../common/categoryInfo";
@@ -110,7 +110,7 @@ export class SiYuanApiAdaptor implements IApi {
         const shortDesc = attrs["custom-desc"] || ""
 
         // 渲染Markdown
-        let html = render(md.content)
+        let html = renderHTML(md.content)
         // 移除挂件html
         html = removeWidgetTag(html)
 

@@ -8,6 +8,9 @@ import {LocalStorage} from "node-localstorage";
 global.fetch = fetch;
 global.localStorage = new LocalStorage('./test/data/polyfill/localStorage');
 
+// lute
+require("../public/lute.min.js")
+
 beforeEach(() => {
     console.log("======test is starting...======")
 })

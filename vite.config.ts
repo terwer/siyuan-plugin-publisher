@@ -137,7 +137,10 @@ export default defineConfig(({command, mode, ssrBuild}) => {
             minify: false,
 
             // @rollup/plugin-commonjs 插件的选项
-            commonjsOptions: {},
+            commonjsOptions: {
+                // include: [/node_modules/, /public/],
+                // extensions: ['.js', '.cjs'],
+            },
 
             // 当设置为 true, 构建后将会生成 manifest.json 文件
             manifest: false,
@@ -171,7 +174,7 @@ export default defineConfig(({command, mode, ssrBuild}) => {
                     // used during production bundling
                     rollupNodePolyFill()
                 ]
-            }
+            },
         },
         test: {
             globals: true,

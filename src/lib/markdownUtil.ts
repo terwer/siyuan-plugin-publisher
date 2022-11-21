@@ -1,15 +1,13 @@
 // ts引用js库的方法
-// @ts-ignore
-// import * as LuteMd from './lute/javascript/lute.min';
-// 这样不好
-// 改成了在publish/indx.html直接引用 <script src="/lute.min.js"></script>
+// 在publish/indx.html直接引用 <script src="/lute.min.js"></script>
 // 打包之后运行是没问题的，vercel dev也能完美运行
+// 测试使用 require("../../public/lute.min.js")
 
 /**
  * 渲染Markdown
  * @param md
  */
-export function render(md: string) {
+export function renderHTML(md: string) {
     // @ts-ignore
     if(typeof Lute == "undefined"){
         return md;
