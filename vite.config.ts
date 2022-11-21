@@ -1,6 +1,5 @@
-import {defineConfig} from 'vite'
-import {loadEnv} from "vite";
-import {resolve, dirname} from 'node:path'
+import {defineConfig, loadEnv} from 'vite'
+import {dirname, resolve} from 'node:path'
 import {fileURLToPath} from 'url'
 import vue from '@vitejs/plugin-vue'
 import vitePluginRequireTransform from 'vite-plugin-require-transform';
@@ -12,12 +11,11 @@ import rollupNodePolyFill from 'rollup-plugin-node-polyfills'
 import vueI18n from '@intlify/vite-plugin-vue-i18n'
 import mpa from 'vite-plugin-mpa'
 import * as path from "path";
+// @ts-ignore
+import {getBooleanEnv} from "./src/utils/envUtil";
 
 // https://vitejs.dev/config/
 export default defineConfig(({command, mode, ssrBuild}) => {
-    const isTest = process.env.TEST == "true"
-    console.log("isTest=>", isTest)
-
     const env = loadEnv(mode, process.cwd())
     const processEnvValues = {
         'process.env': Object.entries(env).reduce(
@@ -30,8 +28,15 @@ export default defineConfig(({command, mode, ssrBuild}) => {
             {},
         )
     }
+
+    const isTest = process.env.TEST == "true"
+    console.log("isTest=>", isTest)
+
     const isSiyuanBuild = process.env.BUILD_TYPE == "siyuan"
     console.log("isSiyuanBuild=>", isSiyuanBuild)
+
+    const logInfoEnabled = env.VITE_LOG_INFO_ENABLED;
+    console.log("logInfoEnabled=>", logInfoEnabled)
 
     return {
         plugins: [
