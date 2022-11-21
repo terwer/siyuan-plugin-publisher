@@ -27,12 +27,12 @@ onMounted(async () => {
   const widgetResult = getWidgetId()
   if (widgetResult.isInSiyuan) {
     const postid = await getPageId()
-    logUtil.logWarn("当前页面ID是=>", postid)
-    logUtil.logWarn("当前处于挂件模式，使用electron的fetch获取数据")
+    // logUtil.logInfo("当前页面ID是=>", postid)
+    // logUtil.logInfo("当前处于挂件模式，使用electron的fetch获取数据")
 
     const api = new SiYuanApiAdaptor()
     const result = await api.getSubPostCount(postid)
-    logUtil.logError("子文档个数", result)
+    // logUtil.logInfo("子文档个数", result)
     if (result > 1) {
       isPublish.value = false
       logUtil.logWarn("检测到子文档，将转到显示列表页面")
