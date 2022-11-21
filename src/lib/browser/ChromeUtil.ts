@@ -8,7 +8,7 @@
  */
 import {isInFirefoxExtension} from "./FirefoxUtil";
 import {inSiyuan} from "../platform/siyuan/siyuanUtil";
-import {getQueryString, inBrowser, setUrlParameter} from "../util";
+import {getQueryString, inBrowser, pathJoin, setUrlParameter} from "../util";
 import logUtil from "../logUtil";
 
 function getPageUrl(pageUrl: string, split?: string) {
@@ -22,22 +22,21 @@ function getPageUrl(pageUrl: string, split?: string) {
         // @ts-ignore
         url = chrome.runtime.getURL(url);
     } else {
+        // 思源笔记链接处理
         const from = getQueryString("from")
         if (inSiyuan() || from == "siyuan") {
-            if (split && split != "") {
-                url = "widgets/sy-post-publisher" + url;
-            } else {
-                url = "/widgets/sy-post-publisher" + url;
-            }
-
+            url = "/widgets/sy-post-publisher" + url;
             url = setUrlParameter(url, "from", "siyuan")
         }
 
+        // 处理手动分隔符
+        let baseUrl = window.location.protocol + "//" + window.location.host
         if (split && split != "") {
-            url = window.location.protocol + "//" + window.location.host + split + url;
-        } else {
-            url = window.location.protocol + "//" + window.location.host + url;
+            baseUrl = window.location.protocol + "//" + window.location.host + split
         }
+
+        // 智能拼接
+        url = pathJoin(baseUrl, url)
     }
 
     logUtil.logWarn("将要打开页面=>", url)

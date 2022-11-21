@@ -48,7 +48,7 @@ const handlePublish = (e: any) => {
 }
 const handleNewWinPublish = (e: any) => {
   e.preventDefault()
-  goToPage("/index.html?id=" + props.post?.postid, "/")
+  goToPage("/publish/index.html?id=" + props.post?.postid, "/")
 }
 </script>
 
