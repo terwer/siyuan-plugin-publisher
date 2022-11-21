@@ -5,7 +5,7 @@ Publish [siyuan](https://github.com/siyuan-note/siyuan) article to supported ope
 At present, it supports vuepress and two open API standard blog platforms, `metaweblog api` and  
 `xmlrpc` remote call API based on <code>wordpress</code>
 
-Also provide a [common API adaptor](https://github.com/terwer/src-sy-post-publisher/blob/main/src/lib/api.ts) , make
+Also provide a [common API adaptor](https://github.com/terwer/src-sy-post-publisher/blob/main/src/utils/api.ts) , make
 every plantform posiable.
 
 [Click to view source](https://github.com/terwer/src-sy-post-publisher)
