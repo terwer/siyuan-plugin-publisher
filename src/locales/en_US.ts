@@ -160,6 +160,7 @@ export default {
     "dynamic.platform.type.custom": "Custom",
     "dynamic.platform.key": "Plantform key",
     "dynamic.platform.key.tip": "The unique logo of the platform, cannot be repeated, for example: myblog",
+    "dynamic.platform.type.github": "Github",
     "dynamic.platform.name": "Plantform name",
     "dynamic.platform.name.tip": "Platform name, for example: my blog",
     "dynamic.platform.opt.add": "Submit",

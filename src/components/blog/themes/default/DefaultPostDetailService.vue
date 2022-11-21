@@ -6,11 +6,11 @@
 </template>
 
 <script lang="ts" setup>
-import {Post} from "../../../../lib/common/post";
+import {Post} from "../../../../utils/common/post";
 import {nextTick, onMounted, ref, watch} from "vue";
-import {API} from "../../../../lib/api";
-import {API_TYPE_CONSTANTS} from "../../../../lib/constants/apiTypeConstants";
-import logUtil from "../../../../lib/logUtil";
+import {API} from "../../../../utils/api";
+import {API_TYPE_CONSTANTS} from "../../../../utils/constants/apiTypeConstants";
+import logUtil from "../../../../utils/logUtil";
 
 const props = defineProps({
   pageId: {

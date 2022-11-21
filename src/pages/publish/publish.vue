@@ -6,10 +6,10 @@
 
 <script lang="ts" setup>
 import {onMounted} from "vue";
-import logUtil from "../../lib/logUtil";
-import PublishService from "../../components/PublishService.vue";
-import {isInChromeExtension} from "../../lib/browser/ChromeUtil";
-import {getWidgetId} from "../../lib/platform/siyuan/siyuanUtil";
+import logUtil from "../../utils/logUtil";
+import PublishService from "../../components/publish/PublishService.vue";
+import {isInChromeExtension} from "../../utils/browser/ChromeUtil";
+import {getWidgetId} from "../../utils/platform/siyuan/siyuanUtil";
 
 onMounted(async () => {
   logUtil.logWarn("MODE=>", import.meta.env.MODE)

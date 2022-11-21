@@ -19,8 +19,8 @@
 </template>
 
 <script lang="ts" setup>
-import {goToPage} from "../../lib/browser/ChromeUtil";
-import {getPageId, getWidgetId} from "../../lib/platform/siyuan/siyuanUtil";
+import {goToPage} from "../../utils/browser/ChromeUtil";
+import {getPageId, getWidgetId} from "../../utils/platform/siyuan/siyuanUtil";
 import {onMounted, ref} from "vue";
 import DefaultFooter from "./themes/default/DefaultFooter.vue";
 
