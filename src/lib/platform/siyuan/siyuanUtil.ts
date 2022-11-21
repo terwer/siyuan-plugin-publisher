@@ -6,7 +6,7 @@ import {getJSONConf, setJSONConf} from "../../config";
 import {exportMdContent, getBlockAttrs, getBlockByID, lsNotebooks, setBlockAttrs} from "./siYuanApi.js";
 import logUtil from "../../logUtil";
 import {getEnv} from "../../envUtil";
-import {inBrowser} from "../../util";
+import {getQueryString, inBrowser} from "../../util";
 
 /**
  * 检测是否处于思源笔记环境中
@@ -140,9 +140,10 @@ export async function getPageId(force?: boolean, pageId?: string) {
             const testPageId = getEnv("VITE_SIYUAN_DEV_PAGE_ID")
             if (!testPageId && inBrowser()) {
                 // 尝试从url参数解析ID
-                const curl = window.location.href
-                const urlIdx = curl.lastIndexOf("=")
-                const qPageId = curl.substring(urlIdx + 1, curl.length)
+                // const curl = window.location.href
+                // const urlIdx = curl.lastIndexOf("=")
+                // const qPageId = curl.substring(urlIdx + 1, curl.length)
+                const qPageId = getQueryString("id")
                 if (qPageId != "") {
                     syPageId = qPageId
                 }
