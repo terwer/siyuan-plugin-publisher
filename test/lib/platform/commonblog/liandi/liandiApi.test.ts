@@ -6,7 +6,6 @@ import {setJSONConf} from "../../../../../src/lib/config";
 import {LiandiCfg} from "../../../../../src/lib/platform/commonblog/liandi/liandiCfg";
 import {API_TYPE_CONSTANTS} from "../../../../../src/lib/constants/apiTypeConstants";
 import {getEnv} from "../../../../../src/lib/envUtil";
-import {Post} from "../../../../../src/lib/common/post";
 
 describe("liandiApi", async () => {
 
@@ -23,11 +22,11 @@ describe("liandiApi", async () => {
     //     setJSONConf(API_TYPE_CONSTANTS.API_TYPE_LIANDI, cfg)
     // })
 
-    // it("getUser", async () => {
-    //     const apiAdaptor: CommonblogApiAdaptor = new LiandiApiAdaptor()
-    //     const result = await apiAdaptor.getUsersBlogs()
-    //     logUtil.logInfo(result)
-    // })
+    it("getUser", async () => {
+        const apiAdaptor: CommonblogApiAdaptor = new LiandiApiAdaptor()
+        const result = await apiAdaptor.getUsersBlogs()
+        logUtil.logInfo(result)
+    })
 
     // it("addArticle", async () => {
     //     const apiAdaptor: CommonblogApiAdaptor = new LiandiApiAdaptor()

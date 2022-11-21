@@ -8,7 +8,7 @@
  */
 import {isInFirefoxExtension} from "./FirefoxUtil";
 import {inSiyuan} from "../platform/siyuan/siyuanUtil";
-import {getQueryString, setUrlParameter} from "../util";
+import {getQueryString, inBrowser, setUrlParameter} from "../util";
 import logUtil from "../logUtil";
 
 function getPageUrl(pageUrl: string, split?: string) {
@@ -62,6 +62,9 @@ export function goToPageWithTarget(pageUrl: string, target?: string, split?: str
  * 检测是否运行在Chrome插件中
  */
 export function isInChromeExtension() {
+    if (!inBrowser()) {
+        return false;
+    }
     if (isInFirefoxExtension()) {
         return false;
     }

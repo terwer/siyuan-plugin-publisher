@@ -7,7 +7,6 @@ import {WordpressApiAdaptor} from "../../../../../src/lib/platform/metaweblog/ad
 import logUtil from "../../../../../src/lib/logUtil";
 
 describe('WordpressApiAtaptor test', () => {
-
     // 这个执行一次即可，后面就不用了
     // it("init", async () => {
     //     const cfg = new WordpressCfg()

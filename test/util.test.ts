@@ -9,7 +9,6 @@ describe('util test', () => {
 
         const result = pathJoin(path1, path2)
 
-        logUtil.logInfo("pathJoin test=>")
-        logUtil.logInfo(result)
+        logUtil.logInfo("pathJoin test=>", result)
     })
 })

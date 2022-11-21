@@ -3,8 +3,8 @@ import {getEnv} from "../src/lib/envUtil";
 
 describe("env test", () => {
     it("getEnv", () => {
-        const testPageId = getEnv("VITE_SIYUAN_DEV_PAGE_ID")
-        expect(testPageId).toBeDefined()
-        console.log("testPageId=>", testPageId)
+        const siyuanApiUrl = getEnv("VITE_SIYUAN_API_URL")
+        expect(siyuanApiUrl).toBeDefined()
+        console.log("siyuanApiUrl=>", siyuanApiUrl)
     })
 })

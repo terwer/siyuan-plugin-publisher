@@ -152,8 +152,10 @@ export class CommonblogApi {
 
         let resJson
 
-        if (response instanceof Response) {
+        const isTest = process.env.TEST == "true"
+        if (isTest || (typeof Response != "undefined" && response instanceof Response)) {
             // 解析响应体并返回响应结果
+            // @ts-ignore
             const statusCode = response.status
 
             // const resText = await response.text()
@@ -170,8 +172,10 @@ export class CommonblogApi {
             const widgetResult = getWidgetId()
 
             if (widgetResult.isInSiyuan) {
+                // @ts-ignore
                 resJson = await response.json()
             } else {
+                // @ts-ignore
                 const corsJson = await response.json()
                 resJson = this.parseCORSBody(corsJson)
             }
