@@ -54,10 +54,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 sendResponse(resJson);
             })();
             break;
-        // 你可以定义任意内容，使用sendResponse()来返回它
-        case 'test':
-            sendResponse({'msg': 'test'});
-            break;
     }
 
     return true; // keep the messaging channel open for sendResponse

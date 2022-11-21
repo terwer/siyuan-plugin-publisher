@@ -1,10 +1,11 @@
 pwd
+rm -rf ./dist
 yarn build
+
 # 删除siyuan挂件专属文件
 rm ./dist/widget.json
 # 删除火狐配置
-rm ./dist/manifest-v2-for-firefox.json
-rm ./dist/background-v2-for-firefox.js
+rm -rf ./dist/mv2
 
 rm -rf ./extension/chrome/*
 mkdir -p extension/chrome

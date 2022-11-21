@@ -59,7 +59,7 @@ export default defineConfig(({command, mode, ssrBuild}) => {
         // root: process.cwd(),
         root: './',
         // 项目部署的基础路径
-        base: isSiyuanBuild ? 'http://127.0.0.1:6806/widgets/sy-post-publisher/' : "",
+        base: isSiyuanBuild ? '/widgets/sy-post-publisher/' : "",
         // 静态资源服务文件夹
         publicDir: 'public',
         // https://github.com/vitejs/vite/issues/1930

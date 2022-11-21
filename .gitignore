@@ -32,3 +32,5 @@ extension/
 *.crx
 *.pem
 backup/
+.vitest-result.json
+coverage
