@@ -160,6 +160,7 @@ export default {
     "dynamic.platform.type": "平台类型[必选]",
     "dynamic.platform.type.metaweblog": "metaweblog API",
     "dynamic.platform.type.wordpress": "Wordpress",
+    "dynamic.platform.type.github": "Github",
     "dynamic.platform.type.custom": "自定义",
     "dynamic.platform.key": "平台key",
     "dynamic.platform.key.tip": "平台唯一标识，不能重复，例如：myblog",

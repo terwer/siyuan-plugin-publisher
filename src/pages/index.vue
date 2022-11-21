@@ -13,7 +13,7 @@
 <script lang="ts" setup>
 import {onMounted, ref} from "vue";
 import logUtil from "../lib/logUtil";
-import PublishService from "../components/PublishService.vue";
+import PublishService from "../components/publish/PublishService.vue";
 import {isInChromeExtension} from "../lib/browser/ChromeUtil";
 import {getPageId, getWidgetId} from "../lib/platform/siyuan/siyuanUtil";
 import BlogIndex from "../components/blog/BlogIndex.vue";

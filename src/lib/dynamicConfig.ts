@@ -11,9 +11,14 @@ export class DynamicConfig {
      */
     modelValue?: any
     /**
-     * 动态平台类型
+     * 动态平台类型(通用类型)
      */
     plantformType: PlantformType
+    /**
+     * 子平台类型(细分子类型)
+     * @since 0.1.0+
+     */
+    subPlantformType?: SubPlantformType
     /**
      * 平台Key
      */
@@ -43,9 +48,29 @@ export enum PlantformType {
      */
     Wordpress = "Wordpress",
     /**
+     * Github(Hugo、Hexo、Jekyll、Vuepress、Vitepress、Nuxt content、Next.js)
+     */
+    Github = "github",
+    /**
      * 自定义
      */
     Custom = "Custom"
+}
+
+/**
+ * 平台子类型
+ * @since 0.1.0+
+ * @author terwer
+ */
+export enum SubPlantformType {
+    Github_pages = "pages",
+    Github_giteePages = "giteePages",
+    Github_codingPages = "codingPages",
+    Github_Hexo = "hexo",
+    Github_Vuepress = "vuepress",
+    Github_Vitepress = "vitepress",
+    Github_Nuxt = "nuxt",
+    Github_Next = "next"
 }
 
 /**
