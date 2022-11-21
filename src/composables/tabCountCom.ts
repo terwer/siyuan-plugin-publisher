@@ -4,7 +4,6 @@ import {reactive, ref} from "vue";
 import {useTabCountStore} from "../stores/tabCountStore";
 import {DynamicConfig, getDynamicJsonCfg} from "../lib/dynamicConfig";
 
-
 export function useTabCount() {
     const tabCountStore = useTabCountStore()
 

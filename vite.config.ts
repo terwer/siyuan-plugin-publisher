@@ -15,7 +15,8 @@ import * as path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig(({command, mode, ssrBuild}) => {
-    console.log("command=>", command)
+    const isTest = process.env.TEST == "true"
+    console.log("isTest=>", isTest)
 
     const env = loadEnv(mode, process.cwd())
     const processEnvValues = {
@@ -47,7 +48,7 @@ export default defineConfig(({command, mode, ssrBuild}) => {
                 include: resolve(dirname(fileURLToPath(import.meta.url)), 'src/locales/index.ts'),
             }),
             // @ts-ignore
-            mpa.default(),
+            isTest ? '' : mpa.default(),
         ],
         // 项目根目录
         // root: process.cwd(),
@@ -136,7 +137,10 @@ export default defineConfig(({command, mode, ssrBuild}) => {
             minify: false,
 
             // @rollup/plugin-commonjs 插件的选项
-            commonjsOptions: {},
+            commonjsOptions: {
+                // include: [/node_modules/, /public/],
+                // extensions: ['.js', '.cjs'],
+            },
 
             // 当设置为 true, 构建后将会生成 manifest.json 文件
             manifest: false,
@@ -170,7 +174,7 @@ export default defineConfig(({command, mode, ssrBuild}) => {
                     // used during production bundling
                     rollupNodePolyFill()
                 ]
-            }
+            },
         },
         test: {
             globals: true,

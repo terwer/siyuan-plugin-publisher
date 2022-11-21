@@ -5,12 +5,12 @@ import {
     getBlockByID,
     getBlockBySlug,
     getRootBlocks,
-    getRootBlocksCount
+    getRootBlocksCount, getSubdocCount, getSubdocs
 } from "./siYuanApi";
 import {Post} from "../../common/post";
 import {UserBlog} from "../../common/userBlog";
 import {API_TYPE_CONSTANTS} from "../../constants/apiTypeConstants";
-import {render} from "../../markdownUtil";
+import {renderHTML} from "../../markdownUtil";
 import {removeWidgetTag} from "../../htmlUtil";
 import {POST_STATUS_CONSTANTS} from "../../constants/postStatusConstants";
 import {CategoryInfo} from "../../common/categoryInfo";
@@ -110,7 +110,7 @@ export class SiYuanApiAdaptor implements IApi {
         const shortDesc = attrs["custom-desc"] || ""
 
         // 渲染Markdown
-        let html = render(md.content)
+        let html = renderHTML(md.content)
         // 移除挂件html
         html = removeWidgetTag(html)
 
@@ -146,5 +146,58 @@ export class SiYuanApiAdaptor implements IApi {
 
     public async getPrevireUrl(postid: string): Promise<string> {
         return Promise.resolve("");
+    }
+
+    // ===============================================
+    // 下面是思源笔记独有的API
+    // ===============================================
+
+    public async getSubPostCount(postid: string): Promise<number> {
+        return await getSubdocCount(postid);
+    }
+
+    public async getSubPosts(postid: string, numOfPosts: number, page: number, keyword?: string): Promise<Array<Post>> {
+        let result: Post[] = []
+
+        let pg = 0
+        if (page) {
+            pg = page
+        }
+        let k = keyword || ""
+        const siyuanPosts = await getSubdocs(postid, pg, numOfPosts, k)
+        // logUtil.logInfo(siyuanPosts)
+
+        for (let i = 0; i < siyuanPosts.length; i++) {
+            const siyuanPost = siyuanPosts[i]
+
+            // 某些属性详情页控制即可
+            const attrs = await getBlockAttrs(siyuanPost.root_id)
+            const page = await this.getPost(siyuanPost.root_id)
+
+            // // 发布状态
+            // let isPublished = true
+            // const publishStatus = attrs["custom-publish-status"] || "draft"
+            // if (publishStatus == "secret") {
+            //     isPublished = false;
+            // }
+            //
+            // // 访问密码
+            // const postPassword = attrs["custom-publish-password"] || ""
+
+            // 文章别名
+            const customSlug = attrs["custom-slug"] || ""
+
+            // 适配公共属性
+            let commonPost = new Post()
+            commonPost.postid = siyuanPost.root_id
+            commonPost.title = siyuanPost.content
+            commonPost.permalink = customSlug == "" ? "/post/" + siyuanPost.root_id : "/post/" + customSlug + ".html"
+            // commonPost.isPublished = isPublished
+            commonPost.mt_keywords = page.mt_keywords
+            commonPost.description = page.description
+            result.push(commonPost)
+        }
+
+        return Promise.resolve(result);
     }
 }

@@ -35,7 +35,7 @@ const pid = ref("")
 
 const handlePublish = async (e: any) => {
   e.preventDefault()
-  const widgetResult = await getWidgetId()
+  const widgetResult = getWidgetId()
   if (widgetResult.isInSiyuan) {
     goToPage("/index.html?id=" + pid.value, "/")
   } else {

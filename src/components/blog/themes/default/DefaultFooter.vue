@@ -8,23 +8,19 @@
         <span class="text s-dark" @click="toggleDark()">{{
             isDark ? $t('theme.mode.light') : $t('theme.mode.dark')
           }}</span>
-        <span class="text">.</span> <span class="text s-dark"
-                                          @click="changeSuyuanApi()"> {{ $t('blog.change.siyuan.api') }} </span>
+        <span class="text">.</span> <span class="text s-dark" @click="changeSuyuanApi()"> {{ $t('blog.change.siyuan.api') }} </span>
         <span class="text">.</span> <span class="text s-dark" @click="newWin()"> {{ $t('blog.newwin.open') }} </span>
 
         <el-dialog v-model="siyuanApiChangeFormVisible" :title="$t('blog.change.siyuan.api')">
           <el-form ref="siyuanApiSettingFormRef" :model="siyuanApiChangeForm" :rules="siyuanApiChangeRules">
             <el-form-item :label="$t('setting.blog.apiurl')" :label-width="formLabelWidth" prop="apiUrl">
-              <el-input v-model="siyuanApiChangeForm.apiUrl" autocomplete="off"
-                        :placeholder="$t('setting.blog.siyuan.apiurl')"/>
+              <el-input v-model="siyuanApiChangeForm.apiUrl" autocomplete="off" :placeholder="$t('setting.blog.siyuan.apiurl')"/>
             </el-form-item>
             <el-form-item :label="$t('setting.blog.password')" :label-width="formLabelWidth" prop="pwd">
-              <el-input v-model="siyuanApiChangeForm.pwd" type="password" autocomplete="off"
-                        :placeholder="$t('setting.blog.siyuan.password')" show-password/>
+              <el-input v-model="siyuanApiChangeForm.pwd" type="password" autocomplete="off" :placeholder="$t('setting.blog.siyuan.password')" show-password/>
             </el-form-item>
             <el-form-item :label="$t('setting.blog.middlewareUrl')" :label-width="formLabelWidth" prop="middlewareUrl">
-              <el-input v-model="siyuanApiChangeForm.middlewareUrl" autocomplete="off"
-                        :placeholder="$t('setting.blog.middlewareUrl.tip')"/>
+              <el-input v-model="siyuanApiChangeForm.middlewareUrl" autocomplete="off" :placeholder="$t('setting.blog.middlewareUrl.tip')"/>
             </el-form-item>
             <el-form-item>
               <el-alert class="top-data-tip middleware-tip" :title="$t('setting.blog.middlewareUrl.my.tip')"
@@ -58,11 +54,14 @@ import {useI18n} from "vue-i18n";
 import {getSiyuanCfg, SiYuanConfig} from "../../../../lib/platform/siyuan/siYuanConfig";
 import {setJSONConf} from "../../../../lib/config";
 import {SIYUAN_CONSTANTS} from "../../../../lib/constants/siyuanConstants";
+import {inSiyuan} from "../../../../lib/platform/siyuan/siyuanUtil";
 
 const {t} = useI18n()
 
 const isDark = useDark()
 const toggleDark = useToggle(isDark)
+
+const isInSiyuan = ref(false)
 
 const formLabelWidth = '140px'
 const siyuanApiChangeFormVisible = ref(false)
@@ -145,8 +144,10 @@ const initConf = () => {
   logUtil.logInfo("初始化思源配置", siyuanCfg)
 }
 
-onMounted(() => {
+onMounted(async () => {
   initConf()
+
+  isInSiyuan.value = await inSiyuan();
 })
 </script>
 

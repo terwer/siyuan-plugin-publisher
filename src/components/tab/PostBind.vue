@@ -51,8 +51,7 @@
 
 <script lang="ts" setup>
 import {onBeforeMount, onMounted, reactive, ref, watch} from "vue";
-import {getBooleanConf, setBooleanConf} from "../../lib/config";
-import SWITCH_CONSTANTS from "../../lib/constants/switchConstants";
+import {getBooleanConf} from "../../lib/config";
 import logUtil from "../../lib/logUtil";
 import type {FormInstance, FormRules} from 'element-plus'
 import {ElMessage} from "element-plus";

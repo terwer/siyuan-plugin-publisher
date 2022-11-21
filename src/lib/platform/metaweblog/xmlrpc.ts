@@ -107,9 +107,9 @@ export class XmlrpcClient {
     private async fetchXmlrpc(apiUrl: string, reqMethod: string, reqParams: Array<string>) {
         let result
 
-        const widgetResult = await getWidgetId()
+        const widgetResult = getWidgetId()
         if (widgetResult.isInSiyuan) {
-            logUtil.logInfo("当前处于挂件模式，使用electron的fetch获取数据or firefox")
+            logUtil.logInfo("当前处于挂件模式，使用electron的fetch获取数据")
             // 不解析了，直接使用Node兼容调用
             // result = await fetchElectron(apiUrl, reqMethod, reqParams)
             result = await fetchNode(apiUrl, reqMethod, reqParams)

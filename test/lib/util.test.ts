@@ -1,6 +1,6 @@
 import {describe, it} from "vitest";
-import logUtil from "../src/lib/logUtil";
-import {pathJoin} from "../src/lib/util";
+import logUtil from "../../src/lib/logUtil";
+import {pathJoin} from "../../src/lib/util";
 
 describe('util test', () => {
     it('pathJoin', () => {
@@ -9,7 +9,6 @@ describe('util test', () => {
 
         const result = pathJoin(path1, path2)
 
-        logUtil.logInfo("pathJoin test=>")
-        logUtil.logInfo(result)
+        logUtil.logInfo("pathJoin test=>", result)
     })
 })

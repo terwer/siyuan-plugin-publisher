@@ -6,7 +6,9 @@
  * @param splt 例如：/，但部分情况下无需传递此参数
  *
  */
-import {firefoxXmlHttpRequest, isInFirefoxExtension} from "./FirefoxUtil";
+import {isInFirefoxExtension} from "./FirefoxUtil";
+import {inSiyuan} from "../platform/siyuan/siyuanUtil";
+import {getQueryString, inBrowser, pathJoin, setUrlParameter} from "../util";
 import logUtil from "../logUtil";
 
 function getPageUrl(pageUrl: string, split?: string) {
@@ -20,18 +22,29 @@ function getPageUrl(pageUrl: string, split?: string) {
         // @ts-ignore
         url = chrome.runtime.getURL(url);
     } else {
-        if (split && split != "") {
-            url = window.location.protocol + "//" + window.location.host + split + url;
-        } else {
-            url = window.location.protocol + "//" + window.location.host + url;
+        // 思源笔记链接处理
+        const from = getQueryString("from")
+        if (inSiyuan() || from == "siyuan") {
+            url = "/widgets/sy-post-publisher" + url;
+            url = setUrlParameter(url, "from", "siyuan")
         }
+
+        // 处理手动分隔符
+        let baseUrl = window.location.protocol + "//" + window.location.host
+        if (split && split != "") {
+            baseUrl = window.location.protocol + "//" + window.location.host + split
+        }
+
+        // 智能拼接
+        url = pathJoin(baseUrl, url)
     }
 
+    logUtil.logWarn("将要打开页面=>", url)
     return url;
 }
 
 export function goToPage(pageUrl: string, split?: string) {
-    const url = getPageUrl(pageUrl, split);
+    let url = getPageUrl(pageUrl, split);
     window.open(url)
 }
 
@@ -48,6 +61,9 @@ export function goToPageWithTarget(pageUrl: string, target?: string, split?: str
  * 检测是否运行在Chrome插件中
  */
 export function isInChromeExtension() {
+    if (!inBrowser()) {
+        return false;
+    }
     if (isInFirefoxExtension()) {
         return false;
     }

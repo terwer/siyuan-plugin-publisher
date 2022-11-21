@@ -14,7 +14,7 @@ import {getWidgetId} from "../../lib/platform/siyuan/siyuanUtil";
 onMounted(async () => {
   logUtil.logWarn("MODE=>", import.meta.env.MODE)
 
-  const widgetResult = await getWidgetId()
+  const widgetResult = getWidgetId()
   if (widgetResult.isInSiyuan) {
     logUtil.logWarn("当前页面ID是=>", widgetResult.widgetId)
     logUtil.logWarn("当前处于挂件模式，使用electron的fetch获取数据")

@@ -24,7 +24,6 @@
 <script lang="ts" setup>
 import logUtil from "../lib/logUtil";
 import {onMounted, ref} from "vue";
-import {getQueryString} from "../lib/util";
 
 let defaultTab = ref("plantform-main")
 

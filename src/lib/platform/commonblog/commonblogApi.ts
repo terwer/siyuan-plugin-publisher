@@ -91,7 +91,7 @@ export class CommonblogApi {
     private async fetchCall(apiUrl: string, fetchOptions: RequestInit, formJson?: any[]) {
         let result
 
-        const widgetResult = await getWidgetId()
+        const widgetResult = getWidgetId()
         if (widgetResult.isInSiyuan) {
             logUtil.logInfo("当前处于挂件模式，使用electron的fetch获取数据")
             // 不解析了，直接使用Node兼容调用
@@ -152,8 +152,10 @@ export class CommonblogApi {
 
         let resJson
 
-        if (response instanceof Response) {
+        const isTest = process.env.TEST == "true"
+        if (isTest || (typeof Response != "undefined" && response instanceof Response)) {
             // 解析响应体并返回响应结果
+            // @ts-ignore
             const statusCode = response.status
 
             // const resText = await response.text()
@@ -167,11 +169,13 @@ export class CommonblogApi {
                 }
             }
 
-            const widgetResult = await getWidgetId()
+            const widgetResult = getWidgetId()
 
             if (widgetResult.isInSiyuan) {
+                // @ts-ignore
                 resJson = await response.json()
             } else {
+                // @ts-ignore
                 const corsJson = await response.json()
                 resJson = this.parseCORSBody(corsJson)
             }
@@ -190,7 +194,7 @@ export class CommonblogApi {
      * @protected
      */
     protected async doFormFetch(apiUrl: string, fetchOptions: RequestInit, formJson: any[]): Promise<any> {
-        const widgetResult = await getWidgetId()
+        const widgetResult = getWidgetId()
         if (widgetResult.isInSiyuan) {
             // 将formJson转换为formData
             const form = new URLSearchParams();

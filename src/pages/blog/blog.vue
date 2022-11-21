@@ -1,11 +1,11 @@
 <template>
-  <Index/>
+  <BlogIndex/>
 </template>
 
 <script lang="ts" setup>
 import {onMounted} from "vue";
 import logUtil from "../../lib/logUtil";
-import Index from "../../components/Index.vue"
+import BlogIndex from "../../components/blog/BlogIndex.vue";
 
 onMounted(async () => {
   logUtil.logInfo("MODE=>", import.meta.env.MODE)
