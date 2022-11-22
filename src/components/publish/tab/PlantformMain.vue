@@ -123,14 +123,14 @@ onMounted(() => {
 </script>
 
 <script lang="ts">
-import VuepressMain from "./main/VuepressMain.vue";
-import JVueMain from "./main/metaweblogmainadaptor/JVueMain.vue";
-import CnblogsMain from "./main/metaweblogmainadaptor/CnblogsMain.vue";
-import ConfluenceMain from "./main/metaweblogmainadaptor/ConfluenceMain.vue";
-import WordpressMain from "./main/metaweblogmainadaptor/WordpressMain.vue";
-import LiandiMain from "./main/commonblogmainadaptor/LiandiMain.vue";
-import YuqueMain from "./main/commonblogmainadaptor/YuqueMain.vue";
-import KmsMain from "./main/commonblogmainadaptor/KmsMain.vue";
+import VuepressMain from "./main/adaptor/github/VuepressMain.vue";
+import JVueMain from "./main/adaptor/metaweblog/JVueMain.vue";
+import CnblogsMain from "./main/adaptor/metaweblog/CnblogsMain.vue";
+import ConfluenceMain from "./main/adaptor/metaweblog/ConfluenceMain.vue";
+import WordpressMain from "./main/adaptor/metaweblog/WordpressMain.vue";
+import LiandiMain from "./main/adaptor/common/LiandiMain.vue";
+import YuqueMain from "./main/adaptor/common/YuqueMain.vue";
+import KmsMain from "./main/adaptor/common/KmsMain.vue";
 import MetaweblogMain from "./main/MetaweblogMain.vue";
 
 export default {
