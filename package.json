@@ -15,9 +15,11 @@
     "webstorm-integration": "vitest --watch --reporter=dot --reporter=json --outputFile=.vitest-result.json",
     "widget": "bash scripts/widget.sh",
     "extChrome": "bash scripts/ext.sh",
+    "extChromeDev": "bash scripts/extDev.sh",
     "extFirefox": "bash scripts/extFV2.sh",
     "w": "yarn widget",
     "e": "yarn extChrome",
+    "edev": "yarn extChromeDev",
     "ef2": "yarn extFirefox"
   },
   "dependencies": {
