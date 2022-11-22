@@ -171,11 +171,11 @@
 </template>
 
 <script lang="ts" setup>
-import {CommonblogCfg, ICommonblogCfg} from "../../../../utils/platform/commonblog/commonblogCfg";
+import {CommonblogCfg, ICommonblogCfg} from "~/utils/platform/commonblog/commonblogCfg";
 import {nextTick, onMounted, reactive, ref} from "vue";
 import {useI18n} from "vue-i18n";
-import {getPage, getPageAttrs, getPageId, getPageMd, setPageAttrs} from "../../../../utils/platform/siyuan/siyuanUtil";
-import {getJSONConf, setJSONConf} from "../../../../utils/config";
+import {getPage, getPageAttrs, getPageId, getPageMd, setPageAttrs} from "~/utils/platform/siyuan/siyuanUtil";
+import {getJSONConf} from "~/utils/config";
 import {
   cutWords,
   formatNumToZhDate,
@@ -183,12 +183,11 @@ import {
   isEmptyObject,
   isEmptyString,
   jiebaToHotWords,
-  pathJoin,
   pingyinSlugify,
   zhSlugify
-} from "../../../../utils/util";
-import {SIYUAN_PAGE_ATTR_KEY} from "../../../../utils/constants/siyuanPageConstants";
-import logUtil from "../../../../utils/logUtil";
+} from "~/utils/util";
+import {SIYUAN_PAGE_ATTR_KEY} from "~/utils/constants/siyuanPageConstants";
+import logUtil from "~/utils/logUtil";
 import {ElMessage} from "element-plus/es";
 import shortHash from "shorthash2";
 import {
@@ -198,13 +197,13 @@ import {
   removeMdWidgetTag,
   removeTitleNumber,
   removeWidgetTag
-} from "../../../../utils/htmlUtil";
-import {CONSTANTS} from "../../../../utils/constants/constants";
+} from "~/utils/htmlUtil";
+import {CONSTANTS} from "~/utils/constants/constants";
 import {ElMessageBox} from "element-plus";
-import {API} from "../../../../utils/api";
-import {PageType} from "../../../../utils/platform/metaweblog/IMetaweblogCfg";
-import {Post} from "../../../../utils/common/post";
-import {CategoryInfo} from "../../../../utils/common/categoryInfo";
+import {API} from "~/utils/api";
+import {PageType} from "~/utils/platform/metaweblog/IMetaweblogCfg";
+import {Post} from "~/utils/common/post";
+import {CategoryInfo} from "~/utils/common/categoryInfo";
 
 const {t} = useI18n()
 
@@ -713,9 +712,11 @@ const doPublish = async () => {
   } catch (e: any) {
     isPublishLoading.value = false
 
-    logUtil.logError("发布异常")
-    ElMessage.error(t('main.opt.failure'))
-    throw new Error(e)
+    logUtil.logError("发布异常", e)
+    ElMessage.error({
+      dangerouslyUseHTMLString: true,
+      message: t('main.opt.failure') + "=>" + e.toString(),
+    })
   }
 
   isPublishLoading.value = false
