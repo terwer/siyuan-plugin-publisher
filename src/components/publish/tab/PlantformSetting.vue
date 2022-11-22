@@ -45,8 +45,7 @@
 
 <script lang="ts" setup>
 import {reactive, ref, watch} from "vue";
-import {getBooleanConf, setBooleanConf} from "../../../utils/config";
-import SWITCH_CONSTANTS from "../../../utils/constants/switchConstants";
+import {getBooleanConf} from "../../../utils/config";
 import logUtil from "../../../utils/logUtil";
 import {DynamicConfig, getDynamicJsonCfg} from "../../../utils/dynamicConfig";
 import {DynamicMCfg} from "../../../utils/platform/metaweblog/config/dynamicMCfg";
@@ -127,15 +126,15 @@ watch(() => props.isReload, /**/(oldValue, newValue) => {
 </script>
 
 <script lang="ts">
-import JVueSetting from "./setting/metaweblogsettingadaptor/JVueSetting.vue";
-import VuepressSetting from "./setting/VuepressSetting.vue";
-import CnblogsSetting from "./setting/metaweblogsettingadaptor/CnblogsSetting.vue";
-import ConfluenceSetting from "./setting/metaweblogsettingadaptor/ConfluenceSetting.vue";
-import LiandiSetting from "./setting/commonsettingadaptor/LiandiSetting.vue";
-import YuqueSetting from "./setting/commonsettingadaptor/YuqueSetting.vue";
-import KmsSetting from "./setting/commonsettingadaptor/KmsSetting.vue";
+import JVueSetting from "./setting/adaptor/metaweblog/JVueSetting.vue";
+import VuepressSetting from "./setting/adaptor/github/VuepressSetting.vue";
+import CnblogsSetting from "./setting/adaptor/metaweblog/CnblogsSetting.vue";
+import ConfluenceSetting from "./setting/adaptor/metaweblog/ConfluenceSetting.vue";
+import LiandiSetting from "./setting/adaptor/common/LiandiSetting.vue";
+import YuqueSetting from "./setting/adaptor/common/YuqueSetting.vue";
+import KmsSetting from "./setting/adaptor/common/KmsSetting.vue";
 import MetaweblogSetting from "./setting/MetaweblogSetting.vue";
-import WordpressSetting from "./setting/metaweblogsettingadaptor/WordpressSetting.vue";
+import WordpressSetting from "./setting/adaptor/metaweblog/WordpressSetting.vue";
 
 export default {
   name: "PlantformSetting",

@@ -200,9 +200,9 @@
 
 <script lang="ts" setup>
 import {nextTick, onBeforeMount, ref, watch} from "vue";
-import {getPage, getPageAttrs, getPageId, getPageMd, setPageAttrs} from "../../../../utils/platform/siyuan/siyuanUtil";
-import logUtil from "../../../../utils/logUtil"
-import {SIYUAN_PAGE_ATTR_KEY} from "../../../../utils/constants/siyuanPageConstants"
+import {getPage, getPageAttrs, getPageId, getPageMd, setPageAttrs} from "../../../../../../utils/platform/siyuan/siyuanUtil";
+import logUtil from "../../../../../../utils/logUtil"
+import {SIYUAN_PAGE_ATTR_KEY} from "../../../../../../utils/constants/siyuanPageConstants"
 import {
   covertStringToDate,
   cutWords,
@@ -215,20 +215,20 @@ import {
   pingyinSlugify,
   yaml2Obj,
   zhSlugify
-} from "../../../../utils/util";
+} from "../../../../../../utils/util";
 import {useI18n} from "vue-i18n";
 import {ElMessage, ElMessageBox} from "element-plus";
-import {CONSTANTS} from "../../../../utils/constants/constants";
-import {mdToHtml, mdToPlainText, parseHtml, removeMdWidgetTag, removeWidgetTag} from "../../../../utils/htmlUtil";
-import {API_TYPE_CONSTANTS} from "../../../../utils/constants/apiTypeConstants";
+import {CONSTANTS} from "../../../../../../utils/constants/constants";
+import {mdToHtml, mdToPlainText, parseHtml, removeMdWidgetTag, removeWidgetTag} from "../../../../../../utils/htmlUtil";
+import {API_TYPE_CONSTANTS} from "../../../../../../utils/constants/apiTypeConstants";
 import copy from "copy-to-clipboard"
 import shortHash from "shorthash2";
-import {API_STATUS_CONSTANTS} from "../../../../utils/constants/apiStatusConstants";
-import {getBooleanConf, getJSONConf} from "../../../../utils/config";
-import {IVuepressCfg} from "../../../../utils/platform/vuepress/IVuepressCfg";
-import {deletePage, getPageTreeNode, publishPage} from "../../../../utils/platform/vuepress/v1";
-import {POSTID_KEY_CONSTANTS} from "../../../../utils/constants/postidKeyConstants";
-import {getApiParams} from "../../../../utils/publishUtil";
+import {API_STATUS_CONSTANTS} from "../../../../../../utils/constants/apiStatusConstants";
+import {getBooleanConf, getJSONConf} from "../../../../../../utils/config";
+import {IVuepressCfg} from "../../../../../../utils/platform/vuepress/IVuepressCfg";
+import {deletePage, getPageTreeNode, publishPage} from "../../../../../../utils/platform/vuepress/v1";
+import {POSTID_KEY_CONSTANTS} from "../../../../../../utils/constants/postidKeyConstants";
+import {getApiParams} from "../../../../../../utils/publishUtil";
 
 const {t} = useI18n()
 
