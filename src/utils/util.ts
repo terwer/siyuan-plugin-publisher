@@ -344,6 +344,20 @@ export function covertStringToDate(dateString: string) {
     return changeTimeZone(datestr, 'Asia/Shanghai')
 }
 
+/**
+ * 计算所给的时间距离现在的秒数
+ * @param isoDateStr 过去的时间
+ */
+export const calcLastSeconds = function (isoDateStr: string) {
+    const fmt = formatIsoToNumDate(isoDateStr, true)
+    const date = covertStringToDate(fmt)
+
+    const now = new Date()
+
+    const s = (now.getTime() - date.getTime()) / 1000
+    return parseInt(s.toString())
+}
+
 // const date = covertStringToDate('20220718142548');
 // // const timeZone = 'Asia/Shanghai'
 // // const datestr = date.toLocaleString('zh-CN', {

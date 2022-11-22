@@ -175,9 +175,10 @@ import {CommonblogCfg, ICommonblogCfg} from "~/utils/platform/commonblog/commonb
 import {nextTick, onMounted, reactive, ref} from "vue";
 import {useI18n} from "vue-i18n";
 import {getPage, getPageAttrs, getPageId, getPageMd, setPageAttrs} from "~/utils/platform/siyuan/siyuanUtil";
-import {getJSONConf} from "~/utils/config";
+import {getConf, getJSONConf, setConf} from "~/utils/config";
 import {
-  cutWords,
+  calcLastSeconds,
+  cutWords, formatIsoToZhDate,
   formatNumToZhDate,
   getPublishStatus,
   isEmptyObject,
@@ -227,7 +228,21 @@ const props = defineProps({
   pageId: {
     type: String,
     default: undefined
-  }
+  },
+  /**
+   * 是否限制发布频率
+   */
+  limitRate: {
+    type: Boolean,
+    default: false
+  },
+  /**
+   * 限制时间，单位秒
+   */
+  limitSeconds: {
+    type: Number,
+    default: 5
+  },
 })
 
 const blogName = ref("")
@@ -622,6 +637,27 @@ const oneclickAttr = async (hideTip?: boolean) => {
   }
 }
 
+const cheeckLimit = (lastmodKey: string) => {
+  let flag = false
+
+  let lastmodDate = getConf(lastmodKey)
+  // 没发布过，不限制
+  if (isEmptyString(lastmodDate)) {
+    return false
+  }
+  logUtil.logInfo("cheeckLimit lastmodKey=>", lastmodKey)
+  logUtil.logInfo("cheeckLimit lastmodDate=>", lastmodDate)
+
+  const s = calcLastSeconds(lastmodDate)
+  if (s <= props.limitSeconds) {
+    ElMessage.error("由于【" + props.apiType + "】平台的限制，每6分钟之内只能发布或者更新一次文章，距离上一次发布时间为："
+        + s + "秒，仍需等待：" + (props.limitSeconds - s) + "秒")
+    return true;
+  }
+
+  return flag
+}
+
 const doPublish = async () => {
   if (!apiStatus.value) {
     ElMessage.error(t('setting.blog.vali.tip.metaweblog'))
@@ -631,6 +667,18 @@ const doPublish = async () => {
   isPublishLoading.value = true
 
   try {
+
+    // 检测发布频率
+    const lastmodKey = props.apiType + "_PUBLISH_LIMIT"
+    if (cheeckLimit(lastmodKey)) {
+      isPublishLoading.value = false
+      return
+    }
+
+    // 发布频率验证通过，更新发布时间
+    logUtil.logInfo("验证通过，更新发布时间")
+    const lastmodDate = (new Date()).toISOString()
+    setConf(lastmodKey, lastmodDate)
 
     // 生成属性
     await oneclickAttr(true)
