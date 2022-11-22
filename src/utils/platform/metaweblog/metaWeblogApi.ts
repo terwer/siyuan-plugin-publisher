@@ -4,7 +4,7 @@ import {XmlrpcClient} from "./xmlrpc";
 import {UserBlog} from "../../common/userBlog";
 import {Post} from "../../common/post";
 import logUtil from "../../logUtil";
-import {METAWEBLOG_METHOD_CONSTANTS} from "../../constants/metaweblogMethodConstants";
+import {METAWEBLOG_METHOD_CONSTANTS} from "~/utils/constants/metaweblogMethodConstants";
 import {POST_STATUS_CONSTANTS} from "../../constants/postStatusConstants";
 import {inBrowser, isEmptyString} from "../../util";
 import {CategoryInfo} from "../../common/categoryInfo";

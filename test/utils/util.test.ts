@@ -1,6 +1,6 @@
 import {describe, expect, it} from "vitest";
-import logUtil from "../../src/utils/logUtil";
-import {pathJoin, zhSlugify} from "../../src/utils/util";
+import logUtil from "~/utils/logUtil";
+import {pathJoin, zhSlugify} from "~/utils/util";
 
 describe('util test', () => {
     it('pathJoin', () => {
