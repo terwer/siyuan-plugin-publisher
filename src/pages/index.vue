@@ -21,7 +21,7 @@ import {SiYuanApiAdaptor} from "../utils/platform/siyuan/siYuanApiAdaptor";
 
 const isPublish = ref(false)
 
-onMounted(async () => {
+const init = async () => {
   logUtil.logWarn("MODE=>", import.meta.env.MODE)
 
   const widgetResult = getWidgetId()
@@ -45,5 +45,18 @@ onMounted(async () => {
   } else {
     logUtil.logWarn("当前处于非挂件模式，已开启请求代理解决CORS跨域问题")
   }
+}
+
+// =====================
+// life cycle
+// =====================
+onMounted(async () => {
+  await init();
 })
+</script>
+
+<script lang="ts">
+export default {
+  name: "index"
+}
 </script>

@@ -8,16 +8,18 @@ import {createPinia} from "pinia";
 import i18n from "../locales";
 
 // Element-Plus
-import ElementPlus from 'element-plus'
+// import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import 'element-plus/theme-chalk/dark/css-vars.css'
+
+// global style
 import '../assets/style.css'
 import '../assets/style.dark.css'
 
 // hljs
-import ".//vue-hljs/vue-hljs.js"
+import "./vue-hljs/vue-hljs.js"
 // @ts-ignore
-import vueHljs from ".//vue-hljs/lib/vue-hljs/main.js";
+import vueHljs from "./vue-hljs/lib/vue-hljs/main.js";
 
 /**
  * 统一的Vue实例创建入口
@@ -35,7 +37,7 @@ const createPage = (rootComponent: Component): App => {
     // 国际化
     app.use(i18n)
     // Element-Plus
-    app.use(ElementPlus)
+    // app.use(ElementPlus)
     // vueHljs
     app.use(vueHljs)
 
