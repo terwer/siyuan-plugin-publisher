@@ -79,22 +79,23 @@
 </template>
 
 <script lang="ts" setup>
-import logUtil from "../../../../utils/logUtil";
+import logUtil from "~/utils/logUtil";
 import {onMounted, ref} from "vue";
-import {formatIsoToZhDate} from "../../../../utils/util";
-import {API} from "../../../../utils/api";
-import {API_TYPE_CONSTANTS} from "../../../../utils/constants/apiTypeConstants";
-import {mdToHtml, removeTitleNumber} from "../../../../utils/htmlUtil";
+import {formatIsoToZhDate} from "~/utils/util";
+import {API} from "~/utils/api";
+import {API_TYPE_CONSTANTS} from "~/utils/constants/apiTypeConstants";
+import {mdToHtml, removeTitleNumber} from "~/utils/htmlUtil";
 import {useI18n} from "vue-i18n";
-import {getRootBlocksCount} from "../../../../utils/platform/siyuan/siYuanApi";
-import {Post} from "../../../../utils/common/post";
+import {getRootBlocksCount} from "~/utils/platform/siyuan/siYuanApi";
+import {Post} from "~/utils/common/post";
 import DefaultPostDetail from "./DefaultPostDetail.vue";
 import DefaultPublish from "./DefaultPublish.vue";
-import {goToPage} from "../../../../utils/browser/ChromeUtil";
+import {goToPage} from "~/utils/browser/ChromeUtil";
 import {ElMessageBox} from "element-plus";
-import {getPageId, inSiyuan} from "../../../../utils/platform/siyuan/siyuanUtil";
-import {getByLength} from "../../../../utils/strUtil";
-import {SiYuanApiAdaptor} from "../../../../utils/platform/siyuan/siYuanApiAdaptor";
+import {getPageId, inSiyuan} from "~/utils/platform/siyuan/siyuanUtil";
+import {getByLength} from "~/utils/strUtil";
+import {SiYuanApiAdaptor} from "~/utils/platform/siyuan/siYuanApiAdaptor";
+import {CONSTANTS} from "~/utils/constants/constants";
 
 const {t} = useI18n()
 
@@ -312,7 +313,7 @@ const reloadTableData = async () => {
     let item = postList[i]
 
     let title = removeTitleNumber(item.title)
-    let shortTitle = getByLength(title, 10, false)
+    let shortTitle = getByLength(title, CONSTANTS.MAX_TITLE_LENGTH, false)
     let content = mdToHtml(item.description)
 
     const tableRow = {
