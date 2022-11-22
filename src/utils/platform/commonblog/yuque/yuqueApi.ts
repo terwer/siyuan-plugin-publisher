@@ -1,6 +1,6 @@
-import {isEmptyObject} from "../../../util";
-import logUtil from "../../../logUtil";
-import {CommonblogApi} from "../commonblogApi";
+import {isEmptyObject} from "~/utils/util";
+import logUtil from "~/utils/logUtil";
+import {CommonblogApi} from "~/utils/platform/commonblog/commonblogApi";
 
 /**
  * 语雀API
@@ -136,8 +136,6 @@ export class YuqueApi extends CommonblogApi {
      * @private
      */
     private async yuqueRequest(url: string, data?: any, method?: string) {
-        let resData = null
-
         // 设置请求参数
         const apiUrl = this.baseUrl + url
 

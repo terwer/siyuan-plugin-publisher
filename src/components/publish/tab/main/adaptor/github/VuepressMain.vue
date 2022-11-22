@@ -219,7 +219,14 @@ import {
 import {useI18n} from "vue-i18n";
 import {ElMessage, ElMessageBox} from "element-plus";
 import {CONSTANTS} from "../../../../../../utils/constants/constants";
-import {mdToHtml, mdToPlainText, parseHtml, removeMdWidgetTag, removeWidgetTag} from "../../../../../../utils/htmlUtil";
+import {
+  mdToHtml,
+  mdToPlainText,
+  parseHtml,
+  removeMdWidgetTag,
+  removeTitleNumber,
+  removeWidgetTag
+} from "../../../../../../utils/htmlUtil";
 import {API_TYPE_CONSTANTS} from "../../../../../../utils/constants/apiTypeConstants";
 import copy from "copy-to-clipboard"
 import shortHash from "shorthash2";
@@ -329,6 +336,19 @@ const complexMode = () => {
   editMode.value = true
 }
 
+// 将文档路径转换为分类
+const convertDocPathToCategories = (docPath: string) => {
+  // logUtil.logError("docPath=>", docPath)
+  const docPathArray = docPath.split("/")
+  if (docPathArray.length > 1) {
+    formData.value.categories = []
+    for (let i = 1; i < docPathArray.length - 1; i++) {
+      const docCat = removeTitleNumber(docPathArray[i])
+      formData.value.categories.push(docCat)
+    }
+  }
+}
+
 async function initPage() {
   isInitLoadding.value = true
 
@@ -379,18 +399,6 @@ async function initPage() {
   logUtil.logInfo("Vuepress的api状态=>")
   logUtil.logInfo(isOk)
 
-  // 表单属性转换为YAML
-  convertAttrToYAML()
-
-  // 文章内容同步到YAMl
-  // 发布内容
-  let content
-  const data = await getPageMd(siyuanData.value.pageId);
-  const md = data.content
-  content = removeMdWidgetTag(md)
-  vuepressData.value.vuepressContent = content;
-  vuepressData.value.vuepressFullContent = vuepressData.value.formatter + "\n" + vuepressData.value.vuepressContent;
-
   // 发布状态
   isPublished.value = getPublishStatus(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS, siyuanData.value.meta)
 
@@ -402,6 +410,8 @@ async function initPage() {
     // 自定义目录
     useDefaultPath.value = false
     formData.value.customPath = docPath;
+    // 目录映射到分类
+    convertDocPathToCategories(docPath)
 
     // "https://terwergreen.com"
     const vdomain = "https://terwer.space/";
@@ -409,6 +419,18 @@ async function initPage() {
         + "/blob/" + vuepressCfg.defaultBranch + "/" + docPath
     previewRealUrl.value = vdomain + vuepressData.value.yamlObj.permalink
   }
+
+  // 表单属性转换为YAML
+  convertAttrToYAML()
+
+  // 文章内容同步到YAMl
+  // 发布内容
+  let content
+  const data = await getPageMd(siyuanData.value.pageId);
+  const md = data.content
+  content = removeMdWidgetTag(md)
+  vuepressData.value.vuepressContent = content;
+  vuepressData.value.vuepressFullContent = vuepressData.value.formatter + "\n" + vuepressData.value.vuepressContent;
 
   isInitLoadding.value = false
 }
@@ -744,6 +766,9 @@ async function doPublish() {
 
       logUtil.logInfo(formData.value.customPath)
       logUtil.logInfo("文章讲发布于以下路径=>", docPath)
+
+      // 目录映射为分类
+      convertDocPathToCategories(docPath)
     }
 
     // 发布内容

@@ -39,10 +39,10 @@ app.post('/api/middleware/xmlrpc', (req: Request, res: Response) => {
 
     let err
     try {
-        // console.log("xmlrpcCORSParams.reqMethod=>")
-        // console.log(xmlrpcCORSParams.reqMethod)
-        // console.log("xmlrpcCORSParams.reqParams=>")
-        // console.log(xmlrpcCORSParams.reqParams)
+        console.log("xmlrpcCORSParams.reqMethod=>")
+        console.log(xmlrpcCORSParams.reqMethod)
+        console.log("xmlrpcCORSParams.reqParams=>")
+        console.log(xmlrpcCORSParams.reqParams)
         const methodPromise = methodCallDirect(client, xmlrpcCORSParams.reqMethod, xmlrpcCORSParams.reqParams)
         methodPromise.then((resolve: any) => {
             // console.log("methodPromise resolve=>")
@@ -101,10 +101,10 @@ app.post('/api/middleware/fetch', (req: Request, res: Response) => {
     }
 
     let err
-    // console.log("fetchCORS.apiUrl=>")
-    // console.log(fetchCORSApiUrl)
-    // console.log("fetchCORS.fetchOptions=>")
-    // console.log(fetchCORSOptions)
+    console.log("fetchCORS.apiUrl=>")
+    console.log(fetchCORSApiUrl)
+    console.log("fetchCORS.fetchOptions=>")
+    console.log(fetchCORSOptions)
 
     fetch(fetchCORSApiUrl, fetchCORSOptions)
         .then((response) => {

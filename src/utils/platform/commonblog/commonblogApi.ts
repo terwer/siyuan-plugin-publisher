@@ -1,7 +1,7 @@
-import logUtil from "../../logUtil";
-import {getWidgetId} from "../siyuan/siyuanUtil";
-import {getEnv} from "../../envUtil";
-import {isInChromeExtension, sendChromeMessage} from "../../browser/ChromeUtil";
+import logUtil from "~/utils/logUtil";
+import {getWidgetId} from "~/utils/platform/siyuan/siyuanUtil";
+import {getEnv} from "~/utils/envUtil";
+import {isInChromeExtension, sendChromeMessage} from "~/utils/browser/ChromeUtil";
 
 export class CommonblogApi {
     constructor() {
@@ -164,8 +164,12 @@ export class CommonblogApi {
             if (200 != statusCode) {
                 if (401 == statusCode) {
                     throw new Error("因权限不足操作已被禁止")
+                } else if (statusCode > 401) {
+                    // @ts-ignore
+                    const msg = response.statusText
+                    throw new Error(msg)
                 } else {
-                    throw new Error("请求错误")
+                    throw new Error("fetch请求错误")
                 }
             }
 

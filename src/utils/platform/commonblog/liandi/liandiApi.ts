@@ -1,6 +1,6 @@
-import logUtil from "../../../logUtil";
-import {isEmptyObject} from "../../../util";
-import {CommonblogApi} from "../commonblogApi";
+import logUtil from "~/utils/logUtil";
+import {isEmptyObject} from "~/utils/util";
+import {CommonblogApi} from "~/utils/platform/commonblog/commonblogApi";
 
 /**
  * 链滴API
@@ -144,6 +144,8 @@ export class LiandiApi extends CommonblogApi {
         logUtil.logInfo("向链滴请求数据，resJson=>", resJson)
         if (resJson.code == 0) {
             return resJson.data
+        } else if (resJson.code == -1) {
+            throw new Error(resJson.msg)
         } else {
             throw new Error("发布帖子受限或者系统异常")
         }

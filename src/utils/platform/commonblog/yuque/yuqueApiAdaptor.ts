@@ -1,12 +1,12 @@
-import {IApi} from "../../../api";
-import {CommonblogApiAdaptor} from "../commonblogApiAdaptor";
-import {YuqueApi} from "./yuqueApi";
-import {API_TYPE_CONSTANTS} from "../../../constants/apiTypeConstants";
-import {UserBlog} from "../../../common/userBlog";
-import logUtil from "../../../logUtil";
-import {Post} from "../../../common/post";
-import {CategoryInfo} from "../../../common/categoryInfo";
-import {pathJoin} from "../../../util";
+import {IApi} from "~/utils/api";
+import {CommonblogApiAdaptor} from "~/utils/platform/commonblog/commonblogApiAdaptor";
+import {YuqueApi} from "~/utils/platform/commonblog/yuque/yuqueApi";
+import {API_TYPE_CONSTANTS} from "~/utils/constants/apiTypeConstants";
+import {UserBlog} from "~/utils/common/userBlog";
+import logUtil from "~/utils/logUtil";
+import {Post} from "~/utils/common/post";
+import {CategoryInfo} from "~/utils/common/categoryInfo";
+import {pathJoin} from "~/utils/util";
 
 /**
  * 语雀的API适配器

@@ -1,6 +1,6 @@
-import {CommonblogCfg} from "../commonblogCfg";
-import {POSTID_KEY_CONSTANTS} from "../../../constants/postidKeyConstants";
-import {PageType} from "../../metaweblog/IMetaweblogCfg";
+import {CommonblogCfg} from "~/utils/platform/commonblog/commonblogCfg";
+import {POSTID_KEY_CONSTANTS} from "~/utils/constants/postidKeyConstants";
+import {PageType} from "~/utils/platform/metaweblog/IMetaweblogCfg";
 
 /**
  * 链滴配置
