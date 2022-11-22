@@ -76,6 +76,7 @@ export default defineConfig(({command, mode, ssrBuild}) => {
         define: Object.assign(processEnvValues, {}),
         resolve: {
             alias: {
+                "~": path.resolve(path.dirname(fileURLToPath(import.meta.url)), "src"),
                 // 'vue-i18n': 'vue-i18n/dist/vue-i18n.runtime.esm-bundler.js',
                 // 'vue-i18n': 'vue-i18n/dist/vue-i18n.cjs.js',
                 'node-fetch': 'cross-fetch',

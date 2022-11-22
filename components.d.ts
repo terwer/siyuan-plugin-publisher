@@ -54,6 +54,8 @@ declare module '@vue/runtime-core' {
     ElTabs: typeof import('element-plus/es')['ElTabs']
     ElTag: typeof import('element-plus/es')['ElTag']
     ElTreeSelect: typeof import('element-plus/es')['ElTreeSelect']
+    GithubMin: typeof import('./src/components/publish/tab/main/GithubMin.vue')['default']
+    GithubSetting: typeof import('./src/components/publish/tab/setting/GithubSetting.vue')['default']
     JVueMain: typeof import('./src/components/publish/tab/main/adaptor/metaweblog/JVueMain.vue')['default']
     JVueSetting: typeof import('./src/components/publish/tab/setting/adaptor/metaweblog/JVueSetting.vue')['default']
     KmsMain: typeof import('./src/components/publish/tab/main/adaptor/common/KmsMain.vue')['default']

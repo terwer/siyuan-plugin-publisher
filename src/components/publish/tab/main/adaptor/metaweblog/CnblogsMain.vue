@@ -3,8 +3,9 @@
 </template>
 
 <script lang="ts" setup>
-import {API_TYPE_CONSTANTS} from "../../../../../../utils/constants/apiTypeConstants";
+import {API_TYPE_CONSTANTS} from "~/utils/constants/apiTypeConstants";
 import {ref} from "vue";
+import MetaweblogMain from "~/components/publish/tab/main/MetaweblogMain.vue";
 
 const apiType = ref(API_TYPE_CONSTANTS.API_TYPE_CNBLOGS)
 
@@ -17,11 +18,8 @@ const props = defineProps({
 </script>
 
 <script lang="ts">
-import MetaweblogMain from "../../MetaweblogMain.vue";
-
 export default {
-  name: "CnblogsMain",
-  components: {MetaweblogMain}
+  name: "CnblogsMain"
 }
 </script>
 

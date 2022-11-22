@@ -21,7 +21,10 @@
       "node",
       "vite/client",
       "vitest/globals"
-    ]
+    ],
+    "paths": {
+      "~/*": ["./src/*"]
+    }
   },
   "include": [
     "src/**/*.ts",
