@@ -1,6 +1,13 @@
 import {describe, expect, it} from "vitest";
 import logUtil from "~/utils/logUtil";
-import {pathJoin, zhSlugify} from "~/utils/util";
+import {
+    calcLastSeconds,
+    covertStringToDate,
+    formatIsoToNumDate,
+    formatIsoToZhDate,
+    pathJoin,
+    zhSlugify
+} from "~/utils/util";
 
 describe('util test', () => {
     it('pathJoin', () => {
@@ -17,5 +24,35 @@ describe('util test', () => {
         const result = await zhSlugify(str)
         logUtil.logInfo("zhSlugify result=>", result)
         expect(result).toBeTruthy()
+    })
+
+    it("date tests", () => {
+        const date = covertStringToDate('20220718142548');
+        // const timeZone = 'Asia/Shanghai'
+        // const datestr = date.toLocaleString('zh-CN', {
+        //     timeZone,
+        // });
+        logUtil.logInfo("date.toISOString=>")
+        logUtil.logInfo(date.toISOString())
+
+        // ======================================
+
+        const isoDateStr = "2022-11-22T15:42:12.637Z"
+        const fmt = formatIsoToZhDate(isoDateStr)
+        logUtil.logInfo("fmt=>")
+        logUtil.logInfo(fmt)
+
+        const fmt2 = formatIsoToNumDate(isoDateStr)
+        logUtil.logInfo("fmt2=>")
+        logUtil.logInfo(fmt2)
+
+        const date3 = covertStringToDate(fmt2)
+        logUtil.logInfo("date3=>", date3)
+    })
+
+    it("date compare", () => {
+        const isoDateStr = "2022-11-22T16:03:12.637Z"
+        const s = calcLastSeconds(isoDateStr)
+        logUtil.logInfo("s=>", s)
     })
 })
