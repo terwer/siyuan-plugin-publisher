@@ -11,6 +11,11 @@ global.localStorage = new LocalStorage('./test/data/polyfill/localStorage');
 // lute
 require("../public/lute.min.js")
 
+// i18n
+import { config } from "@vue/test-utils"
+import i18n from "../src/locales";
+config.global.plugins = [i18n]
+
 beforeEach(() => {
     console.log("======test is starting...======")
 })

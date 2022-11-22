@@ -117,12 +117,13 @@ async function request(url: string, data: any, method?: string, useToken?: boole
         })
     }
 
-    logUtil.logInfo("向思源请求数据，url=>", url)
-    logUtil.logInfo("向思源请求数据，fetchOps=>", fetchOps)
+    logUtil.logInfo("开始向思源请求数据，url=>", url)
+    logUtil.logInfo("开始向思源请求数据，fetchOps=>", fetchOps)
     await fetch(url, fetchOps).then(function (response) {
         resData = response.json()
-        logUtil.logInfo("向思源请求数据，resData=>", resData)
+        logUtil.logInfo("向思源请求数据完成，resData=>", resData)
     })
+    logUtil.logInfo("思源请求数据返回，resData=>", resData)
     return resData
 }
 

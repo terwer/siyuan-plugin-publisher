@@ -28,7 +28,8 @@
     "src/**/*.d.ts",
     "src/**/*.tsx",
     "src/**/*.vue",
-    "test/**/*.ts"
+    "test/**/*.ts",
+    "node_modules/vitest/globals.d.ts"
   ],
   "references": [
     {

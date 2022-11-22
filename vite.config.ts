@@ -11,8 +11,9 @@ import rollupNodePolyFill from 'rollup-plugin-node-polyfills'
 import vueI18n from '@intlify/vite-plugin-vue-i18n'
 import mpa from 'vite-plugin-mpa'
 import * as path from "path";
-// @ts-ignore
-import {getBooleanEnv} from "./src/utils/envUtil";
+
+import Components from 'unplugin-vue-components/vite';
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
 
 // https://vitejs.dev/config/
 export default defineConfig(({command, mode, ssrBuild}) => {
@@ -54,6 +55,13 @@ export default defineConfig(({command, mode, ssrBuild}) => {
             }),
             // @ts-ignore
             isTest ? '' : mpa.default(),
+            Components({
+                resolvers: [
+                    ElementPlusResolver({
+                        importStyle: 'sass',
+                    }),
+                ],
+            }),
         ],
         // 项目根目录
         // root: process.cwd(),
@@ -183,8 +191,12 @@ export default defineConfig(({command, mode, ssrBuild}) => {
         },
         test: {
             globals: true,
-            environment: 'node',
+            // environment: 'node',
+            environment: 'happy-dom',
             setupFiles: ['./test/setup.ts'],
+            deps: {
+                inline: ['element-plus'],
+            },
         },
     }
 })
