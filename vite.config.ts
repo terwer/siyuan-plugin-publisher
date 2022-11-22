@@ -1,19 +1,15 @@
 import {defineConfig, loadEnv} from 'vite'
-import {dirname, resolve} from 'node:path'
+import path, {dirname, resolve} from 'path'
 import {fileURLToPath} from 'url'
 import vue from '@vitejs/plugin-vue'
 import vitePluginRequireTransform from 'vite-plugin-require-transform';
 import {NodeGlobalsPolyfillPlugin} from '@esbuild-plugins/node-globals-polyfill'
 import {NodeModulesPolyfillPlugin} from '@esbuild-plugins/node-modules-polyfill'
-// You don't need to add this to deps, it's included by @esbuild-plugins/node-modules-polyfill
 import rollupNodePolyFill from 'rollup-plugin-node-polyfills'
-// @ts-ignore
 import vueI18n from '@intlify/vite-plugin-vue-i18n'
 import mpa from 'vite-plugin-mpa'
-import * as path from "path";
-
 import Components from 'unplugin-vue-components/vite';
-import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
+import {ElementPlusResolver} from 'unplugin-vue-components/resolvers';
 
 // https://vitejs.dev/config/
 export default defineConfig(({command, mode, ssrBuild}) => {
