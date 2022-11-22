@@ -33,7 +33,7 @@
     "highlight.js": "^11.6.0",
     "js-base64": "^3.7.2",
     "js-yaml": "^4.1.0",
-    "pinia": "^2.0.22",
+    "pinia": "^2.0.25",
     "plantuml-encoder": "^1.4.0",
     "shorthash2": "^1.0.3",
     "transliteration": "^2.3.5",
