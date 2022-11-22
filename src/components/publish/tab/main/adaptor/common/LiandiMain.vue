@@ -1,5 +1,5 @@
 <template>
-  <CommonBlogMain :api-type="apiType" :page-id="props.pageId" :limit-rate="true" :limit-seconds="360"/>
+  <CommonBlogMain :api-type="apiType" :page-id="props.pageId" :limit-rate="true" :limit-seconds="360" :image-to-base64="true"/>
 </template>
 
 <script lang="ts" setup>
