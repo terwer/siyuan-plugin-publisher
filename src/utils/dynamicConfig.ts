@@ -50,7 +50,7 @@ export enum PlantformType {
     /**
      * Github(Hugo、Hexo、Jekyll、Vuepress、Vitepress、Nuxt content、Next.js)
      */
-    Github = "github",
+    Github = "Github",
     /**
      * 自定义
      */
