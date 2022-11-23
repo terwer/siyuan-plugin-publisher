@@ -1,4 +1,4 @@
-import express, {Request, Response} from "express";
+import express, {NextFunction, Request, Response} from "express";
 import fetch from 'cross-fetch';
 import {imageToBase64} from "../src/utils/parser/imageToBase64";
 
@@ -7,6 +7,19 @@ const xmlrpc = require('xmlrpc');
 
 // 解决req.body undefined
 app.use(express.json());
+
+// Enable CORS from client-side
+app.use(function (req: Request, res: Response, next: NextFunction) {
+    // res.header("Access-Control-Allow-Origin", "*");
+    // res.header("Access-Control-Allow-Methods", "PUT, GET, POST, DELETE, OPTIONS");
+    // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, Access-Control-Allow-Credentials");
+    // res.header("Access-Control-Allow-Credentials", "true");
+    if (req.method == "OPTIONS") {
+        res.send(200);
+    } else {
+        next();
+    }
+});
 
 /**
  * xmlrpc请求中间代理层

@@ -1,5 +1,7 @@
 import logUtil from "~/utils/logUtil";
 import {imageToBase64} from "~/utils/parser/imageToBase64";
+import {inSiyuan} from "~/utils/platform/siyuan/siyuanUtil";
+import {getEnv} from "~/utils/envUtil";
 
 /**
  * 图片解析器
@@ -43,10 +45,41 @@ export default class ImageParser {
                 .replace(/\)/, "")
             logUtil.logInfo("src=>", src)
 
-            const imageBase64WithURI = await imageToBase64({uri: src})
-            let newImg = imageBase64WithURI.base64 || "no pic";
-            newImg = "<img src=\"data:image/png;base64," + newImg + "\"  alt=\"base64Image\"/>"
+            let newImg
+            if (inSiyuan()) {
+                let imageBase64WithURI
+                    = await imageToBase64({uri: src})
+                newImg = imageBase64WithURI?.base64 || "no pic";
+            } else {
+                const middleWareUrl = getEnv("VITE_MIDDLEWARE_URL") || "/api/middleware"
+                const middleApiUrl = middleWareUrl + "/imageToBase64"
 
+                const data = {
+                    fetchParams: {
+                        imgUrl: src,
+                    }
+                }
+
+                let middleFetchOption = {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                }
+
+                logUtil.logInfo("middleApiUrl=>")
+                logUtil.logInfo(middleApiUrl)
+                logUtil.logInfo("middleFetchOption=>")
+                logUtil.logInfo(middleFetchOption)
+
+                const resJson: any = await fetch(middleApiUrl, middleFetchOption)
+                logUtil.logInfo("resJson=>")
+                logUtil.logInfo(resJson)
+                newImg = resJson?.body?.base64str || "parse error"
+            }
+
+            newImg = "<img src=\"data:image/png;base64," + newImg + "\"  alt=\"base64Image\"/>"
             newcontent = newcontent.replace(match, newImg)
         }
 

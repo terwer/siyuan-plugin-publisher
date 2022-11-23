@@ -683,7 +683,7 @@ const doPublish = async () => {
     const lastmodKey = props.apiType + "_PUBLISH_LIMIT"
     if (cheeckLimit(lastmodKey)) {
       isPublishLoading.value = false
-      return
+      // return
     }
 
     // 发布频率验证通过，更新发布时间
