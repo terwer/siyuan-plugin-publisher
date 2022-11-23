@@ -1,5 +1,6 @@
 import express, {Request, Response} from "express";
 import fetch from 'cross-fetch';
+import {imageToBase64} from "../src/utils/parser/imageToBase64";
 
 const app = require('express')();
 const xmlrpc = require('xmlrpc');
@@ -146,6 +147,39 @@ app.post('/api/middleware/fetch', (req: Request, res: Response) => {
     // ========================================
     // ========================================
 });
+
+app.post('/api/middleware/imageToBase64', (req: Request, res: Response) => {
+    const body = req.body
+
+    // =====================================
+    // =====================================
+    const imgUrl = body.fetchParams.imgUrl
+    imageToBase64({uri: imgUrl}).then((response) => {
+        const base64str = response.base64
+
+        let resJson = {
+            base64str: base64str
+        }
+
+        const finalRes = {
+            headers: {
+                status: 200,
+                statusText: "ok"
+            },
+            body: resJson
+        }
+        // console.log(finalRes)
+        writeStatusData(res, finalRes, 200)
+        // console.log("请求处理已成功")
+    }).catch((reason: any) => {
+        // console.log("methodPromise catch=>")
+        console.error("imageToBase64 middleware error=>", reason)
+        writeError(res, reason)
+        // console.log("请求处理失败")
+    })
+    // ========================================
+    // ========================================
+})
 
 /**
  * 输出数据
