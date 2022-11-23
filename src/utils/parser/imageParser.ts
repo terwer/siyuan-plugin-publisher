@@ -11,6 +11,25 @@ import {getEnv} from "~/utils/envUtil";
  * @since 0.1.0
  */
 export default class ImageParser {
+    public hasExtenalImages(content: string): boolean {
+        let flag = false
+
+        const imgRegex = /!\[.*]\((http|https):\/.*\/.*\)/g
+        const matches = content.match(imgRegex);
+        if (matches && matches.length > 0) {
+            return true;
+        }
+
+        const imgBase64Regex = /!\[.*]\((data:image):\/.*\/.*\)/g
+        const base64Matches = content.match(imgBase64Regex);
+        if (base64Matches && base64Matches.length > 0) {
+            return true;
+        }
+
+        return flag
+    }
+
+
     /**
      * 剔除外链图片
      * @param content
@@ -73,7 +92,9 @@ export default class ImageParser {
                 logUtil.logInfo("middleFetchOption=>")
                 logUtil.logInfo(middleFetchOption)
 
-                const resJson: any = await fetch(middleApiUrl, middleFetchOption)
+                let resJson
+                const response: Response = await fetch(middleApiUrl, middleFetchOption)
+                resJson = await response.json()
                 logUtil.logInfo("resJson=>")
                 logUtil.logInfo(resJson)
                 newImg = resJson?.body?.base64str || "parse error"

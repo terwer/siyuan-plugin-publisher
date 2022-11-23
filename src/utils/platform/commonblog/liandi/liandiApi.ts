@@ -1,5 +1,5 @@
 import logUtil from "~/utils/logUtil";
-import {isEmptyObject} from "~/utils/util";
+import {isEmptyObject, isEmptyString} from "~/utils/util";
 import {CommonblogApi} from "~/utils/platform/commonblog/commonblogApi";
 
 /**
@@ -11,8 +11,8 @@ import {CommonblogApi} from "~/utils/platform/commonblog/commonblogApi";
  * https://ld246.com/article/1488603534762
  */
 export class LiandiApi extends CommonblogApi {
-    private readonly rewardContent = "如果您觉得此文章不错，请随意打赏哦~"
-    private readonly rewardCount = 5;
+    // private readonly rewardContent = "如果您觉得此文章不错，请随意打赏哦~"
+    // private readonly rewardCount = 5;
 
     private readonly baseUrl: string
     private readonly username: string
@@ -50,8 +50,8 @@ export class LiandiApi extends CommonblogApi {
             "articleTitle": title,
             "articleTags": tags, // 用英文逗号分隔
             "articleContent": content,
-            "articleRewardContent": this.rewardContent, // 打赏区内容
-            "articleRewardPoint": this.rewardCount // 打赏积分
+            // "articleRewardContent": this.rewardContent, // 打赏区内容
+            // "articleRewardPoint": this.rewardCount // 打赏积分
         }
 
         let postid
@@ -85,8 +85,8 @@ export class LiandiApi extends CommonblogApi {
             "articleTitle": title,
             "articleTags": tags, // 用英文逗号分隔
             "articleContent": content,
-            "articleRewardContent": this.rewardContent, // 打赏区内容
-            "articleRewardPoint": this.rewardCount // 打赏积分
+            // "articleRewardContent": this.rewardContent, // 打赏区内容
+            // "articleRewardPoint": this.rewardCount // 打赏积分
         }
 
         await this.liandiRequest(url, data, "PUT", true)
@@ -147,6 +147,12 @@ export class LiandiApi extends CommonblogApi {
         } else if (resJson.code == -1) {
             throw new Error(resJson.msg)
         } else {
+            // @ts-ignore
+            const msg = resJson.msg
+            if (!isEmptyString(msg)) {
+                throw new Error(msg)
+            }
+
             throw new Error("发布帖子受限或者系统异常")
         }
     }

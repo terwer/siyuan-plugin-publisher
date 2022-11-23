@@ -148,7 +148,7 @@
 
         <!-- 发布操作 -->
         <el-form-item label="">
-          <el-button type="primary" @click="doPublish" :loading="isPublishLoading">{{
+          <el-button type="primary" @click="publishConfirm" :loading="isPublishLoading">{{
               isPublishLoading ? $t('main.publish.loading') :
                   isPublished ? $t('main.update') : $t('main.publish')
             }}
@@ -206,6 +206,7 @@ import {PageType} from "~/utils/platform/metaweblog/IMetaweblogCfg";
 import {Post} from "~/utils/common/post";
 import {CategoryInfo} from "~/utils/common/categoryInfo";
 import ImageParser from "~/utils/parser/imageParser";
+import {goToPage} from "~/utils/browser/ChromeUtil";
 
 const {t} = useI18n()
 
@@ -248,6 +249,13 @@ const props = defineProps({
    * 是否将图片转换成base64
    */
   imageToBase64: {
+    type: Boolean,
+    default: false
+  },
+  /**
+   * 是否剔除图片
+   */
+  removeImage: {
     type: Boolean,
     default: false
   },
@@ -669,6 +677,30 @@ const cheeckLimit = (lastmodKey: string) => {
   return flag
 }
 
+const publishConfirm = async () => {
+  // 发布内容
+  let content
+  const data = await getPageMd(siyuanData.pageId);
+  let md = data.content
+  if (props.removeImage && imageParser.hasExtenalImages(md)) {
+    ElMessageBox.confirm(
+        "检测到外链图片，由于平台限制，继续发布将剔除这些图片，以纯文本发布，是否继续？",
+        t('main.opt.warning'),
+        {
+          confirmButtonText: t('main.opt.ok'),
+          cancelButtonText: t('main.opt.cancel'),
+          type: 'warning',
+        }
+    ).then(async () => {
+      await doPublish()
+    }).catch(() => {
+      logUtil.logInfo("操作已取消")
+    });
+  } else {
+    await doPublish()
+  }
+}
+
 const doPublish = async () => {
   if (!apiStatus.value) {
     ElMessage.error(t('setting.blog.vali.tip.metaweblog'))
@@ -683,7 +715,7 @@ const doPublish = async () => {
     const lastmodKey = props.apiType + "_PUBLISH_LIMIT"
     if (cheeckLimit(lastmodKey)) {
       isPublishLoading.value = false
-      // return
+      return
     }
 
     // 发布频率验证通过，更新发布时间
@@ -709,8 +741,14 @@ const doPublish = async () => {
     let md = data.content
 
     // 检测是否需要转换成base64
-    if (props.imageToBase64) {
-      md = await imageParser.replaceImagesWithBase64(md)
+    // 不行
+    // if (props.imageToBase64) {
+    //   ElMessage.warning("使用base64可能会导致请求体太大请求失败，请知悉")
+    //   md = await imageParser.replaceImagesWithBase64(md)
+    // }
+
+    if (props.removeImage) {
+      md = imageParser.removeImages(md)
     }
 
     if (PageType.Html == commonblogCfg.pageType) {

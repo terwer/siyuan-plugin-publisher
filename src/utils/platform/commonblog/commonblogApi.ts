@@ -2,6 +2,7 @@ import logUtil from "~/utils/logUtil";
 import {getWidgetId} from "~/utils/platform/siyuan/siyuanUtil";
 import {getEnv} from "~/utils/envUtil";
 import {isInChromeExtension, sendChromeMessage} from "~/utils/browser/ChromeUtil";
+import {isEmptyString} from "~/utils/util";
 
 export class CommonblogApi {
     constructor() {
@@ -165,6 +166,10 @@ export class CommonblogApi {
                 if (401 == statusCode) {
                     throw new Error("因权限不足操作已被禁止")
                 } else if (statusCode > 401) {
+                    if (statusCode == 413) {
+                        throw new Error("请求内容过多，请删减文章正文之后再试")
+                    }
+
                     // @ts-ignore
                     const msg = response.statusText
                     throw new Error(msg)
