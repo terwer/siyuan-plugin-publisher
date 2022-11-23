@@ -178,7 +178,7 @@ import {getPage, getPageAttrs, getPageId, getPageMd, setPageAttrs} from "~/utils
 import {getConf, getJSONConf, setConf} from "~/utils/config";
 import {
   calcLastSeconds,
-  cutWords, formatIsoToZhDate,
+  cutWords,
   formatNumToZhDate,
   getPublishStatus,
   isEmptyObject,
@@ -205,6 +205,7 @@ import {API} from "~/utils/api";
 import {PageType} from "~/utils/platform/metaweblog/IMetaweblogCfg";
 import {Post} from "~/utils/common/post";
 import {CategoryInfo} from "~/utils/common/categoryInfo";
+import ImageParser from "~/utils/parser/imageParser";
 
 const {t} = useI18n()
 
@@ -243,6 +244,13 @@ const props = defineProps({
     type: Number,
     default: 5
   },
+  /**
+   * 是否将图片转换成base64
+   */
+  imageToBase64: {
+    type: Boolean,
+    default: false
+  },
 })
 
 const blogName = ref("")
@@ -265,6 +273,9 @@ const previewUrl = ref("")
 const tagSwitch = ref(false)
 
 const catEnabled = ref(false)
+
+// 图片解析器
+const imageParser = new ImageParser()
 
 const formData = reactive({
   // 新增时候这个值是空的
@@ -672,7 +683,7 @@ const doPublish = async () => {
     const lastmodKey = props.apiType + "_PUBLISH_LIMIT"
     if (cheeckLimit(lastmodKey)) {
       isPublishLoading.value = false
-      return
+      // return
     }
 
     // 发布频率验证通过，更新发布时间
@@ -695,7 +706,13 @@ const doPublish = async () => {
     // 发布内容
     let content
     const data = await getPageMd(siyuanData.pageId);
-    const md = data.content
+    let md = data.content
+
+    // 检测是否需要转换成base64
+    if (props.imageToBase64) {
+      md = await imageParser.replaceImagesWithBase64(md)
+    }
+
     if (PageType.Html == commonblogCfg.pageType) {
       const html = mdToHtml(md)
       content = removeWidgetTag(html)

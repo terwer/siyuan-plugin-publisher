@@ -2,7 +2,7 @@
 
 将 [思源笔记](https://github.com/siyuan-note/siyuan) 的文章发布到支持的开放平台的 **思源笔记挂件**
 
-目前支持 `Vuepress` 、 以及 2 种博客平台标准、`metaweblog api` 和基于 `Wordpress` 的 `xmlrpc` 远程调用 api
+目前支持基于 `Github` <sup>0.0.1+</sup> 、 `metaweblog API` <sup>0.0.2+</sup> 、`Wordpress API` <sup>0.0.2+</sup> 以及 `自定义HTTP协议` <sup>1.0.0+(预研)</sup> 的平台
 
 同时提供了一个 [统一通用的API适配器](https://github.com/terwer/src-sy-post-publisher/blob/main/src/utils/api.ts)，让适配任何平台成为可能。
 
@@ -70,6 +70,7 @@
 - [X] 自动生成yaml（目前兼容Vuepress，0.1.0 会兼容更多平台） <sup>0.0.1+</sup>
 - [X] 自动生成文档别名（使用Google翻译）、摘要与标签（使用jieba分词） <sup>0.0.2+</sup>
 - [X] 支持文章与平台绑定 <sup>0.0.2+</sup>
+- [X] 支持文章文章更新与删除 <sup>0.0.2+</sup>
 - [X] 自动适配暗黑模式与浅色模式 <sup>0.0.3+</sup>
 - [X] 多语言支持，支持中文版和英文版 <sup>0.0.1+</sup>
 - [X] 支持子目录模式 <sup>0.1.0+</sup>
