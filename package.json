@@ -16,10 +16,12 @@
     "widget": "bash scripts/widget.sh",
     "extChrome": "bash scripts/ext.sh",
     "extChromeDev": "bash scripts/extDev.sh",
+    "extChromeDevWin": "pwsh scripts/extDevWin.ps1",
     "extFirefox": "bash scripts/extFV2.sh",
     "w": "yarn widget",
     "e": "yarn extChrome",
     "edev": "yarn extChromeDev",
+    "edw": "yarn extChromeDevWin",
     "ef2": "yarn extFirefox"
   },
   "dependencies": {
