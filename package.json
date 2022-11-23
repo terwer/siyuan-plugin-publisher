@@ -26,7 +26,7 @@
     "@element-plus/icons-vue": "^2.0.9",
     "@intlify/vite-plugin-vue-i18n": "^6.0.1",
     "@octokit/core": "^4.0.4",
-    "@vueuse/core": "^9.2.0",
+    "@vueuse/core": "^9.6.0",
     "copy-to-clipboard": "^3.3.1",
     "cross-fetch": "^3.1.5",
     "element-plus": "^2.2.11",
@@ -59,7 +59,7 @@
     "vite": "^3.0.0",
     "vite-plugin-mpa": "^1.1.4",
     "vite-plugin-require-transform": "^1.0.3",
-    "vitest": "^0.25.2",
+    "vitest": "^0.25.3",
     "vue-tsc": "^1.0.9"
   }
 }
