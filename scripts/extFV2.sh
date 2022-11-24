@@ -1,6 +1,8 @@
 pwd
 rm -rf ./dist
 yarn build
+cp ./LICENSE ./dist/
+
 # 删除siyuan挂件专属文件
 rm ./dist/widget.json
 

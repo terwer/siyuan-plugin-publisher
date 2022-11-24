@@ -13,6 +13,7 @@ Function removePath($path)
 Get-Location
 removePath -path ./dist
 yarn build
+Copy-Item ./LICENSE ./dist/
 
 # 删除siyuan挂件专属文件
 removePath -path ./dist/widget.json
