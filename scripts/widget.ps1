@@ -23,7 +23,7 @@ Function removePath($path)
 # ================================================
 
 Get-Location
-yarn build-siyuan
+yarn build-siyuan-win
 Copy-Item ./LICENSE ./dist/
 
 # 删除Chrome插件专属文件

@@ -9,6 +9,7 @@
     "vdev": "vercel dev --listen 6006",
     "build": "vue-tsc --noEmit && vite build",
     "build-siyuan": "vue-tsc --noEmit && BUILD_TYPE=siyuan vite build",
+    "build-siyuan-win": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
     "test": "vitest --watch",
     "coverage": "vitest run --coverage",
