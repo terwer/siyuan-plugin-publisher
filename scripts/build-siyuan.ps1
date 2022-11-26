@@ -1,1 +1,3 @@
-vue-tsc --noEmit && vite build
+vue-tsc --noEmit
+$env:BUILD_TYPE="siyuan"
+vite build
