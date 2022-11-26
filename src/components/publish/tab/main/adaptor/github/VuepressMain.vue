@@ -413,15 +413,18 @@ async function initPage() {
     // 目录映射到分类
     convertDocPathToCategories(docPath)
 
+    // 表单属性转换为YAML
+    convertAttrToYAML()
+
     // "https://terwergreen.com"
     const vdomain = "https://terwer.space/";
     previewUrl.value = "https://github.com/" + vuepressCfg.githubUser + "/" + vuepressCfg.githubRepo
         + "/blob/" + vuepressCfg.defaultBranch + "/" + docPath
     previewRealUrl.value = vdomain + vuepressData.value.yamlObj.permalink
+  }else{
+    // 表单属性转换为YAML
+    convertAttrToYAML()
   }
-
-  // 表单属性转换为YAML
-  convertAttrToYAML()
 
   // 文章内容同步到YAMl
   // 发布内容
