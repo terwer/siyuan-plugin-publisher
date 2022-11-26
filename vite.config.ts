@@ -29,7 +29,7 @@ export default defineConfig(({command, mode, ssrBuild}) => {
     const isTest = process.env.TEST == "true"
     console.log("isTest=>", isTest)
 
-    const isSiyuanBuild = process.env.BUILD_TYPE == "siyuan"
+    const isSiyuanBuild = true // = process.env.BUILD_TYPE == "siyuan"
     console.log("isSiyuanBuild=>", isSiyuanBuild)
 
     const logInfoEnabled = env.VITE_LOG_INFO_ENABLED;

@@ -247,13 +247,23 @@ http://localhost:3000/blog/index.html
 
 ### 方式 1、部署到思源笔记挂件
 
+#### Linux/Mac OS
+
 ```bash
 yarn w
+```
+
+#### Windows
+
+```bash
+yarn ww
 ```
 
 压缩 `dist` 文件夹为 `.zip`, 上架思源笔记挂件集市。
 
 ### 方式 2、部署到 Google Chrome 浏览器插件
+
+#### Linux/Mac OS
 
 ```bash
 yarn e
@@ -263,6 +273,12 @@ yarn e
 
 ```bash
 yarn edev
+```
+
+#### Windows
+
+```bash
+yarn edw
 ```
 
 将密钥文件修改为 `key.pem` 放到 `extension/chrome` 文件夹 , 然后压缩 `extension/chrome` 文件夹里面的所有文件为 `.zip`, 上架 Google Chrome 应用商店。
