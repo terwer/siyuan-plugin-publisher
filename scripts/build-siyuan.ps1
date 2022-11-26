@@ -1,0 +1,1 @@
+vue-tsc --noEmit && vite build
