@@ -13,9 +13,9 @@
 </template>
 
 <script lang="ts" setup>
-import {ArrowLeft} from '@element-plus/icons-vue'
+import {ArrowLeft} from "@element-plus/icons-vue";
 import PublishService from "../../../publish/PublishService.vue";
-import {Post} from "../../../../utils/common/post";
+import {Post} from "~/utils/common/post";
 
 const props = defineProps({
   publishData: {
