@@ -1,7 +1,7 @@
 <template>
   <el-container>
-    <el-header height="250px" class="publish-dyn-header">
-      <el-form label-width="180px" ref="formRef" :model="formData.dynCfg" :rules="rules">
+    <el-header height="300px" class="publish-dyn-header">
+      <el-form label-width="165px" ref="formRef" :model="formData.dynCfg" :rules="rules">
         <el-alert class="top-version-tip" :title="$t('dynamic.platform.tip')" type="info" :closable="false"/>
 
         <!-- 平台类型 -->
@@ -75,7 +75,8 @@
 
 <script lang="ts" setup>
 import {
-  DynamicConfig, getDefaultPlatfoemName,
+  DynamicConfig,
+  getDefaultPlatfoemName,
   getDynamicJsonCfg,
   getNewPlatformKey,
   getSubtypeList,
@@ -89,7 +90,6 @@ import logUtil from "~/utils/logUtil";
 import {ElMessage, ElMessageBox, FormInstance, FormRules} from "element-plus";
 import {useI18n} from "vue-i18n";
 import {checkKeyExists} from "~/utils/config";
-import {goToPage} from "~/utils/browser/ChromeUtil";
 
 const {t} = useI18n()
 
@@ -97,9 +97,9 @@ const showForm = ref(true)
 
 const formRef = ref<FormInstance>()
 const formData = reactive({
-  subtype: SubPlantformType.NONE,
+  subtype: SubPlantformType.Github_pages,
   ptype: PlantformType.Github,
-  dynCfg: new DynamicConfig(PlantformType.Github, getNewPlatformKey(PlantformType.Github, SubPlantformType.NONE), ""),
+  dynCfg: new DynamicConfig(PlantformType.Github, getNewPlatformKey(PlantformType.Github, SubPlantformType.Github_pages), ""),
   subtypeOptions: <Array<SubPlantformType>>[],
   dynamicConfigArray:<Array<DynamicConfig>>[]
 })
@@ -273,6 +273,5 @@ export default {
 
 <style scoped>
 .dyn-table-list{
-  margin-top: 50px;
 }
 </style>

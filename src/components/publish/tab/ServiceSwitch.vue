@@ -183,5 +183,6 @@ export default {
 
 <style scoped>
 .switch-form{
+  margin: 16px 10px;
 }
 </style>

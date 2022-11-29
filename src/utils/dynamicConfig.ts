@@ -2,6 +2,7 @@ import {getJSONConf, setJSONConf} from "./config";
 import {CONSTANTS} from "./constants/constants";
 import {newID} from "~/utils/idUtil";
 import {isEmptyString} from "~/utils/util";
+import {upperFirst} from "~/utils/strUtil";
 
 export class DynamicConfig {
     /**
@@ -173,7 +174,7 @@ export function getNewPlatformKey(ptype: PlantformType, subtype: SubPlantformTyp
     ret = ptype.toLowerCase()
 
     if (!isEmptyString(subtype) && SubPlantformType.NONE != subtype) {
-        ret = ret + "_" + subtype.toLowerCase()
+        ret = ret + upperFirst(subtype)
     }
     return ret + "-" + newId;
 }
@@ -201,6 +202,10 @@ export function isDynamicKeyExists(dynamicConfigArray: Array<DynamicConfig>, key
  * @param isShowSubtype 是否显示子平台
  */
 export function getDefaultPlatfoemName(ptype: PlantformType, subtype: SubPlantformType, isShowSubtype: boolean): string {
+    if (PlantformType.Github == ptype && SubPlantformType.NONE == subtype) {
+        return ""
+    }
+
     let pname: string = ptype
     if (isShowSubtype) {
         pname = subtype
@@ -210,7 +215,7 @@ export function getDefaultPlatfoemName(ptype: PlantformType, subtype: SubPlantfo
 }
 
 // =====================
-// 动态平台key规则
+// 动态平台开关key规则
 // =====================
 type SwitchItem = {
     switchKey: string
@@ -258,4 +263,15 @@ export function getSwitchItem(selectedText: string): SwitchItem {
         switchKey: switchKey,
         switchValue: switchStatus
     }
+}
+
+// =====================
+// 动态平台文章ID规则
+// =====================
+/**
+ * 获取动态文章ID的key
+ * @param plantformKey
+ */
+export function getDynPostidKey(plantformKey: string): string {
+    return "custom-" + plantformKey + "-post-id"
 }

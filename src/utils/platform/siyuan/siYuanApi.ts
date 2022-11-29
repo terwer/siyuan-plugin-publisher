@@ -133,6 +133,9 @@ async function request(url: string, data: any, method?: string, useToken?: boole
  */
 async function parseBody(response: any) {
     let r = await response
+    if (r.code == -1) {
+        throw  new Error(r.msg)
+    }
     return r.code === 0 ? r.data : null
 }
 
