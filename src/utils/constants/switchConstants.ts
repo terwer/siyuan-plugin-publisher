@@ -17,8 +17,11 @@ const SWITCH_LIANDI_KEY = "switch-liandi";
 const SWITCH_YUQUE_KEY = "switch-yuque";
 const SWITCH_KMS_KEY = "switch-kms";
 
-const SWITCH_CONSTSNTS = {
+const SWITCH_CONSTANTS = {
     SWITCH_VUEPRESS_KEY,
+    SWITCH_HUGO_KEY,
+    SWITCH_HEXO_KEY,
+    SWITCH_JEKYLL_KEY,
     SWITCH_JVUE_KEY,
     SWITCH_CONF_KEY,
     SWITCH_CNBLOGS_KEY,
@@ -28,4 +31,4 @@ const SWITCH_CONSTSNTS = {
     SWITCH_KMS_KEY
 }
 
-export default SWITCH_CONSTSNTS
+export default SWITCH_CONSTANTS

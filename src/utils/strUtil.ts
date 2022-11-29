@@ -26,3 +26,11 @@ export function getByLength(str: string, length: number, ignore?: boolean) {
     }
     return allText.substring(0, length) + "...";
 }
+
+/**
+ * 首字母大写
+ * @param name
+ */
+export const upperFirst = (name: string): string => {
+    return name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase()
+}

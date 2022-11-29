@@ -7,6 +7,8 @@ cp ./LICENSE ./dist/
 rm ./dist/widget.json
 # 删除火狐配置
 rm -rf ./dist/mv2
+mv ./dist/manifest.prod.json ./dist/manifest.json
+rm ./dist/manifest.dev.json
 
 rm -rf ./extension/chrome/*
 mkdir -p extension/chrome

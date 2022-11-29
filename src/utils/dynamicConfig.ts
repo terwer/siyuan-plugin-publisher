@@ -1,8 +1,8 @@
 import {getJSONConf, setJSONConf} from "./config";
 import {CONSTANTS} from "./constants/constants";
 import {newID} from "~/utils/idUtil";
-import logUtil from "~/utils/logUtil";
 import {isEmptyString} from "~/utils/util";
+import {upperFirst} from "~/utils/strUtil";
 
 export class DynamicConfig {
     /**
@@ -158,6 +158,9 @@ export function setDynamicJsonCfg(dynamicConfigArray: DynamicConfig[]) {
     setJSONConf<DynamicJsonCfg>(CONSTANTS.DYNAMIC_CONFIG_KEY, dynamicJsonCfg)
 }
 
+// =====================
+// 动态平台key规则
+// =====================
 /**
  * 生成新的平台keym
  * 平台与ID之间用-分割
@@ -171,7 +174,7 @@ export function getNewPlatformKey(ptype: PlantformType, subtype: SubPlantformTyp
     ret = ptype.toLowerCase()
 
     if (!isEmptyString(subtype) && SubPlantformType.NONE != subtype) {
-        ret = ret + "_" + subtype.toLowerCase()
+        ret = ret + upperFirst(subtype)
     }
     return ret + "-" + newId;
 }
@@ -190,4 +193,85 @@ export function isDynamicKeyExists(dynamicConfigArray: Array<DynamicConfig>, key
         }
     }
     return flag
+}
+
+/**
+ * 生成默认的平台名
+ * @param ptype 平台
+ * @param subtype 子平台
+ * @param isShowSubtype 是否显示子平台
+ */
+export function getDefaultPlatfoemName(ptype: PlantformType, subtype: SubPlantformType, isShowSubtype: boolean): string {
+    if (PlantformType.Github == ptype && SubPlantformType.NONE == subtype) {
+        return ""
+    }
+
+    let pname: string = ptype
+    if (isShowSubtype) {
+        pname = subtype
+    }
+    pname = pname + "-1"
+    return pname;
+}
+
+// =====================
+// 动态平台开关key规则
+// =====================
+type SwitchItem = {
+    switchKey: string
+    switchValue: boolean
+}
+
+export function getDynSwitchKey(plantformKey: string) {
+    return "switch-" + plantformKey;
+}
+
+/**
+ * 平台开关启用状态值
+ * @param plantformKey
+ */
+export function getDynSwitchActive(plantformKey: string) {
+    return plantformKey + '_true'
+}
+
+/**
+ * 平台开关禁用状态值
+ * @param plantformKey
+ */
+export function getDynSwitchInactive(plantformKey: string) {
+    return plantformKey + '_false';
+}
+
+/**
+ * 组装Switch显示值
+ * @param switchItem 开关
+ */
+export function getDynSwitchModelValue(switchItem: SwitchItem) {
+    return switchItem.switchKey + "_" + switchItem.switchValue;
+}
+
+/**
+ * 解析选中项
+ * @param selectedText 选中的值
+ */
+export function getSwitchItem(selectedText: string): SwitchItem {
+    const valArr = selectedText.split("_")
+    const switchKey = getDynSwitchKey(valArr[0])
+    const switchStatus = valArr[1] == 'true'
+
+    return {
+        switchKey: switchKey,
+        switchValue: switchStatus
+    }
+}
+
+// =====================
+// 动态平台文章ID规则
+// =====================
+/**
+ * 获取动态文章ID的key
+ * @param plantformKey
+ */
+export function getDynPostidKey(plantformKey: string): string {
+    return "custom-" + plantformKey + "-post-id"
 }
