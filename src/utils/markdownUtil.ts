@@ -1,7 +1,8 @@
-// ts引用js库的方法
-// 在publish/indx.html直接引用 <script src="/lute.min.js"></script>
-// 打包之后运行是没问题的，vercel dev也能完美运行
-// 测试使用 require("../../public/lute.min.js")
+// 引用 lute 库的方法
+// dev/prod 环境
+// 在 src/pages//indx.html 直接引用 <script src="/lute.min.js"></script>
+// test 环境
+// 在 setup.ts 引用 require("../public/lute.min.js")
 
 /**
  * 渲染Markdown

@@ -9,7 +9,7 @@ const MAX_TITLE_LENGTH = 10;
 const MAX_PREVIEW_LENGTH = 255;
 
 /**
- * 动态配置key
+ * 动态配置key，全系统唯一，请勿更改
  */
 const DYNAMIC_CONFIG_KEY = "dynamic-config"
 

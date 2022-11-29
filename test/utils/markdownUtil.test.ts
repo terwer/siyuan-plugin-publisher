@@ -1,5 +1,5 @@
 import {describe, expect} from "vitest";
-import {renderHTML} from "../../src/utils/markdownUtil";
+import {renderHTML} from "~/utils/markdownUtil";
 
 describe("markdownUtil test", () => {
     it("renderHTML", () => {
