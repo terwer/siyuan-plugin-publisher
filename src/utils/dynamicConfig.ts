@@ -1,5 +1,8 @@
 import {getJSONConf, setJSONConf} from "./config";
 import {CONSTANTS} from "./constants/constants";
+import {newID} from "~/utils/idUtil";
+import logUtil from "~/utils/logUtil";
+import {isEmptyString} from "~/utils/util";
 
 export class DynamicConfig {
     /**
@@ -66,11 +69,14 @@ export enum SubPlantformType {
     Github_pages = "pages",
     Github_giteePages = "giteePages",
     Github_codingPages = "codingPages",
-    Github_Hexo = "hexo",
-    Github_Vuepress = "vuepress",
-    Github_Vitepress = "vitepress",
-    Github_Nuxt = "nuxt",
-    Github_Next = "next"
+    Github_Hugo = "Hugo",
+    Github_Hexo = "Hexo",
+    Github_Jekyll = "Jekyll",
+    Github_Vuepress = "Vuepress",
+    Github_Vitepress = "Vitepress",
+    Github_Nuxt = "Nuxt",
+    Github_Next = "Next",
+    NONE = "none"
 }
 
 /**
@@ -78,8 +84,34 @@ export enum SubPlantformType {
  */
 export type DynamicJsonCfg = {
     totalCfg: DynamicConfig[]
+    githubCfg: DynamicConfig[]
     metaweblogCfg: DynamicConfig[]
     wordpressCfg: DynamicConfig[]
+}
+
+/**
+ * 获取子平台列表
+ */
+export function getSubtypeList(ptype: PlantformType): Array<SubPlantformType> {
+    let subtypeList: Array<SubPlantformType> = []
+
+    switch (ptype) {
+        case PlantformType.Github:
+            subtypeList.push(SubPlantformType.Github_pages)
+            subtypeList.push(SubPlantformType.Github_giteePages)
+            subtypeList.push(SubPlantformType.Github_Hugo)
+            subtypeList.push(SubPlantformType.Github_Hexo)
+            subtypeList.push(SubPlantformType.Github_Jekyll)
+            subtypeList.push(SubPlantformType.Github_Vuepress)
+            subtypeList.push(SubPlantformType.Github_Vitepress)
+            subtypeList.push(SubPlantformType.Github_Nuxt)
+            subtypeList.push(SubPlantformType.Github_Next)
+            break
+        default:
+            break
+    }
+
+    return subtypeList
 }
 
 /**
@@ -95,12 +127,16 @@ export function getDynamicJsonCfg(): DynamicJsonCfg {
  */
 export function setDynamicJsonCfg(dynamicConfigArray: DynamicConfig[]) {
     let totalCfg: DynamicConfig[] = dynamicConfigArray
+    const githubCfg: DynamicConfig[] = []
     const metaweblogCfg: DynamicConfig[] = []
     const wordpressCfg: DynamicConfig[] = []
 
     // 按照类型组装便于后面数据使用
     totalCfg.forEach(item => {
         switch (item.plantformType) {
+            case PlantformType.Github:
+                githubCfg.push(item)
+                break
             case PlantformType.Metaweblog:
                 metaweblogCfg.push(item)
                 break;
@@ -114,9 +150,44 @@ export function setDynamicJsonCfg(dynamicConfigArray: DynamicConfig[]) {
 
     const dynamicJsonCfg: DynamicJsonCfg = {
         totalCfg: totalCfg,
+        githubCfg: githubCfg,
         metaweblogCfg: metaweblogCfg,
         wordpressCfg: wordpressCfg
     };
 
     setJSONConf<DynamicJsonCfg>(CONSTANTS.DYNAMIC_CONFIG_KEY, dynamicJsonCfg)
+}
+
+/**
+ * 生成新的平台keym
+ * 平台与ID之间用-分割
+ * 平台与子平台直接用_分割
+ * @param ptype 平台类型
+ * @param subtype 子平台类型
+ */
+export function getNewPlatformKey(ptype: PlantformType, subtype: SubPlantformType) {
+    let ret
+    const newId = newID();
+    ret = ptype.toLowerCase()
+
+    if (!isEmptyString(subtype) && SubPlantformType.NONE != subtype) {
+        ret = ret + "_" + subtype.toLowerCase()
+    }
+    return ret + "-" + newId;
+}
+
+/**
+ * 检测动态平台key是否重复
+ */
+export function isDynamicKeyExists(dynamicConfigArray: Array<DynamicConfig>, key: string): boolean {
+    let flag = false
+    // logUtil.logInfo("isDynamicKeyExists,dynamicConfigArray=>")
+    // logUtil.logInfo(dynamicConfigArray)
+    for (let i = 0; i < dynamicConfigArray.length; i++) {
+        if (dynamicConfigArray[i].plantformKey == key) {
+            flag = true;
+            break;
+        }
+    }
+    return flag
 }

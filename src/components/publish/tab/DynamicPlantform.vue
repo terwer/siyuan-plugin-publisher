@@ -1,41 +1,50 @@
 <template>
   <el-container>
     <el-header height="250px" class="publish-dyn-header">
-      <el-form label-width="180px" ref="formRef" :model="formData" :rules="rules">
+      <el-form label-width="180px" ref="formRef" :model="formData.dynCfg" :rules="rules">
         <el-alert class="top-version-tip" :title="$t('dynamic.platform.tip')" type="info" :closable="false"/>
 
+        <!-- 平台类型 -->
         <el-form-item :label="$t('dynamic.platform.type')">
           <el-button-group>
-            <el-button :type="pType===PlantformType.Metaweblog?'primary':''"
-                       @click="onPlantformTypeChange(PlantformType.Metaweblog)">
-              {{ $t('dynamic.platform.type.metaweblog') }}
-            </el-button>
-            <el-button :type="pType===PlantformType.Wordpress?'primary':''"
-                       @click="onPlantformTypeChange(PlantformType.Wordpress)">
-              {{ $t('dynamic.platform.type.wordpress') }}
-            </el-button>
-            <el-button :type="pType===PlantformType.Github?'primary':''"
-                       @click="onPlantformTypeChange(PlantformType.Github)">
+            <el-button :type="formData.ptype===PlantformType.Github?'primary':''" @click="onPlantformTypeChange(PlantformType.Github)">
               {{ $t('dynamic.platform.type.github') }}
             </el-button>
-            <el-button :type="pType===PlantformType.Custom?'primary':''"
-                       @click="onPlantformTypeChange(PlantformType.Custom)">{{
-                $t('dynamic.platform.type.custom')
-              }}
+            <el-button :type="formData.ptype===PlantformType.Metaweblog?'primary':''" @click="onPlantformTypeChange(PlantformType.Metaweblog)">
+              {{ $t('dynamic.platform.type.metaweblog') }}
+            </el-button>
+            <el-button :type="formData.ptype===PlantformType.Wordpress?'primary':''" @click="onPlantformTypeChange(PlantformType.Wordpress)">
+              {{ $t('dynamic.platform.type.wordpress') }}
+            </el-button>
+            <el-button :type="formData.ptype===PlantformType.Custom?'primary':''" @click="onPlantformTypeChange(PlantformType.Custom)">
+              {{ $t('dynamic.platform.type.custom') }}
             </el-button>
           </el-button-group>
         </el-form-item>
 
+        <!-- 临时页面 -->
         <el-form-item v-if="!showForm">
           <el-alert title="敬请期待" type="info" :closable="false"/>
         </el-form-item>
 
-        <el-form-item :label="pType+$t('dynamic.platform.key')" prop="plantformKey" v-if="showForm">
-          <el-input v-model="formData.plantformKey" :placeholder="$t('dynamic.platform.key.tip')"/>
+        <!-- 平台名称 -->
+        <el-form-item v-if="formData.subtypeOptions.length>0 && showForm">
+          <el-select v-model="formData.subtype" class="m-2" placeholder="Select" @change="onSubPlantformTypeChange">
+            <el-option
+                v-for="item in formData.subtypeOptions"
+                :key="item"
+                :label="item"
+                :value="item"
+            />
+          </el-select>
         </el-form-item>
 
-        <el-form-item :label="pType+$t('dynamic.platform.name')" prop="plantformName" v-if="showForm">
-          <el-input v-model="formData.plantformName" :placeholder="$t('dynamic.platform.name.tip')"/>
+        <el-form-item :label="formData.ptype+$t('dynamic.platform.name')" prop="plantformName" v-if="showForm">
+          <el-input v-model="formData.dynCfg.plantformName" :placeholder="$t('dynamic.platform.name.tip')"/>
+        </el-form-item>
+
+        <el-form-item :label="formData.ptype+$t('dynamic.platform.key')" prop="plantformKey" v-if="showForm">
+          {{ formData.dynCfg.plantformKey }}
         </el-form-item>
 
         <el-form-item v-if="showForm">
@@ -44,49 +53,57 @@
       </el-form>
     </el-header>
 
-    <el-main>
+    <!-- 动态列表 -->
+    <el-main class="dyn-table-list">
+      <el-form-item>
+        <el-table :data="tableData" :key="num" border stripe highlight-current-row
+                  empty-text="暂无数据"
+                  @current-change="handleCurrentChange">
+          <el-table-column prop="plantformType" :label="$t('dynamic.platform.type')"/>
+          <el-table-column prop="plantformKey" :label="$t('dynamic.platform.key')"/>
+          <el-table-column prop="plantformName" :label="$t('dynamic.platform.name')"/>
+        </el-table>
+      </el-form-item>
+
       <el-form-item>
         <el-alert class="top-version-tip" :title="currentTip" type="info" :closable="false" v-if="currentRow"/>
         <el-button type="danger" @click="delRow">{{ $t('dynamic.platform.opt.del.select') }}</el-button>
       </el-form-item>
-
-      <el-table :data="tableData" :key="num" border stripe highlight-current-row
-                empty-text="暂无数据"
-                @current-change="handleCurrentChange">
-        <el-table-column prop="plantformType" :label="$t('dynamic.platform.type')"/>
-        <el-table-column prop="plantformKey" :label="$t('dynamic.platform.key')"/>
-        <el-table-column prop="plantformName" :label="$t('dynamic.platform.name')"/>
-      </el-table>
     </el-main>
   </el-container>
 </template>
 
 <script lang="ts" setup>
-import {DynamicConfig, getDynamicJsonCfg, PlantformType, setDynamicJsonCfg} from "~/utils/dynamicConfig";
+import {
+  DynamicConfig,
+  getDynamicJsonCfg,
+  getNewPlatformKey,
+  getSubtypeList,
+  isDynamicKeyExists,
+  PlantformType,
+  setDynamicJsonCfg,
+  SubPlantformType
+} from "~/utils/dynamicConfig";
 import {onMounted, reactive, ref} from "vue";
 import logUtil from "~/utils/logUtil";
-import {ElMessage, FormInstance, FormRules} from "element-plus";
+import {ElMessage, ElMessageBox, FormInstance, FormRules} from "element-plus";
 import {useI18n} from "vue-i18n";
 import {checkKeyExists} from "~/utils/config";
-import {reloadPage} from "~/utils/util";
+import {goToPage} from "~/utils/browser/ChromeUtil";
 
 const {t} = useI18n()
 
-const pType = ref()
-pType.value = PlantformType.Metaweblog
 const showForm = ref(true)
 
-let dynamicConfigArray = reactive(<Array<DynamicConfig>>[])
-
 const formRef = ref<FormInstance>()
-const formData = reactive(new DynamicConfig(PlantformType.Metaweblog, "", ""))
+const formData = reactive({
+  subtype: SubPlantformType.NONE,
+  ptype: PlantformType.Github,
+  dynCfg: new DynamicConfig(PlantformType.Github, getNewPlatformKey(PlantformType.Github, SubPlantformType.NONE), ""),
+  subtypeOptions: <Array<SubPlantformType>>[],
+  dynamicConfigArray:<Array<DynamicConfig>>[]
+})
 const rules = reactive<FormRules>({
-  plantformKey: [
-    {
-      required: true,
-      message: () => t('form.validate.name.required')
-    }
-  ],
   plantformName: [
     {
       required: true,
@@ -95,43 +112,66 @@ const rules = reactive<FormRules>({
   ],
 })
 
-const onPlantformTypeChange = (val: PlantformType) => {
-  pType.value = val
-  showForm.value = pType.value == PlantformType.Metaweblog || pType.value == PlantformType.Wordpress
-    || pType.value == PlantformType.Github
-  logUtil.logInfo(pType.value)
+const onSubPlantformTypeChange = (val: SubPlantformType) => {
+  formData.subtype = val
+  logUtil.logInfo(formData.subtype)
+
+  onPlantformTypeChange(formData.ptype)
 }
 
-const submitForm = async (formEl: FormInstance | undefined) => {
-  // 类型校验
-  if (pType.value == "") {
-    ElMessage.error(t('dynamic.platform.opt.noselect'))
-    return
+const onPlantformTypeChange = (val: PlantformType) => {
+  formData.ptype = val
+  formData.subtypeOptions = getSubtypeList(val)
+
+  let pname: string = val
+  if (formData.subtypeOptions.length > 0 && formData.subtype != SubPlantformType.NONE) {
+    pname = formData.subtype
   }
+  pname = pname + "-1"
+
+  formData.dynCfg = new DynamicConfig(val, getNewPlatformKey(val,
+          formData.subtypeOptions.length > 0 ? formData.subtype : SubPlantformType.NONE),
+      pname)
+  showForm.value = formData.ptype != PlantformType.Custom
+  logUtil.logInfo(formData.ptype)
+}
+
+const validateForm = (formEl: FormInstance | undefined) => {
+  // 类型校验
+  if (formData.ptype == PlantformType.Custom) {
+    ElMessage.error(t('dynamic.platform.opt.noselect'))
+    return false
+  }
+
   // 平台key必须唯一
-  const pkey = formData.plantformKey
-  // 最终存储的key
-  const ptypeKey = pType.value.toLowerCase() + "-" + formData.plantformKey
-  logUtil.logInfo("将要保存的平台key", ptypeKey)
-  if (isDynamicKeyExists(ptypeKey)) {
+  const pkey = formData.dynCfg.plantformKey
+  logUtil.logInfo("将要保存的平台key", pkey)
+  if (isDynamicKeyExists(formData.dynamicConfigArray, pkey)) {
     ElMessage.error(t('dynamic.platform.opt.key.exist'))
-    return
+    return false
   }
 
   // 保证开关变量key不重复
-  const switchKey = "switch-" + ptypeKey
-  const postidKey = "custom-" + ptypeKey + "-post-id"
+  const switchKey = "switch-" + pkey
+  const postidKey = "custom-" + pkey + "-post-id"
   // 保证文章绑定id的key不重复
   if (checkKeyExists(pkey)
-      || checkKeyExists(ptypeKey)
       || checkKeyExists(switchKey)
       || checkKeyExists(postidKey)
   ) {
     ElMessage.error(t('dynamic.platform.opt.key.exist'))
+    return false
+  }
+
+  return true
+}
+
+const submitForm = async (formEl: FormInstance | undefined) => {
+  if (!formEl) return
+  if(!validateForm(formEl)){
     return
   }
 
-  if (!formEl) return
   const result = await formEl.validate((valid, fields) => {
     if (valid) {
       logUtil.logInfo("校验成功")
@@ -146,12 +186,13 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   }
 
   // 保存配置
-  const newCfg = new DynamicConfig(pType.value, ptypeKey, formData.plantformName)
-  dynamicConfigArray.push(newCfg)
-  setDynamicJsonCfg(dynamicConfigArray)
+  const newCfg = new DynamicConfig(formData.ptype, formData.dynCfg.plantformKey, formData.dynCfg.plantformName)
+  formData.dynamicConfigArray.push(newCfg)
+  setDynamicJsonCfg( formData.dynamicConfigArray)
 
-  // 刷新页面
-  reloadPage("dynamicp-platform")
+  // 重新加载列表
+  reloadTable()
+
   ElMessage.success(t('main.opt.success'))
 }
 
@@ -166,49 +207,61 @@ const handleCurrentChange = (val: DynamicConfig | undefined) => {
   logUtil.logInfo(currentRow.value)
 }
 
-const isDynamicKeyExists = (key: string) => {
-  let flag = false
-  logUtil.logInfo("isDynamicKeyExists,dynamicConfigArray=>")
-  logUtil.logInfo(dynamicConfigArray)
-  for (let i = 0; i < dynamicConfigArray.length; i++) {
-    if (dynamicConfigArray[i].plantformKey == key) {
-      flag = true;
-      break;
+const delRow = async () => {
+  ElMessageBox.confirm(
+      t('dynamic.platform.opt.del.confirm'),
+      t('main.opt.warning'),
+      {
+        confirmButtonText: t('main.opt.ok'),
+        cancelButtonText: t('main.opt.cancel'),
+        type: 'warning',
+      }
+  ).then(async () => {
+    if (!currentRow.value || !currentRow.value.plantformKey) {
+      ElMessage.error(t('dynamic.platform.opt.item.no.select.tip'))
     }
-  }
-  return flag
+
+    for (let i = 0; i < formData.dynamicConfigArray.length; i++) {
+      logUtil.logInfo(currentRow.value.plantformKey)
+      logUtil.logInfo(formData.dynamicConfigArray[i].plantformKey)
+      logUtil.logInfo("------------------------")
+      if (currentRow.value.plantformKey == formData.dynamicConfigArray[i].plantformKey) {
+        formData.dynamicConfigArray.splice(i, 1);
+      }
+    }
+
+    setDynamicJsonCfg(formData.dynamicConfigArray)
+
+    // 重新加载列表
+    reloadTable()
+
+    ElMessage.success(t('main.opt.success'))
+  }).catch(() => {
+    // ElMessage({
+    //   type: 'error',
+    //   message: t("main.opt.failure"),
+    // })
+    logUtil.logInfo("操作已取消")
+  });
 }
 
-const delRow = async () => {
-  if (!currentRow.value || !currentRow.value.plantformKey) {
-    ElMessage.error(t('dynamic.platform.opt.item.no.select.tip'))
+const reloadTable = () => {
+  // 渲染table
+  tableData.length = 0
+  for (let i = 0; i < formData.dynamicConfigArray.length; i++) {
+    tableData.push(formData.dynamicConfigArray[i])
   }
-
-  for (let i = 0; i < dynamicConfigArray.length; i++) {
-    logUtil.logInfo(currentRow.value.plantformKey)
-    logUtil.logInfo(dynamicConfigArray[i].plantformKey)
-    logUtil.logInfo("------------------------")
-    if (currentRow.value.plantformKey == dynamicConfigArray[i].plantformKey) {
-      dynamicConfigArray.splice(i, 1);
-    }
-  }
-
-  setDynamicJsonCfg(dynamicConfigArray)
-  // 刷新页面
-  reloadPage("dynamicp-platform")
-  ElMessage.success(t('main.opt.success'))
+  num.value = formData.dynamicConfigArray.length
 }
 
 const initPage = async () => {
-  dynamicConfigArray = getDynamicJsonCfg().totalCfg || []
+  formData.subtypeOptions = getSubtypeList(PlantformType.Github)
+  formData.dynamicConfigArray = getDynamicJsonCfg().totalCfg || []
 
-  // 渲染table
-  for (let i = 0; i < dynamicConfigArray.length; i++) {
-    tableData.push(dynamicConfigArray[i])
-  }
-  num.value = dynamicConfigArray.length
+  // 重新加载列表
+  reloadTable()
 
-  logUtil.logInfo("dynamic init page=>", dynamicConfigArray)
+  logUtil.logInfo("dynamic init page=>", formData.dynamicConfigArray)
 }
 
 onMounted(async () => {
@@ -223,4 +276,7 @@ export default {
 </script>
 
 <style scoped>
+.dyn-table-list{
+  margin-top: 50px;
+}
 </style>

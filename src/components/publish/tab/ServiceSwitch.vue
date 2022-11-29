@@ -4,7 +4,6 @@
       <el-switch v-model="vuepressEnabled" @change="vuepressOnChange"/>
     </el-form-item>
 
-    <!-- 废弃 -->
     <el-form-item :label="$t('service.switch.jvue')" v-if="false">
       <el-switch v-model="jvueEnabled" @change="jvueOnChange"/>
     </el-form-item>
@@ -51,10 +50,10 @@
 <script lang="ts" setup>
 import {onMounted, ref} from 'vue'
 import {useI18n} from "vue-i18n";
-import {setBooleanConf} from "../../../utils/config";
+import {setBooleanConf} from "~/utils/config";
 import SWITCH_CONSTANTS from "../../../utils/constants/switchConstants";
 import logUtil from "../../../utils/logUtil";
-import {useTabCount} from "../../../composables/tabCountCom";
+import {useTabCount} from "~/composables/tabCountCom";
 
 // use
 const {t} = useI18n()
