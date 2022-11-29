@@ -8,6 +8,7 @@ rm ./dist/widget.json
 # 删除火狐配置
 rm -rf ./dist/mv2
 mv ./dist/manifest.dev.json ./dist/manifest.json
+rm ./dist/manifest.prod.json
 
 rm -rf ./extension/chrome/*
 mkdir -p extension/chrome
