@@ -26,6 +26,9 @@ export default defineConfig(({command, mode, ssrBuild}) => {
         )
     }
 
+    const isProd = process.env.NODE_ENV == "production"
+    console.log("isProd=>", isProd)
+
     const isTest = process.env.TEST == "true"
     console.log("isTest=>", isTest)
 
@@ -144,7 +147,7 @@ export default defineConfig(({command, mode, ssrBuild}) => {
             // boolean | 'terser' | 'esbuild'
             // minify: 'terser',
             // 不压缩，用于调试
-            minify: false,
+            minify: true,
 
             // @rollup/plugin-commonjs 插件的选项
             commonjsOptions: {
@@ -153,10 +156,10 @@ export default defineConfig(({command, mode, ssrBuild}) => {
             },
 
             // 当设置为 true, 构建后将会生成 manifest.json 文件
-            manifest: false,
+            manifest: isProd,
 
             // 传递给 Terser 的更多 minify 选项
-            terserOptions: {},
+            // terserOptions: {},
 
             // 设置为false 来禁用将构建好的文件写入磁盘
             write: true,
