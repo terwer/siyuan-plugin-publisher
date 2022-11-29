@@ -1,9 +1,23 @@
 <template>
-  <el-form label-width="100px" inline>
+  <el-form class="switch-form" inline>
+    <!-- Github -->
     <el-form-item :label="$t('service.switch.vuepress')">
       <el-switch v-model="vuepressEnabled" @change="vuepressOnChange"/>
     </el-form-item>
 
+    <el-form-item :label="$t('service.switch.hugo')">
+      <el-switch v-model="hugoEnabled" @change="hugoOnChange"/>
+    </el-form-item>
+
+    <el-form-item :label="$t('service.switch.hexo')">
+      <el-switch v-model="hexoEnabled" @change="hexoEnabled"/>
+    </el-form-item>
+
+    <el-form-item :label="$t('service.switch.jekyll')">
+      <el-switch v-model="jekyllEnabled" @change="jekyllOnChange"/>
+    </el-form-item>
+
+    <!-- Metaweblog API -->
     <el-form-item :label="$t('service.switch.jvue')" v-if="false">
       <el-switch v-model="jvueEnabled" @change="jvueOnChange"/>
     </el-form-item>
@@ -16,10 +30,12 @@
       <el-switch v-model="cnblogsEnabled" @change="cnblogsOnChange"/>
     </el-form-item>
 
+    <!-- Wordpress -->
     <el-form-item :label="$t('service.switch.wordpress')">
       <el-switch v-model="wordpressEnabled" @change="wordpressOnChange"/>
     </el-form-item>
 
+    <!-- Commmon API -->
     <el-form-item :label="$t('service.switch.liandi')">
       <el-switch v-model="liandiEnabled" @change="liandiOnChange"/>
     </el-form-item>
@@ -33,10 +49,9 @@
     </el-form-item>
 
     <!-- 动态配置 -->
-    <el-form-item v-for="cfg in switchFormData.dynamicConfigArray"
-                  :label="cfg.plantformName+'_'+cfg.plantformType.toUpperCase().substring(0,1)">
-      <el-switch v-model="cfg.modelValue" :active-value="cfg.plantformKey+'_true'"
-                 :inactive-value="cfg.plantformKey+'_false'" @change="dynamicOnChange"/>
+    <el-form-item v-for="cfg in switchFormData.dynamicConfigArray" :label="cfg.plantformName">
+      <el-switch v-model="cfg.modelValue" :active-value="getDynSwitchActive(cfg.plantformKey)"
+                 :inactive-value="getDynSwitchInactive(cfg.plantformKey)" @change="dynamicOnChange"/>
     </el-form-item>
 
     <div v-if="showSwitchTip">
@@ -48,18 +63,22 @@
 </template>
 
 <script lang="ts" setup>
-import {onMounted, ref} from 'vue'
+import {onMounted, ref, watch} from 'vue'
 import {useI18n} from "vue-i18n";
 import {setBooleanConf} from "~/utils/config";
-import SWITCH_CONSTANTS from "../../../utils/constants/switchConstants";
 import logUtil from "../../../utils/logUtil";
 import {useTabCount} from "~/composables/tabCountCom";
+import {getDynSwitchActive, getDynSwitchInactive, getSwitchItem} from "~/utils/dynamicConfig.js";
+import SWITCH_CONSTANTS from "~/utils/constants/switchConstants";
 
 // use
 const {t} = useI18n()
 const {
   tabCountStore,
   vuepressEnabled,
+  hugoEnabled,
+  hexoEnabled,
+  jekyllEnabled,
   jvueEnabled,
   confEnabled,
   cnblogsEnabled,
@@ -73,8 +92,27 @@ const {
 
 let showSwitchTip = ref(false)
 
+const props = defineProps({
+  isReload: {
+    type: Boolean,
+    default: false
+  }
+})
+
 const vuepressOnChange = (val: boolean) => {
   setBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY, val)
+  initConf()
+}
+const hugoOnChange = (val: boolean) => {
+  setBooleanConf(SWITCH_CONSTANTS.SWITCH_HUGO_KEY, val)
+  initConf()
+}
+const hexoOnChange = (val: boolean) => {
+  setBooleanConf(SWITCH_CONSTANTS.SWITCH_HEXO_KEY, val)
+  initConf()
+}
+const jekyllOnChange = (val: boolean) => {
+  setBooleanConf(SWITCH_CONSTANTS.SWITCH_JEKYLL_KEY, val)
   initConf()
 }
 const jvueOnChange = (val: boolean) => {
@@ -107,11 +145,8 @@ const kmsOnChange = (val: any) => {
 }
 const dynamicOnChange = (val: any) => {
   logUtil.logWarn("dynamicOnChange,val=>", val)
-  const valArr = val.split("_")
-  const switchKey = "switch-" + valArr[0]
-  const switchStatus = valArr[1]
-
-  setBooleanConf(switchKey, switchStatus)
+  const switchItem = getSwitchItem(val)
+  setBooleanConf(switchItem.switchKey, switchItem.switchValue)
   initConf()
 }
 
@@ -126,29 +161,16 @@ const initConf = () => {
   }
 }
 
-// const checkPlantform = () => {
-// 未设置平台跳转到设置，否则跳转到主界面
-// alert(totalCount.value)
-// logUtil.logWarn("开启的平台数=>" + totalCount.value)
-// const ctab = getQueryString("tab")
-// // 有启用的平台，直接返回
-// if (ctab == undefined && enabledCount > 0) {
-//   return
-// }
-// if (enabledCount == 0 && ctab != "service-switch") {
-//   reloadTabPage("service-switch")
-// } else if (enabledCount > 0 && ctab != "plantform-main") {
-//   // 有启用的平台，但是打开的别的tab，跳转到主界面
-//   reloadTabPage("plantform-main")
-// }
-// }
+/*监听props*/
+watch(() => props.isReload, /**/async (oldValue, newValue) => {
+  // Here you can add you functionality
+  // as described in the name you will get old and new value of watched property
+  initConf();
+})
 
 onMounted(() => {
   // 初始化
   initConf()
-
-  // 检测开启的平台数
-  // checkPlantform()
 })
 
 </script>
@@ -160,5 +182,6 @@ export default {
 </script>
 
 <style scoped>
-
+.switch-form{
+}
 </style>

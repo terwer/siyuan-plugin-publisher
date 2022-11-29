@@ -10,7 +10,7 @@
       <post-bind :is-reload="isReloadPostBind" :page-id="props.pageId"/>
     </el-tab-pane>
     <el-tab-pane name="service-switch" :label="$t('service.tab.service.switch')">
-      <service-switch/>
+      <service-switch :is-reload="isReloadServiceSwitch"/>
     </el-tab-pane>
     <el-tab-pane name="dynamicp-platform" :label="$t('dynamic.platform.new')">
       <dynamic-plantform/>
@@ -30,6 +30,7 @@ let defaultTab = ref("plantform-main")
 let isReloadSetting = ref(false)
 let isReloadMain = ref(false)
 let isReloadPostBind = ref(false)
+let isReloadServiceSwitch = ref(false)
 
 const props = defineProps({
   isReload: {
@@ -56,6 +57,10 @@ const serviceTabChange = (name: string) => {
     // 切换强制刷新
     isReloadPostBind.value = !isReloadPostBind.value;
     logUtil.logInfo("post-bind change=>")
+  } else if ("service-switch" == name) {
+    // 切换强制刷新
+    isReloadServiceSwitch.value = !isReloadServiceSwitch.value;
+    logUtil.logInfo("service-switch change=>")
   }
 }
 

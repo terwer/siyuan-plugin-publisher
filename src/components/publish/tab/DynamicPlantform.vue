@@ -75,7 +75,7 @@
 
 <script lang="ts" setup>
 import {
-  DynamicConfig,
+  DynamicConfig, getDefaultPlatfoemName,
   getDynamicJsonCfg,
   getNewPlatformKey,
   getSubtypeList,
@@ -122,13 +122,8 @@ const onSubPlantformTypeChange = (val: SubPlantformType) => {
 const onPlantformTypeChange = (val: PlantformType) => {
   formData.ptype = val
   formData.subtypeOptions = getSubtypeList(val)
-
-  let pname: string = val
-  if (formData.subtypeOptions.length > 0 && formData.subtype != SubPlantformType.NONE) {
-    pname = formData.subtype
-  }
-  pname = pname + "-1"
-
+  const pname = getDefaultPlatfoemName(val, formData.subtype,
+      formData.subtypeOptions.length > 0 && formData.subtype != SubPlantformType.NONE)
   formData.dynCfg = new DynamicConfig(val, getNewPlatformKey(val,
           formData.subtypeOptions.length > 0 ? formData.subtype : SubPlantformType.NONE),
       pname)
@@ -219,12 +214,13 @@ const delRow = async () => {
   ).then(async () => {
     if (!currentRow.value || !currentRow.value.plantformKey) {
       ElMessage.error(t('dynamic.platform.opt.item.no.select.tip'))
+      return
     }
 
     for (let i = 0; i < formData.dynamicConfigArray.length; i++) {
-      logUtil.logInfo(currentRow.value.plantformKey)
-      logUtil.logInfo(formData.dynamicConfigArray[i].plantformKey)
-      logUtil.logInfo("------------------------")
+      // logUtil.logInfo(currentRow.value.plantformKey)
+      // logUtil.logInfo(formData.dynamicConfigArray[i].plantformKey)
+      // logUtil.logInfo("------------------------")
       if (currentRow.value.plantformKey == formData.dynamicConfigArray[i].plantformKey) {
         formData.dynamicConfigArray.splice(i, 1);
       }
