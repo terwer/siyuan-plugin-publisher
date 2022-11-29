@@ -1,10 +1,6 @@
 # sy-post-publisher
 
-将 [思源笔记](https://github.com/siyuan-note/siyuan) 的文章发布到支持的开放平台的 **思源笔记挂件**
-
-目前支持基于 `Github` <sup>0.0.1+</sup> 、 `metaweblog API` <sup>0.0.2+</sup> 、`Wordpress API` <sup>0.0.2+</sup> 以及 `自定义HTTP协议` <sup>1.0.0+(预研)</sup> 的平台
-
-同时提供了一个 [统一通用的API适配器](https://github.com/terwer/src-sy-post-publisher/blob/main/src/utils/api.ts)，让适配任何平台成为可能。
+将 [思源笔记](https://github.com/siyuan-note/siyuan) 的文章发布到支持的平台的 **思源笔记挂件**
 
 ![](https://static-rs-terwer.oss-cn-beijing.aliyuncs.com/project/sy-post-publisher/preview.png)
 
@@ -13,6 +9,37 @@
 [点击查看帮助文档](https://mp.terwer.space/post/readme-1j4ltp.html)
 
 [点击查看新手小白级视频教程](https://mp.terwer.space/post/configure-entry-video-brpm9.html)
+
+## 支持平台
+
+* [X] Github pages
+* [ ] Hugo
+* [ ] Hexo
+* [ ] Jekyll
+* [X] Vuepress
+* [ ] Vitepress
+* [X] 博客园
+* [X] 语雀
+* [X] 开源中国
+* [X] 链滴社区
+* [X] Wordpress
+* [X] Metaweblog API
+
+## 挂件版快速上手
+
+首先在设置 - 集市 - 挂件 中下载 sy-post-publisher
+
+然后写好文章
+
+在文中最后面输入 / 找到挂件，选择 sy-post-publisher
+
+然后选择你需要的平台然后进行设置
+
+点击发布即可
+
+## 浏览器插件快速上手
+
+https://mp.terwer.space/post/start-to-get-started-zi0eyk.html
 
 ## 愿景
 
@@ -63,6 +90,10 @@
 4. 因为所有配置是配置直接存储在浏览器本地，切换浏览器数据不会共享。卸载插件也会清空所有的配置数据，后续会考虑配置备份功能(需要调研实现这个需求的必要性)。
 
 ## 核心特性
+
+目前支持基于 `Github` <sup>0.0.1+</sup> 、 `metaweblog API` <sup>0.0.2+</sup> 、`Wordpress API` <sup>0.0.2+</sup> 以及 `自定义HTTP协议` <sup>1.0.0+(预研)</sup> 的平台
+
+同时提供了一个 [统一通用的API适配器](https://github.com/terwer/src-sy-post-publisher/blob/main/src/utils/api.ts)，让适配任何平台成为可能。
 
 - [X] 兼容 Metaweblog API 以及自定义平台 <sup>0.0.3+</sup>
 - [X] 支持平台开关 <sup>0.0.3+</sup>
@@ -139,15 +170,6 @@
   * [ ] 支持发布时候选择一键剔除外链图片，主要是个别平台不允许外链图片
 
 [历史更新日志](Changelog.md)
-
-## 支持平台
-
-* [X] Vuepress
-* [X] 博客园
-* [X] 链滴社区
-* [X] 语雀
-* [X] Wordpress
-* [X] Metaweblog API
 
 ## Vue 3 + TypeScript + Vite
 
