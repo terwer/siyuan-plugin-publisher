@@ -2,7 +2,9 @@
   <el-tabs type="border-card" v-if="tabCountStore.tabCount>0">
     <!-- Github -->
     <el-tab-pane :label="$t('setting.vuepress')" v-if="vuepressEnabled">
+      <!--
       <vuepress-setting/>
+      -->
     </el-tab-pane>
 
     <!-- Metaweblog API -->
@@ -57,7 +59,6 @@ import {DynamicConfig, getDynamicJsonCfg, getDynPostidKey, getDynSwitchKey} from
 import {DynamicMCfg} from "~/utils/platform/metaweblog/dynamicMCfg";
 import {DynamicWCfg} from "~/utils/platform/wordpress/dynamicWCfg";
 import {useTabCount} from "~/composables/tabCountCom";
-import VuepressSetting from "~/components/publish/tab/setting/adaptor/github/VuepressSetting.vue";
 import JVueSetting from "~/components/publish/tab/setting/adaptor/metaweblog/JVueSetting.vue";
 import ConfluenceSetting from "~/components/publish/tab/setting/adaptor/metaweblog/ConfluenceSetting.vue";
 import CnblogsSetting from "~/components/publish/tab/setting/adaptor/metaweblog/CnblogsSetting.vue";

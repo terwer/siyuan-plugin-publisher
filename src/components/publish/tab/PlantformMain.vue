@@ -1,7 +1,9 @@
 <template>
   <el-tabs type="border-card" v-if="tabCountStore.tabCount>0">
     <el-tab-pane :label="$t('main.publish.to.vuepress')" v-if="vuepressEnabled">
+      <!--
       <vuepress-main :is-reload="isReloadVuepressMain" :page-id="props.pageId"/>
+      -->
     </el-tab-pane>
     <el-tab-pane :label="$t('main.publish.to.jvue')" v-if="jvueEnabled">
       <j-vue-main :page-id="props.pageId"/>
