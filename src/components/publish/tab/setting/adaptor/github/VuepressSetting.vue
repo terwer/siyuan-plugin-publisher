@@ -62,14 +62,12 @@
 import {onBeforeMount, reactive, ref} from "vue";
 import {ElMessage, FormInstance, FormRules} from "element-plus";
 import {useI18n} from "vue-i18n";
-import logUtil from "../../../../../../utils/logUtil";
-import {getBooleanConf, getJSONConf, setBooleanConf, setJSONConf} from "../../../../../../utils/config";
-import {API_TYPE_CONSTANTS} from "../../../../../../utils/constants/apiTypeConstants";
-import {IVuepressCfg} from "../../../../../../utils/platform/github/vuepress/IVuepressCfg";
-import {deletePage, publishPage} from "../../../../../../utils/platform/github/vuepress/vuepressApiV1";
-import {VuepressCfg} from "../../../../../../utils/platform/github/vuepress/VuepressCfg";
-import {formatIsoToZhDate} from "../../../../../../utils/util";
-import {API_STATUS_CONSTANTS} from "../../../../../../utils/constants/apiStatusConstants";
+import logUtil from "~/utils/logUtil";
+import {getBooleanConf, getJSONConf, setBooleanConf} from "~/utils/config";
+import {API_TYPE_CONSTANTS} from "~/utils/constants/apiTypeConstants";
+import {formatIsoToZhDate} from "~/utils/util";
+import {API_STATUS_CONSTANTS} from "~/utils/constants/apiStatusConstants";
+import {IGithubCfg} from "~/utils/platform/github/githubCfg";
 
 const {t} = useI18n()
 
@@ -161,23 +159,25 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   }
 
   // 保存配置
-  const vuepressCfg = new VuepressCfg(formData.githubUser, formData.githubRepo, formData.githubToken,
-      formData.defaultBranch, formData.defaultPath, formData.msg, formData.author, formData.email);
-  setJSONConf<IVuepressCfg>(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS, vuepressCfg)
+  const vuepressCfg = undefined
+      // new VuepressCfg(formData.githubUser, formData.githubRepo, formData.githubToken,
+      // formData.defaultBranch, formData.defaultPath, formData.msg, formData.author, formData.email);
+  // setJSONConf<IGithubCfg>(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS, vuepressCfg)
   ElMessage.success(t('main.opt.success'))
 }
 
 const valiConf = async () => {
   isLoading.value = true;
 
-  const vuepressCfg = new VuepressCfg(formData.githubUser, formData.githubRepo, formData.githubToken,
-      formData.defaultBranch, formData.defaultPath, formData.msg, formData.author, formData.email);
+  const vuepressCfg = undefined
+      // new VuepressCfg(formData.githubUser, formData.githubRepo, formData.githubToken,
+      // formData.defaultBranch, formData.defaultPath, formData.msg, formData.author, formData.email);
   // const vuepressCfg = getJSONConf<IVuepressCfg>(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS)
   const testFile = "test.md"
 
   const docPath = formData.defaultPath + testFile
   const mdContent = "Hello World!" + formatIsoToZhDate(new Date().toISOString(), true)
-  const res = await publishPage(vuepressCfg, docPath, mdContent)
+  const res = undefined //= await publishPage(vuepressCfg, docPath, mdContent)
 
   isLoading.value = false
 
@@ -191,7 +191,7 @@ const valiConf = async () => {
 
   // 自动删除测试文章
   if(autoDeleteTest.value){
-    await deletePage(vuepressCfg,docPath)
+    // await deletePage(vuepressCfg,docPath)
   }
 
   // 验证通过，更新验证状态
@@ -210,7 +210,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
 
 const initConf = () => {
   logUtil.logInfo("Vuepress配置初始化")
-  const conf = getJSONConf<IVuepressCfg>(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS)
+  const conf = getJSONConf<IGithubCfg>(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS)
   if (conf) {
     logUtil.logInfo("vuepress conf=>", conf)
     formData.githubUser = conf.githubUser

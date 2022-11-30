@@ -186,6 +186,12 @@ const resetForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
   formEl.resetFields()
 }
+
+const submitForm = async (formEl: FormInstance | undefined) => {
+  if (!formEl) return
+}
+const valiConf = async () => {
+}
 </script>
 
 <script lang="ts">

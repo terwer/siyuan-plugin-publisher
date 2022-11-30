@@ -5,14 +5,15 @@ import logUtil from "~/utils/logUtil";
 
 describe("githubAPi test", async () => {
     it("contructor test", async () => {
-        const githubCfg = new GithubCfg("terwer",
-            "terwer.github.io",
-            "",
-            "master",
-            "docs/_posts/",
-            "suto published by sy-post-publisher",
-            "terwer",
-            "youweics@163.com")
+        const githubCfg = new GithubCfg()
+        githubCfg.githubUser = "terwer"
+        githubCfg.githubRepo = "terwer.github.io"
+        githubCfg.defaultBranch = "master"
+        githubCfg.defaultPath = "docs/_posts/"
+        githubCfg.defaultMsg = "auto published by sy-post-publisher"
+        githubCfg.author = "terwer"
+        githubCfg.email = "youweics@163.com"
+
         const githubApi = new GithubApi(githubCfg)
         const meta = await githubApi.getGithubPageTreeNode("")
         logUtil.logInfo("meta=>", meta)

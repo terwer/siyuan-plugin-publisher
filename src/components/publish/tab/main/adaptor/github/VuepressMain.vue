@@ -227,6 +227,7 @@ import {API_STATUS_CONSTANTS} from "~/utils/constants/apiStatusConstants";
 import {getBooleanConf, getJSONConf} from "~/utils/config";
 import {POSTID_KEY_CONSTANTS} from "~/utils/constants/postidKeyConstants";
 import {getApiParams} from "~/utils/publishUtil";
+import {IGithubCfg} from "~/utils/platform/github/githubCfg";
 
 const {t} = useI18n()
 
@@ -395,7 +396,7 @@ async function initPage() {
 
   // 更新预览链接
   if (isPublished.value) {
-    const vuepressCfg = getJSONConf<IVuepressCfg>(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS)
+    const vuepressCfg = getJSONConf<IGithubCfg>(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS)
     const docPath = getDocPath()
 
     // 自定义目录
@@ -430,7 +431,7 @@ async function initPage() {
 }
 
 function getDocPath() {
-  const postidKey = getApiParams<IVuepressCfg>(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS).posidKey;
+  const postidKey = getApiParams<IGithubCfg>(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS).posidKey;
   const meta: any = siyuanData.value.meta
   const docPath = meta[postidKey] || "";
   return docPath;
@@ -695,7 +696,7 @@ const customLoad = async (node: any, resolve: any) => {
   logUtil.logInfo("目前已保存路径=>", formData.value.customPath)
   logUtil.logInfo("当前节点=>", node.data)
 
-  const vuepressCfg = getJSONConf<IVuepressCfg>(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS)
+  const vuepressCfg = getJSONConf<IGithubCfg>(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS)
 
   let docPath
   let parentDocPath = node.data.value || ""
@@ -711,8 +712,8 @@ const customLoad = async (node: any, resolve: any) => {
   docPath = parentDocPath
   // }
 
-  const treeNode = await getPageTreeNode(vuepressCfg, docPath);
-  resolve(treeNode);
+  // const treeNode = await getPageTreeNode(vuepressCfg, docPath);
+  // resolve(treeNode);
 }
 
 async function doPublish() {
@@ -745,10 +746,10 @@ async function doPublish() {
     // api可用并且开启了发布
     logUtil.logInfo("开始真正调用api发布到Github")
 
-    const vuepressCfg = getJSONConf<IVuepressCfg>(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS)
+    // const vuepressCfg = getJSONConf<IVuepressCfg>(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS)
 
     const mdFile = formData.value.title
-    let docPath = vuepressCfg.defaultPath + mdFile
+    let docPath // = vuepressCfg.defaultPath + mdFile
     if (!useDefaultPath.value) {
       // 如果选择了自定义的目录
       if (formData.value.customPath.indexOf(".md") > -1) {
@@ -777,7 +778,7 @@ async function doPublish() {
     logUtil.logInfo("即将发布的内容，mdContent=>", {"mdContent": mdContent})
 
     // 发布
-    const res = await publishPage(vuepressCfg, docPath, mdContent)
+    const res = undefined //= await publishPage(vuepressCfg, docPath, mdContent)
 
     // 成功与失败都提供复制功能
     if (!res) {
@@ -860,11 +861,11 @@ async function cancelPublish() {
 
 // 实际删除逻辑
 async function doCancel(isInit: boolean) {
-  const vuepressCfg = getJSONConf<IVuepressCfg>(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS)
+  // const vuepressCfg = getJSONConf<IVuepressCfg>(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS)
   const docPath = getDocPath()
   logUtil.logInfo("准备取消发布，docPath=>", docPath)
 
-  await deletePage(vuepressCfg, docPath)
+  // await deletePage(vuepressCfg, docPath)
 
   const customAttr = {
     [POSTID_KEY_CONSTANTS.VUEPRESS_POSTID_KEY]: ""
