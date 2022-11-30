@@ -232,8 +232,8 @@ import copy from "copy-to-clipboard"
 import shortHash from "shorthash2";
 import {API_STATUS_CONSTANTS} from "../../../../../../utils/constants/apiStatusConstants";
 import {getBooleanConf, getJSONConf} from "../../../../../../utils/config";
-import {IVuepressCfg} from "../../../../../../utils/platform/vuepress/IVuepressCfg";
-import {deletePage, getPageTreeNode, publishPage} from "../../../../../../utils/platform/vuepress/v1";
+import {IVuepressCfg} from "../../../../../../utils/platform/github/vuepress/IVuepressCfg";
+import {deletePage, getPageTreeNode, publishPage} from "../../../../../../utils/platform/github/vuepress/vuepressApiV1";
 import {POSTID_KEY_CONSTANTS} from "../../../../../../utils/constants/postidKeyConstants";
 import {getApiParams} from "../../../../../../utils/publishUtil";
 

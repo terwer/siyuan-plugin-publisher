@@ -6,7 +6,7 @@
 import {API_TYPE_CONSTANTS} from "../../../../../../utils/constants/apiTypeConstants";
 import {ref} from "vue";
 import MetaweblogSetting from "../../MetaweblogSetting.vue";
-import {ConfCfg} from "../../../../../../utils/platform/metaweblog/config/confCfg";
+import {ConfCfg} from "../../../../../../utils/platform/metaweblog/conf/confCfg";
 
 const apiType = ref(API_TYPE_CONSTANTS.API_TYPE_CONFLUENCE)
 const cfg = ref(new ConfCfg())

@@ -5,7 +5,7 @@
 <script lang="ts" setup>
 import {API_TYPE_CONSTANTS} from "../../../../../../utils/constants/apiTypeConstants";
 import {ref} from "vue";
-import {JVueCfg} from "../../../../../../utils/platform/metaweblog/config/jvueCfg";
+import {JVueCfg} from "../../../../../../utils/platform/metaweblog/jvue/jvueCfg";
 
 const apiType = ref(API_TYPE_CONSTANTS.API_TYPE_JVUE)
 const cfg = ref(new JVueCfg())

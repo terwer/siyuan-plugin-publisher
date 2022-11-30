@@ -1,5 +1,5 @@
 <template>
-  <el-form label-width="120px" ref="formRef" :model="formData" :rules="rules" :size="formSize" status-icon>
+  <el-form label-width="120px" ref="formRef" :model="formData" :rules="rules" status-icon>
     <el-form-item :label="$t('setting.blog.type.vuepress.github.user')" prop="githubUser">
       <el-input v-model="formData.githubUser" :placeholder="$t('setting.blog.type.vuepress.github.user.tip')"/>
     </el-form-item>
@@ -65,9 +65,9 @@ import {useI18n} from "vue-i18n";
 import logUtil from "../../../../../../utils/logUtil";
 import {getBooleanConf, getJSONConf, setBooleanConf, setJSONConf} from "../../../../../../utils/config";
 import {API_TYPE_CONSTANTS} from "../../../../../../utils/constants/apiTypeConstants";
-import {IVuepressCfg} from "../../../../../../utils/platform/vuepress/IVuepressCfg";
-import {deletePage, publishPage} from "../../../../../../utils/platform/vuepress/v1";
-import {VuepressCfg} from "../../../../../../utils/platform/vuepress/VuepressCfg";
+import {IVuepressCfg} from "../../../../../../utils/platform/github/vuepress/IVuepressCfg";
+import {deletePage, publishPage} from "../../../../../../utils/platform/github/vuepress/vuepressApiV1";
+import {VuepressCfg} from "../../../../../../utils/platform/github/vuepress/VuepressCfg";
 import {formatIsoToZhDate} from "../../../../../../utils/util";
 import {API_STATUS_CONSTANTS} from "../../../../../../utils/constants/apiStatusConstants";
 
@@ -78,7 +78,6 @@ const apiStatus = ref(false)
 
 const autoDeleteTest = ref(true)
 
-const formSize = ref('default')
 const formRef = ref<FormInstance>()
 const formData = reactive({
   githubUser: "",

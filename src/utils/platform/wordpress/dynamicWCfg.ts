@@ -1,5 +1,5 @@
-import {MetaweblogCfg} from "../MetaweblogCfg";
-import {PageType} from "../IMetaweblogCfg";
+import {MetaweblogCfg} from "../metaweblog/MetaweblogCfg";
+import {PageType} from "../metaweblog/IMetaweblogCfg";
 
 /**
  * 动态Wordpress配置类
