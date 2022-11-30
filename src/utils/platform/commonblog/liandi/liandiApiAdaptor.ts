@@ -60,7 +60,7 @@ export class LiandiApiAdaptor extends CommonblogApiAdaptor implements IApi {
         return result || ""
     }
 
-    async getPrevireUrl(postid: string): Promise<string> {
+    async getPreviewUrl(postid: string): Promise<string> {
         let previewUrl
 
         // 替换文章链接

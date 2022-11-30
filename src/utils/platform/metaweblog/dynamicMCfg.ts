@@ -1,5 +1,5 @@
-import {MetaweblogCfg} from "../MetaweblogCfg";
-import {PageType} from "../IMetaweblogCfg";
+import {MetaweblogCfg} from "./MetaweblogCfg";
+import {PageType} from "./IMetaweblogCfg";
 
 /**
  * 动态Metaweblog配置类

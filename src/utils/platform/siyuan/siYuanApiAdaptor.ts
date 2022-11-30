@@ -144,7 +144,7 @@ export class SiYuanApiAdaptor implements IApi {
         return Promise.resolve([]);
     }
 
-    public async getPrevireUrl(postid: string): Promise<string> {
+    public async getPreviewUrl(postid: string): Promise<string> {
         return Promise.resolve("");
     }
 

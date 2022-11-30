@@ -1,9 +1,9 @@
 import {describe, it} from "vitest";
-import {WordpressCfg} from "../../../../../src/utils/platform/metaweblog/config/wordpressCfg";
+import {WordpressCfg} from "~/utils/platform/wordpress/wordpressCfg";
 import {getEnv} from "../../../../../src/utils/envUtil";
 import {setJSONConf} from "../../../../../src/utils/config";
 import {API_TYPE_CONSTANTS} from "../../../../../src/utils/constants/apiTypeConstants";
-import {WordpressApiAdaptor} from "../../../../../src/utils/platform/metaweblog/adaptor/wordpressApiAdaptor";
+import {WordpressApiAdaptor} from "~/utils/platform/wordpress/wordpressApiAdaptor";
 import logUtil from "../../../../../src/utils/logUtil";
 
 describe('WordpressApiAtaptor test', () => {

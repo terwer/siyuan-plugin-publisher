@@ -3,10 +3,10 @@
 </template>
 
 <script lang="ts" setup>
-import {API_TYPE_CONSTANTS} from "../../../../../../utils/constants/apiTypeConstants";
+import {API_TYPE_CONSTANTS} from "~/utils/constants/apiTypeConstants";
 import {ref} from "vue";
-import {WordpressCfg} from "../../../../../../utils/platform/metaweblog/config/wordpressCfg";
-import {MetaweblogCfg} from "../../../../../../utils/platform/metaweblog/MetaweblogCfg";
+import {WordpressCfg} from "~/utils/platform/wordpress/wordpressCfg";
+import {MetaweblogCfg} from "~/utils/platform/metaweblog/MetaweblogCfg";
 
 const props = defineProps({
   isReload: {

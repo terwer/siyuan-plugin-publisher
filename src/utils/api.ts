@@ -1,20 +1,25 @@
 import {SiYuanApiAdaptor} from "./platform/siyuan/siYuanApiAdaptor";
 import {API_TYPE_CONSTANTS} from "./constants/apiTypeConstants";
-import {JVueApiAdaptor} from "./platform/metaweblog/adaptor/jvueApiAdaptor";
-import {ConfApiAdaptor} from "./platform/metaweblog/adaptor/confApiAdaptor";
-import {CnblogsApiAdaptor} from "./platform/metaweblog/adaptor/cnblogsApiAdaptor";
+import {JVueApiAdaptor} from "./platform/metaweblog/jvue/jvueApiAdaptor";
+import {ConfApiAdaptor} from "./platform/metaweblog/conf/confApiAdaptor";
+import {CnblogsApiAdaptor} from "./platform/metaweblog/cnblogs/cnblogsApiAdaptor";
 import {Post} from "./common/post";
 import {UserBlog} from "./common/userBlog";
 import {KmsApiAdaptor} from "./platform/commonblog/kms/kmsApiAdaptor";
-import {WordpressApiAdaptor} from "./platform/metaweblog/adaptor/wordpressApiAdaptor";
+import {WordpressApiAdaptor} from "./platform/wordpress/wordpressApiAdaptor";
 import {LiandiApiAdaptor} from "./platform/commonblog/liandi/liandiApiAdaptor";
 import {YuqueApiAdaptor} from "./platform/commonblog/yuque/yuqueApiAdaptor";
 import {PlantformType} from "./dynamicConfig";
 import {MetaWeblogApiAdaptor} from "./platform/metaweblog/metaWeblogApiAdaptor";
 import {CategoryInfo} from "./common/categoryInfo";
+import {GithubApiAdaptor} from "~/utils/platform/github/githubApiAdaptor";
+import {VuepressApiAdaptor} from "~/utils/platform/github/vuepress/vuepressApiAdaptor";
+import {HugoApiAdaptor} from "~/utils/platform/github/hugo/hugoApiAdaptor";
+import {HexoApiAdaptor} from "~/utils/platform/github/hexo/hexoApiAdaptor";
+import {JekyllApiAdaptor} from "~/utils/platform/github/jekyll/jekyllApiAdaptor";
 
 /**
- * 所有平台统一API接口（Vuepress比较特殊，除外）
+ * 所有平台统一API接口
  */
 export interface IApi {
     /**
@@ -118,7 +123,7 @@ export interface IApi {
      * 获取预览链接
      * @param postid 文章ID
      */
-    getPrevireUrl(postid: string): Promise<string>
+    getPreviewUrl(postid: string): Promise<string>
 }
 
 /**
@@ -136,7 +141,11 @@ export class API implements IApi {
             const typeArr = type.split("-")
             if (typeArr.length > 0) {
                 const ptype = typeArr[0]
-                if (ptype == PlantformType.Metaweblog.toLowerCase()) {
+                if (ptype == PlantformType.Github.toLowerCase()) {
+                    // Wordpress
+                    this.apiAdaptor = new GithubApiAdaptor(type)
+                    return;
+                } else if (ptype == PlantformType.Metaweblog.toLowerCase()) {
                     // Metaweblog
                     this.apiAdaptor = new MetaWeblogApiAdaptor(type)
                     return
@@ -153,6 +162,22 @@ export class API implements IApi {
             case API_TYPE_CONSTANTS.API_TYPE_SIYUAN:
                 this.apiAdaptor = new SiYuanApiAdaptor()
                 break;
+
+            // Github
+            case API_TYPE_CONSTANTS.API_TYPE_VUEPRESS:
+                this.apiAdaptor = new VuepressApiAdaptor()
+                break
+            case API_TYPE_CONSTANTS.API_TYPE_HUGO:
+                this.apiAdaptor = new HugoApiAdaptor()
+                break
+            case API_TYPE_CONSTANTS.API_TYPE_HEXO:
+                this.apiAdaptor = new HexoApiAdaptor()
+                break
+            case API_TYPE_CONSTANTS.API_TYPE_JEKYLL:
+                this.apiAdaptor = new JekyllApiAdaptor()
+                break
+
+            // Metaweblog API
             case API_TYPE_CONSTANTS.API_TYPE_JVUE:
                 this.apiAdaptor = new JVueApiAdaptor()
                 break;
@@ -162,9 +187,13 @@ export class API implements IApi {
             case API_TYPE_CONSTANTS.API_TYPE_CNBLOGS:
                 this.apiAdaptor = new CnblogsApiAdaptor()
                 break;
+
+            // Wordpress
             case API_TYPE_CONSTANTS.API_TYPE_WORDPRESS:
                 this.apiAdaptor = new WordpressApiAdaptor()
                 break;
+
+            // Common
             case API_TYPE_CONSTANTS.API_TYPE_LIANDI:
                 this.apiAdaptor = new LiandiApiAdaptor()
                 break
@@ -211,8 +240,8 @@ export class API implements IApi {
         return await this.apiAdaptor.getCategories()
     }
 
-    async getPrevireUrl(postid: string): Promise<string> {
-        return await this.apiAdaptor.getPrevireUrl(postid)
+    async getPreviewUrl(postid: string): Promise<string> {
+        return await this.apiAdaptor.getPreviewUrl(postid)
     }
 }
 

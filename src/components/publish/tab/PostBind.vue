@@ -1,5 +1,5 @@
 <template>
-  <el-form class="post-bind-form" ref="ruleFormRef" :model="ruleForm" :rules="rules" status-icon v-if="tabCountStore.tabCount>0">
+  <el-form label-width="85px" class="post-bind-form" ref="ruleFormRef" :model="ruleForm" :rules="rules" status-icon v-if="tabCountStore.tabCount>0">
     <!-- Github -->
     <el-form-item :label="$t('post.bind.vuepress.slug')" prop="vuepressSlug" v-if="vuepressEnabled">
       <el-input v-model="ruleForm.vuepressSlug"/>
@@ -361,7 +361,7 @@ export default {
 
 <style>
 .post-bind-form label{
-  min-width: 150px;
+  min-width: 125px;
 }
 </style>
 <style scoped>

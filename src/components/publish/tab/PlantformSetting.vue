@@ -1,8 +1,13 @@
 <template>
   <el-tabs type="border-card" v-if="tabCountStore.tabCount>0">
+    <!-- Github -->
     <el-tab-pane :label="$t('setting.vuepress')" v-if="vuepressEnabled">
+      <!--
       <vuepress-setting/>
+      -->
     </el-tab-pane>
+
+    <!-- Metaweblog API -->
     <el-tab-pane :label="$t('setting.jvue')" v-if="jvueEnabled">
       <j-vue-setting/>
     </el-tab-pane>
@@ -12,9 +17,13 @@
     <el-tab-pane :label="$t('setting.cnblogs')" v-if="cnblogsEnabled">
       <cnblogs-setting/>
     </el-tab-pane>
+
+    <!-- Wordpress -->
     <el-tab-pane :label="$t('setting.wordpress')" v-if="wordpressEnabled">
       <wordpress-setting/>
     </el-tab-pane>
+
+    <!-- Commmon API -->
     <el-tab-pane :label="$t('setting.liandi')" v-if="liandiEnabled">
       <liandi-setting/>
     </el-tab-pane>
@@ -26,15 +35,14 @@
     </el-tab-pane>
 
     <!-- 动态平台发布配置 -->
-    <el-tab-pane v-for="mcfg in formData.metaweblogArray"
-                 :label="mcfg.plantformName+'_'+mcfg.plantformType.toUpperCase().substring(0,1)">
-      <metaweblog-setting :api-type="mcfg.plantformKey"
-                          :cfg="createMCfg(mcfg)"/>
+    <el-tab-pane v-for="gcfg in formData.githubArray" :label="gcfg.plantformName">
+      <github-setting :api-type="gcfg.plantformKey"/>
     </el-tab-pane>
-    <el-tab-pane v-for="wcfg in formData.wordpressArray"
-                 :label="wcfg.plantformName+'_'+wcfg.plantformType.toUpperCase().substring(0,1)">
-      <wordpress-setting :api-type="wcfg.plantformKey"
-                         :cfg="createWCfg(wcfg)"/>
+    <el-tab-pane v-for="mcfg in formData.metaweblogArray" :label="mcfg.plantformName">
+      <metaweblog-setting :api-type="mcfg.plantformKey" :cfg="createMCfg(mcfg)"/>
+    </el-tab-pane>
+    <el-tab-pane v-for="wcfg in formData.wordpressArray" :label="wcfg.plantformName">
+      <wordpress-setting :api-type="wcfg.plantformKey" :cfg="createWCfg(wcfg)"/>
     </el-tab-pane>
 
   </el-tabs>
@@ -45,12 +53,21 @@
 
 <script lang="ts" setup>
 import {reactive, ref, watch} from "vue";
-import {getBooleanConf} from "../../../utils/config";
+import {getBooleanConf} from "~/utils/config";
 import logUtil from "../../../utils/logUtil";
-import {DynamicConfig, getDynamicJsonCfg} from "../../../utils/dynamicConfig";
-import {DynamicMCfg} from "../../../utils/platform/metaweblog/config/dynamicMCfg";
-import {DynamicWCfg} from "../../../utils/platform/metaweblog/config/dynamicWCfg";
-import {useTabCount} from "../../../composables/tabCountCom";
+import {DynamicConfig, getDynamicJsonCfg, getDynPostidKey, getDynSwitchKey} from "~/utils/dynamicConfig";
+import {DynamicMCfg} from "~/utils/platform/metaweblog/dynamicMCfg";
+import {DynamicWCfg} from "~/utils/platform/wordpress/dynamicWCfg";
+import {useTabCount} from "~/composables/tabCountCom";
+import JVueSetting from "~/components/publish/tab/setting/adaptor/metaweblog/JVueSetting.vue";
+import ConfluenceSetting from "~/components/publish/tab/setting/adaptor/metaweblog/ConfluenceSetting.vue";
+import CnblogsSetting from "~/components/publish/tab/setting/adaptor/metaweblog/CnblogsSetting.vue";
+import WordpressSetting from "~/components/publish/tab/setting/adaptor/metaweblog/WordpressSetting.vue";
+import LiandiSetting from "~/components/publish/tab/setting/adaptor/common/LiandiSetting.vue";
+import YuqueSetting from "~/components/publish/tab/setting/adaptor/common/YuqueSetting.vue";
+import KmsSetting from "~/components/publish/tab/setting/adaptor/common/KmsSetting.vue";
+import MetaweblogSetting from "~/components/publish/tab/setting/MetaweblogSetting.vue";
+import GithubSetting from "~/components/publish/tab/setting/GithubSetting.vue";
 
 //use
 const {
@@ -68,15 +85,16 @@ const {
 
 let formData = reactive({
   dynamicConfigArray: <Array<DynamicConfig>>[],
+  githubArray: <Array<DynamicConfig>>[],
   metaweblogArray: <Array<DynamicConfig>>[],
   wordpressArray: <Array<DynamicConfig>>[]
 })
 
 const createMCfg = ref((mcfg: DynamicConfig) => {
-  return new DynamicMCfg('custom-' + mcfg.plantformKey + '-post-id')
+  return new DynamicMCfg(getDynPostidKey(mcfg.plantformKey))
 })
 const createWCfg = ref((wcfg: DynamicConfig) => {
-  return new DynamicWCfg('custom-' + wcfg.plantformKey + '-post-id')
+  return new DynamicWCfg(getDynPostidKey(wcfg.plantformKey))
 })
 
 const initDynCfg = (dynCfg: DynamicConfig[]): DynamicConfig[] => {
@@ -84,7 +102,7 @@ const initDynCfg = (dynCfg: DynamicConfig[]): DynamicConfig[] => {
 
   dynCfg.forEach(item => {
     const newItem = new DynamicConfig(item.plantformType, item.plantformKey, item.plantformName)
-    const switchKey = "switch-" + item.plantformKey
+    const switchKey = getDynSwitchKey(item.plantformKey)
     const switchValue = getBooleanConf(switchKey)
     newItem.modelValue = switchValue
     if (switchValue) {
@@ -100,8 +118,10 @@ const initConf = () => {
 
   const dynamicJsonCfg = getDynamicJsonCfg()
   formData.dynamicConfigArray = initDynCfg(dynamicJsonCfg.totalCfg || [])
+  formData.githubArray = initDynCfg(dynamicJsonCfg.githubCfg || [])
   formData.metaweblogArray = initDynCfg(dynamicJsonCfg.metaweblogCfg || [])
   formData.wordpressArray = initDynCfg(dynamicJsonCfg.wordpressCfg || [])
+
   logUtil.logInfo("dynamicJsonCfg=>")
   logUtil.logInfo(JSON.stringify(dynamicJsonCfg))
 
@@ -126,29 +146,8 @@ watch(() => props.isReload, /**/(oldValue, newValue) => {
 </script>
 
 <script lang="ts">
-import JVueSetting from "./setting/adaptor/metaweblog/JVueSetting.vue";
-import VuepressSetting from "./setting/adaptor/github/VuepressSetting.vue";
-import CnblogsSetting from "./setting/adaptor/metaweblog/CnblogsSetting.vue";
-import ConfluenceSetting from "./setting/adaptor/metaweblog/ConfluenceSetting.vue";
-import LiandiSetting from "./setting/adaptor/common/LiandiSetting.vue";
-import YuqueSetting from "./setting/adaptor/common/YuqueSetting.vue";
-import KmsSetting from "./setting/adaptor/common/KmsSetting.vue";
-import MetaweblogSetting from "./setting/MetaweblogSetting.vue";
-import WordpressSetting from "./setting/adaptor/metaweblog/WordpressSetting.vue";
-
 export default {
-  name: "PlantformSetting",
-  components: {
-    VuepressSetting,
-    JVueSetting,
-    CnblogsSetting,
-    ConfluenceSetting,
-    LiandiSetting,
-    YuqueSetting,
-    KmsSetting,
-    MetaweblogSetting,
-    WordpressSetting,
-  }
+  name: "PlantformSetting"
 }
 </script>
 

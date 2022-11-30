@@ -331,7 +331,7 @@ const initPage = async () => {
     formData.postid = meta[metaweblogCfg.posidKey]
 
     // 路径组合
-    previewUrl.value = await api.getPrevireUrl(formData.postid.toString())
+    previewUrl.value = await api.getPreviewUrl(formData.postid.toString())
 
     try {
       // 如果文章选择了分类，初始化分类

@@ -6,11 +6,11 @@ import {mdToPlainText} from "./htmlUtil";
 import {getApiParams} from "./publishUtil";
 import logUtil from "./logUtil";
 import {API_TYPE_CONSTANTS} from "./constants/apiTypeConstants";
-import {IVuepressCfg} from "./platform/vuepress/IVuepressCfg";
 import {IMetaweblogCfg} from "./platform/metaweblog/IMetaweblogCfg";
 import {getDynamicJsonCfg} from "./dynamicConfig";
 import {getBooleanConf} from "./config";
 import {ICommonblogCfg} from "./platform/commonblog/commonblogCfg";
+import {IGithubCfg} from "~/utils/platform/github/githubCfg";
 
 /**
  * 根据平台类型获取发布状态
@@ -55,7 +55,7 @@ export function getPublishStatus(apiType: string, meta: any) {
     })
 
     if (apiType == API_TYPE_CONSTANTS.API_TYPE_VUEPRESS) {
-        const postidKey = getApiParams<IVuepressCfg>(apiType).posidKey;
+        const postidKey = getApiParams<IGithubCfg>(apiType).posidKey;
         const postId = meta[postidKey] || "";
         logUtil.logInfo("平台=>", apiType)
         logUtil.logInfo("meta=>", meta)

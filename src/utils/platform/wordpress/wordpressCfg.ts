@@ -1,6 +1,6 @@
-import {MetaweblogCfg} from "../MetaweblogCfg";
-import {POSTID_KEY_CONSTANTS} from "../../../constants/postidKeyConstants";
-import {PageType} from "../IMetaweblogCfg";
+import {MetaweblogCfg} from "../metaweblog/MetaweblogCfg";
+import {POSTID_KEY_CONSTANTS} from "../../constants/postidKeyConstants";
+import {PageType} from "../metaweblog/IMetaweblogCfg";
 
 /**
  * Wordpress配置类

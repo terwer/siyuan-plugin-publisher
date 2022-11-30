@@ -53,7 +53,7 @@ export class CommonblogApiAdaptor implements IApi {
         return Promise.resolve(0);
     }
 
-    public async getPrevireUrl(postid: string): Promise<string> {
+    public async getPreviewUrl(postid: string): Promise<string> {
         return Promise.resolve("");
     }
 }
