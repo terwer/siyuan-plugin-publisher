@@ -47,7 +47,7 @@ export class KmsApiAdaptor extends CommonblogApiAdaptor implements IApi {
         return await this.kmsApi.addDoc(post.title, post.description)
     }
 
-    async getPrevireUrl(postid: string): Promise<string> {
+    async getPreviewUrl(postid: string): Promise<string> {
         let previewUrl
 
         // 替换文章链接

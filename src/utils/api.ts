@@ -123,7 +123,7 @@ export interface IApi {
      * 获取预览链接
      * @param postid 文章ID
      */
-    getPrevireUrl(postid: string): Promise<string>
+    getPreviewUrl(postid: string): Promise<string>
 }
 
 /**
@@ -240,8 +240,8 @@ export class API implements IApi {
         return await this.apiAdaptor.getCategories()
     }
 
-    async getPrevireUrl(postid: string): Promise<string> {
-        return await this.apiAdaptor.getPrevireUrl(postid)
+    async getPreviewUrl(postid: string): Promise<string> {
+        return await this.apiAdaptor.getPreviewUrl(postid)
     }
 }
 

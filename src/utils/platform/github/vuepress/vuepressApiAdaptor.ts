@@ -35,8 +35,8 @@ export class VuepressApiAdaptor extends GithubApiAdaptor implements IApi{
         return super.getPost(postid, useSlug);
     }
 
-    getPrevireUrl(postid: string): Promise<string> {
-        return super.getPrevireUrl(postid);
+    getPreviewUrl(postid: string): Promise<string> {
+        return super.getPreviewUrl(postid);
     }
 
     getUsersBlogs(): Promise<Array<UserBlog>> {

@@ -38,21 +38,32 @@ export interface IGithubCfg {
      * 文章别名key
      */
     posidKey: string
+    /**
+     * 博客首页，预览用
+     */
+    home: string
+    /**
+     * 预览规则
+     */
+    previewUrl: string
 }
 
 /**
  * Github平台通用配置类
  */
 export class GithubCfg implements IGithubCfg {
-    author: string;
+    githubUser: string;
+    githubRepo: string;
+    githubToken: string;
+
     defaultBranch: string;
     defaultMsg: string;
     defaultPath: string;
+    author: string;
     email: string;
-    githubRepo: string;
-    githubToken: string;
-    githubUser: string;
     posidKey: string = ""
+    home: string
+    previewUrl: string
 
     constructor() {
         this.githubUser = "";
@@ -63,5 +74,7 @@ export class GithubCfg implements IGithubCfg {
         this.defaultMsg = "auto published by sy-post-publisher";
         this.author = "terwer";
         this.email = "youweics@163.com"
+        this.home = ""
+        this.previewUrl = ""
     }
 }

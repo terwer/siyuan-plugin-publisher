@@ -72,6 +72,8 @@ export class GithubApi {
      * @param sha 文件的sha，undefined表示新建，更新需要传sha字符串
      */
     protected async createOrUpdatePage(docPath: string, mdContent: string, sha: any) {
+        let data
+
         let res
         try {
             // const base64 = Buffer.from(mdContent).toString('base64');
@@ -99,7 +101,11 @@ export class GithubApi {
         } catch (e) {
             logUtil.logError("createOrUpdatePage error=>", e)
         }
-        return res
+
+        if (res) {
+            data = res.data
+        }
+        return data;
     }
 
     /**
@@ -109,6 +115,8 @@ export class GithubApi {
      * @param sha 文件的sha，undefined表示新建，更新需要传sha字符串
      */
     protected async deletePage(docPath: string, sha: any) {
+        let data
+
         let res
         try {
             const route = 'DELETE /repos/' + this.githubCfg.githubUser + '/' + this.githubCfg.githubRepo + '/contents/' + docPath;
@@ -129,7 +137,11 @@ export class GithubApi {
         } catch (e) {
             logUtil.logError("deletePage error=>", e)
         }
-        return res
+
+        if (res) {
+            data = res.data
+        }
+        return data;
     }
 
     // ===========================
@@ -141,13 +153,26 @@ export class GithubApi {
      * @param mdContent Markdown文本
      */
     public async publishGithubPage(docPath: string, mdContent: string): Promise<any> {
-        // 因为是删除，所以这里始终新建，避免路径错误
         // https://github.com/terwer/src-sy-post-publisher/issues/21
-        const sha = undefined // await this.getPageSha(docPath)
-
+        const sha = undefined
         let res
         res = await this.createOrUpdatePage(docPath, mdContent, sha)
         logUtil.logInfo("Github publishPage,res=>", res)
+        return res;
+    }
+
+    /**
+     * 更新文章到Github
+     * @param docPath
+     * @param mdContent
+     */
+    public async updateGithubPage(docPath: string, mdContent: string): Promise<any> {
+        // https://github.com/terwer/src-sy-post-publisher/issues/21
+        const sha = await this.getPageSha(docPath)
+
+        let res
+        res = await this.createOrUpdatePage(docPath, mdContent, sha)
+        logUtil.logInfo("Github updatePage,res=>", res)
         return res;
     }
 

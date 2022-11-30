@@ -5,6 +5,7 @@ import logUtil from "~/utils/logUtil";
 import {HugoCfg} from "~/utils/platform/github/hugo/hugoCfg";
 import {setJSONConf} from "~/utils/config";
 import {getEnv} from "~/utils/envUtil";
+import {Post} from "~/utils/common/post";
 
 beforeEach(async (context) => {
     logUtil.logInfo("beforeEach start")
@@ -19,6 +20,7 @@ beforeEach(async (context) => {
     const githubRepo = "hugo-blog"
     const githubToken = getEnv("VITE_TEST_GITHUB_TOKEN")
     const cfg = new HugoCfg(githubUser, githubRepo, githubToken)
+    cfg.home = "https://hugo.terwer.space"
 
     setJSONConf(API_TYPE_CONSTANTS.API_TYPE_HUGO, cfg)
     logUtil.logInfo("beforeEach end")
@@ -30,5 +32,51 @@ describe("hugoApiAdaptor test", () => {
         const api = new API(API_TYPE_CONSTANTS.API_TYPE_HUGO)
         const usersBlogs = await api.getUsersBlogs()
         logUtil.logInfo("usersBlogs=>", usersBlogs)
+    })
+
+    it("getPost test", async () => {
+        const api = new API(API_TYPE_CONSTANTS.API_TYPE_HUGO)
+        const post = await api.getPost("content/post/hello-world.md")
+        logUtil.logInfo("post=>", post)
+    })
+
+    it("newPost test", async () => {
+        const api = new API(API_TYPE_CONSTANTS.API_TYPE_HUGO)
+        const commonPost: Post = new Post()
+        commonPost.postid = "content/post/test.md"
+        commonPost.description = "# Hello world"
+
+        const res = await api.newPost(commonPost)
+        logUtil.logInfo("newPost=>", res)
+    })
+
+    it("editPost test", async () => {
+        const api = new API(API_TYPE_CONSTANTS.API_TYPE_HUGO)
+        const commonPost: Post = new Post()
+        commonPost.postid = "content/post/test.md"
+        commonPost.description = "# Hello world3"
+
+        const res = await api.editPost(commonPost.postid, commonPost)
+        logUtil.logInfo("editPost=>", res)
+    })
+
+    it("deletePost test", async () => {
+        const api = new API(API_TYPE_CONSTANTS.API_TYPE_HUGO)
+        const postid = "content/post/test.md"
+        const res = await api.deletePost(postid)
+        logUtil.logInfo("deletePost=>", res)
+    })
+
+    it("getCategories test", async () => {
+        const api = new API(API_TYPE_CONSTANTS.API_TYPE_HUGO)
+        const res = await api.getCategories()
+        logUtil.logInfo("getCategories=>", res)
+    })
+
+    it("getPrevireUrl test", async () => {
+        const api = new API(API_TYPE_CONSTANTS.API_TYPE_HUGO)
+        const postid = "content/post/test.md"
+        const res = await api.getPreviewUrl(postid)
+        logUtil.logInfo("previewUrl=>", res)
     })
 })

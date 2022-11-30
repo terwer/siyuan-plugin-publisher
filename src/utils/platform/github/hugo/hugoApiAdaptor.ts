@@ -7,6 +7,8 @@ import {CategoryInfo} from "~/utils/common/categoryInfo";
 import {UserBlog} from "~/utils/common/userBlog";
 import {HugoCfg} from "~/utils/platform/github/hugo/hugoCfg";
 import {pathJoin} from "~/utils/util";
+import logUtil from "~/utils/logUtil";
+import {Base64} from "js-base64";
 
 /**
  * Hugo的Api适配器
@@ -32,35 +34,55 @@ export class HugoApiAdaptor extends GithubApiAdaptor implements IApi {
         return result
     }
 
-    async deletePost(postid: string): Promise<boolean> {
-        return super.deletePost(postid);
-    }
-
-    async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
-        return super.editPost(postid, post, publish);
-    }
-
-    async getCategories(): Promise<CategoryInfo[]> {
-        return super.getCategories();
-    }
-
     async getPost(postid: string, useSlug?: boolean): Promise<Post> {
-        return super.getPost(postid, useSlug);
-    }
+        const commonPost = new Post();
 
-    async getPrevireUrl(postid: string): Promise<string> {
-        return super.getPrevireUrl(postid);
-    }
+        const page = await this.hugoApi.getPageData(postid)
+        commonPost.postid = page.path
+        commonPost.title = page.path
+        commonPost.description = Base64.fromBase64(page.content)
+        commonPost.link = page.path
+        commonPost.permalink = page.html_url
+        logUtil.logInfo("page=>", page)
 
-    async getRecentPosts(numOfPosts: number, page?: number, keyword?: string): Promise<Array<Post>> {
-        return super.getRecentPosts(numOfPosts, page, keyword);
-    }
-
-    async getRecentPostsCount(keyword?: string): Promise<number> {
-        return super.getRecentPostsCount(keyword);
+        return commonPost;
     }
 
     async newPost(post: Post, publish?: boolean): Promise<string> {
-        return super.newPost(post, publish);
+        const res = await this.hugoApi.publishGithubPage(post.postid, post.description)
+        if (!res || !res.content || !res.content.path) {
+            throw new Error("Hugo调用API异常")
+        }
+        return res.content.path;
+    }
+
+    async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
+        const res = await this.hugoApi.updateGithubPage(post.postid, post.description)
+        if (!res || !res.content || !res.content.path) {
+            throw new Error("Hugo调用API异常")
+        }
+        return true;
+    }
+
+    async deletePost(postid: string): Promise<boolean> {
+        const res = await this.hugoApi.deleteGithubPage(postid)
+        if (!res || !res.commit || !res.commit.sha) {
+            throw new Error("Hugo调用API异常")
+        }
+        return true;
+    }
+
+    async getCategories(): Promise<CategoryInfo[]> {
+        return Promise.resolve([]);
+    }
+
+    async getPreviewUrl(postid: string): Promise<string> {
+        let previewUrl
+        const newPostid = postid.substring(postid.lastIndexOf("/") + 1).replace(".md", "")
+        previewUrl = this.cfg.previewUrl.replace("[postid]", newPostid)
+        // 路径组合
+        previewUrl = pathJoin(this.cfg.home || "", previewUrl)
+
+        return previewUrl
     }
 }

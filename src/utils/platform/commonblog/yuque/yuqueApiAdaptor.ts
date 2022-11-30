@@ -101,7 +101,7 @@ export class YuqueApiAdaptor extends CommonblogApiAdaptor implements IApi {
         return cats;
     }
 
-    async getPrevireUrl(postid: string): Promise<string> {
+    async getPreviewUrl(postid: string): Promise<string> {
         let previewUrl
 
         // 替换文章链接

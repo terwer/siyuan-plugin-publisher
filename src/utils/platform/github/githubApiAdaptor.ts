@@ -33,7 +33,7 @@ export class GithubApiAdaptor implements IApi {
         throw new Error("该功能未实现，请在子类重写该方法")
     }
 
-    async getPrevireUrl(postid: string): Promise<string> {
+    async getPreviewUrl(postid: string): Promise<string> {
         throw new Error("该功能未实现，请在子类重写该方法")
     }
 

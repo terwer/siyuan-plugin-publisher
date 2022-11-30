@@ -395,7 +395,7 @@ const initPage = async () => {
     formData.postid = meta[commonCfg.posidKey || ""]
 
     // 替换文章链接
-    previewUrl.value = await api.getPrevireUrl(formData.postid.toString())
+    previewUrl.value = await api.getPreviewUrl(formData.postid.toString())
 
     if (props.useCat) {
       try {
