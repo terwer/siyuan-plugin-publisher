@@ -6,7 +6,7 @@ import {POSTID_KEY_CONSTANTS} from "~/utils/constants/postidKeyConstants";
  */
 export class HugoCfg extends GithubCfg {
     constructor() {
-        super();
+        super("", "", "", "");
 
         this.defaultPath = "content/post"
         this.posidKey = POSTID_KEY_CONSTANTS.HUGO_POSTID_KEY

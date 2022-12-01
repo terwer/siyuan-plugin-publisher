@@ -69,8 +69,8 @@ export enum SubPlantformType {
     Github_Hugo = "Hugo",
     Github_Hexo = "Hexo",
     Github_Jekyll = "Jekyll",
-    Github_giteePages = "giteePages",
-    Github_codingPages = "codingPages",
+    // Github_giteePages = "giteePages",
+    // Github_codingPages = "codingPages",
     Github_Vuepress = "Vuepress",
     Github_Vitepress = "Vitepress",
     Github_Nuxt = "Nuxt",
@@ -99,8 +99,8 @@ export function getSubtypeList(ptype: PlantformType): Array<SubPlantformType> {
             subtypeList.push(SubPlantformType.Github_Hugo)
             subtypeList.push(SubPlantformType.Github_Hexo)
             subtypeList.push(SubPlantformType.Github_Jekyll)
-            subtypeList.push(SubPlantformType.Github_giteePages)
-            subtypeList.push(SubPlantformType.Github_codingPages)
+            // subtypeList.push(SubPlantformType.Github_giteePages)
+            // subtypeList.push(SubPlantformType.Github_codingPages)
             subtypeList.push(SubPlantformType.Github_Vuepress)
             subtypeList.push(SubPlantformType.Github_Vitepress)
             subtypeList.push(SubPlantformType.Github_Nuxt)

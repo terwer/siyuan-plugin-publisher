@@ -6,7 +6,7 @@ import {GithubCfg} from "~/utils/platform/github/githubCfg";
  */
 export class VuepressCfg extends GithubCfg {
     constructor() {
-        super();
+        super("", "", "", "");
 
         this.defaultPath = "docs"
         this.posidKey = POSTID_KEY_CONSTANTS.VUEPRESS_POSTID_KEY

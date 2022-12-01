@@ -4,10 +4,10 @@ import {POSTID_KEY_CONSTANTS} from "~/utils/constants/postidKeyConstants";
 /**
  * Hexo配置
  */
-export class HexoCfg extends GithubCfg{
+export class HexoCfg extends GithubCfg {
 
     constructor() {
-        super();
+        super("", "", "", "");
 
         this.defaultPath = "source/_posts"
         this.posidKey = POSTID_KEY_CONSTANTS.HEXO_POSTID_KEY

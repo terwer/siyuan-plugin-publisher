@@ -68,19 +68,21 @@ export class GithubCfg implements IGithubCfg {
     posidKey: string = ""
     home: string
     previewUrl: string
+    baseUrl: string
     apiStatus: boolean
 
-    constructor() {
-        this.githubUser = "";
-        this.githubRepo = "";
-        this.githubToken = "";
+    constructor(home: string, githubUser: string, githubRepo: string, githubToken: string) {
+        this.home = home
+        this.githubUser = githubUser
+        this.githubRepo = githubRepo
+        this.githubToken = githubToken
         this.defaultBranch = "main";
         this.defaultPath = "docs/_posts";
         this.defaultMsg = "auto published by sy-post-publisher";
         this.author = "terwer";
         this.email = "youweics@163.com"
-        this.home = ""
         this.previewUrl = ""
+        this.baseUrl = "https://github.com"
         this.apiStatus = false
     }
 }

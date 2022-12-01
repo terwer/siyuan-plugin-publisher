@@ -7,7 +7,7 @@ import {POSTID_KEY_CONSTANTS} from "~/utils/constants/postidKeyConstants";
 export class JekyllCfg extends GithubCfg{
 
     constructor() {
-        super();
+        super("", "", "", "");
 
         this.defaultPath = "_posts"
         this.posidKey = POSTID_KEY_CONSTANTS.JEKYLL_POSTID_KEY
