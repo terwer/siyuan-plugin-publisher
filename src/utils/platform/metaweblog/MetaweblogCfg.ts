@@ -4,6 +4,22 @@ import {IMetaweblogCfg, PageType} from "./IMetaweblogCfg";
  * Metaweblog配置类
  */
 export class MetaweblogCfg implements IMetaweblogCfg {
+    /**
+     * 首页
+     */
+    home: string
+    /**
+     * API地址
+     */
+    apiUrl: string
+    /**
+     * 用户名
+     */
+    username: string
+    /**
+     * 密码
+     */
+    password: string
 
     /**
      * 是否发布
@@ -13,7 +29,7 @@ export class MetaweblogCfg implements IMetaweblogCfg {
     /**
      * 博客名（API获取）
      */
-    blogName:string
+    blogName: string
 
     /**
      * 文章别名key
@@ -30,10 +46,7 @@ export class MetaweblogCfg implements IMetaweblogCfg {
      */
     pageType: PageType
 
-    constructor(public home: string,
-                public apiUrl: string,
-                public username: string,
-                public password: string) {
+    constructor(home: string, apiUrl: string, username: string, password: string) {
         this.home = home
         this.apiUrl = apiUrl
         this.username = username

@@ -14,14 +14,6 @@ export class VuepressApiV1 extends GithubApi {
         this.vuepressCfg = vuepressCfg;
     }
 
-    async publishGithubPage(docPath: string, mdContent: string): Promise<any> {
-        return super.publishGithubPage(docPath, mdContent);
-    }
-
-    async deleteGithubPage(docPath: string): Promise<any> {
-        return super.deleteGithubPage(docPath);
-    }
-
     async getGithubPageTreeNode(docPath: string): Promise<Array<any>> {
         const data = await this.getPageData(docPath)
 

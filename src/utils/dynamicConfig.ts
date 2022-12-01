@@ -66,12 +66,11 @@ export enum PlantformType {
  * @author terwer
  */
 export enum SubPlantformType {
-    Github_pages = "pages",
-    Github_giteePages = "giteePages",
-    Github_codingPages = "codingPages",
     Github_Hugo = "Hugo",
     Github_Hexo = "Hexo",
     Github_Jekyll = "Jekyll",
+    // Github_giteePages = "giteePages",
+    // Github_codingPages = "codingPages",
     Github_Vuepress = "Vuepress",
     Github_Vitepress = "Vitepress",
     Github_Nuxt = "Nuxt",
@@ -97,11 +96,11 @@ export function getSubtypeList(ptype: PlantformType): Array<SubPlantformType> {
 
     switch (ptype) {
         case PlantformType.Github:
-            subtypeList.push(SubPlantformType.Github_pages)
-            subtypeList.push(SubPlantformType.Github_giteePages)
             subtypeList.push(SubPlantformType.Github_Hugo)
             subtypeList.push(SubPlantformType.Github_Hexo)
             subtypeList.push(SubPlantformType.Github_Jekyll)
+            // subtypeList.push(SubPlantformType.Github_giteePages)
+            // subtypeList.push(SubPlantformType.Github_codingPages)
             subtypeList.push(SubPlantformType.Github_Vuepress)
             subtypeList.push(SubPlantformType.Github_Vitepress)
             subtypeList.push(SubPlantformType.Github_Nuxt)

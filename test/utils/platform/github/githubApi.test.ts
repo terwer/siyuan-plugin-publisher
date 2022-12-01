@@ -5,10 +5,8 @@ import logUtil from "~/utils/logUtil";
 
 describe("githubAPi test", async () => {
     it("contructor test", async () => {
-        const githubCfg = new GithubCfg()
-        githubCfg.githubUser = "terwer"
-        githubCfg.githubRepo = "terwer.github.io"
-        githubCfg.defaultBranch = "master"
+        const githubCfg = new GithubCfg("", "terwer", "terwer.github.io", "")
+        githubCfg.defaultBranch = "main"
         githubCfg.defaultPath = "docs/_posts/"
         githubCfg.defaultMsg = "auto published by sy-post-publisher"
         githubCfg.author = "terwer"

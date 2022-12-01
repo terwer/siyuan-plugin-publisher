@@ -115,7 +115,7 @@ const formData = reactive({
   githubRepo: "",
   githubToken: "",
   defaultBranch: "main",
-  defaultPath: "docs/_posts/",
+  defaultPath: "docs/_posts",
   msg: "auto published by sy-post-publisher",
   author: "terwer",
   email: "youweics@163.com",
@@ -252,7 +252,7 @@ const valiConf = async () => {
     logUtil.logError(e)
   }
 
-  // 验证通过刷新状态
+  // 刷新状态
   setJSONConf(props.apiType, cfg)
 
   if (!apiStatus.value) {
@@ -278,7 +278,9 @@ const saveConf = (hideTip?: boolean) => {
   cfg.defaultMsg = formData.msg
   cfg.author = formData.author
   cfg.email = formData.email
-  cfg.previewUrl = formData.email
+  cfg.previewUrl = formData.previewUrl
+
+  cfg.apiStatus = apiStatus.value
 
   setJSONConf(props.apiType, cfg)
 
@@ -304,6 +306,8 @@ const initConf = () => {
     formData.author = conf.author
     formData.email = conf.email
     formData.previewUrl = conf.previewUrl
+
+    apiStatus.value = conf.apiStatus
   }
 }
 
@@ -311,12 +315,6 @@ onMounted(async () => {
   // 初始化
   initConf()
 })
-</script>
-
-<script lang="ts">
-export default {
-  name: "GithubSetting"
-}
 </script>
 
 <style scoped>

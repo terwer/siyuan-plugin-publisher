@@ -10,7 +10,7 @@
     </el-form-item>
 
     <el-form-item :label="$t('service.switch.hexo')">
-      <el-switch v-model="hexoEnabled" @change="hexoEnabled"/>
+      <el-switch v-model="hexoEnabled" @change="hexoOnChange"/>
     </el-form-item>
 
     <el-form-item :label="$t('service.switch.jekyll')">
