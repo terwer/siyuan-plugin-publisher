@@ -14,8 +14,8 @@ describe("htmlUtil test", () => {
 data = {"name":"张三","age":27}
 v1 = data.get("name")
 
-print(v1)　‍
-`;
+print(v1)
+\`\`\``;
         let pageType = PageType.Html
         pageType = PageType.Markdown
 
