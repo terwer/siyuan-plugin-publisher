@@ -103,21 +103,18 @@ const valiConf = async () => {
     if (usersBlogs && usersBlogs.length > 0) {
       const userBlog = usersBlogs[0]
 
-      cfg.apiStatus = true
-      apiStatus.value = true
-
       cfg.blogName = userBlog.blogName
       blogName.value = userBlog.blogName
 
-      // 验证通过刷新状态
-      setJSONConf(props.apiType, cfg)
+      cfg.apiStatus = true
+      apiStatus.value = true
     } else {
       cfg.apiStatus = false
       apiStatus.value = false
-
-      // 验证失败刷新状态
-      setJSONConf(props.apiType, cfg)
     }
+
+    // 刷新状态
+    setJSONConf(props.apiType, cfg)
   } catch (e) {
     console.error(e)
   }
@@ -142,9 +139,10 @@ const saveConf = (hideTip?: boolean) => {
   cfg.password = password.value
   cfg.apiUrl = apiUrl.value
   cfg.previewUrl = previewUrl.value
-  cfg.apiStatus = apiStatus.value
   cfg.blogName = blogName.value
   cfg.pageType = ptype.value
+
+  cfg.apiStatus = apiStatus.value
 
   setJSONConf(props.apiType, cfg)
 
@@ -168,9 +166,10 @@ const initConf = () => {
     previewUrl.value = conf.previewUrl
     username.value = conf.username
     password.value = conf.password
-    apiStatus.value = conf.apiStatus
     blogName.value = conf.blogName
     ptype.value = conf.pageType
+
+    apiStatus.value = conf.apiStatus
   }
 }
 

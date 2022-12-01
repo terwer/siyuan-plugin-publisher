@@ -75,7 +75,7 @@ export class GithubCfg implements IGithubCfg {
         this.githubRepo = "";
         this.githubToken = "";
         this.defaultBranch = "main";
-        this.defaultPath = "docs/_posts/";
+        this.defaultPath = "docs/_posts";
         this.defaultMsg = "auto published by sy-post-publisher";
         this.author = "terwer";
         this.email = "youweics@163.com"

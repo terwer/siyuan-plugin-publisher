@@ -94,7 +94,7 @@ export default {
     "setting.blog.type.github.token.tip": "Github token, eg:ghp_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
     "setting.blog.type.github.token.gen": "Generate Github Personal Token",
     "setting.blog.type.github.default.path": "Doc path",
-    "setting.blog.type.github.default.path.tip": "Doc path, eg:docs/_posts/",
+    "setting.blog.type.github.default.path.tip": "Doc path, eg:docs/_posts",
     "setting.blog.type.github.msg": "Commit msg",
     "setting.blog.type.github.msg.tip": "Commit msg, eg:auto published by sy-post-publisher",
     "setting.blog.type.github.author": "Author",

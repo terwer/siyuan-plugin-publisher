@@ -9,8 +9,8 @@ export class HexoCfg extends GithubCfg{
     constructor() {
         super();
 
-        this.defaultPath = "hexo"
+        this.defaultPath = "source/_posts"
         this.posidKey = POSTID_KEY_CONSTANTS.HEXO_POSTID_KEY
-        this.previewUrl = "/post/[postid].html"
+        this.previewUrl = "/[date]/[postid]/"
     }
 }

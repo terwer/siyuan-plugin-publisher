@@ -20,7 +20,8 @@ export class DynamicGCfg extends GithubCfg {
                 this.defaultPath = "content/post"
                 break
             case SubPlantformType.Github_Hexo:
-                this.defaultPath = "hexo"
+                this.defaultPath = "source/_posts"
+                this.previewUrl = "/[date]/[postid]/"
                 break
             case SubPlantformType.Github_Jekyll:
                 this.defaultPath = "_posts"

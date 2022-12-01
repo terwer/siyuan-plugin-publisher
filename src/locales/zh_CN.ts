@@ -97,7 +97,7 @@ export default {
     "setting.blog.type.github.default.branch": "默认分支",
     "setting.blog.type.github.default.branch.tip": "默认分支（旧版仓库为master，新版仓库默认为main），例如：main",
     "setting.blog.type.github.default.path": "存储目录",
-    "setting.blog.type.github.default.path.tip": "存储目录（相对于仓库根目录的相对路径，默认所有文章都发布在这里），例如：docs/_posts/",
+    "setting.blog.type.github.default.path.tip": "存储目录（相对于仓库根目录的相对路径，默认所有文章都发布在这里），例如：docs/_posts",
     "setting.blog.type.github.msg": "提交信息",
     "setting.blog.type.github.msg.tip": "提交信息，例如：auto published by sy-post-publisher",
     "setting.blog.type.github.author": "作者",
