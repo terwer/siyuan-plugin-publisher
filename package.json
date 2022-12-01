@@ -61,11 +61,11 @@
     "sass": "^1.56.1",
     "typescript": "^4.6.4",
     "unplugin-vue-components": "^0.22.11",
-    "vercel": "^28.5.6",
+    "vercel": "^28.7.0",
     "vite": "^3.0.0",
     "vite-plugin-mpa": "^1.1.4",
     "vite-plugin-require-transform": "^1.0.3",
     "vitest": "^0.25.3",
-    "vue-tsc": "^1.0.9"
+    "vue-tsc": "^1.0.10"
   }
 }
