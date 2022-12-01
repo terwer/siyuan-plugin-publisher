@@ -8,6 +8,8 @@ export class VuepressCfg extends GithubCfg {
     constructor() {
         super();
 
+        this.defaultPath = "docs"
         this.posidKey = POSTID_KEY_CONSTANTS.VUEPRESS_POSTID_KEY
+        this.previewUrl = "/post/[postid].html"
     }
 }

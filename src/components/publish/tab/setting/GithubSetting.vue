@@ -278,7 +278,7 @@ const saveConf = (hideTip?: boolean) => {
   cfg.defaultMsg = formData.msg
   cfg.author = formData.author
   cfg.email = formData.email
-  cfg.previewUrl = formData.email
+  cfg.previewUrl = formData.previewUrl
 
   setJSONConf(props.apiType, cfg)
 
@@ -311,12 +311,6 @@ onMounted(async () => {
   // 初始化
   initConf()
 })
-</script>
-
-<script lang="ts">
-export default {
-  name: "GithubSetting"
-}
 </script>
 
 <style scoped>

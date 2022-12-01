@@ -2,15 +2,15 @@ import {GithubCfg} from "~/utils/platform/github/githubCfg";
 import {POSTID_KEY_CONSTANTS} from "~/utils/constants/postidKeyConstants";
 
 /**
- * Hugo配置
+ * Hexo配置
  */
-export class HugoCfg extends GithubCfg {
+export class HexoCfg extends GithubCfg{
+
     constructor() {
         super();
 
-        this.defaultPath = "content/post"
-        this.posidKey = POSTID_KEY_CONSTANTS.HUGO_POSTID_KEY
-        this.home = ""
+        this.defaultPath = "hexo"
+        this.posidKey = POSTID_KEY_CONSTANTS.HEXO_POSTID_KEY
         this.previewUrl = "/post/[postid].html"
     }
 }

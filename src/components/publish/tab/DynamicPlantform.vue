@@ -95,12 +95,14 @@ import {checkKeyExists} from "~/utils/config";
 const {t} = useI18n()
 
 const showForm = ref(true)
+// 默认支持jekyll
+const defaultGithubSubtype = SubPlantformType.Github_Jekyll
 
 const formRef = ref<FormInstance>()
 const formData = reactive({
-  subtype: SubPlantformType.Github_pages,
+  subtype: defaultGithubSubtype,
   ptype: PlantformType.Github,
-  dynCfg: new DynamicConfig(PlantformType.Github, getNewPlatformKey(PlantformType.Github, SubPlantformType.Github_pages), ""),
+  dynCfg: new DynamicConfig(PlantformType.Github, getNewPlatformKey(PlantformType.Github, defaultGithubSubtype), "Jekyll-1"),
   subtypeOptions: <Array<SubPlantformType>>[],
   dynamicConfigArray:<Array<DynamicConfig>>[]
 })

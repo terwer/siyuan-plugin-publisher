@@ -1,7 +1,7 @@
 @import "./webfont.css";
 
 html{
-  filter: grayscale(1);
+  /*filter: grayscale(1);*/
   --el-font-family: var(--g-font-family) !important;
   --custom-app-bg-color: #ffffff;
   height: 100%;
