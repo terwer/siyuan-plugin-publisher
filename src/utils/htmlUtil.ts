@@ -53,7 +53,7 @@ export function removeWidgetTag(str: string) {
 export function removeMdWidgetTag(str: string) {
     let newstr = str.toString()
 
-    const mdH1Rehex = /#\s[0-9]+.*/g
+    const mdH1Rehex = /(?:^|\n)#\s[0-9]+.*/g
     newstr = newstr.replace(mdH1Rehex, "")
 
     // 删除挂件的iframe
