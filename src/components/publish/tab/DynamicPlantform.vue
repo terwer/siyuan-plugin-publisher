@@ -43,7 +43,7 @@
           <el-input v-model="formData.dynCfg.plantformName" :placeholder="$t('dynamic.platform.name.tip')"/>
         </el-form-item>
 
-        <el-form-item :label="formData.ptype+$t('dynamic.platform.key')" prop="plantformKey" v-if="showForm">
+        <el-form-item :label="formData.ptype+$t('dynamic.platform.key')" prop="plantformKey" v-if="false">
           {{ formData.dynCfg.plantformKey }}
         </el-form-item>
 
@@ -60,6 +60,7 @@
                   empty-text="暂无数据"
                   @current-change="handleCurrentChange">
           <el-table-column prop="plantformType" :label="$t('dynamic.platform.type')"/>
+          <el-table-column prop="subPlantformType" :label="$t('dynamic.platform.subtype')"/>
           <el-table-column prop="plantformKey" :label="$t('dynamic.platform.key')"/>
           <el-table-column prop="plantformName" :label="$t('dynamic.platform.name')"/>
         </el-table>
@@ -182,8 +183,9 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 
   // 保存配置
   const newCfg = new DynamicConfig(formData.ptype, formData.dynCfg.plantformKey, formData.dynCfg.plantformName)
+  newCfg.subPlantformType = formData.subtype
   formData.dynamicConfigArray.push(newCfg)
-  setDynamicJsonCfg( formData.dynamicConfigArray)
+  setDynamicJsonCfg(formData.dynamicConfigArray)
 
   // 重新加载列表
   reloadTable()
