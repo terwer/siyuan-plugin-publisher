@@ -16,10 +16,12 @@ beforeEach(async (context) => {
         return
     }
 
-    const githubUser = "terwer"
-    const githubRepo = "hugo-blog"
-    const githubToken = getEnv("VITE_TEST_GITHUB_TOKEN")
-    const cfg = new HugoCfg(githubUser, githubRepo, githubToken)
+
+    const cfg = new HugoCfg()
+    cfg.githubUser = "terwer"
+    cfg.githubRepo = "hugo-blog"
+    cfg.githubToken = getEnv("VITE_TEST_GITHUB_TOKEN")
+
     cfg.home = "https://hugo.terwer.space"
 
     setJSONConf(API_TYPE_CONSTANTS.API_TYPE_HUGO, cfg)

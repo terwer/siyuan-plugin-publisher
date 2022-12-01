@@ -46,6 +46,10 @@ export interface IGithubCfg {
      * 预览规则
      */
     previewUrl: string
+    /**
+     * API状态是否正常
+     */
+    apiStatus: boolean
 }
 
 /**
@@ -64,6 +68,7 @@ export class GithubCfg implements IGithubCfg {
     posidKey: string = ""
     home: string
     previewUrl: string
+    apiStatus: boolean
 
     constructor() {
         this.githubUser = "";
@@ -76,5 +81,6 @@ export class GithubCfg implements IGithubCfg {
         this.email = "youweics@163.com"
         this.home = ""
         this.previewUrl = ""
+        this.apiStatus = false
     }
 }

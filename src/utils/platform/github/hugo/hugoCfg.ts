@@ -10,11 +10,11 @@ export class HugoCfg extends GithubCfg {
     githubRepo: string;
     githubToken: string;
 
-    constructor(githubUser: string, githubRepo: string, githubToken: string) {
+    constructor() {
         super();
-        this.githubUser = githubUser;
-        this.githubRepo = githubRepo;
-        this.githubToken = githubToken;
+        this.githubUser = "";
+        this.githubRepo = "";
+        this.githubToken = "";
 
         this.defaultPath = "content/post"
         this.posidKey = POSTID_KEY_CONSTANTS.HUGO_POSTID_KEY

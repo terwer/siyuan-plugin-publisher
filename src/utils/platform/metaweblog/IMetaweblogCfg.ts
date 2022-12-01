@@ -24,7 +24,7 @@ export interface IMetaweblogCfg {
      */
     password: string
     /**
-     * 是否发布
+     * API状态是否正常
      */
     apiStatus: boolean
     /**

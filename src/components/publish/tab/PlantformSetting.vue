@@ -2,9 +2,16 @@
   <el-tabs type="border-card" v-if="tabCountStore.tabCount>0">
     <!-- Github -->
     <el-tab-pane :label="$t('setting.vuepress')" v-if="vuepressEnabled">
-      <!--
       <vuepress-setting/>
-      -->
+    </el-tab-pane>
+    <el-tab-pane :label="$t('setting.hugo') + $t('setting.blog.setting')" v-if="hugoEnabled">
+      <hugo-setting/>
+    </el-tab-pane>
+    <el-tab-pane :label="$t('setting.hexo')" v-if="hexoEnabled">
+      <hexo-setting/>
+    </el-tab-pane>
+    <el-tab-pane :label="$t('setting.jekyll')" v-if="jekyllEnabled">
+      <jekyll-setting/>
     </el-tab-pane>
 
     <!-- Metaweblog API -->
@@ -68,6 +75,10 @@ import YuqueSetting from "~/components/publish/tab/setting/common/YuqueSetting.v
 import KmsSetting from "~/components/publish/tab/setting/common/KmsSetting.vue";
 import MetaweblogSetting from "~/components/publish/tab/setting/MetaweblogSetting.vue";
 import GithubSetting from "~/components/publish/tab/setting/GithubSetting.vue";
+import VuepressSetting from "~/components/publish/tab/setting/github/VuepressSetting.vue";
+import HugoSetting from "~/components/publish/tab/setting/github/HugoSetting.vue";
+import HexoSetting from "~/components/publish/tab/setting/github/HexoSetting.vue";
+import JekyllSetting from "~/components/publish/tab/setting/github/JekyllSetting.vue";
 
 //use
 const {

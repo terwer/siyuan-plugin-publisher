@@ -223,7 +223,7 @@ import {mdToPlainText, parseHtml, removeMdWidgetTag, removeTitleNumber} from "~/
 import {API_TYPE_CONSTANTS} from "~/utils/constants/apiTypeConstants";
 import copy from "copy-to-clipboard"
 import shortHash from "shorthash2";
-import {API_STATUS_CONSTANTS} from "~/utils/constants/apiStatusConstants";
+// import {API_STATUS_CONSTANTS} from "~/utils/constants/apiStatusConstants";
 import {getBooleanConf, getJSONConf} from "~/utils/config";
 import {POSTID_KEY_CONSTANTS} from "~/utils/constants/postidKeyConstants";
 import {getApiParams} from "~/utils/publishUtil";
@@ -381,7 +381,7 @@ async function initPage() {
   }
 
   // api状态
-  const isOk = getBooleanConf(API_STATUS_CONSTANTS.API_STATUS_VUEPRESS)
+  const isOk = false // getBooleanConf(API_STATUS_CONSTANTS.API_STATUS_VUEPRESS)
   vuepressGithubEnabled.value = isOk
 
   // 默认开启hash
@@ -733,7 +733,7 @@ async function doPublish() {
   await oneclickAttr(true)
 
   // 根据选项决定是否发送到Vuepress的Github参考
-  const isOk = getBooleanConf(API_STATUS_CONSTANTS.API_STATUS_VUEPRESS)
+  const isOk = false // getBooleanConf(API_STATUS_CONSTANTS.API_STATUS_VUEPRESS)
   // api不可用但是开启了发布
   if (!isOk && vuepressGithubEnabled.value) {
     // 未开启也生成数据
