@@ -168,7 +168,7 @@ export default {
     "dynamic.platform.new": "新增平台",
     "dynamic.platform.tip": "如果内置的发布服务无法满足或者需要添加多个实例，您可以在这里添加受支持的平台，目前支持Github（HUGO、HEXO、Jekyll等）、metaweblog API（开源中国等）和Wordpress API",
     "dynamic.platform.type": "平台类型[必选]",
-    "dynamic.platform.subtype": "平台名称[必选]",
+    "dynamic.platform.subtype": "子平台名称",
     "dynamic.platform.type.metaweblog": "metaweblog API",
     "dynamic.platform.type.wordpress": "Wordpress",
     "dynamic.platform.type.github": "Github",

@@ -1,54 +1,54 @@
 <template>
   <el-tabs type="border-card" v-if="tabCountStore.tabCount>0">
     <!-- Github -->
-    <el-tab-pane :label="$t('setting.vuepress')" v-if="vuepressEnabled">
+    <el-tab-pane :label="$t('setting.vuepress') + $t('setting.blog.setting')" v-if="vuepressEnabled">
       <vuepress-setting/>
     </el-tab-pane>
     <el-tab-pane :label="$t('setting.hugo') + $t('setting.blog.setting')" v-if="hugoEnabled">
       <hugo-setting/>
     </el-tab-pane>
-    <el-tab-pane :label="$t('setting.hexo')" v-if="hexoEnabled">
+    <el-tab-pane :label="$t('setting.hexo') + $t('setting.blog.setting')" v-if="hexoEnabled">
       <hexo-setting/>
     </el-tab-pane>
-    <el-tab-pane :label="$t('setting.jekyll')" v-if="jekyllEnabled">
+    <el-tab-pane :label="$t('setting.jekyll') + $t('setting.blog.setting')" v-if="jekyllEnabled">
       <jekyll-setting/>
     </el-tab-pane>
 
     <!-- Metaweblog API -->
-    <el-tab-pane :label="$t('setting.jvue')" v-if="jvueEnabled">
+    <el-tab-pane :label="$t('setting.jvue') + $t('setting.blog.setting')" v-if="jvueEnabled">
       <j-vue-setting/>
     </el-tab-pane>
-    <el-tab-pane :label="$t('setting.conf')" v-if="confEnabled">
+    <el-tab-pane :label="$t('setting.conf') + $t('setting.blog.setting')" v-if="confEnabled">
       <confluence-setting/>
     </el-tab-pane>
-    <el-tab-pane :label="$t('setting.cnblogs')" v-if="cnblogsEnabled">
+    <el-tab-pane :label="$t('setting.cnblogs') + $t('setting.blog.setting')" v-if="cnblogsEnabled">
       <cnblogs-setting/>
     </el-tab-pane>
 
     <!-- Wordpress -->
-    <el-tab-pane :label="$t('setting.wordpress')" v-if="wordpressEnabled">
+    <el-tab-pane :label="$t('setting.wordpress') + $t('setting.blog.setting')" v-if="wordpressEnabled">
       <wordpress-setting/>
     </el-tab-pane>
 
     <!-- Commmon API -->
-    <el-tab-pane :label="$t('setting.liandi')" v-if="liandiEnabled">
+    <el-tab-pane :label="$t('setting.liandi') + $t('setting.blog.setting')" v-if="liandiEnabled">
       <liandi-setting/>
     </el-tab-pane>
-    <el-tab-pane :label="$t('setting.yuque')" v-if="yuqueEnabled">
+    <el-tab-pane :label="$t('setting.yuque') + $t('setting.blog.setting')" v-if="yuqueEnabled">
       <yuque-setting/>
     </el-tab-pane>
-    <el-tab-pane :label="$t('setting.kms')" v-if="kmsEnabled">
+    <el-tab-pane :label="$t('setting.kms') + $t('setting.blog.setting')" v-if="kmsEnabled">
       <kms-setting/>
     </el-tab-pane>
 
     <!-- 动态平台发布配置 -->
-    <el-tab-pane v-for="gcfg in formData.githubArray" :label="gcfg.plantformName">
-      <github-setting :api-type="gcfg.plantformKey"/>
+    <el-tab-pane v-for="gcfg in formData.githubArray" :label="gcfg.plantformName + $t('setting.blog.setting')">
+      <github-setting :api-type="gcfg.plantformKey" :cfg="createGCfg(gcfg)"/>
     </el-tab-pane>
-    <el-tab-pane v-for="mcfg in formData.metaweblogArray" :label="mcfg.plantformName">
+    <el-tab-pane v-for="mcfg in formData.metaweblogArray" :label="mcfg.plantformName + $t('setting.blog.setting')">
       <metaweblog-setting :api-type="mcfg.plantformKey" :cfg="createMCfg(mcfg)"/>
     </el-tab-pane>
-    <el-tab-pane v-for="wcfg in formData.wordpressArray" :label="wcfg.plantformName">
+    <el-tab-pane v-for="wcfg in formData.wordpressArray" :label="wcfg.plantformName + $t('setting.blog.setting')">
       <wordpress-setting :api-type="wcfg.plantformKey" :cfg="createWCfg(wcfg)"/>
     </el-tab-pane>
 
@@ -79,6 +79,7 @@ import VuepressSetting from "~/components/publish/tab/setting/github/VuepressSet
 import HugoSetting from "~/components/publish/tab/setting/github/HugoSetting.vue";
 import HexoSetting from "~/components/publish/tab/setting/github/HexoSetting.vue";
 import JekyllSetting from "~/components/publish/tab/setting/github/JekyllSetting.vue";
+import {DynamicGCfg} from "~/utils/platform/github/DynamicGCfg";
 
 //use
 const {
@@ -104,6 +105,9 @@ let formData = reactive({
   wordpressArray: <Array<DynamicConfig>>[]
 })
 
+const createGCfg = ref((gcfg:DynamicConfig) => {
+  return new DynamicGCfg(gcfg)
+})
 const createMCfg = ref((mcfg: DynamicConfig) => {
   return new DynamicMCfg(getDynPostidKey(mcfg.plantformKey))
 })
@@ -116,6 +120,8 @@ const initDynCfg = (dynCfg: DynamicConfig[]): DynamicConfig[] => {
 
   dynCfg.forEach(item => {
     const newItem = new DynamicConfig(item.plantformType, item.plantformKey, item.plantformName)
+    newItem.subPlantformType = item.subPlantformType
+
     const switchKey = getDynSwitchKey(item.plantformKey)
     const switchValue = getBooleanConf(switchKey)
     newItem.modelValue = switchValue
