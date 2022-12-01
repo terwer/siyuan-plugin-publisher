@@ -37,7 +37,7 @@ if (props.cfg) {
 </script>
 
 <script lang="ts">
-import MetaweblogSetting from "../../MetaweblogSetting.vue";
+import MetaweblogSetting from "../MetaweblogSetting.vue";
 
 export default {
   name: "WordpressSetting",

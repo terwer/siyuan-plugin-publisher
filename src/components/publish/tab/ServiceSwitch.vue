@@ -18,7 +18,7 @@
     </el-form-item>
 
     <!-- Metaweblog API -->
-    <el-form-item :label="$t('service.switch.jvue')" v-if="false">
+    <el-form-item :label="$t('service.switch.jvue')">
       <el-switch v-model="jvueEnabled" @change="jvueOnChange"/>
     </el-form-item>
 

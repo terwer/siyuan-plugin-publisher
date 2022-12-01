@@ -201,7 +201,7 @@
 <script lang="ts" setup>
 import {nextTick, onBeforeMount, ref, watch} from "vue";
 import {getPage, getPageAttrs, getPageId, getPageMd, setPageAttrs} from "~/utils/platform/siyuan/siyuanUtil";
-import logUtil from "../../../../../../utils/logUtil"
+import logUtil from "../../../../../utils/logUtil"
 import {SIYUAN_PAGE_ATTR_KEY} from "~/utils/constants/siyuanPageConstants"
 import {
   covertStringToDate,

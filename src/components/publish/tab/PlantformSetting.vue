@@ -59,13 +59,13 @@ import {DynamicConfig, getDynamicJsonCfg, getDynPostidKey, getDynSwitchKey} from
 import {DynamicMCfg} from "~/utils/platform/metaweblog/dynamicMCfg";
 import {DynamicWCfg} from "~/utils/platform/wordpress/dynamicWCfg";
 import {useTabCount} from "~/composables/tabCountCom";
-import JVueSetting from "~/components/publish/tab/setting/adaptor/metaweblog/JVueSetting.vue";
-import ConfluenceSetting from "~/components/publish/tab/setting/adaptor/metaweblog/ConfluenceSetting.vue";
-import CnblogsSetting from "~/components/publish/tab/setting/adaptor/metaweblog/CnblogsSetting.vue";
-import WordpressSetting from "~/components/publish/tab/setting/adaptor/metaweblog/WordpressSetting.vue";
-import LiandiSetting from "~/components/publish/tab/setting/adaptor/common/LiandiSetting.vue";
-import YuqueSetting from "~/components/publish/tab/setting/adaptor/common/YuqueSetting.vue";
-import KmsSetting from "~/components/publish/tab/setting/adaptor/common/KmsSetting.vue";
+import JVueSetting from "~/components/publish/tab/setting/metaweblog/JVueSetting.vue";
+import ConfluenceSetting from "~/components/publish/tab/setting/metaweblog/ConfluenceSetting.vue";
+import CnblogsSetting from "~/components/publish/tab/setting/metaweblog/CnblogsSetting.vue";
+import WordpressSetting from "~/components/publish/tab/setting/metaweblog/WordpressSetting.vue";
+import LiandiSetting from "~/components/publish/tab/setting/common/LiandiSetting.vue";
+import YuqueSetting from "~/components/publish/tab/setting/common/YuqueSetting.vue";
+import KmsSetting from "~/components/publish/tab/setting/common/KmsSetting.vue";
 import MetaweblogSetting from "~/components/publish/tab/setting/MetaweblogSetting.vue";
 import GithubSetting from "~/components/publish/tab/setting/GithubSetting.vue";
 
@@ -73,6 +73,9 @@ import GithubSetting from "~/components/publish/tab/setting/GithubSetting.vue";
 const {
   tabCountStore,
   vuepressEnabled,
+  hugoEnabled,
+  hexoEnabled,
+  jekyllEnabled,
   jvueEnabled,
   confEnabled,
   cnblogsEnabled,
