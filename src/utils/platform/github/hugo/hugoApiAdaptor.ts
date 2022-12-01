@@ -18,7 +18,10 @@ export class HugoApiAdaptor extends GithubApiAdaptor implements IApi {
 
     constructor() {
         super(API_TYPE_CONSTANTS.API_TYPE_HUGO);
-        const hugoCfg = new HugoCfg(this.cfg.githubUser, this.cfg.githubRepo, this.cfg.githubToken)
+        const hugoCfg = new HugoCfg()
+        hugoCfg.githubUser = this.cfg.githubUser
+        hugoCfg.githubRepo = this.cfg.githubRepo
+        hugoCfg.githubToken = this.cfg.githubToken
         this.hugoApi = new HugoApi(hugoCfg)
     }
 

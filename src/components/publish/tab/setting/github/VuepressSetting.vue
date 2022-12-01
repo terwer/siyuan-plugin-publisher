@@ -66,7 +66,6 @@ import logUtil from "~/utils/logUtil";
 import {getBooleanConf, getJSONConf, setBooleanConf} from "~/utils/config";
 import {API_TYPE_CONSTANTS} from "~/utils/constants/apiTypeConstants";
 import {formatIsoToZhDate} from "~/utils/util";
-import {API_STATUS_CONSTANTS} from "~/utils/constants/apiStatusConstants";
 import {IGithubCfg} from "~/utils/platform/github/githubCfg";
 
 const {t} = useI18n()
@@ -184,7 +183,7 @@ const valiConf = async () => {
   if (!res) {
     // 验证不通过，更新验证状态
     apiStatus.value = false
-    setBooleanConf(API_STATUS_CONSTANTS.API_STATUS_VUEPRESS, apiStatus.value)
+    // setBooleanConf(API_STATUS_CONSTANTS.API_STATUS_VUEPRESS, apiStatus.value)
     ElMessage.error(t('main.opt.failure'))
     return
   }
@@ -196,7 +195,7 @@ const valiConf = async () => {
 
   // 验证通过，更新验证状态
   apiStatus.value = true
-  setBooleanConf(API_STATUS_CONSTANTS.API_STATUS_VUEPRESS, apiStatus.value)
+  // setBooleanConf(API_STATUS_CONSTANTS.API_STATUS_VUEPRESS, apiStatus.value)
 
   // 预览
   formData.previewUrl = "https://github.com/" + formData.githubUser + "/" + formData.githubRepo
@@ -224,7 +223,7 @@ const initConf = () => {
   }
 
   // api状态
-  apiStatus.value = getBooleanConf(API_STATUS_CONSTANTS.API_STATUS_VUEPRESS);
+  // apiStatus.value = getBooleanConf(API_STATUS_CONSTANTS.API_STATUS_VUEPRESS);
 }
 onBeforeMount(async () => {
   initConf();
