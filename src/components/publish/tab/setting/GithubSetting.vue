@@ -84,7 +84,6 @@ import {getJSONConf, setJSONConf} from "~/utils/config";
 import {isEmptyObject} from "~/utils/util";
 import logUtil from "~/utils/logUtil";
 import {API} from "~/utils/api";
-import {API_TYPE_CONSTANTS} from "~/utils/constants/apiTypeConstants";
 import {Post} from "~/utils/common/post";
 
 const props = defineProps({
@@ -217,13 +216,23 @@ const valiConf = async () => {
 
   const cfg = getJSONConf<IGithubCfg>(props.apiType)
 
+  let err
   try {
-    const api = new API(API_TYPE_CONSTANTS.API_TYPE_HUGO)
+    const api = new API(props.apiType)
     const commonPost: Post = new Post()
     commonPost.postid = "content/post/test.md"
     commonPost.description = "# Hello world"
 
-    const res = await api.newPost(commonPost)
+    let res
+
+    try {
+      res = await api.newPost(commonPost)
+    } catch (e) {
+      err = e
+      cfg.apiStatus = false
+      apiStatus.value = false
+    }
+
     if (!res) {
       // 验证不通过，更新验证状态
       cfg.apiStatus = false
@@ -247,7 +256,11 @@ const valiConf = async () => {
   setJSONConf(props.apiType, cfg)
 
   if (!apiStatus.value) {
-    ElMessage.error(t('setting.blog.vali.error'))
+    if (err) {
+      ElMessage.error(t('setting.blog.vali.error') + "=>" + err)
+    } else {
+      ElMessage.error(t('setting.blog.vali.error'))
+    }
   } else {
     ElMessage.success(t('main.opt.success'))
   }

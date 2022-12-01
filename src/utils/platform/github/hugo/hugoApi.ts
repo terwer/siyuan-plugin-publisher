@@ -11,12 +11,4 @@ export class HugoApi extends GithubApi{
         super(hugoCfg);
         this.hugoCfg = hugoCfg;
     }
-
-    async getPageData(docPath: string): Promise<any> {
-        return super.getPageData(docPath);
-    }
-
-    async getGithubPageTreeNode(docPath: string): Promise<Array<any>> {
-        return super.getGithubPageTreeNode(docPath);
-    }
 }

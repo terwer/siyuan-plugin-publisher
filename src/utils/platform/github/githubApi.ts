@@ -41,22 +41,18 @@ export class GithubApi {
      * 子类API使用，应用层面不建议直接调用
      * @param docPath 完整文件路径，例如：docs/_posts/测试.md
      */
-    protected async getPageData(docPath: string): Promise<any> {
+    async getPageData(docPath: string): Promise<any> {
         let data
 
         let res
-        try {
-            const route = 'GET /repos/' + this.githubCfg.githubUser + '/' + this.githubCfg.githubRepo + '/contents/' + docPath;
-            logUtil.logInfo("getPage route=>", route)
-            res = await this.octokit.request(route, {
-                owner: this.githubCfg.githubUser,
-                repo: this.githubCfg.githubRepo,
-                path: docPath
-            })
-            logUtil.logInfo("getPage res=>", res)
-        } catch (e) {
-            logUtil.logError("getPage error=>", e)
-        }
+        const route = 'GET /repos/' + this.githubCfg.githubUser + '/' + this.githubCfg.githubRepo + '/contents/' + docPath;
+        logUtil.logInfo("getPage route=>", route)
+        res = await this.octokit.request(route, {
+            owner: this.githubCfg.githubUser,
+            repo: this.githubCfg.githubRepo,
+            path: docPath
+        })
+        logUtil.logInfo("getPage res=>", res)
 
         if (res) {
             data = res.data
@@ -75,32 +71,28 @@ export class GithubApi {
         let data
 
         let res
-        try {
-            // const base64 = Buffer.from(mdContent).toString('base64');
-            const base64 = Base64.toBase64(mdContent)
-            const route = 'PUT /repos/' + this.githubCfg.githubUser + '/' + this.githubCfg.githubRepo + '/contents/' + docPath;
-            let options = {
-                owner: this.githubCfg.githubUser,
-                repo: this.githubCfg.githubRepo,
-                path: docPath,
-                message: this.githubCfg.defaultMsg,
-                committer: {
-                    name: this.githubCfg.author,
-                    email: this.githubCfg.email
-                },
-                content: base64
-            }
-            if (sha) {
-                Object.assign(options, {
-                    sha: sha
-                })
-            }
-
-            res = await this.octokit.request(route, options)
-            logUtil.logInfo("createOrUpdatePage res=>", res)
-        } catch (e) {
-            logUtil.logError("createOrUpdatePage error=>", e)
+        // const base64 = Buffer.from(mdContent).toString('base64');
+        const base64 = Base64.toBase64(mdContent)
+        const route = 'PUT /repos/' + this.githubCfg.githubUser + '/' + this.githubCfg.githubRepo + '/contents/' + docPath;
+        let options = {
+            owner: this.githubCfg.githubUser,
+            repo: this.githubCfg.githubRepo,
+            path: docPath,
+            message: this.githubCfg.defaultMsg,
+            committer: {
+                name: this.githubCfg.author,
+                email: this.githubCfg.email
+            },
+            content: base64
         }
+        if (sha) {
+            Object.assign(options, {
+                sha: sha
+            })
+        }
+
+        res = await this.octokit.request(route, options)
+        logUtil.logInfo("createOrUpdatePage res=>", res)
 
         if (res) {
             data = res.data
@@ -117,26 +109,21 @@ export class GithubApi {
     protected async deletePage(docPath: string, sha: any) {
         let data
 
-        let res
-        try {
-            const route = 'DELETE /repos/' + this.githubCfg.githubUser + '/' + this.githubCfg.githubRepo + '/contents/' + docPath;
-            let options = {
-                owner: this.githubCfg.githubUser,
-                repo: this.githubCfg.githubRepo,
-                path: docPath,
-                message: this.githubCfg.defaultMsg,
-                committer: {
-                    name: this.githubCfg.author,
-                    email: this.githubCfg.email
-                },
-                sha: sha
-            }
-
-            res = await this.octokit.request(route, options)
-            logUtil.logInfo("deletePage res=>", res)
-        } catch (e) {
-            logUtil.logError("deletePage error=>", e)
+        const route = 'DELETE /repos/' + this.githubCfg.githubUser + '/' + this.githubCfg.githubRepo + '/contents/' + docPath;
+        let options = {
+            owner: this.githubCfg.githubUser,
+            repo: this.githubCfg.githubRepo,
+            path: docPath,
+            message: this.githubCfg.defaultMsg,
+            committer: {
+                name: this.githubCfg.author,
+                email: this.githubCfg.email
+            },
+            sha: sha
         }
+
+        const res = await this.octokit.request(route, options)
+        logUtil.logInfo("deletePage res=>", res)
 
         if (res) {
             data = res.data
