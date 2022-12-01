@@ -17,6 +17,7 @@ import {VuepressApiAdaptor} from "~/utils/platform/github/vuepress/vuepressApiAd
 import {HugoApiAdaptor} from "~/utils/platform/github/hugo/hugoApiAdaptor";
 import {HexoApiAdaptor} from "~/utils/platform/github/hexo/hexoApiAdaptor";
 import {JekyllApiAdaptor} from "~/utils/platform/github/jekyll/jekyllApiAdaptor";
+import logUtil from "~/utils/logUtil";
 
 /**
  * 所有平台统一API接口
@@ -141,8 +142,8 @@ export class API implements IApi {
             const typeArr = type.split("-")
             if (typeArr.length > 0) {
                 const ptype = typeArr[0]
-                if (ptype == PlantformType.Github.toLowerCase()) {
-                    // Wordpress
+                if (ptype.indexOf(PlantformType.Github.toLowerCase()) > -1) {
+                    // Github
                     this.apiAdaptor = new GithubApiAdaptor(type)
                     return;
                 } else if (ptype == PlantformType.Metaweblog.toLowerCase()) {
