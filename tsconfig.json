@@ -32,7 +32,11 @@
     "src/**/*.tsx",
     "src/**/*.vue",
     "test/**/*.ts",
-    "node_modules/vitest/globals.d.ts"
+    "api/**/*.ts",
+    "node_modules/vitest/globals.d.ts",
+    "*.json",
+    "*.js",
+    "*.ts"
   ],
   "references": [
     {
