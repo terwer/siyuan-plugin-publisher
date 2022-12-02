@@ -15,6 +15,7 @@
     "coverage": "vitest run --coverage",
     "webstorm-integration": "vitest --watch --reporter=dot --reporter=json --outputFile=.vitest-result.json",
     "docs": "jsdoc -c jsdoc.json src/utils/api.ts",
+    "docsMd": "jsdoc2md -c jsdoc.json src/utils/api.ts",
     "widget": "bash scripts/widget.sh",
     "widgetWin": "pwsh scripts/widget.ps1",
     "extChrome": "bash scripts/ext.sh",
