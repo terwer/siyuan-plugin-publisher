@@ -194,7 +194,7 @@ npm i -g pnpm
 npm i -g vercel
 ```
 
-### 开发阶段运行
+### 开发阶段运行 <sup>推荐</sup>
 
 ```bash
 pnpm install
@@ -230,35 +230,35 @@ http://localhost:3000/blog/index.html
 #### Linux/Mac OS
 
 ```bash
-yarn w
+pnpm run widget
 ```
 
 #### Windows
 
 ```bash
-yarn ww
+pnpm run widgetWin
 ```
 
-压缩 `dist` 文件夹为 `.zip`, 上架思源笔记挂件集市。
+提交 `dist` 文件夹到仓库, 上架思源笔记挂件集市。
 
 ### 方式 2、部署到 Google Chrome 浏览器插件
 
 #### Linux/Mac OS
 
 ```bash
-yarn e
+pnpm run extChrome
 ```
 
 插件调试
 
 ```bash
-yarn edev
+pnpm run extChromeDev
 ```
 
 #### Windows
 
 ```bash
-yarn edw
+pnpm run extChromeDevWin
 ```
 
 将密钥文件修改为 `key.pem` 放到 `extension/chrome` 文件夹 , 然后压缩 `extension/chrome` 文件夹里面的所有文件为 `.zip`, 上架 Google Chrome 应用商店。

@@ -7,7 +7,7 @@
   "scripts": {
     "serve": "PROXY=true vercel dev --listen 6006",
     "dev": "vite --port 6006",
-    "build": "vue-tsc --noEmit && vite build",
+    "build": "bash scripts/build.sh",
     "preview": "vite preview",
     "test": "vitest --watch",
     "docs": "jsdoc -c jsdoc.json src/utils/api.ts",

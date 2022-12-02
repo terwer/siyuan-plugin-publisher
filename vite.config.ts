@@ -12,6 +12,9 @@ console.log("isTest=>", isTest)
 export default defineConfig({
   plugins: [
     vue(),
+    // https://github.com/IndexXuan/vite-plugin-mpa/issues/30
+    // @ts-expect-error
+    mpa.default(),
     Components({
       resolvers: [
         ElementPlusResolver({
@@ -19,8 +22,6 @@ export default defineConfig({
         }),
       ],
     }),
-    // @ts-expect-error
-    mpa.default(),
   ],
   resolve: {
     alias: {
@@ -28,7 +29,19 @@ export default defineConfig({
     },
   },
   build: {
-    // 浏览器兼容性 ‘esnext’ | 'modules'
-    target: "modules",
+    rollupOptions: {
+      input: {
+        index: path.resolve(__dirname, "pages/index/index.html"),
+        // blog: path.resolve(__dirname, "pages/blog/index.html"),
+        // detail: path.resolve(__dirname, "pages/detail/index.html"),
+        // publish: path.resolve(__dirname, "pages/publish/index.html"),
+      },
+      output: {
+        chunkFileNames: "static/js/[name]-[hash].js",
+        entryFileNames: "static/js/[name]-[hash].js",
+        assetFileNames: "static/[ext]/[name]-[hash].[ext]",
+      },
+      plugins: [],
+    },
   },
 })
