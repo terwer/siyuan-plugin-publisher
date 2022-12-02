@@ -1,14 +1,14 @@
 <template>
   <el-form label-width="120px" ref="formRef" :model="formData" :rules="rules" status-icon>
     <!-- 编辑模式 -->
-    <el-form-item :label="$t('main.publish.github.editmode')">
+    <el-form-item :label="$t('main.publish.editmode')">
       <el-button-group>
         <el-button :type="editMode?'default':'primary'" @click="simpleMode">{{
-            $t('main.publish.github.editmode.simple')
+            $t('main.publish.editmode.simple')
           }}
         </el-button>
         <el-button :type="editMode?'primary':'default'" @click="complexMode">{{
-            $t('main.publish.github.editmode.complex')
+            $t('main.publish.editmode.complex')
           }}
         </el-button>
       </el-button-group>

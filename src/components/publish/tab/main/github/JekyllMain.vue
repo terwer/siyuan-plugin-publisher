@@ -6,7 +6,7 @@ import GithubMain from "~/components/publish/tab/main/GithubMain.vue";
 import {API_TYPE_CONSTANTS} from "~/utils/constants/apiTypeConstants";
 import {ref} from "vue";
 
-const apiType = ref(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS)
+const apiType = ref(API_TYPE_CONSTANTS.API_TYPE_JEKYLL)
 
 const props = defineProps({
   pageId: {

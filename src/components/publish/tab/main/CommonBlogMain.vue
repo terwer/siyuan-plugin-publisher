@@ -10,14 +10,14 @@
                 v-if="!apiStatus"/>
       <el-form label-width="120px">
         <!-- 编辑模式 -->
-        <el-form-item :label="$t('main.publish.vuepress.editmode')">
+        <el-form-item :label="$t('main.publish.editmode')">
           <el-button-group>
             <el-button :type="editMode?'default':'primary'" @click="simpleMode">{{
-                $t('main.publish.vuepress.editmode.simple')
+                $t('main.publish.editmode.simple')
               }}
             </el-button>
             <el-button :type="editMode?'primary':'default'" @click="complexMode">{{
-                $t('main.publish.vuepress.editmode.complex')
+                $t('main.publish.editmode.complex')
               }}
             </el-button>
           </el-button-group>
