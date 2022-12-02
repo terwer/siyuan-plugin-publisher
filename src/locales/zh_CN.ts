@@ -214,7 +214,7 @@ export default {
   "setting.common.username.gen": "访问策略设置",
   "setting.common.password": "密码",
   "setting.blog.platform.support.common": "您当前操作的平台是：",
-  "plantform.must.select.one":
+  "platform.must.select.one":
     "哇哦，离使用就差一步啦 o(╥﹏╥)o ，您必须启用至少一个平台。如果上面列出的平台没有你想要的，可以在新增平台动态添加，支持Wordpress和Metaweblog API（例如博客园、oschina、51cto等）。有任何疑问欢迎邮件 youweics#163.com ",
   "blog.list.toptip":
     "温馨提示：单击表格行可以进入文章详情页，详情页有发布按钮哦! (〃'▽'〃)",

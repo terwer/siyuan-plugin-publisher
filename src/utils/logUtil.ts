@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 // 开发阶段开启所有日志
 // 发布阶段只开启WARN和ERROR日志
 
-import { getBooleanEnv } from "./envUtil"
+import { getBooleanEnv } from "~/utils/envUtil"
 
 const LOG_INFO_ENABLED = getBooleanEnv("VITE_LOG_INFO_ENABLED")
 const LOG_WARN_ENABLED = true

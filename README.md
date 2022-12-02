@@ -25,7 +25,7 @@
 - [x] 语雀
 - [x] 开源中国
 - [x] 链滴社区
-- [x] Wordpress
+- [x] WordPress
 - [x] Metaweblog API
 - [ ] Confluence
 
@@ -122,62 +122,11 @@ https://mp.terwer.space/post/start-to-get-started-zi0eyk.html
 
 ## 最近更新
 
-[点击这里查看开发进度](https://github.com/users/terwer/projects/1/views/1)
+[开发进度](https://github.com/users/terwer/projects/1/views/1)
 
-- 0.0.3 关键特性
+[更新日志](Changelog.md)
 
-  2022-09-28 发布
-
-  - feat: #62 [标题支持数字编号](https://github.com/terwer/src-sy-post-publisher/pull/62)
-
-    例如在思源笔记的标题为 `023.利用pm2后台运行nodejs程序`，发布的时候会自动去掉编号变成 `利用pm2后台运行nodejs程序`。这样做的目的是保持文章在思源笔记的结构化，然后又不影响其他平台的展示。
-
-  - feat: #72 [Wordpress 默认发布为 Markdown](https://github.com/terwer/src-sy-post-publisher/pull/72)
-
-    这里还做了进一步的优化，现在发布方式支持配置了，可以自定发布为 markdown 还是 HTML，满足不同平台诉求。
-
-  - feat: #76 [动态类型支持选择发布格式](https://github.com/terwer/src-sy-post-publisher/pull/76)
-
-    支持 HTML 和 Markdown 两种发布格式。
-
-  - fix: #73 [发布到语雀偶发的获取默认知识库失败问题](https://github.com/terwer/src-sy-post-publisher/pull/73)
-  - feat: #103 [支持可设置分类的平台选择分类-语雀支持选择分类](https://github.com/terwer/src-sy-post-publisher/pull/103)
-  - feat: #77 [支持 Metaweblog 选择分类（博客园、Wordpress 等）](https://github.com/terwer/src-sy-post-publisher/pull/77)
-  - feat: #81 [支持取消所有平台](https://github.com/terwer/src-sy-post-publisher/pull/81)
-
-    所有平台均支持关闭，不再强制内置任何平台，默认所有平台关闭，用户自行启用。
-
-  - feat: #88 [适配暗色模式](https://github.com/terwer/src-sy-post-publisher/pull/88)​
-
-    现在所有页面都支持暗色模式和浅色模式切换
-
-  - feat: #89 [整合 node-siyuan 到挂件【非挂件模式】](https://github.com/terwer/src-sy-post-publisher/pull/89)​
-
-    非挂件模式提供文章列表页面，整合我的另外一个 node-siyuan 项目。
-
-  - feat: #99 [Google 插件扩展](https://github.com/terwer/src-sy-post-publisher/pull/99)​
-
-    现在可以直接在 Google Chrome 插件扩展中使用了。
-
-  - feat: #102 [代码优化以及空状态处理](https://github.com/terwer/src-sy-post-publisher/pull/102)​
-
-    现在支持加载过程中展示骨架，提供更好的体验。
-
-  - feat: #104 [动态类型支持自定义预览地址](https://github.com/terwer/src-sy-post-publisher/pull/104)​
-
-- 0.0.4 版本预告
-
-  预计 2022-12-31 发布
-
-  - [ ] 支持发布到印象笔记
-  - [ ] 支持详情页导出 Anki 记忆卡【非挂件模式】
-  - [ ] 支持微信消息、微信公众号、CSDN、简书、知乎（预研，目前没有公开 API，可能需要借助 cookie 模拟登陆）
-  - [ ] 支持 Github pages、HUGO、Jekyll、Next.js content、Nuxt.js content
-  - [ ] 集成 PicGO，可直接粘贴图片自动上传。旧文档的非图床图片，在发布时候使用 PicGO 上传然后再发布
-  - [ ] 详情页支持下载所有图片到本地，并打包成带 assets 文件夹和 md 文件的 zip 包，这个主要是某些分享场景网络不畅通可能有用
-  - [ ] 支持发布时候选择一键剔除外链图片，主要是个别平台不允许外链图片
-
-[历史更新日志](Changelog.md)
+**v0.1.0 关键特性**
 
 ## Vue 3 + TypeScript + Vite
 
@@ -193,24 +142,24 @@ https://mp.terwer.space/post/start-to-get-started-zi0eyk.html
 
 ## 依赖版本
 
-| 工具   | 版本     |
-| ------ | -------- |
-| node   | v16.16.0 |
-| yarn   | 1.22.19  |
-| vercel | 28.0.1   |
-| pm2    | 5.2.0    |
+| 工具   | 版本                 |
+| ------ | -------------------- |
+| node   | 16.16.0 <sup>+</sup> |
+| pnpm   | 7.17.0 <sup>+</sup>  |
+| vercel | 28.5.5 <sup>+</sup>  |
+| pm2    | 5.2.0 <sup>+</sup>   |
 
 ## 环境变量
 
 **设置环境变量**
 
-复制 `.env.local.example` 文件到 `.env.local` (会被 git 忽略):
+复制 `.env.local.example` 文件到 `.env.local` (会被 `git` 忽略):
 
 ```bash
 cp .env.local.example .env.local
 ```
 
-打开 `.env.local` 并且设置 VITE_SIYUAN_API_URL 。例如：
+打开 `.env.local` 并且设置 `VITE_SIYUAN_API_URL` 。例如：
 http://127.0.0.1:6806。
 
 你的 `.env.local` 文件大概像下面这样：
@@ -238,24 +187,25 @@ VITE_MIDDLEWARE_URL=
 
 ## 开发
 
-准备
+### 准备
 
 ```bash
-npm i -g yarn
+npm i -g pnpm
 npm i -g vercel
 ```
 
-开发阶段运行
+### 开发阶段运行
 
 ```bash
-# yarn create vite
-yarn
-yarn vdev
+pnpm install
+pnpm run serve
 ```
+
+### 开发阶段调试
 
 **特别提醒：**
 
-如果你觉得 vervel 不利于热加载，也可以用下面的方式开发启动，但是环境变量 `VITE_MIDDLEWARE_URL` 需要设置跨域代理，我这里提供一个
+`dev` 模式需要先设置环境变量 `VITE_MIDDLEWARE_URL` 用来支持请求跨域，我这里提供一个
 
 ```properties
 VITE_MIDDLEWARE_URL=https://publish.terwer.space/api/middleware
@@ -264,7 +214,7 @@ VITE_MIDDLEWARE_URL=https://publish.terwer.space/api/middleware
 然后用下面命令启动，可以支持热加载。
 
 ```bash
-yarn dev
+pnpm run dev
 ```
 
 浏览器默认入口连接是

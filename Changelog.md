@@ -10,7 +10,7 @@
 - feat:#59 修复数字编号 by @terwer in https://github.com/terwer/src-sy-post-publisher/pull/68
 - feat:#59 修复数字编号 by @terwer in https://github.com/terwer/src-sy-post-publisher/pull/70
 - feat:#59 修复数字编号 by @terwer in https://github.com/terwer/src-sy-post-publisher/pull/71
-- feat:#59 Wordpress 默认发布为 Markdown by @terwer in https://github.com/terwer/src-sy-post-publisher/pull/72
+- feat:#59 WordPress 默认发布为 Markdown by @terwer in https://github.com/terwer/src-sy-post-publisher/pull/72
 - fix:#66 发布到语雀偶发的获取默认知识库失败问题 by @terwer in https://github.com/terwer/src-sy-post-publisher/pull/73
 - feat:#67 动态类型支持选择发布格式 by @terwer in https://github.com/terwer/src-sy-post-publisher/pull/76
 - feat:#74 支持 Metaweblog 选择分类（博客园、Wordpress 等） by @terwer in https://github.com/terwer/src-sy-post-publisher/pull/77
@@ -50,11 +50,11 @@
 
   - [x] [#38](https://github.com/terwer/src-sy-post-publisher/issues/38) 部分平台支持取消发布
 
-  - [x] [#39](https://github.com/terwer/src-sy-post-publisher/issues/39) 支持 eletron 接口
+  - [x] [#39](https://github.com/terwer/src-sy-post-publisher/issues/39) 支持 electron 接口
 
   - [x] [#40](https://github.com/terwer/src-sy-post-publisher/issues/40) 发布到 Confluence，需要配合我的另一个 [适配器项目](https://github.com/terwer/node-metaweblog-api-adaptor) 使用（强烈推荐
 
-  - [x] [#41](https://github.com/terwer/src-sy-post-publisher/issues/41) 发布到 Wordpess
+  - [x] [#41](https://github.com/terwer/src-sy-post-publisher/issues/41) 发布到 Wordless
 
   - [x] [#42](https://github.com/terwer/src-sy-post-publisher/issues/42) 发布到链滴
 
