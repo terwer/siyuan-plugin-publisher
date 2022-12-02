@@ -1,25 +1,29 @@
 <template>
   <el-form label-width="120px">
-    <el-alert class="top-version-tip" :title="apiTypeInfo + blogName" type="info"
-              :closable="false"/>
+    <el-alert
+      class="top-version-tip"
+      :title="apiTypeInfo + blogName"
+      type="info"
+      :closable="false"
+    />
     <el-form-item :label="$t('setting.blog.url')">
-      <el-input v-model="home"/>
+      <el-input v-model="home" />
     </el-form-item>
 
     <el-form-item :label="$t('setting.blog.username')">
-      <el-input v-model="username"/>
+      <el-input v-model="username" />
     </el-form-item>
 
     <el-form-item :label="$t('setting.blog.password')">
-      <el-input type="password" v-model="password" show-password/>
+      <el-input type="password" v-model="password" show-password />
     </el-form-item>
 
     <el-form-item :label="$t('setting.blog.apiurl')">
-      <el-input v-model="apiUrl"/>
+      <el-input v-model="apiUrl" />
     </el-form-item>
 
     <el-form-item :label="$t('setting.blog.previewUrl')">
-      <el-input v-model="previewUrl"/>
+      <el-input v-model="previewUrl" />
     </el-form-item>
 
     <el-form-item :label="$t('setting.blog.pageType')">
@@ -31,46 +35,62 @@
 
     <el-form-item>
       <el-button type="primary" @click="valiConf" :loading="isLoading">
-        {{ isLoading ? $t('setting.blog.vali.ing') : $t('setting.blog.vali') }}
+        {{ isLoading ? $t("setting.blog.vali.ing") : $t("setting.blog.vali") }}
       </el-button>
-      <el-alert :title="$t('setting.blog.vali.tip.metaweblog')" type="warning" :closable="false" v-if="!apiStatus"/>
-      <el-alert :title="$t('setting.blog.vali.ok.metaweblog')" type="success" :closable="false" v-if="apiStatus"/>
+      <el-alert
+        :title="$t('setting.blog.vali.tip.metaweblog')"
+        type="warning"
+        :closable="false"
+        v-if="!apiStatus"
+      />
+      <el-alert
+        :title="$t('setting.blog.vali.ok.metaweblog')"
+        type="success"
+        :closable="false"
+        v-if="apiStatus"
+      />
     </el-form-item>
 
     <el-form-item>
-      <el-button type="primary" @click="saveConf">{{ $t('setting.blog.save') }}</el-button>
-      <el-button>{{ $t('setting.blog.cancel') }}</el-button>
+      <el-button type="primary" @click="saveConf">{{
+        $t("setting.blog.save")
+      }}</el-button>
+      <el-button>{{ $t("setting.blog.cancel") }}</el-button>
     </el-form-item>
   </el-form>
 </template>
 
 <script lang="ts" setup>
-import {onMounted, ref} from "vue";
-import logUtil from "../../../../utils/logUtil";
-import {getJSONConf, setJSONConf} from "~/utils/config";
-import {ElMessage} from "element-plus";
-import {useI18n} from "vue-i18n";
-import {IMetaweblogCfg, PageType} from "~/utils/platform/metaweblog/IMetaweblogCfg";
-import {MetaweblogCfg} from "~/utils/platform/metaweblog/MetaweblogCfg";
-import {API} from "~/utils/api";
-import {UserBlog} from "~/utils/common/userBlog";
-import {isEmptyObject} from "~/utils/util";
+/* eslint-disable no-unused-vars,camelcase */
+import { onMounted, ref } from "vue"
+import logUtil from "../../../../utils/logUtil"
+import { getJSONConf, setJSONConf } from "~/utils/config"
+import { ElMessage } from "element-plus"
+import { useI18n } from "vue-i18n"
+import {
+  IMetaweblogCfg,
+  PageType,
+} from "~/utils/platform/metaweblog/IMetaweblogCfg"
+import { MetaweblogCfg } from "~/utils/platform/metaweblog/MetaweblogCfg"
+import { API } from "~/utils/api"
+import { UserBlog } from "~/utils/common/userBlog"
+import { isEmptyObject } from "~/utils/util"
 
-const {t} = useI18n()
+const { t } = useI18n()
 
 const props = defineProps({
   isReload: {
     type: Boolean,
-    default: false
+    default: false,
   },
   apiType: {
     type: String,
-    default: ""
+    default: "",
   },
   cfg: {
     type: MetaweblogCfg,
-    default: null
-  }
+    default: null,
+  },
 })
 
 const ptype_md = parseInt(PageType.Markdown.toString())
@@ -87,10 +107,12 @@ const isLoading = ref(false)
 const apiStatus = ref(false)
 const blogName = ref("")
 
-const apiTypeInfo = ref(t('setting.blog.platform.support.metaweblog') + props.apiType + " ")
+const apiTypeInfo = ref(
+  t("setting.blog.platform.support.metaweblog") + props.apiType + " "
+)
 
 const valiConf = async () => {
-  isLoading.value = true;
+  isLoading.value = true
 
   try {
     // 先保存
@@ -99,7 +121,7 @@ const valiConf = async () => {
     const cfg = getJSONConf<IMetaweblogCfg>(props.apiType)
 
     const api = new API(props.apiType)
-    const usersBlogs: Array<UserBlog> = await api.getUsersBlogs()
+    const usersBlogs = await api.getUsersBlogs()
     if (usersBlogs && usersBlogs.length > 0) {
       const userBlog = usersBlogs[0]
 
@@ -120,9 +142,9 @@ const valiConf = async () => {
   }
 
   if (!apiStatus.value) {
-    ElMessage.error(t('setting.blog.vali.error'))
+    ElMessage.error(t("setting.blog.vali.error"))
   } else {
-    ElMessage.success(t('main.opt.success'))
+    ElMessage.success(t("main.opt.success"))
   }
 
   isLoading.value = false
@@ -130,7 +152,8 @@ const valiConf = async () => {
   logUtil.logInfo("Metaweblog通用Setting验证完毕")
 }
 
-const saveConf = (hideTip?: boolean) => {
+// @ts-ignore
+const saveConf = (hideTip) => {
   logUtil.logInfo("Metaweblog通用Setting保存配置")
 
   const cfg = props.cfg
@@ -146,8 +169,8 @@ const saveConf = (hideTip?: boolean) => {
 
   setJSONConf(props.apiType, cfg)
 
-  if (hideTip != true) {
-    ElMessage.success(t('main.opt.success'))
+  if (hideTip !== true) {
+    ElMessage.success(t("main.opt.success"))
   }
 }
 
@@ -177,14 +200,12 @@ onMounted(async () => {
   // 初始化
   initConf()
 })
-
 </script>
 
 <script lang="ts">
 export default {
-  name: "MetaweblogSetting"
+  name: "MetaweblogSetting",
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

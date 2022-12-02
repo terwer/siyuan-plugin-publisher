@@ -1,107 +1,170 @@
 <template>
-  <el-form label-width="120px" ref="formRef" :model="formData" :rules="rules" status-icon>
+  <el-form
+    label-width="120px"
+    ref="formRef"
+    :model="formData"
+    :rules="rules"
+    status-icon
+  >
     <!-- 编辑模式 -->
     <el-form-item :label="$t('main.publish.editmode')">
       <el-button-group>
-        <el-button :type="editMode?'default':'primary'" @click="simpleMode">{{
-            $t('main.publish.editmode.simple')
-          }}
+        <el-button :type="editMode ? 'default' : 'primary'" @click="simpleMode"
+          >{{ $t("main.publish.editmode.simple") }}
         </el-button>
-        <el-button :type="editMode?'primary':'default'" @click="complexMode">{{
-            $t('main.publish.editmode.complex')
-          }}
+        <el-button :type="editMode ? 'primary' : 'default'" @click="complexMode"
+          >{{ $t("main.publish.editmode.complex") }}
         </el-button>
       </el-button-group>
     </el-form-item>
 
     <div class="github-setting-basic">
-      <el-form-item :label="$t('setting.blog.type.github.user')" prop="githubUser">
-        <el-input v-model="formData.githubUser" :placeholder="$t('setting.blog.type.github.user.tip')"/>
+      <el-form-item
+        :label="$t('setting.blog.type.github.user')"
+        prop="githubUser"
+      >
+        <el-input
+          v-model="formData.githubUser"
+          :placeholder="$t('setting.blog.type.github.user.tip')"
+        />
       </el-form-item>
 
-      <el-form-item :label="$t('setting.blog.type.github.repo')" prop="githubRepo">
-        <el-input v-model="formData.githubRepo" :placeholder="$t('setting.blog.type.github.repo.tip')"/>
+      <el-form-item
+        :label="$t('setting.blog.type.github.repo')"
+        prop="githubRepo"
+      >
+        <el-input
+          v-model="formData.githubRepo"
+          :placeholder="$t('setting.blog.type.github.repo.tip')"
+        />
       </el-form-item>
 
-      <el-form-item :label="$t('setting.blog.type.github.token')" prop="githubToken">
-        <el-input type="password" v-model="formData.githubToken" :placeholder="$t('setting.blog.type.github.token.tip')" show-password/>
-        <a href="https://github.com/settings/tokens/new"
-           target="_blank">{{ $t('setting.blog.type.github.token.gen') }}</a>
+      <el-form-item
+        :label="$t('setting.blog.type.github.token')"
+        prop="githubToken"
+      >
+        <el-input
+          type="password"
+          v-model="formData.githubToken"
+          :placeholder="$t('setting.blog.type.github.token.tip')"
+          show-password
+        />
+        <a href="https://github.com/settings/tokens/new" target="_blank">{{
+          $t("setting.blog.type.github.token.gen")
+        }}</a>
       </el-form-item>
     </div>
 
     <div class="github-setting-advanced" v-if="editMode">
-      <el-form-item :label="$t('setting.blog.type.github.default.path')" prop="defaultPath">
-        <el-input v-model="formData.defaultPath" :placeholder="$t('setting.blog.type.github.default.path.tip')"/>
+      <el-form-item
+        :label="$t('setting.blog.type.github.default.path')"
+        prop="defaultPath"
+      >
+        <el-input
+          v-model="formData.defaultPath"
+          :placeholder="$t('setting.blog.type.github.default.path.tip')"
+        />
       </el-form-item>
 
-      <el-form-item :label="$t('setting.blog.type.github.default.branch')" prop="defaultBranch">
-        <el-input v-model="formData.defaultBranch" :placeholder="$t('setting.blog.type.github.default.branch.tip')"/>
+      <el-form-item
+        :label="$t('setting.blog.type.github.default.branch')"
+        prop="defaultBranch"
+      >
+        <el-input
+          v-model="formData.defaultBranch"
+          :placeholder="$t('setting.blog.type.github.default.branch.tip')"
+        />
       </el-form-item>
 
       <el-form-item :label="$t('setting.blog.type.github.msg')" prop="msg">
-        <el-input v-model="formData.msg" :placeholder="$t('setting.blog.type.github.msg.tip')"/>
+        <el-input
+          v-model="formData.msg"
+          :placeholder="$t('setting.blog.type.github.msg.tip')"
+        />
       </el-form-item>
 
-      <el-form-item :label="$t('setting.blog.type.github.author')" prop="author">
-        <el-input v-model="formData.author" :placeholder="$t('setting.blog.type.github.author.tip')"/>
+      <el-form-item
+        :label="$t('setting.blog.type.github.author')"
+        prop="author"
+      >
+        <el-input
+          v-model="formData.author"
+          :placeholder="$t('setting.blog.type.github.author.tip')"
+        />
       </el-form-item>
 
       <el-form-item :label="$t('setting.blog.type.github.email')" prop="email">
-        <el-input v-model="formData.email" :placeholder="$t('setting.blog.type.github.email.tip')"/>
+        <el-input
+          v-model="formData.email"
+          :placeholder="$t('setting.blog.type.github.email.tip')"
+        />
       </el-form-item>
 
       <el-form-item :label="$t('setting.blog.previewUrl')">
-        <el-input v-model="formData.previewUrl"/>
+        <el-input v-model="formData.previewUrl" />
       </el-form-item>
     </div>
 
     <el-form-item :label="$t('form.validate.github.auto.delete')">
-      <el-switch v-model="autoDeleteTest" @change="testOnChange"/>
+      <el-switch v-model="autoDeleteTest" @change="testOnChange" />
     </el-form-item>
 
     <el-form-item>
       <el-button type="primary" @click="valiConf" :loading="isLoading">
-        {{ isLoading ? $t('setting.blog.vali.ing') : $t('setting.blog.vali') }}
+        {{ isLoading ? $t("setting.blog.vali.ing") : $t("setting.blog.vali") }}
       </el-button>
-      <el-alert :title="$t('setting.blog.vali.tip')" type="warning" :closable="false" v-if="!apiStatus"/>
-      <el-alert :title="$t('setting.blog.vali.ok')" type="success" :closable="false" v-if="apiStatus"/>
+      <el-alert
+        :title="$t('setting.blog.vali.tip')"
+        type="warning"
+        :closable="false"
+        v-if="!apiStatus"
+      />
+      <el-alert
+        :title="$t('setting.blog.vali.ok')"
+        type="success"
+        :closable="false"
+        v-if="apiStatus"
+      />
     </el-form-item>
 
     <el-form-item>
-      <el-button type="primary" @click="submitForm(formRef)">{{ $t('setting.blog.save') }}</el-button>
-      <el-button @click="resetForm(formRef)">{{ $t('setting.blog.cancel') }}</el-button>
+      <el-button type="primary" @click="submitForm(formRef)">{{
+        $t("setting.blog.save")
+      }}</el-button>
+      <el-button @click="resetForm(formRef)">{{
+        $t("setting.blog.cancel")
+      }}</el-button>
     </el-form-item>
   </el-form>
 </template>
 
 <script lang="ts" setup>
-import {onMounted, reactive, ref} from "vue";
-import {ElMessage, FormInstance, FormRules} from "element-plus";
-import {useI18n} from "vue-i18n";
-import {GithubCfg, IGithubCfg} from "~/utils/platform/github/githubCfg";
-import {getJSONConf, setJSONConf} from "~/utils/config";
-import {isEmptyObject} from "~/utils/util";
-import logUtil from "~/utils/logUtil";
-import {API} from "~/utils/api";
-import {Post} from "~/utils/common/post";
+import { onMounted, reactive, ref } from "vue"
+import { ElMessage, FormRules } from "element-plus"
+import { useI18n } from "vue-i18n"
+import { GithubCfg, IGithubCfg } from "~/utils/platform/github/githubCfg"
+import { getJSONConf, setJSONConf } from "~/utils/config"
+import { isEmptyObject } from "~/utils/util"
+import logUtil from "~/utils/logUtil"
+import { API } from "~/utils/api"
+import { Post } from "~/utils/common/post"
 
 const props = defineProps({
   isReload: {
     type: Boolean,
-    default: false
+    default: false,
   },
   apiType: {
     type: String,
-    default: ""
+    default: "",
   },
   cfg: {
     type: GithubCfg,
-    default: null
-  }
+    default: null,
+  },
 })
 
-const {t} = useI18n()
+const { t } = useI18n()
 
 const editMode = ref(false)
 const isLoading = ref(false)
@@ -109,7 +172,7 @@ const apiStatus = ref(false)
 
 const autoDeleteTest = ref(true)
 
-const formRef = ref<FormInstance>()
+const formRef = ref()
 const formData = reactive({
   githubUser: "",
   githubRepo: "",
@@ -119,57 +182,57 @@ const formData = reactive({
   msg: "auto published by sy-post-publisher",
   author: "terwer",
   email: "youweics@163.com",
-  previewUrl: ""
+  previewUrl: "",
 })
 const rules = reactive<FormRules>({
   githubUser: [
     {
       required: true,
-      message: () => t('form.validate.name.required')
-    }
+      message: () => t("form.validate.name.required"),
+    },
   ],
   githubRepo: [
     {
       required: true,
-      message: () => t('form.validate.name.required')
-    }
+      message: () => t("form.validate.name.required"),
+    },
   ],
   githubToken: [
     {
       required: true,
-      message: () => t('form.validate.name.required')
-    }
+      message: () => t("form.validate.name.required"),
+    },
   ],
   defaultBranch: [
     {
       required: true,
-      message: () => t('form.validate.name.required')
-    }
+      message: () => t("form.validate.name.required"),
+    },
   ],
   defaultPath: [
     {
       required: true,
-      message: () => t('form.validate.name.required')
-    }
+      message: () => t("form.validate.name.required"),
+    },
   ],
   msg: [
     {
       required: true,
-      message: () => t('form.validate.name.required')
-    }
+      message: () => t("form.validate.name.required"),
+    },
   ],
   author: [
     {
       required: true,
-      message: () => t('form.validate.name.required')
-    }
+      message: () => t("form.validate.name.required"),
+    },
   ],
   email: [
     {
       required: true,
-      message: () => t('form.validate.name.required')
-    }
-  ]
+      message: () => t("form.validate.name.required"),
+    },
+  ],
 })
 
 const simpleMode = () => {
@@ -179,25 +242,28 @@ const complexMode = () => {
   editMode.value = true
 }
 
-const testOnChange = (val: any) => {
+// @ts-ignore
+const testOnChange = (val) => {
   autoDeleteTest.value = val
 }
 
-const resetForm = (formEl: FormInstance | undefined) => {
+// @ts-ignore
+const resetForm = (formEl) => {
   if (!formEl) return
   formEl.resetFields()
 }
 
-const submitForm = async (formEl: FormInstance | undefined) => {
+// @ts-ignore
+const submitForm = async (formEl) => {
   if (!formEl) return
 
+  // @ts-ignore
   const result = await formEl.validate((valid, fields) => {
     if (valid) {
       logUtil.logInfo("校验成功")
     } else {
-      logUtil.logError(t('main.opt.failure'), fields)
+      logUtil.logError(t("main.opt.failure"), fields)
       // ElMessage.error(t('main.opt.failure'))
-      return
     }
   })
   if (!result) {
@@ -205,11 +271,11 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   }
 
   // 保存配置
-  saveConf()
+  saveConf(false)
 }
 
 const valiConf = async () => {
-  isLoading.value = true;
+  isLoading.value = true
 
   // 先保存
   saveConf(true)
@@ -219,7 +285,7 @@ const valiConf = async () => {
   let err
   try {
     const api = new API(props.apiType)
-    const commonPost: Post = new Post()
+    const commonPost = new Post()
     commonPost.postid = "content/post/test.md"
     commonPost.description = "# Hello world"
 
@@ -257,18 +323,19 @@ const valiConf = async () => {
 
   if (!apiStatus.value) {
     if (err) {
-      ElMessage.error(t('setting.blog.vali.error') + "=>" + err)
+      ElMessage.error(t("setting.blog.vali.error") + "=>" + err)
     } else {
-      ElMessage.error(t('setting.blog.vali.error'))
+      ElMessage.error(t("setting.blog.vali.error"))
     }
   } else {
-    ElMessage.success(t('main.opt.success'))
+    ElMessage.success(t("main.opt.success"))
   }
 
   isLoading.value = false
 }
 
-const saveConf = (hideTip?: boolean) => {
+// @ts-ignore
+const saveConf = (hideTip) => {
   const cfg = props.cfg
   cfg.githubUser = formData.githubUser
   cfg.githubRepo = formData.githubRepo
@@ -284,8 +351,8 @@ const saveConf = (hideTip?: boolean) => {
 
   setJSONConf(props.apiType, cfg)
 
-  if (hideTip != true) {
-    ElMessage.success(t('main.opt.success'))
+  if (hideTip !== true) {
+    ElMessage.success(t("main.opt.success"))
   }
 }
 
@@ -296,7 +363,7 @@ const initConf = () => {
     conf = props.cfg
   }
 
-  if(conf){
+  if (conf) {
     formData.githubUser = conf.githubUser
     formData.githubRepo = conf.githubRepo
     formData.githubToken = conf.githubToken
@@ -317,6 +384,4 @@ onMounted(async () => {
 })
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

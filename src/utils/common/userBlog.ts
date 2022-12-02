@@ -1,13 +1,13 @@
 export class UserBlog {
-    blogid: string
-    url: string
-    blogName: string
-    isAdmin?: boolean
-    xmlrpc?: string
+  blogid: string
+  url: string
+  blogName: string
+  isAdmin?: boolean
+  xmlrpc?: string
 
-    constructor() {
-        this.blogid = "";
-        this.url = "";
-        this.blogName = ""
-    }
+  constructor() {
+    this.blogid = ""
+    this.url = ""
+    this.blogName = ""
+  }
 }

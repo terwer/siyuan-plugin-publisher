@@ -3,7 +3,7 @@
     {
       "name": "sy-post-publisher",
       "script": "yarn",
-      "args" : "vdev",
+      "args": "vdev",
       "instances": 1,
       "exec_mode": "cluster"
     }

@@ -1,22 +1,23 @@
-import logUtil from "./logUtil";
-import {isEmptyObject} from "./util";
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
+import logUtil from "./logUtil"
+import { isEmptyObject } from "./util"
 
 /**
  * 获取Boolean配置
  * @param key key
  */
 export function getBooleanConf(key: string): boolean {
-    logUtil.logInfo("------------------------------")
-    logUtil.logInfo("尝试从localStorage获取Boolean数据，key=>", key)
+  logUtil.logInfo("------------------------------")
+  logUtil.logInfo("尝试从localStorage获取Boolean数据，key=>", key)
 
-    let valueObj = false
-    let value = getConf(key)
-    valueObj = value.toLowerCase() === "true"
+  let valueObj = false
+  const value = getConf(key)
+  valueObj = value.toLowerCase() === "true"
 
-    logUtil.logInfo("从localStorage获取Boolean数据=>")
-    logUtil.logInfo(valueObj)
-    logUtil.logInfo("------------------------------")
-    return valueObj;
+  logUtil.logInfo("从localStorage获取Boolean数据=>")
+  logUtil.logInfo(valueObj)
+  logUtil.logInfo("------------------------------")
+  return valueObj
 }
 
 /**
@@ -25,12 +26,12 @@ export function getBooleanConf(key: string): boolean {
  * @param key key
  */
 export function getArrayJSONConf<T>(key: string): T {
-    let conf = getJSONConf<T>(key)
-    if (isEmptyObject(conf)) {
-        // @ts-ignore
-        conf = []
-    }
-    return conf
+  let conf = getJSONConf<T>(key)
+  if (isEmptyObject(conf)) {
+    // @ts-expect-error
+    conf = []
+  }
+  return conf
 }
 
 /**
@@ -38,23 +39,23 @@ export function getArrayJSONConf<T>(key: string): T {
  * @param key key
  */
 export function getJSONConf<T>(key: string): T {
-    logUtil.logInfo("------------------------------")
-    logUtil.logInfo("尝试从localStorage获取JSON数据，key=>", key)
+  logUtil.logInfo("------------------------------")
+  logUtil.logInfo("尝试从localStorage获取JSON数据，key=>", key)
 
-    let valueObj = <T>({} || [])
-    let value = getConf(key)
-    if (value != "") {
-        try {
-            valueObj = JSON.parse(value);
-        } catch (e) {
-            logUtil.logInfo("JSON格式不正确", e)
-        }
+  let valueObj = ({} || []) as T
+  const value = getConf(key)
+  if (value !== "") {
+    try {
+      valueObj = JSON.parse(value)
+    } catch (e) {
+      logUtil.logInfo("JSON格式不正确", e)
     }
+  }
 
-    logUtil.logInfo("从localStorage获取JSON数据=>")
-    logUtil.logInfo(valueObj)
-    logUtil.logInfo("------------------------------")
-    return valueObj;
+  logUtil.logInfo("从localStorage获取JSON数据=>")
+  logUtil.logInfo(valueObj)
+  logUtil.logInfo("------------------------------")
+  return valueObj
 }
 
 /**
@@ -62,15 +63,15 @@ export function getJSONConf<T>(key: string): T {
  * @param key key
  */
 export function getConf(key: string): string {
-    logUtil.logInfo("尝试从localStorage获取数据，key=>", key)
+  logUtil.logInfo("尝试从localStorage获取数据，key=>", key)
 
-    const value = localStorage.getItem(key)
-    if (!value) {
-        logUtil.logInfo("未找到对应数据，key=>", key)
-        return "";
-    }
-    logUtil.logInfo("从localStorage获取数据=>", value)
-    return value;
+  const value = localStorage.getItem(key)
+  if (!value) {
+    logUtil.logInfo("未找到对应数据，key=>", key)
+    return ""
+  }
+  logUtil.logInfo("从localStorage获取数据=>", value)
+  return value
 }
 
 /**
@@ -79,14 +80,14 @@ export function getConf(key: string): string {
  * @param value
  */
 export function setBooleanConf(key: string, value: boolean): void {
-    logUtil.logInfo("++++++++++++++++++++++++++++++")
-    logUtil.logInfo("尝试保存Boolean数据到localStorage里key=>", key)
-    logUtil.logInfo("保存Boolean数据到localStorage=>")
-    logUtil.logInfo(value)
+  logUtil.logInfo("++++++++++++++++++++++++++++++")
+  logUtil.logInfo("尝试保存Boolean数据到localStorage里key=>", key)
+  logUtil.logInfo("保存Boolean数据到localStorage=>")
+  logUtil.logInfo(value)
 
-    const boolString = value.toString()
-    setConf(key, boolString)
-    logUtil.logInfo("++++++++++++++++++++++++++++++")
+  const boolString = value.toString()
+  setConf(key, boolString)
+  logUtil.logInfo("++++++++++++++++++++++++++++++")
 }
 
 /**
@@ -95,14 +96,14 @@ export function setBooleanConf(key: string, value: boolean): void {
  * @param value
  */
 export function setJSONConf<T>(key: string, value: T): void {
-    logUtil.logInfo("++++++++++++++++++++++++++++++")
-    logUtil.logInfo("尝试保存JSON数据到localStorage里key=>", key)
-    logUtil.logInfo("保存JSON数据到localStorage=>")
-    logUtil.logInfo(value)
+  logUtil.logInfo("++++++++++++++++++++++++++++++")
+  logUtil.logInfo("尝试保存JSON数据到localStorage里key=>", key)
+  logUtil.logInfo("保存JSON数据到localStorage=>")
+  logUtil.logInfo(value)
 
-    const valueString = JSON.stringify(value)
-    setConf(key, valueString)
-    logUtil.logInfo("++++++++++++++++++++++++++++++")
+  const valueString = JSON.stringify(value)
+  setConf(key, valueString)
+  logUtil.logInfo("++++++++++++++++++++++++++++++")
 }
 
 /**
@@ -111,15 +112,15 @@ export function setJSONConf<T>(key: string, value: T): void {
  * @param value
  */
 export function setConf(key: string, value: string): void {
-    if (!value || value == "") {
-        logUtil.logInfo("空值，不保存")
-        return
-    }
+  if (!value || value === "") {
+    logUtil.logInfo("空值，不保存")
+    return
+  }
 
-    logUtil.logInfo("尝试保存数据到localStorage里key=>", key)
-    logUtil.logInfo("保存数据到localStorage=>", value)
+  logUtil.logInfo("尝试保存数据到localStorage里key=>", key)
+  logUtil.logInfo("保存数据到localStorage=>", value)
 
-    localStorage.setItem(key, value)
+  localStorage.setItem(key, value)
 }
 
 /**
@@ -127,16 +128,16 @@ export function setConf(key: string, value: string): void {
  * @param key
  */
 export function checkKeyExists(key: string): boolean {
-    let flag = false
+  let flag = false
 
-    for (let i = 0; i < localStorage.length; i++) {
-        // 获取key 索引从0开始
-        const getKey = localStorage.key(i);
-        if (key === getKey) {
-            flag = true;
-            break;
-        }
+  for (let i = 0; i < localStorage.length; i++) {
+    // 获取key 索引从0开始
+    const getKey = localStorage.key(i)
+    if (key === getKey) {
+      flag = true
+      break
     }
+  }
 
-    return flag;
+  return flag
 }

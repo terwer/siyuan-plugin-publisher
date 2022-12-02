@@ -1,62 +1,71 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type,@typescript-eslint/strict-boolean-expressions */
 /**
  * 获取挂件所在的块ID
  * @returns {Promise<string>}
  */
-import {getJSONConf, setJSONConf} from "../../config";
-import {exportMdContent, getBlockAttrs, getBlockByID, lsNotebooks, setBlockAttrs} from "./siYuanApi.js";
-import logUtil from "../../logUtil";
-import {getEnv} from "../../envUtil";
-import {getQueryString, inBrowser} from "../../util";
+import { getJSONConf, setJSONConf } from "../../config"
+import {
+  exportMdContent,
+  getBlockAttrs,
+  getBlockByID,
+  lsNotebooks,
+  setBlockAttrs,
+} from "./siYuanApi.js"
+import logUtil from "../../logUtil"
+import { getEnv } from "../../envUtil"
+import { getQueryString, inBrowser } from "../../util"
 
 /**
  * 检测是否处于思源笔记环境中
  */
 export function inSiyuan(): boolean {
-    const widgetResult = getWidgetId()
-    return widgetResult.isInSiyuan
+  const widgetResult = getWidgetId()
+  return widgetResult.isInSiyuan
 }
 
 export function getWidgetId() {
-    if (import.meta.env.MODE == "test") {
-        return {
-            isInSiyuan: true,
-            widgetId: getEnv("VITE_SIYUAN_DEV_PAGE_ID")
-        }
-    }
-
-    if (!window.frameElement
-        || !window.frameElement.parentElement
-        || !window.frameElement.parentElement.parentElement) {
-        logUtil.logInfo("正在已非挂件模式运行，部分功能将不可用，请知悉")
-        return {
-            isInSiyuan: false,
-            widgetId: ""
-        }
-    }
-
-    let self = window.frameElement.parentElement.parentElement;
-    if (!self) {
-        logUtil.logInfo("正在已非挂件模式运行，部分功能将不可用，请知悉")
-        return {
-            isInSiyuan: false,
-            widgetId: ""
-        }
-    }
-
-    const widgetId = self.getAttribute('data-node-id')
-    if (!widgetId) {
-        logUtil.logInfo("正在已非挂件模式运行，部分功能将不可用，请知悉")
-        return {
-            isInSiyuan: false,
-            widgetId: ""
-        }
-    }
-
-    logUtil.logInfo("恭喜你，正在已挂件模式运行")
+  if (import.meta.env.MODE === "test") {
     return {
-        isInSiyuan: true,
-        widgetId: widgetId
+      isInSiyuan: true,
+      widgetId: getEnv("VITE_SIYUAN_DEV_PAGE_ID"),
     }
+  }
+
+  if (
+    window.frameElement == null ||
+    window.frameElement.parentElement == null ||
+    window.frameElement.parentElement.parentElement == null
+  ) {
+    logUtil.logInfo("正在已非挂件模式运行，部分功能将不可用，请知悉")
+    return {
+      isInSiyuan: false,
+      widgetId: "",
+    }
+  }
+
+  const self = window.frameElement.parentElement.parentElement
+  if (!self) {
+    logUtil.logInfo("正在已非挂件模式运行，部分功能将不可用，请知悉")
+    return {
+      isInSiyuan: false,
+      widgetId: "",
+    }
+  }
+
+  const widgetId = self.getAttribute("data-node-id")
+  if (!widgetId) {
+    logUtil.logInfo("正在已非挂件模式运行，部分功能将不可用，请知悉")
+    return {
+      isInSiyuan: false,
+      widgetId: "",
+    }
+  }
+
+  logUtil.logInfo("恭喜你，正在已挂件模式运行")
+  return {
+    isInSiyuan: true,
+    widgetId,
+  }
 }
 
 /**
@@ -65,27 +74,27 @@ export function getWidgetId() {
  * @returns {Promise<any>}
  */
 async function getWidgetPage(force?: boolean) {
-    const widgetResult = getWidgetId()
-    if (!widgetResult.isInSiyuan) {
-        return
-    }
+  const widgetResult = getWidgetId()
+  if (!widgetResult.isInSiyuan) {
+    return
+  }
 
-    const widgetId = widgetResult.widgetId
-    logUtil.logInfo("获取挂件的widgetId=>", widgetId)
-    // 默认读取缓存
-    const pageObj = getJSONConf(widgetId);
-    if (!force && pageObj) {
-        logUtil.logInfo("获取本地缓存的思源笔记页面信息（不是实时的）=>", pageObj)
-        return pageObj;
-    }
+  const widgetId = widgetResult.widgetId
+  logUtil.logInfo("获取挂件的widgetId=>", widgetId)
+  // 默认读取缓存
+  const pageObj = getJSONConf(widgetId)
+  if (!force && pageObj) {
+    logUtil.logInfo("获取本地缓存的思源笔记页面信息（不是实时的）=>", pageObj)
+    return pageObj
+  }
 
-    // 如果本地不存在，或者需要强制读取，调用api查询
-    const page = await getBlockByID(widgetId);
-    if (page) {
-        setJSONConf(widgetId, page)
-        logUtil.logInfo("调用API设置查询思源页面信息并更新本地缓存", page)
-    }
-    return page;
+  // 如果本地不存在，或者需要强制读取，调用api查询
+  const page = await getBlockByID(widgetId)
+  if (page) {
+    setJSONConf(widgetId, page)
+    logUtil.logInfo("调用API设置查询思源页面信息并更新本地缓存", page)
+  }
+  return page
 }
 
 /**
@@ -96,14 +105,14 @@ async function getWidgetPage(force?: boolean) {
  * @returns {Promise<*|string>}
  */
 async function getSiyuanPageId(force?: boolean) {
-    const page = await getWidgetPage(force);
-    if (!page) {
-        return
-    }
+  const page = await getWidgetPage(force)
+  if (!page) {
+    return
+  }
 
-    const pageId = page.root_id
-    logUtil.logInfo("获取思源笔记页面ID=>", pageId)
-    return pageId
+  const pageId = page.root_id
+  logUtil.logInfo("获取思源笔记页面ID=>", pageId)
+  return pageId
 }
 
 /**
@@ -117,44 +126,43 @@ async function getSiyuanPageId(force?: boolean) {
  * @param pageId 页面ID，可选的（挂件模式无需传递，开发阶段或者非挂件模式可以传递ID模拟运行）
  */
 export async function getPageId(force?: boolean, pageId?: string) {
-    let syPageId
+  let syPageId
 
-    // 1、显式传递的ID优先处理
-    if (pageId) {
-        logUtil.logInfo("显示指定pageId=>", pageId)
-        syPageId = pageId
+  // 1、显式传递的ID优先处理
+  if (pageId) {
+    logUtil.logInfo("显示指定pageId=>", pageId)
+    syPageId = pageId
+  }
+
+  // 2、兼容挂件
+  if (!syPageId) {
+    const widgetResult = getWidgetId()
+    if (widgetResult.isInSiyuan) {
+      // 尝试读取挂件的ID
+      syPageId = await getSiyuanPageId(force)
     }
+  }
 
-
-    // 2、兼容挂件
-    if (!syPageId) {
-        const widgetResult = getWidgetId()
-        if (widgetResult.isInSiyuan) {
-            // 尝试读取挂件的ID
-            syPageId = await getSiyuanPageId(force)
+  // logUtil.logInfo("syPageId=>", syPageId)
+  if (!syPageId) {
+    //  3、开发模式模拟传递一个ID
+    if (!pageId) {
+      const testPageId = getEnv("VITE_SIYUAN_DEV_PAGE_ID")
+      if (!testPageId && inBrowser()) {
+        // 尝试从url参数解析ID
+        // const curl = window.location.href
+        // const urlIdx = curl.lastIndexOf("=")
+        // const qPageId = curl.substring(urlIdx + 1, curl.length)
+        const qPageId = getQueryString("id")
+        if (qPageId !== "") {
+          syPageId = qPageId
         }
+      } else {
+        syPageId = testPageId
+      }
     }
-
-    // logUtil.logInfo("syPageId=>", syPageId)
-    if (!syPageId) {
-        //  3、开发模式模拟传递一个ID
-        if (!pageId) {
-            const testPageId = getEnv("VITE_SIYUAN_DEV_PAGE_ID")
-            if (!testPageId && inBrowser()) {
-                // 尝试从url参数解析ID
-                // const curl = window.location.href
-                // const urlIdx = curl.lastIndexOf("=")
-                // const qPageId = curl.substring(urlIdx + 1, curl.length)
-                const qPageId = getQueryString("id")
-                if (qPageId != "") {
-                    syPageId = qPageId
-                }
-            } else {
-                syPageId = testPageId
-            }
-        }
-    }
-    return syPageId;
+  }
+  return syPageId
 }
 
 /**
@@ -162,7 +170,7 @@ export async function getPageId(force?: boolean, pageId?: string) {
  * @param pageId 页面ID
  */
 export async function getPage(pageId: string) {
-    return await getBlockByID(pageId)
+  return await getBlockByID(pageId)
 }
 
 /**
@@ -170,7 +178,7 @@ export async function getPage(pageId: string) {
  * @param pageId 页面ID
  */
 export async function getPageAttrs(pageId: string) {
-    return await getBlockAttrs(pageId)
+  return await getBlockAttrs(pageId)
 }
 
 /**
@@ -178,8 +186,8 @@ export async function getPageAttrs(pageId: string) {
  * @param pageId 页面ID
  * @param attrs 属性对象
  */
-export async function setPageAttrs(pageId: string, attrs: any) {
-    return await setBlockAttrs(pageId, attrs)
+export async function setPageAttrs(pageId: string, attrs: any): Promise<any> {
+  return await setBlockAttrs(pageId, attrs)
 }
 
 /**
@@ -187,12 +195,12 @@ export async function setPageAttrs(pageId: string, attrs: any) {
  * @param pageId
  */
 export async function getPageMd(pageId: string) {
-    return await exportMdContent(pageId);
+  return await exportMdContent(pageId)
 }
 
 /**
  * 列出笔记本
  */
 export async function getNotebooks() {
-    return await lsNotebooks()
+  return await lsNotebooks()
 }

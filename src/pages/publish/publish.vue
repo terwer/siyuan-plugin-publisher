@@ -1,15 +1,15 @@
 <template>
   <div>
-    <publish-service :page-id="undefined"/>
+    <publish-service :page-id="undefined" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import {onMounted} from "vue";
-import logUtil from "../../utils/logUtil";
-import PublishService from "../../components/publish/PublishService.vue";
-import {isInChromeExtension} from "~/utils/browser/ChromeUtil";
-import {getWidgetId} from "~/utils/platform/siyuan/siyuanUtil";
+import { onMounted } from "vue"
+import logUtil from "../../utils/logUtil"
+import PublishService from "../../components/publish/PublishService.vue"
+import { isInChromeExtension } from "~/utils/browser/ChromeUtil"
+import { getWidgetId } from "~/utils/platform/siyuan/siyuanUtil"
 
 onMounted(async () => {
   logUtil.logWarn("MODE=>", import.meta.env.MODE)
@@ -27,7 +27,8 @@ onMounted(async () => {
 </script>
 
 <script lang="ts">
+/* eslint-disable vue/multi-word-component-names */
 export default {
-  name: 'publish'
+  name: "publish",
 }
 </script>

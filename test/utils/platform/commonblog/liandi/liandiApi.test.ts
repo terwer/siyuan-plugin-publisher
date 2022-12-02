@@ -1,9 +1,9 @@
-import { describe } from 'vitest'
-import logUtil from '~/utils/logUtil'
-import { LiandiApiAdaptor } from '~/utils/platform/commonblog/liandi/liandiApiAdaptor'
-import { CommonblogApiAdaptor } from '~/utils/platform/commonblog/commonblogApiAdaptor'
+import { describe } from "vitest"
+import logUtil from "~/utils/logUtil"
+import { LiandiApiAdaptor } from "~/utils/platform/commonblog/liandi/liandiApiAdaptor"
+import { CommonblogApiAdaptor } from "~/utils/platform/commonblog/commonblogApiAdaptor"
 
-describe('liandiApi', async () => {
+describe("liandiApi", async () => {
   // 这个执行一次即可，后面就不用了
   // it("init", async () => {
   //     const cfg = new LiandiCfg()
@@ -17,7 +17,7 @@ describe('liandiApi', async () => {
   //     setJSONConf(API_TYPE_CONSTANTS.API_TYPE_LIANDI, cfg)
   // })
 
-  it('getUser', async () => {
+  it("getUser", async () => {
     const apiAdaptor: CommonblogApiAdaptor = new LiandiApiAdaptor()
     const result = await apiAdaptor.getUsersBlogs()
     logUtil.logInfo(result)

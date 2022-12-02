@@ -2,22 +2,22 @@
 <template>
   <div>
     <div v-if="isPublish">
-      <publish-service :page-id="undefined"/>
+      <publish-service :page-id="undefined" />
     </div>
     <div v-else>
-      <blog-index/>
+      <blog-index />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import {onMounted, ref} from "vue";
-import logUtil from "../utils/logUtil";
-import PublishService from "../components/publish/PublishService.vue";
-import {isInChromeExtension} from "../utils/browser/ChromeUtil";
-import {getPageId, getWidgetId} from "../utils/platform/siyuan/siyuanUtil";
-import BlogIndex from "../components/blog/BlogIndex.vue";
-import {SiYuanApiAdaptor} from "../utils/platform/siyuan/siYuanApiAdaptor";
+import { onMounted, ref } from "vue"
+import logUtil from "../utils/logUtil"
+import PublishService from "../components/publish/PublishService.vue"
+import { isInChromeExtension } from "../utils/browser/ChromeUtil"
+import { getPageId, getWidgetId } from "../utils/platform/siyuan/siyuanUtil"
+import BlogIndex from "../components/blog/BlogIndex.vue"
+import { SiYuanApiAdaptor } from "../utils/platform/siyuan/siYuanApiAdaptor"
 
 const isPublish = ref(false)
 
@@ -51,12 +51,12 @@ const init = async () => {
 // life cycle
 // =====================
 onMounted(async () => {
-  await init();
+  await init()
 })
 </script>
 
 <script lang="ts">
 export default {
-  name: "index"
+  name: "index",
 }
 </script>

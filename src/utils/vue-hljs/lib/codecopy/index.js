@@ -16,9 +16,9 @@ export class CopyButtonPlugin {
    */
   constructor(options = {}) {
     // @ts-ignore
-    self.hook = options.hook;
+    self.hook = options.hook
     // @ts-ignore
-    self.callback = options.callback;
+    self.callback = options.callback
   }
 
   // @ts-ignore
@@ -26,60 +26,60 @@ export class CopyButtonPlugin {
     // Create the copy button and append it to the codeblock.
     const button = Object.assign(document.createElement("button"), {
       innerHTML: "Copy",
-      className: "hljs-copy-button"
-    });
+      className: "hljs-copy-button",
+    })
     // @ts-ignore
-    button.dataset.copied = false;
-    el.parentElement.classList.add("hljs-copy-wrapper");
-    el.parentElement.appendChild(button);
+    button.dataset.copied = false
+    el.parentElement.classList.add("hljs-copy-wrapper")
+    el.parentElement.appendChild(button)
 
     // Add a custom proprety to the code block so that the copy button can reference and match its background-color value.
     el.parentElement.style.setProperty(
       "--hljs-theme-background",
       window.getComputedStyle(el).backgroundColor
-    );
+    )
 
-    button.onclick = function() {
-      if (!navigator.clipboard) return;
+    button.onclick = function () {
+      if (!navigator.clipboard) return
 
-      let newText = text;
+      let newText = text
       // @ts-ignore
       // eslint-disable-next-line no-undef
       if (hook && typeof hook === "function") {
         // @ts-ignore
         // eslint-disable-next-line no-undef
-        newText = hook(text, el) || text;
+        newText = hook(text, el) || text
       }
 
       navigator.clipboard
         .writeText(newText)
-        .then(function() {
-          button.innerHTML = "复制成功";
+        .then(function () {
+          button.innerHTML = "复制成功"
           // @ts-ignore
-          button.dataset.copied = true;
+          button.dataset.copied = true
 
           let alert = Object.assign(document.createElement("div"), {
             role: "status",
             className: "hljs-copy-alert",
-            innerHTML: "复制到剪贴板"
-          });
-          el.parentElement.appendChild(alert);
+            innerHTML: "复制到剪贴板",
+          })
+          el.parentElement.appendChild(alert)
 
           setTimeout(() => {
-            button.innerHTML = "Copy";
+            button.innerHTML = "Copy"
             // @ts-ignore
-            button.dataset.copied = false;
-            el.parentElement.removeChild(alert);
+            button.dataset.copied = false
+            el.parentElement.removeChild(alert)
             // @ts-ignore
-            alert = null;
-          }, 2000);
+            alert = null
+          }, 2000)
         })
-        .then(function() {
+        .then(function () {
           // @ts-ignore
           // eslint-disable-next-line no-undef
-          if (typeof callback === "function") return callback(newText, el);
-        });
-    };
+          if (typeof callback === "function") return callback(newText, el)
+        })
+    }
   }
 }
 

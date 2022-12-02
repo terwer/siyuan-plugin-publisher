@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-floating-promises,@typescript-eslint/strict-boolean-expressions,@typescript-eslint/explicit-function-return-type */
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-import express, { NextFunction, Request, Response } from 'express'
-import fetch from 'cross-fetch'
-import { imageToBase64 } from '~/utils/parser/imageToBase64'
+import express, { NextFunction, Request, Response } from "express"
+import fetch from "cross-fetch"
+import { imageToBase64 } from "~/utils/parser/imageToBase64"
 
 // @ts-expect-error
-import xmlrpc from 'xmlrpc'
+import xmlrpc from "xmlrpc"
 
 const app = express()
 // 解决req.body undefined
@@ -17,7 +17,7 @@ app.use(function (req: Request, res: Response, next: NextFunction) {
   // res.header("Access-Control-Allow-Methods", "PUT, GET, POST, DELETE, OPTIONS");
   // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, Access-Control-Allow-Credentials");
   // res.header("Access-Control-Allow-Credentials", "true");
-  if (req.method === 'OPTIONS') {
+  if (req.method === "OPTIONS") {
     res.send(200)
   } else {
     next()
@@ -27,7 +27,7 @@ app.use(function (req: Request, res: Response, next: NextFunction) {
 /**
  * xmlrpc请求中间代理层
  */
-app.post('/api/middleware/xmlrpc', (req: Request, res: Response) => {
+app.post("/api/middleware/xmlrpc", (req: Request, res: Response) => {
   // const headers = req.headers;
   // console.log(headers)
   const body = req.body
@@ -47,7 +47,7 @@ app.post('/api/middleware/xmlrpc', (req: Request, res: Response) => {
   const xmlrpcApiUrl = body.fetchParams.apiUrl
   const xmlrpcCORSParams = body.fetchParams.fetchCORSParams
 
-  const secure = xmlrpcApiUrl.indexOf('https:') > -1
+  const secure = xmlrpcApiUrl.indexOf("https:") > -1
   if (secure) {
     client = xmlrpc.createSecureClient(xmlrpcApiUrl)
   } else {
@@ -56,24 +56,30 @@ app.post('/api/middleware/xmlrpc', (req: Request, res: Response) => {
 
   let err
   try {
-    console.log('xmlrpcCORSParams.reqMethod=>')
+    console.log("xmlrpcCORSParams.reqMethod=>")
     console.log(xmlrpcCORSParams.reqMethod)
-    console.log('xmlrpcCORSParams.reqParams=>')
+    console.log("xmlrpcCORSParams.reqParams=>")
     console.log(xmlrpcCORSParams.reqParams)
-    const methodPromise = methodCallDirect(client, xmlrpcCORSParams.reqMethod, xmlrpcCORSParams.reqParams)
-    methodPromise.then((resolve: any) => {
-      // console.log("methodPromise resolve=>")
-      // console.log(resolve)
+    const methodPromise = methodCallDirect(
+      client,
+      xmlrpcCORSParams.reqMethod,
+      xmlrpcCORSParams.reqParams
+    )
+    methodPromise
+      .then((resolve: any) => {
+        // console.log("methodPromise resolve=>")
+        // console.log(resolve)
 
-      // console.log("请求完成，准备返回真实结果")
-      writeData(res, resolve)
-      // console.log("请求处理已成功")
-    }).catch((reason: any) => {
-      // console.log("methodPromise catch=>")
-      console.error('xmlrpc middleware error', reason)
-      writeError(res, reason)
-      // console.log("请求处理失败")
-    })
+        // console.log("请求完成，准备返回真实结果")
+        writeData(res, resolve)
+        // console.log("请求处理已成功")
+      })
+      .catch((reason: any) => {
+        // console.log("methodPromise catch=>")
+        console.error("xmlrpc middleware error", reason)
+        writeError(res, reason)
+        // console.log("请求处理失败")
+      })
   } catch (e) {
     err = e
     console.error(e)
@@ -84,7 +90,7 @@ app.post('/api/middleware/xmlrpc', (req: Request, res: Response) => {
   // ========================================
 })
 
-app.post('/api/middleware/fetch', (req: Request, res: Response) => {
+app.post("/api/middleware/fetch", (req: Request, res: Response) => {
   // const headers = req.headers;
   // logUtil.logInfo(headers)
   const body = req.body
@@ -118,9 +124,9 @@ app.post('/api/middleware/fetch', (req: Request, res: Response) => {
   }
 
   let err
-  console.log('fetchCORS.apiUrl=>')
+  console.log("fetchCORS.apiUrl=>")
   console.log(fetchCORSApiUrl)
-  console.log('fetchCORS.fetchOptions=>')
+  console.log("fetchCORS.fetchOptions=>")
   console.log(fetchCORSOptions)
 
   fetch(fetchCORSApiUrl, fetchCORSOptions)
@@ -139,9 +145,9 @@ app.post('/api/middleware/fetch', (req: Request, res: Response) => {
           const finalRes = {
             headers: {
               status: response.status,
-              statusText: response.statusText
+              statusText: response.statusText,
             },
-            body: resJson
+            body: resJson,
           }
           // console.log(finalRes)
           writeStatusData(res, finalRes, response.status)
@@ -156,43 +162,45 @@ app.post('/api/middleware/fetch', (req: Request, res: Response) => {
     })
     .catch((reason: any) => {
       // console.log("methodPromise catch=>")
-      console.error('fetch middleware error=>', reason)
+      console.error("fetch middleware error=>", reason)
       writeError(res, reason)
       // console.log("请求处理失败")
     })
-    // ========================================
-    // ========================================
+  // ========================================
+  // ========================================
 })
 
-app.post('/api/middleware/imageToBase64', (req: Request, res: Response) => {
+app.post("/api/middleware/imageToBase64", (req: Request, res: Response) => {
   const body = req.body
 
   // =====================================
   // =====================================
   const imgUrl = body.fetchParams.imgUrl
-  imageToBase64({ uri: imgUrl }).then((response) => {
-    const base64str = response.base64
+  imageToBase64({ uri: imgUrl })
+    .then((response) => {
+      const base64str = response.base64
 
-    const resJson = {
-      base64str
-    }
+      const resJson = {
+        base64str,
+      }
 
-    const finalRes = {
-      headers: {
-        status: 200,
-        statusText: 'ok'
-      },
-      body: resJson
-    }
-    // console.log(finalRes)
-    writeStatusData(res, finalRes, 200)
-    // console.log("请求处理已成功")
-  }).catch((reason: any) => {
-    // console.log("methodPromise catch=>")
-    console.error('imageToBase64 middleware error=>', reason)
-    writeError(res, reason)
-    // console.log("请求处理失败")
-  })
+      const finalRes = {
+        headers: {
+          status: 200,
+          statusText: "ok",
+        },
+        body: resJson,
+      }
+      // console.log(finalRes)
+      writeStatusData(res, finalRes, 200)
+      // console.log("请求处理已成功")
+    })
+    .catch((reason: any) => {
+      // console.log("methodPromise catch=>")
+      console.error("imageToBase64 middleware error=>", reason)
+      writeError(res, reason)
+      // console.log("请求处理失败")
+    })
   // ========================================
   // ========================================
 })
@@ -202,15 +210,15 @@ app.post('/api/middleware/imageToBase64', (req: Request, res: Response) => {
  * @param res
  * @param data
  */
-function writeData (res: any, data: any) {
+function writeData(res: any, data: any) {
   writeStatusData(res, data, 200)
 }
 
-function writeStatusData (res: any, data: any, status: number) {
+function writeStatusData(res: any, data: any, status: number) {
   const dataJson = JSON.stringify(data)
   res.writeHead(status, {
-    'Content-Length': Buffer.byteLength(dataJson),
-    'Content-Type': 'application/json'
+    "Content-Length": Buffer.byteLength(dataJson),
+    "Content-Type": "application/json",
   })
   res.end(dataJson)
 }
@@ -220,15 +228,15 @@ function writeStatusData (res: any, data: any, status: number) {
  * @param res
  * @param err
  */
-function writeError (res: any, err: any) {
+function writeError(res: any, err: any) {
   writeStatusError(res, err, 500)
 }
 
-function writeStatusError (res: any, err: any, status: number) {
+function writeStatusError(res: any, err: any, status: number) {
   const errorJson = JSON.stringify(err)
   res.writeHead(status, {
-    'Content-Length': Buffer.byteLength(errorJson),
-    'Content-Type': 'application/json'
+    "Content-Length": Buffer.byteLength(errorJson),
+    "Content-Type": "application/json",
   })
   res.end(errorJson)
 }
@@ -240,7 +248,11 @@ function writeStatusError (res: any, err: any, status: number) {
  * @param {Array} params      - Params to send in the call.
  * @return {Promise<Object|Error>}
  */
-async function methodCallDirect (client: any, methodName: string, params: any): Promise<any> {
+async function methodCallDirect(
+  client: any,
+  methodName: string,
+  params: any
+): Promise<any> {
   return await new Promise(function (resolve, reject) {
     client.methodCall(methodName, params, function (error: any, data: any) {
       if (!error) {

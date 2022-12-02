@@ -1,83 +1,110 @@
 <template>
   <el-form label-width="120px">
-    <el-alert class="top-version-tip" :title="apiTypeInfo + blogName" type="info"
-              :closable="false"/>
+    <el-alert
+      class="top-version-tip"
+      :title="apiTypeInfo + blogName"
+      type="info"
+      :closable="false"
+    />
     <el-form-item :label="$t('setting.common.home')">
-      <el-input v-model="home"/>
+      <el-input v-model="home" />
     </el-form-item>
 
-    <el-form-item :label="$t('setting.common.username')" v-if="props.usernameEnabled">
-      <el-input v-model="username"/>
+    <el-form-item
+      :label="$t('setting.common.username')"
+      v-if="props.usernameEnabled"
+    >
+      <el-input v-model="username" />
     </el-form-item>
 
-    <el-form-item :label="$t('setting.common.password')" v-if="props.passwordEnabled">
-      <el-input type="password" v-model="password" show-password/>
-      <a :href="tokenSettingUrl" target="_blank">{{ $t('setting.common.username.gen') }}：{{ tokenSettingUrl }}</a>
+    <el-form-item
+      :label="$t('setting.common.password')"
+      v-if="props.passwordEnabled"
+    >
+      <el-input type="password" v-model="password" show-password />
+      <a :href="tokenSettingUrl" target="_blank"
+        >{{ $t("setting.common.username.gen") }}：{{ tokenSettingUrl }}</a
+      >
     </el-form-item>
 
     <el-form-item :label="$t('setting.common.token')" v-if="props.tokenEnabled">
-      <el-input type="password" v-model="token" show-password/>
-      <a :href="tokenSettingUrl" target="_blank">{{ $t('setting.common.token.gen') }}：{{ tokenSettingUrl }}</a>
+      <el-input type="password" v-model="token" show-password />
+      <a :href="tokenSettingUrl" target="_blank"
+        >{{ $t("setting.common.token.gen") }}：{{ tokenSettingUrl }}</a
+      >
     </el-form-item>
 
     <el-form-item :label="$t('setting.common.apiurl')">
-      <el-input v-model="apiUrl"/>
+      <el-input v-model="apiUrl" />
     </el-form-item>
 
     <el-form-item>
       <el-button type="primary" @click="valiConf" :loading="isLoading">
-        {{ isLoading ? $t('setting.blog.vali.ing') : $t('setting.blog.vali') }}
+        {{ isLoading ? $t("setting.blog.vali.ing") : $t("setting.blog.vali") }}
       </el-button>
-      <el-alert :title="$t('setting.blog.vali.tip.metaweblog')" type="warning" :closable="false" v-if="!apiStatus"/>
-      <el-alert :title="$t('setting.blog.vali.ok.metaweblog')" type="success" :closable="false" v-if="apiStatus"/>
+      <el-alert
+        :title="$t('setting.blog.vali.tip.metaweblog')"
+        type="warning"
+        :closable="false"
+        v-if="!apiStatus"
+      />
+      <el-alert
+        :title="$t('setting.blog.vali.ok.metaweblog')"
+        type="success"
+        :closable="false"
+        v-if="apiStatus"
+      />
     </el-form-item>
 
     <el-form-item>
-      <el-button type="primary" @click="saveConf">{{ $t('setting.blog.save') }}</el-button>
-      <el-button>{{ $t('setting.blog.cancel') }}</el-button>
+      <el-button type="primary" @click="saveConf">{{
+        $t("setting.blog.save")
+      }}</el-button>
+      <el-button>{{ $t("setting.blog.cancel") }}</el-button>
     </el-form-item>
   </el-form>
 </template>
 
 <script lang="ts" setup>
+import {
+  CommonblogCfg,
+  ICommonblogCfg,
+} from "~/utils/platform/commonblog/commonblogCfg"
+import { onMounted, ref } from "vue"
+import { useI18n } from "vue-i18n"
+import logUtil from "../../../../utils/logUtil"
+import { getJSONConf, setJSONConf } from "~/utils/config"
+import { ElMessage } from "element-plus"
+import { isEmptyObject } from "~/utils/util"
+import { API } from "~/utils/api"
 
-import {CommonblogCfg, ICommonblogCfg} from "../../../../utils/platform/commonblog/commonblogCfg";
-import {onMounted, ref} from "vue";
-import {useI18n} from "vue-i18n";
-import logUtil from "../../../../utils/logUtil";
-import {getJSONConf, setJSONConf} from "../../../../utils/config";
-import {ElMessage} from "element-plus";
-import {isEmptyObject} from "../../../../utils/util";
-import {API} from "../../../../utils/api";
-import {UserBlog} from "../../../../utils/common/userBlog";
-
-const {t} = useI18n()
+const { t } = useI18n()
 
 const props = defineProps({
   isReload: {
     type: Boolean,
-    default: false
+    default: false,
   },
   apiType: {
     type: String,
-    default: ""
+    default: "",
   },
   cfg: {
     type: CommonblogCfg,
-    default: null
+    default: null,
   },
   usernameEnabled: {
     type: Boolean,
-    default: false
+    default: false,
   },
   passwordEnabled: {
     type: Boolean,
-    default: false
+    default: false,
   },
   tokenEnabled: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 })
 
 const home = ref("")
@@ -92,10 +119,12 @@ const blogName = ref("")
 const blogid = ref("")
 const tokenSettingUrl = ref("")
 
-const apiTypeInfo = ref(t('setting.blog.platform.support.common') + props.apiType + " ")
+const apiTypeInfo = ref(
+  t("setting.blog.platform.support.common") + props.apiType + " "
+)
 
 const valiConf = async () => {
-  isLoading.value = true;
+  isLoading.value = true
 
   try {
     // 先保存
@@ -103,7 +132,7 @@ const valiConf = async () => {
 
     const cfg = getJSONConf<ICommonblogCfg>(props.apiType)
     const api = new API(props.apiType)
-    const usersBlogs: Array<UserBlog> = await api.getUsersBlogs()
+    const usersBlogs = await api.getUsersBlogs()
     if (usersBlogs && usersBlogs.length > 0) {
       const userBlog = usersBlogs[0]
 
@@ -129,9 +158,9 @@ const valiConf = async () => {
   }
 
   if (!apiStatus.value) {
-    ElMessage.error(t('setting.blog.vali.error'))
+    ElMessage.error(t("setting.blog.vali.error"))
   } else {
-    ElMessage.success(t('main.opt.success'))
+    ElMessage.success(t("main.opt.success"))
   }
 
   isLoading.value = false
@@ -139,7 +168,8 @@ const valiConf = async () => {
   logUtil.logInfo("通用Setting验证完毕")
 }
 
-const saveConf = (hideTip?: boolean) => {
+// @ts-ignore
+const saveConf = (hideTip) => {
   logUtil.logInfo("Metaweblog通用Setting保存配置")
 
   const cfg = props.cfg
@@ -154,8 +184,8 @@ const saveConf = (hideTip?: boolean) => {
 
   setJSONConf(props.apiType, cfg)
 
-  if (hideTip != true) {
-    ElMessage.success(t('main.opt.success'))
+  if (hideTip !== true) {
+    ElMessage.success(t("main.opt.success"))
   }
 }
 
@@ -189,10 +219,8 @@ onMounted(async () => {
 
 <script lang="ts">
 export default {
-  name: "CommonBlogSetting"
+  name: "CommonBlogSetting",
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

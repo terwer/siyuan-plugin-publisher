@@ -1,6 +1,6 @@
 @import "./webfont.css";
 
-html{
+html {
   /*filter: grayscale(1);*/
   --el-font-family: var(--g-font-family) !important;
   --custom-app-bg-color: #ffffff;
@@ -13,7 +13,7 @@ body {
   height: 97.5%;
 }
 
-#app{
+#app {
   background: var(--custom-app-bg-color);
   padding: 10px;
   min-width: 600px;
@@ -32,7 +32,10 @@ a:hover {
 }
 
 :root {
-  --g-font-family: "JetBrains Mono", "LXGW WenKai", "-apple-system", "Wenquanyi Micro Hei", "Wenquanyi Micro Hei Mono", "Microsoft YaHei", "PT Sans", "Liberation Mono", monospace, dejavu sans mono, Fira Code, Microsoft Yahei, Consolas, Courier New, monospace, Menlo, Monaco;
+  --g-font-family: "JetBrains Mono", "LXGW WenKai", "-apple-system",
+    "Wenquanyi Micro Hei", "Wenquanyi Micro Hei Mono", "Microsoft YaHei",
+    "PT Sans", "Liberation Mono", monospace, dejavu sans mono, Fira Code,
+    Microsoft Yahei, Consolas, Courier New, monospace, Menlo, Monaco;
   font-family: var(--g-font-family) !important;
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
@@ -46,7 +49,8 @@ a:hover {
 }
 
 /* Mono font (optional) */
-pre,code {
+pre,
+code {
   font-family: var(--g-font-family) !important;
   tab-size: 4;
 }
@@ -57,7 +61,6 @@ pre,code {
     background-color: #ffffff;
   }
 }
-
 
 /* table */
 .post-detail-content-box table {
@@ -99,8 +102,8 @@ pre,code {
   margin-top: 10px !important;
 }
 
-.el-dialog{
+.el-dialog {
   --el-dialog-width: 88% !important;
   --el-dialog-margin-top: 10vh;
-  margin: var(--el-dialog-margin-top,15vh) auto 0 5.5%;
+  margin: var(--el-dialog-margin-top, 15vh) auto 0 5.5%;
 }

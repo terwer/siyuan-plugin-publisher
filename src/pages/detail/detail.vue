@@ -1,13 +1,13 @@
 <template>
-  <BlogDetail/>
+  <BlogDetail />
 </template>
 
 <script lang="ts" setup>
-import BlogDetail from "../../components/blog/BlogDetail.vue";
+import BlogDetail from "../../components/blog/BlogDetail.vue"
 </script>
 
 <script lang="ts">
 export default {
-  name: 'detail'
+  name: "detail",
 }
 </script>

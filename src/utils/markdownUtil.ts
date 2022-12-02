@@ -8,42 +8,42 @@
  * 渲染Markdown
  * @param md
  */
-export function renderHTML(md: string) {
-    // @ts-ignore
-    if(typeof Lute == "undefined"){
-        return md;
-    }
+export function renderHTML(md: string): string {
+  // @ts-expect-error
+  if (typeof Lute === "undefined") {
+    return md
+  }
 
-    // @ts-ignore
-    const lute = Lute.New()
+  // @ts-expect-error
+  const lute = Lute.New()
 
-    const renderers = {
-        // renderText: (node: any, entering: any) => {
-        //     if (entering) {
-        //         logUtil.logInfo("    render text")
-        //         // @ts-ignore
-        //         return [node.Text() + " via Lute", Lute.WalkContinue]
-        //     }
-        //     // @ts-ignore
-        //     return ["", Lute.WalkContinue]
-        // },
-        // renderStrong: (node: any, entering: any) => {
-        //     entering ? logUtil.logInfo("    start render strong") : logUtil.logInfo("    end render strong")
-        //     // @ts-ignore
-        //     return ["", Lute.WalkContinue]
-        // },
-        // renderParagraph: (node: any, entering: any) => {
-        //     entering ? logUtil.logInfo("    start render paragraph") : logUtil.logInfo("    end render paragraph")
-        //     // @ts-ignore
-        //     return ["", Lute.WalkContinue]
-        // }
-    }
+  const renderers = {
+    // renderText: (node: any, entering: any) => {
+    //     if (entering) {
+    //         logUtil.logInfo("    render text")
+    //         // @ts-ignore
+    //         return [node.Text() + " via Lute", Lute.WalkContinue]
+    //     }
+    //     // @ts-ignore
+    //     return ["", Lute.WalkContinue]
+    // },
+    // renderStrong: (node: any, entering: any) => {
+    //     entering ? logUtil.logInfo("    start render strong") : logUtil.logInfo("    end render strong")
+    //     // @ts-ignore
+    //     return ["", Lute.WalkContinue]
+    // },
+    // renderParagraph: (node: any, entering: any) => {
+    //     entering ? logUtil.logInfo("    start render paragraph") : logUtil.logInfo("    end render paragraph")
+    //     // @ts-ignore
+    //     return ["", Lute.WalkContinue]
+    // }
+  }
 
-    lute.SetJSRenderers({
-        renderers: {
-            Md2HTML: renderers
-        },
-    })
+  lute.SetJSRenderers({
+    renderers: {
+      Md2HTML: renderers,
+    },
+  })
 
-    return lute.MarkdownStr("", md)
+  return lute.MarkdownStr("", md)
 }

@@ -1,17 +1,15 @@
 <template>
- <DefaultIndex/>
+  <DefaultIndex />
 </template>
 
 <script lang="ts" setup>
-import DefaultIndex from "./themes/default/DefaultIndex.vue";
+import DefaultIndex from "./themes/default/DefaultIndex.vue"
 </script>
 
 <script lang="ts">
 export default {
-  name: "BlogIndex"
+  name: "BlogIndex",
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -1,9 +1,9 @@
-import { describe, it } from 'vitest'
-import logUtil from '../../../../../src/utils/logUtil'
+import { describe, it } from "vitest"
+import logUtil from "../../../../../src/utils/logUtil"
 
-describe('kmsApi test', () => {
-  it('kmsFetch', () => {
-    logUtil.logInfo('kmsFetch')
+describe("kmsApi test", () => {
+  it("kmsFetch", () => {
+    logUtil.logInfo("kmsFetch")
   })
 
   // it('kms addDoc', () => {

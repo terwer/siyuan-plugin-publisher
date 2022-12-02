@@ -3,7 +3,7 @@
     <h1>对不起，您没有该操作的权限</h1>
     <el-form>
       <el-form-item>
-        <el-input v-model="pwd"/>
+        <el-input v-model="pwd" />
       </el-form-item>
       <el-form-item>
         <el-button @click="conformPwd">确认</el-button>
@@ -13,26 +13,23 @@
 </template>
 
 <script lang="ts" setup>
-import {ref} from "vue";
-import {inBrowser} from "../../utils/util";
+import { ref } from "vue"
+import { inBrowser } from "../../utils/util"
 
 const pwd = ref("")
 
 const conformPwd = () => {
   if (inBrowser()) {
-    const newUrl = "/?pwd=" + pwd.value;
+    const newUrl = "/?pwd=" + pwd.value
     window.location.href = newUrl
   }
 }
-
 </script>
 
 <script lang="ts">
 export default {
-  name: "NoAuth"
+  name: "NoAuth",
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

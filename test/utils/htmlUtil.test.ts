@@ -1,11 +1,11 @@
 /* eslint-disable no-irregular-whitespace */
-import { describe } from 'vitest'
-import { PageType } from '~/utils/platform/metaweblog/IMetaweblogCfg'
-import { mdToHtml, removeMdWidgetTag, removeWidgetTag } from '~/utils/htmlUtil'
-import logUtil from '~/utils/logUtil'
+import { describe } from "vitest"
+import { PageType } from "~/utils/platform/metaweblog/IMetaweblogCfg"
+import { mdToHtml, removeMdWidgetTag, removeWidgetTag } from "~/utils/htmlUtil"
+import logUtil from "~/utils/logUtil"
 
-describe('htmlUtil test', () => {
-  it('mdToHtml test', () => {
+describe("htmlUtil test", () => {
+  it("mdToHtml test", () => {
     const md = `# 数据类型之字典类型
 ### **二、字典类型的操作**
 
@@ -31,6 +31,6 @@ print(v1)
       content = removeMdWidgetTag(md)
     }
 
-    logUtil.logInfo('content=>', content)
+    logUtil.logInfo("content=>", content)
   })
 })

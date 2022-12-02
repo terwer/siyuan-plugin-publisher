@@ -6,11 +6,11 @@
 const props = defineProps({
   pageId: {
     type: String,
-    default: undefined
+    default: undefined,
   },
   apiType: {
     type: String,
-    default: ""
+    default: "",
   },
 })
 </script>

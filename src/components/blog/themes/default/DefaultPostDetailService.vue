@@ -1,39 +1,39 @@
 <template>
-  <div id="post-detail-content"
-       v-highlight
-       v-html="post.description"
-  ></div>
+  <div id="post-detail-content" v-highlight v-html="post.description"></div>
 </template>
 
 <script lang="ts" setup>
-import {Post} from "../../../../utils/common/post";
-import {nextTick, onMounted, ref, watch} from "vue";
-import {API} from "../../../../utils/api";
-import {API_TYPE_CONSTANTS} from "../../../../utils/constants/apiTypeConstants";
-import logUtil from "../../../../utils/logUtil";
+import { Post } from "~/utils/common/post"
+import { onMounted, ref, watch } from "vue"
+import { API } from "~/utils/api"
+import { API_TYPE_CONSTANTS } from "~/utils/constants/apiTypeConstants"
+import logUtil from "~/utils/logUtil"
 
 const props = defineProps({
   pageId: {
     type: String,
-    default: undefined
+    default: undefined,
+  },
+})
+
+/* 监听props */
+watch(
+  () => props.pageId,
+  /**/ (oldValue, newValue) => {
+    // Here you can add you functionality
+    // as described in the name you will get old and new value of watched property
+    // 默认选中vuepress
+    // setBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY, true)
+    initPage()
+    logUtil.logInfo("文章详情查看初始化")
   }
-})
+)
 
-/*监听props*/
-watch(() => props.pageId, /**/(oldValue, newValue) => {
-  // Here you can add you functionality
-  // as described in the name you will get old and new value of watched property
-  // 默认选中vuepress
-  // setBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY, true)
-  initPage();
-  logUtil.logInfo("文章详情查看初始化")
-})
-
-const defaultPost: Post = new Post()
+const defaultPost = new Post()
 const post = ref(defaultPost)
 
 const initPage = async () => {
-  if (!props.pageId || props.pageId == "") {
+  if (!props.pageId || props.pageId === "") {
     return
   }
 
@@ -49,7 +49,7 @@ onMounted(async () => {
 
 <script lang="ts">
 export default {
-  name: "DefaultPostDetailService"
+  name: "DefaultPostDetailService",
 }
 </script>
 
@@ -65,10 +65,12 @@ export default {
   max-width: 99%;
 }
 
-#post-detail-content ol, #post-detail-content ul {
+#post-detail-content ol,
+#post-detail-content ul {
   padding-inline-start: 24px;
 }
-#post-detail-content ol li, #post-detail-content ul li{
+#post-detail-content ol li,
+#post-detail-content ul li {
   /*padding: 5px 0;*/
 }
 
@@ -84,9 +86,8 @@ export default {
   background: var(--custom-app-bg-color);
 }
 
-#post-detail-content mjx-container[jax="SVG"][display="true"]{
+#post-detail-content mjx-container[jax="SVG"][display="true"] {
   text-align: left;
 }
 </style>
-<style scoped>
-</style>
+<style scoped></style>

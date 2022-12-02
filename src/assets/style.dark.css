@@ -1,63 +1,62 @@
 html.dark {
-    /* 自定义深色背景颜色 */
-    /*--af-bg-color: #000000;*/
-    --custom-app-bg-color: #000000;
+  /* 自定义深色背景颜色 */
+  /*--af-bg-color: #000000;*/
+  --custom-app-bg-color: #000000;
 }
 
 button,
 input,
 select,
 textarea {
-    font-family: inherit;
-    font-size: inherit;
-    line-height: inherit;
-    color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
 }
 
-html.dark .post-detail-content-box .hljs{
-    color: #ffffff;
-    background-color: #161616 !important;
-    border: 1px solid #ccc !important;
+html.dark .post-detail-content-box .hljs {
+  color: #ffffff;
+  background-color: #161616 !important;
+  border: 1px solid #ccc !important;
 }
 
 /* dark table */
 html.dark .post-detail-content-box table {
-    color: #ffffff;
-    border-color: #ccc;
+  color: #ffffff;
+  border-color: #ccc;
 }
 
 html.dark .post-detail-content-box table th {
-    border-color: #ccc;
-    background-color: #161616;
+  border-color: #ccc;
+  background-color: #161616;
 }
 
 html.dark .post-detail-content-box table td {
-    border-color: #ccc;
-    background-color: #161616;
+  border-color: #ccc;
+  background-color: #161616;
 }
 
-
-html.dark .el-header h1{
-    --custom-title-text-color: #ffffff;
+html.dark .el-header h1 {
+  --custom-title-text-color: #ffffff;
 }
 
-html.dark .el-page-header__left{
-    color: #ffffff;
+html.dark .el-page-header__left {
+  color: #ffffff;
 }
 
-html.dark .post-detail-content-box{
-    color: #ffffff;
+html.dark .post-detail-content-box {
+  color: #ffffff;
 }
 
 /** dark code */
 html.dark .post-detail-content-box .hljs {
-    color: #ffffff;
-    background-color: #161616 !important;
-    border: 1px solid #ccc !important;
+  color: #ffffff;
+  background-color: #161616 !important;
+  border: 1px solid #ccc !important;
 }
 
 html.dark code {
-    color: #2fd945 !important;
+  color: #2fd945 !important;
 }
 
 html.dark .hljs-keyword,
@@ -65,7 +64,7 @@ html.dark .hljs-selector-tag,
 html.dark .hljs-built_in,
 html.dark .hljs-name,
 html.dark .hljs-tag {
-    color: #539dc5 !important;
+  color: #539dc5 !important;
 }
 
 html.dark .post-detail-content-box .hljs-string,
@@ -77,5 +76,5 @@ html.dark .post-detail-content-box .hljs-template-tag,
 html.dark .post-detail-content-box .hljs-template-variable,
 html.dark .post-detail-content-box .hljs-type,
 html.dark .post-detail-content-box .hljs-addition {
-    color: #2fd945 !important;
+  color: #2fd945 !important;
 }

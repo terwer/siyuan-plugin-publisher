@@ -1,0 +1,21 @@
+# plantform
+.github
+.husky
+.settings
+.vercel
+.vscode
+
+# Ignore artifacts:
+build
+coverage
+dist
+extension
+node_modules
+out
+
+# Ignore all HTML files:
+*.html
+
+# lib
+*.min.js
+*mathjax*

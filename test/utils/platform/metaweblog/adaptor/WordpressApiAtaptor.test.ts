@@ -1,8 +1,8 @@
-import { describe, it } from 'vitest'
-import { WordpressApiAdaptor } from '~/utils/platform/wordpress/wordpressApiAdaptor'
-import logUtil from '../../../../../src/utils/logUtil'
+import { describe, it } from "vitest"
+import { WordpressApiAdaptor } from "~/utils/platform/wordpress/wordpressApiAdaptor"
+import logUtil from "../../../../../src/utils/logUtil"
 
-describe('WordpressApiAtaptor test', () => {
+describe("WordpressApiAtaptor test", () => {
   // 这个执行一次即可，后面就不用了
   // it("init", async () => {
   //     const cfg = new WordpressCfg()
@@ -16,9 +16,9 @@ describe('WordpressApiAtaptor test', () => {
   //     setJSONConf(API_TYPE_CONSTANTS.API_TYPE_WORDPRESS, cfg)
   // })
 
-  it('getUsersBlogs', async () => {
+  it("getUsersBlogs", async () => {
     const api = new WordpressApiAdaptor()
     const result = await api.getUsersBlogs()
-    logUtil.logInfo('getUsersBlogs测试结果=>', result)
+    logUtil.logInfo("getUsersBlogs测试结果=>", result)
   })
 })
