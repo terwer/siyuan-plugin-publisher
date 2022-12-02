@@ -17,48 +17,58 @@ import {VuepressApiAdaptor} from "~/utils/platform/github/vuepress/vuepressApiAd
 import {HugoApiAdaptor} from "~/utils/platform/github/hugo/hugoApiAdaptor";
 import {HexoApiAdaptor} from "~/utils/platform/github/hexo/hexoApiAdaptor";
 import {JekyllApiAdaptor} from "~/utils/platform/github/jekyll/jekyllApiAdaptor";
-import logUtil from "~/utils/logUtil";
 
 /**
- * 所有平台统一API接口
+ * @description 所有平台统一API接口
+ * @author terwer
+ * @version 0.1.0
+ * @since 0.0.1
  */
 export interface IApi {
+
     /**
-     * 博客配置列表
+     * @description 获取博客配置列表
+     * @see {@link https://codex.wordpress.org/XML-RPC_MetaWeblog_API#metaWeblog.getUsersBlogs getUsersBlogs}
+     * @returns {Promise<Array<UserBlog>>}
      */
     getUsersBlogs(): Promise<Array<UserBlog>>
 
     /**
-     * 最新文章数目
+     * @description 最新文章数目
      * @param keyword 关键字（可选，部分平台不支持搜索）
+     * @returns {Promise<number>}
      */
     getRecentPostsCount(keyword?: string): Promise<number>
 
     /**
-     * 最新文章
+     * @description 最新文章
      * @param numOfPosts 文章数目
      * @param page 页码（可选，部分平台不支持分页）
      * @param keyword 关键字（可选，部分平台不支持搜索）
+     * @see {@link https://codex.wordpress.org/XML-RPC_MetaWeblog_API#metaWeblog.getRecentPosts getRecentPosts}
+     * @returns {Promise<Array<Post>>}
      */
     getRecentPosts(numOfPosts: number, page?: number, keyword?: string): Promise<Array<Post>>
 
     /**
-     * 文章详情
-     * @param postid
+     * @description 文章详情
+     * @param postid 文章ID
      * @param useSlug 是否使用的是别名（可选，部分平台不支持）
+     * @see {@link https://codex.wordpress.org/XML-RPC_MetaWeblog_API#metaWeblog.getPost getPost}
+     * @returns {Promise<Post>}
      */
     getPost(postid: string, useSlug?: boolean): Promise<Post>
 
 
     /**
-     *  发布文章
-     *  https://codex.wordpress.org/XML-RPC_MetaWeblog_API#metaWeblog.newPost
+     * @description 发布文章
      * @param post 文章
      * @param publish 可选，是否发布
      *
+     * ```ts
      *    const post = {
      *         description: "自动发布的测试内容",
-     *         title: "自动发布测试",
+     *         title: "自动发布的测试标题",
      *         categories: ["标签1","标签2"],
      *         // dateCreated: new Date(),
      *         // link: "",
@@ -69,20 +79,22 @@ export interface IApi {
      *         //  url: ""
      *         // };
      *         // userid: ""
-     *     }
+     *    }
      *
-     *     const result = newPost(post, false)
+     *    const result = newPost(post, false)
+     * ```
+     * @see {@link  https://codex.wordpress.org/XML-RPC_MetaWeblog_API#metaWeblog.newPost newPost}
      * @returns {Promise<string>}
      */
     newPost(post: Post, publish?: boolean): Promise<string>
 
     /**
-     *  更新文章
-     *  https://codex.wordpress.org/XML-RPC_MetaWeblog_API#metaWeblog.editPost
+     * @description 更新文章
      * @param postid 文章id
      * @param post 文章
      * @param publish 可选，是否发布
      *
+     * ```ts
      *     // wordpress
      *     // const postid = 4115
      *     // conf
@@ -90,7 +102,7 @@ export interface IApi {
      *     const postid = "2490384_1"
      *     const post = {
      *         description: "修改过的自动发布的测试内容2",
-     *         title: "修改过的自动发布测试2",
+     *         title: "修改过的自动发布的测试标题2",
      *         categories: ["标签1", "标签2"],
      *         // dateCreated: new Date(),
      *         // link: "",
@@ -104,35 +116,44 @@ export interface IApi {
      *     }
      *
      *     const result = editPost(postid, post, false)
+     * ```
+     * @see {@link https://codex.wordpress.org/XML-RPC_MetaWeblog_API#metaWeblog.editPost editPost}
      * @returns {Promise<boolean>}
      */
     editPost(postid: string, post: Post, publish?: boolean): Promise<boolean>
 
     /**
-     * 删除文章
-     * https://codex.wordpress.org/XML-RPC_MetaWeblog_API#metaWeblog.deletePost
+     * @description 删除文章
      * @param postid 文章ID
+     * @see {@link https://codex.wordpress.org/XML-RPC_MetaWeblog_API#metaWeblog.deletePost deletePost}
+     * @returns {Promise<boolean>}
      */
     deletePost(postid: string): Promise<boolean>
 
     /**
-     * 获取分类列表
+     * @description 获取分类列表
+     * @see {@link https://codex.wordpress.org/XML-RPC_MetaWeblog_API#metaWeblog.getCategories getCategories}
+     * @returns {Promise<CategoryInfo[]>}
      */
     getCategories(): Promise<CategoryInfo[]>
 
     /**
-     * 获取预览链接
+     * @description 获取预览链接
      * @param postid 文章ID
+     * @returns {Promise<string>}
      */
     getPreviewUrl(postid: string): Promise<string>
 }
 
 /**
- * 统一API入口
+ * @description 统一API入口具体实现
+ * @author terwer
+ * @version 0.1.0
+ * @since 0.0.1
  */
 export class API implements IApi {
-    type: string
-    private apiAdaptor: IApi
+    private readonly type: string
+    private readonly apiAdaptor: IApi
 
     constructor(type: string) {
         this.type = type;
@@ -209,39 +230,39 @@ export class API implements IApi {
         }
     }
 
-    async getRecentPostsCount(keyword?: string): Promise<number> {
+    public async getRecentPostsCount(keyword?: string): Promise<number> {
         return await this.apiAdaptor.getRecentPostsCount(keyword);
     }
 
-    async getRecentPosts(numOfPosts: number, page?: number, keyword?: string): Promise<Array<Post>> {
+    public async getRecentPosts(numOfPosts: number, page?: number, keyword?: string): Promise<Array<Post>> {
         return await this.apiAdaptor.getRecentPosts(numOfPosts, page, keyword);
     }
 
-    async getUsersBlogs(): Promise<Array<UserBlog>> {
+    public async getUsersBlogs(): Promise<Array<UserBlog>> {
         return await this.apiAdaptor.getUsersBlogs();
     }
 
-    async getPost(postid: string, useSlug?: boolean): Promise<Post> {
+    public async getPost(postid: string, useSlug?: boolean): Promise<Post> {
         return await this.apiAdaptor.getPost(postid, useSlug);
     }
 
-    async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
+    public async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
         return await this.apiAdaptor.editPost(postid, post, publish)
     }
 
-    async newPost(post: Post, publish?: boolean): Promise<string> {
+    public async newPost(post: Post, publish?: boolean): Promise<string> {
         return await this.apiAdaptor.newPost(post, publish)
     }
 
-    async deletePost(postid: string): Promise<boolean> {
+    public async deletePost(postid: string): Promise<boolean> {
         return await this.apiAdaptor.deletePost(postid)
     }
 
-    async getCategories(): Promise<CategoryInfo[]> {
+    public async getCategories(): Promise<CategoryInfo[]> {
         return await this.apiAdaptor.getCategories()
     }
 
-    async getPreviewUrl(postid: string): Promise<string> {
+    public async getPreviewUrl(postid: string): Promise<string> {
         return await this.apiAdaptor.getPreviewUrl(postid)
     }
 }

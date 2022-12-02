@@ -34,3 +34,6 @@ extension/
 backup/
 .vitest-result.json
 coverage
+
+# docs
+out
