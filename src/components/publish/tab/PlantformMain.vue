@@ -87,6 +87,7 @@ const {
 
 let formData = reactive({
   dynamicConfigArray: <Array<DynamicConfig>>[],
+  githubArray: <Array<DynamicConfig>>[],
   metaweblogArray: <Array<DynamicConfig>>[],
   wordpressArray: <Array<DynamicConfig>>[]
 })
