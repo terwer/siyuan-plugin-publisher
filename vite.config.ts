@@ -7,9 +7,15 @@ import Components from "unplugin-vue-components/vite"
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers"
 import { fileURLToPath } from "url"
 import requireTransform from "vite-plugin-require-transform"
+import rollupNodePolyFill from "rollup-plugin-node-polyfills"
+import NodeModulesPolyfillPlugin from "@esbuild-plugins/node-modules-polyfill"
+import NodeGlobalsPolyfillPlugin from "@esbuild-plugins/node-globals-polyfill"
 
 const isTest = process.env.TEST === "true"
 console.log("isTest=>", isTest)
+
+const isProd = process.env.NODE_ENV === "production"
+console.log("isProd=>", isProd)
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode, ssrBuild }) => {
@@ -90,16 +96,92 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
     resolve: {
       alias: {
         "~": path.resolve(__dirname, "./"),
+        "node-fetch": "cross-fetch",
+        // This Rollup aliases are extracted from @esbuild-plugins/node-modules-polyfill,
+        // see https://github.com/remorses/esbuild-plugins/blob/master/node-modules-polyfill/src/polyfills.ts
+        // process and buffer are excluded because already managed
+        // by node-globals-polyfill
+        util: "rollup-plugin-node-polyfills/polyfills/util",
+        sys: "util",
+        events: "rollup-plugin-node-polyfills/polyfills/events",
+        stream: "rollup-plugin-node-polyfills/polyfills/stream",
+        path: "rollup-plugin-node-polyfills/polyfills/path",
+        querystring: "rollup-plugin-node-polyfills/polyfills/qs",
+        punycode: "rollup-plugin-node-polyfills/polyfills/punycode",
+        url: "rollup-plugin-node-polyfills/polyfills/url",
+        string_decoder: "rollup-plugin-node-polyfills/polyfills/string-decoder",
+        http: "rollup-plugin-node-polyfills/polyfills/http",
+        https: "rollup-plugin-node-polyfills/polyfills/http",
+        os: "rollup-plugin-node-polyfills/polyfills/os",
+        assert: "rollup-plugin-node-polyfills/polyfills/assert",
+        constants: "rollup-plugin-node-polyfills/polyfills/constants",
+        _stream_duplex:
+          "rollup-plugin-node-polyfills/polyfills/readable-stream/duplex",
+        _stream_passthrough:
+          "rollup-plugin-node-polyfills/polyfills/readable-stream/passthrough",
+        _stream_readable:
+          "rollup-plugin-node-polyfills/polyfills/readable-stream/readable",
+        _stream_writable:
+          "rollup-plugin-node-polyfills/polyfills/readable-stream/writable",
+        _stream_transform:
+          "rollup-plugin-node-polyfills/polyfills/readable-stream/transform",
+        timers: "rollup-plugin-node-polyfills/polyfills/timers",
+        console: "rollup-plugin-node-polyfills/polyfills/console",
+        vm: "rollup-plugin-node-polyfills/polyfills/vm",
+        zlib: "rollup-plugin-node-polyfills/polyfills/zlib",
+        tty: "rollup-plugin-node-polyfills/polyfills/tty",
+        domain: "rollup-plugin-node-polyfills/polyfills/domain",
+        buffer: "rollup-plugin-node-polyfills/polyfills/buffer-es6",
+        process: "rollup-plugin-node-polyfills/polyfills/process-es6",
+      },
+    },
+    optimizeDeps: {
+      esbuildOptions: {
+        // Node.js global to browser globalThis
+        define: {
+          global: "globalThis",
+        },
+        // Enable esbuild polyfill plugins
+        plugins: [
+          NodeGlobalsPolyfillPlugin({
+            process: true,
+            buffer: true,
+          }),
+          NodeModulesPolyfillPlugin(),
+        ],
       },
     },
     build: {
+      // 浏览器兼容性 ‘esnext’ | 'modules'
+      target: "modules",
+      // 输出路径
+      outDir: "./dist",
+      // 生成静态资源的存放路径
+      assetsDir: "./assets",
+      // 小于此阈值的导入或引用资源将内联为 base64 编码， 以避免额外的http请求， 设置为 0, 可以完全禁用此项，
+      assetsInlineLimit: 4096,
+      // 启动 / 禁用 CSS 代码拆分
+      cssCodeSplit: true,
+      // 构建后是否生成 source map 文件
+      sourcemap: false,
+
+      // 设置为 false 可以禁用最小化混淆
+      // 或是用来指定是应用哪种混淆器
+      // boolean | 'terser' | 'esbuild'
+      // minify: 'terser',
+      // 不压缩，用于调试
+      minify: isProd,
+
       rollupOptions: {
         output: {
           chunkFileNames: "static/js/[name]-[hash].js",
           entryFileNames: "static/js/[name]-[hash].js",
           assetFileNames: "static/[ext]/[name]-[hash].[ext]",
         },
-        plugins: [],
+        plugins: [
+          // Enable rollup polyfills plugin, used during production bundling
+          rollupNodePolyFill(),
+        ],
       },
     },
     test: {

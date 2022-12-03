@@ -1,16 +1,18 @@
 import { describe, it } from "vitest"
-import logUtil from "~/utils/logUtil"
+import { LogFactory } from "~/utils/logUtil"
 
 describe("logUtil test", () => {
+  const logger = LogFactory.getLogger()
+
   it("logInfo", () => {
-    logUtil.logInfo("This is info logUtil")
+    logger.info("This is info log")
   })
 
   it("logWarn", () => {
-    logUtil.logWarn("This is warn logUtil")
+    logger.warn("This is warn log")
   })
 
   it("logError", () => {
-    logUtil.logError("This is error logUtil")
+    logger.error("This is error log")
   })
 })

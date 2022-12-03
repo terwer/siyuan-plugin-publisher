@@ -90,12 +90,14 @@
 </template>
 
 <script lang="ts" setup>
-/* eslint-disable */
 import { useDark, useToggle } from "@vueuse/core"
 import { onMounted, reactive, ref } from "vue"
-import { ElMessage, FormRules } from "element-plus"
-import logUtil from "~/utils/logUtil"
+import { FormRules } from "element-plus"
 import { useI18n } from "vue-i18n"
+import { LogFactory } from "~/utils/logUtil"
+
+const logger = LogFactory.getLogger("layouts/default/DefaultFooter")
+
 const { t } = useI18n()
 
 const isDark = useDark()
@@ -186,6 +188,7 @@ const initConf = () => {
 }
 
 onMounted(async () => {
+  logger.warn("测试", "123abc")
   initConf()
 
   // isInSiyuan.value = await inSiyuan()

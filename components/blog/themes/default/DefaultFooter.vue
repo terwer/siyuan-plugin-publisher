@@ -95,7 +95,6 @@ import { useDark, useToggle } from "@vueuse/core"
 import { goToPage, goToPageWithTarget } from "~/utils/browser/ChromeUtil"
 import { onMounted, reactive, ref } from "vue"
 import { ElMessage, FormRules } from "element-plus"
-import logUtil from "../../../../utils/logUtil"
 import { useI18n } from "vue-i18n"
 import {
   getSiyuanCfg,

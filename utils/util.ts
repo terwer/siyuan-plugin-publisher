@@ -1,5 +1,4 @@
 import { slugify } from "transliteration"
-import logUtil from "~/utils/logUtil"
 import jsYaml from "js-yaml"
 
 /**
@@ -381,9 +380,7 @@ export function jiebaToHotWords(words: string[], len: number) {
 /**
  * 是否在浏览器
  */
-export function inBrowser() {
-  return typeof window !== "undefined"
-}
+export const inBrowser = (): boolean => typeof window !== "undefined"
 
 /**
  * 获取url参数

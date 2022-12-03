@@ -2,6 +2,8 @@ lockfileVersion: 5.4
 
 specifiers:
   "@element-plus/icons-vue": ^2.0.9
+  "@esbuild-plugins/node-globals-polyfill": ^0.1.1
+  "@esbuild-plugins/node-modules-polyfill": ^0.1.4
   "@intlify/vite-plugin-vue-i18n": ^6.0.1
   "@octokit/core": ^4.0.4
   "@types/express": ^4.17.13
@@ -13,6 +15,7 @@ specifiers:
   "@vueuse/components": ^9.6.0
   "@vueuse/core": ^9.6.0
   better-docs: ^2.7.2
+  chalk: ^5.1.2
   copy-to-clipboard: ^3.3.1
   cross-fetch: ^3.1.5
   element-plus: ^2.2.25
@@ -31,6 +34,8 @@ specifiers:
   js-base64: ^3.7.2
   js-yaml: ^4.1.0
   lint-staged: ^13.0.4
+  loglevel: ^1.8.1
+  loglevel-plugin-prefix: ^0.8.4
   node-localstorage: ^2.2.1
   pinia: ^2.0.27
   plantuml-encoder: ^1.4.0
@@ -56,6 +61,7 @@ dependencies:
   "@octokit/core": 4.1.0
   "@vueuse/components": 9.6.0_vue@3.2.45
   "@vueuse/core": 9.6.0_vue@3.2.45
+  chalk: 5.1.2
   copy-to-clipboard: 3.3.3
   cross-fetch: 3.1.5
   element-plus: 2.2.26_vue@3.2.45
@@ -65,6 +71,8 @@ dependencies:
   highlight.js: 11.7.0
   js-base64: 3.7.3
   js-yaml: 4.1.0
+  loglevel: 1.8.1
+  loglevel-plugin-prefix: 0.8.4
   pinia: 2.0.27_mgnvym7yiazkylwwogi5r767ue
   plantuml-encoder: 1.4.0
   shorthash2: 1.0.3
@@ -74,6 +82,8 @@ dependencies:
   xmlrpc: 1.3.2
 
 devDependencies:
+  "@esbuild-plugins/node-globals-polyfill": 0.1.1
+  "@esbuild-plugins/node-modules-polyfill": 0.1.4
   "@types/express": 4.17.14
   "@types/node": 16.18.4
   "@typescript-eslint/eslint-plugin": 5.45.0_hsf322ms6xhhd4b5ne6lb74y4a
@@ -431,6 +441,27 @@ packages:
     dependencies:
       vue: 3.2.45
     dev: false
+
+  /@esbuild-plugins/node-globals-polyfill/0.1.1:
+    resolution:
+      {
+        integrity: sha512-MR0oAA+mlnJWrt1RQVQ+4VYuRJW/P2YmRTv1AsplObyvuBMnPHiizUF95HHYiSsMGLhyGtWufaq2XQg6+iurBg==,
+      }
+    peerDependencies:
+      esbuild: "*"
+    dev: true
+
+  /@esbuild-plugins/node-modules-polyfill/0.1.4:
+    resolution:
+      {
+        integrity: sha512-uZbcXi0zbmKC/050p3gJnne5Qdzw8vkXIv+c2BW0Lsc1ji1SkrxbKPUy5Efr0blbTu1SL8w4eyfpnSdPg3G0Qg==,
+      }
+    peerDependencies:
+      esbuild: "*"
+    dependencies:
+      escape-string-regexp: 4.0.0
+      rollup-plugin-node-polyfills: 0.2.1
+    dev: true
 
   /@esbuild/android-arm/0.15.16:
     resolution:
@@ -2415,6 +2446,14 @@ packages:
       ansi-styles: 4.3.0
       supports-color: 7.2.0
     dev: true
+
+  /chalk/5.1.2:
+    resolution:
+      {
+        integrity: sha512-E5CkT4jWURs1Vy5qGJye+XwCkNj7Od3Af7CP6SujMetSMkLs8Do2RWJK5yx1wamHV/op8Rz+9rltjaTQWDnEFQ==,
+      }
+    engines: { node: ^12.17.0 || ^14.13 || >=16.0.0 }
+    dev: false
 
   /character-parser/2.2.0:
     resolution:
@@ -5741,6 +5780,21 @@ packages:
       wrap-ansi: 6.2.0
     dev: true
 
+  /loglevel-plugin-prefix/0.8.4:
+    resolution:
+      {
+        integrity: sha512-WpG9CcFAOjz/FtNht+QJeGpvVl/cdR6P0z6OcXSkr8wFJOsV2GRj2j10JLfjuA4aYkcKCNIEqRGCyTife9R8/g==,
+      }
+    dev: false
+
+  /loglevel/1.8.1:
+    resolution:
+      {
+        integrity: sha512-tCRIJM51SHjAayKwC+QAg8hT8vg6z7GSgLJKGvzuPb1Wc+hLzqtuVLxp6/HzSPOozuK+8ErAhy7U/sVzw8Dgfg==,
+      }
+    engines: { node: ">= 0.6.0" }
+    dev: false
+
   /longest/1.0.1:
     resolution:
       {
@@ -7119,6 +7173,27 @@ packages:
     hasBin: true
     dependencies:
       glob: 7.2.3
+    dev: true
+
+  /rollup-plugin-inject/3.0.2:
+    resolution:
+      {
+        integrity: sha512-ptg9PQwzs3orn4jkgXJ74bfs5vYz1NCZlSQMBUA0wKcGp5i5pA1AO3fOUEte8enhGUC+iapTCzEWw2jEFFUO/w==,
+      }
+    deprecated: This package has been deprecated and is no longer maintained. Please use @rollup/plugin-inject.
+    dependencies:
+      estree-walker: 0.6.1
+      magic-string: 0.25.9
+      rollup-pluginutils: 2.8.2
+    dev: true
+
+  /rollup-plugin-node-polyfills/0.2.1:
+    resolution:
+      {
+        integrity: sha512-4kCrKPTJ6sK4/gLL/U5QzVT8cxJcofO0OU74tnB19F40cmuAKSzH5/siithxlofFEjwvw1YAhPmbvGNA6jEroA==,
+      }
+    dependencies:
+      rollup-plugin-inject: 3.0.2
     dev: true
 
   /rollup-pluginutils/2.8.2:
