@@ -124,9 +124,7 @@ https://mp.terwer.space/post/start-to-get-started-zi0eyk.html
 
 [开发进度](https://github.com/users/terwer/projects/1/views/1)
 
-[更新日志](Changelog.md)
-
-**v0.1.0 关键特性**
+[更新日志](CHANGELOG.md)
 
 ## Vue 3 + TypeScript + Vite
 
