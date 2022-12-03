@@ -1,4 +1,4 @@
 import pageUtil from "~/utils/pageUtil"
-import index from "~/pages/index/index.vue"
+import index from "./App.vue"
 
 pageUtil.createPage(index)

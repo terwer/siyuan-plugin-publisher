@@ -1,9 +1,11 @@
-import { defineConfig } from "vite"
+import { defineConfig, normalizePath } from "vite"
 import vue from "@vitejs/plugin-vue"
-import path from "path"
-import mpa from "vite-plugin-mpa"
+import path, { dirname, resolve } from "path"
+import vueI18n from "@intlify/vite-plugin-vue-i18n"
+import { createMpaPlugin } from "vite-plugin-virtual-mpa"
 import Components from "unplugin-vue-components/vite"
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers"
+import { fileURLToPath } from "url"
 
 const isTest = process.env.TEST === "true"
 console.log("isTest=>", isTest)
@@ -12,9 +14,59 @@ console.log("isTest=>", isTest)
 export default defineConfig({
   plugins: [
     vue(),
-    // https://github.com/IndexXuan/vite-plugin-mpa/issues/30
-    // @ts-expect-error
-    mpa.default(),
+    // https://github.com/emosheeep/vite-plugin-virtual-mpa
+    createMpaPlugin({
+      pages: [
+        {
+          name: "index",
+          /**
+           * filename is optional, default is `${name}.html`, which is the relative path of `build.outDir`.
+           * output into index.html at build time.
+           */
+          filename: "index.html",
+          entry: "/pages/index/main.ts",
+          data: {
+            title: "首页",
+          },
+        },
+        {
+          name: "blog",
+          filename: "blog/index.html",
+          entry: "/pages/blog/main.ts",
+          data: {
+            title: "文章列表查看",
+          },
+        },
+        {
+          name: "publish",
+          filename: "publish/index.html",
+          entry: "/pages/publish/main.ts",
+          data: {
+            title: "多平台文章发布",
+          },
+        },
+      ],
+      /**
+       * 通过该选项 rewrites 来配置 history fallback rewrite rules
+       * 如果你像上面这样配置页面的话，那下面的这份配置将会自动生成。
+       * 否则你需要自己编写重定向规则，自定义规则将覆盖默认规则。
+       */
+      rewrites: [
+        {
+          from: new RegExp(normalizePath(`/(blog|publish)`)),
+          to: (ctx) => normalizePath(`/${ctx.match[1]}/index.html`),
+        },
+      ],
+    }),
+    vueI18n({
+      // if you want to use Vue I18n Legacy API, you need to set `compositionOnly: false`
+      // compositionOnly: false,
+      // you need to set i18n resource including paths !
+      include: resolve(
+        dirname(fileURLToPath(import.meta.url)),
+        "locales/index.ts"
+      ),
+    }),
     Components({
       resolvers: [
         ElementPlusResolver({
@@ -25,17 +77,11 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      "~": path.resolve(__dirname, "./src"),
+      "~": path.resolve(__dirname, "./"),
     },
   },
   build: {
     rollupOptions: {
-      input: {
-        index: path.resolve(__dirname, "pages/index/index.html"),
-        // blog: path.resolve(__dirname, "pages/blog/index.html"),
-        // detail: path.resolve(__dirname, "pages/detail/index.html"),
-        // publish: path.resolve(__dirname, "pages/publish/index.html"),
-      },
       output: {
         chunkFileNames: "static/js/[name]-[hash].js",
         entryFileNames: "static/js/[name]-[hash].js",

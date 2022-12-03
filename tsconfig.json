@@ -16,21 +16,20 @@
     "checkJs": false,
     "types": ["node", "vite/client", "vitest/globals"],
     "paths": {
-      "~/*": ["./src/*"]
+      "~/*": ["./*"]
     }
   },
   "include": [
-    "src/**/*.ts",
-    "src/**/*.d.ts",
-    "src/**/*.tsx",
-    "src/**/*.vue",
-    "test/**/*.ts",
-    "api/**/*.ts",
+    "~/**/*.ts",
+    "~/**/*.d.ts",
+    "~/**/*.tsx",
+    "~/**/*.vue",
     "node_modules/vitest/globals.d.ts",
     "*.json",
     "*.js",
     "*.ts"
   ],
+  "exclude": [".github", ".husky", ".vercel", "node_modules", "dist"],
   "references": [
     {
       "path": "./tsconfig.node.json"
