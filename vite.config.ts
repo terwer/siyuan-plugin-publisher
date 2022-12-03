@@ -40,6 +40,14 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
             },
           },
           {
+            name: "detail",
+            filename: "detail/index.html",
+            entry: "/pages/detail/main.ts",
+            data: {
+              title: "文章详情预览",
+            },
+          },
+          {
             name: "publish",
             filename: "publish/index.html",
             entry: "/pages/publish/main.ts",

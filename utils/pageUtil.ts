@@ -34,7 +34,6 @@ const createPage = (rootComponent: Component): App => {
   const pinia = createPinia()
   app.use(pinia)
 
-  // 组件注册
   // 国际化
   app.use(i18n)
 

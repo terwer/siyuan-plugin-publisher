@@ -10,6 +10,7 @@ declare module "@vue/runtime-core" {
     ElAlert: typeof import("element-plus/es")["ElAlert"]
     ElButton: typeof import("element-plus/es")["ElButton"]
     ElDialog: typeof import("element-plus/es")["ElDialog"]
+    ElFooter: typeof import("element-plus/es")["ElFooter"]
     ElForm: typeof import("element-plus/es")["ElForm"]
     ElFormItem: typeof import("element-plus/es")["ElFormItem"]
     ElHeader: typeof import("element-plus/es")["ElHeader"]
