@@ -1,4 +1,4 @@
-import { App, Component, createApp } from "vue"
+import { App, Component, createApp, h } from "vue"
 
 // pinia
 import { createPinia } from "pinia"
@@ -25,11 +25,14 @@ import "~/assets/style.dark.css"
  */
 const createPage = (rootComponent: Component): App => {
   // Vue初始化
-  const app = createApp(rootComponent)
+  // const app = createApp(rootComponent)
+  const app = createApp({
+    render: () => h(rootComponent),
+  })
 
   // pinia
   const pinia = createPinia()
-  app.use(pinia) // 再挂载pinia
+  app.use(pinia)
 
   // 组件注册
   // 国际化
@@ -46,9 +49,6 @@ const createPage = (rootComponent: Component): App => {
       el.focus()
     },
   })
-
-  // 挂载Vue
-  app.mount("#app")
 
   return app
 }

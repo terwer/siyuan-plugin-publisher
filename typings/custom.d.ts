@@ -1,1 +1,1 @@
-declare module "node-localstorage"
+// declare module "node-localstorage"
