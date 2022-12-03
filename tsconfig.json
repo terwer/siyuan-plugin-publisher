@@ -20,14 +20,12 @@
     }
   },
   "include": [
-    "~/**/*.ts",
-    "~/**/*.d.ts",
-    "~/**/*.tsx",
-    "~/**/*.vue",
-    "node_modules/vitest/globals.d.ts",
+    "./**/*.ts",
     "*.json",
     "*.js",
-    "*.ts"
+    "*.ts",
+    "./typings/*.d.ts",
+    "node_modules/vitest/globals.d.ts"
   ],
   "exclude": [".github", ".husky", ".vercel", "node_modules", "dist"],
   "references": [

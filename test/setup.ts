@@ -1,11 +1,9 @@
 import { afterEach, beforeEach } from "vitest"
 import fetch from "cross-fetch"
-// @ts-expect-error
 import { LocalStorage } from "node-localstorage"
 
-// i18n
 import { config } from "@vue/test-utils"
-import i18n from "../locales"
+import i18n from "~/locales/index"
 
 // Add `fetch` polyfill.
 // https://markus.oberlehner.net/blog/using-mock-service-worker-with-vitest-and-fetch/
@@ -13,7 +11,9 @@ global.fetch = fetch
 global.localStorage = new LocalStorage("./test/data/polyfill/localStorage")
 
 // lute
-require("../public/lute.min.js")
+require("~/public/lib/lute.min")
+
+// i18n
 config.global.plugins = [i18n]
 
 beforeEach(() => {
@@ -21,5 +21,5 @@ beforeEach(() => {
 })
 
 afterEach(() => {
-  console.log("======finished.================")
+  console.log("======test is finished.========")
 })
