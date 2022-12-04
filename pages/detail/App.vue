@@ -25,11 +25,11 @@
 
 <template>
   <AppLayout>
-    <BlogDetail />
+    <PostDetail />
   </AppLayout>
 </template>
 
 <script lang="ts" setup>
 import AppLayout from "~/layouts/AppLayout.vue"
-import BlogDetail from "~/components/detail/PostDetail.vue"
+import PostDetail from "~/components/detail/PostDetail.vue"
 </script>

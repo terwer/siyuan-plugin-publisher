@@ -171,18 +171,21 @@ export const getPageId = async (
   // logger.debug("syPageId=>", syPageId)
   if (!syPageId) {
     //  3、开发模式模拟传递一个ID
-    if (!pageId) {
+    if (isBrowser()) {
+      // 尝试从url参数解析ID
+      // const curl = window.location.href
+      // const urlIdx = curl.lastIndexOf("=")
+      // const qPageId = curl.substring(urlIdx + 1, curl.length)
+      const qPageId = getQueryString("id")
+      if (qPageId !== "") {
+        syPageId = qPageId
+      }
+    }
+
+    // 4、开发模式模拟传递一个ID
+    if (!syPageId) {
       const testPageId = getEnv("VITE_SIYUAN_DEV_PAGE_ID")
-      if (!testPageId && isBrowser()) {
-        // 尝试从url参数解析ID
-        // const curl = window.location.href
-        // const urlIdx = curl.lastIndexOf("=")
-        // const qPageId = curl.substring(urlIdx + 1, curl.length)
-        const qPageId = getQueryString("id")
-        if (qPageId !== "") {
-          syPageId = qPageId
-        }
-      } else {
+      if (testPageId) {
         syPageId = testPageId
       }
     }

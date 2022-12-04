@@ -42,6 +42,9 @@ import { getPageId, getWidgetId } from "~/utils/platform/siyuan/siyuanUtil"
 import { goToPage } from "~/utils/otherlib/ChromeUtil"
 import { appandStr } from "~/utils/strUtil"
 import PostDetailService from "~/components/detail/PostDetailService.vue"
+import { LogFactory } from "~/utils/logUtil"
+
+const logger = LogFactory.getLogger("components/detail/PostDetail.vue")
 
 const props = defineProps({
   pageId: {
@@ -63,6 +66,7 @@ const handlePublish = async () => {
 
 const initPage = async () => {
   const pageId = await getPageId(true, props.pageId)
+  logger.info("pageId=>", pageId)
   if (!pageId || pageId === "") {
     return
   }
