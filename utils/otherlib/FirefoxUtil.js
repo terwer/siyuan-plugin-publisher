@@ -23,33 +23,30 @@
  * questions.
  */
 
-import { getBooleanConf, getConf, setConf } from "~/utils/configUtil"
-import { LogFactory } from "~/utils/logUtil"
+/**
+ * 检测是否运行在Firefox插件中
+ */
+export function isInFirefoxExtension() {
+  return typeof InstallTrigger !== "undefined"
+}
 
-const logger = LogFactory.getLogger()
-
-describe("config test", () => {
-  it("getBooleanConf test", () => {
-    const key = "testBoolean"
-    const result = getBooleanConf(key)
-    logger.info("getBooleanConf test=>", result)
+export const firefoxXmlHttpRequest = async (obj) => {
+  return await new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest()
+    xhr.open(obj.method || "GET", obj.url)
+    if (obj.headers) {
+      Object.keys(obj.headers).forEach((key) => {
+        xhr.setRequestHeader(key, obj.headers[key])
+      })
+    }
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        resolve(xhr.response)
+      } else {
+        reject(xhr.statusText)
+      }
+    }
+    xhr.onerror = () => reject(xhr.statusText)
+    xhr.send(obj.body)
   })
-
-  it("setConf test", () => {
-    const key = "test"
-    const value = "testValue"
-    logger.info("setConf value=>", value)
-
-    setConf(key, value)
-
-    const newValue = localStorage.getItem(key)
-    logger.info("setConf newValue=>", newValue)
-    assert(newValue, value)
-  })
-
-  it("getConf test", () => {
-    const key = "test"
-    const result = getConf(key)
-    logger.info("getConf test=>", result)
-  })
-})
+}

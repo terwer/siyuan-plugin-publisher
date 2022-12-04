@@ -27,7 +27,9 @@ import { describe, expect } from "vitest"
 import pageUtil from "~/utils/pageUtil"
 import index from "~/pages/index/App.vue"
 import { shallowMount } from "@vue/test-utils"
-import logUtil from "~/utils/logUtil"
+import { LogFactory } from "~/utils/logUtil"
+
+const logger = LogFactory.getLogger()
 
 describe("pageUtil test", () => {
   it("createPage test", async () => {
@@ -39,7 +41,7 @@ describe("pageUtil test", () => {
     // const wrapper = await mount(index, {})
     const wrapper = await shallowMount(index, {})
     const result = wrapper.html()
-    logUtil.logInfo("首页HTML=>", result)
+    logger.info("首页HTML=>", result)
     expect(result).toContain("app-layout")
   })
 })

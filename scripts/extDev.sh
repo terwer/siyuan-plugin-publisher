@@ -25,7 +25,7 @@
 
 pwd
 rm -rf ./dist
-yarn build
+pnpm run build
 cp ./LICENSE ./dist/
 
 # 删除siyuan挂件专属文件

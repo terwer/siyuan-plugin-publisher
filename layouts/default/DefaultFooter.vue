@@ -128,7 +128,7 @@ const { t } = useI18n()
 const isDark = useDark()
 const toggleDark = useToggle(isDark)
 
-const isInSiyuan = ref(false)
+// const isInSiyuan = ref(false)
 
 const formLabelWidth = "140px"
 const siyuanApiChangeFormVisible = ref(false)
@@ -170,9 +170,9 @@ const handleSiyuanApiSetting = async (formEl) => {
   // @ts-ignore
   const result = await formEl.validate((valid, fields) => {
     if (valid) {
-      logUtil.logInfo("校验成功")
+      logger.debug("校验成功")
     } else {
-      logUtil.logError(t("main.opt.failure"), fields)
+      logger.error(t("main.opt.failure"), fields)
       // ElMessage.error(t('main.opt.failure'))
     }
   })
@@ -181,26 +181,26 @@ const handleSiyuanApiSetting = async (formEl) => {
   }
 
   // 保存思源笔记配置数据
-  // try {
-  //   const siyuanCfg = new SiYuanConfig(
-  //     siyuanApiChangeForm.apiUrl,
-  //     siyuanApiChangeForm.pwd,
-  //     siyuanApiChangeForm.middlewareUrl
-  //   )
-  //   setJSONConf<SiYuanConfig>(SIYUAN_CONSTANTS.SIYUAN_CFG_KEY, siyuanCfg)
-  //   logUtil.logInfo("保存思源配置", siyuanCfg)
-  //   ElMessage.success(t("main.opt.success"))
-  //   setTimeout(function() {
-  //     // 关闭对话框
-  //     siyuanApiChangeFormVisible.value = false
-  //     goToPageWithTarget("/blog/index.html", "_self")
-  //   }, 500)
-  // } catch (e) {
-  //   siyuanApiChangeFormVisible.value = false
-  //
-  //   ElMessage.error(t("main.opt.failure"))
-  //   logUtil.logError(t("main.opt.failure"), e)
-  // }
+  try {
+    //   const siyuanCfg = new SiYuanConfig(
+    //     siyuanApiChangeForm.apiUrl,
+    //     siyuanApiChangeForm.pwd,
+    //     siyuanApiChangeForm.middlewareUrl
+    //   )
+    //   setJSONConf<SiYuanConfig>(SIYUAN_CONSTANTS.SIYUAN_CFG_KEY, siyuanCfg)
+    //   logUtil.logInfo("保存思源配置", siyuanCfg)
+    //   ElMessage.success(t("main.opt.success"))
+    //   setTimeout(function() {
+    //     // 关闭对话框
+    //     siyuanApiChangeFormVisible.value = false
+    //     goToPageWithTarget("/blog/index.html", "_self")
+    //   }, 500)
+  } catch (e) {
+    //   siyuanApiChangeFormVisible.value = false
+    //
+    //   ElMessage.error(t("main.opt.failure"))
+    logger.error(t("main.opt.failure"), e)
+  }
 }
 
 const initConf = () => {

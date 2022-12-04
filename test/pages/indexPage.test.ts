@@ -26,7 +26,9 @@
 import { describe } from "vitest"
 import index from "~/pages/index/App.vue"
 import { shallowMount } from "@vue/test-utils"
-import logUtil from "~/utils/logUtil"
+import { LogFactory } from "~/utils/logUtil"
+
+const logger = LogFactory.getLogger()
 
 describe("index page test", () => {
   it("mount component test", async () => {
@@ -35,7 +37,7 @@ describe("index page test", () => {
     const wrapper = await shallowMount(index, {})
 
     const result = wrapper.html()
-    logUtil.logInfo("首页HTML=>", result)
+    logger.info("首页HTML=>", result)
     expect(result).toContain("app-layout")
   })
 
@@ -44,7 +46,7 @@ describe("index page test", () => {
   //
   //   const initMethod = vi.spyOn(wrapper.vm, "init")
   //   wrapper.vm.init()
-  //   logUtil.logInfo(wrapper.vm)
+  //   logger.info(wrapper.vm)
   //   expect(initMethod).toHaveBeenCalledOnce()
   // })
 })

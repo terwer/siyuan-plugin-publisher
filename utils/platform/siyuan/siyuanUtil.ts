@@ -26,8 +26,8 @@
 import { getEnv } from "~/utils/envUtil"
 import { LogFactory } from "~/utils/logUtil"
 import { getJSONConf, setJSONConf } from "~/utils/configUtil"
-import { getQueryString, inBrowser } from "~/utils/util"
 import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
+import { getQueryString, isBrowser } from "~/utils/browserUtil"
 
 const logger = LogFactory.getLogger("utils/platform/siyuan/siyuanUtil.ts")
 
@@ -105,11 +105,11 @@ const getWidgetPage = async (force?: boolean): Promise<any> => {
   }
 
   const widgetId = widgetResult.widgetId
-  logger.info("获取挂件的widgetId=>", widgetId)
+  logger.debug("获取挂件的widgetId=>", widgetId)
   // 默认读取缓存
   const pageObj = getJSONConf(widgetId)
   if (!force && pageObj) {
-    logger.info("获取本地缓存的思源笔记页面信息（不是实时的）=>", pageObj)
+    logger.debug("获取本地缓存的思源笔记页面信息（不是实时的）=>", pageObj)
     return pageObj
   }
 
@@ -118,7 +118,7 @@ const getWidgetPage = async (force?: boolean): Promise<any> => {
   const page = await siyuanApi.getBlockByID(widgetId)
   if (page) {
     setJSONConf(widgetId, page)
-    logger.info("调用API设置查询思源页面信息并更新本地缓存", page)
+    logger.debug("调用API设置查询思源页面信息并更新本地缓存", page)
   }
   return page
 }
@@ -137,7 +137,7 @@ const getSiyuanPageId = async (force?: boolean): Promise<any> => {
   }
 
   const pageId = page.root_id
-  logger.info("获取思源笔记页面ID=>", pageId)
+  logger.debug("获取思源笔记页面ID=>", pageId)
   return pageId
 }
 
@@ -159,7 +159,7 @@ export const getPageId = async (
 
   // 1、显式传递的ID优先处理
   if (pageId) {
-    logger.info("显示指定pageId=>", pageId)
+    logger.debug("显示指定pageId=>", pageId)
     syPageId = pageId
   }
 
@@ -172,12 +172,12 @@ export const getPageId = async (
     }
   }
 
-  // logger.info("syPageId=>", syPageId)
+  // logger.debug("syPageId=>", syPageId)
   if (!syPageId) {
     //  3、开发模式模拟传递一个ID
     if (!pageId) {
       const testPageId = getEnv("VITE_SIYUAN_DEV_PAGE_ID")
-      if (!testPageId && inBrowser()) {
+      if (!testPageId && isBrowser()) {
         // 尝试从url参数解析ID
         // const curl = window.location.href
         // const urlIdx = curl.lastIndexOf("=")

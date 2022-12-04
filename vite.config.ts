@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { defineConfig, normalizePath } from "vite"
+import { defineConfig, loadEnv, normalizePath } from "vite"
 import vue from "@vitejs/plugin-vue"
 import path, { dirname, resolve } from "path"
 import vueI18n from "@intlify/vite-plugin-vue-i18n"
@@ -42,8 +42,24 @@ console.log("isTest=>", isTest)
 const isProd = process.env.NODE_ENV === "production"
 console.log("isProd=>", isProd)
 
+const isSiyuanBuild = process.env.BUILD_TYPE === "siyuan"
+console.log("isSiyuanBuild=>", isSiyuanBuild)
+
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode, ssrBuild }) => {
+  const env = loadEnv(mode, process.cwd())
+  const processEnvValues = {
+    "process.env": Object.entries(env).reduce((prev, [key, val]) => {
+      return {
+        ...prev,
+        [key]: val,
+      }
+    }, {}),
+  }
+
+  const logInfoEnabled = env.VITE_LOG_INFO_ENABLED
+  console.log("logInfoEnabled=>", logInfoEnabled)
+
   return {
     plugins: [
       vue(),
@@ -118,6 +134,16 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
       // https://github.com/WarrenJones/vite-plugin-require-transform/issues/10
       requireTransform(),
     ],
+    // 项目根目录
+    root: "./",
+    // 项目部署的基础路径
+    base: isSiyuanBuild ? "/widgets/sy-post-publisher/" : "",
+    // 静态资源服务文件夹
+    publicDir: "public",
+    // https://github.com/vitejs/vite/issues/1930
+    // https://vitejs.dev/guide/env-and-mode.html#env-files
+    // 在这里自定义变量
+    define: Object.assign(processEnvValues, {}),
     resolve: {
       alias: {
         "~": path.resolve(__dirname, "./"),
@@ -198,6 +224,7 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
       minify: isProd,
 
       rollupOptions: {
+        // external:["#ansi-styles","#supports-color"],
         output: {
           chunkFileNames: "static/js/[name]-[hash].js",
           entryFileNames: "static/js/[name]-[hash].js",

@@ -117,7 +117,6 @@
 <script lang="ts" setup>
 /* eslint-disable */
 import { useDark, useToggle } from "@vueuse/core"
-import { goToPage, goToPageWithTarget } from "~/utils/browser/ChromeUtil"
 import { onMounted, reactive, ref } from "vue"
 import { ElMessage, FormRules } from "element-plus"
 import { useI18n } from "vue-i18n"
@@ -125,9 +124,15 @@ import {
   getSiyuanCfg,
   SiYuanConfig,
 } from "~/utils/platform/siyuan/siYuanConfig"
-import { setJSONConf } from "~/utils/config"
 import { SIYUAN_CONSTANTS } from "~/utils/constants/siyuanConstants"
 import { inSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
+import { LogFactory } from "~/utils/logUtil"
+import { setJSONConf } from "~/utils/configUtil"
+import { goToPage, goToPageWithTarget } from "~/utils/otherlib/ChromeUtil"
+
+const logger = LogFactory.getLogger(
+  "components/blog/themes/default/DefaultFooter.vue"
+)
 
 const { t } = useI18n()
 
@@ -176,9 +181,9 @@ const handleSiyuanApiSetting = async (formEl) => {
   // @ts-ignore
   const result = await formEl.validate((valid, fields) => {
     if (valid) {
-      logUtil.logInfo("校验成功")
+      logger.debug("校验成功")
     } else {
-      logUtil.logError(t("main.opt.failure"), fields)
+      logger.error(t("main.opt.failure"), fields)
       // ElMessage.error(t('main.opt.failure'))
     }
   })
@@ -194,18 +199,18 @@ const handleSiyuanApiSetting = async (formEl) => {
       siyuanApiChangeForm.middlewareUrl
     )
     setJSONConf<SiYuanConfig>(SIYUAN_CONSTANTS.SIYUAN_CFG_KEY, siyuanCfg)
-    logUtil.logInfo("保存思源配置", siyuanCfg)
+    logger.debug("保存思源配置", siyuanCfg)
     ElMessage.success(t("main.opt.success"))
     setTimeout(function () {
       // 关闭对话框
       siyuanApiChangeFormVisible.value = false
-      goToPageWithTarget("/blog/index.html", "_self")
+      goToPageWithTarget("/blog/index.html", "_self", "")
     }, 500)
   } catch (e) {
     siyuanApiChangeFormVisible.value = false
 
     ElMessage.error(t("main.opt.failure"))
-    logUtil.logError(t("main.opt.failure"), e)
+    logger.error(t("main.opt.failure"), e)
   }
 }
 
@@ -216,7 +221,7 @@ const initConf = () => {
   siyuanApiChangeForm.pwd = siyuanCfg.token
   siyuanApiChangeForm.middlewareUrl = siyuanCfg.middlewareUrl
 
-  logUtil.logInfo("初始化思源配置", siyuanCfg)
+  logger.debug("初始化思源配置", siyuanCfg)
 }
 
 onMounted(async () => {

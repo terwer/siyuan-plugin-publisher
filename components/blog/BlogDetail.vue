@@ -27,8 +27,8 @@
   <div class="post-detail-content-box">
     <div class="btn-publish">
       <el-button size="small" type="primary" @click="handlePublish"
-        >发布到其他平台</el-button
-      >
+        >发布到其他平台
+      </el-button>
     </div>
 
     <!-- 文章详情 -->
@@ -50,7 +50,8 @@ import DefaultFooter from "./themes/default/DefaultFooter.vue"
 import DefaultPostDetailService from "./themes/default/DefaultPostDetailService.vue"
 import { onMounted, ref } from "vue"
 import { getPageId, getWidgetId } from "~/utils/platform/siyuan/siyuanUtil"
-import { goToPage } from "~/utils/browser/ChromeUtil"
+import { goToPage } from "~/utils/otherlib/ChromeUtil"
+import { appandStr } from "~/utils/strUtil"
 
 const props = defineProps({
   pageId: {
@@ -64,9 +65,9 @@ const pid = ref("")
 const handlePublish = async () => {
   const widgetResult = getWidgetId()
   if (widgetResult.isInSiyuan) {
-    goToPage("/index.html?id=" + pid.value, "/")
+    goToPage(appandStr("/index.html?id=", pid.value))
   } else {
-    goToPage("/publish/index.html?id=" + pid.value, "/")
+    goToPage(appandStr("/publish/index.html?id=", pid.value))
   }
 }
 

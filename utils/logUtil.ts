@@ -28,8 +28,24 @@
 import { getBooleanEnv } from "./envUtil"
 import loglevel, { Logger } from "loglevel"
 import prefix from "loglevel-plugin-prefix"
-import chalk from "chalk"
 import { isBrowser } from "~/utils/browserUtil"
+
+// import chalk from "chalk"
+// polyfill due to https://github.com/vitejs/vite/issues/7385
+const chalk = {
+  gray: (src: any): string => {
+    return src.toString()
+  },
+  green: (src: any): string => {
+    return src.toString()
+  },
+  yellow: (src: any): string => {
+    return src.toString()
+  },
+  red: (src: any): string => {
+    return src.toString()
+  },
+}
 
 if (isBrowser()) {
   console.log("loglevel运行在浏览器环境中")

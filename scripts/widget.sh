@@ -24,12 +24,12 @@
 #
 
 pwd
-yarn build-siyuan
+vue-tsc --noEmit && PROXY=false BUILD_TYPE=siyuan vite build
 cp ./LICENSE ./dist/
 
 # 删除Chrome插件专属文件
 rm ./dist/background.js
-rm ./dist/manifest.json
+rm ./dist/manifest*.json
 # 删除Firefox的专属文件
 rm -rf ./dist/mv2
 

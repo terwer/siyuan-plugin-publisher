@@ -20,9 +20,10 @@
   "rules": {
     "vue/multi-word-component-names": "off",
     "@typescript-eslint/strict-boolean-expressions": 0,
+    "@typescript-eslint/triple-slash-reference": 0,
     "no-undef": 0,
-    "no-undef-init": 2,
-    "no-undefined": 2,
+    "no-undef-init": 1,
+    "no-undefined": 1,
     "no-prototype-builtins": 1
   }
 }

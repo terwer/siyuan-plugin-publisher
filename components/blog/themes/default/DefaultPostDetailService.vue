@@ -32,7 +32,11 @@ import { Post } from "~/utils/common/post"
 import { onMounted, ref, watch } from "vue"
 import { API } from "~/utils/api"
 import { API_TYPE_CONSTANTS } from "~/utils/constants/apiTypeConstants"
-import logUtil from "~/utils/logUtil"
+import { LogFactory } from "~/utils/logUtil"
+
+const logger = LogFactory.getLogger(
+  "components/blog/themes/default/DefaultPostDetailService.vue"
+)
 
 const props = defineProps({
   pageId: {
@@ -50,7 +54,7 @@ watch(
     // 默认选中vuepress
     // setBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY, true)
     initPage()
-    logUtil.logInfo("文章详情查看初始化")
+    logger.debug("文章详情查看初始化")
   }
 )
 
@@ -94,6 +98,7 @@ export default {
 #post-detail-content ul {
   padding-inline-start: 24px;
 }
+
 #post-detail-content ol li,
 #post-detail-content ul li {
   /*padding: 5px 0;*/

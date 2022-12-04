@@ -23,8 +23,10 @@
  * questions.
  */
 
-import logUtil from "~/utils/logUtil"
 import { isEmptyObject } from "~/utils/util"
+import { LogFactory } from "~/utils/logUtil"
+
+const logger = LogFactory.getLogger()
 
 /**
  * 获取Boolean配置
@@ -37,8 +39,8 @@ export function getBooleanConf(key: string): boolean {
   const value = getConf(key)
   const valueObj: boolean = value.toLowerCase() === "true"
 
-  // logUtil.logInfo("从localStorage获取Boolean数据=>")
-  logUtil.logInfo(valueObj)
+  logger.debug("从localStorage获取Boolean数据=>")
+  logger.debug(valueObj)
   // logUtil.logInfo("------------------------------")
   return valueObj
 }
@@ -70,13 +72,13 @@ export function getJSONConf<T>(key: string): T {
     try {
       valueObj = JSON.parse(value)
     } catch (e) {
-      logUtil.logError("JSON格式不正确", e)
+      logger.error("JSON格式不正确", e)
       throw e
     }
   }
 
-  // logUtil.logInfo("从localStorage获取JSON数据=>")
-  logUtil.logInfo(valueObj)
+  logger.debug("从localStorage获取JSON数据=>")
+  logger.debug(valueObj)
   // logUtil.logInfo("------------------------------")
   return valueObj
 }
@@ -136,7 +138,7 @@ export function setJSONConf<T>(key: string, value: T): void {
  */
 export function setConf(key: string, value: string): void {
   if (!value || value === "") {
-    logUtil.logWarn("空值，不保存")
+    logger.warn("空值，不保存")
     return
   }
 

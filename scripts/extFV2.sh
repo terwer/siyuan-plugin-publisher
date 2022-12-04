@@ -25,7 +25,7 @@
 
 pwd
 rm -rf ./dist
-yarn build
+pnpm run build
 cp ./LICENSE ./dist/
 
 # 删除siyuan挂件专属文件
@@ -35,6 +35,10 @@ rm ./dist/widget.json
 mv ./dist/mv2/manifest-v2-for-firefox.json ./dist/manifest.json
 mv ./dist/mv2/background-v2-for-firefox.js ./dist/background.js
 rm -rf ./dist/mv2
+
+# 删除Chrome配置
+rm ./dist/manifest.dev.json
+rm ./dist/manifest.prod.json
 
 rm -rf ./extension/firefox/*
 mkdir -p extension/firefox

@@ -28,7 +28,14 @@
     "./node_modules/vitest/*.d.ts",
     "./node_modules/vitest/*.d.cts"
   ],
-  "exclude": [".github", ".husky", ".vercel", "node_modules", "dist"],
+  "exclude": [
+    ".github",
+    ".husky",
+    ".vercel",
+    "node_modules",
+    "dist",
+    "vite.config.ts"
+  ],
   "references": [
     {
       "path": "./tsconfig.node.json"

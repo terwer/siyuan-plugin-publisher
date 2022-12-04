@@ -23,33 +23,24 @@
  * questions.
  */
 
-import { getBooleanConf, getConf, setConf } from "~/utils/configUtil"
-import { LogFactory } from "~/utils/logUtil"
+/// <reference types="vite/client" />
 
-const logger = LogFactory.getLogger()
+declare module "*.vue" {
+  import type { DefineComponent } from "vue"
+  const component: DefineComponent<{}, {}, any>
+  export default component
+}
 
-describe("config test", () => {
-  it("getBooleanConf test", () => {
-    const key = "testBoolean"
-    const result = getBooleanConf(key)
-    logger.info("getBooleanConf test=>", result)
-  })
+interface ImportMetaEnv {
+  readonly VITE_LOG_INFO_ENABLED: string
+  readonly VITE_SIYUAN_API_URL: string
+  readonly VITE_SIYUAN_CONFIG_TOKEN: string
+  readonly VITE_SIYUAN_DEV_PAGE_ID: string
+  readonly VITE_OPT_PWD: string
+  readonly VITE_DEBUG_MODE: string
+  readonly VITE_MIDDLEWARE_URL: string
+}
 
-  it("setConf test", () => {
-    const key = "test"
-    const value = "testValue"
-    logger.info("setConf value=>", value)
-
-    setConf(key, value)
-
-    const newValue = localStorage.getItem(key)
-    logger.info("setConf newValue=>", newValue)
-    assert(newValue, value)
-  })
-
-  it("getConf test", () => {
-    const key = "test"
-    const result = getConf(key)
-    logger.info("getConf test=>", result)
-  })
-})
+interface ImportMeta {
+  readonly env: ImportMetaEnv
+}

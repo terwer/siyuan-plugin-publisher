@@ -225,23 +225,13 @@ http://localhost:3000/blog/index.html
 
 ### 方式 1、部署到思源笔记挂件
 
-#### Linux/Mac OS
-
 ```bash
 pnpm run widget
-```
-
-#### Windows
-
-```bash
-pnpm run widgetWin
 ```
 
 提交 `dist` 文件夹到仓库, 上架思源笔记挂件集市。
 
 ### 方式 2、部署到 Google Chrome 浏览器插件
-
-#### Linux/Mac OS
 
 ```bash
 pnpm run extChrome
@@ -251,12 +241,6 @@ pnpm run extChrome
 
 ```bash
 pnpm run extChromeDev
-```
-
-#### Windows
-
-```bash
-pnpm run extChromeDevWin
 ```
 
 将密钥文件修改为 `key.pem` 放到 `extension/chrome` 文件夹 , 然后压缩 `extension/chrome` 文件夹里面的所有文件为 `.zip`, 上架 Google Chrome 应用商店。
