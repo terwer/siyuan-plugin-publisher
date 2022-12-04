@@ -24,8 +24,16 @@
   -->
 
 <template>
-  <PublishService :page-id="undefined" />
+  <div id="publish-index-body">
+    <PublishService :page-id="undefined" />
+  </div>
 </template>
 <script setup lang="ts">
 import PublishService from "~/components/publish/PublishService.vue"
 </script>
+
+<style scoped>
+#publish-index-body {
+  margin-top: 48px;
+}
+</style>

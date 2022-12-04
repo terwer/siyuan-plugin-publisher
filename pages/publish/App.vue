@@ -25,11 +25,11 @@
 
 <template>
   <AppLayout>
-    <PublishService :page-id="undefined" />
+    <PublishIndex />
   </AppLayout>
 </template>
 
 <script lang="ts" setup>
 import AppLayout from "~/layouts/AppLayout.vue"
-import PublishService from "~/components/publish/PublishService.vue"
+import PublishIndex from "~/components/publish/PublishIndex.vue"
 </script>
