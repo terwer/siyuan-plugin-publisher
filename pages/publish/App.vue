@@ -25,10 +25,11 @@
 
 <template>
   <AppLayout>
-    <el-button>This is publish</el-button>
+    <PublishService :page-id="undefined" />
   </AppLayout>
 </template>
 
 <script lang="ts" setup>
 import AppLayout from "~/layouts/AppLayout.vue"
+import PublishService from "~/components/publish/PublishService.vue"
 </script>

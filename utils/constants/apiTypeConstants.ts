@@ -46,13 +46,13 @@ const API_TYPE_CONFLUENCE = "confluence"
  */
 const API_TYPE_CNBLOGS = "cnblogs"
 
-// Wordpress
+// WordPress
 /**
- * Wordpress
+ * WordPress
  */
 const API_TYPE_WORDPRESS = "wordpress"
 
-// Commmon API
+// Common API
 /**
  * 链滴
  */

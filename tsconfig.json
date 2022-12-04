@@ -21,13 +21,13 @@
     }
   },
   "include": [
+    "./**/*.vue",
     "./**/*.ts",
-    "*.json",
-    "*.js",
+    "*.vue",
     "*.ts",
-    "./typings/*.d.ts",
-    "./node_modules/vitest/*.d.ts",
-    "./node_modules/vitest/*.d.cts"
+    "typings/*.d.ts",
+    "node_modules/vitest/*.d.ts",
+    "node_modules/vitest/*.d.cts"
   ],
   "exclude": [
     ".github",

@@ -32,22 +32,16 @@
     </div>
 
     <!-- 文章详情 -->
-    <DefaultPostDetailService :page-id="pid" />
-
-    <!--
-    <div id="dt-tool">
-      <locale-changer/>
-    </div>
-    -->
+    <PostDetailService :page-id="pid" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import DefaultPostDetailService from "./themes/default/DefaultPostDetailService.vue"
 import { onMounted, ref } from "vue"
 import { getPageId, getWidgetId } from "~/utils/platform/siyuan/siyuanUtil"
 import { goToPage } from "~/utils/otherlib/ChromeUtil"
 import { appandStr } from "~/utils/strUtil"
+import PostDetailService from "~/components/detail/PostDetailService.vue"
 
 const props = defineProps({
   pageId: {

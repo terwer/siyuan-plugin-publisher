@@ -25,6 +25,7 @@
 
 import { getSiyuanCfg } from "~/utils/platform/siyuan/siYuanConfig"
 import { LogFactory } from "~/utils/logUtil"
+import { appandStr } from "~/utils/strUtil"
 
 /**
  * 思源API v2.5.0
@@ -150,6 +151,8 @@ export class SiYuanApi {
              },${pagesize}
         )
         ORDER BY b2.content,b2.updated DESC,b2.created DESC,id`
+
+    this.logger.debug("siyuanApi getSubdocs sql=>", stmt)
     return await this.sql(stmt)
   }
 
@@ -260,7 +263,7 @@ export class SiYuanApi {
     const siyuanCfg = getSiyuanCfg()
 
     if (siyuanCfg.baseUrl !== "") {
-      url = siyuanCfg.baseUrl + url
+      url = appandStr(siyuanCfg.baseUrl, url)
     }
 
     let m = "POST"
@@ -272,7 +275,7 @@ export class SiYuanApi {
       body: JSON.stringify(data),
       method: m,
     }
-    if (useToken !== false) {
+    if (useToken) {
       Object.assign(fetchOps, {
         headers: {
           Authorization: `Token ${siyuanCfg.token}`,

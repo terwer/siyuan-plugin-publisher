@@ -247,6 +247,8 @@ export default {
     "The article has been deleted by the platform by itself, please click to cancel the compulsory lifting connection",
   "blog.top-data-tip":
     "Reminder: Please ensure that the Siyuan notes are started and opened the servo. The default servo address: http://127.0.0.0.1: 6806.0.0. Note: The modification will cover the value of the startup setting.",
+  "blog.top-data-tip.siyuan":
+    "It is currently in the pendant mode. Starting from version 0.1.0, there is no need to reference the pendant on all pages. You only need to reference a pendant on the parent page. The specific rules are as follows: 1. If there are no subsidiaries, it will be compatible with the previous method of version 0.0.3 to display the release page of the current document. 2. If a subsidiary document is detected, all the subsidiaries will be displayed in a list and paging. You can choose a sub -document separately for release operations.",
   "blog.newwin.open": "Open in a new window",
   "blog.change.siyuan.api": "Modify Siyuan API address",
   "setting.blog.siyuan.password":

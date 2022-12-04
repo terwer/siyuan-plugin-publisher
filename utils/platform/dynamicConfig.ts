@@ -26,8 +26,8 @@
 import { CONSTANTS } from "~/utils/constants/constants"
 import { getJSONConf, setJSONConf } from "~/utils/configUtil"
 import { isEmptyString } from "~/utils/util"
-import { upperFirst } from "lodash-es"
 import { newID } from "~/utils/idUtil"
+import { appandStr, upperFirst } from "~/utils/strUtil"
 
 export class DynamicConfig {
   /**
@@ -205,9 +205,9 @@ export function getNewPlatformKey(
   ret = ptype.toLowerCase()
 
   if (!isEmptyString(subtype) && SubPlatformType.NONE !== subtype) {
-    ret = ret + upperFirst(subtype)
+    ret = appandStr(ret, upperFirst(subtype))
   }
-  return ret + "-" + newId
+  return appandStr(ret, "-", newId)
 }
 
 /**

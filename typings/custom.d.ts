@@ -24,3 +24,4 @@
  */
 
 // declare module "node-localstorage"
+declare module "~/utils/otherlib/ChromeUtil"

@@ -14,13 +14,16 @@
   "parserOptions": {
     "ecmaVersion": "latest",
     "sourceType": "module",
-    "project": "./tsconfig.json"
+    "parser": "@typescript-eslint/parser",
+    "project": "./tsconfig.json",
+    "extraFileExtensions": [".vue"]
   },
-  "plugins": ["vue"],
+  "plugins": ["@typescript-eslint", "vue"],
   "rules": {
     "vue/multi-word-component-names": "off",
     "@typescript-eslint/strict-boolean-expressions": 0,
     "@typescript-eslint/triple-slash-reference": 0,
+    "@typescript-eslint/restrict-template-expressions": 1,
     "no-undef": 0,
     "no-undef-init": 1,
     "no-undefined": 1,

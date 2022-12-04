@@ -24,25 +24,57 @@
   -->
 
 <template>
-  <div class="common-layout">
-    <el-container>
-      <DefaultHeader />
-      <el-main>
-        <DefaultMain />
-      </el-main>
-    </el-container>
+  <div id="publish-body">
+    <el-page-header
+      class="publish-header"
+      :icon="ArrowLeft"
+      title="返回"
+      @click="onBack"
+    >
+      <template #content>
+        <div class="flex items-center">
+          <span
+            class="text-large font-600 mr-3"
+            :title="props.publishData.title"
+          >
+            {{ shortTitle }} - 文章发布
+          </span>
+        </div>
+      </template>
+    </el-page-header>
+
+    <PublishService :page-id="props.publishData.postid" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import DefaultHeader from "./DefaultHeader.vue"
-import DefaultMain from "./DefaultMain.vue"
-</script>
+import { ArrowLeft } from "@element-plus/icons-vue"
+import PublishService from "~/components/publish/PublishService.vue"
+import { Post } from "~/utils/common/post"
+import { getByLength } from "~/utils/strUtil"
 
-<script lang="ts">
-export default {
-  name: "DefaultIndex",
+const props = defineProps({
+  publishData: {
+    type: Post,
+    default: new Post(),
+  },
+})
+
+const shortTitle = getByLength(props.publishData.title, 18, false)
+
+const emits = defineEmits(["on-change"]) // 语法糖
+const onBack = () => {
+  emits("on-change")
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+#publish-body {
+  min-width: 600px !important;
+  margin-top: 20px;
+}
+
+.publish-header {
+  margin-bottom: 16px;
+}
+</style>

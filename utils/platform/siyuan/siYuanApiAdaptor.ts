@@ -33,11 +33,15 @@ import { CategoryInfo } from "~/utils/common/categoryInfo"
 import { appandStr } from "~/utils/strUtil"
 import { renderHTML } from "~/utils/markdownUtil"
 import { removeWidgetTag } from "~/utils/htmlUtil"
+import { LogFactory } from "~/utils/logUtil"
 
 /**
  * 思源笔记API适配器
  */
 export class SiYuanApiAdaptor implements IApi {
+  private readonly logger = LogFactory.getLogger(
+    "utils/platform/siyuan/siYuanApiAdaptor.ts"
+  )
   private readonly siyuanApi: SiYuanApi
 
   constructor() {
@@ -206,14 +210,14 @@ export class SiYuanApiAdaptor implements IApi {
     if (page !== 0) {
       pg = page
     }
-    const k = keyword != null ?? ""
+    const k = keyword ?? ""
     const siyuanPosts = await this.siyuanApi.getSubdocs(
       postid,
       pg,
       numOfPosts,
-      String(k)
+      k
     )
-    // logUtil.logInfo(siyuanPosts)
+    this.logger.debug("siyuanPosts=>", siyuanPosts)
 
     for (let i = 0; i < siyuanPosts.length; i++) {
       const siyuanPost = siyuanPosts[i]

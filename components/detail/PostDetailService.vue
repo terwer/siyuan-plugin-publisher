@@ -35,7 +35,7 @@ import { API_TYPE_CONSTANTS } from "~/utils/constants/apiTypeConstants"
 import { LogFactory } from "~/utils/logUtil"
 
 const logger = LogFactory.getLogger(
-  "components/blog/themes/default/DefaultPostDetailService.vue"
+  "components/blog/themes/default/PostDetailService.vue"
 )
 
 const props = defineProps({
@@ -74,12 +74,6 @@ const initPage = async () => {
 onMounted(async () => {
   await initPage()
 })
-</script>
-
-<script lang="ts">
-export default {
-  name: "DefaultPostDetailService",
-}
 </script>
 
 <style>

@@ -25,10 +25,11 @@
 
 <template>
   <AppLayout>
-    <el-button>This is blog</el-button>
+    <BlogIndex />
   </AppLayout>
 </template>
 
 <script lang="ts" setup>
 import AppLayout from "~/layouts/AppLayout.vue"
+import BlogIndex from "~/components/blog/BlogIndex.vue"
 </script>

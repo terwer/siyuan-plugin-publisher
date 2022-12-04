@@ -25,6 +25,7 @@
 
 <template>
   <div>
+    <!-- 文章列表 -->
     <div id="post-list" v-if="showHome">
       <el-autocomplete
         class="s-input"
@@ -40,8 +41,8 @@
         </template>
       </el-autocomplete>
       <el-button class="s-btn" type="primary" @click="handleBtnSearch"
-        >搜索</el-button
-      >
+        >搜索
+      </el-button>
 
       <el-table
         class="tb-data"
@@ -84,8 +85,8 @@
           </template>
           <template #default="scope">
             <el-button size="small" @click="handleView(scope.$index, scope.row)"
-              >预览</el-button
-            >
+              >预览
+            </el-button>
             <el-button
               size="small"
               type="primary"
@@ -93,8 +94,8 @@
               >新窗口预览
             </el-button>
             <el-button size="small" @click="handleEdit(scope.$index, scope.row)"
-              >发布</el-button
-            >
+              >发布
+            </el-button>
             <el-button
               size="small"
               type="primary"
@@ -117,26 +118,32 @@
         @current-change="handleCurrentPage"
       />
 
-      <div v-if="!isInSiyuan">
+      <div>
         <el-alert
           class="top-data-tip"
-          :title="$t('blog.top-data-tip')"
+          :title="
+            isInSiyuan
+              ? $t('blog.top-data-tip.siyuan')
+              : $t('blog.top-data-tip')
+          "
           type="info"
           :closable="false"
         />
       </div>
     </div>
 
+    <!-- 文章详情 -->
     <div id="post-detail" v-if="showDetail">
-      <DefaultPostDetail
+      <SingleBlogDetail
         :post="postDetail"
         @on-change="emitFn"
         @on-publish-change="emitPublishPageFn"
       />
     </div>
 
+    <!-- 文章发布 -->
     <div id="post-publisher" v-if="showPublish">
-      <default-publish
+      <SinglePublish
         :publish-data="publishData"
         @on-change="emitPublishBackFn"
       />
@@ -145,23 +152,24 @@
 </template>
 
 <script lang="ts" setup>
-import logUtil from "~/utils/logUtil"
-import { onMounted, ref } from "vue"
-import { formatIsoToZhDate } from "~/utils/util"
-import { API } from "~/utils/api"
-import { API_TYPE_CONSTANTS } from "~/utils/constants/apiTypeConstants"
-import { mdToHtml, removeTitleNumber } from "~/utils/htmlUtil"
 import { useI18n } from "vue-i18n"
-import { getRootBlocksCount } from "~/utils/platform/siyuan/siYuanApi"
+import { onMounted, ref } from "vue"
+import { LogFactory } from "~/utils/logUtil"
 import { Post } from "~/utils/common/post"
-import DefaultPostDetail from "./DefaultPostDetail.vue"
-import DefaultPublish from "./DefaultPublish.vue"
-import { goToPage } from "~/utils/browser/ChromeUtil"
-import { ElMessageBox } from "element-plus"
+import { goToPage } from "~/utils/otherlib/ChromeUtil"
 import { getPageId, inSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
-import { getByLength } from "~/utils/strUtil"
 import { SiYuanApiAdaptor } from "~/utils/platform/siyuan/siYuanApiAdaptor"
+import { mdToHtml, removeTitleNumber } from "~/utils/htmlUtil"
+import { getByLength } from "~/utils/strUtil"
 import { CONSTANTS } from "~/utils/constants/constants"
+import { formatIsoToZhDate } from "~/utils/dateUtil"
+import { ElMessageBox } from "element-plus"
+import SingleBlogDetail from "~/components/blog/singleWin/SingleBlogDetail.vue"
+import SinglePublish from "~/components/blog/singleWin/singlePublish.vue"
+import { SIYUAN_CONSTANTS } from "~/utils/constants/siyuanConstants"
+import { getEnv } from "~/utils/envUtil"
+
+const logger = LogFactory.getLogger()
 
 const { t } = useI18n()
 
@@ -175,17 +183,13 @@ const isInSiyuan = ref(false)
 const state = ref("")
 const links = ref([])
 
-// @ts-ignore
 const querySearch = (queryString, cb) => {
   const results = queryString
     ? links.value.filter(createFilter(queryString))
     : links.value
-  // call callback function to return suggestion objects
   cb(results)
 }
-// @ts-ignore
 const createFilter = (queryString) => {
-  // @ts-ignore
   return (restaurant) => {
     return (
       restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
@@ -193,42 +197,30 @@ const createFilter = (queryString) => {
   }
 }
 
-// @ts-ignore
-const handleSelect = (item) => {
-  console.log(item)
-}
+const handleSelect = (item) => {}
 
 const handleBtnSearch = () => {
-  console.log("handleBtnSearch")
   reloadTableData()
 }
-// @ts-ignore
 const tableData = []
 const MAX_PAGE_SIZE = 5
 const num = ref(0)
 const total = ref(0)
 const currentPage = ref(1)
 
-// @ts-ignore
 const handlePrevPage = async (curPage) => {
   currentPage.value = curPage
-  logUtil.logInfo("handlePrevPage, currentPage=>", currentPage.value)
   await reloadTableData()
 }
-// @ts-ignore
 const handleNextPage = async (curPage) => {
   currentPage.value = curPage
-  logUtil.logInfo("handleNextPage, currentPage=>", currentPage.value)
   await reloadTableData()
 }
-// @ts-ignore
 const handleCurrentPage = async (curPage) => {
   currentPage.value = curPage
-  logUtil.logInfo("handleCurrentPage, currentPage=>", currentPage.value)
   await reloadTableData()
 }
 
-// @ts-ignore
 const handleView = (index, row) => {
   // goToPage("/detail/index.html?id=" + row.postid)
   // ElMessageBox.confirm(
@@ -260,7 +252,6 @@ const handleView = (index, row) => {
   showHome.value = false
   showDetail.value = true
 }
-// @ts-ignore
 const handleNewWinView = (index, row) => {
   ElMessageBox.confirm(
     "预览会打开新页面，此窗口将关闭，是否继续？",
@@ -280,7 +271,6 @@ const handleNewWinView = (index, row) => {
       //   type: 'error',
       //   message: t("main.opt.failure"),
       // })
-      logUtil.logInfo("操作已取消")
     })
 }
 
@@ -295,7 +285,6 @@ const emitPublishBackFn = () => {
   emitFn()
 }
 
-// @ts-ignore
 const emitPublishPageFn = (post) => {
   // post.postid = post.postid
   // post.title = post.title
@@ -306,7 +295,6 @@ const emitPublishPageFn = (post) => {
   showDetail.value = false
 }
 
-// @ts-ignore
 const handleEdit = (index, row) => {
   // goToPage("/index.html?id=" + row.postid)
   // console.log(index, row)
@@ -332,7 +320,7 @@ const handleNewWinEdit = (index, row) => {
     }
   )
     .then(async () => {
-      goToPage("/publish/index.html?id=" + row.postid, "/")
+      goToPage("/publish/index.html?id=" + row.postid)
       // console.log(index, row)
     })
     .catch(() => {
@@ -340,7 +328,6 @@ const handleNewWinEdit = (index, row) => {
       //   type: 'error',
       //   message: t("main.opt.failure"),
       // })
-      logUtil.logInfo("操作已取消")
     })
 }
 
@@ -351,21 +338,26 @@ const handleRowClick = (row, column, event) => {
 }
 
 const initPage = async () => {
-  isInSiyuan.value = await inSiyuan()
+  isInSiyuan.value = inSiyuan()
   await reloadTableData()
   // logUtil.logInfo("Post init page=>", tableData)
 }
 
 const reloadTableData = async () => {
   let postCount = 1
-  // @ts-ignore
   let postList = []
   let hasSubdoc = false
 
-  if (isInSiyuan.value) {
-    const postid = await getPageId()
+  const siyuanApi = new SiYuanApiAdaptor()
+  if (isInSiyuan.value || SIYUAN_CONSTANTS.DEBUG_SIYUAN_SUBDOC) {
+    let postid = getEnv("VITE_SIYUAN_DEV_PAGE_ID")
+    if (SIYUAN_CONSTANTS.DEBUG_SIYUAN_SUBDOC) {
+      logger.warn("处于子文档调试模式，父文档ID为=>", postid)
+    } else {
+      postid = await getPageId()
+      logger.warn("处于生产环境，父文档ID为=>", postid)
+    }
 
-    const siyuanApi = new SiYuanApiAdaptor()
     postCount = await siyuanApi.getSubPostCount(postid)
     if (postCount > 1) {
       hasSubdoc = true
@@ -380,14 +372,13 @@ const reloadTableData = async () => {
       )
     }
   } else {
-    const api = new API(API_TYPE_CONSTANTS.API_TYPE_SIYUAN)
-    postCount = await getRootBlocksCount(state.value)
-    postList = await api.getRecentPosts(
+    postCount = await siyuanApi.getRecentPostsCount(state.value)
+    postList = await siyuanApi.getRecentPosts(
       MAX_PAGE_SIZE,
       currentPage.value - 1,
       state.value
     )
-    // console.log("postList=>", postList)
+    logger.debug("postList=>", postList)
   }
 
   // =======================================================================
@@ -396,10 +387,8 @@ const reloadTableData = async () => {
   total.value = postCount
 
   // 渲染table
-  // @ts-ignore
   tableData.splice(0, tableData.length)
   for (let i = 0; i < postList.length; i++) {
-    // @ts-ignore
     const item = postList[i]
 
     const title = removeTitleNumber(item.title)
@@ -430,19 +419,18 @@ onMounted(async () => {
 })
 </script>
 
-<script lang="ts">
-export default {
-  name: "DefaultMain",
-}
-</script>
-
 <style>
 .s-input {
   min-width: 500px !important;
 }
 </style>
 <style scoped>
+#post-list {
+  margin-top: 20px;
+}
+
 .top-data-tip {
+  margin-top: 32px !important;
   margin-bottom: 10px;
   padding-left: 4px;
 }

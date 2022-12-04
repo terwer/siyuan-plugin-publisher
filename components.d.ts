@@ -33,11 +33,18 @@ export {}
 declare module "@vue/runtime-core" {
   export interface GlobalComponents {
     ElAlert: typeof import("element-plus/es")["ElAlert"]
+    ElAutocomplete: typeof import("element-plus/es")["ElAutocomplete"]
     ElButton: typeof import("element-plus/es")["ElButton"]
+    ElContainer: typeof import("element-plus/es")["ElContainer"]
     ElDialog: typeof import("element-plus/es")["ElDialog"]
     ElForm: typeof import("element-plus/es")["ElForm"]
     ElFormItem: typeof import("element-plus/es")["ElFormItem"]
     ElHeader: typeof import("element-plus/es")["ElHeader"]
     ElInput: typeof import("element-plus/es")["ElInput"]
+    ElMain: typeof import("element-plus/es")["ElMain"]
+    ElPageHeader: typeof import("element-plus/es")["ElPageHeader"]
+    ElPagination: typeof import("element-plus/es")["ElPagination"]
+    ElTable: typeof import("element-plus/es")["ElTable"]
+    ElTableColumn: typeof import("element-plus/es")["ElTableColumn"]
   }
 }

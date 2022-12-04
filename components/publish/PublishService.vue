@@ -24,12 +24,18 @@
   -->
 
 <template>
-  <AppLayout>
-    <BlogDetail />
-  </AppLayout>
+  <div>PublishService {{ props.pageId }}</div>
 </template>
 
 <script lang="ts" setup>
-import AppLayout from "~/layouts/AppLayout.vue"
-import BlogDetail from "~/components/detail/PostDetail.vue"
+const props = defineProps({
+  isReload: {
+    type: Boolean,
+    default: false,
+  },
+  pageId: {
+    type: String,
+    default: undefined,
+  },
+})
 </script>

@@ -24,12 +24,15 @@
   -->
 
 <template>
-  <AppLayout>
-    <BlogDetail />
-  </AppLayout>
+  <div class="common-layout">
+    <el-container>
+      <el-main>
+        <BlogMain />
+      </el-main>
+    </el-container>
+  </div>
 </template>
 
 <script lang="ts" setup>
-import AppLayout from "~/layouts/AppLayout.vue"
-import BlogDetail from "~/components/detail/PostDetail.vue"
+import BlogMain from "~/components/blog/BlogMain.vue"
 </script>

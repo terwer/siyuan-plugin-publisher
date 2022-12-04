@@ -25,10 +25,61 @@
 
 <template>
   <AppLayout>
-    <el-button>This is index</el-button>
+    <div>
+      <div v-if="isPublish">
+        <PublishIndex />
+      </div>
+      <div v-else>
+        <BlogIndex />
+      </div>
+    </div>
   </AppLayout>
 </template>
 
 <script lang="ts" setup>
 import AppLayout from "~/layouts/AppLayout.vue"
+import BlogIndex from "~/components/blog/BlogIndex.vue"
+import PublishIndex from "~/components/publish/PublishIndex.vue"
+import { onMounted, ref } from "vue"
+import { LogFactory } from "~/utils/logUtil"
+import { getPageId, getWidgetId } from "~/utils/platform/siyuan/siyuanUtil"
+import { SiYuanApiAdaptor } from "~/utils/platform/siyuan/siYuanApiAdaptor"
+import { isInChromeExtension } from "~/utils/otherlib/ChromeUtil"
+
+const logger = LogFactory.getLogger("pages/index/App.vue")
+
+const isPublish = ref(false)
+
+const init = async () => {
+  logger.warn("MODE=>", import.meta.env.MODE)
+
+  const widgetResult = getWidgetId()
+  if (widgetResult.isInSiyuan) {
+    const postid = await getPageId()
+    logger.warn("当前页面ID是=>", postid)
+
+    const api = new SiYuanApiAdaptor()
+    const result = await api.getSubPostCount(postid)
+    logger.debug("子文档个数", result)
+
+    if (result > 1) {
+      isPublish.value = false
+      logger.warn("检测到子文档，将转到显示列表页面")
+    } else {
+      isPublish.value = true
+      logger.warn("没有子文档显示发布页面")
+    }
+  } else if (isInChromeExtension()) {
+    logger.warn("当前处于Chrome插件中，需要模拟fetch解决CORS跨域问题")
+  } else {
+    logger.warn("当前处于非挂件模式，已开启请求代理解决CORS跨域问题")
+  }
+}
+
+// =====================
+// life cycle
+// =====================
+onMounted(async () => {
+  await init()
+})
 </script>

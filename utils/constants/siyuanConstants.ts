@@ -24,7 +24,12 @@
  */
 
 const SIYUAN_CFG_KEY = "siyuan-cfg"
+/**
+ * 调试子文档模式，设置 true 可直接调试子文档
+ */
+const DEBUG_SIYUAN_SUBDOC = false
 
 export const SIYUAN_CONSTANTS = {
   SIYUAN_CFG_KEY,
+  DEBUG_SIYUAN_SUBDOC,
 }
