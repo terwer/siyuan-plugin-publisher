@@ -22,6 +22,7 @@
     "@typescript-eslint/strict-boolean-expressions": 0,
     "no-undef": 0,
     "no-undef-init": 2,
-    "no-undefined": 2
+    "no-undefined": 2,
+    "no-prototype-builtins": 1
   }
 }

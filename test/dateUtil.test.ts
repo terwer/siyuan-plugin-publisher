@@ -23,29 +23,39 @@
  * questions.
  */
 
-/**
- * 标题最大长度
- */
-const MAX_TITLE_LENGTH = 10
+import { describe } from "vitest"
+import {
+  covertStringToDate,
+  formatIsoToNumDate,
+  formatIsoToZhDate,
+} from "~/utils/dateUtil"
+import { LogFactory } from "~/utils/logUtil"
 
-/**
- * 文章简介最大长度
- */
-const MAX_PREVIEW_LENGTH = 255
+const logger = LogFactory.getLogger()
 
-/**
- * 动态配置key，全系统唯一，请勿更改
- */
-const DYNAMIC_CONFIG_KEY = "dynamic-config"
+describe("dateUtil test", () => {
+  it("covertStringToDate test", () => {
+    const date = covertStringToDate("20220718142548")
+    logger.info("date.toISOString=>")
+    logger.info(date.toISOString())
 
-/**
- * 分词最大数目
- */
-const DEFAULT_JIEBA_WORD_LENGTH = 5
+    const timeZone = "Asia/Shanghai"
+    const datestr = date.toLocaleString("zh-CN", {
+      timeZone,
+    })
+    logger.info("datestr=>")
+    logger.info(datestr)
+  })
 
-export const CONSTANTS = {
-  MAX_TITLE_LENGTH,
-  MAX_PREVIEW_LENGTH,
-  DYNAMIC_CONFIG_KEY,
-  DEFAULT_JIEBA_WORD_LENGTH,
-}
+  it("formatIsoToZhDate test", () => {
+    const fmt = formatIsoToZhDate(new Date().toISOString())
+    logger.info("fmt=>")
+    logger.info(fmt)
+  })
+
+  it("formatIsoToNumDate test", () => {
+    const fmt2 = formatIsoToNumDate(new Date().toISOString())
+    logger.info("fmt2=>")
+    logger.info(fmt2)
+  })
+})

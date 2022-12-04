@@ -26,12 +26,12 @@
 // 开发阶段开启所有日志
 // 发布阶段只开启WARN和ERROR日志
 import { getBooleanEnv } from "./envUtil"
-import { inBrowser } from "~/utils/util"
 import loglevel, { Logger } from "loglevel"
 import prefix from "loglevel-plugin-prefix"
 import chalk from "chalk"
+import { isBrowser } from "~/utils/browserUtil"
 
-if (inBrowser()) {
+if (isBrowser()) {
   console.log("loglevel运行在浏览器环境中")
 } else {
   console.log("loglevel运行在node环境中")
@@ -77,7 +77,7 @@ prefix.apply(loglevel, {
  * @param loggerName 日志记录器，默认为 console
  */
 const getLogger = (loggerName?: string): Logger => {
-  return loglevel.getLogger(loggerName ?? __filename ?? CONSOLE_LOGGER)
+  return loglevel.getLogger(loggerName ?? CONSOLE_LOGGER)
 }
 
 /**
