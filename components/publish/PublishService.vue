@@ -46,9 +46,7 @@
         -->
     </el-tab-pane>
     <el-tab-pane name="post-bind" :label="$t('service.tab.post.bind')">
-      <!--
-        <post-bind :is-reload="isReloadPostBind" :page-id="props.pageId" />
-        -->
+      <PostBind :is-reload="isReloadPostBind" :page-id="props.pageId" />
     </el-tab-pane>
     <el-tab-pane
       name="service-switch"
@@ -71,6 +69,7 @@ import { LogFactory } from "~/utils/logUtil"
 import ChangeLocale from "~/components/publish/tab/ChangeLocale.vue"
 import DynamicPlatform from "~/components/publish/tab/DynamicPlatform.vue"
 import ServiceSwitch from "~/components/publish/tab/ServiceSwitch.vue"
+import PostBind from "~/components/publish/tab/PostBind.vue"
 
 const logger = LogFactory.getLogger("components/publish/PublishService.vue")
 
