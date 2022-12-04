@@ -24,9 +24,16 @@
  */
 
 import { describe } from "vitest"
+import { getPublishStatus } from "~/utils/publishUtil"
+import { API_TYPE_CONSTANTS } from "~/utils/constants/apiTypeConstants"
+import { LogFactory } from "~/utils/logUtil"
 
 describe("publishUtil test", () => {
+  const logger = LogFactory.getLogger()
+
   it("getPublishStatus test", () => {
-    throw new Error("未验证")
+    const meta = {}
+    const result = getPublishStatus(API_TYPE_CONSTANTS.API_TYPE_HUGO, meta)
+    logger.info("getPublishStatus result=>", result)
   })
 })

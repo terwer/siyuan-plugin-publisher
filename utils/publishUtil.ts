@@ -24,8 +24,25 @@
  */
 
 import { API_TYPE_CONSTANTS } from "~/utils/constants/apiTypeConstants"
-import { getDynamicJsonCfg } from "~/utils/platform/dynamicConfig"
-import { getBooleanConf } from "~/utils/configUtil"
+import {
+  getDynamicJsonCfg,
+  getDynSwitchKey,
+} from "~/utils/platform/dynamicConfig"
+import { getBooleanConf, getJSONConf } from "~/utils/configUtil"
+import { IGithubCfg } from "~/utils/platform/github/githubCfg"
+import { IMetaweblogCfg } from "~/utils/platform/metaweblog/IMetaweblogCfg"
+import { ICommonblogCfg } from "~/utils/platform/commonblog/commonblogCfg"
+import { LogFactory } from "~/utils/logUtil"
+
+const logger = LogFactory.getLogger("utils/publishUtil.ts")
+
+/**
+ * 新版获取apiParams参数的方法，使用ts泛型
+ * @param apiType 参数类型
+ */
+export function getApiParams<T>(apiType: string): T {
+  return getJSONConf<T>(apiType)
+}
 
 /**
  * 根据平台类型获取发布状态
@@ -33,6 +50,13 @@ import { getBooleanConf } from "~/utils/configUtil"
  * @param meta 元数据
  */
 export const getPublishStatus = (apiType: string, meta: any): boolean => {
+  const githubTypeArray = [
+    API_TYPE_CONSTANTS.API_TYPE_VUEPRESS,
+    API_TYPE_CONSTANTS.API_TYPE_HUGO,
+    API_TYPE_CONSTANTS.API_TYPE_HEXO,
+    API_TYPE_CONSTANTS.API_TYPE_JEKYLL,
+  ]
+
   // 固定的平台
   const metaweblogTypeArray = [
     API_TYPE_CONSTANTS.API_TYPE_JVUE,
@@ -42,22 +66,31 @@ export const getPublishStatus = (apiType: string, meta: any): boolean => {
   ]
 
   // 通用自定义平台
-  // const commonblogTypeArray = [
-  //   API_TYPE_CONSTANTS.API_TYPE_LIANDI,
-  //   API_TYPE_CONSTANTS.API_TYPE_YUQUE,
-  //   API_TYPE_CONSTANTS.API_TYPE_KMS,
-  // ]
+  const commonblogTypeArray = [
+    API_TYPE_CONSTANTS.API_TYPE_LIANDI,
+    API_TYPE_CONSTANTS.API_TYPE_YUQUE,
+    API_TYPE_CONSTANTS.API_TYPE_KMS,
+  ]
 
   // 读取动态类型
   const dynamicJsonCfg = getDynamicJsonCfg()
   // const dynamicConfigArray = dynamicJsonCfg.totalCfg || []
+  const githubArray = dynamicJsonCfg.githubCfg || []
   const metaweblogArray = dynamicJsonCfg.metaweblogCfg || []
   const wordpressArray = dynamicJsonCfg.wordpressCfg || []
+  // github
+  githubArray.forEach((item) => {
+    const apiType = item.platformKey
+    const switchKey = getDynSwitchKey(item.platformKey)
+    const switchValue = getBooleanConf(switchKey)
+    if (switchValue) {
+      githubTypeArray.push(apiType)
+    }
+  })
   // metaweblog
   metaweblogArray.forEach((item) => {
     const apiType = item.platformKey
-    // const postidKey = 'custom-' + item.platformKey + '-post-id'
-    const switchKey = "switch-" + item.platformKey
+    const switchKey = getDynSwitchKey(item.platformKey)
     const switchValue = getBooleanConf(switchKey)
     if (switchValue) {
       metaweblogTypeArray.push(apiType)
@@ -66,39 +99,38 @@ export const getPublishStatus = (apiType: string, meta: any): boolean => {
   // WordPress
   wordpressArray.forEach((item) => {
     const apiType = item.platformKey
-    // const postidKey = 'custom-' + item.platformKey + '-post-id'
-    const switchKey = "switch-" + item.platformKey
+    const switchKey = getDynSwitchKey(item.platformKey)
     const switchValue = getBooleanConf(switchKey)
     if (switchValue) {
       metaweblogTypeArray.push(apiType)
     }
   })
 
-  // if (apiType === API_TYPE_CONSTANTS.API_TYPE_VUEPRESS) {
-  //   const postidKey = getApiParams<IGithubCfg>(apiType).posidKey
-  //   const postId = meta[postidKey] || ""
-  //   logUtil.logInfo("平台=>", apiType)
-  //   logUtil.logInfo("meta=>", meta)
-  //   logUtil.logInfo("postidKey=>", postidKey)
-  //   logUtil.logInfo("postidKey的值=>", postId)
-  //   return postId !== ""
-  // } else if (metaweblogTypeArray.includes(apiType)) {
-  //   const postidKey = getApiParams<IMetaweblogCfg>(apiType).posidKey
-  //   const postId = meta[postidKey] || ""
-  //   logUtil.logInfo("平台=>", apiType)
-  //   logUtil.logInfo("meta=>", meta)
-  //   logUtil.logInfo("postidKey=>", postidKey)
-  //   logUtil.logInfo("postidKey的值=>", postId)
-  //   return postId !== ""
-  // } else if (commonblogTypeArray.includes(apiType)) {
-  //   const postidKey = getApiParams<ICommonblogCfg>(apiType).posidKey
-  //   const postId = meta[postidKey ?? ""] || ""
-  //   logUtil.logInfo("平台=>", apiType)
-  //   logUtil.logInfo("meta=>", meta)
-  //   logUtil.logInfo("postidKey=>", postidKey)
-  //   logUtil.logInfo("postidKey的值=>", postId)
-  //   return postId !== ""
-  // }
+  if (githubTypeArray.includes(apiType)) {
+    const postidKey = getApiParams<IGithubCfg>(apiType).posidKey
+    const postId = meta[postidKey] || ""
+    logger.debug("平台=>", apiType)
+    logger.debug("meta=>", meta)
+    logger.debug("postidKey=>", postidKey)
+    logger.debug("postidKey的值=>", postId)
+    return postId !== ""
+  } else if (metaweblogTypeArray.includes(apiType)) {
+    const postidKey = getApiParams<IMetaweblogCfg>(apiType).posidKey
+    const postId = meta[postidKey] || ""
+    logger.debug("平台=>", apiType)
+    logger.debug("meta=>", meta)
+    logger.debug("postidKey=>", postidKey)
+    logger.debug("postidKey的值=>", postId)
+    return postId !== ""
+  } else if (commonblogTypeArray.includes(apiType)) {
+    const postidKey = getApiParams<ICommonblogCfg>(apiType).posidKey
+    const postId = meta[postidKey ?? ""] || ""
+    logger.debug("平台=>", apiType)
+    logger.debug("meta=>", meta)
+    logger.debug("postidKey=>", postidKey)
+    logger.debug("postidKey的值=>", postId)
+    return postId !== ""
+  }
 
   return false
 }
