@@ -308,7 +308,6 @@ const handleEdit = (index, row) => {
   showDetail.value = false
 }
 
-// @ts-ignore
 const handleNewWinEdit = (index, row) => {
   ElMessageBox.confirm(
     "此操作会打开新页面，此窗口将关闭，是否继续？",
@@ -331,7 +330,6 @@ const handleNewWinEdit = (index, row) => {
     })
 }
 
-// @ts-ignore
 const handleRowClick = (row, column, event) => {
   // goToPage("/index.html?id=aaa")
   // console.log("handleRowClick", row)

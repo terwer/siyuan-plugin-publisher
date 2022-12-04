@@ -34,25 +34,21 @@ export class CopyButtonPlugin {
    * @param {Hook} [options.hook]
    */
   constructor(options = {}) {
-    // @ts-ignore
     self.hook = options.hook
-    // @ts-ignore
     self.callback = options.callback
   }
 
-  // @ts-ignore
   "after:highlightElement"({ el, text }) {
     // Create the copy button and append it to the codeblock.
     const button = Object.assign(document.createElement("button"), {
       innerHTML: "Copy",
       className: "hljs-copy-button",
     })
-    // @ts-ignore
     button.dataset.copied = false
     el.parentElement.classList.add("hljs-copy-wrapper")
     el.parentElement.appendChild(button)
 
-    // Add a custom proprety to the code block so that the copy button can reference and match its background-color value.
+    // Add a custom property to the code block so that the copy button can reference and match its background-color value.
     el.parentElement.style.setProperty(
       "--hljs-theme-background",
       window.getComputedStyle(el).backgroundColor
@@ -62,11 +58,7 @@ export class CopyButtonPlugin {
       if (!navigator.clipboard) return
 
       let newText = text
-      // @ts-ignore
-      // eslint-disable-next-line no-undef
       if (hook && typeof hook === "function") {
-        // @ts-ignore
-        // eslint-disable-next-line no-undef
         newText = hook(text, el) || text
       }
 
@@ -74,7 +66,6 @@ export class CopyButtonPlugin {
         .writeText(newText)
         .then(function () {
           button.innerHTML = "复制成功"
-          // @ts-ignore
           button.dataset.copied = true
 
           let alert = Object.assign(document.createElement("div"), {
@@ -86,16 +77,12 @@ export class CopyButtonPlugin {
 
           setTimeout(() => {
             button.innerHTML = "Copy"
-            // @ts-ignore
             button.dataset.copied = false
             el.parentElement.removeChild(alert)
-            // @ts-ignore
             alert = null
           }, 2000)
         })
         .then(function () {
-          // @ts-ignore
-          // eslint-disable-next-line no-undef
           if (typeof callback === "function") return callback(newText, el)
         })
     }

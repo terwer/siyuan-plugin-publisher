@@ -283,7 +283,6 @@ const submitForm = async (formEl) => {
     return
   }
 
-  // @ts-ignore
   const result = await formEl.validate((valid, fields) => {
     if (valid) {
       logger.debug("校验成功")
@@ -317,7 +316,6 @@ const num = ref(0)
 const currentRow = ref()
 const currentTip = ref(t("dynamic.platform.opt.item.select"))
 
-// @ts-ignore
 const handleCurrentChange = (val) => {
   currentRow.value = val
   currentTip.value =
