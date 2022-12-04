@@ -4,35 +4,38 @@
     "useDefineForClassFields": true,
     "module": "ESNext",
     "moduleResolution": "Node",
-    "strict": true,
+    "strict": false,
     "jsx": "preserve",
     "sourceMap": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "esModuleInterop": true,
-    "lib": [
-      "ESNext",
-      "DOM"
-    ],
+    "lib": ["ESNext", "DOM"],
     "skipLibCheck": true,
     "allowJs": true,
     "checkJs": false,
-    "types": [
-      "node",
-      "vite/client",
-      "vitest/globals"
-    ],
+    "noImplicitAny": false,
+    "types": ["node", "vite/client", "vitest/globals"],
     "paths": {
-      "~/*": ["./src/*"]
+      "~/*": ["./*"]
     }
   },
   "include": [
-    "src/**/*.ts",
-    "src/**/*.d.ts",
-    "src/**/*.tsx",
-    "src/**/*.vue",
-    "test/**/*.ts",
-    "node_modules/vitest/globals.d.ts"
+    "./**/*.vue",
+    "./**/*.ts",
+    "*.vue",
+    "*.ts",
+    "typings/*.d.ts",
+    "node_modules/vitest/*.d.ts",
+    "node_modules/vitest/*.d.cts"
+  ],
+  "exclude": [
+    ".github",
+    ".husky",
+    ".vercel",
+    "node_modules",
+    "dist",
+    "vite.config.ts"
   ],
   "references": [
     {

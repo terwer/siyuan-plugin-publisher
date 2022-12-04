@@ -1,1 +1,0 @@
-vue-tsc --noEmit && BUILD_TYPE=siyuan vite build
