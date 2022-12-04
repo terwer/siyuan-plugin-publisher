@@ -18,7 +18,7 @@
  * 2 along with this work; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  *
- * Please contact Terwer, Shenzhen, Guangdong, 518000 China
+ * Please contact Terwer, Shenzhen, Guangdong, China, youweics@163.com
  * or visit www.terwer.space if you need additional information or have any
  * questions.
  */
@@ -26,6 +26,7 @@
 import { UserBlog } from "~/utils/common/userBlog"
 import { Post } from "~/utils/common/post"
 import { CategoryInfo } from "~/utils/common/categoryInfo"
+import { API_TYPE_CONSTANTS } from "~/utils/constants/apiTypeConstants"
 
 /**
  * @description 所有平台统一API接口
@@ -169,26 +170,26 @@ export class API implements IApi {
   constructor(type: string) {
     this.type = type
 
-    // 动态平台key的规则是-分割第一部分是平台类型
-    if (type.includes("-")) {
-      const typeArr = type.split("-")
-      if (typeArr.length > 0) {
-        const ptype = typeArr[0]
-        if (ptype.includes(PlantformType.Github.toLowerCase())) {
-          // Github
-          this.apiAdaptor = new GithubApiAdaptor(type)
-          return
-        } else if (ptype === PlantformType.Metaweblog.toLowerCase()) {
-          // Metaweblog
-          this.apiAdaptor = new MetaWeblogApiAdaptor(type)
-          return
-        } else if (ptype === PlantformType.Wordpress.toLowerCase()) {
-          // Wordpress
-          this.apiAdaptor = new MetaWeblogApiAdaptor(type)
-          return
-        }
-      }
-    }
+    // // 动态平台key的规则是-分割第一部分是平台类型
+    // if (type.includes("-")) {
+    //   const typeArr = type.split("-")
+    //   if (typeArr.length > 0) {
+    //     const ptype = typeArr[0]
+    //     if (ptype.includes(PlantformType.Github.toLowerCase())) {
+    //       // Github
+    //       this.apiAdaptor = new GithubApiAdaptor(type)
+    //       return
+    //     } else if (ptype === PlantformType.Metaweblog.toLowerCase()) {
+    //       // Metaweblog
+    //       this.apiAdaptor = new MetaWeblogApiAdaptor(type)
+    //       return
+    //     } else if (ptype === PlantformType.Wordpress.toLowerCase()) {
+    //       // Wordpress
+    //       this.apiAdaptor = new MetaWeblogApiAdaptor(type)
+    //       return
+    //     }
+    //   }
+    // }
 
     // 下面是固定平台
     switch (this.type) {
@@ -197,46 +198,46 @@ export class API implements IApi {
         this.apiAdaptor = new SiYuanApiAdaptor()
         break
 
-      // Github
-      case API_TYPE_CONSTANTS.API_TYPE_VUEPRESS:
-        this.apiAdaptor = new VuepressApiAdaptor()
-        break
-      case API_TYPE_CONSTANTS.API_TYPE_HUGO:
-        this.apiAdaptor = new HugoApiAdaptor()
-        break
-      case API_TYPE_CONSTANTS.API_TYPE_HEXO:
-        this.apiAdaptor = new HexoApiAdaptor()
-        break
-      case API_TYPE_CONSTANTS.API_TYPE_JEKYLL:
-        this.apiAdaptor = new JekyllApiAdaptor()
-        break
-
-      // Metaweblog API
-      case API_TYPE_CONSTANTS.API_TYPE_JVUE:
-        this.apiAdaptor = new JVueApiAdaptor()
-        break
-      case API_TYPE_CONSTANTS.API_TYPE_CONFLUENCE:
-        this.apiAdaptor = new ConfApiAdaptor()
-        break
-      case API_TYPE_CONSTANTS.API_TYPE_CNBLOGS:
-        this.apiAdaptor = new CnblogsApiAdaptor()
-        break
-
-      // Wordpress
-      case API_TYPE_CONSTANTS.API_TYPE_WORDPRESS:
-        this.apiAdaptor = new WordpressApiAdaptor()
-        break
-
-      // Common
-      case API_TYPE_CONSTANTS.API_TYPE_LIANDI:
-        this.apiAdaptor = new LiandiApiAdaptor()
-        break
-      case API_TYPE_CONSTANTS.API_TYPE_YUQUE:
-        this.apiAdaptor = new YuqueApiAdaptor()
-        break
-      case API_TYPE_CONSTANTS.API_TYPE_KMS:
-        this.apiAdaptor = new KmsApiAdaptor()
-        break
+      //   // Github
+      //   case API_TYPE_CONSTANTS.API_TYPE_VUEPRESS:
+      //     this.apiAdaptor = new VuepressApiAdaptor()
+      //     break
+      //   case API_TYPE_CONSTANTS.API_TYPE_HUGO:
+      //     this.apiAdaptor = new HugoApiAdaptor()
+      //     break
+      //   case API_TYPE_CONSTANTS.API_TYPE_HEXO:
+      //     this.apiAdaptor = new HexoApiAdaptor()
+      //     break
+      //   case API_TYPE_CONSTANTS.API_TYPE_JEKYLL:
+      //     this.apiAdaptor = new JekyllApiAdaptor()
+      //     break
+      //
+      //   // Metaweblog API
+      //   case API_TYPE_CONSTANTS.API_TYPE_JVUE:
+      //     this.apiAdaptor = new JVueApiAdaptor()
+      //     break
+      //   case API_TYPE_CONSTANTS.API_TYPE_CONFLUENCE:
+      //     this.apiAdaptor = new ConfApiAdaptor()
+      //     break
+      //   case API_TYPE_CONSTANTS.API_TYPE_CNBLOGS:
+      //     this.apiAdaptor = new CnblogsApiAdaptor()
+      //     break
+      //
+      //   // Wordpress
+      //   case API_TYPE_CONSTANTS.API_TYPE_WORDPRESS:
+      //     this.apiAdaptor = new WordpressApiAdaptor()
+      //     break
+      //
+      //   // Common
+      //   case API_TYPE_CONSTANTS.API_TYPE_LIANDI:
+      //     this.apiAdaptor = new LiandiApiAdaptor()
+      //     break
+      //   case API_TYPE_CONSTANTS.API_TYPE_YUQUE:
+      //     this.apiAdaptor = new YuqueApiAdaptor()
+      //     break
+      //   case API_TYPE_CONSTANTS.API_TYPE_KMS:
+      //     this.apiAdaptor = new KmsApiAdaptor()
+      //     break
       default:
         throw new Error("未找到接口适配器，请检查参数")
     }

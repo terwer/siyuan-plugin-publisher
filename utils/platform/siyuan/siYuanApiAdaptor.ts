@@ -18,38 +18,29 @@
  * 2 along with this work; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  *
- * Please contact Terwer, Shenzhen, Guangdong, 518000 China
+ * Please contact Terwer, Shenzhen, Guangdong, China, youweics@163.com
  * or visit www.terwer.space if you need additional information or have any
  * questions.
  */
 
-/* eslint-disable @typescript-eslint/restrict-plus-operands,@typescript-eslint/strict-boolean-expressions */
-import { IApi } from "../../api"
-import {
-  exportMdContent,
-  getBlockAttrs,
-  getBlockByID,
-  getBlockBySlug,
-  getRootBlocks,
-  getRootBlocksCount,
-  getSubdocCount,
-  getSubdocs,
-} from "./siYuanApi"
-import { Post } from "../../common/post"
-import { UserBlog } from "../../common/userBlog"
-import { API_TYPE_CONSTANTS } from "../../constants/apiTypeConstants"
-import { renderHTML } from "../../markdownUtil"
-import { removeWidgetTag } from "../../htmlUtil"
-import { POST_STATUS_CONSTANTS } from "../../constants/postStatusConstants"
-import { CategoryInfo } from "../../common/categoryInfo"
+import { IApi } from "~/utils/api"
+import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
+import { UserBlog } from "~/utils/common/userBlog"
+import { API_TYPE_CONSTANTS } from "~/utils/constants/apiTypeConstants"
 
 /**
  * 思源笔记API适配器
  */
 export class SiYuanApiAdaptor implements IApi {
+  private readonly siyuanApi: SiYuanApi
+
+  constructor() {
+    this.siyuanApi = new SiYuanApi()
+  }
+
   public async getUsersBlogs(): Promise<UserBlog[]> {
     const result: UserBlog[] = []
-    // const data = await this.metaWeblog.getUsersBlogs(this.appkey, this.username, this.password);
+
     const userBlog = new UserBlog()
     userBlog.blogid = API_TYPE_CONSTANTS.API_TYPE_SIYUAN
     userBlog.blogName = API_TYPE_CONSTANTS.API_TYPE_SIYUAN

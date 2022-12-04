@@ -18,16 +18,15 @@
  * 2 along with this work; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  *
- * Please contact Terwer, Shenzhen, Guangdong, 518000 China
+ * Please contact Terwer, Shenzhen, Guangdong, China, youweics@163.com
  * or visit www.terwer.space if you need additional information or have any
  * questions.
  */
 
-/* 配置文件(可以被 data/widgets/custom.js 覆盖) */
-import { getEnv } from "../../envUtil"
-import { getJSONConf } from "../../config"
-import { isEmptyString } from "../../util"
-import { SIYUAN_CONSTANTS } from "../../constants/siyuanConstants"
+import { getEnv } from "~/utils/envUtil"
+import { getJSONConf } from "~/utils/configUtil"
+import { SIYUAN_CONSTANTS } from "~/utils/constants/siyuanConstants"
+import { isEmptyString } from "~/utils/util"
 
 /**
  * 思源笔记配置
