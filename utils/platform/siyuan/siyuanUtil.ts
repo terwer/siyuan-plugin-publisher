@@ -53,7 +53,6 @@ export const getWidgetId = (): WidgetResult => {
     window.frameElement.parentElement == null ||
     window.frameElement.parentElement.parentElement == null
   ) {
-    logger.info("正在已非挂件模式运行，部分功能将不可用，请知悉")
     return {
       isInSiyuan: false,
       widgetId: "",
@@ -62,7 +61,6 @@ export const getWidgetId = (): WidgetResult => {
 
   const self = window.frameElement.parentElement.parentElement
   if (!self) {
-    logger.info("正在已非挂件模式运行，部分功能将不可用，请知悉")
     return {
       isInSiyuan: false,
       widgetId: "",
@@ -71,14 +69,12 @@ export const getWidgetId = (): WidgetResult => {
 
   const widgetId = self.getAttribute("data-node-id")
   if (!widgetId) {
-    logger.info("正在已非挂件模式运行，部分功能将不可用，请知悉")
     return {
       isInSiyuan: false,
       widgetId: "",
     }
   }
 
-  logger.info("恭喜你，正在已挂件模式运行")
   return {
     isInSiyuan: true,
     widgetId,

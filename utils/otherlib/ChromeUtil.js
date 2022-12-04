@@ -24,9 +24,10 @@
  */
 
 import { inSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
-import { getQueryString, isBrowser } from "~/utils/browserUtil"
+import { getQueryString, isBrowser, setUrlParameter } from "~/utils/browserUtil"
 import { LogFactory } from "~/utils/logUtil"
 import { isInFirefoxExtension } from "~/utils/otherlib/FirefoxUtil"
+import { pathJoin } from "~/utils/util"
 
 const logger = LogFactory.getLogger()
 

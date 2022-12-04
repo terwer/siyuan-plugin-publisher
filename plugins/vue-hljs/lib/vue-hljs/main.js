@@ -23,24 +23,21 @@
  * questions.
  */
 
-/* eslint-disable no-undef */
 import Hljs from "highlight.js"
 import { CopyButtonPlugin } from "../codecopy"
 import "../codecopy/codecopy.css"
 import "./vs.css"
-// const plantumlEncoder = require('plantuml-encoder')
 import * as plantumlEncoder from "plantuml-encoder"
-import { unescapeHTML } from "../../../strUtil.ts"
-import { isInChromeExtension } from "../../../browser/ChromeUtil.ts"
+import { isInChromeExtension } from "~/utils/otherlib/ChromeUtil"
+import { unescapeHTML } from "~/utils/strUtil"
 
 const vueHljs = {}
 
 vueHljs.install = (Vue) => {
   // 代码复制
   Hljs.addPlugin(
-    // @ts-ignore
     new CopyButtonPlugin({
-      // callback: (text:any, el:any) => console.log("Copied to clipboard", text),
+      callback: (text, el) => console.log("Copied to clipboard", text),
     })
   )
 

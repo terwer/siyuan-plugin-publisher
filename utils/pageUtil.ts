@@ -40,9 +40,8 @@ import "~/assets/style.css"
 import "~/assets/style.dark.css"
 
 // hljs
-// import "./vue-hljs/vue-hljs.js"
-// // @ts-expect-error
-// import vueHljs from "./vue-hljs/lib/vue-hljs/main.js"
+import "~/plugins/vue-hljs/vue-hljs"
+import vueHljs from "~/plugins/vue-hljs/lib/vue-hljs/main"
 
 /**
  * 统一的Vue实例创建入口
@@ -63,7 +62,7 @@ const createPage = (rootComponent: Component): App => {
   app.use(i18n)
 
   // vueHljs
-  // app.use(vueHljs)
+  app.use(vueHljs)
 
   // Register a global custom directive called `v-focus`
   app.directive("focus", {

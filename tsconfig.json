@@ -4,7 +4,7 @@
     "useDefineForClassFields": true,
     "module": "ESNext",
     "moduleResolution": "Node",
-    "strict": true,
+    "strict": false,
     "jsx": "preserve",
     "sourceMap": true,
     "resolveJsonModule": true,
@@ -14,6 +14,7 @@
     "skipLibCheck": true,
     "allowJs": true,
     "checkJs": false,
+    "noImplicitAny": false,
     "types": ["node", "vite/client", "vitest/globals"],
     "paths": {
       "~/*": ["./*"]

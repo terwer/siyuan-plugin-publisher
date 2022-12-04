@@ -33,8 +33,8 @@
         <span class="text s-dark" @click="toggleDark()">{{
           isDark ? $t("theme.mode.light") : $t("theme.mode.dark")
         }}</span>
-        <span class="text">.</span>
-        <span class="text s-dark" @click="changeSuyuanApi()">
+        <span class="text" v-if="!isInSiyuan">.</span>
+        <span class="text s-dark" @click="changeSiyuanApi()" v-if="!isInSiyuan">
           {{ $t("blog.change.siyuan.api") }}
         </span>
         <span class="text">.</span>
@@ -117,9 +117,17 @@
 <script lang="ts" setup>
 import { useDark, useToggle } from "@vueuse/core"
 import { onMounted, reactive, ref } from "vue"
-import { FormRules } from "element-plus"
+import { ElMessage, FormRules } from "element-plus"
 import { useI18n } from "vue-i18n"
 import { LogFactory } from "~/utils/logUtil"
+import { inSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
+import {
+  getSiyuanCfg,
+  SiYuanConfig,
+} from "~/utils/platform/siyuan/siYuanConfig"
+import { goToPage, goToPageWithTarget } from "~/utils/otherlib/ChromeUtil"
+import { setJSONConf } from "~/utils/configUtil"
+import { SIYUAN_CONSTANTS } from "~/utils/constants/siyuanConstants"
 
 const logger = LogFactory.getLogger("layouts/default/DefaultFooter")
 
@@ -128,7 +136,7 @@ const { t } = useI18n()
 const isDark = useDark()
 const toggleDark = useToggle(isDark)
 
-// const isInSiyuan = ref(false)
+const isInSiyuan = ref(false)
 
 const formLabelWidth = "140px"
 const siyuanApiChangeFormVisible = ref(false)
@@ -157,23 +165,21 @@ const goGithub = () => {
   window.open("https://github.com/terwer/src-sy-post-publisher")
 }
 const newWin = () => {
-  // goToPage("/blog/index.html")
+  goToPage("/blog/index.html")
 }
 
-const changeSuyuanApi = () => {
+const changeSiyuanApi = () => {
   siyuanApiChangeFormVisible.value = true
 }
 
-// @ts-ignore
 const handleSiyuanApiSetting = async (formEl) => {
   if (!formEl) return
-  // @ts-ignore
   const result = await formEl.validate((valid, fields) => {
     if (valid) {
       logger.debug("校验成功")
     } else {
       logger.error(t("main.opt.failure"), fields)
-      // ElMessage.error(t('main.opt.failure'))
+      ElMessage.error(t("main.opt.failure"))
     }
   })
   if (!result) {
@@ -182,41 +188,46 @@ const handleSiyuanApiSetting = async (formEl) => {
 
   // 保存思源笔记配置数据
   try {
-    //   const siyuanCfg = new SiYuanConfig(
-    //     siyuanApiChangeForm.apiUrl,
-    //     siyuanApiChangeForm.pwd,
-    //     siyuanApiChangeForm.middlewareUrl
-    //   )
-    //   setJSONConf<SiYuanConfig>(SIYUAN_CONSTANTS.SIYUAN_CFG_KEY, siyuanCfg)
-    //   logUtil.logInfo("保存思源配置", siyuanCfg)
-    //   ElMessage.success(t("main.opt.success"))
-    //   setTimeout(function() {
-    //     // 关闭对话框
-    //     siyuanApiChangeFormVisible.value = false
-    //     goToPageWithTarget("/blog/index.html", "_self")
-    //   }, 500)
+    const siyuanCfg = new SiYuanConfig(
+      siyuanApiChangeForm.apiUrl,
+      siyuanApiChangeForm.pwd,
+      siyuanApiChangeForm.middlewareUrl
+    )
+    setJSONConf<SiYuanConfig>(SIYUAN_CONSTANTS.SIYUAN_CFG_KEY, siyuanCfg)
+    logger.debug("保存思源配置", siyuanCfg)
+    ElMessage.success(t("main.opt.success"))
+    setTimeout(function () {
+      // 关闭对话框
+      siyuanApiChangeFormVisible.value = false
+      goToPageWithTarget("/blog/index.html", "_self", "")
+    }, 500)
   } catch (e) {
-    //   siyuanApiChangeFormVisible.value = false
-    //
-    //   ElMessage.error(t("main.opt.failure"))
+    siyuanApiChangeFormVisible.value = false
+
+    ElMessage.error(t("main.opt.failure"))
     logger.error(t("main.opt.failure"), e)
   }
 }
 
 const initConf = () => {
-  // const siyuanCfg = getSiyuanCfg()
-  //
-  // siyuanApiChangeForm.apiUrl = siyuanCfg.baseUrl
-  // siyuanApiChangeForm.pwd = siyuanCfg.token
-  // siyuanApiChangeForm.middlewareUrl = siyuanCfg.middlewareUrl
-  // logUtil.logInfo("初始化思源配置", siyuanCfg)
+  isInSiyuan.value = inSiyuan()
+  const siyuanCfg = getSiyuanCfg()
+
+  siyuanApiChangeForm.apiUrl = siyuanCfg.baseUrl
+  siyuanApiChangeForm.pwd = siyuanCfg.token
+  siyuanApiChangeForm.middlewareUrl = siyuanCfg.middlewareUrl
+  logger.debug("初始化思源配置", siyuanCfg)
 }
 
-onMounted(async () => {
-  logger.warn("测试", "123abc")
+onMounted(() => {
+  if (inSiyuan()) {
+    logger.warn("恭喜你，正在以挂件模式运行")
+  } else {
+    logger.warn(
+      "正在以非挂件模式运行，部分功能将通过请求代理的方式进行模拟，请知悉"
+    )
+  }
   initConf()
-
-  // isInSiyuan.value = await inSiyuan()
 })
 </script>
 

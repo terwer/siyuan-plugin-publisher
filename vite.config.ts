@@ -224,7 +224,7 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
       minify: isProd,
 
       rollupOptions: {
-        // external:["#ansi-styles","#supports-color"],
+        // external:["#ansi-styles", "#supports-color"],
         output: {
           chunkFileNames: "static/js/[name]-[hash].js",
           entryFileNames: "static/js/[name]-[hash].js",

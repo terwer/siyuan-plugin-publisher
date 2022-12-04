@@ -174,6 +174,10 @@ VITE_SIYUAN_CONFIG_TOKEN=
 # 开发阶段模拟的页面ID，仅限调试使用，生产环境无需此配置
 # VITE_SIYUAN_DEV_PAGE_ID=
 
+# 图表服务器
+# PLANT_UML_SERVR=https://www.plantuml.com/plantuml/svg/
+# PLANT_UML_SERVR=
+
 # 非挂件模式需要中间服务器实现跨域，生产环境可不设置，使用本项目
 # VITE_MIDDLEWARE_URL=https://publish.terwer.space/api/middleware
 VITE_MIDDLEWARE_URL=
@@ -247,28 +251,6 @@ pnpm run extChromeDev
 
 ### 方式 3、部署到服务器后台服务
 
-准备
-
 ```bash
-npm i -g yarn
-npm i -g vercel
-npm i -g pm2
-```
-
-启动
-
-```bash
-pm2 start pm2.json
-```
-
-停止
-
-```bash
-pm2 stop pm2.json
-```
-
-查看
-
-```bash
-pm2 ls
+vercel
 ```

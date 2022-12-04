@@ -39,14 +39,10 @@
       <locale-changer/>
     </div>
     -->
-    <el-footer>
-      <DefaultFooter />
-    </el-footer>
   </div>
 </template>
 
 <script lang="ts" setup>
-import DefaultFooter from "./themes/default/DefaultFooter.vue"
 import DefaultPostDetailService from "./themes/default/DefaultPostDetailService.vue"
 import { onMounted, ref } from "vue"
 import { getPageId, getWidgetId } from "~/utils/platform/siyuan/siyuanUtil"

@@ -103,3 +103,8 @@ html.dark .post-detail-content-box .hljs-type,
 html.dark .post-detail-content-box .hljs-addition {
   color: #2fd945 !important;
 }
+
+html.dark .language-math {
+  color: #ffffff;
+  background: var(--custom-app-bg-color);
+}
