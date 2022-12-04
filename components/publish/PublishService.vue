@@ -54,9 +54,7 @@
       name="service-switch"
       :label="$t('service.tab.service.switch')"
     >
-      <!--
-        <service-switch :is-reload="isReloadServiceSwitch" />
-        -->
+      <ServiceSwitch :is-reload="isReloadServiceSwitch" />
     </el-tab-pane>
     <el-tab-pane name="dynamic-platform" :label="$t('dynamic.platform.new')">
       <DynamicPlatform />
@@ -72,6 +70,7 @@ import { onMounted, ref } from "vue"
 import { LogFactory } from "~/utils/logUtil"
 import ChangeLocale from "~/components/publish/tab/ChangeLocale.vue"
 import DynamicPlatform from "~/components/publish/tab/DynamicPlatform.vue"
+import ServiceSwitch from "~/components/publish/tab/ServiceSwitch.vue"
 
 const logger = LogFactory.getLogger("components/publish/PublishService.vue")
 
