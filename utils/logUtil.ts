@@ -32,9 +32,9 @@ import prefix from "loglevel-plugin-prefix"
 import chalk from "chalk"
 
 if (inBrowser()) {
-  console.log("log4js运行在浏览器环境中")
+  console.log("loglevel运行在浏览器环境中")
 } else {
-  console.log("log4js运行在node环境中")
+  console.log("loglevel运行在node环境中")
 }
 
 const LOG_INFO_ENABLED = getBooleanEnv("VITE_LOG_INFO_ENABLED")

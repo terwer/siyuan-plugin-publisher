@@ -19,6 +19,9 @@
   "plugins": ["vue"],
   "rules": {
     "vue/multi-word-component-names": "off",
-    "@typescript-eslint/strict-boolean-expressions": 0
+    "@typescript-eslint/strict-boolean-expressions": 0,
+    "no-undef": 1,
+    "no-undef-init": 2,
+    "no-undefined": 2
   }
 }

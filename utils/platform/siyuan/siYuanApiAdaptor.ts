@@ -27,6 +27,10 @@ import { IApi } from "~/utils/api"
 import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
 import { UserBlog } from "~/utils/common/userBlog"
 import { API_TYPE_CONSTANTS } from "~/utils/constants/apiTypeConstants"
+import { Post } from "~/utils/common/post"
+import { POST_STATUS_CONSTANTS } from "~/utils/constants/postStatusConstants"
+import { CategoryInfo } from "~/utils/common/categoryInfo"
+import { appandStr } from "~/utils/strUtil"
 
 /**
  * 思源笔记API适配器
@@ -51,7 +55,7 @@ export class SiYuanApiAdaptor implements IApi {
   }
 
   public async getRecentPostsCount(keyword?: string): Promise<number> {
-    return await getRootBlocksCount(keyword ?? "")
+    return await this.siyuanApi.getRootBlocksCount(keyword ?? "")
   }
 
   // @ts-expect-error
@@ -67,14 +71,14 @@ export class SiYuanApiAdaptor implements IApi {
       pg = page
     }
     const k = keyword ?? ""
-    const siyuanPosts = await getRootBlocks(pg, numOfPosts, k)
+    const siyuanPosts = await this.siyuanApi.getRootBlocks(pg, numOfPosts, k)
     // logUtil.logInfo(siyuanPosts)
 
     for (let i = 0; i < siyuanPosts.length; i++) {
       const siyuanPost = siyuanPosts[i]
 
       // 某些属性详情页控制即可
-      const attrs = await getBlockAttrs(siyuanPost.root_id)
+      const attrs = await this.siyuanApi.getBlockAttrs(siyuanPost.root_id)
       const page = await this.getPost(siyuanPost.root_id)
 
       // // 发布状态
@@ -96,32 +100,32 @@ export class SiYuanApiAdaptor implements IApi {
       commonPost.title = siyuanPost.content
       commonPost.permalink =
         customSlug === ""
-          ? "/post/" + siyuanPost.root_id
-          : "/post/" + customSlug + ".html"
+          ? appandStr("/post/", siyuanPost.root_id)
+          : appandStr("/post/", customSlug, ".html")
       // commonPost.isPublished = isPublished
       commonPost.mt_keywords = page.mt_keywords
       commonPost.description = page.description
       result.push(commonPost)
     }
 
-    return await Promise.resolve(result)
+    return result
   }
 
   public async getPost(postid: string, useSlug?: boolean): Promise<Post> {
     let pid = postid
     if (useSlug) {
-      const pidObj = await getBlockBySlug(postid)
+      const pidObj = await this.siyuanApi.getBlockBySlug(postid)
       if (pidObj) {
         pid = pidObj.root_id
       }
     }
-    const siyuanPost = await getBlockByID(pid)
+    const siyuanPost = await this.siyuanApi.getBlockByID(pid)
     if (!siyuanPost) {
       throw new Error("文章不存存在，postid=>" + pid)
     }
 
-    const attrs = await getBlockAttrs(pid)
-    const md = await exportMdContent(pid)
+    const attrs = await this.siyuanApi.getBlockAttrs(pid)
+    const md = await this.siyuanApi.exportMdContent(pid)
 
     // 发布状态
     let isPublished = true
@@ -162,23 +166,23 @@ export class SiYuanApiAdaptor implements IApi {
     post: Post,
     publish?: boolean
   ): Promise<boolean> {
-    return await Promise.resolve(false)
+    return false
   }
 
   public async newPost(post: Post, publish?: boolean): Promise<string> {
-    return await Promise.resolve("")
+    return ""
   }
 
   public async deletePost(postid: string): Promise<boolean> {
-    return await Promise.resolve(false)
+    return false
   }
 
   public async getCategories(): Promise<CategoryInfo[]> {
-    return await Promise.resolve([])
+    return []
   }
 
   public async getPreviewUrl(postid: string): Promise<string> {
-    return await Promise.resolve("")
+    return ""
   }
 
   // ===============================================
@@ -186,7 +190,7 @@ export class SiYuanApiAdaptor implements IApi {
   // ===============================================
 
   public async getSubPostCount(postid: string): Promise<number> {
-    return await getSubdocCount(postid)
+    return await this.siyuanApi.getSubdocCount(postid)
   }
 
   public async getSubPosts(
@@ -202,15 +206,19 @@ export class SiYuanApiAdaptor implements IApi {
       pg = page
     }
     const k = keyword != null ?? ""
-    // @ts-expect-error
-    const siyuanPosts = await getSubdocs(postid, pg, numOfPosts, k)
+    const siyuanPosts = await this.siyuanApi.getSubdocs(
+      postid,
+      pg,
+      numOfPosts,
+      k
+    )
     // logUtil.logInfo(siyuanPosts)
 
     for (let i = 0; i < siyuanPosts.length; i++) {
       const siyuanPost = siyuanPosts[i]
 
       // 某些属性详情页控制即可
-      const attrs = await getBlockAttrs(siyuanPost.root_id)
+      const attrs = await this.siyuanApi.getBlockAttrs(siyuanPost.root_id)
       const page = await this.getPost(siyuanPost.root_id)
 
       // // 发布状态
@@ -240,6 +248,6 @@ export class SiYuanApiAdaptor implements IApi {
       result.push(commonPost)
     }
 
-    return await Promise.resolve(result)
+    return result
   }
 }

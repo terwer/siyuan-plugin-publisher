@@ -19,3 +19,4 @@ out
 # lib
 *.min.js
 *mathjax*
+/pnpm-lock.yaml
