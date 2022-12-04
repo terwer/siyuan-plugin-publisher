@@ -25,7 +25,7 @@
 
 html.dark {
   /* 自定义深色背景颜色 */
-  /*--af-bg-color: #000000;*/
+  --custom-app-color: #ffffff;
   --custom-app-bg-color: #000000;
 }
 

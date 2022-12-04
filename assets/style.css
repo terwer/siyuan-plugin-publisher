@@ -28,9 +28,8 @@
 html {
   /*filter: grayscale(1);*/
   --el-font-family: var(--g-font-family) !important;
+  --custom-app-color: #161616;
   --custom-app-bg-color: #ffffff;
-  height: 100%;
-  background: var(--custom-app-bg-color);
 }
 
 body {
@@ -40,6 +39,7 @@ body {
 }
 
 #app {
+  color: var(--custom-app-color);
   background: var(--custom-app-bg-color);
   padding: 10px;
   min-width: 600px;

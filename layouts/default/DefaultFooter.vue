@@ -29,7 +29,7 @@
       <div>
         <span class="text"> &copy;2011-2022 </span>
         <span class="s-dark" @click="goGithub()"> sy-post-publisher </span>
-        <span class="text"> v0.1.0. </span>
+        <span class="text"> v {{ v }}. </span>
         <span class="text s-dark" @click="toggleDark()">{{
           isDark ? $t("theme.mode.light") : $t("theme.mode.dark")
         }}</span>
@@ -128,6 +128,7 @@ import {
 import { goToPage, goToPageWithTarget } from "~/utils/otherlib/ChromeUtil"
 import { setJSONConf } from "~/utils/configUtil"
 import { SIYUAN_CONSTANTS } from "~/utils/constants/siyuanConstants"
+import { version } from "../../package.json"
 
 const logger = LogFactory.getLogger("layouts/default/DefaultFooter")
 
@@ -137,6 +138,7 @@ const isDark = useDark()
 const toggleDark = useToggle(isDark)
 
 const isInSiyuan = ref(false)
+const v = ref("0.0.3")
 
 const formLabelWidth = "140px"
 const siyuanApiChangeFormVisible = ref(false)
@@ -211,6 +213,9 @@ const handleSiyuanApiSetting = async (formEl) => {
 
 const initConf = () => {
   isInSiyuan.value = inSiyuan()
+
+  v.value = version
+
   const siyuanCfg = getSiyuanCfg()
 
   siyuanApiChangeForm.apiUrl = siyuanCfg.baseUrl
@@ -229,12 +234,6 @@ onMounted(() => {
   }
   initConf()
 })
-</script>
-
-<script lang="ts">
-export default {
-  name: "DefaultFooter",
-}
 </script>
 
 <style scoped>
