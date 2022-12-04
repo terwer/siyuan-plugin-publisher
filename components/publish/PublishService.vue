@@ -59,9 +59,7 @@
         -->
     </el-tab-pane>
     <el-tab-pane name="dynamic-platform" :label="$t('dynamic.platform.new')">
-      <!--
-        <dynamic-platform />
-        -->
+      <DynamicPlatform />
     </el-tab-pane>
     <el-tab-pane name="change-local" :label="$t('service.tab.change.local')">
       <ChangeLocale />
@@ -73,6 +71,7 @@
 import { onMounted, ref } from "vue"
 import { LogFactory } from "~/utils/logUtil"
 import ChangeLocale from "~/components/publish/tab/ChangeLocale.vue"
+import DynamicPlatform from "~/components/publish/tab/DynamicPlatform.vue"
 
 const logger = LogFactory.getLogger("components/publish/PublishService.vue")
 

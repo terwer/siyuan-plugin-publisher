@@ -35,6 +35,7 @@ declare module "@vue/runtime-core" {
     ElAlert: typeof import("element-plus/es")["ElAlert"]
     ElAutocomplete: typeof import("element-plus/es")["ElAutocomplete"]
     ElButton: typeof import("element-plus/es")["ElButton"]
+    ElButtonGroup: typeof import("element-plus/es")["ElButtonGroup"]
     ElContainer: typeof import("element-plus/es")["ElContainer"]
     ElDialog: typeof import("element-plus/es")["ElDialog"]
     ElForm: typeof import("element-plus/es")["ElForm"]
