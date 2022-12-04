@@ -24,6 +24,7 @@
     "@typescript-eslint/strict-boolean-expressions": 0,
     "@typescript-eslint/triple-slash-reference": 0,
     "@typescript-eslint/restrict-template-expressions": 1,
+    "@typescript-eslint/no-var-requires": 1,
     "no-undef": 0,
     "no-undef-init": 1,
     "no-undefined": 1,
