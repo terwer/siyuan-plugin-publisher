@@ -41,9 +41,7 @@
       name="platform-setting"
       :label="$t('service.tab.publish.setting')"
     >
-      <!--
-        <platform-setting :is-reload="isReloadSetting" />
-        -->
+      <PlantformSetting :is-reload="isReloadSetting" />
     </el-tab-pane>
     <el-tab-pane name="post-bind" :label="$t('service.tab.post.bind')">
       <PostBind :is-reload="isReloadPostBind" :page-id="props.pageId" />
@@ -70,6 +68,7 @@ import ChangeLocale from "~/components/publish/tab/ChangeLocale.vue"
 import DynamicPlatform from "~/components/publish/tab/DynamicPlatform.vue"
 import ServiceSwitch from "~/components/publish/tab/ServiceSwitch.vue"
 import PostBind from "~/components/publish/tab/PostBind.vue"
+import PlantformSetting from "~/components/publish/tab/PlantformSetting.vue"
 
 const logger = LogFactory.getLogger("components/publish/PublishService.vue")
 

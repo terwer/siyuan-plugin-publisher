@@ -46,6 +46,8 @@ declare module "@vue/runtime-core" {
     ElOption: typeof import("element-plus/es")["ElOption"]
     ElPageHeader: typeof import("element-plus/es")["ElPageHeader"]
     ElPagination: typeof import("element-plus/es")["ElPagination"]
+    ElRadio: typeof import("element-plus/es")["ElRadio"]
+    ElRadioGroup: typeof import("element-plus/es")["ElRadioGroup"]
     ElSelect: typeof import("element-plus/es")["ElSelect"]
     ElSwitch: typeof import("element-plus/es")["ElSwitch"]
     ElTable: typeof import("element-plus/es")["ElTable"]
