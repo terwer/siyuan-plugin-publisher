@@ -23,22 +23,30 @@
  * questions.
  */
 
-import { describe, expect } from "vitest"
-import { pingyinSlugify, zhSlugify } from "~/utils/util"
+import { describe } from "vitest"
+import { obj2Yaml, yaml2Obj } from "~/utils/yamlUtil"
 import { LogFactory } from "~/utils/logUtil"
+import path from "path"
+import { readFileSync } from "~/utils/fileUtil"
 
-describe("util test", () => {
+describe("yamlUtil test", () => {
   const logger = LogFactory.getLogger()
 
-  it("zhSlugify test", async () => {
-    const result = await zhSlugify("我爱中国")
-    logger.info("zhSlugify result=>", result)
-    expect(result).contains("china")
+  it("yaml2Obj test", () => {
+    const filename = path.resolve("./", "test/data/demo", "yaml.txt")
+    const yaml = readFileSync(filename)
+
+    const obj = yaml2Obj(yaml)
+    logger.info("obj=>", obj)
+    logger.info("objStr=>", JSON.stringify(obj))
   })
 
-  it("pingyinSlugify test", async () => {
-    const result = await pingyinSlugify("我爱中国")
-    logger.info("pingyinSlugify result=>", result)
-    expect(result).contains("wo")
+  it("obj2yaml test", () => {
+    const filename = path.resolve("./", "test/data/demo", "yamlObj.txt")
+    const objStr = readFileSync(filename)
+
+    const obj = JSON.parse(objStr)
+    const yaml = obj2Yaml(obj)
+    logger.info("yaml=>", yaml)
   })
 })

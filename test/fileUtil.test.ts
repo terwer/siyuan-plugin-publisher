@@ -23,22 +23,18 @@
  * questions.
  */
 
-import { describe, expect } from "vitest"
-import { pingyinSlugify, zhSlugify } from "~/utils/util"
+import { describe } from "vitest"
 import { LogFactory } from "~/utils/logUtil"
+import path from "path"
+import { readFile } from "~/utils/fileUtil"
 
-describe("util test", () => {
+describe("fileUtil test", () => {
   const logger = LogFactory.getLogger()
 
-  it("zhSlugify test", async () => {
-    const result = await zhSlugify("我爱中国")
-    logger.info("zhSlugify result=>", result)
-    expect(result).contains("china")
-  })
-
-  it("pingyinSlugify test", async () => {
-    const result = await pingyinSlugify("我爱中国")
-    logger.info("pingyinSlugify result=>", result)
-    expect(result).contains("wo")
+  it("readFile test", async () => {
+    const filename = path.resolve("./", "test/data/demo", "yaml.txt")
+    logger.info("filename=>", filename)
+    const content = await readFile(filename)
+    logger.info("content=>", content)
   })
 })

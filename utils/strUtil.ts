@@ -67,5 +67,5 @@ export const upperFirst = (name: string): string => {
  * @param str
  */
 export const appandStr = (...str: string[]): string => {
-  return str.join()
+  return str.join("")
 }

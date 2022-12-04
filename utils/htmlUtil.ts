@@ -23,17 +23,13 @@
  * questions.
  */
 
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-// const showdown = require("showdown")
-// const converter = new showdown.Converter();
-
-import { renderHTML } from "./markdownUtil"
+import { renderHTML } from "~/utils/markdownUtil"
 
 /**
  * 移除标题数字
  * @param str
  */
-export function removeTitleNumber(str: string) {
+export const removeTitleNumber = (str: string): string => {
   let newstr = str
 
   // 移除序号
@@ -48,7 +44,7 @@ export function removeTitleNumber(str: string) {
  * @param str 原字符
  * @returns {*|string} 删除后的字符
  */
-export function removeWidgetTag(str: string) {
+export const removeWidgetTag = (str: string): string => {
   let newstr = str.toString()
   // logUtil.logWarn("newstr=>", newstr)
 
@@ -76,11 +72,11 @@ export function removeWidgetTag(str: string) {
  * @param str 原字符
  * @returns {*|string} 删除后的字符
  */
-export function removeMdWidgetTag(str: string) {
+export const removeMdWidgetTag = (str: string): string => {
   let newstr = str.toString()
 
-  const mdH1Rehex = /(?:^|\n)#\s[0-9]+.*/g
-  newstr = newstr.replace(mdH1Rehex, "")
+  const mdH1Regex = /(?:^|\n)#\s[0-9]+.*/g
+  newstr = newstr.replace(mdH1Regex, "")
 
   // 删除挂件的iframe
   newstr = removeWidgetTag(newstr)
@@ -89,29 +85,11 @@ export function removeMdWidgetTag(str: string) {
 }
 
 /**
- * 截取指定长度html
- * @param html html
- * @param length 长度
- * @param ignore 不要结尾省略号
- * @returns {string} 结果
- */
-export function parseHtml(html: string, length: number, ignore?: boolean) {
-  const allText = filterHtml(html)
-  if (allText.length < length) {
-    return allText
-  }
-  if (ignore === true) {
-    return allText.substring(0, length)
-  }
-  return allText.substring(0, length) + "..."
-}
-
-/**
  * 去除html标签，残缺不全也可以
  * @param str
  * @returns {string} 转换后的结果
  */
-function filterHtml(str: string) {
+const filterHtml = (str: string): string => {
   /*
    * <.*?>为正则表达式，其中的.表示任意字符，*?表示出现0次或0次以上，此方法可以去掉双头标签(双头针对于残缺的标签)
    * "<.*?"表示<尖括号后的所有字符，此方法可以去掉残缺的标签，及后面的内容
@@ -150,13 +128,33 @@ function filterHtml(str: string) {
 }
 
 /**
+ * 截取指定长度html
+ * @param html html
+ * @param length 长度
+ * @param ignore 不要结尾省略号
+ * @returns {string} 结果
+ */
+export const parseHtml = (
+  html: string,
+  length: number,
+  ignore?: boolean
+): string => {
+  const allText = filterHtml(html)
+  if (allText.length < length) {
+    return allText
+  }
+  if (ignore === true) {
+    return allText.substring(0, length)
+  }
+  return allText.substring(0, length) + "..."
+}
+
+/**
  * 将Markdown转换为HTML
  * @param md Markdown
  * @returns {*} HTML
  */
-export function mdToHtml(md: string) {
-  // let html = "<h1>No markdown parser,see src/lib/htmlUtil.ts</h1>"
-  // html = converter.makeHtml(md);
+export const mdToHtml = (md: string): string => {
   const html = renderHTML(md)
   return removeWidgetTag(html)
 }
@@ -166,7 +164,7 @@ export function mdToHtml(md: string) {
  * @param md
  * @returns {string}
  */
-export function mdToPlainText(md: string) {
+export const mdToPlainText = (md: string): string => {
   let html = mdToHtml(md)
   html = removeWidgetTag(html)
   return filterHtml(html)

@@ -23,22 +23,26 @@
  * questions.
  */
 
-import { describe, expect } from "vitest"
-import { pingyinSlugify, zhSlugify } from "~/utils/util"
-import { LogFactory } from "~/utils/logUtil"
+import jsYaml from "js-yaml"
+import { appandStr } from "~/utils/strUtil"
 
-describe("util test", () => {
-  const logger = LogFactory.getLogger()
+/**
+ * yaml转对象
+ * @param yaml yaml格式的字符串
+ */
+export const yaml2Obj = (yaml: string): any => {
+  yaml = yaml.replace("---\n", "")
+  yaml = yaml.replace("---", "")
+  return jsYaml.load(yaml, {})
+}
 
-  it("zhSlugify test", async () => {
-    const result = await zhSlugify("我爱中国")
-    logger.info("zhSlugify result=>", result)
-    expect(result).contains("china")
-  })
-
-  it("pingyinSlugify test", async () => {
-    const result = await pingyinSlugify("我爱中国")
-    logger.info("pingyinSlugify result=>", result)
-    expect(result).contains("wo")
-  })
-})
+/**
+ * 对象转yaml字符串
+ * @param obj
+ */
+export const obj2Yaml = (obj: any): string => {
+  // https://npmmirror.com/package/js-yaml
+  let res = jsYaml.dump(obj, {})
+  res = appandStr("---\n", res, "---")
+  return res
+}

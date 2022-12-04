@@ -31,6 +31,8 @@ import { Post } from "~/utils/common/post"
 import { POST_STATUS_CONSTANTS } from "~/utils/constants/postStatusConstants"
 import { CategoryInfo } from "~/utils/common/categoryInfo"
 import { appandStr } from "~/utils/strUtil"
+import { renderHTML } from "~/utils/markdownUtil"
+import { removeWidgetTag } from "~/utils/htmlUtil"
 
 /**
  * 思源笔记API适配器
@@ -58,11 +60,10 @@ export class SiYuanApiAdaptor implements IApi {
     return await this.siyuanApi.getRootBlocksCount(keyword ?? "")
   }
 
-  // @ts-expect-error
   public async getRecentPosts(
     numOfPosts: number,
-    page: number,
-    keyword?: string
+    page: number | undefined,
+    keyword: string | undefined
   ): Promise<Post[]> {
     const result: Post[] = []
 
@@ -210,7 +211,7 @@ export class SiYuanApiAdaptor implements IApi {
       postid,
       pg,
       numOfPosts,
-      k
+      String(k)
     )
     // logUtil.logInfo(siyuanPosts)
 
@@ -240,8 +241,8 @@ export class SiYuanApiAdaptor implements IApi {
       commonPost.title = siyuanPost.content
       commonPost.permalink =
         customSlug === ""
-          ? "/post/" + siyuanPost.root_id
-          : "/post/" + customSlug + ".html"
+          ? appandStr("/post/", siyuanPost.root_id)
+          : appandStr("/post/", customSlug, ".html")
       // commonPost.isPublished = isPublished
       commonPost.mt_keywords = page.mt_keywords
       commonPost.description = page.description

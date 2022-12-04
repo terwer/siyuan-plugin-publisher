@@ -1,0 +1,24 @@
+---
+title: 开始上手
+date: 2022-09-27 09:49:26
+permalink: /post/start-to-get-started-zi0eyk.html
+meta:
+  - name: keywords
+    content: 地址 如果 思源 使用 部署 上手 入门
+  - name: description
+    content: >-
+      安装从edge商店下载插件或者在思源笔记集市下载挂件并添加到页面。思源笔记发布工具microsoftedgeaddons快速配置浏览器插件方式使用推荐如果本地使用请确保思源笔记处于打开模式。​如果是docker部署请启动容器。如果本地使用并且是​端口则无需设置请忽略此步骤_如果本地使用但是使用的是随机端口请在在思源笔记设置关于找到ip地址以及端口然后修改本插件的思源api地址​_如果是远程docker​部署请填写外网api地址​以及token​并配置代理地址​。配置地址可在列表页面底部找到_修改思源api
+categories:
+  - 默认分类
+tags:
+  - 地址
+  - 如果
+  - 思源
+  - 使用
+  - 部署
+  - 上手
+  - 入门
+author:
+  name: terwer
+  link: https://github.com/terwer
+---

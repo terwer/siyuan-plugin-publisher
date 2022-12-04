@@ -27,6 +27,7 @@ import { UserBlog } from "~/utils/common/userBlog"
 import { Post } from "~/utils/common/post"
 import { CategoryInfo } from "~/utils/common/categoryInfo"
 import { API_TYPE_CONSTANTS } from "~/utils/constants/apiTypeConstants"
+import { SiYuanApiAdaptor } from "~/utils/platform/siyuan/siYuanApiAdaptor"
 
 /**
  * @description 所有平台统一API接口
@@ -175,15 +176,15 @@ export class API implements IApi {
     //   const typeArr = type.split("-")
     //   if (typeArr.length > 0) {
     //     const ptype = typeArr[0]
-    //     if (ptype.includes(PlantformType.Github.toLowerCase())) {
+    //     if (ptype.includes(PlatformType.Github.toLowerCase())) {
     //       // Github
     //       this.apiAdaptor = new GithubApiAdaptor(type)
     //       return
-    //     } else if (ptype === PlantformType.Metaweblog.toLowerCase()) {
+    //     } else if (ptype === PlatformType.Metaweblog.toLowerCase()) {
     //       // Metaweblog
     //       this.apiAdaptor = new MetaWeblogApiAdaptor(type)
     //       return
-    //     } else if (ptype === PlantformType.Wordpress.toLowerCase()) {
+    //     } else if (ptype === PlatformType.Wordpress.toLowerCase()) {
     //       // Wordpress
     //       this.apiAdaptor = new MetaWeblogApiAdaptor(type)
     //       return
@@ -194,7 +195,6 @@ export class API implements IApi {
     // 下面是固定平台
     switch (this.type) {
       case API_TYPE_CONSTANTS.API_TYPE_SIYUAN:
-        // @ts-expect-error
         this.apiAdaptor = new SiYuanApiAdaptor()
         break
 

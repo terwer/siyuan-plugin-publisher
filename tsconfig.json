@@ -25,7 +25,8 @@
     "*.js",
     "*.ts",
     "./typings/*.d.ts",
-    "node_modules/vitest/globals.d.ts"
+    "./node_modules/vitest/*.d.ts",
+    "./node_modules/vitest/*.d.cts"
   ],
   "exclude": [".github", ".husky", ".vercel", "node_modules", "dist"],
   "references": [

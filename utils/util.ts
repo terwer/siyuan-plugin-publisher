@@ -53,63 +53,6 @@ export const zhSlugify = async (q: string): Promise<string> => {
 export const pingyinSlugify = async (q: string): Promise<string> => slugify(q)
 
 /**
- * yaml转对象
- * @param yaml yaml格式的字符串
- */
-export const yaml2Obj = (yaml: string): any => {
-  yaml = yaml.replace("---\n", "")
-  yaml = yaml.replace("---", "")
-  return jsYaml.load(yaml, {})
-}
-
-export function obj2yaml(obj: any) {
-  // https://npmmirror.com/package/js-yaml
-  let res = jsYaml.dump(obj)
-  // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-  res = "---\n" + res + "---"
-  return res
-}
-
-// function test() {
-//     const obj = {
-//         title: "把npm依赖转换为本地依赖",
-//         date: "2022-07-09 15:16:00",
-//         permalink: "/post/convert-npm-dependencies-to-local.html",
-//         meta: [
-//             {
-//                 name: "keywords",
-//                 content: "npm dependency"
-//             },
-//             {
-//                 name: "description",
-//                 content: "把npm依赖转换为本地依赖有的时候，当我们要使用额第三方库停止维护之后，我们想自己修改代码才能达到某个需求。但是npm默认是只读的，下次运行依赖管理会覆盖代码。缘由要在上面陈述的情况，我们可以把npm依赖库转换为本地依赖，这样就不再受包管理器约束，我们就可以自定义修改代码了方案先删除npm中依赖yarnremove@oaktreehouse/vuepresspluginencrypt森岛帆高"
-//             }
-//         ],
-//         categories: [
-//             "博文", "实用技巧"
-//         ],
-//         tags: [
-//             "npm", "dependency"
-//         ],
-//         author: {
-//             name: "terwer",
-//             link: "https://github.com/terwer"
-//         }
-//     };
-//     const yamlResult = obj2yaml(obj)
-//     logUtil.logInfo("yamlResult=>")
-//     logUtil.logInfo(yamlResult)
-//
-//     const objResult = yaml2Obj(yamlResult)
-//     logUtil.logInfo("objResult=>")
-//     logUtil.logInfo(objResult)
-// }
-//
-// test()
-
-// babel-node src/lib/util.js
-
-/**
  * 给日期添加小时
  * @param date
  * @param numOfHours
