@@ -23,19 +23,43 @@
  * questions.
  */
 
-import Hljs from "highlight.js"
+import hljs from "highlight.js/lib/core"
+import javascript from "highlight.js/lib/languages/javascript"
+import typescript from "highlight.js/lib/languages/typescript"
+import c from "highlight.js/lib/languages/c"
+import cpp from "highlight.js/lib/languages/cpp"
+import java from "highlight.js/lib/languages/java"
+import bash from "highlight.js/lib/languages/bash"
+import xml from "highlight.js/lib/languages/xml"
+import css from "highlight.js/lib/languages/css"
 import { CopyButtonPlugin } from "../codecopy"
 import "../codecopy/codecopy.css"
 import "./vs.css"
 import * as plantumlEncoder from "plantuml-encoder"
-import { isInChromeExtension } from "~/utils/otherlib/ChromeUtil"
 import { unescapeHTML } from "~/utils/strUtil"
+import { isInChromeExtension } from "~/utils/otherlib/ChromeUtil.js"
 
 const vueHljs = {}
 
 vueHljs.install = (Vue) => {
+  // 按需加载语言，防止打包体积过大
+  hljs.registerLanguage("javascript", javascript)
+  hljs.registerLanguage("js", javascript)
+  hljs.registerLanguage("typescript", typescript)
+  hljs.registerLanguage("ts", typescript)
+  hljs.registerLanguage("c", c)
+  hljs.registerLanguage("cpp", cpp)
+  hljs.registerLanguage("java", java)
+  hljs.registerLanguage("csharp", java)
+  hljs.registerLanguage("cs", java)
+  hljs.registerLanguage("bash", bash)
+  hljs.registerLanguage("shell", bash)
+  hljs.registerLanguage("xml", xml)
+  hljs.registerLanguage("html", xml)
+  hljs.registerLanguage("css", css)
+
   // 代码复制
-  Hljs.addPlugin(
+  hljs.addPlugin(
     new CopyButtonPlugin({
       callback: (text, el) => console.log("Copied to clipboard", text),
     })
@@ -43,7 +67,7 @@ vueHljs.install = (Vue) => {
 
   Vue.directive("highlight", (el) => {
     const blocks = el.querySelectorAll("pre code")
-    Array.prototype.forEach.call(blocks, Hljs.highlightBlock)
+    Array.prototype.forEach.call(blocks, hljs.highlightBlock)
 
     // 代码选项卡
     // 代码块
