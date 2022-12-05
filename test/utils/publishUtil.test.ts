@@ -27,12 +27,15 @@ import { describe } from "vitest"
 import { getPublishStatus } from "~/utils/publishUtil"
 import { API_TYPE_CONSTANTS } from "~/utils/constants/apiTypeConstants"
 import { LogFactory } from "~/utils/logUtil"
+import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
 
 describe("publishUtil test", () => {
   const logger = LogFactory.getLogger()
 
-  it("getPublishStatus test", () => {
-    const meta = {}
+  it("getPublishStatus test", async () => {
+    const pageId = ""
+    const siyuanApi = new SiYuanApi()
+    const meta = await siyuanApi.getBlockAttrs(pageId)
     const result = getPublishStatus(API_TYPE_CONSTANTS.API_TYPE_HUGO, meta)
     logger.info("getPublishStatus result=>", result)
   })

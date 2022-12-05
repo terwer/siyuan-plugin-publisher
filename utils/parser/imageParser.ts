@@ -36,7 +36,7 @@ import { appandStr } from "~/utils/strUtil"
  * @author terwer
  * @since 0.1.0
  */
-export default class ImageParser {
+export class ImageParser {
   private readonly logger = LogFactory.getLogger("utils/parser/imageParser.ts")
 
   public hasExternalImages(content: string): boolean {
