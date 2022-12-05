@@ -26,7 +26,7 @@
 import { LogFactory } from "~/utils/logUtil"
 import { inSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
 import { imageToBase64 } from "~/utils/parser/imageToBase64"
-import { getEnv } from "~/utils/envUtil"
+import { getEnvOrDefault } from "~/utils/envUtil"
 import { appandStr } from "~/utils/strUtil"
 
 /**
@@ -95,8 +95,11 @@ export class ImageParser {
         const imageBase64WithURI = await imageToBase64({ uri: src })
         newImg = imageBase64WithURI?.base64 ?? "no pic"
       } else {
-        const middleWareUrl = getEnv("VITE_MIDDLEWARE_URL") ?? "/api/middleware"
-        const middleApiUrl = middleWareUrl + "/imageToBase64"
+        const middlewareUrl = getEnvOrDefault(
+          "VITE_MIDDLEWARE_URL",
+          "/api/middleware"
+        )
+        const middleApiUrl = middlewareUrl + "/imageToBase64"
 
         const data = {
           fetchParams: {

@@ -61,6 +61,8 @@ export const getSiyuanCfg = (): SiYuanConfig => {
   }
   if (!isEmptyString(siyuanCfg.middlewareUrl)) {
     middlewareUrl = siyuanCfg.middlewareUrl
+  } else {
+    middlewareUrl = "/api/middleware"
   }
 
   return new SiYuanConfig(baseUrl, token, middlewareUrl)
