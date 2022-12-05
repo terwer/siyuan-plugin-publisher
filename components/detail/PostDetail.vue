@@ -85,7 +85,7 @@ onMounted(async () => {
 </style>
 <style scoped>
 .post-detail-content-box {
-  padding: 10px;
+  padding: 0 20px;
 }
 
 .post-detail-content-box .btn-publish {
