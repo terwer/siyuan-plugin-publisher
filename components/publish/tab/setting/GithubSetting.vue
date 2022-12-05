@@ -271,7 +271,6 @@ const complexMode = () => {
   editMode.value = true
 }
 
-// @ts-ignore
 const testOnChange = (val) => {
   autoDeleteTest.value = val
 }

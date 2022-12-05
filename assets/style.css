@@ -30,6 +30,7 @@ html {
   --el-font-family: var(--g-font-family) !important;
   --custom-app-color: #161616;
   --custom-app-bg-color: #ffffff;
+  height: 100%;
 }
 
 body {
