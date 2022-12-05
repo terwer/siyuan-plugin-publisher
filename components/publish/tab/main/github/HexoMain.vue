@@ -24,16 +24,19 @@
   -->
 
 <template>
-  <div id="publish-index-body">
-    <publish-service :page-id="undefined" />
-  </div>
+  <github-main :api-type="apiType" :page-id="props.pageId" />
 </template>
-<script setup lang="ts">
-import PublishService from "~/components/publish/PublishService.vue"
-</script>
+<script lang="ts" setup>
+import GithubMain from "~/components/publish/tab/main/GithubMain.vue"
+import { API_TYPE_CONSTANTS } from "~/utils/constants/apiTypeConstants"
+import { ref } from "vue"
 
-<style scoped>
-#publish-index-body {
-  margin-top: 48px;
-}
-</style>
+const apiType = ref(API_TYPE_CONSTANTS.API_TYPE_HEXO)
+
+const props = defineProps({
+  pageId: {
+    type: String,
+    default: undefined,
+  },
+})
+</script>

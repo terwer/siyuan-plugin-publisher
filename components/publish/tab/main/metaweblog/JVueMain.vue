@@ -24,16 +24,20 @@
   -->
 
 <template>
-  <div id="publish-index-body">
-    <publish-service :page-id="undefined" />
-  </div>
+  <metaweblog-main :api-type="apiType" :page-id="props.pageId" />
 </template>
-<script setup lang="ts">
-import PublishService from "~/components/publish/PublishService.vue"
-</script>
 
-<style scoped>
-#publish-index-body {
-  margin-top: 48px;
-}
-</style>
+<script lang="ts" setup>
+import { API_TYPE_CONSTANTS } from "~/utils/constants/apiTypeConstants"
+import { ref } from "vue"
+import MetaweblogMain from "../MetaweblogMain.vue"
+
+const apiType = ref(API_TYPE_CONSTANTS.API_TYPE_JVUE)
+
+const props = defineProps({
+  pageId: {
+    type: String,
+    default: undefined,
+  },
+})
+</script>

@@ -43,7 +43,7 @@
       </template>
     </el-page-header>
 
-    <PublishService :page-id="props.publishData.postid" />
+    <publish-service :page-id="props.publishData.postid" />
   </div>
 </template>
 

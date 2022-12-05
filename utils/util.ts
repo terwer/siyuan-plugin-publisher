@@ -60,7 +60,7 @@ export const pingyinSlugify = async (q: string): Promise<string> => slugify(q)
  * 文本分词
  * @param words 文本
  */
-export const cutWords = async (words: string): Promise<string> => {
+export const cutWords = async (words: string): Promise<any> => {
   // https://github.com/yanyiwu/nodejieba
   words = mdToPlainText(words)
   logger.debug("准备开始分词，原文=>", words)

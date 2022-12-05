@@ -46,7 +46,7 @@
       </div>
 
       <!-- 文章详情 -->
-      <PostDetailService :page-id="props.post.postid" />
+      <post-detail-service :page-id="props.post.postid" />
     </div>
   </div>
 </template>

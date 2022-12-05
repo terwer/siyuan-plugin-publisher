@@ -27,7 +27,7 @@
   <div class="common-layout">
     <el-container>
       <el-main>
-        <BlogMain />
+        <blog-main />
       </el-main>
     </el-container>
   </div>
