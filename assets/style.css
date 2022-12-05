@@ -42,7 +42,7 @@ body {
 #app {
   color: var(--custom-app-color);
   background: var(--custom-app-bg-color);
-  padding: 10px;
+  padding: 10px 0;
   min-width: 600px;
   min-height: 99%;
   /*min-height: 500px;*/

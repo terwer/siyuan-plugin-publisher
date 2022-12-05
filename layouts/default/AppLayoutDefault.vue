@@ -40,7 +40,8 @@ import DefaultFooter from "~/layouts/default/DefaultFooter.vue"
 
 <style scoped>
 #app-layout-default {
-  padding: 16px;
+  /*padding: 16px;*/
+  padding: 0;
 }
 .default-main {
   min-height: 500px;
