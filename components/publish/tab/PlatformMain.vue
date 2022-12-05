@@ -58,7 +58,7 @@
       <wordpress-main :page-id="props.pageId" />
     </el-tab-pane>
 
-    <!-- Commmon API -->
+    <!-- Common API -->
     <el-tab-pane :label="$t('main.publish.to.liandi')" v-if="liandiEnabled">
       <liandi-main :page-id="props.pageId" />
     </el-tab-pane>
@@ -72,24 +72,24 @@
     <!-- 动态平台发布 -->
     <el-tab-pane
       v-for="gcfg in formData.githubArray"
-      :key="gcfg.plantformKey"
-      :label="gcfg.plantformName"
+      :key="gcfg.platformKey"
+      :label="gcfg.platformName"
     >
-      <github-main :api-type="gcfg.plantformKey" :page-id="props.pageId" />
+      <github-main :api-type="gcfg.platformKey" :page-id="props.pageId" />
     </el-tab-pane>
     <el-tab-pane
       v-for="mcfg in formData.metaweblogArray"
-      :key="mcfg.plantformKey"
-      :label="mcfg.plantformName"
+      :key="mcfg.platformKey"
+      :label="mcfg.platformName"
     >
-      <metaweblog-main :api-type="mcfg.plantformKey" :page-id="props.pageId" />
+      <metaweblog-main :api-type="mcfg.platformKey" :page-id="props.pageId" />
     </el-tab-pane>
     <el-tab-pane
       v-for="wcfg in formData.wordpressArray"
-      :key="wcfg.plantformKey"
-      :label="wcfg.plantformName"
+      :key="wcfg.platformKey"
+      :label="wcfg.platformName"
     >
-      <metaweblog-main :api-type="wcfg.plantformKey" :page-id="props.pageId" />
+      <metaweblog-main :api-type="wcfg.platformKey" :page-id="props.pageId" />
     </el-tab-pane>
   </el-tabs>
   <div v-else>
@@ -103,15 +103,29 @@
 </template>
 
 <script lang="ts" setup>
+import { onMounted, reactive, watch } from "vue"
+import { useTabCount } from "~/composables/tabCountCom"
+import { LogFactory } from "~/utils/logUtil"
+import VuepressMain from "~/components/publish/tab/main/github/VuepressMain.vue"
 import HugoMain from "~/components/publish/tab/main/github/HugoMain.vue"
 import HexoMain from "~/components/publish/tab/main/github/HexoMain.vue"
 import JekyllMain from "~/components/publish/tab/main/github/JekyllMain.vue"
+import JVueMain from "~/components/publish/tab/main/metaweblog/JVueMain.vue"
+import ConfluenceMain from "~/components/publish/tab/main/metaweblog/ConfluenceMain.vue"
+import CnblogsMain from "~/components/publish/tab/main/metaweblog/CnblogsMain.vue"
+import WordpressMain from "~/components/publish/tab/main/metaweblog/WordpressMain.vue"
+import LiandiMain from "~/components/publish/tab/main/common/LiandiMain.vue"
+import YuqueMain from "~/components/publish/tab/main/common/YuqueMain.vue"
+import KmsMain from "~/components/publish/tab/main/common/KmsMain.vue"
 import GithubMain from "~/components/publish/tab/main/GithubMain.vue"
-import { onMounted, reactive, watch } from "vue"
-import { useTabCount } from "~/composables/tabCountCom"
-import { DynamicConfig, getDynamicJsonCfg } from "~/utils/dynamicConfig"
-import { getBooleanConf } from "~/utils/config"
-import logUtil from "~/utils/logUtil"
+import MetaweblogMain from "~/components/publish/tab/main/MetaweblogMain.vue"
+import {
+  DynamicConfig,
+  getDynamicJsonCfg,
+} from "~/utils/platform/dynamicConfig"
+import { getBooleanConf } from "~/utils/configUtil"
+
+const logger = LogFactory.getLogger("components/publish/tab/PlatformMain.vue")
 
 // use
 const {
@@ -137,12 +151,9 @@ const formData = reactive({
   wordpressArray: [],
 })
 
-// @ts-ignore
 const initDynCfg = (dynCfg) => {
-  // @ts-ignore
   const newCfg = []
 
-  // @ts-ignore
   dynCfg.forEach((item) => {
     const newItem = new DynamicConfig(
       item.plantformType,
@@ -165,16 +176,11 @@ const initConf = () => {
   doCount()
 
   const dynamicJsonCfg = getDynamicJsonCfg()
-  // @ts-ignore
   formData.dynamicConfigArray = initDynCfg(dynamicJsonCfg.totalCfg || [])
-  // @ts-ignore
   formData.metaweblogArray = initDynCfg(dynamicJsonCfg.metaweblogCfg || [])
-  // @ts-ignore
   formData.wordpressArray = initDynCfg(dynamicJsonCfg.wordpressCfg || [])
-  logUtil.logInfo("dynamicJsonCfg=>")
-  logUtil.logInfo(JSON.stringify(dynamicJsonCfg))
-
-  logUtil.logInfo("平台设置初始化")
+  logger.debug("dynamicJsonCfg=>", JSON.stringify(dynamicJsonCfg))
+  logger.debug("平台设置初始化")
 }
 
 const props = defineProps({
@@ -193,12 +199,10 @@ watch(
   () => props.isReload,
   /**/ (oldValue, newValue) => {
     initConf()
-    logUtil.logInfo("plantform-main初始化")
   }
 )
 
 onMounted(() => {
   initConf()
-  logUtil.logInfo("plantform-main初始化 onMounted")
 })
 </script>

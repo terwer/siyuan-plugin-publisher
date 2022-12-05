@@ -164,7 +164,7 @@ import GithubSetting from "~/components/publish/tab/setting/GithubSetting.vue"
 import MetaweblogSetting from "~/components/publish/tab/setting/MetaweblogSetting.vue"
 
 const logger = LogFactory.getLogger(
-  "components/publish/tab/PlantformSetting.vue"
+  "components/publish/tab/PlatformSetting.vue"
 )
 
 // use

@@ -32,7 +32,7 @@
     </div>
 
     <!-- 文章详情 -->
-    <PostDetailService :page-id="pid" />
+    <post-detail-service :page-id="pid" />
   </div>
 </template>
 

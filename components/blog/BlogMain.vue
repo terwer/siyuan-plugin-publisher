@@ -134,7 +134,7 @@
 
     <!-- 文章详情 -->
     <div id="post-detail" v-if="showDetail">
-      <SingleBlogDetail
+      <single-blog-detail
         :post="postDetail"
         @on-change="emitFn"
         @on-publish-change="emitPublishPageFn"
@@ -143,7 +143,7 @@
 
     <!-- 文章发布 -->
     <div id="post-publisher" v-if="showPublish">
-      <SinglePublish
+      <single-publish
         :publish-data="publishData"
         @on-change="emitPublishBackFn"
       />

@@ -25,7 +25,7 @@
 
 <template>
   <div id="publish-index-body">
-    <PublishService :page-id="undefined" />
+    <publish-service :page-id="undefined" />
   </div>
 </template>
 <script setup lang="ts">
