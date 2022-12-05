@@ -53,7 +53,7 @@ if (isBrowser()) {
   console.log("loglevel运行在node环境中")
 }
 
-const LOG_INFO_ENABLED = getBooleanEnv("VITE_LOG_INFO_ENABLED")
+const LOG_INFO_ENABLED = getBooleanEnv("VITE_LOG_INFO_ENABLED") ?? false
 const LOG_LEVEL_INFO = "INFO"
 const LOG_LEVEL_WARN = "WARN"
 const LOG_LEVEL_ERROR = "ERROR"

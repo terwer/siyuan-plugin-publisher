@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { getEnv } from "~/utils/envUtil"
+import { getEnvOrDefault } from "~/utils/envUtil"
 import { Logger } from "loglevel"
 import { LogFactory } from "~/utils/logUtil"
 import {
@@ -52,8 +52,11 @@ export class CommonblogApi {
     fetchOptions: RequestInit,
     formJson?: any[]
   ): Promise<Response> {
-    const middleWareUrl = getEnv("VITE_MIDDLEWARE_URL") ?? "/api/middleware"
-    const middleApiUrl = middleWareUrl + "/fetch"
+    const middlewareUrl = getEnvOrDefault(
+      "VITE_MIDDLEWARE_URL",
+      "/api/middleware"
+    )
+    const middleApiUrl = middlewareUrl + "/fetch"
     this.logger.debug("apiUrl=>", apiUrl)
 
     this.logger.debug("fetchOptions=>", fetchOptions)

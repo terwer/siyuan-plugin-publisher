@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { getEnv } from "~/utils/envUtil"
+import { getEnvOrDefault } from "~/utils/envUtil"
 import { LogFactory } from "~/utils/logUtil"
 import { Logger } from "loglevel"
 import { fetchCustom } from "~/utils/platform/metaweblog/customXmlrpc"
@@ -65,8 +65,11 @@ export class XmlrpcClient {
     reqMethod: string,
     reqParams: string[]
   ): Promise<string> {
-    const middleWareUrl = getEnv("VITE_MIDDLEWARE_URL") ?? "/api/middleware"
-    const middleApiUrl = middleWareUrl + "/xmlrpc"
+    const middlewareUrl = getEnvOrDefault(
+      "VITE_MIDDLEWARE_URL",
+      "/api/middleware"
+    )
+    const middleApiUrl = middlewareUrl + "/xmlrpc"
     this.logger.debug("apiUrl=>", apiUrl)
     const fetchCORSParams = {
       reqMethod,

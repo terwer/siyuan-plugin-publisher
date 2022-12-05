@@ -24,6 +24,21 @@
  */
 
 /**
+ * 获取环境变量，如果未定义或者为空值，用指定的默认值代替
+ * @param key key
+ * @param defaultValue 默认值
+ * @since 0.1.0
+ * @author terwer
+ */
+export const getEnvOrDefault = (key: string, defaultValue: string) => {
+  const value = getEnv(key)
+  if (value.trim().length == 0) {
+    return defaultValue
+  }
+  return value
+}
+
+/**
  * 获取环境变量
  * @param key key
  */
