@@ -44,7 +44,7 @@ body {
   background: var(--custom-app-bg-color);
   padding: 10px 0;
   min-width: 600px;
-  min-height: 99%;
+  min-height: 100%;
   /*min-height: 500px;*/
   /*height: 100%;*/
 }
