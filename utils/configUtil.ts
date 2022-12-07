@@ -218,8 +218,12 @@ export const importConf = async (): Promise<void> => {
       }, 500)
     }
   } catch (e) {
-    logger.error("配置文件解析错误=>", e)
-    ElMessage.error(appandStr("配置文件解析错误=>", e))
+    if (e.toString().indexOf("AbortError") > -1) {
+      logger.warn("您取消了导入=>", e)
+    } else {
+      logger.error("配置文件解析错误=>", e)
+      ElMessage.error(appandStr("配置文件解析错误=>", e))
+    }
   }
 }
 
