@@ -30,6 +30,7 @@
     @tab-change="serviceTabChange"
   >
     <el-tab-pane
+      class="pane-platform-main-body"
       name="platform-main"
       :label="$t('service.tab.publish.service')"
     >
@@ -115,4 +116,8 @@ onMounted(() => {
 })
 </script>
 
-<style scoped></style>
+<style scoped>
+.pane-platform-main-body {
+  margin-right: 24px;
+}
+</style>
