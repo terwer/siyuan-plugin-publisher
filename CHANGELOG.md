@@ -32,6 +32,14 @@
 - [#69](https://github.com/terwer/src-sy-post-publisher/issues/69) 动态类型支持自定义预览地址-适配暗黑模式
 - [#84](https://github.com/terwer/src-sy-post-publisher/issues/84) 平台配置帮助文档
 
+## [0.1.1](https://github.com/terwer/src-sy-post-publisher/compare/v0.1.0...v0.1.1) (2022-12-07)
+
+
+### Bug Fixes
+
+* 去除页面底部空白 ([a2c0bb5](https://github.com/terwer/src-sy-post-publisher/commit/a2c0bb54e76e55eb311a27fc40d416b6e4606846))
+* 去除页面底部空白-根据浏览器宽度判断 ([368e699](https://github.com/terwer/src-sy-post-publisher/commit/368e699152bae31e36f1d4ecde654d73376eadd1))
+
 ## v0.0.2
 
 - [x] [#15](https://github.com/terwer/src-sy-post-publisher/issues/15) 发布到其他平台-博客园、Wordpress、链滴社区等
