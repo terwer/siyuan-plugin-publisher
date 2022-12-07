@@ -168,7 +168,6 @@ const initDynCfg = (dynCfg: any[]) => {
     }
   })
 
-  // @ts-ignore
   return newCfg
 }
 

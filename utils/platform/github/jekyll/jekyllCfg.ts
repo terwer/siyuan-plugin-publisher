@@ -25,13 +25,14 @@
 
 import { GithubCfg } from "~/utils/platform/github/githubCfg"
 import { POSTID_KEY_CONSTANTS } from "~/utils/constants/postidKeyConstants"
+import { SubPlatformType } from "~/utils/platform/dynamicConfig"
 
 /**
  * Jekyll配置
  */
 export class JekyllCfg extends GithubCfg {
   constructor() {
-    super("", "", "", "")
+    super("", SubPlatformType.Github_Jekyll, "", "", "")
 
     this.defaultPath = "_posts"
     this.posidKey = POSTID_KEY_CONSTANTS.JEKYLL_POSTID_KEY

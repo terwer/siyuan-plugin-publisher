@@ -205,7 +205,7 @@ export const exportConf = (): void => {
 /**
  * 导入JSON配置文件到本地
  */
-export const importConf = async (): void => {
+export const importConf = async (): Promise<void> => {
   try {
     await importJSONToLocalStorage()
 

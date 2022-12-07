@@ -296,6 +296,7 @@ onMounted(() => {
   font-size: 12px;
   color: #bbb;
   text-align: center;
+  padding-bottom: 8px;
 }
 
 .footer .text {

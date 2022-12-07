@@ -25,13 +25,14 @@
 
 import { GithubCfg } from "~/utils/platform/github/githubCfg"
 import { POSTID_KEY_CONSTANTS } from "~/utils/constants/postidKeyConstants"
+import { SubPlatformType } from "~/utils/platform/dynamicConfig"
 
 /**
  * Hexo配置
  */
 export class HexoCfg extends GithubCfg {
   constructor() {
-    super("", "", "", "")
+    super("", SubPlatformType.Github_Hexo, "", "", "")
 
     this.defaultPath = "source/_posts"
     this.posidKey = POSTID_KEY_CONSTANTS.HEXO_POSTID_KEY

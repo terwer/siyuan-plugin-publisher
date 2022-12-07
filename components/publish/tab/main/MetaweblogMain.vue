@@ -412,10 +412,8 @@ const initPage = async () => {
 
   // 表单数据
   formData.title = page.content
-  // @ts-ignore
   formData.customSlug =
     siyuanData.meta[SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_SLUG_KEY]
-  // @ts-ignore
   formData.desc =
     siyuanData.meta[SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_DESC_KEY]
   formData.created = formatNumToZhDate(page.created)
@@ -427,7 +425,6 @@ const initPage = async () => {
   for (let i = 0; i < tgarr.length; i++) {
     const tg = tgarr[i]
     if (tg !== "") {
-      // @ts-ignore
       formData.tag.dynamicTags.push(tgarr[i])
     }
   }
@@ -441,14 +438,12 @@ const initPage = async () => {
   const metaweblogCfg = getJSONConf<IMetaweblogCfg>(props.apiType)
   const api = new API(props.apiType)
   // 选中的分类
-  // @ts-ignore
   let catData = []
 
   // 更新预览链接
   if (isPublished.value) {
     // 读取postid
     const meta = siyuanData.meta
-    // @ts-ignore
     formData.postid = meta[metaweblogCfg.posidKey]
 
     // 路径组合
@@ -472,7 +467,6 @@ const initPage = async () => {
   }
 
   // 全部文章分类请求
-  // @ts-ignore
   let catInfo = []
   try {
     catInfo = await api.getCategories()
@@ -676,7 +670,6 @@ const handleCatNodeCheck = (data, status) => {
   logger.debug(" formData.categories=>", formData.categories)
 }
 
-// @ts-ignore
 const oneclickAttr = async (hideTip) => {
   isGenLoading.value = true
   await makeSlug(true)

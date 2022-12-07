@@ -37,10 +37,11 @@ export default {
   "main.publish.editmode": "编辑模式",
   "main.publish.editmode.simple": "简洁模式",
   "main.publish.editmode.complex": "详细模式",
+  "main.publish.editmode.source": "源码模式",
   "main.publish.vuepress.tip":
     "推荐Vuepress的V1版本，配合 vuepress-theme-vdoing 使用，后续bug也只会对V1和此主题进行更新",
   "main.publish.github.error.tip":
-    "由于Github的rest的API问题，导致更新暂时无法处理，如需更新请先点取消删除再新增即可，可以查看这里等待修复进度：https://github.com/terwer/src-sy-post-publisher/issues/21。",
+    "配置错误或者api不可用，请检查。若修改过配置，请刷新页面",
   "main.publish.github": "发布Github",
   "main.publish.github.tip":
     "自动将文章的markdown文本发布到Vuepress对应的Github仓库（需要先进行相关配置）",
@@ -161,6 +162,7 @@ export default {
   "setting.blog.vali.ok": "验证通过，不要忘了点击下方保存哟(*^▽^*)",
   "setting.blog.vali.ok.metaweblog": "配置已保存并验证通过",
   "setting.blog.vali.error": "API验证失败，请检查配置",
+  "setting.blog.platform.support.github": "您当前操作的是支持Github的平台：",
   "setting.blog.platform.support.metaweblog":
     "您当前操作的是支持metaweblog的平台：",
   "setting.blog.cancel": "取消",
