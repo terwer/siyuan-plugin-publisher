@@ -1,3 +1,12 @@
+# Changelog
+
+## [0.2.1](https://github.com/terwer/src-sy-post-publisher/compare/v0.2.0...v0.2.1) (2022-12-07)
+
+
+### Miscellaneous
+
+* 合并历史记录 ([3c94bfc](https://github.com/terwer/src-sy-post-publisher/commit/3c94bfca1089efb5188683d4938f18d2c46e11ff))
+
 ## [0.2.0](https://github.com/terwer/src-sy-post-publisher/compare/v0.1.0...v0.2.0) (2022-12-07)
 
 ### Features
