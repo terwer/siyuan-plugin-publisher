@@ -29,14 +29,32 @@
       <div>
         <span class="text"> &copy;2011-2022 </span>
         <span class="s-dark" @click="goGithub()"> sy-post-publisher </span>
+
         <span class="text"> v {{ v }}. </span>
         <span class="text s-dark" @click="toggleDark()">{{
           isDark ? $t("theme.mode.light") : $t("theme.mode.dark")
         }}</span>
+
         <span class="text" v-if="!isInSiyuan">.</span>
         <span class="text s-dark" @click="changeSiyuanApi()" v-if="!isInSiyuan">
           {{ $t("blog.change.siyuan.api") }}
         </span>
+
+        <span class="text">.</span>
+        <span class="text s-dark" @click="exportConfig()">
+          {{ $t("setting.conf.export") }}
+        </span>
+
+        <span class="text">.</span>
+        <span class="text s-dark" @click="importConfig()">
+          {{ $t("setting.conf.import") }}
+        </span>
+
+        <span class="text">.</span>
+        <span class="text s-dark" @click="clearConfig()">
+          {{ $t("setting.conf.clear") }}
+        </span>
+
         <span class="text">.</span>
         <span class="text s-dark" @click="newWin()">
           {{ $t("blog.newwin.open") }}
@@ -117,7 +135,7 @@
 <script lang="ts" setup>
 import { useDark, useToggle } from "@vueuse/core"
 import { onMounted, reactive, ref } from "vue"
-import { ElMessage, FormRules } from "element-plus"
+import { ElMessage, ElMessageBox, FormRules } from "element-plus"
 import { useI18n } from "vue-i18n"
 import { LogFactory } from "~/utils/logUtil"
 import { inSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
@@ -126,9 +144,15 @@ import {
   SiYuanConfig,
 } from "~/utils/platform/siyuan/siYuanConfig"
 import { goToPage, goToPageWithTarget } from "~/utils/otherlib/ChromeUtil"
-import { setJSONConf } from "~/utils/configUtil"
+import {
+  clearConf,
+  exportConf,
+  importConf,
+  setJSONConf,
+} from "~/utils/configUtil"
 import { SIYUAN_CONSTANTS } from "~/utils/constants/siyuanConstants"
 import { version } from "../../package.json"
+import { reloadPage } from "~/utils/browserUtil"
 
 const logger = LogFactory.getLogger("layouts/default/DefaultFooter")
 
@@ -166,8 +190,37 @@ const siyuanApiChangeRules = reactive<FormRules>({
 const goGithub = () => {
   window.open("https://github.com/terwer/src-sy-post-publisher")
 }
+
 const newWin = () => {
   goToPage("/blog/index.html")
+}
+
+const exportConfig = () => {
+  exportConf()
+}
+
+const importConfig = async () => {
+  await importConf()
+}
+
+const clearConfig = () => {
+  ElMessageBox.confirm(t("main.opt.warning.tip"), t("main.opt.warning"), {
+    confirmButtonText: t("main.opt.ok"),
+    cancelButtonText: t("main.opt.cancel"),
+    type: "warning",
+  })
+    .then(async () => {
+      clearConf()
+
+      reloadPage()
+      ElMessage.success(t("main.opt.success"))
+    })
+    .catch(() => {
+      // ElMessage({
+      //   type: 'error',
+      //   message: t("main.opt.failure"),
+      // })
+    })
 }
 
 const changeSiyuanApi = () => {

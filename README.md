@@ -247,7 +247,8 @@ pnpm run extChrome
 pnpm run extChromeDev
 ```
 
-将密钥文件修改为 `key.pem` 放到 `extension/chrome` 文件夹 , 然后压缩 `extension/chrome` 文件夹里面的所有文件为 `.zip`, 上架 Google Chrome 应用商店。
+将密钥文件修改为 `key.pem` 放到 `extension/chrome` 文件夹 , 然后压缩 `extension/chrome` 文件夹里面的所有文件为 `.zip` ,
+上架 Google Chrome 应用商店。
 
 ### 方式 3、部署到服务器后台服务
 

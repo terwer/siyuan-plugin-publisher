@@ -239,7 +239,7 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
               const dep = arr[0].split("@")[0].replace(/\./g, "-")
               // console.log("id=>", id)
               // console.log("dep=>", dep)
-              if (dep != "") {
+              if (dep !== "") {
                 return "vendor_" + dep
               }
               return "vendor"

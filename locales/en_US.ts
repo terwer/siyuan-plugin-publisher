@@ -256,4 +256,7 @@ export default {
   "setting.blog.siyuan.apiurl":
     "The API address of Siyuan Note, including ports, for example: http://127.0.0.0.1: 6806",
   "setting.blog.siyuan.current.apiurl": "Current apiUrl=>",
+  "setting.conf.export": "Export config",
+  "setting.conf.import": "Import config",
+  "setting.conf.clear": "Clear config",
 }
