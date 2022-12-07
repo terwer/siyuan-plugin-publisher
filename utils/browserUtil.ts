@@ -23,6 +23,8 @@
  * questions.
  */
 
+import { fileOpen, FileWithHandle } from "browser-fs-access"
+
 /**
  * 是否在浏览器
  * @see {@link https://github.com/flexdinesh/browser-or-node/blob/master/src/index.js#L1 isBrowser}
@@ -110,12 +112,20 @@ export const reloadTabPage = (tabname: string): void => {
 
 /**
  * 刷新当前tab页面
- * @param tabname
  */
-export const reloadPage = (tabname: string): void => {
+export const reloadPage = (): void => {
   setTimeout(function () {
     if (isBrowser()) {
       window.location.reload()
     }
   }, 200)
+}
+
+export const readJSONFileFormDialog = async (): Promise<FileWithHandle[]> => {
+  return await fileOpen({
+    description: "JSON files",
+    mimeTypes: ["application/json"],
+    extensions: [".json"],
+    multiple: true,
+  })
 }

@@ -24,7 +24,12 @@
  */
 
 import { inSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
-import { getQueryString, isBrowser, setUrlParameter } from "~/utils/browserUtil"
+import {
+  getQueryString,
+  isBrowser,
+  readJSONFileFormDialog,
+  setUrlParameter,
+} from "~/utils/browserUtil"
 import { LogFactory } from "~/utils/logUtil"
 import { isInFirefoxExtension } from "~/utils/otherlib/FirefoxUtil"
 import { pathJoin } from "~/utils/util"
@@ -123,4 +128,31 @@ export async function sendChromeMessage(message) {
 
     chrome.runtime.sendMessage(message, resolve)
   })
+}
+
+/**
+ * 导入JSON配置
+ */
+export const importJSONToLocalStorage = async () => {
+  // Open a file dialog and select a file
+  const files = await readJSONFileFormDialog()
+
+  // Create a FileReader to read the file
+  const reader = new FileReader()
+
+  // When the file has been read, log the contents to the console
+  reader.addEventListener("load", () => {
+    // Parse the JSON string to a JavaScript object
+    const data = JSON.parse(reader.result)
+
+    console.log("准备导入配置，读取到的配置数据为=>", data)
+    // Iterate over the key/value pairs in the object
+    for (const [key, value] of Object.entries(data)) {
+      // Add each pair to LocalStorage
+      localStorage.setItem(key, value)
+    }
+  })
+
+  // Read the file as a string of text
+  reader.readAsText(files[0])
 }

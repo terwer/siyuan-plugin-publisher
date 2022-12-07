@@ -332,7 +332,7 @@
               v-model="vuepressData.vuepressFullContent"
               :autosize="{ minRows: 5, maxRows: 8 }"
               type="textarea"
-              v-on:focus="$event.target.select()"
+              v-on:focus="onYamlContentFocus"
             />
           </el-form-item>
           <el-form-item>
@@ -526,7 +526,7 @@ function checkForce() {
   return true
 }
 
-async function makeSlug(hideTip?: boolean) {
+async function makeSlug(hideTip?: any) {
   if (!checkForce()) {
     return
   }
@@ -568,7 +568,7 @@ async function makeSlug(hideTip?: boolean) {
   }
 }
 
-async function makeDesc(hideTip?: boolean) {
+async function makeDesc(hideTip?: any) {
   isDescLoading.value = true
   const data = await siyuanApi.exportMdContent(siyuanData.value.pageId)
 
@@ -610,7 +610,7 @@ const tagHandleInputConfirm = () => {
   formData.value.tag.inputValue = ""
 }
 
-async function fetchTag(hideTip?: boolean) {
+async function fetchTag(hideTip?: any) {
   if (!tagSwitch.value) {
     ElMessage.warning(t("main.tag.auto.switch.no.tip"))
     return
@@ -639,7 +639,7 @@ async function fetchTag(hideTip?: boolean) {
   }
 }
 
-async function saveAttrToSiyuan(hideTip?: boolean) {
+async function saveAttrToSiyuan(hideTip?: any) {
   const customAttr = {
     [SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_SLUG_KEY]:
       formData.value.customSlug,
@@ -751,6 +751,11 @@ const copyToClipboard = () => {
 
     ElMessage.success(t("main.opt.success"))
   })
+}
+
+const onYamlContentFocus = (event) => {
+  const target = event.target as HTMLTextAreaElement
+  target.select()
 }
 
 const githubOnChange = (val: boolean) => {
@@ -896,7 +901,7 @@ async function doPublish() {
   ElMessage.success(t("main.opt.status.publish"))
 }
 
-async function oneclickAttr(hideTip?: boolean) {
+async function oneclickAttr(hideTip?: any) {
   isGenLoading.value = true
   await makeSlug(true)
 
