@@ -26,6 +26,7 @@
 import { LogFactory } from "~/utils/logUtil"
 import { importJSONToLocalStorage } from "~/utils/otherlib/ChromeUtil"
 import { ElMessage } from "element-plus"
+import { appandStr } from "./strUtil"
 
 const logger = LogFactory.getLogger()
 
@@ -158,7 +159,7 @@ export const checkKeyExists = (key: string): boolean => {
 /**
  * 获取所有配置数据
  */
-export const getAllConf = () => {
+export const getAllConf = (): object => {
   // Create an object to store the data from LocalStorage
   const data = {}
 
@@ -179,7 +180,7 @@ export const getAllConf = () => {
 /**
  * 导出所有配置
  */
-export const exportConf = () => {
+export const exportConf = (): void => {
   // Get all data from LocalStorage as an object
   const data = getAllConf()
 
@@ -204,14 +205,14 @@ export const exportConf = () => {
 /**
  * 导入JSON配置文件到本地
  */
-export const importConf = async () => {
+export const importConf = async (): void => {
   try {
     await importJSONToLocalStorage()
 
     ElMessage.success("导入成功")
   } catch (e) {
     logger.error("配置文件解析错误=>", e)
-    ElMessage.error("配置文件解析错误=>" + e)
+    ElMessage.error(appandStr("配置文件解析错误=>", e))
   }
 }
 
@@ -221,7 +222,7 @@ export const importConf = async () => {
  * ！！！ 操作之前，请一定做好备份，请谨慎操作！！！<br/>
  * ==========================================
  */
-export const clearConf = () => {
+export const clearConf = (): void => {
   // Remove all data from LocalStorage
   localStorage.clear()
 
