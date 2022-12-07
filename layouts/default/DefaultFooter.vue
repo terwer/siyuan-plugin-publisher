@@ -152,7 +152,7 @@ import {
 } from "~/utils/configUtil"
 import { SIYUAN_CONSTANTS } from "~/utils/constants/siyuanConstants"
 import { version } from "../../package.json"
-import { reloadPage } from "~/utils/browserUtil"
+import { isBrowser, reloadPage } from "~/utils/browserUtil"
 
 const logger = LogFactory.getLogger("layouts/default/DefaultFooter")
 
@@ -288,6 +288,13 @@ onMounted(() => {
     )
   }
   initConf()
+
+  // 不是浏览器插件，设置100%
+  if (isBrowser()) {
+    if (document.body.clientWidth > 660) {
+      document.getElementById("app").style.minHeight = "100%"
+    }
+  }
 })
 </script>
 
