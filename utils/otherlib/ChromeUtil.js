@@ -50,6 +50,13 @@ function getPageUrl(pageUrl, split) {
   // runtime.
   // let url = chrome.runtime.getURL("index/index.html");
   let url = pageUrl
+  // 外部链接
+  if (url.startsWith("http") || url.startsWith("https")) {
+    logger.info("当前是外部链接，直接跳转")
+    return url
+  }
+
+  // 处理内部链接
   if (typeof chrome.runtime !== "undefined") {
     url = chrome.runtime.getURL(url)
   } else {

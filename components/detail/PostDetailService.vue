@@ -24,7 +24,12 @@
   -->
 
 <template>
-  <div id="post-detail-content" v-highlight v-html="post.description"></div>
+  <div
+    id="post-detail-content"
+    v-beauty
+    v-highlight
+    v-html="post.description"
+  ></div>
 </template>
 
 <script lang="ts" setup>

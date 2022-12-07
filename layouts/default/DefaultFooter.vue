@@ -30,7 +30,7 @@
         <span class="text"> &copy;2011-2022 </span>
         <span class="s-dark" @click="goGithub()"> sy-post-publisher </span>
 
-        <span class="text"> v {{ v }}. </span>
+        <span class="text"> v{{ v }} . </span>
         <span class="text s-dark" @click="toggleDark()">{{
           isDark ? $t("theme.mode.light") : $t("theme.mode.dark")
         }}</span>

@@ -43,6 +43,9 @@ import "~/assets/style.dark.css"
 import "~/plugins/vue-hljs/vue-hljs"
 import vueHljs from "~/plugins/vue-hljs/lib/vue-hljs/main"
 
+// page-beauty
+import PageBeauty from "~/plugins/page-beauty/page-beauty"
+
 /**
  * 统一的Vue实例创建入口
  * @param rootComponent
@@ -63,6 +66,9 @@ const createPage = (rootComponent: Component): App => {
 
   // vueHljs
   app.use(vueHljs)
+
+  // page-beauty
+  app.use(PageBeauty)
 
   // Register a global custom directive called `v-focus`
   app.directive("focus", {

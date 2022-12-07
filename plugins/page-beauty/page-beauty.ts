@@ -22,8 +22,50 @@
  * or visit www.terwer.space if you need additional information or have any
  * questions.
  */
+import { PluginObject } from "vue"
+import { LogFactory } from "~/utils/logUtil"
+import { isEmptyString } from "~/utils/util"
+import { goToPage } from "~/utils/otherlib/ChromeUtil"
 
-// declare module "node-localstorage"
-declare module "~/utils/otherlib/ChromeUtil"
+// typedef
+declare module "vue" {
+  export type PluginFunction<T> = (Vue: any, options?: T) => void
 
-declare module "vue/types/vue" {}
+  export interface PluginObject<T> {
+    install: PluginFunction<T>
+
+    [key: string]: any
+  }
+}
+
+const logger = LogFactory.getLogger("plugins/page-beauty/page-beauty.ts")
+
+/**
+ * 页面美化插件，使用方法 <div v-beauty></div>
+ * @author terwer
+ * @since 0.1.0
+ */
+const PageBeauty: PluginObject<any> = {
+  install(Vue) {
+    Vue.directive("beauty", (el: HTMLElement) => {
+      logger.info("PageBeauty is rendering ...")
+
+      const links = el.querySelectorAll("a")
+      links.forEach((link) => {
+        link.addEventListener("click", function (evt) {
+          // 阻止默认跳转
+          evt.preventDefault()
+
+          // 获取跳转链接
+          const href = link.getAttribute("href")
+          // logger.info("href=>", href)
+          if (!isEmptyString(href)) {
+            goToPage(href)
+          }
+        })
+      })
+    })
+  },
+}
+
+export default PageBeauty
