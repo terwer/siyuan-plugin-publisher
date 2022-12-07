@@ -35,16 +35,6 @@
           type="info"
         />
         <el-alert
-          v-if="
-            props.apiType === API_TYPE_CONSTANTS.API_TYPE_VUEPRESS &&
-            editData.etype !== PageEditMode.EditMode_source
-          "
-          :closable="false"
-          :title="$t('main.publish.vuepress.tip')"
-          class="top-version-tip"
-          type="info"
-        />
-        <el-alert
           v-if="!apiStatus && editData.etype !== PageEditMode.EditMode_source"
           :closable="false"
           :title="$t('main.publish.github.error.tip')"
@@ -266,12 +256,6 @@
                 @change="githubOnChange"
               />
               <el-alert
-                v-if="vuepressGithubEnabled"
-                :closable="false"
-                :title="$t('main.publish.github.tip')"
-                type="info"
-              />
-              <el-alert
                 v-if="!vuepressGithubEnabled"
                 :closable="false"
                 :title="$t('main.publish.github.no.tip')"
@@ -290,7 +274,10 @@
               <el-alert
                 v-if="useDefaultPath"
                 :closable="false"
-                :title="$t('main.publish.github.choose.path.use.default.tip')"
+                :title="
+                  $t('main.publish.github.choose.path.use.default.tip') +
+                  currentDefaultPath
+                "
                 type="info"
               />
             </el-form-item>
@@ -484,6 +471,7 @@ const props = defineProps({
 const apiTypeInfo = ref(
   t("setting.blog.platform.support.github") + props.apiType + " "
 )
+const currentDefaultPath = ref("docs")
 const apiStatus = ref(false)
 
 const isSlugLoading = ref(false)
@@ -1087,6 +1075,9 @@ async function initPage() {
   const conf = getJSONConf<IGithubCfg>(props.apiType)
   apiStatus.value = conf.apiStatus
   vuepressGithubEnabled.value = apiStatus.value
+
+  // 默认目录
+  currentDefaultPath.value = conf.defaultPath ?? "尚未配置"
 
   // 默认开启hash
   slugHashEnabled.value = true

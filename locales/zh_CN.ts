@@ -46,11 +46,11 @@ export default {
   "main.publish.github.tip":
     "自动将文章的markdown文本发布到Vuepress对应的Github仓库（需要先进行相关配置）",
   "main.publish.github.no.tip":
-    "您未开启Github发布，请在点击发布之后自行复制右侧文本",
+    "您未开启Github发布，请在点击发布之后切换源码模式复制Markdown文本",
   "main.publish.github.choose.path": "请选择目录",
   "main.publish.github.choose.path.use.default": "默认目录",
   "main.publish.github.choose.path.use.default.tip":
-    "使用默认目录，则默认所有文章都发布在配置好的默认目录下，无需每次发布的时候来选择目录",
+    "使用默认目录，则默认所有文章都发布在配置好的默认目录下，无需每次发布的时候来选择目录，当前平台的默认目录为：",
   "main.publish.github.choose.title": "文件名",
   "main.publish.github.choose.title.tip":
     "Vuepress-theme-vdoing支持文件名加上序号来标识，如果你不清楚此用法，请不要修改文件名",
