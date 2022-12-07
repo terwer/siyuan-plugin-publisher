@@ -35,6 +35,8 @@ import requireTransform from "vite-plugin-require-transform"
 import rollupNodePolyFill from "rollup-plugin-node-polyfills"
 import NodeModulesPolyfillPlugin from "@esbuild-plugins/node-modules-polyfill"
 import NodeGlobalsPolyfillPlugin from "@esbuild-plugins/node-globals-polyfill"
+import OptimizationPersist from 'vite-plugin-optimize-persist'
+import PkgConfig from 'vite-plugin-package-config'
 
 const isTest = process.env.TEST === "true"
 console.log("isTest=>", isTest)
@@ -63,6 +65,9 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
   return {
     plugins: [
       vue(),
+      // https://blog.csdn.net/pzy_666/article/details/123017630
+      PkgConfig(),
+      OptimizationPersist(),
       // https://github.com/emosheeep/vite-plugin-virtual-mpa
       createMpaPlugin({
         pages: [

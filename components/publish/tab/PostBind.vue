@@ -418,7 +418,7 @@ const submitForm = async (formEl) => {
 
     // 动态绑定文章
     formData.dynamicConfigArray.forEach((item) => {
-      const posidKey = getDynPostidKey(item.plantformKey)
+      const posidKey = getDynPostidKey(item.platformKey)
       assignPostid(item.modelValue, customAttr, posidKey, item.posid)
     })
 

@@ -5,7 +5,9 @@
   "packageManager": "pnpm@7.17.1",
   "scripts": {
     "serve": "PROXY=false vercel dev --listen 6006",
+    "serveWin": "pwsh scripts/serve.ps1",
     "dev": "PROXY=true vite --port 6006",
+    "devWin": "pwsh scripts/dev.ps1",
     "build": "vue-tsc --noEmit && PROXY=true vite build",
     "preview": "vite preview",
     "test": "vitest --watch",
@@ -71,6 +73,8 @@
     "unplugin-vue-components": "^0.22.11",
     "vercel": "^28.7.0",
     "vite": "^3.0.0",
+    "vite-plugin-optimize-persist": "^0.1.2",
+    "vite-plugin-package-config": "^0.1.1",
     "vite-plugin-require-transform": "^1.0.3",
     "vite-plugin-virtual-mpa": "^1.2.2",
     "vitest": "^0.25.3",

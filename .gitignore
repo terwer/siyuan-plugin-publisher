@@ -37,3 +37,4 @@ coverage
 
 # docs
 out
+.pnpm-store

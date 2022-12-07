@@ -37,10 +37,11 @@ export default {
   "main.publish.editmode": "Edit mode",
   "main.publish.editmode.simple": "Simple",
   "main.publish.editmode.complex": "Complex",
+  "main.publish.editmode.source": "Source",
   "main.publish.vuepress.tip":
     "Recommends use it with vuepress-theme-vdoing , and the subsequent bug will only update this theme",
   "main.publish.github.error.tip":
-    "Due to the API of GitHub's REST, the update cannot be treated for the time being. If you need to update, please click Delete and then add it. You can check here for the restoration progress: https: //github.com/terwer/src-sy-post -Publisher/ISSUES/21.",
+    "Configure error or API is not available, please check. If you modify the configuration, please refresh the page",
   "main.publish.github": "Send Github",
   "main.publish.github.tip":
     "Checking the Markdown text of the article to the GitHub warehouse corresponding to Vuepress (need to perform related configuration first, unsatisfactory or configuration error will be ignored)",
@@ -158,6 +159,7 @@ export default {
   "setting.blog.vali.ok.metaweblog":
     "The configuration has been saved and verified",
   "setting.blog.vali.error": "Validate error",
+  "setting.blog.platform.support.github": "Current github supported platform:",
   "setting.blog.platform.support.metaweblog":
     "Current metaweblog supported platform:",
   "setting.blog.cancel": "Cancel",

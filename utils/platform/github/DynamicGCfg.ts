@@ -35,10 +35,11 @@ import {
  */
 export class DynamicGCfg extends GithubCfg {
   constructor(cfg: DynamicConfig) {
-    super("", "", "", "")
+    super("", "", "", "", "")
 
     this.previewUrl = "/post/[postid].html"
     this.posidKey = getDynPostidKey(cfg.platformKey)
+    this.blogName = cfg.subPlatformType
 
     switch (cfg.subPlatformType) {
       case SubPlatformType.Github_Vuepress:

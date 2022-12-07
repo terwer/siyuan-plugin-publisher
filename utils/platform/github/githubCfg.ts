@@ -68,6 +68,10 @@ export interface IGithubCfg {
    */
   home: string
   /**
+   * 平台名称
+   */
+  blogName: string
+  /**
    * 预览规则
    */
   previewUrl: string
@@ -92,17 +96,20 @@ export class GithubCfg implements IGithubCfg {
   email: string
   posidKey: string = ""
   home: string
+  blogName: string
   previewUrl: string
   baseUrl: string
   apiStatus: boolean
 
   constructor(
     home: string,
+    blogName: string,
     githubUser: string,
     githubRepo: string,
     githubToken: string
   ) {
     this.home = home
+    this.blogName = blogName
     this.githubUser = githubUser
     this.githubRepo = githubRepo
     this.githubToken = githubToken

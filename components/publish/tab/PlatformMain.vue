@@ -151,16 +151,16 @@ const formData = reactive({
   wordpressArray: [],
 })
 
-const initDynCfg = (dynCfg) => {
+const initDynCfg = (dynCfg: any[]) => {
   const newCfg = []
 
   dynCfg.forEach((item) => {
     const newItem = new DynamicConfig(
-      item.plantformType,
-      item.plantformKey,
-      item.plantformName
+      item.platformType,
+      item.platformKey,
+      item.platformName
     )
-    const switchKey = "switch-" + item.plantformKey
+    const switchKey = "switch-" + item.platformKey
     const switchValue = getBooleanConf(switchKey)
     newItem.modelValue = switchValue
     if (switchValue) {
@@ -168,7 +168,6 @@ const initDynCfg = (dynCfg) => {
     }
   })
 
-  // @ts-ignore
   return newCfg
 }
 

@@ -550,7 +550,6 @@ const initPage = async () => {
 
   // 全部文章分类请求
   if (props.useCat) {
-    // @ts-ignore
     let catInfo = []
     try {
       catInfo = await api.getCategories()
@@ -730,7 +729,6 @@ const handleCatNodeSingleCheck = (val) => {
   formData.categories = cats
 
   catSlugs.push(conf.username + "/" + val.value)
-  // @ts-ignore
   formData.cat_slugs = catSlugs
 
   blogName.value = val.label

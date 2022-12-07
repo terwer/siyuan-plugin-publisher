@@ -25,13 +25,14 @@
 
 import { GithubCfg } from "~/utils/platform/github/githubCfg"
 import { POSTID_KEY_CONSTANTS } from "~/utils/constants/postidKeyConstants"
+import { SubPlatformType } from "~/utils/platform/dynamicConfig"
 
 /**
  * Hugo配置
  */
 export class HugoCfg extends GithubCfg {
   constructor() {
-    super("", "", "", "")
+    super("", SubPlatformType.Github_Hugo, "", "", "")
 
     this.defaultPath = "content/post"
     this.posidKey = POSTID_KEY_CONSTANTS.HUGO_POSTID_KEY

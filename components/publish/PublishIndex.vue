@@ -35,5 +35,6 @@ import PublishService from "~/components/publish/PublishService.vue"
 <style scoped>
 #publish-index-body {
   margin-top: 48px;
+  margin-bottom: 16px;
 }
 </style>

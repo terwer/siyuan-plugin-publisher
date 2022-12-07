@@ -23,19 +23,20 @@
  * questions.
  */
 
-import { POSTID_KEY_CONSTANTS } from "~/utils/constants/postidKeyConstants"
-import { GithubCfg } from "~/utils/platform/github/githubCfg"
-import { SubPlatformType } from "~/utils/platform/dynamicConfig"
-
 /**
- * Vuepress配置类
+ * 编辑模式
  */
-export class VuepressCfg extends GithubCfg {
-  constructor() {
-    super("", SubPlatformType.Github_Vuepress, "", "", "")
-
-    this.defaultPath = "docs"
-    this.posidKey = POSTID_KEY_CONSTANTS.VUEPRESS_POSTID_KEY
-    this.previewUrl = "/post/[postid].html"
-  }
+export enum PageEditMode {
+  /**
+   * 简洁模式
+   */
+  EditMode_simple,
+  /**
+   * 详细模式
+   */
+  EditMode_complex,
+  /**
+   * 源码模式
+   */
+  EditMode_source,
 }

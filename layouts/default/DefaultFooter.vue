@@ -197,10 +197,12 @@ const newWin = () => {
 
 const exportConfig = () => {
   exportConf()
+  reloadPage()
 }
 
 const importConfig = async () => {
   await importConf()
+  reloadPage()
 }
 
 const clearConfig = () => {
@@ -294,6 +296,7 @@ onMounted(() => {
   font-size: 12px;
   color: #bbb;
   text-align: center;
+  padding-bottom: 8px;
 }
 
 .footer .text {

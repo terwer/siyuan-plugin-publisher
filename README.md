@@ -199,7 +199,7 @@ npm i -g vercel
 
 ```bash
 pnpm install
-pnpm run serve
+pnpm serve
 ```
 
 ### 开发阶段调试
@@ -215,7 +215,7 @@ VITE_MIDDLEWARE_URL=https://publish.terwer.space/api/middleware
 然后用下面命令启动，可以支持热加载。
 
 ```bash
-pnpm run dev
+pnpm dev
 ```
 
 浏览器默认入口连接是
@@ -229,7 +229,7 @@ http://localhost:3000/blog/index.html
 ### 方式 1、部署到思源笔记挂件
 
 ```bash
-pnpm run widget
+pnpm widget
 ```
 
 提交 `dist` 文件夹到仓库, 上架思源笔记挂件集市。
@@ -237,13 +237,13 @@ pnpm run widget
 ### 方式 2、部署到 Google Chrome 浏览器插件
 
 ```bash
-pnpm run extChrome
+pnpm extChrome
 ```
 
 插件调试
 
 ```bash
-pnpm run extChromeDev
+pnpm extChromeDev
 ```
 
 将密钥文件修改为 `key.pem` 放到 `extension/chrome` 文件夹 , 然后压缩 `extension/chrome` 文件夹里面的所有文件为 `.zip` ,

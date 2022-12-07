@@ -316,10 +316,10 @@ const num = ref(0)
 const currentRow = ref()
 const currentTip = ref(t("dynamic.platform.opt.item.select"))
 
-const handleCurrentChange = (val) => {
+const handleCurrentChange = (val: any) => {
   currentRow.value = val
   currentTip.value =
-    t("dynamic.platform.opt.item.select.tip") + currentRow.value.plantformName
+    t("dynamic.platform.opt.item.select.tip") + currentRow.value.platformName
   logger.debug(currentRow.value)
 }
 
@@ -334,7 +334,7 @@ const delRow = async () => {
     }
   )
     .then(async () => {
-      if (!currentRow.value || !currentRow.value.plantformKey) {
+      if (!currentRow.value || !currentRow.value.platformKey) {
         ElMessage.error(t("dynamic.platform.opt.item.no.select.tip"))
         return
       }
@@ -344,8 +344,8 @@ const delRow = async () => {
         // logUtil.logInfo(formData.dynamicConfigArray[i].platformKey)
         // logUtil.logInfo("------------------------")
         if (
-          currentRow.value.plantformKey ===
-          formData.dynamicConfigArray[i].plantformKey
+          currentRow.value.platformKey ===
+          formData.dynamicConfigArray[i].platformKey
         ) {
           formData.dynamicConfigArray.splice(i, 1)
         }
