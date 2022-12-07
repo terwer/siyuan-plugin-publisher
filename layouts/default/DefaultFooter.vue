@@ -197,12 +197,10 @@ const newWin = () => {
 
 const exportConfig = () => {
   exportConf()
-  reloadPage()
 }
 
 const importConfig = async () => {
   await importConf()
-  reloadPage()
 }
 
 const clearConfig = () => {

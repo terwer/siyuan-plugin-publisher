@@ -27,6 +27,7 @@ import { LogFactory } from "~/utils/logUtil"
 import { importJSONToLocalStorage } from "~/utils/otherlib/ChromeUtil"
 import { ElMessage } from "element-plus"
 import { appandStr } from "./strUtil"
+import { isBrowser, reloadPage } from "~/utils/browserUtil"
 
 const logger = LogFactory.getLogger()
 
@@ -210,9 +211,19 @@ export const importConf = async (): Promise<void> => {
     await importJSONToLocalStorage()
 
     ElMessage.success("导入成功")
+
+    if (isBrowser()) {
+      setTimeout(function () {
+        reloadPage()
+      }, 500)
+    }
   } catch (e) {
-    logger.error("配置文件解析错误=>", e)
-    ElMessage.error(appandStr("配置文件解析错误=>", e))
+    if (e.toString().indexOf("AbortError") > -1) {
+      logger.warn("您取消了导入=>", e)
+    } else {
+      logger.error("配置文件解析错误=>", e)
+      ElMessage.error(appandStr("配置文件解析错误=>", e))
+    }
   }
 }
 

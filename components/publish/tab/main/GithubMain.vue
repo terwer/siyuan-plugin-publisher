@@ -337,7 +337,6 @@
                 ref="fmtRefInput"
                 v-model="vuepressData.vuepressFullContent"
                 :autosize="{ minRows: 4, maxRows: 16 }"
-                style="margin-right: 10px"
                 type="textarea"
                 v-on:focus="onYamlContentFocus"
               />
