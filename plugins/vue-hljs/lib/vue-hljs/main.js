@@ -32,6 +32,7 @@ import java from "highlight.js/lib/languages/java"
 import bash from "highlight.js/lib/languages/bash"
 import xml from "highlight.js/lib/languages/xml"
 import css from "highlight.js/lib/languages/css"
+import plaintext from "highlight.js/lib/languages/plaintext"
 import { CopyButtonPlugin } from "../codecopy"
 import "../codecopy/codecopy.css"
 import "./vs.css"
@@ -57,6 +58,7 @@ vueHljs.install = (Vue) => {
   hljs.registerLanguage("xml", xml)
   hljs.registerLanguage("html", xml)
   hljs.registerLanguage("css", css)
+  hljs.registerLanguage("plaintext", plaintext)
 
   // 代码复制
   hljs.addPlugin(
