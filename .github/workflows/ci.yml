@@ -45,4 +45,4 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies and build for production
-        run: pnpm install && pnpm run build
+        run: pnpm install --no-frozen-lockfile && pnpm run build
