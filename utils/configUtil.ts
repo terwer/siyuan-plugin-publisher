@@ -26,7 +26,7 @@
 import { LogFactory } from "~/utils/logUtil"
 import { importJSONToLocalStorage } from "~/utils/otherlib/ChromeUtil"
 import { ElMessage } from "element-plus"
-import { appandStr } from "./strUtil"
+import { appendStr } from "./strUtil"
 import { isBrowser, reloadPage } from "~/utils/browserUtil"
 
 const logger = LogFactory.getLogger()
@@ -222,7 +222,7 @@ export const importConf = async (): Promise<void> => {
       logger.warn("您取消了导入=>", e)
     } else {
       logger.error("配置文件解析错误=>", e)
-      ElMessage.error(appandStr("配置文件解析错误=>", e))
+      ElMessage.error(appendStr("配置文件解析错误=>", e))
     }
   }
 }

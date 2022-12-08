@@ -24,7 +24,7 @@
  */
 
 import { CommonblogApi } from "../commonblogApi"
-import { appandStr } from "~/utils/strUtil"
+import { appendStr } from "~/utils/strUtil"
 
 /**
  * KMS的API
@@ -187,7 +187,7 @@ export class KmsApi extends CommonblogApi {
 
     if (statusCode !== 200) {
       if (statusCode === 401) {
-        throw new Error(appandStr("因权限不足操作已被禁止：", msg))
+        throw new Error(appendStr("因权限不足操作已被禁止：", msg))
       } else {
         throw new Error("请求错误")
       }
@@ -225,7 +225,7 @@ export class KmsApi extends CommonblogApi {
 
     if (statusCode !== 200) {
       if (statusCode === 401) {
-        throw new Error(appandStr("因权限不足操作已被禁止：", msg))
+        throw new Error(appendStr("因权限不足操作已被禁止：", msg))
       } else {
         throw new Error("请求错误")
       }

@@ -41,13 +41,6 @@
           />
         </el-select>
       </el-form-item>
-
-      <el-form-item :label="$t('theme.mode.choose')">
-        <!-- 暗黑模式 -->
-        <el-button type="primary" @click="toggleDark()">
-          {{ isDark ? $t("theme.mode.light") : $t("theme.mode.dark") }}
-        </el-button>
-      </el-form-item>
     </el-form>
   </div>
 </template>
@@ -55,7 +48,6 @@
 <script lang="ts" setup>
 import { useI18n } from "vue-i18n"
 import { onMounted } from "vue"
-import { useDark, useToggle } from "@vueuse/core"
 import { LogFactory } from "~/utils/logUtil"
 
 const logger = LogFactory.getLogger("components/publish/tab/ChangeLocale.vue")
@@ -72,11 +64,7 @@ const langs = [
   },
 ]
 
-const isDark = useDark()
-const toggleDark = useToggle(isDark)
-
 const langChanged = (lang) => {
-  logger.debug("langChanged=>", lang)
   localStorage.Lang = lang
   locale.value = lang
 }

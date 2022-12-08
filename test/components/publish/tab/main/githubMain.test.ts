@@ -23,10 +23,18 @@
  * questions.
  */
 
-/**
- * vue-hljs
- * @author terwer
- * @version 1.0.0
- * 2019/3/21 12:02
- */
-// console.log("Register vue-hljs success")
+import { describe } from "vitest"
+import { shallowMount } from "@vue/test-utils"
+import githubMain from "~/components/publish/tab/main/GithubMain.vue"
+import { LogFactory } from "~/utils/logUtil"
+
+describe("GithubMain test", () => {
+  const logger = LogFactory.getLogger()
+
+  it("mount component test", async () => {
+    const wrapper = await shallowMount(githubMain, {})
+    const result = wrapper.html()
+    logger.info("GithubMain HTML=>", result)
+    expect(result).toContain("div")
+  })
+})

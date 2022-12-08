@@ -41,6 +41,7 @@ export const zhSlugify = async (q: string): Promise<string> => {
   const json = await v.json()
   let res = json[0][0]
   res = res.replaceAll(/-/g, "")
+  res = res.replaceAll(/\./g, "")
   res = res.replaceAll(/~/g, "")
 
   res = slugify(res)

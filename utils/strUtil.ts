@@ -66,6 +66,20 @@ export const upperFirst = (name: string): string => {
  * 字符串拼接
  * @param str
  */
-export const appandStr = (...str: string[]): string => {
+export const appendStr = (...str: string[]): string => {
   return str.join("")
+}
+
+/**
+ * 文件名转title
+ * @param fmtTitle
+ */
+export const mdFileToTitle = (fmtTitle: string): string => {
+  if (fmtTitle.indexOf(".md") > -1) {
+    fmtTitle = fmtTitle.replace(/\.md/g, "")
+  }
+  if (fmtTitle.indexOf(".") > -1) {
+    fmtTitle = fmtTitle.replace(/\d*\./g, "")
+  }
+  return fmtTitle
 }

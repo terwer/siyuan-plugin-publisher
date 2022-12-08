@@ -279,9 +279,9 @@ const initConf = () => {
 
 onMounted(() => {
   if (inSiyuan()) {
-    logger.warn("恭喜你，正在以挂件模式运行")
+    logger.info("恭喜你，正在以挂件模式运行")
   } else {
-    logger.warn(
+    logger.info(
       "正在以非挂件模式运行，部分功能将通过请求代理的方式进行模拟，请知悉"
     )
   }

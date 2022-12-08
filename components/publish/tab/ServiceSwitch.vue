@@ -185,7 +185,6 @@ const kmsOnChange = (val) => {
   initConf()
 }
 const dynamicOnChange = (val) => {
-  logger.warn("dynamicOnChange,val=>", val)
   const switchItem = getSwitchItem(val)
   setBooleanConf(switchItem.switchKey, switchItem.switchValue)
   initConf()

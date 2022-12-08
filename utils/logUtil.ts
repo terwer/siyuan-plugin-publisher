@@ -28,7 +28,6 @@
 import { getBooleanEnv } from "./envUtil"
 import loglevel, { Logger } from "loglevel"
 import prefix from "loglevel-plugin-prefix"
-import { isBrowser } from "~/utils/browserUtil"
 
 // import chalk from "chalk"
 // polyfill due to https://github.com/vitejs/vite/issues/7385
@@ -47,11 +46,11 @@ const chalk = {
   },
 }
 
-if (isBrowser()) {
-  console.log("loglevel运行在浏览器环境中")
-} else {
-  console.log("loglevel运行在node环境中")
-}
+// if (isBrowser()) {
+//   console.log("loglevel运行在浏览器环境中")
+// } else {
+//   console.log("loglevel运行在node环境中")
+// }
 
 const LOG_INFO_ENABLED = getBooleanEnv("VITE_LOG_INFO_ENABLED") ?? false
 const LOG_LEVEL_INFO = "INFO"

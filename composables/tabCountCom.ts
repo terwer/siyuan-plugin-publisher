@@ -34,7 +34,10 @@ import {
 import { getBooleanConf } from "~/utils/configUtil"
 import SWITCH_CONSTANTS from "~/utils/constants/switchConstants"
 
-export function useTabCount(): any {
+/**
+ * 计算使用的平台数
+ */
+export const useTabCount = (): any => {
   const tabCountStore = useTabCountStore()
 
   // Github

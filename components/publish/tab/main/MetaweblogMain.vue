@@ -213,10 +213,6 @@
                 : $t("main.publish.oneclick.attr")
             }}
           </el-button>
-        </el-form-item>
-
-        <!-- 保存属性 -->
-        <el-form-item>
           <el-button type="primary" @click="saveAttrToSiyuan"
             >{{ $t("main.save.attr.to.siyuan") }}
           </el-button>

@@ -23,10 +23,33 @@
  * questions.
  */
 
+import { PageEditMode } from "~/utils/common/pageEditMode"
+import { SourceContentShowType } from "~/utils/common/sourceContentShowType"
+
 /**
- * vue-hljs
- * @author terwer
- * @version 1.0.0
- * 2019/3/21 12:02
+ * 发布偏好设置
  */
-// console.log("Register vue-hljs success")
+export class PublishPreference {
+  /**
+   * 精简模式、源码模式
+   */
+  editMode: PageEditMode
+
+  /**
+   * 默认展示形式，HTML、MD、YAML等
+   */
+  contentShowType: SourceContentShowType
+
+  /**
+   * 是否处理标题（包括去除.md等后缀，去除数字编号）
+   */
+  fixTitle: boolean
+  /**
+   * 是否使用谷歌翻译，不使用将直接用拼音代替
+   */
+  useGoogleTranslate: boolean
+  /**
+   * 是否删除H1标签
+   */
+  removeH1: boolean
+}

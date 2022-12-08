@@ -46,7 +46,6 @@ export const removeTitleNumber = (str: string): string => {
  */
 export const removeWidgetTag = (str: string): string => {
   let newstr = str.toString()
-  // logUtil.logWarn("newstr=>", newstr)
 
   // 旧版发布挂件
   const publisherRegex = /<iframe.*src="\/widgets\/publisher.*<\/iframe>/g
@@ -61,9 +60,6 @@ export const removeWidgetTag = (str: string): string => {
   const noteAttrRegex = /<iframe.*\/widgets\/Note*\sAttrs.*\/iframe>/g
   newstr = newstr.replace(noteAttrRegex, "")
 
-  const h1Regex = /<h1.*\/h1>/g
-  newstr = newstr.replace(h1Regex, "")
-
   return newstr
 }
 
@@ -74,9 +70,6 @@ export const removeWidgetTag = (str: string): string => {
  */
 export const removeMdWidgetTag = (str: string): string => {
   let newstr = str.toString()
-
-  const mdH1Regex = /(?:^|\n)#\s[0-9]+.*/g
-  newstr = newstr.replace(mdH1Regex, "")
 
   // 删除挂件的iframe
   newstr = removeWidgetTag(newstr)
@@ -166,6 +159,38 @@ export const mdToHtml = (md: string): string => {
  */
 export const mdToPlainText = (md: string): string => {
   let html = mdToHtml(md)
-  html = removeWidgetTag(html)
   return filterHtml(html)
+}
+
+/**
+ * 移除H1标签
+ * @param html
+ */
+export const removeH1 = (html: string): string => {
+  let newstr = html
+
+  const h1Regex = /<h1.*\/h1>/g
+  newstr = newstr.replace(h1Regex, "")
+
+  return newstr
+}
+
+/**
+ * 移除Markdown里面的H1标签
+ * JavaScript 正则表达式可以用来删除所有 Markdown 中的 h1 标签。下面是一个示例代码：
+ *
+ * const str = "# This is an H1\n## This is an H2\n### This is an H3";
+ *
+ * const regex = /^# .*$/gm;
+ * const result = str.replace(regex, '');
+ *
+ * console.log(result);
+ * 在这个例子中，我们使用正则表达式 /^# .*$/gm 来匹配所有的 h1 标签。
+ * 在 JavaScript 中，^ 匹配行首，# 匹配 # 字符，.* 匹配任意字符，$ 匹配行尾，m 标记表示多行模式。
+ */
+export const removeMdH1 = (md: string) => {
+  let newstr = md
+  const mdH1Regex = /^# .*$/gm
+  newstr = newstr.replace(mdH1Regex, "")
+  return newstr
 }

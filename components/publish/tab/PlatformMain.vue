@@ -176,6 +176,7 @@ const initConf = () => {
 
   const dynamicJsonCfg = getDynamicJsonCfg()
   formData.dynamicConfigArray = initDynCfg(dynamicJsonCfg.totalCfg || [])
+  formData.githubArray = initDynCfg(dynamicJsonCfg.githubCfg || [])
   formData.metaweblogArray = initDynCfg(dynamicJsonCfg.metaweblogCfg || [])
   formData.wordpressArray = initDynCfg(dynamicJsonCfg.wordpressCfg || [])
   logger.debug("dynamicJsonCfg=>", JSON.stringify(dynamicJsonCfg))
@@ -193,10 +194,12 @@ const props = defineProps({
   },
 })
 
-/* 监听props */
+/**
+ * 监听props
+ */
 watch(
   () => props.isReload,
-  /**/ (oldValue, newValue) => {
+  (oldValue, newValue) => {
     initConf()
   }
 )

@@ -27,7 +27,7 @@ import { CONSTANTS } from "~/utils/constants/constants"
 import { getJSONConf, setJSONConf } from "~/utils/configUtil"
 import { isEmptyString } from "~/utils/util"
 import { newID } from "~/utils/idUtil"
-import { appandStr, upperFirst } from "~/utils/strUtil"
+import { appendStr, upperFirst } from "~/utils/strUtil"
 
 export class DynamicConfig {
   /**
@@ -205,9 +205,9 @@ export function getNewPlatformKey(
   ret = ptype.toLowerCase()
 
   if (!isEmptyString(subtype) && SubPlatformType.NONE !== subtype) {
-    ret = appandStr(ret, upperFirst(subtype))
+    ret = appendStr(ret, upperFirst(subtype))
   }
-  return appandStr(ret, "-", newId)
+  return appendStr(ret, "-", newId)
 }
 
 /**

@@ -24,9 +24,11 @@
  */
 
 /**
- * vue-hljs
- * @author terwer
- * @version 1.0.0
- * 2019/3/21 12:02
+ * 源码显示类型
  */
-// console.log("Register vue-hljs success")
+export enum SourceContentShowType {
+  YAML,
+  CONTENT,
+  YAML_CONTENT,
+  HTML_CONTENT,
+}
