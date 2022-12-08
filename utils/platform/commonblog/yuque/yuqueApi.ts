@@ -25,7 +25,7 @@
 
 import { CommonblogApi } from "~/utils/platform/commonblog/commonblogApi"
 import { LogFactory } from "~/utils/logUtil"
-import { appandStr } from "~/utils/strUtil"
+import { appendStr } from "~/utils/strUtil"
 import { isEmptyObject } from "~/utils/util"
 
 /**
@@ -94,7 +94,7 @@ export class YuqueApi extends CommonblogApi {
       throw new Error("请求语雀API异常")
     }
 
-    return appandStr(result.id, "")
+    return appendStr(result.id, "")
   }
 
   /**

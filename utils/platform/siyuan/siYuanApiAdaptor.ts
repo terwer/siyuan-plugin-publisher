@@ -30,7 +30,7 @@ import { API_TYPE_CONSTANTS } from "~/utils/constants/apiTypeConstants"
 import { Post } from "~/utils/common/post"
 import { POST_STATUS_CONSTANTS } from "~/utils/constants/postStatusConstants"
 import { CategoryInfo } from "~/utils/common/categoryInfo"
-import { appandStr } from "~/utils/strUtil"
+import { appendStr } from "~/utils/strUtil"
 import { renderHTML } from "~/utils/markdownUtil"
 import { removeWidgetTag } from "~/utils/htmlUtil"
 import { LogFactory } from "~/utils/logUtil"
@@ -105,8 +105,8 @@ export class SiYuanApiAdaptor implements IApi {
       commonPost.title = siyuanPost.content
       commonPost.permalink =
         customSlug === ""
-          ? appandStr("/post/", siyuanPost.root_id)
-          : appandStr("/post/", customSlug, ".html")
+          ? appendStr("/post/", siyuanPost.root_id)
+          : appendStr("/post/", customSlug, ".html")
       // commonPost.isPublished = isPublished
       commonPost.mt_keywords = page.mt_keywords
       commonPost.description = page.description
@@ -245,8 +245,8 @@ export class SiYuanApiAdaptor implements IApi {
       commonPost.title = siyuanPost.content
       commonPost.permalink =
         customSlug === ""
-          ? appandStr("/post/", siyuanPost.root_id)
-          : appandStr("/post/", customSlug, ".html")
+          ? appendStr("/post/", siyuanPost.root_id)
+          : appendStr("/post/", customSlug, ".html")
       // commonPost.isPublished = isPublished
       commonPost.mt_keywords = page.mt_keywords
       commonPost.description = page.description

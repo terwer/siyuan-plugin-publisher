@@ -67,7 +67,7 @@ export default {
     "不使用hash会展示更有意义的url，但是可能导致文章别名重复（后果是Vuepress会Build失败除非手动解决别名唯一问题），请知悉。",
   "main.force.refresh": "强制刷新",
   "main.force.refresh.tip":
-    "为了防止误操作更新别名，别名不为空的时候默认不会更新别名，如需更新，请勾选。",
+    "为了防止误操作更新别名，别名不为空的时候默认不会更新别名，如需更新，请勾选强制刷新。",
   "main.desc": "文章摘要",
   "main.auto.fetch.desc": "自动提取摘要",
   "main.create.time": "发布时间",

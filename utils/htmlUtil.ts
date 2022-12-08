@@ -46,7 +46,6 @@ export const removeTitleNumber = (str: string): string => {
  */
 export const removeWidgetTag = (str: string): string => {
   let newstr = str.toString()
-  // logUtil.logWarn("newstr=>", newstr)
 
   // 旧版发布挂件
   const publisherRegex = /<iframe.*src="\/widgets\/publisher.*<\/iframe>/g
@@ -60,9 +59,6 @@ export const removeWidgetTag = (str: string): string => {
   // 文章属性挂件
   const noteAttrRegex = /<iframe.*\/widgets\/Note*\sAttrs.*\/iframe>/g
   newstr = newstr.replace(noteAttrRegex, "")
-
-  const h1Regex = /<h1.*\/h1>/g
-  newstr = newstr.replace(h1Regex, "")
 
   return newstr
 }
@@ -166,6 +162,18 @@ export const mdToHtml = (md: string): string => {
  */
 export const mdToPlainText = (md: string): string => {
   let html = mdToHtml(md)
-  html = removeWidgetTag(html)
   return filterHtml(html)
+}
+
+/**
+ * 移除H1标签
+ * @param html
+ */
+export const removeH1 = (html: string): string => {
+  let newstr = html
+
+  const h1Regex = /<h1.*\/h1>/g
+  newstr = newstr.replace(h1Regex, "")
+
+  return newstr
 }

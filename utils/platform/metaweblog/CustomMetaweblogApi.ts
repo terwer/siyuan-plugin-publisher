@@ -24,7 +24,7 @@
  */
 
 import { XmlrpcClient } from "~/utils/platform/metaweblog/xmlrpc"
-import { appandStr } from "~/utils/strUtil"
+import { appendStr } from "~/utils/strUtil"
 import { UserBlog } from "~/utils/common/userBlog"
 import { METAWEBLOG_METHOD_CONSTANTS } from "~/utils/constants/metaweblogMethodConstants"
 import { Logger } from "loglevel"
@@ -78,7 +78,7 @@ export class CustomMetaWeblogApi {
       const faultCode = this.parseFieldValue(fault, "faultCode")
       const faultString = this.parseFieldValue(fault, "faultString")
       throw new Error(
-        appandStr("发生异常，错误码=>", faultCode, "，错误信息=>", faultString)
+        appendStr("发生异常，错误码=>", faultCode, "，错误信息=>", faultString)
       )
     }
 

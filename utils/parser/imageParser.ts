@@ -27,7 +27,7 @@ import { LogFactory } from "~/utils/logUtil"
 import { inSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
 import { imageToBase64 } from "~/utils/parser/imageToBase64"
 import { getEnvOrDefault } from "~/utils/envUtil"
-import { appandStr } from "~/utils/strUtil"
+import { appendStr } from "~/utils/strUtil"
 
 /**
  * 图片解析器
@@ -124,7 +124,7 @@ export class ImageParser {
         newImg = resJson?.body?.base64str ?? "parse error"
       }
 
-      newImg = appandStr(
+      newImg = appendStr(
         '<img src="data:image/png;base64,',
         newImg,
         '"  alt="base64Image"/>'

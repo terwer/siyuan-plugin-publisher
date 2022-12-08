@@ -25,7 +25,7 @@
 
 import { getSiyuanCfg } from "~/utils/platform/siyuan/siYuanConfig"
 import { LogFactory } from "~/utils/logUtil"
-import { appandStr } from "~/utils/strUtil"
+import { appendStr } from "~/utils/strUtil"
 
 /**
  * 思源API v2.5.0
@@ -263,7 +263,7 @@ export class SiYuanApi {
     const siyuanCfg = getSiyuanCfg()
 
     if (siyuanCfg.baseUrl !== "") {
-      url = appandStr(siyuanCfg.baseUrl, url)
+      url = appendStr(siyuanCfg.baseUrl, url)
     }
 
     let m = "POST"

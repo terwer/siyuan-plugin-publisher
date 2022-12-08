@@ -40,7 +40,7 @@
 import { onMounted, ref } from "vue"
 import { getPageId, getWidgetId } from "~/utils/platform/siyuan/siyuanUtil"
 import { goToPage } from "~/utils/otherlib/ChromeUtil"
-import { appandStr } from "~/utils/strUtil"
+import { appendStr } from "~/utils/strUtil"
 import PostDetailService from "~/components/detail/PostDetailService.vue"
 import { LogFactory } from "~/utils/logUtil"
 
@@ -58,9 +58,9 @@ const pid = ref("")
 const handlePublish = async () => {
   const widgetResult = getWidgetId()
   if (widgetResult.isInSiyuan) {
-    goToPage(appandStr("/index.html?id=", pid.value))
+    goToPage(appendStr("/index.html?id=", pid.value))
   } else {
-    goToPage(appandStr("/publish/index.html?id=", pid.value))
+    goToPage(appendStr("/publish/index.html?id=", pid.value))
   }
 }
 

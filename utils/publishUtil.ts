@@ -33,6 +33,11 @@ import { IGithubCfg } from "~/utils/platform/github/githubCfg"
 import { IMetaweblogCfg } from "~/utils/platform/metaweblog/IMetaweblogCfg"
 import { ICommonblogCfg } from "~/utils/platform/commonblog/commonblogCfg"
 import { LogFactory } from "~/utils/logUtil"
+import { PublishPreference } from "~/utils/common/publishPreference"
+import { CONSTANTS } from "~/utils/constants/constants"
+import { isEmptyString } from "~/utils/util"
+import { PageEditMode } from "~/utils/common/pageEditMode"
+import { SourceContentShowType } from "~/utils/common/sourceContentShowType"
 
 const logger = LogFactory.getLogger("utils/publishUtil.ts")
 
@@ -133,4 +138,34 @@ export const getPublishStatus = (apiType: string, meta: any): boolean => {
   }
 
   return false
+}
+
+/**
+ * 获取发布偏好设置
+ */
+export const getPublishCfg = (): PublishPreference => {
+  let publishCfg = getJSONConf<PublishPreference>(
+    CONSTANTS.PUBLISH_PREFERENCE_CONFIG_KEY
+  )
+  if (isEmptyString(publishCfg)) {
+    publishCfg = new PublishPreference()
+    publishCfg.fixTitle = false
+    publishCfg.useGoogleTranslate = true
+    publishCfg.editMode = PageEditMode.EditMode_simple
+    publishCfg.contentShowType = SourceContentShowType.YAML_CONTENT
+  }
+
+  // ================
+  // 下面是我自己的配置
+  // ================
+  publishCfg.fixTitle = true
+  publishCfg.useGoogleTranslate = true
+  publishCfg.editMode = PageEditMode.EditMode_complex
+  publishCfg.contentShowType = SourceContentShowType.YAML
+  publishCfg.removeH1 = true
+  // ================
+  // 下面是我自己的配置
+  // ================
+
+  return publishCfg
 }

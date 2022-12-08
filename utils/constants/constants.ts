@@ -39,6 +39,11 @@ const MAX_PREVIEW_LENGTH = 255
 const DYNAMIC_CONFIG_KEY = "dynamic-config"
 
 /**
+ * 发布偏好设置，全系统唯一，请勿更改
+ */
+const PUBLISH_PREFERENCE_CONFIG_KEY = "publish-preference"
+
+/**
  * 分词最大数目
  */
 const DEFAULT_JIEBA_WORD_LENGTH = 5
@@ -48,4 +53,5 @@ export const CONSTANTS = {
   MAX_PREVIEW_LENGTH,
   DYNAMIC_CONFIG_KEY,
   DEFAULT_JIEBA_WORD_LENGTH,
+  PUBLISH_PREFERENCE_CONFIG_KEY,
 }

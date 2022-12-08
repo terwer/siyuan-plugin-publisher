@@ -24,7 +24,7 @@
  */
 
 import jsYaml from "js-yaml"
-import { appandStr } from "~/utils/strUtil"
+import { appendStr } from "~/utils/strUtil"
 
 /**
  * yaml转对象
@@ -43,6 +43,6 @@ export const yaml2Obj = (yaml: string): any => {
 export const obj2Yaml = (obj: any): string => {
   // https://npmmirror.com/package/js-yaml
   let res = jsYaml.dump(obj, {})
-  res = appandStr("---\n", res, "---")
+  res = appendStr("---\n", res, "---")
   return res
 }
