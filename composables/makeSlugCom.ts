@@ -41,7 +41,7 @@ import { SIYUAN_PAGE_ATTR_KEY } from "~/utils/constants/siyuanPageConstants"
  * @param siyuanApi 思源Api
  */
 export const useSlug = (defaultPageId: string, siyuanApi: SiYuanApi) => {
-  const logger = LogFactory.getLogger()
+  const logger = LogFactory.getLogger("composables/makeSlugCom.ts")
   const { t } = useI18n()
   const slugData = reactive({
     isSlugLoading: false,
@@ -75,6 +75,10 @@ export const useSlug = (defaultPageId: string, siyuanApi: SiYuanApi) => {
       // 获取最新属性
       const pageId = await getPageId(true, defaultPageId)
       if (!pageId || pageId === "") {
+        slugData.isSlugLoading = false
+
+        logger.error(t("page.no.id"))
+        ElMessage.error(t("page.no.id"))
         return
       }
       const page = await siyuanApi.getBlockByID(pageId)

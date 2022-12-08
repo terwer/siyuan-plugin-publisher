@@ -261,4 +261,5 @@ export default {
   "setting.conf.export": "Export config",
   "setting.conf.import": "Import config",
   "setting.conf.clear": "Clear config",
+  "page.no.id": "pageId fetch error",
 }

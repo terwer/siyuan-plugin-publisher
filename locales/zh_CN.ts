@@ -267,4 +267,5 @@ export default {
   "setting.conf.export": "导出配置",
   "setting.conf.import": "导入配置",
   "setting.conf.clear": "清空配置",
+  "page.no.id": "请求非法，原因：pageId获取失败",
 }

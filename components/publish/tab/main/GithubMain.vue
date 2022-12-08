@@ -82,6 +82,55 @@
               </el-button>
             </el-button-group>
           </el-form-item>
+
+          <!-- 别名 -->
+          <div class="form-slug">
+            <!-- 强制刷新 -->
+            <el-form-item
+              v-if="formOptionData.etype !== PageEditMode.EditMode_simple"
+              :label="$t('main.force.refresh')"
+            >
+              <el-switch v-model="slugData.forceRefresh" />
+            </el-form-item>
+
+            <!-- 别名 -->
+            <el-form-item
+              v-if="formOptionData.etype !== PageEditMode.EditMode_simple"
+              :label="$t('main.slug')"
+            >
+              <el-input v-model="slugData.customSlug" />
+            </el-form-item>
+            <!-- hash -->
+            <el-form-item
+              v-if="formOptionData.etype !== PageEditMode.EditMode_simple"
+              :label="$t('main.use.hash')"
+            >
+              <el-switch v-model="slugData.slugHashEnabled" />
+              <el-alert
+                v-if="!slugData.slugHashEnabled"
+                :closable="false"
+                :title="$t('main.use.hash.tip')"
+                type="warning"
+              />
+            </el-form-item>
+            <!-- 生成别名 -->
+            <el-form-item
+              v-if="formOptionData.etype !== PageEditMode.EditMode_simple"
+            >
+              <el-button
+                :loading="slugData.isSlugLoading"
+                class="make-slug-btn"
+                type="primary"
+                @click="makeSlug"
+              >
+                {{
+                  slugData.isSlugLoading
+                    ? $t("main.opt.loading")
+                    : $t("main.auto.fetch.slug")
+                }}
+              </el-button>
+            </el-form-item>
+          </div>
         </el-form>
       </el-main>
     </el-container>
@@ -98,8 +147,18 @@ import { appendStr } from "~/utils/strUtil"
 import { useI18n } from "vue-i18n"
 import { getJSONConf } from "~/utils/configUtil"
 import { IGithubCfg } from "~/utils/platform/github/githubCfg"
+import { useSlug } from "~/composables/makeSlugCom"
+import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
+import { getPageId } from "~/utils/platform/siyuan/siyuanUtil"
+import { SIYUAN_PAGE_ATTR_KEY } from "~/utils/constants/siyuanPageConstants"
+import { LogFactory } from "~/utils/logUtil"
+import { ElMessage } from "element-plus"
 
+const logger = LogFactory.getLogger(
+  "components/publish/tab/main/GithubMain.vue"
+)
 const { t } = useI18n()
+const siyuanApi = new SiYuanApi()
 const props = defineProps({
   isReload: {
     type: Boolean,
@@ -123,12 +182,22 @@ const formOptionData = reactive({
   etype: <PageEditMode>PageEditMode.EditMode_simple,
   stype: SourceContentShowType.YAML_CONTENT,
 })
+const siyuanData = ref({
+  pageId: "",
+  meta: {
+    tags: "",
+  },
+})
 
+// composables
+const { slugData, makeSlug, initSlug } = useSlug(props.pageId, siyuanApi)
+
+// page methods
 const onEditModeChange = (val: PageEditMode) => {
   formOptionData.etype = val
 }
 
-const initPage = () => {
+const initPage = async () => {
   isInitLoading.value = true
 
   // 读取偏好设置
@@ -139,6 +208,25 @@ const initPage = () => {
   // 读取平台配置
   const githubCfg = getJSONConf<IGithubCfg>(props.apiType)
   apiStatus.value = githubCfg.apiStatus
+
+  // 获取最新属性
+  const pageId = await getPageId(true, props.pageId)
+  if (!pageId || pageId === "") {
+    isInitLoading.value = false
+
+    logger.error(t("page.no.id"))
+    ElMessage.error(t("page.no.id"))
+    return
+  }
+
+  // 思源笔记数据
+  siyuanData.value.pageId = pageId
+  siyuanData.value.meta = await siyuanApi.getBlockAttrs(pageId)
+
+  // composables 初始化
+  // 别名
+  const slugKey = SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_SLUG_KEY
+  await initSlug(siyuanData.value.meta[slugKey])
 
   isInitLoading.value = false
 }
