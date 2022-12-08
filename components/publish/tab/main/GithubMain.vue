@@ -27,15 +27,18 @@
   <div>
     <el-container v-if="!isInitLoading">
       <el-main class="github-main">
+        <!-- 提示 -->
         <el-alert
-          v-if="editData.etype !== PageEditMode.EditMode_source"
+          v-if="formOptionData.etype !== PageEditMode.EditMode_source"
           :closable="false"
           :title="apiTypeInfo"
           class="top-version-tip"
           type="info"
         />
         <el-alert
-          v-if="!apiStatus && editData.etype !== PageEditMode.EditMode_source"
+          v-if="
+            !apiStatus && formOptionData.etype !== PageEditMode.EditMode_source
+          "
           :closable="false"
           :title="$t('main.publish.github.error.tip')"
           class="top-version-tip"
@@ -48,7 +51,7 @@
             <el-button-group>
               <el-button
                 :type="
-                  editData.etype === PageEditMode.EditMode_simple
+                  formOptionData.etype === PageEditMode.EditMode_simple
                     ? 'primary'
                     : 'default'
                 "
@@ -57,7 +60,7 @@
               </el-button>
               <el-button
                 :type="
-                  editData.etype === PageEditMode.EditMode_complex
+                  formOptionData.etype === PageEditMode.EditMode_complex
                     ? 'primary'
                     : 'default'
                 "
@@ -66,7 +69,7 @@
               </el-button>
               <el-button
                 :type="
-                  editData.etype === PageEditMode.EditMode_source
+                  formOptionData.etype === PageEditMode.EditMode_source
                     ? 'primary'
                     : 'default'
                 "
@@ -77,12 +80,12 @@
           </el-form-item>
 
           <div
-            v-if="editData.etype !== PageEditMode.EditMode_source"
+            v-if="formOptionData.etype !== PageEditMode.EditMode_source"
             class="normal-mode"
           >
             <!-- 强制刷新 -->
             <el-form-item
-              v-if="editData.etype !== PageEditMode.EditMode_simple"
+              v-if="formOptionData.etype !== PageEditMode.EditMode_simple"
               :label="$t('main.force.refresh')"
             >
               <el-switch v-model="forceRefresh" />
@@ -96,22 +99,14 @@
 
             <!-- 别名 -->
             <el-form-item
-              v-if="editData.etype !== PageEditMode.EditMode_simple"
+              v-if="formOptionData.etype !== PageEditMode.EditMode_simple"
               :label="$t('main.slug')"
             >
               <el-input v-model="formData.customSlug" />
             </el-form-item>
+            <!-- hash -->
             <el-form-item
-              v-if="editData.etype !== PageEditMode.EditMode_simple"
-            >
-              <el-checkbox-group v-model="formData.checkList">
-                <el-checkbox label="1"
-                  >{{ $t("main.use.google.translate") }}
-                </el-checkbox>
-              </el-checkbox-group>
-            </el-form-item>
-            <el-form-item
-              v-if="editData.etype !== PageEditMode.EditMode_simple"
+              v-if="formOptionData.etype !== PageEditMode.EditMode_simple"
               :label="$t('main.use.hash')"
             >
               <el-switch v-model="slugHashEnabled" />
@@ -122,8 +117,9 @@
                 type="warning"
               />
             </el-form-item>
+            <!-- 生成别名 -->
             <el-form-item
-              v-if="editData.etype !== PageEditMode.EditMode_simple"
+              v-if="formOptionData.etype !== PageEditMode.EditMode_simple"
             >
               <el-button
                 :loading="isSlugLoading"
@@ -141,13 +137,13 @@
 
             <!-- 文章摘要 -->
             <el-form-item
-              v-if="editData.etype !== PageEditMode.EditMode_simple"
+              v-if="formOptionData.etype !== PageEditMode.EditMode_simple"
               :label="$t('main.desc')"
             >
               <el-input v-model="formData.desc" type="textarea" />
             </el-form-item>
             <el-form-item
-              v-if="editData.etype !== PageEditMode.EditMode_simple"
+              v-if="formOptionData.etype !== PageEditMode.EditMode_simple"
             >
               <el-button
                 :loading="isDescLoading"
@@ -164,7 +160,7 @@
 
             <!-- 发布时间 -->
             <el-form-item
-              v-if="editData.etype !== PageEditMode.EditMode_simple"
+              v-if="formOptionData.etype !== PageEditMode.EditMode_simple"
               :label="$t('main.create.time')"
             >
               <el-date-picker
@@ -212,7 +208,7 @@
               </el-button>
             </el-form-item>
             <el-form-item
-              v-if="editData.etype !== PageEditMode.EditMode_simple"
+              v-if="formOptionData.etype !== PageEditMode.EditMode_simple"
             >
               <el-button
                 :loading="isTagLoading"
@@ -251,12 +247,9 @@
 
             <!-- 启用Github发布 -->
             <el-form-item :label="$t('main.publish.github')">
-              <el-switch
-                v-model="vuepressGithubEnabled"
-                @change="githubOnChange"
-              />
+              <el-switch v-model="githubEnabled" @change="githubOnChange" />
               <el-alert
-                v-if="!vuepressGithubEnabled"
+                v-if="!githubEnabled"
                 :closable="false"
                 :title="$t('main.publish.github.no.tip')"
                 type="warning"
@@ -264,7 +257,7 @@
             </el-form-item>
             <!-- 是否使用默认目录 -->
             <el-form-item
-              v-if="vuepressGithubEnabled"
+              v-if="githubEnabled"
               :label="$t('main.publish.github.choose.path.use.default')"
             >
               <el-switch
@@ -283,7 +276,7 @@
             </el-form-item>
             <!-- 选择目录 -->
             <el-form-item
-              v-if="vuepressGithubEnabled && !useDefaultPath"
+              v-if="githubEnabled && !useDefaultPath"
               :label="$t('main.publish.github.choose.path')"
             >
               <el-tree-select
@@ -299,12 +292,12 @@
             </el-form-item>
             <!-- 设置文件名 -->
             <el-form-item
-              v-if="vuepressGithubEnabled"
+              v-if="githubEnabled"
               :label="$t('main.publish.github.choose.title')"
             >
               <el-input v-model="formData.title" />
               <el-alert
-                v-if="vuepressGithubEnabled"
+                v-if="githubEnabled"
                 :closable="false"
                 :title="$t('main.publish.github.choose.title.tip')"
                 type="error"
@@ -313,7 +306,7 @@
           </div>
 
           <div
-            v-if="editData.etype === PageEditMode.EditMode_source"
+            v-if="formOptionData.etype === PageEditMode.EditMode_source"
             class="source-mode"
           >
             <el-form-item>
@@ -328,14 +321,51 @@
             </el-form-item>
             <el-form-item>
               <div class="source-opt">
-                <a>显示YAML</a>
-                <a class="middle">显示正文</a>
-                <a class="current">显示YAML+正文</a>
+                <a
+                  :class="{
+                    current:
+                      formOptionData.stype === SourceContentShowType.YAML,
+                  }"
+                  @click="onYamlShowTypeChange(SourceContentShowType.YAML)"
+                  >YAML</a
+                >
+                <a
+                  :class="{
+                    current:
+                      formOptionData.stype === SourceContentShowType.CONTENT,
+                    middle: true,
+                  }"
+                  @click="onYamlShowTypeChange(SourceContentShowType.CONTENT)"
+                  >MD正文</a
+                >
+                <a
+                  :class="{
+                    current:
+                      formOptionData.stype ===
+                      SourceContentShowType.YAML_CONTENT,
+                    middle: true,
+                  }"
+                  @click="
+                    onYamlShowTypeChange(SourceContentShowType.YAML_CONTENT)
+                  "
+                  >YAML+MD正文</a
+                >
+                <a
+                  :class="{
+                    current:
+                      formOptionData.stype ===
+                      SourceContentShowType.HTML_CONTENT,
+                  }"
+                  @click="
+                    onYamlShowTypeChange(SourceContentShowType.HTML_CONTENT)
+                  "
+                  >HTML正文</a
+                >
               </div>
 
               <el-input
                 ref="fmtRefInput"
-                v-model="vuepressData.vuepressFullContent"
+                v-model="githubData.mdFullContent"
                 :autosize="{ minRows: 4, maxRows: 16 }"
                 type="textarea"
                 v-on:focus="onYamlContentFocus"
@@ -444,6 +474,7 @@ import { POSTID_KEY_CONSTANTS } from "~/utils/constants/postidKeyConstants"
 import { getPageId } from "~/utils/platform/siyuan/siyuanUtil"
 import { PageEditMode } from "~/utils/common/pageEditMode"
 import { upperFirst } from "~/utils/strUtil"
+import { SourceContentShowType } from "~/utils/common/sourceContentShowType"
 
 const logger = LogFactory.getLogger(
   "components/publish/tab/main/GithubMain.vue"
@@ -482,7 +513,7 @@ const isCancelLoading = ref(false)
 const isInitLoading = ref(false)
 
 const slugHashEnabled = ref(false)
-const vuepressGithubEnabled = ref(false)
+const githubEnabled = ref(false)
 const useDefaultPath = ref(true)
 const isPublished = ref(false)
 const previewUrl = ref("")
@@ -490,8 +521,9 @@ const previewRealUrl = ref("")
 const forceRefresh = ref(false)
 const tagSwitch = ref(false)
 
-const editData = reactive({
-  etype: PageEditMode.EditMode_simple,
+const formOptionData = reactive({
+  etype: <PageEditMode>PageEditMode.EditMode_simple,
+  stype: SourceContentShowType.YAML_CONTENT,
 })
 const formData = ref({
   title: "",
@@ -506,6 +538,7 @@ const formData = ref({
   },
   customPath: "",
   categories: ["默认分类"],
+  sourceContent: "",
 })
 const siyuanData = ref({
   pageId: "",
@@ -513,7 +546,7 @@ const siyuanData = ref({
     tags: "",
   },
 })
-const vuepressData = ref({
+const githubData = ref({
   yamlObj: {
     title: "",
     date: new Date(),
@@ -536,18 +569,23 @@ const vuepressData = ref({
     },
   },
   formatter: "",
-  vuepressContent: "",
-  vuepressFullContent: "",
+  mdContent: "",
+  mdFullContent: "",
+  htmlContent: "",
 })
 
 const simpleMode = () => {
-  editData.etype = PageEditMode.EditMode_simple
+  formOptionData.etype = PageEditMode.EditMode_simple
 }
 const complexMode = () => {
-  editData.etype = PageEditMode.EditMode_complex
+  formOptionData.etype = PageEditMode.EditMode_complex
 }
 const sourceMode = () => {
-  editData.etype = PageEditMode.EditMode_source
+  formOptionData.etype = PageEditMode.EditMode_source
+}
+
+const onYamlShowTypeChange = (val) => {
+  formOptionData.stype = val
 }
 
 // 将文档路径转换为分类
@@ -741,10 +779,10 @@ const convertAttrToYAML = () => {
   let fmtTitle = formData.value.title
   fmtTitle = mdFileToTitle(fmtTitle)
 
-  vuepressData.value.yamlObj.title = fmtTitle
-  vuepressData.value.yamlObj.permalink =
+  githubData.value.yamlObj.title = fmtTitle
+  githubData.value.yamlObj.permalink =
     "/post/" + formData.value.customSlug + ".html"
-  vuepressData.value.yamlObj.date = covertStringToDate(formData.value.created)
+  githubData.value.yamlObj.date = covertStringToDate(formData.value.created)
   const meta = [
     {
       name: "keywords",
@@ -755,35 +793,35 @@ const convertAttrToYAML = () => {
       content: formData.value.desc,
     },
   ]
-  vuepressData.value.yamlObj.meta = meta
-  vuepressData.value.yamlObj.tags = formData.value.tag.dynamicTags
-  vuepressData.value.yamlObj.categories = formData.value.categories
+  githubData.value.yamlObj.meta = meta
+  githubData.value.yamlObj.tags = formData.value.tag.dynamicTags
+  githubData.value.yamlObj.categories = formData.value.categories
 
   // formatter
-  let yaml = obj2Yaml(vuepressData.value.yamlObj)
+  let yaml = obj2Yaml(githubData.value.yamlObj)
   // 修复yaml的ISO日期格式（js-yaml转换的才需要）
   yaml = formatIsoToZhDate(yaml, true)
-  vuepressData.value.formatter = yaml
-  vuepressData.value.vuepressFullContent = vuepressData.value.formatter
+  githubData.value.formatter = yaml
+  githubData.value.mdFullContent = githubData.value.formatter
 }
 const convertYAMLToAttr = () => {
-  vuepressData.value.formatter = vuepressData.value.vuepressFullContent
-  vuepressData.value.yamlObj = yaml2Obj(vuepressData.value.formatter)
+  githubData.value.formatter = githubData.value.mdFullContent
+  githubData.value.yamlObj = yaml2Obj(githubData.value.formatter)
 
   // yamlObj转表单属性
-  logger.debug("convertYAMLToAttr,yamlObj=>", vuepressData.value.yamlObj)
-  formData.value.title = vuepressData.value.yamlObj.title + ".md"
-  formData.value.customSlug = vuepressData.value.yamlObj.permalink
+  logger.debug("convertYAMLToAttr,yamlObj=>", githubData.value.yamlObj)
+  formData.value.title = githubData.value.yamlObj.title + ".md"
+  formData.value.customSlug = githubData.value.yamlObj.permalink
     .replace("/pages/", "")
     .replace("/post/", "")
     .replace(".html", "")
     .replace("/", "")
   formData.value.created = formatIsoToZhDate(
-    vuepressData.value.yamlObj.date.toISOString(),
+    githubData.value.yamlObj.date.toISOString(),
     false
   )
 
-  const yamlMeta = vuepressData.value.yamlObj.meta
+  const yamlMeta = githubData.value.yamlObj.meta
   for (let i = 0; i < yamlMeta.length; i++) {
     const m = yamlMeta[i]
     if (m.name === "description") {
@@ -792,14 +830,14 @@ const convertYAMLToAttr = () => {
     }
   }
 
-  for (let j = 0; j < vuepressData.value.yamlObj.tags.length; j++) {
-    const tag = vuepressData.value.yamlObj.tags[j]
+  for (let j = 0; j < githubData.value.yamlObj.tags.length; j++) {
+    const tag = githubData.value.yamlObj.tags[j]
     if (!formData.value.tag.dynamicTags.includes(tag) && tag !== "") {
       formData.value.tag.dynamicTags.push(tag)
     }
   }
 
-  formData.value.categories = vuepressData.value.yamlObj.categories
+  formData.value.categories = githubData.value.yamlObj.categories
 }
 const fmtRefInput = ref()
 const copyToClipboard = () => {
@@ -809,7 +847,7 @@ const copyToClipboard = () => {
   nextTick(() => {
     fmtRefInput.value.focus()
 
-    copy(vuepressData.value.vuepressFullContent)
+    copy(githubData.value.mdFullContent)
 
     ElMessage.success(t("main.opt.success"))
   })
@@ -824,7 +862,7 @@ const githubOnChange = (val: boolean) => {
   // 开启Github需要开启hash避免重复
   slugHashEnabled.value = val
   // Github开启状态同步给其他地方用
-  vuepressGithubEnabled.value = val
+  githubEnabled.value = val
 }
 
 const defaultPathOnChange = (val: boolean) => {
@@ -885,7 +923,7 @@ async function doPublish() {
   // 根据选项决定是否发送到Vuepress的Github参考
   const isOk = false // getBooleanConf(API_STATUS_CONSTANTS.API_STATUS_VUEPRESS)
   // api不可用但是开启了发布
-  if (!isOk && vuepressGithubEnabled.value) {
+  if (!isOk && githubEnabled.value) {
     // 未开启也生成数据
     // 刷新属性数据
     await initPage()
@@ -894,7 +932,7 @@ async function doPublish() {
       "检测到api不可用或者配置错误，无法发布到Github，请自行复制文本"
     )
     return
-  } else if (isOk && vuepressGithubEnabled.value) {
+  } else if (isOk && githubEnabled.value) {
     // api可用并且开启了发布
     logger.debug("开始真正调用api发布到Github")
 
@@ -921,9 +959,9 @@ async function doPublish() {
     // 纯正文
     const md = removeMdWidgetTag(data.content)
     // 包含formatter和正文
-    const mdContent = vuepressData.value.formatter + "\n" + md
-    vuepressData.value.vuepressContent = md
-    vuepressData.value.vuepressFullContent = mdContent
+    const mdContent = githubData.value.formatter + "\n" + md
+    githubData.value.mdContent = md
+    githubData.value.mdFullContent = mdContent
 
     logger.debug("即将发布的内容，mdContent=>", { mdContent })
 
@@ -1073,7 +1111,7 @@ async function initPage() {
   // api状态
   const conf = getJSONConf<IGithubCfg>(props.apiType)
   apiStatus.value = conf.apiStatus
-  vuepressGithubEnabled.value = apiStatus.value
+  githubEnabled.value = apiStatus.value
 
   // 默认目录
   currentDefaultPath.value = conf.defaultPath ?? "尚未配置"
@@ -1117,7 +1155,7 @@ async function initPage() {
       vuepressCfg.defaultBranch +
       "/" +
       docPath
-    previewRealUrl.value = vdomain + vuepressData.value.yamlObj.permalink
+    previewRealUrl.value = vdomain + githubData.value.yamlObj.permalink
   } else {
     // 表单属性转换为YAML
     convertAttrToYAML()
@@ -1127,9 +1165,9 @@ async function initPage() {
   // 发布内容
   const data = await siyuanApi.exportMdContent(siyuanData.value.pageId)
   const md = data.content
-  vuepressData.value.vuepressContent = removeMdWidgetTag(md)
-  vuepressData.value.vuepressFullContent =
-    vuepressData.value.formatter + "\n" + vuepressData.value.vuepressContent
+  githubData.value.mdContent = removeMdWidgetTag(md)
+  githubData.value.mdFullContent =
+    githubData.value.formatter + "\n" + githubData.value.mdContent
 
   isInitLoading.value = false
 }
@@ -1167,6 +1205,7 @@ onBeforeMount(async () => {
 .source-opt a {
   padding: 4px 2px;
   cursor: pointer;
+  /*border: solid 1px #409eff;*/
 }
 
 .source-opt a.middle {
