@@ -1,3 +1,19 @@
+# Changelog
+
+## [0.2.1](https://github.com/terwer/src-sy-post-publisher/compare/v0.2.0...v0.2.1) (2022-12-08)
+
+
+### Bug Fixes
+
+* 修复版本检测构建失败问题 ([ce0b4f6](https://github.com/terwer/src-sy-post-publisher/commit/ce0b4f6c95d985dd276876a94c9360dff30d1e12))
+
+
+### Miscellaneous
+
+* **deps-dev:** bump happy-dom from 7.8.1 to 8.1.0 ([9ac1e24](https://github.com/terwer/src-sy-post-publisher/commit/9ac1e24b5c744973a9f579ab7a12bf4e0cf23afe))
+* **deps-dev:** bump prettier from 2.8.0 to 2.8.1 ([82e1667](https://github.com/terwer/src-sy-post-publisher/commit/82e16678d3eb69a9cbde39607659bf8d651c3854))
+* 合并历史记录 ([3c94bfc](https://github.com/terwer/src-sy-post-publisher/commit/3c94bfca1089efb5188683d4938f18d2c46e11ff))
+
 ## [0.2.0](https://github.com/terwer/src-sy-post-publisher/compare/v0.1.0...v0.2.0) (2022-12-07)
 
 ### Features
