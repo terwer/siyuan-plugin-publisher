@@ -268,4 +268,8 @@ export default {
   "setting.conf.import": "导入配置",
   "setting.conf.clear": "清空配置",
   "page.no.id": "请求非法，原因：pageId获取失败",
+  "yaml.show.type.yaml": "YAML",
+  "yaml.show.type.md": "MD正文",
+  "yaml.show.type.yamlmd": "YAML+MD正文",
+  "yaml.show.type.html": "HTML正文",
 }
