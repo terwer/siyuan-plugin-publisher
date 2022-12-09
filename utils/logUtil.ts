@@ -42,7 +42,7 @@ const chalk = {
     return src.toString()
   },
   red: (src: any): string => {
-    return src.toString()
+    return src.toString();
   },
 }
 
@@ -52,21 +52,27 @@ const chalk = {
 //   console.log("loglevel运行在node环境中")
 // }
 
-const LOG_INFO_ENABLED = getBooleanEnv("VITE_LOG_INFO_ENABLED") ?? false
-const LOG_LEVEL_INFO = "INFO"
-const LOG_LEVEL_WARN = "WARN"
-const LOG_LEVEL_ERROR = "ERROR"
-const CONSOLE_LOGGER = "console"
+const isTest = process.env.TEST === "true";
+const LOG_INFO_ENABLED = getBooleanEnv("VITE_LOG_INFO_ENABLED") ?? false;
+const LOG_LEVEL_DEBUG = "DEBUG";
+const LOG_LEVEL_INFO = "INFO";
+const LOG_LEVEL_WARN = "WARN";
+const LOG_LEVEL_ERROR = "ERROR";
+const CONSOLE_LOGGER = "console";
 
-prefix.reg(loglevel)
-loglevel.setLevel(LOG_INFO_ENABLED ? LOG_LEVEL_INFO : LOG_LEVEL_WARN)
+prefix.reg(loglevel);
+if (isTest) {
+  loglevel.setLevel(LOG_LEVEL_DEBUG);
+} else {
+  loglevel.setLevel(LOG_INFO_ENABLED ? LOG_LEVEL_INFO : LOG_LEVEL_WARN);
+}
 
 prefix.apply(loglevel, {
   format(level, name, timestamp) {
-    const strarr = []
+    const strarr = [];
     strarr.push(
       chalk.gray("[") + chalk.green(timestamp).toString() + chalk.gray("]")
-    )
+    );
 
     switch (level) {
       case LOG_LEVEL_INFO:

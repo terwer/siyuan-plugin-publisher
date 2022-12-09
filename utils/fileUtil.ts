@@ -23,10 +23,12 @@
  * questions.
  */
 
-import fs from "fs-extra"
-import { LogFactory } from "~/utils/logUtil"
+import fs from "fs-extra";
+import { LogFactory } from "~/utils/logUtil";
 
-const logger = LogFactory.getLogger()
+const logger = LogFactory.getLogger();
+
+// 此类中的方法不适合浏览器，请勿在浏览器环境使用
 
 /**
  * 拷贝文件-同步
@@ -35,7 +37,7 @@ const logger = LogFactory.getLogger()
  */
 export const copyFileSync = (fromPath: string, toPath: string): void => {
   try {
-    fs.copySync(fromPath, toPath, {})
+    fs.copySync(fromPath, toPath, {});
   } catch (e) {
     logger.error(e)
     throw e

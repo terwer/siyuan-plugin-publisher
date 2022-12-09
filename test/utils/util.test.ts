@@ -27,31 +27,31 @@ import { describe, expect } from "vitest"
 import {
   cutWords,
   jiebaToHotWords,
-  pingyinSlugify,
-  zhSlugify,
+  pinyinSlugify,
+  zhSlugify
 } from "~/utils/util"
 import { LogFactory } from "~/utils/logUtil"
 
 describe("util test", () => {
-  const logger = LogFactory.getLogger()
+  const logger = LogFactory.getLogger();
 
   it("zhSlugify test", async () => {
-    const result = await zhSlugify("我爱中国")
-    logger.info("zhSlugify result=>", result)
-    expect(result).contains("china")
-  })
+    const result = await zhSlugify("我爱中国");
+    logger.info("zhSlugify result=>", result);
+    expect(result).contains("china");
+  });
 
-  it("pingyinSlugify test", async () => {
-    const result = await pingyinSlugify("我爱中国")
-    logger.info("pingyinSlugify result=>", result)
-    expect(result).contains("wo")
-  })
+  it("pinyinSlugify test", async () => {
+    const result = pinyinSlugify("我爱中国");
+    logger.info("pinyinSlugify result=>", result);
+    expect(result).contains("wo");
+  });
 
   it("cutWords test", async () => {
-    const words = "今天天气很好"
-    const result = await cutWords(words)
-    logger.info("cutWords result=>", result)
-  })
+    const words = "今天天气很好";
+    const result = await cutWords(words);
+    logger.info("cutWords result=>", result);
+  });
 
   it("jiebaToHotWords test", () => {
     const words = [

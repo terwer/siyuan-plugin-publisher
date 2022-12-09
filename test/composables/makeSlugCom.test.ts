@@ -23,30 +23,33 @@
  * questions.
  */
 
-import { describe } from "vitest"
-import { obj2Yaml, yaml2Obj } from "~/utils/yamlUtil"
-import { LogFactory } from "~/utils/logUtil"
-import path from "path"
-import { readFileSync } from "~/utils/fileUtil"
+import { describe } from "vitest";
+import { LogFactory } from "~/utils/logUtil";
+import { flushPromises, mount } from "@vue/test-utils";
+import TestSlug from "~/test/composables/TestSlug.vue";
+import path from "path";
+import { readFileSync } from "~/utils/fileUtil";
+import { setJSONConf } from "~/utils/configUtil";
+import { TEST_CONSTANTS } from "~/test/TEST_CONSTANTS";
 
-describe("yamlUtil test", () => {
+describe("makeSlug test", async () => {
   const logger = LogFactory.getLogger();
 
-  it("yaml2Obj test", async () => {
-    const filename = path.resolve("./", "test/data/demo", "yaml.txt");
-    const yaml = await readFileSync(filename);
-
-    const obj = yaml2Obj(yaml);
-    logger.info("obj=>", obj);
-    logger.info("objStr=>", JSON.stringify(obj));
+  it("init", () => {
+    const filename = path.resolve("./", "test/data/demo", "siyuanPage.txt");
+    const pageStr = readFileSync(filename);
+    setJSONConf(TEST_CONSTANTS.CONSTANTS_SIYUAN_PAGE, pageStr);
+    logger.info("pageStr=>", pageStr);
   });
 
-  it("obj2yaml test", async () => {
-    const filename = path.resolve("./", "test/data/demo", "yamlObj.txt");
-    const objStr = await readFileSync(filename);
+  it("useSlug test", async () => {
+    const wrapper = mount(TestSlug);
+    await flushPromises();
 
-    const obj = JSON.parse(objStr);
-    const yaml = obj2Yaml(obj);
-    logger.info("yaml=>", yaml);
+    await wrapper.find("#makeSlugBtn").trigger("click");
+    await flushPromises();
+
+    // const result = wrapper.html()
+    // logger.info("slugComponent HTML=>", result)
   });
-})
+});

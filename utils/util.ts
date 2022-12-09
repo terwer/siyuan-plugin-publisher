@@ -55,7 +55,7 @@ export const zhSlugify = async (q: string): Promise<string> => {
  * 拼音转别名
  * @param q 中文名
  */
-export const pingyinSlugify = async (q: string): Promise<string> => slugify(q)
+export const pinyinSlugify = (q: string): string => slugify(q);
 
 /**
  * 文本分词
