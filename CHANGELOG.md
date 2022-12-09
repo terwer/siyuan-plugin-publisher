@@ -1,3 +1,28 @@
+# Changelog
+
+## [0.3.0](https://github.com/terwer/src-sy-post-publisher/compare/v0.2.0...v0.3.0) (2022-12-09)
+
+
+### Features
+
+* [#133](https://github.com/terwer/src-sy-post-publisher/issues/133) 支持Github系列-源码模式展示方式切换 ([558950c](https://github.com/terwer/src-sy-post-publisher/commit/558950caab418456a803a22ac74f14159e5f67e3))
+
+
+### Bug Fixes
+
+* 修复版本检测构建失败问题 ([ce0b4f6](https://github.com/terwer/src-sy-post-publisher/commit/ce0b4f6c95d985dd276876a94c9360dff30d1e12))
+
+
+### Miscellaneous
+
+* **deps-dev:** bump happy-dom from 7.8.1 to 8.1.0 ([9ac1e24](https://github.com/terwer/src-sy-post-publisher/commit/9ac1e24b5c744973a9f579ab7a12bf4e0cf23afe))
+* **deps-dev:** bump prettier from 2.8.0 to 2.8.1 ([82e1667](https://github.com/terwer/src-sy-post-publisher/commit/82e16678d3eb69a9cbde39607659bf8d651c3854))
+* 合并历史记录 ([3c94bfc](https://github.com/terwer/src-sy-post-publisher/commit/3c94bfca1089efb5188683d4938f18d2c46e11ff))
+* 组件化重构 ([6ab2504](https://github.com/terwer/src-sy-post-publisher/commit/6ab25041794a4005ef31eaa0b83e5db78d728c8d))
+* 组件化重构-抽取别名生成组件 ([b09e7a5](https://github.com/terwer/src-sy-post-publisher/commit/b09e7a5273083cb4b16e1d8e6e75c19ce0e3acb8))
+* 组件化重构-改进源码模式 ([94541df](https://github.com/terwer/src-sy-post-publisher/commit/94541df113d79d7cd8862f4fc0dc2e00c0d87db2))
+* 组件化重构-文章别名 ([69d29f1](https://github.com/terwer/src-sy-post-publisher/commit/69d29f15399eded2234d66bd34d5156912c0ad45))
+
 ## [0.2.0](https://github.com/terwer/src-sy-post-publisher/compare/v0.1.0...v0.2.0) (2022-12-07)
 
 ### Features
