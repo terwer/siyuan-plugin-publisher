@@ -97,16 +97,12 @@
                 <el-switch v-model="slugData.forceRefresh" />
               </el-form-item>
 
-              <!-- 别名 -->
-              <el-form-item
-                v-if="formOptionData.etype !== PageEditMode.EditMode_simple"
-                :label="$t('main.slug')"
-              >
-                <el-input v-model="slugData.customSlug" />
-              </el-form-item>
               <!-- hash -->
               <el-form-item
-                v-if="formOptionData.etype !== PageEditMode.EditMode_simple"
+                v-if="
+                  formOptionData.etype.toString() !==
+                  PageEditMode.EditMode_simple.toString()
+                "
                 :label="$t('main.use.hash')"
               >
                 <el-switch v-model="slugData.slugHashEnabled" />
@@ -116,6 +112,17 @@
                   :title="$t('main.use.hash.tip')"
                   type="warning"
                 />
+              </el-form-item>
+
+              <!-- 别名字段 -->
+              <el-form-item
+                v-if="
+                  formOptionData.etype.toString() !==
+                  PageEditMode.EditMode_simple.toString()
+                "
+                :label="$t('main.slug')"
+              >
+                <el-input v-model="slugData.customSlug" />
               </el-form-item>
               <!-- 生成别名 -->
               <el-form-item

@@ -289,8 +289,8 @@ import {
   isEmptyObject,
   isEmptyString,
   jiebaToHotWords,
-  pingyinSlugify,
-  zhSlugify,
+  pinyinSlugify,
+  zhSlugify
 } from "~/utils/util"
 import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
 import { formatNumToZhDate } from "~/utils/dateUtil"
@@ -545,7 +545,7 @@ const makeSlug = async (hideTip) => {
       ElMessage.success(t("main.opt.failure"))
     }
   } else {
-    formData.customSlug = await pingyinSlugify(fmtTitle)
+    formData.customSlug = pinyinSlugify(fmtTitle);
   }
 
   // add hash

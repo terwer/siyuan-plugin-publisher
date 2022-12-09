@@ -23,30 +23,8 @@
  * questions.
  */
 
-import { describe } from "vitest"
-import { obj2Yaml, yaml2Obj } from "~/utils/yamlUtil"
-import { LogFactory } from "~/utils/logUtil"
-import path from "path"
-import { readFileSync } from "~/utils/fileUtil"
+const CONSTANTS_SIYUAN_PAGE = "test-data-siyuanPage";
 
-describe("yamlUtil test", () => {
-  const logger = LogFactory.getLogger();
-
-  it("yaml2Obj test", async () => {
-    const filename = path.resolve("./", "test/data/demo", "yaml.txt");
-    const yaml = await readFileSync(filename);
-
-    const obj = yaml2Obj(yaml);
-    logger.info("obj=>", obj);
-    logger.info("objStr=>", JSON.stringify(obj));
-  });
-
-  it("obj2yaml test", async () => {
-    const filename = path.resolve("./", "test/data/demo", "yamlObj.txt");
-    const objStr = await readFileSync(filename);
-
-    const obj = JSON.parse(objStr);
-    const yaml = obj2Yaml(obj);
-    logger.info("yaml=>", yaml);
-  });
-})
+export const TEST_CONSTANTS = {
+  CONSTANTS_SIYUAN_PAGE
+};

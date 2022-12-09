@@ -62,7 +62,7 @@ export default {
   "main.slug": "文章别名",
   "main.auto.fetch.slug": "自动生成别名",
   "main.use.google.translate": "使用Google翻译API",
-  "main.use.hash": "使用hash",
+  "main.use.hash": "使用后缀",
   "main.use.hash.tip":
     "不使用hash会展示更有意义的url，但是可能导致文章别名重复（后果是Vuepress会Build失败除非手动解决别名唯一问题），请知悉。",
   "main.force.refresh": "强制刷新",
