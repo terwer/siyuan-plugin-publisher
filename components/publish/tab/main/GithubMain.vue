@@ -125,6 +125,7 @@
                 <el-input v-model="slugData.customSlug" />
               </el-form-item>
               <!-- 生成别名 -->
+              <!--
               <el-form-item
                 v-if="formOptionData.etype !== PageEditMode.EditMode_simple"
               >
@@ -139,6 +140,52 @@
                       ? $t("main.opt.loading")
                       : $t("main.auto.fetch.slug")
                   }}
+                </el-button>
+              </el-form-item>
+              -->
+            </div>
+
+            <!-- 属性转换 -->
+            <div class="convert-option">
+              <!-- 一键生成属性-->
+              <el-form-item :label="$t('main.opt.quick')">
+                <el-button
+                  :loading="isGenLoading"
+                  type="primary"
+                  @click="oneclickAttr"
+                >
+                  {{
+                    isGenLoading
+                      ? $t("main.opt.loading")
+                      : $t("main.publish.oneclick.attr")
+                  }}
+                </el-button>
+                <el-button type="primary" @click="saveAttrToSiyuan"
+                  >{{ $t("main.save.attr.to.siyuan") }}
+                </el-button>
+                <el-button type="primary" @click="convertAttrToYAML"
+                  >{{ $t("main.siyuan.to.yaml") }}
+                </el-button>
+              </el-form-item>
+            </div>
+
+            <!-- 发布操作 -->
+            <div class="publish-option">
+              <el-form-item>
+                <el-button
+                  :loading="isPublishLoading"
+                  type="primary"
+                  @click="doPublish"
+                  >{{
+                    isPublishLoading
+                      ? $t("main.publish.loading")
+                      : isPublished
+                      ? $t("main.update")
+                      : $t("main.publish")
+                  }}
+                </el-button>
+                <el-button :loading="isCancelLoading" @click="cancelPublish"
+                  >{{ $t("main.cancel") }}
                 </el-button>
               </el-form-item>
             </div>
@@ -161,9 +208,18 @@
               />
             </el-form-item>
 
+            <!-- 只读模式 -->
+            <!-- 强制刷新 -->
+            <el-form-item
+              v-if="formOptionData.etype !== PageEditMode.EditMode_simple"
+              :label="$t('main.read.mode')"
+            >
+              <el-switch v-model="yamlData.readMode" />
+            </el-form-item>
+
             <!-- 显示方式 -->
-            <el-form-item>
-              <div class="source-opt">
+            <div class="source-opt">
+              <el-form-item>
                 <a
                   :class="{
                     current:
@@ -204,30 +260,56 @@
                   "
                   >{{ $t("yaml.show.type.html") }}</a
                 >
-              </div>
+              </el-form-item>
+            </div>
 
-              <!-- YAML数据 -->
-              <el-input
-                ref="fmtRefInput"
-                v-model="yamlData.yamlContent"
-                :autosize="{ minRows: 4, maxRows: 16 }"
-                type="textarea"
-                v-on:focus="onYamlContentFocus"
-              />
-            </el-form-item>
+            <!-- YAML预览 -->
+            <div v-if="yamlData.readMode" id="yaml-detail-content">
+              <el-form-item>
+                <el-input
+                  id="yaml-detail-preview"
+                  v-model="yamlData.yamlPreviewContent"
+                  :autosize="{ minRows: 4, maxRows: 16 }"
+                  readonly
+                  type="textarea"
+                  @click="onYamlContentFocus"
+                  v-on:contextmenu="onYamlContextMenu"
+                />
+              </el-form-item>
+            </div>
+
+            <!-- YAML编辑 -->
+            <div v-if="!yamlData.readMode" id="yaml-edit-content">
+              <el-form-item>
+                <el-input
+                  v-model="yamlData.yamlContent"
+                  :autosize="{ minRows: 4, maxRows: 16 }"
+                  type="textarea"
+                />
+              </el-form-item>
+            </div>
 
             <!-- 操作 -->
-            <el-form-item>
-              <el-button type="primary" @click="convertAttrToYAML"
-                >{{ $t("main.siyuan.to.yaml") }}
-              </el-button>
-              <el-button type="primary" @click="convertYAMLToAttr"
-                >{{ $t("main.yaml.to.siyuan") }}
-              </el-button>
-              <el-button type="primary" @click="copyToClipboard"
-                >{{ $t("main.copy") }}
-              </el-button>
-            </el-form-item>
+            <div v-if="!yamlData.readMode" id="yaml-action">
+              <el-form-item>
+                <el-button type="primary" @click="convertYAMLToAttr"
+                  >{{ $t("main.yaml.to.siyuan") }}
+                </el-button>
+                <el-button type="primary" @click="copyYamlToClipboard()"
+                  >{{ $t("main.copy") }}
+                </el-button>
+              </el-form-item>
+            </div>
+
+            <div id="yaml-read-mode-tip">
+              <el-form-item>
+                <el-alert
+                  :closable="false"
+                  :title="$t('main.read.mode.tip')"
+                  type="success"
+                />
+              </el-form-item>
+            </div>
           </div>
         </el-form>
       </el-main>
@@ -312,13 +394,14 @@ const formData = ref({
 })
 
 // composables
-const { slugData, makeSlug, initSlug } = useSlug(props.pageId, siyuanApi)
+const { slugData, initSlug } = useSlug(props.pageId, siyuanApi)
 const {
   yamlData,
   onYamlContentFocus,
   doConvertAttrToYAML,
-  convertYAMLToAttr,
-  copyToClipboard,
+  doConvertYAMLToAttr,
+  copyYamlToClipboard,
+  onYamlContextMenu,
   initYaml,
 } = useYaml()
 
@@ -428,16 +511,20 @@ const composableDataToForm = () => {
 // 调用之前先同步form
 const convertAttrToYAML = (hideTip?: boolean) => {
   const publishCfg = getPublishCfg()
+  const githubCfg = getJSONConf<IGithubCfg>(props.apiType)
 
   composableDataToForm()
 
-  const githubCfg = getJSONConf<IGithubCfg>(props.apiType)
   doConvertAttrToYAML(props.yamlConverter, formData.value.postForm, githubCfg)
   onYamlShowTypeChange(publishCfg.contentShowType)
 
   if (hideTip !== true) {
     ElMessage.success(t("main.opt.success"))
   }
+}
+
+const convertYAMLToAttr = () => {
+  doConvertYAMLToAttr()
 }
 
 const initPage = async () => {
@@ -500,7 +587,7 @@ const initPage = async () => {
 
     // 表单属性转换为YAML
     doConvertAttrToYAML(props.yamlConverter, formData.value.postForm, githubCfg)
-    // 显示默认
+    // 显示默认（内部调用initYaml）
     onYamlShowTypeChange(publishCfg.contentShowType)
 
     // ================
@@ -559,5 +646,10 @@ onMounted(async () => {
 .top-yaml-tip {
   padding: 2px 4px;
   margin: 0 10px 0 0;
+}
+
+#yaml-detail-preview {
+  cursor: default;
+  /*pointer-events: none;*/
 }
 </style>

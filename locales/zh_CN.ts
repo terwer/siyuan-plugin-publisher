@@ -272,4 +272,7 @@ export default {
   "yaml.show.type.md": "MD正文",
   "yaml.show.type.yamlmd": "YAML+MD正文",
   "yaml.show.type.html": "HTML正文",
+  "main.read.mode": "只读模式",
+  "main.read.mode.tip":
+    "温馨提示：只读模式下点击可直接复制，编辑模式下需要点击复制按钮复制。",
 }

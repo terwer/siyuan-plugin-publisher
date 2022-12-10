@@ -262,4 +262,6 @@ export default {
   "setting.conf.import": "Import config",
   "setting.conf.clear": "Clear config",
   "page.no.id": "pageId fetch error",
+  "main.read.mode": "Readonly",
+  "main.read.mode.tip": "Readonly tips",
 }

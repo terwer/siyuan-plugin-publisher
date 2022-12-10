@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { nextTick, reactive, ref } from "vue"
+import { reactive } from "vue"
 import copy from "copy-to-clipboard"
 import { ElMessage } from "element-plus"
 import { LogFactory } from "~/utils/logUtil"
@@ -31,6 +31,8 @@ import { useI18n } from "vue-i18n"
 import { YamlConvertAdaptor } from "~/utils/platform/yamlConvertAdaptor"
 import { PostForm } from "~/utils/common/postForm"
 import { IGithubCfg } from "~/utils/platform/github/githubCfg"
+import { appendStr } from "~/utils/strUtil"
+import { isBrowser } from "~/utils/browserUtil"
 
 /**
  * YAML组件
@@ -40,6 +42,8 @@ export const useYaml = () => {
   const { t } = useI18n()
   const yamlData = reactive({
     yamlObj: {},
+    readMode: true,
+    yamlPreviewContent: "",
     yamlContent: "",
     formatter: "",
     mdContent: "",
@@ -47,11 +51,35 @@ export const useYaml = () => {
     htmlContent: "",
   })
 
+  /**
+   * @param event
+   */
   const onYamlContentFocus = (event) => {
+    event.preventDefault()
+
     const target = event.target as HTMLTextAreaElement
     target.select()
+
+    if (isBrowser()) {
+      // document.execCommand("copy");
+
+      // Copy the selected text to the clipboard
+      navigator.clipboard.writeText(yamlData.yamlContent).then(
+        function () {
+          // The text has been successfully copied to the clipboard
+          ElMessage.success(t("main.opt.success"))
+        },
+        function (err) {
+          // An error occurred while copying the text
+          ElMessage.error(t("main.opt.failure") + err)
+        }
+      )
+    }
   }
 
+  const onYamlContextMenu = (event) => {
+    event.preventDefault()
+  }
   const doConvertAttrToYAML = (
     yamlConverter: YamlConvertAdaptor,
     postForm: PostForm,
@@ -69,23 +97,14 @@ export const useYaml = () => {
     yamlData.htmlContent = yamlObj.htmlContent
   }
 
-  const convertYAMLToAttr = () => {
+  const doConvertYAMLToAttr = () => {
     // TODO
     throw new Error("Not implemented")
   }
 
-  const fmtRefInput = ref()
-  const copyToClipboard = () => {
-    // this.$refs.fmtRefInput.focus();
-    // document.execCommand('copy');
-
-    nextTick(() => {
-      fmtRefInput.value.focus()
-
-      copy(yamlData.yamlContent)
-
-      ElMessage.success(t("main.opt.success"))
-    })
+  const copyYamlToClipboard = () => {
+    copy(yamlData.yamlContent)
+    ElMessage.success(t("main.opt.success"))
   }
 
   /**
@@ -94,14 +113,16 @@ export const useYaml = () => {
    */
   const initYaml = (yaml: string) => {
     yamlData.yamlContent = yaml
+    yamlData.yamlPreviewContent = appendStr(yaml)
   }
 
   return {
     yamlData,
     onYamlContentFocus,
     doConvertAttrToYAML,
-    convertYAMLToAttr,
-    copyToClipboard,
+    doConvertYAMLToAttr,
+    copyYamlToClipboard,
+    onYamlContextMenu,
     initYaml,
   }
 }
