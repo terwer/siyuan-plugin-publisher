@@ -325,6 +325,10 @@ const {
 // page methods
 const onEditModeChange = (val: PageEditMode) => {
   formOptionData.etype = val
+
+  if (val === PageEditMode.EditMode_source) {
+    convertAttrToYAML(true)
+  }
 }
 
 const onYamlShowTypeChange = (val) => {
@@ -332,16 +336,16 @@ const onYamlShowTypeChange = (val) => {
 
   switch (val) {
     case SourceContentShowType.YAML:
-      yamlData.yamlContent = yamlData.formatter
+      initYaml(yamlData.formatter)
       break
     case SourceContentShowType.CONTENT:
-      yamlData.yamlContent = yamlData.mdContent
+      initYaml(yamlData.mdContent)
       break
     case SourceContentShowType.YAML_CONTENT:
-      yamlData.yamlContent = yamlData.formatter + yamlData.mdContent
+      initYaml(yamlData.formatter + yamlData.mdContent)
       break
     case SourceContentShowType.HTML_CONTENT:
-      yamlData.yamlContent = yamlData.htmlContent
+      initYaml(yamlData.htmlContent)
       break
     default:
       break
@@ -414,16 +418,26 @@ const siyuanDataToForm = (publishCfg: PublishPreference) => {
 }
 
 // 组件数据转formData，主要是修改页面之后同步
-const composableDataToForm = () => {}
+const composableDataToForm = () => {
+  formData.value.postForm.formData.customSlug = slugData.customSlug
+}
 
 // 组件在页面上尽量使用自带的Data，这个是与DOM绑定的，可以实时获取最新数据，有改变的时候同步formData
 // 调用之前先同步form
 
 // 调用之前先同步form
-const convertAttrToYAML = () => {
+const convertAttrToYAML = (hideTip?: boolean) => {
+  const publishCfg = getPublishCfg()
+
   composableDataToForm()
 
-  doConvertAttrToYAML(props.yamlConverter, formData.value.postForm)
+  const githubCfg = getJSONConf<IGithubCfg>(props.apiType)
+  doConvertAttrToYAML(props.yamlConverter, formData.value.postForm, githubCfg)
+  onYamlShowTypeChange(publishCfg.contentShowType)
+
+  if (hideTip !== true) {
+    ElMessage.success(t("main.opt.success"))
+  }
 }
 
 const initPage = async () => {
@@ -486,8 +500,6 @@ const initPage = async () => {
 
     // 表单属性转换为YAML
     doConvertAttrToYAML(props.yamlConverter, formData.value.postForm, githubCfg)
-    // YAML
-    initYaml(yamlData.yamlContent)
     // 显示默认
     onYamlShowTypeChange(publishCfg.contentShowType)
 

@@ -30,9 +30,6 @@ import { LogFactory } from "~/utils/logUtil"
 import { useI18n } from "vue-i18n"
 import { YamlConvertAdaptor } from "~/utils/platform/yamlConvertAdaptor"
 import { PostForm } from "~/utils/common/postForm"
-import * as yamlUtil from "~/utils/yamlUtil"
-import * as dateUtil from "~/utils/dateUtil"
-import { YamlObj } from "~/utils/common/yamlObj"
 import { IGithubCfg } from "~/utils/platform/github/githubCfg"
 
 /**
@@ -59,7 +56,7 @@ export const useYaml = () => {
     yamlConverter: YamlConvertAdaptor,
     postForm: PostForm,
     githubCfg?: IGithubCfg
-  ): YamlObj => {
+  ): void => {
     if (!yamlConverter) {
       yamlConverter = new YamlConvertAdaptor()
       logger.error("未指定YAML转换器")
@@ -70,7 +67,6 @@ export const useYaml = () => {
     yamlData.mdContent = yamlObj.mdContent
     yamlData.mdFullContent = yamlObj.formatter + "\n" + yamlObj.mdContent
     yamlData.htmlContent = yamlObj.htmlContent
-    return yamlObj
   }
 
   const convertYAMLToAttr = () => {

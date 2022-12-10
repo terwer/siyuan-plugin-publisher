@@ -54,6 +54,7 @@ export class VuepressYamlConvertAdaptor
         postForm.formData.customSlug
       )
     }
+    this.logger.debug("link=>", link)
     yamlObj.yamlObj.permalink = link
 
     yamlObj.yamlObj.date = covertStringToDate(postForm.formData.created)
