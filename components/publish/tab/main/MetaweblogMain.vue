@@ -251,7 +251,7 @@
             :title="previewUrl"
             target="_blank"
             v-if="isPublished"
-            >{{ $t("main.publish.vuepress.see.preview") }}</a
+            >{{ $t("main.publish.see.preview") }}</a
           >
         </el-form-item>
       </el-form>
@@ -290,7 +290,7 @@ import {
   isEmptyString,
   jiebaToHotWords,
   pinyinSlugify,
-  zhSlugify
+  zhSlugify,
 } from "~/utils/util"
 import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
 import { formatNumToZhDate } from "~/utils/dateUtil"
@@ -545,7 +545,7 @@ const makeSlug = async (hideTip) => {
       ElMessage.success(t("main.opt.failure"))
     }
   } else {
-    formData.customSlug = pinyinSlugify(fmtTitle);
+    formData.customSlug = pinyinSlugify(fmtTitle)
   }
 
   // add hash

@@ -23,6 +23,8 @@
  * questions.
  */
 
+import { removeTitleNumber } from "~/utils/htmlUtil"
+
 /**
  * @function unescapeHTML 还原html脚本 < > & " '
  * @param a 字符串
@@ -79,7 +81,7 @@ export const mdFileToTitle = (fmtTitle: string): string => {
     fmtTitle = fmtTitle.replace(/\.md/g, "")
   }
   if (fmtTitle.indexOf(".") > -1) {
-    fmtTitle = fmtTitle.replace(/\d*\./g, "")
+    fmtTitle = removeTitleNumber(fmtTitle)
   }
   return fmtTitle
 }

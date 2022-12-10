@@ -24,16 +24,28 @@
   -->
 
 <template>
-  <github-main :api-type="apiType" :page-id="props.pageId" />
+  <github-main
+    :is-reload="props.isReload"
+    :api-type="apiType"
+    :page-id="props.pageId"
+    :yaml-converter="yamlConverter"
+  />
 </template>
 <script lang="ts" setup>
 import GithubMain from "~/components/publish/tab/main/GithubMain.vue"
 import { API_TYPE_CONSTANTS } from "~/utils/constants/apiTypeConstants"
 import { ref } from "vue"
+import { VuepressYamlConvertAdaptor } from "~/utils/platform/github/vuepress/VuepressYamlConvertAdaptor"
 
 const apiType = ref(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS)
+const vuepressYamlConvertAdaptor = new VuepressYamlConvertAdaptor()
+const yamlConverter = ref(vuepressYamlConvertAdaptor)
 
 const props = defineProps({
+  isReload: {
+    type: Boolean,
+    default: false,
+  },
   pageId: {
     type: String,
     default: undefined,

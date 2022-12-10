@@ -237,11 +237,15 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, reactive, ref } from "vue"
+import { onMounted, reactive, ref, watch } from "vue"
 import { PageEditMode } from "~/utils/common/pageEditMode"
 import { SourceContentShowType } from "~/utils/common/sourceContentShowType"
-import { getPublishCfg } from "~/utils/publishUtil"
-import { appendStr, upperFirst } from "~/utils/strUtil"
+import {
+  getApiParams,
+  getPublishCfg,
+  getPublishStatus,
+} from "~/utils/publishUtil"
+import { appendStr, mdFileToTitle, upperFirst } from "~/utils/strUtil"
 import { useI18n } from "vue-i18n"
 import { getJSONConf } from "~/utils/configUtil"
 import { IGithubCfg } from "~/utils/platform/github/githubCfg"
@@ -253,6 +257,10 @@ import { LogFactory } from "~/utils/logUtil"
 import { ElMessage } from "element-plus"
 import { useYaml } from "~/composables/makeYamlCom"
 import { mdToHtml, removeMdH1, removeMdWidgetTag } from "~/utils/htmlUtil"
+import { YamlConvertAdaptor } from "~/utils/platform/yamlConvertAdaptor"
+import { PostForm } from "~/utils/common/postForm"
+import { PublishPreference } from "~/utils/common/publishPreference"
+import { formatNumToZhDate } from "~/utils/dateUtil"
 
 const logger = LogFactory.getLogger(
   "components/publish/tab/main/GithubMain.vue"
@@ -272,9 +280,13 @@ const props = defineProps({
     type: String,
     default: undefined,
   },
+  yamlConverter: {
+    type: YamlConvertAdaptor,
+  },
 })
 const isInitLoading = ref(false)
 const apiStatus = ref(false)
+const isPublished = ref(false)
 const apiTypeInfo = ref(
   appendStr(t("setting.blog.platform.support.github"), props.apiType)
 )
@@ -287,6 +299,16 @@ const siyuanData = ref({
   meta: {
     tags: "",
   },
+  page: {
+    content: "",
+    created: "20220831131637",
+  },
+  content: {
+    content: "",
+  },
+})
+const formData = ref({
+  postForm: new PostForm(),
 })
 
 // composables
@@ -294,7 +316,7 @@ const { slugData, makeSlug, initSlug } = useSlug(props.pageId, siyuanApi)
 const {
   yamlData,
   onYamlContentFocus,
-  convertAttrToYAML,
+  doConvertAttrToYAML,
   convertYAMLToAttr,
   copyToClipboard,
   initYaml,
@@ -326,6 +348,84 @@ const onYamlShowTypeChange = (val) => {
   }
 }
 
+const getDocPath = () => {
+  const postidKey = getApiParams<IGithubCfg>(props.apiType).posidKey
+  const meta: any = siyuanData.value.meta
+  return meta[postidKey] || ""
+}
+
+// 将文档路径转换为分类
+const convertDocPathToCategories = (
+  docPath: string,
+  publishCfg: PublishPreference
+) => {
+  logger.debug("docPath=>", docPath)
+  const docPathArray = docPath.split("/")
+  if (docPathArray.length > 1) {
+    formData.value.postForm.formData.categories = []
+    for (let i = 1; i < docPathArray.length - 1; i++) {
+      let docCat
+      if (publishCfg.fixTitle) {
+        docCat = mdFileToTitle(docPathArray[i])
+      } else {
+        docCat = docPathArray[i]
+      }
+      formData.value.postForm.formData.categories.push(docCat)
+    }
+  }
+}
+
+// 思源笔记转formData，主要是初始化
+const siyuanDataToForm = (publishCfg: PublishPreference) => {
+  let fmtTitle = siyuanData.value.page.content
+  if (publishCfg.fixTitle) {
+    fmtTitle = mdFileToTitle(fmtTitle)
+  }
+  formData.value.postForm.formData.title = fmtTitle
+
+  const slugKey = SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_SLUG_KEY
+  formData.value.postForm.formData.customSlug = siyuanData.value.meta[slugKey]
+
+  const descKey = SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_DESC_KEY
+  formData.value.postForm.formData.desc = siyuanData.value.meta[descKey]
+
+  formData.value.postForm.formData.created = formatNumToZhDate(
+    siyuanData.value.page.created
+  )
+
+  formData.value.postForm.formData.tag.dynamicTags = []
+  const tagstr = siyuanData.value.meta.tags || ""
+  const tgarr = tagstr.split(",")
+  for (let i = 0; i < tgarr.length; i++) {
+    const tg = tgarr[i]
+    if (tg !== "") {
+      formData.value.postForm.formData.tag.dynamicTags.push(tgarr[i])
+    }
+  }
+
+  const dataContent = siyuanData.value.content
+  let md = dataContent.content
+  md = removeMdWidgetTag(md)
+  if (publishCfg.removeH1) {
+    md = removeMdH1(md)
+  }
+  formData.value.postForm.formData.mdContent = md
+  formData.value.postForm.formData.htmlContent = mdToHtml(md)
+}
+
+// 组件数据转formData，主要是修改页面之后同步
+const composableDataToForm = () => {}
+
+// 组件在页面上尽量使用自带的Data，这个是与DOM绑定的，可以实时获取最新数据，有改变的时候同步formData
+// 调用之前先同步form
+
+// 调用之前先同步form
+const convertAttrToYAML = () => {
+  composableDataToForm()
+
+  doConvertAttrToYAML(props.yamlConverter, formData.value.postForm)
+}
+
 const initPage = async () => {
   isInitLoading.value = true
 
@@ -339,7 +439,7 @@ const initPage = async () => {
     const githubCfg = getJSONConf<IGithubCfg>(props.apiType)
     apiStatus.value = githubCfg.apiStatus
 
-    // 获取最新属性
+    // 获取页面ID
     const pageId = await getPageId(true, props.pageId)
     if (!pageId || pageId === "") {
       isInitLoading.value = false
@@ -352,29 +452,48 @@ const initPage = async () => {
     // 思源笔记数据
     siyuanData.value.pageId = pageId
     siyuanData.value.meta = await siyuanApi.getBlockAttrs(pageId)
+    siyuanData.value.page = await siyuanApi.getBlockByID(pageId)
+    siyuanData.value.content = await siyuanApi.exportMdContent(pageId)
+
+    // Form数据
+    siyuanDataToForm(publishCfg)
+    // 默认目录
+    formData.value.postForm.formData.customPath =
+      githubCfg.defaultPath ?? "尚未配置"
+    // convertDocPathToCategories(
+    //   formData.value.postForm.formData.customPath,
+    //   publishCfg
+    // )
+    // 发布状态
+    isPublished.value = getPublishStatus(props.apiType, siyuanData.value.meta)
+    if (isPublished.value) {
+      formData.value.postForm.formData.customPath = getDocPath()
+      convertDocPathToCategories(
+        formData.value.postForm.formData.customPath,
+        publishCfg
+      )
+    }
+    logger.debug("formData=>", formData.value)
+
+    // ===========================
+    // 后面尽量使用formData获取数据
+    // ===========================
 
     // composables 初始化
     // 别名
     const slugKey = SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_SLUG_KEY
     await initSlug(siyuanData.value.meta[slugKey])
 
-    // 发布内容
     // 表单属性转换为YAML
-    yamlData.formatter = convertAttrToYAML()
-    const data = await siyuanApi.exportMdContent(siyuanData.value.pageId)
-    let md = data.content
-    md = removeMdWidgetTag(md)
-    if (publishCfg.removeH1) {
-      md = removeMdH1(md)
-    }
-    yamlData.mdContent = md
-    yamlData.mdFullContent = yamlData.formatter + "\n" + yamlData.mdContent
-    yamlData.htmlContent = mdToHtml(md)
+    doConvertAttrToYAML(props.yamlConverter, formData.value.postForm, githubCfg)
+    // YAML
+    initYaml(yamlData.yamlContent)
     // 显示默认
     onYamlShowTypeChange(publishCfg.contentShowType)
 
-    // YAML
-    initYaml(yamlData.yamlContent)
+    // ================
+    // 处理发布之后的数据
+    // ================
   } catch (e) {
     const errmsg = appendStr(t("main.opt.failure"), "=>", e)
     logger.error(errmsg)
@@ -385,6 +504,17 @@ const initPage = async () => {
 }
 
 // life cycle
+/**
+ * 监听props
+ */
+watch(
+  () => props.isReload,
+  async (oldValue, newValue) => {
+    // 初始化
+    await initPage()
+    logger.debug(props.apiType + "_Main检测到更新操作，刷新页面")
+  }
+)
 onMounted(async () => {
   await initPage()
 })

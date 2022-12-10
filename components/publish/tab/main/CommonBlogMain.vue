@@ -271,7 +271,7 @@
             :title="previewUrl"
             target="_blank"
             v-if="isPublished"
-            >{{ $t("main.publish.vuepress.see.preview") }}</a
+            >{{ $t("main.publish.see.preview") }}</a
           >
         </el-form-item>
       </el-form>
@@ -281,46 +281,56 @@
 </template>
 
 <script lang="ts" setup>
-import { CommonblogCfg, ICommonblogCfg } from "~/utils/platform/commonblog/commonblogCfg";
-import { nextTick, onMounted, reactive, ref } from "vue";
-import { useI18n } from "vue-i18n";
-import { SIYUAN_PAGE_ATTR_KEY } from "~/utils/constants/siyuanPageConstants";
-import { ElMessage, ElMessageBox } from "element-plus/es";
-import shortHash from "shorthash2";
+import {
+  CommonblogCfg,
+  ICommonblogCfg,
+} from "~/utils/platform/commonblog/commonblogCfg"
+import { nextTick, onMounted, reactive, ref } from "vue"
+import { useI18n } from "vue-i18n"
+import { SIYUAN_PAGE_ATTR_KEY } from "~/utils/constants/siyuanPageConstants"
+import { ElMessage, ElMessageBox } from "element-plus/es"
+import shortHash from "shorthash2"
 import {
   mdToHtml,
   mdToPlainText,
   parseHtml,
   removeMdWidgetTag,
   removeTitleNumber,
-  removeWidgetTag
-} from "~/utils/htmlUtil";
-import { CONSTANTS } from "~/utils/constants/constants";
-import { API } from "~/utils/api";
-import { PageType } from "~/utils/platform/metaweblog/IMetaweblogCfg";
-import { Post } from "~/utils/common/post";
-import { LogFactory } from "~/utils/logUtil";
-import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi";
-import { getPageId } from "~/utils/platform/siyuan/siyuanUtil";
-import { getConf, getJSONConf, setConf } from "~/utils/configUtil";
-import { cutWords, isEmptyObject, isEmptyString, jiebaToHotWords, pinyinSlugify, zhSlugify } from "~/utils/util";
-import { calcLastSeconds, formatNumToZhDate } from "~/utils/dateUtil";
-import { getPublishStatus } from "~/utils/publishUtil";
-import { ImageParser } from "~/utils/parser/imageParser";
+  removeWidgetTag,
+} from "~/utils/htmlUtil"
+import { CONSTANTS } from "~/utils/constants/constants"
+import { API } from "~/utils/api"
+import { PageType } from "~/utils/platform/metaweblog/IMetaweblogCfg"
+import { Post } from "~/utils/common/post"
+import { LogFactory } from "~/utils/logUtil"
+import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
+import { getPageId } from "~/utils/platform/siyuan/siyuanUtil"
+import { getConf, getJSONConf, setConf } from "~/utils/configUtil"
+import {
+  cutWords,
+  isEmptyObject,
+  isEmptyString,
+  jiebaToHotWords,
+  pinyinSlugify,
+  zhSlugify,
+} from "~/utils/util"
+import { calcLastSeconds, formatNumToZhDate } from "~/utils/dateUtil"
+import { getPublishStatus } from "~/utils/publishUtil"
+import { ImageParser } from "~/utils/parser/imageParser"
 
 const logger = LogFactory.getLogger(
   "components/publish/tab/main/CommonBlogMain.vue"
-);
-const siyuanApi = new SiYuanApi();
+)
+const siyuanApi = new SiYuanApi()
 // 图片解析器
-const imageParser = new ImageParser();
+const imageParser = new ImageParser()
 
-const { t } = useI18n();
+const { t } = useI18n()
 
 const props = defineProps({
   isReload: {
     type: Boolean,
-    default: false
+    default: false,
   },
   useCat: {
     type: Boolean,
@@ -622,7 +632,7 @@ const makeSlug = async (hideTip) => {
       ElMessage.success(t("main.opt.failure"))
     }
   } else {
-    formData.customSlug = pinyinSlugify(fmtTitle);
+    formData.customSlug = pinyinSlugify(fmtTitle)
   }
 
   // add hash

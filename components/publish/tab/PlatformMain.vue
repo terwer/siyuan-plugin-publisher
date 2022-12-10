@@ -27,7 +27,7 @@
   <el-tabs type="border-card" v-if="tabCountStore.tabCount > 0">
     <!-- Github -->
     <el-tab-pane :label="$t('main.publish.to.vuepress')" v-if="vuepressEnabled">
-      <vuepress-main :page-id="props.pageId" />
+      <vuepress-main :is-reload="props.isReload" :page-id="props.pageId" />
     </el-tab-pane>
     <el-tab-pane :label="$t('main.publish.to.hugo')" v-if="hugoEnabled">
       <hugo-main :page-id="props.pageId" />

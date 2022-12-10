@@ -54,9 +54,9 @@ export default {
   "main.publish.github.choose.title": "File name",
   "main.publish.github.choose.title.tip":
     "Vuepress-theme-VDoing support file name plus serial number to identify. If you don’t know this usage, please do not modify the file name",
-  "main.publish.github.see.preview": "Click here see new post",
-  "main.publish.github.see.md.preview": "Click here see new md file",
-  "main.publish.github.see.real.preview": "Click here see new post",
+  "main.publish.see.preview": "Click here see new post",
+  "main.publish.see.md.preview": "Click here see new md file",
+  "main.publish.see.real.preview": "Click here see new post",
   "main.publish.to.wordpress": "Sendto WP",
   "main.slug": "Post slug",
   "main.auto.fetch.slug": "Auto fetch slug",
