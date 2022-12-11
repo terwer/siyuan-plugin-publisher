@@ -264,4 +264,6 @@ export default {
   "page.no.id": "pageId fetch error",
   "main.read.mode": "Readonly",
   "main.read.mode.tip": "Readonly tips",
+  "main.opt.onclick.confirm.tip":
+    "This operation will re -generate all attributes other than alias. If you just want to modify individual attributes, please click the individual function button to operate in the detailed mode. Do you continue?",
 }

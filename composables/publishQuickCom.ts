@@ -24,14 +24,55 @@
  */
 
 import { reactive } from "vue"
+import { LogFactory } from "~/utils/logUtil"
+import { ElMessage, ElMessageBox } from "element-plus"
+import { useI18n } from "vue-i18n"
+import { clearConf } from "~/utils/configUtil"
+import { reloadPage } from "~/utils/browserUtil"
 
-export const useQuick = () => {
+/**
+ * 快捷操作组件
+ */
+export const useQuick = (dependentMethods?: any) => {
+  const logger = LogFactory.getLogger("composables/publishQuickCom.ts")
+  const { t } = useI18n()
   const quickData = reactive({
     isGenLoading: false,
   })
 
   const quickMethods = {
-    oneclickAttr: async () => {},
+    oneclickAttr: async () => {
+      ElMessageBox.confirm(
+        t("main.opt.onclick.confirm.tip"),
+        t("main.opt.warning"),
+        {
+          confirmButtonText: t("main.opt.ok"),
+          cancelButtonText: t("main.opt.cancel"),
+          type: "warning",
+        }
+      )
+        .then(async () => {
+          quickData.isGenLoading = true
+
+          if (dependentMethods.slugMethods) {
+            await dependentMethods.slugMethods.makeSlug(true)
+          }
+
+          if (dependentMethods.descMethods) {
+            await dependentMethods.descMethods.makeDesc(true)
+          }
+
+          quickData.isGenLoading = false
+          logger.debug("一键生成属性完成.")
+          ElMessage.success(t("main.opt.success"))
+        })
+        .catch(() => {
+          // ElMessage({
+          //   type: 'error',
+          //   message: t("main.opt.failure"),
+          // })
+        })
+    },
     saveAttrToSiyuan: async () => {},
   }
 

@@ -65,9 +65,9 @@ export default {
   "main.use.hash": "别名后缀",
   "main.use.hash.tip":
     "不使用hash会展示更有意义的url，但是可能导致文章别名重复（后果是Vuepress会Build失败除非手动解决别名唯一问题），请知悉。",
-  "main.force.refresh": "强制刷新",
+  "main.force.refresh": "刷新别名",
   "main.force.refresh.tip":
-    "为了防止误操作更新别名，别名不为空的时候默认不会更新别名，如需更新，请勾选强制刷新。",
+    "为了防止误操作更新别名，别名不为空的时候默认不会更新别名，如需更新，请勾选刷新别名。",
   "main.desc": "文章摘要",
   "main.auto.fetch.desc": "自动提取摘要",
   "main.create.time": "发布时间",
@@ -275,4 +275,6 @@ export default {
   "main.read.mode": "只读模式",
   "main.read.mode.tip":
     "温馨提示：只读模式下点击可直接复制，编辑模式下需要点击复制按钮复制。",
+  "main.opt.onclick.confirm.tip":
+    "此操作默认将重新生成除别名以外的所有属性，如果只想修改个别属性，请在详细模式点击单独功能按钮操作，是否继续？",
 }

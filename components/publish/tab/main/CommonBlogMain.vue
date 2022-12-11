@@ -63,7 +63,7 @@
           </el-button-group>
         </el-form-item>
 
-        <!-- 强制刷新 -->
+        <!-- 刷新别名 -->
         <el-form-item :label="$t('main.force.refresh')" v-if="editMode">
           <el-switch v-model="forceRefresh" />
           <el-alert

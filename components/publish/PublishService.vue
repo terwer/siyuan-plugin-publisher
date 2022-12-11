@@ -93,19 +93,15 @@ const props = defineProps({
 const serviceTabChange = (name) => {
   logger.debug("serviceTabChange=>", name)
   if (name === "platform-setting") {
-    // 切换强制刷新
     isReloadSetting.value = !isReloadSetting.value
     logger.debug("platform-setting change=>")
   } else if (name === "platform-main") {
-    // 切换强制刷新
     isReloadMain.value = !isReloadMain.value
     logger.debug("platform-main change=>")
   } else if (name === "post-bind") {
-    // 切换强制刷新
     isReloadPostBind.value = !isReloadPostBind.value
     logger.debug("post-bind change=>")
   } else if (name === "service-switch") {
-    // 切换强制刷新
     isReloadServiceSwitch.value = !isReloadServiceSwitch.value
     logger.debug("service-switch change=>")
   }

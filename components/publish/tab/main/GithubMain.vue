@@ -89,7 +89,7 @@
           >
             <!-- 别名 -->
             <div class="form-slug">
-              <!-- 强制刷新 -->
+              <!-- 刷新别名 -->
               <el-form-item
                 v-if="formOptionData.etype !== PageEditMode.EditMode_simple"
                 :label="$t('main.force.refresh')"
@@ -125,7 +125,6 @@
                 <el-input v-model="slugData.customSlug" />
               </el-form-item>
               <!-- 生成别名 -->
-              <!--
               <el-form-item
                 v-if="formOptionData.etype !== PageEditMode.EditMode_simple"
               >
@@ -133,7 +132,7 @@
                   :loading="slugData.isSlugLoading"
                   class="make-slug-btn"
                   type="primary"
-                  @click="makeSlug"
+                  @click="slugMethods.makeSlug"
                 >
                   {{
                     slugData.isSlugLoading
@@ -142,7 +141,36 @@
                   }}
                 </el-button>
               </el-form-item>
-              -->
+            </div>
+
+            <!-- 文章摘要 -->
+            <div class="form-desc">
+              <!-- 摘要字段 -->
+              <el-form-item
+                v-if="formOptionData.etype !== PageEditMode.EditMode_simple"
+                :label="$t('main.desc')"
+              >
+                <el-input
+                  v-model="descData.desc"
+                  :autosize="{ minRows: 3, maxRows: 16 }"
+                  type="textarea"
+                />
+              </el-form-item>
+              <el-form-item
+                v-if="formOptionData.etype !== PageEditMode.EditMode_simple"
+              >
+                <el-button
+                  :loading="descData.isDescLoading"
+                  type="primary"
+                  @click="descMethods.makeDesc"
+                >
+                  {{
+                    descData.isDescLoading
+                      ? $t("main.opt.loading")
+                      : $t("main.auto.fetch.desc")
+                  }}
+                </el-button>
+              </el-form-item>
             </div>
 
             <!-- 快捷操作 -->
@@ -212,7 +240,7 @@
             </el-form-item>
 
             <!-- 只读模式 -->
-            <!-- 强制刷新 -->
+            <!-- 刷新别名 -->
             <el-form-item
               v-if="
                 formOptionData.etype.toString() !==
@@ -353,6 +381,7 @@ import { PublishPreference } from "~/utils/common/publishPreference"
 import { formatNumToZhDate } from "~/utils/dateUtil"
 import { usePublish } from "~/composables/doPublishCom"
 import { useQuick } from "~/composables/publishQuickCom"
+import { useDesc } from "~/composables/makeDescCom"
 
 const logger = LogFactory.getLogger(
   "components/publish/tab/main/GithubMain.vue"
@@ -405,9 +434,13 @@ const formData = ref({
 
 // composables
 const { slugData, slugMethods } = useSlug(props.pageId, siyuanApi)
+const { descData, descMethods } = useDesc(props.pageId, siyuanApi)
 const { yamlData, yamlMethods } = useYaml()
 const { publishData, publishMethods } = usePublish()
-const { quickData, quickMethods } = useQuick()
+const { quickData, quickMethods } = useQuick({
+  slugMethods,
+  descMethods,
+})
 
 // page methods
 const onEditModeChange = (val: PageEditMode) => {
@@ -592,6 +625,9 @@ const initPage = async () => {
     // 别名
     const slugKey = SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_SLUG_KEY
     await slugMethods.initSlug(siyuanData.value.meta[slugKey])
+    // 摘要
+    const descKey = SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_DESC_KEY
+    await descMethods.initDesc(siyuanData.value.meta[descKey])
 
     // 表单属性转换为YAML
     yamlMethods.doConvertAttrToYAML(
