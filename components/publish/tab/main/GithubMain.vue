@@ -529,6 +529,7 @@ import { usePublishTime } from "~/composables/publish/publishTimeCom"
 import { useTag } from "~/composables/publish/makeTagCom"
 import { useGithubPages } from "~/composables/publish/githubPagesCom"
 import { SLUG_TYPE_CONSTANTS } from "~/utils/constants/slugTypeConstants"
+import { SiyuanDataObj } from "~/utils/models/siyuanDataObj"
 
 const logger = LogFactory.getLogger(
   "components/publish/tab/main/GithubMain.vue"
@@ -567,17 +568,7 @@ const formOptionData = reactive({
   stype: SourceContentShowType.YAML_CONTENT,
 })
 const siyuanData = ref({
-  pageId: "",
-  meta: {
-    tags: "",
-  },
-  page: {
-    content: "",
-    created: "20220831131637",
-  },
-  content: {
-    content: "",
-  },
+  dataObj: new SiyuanDataObj(),
 })
 const formData = ref({
   postForm: new PostForm(),
@@ -629,7 +620,7 @@ const onYamlShowTypeChange = (val) => {
 
 const getDocPath = () => {
   const postidKey = getApiParams<IGithubCfg>(props.apiType).posidKey
-  const meta: any = siyuanData.value.meta
+  const meta: any = siyuanData.value.dataObj.meta
   return meta[postidKey] || ""
 }
 
@@ -656,20 +647,21 @@ const convertDocPathToCategories = (
 
 // 思源笔记转formData，主要是初始化
 const siyuanDataToForm = (publishCfg: PublishPreference) => {
-  formData.value.postForm.formData.title = siyuanData.value.page.content
+  formData.value.postForm.formData.title = siyuanData.value.dataObj.page.content
 
   const slugKey = SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_SLUG_KEY
-  formData.value.postForm.formData.customSlug = siyuanData.value.meta[slugKey]
+  formData.value.postForm.formData.customSlug =
+    siyuanData.value.dataObj.meta[slugKey]
 
   const descKey = SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_DESC_KEY
-  formData.value.postForm.formData.desc = siyuanData.value.meta[descKey]
+  formData.value.postForm.formData.desc = siyuanData.value.dataObj.meta[descKey]
 
   formData.value.postForm.formData.created = formatNumToZhDate(
-    siyuanData.value.page.created
+    siyuanData.value.dataObj.page.created
   )
 
   formData.value.postForm.formData.tag.dynamicTags = []
-  const tagstr = siyuanData.value.meta.tags || ""
+  const tagstr = siyuanData.value.dataObj.meta.tags || ""
   const tgarr = tagstr.split(",")
   for (let i = 0; i < tgarr.length; i++) {
     const tg = tgarr[i]
@@ -678,7 +670,7 @@ const siyuanDataToForm = (publishCfg: PublishPreference) => {
     }
   }
 
-  const dataContent = siyuanData.value.content
+  const dataContent = siyuanData.value.dataObj.content
   let md = dataContent.content
   md = removeMdWidgetTag(md)
   if (publishCfg.removeH1) {
@@ -747,13 +739,16 @@ const initPage = async () => {
     }
 
     // 思源笔记数据
-    siyuanData.value.pageId = pageId
-    siyuanData.value.meta = await siyuanApi.getBlockAttrs(pageId)
-    siyuanData.value.page = await siyuanApi.getBlockByID(pageId)
-    siyuanData.value.content = await siyuanApi.exportMdContent(pageId)
+    siyuanData.value.dataObj.pageId = pageId
+    siyuanData.value.dataObj.meta = await siyuanApi.getBlockAttrs(pageId)
+    siyuanData.value.dataObj.page = await siyuanApi.getBlockByID(pageId)
+    siyuanData.value.dataObj.content = await siyuanApi.exportMdContent(pageId)
 
     // 发布状态
-    isPublished.value = getPublishStatus(props.apiType, siyuanData.value.meta)
+    isPublished.value = getPublishStatus(
+      props.apiType,
+      siyuanData.value.dataObj.meta
+    )
 
     // Form数据
     siyuanDataToForm(publishCfg)
