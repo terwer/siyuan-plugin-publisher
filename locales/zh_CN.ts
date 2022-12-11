@@ -42,16 +42,17 @@ export default {
     "推荐Vuepress的V1版本，配合 vuepress-theme-vdoing 使用，后续bug也只会对V1和此主题进行更新",
   "main.publish.github.error.tip":
     "配置错误或者api不可用，请检查。若修改过配置，请刷新页面",
-  "main.publish.github": "发布Github",
+  "main.publish.github": "发布页面",
   "main.publish.github.tip":
     "自动将文章的markdown文本发布到Vuepress对应的Github仓库（需要先进行相关配置）",
   "main.publish.github.no.tip":
-    "您未开启Github发布，请在点击发布之后切换源码模式复制Markdown文本",
-  "main.publish.github.choose.path": "请选择目录",
+    "您未开启Github pages发布，请切换源码模式复制YAML以及Markdown文本",
+  "main.publish.github.choose.path": "选择目录",
+  "main.publish.github.published.path": "发布路径",
   "main.publish.github.choose.path.use.default": "默认目录",
   "main.publish.github.choose.path.use.default.tip":
-    "使用默认目录，则默认所有文章都发布在配置好的默认目录下，无需每次发布的时候来选择目录，当前平台的默认目录为：",
-  "main.publish.github.choose.title": "文件名",
+    "使用默认目录，则默认所有文章都发布在配置好的默认目录下（可在发布配置设置），无需每次发布的时候来选择目录，当前平台的默认目录为：",
+  "main.publish.github.choose.title": "文件名称",
   "main.publish.github.choose.title.tip":
     "Vuepress-theme-vdoing支持文件名加上序号来标识，如果你不清楚此用法，请不要修改文件名",
   "main.publish.github.failure": "发布失败，请自行复制右侧文本",

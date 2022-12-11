@@ -27,6 +27,7 @@
   <github-main
     :is-reload="props.isReload"
     :api-type="apiType"
+    :slug-type="slugType"
     :page-id="props.pageId"
     :yaml-converter="yamlConverter"
   />
@@ -36,8 +37,10 @@ import GithubMain from "~/components/publish/tab/main/GithubMain.vue"
 import { API_TYPE_CONSTANTS } from "~/utils/constants/apiTypeConstants"
 import { ref } from "vue"
 import { VuepressYamlConvertAdaptor } from "~/utils/platform/github/vuepress/VuepressYamlConvertAdaptor"
+import { SLUG_TYPE_CONSTANTS } from "~/utils/constants/slugTypeConstants"
 
 const apiType = ref(API_TYPE_CONSTANTS.API_TYPE_VUEPRESS)
+const slugType = ref(SLUG_TYPE_CONSTANTS.SLUG_TYPE_MD_FILE)
 const vuepressYamlConvertAdaptor = new VuepressYamlConvertAdaptor()
 const yamlConverter = ref(vuepressYamlConvertAdaptor)
 

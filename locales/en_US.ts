@@ -46,6 +46,7 @@ export default {
   "main.publish.github.tip":
     "Checking the Markdown text of the article to the GitHub warehouse corresponding to Vuepress (need to perform related configuration first, unsatisfactory or configuration error will be ignored)",
   "main.publish.github.choose.path": "Choose path",
+  "main.publish.github.published.path": "Published path",
   "main.publish.github.choose.path.use.default": "Default path",
   "main.publish.github.choose.path.use.default.tip":
     "Using the default directory, all articles are published in the configuration default directory, no need to select the directory every time it is published",

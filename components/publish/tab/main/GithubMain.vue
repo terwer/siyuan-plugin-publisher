@@ -244,6 +244,78 @@
               </el-form-item>
             </div>
 
+            <!-- Github pages -->
+            <div class="form-github-pages">
+              <!-- 启用Github发布 -->
+              <el-form-item :label="$t('main.publish.github')">
+                <el-switch
+                  v-model="githubPagesData.githubEnabled"
+                  @change="githubPagesMethods.githubOnChange"
+                />
+                <el-alert
+                  v-if="!githubPagesData.githubEnabled"
+                  :closable="false"
+                  :title="$t('main.publish.github.no.tip')"
+                  type="warning"
+                />
+              </el-form-item>
+              <div
+                v-if="githubPagesData.githubEnabled"
+                class="form-github-pages-items"
+              >
+                <!-- 是否使用默认目录 -->
+                <el-form-item
+                  :label="$t('main.publish.github.choose.path.use.default')"
+                >
+                  <el-switch
+                    v-model="githubPagesData.useDefaultPath"
+                    @change="githubPagesMethods.defaultPathOnChange"
+                  />
+                  <el-alert
+                    v-if="githubPagesData.useDefaultPath"
+                    :closable="false"
+                    :title="
+                      $t('main.publish.github.choose.path.use.default.tip') +
+                      githubPagesData.currentDefaultPath
+                    "
+                    type="info"
+                  />
+                </el-form-item>
+                <!-- 选择目录 -->
+                <el-form-item
+                  v-if="!githubPagesData.useDefaultPath && !isPublished"
+                  :label="$t('main.publish.github.choose.path')"
+                >
+                  <el-tree-select
+                    v-model="githubPagesData.customPath"
+                    :check-strictly="true"
+                    :empty-text="$t('main.cat.empty')"
+                    :load="githubPagesMethods.customLoad"
+                    :no-data-text="$t('main.cat.empty')"
+                    :placeholder="$t('main.cat.select')"
+                    :props="githubPagesData.path.customProps"
+                    lazy
+                    style="width: 100%"
+                    @node-click="githubPagesMethods.onSelectChange"
+                  />
+                </el-form-item>
+                <!-- 设置文件名 -->
+                <el-form-item
+                  v-if="!isPublished"
+                  :label="$t('main.publish.github.choose.title')"
+                >
+                  <el-input v-model="githubPagesData.mdTitle" />
+                </el-form-item>
+                <!-- 发布路径只读查看 -->
+                <el-form-item :label="$t('main.publish.github.published.path')">
+                  <el-input
+                    v-model="githubPagesData.publishPath"
+                    :disabled="isPublished"
+                  />
+                </el-form-item>
+              </div>
+            </div>
+
             <!-- 快捷操作 -->
             <div class="convert-option">
               <!-- 一键生成属性-->
@@ -270,7 +342,7 @@
             </div>
 
             <!-- 发布操作 -->
-            <div class="publish-option">
+            <div v-if="githubPagesData.githubEnabled" class="publish-option">
               <el-form-item>
                 <el-button
                   :loading="publishData.isPublishLoading"
@@ -455,6 +527,8 @@ import { useQuick } from "~/composables/publish/publishQuickCom"
 import { useDesc } from "~/composables/publish/makeDescCom"
 import { usePublishTime } from "~/composables/publish/publishTimeCom"
 import { useTag } from "~/composables/publish/makeTagCom"
+import { useGithubPages } from "~/composables/publish/githubPagesCom"
+import { SLUG_TYPE_CONSTANTS } from "~/utils/constants/slugTypeConstants"
 
 const logger = LogFactory.getLogger(
   "components/publish/tab/main/GithubMain.vue"
@@ -471,6 +545,10 @@ const props = defineProps({
     default: "",
   },
   pageId: {
+    type: String,
+    default: undefined,
+  },
+  slugType: {
     type: String,
     default: undefined,
   },
@@ -510,6 +588,7 @@ const { slugData, slugMethods } = useSlug(props.pageId, siyuanApi)
 const { descData, descMethods } = useDesc(props.pageId, siyuanApi)
 const { publishTimeData, publishTimeMethods } = usePublishTime()
 const { tagData, tagMethods } = useTag(props.pageId, siyuanApi)
+const { githubPagesData, githubPagesMethods } = useGithubPages(props.apiType)
 const { yamlData, yamlMethods } = useYaml()
 const { publishData, publishMethods } = usePublish()
 const { quickData, quickMethods } = useQuick({
@@ -577,11 +656,7 @@ const convertDocPathToCategories = (
 
 // 思源笔记转formData，主要是初始化
 const siyuanDataToForm = (publishCfg: PublishPreference) => {
-  let fmtTitle = siyuanData.value.page.content
-  if (publishCfg.fixTitle) {
-    fmtTitle = mdFileToTitle(fmtTitle)
-  }
-  formData.value.postForm.formData.title = fmtTitle
+  formData.value.postForm.formData.title = siyuanData.value.page.content
 
   const slugKey = SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_SLUG_KEY
   formData.value.postForm.formData.customSlug = siyuanData.value.meta[slugKey]
@@ -658,6 +733,7 @@ const initPage = async () => {
 
     // 读取平台配置
     const githubCfg = getJSONConf<IGithubCfg>(props.apiType)
+    // API状态
     apiStatus.value = githubCfg.apiStatus
 
     // 获取页面ID
@@ -676,6 +752,9 @@ const initPage = async () => {
     siyuanData.value.page = await siyuanApi.getBlockByID(pageId)
     siyuanData.value.content = await siyuanApi.exportMdContent(pageId)
 
+    // 发布状态
+    isPublished.value = getPublishStatus(props.apiType, siyuanData.value.meta)
+
     // Form数据
     siyuanDataToForm(publishCfg)
     // 默认目录
@@ -685,8 +764,6 @@ const initPage = async () => {
     //   formData.value.postForm.formData.customPath,
     //   publishCfg
     // )
-    // 发布状态
-    isPublished.value = getPublishStatus(props.apiType, siyuanData.value.meta)
     if (isPublished.value) {
       formData.value.postForm.formData.customPath = getDocPath()
       convertDocPathToCategories(
@@ -709,6 +786,21 @@ const initPage = async () => {
     publishTimeMethods.initPublishTime(formData.value.postForm.formData.created)
     // 标签
     tagMethods.initTag(formData.value.postForm.formData.tag.dynamicTags)
+    // githubPages
+    githubPagesData.githubEnabled = apiStatus.value
+    let docPath
+    if (isPublished.value) {
+      githubPagesData.useDefaultPath = false
+      docPath = getDocPath()
+    } else {
+      docPath = githubCfg.defaultPath ?? ""
+    }
+    const currentDefaultPath = githubCfg.defaultPath ?? "尚未配置"
+    const mdTitle =
+      props.slugType === SLUG_TYPE_CONSTANTS.SLUG_TYPE_MD_FILE
+        ? formData.value.postForm.formData.title
+        : slugData.customSlug
+    githubPagesMethods.initGithubPages(docPath, currentDefaultPath, mdTitle)
 
     // 表单属性转换为YAML
     yamlMethods.doConvertAttrToYAML(
