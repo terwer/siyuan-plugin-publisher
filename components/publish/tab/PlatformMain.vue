@@ -104,7 +104,7 @@
 
 <script lang="ts" setup>
 import { onMounted, reactive, watch } from "vue"
-import { useTabCount } from "~/composables/tabCountCom"
+import { useTabCount } from "~/composables/publish/tabCountCom"
 import { LogFactory } from "~/utils/logUtil"
 import VuepressMain from "~/components/publish/tab/main/github/VuepressMain.vue"
 import HugoMain from "~/components/publish/tab/main/github/HugoMain.vue"

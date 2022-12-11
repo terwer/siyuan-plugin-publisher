@@ -23,37 +23,24 @@
  * questions.
  */
 
-import { PageEditMode } from "~/utils/common/pageEditMode"
-import { SourceContentShowType } from "~/utils/common/sourceContentShowType"
+import { reactive } from "vue"
 
 /**
- * 发布偏好设置
+ * 发布时间组件
  */
-export class PublishPreference {
-  /**
-   * 精简模式、源码模式
-   */
-  editMode: PageEditMode
+export const usePublishTime = () => {
+  const publishTimeData = reactive({
+    created: "",
+  })
 
-  /**
-   * 默认展示形式，HTML、MD、YAML等
-   */
-  contentShowType: SourceContentShowType
+  const publishTimeMethods = {
+    initPublishTime: (datestr: string) => {
+      publishTimeData.created = datestr
+    },
+  }
 
-  /**
-   * 是否处理标题（包括去除.md等后缀，去除数字编号）
-   */
-  fixTitle: boolean
-  /**
-   * 是否使用谷歌翻译，不使用将直接用拼音代替
-   */
-  useGoogleTranslate: boolean
-  /**
-   * 是否删除H1标签
-   */
-  removeH1: boolean
-  /**
-   * 是否自动生成标签
-   */
-  autoTag: boolean
+  return {
+    publishTimeData,
+    publishTimeMethods,
+  }
 }

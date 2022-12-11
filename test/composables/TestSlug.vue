@@ -48,7 +48,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useSlug } from "~/composables/makeSlugCom"
+import { useSlug } from "~/composables/publish/makeSlugCom"
 import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
 
 const { slugData, slugMethods } = useSlug(

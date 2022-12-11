@@ -62,6 +62,10 @@ export const useQuick = (dependentMethods?: any) => {
             await dependentMethods.descMethods.makeDesc(true)
           }
 
+          if (dependentMethods.tagMethods) {
+            await dependentMethods.tagMethods.fetchTag(true)
+          }
+
           quickData.isGenLoading = false
           logger.debug("一键生成属性完成.")
           ElMessage.success(t("main.opt.success"))

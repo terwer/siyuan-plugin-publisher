@@ -153,6 +153,7 @@ export const getPublishCfg = (): PublishPreference => {
     publishCfg.useGoogleTranslate = true
     publishCfg.editMode = PageEditMode.EditMode_simple
     publishCfg.contentShowType = SourceContentShowType.YAML_CONTENT
+    publishCfg.autoTag = false
   }
 
   // ================
@@ -163,6 +164,7 @@ export const getPublishCfg = (): PublishPreference => {
   publishCfg.editMode = PageEditMode.EditMode_complex
   publishCfg.contentShowType = SourceContentShowType.YAML
   publishCfg.removeH1 = true
+  publishCfg.autoTag = true
   // ================
   // 下面是我自己的配置
   // ================

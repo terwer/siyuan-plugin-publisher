@@ -173,6 +173,77 @@
               </el-form-item>
             </div>
 
+            <!-- 发布时间 -->
+            <div class="form-publish-time">
+              <el-form-item
+                v-if="formOptionData.etype !== PageEditMode.EditMode_simple"
+                :label="$t('main.create.time')"
+              >
+                <el-date-picker
+                  v-model="publishTimeData.created"
+                  :placeholder="$t('main.create.time.placeholder')"
+                  format="YYYY-MM-DD HH:mm:ss"
+                  type="datetime"
+                  value-format="YYYY-MM-DD HH:mm:ss"
+                />
+              </el-form-item>
+            </div>
+
+            <!--
+            ----------------------------------------------------------------------
+            -->
+            <!-- 标签  -->
+            <div class="form-tags">
+              <!-- 标签开关 -->
+              <el-form-item :label="$t('main.tag.auto.switch')">
+                <el-switch v-model="tagData.tagSwitch" />
+              </el-form-item>
+              <el-form-item :label="$t('main.tag')">
+                <el-tag
+                  v-for="tag in tagData.tag.dynamicTags"
+                  :key="tag"
+                  :disable-transitions="false"
+                  class="mx-1"
+                  closable
+                  @close="tagMethods.tagHandleClose(tag)"
+                >
+                  {{ tag }}
+                </el-tag>
+                <el-input
+                  v-if="tagData.tag.inputVisible"
+                  ref="tagRefInput"
+                  v-model="tagData.tag.inputValue"
+                  class="ml-1 w-20"
+                  size="small"
+                  @blur="tagMethods.tagHandleInputConfirm"
+                  @keyup.enter="tagMethods.tagHandleInputConfirm"
+                />
+                <el-button
+                  v-else
+                  class="button-new-tag ml-1 el-tag"
+                  size="small"
+                  @click="tagMethods.tagShowInput"
+                >
+                  {{ $t("main.tag.new") }}
+                </el-button>
+              </el-form-item>
+              <el-form-item
+                v-if="formOptionData.etype !== PageEditMode.EditMode_simple"
+              >
+                <el-button
+                  :loading="tagData.isTagLoading"
+                  type="primary"
+                  @click="tagMethods.fetchTag"
+                >
+                  {{
+                    tagData.isTagLoading
+                      ? $t("main.opt.loading")
+                      : $t("main.auto.fetch.tag")
+                  }}
+                </el-button>
+              </el-form-item>
+            </div>
+
             <!-- 快捷操作 -->
             <div class="convert-option">
               <!-- 一键生成属性-->
@@ -367,21 +438,23 @@ import { appendStr, mdFileToTitle, upperFirst } from "~/utils/strUtil"
 import { useI18n } from "vue-i18n"
 import { getJSONConf } from "~/utils/configUtil"
 import { IGithubCfg } from "~/utils/platform/github/githubCfg"
-import { useSlug } from "~/composables/makeSlugCom"
+import { useSlug } from "~/composables/publish/makeSlugCom"
 import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
 import { getPageId } from "~/utils/platform/siyuan/siyuanUtil"
 import { SIYUAN_PAGE_ATTR_KEY } from "~/utils/constants/siyuanPageConstants"
 import { LogFactory } from "~/utils/logUtil"
 import { ElMessage } from "element-plus"
-import { useYaml } from "~/composables/makeYamlCom"
+import { useYaml } from "~/composables/publish/makeYamlCom"
 import { mdToHtml, removeMdH1, removeMdWidgetTag } from "~/utils/htmlUtil"
 import { YamlConvertAdaptor } from "~/utils/platform/yamlConvertAdaptor"
 import { PostForm } from "~/utils/common/postForm"
 import { PublishPreference } from "~/utils/common/publishPreference"
 import { formatNumToZhDate } from "~/utils/dateUtil"
-import { usePublish } from "~/composables/doPublishCom"
-import { useQuick } from "~/composables/publishQuickCom"
-import { useDesc } from "~/composables/makeDescCom"
+import { usePublish } from "~/composables/publish/doPublishCom"
+import { useQuick } from "~/composables/publish/publishQuickCom"
+import { useDesc } from "~/composables/publish/makeDescCom"
+import { usePublishTime } from "~/composables/publish/publishTimeCom"
+import { useTag } from "~/composables/publish/makeTagCom"
 
 const logger = LogFactory.getLogger(
   "components/publish/tab/main/GithubMain.vue"
@@ -435,11 +508,14 @@ const formData = ref({
 // composables
 const { slugData, slugMethods } = useSlug(props.pageId, siyuanApi)
 const { descData, descMethods } = useDesc(props.pageId, siyuanApi)
+const { publishTimeData, publishTimeMethods } = usePublishTime()
+const { tagData, tagMethods } = useTag(props.pageId, siyuanApi)
 const { yamlData, yamlMethods } = useYaml()
 const { publishData, publishMethods } = usePublish()
 const { quickData, quickMethods } = useQuick({
   slugMethods,
   descMethods,
+  tagMethods,
 })
 
 // page methods
@@ -540,6 +616,9 @@ const siyuanDataToForm = (publishCfg: PublishPreference) => {
 // 组件数据转formData，主要是修改页面之后同步
 const composableDataToForm = () => {
   formData.value.postForm.formData.customSlug = slugData.customSlug
+  formData.value.postForm.formData.desc = descData.desc
+  formData.value.postForm.formData.created = publishTimeData.created
+  formData.value.postForm.formData.tag.dynamicTags = tagData.tag.dynamicTags
 }
 
 // 组件在页面上尽量使用自带的Data，这个是与DOM绑定的，可以实时获取最新数据，有改变的时候同步formData
@@ -623,11 +702,13 @@ const initPage = async () => {
 
     // composables 初始化
     // 别名
-    const slugKey = SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_SLUG_KEY
-    await slugMethods.initSlug(siyuanData.value.meta[slugKey])
+    slugMethods.initSlug(formData.value.postForm.formData.customSlug)
     // 摘要
-    const descKey = SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_DESC_KEY
-    await descMethods.initDesc(siyuanData.value.meta[descKey])
+    descMethods.initDesc(formData.value.postForm.formData.desc)
+    // 发布时间
+    publishTimeMethods.initPublishTime(formData.value.postForm.formData.created)
+    // 标签
+    tagMethods.initTag(formData.value.postForm.formData.tag.dynamicTags)
 
     // 表单属性转换为YAML
     yamlMethods.doConvertAttrToYAML(

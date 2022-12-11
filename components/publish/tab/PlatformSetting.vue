@@ -137,7 +137,7 @@
 
 <script lang="ts" setup>
 import { reactive, ref, watch } from "vue"
-import { useTabCount } from "~/composables/tabCountCom"
+import { useTabCount } from "~/composables/publish/tabCountCom"
 import { DynamicGCfg } from "~/utils/platform/github/DynamicGCfg"
 import { DynamicMCfg } from "~/utils/platform/metaweblog/dynamicMCfg"
 import {

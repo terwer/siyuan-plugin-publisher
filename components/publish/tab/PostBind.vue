@@ -154,7 +154,7 @@
 <script lang="ts" setup>
 import { onBeforeMount, onMounted, reactive, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
-import { useTabCount } from "~/composables/tabCountCom"
+import { useTabCount } from "~/composables/publish/tabCountCom"
 import {
   getDynamicJsonCfg,
   getDynPostidKey,
