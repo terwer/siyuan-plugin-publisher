@@ -52,7 +52,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Post } from "~/utils/common/post"
+import { Post } from "~/utils/models/post"
 import { getByLength } from "~/utils/strUtil"
 import { goToPage } from "~/utils/otherlib/ChromeUtil"
 import PostDetailService from "~/components/detail/PostDetailService.vue"

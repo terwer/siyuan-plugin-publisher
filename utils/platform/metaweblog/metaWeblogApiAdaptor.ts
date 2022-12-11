@@ -28,22 +28,22 @@ import { IMetaweblogCfg } from "~/utils/platform/metaweblog/IMetaweblogCfg"
 import { MetaWeblogApi } from "~/utils/platform/metaweblog/metaWeblogApi"
 import { CustomMetaWeblogApi } from "~/utils/platform/metaweblog/CustomMetaweblogApi"
 import { getJSONConf } from "~/utils/configUtil"
-import { UserBlog } from "~/utils/common/userBlog"
+import { UserBlog } from "~/utils/models/userBlog"
 import { isInChromeExtension } from "~/utils/otherlib/ChromeUtil"
 import { Logger } from "loglevel"
 import { LogFactory } from "~/utils/logUtil"
-import { Post } from "~/utils/common/post"
-import { CategoryInfo } from "~/utils/common/categoryInfo"
+import { Post } from "~/utils/models/post"
+import { CategoryInfo } from "~/utils/models/categoryInfo"
 import { pathJoin } from "~/utils/util"
 
 /**
  * 支持Metaweblog的通用API适配器
  */
 export class MetaWeblogApiAdaptor implements IApi {
-  private readonly logger: Logger
-  private readonly cfg: IMetaweblogCfg
   protected metaWeblogApi: MetaWeblogApi
   protected username: string
+  private readonly logger: Logger
+  private readonly cfg: IMetaweblogCfg
   protected password: string
   protected appkey: string
 

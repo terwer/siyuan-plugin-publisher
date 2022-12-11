@@ -155,7 +155,7 @@
 import { useI18n } from "vue-i18n"
 import { onMounted, ref } from "vue"
 import { LogFactory } from "~/utils/logUtil"
-import { Post } from "~/utils/common/post"
+import { Post } from "~/utils/models/post"
 import { goToPage } from "~/utils/otherlib/ChromeUtil"
 import { getPageId, inSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
 import { SiYuanApiAdaptor } from "~/utils/platform/siyuan/siYuanApiAdaptor"

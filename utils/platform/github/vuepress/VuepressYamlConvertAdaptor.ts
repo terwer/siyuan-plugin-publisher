@@ -27,8 +27,8 @@ import {
   IYamlConvertAdaptor,
   YamlConvertAdaptor,
 } from "~/utils/platform/yamlConvertAdaptor"
-import { PostForm } from "~/utils/common/postForm"
-import { YamlObj } from "~/utils/common/yamlObj"
+import { PostForm } from "~/utils/models/postForm"
+import { YamlObj } from "~/utils/models/yamlObj"
 import { LogFactory } from "~/utils/logUtil"
 import { covertStringToDate, formatIsoToZhDate } from "~/utils/dateUtil"
 import { obj2Yaml } from "~/utils/yamlUtil"

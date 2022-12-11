@@ -26,15 +26,15 @@
 import { IMetaweblogCfg } from "~/utils/platform/metaweblog/IMetaweblogCfg"
 import { getJSONConf } from "~/utils/configUtil"
 import { XmlrpcClient } from "~/utils/platform/metaweblog/xmlrpc"
-import { UserBlog } from "~/utils/common/userBlog"
+import { UserBlog } from "~/utils/models/userBlog"
 import { METAWEBLOG_METHOD_CONSTANTS } from "~/utils/constants/metaweblogMethodConstants"
 import { LogFactory } from "~/utils/logUtil"
 import { Logger } from "loglevel"
-import { Post } from "~/utils/common/post"
+import { Post } from "~/utils/models/post"
 import { POST_STATUS_CONSTANTS } from "~/utils/constants/postStatusConstants"
 import { isEmptyString } from "~/utils/util"
 import { isBrowser } from "~/utils/browserUtil"
-import { CategoryInfo } from "~/utils/common/categoryInfo"
+import { CategoryInfo } from "~/utils/models/categoryInfo"
 
 /**
  * Metaweblog API的具体实现

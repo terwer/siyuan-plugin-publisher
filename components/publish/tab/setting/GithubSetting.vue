@@ -171,7 +171,7 @@ import { GithubCfg, IGithubCfg } from "~/utils/platform/github/githubCfg"
 import { LogFactory } from "~/utils/logUtil"
 import { getJSONConf, setJSONConf } from "~/utils/configUtil"
 import { API } from "~/utils/api"
-import { Post } from "~/utils/common/post"
+import { Post } from "~/utils/models/post"
 import { isEmptyObject } from "~/utils/util"
 
 const logger = LogFactory.getLogger(

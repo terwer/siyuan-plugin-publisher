@@ -25,7 +25,7 @@
 
 import { LogFactory } from "~/utils/logUtil"
 import { METAWEBLOG_METHOD_CONSTANTS } from "~/utils/constants/metaweblogMethodConstants"
-import { UserBlog } from "~/utils/common/userBlog"
+import { UserBlog } from "~/utils/models/userBlog"
 
 const logger = LogFactory.getLogger(
   "utils/platform/metaweblog/electronXmlrpc.ts"

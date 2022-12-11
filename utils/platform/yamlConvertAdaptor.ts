@@ -23,8 +23,8 @@
  * questions.
  */
 
-import { YamlObj } from "~/utils/common/yamlObj"
-import { PostForm } from "~/utils/common/postForm"
+import { YamlObj } from "~/utils/models/yamlObj"
+import { PostForm } from "~/utils/models/postForm"
 import { IGithubCfg } from "~/utils/platform/github/githubCfg"
 
 export interface IYamlConvertAdaptor {

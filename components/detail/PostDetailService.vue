@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Post } from "~/utils/common/post"
+import { Post } from "~/utils/models/post"
 import { onMounted, ref, watch } from "vue"
 import { API } from "~/utils/api"
 import { API_TYPE_CONSTANTS } from "~/utils/constants/apiTypeConstants"

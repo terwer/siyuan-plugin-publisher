@@ -26,9 +26,9 @@
 import { IApi } from "~/utils/api"
 import { ICommonblogCfg } from "~/utils/platform/commonblog/commonblogCfg"
 import { getJSONConf } from "~/utils/configUtil"
-import { Post } from "~/utils/common/post"
-import { UserBlog } from "~/utils/common/userBlog"
-import { CategoryInfo } from "~/utils/common/categoryInfo"
+import { Post } from "~/utils/models/post"
+import { UserBlog } from "~/utils/models/userBlog"
+import { CategoryInfo } from "~/utils/models/categoryInfo"
 
 /**
  * 通用平台接口适配器

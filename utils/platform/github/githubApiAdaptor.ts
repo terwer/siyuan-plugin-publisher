@@ -27,13 +27,13 @@ import { IApi } from "~/utils/api"
 import { IGithubCfg } from "~/utils/platform/github/githubCfg"
 import { GithubApi } from "~/utils/platform/github/githubApi"
 import { getJSONConf } from "~/utils/configUtil"
-import { UserBlog } from "~/utils/common/userBlog"
+import { UserBlog } from "~/utils/models/userBlog"
 import { pathJoin } from "~/utils/util"
-import { Post } from "~/utils/common/post"
+import { Post } from "~/utils/models/post"
 import { Base64 } from "js-base64"
 import { Logger } from "loglevel"
 import { LogFactory } from "~/utils/logUtil"
-import { CategoryInfo } from "~/utils/common/categoryInfo"
+import { CategoryInfo } from "~/utils/models/categoryInfo"
 
 /**
  * Github平台适配器

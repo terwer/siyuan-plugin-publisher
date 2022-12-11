@@ -91,7 +91,7 @@ export const useGithubPages = (apiType: string) => {
       logger.debug("onSelectChange=>", val)
 
       if (val.isLeaf) {
-        ElMessage.error("您当前选择的是页面，页面必须发布在目录下")
+        ElMessage.error("您当前选择的是页面，请注意，页面必须发布在目录下")
         return
       }
 

@@ -279,7 +279,7 @@ import {
 } from "~/utils/platform/metaweblog/IMetaweblogCfg"
 import shortHash from "shorthash2"
 import { API } from "~/utils/api"
-import { Post } from "~/utils/common/post"
+import { Post } from "~/utils/models/post"
 import { API_TYPE_CONSTANTS } from "~/utils/constants/apiTypeConstants"
 import { LogFactory } from "~/utils/logUtil"
 import { getPageId } from "~/utils/platform/siyuan/siyuanUtil"
