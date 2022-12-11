@@ -145,22 +145,23 @@
               -->
             </div>
 
-            <!-- 属性转换 -->
+            <!-- 快捷操作 -->
             <div class="convert-option">
               <!-- 一键生成属性-->
               <el-form-item :label="$t('main.opt.quick')">
                 <el-button
-                  :loading="isGenLoading"
+                  :loading="quickData.isGenLoading"
                   type="primary"
-                  @click="oneclickAttr"
+                  @click="quickMethods.oneclickAttr"
                 >
                   {{
-                    isGenLoading
+                    quickData.isGenLoading
                       ? $t("main.opt.loading")
                       : $t("main.publish.oneclick.attr")
                   }}
                 </el-button>
-                <el-button type="primary" @click="saveAttrToSiyuan"
+                <!-- 属性转换 -->
+                <el-button type="primary" @click="quickMethods.saveAttrToSiyuan"
                   >{{ $t("main.save.attr.to.siyuan") }}
                 </el-button>
                 <el-button type="primary" @click="convertAttrToYAML"
@@ -173,18 +174,20 @@
             <div class="publish-option">
               <el-form-item>
                 <el-button
-                  :loading="isPublishLoading"
+                  :loading="publishData.isPublishLoading"
                   type="primary"
-                  @click="doPublish"
+                  @click="publishMethods.doPublish"
                   >{{
-                    isPublishLoading
+                    publishData.isPublishLoading
                       ? $t("main.publish.loading")
                       : isPublished
                       ? $t("main.update")
                       : $t("main.publish")
                   }}
                 </el-button>
-                <el-button :loading="isCancelLoading" @click="cancelPublish"
+                <el-button
+                  :loading="publishData.isCancelLoading"
+                  @click="publishMethods.cancelPublish"
                   >{{ $t("main.cancel") }}
                 </el-button>
               </el-form-item>
@@ -211,7 +214,10 @@
             <!-- 只读模式 -->
             <!-- 强制刷新 -->
             <el-form-item
-              v-if="formOptionData.etype !== PageEditMode.EditMode_simple"
+              v-if="
+                formOptionData.etype.toString() !==
+                PageEditMode.EditMode_simple.toString()
+              "
               :label="$t('main.read.mode')"
             >
               <el-switch v-model="yamlData.readMode" />
@@ -272,8 +278,8 @@
                   :autosize="{ minRows: 4, maxRows: 16 }"
                   readonly
                   type="textarea"
-                  @click="onYamlContentFocus"
-                  v-on:contextmenu="onYamlContextMenu"
+                  @click="yamlMethods.onYamlContentFocus"
+                  v-on:contextmenu="yamlMethods.onYamlContextMenu"
                 />
               </el-form-item>
             </div>
@@ -295,7 +301,9 @@
                 <el-button type="primary" @click="convertYAMLToAttr"
                   >{{ $t("main.yaml.to.siyuan") }}
                 </el-button>
-                <el-button type="primary" @click="copyYamlToClipboard()"
+                <el-button
+                  type="primary"
+                  @click="yamlMethods.copyYamlToClipboard()"
                   >{{ $t("main.copy") }}
                 </el-button>
               </el-form-item>
@@ -343,6 +351,8 @@ import { YamlConvertAdaptor } from "~/utils/platform/yamlConvertAdaptor"
 import { PostForm } from "~/utils/common/postForm"
 import { PublishPreference } from "~/utils/common/publishPreference"
 import { formatNumToZhDate } from "~/utils/dateUtil"
+import { usePublish } from "~/composables/doPublishCom"
+import { useQuick } from "~/composables/publishQuickCom"
 
 const logger = LogFactory.getLogger(
   "components/publish/tab/main/GithubMain.vue"
@@ -394,16 +404,10 @@ const formData = ref({
 })
 
 // composables
-const { slugData, initSlug } = useSlug(props.pageId, siyuanApi)
-const {
-  yamlData,
-  onYamlContentFocus,
-  doConvertAttrToYAML,
-  doConvertYAMLToAttr,
-  copyYamlToClipboard,
-  onYamlContextMenu,
-  initYaml,
-} = useYaml()
+const { slugData, slugMethods } = useSlug(props.pageId, siyuanApi)
+const { yamlData, yamlMethods } = useYaml()
+const { publishData, publishMethods } = usePublish()
+const { quickData, quickMethods } = useQuick()
 
 // page methods
 const onEditModeChange = (val: PageEditMode) => {
@@ -419,16 +423,16 @@ const onYamlShowTypeChange = (val) => {
 
   switch (val) {
     case SourceContentShowType.YAML:
-      initYaml(yamlData.formatter)
+      yamlMethods.initYaml(yamlData.formatter)
       break
     case SourceContentShowType.CONTENT:
-      initYaml(yamlData.mdContent)
+      yamlMethods.initYaml(yamlData.mdContent)
       break
     case SourceContentShowType.YAML_CONTENT:
-      initYaml(yamlData.formatter + yamlData.mdContent)
+      yamlMethods.initYaml(yamlData.formatter + yamlData.mdContent)
       break
     case SourceContentShowType.HTML_CONTENT:
-      initYaml(yamlData.htmlContent)
+      yamlMethods.initYaml(yamlData.htmlContent)
       break
     default:
       break
@@ -509,13 +513,17 @@ const composableDataToForm = () => {
 // 调用之前先同步form
 
 // 调用之前先同步form
-const convertAttrToYAML = (hideTip?: boolean) => {
+const convertAttrToYAML = (hideTip?: any) => {
   const publishCfg = getPublishCfg()
   const githubCfg = getJSONConf<IGithubCfg>(props.apiType)
 
   composableDataToForm()
 
-  doConvertAttrToYAML(props.yamlConverter, formData.value.postForm, githubCfg)
+  yamlMethods.doConvertAttrToYAML(
+    props.yamlConverter,
+    formData.value.postForm,
+    githubCfg
+  )
   onYamlShowTypeChange(publishCfg.contentShowType)
 
   if (hideTip !== true) {
@@ -524,7 +532,7 @@ const convertAttrToYAML = (hideTip?: boolean) => {
 }
 
 const convertYAMLToAttr = () => {
-  doConvertYAMLToAttr()
+  yamlMethods.doConvertYAMLToAttr()
 }
 
 const initPage = async () => {
@@ -583,10 +591,14 @@ const initPage = async () => {
     // composables 初始化
     // 别名
     const slugKey = SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_SLUG_KEY
-    await initSlug(siyuanData.value.meta[slugKey])
+    await slugMethods.initSlug(siyuanData.value.meta[slugKey])
 
     // 表单属性转换为YAML
-    doConvertAttrToYAML(props.yamlConverter, formData.value.postForm, githubCfg)
+    yamlMethods.doConvertAttrToYAML(
+      props.yamlConverter,
+      formData.value.postForm,
+      githubCfg
+    )
     // 显示默认（内部调用initYaml）
     onYamlShowTypeChange(publishCfg.contentShowType)
 

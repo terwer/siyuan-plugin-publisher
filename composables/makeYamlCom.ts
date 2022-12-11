@@ -51,78 +51,76 @@ export const useYaml = () => {
     htmlContent: "",
   })
 
-  /**
-   * @param event
-   */
-  const onYamlContentFocus = (event) => {
-    event.preventDefault()
+  const yamlMethods = {
+    /**
+     * @param event
+     */
+    onYamlContentFocus: (event) => {
+      event.preventDefault()
 
-    const target = event.target as HTMLTextAreaElement
-    target.select()
+      const target = event.target as HTMLTextAreaElement
+      target.select()
 
-    if (isBrowser()) {
-      // document.execCommand("copy");
+      if (isBrowser()) {
+        // document.execCommand("copy");
 
-      // Copy the selected text to the clipboard
-      navigator.clipboard.writeText(yamlData.yamlContent).then(
-        function () {
-          // The text has been successfully copied to the clipboard
-          ElMessage.success(t("main.opt.success"))
-        },
-        function (err) {
-          // An error occurred while copying the text
-          ElMessage.error(t("main.opt.failure") + err)
-        }
-      )
-    }
-  }
+        // Copy the selected text to the clipboard
+        navigator.clipboard.writeText(yamlData.yamlContent).then(
+          function () {
+            // The text has been successfully copied to the clipboard
+            ElMessage.success(t("main.opt.success"))
+          },
+          function (err) {
+            // An error occurred while copying the text
+            ElMessage.error(t("main.opt.failure") + err)
+          }
+        )
+      }
+    },
 
-  const onYamlContextMenu = (event) => {
-    event.preventDefault()
-  }
-  const doConvertAttrToYAML = (
-    yamlConverter: YamlConvertAdaptor,
-    postForm: PostForm,
-    githubCfg?: IGithubCfg
-  ): void => {
-    if (!yamlConverter) {
-      yamlConverter = new YamlConvertAdaptor()
-      logger.error("未指定YAML转换器")
-    }
+    onYamlContextMenu: (event) => {
+      event.preventDefault()
+    },
 
-    const yamlObj = yamlConverter.convert(postForm, githubCfg)
-    yamlData.formatter = yamlObj.formatter
-    yamlData.mdContent = yamlObj.mdContent
-    yamlData.mdFullContent = yamlObj.formatter + "\n" + yamlObj.mdContent
-    yamlData.htmlContent = yamlObj.htmlContent
-  }
+    doConvertAttrToYAML: (
+      yamlConverter: YamlConvertAdaptor,
+      postForm: PostForm,
+      githubCfg?: IGithubCfg
+    ): void => {
+      if (!yamlConverter) {
+        yamlConverter = new YamlConvertAdaptor()
+        logger.error("未指定YAML转换器")
+      }
 
-  const doConvertYAMLToAttr = () => {
-    // TODO
-    throw new Error("Not implemented")
-  }
+      const yamlObj = yamlConverter.convert(postForm, githubCfg)
+      yamlData.formatter = yamlObj.formatter
+      yamlData.mdContent = yamlObj.mdContent
+      yamlData.mdFullContent = yamlObj.formatter + "\n" + yamlObj.mdContent
+      yamlData.htmlContent = yamlObj.htmlContent
+    },
 
-  const copyYamlToClipboard = () => {
-    copy(yamlData.yamlContent)
-    ElMessage.success(t("main.opt.success"))
-  }
+    doConvertYAMLToAttr: () => {
+      // TODO
+      throw new Error("Not implemented")
+    },
 
-  /**
-   * 初始化
-   * @param yaml
-   */
-  const initYaml = (yaml: string) => {
-    yamlData.yamlContent = yaml
-    yamlData.yamlPreviewContent = appendStr(yaml)
+    copyYamlToClipboard: () => {
+      copy(yamlData.yamlContent)
+      ElMessage.success(t("main.opt.success"))
+    },
+
+    /**
+     * 初始化
+     * @param yaml
+     */
+    initYaml: (yaml: string) => {
+      yamlData.yamlContent = yaml
+      yamlData.yamlPreviewContent = appendStr(yaml)
+    },
   }
 
   return {
     yamlData,
-    onYamlContentFocus,
-    doConvertAttrToYAML,
-    doConvertYAMLToAttr,
-    copyYamlToClipboard,
-    onYamlContextMenu,
-    initYaml,
+    yamlMethods,
   }
 }

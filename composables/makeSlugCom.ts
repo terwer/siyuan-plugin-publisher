@@ -23,20 +23,20 @@
  * questions.
  */
 
-import { reactive } from "vue";
-import { ElMessage } from "element-plus";
-import { appendStr, mdFileToTitle } from "~/utils/strUtil";
-import * as util from "~/utils/util";
-import shortHash from "shorthash2";
-import { useI18n } from "vue-i18n";
-import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi";
-import { LogFactory } from "~/utils/logUtil";
-import { getPublishCfg } from "~/utils/publishUtil";
-import { getPageId } from "~/utils/platform/siyuan/siyuanUtil";
-import { SIYUAN_PAGE_ATTR_KEY } from "~/utils/constants/siyuanPageConstants";
-import { commonIsTest } from "~/utils/common/commonEnv";
-import { getConf } from "~/utils/configUtil";
-import { TEST_CONSTANTS } from "~/test/TEST_CONSTANTS";
+import { reactive } from "vue"
+import { ElMessage } from "element-plus"
+import { appendStr, mdFileToTitle } from "~/utils/strUtil"
+import * as util from "~/utils/util"
+import shortHash from "shorthash2"
+import { useI18n } from "vue-i18n"
+import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
+import { LogFactory } from "~/utils/logUtil"
+import { getPublishCfg } from "~/utils/publishUtil"
+import { getPageId } from "~/utils/platform/siyuan/siyuanUtil"
+import { SIYUAN_PAGE_ATTR_KEY } from "~/utils/constants/siyuanPageConstants"
+import { commonIsTest } from "~/utils/common/commonEnv"
+import { getConf } from "~/utils/configUtil"
+import { TEST_CONSTANTS } from "~/test/TEST_CONSTANTS"
 
 /**
  * 文章别名组件
@@ -44,150 +44,151 @@ import { TEST_CONSTANTS } from "~/test/TEST_CONSTANTS";
  * @param siyuanApi 思源Api
  */
 export const useSlug = (defaultPageId: string, siyuanApi: SiYuanApi) => {
-  const logger = LogFactory.getLogger("composables/makeSlugCom.ts");
-  const { t } = useI18n();
+  const logger = LogFactory.getLogger("composables/makeSlugCom.ts")
+  const { t } = useI18n()
   const slugData = reactive({
     isSlugLoading: false,
     forceRefresh: false,
     customSlug: "",
-    slugHashEnabled: true
-  });
+    slugHashEnabled: true,
+  })
 
-  function checkForce() {
+  const checkForce = () => {
     // 空值跳过
     if (util.isEmptyString(slugData.customSlug)) {
-      return true;
+      return true
     }
 
     // 别名不为空，根据用户操作判断
-    return slugData.forceRefresh;
+    return slugData.forceRefresh
   }
 
-  async function makeSlug(hideTip?: any) {
-    if (!checkForce()) {
-      if (hideTip !== true) {
-        ElMessage.warning(t("main.force.refresh.tip"));
-      }
-      logger.debug(t("main.force.refresh.tip"));
-      return;
-    }
-
-    slugData.isSlugLoading = true;
-    logger.debug("开始生成别名...");
-
-    try {
-      const publishCfg = getPublishCfg();
-      // 获取最新属性
-      const pageId = await getPageId(true, defaultPageId);
-
-      if (!pageId || pageId === "") {
-        slugData.isSlugLoading = false;
-
-        logger.error(t("page.no.id"));
-        ElMessage.error(t("page.no.id"));
-        return;
-      }
-      logger.debug("当前页面ID为=>", pageId);
-
-      // =====================
-      // == Test Mock Start ==
-      if (commonIsTest) {
-        const pageStr = getConf(TEST_CONSTANTS.CONSTANTS_SIYUAN_PAGE);
-        const pageObj = JSON.parse(JSON.parse(pageStr));
-        vi.spyOn(siyuanApi, "getBlockByID").mockResolvedValue(pageObj);
-      }
-      // == Test Mock End ==
-      // =====================
-      const page = await siyuanApi.getBlockByID(pageId);
-      logger.debug("获取到思源页面数据=>", page);
-
-      // 标题处理
-      let fmtTitle = page.content;
-      if (publishCfg.fixTitle) {
-        fmtTitle = mdFileToTitle(fmtTitle);
-      }
-      logger.debug("标题处理完毕");
-
-      // 生成别名
-      if (publishCfg.useGoogleTranslate) {
-        // 先调用谷歌API，如果失败就用拼音代替
-        try {
-          let result;
-          // 调用Google翻译API
-          if (commonIsTest) {
-            const mock_zhSlugify = vi
-              .fn()
-              .mockImplementation((q: string) => util.pinyinSlugify(q));
-            result = await mock_zhSlugify(fmtTitle);
-          } else {
-            result = await util.zhSlugify(fmtTitle);
-          }
-          logger.debug("使用谷歌翻译");
-
-          if (result) {
-            slugData.customSlug = result;
-          } else {
-            slugData.customSlug = util.pinyinSlugify(fmtTitle);
-            ElMessage.success(t("main.opt.failure"));
-          }
-        } catch (e) {
-          slugData.customSlug = util.pinyinSlugify(fmtTitle);
+  const slugMethods = {
+    makeSlug: async (hideTip?: any) => {
+      if (!checkForce()) {
+        if (hideTip !== true) {
+          ElMessage.warning(t("main.force.refresh.tip"))
         }
-      } else {
-        slugData.customSlug = util.pinyinSlugify(fmtTitle);
-      }
-      logger.debug("完成别名翻译");
-
-      // 添加hash
-      if (slugData.slugHashEnabled) {
-        const newstr = page.content + new Date().toISOString();
-        const hashstr = appendStr("-", shortHash(newstr).toLowerCase());
-        slugData.customSlug += hashstr;
-        logger.debug("为别名添加hash");
+        logger.debug(t("main.force.refresh.tip"))
+        return
       }
 
-      // 保存别名属性到思源
-      const customAttr = {
-        [SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_SLUG_KEY]:
-        slugData.customSlug
-      };
-      // =====================
-      // == Test Mock Start ==
-      if (commonIsTest) {
-        vi.spyOn(siyuanApi, "setBlockAttrs").mockResolvedValue(undefined);
-      }
-      // == Test Mock End ==
-      // =====================
-      await siyuanApi.setBlockAttrs(pageId, customAttr);
+      slugData.isSlugLoading = true
+      logger.debug("开始生成别名...")
 
-      if (hideTip !== true) {
-        ElMessage.success(t("main.opt.success"));
-      }
-      logger.info("生成别名正常完成,slugData=>", slugData);
-    } catch (e) {
-      const errmsg = appendStr(t("main.opt.failure"), "=>", e);
-      if (hideTip !== true) {
-        ElMessage.error(errmsg);
-      }
-      logger.error(errmsg);
-    }
+      try {
+        const publishCfg = getPublishCfg()
+        // 获取最新属性
+        const pageId = await getPageId(true, defaultPageId)
 
-    // 结束
-    slugData.isSlugLoading = false;
-    logger.debug("生成别名结束.");
-  }
+        if (!pageId || pageId === "") {
+          slugData.isSlugLoading = false
 
-  /**
-   * 初始化
-   * @param slug
-   */
-  function initSlug(slug: string) {
-    slugData.customSlug = slug
+          logger.error(t("page.no.id"))
+          ElMessage.error(t("page.no.id"))
+          return
+        }
+        logger.debug("当前页面ID为=>", pageId)
+
+        // =====================
+        // == Test Mock Start ==
+        if (commonIsTest) {
+          const pageStr = getConf(TEST_CONSTANTS.CONSTANTS_SIYUAN_PAGE)
+          const pageObj = JSON.parse(JSON.parse(pageStr))
+          vi.spyOn(siyuanApi, "getBlockByID").mockResolvedValue(pageObj)
+        }
+        // == Test Mock End ==
+        // =====================
+        const page = await siyuanApi.getBlockByID(pageId)
+        logger.debug("获取到思源页面数据=>", page)
+
+        // 标题处理
+        let fmtTitle = page.content
+        if (publishCfg.fixTitle) {
+          fmtTitle = mdFileToTitle(fmtTitle)
+        }
+        logger.debug("标题处理完毕")
+
+        // 生成别名
+        if (publishCfg.useGoogleTranslate) {
+          // 先调用谷歌API，如果失败就用拼音代替
+          try {
+            let result
+            // 调用Google翻译API
+            if (commonIsTest) {
+              const mock_zhSlugify = vi
+                .fn()
+                .mockImplementation((q: string) => util.pinyinSlugify(q))
+              result = await mock_zhSlugify(fmtTitle)
+            } else {
+              result = await util.zhSlugify(fmtTitle)
+            }
+            logger.debug("使用谷歌翻译")
+
+            if (result) {
+              slugData.customSlug = result
+            } else {
+              slugData.customSlug = util.pinyinSlugify(fmtTitle)
+              ElMessage.success(t("main.opt.failure"))
+            }
+          } catch (e) {
+            slugData.customSlug = util.pinyinSlugify(fmtTitle)
+          }
+        } else {
+          slugData.customSlug = util.pinyinSlugify(fmtTitle)
+        }
+        logger.debug("完成别名翻译")
+
+        // 添加hash
+        if (slugData.slugHashEnabled) {
+          const newstr = page.content + new Date().toISOString()
+          const hashstr = appendStr("-", shortHash(newstr).toLowerCase())
+          slugData.customSlug += hashstr
+          logger.debug("为别名添加hash")
+        }
+
+        // 保存别名属性到思源
+        const customAttr = {
+          [SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_SLUG_KEY]:
+            slugData.customSlug,
+        }
+        // =====================
+        // == Test Mock Start ==
+        if (commonIsTest) {
+          vi.spyOn(siyuanApi, "setBlockAttrs").mockResolvedValue(undefined)
+        }
+        // == Test Mock End ==
+        // =====================
+        await siyuanApi.setBlockAttrs(pageId, customAttr)
+
+        if (hideTip !== true) {
+          ElMessage.success(t("main.opt.success"))
+        }
+        logger.info("生成别名正常完成,slugData=>", slugData)
+      } catch (e) {
+        const errmsg = appendStr(t("main.opt.failure"), "=>", e)
+        if (hideTip !== true) {
+          ElMessage.error(errmsg)
+        }
+        logger.error(errmsg)
+      }
+
+      // 结束
+      slugData.isSlugLoading = false
+      logger.debug("生成别名结束.")
+    },
+
+    /**
+     * 初始化
+     * @param slug
+     */
+    initSlug: (slug: string) => {
+      slugData.customSlug = slug
+    },
   }
 
   return {
     slugData,
-    makeSlug,
-    initSlug,
+    slugMethods,
   }
 }
