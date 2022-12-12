@@ -33,6 +33,7 @@ import { cutWords, jiebaToHotWords } from "~/utils/util"
 import { getPublishCfg } from "~/utils/publishUtil"
 import { useSiyuanPage } from "~/composables/publish/siyuanPageCom"
 import { SiyuanDataObj } from "~/utils/models/siyuanDataObj"
+import { SIYUAN_PAGE_ATTR_KEY } from "~/utils/constants/siyuanPageConstants"
 
 /**
  * 标签组件
@@ -106,6 +107,16 @@ export const useTag = (props) => {
             tagData.tag.dynamicTags.push(hotTags[i])
           }
         }
+
+        // 保存属性到思源
+        const customAttr = {
+          tags: tagData.tag.dynamicTags.join(","),
+        }
+        await siyuanApi.setBlockAttrs(pageId, customAttr)
+
+        if (hideTip !== true) {
+          ElMessage.success(t("main.opt.success"))
+        }
       } catch (e) {
         const errmsg = appendStr(t("main.opt.failure"), "=>", e)
         if (hideTip !== true) {
@@ -118,6 +129,10 @@ export const useTag = (props) => {
       if (hideTip !== true) {
         ElMessage.success(t("main.opt.success"))
       }
+    },
+
+    getTagData: (): string[] => {
+      return tagData.tag.dynamicTags
     },
 
     /**

@@ -40,7 +40,7 @@ import { SiyuanDataObj } from "~/utils/models/siyuanDataObj"
 /**
  * 摘要组件
  */
-export const useDesc = (props) => {
+export const useDesc = (props, deps?: any) => {
   // private data
   const logger = LogFactory.getLogger("composables/publish/makeDescCom.ts")
   const { t } = useI18n()
@@ -52,11 +52,11 @@ export const useDesc = (props) => {
   })
 
   // deps
-  const { siyuanPageMethods } = useSiyuanPage(props)
+  const siyuanPageMethods = deps.siyuanPageMethods
 
   // public methods
   const descMethods = {
-    makeDesc: async (hideTips?: boolean) => {
+    makeDesc: async (hideTip?: boolean) => {
       logger.debug("准备生成摘要...")
       descData.isDescLoading = true
       try {
@@ -79,17 +79,21 @@ export const useDesc = (props) => {
         }
         await siyuanApi.setBlockAttrs(pageId, customAttr)
 
-        if (hideTips !== true) {
+        if (hideTip !== true) {
           ElMessage.success(t("main.opt.success"))
         }
       } catch (e) {
-        if (hideTips !== true) {
+        if (hideTip !== true) {
           ElMessage.error(appendStr(t("main.opt.failure"), "=>", e))
         }
       }
 
       descData.isDescLoading = false
       logger.debug("摘要生成完毕.")
+    },
+
+    getDescData: () => {
+      return descData
     },
 
     /**

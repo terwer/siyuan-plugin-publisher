@@ -27,19 +27,30 @@ import { reactive } from "vue"
 import { LogFactory } from "~/utils/logUtil"
 import { ElMessage, ElMessageBox } from "element-plus"
 import { useI18n } from "vue-i18n"
-import { clearConf } from "~/utils/configUtil"
-import { reloadPage } from "~/utils/browserUtil"
+import { SIYUAN_PAGE_ATTR_KEY } from "~/utils/constants/siyuanPageConstants"
+import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
+import { appendStr } from "~/utils/strUtil"
 
 /**
  * 快捷操作组件
  */
-export const useQuick = (dependentMethods?: any) => {
+export const useQuick = (props, deps?: any) => {
+  // private data
   const logger = LogFactory.getLogger("composables/publishQuickCom.ts")
   const { t } = useI18n()
+  const siyuanApi = new SiYuanApi()
+  // publish data
   const quickData = reactive({
     isGenLoading: false,
   })
 
+  // deps
+  const siyuanPageMethods = deps.siyuanPageMethods
+  const slugMethods = deps.slugMethods
+  const descMethods = deps.descMethods
+  const tagMethods = deps.tagMethods
+
+  // public methods
   const quickMethods = {
     oneclickAttr: async () => {
       ElMessageBox.confirm(
@@ -54,30 +65,55 @@ export const useQuick = (dependentMethods?: any) => {
         .then(async () => {
           quickData.isGenLoading = true
 
-          if (dependentMethods.slugMethods) {
-            await dependentMethods.slugMethods.makeSlug(true)
-          }
-
-          if (dependentMethods.descMethods) {
-            await dependentMethods.descMethods.makeDesc(true)
-          }
-
-          if (dependentMethods.tagMethods) {
-            await dependentMethods.tagMethods.fetchTag(true)
-          }
+          await slugMethods.makeSlug(true)
+          await descMethods.makeDesc(true)
+          await tagMethods.fetchTag(true)
 
           quickData.isGenLoading = false
           logger.debug("一键生成属性完成.")
           ElMessage.success(t("main.opt.success"))
         })
-        .catch(() => {
-          // ElMessage({
-          //   type: 'error',
-          //   message: t("main.opt.failure"),
-          // })
+        .catch((e) => {
+          quickData.isGenLoading = false
+
+          if (e.toString().indexOf("cancel") <= -1) {
+            ElMessage({
+              type: "error",
+              message: t("main.opt.failure") + "=>" + e,
+            })
+            logger.error(t("main.opt.failure") + "=>" + e)
+          }
         })
     },
-    saveAttrToSiyuan: async () => {},
+    saveAttrToSiyuan: async (hideTip?: boolean) => {
+      try {
+        // 保存属性到思源
+        const slugData = slugMethods.getSlugData()
+        const descData = descMethods.getDescData()
+        const tagData = tagMethods.getTagData()
+        const customAttr = {
+          [SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_SLUG_KEY]:
+            slugData.customSlug,
+          [SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_DESC_KEY]:
+            descData.desc,
+          tags: tagData.join(","),
+        }
+
+        // 获取最新属性
+        const pageId = await siyuanPageMethods.getPageId()
+        await siyuanApi.setBlockAttrs(pageId, customAttr)
+
+        if (hideTip !== true) {
+          ElMessage.success(t("main.opt.success"))
+        }
+      } catch (e) {
+        const errmsg = appendStr(t("main.opt.failure"), "=>", e)
+        if (hideTip !== true) {
+          ElMessage.error(appendStr(t("main.opt.failure"), "=>", e))
+        }
+        logger.error(errmsg)
+      }
+    },
   }
 
   return {

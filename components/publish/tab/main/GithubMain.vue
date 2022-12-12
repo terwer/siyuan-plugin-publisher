@@ -334,6 +334,97 @@
                 </div>
               </div>
             </div>
+
+            <!-- 快捷操作 -->
+            <div
+              v-if="pageModeData.etype !== PageEditMode.EditMode_source"
+              class="convert-option"
+            >
+              <!-- 一键生成属性-->
+              <el-form-item :label="$t('main.opt.quick')">
+                <el-button
+                  :loading="quickData.isGenLoading"
+                  type="primary"
+                  @click="quickMethods.oneclickAttr"
+                >
+                  {{
+                    quickData.isGenLoading
+                      ? $t("main.opt.loading")
+                      : $t("main.publish.oneclick.attr")
+                  }}
+                </el-button>
+                <!-- 属性转换 -->
+                <el-button type="primary" @click="quickMethods.saveAttrToSiyuan"
+                  >{{ $t("main.save.attr.to.siyuan") }}
+                </el-button>
+                <el-button
+                  type="primary"
+                  @click="
+                    initPublishMethods.onEditModeChange(
+                      PageEditMode.EditMode_source
+                    )
+                  "
+                  >{{ $t("main.siyuan.to.yaml") }}
+                </el-button>
+              </el-form-item>
+            </div>
+
+            <!-- 发布操作 -->
+            <div
+              v-if="pageModeData.etype !== PageEditMode.EditMode_source"
+              class="publish-action"
+            >
+              <el-form-item>
+                <el-button
+                  :loading="isPublishLoading"
+                  type="primary"
+                  @click="doPublish"
+                  >{{
+                    isPublishLoading
+                      ? $t("main.publish.loading")
+                      : isPublished
+                      ? $t("main.update")
+                      : $t("main.publish")
+                  }}
+                </el-button>
+                <el-button :loading="isCancelLoading" @click="cancelPublish"
+                  >{{ $t("main.cancel") }}
+                </el-button>
+              </el-form-item>
+            </div>
+
+            <!-- 发布状态 -->
+            <div
+              v-if="pageModeData.etype !== PageEditMode.EditMode_source"
+              class="publish-status"
+            >
+              <!-- 文章状态 -->
+              <el-form-item>
+                <el-button disabled text type="danger">
+                  {{
+                    isPublished
+                      ? $t("main.publish.status.published")
+                      : $t("main.publish.status.unpublish")
+                  }}
+                </el-button>
+                <a
+                  v-if="isPublished"
+                  :href="previewUrl"
+                  :title="previewUrl"
+                  target="_blank"
+                  >{{ $t("main.publish.github.see.md.preview") }}</a
+                >
+              </el-form-item>
+              <el-form-item>
+                <a
+                  v-if="isPublished"
+                  :href="previewRealUrl"
+                  :title="previewRealUrl"
+                  target="_blank"
+                  >{{ $t("main.publish.github.see.real.preview") }}</a
+                >
+              </el-form-item>
+            </div>
           </el-form>
         </div>
       </el-main>
@@ -392,14 +483,19 @@ const props = defineProps({
 const { pageModeData, pageModeMethods } = usePageMode()
 const { siyuanPageMethods } = useSiyuanPage(props)
 const { slugData, slugMethods } = useSlug(props, { siyuanPageMethods })
-const { descData, descMethods } = useDesc(props)
+const { descData, descMethods } = useDesc(props, { siyuanPageMethods })
 const { publishTimeData, publishTimeMethods } = usePublishTime()
 const { tagData, tagMethods } = useTag(props)
 const { githubPagesData, githubPagesMethods } = useGithubPages(props, {
   siyuanPageMethods,
 })
 const { yamlData, yamlMethods } = useYaml()
-const { quickData, quickMethods } = useQuick()
+const { quickData, quickMethods } = useQuick(props, {
+  siyuanPageMethods,
+  slugMethods,
+  descMethods,
+  tagMethods,
+})
 const { publishData, publishMethods } = usePublish()
 const { initPublishData, initPublishMethods } = useInitPublish(props, {
   pageModeMethods,
