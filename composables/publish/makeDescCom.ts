@@ -34,18 +34,27 @@ import { getPublishCfg } from "~/utils/publishUtil"
 import { getPageId } from "~/utils/platform/siyuan/siyuanUtil"
 import { appendStr } from "~/utils/strUtil"
 import { SIYUAN_PAGE_ATTR_KEY } from "~/utils/constants/siyuanPageConstants"
+import { useSiyuanPage } from "~/composables/publish/siyuanPageCom"
+import { SiyuanDataObj } from "~/utils/models/siyuanDataObj"
 
 /**
  * 摘要组件
  */
-export const useDesc = (defaultPageId: string, siyuanApi: SiYuanApi) => {
-  const logger = LogFactory.getLogger("composables/makeDescCom.ts")
+export const useDesc = (props) => {
+  // private data
+  const logger = LogFactory.getLogger("composables/publish/makeDescCom.ts")
   const { t } = useI18n()
+  const siyuanApi = new SiYuanApi()
+  // public data
   const descData = reactive({
     isDescLoading: false,
     desc: "",
   })
 
+  // deps
+  const { siyuanPageMethods } = useSiyuanPage(props)
+
+  // public methods
   const descMethods = {
     makeDesc: async (hideTips?: boolean) => {
       logger.debug("准备生成摘要...")
@@ -53,19 +62,9 @@ export const useDesc = (defaultPageId: string, siyuanApi: SiYuanApi) => {
       try {
         const publishCfg = getPublishCfg()
         // 获取最新属性
-        const pageId = await getPageId(true, defaultPageId)
-
-        if (!pageId || pageId === "") {
-          descData.isDescLoading = false
-
-          logger.error(t("page.no.id"))
-          ElMessage.error(t("page.no.id"))
-          return
-        }
-        logger.debug("当前页面ID为=>", pageId)
+        const pageId = await siyuanPageMethods.getPageId()
 
         const data = await siyuanApi.exportMdContent(pageId)
-
         const md = data.content
         let html = mdToHtml(md)
         if (publishCfg.removeH1) {
@@ -95,10 +94,11 @@ export const useDesc = (defaultPageId: string, siyuanApi: SiYuanApi) => {
 
     /**
      * 初始化
-     * @param desc
+     * @param siyuanData
      */
-    initDesc: (desc: string) => {
-      descData.desc = desc
+    initDesc: (siyuanData: SiyuanDataObj) => {
+      const descKey = SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_DESC_KEY
+      descData.desc = siyuanData.meta[descKey]
     },
   }
 

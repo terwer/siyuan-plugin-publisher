@@ -58,7 +58,8 @@ export default {
   "main.publish.see.preview": "Click here see new post",
   "main.publish.see.md.preview": "Click here see new md file",
   "main.publish.see.real.preview": "Click here see new post",
-  "main.publish.to.wordpress": "Sendto WP",
+  "main.publish.to.wordpress": "Send to WP",
+  "main.title": "Post title",
   "main.slug": "Post slug",
   "main.auto.fetch.slug": "Auto fetch slug",
   "main.use.google.translate": "Use Google translate API",
@@ -267,4 +268,5 @@ export default {
   "main.read.mode.tip": "Readonly tips",
   "main.opt.onclick.confirm.tip":
     "This operation will re -generate all attributes other than alias. If you just want to modify individual attributes, please click the individual function button to operate in the detailed mode. Do you continue?",
+  "main.cat.list.error": "Category list get error",
 }

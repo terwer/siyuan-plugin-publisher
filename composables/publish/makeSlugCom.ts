@@ -32,27 +32,37 @@ import { useI18n } from "vue-i18n"
 import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
 import { LogFactory } from "~/utils/logUtil"
 import { getPublishCfg } from "~/utils/publishUtil"
-import { getPageId } from "~/utils/platform/siyuan/siyuanUtil"
 import { SIYUAN_PAGE_ATTR_KEY } from "~/utils/constants/siyuanPageConstants"
 import { commonIsTest } from "~/utils/common/commonEnv"
 import { getConf } from "~/utils/configUtil"
 import { TEST_CONSTANTS } from "~/test/TEST_CONSTANTS"
+import { useSiyuanPage } from "~/composables/publish/siyuanPageCom"
+import { SiyuanDataObj } from "~/utils/models/siyuanDataObj"
 
 /**
  * 文章别名组件
- * @param defaultPageId 默认页面ID
- * @param siyuanApi 思源Api
+ * @param props 页面属性
+ * @param deps 依赖的组件
  */
-export const useSlug = (defaultPageId: string, siyuanApi: SiYuanApi) => {
-  const logger = LogFactory.getLogger("composables/makeSlugCom.ts")
+export const useSlug = (props, deps) => {
+  // private data
+  const logger = LogFactory.getLogger("composables/publish/makeSlugCom.ts")
   const { t } = useI18n()
+  const siyuanApi = new SiYuanApi()
+  const publishCfg = getPublishCfg()
+  // public data
   const slugData = reactive({
     isSlugLoading: false,
     forceRefresh: false,
+    title: "",
     customSlug: "",
     slugHashEnabled: true,
   })
 
+  // deps
+  const siyuanPageMethods = deps.siyuanPageMethods
+
+  // private methods
   const checkForce = () => {
     // 空值跳过
     if (util.isEmptyString(slugData.customSlug)) {
@@ -63,6 +73,7 @@ export const useSlug = (defaultPageId: string, siyuanApi: SiYuanApi) => {
     return slugData.forceRefresh
   }
 
+  // public methods
   const slugMethods = {
     makeSlug: async (hideTip?: any) => {
       if (!checkForce()) {
@@ -77,18 +88,8 @@ export const useSlug = (defaultPageId: string, siyuanApi: SiYuanApi) => {
       logger.debug("开始生成别名...")
 
       try {
-        const publishCfg = getPublishCfg()
         // 获取最新属性
-        const pageId = await getPageId(true, defaultPageId)
-
-        if (!pageId || pageId === "") {
-          slugData.isSlugLoading = false
-
-          logger.error(t("page.no.id"))
-          ElMessage.error(t("page.no.id"))
-          return
-        }
-        logger.debug("当前页面ID为=>", pageId)
+        const pageId = await siyuanPageMethods.getPageId()
 
         // =====================
         // == Test Mock Start ==
@@ -102,13 +103,8 @@ export const useSlug = (defaultPageId: string, siyuanApi: SiYuanApi) => {
         const page = await siyuanApi.getBlockByID(pageId)
         logger.debug("获取到思源页面数据=>", page)
 
-        // 标题处理
-        let fmtTitle = page.content
-        if (publishCfg.fixTitle) {
-          fmtTitle = mdFileToTitle(fmtTitle)
-        }
-        logger.debug("标题处理完毕")
-
+        // 标题已经处理
+        const fmtTitle = slugData.title
         // 生成别名
         if (publishCfg.useGoogleTranslate) {
           // 先调用谷歌API，如果失败就用拼音代替
@@ -178,12 +174,26 @@ export const useSlug = (defaultPageId: string, siyuanApi: SiYuanApi) => {
       logger.debug("生成别名结束.")
     },
 
+    getSlugData: () => {
+      return slugData
+    },
+
     /**
      * 初始化
-     * @param slug
+     * @param siyuanData
      */
-    initSlug: (slug: string) => {
-      slugData.customSlug = slug
+    initSlug: (siyuanData: SiyuanDataObj) => {
+      // 标题处理
+      let fmtTitle = siyuanData.page.content
+      if (publishCfg.fixTitle) {
+        fmtTitle = mdFileToTitle(fmtTitle)
+      }
+      logger.debug("标题处理完毕")
+      slugData.title = fmtTitle
+      const slugKey = SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_SLUG_KEY
+      slugData.customSlug = siyuanData.meta[slugKey]
+
+      logger.debug("initSlug=>", slugData)
     },
   }
 

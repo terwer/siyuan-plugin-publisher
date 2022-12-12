@@ -24,6 +24,8 @@
  */
 
 import { reactive } from "vue"
+import { SiyuanDataObj } from "~/utils/models/siyuanDataObj"
+import { formatNumToZhDate } from "~/utils/dateUtil"
 
 /**
  * 发布时间组件
@@ -34,8 +36,8 @@ export const usePublishTime = () => {
   })
 
   const publishTimeMethods = {
-    initPublishTime: (datestr: string) => {
-      publishTimeData.created = datestr
+    initPublishTime: (siyuanData: SiyuanDataObj) => {
+      publishTimeData.created = formatNumToZhDate(siyuanData.page.created)
     },
   }
 

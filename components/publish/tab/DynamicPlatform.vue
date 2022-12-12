@@ -184,6 +184,7 @@ import {
 } from "~/utils/platform/dynamicConfig"
 import { LogFactory } from "~/utils/logUtil"
 import { checkKeyExists } from "~/utils/configUtil"
+import { SLUG_TYPE_CONSTANTS } from "~/utils/constants/slugTypeConstants"
 
 const logger = LogFactory.getLogger(
   "components/publish/tab/DynamicPlatform.vue"
@@ -302,6 +303,13 @@ const submitForm = async (formEl) => {
     formData.dynCfg.platformName
   )
   newCfg.subPlatformType = formData.subtype
+  // Vuepress使用文件名，其他情况使用别名
+  newCfg.slugType =
+    newCfg.subPlatformType
+      .toLowerCase()
+      .indexOf(SubPlatformType.Github_Vuepress.toLowerCase()) > -1
+      ? SLUG_TYPE_CONSTANTS.SLUG_TYPE_MD_FILE
+      : SLUG_TYPE_CONSTANTS.SLUG_TYPE_SLUG
   formData.dynamicConfigArray.push(newCfg)
   setDynamicJsonCfg(formData.dynamicConfigArray)
 

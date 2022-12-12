@@ -30,13 +30,13 @@
       <vuepress-main :is-reload="props.isReload" :page-id="props.pageId" />
     </el-tab-pane>
     <el-tab-pane :label="$t('main.publish.to.hugo')" v-if="hugoEnabled">
-      <hugo-main :page-id="props.pageId" />
+      <hugo-main :is-reload="props.isReload" :page-id="props.pageId" />
     </el-tab-pane>
     <el-tab-pane :label="$t('main.publish.to.hexo')" v-if="hexoEnabled">
-      <hexo-main :page-id="props.pageId" />
+      <hexo-main :is-reload="props.isReload" :page-id="props.pageId" />
     </el-tab-pane>
     <el-tab-pane :label="$t('main.publish.to.jekyll')" v-if="jekyllEnabled">
-      <jekyll-main :page-id="props.pageId" />
+      <jekyll-main :is-reload="props.isReload" :page-id="props.pageId" />
     </el-tab-pane>
 
     <!-- Metaweblog API -->
@@ -75,7 +75,12 @@
       :key="gcfg.platformKey"
       :label="gcfg.platformName"
     >
-      <github-main :api-type="gcfg.platformKey" :page-id="props.pageId" />
+      <github-main
+        :api-type="gcfg.platformKey"
+        :is-reload="props.isReload"
+        :page-id="props.pageId"
+        :slug-type="gcfg.slugType"
+      />
     </el-tab-pane>
     <el-tab-pane
       v-for="mcfg in formData.metaweblogArray"
@@ -160,6 +165,9 @@ const initDynCfg = (dynCfg: any[]) => {
       item.platformKey,
       item.platformName
     )
+
+    newItem.slugType = item.slugType
+
     const switchKey = "switch-" + item.platformKey
     const switchValue = getBooleanConf(switchKey)
     newItem.modelValue = switchValue

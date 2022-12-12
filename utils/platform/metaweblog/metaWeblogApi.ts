@@ -35,6 +35,7 @@ import { POST_STATUS_CONSTANTS } from "~/utils/constants/postStatusConstants"
 import { isEmptyString } from "~/utils/util"
 import { isBrowser } from "~/utils/browserUtil"
 import { CategoryInfo } from "~/utils/models/categoryInfo"
+import { useI18n } from "vue-i18n"
 
 /**
  * Metaweblog API的具体实现
@@ -308,7 +309,8 @@ export class MetaWeblogApi {
         result.push(cat)
       })
     } catch (e) {
-      this.logger.error("分类获取失败", e)
+      const { t } = useI18n()
+      this.logger.error(t("main.cat.list.error"), e)
     }
 
     return result

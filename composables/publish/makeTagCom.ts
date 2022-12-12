@@ -23,22 +23,26 @@
  * questions.
  */
 
-import { nextTick, reactive, ref } from "vue"
+import { reactive } from "vue"
 import { appendStr } from "~/utils/strUtil"
 import { ElMessage } from "element-plus"
 import { LogFactory } from "~/utils/logUtil"
 import { useI18n } from "vue-i18n"
-import { getPageId } from "~/utils/platform/siyuan/siyuanUtil"
 import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
 import { cutWords, jiebaToHotWords } from "~/utils/util"
 import { getPublishCfg } from "~/utils/publishUtil"
+import { useSiyuanPage } from "~/composables/publish/siyuanPageCom"
+import { SiyuanDataObj } from "~/utils/models/siyuanDataObj"
 
 /**
  * 标签组件
  */
-export const useTag = (defaultPageId: string, siyuanApi: SiYuanApi) => {
+export const useTag = (props) => {
+  // private data
   const logger = LogFactory.getLogger("composables/publish/makeTagCom.ts")
   const { t } = useI18n()
+  const siyuanApi = new SiYuanApi()
+  // public data
   const tagData = reactive({
     isTagLoading: false,
     tagSwitch: false,
@@ -53,6 +57,10 @@ export const useTag = (defaultPageId: string, siyuanApi: SiYuanApi) => {
     // tagRefInput: ref(),
   })
 
+  // deps
+  const { siyuanPageMethods } = useSiyuanPage(props)
+
+  // public methods
   const tagMethods = {
     tagHandleClose: (tag: any) => {
       tagData.tag.dynamicTags.splice(tagData.tag.dynamicTags.indexOf(tag), 1)
@@ -82,18 +90,9 @@ export const useTag = (defaultPageId: string, siyuanApi: SiYuanApi) => {
         tagData.isTagLoading = true
 
         // 获取最新属性
-        const pageId = await getPageId(true, defaultPageId)
+        const pageId = await siyuanPageMethods.getPageId()
 
-        if (!pageId || pageId === "") {
-          tagData.isTagLoading = false
-
-          logger.error(t("page.no.id"))
-          ElMessage.error(t("page.no.id"))
-          return
-        }
-        logger.debug("当前页面ID为=>", pageId)
         const data = await siyuanApi.exportMdContent(pageId)
-
         const md = data.content
         const genTags = await cutWords(md)
         logger.debug("genTags=>", genTags)
@@ -120,13 +119,24 @@ export const useTag = (defaultPageId: string, siyuanApi: SiYuanApi) => {
         ElMessage.success(t("main.opt.success"))
       }
     },
+
     /**
      * 初始化
      */
-    initTag: (tags: string[]) => {
+    initTag: (siyuanData: SiyuanDataObj) => {
       const publishCfg = getPublishCfg()
       if (publishCfg.autoTag) {
         tagData.tagSwitch = true
+      }
+
+      tagData.tag.dynamicTags = []
+      const tagstr = siyuanData.meta.tags || ""
+      const tgarr = tagstr.split(",")
+      for (let i = 0; i < tgarr.length; i++) {
+        const tg = tgarr[i]
+        if (tg !== "") {
+          tagData.tag.dynamicTags.push(tgarr[i])
+        }
       }
     },
   }

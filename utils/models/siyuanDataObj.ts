@@ -31,11 +31,11 @@
 export class SiyuanDataObj {
   pageId: string
   meta: {
-    tags: ""
+    tags: string
   }
   page: {
-    content: ""
-    created: "20220831131637"
+    content: string
+    created: string
   }
   content: {
     content: string

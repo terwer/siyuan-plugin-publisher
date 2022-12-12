@@ -28,6 +28,8 @@ import { Octokit } from "@octokit/core"
 import { Logger } from "loglevel"
 import { LogFactory } from "~/utils/logUtil"
 import { Base64 } from "js-base64"
+import { isEmptyString } from "~/utils/util"
+import { useI18n } from "vue-i18n"
 
 /**
  * Github API
@@ -71,6 +73,14 @@ export class GithubApi {
    */
   async getPageData(docPath: string): Promise<any> {
     let data
+
+    if (
+      isEmptyString(this.githubCfg.githubUser) ||
+      isEmptyString(this.githubCfg.githubRepo)
+    ) {
+      const { t } = useI18n()
+      throw new Error(t("main.cat.list.error"))
+    }
 
     const route =
       "GET /repos/" +

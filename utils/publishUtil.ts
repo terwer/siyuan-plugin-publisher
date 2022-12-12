@@ -154,6 +154,8 @@ export const getPublishCfg = (): PublishPreference => {
     publishCfg.editMode = PageEditMode.EditMode_simple
     publishCfg.contentShowType = SourceContentShowType.YAML_CONTENT
     publishCfg.autoTag = false
+    publishCfg.renderSiyuanVirtualLink = true
+    publishCfg.makeAttrOnFirstLoad = false
   }
 
   // ================
@@ -165,6 +167,8 @@ export const getPublishCfg = (): PublishPreference => {
   publishCfg.contentShowType = SourceContentShowType.YAML
   publishCfg.removeH1 = true
   publishCfg.autoTag = true
+  publishCfg.renderSiyuanVirtualLink = true
+  publishCfg.makeAttrOnFirstLoad = true
   // ================
   // 下面是我自己的配置
   // ================

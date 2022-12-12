@@ -23,45 +23,9 @@
  * questions.
  */
 
-import { PageEditMode } from "~/utils/common/pageEditMode"
-import { SourceContentShowType } from "~/utils/common/sourceContentShowType"
-
 /**
- * 发布偏好设置
+ * 偏好设置组件
+ * @author terwer
+ * @since 0.1.0
  */
-export class PublishPreference {
-  /**
-   * 精简模式、源码模式
-   */
-  editMode: PageEditMode
-
-  /**
-   * 默认展示形式，HTML、MD、YAML等
-   */
-  contentShowType: SourceContentShowType
-
-  /**
-   * 是否处理标题（包括去除.md等后缀，去除数字编号）
-   */
-  fixTitle: boolean
-  /**
-   * 是否使用谷歌翻译，不使用将直接用拼音代替
-   */
-  useGoogleTranslate: boolean
-  /**
-   * 是否删除H1标签
-   */
-  removeH1: boolean
-  /**
-   * 是否自动生成标签
-   */
-  autoTag: boolean
-  /**
-   * 是否将siyuan虚拟链接转换为真实预览链接
-   */
-  renderSiyuanVirtualLink: boolean
-  /**
-   * 是否在第一次加载页面时自动生成属性（api验证通过才会执行）
-   */
-  makeAttrOnFirstLoad: boolean
-}
+export const usePreferenceSetting = () => {}

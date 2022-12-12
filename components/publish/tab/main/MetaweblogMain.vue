@@ -468,7 +468,7 @@ const initPage = async () => {
     catInfo = await api.getCategories()
   } catch (e) {
     isInitLoading.value = false
-    logger.error("分类获取失败", e)
+    logger.error(t("main.cat.list.error"), e)
   }
   // logUtil.logInfo("catInfo=>", catInfo)
 

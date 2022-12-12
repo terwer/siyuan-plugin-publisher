@@ -33,6 +33,7 @@ import { PostForm } from "~/utils/models/postForm"
 import { IGithubCfg } from "~/utils/platform/github/githubCfg"
 import { appendStr } from "~/utils/strUtil"
 import { isBrowser } from "~/utils/browserUtil"
+import { YamlObj } from "~/utils/models/yamlObj"
 
 /**
  * YAML组件
@@ -41,7 +42,7 @@ export const useYaml = () => {
   const logger = LogFactory.getLogger("composables/makeSlugCom.ts")
   const { t } = useI18n()
   const yamlData = reactive({
-    yamlObj: {},
+    yamlObj: new YamlObj(),
     readMode: true,
     yamlPreviewContent: "",
     yamlContent: "",
@@ -93,6 +94,7 @@ export const useYaml = () => {
       }
 
       const yamlObj = yamlConverter.convert(postForm, githubCfg)
+      yamlData.yamlObj = yamlObj
       yamlData.formatter = yamlObj.formatter
       yamlData.mdContent = yamlObj.mdContent
       yamlData.mdFullContent = yamlObj.formatter + "\n" + yamlObj.mdContent
@@ -107,6 +109,13 @@ export const useYaml = () => {
     copyYamlToClipboard: () => {
       copy(yamlData.yamlContent)
       ElMessage.success(t("main.opt.success"))
+    },
+
+    /**
+     * 提供给其他组件访问数据的方法
+     */
+    getYamlData: () => {
+      return yamlData
     },
 
     /**

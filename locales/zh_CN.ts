@@ -60,6 +60,7 @@ export default {
   "main.publish.see.md.preview": "点击这里查看MD文件",
   "main.publish.see.real.preview": "点击这里查看最新文章",
   "main.publish.to.wordpress": "发布到Wordpress",
+  "main.title": "文章标题",
   "main.slug": "文章别名",
   "main.auto.fetch.slug": "自动生成别名",
   "main.use.google.translate": "使用Google翻译API",
@@ -278,4 +279,5 @@ export default {
     "温馨提示：只读模式下点击可直接复制，编辑模式下需要点击复制按钮复制。",
   "main.opt.onclick.confirm.tip":
     "此操作默认将重新生成除别名以外的所有属性，如果只想修改个别属性，请在详细模式点击单独功能按钮操作，是否继续？",
+  "main.cat.list.error": "分类获取失败",
 }

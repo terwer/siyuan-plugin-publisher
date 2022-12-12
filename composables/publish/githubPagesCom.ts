@@ -30,12 +30,15 @@ import { IGithubCfg } from "~/utils/platform/github/githubCfg"
 import { GithubApi } from "~/utils/platform/github/githubApi"
 import { pathJoin } from "~/utils/util"
 import { ElMessage } from "element-plus"
+import { getApiParams } from "~/utils/publishUtil"
 
 /**
  * Github pages组件
  */
-export const useGithubPages = (apiType: string) => {
+export const useGithubPages = (props, deps) => {
+  // private data
   const logger = LogFactory.getLogger("composables/publish/githubPagesCom.ts")
+  // public data
   const githubPagesData = reactive({
     githubEnabled: false,
     useDefaultPath: false,
@@ -51,7 +54,14 @@ export const useGithubPages = (apiType: string) => {
       },
     },
     publishPath: "",
+    previewUrl: "",
+    previewRealUrl: "",
   })
+
+  // deps
+  const siyuanPageMethods = deps.siyuanPageMethods
+
+  // public methods
   const githubPagesMethods = {
     githubOnChange: (val: boolean) => {
       // Github开启状态同步给其他地方用
@@ -66,13 +76,14 @@ export const useGithubPages = (apiType: string) => {
       logger.debug("目前已保存路径=>", githubPagesData.customPath)
       logger.debug("当前节点=>", node.data)
 
-      const githubCfg = getJSONConf<IGithubCfg>(apiType)
+      const githubCfg = getJSONConf<IGithubCfg>(props.apiType)
       const api = new GithubApi(githubCfg)
 
       let docPath
       let parentDocPath = node.data.value || ""
       // 第一次加载并且保存过目录
       if (parentDocPath === "" && githubPagesData.customPath !== "") {
+        // const githubPagesData=githubPagesMethods.getGithubPagesData()
         // docPath = githubPagesData.customPath
         docPath = "/"
       } else {
@@ -96,13 +107,34 @@ export const useGithubPages = (apiType: string) => {
       }
 
       // 渲染路径
-      githubPagesMethods.initGithubPages(
-        val.value,
-        githubPagesData.currentDefaultPath,
-        githubPagesData.mdTitle
-      )
+      githubPagesMethods.initGithubPages({
+        cpath: val.value,
+        defpath: githubPagesData.currentDefaultPath,
+        fname: githubPagesData.mdTitle,
+      })
     },
-    initGithubPages: (cpath: string, defpath: string, fname: string) => {
+
+    getGithubPagesData: () => {
+      return githubPagesData
+    },
+
+    getDocPath: () => {
+      const postidKey = getApiParams<IGithubCfg>(props.apiType).posidKey
+      const siyuanData = siyuanPageMethods.getSiyuanPageData().dataObj
+      const meta = siyuanData.meta
+      return meta[postidKey] || ""
+    },
+
+    initGithubPages: (paths: any) => {
+      let cpath: string, defpath: string, fname: string
+      if (paths) {
+        cpath = paths.cpath
+        defpath = paths.defpath
+        fname = paths.fname
+      }
+      logger.debug("paths=>", paths)
+
+      // 路径处理
       githubPagesData.customPath = cpath
       githubPagesData.currentDefaultPath = defpath
       githubPagesData.mdTitle =
