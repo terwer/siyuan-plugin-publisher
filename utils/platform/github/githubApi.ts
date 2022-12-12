@@ -29,7 +29,6 @@ import { Logger } from "loglevel"
 import { LogFactory } from "~/utils/logUtil"
 import { Base64 } from "js-base64"
 import { isEmptyString } from "~/utils/util"
-import { useI18n } from "vue-i18n"
 
 /**
  * Github API
@@ -78,8 +77,7 @@ export class GithubApi {
       isEmptyString(this.githubCfg.githubUser) ||
       isEmptyString(this.githubCfg.githubRepo)
     ) {
-      const { t } = useI18n()
-      throw new Error(t("main.cat.list.error"))
+      throw new Error("分类获取失败")
     }
 
     const route =

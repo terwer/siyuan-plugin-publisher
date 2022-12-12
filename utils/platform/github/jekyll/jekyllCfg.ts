@@ -36,6 +36,7 @@ export class JekyllCfg extends GithubCfg {
 
     this.defaultPath = "_posts"
     this.posidKey = POSTID_KEY_CONSTANTS.JEKYLL_POSTID_KEY
-    this.previewUrl = "/[cats]/[date]/[postid].html"
+    this.previewUrl = "/[cats]/[yyyy]/[mm]/[dd]/[postid].html"
+    this.mdFilenameRule = "[yyyy]-[mm]-[dd]-[slug].md"
   }
 }

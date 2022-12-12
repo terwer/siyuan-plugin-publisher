@@ -26,6 +26,7 @@
 <template>
   <github-main
     :is-reload="props.isReload"
+    :is-main-reload="props.isMainReload"
     :api-type="apiType"
     :slug-type="slugType"
     :page-id="props.pageId"
@@ -46,6 +47,10 @@ const yamlConverter = ref(vuepressYamlConvertAdaptor)
 
 const props = defineProps({
   isReload: {
+    type: Boolean,
+    default: false,
+  },
+  isMainReload: {
     type: Boolean,
     default: false,
   },

@@ -52,7 +52,10 @@
         <div class="github-form">
           <el-form label-width="100px">
             <!-- 文章标题 -->
-            <div class="form-post-title">
+            <div
+              v-if="pageModeData.etype !== PageEditMode.EditMode_source"
+              class="form-post-title"
+            >
               <el-form-item :label="$t('main.title')">
                 <el-input v-model="slugData.title" :disabled="true" />
               </el-form-item>
@@ -364,6 +367,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  isMainReload: {
+    type: Boolean,
+    default: false,
+  },
   apiType: {
     type: String,
     default: "",
@@ -413,7 +420,15 @@ watch(
   async () => {
     // 初始化
     await initPublishMethods.initPage()
-    logger.debug(props.apiType + "_Main检测到更新操作，刷新页面")
+    logger.debug(props.apiType + "_Main检测到设置更新操作，刷新页面")
+  }
+)
+watch(
+  () => props.isMainReload,
+  async () => {
+    // 初始化
+    await initPublishMethods.initPage()
+    logger.debug(props.apiType + "_Main左右切换tab，刷新页面")
   }
 )
 onMounted(async () => {

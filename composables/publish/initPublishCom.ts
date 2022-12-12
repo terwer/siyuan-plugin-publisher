@@ -35,6 +35,7 @@ import { PageEditMode } from "~/utils/common/pageEditMode"
 import { PublishPreference } from "~/utils/models/publishPreference"
 import { getPageId } from "~/utils/platform/siyuan/siyuanUtil"
 import { SLUG_TYPE_CONSTANTS } from "~/utils/constants/slugTypeConstants"
+import { isEmptyString } from "~/utils/util"
 
 /**
  * 发布页面初始化组件
@@ -173,11 +174,51 @@ export const useInitPublish = (props, deps, otherArgs?) => {
         }
         const currentDefaultPath = githubCfg.defaultPath ?? "尚未配置"
         const slugData = slugMethods.getSlugData()
-        const mdTitle =
-          props.slugType === SLUG_TYPE_CONSTANTS.SLUG_TYPE_MD_FILE
-            ? siyuanData.page.content
-            : slugData.customSlug ?? "no-slug"
-        logger.debug("siyuanData=>", siyuanData.page.content)
+        // 文件名规则
+        const mdFilenameRule = githubCfg.mdFilenameRule
+        let mdTitle
+        if (isEmptyString(mdFilenameRule)) {
+          mdTitle =
+            props.slugType === SLUG_TYPE_CONSTANTS.SLUG_TYPE_MD_FILE
+              ? siyuanData.page.content
+              : slugData.customSlug ?? "no-slug"
+        } else {
+          mdTitle = mdFilenameRule
+          if (mdFilenameRule.indexOf("filename") > -1) {
+            mdTitle = mdTitle.replace(/\[filename]/g, siyuanData.page.content)
+          }
+          if (mdFilenameRule.indexOf("slug") > -1) {
+            mdTitle = mdTitle.replace(/\[slug]/g, slugData.customSlug)
+          }
+          let date = new Date()
+          if (mdFilenameRule.indexOf("yyyy") > -1) {
+            const year = date.getFullYear()
+            mdTitle = mdTitle.replace(/\[yyyy]/g, year.toString())
+          }
+          if (
+            mdFilenameRule.indexOf("MM") > -1 ||
+            mdFilenameRule.indexOf("mm") > -1
+          ) {
+            let monthstr
+            let month = date.getMonth() + 1
+            monthstr = month.toString()
+            if (month < 10) {
+              monthstr = appendStr("0", monthstr)
+            }
+            mdTitle = mdTitle.replace(/\[MM]/g, monthstr)
+            mdTitle = mdTitle.replace(/\[mm]/g, monthstr)
+          }
+          if (mdFilenameRule.indexOf("dd") > -1) {
+            let daystr
+            let day = date.getDate()
+            daystr = day.toString()
+            if (day < 10) {
+              daystr = appendStr("0", daystr)
+            }
+            mdTitle = mdTitle.replace(/\[dd]/g, daystr)
+          }
+        }
+        // 初始化
         githubPagesMethods.initGithubPages({
           cpath: docPath,
           defpath: currentDefaultPath,

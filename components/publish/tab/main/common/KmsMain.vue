@@ -24,7 +24,12 @@
   -->
 
 <template>
-  <CommonBlogMain :api-type="apiType" :page-id="props.pageId" />
+  <CommonBlogMain
+    :api-type="apiType"
+    :is-main-reload="props.isMainReload"
+    :is-reload="props.isReload"
+    :page-id="props.pageId"
+  />
 </template>
 
 <script lang="ts" setup>
@@ -35,6 +40,14 @@ import CommonBlogMain from "~/components/publish/tab/main/CommonBlogMain.vue"
 const apiType = ref(API_TYPE_CONSTANTS.API_TYPE_KMS)
 
 const props = defineProps({
+  isReload: {
+    type: Boolean,
+    default: false,
+  },
+  isMainReload: {
+    type: Boolean,
+    default: false,
+  },
   pageId: {
     type: String,
     default: undefined,

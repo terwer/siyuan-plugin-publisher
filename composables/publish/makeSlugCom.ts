@@ -34,10 +34,13 @@ import { LogFactory } from "~/utils/logUtil"
 import { getPublishCfg } from "~/utils/publishUtil"
 import { SIYUAN_PAGE_ATTR_KEY } from "~/utils/constants/siyuanPageConstants"
 import { commonIsTest } from "~/utils/common/commonEnv"
-import { getConf } from "~/utils/configUtil"
+import { getConf, getJSONConf } from "~/utils/configUtil"
 import { TEST_CONSTANTS } from "~/test/TEST_CONSTANTS"
 import { useSiyuanPage } from "~/composables/publish/siyuanPageCom"
 import { SiyuanDataObj } from "~/utils/models/siyuanDataObj"
+import { isEmptyString } from "~/utils/util"
+import { IGithubCfg } from "~/utils/platform/github/githubCfg"
+import { POSTID_KEY_CONSTANTS } from "~/utils/constants/postidKeyConstants"
 
 /**
  * 文章别名组件
@@ -90,6 +93,9 @@ export const useSlug = (props, deps) => {
       try {
         // 获取最新属性
         const pageId = await siyuanPageMethods.getPageId()
+
+        // 读取平台配置
+        const githubCfg = getJSONConf<IGithubCfg>(props.apiType)
 
         // =====================
         // == Test Mock Start ==
@@ -144,10 +150,12 @@ export const useSlug = (props, deps) => {
         }
 
         // 保存别名属性到思源
+        githubCfg.posidKey
         const customAttr = {
           [SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_SLUG_KEY]:
             slugData.customSlug,
         }
+
         // =====================
         // == Test Mock Start ==
         if (commonIsTest) {

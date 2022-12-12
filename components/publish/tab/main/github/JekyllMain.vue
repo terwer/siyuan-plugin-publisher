@@ -25,8 +25,9 @@
 
 <template>
   <github-main
-    :api-type="apiType"
     :is-reload="props.isReload"
+    :api-type="apiType"
+    :is-main-reload="props.isMainReload"
     :page-id="props.pageId"
     :slug-type="slugType"
   />
@@ -42,6 +43,10 @@ const slugType = ref(SLUG_TYPE_CONSTANTS.SLUG_TYPE_SLUG)
 
 const props = defineProps({
   isReload: {
+    type: Boolean,
+    default: false,
+  },
+  isMainReload: {
     type: Boolean,
     default: false,
   },

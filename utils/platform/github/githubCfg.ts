@@ -72,9 +72,17 @@ export interface IGithubCfg {
    */
   blogName: string
   /**
-   * 预览规则
+   * 预览规则（占位符：[yyyy] [MM] [dd] [postid]）
    */
   previewUrl: string
+  /**
+   * Markdown文件名规则（占位符：yyyy] [MM] [dd] [slug] [filename] ）
+   */
+  mdFilenameRule: string
+  /**
+   * 是否使用meta.json（next.js需要）
+   */
+  useMetaJson: boolean
   /**
    * API状态是否正常
    */
@@ -99,6 +107,10 @@ export class GithubCfg implements IGithubCfg {
   blogName: string
   previewUrl: string
   baseUrl: string
+  slugRule: string
+  docPathRule: string
+  mdFilenameRule: string
+  useMetaJson: boolean
   apiStatus: boolean
 
   constructor(
@@ -120,6 +132,8 @@ export class GithubCfg implements IGithubCfg {
     this.email = "youweics@163.com"
     this.previewUrl = ""
     this.baseUrl = "https://github.com"
+    this.mdFilenameRule = "[filename].md"
+    this.useMetaJson = false
     this.apiStatus = false
   }
 }

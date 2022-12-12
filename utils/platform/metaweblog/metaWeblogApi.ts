@@ -310,7 +310,7 @@ export class MetaWeblogApi {
       })
     } catch (e) {
       const { t } = useI18n()
-      this.logger.error(t("main.cat.list.error"), e)
+      this.logger.error("分类获取失败", e)
     }
 
     return result

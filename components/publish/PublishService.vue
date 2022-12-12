@@ -27,29 +27,29 @@
   <el-tabs
     :model-value="defaultTab"
     tab-position="left"
-    @tab-change="serviceTabChange"
+    @tab-click="serviceTabChange"
   >
     <el-tab-pane
       class="pane-platform-main-body"
       name="platform-main"
       :label="$t('service.tab.publish.service')"
     >
-      <platform-main :is-reload="isReloadMain" :page-id="props.pageId" />
+      <platform-main :is-reload="isReloadServiceTab" :page-id="props.pageId" />
     </el-tab-pane>
     <el-tab-pane
       name="platform-setting"
       :label="$t('service.tab.publish.setting')"
     >
-      <platform-setting :is-reload="isReloadSetting" />
+      <platform-setting :is-reload="isReloadServiceTab" />
     </el-tab-pane>
     <el-tab-pane name="post-bind" :label="$t('service.tab.post.bind')">
-      <PostBind :is-reload="isReloadPostBind" :page-id="props.pageId" />
+      <PostBind :is-reload="isReloadServiceTab" :page-id="props.pageId" />
     </el-tab-pane>
     <el-tab-pane
       name="service-switch"
       :label="$t('service.tab.service.switch')"
     >
-      <service-switch :is-reload="isReloadServiceSwitch" />
+      <service-switch :is-reload="isReloadServiceTab" />
     </el-tab-pane>
     <el-tab-pane name="dynamic-platform" :label="$t('dynamic.platform.new')">
       <dynamic-platform />
@@ -61,7 +61,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from "vue"
+import { ref } from "vue"
 import { LogFactory } from "~/utils/logUtil"
 import ChangeLocale from "~/components/publish/tab/ChangeLocale.vue"
 import DynamicPlatform from "~/components/publish/tab/DynamicPlatform.vue"
@@ -74,10 +74,7 @@ const logger = LogFactory.getLogger("components/publish/PublishService.vue")
 
 const defaultTab = ref("platform-main")
 
-const isReloadSetting = ref(false)
-const isReloadMain = ref(false)
-const isReloadPostBind = ref(false)
-const isReloadServiceSwitch = ref(false)
+const isReloadServiceTab = ref(false)
 
 const props = defineProps({
   isReload: {
@@ -92,24 +89,8 @@ const props = defineProps({
 
 const serviceTabChange = (name) => {
   logger.debug("serviceTabChange=>", name)
-  if (name === "platform-setting") {
-    isReloadSetting.value = !isReloadSetting.value
-    logger.debug("platform-setting change=>")
-  } else if (name === "platform-main") {
-    isReloadMain.value = !isReloadMain.value
-    logger.debug("platform-main change=>")
-  } else if (name === "post-bind") {
-    isReloadPostBind.value = !isReloadPostBind.value
-    logger.debug("post-bind change=>")
-  } else if (name === "service-switch") {
-    isReloadServiceSwitch.value = !isReloadServiceSwitch.value
-    logger.debug("service-switch change=>")
-  }
+  isReloadServiceTab.value = !isReloadServiceTab.value
 }
-
-onMounted(() => {
-  // defaultTab.value = getQueryString("tab") || defaultTab.value
-})
 </script>
 
 <style scoped>

@@ -38,5 +38,6 @@ export class HugoCfg extends GithubCfg {
     this.posidKey = POSTID_KEY_CONSTANTS.HUGO_POSTID_KEY
     this.home = ""
     this.previewUrl = "/post/[postid].html"
+    this.mdFilenameRule = "[slug].md"
   }
 }

@@ -261,7 +261,7 @@
 </template>
 
 <script lang="ts" setup>
-import { nextTick, onMounted, reactive, ref } from "vue"
+import { nextTick, onMounted, reactive, ref, watch } from "vue"
 import { ElMessage, ElMessageBox } from "element-plus"
 import { useI18n } from "vue-i18n"
 import { SIYUAN_PAGE_ATTR_KEY } from "~/utils/constants/siyuanPageConstants"
@@ -306,6 +306,10 @@ const { t } = useI18n()
 
 const props = defineProps({
   isReload: {
+    type: Boolean,
+    default: false,
+  },
+  isMainReload: {
     type: Boolean,
     default: false,
   },
@@ -825,6 +829,27 @@ const doCancel = async (isInit) => {
     await initPage()
   }
 }
+
+// life cycle
+/**
+ * 监听props
+ */
+watch(
+  () => props.isReload,
+  async () => {
+    // 初始化
+    await initPage()
+    logger.debug(props.apiType + "_Main检测到设置更新操作，刷新页面")
+  }
+)
+watch(
+  () => props.isMainReload,
+  async () => {
+    // 初始化
+    await initPage()
+    logger.debug(props.apiType + "_Main左右切换tab，刷新页面")
+  }
+)
 </script>
 
 <style scoped>

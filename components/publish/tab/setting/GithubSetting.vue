@@ -65,6 +65,16 @@
       </el-form-item>
 
       <el-form-item
+        :label="$t('setting.blog.type.github.default.branch')"
+        prop="defaultBranch"
+      >
+        <el-input
+          v-model="formData.defaultBranch"
+          :placeholder="$t('setting.blog.type.github.default.branch.tip')"
+        />
+      </el-form-item>
+
+      <el-form-item
         :label="$t('setting.blog.type.github.token')"
         prop="githubToken"
       >
@@ -88,16 +98,6 @@
         <el-input
           v-model="formData.defaultPath"
           :placeholder="$t('setting.blog.type.github.default.path.tip')"
-        />
-      </el-form-item>
-
-      <el-form-item
-        :label="$t('setting.blog.type.github.default.branch')"
-        prop="defaultBranch"
-      >
-        <el-input
-          v-model="formData.defaultBranch"
-          :placeholder="$t('setting.blog.type.github.default.branch.tip')"
         />
       </el-form-item>
 
@@ -127,6 +127,10 @@
 
       <el-form-item :label="$t('setting.blog.previewUrl')">
         <el-input v-model="formData.previewUrl" />
+      </el-form-item>
+
+      <el-form-item :label="$t('setting.blog.mdFilenameRule')">
+        <el-input v-model="formData.mdFilenameRule" />
       </el-form-item>
     </div>
 
@@ -212,6 +216,7 @@ const formData = reactive({
   author: "terwer",
   email: "youweics@163.com",
   previewUrl: "",
+  mdFilenameRule: "[filename]",
 })
 const rules = reactive<FormRules>({
   githubUser: [
@@ -370,6 +375,7 @@ const saveConf = (hideTip) => {
   cfg.author = formData.author
   cfg.email = formData.email
   cfg.previewUrl = formData.previewUrl
+  cfg.mdFilenameRule = formData.mdFilenameRule
 
   cfg.apiStatus = apiStatus.value
 
@@ -397,6 +403,7 @@ const initConf = () => {
     formData.author = conf.author
     formData.email = conf.email
     formData.previewUrl = conf.previewUrl
+    formData.mdFilenameRule = conf.mdFilenameRule
 
     apiStatus.value = conf.apiStatus
   }
