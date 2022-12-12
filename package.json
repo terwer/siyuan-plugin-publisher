@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.0.9",
-    "@intlify/vite-plugin-vue-i18n": "^6.0.1",
+    "@intlify/vite-plugin-vue-i18n": "^7.0.0",
     "@octokit/core": "^4.0.4",
     "@vueuse/components": "^9.6.0",
     "@vueuse/core": "^9.6.0",
