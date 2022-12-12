@@ -36,6 +36,10 @@ export const usePublishTime = () => {
   })
 
   const publishTimeMethods = {
+    getPublishTime: () => {
+      return publishTimeData
+    },
+
     initPublishTime: (siyuanData: SiyuanDataObj) => {
       publishTimeData.created = formatNumToZhDate(siyuanData.page.created)
     },

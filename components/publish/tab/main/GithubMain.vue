@@ -425,6 +425,146 @@
                 >
               </el-form-item>
             </div>
+
+            <!-- 源码模式 -->
+            <div
+              v-if="pageModeData.etype === PageEditMode.EditMode_source"
+              class="source-mode"
+            >
+              <!-- YAML提示 -->
+              <el-form-item>
+                <el-alert
+                  :closable="false"
+                  :title="
+                    upperFirst(props.apiType) + ' ' + $t('main.yaml.formatter')
+                  "
+                  class="top-yaml-tip"
+                  type="info"
+                />
+              </el-form-item>
+
+              <!-- 只读模式 -->
+              <!-- 刷新别名 -->
+              <el-form-item
+                v-if="
+                  pageModeData.etype.toString() !==
+                  PageEditMode.EditMode_simple.toString()
+                "
+                :label="$t('main.read.mode')"
+              >
+                <el-switch v-model="yamlData.readMode" />
+              </el-form-item>
+
+              <!-- 显示方式 -->
+              <div class="source-opt">
+                <el-form-item>
+                  <a
+                    :class="{
+                      current:
+                        pageModeData.stype === SourceContentShowType.YAML,
+                    }"
+                    @click="
+                      initPublishMethods.onYamlShowTypeChange(
+                        SourceContentShowType.YAML
+                      )
+                    "
+                    >{{ $t("yaml.show.type.yaml") }}</a
+                  >
+                  <a
+                    :class="{
+                      current:
+                        pageModeData.stype === SourceContentShowType.CONTENT,
+                      middle: true,
+                    }"
+                    @click="
+                      initPublishMethods.onYamlShowTypeChange(
+                        SourceContentShowType.CONTENT
+                      )
+                    "
+                    >{{ $t("yaml.show.type.md") }}</a
+                  >
+                  <a
+                    :class="{
+                      current:
+                        pageModeData.stype ===
+                        SourceContentShowType.YAML_CONTENT,
+                      middle: true,
+                    }"
+                    @click="
+                      initPublishMethods.onYamlShowTypeChange(
+                        SourceContentShowType.YAML_CONTENT
+                      )
+                    "
+                    >{{ $t("yaml.show.type.yamlmd") }}</a
+                  >
+                  <a
+                    :class="{
+                      current:
+                        pageModeData.stype ===
+                        SourceContentShowType.HTML_CONTENT,
+                    }"
+                    @click="
+                      initPublishMethods.onYamlShowTypeChange(
+                        SourceContentShowType.HTML_CONTENT
+                      )
+                    "
+                    >{{ $t("yaml.show.type.html") }}</a
+                  >
+                </el-form-item>
+              </div>
+
+              <!-- YAML预览 -->
+              <div v-if="yamlData.readMode" id="yaml-detail-content">
+                <el-form-item>
+                  <el-input
+                    id="yaml-detail-preview"
+                    v-model="yamlData.yamlPreviewContent"
+                    :autosize="{ minRows: 4, maxRows: 16 }"
+                    readonly
+                    type="textarea"
+                    @click="yamlMethods.onYamlContentFocus"
+                    v-on:contextmenu="yamlMethods.onYamlContextMenu"
+                  />
+                </el-form-item>
+              </div>
+
+              <!-- YAML编辑 -->
+              <div v-if="!yamlData.readMode" id="yaml-edit-content">
+                <el-form-item>
+                  <el-input
+                    v-model="yamlData.yamlContent"
+                    :autosize="{ minRows: 4, maxRows: 16 }"
+                    type="textarea"
+                  />
+                </el-form-item>
+              </div>
+
+              <!-- 操作 -->
+              <div v-if="!yamlData.readMode" id="yaml-action">
+                <el-form-item>
+                  <el-button
+                    type="primary"
+                    @click="initPublishMethods.convertYAMLToAttr"
+                    >{{ $t("main.yaml.to.siyuan") }}
+                  </el-button>
+                  <el-button
+                    type="primary"
+                    @click="yamlMethods.copyYamlToClipboard()"
+                    >{{ $t("main.copy") }}
+                  </el-button>
+                </el-form-item>
+              </div>
+
+              <div id="yaml-read-mode-tip">
+                <el-form-item>
+                  <el-alert
+                    :closable="false"
+                    :title="$t('main.read.mode.tip')"
+                    type="success"
+                  />
+                </el-form-item>
+              </div>
+            </div>
           </el-form>
         </div>
       </el-main>
@@ -449,6 +589,8 @@ import { useGithubPages } from "~/composables/publish/githubPagesCom"
 import { useInitPublish } from "~/composables/publish/initPublishCom"
 import { usePageMode } from "~/composables/publish/pageModeCom"
 import { useSiyuanPage } from "~/composables/publish/siyuanPageCom"
+import { upperFirst } from "~/utils/strUtil"
+import { SourceContentShowType } from "~/utils/common/sourceContentShowType"
 
 const logger = LogFactory.getLogger(
   "components/publish/tab/main/GithubMain.vue"
@@ -505,6 +647,7 @@ const { initPublishData, initPublishMethods } = useInitPublish(props, {
   publishTimeMethods,
   tagMethods,
   githubPagesMethods,
+  yamlMethods,
 })
 
 // life cycle

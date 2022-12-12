@@ -28,31 +28,11 @@
  * @author terwer
  * @since 0.1.0
  */
-export class YamlObj {
+export class YamlFormatObj {
   /**
    * YAML
    */
-  yamlObj = {
-    title: "",
-    date: new Date(),
-    permalink: "",
-    meta: [
-      {
-        name: "keywords",
-        content: "",
-      },
-      {
-        name: "description",
-        content: "",
-      },
-    ],
-    categories: <string[]>[],
-    tags: <string[]>[],
-    author: {
-      name: "terwer",
-      link: "https://github.com/terwer",
-    },
-  }
+  yamlObj = {} as any
   /**
    * YAML字符串
    */

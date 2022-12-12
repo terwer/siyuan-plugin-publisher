@@ -33,7 +33,7 @@ import { PostForm } from "~/utils/models/postForm"
 import { IGithubCfg } from "~/utils/platform/github/githubCfg"
 import { appendStr } from "~/utils/strUtil"
 import { isBrowser } from "~/utils/browserUtil"
-import { YamlObj } from "~/utils/models/yamlObj"
+import { YamlFormatObj } from "~/utils/models/yamlFormatObj"
 
 /**
  * YAML组件
@@ -42,7 +42,7 @@ export const useYaml = () => {
   const logger = LogFactory.getLogger("composables/makeSlugCom.ts")
   const { t } = useI18n()
   const yamlData = reactive({
-    yamlObj: new YamlObj(),
+    yamlObj: {} as any,
     readMode: true,
     yamlPreviewContent: "",
     yamlContent: "",
@@ -93,17 +93,29 @@ export const useYaml = () => {
         logger.error("未指定YAML转换器")
       }
 
-      const yamlObj = yamlConverter.convert(postForm, githubCfg)
-      yamlData.yamlObj = yamlObj
-      yamlData.formatter = yamlObj.formatter
-      yamlData.mdContent = yamlObj.mdContent
-      yamlData.mdFullContent = yamlObj.formatter + "\n" + yamlObj.mdContent
-      yamlData.htmlContent = yamlObj.htmlContent
+      const yamlFormatObj = yamlConverter.convertToYaml(postForm, githubCfg)
+      yamlData.yamlObj = yamlFormatObj.yamlObj
+      yamlData.formatter = yamlFormatObj.formatter
+      yamlData.mdContent = yamlFormatObj.mdContent
+      yamlData.mdFullContent =
+        yamlFormatObj.formatter + "\n" + yamlFormatObj.mdContent
+      yamlData.htmlContent = yamlFormatObj.htmlContent
     },
 
-    doConvertYAMLToAttr: () => {
-      // TODO
-      throw new Error("Not implemented")
+    doConvertYAMLToAttr: (
+      yamlConverter: YamlConvertAdaptor,
+      yamlFormatObj: YamlFormatObj,
+      githubCfg?: IGithubCfg
+    ): PostForm => {
+      if (!yamlConverter) {
+        yamlConverter = new YamlConvertAdaptor()
+        logger.error("未指定YAML转换器")
+      }
+
+      const postForm = yamlConverter.convertToAttr(yamlFormatObj, githubCfg)
+      logger.debug("doConvertYAMLToAttr转换中转数据postForm=>", postForm)
+
+      return postForm
     },
 
     copyYamlToClipboard: () => {

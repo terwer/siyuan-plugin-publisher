@@ -43,7 +43,13 @@ export const useGithubPages = (props, deps) => {
     githubEnabled: false,
     useDefaultPath: false,
     currentDefaultPath: "",
+    /**
+     * 发布目录
+     */
     customPath: "",
+    /**
+     * 发布的文件名
+     */
     mdTitle: "",
     path: {
       // 树形目录选择
@@ -53,6 +59,9 @@ export const useGithubPages = (props, deps) => {
         isLeaf: "isLeaf",
       },
     },
+    /**
+     * 最终发布的路径
+     */
     publishPath: "",
     previewUrl: "",
     previewRealUrl: "",

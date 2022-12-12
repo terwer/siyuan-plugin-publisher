@@ -28,7 +28,7 @@ import {
   YamlConvertAdaptor,
 } from "~/utils/platform/yamlConvertAdaptor"
 import { PostForm } from "~/utils/models/postForm"
-import { YamlObj } from "~/utils/models/yamlObj"
+import { YamlFormatObj } from "~/utils/models/yamlFormatObj"
 import { LogFactory } from "~/utils/logUtil"
 import { covertStringToDate, formatIsoToZhDate } from "~/utils/dateUtil"
 import { obj2Yaml } from "~/utils/yamlUtil"
@@ -43,10 +43,10 @@ export class VuepressYamlConvertAdaptor
     "utils/platform/github/vuepress/VuepressYamlConvertAdaptor.ts"
   )
 
-  convert(postForm: PostForm, githubCfg?: IGithubCfg): YamlObj {
-    let yamlObj: YamlObj = new YamlObj()
+  convertToYaml(postForm: PostForm, githubCfg?: IGithubCfg): YamlFormatObj {
+    let yamlFormatObj: YamlFormatObj = new YamlFormatObj()
     this.logger.debug("您正在使用 Vuepress Yaml Converter", postForm)
-    yamlObj.yamlObj.title = postForm.formData.title
+    yamlFormatObj.yamlObj.title = postForm.formData.title
     let link = "/post/" + postForm.formData.customSlug + ".html"
     if (githubCfg && !isEmptyString(githubCfg.previewUrl)) {
       link = githubCfg.previewUrl.replace(
@@ -55,10 +55,10 @@ export class VuepressYamlConvertAdaptor
       )
     }
     this.logger.debug("link=>", link)
-    yamlObj.yamlObj.permalink = link
+    yamlFormatObj.yamlObj.permalink = link
 
-    yamlObj.yamlObj.date = covertStringToDate(postForm.formData.created)
-    yamlObj.yamlObj.meta = [
+    yamlFormatObj.yamlObj.date = covertStringToDate(postForm.formData.created)
+    yamlFormatObj.yamlObj.meta = [
       {
         name: "keywords",
         content: postForm.formData.tag.dynamicTags.join(" "),
@@ -68,18 +68,57 @@ export class VuepressYamlConvertAdaptor
         content: postForm.formData.desc,
       },
     ]
-    yamlObj.yamlObj.tags = postForm.formData.tag.dynamicTags
-    yamlObj.yamlObj.categories = postForm.formData.categories
+    yamlFormatObj.yamlObj.tags = postForm.formData.tag.dynamicTags
+    yamlFormatObj.yamlObj.categories = postForm.formData.categories
 
     // formatter
-    let yaml = obj2Yaml(yamlObj.yamlObj)
+    let yaml = obj2Yaml(yamlFormatObj.yamlObj)
     // 修复yaml的ISO日期格式（js-yaml转换的才需要）
     yaml = formatIsoToZhDate(yaml, true)
-    yamlObj.formatter = yaml
-    yamlObj.mdContent = postForm.formData.mdContent
-    yamlObj.mdFullContent = yamlObj.formatter + yamlObj.mdContent
-    yamlObj.htmlContent = postForm.formData.htmlContent
+    yamlFormatObj.formatter = yaml
+    yamlFormatObj.mdContent = postForm.formData.mdContent
+    yamlFormatObj.mdFullContent =
+      yamlFormatObj.formatter + "\n" + yamlFormatObj.mdContent
+    yamlFormatObj.htmlContent = postForm.formData.htmlContent
 
-    return yamlObj
+    return yamlFormatObj
+  }
+
+  convertToAttr(
+    yamlFormatObj: YamlFormatObj,
+    githubCfg?: IGithubCfg
+  ): PostForm {
+    const yamlObj = yamlFormatObj.yamlObj
+
+    const postForm = new PostForm()
+    postForm.formData.title = yamlObj.title
+    postForm.formData.customSlug = yamlObj.permalink
+      .replace("/pages/", "")
+      .replace("/post/", "")
+      .replace(".html", "")
+      .replace("/", "")
+    postForm.formData.created = formatIsoToZhDate(
+      yamlObj.date.toISOString(),
+      false
+    )
+
+    const yamlMeta = yamlObj.meta
+    for (let i = 0; i < yamlMeta.length; i++) {
+      const m = yamlMeta[i]
+      if (m.name === "description") {
+        postForm.formData.desc = m.content
+        break
+      }
+    }
+
+    for (let j = 0; j < yamlObj.tags.length; j++) {
+      const tag = yamlObj.tags[j]
+      if (!postForm.formData.tag.dynamicTags.includes(tag) && tag !== "") {
+        postForm.formData.tag.dynamicTags.push(tag)
+      }
+    }
+
+    postForm.formData.categories = yamlObj.categories
+    return postForm
   }
 }

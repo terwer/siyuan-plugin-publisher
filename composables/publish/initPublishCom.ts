@@ -28,14 +28,18 @@ import { getPublishCfg, getPublishStatus } from "~/utils/publishUtil"
 import { getJSONConf } from "~/utils/configUtil"
 import { IGithubCfg } from "~/utils/platform/github/githubCfg"
 import { ElMessage } from "element-plus"
-import { appendStr } from "~/utils/strUtil"
+import { appendStr, mdFileToTitle } from "~/utils/strUtil"
 import { useI18n } from "vue-i18n"
 import { LogFactory } from "~/utils/logUtil"
 import { PageEditMode } from "~/utils/common/pageEditMode"
-import { PublishPreference } from "~/utils/models/publishPreference"
 import { getPageId } from "~/utils/platform/siyuan/siyuanUtil"
 import { SLUG_TYPE_CONSTANTS } from "~/utils/constants/slugTypeConstants"
 import { isEmptyString } from "~/utils/util"
+import { SourceContentShowType } from "~/utils/common/sourceContentShowType"
+import { PostForm } from "~/utils/models/postForm"
+import { mdToHtml, removeH1, removeMdH1 } from "~/utils/htmlUtil"
+import { yaml2Obj } from "~/utils/yamlUtil"
+import { YamlFormatObj } from "~/utils/models/yamlFormatObj"
 
 /**
  * 发布页面初始化组件
@@ -65,6 +69,7 @@ export const useInitPublish = (props, deps, otherArgs?) => {
   const publishTimeMethods = deps.publishTimeMethods
   const tagMethods = deps.tagMethods
   const githubPagesMethods = deps.githubPagesMethods
+  const yamlMethods = deps.yamlMethods
 
   // methods
   const initPublishMethods = {
@@ -102,40 +107,6 @@ export const useInitPublish = (props, deps, otherArgs?) => {
           props.apiType,
           siyuanPageMethods.getSiyuanPageData().dataObj.meta
         )
-
-        // Form数据
-        // initPublishMethods.siyuanDataToForm(publishCfg)
-        // // 默认目录
-        // formData.value.postForm.formData.customPath =
-        //   githubCfg.defaultPath ?? "尚未配置"
-        // if (initPublishData.isPublished) {
-        //   formData.value.postForm.formData.customPath =
-        //     initPublishMethods.getDocPath()
-        //   initPublishMethods.convertDocPathToCategories(
-        //     formData.value.postForm.formData.customPath,
-        //     publishCfg
-        //   )
-        // }
-        // logger.debug("formData=>", formData.value)
-
-        // ===========================
-        // 后面尽量使用formData获取数据
-        // ===========================
-
-        // 表单属性转换为YAML
-        // if (dependentMethods.yamlMethods) {
-        //   dependentMethods.yamlMethods.doConvertAttrToYAML(
-        //     props.yamlConverter,
-        //     formData.value.postForm,
-        //     githubCfg
-        //   )
-        //   // 初始化YAML数据，显示默认（内部调用initYaml）
-        //   initPublishMethods.onYamlShowTypeChange(publishCfg.contentShowType)
-        //   logger.debug(
-        //     "yamlObj=>",
-        //     dependentMethods.yamlMethods.getYamlData().yamlObj
-        //   )
-        // }
 
         // composables 初始化
         // 别名
@@ -224,10 +195,6 @@ export const useInitPublish = (props, deps, otherArgs?) => {
           defpath: currentDefaultPath,
           fname: mdTitle,
         })
-
-        // ================
-        // 处理发布之后的数据
-        // ================
       } catch (e) {
         const errmsg = appendStr(t("main.opt.failure"), "=>", e)
         logger.error(errmsg)
@@ -243,99 +210,150 @@ export const useInitPublish = (props, deps, otherArgs?) => {
       pageModeData.etype = val
 
       if (val === PageEditMode.EditMode_source) {
-        // convertAttrToYAML(true)
+        initPublishMethods.convertAttrToYAML(true)
       }
     },
 
     onYamlShowTypeChange: (val) => {
-      // formOptionData.stype = val
-      //
-      // switch (val) {
-      //   case SourceContentShowType.YAML:
-      //     if (dependentMethods.yamlMethods) {
-      //       dependentMethods.yamlMethods.initYaml(
-      //         dependentMethods.yamlMethods.getYamlData().formatter
-      //       )
-      //     }
-      //     break
-      //   case SourceContentShowType.CONTENT:
-      //     if (dependentMethods.yamlMethods) {
-      //       dependentMethods.yamlMethods.initYaml(
-      //         dependentMethods.yamlMethods.getYamlData().mdContent
-      //       )
-      //     }
-      //     break
-      //   case SourceContentShowType.YAML_CONTENT:
-      //     if (dependentMethods.yamlMethods) {
-      //       dependentMethods.yamlMethods.initYaml(
-      //         dependentMethods.yamlMethods.getYamlData().formatter +
-      //           dependentMethods.yamlMethods.getYamlData().mdContent
-      //       )
-      //     }
-      //     break
-      //   case SourceContentShowType.HTML_CONTENT:
-      //     dependentMethods.yamlMethods.initYaml(
-      //       dependentMethods.yamlMethods.getYamlData().htmlContent
-      //     )
-      //     break
-      //   default:
-      //     break
-      // }
+      const pageModeData = pageModeMethods.getPageModeData()
+      pageModeData.stype = val
+
+      switch (val) {
+        case SourceContentShowType.YAML:
+          yamlMethods.initYaml(yamlMethods.getYamlData().formatter)
+          break
+        case SourceContentShowType.CONTENT:
+          yamlMethods.initYaml(yamlMethods.getYamlData().mdContent)
+          break
+        case SourceContentShowType.YAML_CONTENT:
+          yamlMethods.initYaml(
+            yamlMethods.getYamlData().formatter +
+              yamlMethods.getYamlData().mdContent
+          )
+          break
+        case SourceContentShowType.HTML_CONTENT:
+          yamlMethods.initYaml(yamlMethods.getYamlData().htmlContent)
+          break
+        default:
+          break
+      }
     },
 
     // 将文档路径转换为分类
-    convertDocPathToCategories: (
-      docPath: string,
-      publishCfg: PublishPreference
-    ) => {
+    convertDocPathToCategories: (docPath: string): string[] => {
+      const publishCfg = getPublishCfg()
+
       logger.debug("docPath=>", docPath)
-      // const docPathArray = docPath.split("/")
-      // if (docPathArray.length > 1) {
-      //   formData.value.postForm.formData.categories = []
-      //   for (let i = 1; i < docPathArray.length - 1; i++) {
-      //     let docCat
-      //     if (publishCfg.fixTitle) {
-      //       docCat = mdFileToTitle(docPathArray[i])
-      //     } else {
-      //       docCat = docPathArray[i]
-      //     }
-      //     formData.value.postForm.formData.categories.push(docCat)
-      //   }
-      // }
+      const docPathArray = docPath.split("/")
+      let categories = []
+      if (docPathArray.length > 1) {
+        for (let i = 1; i < docPathArray.length - 1; i++) {
+          let docCat
+          if (publishCfg.fixTitle) {
+            docCat = mdFileToTitle(docPathArray[i])
+          } else {
+            docCat = docPathArray[i]
+          }
+          categories.push(docCat)
+        }
+      }
+
+      return categories
     },
 
     // 组件数据转formData，主要是修改页面之后同步
-    composableDataToForm: () => {
-      // formData.value.postForm.formData.customSlug = slugData.customSlug
-      // formData.value.postForm.formData.desc = descData.desc
-      // formData.value.postForm.formData.created = publishTimeData.created
-      // formData.value.postForm.formData.tag.dynamicTags = tagData.tag.dynamicTags
+    composableDataToForm: (): PostForm => {
+      const publishCfg = getPublishCfg()
+
+      const postForm = new PostForm()
+      postForm.formData.title = slugMethods.getSlugData().title
+      postForm.formData.customSlug = slugMethods.getSlugData().customSlug
+      postForm.formData.desc = descMethods.getDescData().desc
+      postForm.formData.created = publishTimeMethods.getPublishTime().created
+      postForm.formData.tag.dynamicTags = tagMethods.getTagData()
+      // 分类
+      const docPath = githubPagesMethods.getGithubPagesData().customPath
+      postForm.formData.categories =
+        initPublishMethods.convertDocPathToCategories(docPath)
+      // 正文
+      let md = siyuanPageMethods.getSiyuanPageData().dataObj.content.content
+      let html = mdToHtml(md)
+      if (publishCfg.removeH1) {
+        md = removeMdH1(md)
+        html = removeH1(html)
+      }
+      postForm.formData.mdContent = md
+      postForm.formData.htmlContent = html
+
+      return postForm
     },
 
-    // 组件在页面上尽量使用自带的Data，这个是与DOM绑定的，可以实时获取最新数据，有改变的时候同步formData
-    // 调用之前先同步form
-
-    // 调用之前先同步form
+    // 组件在页面上尽量使用自带的Data，这个是与DOM绑定的，可以实时获取最新数据，
+    // 调用之前先使用form中转
     convertAttrToYAML: (hideTip?: any) => {
       const publishCfg = getPublishCfg()
       const githubCfg = getJSONConf<IGithubCfg>(props.apiType)
 
-      // composableDataToForm()
+      // composableDataToForm
+      const postForm = initPublishMethods.composableDataToForm()
 
-      // yamlMethods.doConvertAttrToYAML(
-      //   props.yamlConverter,
-      //   formData.value.postForm,
-      //   githubCfg
-      // )
-      // onYamlShowTypeChange(publishCfg.contentShowType)
+      yamlMethods.doConvertAttrToYAML(props.yamlConverter, postForm, githubCfg)
+      initPublishMethods.onYamlShowTypeChange(publishCfg.contentShowType)
 
       if (hideTip !== true) {
         ElMessage.success(t("main.opt.success"))
       }
     },
 
-    convertYAMLToAttr: () => {
-      // yamlMethods.doConvertYAMLToAttr()
+    formToComposableData: (postForm: PostForm): void => {
+      // 别名
+      // slugMethods.syncSlug(postForm)
+      // 摘要
+      // descMethods.syncDesc(postForm)
+      // 发布时间
+      // publishTimeMethods.syncPublishTime(postForm)
+      // 标签
+      // tagMethods.syncTag(postForm)
+      // 分类没办法同步
+
+      throw new Error("未填充composable组件数据")
+    },
+
+    convertYAMLToAttr: (hideTip?: boolean) => {
+      if (
+        pageModeMethods.getPageModeData().stype !== SourceContentShowType.YAML
+      ) {
+        const errmsg = "只能转换YAML，请切换显示模式"
+        ElMessage.error(errmsg)
+        throw new Error(errmsg)
+      }
+
+      try {
+        const githubCfg = getJSONConf<IGithubCfg>(props.apiType)
+
+        // yamlToObj
+        const formatter = yamlMethods.getYamlData().yamlContent
+        const yamlObj = yaml2Obj(formatter)
+        const yamlFormatObj = new YamlFormatObj()
+        yamlFormatObj.yamlObj = yamlObj
+        logger.debug("准备将YAML转换为思源属性，yamlFormatObj=>", yamlFormatObj)
+        const postForm = yamlMethods.doConvertYAMLToAttr(
+          props.yamlConverter,
+          yamlFormatObj,
+          githubCfg
+        )
+
+        // formData转composable组件数据
+        initPublishMethods.formToComposableData(postForm)
+
+        if (hideTip !== true) {
+          ElMessage.success(t("main.opt.success"))
+        }
+      } catch (e) {
+        if (hideTip !== true) {
+          ElMessage.error(appendStr(t("main.opt.failure"), "=>", e))
+        }
+      }
     },
   }
 

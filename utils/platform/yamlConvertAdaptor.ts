@@ -23,21 +23,32 @@
  * questions.
  */
 
-import { YamlObj } from "~/utils/models/yamlObj"
 import { PostForm } from "~/utils/models/postForm"
 import { IGithubCfg } from "~/utils/platform/github/githubCfg"
+import { YamlFormatObj } from "~/utils/models/yamlFormatObj"
 
 export interface IYamlConvertAdaptor {
-  convert(formData: PostForm): YamlObj
+  convertToYaml(formData: PostForm, githubCfg?: IGithubCfg): YamlFormatObj
+
+  convertToAttr(yamlObj: YamlFormatObj, githubCfg?: IGithubCfg): PostForm
 }
 
 /**
  * YAML转换适配器
  */
 export class YamlConvertAdaptor implements IYamlConvertAdaptor {
-  convert(formData: PostForm, githubCfg?: IGithubCfg): YamlObj {
+  convertToYaml(formData: PostForm, githubCfg?: IGithubCfg): YamlFormatObj {
     throw new Error(
-      "YamlConvertAdaptor.convert: 该功能未实现，请在子类重写该方法"
+      "YamlConvertAdaptor.convertToYaml: 该功能未实现，请在子类重写该方法"
+    )
+  }
+
+  convertToAttr(
+    yamlFormatObj: YamlFormatObj,
+    githubCfg?: IGithubCfg
+  ): PostForm {
+    throw new Error(
+      "YamlConvertAdaptor.convertToAttr: 该功能未实现，请在子类重写该方法"
     )
   }
 }
