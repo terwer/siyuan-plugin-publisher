@@ -127,7 +127,7 @@ export class GithubApiAdaptor implements IApi {
     const newPostid = postid
       .substring(postid.lastIndexOf("/") + 1)
       .replace(".md", "")
-    previewUrl = this.cfg.previewUrl.replace("[postid]", newPostid)
+    previewUrl = this.cfg.previewMdUrl.replace("[postid]", newPostid)
     // 路径组合
     previewUrl = pathJoin(this.cfg.home ?? "", previewUrl)
 

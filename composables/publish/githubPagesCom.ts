@@ -63,8 +63,6 @@ export const useGithubPages = (props, deps) => {
      * 最终发布的路径
      */
     publishPath: "",
-    previewUrl: "",
-    previewRealUrl: "",
   })
 
   // deps

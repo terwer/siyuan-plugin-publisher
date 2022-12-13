@@ -163,7 +163,7 @@ export class YuqueApiAdaptor extends CommonblogApiAdaptor implements IApi {
 
   async getPreviewUrl(postid: string): Promise<string> {
     // 替换文章链接
-    const purl = this.cfg.previewUrl ?? ""
+    const purl = this.cfg.previewMdUrl ?? ""
     const yuquePostidKey = this.getYuquePostKey(postid)
     const docId = yuquePostidKey.docId
     const repo = yuquePostidKey.docRepo ?? this.cfg.blogid ?? ""

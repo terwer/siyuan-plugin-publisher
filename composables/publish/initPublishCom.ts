@@ -54,6 +54,8 @@ export const useInitPublish = (props, deps, otherArgs?) => {
     isInitLoading: false,
     apiStatus: false,
     isPublished: false,
+    previewMdUrl: "",
+    previewUrl: "",
     apiTypeInfo: ref(
       appendStr(t("setting.blog.platform.support.github"), props.apiType)
     ),

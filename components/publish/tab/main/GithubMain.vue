@@ -376,18 +376,21 @@
             >
               <el-form-item>
                 <el-button
-                  :loading="isPublishLoading"
+                  :loading="publishData.isPublishLoading"
                   type="primary"
-                  @click="doPublish"
+                  @click="publishMethods.doPublish"
                   >{{
-                    isPublishLoading
+                    publishData.isPublishLoading
                       ? $t("main.publish.loading")
-                      : isPublished
+                      : initPublishData.isPublished
                       ? $t("main.update")
                       : $t("main.publish")
                   }}
                 </el-button>
-                <el-button :loading="isCancelLoading" @click="cancelPublish"
+                <el-button
+                  v-if="initPublishData.isPublished"
+                  :loading="publishData.isCancelLoading"
+                  @click="publishMethods.cancelPublish"
                   >{{ $t("main.cancel") }}
                 </el-button>
               </el-form-item>
@@ -402,26 +405,26 @@
               <el-form-item>
                 <el-button disabled text type="danger">
                   {{
-                    isPublished
+                    initPublishData.isPublished
                       ? $t("main.publish.status.published")
                       : $t("main.publish.status.unpublish")
                   }}
                 </el-button>
                 <a
-                  v-if="isPublished"
-                  :href="previewUrl"
-                  :title="previewUrl"
+                  v-if="initPublishData.isPublished"
+                  :href="initPublishData.previewMdUrl"
+                  :title="initPublishData.previewMdUrl"
                   target="_blank"
-                  >{{ $t("main.publish.github.see.md.preview") }}</a
+                  >{{ $t("main.publish.see.md.preview") }}</a
                 >
               </el-form-item>
               <el-form-item>
                 <a
-                  v-if="isPublished"
-                  :href="previewRealUrl"
-                  :title="previewRealUrl"
+                  v-if="initPublishData.isPublished"
+                  :href="initPublishData.previewUrl"
+                  :title="initPublishData.previewUrl"
                   target="_blank"
-                  >{{ $t("main.publish.github.see.real.preview") }}</a
+                  >{{ $t("main.publish.see.real.preview") }}</a
                 >
               </el-form-item>
             </div>
@@ -639,7 +642,6 @@ const { quickData, quickMethods } = useQuick(props, {
   descMethods,
   tagMethods,
 })
-const { publishData, publishMethods } = usePublish()
 const { initPublishData, initPublishMethods } = useInitPublish(props, {
   pageModeMethods,
   siyuanPageMethods,
@@ -649,6 +651,10 @@ const { initPublishData, initPublishMethods } = useInitPublish(props, {
   tagMethods,
   githubPagesMethods,
   yamlMethods,
+})
+const { publishData, publishMethods } = usePublish(props, {
+  githubPagesMethods,
+  initPublishMethods,
 })
 
 // life cycle

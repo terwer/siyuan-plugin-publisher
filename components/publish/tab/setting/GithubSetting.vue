@@ -126,7 +126,7 @@
       </el-form-item>
 
       <el-form-item :label="$t('setting.blog.previewUrl')">
-        <el-input v-model="formData.previewUrl" />
+        <el-input v-model="formData.previewMdUrl" />
       </el-form-item>
 
       <el-form-item :label="$t('setting.blog.mdFilenameRule')">
@@ -215,7 +215,7 @@ const formData = reactive({
   msg: "auto published by sy-post-publisher",
   author: "terwer",
   email: "youweics@163.com",
-  previewUrl: "",
+  previewMdUrl: "",
   mdFilenameRule: "[filename]",
 })
 const rules = reactive<FormRules>({
@@ -374,7 +374,7 @@ const saveConf = (hideTip) => {
   cfg.defaultMsg = formData.msg
   cfg.author = formData.author
   cfg.email = formData.email
-  cfg.previewUrl = formData.previewUrl
+  cfg.previewUrl = formData.previewMdUrl
   cfg.mdFilenameRule = formData.mdFilenameRule
 
   cfg.apiStatus = apiStatus.value
@@ -402,7 +402,7 @@ const initConf = () => {
     formData.msg = conf.defaultMsg
     formData.author = conf.author
     formData.email = conf.email
-    formData.previewUrl = conf.previewUrl
+    formData.previewUrl = conf.previewMdUrl
     formData.mdFilenameRule = conf.mdFilenameRule
 
     apiStatus.value = conf.apiStatus
