@@ -152,6 +152,7 @@ export default {
   "setting.blog.password": "密码/Token",
   "setting.blog.apiurl": "API地址",
   "setting.blog.previewUrl": "预览规则",
+  "setting.blog.previewMdUrl": "MD预览规则",
   "setting.blog.mdFilenameRule": "文件规则",
   "setting.blog.pageType": "发布格式",
   "setting.blog.validate": "验证",

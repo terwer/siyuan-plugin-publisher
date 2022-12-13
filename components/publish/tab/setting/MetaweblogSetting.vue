@@ -212,7 +212,7 @@ const initConf = () => {
 
     home.value = conf.home
     apiUrl.value = conf.apiUrl
-    previewUrl.value = conf.previewMdUrl
+    previewUrl.value = conf.previewUrl
     username.value = conf.username
     password.value = conf.password
     blogName.value = conf.blogName

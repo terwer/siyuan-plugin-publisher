@@ -33,7 +33,7 @@ import { useI18n } from "vue-i18n"
 import { LogFactory } from "~/utils/logUtil"
 import { PageEditMode } from "~/utils/common/pageEditMode"
 import { getPageId } from "~/utils/platform/siyuan/siyuanUtil"
-import { isEmptyString } from "~/utils/util"
+import { isEmptyString, pathJoin } from "~/utils/util"
 import { SourceContentShowType } from "~/utils/common/sourceContentShowType"
 import { PostForm } from "~/utils/models/postForm"
 import { mdToHtml, removeH1, removeMdH1 } from "~/utils/htmlUtil"
@@ -53,12 +53,12 @@ export const useInitPublish = (props, deps, otherArgs?) => {
   const initPublishData = reactive({
     isInitLoading: false,
     apiStatus: false,
-    isPublished: false,
-    previewMdUrl: "",
-    previewUrl: "",
     apiTypeInfo: ref(
       appendStr(t("setting.blog.platform.support.github"), props.apiType)
     ),
+    isPublished: false,
+    previewMdUrl: "",
+    previewUrl: "",
   })
 
   // deps
@@ -300,22 +300,6 @@ export const useInitPublish = (props, deps, otherArgs?) => {
         if (initPublishData.isPublished) {
           githubPagesData.useDefaultPath = false
           docPath = githubPagesMethods.getDocPath()
-
-          // 预览链接
-          //   const vdomain = "https://terwer.space/"
-          //   githubPagesData.previewUrl =
-          //     "https://github.com/" +
-          //     githubCfg.githubUser +
-          //     "/" +
-          //     githubCfg.githubRepo +
-          //     "/blob/" +
-          //     githubCfg.defaultBranch +
-          //     "/" +
-          //     docPath
-          //   githubPagesData.previewRealUrl = pathJoin(
-          //     vdomain,
-          //     yamlData.yamlObj.yamlObj.permalink
-          //   )
         } else {
           docPath = githubCfg.defaultPath ?? ""
         }
@@ -368,6 +352,51 @@ export const useInitPublish = (props, deps, otherArgs?) => {
           defpath: currentDefaultPath,
           fname: mdTitle,
         })
+
+        // 所有数据初始化完成，生成YAML
+        initPublishMethods.convertAttrToYAML(true)
+
+        // 预览链接
+        if (initPublishData.isPublished) {
+          githubPagesData.useDefaultPath = false
+          docPath = githubPagesMethods.getDocPath()
+
+          // 预览链接
+          const baseUrl = githubCfg.baseUrl ?? "https://terwer.space/"
+          const home = githubCfg.home ?? "https://terwer.space/"
+
+          let mdUrl
+          mdUrl = pathJoin(githubCfg.githubUser, "/" + githubCfg.githubRepo)
+          mdUrl = pathJoin(mdUrl, "/blob/")
+          mdUrl = pathJoin(mdUrl, "/" + githubCfg.defaultBranch)
+          mdUrl = pathJoin(mdUrl, "/" + docPath)
+          if (!isEmptyString(githubCfg.previewMdUrl)) {
+            mdUrl = githubCfg.previewMdUrl.replace(
+              /\[user]/,
+              githubCfg.githubUser
+            )
+            mdUrl = githubCfg.previewMdUrl.replace(
+              /\[repo]/,
+              githubCfg.githubRepo
+            )
+            mdUrl = githubCfg.previewMdUrl.replace(
+              /\[branch]/,
+              githubCfg.defaultBranch
+            )
+            mdUrl = githubCfg.previewMdUrl.replace(/\[docpath]/, docPath)
+          }
+          mdUrl = pathJoin(baseUrl, mdUrl)
+          initPublishData.previewMdUrl = mdUrl
+
+          let url = yamlMethods.getYamlData().yamlObj.permalink
+          if (!isEmptyString(githubCfg.previewUrl)) {
+            url = githubCfg.previewUrl.replace(
+              "[postid]",
+              slugMethods.getSlugData().customSlug
+            )
+          }
+          initPublishData.previewUrl = pathJoin(home, url)
+        }
       } catch (e) {
         const errmsg = appendStr(t("main.opt.failure"), "=>", e)
         logger.error(errmsg)

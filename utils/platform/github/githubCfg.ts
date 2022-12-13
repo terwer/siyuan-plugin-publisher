@@ -72,11 +72,19 @@ export interface IGithubCfg {
    */
   blogName: string
   /**
+   * MD文件预览规则（占位符：[user] [repo] [branch] [docpath]）
+   */
+  previewMdUrl: string
+  /**
    * 预览规则（占位符：[yyyy] [MM] [dd] [postid]）
    */
   previewUrl: string
   /**
-   * Markdown文件名规则（占位符：yyyy] [MM] [dd] [slug] [filename] ）
+   * 文件预览链接，默认 https://github.com
+   */
+  baseUrl: string
+  /**
+   * Markdown文件名规则（占位符：[yyyy] [MM] [dd] [slug] [filename] ）
    */
   mdFilenameRule: string
   /**
@@ -93,24 +101,73 @@ export interface IGithubCfg {
  * Github平台通用配置类
  */
 export class GithubCfg implements IGithubCfg {
+  /**
+   * Github用户名
+   */
   githubUser: string
+  /**
+   * Github仓库名称
+   */
   githubRepo: string
+  /**
+   * Github个人Token令牌
+   */
   githubToken: string
-
+  /**
+   * 默认分支
+   */
   defaultBranch: string
-  defaultMsg: string
+  /**
+   * 文章存储的默认目录（相对于仓库根目录的相对路径，例如：docs/_posts/）
+   */
   defaultPath: string
+  /**
+   * 默认提交信息
+   */
+  defaultMsg: string
+  /**
+   * 作者
+   */
   author: string
+  /**
+   * 邮箱
+   */
   email: string
-  posidKey: string = ""
+  /**
+   * 文章别名key
+   */
+  posidKey: string
+  /**
+   * 博客首页，预览用
+   */
   home: string
+  /**
+   * 平台名称
+   */
   blogName: string
+  /**
+   * MD文件预览规则（占位符：[user] [repo] [branch] [docpath]）
+   */
+  previewMdUrl: string
+  /**
+   * 预览规则（占位符：[yyyy] [MM] [dd] [postid]）
+   */
   previewUrl: string
+  /**
+   * 文件预览链接，默认 https://github.com
+   */
   baseUrl: string
-  slugRule: string
-  docPathRule: string
+  /**
+   * Markdown文件名规则（占位符：[yyyy] [MM] [dd] [slug] [filename] ）
+   */
   mdFilenameRule: string
+  /**
+   * 是否使用meta.json（next.js需要）
+   */
   useMetaJson: boolean
+  /**
+   * API状态是否正常
+   */
   apiStatus: boolean
 
   constructor(
@@ -130,6 +187,7 @@ export class GithubCfg implements IGithubCfg {
     this.defaultMsg = "auto published by sy-post-publisher"
     this.author = "terwer"
     this.email = "youweics@163.com"
+    this.previewMdUrl = ""
     this.previewUrl = ""
     this.baseUrl = "https://github.com"
     this.mdFilenameRule = "[filename].md"

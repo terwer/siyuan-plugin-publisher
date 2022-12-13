@@ -125,8 +125,12 @@
         />
       </el-form-item>
 
-      <el-form-item :label="$t('setting.blog.previewUrl')">
+      <el-form-item :label="$t('setting.blog.previewMdUrl')">
         <el-input v-model="formData.previewMdUrl" />
+      </el-form-item>
+
+      <el-form-item :label="$t('setting.blog.previewUrl')">
+        <el-input v-model="formData.previewUrl" />
       </el-form-item>
 
       <el-form-item :label="$t('setting.blog.mdFilenameRule')">
@@ -216,6 +220,7 @@ const formData = reactive({
   author: "terwer",
   email: "youweics@163.com",
   previewMdUrl: "",
+  previewUrl: "",
   mdFilenameRule: "[filename]",
 })
 const rules = reactive<FormRules>({
@@ -374,7 +379,8 @@ const saveConf = (hideTip) => {
   cfg.defaultMsg = formData.msg
   cfg.author = formData.author
   cfg.email = formData.email
-  cfg.previewUrl = formData.previewMdUrl
+  cfg.previewMdUrl = formData.previewMdUrl
+  cfg.previewUrl = formData.previewUrl
   cfg.mdFilenameRule = formData.mdFilenameRule
 
   cfg.apiStatus = apiStatus.value
@@ -402,7 +408,8 @@ const initConf = () => {
     formData.msg = conf.defaultMsg
     formData.author = conf.author
     formData.email = conf.email
-    formData.previewUrl = conf.previewMdUrl
+    formData.previewMdUrl = conf.previewMdUrl
+    formData.previewUrl = conf.previewUrl
     formData.mdFilenameRule = conf.mdFilenameRule
 
     apiStatus.value = conf.apiStatus

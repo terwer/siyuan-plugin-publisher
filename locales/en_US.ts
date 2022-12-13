@@ -145,6 +145,7 @@ export default {
   "setting.blog.type.github.email.tip": "Email",
   "setting.blog.url": "Blog addr",
   "setting.blog.previewUrl": "Preview rule",
+  "setting.blog.previewMdUrl": "MD preview rule",
   "setting.blog.mdFilenameRule": "File rule",
   "setting.blog.username": "Username",
   "setting.blog.password": "Password",

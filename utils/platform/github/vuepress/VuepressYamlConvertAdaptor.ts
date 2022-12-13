@@ -48,8 +48,8 @@ export class VuepressYamlConvertAdaptor
     this.logger.debug("您正在使用 Vuepress Yaml Converter", postForm)
     yamlFormatObj.yamlObj.title = postForm.formData.title
     let link = "/post/" + postForm.formData.customSlug + ".html"
-    if (githubCfg && !isEmptyString(githubCfg.previewMdUrl)) {
-      link = githubCfg.previewMdUrl.replace(
+    if (githubCfg && !isEmptyString(githubCfg.previewUrl)) {
+      link = githubCfg.previewUrl.replace(
         "[postid]",
         postForm.formData.customSlug
       )

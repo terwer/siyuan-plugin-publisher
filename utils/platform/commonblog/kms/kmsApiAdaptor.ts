@@ -78,7 +78,7 @@ export class KmsApiAdaptor extends CommonblogApiAdaptor implements IApi {
 
   async getPreviewUrl(postid: string): Promise<string> {
     // 替换文章链接
-    const purl = this.cfg.previewMdUrl ?? ""
+    const purl = this.cfg.previewUrl ?? ""
     const postUrl = purl.replace("[postid]", postid)
     // 路径组合
     return pathJoin(this.cfg.home ?? "", postUrl)

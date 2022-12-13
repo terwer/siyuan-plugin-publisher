@@ -274,7 +274,7 @@ export class MetaWeblogApiAdaptor implements IApi {
   }
 
   public async getPreviewUrl(postid: string): Promise<string> {
-    const postUrl = this.cfg.previewMdUrl.replace("[postid]", postid)
+    const postUrl = this.cfg.previewUrl.replace("[postid]", postid)
     const previewUrl = pathJoin(this.cfg.home ?? "", postUrl)
     this.logger.debug("previewUrl", previewUrl)
     return previewUrl
