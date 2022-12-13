@@ -1,21 +1,17 @@
 # sy-post-publisher
 
-<div style="text-align: center;">
-
 ![](https://raw.githubusercontent.com/terwer/src-sy-post-publisher/main/assets/favicon/android-chrome-512x512.png)
 
 将 [思源笔记](https://github.com/siyuan-note/siyuan) 的文章发布到支持的平台的 **思源笔记挂件**
 
-[![](https://img.shields.io/badge/online-preview-faad14.svg?style=popout-square)](https://publish.terwer.space/blog/index.html)
-[![](https://img.shields.io/github/workflow/status/terwer/src-sy-post-publisher/ci)](https://github.com/terwer/src-sy-post-publisher/actions/workflows/ci.yml)
-![](https://img.shields.io/badge/license-GPL-blue.svg?style=popout-square)
+[![](https://img.shields.io/badge/source-code-green)](https://github.com/terwer/src-sy-post-publisher)
 ![version](https://img.shields.io/github/release/terwer/src-sy-post-publisher.svg?style=flat-square)
-![GitHub last commit](https://img.shields.io/github/last-commit/terwer/src-sy-post-publisher)
 <a title="Downloads" target="_blank" href="https://github.com/terwer/src-sy-post-publisher/releases"><img src="https://img.shields.io/github/downloads/terwer/src-sy-post-publisher/total.svg?style=flat-square&color=blueviolet"></a>
+![GitHub last commit](https://img.shields.io/github/last-commit/terwer/src-sy-post-publisher)
+![](https://img.shields.io/badge/license-GPL-blue.svg?style=popout-square)
+[![](https://img.shields.io/badge/online-preview-faad14.svg?style=popout-square)](https://publish.terwer.space/blog/index.html)
 
-</div>
-
-![](https://raw.githubusercontent.com/terwer/src-sy-post-publisher/main/public/preview-light.png)
+![](https://raw.githubusercontent.com/terwer/src-sy-post-publisher/main/public/preview.png)
 
 [点击查看项目源码](https://github.com/terwer/src-sy-post-publisher)
 

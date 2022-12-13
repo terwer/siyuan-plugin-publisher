@@ -36,7 +36,12 @@ import { getPageId } from "~/utils/platform/siyuan/siyuanUtil"
 import { isEmptyString, pathJoin } from "~/utils/util"
 import { SourceContentShowType } from "~/utils/common/sourceContentShowType"
 import { PostForm } from "~/utils/models/postForm"
-import { mdToHtml, removeH1, removeMdH1 } from "~/utils/htmlUtil"
+import {
+  mdToHtml,
+  removeH1,
+  removeMdH1,
+  removeMdWidgetTag,
+} from "~/utils/htmlUtil"
 import { yaml2Obj } from "~/utils/yamlUtil"
 import { YamlFormatObj } from "~/utils/models/yamlFormatObj"
 
@@ -165,7 +170,10 @@ export const useInitPublish = (props, deps, otherArgs?) => {
         initPublishMethods.convertDocPathToCategories(docPath)
       // 正文
       let md = siyuanPageMethods.getSiyuanPageData().dataObj.content.content
+      // mdToHtml已经去掉了挂件代码
       let html = mdToHtml(md)
+      // md还需要单独去掉挂件代码
+      md = removeMdWidgetTag(md)
       if (publishCfg.removeH1) {
         md = removeMdH1(md)
         html = removeH1(html)
