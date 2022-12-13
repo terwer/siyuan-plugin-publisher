@@ -287,5 +287,7 @@ export default {
     "Git platform address is used for md file preview, the default is: https://github.com",
   "preference.setting.fixTitle": "Fix title",
   "preference.setting.removeH1": "Remove h1",
+  "preference.setting.removeH1.tip":
+    "Delete H1 may accidentally delete the beginning of the beginning of Markdown. If you need to open it, please use more than 2 ones.",
   "preference.setting.newWin": "New win",
 }

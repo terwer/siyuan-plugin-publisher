@@ -57,10 +57,13 @@ import { CONSTANTS } from "~/utils/constants/constants"
 import { LogFactory } from "~/utils/logUtil"
 import { isBrowser, reloadPage } from "~/utils/browserUtil"
 import { parseBoolean } from "~/utils/util"
+import { ElMessageBox } from "element-plus"
+import { useI18n } from "vue-i18n"
 
 const logger = LogFactory.getLogger(
   "components/publish/tab/preference/PreferenceSetting.vue"
 )
+const { t } = useI18n()
 
 const props = defineProps({
   isReload: {
@@ -84,9 +87,31 @@ const formMethods = {
   },
   onH1Change: (val: boolean) => {
     logger.debug("onH1Change=>", val)
-    formData.removeH1 = val
+    const isTrue = parseBoolean(val)
+    if (isTrue === true) {
+      ElMessageBox.confirm(
+        t("preference.setting.removeH1.tip"),
+        t("main.opt.warning"),
+        {
+          confirmButtonText: t("main.opt.ok"),
+          cancelButtonText: t("main.opt.cancel"),
+          type: "warning",
+        }
+      )
+        .then(async () => {
+          formData.removeH1 = val
 
-    saveConf()
+          saveConf()
+        })
+        .catch(() => {
+          formData.removeH1 = !isTrue
+
+          // ElMessage({
+          //   type: 'error',
+          //   message: t("main.opt.failure"),
+          // })
+        })
+    }
   },
   onNewWinChange: (val: boolean) => {
     logger.debug("onNewWinChange=>", val)

@@ -140,7 +140,11 @@ export const usePublish = (props, deps?: any) => {
           publishData.isPublishLoading = false
         }
         logger.debug("文章发布完成.")
-        ElMessage.success(t("main.opt.status.publish"))
+        if (initPublishMethods.getInitPublishData().isPublished) {
+          ElMessage.success(t("main.opt.status.updated"))
+        } else {
+          ElMessage.success(t("main.opt.status.publish"))
+        }
       } catch (e) {
         const errmsg = appendStr(t("main.opt.failure"), "=>", e)
         ElMessage.error(errmsg)

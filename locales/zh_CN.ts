@@ -110,6 +110,7 @@ export default {
   "main.opt.failure": "操作失败",
   "main.opt.quick": "快捷操作",
   "main.opt.status.publish": "文章已发布",
+  "main.opt.status.updated": "文章已更新",
   "main.opt.status.cancel": "文章发布已取消",
   "main.opt.loading": "操作中...",
   "main.opt.warning": "警告信息",
@@ -297,5 +298,7 @@ export default {
     "Git平台地址，用于MD文件预览，默认是：https://github.com",
   "preference.setting.fixTitle": "去除标题编号",
   "preference.setting.removeH1": "去除正文H1",
+  "preference.setting.removeH1.tip":
+    "删除H1可能会误删除Markdown里面的#开头的注释，如需开启，请使用2个以上的#注释，是否继续？",
   "preference.setting.newWin": "新窗口",
 }
