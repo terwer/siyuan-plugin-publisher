@@ -40,6 +40,7 @@ import { PageEditMode } from "~/utils/common/pageEditMode"
 import { SourceContentShowType } from "~/utils/common/sourceContentShowType"
 
 const logger = LogFactory.getLogger("utils/publishUtil.ts")
+const isProd = process.env.NODE_ENV === "production"
 
 /**
  * 新版获取apiParams参数的方法，使用ts泛型
@@ -150,28 +151,37 @@ export const getPublishCfg = (): PublishPreference => {
   if (isEmptyString(publishCfg)) {
     publishCfg = new PublishPreference()
     publishCfg.fixTitle = false
+    // TODO 非Github平台待实现
     publishCfg.useGoogleTranslate = true
+    // TODO 非Github平台待实现
     publishCfg.editMode = PageEditMode.EditMode_simple
+    // TODO 非Github平台待实现
     publishCfg.contentShowType = SourceContentShowType.YAML_CONTENT
+    publishCfg.removeH1 = false
+    // TODO 非Github平台待实现
     publishCfg.autoTag = false
+    // TODO 非Github平台待实现
     publishCfg.renderSiyuanVirtualLink = true
+    // TODO 非Github平台待实现
     publishCfg.makeAttrOnFirstLoad = false
   }
 
-  // ================
+  // =====================================================
   // 下面是我自己的配置
-  // ================
-  publishCfg.fixTitle = true
-  publishCfg.useGoogleTranslate = true
-  publishCfg.editMode = PageEditMode.EditMode_simple
-  publishCfg.contentShowType = SourceContentShowType.YAML
-  publishCfg.removeH1 = true
-  publishCfg.autoTag = true
-  publishCfg.renderSiyuanVirtualLink = true
-  publishCfg.makeAttrOnFirstLoad = true
-  // ================
+  // =====================================================
+  if (!isProd) {
+    publishCfg.fixTitle = true
+    publishCfg.useGoogleTranslate = true
+    publishCfg.editMode = PageEditMode.EditMode_simple
+    publishCfg.contentShowType = SourceContentShowType.YAML
+    publishCfg.removeH1 = true
+    publishCfg.autoTag = true
+    publishCfg.renderSiyuanVirtualLink = true
+    publishCfg.makeAttrOnFirstLoad = true
+  }
+  // =====================================================
   // 下面是我自己的配置
-  // ================
+  // =====================================================
 
   return publishCfg
 }

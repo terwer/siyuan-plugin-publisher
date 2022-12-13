@@ -353,6 +353,9 @@
                       : $t("main.publish.oneclick.attr")
                   }}
                 </el-button>
+              </el-form-item>
+
+              <el-form-item>
                 <!-- 属性转换 -->
                 <el-button
                   v-if="pageModeData.etype !== PageEditMode.EditMode_simple"
@@ -360,6 +363,9 @@
                   @click="quickMethods.saveAttrToSiyuan"
                   >{{ $t("main.save.attr.to.siyuan") }}
                 </el-button>
+              </el-form-item>
+
+              <el-form-item>
                 <el-button
                   v-if="pageModeData.etype !== PageEditMode.EditMode_simple"
                   type="primary"

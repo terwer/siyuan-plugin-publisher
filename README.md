@@ -12,13 +12,13 @@
 
 ## 支持平台
 
-- [ ] Hugo
-- [ ] Hexo
-- [ ] Jekyll（Github pages 默认内置支持的平台）
+- [x] Hugo
+- [x] Hexo
+- [x] Jekyll（Github pages 默认内置支持的平台）
 - [x] Vuepress
-- [ ] Vitepress
-- [ ] Nuxt
-- [ ] Next
+- [x] Vitepress
+- [x] Nuxt
+- [x] Next
 - [x] 博客园
 - [ ] CSDN <sup>预研</sup>
 - [ ] 知乎 <sup>预研</sup>
@@ -26,8 +26,9 @@
 - [x] 开源中国
 - [x] 链滴社区
 - [x] WordPress
+- [x] Confluence <sup>通过接口适配器支持</sup>
 - [x] Metaweblog API
-- [ ] Confluence
+- [ ] 自定义 HTTP 协议 <sup>预研</sup>
 
 ## 挂件版快速上手
 

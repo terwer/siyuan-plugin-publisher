@@ -47,6 +47,13 @@
         v-if="useAdaptor"
       />
       <el-form label-width="120px">
+        <!-- 文章标题 -->
+        <div class="form-post-title">
+          <el-form-item :label="$t('main.title')">
+            <el-input v-model="formData.title" :disabled="true" />
+          </el-form-item>
+        </div>
+
         <!-- 编辑模式 -->
         <el-form-item :label="$t('main.publish.editmode')">
           <el-button-group>
@@ -213,7 +220,7 @@
                 : $t("main.publish.oneclick.attr")
             }}
           </el-button>
-          <el-button type="primary" @click="saveAttrToSiyuan"
+          <el-button v-if="editMode" type="primary" @click="saveAttrToSiyuan"
             >{{ $t("main.save.attr.to.siyuan") }}
           </el-button>
         </el-form-item>
@@ -232,7 +239,10 @@
                 : $t("main.publish")
             }}
           </el-button>
-          <el-button @click="cancelPublish" :loading="isCancelLoading"
+          <el-button
+            v-if="isPublished"
+            :loading="isCancelLoading"
+            @click="cancelPublish"
             >{{ $t("main.cancel") }}
           </el-button>
         </el-form-item>
@@ -269,6 +279,8 @@ import {
   mdToHtml,
   mdToPlainText,
   parseHtml,
+  removeH1,
+  removeMdH1,
   removeMdWidgetTag,
   removeTitleNumber,
   removeWidgetTag,
@@ -294,7 +306,7 @@ import {
 } from "~/utils/util"
 import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
 import { formatNumToZhDate } from "~/utils/dateUtil"
-import { getPublishStatus } from "~/utils/publishUtil"
+import { getPublishCfg, getPublishStatus } from "~/utils/publishUtil"
 import { CONSTANTS } from "~/utils/constants/constants"
 
 const logger = LogFactory.getLogger(
@@ -395,6 +407,8 @@ const initPage = async () => {
   if (!isEmptyObject(conf)) {
     blogName.value = conf.blogName
   }
+  // 读取偏好设置
+  const publishCfg = getPublishCfg()
 
   // 默认开启hash
   slugHashEnabled.value = true
@@ -411,7 +425,11 @@ const initPage = async () => {
   logger.debug("MetaweblogMain初始化页面,meta=>", siyuanData.meta)
 
   // 表单数据
-  formData.title = page.content
+  let fmtTitle = page.content
+  if (publishCfg.fixTitle) {
+    fmtTitle = removeTitleNumber(page.content)
+  }
+  formData.title = fmtTitle
   formData.customSlug =
     siyuanData.meta[SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_SLUG_KEY]
   formData.desc =
@@ -702,13 +720,12 @@ const doPublish = async () => {
 
     // api可用并且开启了发布
     const metaweblogCfg = getJSONConf<IMetaweblogCfg>(props.apiType)
-
     const api = new API(props.apiType)
+    // 读取偏好设置
+    const publishCfg = getPublishCfg()
 
     // 组装文章数据
     // ===============================
-    // 标题处理
-    const fmtTitle = removeTitleNumber(formData.title)
     // 发布内容
     let content
     const data = await siyuanApi.exportMdContent(siyuanData.pageId)
@@ -716,13 +733,18 @@ const doPublish = async () => {
     if (PageType.Html === metaweblogCfg.pageType) {
       const html = mdToHtml(md)
       content = removeWidgetTag(html)
+      if (publishCfg.removeH1) {
+        content = removeH1(content)
+      }
     } else {
-      // logUtil.logWarn("md=>", md)
       content = removeMdWidgetTag(md)
+      if (publishCfg.removeH1) {
+        content = removeMdH1(content)
+      }
     }
     // ===============================
     const post = new Post()
-    post.title = fmtTitle
+    post.title = formData.title
     post.wp_slug = formData.customSlug
     post.description = content
     post.categories = formData.categories
