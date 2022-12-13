@@ -390,10 +390,30 @@ export const useInitPublish = (props, deps, otherArgs?) => {
 
           let url = yamlMethods.getYamlData().yamlObj.permalink
           if (!isEmptyString(githubCfg.previewUrl)) {
+            // [postid]
             url = githubCfg.previewUrl.replace(
-              "[postid]",
+              /\[postid]/g,
               slugMethods.getSlugData().customSlug
             )
+
+            // [yyyy] [MM] [dd]
+            const created = publishTimeMethods.getPublishTime().created
+            const datearr = created.split(" ")[0]
+            const numarr = datearr.split("-")
+            logger.debug("created numarr=>", numarr)
+            const y = numarr[0]
+            const m = numarr[1]
+            const d = numarr[2]
+            url = url.replace(/\[yyyy]/g, y)
+            url = url.replace(/\[MM]/g, m)
+            url = url.replace(/\[mm]/g, m)
+            url = url.replace(/\[dd]/g, d)
+
+            // [cats]
+            const docPath = githubPagesMethods.getGithubPagesData().publishPath
+            const categories =
+              initPublishMethods.convertDocPathToCategories(docPath)
+            url = url.replace(/\[cats]/, categories.join("/"))
           }
           initPublishData.previewUrl = pathJoin(home, url)
         }
