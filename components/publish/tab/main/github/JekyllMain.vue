@@ -29,17 +29,14 @@
     :api-type="apiType"
     :is-main-reload="props.isMainReload"
     :page-id="props.pageId"
-    :slug-type="slugType"
   />
 </template>
 <script lang="ts" setup>
 import GithubMain from "~/components/publish/tab/main/GithubMain.vue"
 import { API_TYPE_CONSTANTS } from "~/utils/constants/apiTypeConstants"
 import { ref } from "vue"
-import { SLUG_TYPE_CONSTANTS } from "~/utils/constants/slugTypeConstants"
 
 const apiType = ref(API_TYPE_CONSTANTS.API_TYPE_JEKYLL)
-const slugType = ref(SLUG_TYPE_CONSTANTS.SLUG_TYPE_SLUG)
 
 const props = defineProps({
   isReload: {

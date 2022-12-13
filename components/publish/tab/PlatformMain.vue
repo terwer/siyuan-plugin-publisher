@@ -128,7 +128,6 @@
         :api-type="gcfg.platformKey"
         :is-main-reload="isReloadMainTab"
         :page-id="props.pageId"
-        :slug-type="gcfg.slugType"
       />
     </el-tab-pane>
     <el-tab-pane
@@ -226,8 +225,6 @@ const initDynCfg = (dynCfg: any[]) => {
       item.platformKey,
       item.platformName
     )
-
-    newItem.slugType = item.slugType
 
     const switchKey = "switch-" + item.platformKey
     const switchValue = getBooleanConf(switchKey)

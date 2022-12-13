@@ -33,7 +33,6 @@ import { useI18n } from "vue-i18n"
 import { LogFactory } from "~/utils/logUtil"
 import { PageEditMode } from "~/utils/common/pageEditMode"
 import { getPageId } from "~/utils/platform/siyuan/siyuanUtil"
-import { SLUG_TYPE_CONSTANTS } from "~/utils/constants/slugTypeConstants"
 import { isEmptyString } from "~/utils/util"
 import { SourceContentShowType } from "~/utils/common/sourceContentShowType"
 import { PostForm } from "~/utils/models/postForm"
@@ -149,10 +148,7 @@ export const useInitPublish = (props, deps, otherArgs?) => {
         const mdFilenameRule = githubCfg.mdFilenameRule
         let mdTitle
         if (isEmptyString(mdFilenameRule)) {
-          mdTitle =
-            props.slugType === SLUG_TYPE_CONSTANTS.SLUG_TYPE_MD_FILE
-              ? siyuanData.page.content
-              : slugData.customSlug ?? "no-slug"
+          mdTitle = siyuanData.page.content ?? slugData.customSlug ?? "no-slug"
         } else {
           mdTitle = mdFilenameRule
           if (mdFilenameRule.indexOf("filename") > -1) {

@@ -55,10 +55,6 @@ export class DynamicConfig {
    * 平台名称
    */
   platformName: string
-  /**
-   * 别名类型
-   */
-  slugType?: string
 
   constructor(
     platformType: PlatformType,

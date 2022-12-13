@@ -612,10 +612,6 @@ const props = defineProps({
     type: String,
     default: undefined,
   },
-  slugType: {
-    type: String,
-    default: undefined,
-  },
   yamlConverter: {
     type: YamlConvertAdaptor,
   },
