@@ -119,10 +119,7 @@ export const useInitPublish = (props, deps, otherArgs?) => {
           yamlMethods.initYaml(yamlMethods.getYamlData().mdContent)
           break
         case SourceContentShowType.YAML_CONTENT:
-          yamlMethods.initYaml(
-            yamlMethods.getYamlData().formatter +
-              yamlMethods.getYamlData().mdContent
-          )
+          yamlMethods.initYaml(yamlMethods.getYamlData().mdFullContent)
           break
         case SourceContentShowType.HTML_CONTENT:
           yamlMethods.initYaml(yamlMethods.getYamlData().htmlContent)

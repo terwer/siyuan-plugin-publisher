@@ -355,19 +355,19 @@
                 </el-button>
               </el-form-item>
 
-              <el-form-item>
+              <el-form-item
+                v-if="pageModeData.etype !== PageEditMode.EditMode_simple"
+              >
                 <!-- 属性转换 -->
-                <el-button
-                  v-if="pageModeData.etype !== PageEditMode.EditMode_simple"
-                  type="primary"
-                  @click="quickMethods.saveAttrToSiyuan"
+                <el-button type="primary" @click="quickMethods.saveAttrToSiyuan"
                   >{{ $t("main.save.attr.to.siyuan") }}
                 </el-button>
               </el-form-item>
 
-              <el-form-item>
+              <el-form-item
+                v-if="pageModeData.etype !== PageEditMode.EditMode_simple"
+              >
                 <el-button
-                  v-if="pageModeData.etype !== PageEditMode.EditMode_simple"
                   type="primary"
                   @click="
                     initPublishMethods.onEditModeChange(

@@ -103,7 +103,7 @@ export const useYaml = () => {
       yamlData.formatter = yamlFormatObj.formatter
       yamlData.mdContent = yamlFormatObj.mdContent
       yamlData.mdFullContent =
-        yamlFormatObj.formatter + "\n" + yamlFormatObj.mdContent
+        yamlFormatObj.formatter + "\n\n" + yamlFormatObj.mdContent
       yamlData.htmlContent = yamlFormatObj.htmlContent
     },
 
