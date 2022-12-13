@@ -152,8 +152,14 @@ export default {
   "setting.blog.password": "密码/Token",
   "setting.blog.apiurl": "API地址",
   "setting.blog.previewUrl": "预览规则",
+  "setting.blog.previewUrl.tip":
+    "预览规则（占位符：[yyyy] [MM] [dd] [postid]），例如：/post/[postid].html 或者 /[cats]/[yyyy]/[mm]/[dd]/[postid].html",
   "setting.blog.previewMdUrl": "MD预览规则",
+  "setting.blog.previewMdUrl.tip":
+    "MD文件预览规则（占位符：[user] [repo] [branch] [docpath]），例如：/[user]/[repo]/blob/[branch]/[docpath]",
   "setting.blog.mdFilenameRule": "文件规则",
+  "setting.blog.mdFilenameRule.tip":
+    "Markdown文件名规则（占位符：[yyyy] [MM] [dd] [slug] [filename] ），例如：[filename].md 或者 [yyyy]-[mm]-[dd]-[slug].md",
   "setting.blog.pageType": "发布格式",
   "setting.blog.validate": "验证",
   "setting.blog.save": "保存",
@@ -238,6 +244,7 @@ export default {
   "dynamic.platform.opt.item.select.tip": "当前选择的是：",
   "dynamic.platform.opt.item.no.select.tip": "请选择要删除的行",
   "setting.common.home": "平台首页",
+  "setting.common.tip": "平台首页，用于预览文章，例如：https://terwer.space",
   "setting.common.apiurl": "API地址",
   "setting.common.token": "鉴权token",
   "setting.common.token.gen": "Token生成地址",
@@ -285,4 +292,7 @@ export default {
   "main.cat.list.error": "分类获取失败",
   "main.yaml.no.save":
     "您编辑过YAML，点击确认可同步YAML到属性，取消将丢失YAML修改，是否继续？",
+  "setting.github.baseUrl": "Git平台地址",
+  "setting.github.baseUrl.tip":
+    "Git平台地址，用于MD文件预览，默认是：https://github.com",
 }
