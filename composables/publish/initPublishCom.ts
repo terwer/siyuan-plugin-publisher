@@ -371,19 +371,11 @@ export const useInitPublish = (props, deps, otherArgs?) => {
           mdUrl = pathJoin(mdUrl, "/" + githubCfg.defaultBranch)
           mdUrl = pathJoin(mdUrl, "/" + docPath)
           if (!isEmptyString(githubCfg.previewMdUrl)) {
-            mdUrl = githubCfg.previewMdUrl.replace(
-              /\[user]/,
-              githubCfg.githubUser
-            )
-            mdUrl = githubCfg.previewMdUrl.replace(
-              /\[repo]/,
-              githubCfg.githubRepo
-            )
-            mdUrl = githubCfg.previewMdUrl.replace(
-              /\[branch]/,
-              githubCfg.defaultBranch
-            )
-            mdUrl = githubCfg.previewMdUrl.replace(/\[docpath]/, docPath)
+            mdUrl = githubCfg.previewMdUrl
+            mdUrl = mdUrl.replace(/\[user]/, githubCfg.githubUser)
+            mdUrl = mdUrl.replace(/\[repo]/, githubCfg.githubRepo)
+            mdUrl = mdUrl.replace(/\[branch]/, githubCfg.defaultBranch)
+            mdUrl = mdUrl.replace(/\[docpath]/, docPath)
           }
           mdUrl = pathJoin(baseUrl, mdUrl)
           initPublishData.previewMdUrl = mdUrl

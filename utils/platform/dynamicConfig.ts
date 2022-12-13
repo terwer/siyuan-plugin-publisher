@@ -28,6 +28,11 @@ import { getJSONConf, setJSONConf } from "~/utils/configUtil"
 import { isEmptyString } from "~/utils/util"
 import { newID } from "~/utils/idUtil"
 import { appendStr, upperFirst } from "~/utils/strUtil"
+import { YamlConvertAdaptor } from "~/utils/platform/yamlConvertAdaptor"
+import { LogFactory } from "~/utils/logUtil"
+import { VuepressYamlConvertAdaptor } from "~/utils/platform/github/vuepress/VuepressYamlConvertAdaptor"
+
+const logger = LogFactory.getLogger("utils/platform/dynamicConfig.ts")
 
 export class DynamicConfig {
   /**
@@ -55,6 +60,10 @@ export class DynamicConfig {
    * 平台名称
    */
   platformName: string
+  /**
+   * YAML转换器
+   */
+  yamlConverter?: YamlConvertAdaptor
 
   constructor(
     platformType: PlatformType,
@@ -312,4 +321,31 @@ export function getSwitchItem(selectedText: string): SwitchItem {
  */
 export function getDynPostidKey(platformKey: string): string {
   return "custom-" + platformKey + "-post-id"
+}
+
+// ======================
+// 动态平台Object对象初始化
+// ======================
+/**
+ * 根据平台key获取YAML转换器
+ * @param platformKey
+ */
+export const getDynYamlConverterAdaptor = (
+  platformKey: string
+): YamlConvertAdaptor => {
+  logger.error(platformKey)
+  let yamlConverter = new YamlConvertAdaptor()
+  if (platformKey.includes("-")) {
+    const typeArr = platformKey.split("-")
+    if (typeArr.length > 0) {
+      const ptype = typeArr[0].toLowerCase()
+
+      if (ptype.includes(SubPlatformType.Github_Vuepress.toLowerCase())) {
+        yamlConverter = new VuepressYamlConvertAdaptor()
+      } else if (ptype.includes(SubPlatformType.Github_Hugo.toLowerCase())) {
+      }
+    }
+  }
+
+  return yamlConverter
 }

@@ -1,8 +1,21 @@
 # sy-post-publisher
 
+<div style="text-align: center;">
+
+![](https://raw.githubusercontent.com/terwer/src-sy-post-publisher/main/assets/favicon/android-chrome-512x512.png)
+
 将 [思源笔记](https://github.com/siyuan-note/siyuan) 的文章发布到支持的平台的 **思源笔记挂件**
 
-![](https://static-rs-terwer.oss-cn-beijing.aliyuncs.com/project/sy-post-publisher/preview.png)
+[![](https://img.shields.io/badge/online-preview-faad14.svg?style=popout-square)](https://publish.terwer.space/blog/index.html)
+[![](https://img.shields.io/github/workflow/status/terwer/src-sy-post-publisher/ci)](https://github.com/terwer/src-sy-post-publisher/actions/workflows/ci.yml)
+![](https://img.shields.io/badge/license-GPL-blue.svg?style=popout-square)
+![version](https://img.shields.io/github/release/terwer/src-sy-post-publisher.svg?style=flat-square)
+![GitHub last commit](https://img.shields.io/github/last-commit/terwer/src-sy-post-publisher)
+<a title="Downloads" target="_blank" href="https://github.com/terwer/src-sy-post-publisher/releases"><img src="https://img.shields.io/github/downloads/terwer/src-sy-post-publisher/total.svg?style=flat-square&color=blueviolet"></a>
+
+</div>
+
+![](https://raw.githubusercontent.com/terwer/src-sy-post-publisher/main/public/preview-light.png)
 
 [点击查看项目源码](https://github.com/terwer/src-sy-post-publisher)
 
@@ -70,11 +83,11 @@ https://mp.terwer.space/post/start-to-get-started-zi0eyk.html
 
 |                                         商店                                         |                                                                                          版本                                                                                           | 上架状态 |
 | :----------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :------: |
-|  ![](https://static-rs-terwer.oss-cn-beijing.aliyuncs.com/icons/browser/edge20.svg)  | [v0.0.3](https://microsoftedge.microsoft.com/addons/detail/%E6%80%9D%E6%BA%90%E7%AC%94%E8%AE%B0%E5%8F%91%E5%B8%83%E8%BE%85%E5%8A%A9%E5%B7%A5%E5%85%B7/aejmkigifflimhjlhjkdckclhabbilee) |  已上架  |
-| ![](https://static-rs-terwer.oss-cn-beijing.aliyuncs.com/icons/browser/chrome20.svg) |     [v0.0.3](https://chrome.google.com/webstore/detail/%E6%80%9D%E6%BA%90%E7%AC%94%E8%AE%B0%E5%8F%91%E5%B8%83%E8%BE%85%E5%8A%A9%E5%B7%A5%E5%85%B7/gemlnnppcphbiimfjnobfgdkohjmgifm)     |  已上架  |
-|                                        网页版                                        |                                                                 [v0.0.3](https://publish.terwer.space/blog/index.html)                                                                  |  可使用  |
-|                                       离线 zip                                       |                                  [v0.0.3](https://github.com/terwer/src-sy-post-publisher/releases/download/v0.0.3/sy-post-publisher-chrome-0.0.3.zip)                                  |  可下载  |
-|                                        挂件版                                        |                                                                  [v0.0.3](https://github.com/terwer/sy-post-publisher)                                                                  |  可使用  |
+|  ![](https://static-rs-terwer.oss-cn-beijing.aliyuncs.com/icons/browser/edge20.svg)  | [latest](https://microsoftedge.microsoft.com/addons/detail/%E6%80%9D%E6%BA%90%E7%AC%94%E8%AE%B0%E5%8F%91%E5%B8%83%E8%BE%85%E5%8A%A9%E5%B7%A5%E5%85%B7/aejmkigifflimhjlhjkdckclhabbilee) |  已上架  |
+| ![](https://static-rs-terwer.oss-cn-beijing.aliyuncs.com/icons/browser/chrome20.svg) |     [latest](https://chrome.google.com/webstore/detail/%E6%80%9D%E6%BA%90%E7%AC%94%E8%AE%B0%E5%8F%91%E5%B8%83%E8%BE%85%E5%8A%A9%E5%B7%A5%E5%85%B7/gemlnnppcphbiimfjnobfgdkohjmgifm)     |  已上架  |
+|                                        网页版                                        |                                                                 [latest](https://publish.terwer.space/blog/index.html)                                                                  |  可使用  |
+|                                       离线 zip                                       |                                  [latest](https://github.com/terwer/src-sy-post-publisher/releases/download/v0.0.3/sy-post-publisher-chrome-0.0.3.zip)                                  |  可下载  |
+|                                        挂件版                                        |                                                                  [latest](https://github.com/terwer/sy-post-publisher)                                                                  |  可使用  |
 
 小贴士：
 
