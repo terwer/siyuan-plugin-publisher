@@ -28,7 +28,7 @@ import { IGithubCfg } from "~/utils/platform/github/githubCfg"
 import { YamlFormatObj } from "~/utils/models/yamlFormatObj"
 
 export interface IYamlConvertAdaptor {
-  convertToYaml(formData: PostForm, githubCfg?: IGithubCfg): YamlFormatObj
+  convertToYaml(postForm: PostForm, githubCfg?: IGithubCfg): YamlFormatObj
 
   convertToAttr(yamlObj: YamlFormatObj, githubCfg?: IGithubCfg): PostForm
 }
@@ -37,7 +37,7 @@ export interface IYamlConvertAdaptor {
  * YAML转换适配器
  */
 export class YamlConvertAdaptor implements IYamlConvertAdaptor {
-  convertToYaml(formData: PostForm, githubCfg?: IGithubCfg): YamlFormatObj {
+  convertToYaml(postForm: PostForm, githubCfg?: IGithubCfg): YamlFormatObj {
     throw new Error(
       "YamlConvertAdaptor.convertToYaml: 该功能未实现，请在子类重写该方法"
     )

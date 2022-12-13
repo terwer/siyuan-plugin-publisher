@@ -92,11 +92,11 @@ export const useGithubPages = (props, deps) => {
       if (parentDocPath === "" && githubPagesData.customPath !== "") {
         // const githubPagesData=githubPagesMethods.getGithubPagesData()
         // docPath = githubPagesData.customPath
-        docPath = "/"
+        docPath = ""
       } else {
         // 非首次加载或者首次加载但是没保存过目录
         if (parentDocPath === "") {
-          parentDocPath = "/"
+          parentDocPath = ""
         }
         // 子目录加载
         docPath = parentDocPath

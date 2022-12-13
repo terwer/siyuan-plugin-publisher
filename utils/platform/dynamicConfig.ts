@@ -31,6 +31,7 @@ import { appendStr, upperFirst } from "~/utils/strUtil"
 import { YamlConvertAdaptor } from "~/utils/platform/yamlConvertAdaptor"
 import { LogFactory } from "~/utils/logUtil"
 import { VuepressYamlConvertAdaptor } from "~/utils/platform/github/vuepress/VuepressYamlConvertAdaptor"
+import { JekyllYamlConverterAdaptor } from "~/utils/platform/github/jekyll/JekyllYamlConverterAdaptor"
 
 const logger = LogFactory.getLogger("utils/platform/dynamicConfig.ts")
 
@@ -343,6 +344,9 @@ export const getDynYamlConverterAdaptor = (
       if (ptype.includes(SubPlatformType.Github_Vuepress.toLowerCase())) {
         yamlConverter = new VuepressYamlConvertAdaptor()
       } else if (ptype.includes(SubPlatformType.Github_Hugo.toLowerCase())) {
+      } else if (ptype.includes(SubPlatformType.Github_Hexo.toLowerCase())) {
+      } else if (ptype.includes(SubPlatformType.Github_Jekyll.toLowerCase())) {
+        yamlConverter = new JekyllYamlConverterAdaptor()
       }
     }
   }
