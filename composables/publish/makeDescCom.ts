@@ -36,6 +36,7 @@ import { appendStr } from "~/utils/strUtil"
 import { SIYUAN_PAGE_ATTR_KEY } from "~/utils/constants/siyuanPageConstants"
 import { useSiyuanPage } from "~/composables/publish/siyuanPageCom"
 import { SiyuanDataObj } from "~/utils/models/siyuanDataObj"
+import { PostForm } from "~/utils/models/postForm"
 
 /**
  * 摘要组件
@@ -103,6 +104,14 @@ export const useDesc = (props, deps?: any) => {
     initDesc: (siyuanData: SiyuanDataObj) => {
       const descKey = SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_DESC_KEY
       descData.desc = siyuanData.meta[descKey]
+    },
+
+    /**
+     * 同步FormData到属性
+     * @param postForm
+     */
+    syncDesc: (postForm: PostForm) => {
+      descData.desc = postForm.formData.desc
     },
   }
 

@@ -26,6 +26,7 @@
 import { reactive } from "vue"
 import { SiyuanDataObj } from "~/utils/models/siyuanDataObj"
 import { formatNumToZhDate } from "~/utils/dateUtil"
+import { PostForm } from "~/utils/models/postForm"
 
 /**
  * 发布时间组件
@@ -42,6 +43,14 @@ export const usePublishTime = () => {
 
     initPublishTime: (siyuanData: SiyuanDataObj) => {
       publishTimeData.created = formatNumToZhDate(siyuanData.page.created)
+    },
+
+    /**
+     * 同步FormData到属性
+     * @param postForm
+     */
+    syncPublishTime: (postForm: PostForm) => {
+      publishTimeData.created = postForm.formData.created
     },
   }
 

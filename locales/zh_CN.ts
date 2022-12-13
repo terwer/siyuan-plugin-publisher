@@ -83,8 +83,8 @@ export default {
   "main.cat.empty": "暂无分类",
   "main.cat.select": "请选择分类",
   "main.yaml.formatter": "YAML Formatter",
-  "main.siyuan.to.yaml": "思源属性转YAML",
-  "main.yaml.to.siyuan": "YAML转思源属性",
+  "main.siyuan.to.yaml": "文章属性转YAML",
+  "main.yaml.to.siyuan": "YAML转文章属性",
   "main.save.attr.to.siyuan": "保存属性到思源",
   "main.copy": "复制",
   "main.publish": "发布",
@@ -276,9 +276,12 @@ export default {
   "yaml.show.type.yamlmd": "YAML+MD正文",
   "yaml.show.type.html": "HTML正文",
   "main.read.mode": "只读模式",
+  "main.edit.mode": "编辑模式",
   "main.read.mode.tip":
-    "温馨提示：只读模式下点击可直接复制，编辑模式下需要点击复制按钮复制。",
+    "温馨提示：只读模式下点击可直接复制，编辑模式下需要点击复制按钮复制。YAML转文章属性仅支持title、permalink、date、description、tags",
   "main.opt.onclick.confirm.tip":
     "此操作默认将重新生成除别名以外的所有属性，如果只想修改个别属性，请在详细模式点击单独功能按钮操作，是否继续？",
   "main.cat.list.error": "分类获取失败",
+  "main.yaml.no.save":
+    "您编辑过YAML，点击确认可同步YAML到属性，取消将丢失YAML修改，是否继续？",
 }

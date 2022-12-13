@@ -46,6 +46,7 @@ export const useYaml = () => {
     readMode: true,
     yamlPreviewContent: "",
     yamlContent: "",
+    isSaved: true,
     formatter: "",
     mdContent: "",
     mdFullContent: "",
@@ -77,6 +78,10 @@ export const useYaml = () => {
           }
         )
       }
+    },
+
+    onYamlContentInput: () => {
+      yamlData.isSaved = false
     },
 
     onYamlContextMenu: (event) => {

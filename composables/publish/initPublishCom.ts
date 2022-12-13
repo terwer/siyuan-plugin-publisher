@@ -27,7 +27,7 @@ import { reactive, ref } from "vue"
 import { getPublishCfg, getPublishStatus } from "~/utils/publishUtil"
 import { getJSONConf } from "~/utils/configUtil"
 import { IGithubCfg } from "~/utils/platform/github/githubCfg"
-import { ElMessage } from "element-plus"
+import { ElMessage, ElMessageBox } from "element-plus"
 import { appendStr, mdFileToTitle } from "~/utils/strUtil"
 import { useI18n } from "vue-i18n"
 import { LogFactory } from "~/utils/logUtil"
@@ -39,6 +39,7 @@ import { PostForm } from "~/utils/models/postForm"
 import { mdToHtml, removeH1, removeMdH1 } from "~/utils/htmlUtil"
 import { yaml2Obj } from "~/utils/yamlUtil"
 import { YamlFormatObj } from "~/utils/models/yamlFormatObj"
+import { goToPage } from "~/utils/otherlib/ChromeUtil"
 
 /**
  * 发布页面初始化组件
@@ -203,10 +204,28 @@ export const useInitPublish = (props, deps, otherArgs?) => {
     // page methods
     onEditModeChange: (val: PageEditMode) => {
       const pageModeData = pageModeMethods.getPageModeData()
-      pageModeData.etype = val
 
       if (val === PageEditMode.EditMode_source) {
         initPublishMethods.convertAttrToYAML(true)
+        pageModeData.etype = val
+      } else {
+        const isSaved = yamlMethods.getYamlData().isSaved
+        if (!isSaved) {
+          ElMessageBox.confirm(t("main.yaml.no.save"), t("main.opt.warning"), {
+            confirmButtonText: t("main.opt.ok"),
+            cancelButtonText: t("main.opt.cancel"),
+            type: "warning",
+          })
+            .then(async () => {
+              initPublishMethods.convertYAMLToAttr(true)
+              pageModeData.etype = val
+            })
+            .catch(() => {
+              pageModeData.etype = val
+            })
+        } else {
+          pageModeData.etype = val
+        }
       }
     },
 
@@ -303,16 +322,16 @@ export const useInitPublish = (props, deps, otherArgs?) => {
 
     formToComposableData: (postForm: PostForm): void => {
       // 别名
-      // slugMethods.syncSlug(postForm)
+      slugMethods.syncSlug(postForm)
       // 摘要
-      // descMethods.syncDesc(postForm)
+      descMethods.syncDesc(postForm)
       // 发布时间
-      // publishTimeMethods.syncPublishTime(postForm)
+      publishTimeMethods.syncPublishTime(postForm)
       // 标签
-      // tagMethods.syncTag(postForm)
+      tagMethods.syncTag(postForm)
       // 分类没办法同步
-
-      throw new Error("未填充composable组件数据")
+      // pages相关，暂不支持
+      // githubPagesMethods.syncMdFile(postForm)
     },
 
     convertYAMLToAttr: (hideTip?: boolean) => {
@@ -332,7 +351,7 @@ export const useInitPublish = (props, deps, otherArgs?) => {
         const yamlObj = yaml2Obj(formatter)
         const yamlFormatObj = new YamlFormatObj()
         yamlFormatObj.yamlObj = yamlObj
-        logger.debug("准备将YAML转换为思源属性，yamlFormatObj=>", yamlFormatObj)
+        logger.debug("准备将YAML转换为文章属性，yamlFormatObj=>", yamlFormatObj)
         const postForm = yamlMethods.doConvertYAMLToAttr(
           props.yamlConverter,
           yamlFormatObj,
@@ -341,7 +360,8 @@ export const useInitPublish = (props, deps, otherArgs?) => {
 
         // formData转composable组件数据
         initPublishMethods.formToComposableData(postForm)
-
+        // 标记为保存
+        yamlMethods.getYamlData().isSaved = true
         if (hideTip !== true) {
           ElMessage.success(t("main.opt.success"))
         }

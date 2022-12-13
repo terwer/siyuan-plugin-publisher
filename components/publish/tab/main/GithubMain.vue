@@ -450,7 +450,11 @@
                   pageModeData.etype.toString() !==
                   PageEditMode.EditMode_simple.toString()
                 "
-                :label="$t('main.read.mode')"
+                :label="
+                  yamlData.readMode
+                    ? $t('main.read.mode')
+                    : $t('main.edit.mode')
+                "
               >
                 <el-switch v-model="yamlData.readMode" />
               </el-form-item>
@@ -535,6 +539,7 @@
                     v-model="yamlData.yamlContent"
                     :autosize="{ minRows: 4, maxRows: 16 }"
                     type="textarea"
+                    @input="yamlMethods.onYamlContentInput"
                   />
                 </el-form-item>
               </div>
@@ -560,7 +565,7 @@
                   <el-alert
                     :closable="false"
                     :title="$t('main.read.mode.tip')"
-                    type="success"
+                    type="info"
                   />
                 </el-form-item>
               </div>
@@ -681,18 +686,33 @@ onMounted(async () => {
 }
 
 .source-opt a {
-  padding: 4px 2px;
+  --text-color: #1a1a1a;
+  /*padding: 4px 2px;*/
   cursor: pointer;
   /*border: solid 1px #409eff;*/
+  color: var(--text-color);
+  font-size: 16px;
+  font-weight: 400;
+}
+
+html.dark .source-opt a {
+  --text-color: #999;
+}
+
+.source-opt a:first-child {
+  margin-right: 22px;
 }
 
 .source-opt a.middle {
-  margin: 0 12px;
+  margin-right: 22px;
 }
 
 .source-opt a.current {
-  background-color: #409eff;
-  color: #ffffff;
+  --text-blue-color: #0084ff;
+  /*background-color: #409eff;*/
+  /*color: #ffffff;*/
+  color: var(--text-blue-color);
+  font-weight: 600;
 }
 
 .top-yaml-tip {

@@ -266,8 +266,11 @@ export default {
   "setting.conf.clear": "Clear config",
   "page.no.id": "pageId fetch error",
   "main.read.mode": "Readonly",
+  "main.edit.mode": "Editable",
   "main.read.mode.tip": "Readonly tips",
   "main.opt.onclick.confirm.tip":
     "This operation will re -generate all attributes other than alias. If you just want to modify individual attributes, please click the individual function button to operate in the detailed mode. Do you continue?",
   "main.cat.list.error": "Category list get error",
+  "main.yaml.no.save":
+    "Have you edited YAML, do you synchronize to attributes, and cancel the loss of YAML modification?",
 }

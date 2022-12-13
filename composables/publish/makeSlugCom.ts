@@ -37,6 +37,7 @@ import { commonIsTest } from "~/utils/common/commonEnv"
 import { getConf } from "~/utils/configUtil"
 import { TEST_CONSTANTS } from "~/test/TEST_CONSTANTS"
 import { SiyuanDataObj } from "~/utils/models/siyuanDataObj"
+import { PostForm } from "~/utils/models/postForm"
 
 /**
  * 文章别名组件
@@ -194,6 +195,15 @@ export const useSlug = (props, deps) => {
       slugData.customSlug = siyuanData.meta[slugKey]
 
       logger.debug("initSlug=>", slugData)
+    },
+
+    /**
+     * 同步FormData到属性
+     * @param postForm
+     */
+    syncSlug: (postForm: PostForm) => {
+      slugData.title = postForm.formData.title
+      slugData.customSlug = postForm.formData.customSlug
     },
   }
 

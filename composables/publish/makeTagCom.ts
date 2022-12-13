@@ -34,6 +34,7 @@ import { getPublishCfg } from "~/utils/publishUtil"
 import { useSiyuanPage } from "~/composables/publish/siyuanPageCom"
 import { SiyuanDataObj } from "~/utils/models/siyuanDataObj"
 import { SIYUAN_PAGE_ATTR_KEY } from "~/utils/constants/siyuanPageConstants"
+import { PostForm } from "~/utils/models/postForm"
 
 /**
  * 标签组件
@@ -151,6 +152,19 @@ export const useTag = (props) => {
         const tg = tgarr[i]
         if (tg !== "") {
           tagData.tag.dynamicTags.push(tgarr[i])
+        }
+      }
+    },
+
+    /**
+     * 同步FormData到属性
+     * @param postForm
+     */
+    syncTag: (postForm: PostForm) => {
+      for (let i = 0; i < postForm.formData.tag.dynamicTags.length; i++) {
+        const tag = postForm.formData.tag.dynamicTags[i]
+        if (!tagData.tag.dynamicTags.includes(tag) && tag !== "") {
+          tagData.tag.dynamicTags.push(tag)
         }
       }
     },
