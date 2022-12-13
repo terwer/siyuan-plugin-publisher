@@ -39,7 +39,6 @@ import { PostForm } from "~/utils/models/postForm"
 import { mdToHtml, removeH1, removeMdH1 } from "~/utils/htmlUtil"
 import { yaml2Obj } from "~/utils/yamlUtil"
 import { YamlFormatObj } from "~/utils/models/yamlFormatObj"
-import { goToPage } from "~/utils/otherlib/ChromeUtil"
 
 /**
  * 发布页面初始化组件

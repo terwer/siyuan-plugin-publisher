@@ -36,7 +36,7 @@ import { appendStr } from "~/utils/strUtil"
  */
 export const useQuick = (props, deps?: any) => {
   // private data
-  const logger = LogFactory.getLogger("composables/publishQuickCom.ts")
+  const logger = LogFactory.getLogger("composables/publish/publishQuickCom.ts")
   const { t } = useI18n()
   const siyuanApi = new SiYuanApi()
   // publish data

@@ -39,7 +39,7 @@ import { YamlFormatObj } from "~/utils/models/yamlFormatObj"
  * YAML组件
  */
 export const useYaml = () => {
-  const logger = LogFactory.getLogger("composables/makeSlugCom.ts")
+  const logger = LogFactory.getLogger("composables/publish/makeYamlCom.ts")
   const { t } = useI18n()
   const yamlData = reactive({
     yamlObj: {} as any,

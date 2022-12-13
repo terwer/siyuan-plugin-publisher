@@ -32,7 +32,7 @@ import { LogFactory } from "~/utils/logUtil"
  * @since 0.1.0
  */
 export const usePublish = () => {
-  const logger = LogFactory.getLogger("composables/doPublishCom.ts")
+  const logger = LogFactory.getLogger("composables/publish/publishActionCom.ts")
 
   const publishData = reactive({
     isPublishLoading: false,

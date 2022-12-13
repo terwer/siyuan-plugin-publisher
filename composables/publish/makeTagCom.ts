@@ -33,7 +33,6 @@ import { cutWords, jiebaToHotWords } from "~/utils/util"
 import { getPublishCfg } from "~/utils/publishUtil"
 import { useSiyuanPage } from "~/composables/publish/siyuanPageCom"
 import { SiyuanDataObj } from "~/utils/models/siyuanDataObj"
-import { SIYUAN_PAGE_ATTR_KEY } from "~/utils/constants/siyuanPageConstants"
 import { PostForm } from "~/utils/models/postForm"
 
 /**
