@@ -36,6 +36,8 @@ export class VuepressCfg extends GithubCfg {
 
     this.defaultPath = "docs"
     this.posidKey = POSTID_KEY_CONSTANTS.VUEPRESS_POSTID_KEY
+    this.previewMdUrl = "/[user]/[repo]/blob/[branch]/[docpath]"
     this.previewUrl = "/post/[postid].html"
+    this.mdFilenameRule = "[filename].md"
   }
 }

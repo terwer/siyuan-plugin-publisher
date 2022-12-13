@@ -25,6 +25,8 @@
 
 <template>
   <metaweblog-main
+    :is-main-reload="props.isMainReload"
+    :is-reload="props.isReload"
     :api-type="apiType"
     :use-adaptor="true"
     :page-id="props.pageId"
@@ -40,6 +42,14 @@ import MetaweblogMain from "../MetaweblogMain.vue"
 const apiType = ref(API_TYPE_CONSTANTS.API_TYPE_CONFLUENCE)
 
 const props = defineProps({
+  isReload: {
+    type: Boolean,
+    default: false,
+  },
+  isMainReload: {
+    type: Boolean,
+    default: false,
+  },
   pageId: {
     type: String,
     default: undefined,

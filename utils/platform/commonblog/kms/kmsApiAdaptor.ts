@@ -28,8 +28,8 @@ import { CommonblogApiAdaptor } from "../commonblogApiAdaptor"
 import { Base64 } from "js-base64"
 import { KmsApi } from "./kmsApi"
 import { API_TYPE_CONSTANTS } from "~/utils/constants/apiTypeConstants"
-import { UserBlog } from "~/utils/common/userBlog"
-import { Post } from "~/utils/common/post"
+import { UserBlog } from "~/utils/models/userBlog"
+import { Post } from "~/utils/models/post"
 import { pathJoin } from "~/utils/util"
 
 /**

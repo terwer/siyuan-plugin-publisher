@@ -23,9 +23,9 @@
  * questions.
  */
 
-import { UserBlog } from "~/utils/common/userBlog"
-import { Post } from "~/utils/common/post"
-import { CategoryInfo } from "~/utils/common/categoryInfo"
+import { UserBlog } from "~/utils/models/userBlog"
+import { Post } from "~/utils/models/post"
+import { CategoryInfo } from "~/utils/models/categoryInfo"
 import { API_TYPE_CONSTANTS } from "~/utils/constants/apiTypeConstants"
 import { SiYuanApiAdaptor } from "~/utils/platform/siyuan/siYuanApiAdaptor"
 import { PlatformType } from "~/utils/platform/dynamicConfig"

@@ -55,7 +55,7 @@ export const zhSlugify = async (q: string): Promise<string> => {
  * 拼音转别名
  * @param q 中文名
  */
-export const pinyinSlugify = (q: string): string => slugify(q);
+export const pinyinSlugify = (q: string): string => slugify(q)
 
 /**
  * 文本分词
@@ -180,4 +180,15 @@ export const pathJoin = (path1: string, path2: string): string => {
   }
 
   return path
+}
+
+/**
+ * 强转boolean
+ * @param val
+ */
+export const parseBoolean = (val: any) => {
+  if (!val) {
+    val = "false"
+  }
+  return val.toString().toLowerCase() === "true"
 }

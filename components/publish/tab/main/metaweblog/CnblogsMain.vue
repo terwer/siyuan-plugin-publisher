@@ -24,7 +24,12 @@
   -->
 
 <template>
-  <metaweblog-main :api-type="apiType" :page-id="props.pageId" />
+  <metaweblog-main
+    :api-type="apiType"
+    :is-main-reload="props.isMainReload"
+    :is-reload="props.isReload"
+    :page-id="props.pageId"
+  />
 </template>
 
 <script lang="ts" setup>
@@ -35,6 +40,14 @@ import MetaweblogMain from "~/components/publish/tab/main/MetaweblogMain.vue"
 const apiType = ref(API_TYPE_CONSTANTS.API_TYPE_CNBLOGS)
 
 const props = defineProps({
+  isReload: {
+    type: Boolean,
+    default: false,
+  },
+  isMainReload: {
+    type: Boolean,
+    default: false,
+  },
   pageId: {
     type: String,
     default: undefined,

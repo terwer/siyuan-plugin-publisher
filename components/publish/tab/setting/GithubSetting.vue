@@ -65,6 +65,16 @@
       </el-form-item>
 
       <el-form-item
+        :label="$t('setting.blog.type.github.default.branch')"
+        prop="defaultBranch"
+      >
+        <el-input
+          v-model="formData.defaultBranch"
+          :placeholder="$t('setting.blog.type.github.default.branch.tip')"
+        />
+      </el-form-item>
+
+      <el-form-item
         :label="$t('setting.blog.type.github.token')"
         prop="githubToken"
       >
@@ -88,16 +98,6 @@
         <el-input
           v-model="formData.defaultPath"
           :placeholder="$t('setting.blog.type.github.default.path.tip')"
-        />
-      </el-form-item>
-
-      <el-form-item
-        :label="$t('setting.blog.type.github.default.branch')"
-        prop="defaultBranch"
-      >
-        <el-input
-          v-model="formData.defaultBranch"
-          :placeholder="$t('setting.blog.type.github.default.branch.tip')"
         />
       </el-form-item>
 
@@ -125,8 +125,39 @@
         />
       </el-form-item>
 
+      <el-form-item :label="$t('setting.common.home')">
+        <el-input
+          v-model="formData.home"
+          :placeholder="$t('setting.common.tip')"
+        />
+      </el-form-item>
+
+      <el-form-item :label="$t('setting.github.baseUrl')">
+        <el-input
+          v-model="formData.baseUrl"
+          :placeholder="$t('setting.github.baseUrl.tip')"
+        />
+      </el-form-item>
+
+      <el-form-item :label="$t('setting.blog.previewMdUrl')">
+        <el-input
+          v-model="formData.previewMdUrl"
+          :placeholder="$t('setting.blog.previewMdUrl.tip')"
+        />
+      </el-form-item>
+
       <el-form-item :label="$t('setting.blog.previewUrl')">
-        <el-input v-model="formData.previewUrl" />
+        <el-input
+          v-model="formData.previewUrl"
+          :placeholder="$t('setting.blog.previewUrl.tip')"
+        />
+      </el-form-item>
+
+      <el-form-item :label="$t('setting.blog.mdFilenameRule')">
+        <el-input
+          v-model="formData.mdFilenameRule"
+          :placeholder="$t('setting.blog.mdFilenameRule.tip')"
+        />
       </el-form-item>
     </div>
 
@@ -171,7 +202,7 @@ import { GithubCfg, IGithubCfg } from "~/utils/platform/github/githubCfg"
 import { LogFactory } from "~/utils/logUtil"
 import { getJSONConf, setJSONConf } from "~/utils/configUtil"
 import { API } from "~/utils/api"
-import { Post } from "~/utils/common/post"
+import { Post } from "~/utils/models/post"
 import { isEmptyObject } from "~/utils/util"
 
 const logger = LogFactory.getLogger(
@@ -211,7 +242,11 @@ const formData = reactive({
   msg: "auto published by sy-post-publisher",
   author: "terwer",
   email: "youweics@163.com",
+  home: "",
+  baseUrl: "",
+  previewMdUrl: "",
   previewUrl: "",
+  mdFilenameRule: "[filename]",
 })
 const rules = reactive<FormRules>({
   githubUser: [
@@ -369,7 +404,11 @@ const saveConf = (hideTip) => {
   cfg.defaultMsg = formData.msg
   cfg.author = formData.author
   cfg.email = formData.email
+  cfg.home = formData.home
+  cfg.baseUrl = formData.baseUrl
+  cfg.previewMdUrl = formData.previewMdUrl
   cfg.previewUrl = formData.previewUrl
+  cfg.mdFilenameRule = formData.mdFilenameRule
 
   cfg.apiStatus = apiStatus.value
 
@@ -396,7 +435,11 @@ const initConf = () => {
     formData.msg = conf.defaultMsg
     formData.author = conf.author
     formData.email = conf.email
+    formData.home = conf.home
+    formData.baseUrl = conf.baseUrl
+    formData.previewMdUrl = conf.previewMdUrl
     formData.previewUrl = conf.previewUrl
+    formData.mdFilenameRule = conf.mdFilenameRule
 
     apiStatus.value = conf.apiStatus
   }

@@ -25,15 +25,15 @@
 
 import { XmlrpcClient } from "~/utils/platform/metaweblog/xmlrpc"
 import { appendStr } from "~/utils/strUtil"
-import { UserBlog } from "~/utils/common/userBlog"
+import { UserBlog } from "~/utils/models/userBlog"
 import { METAWEBLOG_METHOD_CONSTANTS } from "~/utils/constants/metaweblogMethodConstants"
 import { Logger } from "loglevel"
 import { LogFactory } from "~/utils/logUtil"
-import { Post } from "~/utils/common/post"
+import { Post } from "~/utils/models/post"
 import { POST_STATUS_CONSTANTS } from "~/utils/constants/postStatusConstants"
 import { isEmptyString } from "~/utils/util"
 import { isBrowser } from "~/utils/browserUtil"
-import { CategoryInfo } from "~/utils/common/categoryInfo"
+import { CategoryInfo } from "~/utils/models/categoryInfo"
 
 export class CustomMetaWeblogApi {
   private readonly logger: Logger

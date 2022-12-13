@@ -25,7 +25,7 @@
 
 <template>
   <div>
-    \n isSlugLoading: {{ slugData.isSlugLoading }} <br />
+    <div>isSlugLoading: {{ slugData.isSlugLoading }}</div>
     <el-form>
       <el-switch id="forceRefreshST" v-model="slugData.forceRefresh" />
       <el-switch id="slugHashEnabledST" v-model="slugData.slugHashEnabled" />
@@ -35,7 +35,7 @@
         :loading="slugData.isSlugLoading"
         class="make-slug-btn"
         type="primary"
-        @click="makeSlug"
+        @click="slugMethods.makeSlug"
       >
         {{
           slugData.isSlugLoading
@@ -48,11 +48,11 @@
 </template>
 
 <script lang="ts" setup>
-import { useSlug } from "~/composables/makeSlugCom";
-import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi";
+import { useSlug } from "~/composables/publish/makeSlugCom"
+import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
 
-const { slugData, makeSlug } = useSlug(
+const { slugData, slugMethods } = useSlug(
   "20220831131637-zdnmp2m",
   new SiYuanApi()
-);
+)
 </script>

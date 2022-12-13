@@ -24,7 +24,12 @@
   -->
 
 <template>
-  <github-main :api-type="apiType" :page-id="props.pageId" />
+  <github-main
+    :is-reload="props.isReload"
+    :api-type="apiType"
+    :is-main-reload="props.isMainReload"
+    :page-id="props.pageId"
+  />
 </template>
 <script lang="ts" setup>
 import GithubMain from "~/components/publish/tab/main/GithubMain.vue"
@@ -34,6 +39,14 @@ import { ref } from "vue"
 const apiType = ref(API_TYPE_CONSTANTS.API_TYPE_JEKYLL)
 
 const props = defineProps({
+  isReload: {
+    type: Boolean,
+    default: false,
+  },
+  isMainReload: {
+    type: Boolean,
+    default: false,
+  },
   pageId: {
     type: String,
     default: undefined,

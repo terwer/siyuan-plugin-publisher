@@ -136,8 +136,8 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, watch } from "vue"
-import { useTabCount } from "~/composables/tabCountCom"
+import { onMounted, reactive, ref, watch } from "vue"
+import { useTabCount } from "~/composables/publish/tabCountCom"
 import { DynamicGCfg } from "~/utils/platform/github/DynamicGCfg"
 import { DynamicMCfg } from "~/utils/platform/metaweblog/dynamicMCfg"
 import {
@@ -240,6 +240,7 @@ const props = defineProps({
     default: false,
   },
 })
+
 /* 监听props */
 watch(
   () => props.isReload,
@@ -250,4 +251,8 @@ watch(
     logger.debug("platform-setting初始化")
   }
 )
+
+onMounted(() => {
+  initConf()
+})
 </script>

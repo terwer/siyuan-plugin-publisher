@@ -28,6 +28,7 @@ import { Octokit } from "@octokit/core"
 import { Logger } from "loglevel"
 import { LogFactory } from "~/utils/logUtil"
 import { Base64 } from "js-base64"
+import { isEmptyString } from "~/utils/util"
 
 /**
  * Github API
@@ -71,6 +72,13 @@ export class GithubApi {
    */
   async getPageData(docPath: string): Promise<any> {
     let data
+
+    if (
+      isEmptyString(this.githubCfg.githubUser) ||
+      isEmptyString(this.githubCfg.githubRepo)
+    ) {
+      throw new Error("分类获取失败")
+    }
 
     const route =
       "GET /repos/" +

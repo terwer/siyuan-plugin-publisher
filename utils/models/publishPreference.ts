@@ -52,4 +52,20 @@ export class PublishPreference {
    * 是否删除H1标签
    */
   removeH1: boolean
+  /**
+   * 是否自动生成标签
+   */
+  autoTag: boolean
+  /**
+   * 是否将siyuan虚拟链接转换为真实预览链接
+   */
+  renderSiyuanVirtualLink: boolean
+  /**
+   * 是否在第一次加载页面时自动生成属性（api验证通过才会执行）
+   */
+  makeAttrOnFirstLoad: boolean
+  /**
+   * 是否开启新窗口
+   */
+  newWin: boolean
 }

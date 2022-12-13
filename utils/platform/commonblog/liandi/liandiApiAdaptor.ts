@@ -27,10 +27,10 @@ import { CommonblogApiAdaptor } from "~/utils/platform/commonblog/commonblogApiA
 import { IApi } from "~/utils/api"
 import { LiandiApi } from "~/utils/platform/commonblog/liandi/liandiApi"
 import { API_TYPE_CONSTANTS } from "~/utils/constants/apiTypeConstants"
-import { UserBlog } from "~/utils/common/userBlog"
+import { UserBlog } from "~/utils/models/userBlog"
 import { Logger } from "loglevel"
 import { LogFactory } from "~/utils/logUtil"
-import { Post } from "~/utils/common/post"
+import { Post } from "~/utils/models/post"
 import { pathJoin } from "~/utils/util"
 
 /**

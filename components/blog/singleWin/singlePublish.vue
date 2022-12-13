@@ -50,7 +50,7 @@
 <script lang="ts" setup>
 import { ArrowLeft } from "@element-plus/icons-vue"
 import PublishService from "~/components/publish/PublishService.vue"
-import { Post } from "~/utils/common/post"
+import { Post } from "~/utils/models/post"
 import { getByLength } from "~/utils/strUtil"
 
 const props = defineProps({

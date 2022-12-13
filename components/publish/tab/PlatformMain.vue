@@ -24,30 +24,62 @@
   -->
 
 <template>
-  <el-tabs type="border-card" v-if="tabCountStore.tabCount > 0">
+  <el-tabs
+    v-if="tabCountStore.tabCount > 0"
+    type="border-card"
+    @tab-click="mainTabChange"
+  >
     <!-- Github -->
     <el-tab-pane :label="$t('main.publish.to.vuepress')" v-if="vuepressEnabled">
-      <vuepress-main :page-id="props.pageId" />
+      <vuepress-main
+        :is-main-reload="isReloadMainTab"
+        :is-reload="props.isReload"
+        :page-id="props.pageId"
+      />
     </el-tab-pane>
     <el-tab-pane :label="$t('main.publish.to.hugo')" v-if="hugoEnabled">
-      <hugo-main :page-id="props.pageId" />
+      <hugo-main
+        :is-main-reload="isReloadMainTab"
+        :is-reload="props.isReload"
+        :page-id="props.pageId"
+      />
     </el-tab-pane>
     <el-tab-pane :label="$t('main.publish.to.hexo')" v-if="hexoEnabled">
-      <hexo-main :page-id="props.pageId" />
+      <hexo-main
+        :is-main-reload="isReloadMainTab"
+        :is-reload="props.isReload"
+        :page-id="props.pageId"
+      />
     </el-tab-pane>
     <el-tab-pane :label="$t('main.publish.to.jekyll')" v-if="jekyllEnabled">
-      <jekyll-main :page-id="props.pageId" />
+      <jekyll-main
+        :is-main-reload="isReloadMainTab"
+        :is-reload="props.isReload"
+        :page-id="props.pageId"
+      />
     </el-tab-pane>
 
     <!-- Metaweblog API -->
     <el-tab-pane :label="$t('main.publish.to.jvue')" v-if="jvueEnabled">
-      <j-vue-main :page-id="props.pageId" />
+      <j-vue-main
+        :is-main-reload="isReloadMainTab"
+        :is-reload="props.isReload"
+        :page-id="props.pageId"
+      />
     </el-tab-pane>
     <el-tab-pane :label="$t('main.publish.to.conf')" v-if="confEnabled">
-      <confluence-main :page-id="props.pageId" />
+      <confluence-main
+        :is-main-reload="isReloadMainTab"
+        :is-reload="props.isReload"
+        :page-id="props.pageId"
+      />
     </el-tab-pane>
     <el-tab-pane :label="$t('main.publish.to.cnblogs')" v-if="cnblogsEnabled">
-      <cnblogs-main :page-id="props.pageId" />
+      <cnblogs-main
+        :is-main-reload="isReloadMainTab"
+        :is-reload="props.isReload"
+        :page-id="props.pageId"
+      />
     </el-tab-pane>
 
     <!-- Wordpress -->
@@ -55,18 +87,34 @@
       :label="$t('main.publish.to.wordpress')"
       v-if="wordpressEnabled"
     >
-      <wordpress-main :page-id="props.pageId" />
+      <wordpress-main
+        :is-main-reload="isReloadMainTab"
+        :is-reload="props.isReload"
+        :page-id="props.pageId"
+      />
     </el-tab-pane>
 
     <!-- Common API -->
     <el-tab-pane :label="$t('main.publish.to.liandi')" v-if="liandiEnabled">
-      <liandi-main :page-id="props.pageId" />
+      <liandi-main
+        :is-main-reload="isReloadMainTab"
+        :is-reload="props.isReload"
+        :page-id="props.pageId"
+      />
     </el-tab-pane>
     <el-tab-pane :label="$t('main.publish.to.yuque')" v-if="yuqueEnabled">
-      <yuque-main :page-id="props.pageId" />
+      <yuque-main
+        :is-main-reload="isReloadMainTab"
+        :is-reload="props.isReload"
+        :page-id="props.pageId"
+      />
     </el-tab-pane>
     <el-tab-pane :label="$t('main.publish.to.kms')" v-if="kmsEnabled">
-      <kms-main :page-id="props.pageId" />
+      <kms-main
+        :is-main-reload="isReloadMainTab"
+        :is-reload="props.isReload"
+        :page-id="props.pageId"
+      />
     </el-tab-pane>
 
     <!-- 动态平台发布 -->
@@ -75,21 +123,36 @@
       :key="gcfg.platformKey"
       :label="gcfg.platformName"
     >
-      <github-main :api-type="gcfg.platformKey" :page-id="props.pageId" />
+      <github-main
+        :is-reload="props.isReload"
+        :api-type="gcfg.platformKey"
+        :is-main-reload="isReloadMainTab"
+        :page-id="props.pageId"
+      />
     </el-tab-pane>
     <el-tab-pane
       v-for="mcfg in formData.metaweblogArray"
       :key="mcfg.platformKey"
       :label="mcfg.platformName"
     >
-      <metaweblog-main :api-type="mcfg.platformKey" :page-id="props.pageId" />
+      <metaweblog-main
+        :api-type="mcfg.platformKey"
+        :is-main-reload="isReloadMainTab"
+        :is-reload="props.isReload"
+        :page-id="props.pageId"
+      />
     </el-tab-pane>
     <el-tab-pane
       v-for="wcfg in formData.wordpressArray"
       :key="wcfg.platformKey"
       :label="wcfg.platformName"
     >
-      <metaweblog-main :api-type="wcfg.platformKey" :page-id="props.pageId" />
+      <metaweblog-main
+        :api-type="wcfg.platformKey"
+        :is-main-reload="isReloadMainTab"
+        :is-reload="props.isReload"
+        :page-id="props.pageId"
+      />
     </el-tab-pane>
   </el-tabs>
   <div v-else>
@@ -103,8 +166,8 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, reactive, watch } from "vue"
-import { useTabCount } from "~/composables/tabCountCom"
+import { onMounted, reactive, ref, watch } from "vue"
+import { useTabCount } from "~/composables/publish/tabCountCom"
 import { LogFactory } from "~/utils/logUtil"
 import VuepressMain from "~/components/publish/tab/main/github/VuepressMain.vue"
 import HugoMain from "~/components/publish/tab/main/github/HugoMain.vue"
@@ -144,6 +207,8 @@ const {
   doCount,
 } = useTabCount()
 
+const isReloadMainTab = ref(false)
+
 const formData = reactive({
   dynamicConfigArray: [],
   githubArray: [],
@@ -160,6 +225,7 @@ const initDynCfg = (dynCfg: any[]) => {
       item.platformKey,
       item.platformName
     )
+
     const switchKey = "switch-" + item.platformKey
     const switchValue = getBooleanConf(switchKey)
     newItem.modelValue = switchValue
@@ -193,6 +259,10 @@ const props = defineProps({
     default: undefined,
   },
 })
+
+const mainTabChange = () => {
+  isReloadMainTab.value = !isReloadMainTab.value
+}
 
 /**
  * 监听props

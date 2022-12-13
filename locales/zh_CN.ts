@@ -42,32 +42,34 @@ export default {
     "推荐Vuepress的V1版本，配合 vuepress-theme-vdoing 使用，后续bug也只会对V1和此主题进行更新",
   "main.publish.github.error.tip":
     "配置错误或者api不可用，请检查。若修改过配置，请刷新页面",
-  "main.publish.github": "发布Github",
+  "main.publish.github": "发布页面",
   "main.publish.github.tip":
     "自动将文章的markdown文本发布到Vuepress对应的Github仓库（需要先进行相关配置）",
   "main.publish.github.no.tip":
-    "您未开启Github发布，请在点击发布之后切换源码模式复制Markdown文本",
-  "main.publish.github.choose.path": "请选择目录",
+    "您未开启Github pages发布，请切换源码模式复制YAML以及Markdown文本",
+  "main.publish.github.choose.path": "选择目录",
+  "main.publish.github.published.path": "发布路径",
   "main.publish.github.choose.path.use.default": "默认目录",
   "main.publish.github.choose.path.use.default.tip":
-    "使用默认目录，则默认所有文章都发布在配置好的默认目录下，无需每次发布的时候来选择目录，当前平台的默认目录为：",
-  "main.publish.github.choose.title": "文件名",
+    "使用默认目录，则默认所有文章都发布在配置好的默认目录下（可在发布配置设置），无需每次发布的时候来选择目录，当前平台的默认目录为：",
+  "main.publish.github.choose.title": "文件名称",
   "main.publish.github.choose.title.tip":
     "Vuepress-theme-vdoing支持文件名加上序号来标识，如果你不清楚此用法，请不要修改文件名",
   "main.publish.github.failure": "发布失败，请自行复制右侧文本",
-  "main.publish.github.see.preview": "点击这里查看最新文章",
-  "main.publish.github.see.md.preview": "点击这里查看MD文件",
-  "main.publish.github.see.real.preview": "点击这里查看最新文章",
+  "main.publish.see.preview": "点击这里查看最新文章",
+  "main.publish.see.md.preview": "点击这里查看MD文件",
+  "main.publish.see.real.preview": "点击这里查看最新文章",
   "main.publish.to.wordpress": "发布到Wordpress",
+  "main.title": "文章标题",
   "main.slug": "文章别名",
   "main.auto.fetch.slug": "自动生成别名",
   "main.use.google.translate": "使用Google翻译API",
-  "main.use.hash": "使用后缀",
+  "main.use.hash": "别名后缀",
   "main.use.hash.tip":
     "不使用hash会展示更有意义的url，但是可能导致文章别名重复（后果是Vuepress会Build失败除非手动解决别名唯一问题），请知悉。",
-  "main.force.refresh": "强制刷新",
+  "main.force.refresh": "刷新别名",
   "main.force.refresh.tip":
-    "为了防止误操作更新别名，别名不为空的时候默认不会更新别名，如需更新，请勾选强制刷新。",
+    "为了防止误操作更新别名，别名不为空的时候默认不会更新别名，如需更新，请勾选刷新别名。",
   "main.desc": "文章摘要",
   "main.auto.fetch.desc": "自动提取摘要",
   "main.create.time": "发布时间",
@@ -81,8 +83,8 @@ export default {
   "main.cat.empty": "暂无分类",
   "main.cat.select": "请选择分类",
   "main.yaml.formatter": "YAML Formatter",
-  "main.siyuan.to.yaml": "思源属性转YAML",
-  "main.yaml.to.siyuan": "YAML转思源属性",
+  "main.siyuan.to.yaml": "文章属性转YAML",
+  "main.yaml.to.siyuan": "YAML转文章属性",
   "main.save.attr.to.siyuan": "保存属性到思源",
   "main.copy": "复制",
   "main.publish": "发布",
@@ -150,6 +152,14 @@ export default {
   "setting.blog.password": "密码/Token",
   "setting.blog.apiurl": "API地址",
   "setting.blog.previewUrl": "预览规则",
+  "setting.blog.previewUrl.tip":
+    "预览规则（占位符：[yyyy] [MM] [dd] [postid]），例如：/post/[postid].html 或者 /[cats]/[yyyy]/[mm]/[dd]/[postid].html",
+  "setting.blog.previewMdUrl": "MD预览规则",
+  "setting.blog.previewMdUrl.tip":
+    "MD文件预览规则（占位符：[user] [repo] [branch] [docpath]），例如：/[user]/[repo]/blob/[branch]/[docpath]",
+  "setting.blog.mdFilenameRule": "文件规则",
+  "setting.blog.mdFilenameRule.tip":
+    "Markdown文件名规则（占位符：[yyyy] [MM] [dd] [slug] [filename] ），例如：[filename].md 或者 [yyyy]-[mm]-[dd]-[slug].md",
   "setting.blog.pageType": "发布格式",
   "setting.blog.validate": "验证",
   "setting.blog.save": "保存",
@@ -234,6 +244,7 @@ export default {
   "dynamic.platform.opt.item.select.tip": "当前选择的是：",
   "dynamic.platform.opt.item.no.select.tip": "请选择要删除的行",
   "setting.common.home": "平台首页",
+  "setting.common.tip": "平台首页，用于预览文章，例如：https://terwer.space",
   "setting.common.apiurl": "API地址",
   "setting.common.token": "鉴权token",
   "setting.common.token.gen": "Token生成地址",
@@ -272,4 +283,18 @@ export default {
   "yaml.show.type.md": "MD正文",
   "yaml.show.type.yamlmd": "YAML+MD正文",
   "yaml.show.type.html": "HTML正文",
+  "main.read.mode": "只读模式",
+  "main.edit.mode": "编辑模式",
+  "main.read.mode.tip":
+    "温馨提示：只读模式下点击可直接复制，编辑模式下需要点击复制按钮复制。YAML转文章属性仅支持title、permalink、date、description、tags",
+  "main.opt.onclick.confirm.tip":
+    "此操作默认将重新生成除别名以外的所有属性，如果只想修改个别属性，请在详细模式点击单独的功能按钮进行对应操作，是否继续？",
+  "main.cat.list.error": "分类获取失败",
+  "main.yaml.no.save":
+    "您编辑过YAML，点击确认可同步YAML到属性，取消将丢失YAML修改，是否继续？",
+  "setting.github.baseUrl": "Git平台地址",
+  "setting.github.baseUrl.tip":
+    "Git平台地址，用于MD文件预览，默认是：https://github.com",
+  "preference.setting.fixTitle": "去除标题编号",
+  "preference.setting.newWin": "新窗口",
 }

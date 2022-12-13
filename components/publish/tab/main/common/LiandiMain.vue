@@ -25,6 +25,8 @@
 
 <template>
   <CommonBlogMain
+    :is-main-reload="props.isMainReload"
+    :is-reload="props.isReload"
     :api-type="apiType"
     :page-id="props.pageId"
     :limit-rate="true"
@@ -41,6 +43,14 @@ import CommonBlogMain from "~/components/publish/tab/main/CommonBlogMain.vue"
 const apiType = ref(API_TYPE_CONSTANTS.API_TYPE_LIANDI)
 
 const props = defineProps({
+  isReload: {
+    type: Boolean,
+    default: false,
+  },
+  isMainReload: {
+    type: Boolean,
+    default: false,
+  },
   pageId: {
     type: String,
     default: undefined,

@@ -101,7 +101,7 @@
 
 <script lang="ts" setup>
 import { onMounted, ref, watch } from "vue"
-import { useTabCount } from "~/composables/tabCountCom"
+import { useTabCount } from "~/composables/publish/tabCountCom"
 import { setBooleanConf } from "~/utils/configUtil"
 import SWITCH_CONSTANTS from "~/utils/constants/switchConstants"
 import {

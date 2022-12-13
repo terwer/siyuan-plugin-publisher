@@ -25,21 +25,21 @@
 
 <template>
   <div>
-    <el-container v-if="!isInitLoading">
+    <el-container v-if="!initPublishData.isInitLoading">
       <el-main class="github-main">
         <!-- 提示 -->
         <div class="github-tips">
           <el-alert
-            v-if="formOptionData.etype !== PageEditMode.EditMode_source"
+            v-if="pageModeData.etype !== PageEditMode.EditMode_source"
             :closable="false"
-            :title="apiTypeInfo"
+            :title="initPublishData.apiTypeInfo"
             class="top-version-tip"
             type="info"
           />
           <el-alert
             v-if="
-              !apiStatus &&
-              formOptionData.etype !== PageEditMode.EditMode_source
+              !initPublishData.apiStatus &&
+              pageModeData.etype !== PageEditMode.EditMode_source
             "
             :closable="false"
             :title="$t('main.publish.github.error.tip')"
@@ -48,219 +48,577 @@
           />
         </div>
 
-        <el-form label-width="100px">
-          <!-- 编辑模式 -->
-          <el-form-item :label="$t('main.publish.editmode')">
-            <el-button-group>
-              <el-button
-                :type="
-                  formOptionData.etype === PageEditMode.EditMode_simple
-                    ? 'primary'
-                    : 'default'
-                "
-                @click="onEditModeChange(PageEditMode.EditMode_simple)"
-                >{{ $t("main.publish.editmode.simple") }}
-              </el-button>
-              <el-button
-                :type="
-                  formOptionData.etype === PageEditMode.EditMode_complex
-                    ? 'primary'
-                    : 'default'
-                "
-                @click="onEditModeChange(PageEditMode.EditMode_complex)"
-                >{{ $t("main.publish.editmode.complex") }}
-              </el-button>
-              <el-button
-                :type="
-                  formOptionData.etype === PageEditMode.EditMode_source
-                    ? 'primary'
-                    : 'default'
-                "
-                @click="onEditModeChange(PageEditMode.EditMode_source)"
-                >{{ $t("main.publish.editmode.source") }}
-              </el-button>
-            </el-button-group>
-          </el-form-item>
-
-          <!-- 简洁模式与详细模式 -->
-          <div
-            v-if="formOptionData.etype !== PageEditMode.EditMode_source"
-            class="normal-mode"
-          >
-            <!-- 别名 -->
-            <div class="form-slug">
-              <!-- 强制刷新 -->
-              <el-form-item
-                v-if="formOptionData.etype !== PageEditMode.EditMode_simple"
-                :label="$t('main.force.refresh')"
-              >
-                <el-switch v-model="slugData.forceRefresh" />
+        <!-- 表单数据 -->
+        <div class="github-form">
+          <el-form label-width="100px">
+            <!-- 文章标题 -->
+            <div
+              v-if="pageModeData.etype !== PageEditMode.EditMode_source"
+              class="form-post-title"
+            >
+              <el-form-item :label="$t('main.title')">
+                <el-input v-model="slugData.title" :disabled="true" />
               </el-form-item>
+            </div>
 
-              <!-- hash -->
-              <el-form-item
-                v-if="
-                  formOptionData.etype.toString() !==
-                  PageEditMode.EditMode_simple.toString()
-                "
-                :label="$t('main.use.hash')"
-              >
-                <el-switch v-model="slugData.slugHashEnabled" />
-                <el-alert
-                  v-if="!slugData.slugHashEnabled"
-                  :closable="false"
-                  :title="$t('main.use.hash.tip')"
-                  type="warning"
-                />
+            <!-- 编辑模式 -->
+            <div class="form-edit-mode">
+              <el-form-item :label="$t('main.publish.editmode')">
+                <el-button-group>
+                  <el-button
+                    :type="
+                      pageModeData.etype === PageEditMode.EditMode_simple
+                        ? 'primary'
+                        : 'default'
+                    "
+                    @click="
+                      initPublishMethods.onEditModeChange(
+                        PageEditMode.EditMode_simple
+                      )
+                    "
+                    >{{ $t("main.publish.editmode.simple") }}
+                  </el-button>
+                  <el-button
+                    :type="
+                      pageModeData.etype === PageEditMode.EditMode_complex
+                        ? 'primary'
+                        : 'default'
+                    "
+                    @click="
+                      initPublishMethods.onEditModeChange(
+                        PageEditMode.EditMode_complex
+                      )
+                    "
+                    >{{ $t("main.publish.editmode.complex") }}
+                  </el-button>
+                  <el-button
+                    :type="
+                      pageModeData.etype === PageEditMode.EditMode_source
+                        ? 'primary'
+                        : 'default'
+                    "
+                    @click="
+                      initPublishMethods.onEditModeChange(
+                        PageEditMode.EditMode_source
+                      )
+                    "
+                    >{{ $t("main.publish.editmode.source") }}
+                  </el-button>
+                </el-button-group>
               </el-form-item>
+            </div>
 
-              <!-- 别名字段 -->
-              <el-form-item
-                v-if="
-                  formOptionData.etype.toString() !==
-                  PageEditMode.EditMode_simple.toString()
-                "
-                :label="$t('main.slug')"
+            <!-- 简洁模式与详细模式 -->
+            <div
+              v-if="pageModeData.etype !== PageEditMode.EditMode_source"
+              class="normal-mode"
+            >
+              <!-- 别名 -->
+              <div
+                v-if="pageModeData.etype !== PageEditMode.EditMode_simple"
+                class="form-slug"
               >
-                <el-input v-model="slugData.customSlug" />
-              </el-form-item>
-              <!-- 生成别名 -->
-              <el-form-item
-                v-if="formOptionData.etype !== PageEditMode.EditMode_simple"
-              >
+                <!-- 刷新别名 -->
+                <el-form-item :label="$t('main.force.refresh')">
+                  <el-switch v-model="slugData.forceRefresh" />
+                </el-form-item>
+
+                <!-- hash -->
+                <el-form-item :label="$t('main.use.hash')">
+                  <el-switch v-model="slugData.slugHashEnabled" />
+                  <el-alert
+                    v-if="!slugData.slugHashEnabled"
+                    :closable="false"
+                    :title="$t('main.use.hash.tip')"
+                    type="warning"
+                  />
+                </el-form-item>
+
+                <!-- 别名字段 -->
+                <el-form-item :label="$t('main.slug')">
+                  <el-input v-model="slugData.customSlug" />
+                </el-form-item>
+                <!-- 生成别名 -->
+                <el-form-item>
+                  <el-button
+                    :loading="slugData.isSlugLoading"
+                    class="make-slug-btn"
+                    type="primary"
+                    @click="slugMethods.makeSlug"
+                  >
+                    {{
+                      slugData.isSlugLoading
+                        ? $t("main.opt.loading")
+                        : $t("main.auto.fetch.slug")
+                    }}
+                  </el-button>
+                </el-form-item>
+              </div>
+
+              <!-- 文章摘要 -->
+              <div class="form-desc">
+                <!-- 摘要字段 -->
+                <el-form-item
+                  v-if="pageModeData.etype !== PageEditMode.EditMode_simple"
+                  :label="$t('main.desc')"
+                >
+                  <el-input
+                    v-model="descData.desc"
+                    :autosize="{ minRows: 3, maxRows: 16 }"
+                    type="textarea"
+                  />
+                </el-form-item>
+                <el-form-item
+                  v-if="pageModeData.etype !== PageEditMode.EditMode_simple"
+                >
+                  <el-button
+                    :loading="descData.isDescLoading"
+                    type="primary"
+                    @click="descMethods.makeDesc"
+                  >
+                    {{
+                      descData.isDescLoading
+                        ? $t("main.opt.loading")
+                        : $t("main.auto.fetch.desc")
+                    }}
+                  </el-button>
+                </el-form-item>
+              </div>
+
+              <!-- 发布时间 -->
+              <div class="form-publish-time">
+                <el-form-item
+                  v-if="pageModeData.etype !== PageEditMode.EditMode_simple"
+                  :label="$t('main.create.time')"
+                >
+                  <el-date-picker
+                    v-model="publishTimeData.created"
+                    :placeholder="$t('main.create.time.placeholder')"
+                    format="YYYY-MM-DD HH:mm:ss"
+                    type="datetime"
+                    value-format="YYYY-MM-DD HH:mm:ss"
+                  />
+                </el-form-item>
+              </div>
+
+              <!--
+              ----------------------------------------------------------------------
+              -->
+              <!-- 标签  -->
+              <div class="form-tags">
+                <!-- 标签开关 -->
+                <el-form-item :label="$t('main.tag.auto.switch')">
+                  <el-switch v-model="tagData.tagSwitch" />
+                </el-form-item>
+                <el-form-item :label="$t('main.tag')">
+                  <el-tag
+                    v-for="tag in tagData.tag.dynamicTags"
+                    :key="tag"
+                    :disable-transitions="false"
+                    class="mx-1"
+                    closable
+                    @close="tagMethods.tagHandleClose(tag)"
+                  >
+                    {{ tag }}
+                  </el-tag>
+                  <el-input
+                    v-if="tagData.tag.inputVisible"
+                    ref="tagRefInput"
+                    v-model="tagData.tag.inputValue"
+                    class="ml-1 w-20"
+                    size="small"
+                    @blur="tagMethods.tagHandleInputConfirm"
+                    @keyup.enter="tagMethods.tagHandleInputConfirm"
+                  />
+                  <el-button
+                    v-else
+                    class="button-new-tag ml-1 el-tag"
+                    size="small"
+                    @click="tagMethods.tagShowInput"
+                  >
+                    {{ $t("main.tag.new") }}
+                  </el-button>
+                </el-form-item>
+                <el-form-item
+                  v-if="pageModeData.etype !== PageEditMode.EditMode_simple"
+                >
+                  <el-button
+                    :loading="tagData.isTagLoading"
+                    type="primary"
+                    @click="tagMethods.fetchTag"
+                  >
+                    {{
+                      tagData.isTagLoading
+                        ? $t("main.opt.loading")
+                        : $t("main.auto.fetch.tag")
+                    }}
+                  </el-button>
+                </el-form-item>
+              </div>
+
+              <!-- Github pages -->
+              <div class="form-github-pages">
+                <!-- 启用Github发布 -->
+                <el-form-item :label="$t('main.publish.github')">
+                  <el-switch
+                    v-model="githubPagesData.githubEnabled"
+                    @change="githubPagesMethods.githubOnChange"
+                  />
+                  <el-alert
+                    v-if="!githubPagesData.githubEnabled"
+                    :closable="false"
+                    :title="$t('main.publish.github.no.tip')"
+                    type="warning"
+                  />
+                </el-form-item>
+                <div
+                  v-if="githubPagesData.githubEnabled"
+                  class="form-github-pages-items"
+                >
+                  <!-- 是否使用默认目录 -->
+                  <el-form-item
+                    v-if="!initPublishData.isPublished"
+                    :label="$t('main.publish.github.choose.path.use.default')"
+                  >
+                    <el-switch
+                      v-model="githubPagesData.useDefaultPath"
+                      @change="githubPagesMethods.defaultPathOnChange"
+                    />
+                    <el-alert
+                      v-if="githubPagesData.useDefaultPath"
+                      :closable="false"
+                      :title="
+                        $t('main.publish.github.choose.path.use.default.tip') +
+                        githubPagesData.currentDefaultPath
+                      "
+                      type="info"
+                    />
+                  </el-form-item>
+                  <!-- 选择目录 -->
+                  <el-form-item
+                    v-if="
+                      !githubPagesData.useDefaultPath &&
+                      !initPublishData.isPublished
+                    "
+                    :label="$t('main.publish.github.choose.path')"
+                  >
+                    <el-tree-select
+                      v-model="githubPagesData.customPath"
+                      :check-strictly="true"
+                      :empty-text="$t('main.cat.empty')"
+                      :load="githubPagesMethods.customLoad"
+                      :no-data-text="$t('main.cat.empty')"
+                      :placeholder="$t('main.cat.select')"
+                      :props="githubPagesData.path.customProps"
+                      lazy
+                      style="width: 100%"
+                      @node-click="githubPagesMethods.onSelectChange"
+                    />
+                  </el-form-item>
+                  <!-- 设置文件名 -->
+                  <el-form-item
+                    v-if="!initPublishData.isPublished"
+                    :label="$t('main.publish.github.choose.title')"
+                  >
+                    <el-input v-model="githubPagesData.mdTitle" />
+                  </el-form-item>
+                  <!-- 发布路径只读查看 -->
+                  <el-form-item
+                    :label="$t('main.publish.github.published.path')"
+                  >
+                    <el-input
+                      v-model="githubPagesData.publishPath"
+                      :disabled="initPublishData.isPublished"
+                    />
+                  </el-form-item>
+                </div>
+              </div>
+            </div>
+
+            <!-- 快捷操作 -->
+            <div
+              v-if="pageModeData.etype !== PageEditMode.EditMode_source"
+              class="convert-option"
+            >
+              <!-- 一键生成属性-->
+              <el-form-item :label="$t('main.opt.quick')">
                 <el-button
-                  :loading="slugData.isSlugLoading"
-                  class="make-slug-btn"
+                  :loading="quickData.isGenLoading"
                   type="primary"
-                  @click="makeSlug"
+                  @click="quickMethods.oneclickAttr"
                 >
                   {{
-                    slugData.isSlugLoading
+                    quickData.isGenLoading
                       ? $t("main.opt.loading")
-                      : $t("main.auto.fetch.slug")
+                      : $t("main.publish.oneclick.attr")
                   }}
                 </el-button>
               </el-form-item>
+
+              <el-form-item>
+                <!-- 属性转换 -->
+                <el-button
+                  v-if="pageModeData.etype !== PageEditMode.EditMode_simple"
+                  type="primary"
+                  @click="quickMethods.saveAttrToSiyuan"
+                  >{{ $t("main.save.attr.to.siyuan") }}
+                </el-button>
+              </el-form-item>
+
+              <el-form-item>
+                <el-button
+                  v-if="pageModeData.etype !== PageEditMode.EditMode_simple"
+                  type="primary"
+                  @click="
+                    initPublishMethods.onEditModeChange(
+                      PageEditMode.EditMode_source
+                    )
+                  "
+                  >{{ $t("main.siyuan.to.yaml") }}
+                </el-button>
+              </el-form-item>
             </div>
-          </div>
 
-          <!-- 源码模式 -->
-          <div
-            v-if="formOptionData.etype === PageEditMode.EditMode_source"
-            class="source-mode"
-          >
-            <!-- YAML提示 -->
-            <el-form-item>
-              <el-alert
-                :closable="false"
-                :title="
-                  upperFirst(props.apiType) + ' ' + $t('main.yaml.formatter')
+            <!-- 发布操作 -->
+            <div
+              v-if="pageModeData.etype !== PageEditMode.EditMode_source"
+              class="publish-action"
+            >
+              <el-form-item>
+                <el-button
+                  :loading="publishData.isPublishLoading"
+                  type="primary"
+                  @click="publishMethods.doPublish"
+                  >{{
+                    publishData.isPublishLoading
+                      ? $t("main.publish.loading")
+                      : initPublishData.isPublished
+                      ? $t("main.update")
+                      : $t("main.publish")
+                  }}
+                </el-button>
+                <el-button
+                  v-if="initPublishData.isPublished"
+                  :loading="publishData.isCancelLoading"
+                  @click="publishMethods.cancelPublish"
+                  >{{ $t("main.cancel") }}
+                </el-button>
+              </el-form-item>
+            </div>
+
+            <!-- 发布状态 -->
+            <div
+              v-if="pageModeData.etype !== PageEditMode.EditMode_source"
+              class="publish-status"
+            >
+              <!-- 文章状态 -->
+              <el-form-item>
+                <el-button disabled text type="danger">
+                  {{
+                    initPublishData.isPublished
+                      ? $t("main.publish.status.published")
+                      : $t("main.publish.status.unpublish")
+                  }}
+                </el-button>
+                <a
+                  v-if="initPublishData.isPublished"
+                  :href="initPublishData.previewMdUrl"
+                  :title="initPublishData.previewMdUrl"
+                  target="_blank"
+                  >{{ $t("main.publish.see.md.preview") }}</a
+                >
+              </el-form-item>
+              <el-form-item>
+                <a
+                  v-if="initPublishData.isPublished"
+                  :href="initPublishData.previewUrl"
+                  :title="initPublishData.previewUrl"
+                  target="_blank"
+                  >{{ $t("main.publish.see.real.preview") }}</a
+                >
+              </el-form-item>
+            </div>
+
+            <!-- 源码模式 -->
+            <div
+              v-if="pageModeData.etype === PageEditMode.EditMode_source"
+              class="source-mode"
+            >
+              <!-- YAML提示 -->
+              <el-form-item>
+                <el-alert
+                  :closable="false"
+                  :title="
+                    upperFirst(props.apiType) + ' ' + $t('main.yaml.formatter')
+                  "
+                  class="top-yaml-tip"
+                  type="info"
+                />
+              </el-form-item>
+
+              <!-- 只读模式 -->
+              <!-- 刷新别名 -->
+              <el-form-item
+                v-if="
+                  pageModeData.etype.toString() !==
+                  PageEditMode.EditMode_simple.toString()
                 "
-                class="top-yaml-tip"
-                type="info"
-              />
-            </el-form-item>
+                :label="
+                  yamlData.readMode
+                    ? $t('main.read.mode')
+                    : $t('main.edit.mode')
+                "
+              >
+                <el-switch v-model="yamlData.readMode" />
+              </el-form-item>
 
-            <!-- 显示方式 -->
-            <el-form-item>
+              <!-- 显示方式 -->
               <div class="source-opt">
-                <a
-                  :class="{
-                    current:
-                      formOptionData.stype === SourceContentShowType.YAML,
-                  }"
-                  @click="onYamlShowTypeChange(SourceContentShowType.YAML)"
-                  >{{ $t("yaml.show.type.yaml") }}</a
-                >
-                <a
-                  :class="{
-                    current:
-                      formOptionData.stype === SourceContentShowType.CONTENT,
-                    middle: true,
-                  }"
-                  @click="onYamlShowTypeChange(SourceContentShowType.CONTENT)"
-                  >{{ $t("yaml.show.type.md") }}</a
-                >
-                <a
-                  :class="{
-                    current:
-                      formOptionData.stype ===
-                      SourceContentShowType.YAML_CONTENT,
-                    middle: true,
-                  }"
-                  @click="
-                    onYamlShowTypeChange(SourceContentShowType.YAML_CONTENT)
-                  "
-                  >{{ $t("yaml.show.type.yamlmd") }}</a
-                >
-                <a
-                  :class="{
-                    current:
-                      formOptionData.stype ===
-                      SourceContentShowType.HTML_CONTENT,
-                  }"
-                  @click="
-                    onYamlShowTypeChange(SourceContentShowType.HTML_CONTENT)
-                  "
-                  >{{ $t("yaml.show.type.html") }}</a
-                >
+                <el-form-item>
+                  <a
+                    :class="{
+                      current:
+                        pageModeData.stype === SourceContentShowType.YAML,
+                    }"
+                    @click="
+                      initPublishMethods.onYamlShowTypeChange(
+                        SourceContentShowType.YAML
+                      )
+                    "
+                    >{{ $t("yaml.show.type.yaml") }}</a
+                  >
+                  <a
+                    :class="{
+                      current:
+                        pageModeData.stype === SourceContentShowType.CONTENT,
+                      middle: true,
+                    }"
+                    @click="
+                      initPublishMethods.onYamlShowTypeChange(
+                        SourceContentShowType.CONTENT
+                      )
+                    "
+                    >{{ $t("yaml.show.type.md") }}</a
+                  >
+                  <a
+                    :class="{
+                      current:
+                        pageModeData.stype ===
+                        SourceContentShowType.YAML_CONTENT,
+                      middle: true,
+                    }"
+                    @click="
+                      initPublishMethods.onYamlShowTypeChange(
+                        SourceContentShowType.YAML_CONTENT
+                      )
+                    "
+                    >{{ $t("yaml.show.type.yamlmd") }}</a
+                  >
+                  <a
+                    :class="{
+                      current:
+                        pageModeData.stype ===
+                        SourceContentShowType.HTML_CONTENT,
+                    }"
+                    @click="
+                      initPublishMethods.onYamlShowTypeChange(
+                        SourceContentShowType.HTML_CONTENT
+                      )
+                    "
+                    >{{ $t("yaml.show.type.html") }}</a
+                  >
+                </el-form-item>
               </div>
 
-              <!-- YAML数据 -->
-              <el-input
-                ref="fmtRefInput"
-                v-model="yamlData.yamlContent"
-                :autosize="{ minRows: 4, maxRows: 16 }"
-                type="textarea"
-                v-on:focus="onYamlContentFocus"
-              />
-            </el-form-item>
+              <!-- YAML预览 -->
+              <div v-if="yamlData.readMode" id="yaml-detail-content">
+                <el-form-item>
+                  <el-input
+                    id="yaml-detail-preview"
+                    v-model="yamlData.yamlPreviewContent"
+                    :autosize="{ minRows: 4, maxRows: 16 }"
+                    readonly
+                    type="textarea"
+                    @click="yamlMethods.onYamlContentFocus"
+                    v-on:contextmenu="yamlMethods.onYamlContextMenu"
+                  />
+                </el-form-item>
+              </div>
 
-            <!-- 操作 -->
-            <el-form-item>
-              <el-button type="primary" @click="convertAttrToYAML"
-                >{{ $t("main.siyuan.to.yaml") }}
-              </el-button>
-              <el-button type="primary" @click="convertYAMLToAttr"
-                >{{ $t("main.yaml.to.siyuan") }}
-              </el-button>
-              <el-button type="primary" @click="copyToClipboard"
-                >{{ $t("main.copy") }}
-              </el-button>
-            </el-form-item>
-          </div>
-        </el-form>
+              <!-- YAML编辑 -->
+              <div v-if="!yamlData.readMode" id="yaml-edit-content">
+                <el-form-item>
+                  <el-input
+                    v-model="yamlData.yamlContent"
+                    :autosize="{ minRows: 4, maxRows: 16 }"
+                    type="textarea"
+                    @input="yamlMethods.onYamlContentInput"
+                  />
+                </el-form-item>
+              </div>
+
+              <!-- 操作 -->
+              <div v-if="!yamlData.readMode" id="yaml-action">
+                <el-form-item>
+                  <el-button
+                    type="primary"
+                    @click="initPublishMethods.convertYAMLToAttr"
+                    >{{ $t("main.yaml.to.siyuan") }}
+                  </el-button>
+                  <el-button
+                    type="primary"
+                    @click="yamlMethods.copyYamlToClipboard()"
+                    >{{ $t("main.copy") }}
+                  </el-button>
+                </el-form-item>
+              </div>
+
+              <div id="yaml-read-mode-tip">
+                <el-form-item>
+                  <el-alert
+                    :closable="false"
+                    :title="$t('main.read.mode.tip')"
+                    type="info"
+                  />
+                </el-form-item>
+              </div>
+            </div>
+          </el-form>
+        </div>
       </el-main>
     </el-container>
-    <el-skeleton :loading="isInitLoading" :rows="5" animated />
+    <el-skeleton :loading="initPublishData.isInitLoading" :rows="5" animated />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, reactive, ref } from "vue"
+import { onMounted, watch } from "vue"
 import { PageEditMode } from "~/utils/common/pageEditMode"
-import { SourceContentShowType } from "~/utils/common/sourceContentShowType"
-import { getPublishCfg } from "~/utils/publishUtil"
-import { appendStr, upperFirst } from "~/utils/strUtil"
-import { useI18n } from "vue-i18n"
-import { getJSONConf } from "~/utils/configUtil"
-import { IGithubCfg } from "~/utils/platform/github/githubCfg"
-import { useSlug } from "~/composables/makeSlugCom"
-import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
-import { getPageId } from "~/utils/platform/siyuan/siyuanUtil"
-import { SIYUAN_PAGE_ATTR_KEY } from "~/utils/constants/siyuanPageConstants"
+import { useSlug } from "~/composables/publish/makeSlugCom"
 import { LogFactory } from "~/utils/logUtil"
-import { ElMessage } from "element-plus"
-import { useYaml } from "~/composables/makeYamlCom"
-import { mdToHtml, removeMdH1, removeMdWidgetTag } from "~/utils/htmlUtil"
+import { useYaml } from "~/composables/publish/makeYamlCom"
+import { YamlConvertAdaptor } from "~/utils/platform/yamlConvertAdaptor"
+import { usePublish } from "~/composables/publish/publishActionCom"
+import { useQuick } from "~/composables/publish/publishQuickCom"
+import { useDesc } from "~/composables/publish/makeDescCom"
+import { usePublishTime } from "~/composables/publish/publishTimeCom"
+import { useTag } from "~/composables/publish/makeTagCom"
+import { useGithubPages } from "~/composables/publish/githubPagesCom"
+import { useInitPublish } from "~/composables/publish/initPublishCom"
+import { usePageMode } from "~/composables/publish/pageModeCom"
+import { useSiyuanPage } from "~/composables/publish/siyuanPageCom"
+import { upperFirst } from "~/utils/strUtil"
+import { SourceContentShowType } from "~/utils/common/sourceContentShowType"
 
 const logger = LogFactory.getLogger(
   "components/publish/tab/main/GithubMain.vue"
 )
-const { t } = useI18n()
-const siyuanApi = new SiYuanApi()
 const props = defineProps({
   isReload: {
+    type: Boolean,
+    default: false,
+  },
+  isMainReload: {
     type: Boolean,
     default: false,
   },
@@ -272,121 +630,68 @@ const props = defineProps({
     type: String,
     default: undefined,
   },
-})
-const isInitLoading = ref(false)
-const apiStatus = ref(false)
-const apiTypeInfo = ref(
-  appendStr(t("setting.blog.platform.support.github"), props.apiType)
-)
-const formOptionData = reactive({
-  etype: <PageEditMode>PageEditMode.EditMode_simple,
-  stype: SourceContentShowType.YAML_CONTENT,
-})
-const siyuanData = ref({
-  pageId: "",
-  meta: {
-    tags: "",
+  yamlConverter: {
+    type: YamlConvertAdaptor,
   },
 })
 
 // composables
-const { slugData, makeSlug, initSlug } = useSlug(props.pageId, siyuanApi)
-const {
-  yamlData,
-  onYamlContentFocus,
-  convertAttrToYAML,
-  convertYAMLToAttr,
-  copyToClipboard,
-  initYaml,
-} = useYaml()
-
-// page methods
-const onEditModeChange = (val: PageEditMode) => {
-  formOptionData.etype = val
-}
-
-const onYamlShowTypeChange = (val) => {
-  formOptionData.stype = val
-
-  switch (val) {
-    case SourceContentShowType.YAML:
-      yamlData.yamlContent = yamlData.formatter
-      break
-    case SourceContentShowType.CONTENT:
-      yamlData.yamlContent = yamlData.mdContent
-      break
-    case SourceContentShowType.YAML_CONTENT:
-      yamlData.yamlContent = yamlData.formatter + yamlData.mdContent
-      break
-    case SourceContentShowType.HTML_CONTENT:
-      yamlData.yamlContent = yamlData.htmlContent
-      break
-    default:
-      break
-  }
-}
-
-const initPage = async () => {
-  isInitLoading.value = true
-
-  try {
-    // 读取偏好设置
-    const publishCfg = getPublishCfg()
-    formOptionData.etype = publishCfg.editMode
-    formOptionData.stype = publishCfg.contentShowType
-
-    // 读取平台配置
-    const githubCfg = getJSONConf<IGithubCfg>(props.apiType)
-    apiStatus.value = githubCfg.apiStatus
-
-    // 获取最新属性
-    const pageId = await getPageId(true, props.pageId)
-    if (!pageId || pageId === "") {
-      isInitLoading.value = false
-
-      logger.error(t("page.no.id"))
-      ElMessage.error(t("page.no.id"))
-      return
-    }
-
-    // 思源笔记数据
-    siyuanData.value.pageId = pageId
-    siyuanData.value.meta = await siyuanApi.getBlockAttrs(pageId)
-
-    // composables 初始化
-    // 别名
-    const slugKey = SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_SLUG_KEY
-    await initSlug(siyuanData.value.meta[slugKey])
-
-    // 发布内容
-    // 表单属性转换为YAML
-    yamlData.formatter = convertAttrToYAML()
-    const data = await siyuanApi.exportMdContent(siyuanData.value.pageId)
-    let md = data.content
-    md = removeMdWidgetTag(md)
-    if (publishCfg.removeH1) {
-      md = removeMdH1(md)
-    }
-    yamlData.mdContent = md
-    yamlData.mdFullContent = yamlData.formatter + "\n" + yamlData.mdContent
-    yamlData.htmlContent = mdToHtml(md)
-    // 显示默认
-    onYamlShowTypeChange(publishCfg.contentShowType)
-
-    // YAML
-    initYaml(yamlData.yamlContent)
-  } catch (e) {
-    const errmsg = appendStr(t("main.opt.failure"), "=>", e)
-    logger.error(errmsg)
-    // ElMessage.error(errmsg)
-  }
-
-  isInitLoading.value = false
-}
+const { pageModeData, pageModeMethods } = usePageMode()
+const { siyuanPageMethods } = useSiyuanPage(props)
+const { slugData, slugMethods } = useSlug(props, { siyuanPageMethods })
+const { descData, descMethods } = useDesc(props, { siyuanPageMethods })
+const { publishTimeData, publishTimeMethods } = usePublishTime()
+const { tagData, tagMethods } = useTag(props)
+const { githubPagesData, githubPagesMethods } = useGithubPages(props, {
+  siyuanPageMethods,
+})
+const { yamlData, yamlMethods } = useYaml()
+const { quickData, quickMethods } = useQuick(props, {
+  siyuanPageMethods,
+  slugMethods,
+  descMethods,
+  tagMethods,
+})
+const { initPublishData, initPublishMethods } = useInitPublish(props, {
+  pageModeMethods,
+  siyuanPageMethods,
+  slugMethods,
+  descMethods,
+  publishTimeMethods,
+  tagMethods,
+  githubPagesMethods,
+  yamlMethods,
+})
+const { publishData, publishMethods } = usePublish(props, {
+  siyuanPageMethods,
+  yamlMethods,
+  githubPagesMethods,
+  quickMethods,
+  initPublishMethods,
+})
 
 // life cycle
+/**
+ * 监听props
+ */
+watch(
+  () => props.isReload,
+  async () => {
+    // 初始化
+    await initPublishMethods.initPage()
+    logger.debug(props.apiType + "_Main检测到设置更新操作，刷新页面")
+  }
+)
+watch(
+  () => props.isMainReload,
+  async () => {
+    // 初始化
+    await initPublishMethods.initPage()
+    logger.debug(props.apiType + "_Main左右切换tab，刷新页面")
+  }
+)
 onMounted(async () => {
-  await initPage()
+  await initPublishMethods.initPage()
 })
 </script>
 
@@ -400,22 +705,42 @@ onMounted(async () => {
 }
 
 .source-opt a {
-  padding: 4px 2px;
+  --text-color: #1a1a1a;
+  /*padding: 4px 2px;*/
   cursor: pointer;
   /*border: solid 1px #409eff;*/
+  color: var(--text-color);
+  font-size: 16px;
+  font-weight: 400;
+}
+
+html.dark .source-opt a {
+  --text-color: #999;
+}
+
+.source-opt a:first-child {
+  margin-right: 22px;
 }
 
 .source-opt a.middle {
-  margin: 0 12px;
+  margin-right: 22px;
 }
 
 .source-opt a.current {
-  background-color: #409eff;
-  color: #ffffff;
+  --text-blue-color: #0084ff;
+  /*background-color: #409eff;*/
+  /*color: #ffffff;*/
+  color: var(--text-blue-color);
+  font-weight: 600;
 }
 
 .top-yaml-tip {
   padding: 2px 4px;
   margin: 0 10px 0 0;
+}
+
+#yaml-detail-preview {
+  cursor: default;
+  /*pointer-events: none;*/
 }
 </style>

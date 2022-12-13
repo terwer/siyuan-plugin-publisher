@@ -47,6 +47,13 @@
         v-if="!apiStatus"
       />
       <el-form label-width="120px">
+        <!-- 文章标题 -->
+        <div class="form-post-title">
+          <el-form-item :label="$t('main.title')">
+            <el-input v-model="formData.title" :disabled="true" />
+          </el-form-item>
+        </div>
+
         <!-- 编辑模式 -->
         <el-form-item :label="$t('main.publish.editmode')">
           <el-button-group>
@@ -63,7 +70,7 @@
           </el-button-group>
         </el-form-item>
 
-        <!-- 强制刷新 -->
+        <!-- 刷新别名 -->
         <el-form-item :label="$t('main.force.refresh')" v-if="editMode">
           <el-switch v-model="forceRefresh" />
           <el-alert
@@ -233,7 +240,7 @@
                 : $t("main.publish.oneclick.attr")
             }}
           </el-button>
-          <el-button type="primary" @click="saveAttrToSiyuan"
+          <el-button v-if="editMode" type="primary" @click="saveAttrToSiyuan"
             >{{ $t("main.save.attr.to.siyuan") }}
           </el-button>
         </el-form-item>
@@ -252,7 +259,10 @@
                 : $t("main.publish")
             }}
           </el-button>
-          <el-button @click="cancelPublish" :loading="isCancelLoading"
+          <el-button
+            v-if="isPublished"
+            :loading="isCancelLoading"
+            @click="cancelPublish"
             >{{ $t("main.cancel") }}
           </el-button>
         </el-form-item>
@@ -271,7 +281,7 @@
             :title="previewUrl"
             target="_blank"
             v-if="isPublished"
-            >{{ $t("main.publish.vuepress.see.preview") }}</a
+            >{{ $t("main.publish.see.preview") }}</a
           >
         </el-form-item>
       </el-form>
@@ -281,46 +291,62 @@
 </template>
 
 <script lang="ts" setup>
-import { CommonblogCfg, ICommonblogCfg } from "~/utils/platform/commonblog/commonblogCfg";
-import { nextTick, onMounted, reactive, ref } from "vue";
-import { useI18n } from "vue-i18n";
-import { SIYUAN_PAGE_ATTR_KEY } from "~/utils/constants/siyuanPageConstants";
-import { ElMessage, ElMessageBox } from "element-plus/es";
-import shortHash from "shorthash2";
+import {
+  CommonblogCfg,
+  ICommonblogCfg,
+} from "~/utils/platform/commonblog/commonblogCfg"
+import { nextTick, onMounted, reactive, ref, watch } from "vue"
+import { useI18n } from "vue-i18n"
+import { SIYUAN_PAGE_ATTR_KEY } from "~/utils/constants/siyuanPageConstants"
+import { ElMessage, ElMessageBox } from "element-plus/es"
+import shortHash from "shorthash2"
 import {
   mdToHtml,
   mdToPlainText,
   parseHtml,
+  removeH1,
+  removeMdH1,
   removeMdWidgetTag,
   removeTitleNumber,
-  removeWidgetTag
-} from "~/utils/htmlUtil";
-import { CONSTANTS } from "~/utils/constants/constants";
-import { API } from "~/utils/api";
-import { PageType } from "~/utils/platform/metaweblog/IMetaweblogCfg";
-import { Post } from "~/utils/common/post";
-import { LogFactory } from "~/utils/logUtil";
-import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi";
-import { getPageId } from "~/utils/platform/siyuan/siyuanUtil";
-import { getConf, getJSONConf, setConf } from "~/utils/configUtil";
-import { cutWords, isEmptyObject, isEmptyString, jiebaToHotWords, pinyinSlugify, zhSlugify } from "~/utils/util";
-import { calcLastSeconds, formatNumToZhDate } from "~/utils/dateUtil";
-import { getPublishStatus } from "~/utils/publishUtil";
-import { ImageParser } from "~/utils/parser/imageParser";
+  removeWidgetTag,
+} from "~/utils/htmlUtil"
+import { CONSTANTS } from "~/utils/constants/constants"
+import { API } from "~/utils/api"
+import { PageType } from "~/utils/platform/metaweblog/IMetaweblogCfg"
+import { Post } from "~/utils/models/post"
+import { LogFactory } from "~/utils/logUtil"
+import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
+import { getPageId } from "~/utils/platform/siyuan/siyuanUtil"
+import { getConf, getJSONConf, setConf } from "~/utils/configUtil"
+import {
+  cutWords,
+  isEmptyObject,
+  isEmptyString,
+  jiebaToHotWords,
+  pinyinSlugify,
+  zhSlugify,
+} from "~/utils/util"
+import { calcLastSeconds, formatNumToZhDate } from "~/utils/dateUtil"
+import { getPublishCfg, getPublishStatus } from "~/utils/publishUtil"
+import { ImageParser } from "~/utils/parser/imageParser"
 
 const logger = LogFactory.getLogger(
   "components/publish/tab/main/CommonBlogMain.vue"
-);
-const siyuanApi = new SiYuanApi();
+)
+const siyuanApi = new SiYuanApi()
 // 图片解析器
-const imageParser = new ImageParser();
+const imageParser = new ImageParser()
 
-const { t } = useI18n();
+const { t } = useI18n()
 
 const props = defineProps({
   isReload: {
     type: Boolean,
-    default: false
+    default: false,
+  },
+  isMainReload: {
+    type: Boolean,
+    default: false,
   },
   useCat: {
     type: Boolean,
@@ -439,6 +465,8 @@ const initPage = async () => {
   if (!isEmptyObject(conf)) {
     blogName.value = conf.blogName || ""
   }
+  // 读取偏好设置
+  const publishCfg = getPublishCfg()
 
   // 默认开启hash
   slugHashEnabled.value = true
@@ -462,7 +490,11 @@ const initPage = async () => {
   logger.debug("CommonblogMain初始化页面,meta=>", siyuanData.meta)
 
   // 表单数据
-  formData.title = page.content
+  let fmtTitle = page.content
+  if (publishCfg.fixTitle) {
+    fmtTitle = removeTitleNumber(page.content)
+  }
+  formData.title = fmtTitle
   formData.customSlug =
     siyuanData.meta[SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_SLUG_KEY]
   formData.desc =
@@ -541,7 +573,7 @@ const initPage = async () => {
       catInfo = await api.getCategories()
     } catch (e) {
       isInitLoading.value = false
-      logger.error("分类获取失败", e)
+      logger.error(t("main.cat.list.error"), e)
     }
 
     // 组装分类
@@ -622,7 +654,7 @@ const makeSlug = async (hideTip) => {
       ElMessage.success(t("main.opt.failure"))
     }
   } else {
-    formData.customSlug = pinyinSlugify(fmtTitle);
+    formData.customSlug = pinyinSlugify(fmtTitle)
   }
 
   // add hash
@@ -837,13 +869,12 @@ const doPublish = async () => {
 
     // api可用并且开启了发布
     const commonblogCfg = getJSONConf<ICommonblogCfg>(props.apiType)
-
     const api = new API(props.apiType)
+    // 读取偏好设置
+    const publishCfg = getPublishCfg()
 
     // 组装文章数据
     // ===============================
-    // 文章标题
-    const fmtTitle = removeTitleNumber(formData.title)
     // 发布内容
     let content
     const data = await siyuanApi.exportMdContent(siyuanData.pageId)
@@ -863,13 +894,19 @@ const doPublish = async () => {
     if (PageType.Html === commonblogCfg.pageType) {
       const html = mdToHtml(md)
       content = removeWidgetTag(html)
+      if (publishCfg.removeH1) {
+        content = removeH1(content)
+      }
     } else {
       // logger.warn("md=>", md)
       content = removeMdWidgetTag(md)
+      if (publishCfg.removeH1) {
+        content = removeMdH1(content)
+      }
     }
     // ===============================
     const post = new Post()
-    post.title = fmtTitle
+    post.title = formData.title
     post.wp_slug = formData.customSlug
     post.description = content
     post.categories = formData.categories
@@ -989,6 +1026,26 @@ const doCancel = async (isInit) => {
     await initPage()
   }
 }
+
+/**
+ * 监听props
+ */
+watch(
+  () => props.isReload,
+  async () => {
+    // 初始化
+    await initPage()
+    logger.debug(props.apiType + "_Main检测到设置更新操作，刷新页面")
+  }
+)
+watch(
+  () => props.isMainReload,
+  async () => {
+    // 初始化
+    await initPage()
+    logger.debug(props.apiType + "_Main左右切换tab，刷新页面")
+  }
+)
 </script>
 
 <style scoped>

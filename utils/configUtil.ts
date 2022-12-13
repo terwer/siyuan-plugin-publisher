@@ -69,8 +69,8 @@ export const getBooleanConf = (key: string): boolean => {
  * @param key key
  */
 export function getJSONConf<T>(key: string): T {
-  // logUtil.logInfo("------------------------------")
-  // logUtil.logInfo("尝试从localStorage获取JSON数据，key=>", key)
+  logger.debug("------------------------------")
+  logger.debug("尝试从localStorage获取JSON数据，key=>", key)
 
   let valueObj = ({} || []) as T
   const value = getConf(key)
@@ -83,9 +83,8 @@ export function getJSONConf<T>(key: string): T {
     }
   }
 
-  logger.debug("从localStorage获取JSON数据=>")
-  logger.debug(valueObj)
-  // logUtil.logInfo("------------------------------")
+  logger.debug("从localStorage获取JSON数据=>", valueObj)
+  logger.debug("------------------------------")
   return valueObj
 }
 
@@ -128,14 +127,13 @@ export const setBooleanConf = (key: string, value: boolean): void => {
  * @param value
  */
 export const setJSONConf = <T>(key: string, value: T): void => {
-  // logUtil.logInfo("++++++++++++++++++++++++++++++")
-  // logUtil.logInfo("尝试保存JSON数据到localStorage里key=>", key)
-  // logUtil.logInfo("保存JSON数据到localStorage=>")
-  // logUtil.logInfo(value)
+  logger.debug("++++++++++++++++++++++++++++++")
+  logger.debug("尝试保存JSON数据到localStorage里key=>", key)
+  logger.debug("保存JSON数据到localStorage=>", value)
 
   const valueString = JSON.stringify(value)
   setConf(key, valueString)
-  // logUtil.logInfo("++++++++++++++++++++++++++++++")
+  logger.debug("++++++++++++++++++++++++++++++")
 }
 
 /**

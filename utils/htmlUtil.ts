@@ -33,7 +33,7 @@ export const removeTitleNumber = (str: string): string => {
   let newstr = str
 
   // 移除序号
-  const publisherRegex = /([0-9]*)\./g
+  const publisherRegex = /([0-9]*)\./
   newstr = newstr.replace(publisherRegex, "")
 
   return newstr
@@ -105,9 +105,12 @@ const filterHtml = (str: string): string => {
   // 下面是行内空格，不建议去除
   str = str.replace(/\s+/g, "")
 
-  // 冒号分号替换成下划线
+  // 冒号分号等替换成下划线
   str = str.replace(/[:|：]/g, "_")
   str = str.replace(/[;|；]/g, "_")
+  str = str.replace(/\^/g, "_")
+  str = str.replace(/!/g, "_")
+  str = str.replace(/@/g, "at_")
 
   // 需要排除的字符
   const excludeWords = ["\\d*/\\d/\\d*", "[、|\\\\]", "[，|,]", "\\d", "/", "-"]

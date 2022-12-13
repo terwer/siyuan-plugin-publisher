@@ -46,6 +46,7 @@ export default {
   "main.publish.github.tip":
     "Checking the Markdown text of the article to the GitHub warehouse corresponding to Vuepress (need to perform related configuration first, unsatisfactory or configuration error will be ignored)",
   "main.publish.github.choose.path": "Choose path",
+  "main.publish.github.published.path": "Published path",
   "main.publish.github.choose.path.use.default": "Default path",
   "main.publish.github.choose.path.use.default.tip":
     "Using the default directory, all articles are published in the configuration default directory, no need to select the directory every time it is published",
@@ -54,10 +55,11 @@ export default {
   "main.publish.github.choose.title": "File name",
   "main.publish.github.choose.title.tip":
     "Vuepress-theme-VDoing support file name plus serial number to identify. If you don’t know this usage, please do not modify the file name",
-  "main.publish.github.see.preview": "Click here see new post",
-  "main.publish.github.see.md.preview": "Click here see new md file",
-  "main.publish.github.see.real.preview": "Click here see new post",
-  "main.publish.to.wordpress": "Sendto WP",
+  "main.publish.see.preview": "Click here see new post",
+  "main.publish.see.md.preview": "Click here see new md file",
+  "main.publish.see.real.preview": "Click here see new post",
+  "main.publish.to.wordpress": "Send to WP",
+  "main.title": "Post title",
   "main.slug": "Post slug",
   "main.auto.fetch.slug": "Auto fetch slug",
   "main.use.google.translate": "Use Google translate API",
@@ -143,6 +145,14 @@ export default {
   "setting.blog.type.github.email.tip": "Email",
   "setting.blog.url": "Blog addr",
   "setting.blog.previewUrl": "Preview rule",
+  "setting.blog.previewUrl.tip":
+    "Preview Rules (place occupied: [yyyy] [mm] [dd] [postid]), for example:/post/[postid].html or /[cats]/[yyyy]/[mm]/[dd]/[[dd]/[postid].html",
+  "setting.blog.previewMdUrl": "MD preview rule",
+  "setting.blog.previewMdUrl.tip":
+    "MD file preview rules (place occupied: [user] [repo] [Branch] [docpath]), for example:/[user]/[repo]/blob/[branch]/[docpath]",
+  "setting.blog.mdFilenameRule": "File rule",
+  "setting.blog.mdFilenameRule.tip":
+    "Markdown File Name Rules (Plasma: [yyyy] [MM] [dd] [slug] [filename]), for example: [filename].md or [yyyy]-[MM]-[dd]-[slug].md",
   "setting.blog.username": "Username",
   "setting.blog.password": "Password",
   "setting.blog.apiurl": "API Url",
@@ -233,6 +243,8 @@ export default {
   "dynamic.platform.opt.item.no.select.tip":
     "Please select the line to be deleted",
   "setting.common.home": "Home",
+  "setting.common.tip":
+    "The platform homepage is used to preview articles, for example: https://terwork.space",
   "setting.common.apiurl": "API",
   "setting.common.token": "Token",
   "setting.common.token.gen": "Token addr",
@@ -262,4 +274,18 @@ export default {
   "setting.conf.import": "Import config",
   "setting.conf.clear": "Clear config",
   "page.no.id": "pageId fetch error",
+  "main.read.mode": "Readonly",
+  "main.edit.mode": "Editable",
+  "main.read.mode.tip": "Readonly tips",
+  "main.opt.onclick.confirm.tip":
+    "This operation will re -generate all attributes other than alias. If you just want to modify individual attributes, please click the individual function button to operate in the detailed mode. Do you continue?",
+  "main.cat.list.error": "Category list get error",
+  "main.yaml.no.save":
+    "Have you edited YAML, do you synchronize to attributes, and cancel the loss of YAML modification?",
+  "setting.github.baseUrl": "Git repo index",
+  "setting.github.baseUrl.tip":
+    "Git platform address is used for md file preview, the default is: https://github.com",
+  "preference.setting.fixTitle": "Fix title",
+  "preference.setting.removeH1": "Remove h1",
+  "preference.setting.newWin": "New win",
 }
