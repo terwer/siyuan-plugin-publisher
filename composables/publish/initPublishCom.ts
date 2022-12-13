@@ -218,6 +218,9 @@ export const useInitPublish = (props, deps, otherArgs?) => {
       ) {
         const errmsg = "只能转换YAML，请切换显示模式"
         ElMessage.error(errmsg)
+
+        // 防止循环提示
+        yamlMethods.getYamlData().isSaved = true
         throw new Error(errmsg)
       }
 
