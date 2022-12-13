@@ -285,4 +285,6 @@ export default {
   "setting.github.baseUrl": "Git repo index",
   "setting.github.baseUrl.tip":
     "Git platform address is used for md file preview, the default is: https://github.com",
+  "preference.setting.fixTitle": "Fix title",
+  "preference.setting.removeH1": "Remove h1",
 }

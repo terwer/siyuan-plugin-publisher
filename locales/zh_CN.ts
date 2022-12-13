@@ -295,4 +295,6 @@ export default {
   "setting.github.baseUrl": "Git平台地址",
   "setting.github.baseUrl.tip":
     "Git平台地址，用于MD文件预览，默认是：https://github.com",
+  "preference.setting.fixTitle": "去除标题编号",
+  "preference.setting.removeH1": "去除正文H1",
 }

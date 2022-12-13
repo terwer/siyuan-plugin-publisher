@@ -35,7 +35,7 @@ import { ICommonblogCfg } from "~/utils/platform/commonblog/commonblogCfg"
 import { LogFactory } from "~/utils/logUtil"
 import { PublishPreference } from "~/utils/models/publishPreference"
 import { CONSTANTS } from "~/utils/constants/constants"
-import { isEmptyString } from "~/utils/util"
+import { isEmptyObject, parseBoolean } from "~/utils/util"
 import { PageEditMode } from "~/utils/common/pageEditMode"
 import { SourceContentShowType } from "~/utils/common/sourceContentShowType"
 
@@ -148,7 +148,7 @@ export const getPublishCfg = (): PublishPreference => {
   let publishCfg = getJSONConf<PublishPreference>(
     CONSTANTS.PUBLISH_PREFERENCE_CONFIG_KEY
   )
-  if (isEmptyString(publishCfg)) {
+  if (isEmptyObject(publishCfg)) {
     publishCfg = new PublishPreference()
     publishCfg.fixTitle = false
     // TODO 非Github平台待实现
@@ -164,21 +164,24 @@ export const getPublishCfg = (): PublishPreference => {
     publishCfg.renderSiyuanVirtualLink = true
     // TODO 非Github平台待实现
     publishCfg.makeAttrOnFirstLoad = false
+  } else {
+    publishCfg.fixTitle = parseBoolean(publishCfg.fixTitle)
+    publishCfg.removeH1 = parseBoolean(publishCfg.removeH1)
   }
 
   // =====================================================
   // 下面是我自己的配置
   // =====================================================
-  if (!isProd) {
-    publishCfg.fixTitle = true
-    publishCfg.useGoogleTranslate = true
-    publishCfg.editMode = PageEditMode.EditMode_simple
-    publishCfg.contentShowType = SourceContentShowType.YAML
-    publishCfg.removeH1 = true
-    publishCfg.autoTag = true
-    publishCfg.renderSiyuanVirtualLink = true
-    publishCfg.makeAttrOnFirstLoad = true
-  }
+  // if (!isProd) {
+  //   publishCfg.fixTitle = true
+  //   publishCfg.useGoogleTranslate = true
+  //   publishCfg.editMode = PageEditMode.EditMode_simple
+  //   publishCfg.contentShowType = SourceContentShowType.YAML
+  //   publishCfg.removeH1 = true
+  //   publishCfg.autoTag = true
+  //   publishCfg.renderSiyuanVirtualLink = true
+  //   publishCfg.makeAttrOnFirstLoad = true
+  // }
   // =====================================================
   // 下面是我自己的配置
   // =====================================================

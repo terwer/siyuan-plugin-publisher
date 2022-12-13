@@ -54,8 +54,8 @@
     <el-tab-pane name="dynamic-platform" :label="$t('dynamic.platform.new')">
       <dynamic-platform />
     </el-tab-pane>
-    <el-tab-pane name="change-local" :label="$t('service.tab.change.local')">
-      <change-locale />
+    <el-tab-pane :label="$t('service.tab.change.local')" name="general-setting">
+      <general-setting :is-reload="isReloadCommonSettingTab" />
     </el-tab-pane>
   </el-tabs>
 </template>
@@ -63,12 +63,12 @@
 <script lang="ts" setup>
 import { ref } from "vue"
 import { LogFactory } from "~/utils/logUtil"
-import ChangeLocale from "~/components/publish/tab/ChangeLocale.vue"
 import DynamicPlatform from "~/components/publish/tab/DynamicPlatform.vue"
 import ServiceSwitch from "~/components/publish/tab/ServiceSwitch.vue"
 import PostBind from "~/components/publish/tab/PostBind.vue"
 import PlatformSetting from "~/components/publish/tab/PlatformSetting.vue"
 import PlatformMain from "~/components/publish/tab/PlatformMain.vue"
+import GeneralSetting from "~/components/publish/tab/GeneralSetting.vue"
 
 const logger = LogFactory.getLogger("components/publish/PublishService.vue")
 
@@ -78,6 +78,7 @@ const isReloadServiceTab = ref(false)
 const isReloadSettingTab = ref(false)
 const isReloadPostBindTab = ref(false)
 const isReloadServiceSwitchTab = ref(false)
+const isReloadCommonSettingTab = ref(false)
 
 const props = defineProps({
   isReload: {
@@ -107,6 +108,10 @@ const serviceTabChange = (name) => {
 
   if (paneName === "service-switch") {
     isReloadServiceSwitchTab.value = !isReloadServiceSwitchTab.value
+  }
+
+  if (paneName === "general-setting") {
+    isReloadCommonSettingTab.value = !isReloadCommonSettingTab.value
   }
 }
 </script>
