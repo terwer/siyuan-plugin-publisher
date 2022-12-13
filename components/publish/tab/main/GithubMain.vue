@@ -657,7 +657,10 @@ const { initPublishData, initPublishMethods } = useInitPublish(props, {
   yamlMethods,
 })
 const { publishData, publishMethods } = usePublish(props, {
+  siyuanPageMethods,
+  yamlMethods,
   githubPagesMethods,
+  quickMethods,
   initPublishMethods,
 })
 

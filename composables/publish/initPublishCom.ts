@@ -74,134 +74,6 @@ export const useInitPublish = (props, deps, otherArgs?) => {
 
   // methods
   const initPublishMethods = {
-    initPage: async () => {
-      initPublishData.isInitLoading = true
-
-      try {
-        // 读取偏好设置
-        const publishCfg = getPublishCfg()
-        const pageModeData = pageModeMethods.getPageModeData()
-        pageModeData.etype = publishCfg.editMode
-        pageModeData.stype = publishCfg.contentShowType
-
-        // 读取平台配置
-        const githubCfg = getJSONConf<IGithubCfg>(props.apiType)
-        // API状态
-        initPublishData.apiStatus = githubCfg.apiStatus
-
-        // 获取页面ID
-        const pageId = await getPageId(true, props.pageId)
-        if (!pageId || pageId === "") {
-          initPublishData.isInitLoading = false
-
-          logger.error(t("page.no.id"))
-          ElMessage.error(t("page.no.id"))
-          return
-        }
-
-        // 思源笔记数据
-        await siyuanPageMethods.initSiyuanPage(pageId)
-        const siyuanData = siyuanPageMethods.getSiyuanPageData().dataObj
-
-        // 发布状态
-        initPublishData.isPublished = getPublishStatus(
-          props.apiType,
-          siyuanPageMethods.getSiyuanPageData().dataObj.meta
-        )
-
-        // composables 初始化
-        // 别名
-        slugMethods.initSlug(siyuanData)
-        // 摘要
-        descMethods.initDesc(siyuanData)
-        // 发布时间
-        publishTimeMethods.initPublishTime(siyuanData)
-        // 标签
-        tagMethods.initTag(siyuanData)
-        // githubPages
-        const githubPagesData = githubPagesMethods.getGithubPagesData()
-        githubPagesData.githubEnabled = initPublishData.apiStatus
-        let docPath
-        if (initPublishData.isPublished) {
-          githubPagesData.useDefaultPath = false
-          docPath = githubPagesMethods.getDocPath()
-
-          // 预览链接
-          //   const vdomain = "https://terwer.space/"
-          //   githubPagesData.previewUrl =
-          //     "https://github.com/" +
-          //     githubCfg.githubUser +
-          //     "/" +
-          //     githubCfg.githubRepo +
-          //     "/blob/" +
-          //     githubCfg.defaultBranch +
-          //     "/" +
-          //     docPath
-          //   githubPagesData.previewRealUrl = pathJoin(
-          //     vdomain,
-          //     yamlData.yamlObj.yamlObj.permalink
-          //   )
-        } else {
-          docPath = githubCfg.defaultPath ?? ""
-        }
-        const currentDefaultPath = githubCfg.defaultPath ?? "尚未配置"
-        const slugData = slugMethods.getSlugData()
-        // 文件名规则
-        const mdFilenameRule = githubCfg.mdFilenameRule
-        let mdTitle
-        if (isEmptyString(mdFilenameRule)) {
-          mdTitle = siyuanData.page.content ?? slugData.customSlug ?? "no-slug"
-        } else {
-          mdTitle = mdFilenameRule
-          if (mdFilenameRule.indexOf("filename") > -1) {
-            mdTitle = mdTitle.replace(/\[filename]/g, siyuanData.page.content)
-          }
-          if (mdFilenameRule.indexOf("slug") > -1) {
-            mdTitle = mdTitle.replace(/\[slug]/g, slugData.customSlug)
-          }
-          let date = new Date()
-          if (mdFilenameRule.indexOf("yyyy") > -1) {
-            const year = date.getFullYear()
-            mdTitle = mdTitle.replace(/\[yyyy]/g, year.toString())
-          }
-          if (
-            mdFilenameRule.indexOf("MM") > -1 ||
-            mdFilenameRule.indexOf("mm") > -1
-          ) {
-            let monthstr
-            let month = date.getMonth() + 1
-            monthstr = month.toString()
-            if (month < 10) {
-              monthstr = appendStr("0", monthstr)
-            }
-            mdTitle = mdTitle.replace(/\[MM]/g, monthstr)
-            mdTitle = mdTitle.replace(/\[mm]/g, monthstr)
-          }
-          if (mdFilenameRule.indexOf("dd") > -1) {
-            let daystr
-            let day = date.getDate()
-            daystr = day.toString()
-            if (day < 10) {
-              daystr = appendStr("0", daystr)
-            }
-            mdTitle = mdTitle.replace(/\[dd]/g, daystr)
-          }
-        }
-        // 初始化
-        githubPagesMethods.initGithubPages({
-          cpath: docPath,
-          defpath: currentDefaultPath,
-          fname: mdTitle,
-        })
-      } catch (e) {
-        const errmsg = appendStr(t("main.opt.failure"), "=>", e)
-        logger.error(errmsg)
-        // ElMessage.error(errmsg)
-      }
-
-      initPublishData.isInitLoading = false
-    },
-
     // page methods
     onEditModeChange: (val: PageEditMode) => {
       const pageModeData = pageModeMethods.getPageModeData()
@@ -371,6 +243,138 @@ export const useInitPublish = (props, deps, otherArgs?) => {
           ElMessage.error(appendStr(t("main.opt.failure"), "=>", e))
         }
       }
+    },
+
+    getInitPublishData: () => {
+      return initPublishData
+    },
+
+    initPage: async () => {
+      initPublishData.isInitLoading = true
+
+      try {
+        // 读取偏好设置
+        const publishCfg = getPublishCfg()
+        const pageModeData = pageModeMethods.getPageModeData()
+        pageModeData.etype = publishCfg.editMode
+        pageModeData.stype = publishCfg.contentShowType
+
+        // 读取平台配置
+        const githubCfg = getJSONConf<IGithubCfg>(props.apiType)
+        // API状态
+        initPublishData.apiStatus = githubCfg.apiStatus
+
+        // 获取页面ID
+        const pageId = await getPageId(true, props.pageId)
+        if (!pageId || pageId === "") {
+          initPublishData.isInitLoading = false
+
+          logger.error(t("page.no.id"))
+          ElMessage.error(t("page.no.id"))
+          return
+        }
+
+        // 思源笔记数据
+        await siyuanPageMethods.initSiyuanPage(pageId)
+        const siyuanData = siyuanPageMethods.getSiyuanPageData().dataObj
+
+        // 发布状态
+        initPublishData.isPublished = getPublishStatus(
+          props.apiType,
+          siyuanPageMethods.getSiyuanPageData().dataObj.meta
+        )
+
+        // composables 初始化
+        // 别名
+        slugMethods.initSlug(siyuanData)
+        // 摘要
+        descMethods.initDesc(siyuanData)
+        // 发布时间
+        publishTimeMethods.initPublishTime(siyuanData)
+        // 标签
+        tagMethods.initTag(siyuanData)
+        // githubPages
+        const githubPagesData = githubPagesMethods.getGithubPagesData()
+        githubPagesData.githubEnabled = initPublishData.apiStatus
+        let docPath
+        if (initPublishData.isPublished) {
+          githubPagesData.useDefaultPath = false
+          docPath = githubPagesMethods.getDocPath()
+
+          // 预览链接
+          //   const vdomain = "https://terwer.space/"
+          //   githubPagesData.previewUrl =
+          //     "https://github.com/" +
+          //     githubCfg.githubUser +
+          //     "/" +
+          //     githubCfg.githubRepo +
+          //     "/blob/" +
+          //     githubCfg.defaultBranch +
+          //     "/" +
+          //     docPath
+          //   githubPagesData.previewRealUrl = pathJoin(
+          //     vdomain,
+          //     yamlData.yamlObj.yamlObj.permalink
+          //   )
+        } else {
+          docPath = githubCfg.defaultPath ?? ""
+        }
+        const currentDefaultPath = githubCfg.defaultPath ?? "尚未配置"
+        const slugData = slugMethods.getSlugData()
+        // 文件名规则
+        const mdFilenameRule = githubCfg.mdFilenameRule
+        let mdTitle
+        if (isEmptyString(mdFilenameRule)) {
+          mdTitle = siyuanData.page.content ?? slugData.customSlug ?? "no-slug"
+        } else {
+          mdTitle = mdFilenameRule
+          if (mdFilenameRule.indexOf("filename") > -1) {
+            mdTitle = mdTitle.replace(/\[filename]/g, siyuanData.page.content)
+          }
+          if (mdFilenameRule.indexOf("slug") > -1) {
+            mdTitle = mdTitle.replace(/\[slug]/g, slugData.customSlug)
+          }
+          let date = new Date()
+          if (mdFilenameRule.indexOf("yyyy") > -1) {
+            const year = date.getFullYear()
+            mdTitle = mdTitle.replace(/\[yyyy]/g, year.toString())
+          }
+          if (
+            mdFilenameRule.indexOf("MM") > -1 ||
+            mdFilenameRule.indexOf("mm") > -1
+          ) {
+            let monthstr
+            let month = date.getMonth() + 1
+            monthstr = month.toString()
+            if (month < 10) {
+              monthstr = appendStr("0", monthstr)
+            }
+            mdTitle = mdTitle.replace(/\[MM]/g, monthstr)
+            mdTitle = mdTitle.replace(/\[mm]/g, monthstr)
+          }
+          if (mdFilenameRule.indexOf("dd") > -1) {
+            let daystr
+            let day = date.getDate()
+            daystr = day.toString()
+            if (day < 10) {
+              daystr = appendStr("0", daystr)
+            }
+            mdTitle = mdTitle.replace(/\[dd]/g, daystr)
+          }
+        }
+        // 初始化
+        githubPagesMethods.initGithubPages({
+          cpath: docPath,
+          defpath: currentDefaultPath,
+          fname: mdTitle,
+        })
+      } catch (e) {
+        const errmsg = appendStr(t("main.opt.failure"), "=>", e)
+        logger.error(errmsg)
+        // ElMessage.error(errmsg)
+      }
+
+      initPublishData.isInitLoading = false
     },
   }
 

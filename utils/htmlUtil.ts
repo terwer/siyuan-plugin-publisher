@@ -33,7 +33,7 @@ export const removeTitleNumber = (str: string): string => {
   let newstr = str
 
   // 移除序号
-  const publisherRegex = /([0-9]*)\./g
+  const publisherRegex = /([0-9]*)\./
   newstr = newstr.replace(publisherRegex, "")
 
   return newstr

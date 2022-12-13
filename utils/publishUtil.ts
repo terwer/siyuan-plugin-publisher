@@ -163,7 +163,7 @@ export const getPublishCfg = (): PublishPreference => {
   // ================
   publishCfg.fixTitle = true
   publishCfg.useGoogleTranslate = true
-  publishCfg.editMode = PageEditMode.EditMode_complex
+  publishCfg.editMode = PageEditMode.EditMode_simple
   publishCfg.contentShowType = SourceContentShowType.YAML
   publishCfg.removeH1 = true
   publishCfg.autoTag = true

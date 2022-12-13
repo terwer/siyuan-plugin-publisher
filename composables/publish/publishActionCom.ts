@@ -31,6 +31,8 @@ import { GithubApi } from "~/utils/platform/github/githubApi"
 import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
 import { ElMessage, ElMessageBox } from "element-plus"
 import { useI18n } from "vue-i18n"
+import { appendStr } from "~/utils/strUtil"
+import { removeTitleNumber } from "~/utils/htmlUtil"
 
 /**
  * 通用的发布操作组件
@@ -50,13 +52,102 @@ export const usePublish = (props, deps?: any) => {
 
   // deps
   const siyuanPageMethods = deps.siyuanPageMethods
+  const yamlMethods = deps.yamlMethods
   const githubPagesMethods = deps.githubPagesMethods
+  const quickMethods = deps.quickMethods
   const initPublishMethods = deps.initPublishMethods
 
   // public methods
   const publishMethods = {
     doPublish: async () => {
       logger.debug("准备发布文章...")
+      publishData.isPublishLoading = true
+      try {
+        const githubCfg = getJSONConf<IGithubCfg>(props.apiType)
+        const api = new GithubApi(githubCfg)
+
+        // 先删除
+        // if (initPublishMethods.getInitPublishData().isPublished) {
+        try {
+          await publishMethods.doCancel(false)
+        } catch (e) {
+          logger.error("强制删除异常，不影响发布=>", e)
+        }
+        // }
+
+        // 校验标题
+        const mdTitle = githubPagesMethods.getGithubPagesData().mdTitle
+        let fmtTitle = removeTitleNumber(mdTitle)
+        fmtTitle = fmtTitle.replace(/\.md/g, "")
+        if (/[\s*|\\.]/g.test(fmtTitle)) {
+          logger.debug("fmtTitle=>", fmtTitle)
+          ElMessage.error("文件名不能包含空格或者特殊字符")
+          publishData.isPublishLoading = false
+          return
+        }
+
+        // 生成属性
+        await quickMethods.doOneclickAttr()
+
+        // 根据选项决定是否发送到Github参考
+        const isOk = githubCfg.apiStatus
+        // api不可用但是开启了发布
+        if (!isOk && githubPagesMethods.getGithubPagesData().githubEnabled) {
+          publishData.isPublishLoading = false
+          ElMessage.error(
+            "检测到api不可用或者配置错误，无法发布到Github，请转到源码模式自行复制文本"
+          )
+          return
+        } else if (
+          isOk &&
+          githubPagesMethods.getGithubPagesData().githubEnabled
+        ) {
+          // api可用并且开启了发布
+          logger.debug("开始真正调用api发布到Github")
+
+          // 发布路径
+          let docPath = githubPagesMethods.getGithubPagesData().publishPath
+          // 生成YAML+MD的发布内容
+          initPublishMethods.convertAttrToYAML(true)
+          const mdFullContent = yamlMethods.getYamlData().mdFullContent
+          logger.debug("即将发布的内容，mdContent=>", { mdFullContent })
+
+          // 发布
+          const res = await api.publishGithubPage(docPath, mdFullContent)
+
+          // 成功与失败都刷新页面
+          if (!res) {
+            publishData.isPublishLoading = false
+
+            // 刷新属性数据
+            await initPublishMethods.initPage()
+            // 发布失败
+            ElMessage.error(t("main.publish.vuepress.failure"))
+            return
+          }
+
+          // 这里是发布成功之后
+          const customAttr = {
+            [githubCfg.posidKey]: docPath,
+          }
+          // 获取最新属性
+          const pageId = await siyuanPageMethods.getPageId()
+          await siyuanApi.setBlockAttrs(pageId, customAttr)
+          logger.debug("VuepressMain发布成功，保存路径,meta=>", customAttr)
+
+          // 刷新属性数据
+          await initPublishMethods.initPage()
+          publishData.isPublishLoading = false
+        }
+        logger.debug("文章发布完成.")
+        ElMessage.success(t("main.opt.status.publish"))
+      } catch (e) {
+        const errmsg = appendStr(t("main.opt.failure"), "=>", e)
+        ElMessage.error(errmsg)
+        logger.error(errmsg)
+      }
+
+      publishData.isPublishLoading = false
     },
     cancelPublish: async () => {
       logger.debug("准备取消文章发布...")
@@ -72,11 +163,14 @@ export const usePublish = (props, deps?: any) => {
           publishData.isCancelLoading = false
           ElMessage.warning(t("main.opt.status.cancel"))
         })
-        .catch(() => {
-          // ElMessage({
-          //   type: 'error',
-          //   message: t("main.opt.failure"),
-          // })
+        .catch((e) => {
+          if (e.toString().indexOf("cancel") <= -1) {
+            ElMessage({
+              type: "error",
+              message: t("main.opt.failure") + "=>" + e,
+            })
+            logger.error(t("main.opt.failure") + "=>" + e)
+          }
           publishData.isCancelLoading = false
         })
     },

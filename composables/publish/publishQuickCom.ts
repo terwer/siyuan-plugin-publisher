@@ -65,13 +65,8 @@ export const useQuick = (props, deps?: any) => {
         .then(async () => {
           quickData.isGenLoading = true
 
-          await slugMethods.makeSlug(true)
-          await descMethods.makeDesc(true)
-          await tagMethods.fetchTag(true)
-
-          // 发布属性
-          await quickMethods.saveAttrToSiyuan(true)
-          logger.debug("发布属性完成")
+          // 一键生成属性
+          await quickMethods.doOneclickAttr()
 
           quickData.isGenLoading = false
           logger.debug("一键生成属性完成.")
@@ -90,6 +85,15 @@ export const useQuick = (props, deps?: any) => {
             logger.error(t("main.opt.failure") + "=>" + e)
           }
         })
+    },
+    doOneclickAttr: async () => {
+      await slugMethods.makeSlug(true)
+      await descMethods.makeDesc(true)
+      await tagMethods.fetchTag(true)
+
+      // 发布属性
+      await quickMethods.saveAttrToSiyuan(true)
+      logger.debug("发布属性完成")
     },
     saveAttrToSiyuan: async (hideTip?: boolean) => {
       try {
