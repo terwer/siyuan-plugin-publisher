@@ -43,13 +43,13 @@
       <platform-setting :is-reload="isReloadServiceTab" />
     </el-tab-pane>
     <el-tab-pane name="post-bind" :label="$t('service.tab.post.bind')">
-      <PostBind :is-reload="isReloadServiceTab" :page-id="props.pageId" />
+      <PostBind :is-reload="isReloadSettingTab" :page-id="props.pageId" />
     </el-tab-pane>
     <el-tab-pane
       name="service-switch"
       :label="$t('service.tab.service.switch')"
     >
-      <service-switch :is-reload="isReloadServiceTab" />
+      <service-switch :is-reload="isReloadServiceSwitchTab" />
     </el-tab-pane>
     <el-tab-pane name="dynamic-platform" :label="$t('dynamic.platform.new')">
       <dynamic-platform />
@@ -75,6 +75,9 @@ const logger = LogFactory.getLogger("components/publish/PublishService.vue")
 const defaultTab = ref("platform-main")
 
 const isReloadServiceTab = ref(false)
+const isReloadSettingTab = ref(false)
+const isReloadPostBindTab = ref(false)
+const isReloadServiceSwitchTab = ref(false)
 
 const props = defineProps({
   isReload: {
@@ -88,8 +91,23 @@ const props = defineProps({
 })
 
 const serviceTabChange = (name) => {
-  logger.debug("serviceTabChange=>", name)
-  isReloadServiceTab.value = !isReloadServiceTab.value
+  const paneName = name.paneName
+  logger.debug("serviceTabChange=>", paneName)
+  if (paneName === "platform-main") {
+    isReloadServiceTab.value = !isReloadServiceTab.value
+  }
+
+  if (paneName === "platform-setting") {
+    isReloadSettingTab.value = !isReloadSettingTab.value
+  }
+
+  if (paneName === "post-bind") {
+    isReloadPostBindTab.value = !isReloadPostBindTab.value
+  }
+
+  if (paneName === "service-switch") {
+    isReloadServiceSwitchTab.value = !isReloadServiceSwitchTab.value
+  }
 }
 </script>
 
