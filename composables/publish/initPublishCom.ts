@@ -410,7 +410,12 @@ export const useInitPublish = (props, deps, otherArgs?) => {
             const docPath = githubPagesMethods.getGithubPagesData().publishPath
             const categories =
               initPublishMethods.convertDocPathToCategories(docPath)
-            url = url.replace(/\[cats]/, categories.join("/"))
+            // 处理分类
+            if (categories.length > 0) {
+              url = url.replace(/\[cats]/, categories.join("/"))
+            } else {
+              url = url.replace(/\/\[cats]/, "")
+            }
           }
           initPublishData.previewUrl = pathJoin(home, url)
         }
