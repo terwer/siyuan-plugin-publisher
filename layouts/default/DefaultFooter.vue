@@ -55,11 +55,21 @@
           {{ $t("setting.conf.clear") }}
         </span>
 
-        <span class="text">.</span>
-        <span class="text s-dark" @click="newWin()">
+        <span v-if="isNewWin" class="text">.</span>
+        <span v-if="isNewWin" class="text s-dark" @click="newWin()">
           {{ $t("blog.newwin.open") }}
         </span>
 
+        <span class="text">.</span>
+        <span class="text s-dark" @click="openGeneralSetting()">
+          {{ $t("service.tab.change.local") }}
+        </span>
+
+        <!--
+        -----------------------------------------------------------------------------
+        -->
+
+        <!-- 思源笔记设置弹窗 -->
         <el-dialog
           v-model="siyuanApiChangeFormVisible"
           :title="$t('blog.change.siyuan.api')"
@@ -127,6 +137,11 @@
             </span>
           </template>
         </el-dialog>
+
+        <!-- 通用设置弹窗 -->
+        <el-dialog v-model="generalSettingFormVisible">
+          <general-setting />
+        </el-dialog>
       </div>
     </div>
   </div>
@@ -153,6 +168,9 @@ import {
 import { SIYUAN_CONSTANTS } from "~/utils/constants/siyuanConstants"
 import { version } from "../../package.json"
 import { isBrowser, reloadPage } from "~/utils/browserUtil"
+import { getPublishCfg } from "~/utils/publishUtil"
+import { parseBoolean } from "~/utils/util"
+import GeneralSetting from "~/components/publish/tab/GeneralSetting.vue"
 
 const logger = LogFactory.getLogger("layouts/default/DefaultFooter")
 
@@ -163,6 +181,7 @@ const toggleDark = useToggle(isDark)
 
 const isInSiyuan = ref(false)
 const v = ref("0.0.3")
+const isNewWin = ref(true)
 
 const formLabelWidth = "140px"
 const siyuanApiChangeFormVisible = ref(false)
@@ -187,8 +206,14 @@ const siyuanApiChangeRules = reactive<FormRules>({
   ],
 })
 
+const generalSettingFormVisible = ref(false)
+
 const goGithub = () => {
   window.open("https://github.com/terwer/src-sy-post-publisher")
+}
+
+const openGeneralSetting = () => {
+  generalSettingFormVisible.value = true
 }
 
 const newWin = () => {
@@ -268,6 +293,9 @@ const initConf = () => {
   isInSiyuan.value = inSiyuan()
 
   v.value = version
+
+  const publishCfg = getPublishCfg()
+  isNewWin.value = parseBoolean(publishCfg.newWin)
 
   const siyuanCfg = getSiyuanCfg()
 

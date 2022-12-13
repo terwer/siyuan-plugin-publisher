@@ -187,5 +187,8 @@ export const pathJoin = (path1: string, path2: string): string => {
  * @param val
  */
 export const parseBoolean = (val: any) => {
+  if (!val) {
+    val = "false"
+  }
   return val.toString().toLowerCase() === "true"
 }

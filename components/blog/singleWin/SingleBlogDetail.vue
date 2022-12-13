@@ -40,7 +40,11 @@
         <el-button size="small" @click="handlePublish"
           >发布到其他平台
         </el-button>
-        <el-button size="small" type="primary" @click="handleNewWinPublish"
+        <el-button
+          v-if="isNewWin"
+          size="small"
+          type="primary"
+          @click="handleNewWinPublish"
           >新窗口发布到其他平台
         </el-button>
       </div>
@@ -57,6 +61,9 @@ import { getByLength } from "~/utils/strUtil"
 import { goToPage } from "~/utils/otherlib/ChromeUtil"
 import PostDetailService from "~/components/detail/PostDetailService.vue"
 import { ArrowLeft } from "@element-plus/icons-vue"
+import { onMounted, ref } from "vue"
+import { getPublishCfg } from "~/utils/publishUtil"
+import { parseBoolean } from "~/utils/util"
 
 const props = defineProps({
   post: {
@@ -67,6 +74,7 @@ const props = defineProps({
 const emits = defineEmits(["on-change", "on-publish-change"])
 
 const shortTitle = getByLength(props.post?.title, 18, false)
+const isNewWin = ref(true)
 
 const onBack = () => {
   emits("on-change")
@@ -78,6 +86,11 @@ const handleNewWinPublish = (e) => {
   e.preventDefault()
   goToPage("/publish/index.html?id=" + props.post?.postid, "/")
 }
+
+onMounted(() => {
+  const publishCfg = getPublishCfg()
+  isNewWin.value = parseBoolean(publishCfg.newWin)
+})
 </script>
 
 <style scoped>

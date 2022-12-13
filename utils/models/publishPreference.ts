@@ -64,4 +64,8 @@ export class PublishPreference {
    * 是否在第一次加载页面时自动生成属性（api验证通过才会执行）
    */
   makeAttrOnFirstLoad: boolean
+  /**
+   * 是否开启新窗口
+   */
+  newWin: boolean
 }

@@ -38,6 +38,12 @@
           @change="formMethods.onH1Change"
         />
       </el-form-item>
+      <el-form-item :label="$t('preference.setting.newWin')">
+        <el-switch
+          v-model="formData.newWin"
+          @change="formMethods.onNewWinChange"
+        />
+      </el-form-item>
     </el-form>
   </div>
 </template>
@@ -66,6 +72,7 @@ const props = defineProps({
 const formData = reactive({
   fixTitle: false,
   removeH1: false,
+  newWin: true,
 })
 
 const formMethods = {
@@ -81,12 +88,19 @@ const formMethods = {
 
     saveConf()
   },
+  onNewWinChange: (val: boolean) => {
+    logger.debug("onNewWinChange=>", val)
+    formData.newWin = val
+
+    saveConf()
+  },
 }
 
 const saveConf = () => {
   const publishCfg = getPublishCfg()
   publishCfg.fixTitle = parseBoolean(formData.fixTitle)
   publishCfg.removeH1 = parseBoolean(formData.removeH1)
+  publishCfg.newWin = parseBoolean(formData.newWin)
 
   setJSONConf<PublishPreference>(
     CONSTANTS.PUBLISH_PREFERENCE_CONFIG_KEY,
@@ -106,6 +120,7 @@ const initConf = () => {
 
   formData.fixTitle = parseBoolean(publishCfg.fixTitle)
   formData.removeH1 = parseBoolean(publishCfg.removeH1)
+  formData.newWin = parseBoolean(publishCfg.newWin)
 }
 
 onMounted(() => {

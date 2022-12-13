@@ -287,4 +287,5 @@ export default {
     "Git platform address is used for md file preview, the default is: https://github.com",
   "preference.setting.fixTitle": "Fix title",
   "preference.setting.removeH1": "Remove h1",
+  "preference.setting.newWin": "New win",
 }

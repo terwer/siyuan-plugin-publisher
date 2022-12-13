@@ -64,7 +64,7 @@
               <p m="t-0 b-2">
                 标签:
                 {{
-                  props.row.mt_keywords == ""
+                  props.row.mt_keywords === ""
                     ? "暂无标签"
                     : props.row.mt_keywords
                 }}
@@ -79,7 +79,7 @@
         <!--
         <el-table-column prop="dateCreated" label="发布时间" width="150"/>
         -->
-        <el-table-column align="right" width="350">
+        <el-table-column align="center" width="350">
           <template #header>
             <div style="text-align: center">操作</div>
           </template>
@@ -88,6 +88,7 @@
               >预览
             </el-button>
             <el-button
+              v-if="isNewWin"
               size="small"
               type="primary"
               @click="handleNewWinView(scope.$index, scope.row)"
@@ -97,6 +98,7 @@
               >发布
             </el-button>
             <el-button
+              v-if="isNewWin"
               size="small"
               type="primary"
               @click="handleNewWinEdit(scope.$index, scope.row)"
@@ -168,6 +170,8 @@ import SingleBlogDetail from "~/components/blog/singleWin/SingleBlogDetail.vue"
 import SinglePublish from "~/components/blog/singleWin/singlePublish.vue"
 import { SIYUAN_CONSTANTS } from "~/utils/constants/siyuanConstants"
 import { getEnv } from "~/utils/envUtil"
+import { getPublishCfg } from "~/utils/publishUtil"
+import { parseBoolean } from "~/utils/util"
 
 const logger = LogFactory.getLogger()
 
@@ -179,6 +183,7 @@ const showPublish = ref(false)
 const postDetail = ref()
 const publishData = ref()
 const isInSiyuan = ref(false)
+const isNewWin = ref(true)
 
 const state = ref("")
 const links = ref([])
@@ -337,6 +342,10 @@ const handleRowClick = (row, column, event) => {
 
 const initPage = async () => {
   isInSiyuan.value = inSiyuan()
+
+  const publishCfg = getPublishCfg()
+  isNewWin.value = parseBoolean(publishCfg.newWin)
+
   await reloadTableData()
   // logUtil.logInfo("Post init page=>", tableData)
 }
