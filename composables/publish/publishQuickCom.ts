@@ -52,7 +52,7 @@ export const useQuick = (props, deps?: any) => {
 
   // public methods
   const quickMethods = {
-    oneclickAttr: async () => {
+    oneclickAttr: async (hideTip?: boolean) => {
       ElMessageBox.confirm(
         t("main.opt.onclick.confirm.tip"),
         t("main.opt.warning"),
@@ -69,9 +69,15 @@ export const useQuick = (props, deps?: any) => {
           await descMethods.makeDesc(true)
           await tagMethods.fetchTag(true)
 
+          // 发布属性
+          await quickMethods.saveAttrToSiyuan(true)
+          logger.debug("发布属性完成")
+
           quickData.isGenLoading = false
           logger.debug("一键生成属性完成.")
-          ElMessage.success(t("main.opt.success"))
+          if (hideTip !== true) {
+            ElMessage.success(t("main.publish.oneclick.attr.finish"))
+          }
         })
         .catch((e) => {
           quickData.isGenLoading = false

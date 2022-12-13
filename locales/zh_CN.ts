@@ -280,7 +280,7 @@ export default {
   "main.read.mode.tip":
     "温馨提示：只读模式下点击可直接复制，编辑模式下需要点击复制按钮复制。YAML转文章属性仅支持title、permalink、date、description、tags",
   "main.opt.onclick.confirm.tip":
-    "此操作默认将重新生成除别名以外的所有属性，如果只想修改个别属性，请在详细模式点击单独功能按钮操作，是否继续？",
+    "此操作默认将重新生成除别名以外的所有属性，如果只想修改个别属性，请在详细模式点击单独的功能按钮进行对应操作，是否继续？",
   "main.cat.list.error": "分类获取失败",
   "main.yaml.no.save":
     "您编辑过YAML，点击确认可同步YAML到属性，取消将丢失YAML修改，是否继续？",
