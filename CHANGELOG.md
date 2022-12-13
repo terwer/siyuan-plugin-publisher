@@ -1,3 +1,54 @@
+# Changelog
+
+## [0.3.0](https://github.com/terwer/src-sy-post-publisher/compare/v0.2.0...v0.3.0) (2022-12-13)
+
+
+### Features
+
+* [#133](https://github.com/terwer/src-sy-post-publisher/issues/133) 支持Github系列-源码模式展示方式切换 ([558950c](https://github.com/terwer/src-sy-post-publisher/commit/558950caab418456a803a22ac74f14159e5f67e3))
+* 组件化重构-Github pages组件 ([31353dd](https://github.com/terwer/src-sy-post-publisher/commit/31353dd56ba446c3a4418419e470ba1485e61308))
+* 组件化重构-YAML转换 ([731e324](https://github.com/terwer/src-sy-post-publisher/commit/731e32496754980ec60e40092503cb47c8bd0f3c))
+* 组件化重构-YAML转文章属性 ([8be4954](https://github.com/terwer/src-sy-post-publisher/commit/8be4954288b15b6e52b42b24f0b1ab916d3821d1))
+* 组件化重构-y优化自定义组件结构 ([5979782](https://github.com/terwer/src-sy-post-publisher/commit/5979782d2c58a97370ef62fe291e93db3204afa6))
+* 组件化重构-y优化预览规则 ([2b811e2](https://github.com/terwer/src-sy-post-publisher/commit/2b811e2092f0bb6cc9bb22c896e5687f3bc43a61))
+* 组件化重构-优化tab刷新 ([d6c01fd](https://github.com/terwer/src-sy-post-publisher/commit/d6c01fdfc54b16e68f16f9769f0bacb865a2b7ab))
+* 组件化重构-优化tab加载 ([c31083e](https://github.com/terwer/src-sy-post-publisher/commit/c31083ea647ee7a1c28ab4dc44bbddf013323d7e))
+* 组件化重构-优化分类预览 ([16a3d83](https://github.com/terwer/src-sy-post-publisher/commit/16a3d83aced7ceb17ed1423d8bf106e7028ac1cc))
+* 组件化重构-偏好设置 ([71f1149](https://github.com/terwer/src-sy-post-publisher/commit/71f11497f3936d9fc3ba809cfc385d42ef2b2011))
+* 组件化重构-完成发布功能 ([2f9dccf](https://github.com/terwer/src-sy-post-publisher/commit/2f9dccf49e4a77b21f6c0cfeb0c6c550e695a729))
+* 组件化重构-快捷操作 ([59f380e](https://github.com/terwer/src-sy-post-publisher/commit/59f380e3383e3eec035c7cc926febd8ccfdf9ed8))
+* 组件化重构-提取标签组件 ([ac61b34](https://github.com/terwer/src-sy-post-publisher/commit/ac61b34bae7461d0b09a61bfc4d9da496746476e))
+* 组件化重构-提取生成摘要组件 ([9d4d7fd](https://github.com/terwer/src-sy-post-publisher/commit/9d4d7fd8321e7b667b49b128135fbce4161b8652))
+* 组件化重构-文章取消发布 ([864a72d](https://github.com/terwer/src-sy-post-publisher/commit/864a72df14f0f510860dc5ca06fba94c68d4af14))
+* 组件化重构-文章预览规则调整 ([8b30665](https://github.com/terwer/src-sy-post-publisher/commit/8b3066596c9fb3280b53d3a6e97832ad9b7d32fb))
+* 组件化重构-新增只读模式查看YAML ([ad9ca14](https://github.com/terwer/src-sy-post-publisher/commit/ad9ca147abce58b18e62034fed97e0f151b41f76))
+* 组件化重构-新增新窗口开关 ([ef9f465](https://github.com/terwer/src-sy-post-publisher/commit/ef9f46536f9ad987c1f2e8455957b9daea8ae5b8))
+* 组件化重构-移除冗余的配置 ([6a4c72c](https://github.com/terwer/src-sy-post-publisher/commit/6a4c72c5e5d9a8ae2befb410b1bbde4ee11fc90d))
+* 组件化重构-简化操作按钮 ([b22ea25](https://github.com/terwer/src-sy-post-publisher/commit/b22ea258ef8081e57c85948057ba74e6821fd40a))
+* 组件化重构-通用设置优化 ([0e64757](https://github.com/terwer/src-sy-post-publisher/commit/0e64757815abd348e20fc6e78309f0cfe62abdd7))
+* 组件化重构-页面初始化组件提取 ([d571e87](https://github.com/terwer/src-sy-post-publisher/commit/d571e87d2f6100d16a8bf9dfc9ceb910f2893801))
+
+
+### Bug Fixes
+
+* 修复版本检测构建失败问题 ([ce0b4f6](https://github.com/terwer/src-sy-post-publisher/commit/ce0b4f6c95d985dd276876a94c9360dff30d1e12))
+* 组件化重构-修复转换未及时更新问题 ([dfbf9de](https://github.com/terwer/src-sy-post-publisher/commit/dfbf9de79e296e53c7075db0c9820c0874a624fc))
+
+
+### Miscellaneous
+
+* **deps-dev:** bump happy-dom from 7.8.1 to 8.1.0 ([9ac1e24](https://github.com/terwer/src-sy-post-publisher/commit/9ac1e24b5c744973a9f579ab7a12bf4e0cf23afe))
+* **deps-dev:** bump prettier from 2.8.0 to 2.8.1 ([82e1667](https://github.com/terwer/src-sy-post-publisher/commit/82e16678d3eb69a9cbde39607659bf8d651c3854))
+* fix imports ([862c67f](https://github.com/terwer/src-sy-post-publisher/commit/862c67ff277467f7455378c07232f7ee20e9b851))
+* 合并历史记录 ([3c94bfc](https://github.com/terwer/src-sy-post-publisher/commit/3c94bfca1089efb5188683d4938f18d2c46e11ff))
+* 思源页面数据封装 ([929d19b](https://github.com/terwer/src-sy-post-publisher/commit/929d19b737c62195e6382e263d42ad253ec198ed))
+* 组件化重构 ([6ab2504](https://github.com/terwer/src-sy-post-publisher/commit/6ab25041794a4005ef31eaa0b83e5db78d728c8d))
+* 组件化重构-FormData转YAML ([940ec77](https://github.com/terwer/src-sy-post-publisher/commit/940ec77b45234fdd29685433102ca29a514b0f99))
+* 组件化重构-抽取别名生成组件 ([b09e7a5](https://github.com/terwer/src-sy-post-publisher/commit/b09e7a5273083cb4b16e1d8e6e75c19ce0e3acb8))
+* 组件化重构-改进源码模式 ([94541df](https://github.com/terwer/src-sy-post-publisher/commit/94541df113d79d7cd8862f4fc0dc2e00c0d87db2))
+* 组件化重构-文章别名 ([69d29f1](https://github.com/terwer/src-sy-post-publisher/commit/69d29f15399eded2234d66bd34d5156912c0ad45))
+* 调整目录结构 ([cd9b0a9](https://github.com/terwer/src-sy-post-publisher/commit/cd9b0a9a84322f6c6a8b1729c853a1551b8cf090))
+
 ## [0.2.0](https://github.com/terwer/src-sy-post-publisher/compare/v0.1.0...v0.2.0) (2022-12-07)
 
 ### Features
