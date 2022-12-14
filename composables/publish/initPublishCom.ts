@@ -395,7 +395,8 @@ export const useInitPublish = (props, deps, otherArgs?) => {
             "/",
             githubCfg.githubRepo,
             "/",
-            githubCfg.defaultBranch
+            githubCfg.defaultBranch,
+            "?label=build"
           )
           // 实际预览链接
           let url = yamlMethods.getYamlData().yamlObj.permalink

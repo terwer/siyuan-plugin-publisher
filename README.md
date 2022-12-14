@@ -4,25 +4,23 @@
 
 将 [思源笔记](https://github.com/siyuan-note/siyuan) 的文章发布到支持的平台的 **思源笔记挂件**
 
-[![](https://img.shields.io/badge/source-code-green)](https://github.com/terwer/src-sy-post-publisher)
 ![version](https://img.shields.io/github/release/terwer/src-sy-post-publisher.svg?style=flat-square)
-<a title="Downloads" target="_blank" href="https://github.com/terwer/src-sy-post-publisher/releases"><img src="https://img.shields.io/github/downloads/terwer/src-sy-post-publisher/total.svg?style=flat-square&color=blueviolet"></a>
-![GitHub last commit](https://img.shields.io/github/last-commit/terwer/src-sy-post-publisher)
-![](https://img.shields.io/badge/license-GPL-blue.svg?style=popout-square)
 [![](https://img.shields.io/badge/online-preview-faad14.svg?style=popout-square)](https://publish.terwer.space/blog/index.html)
+![](https://img.shields.io/badge/license-GPL-blue.svg?style=popout-square)
+
+[![](https://img.shields.io/badge/%E9%A1%B9%E7%9B%AE%E6%BA%90%E7%A0%81-code-brightgreen)](https://github.com/terwer/src-sy-post-publisher)
+[![](https://img.shields.io/badge/%E5%B8%AE%E5%8A%A9%E6%96%87%E6%A1%A3-doc-blue)](https://mp.terwer.space/post/readme-1j4ltp.html)
+[![](https://img.shields.io/badge/%E6%96%B0%E6%89%8B%E5%B0%8F%E7%99%BD%E7%BA%A7%E8%A7%86%E9%A2%91%E6%95%99%E7%A8%8B-video-red)](https://mp.terwer.space/post/configure-entry-video-brpm9.html)
 
 ![](https://raw.githubusercontent.com/terwer/src-sy-post-publisher/main/public/preview.png)
 
-[点击查看项目源码](https://github.com/terwer/src-sy-post-publisher)
+## 开发状态
 
-[点击查看帮助文档](https://mp.terwer.space/post/readme-1j4ltp.html)
-
-[点击查看新手小白级视频教程](https://mp.terwer.space/post/configure-entry-video-brpm9.html)
+[![dev checks](https://img.shields.io/github/checks-status/terwer/src-sy-post-publisher/main?label=main)](https://github.com/terwer/src-sy-post-publisher)
+[![dev checks](https://img.shields.io/github/checks-status/terwer/src-sy-post-publisher/dev?label=dev)](https://github.com/terwer/src-sy-post-publisher/tree/dev)
+![GitHub last commit](https://img.shields.io/github/last-commit/terwer/src-sy-post-publisher)
 
 ## 支持平台
-
-![checks](https://img.shields.io/github/checks-status/terwer/terwer.github.io/main)
-![checks](https://img.shields.io/github/checks-status/terwer/terwer.github.io/gh-pages)
 
 - [x] Hugo
 - [x] Hexo
@@ -128,12 +126,16 @@ https://mp.terwer.space/post/start-to-get-started-zi0eyk.html
 - [x] 发布页面支持预览 <sup>0.1.0+</sup>
 - [ ] 支持自定义接口协议 <sup>1.0.0+</sup>
 - [x] 支持文章标题使用数字编号 <sup>0.0.3+</sup>
-- [x] [多平台支持，并且持续适配中](https://github.com/terwer/src-sy-post-publisher#%E6%94%AF%E6%8C%81%E5%B9%B3%E5%8F%B0) <sup>0.0.1+</sup>
-- [ ] 支持同步到 Github(Github pages、Hugo、Hexo、Jekyll、Vuepress、Vitepress、Nuxt content、Next.js)，0.1.0+ 之后更加通用，支持动态添加管理多个 <sup>0.0.1+</sup> <sup>0.1.0+</sup>
+- [x] [多平台支持，并且持续适配中](https://github.com/terwer/src-sy-post-publisher#%E6%94%AF%E6%8C%81%E5%B9%B3%E5%8F%B0) <sup>
+      0.0.1+</sup>
+- [ ] 支持同步到 Github(Github pages、Hugo、Hexo、Jekyll、Vuepress、Vitepress、Nuxt content、Next.js)，0.1.0+
+      之后更加通用，支持动态添加管理多个 <sup>0.0.1+</sup> <sup>0.1.0+</sup>
 - [ ] 支持自定义图床 <sup>0.1.0+</sup>
 - [ ] 支持多种发布视图，简单模式、详细模式和源码模式 <sup>0.1.0+</sup> <sup>0.0.1+</sup>
 
 ## 最近更新
+
+<a title="Downloads" target="_blank" href="https://github.com/terwer/src-sy-post-publisher/releases"><img src="https://img.shields.io/github/downloads/terwer/src-sy-post-publisher/total.svg?style=flat-square&color=blueviolet"></a>
 
 [开发进度](https://github.com/users/terwer/projects/1/views/1)
 
