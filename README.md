@@ -24,7 +24,7 @@
 ## 支持平台
 
 - [x] [Hugo](https://gohugo.io/) <sup>推荐</sup>
-- [x] [Hexo](<[https://hexo.io/zh-cn/](https://hexo.io/zh-cn/)>)
+- [x] [Hexo](https://hexo.io/zh-cn/)
 - [x] [Jekyll](https://github.com/lorepirri/cayman-blog)（Github pages 默认内置支持的平台）
 - [x] [Vuepress](https://github.com/terwer/terwer.github.io)
 - [x] [Vitepress](https://vitepress.vuejs.org/guide/getting-started)
