@@ -31,9 +31,12 @@ import { PostForm } from "~/utils/models/postForm"
 import { IGithubCfg } from "~/utils/platform/github/githubCfg"
 import { YamlFormatObj } from "~/utils/models/yamlFormatObj"
 import { LogFactory } from "~/utils/logUtil"
+import { obj2Yaml } from "~/utils/yamlUtil"
+import { formatIsoToZhDate } from "~/utils/dateUtil"
 
 /**
  * Hugo平台的YAMl解析器
+ * @see https://gohugo.io/content-management/front-matter/
  */
 export class HugoYamlConverterAdaptor
   extends YamlConvertAdaptor
@@ -46,6 +49,52 @@ export class HugoYamlConverterAdaptor
   convertToYaml(postForm: PostForm, githubCfg?: IGithubCfg): YamlFormatObj {
     let yamlFormatObj: YamlFormatObj = new YamlFormatObj()
     this.logger.debug("您正在使用 Hugo Yaml Converter", postForm)
+
+    // title
+    yamlFormatObj.yamlObj.title = postForm.formData.title
+
+    // slug
+    yamlFormatObj.yamlObj.slug = postForm.formData.customSlug
+
+    // url
+    yamlFormatObj.yamlObj.url = "post/" + postForm.formData.customSlug + ".html"
+
+    // date
+    yamlFormatObj.yamlObj.date = postForm.formData.created
+
+    // tags
+    yamlFormatObj.yamlObj.tags = postForm.formData.tag.dynamicTags
+
+    // categories
+    yamlFormatObj.yamlObj.categories = postForm.formData.categories
+
+    // lastmod
+    yamlFormatObj.yamlObj.lastmod = formatIsoToZhDate(
+      new Date().toISOString(),
+      true
+    )
+
+    // toc
+    yamlFormatObj.yamlObj.toc = true
+
+    // seo
+    yamlFormatObj.yamlObj.keywords = postForm.formData.tag.dynamicTags.join(",")
+    yamlFormatObj.yamlObj.description = postForm.formData.desc
+
+    // isCJKLanguage
+    yamlFormatObj.yamlObj.isCJKLanguage = true
+
+    // formatter
+    let yaml = obj2Yaml(yamlFormatObj.yamlObj)
+    // 修复yaml的ISO日期格式（js-yaml转换的才需要）
+    yaml = formatIsoToZhDate(yaml, true)
+    // this.logger.debug("yaml=>", yaml)
+
+    yamlFormatObj.formatter = yaml
+    yamlFormatObj.mdContent = postForm.formData.mdContent
+    yamlFormatObj.mdFullContent =
+      yamlFormatObj.formatter + "\n\n" + yamlFormatObj.mdContent
+    yamlFormatObj.htmlContent = postForm.formData.htmlContent
 
     return yamlFormatObj
   }

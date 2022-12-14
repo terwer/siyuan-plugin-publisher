@@ -54,7 +54,7 @@
 
 ## 浏览器插件快速上手
 
-https://mp.terwer.space/post/start-to-get-started-zi0eyk.html
+https://terwer.space/post/start-to-get-started-zi0eyk.html
 
 ## 愿景
 
