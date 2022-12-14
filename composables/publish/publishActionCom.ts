@@ -67,13 +67,13 @@ export const usePublish = (props, deps?: any) => {
         const api = new GithubApi(githubCfg)
 
         // 先删除
-        // if (initPublishMethods.getInitPublishData().isPublished) {
-        // try {
-        //   await publishMethods.doCancel(false)
-        // } catch (e) {
-        //   logger.error("强制删除异常，不影响发布=>", e)
-        // }
-        // }
+        if (initPublishMethods.getInitPublishData().isPublished) {
+          try {
+            await publishMethods.doCancel(false)
+          } catch (e) {
+            logger.error("强制删除异常，不影响发布=>", e)
+          }
+        }
 
         // 校验标题
         const mdTitle = githubPagesMethods.getGithubPagesData().mdTitle
