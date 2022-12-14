@@ -317,53 +317,7 @@ export const useInitPublish = (props, deps, otherArgs?) => {
           docPath = githubCfg.defaultPath ?? ""
         }
         const currentDefaultPath = githubCfg.defaultPath ?? "尚未配置"
-        const slugData = slugMethods.getSlugData()
-        // 文件名规则
-        const mdFilenameRule = githubCfg.mdFilenameRule
-        let mdTitle
-        // 如果没有生成，就发布过程中动态生成
-        const slugPlace = "[dynamic-generated-on-publish]"
-        if (isEmptyString(mdFilenameRule)) {
-          mdTitle = siyuanData.page.content ?? slugData.customSlug ?? slugPlace
-        } else {
-          mdTitle = mdFilenameRule
-          if (mdFilenameRule.indexOf("filename") > -1) {
-            mdTitle = mdTitle.replace(/\[filename]/g, siyuanData.page.content)
-          }
-          if (mdFilenameRule.indexOf("slug") > -1) {
-            mdTitle = mdTitle.replace(
-              /\[slug]/g,
-              slugData.customSlug ?? slugPlace
-            )
-          }
-          let date = new Date()
-          if (mdFilenameRule.indexOf("yyyy") > -1) {
-            const year = date.getFullYear()
-            mdTitle = mdTitle.replace(/\[yyyy]/g, year.toString())
-          }
-          if (
-            mdFilenameRule.indexOf("MM") > -1 ||
-            mdFilenameRule.indexOf("mm") > -1
-          ) {
-            let monthstr
-            let month = date.getMonth() + 1
-            monthstr = month.toString()
-            if (month < 10) {
-              monthstr = appendStr("0", monthstr)
-            }
-            mdTitle = mdTitle.replace(/\[MM]/g, monthstr)
-            mdTitle = mdTitle.replace(/\[mm]/g, monthstr)
-          }
-          if (mdFilenameRule.indexOf("dd") > -1) {
-            let daystr
-            let day = date.getDate()
-            daystr = day.toString()
-            if (day < 10) {
-              daystr = appendStr("0", daystr)
-            }
-            mdTitle = mdTitle.replace(/\[dd]/g, daystr)
-          }
-        }
+        const mdTitle = githubPagesMethods.getMdFilename()
         // 初始化
         githubPagesMethods.initGithubPages({
           cpath: docPath,
@@ -376,9 +330,6 @@ export const useInitPublish = (props, deps, otherArgs?) => {
 
         // 预览链接
         if (initPublishData.isPublished) {
-          githubPagesData.useDefaultPath = false
-          docPath = githubPagesMethods.getDocPath()
-
           // 预览链接
           const baseUrl = githubCfg.baseUrl ?? "https://terwer.space/"
           const home = githubCfg.home ?? "https://terwer.space/"

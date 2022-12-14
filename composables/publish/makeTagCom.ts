@@ -140,10 +140,8 @@ export const useTag = (props) => {
      */
     initTag: (siyuanData: SiyuanDataObj) => {
       const publishCfg = getPublishCfg()
-      if (publishCfg.autoTag) {
-        tagData.tagSwitch = true
-      }
 
+      // 初始化标签
       tagData.tag.dynamicTags = []
       const tagstr = siyuanData.meta.tags || ""
       const tgarr = tagstr.split(",")
@@ -152,6 +150,11 @@ export const useTag = (props) => {
         if (tg !== "") {
           tagData.tag.dynamicTags.push(tgarr[i])
         }
+      }
+
+      if (publishCfg.autoTag && tagData.tag.dynamicTags.length === 0) {
+        tagData.tagSwitch = true
+        alert(tagData.tag.dynamicTags.length)
       }
     },
 

@@ -651,6 +651,7 @@ const { publishTimeData, publishTimeMethods } = usePublishTime()
 const { tagData, tagMethods } = useTag(props)
 const { githubPagesData, githubPagesMethods } = useGithubPages(props, {
   siyuanPageMethods,
+  slugMethods,
 })
 const { yamlData, yamlMethods } = useYaml()
 const { quickData, quickMethods } = useQuick(props, {

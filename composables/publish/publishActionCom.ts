@@ -33,7 +33,6 @@ import { ElMessage, ElMessageBox } from "element-plus"
 import { useI18n } from "vue-i18n"
 import { appendStr } from "~/utils/strUtil"
 import { removeTitleNumber } from "~/utils/htmlUtil"
-import { isEmptyString } from "~/utils/util"
 
 /**
  * 通用的发布操作组件
@@ -69,11 +68,11 @@ export const usePublish = (props, deps?: any) => {
 
         // 先删除
         // if (initPublishMethods.getInitPublishData().isPublished) {
-        try {
-          await publishMethods.doCancel(false)
-        } catch (e) {
-          logger.error("强制删除异常，不影响发布=>", e)
-        }
+        // try {
+        //   await publishMethods.doCancel(false)
+        // } catch (e) {
+        //   logger.error("强制删除异常，不影响发布=>", e)
+        // }
         // }
 
         // 校验标题
@@ -97,9 +96,6 @@ export const usePublish = (props, deps?: any) => {
             // 生成过了，如果有修改，直接保存即可
             await quickMethods.saveAttrToSiyuan(true)
           }
-
-          // 这里初始化一下页面，防止某些属性没有的情况
-          await initPublishMethods.initPage(true)
         } else {
           // 更新的时候，自动保存属性到思源
           await quickMethods.saveAttrToSiyuan(true)
@@ -122,13 +118,24 @@ export const usePublish = (props, deps?: any) => {
           logger.debug("开始真正调用api发布到Github")
 
           // 发布路径
-          let docPath = githubPagesMethods.getGithubPagesData().publishPath
+          let currentPath = githubPagesMethods.getGithubPagesData().customPath
+          const currentDefaultPath = githubCfg.defaultPath ?? "尚未配置"
+          const mdFilename = githubPagesMethods.getGithubPagesData().mdTitle
+          githubPagesMethods.initGithubPages({
+            cpath: currentPath,
+            defpath: currentDefaultPath,
+            fname: mdFilename,
+          })
+
           // 生成YAML+MD的发布内容
           initPublishMethods.convertAttrToYAML(true)
+
           const mdFullContent = yamlMethods.getYamlData().mdFullContent
           logger.debug("即将发布的内容，mdContent=>", { mdFullContent })
 
           // 发布
+          // initGithubPages之后发布路径就是最新完整的
+          const docPath = githubPagesMethods.getGithubPagesData().publishPath
           const res = await api.publishGithubPage(docPath, mdFullContent)
 
           // 成功与失败都刷新页面
@@ -136,7 +143,7 @@ export const usePublish = (props, deps?: any) => {
             publishData.isPublishLoading = false
 
             // 刷新属性数据
-            await initPublishMethods.initPage()
+            // await initPublishMethods.initPage()
             // 发布失败
             ElMessage.error(t("main.publish.vuepress.failure"))
             return

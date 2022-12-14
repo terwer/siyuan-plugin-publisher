@@ -413,11 +413,6 @@ const initPage = async () => {
   // 默认开启hash
   slugHashEnabled.value = true
 
-  // 自动标签
-  if (publishCfg.autoTag) {
-    tagSwitch.value = true
-  }
-
   // 思源笔记数据
   siyuanData.pageId = pageId
   siyuanData.meta = await siyuanApi.getBlockAttrs(pageId)
@@ -450,6 +445,11 @@ const initPage = async () => {
     if (tg !== "") {
       formData.tag.dynamicTags.push(tgarr[i])
     }
+  }
+
+  // 自动标签
+  if (publishCfg.autoTag && formData.tag.dynamicTags.length === 0) {
+    tagSwitch.value = true
   }
 
   // 发布状态
