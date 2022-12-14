@@ -64,6 +64,7 @@ export const useInitPublish = (props, deps, otherArgs?) => {
     isPublished: false,
     previewMdUrl: "",
     previewUrl: "",
+    mdStatusUrl: "",
   })
 
   // deps
@@ -372,7 +373,7 @@ export const useInitPublish = (props, deps, otherArgs?) => {
           // 预览链接
           const baseUrl = githubCfg.baseUrl ?? "https://terwer.space/"
           const home = githubCfg.home ?? "https://terwer.space/"
-
+          // MD预览链接
           let mdUrl
           mdUrl = pathJoin(githubCfg.githubUser, "/" + githubCfg.githubRepo)
           mdUrl = pathJoin(mdUrl, "/blob/")
@@ -387,7 +388,16 @@ export const useInitPublish = (props, deps, otherArgs?) => {
           }
           mdUrl = pathJoin(baseUrl, mdUrl)
           initPublishData.previewMdUrl = mdUrl
-
+          // 构建状态
+          initPublishData.mdStatusUrl = appendStr(
+            "https://img.shields.io/github/checks-status/",
+            githubCfg.githubUser,
+            "/",
+            githubCfg.githubRepo,
+            "/",
+            githubCfg.defaultBranch
+          )
+          // 实际预览链接
           let url = yamlMethods.getYamlData().yamlObj.permalink
           if (!isEmptyString(githubCfg.previewUrl)) {
             // [postid]

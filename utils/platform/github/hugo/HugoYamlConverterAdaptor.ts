@@ -23,21 +23,37 @@
  * questions.
  */
 
-import { GithubCfg } from "~/utils/platform/github/githubCfg"
-import { POSTID_KEY_CONSTANTS } from "~/utils/constants/postidKeyConstants"
-import { SubPlatformType } from "~/utils/platform/dynamicConfig"
+import {
+  IYamlConvertAdaptor,
+  YamlConvertAdaptor,
+} from "~/utils/platform/yamlConvertAdaptor"
+import { PostForm } from "~/utils/models/postForm"
+import { IGithubCfg } from "~/utils/platform/github/githubCfg"
+import { YamlFormatObj } from "~/utils/models/yamlFormatObj"
+import { LogFactory } from "~/utils/logUtil"
 
 /**
- * Hugo配置
+ * Hugo平台的YAMl解析器
  */
-export class HugoCfg extends GithubCfg {
-  constructor() {
-    super("", SubPlatformType.Github_Hugo, "", "", "")
+export class HugoYamlConverterAdaptor
+  extends YamlConvertAdaptor
+  implements IYamlConvertAdaptor
+{
+  private readonly logger = LogFactory.getLogger(
+    "utils/platform/github/hugo/HugoYamlConverterAdaptor.ts"
+  )
 
-    this.defaultPath = "content/post"
-    this.posidKey = POSTID_KEY_CONSTANTS.HUGO_POSTID_KEY
-    this.previewMdUrl = "/[user]/[repo]/blob/[branch]/[docpath]"
-    this.previewUrl = "/post/[postid].html"
-    this.mdFilenameRule = "[slug].md"
+  convertToYaml(postForm: PostForm, githubCfg?: IGithubCfg): YamlFormatObj {
+    let yamlFormatObj: YamlFormatObj = new YamlFormatObj()
+    this.logger.debug("您正在使用 Hugo Yaml Converter", postForm)
+
+    return yamlFormatObj
+  }
+
+  convertToAttr(
+    yamlFormatObj: YamlFormatObj,
+    githubCfg?: IGithubCfg
+  ): PostForm {
+    return super.convertToAttr(yamlFormatObj, githubCfg)
   }
 }

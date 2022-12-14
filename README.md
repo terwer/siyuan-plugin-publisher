@@ -21,6 +21,9 @@
 
 ## 支持平台
 
+![checks](https://img.shields.io/github/checks-status/terwer/terwer.github.io/main)
+![checks](https://img.shields.io/github/checks-status/terwer/terwer.github.io/gh-pages)
+
 - [x] Hugo
 - [x] Hexo
 - [x] Jekyll（Github pages 默认内置支持的平台）
