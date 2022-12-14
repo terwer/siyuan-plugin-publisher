@@ -28,53 +28,39 @@ import {
   YamlConvertAdaptor,
 } from "~/utils/platform/yamlConvertAdaptor"
 import { PostForm } from "~/utils/models/postForm"
+import { IGithubCfg } from "~/utils/platform/github/githubCfg"
 import { YamlFormatObj } from "~/utils/models/yamlFormatObj"
 import { LogFactory } from "~/utils/logUtil"
-import { covertStringToDate, formatIsoToZhDate } from "~/utils/dateUtil"
 import { obj2Yaml } from "~/utils/yamlUtil"
-import { IGithubCfg } from "~/utils/platform/github/githubCfg"
-import { isEmptyString, pathJoin } from "~/utils/util"
+import { formatIsoToZhDate } from "~/utils/dateUtil"
 
-export class VuepressYamlConvertAdaptor
+/**
+ * Hugo平台的YAMl解析器
+ * @see https://gohugo.io/content-management/front-matter/
+ */
+export class HugoYamlConverterAdaptor
   extends YamlConvertAdaptor
   implements IYamlConvertAdaptor
 {
   private readonly logger = LogFactory.getLogger(
-    "utils/platform/github/vuepress/VuepressYamlConvertAdaptor.ts"
+    "utils/platform/github/hugo/HugoYamlConverterAdaptor.ts"
   )
 
   convertToYaml(postForm: PostForm, githubCfg?: IGithubCfg): YamlFormatObj {
     let yamlFormatObj: YamlFormatObj = new YamlFormatObj()
-    this.logger.debug("您正在使用 Vuepress Yaml Converter", postForm)
+    this.logger.debug("您正在使用 Hugo Yaml Converter", postForm)
 
     // title
     yamlFormatObj.yamlObj.title = postForm.formData.title
 
-    // permalink
-    let link = "/post/" + postForm.formData.customSlug + ".html"
-    if (githubCfg && !isEmptyString(githubCfg.previewUrl)) {
-      link = githubCfg.previewUrl.replace(
-        "[postid]",
-        postForm.formData.customSlug
-      )
-    }
-    this.logger.debug("link=>", link)
-    yamlFormatObj.yamlObj.permalink = link
+    // slug
+    yamlFormatObj.yamlObj.slug = postForm.formData.customSlug
+
+    // url
+    yamlFormatObj.yamlObj.url = "post/" + postForm.formData.customSlug + ".html"
 
     // date
-    yamlFormatObj.yamlObj.date = covertStringToDate(postForm.formData.created)
-
-    // meta
-    yamlFormatObj.yamlObj.meta = [
-      {
-        name: "keywords",
-        content: postForm.formData.tag.dynamicTags.join(" "),
-      },
-      {
-        name: "description",
-        content: postForm.formData.desc,
-      },
-    ]
+    yamlFormatObj.yamlObj.date = postForm.formData.created
 
     // tags
     yamlFormatObj.yamlObj.tags = postForm.formData.tag.dynamicTags
@@ -82,15 +68,21 @@ export class VuepressYamlConvertAdaptor
     // categories
     yamlFormatObj.yamlObj.categories = postForm.formData.categories
 
-    // author
-    let githubUrl = "https://github.com/terwer"
-    if (githubCfg.baseUrl) {
-      githubUrl = pathJoin(githubCfg.baseUrl, "/" + githubCfg.githubUser)
-    }
-    yamlFormatObj.yamlObj.author = {
-      name: githubCfg.author ?? "terwer",
-      link: githubUrl,
-    }
+    // lastmod
+    yamlFormatObj.yamlObj.lastmod = formatIsoToZhDate(
+      new Date().toISOString(),
+      true
+    )
+
+    // toc
+    yamlFormatObj.yamlObj.toc = true
+
+    // seo
+    yamlFormatObj.yamlObj.keywords = postForm.formData.tag.dynamicTags.join(",")
+    yamlFormatObj.yamlObj.description = postForm.formData.desc
+
+    // isCJKLanguage
+    yamlFormatObj.yamlObj.isCJKLanguage = true
 
     // formatter
     let yaml = obj2Yaml(yamlFormatObj.yamlObj)
@@ -111,37 +103,6 @@ export class VuepressYamlConvertAdaptor
     yamlFormatObj: YamlFormatObj,
     githubCfg?: IGithubCfg
   ): PostForm {
-    const yamlObj = yamlFormatObj.yamlObj
-
-    const postForm = new PostForm()
-    postForm.formData.title = yamlObj.title
-    postForm.formData.customSlug = yamlObj.permalink
-      .replace("/pages/", "")
-      .replace("/post/", "")
-      .replace(".html", "")
-      .replace("/", "")
-    postForm.formData.created = formatIsoToZhDate(
-      yamlObj.date.toISOString(),
-      false
-    )
-
-    const yamlMeta = yamlObj.meta
-    for (let i = 0; i < yamlMeta.length; i++) {
-      const m = yamlMeta[i]
-      if (m.name === "description") {
-        postForm.formData.desc = m.content
-        break
-      }
-    }
-
-    for (let j = 0; j < yamlObj.tags.length; j++) {
-      const tag = yamlObj.tags[j]
-      if (!postForm.formData.tag.dynamicTags.includes(tag) && tag !== "") {
-        postForm.formData.tag.dynamicTags.push(tag)
-      }
-    }
-
-    postForm.formData.categories = yamlObj.categories
-    return postForm
+    return super.convertToAttr(yamlFormatObj, githubCfg)
   }
 }

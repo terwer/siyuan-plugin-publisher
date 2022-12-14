@@ -28,6 +28,17 @@ import { getJSONConf, setJSONConf } from "~/utils/configUtil"
 import { isEmptyString } from "~/utils/util"
 import { newID } from "~/utils/idUtil"
 import { appendStr, upperFirst } from "~/utils/strUtil"
+import { YamlConvertAdaptor } from "~/utils/platform/yamlConvertAdaptor"
+import { LogFactory } from "~/utils/logUtil"
+import { VuepressYamlConvertAdaptor } from "~/utils/platform/github/vuepress/VuepressYamlConvertAdaptor"
+import { JekyllYamlConverterAdaptor } from "~/utils/platform/github/jekyll/JekyllYamlConverterAdaptor"
+import { HugoYamlConverterAdaptor } from "~/utils/platform/github/hugo/HugoYamlConverterAdaptor"
+import { HexoYamlConverterAdaptor } from "~/utils/platform/github/hexo/hexoYamlConverterAdaptor"
+import { VitepressYamlConverterAdaptor } from "~/utils/platform/github/other/VitepressYamlConverterAdaptor"
+import { NuxtYamlConverterAdaptor } from "~/utils/platform/github/other/NuxtYamlConverterAdaptor"
+import { NextYamlConvertAdaptor } from "~/utils/platform/github/other/NextYamlConvertAdaptor"
+
+const logger = LogFactory.getLogger("utils/platform/dynamicConfig.ts")
 
 export class DynamicConfig {
   /**
@@ -55,6 +66,10 @@ export class DynamicConfig {
    * 平台名称
    */
   platformName: string
+  /**
+   * YAML转换器
+   */
+  yamlConverter?: YamlConvertAdaptor
 
   constructor(
     platformType: PlatformType,
@@ -312,4 +327,44 @@ export function getSwitchItem(selectedText: string): SwitchItem {
  */
 export function getDynPostidKey(platformKey: string): string {
   return "custom-" + platformKey + "-post-id"
+}
+
+// ======================
+// 动态平台Object对象初始化
+// ======================
+/**
+ * 根据平台key获取YAML转换器
+ * @param platformKey
+ */
+export const getDynYamlConverterAdaptor = (
+  platformKey: string
+): YamlConvertAdaptor => {
+  logger.error(platformKey)
+  let yamlConverter = new YamlConvertAdaptor()
+  if (platformKey.includes("-")) {
+    const typeArr = platformKey.split("-")
+    if (typeArr.length > 0) {
+      const ptype = typeArr[0].toLowerCase()
+
+      if (ptype.includes(SubPlatformType.Github_Vuepress.toLowerCase())) {
+        yamlConverter = new VuepressYamlConvertAdaptor()
+      } else if (ptype.includes(SubPlatformType.Github_Hugo.toLowerCase())) {
+        yamlConverter = new HugoYamlConverterAdaptor()
+      } else if (ptype.includes(SubPlatformType.Github_Hexo.toLowerCase())) {
+        yamlConverter = new HexoYamlConverterAdaptor()
+      } else if (ptype.includes(SubPlatformType.Github_Jekyll.toLowerCase())) {
+        yamlConverter = new JekyllYamlConverterAdaptor()
+      } else if (
+        ptype.includes(SubPlatformType.Github_Vitepress.toLowerCase())
+      ) {
+        yamlConverter = new VitepressYamlConverterAdaptor()
+      } else if (ptype.includes(SubPlatformType.Github_Nuxt.toLowerCase())) {
+        yamlConverter = new NuxtYamlConverterAdaptor()
+      } else if (ptype.includes(SubPlatformType.Github_Next.toLowerCase())) {
+        yamlConverter = new NextYamlConvertAdaptor()
+      }
+    }
+  }
+
+  return yamlConverter
 }

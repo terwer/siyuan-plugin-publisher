@@ -29,14 +29,18 @@
     :is-main-reload="props.isMainReload"
     :api-type="apiType"
     :page-id="props.pageId"
+    :yaml-converter="yamlConverter"
   />
 </template>
 <script lang="ts" setup>
 import GithubMain from "~/components/publish/tab/main/GithubMain.vue"
 import { API_TYPE_CONSTANTS } from "~/utils/constants/apiTypeConstants"
 import { ref } from "vue"
+import { HugoYamlConverterAdaptor } from "~/utils/platform/github/hugo/HugoYamlConverterAdaptor"
 
 const apiType = ref(API_TYPE_CONSTANTS.API_TYPE_HUGO)
+const hugoYamlConverterAdaptor = new HugoYamlConverterAdaptor()
+const yamlConverter = ref(hugoYamlConverterAdaptor)
 
 const props = defineProps({
   isReload: {

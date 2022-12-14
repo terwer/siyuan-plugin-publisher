@@ -67,13 +67,13 @@ export const usePublish = (props, deps?: any) => {
         const api = new GithubApi(githubCfg)
 
         // 先删除
-        // if (initPublishMethods.getInitPublishData().isPublished) {
-        try {
-          await publishMethods.doCancel(false)
-        } catch (e) {
-          logger.error("强制删除异常，不影响发布=>", e)
+        if (initPublishMethods.getInitPublishData().isPublished) {
+          try {
+            await publishMethods.doCancel(false)
+          } catch (e) {
+            logger.error("强制删除异常，不影响发布=>", e)
+          }
         }
-        // }
 
         // 校验标题
         const mdTitle = githubPagesMethods.getGithubPagesData().mdTitle
@@ -86,8 +86,20 @@ export const usePublish = (props, deps?: any) => {
           return
         }
 
-        // 生成属性
-        await quickMethods.doOneclickAttr()
+        // 未发布过生成属性，更新的时候不重复生成
+        if (!initPublishMethods.getInitPublishData().isPublished) {
+          // 未发布阶段，没有生成过
+          if (!quickMethods.getQuickData().onclickFlag) {
+            // 这里面会自动保存
+            await quickMethods.doOneclickAttr()
+          } else {
+            // 生成过了，如果有修改，直接保存即可
+            await quickMethods.saveAttrToSiyuan(true)
+          }
+        } else {
+          // 更新的时候，自动保存属性到思源
+          await quickMethods.saveAttrToSiyuan(true)
+        }
 
         // 根据选项决定是否发送到Github参考
         const isOk = githubCfg.apiStatus
@@ -106,13 +118,24 @@ export const usePublish = (props, deps?: any) => {
           logger.debug("开始真正调用api发布到Github")
 
           // 发布路径
-          let docPath = githubPagesMethods.getGithubPagesData().publishPath
+          let currentPath = githubPagesMethods.getGithubPagesData().customPath
+          const currentDefaultPath = githubCfg.defaultPath ?? "尚未配置"
+          const mdFilename = githubPagesMethods.getGithubPagesData().mdTitle
+          githubPagesMethods.initGithubPages({
+            cpath: currentPath,
+            defpath: currentDefaultPath,
+            fname: mdFilename,
+          })
+
           // 生成YAML+MD的发布内容
           initPublishMethods.convertAttrToYAML(true)
+
           const mdFullContent = yamlMethods.getYamlData().mdFullContent
           logger.debug("即将发布的内容，mdContent=>", { mdFullContent })
 
           // 发布
+          // initGithubPages之后发布路径就是最新完整的
+          const docPath = githubPagesMethods.getGithubPagesData().publishPath
           const res = await api.publishGithubPage(docPath, mdFullContent)
 
           // 成功与失败都刷新页面
@@ -120,7 +143,7 @@ export const usePublish = (props, deps?: any) => {
             publishData.isPublishLoading = false
 
             // 刷新属性数据
-            await initPublishMethods.initPage()
+            // await initPublishMethods.initPage()
             // 发布失败
             ElMessage.error(t("main.publish.vuepress.failure"))
             return
@@ -140,7 +163,11 @@ export const usePublish = (props, deps?: any) => {
           publishData.isPublishLoading = false
         }
         logger.debug("文章发布完成.")
-        ElMessage.success(t("main.opt.status.publish"))
+        if (initPublishMethods.getInitPublishData().isPublished) {
+          ElMessage.success(t("main.opt.status.updated"))
+        } else {
+          ElMessage.success(t("main.opt.status.publish"))
+        }
       } catch (e) {
         const errmsg = appendStr(t("main.opt.failure"), "=>", e)
         ElMessage.error(errmsg)

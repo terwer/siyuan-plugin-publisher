@@ -23,32 +23,58 @@
  * questions.
  */
 
+import {
+  IYamlConvertAdaptor,
+  YamlConvertAdaptor,
+} from "~/utils/platform/yamlConvertAdaptor"
 import { PostForm } from "~/utils/models/postForm"
 import { IGithubCfg } from "~/utils/platform/github/githubCfg"
 import { YamlFormatObj } from "~/utils/models/yamlFormatObj"
-
-export interface IYamlConvertAdaptor {
-  convertToYaml(postForm: PostForm, githubCfg?: IGithubCfg): YamlFormatObj
-
-  convertToAttr(yamlObj: YamlFormatObj, githubCfg?: IGithubCfg): PostForm
-}
+import { obj2Yaml } from "~/utils/yamlUtil"
+import { LogFactory } from "~/utils/logUtil"
+import { covertStringToDate } from "~/utils/dateUtil"
 
 /**
- * YAML转换适配器
+ * Next的YAML解析器
  */
-export class YamlConvertAdaptor implements IYamlConvertAdaptor {
+export class NextYamlConvertAdaptor
+  extends YamlConvertAdaptor
+  implements IYamlConvertAdaptor
+{
+  private readonly logger = LogFactory.getLogger(
+    "utils/platform/github/other/NextYamlConvertAdaptor.ts"
+  )
+
   convertToYaml(postForm: PostForm, githubCfg?: IGithubCfg): YamlFormatObj {
-    throw new Error(
-      "YamlConvertAdaptor.convertToYaml: 该功能未实现，请在子类重写该方法"
-    )
+    let yamlFormatObj: YamlFormatObj = new YamlFormatObj()
+    this.logger.debug("您正在使用 Next Yaml Converter", postForm)
+
+    // title
+    yamlFormatObj.yamlObj.title = postForm.formData.title
+
+    // date
+    yamlFormatObj.yamlObj.date = covertStringToDate(postForm.formData.created)
+
+    // description
+    yamlFormatObj.yamlObj.description = postForm.formData.desc
+
+    // tag
+    yamlFormatObj.yamlObj.tag = postForm.formData.tag.dynamicTags
+
+    // formatter
+    yamlFormatObj.formatter = obj2Yaml(yamlFormatObj.yamlObj)
+    yamlFormatObj.mdContent = postForm.formData.mdContent
+    yamlFormatObj.mdFullContent =
+      yamlFormatObj.formatter + "\n\n" + yamlFormatObj.mdContent
+    yamlFormatObj.htmlContent = postForm.formData.htmlContent
+
+    return yamlFormatObj
   }
 
   convertToAttr(
     yamlFormatObj: YamlFormatObj,
     githubCfg?: IGithubCfg
   ): PostForm {
-    throw new Error(
-      "YamlConvertAdaptor.convertToAttr: 该功能未实现，请在子类重写该方法"
-    )
+    return super.convertToAttr(yamlFormatObj, githubCfg)
   }
 }

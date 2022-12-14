@@ -447,6 +447,11 @@ const initPage = async () => {
     }
   }
 
+  // 自动标签
+  if (publishCfg.autoTag && formData.tag.dynamicTags.length === 0) {
+    tagSwitch.value = true
+  }
+
   // 发布状态
   isPublished.value = getPublishStatus(props.apiType, siyuanData.meta)
 

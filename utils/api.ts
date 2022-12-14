@@ -189,7 +189,7 @@ export class API implements IApi {
     if (type.includes("-")) {
       const typeArr = type.split("-")
       if (typeArr.length > 0) {
-        const ptype = typeArr[0]
+        const ptype = typeArr[0].toLowerCase()
         if (ptype.includes(PlatformType.Github.toLowerCase())) {
           // Github
           this.apiAdaptor = new GithubApiAdaptor(type)

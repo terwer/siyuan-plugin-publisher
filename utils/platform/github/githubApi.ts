@@ -32,6 +32,7 @@ import { isEmptyString } from "~/utils/util"
 
 /**
  * Github API
+ * @see https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28#create-or-update-file-contents
  */
 export class GithubApi {
   protected logger: Logger
@@ -86,7 +87,9 @@ export class GithubApi {
       "/" +
       this.githubCfg.githubRepo +
       "/contents/" +
-      docPath
+      docPath +
+      "?ref=" +
+      this.githubCfg.defaultBranch
     this.logger.debug("getPage route=>", route)
     const res = await this.octokit.request(route, {
       owner: this.githubCfg.githubUser,
@@ -134,6 +137,7 @@ export class GithubApi {
         email: this.githubCfg.email,
       },
       content: base64,
+      branch: this.githubCfg.defaultBranch,
     }
     if (sha) {
       Object.assign(options, {
@@ -176,6 +180,7 @@ export class GithubApi {
         email: this.githubCfg.email,
       },
       sha,
+      branch: this.githubCfg.defaultBranch,
     }
 
     const res = await this.octokit.request(route, options)

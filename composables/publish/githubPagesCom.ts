@@ -28,9 +28,10 @@ import { LogFactory } from "~/utils/logUtil"
 import { getJSONConf } from "~/utils/configUtil"
 import { IGithubCfg } from "~/utils/platform/github/githubCfg"
 import { GithubApi } from "~/utils/platform/github/githubApi"
-import { pathJoin } from "~/utils/util"
+import { isEmptyString, pathJoin } from "~/utils/util"
 import { ElMessage } from "element-plus"
 import { getApiParams } from "~/utils/publishUtil"
+import { appendStr } from "~/utils/strUtil"
 
 /**
  * Github pages组件
@@ -67,6 +68,7 @@ export const useGithubPages = (props, deps) => {
 
   // deps
   const siyuanPageMethods = deps.siyuanPageMethods
+  const slugMethods = deps.slugMethods
 
   // public methods
   const githubPagesMethods = {
@@ -76,6 +78,15 @@ export const useGithubPages = (props, deps) => {
     },
     defaultPathOnChange: (val: boolean) => {
       githubPagesData.useDefaultPath = val
+
+      if (val == true) {
+        const githubCfg = getJSONConf<IGithubCfg>(props.apiType)
+        githubPagesMethods.initGithubPages({
+          cpath: githubCfg.defaultPath ?? "",
+          defpath: githubPagesData.currentDefaultPath,
+          fname: githubPagesData.mdTitle,
+        })
+      }
     },
     customLoad: async (node: any, resolve: any) => {
       if (node.isLeaf) return resolve([])
@@ -92,11 +103,11 @@ export const useGithubPages = (props, deps) => {
       if (parentDocPath === "" && githubPagesData.customPath !== "") {
         // const githubPagesData=githubPagesMethods.getGithubPagesData()
         // docPath = githubPagesData.customPath
-        docPath = "/"
+        docPath = ""
       } else {
         // 非首次加载或者首次加载但是没保存过目录
         if (parentDocPath === "") {
-          parentDocPath = "/"
+          parentDocPath = ""
         }
         // 子目录加载
         docPath = parentDocPath
@@ -130,6 +141,64 @@ export const useGithubPages = (props, deps) => {
       const siyuanData = siyuanPageMethods.getSiyuanPageData().dataObj
       const meta = siyuanData.meta
       return meta[postidKey] || ""
+    },
+
+    /**
+     * 根据规则生成文件名
+     */
+    getMdFilename: (): string => {
+      const githubCfg = getJSONConf<IGithubCfg>(props.apiType)
+      const slugData = slugMethods.getSlugData()
+      const siyuanData = siyuanPageMethods.getSiyuanPageData().dataObj
+
+      // 文件名规则
+      const mdFilenameRule = githubCfg.mdFilenameRule
+      let mdTitle
+      // 如果没有生成，就发布过程中动态生成
+      const slugPlace = "[dynamic-generated-on-publish]"
+      if (isEmptyString(mdFilenameRule)) {
+        mdTitle = siyuanData.page.content ?? slugData.customSlug ?? slugPlace
+      } else {
+        mdTitle = mdFilenameRule
+        if (mdFilenameRule.indexOf("filename") > -1) {
+          mdTitle = mdTitle.replace(/\[filename]/g, siyuanData.page.content)
+        }
+        if (mdFilenameRule.indexOf("slug") > -1) {
+          mdTitle = mdTitle.replace(
+            /\[slug]/g,
+            slugData.customSlug ?? slugPlace
+          )
+        }
+        let date = new Date()
+        if (mdFilenameRule.indexOf("yyyy") > -1) {
+          const year = date.getFullYear()
+          mdTitle = mdTitle.replace(/\[yyyy]/g, year.toString())
+        }
+        if (
+          mdFilenameRule.indexOf("MM") > -1 ||
+          mdFilenameRule.indexOf("mm") > -1
+        ) {
+          let monthstr
+          let month = date.getMonth() + 1
+          monthstr = month.toString()
+          if (month < 10) {
+            monthstr = appendStr("0", monthstr)
+          }
+          mdTitle = mdTitle.replace(/\[MM]/g, monthstr)
+          mdTitle = mdTitle.replace(/\[mm]/g, monthstr)
+        }
+        if (mdFilenameRule.indexOf("dd") > -1) {
+          let daystr
+          let day = date.getDate()
+          daystr = day.toString()
+          if (day < 10) {
+            daystr = appendStr("0", daystr)
+          }
+          mdTitle = mdTitle.replace(/\[dd]/g, daystr)
+        }
+      }
+
+      return mdTitle
     },
 
     initGithubPages: (paths: any) => {

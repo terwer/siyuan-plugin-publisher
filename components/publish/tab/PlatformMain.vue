@@ -27,7 +27,7 @@
   <el-tabs
     v-if="tabCountStore.tabCount > 0"
     type="border-card"
-    @tab-click="mainTabChange"
+    @tab-change="mainTabChange"
   >
     <!-- Github -->
     <el-tab-pane :label="$t('main.publish.to.vuepress')" v-if="vuepressEnabled">
@@ -124,12 +124,14 @@
       :label="gcfg.platformName"
     >
       <github-main
+        :is-main-reload="isReloadMainTab"
         :is-reload="props.isReload"
         :api-type="gcfg.platformKey"
-        :is-main-reload="isReloadMainTab"
         :page-id="props.pageId"
+        :yaml-converter="gcfg.yamlConverter"
       />
     </el-tab-pane>
+
     <el-tab-pane
       v-for="mcfg in formData.metaweblogArray"
       :key="mcfg.platformKey"
@@ -142,6 +144,7 @@
         :page-id="props.pageId"
       />
     </el-tab-pane>
+
     <el-tab-pane
       v-for="wcfg in formData.wordpressArray"
       :key="wcfg.platformKey"
@@ -185,6 +188,7 @@ import MetaweblogMain from "~/components/publish/tab/main/MetaweblogMain.vue"
 import {
   DynamicConfig,
   getDynamicJsonCfg,
+  getDynYamlConverterAdaptor,
 } from "~/utils/platform/dynamicConfig"
 import { getBooleanConf } from "~/utils/configUtil"
 
@@ -210,13 +214,13 @@ const {
 const isReloadMainTab = ref(false)
 
 const formData = reactive({
-  dynamicConfigArray: [],
-  githubArray: [],
-  metaweblogArray: [],
-  wordpressArray: [],
+  dynamicConfigArray: <DynamicConfig[]>[],
+  githubArray: <DynamicConfig[]>[],
+  metaweblogArray: <DynamicConfig[]>[],
+  wordpressArray: <DynamicConfig[]>[],
 })
 
-const initDynCfg = (dynCfg: any[]) => {
+const initDynCfg = (dynCfg: DynamicConfig[]) => {
   const newCfg = []
 
   dynCfg.forEach((item) => {
@@ -232,6 +236,8 @@ const initDynCfg = (dynCfg: any[]) => {
     if (switchValue) {
       newCfg.push(newItem)
     }
+
+    newItem.yamlConverter = getDynYamlConverterAdaptor(item.platformKey)
   })
 
   return newCfg

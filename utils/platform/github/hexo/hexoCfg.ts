@@ -36,7 +36,9 @@ export class HexoCfg extends GithubCfg {
 
     this.defaultPath = "source/_posts"
     this.posidKey = POSTID_KEY_CONSTANTS.HEXO_POSTID_KEY
-    this.previewUrl = "/[date]/[postid]/"
+    this.previewMdUrl = "/[user]/[repo]/blob/[branch]/[docpath]"
+    // this.previewUrl = "[yyyy]/[mm]/[dd]/[postid]/"
+    this.previewUrl = "/post/[postid].html"
     this.mdFilenameRule = "[slug].md"
   }
 }

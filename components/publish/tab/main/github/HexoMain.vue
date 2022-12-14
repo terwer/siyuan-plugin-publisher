@@ -29,14 +29,18 @@
     :is-reload="props.isReload"
     :is-main-reload="props.isMainReload"
     :page-id="props.pageId"
+    :yaml-converter="yamlConverter"
   />
 </template>
 <script lang="ts" setup>
 import GithubMain from "~/components/publish/tab/main/GithubMain.vue"
 import { API_TYPE_CONSTANTS } from "~/utils/constants/apiTypeConstants"
 import { ref } from "vue"
+import { HexoYamlConverterAdaptor } from "~/utils/platform/github/hexo/hexoYamlConverterAdaptor"
 
 const apiType = ref(API_TYPE_CONSTANTS.API_TYPE_HEXO)
+const hexoYamlConverterAdaptor = new HexoYamlConverterAdaptor()
+const yamlConverter = ref(hexoYamlConverterAdaptor)
 
 const props = defineProps({
   isReload: {

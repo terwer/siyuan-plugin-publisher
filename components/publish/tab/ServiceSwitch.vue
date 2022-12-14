@@ -111,8 +111,6 @@ import {
 } from "~/utils/platform/dynamicConfig"
 import { LogFactory } from "~/utils/logUtil"
 
-const logger = LogFactory.getLogger("components/publish/tab/ServiceSwitch.vue")
-
 // use
 const {
   tabCountStore,

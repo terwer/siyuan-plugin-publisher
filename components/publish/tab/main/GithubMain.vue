@@ -355,19 +355,19 @@
                 </el-button>
               </el-form-item>
 
-              <el-form-item>
+              <el-form-item
+                v-if="pageModeData.etype !== PageEditMode.EditMode_simple"
+              >
                 <!-- 属性转换 -->
-                <el-button
-                  v-if="pageModeData.etype !== PageEditMode.EditMode_simple"
-                  type="primary"
-                  @click="quickMethods.saveAttrToSiyuan"
+                <el-button type="primary" @click="quickMethods.saveAttrToSiyuan"
                   >{{ $t("main.save.attr.to.siyuan") }}
                 </el-button>
               </el-form-item>
 
-              <el-form-item>
+              <el-form-item
+                v-if="pageModeData.etype !== PageEditMode.EditMode_simple"
+              >
                 <el-button
-                  v-if="pageModeData.etype !== PageEditMode.EditMode_simple"
                   type="primary"
                   @click="
                     initPublishMethods.onEditModeChange(
@@ -412,8 +412,8 @@
               class="publish-status"
             >
               <!-- 文章状态 -->
-              <el-form-item>
-                <el-button disabled text type="danger">
+              <el-form-item class="publish-status-box">
+                <el-button class="publish-text-btn" disabled text type="danger">
                   {{
                     initPublishData.isPublished
                       ? $t("main.publish.status.published")
@@ -428,9 +428,16 @@
                   >{{ $t("main.publish.see.md.preview") }}</a
                 >
               </el-form-item>
-              <el-form-item>
+              <el-form-item
+                v-if="initPublishData.isPublished"
+                class="publish-status-box"
+              >
+                <img
+                  :src="initPublishData.mdStatusUrl"
+                  alt="md-build-status"
+                  class="publish-build-status-icon"
+                />
                 <a
-                  v-if="initPublishData.isPublished"
                   :href="initPublishData.previewUrl"
                   :title="initPublishData.previewUrl"
                   target="_blank"
@@ -644,6 +651,7 @@ const { publishTimeData, publishTimeMethods } = usePublishTime()
 const { tagData, tagMethods } = useTag(props)
 const { githubPagesData, githubPagesMethods } = useGithubPages(props, {
   siyuanPageMethods,
+  slugMethods,
 })
 const { yamlData, yamlMethods } = useYaml()
 const { quickData, quickMethods } = useQuick(props, {
@@ -742,5 +750,18 @@ html.dark .source-opt a {
 #yaml-detail-preview {
   cursor: default;
   /*pointer-events: none;*/
+}
+
+.publish-status-box {
+  margin-bottom: 0;
+}
+
+.publish-status-box .publish-text-btn {
+  margin: 0;
+  padding: 0 12px 0 0;
+}
+
+.publish-build-status-icon {
+  margin-right: 12px;
 }
 </style>

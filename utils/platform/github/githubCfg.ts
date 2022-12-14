@@ -150,6 +150,7 @@ export class GithubCfg implements IGithubCfg {
    */
   previewMdUrl: string
   /**
+   * TODO: 支持 [docpath] 作为占位符
    * 预览规则（占位符：[yyyy] [MM] [dd] [postid]）
    */
   previewUrl: string

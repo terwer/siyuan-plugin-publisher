@@ -29,14 +29,18 @@
     :api-type="apiType"
     :is-main-reload="props.isMainReload"
     :page-id="props.pageId"
+    :yaml-converter="yamlConverter"
   />
 </template>
 <script lang="ts" setup>
 import GithubMain from "~/components/publish/tab/main/GithubMain.vue"
 import { API_TYPE_CONSTANTS } from "~/utils/constants/apiTypeConstants"
 import { ref } from "vue"
+import { JekyllYamlConverterAdaptor } from "~/utils/platform/github/jekyll/JekyllYamlConverterAdaptor"
 
 const apiType = ref(API_TYPE_CONSTANTS.API_TYPE_JEKYLL)
+const jekyllYamlConverterAdaptor = new JekyllYamlConverterAdaptor()
+const yamlConverter = ref(jekyllYamlConverterAdaptor)
 
 const props = defineProps({
   isReload: {

@@ -36,7 +36,12 @@ import { getPageId } from "~/utils/platform/siyuan/siyuanUtil"
 import { isEmptyString, pathJoin } from "~/utils/util"
 import { SourceContentShowType } from "~/utils/common/sourceContentShowType"
 import { PostForm } from "~/utils/models/postForm"
-import { mdToHtml, removeH1, removeMdH1 } from "~/utils/htmlUtil"
+import {
+  mdToHtml,
+  removeH1,
+  removeMdH1,
+  removeMdWidgetTag,
+} from "~/utils/htmlUtil"
 import { yaml2Obj } from "~/utils/yamlUtil"
 import { YamlFormatObj } from "~/utils/models/yamlFormatObj"
 
@@ -59,6 +64,7 @@ export const useInitPublish = (props, deps, otherArgs?) => {
     isPublished: false,
     previewMdUrl: "",
     previewUrl: "",
+    mdStatusUrl: "",
   })
 
   // deps
@@ -114,10 +120,7 @@ export const useInitPublish = (props, deps, otherArgs?) => {
           yamlMethods.initYaml(yamlMethods.getYamlData().mdContent)
           break
         case SourceContentShowType.YAML_CONTENT:
-          yamlMethods.initYaml(
-            yamlMethods.getYamlData().formatter +
-              yamlMethods.getYamlData().mdContent
-          )
+          yamlMethods.initYaml(yamlMethods.getYamlData().mdFullContent)
           break
         case SourceContentShowType.HTML_CONTENT:
           yamlMethods.initYaml(yamlMethods.getYamlData().htmlContent)
@@ -165,7 +168,10 @@ export const useInitPublish = (props, deps, otherArgs?) => {
         initPublishMethods.convertDocPathToCategories(docPath)
       // 正文
       let md = siyuanPageMethods.getSiyuanPageData().dataObj.content.content
+      // mdToHtml已经去掉了挂件代码
       let html = mdToHtml(md)
+      // md还需要单独去掉挂件代码
+      md = removeMdWidgetTag(md)
       if (publishCfg.removeH1) {
         md = removeMdH1(md)
         html = removeH1(html)
@@ -213,6 +219,9 @@ export const useInitPublish = (props, deps, otherArgs?) => {
       ) {
         const errmsg = "只能转换YAML，请切换显示模式"
         ElMessage.error(errmsg)
+
+        // 防止循环提示
+        yamlMethods.getYamlData().isSaved = true
         throw new Error(errmsg)
       }
 
@@ -249,8 +258,12 @@ export const useInitPublish = (props, deps, otherArgs?) => {
       return initPublishData
     },
 
-    initPage: async () => {
-      initPublishData.isInitLoading = true
+    /**
+     * 初始化发布页面
+     * @param hideTip 是否隐藏loading
+     */
+    initPage: async (hideTip?: boolean) => {
+      initPublishData.isInitLoading = hideTip != true
 
       try {
         // 读取偏好设置
@@ -304,48 +317,7 @@ export const useInitPublish = (props, deps, otherArgs?) => {
           docPath = githubCfg.defaultPath ?? ""
         }
         const currentDefaultPath = githubCfg.defaultPath ?? "尚未配置"
-        const slugData = slugMethods.getSlugData()
-        // 文件名规则
-        const mdFilenameRule = githubCfg.mdFilenameRule
-        let mdTitle
-        if (isEmptyString(mdFilenameRule)) {
-          mdTitle = siyuanData.page.content ?? slugData.customSlug ?? "no-slug"
-        } else {
-          mdTitle = mdFilenameRule
-          if (mdFilenameRule.indexOf("filename") > -1) {
-            mdTitle = mdTitle.replace(/\[filename]/g, siyuanData.page.content)
-          }
-          if (mdFilenameRule.indexOf("slug") > -1) {
-            mdTitle = mdTitle.replace(/\[slug]/g, slugData.customSlug)
-          }
-          let date = new Date()
-          if (mdFilenameRule.indexOf("yyyy") > -1) {
-            const year = date.getFullYear()
-            mdTitle = mdTitle.replace(/\[yyyy]/g, year.toString())
-          }
-          if (
-            mdFilenameRule.indexOf("MM") > -1 ||
-            mdFilenameRule.indexOf("mm") > -1
-          ) {
-            let monthstr
-            let month = date.getMonth() + 1
-            monthstr = month.toString()
-            if (month < 10) {
-              monthstr = appendStr("0", monthstr)
-            }
-            mdTitle = mdTitle.replace(/\[MM]/g, monthstr)
-            mdTitle = mdTitle.replace(/\[mm]/g, monthstr)
-          }
-          if (mdFilenameRule.indexOf("dd") > -1) {
-            let daystr
-            let day = date.getDate()
-            daystr = day.toString()
-            if (day < 10) {
-              daystr = appendStr("0", daystr)
-            }
-            mdTitle = mdTitle.replace(/\[dd]/g, daystr)
-          }
-        }
+        const mdTitle = githubPagesMethods.getMdFilename()
         // 初始化
         githubPagesMethods.initGithubPages({
           cpath: docPath,
@@ -358,62 +330,78 @@ export const useInitPublish = (props, deps, otherArgs?) => {
 
         // 预览链接
         if (initPublishData.isPublished) {
-          githubPagesData.useDefaultPath = false
-          docPath = githubPagesMethods.getDocPath()
-
           // 预览链接
           const baseUrl = githubCfg.baseUrl ?? "https://terwer.space/"
           const home = githubCfg.home ?? "https://terwer.space/"
-
+          // MD预览链接
           let mdUrl
           mdUrl = pathJoin(githubCfg.githubUser, "/" + githubCfg.githubRepo)
           mdUrl = pathJoin(mdUrl, "/blob/")
           mdUrl = pathJoin(mdUrl, "/" + githubCfg.defaultBranch)
           mdUrl = pathJoin(mdUrl, "/" + docPath)
           if (!isEmptyString(githubCfg.previewMdUrl)) {
-            mdUrl = githubCfg.previewMdUrl.replace(
-              /\[user]/,
-              githubCfg.githubUser
-            )
-            mdUrl = githubCfg.previewMdUrl.replace(
-              /\[repo]/,
-              githubCfg.githubRepo
-            )
-            mdUrl = githubCfg.previewMdUrl.replace(
-              /\[branch]/,
-              githubCfg.defaultBranch
-            )
-            mdUrl = githubCfg.previewMdUrl.replace(/\[docpath]/, docPath)
+            mdUrl = githubCfg.previewMdUrl
+            mdUrl = mdUrl.replace(/\[user]/, githubCfg.githubUser)
+            mdUrl = mdUrl.replace(/\[repo]/, githubCfg.githubRepo)
+            mdUrl = mdUrl.replace(/\[branch]/, githubCfg.defaultBranch)
+            mdUrl = mdUrl.replace(/\[docpath]/, docPath)
           }
           mdUrl = pathJoin(baseUrl, mdUrl)
           initPublishData.previewMdUrl = mdUrl
+          // 构建状态
+          initPublishData.mdStatusUrl = appendStr(
+            "https://img.shields.io/github/checks-status/",
+            githubCfg.githubUser,
+            "/",
+            githubCfg.githubRepo,
+            "/",
+            githubCfg.defaultBranch,
+            "?label=build"
+          )
 
+          // 实际预览链接
           let url = yamlMethods.getYamlData().yamlObj.permalink
           if (!isEmptyString(githubCfg.previewUrl)) {
-            // [postid]
-            url = githubCfg.previewUrl.replace(
-              /\[postid]/g,
-              slugMethods.getSlugData().customSlug
-            )
+            // [docpath]
+            // Vitepress
+            // Nuxt content
+            if (githubCfg.previewUrl.indexOf("[docpath]") > -1) {
+              const defaultPath = githubCfg.defaultPath ?? "docs"
+              const prefix = docPath.replace(defaultPath, "").replace(".md", "")
+              url = githubCfg.previewUrl.replace("/[docpath]", prefix)
+            } else {
+              // Vuepress、HUGO、Hexo、Jekyll
+              // [postid]
+              url = githubCfg.previewUrl.replace(
+                /\[postid]/g,
+                slugMethods.getSlugData().customSlug
+              )
 
-            // [yyyy] [MM] [dd]
-            const created = publishTimeMethods.getPublishTime().created
-            const datearr = created.split(" ")[0]
-            const numarr = datearr.split("-")
-            logger.debug("created numarr=>", numarr)
-            const y = numarr[0]
-            const m = numarr[1]
-            const d = numarr[2]
-            url = url.replace(/\[yyyy]/g, y)
-            url = url.replace(/\[MM]/g, m)
-            url = url.replace(/\[mm]/g, m)
-            url = url.replace(/\[dd]/g, d)
+              // [yyyy] [MM] [dd]
+              const created = publishTimeMethods.getPublishTime().created
+              const datearr = created.split(" ")[0]
+              const numarr = datearr.split("-")
+              logger.debug("created numarr=>", numarr)
+              const y = numarr[0]
+              const m = numarr[1]
+              const d = numarr[2]
+              url = url.replace(/\[yyyy]/g, y)
+              url = url.replace(/\[MM]/g, m)
+              url = url.replace(/\[mm]/g, m)
+              url = url.replace(/\[dd]/g, d)
 
-            // [cats]
-            const docPath = githubPagesMethods.getGithubPagesData().publishPath
-            const categories =
-              initPublishMethods.convertDocPathToCategories(docPath)
-            url = url.replace(/\[cats]/, categories.join("/"))
+              // [cats]
+              const publishPath =
+                githubPagesMethods.getGithubPagesData().publishPath
+              const categories =
+                initPublishMethods.convertDocPathToCategories(publishPath)
+              // 处理分类
+              if (categories.length > 0) {
+                url = url.replace(/\[cats]/, categories.join("/"))
+              } else {
+                url = url.replace(/\/\[cats]/, "")
+              }
+            }
           }
           initPublishData.previewUrl = pathJoin(home, url)
         }

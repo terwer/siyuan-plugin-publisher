@@ -43,19 +43,19 @@
       <platform-setting :is-reload="isReloadServiceTab" />
     </el-tab-pane>
     <el-tab-pane name="post-bind" :label="$t('service.tab.post.bind')">
-      <PostBind :is-reload="isReloadSettingTab" :page-id="props.pageId" />
+      <PostBind :is-reload="isReloadServiceTab" :page-id="props.pageId" />
     </el-tab-pane>
     <el-tab-pane
       name="service-switch"
       :label="$t('service.tab.service.switch')"
     >
-      <service-switch :is-reload="isReloadServiceSwitchTab" />
+      <service-switch :is-reload="isReloadServiceTab" />
     </el-tab-pane>
     <el-tab-pane name="dynamic-platform" :label="$t('dynamic.platform.new')">
       <dynamic-platform />
     </el-tab-pane>
     <el-tab-pane :label="$t('service.tab.change.local')" name="general-setting">
-      <general-setting :is-reload="isReloadCommonSettingTab" />
+      <general-setting :is-reload="isReloadServiceTab" />
     </el-tab-pane>
   </el-tabs>
 </template>
@@ -75,10 +75,6 @@ const logger = LogFactory.getLogger("components/publish/PublishService.vue")
 const defaultTab = ref("platform-main")
 
 const isReloadServiceTab = ref(false)
-const isReloadSettingTab = ref(false)
-const isReloadPostBindTab = ref(false)
-const isReloadServiceSwitchTab = ref(false)
-const isReloadCommonSettingTab = ref(false)
 
 const props = defineProps({
   isReload: {
@@ -94,25 +90,7 @@ const props = defineProps({
 const serviceTabChange = (name) => {
   const paneName = name.paneName
   logger.debug("serviceTabChange=>", paneName)
-  if (paneName === "platform-main") {
-    isReloadServiceTab.value = !isReloadServiceTab.value
-  }
-
-  if (paneName === "platform-setting") {
-    isReloadSettingTab.value = !isReloadSettingTab.value
-  }
-
-  if (paneName === "post-bind") {
-    isReloadPostBindTab.value = !isReloadPostBindTab.value
-  }
-
-  if (paneName === "service-switch") {
-    isReloadServiceSwitchTab.value = !isReloadServiceSwitchTab.value
-  }
-
-  if (paneName === "general-setting") {
-    isReloadCommonSettingTab.value = !isReloadCommonSettingTab.value
-  }
+  isReloadServiceTab.value = !isReloadServiceTab.value
 }
 </script>
 
