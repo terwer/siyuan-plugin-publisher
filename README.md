@@ -5,6 +5,7 @@
 将 [思源笔记](https://github.com/siyuan-note/siyuan) 的文章发布到支持的平台的 **思源笔记挂件**
 
 ![version](https://img.shields.io/github/release/terwer/src-sy-post-publisher.svg?style=flat-square)
+<a title="Downloads" target="_blank" href="https://github.com/terwer/src-sy-post-publisher/releases"><img src="https://img.shields.io/github/downloads/terwer/src-sy-post-publisher/total.svg?style=flat-square&color=blueviolet"></a>
 [![](https://img.shields.io/badge/online-preview-faad14.svg?style=popout-square)](https://publish.terwer.space/blog/index.html)
 ![](https://img.shields.io/badge/license-GPL-blue.svg?style=popout-square)
 
@@ -128,14 +129,15 @@ https://terwer.space/post/start-to-get-started-zi0eyk.html
 - [x] 支持文章标题使用数字编号 <sup>0.0.3+</sup>
 - [x] [多平台支持，并且持续适配中](https://github.com/terwer/src-sy-post-publisher#%E6%94%AF%E6%8C%81%E5%B9%B3%E5%8F%B0) <sup>
       0.0.1+</sup>
-- [ ] 支持同步到 Github(Github pages、Hugo、Hexo、Jekyll、Vuepress、Vitepress、Nuxt content、Next.js)，0.1.0+
+- [x] 支持同步到 Github(Github pages、Hugo、Hexo、Jekyll、Vuepress、Vitepress、Nuxt content、Next.js)，0.1.0+
       之后更加通用，支持动态添加管理多个 <sup>0.0.1+</sup> <sup>0.1.0+</sup>
-- [ ] 支持自定义图床 <sup>0.1.0+</sup>
-- [ ] 支持多种发布视图，简单模式、详细模式和源码模式 <sup>0.1.0+</sup> <sup>0.0.1+</sup>
+- [ ] 支持自定义图床 <sup>1.0.0+</sup>
+- [x] 支持多种发布视图，简单模式、详细模式和源码模式（Github 系列平台） <sup>0.1.0+</sup> <sup>0.0.1+</sup>
+- [x] 支持自定义设置 API 地址，支持本地、局域网、远程 <sup>0.1.0+</sup>
+- [x] 支持配置导入导出 <sup>0.2.0+</sup>
+- [x] 通用设置支持标题序号开关、正文 H1 开关、新窗口开关、自动标签开关 <sup>0.2.0+</sup>
 
 ## 最近更新
-
-<a title="Downloads" target="_blank" href="https://github.com/terwer/src-sy-post-publisher/releases"><img src="https://img.shields.io/github/downloads/terwer/src-sy-post-publisher/total.svg?style=flat-square&color=blueviolet"></a>
 
 [开发进度](https://github.com/users/terwer/projects/1/views/1)
 
