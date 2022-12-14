@@ -258,8 +258,12 @@ export const useInitPublish = (props, deps, otherArgs?) => {
       return initPublishData
     },
 
-    initPage: async () => {
-      initPublishData.isInitLoading = true
+    /**
+     * 初始化发布页面
+     * @param hideTip 是否隐藏loading
+     */
+    initPage: async (hideTip?: boolean) => {
+      initPublishData.isInitLoading = hideTip != true
 
       try {
         // 读取偏好设置

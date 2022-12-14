@@ -99,7 +99,7 @@ export const usePublish = (props, deps?: any) => {
           }
 
           // 这里初始化一下页面，防止某些属性没有的情况
-          await initPublishMethods.initPage()
+          await initPublishMethods.initPage(true)
         } else {
           // 更新的时候，自动保存属性到思源
           await quickMethods.saveAttrToSiyuan(true)
