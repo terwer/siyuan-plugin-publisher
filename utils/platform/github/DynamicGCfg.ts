@@ -37,6 +37,7 @@ export class DynamicGCfg extends GithubCfg {
   constructor(cfg: DynamicConfig) {
     super("", "", "", "", "")
 
+    this.previewMdUrl = "/[user]/[repo]/blob/[branch]/[docpath]"
     this.previewUrl = "/post/[postid].html"
     this.posidKey = getDynPostidKey(cfg.platformKey)
     this.blogName = cfg.subPlatformType
@@ -44,17 +45,21 @@ export class DynamicGCfg extends GithubCfg {
     switch (cfg.subPlatformType) {
       case SubPlatformType.Github_Vuepress:
         this.defaultPath = "docs"
+        this.mdFilenameRule = "[filename].md"
         break
       case SubPlatformType.Github_Hugo:
         this.defaultPath = "content/post"
+        this.mdFilenameRule = "[slug].md"
         break
       case SubPlatformType.Github_Hexo:
         this.defaultPath = "source/_posts"
-        this.previewUrl = "/[date]/[postid]/"
+        // this.previewUrl = "/[date]/[postid]/"
+        this.mdFilenameRule = "[slug].md"
         break
       case SubPlatformType.Github_Jekyll:
         this.defaultPath = "_posts"
-        this.previewUrl = "/[cats]/[date]/[postid].html"
+        // this.previewUrl = "/[cats]/[date]/[postid].html"
+        this.mdFilenameRule = "[yyyy]-[mm]-[dd]-[slug].md"
         break
       // Gitee需要人工审核
       // case SubPlatformType.Github_giteePages:
@@ -66,6 +71,8 @@ export class DynamicGCfg extends GithubCfg {
       //     break
       case SubPlatformType.Github_Vitepress:
         this.defaultPath = "docs"
+        this.previewUrl = "/[docpath]"
+        this.mdFilenameRule = "[slug].md"
         break
       case SubPlatformType.Github_Nuxt:
         this.defaultPath = "content"

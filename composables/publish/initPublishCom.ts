@@ -358,6 +358,7 @@ export const useInitPublish = (props, deps, otherArgs?) => {
             githubCfg.defaultBranch,
             "?label=build"
           )
+
           // 实际预览链接
           let url = yamlMethods.getYamlData().yamlObj.permalink
           if (!isEmptyString(githubCfg.previewUrl)) {
@@ -366,6 +367,12 @@ export const useInitPublish = (props, deps, otherArgs?) => {
               /\[postid]/g,
               slugMethods.getSlugData().customSlug
             )
+
+            // [docpath]
+            if (url.indexOf("[docpath]") > -1) {
+              const defaultPath = githubCfg.defaultPath ?? "docs"
+              url = docPath.replace(defaultPath, "").replace(".md", ".html")
+            }
 
             // [yyyy] [MM] [dd]
             const created = publishTimeMethods.getPublishTime().created
@@ -381,9 +388,10 @@ export const useInitPublish = (props, deps, otherArgs?) => {
             url = url.replace(/\[dd]/g, d)
 
             // [cats]
-            const docPath = githubPagesMethods.getGithubPagesData().publishPath
+            const publishPath =
+              githubPagesMethods.getGithubPagesData().publishPath
             const categories =
-              initPublishMethods.convertDocPathToCategories(docPath)
+              initPublishMethods.convertDocPathToCategories(publishPath)
             // 处理分类
             if (categories.length > 0) {
               url = url.replace(/\[cats]/, categories.join("/"))
