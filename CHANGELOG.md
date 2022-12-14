@@ -1,5 +1,40 @@
 # Changelog
 
+## [0.4.0](https://github.com/terwer/src-sy-post-publisher/compare/v0.3.0...v0.4.0) (2022-12-14)
+
+
+### Features
+
+* [#133](https://github.com/terwer/src-sy-post-publisher/issues/133) 支持Github系列-HUGO平台适配 ([4d25fbd](https://github.com/terwer/src-sy-post-publisher/commit/4d25fbddb807c431569cfda7156a983cddc4f8bb))
+* [#133](https://github.com/terwer/src-sy-post-publisher/issues/133) 支持Github系列-Jekyll平台适配 ([9bdbd19](https://github.com/terwer/src-sy-post-publisher/commit/9bdbd1903db1c87566c15106a7d67a057de86b27))
+* [#133](https://github.com/terwer/src-sy-post-publisher/issues/133) 支持Github系列-Vuepress动态平台YAML解析器 ([99a1927](https://github.com/terwer/src-sy-post-publisher/commit/99a192760b80b2a9c961571877d7e48f1f698134))
+* [#133](https://github.com/terwer/src-sy-post-publisher/issues/133) 支持Github系列-优化第一次发布体验 ([83b6df6](https://github.com/terwer/src-sy-post-publisher/commit/83b6df6966b240c46f941725bcbe9e46932fc4c3))
+* [#133](https://github.com/terwer/src-sy-post-publisher/issues/133) 支持Github系列-支持Hexo平台 ([a52bda9](https://github.com/terwer/src-sy-post-publisher/commit/a52bda9b37e093d9dac8ccab90fcb610aac89304))
+* [#133](https://github.com/terwer/src-sy-post-publisher/issues/133) 支持Github系列-新增构建状态展示 ([d6728ad](https://github.com/terwer/src-sy-post-publisher/commit/d6728ad90b344836197bbf5314decfad5c280fc9))
+* [#133](https://github.com/terwer/src-sy-post-publisher/issues/133) 支持Github系列-适配Next ([15cdc31](https://github.com/terwer/src-sy-post-publisher/commit/15cdc31853f64e67c697dede808017cd77109a52))
+* [#133](https://github.com/terwer/src-sy-post-publisher/issues/133) 支持Github系列-适配Nuxt content ([992c881](https://github.com/terwer/src-sy-post-publisher/commit/992c8818f371402b11d708dfadfc7c6f0c41d63c))
+* [#133](https://github.com/terwer/src-sy-post-publisher/issues/133) 支持Github系列-适配Vitepress ([0931e26](https://github.com/terwer/src-sy-post-publisher/commit/0931e269d361b0e669431eaf0cc849548487d030))
+* [#133](https://github.com/terwer/src-sy-post-publisher/issues/133) 支持Github系列-预定义平台导入 ([7eadae1](https://github.com/terwer/src-sy-post-publisher/commit/7eadae1f2b14d0d3ecbc6487c75accffcb782692))
+
+
+### Bug Fixes
+
+* [#133](https://github.com/terwer/src-sy-post-publisher/issues/133) 支持Github系列-修复Jekyll平台预览路径问题 ([07e51a7](https://github.com/terwer/src-sy-post-publisher/commit/07e51a7013abea452548da1c34f4cdcb634e7e28))
+* [#133](https://github.com/terwer/src-sy-post-publisher/issues/133) 支持Github系列-修复Markdown挂件代码未去掉问题 ([8a06125](https://github.com/terwer/src-sy-post-publisher/commit/8a061255acb033eb6dc3f368862bd96546841004))
+* [#133](https://github.com/terwer/src-sy-post-publisher/issues/133) 支持Github系列-修复YAML更改错误提示 ([f39f1f3](https://github.com/terwer/src-sy-post-publisher/commit/f39f1f3e1c8de4fb456e8c87a5f1f76567bc3608))
+* [#133](https://github.com/terwer/src-sy-post-publisher/issues/133) 支持Github系列-修复YAML格式问题 ([119e87e](https://github.com/terwer/src-sy-post-publisher/commit/119e87e4c93d8947cbd6e9634e14f13f37467325))
+* [#133](https://github.com/terwer/src-sy-post-publisher/issues/133) 支持Github系列-修复发布路径问题 ([bdfe99f](https://github.com/terwer/src-sy-post-publisher/commit/bdfe99f6dcfb9c3df0db0e61108abe2bed396216))
+* [#133](https://github.com/terwer/src-sy-post-publisher/issues/133) 支持Github系列-修复弹窗 ([d5f6579](https://github.com/terwer/src-sy-post-publisher/commit/d5f657975c9e82dbfe22b84e2bdfccc0a8cf2880))
+* [#133](https://github.com/terwer/src-sy-post-publisher/issues/133) 支持Github系列-修复日期问题 ([9f09069](https://github.com/terwer/src-sy-post-publisher/commit/9f09069123c00dec7fd8f5b6c61c01441f00660a))
+* [#133](https://github.com/terwer/src-sy-post-publisher/issues/133) 支持Github系列-修复误删除Markdown代码注释问题 ([865921f](https://github.com/terwer/src-sy-post-publisher/commit/865921f41fe693d18f082d0d8e58d2b2dd03caca))
+* [#268](https://github.com/terwer/src-sy-post-publisher/issues/268) 直接点击发布，不生成属性，文件名会undefined ([01d3bf7](https://github.com/terwer/src-sy-post-publisher/commit/01d3bf73884d2b46c6855b71f050c7a2ce441989))
+
+
+### Miscellaneous
+
+* 优化项目说明 ([4d60d86](https://github.com/terwer/src-sy-post-publisher/commit/4d60d868b79a33581b7095d366c247a2280037e1))
+* 新增0.2.0项特性说明 ([2619353](https://github.com/terwer/src-sy-post-publisher/commit/2619353615b5f25a29292e88767b701d60bfb451))
+
 ## [0.3.0](https://github.com/terwer/src-sy-post-publisher/compare/v0.2.0...v0.3.0) (2022-12-13)
 
 
