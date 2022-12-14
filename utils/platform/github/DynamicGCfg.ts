@@ -71,11 +71,13 @@ export class DynamicGCfg extends GithubCfg {
       //     break
       case SubPlatformType.Github_Vitepress:
         this.defaultPath = "docs"
-        this.previewUrl = "/[docpath]"
+        this.previewUrl = "/[docpath].html"
         this.mdFilenameRule = "[slug].md"
         break
       case SubPlatformType.Github_Nuxt:
         this.defaultPath = "content"
+        this.previewUrl = "/[docpath]"
+        this.mdFilenameRule = "[slug].md"
         break
       case SubPlatformType.Github_Next:
         this.defaultPath = "pages"

@@ -362,41 +362,45 @@ export const useInitPublish = (props, deps, otherArgs?) => {
           // 实际预览链接
           let url = yamlMethods.getYamlData().yamlObj.permalink
           if (!isEmptyString(githubCfg.previewUrl)) {
-            // [postid]
-            url = githubCfg.previewUrl.replace(
-              /\[postid]/g,
-              slugMethods.getSlugData().customSlug
-            )
-
             // [docpath]
-            if (url.indexOf("[docpath]") > -1) {
+            // Vitepress
+            // Nuxt content
+            if (githubCfg.previewUrl.indexOf("[docpath]") > -1) {
               const defaultPath = githubCfg.defaultPath ?? "docs"
-              url = docPath.replace(defaultPath, "").replace(".md", ".html")
-            }
-
-            // [yyyy] [MM] [dd]
-            const created = publishTimeMethods.getPublishTime().created
-            const datearr = created.split(" ")[0]
-            const numarr = datearr.split("-")
-            logger.debug("created numarr=>", numarr)
-            const y = numarr[0]
-            const m = numarr[1]
-            const d = numarr[2]
-            url = url.replace(/\[yyyy]/g, y)
-            url = url.replace(/\[MM]/g, m)
-            url = url.replace(/\[mm]/g, m)
-            url = url.replace(/\[dd]/g, d)
-
-            // [cats]
-            const publishPath =
-              githubPagesMethods.getGithubPagesData().publishPath
-            const categories =
-              initPublishMethods.convertDocPathToCategories(publishPath)
-            // 处理分类
-            if (categories.length > 0) {
-              url = url.replace(/\[cats]/, categories.join("/"))
+              const prefix = docPath.replace(defaultPath, "").replace(".md", "")
+              url = githubCfg.previewUrl.replace("/[docpath]", prefix)
             } else {
-              url = url.replace(/\/\[cats]/, "")
+              // Vuepress、HUGO、Hexo、Jekyll
+              // [postid]
+              url = githubCfg.previewUrl.replace(
+                /\[postid]/g,
+                slugMethods.getSlugData().customSlug
+              )
+
+              // [yyyy] [MM] [dd]
+              const created = publishTimeMethods.getPublishTime().created
+              const datearr = created.split(" ")[0]
+              const numarr = datearr.split("-")
+              logger.debug("created numarr=>", numarr)
+              const y = numarr[0]
+              const m = numarr[1]
+              const d = numarr[2]
+              url = url.replace(/\[yyyy]/g, y)
+              url = url.replace(/\[MM]/g, m)
+              url = url.replace(/\[mm]/g, m)
+              url = url.replace(/\[dd]/g, d)
+
+              // [cats]
+              const publishPath =
+                githubPagesMethods.getGithubPagesData().publishPath
+              const categories =
+                initPublishMethods.convertDocPathToCategories(publishPath)
+              // 处理分类
+              if (categories.length > 0) {
+                url = url.replace(/\[cats]/, categories.join("/"))
+              } else {
+                url = url.replace(/\/\[cats]/, "")
+              }
             }
           }
           initPublishData.previewUrl = pathJoin(home, url)
