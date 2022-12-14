@@ -24,12 +24,12 @@
 ## 支持平台
 
 - [x] [Hugo](https://gohugo.io/) <sup>推荐</sup>
-- [x] Hexo
+- [x] [Hexo](<[https://hexo.io/zh-cn/](https://hexo.io/zh-cn/)>)
 - [x] [Jekyll](https://github.com/lorepirri/cayman-blog)（Github pages 默认内置支持的平台）
 - [x] [Vuepress](https://github.com/terwer/terwer.github.io)
-- [x] Vitepress
-- [x] Nuxt
-- [x] Next
+- [x] [Vitepress](https://vitepress.vuejs.org/guide/getting-started)
+- [x] [Nuxt](https://content.nuxtjs.org/)
+- [x] [Next](https://nextra.site/)
 - [x] [博客园](https://cnblogs.com) <sup>推荐</sup>
 - [ ] CSDN <sup>预研</sup>
 - [ ] 知乎 <sup>预研</sup>
