@@ -154,7 +154,6 @@ export const useTag = (props) => {
 
       if (publishCfg.autoTag && tagData.tag.dynamicTags.length === 0) {
         tagData.tagSwitch = true
-        alert(tagData.tag.dynamicTags.length)
       }
     },
 
