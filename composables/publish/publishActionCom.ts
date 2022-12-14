@@ -33,6 +33,7 @@ import { ElMessage, ElMessageBox } from "element-plus"
 import { useI18n } from "vue-i18n"
 import { appendStr } from "~/utils/strUtil"
 import { removeTitleNumber } from "~/utils/htmlUtil"
+import { isEmptyString } from "~/utils/util"
 
 /**
  * 通用的发布操作组件
@@ -86,8 +87,23 @@ export const usePublish = (props, deps?: any) => {
           return
         }
 
-        // 生成属性
-        await quickMethods.doOneclickAttr()
+        // 未发布过生成属性，更新的时候不重复生成
+        if (!initPublishMethods.getInitPublishData().isPublished) {
+          // 未发布阶段，没有生成过
+          if (!quickMethods.getQuickData().onclickFlag) {
+            // 这里面会自动保存
+            await quickMethods.doOneclickAttr()
+          } else {
+            // 生成过了，如果有修改，直接保存即可
+            await quickMethods.saveAttrToSiyuan(true)
+          }
+
+          // 这里初始化一下页面，防止某些属性没有的情况
+          await initPublishMethods.initPage()
+        } else {
+          // 更新的时候，自动保存属性到思源
+          await quickMethods.saveAttrToSiyuan(true)
+        }
 
         // 根据选项决定是否发送到Github参考
         const isOk = githubCfg.apiStatus

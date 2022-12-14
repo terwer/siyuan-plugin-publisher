@@ -317,15 +317,20 @@ export const useInitPublish = (props, deps, otherArgs?) => {
         // 文件名规则
         const mdFilenameRule = githubCfg.mdFilenameRule
         let mdTitle
+        // 如果没有生成，就发布过程中动态生成
+        const slugPlace = "[dynamic-generated-on-publish]"
         if (isEmptyString(mdFilenameRule)) {
-          mdTitle = siyuanData.page.content ?? slugData.customSlug ?? "no-slug"
+          mdTitle = siyuanData.page.content ?? slugData.customSlug ?? slugPlace
         } else {
           mdTitle = mdFilenameRule
           if (mdFilenameRule.indexOf("filename") > -1) {
             mdTitle = mdTitle.replace(/\[filename]/g, siyuanData.page.content)
           }
           if (mdFilenameRule.indexOf("slug") > -1) {
-            mdTitle = mdTitle.replace(/\[slug]/g, slugData.customSlug)
+            mdTitle = mdTitle.replace(
+              /\[slug]/g,
+              slugData.customSlug ?? slugPlace
+            )
           }
           let date = new Date()
           if (mdFilenameRule.indexOf("yyyy") > -1) {

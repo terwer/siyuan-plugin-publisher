@@ -471,6 +471,11 @@ const initPage = async () => {
   // 默认开启hash
   slugHashEnabled.value = true
 
+  // 自动标签
+  if (publishCfg.autoTag) {
+    tagSwitch.value = true
+  }
+
   // 思源笔记数据
   siyuanData.pageId = pageId
   siyuanData.meta = await siyuanApi.getBlockAttrs(pageId)

@@ -42,6 +42,10 @@ export const useQuick = (props, deps?: any) => {
   // publish data
   const quickData = reactive({
     isGenLoading: false,
+    /**
+     * 是否操作过一键生成
+     */
+    onclickFlag: false,
   })
 
   // deps
@@ -93,6 +97,8 @@ export const useQuick = (props, deps?: any) => {
 
       // 发布属性
       await quickMethods.saveAttrToSiyuan(true)
+
+      quickData.onclickFlag = true
       logger.debug("发布属性完成")
     },
     saveAttrToSiyuan: async (hideTip?: boolean) => {
@@ -123,6 +129,10 @@ export const useQuick = (props, deps?: any) => {
         }
         logger.error(errmsg)
       }
+    },
+
+    getQuickData: () => {
+      return quickData
     },
   }
 

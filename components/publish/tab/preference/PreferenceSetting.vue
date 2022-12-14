@@ -44,6 +44,12 @@
           @change="formMethods.onNewWinChange"
         />
       </el-form-item>
+      <el-form-item :label="$t('main.auto.fetch.tag')">
+        <el-switch
+          v-model="formData.autoTag"
+          @change="formMethods.onAutoTagChange"
+        />
+      </el-form-item>
     </el-form>
   </div>
 </template>
@@ -76,6 +82,7 @@ const formData = reactive({
   fixTitle: false,
   removeH1: false,
   newWin: true,
+  autoTag: false,
 })
 
 const formMethods = {
@@ -119,6 +126,12 @@ const formMethods = {
 
     saveConf()
   },
+  onAutoTagChange: (val: boolean) => {
+    logger.debug("onAutoTagChange=>", val)
+    formData.autoTag = val
+
+    saveConf()
+  },
 }
 
 const saveConf = () => {
@@ -126,6 +139,7 @@ const saveConf = () => {
   publishCfg.fixTitle = parseBoolean(formData.fixTitle)
   publishCfg.removeH1 = parseBoolean(formData.removeH1)
   publishCfg.newWin = parseBoolean(formData.newWin)
+  publishCfg.autoTag = parseBoolean(formData.autoTag)
 
   setJSONConf<PublishPreference>(
     CONSTANTS.PUBLISH_PREFERENCE_CONFIG_KEY,
@@ -146,6 +160,7 @@ const initConf = () => {
   formData.fixTitle = parseBoolean(publishCfg.fixTitle)
   formData.removeH1 = parseBoolean(publishCfg.removeH1)
   formData.newWin = parseBoolean(publishCfg.newWin)
+  formData.autoTag = parseBoolean(publishCfg.autoTag)
 }
 
 onMounted(() => {
