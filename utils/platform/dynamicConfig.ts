@@ -36,6 +36,7 @@ import { HugoYamlConverterAdaptor } from "~/utils/platform/github/hugo/HugoYamlC
 import { HexoYamlConverterAdaptor } from "~/utils/platform/github/hexo/hexoYamlConverterAdaptor"
 import { VitepressYamlConverterAdaptor } from "~/utils/platform/github/other/VitepressYamlConverterAdaptor"
 import { NuxtYamlConverterAdaptor } from "~/utils/platform/github/other/NuxtYamlConverterAdaptor"
+import { NextYamlConvertAdaptor } from "~/utils/platform/github/other/NextYamlConvertAdaptor"
 
 const logger = LogFactory.getLogger("utils/platform/dynamicConfig.ts")
 
@@ -360,6 +361,7 @@ export const getDynYamlConverterAdaptor = (
       } else if (ptype.includes(SubPlatformType.Github_Nuxt.toLowerCase())) {
         yamlConverter = new NuxtYamlConverterAdaptor()
       } else if (ptype.includes(SubPlatformType.Github_Next.toLowerCase())) {
+        yamlConverter = new NextYamlConvertAdaptor()
       }
     }
   }

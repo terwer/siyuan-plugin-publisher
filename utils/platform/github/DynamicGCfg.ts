@@ -81,6 +81,8 @@ export class DynamicGCfg extends GithubCfg {
         break
       case SubPlatformType.Github_Next:
         this.defaultPath = "pages"
+        this.previewUrl = "/[docpath]"
+        this.mdFilenameRule = "[slug].md"
         break
       default:
         break

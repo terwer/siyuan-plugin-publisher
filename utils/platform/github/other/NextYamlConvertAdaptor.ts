@@ -23,4 +23,63 @@
  * questions.
  */
 
-export class NextYamlConvertAdaptor {}
+import {
+  IYamlConvertAdaptor,
+  YamlConvertAdaptor,
+} from "~/utils/platform/yamlConvertAdaptor"
+import { PostForm } from "~/utils/models/postForm"
+import { IGithubCfg } from "~/utils/platform/github/githubCfg"
+import { YamlFormatObj } from "~/utils/models/yamlFormatObj"
+import { obj2Yaml } from "~/utils/yamlUtil"
+import { covertStringToDate, formatIsoToZhDate } from "~/utils/dateUtil"
+import { LogFactory } from "~/utils/logUtil"
+
+/**
+ * Next的YAML解析器
+ */
+export class NextYamlConvertAdaptor
+  extends YamlConvertAdaptor
+  implements IYamlConvertAdaptor
+{
+  private readonly logger = LogFactory.getLogger(
+    "utils/platform/github/other/NextYamlConvertAdaptor.ts"
+  )
+
+  convertToYaml(postForm: PostForm, githubCfg?: IGithubCfg): YamlFormatObj {
+    let yamlFormatObj: YamlFormatObj = new YamlFormatObj()
+    this.logger.debug("您正在使用 Next Yaml Converter", postForm)
+
+    // title
+    yamlFormatObj.yamlObj.title = postForm.formData.title
+
+    // date
+    yamlFormatObj.yamlObj.date = postForm.formData.created
+
+    // description
+    yamlFormatObj.yamlObj.description = postForm.formData.desc
+
+    // tag
+    yamlFormatObj.yamlObj.tag = postForm.formData.tag.dynamicTags
+
+    // formatter
+    let yaml = obj2Yaml(yamlFormatObj.yamlObj)
+    // 修复yaml的ISO日期格式（js-yaml转换的才需要）
+    yaml = formatIsoToZhDate(yaml, true)
+    // this.logger.debug("yaml=>", yaml)
+
+    yamlFormatObj.formatter = yaml
+    yamlFormatObj.mdContent = postForm.formData.mdContent
+    yamlFormatObj.mdFullContent =
+      yamlFormatObj.formatter + "\n\n" + yamlFormatObj.mdContent
+    yamlFormatObj.htmlContent = postForm.formData.htmlContent
+
+    return yamlFormatObj
+  }
+
+  convertToAttr(
+    yamlFormatObj: YamlFormatObj,
+    githubCfg?: IGithubCfg
+  ): PostForm {
+    return super.convertToAttr(yamlFormatObj, githubCfg)
+  }
+}
