@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.1](https://github.com/terwer/src-sy-post-publisher/compare/v0.4.0...v0.4.1) (2022-12-14)
+
+
+### Miscellaneous
+
+* 更新文档说明 ([5e20d65](https://github.com/terwer/src-sy-post-publisher/commit/5e20d656bd482402dcc8001cee3cb160f70d477e))
+
 ## [0.4.0](https://github.com/terwer/src-sy-post-publisher/compare/v0.3.0...v0.4.0) (2022-12-14)
 
 
