@@ -31,8 +31,8 @@ import { PostForm } from "~/utils/models/postForm"
 import { IGithubCfg } from "~/utils/platform/github/githubCfg"
 import { YamlFormatObj } from "~/utils/models/yamlFormatObj"
 import { obj2Yaml } from "~/utils/yamlUtil"
-import { covertStringToDate, formatIsoToZhDate } from "~/utils/dateUtil"
 import { LogFactory } from "~/utils/logUtil"
+import { covertStringToDate } from "~/utils/dateUtil"
 
 /**
  * Next的YAML解析器
@@ -53,7 +53,7 @@ export class NextYamlConvertAdaptor
     yamlFormatObj.yamlObj.title = postForm.formData.title
 
     // date
-    yamlFormatObj.yamlObj.date = postForm.formData.created
+    yamlFormatObj.yamlObj.date = covertStringToDate(postForm.formData.created)
 
     // description
     yamlFormatObj.yamlObj.description = postForm.formData.desc
@@ -62,12 +62,7 @@ export class NextYamlConvertAdaptor
     yamlFormatObj.yamlObj.tag = postForm.formData.tag.dynamicTags
 
     // formatter
-    let yaml = obj2Yaml(yamlFormatObj.yamlObj)
-    // 修复yaml的ISO日期格式（js-yaml转换的才需要）
-    yaml = formatIsoToZhDate(yaml, true)
-    // this.logger.debug("yaml=>", yaml)
-
-    yamlFormatObj.formatter = yaml
+    yamlFormatObj.formatter = obj2Yaml(yamlFormatObj.yamlObj)
     yamlFormatObj.mdContent = postForm.formData.mdContent
     yamlFormatObj.mdFullContent =
       yamlFormatObj.formatter + "\n\n" + yamlFormatObj.mdContent
