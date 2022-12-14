@@ -351,6 +351,11 @@ export const getDynYamlConverterAdaptor = (
         yamlConverter = new HexoYamlConverterAdaptor()
       } else if (ptype.includes(SubPlatformType.Github_Jekyll.toLowerCase())) {
         yamlConverter = new JekyllYamlConverterAdaptor()
+      } else if (
+        ptype.includes(SubPlatformType.Github_Vitepress.toLowerCase())
+      ) {
+      } else if (ptype.includes(SubPlatformType.Github_Nuxt.toLowerCase())) {
+      } else if (ptype.includes(SubPlatformType.Github_Next.toLowerCase())) {
       }
     }
   }

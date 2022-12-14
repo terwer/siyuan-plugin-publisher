@@ -184,6 +184,7 @@ import {
 } from "~/utils/platform/dynamicConfig"
 import { LogFactory } from "~/utils/logUtil"
 import { checkKeyExists } from "~/utils/configUtil"
+import { importPreDefinedPlatform } from "~/utils/import/importUtil"
 
 const logger = LogFactory.getLogger(
   "components/publish/tab/DynamicPlatform.vue"
@@ -301,7 +302,11 @@ const submitForm = async (formEl) => {
     formData.dynCfg.platformKey,
     formData.dynCfg.platformName
   )
-  newCfg.subPlatformType = formData.subtype
+  if (formData.ptype === PlatformType.Github) {
+    newCfg.subPlatformType = formData.subtype
+  } else {
+    newCfg.subPlatformType = SubPlatformType.NONE
+  }
   formData.dynamicConfigArray.push(newCfg)
   setDynamicJsonCfg(formData.dynamicConfigArray)
 
@@ -386,6 +391,12 @@ const initPage = async () => {
 }
 
 onMounted(async () => {
+  // 导入配置
+  logger.info("开始导入预定义平台...")
+  importPreDefinedPlatform()
+  logger.info("导入预定义平台成功.")
+
+  // 初始化
   await initPage()
 })
 </script>
