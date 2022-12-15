@@ -45,6 +45,10 @@ import { LogFactory } from "~/utils/logUtil"
 import { getPageId, getWidgetId } from "~/utils/platform/siyuan/siyuanUtil"
 import { SiYuanApiAdaptor } from "~/utils/platform/siyuan/siYuanApiAdaptor"
 import { isInChromeExtension } from "~/utils/otherlib/ChromeUtil"
+import {
+  getSiyuanNewWinPageId,
+  isInSiyuanNewWinBrowser,
+} from "~/utils/otherlib/siyuanBrowserUtil"
 
 const logger = LogFactory.getLogger("pages/index/App.vue")
 
@@ -54,8 +58,17 @@ const init = async () => {
   logger.warn("MODE=>", import.meta.env.MODE)
 
   const widgetResult = getWidgetId()
-  if (widgetResult.isInSiyuan) {
-    const postid = await getPageId()
+  if (widgetResult.isInSiyuan || isInSiyuanNewWinBrowser()) {
+    let postid
+    if (isInSiyuanNewWinBrowser) {
+      const newWinPageId = getSiyuanNewWinPageId()
+      if (newWinPageId) {
+        postid = newWinPageId
+      }
+      logger.warn("思源笔记新窗口，postid为=>", postid)
+    } else {
+      postid = await getPageId()
+    }
     logger.warn("当前页面ID是=>", postid)
 
     const api = new SiYuanApiAdaptor()

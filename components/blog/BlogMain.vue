@@ -172,7 +172,10 @@ import { SIYUAN_CONSTANTS } from "~/utils/constants/siyuanConstants"
 import { getEnv } from "~/utils/envUtil"
 import { getPublishCfg } from "~/utils/publishUtil"
 import { parseBoolean } from "~/utils/util"
-import { getSiyuanNewWinPageId } from "~/utils/otherlib/siyuanBrowserUtil"
+import {
+  getSiyuanNewWinPageId,
+  isInSiyuanNewWinBrowser,
+} from "~/utils/otherlib/siyuanBrowserUtil"
 
 const logger = LogFactory.getLogger()
 
@@ -357,20 +360,29 @@ const reloadTableData = async () => {
   let hasSubdoc = false
 
   const siyuanApi = new SiYuanApiAdaptor()
-  if (isInSiyuan.value || SIYUAN_CONSTANTS.DEBUG_SIYUAN_SUBDOC) {
-    let postid = getEnv("VITE_SIYUAN_DEV_PAGE_ID")
-    if (SIYUAN_CONSTANTS.DEBUG_SIYUAN_SUBDOC) {
-      logger.warn("处于子文档调试模式，父文档ID为=>", postid)
-    } else {
-      postid = await getPageId()
-      logger.warn("处于生产环境，父文档ID为=>", postid)
-    }
+  if (
+    isInSiyuan.value ||
+    SIYUAN_CONSTANTS.DEBUG_SIYUAN_SUBDOC ||
+    isInSiyuanNewWinBrowser()
+  ) {
+    let postid
 
     // 如果是思源笔记新窗口打开
-    const newWinPageId = getSiyuanNewWinPageId()
-    logger.warn("思源笔记新窗口，postid为=>", postid)
-    if (newWinPageId) {
-      postid = newWinPageId
+    if (isInSiyuanNewWinBrowser) {
+      const newWinPageId = getSiyuanNewWinPageId()
+      if (newWinPageId) {
+        postid = newWinPageId
+      }
+      logger.warn("思源笔记新窗口，postid为=>", postid)
+    } else {
+      // 其他模式
+      postid = getEnv("VITE_SIYUAN_DEV_PAGE_ID")
+      if (SIYUAN_CONSTANTS.DEBUG_SIYUAN_SUBDOC) {
+        logger.warn("处于子文档调试模式，父文档ID为=>", postid)
+      } else {
+        postid = await getPageId()
+        logger.warn("处于生产环境，父文档ID为=>", postid)
+      }
     }
 
     // 检测子文档

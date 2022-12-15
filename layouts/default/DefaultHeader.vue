@@ -26,27 +26,27 @@
 <template>
   <div class="header-default">
     <el-header id="publisher-header">
-      <el-button
-        v-if="showOpenBtn"
-        class="b3-button--open"
-        type="success"
-        @click="handleWinOpen"
-        >[]
-      </el-button>
-      <el-button
-        v-if="showCloseBtn"
-        class="b3-button--cancel"
-        type="danger"
-        @click="handleWinClose"
-        >X
-      </el-button>
-      <!--
-      <h1 class="header-title-default">
+      <div v-if="!showTitle">
+        <el-button
+          v-if="showOpenBtn"
+          class="b3-button--open"
+          type="success"
+          @click="handleWinOpen"
+          >[]
+        </el-button>
+        <el-button
+          v-if="showCloseBtn"
+          class="b3-button--cancel"
+          type="danger"
+          @click="handleWinClose"
+          >X
+        </el-button>
+      </div>
+      <h1 v-if="showTitle" class="header-title-default">
         <el-button class="header-title-btn disabled-click">
           思源笔记发布工具
         </el-button>
       </h1>
-      -->
     </el-header>
   </div>
 </template>
@@ -56,24 +56,26 @@ import { onMounted, ref } from "vue"
 import {
   doCloseExportWin,
   doOpenExportWin,
-  getSiyuanNewWinPageId,
-  isInSiyuanBrowser,
+  isInSiyuanNewWinBrowser,
 } from "~/utils/otherlib/siyuanBrowserUtil"
-import { getPublishCfg } from "~/utils/publishUtil"
 import { ElMessage } from "element-plus"
+import { getWidgetId, inSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
+import { getPublishCfg } from "~/utils/publishUtil"
 
 const showCloseBtn = ref(false)
 const showOpenBtn = ref(false)
+const showTitle = ref(false)
 
 const handleWinOpen = async () => {
   if (showOpenBtn.value) {
     try {
-      await doOpenExportWin()
+      const widgetResult = getWidgetId()
+      await doOpenExportWin(widgetResult.widgetId)
 
       // event
       pageIdChanged()
     } catch (e) {
-      showOpenBtn.value = false
+      // showOpenBtn.value = false
       ElMessage.info(
         "发生异常，已暂时关闭此按钮，如需永久关闭，请前往通用设置关闭=>" + e
       )
@@ -89,7 +91,7 @@ const handleWinClose = () => {
       // event
       pageIdChanged()
     } catch (e) {
-      showCloseBtn.value = false
+      // showCloseBtn.value = false
       ElMessage.info(
         "非弹窗点击，已暂时关闭此按钮，如需永久关闭，请前往通用设置关闭=>" + e
       )
@@ -98,26 +100,33 @@ const handleWinClose = () => {
 }
 
 const pageIdChanged = () => {
-  const newWinPageId = getSiyuanNewWinPageId()
-  const isNewWin = typeof newWinPageId === "undefined"
-  alert(isNewWin)
-  // if (newWinPageId) {
-  //   showOpenBtn.value = false
-  //   showCloseBtn.value = true
-  // } else {
-  //   showOpenBtn.value = true
-  //   showCloseBtn.value = false
-  // }
+  if (inSiyuan()) {
+    showOpenBtn.value = true
+    showCloseBtn.value = false
+  } else {
+    showOpenBtn.value = false
+    showCloseBtn.value = true
+  }
 }
 
 onMounted(() => {
-  // init
-  const publishCfg = getPublishCfg()
-  showCloseBtn.value = isInSiyuanBrowser() || publishCfg.showCloseBtn
-  showOpenBtn.value = showCloseBtn.value
+  // 思源新窗口，或者思源挂件才会有这两个按钮
+  if (isInSiyuanNewWinBrowser() || inSiyuan()) {
+    // init
+    const publishCfg = getPublishCfg()
+    showCloseBtn.value = isInSiyuanNewWinBrowser() || publishCfg.showCloseBtn
+    showOpenBtn.value = showCloseBtn.value
 
-  // event
-  pageIdChanged()
+    // event
+    pageIdChanged()
+
+    showTitle.value = false
+  } else {
+    showOpenBtn.value = false
+    showCloseBtn.value = true
+
+    showTitle.value = true
+  }
 })
 </script>
 

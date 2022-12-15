@@ -35,11 +35,14 @@ const SIYUAN_BROWSER_CONSTANTS_SIYUAN_EXPORT_CLOSE = "siyuan-export-close"
  * 是否在思源浏览器
  * @returns {boolean}
  */
-export const isInSiyuanBrowser = () => {
-  console.log("inSiyuan=>", inSiyuan())
-  console.log("isBrowser=>", isBrowser())
-  console.log("window.siyuan=>", window.siyuan !== "undefined")
-  return inSiyuan() && isBrowser() && typeof window.siyuan !== "undefined"
+export const isInSiyuanNewWinBrowser = () => {
+  // console.log("inSiyuan=>", inSiyuan())
+  // console.log("isBrowser=>", isBrowser())
+  // console.log("window.terwer=>", window.terwer !== "undefined")
+  // if (window.terwer && window.terwer.pageId) {
+  //   console.log("window.terwer.pageId=>", window.terwer.pageId)
+  // }
+  return typeof window.terwer !== "undefined"
 }
 
 /**
@@ -72,10 +75,7 @@ export const doOpenExportWin = async (pageId) => {
 
 // 如果是思源新窗口
 export const getSiyuanNewWinPageId = () => {
-  let pageId
-  const syWin = window.parent
-  if (syWin.terwer && syWin.terwer.pageId) {
-    pageId = syWin.terwer.pageId
-  }
+  let pageId = window.terwer.pageId
+  console.log("window.terwer.pageId=>", window.terwer.pageId)
   return pageId
 }

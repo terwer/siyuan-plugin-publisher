@@ -115,6 +115,7 @@ const fetchPost = (url, data, cb, headers) => {
  * 弹窗打开
  */
 window.terwer = {
+  pageId: undefined,
   renderPublishHelper: () => {},
 }
 window.terwer.renderPublishHelper = (pageId) => {
@@ -151,6 +152,10 @@ window.terwer.renderPublishHelper = (pageId) => {
           console.log(err)
         }
         var txt = data.toString().replace(/<!--.*-->/gs, "")
+        txt +=
+          '<script>window.terwer={};window.terwer.pageId="' +
+          pageId +
+          '"</script>'
         html(txt)
       }
     )
@@ -188,12 +193,13 @@ window.terwer.renderPublishHelper = (pageId) => {
     window.siyuan.printWin.once("ready-to-show", () => {
       window.siyuan.printWin.webContents.setZoomFactor(1)
     })
-    window.siyuan.printWin.terwerPageId = "aaaa"
     fetchPost(
       "/api/export/exportTempContent",
       { content: html },
       (response) => {
         window.siyuan.printWin.loadURL(response.data.url)
+        // 打开开发者工具
+        // window.siyuan.printWin.webContents.openDevTools()
       }
     )
   })
