@@ -22,7 +22,7 @@ specifiers:
   element-plus: ^2.2.25
   eslint: ^8.0.1
   eslint-config-prettier: ^8.5.0
-  eslint-config-standard-with-typescript: ^23.0.0
+  eslint-config-standard-with-typescript: ^24.0.0
   eslint-plugin-import: ^2.25.2
   eslint-plugin-n: ^15.0.0
   eslint-plugin-promise: ^6.0.0
@@ -95,7 +95,7 @@ devDependencies:
   better-docs: 2.7.2
   eslint: 8.28.0
   eslint-config-prettier: 8.5.0_eslint@8.28.0
-  eslint-config-standard-with-typescript: 23.0.0_lwp7uu2ndga6sqsuliw5ylzib4
+  eslint-config-standard-with-typescript: 24.0.0_lwp7uu2ndga6sqsuliw5ylzib4
   eslint-plugin-import: 2.26.0_vbnhqcxlbs7ynbxw44hu2vq7eq
   eslint-plugin-n: 15.5.1_eslint@8.28.0
   eslint-plugin-promise: 6.1.1_eslint@8.28.0
@@ -2786,8 +2786,8 @@ packages:
       eslint: 8.28.0
     dev: true
 
-  /eslint-config-standard-with-typescript/23.0.0_lwp7uu2ndga6sqsuliw5ylzib4:
-    resolution: { integrity: sha512-iaaWifImn37Z1OXbNW1es7KI+S7D408F9ys0bpaQf2temeBWlvb0Nc5qHkOgYaRb5QxTZT32GGeN1gtswASOXA== }
+  /eslint-config-standard-with-typescript/24.0.0_lwp7uu2ndga6sqsuliw5ylzib4:
+    resolution: { integrity: sha512-vEnGXZ5aiR1enl9652iIP4nTpY3GPcNEwuhrsPbKO3Ce3D6T3yCqZdkUPk8nJetfdL/yO0DLsHg2d/l9iECIdg== }
     peerDependencies:
       '@typescript-eslint/eslint-plugin': ^5.0.0
       eslint: ^8.0.1
