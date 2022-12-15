@@ -111,6 +111,9 @@ const fetchPost = (url, data, cb, headers) => {
     })
 }
 
+/**
+ * 弹窗打开
+ */
 window.terwer = {
   renderPublishHelper: () => {},
 }
@@ -196,3 +199,73 @@ window.terwer.renderPublishHelper = () => {
 //   getCurrentWindow().webContents.setZoomFactor(1);
 //   window.siyuan.printWin.destroy();
 // };
+
+/**-- 在所有文档前面加上一个挂件插槽--**/
+function showPreviousWidgetsSlot() {
+  setInterval(DocumentShowPreviousWidget, 300)
+}
+
+DocumentShowPreviousWidget()
+showPreviousWidgetsSlot()
+
+function DocumentShowPreviousWidget() {
+  var openDoc = document.querySelectorAll(
+    ".layout-tab-container>.fn__flex-1.protyle:not(.fn__none)"
+  )
+  var allDocumentTitleElement = []
+  for (let index = 0; index < openDoc.length; index++) {
+    const element = openDoc[index]
+    element.setAttribute("withPreviousWidgets", true)
+    allDocumentTitleElement.push(element.children[1].children[1].children[1])
+  }
+
+  for (let index = 0; index < allDocumentTitleElement.length; index++) {
+    const element = allDocumentTitleElement[index]
+
+    if (
+      !element.parentElement.querySelector(".previous-widgets-slot") &&
+      element.parentElement.parentElement.querySelector("[data-node-id]")
+    ) {
+      var documentPreviousWidgetsSlotElement = CreatePreviousWidgetsSlot(
+        element.parentElement
+      )
+      element.parentElement.appendChild(documentPreviousWidgetsSlotElement)
+    }
+  }
+}
+
+function CreatePreviousWidgetsSlot(element) {
+  let cloneNode = element.parentElement
+    .querySelector(".protyle-wysiwyg.protyle-wysiwyg--attr")
+    .cloneNode(false)
+  cloneNode.innerHTML = `
+  <div class="iframe-content">
+      <iframe src="/widgets/sy-post-publisher/" ></iframe>
+  </div>
+  `
+  let id = element.parentElement.parentElement
+    .querySelector("[data-node-id]")
+    .getAttribute("data-node-id")
+  cloneNode.setAttribute("data-node-id", id)
+  cloneNode.setAttribute("contenteditable", false)
+  cloneNode.setAttribute("style", "padding: 0;")
+  let div = document.createElement("div")
+  div.setAttribute("class", "previous-widgets-slot")
+  div.setAttribute("contenteditable", false)
+  div.setAttribute("style", "padding: 0;")
+  let root = div.attachShadow({ mode: "open" })
+  root.innerHTML = `
+      <style>
+          iframe{
+              width:100%;
+              min-height:45px;
+              height:45px;
+              border:none;
+              margin:0;
+              padding:0
+          }
+      </style>
+      `
+  root.appendChild(cloneNode)
+  return div
+}

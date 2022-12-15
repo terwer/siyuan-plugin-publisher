@@ -117,6 +117,10 @@ onMounted(() => {
   color: var(--el-button-text-color);
 }
 
+#publisher-header {
+  /*padding: 0;*/
+}
+
 #publisher-header .b3-button--cancel {
   float: right;
 }
