@@ -121,9 +121,11 @@ https://terwer.space/post/start-to-get-started-zi0eyk.html
 
 ## 核心特性
 
-目前支持基于 `Github` <sup>0.0.1+</sup> 、 `metaweblog API` <sup>0.0.2+</sup> 、`Wordpress API` <sup>0.0.2+</sup> 以及 `自定义HTTP协议` <sup>1.0.0+(预研)</sup> 的平台
+目前支持基于 `Github` <sup>0.0.1+</sup> 、 `metaweblog API` <sup>0.0.2+</sup> 、`Wordpress API` <sup>0.0.2+</sup>
+以及 `自定义HTTP协议` <sup>1.0.0+(预研)</sup> 的平台
 
-同时提供了一个 [统一通用的 API 适配器](https://github.com/terwer/src-sy-post-publisher/blob/main/src/utils/api.ts)，让适配任何平台成为可能。
+同时提供了一个 [统一通用的 API 适配器](https://github.com/terwer/src-sy-post-publisher/blob/main/utils/api.ts)
+，让适配任何平台成为可能。
 
 - [x] 兼容 Metaweblog API 以及自定义平台 <sup>0.0.3+</sup>
 - [x] 支持平台开关 <sup>0.0.3+</sup>
@@ -159,7 +161,7 @@ https://terwer.space/post/start-to-get-started-zi0eyk.html
 
 [开发进度](https://github.com/users/terwer/projects/1/views/1)
 
-[更新日志](CHANGELOG.md)
+[更新日志](https://github.com/terwer/src-sy-post-publisher/blob/main/CHANGELOG.md)
 
 ## Vue 3 + TypeScript + Vite
 
