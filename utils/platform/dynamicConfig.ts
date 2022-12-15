@@ -339,7 +339,6 @@ export function getDynPostidKey(platformKey: string): string {
 export const getDynYamlConverterAdaptor = (
   platformKey: string
 ): YamlConvertAdaptor => {
-  logger.error(platformKey)
   let yamlConverter = new YamlConvertAdaptor()
   if (platformKey.includes("-")) {
     const typeArr = platformKey.split("-")

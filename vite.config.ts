@@ -227,7 +227,13 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
       minify: isProd,
 
       rollupOptions: {
-        external: ["readFile", "stat"],
+        external: [
+          "stat",
+          "readFile",
+          "fs",
+          "@electron/remote",
+          "/lib/siyuanhook.js",
+        ],
         output: {
           chunkFileNames: "static/js/[name]-[hash].js",
           entryFileNames: "static/js/[name]-[hash].js",

@@ -28,6 +28,10 @@ import { LogFactory } from "~/utils/logUtil"
 import { getJSONConf, setJSONConf } from "~/utils/configUtil"
 import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
 import { getQueryString, isBrowser } from "~/utils/browserUtil"
+import {
+  getSiyuanNewWinPageId,
+  isInSiyuanNewWinBrowser,
+} from "~/utils/otherlib/siyuanBrowserUtil"
 
 const logger = LogFactory.getLogger("utils/platform/siyuan/siyuanUtil.ts")
 
@@ -159,12 +163,17 @@ export const getPageId = async (
     syPageId = pageId
   }
 
-  // 2、兼容挂件
+  // 2、兼容挂件或者挂件新窗口
   if (!syPageId) {
     const widgetResult = getWidgetId()
     if (widgetResult.isInSiyuan) {
       // 尝试读取挂件的ID
       syPageId = await getSiyuanPageId(force)
+    } else {
+      // 新窗口
+      if (isInSiyuanNewWinBrowser()) {
+        syPageId = getSiyuanNewWinPageId()
+      }
     }
   }
 

@@ -30,6 +30,8 @@ cp ./LICENSE ./dist/
 
 # 删除siyuan挂件专属文件
 rm ./dist/widget.json
+rm ./dist/lib/siyuanhook.js
+
 # 删除火狐配置
 rm -rf ./dist/mv2
 mv ./dist/manifest.prod.json ./dist/manifest.json

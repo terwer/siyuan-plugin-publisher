@@ -30,6 +30,7 @@ cp ./LICENSE ./dist/
 
 # 删除siyuan挂件专属文件
 rm ./dist/widget.json
+rm ./dist/lib/siyuanhook.js
 
 # 火狐配置
 mv ./dist/mv2/manifest-v2-for-firefox.json ./dist/manifest.json
