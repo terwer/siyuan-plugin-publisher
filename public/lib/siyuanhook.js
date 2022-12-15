@@ -166,7 +166,7 @@ window.terwer.renderPublishHelper = (pageId) => {
       modal: true,
       show: true,
       width: 900,
-      height: 680,
+      height: 750,
       resizable: true,
       frame: "darwin" === window.siyuan.config.system.os,
       icon: path.join(
@@ -263,8 +263,8 @@ function CreatePreviousWidgetsSlot(element) {
       <style>
           iframe{
               width:100%;
-              min-height:45px;
-              height:45px;
+              min-height:53px;
+              height:53px;
               border:none;
               margin:0;
               padding:0

@@ -368,7 +368,7 @@ const reloadTableData = async () => {
     let postid
 
     // 如果是思源笔记新窗口打开
-    if (isInSiyuanNewWinBrowser) {
+    if (isInSiyuanNewWinBrowser()) {
       const newWinPageId = getSiyuanNewWinPageId()
       if (newWinPageId) {
         postid = newWinPageId

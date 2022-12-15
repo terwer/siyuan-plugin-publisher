@@ -75,7 +75,10 @@ export const doOpenExportWin = async (pageId) => {
 
 // 如果是思源新窗口
 export const getSiyuanNewWinPageId = () => {
-  let pageId = window.terwer.pageId
-  console.log("window.terwer.pageId=>", window.terwer.pageId)
+  let pageId
+  if (window && window.terwer && window.terwer.pageId) {
+    pageId = window.terwer.pageId
+    // console.log("window.terwer.pageId=>", window.terwer.pageId)
+  }
   return pageId
 }

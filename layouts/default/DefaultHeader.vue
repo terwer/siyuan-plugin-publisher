@@ -151,7 +151,7 @@ onMounted(() => {
 }
 
 #publisher-header {
-  /*padding: 0;*/
+  padding: 0 16px;
 }
 
 #publisher-header .b3-button--cancel {

@@ -60,7 +60,7 @@ const init = async () => {
   const widgetResult = getWidgetId()
   if (widgetResult.isInSiyuan || isInSiyuanNewWinBrowser()) {
     let postid
-    if (isInSiyuanNewWinBrowser) {
+    if (isInSiyuanNewWinBrowser()) {
       const newWinPageId = getSiyuanNewWinPageId()
       if (newWinPageId) {
         postid = newWinPageId

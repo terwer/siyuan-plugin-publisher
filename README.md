@@ -10,8 +10,8 @@
 ![](https://img.shields.io/badge/license-GPL-blue.svg?style=popout-square)
 
 [![](https://img.shields.io/badge/%E9%A1%B9%E7%9B%AE%E6%BA%90%E7%A0%81-code-brightgreen)](https://github.com/terwer/src-sy-post-publisher)
-[![](https://img.shields.io/badge/%E5%B8%AE%E5%8A%A9%E6%96%87%E6%A1%A3-doc-blue)](https://hugo.terwer.space/post/readme-1j4ltp.html)
-[![](https://img.shields.io/badge/%E6%96%B0%E6%89%8B%E5%B0%8F%E7%99%BD%E7%BA%A7%E8%A7%86%E9%A2%91%E6%95%99%E7%A8%8B-video-red)](https://hugo.terwer.space/post/configure-entry-video-brpm9.html)
+[![](https://img.shields.io/badge/%E5%B8%AE%E5%8A%A9%E6%96%87%E6%A1%A3-doc-blue)](https://www.terwer.space/post/readme-1j4ltp.html)
+[![](https://img.shields.io/badge/%E6%96%B0%E6%89%8B%E5%B0%8F%E7%99%BD%E7%BA%A7%E8%A7%86%E9%A2%91%E6%95%99%E7%A8%8B-video-red)](https://www.terwer.space/post/configure-entry-video-brpm9.html)
 
 ![](https://raw.githubusercontent.com/terwer/src-sy-post-publisher/main/public/preview.png)
 
@@ -42,7 +42,23 @@
 - [x] [Metaweblog API](http://xmlrpc.com/spec.md)
 - [ ] 自定义 HTTP 协议 <sup>预研</sup>
 
-## 挂件版快速上手
+## 挂件版挂载菜单打开新窗口操作方式快速上手
+
+首先在设置 - 集市 - 挂件 中下载 sy-post-publisher
+
+点击设置 - 外观- 代码片段，代码片段加上下面的 `js` 片段，然后重启思源
+
+```js
+import("/widgets/sy-post-publisher/lib/siyuanhook.js")
+```
+
+点击按钮开始体验
+
+![](https://img1.terwer.space/api/public/202212151951396.png)
+
+详情请参考: [挂件模式用挂载菜单的方式使用](https://www.terwer.space/post/the-pendant-mode-is-used-in-the-method-of-mounting-menu-169wrw.html#%E6%95%88%E6%9E%9C%E6%BC%94%E7%A4%BA)<sup>强烈推荐</sup> <sup>0.4.2+</sup>
+
+## 挂件版通用方式快速上手
 
 首先在设置 - 集市 - 挂件 中下载 sy-post-publisher
 
