@@ -27,9 +27,9 @@ import { isBrowser } from "~/utils/browserUtil"
 import { inSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
 import { ElMessage } from "element-plus"
 
-const SIYUAN_BROWSER_CONSTANTS_SIYUAN_EXPORT_CLOSE = "siyuan-export-close"
-
 // 警告⚠️：请勿在非思源笔记浏览器环境调用此文件中的任何方法
+
+const SIYUAN_BROWSER_CONSTANTS_SIYUAN_EXPORT_CLOSE = "siyuan-export-close"
 
 /**
  * 是否在思源浏览器
@@ -49,7 +49,6 @@ export const doCloseExportWin = () => {
   const { ipcRenderer } = require("electron")
   ipcRenderer.send(SIYUAN_BROWSER_CONSTANTS_SIYUAN_EXPORT_CLOSE)
 
-  // getCurrentWindow().webContents.setZoomFactor(1)
   if (window.siyuan.printWin) {
     window.siyuan.printWin.destroy()
   }
@@ -57,15 +56,26 @@ export const doCloseExportWin = () => {
 
 /**
  * 打开思源导出窗口
+ * 打开的时候 syWin = window.parent
  */
-export const doOpenExportWin = async () => {
+export const doOpenExportWin = async (pageId) => {
   const syWin = window.parent
   if (syWin.terwer && syWin.terwer.renderPublishHelper) {
     // 打开弹窗
-    syWin.terwer.renderPublishHelper()
+    syWin.terwer.renderPublishHelper(pageId)
   } else {
     ElMessage.warning(
-      "未找到hook方法，请在自定义js片段添加 import('/widgets/sy-post-publisher/lib/siyuanhook.js') ，并重启思源笔记"
+      "renderPublishHelper失败，未找到hook方法，请在自定义js片段添加 import('/widgets/sy-post-publisher/lib/siyuanhook.js') ，并重启思源笔记"
     )
   }
+}
+
+// 如果是思源新窗口
+export const getSiyuanNewWinPageId = () => {
+  let pageId
+  const syWin = window.parent
+  if (syWin.terwer && syWin.terwer.pageId) {
+    pageId = syWin.terwer.pageId
+  }
+  return pageId
 }

@@ -56,6 +56,7 @@ import { onMounted, ref } from "vue"
 import {
   doCloseExportWin,
   doOpenExportWin,
+  getSiyuanNewWinPageId,
   isInSiyuanBrowser,
 } from "~/utils/otherlib/siyuanBrowserUtil"
 import { getPublishCfg } from "~/utils/publishUtil"
@@ -68,6 +69,9 @@ const handleWinOpen = async () => {
   if (showOpenBtn.value) {
     try {
       await doOpenExportWin()
+
+      // event
+      pageIdChanged()
     } catch (e) {
       showOpenBtn.value = false
       ElMessage.info(
@@ -81,6 +85,9 @@ const handleWinClose = () => {
   if (showCloseBtn.value) {
     try {
       doCloseExportWin()
+
+      // event
+      pageIdChanged()
     } catch (e) {
       showCloseBtn.value = false
       ElMessage.info(
@@ -90,10 +97,27 @@ const handleWinClose = () => {
   }
 }
 
+const pageIdChanged = () => {
+  const newWinPageId = getSiyuanNewWinPageId()
+  const isNewWin = typeof newWinPageId === "undefined"
+  alert(isNewWin)
+  // if (newWinPageId) {
+  //   showOpenBtn.value = false
+  //   showCloseBtn.value = true
+  // } else {
+  //   showOpenBtn.value = true
+  //   showCloseBtn.value = false
+  // }
+}
+
 onMounted(() => {
+  // init
   const publishCfg = getPublishCfg()
   showCloseBtn.value = isInSiyuanBrowser() || publishCfg.showCloseBtn
   showOpenBtn.value = showCloseBtn.value
+
+  // event
+  pageIdChanged()
 })
 </script>
 

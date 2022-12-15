@@ -172,6 +172,7 @@ import { SIYUAN_CONSTANTS } from "~/utils/constants/siyuanConstants"
 import { getEnv } from "~/utils/envUtil"
 import { getPublishCfg } from "~/utils/publishUtil"
 import { parseBoolean } from "~/utils/util"
+import { getSiyuanNewWinPageId } from "~/utils/otherlib/siyuanBrowserUtil"
 
 const logger = LogFactory.getLogger()
 
@@ -365,6 +366,14 @@ const reloadTableData = async () => {
       logger.warn("处于生产环境，父文档ID为=>", postid)
     }
 
+    // 如果是思源笔记新窗口打开
+    const newWinPageId = getSiyuanNewWinPageId()
+    logger.warn("思源笔记新窗口，postid为=>", postid)
+    if (newWinPageId) {
+      postid = newWinPageId
+    }
+
+    // 检测子文档
     postCount = await siyuanApi.getSubPostCount(postid)
     if (postCount > 1) {
       hasSubdoc = true

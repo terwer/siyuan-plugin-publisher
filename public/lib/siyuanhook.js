@@ -117,7 +117,7 @@ const fetchPost = (url, data, cb, headers) => {
 window.terwer = {
   renderPublishHelper: () => {},
 }
-window.terwer.renderPublishHelper = () => {
+window.terwer.renderPublishHelper = (pageId) => {
   const localData = JSON.parse(
     localStorage.getItem("local-exportpdf") ||
       JSON.stringify({
@@ -180,11 +180,15 @@ window.terwer.renderPublishHelper = () => {
         webviewTag: true,
         webSecurity: false,
       },
+      customProperty: {
+        pageId: pageId,
+      },
     })
     window.siyuan.printWin.webContents.userAgent = `SiYuan/${app.getVersion()} https://b3log.org/siyuan Electron`
     window.siyuan.printWin.once("ready-to-show", () => {
       window.siyuan.printWin.webContents.setZoomFactor(1)
     })
+    window.siyuan.printWin.terwerPageId = "aaaa"
     fetchPost(
       "/api/export/exportTempContent",
       { content: html },
@@ -194,11 +198,6 @@ window.terwer.renderPublishHelper = () => {
     )
   })
 }
-
-// export const destroyPrintWindow = () => {
-//   getCurrentWindow().webContents.setZoomFactor(1);
-//   window.siyuan.printWin.destroy();
-// };
 
 /**-- 在所有文档前面加上一个挂件插槽--**/
 function showPreviousWidgetsSlot() {
