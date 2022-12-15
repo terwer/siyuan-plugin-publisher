@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.5.0](https://github.com/terwer/src-sy-post-publisher/compare/v0.4.1...v0.5.0) (2022-12-15)
+
+
+### Features
+
+* [#213](https://github.com/terwer/src-sy-post-publisher/issues/213) 挂件模式用挂载菜单的方式使用 ([0de9a73](https://github.com/terwer/src-sy-post-publisher/commit/0de9a73b7f333e74bb6a40c4e5f015d428edfd51))
+* [#213](https://github.com/terwer/src-sy-post-publisher/issues/213) 挂件模式用挂载菜单的方式使用-hook挂件按钮 ([0b08791](https://github.com/terwer/src-sy-post-publisher/commit/0b08791ff513349406299c8d0bd856c0d1ad96e9))
+* [#213](https://github.com/terwer/src-sy-post-publisher/issues/213) 挂件模式用挂载菜单的方式使用-优化弹窗体验，改进子文档 ([2a94252](https://github.com/terwer/src-sy-post-publisher/commit/2a94252a6074b6fbf200782988bae1cb7fe9c614))
+* [#213](https://github.com/terwer/src-sy-post-publisher/issues/213) 挂件模式用挂载菜单的方式使用-弹窗关闭 ([430d73a](https://github.com/terwer/src-sy-post-publisher/commit/430d73a6ff1a7cdf035ac50b5c3bf5ea66dd2932))
+* [#213](https://github.com/terwer/src-sy-post-publisher/issues/213) 挂件模式用挂载菜单的方式使用-样式优化，pageId错误逻辑修复 ([1a20189](https://github.com/terwer/src-sy-post-publisher/commit/1a20189450b27e7139a67e2979a7431713739dee))
+
+
+### Miscellaneous
+
+* **deps-dev:** bump eslint-config-standard-with-typescript ([a8866cf](https://github.com/terwer/src-sy-post-publisher/commit/a8866cf6545b7d8e05a0d541e38f942c157cf65f))
+* widget 0.4.1 ([0e3e526](https://github.com/terwer/src-sy-post-publisher/commit/0e3e5266006019960d61d04aa350c3b05907fe88))
+* widget 0.4.1 ([d9386f3](https://github.com/terwer/src-sy-post-publisher/commit/d9386f3978248d2083e6278764ceaabe51d68c53))
+* 修改项目说明 ([739b69b](https://github.com/terwer/src-sy-post-publisher/commit/739b69beeb7b3bbbda54fc6fcef22257715bbef2))
+* 升级eslint，更改下载统计 ([9ad0592](https://github.com/terwer/src-sy-post-publisher/commit/9ad0592201782acff8fcb6478f661455a4d08754))
+
 ## [0.4.1](https://github.com/terwer/src-sy-post-publisher/compare/v0.4.0...v0.4.1) (2022-12-14)
 
 
