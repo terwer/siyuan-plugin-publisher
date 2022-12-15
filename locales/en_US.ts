@@ -290,4 +290,5 @@ export default {
   "preference.setting.removeH1.tip":
     "Delete H1 may accidentally delete the beginning of the beginning of Markdown. If you need to open it, please use more than 2 ones.",
   "preference.setting.newWin": "New win",
+  "siyuan.browser.show.close.btn": "Show close btn",
 }

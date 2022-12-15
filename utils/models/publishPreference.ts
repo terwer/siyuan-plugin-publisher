@@ -68,4 +68,8 @@ export class PublishPreference {
    * 是否开启新窗口
    */
   newWin: boolean
+  /**
+   * 是否显示关闭按钮（思源笔记挂载菜单模式可以用）
+   */
+  showCloseBtn: boolean
 }

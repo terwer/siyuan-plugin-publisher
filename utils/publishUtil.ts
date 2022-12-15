@@ -165,10 +165,13 @@ export const getPublishCfg = (): PublishPreference => {
     // TODO 非Github平台待实现
     publishCfg.makeAttrOnFirstLoad = false
     publishCfg.newWin = true
+    publishCfg.showCloseBtn = false
   } else {
     publishCfg.fixTitle = parseBoolean(publishCfg.fixTitle)
     publishCfg.removeH1 = parseBoolean(publishCfg.removeH1)
     publishCfg.newWin = parseBoolean(publishCfg.newWin)
+    publishCfg.autoTag = parseBoolean(publishCfg.autoTag)
+    publishCfg.showCloseBtn = parseBoolean(publishCfg.showCloseBtn)
   }
 
   // =====================================================

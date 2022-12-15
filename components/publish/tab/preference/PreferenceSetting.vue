@@ -50,6 +50,12 @@
           @change="formMethods.onAutoTagChange"
         />
       </el-form-item>
+      <el-form-item :label="$t('siyuan.browser.show.close.btn')">
+        <el-switch
+          v-model="formData.showCloseBtn"
+          @change="formMethods.onShowCloseBtnChange"
+        />
+      </el-form-item>
     </el-form>
   </div>
 </template>
@@ -83,6 +89,7 @@ const formData = reactive({
   removeH1: false,
   newWin: true,
   autoTag: false,
+  showCloseBtn: false,
 })
 
 const formMethods = {
@@ -132,6 +139,12 @@ const formMethods = {
 
     saveConf()
   },
+  onShowCloseBtnChange: (val: boolean) => {
+    logger.debug("onShowCloseBtnChange=>", val)
+    formData.showCloseBtn = val
+
+    saveConf()
+  },
 }
 
 const saveConf = () => {
@@ -140,6 +153,7 @@ const saveConf = () => {
   publishCfg.removeH1 = parseBoolean(formData.removeH1)
   publishCfg.newWin = parseBoolean(formData.newWin)
   publishCfg.autoTag = parseBoolean(formData.autoTag)
+  publishCfg.showCloseBtn = parseBoolean(formData.showCloseBtn)
 
   setJSONConf<PublishPreference>(
     CONSTANTS.PUBLISH_PREFERENCE_CONFIG_KEY,
@@ -161,6 +175,7 @@ const initConf = () => {
   formData.removeH1 = parseBoolean(publishCfg.removeH1)
   formData.newWin = parseBoolean(publishCfg.newWin)
   formData.autoTag = parseBoolean(publishCfg.autoTag)
+  formData.showCloseBtn = parseBoolean(publishCfg.showCloseBtn)
 }
 
 onMounted(() => {
