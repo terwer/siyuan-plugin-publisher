@@ -102,8 +102,8 @@ https://terwer.space/post/start-to-get-started-zi0eyk.html
 |  ![](https://static-rs-terwer.oss-cn-beijing.aliyuncs.com/icons/browser/edge20.svg)  | [latest](https://microsoftedge.microsoft.com/addons/detail/%E6%80%9D%E6%BA%90%E7%AC%94%E8%AE%B0%E5%8F%91%E5%B8%83%E8%BE%85%E5%8A%A9%E5%B7%A5%E5%85%B7/aejmkigifflimhjlhjkdckclhabbilee) |  已上架  |
 | ![](https://static-rs-terwer.oss-cn-beijing.aliyuncs.com/icons/browser/chrome20.svg) |     [latest](https://chrome.google.com/webstore/detail/%E6%80%9D%E6%BA%90%E7%AC%94%E8%AE%B0%E5%8F%91%E5%B8%83%E8%BE%85%E5%8A%A9%E5%B7%A5%E5%85%B7/gemlnnppcphbiimfjnobfgdkohjmgifm)     |  已上架  |
 |                                        网页版                                        |                                                                 [latest](https://publish.terwer.space/blog/index.html)                                                                  |  可使用  |
-|                                       离线 zip                                       |                                  [latest](https://github.com/terwer/src-sy-post-publisher/releases/download/v0.0.3/sy-post-publisher-chrome-0.0.3.zip)                                  |  可下载  |
-|                                        挂件版                                        |                                                                  [latest](https://github.com/terwer/sy-post-publisher)                                                                  |  可使用  |
+|                                       离线 zip                                       |                                                           [latest](https://github.com/terwer/src-sy-post-publisher/releases)                                                            |  可下载  |
+|                                        挂件版                                        |                                                             [latest](https://github.com/terwer/sy-post-publisher/releases)                                                              |  可使用  |
 
 小贴士：
 
@@ -291,6 +291,41 @@ pnpm extChromeDev
 ```bash
 vercel
 ```
+
+## 🎈 鸣谢
+
+sy-post-publisher 系列主题的诞生与成长离不开下列开源项目的贡献，以及热心网友的反馈和建议。
+
+### 思源社区
+
+[思源笔记](https://github.com/siyuan-note/siyuan)
+
+### 资源
+
+UI 框架：（排名不分先后）
+
+- [Vue3](https://vuejs.org/)
+- [Element-Plus](https://element-plus.org/)
+- [lute](https://github.com/88250/lute)
+
+技术框架或托管平台：（排名不分先后）
+
+- [xmlrpc](https://github.com/baalexander/node-xmlrpc)
+- [yaml](https://github.com/nodeca/js-yaml)
+- [vercel](https://vercel.com/)
+
+### 个人
+
+技术支持：（排名不分先后）
+
+- 感谢 [Soltus](https://github.com/Soltus) 提供的新窗口打开相关代码及实现思路
+
+- 感谢 [leolee9086](https://github.com/leolee9086) 提供的挂载菜单相关代码及实现思路
+
+- 感谢 [Zuoqiu-Yingyi](https://github.com/Zuoqiu-Yingyi)
+  开源的 [Dark+](https://github.com/Zuoqiu-Yingyi/siyuan-theme-dark-plus) 主题的灵感
+
+- 感谢 [svchord](https://github.com/svchord) 开源的 [Rem Craft](https://github.com/svchord/Rem-Craft) 主题的灵感
 
 ## 版权声明
 
