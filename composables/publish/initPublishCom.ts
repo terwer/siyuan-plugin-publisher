@@ -255,9 +255,11 @@ export const useInitPublish = (props, deps, otherArgs?) => {
       }
     },
 
-    saveAttrToSiyuanWithInit: async (hideTip?: boolean) => {
+    saveAttrToSiyuanWithInit: async () => {
       await quickMethods.saveAttrToSiyuan(true)
-      await initPublishMethods.initPage(false)
+      await initPublishMethods.initPage(true)
+
+      ElMessage.success(t("main.opt.success"))
     },
 
     getInitPublishData: () => {
