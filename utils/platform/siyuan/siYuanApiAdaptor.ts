@@ -32,8 +32,9 @@ import { POST_STATUS_CONSTANTS } from "~/utils/constants/postStatusConstants"
 import { CategoryInfo } from "~/utils/models/categoryInfo"
 import { appendStr } from "~/utils/strUtil"
 import { renderHTML } from "~/utils/markdownUtil"
-import { removeWidgetTag } from "~/utils/htmlUtil"
+import { removeH1, removeWidgetTag } from "~/utils/htmlUtil"
 import { LogFactory } from "~/utils/logUtil"
+import { getPublishCfg } from "~/utils/publishUtil"
 
 /**
  * 思源笔记API适配器
@@ -117,6 +118,9 @@ export class SiYuanApiAdaptor implements IApi {
   }
 
   public async getPost(postid: string, useSlug?: boolean): Promise<Post> {
+    // 读取偏好设置
+    const publishCfg = getPublishCfg()
+
     let pid = postid
     if (useSlug) {
       const pidObj = await this.siyuanApi.getBlockBySlug(postid)
@@ -149,6 +153,9 @@ export class SiYuanApiAdaptor implements IApi {
     let html = renderHTML(md.content)
     // 移除挂件html
     html = removeWidgetTag(html)
+    if (publishCfg.removeH1) {
+      html = removeH1(html)
+    }
 
     // 适配公共属性
     const commonPost = new Post()
