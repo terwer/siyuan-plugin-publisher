@@ -158,7 +158,7 @@ window.terwer.renderPublishHelper = (pageId, pageUrl) => {
         var txt = data.toString().replace(/<!--.*-->/gs, "")
         txt +=
           '<script>window.terwer={};window.terwer.pageId="' +
-          pageId +
+          (pageId ?? "") +
           '"</script>'
         html(txt)
       }
@@ -203,7 +203,7 @@ window.terwer.renderPublishHelper = (pageId, pageUrl) => {
       (response) => {
         window.siyuan.printWin.loadURL(response.data.url)
         // 打开开发者工具
-        // window.siyuan.printWin.webContents.openDevTools()
+        window.siyuan.printWin.webContents.openDevTools()
       }
     )
   })

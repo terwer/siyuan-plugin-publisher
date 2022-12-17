@@ -168,14 +168,9 @@ import { formatIsoToZhDate } from "~/utils/dateUtil"
 import { ElMessageBox } from "element-plus"
 import SingleBlogDetail from "~/components/blog/singleWin/SingleBlogDetail.vue"
 import SinglePublish from "~/components/blog/singleWin/singlePublish.vue"
-import { SIYUAN_CONSTANTS } from "~/utils/constants/siyuanConstants"
-import { getEnv } from "~/utils/envUtil"
 import { getPublishCfg } from "~/utils/publishUtil"
-import { parseBoolean } from "~/utils/util"
-import {
-  getSiyuanNewWinPageId,
-  isInSiyuanNewWinBrowser,
-} from "~/utils/otherlib/siyuanBrowserUtil"
+import { isEmptyString, parseBoolean } from "~/utils/util"
+import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
 
 const logger = LogFactory.getLogger()
 
@@ -360,44 +355,34 @@ const reloadTableData = async () => {
   let hasSubdoc = false
 
   const siyuanApi = new SiYuanApiAdaptor()
-  if (
-    isInSiyuan.value ||
-    SIYUAN_CONSTANTS.DEBUG_SIYUAN_SUBDOC ||
-    isInSiyuanNewWinBrowser()
-  ) {
-    let postid
+  if (isInSiyuan.value || isInSiyuanNewWinBrowser()) {
+    const postid = await getPageId()
+    logger.warn("处于生产环境，父文档ID为=>", postid)
 
-    // 如果是思源笔记新窗口打开
-    if (isInSiyuanNewWinBrowser()) {
-      const newWinPageId = getSiyuanNewWinPageId()
-      if (newWinPageId) {
-        postid = newWinPageId
+    if (!isEmptyString(postid)) {
+      // 检测子文档
+      postCount = await siyuanApi.getSubPostCount(postid)
+      if (postCount > 1) {
+        hasSubdoc = true
       }
-      logger.warn("思源笔记新窗口，postid为=>", postid)
+
+      if (hasSubdoc) {
+        postList = await siyuanApi.getSubPosts(
+          postid,
+          MAX_PAGE_SIZE,
+          currentPage.value - 1,
+          state.value
+        )
+      }
+      logger.warn("思源笔记内部展示子文档")
     } else {
-      // 其他模式
-      postid = getEnv("VITE_SIYUAN_DEV_PAGE_ID")
-      if (SIYUAN_CONSTANTS.DEBUG_SIYUAN_SUBDOC) {
-        logger.warn("处于子文档调试模式，父文档ID为=>", postid)
-      } else {
-        postid = await getPageId()
-        logger.warn("处于生产环境，父文档ID为=>", postid)
-      }
-    }
-
-    // 检测子文档
-    postCount = await siyuanApi.getSubPostCount(postid)
-    if (postCount > 1) {
-      hasSubdoc = true
-    }
-
-    if (hasSubdoc) {
-      postList = await siyuanApi.getSubPosts(
-        postid,
+      postCount = await siyuanApi.getRecentPostsCount(state.value)
+      postList = await siyuanApi.getRecentPosts(
         MAX_PAGE_SIZE,
         currentPage.value - 1,
         state.value
       )
+      logger.warn("思源笔记内部展示文档列表")
     }
   } else {
     postCount = await siyuanApi.getRecentPostsCount(state.value)
@@ -406,6 +391,7 @@ const reloadTableData = async () => {
       currentPage.value - 1,
       state.value
     )
+    logger.warn("浏览器环境或者浏览器插件展示文档列表")
     logger.debug("postList=>", postList)
   }
 

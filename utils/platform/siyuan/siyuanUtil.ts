@@ -169,11 +169,11 @@ export const getPageId = async (
     if (widgetResult.isInSiyuan) {
       // 尝试读取挂件的ID
       syPageId = await getSiyuanPageId(force)
-    } else {
-      // 新窗口
-      if (isInSiyuanNewWinBrowser()) {
-        syPageId = getSiyuanNewWinPageId()
-      }
+    }
+
+    // 新窗口
+    if (isInSiyuanNewWinBrowser()) {
+      syPageId = getSiyuanNewWinPageId()
     }
   }
 

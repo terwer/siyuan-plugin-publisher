@@ -25,7 +25,7 @@
 
 <template>
   <div class="post-detail-content-box">
-    <div v-if="!isInSiyuanNewWinBrowser()" class="btn-publish">
+    <div v-if="!inSiyuanNewWin" class="btn-publish">
       <el-button size="small" type="primary" @click="handlePublish"
         >发布到其他平台
       </el-button>
@@ -55,6 +55,7 @@ const props = defineProps({
 })
 
 const pid = ref("")
+const inSiyuanNewWin = ref(isInSiyuanNewWinBrowser())
 
 const handlePublish = async () => {
   const widgetResult = getWidgetId()

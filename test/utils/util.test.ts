@@ -26,32 +26,33 @@
 import { describe, expect } from "vitest"
 import {
   cutWords,
+  isEmptyString,
   jiebaToHotWords,
   pinyinSlugify,
-  zhSlugify
+  zhSlugify,
 } from "~/utils/util"
 import { LogFactory } from "~/utils/logUtil"
 
 describe("util test", () => {
-  const logger = LogFactory.getLogger();
+  const logger = LogFactory.getLogger()
 
   it("zhSlugify test", async () => {
-    const result = await zhSlugify("我爱中国");
-    logger.info("zhSlugify result=>", result);
-    expect(result).contains("china");
-  });
+    const result = await zhSlugify("我爱中国")
+    logger.info("zhSlugify result=>", result)
+    expect(result).contains("china")
+  })
 
   it("pinyinSlugify test", async () => {
-    const result = pinyinSlugify("我爱中国");
-    logger.info("pinyinSlugify result=>", result);
-    expect(result).contains("wo");
-  });
+    const result = pinyinSlugify("我爱中国")
+    logger.info("pinyinSlugify result=>", result)
+    expect(result).contains("wo")
+  })
 
   it("cutWords test", async () => {
-    const words = "今天天气很好";
-    const result = await cutWords(words);
-    logger.info("cutWords result=>", result);
-  });
+    const words = "今天天气很好"
+    const result = await cutWords(words)
+    logger.info("cutWords result=>", result)
+  })
 
   it("jiebaToHotWords test", () => {
     const words = [
@@ -345,5 +346,14 @@ describe("util test", () => {
     // const result = jiebaToHotWords(words,3)
     const result = jiebaToHotWords(words)
     logger.info("jiebaToHotWords result=>", result)
+  })
+
+  it("isEmptyString test", () => {
+    // const str = undefined
+    const str = "undefined"
+    logger.info(typeof str)
+    logger.info(str == "undefined")
+    const result = isEmptyString(str)
+    logger.info("isEmptyString result=>", result)
   })
 })

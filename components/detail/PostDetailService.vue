@@ -25,7 +25,10 @@
 
 <template>
   <div class="post-detail-wrap">
-    <h1>{{ post.title }}</h1>
+    <h1 v-if="inSiyuanNewWin" style="display: none">{{ post.title }}</h1>
+    <blockquote class="post-detail-id" style="display: none">
+      本文ID：{{ post.postid }}
+    </blockquote>
     <div
       id="post-detail-content"
       v-beauty
@@ -41,6 +44,7 @@ import { onMounted, ref, watch } from "vue"
 import { API } from "~/utils/api"
 import { API_TYPE_CONSTANTS } from "~/utils/constants/apiTypeConstants"
 import { LogFactory } from "~/utils/logUtil"
+import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
 
 const logger = LogFactory.getLogger(
   "components/blog/themes/default/PostDetailService.vue"
@@ -52,6 +56,8 @@ const props = defineProps({
     default: undefined,
   },
 })
+
+const inSiyuanNewWin = ref(isInSiyuanNewWinBrowser())
 
 /* 监听props */
 watch(
@@ -130,6 +136,20 @@ h2 {
 
 .post-detail-wrap h1 {
   margin-top: 16px;
+}
+
+.post-detail-wrap .post-detail-id {
+  margin-top: 10px;
+  display: block;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 4px;
+  margin-inline-end: 24px;
+  border: solid 1px green;
+  border-radius: 4px;
+  padding: 10px;
+  background: var(--custom-app-bg-color);
+  margin-bottom: 0;
 }
 </style>
 <style scoped></style>
