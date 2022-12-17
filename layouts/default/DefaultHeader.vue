@@ -32,28 +32,32 @@
           class="b3-button--open"
           type="success"
           @click="handleWinOpen"
-          >[]
+        >
+          <font-awesome-icon icon="fa-solid fa-upload" />
         </el-button>
         <el-button
           v-if="showOpenBtn"
           class="b3-button--preview"
           type="success"
           @click="handleWinPreview"
-          >-
+        >
+          <font-awesome-icon icon="fa-solid fa-book-open-reader" />
         </el-button>
         <el-button
           v-if="showOpenBtn"
           class="b3-button--preview"
           type="success"
           @click="handleWinManage"
-          >+
+        >
+          <font-awesome-icon icon="fa-solid fa-rectangle-list" />
         </el-button>
         <el-button
           v-if="showCloseBtn"
           class="b3-button--cancel"
           type="danger"
           @click="handleWinClose"
-          >X
+        >
+          <font-awesome-icon icon="fa-solid fa-xmark" />
         </el-button>
       </div>
       <h1 v-if="showTitle" class="header-title-default">

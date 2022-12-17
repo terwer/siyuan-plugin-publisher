@@ -46,6 +46,9 @@ import vueHljs from "~/plugins/vue-hljs/lib/vue-hljs/main"
 // page-beauty
 import PageBeauty from "~/plugins/page-beauty/page-beauty"
 
+// font-awesome
+import FontAwesome from "~/plugins/font-awesome/font-awesome"
+
 /**
  * 统一的Vue实例创建入口
  * @param rootComponent
@@ -69,6 +72,9 @@ const createPage = (rootComponent: Component): App => {
 
   // page-beauty
   app.use(PageBeauty)
+
+  // font-awesome
+  app.use(FontAwesome)
 
   // Register a global custom directive called `v-focus`
   app.directive("focus", {
