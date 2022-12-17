@@ -24,12 +24,15 @@
   -->
 
 <template>
-  <div
-    id="post-detail-content"
-    v-beauty
-    v-highlight
-    v-html="post.description"
-  ></div>
+  <div class="post-detail-wrap">
+    <h1>{{ post.title }}</h1>
+    <div
+      id="post-detail-content"
+      v-beauty
+      v-highlight
+      v-html="post.description"
+    ></div>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -117,6 +120,16 @@ onMounted(async () => {
 
 #post-detail-content mjx-container[jax="SVG"][display="true"] {
   text-align: left;
+}
+
+.post-detail-wrap h1,
+h2 {
+  margin: 0;
+  padding: 0;
+}
+
+.post-detail-wrap h1 {
+  margin-top: 16px;
 }
 </style>
 <style scoped></style>

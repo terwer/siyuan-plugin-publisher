@@ -61,11 +61,11 @@ export const doCloseExportWin = () => {
  * 打开思源导出窗口
  * 打开的时候 syWin = window.parent
  */
-export const doOpenExportWin = async (pageId) => {
+export const doOpenExportWin = async (pageId, pageUrl) => {
   const syWin = window.parent
   if (syWin.terwer && syWin.terwer.renderPublishHelper) {
     // 打开弹窗
-    syWin.terwer.renderPublishHelper(pageId)
+    syWin.terwer.renderPublishHelper(pageId, pageUrl)
   } else {
     ElMessage.warning(
       "renderPublishHelper失败，未找到hook方法，请在自定义js片段添加 import('/widgets/sy-post-publisher/lib/siyuanhook.js') ，并重启思源笔记"

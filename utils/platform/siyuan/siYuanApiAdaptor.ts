@@ -32,7 +32,7 @@ import { POST_STATUS_CONSTANTS } from "~/utils/constants/postStatusConstants"
 import { CategoryInfo } from "~/utils/models/categoryInfo"
 import { appendStr } from "~/utils/strUtil"
 import { renderHTML } from "~/utils/markdownUtil"
-import { removeH1, removeWidgetTag } from "~/utils/htmlUtil"
+import { removeH1, removeTitleNumber, removeWidgetTag } from "~/utils/htmlUtil"
 import { LogFactory } from "~/utils/logUtil"
 import { getPublishCfg } from "~/utils/publishUtil"
 
@@ -149,18 +149,24 @@ export class SiYuanApiAdaptor implements IApi {
     // 访问密码
     const shortDesc = attrs["custom-desc"] || ""
 
+    // 标题处理
+    let title = siyuanPost.content || ""
+    if (publishCfg.fixTitle) {
+      title = removeTitleNumber(title)
+    }
+
     // 渲染Markdown
     let html = renderHTML(md.content)
     // 移除挂件html
     html = removeWidgetTag(html)
-    if (publishCfg.removeH1) {
+    if (publishCfg.fixTitle) {
       html = removeH1(html)
     }
 
     // 适配公共属性
     const commonPost = new Post()
     commonPost.postid = siyuanPost.root_id || ""
-    commonPost.title = siyuanPost.content || ""
+    commonPost.title = title || ""
     commonPost.description = html || ""
     commonPost.shortDesc = shortDesc || ""
     commonPost.mt_keywords = attrs.tags || ""
