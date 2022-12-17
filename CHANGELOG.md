@@ -1,5 +1,29 @@
 # Changelog
 
+## [0.5.1](https://github.com/terwer/src-sy-post-publisher/compare/v0.5.0...v0.5.1) (2022-12-17)
+
+
+### Bug Fixes
+
+* [#275](https://github.com/terwer/src-sy-post-publisher/issues/275) 保存属性到思源需要刷新页面 ([120ec34](https://github.com/terwer/src-sy-post-publisher/commit/120ec348cdb8840913d5ea84fef64b47b451b6b7))
+* [#275](https://github.com/terwer/src-sy-post-publisher/issues/275) 保存属性到思源需要刷新页面-成功提示 ([d5602f5](https://github.com/terwer/src-sy-post-publisher/commit/d5602f56aec752ce1e583e47ffb1fcfdbe803acc))
+* [#280](https://github.com/terwer/src-sy-post-publisher/issues/280) 弹窗新窗口打开404 ([361b397](https://github.com/terwer/src-sy-post-publisher/commit/361b397a2cf836273f05112df09c2716fce0fbc5))
+* [#281](https://github.com/terwer/src-sy-post-publisher/issues/281) 文章搜索支持ID ([6573afc](https://github.com/terwer/src-sy-post-publisher/commit/6573afcb1f2f924ec47962a681ec8f014d59786b))
+* [#282](https://github.com/terwer/src-sy-post-publisher/issues/282) 弹窗支持手动切换发布页面与列表-新增一个单独预览按钮 ([ad8c030](https://github.com/terwer/src-sy-post-publisher/commit/ad8c030905b68b1b95ceaca7c776ae67a29a4976))
+* [#282](https://github.com/terwer/src-sy-post-publisher/issues/282) 弹窗支持手动切换发布页面与列表-新增一个管理所有文章的按钮 ([c57a605](https://github.com/terwer/src-sy-post-publisher/commit/c57a605e03b02a712a16c5cdb8a7ace09bb30ab2))
+* [#282](https://github.com/terwer/src-sy-post-publisher/issues/282) 弹窗支持手动切换发布页面与列表-美化按钮图标 ([fe745c1](https://github.com/terwer/src-sy-post-publisher/commit/fe745c1d9db7e011d3e0a6aaee2edcea42294fae))
+* 修复文章预览H1标签问题 ([58df259](https://github.com/terwer/src-sy-post-publisher/commit/58df25942585119d30b3d3c67446dedaf8cb73e0))
+
+
+### Miscellaneous
+
+* 0.5.0 release ([6150b1e](https://github.com/terwer/src-sy-post-publisher/commit/6150b1e9c1fabfd5b8b691faa8d9b63dcdf38410))
+* 0.5.0 release ([7f162d0](https://github.com/terwer/src-sy-post-publisher/commit/7f162d05e1d6af9196d0e9fad940f6a25a43e21f))
+* fix doc ([cc14f05](https://github.com/terwer/src-sy-post-publisher/commit/cc14f058568c368ac2f5533c0d370839765facfc))
+* 新增感谢说明 ([f6586db](https://github.com/terwer/src-sy-post-publisher/commit/f6586db7ebdda7759b30417786ead98e5e09449a))
+* 新增感谢说明 ([e953552](https://github.com/terwer/src-sy-post-publisher/commit/e9535522ef1d9024cf28a68a1da54323a6599eb1))
+* 新增感谢说明，QQ群 ([8e77a8b](https://github.com/terwer/src-sy-post-publisher/commit/8e77a8b2eee5ec55ef6099dc811544f33238e3da))
+
 ## [0.5.0](https://github.com/terwer/src-sy-post-publisher/compare/v0.4.1...v0.5.0) (2022-12-15)
 
 
