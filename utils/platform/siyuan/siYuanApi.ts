@@ -48,7 +48,7 @@ export class SiYuanApi {
     const stmt = `SELECT COUNT(DISTINCT b1.root_id) as count
         FROM blocks b1
         WHERE 1 = 1
-        AND ((b1.content LIKE '%${keyword}%') OR (b1.tag LIKE '%${keyword}%')
+        AND (b1.root_id ='${keyword}' OR (b1.content LIKE '%${keyword}%') OR (b1.tag LIKE '%${keyword}%')
     )`
     const data = await this.sql(stmt)
     this.logger.debug("getRootBlocksCount data=>", data[0].count)
@@ -86,7 +86,7 @@ export class SiYuanApi {
              SELECT DISTINCT b1.root_id
                 FROM blocks b1
                 WHERE 1 = 1
-                AND ((b1.content LIKE '%${keyword}%') OR (b1.tag LIKE '%${keyword}%'))
+                AND (b1.root_id ='${keyword}' OR (b1.content LIKE '%${keyword}%') OR (b1.tag LIKE '%${keyword}%'))
                 ORDER BY b1.updated DESC,b1.created DESC LIMIT ${
                   page * pagesize
                 },${pagesize}
@@ -109,7 +109,7 @@ export class SiYuanApi {
   public async getSubdocCount(docId: string): Promise<number> {
     const stmt = `SELECT COUNT(DISTINCT b1.root_id) AS count
         FROM blocks b1
-        WHERE b1.path LIKE '%/${docId}%'`
+        WHERE b1.root_id='${docId}' OR b1.path LIKE '%/${docId}%'`
     const data = await this.sql(stmt)
     return data[0].count
   }
@@ -144,7 +144,7 @@ export class SiYuanApi {
         WHERE b2.id IN (
           SELECT DISTINCT b1.root_id
              FROM blocks b1
-             WHERE b1.path like '%/${docId}%'
+             WHERE b1.root_id='${docId}' OR b1.path like '%/${docId}%'
              AND ((b1.content LIKE '%${keyword}%') OR (b1.tag LIKE '%${keyword}%'))
              ORDER BY b1.updated DESC,b1.created DESC LIMIT ${
                page * pagesize
