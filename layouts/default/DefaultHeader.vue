@@ -32,14 +32,32 @@
           class="b3-button--open"
           type="success"
           @click="handleWinOpen"
-          >[]
+        >
+          <font-awesome-icon icon="fa-solid fa-upload" />
+        </el-button>
+        <el-button
+          v-if="showOpenBtn"
+          class="b3-button--preview"
+          type="success"
+          @click="handleWinPreview"
+        >
+          <font-awesome-icon icon="fa-solid fa-book-open-reader" />
+        </el-button>
+        <el-button
+          v-if="showOpenBtn"
+          class="b3-button--preview"
+          type="success"
+          @click="handleWinManage"
+        >
+          <font-awesome-icon icon="fa-solid fa-rectangle-list" />
         </el-button>
         <el-button
           v-if="showCloseBtn"
           class="b3-button--cancel"
           type="danger"
           @click="handleWinClose"
-          >X
+        >
+          <font-awesome-icon icon="fa-solid fa-xmark" />
         </el-button>
       </div>
       <h1 v-if="showTitle" class="header-title-default">
@@ -71,6 +89,39 @@ const handleWinOpen = async () => {
     try {
       const widgetResult = getWidgetId()
       await doOpenExportWin(widgetResult.widgetId)
+
+      // event
+      pageIdChanged()
+    } catch (e) {
+      // showOpenBtn.value = false
+      ElMessage.info(
+        "发生异常，已暂时关闭此按钮，如需永久关闭，请前往通用设置关闭=>" + e
+      )
+    }
+  }
+}
+
+const handleWinPreview = async () => {
+  if (showOpenBtn.value) {
+    try {
+      const widgetResult = getWidgetId()
+      await doOpenExportWin(widgetResult.widgetId, "detail/index.html")
+
+      // event
+      pageIdChanged()
+    } catch (e) {
+      // showOpenBtn.value = false
+      ElMessage.info(
+        "发生异常，已暂时关闭此按钮，如需永久关闭，请前往通用设置关闭=>" + e
+      )
+    }
+  }
+}
+
+const handleWinManage = async () => {
+  if (showOpenBtn.value) {
+    try {
+      await doOpenExportWin(undefined, "blog/index.html")
 
       // event
       pageIdChanged()

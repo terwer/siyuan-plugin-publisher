@@ -118,7 +118,7 @@ window.terwer = {
   pageId: undefined,
   renderPublishHelper: () => {},
 }
-window.terwer.renderPublishHelper = (pageId) => {
+window.terwer.renderPublishHelper = (pageId, pageUrl) => {
   const localData = JSON.parse(
     localStorage.getItem("local-exportpdf") ||
       JSON.stringify({
@@ -145,8 +145,12 @@ window.terwer.renderPublishHelper = (pageId) => {
     }"/>`
   }
   new Promise(function (html) {
+    let url = "index.html"
+    if (pageUrl) {
+      url = pageUrl
+    }
     fs.readFile(
-      `${window.siyuan.config.system.dataDir}/widgets/sy-post-publisher/index.html`,
+      `${window.siyuan.config.system.dataDir}/widgets/sy-post-publisher/${url}`,
       function (err, data) {
         if (err) {
           console.log(err)
@@ -154,7 +158,7 @@ window.terwer.renderPublishHelper = (pageId) => {
         var txt = data.toString().replace(/<!--.*-->/gs, "")
         txt +=
           '<script>window.terwer={};window.terwer.pageId="' +
-          pageId +
+          (pageId ?? "") +
           '"</script>'
         html(txt)
       }

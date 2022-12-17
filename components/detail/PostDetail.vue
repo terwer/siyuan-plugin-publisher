@@ -25,7 +25,7 @@
 
 <template>
   <div class="post-detail-content-box">
-    <div class="btn-publish">
+    <div v-if="!inSiyuanNewWin" class="btn-publish">
       <el-button size="small" type="primary" @click="handlePublish"
         >发布到其他平台
       </el-button>
@@ -43,6 +43,7 @@ import { goToPage } from "~/utils/otherlib/ChromeUtil"
 import { appendStr } from "~/utils/strUtil"
 import PostDetailService from "~/components/detail/PostDetailService.vue"
 import { LogFactory } from "~/utils/logUtil"
+import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
 
 const logger = LogFactory.getLogger("components/detail/PostDetail.vue")
 
@@ -54,6 +55,7 @@ const props = defineProps({
 })
 
 const pid = ref("")
+const inSiyuanNewWin = ref(isInSiyuanNewWinBrowser())
 
 const handlePublish = async () => {
   const widgetResult = getWidgetId()

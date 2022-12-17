@@ -32,8 +32,9 @@ import { POST_STATUS_CONSTANTS } from "~/utils/constants/postStatusConstants"
 import { CategoryInfo } from "~/utils/models/categoryInfo"
 import { appendStr } from "~/utils/strUtil"
 import { renderHTML } from "~/utils/markdownUtil"
-import { removeWidgetTag } from "~/utils/htmlUtil"
+import { removeH1, removeTitleNumber, removeWidgetTag } from "~/utils/htmlUtil"
 import { LogFactory } from "~/utils/logUtil"
+import { getPublishCfg } from "~/utils/publishUtil"
 
 /**
  * 思源笔记API适配器
@@ -117,6 +118,9 @@ export class SiYuanApiAdaptor implements IApi {
   }
 
   public async getPost(postid: string, useSlug?: boolean): Promise<Post> {
+    // 读取偏好设置
+    const publishCfg = getPublishCfg()
+
     let pid = postid
     if (useSlug) {
       const pidObj = await this.siyuanApi.getBlockBySlug(postid)
@@ -145,15 +149,24 @@ export class SiYuanApiAdaptor implements IApi {
     // 访问密码
     const shortDesc = attrs["custom-desc"] || ""
 
+    // 标题处理
+    let title = siyuanPost.content || ""
+    if (publishCfg.fixTitle) {
+      title = removeTitleNumber(title)
+    }
+
     // 渲染Markdown
     let html = renderHTML(md.content)
     // 移除挂件html
     html = removeWidgetTag(html)
+    if (publishCfg.fixTitle) {
+      html = removeH1(html)
+    }
 
     // 适配公共属性
     const commonPost = new Post()
     commonPost.postid = siyuanPost.root_id || ""
-    commonPost.title = siyuanPost.content || ""
+    commonPost.title = title || ""
     commonPost.description = html || ""
     commonPost.shortDesc = shortDesc || ""
     commonPost.mt_keywords = attrs.tags || ""

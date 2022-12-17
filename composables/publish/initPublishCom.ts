@@ -77,6 +77,7 @@ export const useInitPublish = (props, deps, otherArgs?) => {
   const tagMethods = deps.tagMethods
   const githubPagesMethods = deps.githubPagesMethods
   const yamlMethods = deps.yamlMethods
+  const quickMethods = deps.quickMethods
 
   // methods
   const initPublishMethods = {
@@ -252,6 +253,13 @@ export const useInitPublish = (props, deps, otherArgs?) => {
           ElMessage.error(appendStr(t("main.opt.failure"), "=>", e))
         }
       }
+    },
+
+    saveAttrToSiyuanWithInit: async () => {
+      await quickMethods.saveAttrToSiyuan(true)
+      await initPublishMethods.initPage(true)
+
+      ElMessage.success(t("main.opt.success"))
     },
 
     getInitPublishData: () => {

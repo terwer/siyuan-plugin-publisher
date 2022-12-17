@@ -33,6 +33,7 @@ import {
 import { LogFactory } from "~/utils/logUtil"
 import { isInFirefoxExtension } from "~/utils/otherlib/FirefoxUtil"
 import { pathJoin } from "~/utils/util"
+import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
 
 const logger = LogFactory.getLogger()
 
@@ -62,7 +63,7 @@ function getPageUrl(pageUrl, split) {
   } else {
     // 思源笔记链接处理
     const from = getQueryString("from")
-    if (inSiyuan() || from === "siyuan") {
+    if (inSiyuan() || from === "siyuan" || isInSiyuanNewWinBrowser()) {
       url = "/widgets/sy-post-publisher" + url
       url = setUrlParameter(url, "from", "siyuan")
     }

@@ -359,7 +359,9 @@
                 v-if="pageModeData.etype !== PageEditMode.EditMode_simple"
               >
                 <!-- 属性转换 -->
-                <el-button type="primary" @click="quickMethods.saveAttrToSiyuan"
+                <el-button
+                  type="primary"
+                  @click="initPublishMethods.saveAttrToSiyuanWithInit"
                   >{{ $t("main.save.attr.to.siyuan") }}
                 </el-button>
               </el-form-item>
@@ -669,6 +671,7 @@ const { initPublishData, initPublishMethods } = useInitPublish(props, {
   tagMethods,
   githubPagesMethods,
   yamlMethods,
+  quickMethods,
 })
 const { publishData, publishMethods } = usePublish(props, {
   siyuanPageMethods,
