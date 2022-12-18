@@ -120,7 +120,8 @@ export const usePublish = (props, deps?: any) => {
           // 发布路径
           let currentPath = githubPagesMethods.getGithubPagesData().customPath
           const currentDefaultPath = githubCfg.defaultPath ?? "尚未配置"
-          const mdFilename = githubPagesMethods.getGithubPagesData().mdTitle
+          // const mdFilename = githubPagesMethods.getGithubPagesData().mdTitle
+          const mdFilename = githubPagesMethods.getMdFilename()
           githubPagesMethods.initGithubPages({
             cpath: currentPath,
             defpath: currentDefaultPath,
@@ -142,8 +143,6 @@ export const usePublish = (props, deps?: any) => {
           if (!res) {
             publishData.isPublishLoading = false
 
-            // 刷新属性数据
-            // await initPublishMethods.initPage()
             // 发布失败
             ElMessage.error(t("main.publish.vuepress.failure"))
             return
@@ -156,7 +155,10 @@ export const usePublish = (props, deps?: any) => {
           // 获取最新属性
           const pageId = await siyuanPageMethods.getPageId()
           await siyuanApi.setBlockAttrs(pageId, customAttr)
-          logger.debug("VuepressMain发布成功，保存路径,meta=>", customAttr)
+          logger.debug(
+            props.apiType + "_Main发布成功，保存路径,meta=>",
+            customAttr
+          )
 
           // 刷新属性数据
           await initPublishMethods.initPage()
