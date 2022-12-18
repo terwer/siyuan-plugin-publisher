@@ -173,6 +173,7 @@ import { ElMessage } from "element-plus"
 import { getWidgetId, inSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
 import { getPublishCfg } from "~/utils/publishUtil"
 import { getBooleanEnv } from "~/utils/envUtil"
+import { uploadByPicGO } from "~/utils/otherlib/picgoUtil"
 
 const showCloseBtn = ref(false)
 const showOpenBtn = ref(false)
@@ -235,6 +236,7 @@ const handleWinAnki = async () => {
 }
 
 const handleWinPicture = async () => {
+  await uploadByPicGO()
   alert("picture")
 }
 

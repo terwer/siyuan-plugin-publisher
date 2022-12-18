@@ -23,18 +23,19 @@
  * questions.
  */
 
-// 引用 lute 库的方法
-// dev/prod 环境
-// 在 /pages/index.html 直接引用 <script src="/lib/lute/lute.min.js"></script>
-// test 环境
-// 在 setup.ts 引用 require("../public/lib/lute/lute.min.js")
-
-import { renderMarkdownStr } from "~/utils/otherlib/luteUtil"
+import { ElMessage } from "element-plus"
 
 /**
- * 渲染Markdown
- * @param md Markdown文本
+ * 通过PicGO上传图片
+ * @returns {Promise<void>}
  */
-export function renderHTML(md: string): string {
-  return renderMarkdownStr(md)
+export async function uploadByPicGO() {
+  const syWin = window.parent
+  if (syWin.terwer && syWin.terwer.picGoUpload) {
+    return syWin.terwer.picGoUpload()
+  } else {
+    ElMessage.warning(
+      "renderPublishHelper失败，未找到hook方法，请在自定义js片段添加 import('/widgets/sy-post-publisher/lib/siyuanhook.js') ，并重启思源笔记"
+    )
+  }
 }
