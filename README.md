@@ -1,6 +1,6 @@
 # sy-post-publisher
 
-![](https://raw.githubusercontent.com/terwer/src-sy-post-publisher/main/assets/favicon/android-chrome-512x512.png)
+![](https://img1.terwer.space/api/public/202212181125714.png)
 
 将 [思源笔记](https://github.com/siyuan-note/siyuan) 的文章发布到支持的平台的 **思源笔记挂件**
 
@@ -13,7 +13,7 @@
 [![](https://img.shields.io/badge/%E5%B8%AE%E5%8A%A9%E6%96%87%E6%A1%A3-doc-blue)](https://www.terwer.space/post/readme-1j4ltp.html)
 [![](https://img.shields.io/badge/%E6%96%B0%E6%89%8B%E5%B0%8F%E7%99%BD%E7%BA%A7%E8%A7%86%E9%A2%91%E6%95%99%E7%A8%8B-video-red)](https://www.terwer.space/post/configure-entry-video-brpm9.html)
 
-![](https://raw.githubusercontent.com/terwer/src-sy-post-publisher/main/public/preview.png)
+![](https://img1.terwer.space/api/public/202212181127124.png)
 
 ## 状态
 
