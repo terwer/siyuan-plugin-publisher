@@ -312,6 +312,7 @@ UI 框架：（排名不分先后）
 - [Vue3](https://vuejs.org/)
 - [Element-Plus](https://element-plus.org/)
 - [lute](https://github.com/88250/lute)
+- [FontAwesome](https://fontawesome.com/)
 
 技术框架或托管平台：（排名不分先后）
 
