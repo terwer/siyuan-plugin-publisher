@@ -33,6 +33,7 @@ import { ElMessage, ElMessageBox } from "element-plus"
 import { useI18n } from "vue-i18n"
 import { appendStr } from "~/utils/strUtil"
 import { removeTitleNumber } from "~/utils/htmlUtil"
+import { CONSTANTS } from "~/utils/constants/constants"
 
 /**
  * 通用的发布操作组件
@@ -120,8 +121,11 @@ export const usePublish = (props, deps?: any) => {
           // 发布路径
           let currentPath = githubPagesMethods.getGithubPagesData().customPath
           const currentDefaultPath = githubCfg.defaultPath ?? "尚未配置"
-          // const mdFilename = githubPagesMethods.getGithubPagesData().mdTitle
-          const mdFilename = githubPagesMethods.getMdFilename()
+          let mdFilename = githubPagesMethods.getGithubPagesData().mdTitle
+          // 如果是自动生成的别名，需要动态获取
+          if (mdFilename.includes(CONSTANTS.PUBLISH_DYNAMIC_SLUG)) {
+            mdFilename = githubPagesMethods.getMdFilename()
+          }
           githubPagesMethods.initGithubPages({
             cpath: currentPath,
             defpath: currentDefaultPath,

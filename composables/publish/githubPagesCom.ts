@@ -32,6 +32,7 @@ import { isEmptyString, pathJoin } from "~/utils/util"
 import { ElMessage } from "element-plus"
 import { getApiParams } from "~/utils/publishUtil"
 import { appendStr } from "~/utils/strUtil"
+import { CONSTANTS } from "~/utils/constants/constants"
 
 /**
  * Github pages组件
@@ -155,7 +156,7 @@ export const useGithubPages = (props, deps) => {
       const mdFilenameRule = githubCfg.mdFilenameRule
       let mdTitle
       // 如果没有生成，就发布过程中动态生成
-      const slugPlace = "[dynamic-generated-on-publish]"
+      const slugPlace = CONSTANTS.PUBLISH_DYNAMIC_SLUG
       if (isEmptyString(mdFilenameRule)) {
         mdTitle = siyuanData.page.content ?? slugData.customSlug ?? slugPlace
       } else {

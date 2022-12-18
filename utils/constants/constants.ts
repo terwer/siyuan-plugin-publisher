@@ -44,6 +44,11 @@ const DYNAMIC_CONFIG_KEY = "dynamic-config"
 const PUBLISH_PREFERENCE_CONFIG_KEY = "publish-preference"
 
 /**
+ * 自动生成的文件名占位符
+ */
+const PUBLISH_DYNAMIC_SLUG = "[dynamic-generated-on-publish]"
+
+/**
  * 分词最大数目
  */
 const DEFAULT_JIEBA_WORD_LENGTH = 5
@@ -54,4 +59,5 @@ export const CONSTANTS = {
   DYNAMIC_CONFIG_KEY,
   DEFAULT_JIEBA_WORD_LENGTH,
   PUBLISH_PREFERENCE_CONFIG_KEY,
+  PUBLISH_DYNAMIC_SLUG,
 }
