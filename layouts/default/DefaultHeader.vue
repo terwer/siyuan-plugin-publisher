@@ -29,6 +29,14 @@
       <div v-if="!showTitle">
         <el-button
           v-if="showOpenBtn"
+          class="b3-button--quick"
+          type="success"
+          @click="handleWinQuick"
+        >
+          <font-awesome-icon icon="fa-solid fa-bolt" />
+        </el-button>
+        <el-button
+          v-if="showOpenBtn"
           class="b3-button--open"
           type="success"
           @click="handleWinOpen"
@@ -79,10 +87,13 @@ import {
 import { ElMessage } from "element-plus"
 import { getWidgetId, inSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
 import { getPublishCfg } from "~/utils/publishUtil"
+import { getBooleanEnv } from "~/utils/envUtil"
 
 const showCloseBtn = ref(false)
 const showOpenBtn = ref(false)
 const showTitle = ref(false)
+
+const handleWinQuick = async () => {}
 
 const handleWinOpen = async () => {
   if (showOpenBtn.value) {
@@ -178,6 +189,20 @@ onMounted(() => {
 
     showTitle.value = true
   }
+
+  // ==================
+  // Debug mode start
+  // ==================
+  const debugMode = getBooleanEnv("VITE_DEBUG_MODE")
+  if (debugMode) {
+    showOpenBtn.value = true
+    showCloseBtn.value = true
+
+    showTitle.value = false
+  }
+  // ==================
+  // Debug mode end
+  // ==================
 })
 </script>
 

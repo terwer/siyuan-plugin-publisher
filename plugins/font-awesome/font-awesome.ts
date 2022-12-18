@@ -31,6 +31,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
 import { LogFactory } from "~/utils/logUtil"
 /* import specific icons */
 import {
+  faBolt,
   faBookOpenReader,
   faCircleXmark,
   faRectangleList,
@@ -48,6 +49,7 @@ const FontAwesome: PluginObject<any> = {
     library.add(faRectangleList)
     library.add(faXmark)
     library.add(faCircleXmark)
+    library.add(faBolt)
 
     Vue.component("font-awesome-icon", FontAwesomeIcon)
     logger.debug("FontAwesome inited")
