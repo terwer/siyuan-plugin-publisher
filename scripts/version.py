@@ -5,6 +5,13 @@ import argparse
 
 
 def parse_json(filename, version_field, new_version):
+    """
+    解析json文件，并修改版本号未指定的值
+    :param filename: 文件路径
+    :param version_field: 版本号字段
+    :param new_version: 版本号
+    """
+
     # 读取 JSON 文件
     with open(filename, 'r') as f:
         data = json.load(f)
