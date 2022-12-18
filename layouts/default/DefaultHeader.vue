@@ -27,46 +27,131 @@
   <div class="header-default">
     <el-header id="publisher-header">
       <div v-if="!showTitle">
-        <el-button
-          v-if="showOpenBtn"
-          class="b3-button--quick"
-          type="success"
-          @click="handleWinQuick"
+        <!-- 快速发布 -->
+        <el-tooltip
+          :content="$t('siyuan.browser.menu.quick.btn')"
+          class="box-item"
+          effect="light"
+          placement="right"
+          popper-class="publish-menu-tooltip"
         >
-          <font-awesome-icon icon="fa-solid fa-bolt" />
-        </el-button>
-        <el-button
-          v-if="showOpenBtn"
-          class="b3-button--open"
-          type="success"
-          @click="handleWinOpen"
+          <el-button
+            v-if="showOpenBtn"
+            class="b3-button--quick"
+            type="success"
+            @click="handleWinQuick"
+          >
+            <font-awesome-icon icon="fa-solid fa-bolt" />
+          </el-button>
+        </el-tooltip>
+
+        <!-- 文章发布 -->
+        <el-tooltip
+          :content="$t('siyuan.browser.menu.publish.btn')"
+          class="box-item"
+          effect="light"
+          placement="right"
+          popper-class="publish-menu-tooltip"
         >
-          <font-awesome-icon icon="fa-solid fa-upload" />
-        </el-button>
-        <el-button
-          v-if="showOpenBtn"
-          class="b3-button--preview"
-          type="success"
-          @click="handleWinPreview"
+          <el-button
+            v-if="showOpenBtn"
+            class="b3-button--open"
+            type="success"
+            @click="handleWinOpen"
+          >
+            <font-awesome-icon icon="fa-solid fa-upload" />
+          </el-button>
+        </el-tooltip>
+
+        <!-- 文章预览 -->
+        <el-tooltip
+          :content="$t('siyuan.browser.menu.preview.btn')"
+          class="box-item"
+          effect="light"
+          placement="right"
+          popper-class="publish-menu-tooltip"
         >
-          <font-awesome-icon icon="fa-solid fa-book-open-reader" />
-        </el-button>
-        <el-button
-          v-if="showOpenBtn"
-          class="b3-button--preview"
-          type="success"
-          @click="handleWinManage"
+          <el-button
+            v-if="showOpenBtn"
+            class="b3-button--preview"
+            type="success"
+            @click="handleWinPreview"
+          >
+            <font-awesome-icon icon="fa-solid fa-book-open-reader" />
+          </el-button>
+        </el-tooltip>
+
+        <!-- 文章管理 -->
+        <el-tooltip
+          :content="$t('siyuan.browser.menu.manage.btn')"
+          class="box-item"
+          effect="light"
+          placement="right"
+          popper-class="publish-menu-tooltip"
         >
-          <font-awesome-icon icon="fa-solid fa-rectangle-list" />
-        </el-button>
-        <el-button
-          v-if="showCloseBtn"
-          class="b3-button--cancel"
-          type="danger"
-          @click="handleWinClose"
+          <el-button
+            v-if="showOpenBtn"
+            class="b3-button--preview"
+            type="success"
+            @click="handleWinManage"
+          >
+            <font-awesome-icon icon="fa-solid fa-rectangle-list" />
+          </el-button>
+        </el-tooltip>
+
+        <!-- Anki标记 -->
+        <el-tooltip
+          :content="$t('siyuan.browser.menu.anki.btn')"
+          class="box-item"
+          effect="light"
+          placement="right"
+          popper-class="publish-menu-tooltip"
         >
-          <font-awesome-icon icon="fa-solid fa-xmark" />
-        </el-button>
+          <el-button
+            v-if="showOpenBtn"
+            class="b3-button--anki"
+            type="success"
+            @click="handleWinAnki"
+          >
+            <font-awesome-icon icon="fa-solid fa-credit-card" />
+          </el-button>
+        </el-tooltip>
+
+        <!-- 图床 -->
+        <el-tooltip
+          :content="$t('siyuan.browser.menu.picture.btn')"
+          class="box-item"
+          effect="light"
+          placement="right"
+          popper-class="publish-menu-tooltip"
+        >
+          <el-button
+            v-if="showOpenBtn"
+            class="b3-button--picture"
+            type="success"
+            @click="handleWinPicture"
+          >
+            <font-awesome-icon icon="fa-solid fa-image" />
+          </el-button>
+        </el-tooltip>
+
+        <!-- 关闭 -->
+        <el-tooltip
+          :content="$t('siyuan.browser.menu.quick.btn')"
+          class="box-item"
+          effect="light"
+          placement="right"
+          popper-class="publish-menu-tooltip"
+        >
+          <el-button
+            v-if="showCloseBtn"
+            class="b3-button--cancel"
+            type="danger"
+            @click="handleWinClose"
+          >
+            <font-awesome-icon icon="fa-solid fa-xmark" />
+          </el-button>
+        </el-tooltip>
       </div>
       <h1 v-if="showTitle" class="header-title-default">
         <el-button class="header-title-btn disabled-click">
@@ -143,6 +228,14 @@ const handleWinManage = async () => {
       )
     }
   }
+}
+
+const handleWinAnki = async () => {
+  alert("anki")
+}
+
+const handleWinPicture = async () => {
+  alert("picture")
 }
 
 const handleWinClose = () => {

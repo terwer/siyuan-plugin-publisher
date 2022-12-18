@@ -55,7 +55,7 @@ import("/widgets/sy-post-publisher/lib/siyuanhook.js")
 
 点击按钮开始体验
 
-![](https://img1.terwer.space/api/public/202212180137539.png)
+![](https://img1.terwer.space/api/public/202212182033394.png)
 
 详情请参考: [挂件模式用挂载菜单的方式使用](https://www.terwer.space/post/the-pendant-mode-is-used-in-the-method-of-mounting-menu-169wrw.html#%E6%95%88%E6%9E%9C%E6%BC%94%E7%A4%BA)<sup>
 强烈推荐</sup> <sup>0.4.2+</sup>

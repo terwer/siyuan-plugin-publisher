@@ -291,4 +291,10 @@ export default {
     "Delete H1 may accidentally delete the beginning of the beginning of Markdown. If you need to open it, please use more than 2 ones.",
   "preference.setting.newWin": "New win",
   "siyuan.browser.show.close.btn": "Show close btn",
+  "siyuan.browser.menu.quick.btn": "Quick publish",
+  "siyuan.browser.menu.publish.btn": "Publish",
+  "siyuan.browser.menu.preview.btn": "Preview",
+  "siyuan.browser.menu.manage.btn": "Manage",
+  "siyuan.browser.menu.anki.btn": "Anki",
+  "siyuan.browser.menu.picture.btn": "PicGO",
 }

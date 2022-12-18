@@ -302,4 +302,11 @@ export default {
     "删除H1可能会误删除Markdown里面的#开头的注释，如需开启，请使用2个以上的#注释，是否继续？",
   "preference.setting.newWin": "新窗口",
   "siyuan.browser.show.close.btn": "显示关闭按钮",
+  "siyuan.browser.menu.quick.btn": "一键快速发布",
+  "siyuan.browser.menu.publish.btn":
+    "文章发布（自动检测，有子文档->列表页；无子文档->发布页）",
+  "siyuan.browser.menu.preview.btn": "文章预览（当前文章只读预览）",
+  "siyuan.browser.menu.manage.btn": "文章管理（全部文章统一管理）",
+  "siyuan.browser.menu.anki.btn": "Anki标记（配合ankisiyuan生成Anki标记）",
+  "siyuan.browser.menu.picture.btn": "PicGO图床（支持图床配置与图片上传）",
 }
