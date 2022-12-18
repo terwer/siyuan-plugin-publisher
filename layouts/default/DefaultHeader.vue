@@ -174,6 +174,12 @@ import { getWidgetId, inSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
 import { getPublishCfg } from "~/utils/publishUtil"
 import { getBooleanEnv } from "~/utils/envUtil"
 import { uploadByPicGO } from "~/utils/otherlib/picgoUtil"
+import { appendStr } from "~/utils/strUtil"
+import { useI18n } from "vue-i18n"
+import { LogFactory } from "~/utils/logUtil"
+
+const { t } = useI18n()
+const logger = LogFactory.getLogger("layouts/default/DefaultHeader.vue")
 
 const showCloseBtn = ref(false)
 const showOpenBtn = ref(false)
@@ -236,8 +242,13 @@ const handleWinAnki = async () => {
 }
 
 const handleWinPicture = async () => {
-  await uploadByPicGO()
-  alert("picture")
+  try {
+    const imgInfos = await uploadByPicGO()
+    logger.info("上传完成，图片信息=>", imgInfos)
+    ElMessage.success(t("main.opt.success"))
+  } catch (e) {
+    ElMessage.error(appendStr(t("main.opt.failure"), "=>", e))
+  }
 }
 
 const handleWinClose = () => {
