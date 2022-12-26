@@ -58,7 +58,7 @@
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.45.0",
     "@vitejs/plugin-vue": "^3.0.0",
-    "@vitest/coverage-c8": "^0.25.3",
+    "@vitest/coverage-c8": "^0.26.2",
     "@vue/test-utils": "^2.2.4",
     "better-docs": "^2.7.2",
     "eslint": "^8.0.1",
@@ -81,7 +81,7 @@
     "vite": "^3.0.0",
     "vite-plugin-require-transform": "^1.0.3",
     "vite-plugin-virtual-mpa": "^1.2.2",
-    "vitest": "^0.25.3",
+    "vitest": "^0.26.2",
     "vue-tsc": "^1.0.10"
   },
   "lint-staged": {
