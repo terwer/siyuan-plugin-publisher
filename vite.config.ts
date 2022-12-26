@@ -105,6 +105,14 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
               title: "多平台文章发布",
             },
           },
+          {
+            name: "anki",
+            filename: "anki/index.html",
+            entry: "/pages/anki/main.ts",
+            data: {
+              title: "Anki卡片标记",
+            },
+          },
         ],
         /**
          * 通过该选项 rewrites 来配置 history fallback rewrite rules
