@@ -24,7 +24,82 @@
   -->
 
 <template>
-  <div>Anki</div>
+  <div>
+    <el-row :gutter="12">
+      <el-col v-for="(o, index) in formData.ankiInfo" :key="o.id" :span="8">
+        <el-card shadow="always">
+          <div class="block-title">
+            {{ index }}.{{ o.content }} - {{ o.id }}
+          </div>
+          <div class="anki-option">
+            <!--
+            <div class="anki-name">
+              <el-input v-model="o.name" readonly />
+            </div>
+            -->
+            <div class="anki-value">
+              <el-input
+                type="textarea"
+                :autosize="{ minRows: 5, maxRows: 10 }"
+                v-model="o.value"
+              />
+            </div>
+            <el-button
+              type="primary"
+              class="button"
+              :data-block-id="o.id"
+              @click="saveAnkiInfo(o.id)"
+              >保存Anki标记</el-button
+            >
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
+  </div>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
+import { onMounted, reactive } from "vue"
+import { getPageId } from "~/utils/platform/siyuan/siyuanUtil"
+import { ElMessage } from "element-plus"
+import { useI18n } from "vue-i18n"
+import { LogFactory } from "~/utils/logUtil"
+
+const logger = LogFactory.getLogger("components/anki/AnkiIndex.vue")
+const { t } = useI18n()
+const siyuanApi = new SiYuanApi()
+const formData = reactive({
+  ankiInfo: null,
+  ankiMap: {},
+})
+const initPage = async () => {
+  const pageId = await getPageId()
+  formData.ankiInfo = await siyuanApi.getAnkilinkInfo(pageId)
+
+  formData.ankiInfo.forEach((item) => {
+    formData.ankiMap[item.id] = item
+  })
+}
+const saveAnkiInfo = (blockId: string) => {
+  logger.debug("blockId=>", blockId)
+  const ankiInfo = formData.ankiMap[blockId]
+
+  const customAttr = {
+    [ankiInfo.name]: ankiInfo.value,
+  }
+  siyuanApi.setBlockAttrs(blockId, customAttr)
+  logger.debug("ankiInfo=>", ankiInfo)
+  ElMessage.success(t("main.opt.success"))
+}
+
+onMounted(async () => {
+  await initPage()
+})
+</script>
+
+<style scoped>
+.anki-value {
+  margin: 16px 0;
+}
+</style>
