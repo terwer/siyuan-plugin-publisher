@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.5.2](https://github.com/terwer/src-sy-post-publisher/compare/v0.5.1...v0.5.2) (2022-12-26)
+
+
+### Miscellaneous
+
+* **deps-dev:** bump @vitest/coverage-c8 from 0.25.8 to 0.26.2 ([fca56ba](https://github.com/terwer/src-sy-post-publisher/commit/fca56baf8cec698ae0314530e4343ea899d7e749))
+* **deps-dev:** bump vitest from 0.25.8 to 0.26.2 ([97f450a](https://github.com/terwer/src-sy-post-publisher/commit/97f450ad0e8ccfe32575a554ddbd964908c464d1))
+
 ## [0.5.1](https://github.com/terwer/src-sy-post-publisher/compare/v0.5.0...v0.5.1) (2022-12-17)
 
 
