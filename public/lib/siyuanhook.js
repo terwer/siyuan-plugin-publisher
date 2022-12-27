@@ -33,6 +33,7 @@ const {
   getCurrentWindow,
   ipcRenderer,
 } = require("@electron/remote")
+// const { exec } = require("child_process")
 
 /**
  * 激活PicGo
@@ -49,6 +50,7 @@ window.terwer = {
   renderPublishHelper: () => {},
   picGoUpload: () => {},
   widgetsSlot: () => {},
+  // execShell: () => {},
 }
 
 /**
@@ -210,13 +212,11 @@ window.terwer.renderPublishHelper = (pageId, pageUrl) => {
         symbolColor: "black",
       },
       webPreferences: {
-        contextIsolation: false,
+        nativeWindowOpen: true,
         nodeIntegration: true,
         webviewTag: true,
         webSecurity: false,
-      },
-      customProperty: {
-        pageId: pageId,
+        contextIsolation: false,
       },
     })
     window.siyuan.printWin.webContents.userAgent = `SiYuan/${app.getVersion()} https://b3log.org/siyuan Electron`
@@ -229,7 +229,7 @@ window.terwer.renderPublishHelper = (pageId, pageUrl) => {
       (response) => {
         window.siyuan.printWin.loadURL(response.data.url)
         // 打开开发者工具
-        // window.siyuan.printWin.webContents.openDevTools()
+        window.siyuan.printWin.webContents.openDevTools()
       }
     )
   })
@@ -309,6 +309,23 @@ window.terwer.widgetsSlot = () => {
     return div
   }
 }
+
+/**
+ * 执行sell命令，主要用于anki同步，需要自行复制anki可执行文件
+ */
+// window.terwer.execShell = (shell) => {
+//   exec(shell, (error, stdout, stderr) => {
+//     if (error) {
+//       console.error(`exec error: ${error}`)
+//       return
+//     }
+//     if (stderr) {
+//       console.error(`exec stderr: ${stderr}`)
+//       return
+//     }
+//     console.log(`stdout: ${stdout}`)
+//   })
+// }
 
 // do render
 window.terwer.widgetsSlot()

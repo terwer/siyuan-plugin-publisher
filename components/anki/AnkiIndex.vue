@@ -137,6 +137,7 @@ import { useI18n } from "vue-i18n"
 import { LogFactory } from "~/utils/logUtil"
 import { isEmptyString } from "~/utils/util"
 import { appendStr } from "~/utils/strUtil"
+import { execShellCmd } from "~/utils/otherlib/shellUtil"
 
 const logger = LogFactory.getLogger("components/anki/AnkiIndex.vue")
 const { t } = useI18n()
@@ -158,7 +159,10 @@ const updateCard = async () => {
       type: "warning",
     }
   )
-    .then(async () => {})
+    .then(async () => {
+      const result = await execShellCmd("ls -l")
+      ElMessage.success("操作成功，执行结果=>" + result)
+    })
     .catch((e) => {
       if (e.toString().indexOf("cancel") <= -1) {
         ElMessage({

@@ -23,11 +23,9 @@
  * questions.
  */
 
-import { isBrowser } from "~/utils/browserUtil"
-import { inSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
-import { ElMessage } from "element-plus"
-
 // 警告⚠️：请勿在非思源笔记浏览器环境调用此文件中的任何方法
+
+import { ElMessage } from "element-plus"
 
 const SIYUAN_BROWSER_CONSTANTS_SIYUAN_EXPORT_CLOSE = "siyuan-export-close"
 
