@@ -25,10 +25,10 @@
 
 // 警告⚠️：请勿在非思源笔记浏览器环境调用此文件中的任何方法
 
-import { ElMessage } from "element-plus"
+import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
 
-const { spawn } = require("child_process")
-const process = require("process")
+const { spawn } = isInSiyuanNewWinBrowser() ? require("child_process") : ""
+const process = isInSiyuanNewWinBrowser() ? require("process") : ""
 
 function cmd(...command) {
   let p = spawn(command[0], command.slice(1))
@@ -53,14 +53,8 @@ function cmd(...command) {
  * @returns {Promise<undefined>}
  */
 export async function execShellCmd(shell) {
-  try {
-    console.log("exec shell=>", shell)
-    const ret = await cmd("bash", "-c", shell)
-    console.log("exec finished=>", ret)
-
-    return ret
-  } catch (e) {
-    console.error("error=>", e)
-    ElMessage.error("系统异常")
-  }
+  console.log("exec shell=>", shell)
+  const ret = await cmd("bash", "-c", shell)
+  console.log("exec finished=>", ret)
+  return ret
 }

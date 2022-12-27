@@ -44,6 +44,14 @@ export const isInSiyuanNewWinBrowser = () => {
 }
 
 /**
+ * 获取数据目录
+ * @returns {*|string}
+ */
+export const getSiyuanNewWinDataDir = () => {
+  return window.terwer.dataDir ?? "/notfound"
+}
+
+/**
  * 关闭思源导出窗口
  */
 export const doCloseExportWin = () => {

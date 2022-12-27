@@ -25,7 +25,9 @@
 
 <template>
   <div class="anki-body">
-    <el-button type="primary" @click="updateCard">更新卡片</el-button>
+    <el-button type="primary" @click="updateCard" v-if="false"
+      >更新卡片</el-button
+    >
     <el-row :gutter="12">
       <el-col
         v-for="(o, index) in formData.ankiInfo"
@@ -138,6 +140,7 @@ import { LogFactory } from "~/utils/logUtil"
 import { isEmptyString } from "~/utils/util"
 import { appendStr } from "~/utils/strUtil"
 import { execShellCmd } from "~/utils/otherlib/shellUtil"
+import { getSiyuanNewWinDataDir } from "~/utils/otherlib/siyuanBrowserUtil"
 
 const logger = LogFactory.getLogger("components/anki/AnkiIndex.vue")
 const { t } = useI18n()
@@ -150,24 +153,25 @@ const formData = reactive({
 })
 
 const updateCard = async () => {
-  ElMessageBox.confirm(
-    "请确保复制 ankisiyuan.bin 到 /data/widgets/ 目录，是否继续？",
-    t("main.opt.warning"),
-    {
-      confirmButtonText: t("main.opt.ok"),
-      cancelButtonText: t("main.opt.cancel"),
-      type: "warning",
-    }
-  )
+  ElMessageBox.confirm("准备同步Anki卡片，是否继续？", t("main.opt.warning"), {
+    confirmButtonText: t("main.opt.ok"),
+    cancelButtonText: t("main.opt.cancel"),
+    type: "warning",
+  })
     .then(async () => {
-      const result = await execShellCmd("ls -l")
+      const dataDir: string = getSiyuanNewWinDataDir()
+      const ankisiyuanPath = `${dataDir}/widgets/ankisiyuan.bin`
+      const result = await execShellCmd(ankisiyuanPath)
       ElMessage.success("操作成功，执行结果=>" + result)
     })
     .catch((e) => {
       if (e.toString().indexOf("cancel") <= -1) {
         ElMessage({
           type: "error",
-          message: t("main.opt.failure") + "=>" + e,
+          message:
+            t("main.opt.failure") +
+            "，请将 ankisiyuan 或者 ankisiyuan.exe 复制到 data/widgets 目录=>" +
+            e,
         })
         logger.error(t("main.opt.failure") + "=>" + e)
       }
