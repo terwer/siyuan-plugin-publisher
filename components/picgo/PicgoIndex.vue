@@ -41,10 +41,9 @@
     </el-upload>
     -->
     <div class="upload-control">
-      <label
-        >选择上传
+      <label>
         <!-- 自定义的文件选择按钮 -->
-        <label for="fileInput" class="custom-file-input">选择图片</label>
+        <label for="fileInput" class="custom-file-input">上传选择的图片</label>
 
         <!-- 原有的文件选择按钮 -->
         <input
@@ -61,6 +60,10 @@
       <el-button type="primary" @click="doUploadPicFromClipboard"
         >上传剪贴板图片
       </el-button>
+    </div>
+
+    <div class="upload-control">
+      <el-button :loading="isUploadLoading">图片的上传状态</el-button>
     </div>
 
     <ul class="file-list">
@@ -96,6 +99,7 @@ import { reactive, ref } from "vue"
 
 const logger = LogFactory.getLogger("components/picgo/PicgoIndex.vue")
 const { t } = useI18n()
+const isUploadLoading = ref(false)
 
 const fileList = reactive({
   files: [],
@@ -126,11 +130,14 @@ const doAfterUpload = (imgInfos) => {
 }
 
 const onRequest = async (event) => {
+  isUploadLoading.value = true
+
   try {
     const fileList = event.target.files
     console.log("onRequest fileList=>", fileList)
     if (!fileList || fileList.length === 0) {
       ElMessage.error("请选择图片")
+      isUploadLoading.value = false
       return
     }
 
@@ -143,6 +150,8 @@ const onRequest = async (event) => {
     const imgInfos: any = await uploadNewWinByPicGO(filePaths)
     // 处理后续
     doAfterUpload(imgInfos)
+
+    isUploadLoading.value = false
   } catch (e) {
     if (e.toString().indexOf("cancel") <= -1) {
       ElMessage({
@@ -151,14 +160,19 @@ const onRequest = async (event) => {
       })
       logger.error(t("main.opt.failure") + "=>" + e)
     }
+    isUploadLoading.value = false
   }
 }
 
 const doUploadPicFromClipboard = async () => {
+  isUploadLoading.value = true
+
   try {
     const imgInfos: any = await uploadNewWinClipboardByPicGO()
     // 处理后续
     doAfterUpload(imgInfos)
+
+    isUploadLoading.value = false
   } catch (e) {
     if (e.toString().indexOf("cancel") <= -1) {
       ElMessage({
@@ -167,6 +181,7 @@ const doUploadPicFromClipboard = async () => {
       })
       logger.error(t("main.opt.failure") + "=>", e)
     }
+    isUploadLoading.value = false
   }
 }
 </script>
