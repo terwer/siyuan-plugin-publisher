@@ -190,7 +190,6 @@ import { ElMessage } from "element-plus"
 import { getWidgetId, inSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
 import { getPublishCfg } from "~/utils/publishUtil"
 import { getBooleanEnv } from "~/utils/envUtil"
-import { uploadByPicGO } from "~/utils/otherlib/picgoUtil"
 import { appendStr } from "~/utils/strUtil"
 import { useI18n } from "vue-i18n"
 import { LogFactory } from "~/utils/logUtil"
@@ -202,7 +201,7 @@ const showCloseBtn = ref(false)
 const showOpenBtn = ref(false)
 const showTitle = ref(false)
 
-const handleWinQuick = async () => {}
+// const handleWinQuick = async () => {}
 
 const handleWinOpen = async () => {
   if (showOpenBtn.value) {
@@ -273,10 +272,13 @@ const handleWinAnki = async () => {
 
 const handleWinPicture = async () => {
   try {
-    const imgInfos = await uploadByPicGO()
-    logger.info("上传完成，图片信息=>", imgInfos)
-    ElMessage.success(t("main.opt.success"))
+    const widgetResult = getWidgetId()
+    await doOpenExportWin(widgetResult.widgetId, "picgo/index.html")
+
+    // event
+    pageIdChanged()
   } catch (e) {
+    logger.error(t("main.opt.failure"), "=>", e)
     ElMessage.error(appendStr(t("main.opt.failure"), "=>", e))
   }
 }

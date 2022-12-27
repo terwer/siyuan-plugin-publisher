@@ -38,9 +38,8 @@ const {
 /**
  * 激活PicGo
  */
-const picgoExtension =
-  require(`${window.siyuan.config.system.dataDir}/widgets/sy-post-publisher/lib/picgo/picgo.js`).default
-picgoExtension.activate()
+// const picgoExtension = require(`${window.siyuan.config.system.dataDir}/widgets/sy-post-publisher/lib/picgo/picgo.js`).default
+// picgoExtension.activate()
 
 /**
  * 思源笔记弹窗参数定义
@@ -48,7 +47,7 @@ picgoExtension.activate()
 window.terwer = {
   pageId: undefined,
   renderPublishHelper: () => {},
-  picGoUpload: () => {},
+  // picGoUpload: () => {},
   widgetsSlot: () => {},
   // execShell: () => {},
 }
@@ -57,11 +56,11 @@ window.terwer = {
  * 获取一个PicGO对象
  * @returns {Promise<*>}
  */
-window.terwer.picGoUpload = async (input) => {
-  console.log("picgoExtension=>", picgoExtension)
-  // picgoExtension.upload(input)
-  return await picgoExtension.uploadFormClipboard()
-}
+// window.terwer.picGoUpload = async (input) => {
+//   console.log("picgoExtension=>", picgoExtension)
+//   // picgoExtension.upload(input)
+//   return await picgoExtension.uploadFormClipboard()
+// }
 
 /**
  * 新窗口打开插件页面
@@ -186,7 +185,10 @@ window.terwer.renderPublishHelper = (pageId, pageUrl) => {
         var dataDir = `${window.siyuan.config.system.dataDir}`
         const newWinPageId = pageId ?? ""
         var txt = data.toString().replace(/<!--.*-->/gs, "")
-        txt += `<script>window.terwer={};window.terwer.pageId="${newWinPageId}";window.terwer.dataDir="${dataDir}";</script>`
+        txt += `<script>window.terwer={};window.terwer.pageId="${newWinPageId}";window.terwer.dataDir="${dataDir}";
+          window.terwer.picgoExtension = require("${dataDir}/widgets/sy-post-publisher/lib/picgo/picgo.js").default;
+          window.terwer.picgoExtension.activate("${dataDir}/widgets/sy-post-publisher/lib/picgo/picgo.cfg.json");
+          </script>`
         html(txt)
       }
     )
@@ -228,7 +230,7 @@ window.terwer.renderPublishHelper = (pageId, pageUrl) => {
       (response) => {
         window.siyuan.printWin.loadURL(response.data.url)
         // 打开开发者工具
-        // window.siyuan.printWin.webContents.openDevTools()
+        window.siyuan.printWin.webContents.openDevTools()
       }
     )
   })

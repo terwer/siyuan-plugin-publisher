@@ -38,3 +38,4 @@ coverage
 # docs
 out
 .pnpm-store
+public/lib/picgo/picgo.cfg.json

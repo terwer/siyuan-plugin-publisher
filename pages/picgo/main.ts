@@ -23,27 +23,10 @@
  * questions.
  */
 
-import { ElMessage } from "element-plus"
+import pageUtil from "~/utils/pageUtil"
+import picgo from "./App.vue"
 
-/**
- * 通过PicGO上传图片
- * @returns {Promise<void>}
- */
-// export async function uploadByPicGO() {
-//   const syWin = window.parent
-//   if (syWin.terwer && syWin.terwer.picGoUpload) {
-//     return syWin.terwer.picGoUpload()
-//   } else {
-//     ElMessage.warning(
-//       "uploadByPicGO失败，未找到hook方法，请在自定义js片段添加 import('/widgets/sy-post-publisher/lib/siyuanhook.js') ，并重启思源笔记"
-//     )
-//   }
-// }
-
-/**
- * 通过PicGO上传图片，思源笔记新窗口
- * @returns {Promise<void>}
- */
-export async function uploadNewWinByPicGO() {
-  return await window.terwer.picgoExtension.uploadFormClipboard()
-}
+// 创建统一的Vue实例
+const app = pageUtil.createPage(picgo)
+// 挂载Vue
+app.mount("#app")

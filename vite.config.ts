@@ -113,6 +113,14 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
               title: "Anki卡片标记",
             },
           },
+          {
+            name: "picgo",
+            filename: "picgo/index.html",
+            entry: "/pages/picgo/main.ts",
+            data: {
+              title: "Picgo图床",
+            },
+          },
         ],
         /**
          * 通过该选项 rewrites 来配置 history fallback rewrite rules
