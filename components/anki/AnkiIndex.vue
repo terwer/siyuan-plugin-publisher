@@ -46,25 +46,29 @@
             <div class="anki-deck">
               <el-form-item :label="$t('anki.siyuan.deck')">
                 <el-tag
-                  v-for="tag in formData.tag.dynamicTags"
-                  :key="tag"
+                  v-for="deck in formData.deckMap[o.id].dynamicTags ?? []"
+                  :key="deck"
                   class="mx-1"
                   closable
                   :disable-transitions="false"
+                  @close="deckHandleClose(o.id, deck)"
                 >
-                  {{ tag }}
+                  {{ deck }}
                 </el-tag>
                 <el-input
-                  v-if="formData.tag.inputVisible"
-                  ref="tagRefInput"
-                  v-model="formData.tag.inputValue"
+                  v-if="formData.deckMap[o.id].inputVisible"
+                  ref="deckRefInput"
+                  v-model="formData.deckMap[o.id].inputValue"
                   class="ml-1 w-20"
                   size="small"
+                  @keyup.enter="deckHandleInputConfirm(o.id)"
+                  @blur="deckHandleInputConfirm(o.id)"
                 />
                 <el-button
                   v-else
                   class="button-new-tag ml-1 el-tag"
                   size="small"
+                  @click="deckShowInput(o.id)"
                 >
                   {{ $t("anki.siyuan.deck.new") }}
                 </el-button>
@@ -73,25 +77,29 @@
             <div class="anki-tags">
               <el-form-item :label="$t('anki.siyuan.tag')">
                 <el-tag
-                  v-for="tag in formData.tag.dynamicTags"
+                  v-for="tag in formData.tagMap[o.id].dynamicTags"
                   :key="tag"
                   class="mx-1"
                   closable
                   :disable-transitions="false"
+                  @close="tagHandleClose(o.id, tag)"
                 >
                   {{ tag }}
                 </el-tag>
                 <el-input
-                  v-if="formData.tag.inputVisible"
+                  v-if="formData.tagMap[o.id].inputVisible"
                   ref="tagRefInput"
-                  v-model="formData.tag.inputValue"
+                  v-model="formData.tagMap[o.id].inputValue"
                   class="ml-1 w-20"
                   size="small"
+                  @keyup.enter="tagHandleInputConfirm(o.id)"
+                  @blur="tagHandleInputConfirm(o.id)"
                 />
                 <el-button
                   v-else
                   class="button-new-tag ml-1 el-tag"
                   size="small"
+                  @click="tagShowInput(o.id)"
                 >
                   {{ $t("anki.siyuan.tag.new") }}
                 </el-button>
@@ -127,7 +135,8 @@ import { getPageId } from "~/utils/platform/siyuan/siyuanUtil"
 import { ElMessage, ElMessageBox } from "element-plus"
 import { useI18n } from "vue-i18n"
 import { LogFactory } from "~/utils/logUtil"
-import { goToPage } from "~/utils/otherlib/ChromeUtil"
+import { isEmptyString } from "~/utils/util"
+import { appendStr } from "~/utils/strUtil"
 
 const logger = LogFactory.getLogger("components/anki/AnkiIndex.vue")
 const { t } = useI18n()
@@ -135,11 +144,8 @@ const siyuanApi = new SiYuanApi()
 const formData = reactive({
   ankiInfo: null,
   ankiMap: {},
-  tag: {
-    inputValue: "",
-    dynamicTags: [],
-    inputVisible: false,
-  },
+  deckMap: {},
+  tagMap: {},
 })
 
 const updateCard = async () => {
@@ -164,24 +170,117 @@ const updateCard = async () => {
     })
 }
 
+// deck methods
+const deckHandleClose = (blockId, tag) => {
+  formData.deckMap[blockId].dynamicTags.splice(
+    formData.deckMap[blockId].dynamicTags.indexOf(tag),
+    1
+  )
+}
+const deckShowInput = (blockId) => {
+  formData.deckMap[blockId].inputVisible = true
+}
+const deckHandleInputConfirm = (blockId) => {
+  if (formData.deckMap[blockId].inputValue) {
+    formData.deckMap[blockId].dynamicTags.push(
+      formData.deckMap[blockId].inputValue
+    )
+  }
+  formData.deckMap[blockId].inputVisible = false
+  formData.deckMap[blockId].inputValue = ""
+}
+
+// tag methods
+const tagHandleClose = (blockId, tag) => {
+  formData.tagMap[blockId].dynamicTags.splice(
+    formData.tagMap[blockId].dynamicTags.indexOf(tag),
+    1
+  )
+}
+// https://stackoverflow.com/questions/64774113/vue-js-3-use-autofocus-on-input-with-ref-inside-a-method
+// https://stackoverflow.com/questions/64774113/vue-js-3-use-autofocus-on-input-with-ref-inside-a-method
+// https://www.helloworld.net/p/2721375043
+const tagShowInput = (blockId) => {
+  formData.tagMap[blockId].inputVisible = true
+}
+const tagHandleInputConfirm = (blockId) => {
+  if (formData.tagMap[blockId].inputValue) {
+    formData.tagMap[blockId].dynamicTags.push(
+      formData.tagMap[blockId].inputValue
+    )
+  }
+  formData.tagMap[blockId].inputVisible = false
+  formData.tagMap[blockId].inputValue = ""
+}
+
+// init
 const initPage = async () => {
   const pageId = await getPageId()
   formData.ankiInfo = await siyuanApi.getAnkilinkInfo(pageId)
 
   formData.ankiInfo.forEach((item) => {
     formData.ankiMap[item.id] = item
+
+    logger.info("item.value=>", item.value)
+    let deckArr = []
+    let tagArr = []
+    if (!isEmptyString(item.value)) {
+      const valueArr = item.value?.split("\n")
+      deckArr = valueArr[0]
+        ?.replace(/"/g, "")
+        .replace(/deck_name=/g, "")
+        ?.split("::")
+      if (valueArr.length > 1) {
+        tagArr = valueArr[1]
+          ?.replace(/"/g, "")
+          .replace(/tags=\[/g, "")
+          .replace(/]/g, "")
+          .split(",")
+      }
+    }
+
+    logger.debug("deckArr=>", deckArr)
+    logger.debug("tagArr=>", tagArr)
+
+    formData.deckMap[item.id] = {
+      inputValue: "",
+      dynamicTags: deckArr,
+      inputVisible: false,
+    }
+    formData.tagMap[item.id] = {
+      inputValue: "",
+      dynamicTags: tagArr,
+      inputVisible: false,
+    }
   })
 }
 
 const saveAnkiInfo = (blockId: string) => {
   logger.debug("blockId=>", blockId)
   const ankiInfo = formData.ankiMap[blockId]
+  const deckInfo = formData.deckMap[blockId]
+  const tagInfo = formData.tagMap[blockId]
+
+  logger.debug("deckInfo=>", deckInfo)
+  logger.debug("tagInfo=>", tagInfo)
+
+  // deck_name="用户手册::快速配置"
+  // tags=["思源笔记","笔记","配置"]
+  let ankiValue
+  ankiValue = appendStr('deck_name="', deckInfo.dynamicTags.join("::"), '"')
+  ankiValue = appendStr(
+    ankiValue,
+    "\n",
+    "tags=",
+    JSON.stringify(tagInfo.dynamicTags)
+  )
+  ankiInfo.value = ankiValue
 
   const customAttr = {
     [ankiInfo.name]: ankiInfo.value,
   }
   siyuanApi.setBlockAttrs(blockId, customAttr)
-  logger.debug("ankiInfo=>", ankiInfo)
+  logger.info("anki标记已保存，ankiInfo=>", ankiInfo)
   ElMessage.success(t("main.opt.success"))
 }
 
