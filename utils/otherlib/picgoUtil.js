@@ -23,8 +23,6 @@
  * questions.
  */
 
-import { ElMessage } from "element-plus"
-
 /**
  * 通过PicGO上传图片
  * @returns {Promise<void>}
@@ -44,6 +42,14 @@ import { ElMessage } from "element-plus"
  * 通过PicGO上传图片，思源笔记新窗口
  * @returns {Promise<void>}
  */
-export async function uploadNewWinByPicGO() {
+export async function uploadNewWinByPicGO(input) {
+  return await window.terwer.picgoExtension.upload(input)
+}
+
+/**
+ * 通过PicGO上传剪贴板图片，思源笔记新窗口
+ * @returns {Promise<void>}
+ */
+export async function uploadNewWinClipboardByPicGO() {
   return await window.terwer.picgoExtension.uploadFormClipboard()
 }

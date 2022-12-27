@@ -2,6 +2,7 @@
   "picBed": {
     "current": "github",
     "uploader": "github",
+    "rename": "${random}-${year}-${month}-${day}-${hour}-${minute}-${second}",
     "github": {
       "branch": "main",
       "customUrl": "https://img1.terwer.space/api",

@@ -24,9 +24,63 @@
   -->
 
 <template>
-  <div>
-    Picgo
-    <el-button @click="doUploadPic">点击上传</el-button>
+  <div class="picgo-body">
+    <!--
+    <el-upload
+      action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+      v-model:file-list="fileList"
+      class="upload-demo"
+      :on-preview="handlePreview"
+      :on-remove="handleRemove"
+      list-type="picture"
+    >
+      <el-button type="primary">点击上传</el-button>
+      <template #tip>
+        <div class="el-upload__tip">仅支持jpg/png，文件大小不能超过500kb</div>
+      </template>
+    </el-upload>
+    -->
+    <div class="upload-control">
+      <label
+        >选择上传
+        <!-- 自定义的文件选择按钮 -->
+        <label for="fileInput" class="custom-file-input">选择图片</label>
+
+        <!-- 原有的文件选择按钮 -->
+        <input
+          type="file"
+          accept="image/png, image/gif, image/jpeg"
+          @change="onRequest"
+          multiple
+          id="fileInput"
+        />
+      </label>
+    </div>
+
+    <div class="upload-control">
+      <el-button type="primary" @click="doUploadPicFromClipboard"
+        >上传剪贴板图片
+      </el-button>
+    </div>
+
+    <ul class="file-list">
+      <li
+        class="file-list-item"
+        v-for="f in fileList.files"
+        v-bind:key="f.name"
+      >
+        <img :src="f.url" :alt="f.name" />
+        <el-input :model-value="f.url" />
+      </li>
+    </ul>
+
+    <div class="log-msg">
+      <el-input
+        type="textarea"
+        :autosize="{ minRows: 5, maxRows: 10 }"
+        v-model="loggerMsg"
+      />
+    </div>
   </div>
 </template>
 
@@ -34,16 +88,61 @@
 import { LogFactory } from "~/utils/logUtil"
 import { ElMessage } from "element-plus"
 import { useI18n } from "vue-i18n"
-import { uploadNewWinByPicGO } from "~/utils/otherlib/picgoUtil"
+import {
+  uploadNewWinByPicGO,
+  uploadNewWinClipboardByPicGO,
+} from "~/utils/otherlib/picgoUtil"
+import { reactive, ref } from "vue"
 
 const logger = LogFactory.getLogger("components/picgo/PicgoIndex.vue")
 const { t } = useI18n()
 
-const doUploadPic = async () => {
+const fileList = reactive({
+  files: [],
+})
+const loggerMsg = ref("")
+
+/**
+ * 处理图片后续
+ * @param imgInfos
+ */
+const doAfterUpload = (imgInfos) => {
+  loggerMsg.value = imgInfos
+
+  const imageJson = JSON.parse(imgInfos)
+
+  if (imageJson && imageJson.length > 0) {
+    imageJson.forEach((img) => {
+      const rtnItem = {
+        name: img.fileName,
+        url: img.imgUrl,
+      }
+      loggerMsg.value += "\nnewItem=>" + JSON.stringify(rtnItem)
+
+      fileList.files.push(rtnItem)
+    })
+  }
+  ElMessage.success(t("main.opt.success"))
+}
+
+const onRequest = async (event) => {
   try {
-    const imgInfos = await uploadNewWinByPicGO()
-    logger.info("上传完成，图片信息=>", imgInfos)
-    ElMessage.success(t("main.opt.success"))
+    const fileList = event.target.files
+    console.log("onRequest fileList=>", fileList)
+    if (!fileList || fileList.length === 0) {
+      ElMessage.error("请选择图片")
+      return
+    }
+
+    // 获取选择的文件的路径数组
+    const filePaths = []
+    for (let i = 0; i < fileList.length; i++) {
+      filePaths.push(fileList.item(i).path)
+    }
+
+    const imgInfos: any = await uploadNewWinByPicGO(filePaths)
+    // 处理后续
+    doAfterUpload(imgInfos)
   } catch (e) {
     if (e.toString().indexOf("cancel") <= -1) {
       ElMessage({
@@ -54,4 +153,72 @@ const doUploadPic = async () => {
     }
   }
 }
+
+const doUploadPicFromClipboard = async () => {
+  try {
+    const imgInfos: any = await uploadNewWinClipboardByPicGO()
+    // 处理后续
+    doAfterUpload(imgInfos)
+  } catch (e) {
+    if (e.toString().indexOf("cancel") <= -1) {
+      ElMessage({
+        type: "error",
+        message: t("main.opt.failure") + "=>" + e,
+      })
+      logger.error(t("main.opt.failure") + "=>", e)
+    }
+  }
+}
 </script>
+
+<style>
+.picgo-body {
+  padding: 16px;
+}
+
+.upload-control {
+  margin: 10px 0;
+}
+
+.log-msg {
+  margin: 10px 0;
+}
+
+input[type="file"] {
+  /* 隐藏原有的文件选择按钮 */
+  display: none;
+}
+
+/* 创建自定义的文件选择按钮 */
+.custom-file-input {
+  display: inline-block;
+  padding: 0.35em 0.5em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #333;
+  cursor: pointer;
+}
+
+/* 文件选择按钮的悬停样式 */
+.custom-file-input:hover {
+  background-color: #eee;
+}
+
+.file-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.file-list li {
+  display: inline-block;
+  margin-right: 1em;
+  padding-bottom: 4px;
+}
+
+.file-list li img {
+  max-width: 100px;
+  height: auto;
+}
+</style>

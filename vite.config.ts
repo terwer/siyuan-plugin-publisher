@@ -240,7 +240,8 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
       // boolean | 'terser' | 'esbuild'
       // minify: 'terser',
       // 不压缩，用于调试
-      minify: isProd,
+      // minify: isProd,
+      minify: false,
 
       rollupOptions: {
         external: [
