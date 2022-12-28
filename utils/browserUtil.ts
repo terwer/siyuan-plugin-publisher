@@ -33,6 +33,13 @@ export const isBrowser = (): boolean =>
   typeof window !== "undefined" && typeof window.document !== "undefined"
 
 /**
+ * 检测是否是本地请求
+ * @param apiUrl 请求地址
+ */
+export const isLocalhost = (apiUrl: string): boolean =>
+  apiUrl.indexOf("127.0.0.1") > -1 || apiUrl.indexOf("localhost") > -1
+
+/**
  * 获取url参数
  * @param sParam 参数
  */

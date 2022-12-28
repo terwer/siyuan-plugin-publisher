@@ -31,6 +31,8 @@ import {
   sendChromeMessage,
 } from "~/utils/otherlib/ChromeUtil"
 import { getWidgetId } from "~/utils/platform/siyuan/siyuanUtil"
+import { isEmptyString } from "~/utils/util"
+import { isLocalhost } from "~/utils/browserUtil"
 
 export class CommonblogApi {
   protected logger: Logger
@@ -135,8 +137,11 @@ export class CommonblogApi {
   ): Promise<any> {
     let result
 
-    const widgetResult = getWidgetId()
-    if (widgetResult.isInSiyuan) {
+    if (isLocalhost(apiUrl)) {
+      this.logger.warn("检测到本地请求，直接fetch获取数据")
+      // 不解析了，直接fetch
+      result = await fetch(apiUrl, fetchOptions)
+    } else if (getWidgetId().isInSiyuan) {
       this.logger.warn("当前处于挂件模式，使用electron的fetch获取数据")
       // 不解析了，直接使用Node兼容调用
       result = await fetch(apiUrl, fetchOptions)
@@ -219,16 +224,21 @@ export class CommonblogApi {
             throw new Error("请求内容过多，请删减文章正文之后再试")
           }
 
-          const msg = response.statusText
+          let msg = response.statusText
+          if (isEmptyString(msg)) {
+            msg = "网络超时或者服务器错误，请稍后再试。"
+          } else {
+            msg = "错误信息：" + msg
+          }
           throw new Error(msg)
         } else {
           throw new Error("fetch请求错误")
         }
       }
 
-      const widgetResult = getWidgetId()
-
-      if (widgetResult.isInSiyuan) {
+      if (isLocalhost(apiUrl)) {
+        resJson = await response.json()
+      } else if (getWidgetId().isInSiyuan) {
         resJson = await response.json()
       } else {
         const corsJson = await response.json()

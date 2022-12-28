@@ -93,6 +93,8 @@ import { ElMessage } from "element-plus"
 import { useI18n } from "vue-i18n"
 import { uploadByPicGO } from "~/utils/otherlib/picgoUtil"
 import { reactive, ref } from "vue"
+import { inSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
+import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
 
 const logger = LogFactory.getLogger("components/picgo/PicgoIndex.vue")
 const { t } = useI18n()
@@ -126,11 +128,22 @@ const doAfterUpload = (imgInfos) => {
   ElMessage.success(t("main.opt.success"))
 }
 
+const readBase64FromFile = async (file) => {
+  const reader = new FileReader()
+  reader.readAsDataURL(file)
+  const base64 = await new Promise((resolve, reject) => {
+    reader.onload = () => resolve(reader.result)
+    reader.onerror = (error) => reject(error)
+  })
+  return base64
+}
+
 const onRequest = async (event) => {
   isUploadLoading.value = true
 
   try {
     const fileList = event.target.files
+
     console.log("onRequest fileList=>", fileList)
     if (!fileList || fileList.length === 0) {
       ElMessage.error("请选择图片")
@@ -138,10 +151,35 @@ const onRequest = async (event) => {
       return
     }
 
+    if (!inSiyuan() && !isInSiyuanNewWinBrowser()) {
+      ElMessage.error("非electron环境只能通过剪贴板上传")
+      isUploadLoading.value = false
+      return
+    }
+
     // 获取选择的文件的路径数组
     const filePaths = []
     for (let i = 0; i < fileList.length; i++) {
-      filePaths.push(fileList.item(i).path)
+      // const tmppath = URL.createObjectURL(fileList[i])
+      // logger.debug("tmppath=>", tmppath)
+      //
+      // const base64 = await readBase64FromFile(fileList[i])
+      // logger.debug("base64=>", base64)
+
+      if (fileList.item(i).path) {
+        filePaths.push(fileList.item(i).path)
+        logger.debug("路径不为空")
+      } else {
+        // const base64Obj = {
+        //   base64Image: base64,
+        //   fileName: fileList.item(i).name, // 图片的文件名
+        //   width: "200", // 图片宽度
+        //   height: "200", // 图片高度
+        //   extname: ".png", // 图片格式的扩展名 比如.jpg | .png
+        // }
+        logger.debug("路径为空，忽略")
+        // filePaths.push(base64Obj)
+      }
     }
 
     const imgInfos = await uploadByPicGO(filePaths)

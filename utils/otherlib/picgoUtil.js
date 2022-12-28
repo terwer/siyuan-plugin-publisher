@@ -24,6 +24,10 @@
  */
 
 import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
+import { PicGoUploadApi } from "~/utils/platform/picgo/picGoUploadApi"
+
+// Pico上传Api封装
+const picGoUploadApi = new PicGoUploadApi()
 
 /**
  * 通过PicGO上传图片，主窗口
@@ -49,13 +53,13 @@ export async function uploadByPicGO(input) {
     if (isInSiyuanNewWinBrowser()) {
       return uploadNewWinByPicGO(input)
     } else {
-      alert("aaa")
+      return picGoUploadApi.upload(input)
     }
   } else {
     if (isInSiyuanNewWinBrowser()) {
       return uploadNewWinClipboardByPicGO()
     } else {
-      alert("bbb")
+      return picGoUploadApi.upload()
     }
   }
 }
