@@ -132,7 +132,7 @@
 
 <script lang="ts" setup>
 import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
-import { onMounted, reactive } from "vue"
+import { onMounted, reactive, watch } from "vue"
 import { getPageId } from "~/utils/platform/siyuan/siyuanUtil"
 import { ElMessage, ElMessageBox } from "element-plus"
 import { useI18n } from "vue-i18n"
@@ -150,6 +150,14 @@ const formData = reactive({
   ankiMap: {},
   deckMap: {},
   tagMap: {},
+})
+
+// props
+const props = defineProps({
+  pageId: {
+    type: String,
+    default: undefined,
+  },
 })
 
 const updateCard = async () => {
@@ -223,7 +231,7 @@ const tagHandleInputConfirm = (blockId) => {
 
 // init
 const initPage = async () => {
-  const pageId = await getPageId()
+  const pageId = await getPageId(true, props.pageId)
   formData.ankiInfo = await siyuanApi.getAnkilinkInfo(pageId)
 
   formData.ankiInfo.forEach((item) => {
@@ -293,6 +301,19 @@ const saveAnkiInfo = (blockId: string) => {
   logger.info("anki标记已保存，ankiInfo=>", ankiInfo)
   ElMessage.success(t("main.opt.success"))
 }
+
+/* 监听props */
+watch(
+  () => props.pageId,
+  /**/ (oldValue, newValue) => {
+    // Here you can add you functionality
+    // as described in the name you will get old and new value of watched property
+    // 默认选中vuepress
+    // setBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY, true)
+    initPage()
+    logger.debug("Anki初始化")
+  }
+)
 
 onMounted(async () => {
   await initPage()

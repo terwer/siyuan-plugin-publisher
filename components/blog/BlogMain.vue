@@ -84,17 +84,33 @@
             <div style="text-align: center">操作</div>
           </template>
           <template #default="scope">
+            <!-- 预览 -->
             <el-button
               size="small"
               @click="handleView(scope.$index, scope.row)"
             >
               <font-awesome-icon icon="fa-solid fa-book-open-reader" />
             </el-button>
+            <!-- 发布 -->
             <el-button
               size="small"
               @click="handleEdit(scope.$index, scope.row)"
             >
               <font-awesome-icon icon="fa-solid fa-upload" />
+            </el-button>
+            <!-- anki -->
+            <el-button
+              size="small"
+              @click="handleAnki(scope.$index, scope.row)"
+            >
+              <font-awesome-icon icon="fa-solid fa-credit-card" />
+            </el-button>
+            <!-- picgo -->
+            <el-button
+              size="small"
+              @click="handlePicgo(scope.$index, scope.row)"
+            >
+              <font-awesome-icon icon="fa-solid fa-image" />
             </el-button>
           </template>
         </el-table-column>
@@ -130,17 +146,24 @@
     <div id="post-detail" v-if="showDetail">
       <single-blog-detail
         :post="postDetail"
-        @on-change="emitFn"
+        @on-change="emitBackFn"
         @on-publish-change="emitPublishPageFn"
       />
     </div>
 
     <!-- 文章发布 -->
     <div id="post-publisher" v-if="showPublish">
-      <single-publish
-        :publish-data="publishData"
-        @on-change="emitPublishBackFn"
-      />
+      <single-publish :publish-data="publishData" @on-change="emitBackFn" />
+    </div>
+
+    <!-- Anki -->
+    <div class="post-anki" v-if="showAnki">
+      <single-anki :post="postDetail" @on-change="emitBackFn" />
+    </div>
+
+    <!-- Picgo -->
+    <div class="post-picgo" v-if="showPicgo">
+      <single-picgo :post="postDetail" @on-change="emitBackFn" />
     </div>
   </div>
 </template>
@@ -163,6 +186,8 @@ import SinglePublish from "~/components/blog/singleWin/singlePublish.vue"
 import { getPublishCfg } from "~/utils/publishUtil"
 import { isEmptyString, parseBoolean } from "~/utils/util"
 import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
+import SingleAnki from "~/components/blog/singleWin/SingleAnki.vue"
+import SinglePicgo from "~/components/blog/singleWin/SinglePicgo.vue"
 
 const logger = LogFactory.getLogger()
 
@@ -171,6 +196,9 @@ const { t } = useI18n()
 const showHome = ref(true)
 const showDetail = ref(false)
 const showPublish = ref(false)
+const showAnki = ref(false)
+const showPicgo = ref(false)
+
 const postDetail = ref()
 const publishData = ref()
 const isInSiyuan = ref(false)
@@ -231,6 +259,8 @@ const handleView = (index, row) => {
 
     showPublish.value = false
     showHome.value = false
+    showAnki.value = false
+    showPicgo.value = false
     showDetail.value = true
   }
 }
@@ -263,18 +293,18 @@ const emitFn = () => {
   // console.log("emitFn");
 }
 
-const emitPublishBackFn = () => {
+const emitBackFn = () => {
   emitFn()
 }
 
 const emitPublishPageFn = (post) => {
-  // post.postid = post.postid
-  // post.title = post.title
   publishData.value = post
 
   showPublish.value = true
   showHome.value = false
   showDetail.value = false
+  showAnki.value = false
+  showPicgo.value = false
 }
 
 const handleEdit = (index, row) => {
@@ -289,6 +319,8 @@ const handleEdit = (index, row) => {
     showPublish.value = true
     showHome.value = false
     showDetail.value = false
+    showAnki.value = false
+    showPicgo.value = false
   }
 }
 const handleNewWinEdit = (index, row) => {
@@ -316,6 +348,88 @@ const handleNewWinEdit = (index, row) => {
 const handleRowClick = (row, column, event) => {
   // goToPage("/index.html?id=aaa")
   // console.log("handleRowClick", row)
+}
+
+const handleAnki = (index, row) => {
+  if (isNewWin.value) {
+    handleNewWinAnki(index, row)
+  } else {
+    const post = new Post()
+    post.postid = row.postid
+    post.title = row.title
+    post.dateCreated = row.dateCreated
+    post.mt_keywords = row.mt_keywords
+    post.description = row.description
+    postDetail.value = post
+
+    showPublish.value = false
+    showHome.value = false
+    showPicgo.value = false
+    showDetail.value = false
+    showAnki.value = true
+  }
+}
+const handleNewWinAnki = (index, row) => {
+  ElMessageBox.confirm(
+    "此操作会打开新页面，此窗口将关闭，是否继续？",
+    t("main.opt.warning"),
+    {
+      confirmButtonText: t("main.opt.ok"),
+      cancelButtonText: t("main.opt.cancel"),
+      type: "warning",
+    }
+  )
+    .then(async () => {
+      goToPage("/anki/index.html?id=" + row.postid)
+      // console.log(index, row)
+    })
+    .catch(() => {
+      // ElMessage({
+      //   type: 'error',
+      //   message: t("main.opt.failure"),
+      // })
+    })
+}
+
+const handlePicgo = (index, row) => {
+  if (isNewWin.value) {
+    handleNewWinPicgo(index, row)
+  } else {
+    const post = new Post()
+    post.postid = row.postid
+    post.title = row.title
+    post.dateCreated = row.dateCreated
+    post.mt_keywords = row.mt_keywords
+    post.description = row.description
+    postDetail.value = post
+
+    showPublish.value = false
+    showHome.value = false
+    showAnki.value = false
+    showDetail.value = false
+    showPicgo.value = true
+  }
+}
+const handleNewWinPicgo = (index, row) => {
+  ElMessageBox.confirm(
+    "此操作会打开新页面，此窗口将关闭，是否继续？",
+    t("main.opt.warning"),
+    {
+      confirmButtonText: t("main.opt.ok"),
+      cancelButtonText: t("main.opt.cancel"),
+      type: "warning",
+    }
+  )
+    .then(async () => {
+      goToPage("/picgo/index.html?id=" + row.postid)
+      // console.log(index, row)
+    })
+    .catch(() => {
+      // ElMessage({
+      //   type: 'error',
+      //   message: t("main.opt.failure"),
+      // })
+    })
 }
 
 const initPage = async () => {
