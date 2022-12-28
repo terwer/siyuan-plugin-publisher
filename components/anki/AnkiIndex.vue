@@ -233,6 +233,7 @@ const tagHandleInputConfirm = (blockId) => {
 const initPage = async () => {
   const pageId = await getPageId(true, props.pageId)
   formData.ankiInfo = await siyuanApi.getAnkilinkInfo(pageId)
+  logger.debug("ankiInfo=>", formData.ankiInfo)
 
   formData.ankiInfo.forEach((item) => {
     formData.ankiMap[item.id] = item

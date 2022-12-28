@@ -170,7 +170,7 @@ export class SiYuanApi {
    * @param blockId 文档ID
    */
   public async getAnkilinkInfo(blockId: string): Promise<any> {
-    const stmt = `select b.id, b.content,ifnull(attr.name,'custom-ankilink') as name, attr.value
+    const stmt = `select distinct b.id, b.content,ifnull(attr.name,'custom-ankilink') as name, attr.value
 from blocks b
 left join attributes attr on attr.name = 'custom-ankilink' and attr.block_id = b.id
 where b.root_id = '${blockId}'

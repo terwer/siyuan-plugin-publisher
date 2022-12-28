@@ -45,3 +45,18 @@ onMounted(() => {
   isNewWin.value = parseBoolean(publishCfg.newWin)
 })
 </script>
+
+<style scoped>
+#post-detail-body {
+  min-width: 600px !important;
+  margin-top: 20px;
+  margin-bottom: 16px;
+}
+
+#post-detail-body .btn-publish {
+  /*margin-left: 10px;*/
+  cursor: pointer;
+  padding: 0;
+  margin-top: 20px;
+}
+</style>
