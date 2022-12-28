@@ -238,6 +238,9 @@ npm i -g vercel
 ```bash
 pnpm install
 pnpm serve
+
+# windows
+# pnpm serveWin
 ```
 
 ### 开发阶段调试
@@ -254,6 +257,9 @@ VITE_MIDDLEWARE_URL=https://publish.terwer.space/api/middleware
 
 ```bash
 pnpm dev
+
+# windows
+# pnpm devWin
 ```
 
 浏览器默认入口连接是
@@ -268,6 +274,9 @@ http://localhost:3000/blog/index.html
 
 ```bash
 pnpm widget
+
+# windows
+# pnpm widgetWin
 ```
 
 提交 `dist` 文件夹到仓库, 上架思源笔记挂件集市。
@@ -276,6 +285,9 @@ pnpm widget
 
 ```bash
 pnpm extChrome
+
+# windows
+# pnpm extChromeWin
 ```
 
 插件调试

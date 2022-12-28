@@ -24,7 +24,7 @@
 #
 
 pwd
-vue-tsc --noEmit && PROXY=false BUILD_TYPE=siyuan vite build
+vue-tsc --noEmit && BUILD_TYPE=siyuan vite build
 cp ./LICENSE ./dist/
 
 # 删除Chrome插件专属文件

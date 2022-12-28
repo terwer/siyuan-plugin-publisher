@@ -156,7 +156,7 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
     // 项目根目录
     root: "./",
     // 项目部署的基础路径
-    base: isSiyuanBuild ? "/widgets/sy-post-publisher/" : "",
+    base: isSiyuanBuild ? "/widgets/sy-post-publisher/" : "/",
     // 静态资源服务文件夹
     publicDir: "public",
     // https://github.com/vitejs/vite/issues/1930
