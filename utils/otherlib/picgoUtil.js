@@ -23,11 +23,13 @@
  * questions.
  */
 
+import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
+
 /**
- * 通过PicGO上传图片
+ * 通过PicGO上传图片，主窗口
  * @returns {Promise<void>}
  */
-// export async function uploadByPicGO() {
+// export async function uploadQuickByPicGO() {
 //   const syWin = window.parent
 //   if (syWin.terwer && syWin.terwer.picGoUpload) {
 //     return syWin.terwer.picGoUpload()
@@ -39,17 +41,37 @@
 // }
 
 /**
- * 通过PicGO上传图片，思源笔记新窗口
- * @returns {Promise<void>}
+ * 通过PicGO上传图片
+ * @returns {Promise<any[]>}
  */
-export async function uploadNewWinByPicGO(input) {
+export async function uploadByPicGO(input) {
+  if (input) {
+    if (isInSiyuanNewWinBrowser()) {
+      return uploadNewWinByPicGO(input)
+    } else {
+      alert("aaa")
+    }
+  } else {
+    if (isInSiyuanNewWinBrowser()) {
+      return uploadNewWinClipboardByPicGO()
+    } else {
+      alert("bbb")
+    }
+  }
+}
+
+/**
+ * 通过PicGO上传图片，思源笔记新窗口
+ * @returns {Promise<any[]>}
+ */
+async function uploadNewWinByPicGO(input) {
   return await window.terwer.picgoExtension.upload(input)
 }
 
 /**
  * 通过PicGO上传剪贴板图片，思源笔记新窗口
- * @returns {Promise<void>}
+ * @returns {Promise<any[]>}
  */
-export async function uploadNewWinClipboardByPicGO() {
+async function uploadNewWinClipboardByPicGO() {
   return await window.terwer.picgoExtension.uploadFormClipboard()
 }

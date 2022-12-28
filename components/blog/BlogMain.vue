@@ -290,6 +290,8 @@ const emitFn = () => {
   showPublish.value = false
   showHome.value = true
   showDetail.value = false
+  showAnki.value = false
+  showPicgo.value = false
   // console.log("emitFn");
 }
 

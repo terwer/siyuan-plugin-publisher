@@ -40,30 +40,30 @@
       </template>
     </el-upload>
     -->
-    <div class="upload-control">
-      <label>
-        <!-- 自定义的文件选择按钮 -->
-        <label for="fileInput" class="custom-file-input">上传选择的图片</label>
+    <div class="upload-btn-list">
+      <div class="upload-control">
+        <label>
+          <!-- 自定义的文件选择按钮 -->
+          <label for="fileInput" class="custom-file-input">选择图片</label>
 
-        <!-- 原有的文件选择按钮 -->
-        <input
-          type="file"
-          accept="image/png, image/gif, image/jpeg"
-          @change="onRequest"
-          multiple
-          id="fileInput"
-        />
-      </label>
-    </div>
-
-    <div class="upload-control">
-      <el-button type="primary" @click="doUploadPicFromClipboard"
-        >上传剪贴板图片
-      </el-button>
-    </div>
-
-    <div class="upload-control">
-      <el-button :loading="isUploadLoading">图片的上传状态</el-button>
+          <!-- 原有的文件选择按钮 -->
+          <input
+            type="file"
+            accept="image/png, image/gif, image/jpeg"
+            @change="onRequest"
+            multiple
+            id="fileInput"
+          />
+        </label>
+      </div>
+      <div class="upload-control">
+        <el-button type="primary" @click="doUploadPicFromClipboard"
+          >剪贴板图片
+        </el-button>
+      </div>
+      <div class="upload-control">
+        <el-button text :loading="isUploadLoading">上传状态</el-button>
+      </div>
     </div>
 
     <ul class="file-list">
@@ -91,10 +91,7 @@
 import { LogFactory } from "~/utils/logUtil"
 import { ElMessage } from "element-plus"
 import { useI18n } from "vue-i18n"
-import {
-  uploadNewWinByPicGO,
-  uploadNewWinClipboardByPicGO,
-} from "~/utils/otherlib/picgoUtil"
+import { uploadByPicGO } from "~/utils/otherlib/picgoUtil"
 import { reactive, ref } from "vue"
 
 const logger = LogFactory.getLogger("components/picgo/PicgoIndex.vue")
@@ -147,7 +144,7 @@ const onRequest = async (event) => {
       filePaths.push(fileList.item(i).path)
     }
 
-    const imgInfos: any = await uploadNewWinByPicGO(filePaths)
+    const imgInfos = await uploadByPicGO(filePaths)
     // 处理后续
     doAfterUpload(imgInfos)
 
@@ -168,7 +165,7 @@ const doUploadPicFromClipboard = async () => {
   isUploadLoading.value = true
 
   try {
-    const imgInfos: any = await uploadNewWinClipboardByPicGO()
+    const imgInfos = await uploadByPicGO()
     // 处理后续
     doAfterUpload(imgInfos)
 
@@ -191,8 +188,12 @@ const doUploadPicFromClipboard = async () => {
   padding: 16px;
 }
 
+.upload-btn-list {
+}
+
 .upload-control {
-  margin: 10px 0;
+  display: inline-block;
+  margin: 10px 16px 10px 0;
 }
 
 .log-msg {
