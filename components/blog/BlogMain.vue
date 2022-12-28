@@ -84,25 +84,17 @@
             <div style="text-align: center">操作</div>
           </template>
           <template #default="scope">
-            <el-button size="small" @click="handleView(scope.$index, scope.row)"
-              >预览
+            <el-button
+              size="small"
+              @click="handleView(scope.$index, scope.row)"
+            >
+              <font-awesome-icon icon="fa-solid fa-book-open-reader" />
             </el-button>
             <el-button
-              v-if="isNewWin"
               size="small"
-              type="primary"
-              @click="handleNewWinView(scope.$index, scope.row)"
-              >新窗口预览
-            </el-button>
-            <el-button size="small" @click="handleEdit(scope.$index, scope.row)"
-              >发布
-            </el-button>
-            <el-button
-              v-if="isNewWin"
-              size="small"
-              type="primary"
-              @click="handleNewWinEdit(scope.$index, scope.row)"
-              >新窗口发布
+              @click="handleEdit(scope.$index, scope.row)"
+            >
+              <font-awesome-icon icon="fa-solid fa-upload" />
             </el-button>
           </template>
         </el-table-column>
@@ -226,35 +218,21 @@ const handleCurrentPage = async (curPage) => {
 }
 
 const handleView = (index, row) => {
-  // goToPage("/detail/index.html?id=" + row.postid)
-  // ElMessageBox.confirm(
-  //     "预览会打开新页面，此窗口将关闭，是否继续？",
-  //     t('main.opt.warning'),
-  //     {
-  //       confirmButtonText: t('main.opt.ok'),
-  //       cancelButtonText: t('main.opt.cancel'),
-  //       type: 'warning',
-  //     }
-  // ).then(async () => {
-  //   console.log(index, row)
-  // }).catch(() => {
-  //   // ElMessage({
-  //   //   type: 'error',
-  //   //   message: t("main.opt.failure"),
-  //   // })
-  //   logUtil.logInfo("操作已取消")
-  // });
-  const post = new Post()
-  post.postid = row.postid
-  post.title = row.title
-  post.dateCreated = row.dateCreated
-  post.mt_keywords = row.mt_keywords
-  post.description = row.description
-  postDetail.value = post
+  if (isNewWin.value) {
+    handleNewWinView(index, row)
+  } else {
+    const post = new Post()
+    post.postid = row.postid
+    post.title = row.title
+    post.dateCreated = row.dateCreated
+    post.mt_keywords = row.mt_keywords
+    post.description = row.description
+    postDetail.value = post
 
-  showPublish.value = false
-  showHome.value = false
-  showDetail.value = true
+    showPublish.value = false
+    showHome.value = false
+    showDetail.value = true
+  }
 }
 const handleNewWinView = (index, row) => {
   ElMessageBox.confirm(
@@ -300,18 +278,19 @@ const emitPublishPageFn = (post) => {
 }
 
 const handleEdit = (index, row) => {
-  // goToPage("/index.html?id=" + row.postid)
-  // console.log(index, row)
-  const post = new Post()
-  post.postid = row.postid
-  post.title = row.title
-  publishData.value = post
+  if (isNewWin.value) {
+    handleNewWinEdit(index, row)
+  } else {
+    const post = new Post()
+    post.postid = row.postid
+    post.title = row.title
+    publishData.value = post
 
-  showPublish.value = true
-  showHome.value = false
-  showDetail.value = false
+    showPublish.value = true
+    showHome.value = false
+    showDetail.value = false
+  }
 }
-
 const handleNewWinEdit = (index, row) => {
   ElMessageBox.confirm(
     "此操作会打开新页面，此窗口将关闭，是否继续？",

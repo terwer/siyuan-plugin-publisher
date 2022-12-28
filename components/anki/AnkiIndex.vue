@@ -236,11 +236,13 @@ const initPage = async () => {
       const valueArr = item.value?.split("\n")
       deckArr = valueArr[0]
         ?.replace(/"/g, "")
+        .replace(/&quot;/g, "")
         .replace(/deck_name=/g, "")
         ?.split("::")
       if (valueArr.length > 1) {
         tagArr = valueArr[1]
           ?.replace(/"/g, "")
+          .replace(/&quot;/g, "")
           .replace(/tags=\[/g, "")
           .replace(/]/g, "")
           .split(",")
