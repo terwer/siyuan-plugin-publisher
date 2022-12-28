@@ -182,8 +182,13 @@ window.terwer.renderPublishHelper = (pageId, pageUrl) => {
         if (err) {
           console.log(err)
         }
-        var dataDir = `${window.siyuan.config.system.dataDir}`
+        let dataDir = `${window.siyuan.config.system.dataDir}`
+        // 修复Windows路径问题
+        dataDir = dataDir.replace(/\\/g, "/")
         const newWinPageId = pageId ?? ""
+        console.log("dataDir=>", dataDir)
+        console.log("newWinPageId=>", newWinPageId)
+
         var txt = data.toString().replace(/<!--.*-->/gs, "")
         txt += `<script>window.terwer={};window.terwer.pageId="${newWinPageId}";window.terwer.dataDir="${dataDir}";
           window.terwer.picgoExtension = require("${dataDir}/widgets/sy-post-publisher/lib/picgo/picgo.js").default;
@@ -230,7 +235,7 @@ window.terwer.renderPublishHelper = (pageId, pageUrl) => {
       (response) => {
         window.siyuan.printWin.loadURL(response.data.url)
         // 打开开发者工具
-        // window.siyuan.printWin.webContents.openDevTools()
+        window.siyuan.printWin.webContents.openDevTools()
       }
     )
   })

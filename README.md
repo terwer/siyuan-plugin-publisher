@@ -55,7 +55,7 @@ import("/widgets/sy-post-publisher/lib/siyuanhook.js")
 
 点击按钮开始体验
 
-![](https://img1.terwer.space/api/public/202212182033394.png)
+![](https://img1.terwer.space/api/public/20221228-175950.jpeg)
 
 详情请参考: [挂件模式用挂载菜单的方式使用](https://www.terwer.space/post/the-pendant-mode-is-used-in-the-method-of-mounting-menu-169wrw.html#%E6%95%88%E6%9E%9C%E6%BC%94%E7%A4%BA)<sup>
 强烈推荐</sup> <sup>0.4.2+</sup>
@@ -157,6 +157,18 @@ https://terwer.space/post/start-to-get-started-zi0eyk.html
 - [x] 支持自定义设置 API 地址，支持本地、局域网、远程 <sup>0.1.0+</sup>
 - [x] 支持配置导入导出 <sup>0.2.0+</sup>
 - [x] 通用设置支持标题序号开关、正文 H1 开关、新窗口开关、自动标签开关 <sup>0.2.0+</sup>
+- [x] 支持设置 Anki 牌组标记 <sup>0.6.0+</sup>
+
+  - anki 使用入门请参考：https://ld246.com/article/1670312056742
+
+- [x] 支持通过 PicGO 管理图床 <sup>
+      0.6.0+ [挂件版已经完美集成 PicGO，可直接使用；浏览器插件只能通过 HTTP 调用本地的 PicGO，需手动下载和配置]</sup>
+
+  - PicGO 使用注意事项：
+
+  1. 如果你使用的是浏览器插件可以从这里下载配置 PicGO 客户端：https://github.com/Molunerfinn/PicGo/releases
+
+  2. 挂件版无需此操作
 
 ## 最近更新
 
