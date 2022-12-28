@@ -55,8 +55,8 @@
           {{ $t("setting.conf.clear") }}
         </span>
 
-        <span v-if="isNewWin" class="text">.</span>
-        <span v-if="isNewWin" class="text s-dark" @click="newWin()">
+        <span class="text">.</span>
+        <span class="text s-dark" @click="newWin()">
           {{ $t("blog.newwin.open") }}
         </span>
 
@@ -168,8 +168,6 @@ import {
 import { SIYUAN_CONSTANTS } from "~/utils/constants/siyuanConstants"
 import { version } from "../../package.json"
 import { isBrowser, reloadPage } from "~/utils/browserUtil"
-import { getPublishCfg } from "~/utils/publishUtil"
-import { parseBoolean } from "~/utils/util"
 import GeneralSetting from "~/components/publish/tab/GeneralSetting.vue"
 
 const logger = LogFactory.getLogger("layouts/default/DefaultFooter")
@@ -181,7 +179,6 @@ const toggleDark = useToggle(isDark)
 
 const isInSiyuan = ref(false)
 const v = ref("0.0.3")
-const isNewWin = ref(true)
 
 const formLabelWidth = "140px"
 const siyuanApiChangeFormVisible = ref(false)
@@ -293,9 +290,6 @@ const initConf = () => {
   isInSiyuan.value = inSiyuan()
 
   v.value = version
-
-  const publishCfg = getPublishCfg()
-  isNewWin.value = parseBoolean(publishCfg.newWin)
 
   const siyuanCfg = getSiyuanCfg()
 

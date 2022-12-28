@@ -57,7 +57,8 @@ export class HugoYamlConverterAdaptor
     yamlFormatObj.yamlObj.slug = postForm.formData.customSlug
 
     // url
-    yamlFormatObj.yamlObj.url = "post/" + postForm.formData.customSlug + ".html"
+    yamlFormatObj.yamlObj.url =
+      "/post/" + postForm.formData.customSlug + ".html"
 
     // date
     yamlFormatObj.yamlObj.date = postForm.formData.created
