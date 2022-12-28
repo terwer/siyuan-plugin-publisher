@@ -323,7 +323,7 @@ onMounted(async () => {
 
 <style scoped>
 .anki-body {
-  padding: 10px;
+  padding: 16px;
 }
 .block-title {
   margin-bottom: 16px;
