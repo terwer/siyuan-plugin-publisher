@@ -181,6 +181,21 @@ where b.root_id = '${blockId}'
   }
 
   /**
+   * 以id获取所有图片块
+   * @param blockId 块ID
+   */
+  public async getImageBlocksByID(blockId: string): Promise<any[]> {
+    const stmt = `select *
+                from blocks
+                where id = '${blockId}' and  and markdown like '%![%''`
+    const data = await this.sql(stmt)
+    if (!data || data.length === 0) {
+      throw new Error("通过ID查询图片块信息失败")
+    }
+    return data
+  }
+
+  /**
    * 以id获取思源块信息
    * @param blockId 块ID
    */
