@@ -33,6 +33,9 @@ rm ./dist/manifest*.json
 # 删除Firefox的专属文件
 rm -rf ./dist/mv2
 
+# Picgo配置文件
+cp ./dist/lib/picgo/picgo.cfg.json.example ./dist/lib/picgo/picgo.cfg.json
+
 rm -rf ../my-note-docker/workspace/SiYuan/data/widgets/sy-post-publisher/
 mkdir ../my-note-docker/workspace/SiYuan/data/widgets/sy-post-publisher
 cp -r ./dist/* ../my-note-docker/workspace/SiYuan/data/widgets/sy-post-publisher/

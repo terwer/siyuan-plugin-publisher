@@ -303,4 +303,8 @@ export default {
   "anki.siyuan.deck.new": "New deck",
   "anki.siyuan.tag": "Tag",
   "anki.siyuan.tag.new": "New tag",
+  "picgo.chrome.tip":
+    "If you are using a browser plug -in, you need to download the configuration Picgo client from here: https://github.com/Molunerfinn/PicGo/releases",
+  "picgo.siyuan.tip":
+    "If you are using Siyuan notes pendants, you need to configure your own integration of PICGO. The pendant version of the PICGO configuration file is:`[Siyuan Workspace]/data/widgets/sy-post-publisher/lib/picgo/picgo.cfg.json`，Please refer to the official picgo document for configuration：https://picgo.github.io/PicGo-Core-Doc/zh/guide/config.html#%E6%89%8B%E5%8A%A8%E7%94%9F%E6%88%90",
 }

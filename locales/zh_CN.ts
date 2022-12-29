@@ -315,4 +315,8 @@ export default {
   "anki.siyuan.deck.new": "新牌组",
   "anki.siyuan.tag": "标签",
   "anki.siyuan.tag.new": "新标签",
+  "picgo.chrome.tip":
+    "您当前使用的是浏览器插件，需要从这里下载配置 PicGO 客户端：https://github.com/Molunerfinn/PicGo/releases",
+  "picgo.siyuan.tip":
+    "您当前使用的是思源笔记挂件，需要自行配置已经集成好的PicGO，挂件版 PicGO 配置文件在：`[思源工作空间]/data/widgets/sy-post-publisher/lib/picgo/picgo.cfg.json`，请参考PicGO官方文档进行配置：https://picgo.github.io/PicGo-Core-Doc/zh/guide/config.html#%E6%89%8B%E5%8A%A8%E7%94%9F%E6%88%90",
 }

@@ -166,9 +166,11 @@ https://terwer.space/post/start-to-get-started-zi0eyk.html
 
   - PicGO 使用注意事项：
 
-  1. 如果你使用的是浏览器插件可以从这里下载配置 PicGO 客户端：https://github.com/Molunerfinn/PicGo/releases
+  1. 如果你使用的是浏览器插件，需要从这里下载配置 PicGO 客户端：https://github.com/Molunerfinn/PicGo/releases
 
-  2. 挂件版无需此操作
+  2. 如果你使用的是思源笔记挂件，需要自行配置已经集成好的 PicGO，挂件版 PicGO
+     配置文件在：`[思源工作空间]/data/widgets/sy-post-publisher/lib/picgo/picgo.cfg.json`
+     ，请参考 PicGO 官方文档进行配置：https://picgo.github.io/PicGo-Core-Doc/zh/guide/config.html#%E6%89%8B%E5%8A%A8%E7%94%9F%E6%88%90
 
 ## 最近更新
 

@@ -31,6 +31,7 @@ cp ./LICENSE ./dist/
 # 删除siyuan挂件专属文件
 rm ./dist/widget.json
 rm ./dist/lib/siyuanhook.js
+rm -rf ./dist/lib/picgo
 
 # 删除火狐配置
 rm -rf ./dist/mv2

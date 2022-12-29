@@ -25,6 +25,12 @@
 
 <template>
   <div class="picgo-body">
+    <el-alert
+      class="top-version-tip"
+      :title="isElectron ? $t('picgo.siyuan.tip') : $t('picgo.chrome.tip')"
+      type="info"
+      :closable="false"
+    />
     <!--
     <el-upload
       action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
@@ -97,7 +103,7 @@ import { getPageId, inSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
 import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
 import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
 import { removeBom } from "~/utils/strUtil"
-import { isBrowser } from "~/utils/browserUtil"
+import { isBrowser, isElectron } from "~/utils/browserUtil"
 
 const logger = LogFactory.getLogger("components/picgo/PicgoIndex.vue")
 const { t } = useI18n()
