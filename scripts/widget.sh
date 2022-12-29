@@ -26,6 +26,9 @@
 pwd
 vue-tsc --noEmit && BUILD_TYPE=siyuan vite build
 cp ./LICENSE ./dist/
+cp ./README.md ./dist/
+cp ./policy.md ./dist/
+cp ./.gitignore ./dist/
 
 # 删除Chrome插件专属文件
 rm ./dist/background.js
