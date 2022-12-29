@@ -1,5 +1,58 @@
 # Changelog
 
+## [0.6.0](https://github.com/terwer/src-sy-post-publisher/compare/v0.5.1...v0.6.0) (2022-12-29)
+
+
+### Features
+
+* [#132](https://github.com/terwer/src-sy-post-publisher/issues/132) 集成PicGO以及图床-上传接口调整 ([b224ab1](https://github.com/terwer/src-sy-post-publisher/commit/b224ab173b36b2440e1a034293d98a2d6865168e))
+* [#132](https://github.com/terwer/src-sy-post-publisher/issues/132) 集成PicGO以及图床-修复Windows路径问题 ([b81dd85](https://github.com/terwer/src-sy-post-publisher/commit/b81dd85cc92814cc5b8712bc4637c9107016ae4b))
+* [#132](https://github.com/terwer/src-sy-post-publisher/issues/132) 集成PicGO以及图床-关闭按钮优化 ([1a488e6](https://github.com/terwer/src-sy-post-publisher/commit/1a488e60c04431c013799af27d0d6055d3b266d6))
+* [#132](https://github.com/terwer/src-sy-post-publisher/issues/132) 集成PicGO以及图床-新增功能菜单按钮 ([2cc434c](https://github.com/terwer/src-sy-post-publisher/commit/2cc434cac303841240b063095d31427928e40a17))
+* [#132](https://github.com/terwer/src-sy-post-publisher/issues/132) 集成PicGO以及图床-样式优化 ([5222890](https://github.com/terwer/src-sy-post-publisher/commit/52228901a94a4363f37339c1118cc5f5f7d512f9))
+* [#132](https://github.com/terwer/src-sy-post-publisher/issues/132) 集成PicGO以及图床-读取文章图片块 ([e08b0b6](https://github.com/terwer/src-sy-post-publisher/commit/e08b0b664c811471c450d5d908720e0773c31b71))
+* [#132](https://github.com/terwer/src-sy-post-publisher/issues/132) 集成PicGO以及图床-非electron环境支持剪贴板上传 ([b6dea35](https://github.com/terwer/src-sy-post-publisher/commit/b6dea359f6d4e4dd0ecf04205667fed4a484092f))
+* [#285](https://github.com/terwer/src-sy-post-publisher/issues/285) 支持生成ankilink牌组标记 ([d39df30](https://github.com/terwer/src-sy-post-publisher/commit/d39df3046150aeefdc593eff311c3749f2dbfd52))
+* [#285](https://github.com/terwer/src-sy-post-publisher/issues/285) 支持生成ankilink牌组标记-修复牌组重复问题 ([0f7d9aa](https://github.com/terwer/src-sy-post-publisher/commit/0f7d9aa8dcbdf24805fc449ea8946d185ac52017))
+* [#285](https://github.com/terwer/src-sy-post-publisher/issues/285) 支持生成ankilink牌组标记-列表新增牌组标记管理按钮 ([23eb689](https://github.com/terwer/src-sy-post-publisher/commit/23eb689f23aabd86bf590908cb40894e7f63d3e0))
+* [#285](https://github.com/terwer/src-sy-post-publisher/issues/285) 支持生成ankilink牌组标记-基本展示和保存 ([f94a53c](https://github.com/terwer/src-sy-post-publisher/commit/f94a53cbe0214c984270701c2d27f9970c1b8bac))
+* [#285](https://github.com/terwer/src-sy-post-publisher/issues/285) 支持生成ankilink牌组标记-完善牌组展示 ([ab32f12](https://github.com/terwer/src-sy-post-publisher/commit/ab32f1219fd6339e756acef672730e0cbc9c977b))
+* [#285](https://github.com/terwer/src-sy-post-publisher/issues/285) 支持生成ankilink牌组标记-完成Ankisiyuan标记 ([07f8d7e](https://github.com/terwer/src-sy-post-publisher/commit/07f8d7e28d7a7fa37ccfb5983e88abda04f810a8))
+* [#285](https://github.com/terwer/src-sy-post-publisher/issues/285) 支持生成ankilink牌组标记-完成牌组标记 ([4214897](https://github.com/terwer/src-sy-post-publisher/commit/4214897ad3660bcc6069b549174388239b30b9c9))
+* [#285](https://github.com/terwer/src-sy-post-publisher/issues/285) 支持生成ankilink牌组标记-调用shell的公共方法 ([51f6a68](https://github.com/terwer/src-sy-post-publisher/commit/51f6a6807246946383d6a7fbc44236c452ad122f))
+* 集成PicGO以及图床-Pico上传 ([8d26ff6](https://github.com/terwer/src-sy-post-publisher/commit/8d26ff649f6a60092b52529c9a74d3710dba0573))
+* 集成PicGO以及图床-Pico依赖库 ([6ec387c](https://github.com/terwer/src-sy-post-publisher/commit/6ec387c45d11f44393e69b13d1807d05cf010b79))
+* 集成PicGO以及图床-Pico依赖库 ([6f57baa](https://github.com/terwer/src-sy-post-publisher/commit/6f57baa70c2715fe85741feff9a293a3e824c652))
+* 集成PicGO以及图床-Pico图床可用 ([4800d48](https://github.com/terwer/src-sy-post-publisher/commit/4800d480c378d926bf4bdd5158c7d05535e39cbc))
+* 集成PicGO以及图床-修复图标 ([a764286](https://github.com/terwer/src-sy-post-publisher/commit/a76428650735721a88bc7e3b21ca18d971557000))
+* 集成PicGO以及图床-图片路径复制 ([503e3ad](https://github.com/terwer/src-sy-post-publisher/commit/503e3ad963bda87f1b5db9f377c96089477a0e31))
+* 集成PicGO以及图床-展示文章中的图片 ([f5341a1](https://github.com/terwer/src-sy-post-publisher/commit/f5341a12b3b15a327af1dc1bf99c777875c2cfc6))
+* 集成PicGO以及图床-提取并构建构建单独可运行的PicGo依赖库 ([9741111](https://github.com/terwer/src-sy-post-publisher/commit/9741111f117c2dd0fa2e3d298bbd853424bffa0e))
+* 集成PicGO以及图床-提取并构建构建单独可运行的PicGo依赖库 ([2026f1d](https://github.com/terwer/src-sy-post-publisher/commit/2026f1d3856dc754c226597c662d7e1ef50b84a4))
+* 集成PicGO以及图床-提取并构建构建单独可运行的PicGo依赖库 ([f83957c](https://github.com/terwer/src-sy-post-publisher/commit/f83957c58df386391f941f9d46299d6351acc872))
+* 集成PicGO以及图床-显示操作状态 ([1332329](https://github.com/terwer/src-sy-post-publisher/commit/13323293362340228061ac017e0ad8a8a5844123))
+
+
+### Bug Fixes
+
+* 修复未生成属性时点击发布造成的文件名错误问题 ([a98eef8](https://github.com/terwer/src-sy-post-publisher/commit/a98eef8002a21722aaa70e3ac9ca49b724f3b05c))
+* 修改Window构建脚本，优化构建体验 ([2bac0eb](https://github.com/terwer/src-sy-post-publisher/commit/2bac0eb8721c7d18e33083231e4bce1e3693166a))
+* 未修改过别名才去更改 ([03e2736](https://github.com/terwer/src-sy-post-publisher/commit/03e27360ede3364befd2ab2f36b91cfe3c3a618b))
+
+
+### Miscellaneous
+
+* add script comment ([fd961e3](https://github.com/terwer/src-sy-post-publisher/commit/fd961e3a27fca83992988b8736fc94545f30b08e))
+* **deps-dev:** bump @vitest/coverage-c8 from 0.25.8 to 0.26.2 ([fca56ba](https://github.com/terwer/src-sy-post-publisher/commit/fca56baf8cec698ae0314530e4343ea899d7e749))
+* **deps-dev:** bump vitest from 0.25.8 to 0.26.2 ([97f450a](https://github.com/terwer/src-sy-post-publisher/commit/97f450ad0e8ccfe32575a554ddbd964908c464d1))
+* fix default config ([b958626](https://github.com/terwer/src-sy-post-publisher/commit/b958626e028120379f8b3e44e5691271f59218a2))
+* fix image link ([51ff027](https://github.com/terwer/src-sy-post-publisher/commit/51ff02722ec54fab2603adee644f4ec0536ebb2c))
+* new version script ([0c88ade](https://github.com/terwer/src-sy-post-publisher/commit/0c88ade3e47ed4efaa55ab430e0f3f60823a3b5f))
+* release 0.5.1 ([82a1067](https://github.com/terwer/src-sy-post-publisher/commit/82a106791f72fe3a140f7d37d20dcf1696c02b58))
+* update deps ([92c3dc5](https://github.com/terwer/src-sy-post-publisher/commit/92c3dc53f651c474c065bc12270d8a4069fdbaf2))
+* use python script change new version ([64eb99c](https://github.com/terwer/src-sy-post-publisher/commit/64eb99c3960c99ad5742b71055d561e99455e741))
+* 新增FontAwesome感谢 ([b7d19b8](https://github.com/terwer/src-sy-post-publisher/commit/b7d19b808f5f3f2eb9808f9178e2ba01b323cc08))
+
 ## [0.5.1](https://github.com/terwer/src-sy-post-publisher/compare/v0.5.0...v0.5.1) (2022-12-17)
 
 
