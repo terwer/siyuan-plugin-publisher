@@ -107,6 +107,8 @@ export default {
   "main.publish.to.kms": "Send to KMS",
   "main.opt.success": "Success",
   "main.opt.failure": "Error",
+  "main.copy.success": "Copy Success",
+  "main.copy.failure": "Copy Error",
   "main.opt.quick": "Quick",
   "main.opt.status.publish": "Post published success",
   "main.opt.status.cancel": "Post publishing has been canceled",

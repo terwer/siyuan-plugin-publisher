@@ -73,7 +73,7 @@
         v-bind:key="f.name"
       >
         <img :src="f.url" :alt="f.name" />
-        <el-input :model-value="f.url" />
+        <el-input :model-value="f.url" @click="onImageUrlCopy(f.url)" />
       </li>
     </ul>
 
@@ -97,6 +97,7 @@ import { getPageId, inSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
 import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
 import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
 import { removeBom } from "~/utils/strUtil"
+import { isBrowser } from "~/utils/browserUtil"
 
 const logger = LogFactory.getLogger("components/picgo/PicgoIndex.vue")
 const { t } = useI18n()
@@ -228,6 +229,25 @@ const doUploadPicFromClipboard = async () => {
       logger.error(t("main.opt.failure") + "=>", e)
     }
     isUploadLoading.value = false
+  }
+}
+
+const onImageUrlCopy = (url: string) => {
+  if (isBrowser()) {
+    const mdUrl = `![](${url})`
+    // document.execCommand("copy");
+
+    // Copy the selected text to the clipboard
+    navigator.clipboard.writeText(mdUrl).then(
+      function () {
+        // The text has been successfully copied to the clipboard
+        ElMessage.success(t("main.copy.success"))
+      },
+      function (err) {
+        // An error occurred while copying the text
+        ElMessage.error(t("main.copy.failure") + err)
+      }
+    )
   }
 }
 

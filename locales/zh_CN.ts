@@ -108,6 +108,8 @@ export default {
   "main.publish.to.kms": "发布到KMS",
   "main.opt.success": "操作成功",
   "main.opt.failure": "操作失败",
+  "main.copy.success": "复制成功",
+  "main.copy.failure": "复制失败",
   "main.opt.quick": "快捷操作",
   "main.opt.status.publish": "文章已发布",
   "main.opt.status.updated": "文章已更新",
