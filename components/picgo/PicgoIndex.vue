@@ -92,18 +92,29 @@ import { LogFactory } from "~/utils/logUtil"
 import { ElMessage } from "element-plus"
 import { useI18n } from "vue-i18n"
 import { uploadByPicGO } from "~/utils/otherlib/picgoUtil"
-import { reactive, ref } from "vue"
-import { inSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
+import { onMounted, reactive, ref, watch } from "vue"
+import { getPageId, inSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
 import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
+import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
+import { removeBom } from "~/utils/strUtil"
 
 const logger = LogFactory.getLogger("components/picgo/PicgoIndex.vue")
 const { t } = useI18n()
+const siyuanApi = new SiYuanApi()
 const isUploadLoading = ref(false)
 
 const fileList = reactive({
   files: [],
 })
 const loggerMsg = ref("")
+
+// props
+const props = defineProps({
+  pageId: {
+    type: String,
+    default: undefined,
+  },
+})
 
 /**
  * 处理图片后续
@@ -128,15 +139,15 @@ const doAfterUpload = (imgInfos) => {
   ElMessage.success(t("main.opt.success"))
 }
 
-const readBase64FromFile = async (file) => {
-  const reader = new FileReader()
-  reader.readAsDataURL(file)
-  const base64 = await new Promise((resolve, reject) => {
-    reader.onload = () => resolve(reader.result)
-    reader.onerror = (error) => reject(error)
-  })
-  return base64
-}
+// const readBase64FromFile = async (file) => {
+//   const reader = new FileReader()
+//   reader.readAsDataURL(file)
+//   const base64 = await new Promise((resolve, reject) => {
+//     reader.onload = () => resolve(reader.result)
+//     reader.onerror = (error) => reject(error)
+//   })
+//   return base64
+// }
 
 const onRequest = async (event) => {
   isUploadLoading.value = true
@@ -219,6 +230,45 @@ const doUploadPicFromClipboard = async () => {
     isUploadLoading.value = false
   }
 }
+
+const initPage = async () => {
+  const pageId = await getPageId(true, props.pageId)
+  const imageBlocks = await siyuanApi.getImageBlocksByID(pageId)
+  logger.debug("查询文章中的图片块=>", imageBlocks)
+
+  if (!imageBlocks || imageBlocks.length === 0) {
+    return
+  }
+
+  // 解析
+  imageBlocks.forEach((page) => {
+    const imgUrl = removeBom(page.content)
+    const imageItem = {
+      name: imgUrl.substring(imgUrl.lastIndexOf("/") + 1),
+      url: imgUrl,
+    }
+
+    logger.debug("imageItem=>", imageItem)
+    fileList.files.push(imageItem)
+  })
+}
+
+/* 监听props */
+watch(
+  () => props.pageId,
+  /**/ (oldValue, newValue) => {
+    // Here you can add you functionality
+    // as described in the name you will get old and new value of watched property
+    // 默认选中vuepress
+    // setBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY, true)
+    initPage()
+    logger.debug("Picgo初始化")
+  }
+)
+
+onMounted(async () => {
+  await initPage()
+})
 </script>
 
 <style>

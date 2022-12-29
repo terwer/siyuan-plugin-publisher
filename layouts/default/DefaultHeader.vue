@@ -193,7 +193,7 @@ import { getBooleanEnv } from "~/utils/envUtil"
 import { appendStr } from "~/utils/strUtil"
 import { useI18n } from "vue-i18n"
 import { LogFactory } from "~/utils/logUtil"
-import { isElectron } from "~/utils/browserUtil"
+import { isElectron, isWindows } from "~/utils/browserUtil"
 
 const { t } = useI18n()
 const logger = LogFactory.getLogger("layouts/default/DefaultHeader.vue")
@@ -310,7 +310,7 @@ const pageIdChanged = () => {
   }
 
   // 如果是Windows环境，不显示关闭按钮
-  if (isElectron) {
+  if (isWindows && isElectron) {
     showCloseBtn.value = false
   }
 }

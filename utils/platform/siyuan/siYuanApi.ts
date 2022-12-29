@@ -187,9 +187,9 @@ where b.root_id = '${blockId}'
   public async getImageBlocksByID(blockId: string): Promise<any[]> {
     const stmt = `select *
                 from blocks
-                where id = '${blockId}' and  and markdown like '%![%''`
+                where root_id = '${blockId}' and markdown like '%![%'`
     const data = await this.sql(stmt)
-    if (!data || data.length === 0) {
+    if (!data) {
       throw new Error("通过ID查询图片块信息失败")
     }
     return data
@@ -283,6 +283,7 @@ where b.root_id = '${blockId}'
       stmt: sql,
     }
     const url = "/api/query/sql"
+    this.logger.debug("sql=>", sql)
     return await this.siyuanRequest(url, sqldata)
   }
 

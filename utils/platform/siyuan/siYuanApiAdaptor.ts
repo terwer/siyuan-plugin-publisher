@@ -150,7 +150,7 @@ export class SiYuanApiAdaptor implements IApi {
     const shortDesc = attrs["custom-desc"] || ""
 
     // 标题处理
-    let title = siyuanPost.content || ""
+    let title = siyuanPost.content ?? ""
     if (publishCfg.fixTitle) {
       title = removeTitleNumber(title)
     }

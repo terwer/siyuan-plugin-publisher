@@ -85,3 +85,28 @@ export const mdFileToTitle = (fmtTitle: string): string => {
   }
   return fmtTitle
 }
+
+/**
+ * 去除BOM字符
+ * @param str  原字符
+ */
+export const removeBom = (str: string): string => {
+  const supportedImages = [".png", ".jpg", ".gif"]
+  supportedImages.forEach((ext) => {
+    // const ext = ".png"
+    if (str.indexOf(ext) > -1) {
+      str = str.substring(0, str.indexOf(ext)) + ext
+    }
+  })
+
+  // 去除空白
+  // str = str.replace(/%.*/g, "").replace(/\s/g, "")
+
+  // 先解码URL编码的字符
+  // str = decodeURIComponent(str)
+
+  // 再去除BOM字符
+  // str = str.replace(/\uFEFF/g, "")
+
+  return str
+}

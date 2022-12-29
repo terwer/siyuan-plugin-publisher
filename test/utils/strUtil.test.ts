@@ -23,28 +23,17 @@
  * questions.
  */
 
-import { afterEach, beforeEach } from "vitest"
-import fetch from "cross-fetch"
-import { LocalStorage } from "node-localstorage"
+import { describe } from "vitest"
+import { removeBom } from "~/utils/strUtil"
+import { LogFactory } from "~/utils/logUtil"
 
-import { config } from "@vue/test-utils"
-import i18n from "~/locales/index"
+describe("strUtil test", () => {
+  const logger = LogFactory.getLogger()
 
-// Add `fetch` polyfill.
-// https://markus.oberlehner.net/blog/using-mock-service-worker-with-vitest-and-fetch/
-global.fetch = fetch
-global.localStorage = new LocalStorage("./test/data/polyfill/localStorage")
-
-// lute
-require("~/public/lib/lute/lute.min")
-
-// i18n
-config.global.plugins = [i18n]
-
-beforeEach(() => {
-  console.log("======test is starting...======")
-})
-
-afterEach(() => {
-  console.log("======test is finished.========")
+  it("removeBom test", () => {
+    const str =
+      "https://img1.terwer.space/api/public/20220929000423.png%E2%80%8B"
+    const result = removeBom(str)
+    logger.info("removeBom result=>", "[" + result + "]")
+  })
 })

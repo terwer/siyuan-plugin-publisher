@@ -280,11 +280,11 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
     },
     test: {
       globals: true,
-      // environment: 'node',
-      environment: "happy-dom",
+      environment: "node",
+      // environment: "happy-dom",
       setupFiles: ["./test/setup.ts"],
       deps: {
-        inline: ["element-plus"],
+        // inline: ["element-plus"],
       },
     },
   }
