@@ -33,6 +33,7 @@ import { ElMessage, ElMessageBox } from "element-plus"
 import { useI18n } from "vue-i18n"
 import { appendStr } from "~/utils/strUtil"
 import { removeTitleNumber } from "~/utils/htmlUtil"
+import { CONSTANTS } from "~/utils/constants/constants"
 
 /**
  * 通用的发布操作组件
@@ -120,7 +121,11 @@ export const usePublish = (props, deps?: any) => {
           // 发布路径
           let currentPath = githubPagesMethods.getGithubPagesData().customPath
           const currentDefaultPath = githubCfg.defaultPath ?? "尚未配置"
-          const mdFilename = githubPagesMethods.getGithubPagesData().mdTitle
+          let mdFilename = githubPagesMethods.getGithubPagesData().mdTitle
+          // 如果是自动生成的别名，需要动态获取
+          if (mdFilename.includes(CONSTANTS.PUBLISH_DYNAMIC_SLUG)) {
+            mdFilename = githubPagesMethods.getMdFilename()
+          }
           githubPagesMethods.initGithubPages({
             cpath: currentPath,
             defpath: currentDefaultPath,
@@ -142,8 +147,6 @@ export const usePublish = (props, deps?: any) => {
           if (!res) {
             publishData.isPublishLoading = false
 
-            // 刷新属性数据
-            // await initPublishMethods.initPage()
             // 发布失败
             ElMessage.error(t("main.publish.vuepress.failure"))
             return
@@ -156,7 +159,10 @@ export const usePublish = (props, deps?: any) => {
           // 获取最新属性
           const pageId = await siyuanPageMethods.getPageId()
           await siyuanApi.setBlockAttrs(pageId, customAttr)
-          logger.debug("VuepressMain发布成功，保存路径,meta=>", customAttr)
+          logger.debug(
+            props.apiType + "_Main发布成功，保存路径,meta=>",
+            customAttr
+          )
 
           // 刷新属性数据
           await initPublishMethods.initPage()

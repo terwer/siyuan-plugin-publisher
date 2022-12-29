@@ -70,11 +70,11 @@ export const useYaml = () => {
         navigator.clipboard.writeText(yamlData.yamlContent).then(
           function () {
             // The text has been successfully copied to the clipboard
-            ElMessage.success(t("main.opt.success"))
+            ElMessage.success(t("main.copy.success"))
           },
           function (err) {
             // An error occurred while copying the text
-            ElMessage.error(t("main.opt.failure") + err)
+            ElMessage.error(t("main.copy.failure") + err)
           }
         )
       }

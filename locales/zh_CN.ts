@@ -108,6 +108,8 @@ export default {
   "main.publish.to.kms": "发布到KMS",
   "main.opt.success": "操作成功",
   "main.opt.failure": "操作失败",
+  "main.copy.success": "复制成功",
+  "main.copy.failure": "复制失败",
   "main.opt.quick": "快捷操作",
   "main.opt.status.publish": "文章已发布",
   "main.opt.status.updated": "文章已更新",
@@ -264,7 +266,7 @@ export default {
     "温馨提示：1. 0.1.0+ 以后，可通过【思源地址】来修改默认伺服配置，支持本地和远程；如果是远程还需要设置token，如果使用浏览器插件或者挂件之外的访问方式还需要设置跨域请求代理。 2、升级新版之前强烈建议导出配置，防止配置丢失。 3、如果出现新版本不兼容的异常情况，建议清空配置。此操作不可恢复，请谨慎操作！",
   "blog.top-data-tip.siyuan":
     "温馨提示：1、当前处于挂件模式，从 0.1.0 版本开始，无需在所有页面引用挂件了，只需要在父级页面引用一个挂件即可。具体规则如下：(1). 如果检测到没有子文档，会兼容 0.0.3 版本以前的方式，展示当前文档的发布页面。 (2). 如果检测到有子文档，会以列表加分页的方式展示所有子文档列表。可单独选择某个子文档进行发布操作。 2、升级新版之前强烈建议导出配置，防止配置丢失。 3、如果出现新版本不兼容的异常情况，建议清空配置。此操作不可恢复，请谨慎操作！",
-  "blog.newwin.open": "新窗打开[推荐]",
+  "blog.newwin.open": "新窗打开",
   "blog.change.siyuan.api": "思源地址",
   "setting.blog.siyuan.password":
     "思源笔记鉴权Token，请从【设置->关于】复制，如果是本地笔记留空即可",
@@ -302,4 +304,15 @@ export default {
     "删除H1可能会误删除Markdown里面的#开头的注释，如需开启，请使用2个以上的#注释，是否继续？",
   "preference.setting.newWin": "新窗口",
   "siyuan.browser.show.close.btn": "显示关闭按钮",
+  "siyuan.browser.menu.quick.btn": "一键快速发布",
+  "siyuan.browser.menu.publish.btn":
+    "文章发布（自动检测，有子文档->列表页；无子文档->发布页）",
+  "siyuan.browser.menu.preview.btn": "文章预览（当前文章只读预览）",
+  "siyuan.browser.menu.manage.btn": "文章管理（全部文章统一管理）",
+  "siyuan.browser.menu.anki.btn": "Anki标记（配合ankisiyuan生成Anki标记）",
+  "siyuan.browser.menu.picture.btn": "PicGO图床（支持图床配置与图片上传）",
+  "anki.siyuan.deck": "牌组",
+  "anki.siyuan.deck.new": "新牌组",
+  "anki.siyuan.tag": "标签",
+  "anki.siyuan.tag.new": "新标签",
 }

@@ -23,49 +23,56 @@
  * questions.
  */
 
+// 警告⚠️：请勿在非思源笔记浏览器环境调用此文件中的任何方法
+
 let fs = require("fs")
 let path = require("path")
 const {
   app,
   BrowserWindow,
-  dialog,
   getCurrentWindow,
   ipcRenderer,
 } = require("@electron/remote")
+// const { exec } = require("child_process")
 
-const fetchPost = (url, data, cb, headers) => {
-  const init = {
-    method: "POST",
-  }
-  if (data) {
-    if (
-      [
-        "/api/search/searchRefBlock",
-        "/api/graph/getGraph",
-        "/api/graph/getLocalGraph",
-      ].includes(url)
-    ) {
-      window.siyuan.reqIds[url] = new Date().getTime()
-      if (data.type === "local" && url === "/api/graph/getLocalGraph") {
-        // 当打开文档A的关系图、关系图、文档A后刷新，由于防止请求重复处理，文档A关系图无法渲染。
-      } else {
-        data.reqId = window.siyuan.reqIds[url]
-      }
+/**
+ * 激活PicGo
+ */
+// const picgoExtension = require(`${window.siyuan.config.system.dataDir}/widgets/sy-post-publisher/lib/picgo/picgo.js`).default
+// picgoExtension.activate()
+
+/**
+ * 思源笔记弹窗参数定义
+ */
+window.terwer = {
+  pageId: undefined,
+  renderPublishHelper: () => {},
+  // picGoUpload: () => {},
+  widgetsSlot: () => {},
+  // execShell: () => {},
+}
+
+/**
+ * 获取一个PicGO对象
+ * @returns {Promise<*>}
+ */
+// window.terwer.picGoUpload = async (input) => {
+//   console.log("picgoExtension=>", picgoExtension)
+//   // picgoExtension.upload(input)
+//   return await picgoExtension.uploadFormClipboard()
+// }
+
+/**
+ * 新窗口打开插件页面
+ * @param pageId 文章ID
+ * @param pageUrl 页面地址
+ */
+window.terwer.renderPublishHelper = (pageId, pageUrl) => {
+  const fetchPost = (url, data, cb, headers) => {
+    const init = {
+      method: "POST",
     }
-    if (data instanceof FormData) {
-      init.body = data
-    } else {
-      init.body = JSON.stringify(data)
-    }
-  }
-  if (headers) {
-    init.headers = headers
-  }
-  fetch(url, init)
-    .then((response) => {
-      return response.json()
-    })
-    .then((response) => {
+    if (data) {
       if (
         [
           "/api/search/searchRefBlock",
@@ -73,52 +80,72 @@ const fetchPost = (url, data, cb, headers) => {
           "/api/graph/getLocalGraph",
         ].includes(url)
       ) {
-        if (
-          response.data.reqId &&
-          window.siyuan.reqIds[url] &&
-          window.siyuan.reqIds[url] > response.data.reqId
-        ) {
-          return
+        window.siyuan.reqIds[url] = new Date().getTime()
+        if (data.type === "local" && url === "/api/graph/getLocalGraph") {
+          // 当打开文档A的关系图、关系图、文档A后刷新，由于防止请求重复处理，文档A关系图无法渲染。
+        } else {
+          data.reqId = window.siyuan.reqIds[url]
         }
       }
-      if (cb) {
-        cb(response)
+      if (data instanceof FormData) {
+        init.body = data
+      } else {
+        init.body = JSON.stringify(data)
       }
-    })
-    .catch((e) => {
-      console.warn("fetch post error", e)
-      if (
-        url === "/api/transactions" &&
-        (e.message === "Failed to fetch" ||
-          e.message === "Unexpected end of JSON input")
-      ) {
-        kernelError()
-        return
-      }
-      /// #if !BROWSER
-      if (
-        url === "/api/system/exit" ||
-        url === "/api/system/setWorkspaceDir" ||
-        (["/api/system/setUILayout", "/api/storage/setLocalStorage"].includes(
-          url
-        ) &&
-          data.exit) // 内核中断，点关闭处理
-      ) {
-        ipcRenderer.send("siyuan-config-closetray")
-        ipcRenderer.send("siyuan-quit")
-      }
-      /// #endif
-    })
-}
+    }
+    if (headers) {
+      init.headers = headers
+    }
+    fetch(url, init)
+      .then((response) => {
+        return response.json()
+      })
+      .then((response) => {
+        if (
+          [
+            "/api/search/searchRefBlock",
+            "/api/graph/getGraph",
+            "/api/graph/getLocalGraph",
+          ].includes(url)
+        ) {
+          if (
+            response.data.reqId &&
+            window.siyuan.reqIds[url] &&
+            window.siyuan.reqIds[url] > response.data.reqId
+          ) {
+            return
+          }
+        }
+        if (cb) {
+          cb(response)
+        }
+      })
+      .catch((e) => {
+        console.warn("fetch post error", e)
+        if (
+          url === "/api/transactions" &&
+          (e.message === "Failed to fetch" ||
+            e.message === "Unexpected end of JSON input")
+        ) {
+          kernelError()
+          return
+        }
+        /// #if !BROWSER
+        if (
+          url === "/api/system/exit" ||
+          url === "/api/system/setWorkspaceDir" ||
+          (["/api/system/setUILayout", "/api/storage/setLocalStorage"].includes(
+            url
+          ) &&
+            data.exit) // 内核中断，点关闭处理
+        ) {
+          ipcRenderer.send("siyuan-config-closetray")
+          ipcRenderer.send("siyuan-quit")
+        }
+        /// #endif
+      })
+  }
 
-/**
- * 弹窗打开
- */
-window.terwer = {
-  pageId: undefined,
-  renderPublishHelper: () => {},
-}
-window.terwer.renderPublishHelper = (pageId, pageUrl) => {
   const localData = JSON.parse(
     localStorage.getItem("local-exportpdf") ||
       JSON.stringify({
@@ -155,11 +182,18 @@ window.terwer.renderPublishHelper = (pageId, pageUrl) => {
         if (err) {
           console.log(err)
         }
+        let dataDir = `${window.siyuan.config.system.dataDir}`
+        // 修复Windows路径问题
+        dataDir = dataDir.replace(/\\/g, "/")
+        const newWinPageId = pageId ?? ""
+        console.log("dataDir=>", dataDir)
+        console.log("newWinPageId=>", newWinPageId)
+
         var txt = data.toString().replace(/<!--.*-->/gs, "")
-        txt +=
-          '<script>window.terwer={};window.terwer.pageId="' +
-          (pageId ?? "") +
-          '"</script>'
+        txt += `<script>window.terwer={};window.terwer.pageId="${newWinPageId}";window.terwer.dataDir="${dataDir}";
+          window.terwer.picgoExtension = require("${dataDir}/widgets/sy-post-publisher/lib/picgo/picgo.js").default;
+          window.terwer.picgoExtension.activate("${dataDir}/widgets/sy-post-publisher/lib/picgo/picgo.cfg.json");
+          </script>`
         html(txt)
       }
     )
@@ -184,13 +218,11 @@ window.terwer.renderPublishHelper = (pageId, pageUrl) => {
         symbolColor: "black",
       },
       webPreferences: {
-        contextIsolation: false,
+        nativeWindowOpen: true,
         nodeIntegration: true,
         webviewTag: true,
         webSecurity: false,
-      },
-      customProperty: {
-        pageId: pageId,
+        contextIsolation: false,
       },
     })
     window.siyuan.printWin.webContents.userAgent = `SiYuan/${app.getVersion()} https://b3log.org/siyuan Electron`
@@ -209,61 +241,65 @@ window.terwer.renderPublishHelper = (pageId, pageUrl) => {
   })
 }
 
-/**-- 在所有文档前面加上一个挂件插槽--**/
-function showPreviousWidgetsSlot() {
-  setInterval(DocumentShowPreviousWidget, 300)
-}
-
-DocumentShowPreviousWidget()
-showPreviousWidgetsSlot()
-
-function DocumentShowPreviousWidget() {
-  var openDoc = document.querySelectorAll(
-    ".layout-tab-container>.fn__flex-1.protyle:not(.fn__none)"
-  )
-  var allDocumentTitleElement = []
-  for (let index = 0; index < openDoc.length; index++) {
-    const element = openDoc[index]
-    element.setAttribute("withPreviousWidgets", true)
-    allDocumentTitleElement.push(element.children[1].children[1].children[1])
+/**
+ * 在所有文档前面加上一个挂件插槽
+ */
+window.terwer.widgetsSlot = () => {
+  /**-- 在所有文档前面加上一个挂件插槽--**/
+  function showPreviousWidgetsSlot() {
+    setInterval(DocumentShowPreviousWidget, 300)
   }
 
-  for (let index = 0; index < allDocumentTitleElement.length; index++) {
-    const element = allDocumentTitleElement[index]
+  DocumentShowPreviousWidget()
+  showPreviousWidgetsSlot()
 
-    if (
-      !element.parentElement.querySelector(".previous-widgets-slot") &&
-      element.parentElement.parentElement.querySelector("[data-node-id]")
-    ) {
-      var documentPreviousWidgetsSlotElement = CreatePreviousWidgetsSlot(
-        element.parentElement
-      )
-      element.parentElement.appendChild(documentPreviousWidgetsSlotElement)
+  function DocumentShowPreviousWidget() {
+    var openDoc = document.querySelectorAll(
+      ".layout-tab-container>.fn__flex-1.protyle:not(.fn__none)"
+    )
+    var allDocumentTitleElement = []
+    for (let index = 0; index < openDoc.length; index++) {
+      const element = openDoc[index]
+      element.setAttribute("withPreviousWidgets", true)
+      allDocumentTitleElement.push(element.children[1].children[1].children[1])
+    }
+
+    for (let index = 0; index < allDocumentTitleElement.length; index++) {
+      const element = allDocumentTitleElement[index]
+
+      if (
+        !element.parentElement.querySelector(".previous-widgets-slot") &&
+        element.parentElement.parentElement.querySelector("[data-node-id]")
+      ) {
+        var documentPreviousWidgetsSlotElement = CreatePreviousWidgetsSlot(
+          element.parentElement
+        )
+        element.parentElement.appendChild(documentPreviousWidgetsSlotElement)
+      }
     }
   }
-}
 
-function CreatePreviousWidgetsSlot(element) {
-  let cloneNode = element.parentElement
-    .querySelector(".protyle-wysiwyg.protyle-wysiwyg--attr")
-    .cloneNode(false)
-  cloneNode.innerHTML = `
+  function CreatePreviousWidgetsSlot(element) {
+    let cloneNode = element.parentElement
+      .querySelector(".protyle-wysiwyg.protyle-wysiwyg--attr")
+      .cloneNode(false)
+    cloneNode.innerHTML = `
   <div class="iframe-content">
       <iframe src="/widgets/sy-post-publisher/" ></iframe>
   </div>
   `
-  let id = element.parentElement.parentElement
-    .querySelector("[data-node-id]")
-    .getAttribute("data-node-id")
-  cloneNode.setAttribute("data-node-id", id)
-  cloneNode.setAttribute("contenteditable", false)
-  cloneNode.setAttribute("style", "padding: 0;")
-  let div = document.createElement("div")
-  div.setAttribute("class", "previous-widgets-slot")
-  div.setAttribute("contenteditable", false)
-  div.setAttribute("style", "padding: 0;")
-  let root = div.attachShadow({ mode: "open" })
-  root.innerHTML = `
+    let id = element.parentElement.parentElement
+      .querySelector("[data-node-id]")
+      .getAttribute("data-node-id")
+    cloneNode.setAttribute("data-node-id", id)
+    cloneNode.setAttribute("contenteditable", false)
+    cloneNode.setAttribute("style", "padding: 0;")
+    let div = document.createElement("div")
+    div.setAttribute("class", "previous-widgets-slot")
+    div.setAttribute("contenteditable", false)
+    div.setAttribute("style", "padding: 0;")
+    let root = div.attachShadow({ mode: "open" })
+    root.innerHTML = `
       <style>
           iframe{
               width:100%;
@@ -275,6 +311,27 @@ function CreatePreviousWidgetsSlot(element) {
           }
       </style>
       `
-  root.appendChild(cloneNode)
-  return div
+    root.appendChild(cloneNode)
+    return div
+  }
 }
+
+/**
+ * 执行sell命令，主要用于anki同步，需要自行复制anki可执行文件
+ */
+// window.terwer.execShell = (shell) => {
+//   exec(shell, (error, stdout, stderr) => {
+//     if (error) {
+//       console.error(`exec error: ${error}`)
+//       return
+//     }
+//     if (stderr) {
+//       console.error(`exec stderr: ${stderr}`)
+//       return
+//     }
+//     console.log(`stdout: ${stdout}`)
+//   })
+// }
+
+// do render
+window.terwer.widgetsSlot()

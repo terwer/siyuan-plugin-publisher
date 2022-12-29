@@ -36,7 +36,7 @@ global.fetch = fetch
 global.localStorage = new LocalStorage("./test/data/polyfill/localStorage")
 
 // lute
-require("~/public/lib/lute.min")
+require("~/public/lib/lute/lute.min")
 
 // i18n
 config.global.plugins = [i18n]

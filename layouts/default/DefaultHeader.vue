@@ -27,6 +27,39 @@
   <div class="header-default">
     <el-header id="publisher-header">
       <div v-if="!showTitle">
+        <!-- 快速发布 -->
+        <!--
+        <el-tooltip
+          :content="$t('siyuan.browser.menu.quick.btn')"
+          class="box-item"
+          effect="light"
+          placement="right"
+          popper-class="publish-menu-tooltip"
+        >
+        </el-tooltip>
+        -->
+        <!--
+        <el-button
+          v-if="showOpenBtn"
+          class="b3-button--quick"
+          type="success"
+          @click="handleWinQuick"
+        >
+          <font-awesome-icon icon="fa-solid fa-bolt" />
+        </el-button>
+        -->
+
+        <!-- 文章发布 -->
+        <!--
+        <el-tooltip
+          :content="$t('siyuan.browser.menu.publish.btn')"
+          class="box-item"
+          effect="light"
+          placement="right"
+          popper-class="publish-menu-tooltip"
+        >
+        </el-tooltip>
+        -->
         <el-button
           v-if="showOpenBtn"
           class="b3-button--open"
@@ -35,6 +68,18 @@
         >
           <font-awesome-icon icon="fa-solid fa-upload" />
         </el-button>
+
+        <!-- 文章预览 -->
+        <!--
+        <el-tooltip
+          :content="$t('siyuan.browser.menu.preview.btn')"
+          class="box-item"
+          effect="light"
+          placement="right"
+          popper-class="publish-menu-tooltip"
+        >
+        </el-tooltip>
+        -->
         <el-button
           v-if="showOpenBtn"
           class="b3-button--preview"
@@ -43,6 +88,18 @@
         >
           <font-awesome-icon icon="fa-solid fa-book-open-reader" />
         </el-button>
+
+        <!-- 文章管理 -->
+        <!--
+        <el-tooltip
+          :content="$t('siyuan.browser.menu.manage.btn')"
+          class="box-item"
+          effect="light"
+          placement="right"
+          popper-class="publish-menu-tooltip"
+        >
+        </el-tooltip>
+        -->
         <el-button
           v-if="showOpenBtn"
           class="b3-button--preview"
@@ -51,6 +108,58 @@
         >
           <font-awesome-icon icon="fa-solid fa-rectangle-list" />
         </el-button>
+
+        <!-- Anki标记 -->
+        <!--
+        <el-tooltip
+          :content="$t('siyuan.browser.menu.anki.btn')"
+          class="box-item"
+          effect="light"
+          placement="right"
+          popper-class="publish-menu-tooltip"
+        >
+        </el-tooltip>
+        -->
+        <el-button
+          v-if="showOpenBtn"
+          class="b3-button--anki"
+          type="success"
+          @click="handleWinAnki"
+        >
+          <font-awesome-icon icon="fa-solid fa-credit-card" />
+        </el-button>
+
+        <!-- 图床 -->
+        <!--
+        <el-tooltip
+          :content="$t('siyuan.browser.menu.picture.btn')"
+          class="box-item"
+          effect="light"
+          placement="right"
+          popper-class="publish-menu-tooltip"
+        >
+        </el-tooltip>
+        -->
+        <el-button
+          v-if="showOpenBtn"
+          class="b3-button--picture"
+          type="success"
+          @click="handleWinPicture"
+        >
+          <font-awesome-icon icon="fa-solid fa-image" />
+        </el-button>
+
+        <!-- 关闭 -->
+        <!--
+        <el-tooltip
+          :content="$t('siyuan.browser.menu.quick.btn')"
+          class="box-item"
+          effect="light"
+          placement="right"
+          popper-class="publish-menu-tooltip"
+        >
+        </el-tooltip>
+        -->
         <el-button
           v-if="showCloseBtn"
           class="b3-button--cancel"
@@ -60,6 +169,7 @@
           <font-awesome-icon icon="fa-solid fa-xmark" />
         </el-button>
       </div>
+
       <h1 v-if="showTitle" class="header-title-default">
         <el-button class="header-title-btn disabled-click">
           思源笔记发布工具
@@ -79,10 +189,20 @@ import {
 import { ElMessage } from "element-plus"
 import { getWidgetId, inSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
 import { getPublishCfg } from "~/utils/publishUtil"
+import { getBooleanEnv } from "~/utils/envUtil"
+import { appendStr } from "~/utils/strUtil"
+import { useI18n } from "vue-i18n"
+import { LogFactory } from "~/utils/logUtil"
+import { isElectron, isWindows } from "~/utils/browserUtil"
+
+const { t } = useI18n()
+const logger = LogFactory.getLogger("layouts/default/DefaultHeader.vue")
 
 const showCloseBtn = ref(false)
 const showOpenBtn = ref(false)
 const showTitle = ref(false)
+
+// const handleWinQuick = async () => {}
 
 const handleWinOpen = async () => {
   if (showOpenBtn.value) {
@@ -134,6 +254,36 @@ const handleWinManage = async () => {
   }
 }
 
+const handleWinAnki = async () => {
+  if (showOpenBtn.value) {
+    try {
+      const widgetResult = getWidgetId()
+      await doOpenExportWin(widgetResult.widgetId, "anki/index.html")
+
+      // event
+      pageIdChanged()
+    } catch (e) {
+      // showOpenBtn.value = false
+      ElMessage.info(
+        "发生异常，已暂时关闭此按钮，如需永久关闭，请前往通用设置关闭=>" + e
+      )
+    }
+  }
+}
+
+const handleWinPicture = async () => {
+  try {
+    const widgetResult = getWidgetId()
+    await doOpenExportWin(widgetResult.widgetId, "picgo/index.html")
+
+    // event
+    pageIdChanged()
+  } catch (e) {
+    logger.error(t("main.opt.failure"), "=>", e)
+    ElMessage.error(appendStr(t("main.opt.failure"), "=>", e))
+  }
+}
+
 const handleWinClose = () => {
   if (showCloseBtn.value) {
     try {
@@ -158,6 +308,11 @@ const pageIdChanged = () => {
     showOpenBtn.value = false
     showCloseBtn.value = true
   }
+
+  // 如果是Windows环境，不显示关闭按钮
+  if (isWindows && isElectron) {
+    showCloseBtn.value = false
+  }
 }
 
 onMounted(() => {
@@ -178,6 +333,20 @@ onMounted(() => {
 
     showTitle.value = true
   }
+
+  // ==================
+  // Debug mode start
+  // ==================
+  const debugMode = getBooleanEnv("VITE_DEBUG_MODE")
+  if (debugMode) {
+    showOpenBtn.value = true
+    showCloseBtn.value = true
+
+    showTitle.value = false
+  }
+  // ==================
+  // Debug mode end
+  // ==================
 })
 </script>
 
@@ -202,7 +371,7 @@ onMounted(() => {
 }
 
 #publisher-header {
-  padding: 0 16px;
+  padding: 0 6px;
 }
 
 #publisher-header .b3-button--cancel {

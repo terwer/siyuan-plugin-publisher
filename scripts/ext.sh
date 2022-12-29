@@ -39,5 +39,5 @@ rm ./dist/manifest.dev.json
 
 rm -rf ./extension/chrome/*
 mkdir -p extension/chrome
-cp -r ./dist/* ./extension/chrome
+cp -r ./dist/* ./extension/chrome/
 echo "Chrome插件发布完毕."

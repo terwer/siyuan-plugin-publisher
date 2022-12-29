@@ -1,0 +1,86 @@
+{
+  "picBed": {
+    "current": "github",
+    "uploader": "github",
+    "rename": "${random}-${year}-${month}-${day}-${hour}-${minute}-${second}",
+    "github": {
+      "branch": "main",
+      "customUrl": "https://img1.terwer.space/api",
+      "path": "public/",
+      "repo": "terwer/upload",
+      "token": ""
+    },
+    "list": [
+      {
+        "type": "tcyun",
+        "name": "腾讯云COS",
+        "visible": false
+      },
+      {
+        "type": "aliyun",
+        "name": "阿里云OSS",
+        "visible": true
+      },
+      {
+        "type": "smms",
+        "name": "SM.MS",
+        "visible": false
+      },
+      {
+        "type": "github",
+        "name": "GitHub",
+        "visible": true
+      },
+      {
+        "type": "qiniu",
+        "name": "七牛云",
+        "visible": false
+      },
+      {
+        "type": "imgur",
+        "name": "Imgur",
+        "visible": false
+      },
+      {
+        "type": "upyun",
+        "name": "又拍云",
+        "visible": false
+      }
+    ]
+  },
+  "settings": {
+    "shortKey": {
+      "picgo:upload": {
+        "enable": true,
+        "key": "CommandOrControl+Shift+P",
+        "name": "upload",
+        "label": "快捷上传"
+      }
+    },
+    "server": {
+      "port": 36677,
+      "host": "127.0.0.1",
+      "enable": true
+    },
+    "privacyEnsure": true,
+    "showUpdateTip": true,
+    "useBuiltinClipboard": false,
+    "autoRename": true,
+    "autoStart": true
+  },
+  "picgoPlugins": {
+    "picgo-plugin-watermark": false
+  },
+  "debug": true,
+  "PICGO_ENV": "GUI",
+  "needReload": false,
+  "picgo-plugin-watermark": {
+    "fontFamily": "/Users/terwer/Documents/code/picgo-plugin-watermark/fonts/Arial-Unicode-MS.ttf",
+    "fontSize": "14px",
+    "image": "/Users/terwer/Documents/code/picgo-plugin-watermark/fonts/terwer.png",
+    "minSize": "100*100",
+    "position": "rt",
+    "text": "terwer",
+    "textColor": "#b2b2b2"
+  }
+}

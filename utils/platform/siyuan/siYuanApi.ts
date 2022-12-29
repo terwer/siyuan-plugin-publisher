@@ -157,6 +157,45 @@ export class SiYuanApi {
   }
 
   /**
+   * 获取Ankisiyuan标记信息
+   *
+   * ```sql
+   * select b.id, b.content,ifnull(attr.name,'') as name, attr.value
+   * from blocks b
+   * left join attributes attr on attr.name = 'custom-ankilink' and attr.block_id = b.id
+   * where b.root_id = '20220924223854-qygzxps'
+   *   and b.type = 'h'
+   * ```
+   *
+   * @param blockId 文档ID
+   */
+  public async getAnkilinkInfo(blockId: string): Promise<any> {
+    const stmt = `select distinct b.id, b.content,ifnull(attr.name,'custom-ankilink') as name, attr.value
+from blocks b
+left join attributes attr on attr.name = 'custom-ankilink' and attr.block_id = b.id
+where b.root_id = '${blockId}'
+  and b.type = 'h'`
+
+    this.logger.debug("siyuanApi getAnkilinkInfo sql=>", stmt)
+    return await this.sql(stmt)
+  }
+
+  /**
+   * 以id获取所有图片块
+   * @param blockId 块ID
+   */
+  public async getImageBlocksByID(blockId: string): Promise<any[]> {
+    const stmt = `select *
+                from blocks
+                where root_id = '${blockId}' and markdown like '%![%'`
+    const data = await this.sql(stmt)
+    if (!data) {
+      throw new Error("通过ID查询图片块信息失败")
+    }
+    return data
+  }
+
+  /**
    * 以id获取思源块信息
    * @param blockId 块ID
    */
@@ -244,6 +283,7 @@ export class SiYuanApi {
       stmt: sql,
     }
     const url = "/api/query/sql"
+    this.logger.debug("sql=>", sql)
     return await this.siyuanRequest(url, sqldata)
   }
 

@@ -105,6 +105,22 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
               title: "多平台文章发布",
             },
           },
+          {
+            name: "anki",
+            filename: "anki/index.html",
+            entry: "/pages/anki/main.ts",
+            data: {
+              title: "Anki卡片标记",
+            },
+          },
+          {
+            name: "picgo",
+            filename: "picgo/index.html",
+            entry: "/pages/picgo/main.ts",
+            data: {
+              title: "Picgo图床",
+            },
+          },
         ],
         /**
          * 通过该选项 rewrites 来配置 history fallback rewrite rules
@@ -140,7 +156,7 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
     // 项目根目录
     root: "./",
     // 项目部署的基础路径
-    base: isSiyuanBuild ? "/widgets/sy-post-publisher/" : "",
+    base: isSiyuanBuild ? "/widgets/sy-post-publisher/" : "/",
     // 静态资源服务文件夹
     publicDir: "public",
     // https://github.com/vitejs/vite/issues/1930
@@ -224,7 +240,8 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
       // boolean | 'terser' | 'esbuild'
       // minify: 'terser',
       // 不压缩，用于调试
-      minify: isProd,
+      // minify: isProd,
+      minify: false,
 
       rollupOptions: {
         external: [
@@ -263,11 +280,11 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
     },
     test: {
       globals: true,
-      // environment: 'node',
-      environment: "happy-dom",
+      environment: "node",
+      // environment: "happy-dom",
       setupFiles: ["./test/setup.ts"],
       deps: {
-        inline: ["element-plus"],
+        // inline: ["element-plus"],
       },
     },
   }

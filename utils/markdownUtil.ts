@@ -25,9 +25,9 @@
 
 // 引用 lute 库的方法
 // dev/prod 环境
-// 在 /pages/index.html 直接引用 <script src="/lib/lute.min.js"></script>
+// 在 /pages/index.html 直接引用 <script src="/lib/lute/lute.min.js"></script>
 // test 环境
-// 在 setup.ts 引用 require("../public/lib/lute.min.js")
+// 在 setup.ts 引用 require("../public/lib/lute/lute.min.js")
 
 import { renderMarkdownStr } from "~/utils/otherlib/luteUtil"
 

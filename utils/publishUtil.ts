@@ -164,7 +164,7 @@ export const getPublishCfg = (): PublishPreference => {
     publishCfg.renderSiyuanVirtualLink = true
     // TODO 非Github平台待实现
     publishCfg.makeAttrOnFirstLoad = false
-    publishCfg.newWin = true
+    publishCfg.newWin = false
     publishCfg.showCloseBtn = false
   } else {
     publishCfg.fixTitle = parseBoolean(publishCfg.fixTitle)
