@@ -141,6 +141,11 @@
           />
         </el-form-item>
 
+        <!-- 标签开关 -->
+        <el-form-item v-if="editMode" :label="$t('main.tag.auto.switch')">
+          <el-switch v-model="tagSwitch" />
+        </el-form-item>
+
         <!-- 标签  -->
         <el-form-item :label="$t('main.tag')">
           <el-tag
@@ -177,10 +182,6 @@
               isTagLoading ? $t("main.opt.loading") : $t("main.auto.fetch.tag")
             }}
           </el-button>
-        </el-form-item>
-        <!-- 标签开关 -->
-        <el-form-item :label="$t('main.tag.auto.switch')">
-          <el-switch v-model="tagSwitch" />
         </el-form-item>
 
         <!-- 分类 -->
@@ -228,7 +229,7 @@
         ----------------------------------------------------------------------
         -->
         <!-- 一键生成属性-->
-        <el-form-item :label="$t('main.opt.quick')">
+        <el-form-item v-if="editMode" :label="$t('main.opt.quick')">
           <el-button
             type="primary"
             @click="oneclickAttr"
@@ -240,7 +241,7 @@
                 : $t("main.publish.oneclick.attr")
             }}
           </el-button>
-          <el-button v-if="editMode" type="primary" @click="saveAttrToSiyuan"
+          <el-button type="primary" @click="saveAttrToSiyuan"
             >{{ $t("main.save.attr.to.siyuan") }}
           </el-button>
         </el-form-item>
