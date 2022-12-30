@@ -302,7 +302,7 @@ export default {
   "preference.setting.removeH1": "去除正文H1",
   "preference.setting.removeH1.tip":
     "删除H1可能会误删除Markdown里面的#开头的注释，如需开启，请使用2个以上的#注释，是否继续？",
-  "preference.setting.newWin": "新窗口",
+  "preference.setting.newWin": "新窗口操作",
   "siyuan.browser.show.close.btn": "显示关闭按钮",
   "siyuan.browser.menu.quick.btn": "一键快速发布",
   "siyuan.browser.menu.publish.btn":

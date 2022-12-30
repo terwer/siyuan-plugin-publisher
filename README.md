@@ -152,7 +152,6 @@ https://terwer.space/post/start-to-get-started-zi0eyk.html
       0.0.1+</sup>
 - [x] 支持同步到 Github(Github pages、Hugo、Hexo、Jekyll、Vuepress、Vitepress、Nuxt content、Next.js)，0.1.0+
       之后更加通用，支持动态添加管理多个 <sup>0.0.1+</sup> <sup>0.1.0+</sup>
-- [ ] 支持自定义图床 <sup>1.0.0+</sup>
 - [x] 支持多种发布视图，简单模式、详细模式和源码模式（Github 系列平台） <sup>0.1.0+</sup> <sup>0.0.1+</sup>
 - [x] 支持自定义设置 API 地址，支持本地、局域网、远程 <sup>0.1.0+</sup>
 - [x] 支持配置导入导出 <sup>0.2.0+</sup>

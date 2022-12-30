@@ -50,7 +50,7 @@
           @change="formMethods.onAutoTagChange"
         />
       </el-form-item>
-      <el-form-item :label="$t('siyuan.browser.show.close.btn')">
+      <el-form-item v-if="false" :label="$t('siyuan.browser.show.close.btn')">
         <el-switch
           v-model="formData.showCloseBtn"
           @change="formMethods.onShowCloseBtnChange"
