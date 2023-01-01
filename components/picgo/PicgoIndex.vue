@@ -94,7 +94,7 @@
             v-if="f.isLocal"
             content="上传本地图片到图床"
             class="box-item"
-            effect="light"
+            effect="dark"
             placement="bottom"
             popper-class="publish-menu-tooltip"
           >
@@ -108,7 +108,7 @@
             v-if="!f.isLocal"
             content="下载远程图片到本地"
             class="box-item"
-            effect="light"
+            effect="dark"
             placement="bottom"
             popper-class="publish-menu-tooltip"
           >
@@ -136,7 +136,7 @@
           <el-tooltip
             content="图片预览"
             class="box-item"
-            effect="light"
+            effect="dark"
             placement="bottom"
             popper-class="publish-menu-tooltip"
           >

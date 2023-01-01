@@ -64,6 +64,30 @@
           <font-awesome-icon icon="fa-brands fa-chrome" />
         </el-button>
       </el-tooltip>
+
+      <!-- 管理图片 -->
+      <el-tooltip
+        class="box-item"
+        effect="dark"
+        :content="$t('post.detail.button.pic.manage')"
+        placement="bottom-start"
+      >
+        <el-button size="small" type="primary" @click="handleOpenPicgo">
+          <font-awesome-icon icon="fa-solid fa-image" />
+        </el-button>
+      </el-tooltip>
+
+      <!-- 管理Anki -->
+      <el-tooltip
+        class="box-item"
+        effect="dark"
+        :content="$t('post.detail.button.anki.mark')"
+        placement="bottom-start"
+      >
+        <el-button size="small" type="success" @click="handleOpenAnki">
+          <font-awesome-icon icon="fa-solid fa-credit-card" />
+        </el-button>
+      </el-tooltip>
     </blockquote>
     <div
       id="post-detail-content"
@@ -128,6 +152,16 @@ const handleShareLink = () => {
 const handleOpenInBrowser = () => {
   const pageId = post.value.postid
   goToPage("/detail/index.html?id=" + pageId)
+}
+
+const handleOpenPicgo = () => {
+  const pageId = post.value.postid
+  goToPage("/picgo/index.html?id=" + pageId)
+}
+
+const handleOpenAnki = () => {
+  const pageId = post.value.postid
+  goToPage("/anki/index.html?id=" + pageId)
 }
 
 const initPage = async () => {

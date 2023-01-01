@@ -310,6 +310,8 @@ export default {
   "post.detail.button.copy.id": "Copy post ID",
   "post.detail.button.share.link": "Copy share link",
   "post.detail.button.browser.open": "Open with default browser",
+  "post.detail.button.pic.manage": "Picture manage",
+  "post.detail.button.anki.mark": "Anki mark",
   "post.detail.index.send.to.publish": "Send to other platform",
   "post.detail.index.export.to.pdf": "Export to PDF",
 }

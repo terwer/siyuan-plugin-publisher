@@ -322,6 +322,8 @@ export default {
   "post.detail.button.copy.id": "复制本文ID",
   "post.detail.button.share.link": "复制分享链接",
   "post.detail.button.browser.open": "默认浏览器打开",
+  "post.detail.button.pic.manage": "图片管理",
+  "post.detail.button.anki.mark": "Anki标记",
   "post.detail.index.send.to.publish": "发布到其他平台",
   "post.detail.index.export.to.pdf": "导出为PDF",
 }
