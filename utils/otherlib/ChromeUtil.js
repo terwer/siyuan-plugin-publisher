@@ -69,9 +69,14 @@ export const getPageUrl = (pageUrl, split) => {
     }
 
     // 处理手动分隔符
-    let baseUrl = window.location.protocol + "//" + window.location.host
+    let host = window.location.host
+    if (isInSiyuanNewWinBrowser()) {
+      const ipv4 = window.terwer.ip
+      host = ipv4 + ":" + window.location.port
+    }
+    let baseUrl = window.location.protocol + "//" + host
     if (split && split !== "") {
-      baseUrl = window.location.protocol + "//" + window.location.host + split
+      baseUrl = window.location.protocol + "//" + host + split
     }
 
     // 智能拼接

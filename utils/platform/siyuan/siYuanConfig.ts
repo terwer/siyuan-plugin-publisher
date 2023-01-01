@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -27,6 +27,7 @@ import { getEnv } from "~/utils/envUtil"
 import { getJSONConf } from "~/utils/configUtil"
 import { SIYUAN_CONSTANTS } from "~/utils/constants/siyuanConstants"
 import { isEmptyString } from "~/utils/util"
+import { isBrowser } from "~/utils/browserUtil"
 
 /**
  * 思源笔记配置
@@ -56,6 +57,12 @@ export const getSiyuanCfg = (): SiYuanConfig => {
   if (!isEmptyString(siyuanCfg.baseUrl)) {
     baseUrl = siyuanCfg.baseUrl
   }
+  if (isBrowser()) {
+    if (!window.location.href.includes(baseUrl)) {
+      baseUrl = window.location.protocol + "//" + window.location.host
+    }
+  }
+
   if (!isEmptyString(siyuanCfg.token)) {
     token = siyuanCfg.token
   }

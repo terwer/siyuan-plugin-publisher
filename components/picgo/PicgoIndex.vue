@@ -1,5 +1,5 @@
 <!--
-  - Copyright (c) 2022, Terwer . All rights reserved.
+  - Copyright (c) 2022-2023, Terwer . All rights reserved.
   - DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
   -  
   - This code is free software; you can redistribute it and/or modify it
@@ -103,7 +103,11 @@ import { getPageId, inSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
 import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
 import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
 import { removeBom } from "~/utils/strUtil"
-import { isBrowser, isElectron } from "~/utils/browserUtil"
+import {
+  copyToClipboardInBrowser,
+  isBrowser,
+  isElectron,
+} from "~/utils/browserUtil"
 
 const logger = LogFactory.getLogger("components/picgo/PicgoIndex.vue")
 const { t } = useI18n()
@@ -241,19 +245,7 @@ const doUploadPicFromClipboard = async () => {
 const onImageUrlCopy = (url: string) => {
   if (isBrowser()) {
     const mdUrl = `![](${url})`
-    // document.execCommand("copy");
-
-    // Copy the selected text to the clipboard
-    navigator.clipboard.writeText(mdUrl).then(
-      function () {
-        // The text has been successfully copied to the clipboard
-        ElMessage.success(t("main.copy.success"))
-      },
-      function (err) {
-        // An error occurred while copying the text
-        ElMessage.error(t("main.copy.failure") + err)
-      }
-    )
+    copyToClipboardInBrowser(mdUrl)
   }
 }
 

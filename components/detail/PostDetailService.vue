@@ -54,15 +54,12 @@ import { API } from "~/utils/api"
 import { API_TYPE_CONSTANTS } from "~/utils/constants/apiTypeConstants"
 import { LogFactory } from "~/utils/logUtil"
 import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
-import { isBrowser } from "~/utils/browserUtil"
-import { ElMessage } from "element-plus"
-import { useI18n } from "vue-i18n"
+import { copyToClipboardInBrowser, isBrowser } from "~/utils/browserUtil"
 import { getPageUrl, goToPage } from "~/utils/otherlib/ChromeUtil"
 
 const logger = LogFactory.getLogger(
   "components/blog/themes/default/PostDetailService.vue"
 )
-const { t } = useI18n()
 
 const props = defineProps({
   pageId: {
@@ -87,19 +84,7 @@ const post = ref(defaultPost)
 
 const handleCopyID = () => {
   if (isBrowser()) {
-    // document.execCommand("copy");
-
-    // Copy the selected text to the clipboard
-    navigator.clipboard.writeText(post.value.postid).then(
-      function () {
-        // The text has been successfully copied to the clipboard
-        ElMessage.success(t("main.copy.success"))
-      },
-      function (err) {
-        // An error occurred while copying the text
-        ElMessage.error(t("main.copy.failure") + err)
-      }
-    )
+    copyToClipboardInBrowser(post.value.postid)
   }
 }
 
@@ -108,19 +93,8 @@ const handleShareLink = () => {
     const pageId = post.value.postid
     const pageUrl = "/detail/index.html?id=" + pageId
     const url = getPageUrl(pageUrl)
-    // document.execCommand("copy");
 
-    // Copy the selected text to the clipboard
-    navigator.clipboard.writeText(url).then(
-      function () {
-        // The text has been successfully copied to the clipboard
-        ElMessage.success(t("main.copy.success"))
-      },
-      function (err) {
-        // An error occurred while copying the text
-        ElMessage.error(t("main.copy.failure") + err)
-      }
-    )
+    copyToClipboardInBrowser(url)
   }
 }
 
