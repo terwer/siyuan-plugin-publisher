@@ -58,7 +58,11 @@ export const getSiyuanCfg = (): SiYuanConfig => {
     baseUrl = siyuanCfg.baseUrl
   }
   if (isBrowser()) {
-    if (!window.location.href.includes(baseUrl)) {
+    // 不是Chrome浏览器插件，并且页面地址与API地址不一致的时候，以页面地址为准
+    if (
+      !(window.location.href.indexOf("chrome-extension") > -1) &&
+      !window.location.href.includes(baseUrl)
+    ) {
       baseUrl = window.location.protocol + "//" + window.location.host
     }
   }
