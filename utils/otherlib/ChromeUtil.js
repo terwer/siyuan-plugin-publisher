@@ -73,7 +73,7 @@ export const getPageUrl = (pageUrl, split, isShare) => {
   } else {
     // 思源笔记链接处理
     url = "/widgets/sy-post-publisher" + url
-    const from = getQueryString("from")
+    let from = getQueryString("from")
     if (inSiyuan()) {
       from = "siyuan"
     }
