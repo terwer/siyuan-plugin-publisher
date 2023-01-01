@@ -32,7 +32,7 @@ import {
 } from "~/utils/browserUtil"
 import { LogFactory } from "~/utils/logUtil"
 import { isInFirefoxExtension } from "~/utils/otherlib/FirefoxUtil"
-import { pathJoin } from "~/utils/util"
+import { isEmptyString, pathJoin } from "~/utils/util"
 import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
 import { getSiyuanCfg } from "~/utils/platform/siyuan/siYuanConfig"
 
@@ -72,14 +72,15 @@ export const getPageUrl = (pageUrl, split, isShare) => {
     }
   } else {
     // 思源笔记链接处理
-    const from = getQueryString("from") ?? "siyuan"
-    if (
-      inSiyuan() ||
-      isInSiyuanNewWinBrowser() ||
-      from === "chrome" ||
-      from === "siyuan"
-    ) {
-      url = "/widgets/sy-post-publisher" + url
+    url = "/widgets/sy-post-publisher" + url
+    const from = getQueryString("from")
+    if (inSiyuan()) {
+      from = "siyuan"
+    }
+    if (isInSiyuanNewWinBrowser()) {
+      from = "siyuanNewWin"
+    }
+    if (!isEmptyString(from)) {
       url = setUrlParameter(url, "from", from)
     }
 
