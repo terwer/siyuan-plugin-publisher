@@ -127,12 +127,13 @@
         <el-pagination
           small
           background
-          layout="prev, pager, next"
+          :layout="dataLayout"
           :total="total"
           class="mt-4"
           :page-size="MAX_PAGE_SIZE"
           @prev-click="handlePrevPage"
           @next-click="handleNextPage"
+          :current-page="currentPage"
           @current-change="handleCurrentPage"
         />
       </div>
@@ -202,6 +203,7 @@ import SinglePicgo from "~/components/blog/singleWin/SinglePicgo.vue"
 const logger = LogFactory.getLogger()
 const { t } = useI18n()
 const isDataBoxLoading = ref(false)
+const dataLayout = ref("prev,pager,next")
 
 const showHome = ref(true)
 const showDetail = ref(false)
