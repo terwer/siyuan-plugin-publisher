@@ -1,5 +1,5 @@
 <!--
-  - Copyright (c) 2022, Terwer . All rights reserved.
+  - Copyright (c) 2022-2023, Terwer . All rights reserved.
   - DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
   -
   - This code is free software; you can redistribute it and/or modify it
@@ -27,7 +27,10 @@
   <div class="post-detail-content-box">
     <div v-if="!inSiyuanNewWin" class="btn-publish">
       <el-button size="small" type="primary" @click="handlePublish"
-        >发布到其他平台
+        >{{ $t("post.detail.index.send.to.publish") }}
+      </el-button>
+      <el-button size="small" type="success" @click="handleExportPDF"
+        >{{ $t("post.detail.index.export.to.pdf") }}
       </el-button>
     </div>
 
@@ -64,6 +67,10 @@ const handlePublish = async () => {
   } else {
     goToPage(appendStr("/publish/index.html?id=", pid.value))
   }
+}
+
+const handleExportPDF = async () => {
+  alert("pdf")
 }
 
 const initPage = async () => {

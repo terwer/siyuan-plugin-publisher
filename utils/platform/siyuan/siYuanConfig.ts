@@ -60,6 +60,7 @@ export const getSiyuanCfg = (): SiYuanConfig => {
   if (isBrowser()) {
     // 不是Chrome浏览器插件，并且页面地址与API地址不一致的时候，以页面地址为准
     if (
+      !(window.location.href.indexOf("localhost") > -1) &&
       !(window.location.href.indexOf("chrome-extension") > -1) &&
       !window.location.href.includes(baseUrl)
     ) {

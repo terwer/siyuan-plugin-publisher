@@ -1,5 +1,5 @@
 <!--
-  - Copyright (c) 2022, Terwer . All rights reserved.
+  - Copyright (c) 2022-2023, Terwer . All rights reserved.
   - DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
   -
   - This code is free software; you can redistribute it and/or modify it
@@ -27,108 +27,118 @@
   <div>
     <!-- 文章列表 -->
     <div id="post-list" v-if="showHome">
-      <el-autocomplete
-        class="s-input"
-        v-model="state"
-        :fetch-suggestions="querySearch"
-        popper-class="my-autocomplete"
-        placeholder="请输入关键字"
-        @change="handleBtnSearch"
-        @select="handleSelect"
-      >
-        <template #default="{ item }">
-          <div class="value">{{ item.value }}</div>
-        </template>
-      </el-autocomplete>
-      <el-button class="s-btn" type="primary" @click="handleBtnSearch"
-        >搜索
-      </el-button>
+      <!-- 搜索 -->
+      <div class="search-btn">
+        <el-autocomplete
+          class="s-input"
+          v-model="state"
+          :fetch-suggestions="querySearch"
+          popper-class="my-autocomplete"
+          placeholder="请输入关键字"
+          @change="handleBtnSearch"
+          @select="handleSelect"
+        >
+          <template #default="{ item }">
+            <div class="value">{{ item.value }}</div>
+          </template>
+        </el-autocomplete>
+        <el-button class="s-btn" type="primary" @click="handleBtnSearch"
+          >搜索
+        </el-button>
+      </div>
 
-      <el-table
-        class="tb-data"
-        :data="tableData"
-        :key="num"
-        border
-        stripe
-        highlight-current-row
-        empty-text="笔记数据为空或者思源笔记未启动！"
-        @row-click="handleRowClick"
-        style="width: 100%; min-width: 600px"
-      >
-        <el-table-column type="expand">
-          <template #default="props">
-            <div m="4" style="padding-left: 10px">
-              <p m="t-0 b-2">ID: {{ props.row.postid }}</p>
-              <p m="t-0 b-2">发布时间: {{ props.row.dateCreated }}</p>
-              <p m="t-0 b-2">标题: {{ props.row.title }}</p>
-              <p m="t-0 b-2">
-                标签:
-                {{
-                  props.row.mt_keywords === ""
-                    ? "暂无标签"
-                    : props.row.mt_keywords
-                }}
-              </p>
-            </div>
-          </template>
-        </el-table-column>
-        <!--
-        <el-table-column prop="postid" label="ID" width="200"/>
-        -->
-        <el-table-column prop="shortTitle" label="标题" />
-        <!--
-        <el-table-column prop="dateCreated" label="发布时间" width="150"/>
-        -->
-        <el-table-column align="center" width="350">
-          <template #header>
-            <div style="text-align: center">操作</div>
-          </template>
-          <template #default="scope">
-            <!-- 预览 -->
-            <el-button
-              size="small"
-              @click="handleView(scope.$index, scope.row)"
-            >
-              <font-awesome-icon icon="fa-solid fa-book-open-reader" />
-            </el-button>
-            <!-- 发布 -->
-            <el-button
-              size="small"
-              @click="handleEdit(scope.$index, scope.row)"
-            >
-              <font-awesome-icon icon="fa-solid fa-upload" />
-            </el-button>
-            <!-- anki -->
-            <el-button
-              size="small"
-              @click="handleAnki(scope.$index, scope.row)"
-            >
-              <font-awesome-icon icon="fa-solid fa-credit-card" />
-            </el-button>
-            <!-- picgo -->
-            <el-button
-              size="small"
-              @click="handlePicgo(scope.$index, scope.row)"
-            >
-              <font-awesome-icon icon="fa-solid fa-image" />
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <!-- 分页 -->
-      <el-pagination
-        small
-        background
-        layout="prev, pager, next"
-        :total="total"
-        class="mt-4"
-        :page-size="MAX_PAGE_SIZE"
-        @prev-click="handlePrevPage"
-        @next-click="handleNextPage"
-        @current-change="handleCurrentPage"
-      />
+      <!-- 表格数据展示 -->
+      <div class="data-empty-box" v-if="isDataBoxLoading">
+        <el-skeleton :loading="isDataBoxLoading" :rows="5" animated />
+      </div>
+      <div class="data-box" v-else>
+        <el-table
+          class="tb-data"
+          :data="tableData"
+          :key="num"
+          border
+          stripe
+          highlight-current-row
+          empty-text="笔记数据为空或者思源笔记未启动！"
+          @row-click="handleRowClick"
+          style="width: 100%; min-width: 600px"
+        >
+          <el-table-column type="expand">
+            <template #default="props">
+              <div m="4" style="padding-left: 10px">
+                <p m="t-0 b-2">ID: {{ props.row.postid }}</p>
+                <p m="t-0 b-2">发布时间: {{ props.row.dateCreated }}</p>
+                <p m="t-0 b-2">标题: {{ props.row.title }}</p>
+                <p m="t-0 b-2">
+                  标签:
+                  {{
+                    props.row.mt_keywords === ""
+                      ? "暂无标签"
+                      : props.row.mt_keywords
+                  }}
+                </p>
+              </div>
+            </template>
+          </el-table-column>
+          <!--
+          <el-table-column prop="postid" label="ID" width="200"/>
+          -->
+          <el-table-column prop="shortTitle" label="标题" />
+          <!--
+          <el-table-column prop="dateCreated" label="发布时间" width="150"/>
+          -->
+          <el-table-column align="center" width="350">
+            <template #header>
+              <div style="text-align: center">操作</div>
+            </template>
+            <template #default="scope">
+              <!-- 预览 -->
+              <el-button
+                size="small"
+                @click="handleView(scope.$index, scope.row)"
+              >
+                <font-awesome-icon icon="fa-solid fa-book-open-reader" />
+              </el-button>
+              <!-- 发布 -->
+              <el-button
+                size="small"
+                @click="handleEdit(scope.$index, scope.row)"
+              >
+                <font-awesome-icon icon="fa-solid fa-upload" />
+              </el-button>
+              <!-- anki -->
+              <el-button
+                size="small"
+                @click="handleAnki(scope.$index, scope.row)"
+              >
+                <font-awesome-icon icon="fa-solid fa-credit-card" />
+              </el-button>
+              <!-- picgo -->
+              <el-button
+                size="small"
+                @click="handlePicgo(scope.$index, scope.row)"
+              >
+                <font-awesome-icon icon="fa-solid fa-image" />
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <!-- 分页 -->
+        <el-pagination
+          small
+          background
+          layout="prev, pager, next"
+          :total="total"
+          class="mt-4"
+          :page-size="MAX_PAGE_SIZE"
+          @prev-click="handlePrevPage"
+          @next-click="handleNextPage"
+          @current-change="handleCurrentPage"
+        />
+      </div>
 
-      <div>
+      <!-- 操作指南 -->
+      <div class="blog-tip">
         <el-alert
           class="top-data-tip"
           :title="
@@ -190,8 +200,8 @@ import SingleAnki from "~/components/blog/singleWin/SingleAnki.vue"
 import SinglePicgo from "~/components/blog/singleWin/SinglePicgo.vue"
 
 const logger = LogFactory.getLogger()
-
 const { t } = useI18n()
+const isDataBoxLoading = ref(false)
 
 const showHome = ref(true)
 const showDetail = ref(false)
@@ -445,6 +455,8 @@ const initPage = async () => {
 }
 
 const reloadTableData = async () => {
+  isDataBoxLoading.value = true
+
   let postCount = 1
   let postList = []
   let hasSubdoc = false
@@ -521,6 +533,8 @@ const reloadTableData = async () => {
 
   // table的key改变才会刷新
   num.value++
+
+  isDataBoxLoading.value = false
 }
 
 onMounted(async () => {
