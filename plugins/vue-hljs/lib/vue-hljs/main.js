@@ -29,11 +29,13 @@ import typescript from "highlight.js/lib/languages/typescript"
 import c from "highlight.js/lib/languages/c"
 import cpp from "highlight.js/lib/languages/cpp"
 import java from "highlight.js/lib/languages/java"
+import kotlin from "highlight.js/lib/languages/kotlin"
 import bash from "highlight.js/lib/languages/bash"
 import xml from "highlight.js/lib/languages/xml"
 import css from "highlight.js/lib/languages/css"
 import plaintext from "highlight.js/lib/languages/plaintext"
 import php from "highlight.js/lib/languages/php"
+import properties from "highlight.js/lib/languages/properties"
 import { CopyButtonPlugin } from "../codecopy"
 import "../codecopy/codecopy.css"
 import "./vs.css"
@@ -52,6 +54,7 @@ vueHljs.install = (Vue) => {
   hljs.registerLanguage("c", c)
   hljs.registerLanguage("cpp", cpp)
   hljs.registerLanguage("java", java)
+  hljs.registerLanguage("kotlin", kotlin)
   hljs.registerLanguage("csharp", java)
   hljs.registerLanguage("cs", java)
   hljs.registerLanguage("bash", bash)
@@ -60,7 +63,9 @@ vueHljs.install = (Vue) => {
   hljs.registerLanguage("html", xml)
   hljs.registerLanguage("css", css)
   hljs.registerLanguage("plaintext", plaintext)
+  hljs.registerLanguage("plantuml", plaintext)
   hljs.registerLanguage("php", php)
+  hljs.registerLanguage("properties", properties)
 
   // 代码复制
   hljs.addPlugin(

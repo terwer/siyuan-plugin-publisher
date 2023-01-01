@@ -168,13 +168,10 @@ onMounted(async () => {
 
 #post-detail-content blockquote {
   display: block;
-  margin-block-start: 1em;
-  margin-block-end: 1em;
-  margin-inline-start: 4px;
-  margin-inline-end: 24px;
   border: solid 1px green;
   border-radius: 4px;
   padding: 0 10px;
+  margin: 16px 0 0;
   background: var(--custom-app-bg-color);
 }
 
