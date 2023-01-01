@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -33,6 +33,7 @@ import bash from "highlight.js/lib/languages/bash"
 import xml from "highlight.js/lib/languages/xml"
 import css from "highlight.js/lib/languages/css"
 import plaintext from "highlight.js/lib/languages/plaintext"
+import php from "highlight.js/lib/languages/php"
 import { CopyButtonPlugin } from "../codecopy"
 import "../codecopy/codecopy.css"
 import "./vs.css"
@@ -59,6 +60,7 @@ vueHljs.install = (Vue) => {
   hljs.registerLanguage("html", xml)
   hljs.registerLanguage("css", css)
   hljs.registerLanguage("plaintext", plaintext)
+  hljs.registerLanguage("php", php)
 
   // 代码复制
   hljs.addPlugin(
