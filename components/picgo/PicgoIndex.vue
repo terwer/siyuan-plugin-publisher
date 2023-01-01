@@ -362,7 +362,7 @@ const initPage = async () => {
   retImgs.forEach((retImg) => {
     let isLocal = false
     let imgUrl = retImg
-    if (imgUrl.indexOf("assets") > -1) {
+    if (!(imgUrl.indexOf("http") > -1) && imgUrl.indexOf("assets") > -1) {
       const baseUrl = getSiyuanCfg().baseUrl
       imgUrl = pathJoin(baseUrl, "/" + imgUrl)
       isLocal = true
