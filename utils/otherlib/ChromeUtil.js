@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -45,7 +45,7 @@ const logger = LogFactory.getLogger()
  * @param split 例如：/，但部分情况下无需传递此参数
  *
  */
-function getPageUrl(pageUrl, split) {
+export const getPageUrl = (pageUrl, split) => {
   // While we could have used `let url = "index.html"`, using runtime.getURL is a bit more robust as
   // it returns a full URL rather than just a path that Chrome needs to be resolved contextually at
   // runtime.

@@ -20,7 +20,7 @@
     "extChromeWin": "pwsh scripts/ext.ps1",
     "extChromeDev": "bash scripts/extDev.sh",
     "extFirefox": "bash scripts/extFV2.sh",
-    "newVersion": "cd scripts && python3 version.py 0.6.0 && cd ../"
+    "newVersion": "cd scripts && python3 version.py 0.6.1 && cd ../"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.0.9",

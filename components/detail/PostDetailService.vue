@@ -1,5 +1,5 @@
 <!--
-  - Copyright (c) 2022, Terwer . All rights reserved.
+  - Copyright (c) 2022-2023, Terwer . All rights reserved.
   - DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
   -
   - This code is free software; you can redistribute it and/or modify it
@@ -26,8 +26,17 @@
 <template>
   <div class="post-detail-wrap">
     <h1 v-if="inSiyuanNewWin" style="display: none">{{ post.title }}</h1>
-    <blockquote class="post-detail-id" style="display: none">
-      本文ID：{{ post.postid }}
+    <blockquote class="post-detail-id">
+      <span class="id-text">本文ID：{{ post.postid }}</span>
+      <el-button size="small" type="warning" @click="handleCopyID"
+        >{{ $t("post.detail.button.copy.id") }}
+      </el-button>
+      <el-button size="small" type="primary" @click="handleShareLink"
+        >{{ $t("post.detail.button.share.link") }}
+      </el-button>
+      <el-button size="small" type="danger" @click="handleOpenInBrowser"
+        >{{ $t("post.detail.button.browser.open") }}
+      </el-button>
     </blockquote>
     <div
       id="post-detail-content"
@@ -45,10 +54,15 @@ import { API } from "~/utils/api"
 import { API_TYPE_CONSTANTS } from "~/utils/constants/apiTypeConstants"
 import { LogFactory } from "~/utils/logUtil"
 import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
+import { isBrowser } from "~/utils/browserUtil"
+import { ElMessage } from "element-plus"
+import { useI18n } from "vue-i18n"
+import { getPageUrl, goToPage } from "~/utils/otherlib/ChromeUtil"
 
 const logger = LogFactory.getLogger(
   "components/blog/themes/default/PostDetailService.vue"
 )
+const { t } = useI18n()
 
 const props = defineProps({
   pageId: {
@@ -62,11 +76,7 @@ const inSiyuanNewWin = ref(isInSiyuanNewWinBrowser())
 /* 监听props */
 watch(
   () => props.pageId,
-  /**/ (oldValue, newValue) => {
-    // Here you can add you functionality
-    // as described in the name you will get old and new value of watched property
-    // 默认选中vuepress
-    // setBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY, true)
+  (oldValue, newValue) => {
     initPage()
     logger.debug("文章详情查看初始化")
   }
@@ -74,6 +84,50 @@ watch(
 
 const defaultPost = new Post()
 const post = ref(defaultPost)
+
+const handleCopyID = () => {
+  if (isBrowser()) {
+    // document.execCommand("copy");
+
+    // Copy the selected text to the clipboard
+    navigator.clipboard.writeText(post.value.postid).then(
+      function () {
+        // The text has been successfully copied to the clipboard
+        ElMessage.success(t("main.copy.success"))
+      },
+      function (err) {
+        // An error occurred while copying the text
+        ElMessage.error(t("main.copy.failure") + err)
+      }
+    )
+  }
+}
+
+const handleShareLink = () => {
+  if (isBrowser()) {
+    const pageId = post.value.postid
+    const pageUrl = "/detail/index.html?id=" + pageId
+    const url = getPageUrl(pageUrl)
+    // document.execCommand("copy");
+
+    // Copy the selected text to the clipboard
+    navigator.clipboard.writeText(url).then(
+      function () {
+        // The text has been successfully copied to the clipboard
+        ElMessage.success(t("main.copy.success"))
+      },
+      function (err) {
+        // An error occurred while copying the text
+        ElMessage.error(t("main.copy.failure") + err)
+      }
+    )
+  }
+}
+
+const handleOpenInBrowser = () => {
+  const pageId = post.value.postid
+  goToPage("/detail/index.html?id=" + pageId)
+}
 
 const initPage = async () => {
   if (!props.pageId || props.pageId === "") {
@@ -139,17 +193,16 @@ h2 {
 }
 
 .post-detail-wrap .post-detail-id {
-  margin-top: 10px;
   display: block;
-  margin-block-start: 1em;
-  margin-block-end: 1em;
-  margin-inline-start: 4px;
-  margin-inline-end: 24px;
   border: solid 1px green;
   border-radius: 4px;
   padding: 10px;
   background: var(--custom-app-bg-color);
-  margin-bottom: 0;
+  margin: 16px 0 0;
+}
+
+.id-text {
+  margin-right: 16px;
 }
 </style>
 <style scoped></style>
