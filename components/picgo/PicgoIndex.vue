@@ -158,7 +158,12 @@
 
     <!-- 图片放大 -->
     <el-dialog v-model="dialogVisible">
-      <img w-full :src="dialogImageUrl" alt="Preview Image" />
+      <img
+        w-full
+        :src="dialogImageUrl"
+        alt="Preview Image"
+        class="img-big-preview"
+      />
     </el-dialog>
   </div>
 </template>
@@ -455,5 +460,9 @@ input[type="file"] {
 
 .one-bed-to-local {
   margin-bottom: 16px;
+}
+
+.img-big-preview {
+  max-width: 100%;
 }
 </style>
