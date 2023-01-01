@@ -443,8 +443,9 @@ input[type="file"] {
 
 .file-list li {
   display: inline-block;
-  margin-right: 16px;
-  padding: 10px;
+  margin-right: 10px;
+  margin-bottom: 16px;
+  padding: 8px;
   border: solid 1px var(--el-color-primary);
   border-radius: var(--el-input-border-radius, var(--el-border-radius-base));
 }
