@@ -544,7 +544,7 @@ onMounted(async () => {
 
 <style>
 .s-input {
-  min-width: 500px !important;
+  min-width: 400px !important;
 }
 </style>
 <style scoped>
@@ -591,5 +591,9 @@ onMounted(async () => {
   text-align: center;
   margin-top: 20px;
   justify-content: center;
+}
+
+.data-empty-box {
+  margin: 16px 0;
 }
 </style>
