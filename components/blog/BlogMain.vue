@@ -191,7 +191,7 @@ import { mdToHtml, removeTitleNumber } from "~/utils/htmlUtil"
 import { getByLength } from "~/utils/strUtil"
 import { CONSTANTS } from "~/utils/constants/constants"
 import { formatIsoToZhDate } from "~/utils/dateUtil"
-import { ElMessageBox } from "element-plus"
+import { ElMessage, ElMessageBox } from "element-plus"
 import SingleBlogDetail from "~/components/blog/singleWin/SingleBlogDetail.vue"
 import SinglePublish from "~/components/blog/singleWin/singlePublish.vue"
 import { getPublishCfg } from "~/utils/publishUtil"
@@ -463,27 +463,37 @@ const reloadTableData = async () => {
   let postList = []
   let hasSubdoc = false
 
-  const siyuanApi = new SiYuanApiAdaptor()
-  if (isInSiyuan.value || isInSiyuanNewWinBrowser()) {
-    const postid = await getPageId()
-    logger.warn("处于生产环境，父文档ID为=>", postid)
+  try {
+    const siyuanApi = new SiYuanApiAdaptor()
+    if (isInSiyuan.value || isInSiyuanNewWinBrowser()) {
+      const postid = await getPageId()
+      logger.warn("处于生产环境，父文档ID为=>", postid)
 
-    if (!isEmptyString(postid)) {
-      // 检测子文档
-      postCount = await siyuanApi.getSubPostCount(postid)
-      if (postCount > 1) {
-        hasSubdoc = true
-      }
+      if (!isEmptyString(postid)) {
+        // 检测子文档
+        postCount = await siyuanApi.getSubPostCount(postid)
+        if (postCount > 1) {
+          hasSubdoc = true
+        }
 
-      if (hasSubdoc) {
-        postList = await siyuanApi.getSubPosts(
-          postid,
+        if (hasSubdoc) {
+          postList = await siyuanApi.getSubPosts(
+            postid,
+            MAX_PAGE_SIZE,
+            currentPage.value - 1,
+            state.value
+          )
+        }
+        logger.warn("思源笔记内部展示子文档")
+      } else {
+        postCount = await siyuanApi.getRecentPostsCount(state.value)
+        postList = await siyuanApi.getRecentPosts(
           MAX_PAGE_SIZE,
           currentPage.value - 1,
           state.value
         )
+        logger.warn("思源笔记内部展示文档列表")
       }
-      logger.warn("思源笔记内部展示子文档")
     } else {
       postCount = await siyuanApi.getRecentPostsCount(state.value)
       postList = await siyuanApi.getRecentPosts(
@@ -491,46 +501,41 @@ const reloadTableData = async () => {
         currentPage.value - 1,
         state.value
       )
-      logger.warn("思源笔记内部展示文档列表")
+      logger.warn("浏览器环境或者浏览器插件展示文档列表")
+      logger.debug("postList=>", postList)
     }
-  } else {
-    postCount = await siyuanApi.getRecentPostsCount(state.value)
-    postList = await siyuanApi.getRecentPosts(
-      MAX_PAGE_SIZE,
-      currentPage.value - 1,
-      state.value
-    )
-    logger.warn("浏览器环境或者浏览器插件展示文档列表")
-    logger.debug("postList=>", postList)
-  }
 
-  // =======================================================================
+    // =======================================================================
 
-  // 总数
-  total.value = postCount
+    // 总数
+    total.value = postCount
 
-  // 渲染table
-  tableData.splice(0, tableData.length)
-  for (let i = 0; i < postList.length; i++) {
-    const item = postList[i]
+    // 渲染table
+    tableData.splice(0, tableData.length)
+    for (let i = 0; i < postList.length; i++) {
+      const item = postList[i]
 
-    const title = removeTitleNumber(item.title)
-    const shortTitle = getByLength(title, CONSTANTS.MAX_TITLE_LENGTH, false)
-    const content = mdToHtml(item.description)
+      const title = removeTitleNumber(item.title)
+      const shortTitle = getByLength(title, CONSTANTS.MAX_TITLE_LENGTH, false)
+      const content = mdToHtml(item.description)
 
-    const tableRow = {
-      postid: item.postid,
-      title,
-      shortTitle,
-      dateCreated: formatIsoToZhDate(
-        item.dateCreated.toISOString(),
-        true,
-        true
-      ),
-      mt_keywords: item.mt_keywords,
-      description: content.trim() === "" ? "暂无内容" : content,
+      const tableRow = {
+        postid: item.postid,
+        title,
+        shortTitle,
+        dateCreated: formatIsoToZhDate(
+          item.dateCreated.toISOString(),
+          true,
+          true
+        ),
+        mt_keywords: item.mt_keywords,
+        description: content.trim() === "" ? "暂无内容" : content,
+      }
+      tableData.push(tableRow)
     }
-    tableData.push(tableRow)
+  } catch (e) {
+    isDataBoxLoading.value = false
+    ElMessage.error("数据加载失败，=>" + e)
   }
 
   // table的key改变才会刷新
