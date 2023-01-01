@@ -203,6 +203,7 @@ h2 {
 
 .id-text {
   margin-right: 16px;
+  vertical-align: middle;
 }
 </style>
 <style scoped></style>
