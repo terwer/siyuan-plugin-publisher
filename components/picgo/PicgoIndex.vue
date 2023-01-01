@@ -46,8 +46,14 @@
       </template>
     </el-upload>
     -->
+    <div class="upload-status">
+      <el-button text :loading="isUploadLoading">上传状态</el-button>
+    </div>
     <div class="upload-btn-list">
-      <div class="upload-control">
+      <div
+        class="upload-control"
+        v-if="inSiyuan() || isInSiyuanNewWinBrowser()"
+      >
         <label>
           <!-- 自定义的文件选择按钮 -->
           <label for="fileInput" class="custom-file-input">选择图片</label>
@@ -67,9 +73,12 @@
           >剪贴板图片
         </el-button>
       </div>
-      <div class="upload-control">
-        <el-button text :loading="isUploadLoading">上传状态</el-button>
-      </div>
+    </div>
+    <div class="one-local-to-bed">
+      <el-button type="success">一键上传本地图片到图床</el-button>
+    </div>
+    <div class="one-bed-to-local">
+      <el-button type="primary">一键下载远程图片到本地</el-button>
     </div>
 
     <ul class="file-list">
@@ -78,18 +87,79 @@
         v-for="f in fileList.files"
         v-bind:key="f.name"
       >
-        <img :src="f.url" :alt="f.name" />
-        <el-input :model-value="f.url" @click="onImageUrlCopy(f.url)" />
+        <div><img :src="f.url" :alt="f.name" /></div>
+        <div>
+          <!-- 上传本地图片到图床 -->
+          <el-tooltip
+            v-if="f.isLocal"
+            content="上传本地图片到图床"
+            class="box-item"
+            effect="light"
+            placement="bottom"
+            popper-class="publish-menu-tooltip"
+          >
+            <el-button>
+              <font-awesome-icon icon="fa-solid fa-upload" />
+            </el-button>
+          </el-tooltip>
+
+          <!-- 下载远程图片到本地 -->
+          <el-tooltip
+            v-if="!f.isLocal"
+            content="下载远程图片到本地"
+            class="box-item"
+            effect="light"
+            placement="bottom"
+            popper-class="publish-menu-tooltip"
+          >
+            <el-button>
+              <font-awesome-icon icon="fa-solid fa-download" />
+            </el-button>
+          </el-tooltip>
+
+          <!-- 复制图片链接 -->
+          <el-popover
+            placement="bottom"
+            :title="f.name"
+            :width="popWidth"
+            trigger="hover"
+            :content="f.url"
+          >
+            <template #reference>
+              <el-button @click="onImageUrlCopy(f.url)">
+                <font-awesome-icon icon="fa-solid fa-file-lines" />
+              </el-button>
+            </template>
+          </el-popover>
+
+          <!-- 图片预览 -->
+          <el-tooltip
+            content="图片预览"
+            class="box-item"
+            effect="light"
+            placement="bottom"
+            popper-class="publish-menu-tooltip"
+          >
+            <el-button @click="handlePictureCardPreview(f.url)">
+              <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
+            </el-button>
+          </el-tooltip>
+        </div>
       </li>
     </ul>
 
-    <div class="log-msg">
+    <div class="log-msg" v-if="showDebugMsg">
       <el-input
         type="textarea"
         :autosize="{ minRows: 5, maxRows: 10 }"
         v-model="loggerMsg"
       />
     </div>
+
+    <!-- 图片放大 -->
+    <el-dialog v-model="dialogVisible">
+      <img w-full :src="dialogImageUrl" alt="Preview Image" />
+    </el-dialog>
   </div>
 </template>
 
@@ -116,10 +186,15 @@ const { t } = useI18n()
 const siyuanApi = new SiYuanApi()
 const imageParser = new ImageParser()
 const isUploadLoading = ref(false)
+const popWidth = ref(400)
+const isDev = process.env.NODE_ENV === "development"
+const showDebugMsg = ref(isDev)
 
 const fileList = reactive({
   files: [],
 })
+const dialogImageUrl = ref("")
+const dialogVisible = ref(false)
 const loggerMsg = ref("")
 
 // props
@@ -253,6 +328,11 @@ const onImageUrlCopy = (url: string) => {
   }
 }
 
+const handlePictureCardPreview = (url) => {
+  dialogImageUrl.value = url!
+  dialogVisible.value = true
+}
+
 const initPage = async () => {
   const pageId = await getPageId(true, props.pageId)
   const imageBlocks = await siyuanApi.getImageBlocksByID(pageId)
@@ -297,8 +377,8 @@ const initPage = async () => {
 /* 监听props */
 watch(
   () => props.pageId,
-  /**/ (oldValue, newValue) => {
-    // Here you can add you functionality
+  () => {
+    // Here you can add your functionality
     // as described in the name you will get old and new value of watched property
     // 默认选中vuepress
     // setBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY, true)
@@ -358,12 +438,22 @@ input[type="file"] {
 
 .file-list li {
   display: inline-block;
-  margin-right: 1em;
-  padding-bottom: 4px;
+  margin-right: 16px;
+  padding: 10px;
+  border: solid 1px var(--el-color-primary);
+  border-radius: var(--el-input-border-radius, var(--el-border-radius-base));
 }
 
 .file-list li img {
-  max-width: 100px;
-  height: auto;
+  width: 160px;
+  height: 140px;
+}
+
+.one-local-to-bed {
+  margin-bottom: 12px;
+}
+
+.one-bed-to-local {
+  margin-bottom: 16px;
 }
 </style>

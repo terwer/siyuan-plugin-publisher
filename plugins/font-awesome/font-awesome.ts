@@ -24,19 +24,19 @@
  */
 
 import { PluginObject } from "vue"
-/* import the fontawesome core */
 import { library } from "@fortawesome/fontawesome-svg-core"
-/* import font awesome icon component */
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
 import { LogFactory } from "~/utils/logUtil"
-/* import specific icons */
 import {
   faBolt,
   faBookOpenReader,
   faCircleXmark,
   faCreditCard,
+  faDownload,
+  faFileLines,
   faImage,
   faListOl,
+  faMagnifyingGlass,
   faRectangleList,
   faShareNodes,
   faUpload,
@@ -48,7 +48,6 @@ const logger = LogFactory.getLogger("plugins/font-awesome/font-awesome.ts")
 
 const FontAwesome: PluginObject<any> = {
   install(Vue) {
-    /* add icons to the library */
     library.add(faUpload)
     library.add(faBookOpenReader)
     library.add(faRectangleList)
@@ -60,6 +59,9 @@ const FontAwesome: PluginObject<any> = {
     library.add(faChrome)
     library.add(faShareNodes)
     library.add(faListOl)
+    library.add(faFileLines)
+    library.add(faDownload)
+    library.add(faMagnifyingGlass)
 
     Vue.component("font-awesome-icon", FontAwesomeIcon)
     logger.debug("FontAwesome inited")
