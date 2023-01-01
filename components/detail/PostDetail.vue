@@ -47,6 +47,11 @@ import { appendStr } from "~/utils/strUtil"
 import PostDetailService from "~/components/detail/PostDetailService.vue"
 import { LogFactory } from "~/utils/logUtil"
 import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
+import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
+import { removeTitleNumber } from "~/utils/htmlUtil"
+import { getPublishCfg } from "~/utils/publishUtil"
+import { isBrowser, reloadPage } from "~/utils/browserUtil"
+import { ElMessage } from "element-plus"
 
 const logger = LogFactory.getLogger("components/detail/PostDetail.vue")
 
@@ -58,6 +63,7 @@ const props = defineProps({
 })
 
 const pid = ref("")
+const siyuanApi = new SiYuanApi()
 const inSiyuanNewWin = ref(isInSiyuanNewWinBrowser())
 
 const handlePublish = async () => {
@@ -70,7 +76,26 @@ const handlePublish = async () => {
 }
 
 const handleExportPDF = async () => {
-  alert("pdf")
+  // 读取偏好设置并设置标题
+  const publishCfg = getPublishCfg()
+  const page = await siyuanApi.getBlockByID(pid.value)
+  let fmtTitle = page.content
+  if (publishCfg.fixTitle) {
+    fmtTitle = removeTitleNumber(page.content)
+  }
+  document.title = fmtTitle + " - 由思源笔记发布辅助工具导出"
+  document.querySelector(".header-default").remove()
+  document.querySelector(".btn-publish").remove()
+  document.querySelector(".post-detail-id").remove()
+  document.querySelector(".footer").remove()
+
+  // 打印
+  window.print()
+}
+
+const afterPrint = () => {
+  ElMessage.success("通过打印导出PDF完成")
+  reloadPage()
 }
 
 const initPage = async () => {
@@ -84,6 +109,11 @@ const initPage = async () => {
 
 onMounted(async () => {
   await initPage()
+
+  // 注册事件
+  if (isBrowser()) {
+    window.onafterprint = afterPrint
+  }
 })
 </script>
 
