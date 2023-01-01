@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -87,7 +87,7 @@ export class ImageParser {
       const match = matches[i]
       this.logger.debug("img=>", match)
 
-      const src = match.replace(/!\[]\(/g, "").replace(/\)/, "")
+      const src = match.replace(/!\[.*]\(/g, "").replace(/\)/, "")
       this.logger.debug("src=>", src)
 
       let newImg
@@ -133,6 +133,66 @@ export class ImageParser {
     }
 
     return newcontent
+  }
+
+  public parseImagesToArray(content: string): string[] {
+    let ret = []
+    const remoteImages = this.parseRemoteImagesToArray(content)
+    const localImages = this.parseLocalImagesToArray(content)
+
+    // 会有很多重复值
+    // ret = ret.concat(remoteImages,localImages)
+    // 下面的写法可以去重
+    ret = [...new Set([...remoteImages, ...localImages])]
+
+    return ret
+  }
+
+  private parseRemoteImagesToArray(content: string): string[] {
+    let ret = []
+    let newcontent = content
+
+    const imgRegex = /!\[.*]\((http|https):\/.*\/.*\)/g
+    const matches = newcontent.match(imgRegex)
+    // 没有图片，无需处理
+    if (matches == null || matches.length === 0) {
+      return ret
+    }
+
+    for (let i = 0; i < matches.length; i++) {
+      const match = matches[i]
+      this.logger.debug("img=>", match)
+
+      const src = match.replace(/!\[.*]\(/g, "").replace(/\)/, "")
+      ret.push(src)
+      this.logger.debug("src=>", src)
+    }
+
+    this.logger.debug("远程图片解析完毕.")
+    return ret
+  }
+
+  private parseLocalImagesToArray(content: string): string[] {
+    let ret = []
+    let newcontent = content
+
+    const imgRegex = /!\[.*]\(assets\/.*\..*\)/g
+    const matches = newcontent.match(imgRegex)
+    // 没有图片，无需处理
+    if (matches == null || matches.length === 0) {
+      return ret
+    }
+
+    for (let i = 0; i < matches.length; i++) {
+      const match = matches[i]
+      this.logger.debug("img=>", match)
+
+      const src = match.replace(/!\[.*]\(/g, "").replace(/\)/, "")
+      ret.push(src)
+      this.logger.debug("src=>", src)
+    }
+
+    return ret
   }
 
   /**

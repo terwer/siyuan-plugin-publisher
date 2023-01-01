@@ -102,16 +102,19 @@ import { onMounted, reactive, ref, watch } from "vue"
 import { getPageId, inSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
 import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
 import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
-import { removeBom } from "~/utils/strUtil"
 import {
   copyToClipboardInBrowser,
   isBrowser,
   isElectron,
 } from "~/utils/browserUtil"
+import { ImageParser } from "~/utils/parser/imageParser"
+import { getSiyuanCfg } from "~/utils/platform/siyuan/siYuanConfig"
+import { pathJoin } from "~/utils/util"
 
 const logger = LogFactory.getLogger("components/picgo/PicgoIndex.vue")
 const { t } = useI18n()
 const siyuanApi = new SiYuanApi()
+const imageParser = new ImageParser()
 const isUploadLoading = ref(false)
 
 const fileList = reactive({
@@ -141,6 +144,7 @@ const doAfterUpload = (imgInfos) => {
       const rtnItem = {
         name: img.fileName,
         url: img.imgUrl,
+        isLocal: false,
       }
       loggerMsg.value += "\nnewItem=>" + JSON.stringify(rtnItem)
 
@@ -258,12 +262,31 @@ const initPage = async () => {
     return
   }
 
-  // 解析
+  // 解析图片地址
+  let retImgs = []
   imageBlocks.forEach((page) => {
-    const imgUrl = removeBom(page.content)
+    const parsedImages = imageParser.parseImagesToArray(page.markdown)
+
+    // 会有很多重复值
+    // retImgs = retImgs.concat(retImgs, parsedImages)
+    // 下面的写法可以去重
+    retImgs = [...new Set([...retImgs, ...parsedImages])]
+  })
+  logger.debug("解析出来的所有的图片地址=>", retImgs)
+
+  retImgs.forEach((retImg) => {
+    let isLocal = false
+    let imgUrl = retImg
+    if (imgUrl.indexOf("assets") > -1) {
+      const baseUrl = getSiyuanCfg().baseUrl
+      imgUrl = pathJoin(baseUrl, "/" + imgUrl)
+      isLocal = true
+    }
+
     const imageItem = {
       name: imgUrl.substring(imgUrl.lastIndexOf("/") + 1),
       url: imgUrl,
+      isLocal,
     }
 
     logger.debug("imageItem=>", imageItem)
