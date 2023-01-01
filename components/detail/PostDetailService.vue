@@ -92,7 +92,7 @@ const handleShareLink = () => {
   if (isBrowser()) {
     const pageId = post.value.postid
     const pageUrl = "/detail/index.html?id=" + pageId
-    const url = getPageUrl(pageUrl)
+    const url = getPageUrl(pageUrl, "", true)
 
     copyToClipboardInBrowser(url)
   }

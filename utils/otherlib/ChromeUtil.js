@@ -34,6 +34,7 @@ import { LogFactory } from "~/utils/logUtil"
 import { isInFirefoxExtension } from "~/utils/otherlib/FirefoxUtil"
 import { pathJoin } from "~/utils/util"
 import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
+import { getSiyuanCfg } from "~/utils/platform/siyuan/siYuanConfig"
 
 const logger = LogFactory.getLogger()
 
@@ -44,8 +45,9 @@ const logger = LogFactory.getLogger()
  * @param pageUrl 例如：/index.html
  * @param split 例如：/，但部分情况下无需传递此参数
  *
+ * @param isShare 是否是分享链接
  */
-export const getPageUrl = (pageUrl, split) => {
+export const getPageUrl = (pageUrl, split, isShare) => {
   // While we could have used `let url = "index.html"`, using runtime.getURL is a bit more robust as
   // it returns a full URL rather than just a path that Chrome needs to be resolved contextually at
   // runtime.
@@ -59,13 +61,26 @@ export const getPageUrl = (pageUrl, split) => {
 
   // 处理内部链接
   if (typeof chrome.runtime !== "undefined") {
-    url = chrome.runtime.getURL(url)
+    if (isShare) {
+      url = "/widgets/sy-post-publisher" + url
+      url = setUrlParameter(url, "from", "chrome")
+
+      const baseUrl = getSiyuanCfg().baseUrl
+      url = pathJoin(baseUrl, url)
+    } else {
+      url = chrome.runtime.getURL(url)
+    }
   } else {
     // 思源笔记链接处理
-    const from = getQueryString("from")
-    if (inSiyuan() || from === "siyuan" || isInSiyuanNewWinBrowser()) {
+    const from = getQueryString("from") ?? "siyuan"
+    if (
+      inSiyuan() ||
+      isInSiyuanNewWinBrowser() ||
+      from === "chrome" ||
+      from === "siyuan"
+    ) {
       url = "/widgets/sy-post-publisher" + url
-      url = setUrlParameter(url, "from", "siyuan")
+      url = setUrlParameter(url, "from", from)
     }
 
     // 处理手动分隔符
