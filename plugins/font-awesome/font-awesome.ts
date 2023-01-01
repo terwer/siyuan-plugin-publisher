@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -36,10 +36,13 @@ import {
   faCircleXmark,
   faCreditCard,
   faImage,
+  faListOl,
   faRectangleList,
+  faShareNodes,
   faUpload,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons"
+import { faChrome } from "@fortawesome/free-brands-svg-icons"
 
 const logger = LogFactory.getLogger("plugins/font-awesome/font-awesome.ts")
 
@@ -54,6 +57,9 @@ const FontAwesome: PluginObject<any> = {
     library.add(faBolt)
     library.add(faCreditCard)
     library.add(faImage)
+    library.add(faChrome)
+    library.add(faShareNodes)
+    library.add(faListOl)
 
     Vue.component("font-awesome-icon", FontAwesomeIcon)
     logger.debug("FontAwesome inited")

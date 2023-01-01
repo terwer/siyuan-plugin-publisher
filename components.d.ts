@@ -51,6 +51,7 @@ declare module "@vue/runtime-core" {
     ElOption: typeof import("element-plus/es")["ElOption"]
     ElPageHeader: typeof import("element-plus/es")["ElPageHeader"]
     ElPagination: typeof import("element-plus/es")["ElPagination"]
+    ElPopover: typeof import("element-plus/es")["ElPopover"]
     ElRadio: typeof import("element-plus/es")["ElRadio"]
     ElRadioGroup: typeof import("element-plus/es")["ElRadioGroup"]
     ElRow: typeof import("element-plus/es")["ElRow"]
@@ -62,6 +63,7 @@ declare module "@vue/runtime-core" {
     ElTabPane: typeof import("element-plus/es")["ElTabPane"]
     ElTabs: typeof import("element-plus/es")["ElTabs"]
     ElTag: typeof import("element-plus/es")["ElTag"]
+    ElTooltip: typeof import("element-plus/es")["ElTooltip"]
     ElTreeSelect: typeof import("element-plus/es")["ElTreeSelect"]
   }
 }

@@ -28,15 +28,42 @@
     <h1 v-if="inSiyuanNewWin" style="display: none">{{ post.title }}</h1>
     <blockquote class="post-detail-id">
       <span class="id-text">本文ID：{{ post.postid }}</span>
-      <el-button size="small" type="warning" @click="handleCopyID"
-        >{{ $t("post.detail.button.copy.id") }}
-      </el-button>
-      <el-button size="small" type="primary" @click="handleShareLink"
-        >{{ $t("post.detail.button.share.link") }}
-      </el-button>
-      <el-button size="small" type="danger" @click="handleOpenInBrowser"
-        >{{ $t("post.detail.button.browser.open") }}
-      </el-button>
+
+      <!-- 复制ID -->
+      <el-tooltip
+        class="box-item"
+        effect="dark"
+        :content="$t('post.detail.button.copy.id')"
+        placement="bottom-start"
+      >
+        <el-button size="small" type="warning" @click="handleCopyID">
+          <font-awesome-icon icon="fa-solid fa-list-ol" />
+        </el-button>
+      </el-tooltip>
+
+      <!-- 分享链接 -->
+      <el-tooltip
+        class="box-item"
+        effect="dark"
+        :content="$t('post.detail.button.share.link')"
+        placement="bottom-start"
+      >
+        <el-button size="small" type="primary" @click="handleShareLink">
+          <font-awesome-icon icon="fa-solid fa-share-nodes" />
+        </el-button>
+      </el-tooltip>
+
+      <!-- 浏览器打开 -->
+      <el-tooltip
+        class="box-item"
+        effect="dark"
+        :content="$t('post.detail.button.browser.open')"
+        placement="bottom-start"
+      >
+        <el-button size="small" type="danger" @click="handleOpenInBrowser">
+          <font-awesome-icon icon="fa-brands fa-chrome" />
+        </el-button>
+      </el-tooltip>
     </blockquote>
     <div
       id="post-detail-content"
