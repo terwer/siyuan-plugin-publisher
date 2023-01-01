@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -2215,4 +2215,14 @@
     U+30bd, U+30bf-30c1, U+30c3-30c4, U+30c6-30cb, U+30cd-30d7, U+30d9-30e1,
     U+30e3-30e7, U+30e9-30ed, U+30ef, U+30f3, U+30fb-30fc, U+4e00, U+4e2d,
     U+65b0, U+65e5, U+6708-6709, U+70b9, U+7684, U+7f51, U+ff0c, U+ff0e, U+ff1a;
+}
+
+/* Times New Roman */
+@font-face {
+  font-family: times new roman;
+  font-style: normal;
+  font-weight: 400;
+  src: local("Times New Roman"),
+    url(https://static-rs-terwer.oss-cn-beijing.aliyuncs.com/lib/fonts/times/times.woff)
+      format("woff");
 }
