@@ -1,5 +1,5 @@
 <!--
-  - Copyright (c) 2022, Terwer . All rights reserved.
+  - Copyright (c) 2022-2023, Terwer . All rights reserved.
   - DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
   -  
   - This code is free software; you can redistribute it and/or modify it
@@ -321,13 +321,24 @@ onMounted(async () => {
 })
 </script>
 
+<style>
+.anki-deck .el-form-item__label {
+  margin-top: -4px !important;
+}
+
+.anki-tags .el-form-item__label {
+  margin-top: -4px !important;
+}
+</style>
 <style scoped>
 .anki-body {
   padding: 16px;
 }
+
 .block-title {
   margin-bottom: 16px;
 }
+
 .anki-card-col {
   margin: 8px 0;
 }
