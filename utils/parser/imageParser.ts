@@ -188,6 +188,10 @@ export class ImageParser {
       this.logger.debug("img=>", match)
 
       const src = match.replace(/!\[.*]\(/g, "").replace(/\)/, "")
+      // 远程图片不能算
+      if (src.includes("http")) {
+        continue
+      }
       ret.push(src)
       this.logger.debug("src=>", src)
     }
