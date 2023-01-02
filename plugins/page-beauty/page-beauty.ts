@@ -55,6 +55,17 @@ const PageBeauty: PluginObject<any> = {
       const links = el.querySelectorAll("a")
       if (links && links.length > 0) {
         links.forEach((link) => {
+          // #264 转换虚拟链接为真实预览链接
+          const href = link.getAttribute("href")
+          if (href.includes("siyuan://blocks/")) {
+            // const baseUrl = getSiyuanCfg().baseUrl
+            let newHref = href.replace(/siyuan:\/\/blocks\//g, "")
+            newHref = "/detail/index.html?id=" + newHref
+            // newHref = pathJoin(baseUrl, newHref)
+
+            link.setAttribute("href", newHref)
+          }
+
           link.addEventListener("click", function (evt) {
             // 阻止默认跳转
             evt.preventDefault()

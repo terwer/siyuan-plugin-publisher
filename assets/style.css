@@ -58,8 +58,8 @@ a:hover {
 }
 
 :root {
-  --g-font-family: "Times New Roman", "LXGW WenKai", "JetBrains Mono",
-    "-apple-system", "Microsoft YaHei", "方正北魏楷书_GBK";
+  --g-font-family: "JetBrains Mono", "LXGW WenKai", "-apple-system",
+    "Microsoft YaHei", "Times New Roman", "方正北魏楷书_GBK";
   font-family: var(--g-font-family) !important;
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
