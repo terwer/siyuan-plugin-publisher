@@ -36,6 +36,8 @@ import css from "highlight.js/lib/languages/css"
 import plaintext from "highlight.js/lib/languages/plaintext"
 import php from "highlight.js/lib/languages/php"
 import properties from "highlight.js/lib/languages/properties"
+import sql from "highlight.js/lib/languages/sql"
+import markdown from "highlight.js/lib/languages/markdown"
 import { CopyButtonPlugin } from "../codecopy"
 import "../codecopy/codecopy.css"
 import "./vs.css"
@@ -66,6 +68,9 @@ vueHljs.install = (Vue) => {
   hljs.registerLanguage("plantuml", plaintext)
   hljs.registerLanguage("php", php)
   hljs.registerLanguage("properties", properties)
+  hljs.registerLanguage("sql", sql)
+  hljs.registerLanguage("markdown", markdown)
+  hljs.registerLanguage("md", markdown)
 
   // 代码复制
   hljs.addPlugin(
