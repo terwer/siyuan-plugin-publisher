@@ -1,5 +1,5 @@
 <!--
-  - Copyright (c) 2022, Terwer . All rights reserved.
+  - Copyright (c) 2022-2023, Terwer . All rights reserved.
   - DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
   -
   - This code is free software; you can redistribute it and/or modify it
@@ -193,7 +193,8 @@ import { getBooleanEnv } from "~/utils/envUtil"
 import { appendStr } from "~/utils/strUtil"
 import { useI18n } from "vue-i18n"
 import { LogFactory } from "~/utils/logUtil"
-import { isElectron, isWindows } from "~/utils/browserUtil"
+import { isElectron } from "~/utils/browserUtil"
+import { isWindows } from "~/utils/otherlib/ChromeUtil"
 
 const { t } = useI18n()
 const logger = LogFactory.getLogger("layouts/default/DefaultHeader.vue")

@@ -41,11 +41,6 @@ export const isLocalhost = (apiUrl: string): boolean =>
   apiUrl.indexOf("127.0.0.1") > -1 || apiUrl.indexOf("localhost") > -1
 
 /**
- * 检测是否是Windows
- */
-export const isWindows = /Windows/.test(navigator.userAgent)
-
-/**
  * 检测是否是Electron
  */
 export const isElectron = /Electron/.test(navigator.userAgent)

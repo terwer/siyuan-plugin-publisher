@@ -77,7 +77,7 @@
     <div class="one-local-to-bed">
       <el-button type="success">一键上传本地图片到图床</el-button>
     </div>
-    <div class="one-bed-to-local">
+    <div class="one-bed-to-local" v-if="isElectron">
       <el-button type="primary">一键下载远程图片到本地</el-button>
     </div>
 
@@ -105,7 +105,7 @@
 
           <!-- 下载远程图片到本地 -->
           <el-tooltip
-            v-if="!f.isLocal"
+            v-if="isElectron && !f.isLocal"
             content="下载远程图片到本地"
             class="box-item"
             effect="dark"

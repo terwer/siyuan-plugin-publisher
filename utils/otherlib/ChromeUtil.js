@@ -185,3 +185,8 @@ export const importJSONToLocalStorage = async () => {
   // Read the file as a string of text
   reader.readAsText(files[0])
 }
+
+/**
+ * 检测是否是Windows
+ */
+export const isWindows = "Windows" === navigator.userAgentData.platform
