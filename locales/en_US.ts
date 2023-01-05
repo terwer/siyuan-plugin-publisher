@@ -314,4 +314,12 @@ export default {
   "post.detail.button.anki.mark": "Anki mark",
   "post.detail.index.send.to.publish": "Send to other platform",
   "post.detail.index.export.to.pdf": "Export to PDF",
+  "picgo.upload.status": "Upload status",
+  "picgo.upload.select.pic": "Select picture",
+  "picgo.upload.clipboard": "Clipboard picture",
+  "picgo.upload.onclick": "One click upload",
+  "picgo.download.onclick": "One click download",
+  "picgo.download.local.to.bed": "Upload picture to bed",
+  "picgo.download.bed.to.local": "Upload picture from bed",
+  "picgo.pic.preview": "Picture preview",
 }

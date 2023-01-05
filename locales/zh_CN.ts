@@ -326,4 +326,12 @@ export default {
   "post.detail.button.anki.mark": "Anki标记",
   "post.detail.index.send.to.publish": "发布到其他平台",
   "post.detail.index.export.to.pdf": "导出为PDF",
+  "picgo.upload.status": "上传状态",
+  "picgo.upload.select.pic": "选择图片",
+  "picgo.upload.clipboard": "剪贴板图片",
+  "picgo.upload.onclick": "一键上传本地图片到图床",
+  "picgo.download.onclick": "一键下载远程图片到本地",
+  "picgo.download.local.to.bed": "上传本地图片到图床",
+  "picgo.download.bed.to.local": "下载远程图片到本地",
+  "picgo.pic.preview": "图片预览",
 }
