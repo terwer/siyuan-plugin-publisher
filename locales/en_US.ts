@@ -322,4 +322,5 @@ export default {
   "picgo.download.local.to.bed": "Upload picture to bed",
   "picgo.download.bed.to.local": "Upload picture from bed",
   "picgo.pic.preview": "Picture preview",
+  "picgo.pic.setting": "Picture setting",
 }

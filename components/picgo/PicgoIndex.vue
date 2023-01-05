@@ -62,6 +62,7 @@
         </el-button>
       </el-tooltip>
 
+      <!-- 剪贴板上传 -->
       <el-tooltip
         class="box-item"
         effect="dark"
@@ -76,6 +77,7 @@
         </el-button>
       </el-tooltip>
 
+      <!-- 上传所有图到图床 -->
       <el-tooltip
         class="box-item"
         effect="dark"
@@ -87,6 +89,7 @@
         </el-button>
       </el-tooltip>
 
+      <!-- 下载所有远程图片 -->
       <el-tooltip
         v-if="isElectron"
         class="box-item"
@@ -96,6 +99,18 @@
       >
         <el-button type="primary">
           <font-awesome-icon icon="fa-solid fa-download" />
+        </el-button>
+      </el-tooltip>
+
+      <!-- 图床设置 -->
+      <el-tooltip
+        class="box-item"
+        effect="dark"
+        :content="$t('picgo.pic.setting')"
+        placement="top-start"
+      >
+        <el-button type="info" @click="picgoUploadMethods.handlePicgoSetting">
+          <font-awesome-icon icon="fa-solid fa-gear" />
         </el-button>
       </el-tooltip>
     </blockquote>
@@ -171,13 +186,24 @@
     </ul>
 
     <!-- 图片放大 -->
-    <el-dialog v-model="picgoManageData.dialogVisible">
+    <el-dialog
+      v-model="picgoManageData.dialogPreviewVisible"
+      :title="$t('picgo.pic.preview') + ' - ' + picgoManageData.dialogImageUrl"
+    >
       <img
         w-full
         :src="picgoManageData.dialogImageUrl"
         alt="Preview Image"
         class="img-big-preview"
       />
+    </el-dialog>
+
+    <!-- Picgo设置 -->
+    <el-dialog
+      v-model="picgoUploadData.dialogPicgoSettingFormVisible"
+      :title="$t('picgo.pic.setting')"
+    >
+      <picgo-setting />
     </el-dialog>
 
     <!-- 日志显示 -->
@@ -198,6 +224,7 @@ import { usePicgoInitPage } from "~/composables/picgo/picgoInitPageCom"
 import { isElectron } from "~/utils/browserUtil"
 import { usePicgoManage } from "~/composables/picgo/picgoManageCom"
 import { ref } from "vue"
+import PicgoSetting from "~/components/picgo/PicgoSetting.vue"
 
 // props
 const props = defineProps({
@@ -212,7 +239,7 @@ const refSelectedFiles = ref()
 
 // uses
 const { picgoCommonData, picgoCommonMethods } = usePicgoCommon()
-const { picgoUploadMethods } = usePicgoUpload(
+const { picgoUploadData, picgoUploadMethods } = usePicgoUpload(
   props,
   { picgoCommonMethods },
   { refSelectedFiles }

@@ -139,7 +139,10 @@
         </el-dialog>
 
         <!-- 通用设置弹窗 -->
-        <el-dialog v-model="generalSettingFormVisible">
+        <el-dialog
+          v-model="generalSettingFormVisible"
+          :title="$t('service.tab.change.local')"
+        >
           <general-setting />
         </el-dialog>
       </div>
@@ -319,6 +322,11 @@ onMounted(() => {
 })
 </script>
 
+<style>
+.el-dialog__header {
+  text-align: left !important;
+}
+</style>
 <style scoped>
 .footer {
   font-size: 12px;

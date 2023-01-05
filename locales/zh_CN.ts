@@ -334,4 +334,5 @@ export default {
   "picgo.download.local.to.bed": "上传本地图片到图床",
   "picgo.download.bed.to.local": "下载远程图片到本地",
   "picgo.pic.preview": "图片预览",
+  "picgo.pic.setting": "图床设置",
 }

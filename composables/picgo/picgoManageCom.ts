@@ -33,7 +33,7 @@ export const usePicgoManage = (props, deps) => {
   // public data
   const picgoManageData = reactive({
     dialogImageUrl: "",
-    dialogVisible: false,
+    dialogPreviewVisible: false,
   })
 
   // public methods
@@ -47,7 +47,7 @@ export const usePicgoManage = (props, deps) => {
 
     handlePictureCardPreview: (url) => {
       picgoManageData.dialogImageUrl = url ?? ""
-      picgoManageData.dialogVisible = true
+      picgoManageData.dialogPreviewVisible = true
     },
   }
 

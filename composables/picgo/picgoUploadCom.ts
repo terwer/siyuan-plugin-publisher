@@ -40,7 +40,9 @@ export const usePicgoUpload = (props, deps, refs) => {
   const { t } = useI18n()
 
   // public data
-  const picgoUploadData = reactive({})
+  const picgoUploadData = reactive({
+    dialogPicgoSettingFormVisible: false,
+  })
 
   // deps
   const picgoCommonMethods = deps.picgoCommonMethods
@@ -78,6 +80,9 @@ export const usePicgoUpload = (props, deps, refs) => {
 
   // public methods
   const picgoUploadMethods = {
+    handlePicgoSetting: () => {
+      picgoUploadData.dialogPicgoSettingFormVisible = true
+    },
     bindFileControl: () => {
       refSelectedFiles.value.click()
     },
