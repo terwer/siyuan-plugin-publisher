@@ -88,6 +88,7 @@ export const usePicgoManage = (props, deps) => {
         if (!hasLocalImages) {
           ElMessage.error("未发现本地图片，不上传")
         } else {
+          ElMessage.success("图片已经全部上传至图床，即将刷新页面")
           reloadPage()
         }
       } catch (e) {
@@ -114,6 +115,7 @@ export const usePicgoManage = (props, deps) => {
         await picgoManageMethods.doUploadImagesToBed(imageItem)
         picgoCommonData.isUploadLoading = false
 
+        ElMessage.success("图片已经成功上传至图床，即将刷新页面")
         reloadPage()
       } catch (e) {
         picgoCommonData.isUploadLoading = false
