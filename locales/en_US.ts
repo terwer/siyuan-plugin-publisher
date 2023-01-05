@@ -118,6 +118,7 @@ export default {
   "main.opt.cancel": "Cancel",
   "main.opt.warning.tip":
     "The operation will delete the data, whether to continue?",
+  "main.opt.tip": "Tips",
   "setting.noneed": "No need setting",
   "setting.blog.setting": " Setting",
   "setting.blog.type": "Blog type",
@@ -323,4 +324,6 @@ export default {
   "picgo.download.bed.to.local": "Upload picture from bed",
   "picgo.pic.preview": "Picture preview",
   "picgo.pic.setting": "Picture setting",
+  "picgo.pic.setting.no.tip":
+    "You are currently using the browser plug -in and cannot inherit PicGo. You can only call the local Picgo client on the local Picgo client through HTTP",
 }

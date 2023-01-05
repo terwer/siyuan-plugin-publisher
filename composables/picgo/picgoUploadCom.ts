@@ -24,12 +24,13 @@
  */
 
 import { reactive } from "vue"
-import { ElMessage } from "element-plus"
+import { ElMessage, ElMessageBox } from "element-plus"
 import { useI18n } from "vue-i18n"
 import { LogFactory } from "~/utils/logUtil"
 import { inSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
 import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
 import { uploadByPicGO } from "~/utils/otherlib/picgoUtil"
+import { isElectron } from "~/utils/browserUtil"
 
 /**
  * Picgo上传组件
@@ -80,7 +81,18 @@ export const usePicgoUpload = (props, deps, refs) => {
 
   // public methods
   const picgoUploadMethods = {
-    handlePicgoSetting: () => {
+    handlePicgoSetting: async () => {
+      if (!isElectron) {
+        await ElMessageBox.alert(
+          t("picgo.pic.setting.no.tip"),
+          t("main.opt.tip"),
+          {
+            confirmButtonText: t("main.opt.ok"),
+          }
+        )
+        return
+      }
+
       picgoUploadData.dialogPicgoSettingFormVisible = true
     },
     bindFileControl: () => {

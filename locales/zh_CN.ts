@@ -116,6 +116,7 @@ export default {
   "main.opt.status.cancel": "文章发布已取消",
   "main.opt.loading": "操作中...",
   "main.opt.warning": "警告信息",
+  "main.opt.tip": "温馨提示",
   "main.opt.ok": "确认",
   "main.opt.cancel": "取消",
   "main.opt.warning.tip": "此操作不可恢复，是否继续？",
@@ -335,4 +336,6 @@ export default {
   "picgo.download.bed.to.local": "下载远程图片到本地",
   "picgo.pic.preview": "图片预览",
   "picgo.pic.setting": "图床设置",
+  "picgo.pic.setting.no.tip":
+    "您当前使用的是浏览器插件，无法直接集成PicGO，只能通过HTTP请求间接调用本地PicGO客户端上图片，请直接在本地PicGO客户端进行设置。如需体验更加完整的功能，请通过思源笔记挂件版挂载菜单打开新窗口的方式使用",
 }
