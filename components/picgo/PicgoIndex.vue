@@ -40,41 +40,65 @@
       </el-button>
     </div>
 
-    <!-- Picgo上传 -->
-    <div class="upload-btn-list">
-      <div class="upload-control" v-if="picgoCommonData.isSiyuanOrSiyuanNewWin">
-        <label>
-          <!-- 自定义的文件选择按钮 -->
-          <label for="fileInput" class="custom-file-input">{{
-            $t("picgo.upload.select.pic")
-          }}</label>
+    <!-- 操作按钮 -->
+    <blockquote class="picgo-opt-btn">
+      <!-- 原有的文件选择按钮 -->
+      <input
+        type="file"
+        accept="image/png, image/gif, image/jpeg"
+        @change="picgoUploadMethods.doUploadPicSelected"
+        multiple
+        ref="refSelectedFiles"
+      />
+      <el-tooltip
+        v-if="isElectron"
+        class="box-item"
+        effect="dark"
+        :content="$t('picgo.upload.select.pic')"
+        placement="top-start"
+      >
+        <el-button type="warning" @click="picgoUploadMethods.bindFileControl">
+          <font-awesome-icon icon="fa-solid fa-file-import" />
+        </el-button>
+      </el-tooltip>
 
-          <!-- 原有的文件选择按钮 -->
-          <input
-            type="file"
-            accept="image/png, image/gif, image/jpeg"
-            @change="picgoUploadMethods.doUploadPicSelected"
-            multiple
-            id="fileInput"
-          />
-        </label>
-      </div>
-      <div class="upload-control">
+      <el-tooltip
+        class="box-item"
+        effect="dark"
+        :content="$t('picgo.upload.clipboard')"
+        placement="top-start"
+      >
         <el-button
           type="primary"
           @click="picgoUploadMethods.doUploadPicFromClipboard"
-          >{{ $t("picgo.upload.clipboard") }}
+        >
+          <font-awesome-icon icon="fa-solid fa-paste" />
         </el-button>
-      </div>
-    </div>
+      </el-tooltip>
 
-    <!-- 一键操作 -->
-    <div class="one-local-to-bed">
-      <el-button type="success">{{ $t("picgo.upload.onclick") }}</el-button>
-    </div>
-    <div class="one-bed-to-local" v-if="isElectron">
-      <el-button type="primary">{{ $t("picgo.download.onclick") }}</el-button>
-    </div>
+      <el-tooltip
+        class="box-item"
+        effect="dark"
+        :content="$t('picgo.upload.onclick')"
+        placement="top-start"
+      >
+        <el-button type="success">
+          <font-awesome-icon icon="fa-solid fa-upload" />
+        </el-button>
+      </el-tooltip>
+
+      <el-tooltip
+        v-if="isElectron"
+        class="box-item"
+        effect="dark"
+        :content="$t('picgo.download.onclick')"
+        placement="top-start"
+      >
+        <el-button type="primary">
+          <font-awesome-icon icon="fa-solid fa-download" />
+        </el-button>
+      </el-tooltip>
+    </blockquote>
 
     <!-- 图片列表 -->
     <ul class="file-list">
@@ -173,6 +197,7 @@ import { usePicgoUpload } from "~/composables/picgo/picgoUploadCom"
 import { usePicgoInitPage } from "~/composables/picgo/picgoInitPageCom"
 import { isElectron } from "~/utils/browserUtil"
 import { usePicgoManage } from "~/composables/picgo/picgoManageCom"
+import { ref } from "vue"
 
 // props
 const props = defineProps({
@@ -182,9 +207,16 @@ const props = defineProps({
   },
 })
 
-// use
-const { picgoCommonData, picgoCommonMethods } = usePicgoCommon(props)
-const { picgoUploadMethods } = usePicgoUpload(props, { picgoCommonMethods })
+// refs
+const refSelectedFiles = ref()
+
+// uses
+const { picgoCommonData, picgoCommonMethods } = usePicgoCommon()
+const { picgoUploadMethods } = usePicgoUpload(
+  props,
+  { picgoCommonMethods },
+  { refSelectedFiles }
+)
 const { picgoManageData, picgoManageMethods } = usePicgoManage(props, {
   picgoCommonMethods,
 })
@@ -194,6 +226,15 @@ usePicgoInitPage(props, { picgoCommonMethods })
 <style>
 .picgo-body {
   padding: 16px;
+}
+
+.picgo-body .picgo-opt-btn {
+  display: block;
+  border: solid 1px green;
+  border-radius: 4px;
+  padding: 10px;
+  background: var(--custom-app-bg-color);
+  margin: 16px 0 16px;
 }
 
 .upload-btn-list {

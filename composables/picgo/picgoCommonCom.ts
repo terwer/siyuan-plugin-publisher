@@ -29,11 +29,10 @@ import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
 
 /**
  * Picgo公共组件
- * @param props
  * @author terwer
  * @since 0.6.1
  */
-export const usePicgoCommon = (props) => {
+export const usePicgoCommon = () => {
   // private data
   const isDev = process.env.NODE_ENV === "development"
   const isSiyuanOrSiyuanNewWin = inSiyuan() || isInSiyuanNewWinBrowser()
@@ -49,10 +48,6 @@ export const usePicgoCommon = (props) => {
       files: [],
     },
   })
-
-  // deps
-
-  // private methods
 
   // public methods
   const picgoCommonMethods = {

@@ -34,7 +34,7 @@ import { uploadByPicGO } from "~/utils/otherlib/picgoUtil"
 /**
  * Picgo上传组件
  */
-export const usePicgoUpload = (props, deps) => {
+export const usePicgoUpload = (props, deps, refs) => {
   // private data
   const logger = LogFactory.getLogger("composables/picgo/picgoUploadCom.ts")
   const { t } = useI18n()
@@ -47,6 +47,9 @@ export const usePicgoUpload = (props, deps) => {
 
   // deps data
   const picgoCommonData = picgoCommonMethods.getPicgoCommonData()
+
+  // refs
+  const refSelectedFiles = refs.refSelectedFiles
 
   // private methods
   /**
@@ -75,6 +78,9 @@ export const usePicgoUpload = (props, deps) => {
 
   // public methods
   const picgoUploadMethods = {
+    bindFileControl: () => {
+      refSelectedFiles.value.click()
+    },
     doUploadPicSelected: async (event) => {
       picgoCommonData.isUploadLoading = true
 

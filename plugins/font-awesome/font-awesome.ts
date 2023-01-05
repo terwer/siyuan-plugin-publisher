@@ -33,10 +33,12 @@ import {
   faCircleXmark,
   faCreditCard,
   faDownload,
+  faFileImport,
   faFileLines,
   faImage,
   faListOl,
   faMagnifyingGlass,
+  faPaste,
   faRectangleList,
   faShareNodes,
   faUpload,
@@ -62,6 +64,8 @@ const FontAwesome: PluginObject<any> = {
     library.add(faFileLines)
     library.add(faDownload)
     library.add(faMagnifyingGlass)
+    library.add(faPaste)
+    library.add(faFileImport)
 
     Vue.component("font-awesome-icon", FontAwesomeIcon)
     logger.debug("FontAwesome inited")
