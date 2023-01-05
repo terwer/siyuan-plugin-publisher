@@ -23,7 +23,7 @@
  * questions.
  */
 
-import md5 from "js-md5"
+import md5 from "blueimp-md5-es6/js/md5"
 
 /**
  * 获取文件名的hash

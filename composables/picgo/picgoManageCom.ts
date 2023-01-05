@@ -84,12 +84,12 @@ export const usePicgoManage = (props, deps) => {
           await picgoManageMethods.doUploadImagesToBed(imageItem)
         }
 
+        picgoCommonData.isUploadLoading = false
         if (!hasLocalImages) {
           ElMessage.error("未发现本地图片，不上传")
+        } else {
+          reloadPage()
         }
-        picgoCommonData.isUploadLoading = false
-
-        reloadPage()
       } catch (e) {
         picgoCommonData.isUploadLoading = false
 

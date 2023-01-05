@@ -21,6 +21,7 @@ specifiers:
   '@vueuse/components': ^9.6.0
   '@vueuse/core': ^9.6.0
   better-docs: ^2.7.2
+  blueimp-md5-es6: ^2.7.4
   browser-fs-access: ^0.31.1
   copy-to-clipboard: ^3.3.1
   cross-fetch: ^3.1.5
@@ -39,7 +40,6 @@ specifiers:
   highlight.js: ^11.6.0
   husky: ^8.0.2
   js-base64: ^3.7.2
-  js-md5: ^0.7.3
   js-yaml: ^4.1.0
   lint-staged: ^13.0.4
   loglevel: ^1.8.1
@@ -74,6 +74,7 @@ dependencies:
   '@octokit/core': 4.1.0
   '@vueuse/components': 9.9.0_vue@3.2.45
   '@vueuse/core': 9.9.0_vue@3.2.45
+  blueimp-md5-es6: 2.7.4
   browser-fs-access: 0.31.1
   copy-to-clipboard: 3.3.3
   cross-fetch: 3.1.5
@@ -82,7 +83,6 @@ dependencies:
   fast-xml-parser: 4.0.12
   highlight.js: 11.7.0
   js-base64: 3.7.3
-  js-md5: 0.7.3
   js-yaml: 4.1.0
   loglevel: 1.8.1
   loglevel-plugin-prefix: 0.8.4
@@ -1649,18 +1649,22 @@ packages:
     dev: true
 
   /binary-extensions/2.2.0:
-    resolution: {integrity: sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==}
-    engines: {node: '>=8'}
+    resolution: { integrity: sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA== }
+    engines: { node: '>=8' }
 
   /bindings/1.5.0:
-    resolution: {integrity: sha512-p2q/t/mhvuOj/UeLlV6566GD/guowlr0hHxClI0W9m7MWYkL1F0hLo+0Aexs9HSPCtR1SXQ0TD3MMKrXZajbiQ==}
+    resolution: { integrity: sha512-p2q/t/mhvuOj/UeLlV6566GD/guowlr0hHxClI0W9m7MWYkL1F0hLo+0Aexs9HSPCtR1SXQ0TD3MMKrXZajbiQ== }
     dependencies:
       file-uri-to-path: 1.0.0
     dev: true
 
+  /blueimp-md5-es6/2.7.4:
+    resolution: { integrity: sha512-q7+/MX+2BXdOY0DanEdHSbY5TeTSuM7PotaHmvng9fqEPxNhLVLuj849Vag5x7vAmvZBzxBhh780gq6rJxT/rA== }
+    dev: false
+
   /body-parser/1.20.1:
-    resolution: {integrity: sha512-jWi7abTbYwajOytWCQc37VulmWiRae5RyTpaCyDcS5/lMdtwSz5lOpDE67srw/HYe35f1z3fDQw+3txg7gNtWw==}
-    engines: {node: '>= 0.8', npm: 1.2.8000 || >= 1.4.16}
+    resolution: { integrity: sha512-jWi7abTbYwajOytWCQc37VulmWiRae5RyTpaCyDcS5/lMdtwSz5lOpDE67srw/HYe35f1z3fDQw+3txg7gNtWw== }
+    engines: { node: '>= 0.8', npm: 1.2.8000 || >= 1.4.16 }
     dependencies:
       bytes: 3.1.2
       content-type: 1.0.4
@@ -3963,10 +3967,6 @@ packages:
 
   /js-base64/3.7.3:
     resolution: { integrity: sha512-PAr6Xg2jvd7MCR6Ld9Jg3BmTcjYsHEBx1VlwEwULb/qowPf5VD9kEMagj23Gm7JRnSvE/Da/57nChZjnvL8v6A== }
-    dev: false
-
-  /js-md5/0.7.3:
-    resolution: { integrity: sha512-ZC41vPSTLKGwIRjqDh8DfXoCrdQIyBgspJVPXHBGu4nZlAEvG3nf+jO9avM9RmLiGakg7vz974ms99nEV0tmTQ== }
     dev: false
 
   /js-sdsl/4.2.0:
