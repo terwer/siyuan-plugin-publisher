@@ -66,8 +66,39 @@ export const usePicgoManage = (props, deps) => {
 
   // public methods
   const picgoManageMethods = {
-    handleUploadAllImagesToBed: () => {
-      alert("handleUploadAllImagesToBed")
+    handleUploadAllImagesToBed: async () => {
+      picgoCommonData.isUploadLoading = true
+
+      try {
+        let hasLocalImages = false
+        const imageItemArray = picgoCommonData.fileList.files
+
+        for (let i = 0; i < imageItemArray.length; i++) {
+          const imageItem = imageItemArray[i]
+          if (!imageItem.isLocal) {
+            logger.warn("已经上传过图床，请勿重复上传=>", imageItem.originUrl)
+            continue
+          }
+
+          hasLocalImages = true
+          await picgoManageMethods.doUploadImagesToBed(imageItem)
+        }
+
+        if (!hasLocalImages) {
+          ElMessage.error("未发现本地图片，不上传")
+        }
+        picgoCommonData.isUploadLoading = false
+
+        reloadPage()
+      } catch (e) {
+        picgoCommonData.isUploadLoading = false
+
+        ElMessage({
+          type: "error",
+          message: t("main.opt.failure") + "=>" + e,
+        })
+        logger.error(t("main.opt.failure") + "=>" + e)
+      }
     },
 
     handleUploadCurrentImageToBed: async (imageItem: ImageItem) => {

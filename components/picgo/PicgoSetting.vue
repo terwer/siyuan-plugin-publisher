@@ -24,5 +24,11 @@
   -->
 
 <template>
-  <div>PicgoSetting</div>
+  <div>
+    暂时未开发图形界面，请直接拷贝
+    `[思源工作空间]/data/widgets/sy-post-publisher/lib/picgo/picgo.cfg.json.example`
+    到 `picgo.cfg.json` ，然后手动修改。
+    PicGO官方文档：https://picgo.github.io/PicGo-Core-Doc/zh/guide/config.html#%E6%89%8B%E5%8A%A8%E7%94%9F%E6%88%90。
+  </div>
+  <h1>敬请期待...</h1>
 </template>

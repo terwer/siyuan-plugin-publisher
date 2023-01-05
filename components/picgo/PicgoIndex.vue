@@ -94,7 +94,7 @@
 
       <!-- 下载所有远程图片 -->
       <el-tooltip
-        v-if="isElectron"
+        v-if="false && isElectron"
         class="box-item"
         effect="dark"
         :content="$t('picgo.download.onclick')"
@@ -145,7 +145,7 @@
 
           <!-- 下载远程图片到本地 -->
           <el-tooltip
-            v-if="isElectron && !f.isLocal"
+            v-if="false && isElectron && !f.isLocal"
             :content="$t('picgo.download.bed.to.local')"
             class="box-item"
             effect="dark"
