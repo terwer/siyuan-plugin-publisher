@@ -23,38 +23,23 @@
  * questions.
  */
 
-import { getFileHash } from "~/utils/hashUtil"
+import md5 from "js-md5"
 
 /**
- * 图片信息
+ * 获取文件名的hash
+ * @param filename 文件名
  */
-export class ImageItem {
-  /**
-   * 文件，
-   */
-  name: string
-  /**
-   * 文件名称的Hash，构造函数指定
-   */
-  hash: string
-  /**
-   * 原始资源地址
-   */
-  originUrl: string
-  /**
-   * 资源地址
-   */
-  url: string
-  /**
-   * 是否本地
-   */
-  isLocal: boolean
+/**
+ * 获取文件名的hash
+ * @param filename 文件名
+ */
+export const getFileHash = (filename) => {
+  // import { createHash } from "crypto"
+  // const hash = createHash("sha256")
+  // hash.update(filename)
+  // return hash.digest("hex")
 
-  constructor(originUrl: string, url: string, isLocal: boolean) {
-    this.originUrl = originUrl
-    this.name = originUrl.substring(originUrl.lastIndexOf("/") + 1)
-    this.hash = getFileHash(this.name)
-    this.url = url
-    this.isLocal = isLocal
-  }
+  // Base64.toBase64(filename).substring(0, 8);
+
+  return md5(filename)
 }

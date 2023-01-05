@@ -302,25 +302,28 @@ const handleWinClose = () => {
 }
 
 const pageIdChanged = () => {
-  if (inSiyuan()) {
-    showOpenBtn.value = true
-    showCloseBtn.value = false
-  } else {
+  // 思源新窗口
+  if (isInSiyuanNewWinBrowser()) {
     showOpenBtn.value = false
     showCloseBtn.value = true
-  }
 
-  // 如果是Windows环境，不显示关闭按钮
-  if (isWindows && isElectron) {
+    // 如果是Windows环境，不显示关闭按钮
+    if (isWindows && isElectron) {
+      showCloseBtn.value = false
+    }
+  } else {
+    // 思源笔记主窗口
+
+    showOpenBtn.value = true
     showCloseBtn.value = false
-  }
 
-  // 非插槽不显示按钮
-  if (!isSlot) {
-    showOpenBtn.value = false
-    showCloseBtn.value = false
+    // 非插槽不显示按钮
+    if (!isSlot) {
+      showOpenBtn.value = false
+      showCloseBtn.value = false
 
-    showTitle.value = true
+      showTitle.value = true
+    }
   }
 }
 
@@ -329,13 +332,14 @@ onMounted(() => {
   if (isInSiyuanNewWinBrowser() || inSiyuan()) {
     // init
     const publishCfg = getPublishCfg()
+
     showCloseBtn.value = isInSiyuanNewWinBrowser() || publishCfg.showCloseBtn
     showOpenBtn.value = showCloseBtn.value
 
+    showTitle.value = false
+
     // event
     pageIdChanged()
-
-    showTitle.value = false
   } else {
     showOpenBtn.value = false
     showCloseBtn.value = true

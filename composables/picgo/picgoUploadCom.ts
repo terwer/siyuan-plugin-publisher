@@ -31,6 +31,7 @@ import { inSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
 import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
 import { uploadByPicGO } from "~/utils/otherlib/picgoUtil"
 import { isElectron } from "~/utils/browserUtil"
+import { ImageItem } from "~/utils/models/imageItem"
 
 /**
  * Picgo上传组件
@@ -66,11 +67,7 @@ export const usePicgoUpload = (props, deps, refs) => {
 
     if (imageJson && imageJson.length > 0) {
       imageJson.forEach((img) => {
-        const rtnItem = {
-          name: img.fileName,
-          url: img.imgUrl,
-          isLocal: false,
-        }
+        const rtnItem = new ImageItem(img.imgUrl, img.imgUrl, false)
         picgoCommonData.loggerMsg += "\nnewItem=>" + JSON.stringify(rtnItem)
 
         picgoCommonData.fileList.files.push(rtnItem)

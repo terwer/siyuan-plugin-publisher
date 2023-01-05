@@ -39,6 +39,7 @@ specifiers:
   highlight.js: ^11.6.0
   husky: ^8.0.2
   js-base64: ^3.7.2
+  js-md5: ^0.7.3
   js-yaml: ^4.1.0
   lint-staged: ^13.0.4
   loglevel: ^1.8.1
@@ -81,6 +82,7 @@ dependencies:
   fast-xml-parser: 4.0.12
   highlight.js: 11.7.0
   js-base64: 3.7.3
+  js-md5: 0.7.3
   js-yaml: 4.1.0
   loglevel: 1.8.1
   loglevel-plugin-prefix: 0.8.4
@@ -3960,15 +3962,19 @@ packages:
     dev: true
 
   /js-base64/3.7.3:
-    resolution: {integrity: sha512-PAr6Xg2jvd7MCR6Ld9Jg3BmTcjYsHEBx1VlwEwULb/qowPf5VD9kEMagj23Gm7JRnSvE/Da/57nChZjnvL8v6A==}
+    resolution: { integrity: sha512-PAr6Xg2jvd7MCR6Ld9Jg3BmTcjYsHEBx1VlwEwULb/qowPf5VD9kEMagj23Gm7JRnSvE/Da/57nChZjnvL8v6A== }
+    dev: false
+
+  /js-md5/0.7.3:
+    resolution: { integrity: sha512-ZC41vPSTLKGwIRjqDh8DfXoCrdQIyBgspJVPXHBGu4nZlAEvG3nf+jO9avM9RmLiGakg7vz974ms99nEV0tmTQ== }
     dev: false
 
   /js-sdsl/4.2.0:
-    resolution: {integrity: sha512-dyBIzQBDkCqCu+0upx25Y2jGdbTGxE9fshMsCdK0ViOongpV+n5tXRcZY9v7CaVQ79AGS9KA1KHtojxiM7aXSQ==}
+    resolution: { integrity: sha512-dyBIzQBDkCqCu+0upx25Y2jGdbTGxE9fshMsCdK0ViOongpV+n5tXRcZY9v7CaVQ79AGS9KA1KHtojxiM7aXSQ== }
     dev: true
 
   /js-stringify/1.0.2:
-    resolution: {integrity: sha512-rtS5ATOo2Q5k1G+DADISilDA6lv79zIiwFd6CcjuIxGKLFm5C+RLImRscVap9k55i+MOZwgliw+NejvkLuGD5g==}
+    resolution: { integrity: sha512-rtS5ATOo2Q5k1G+DADISilDA6lv79zIiwFd6CcjuIxGKLFm5C+RLImRscVap9k55i+MOZwgliw+NejvkLuGD5g== }
     dev: true
 
   /js-tokens/4.0.0:

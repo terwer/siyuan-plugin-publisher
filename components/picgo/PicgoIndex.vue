@@ -244,6 +244,7 @@ const refSelectedFiles = ref()
 
 // uses
 const { picgoCommonData, picgoCommonMethods } = usePicgoCommon()
+const { picgoInitMethods } = usePicgoInitPage(props, { picgoCommonMethods })
 const { picgoUploadData, picgoUploadMethods } = usePicgoUpload(
   props,
   { picgoCommonMethods },
@@ -251,8 +252,8 @@ const { picgoUploadData, picgoUploadMethods } = usePicgoUpload(
 )
 const { picgoManageData, picgoManageMethods } = usePicgoManage(props, {
   picgoCommonMethods,
+  picgoInitMethods,
 })
-usePicgoInitPage(props, { picgoCommonMethods })
 </script>
 
 <style>

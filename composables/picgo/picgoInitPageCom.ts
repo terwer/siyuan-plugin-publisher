@@ -78,11 +78,13 @@ export const usePicgoInitPage = (props, deps) => {
       let isLocal = false
       const originUrl = retImg
       let imgUrl = retImg
+
+      let fileMap = {}
       if (!(imgUrl.indexOf("http") > -1) && imgUrl.indexOf("assets") > -1) {
         const attrs = await siyuanApi.getBlockAttrs(pageId)
         logger.debug("attrs=>", attrs)
         if (!isEmptyString(attrs[CONSTANTS.PICGO_FILE_MAP_KEY])) {
-          const fileMap = parseJSONObj(attrs[CONSTANTS.PICGO_FILE_MAP_KEY])
+          fileMap = parseJSONObj(attrs[CONSTANTS.PICGO_FILE_MAP_KEY])
           logger.debug("fileMap=>", fileMap)
         }
 
@@ -91,16 +93,30 @@ export const usePicgoInitPage = (props, deps) => {
         isLocal = true
       }
 
-      const imageItem = new ImageItem(
-        imgUrl.substring(imgUrl.lastIndexOf("/") + 1),
-        originUrl,
-        imgUrl,
-        isLocal
-      )
+      const imageItem = new ImageItem(originUrl, imgUrl, isLocal)
+      // logger.debug("imageItem.hash imageItem.name=>", imageItem.name)
+      // logger.debug("imageItem.hash fileMap=>", fileMap)
+      // logger.debug("imageItem.hash=>", imageItem.hash)
+      // logger.debug("fileMap[imageItem.hash]=>", fileMap[imageItem.hash])
+      if (fileMap[imageItem.hash]) {
+        const newImageItem = fileMap[imageItem.hash]
+        logger.debug("newImageItem=>", newImageItem)
+        if (!newImageItem.isLocal) {
+          imageItem.isLocal = false
+          imageItem.url = newImageItem.url
+        }
+      }
 
       logger.debug("imageItem=>", imageItem)
       picgoCommonData.fileList.files.push(imageItem)
     }
+  }
+
+  // publish methods
+  const picgoInitMethods = {
+    initPage: async () => {
+      await initPage()
+    },
   }
 
   /**
@@ -117,4 +133,8 @@ export const usePicgoInitPage = (props, deps) => {
   onMounted(async () => {
     await initPage()
   })
+
+  return {
+    picgoInitMethods,
+  }
 }

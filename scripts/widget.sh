@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2022, Terwer . All rights reserved.
+# Copyright (c) 2022-2023, Terwer . All rights reserved.
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
 # This code is free software; you can redistribute it and/or modify it
@@ -37,7 +37,7 @@ rm ./dist/manifest*.json
 rm -rf ./dist/mv2
 
 # Picgo配置文件
-cp ./dist/lib/picgo/picgo.cfg.json.example ./dist/lib/picgo/picgo.cfg.json
+# cp ./dist/lib/picgo/picgo.cfg.json.example ./dist/lib/picgo/picgo.cfg.json
 
 rm -rf ../my-note-docker/workspace/SiYuan/data/widgets/sy-post-publisher/
 mkdir ../my-note-docker/workspace/SiYuan/data/widgets/sy-post-publisher

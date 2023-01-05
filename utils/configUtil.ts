@@ -94,7 +94,7 @@ export function getJSONConf<T>(key: string): T {
  * @author terwer
  * @since 0.6.1
  */
-export function parseJSONObj(objstr: string): Object {
+export function parseJSONObj(objstr: string): any {
   logger.debug("------------------------------")
   logger.debug("尝试从JSON字符串解析Object，objstr=>", objstr)
 
