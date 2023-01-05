@@ -330,7 +330,7 @@ window.terwer.widgetsSlot = () => {
       .cloneNode(false)
     cloneNode.innerHTML = `
   <div class="iframe-content">
-      <iframe src="/widgets/sy-post-publisher/" scrolling="no"></iframe>
+      <iframe src="/widgets/sy-post-publisher/?isSlot=true" scrolling="no"></iframe>
   </div>
   `
     let id = element.parentElement.parentElement

@@ -194,7 +194,7 @@ import { appendStr } from "~/utils/strUtil"
 import { useI18n } from "vue-i18n"
 import { LogFactory } from "~/utils/logUtil"
 import { isElectron } from "~/utils/browserUtil"
-import { isWindows } from "~/utils/otherlib/ChromeUtil"
+import { isSlot, isWindows } from "~/utils/otherlib/ChromeUtil"
 
 const { t } = useI18n()
 const logger = LogFactory.getLogger("layouts/default/DefaultHeader.vue")
@@ -313,6 +313,14 @@ const pageIdChanged = () => {
   // 如果是Windows环境，不显示关闭按钮
   if (isWindows && isElectron) {
     showCloseBtn.value = false
+  }
+
+  // 非插槽不显示按钮
+  if (!isSlot) {
+    showOpenBtn.value = false
+    showCloseBtn.value = false
+
+    showTitle.value = true
   }
 }
 

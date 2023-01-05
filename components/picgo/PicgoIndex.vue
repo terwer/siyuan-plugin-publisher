@@ -84,7 +84,10 @@
         :content="$t('picgo.upload.onclick')"
         placement="top-start"
       >
-        <el-button type="success">
+        <el-button
+          type="success"
+          @click="picgoManageMethods.handleUploadAllImagesToBed"
+        >
           <font-awesome-icon icon="fa-solid fa-upload" />
         </el-button>
       </el-tooltip>
@@ -133,7 +136,9 @@
             placement="bottom"
             popper-class="publish-menu-tooltip"
           >
-            <el-button>
+            <el-button
+              @click="picgoManageMethods.handleUploadCurrentImageToBed(f)"
+            >
               <font-awesome-icon icon="fa-solid fa-upload" />
             </el-button>
           </el-tooltip>

@@ -29,7 +29,10 @@ import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
 import { getPageId } from "~/utils/platform/siyuan/siyuanUtil"
 import { ImageParser } from "~/utils/parser/imageParser"
 import { getSiyuanCfg } from "~/utils/platform/siyuan/siYuanConfig"
-import { pathJoin } from "~/utils/util"
+import { isEmptyString, pathJoin } from "~/utils/util"
+import { CONSTANTS } from "~/utils/constants/constants"
+import { parseJSONObj } from "~/utils/configUtil"
+import { ImageItem } from "~/utils/models/imageItem"
 
 /**
  * Picgo页面初始化组件
@@ -49,6 +52,8 @@ export const usePicgoInitPage = (props, deps) => {
   // private methods
   const initPage = async () => {
     const pageId = await getPageId(true, props.pageId)
+
+    // 图片信息
     const imageBlocks = await siyuanApi.getImageBlocksByID(pageId)
     logger.debug("查询文章中的图片块=>", imageBlocks)
 
@@ -68,24 +73,34 @@ export const usePicgoInitPage = (props, deps) => {
     })
     logger.debug("解析出来的所有的图片地址=>", retImgs)
 
-    retImgs.forEach((retImg) => {
+    for (let i = 0; i < retImgs.length; i++) {
+      const retImg = retImgs[i]
       let isLocal = false
+      const originUrl = retImg
       let imgUrl = retImg
       if (!(imgUrl.indexOf("http") > -1) && imgUrl.indexOf("assets") > -1) {
+        const attrs = await siyuanApi.getBlockAttrs(pageId)
+        logger.debug("attrs=>", attrs)
+        if (!isEmptyString(attrs[CONSTANTS.PICGO_FILE_MAP_KEY])) {
+          const fileMap = parseJSONObj(attrs[CONSTANTS.PICGO_FILE_MAP_KEY])
+          logger.debug("fileMap=>", fileMap)
+        }
+
         const baseUrl = getSiyuanCfg().baseUrl
         imgUrl = pathJoin(baseUrl, "/" + imgUrl)
         isLocal = true
       }
 
-      const imageItem = {
-        name: imgUrl.substring(imgUrl.lastIndexOf("/") + 1),
-        url: imgUrl,
-        isLocal,
-      }
+      const imageItem = new ImageItem(
+        imgUrl.substring(imgUrl.lastIndexOf("/") + 1),
+        originUrl,
+        imgUrl,
+        isLocal
+      )
 
       logger.debug("imageItem=>", imageItem)
       picgoCommonData.fileList.files.push(imageItem)
-    })
+    }
   }
 
   /**
