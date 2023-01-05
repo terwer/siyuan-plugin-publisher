@@ -189,4 +189,4 @@ export const importJSONToLocalStorage = async () => {
 /**
  * 检测是否是Windows
  */
-export const isWindows = "Windows" === navigator.userAgentData.platform
+export const isWindows = "Windows" === navigator?.userAgentData?.platform
