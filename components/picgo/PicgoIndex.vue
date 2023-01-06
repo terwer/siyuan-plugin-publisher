@@ -130,8 +130,7 @@
           <!-- 上传本地图片到图床 -->
           <el-tooltip
             :content="
-              $t('picgo.download.local.to.bed') +
-              (f.isLocal ? '' : '<sup>已上传</sup>')
+              $t('picgo.download.local.to.bed') + (f.isLocal ? '' : '[已上传]')
             "
             class="box-item"
             effect="dark"
