@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -35,12 +35,11 @@ import { ICommonblogCfg } from "~/utils/platform/commonblog/commonblogCfg"
 import { LogFactory } from "~/utils/logUtil"
 import { PublishPreference } from "~/utils/models/publishPreference"
 import { CONSTANTS } from "~/utils/constants/constants"
-import { isEmptyObject, parseBoolean } from "~/utils/util"
+import { isEmptyObject, isEmptyString, parseBoolean } from "~/utils/util"
 import { PageEditMode } from "~/utils/common/pageEditMode"
 import { SourceContentShowType } from "~/utils/common/sourceContentShowType"
 
 const logger = LogFactory.getLogger("utils/publishUtil.ts")
-const isProd = process.env.NODE_ENV === "production"
 
 /**
  * 新版获取apiParams参数的方法，使用ts泛型
@@ -112,14 +111,15 @@ export const getPublishStatus = (apiType: string, meta: any): boolean => {
     }
   })
 
+  // 处理
+  let postId
   if (githubTypeArray.includes(apiType)) {
     const postidKey = getApiParams<IGithubCfg>(apiType).posidKey
-    const postId = meta[postidKey] || ""
+    postId = meta[postidKey] || ""
     logger.debug("平台=>", apiType)
     logger.debug("meta=>", meta)
     logger.debug("postidKey=>", postidKey)
     logger.debug("postidKey的值=>", postId)
-    return postId !== ""
   } else if (metaweblogTypeArray.includes(apiType)) {
     const postidKey = getApiParams<IMetaweblogCfg>(apiType).posidKey
     const postId = meta[postidKey] || ""
@@ -127,7 +127,6 @@ export const getPublishStatus = (apiType: string, meta: any): boolean => {
     logger.debug("meta=>", meta)
     logger.debug("postidKey=>", postidKey)
     logger.debug("postidKey的值=>", postId)
-    return postId !== ""
   } else if (commonblogTypeArray.includes(apiType)) {
     const postidKey = getApiParams<ICommonblogCfg>(apiType).posidKey
     const postId = meta[postidKey ?? ""] || ""
@@ -135,10 +134,9 @@ export const getPublishStatus = (apiType: string, meta: any): boolean => {
     logger.debug("meta=>", meta)
     logger.debug("postidKey=>", postidKey)
     logger.debug("postidKey的值=>", postId)
-    return postId !== ""
   }
 
-  return false
+  return isEmptyString(postId)
 }
 
 /**

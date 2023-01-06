@@ -307,7 +307,11 @@ import {
 } from "~/utils/util"
 import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
 import { formatNumToZhDate } from "~/utils/dateUtil"
-import { getPublishCfg, getPublishStatus } from "~/utils/publishUtil"
+import {
+  getApiParams,
+  getPublishCfg,
+  getPublishStatus,
+} from "~/utils/publishUtil"
 import { CONSTANTS } from "~/utils/constants/constants"
 
 const logger = LogFactory.getLogger(
@@ -488,6 +492,13 @@ const initPage = async () => {
       isInitLoading.value = false
       logger.error("文章新获取失败", e)
     }
+  } else {
+    logger.warn("检测到之前发布异常，清空文章ID")
+    const postidKey = getApiParams<IMetaweblogCfg>(props.apiType).posidKey
+    const customAttr = {
+      [postidKey]: "",
+    }
+    await siyuanApi.setBlockAttrs(siyuanData.pageId, customAttr)
   }
 
   // 全部文章分类请求

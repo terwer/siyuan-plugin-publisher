@@ -34,6 +34,7 @@ import {
   XmlRpcValue,
   XmlRpcValueOrFault,
 } from "./XmlRpcTypes"
+import { XmlrpcUtil } from "../custom/xmlrpcUtil"
 
 // A client for making XML-RPC method calls over HTTP(S)
 export class XmlRpcClient {
@@ -80,7 +81,8 @@ export class XmlRpcClient {
       )
     }
 
-    const resText = await res.text()
+    let resText = await res.text()
+    resText = XmlrpcUtil.removeXmlHeader(resText)
     const deserializer = new Deserializer(this.encoding)
     return await deserializer.deserializeMethodResponse(resText)
   }

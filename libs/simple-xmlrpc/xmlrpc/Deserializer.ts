@@ -216,6 +216,9 @@ export class Deserializer {
         case "MEMBER":
           // Ignored by design
           break
+        case "BR":
+          // Ignored by typecho
+          break
         default:
           this._onError(new Error(`Unknown XML-RPC tag "${el}"`))
           break
