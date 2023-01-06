@@ -33,7 +33,7 @@ import { getPageId } from "~/utils/platform/siyuan/siyuanUtil"
 import { LogFactory } from "~/utils/logUtil"
 import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
 import { ImageItem } from "~/utils/models/imageItem"
-import { ElMessage } from "element-plus"
+import { ElMessage, ElMessageBox } from "element-plus"
 import { useI18n } from "vue-i18n"
 import { PicgoPostApi } from "~/utils/platform/picgo/picgoPostApi"
 
@@ -102,37 +102,82 @@ export const usePicgoManage = (props, deps) => {
       picgoCommonData.isUploadLoading = true
 
       if (!imageItem.isLocal) {
-        ElMessage.error("已经上传过图床，请勿重复上传")
-        picgoCommonData.isUploadLoading = false
-        return
-      }
+        ElMessageBox.confirm(
+          "已经是远程图片，是否仍然覆盖上传？",
+          t("main.opt.warning"),
+          {
+            confirmButtonText: t("main.opt.ok"),
+            cancelButtonText: t("main.opt.cancel"),
+            type: "warning",
+          }
+        )
+          .then(async () => {
+            try {
+              await picgoManageMethods.doUploadImagesToBed(imageItem, true)
+              picgoCommonData.isUploadLoading = false
 
-      try {
-        await picgoManageMethods.doUploadImagesToBed(imageItem)
-        picgoCommonData.isUploadLoading = false
+              ElMessage.success("图片已经成功上传至图床，即将刷新页面")
+              reloadPage()
+            } catch (e) {
+              picgoCommonData.isUploadLoading = false
 
-        ElMessage.success("图片已经成功上传至图床，即将刷新页面")
-        reloadPage()
-      } catch (e) {
-        picgoCommonData.isUploadLoading = false
+              ElMessage({
+                type: "error",
+                message: t("main.opt.failure") + "=>" + e,
+              })
+              logger.error(t("main.opt.failure") + "=>" + e)
+            }
+          })
+          .catch((e) => {
+            picgoCommonData.isUploadLoading = false
 
-        ElMessage({
-          type: "error",
-          message: t("main.opt.failure") + "=>" + e,
-        })
-        logger.error(t("main.opt.failure") + "=>" + e)
+            if (e.toString().indexOf("cancel") <= -1) {
+              ElMessage({
+                type: "error",
+                message: t("main.opt.failure") + "，图片上传异常=>" + e,
+              })
+              logger.error(t("main.opt.failure") + "=>" + e)
+            }
+          })
+      } else {
+        try {
+          await picgoManageMethods.doUploadImagesToBed(imageItem)
+          picgoCommonData.isUploadLoading = false
+
+          ElMessage.success("图片已经成功上传至图床，即将刷新页面")
+          reloadPage()
+        } catch (e) {
+          picgoCommonData.isUploadLoading = false
+
+          ElMessage({
+            type: "error",
+            message: t("main.opt.failure") + "=>" + e,
+          })
+          logger.error(t("main.opt.failure") + "=>" + e)
+        }
+
+        picgoCommonData.isUploadLoading = false
       }
     },
 
     /**
      * 单个传，否则无法将图片对应
      * @param imageItem
+     * @param forceUpload 强制上传
      */
-    doUploadImagesToBed: async (imageItem: ImageItem) => {
+    doUploadImagesToBed: async (
+      imageItem: ImageItem,
+      forceUpload?: boolean
+    ) => {
       const pageId = await getPageId(true, props.pageId)
       const attrs = await siyuanApi.getBlockAttrs(pageId)
 
-      await picgoPostApi.uploadSingleImageToBed(pageId, attrs, imageItem)
+      await picgoPostApi.uploadSingleImageToBed(
+        pageId,
+        attrs,
+        imageItem,
+        forceUpload
+      )
     },
 
     onImageUrlCopy: (url: string) => {

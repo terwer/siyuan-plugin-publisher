@@ -173,11 +173,13 @@ export class PicgoPostApi {
    * @param pageId 文章ID
    * @param attrs 文章属性
    * @param imageItem 图片信息
+   * @param forceUpload 强制上传
    */
   public async uploadSingleImageToBed(
     pageId: string,
     attrs: any,
-    imageItem: ImageItem
+    imageItem: ImageItem,
+    forceUpload?: boolean
   ): Promise<boolean> {
     const mapInfoStr = attrs[CONSTANTS.PICGO_FILE_MAP_KEY] ?? "{}"
     const fileMap = parseJSONObj(mapInfoStr)
@@ -185,7 +187,7 @@ export class PicgoPostApi {
 
     // 处理上传
     const filePaths = []
-    if (!imageItem.isLocal) {
+    if (forceUpload !== true && !imageItem.isLocal) {
       this.logger.warn("非本地图片，忽略=>", imageItem.url)
       return
     }

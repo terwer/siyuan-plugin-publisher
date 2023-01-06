@@ -129,8 +129,10 @@
         <div>
           <!-- 上传本地图片到图床 -->
           <el-tooltip
-            v-if="f.isLocal"
-            :content="$t('picgo.download.local.to.bed')"
+            :content="
+              $t('picgo.download.local.to.bed') +
+              (f.isLocal ? '' : '<sup>已上传</sup>')
+            "
             class="box-item"
             effect="dark"
             placement="bottom"
