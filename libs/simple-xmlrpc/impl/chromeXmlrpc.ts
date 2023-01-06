@@ -66,7 +66,7 @@ async function doChromeFetch(
 
       const deserializer = new Deserializer("utf-8")
       data = await deserializer.deserializeMethodResponse(resText)
-      logger.debug("fetchChromeXmlrpc=结束，data=>", data)
+      logger.debug("fetchChromeXmlrpc结束，data=>", data)
     }
 
     return data
