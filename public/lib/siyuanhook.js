@@ -326,7 +326,7 @@ window.terwer.widgetsSlot = () => {
 
   function CreatePreviousWidgetsSlot(element) {
     let cloneNode = element.parentElement
-      .querySelector(".protyle-wysiwyg.protyle-wysiwyg--attr")
+    .querySelector(".protyle-wysiwyg")
       .cloneNode(false)
     cloneNode.innerHTML = `
   <div class="iframe-content">
