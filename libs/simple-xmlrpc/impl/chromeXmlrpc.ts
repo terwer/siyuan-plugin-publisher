@@ -26,6 +26,7 @@
 import { sendChromeMessage } from "~/utils/otherlib/ChromeUtil"
 import { LogFactory } from "~/utils/logUtil"
 import { Deserializer, serializeMethodCall } from "~/libs/simple-xmlrpc/xmlrpc"
+import { XmlrpcUtil } from "~/libs/simple-xmlrpc/custom/xmlrpcUtil"
 
 const logger = LogFactory.getLogger("libs/simple-xmlrpc/impl/chromeXmlrpc.ts")
 
@@ -51,24 +52,24 @@ async function doChromeFetch(
       body: methodBodyXml,
     }
 
-    const resXml = await sendChromeMessage({
+    let resText = await sendChromeMessage({
       // 里面的值应该可以自定义，用于判断哪个请求之类的
       type: "fetchChromeXmlrpc",
       apiUrl, // 需要请求的url
       fetchCORSParams,
     })
-    logger.debug("fetchChromeXmlrpc resXml=>", resXml)
+    logger.debug("fetchChromeXmlrpc开始，resText=>", resText)
 
-    let resJson
-    if (resXml) {
+    let data
+    if (resText) {
+      resText = XmlrpcUtil.removeXmlHeader(resText)
+
       const deserializer = new Deserializer("utf-8")
-      const resJson = await deserializer.deserializeMethodResponse(resXml)
-      logger.debug("resJson=>", JSON.stringify(resJson))
-    } else {
-      resJson = {}
+      data = await deserializer.deserializeMethodResponse(resText)
+      logger.debug("fetchChromeXmlrpc=结束，data=>", data)
     }
 
-    return resJson
+    return data
   } catch (e: any) {
     throw new Error(e)
   }

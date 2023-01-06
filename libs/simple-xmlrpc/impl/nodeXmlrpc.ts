@@ -25,6 +25,7 @@
 
 import { LogFactory } from "~/utils/logUtil"
 import { SimpleXmlRpcClient } from "~/libs/simple-xmlrpc/custom/SimpleXmlRpcClient"
+import { XmlRpcValue } from "~/libs/simple-xmlrpc/xmlrpc"
 
 const logger = LogFactory.getLogger("libs/simple-xmlrpc/impl/nodeXmlrpc.ts")
 
@@ -32,7 +33,7 @@ export async function fetchNode(
   apiUrl: string,
   reqMethod: string,
   reqParams: string[]
-): Promise<string> {
+): Promise<XmlRpcValue> {
   try {
     logger.debug("SimpleXmlRpcClient开始")
     logger.debug("xmlrpcNodeParams.reqMethod=>", reqMethod)
@@ -40,9 +41,8 @@ export async function fetchNode(
 
     const client = new SimpleXmlRpcClient(apiUrl)
     const data = await client.methodCall(reqMethod, reqParams)
-    const dataJson = JSON.stringify(data)
-    logger.debug("dataJson=>", dataJson)
-    return dataJson
+    logger.debug("SimpleXmlRpcClient结束，data=>", data)
+    return data
   } catch (e) {
     logger.error(e)
     throw new Error("请求处理异常")
