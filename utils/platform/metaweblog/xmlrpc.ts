@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -27,7 +27,7 @@ import { getEnvOrDefault } from "~/utils/envUtil"
 import { LogFactory } from "~/utils/logUtil"
 import { Logger } from "loglevel"
 import { fetchCustom } from "~/utils/platform/metaweblog/customXmlrpc"
-import { getWidgetId } from "~/utils/platform/siyuan/siyuanUtil"
+import { isSiyuanOrSiyuanNewWin } from "~/utils/platform/siyuan/siyuanUtil"
 import { fetchNode } from "~/utils/platform/metaweblog/nodeXmlrpc"
 import { isInChromeExtension } from "~/utils/otherlib/ChromeUtil"
 
@@ -146,8 +146,7 @@ export class XmlrpcClient {
   ): Promise<string> {
     let result
 
-    const widgetResult = getWidgetId()
-    if (widgetResult.isInSiyuan) {
+    if (isSiyuanOrSiyuanNewWin()) {
       this.logger.info("当前处于挂件模式，使用electron的fetch获取数据")
       // 不解析了，直接使用Node兼容调用
       // result = await fetchElectron(apiUrl, reqMethod, reqParams)

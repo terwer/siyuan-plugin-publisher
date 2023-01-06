@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -35,7 +35,6 @@ import { POST_STATUS_CONSTANTS } from "~/utils/constants/postStatusConstants"
 import { isEmptyString } from "~/utils/util"
 import { isBrowser } from "~/utils/browserUtil"
 import { CategoryInfo } from "~/utils/models/categoryInfo"
-import { useI18n } from "vue-i18n"
 
 /**
  * Metaweblog API的具体实现
@@ -309,7 +308,6 @@ export class MetaWeblogApi {
         result.push(cat)
       })
     } catch (e) {
-      const { t } = useI18n()
       this.logger.error("分类获取失败", e)
     }
 

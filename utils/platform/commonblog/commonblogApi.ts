@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -30,7 +30,10 @@ import {
   isInChromeExtension,
   sendChromeMessage,
 } from "~/utils/otherlib/ChromeUtil"
-import { getWidgetId } from "~/utils/platform/siyuan/siyuanUtil"
+import {
+  getWidgetId,
+  isSiyuanOrSiyuanNewWin,
+} from "~/utils/platform/siyuan/siyuanUtil"
 import { isEmptyString } from "~/utils/util"
 import { isLocalhost } from "~/utils/browserUtil"
 
@@ -238,7 +241,7 @@ export class CommonblogApi {
 
       if (isLocalhost(apiUrl)) {
         resJson = await response.json()
-      } else if (getWidgetId().isInSiyuan) {
+      } else if (isSiyuanOrSiyuanNewWin()) {
         resJson = await response.json()
       } else {
         const corsJson = await response.json()

@@ -280,7 +280,7 @@ window.terwer.renderPublishHelper = (pageId, pageUrl) => {
       (response) => {
         window.siyuan.printWin.loadURL(response.data.url)
         // 打开开发者工具
-        // window.siyuan.printWin.webContents.openDevTools()
+        window.siyuan.printWin.webContents.openDevTools()
       }
     )
   })
@@ -326,7 +326,7 @@ window.terwer.widgetsSlot = () => {
 
   function CreatePreviousWidgetsSlot(element) {
     let cloneNode = element.parentElement
-    .querySelector(".protyle-wysiwyg")
+      .querySelector(".protyle-wysiwyg")
       .cloneNode(false)
     cloneNode.innerHTML = `
   <div class="iframe-content">

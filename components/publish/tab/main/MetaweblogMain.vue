@@ -1,5 +1,5 @@
 <!--
-  - Copyright (c) 2022, Terwer . All rights reserved.
+  - Copyright (c) 2022-2023, Terwer . All rights reserved.
   - DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
   -
   - This code is free software; you can redistribute it and/or modify it
@@ -794,9 +794,8 @@ const doPublish = async () => {
 
     ElMessage.success(t("main.opt.success"))
   } catch (e) {
-    logger.error("发布异常")
-    ElMessage.error(t("main.opt.failure"))
-    throw e
+    isPublishLoading.value = false
+    logger.error("发布异常", e)
   }
 
   isPublishLoading.value = false

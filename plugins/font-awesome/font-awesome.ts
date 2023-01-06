@@ -28,6 +28,7 @@ import { library } from "@fortawesome/fontawesome-svg-core"
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
 import { LogFactory } from "~/utils/logUtil"
 import {
+  faArrowRotateRight,
   faBolt,
   faBookOpenReader,
   faCircleXmark,
@@ -68,6 +69,7 @@ const FontAwesome: PluginObject<any> = {
     library.add(faPaste)
     library.add(faFileImport)
     library.add(faGear)
+    library.add(faArrowRotateRight)
 
     Vue.component("font-awesome-icon", FontAwesomeIcon)
     logger.debug("FontAwesome inited")

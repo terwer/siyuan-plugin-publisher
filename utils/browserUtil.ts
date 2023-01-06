@@ -38,7 +38,7 @@ export const isBrowser = (): boolean =>
  * @param apiUrl 请求地址
  */
 export const isLocalhost = (apiUrl: string): boolean =>
-  apiUrl.indexOf("127.0.0.1") > -1 || apiUrl.indexOf("localhost") > -1
+  apiUrl.indexOf("127.0.0.1") > -1
 
 /**
  * 检测是否是Electron

@@ -130,7 +130,7 @@
           <!-- 上传本地图片到图床 -->
           <el-tooltip
             :content="
-              $t('picgo.download.local.to.bed') + (f.isLocal ? '' : '[已上传]')
+              f.isLocal ? $t('picgo.download.local.to.bed') : '重新上传'
             "
             class="box-item"
             effect="dark"
@@ -140,7 +140,13 @@
             <el-button
               @click="picgoManageMethods.handleUploadCurrentImageToBed(f)"
             >
-              <font-awesome-icon icon="fa-solid fa-upload" />
+              <font-awesome-icon
+                :icon="
+                  f.isLocal
+                    ? 'fa-solid fa-upload'
+                    : 'fa-solid fa-arrow-rotate-right'
+                "
+              />
             </el-button>
           </el-tooltip>
 
