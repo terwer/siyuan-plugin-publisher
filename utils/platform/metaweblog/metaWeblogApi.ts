@@ -25,7 +25,6 @@
 
 import { IMetaweblogCfg } from "~/utils/platform/metaweblog/IMetaweblogCfg"
 import { getJSONConf } from "~/utils/configUtil"
-import { XmlrpcClient } from "~/utils/platform/metaweblog/xmlrpc"
 import { UserBlog } from "~/utils/models/userBlog"
 import { METAWEBLOG_METHOD_CONSTANTS } from "~/utils/constants/metaweblogMethodConstants"
 import { LogFactory } from "~/utils/logUtil"
@@ -35,6 +34,7 @@ import { POST_STATUS_CONSTANTS } from "~/utils/constants/postStatusConstants"
 import { isEmptyString } from "~/utils/util"
 import { isBrowser } from "~/utils/browserUtil"
 import { CategoryInfo } from "~/utils/models/categoryInfo"
+import { CommonXmlrpcClient } from "~/libs/simple-xmlrpc/commonXmlrpcClient"
 
 /**
  * Metaweblog API的具体实现
@@ -43,7 +43,7 @@ export class MetaWeblogApi {
   private readonly logger: Logger
   private readonly apiType: string
   private readonly cfg: IMetaweblogCfg
-  private readonly xmlrpcClient: any
+  private readonly commonXmlrpcClient: CommonXmlrpcClient
 
   constructor(apiType: string) {
     this.logger = LogFactory.getLogger(
@@ -51,7 +51,7 @@ export class MetaWeblogApi {
     )
     this.apiType = apiType
     this.cfg = getJSONConf<IMetaweblogCfg>(apiType)
-    this.xmlrpcClient = new XmlrpcClient(
+    this.commonXmlrpcClient = new CommonXmlrpcClient(
       this.apiType,
       this.cfg.apiUrl,
       this.cfg.username,
@@ -65,7 +65,7 @@ export class MetaWeblogApi {
     password: string
   ): Promise<UserBlog[]> {
     const usersBlogs: UserBlog[] = []
-    const ret = await this.xmlrpcClient.methodCallEntry(
+    const ret = await this.commonXmlrpcClient.methodCall(
       METAWEBLOG_METHOD_CONSTANTS.GET_USERS_BLOGS,
       [this.apiType, username, password]
     )
@@ -114,7 +114,7 @@ export class MetaWeblogApi {
     const result: Post = new Post()
 
     try {
-      const ret = await this.xmlrpcClient.methodCallEntry(
+      const ret = await this.commonXmlrpcClient.methodCall(
         METAWEBLOG_METHOD_CONSTANTS.GET_POST,
         [postid, username, password]
       )
@@ -158,7 +158,7 @@ export class MetaWeblogApi {
 
     const postStruct = this.createPostStruct(post)
     this.logger.debug("postStruct=>", postStruct)
-    let ret = await this.xmlrpcClient.methodCallEntry(
+    let ret = await this.commonXmlrpcClient.methodCall(
       METAWEBLOG_METHOD_CONSTANTS.NEW_POST,
       [this.apiType, username, password, postStruct, publish]
     )
@@ -182,7 +182,7 @@ export class MetaWeblogApi {
 
     const postStruct = this.createPostStruct(post)
     this.logger.debug("postStruct=>", postStruct)
-    const ret = await this.xmlrpcClient.methodCallEntry(
+    const ret = await this.commonXmlrpcClient.methodCall(
       METAWEBLOG_METHOD_CONSTANTS.EDIT_POST,
       [postid, username, password, postStruct, publish]
     )
@@ -198,7 +198,7 @@ export class MetaWeblogApi {
     password: string,
     publish: boolean
   ): Promise<boolean> {
-    const ret = await this.xmlrpcClient.methodCallEntry(
+    const ret = await this.commonXmlrpcClient.methodCall(
       METAWEBLOG_METHOD_CONSTANTS.DELETE_POST,
       [appKey, postid, username, password, publish]
     )
@@ -285,7 +285,7 @@ export class MetaWeblogApi {
     const result = [] as CategoryInfo[]
 
     try {
-      const ret = await this.xmlrpcClient.methodCallEntry(
+      const ret = await this.commonXmlrpcClient.methodCall(
         METAWEBLOG_METHOD_CONSTANTS.GET_CATEGORIES,
         [this.apiType, username, password]
       )

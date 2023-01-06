@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -25,41 +25,23 @@
 
 import { sendChromeMessage } from "~/utils/otherlib/ChromeUtil"
 import { LogFactory } from "~/utils/logUtil"
+import { Deserializer, serializeMethodCall } from "~/libs/simple-xmlrpc/xmlrpc"
 
-const logger = LogFactory.getLogger("utils/platform/metaweblog/customXmlrpc.ts")
-
-const Serializer = require("xmlrpc/lib/serializer")
-const { XMLParser } = require("fast-xml-parser")
-const options = {
-  ignoreAttributes: false,
-}
-const xmlParser = new XMLParser(options)
+const logger = LogFactory.getLogger("libs/simple-xmlrpc/impl/chromeXmlrpc.ts")
 
 /**
- * 自定义xmlrpc的请求与解析，解决apache xmlrpc的扩展问题
+ * 自定义xmlrpc的请求与解析，通过Chrome发送事件交互
  * @param apiUrl
  * @param reqMethod
  * @param reqParams
  */
-export async function fetchCustom(
+async function doChromeFetch(
   apiUrl: string,
   reqMethod: string,
   reqParams: string[]
 ): Promise<string> {
   try {
-    const methodBodyXml = Serializer.serializeMethodCall(
-      reqMethod,
-      reqParams,
-      "utf8"
-    )
-
-    // const response = await fetch(apiUrl, {
-    //     method: "POST",
-    //     headers: {
-    //         "content-type": "text/xml"
-    //     },
-    //     body: methodBodyXml
-    // })
+    const methodBodyXml = serializeMethodCall(reqMethod, reqParams, "utf-8")
 
     const fetchCORSParams = {
       method: "POST",
@@ -79,10 +61,8 @@ export async function fetchCustom(
 
     let resJson
     if (resXml) {
-      const parseResult: any = xmlParser.parse(resXml)
-      logger.debug("parseResult=>", parseResult)
-
-      resJson = parseResult.methodResponse || {}
+      const deserializer = new Deserializer("utf-8")
+      const resJson = await deserializer.deserializeMethodResponse(resXml)
       logger.debug("resJson=>", JSON.stringify(resJson))
     } else {
       resJson = {}
@@ -92,4 +72,31 @@ export async function fetchCustom(
   } catch (e: any) {
     throw new Error(e)
   }
+}
+
+/**
+ * 兼容Chrome插件的xmlrpc API
+ * @param apiUrl 端点
+ * @param reqMethod 方法
+ * @param reqParams 参数
+ */
+export async function fetchChrome(
+  apiUrl: string,
+  reqMethod: string,
+  reqParams: string[]
+): Promise<string> {
+  this.logger.debug("fetchChrome apiUrl=>", apiUrl)
+
+  const fetchCORSParams = {
+    reqMethod,
+    reqParams,
+  }
+  this.logger.debug("fetchChrome fetchCORSParams=>", fetchCORSParams)
+
+  const result = await doChromeFetch(apiUrl, reqMethod, reqParams)
+  if (!result || result === "") {
+    throw new Error("请求错误或者返回结果为空")
+  }
+  this.logger.debug("fetchCustom result=>", result)
+  return result
 }
