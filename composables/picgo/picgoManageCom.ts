@@ -26,21 +26,16 @@
 import {
   copyToClipboardInBrowser,
   isBrowser,
-  isElectron,
   reloadPage,
 } from "~/utils/browserUtil"
 import { reactive } from "vue"
-import { parseJSONObj, toJSONString } from "~/utils/configUtil"
-import { CONSTANTS } from "~/utils/constants/constants"
 import { getPageId } from "~/utils/platform/siyuan/siyuanUtil"
 import { LogFactory } from "~/utils/logUtil"
 import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
 import { ImageItem } from "~/utils/models/imageItem"
 import { ElMessage } from "element-plus"
-import { getSiyuanNewWinDataDir } from "~/utils/otherlib/siyuanBrowserUtil"
-import { uploadByPicGO } from "~/utils/otherlib/picgoUtil"
 import { useI18n } from "vue-i18n"
-import { isFileExist } from "~/utils/otherlib/ChromeUtil"
+import { PicgoPostApi } from "~/utils/platform/picgo/picgoPostApi"
 
 /**
  * Picgo图片管理组件
@@ -50,6 +45,7 @@ export const usePicgoManage = (props, deps) => {
   const logger = LogFactory.getLogger("composables/picgo/picgoManageCom.ts")
   const { t } = useI18n()
   const siyuanApi = new SiYuanApi()
+  const picgoPostApi = new PicgoPostApi()
 
   // public data
   const picgoManageData = reactive({
@@ -59,7 +55,7 @@ export const usePicgoManage = (props, deps) => {
 
   // deps
   const picgoCommonMethods = deps.picgoCommonMethods
-  const picgoInitMethods = deps.picgoInitMethods
+  // const picgoInitMethods = deps.picgoInitMethods
 
   // deps data
   const picgoCommonData = picgoCommonMethods.getPicgoCommonData()
@@ -136,60 +132,7 @@ export const usePicgoManage = (props, deps) => {
       const pageId = await getPageId(true, props.pageId)
       const attrs = await siyuanApi.getBlockAttrs(pageId)
 
-      const mapInfoStr = attrs[CONSTANTS.PICGO_FILE_MAP_KEY] ?? "{}"
-      const fileMap = parseJSONObj(mapInfoStr)
-      logger.warn("fileMap=>", fileMap)
-
-      // 处理上传
-      const filePaths = []
-      if (!imageItem.isLocal) {
-        logger.warn("非本地图片，忽略=>", imageItem.url)
-        return
-      }
-
-      let imageFullPath
-      if (isElectron) {
-        const imagePath = imageItem.originUrl.substring(
-          imageItem.originUrl.indexOf("assets"),
-          imageItem.originUrl.length
-        )
-        const dataDir: string = getSiyuanNewWinDataDir()
-        imageFullPath = `${dataDir}/${imagePath}`
-
-        // 不存在就用网页url
-        if (!isFileExist(imageFullPath)) {
-          imageFullPath = imageItem.url
-        }
-      } else {
-        imageFullPath = imageItem.url
-      }
-      logger.warn(
-        "isElectron=>" + isElectron + ", imageFullPath=>",
-        imageFullPath
-      )
-      filePaths.push(imageFullPath)
-
-      // 批量上传
-      const imageJson: any = await uploadByPicGO(filePaths)
-      logger.warn("图片上传完成，imageJson=>", imageJson)
-      const imageJsonObj = JSON.parse(imageJson)
-      // 处理后续
-      if (imageJsonObj && imageJsonObj.length > 0) {
-        const img = imageJsonObj[0]
-        const newImageItem = new ImageItem(
-          imageItem.originUrl,
-          img.imgUrl,
-          false
-        )
-        fileMap[newImageItem.hash] = newImageItem
-      }
-
-      logger.warn("newFileMap=>", fileMap)
-
-      const newFileMapStr = toJSONString(fileMap)
-      await siyuanApi.setBlockAttrs(pageId, {
-        [CONSTANTS.PICGO_FILE_MAP_KEY]: newFileMapStr,
-      })
+      await picgoPostApi.uploadSingleImageToBed(pageId, attrs, imageItem)
     },
 
     onImageUrlCopy: (url: string) => {

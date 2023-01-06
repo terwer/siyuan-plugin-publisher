@@ -28,6 +28,7 @@ import { inSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
 import { imageToBase64 } from "~/utils/parser/imageToBase64"
 import { getEnvOrDefault } from "~/utils/envUtil"
 import { appendStr } from "~/utils/strUtil"
+import { ImageItem } from "~/utils/models/imageItem"
 
 /**
  * 图片解析器
@@ -39,6 +40,10 @@ import { appendStr } from "~/utils/strUtil"
 export class ImageParser {
   private readonly logger = LogFactory.getLogger("utils/parser/imageParser.ts")
 
+  /**
+   * 检测是否有外链图片
+   * @param content 文章正文
+   */
   public hasExternalImages(content: string): boolean {
     const flag = false
 
@@ -59,7 +64,7 @@ export class ImageParser {
 
   /**
    * 剔除外链图片
-   * @param content
+   * @param content 文章正文
    */
   public removeImages(content: string): string {
     let newcontent = content
@@ -135,6 +140,11 @@ export class ImageParser {
     return newcontent
   }
 
+  /**
+   * 解析图片块为图片链接
+   * @param content 图片块
+   * @private
+   */
   public parseImagesToArray(content: string): string[] {
     let ret = []
     const remoteImages = this.parseRemoteImagesToArray(content)
@@ -148,6 +158,11 @@ export class ImageParser {
     return ret
   }
 
+  /**
+   * 解析图片块为远程图片链接
+   * @param content 图片块
+   * @private
+   */
   private parseRemoteImagesToArray(content: string): string[] {
     let ret = []
     let newcontent = content
@@ -172,7 +187,11 @@ export class ImageParser {
     return ret
   }
 
-  private parseLocalImagesToArray(content: string): string[] {
+  /**
+   * 解析图片块为本地图片链接
+   * @param content 图片块
+   */
+  public parseLocalImagesToArray(content: string): string[] {
     let ret = []
     let newcontent = content
 
@@ -200,43 +219,53 @@ export class ImageParser {
   }
 
   /**
-   * 将外链外链图片替换为ascii码
-   * @param content
+   * 将外链外链图片替换为图床链接
+   * @param content 正文
+   * @param replaceMap 替换信息
    */
-  public replaceImagesWithAscii(content: string): string {
-    const newcontent = content
-    return newcontent
-  }
+  public replaceImagesWithImageItemArray(
+    content: string,
+    replaceMap: any
+  ): string {
+    let newcontent = content
 
-  /**
-   * 将外链外链图片替换为彩色ascii码
-   * @param content
-   */
-  public replaceImagesWithColorAscii(content: string): string {
-    const newcontent = content
-    return newcontent
-  }
+    const imgRegex = /!\[.*]\(assets\/.*\..*\)/g
+    const matches = newcontent.match(imgRegex)
+    // 没有图片，无需处理
+    if (matches == null || matches.length === 0) {
+      return newcontent
+    }
 
-  /**
-   * 上传外链图片到图床
-   * @param content
-   */
-  public async uploadImageToBeds(content: string): Promise<string> {
-    const newcontent = content
+    for (let i = 0; i < matches.length; i++) {
+      const match = matches[i]
+      this.logger.debug("img=>", match)
+
+      const src = match.replace(/!\[.*]\(/g, "").replace(/\)/, "")
+      this.logger.debug("src=>", src)
+
+      let newImg
+      const tempImageItem = new ImageItem(src, "", true)
+      const hash = tempImageItem.hash
+      const replaceImageItem = replaceMap[hash]
+      newImg = `![](${replaceImageItem.url})`
+
+      newcontent = newcontent.replace(match, newImg)
+    }
 
     return newcontent
   }
 
   /**
    * 下载图片到本地并打包成zip
+   * @@deprecated 不再支持
    */
-  public async downloadMdWithImages(): Promise<void> {}
+  // public async downloadMdWithImages(): Promise<void> {}
 
   /**
    * 下载图片到本地并保存到思源
    * @deprecated 思源笔记已经有此功能
    */
-  public async downloadImagesToSiyuan(): Promise<void> {
-    throw new Error("思源笔记已经有此功能，无需重新实现")
-  }
+  // public async downloadImagesToSiyuan(): Promise<void> {
+  //   throw new Error("思源笔记已经有此功能，无需重新实现")
+  // }
 }

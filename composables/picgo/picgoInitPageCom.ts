@@ -28,11 +28,7 @@ import { LogFactory } from "~/utils/logUtil"
 import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
 import { getPageId } from "~/utils/platform/siyuan/siyuanUtil"
 import { ImageParser } from "~/utils/parser/imageParser"
-import { getSiyuanCfg } from "~/utils/platform/siyuan/siYuanConfig"
-import { isEmptyString, pathJoin } from "~/utils/util"
-import { CONSTANTS } from "~/utils/constants/constants"
-import { parseJSONObj } from "~/utils/configUtil"
-import { ImageItem } from "~/utils/models/imageItem"
+import { PicgoPostApi } from "~/utils/platform/picgo/picgoPostApi"
 
 /**
  * Picgo页面初始化组件
@@ -41,6 +37,7 @@ export const usePicgoInitPage = (props, deps) => {
   // private data
   const logger = LogFactory.getLogger("composables/picgo/picgoInitPageCom.ts")
   const siyuanApi = new SiYuanApi()
+  const picgoPostApi = new PicgoPostApi()
   const imageParser = new ImageParser()
 
   // deps
@@ -73,41 +70,16 @@ export const usePicgoInitPage = (props, deps) => {
     })
     logger.debug("解析出来的所有的图片地址=>", retImgs)
 
-    for (let i = 0; i < retImgs.length; i++) {
-      const retImg = retImgs[i]
-      let isLocal = false
-      const originUrl = retImg
-      let imgUrl = retImg
+    // 将字符串数组格式的图片信息转换成图片对象数组
+    const attrs = await siyuanApi.getBlockAttrs(pageId)
+    const imageItemArray = await picgoPostApi.convertImagesToImagesItemArray(
+      attrs,
+      retImgs
+    )
 
-      let fileMap = {}
-      if (!(imgUrl.indexOf("http") > -1) && imgUrl.indexOf("assets") > -1) {
-        const attrs = await siyuanApi.getBlockAttrs(pageId)
-        logger.debug("attrs=>", attrs)
-        if (!isEmptyString(attrs[CONSTANTS.PICGO_FILE_MAP_KEY])) {
-          fileMap = parseJSONObj(attrs[CONSTANTS.PICGO_FILE_MAP_KEY])
-          logger.debug("fileMap=>", fileMap)
-        }
-
-        const baseUrl = getSiyuanCfg().baseUrl
-        imgUrl = pathJoin(baseUrl, "/" + imgUrl)
-        isLocal = true
-      }
-
-      const imageItem = new ImageItem(originUrl, imgUrl, isLocal)
-      // logger.debug("imageItem.hash imageItem.name=>", imageItem.name)
-      // logger.debug("imageItem.hash fileMap=>", fileMap)
-      // logger.debug("imageItem.hash=>", imageItem.hash)
-      // logger.debug("fileMap[imageItem.hash]=>", fileMap[imageItem.hash])
-      if (fileMap[imageItem.hash]) {
-        const newImageItem = fileMap[imageItem.hash]
-        logger.debug("newImageItem=>", newImageItem)
-        if (!newImageItem.isLocal) {
-          imageItem.isLocal = false
-          imageItem.url = newImageItem.url
-        }
-      }
-
-      logger.debug("imageItem=>", imageItem)
+    // 页面属性
+    for (let i = 0; i < imageItemArray.length; i++) {
+      const imageItem = imageItemArray[i]
       picgoCommonData.fileList.files.push(imageItem)
     }
   }
