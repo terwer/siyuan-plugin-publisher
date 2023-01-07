@@ -343,6 +343,40 @@
               </div>
             </div>
 
+            <!-- 附加属性，用于适配 -->
+            <div
+              class="addition-attributes"
+              v-if="pageModeData.etype === PageEditMode.EditMode_complex"
+            >
+              <!-- 是否使用永久链接 -->
+              <el-form-item :label="$t('github.use.permalink')">
+                <el-switch
+                  v-model="githubPagesData.usePermalink"
+                  @change="githubPagesMethods.permalinkOnChange"
+                />
+                <el-alert
+                  v-if="!githubPagesData.usePermalink"
+                  :closable="false"
+                  :title="$t('github.use.permalink.no.warn')"
+                  type="warning"
+                />
+              </el-form-item>
+              <!-- 菜单标题 -->
+              <el-form-item :label="$t('github.menu.title')">
+                <el-input
+                  v-model="githubPagesData.linkTitle"
+                  :placeholder="$t('github.menu.title.placeholder')"
+                />
+              </el-form-item>
+              <!-- 权重 -->
+              <el-form-item :label="$t('github.weight')">
+                <el-input
+                  v-model="githubPagesData.weight"
+                  :placeholder="$t('github.weight.placeholder')"
+                />
+              </el-form-item>
+            </div>
+
             <!-- 快捷操作 -->
             <div
               v-if="pageModeData.etype !== PageEditMode.EditMode_source"
@@ -366,6 +400,7 @@
                 </el-button>
               </el-form-item>
 
+              <!-- 属性转换 -->
               <el-form-item
                 v-if="pageModeData.etype !== PageEditMode.EditMode_simple"
               >

@@ -179,6 +179,14 @@ export const useInitPublish = (props, deps, otherArgs?) => {
       }
       postForm.formData.mdContent = md
       postForm.formData.htmlContent = html
+      // 是否生成永久链接
+      postForm.formData.usePermalink =
+        githubPagesMethods.getGithubPagesData().usePermalink
+      // 菜单标题
+      postForm.formData.linkTitle =
+        githubPagesMethods.getGithubPagesData().linkTitle
+      // 权重
+      postForm.formData.weight = githubPagesMethods.getGithubPagesData().weight
 
       return postForm
     },

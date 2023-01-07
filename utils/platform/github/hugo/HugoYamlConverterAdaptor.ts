@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -33,6 +33,7 @@ import { YamlFormatObj } from "~/utils/models/yamlFormatObj"
 import { LogFactory } from "~/utils/logUtil"
 import { obj2Yaml } from "~/utils/yamlUtil"
 import { formatIsoToZhDate } from "~/utils/dateUtil"
+import { isEmptyString } from "~/utils/util"
 
 /**
  * Hugo平台的YAMl解析器
@@ -56,9 +57,12 @@ export class HugoYamlConverterAdaptor
     // slug
     yamlFormatObj.yamlObj.slug = postForm.formData.customSlug
 
-    // url
-    yamlFormatObj.yamlObj.url =
-      "/post/" + postForm.formData.customSlug + ".html"
+    // 固定连接开关
+    if (postForm.formData.usePermalink) {
+      // url
+      yamlFormatObj.yamlObj.url =
+        "/post/" + postForm.formData.customSlug + ".html"
+    }
 
     // date
     yamlFormatObj.yamlObj.date = postForm.formData.created
@@ -84,6 +88,20 @@ export class HugoYamlConverterAdaptor
 
     // isCJKLanguage
     yamlFormatObj.yamlObj.isCJKLanguage = true
+
+    // linkTitle
+    // weight
+    if (!isEmptyString(postForm.formData.linkTitle)) {
+      yamlFormatObj.yamlObj.linkTitle = postForm.formData.linkTitle
+      yamlFormatObj.yamlObj.weight = parseInt(
+        postForm.formData.weight.toString()
+      )
+      yamlFormatObj.yamlObj.menu = {
+        main: {
+          weight: parseInt(postForm.formData.weight.toString()),
+        },
+      }
+    }
 
     // formatter
     let yaml = obj2Yaml(yamlFormatObj.yamlObj)

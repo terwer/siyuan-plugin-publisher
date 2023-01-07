@@ -326,4 +326,13 @@ export default {
   "picgo.pic.setting": "Picture setting",
   "picgo.pic.setting.no.tip":
     "You are currently using the browser plug -in and cannot inherit PicGo. You can only call the local Picgo client on the local Picgo client through HTTP",
+  "github.use.permalink": "Use permalink",
+  "github.use.permalink.no.warn":
+    "You have closed the permanent link, and Formatter will not generate a mark, which may be useful in some scenarios",
+  "github.menu.title": "Menu title",
+  "github.menu.title.placeholder":
+    "The menu column title (HUGO platform is dedicated, but the empty is not displayed in the menu)",
+  "github.weight": "Weight",
+  "github.weight.placeholder":
+    "Weight (decide to display the order, the smaller the display, the more upward)",
 }

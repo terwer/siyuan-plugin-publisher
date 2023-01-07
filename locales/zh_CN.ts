@@ -338,4 +338,12 @@ export default {
   "picgo.pic.setting": "图床设置",
   "picgo.pic.setting.no.tip":
     "您当前使用的是浏览器插件，无法直接集成PicGO，只能通过HTTP请求间接调用本地PicGO客户端上图片，请直接在本地PicGO客户端进行设置。如需体验更加完整的功能，请通过思源笔记挂件版挂载菜单打开新窗口的方式使用",
+  "github.use.permalink": "永久链接",
+  "github.use.permalink.no.warn":
+    "您已关闭永久链接，formatter将不会生成标记，这在某些特殊场景下可能有用，大部分情况下需要开启此选项，注意：目前仅仅在HUGO平台生效，主要是适配Docsy",
+  "github.menu.title": "菜单标题",
+  "github.menu.title.placeholder":
+    "菜单栏标题（HUGO平台专用，为空则不显示在菜单）",
+  "github.weight": "显示权重",
+  "github.weight.placeholder": "权重（决定显示顺序，越小显示越靠前）",
 }

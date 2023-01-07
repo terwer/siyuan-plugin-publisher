@@ -65,6 +65,18 @@ export const useGithubPages = (props, deps) => {
      * 最终发布的路径
      */
     publishPath: "",
+    /**
+     * 是否生成永久链接（HUGO平台专用）
+     */
+    usePermalink: true,
+    /**
+     * 菜单栏标题（HUGO平台专用，为空则不显示在菜单）
+     */
+    linkTitle: "",
+    /**
+     * 权重（决定显示顺序，越小显示越靠前）
+     */
+    weight: 0,
   })
 
   // deps
@@ -139,6 +151,9 @@ export const useGithubPages = (props, deps) => {
       const val = ref(githubPagesData.customPath)
       githubPagesMethods.onSelectChange(val)
       logger.info("触发文件名修改，同步发布路径.")
+    },
+    permalinkOnChange: (val: boolean) => {
+      githubPagesData.usePermalink = val
     },
 
     getGithubPagesData: () => {
