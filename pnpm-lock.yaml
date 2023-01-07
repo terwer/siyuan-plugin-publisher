@@ -29,7 +29,7 @@ specifiers:
   element-plus: ^2.2.25
   eslint: ^8.0.1
   eslint-config-prettier: ^8.5.0
-  eslint-config-standard-with-typescript: ^24.0.0
+  eslint-config-standard-with-typescript: ^26.0.0
   eslint-plugin-import: ^2.25.2
   eslint-plugin-n: ^15.0.0
   eslint-plugin-promise: ^6.0.0
@@ -109,7 +109,7 @@ devDependencies:
   better-docs: 2.7.2
   eslint: 8.30.0
   eslint-config-prettier: 8.5.0_eslint@8.30.0
-  eslint-config-standard-with-typescript: 24.0.0_r3et37n5jo7vy32jffmixody7a
+  eslint-config-standard-with-typescript: 26.0.0_r3et37n5jo7vy32jffmixody7a
   eslint-plugin-import: 2.26.0_smw3o7qjeokkcohbvp7rylsoqq
   eslint-plugin-n: 15.6.0_eslint@8.30.0
   eslint-plugin-promise: 6.1.1_eslint@8.30.0
@@ -2890,7 +2890,7 @@ packages:
     dev: true
 
   /eslint-config-prettier/8.5.0_eslint@8.30.0:
-    resolution: {integrity: sha512-obmWKLUNCnhtQRKc+tmnYuQl0pFU1ibYJQ5BGhTVB08bHe9wC8qUeG7c08dj9XX+AuPj1YSGSQIHl1pnDHZR0Q==}
+    resolution: { integrity: sha512-obmWKLUNCnhtQRKc+tmnYuQl0pFU1ibYJQ5BGhTVB08bHe9wC8qUeG7c08dj9XX+AuPj1YSGSQIHl1pnDHZR0Q== }
     hasBin: true
     peerDependencies:
       eslint: '>=7.0.0'
@@ -2898,8 +2898,8 @@ packages:
       eslint: 8.30.0
     dev: true
 
-  /eslint-config-standard-with-typescript/24.0.0_r3et37n5jo7vy32jffmixody7a:
-    resolution: {integrity: sha512-vEnGXZ5aiR1enl9652iIP4nTpY3GPcNEwuhrsPbKO3Ce3D6T3yCqZdkUPk8nJetfdL/yO0DLsHg2d/l9iECIdg==}
+  /eslint-config-standard-with-typescript/26.0.0_r3et37n5jo7vy32jffmixody7a:
+    resolution: { integrity: sha512-TluIWunQo76qp4MHyYIaTT+sN2q2v/jTeE3Dj4rXsSbx27GOUEOujhJaAL3v9dHVQelAK13gZ5Jy9IWnWCyFrg== }
     peerDependencies:
       '@typescript-eslint/eslint-plugin': ^5.0.0
       eslint: ^8.0.1
