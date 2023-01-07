@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.1](https://github.com/terwer/src-sy-post-publisher/compare/v0.6.0...v0.6.1) (2023-01-07)
+
+
+### Miscellaneous
+
+* **deps-dev:** bump eslint-config-standard-with-typescript ([cd41105](https://github.com/terwer/src-sy-post-publisher/commit/cd4110504aa3e0b4ea776e2c7c2bfd4630296fb1))
+
 ## [0.6.0](https://github.com/terwer/src-sy-post-publisher/compare/v0.5.1...v0.6.0) (2022-12-29)
 
 
