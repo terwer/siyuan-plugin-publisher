@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { reactive } from "vue"
+import { reactive, ref } from "vue"
 import { LogFactory } from "~/utils/logUtil"
 import { getJSONConf } from "~/utils/configUtil"
 import { IGithubCfg } from "~/utils/platform/github/githubCfg"
@@ -131,6 +131,14 @@ export const useGithubPages = (props, deps) => {
         defpath: githubPagesData.currentDefaultPath,
         fname: githubPagesData.mdTitle,
       })
+    },
+    onFilenameChange: () => {
+      if (githubPagesData.customPath === "") {
+        return
+      }
+      const val = ref(githubPagesData.customPath)
+      githubPagesMethods.onSelectChange(val)
+      logger.info("触发文件名修改，同步发布路径.")
     },
 
     getGithubPagesData: () => {

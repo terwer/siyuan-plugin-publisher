@@ -1,5 +1,5 @@
 <!--
-  - Copyright (c) 2022, Terwer . All rights reserved.
+  - Copyright (c) 2022-2023, Terwer . All rights reserved.
   - DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
   -
   - This code is free software; you can redistribute it and/or modify it
@@ -262,32 +262,26 @@
               <!-- Github pages -->
               <div class="form-github-pages">
                 <!-- 启用Github发布 -->
-                <el-form-item
-                  v-if="pageModeData.etype !== PageEditMode.EditMode_simple"
-                  :label="$t('main.publish.github')"
-                >
+                <el-form-item :label="$t('main.publish.github')">
                   <el-switch
                     v-model="githubPagesData.githubEnabled"
                     @change="githubPagesMethods.githubOnChange"
                   />
-                </el-form-item>
-                <el-form-item v-if="!githubPagesData.githubEnabled">
                   <el-alert
+                    v-if="!githubPagesData.githubEnabled"
                     :closable="false"
                     :title="$t('main.publish.github.no.tip')"
                     type="warning"
                   />
                 </el-form-item>
+
                 <div
                   v-if="githubPagesData.githubEnabled"
                   class="form-github-pages-items"
                 >
                   <!-- 是否使用默认目录 -->
                   <el-form-item
-                    v-if="
-                      pageModeData.etype !== PageEditMode.EditMode_simple &&
-                      !initPublishData.isPublished
-                    "
+                    v-if="!initPublishData.isPublished"
                     :label="$t('main.publish.github.choose.path.use.default')"
                   >
                     <el-switch
@@ -332,6 +326,7 @@
                   >
                     <el-input
                       v-model="githubPagesData.mdTitle"
+                      @change="githubPagesMethods.onFilenameChange"
                       :disabled="slugMethods.isSlugEmpty()"
                     />
                   </el-form-item>
@@ -341,9 +336,7 @@
                   >
                     <el-input
                       v-model="githubPagesData.publishPath"
-                      :disabled="
-                        slugMethods.isSlugEmpty() || initPublishData.isPublished
-                      "
+                      :disabled="true"
                     />
                   </el-form-item>
                 </div>
@@ -428,7 +421,10 @@
 
             <!-- 发布状态 -->
             <div
-              v-if="pageModeData.etype !== PageEditMode.EditMode_source"
+              v-if="
+                pageModeData.etype !== PageEditMode.EditMode_source &&
+                initPublishData.apiStatus
+              "
               class="publish-status"
             >
               <!-- 文章状态 -->

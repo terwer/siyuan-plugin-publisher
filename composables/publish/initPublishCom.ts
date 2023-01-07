@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -337,7 +337,7 @@ export const useInitPublish = (props, deps, otherArgs?) => {
         initPublishMethods.convertAttrToYAML(true)
 
         // 预览链接
-        if (initPublishData.isPublished) {
+        if (initPublishData.apiStatus && initPublishData.isPublished) {
           // 预览链接
           const baseUrl = githubCfg.baseUrl ?? "https://terwer.space/"
           const home = githubCfg.home ?? "https://terwer.space/"

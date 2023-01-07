@@ -136,7 +136,7 @@ export const getPublishStatus = (apiType: string, meta: any): boolean => {
     logger.debug("postidKey的值=>", postId)
   }
 
-  return isEmptyString(postId)
+  return !isEmptyString(postId)
 }
 
 /**
