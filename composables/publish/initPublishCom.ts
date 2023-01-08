@@ -187,6 +187,9 @@ export const useInitPublish = (props, deps, otherArgs?) => {
         githubPagesMethods.getGithubPagesData().linkTitle
       // 权重
       postForm.formData.weight = githubPagesMethods.getGithubPagesData().weight
+      // 是否显示日期字段
+      postForm.formData.useDate =
+        githubPagesMethods.getGithubPagesData().useDate
 
       return postForm
     },
@@ -335,11 +338,14 @@ export const useInitPublish = (props, deps, otherArgs?) => {
         const currentDefaultPath = githubCfg.defaultPath ?? "尚未配置"
         const mdTitle = githubPagesMethods.getMdFilename()
         // 初始化
-        githubPagesMethods.initGithubPages({
-          cpath: docPath,
-          defpath: currentDefaultPath,
-          fname: mdTitle,
-        })
+        githubPagesMethods.initGithubPages(
+          {
+            cpath: docPath,
+            defpath: currentDefaultPath,
+            fname: mdTitle,
+          },
+          siyuanData
+        )
 
         // 所有数据初始化完成，生成YAML
         initPublishMethods.convertAttrToYAML(true)

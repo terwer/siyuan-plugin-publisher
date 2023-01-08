@@ -335,4 +335,7 @@ export default {
   "github.weight": "Weight",
   "github.weight.placeholder":
     "Weight (decide to display the order, the smaller the display, the more upward)",
+  "github.use.date": "Show date",
+  "github.use.date.no.warn":
+    "You have closed the date show that it will not generate the date field in Formatter",
 }

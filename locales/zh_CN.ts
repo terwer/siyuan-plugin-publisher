@@ -346,4 +346,6 @@ export default {
     "菜单栏标题（HUGO平台专用，为空则不显示在菜单）",
   "github.weight": "显示权重",
   "github.weight.placeholder": "权重（决定显示顺序，越小显示越靠前）",
+  "github.use.date": "显示日期",
+  "github.use.date.no.warn": "您已关闭日期显示，将不会在formatter生成date字段",
 }

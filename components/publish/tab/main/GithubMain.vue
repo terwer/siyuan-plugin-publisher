@@ -375,6 +375,19 @@
                   :placeholder="$t('github.weight.placeholder')"
                 />
               </el-form-item>
+              <!-- 是否显示日期字段 -->
+              <el-form-item :label="$t('github.use.date')">
+                <el-switch
+                  v-model="githubPagesData.useDate"
+                  @change="githubPagesMethods.showDateOnChange"
+                />
+                <el-alert
+                  v-if="!githubPagesData.useDate"
+                  :closable="false"
+                  :title="$t('github.use.date.no.warn')"
+                  type="warning"
+                />
+              </el-form-item>
             </div>
 
             <!-- 快捷操作 -->
@@ -710,6 +723,7 @@ const { quickData, quickMethods } = useQuick(props, {
   slugMethods,
   descMethods,
   tagMethods,
+  githubPagesMethods,
 })
 const { initPublishData, initPublishMethods } = useInitPublish(props, {
   pageModeMethods,

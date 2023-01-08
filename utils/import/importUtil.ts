@@ -173,7 +173,7 @@ const doFixPlatformInfo = (
 
     // 修复 Typecho 的拼写错误
     const pcfg = dynamicConfigArray[i]
-    logger.warn("pcfg=>", pcfg)
+    logger.debug("pcfg=>", pcfg)
     if (PRE_DEFINED_PLATFORM_KEY_CONSTANTS.PRE_DEFINED_TYPECHO_KEY === pkey) {
       if (pcfg.platformName === "Typeecho") {
         pcfg.platformName = "Typecho"

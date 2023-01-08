@@ -28,11 +28,13 @@ import { LogFactory } from "~/utils/logUtil"
 import { getJSONConf } from "~/utils/configUtil"
 import { IGithubCfg } from "~/utils/platform/github/githubCfg"
 import { GithubApi } from "~/utils/platform/github/githubApi"
-import { isEmptyString, pathJoin } from "~/utils/util"
+import { isEmptyString, parseBoolean, pathJoin } from "~/utils/util"
 import { ElMessage } from "element-plus"
 import { getApiParams } from "~/utils/publishUtil"
 import { appendStr } from "~/utils/strUtil"
 import { CONSTANTS } from "~/utils/constants/constants"
+import { SIYUAN_PAGE_ATTR_KEY } from "~/utils/constants/siyuanPageConstants"
+import { SiyuanDataObj } from "~/utils/models/siyuanDataObj"
 
 /**
  * Github pages组件
@@ -77,6 +79,10 @@ export const useGithubPages = (props, deps) => {
      * 权重（决定显示顺序，越小显示越靠前）
      */
     weight: 0,
+    /**
+     * 是否显示日期字段
+     */
+    useDate: true,
   })
 
   // deps
@@ -155,6 +161,9 @@ export const useGithubPages = (props, deps) => {
     permalinkOnChange: (val: boolean) => {
       githubPagesData.usePermalink = val
     },
+    showDateOnChange: (val: boolean) => {
+      githubPagesData.useDate = val
+    },
 
     getGithubPagesData: () => {
       return githubPagesData
@@ -225,7 +234,7 @@ export const useGithubPages = (props, deps) => {
       return mdTitle
     },
 
-    initGithubPages: (paths: any) => {
+    initGithubPages: (paths: any, siyuanData?: SiyuanDataObj) => {
       let cpath: string, defpath: string, fname: string
       if (paths) {
         cpath = paths.cpath
@@ -246,6 +255,28 @@ export const useGithubPages = (props, deps) => {
         githubPagesData.publishPath = pathJoin(
           githubPagesData.customPath,
           "/" + githubPagesData.mdTitle
+        )
+      }
+
+      // 附加属性
+      if (siyuanData) {
+        const menuTitleKey =
+          SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_MENU_TITLE_KEY
+        githubPagesData.linkTitle = siyuanData.meta[menuTitleKey] ?? ""
+
+        const weightKey =
+          SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_WEIGHT_KEY
+        githubPagesData.weight = siyuanData.meta[weightKey] ?? "0"
+
+        const usePermalinkKey =
+          SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_USE_PERMALINK_KEY
+        githubPagesData.usePermalink = parseBoolean(
+          siyuanData.meta[usePermalinkKey] ?? "true"
+        )
+        const useDateKey =
+          SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_USE_DATE_KEY
+        githubPagesData.useDate = parseBoolean(
+          siyuanData.meta[useDateKey] ?? "false"
         )
       }
     },

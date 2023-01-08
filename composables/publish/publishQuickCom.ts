@@ -31,6 +31,7 @@ import { SIYUAN_PAGE_ATTR_KEY } from "~/utils/constants/siyuanPageConstants"
 import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
 import { appendStr } from "~/utils/strUtil"
 import { reloadPage } from "~/utils/browserUtil"
+import { isEmptyString } from "~/utils/util"
 
 /**
  * 快捷操作组件
@@ -54,6 +55,7 @@ export const useQuick = (props, deps?: any) => {
   const slugMethods = deps.slugMethods
   const descMethods = deps.descMethods
   const tagMethods = deps.tagMethods
+  const githubPagesMethods = deps.githubPagesMethods
 
   // public methods
   const quickMethods = {
@@ -109,12 +111,32 @@ export const useQuick = (props, deps?: any) => {
         const slugData = slugMethods.getSlugData()
         const descData = descMethods.getDescData()
         const tagData = tagMethods.getTagData()
-        const customAttr = {
+        const githubPagesData = githubPagesMethods.getGithubPagesData()
+
+        let customAttr = {
           [SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_SLUG_KEY]:
             slugData.customSlug,
           [SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_DESC_KEY]:
             descData.desc,
+          [SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_USE_PERMALINK_KEY]:
+            githubPagesData.usePermalink.toString(),
+          [SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_USE_DATE_KEY]:
+            githubPagesData.useDate.toString(),
           tags: tagData.join(","),
+        }
+
+        if (!isEmptyString(githubPagesData.linkTitle)) {
+          customAttr = Object.assign(customAttr, {
+            [SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_MENU_TITLE_KEY]:
+              githubPagesData.linkTitle,
+          })
+        }
+
+        const weight = parseInt(githubPagesData.weight)
+        if (weight > 0) {
+          customAttr = Object.assign(customAttr, {
+            [SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_WEIGHT_KEY]: weight,
+          })
         }
 
         // 获取最新属性

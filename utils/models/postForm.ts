@@ -44,6 +44,7 @@ export class PostForm {
     mdContent: "",
     htmlContent: "",
     usePermalink: true,
+    useDate: true,
     linkTitle: "",
     weight: 0,
   }

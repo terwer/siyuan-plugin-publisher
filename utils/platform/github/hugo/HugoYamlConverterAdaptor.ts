@@ -64,8 +64,11 @@ export class HugoYamlConverterAdaptor
         "/post/" + postForm.formData.customSlug + ".html"
     }
 
-    // date
-    yamlFormatObj.yamlObj.date = postForm.formData.created
+    // 日期开关
+    if (postForm.formData.useDate) {
+      // date
+      yamlFormatObj.yamlObj.date = postForm.formData.created
+    }
 
     // tags
     yamlFormatObj.yamlObj.tags = postForm.formData.tag.dynamicTags
