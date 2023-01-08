@@ -90,16 +90,20 @@ export class HugoYamlConverterAdaptor
     yamlFormatObj.yamlObj.isCJKLanguage = true
 
     // linkTitle
+    const linkTitle = postForm.formData.linkTitle
     // weight
-    if (!isEmptyString(postForm.formData.linkTitle)) {
-      yamlFormatObj.yamlObj.linkTitle = postForm.formData.linkTitle
-      yamlFormatObj.yamlObj.weight = parseInt(
-        postForm.formData.weight.toString()
-      )
-      yamlFormatObj.yamlObj.menu = {
-        main: {
-          weight: parseInt(postForm.formData.weight.toString()),
-        },
+    const weight = parseInt(postForm.formData.weight.toString())
+    if (weight > 0) {
+      yamlFormatObj.yamlObj.weight = weight
+    }
+    if (!isEmptyString(linkTitle)) {
+      yamlFormatObj.yamlObj.linkTitle = linkTitle
+      if (weight > 0) {
+        yamlFormatObj.yamlObj.menu = {
+          main: {
+            weight: weight,
+          },
+        }
       }
     }
 

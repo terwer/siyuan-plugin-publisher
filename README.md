@@ -11,7 +11,8 @@
 
 [![](https://img.shields.io/badge/%E9%A1%B9%E7%9B%AE%E6%BA%90%E7%A0%81-code-brightgreen)](https://github.com/terwer/src-sy-post-publisher)
 [![](https://img.shields.io/badge/%E5%B8%AE%E5%8A%A9%E6%96%87%E6%A1%A3-doc-blue)](https://docs.publish.terwer.space)
-[![](https://img.shields.io/badge/%E6%96%B0%E6%89%8B%E5%B0%8F%E7%99%BD%E7%BA%A7%E8%A7%86%E9%A2%91%E6%95%99%E7%A8%8B-video-red)](https://www.terwer.space/post/configure-entry-video-brpm9.html)
+[![](https://img.shields.io/badge/视频教程（旧）-video-purple)](https://docs.publish.terwer.space/post/configure-entry-video-brpm9.html)
+[![](https://img.shields.io/badge/视频教程（新）-video-red)](https://docs.publish.terwer.space/post/the-pendant-mode-is-used-in-the-method-of-mounting-menu-169wrw.html#%E8%A7%86%E9%A2%91%E6%95%99%E7%A8%8B)
 
 ![](https://img1.terwer.space/api/public/202212181127124.png)
 
@@ -58,7 +59,7 @@ import("/widgets/sy-post-publisher/lib/siyuanhook.js")
 
 ![](https://img1.terwer.space/api/public/20221228-175950.jpeg)
 
-详情请参考: [挂件模式用挂载菜单的方式使用](https://www.terwer.space/post/the-pendant-mode-is-used-in-the-method-of-mounting-menu-169wrw.html#%E6%95%88%E6%9E%9C%E6%BC%94%E7%A4%BA)<sup>
+详情请参考: [挂件模式用挂载菜单的方式使用](https://docs.publish.terwer.space/post/the-pendant-mode-is-used-in-the-method-of-mounting-menu-169wrw.html)<sup>
 强烈推荐</sup> <sup>0.4.2+</sup>
 
 ## 挂件版通用方式快速上手
@@ -75,7 +76,7 @@ import("/widgets/sy-post-publisher/lib/siyuanhook.js")
 
 ## 浏览器插件快速上手
 
-https://docs.publish.terwer.space/docs/getting-started/
+参考 [浏览器插件快速上手指南](https://docs.publish.terwer.space/docs/getting-started/#%E6%B5%8F%E8%A7%88%E5%99%A8%E6%8F%92%E4%BB%B6%E6%96%B9%E5%BC%8F%E4%BD%BF%E7%94%A8)
 
 ## 愿景
 
