@@ -2,6 +2,12 @@
   "githubCfg": [
     {
       "platformType": "Github",
+      "subPlatformType": "Github_Hugo",
+      "platformKey": "githubHugo-zdlc6l",
+      "platformName": "Docsy"
+    },
+    {
+      "platformType": "Github",
       "subPlatformType": "Github_Vitepress",
       "platformKey": "githubVitepress-mhxj3",
       "platformName": "Vitepress"

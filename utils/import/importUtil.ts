@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -34,8 +34,16 @@ import {
 import { checkKeyExists } from "~/utils/configUtil"
 import * as pre from "./pre.json"
 import { LogFactory } from "~/utils/logUtil"
+import { PRE_DEFINED_PLATFORM_KEY_CONSTANTS } from "~/utils/import/PRE_DEFINED_PLATFORM_CONSTANTS"
 
 const logger = LogFactory.getLogger("utils/import/importUtil.ts")
+
+// 需要修正平台配置信息的key（注意：只能修正不影响后续使用的值，例如显示名称等，其他值请勿修复）
+// 修复信息请在 pre.json 里面定义
+const fixPlatformArray = [
+  PRE_DEFINED_PLATFORM_KEY_CONSTANTS.PRE_DEFINED_DOCSY_KEY,
+  PRE_DEFINED_PLATFORM_KEY_CONSTANTS.PRE_DEFINED_TYPECHO_KEY,
+]
 
 /**
  * 检测唯一性
@@ -44,6 +52,9 @@ const logger = LogFactory.getLogger("utils/import/importUtil.ts")
  */
 const checkPlatform = (pkey: string, dynamicConfigArray: DynamicConfig[]) => {
   if (isDynamicKeyExists(dynamicConfigArray, pkey)) {
+    if (fixPlatformArray.includes(pkey)) {
+      doFixPlatformInfo(pkey, dynamicConfigArray)
+    }
     return false
   }
 
@@ -144,4 +155,39 @@ export const importPreDefinedPlatform = () => {
 
   logger.debug("将要导入预定义平台：", dynamicConfigArray)
   setDynamicJsonCfg(dynamicConfigArray)
+}
+
+/**
+ * 修复之前错误预置的信息，例如显示名称等，不可修复 key 等关键信息
+ * @param pkey 平台key
+ * @param dynamicConfigArray totalCfg
+ */
+const doFixPlatformInfo = (
+  pkey: string,
+  dynamicConfigArray: DynamicConfig[]
+) => {
+  for (let i = 0; i < dynamicConfigArray.length; i++) {
+    if (dynamicConfigArray[i].platformKey !== pkey) {
+      continue
+    }
+
+    // 修复 Typecho 的拼写错误
+    const pcfg = dynamicConfigArray[i]
+    logger.warn("pcfg=>", pcfg)
+    if (PRE_DEFINED_PLATFORM_KEY_CONSTANTS.PRE_DEFINED_TYPECHO_KEY === pkey) {
+      if (pcfg.platformName === "Typeecho") {
+        pcfg.platformName = "Typecho"
+        logger.warn("Typeecho 已经修正为=>", pcfg.platformName)
+      }
+    }
+
+    // 修复 Docsy 名称
+    if (PRE_DEFINED_PLATFORM_KEY_CONSTANTS.PRE_DEFINED_DOCSY_KEY == pkey) {
+      if (pcfg.platformName !== "Docsy") {
+        pcfg.platformName = "Docsy"
+
+        logger.warn("Docsy 已经修正为=>", pcfg.platformName)
+      }
+    }
+  }
 }
