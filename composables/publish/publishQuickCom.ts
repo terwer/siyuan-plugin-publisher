@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -30,6 +30,7 @@ import { useI18n } from "vue-i18n"
 import { SIYUAN_PAGE_ATTR_KEY } from "~/utils/constants/siyuanPageConstants"
 import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
 import { appendStr } from "~/utils/strUtil"
+import { reloadPage } from "~/utils/browserUtil"
 
 /**
  * 快捷操作组件
@@ -71,6 +72,7 @@ export const useQuick = (props, deps?: any) => {
 
           // 一键生成属性
           await quickMethods.doOneclickAttr()
+          reloadPage()
 
           quickData.isGenLoading = false
           logger.debug("一键生成属性完成.")
