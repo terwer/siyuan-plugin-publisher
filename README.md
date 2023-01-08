@@ -215,23 +215,23 @@ http://127.0.0.1:6806。
 你的 `.env.local` 文件大概像下面这样：
 
 ```properties
-# 是否开启info日志，true | false，建议生产环境设置为false
+## 是否开启info日志，true | false，建议生产环境设置为false
 VITE_LOG_INFO_ENABLED=false
 
-# 思源笔记授权api
+## 思源笔记授权api
 VITE_SIYUAN_API_URL=http://127.0.0.1:6806
-# 思源笔记授权token
+## 思源笔记授权token
 VITE_SIYUAN_CONFIG_TOKEN=
 
-# 开发阶段模拟的页面ID，仅限调试使用，生产环境无需此配置
-# VITE_SIYUAN_DEV_PAGE_ID=
+## 开发阶段模拟的页面ID，仅限调试使用，生产环境无需此配置
+## VITE_SIYUAN_DEV_PAGE_ID=
 
-# 图表服务器
-# PLANT_UML_SERVR=https://www.plantuml.com/plantuml/svg/
-# PLANT_UML_SERVR=
+## 图表服务器
+## PLANT_UML_SERVR=https://www.plantuml.com/plantuml/svg/
+## PLANT_UML_SERVR=
 
-# 非挂件模式需要中间服务器实现跨域，生产环境可不设置，使用本项目
-# VITE_MIDDLEWARE_URL=https://publish.terwer.space/api/middleware
+## 非挂件模式需要中间服务器实现跨域，生产环境可不设置，使用本项目
+## VITE_MIDDLEWARE_URL=https://publish.terwer.space/api/middleware
 VITE_MIDDLEWARE_URL=
 ```
 
@@ -273,8 +273,8 @@ VITE_MIDDLEWARE_URL=https://publish.terwer.space/api/middleware
 ```bash
 pnpm dev
 
-# windows
-# pnpm devWin
+## windows
+## pnpm devWin
 ```
 
 浏览器默认入口连接是
@@ -290,8 +290,8 @@ http://localhost:3000/blog/index.html
 ```bash
 pnpm widget
 
-# windows
-# pnpm widgetWin
+## windows
+## pnpm widgetWin
 ```
 
 提交 `dist` 文件夹到仓库, 上架思源笔记挂件集市。
@@ -301,8 +301,8 @@ pnpm widget
 ```bash
 pnpm extChrome
 
-# windows
-# pnpm extChromeWin
+## windows
+## pnpm extChromeWin
 ```
 
 插件调试
