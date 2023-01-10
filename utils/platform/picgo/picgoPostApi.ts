@@ -229,6 +229,8 @@ export class PicgoPostApi {
       const img = imageJsonObj[0]
       const newImageItem = new ImageItem(imageItem.originUrl, img.imgUrl, false)
       fileMap[newImageItem.hash] = newImageItem
+    } else {
+      throw new Error("图片上传失败，请打开picgo.log查看更多信息")
     }
 
     this.logger.warn("newFileMap=>", fileMap)
