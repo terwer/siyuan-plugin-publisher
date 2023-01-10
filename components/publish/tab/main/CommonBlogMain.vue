@@ -1,5 +1,5 @@
 <!--
-  - Copyright (c) 2022, Terwer . All rights reserved.
+  - Copyright (c) 2022-2023, Terwer . All rights reserved.
   - DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
   -
   - This code is free software; you can redistribute it and/or modify it
@@ -246,6 +246,20 @@
           </el-button>
         </el-form-item>
 
+        <!-- 使用图床 -->
+        <el-form-item :label="$t('github.post.picgo.use')">
+          <el-switch
+            v-model="picgoPostData.picgoEnabled"
+            @change="picgoPostMethods.picgoOnChange"
+          />
+          <el-alert
+            v-if="picgoPostData.picgoEnabled"
+            :closable="false"
+            :title="$t('github.post.picgo.use.tip')"
+            type="warning"
+          />
+        </el-form-item>
+
         <!-- 发布操作 -->
         <el-form-item label="">
           <el-button
@@ -330,6 +344,8 @@ import {
 import { calcLastSeconds, formatNumToZhDate } from "~/utils/dateUtil"
 import { getPublishCfg, getPublishStatus } from "~/utils/publishUtil"
 import { ImageParser } from "~/utils/parser/imageParser"
+import { usePicgoPost } from "~/composables/picgo/import/picgoPostCom"
+import { PicgoPostApi } from "~/utils/platform/picgo/picgoPostApi"
 
 const logger = LogFactory.getLogger(
   "components/publish/tab/main/CommonBlogMain.vue"
@@ -400,6 +416,7 @@ const apiTypeInfo = ref(
   t("setting.blog.platform.support.common") + props.apiType + " "
 )
 const apiStatus = ref(false)
+const picgoPostApi = new PicgoPostApi()
 
 const isSlugLoading = ref(false)
 const isDescLoading = ref(false)
@@ -417,6 +434,9 @@ const previewUrl = ref("")
 const tagSwitch = ref(false)
 
 const catEnabled = ref(false)
+
+// use
+const { picgoPostData, picgoPostMethods } = usePicgoPost()
 
 const formData = reactive({
   // 新增时候这个值是空的
@@ -517,6 +537,9 @@ const initPage = async () => {
   if (publishCfg.autoTag && formData.tag.dynamicTags.length === 0) {
     tagSwitch.value = true
   }
+
+  // PicGO开关
+  picgoPostData.picgoEnabled = publishCfg.usePicgo
 
   // 发布状态
   isPublished.value = getPublishStatus(props.apiType, siyuanData.meta)
@@ -893,8 +916,26 @@ const doPublish = async () => {
     //   md = await imageParser.replaceImagesWithBase64(md)
     // }
 
+    // 如果设置了移除图片，则忽略
+    // 正常情况下，如果图床开启，上传文档到图床
     if (props.removeImage) {
       md = imageParser.removeImages(md)
+    } else {
+      // 处理图床
+      if (picgoPostMethods.getPicgoPostData().picgoEnabled) {
+        ElMessage.info(t("github.post.picgo.start.upload"))
+        const picgoPostResult = await picgoPostApi.uploadPostImagesToBed(
+          siyuanData.pageId,
+          siyuanData.meta,
+          md
+        )
+
+        if (picgoPostResult.flag) {
+          md = picgoPostResult.mdContent
+        } else {
+          ElMessage.warning(t("github.post.picgo.picbed.error"))
+        }
+      }
     }
 
     if (PageType.Html === commonblogCfg.pageType) {
@@ -963,7 +1004,12 @@ const doPublish = async () => {
     // 刷新属性数据
     await initPage()
 
-    ElMessage.success(t("main.opt.success"))
+    // ElMessage.success(t("main.opt.success"))
+    if (isPublished.value) {
+      ElMessage.success(t("main.opt.status.updated"))
+    } else {
+      ElMessage.success(t("main.opt.status.publish"))
+    }
   } catch (e) {
     isPublishLoading.value = false
 

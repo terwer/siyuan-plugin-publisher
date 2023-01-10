@@ -137,7 +137,7 @@ export const usePublish = (props, deps?: any) => {
 
           // 处理图床
           if (picgoPostMethods.getPicgoPostData().picgoEnabled) {
-            logger.warn(t("github.post.picgo.start.upload"))
+            ElMessage.info(t("github.post.picgo.start.upload"))
             const siyuanPage = siyuanPageMethods.getSiyuanPageData().dataObj
             const picgoPostResult = await picgoPostApi.uploadPostImagesToBed(
               siyuanPage.pageId,

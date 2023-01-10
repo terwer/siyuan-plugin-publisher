@@ -55,6 +55,7 @@ export function getApiParams<T>(apiType: string): T {
  * @param meta 元数据
  */
 export const getPublishStatus = (apiType: string, meta: any): boolean => {
+  logger.info("根据平台类型获取发布状态，apiType=>", apiType)
   const githubTypeArray = [
     API_TYPE_CONSTANTS.API_TYPE_VUEPRESS,
     API_TYPE_CONSTANTS.API_TYPE_HUGO,
@@ -122,14 +123,14 @@ export const getPublishStatus = (apiType: string, meta: any): boolean => {
     logger.debug("postidKey的值=>", postId)
   } else if (metaweblogTypeArray.includes(apiType)) {
     const postidKey = getApiParams<IMetaweblogCfg>(apiType).posidKey
-    const postId = meta[postidKey] || ""
+    postId = meta[postidKey] || ""
     logger.debug("平台=>", apiType)
     logger.debug("meta=>", meta)
     logger.debug("postidKey=>", postidKey)
     logger.debug("postidKey的值=>", postId)
   } else if (commonblogTypeArray.includes(apiType)) {
     const postidKey = getApiParams<ICommonblogCfg>(apiType).posidKey
-    const postId = meta[postidKey ?? ""] || ""
+    postId = meta[postidKey ?? ""] || ""
     logger.debug("平台=>", apiType)
     logger.debug("meta=>", meta)
     logger.debug("postidKey=>", postidKey)
