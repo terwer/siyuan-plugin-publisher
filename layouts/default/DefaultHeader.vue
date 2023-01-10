@@ -209,7 +209,7 @@ const handleWinOpen = async () => {
   if (showOpenBtn.value) {
     try {
       const widgetResult = getWidgetId()
-      await doOpenExportWin(widgetResult.widgetId)
+      await doOpenExportWin(widgetResult.widgetId, "index.html")
 
       // event
       pageIdChanged()

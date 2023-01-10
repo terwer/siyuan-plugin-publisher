@@ -226,9 +226,12 @@ window.terwer.renderPublishHelper = (pageId, pageUrl) => {
         dataDir = dataDir.replace(/\\/g, "/")
         const newWinPageId = pageId ?? ""
         const ipv4 = getIPv4()
+        const mainWindow = getCurrentWindow()
+        const currentWindowId = mainWindow.id
         console.log("dataDir=>", dataDir)
         console.log("newWinPageId=>", newWinPageId)
         console.log("ipv4=>", ipv4)
+        console.log("currentWindowId=>", currentWindowId)
 
         var txt = data.toString().replace(/<!--.*-->/gs, "")
         txt += `<script>
@@ -238,6 +241,7 @@ window.terwer.renderPublishHelper = (pageId, pageUrl) => {
           window.terwer.picgoExtension = require("${dataDir}/widgets/sy-post-publisher/lib/picgo/picgo.js").default;
           window.terwer.picgoExtension.activate("${dataDir}/widgets/sy-post-publisher/lib/picgo/picgo.cfg.json");
           window.terwer.ip = "${ipv4}";
+          window.terwer.currentWindowId = ${currentWindowId};
           </script>`
         html(txt)
       }
