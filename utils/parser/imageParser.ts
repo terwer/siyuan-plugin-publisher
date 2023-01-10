@@ -233,14 +233,15 @@ export class ImageParser {
     const matches = newcontent.match(imgRegex)
     // 没有图片，无需处理
     if (matches == null || matches.length === 0) {
+      this.logger.warn("未匹配到本地图片，将不会替换图片链接")
       return newcontent
     }
 
     for (let i = 0; i < matches.length; i++) {
-      const match = matches[i]
-      this.logger.debug("img=>", match)
+      const img = matches[i]
+      this.logger.debug("img=>", img)
 
-      const src = match.replace(/!\[.*]\(/g, "").replace(/\)/, "")
+      const src = img.replace(/!\[.*]\(/g, "").replace(/\)/, "")
       this.logger.debug("src=>", src)
 
       let newImg
@@ -248,8 +249,9 @@ export class ImageParser {
       const hash = tempImageItem.hash
       const replaceImageItem = replaceMap[hash]
       newImg = `![](${replaceImageItem.url})`
+      this.logger.debug("newImg=>", newImg)
 
-      newcontent = newcontent.replace(match, newImg)
+      newcontent = newcontent.replaceAll(img, newImg)
     }
 
     return newcontent

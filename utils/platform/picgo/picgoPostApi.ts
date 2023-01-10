@@ -150,22 +150,41 @@ export class PicgoPostApi {
         }
 
         hasLocalImages = true
+        // 实际上传逻辑
         await this.uploadSingleImageToBed(pageId, attrs, imageItem)
+        // 上传完成，需要获取最新链接
+        const newattrs = await this.siyuanApi.getBlockAttrs(pageId)
+        const newfileMap = parseJSONObj(newattrs[CONSTANTS.PICGO_FILE_MAP_KEY])
+        const newImageItem: ImageItem = newfileMap[imageItem.hash]
+        replaceMap[imageItem.hash] = new ImageItem(
+          newImageItem.originUrl,
+          newImageItem.url,
+          false
+        )
       }
 
       if (!hasLocalImages) {
         ElMessage.error("未发现本地图片，不上传")
-      } else {
-        ElMessage.success("图片已经全部上传至图床，即将替换链接")
       }
 
-      this.logger.debug("replaceMap=>", replaceMap)
-      // 上传完成
-      this.logger.info("开始替换正文，原文=>", { mdContent: mdContent })
+      // 处理链接替换
+      this.logger.info(
+        "准备替换正文图片，replaceMap=>",
+        JSON.stringify(replaceMap)
+      )
+      this.logger.info(
+        "开始替换正文，原文=>",
+        JSON.stringify({ mdContent: mdContent })
+      )
       ret.mdContent = this.imageParser.replaceImagesWithImageItemArray(
         mdContent,
         replaceMap
       )
+      this.logger.info(
+        "图片链接替换完成，新正文=>",
+        JSON.stringify({ newmdContent: ret.mdContent })
+      )
+
       ret.flag = true
       this.logger.info("正文替换完成，最终结果=>", ret)
     } catch (e) {
