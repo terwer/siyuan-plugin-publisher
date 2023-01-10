@@ -222,7 +222,8 @@ const newWin = () => {
 }
 
 const exportConfig = () => {
-  exportConf()
+  const confName = `sy-p-cfg-v${v.value}.json`
+  exportConf(confName)
 }
 
 const importConfig = async () => {

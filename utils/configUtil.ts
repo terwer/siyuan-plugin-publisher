@@ -218,7 +218,7 @@ export const getAllConf = (): object => {
 /**
  * 导出所有配置
  */
-export const exportConf = (): void => {
+export const exportConf = (filename): void => {
   // Get all data from LocalStorage as an object
   const data = getAllConf()
 
@@ -230,7 +230,7 @@ export const exportConf = (): void => {
 
   // Create a download link for the JSON file
   const link = document.createElement("a")
-  link.download = "data.json"
+  link.download = filename ?? "data.json"
   link.href = URL.createObjectURL(blob)
 
   // Add the download link to the page
