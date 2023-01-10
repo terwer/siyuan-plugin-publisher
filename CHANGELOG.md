@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.2](https://github.com/terwer/src-sy-post-publisher/compare/v0.6.1...v0.6.2) (2023-01-10)
+
+
+### Miscellaneous
+
+* 准备开发 0.7.0 ([412a08e](https://github.com/terwer/src-sy-post-publisher/commit/412a08ee51d160a0a79a9082fd94736bd01a55b2))
+
 ## [0.6.1](https://github.com/terwer/src-sy-post-publisher/compare/v0.6.0...v0.6.1) (2023-01-10)
 
 
