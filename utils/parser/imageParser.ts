@@ -24,10 +24,7 @@
  */
 
 import { LogFactory } from "~/utils/logUtil"
-import { inSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
-import { imageToBase64 } from "~/utils/otherlib/imageToBase64"
-import { getEnvOrDefault } from "~/utils/envUtil"
-import { appendStr } from "~/utils/strUtil"
+// import { imageToBase64 } from "~/utils/otherlib/imageToBase64"
 import { ImageItem } from "~/utils/models/imageItem"
 
 /**
@@ -78,67 +75,67 @@ export class ImageParser {
    * 将外链外链图片替换为base64
    * @param content
    */
-  public async replaceImagesWithBase64(content: string): Promise<string> {
-    let newcontent = content
-
-    const imgRegex = /!\[.*]\((http|https):\/.*\/.*\)/g
-    const matches = newcontent.match(imgRegex)
-    // 没有图片，无需处理
-    if (matches == null || matches.length === 0) {
-      return newcontent
-    }
-
-    for (let i = 0; i < matches.length; i++) {
-      const match = matches[i]
-      this.logger.debug("img=>", match)
-
-      const src = match.replace(/!\[.*]\(/g, "").replace(/\)/, "")
-      this.logger.debug("src=>", src)
-
-      let newImg
-      if (inSiyuan()) {
-        const imageBase64WithURI = await imageToBase64({ uri: src })
-        newImg = imageBase64WithURI?.base64 ?? "no pic"
-      } else {
-        const middlewareUrl = getEnvOrDefault(
-          "VITE_MIDDLEWARE_URL",
-          "/api/middleware"
-        )
-        const middleApiUrl = middlewareUrl + "/imageToBase64"
-
-        const data = {
-          fetchParams: {
-            imgUrl: src,
-          },
-        }
-
-        const middleFetchOption = {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        }
-
-        this.logger.debug("middleApiUrl=>", middleApiUrl)
-        this.logger.debug("middleFetchOption=>", middleFetchOption)
-
-        const response: Response = await fetch(middleApiUrl, middleFetchOption)
-        const resJson = await response.json()
-        this.logger.debug("resJson=>", resJson)
-        newImg = resJson?.body?.base64str ?? "parse error"
-      }
-
-      newImg = appendStr(
-        '<img src="data:image/png;base64,',
-        newImg,
-        '"  alt="base64Image"/>'
-      )
-      newcontent = newcontent.replace(match, newImg)
-    }
-
-    return newcontent
-  }
+  // public async replaceImagesWithBase64(content: string): Promise<string> {
+  //   let newcontent = content
+  //
+  //   const imgRegex = /!\[.*]\((http|https):\/.*\/.*\)/g
+  //   const matches = newcontent.match(imgRegex)
+  //   // 没有图片，无需处理
+  //   if (matches == null || matches.length === 0) {
+  //     return newcontent
+  //   }
+  //
+  //   for (let i = 0; i < matches.length; i++) {
+  //     const match = matches[i]
+  //     this.logger.debug("img=>", match)
+  //
+  //     const src = match.replace(/!\[.*]\(/g, "").replace(/\)/, "")
+  //     this.logger.debug("src=>", src)
+  //
+  //     let newImg
+  //     if (inSiyuan()) {
+  //       const imageBase64WithURI = await imageToBase64({ uri: src })
+  //       newImg = imageBase64WithURI?.base64 ?? "no pic"
+  //     } else {
+  //       const middlewareUrl = getEnvOrDefault(
+  //         "VITE_MIDDLEWARE_URL",
+  //         "/api/middleware"
+  //       )
+  //       const middleApiUrl = middlewareUrl + "/imageToBase64"
+  //
+  //       const data = {
+  //         fetchParams: {
+  //           imgUrl: src,
+  //         },
+  //       }
+  //
+  //       const middleFetchOption = {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify(data),
+  //       }
+  //
+  //       this.logger.debug("middleApiUrl=>", middleApiUrl)
+  //       this.logger.debug("middleFetchOption=>", middleFetchOption)
+  //
+  //       const response: Response = await fetch(middleApiUrl, middleFetchOption)
+  //       const resJson = await response.json()
+  //       this.logger.debug("resJson=>", resJson)
+  //       newImg = resJson?.body?.base64str ?? "parse error"
+  //     }
+  //
+  //     newImg = appendStr(
+  //       '<img src="data:image/png;base64,',
+  //       newImg,
+  //       '"  alt="base64Image"/>'
+  //     )
+  //     newcontent = newcontent.replace(match, newImg)
+  //   }
+  //
+  //   return newcontent
+  // }
 
   /**
    * 解析图片块为图片链接

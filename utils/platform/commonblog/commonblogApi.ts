@@ -23,7 +23,6 @@
  * questions.
  */
 
-import { getEnvOrDefault } from "~/utils/envUtil"
 import { Logger } from "loglevel"
 import { LogFactory } from "~/utils/logUtil"
 import {
@@ -33,6 +32,7 @@ import {
 import { getWidgetId } from "~/utils/platform/siyuan/siyuanUtil"
 import { isEmptyString } from "~/utils/util"
 import { isElectron, isLocalhost } from "~/utils/browserUtil"
+import { getSiyuanCfg } from "~/utils/platform/siyuan/siYuanConfig"
 
 export class CommonblogApi {
   protected logger: Logger
@@ -54,10 +54,7 @@ export class CommonblogApi {
     fetchOptions: RequestInit,
     formJson?: any[]
   ): Promise<Response> {
-    const middlewareUrl = getEnvOrDefault(
-      "VITE_MIDDLEWARE_URL",
-      "/api/middleware"
-    )
+    const middlewareUrl = getSiyuanCfg().middlewareUrl
     const middleApiUrl = middlewareUrl + "/fetch"
     this.logger.debug("apiUrl=>", apiUrl)
 

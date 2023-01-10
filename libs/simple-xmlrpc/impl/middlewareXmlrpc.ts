@@ -23,8 +23,8 @@
  * questions.
  */
 
-import { getEnvOrDefault } from "~/utils/envUtil"
 import { LogFactory } from "~/utils/logUtil"
+import { getSiyuanCfg } from "~/utils/platform/siyuan/siYuanConfig"
 
 const logger = LogFactory.getLogger(
   "libs/simple-xmlrpc/impl/middlewareXmlrpc.ts"
@@ -41,10 +41,7 @@ export async function fetchMiddleware(
   reqMethod: string,
   reqParams: string[]
 ): Promise<string> {
-  const middlewareUrl = getEnvOrDefault(
-    "VITE_MIDDLEWARE_URL",
-    "/api/middleware"
-  )
+  const middlewareUrl = getSiyuanCfg().middlewareUrl
   const middleApiUrl = middlewareUrl + "/xmlrpc"
   logger.debug("apiUrl=>", apiUrl)
   const fetchCORSParams = {

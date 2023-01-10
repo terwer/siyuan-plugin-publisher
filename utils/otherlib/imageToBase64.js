@@ -22,31 +22,31 @@
  * or visit www.terwer.space if you need additional information or have any
  * questions.
  */
-
-import * as fs from "fs/promises"
-import * as path from "path"
-import fetch from "cross-fetch"
-
-const imageRegex = /.(gif|jpe?g|tiff?|png|webp|bmp|ico)$/i
-
-export async function imageToBase64(image) {
-  let base64 = ""
-  if (image.uri) {
-    const uri = new URL(image.uri)
-    const fetchResponse = await fetch(uri)
-    const imageBuffer = await fetchResponse.buffer()
-    base64 = imageBuffer.toString("base64")
-  } else if (image.path && imageRegex.test(image.path)) {
-    const response = await fs.stat(image.path)
-    const isFile = response.isFile()
-    if (isFile) {
-      const imageBuffer = await fs.readFile(path.resolve(image.path))
-      base64 = imageBuffer.toString("base64")
-    }
-  } else {
-    throw new Error(
-      "Didn't get an image or a good uri for the appropriate param"
-    )
-  }
-  return { base64 }
-}
+//
+// import * as fs from "fs/promises"
+// import * as path from "path"
+// import fetch from "cross-fetch"
+//
+// const imageRegex = /.(gif|jpe?g|tiff?|png|webp|bmp|ico)$/i
+//
+// export async function imageToBase64(image) {
+//   let base64 = ""
+//   if (image.uri) {
+//     const uri = new URL(image.uri)
+//     const fetchResponse = await fetch(uri)
+//     const imageBuffer = await fetchResponse.buffer()
+//     base64 = imageBuffer.toString("base64")
+//   } else if (image.path && imageRegex.test(image.path)) {
+//     const response = await fs.stat(image.path)
+//     const isFile = response.isFile()
+//     if (isFile) {
+//       const imageBuffer = await fs.readFile(path.resolve(image.path))
+//       base64 = imageBuffer.toString("base64")
+//     }
+//   } else {
+//     throw new Error(
+//       "Didn't get an image or a good uri for the appropriate param"
+//     )
+//   }
+//   return { base64 }
+// }
