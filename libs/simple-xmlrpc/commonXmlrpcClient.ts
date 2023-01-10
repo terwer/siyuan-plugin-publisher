@@ -25,12 +25,12 @@
 
 import { LogFactory } from "~/utils/logUtil"
 import { Logger } from "loglevel"
-import { isSiyuanOrSiyuanNewWin } from "~/utils/platform/siyuan/siyuanUtil"
 import { isInChromeExtension } from "~/utils/otherlib/ChromeUtil"
 import { fetchNode } from "~/libs/simple-xmlrpc/impl/nodeXmlrpc"
 import { fetchChrome } from "~/libs/simple-xmlrpc/impl/chromeXmlrpc"
 import { fetchMiddleware } from "~/libs/simple-xmlrpc/impl/middlewareXmlrpc"
 import { XmlRpcValue } from "~/libs/simple-xmlrpc/xmlrpc"
+import { isElectron } from "~/utils/browserUtil"
 
 /**
  * Xmlrpc客户端封装类
@@ -68,7 +68,7 @@ export class CommonXmlrpcClient {
   ): Promise<XmlRpcValue> {
     let result
 
-    if (isSiyuanOrSiyuanNewWin()) {
+    if (isElectron) {
       this.logger.info("当前处于挂件模式，使用electron的fetch获取数据")
       // 不解析了，直接使用Node兼容调用
       result = await fetchNode(apiUrl, reqMethod, reqParams)

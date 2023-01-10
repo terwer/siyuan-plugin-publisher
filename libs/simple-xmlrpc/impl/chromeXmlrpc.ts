@@ -25,7 +25,11 @@
 
 import { sendChromeMessage } from "~/utils/otherlib/ChromeUtil"
 import { LogFactory } from "~/utils/logUtil"
-import { Deserializer, serializeMethodCall } from "~/libs/simple-xmlrpc/xmlrpc"
+import {
+  Deserializer,
+  serializeMethodCall,
+  XmlRpcValue,
+} from "~/libs/simple-xmlrpc/xmlrpc"
 import { XmlrpcUtil } from "~/libs/simple-xmlrpc/custom/xmlrpcUtil"
 
 const logger = LogFactory.getLogger("libs/simple-xmlrpc/impl/chromeXmlrpc.ts")
@@ -40,7 +44,7 @@ async function doChromeFetch(
   apiUrl: string,
   reqMethod: string,
   reqParams: string[]
-): Promise<string> {
+): Promise<XmlRpcValue> {
   try {
     const methodBodyXml = serializeMethodCall(reqMethod, reqParams, "utf-8")
 
@@ -58,7 +62,7 @@ async function doChromeFetch(
       apiUrl, // 需要请求的url
       fetchCORSParams,
     })
-    logger.debug("fetchChromeXmlrpc开始，resText=>", resText)
+    // logger.debug("fetchChromeXmlrpc开始，resText=>", resText)
 
     let data
     if (resText) {
@@ -66,7 +70,7 @@ async function doChromeFetch(
 
       const deserializer = new Deserializer("utf-8")
       data = await deserializer.deserializeMethodResponse(resText)
-      logger.debug("fetchChromeXmlrpc结束，data=>", data)
+      // logger.debug("fetchChromeXmlrpc结束，data=>", data)
     }
 
     return data
@@ -85,19 +89,19 @@ export async function fetchChrome(
   apiUrl: string,
   reqMethod: string,
   reqParams: string[]
-): Promise<string> {
-  this.logger.debug("fetchChrome apiUrl=>", apiUrl)
+): Promise<XmlRpcValue> {
+  logger.debug("fetchChrome apiUrl=>", apiUrl)
 
   const fetchCORSParams = {
     reqMethod,
     reqParams,
   }
-  this.logger.debug("fetchChrome fetchCORSParams=>", fetchCORSParams)
+  logger.debug("fetchChrome fetchCORSParams=>", fetchCORSParams)
 
   const result = await doChromeFetch(apiUrl, reqMethod, reqParams)
   if (!result || result === "") {
     throw new Error("请求错误或者返回结果为空")
   }
-  this.logger.debug("fetchCustom result=>", result)
+  logger.debug("fetchCustom result=>", result)
   return result
 }

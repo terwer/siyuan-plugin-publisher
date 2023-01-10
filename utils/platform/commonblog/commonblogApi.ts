@@ -94,7 +94,7 @@ export class CommonblogApi {
    * @param fetchOptions 请求参数
    * @param formJson 可选，发送form请求才需要
    */
-  private async fetchChromeCORS(
+  private async fetchChrome(
     apiUrl: string,
     fetchOptions: RequestInit,
     formJson?: any[]
@@ -144,7 +144,7 @@ export class CommonblogApi {
       result = await fetch(apiUrl, fetchOptions)
     } else if (isInChromeExtension()) {
       this.logger.warn("当前处于Chrome插件中，需要模拟fetch解决CORS跨域问题")
-      result = await this.fetchChromeCORS(apiUrl, fetchOptions, formJson)
+      result = await this.fetchChrome(apiUrl, fetchOptions, formJson)
     } else {
       this.logger.warn("当前处于非挂件模式，已开启请求代理解决CORS跨域问题")
       this.logger.warn("formJson=>", formJson)
