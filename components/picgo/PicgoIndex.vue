@@ -1,5 +1,5 @@
 <!--
-  - Copyright (c) 2022, Terwer . All rights reserved.
+  - Copyright (c) 2022-2023, Terwer . All rights reserved.
   - DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
   -  
   - This code is free software; you can redistribute it and/or modify it
@@ -25,89 +25,210 @@
 
 <template>
   <div class="picgo-body">
-    <!--
-    <el-upload
-      action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-      v-model:file-list="fileList"
-      class="upload-demo"
-      :on-preview="handlePreview"
-      :on-remove="handleRemove"
-      list-type="picture"
-    >
-      <el-button type="primary">点击上传</el-button>
-      <template #tip>
-        <div class="el-upload__tip">仅支持jpg/png，文件大小不能超过500kb</div>
-      </template>
-    </el-upload>
-    -->
-    <div class="upload-btn-list">
-      <div class="upload-control">
-        <label>
-          <!-- 自定义的文件选择按钮 -->
-          <label for="fileInput" class="custom-file-input">选择图片</label>
-
-          <!-- 原有的文件选择按钮 -->
-          <input
-            type="file"
-            accept="image/png, image/gif, image/jpeg"
-            @change="onRequest"
-            multiple
-            id="fileInput"
-          />
-        </label>
-      </div>
-      <div class="upload-control">
-        <el-button type="primary" @click="doUploadPicFromClipboard"
-          >剪贴板图片
-        </el-button>
-      </div>
-      <div class="upload-control">
-        <el-button text :loading="isUploadLoading">上传状态</el-button>
-      </div>
+    <!-- 上传状态 -->
+    <div class="upload-status">
+      <el-button text :loading="picgoCommonData.isUploadLoading"
+        >{{ $t("picgo.upload.status") }}
+      </el-button>
     </div>
 
+    <!-- 操作按钮 -->
+    <blockquote class="picgo-opt-btn">
+      <!-- 原有的文件选择按钮 -->
+      <input
+        type="file"
+        accept="image/png, image/gif, image/jpeg"
+        @change="picgoUploadMethods.doUploadPicSelected"
+        multiple
+        ref="refSelectedFiles"
+      />
+      <el-tooltip
+        v-if="isElectron"
+        class="box-item"
+        effect="dark"
+        :content="$t('picgo.upload.select.pic')"
+        placement="top-start"
+      >
+        <el-button type="warning" @click="picgoUploadMethods.bindFileControl">
+          <font-awesome-icon icon="fa-solid fa-file-import" />
+        </el-button>
+      </el-tooltip>
+
+      <!-- 剪贴板上传 -->
+      <el-tooltip
+        class="box-item"
+        effect="dark"
+        :content="$t('picgo.upload.clipboard')"
+        placement="top-start"
+      >
+        <el-button
+          type="primary"
+          @click="picgoUploadMethods.doUploadPicFromClipboard"
+        >
+          <font-awesome-icon icon="fa-solid fa-paste" />
+        </el-button>
+      </el-tooltip>
+
+      <!-- 上传所有图到图床 -->
+      <el-tooltip
+        class="box-item"
+        effect="dark"
+        :content="$t('picgo.upload.onclick')"
+        placement="top-start"
+      >
+        <el-button
+          type="success"
+          @click="picgoManageMethods.handleUploadAllImagesToBed"
+        >
+          <font-awesome-icon icon="fa-solid fa-upload" />
+        </el-button>
+      </el-tooltip>
+
+      <!-- 下载所有远程图片 -->
+      <el-tooltip
+        v-if="false && isElectron"
+        class="box-item"
+        effect="dark"
+        :content="$t('picgo.download.onclick')"
+        placement="top-start"
+      >
+        <el-button type="primary">
+          <font-awesome-icon icon="fa-solid fa-download" />
+        </el-button>
+      </el-tooltip>
+
+      <!-- 图床设置 -->
+      <el-tooltip
+        class="box-item"
+        effect="dark"
+        :content="$t('picgo.pic.setting')"
+        placement="top-start"
+      >
+        <el-button type="info" @click="picgoUploadMethods.handlePicgoSetting">
+          <font-awesome-icon icon="fa-solid fa-gear" />
+        </el-button>
+      </el-tooltip>
+    </blockquote>
+
+    <!-- 图片列表 -->
     <ul class="file-list">
       <li
         class="file-list-item"
-        v-for="f in fileList.files"
+        v-for="f in picgoCommonData.fileList.files"
         v-bind:key="f.name"
       >
-        <img :src="f.url" :alt="f.name" />
-        <el-input :model-value="f.url" @click="onImageUrlCopy(f.url)" />
+        <div><img :src="f.url" :alt="f.name" /></div>
+        <div>
+          <!-- 上传本地图片到图床 -->
+          <el-tooltip
+            :content="
+              f.isLocal ? $t('picgo.download.local.to.bed') : '重新上传'
+            "
+            class="box-item"
+            effect="dark"
+            placement="bottom"
+            popper-class="publish-menu-tooltip"
+          >
+            <el-button
+              @click="picgoManageMethods.handleUploadCurrentImageToBed(f)"
+            >
+              <font-awesome-icon
+                :icon="
+                  f.isLocal
+                    ? 'fa-solid fa-upload'
+                    : 'fa-solid fa-arrow-rotate-right'
+                "
+              />
+            </el-button>
+          </el-tooltip>
+
+          <!-- 下载远程图片到本地 -->
+          <el-tooltip
+            v-if="false && isElectron && !f.isLocal"
+            :content="$t('picgo.download.bed.to.local')"
+            class="box-item"
+            effect="dark"
+            placement="bottom"
+            popper-class="publish-menu-tooltip"
+          >
+            <el-button>
+              <font-awesome-icon icon="fa-solid fa-download" />
+            </el-button>
+          </el-tooltip>
+
+          <!-- 复制图片链接 -->
+          <el-popover
+            placement="bottom"
+            :title="f.name"
+            :width="picgoCommonData.popWidth"
+            trigger="hover"
+            :content="f.url"
+          >
+            <template #reference>
+              <el-button @click="picgoManageMethods.onImageUrlCopy(f.url)">
+                <font-awesome-icon icon="fa-solid fa-file-lines" />
+              </el-button>
+            </template>
+          </el-popover>
+
+          <!-- 图片预览 -->
+          <el-tooltip
+            :content="$t('picgo.pic.preview')"
+            class="box-item"
+            effect="dark"
+            placement="bottom"
+            popper-class="publish-menu-tooltip"
+          >
+            <el-button
+              @click="picgoManageMethods.handlePictureCardPreview(f.url)"
+            >
+              <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
+            </el-button>
+          </el-tooltip>
+        </div>
       </li>
     </ul>
 
-    <div class="log-msg">
+    <!-- 图片放大 -->
+    <el-dialog
+      v-model="picgoManageData.dialogPreviewVisible"
+      :title="$t('picgo.pic.preview') + ' - ' + picgoManageData.dialogImageUrl"
+    >
+      <img
+        w-full
+        :src="picgoManageData.dialogImageUrl"
+        alt="Preview Image"
+        class="img-big-preview"
+      />
+    </el-dialog>
+
+    <!-- Picgo设置 -->
+    <el-dialog
+      v-model="picgoUploadData.dialogPicgoSettingFormVisible"
+      :title="$t('picgo.pic.setting')"
+    >
+      <picgo-setting />
+    </el-dialog>
+
+    <!-- 日志显示 -->
+    <div class="log-msg" v-if="picgoCommonData.showDebugMsg">
       <el-input
         type="textarea"
         :autosize="{ minRows: 5, maxRows: 10 }"
-        v-model="loggerMsg"
+        v-model="picgoCommonData.loggerMsg"
       />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { LogFactory } from "~/utils/logUtil"
-import { ElMessage } from "element-plus"
-import { useI18n } from "vue-i18n"
-import { uploadByPicGO } from "~/utils/otherlib/picgoUtil"
-import { onMounted, reactive, ref, watch } from "vue"
-import { getPageId, inSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
-import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
-import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
-import { removeBom } from "~/utils/strUtil"
-import { isBrowser } from "~/utils/browserUtil"
-
-const logger = LogFactory.getLogger("components/picgo/PicgoIndex.vue")
-const { t } = useI18n()
-const siyuanApi = new SiYuanApi()
-const isUploadLoading = ref(false)
-
-const fileList = reactive({
-  files: [],
-})
-const loggerMsg = ref("")
+import { usePicgoCommon } from "~/composables/picgo/picgoCommonCom"
+import { usePicgoUpload } from "~/composables/picgo/picgoUploadCom"
+import { usePicgoInitPage } from "~/composables/picgo/picgoInitPageCom"
+import { isElectron } from "~/utils/browserUtil"
+import { usePicgoManage } from "~/composables/picgo/picgoManageCom"
+import { ref } from "vue"
+import PicgoSetting from "~/components/picgo/PicgoSetting.vue"
 
 // props
 const props = defineProps({
@@ -117,183 +238,35 @@ const props = defineProps({
   },
 })
 
-/**
- * 处理图片后续
- * @param imgInfos
- */
-const doAfterUpload = (imgInfos) => {
-  loggerMsg.value = imgInfos
+// refs
+const refSelectedFiles = ref()
 
-  const imageJson = JSON.parse(imgInfos)
-
-  if (imageJson && imageJson.length > 0) {
-    imageJson.forEach((img) => {
-      const rtnItem = {
-        name: img.fileName,
-        url: img.imgUrl,
-      }
-      loggerMsg.value += "\nnewItem=>" + JSON.stringify(rtnItem)
-
-      fileList.files.push(rtnItem)
-    })
-  }
-  ElMessage.success(t("main.opt.success"))
-}
-
-// const readBase64FromFile = async (file) => {
-//   const reader = new FileReader()
-//   reader.readAsDataURL(file)
-//   const base64 = await new Promise((resolve, reject) => {
-//     reader.onload = () => resolve(reader.result)
-//     reader.onerror = (error) => reject(error)
-//   })
-//   return base64
-// }
-
-const onRequest = async (event) => {
-  isUploadLoading.value = true
-
-  try {
-    const fileList = event.target.files
-
-    console.log("onRequest fileList=>", fileList)
-    if (!fileList || fileList.length === 0) {
-      ElMessage.error("请选择图片")
-      isUploadLoading.value = false
-      return
-    }
-
-    if (!inSiyuan() && !isInSiyuanNewWinBrowser()) {
-      ElMessage.error("非electron环境只能通过剪贴板上传")
-      isUploadLoading.value = false
-      return
-    }
-
-    // 获取选择的文件的路径数组
-    const filePaths = []
-    for (let i = 0; i < fileList.length; i++) {
-      // const tmppath = URL.createObjectURL(fileList[i])
-      // logger.debug("tmppath=>", tmppath)
-      //
-      // const base64 = await readBase64FromFile(fileList[i])
-      // logger.debug("base64=>", base64)
-
-      if (fileList.item(i).path) {
-        filePaths.push(fileList.item(i).path)
-        logger.debug("路径不为空")
-      } else {
-        // const base64Obj = {
-        //   base64Image: base64,
-        //   fileName: fileList.item(i).name, // 图片的文件名
-        //   width: "200", // 图片宽度
-        //   height: "200", // 图片高度
-        //   extname: ".png", // 图片格式的扩展名 比如.jpg | .png
-        // }
-        logger.debug("路径为空，忽略")
-        // filePaths.push(base64Obj)
-      }
-    }
-
-    const imgInfos = await uploadByPicGO(filePaths)
-    // 处理后续
-    doAfterUpload(imgInfos)
-
-    isUploadLoading.value = false
-  } catch (e) {
-    if (e.toString().indexOf("cancel") <= -1) {
-      ElMessage({
-        type: "error",
-        message: t("main.opt.failure") + "=>" + e,
-      })
-      logger.error(t("main.opt.failure") + "=>" + e)
-    }
-    isUploadLoading.value = false
-  }
-}
-
-const doUploadPicFromClipboard = async () => {
-  isUploadLoading.value = true
-
-  try {
-    const imgInfos = await uploadByPicGO()
-    // 处理后续
-    doAfterUpload(imgInfos)
-
-    isUploadLoading.value = false
-  } catch (e) {
-    if (e.toString().indexOf("cancel") <= -1) {
-      ElMessage({
-        type: "error",
-        message: t("main.opt.failure") + "=>" + e,
-      })
-      logger.error(t("main.opt.failure") + "=>", e)
-    }
-    isUploadLoading.value = false
-  }
-}
-
-const onImageUrlCopy = (url: string) => {
-  if (isBrowser()) {
-    const mdUrl = `![](${url})`
-    // document.execCommand("copy");
-
-    // Copy the selected text to the clipboard
-    navigator.clipboard.writeText(mdUrl).then(
-      function () {
-        // The text has been successfully copied to the clipboard
-        ElMessage.success(t("main.copy.success"))
-      },
-      function (err) {
-        // An error occurred while copying the text
-        ElMessage.error(t("main.copy.failure") + err)
-      }
-    )
-  }
-}
-
-const initPage = async () => {
-  const pageId = await getPageId(true, props.pageId)
-  const imageBlocks = await siyuanApi.getImageBlocksByID(pageId)
-  logger.debug("查询文章中的图片块=>", imageBlocks)
-
-  if (!imageBlocks || imageBlocks.length === 0) {
-    return
-  }
-
-  // 解析
-  imageBlocks.forEach((page) => {
-    const imgUrl = removeBom(page.content)
-    const imageItem = {
-      name: imgUrl.substring(imgUrl.lastIndexOf("/") + 1),
-      url: imgUrl,
-    }
-
-    logger.debug("imageItem=>", imageItem)
-    fileList.files.push(imageItem)
-  })
-}
-
-/* 监听props */
-watch(
-  () => props.pageId,
-  /**/ (oldValue, newValue) => {
-    // Here you can add you functionality
-    // as described in the name you will get old and new value of watched property
-    // 默认选中vuepress
-    // setBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY, true)
-    initPage()
-    logger.debug("Picgo初始化")
-  }
+// uses
+const { picgoCommonData, picgoCommonMethods } = usePicgoCommon()
+const { picgoInitMethods } = usePicgoInitPage(props, { picgoCommonMethods })
+const { picgoUploadData, picgoUploadMethods } = usePicgoUpload(
+  props,
+  { picgoCommonMethods },
+  { refSelectedFiles }
 )
-
-onMounted(async () => {
-  await initPage()
+const { picgoManageData, picgoManageMethods } = usePicgoManage(props, {
+  picgoCommonMethods,
+  picgoInitMethods,
 })
 </script>
 
 <style>
 .picgo-body {
   padding: 16px;
+}
+
+.picgo-body .picgo-opt-btn {
+  display: block;
+  border: solid 1px green;
+  border-radius: 4px;
+  padding: 10px;
+  background: var(--custom-app-bg-color);
+  margin: 16px 0 16px;
 }
 
 .upload-btn-list {
@@ -337,12 +310,27 @@ input[type="file"] {
 
 .file-list li {
   display: inline-block;
-  margin-right: 1em;
-  padding-bottom: 4px;
+  margin-right: 10px;
+  margin-bottom: 16px;
+  padding: 8px;
+  border: solid 1px var(--el-color-primary);
+  border-radius: var(--el-input-border-radius, var(--el-border-radius-base));
 }
 
 .file-list li img {
-  max-width: 100px;
-  height: auto;
+  width: 160px;
+  height: 140px;
+}
+
+.one-local-to-bed {
+  margin-bottom: 12px;
+}
+
+.one-bed-to-local {
+  margin-bottom: 16px;
+}
+
+.img-big-preview {
+  max-width: 100%;
 }
 </style>

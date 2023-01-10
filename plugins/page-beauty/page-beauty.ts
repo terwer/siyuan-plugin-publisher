@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -24,8 +24,9 @@
  */
 import { PluginObject } from "vue"
 import { LogFactory } from "~/utils/logUtil"
-import { isEmptyString } from "~/utils/util"
+import { isEmptyString, pathJoin } from "~/utils/util"
 import { goToPage } from "~/utils/otherlib/ChromeUtil"
+import { getSiyuanCfg } from "~/utils/platform/siyuan/siYuanConfig"
 
 // typedef
 declare module "vue" {
@@ -50,20 +51,50 @@ const PageBeauty: PluginObject<any> = {
     Vue.directive("beauty", (el: HTMLElement) => {
       logger.info("PageBeauty is rendering ...")
 
+      // links
       const links = el.querySelectorAll("a")
-      links.forEach((link) => {
-        link.addEventListener("click", function (evt) {
-          // 阻止默认跳转
-          evt.preventDefault()
-
-          // 获取跳转链接
+      if (links && links.length > 0) {
+        links.forEach((link) => {
+          // #264 转换虚拟链接为真实预览链接
           const href = link.getAttribute("href")
-          // logger.info("href=>", href)
-          if (!isEmptyString(href)) {
-            goToPage(href)
+          if (href.includes("siyuan://blocks/")) {
+            // const baseUrl = getSiyuanCfg().baseUrl
+            let newHref = href.replace(/siyuan:\/\/blocks\//g, "")
+            newHref = "/detail/index.html?id=" + newHref
+            // newHref = pathJoin(baseUrl, newHref)
+
+            link.setAttribute("href", newHref)
+          }
+
+          link.addEventListener("click", function (evt) {
+            // 阻止默认跳转
+            evt.preventDefault()
+
+            // 获取跳转链接
+            const href = link.getAttribute("href")
+            // logger.info("href=>", href)
+            if (!isEmptyString(href)) {
+              goToPage(href)
+            }
+          })
+        })
+        console.log("链接处理完毕，全部新窗口打开.")
+      }
+
+      // assets
+      const imgs = el.querySelectorAll("img")
+      if (imgs && imgs.length > 0) {
+        imgs.forEach((img) => {
+          const src = img.getAttribute("src")
+          if (src.indexOf("assets") > -1) {
+            const baseUrl = getSiyuanCfg().baseUrl
+            const imgUrl = pathJoin(baseUrl, "/" + src)
+
+            img.setAttribute("src", imgUrl)
           }
         })
-      })
+        console.log("本地图片处理完毕，已修复图片展示.")
+      }
     })
   },
 }

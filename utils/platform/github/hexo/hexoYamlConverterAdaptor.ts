@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -32,7 +32,7 @@ import { IGithubCfg } from "~/utils/platform/github/githubCfg"
 import { YamlFormatObj } from "~/utils/models/yamlFormatObj"
 import { LogFactory } from "~/utils/logUtil"
 import { obj2Yaml } from "~/utils/yamlUtil"
-import { covertStringToDate, formatIsoToZhDate } from "~/utils/dateUtil"
+import { formatIsoToZhDate } from "~/utils/dateUtil"
 import { isEmptyString } from "~/utils/util"
 
 /**
@@ -54,7 +54,7 @@ export class HexoYamlConverterAdaptor
     yamlFormatObj.yamlObj.title = postForm.formData.title
 
     // date
-    yamlFormatObj.yamlObj.date = postForm.formData.created
+    // yamlFormatObj.yamlObj.date = postForm.formData.created
 
     // updated
     yamlFormatObj.yamlObj.updated = formatIsoToZhDate(

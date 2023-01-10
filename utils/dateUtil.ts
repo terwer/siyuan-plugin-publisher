@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -226,4 +226,11 @@ export const calcLastSeconds = function (isoDateStr: string): number {
 
   const s = (now.getTime() - date.getTime()) / 1000
   return parseInt(s.toString())
+}
+
+/**
+ * 当前年份
+ */
+export const nowYear = () => {
+  return new Date().getFullYear()
 }

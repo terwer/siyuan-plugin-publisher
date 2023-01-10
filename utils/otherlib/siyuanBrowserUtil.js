@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -56,11 +56,13 @@ export const getSiyuanNewWinDataDir = () => {
  */
 export const doCloseExportWin = () => {
   const { ipcRenderer } = require("electron")
-  ipcRenderer.send(SIYUAN_BROWSER_CONSTANTS_SIYUAN_EXPORT_CLOSE)
-
-  if (window.siyuan.printWin) {
-    window.siyuan.printWin.destroy()
-  }
+  // const currentWindowId = getCurrentWindow().id
+  const currentWindowId = window.terwer.currentWindowId
+  console.log("currentWindowId=>", currentWindowId)
+  ipcRenderer.send(
+    SIYUAN_BROWSER_CONSTANTS_SIYUAN_EXPORT_CLOSE,
+    currentWindowId
+  )
 }
 
 /**

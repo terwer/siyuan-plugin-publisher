@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -32,8 +32,9 @@ import {
 } from "~/utils/browserUtil"
 import { LogFactory } from "~/utils/logUtil"
 import { isInFirefoxExtension } from "~/utils/otherlib/FirefoxUtil"
-import { pathJoin } from "~/utils/util"
+import { isEmptyString, pathJoin } from "~/utils/util"
 import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
+import { getSiyuanCfg } from "~/utils/platform/siyuan/siYuanConfig"
 
 const logger = LogFactory.getLogger()
 
@@ -44,8 +45,9 @@ const logger = LogFactory.getLogger()
  * @param pageUrl 例如：/index.html
  * @param split 例如：/，但部分情况下无需传递此参数
  *
+ * @param isShare 是否是分享链接
  */
-function getPageUrl(pageUrl, split) {
+export const getPageUrl = (pageUrl, split, isShare) => {
   // While we could have used `let url = "index.html"`, using runtime.getURL is a bit more robust as
   // it returns a full URL rather than just a path that Chrome needs to be resolved contextually at
   // runtime.
@@ -59,19 +61,38 @@ function getPageUrl(pageUrl, split) {
 
   // 处理内部链接
   if (typeof chrome.runtime !== "undefined") {
-    url = chrome.runtime.getURL(url)
+    if (isShare) {
+      url = "/widgets/sy-post-publisher" + url
+      url = setUrlParameter(url, "from", "chrome")
+
+      const baseUrl = getSiyuanCfg().baseUrl
+      url = pathJoin(baseUrl, url)
+    } else {
+      url = chrome.runtime.getURL(url)
+    }
   } else {
     // 思源笔记链接处理
-    const from = getQueryString("from")
-    if (inSiyuan() || from === "siyuan" || isInSiyuanNewWinBrowser()) {
-      url = "/widgets/sy-post-publisher" + url
-      url = setUrlParameter(url, "from", "siyuan")
+    url = "/widgets/sy-post-publisher" + url
+    let from = getQueryString("from")
+    if (inSiyuan()) {
+      from = "siyuan"
+    }
+    if (isInSiyuanNewWinBrowser()) {
+      from = "siyuanNewWin"
+    }
+    if (!isEmptyString(from)) {
+      url = setUrlParameter(url, "from", from)
     }
 
     // 处理手动分隔符
-    let baseUrl = window.location.protocol + "//" + window.location.host
+    let host = window.location.host
+    if (isInSiyuanNewWinBrowser()) {
+      const ipv4 = window.terwer.ip
+      host = ipv4 + ":" + window.location.port
+    }
+    let baseUrl = window.location.protocol + "//" + host
     if (split && split !== "") {
-      baseUrl = window.location.protocol + "//" + window.location.host + split
+      baseUrl = window.location.protocol + "//" + host + split
     }
 
     // 智能拼接
@@ -163,4 +184,31 @@ export const importJSONToLocalStorage = async () => {
 
   // Read the file as a string of text
   reader.readAsText(files[0])
+}
+
+/**
+ * 检测是否是Windows
+ */
+export const isWindows = "Windows" === navigator?.userAgentData?.platform
+
+/**
+ * 是否在插槽里面
+ * @type {boolean}
+ */
+export const isSlot = getQueryString("isSlot") === "true"
+
+/**
+ * 检测文件是否存在
+ * @returns {boolean}
+ */
+export const isFileExist = (filepath) => {
+  const fs = require("fs")
+
+  if (fs.existsSync(filepath)) {
+    console.log("File exists")
+    return true
+  } else {
+    console.log("File does not exist")
+    return false
+  }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -90,7 +90,7 @@ export class GithubApiAdaptor implements IApi {
     )
 
     if (!res?.content?.path) {
-      throw new Error("Hugo调用API异常")
+      throw new Error(this.apiType + "调用API异常")
     }
     return res.content.path
   }

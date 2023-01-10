@@ -27,6 +27,7 @@ import { reactive } from "vue"
 import { ElMessage } from "element-plus"
 import { appendStr, mdFileToTitle } from "~/utils/strUtil"
 import * as util from "~/utils/util"
+import { isEmptyString } from "~/utils/util"
 import shortHash from "shorthash2"
 import { useI18n } from "vue-i18n"
 import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
@@ -177,6 +178,13 @@ export const useSlug = (props, deps) => {
 
     getSlugData: () => {
       return slugData
+    },
+
+    /**
+     * 别名是否为空
+     */
+    isSlugEmpty: () => {
+      return isEmptyString(slugData.customSlug)
     },
 
     /**

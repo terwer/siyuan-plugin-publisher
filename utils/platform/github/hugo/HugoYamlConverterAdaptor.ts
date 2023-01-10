@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -33,6 +33,7 @@ import { YamlFormatObj } from "~/utils/models/yamlFormatObj"
 import { LogFactory } from "~/utils/logUtil"
 import { obj2Yaml } from "~/utils/yamlUtil"
 import { formatIsoToZhDate } from "~/utils/dateUtil"
+import { isEmptyString } from "~/utils/util"
 
 /**
  * Hugo平台的YAMl解析器
@@ -56,12 +57,18 @@ export class HugoYamlConverterAdaptor
     // slug
     yamlFormatObj.yamlObj.slug = postForm.formData.customSlug
 
-    // url
-    yamlFormatObj.yamlObj.url =
-      "/post/" + postForm.formData.customSlug + ".html"
+    // 固定连接开关
+    if (postForm.formData.usePermalink) {
+      // url
+      yamlFormatObj.yamlObj.url =
+        "/post/" + postForm.formData.customSlug + ".html"
+    }
 
-    // date
-    yamlFormatObj.yamlObj.date = postForm.formData.created
+    // 日期开关
+    if (postForm.formData.useDate) {
+      // date
+      yamlFormatObj.yamlObj.date = postForm.formData.created
+    }
 
     // tags
     yamlFormatObj.yamlObj.tags = postForm.formData.tag.dynamicTags
@@ -84,6 +91,24 @@ export class HugoYamlConverterAdaptor
 
     // isCJKLanguage
     yamlFormatObj.yamlObj.isCJKLanguage = true
+
+    // linkTitle
+    const linkTitle = postForm.formData.linkTitle
+    // weight
+    const weight = parseInt(postForm.formData.weight.toString())
+    if (weight > 0) {
+      yamlFormatObj.yamlObj.weight = weight
+    }
+    if (!isEmptyString(linkTitle)) {
+      yamlFormatObj.yamlObj.linkTitle = linkTitle
+      if (weight > 0) {
+        yamlFormatObj.yamlObj.menu = {
+          main: {
+            weight: weight,
+          },
+        }
+      }
+    }
 
     // formatter
     let yaml = obj2Yaml(yamlFormatObj.yamlObj)

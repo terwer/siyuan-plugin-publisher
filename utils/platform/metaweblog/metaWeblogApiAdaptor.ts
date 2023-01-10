@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -26,10 +26,8 @@
 import { IApi } from "~/utils/api"
 import { IMetaweblogCfg } from "~/utils/platform/metaweblog/IMetaweblogCfg"
 import { MetaWeblogApi } from "~/utils/platform/metaweblog/metaWeblogApi"
-import { CustomMetaWeblogApi } from "~/utils/platform/metaweblog/CustomMetaweblogApi"
 import { getJSONConf } from "~/utils/configUtil"
 import { UserBlog } from "~/utils/models/userBlog"
-import { isInChromeExtension } from "~/utils/otherlib/ChromeUtil"
 import { Logger } from "loglevel"
 import { LogFactory } from "~/utils/logUtil"
 import { Post } from "~/utils/models/post"
@@ -47,9 +45,6 @@ export class MetaWeblogApiAdaptor implements IApi {
   protected password: string
   protected appkey: string
 
-  // Chrome插件扩展专用，后期也可以扩展为通用
-  protected customMetaWeblogApi: CustomMetaWeblogApi
-
   constructor(apiType: string) {
     this.logger = LogFactory.getLogger(
       "utils/platform/metaweblog/metaWeblogApiAdaptor.ts"
@@ -60,13 +55,6 @@ export class MetaWeblogApiAdaptor implements IApi {
     this.username = this.cfg.username
     this.password = this.cfg.password
     this.appkey = apiType
-
-    this.customMetaWeblogApi = new CustomMetaWeblogApi(
-      apiType,
-      this.cfg.apiUrl,
-      this.cfg.username,
-      this.cfg.password
-    )
   }
 
   /**
@@ -75,19 +63,12 @@ export class MetaWeblogApiAdaptor implements IApi {
    */
   public async getUsersBlogs(): Promise<UserBlog[]> {
     let result: UserBlog[] = []
-    if (isInChromeExtension()) {
-      result = await this.customMetaWeblogApi.getUsersBlogs(
-        this.appkey,
-        this.username,
-        this.password
-      )
-    } else {
-      result = await this.metaWeblogApi.getUsersBlogs(
-        this.appkey,
-        this.username,
-        this.password
-      )
-    }
+    result = await this.metaWeblogApi.getUsersBlogs(
+      this.appkey,
+      this.username,
+      this.password
+    )
+
     this.logger.debug("getUsersBlogs=>", result)
     return result
   }
@@ -108,21 +89,12 @@ export class MetaWeblogApiAdaptor implements IApi {
   public async getRecentPosts(numOfPosts: number): Promise<Post[]> {
     const result: Post[] = []
     let blogPosts
-    if (isInChromeExtension()) {
-      blogPosts = await this.customMetaWeblogApi.getRecentPosts(
-        this.appkey,
-        this.username,
-        this.password,
-        numOfPosts
-      )
-    } else {
-      blogPosts = await this.metaWeblogApi.getRecentPosts(
-        this.appkey,
-        this.username,
-        this.password,
-        numOfPosts
-      )
-    }
+    blogPosts = await this.metaWeblogApi.getRecentPosts(
+      this.appkey,
+      this.username,
+      this.password,
+      numOfPosts
+    )
 
     for (let i = 0; i < blogPosts.length; i++) {
       const blogPost = blogPosts[i]
@@ -150,19 +122,12 @@ export class MetaWeblogApiAdaptor implements IApi {
    */
   public async getPost(postid: string): Promise<Post> {
     let data
-    if (isInChromeExtension()) {
-      data = await this.customMetaWeblogApi.getPost(
-        postid,
-        this.username,
-        this.password
-      )
-    } else {
-      data = await this.metaWeblogApi.getPost(
-        postid,
-        this.username,
-        this.password
-      )
-    }
+    data = await this.metaWeblogApi.getPost(
+      postid,
+      this.username,
+      this.password
+    )
+
     return data
   }
 
@@ -176,23 +141,14 @@ export class MetaWeblogApiAdaptor implements IApi {
     publish?: boolean
   ): Promise<boolean> {
     let data
-    if (isInChromeExtension()) {
-      data = await this.customMetaWeblogApi.editPost(
-        postid,
-        this.username,
-        this.password,
-        post,
-        publish ?? true
-      )
-    } else {
-      data = await this.metaWeblogApi.editPost(
-        postid,
-        this.username,
-        this.password,
-        post,
-        publish ?? true
-      )
-    }
+    data = await this.metaWeblogApi.editPost(
+      postid,
+      this.username,
+      this.password,
+      post,
+      publish ?? true
+    )
+
     return data
   }
 
@@ -202,23 +158,13 @@ export class MetaWeblogApiAdaptor implements IApi {
    */
   public async newPost(post: Post, publish?: boolean): Promise<string> {
     let data
-    if (isInChromeExtension()) {
-      data = await this.customMetaWeblogApi.newPost(
-        this.appkey,
-        this.username,
-        this.password,
-        post,
-        publish ?? true
-      )
-    } else {
-      data = await this.metaWeblogApi.newPost(
-        this.appkey,
-        this.username,
-        this.password,
-        post,
-        publish ?? true
-      )
-    }
+    data = await this.metaWeblogApi.newPost(
+      this.appkey,
+      this.username,
+      this.password,
+      post,
+      publish ?? true
+    )
     return data
   }
 
@@ -228,23 +174,13 @@ export class MetaWeblogApiAdaptor implements IApi {
    */
   public async deletePost(postid: string): Promise<boolean> {
     let data
-    if (isInChromeExtension()) {
-      data = await this.customMetaWeblogApi.deletePost(
-        this.appkey,
-        postid,
-        this.username,
-        this.password,
-        true
-      )
-    } else {
-      data = await this.metaWeblogApi.deletePost(
-        this.appkey,
-        postid,
-        this.username,
-        this.password,
-        true
-      )
-    }
+    data = await this.metaWeblogApi.deletePost(
+      this.appkey,
+      postid,
+      this.username,
+      this.password,
+      true
+    )
     return data
   }
 
@@ -256,19 +192,11 @@ export class MetaWeblogApiAdaptor implements IApi {
    */
   public async getCategories(): Promise<CategoryInfo[]> {
     let cats
-    if (isInChromeExtension()) {
-      cats = await this.customMetaWeblogApi.getCategories(
-        this.appkey,
-        this.username,
-        this.password
-      )
-    } else {
-      cats = await this.metaWeblogApi.getCategories(
-        this.appkey,
-        this.username,
-        this.password
-      )
-    }
+    cats = await this.metaWeblogApi.getCategories(
+      this.appkey,
+      this.username,
+      this.password
+    )
     this.logger.debug("获取分类列表=>", cats)
     return cats
   }

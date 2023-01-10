@@ -1,5 +1,5 @@
 <!--
-  - Copyright (c) 2022, Terwer . All rights reserved.
+  - Copyright (c) 2022-2023, Terwer . All rights reserved.
   - DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
   -
   - This code is free software; you can redistribute it and/or modify it
@@ -27,7 +27,7 @@
   <div>
     <div class="footer">
       <div>
-        <span class="text"> &copy;2011-2022 </span>
+        <span class="text"> &copy;2011-{{ nowYear() }} </span>
         <span class="s-dark" @click="goGithub()"> sy-post-publisher </span>
 
         <span class="text"> v{{ v }} . </span>
@@ -139,7 +139,10 @@
         </el-dialog>
 
         <!-- 通用设置弹窗 -->
-        <el-dialog v-model="generalSettingFormVisible">
+        <el-dialog
+          v-model="generalSettingFormVisible"
+          :title="$t('service.tab.change.local')"
+        >
           <general-setting />
         </el-dialog>
       </div>
@@ -169,6 +172,7 @@ import { SIYUAN_CONSTANTS } from "~/utils/constants/siyuanConstants"
 import { version } from "../../package.json"
 import { isBrowser, reloadPage } from "~/utils/browserUtil"
 import GeneralSetting from "~/components/publish/tab/GeneralSetting.vue"
+import { nowYear } from "~/utils/dateUtil"
 
 const logger = LogFactory.getLogger("layouts/default/DefaultFooter")
 
@@ -218,7 +222,8 @@ const newWin = () => {
 }
 
 const exportConfig = () => {
-  exportConf()
+  const confName = `sy-p-cfg-v${v.value}.json`
+  exportConf(confName)
 }
 
 const importConfig = async () => {
@@ -318,6 +323,11 @@ onMounted(() => {
 })
 </script>
 
+<style>
+.el-dialog__header {
+  text-align: left !important;
+}
+</style>
 <style scoped>
 .footer {
   font-size: 12px;

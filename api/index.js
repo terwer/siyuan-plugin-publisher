@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -25,9 +25,8 @@
 
 import express from "express"
 import fetch from "cross-fetch"
-import { imageToBase64 } from "../utils/parser/imageToBase64"
-
-import xmlrpc from "xmlrpc"
+// import { imageToBase64 } from "../utils/otherlib/imageToBase64"
+import { SimpleXmlRpcClient } from "../libs/simple-xmlrpc/custom/SimpleXmlRpcClient"
 
 const app = express()
 // 解决req.body undefined
@@ -55,7 +54,6 @@ app.post("/api/middleware/xmlrpc", (req, res) => {
   // const headers = req.headers;
   // console.log(headers)
   const body = req.body
-  // logUtil.logInfo(body)
 
   // 获取代理参数
   // console.log("body.fetchParams.apiUrl=>")
@@ -66,17 +64,9 @@ app.post("/api/middleware/xmlrpc", (req, res) => {
   // =====================================
   // =====================================
   // 发送真实请求并获取结果
-  // console.log("开始发送真实请求并获取结果")
-  let client
+  console.log("开始发送真实请求并获取结果")
   const xmlrpcApiUrl = body.fetchParams.apiUrl
   const xmlrpcCORSParams = body.fetchParams.fetchCORSParams
-
-  const secure = xmlrpcApiUrl.indexOf("https:") > -1
-  if (secure) {
-    client = xmlrpc.createSecureClient(xmlrpcApiUrl)
-  } else {
-    client = xmlrpc.createClient(xmlrpcApiUrl)
-  }
 
   let err
   try {
@@ -84,31 +74,32 @@ app.post("/api/middleware/xmlrpc", (req, res) => {
     console.log(xmlrpcCORSParams.reqMethod)
     console.log("xmlrpcCORSParams.reqParams=>")
     console.log(xmlrpcCORSParams.reqParams)
-    const methodPromise = methodCallDirect(
-      client,
+
+    const client = new SimpleXmlRpcClient(xmlrpcApiUrl)
+
+    const methodPromise = client.methodCall(
       xmlrpcCORSParams.reqMethod,
       xmlrpcCORSParams.reqParams
     )
     methodPromise
       .then((resolve) => {
-        // console.log("methodPromise resolve=>")
-        // console.log(resolve)
+        console.log("methodPromise resolve=>")
+        console.log(resolve)
 
-        // console.log("请求完成，准备返回真实结果")
         writeData(res, resolve)
-        // console.log("请求处理已成功")
+        console.log("请求处理已成功")
       })
       .catch((reason) => {
-        // console.log("methodPromise catch=>")
+        console.log("methodPromise catch=>")
         console.error("xmlrpc middleware error", reason)
         writeError(res, reason)
-        // console.log("请求处理失败")
+        console.log("请求处理失败")
       })
   } catch (e) {
     err = e
     console.error(e)
     writeError(res, err)
-    // console.log("请求处理异常")
+    console.log("请求处理异常")
   }
   // ========================================
   // ========================================
@@ -173,61 +164,61 @@ app.post("/api/middleware/fetch", (req, res) => {
             },
             body: resJson,
           }
-          // console.log(finalRes)
+          console.log(finalRes)
+          console.log("请求处理已成功")
           writeStatusData(res, finalRes, response.status)
-          // console.log("请求处理已成功")
         })
       } catch (e) {
         err = e
-        console.error(e)
         writeStatusError(res, err, response.status)
-        // console.log("请求处理异常")
+        console.log("请求处理异常")
+        console.error(e)
       }
     })
     .catch((reason) => {
       // console.log("methodPromise catch=>")
+      console.log("请求处理失败")
       console.error("fetch middleware error=>", reason)
       writeError(res, reason)
-      // console.log("请求处理失败")
     })
   // ========================================
   // ========================================
 })
 
-app.post("/api/middleware/imageToBase64", (req, res) => {
-  const body = req.body
-
-  // =====================================
-  // =====================================
-  const imgUrl = body.fetchParams.imgUrl
-  imageToBase64({ uri: imgUrl })
-    .then((response) => {
-      const base64str = response.base64
-
-      const resJson = {
-        base64str,
-      }
-
-      const finalRes = {
-        headers: {
-          status: 200,
-          statusText: "ok",
-        },
-        body: resJson,
-      }
-      // console.log(finalRes)
-      writeStatusData(res, finalRes, 200)
-      // console.log("请求处理已成功")
-    })
-    .catch((reason) => {
-      // console.log("methodPromise catch=>")
-      console.error("imageToBase64 middleware error=>", reason)
-      writeError(res, reason)
-      // console.log("请求处理失败")
-    })
-  // ========================================
-  // ========================================
-})
+// app.post("/api/middleware/imageToBase64", (req, res) => {
+//   const body = req.body
+//
+//   // =====================================
+//   // =====================================
+//   const imgUrl = body.fetchParams.imgUrl
+//   imageToBase64({ uri: imgUrl })
+//     .then((response) => {
+//       const base64str = response.base64
+//
+//       const resJson = {
+//         base64str,
+//       }
+//
+//       const finalRes = {
+//         headers: {
+//           status: 200,
+//           statusText: "ok",
+//         },
+//         body: resJson,
+//       }
+//       // console.log(finalRes)
+//       writeStatusData(res, finalRes, 200)
+//       // console.log("请求处理已成功")
+//     })
+//     .catch((reason) => {
+//       // console.log("methodPromise catch=>")
+//       console.error("imageToBase64 middleware error=>", reason)
+//       writeError(res, reason)
+//       // console.log("请求处理失败")
+//     })
+//   // ========================================
+//   // ========================================
+// })
 
 /**
  * 输出数据
@@ -263,27 +254,6 @@ function writeStatusError(res, err, status) {
     "Content-Type": "application/json",
   })
   res.end(errorJson)
-}
-
-// xmlrpc
-/*
- * Makes an XML-RPC call to the server and returns a Promise.
- * @param {String} methodName - The method name.
- * @param {Array} params      - Params to send in the call.
- * @return {Promise<Object|Error>}
- */
-async function methodCallDirect(client, methodName, params) {
-  return await new Promise(function (resolve, reject) {
-    client.methodCall(methodName, params, function (error, data) {
-      if (!error) {
-        // console.log("resolve=>")
-        // console.log(data)
-        resolve(data)
-      } else {
-        reject(error)
-      }
-    })
-  })
 }
 
 export default app

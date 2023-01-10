@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2022, Terwer . All rights reserved.
+# Copyright (c) 2022-2023, Terwer . All rights reserved.
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
 # This code is free software; you can redistribute it and/or modify it
@@ -26,12 +26,19 @@
 pwd
 vue-tsc --noEmit && BUILD_TYPE=siyuan vite build
 cp ./LICENSE ./dist/
+cp ./README.md ./dist/
+cp ./policy.md ./dist/
+cp ./.gitignore ./dist/
 
 # 删除Chrome插件专属文件
 rm ./dist/background.js
 rm ./dist/manifest*.json
 # 删除Firefox的专属文件
 rm -rf ./dist/mv2
+
+# Picgo配置文件
+rm ./dist/lib/picgo/picgo.cfg.dev.json
+# cp ./dist/lib/picgo/picgo.cfg.json.example ./dist/lib/picgo/picgo.cfg.json
 
 rm -rf ../my-note-docker/workspace/SiYuan/data/widgets/sy-post-publisher/
 mkdir ../my-note-docker/workspace/SiYuan/data/widgets/sy-post-publisher

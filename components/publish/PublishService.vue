@@ -1,5 +1,5 @@
 <!--
-  - Copyright (c) 2022, Terwer . All rights reserved.
+  - Copyright (c) 2022-2023, Terwer . All rights reserved.
   - DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
   -
   - This code is free software; you can redistribute it and/or modify it
@@ -54,6 +54,11 @@
     <el-tab-pane name="dynamic-platform" :label="$t('dynamic.platform.new')">
       <dynamic-platform />
     </el-tab-pane>
+    <el-tab-pane name="picgo-setting" :label="$t('picgo.pic.setting')">
+      <div style="padding: 16px 20px">
+        <picgo-setting />
+      </div>
+    </el-tab-pane>
     <el-tab-pane :label="$t('service.tab.change.local')" name="general-setting">
       <general-setting :is-reload="isReloadServiceTab" />
     </el-tab-pane>
@@ -69,6 +74,7 @@ import PostBind from "~/components/publish/tab/PostBind.vue"
 import PlatformSetting from "~/components/publish/tab/PlatformSetting.vue"
 import PlatformMain from "~/components/publish/tab/PlatformMain.vue"
 import GeneralSetting from "~/components/publish/tab/GeneralSetting.vue"
+import PicgoSetting from "~/components/picgo/PicgoSetting.vue"
 
 const logger = LogFactory.getLogger("components/publish/PublishService.vue")
 

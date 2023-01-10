@@ -1,5 +1,5 @@
 <!--
-  - Copyright (c) 2022, Terwer . All rights reserved.
+  - Copyright (c) 2022-2023, Terwer . All rights reserved.
   - DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
   -
   - This code is free software; you can redistribute it and/or modify it
@@ -207,7 +207,10 @@
               <!-- 标签  -->
               <div class="form-tags">
                 <!-- 标签开关 -->
-                <el-form-item :label="$t('main.tag.auto.switch')">
+                <el-form-item
+                  v-if="pageModeData.etype !== PageEditMode.EditMode_simple"
+                  :label="$t('main.tag.auto.switch')"
+                >
                   <el-switch v-model="tagData.tagSwitch" />
                 </el-form-item>
                 <el-form-item :label="$t('main.tag')">
@@ -271,6 +274,7 @@
                     type="warning"
                   />
                 </el-form-item>
+
                 <div
                   v-if="githubPagesData.githubEnabled"
                   class="form-github-pages-items"
@@ -320,7 +324,11 @@
                     v-if="!initPublishData.isPublished"
                     :label="$t('main.publish.github.choose.title')"
                   >
-                    <el-input v-model="githubPagesData.mdTitle" />
+                    <el-input
+                      v-model="githubPagesData.mdTitle"
+                      @change="githubPagesMethods.onFilenameChange"
+                      :disabled="slugMethods.isSlugEmpty()"
+                    />
                   </el-form-item>
                   <!-- 发布路径只读查看 -->
                   <el-form-item
@@ -328,11 +336,58 @@
                   >
                     <el-input
                       v-model="githubPagesData.publishPath"
-                      :disabled="initPublishData.isPublished"
+                      :disabled="true"
                     />
                   </el-form-item>
                 </div>
               </div>
+            </div>
+
+            <!-- 附加属性，用于适配 -->
+            <div
+              class="addition-attributes"
+              v-if="pageModeData.etype === PageEditMode.EditMode_complex"
+            >
+              <!-- 是否使用永久链接 -->
+              <el-form-item :label="$t('github.use.permalink')">
+                <el-switch
+                  v-model="githubPagesData.usePermalink"
+                  @change="githubPagesMethods.permalinkOnChange"
+                />
+                <el-alert
+                  v-if="!githubPagesData.usePermalink"
+                  :closable="false"
+                  :title="$t('github.use.permalink.no.warn')"
+                  type="warning"
+                />
+              </el-form-item>
+              <!-- 菜单标题 -->
+              <el-form-item :label="$t('github.menu.title')">
+                <el-input
+                  v-model="githubPagesData.linkTitle"
+                  :placeholder="$t('github.menu.title.placeholder')"
+                />
+              </el-form-item>
+              <!-- 权重 -->
+              <el-form-item :label="$t('github.weight')">
+                <el-input
+                  v-model="githubPagesData.weight"
+                  :placeholder="$t('github.weight.placeholder')"
+                />
+              </el-form-item>
+              <!-- 是否显示日期字段 -->
+              <el-form-item :label="$t('github.use.date')">
+                <el-switch
+                  v-model="githubPagesData.useDate"
+                  @change="githubPagesMethods.showDateOnChange"
+                />
+                <el-alert
+                  v-if="!githubPagesData.useDate"
+                  :closable="false"
+                  :title="$t('github.use.date.no.warn')"
+                  type="warning"
+                />
+              </el-form-item>
             </div>
 
             <!-- 快捷操作 -->
@@ -341,7 +396,10 @@
               class="convert-option"
             >
               <!-- 一键生成属性-->
-              <el-form-item :label="$t('main.opt.quick')">
+              <el-form-item
+                v-if="pageModeData.etype !== PageEditMode.EditMode_simple"
+                :label="$t('main.opt.quick')"
+              >
                 <el-button
                   :loading="quickData.isGenLoading"
                   type="primary"
@@ -355,6 +413,7 @@
                 </el-button>
               </el-form-item>
 
+              <!-- 属性转换 -->
               <el-form-item
                 v-if="pageModeData.etype !== PageEditMode.EditMode_simple"
               >
@@ -383,9 +442,26 @@
 
             <!-- 发布操作 -->
             <div
-              v-if="pageModeData.etype !== PageEditMode.EditMode_source"
+              v-if="
+                githubPagesData.githubEnabled &&
+                pageModeData.etype !== PageEditMode.EditMode_source
+              "
               class="publish-action"
             >
+              <!-- 使用图床 -->
+              <el-form-item :label="$t('github.post.picgo.use')">
+                <el-switch
+                  v-model="picgoPostData.picgoEnabled"
+                  @change="picgoPostMethods.picgoOnChange"
+                />
+                <el-alert
+                  v-if="picgoPostData.picgoEnabled"
+                  :closable="false"
+                  :title="$t('github.post.picgo.use.tip')"
+                  type="warning"
+                />
+              </el-form-item>
+              <!-- 发布 -->
               <el-form-item>
                 <el-button
                   :loading="publishData.isPublishLoading"
@@ -410,7 +486,11 @@
 
             <!-- 发布状态 -->
             <div
-              v-if="pageModeData.etype !== PageEditMode.EditMode_source"
+              v-if="
+                githubPagesData.githubEnabled &&
+                pageModeData.etype !== PageEditMode.EditMode_source &&
+                initPublishData.apiStatus
+              "
               class="publish-status"
             >
               <!-- 文章状态 -->
@@ -618,6 +698,7 @@ import { usePageMode } from "~/composables/publish/pageModeCom"
 import { useSiyuanPage } from "~/composables/publish/siyuanPageCom"
 import { upperFirst } from "~/utils/strUtil"
 import { SourceContentShowType } from "~/utils/common/sourceContentShowType"
+import { usePicgoPost } from "~/composables/picgo/import/picgoPostCom"
 
 const logger = LogFactory.getLogger(
   "components/publish/tab/main/GithubMain.vue"
@@ -661,7 +742,9 @@ const { quickData, quickMethods } = useQuick(props, {
   slugMethods,
   descMethods,
   tagMethods,
+  githubPagesMethods,
 })
+const { picgoPostData, picgoPostMethods } = usePicgoPost()
 const { initPublishData, initPublishMethods } = useInitPublish(props, {
   pageModeMethods,
   siyuanPageMethods,
@@ -672,11 +755,13 @@ const { initPublishData, initPublishMethods } = useInitPublish(props, {
   githubPagesMethods,
   yamlMethods,
   quickMethods,
+  picgoPostMethods,
 })
 const { publishData, publishMethods } = usePublish(props, {
   siyuanPageMethods,
   yamlMethods,
   githubPagesMethods,
+  picgoPostMethods,
   quickMethods,
   initPublishMethods,
 })

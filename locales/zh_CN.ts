@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -116,6 +116,7 @@ export default {
   "main.opt.status.cancel": "文章发布已取消",
   "main.opt.loading": "操作中...",
   "main.opt.warning": "警告信息",
+  "main.opt.tip": "温馨提示",
   "main.opt.ok": "确认",
   "main.opt.cancel": "取消",
   "main.opt.warning.tip": "此操作不可恢复，是否继续？",
@@ -302,7 +303,7 @@ export default {
   "preference.setting.removeH1": "去除正文H1",
   "preference.setting.removeH1.tip":
     "删除H1可能会误删除Markdown里面的#开头的注释，如需开启，请使用2个以上的#注释，是否继续？",
-  "preference.setting.newWin": "新窗口",
+  "preference.setting.newWin": "新窗口操作",
   "siyuan.browser.show.close.btn": "显示关闭按钮",
   "siyuan.browser.menu.quick.btn": "一键快速发布",
   "siyuan.browser.menu.publish.btn":
@@ -315,4 +316,61 @@ export default {
   "anki.siyuan.deck.new": "新牌组",
   "anki.siyuan.tag": "标签",
   "anki.siyuan.tag.new": "新标签",
+  "picgo.chrome.tip":
+    "您当前使用的是浏览器插件，需要从这里下载配置 PicGO 客户端：https://github.com/Molunerfinn/PicGo/releases",
+  "picgo.siyuan.tip":
+    "您当前使用的是思源笔记挂件，需要自行配置已经集成好的PicGO，挂件版 PicGO 配置文件在：`[思源工作空间]/data/widgets/sy-post-publisher/lib/picgo/picgo.cfg.json`，请参考PicGO官方文档进行配置：https://picgo.github.io/PicGo-Core-Doc/zh/guide/config.html#%E6%89%8B%E5%8A%A8%E7%94%9F%E6%88%90",
+  "post.detail.button.copy.id": "复制本文ID",
+  "post.detail.button.share.link": "复制分享链接",
+  "post.detail.button.browser.open": "默认浏览器打开",
+  "post.detail.button.pic.manage": "图片管理",
+  "post.detail.button.anki.mark": "Anki标记",
+  "post.detail.index.send.to.publish": "发布到其他平台",
+  "post.detail.index.export.to.pdf": "导出为PDF",
+  "picgo.upload.status": "上传状态",
+  "picgo.upload.select.pic": "选择图片",
+  "picgo.upload.clipboard": "剪贴板图片",
+  "picgo.upload.onclick": "一键上传本地图片到图床",
+  "picgo.download.onclick": "一键下载远程图片到本地",
+  "picgo.download.local.to.bed": "上传本地图片到图床",
+  "picgo.download.bed.to.local": "下载远程图片到本地",
+  "picgo.pic.preview": "图片预览",
+  "picgo.pic.setting": "图床设置",
+  "picgo.pic.setting.no.tip":
+    "由于您当前使用的是浏览器插件，无法直接集成 PicGO ，只能通过 HTTP 请求间接调用本地 PicGO 客户端上图片，请直接在本地 PicGO 客户端进行设置。如需体验更加完整的功能，请通过思源笔记挂件版挂载菜单打开新窗口的方式使用。详情请参考：https://docs.publish.terwer.space/post/the-pendant-mode-is-used-in-the-method-of-mounting-menu-169wrw.html",
+  "github.use.permalink": "永久链接",
+  "github.use.permalink.no.warn":
+    "您已关闭永久链接，formatter将不会生成标记，这在某些特殊场景下可能有用，大部分情况下需要开启此选项，注意：目前仅仅在HUGO平台生效，主要是适配Docsy",
+  "github.menu.title": "菜单标题",
+  "github.menu.title.placeholder":
+    "菜单栏标题（HUGO平台专用，为空则不显示在菜单）",
+  "github.weight": "显示权重",
+  "github.weight.placeholder": "权重（决定显示顺序，越小显示越靠前）",
+  "github.use.date": "显示日期",
+  "github.use.date.no.warn": "您已关闭日期显示，将不会在formatter生成date字段",
+  "github.post.picgo.use": "使用图床",
+  "github.post.picgo.use.tip":
+    "启用此选项，将会自动将此文档包含的所有本地图片上传至自定义图床（远程图片不上传），请确保PicGO图床配置正确",
+  "github.post.picgo.start.upload": "图床已开启，即将上传本地图片到图床",
+  "github.post.picgo.picbed.error":
+    "图片上传到图床失败，可能是图床配置错误，请检查图床配置",
+  "setting.yuque.home.tip": "语雀平台首页，通常固定是：https://www.yuque.com/",
+  "setting.yuque.username.tip":
+    "语雀平台用户名，注意是【账户设置】里面固定连接里面的用户名，不是用户昵称哦(*^▽^*)",
+  "setting.yuque.password.tip":
+    "语雀平台的Token，请按照链接点击获取，只需要勾选【读取你的知识库】和【修改和读取你的文档】两个权限即可",
+  "setting.yuque.apiurl.tip":
+    "语雀平台的API地址，通常固定是：https://www.yuque.com/api/v2",
+  "setting.liandi.home.tip": "链滴平台首页，通常固定是：https://ld246.com/",
+  "setting.liandi.username.tip":
+    "链滴平台用户名，注意是点击【个人主页】之后URL上member后面显示的用户名，不是用户昵称哦(*^▽^*)",
+  "setting.liandi.password.tip": "链滴平台的Token，请按照链接点击获取",
+  "setting.liandi.apiurl.tip":
+    "链滴平台的API地址，通常固定是：https://ld246.com/api/v2",
+  "setting.kms.home.tip":
+    "KMS平台首页，例如：http://localhost:9564/kms16_release/kms/multidoc",
+  "setting.kms.username.tip": "KMS平台Rest账户用户名，请按照链接指示创建",
+  "setting.kms.password.tip": "KMS平台Rest账户密码，请按照链接指示创建",
+  "setting.kms.apiurl.tip":
+    "KMS平台的API地址，例如：http://localhost:9564/kms16_release/api/kms-multidoc/kmsMultidocKnowledgeRestService",
 }

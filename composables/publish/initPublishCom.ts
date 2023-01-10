@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -36,14 +36,10 @@ import { getPageId } from "~/utils/platform/siyuan/siyuanUtil"
 import { isEmptyString, pathJoin } from "~/utils/util"
 import { SourceContentShowType } from "~/utils/common/sourceContentShowType"
 import { PostForm } from "~/utils/models/postForm"
-import {
-  mdToHtml,
-  removeH1,
-  removeMdH1,
-  removeMdWidgetTag,
-} from "~/utils/htmlUtil"
+import { mdToHtml, removeMdH1, removeMdWidgetTag } from "~/utils/htmlUtil"
 import { yaml2Obj } from "~/utils/yamlUtil"
 import { YamlFormatObj } from "~/utils/models/yamlFormatObj"
+import { LinkParser } from "~/utils/parser/LinkParser"
 
 /**
  * 发布页面初始化组件
@@ -54,6 +50,7 @@ import { YamlFormatObj } from "~/utils/models/yamlFormatObj"
 export const useInitPublish = (props, deps, otherArgs?) => {
   const logger = LogFactory.getLogger("composables/publish/initPublishCom.ts")
   const { t } = useI18n()
+  const linkParser = new LinkParser()
   // data
   const initPublishData = reactive({
     isInitLoading: false,
@@ -78,6 +75,7 @@ export const useInitPublish = (props, deps, otherArgs?) => {
   const githubPagesMethods = deps.githubPagesMethods
   const yamlMethods = deps.yamlMethods
   const quickMethods = deps.quickMethods
+  const picgoPostMethods = deps.picgoPostMethods
 
   // methods
   const initPublishMethods = {
@@ -170,15 +168,30 @@ export const useInitPublish = (props, deps, otherArgs?) => {
       // 正文
       let md = siyuanPageMethods.getSiyuanPageData().dataObj.content.content
       // mdToHtml已经去掉了挂件代码
-      let html = mdToHtml(md)
-      // md还需要单独去掉挂件代码
+      // let html = mdToHtml(md)
+      // md去掉挂件代码
       md = removeMdWidgetTag(md)
+      // md去掉H1
       if (publishCfg.removeH1) {
         md = removeMdH1(md)
-        html = removeH1(html)
+        // html = removeH1(html)
       }
+      // md双链转换
+      // @deprecated 移植性不好，放弃
+      // md = linkParser.convertSiyuanLinkToInnerLink(md)
       postForm.formData.mdContent = md
-      postForm.formData.htmlContent = html
+      postForm.formData.htmlContent = mdToHtml(md)
+      // 是否生成永久链接
+      postForm.formData.usePermalink =
+        githubPagesMethods.getGithubPagesData().usePermalink
+      // 菜单标题
+      postForm.formData.linkTitle =
+        githubPagesMethods.getGithubPagesData().linkTitle
+      // 权重
+      postForm.formData.weight = githubPagesMethods.getGithubPagesData().weight
+      // 是否显示日期字段
+      postForm.formData.useDate =
+        githubPagesMethods.getGithubPagesData().useDate
 
       return postForm
     },
@@ -314,6 +327,9 @@ export const useInitPublish = (props, deps, otherArgs?) => {
         publishTimeMethods.initPublishTime(siyuanData)
         // 标签
         tagMethods.initTag(siyuanData)
+        // 使用Picgo
+        picgoPostMethods.initPicgo(publishCfg.usePicgo)
+
         // githubPages
         const githubPagesData = githubPagesMethods.getGithubPagesData()
         githubPagesData.githubEnabled = initPublishData.apiStatus
@@ -327,17 +343,20 @@ export const useInitPublish = (props, deps, otherArgs?) => {
         const currentDefaultPath = githubCfg.defaultPath ?? "尚未配置"
         const mdTitle = githubPagesMethods.getMdFilename()
         // 初始化
-        githubPagesMethods.initGithubPages({
-          cpath: docPath,
-          defpath: currentDefaultPath,
-          fname: mdTitle,
-        })
+        githubPagesMethods.initGithubPages(
+          {
+            cpath: docPath,
+            defpath: currentDefaultPath,
+            fname: mdTitle,
+          },
+          siyuanData
+        )
 
         // 所有数据初始化完成，生成YAML
         initPublishMethods.convertAttrToYAML(true)
 
         // 预览链接
-        if (initPublishData.isPublished) {
+        if (initPublishData.apiStatus && initPublishData.isPublished) {
           // 预览链接
           const baseUrl = githubCfg.baseUrl ?? "https://terwer.space/"
           const home = githubCfg.home ?? "https://terwer.space/"

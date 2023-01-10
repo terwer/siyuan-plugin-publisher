@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -25,7 +25,6 @@
 
 import { IMetaweblogCfg } from "~/utils/platform/metaweblog/IMetaweblogCfg"
 import { getJSONConf } from "~/utils/configUtil"
-import { XmlrpcClient } from "~/utils/platform/metaweblog/xmlrpc"
 import { UserBlog } from "~/utils/models/userBlog"
 import { METAWEBLOG_METHOD_CONSTANTS } from "~/utils/constants/metaweblogMethodConstants"
 import { LogFactory } from "~/utils/logUtil"
@@ -35,7 +34,7 @@ import { POST_STATUS_CONSTANTS } from "~/utils/constants/postStatusConstants"
 import { isEmptyString } from "~/utils/util"
 import { isBrowser } from "~/utils/browserUtil"
 import { CategoryInfo } from "~/utils/models/categoryInfo"
-import { useI18n } from "vue-i18n"
+import { CommonXmlrpcClient } from "~/libs/simple-xmlrpc/commonXmlrpcClient"
 
 /**
  * Metaweblog API的具体实现
@@ -44,7 +43,7 @@ export class MetaWeblogApi {
   private readonly logger: Logger
   private readonly apiType: string
   private readonly cfg: IMetaweblogCfg
-  private readonly xmlrpcClient: any
+  private readonly commonXmlrpcClient: CommonXmlrpcClient
 
   constructor(apiType: string) {
     this.logger = LogFactory.getLogger(
@@ -52,7 +51,7 @@ export class MetaWeblogApi {
     )
     this.apiType = apiType
     this.cfg = getJSONConf<IMetaweblogCfg>(apiType)
-    this.xmlrpcClient = new XmlrpcClient(
+    this.commonXmlrpcClient = new CommonXmlrpcClient(
       this.apiType,
       this.cfg.apiUrl,
       this.cfg.username,
@@ -66,24 +65,14 @@ export class MetaWeblogApi {
     password: string
   ): Promise<UserBlog[]> {
     const usersBlogs: UserBlog[] = []
-    const ret = await this.xmlrpcClient.methodCallEntry(
+
+    const ret = await this.commonXmlrpcClient.methodCall(
       METAWEBLOG_METHOD_CONSTANTS.GET_USERS_BLOGS,
       [this.apiType, username, password]
     )
     this.logger.debug("ret=>", ret)
 
-    // JSON格式规范化
-    // if (typeof ret == "string") {
-    // }
-
-    // 错误处理
-    const dataObj = JSON.parse(ret) || []
-    if (dataObj.faultCode) {
-      throw new Error(dataObj.faultString)
-    }
-
-    // 数据适配
-    const dataArr = JSON.parse(ret) || []
+    const dataArr = ret
     for (let i = 0; i < dataArr.length; i++) {
       const userBlog = new UserBlog()
       const item = dataArr[i]
@@ -115,19 +104,13 @@ export class MetaWeblogApi {
     const result: Post = new Post()
 
     try {
-      const ret = await this.xmlrpcClient.methodCallEntry(
+      const ret = await this.commonXmlrpcClient.methodCall(
         METAWEBLOG_METHOD_CONSTANTS.GET_POST,
         [postid, username, password]
       )
-      this.logger.debug("getCategories ret=>", ret)
-
-      const dataObj = JSON.parse(ret) || []
-      if (dataObj.faultCode) {
-        this.logger.error("请求分类异常，错误信息如下：", dataObj.faultString)
-      }
-
-      // 数据适配
+      const dataObj = ret
       this.logger.debug("获取的文章信息，dataObj=>", dataObj)
+
       // 暂时只用到了分类，其他属性先不适配
       result.categories = dataObj.categories
     } catch (e) {
@@ -159,7 +142,7 @@ export class MetaWeblogApi {
 
     const postStruct = this.createPostStruct(post)
     this.logger.debug("postStruct=>", postStruct)
-    let ret = await this.xmlrpcClient.methodCallEntry(
+    let ret = await this.commonXmlrpcClient.methodCall(
       METAWEBLOG_METHOD_CONSTANTS.NEW_POST,
       [this.apiType, username, password, postStruct, publish]
     )
@@ -183,7 +166,7 @@ export class MetaWeblogApi {
 
     const postStruct = this.createPostStruct(post)
     this.logger.debug("postStruct=>", postStruct)
-    const ret = await this.xmlrpcClient.methodCallEntry(
+    const ret = await this.commonXmlrpcClient.methodCall(
       METAWEBLOG_METHOD_CONSTANTS.EDIT_POST,
       [postid, username, password, postStruct, publish]
     )
@@ -199,7 +182,7 @@ export class MetaWeblogApi {
     password: string,
     publish: boolean
   ): Promise<boolean> {
-    const ret = await this.xmlrpcClient.methodCallEntry(
+    const ret = await this.commonXmlrpcClient.methodCall(
       METAWEBLOG_METHOD_CONSTANTS.DELETE_POST,
       [appKey, postid, username, password, publish]
     )
@@ -286,20 +269,11 @@ export class MetaWeblogApi {
     const result = [] as CategoryInfo[]
 
     try {
-      const ret = await this.xmlrpcClient.methodCallEntry(
+      const ret = await this.commonXmlrpcClient.methodCall(
         METAWEBLOG_METHOD_CONSTANTS.GET_CATEGORIES,
         [this.apiType, username, password]
       )
-      this.logger.debug("getCategories ret=>", ret)
-
-      // 错误处理
-      const dataObj = JSON.parse(ret) || []
-      if (dataObj.faultCode) {
-        this.logger.error("请求分类异常，错误信息如下：", dataObj.faultString)
-      }
-
-      // 数据适配
-      const dataArr = JSON.parse(ret) || []
+      const dataArr = ret
       this.logger.debug("获取的分类信息，dataArr=>", dataArr)
 
       dataArr.forEach((item: any) => {
@@ -309,7 +283,6 @@ export class MetaWeblogApi {
         result.push(cat)
       })
     } catch (e) {
-      const { t } = useI18n()
       this.logger.error("分类获取失败", e)
     }
 

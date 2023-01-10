@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -32,7 +32,7 @@ import { YamlConvertAdaptor } from "~/utils/platform/yamlConvertAdaptor"
 import { PostForm } from "~/utils/models/postForm"
 import { IGithubCfg } from "~/utils/platform/github/githubCfg"
 import { appendStr } from "~/utils/strUtil"
-import { isBrowser } from "~/utils/browserUtil"
+import { copyToClipboardInBrowser, isBrowser } from "~/utils/browserUtil"
 import { YamlFormatObj } from "~/utils/models/yamlFormatObj"
 
 /**
@@ -64,19 +64,7 @@ export const useYaml = () => {
       target.select()
 
       if (isBrowser()) {
-        // document.execCommand("copy");
-
-        // Copy the selected text to the clipboard
-        navigator.clipboard.writeText(yamlData.yamlContent).then(
-          function () {
-            // The text has been successfully copied to the clipboard
-            ElMessage.success(t("main.copy.success"))
-          },
-          function (err) {
-            // An error occurred while copying the text
-            ElMessage.error(t("main.copy.failure") + err)
-          }
-        )
+        copyToClipboardInBrowser(yamlData.yamlContent)
       }
     },
 

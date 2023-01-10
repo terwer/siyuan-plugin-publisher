@@ -1,5 +1,5 @@
 <!--
-  - Copyright (c) 2022, Terwer . All rights reserved.
+  - Copyright (c) 2022-2023, Terwer . All rights reserved.
   - DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
   -
   - This code is free software; you can redistribute it and/or modify it
@@ -32,35 +32,54 @@
       :closable="false"
     />
     <el-form-item :label="$t('setting.common.home')">
-      <el-input v-model="home" />
+      <el-input
+        v-model="home"
+        :placeholder="props.cfg.placeholder.homePlaceholder"
+      />
     </el-form-item>
 
     <el-form-item
       :label="$t('setting.common.username')"
       v-if="props.usernameEnabled"
     >
-      <el-input v-model="username" />
+      <el-input
+        v-model="username"
+        :placeholder="props.cfg.placeholder.usernamePlaceholder"
+      />
     </el-form-item>
 
     <el-form-item
       :label="$t('setting.common.password')"
       v-if="props.passwordEnabled"
     >
-      <el-input type="password" v-model="password" show-password />
+      <el-input
+        type="password"
+        v-model="password"
+        show-password
+        :placeholder="props.cfg.placeholder.passwordPlaceholder"
+      />
       <a :href="tokenSettingUrl" target="_blank"
         >{{ $t("setting.common.username.gen") }}：{{ tokenSettingUrl }}</a
       >
     </el-form-item>
 
     <el-form-item :label="$t('setting.common.token')" v-if="props.tokenEnabled">
-      <el-input type="password" v-model="token" show-password />
+      <el-input
+        type="password"
+        v-model="token"
+        show-password
+        :placeholder="props.cfg.placeholder.passwordPlaceholder"
+      />
       <a :href="tokenSettingUrl" target="_blank"
         >{{ $t("setting.common.token.gen") }}：{{ tokenSettingUrl }}</a
       >
     </el-form-item>
 
     <el-form-item :label="$t('setting.common.apiurl')">
-      <el-input v-model="apiUrl" />
+      <el-input
+        v-model="apiUrl"
+        :placeholder="props.cfg.placeholder.apiUrlPlaceholder"
+      />
     </el-form-item>
 
     <el-form-item>

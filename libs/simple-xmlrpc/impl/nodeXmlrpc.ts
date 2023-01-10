@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -24,58 +24,27 @@
  */
 
 import { LogFactory } from "~/utils/logUtil"
+import { SimpleXmlRpcClient } from "~/libs/simple-xmlrpc/custom/SimpleXmlRpcClient"
+import { XmlRpcValue } from "~/libs/simple-xmlrpc/xmlrpc"
 
-const logger = LogFactory.getLogger("utils/platform/metaweblog/nodeXmlrpc.ts")
-
-const xmlrpc = require("xmlrpc")
+const logger = LogFactory.getLogger("libs/simple-xmlrpc/impl/nodeXmlrpc.ts")
 
 export async function fetchNode(
   apiUrl: string,
   reqMethod: string,
   reqParams: string[]
-): Promise<string> {
-  let client
-
-  const secure = apiUrl.includes("https:")
-  if (secure) {
-    client = xmlrpc.createSecureClient(apiUrl)
-  } else {
-    client = xmlrpc.createClient(apiUrl)
-  }
-
+): Promise<XmlRpcValue> {
   try {
-    logger.debug("methodCallDirectNode开始")
+    logger.debug("SimpleXmlRpcClient开始")
     logger.debug("xmlrpcNodeParams.reqMethod=>", reqMethod)
     logger.debug("xmlrpcNodeParams.reqParams=>", reqParams)
-    const data = await methodCallDirectNode(client, reqMethod, reqParams)
-    const dataJson = JSON.stringify(data)
-    return dataJson
+
+    const client = new SimpleXmlRpcClient(apiUrl)
+    const ret = await client.methodCall(reqMethod, reqParams)
+    logger.debug("SimpleXmlRpcClient结束，ret=>", ret)
+    return ret
   } catch (e) {
     logger.error(e)
     throw new Error("请求处理异常")
   }
-}
-
-// xmlrpc
-/*
- * Makes an XML-RPC call to the server and returns a Promise.
- * @param {String} methodName - The method name.
- * @param {Array} params      - Params to send in the call.
- * @return {Promise<Object|Error>}
- */
-async function methodCallDirectNode(
-  client: any,
-  methodName: string,
-  params: any
-): Promise<any> {
-  return await new Promise(function (resolve, reject) {
-    client.methodCall(methodName, params, function (error: any, data: any) {
-      if (!error) {
-        logger.debug("resolve=>", data)
-        resolve(data)
-      } else {
-        reject(error)
-      }
-    })
-  })
 }

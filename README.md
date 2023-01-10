@@ -10,8 +10,9 @@
 ![](https://img.shields.io/badge/license-GPL-blue.svg?style=popout-square)
 
 [![](https://img.shields.io/badge/%E9%A1%B9%E7%9B%AE%E6%BA%90%E7%A0%81-code-brightgreen)](https://github.com/terwer/src-sy-post-publisher)
-[![](https://img.shields.io/badge/%E5%B8%AE%E5%8A%A9%E6%96%87%E6%A1%A3-doc-blue)](https://www.terwer.space/post/readme-1j4ltp.html)
-[![](https://img.shields.io/badge/%E6%96%B0%E6%89%8B%E5%B0%8F%E7%99%BD%E7%BA%A7%E8%A7%86%E9%A2%91%E6%95%99%E7%A8%8B-video-red)](https://www.terwer.space/post/configure-entry-video-brpm9.html)
+[![](https://img.shields.io/badge/%E5%B8%AE%E5%8A%A9%E6%96%87%E6%A1%A3-doc-blue)](https://docs.publish.terwer.space)
+[![](https://img.shields.io/badge/视频教程（旧）-video-purple)](https://docs.publish.terwer.space/post/configure-entry-video-brpm9.html)
+[![](https://img.shields.io/badge/视频教程（新）-video-red)](https://docs.publish.terwer.space/post/the-pendant-mode-is-used-in-the-method-of-mounting-menu-169wrw.html#%E8%A7%86%E9%A2%91%E6%95%99%E7%A8%8B)
 
 ![](https://img1.terwer.space/api/public/202212181127124.png)
 
@@ -25,6 +26,7 @@
 ## 支持平台
 
 - [x] [Hugo](https://gohugo.io/) <sup>推荐</sup>
+- [x] [Docsy](https://www.docsy.dev/) <sup>推荐</sup>
 - [x] [Hexo](https://hexo.io/zh-cn/)
 - [x] [Jekyll](https://github.com/lorepirri/cayman-blog)（Github pages 默认内置支持的平台）
 - [x] [Vuepress](https://github.com/terwer/terwer.github.io)
@@ -57,7 +59,7 @@ import("/widgets/sy-post-publisher/lib/siyuanhook.js")
 
 ![](https://img1.terwer.space/api/public/20221228-175950.jpeg)
 
-详情请参考: [挂件模式用挂载菜单的方式使用](https://www.terwer.space/post/the-pendant-mode-is-used-in-the-method-of-mounting-menu-169wrw.html#%E6%95%88%E6%9E%9C%E6%BC%94%E7%A4%BA)<sup>
+详情请参考: [挂件模式用挂载菜单的方式使用](https://docs.publish.terwer.space/post/the-pendant-mode-is-used-in-the-method-of-mounting-menu-169wrw.html)<sup>
 强烈推荐</sup> <sup>0.4.2+</sup>
 
 ## 挂件版通用方式快速上手
@@ -74,7 +76,7 @@ import("/widgets/sy-post-publisher/lib/siyuanhook.js")
 
 ## 浏览器插件快速上手
 
-https://terwer.space/post/start-to-get-started-zi0eyk.html
+参考 [浏览器插件快速上手指南](https://docs.publish.terwer.space/docs/getting-started/#%E6%B5%8F%E8%A7%88%E5%99%A8%E6%8F%92%E4%BB%B6%E6%96%B9%E5%BC%8F%E4%BD%BF%E7%94%A8)
 
 ## 愿景
 
@@ -152,7 +154,6 @@ https://terwer.space/post/start-to-get-started-zi0eyk.html
       0.0.1+</sup>
 - [x] 支持同步到 Github(Github pages、Hugo、Hexo、Jekyll、Vuepress、Vitepress、Nuxt content、Next.js)，0.1.0+
       之后更加通用，支持动态添加管理多个 <sup>0.0.1+</sup> <sup>0.1.0+</sup>
-- [ ] 支持自定义图床 <sup>1.0.0+</sup>
 - [x] 支持多种发布视图，简单模式、详细模式和源码模式（Github 系列平台） <sup>0.1.0+</sup> <sup>0.0.1+</sup>
 - [x] 支持自定义设置 API 地址，支持本地、局域网、远程 <sup>0.1.0+</sup>
 - [x] 支持配置导入导出 <sup>0.2.0+</sup>
@@ -166,9 +167,11 @@ https://terwer.space/post/start-to-get-started-zi0eyk.html
 
   - PicGO 使用注意事项：
 
-  1. 如果你使用的是浏览器插件可以从这里下载配置 PicGO 客户端：https://github.com/Molunerfinn/PicGo/releases
+  1. 如果你使用的是浏览器插件，需要从这里下载配置 PicGO 客户端：https://github.com/Molunerfinn/PicGo/releases
 
-  2. 挂件版无需此操作
+  2. 如果你使用的是思源笔记挂件，需要自行配置已经集成好的 PicGO，挂件版 PicGO
+     配置文件在：`[思源工作空间]/data/widgets/sy-post-publisher/lib/picgo/picgo.cfg.json`
+     ，请参考 PicGO 官方文档进行配置：https://picgo.github.io/PicGo-Core-Doc/zh/guide/config.html#%E6%89%8B%E5%8A%A8%E7%94%9F%E6%88%90
 
 ## 最近更新
 
@@ -212,23 +215,23 @@ http://127.0.0.1:6806。
 你的 `.env.local` 文件大概像下面这样：
 
 ```properties
-# 是否开启info日志，true | false，建议生产环境设置为false
+## 是否开启info日志，true | false，建议生产环境设置为false
 VITE_LOG_INFO_ENABLED=false
 
-# 思源笔记授权api
+## 思源笔记授权api
 VITE_SIYUAN_API_URL=http://127.0.0.1:6806
-# 思源笔记授权token
+## 思源笔记授权token
 VITE_SIYUAN_CONFIG_TOKEN=
 
-# 开发阶段模拟的页面ID，仅限调试使用，生产环境无需此配置
-# VITE_SIYUAN_DEV_PAGE_ID=
+## 开发阶段模拟的页面ID，仅限调试使用，生产环境无需此配置
+## VITE_SIYUAN_DEV_PAGE_ID=
 
-# 图表服务器
-# PLANT_UML_SERVR=https://www.plantuml.com/plantuml/svg/
-# PLANT_UML_SERVR=
+## 图表服务器
+## PLANT_UML_SERVR=https://www.plantuml.com/plantuml/svg/
+## PLANT_UML_SERVR=
 
-# 非挂件模式需要中间服务器实现跨域，生产环境可不设置，使用本项目
-# VITE_MIDDLEWARE_URL=https://publish.terwer.space/api/middleware
+## 非挂件模式需要中间服务器实现跨域，生产环境可不设置，使用本项目
+## VITE_MIDDLEWARE_URL=https://publish.terwer.space/api/middleware
 VITE_MIDDLEWARE_URL=
 ```
 
@@ -270,8 +273,8 @@ VITE_MIDDLEWARE_URL=https://publish.terwer.space/api/middleware
 ```bash
 pnpm dev
 
-# windows
-# pnpm devWin
+## windows
+## pnpm devWin
 ```
 
 浏览器默认入口连接是
@@ -287,8 +290,8 @@ http://localhost:3000/blog/index.html
 ```bash
 pnpm widget
 
-# windows
-# pnpm widgetWin
+## windows
+## pnpm widgetWin
 ```
 
 提交 `dist` 文件夹到仓库, 上架思源笔记挂件集市。
@@ -298,8 +301,8 @@ pnpm widget
 ```bash
 pnpm extChrome
 
-# windows
-# pnpm extChromeWin
+## windows
+## pnpm extChromeWin
 ```
 
 插件调试

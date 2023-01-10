@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -91,6 +91,13 @@ export const getWidgetId = (): WidgetResult => {
 export const inSiyuan = (): boolean => {
   const widgetResult = getWidgetId()
   return widgetResult.isInSiyuan
+}
+
+/**
+ * 检测是否处于思源笔记主窗口或者弹出新窗口中
+ */
+export const isSiyuanOrSiyuanNewWin = (): boolean => {
+  return inSiyuan() || isInSiyuanNewWinBrowser()
 }
 
 /**

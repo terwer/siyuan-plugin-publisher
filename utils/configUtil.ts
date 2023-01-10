@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -89,6 +89,31 @@ export function getJSONConf<T>(key: string): T {
 }
 
 /**
+ * 从字符串解析Object
+ * @param objstr Object字符串
+ * @author terwer
+ * @since 0.6.1
+ */
+export function parseJSONObj(objstr: string): any {
+  logger.debug("------------------------------")
+  logger.debug("尝试从JSON字符串解析Object，objstr=>", objstr)
+
+  let valueObj = {}
+  const value = objstr
+  if (value !== "") {
+    try {
+      valueObj = JSON.parse(value)
+    } catch (e) {
+      logger.error("JSON格式不正确，将直接返回{}=>", e)
+    }
+  }
+
+  logger.debug("从JSON字符串解析Object=>", valueObj)
+  logger.debug("------------------------------")
+  return valueObj
+}
+
+/**
  * 保存配置：这个是所有数据保存的根方法
  * @param key
  * @param value
@@ -137,6 +162,20 @@ export const setJSONConf = <T>(key: string, value: T): void => {
 }
 
 /**
+ * Object解析为JSON字符串
+ * @param value JSON字符串
+ */
+export const toJSONString = (value: Object): String => {
+  logger.debug("++++++++++++++++++++++++++++++")
+  logger.debug("尝试将Object转换为JSON字符串", value)
+
+  const valueString = JSON.stringify(value)
+  logger.debug("将Object转换为JSON字符串=>", valueString)
+  logger.debug("++++++++++++++++++++++++++++++")
+  return valueString
+}
+
+/**
  * 检测key是否冲突
  * @param key
  */
@@ -179,7 +218,7 @@ export const getAllConf = (): object => {
 /**
  * 导出所有配置
  */
-export const exportConf = (): void => {
+export const exportConf = (filename): void => {
   // Get all data from LocalStorage as an object
   const data = getAllConf()
 
@@ -191,7 +230,7 @@ export const exportConf = (): void => {
 
   // Create a download link for the JSON file
   const link = document.createElement("a")
-  link.download = "data.json"
+  link.download = filename ?? "data.json"
   link.href = URL.createObjectURL(blob)
 
   // Add the download link to the page

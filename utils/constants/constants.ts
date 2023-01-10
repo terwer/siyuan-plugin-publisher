@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -49,6 +49,11 @@ const PUBLISH_PREFERENCE_CONFIG_KEY = "publish-preference"
 const PUBLISH_DYNAMIC_SLUG = "[dynamic-generated-on-publish]"
 
 /**
+ * 文章PicGO图片信息Key
+ */
+const PICGO_FILE_MAP_KEY = "custom-picgo-file-map-key"
+
+/**
  * 分词最大数目
  */
 const DEFAULT_JIEBA_WORD_LENGTH = 5
@@ -60,4 +65,5 @@ export const CONSTANTS = {
   DEFAULT_JIEBA_WORD_LENGTH,
   PUBLISH_PREFERENCE_CONFIG_KEY,
   PUBLISH_DYNAMIC_SLUG,
+  PICGO_FILE_MAP_KEY,
 }

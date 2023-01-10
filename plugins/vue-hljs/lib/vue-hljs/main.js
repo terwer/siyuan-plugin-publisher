@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -29,10 +29,15 @@ import typescript from "highlight.js/lib/languages/typescript"
 import c from "highlight.js/lib/languages/c"
 import cpp from "highlight.js/lib/languages/cpp"
 import java from "highlight.js/lib/languages/java"
+import kotlin from "highlight.js/lib/languages/kotlin"
 import bash from "highlight.js/lib/languages/bash"
 import xml from "highlight.js/lib/languages/xml"
 import css from "highlight.js/lib/languages/css"
 import plaintext from "highlight.js/lib/languages/plaintext"
+import php from "highlight.js/lib/languages/php"
+import properties from "highlight.js/lib/languages/properties"
+import sql from "highlight.js/lib/languages/sql"
+import markdown from "highlight.js/lib/languages/markdown"
 import { CopyButtonPlugin } from "../codecopy"
 import "../codecopy/codecopy.css"
 import "./vs.css"
@@ -51,6 +56,7 @@ vueHljs.install = (Vue) => {
   hljs.registerLanguage("c", c)
   hljs.registerLanguage("cpp", cpp)
   hljs.registerLanguage("java", java)
+  hljs.registerLanguage("kotlin", kotlin)
   hljs.registerLanguage("csharp", java)
   hljs.registerLanguage("cs", java)
   hljs.registerLanguage("bash", bash)
@@ -59,6 +65,12 @@ vueHljs.install = (Vue) => {
   hljs.registerLanguage("html", xml)
   hljs.registerLanguage("css", css)
   hljs.registerLanguage("plaintext", plaintext)
+  hljs.registerLanguage("plantuml", plaintext)
+  hljs.registerLanguage("php", php)
+  hljs.registerLanguage("properties", properties)
+  hljs.registerLanguage("sql", sql)
+  hljs.registerLanguage("markdown", markdown)
+  hljs.registerLanguage("md", markdown)
 
   // 代码复制
   hljs.addPlugin(

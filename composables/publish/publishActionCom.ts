@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -27,13 +27,15 @@ import { reactive } from "vue"
 import { LogFactory } from "~/utils/logUtil"
 import { getJSONConf } from "~/utils/configUtil"
 import { IGithubCfg } from "~/utils/platform/github/githubCfg"
-import { GithubApi } from "~/utils/platform/github/githubApi"
 import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
 import { ElMessage, ElMessageBox } from "element-plus"
 import { useI18n } from "vue-i18n"
 import { appendStr } from "~/utils/strUtil"
 import { removeTitleNumber } from "~/utils/htmlUtil"
 import { CONSTANTS } from "~/utils/constants/constants"
+import { PicgoPostApi } from "~/utils/platform/picgo/picgoPostApi"
+import { API } from "~/utils/api"
+import { Post } from "~/utils/models/post"
 
 /**
  * 通用的发布操作组件
@@ -45,6 +47,7 @@ export const usePublish = (props, deps?: any) => {
   const logger = LogFactory.getLogger("composables/publish/publishActionCom.ts")
   const { t } = useI18n()
   const siyuanApi = new SiYuanApi()
+  const picgoPostApi = new PicgoPostApi()
   // public data
   const publishData = reactive({
     isPublishLoading: false,
@@ -56,6 +59,7 @@ export const usePublish = (props, deps?: any) => {
   const yamlMethods = deps.yamlMethods
   const githubPagesMethods = deps.githubPagesMethods
   const quickMethods = deps.quickMethods
+  const picgoPostMethods = deps.picgoPostMethods
   const initPublishMethods = deps.initPublishMethods
 
   // public methods
@@ -65,16 +69,7 @@ export const usePublish = (props, deps?: any) => {
       publishData.isPublishLoading = true
       try {
         const githubCfg = getJSONConf<IGithubCfg>(props.apiType)
-        const api = new GithubApi(githubCfg)
-
-        // 先删除
-        if (initPublishMethods.getInitPublishData().isPublished) {
-          try {
-            await publishMethods.doCancel(false)
-          } catch (e) {
-            logger.error("强制删除异常，不影响发布=>", e)
-          }
-        }
+        const api = new API(props.apiType)
 
         // 校验标题
         const mdTitle = githubPagesMethods.getGithubPagesData().mdTitle
@@ -136,12 +131,42 @@ export const usePublish = (props, deps?: any) => {
           initPublishMethods.convertAttrToYAML(true)
 
           const mdFullContent = yamlMethods.getYamlData().mdFullContent
-          logger.debug("即将发布的内容，mdContent=>", { mdFullContent })
+
+          // 最终发布的内容
+          let publishContent = mdFullContent
+
+          // 处理图床
+          if (picgoPostMethods.getPicgoPostData().picgoEnabled) {
+            ElMessage.info(t("github.post.picgo.start.upload"))
+            const siyuanPage = siyuanPageMethods.getSiyuanPageData().dataObj
+            const picgoPostResult = await picgoPostApi.uploadPostImagesToBed(
+              siyuanPage.pageId,
+              siyuanPage.meta,
+              mdFullContent
+            )
+
+            if (picgoPostResult.flag) {
+              publishContent = picgoPostResult.mdContent
+            } else {
+              ElMessage.warning(t("github.post.picgo.picbed.error"))
+            }
+          }
+
+          // 最终发布的内容
+          logger.debug("即将发布的内容，publishContent=>", { publishContent })
 
           // 发布
           // initGithubPages之后发布路径就是最新完整的
           const docPath = githubPagesMethods.getGithubPagesData().publishPath
-          const res = await api.publishGithubPage(docPath, mdFullContent)
+          const post = new Post()
+          post.postid = docPath
+          post.description = publishContent
+          let res
+          if (initPublishMethods.getInitPublishData().isPublished) {
+            res = await api.editPost(post.postid, post)
+          } else {
+            res = await api.newPost(post)
+          }
 
           // 成功与失败都刷新页面
           if (!res) {
@@ -175,7 +200,18 @@ export const usePublish = (props, deps?: any) => {
           ElMessage.success(t("main.opt.status.publish"))
         }
       } catch (e) {
-        const errmsg = appendStr(t("main.opt.failure"), "=>", e)
+        // 发生异常强制删除
+        try {
+          await publishMethods.doCancel(false)
+        } catch (e) {
+          logger.error("强制删除异常，不影响发布=>", e)
+        }
+
+        const errmsg = appendStr(
+          t("main.opt.failure"),
+          "=>发布异常，可能是Github平台已自行删除。已清除关联，请重新发布",
+          e
+        )
         ElMessage.error(errmsg)
         logger.error(errmsg)
       }
@@ -209,12 +245,16 @@ export const usePublish = (props, deps?: any) => {
     },
     doCancel: async (isInit: boolean) => {
       const githubCfg = getJSONConf<IGithubCfg>(props.apiType)
-      const api = new GithubApi(githubCfg)
+      const api = new API(props.apiType)
 
       const docPath = githubPagesMethods.getGithubPagesData().publishPath
       logger.debug("准备取消发布，docPath=>", docPath)
 
-      await api.deleteGithubPage(docPath)
+      try {
+        await api.deletePost(docPath)
+      } catch (e) {
+        logger.error("调用Github平台删除页面失败=>", e)
+      }
 
       const customAttr = {
         [githubCfg.posidKey]: "",

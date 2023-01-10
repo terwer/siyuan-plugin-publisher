@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -118,6 +118,7 @@ export default {
   "main.opt.cancel": "Cancel",
   "main.opt.warning.tip":
     "The operation will delete the data, whether to continue?",
+  "main.opt.tip": "Tips",
   "setting.noneed": "No need setting",
   "setting.blog.setting": " Setting",
   "setting.blog.type": "Blog type",
@@ -303,4 +304,69 @@ export default {
   "anki.siyuan.deck.new": "New deck",
   "anki.siyuan.tag": "Tag",
   "anki.siyuan.tag.new": "New tag",
+  "picgo.chrome.tip":
+    "If you are using a browser plug -in, you need to download the configuration Picgo client from here: https://github.com/Molunerfinn/PicGo/releases",
+  "picgo.siyuan.tip":
+    "If you are using Siyuan notes pendants, you need to configure your own integration of PICGO. The pendant version of the PICGO configuration file is:`[Siyuan Workspace]/data/widgets/sy-post-publisher/lib/picgo/picgo.cfg.json`，Please refer to the official picgo document for configuration：https://picgo.github.io/PicGo-Core-Doc/zh/guide/config.html#%E6%89%8B%E5%8A%A8%E7%94%9F%E6%88%90",
+  "post.detail.button.copy.id": "Copy post ID",
+  "post.detail.button.share.link": "Copy share link",
+  "post.detail.button.browser.open": "Open with default browser",
+  "post.detail.button.pic.manage": "Picture manage",
+  "post.detail.button.anki.mark": "Anki mark",
+  "post.detail.index.send.to.publish": "Send to other platform",
+  "post.detail.index.export.to.pdf": "Export to PDF",
+  "picgo.upload.status": "Upload status",
+  "picgo.upload.select.pic": "Select picture",
+  "picgo.upload.clipboard": "Clipboard picture",
+  "picgo.upload.onclick": "One click upload",
+  "picgo.download.onclick": "One click download",
+  "picgo.download.local.to.bed": "Upload picture to bed",
+  "picgo.download.bed.to.local": "Upload picture from bed",
+  "picgo.pic.preview": "Picture preview",
+  "picgo.pic.setting": "Picture setting",
+  "picgo.pic.setting.no.tip":
+    "You are currently using the browser plug -in and cannot inherit PicGo. You can only call the local Picgo client on the local Picgo client through HTTP",
+  "github.use.permalink": "Use permalink",
+  "github.use.permalink.no.warn":
+    "You have closed the permanent link, and Formatter will not generate a mark, which may be useful in some scenarios",
+  "github.menu.title": "Menu title",
+  "github.menu.title.placeholder":
+    "The menu column title (HUGO platform is dedicated, but the empty is not displayed in the menu)",
+  "github.weight": "Weight",
+  "github.weight.placeholder":
+    "Weight (decide to display the order, the smaller the display, the more upward)",
+  "github.use.date": "Show date",
+  "github.use.date.no.warn":
+    "You have closed the date show that it will not generate the date field in Formatter",
+  "github.post.picgo.use": "Use picbed",
+  "github.post.picgo.use.tip":
+    "To enable this option, the local picture will be uploaded to the custom diagram bed (the remote picture is not uploaded), please make sure that the PICGO diagram bed configuration is correct",
+  "github.post.picgo.start.upload":
+    "The picture bed has been opened, and the picture bed is about to upload the picture bed to the bed",
+  "github.post.picgo.picbed.error":
+    "The picture uploaded to the picture bed failed, it may be an error in the configuration of the graph, please check the picture bed configuration",
+  "setting.yuque.home.tip":
+    "The homepage of the language bird platform is usually fixed: https://www.yuque.com/",
+  "setting.yuque.username.tip":
+    "The user name of the spark platform, note that the user name is fixed in [account settings], not the user nickname (*^▽^*)",
+  "setting.yuque.password.tip":
+    "For the token of the spark platform, please follow the link to get it. You only need to grant the document to read and modify the two permissions.",
+  "setting.yuque.apiurl.tip":
+    "The API address of the language bird platform is usually fixed: https://www.yuque.com/api/v2",
+  "setting.liandi.home.tip":
+    "The homepage of the chain drop platform is usually fixed: https://ld246.com/",
+  "setting.liandi.username.tip":
+    "The user name of the chain drop platform, note that after clicking [Personal Homepage], the user name displayed behind the MEMBER on the URL is not a user nickname (*^▽^*)",
+  "setting.liandi.password.tip":
+    "Token on the chain drop platform, please click on the link to get",
+  "setting.liandi.apiurl.tip":
+    "The API address of the chain drop platform is usually fixed: https://ld246.com/api/v2",
+  "setting.kms.home.tip":
+    "KMS platform homepage, for example: http:// localhost: 9564/kms16_release/kms/multidoc",
+  "setting.kms.username.tip":
+    "KMS platform REST account user name, please create according to the link instruction",
+  "setting.kms.password.tip":
+    "KMS platform REST account password, please create according to the link instruction",
+  "setting.kms.apiurl.tip":
+    "The API address of the KMS platform, for example: http:// localhost: 9564/kms16_release/API/KMS-Multidoc/KMSMultidOWRESTSERVICE",
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -23,7 +23,6 @@
  * questions.
  */
 
-import { getEnvOrDefault } from "~/utils/envUtil"
 import { Logger } from "loglevel"
 import { LogFactory } from "~/utils/logUtil"
 import {
@@ -32,7 +31,8 @@ import {
 } from "~/utils/otherlib/ChromeUtil"
 import { getWidgetId } from "~/utils/platform/siyuan/siyuanUtil"
 import { isEmptyString } from "~/utils/util"
-import { isLocalhost } from "~/utils/browserUtil"
+import { isElectron, isLocalhost } from "~/utils/browserUtil"
+import { getSiyuanCfg } from "~/utils/platform/siyuan/siYuanConfig"
 
 export class CommonblogApi {
   protected logger: Logger
@@ -54,10 +54,7 @@ export class CommonblogApi {
     fetchOptions: RequestInit,
     formJson?: any[]
   ): Promise<Response> {
-    const middlewareUrl = getEnvOrDefault(
-      "VITE_MIDDLEWARE_URL",
-      "/api/middleware"
-    )
+    const middlewareUrl = getSiyuanCfg().middlewareUrl
     const middleApiUrl = middlewareUrl + "/fetch"
     this.logger.debug("apiUrl=>", apiUrl)
 
@@ -97,7 +94,7 @@ export class CommonblogApi {
    * @param fetchOptions 请求参数
    * @param formJson 可选，发送form请求才需要
    */
-  private async fetchChromeCORS(
+  private async fetchChrome(
     apiUrl: string,
     fetchOptions: RequestInit,
     formJson?: any[]
@@ -141,13 +138,13 @@ export class CommonblogApi {
       this.logger.warn("检测到本地请求，直接fetch获取数据")
       // 不解析了，直接fetch
       result = await fetch(apiUrl, fetchOptions)
-    } else if (getWidgetId().isInSiyuan) {
+    } else if (isElectron) {
       this.logger.warn("当前处于挂件模式，使用electron的fetch获取数据")
       // 不解析了，直接使用Node兼容调用
       result = await fetch(apiUrl, fetchOptions)
     } else if (isInChromeExtension()) {
       this.logger.warn("当前处于Chrome插件中，需要模拟fetch解决CORS跨域问题")
-      result = await this.fetchChromeCORS(apiUrl, fetchOptions, formJson)
+      result = await this.fetchChrome(apiUrl, fetchOptions, formJson)
     } else {
       this.logger.warn("当前处于非挂件模式，已开启请求代理解决CORS跨域问题")
       this.logger.warn("formJson=>", formJson)
@@ -238,7 +235,7 @@ export class CommonblogApi {
 
       if (isLocalhost(apiUrl)) {
         resJson = await response.json()
-      } else if (getWidgetId().isInSiyuan) {
+      } else if (isElectron) {
         resJson = await response.json()
       } else {
         const corsJson = await response.json()

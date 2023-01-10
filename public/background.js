@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -38,19 +38,19 @@ chrome.runtime.onInstalled.addListener(async () => {
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   switch (request.type) {
-    case "fetchChromeXmlrpc":
-      ;(async () => {
-        let resText
-        try {
-          const response = await fetch(request.apiUrl, request.fetchCORSParams)
-          resText = await response.text()
-          // console.log("chrome.runtime.onMessage.addListener fetchChromeXmlrpc response:", resText)
-        } catch (e) {
-          console.error("chrome.runtime fetchChromeXmlrpc request error", e)
-        }
-        sendResponse(resText)
-      })()
-      break
+    // case "fetchChromeXmlrpc":
+    //   ;(async () => {
+    //     let resText
+    //     try {
+    //       const response = await fetch(request.apiUrl, request.fetchCORSParams)
+    //       resText = await response.text()
+    //       // console.log("chrome.runtime.onMessage.addListener fetchChromeXmlrpc response:", resText)
+    //     } catch (e) {
+    //       console.error("chrome.runtime fetchChromeXmlrpc request error", e)
+    //     }
+    //     sendResponse(resText)
+    //   })()
+    //   break
     case "fetchChromeJson":
       ;(async () => {
         let resJson

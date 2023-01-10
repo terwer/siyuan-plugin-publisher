@@ -1,5 +1,5 @@
 <!--
-  - Copyright (c) 2022, Terwer . All rights reserved.
+  - Copyright (c) 2022-2023, Terwer . All rights reserved.
   - DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
   -
   - This code is free software; you can redistribute it and/or modify it
@@ -27,7 +27,10 @@
   <div class="post-detail-content-box">
     <div v-if="!inSiyuanNewWin" class="btn-publish">
       <el-button size="small" type="primary" @click="handlePublish"
-        >发布到其他平台
+        >{{ $t("post.detail.index.send.to.publish") }}
+      </el-button>
+      <el-button size="small" type="success" @click="handleExportPDF"
+        >{{ $t("post.detail.index.export.to.pdf") }}
       </el-button>
     </div>
 
@@ -44,6 +47,11 @@ import { appendStr } from "~/utils/strUtil"
 import PostDetailService from "~/components/detail/PostDetailService.vue"
 import { LogFactory } from "~/utils/logUtil"
 import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
+import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
+import { removeTitleNumber } from "~/utils/htmlUtil"
+import { getPublishCfg } from "~/utils/publishUtil"
+import { isBrowser, reloadPage } from "~/utils/browserUtil"
+import { ElMessage } from "element-plus"
 
 const logger = LogFactory.getLogger("components/detail/PostDetail.vue")
 
@@ -55,6 +63,7 @@ const props = defineProps({
 })
 
 const pid = ref("")
+const siyuanApi = new SiYuanApi()
 const inSiyuanNewWin = ref(isInSiyuanNewWinBrowser())
 
 const handlePublish = async () => {
@@ -64,6 +73,29 @@ const handlePublish = async () => {
   } else {
     goToPage(appendStr("/publish/index.html?id=", pid.value))
   }
+}
+
+const handleExportPDF = async () => {
+  // 读取偏好设置并设置标题
+  const publishCfg = getPublishCfg()
+  const page = await siyuanApi.getBlockByID(pid.value)
+  let fmtTitle = page.content
+  if (publishCfg.fixTitle) {
+    fmtTitle = removeTitleNumber(page.content)
+  }
+  document.title = fmtTitle + " - 由思源笔记发布辅助工具导出"
+  document.querySelector(".header-default").remove()
+  document.querySelector(".btn-publish").remove()
+  document.querySelector(".post-detail-id").remove()
+  document.querySelector(".footer").remove()
+
+  // 打印
+  window.print()
+}
+
+const afterPrint = () => {
+  ElMessage.success("通过打印导出PDF完成")
+  reloadPage()
 }
 
 const initPage = async () => {
@@ -77,6 +109,11 @@ const initPage = async () => {
 
 onMounted(async () => {
   await initPage()
+
+  // 注册事件
+  if (isBrowser()) {
+    window.onafterprint = afterPrint
+  }
 })
 </script>
 

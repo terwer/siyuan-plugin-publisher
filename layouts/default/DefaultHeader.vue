@@ -1,5 +1,5 @@
 <!--
-  - Copyright (c) 2022, Terwer . All rights reserved.
+  - Copyright (c) 2022-2023, Terwer . All rights reserved.
   - DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
   -
   - This code is free software; you can redistribute it and/or modify it
@@ -193,7 +193,8 @@ import { getBooleanEnv } from "~/utils/envUtil"
 import { appendStr } from "~/utils/strUtil"
 import { useI18n } from "vue-i18n"
 import { LogFactory } from "~/utils/logUtil"
-import { isElectron, isWindows } from "~/utils/browserUtil"
+import { isElectron } from "~/utils/browserUtil"
+import { isSlot, isWindows } from "~/utils/otherlib/ChromeUtil"
 
 const { t } = useI18n()
 const logger = LogFactory.getLogger("layouts/default/DefaultHeader.vue")
@@ -208,7 +209,7 @@ const handleWinOpen = async () => {
   if (showOpenBtn.value) {
     try {
       const widgetResult = getWidgetId()
-      await doOpenExportWin(widgetResult.widgetId)
+      await doOpenExportWin(widgetResult.widgetId, "index.html")
 
       // event
       pageIdChanged()
@@ -301,17 +302,28 @@ const handleWinClose = () => {
 }
 
 const pageIdChanged = () => {
-  if (inSiyuan()) {
-    showOpenBtn.value = true
-    showCloseBtn.value = false
-  } else {
+  // 思源新窗口
+  if (isInSiyuanNewWinBrowser()) {
     showOpenBtn.value = false
     showCloseBtn.value = true
-  }
 
-  // 如果是Windows环境，不显示关闭按钮
-  if (isWindows && isElectron) {
+    // 如果是Windows环境，不显示关闭按钮
+    if (isWindows && isElectron) {
+      showCloseBtn.value = false
+    }
+  } else {
+    // 思源笔记主窗口
+
+    showOpenBtn.value = true
     showCloseBtn.value = false
+
+    // 非插槽不显示按钮
+    if (!isSlot) {
+      showOpenBtn.value = false
+      showCloseBtn.value = false
+
+      showTitle.value = true
+    }
   }
 }
 
@@ -320,13 +332,14 @@ onMounted(() => {
   if (isInSiyuanNewWinBrowser() || inSiyuan()) {
     // init
     const publishCfg = getPublishCfg()
+
     showCloseBtn.value = isInSiyuanNewWinBrowser() || publishCfg.showCloseBtn
     showOpenBtn.value = showCloseBtn.value
 
+    showTitle.value = false
+
     // event
     pageIdChanged()
-
-    showTitle.value = false
   } else {
     showOpenBtn.value = false
     showCloseBtn.value = true

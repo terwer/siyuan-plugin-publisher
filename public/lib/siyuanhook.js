@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -25,21 +25,60 @@
 
 // 警告⚠️：请勿在非思源笔记浏览器环境调用此文件中的任何方法
 
-let fs = require("fs")
-let path = require("path")
+const os = require("os")
+const fs = require("fs")
+const path = require("path")
 const {
   app,
   BrowserWindow,
   getCurrentWindow,
   ipcRenderer,
 } = require("@electron/remote")
-// const { exec } = require("child_process")
+
+// enable webContents
+// require("@electron/remote").require("@electron/remote/main").enable(serverHost.webContents)
 
 /**
  * 激活PicGo
  */
 // const picgoExtension = require(`${window.siyuan.config.system.dataDir}/widgets/sy-post-publisher/lib/picgo/picgo.js`).default
 // picgoExtension.activate()
+
+/**
+ * 获取IP
+ * @returns {*|string}
+ */
+const getIPv4 = () => {
+  const interfaces = os.networkInterfaces()
+  const addresses = []
+
+  for (const k in interfaces) {
+    for (const k2 in interfaces[k]) {
+      const address = interfaces[k][k2]
+      if (address.family === "IPv4" && !address.internal) {
+        addresses.push(address.address)
+      }
+    }
+  }
+
+  if (addresses.length === 0) {
+    return "127.0.0.1"
+  }
+
+  let retAddr
+  for (let i = 0; i < addresses.length; i++) {
+    const addr = addresses[i]
+    if (addr.indexOf("192.") > -1) {
+      retAddr = addr
+      break
+    }
+  }
+  if (!retAddr) {
+    retAddr = addresses[0]
+  }
+
+  return retAddr
+}
 
 /**
  * 思源笔记弹窗参数定义
@@ -186,13 +225,23 @@ window.terwer.renderPublishHelper = (pageId, pageUrl) => {
         // 修复Windows路径问题
         dataDir = dataDir.replace(/\\/g, "/")
         const newWinPageId = pageId ?? ""
+        const ipv4 = getIPv4()
+        const mainWindow = getCurrentWindow()
+        const currentWindowId = mainWindow.id
         console.log("dataDir=>", dataDir)
         console.log("newWinPageId=>", newWinPageId)
+        console.log("ipv4=>", ipv4)
+        console.log("currentWindowId=>", currentWindowId)
 
         var txt = data.toString().replace(/<!--.*-->/gs, "")
-        txt += `<script>window.terwer={};window.terwer.pageId="${newWinPageId}";window.terwer.dataDir="${dataDir}";
+        txt += `<script>
+          window.terwer={};
+          window.terwer.pageId="${newWinPageId}";
+          window.terwer.dataDir="${dataDir}";
           window.terwer.picgoExtension = require("${dataDir}/widgets/sy-post-publisher/lib/picgo/picgo.js").default;
           window.terwer.picgoExtension.activate("${dataDir}/widgets/sy-post-publisher/lib/picgo/picgo.cfg.json");
+          window.terwer.ip = "${ipv4}";
+          window.terwer.currentWindowId = ${currentWindowId};
           </script>`
         html(txt)
       }
@@ -281,11 +330,11 @@ window.terwer.widgetsSlot = () => {
 
   function CreatePreviousWidgetsSlot(element) {
     let cloneNode = element.parentElement
-      .querySelector(".protyle-wysiwyg.protyle-wysiwyg--attr")
+      .querySelector(".protyle-wysiwyg")
       .cloneNode(false)
     cloneNode.innerHTML = `
   <div class="iframe-content">
-      <iframe src="/widgets/sy-post-publisher/" ></iframe>
+      <iframe src="/widgets/sy-post-publisher/?isSlot=true" scrolling="no"></iframe>
   </div>
   `
     let id = element.parentElement.parentElement
@@ -307,7 +356,8 @@ window.terwer.widgetsSlot = () => {
               height:53px;
               border:none;
               margin:0;
-              padding:0
+              padding:0;
+              overflow: hidden;
           }
       </style>
       `

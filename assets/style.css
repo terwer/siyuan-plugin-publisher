@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -59,9 +59,7 @@ a:hover {
 
 :root {
   --g-font-family: "JetBrains Mono", "LXGW WenKai", "-apple-system",
-    "Wenquanyi Micro Hei", "Wenquanyi Micro Hei Mono", "Microsoft YaHei",
-    "PT Sans", "Liberation Mono", monospace, dejavu sans mono, Fira Code,
-    Microsoft Yahei, Consolas, Courier New, monospace, Menlo, Monaco;
+    "Microsoft YaHei", "Times New Roman", "方正北魏楷书_GBK";
   font-family: var(--g-font-family) !important;
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);

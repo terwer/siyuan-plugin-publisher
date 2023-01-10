@@ -1,5 +1,5 @@
 <!--
-  - Copyright (c) 2022, Terwer . All rights reserved.
+  - Copyright (c) 2022-2023, Terwer . All rights reserved.
   - DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
   -
   - This code is free software; you can redistribute it and/or modify it
@@ -141,6 +141,11 @@
           />
         </el-form-item>
 
+        <!-- 标签开关 -->
+        <el-form-item v-if="editMode" :label="$t('main.tag.auto.switch')">
+          <el-switch v-model="tagSwitch" />
+        </el-form-item>
+
         <!-- 标签  -->
         <el-form-item :label="$t('main.tag')">
           <el-tag
@@ -178,10 +183,6 @@
             }}
           </el-button>
         </el-form-item>
-        <!-- 标签开关 -->
-        <el-form-item :label="$t('main.tag.auto.switch')">
-          <el-switch v-model="tagSwitch" />
-        </el-form-item>
 
         <!-- 分类 -->
         <el-form-item :label="$t('main.cat')" style="width: 100%">
@@ -208,7 +209,7 @@
         -->
 
         <!-- 一键生成属性-->
-        <el-form-item :label="$t('main.opt.quick')">
+        <el-form-item v-if="editMode" :label="$t('main.opt.quick')">
           <el-button
             type="primary"
             @click="oneclickAttr"
@@ -220,7 +221,7 @@
                 : $t("main.publish.oneclick.attr")
             }}
           </el-button>
-          <el-button v-if="editMode" type="primary" @click="saveAttrToSiyuan"
+          <el-button type="primary" @click="saveAttrToSiyuan"
             >{{ $t("main.save.attr.to.siyuan") }}
           </el-button>
         </el-form-item>
@@ -306,7 +307,11 @@ import {
 } from "~/utils/util"
 import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
 import { formatNumToZhDate } from "~/utils/dateUtil"
-import { getPublishCfg, getPublishStatus } from "~/utils/publishUtil"
+import {
+  getApiParams,
+  getPublishCfg,
+  getPublishStatus,
+} from "~/utils/publishUtil"
 import { CONSTANTS } from "~/utils/constants/constants"
 
 const logger = LogFactory.getLogger(
@@ -470,7 +475,7 @@ const initPage = async () => {
     formData.postid = meta[metaweblogCfg.posidKey]
 
     // 路径组合
-    previewUrl.value = await api.getPreviewUrl(formData.postid.toString())
+    previewUrl.value = await api.getPreviewUrl(formData?.postid?.toString())
 
     try {
       // 如果文章选择了分类，初始化分类
@@ -487,6 +492,13 @@ const initPage = async () => {
       isInitLoading.value = false
       logger.error("文章新获取失败", e)
     }
+  } else {
+    logger.warn("检测到之前发布异常，清空文章ID")
+    const postidKey = getApiParams<IMetaweblogCfg>(props.apiType).posidKey
+    const customAttr = {
+      [postidKey]: "",
+    }
+    await siyuanApi.setBlockAttrs(siyuanData.pageId, customAttr)
   }
 
   // 全部文章分类请求
@@ -793,9 +805,8 @@ const doPublish = async () => {
 
     ElMessage.success(t("main.opt.success"))
   } catch (e) {
-    logger.error("发布异常")
-    ElMessage.error(t("main.opt.failure"))
-    throw e
+    isPublishLoading.value = false
+    logger.error("发布异常", e)
   }
 
   isPublishLoading.value = false

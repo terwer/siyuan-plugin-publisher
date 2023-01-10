@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -24,6 +24,7 @@
  */
 
 import { fileOpen, FileWithHandle } from "browser-fs-access"
+import { ElMessage } from "element-plus"
 
 /**
  * 是否在浏览器
@@ -37,12 +38,7 @@ export const isBrowser = (): boolean =>
  * @param apiUrl 请求地址
  */
 export const isLocalhost = (apiUrl: string): boolean =>
-  apiUrl.indexOf("127.0.0.1") > -1 || apiUrl.indexOf("localhost") > -1
-
-/**
- * 检测是否是Windows
- */
-export const isWindows = /Windows/.test(navigator.userAgent)
+  apiUrl.indexOf("127.0.0.1") > -1
 
 /**
  * 检测是否是Electron
@@ -145,4 +141,38 @@ export const readJSONFileFormDialog = async (): Promise<FileWithHandle[]> => {
     extensions: [".json"],
     multiple: true,
   })
+}
+
+/**
+ * 复制网页内容到剪贴板
+ * @param text 待复制的文本
+ */
+export const copyToClipboardInBrowser = (text) => {
+  if (navigator && navigator.clipboard) {
+    // Copy the selected text to the clipboard
+    navigator.clipboard.writeText(text).then(
+      function () {
+        // The text has been successfully copied to the clipboard
+        ElMessage.success("复制成功")
+      },
+      function (e) {
+        // An error occurred while copying the text
+        ElMessage.error("复制失败=>" + e)
+      }
+    )
+  } else {
+    try {
+      const input = document.createElement("input")
+      input.style.position = "fixed"
+      input.style.opacity = "0"
+      input.value = text
+      document.body.appendChild(input)
+      input.select()
+      document.execCommand("copy")
+      document.body.removeChild(input)
+      ElMessage.success("复制成功")
+    } catch (e) {
+      ElMessage.error("复制失败=>" + e)
+    }
+  }
 }

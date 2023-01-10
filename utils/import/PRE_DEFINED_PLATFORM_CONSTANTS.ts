@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -23,45 +23,42 @@
  * questions.
  */
 
-import * as fs from "fs/promises"
-import * as path from "path"
-import fetch from "cross-fetch"
+/**
+ * Docsy
+ */
+const PRE_DEFINED_DOCSY_KEY = "githubHugo-zdlc6l"
+/**
+ * Vitepress
+ */
+const PRE_DEFINED_VITEPRESS_KEY = "githubVitepress-mhxj3"
+/**
+ * Nuxt content
+ */
+const PRE_DEFINED_NUXT_CONTENT_KEY = "githubNuxt-z1xcb7x"
+/**
+ * Nextra
+ */
+const PRE_DEFINED_NEXTRA_KEY = "githubNext-ziz9v8"
+/**
+ * Oschina
+ */
+const PRE_DEFINED_OSCHINA_KEY = "metaweblog-zahrlw"
+/**
+ * Typecho
+ */
+const PRE_DEFINED_TYPECHO_KEY = "metaweblog-22pamt"
 
-// Vars
-const imageRegex = /.(gif|jpe?g|tiff?|png|webp|bmp|ico)$/i
-
-export interface Image {
-  path?: string
-  uri?: string
-}
-
-export interface ResponsePayload {
-  base64?: string
-}
-
-export async function imageToBase64(image: Image): Promise<ResponsePayload> {
-  let base64: string = ""
-
-  if (image.uri) {
-    const uri = new URL(image.uri)
-
-    const fetchResponse: any = await fetch(uri)
-    const imageBuffer = await fetchResponse.buffer()
-
-    base64 = imageBuffer.toString("base64")
-  } else if (image.path && imageRegex.test(image.path)) {
-    const response = await fs.stat(image.path)
-    const isFile = response.isFile()
-    if (isFile) {
-      const imageBuffer = await fs.readFile(path.resolve(image.path))
-
-      base64 = imageBuffer.toString("base64")
-    }
-  } else {
-    throw new Error(
-      "Didn't get an image or a good uri for the appropriate param"
-    )
-  }
-
-  return { base64 }
+/**
+ * 预定义平台的 key ，请勿修改，否则将导致此平台无法运行
+ * 注意：这里的值必须与 pre.json 完全保持一致
+ * @author terwer
+ * @since 0.6.1
+ */
+export const PRE_DEFINED_PLATFORM_KEY_CONSTANTS = {
+  PRE_DEFINED_DOCSY_KEY,
+  PRE_DEFINED_VITEPRESS_KEY,
+  PRE_DEFINED_NUXT_CONTENT_KEY,
+  PRE_DEFINED_NEXTRA_KEY,
+  PRE_DEFINED_OSCHINA_KEY,
+  PRE_DEFINED_TYPECHO_KEY,
 }
