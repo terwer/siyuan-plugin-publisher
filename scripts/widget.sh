@@ -37,6 +37,7 @@ rm ./dist/manifest*.json
 rm -rf ./dist/mv2
 
 # Picgo配置文件
+rm ./dist/lib/picgo/picgo.cfg.dev.json
 # cp ./dist/lib/picgo/picgo.cfg.json.example ./dist/lib/picgo/picgo.cfg.json
 
 rm -rf ../my-note-docker/workspace/SiYuan/data/widgets/sy-post-publisher/
