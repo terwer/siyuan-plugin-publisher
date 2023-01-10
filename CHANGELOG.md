@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.6.1](https://github.com/terwer/src-sy-post-publisher/compare/v0.6.0...v0.6.1) (2023-01-10)
+
+
+### Miscellaneous
+
+* **deps-dev:** bump @vitest/coverage-c8 from 0.26.3 to 0.27.0 ([58d15e6](https://github.com/terwer/src-sy-post-publisher/commit/58d15e60cc15671ac74bae9fcc37b9100e4ddd87))
+* **deps-dev:** bump eslint-config-standard-with-typescript ([cd41105](https://github.com/terwer/src-sy-post-publisher/commit/cd4110504aa3e0b4ea776e2c7c2bfd4630296fb1))
+* **deps-dev:** bump vitest from 0.26.3 to 0.27.0 ([276be85](https://github.com/terwer/src-sy-post-publisher/commit/276be85b5c20544caf2e86c63a99e9d80cd8e18d))
+
 ## [0.6.0](https://github.com/terwer/src-sy-post-publisher/compare/v0.5.1...v0.6.0) (2022-12-29)
 
 
