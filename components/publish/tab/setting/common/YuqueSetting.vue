@@ -1,5 +1,5 @@
 <!--
-  - Copyright (c) 2022, Terwer . All rights reserved.
+  - Copyright (c) 2022-2023, Terwer . All rights reserved.
   - DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
   -
   - This code is free software; you can redistribute it and/or modify it
@@ -38,8 +38,19 @@ import { API_TYPE_CONSTANTS } from "~/utils/constants/apiTypeConstants"
 import { YuqueCfg } from "~/utils/platform/commonblog/yuque/yuqueCfg"
 
 import CommonBlogSetting from "../CommonBlogSetting.vue"
+import { CommonblogPlaceholder } from "~/utils/platform/commonblog/CommonblogPlaceholder"
+import { useI18n } from "vue-i18n"
+
+const { t } = useI18n()
 
 const apiType = ref(API_TYPE_CONSTANTS.API_TYPE_YUQUE)
+
 const yuqueCfg = new YuqueCfg()
+const yuquePlaceholder = new CommonblogPlaceholder()
+yuquePlaceholder.homePlaceholder = t("setting.yuque.home.tip")
+yuquePlaceholder.usernamePlaceholder = t("setting.yuque.username.tip")
+yuquePlaceholder.passwordPlaceholder = t("setting.yuque.password.tip")
+yuquePlaceholder.apiUrlPlaceholder = t("setting.yuque.apiurl.tip")
+yuqueCfg.placeholder = yuquePlaceholder
 const cfg = ref(yuqueCfg)
 </script>

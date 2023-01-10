@@ -345,4 +345,28 @@ export default {
     "The picture bed has been opened, and the picture bed is about to upload the picture bed to the bed",
   "github.post.picgo.picbed.error":
     "The picture uploaded to the picture bed failed, it may be an error in the configuration of the graph, please check the picture bed configuration",
+  "setting.yuque.home.tip":
+    "The homepage of the language bird platform is usually fixed: https://www.yuque.com/",
+  "setting.yuque.username.tip":
+    "The user name of the spark platform, note that the user name is fixed in [account settings], not the user nickname (*^▽^*)",
+  "setting.yuque.password.tip":
+    "For the token of the spark platform, please follow the link to get it. You only need to grant the document to read and modify the two permissions.",
+  "setting.yuque.apiurl.tip":
+    "The API address of the language bird platform is usually fixed: https://www.yuque.com/api/v2",
+  "setting.liandi.home.tip":
+    "The homepage of the chain drop platform is usually fixed: https://ld246.com/",
+  "setting.liandi.username.tip":
+    "The user name of the chain drop platform, note that after clicking [Personal Homepage], the user name displayed behind the MEMBER on the URL is not a user nickname (*^▽^*)",
+  "setting.liandi.password.tip":
+    "Token on the chain drop platform, please click on the link to get",
+  "setting.liandi.apiurl.tip":
+    "The API address of the chain drop platform is usually fixed: https://ld246.com/api/v2",
+  "setting.kms.home.tip":
+    "KMS platform homepage, for example: http:// localhost: 9564/kms16_release/kms/multidoc",
+  "setting.kms.username.tip":
+    "KMS platform REST account user name, please create according to the link instruction",
+  "setting.kms.password.tip":
+    "KMS platform REST account password, please create according to the link instruction",
+  "setting.kms.apiurl.tip":
+    "The API address of the KMS platform, for example: http:// localhost: 9564/kms16_release/API/KMS-Multidoc/KMSMultidOWRESTSERVICE",
 }

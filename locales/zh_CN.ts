@@ -354,4 +354,23 @@ export default {
   "github.post.picgo.start.upload": "图床已开启，即将上传本地图片到图床",
   "github.post.picgo.picbed.error":
     "图片上传到图床失败，可能是图床配置错误，请检查图床配置",
+  "setting.yuque.home.tip": "语雀平台首页，通常固定是：https://www.yuque.com/",
+  "setting.yuque.username.tip":
+    "语雀平台用户名，注意是【账户设置】里面固定连接里面的用户名，不是用户昵称哦(*^▽^*)",
+  "setting.yuque.password.tip":
+    "语雀平台的Token，请按照链接点击获取，只需要勾选【读取你的知识库】和【修改和读取你的文档】两个权限即可",
+  "setting.yuque.apiurl.tip":
+    "语雀平台的API地址，通常固定是：https://www.yuque.com/api/v2",
+  "setting.liandi.home.tip": "链滴平台首页，通常固定是：https://ld246.com/",
+  "setting.liandi.username.tip":
+    "链滴平台用户名，注意是点击【个人主页】之后URL上member后面显示的用户名，不是用户昵称哦(*^▽^*)",
+  "setting.liandi.password.tip": "链滴平台的Token，请按照链接点击获取",
+  "setting.liandi.apiurl.tip":
+    "链滴平台的API地址，通常固定是：https://ld246.com/api/v2",
+  "setting.kms.home.tip":
+    "KMS平台首页，例如：http://localhost:9564/kms16_release/kms/multidoc",
+  "setting.kms.username.tip": "KMS平台Rest账户用户名，请按照链接指示创建",
+  "setting.kms.password.tip": "KMS平台Rest账户密码，请按照链接指示创建",
+  "setting.kms.apiurl.tip":
+    "KMS平台的API地址，例如：http://localhost:9564/kms16_release/api/kms-multidoc/kmsMultidocKnowledgeRestService",
 }

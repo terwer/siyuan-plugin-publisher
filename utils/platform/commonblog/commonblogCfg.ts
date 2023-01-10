@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -24,6 +24,7 @@
  */
 
 import { PageType } from "../metaweblog/IMetaweblogCfg"
+import { CommonblogPlaceholder } from "~/utils/platform/commonblog/CommonblogPlaceholder"
 
 /**
  * 通用平台配置接口
@@ -135,6 +136,10 @@ export class CommonblogCfg implements ICommonblogCfg {
    * token设置地址
    */
   tokenSettingUrl: string
+  /**
+   * 操作提示
+   */
+  placeholder: CommonblogPlaceholder
 
   constructor() {
     this.home = ""
@@ -149,5 +154,6 @@ export class CommonblogCfg implements ICommonblogCfg {
     this.previewUrl = ""
     this.pageType = PageType.Markdown
     this.tokenSettingUrl = ""
+    this.placeholder = new CommonblogPlaceholder()
   }
 }

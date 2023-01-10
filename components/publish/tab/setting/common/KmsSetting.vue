@@ -1,5 +1,5 @@
 <!--
-  - Copyright (c) 2022, Terwer . All rights reserved.
+  - Copyright (c) 2022-2023, Terwer . All rights reserved.
   - DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
   -
   - This code is free software; you can redistribute it and/or modify it
@@ -38,8 +38,19 @@ import { API_TYPE_CONSTANTS } from "~/utils/constants/apiTypeConstants"
 import { KmsCfg } from "~/utils/platform/commonblog/kms/kmsCfg"
 
 import CommonBlogSetting from "../CommonBlogSetting.vue"
+import { CommonblogPlaceholder } from "~/utils/platform/commonblog/CommonblogPlaceholder"
+import { useI18n } from "vue-i18n"
+
+const { t } = useI18n()
 
 const apiType = ref(API_TYPE_CONSTANTS.API_TYPE_KMS)
+
 const kmsCfg = new KmsCfg()
+const kmsPlaceholder = new CommonblogPlaceholder()
+kmsPlaceholder.homePlaceholder = t("setting.kms.home.tip")
+kmsPlaceholder.usernamePlaceholder = t("setting.kms.username.tip")
+kmsPlaceholder.passwordPlaceholder = t("setting.kms.password.tip")
+kmsPlaceholder.apiUrlPlaceholder = t("setting.kms.apiurl.tip")
+kmsCfg.placeholder = kmsPlaceholder
 const cfg = ref(kmsCfg)
 </script>

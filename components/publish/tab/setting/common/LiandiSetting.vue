@@ -1,5 +1,5 @@
 <!--
-  - Copyright (c) 2022, Terwer . All rights reserved.
+  - Copyright (c) 2022-2023, Terwer . All rights reserved.
   - DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
   -
   - This code is free software; you can redistribute it and/or modify it
@@ -37,8 +37,19 @@ import { ref } from "vue"
 import { API_TYPE_CONSTANTS } from "~/utils/constants/apiTypeConstants"
 import { LiandiCfg } from "~/utils/platform/commonblog/liandi/liandiCfg"
 import CommonBlogSetting from "../CommonBlogSetting.vue"
+import { CommonblogPlaceholder } from "~/utils/platform/commonblog/CommonblogPlaceholder"
+import { useI18n } from "vue-i18n"
+
+const { t } = useI18n()
 
 const apiType = ref(API_TYPE_CONSTANTS.API_TYPE_LIANDI)
+
 const liandiCfg = new LiandiCfg()
+const liandiPlaceholder = new CommonblogPlaceholder()
+liandiPlaceholder.homePlaceholder = t("setting.liandi.home.tip")
+liandiPlaceholder.usernamePlaceholder = t("setting.liandi.username.tip")
+liandiPlaceholder.passwordPlaceholder = t("setting.liandi.password.tip")
+liandiPlaceholder.apiUrlPlaceholder = t("setting.liandi.apiurl.tip")
+liandiCfg.placeholder = liandiPlaceholder
 const cfg = ref(liandiCfg)
 </script>
