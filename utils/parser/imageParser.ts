@@ -25,7 +25,7 @@
 
 import { LogFactory } from "~/utils/logUtil"
 import { inSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
-import { imageToBase64 } from "~/utils/parser/imageToBase64"
+import { imageToBase64 } from "~/utils/otherlib/imageToBase64"
 import { getEnvOrDefault } from "~/utils/envUtil"
 import { appendStr } from "~/utils/strUtil"
 import { ImageItem } from "~/utils/models/imageItem"

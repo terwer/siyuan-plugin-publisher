@@ -25,7 +25,7 @@
 
 import express from "express"
 import fetch from "cross-fetch"
-import { imageToBase64 } from "../utils/parser/imageToBase64"
+import { imageToBase64 } from "../utils/otherlib/imageToBase64"
 
 import { SimpleXmlRpcClient } from "../libs/simple-xmlrpc/custom/SimpleXmlRpcClient"
 

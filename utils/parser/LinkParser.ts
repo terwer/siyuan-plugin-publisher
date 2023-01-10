@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -23,45 +23,9 @@
  * questions.
  */
 
-import * as fs from "fs/promises"
-import * as path from "path"
-import fetch from "cross-fetch"
-
-// Vars
-const imageRegex = /.(gif|jpe?g|tiff?|png|webp|bmp|ico)$/i
-
-export interface Image {
-  path?: string
-  uri?: string
-}
-
-export interface ResponsePayload {
-  base64?: string
-}
-
-export async function imageToBase64(image: Image): Promise<ResponsePayload> {
-  let base64: string = ""
-
-  if (image.uri) {
-    const uri = new URL(image.uri)
-
-    const fetchResponse: any = await fetch(uri)
-    const imageBuffer = await fetchResponse.buffer()
-
-    base64 = imageBuffer.toString("base64")
-  } else if (image.path && imageRegex.test(image.path)) {
-    const response = await fs.stat(image.path)
-    const isFile = response.isFile()
-    if (isFile) {
-      const imageBuffer = await fs.readFile(path.resolve(image.path))
-
-      base64 = imageBuffer.toString("base64")
-    }
-  } else {
-    throw new Error(
-      "Didn't get an image or a good uri for the appropriate param"
-    )
-  }
-
-  return { base64 }
-}
+/**
+ * 链接解析器，复制将思源笔记的 siyuan:// 外链转换为真实文章之间的跳转链接
+ * @author terwer
+ * @since 0.6.1
+ */
+export class LinkParser {}
