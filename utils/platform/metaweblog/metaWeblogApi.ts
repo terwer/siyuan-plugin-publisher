@@ -32,10 +32,9 @@ import { Logger } from "loglevel"
 import { Post } from "~/utils/models/post"
 import { POST_STATUS_CONSTANTS } from "~/utils/constants/postStatusConstants"
 import { isEmptyString } from "~/utils/util"
-import { isBrowser, isElectron } from "~/utils/browserUtil"
+import { isBrowser } from "~/utils/browserUtil"
 import { CategoryInfo } from "~/utils/models/categoryInfo"
 import { CommonXmlrpcClient } from "~/libs/simple-xmlrpc/commonXmlrpcClient"
-import { isInChromeExtension } from "~/utils/otherlib/ChromeUtil"
 
 /**
  * Metaweblog API的具体实现
@@ -67,25 +66,13 @@ export class MetaWeblogApi {
   ): Promise<UserBlog[]> {
     const usersBlogs: UserBlog[] = []
 
-    let dataArr
     const ret = await this.commonXmlrpcClient.methodCall(
       METAWEBLOG_METHOD_CONSTANTS.GET_USERS_BLOGS,
       [this.apiType, username, password]
     )
     this.logger.debug("ret=>", ret)
-    // Electron或者Chrome平台直接使用数据，代理情况需要JSON解析
-    if (isElectron || isInChromeExtension()) {
-      dataArr = ret
-    } else {
-      // 错误处理
-      const dataObj = JSON.parse(ret) || []
-      if (dataObj.faultCode) {
-        throw new Error(dataObj.faultString)
-      }
-      // 数据适配
-      dataArr = JSON.parse(ret) || []
-    }
 
+    const dataArr = ret
     for (let i = 0; i < dataArr.length; i++) {
       const userBlog = new UserBlog()
       const item = dataArr[i]
@@ -117,24 +104,12 @@ export class MetaWeblogApi {
     const result: Post = new Post()
 
     try {
-      let dataObj
       const ret = await this.commonXmlrpcClient.methodCall(
         METAWEBLOG_METHOD_CONSTANTS.GET_POST,
         [postid, username, password]
       )
-      this.logger.debug("getCategories ret=>", ret)
-      // Electron或者Chrome平台直接使用数据，代理情况需要JSON解析
-      if (isElectron || isInChromeExtension()) {
-        dataObj = ret
-      } else {
-        dataObj = JSON.parse(ret) || []
-        if (dataObj.faultCode) {
-          this.logger.error("请求分类异常，错误信息如下：", dataObj.faultString)
-        }
-
-        // 数据适配
-        this.logger.debug("获取的文章信息，dataObj=>", dataObj)
-      }
+      const dataObj = ret
+      this.logger.debug("获取的文章信息，dataObj=>", dataObj)
 
       // 暂时只用到了分类，其他属性先不适配
       result.categories = dataObj.categories
@@ -294,25 +269,11 @@ export class MetaWeblogApi {
     const result = [] as CategoryInfo[]
 
     try {
-      let dataArr
       const ret = await this.commonXmlrpcClient.methodCall(
         METAWEBLOG_METHOD_CONSTANTS.GET_CATEGORIES,
         [this.apiType, username, password]
       )
-      this.logger.debug("getCategories ret=>", ret)
-      // Electron或者Chrome平台直接使用数据，代理情况需要JSON解析
-      if (isElectron || isInChromeExtension()) {
-        dataArr = ret
-      } else {
-        // 错误处理
-        const dataObj = JSON.parse(ret) || []
-        if (dataObj.faultCode) {
-          this.logger.error("请求分类异常，错误信息如下：", dataObj.faultString)
-        }
-
-        // 数据适配
-        dataArr = JSON.parse(ret) || []
-      }
+      const dataArr = ret
       this.logger.debug("获取的分类信息，dataArr=>", dataArr)
 
       dataArr.forEach((item: any) => {

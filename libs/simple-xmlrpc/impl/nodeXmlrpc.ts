@@ -40,9 +40,9 @@ export async function fetchNode(
     logger.debug("xmlrpcNodeParams.reqParams=>", reqParams)
 
     const client = new SimpleXmlRpcClient(apiUrl)
-    const data = await client.methodCall(reqMethod, reqParams)
-    logger.debug("SimpleXmlRpcClient结束，data=>", data)
-    return data
+    const ret = await client.methodCall(reqMethod, reqParams)
+    logger.debug("SimpleXmlRpcClient结束，ret=>", ret)
+    return ret
   } catch (e) {
     logger.error(e)
     throw new Error("请求处理异常")

@@ -25,6 +25,7 @@
 
 import { LogFactory } from "~/utils/logUtil"
 import { getSiyuanCfg } from "~/utils/platform/siyuan/siYuanConfig"
+import { XmlRpcValue } from "~/libs/simple-xmlrpc/xmlrpc"
 
 const logger = LogFactory.getLogger(
   "libs/simple-xmlrpc/impl/middlewareXmlrpc.ts"
@@ -40,7 +41,7 @@ export async function fetchMiddleware(
   apiUrl: string,
   reqMethod: string,
   reqParams: string[]
-): Promise<string> {
+): Promise<XmlRpcValue> {
   const middlewareUrl = getSiyuanCfg().middlewareUrl
   const middleApiUrl = middlewareUrl + "/xmlrpc"
   logger.debug("apiUrl=>", apiUrl)
@@ -69,5 +70,11 @@ export async function fetchMiddleware(
   logger.debug("middleFetchOption=>", middleFetchOption)
 
   const response: Response = await fetch(middleApiUrl, middleFetchOption)
-  return await response.text()
+  const resText = await response.text()
+
+  const ret = JSON.parse(resText) || []
+  if (ret.faultCode) {
+    this.logger.error("代理请求异常，错误信息如下：", ret.faultString)
+  }
+  return ret
 }
