@@ -227,10 +227,17 @@ export class PicgoPostApi {
     // 处理后续
     if (imageJsonObj && imageJsonObj.length > 0) {
       const img = imageJsonObj[0]
+      if (!img || !img.imgUrl || isEmptyString(img.imgUrl)) {
+        throw new Error(
+          "图片上传失败，可能原因：PicGO配置错误或者该平台不支持图片覆盖，请检查配置或者尝试上传新图片。请打开picgo.log查看更多信息"
+        )
+      }
       const newImageItem = new ImageItem(imageItem.originUrl, img.imgUrl, false)
       fileMap[newImageItem.hash] = newImageItem
     } else {
-      throw new Error("图片上传失败，请打开picgo.log查看更多信息")
+      throw new Error(
+        "图片上传失败，可能原因：PicGO配置错误，请检查配置。请打开picgo.log查看更多信息"
+      )
     }
 
     this.logger.warn("newFileMap=>", fileMap)
