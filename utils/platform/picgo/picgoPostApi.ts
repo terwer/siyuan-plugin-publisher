@@ -127,44 +127,50 @@ export class PicgoPostApi {
     }
 
     // 开始上传
-    const imageItemArray = await this.convertImagesToImagesItemArray(
-      attrs,
-      uniqueLocalImages
-    )
+    try {
+      const imageItemArray = await this.convertImagesToImagesItemArray(
+        attrs,
+        uniqueLocalImages
+      )
 
-    let replaceMap = {}
-    let hasLocalImages = false
-    for (let i = 0; i < imageItemArray.length; i++) {
-      const imageItem = imageItemArray[i]
-      if (imageItem.originUrl.includes("assets")) {
-        replaceMap[imageItem.hash] = imageItem
+      let replaceMap = {}
+      let hasLocalImages = false
+      for (let i = 0; i < imageItemArray.length; i++) {
+        const imageItem = imageItemArray[i]
+        if (imageItem.originUrl.includes("assets")) {
+          replaceMap[imageItem.hash] = imageItem
+        }
+
+        if (!imageItem.isLocal) {
+          this.logger.warn(
+            "已经上传过图床，请勿重复上传=>",
+            imageItem.originUrl
+          )
+          continue
+        }
+
+        hasLocalImages = true
+        await this.uploadSingleImageToBed(pageId, attrs, imageItem)
       }
 
-      if (!imageItem.isLocal) {
-        this.logger.warn("已经上传过图床，请勿重复上传=>", imageItem.originUrl)
-        continue
+      if (!hasLocalImages) {
+        ElMessage.error("未发现本地图片，不上传")
+      } else {
+        ElMessage.success("图片已经全部上传至图床，即将替换链接")
       }
 
-      hasLocalImages = true
-      await this.uploadSingleImageToBed(pageId, attrs, imageItem)
+      this.logger.debug("replaceMap=>", replaceMap)
+      // 上传完成
+      this.logger.info("开始替换正文，原文=>", { mdContent: mdContent })
+      ret.mdContent = this.imageParser.replaceImagesWithImageItemArray(
+        mdContent,
+        replaceMap
+      )
+      ret.flag = true
+      this.logger.info("正文替换完成，最终结果=>", ret)
+    } catch (e) {
+      this.logger.info("文章图片上传失败=>", e)
     }
-
-    if (!hasLocalImages) {
-      ElMessage.error("未发现本地图片，不上传")
-    } else {
-      ElMessage.success("图片已经全部上传至图床，即将替换链接")
-    }
-
-    this.logger.debug("replaceMap=>", replaceMap)
-    // 上传完成
-    this.logger.info("开始替换正文，原文=>", { mdContent: mdContent })
-    ret.mdContent = this.imageParser.replaceImagesWithImageItemArray(
-      mdContent,
-      replaceMap
-    )
-    ret.flag = true
-    this.logger.info("正文替换完成，最终结果=>", ret)
-
     return Promise.resolve(ret)
   }
 
