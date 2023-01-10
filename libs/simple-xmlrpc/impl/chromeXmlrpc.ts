@@ -23,14 +23,9 @@
  * questions.
  */
 
-import { sendChromeMessage } from "~/utils/otherlib/ChromeUtil"
 import { LogFactory } from "~/utils/logUtil"
-import {
-  Deserializer,
-  serializeMethodCall,
-  XmlRpcValue,
-} from "~/libs/simple-xmlrpc/xmlrpc"
-import { XmlrpcUtil } from "~/libs/simple-xmlrpc/custom/xmlrpcUtil"
+import { XmlRpcValue } from "~/libs/simple-xmlrpc/xmlrpc"
+import { fetchMiddleware } from "~/libs/simple-xmlrpc/impl/middlewareXmlrpc"
 
 const logger = LogFactory.getLogger("libs/simple-xmlrpc/impl/chromeXmlrpc.ts")
 
@@ -46,34 +41,33 @@ async function doChromeFetch(
   reqParams: string[]
 ): Promise<XmlRpcValue> {
   try {
-    const methodBodyXml = serializeMethodCall(reqMethod, reqParams, "utf-8")
-
-    const fetchCORSParams = {
-      method: "POST",
-      headers: {
-        "content-type": "text/xml",
-      },
-      body: methodBodyXml,
-    }
-
-    let resText = await sendChromeMessage({
-      // 里面的值应该可以自定义，用于判断哪个请求之类的
-      type: "fetchChromeXmlrpc",
-      apiUrl, // 需要请求的url
-      fetchCORSParams,
-    })
-    // logger.debug("fetchChromeXmlrpc开始，resText=>", resText)
-
-    let data
-    if (resText) {
-      resText = XmlrpcUtil.removeXmlHeader(resText)
-
-      const deserializer = new Deserializer("utf-8")
-      data = await deserializer.deserializeMethodResponse(resText)
-      // logger.debug("fetchChromeXmlrpc结束，data=>", data)
-    }
-
-    return data
+    // const methodBodyXml = serializeMethodCall(reqMethod, reqParams, "utf-8")
+    //
+    // const fetchCORSParams = {
+    //   method: "POST",
+    //   headers: {
+    //     "content-type": "text/xml",
+    //   },
+    //   body: methodBodyXml,
+    // }
+    //
+    // let resText = await sendChromeMessage({
+    //   // 里面的值应该可以自定义，用于判断哪个请求之类的
+    //   type: "fetchChromeXmlrpc",
+    //   apiUrl, // 需要请求的url
+    //   fetchCORSParams,
+    // })
+    // // logger.debug("fetchChromeXmlrpc开始，resText=>", resText)
+    //
+    // let data
+    // if (resText) {
+    //   resText = XmlrpcUtil.removeXmlHeader(resText)
+    //
+    //   const deserializer = new Deserializer("utf-8")
+    //   data = await deserializer.deserializeMethodResponse(resText)
+    //   // logger.debug("fetchChromeXmlrpc结束，data=>", data)
+    // }
+    return await fetchMiddleware(apiUrl, reqMethod, reqParams)
   } catch (e: any) {
     throw new Error(e)
   }
