@@ -27,7 +27,6 @@ import { getEnv } from "~/utils/envUtil"
 import { getJSONConf } from "~/utils/configUtil"
 import { SIYUAN_CONSTANTS } from "~/utils/constants/siyuanConstants"
 import { isEmptyString } from "~/utils/util"
-import { isBrowser } from "~/utils/browserUtil"
 
 /**
  * 思源笔记配置
@@ -51,31 +50,29 @@ export class SiYuanConfig {
 export const getSiyuanCfg = (): SiYuanConfig => {
   let baseUrl = getEnv("VITE_SIYUAN_API_URL") // Base Url，开发阶段需要填写
   let token = getEnv("VITE_SIYUAN_CONFIG_TOKEN") // API token, 无需填写
-  let middlewareUrl = getEnv("VITE_MIDDLEWARE_URL") // 请求代理地址
+  let middlewareUrl = getEnv("VITE_MIDDLEWARE_URL") ?? "/api/middleware" // 请求代理地址
 
   const siyuanCfg = getJSONConf<SiYuanConfig>(SIYUAN_CONSTANTS.SIYUAN_CFG_KEY)
   if (!isEmptyString(siyuanCfg.baseUrl)) {
     baseUrl = siyuanCfg.baseUrl
   }
-  if (isBrowser()) {
-    // 不是Chrome浏览器插件，并且页面地址与API地址不一致的时候，以页面地址为准
-    if (
-      !(window.location.href.indexOf("localhost") > -1) &&
-      !(window.location.href.indexOf("chrome-extension") > -1) &&
-      !window.location.href.includes(baseUrl)
-    ) {
-      baseUrl = window.location.protocol + "//" + window.location.host
-    }
-  }
-
   if (!isEmptyString(siyuanCfg.token)) {
     token = siyuanCfg.token
   }
   if (!isEmptyString(siyuanCfg.middlewareUrl)) {
     middlewareUrl = siyuanCfg.middlewareUrl
-  } else {
-    middlewareUrl = "/api/middleware"
   }
+
+  // if (isBrowser()) {
+  //   // 不是Chrome浏览器插件，并且页面地址与API地址不一致的时候，以页面地址为准
+  //   if (
+  //     !(window.location.href.indexOf("localhost") > -1) &&
+  //     !(window.location.href.indexOf("chrome-extension") > -1) &&
+  //     !window.location.href.includes(baseUrl)
+  //   ) {
+  //     baseUrl = window.location.protocol + "//" + window.location.host
+  //   }
+  // }
 
   return new SiYuanConfig(baseUrl, token, middlewareUrl)
 }
