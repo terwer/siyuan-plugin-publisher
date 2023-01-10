@@ -135,7 +135,7 @@ export const usePublish = (props, deps?: any) => {
           // 最终发布的内容
           let publishContent = mdFullContent
 
-          // 发布之前处理图床
+          // 处理图床
           if (picgoPostMethods.getPicgoPostData().picgoEnabled) {
             logger.warn(t("github.post.picgo.start.upload"))
             const siyuanPage = siyuanPageMethods.getSiyuanPageData().dataObj
@@ -152,6 +152,9 @@ export const usePublish = (props, deps?: any) => {
             }
           }
 
+          // 处理双链
+
+          // 最终发布的内容
           logger.debug("即将发布的内容，publishContent=>", { publishContent })
 
           // 发布

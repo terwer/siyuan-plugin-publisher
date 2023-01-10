@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -72,4 +72,8 @@ export class PublishPreference {
    * 是否显示关闭按钮（思源笔记挂载菜单模式可以用）
    */
   showCloseBtn: boolean
+  /**
+   * 是否使用PicGO
+   */
+  usePicgo: boolean
 }

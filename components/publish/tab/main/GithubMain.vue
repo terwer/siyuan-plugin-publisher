@@ -755,6 +755,7 @@ const { initPublishData, initPublishMethods } = useInitPublish(props, {
   githubPagesMethods,
   yamlMethods,
   quickMethods,
+  picgoPostMethods,
 })
 const { publishData, publishMethods } = usePublish(props, {
   siyuanPageMethods,

@@ -78,6 +78,7 @@ export const useInitPublish = (props, deps, otherArgs?) => {
   const githubPagesMethods = deps.githubPagesMethods
   const yamlMethods = deps.yamlMethods
   const quickMethods = deps.quickMethods
+  const picgoPostMethods = deps.picgoPostMethods
 
   // methods
   const initPublishMethods = {
@@ -325,6 +326,9 @@ export const useInitPublish = (props, deps, otherArgs?) => {
         publishTimeMethods.initPublishTime(siyuanData)
         // 标签
         tagMethods.initTag(siyuanData)
+        // 使用Picgo
+        picgoPostMethods.initPicgo(publishCfg.usePicgo)
+
         // githubPages
         const githubPagesData = githubPagesMethods.getGithubPagesData()
         githubPagesData.githubEnabled = initPublishData.apiStatus

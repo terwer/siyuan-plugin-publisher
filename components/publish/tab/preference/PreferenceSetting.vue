@@ -1,5 +1,5 @@
 <!--
-  - Copyright (c) 2022, Terwer . All rights reserved.
+  - Copyright (c) 2022-2023, Terwer . All rights reserved.
   - DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
   -  
   - This code is free software; you can redistribute it and/or modify it
@@ -56,6 +56,12 @@
           @change="formMethods.onShowCloseBtnChange"
         />
       </el-form-item>
+      <el-form-item :label="$t('github.post.picgo.use')">
+        <el-switch
+          v-model="formData.usePicgo"
+          @change="formMethods.onUsePicgoBtnChange"
+        />
+      </el-form-item>
     </el-form>
   </div>
 </template>
@@ -90,6 +96,7 @@ const formData = reactive({
   newWin: true,
   autoTag: false,
   showCloseBtn: false,
+  usePicgo: false,
 })
 
 const formMethods = {
@@ -145,6 +152,12 @@ const formMethods = {
 
     saveConf()
   },
+  onUsePicgoBtnChange: (val: boolean) => {
+    logger.debug("onUsePicgoBtnChange=>", val)
+    formData.usePicgo = val
+
+    saveConf()
+  },
 }
 
 const saveConf = () => {
@@ -154,6 +167,7 @@ const saveConf = () => {
   publishCfg.newWin = parseBoolean(formData.newWin)
   publishCfg.autoTag = parseBoolean(formData.autoTag)
   publishCfg.showCloseBtn = parseBoolean(formData.showCloseBtn)
+  publishCfg.usePicgo = parseBoolean(formData.usePicgo)
 
   setJSONConf<PublishPreference>(
     CONSTANTS.PUBLISH_PREFERENCE_CONFIG_KEY,
@@ -176,6 +190,7 @@ const initConf = () => {
   formData.newWin = parseBoolean(publishCfg.newWin)
   formData.autoTag = parseBoolean(publishCfg.autoTag)
   formData.showCloseBtn = parseBoolean(publishCfg.showCloseBtn)
+  formData.usePicgo = parseBoolean(publishCfg.usePicgo)
 }
 
 onMounted(() => {

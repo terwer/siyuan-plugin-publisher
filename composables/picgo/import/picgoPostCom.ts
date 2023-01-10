@@ -42,6 +42,9 @@ export const usePicgoPost = () => {
       // Github开启状态同步给其他地方用
       picgoPostData.picgoEnabled = val
     },
+    initPicgo: (val: boolean) => {
+      picgoPostData.picgoEnabled = val
+    },
 
     getPicgoPostData: () => {
       return picgoPostData
