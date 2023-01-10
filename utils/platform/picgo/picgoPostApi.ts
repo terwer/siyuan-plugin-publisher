@@ -164,7 +164,7 @@ export class PicgoPostApi {
       }
 
       if (!hasLocalImages) {
-        ElMessage.error("未发现本地图片，不上传")
+        ElMessage.warning("未发现本地图片，不上传")
       }
 
       // 处理链接替换

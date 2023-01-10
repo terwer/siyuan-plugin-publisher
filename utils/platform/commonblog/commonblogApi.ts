@@ -30,12 +30,9 @@ import {
   isInChromeExtension,
   sendChromeMessage,
 } from "~/utils/otherlib/ChromeUtil"
-import {
-  getWidgetId,
-  isSiyuanOrSiyuanNewWin,
-} from "~/utils/platform/siyuan/siyuanUtil"
+import { getWidgetId } from "~/utils/platform/siyuan/siyuanUtil"
 import { isEmptyString } from "~/utils/util"
-import { isLocalhost } from "~/utils/browserUtil"
+import { isElectron, isLocalhost } from "~/utils/browserUtil"
 
 export class CommonblogApi {
   protected logger: Logger
@@ -144,7 +141,7 @@ export class CommonblogApi {
       this.logger.warn("检测到本地请求，直接fetch获取数据")
       // 不解析了，直接fetch
       result = await fetch(apiUrl, fetchOptions)
-    } else if (getWidgetId().isInSiyuan) {
+    } else if (isElectron) {
       this.logger.warn("当前处于挂件模式，使用electron的fetch获取数据")
       // 不解析了，直接使用Node兼容调用
       result = await fetch(apiUrl, fetchOptions)
@@ -241,7 +238,7 @@ export class CommonblogApi {
 
       if (isLocalhost(apiUrl)) {
         resJson = await response.json()
-      } else if (isSiyuanOrSiyuanNewWin()) {
+      } else if (isElectron) {
         resJson = await response.json()
       } else {
         const corsJson = await response.json()
