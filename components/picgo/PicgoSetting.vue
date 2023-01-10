@@ -30,5 +30,12 @@
     到 `picgo.cfg.json` ，然后手动修改。
     PicGO官方文档：https://picgo.github.io/PicGo-Core-Doc/zh/guide/config.html#%E6%89%8B%E5%8A%A8%E7%94%9F%E6%88%90。
   </div>
-  <h1>敬请期待...</h1>
+  <p>
+    详情请参考：<a
+      target="_blank"
+      href="https://docs.publish.terwer.space/post/picgo-diagram-bed-use-zxqqec.html"
+      >PicoGO配置在线文档</a
+    >
+  </p>
+  <h1>预计0.7.0会新增比较友好的图形化配置页面，敬请期待。</h1>
 </template>
