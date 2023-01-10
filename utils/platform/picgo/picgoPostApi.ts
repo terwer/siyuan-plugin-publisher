@@ -58,7 +58,7 @@ export class PicgoPostApi {
    * @param attrs 文章属性
    * @param retImgs  字符串数组格式的图片信息
    */
-  public async convertImagesToImagesItemArray(
+  public async doConvertImagesToImagesItemArray(
     attrs,
     retImgs: any[]
   ): Promise<ImageItem[]> {
@@ -128,7 +128,7 @@ export class PicgoPostApi {
 
     // 开始上传
     try {
-      const imageItemArray = await this.convertImagesToImagesItemArray(
+      const imageItemArray = await this.doConvertImagesToImagesItemArray(
         attrs,
         uniqueLocalImages
       )

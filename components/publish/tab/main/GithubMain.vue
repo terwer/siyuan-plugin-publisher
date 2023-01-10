@@ -442,9 +442,26 @@
 
             <!-- 发布操作 -->
             <div
-              v-if="pageModeData.etype !== PageEditMode.EditMode_source"
+              v-if="
+                githubPagesData.githubEnabled &&
+                pageModeData.etype !== PageEditMode.EditMode_source
+              "
               class="publish-action"
             >
+              <!-- 使用图床 -->
+              <el-form-item :label="$t('github.post.picgo.use')">
+                <el-switch
+                  v-model="picgoPostData.picgoEnabled"
+                  @change="picgoPostMethods.picgoOnChange"
+                />
+                <el-alert
+                  v-if="picgoPostData.picgoEnabled"
+                  :closable="false"
+                  :title="$t('github.post.picgo.use.tip')"
+                  type="warning"
+                />
+              </el-form-item>
+              <!-- 发布 -->
               <el-form-item>
                 <el-button
                   :loading="publishData.isPublishLoading"
@@ -470,6 +487,7 @@
             <!-- 发布状态 -->
             <div
               v-if="
+                githubPagesData.githubEnabled &&
                 pageModeData.etype !== PageEditMode.EditMode_source &&
                 initPublishData.apiStatus
               "
@@ -680,6 +698,7 @@ import { usePageMode } from "~/composables/publish/pageModeCom"
 import { useSiyuanPage } from "~/composables/publish/siyuanPageCom"
 import { upperFirst } from "~/utils/strUtil"
 import { SourceContentShowType } from "~/utils/common/sourceContentShowType"
+import { usePicgoPost } from "~/composables/picgo/import/picgoPostCom"
 
 const logger = LogFactory.getLogger(
   "components/publish/tab/main/GithubMain.vue"
@@ -725,6 +744,7 @@ const { quickData, quickMethods } = useQuick(props, {
   tagMethods,
   githubPagesMethods,
 })
+const { picgoPostData, picgoPostMethods } = usePicgoPost()
 const { initPublishData, initPublishMethods } = useInitPublish(props, {
   pageModeMethods,
   siyuanPageMethods,
@@ -740,6 +760,7 @@ const { publishData, publishMethods } = usePublish(props, {
   siyuanPageMethods,
   yamlMethods,
   githubPagesMethods,
+  picgoPostMethods,
   quickMethods,
   initPublishMethods,
 })

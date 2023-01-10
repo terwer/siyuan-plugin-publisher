@@ -337,7 +337,7 @@ export default {
   "picgo.pic.preview": "图片预览",
   "picgo.pic.setting": "图床设置",
   "picgo.pic.setting.no.tip":
-    "您当前使用的是浏览器插件，无法直接集成PicGO，只能通过HTTP请求间接调用本地PicGO客户端上图片，请直接在本地PicGO客户端进行设置。如需体验更加完整的功能，请通过思源笔记挂件版挂载菜单打开新窗口的方式使用",
+    "由于您当前使用的是浏览器插件，无法直接集成 PicGO ，只能通过 HTTP 请求间接调用本地 PicGO 客户端上图片，请直接在本地 PicGO 客户端进行设置。如需体验更加完整的功能，请通过思源笔记挂件版挂载菜单打开新窗口的方式使用。详情请参考：https://docs.publish.terwer.space/post/the-pendant-mode-is-used-in-the-method-of-mounting-menu-169wrw.html",
   "github.use.permalink": "永久链接",
   "github.use.permalink.no.warn":
     "您已关闭永久链接，formatter将不会生成标记，这在某些特殊场景下可能有用，大部分情况下需要开启此选项，注意：目前仅仅在HUGO平台生效，主要是适配Docsy",
@@ -348,4 +348,10 @@ export default {
   "github.weight.placeholder": "权重（决定显示顺序，越小显示越靠前）",
   "github.use.date": "显示日期",
   "github.use.date.no.warn": "您已关闭日期显示，将不会在formatter生成date字段",
+  "github.post.picgo.use": "使用图床",
+  "github.post.picgo.use.tip":
+    "启用此选项，将会自动将此文档包含的所有本地图片上传至自定义图床（远程图片不上传），请确保PicGO图床配置正确",
+  "github.post.picgo.start.upload": "图床已开启，即将上传本地图片到图床",
+  "github.post.picgo.picbed.error":
+    "图片上传到图床失败，可能是图床配置错误，请检查图床配置",
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -34,6 +34,7 @@ import { useI18n } from "vue-i18n"
 import { appendStr } from "~/utils/strUtil"
 import { removeTitleNumber } from "~/utils/htmlUtil"
 import { CONSTANTS } from "~/utils/constants/constants"
+import { PicgoPostApi } from "~/utils/platform/picgo/picgoPostApi"
 
 /**
  * 通用的发布操作组件
@@ -45,6 +46,7 @@ export const usePublish = (props, deps?: any) => {
   const logger = LogFactory.getLogger("composables/publish/publishActionCom.ts")
   const { t } = useI18n()
   const siyuanApi = new SiYuanApi()
+  const picgoPostApi = new PicgoPostApi()
   // public data
   const publishData = reactive({
     isPublishLoading: false,
@@ -56,6 +58,7 @@ export const usePublish = (props, deps?: any) => {
   const yamlMethods = deps.yamlMethods
   const githubPagesMethods = deps.githubPagesMethods
   const quickMethods = deps.quickMethods
+  const picgoPostMethods = deps.picgoPostMethods
   const initPublishMethods = deps.initPublishMethods
 
   // public methods
@@ -138,10 +141,30 @@ export const usePublish = (props, deps?: any) => {
           const mdFullContent = yamlMethods.getYamlData().mdFullContent
           logger.debug("即将发布的内容，mdContent=>", { mdFullContent })
 
+          // 最终发布的内容
+          let publishContent = mdFullContent
+
+          // 发布之前处理图床
+          if (picgoPostMethods.getPicgoPostData().picgoEnabled) {
+            logger.warn(t("github.post.picgo.start.upload"))
+            const siyuanPage = siyuanPageMethods.getSiyuanPageData().dataObj
+            const picgoPostResult = await picgoPostApi.uploadPostImagesToBed(
+              siyuanPage.pageId,
+              siyuanPage.meta,
+              mdFullContent
+            )
+
+            if (picgoPostResult.flag) {
+              publishContent = picgoPostResult.mdContent
+            } else {
+              ElMessage.warning(t("github.post.picgo.picbed.error"))
+            }
+          }
+
           // 发布
           // initGithubPages之后发布路径就是最新完整的
           const docPath = githubPagesMethods.getGithubPagesData().publishPath
-          const res = await api.publishGithubPage(docPath, mdFullContent)
+          const res = await api.publishGithubPage(docPath, publishContent)
 
           // 成功与失败都刷新页面
           if (!res) {

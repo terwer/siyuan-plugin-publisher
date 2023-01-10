@@ -338,4 +338,11 @@ export default {
   "github.use.date": "Show date",
   "github.use.date.no.warn":
     "You have closed the date show that it will not generate the date field in Formatter",
+  "github.post.picgo.use": "Use picbed",
+  "github.post.picgo.use.tip":
+    "To enable this option, the local picture will be uploaded to the custom diagram bed (the remote picture is not uploaded), please make sure that the PICGO diagram bed configuration is correct",
+  "github.post.picgo.start.upload":
+    "The picture bed has been opened, and the picture bed is about to upload the picture bed to the bed",
+  "github.post.picgo.picbed.error":
+    "The picture uploaded to the picture bed failed, it may be an error in the configuration of the graph, please check the picture bed configuration",
 }

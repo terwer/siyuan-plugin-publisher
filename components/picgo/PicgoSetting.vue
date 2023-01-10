@@ -24,18 +24,23 @@
   -->
 
 <template>
-  <div>
-    暂时未开发图形界面，请直接拷贝
-    `[思源工作空间]/data/widgets/sy-post-publisher/lib/picgo/picgo.cfg.json.example`
-    到 `picgo.cfg.json` ，然后手动修改。
-    PicGO官方文档：https://picgo.github.io/PicGo-Core-Doc/zh/guide/config.html#%E6%89%8B%E5%8A%A8%E7%94%9F%E6%88%90。
+  <div v-if="isElectron">
+    <div>{{ $t("picgo.siyuan.tip") }} 。</div>
+    <p></p>
+    <p>
+      详情请参考：<a
+        target="_blank"
+        href="https://docs.publish.terwer.space/post/picgo-diagram-bed-use-zxqqec.html"
+        >PicoGO配置在线文档</a
+      >
+    </p>
+    <h1>预计0.7.0会新增比较友好的图形化配置页面，敬请期待。</h1>
   </div>
-  <p>
-    详情请参考：<a
-      target="_blank"
-      href="https://docs.publish.terwer.space/post/picgo-diagram-bed-use-zxqqec.html"
-      >PicoGO配置在线文档</a
-    >
-  </p>
-  <h1>预计0.7.0会新增比较友好的图形化配置页面，敬请期待。</h1>
+  <div v-else>
+    <p>{{ $t("picgo.chrome.tip") }} 。</p>
+    <p>{{ $t("picgo.pic.setting.no.tip") }} 。</p>
+  </div>
 </template>
+<script setup lang="ts">
+import { isElectron } from "~/utils/browserUtil"
+</script>

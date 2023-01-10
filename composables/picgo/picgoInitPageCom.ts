@@ -72,7 +72,7 @@ export const usePicgoInitPage = (props, deps) => {
 
     // 将字符串数组格式的图片信息转换成图片对象数组
     const attrs = await siyuanApi.getBlockAttrs(pageId)
-    const imageItemArray = await picgoPostApi.convertImagesToImagesItemArray(
+    const imageItemArray = await picgoPostApi.doConvertImagesToImagesItemArray(
       attrs,
       retImgs
     )

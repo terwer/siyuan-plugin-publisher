@@ -25,14 +25,6 @@
 
 <template>
   <div class="picgo-body">
-    <!-- 操作提示 -->
-    <el-alert
-      class="top-version-tip"
-      :title="isElectron ? $t('picgo.siyuan.tip') : $t('picgo.chrome.tip')"
-      type="info"
-      :closable="false"
-    />
-
     <!-- 上传状态 -->
     <div class="upload-status">
       <el-button text :loading="picgoCommonData.isUploadLoading"
