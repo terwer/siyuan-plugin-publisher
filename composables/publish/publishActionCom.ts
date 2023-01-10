@@ -152,8 +152,6 @@ export const usePublish = (props, deps?: any) => {
             }
           }
 
-          // 处理双链
-
           // 最终发布的内容
           logger.debug("即将发布的内容，publishContent=>", { publishContent })
 

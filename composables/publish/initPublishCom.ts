@@ -36,14 +36,10 @@ import { getPageId } from "~/utils/platform/siyuan/siyuanUtil"
 import { isEmptyString, pathJoin } from "~/utils/util"
 import { SourceContentShowType } from "~/utils/common/sourceContentShowType"
 import { PostForm } from "~/utils/models/postForm"
-import {
-  mdToHtml,
-  removeH1,
-  removeMdH1,
-  removeMdWidgetTag,
-} from "~/utils/htmlUtil"
+import { mdToHtml, removeMdH1, removeMdWidgetTag } from "~/utils/htmlUtil"
 import { yaml2Obj } from "~/utils/yamlUtil"
 import { YamlFormatObj } from "~/utils/models/yamlFormatObj"
+import { LinkParser } from "~/utils/parser/LinkParser"
 
 /**
  * 发布页面初始化组件
@@ -54,6 +50,7 @@ import { YamlFormatObj } from "~/utils/models/yamlFormatObj"
 export const useInitPublish = (props, deps, otherArgs?) => {
   const logger = LogFactory.getLogger("composables/publish/initPublishCom.ts")
   const { t } = useI18n()
+  const linkParser = new LinkParser()
   // data
   const initPublishData = reactive({
     isInitLoading: false,
@@ -171,15 +168,19 @@ export const useInitPublish = (props, deps, otherArgs?) => {
       // 正文
       let md = siyuanPageMethods.getSiyuanPageData().dataObj.content.content
       // mdToHtml已经去掉了挂件代码
-      let html = mdToHtml(md)
-      // md还需要单独去掉挂件代码
+      // let html = mdToHtml(md)
+      // md去掉挂件代码
       md = removeMdWidgetTag(md)
+      // md去掉H1
       if (publishCfg.removeH1) {
         md = removeMdH1(md)
-        html = removeH1(html)
+        // html = removeH1(html)
       }
+      // md双链转换
+      // @deprecated 移植性不好，放弃
+      // md = linkParser.convertSiyuanLinkToInnerLink(md)
       postForm.formData.mdContent = md
-      postForm.formData.htmlContent = html
+      postForm.formData.htmlContent = mdToHtml(md)
       // 是否生成永久链接
       postForm.formData.usePermalink =
         githubPagesMethods.getGithubPagesData().usePermalink
