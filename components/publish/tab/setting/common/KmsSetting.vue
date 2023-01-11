@@ -37,7 +37,7 @@ import { ref } from "vue"
 import { API_TYPE_CONSTANTS } from "~/utils/constants/apiTypeConstants"
 import { KmsCfg } from "~/utils/platform/commonblog/kms/kmsCfg"
 import CommonBlogSetting from "../CommonBlogSetting.vue"
-import { CommonblogPlaceholder } from "~/utils/platform/commonblog/CommonblogPlaceholder"
+import { CommonblogPlaceholder } from "~/utils/platform/commonblog/commonblogPlaceholder"
 import { useI18n } from "vue-i18n"
 
 const { t } = useI18n()
