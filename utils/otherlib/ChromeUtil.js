@@ -108,14 +108,14 @@ export function goToPage(pageUrl) {
   window.open(url)
 }
 
-export function goToPageWithTarget(pageUrl, target, split) {
-  const url = getPageUrl(pageUrl, split)
-  if (target === "_self") {
-    window.location.href = url
-  } else {
-    window.open(url)
-  }
-}
+// export function goToPageWithTarget(pageUrl, target, split) {
+//   const url = getPageUrl(pageUrl, split)
+//   if (target === "_self") {
+//     window.location.href = url
+//   } else {
+//     window.open(url)
+//   }
+// }
 
 /**
  * 检测是否运行在Chrome插件中

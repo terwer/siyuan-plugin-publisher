@@ -45,7 +45,11 @@ export class SiYuanConfig {
 }
 
 /**
- * 获取思源笔记配置，优先读取配置的值，如果没有配置，读取启动环境变量
+ * 获取思源笔记配置，优先级如下：
+ * <p>1.本地保存的配置的值</p>
+ * <P>2.启动环境变量</P>
+ * @author terwer
+ * @since 0.6.0
  */
 export const getSiyuanCfg = (): SiYuanConfig => {
   let baseUrl = getEnv("VITE_SIYUAN_API_URL") // Base Url，开发阶段需要填写
@@ -62,17 +66,6 @@ export const getSiyuanCfg = (): SiYuanConfig => {
   if (!isEmptyString(siyuanCfg.middlewareUrl)) {
     middlewareUrl = siyuanCfg.middlewareUrl
   }
-
-  // if (isBrowser()) {
-  //   // 不是Chrome浏览器插件，并且页面地址与API地址不一致的时候，以页面地址为准
-  //   if (
-  //     !(window.location.href.indexOf("localhost") > -1) &&
-  //     !(window.location.href.indexOf("chrome-extension") > -1) &&
-  //     !window.location.href.includes(baseUrl)
-  //   ) {
-  //     baseUrl = window.location.protocol + "//" + window.location.host
-  //   }
-  // }
 
   return new SiYuanConfig(baseUrl, token, middlewareUrl)
 }
