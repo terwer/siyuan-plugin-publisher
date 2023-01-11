@@ -43,7 +43,7 @@ import "../codecopy/codecopy.css"
 import "./vs.css"
 import * as plantumlEncoder from "plantuml-encoder"
 import { unescapeHTML } from "~/utils/strUtil"
-import { isInChromeExtension } from "~/utils/otherlib/ChromeUtil.js"
+import { isInChromeExtension } from "~/utils/browserUtil"
 
 const vueHljs = {}
 

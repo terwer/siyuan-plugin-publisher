@@ -25,12 +25,11 @@
 
 import { LogFactory } from "~/utils/logUtil"
 import { Logger } from "loglevel"
-import { isInChromeExtension } from "~/utils/otherlib/ChromeUtil"
+import { isElectron, isInChromeExtension } from "~/utils/browserUtil"
 import { fetchNode } from "~/utils/xmlrpc/impl/nodeXmlrpc"
 import { fetchChrome } from "~/utils/xmlrpc/impl/chromeXmlrpc"
 import { fetchMiddleware } from "~/utils/xmlrpc/impl/middlewareXmlrpc"
 import { XmlRpcValue } from "simple-xmlrpc"
-import { isElectron } from "~/utils/browserUtil"
 
 /**
  * Xmlrpc客户端封装类

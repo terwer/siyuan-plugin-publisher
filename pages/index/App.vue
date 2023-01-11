@@ -1,5 +1,5 @@
 <!--
-  - Copyright (c) 2022, Terwer . All rights reserved.
+  - Copyright (c) 2022-2023, Terwer . All rights reserved.
   - DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
   -
   - This code is free software; you can redistribute it and/or modify it
@@ -44,7 +44,7 @@ import { onMounted, ref } from "vue"
 import { LogFactory } from "~/utils/logUtil"
 import { getPageId, getWidgetId } from "~/utils/platform/siyuan/siyuanUtil"
 import { SiYuanApiAdaptor } from "~/utils/platform/siyuan/siYuanApiAdaptor"
-import { isInChromeExtension } from "~/utils/otherlib/ChromeUtil"
+import { isInChromeExtension } from "~/utils/browserUtil"
 import {
   getSiyuanNewWinPageId,
   isInSiyuanNewWinBrowser,

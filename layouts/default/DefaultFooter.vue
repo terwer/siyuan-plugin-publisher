@@ -35,8 +35,12 @@
           isDark ? $t("theme.mode.light") : $t("theme.mode.dark")
         }}</span>
 
-        <span class="text" v-if="!isInSiyuan">.</span>
-        <span class="text s-dark" @click="changeSiyuanApi()" v-if="!isInSiyuan">
+        <span class="text" v-if="!isInSiyuanEnv">.</span>
+        <span
+          class="text s-dark"
+          @click="changeSiyuanApi()"
+          v-if="!isInSiyuanEnv"
+        >
           {{ $t("blog.change.siyuan.api") }}
         </span>
 
@@ -156,7 +160,7 @@ import { onMounted, reactive, ref } from "vue"
 import { ElMessage, ElMessageBox, FormRules } from "element-plus"
 import { useI18n } from "vue-i18n"
 import { LogFactory } from "~/utils/logUtil"
-import { inSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
+import { isInSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
 import {
   getSiyuanCfg,
   SiYuanConfig,
@@ -181,7 +185,7 @@ const { t } = useI18n()
 const isDark = useDark()
 const toggleDark = useToggle(isDark)
 
-const isInSiyuan = ref(false)
+const isInSiyuanEnv = ref(false)
 const v = ref("0.0.3")
 
 const formLabelWidth = "140px"
@@ -294,7 +298,7 @@ const handleSiyuanApiSetting = async (formEl) => {
 }
 
 const initConf = () => {
-  isInSiyuan.value = inSiyuan()
+  isInSiyuanEnv.value = isInSiyuan()
 
   v.value = version
 
@@ -307,7 +311,7 @@ const initConf = () => {
 }
 
 onMounted(() => {
-  if (inSiyuan()) {
+  if (isInSiyuan()) {
     logger.info("恭喜你，正在以挂件模式运行")
   } else {
     logger.info(

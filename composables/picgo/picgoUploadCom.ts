@@ -27,7 +27,7 @@ import { reactive } from "vue"
 import { ElMessage, ElMessageBox } from "element-plus"
 import { useI18n } from "vue-i18n"
 import { LogFactory } from "~/utils/logUtil"
-import { inSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
+import { isInSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
 import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
 import { uploadByPicGO } from "~/utils/otherlib/picgoUtil"
 import { isElectron } from "~/utils/browserUtil"
@@ -108,7 +108,7 @@ export const usePicgoUpload = (props, deps, refs) => {
           return
         }
 
-        if (!inSiyuan() && !isInSiyuanNewWinBrowser()) {
+        if (!isInSiyuan() && !isInSiyuanNewWinBrowser()) {
           ElMessage.error("非electron环境只能通过剪贴板上传")
           picgoCommonData.isUploadLoading = false
           return

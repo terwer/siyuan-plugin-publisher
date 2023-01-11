@@ -26,12 +26,13 @@
 import { Logger } from "loglevel"
 import { LogFactory } from "~/utils/logUtil"
 import {
+  isElectron,
   isInChromeExtension,
-  sendChromeMessage,
-} from "~/utils/otherlib/ChromeUtil"
+  isLocalhost,
+} from "~/utils/browserUtil"
+import { sendChromeMessage } from "~/utils/otherlib/ChromeUtil"
 import { getWidgetId } from "~/utils/platform/siyuan/siyuanUtil"
 import { isEmptyString } from "~/utils/util"
-import { isElectron, isLocalhost } from "~/utils/browserUtil"
 import { getSiyuanCfg } from "~/utils/platform/siyuan/siYuanConfig"
 
 export class CommonblogApi {

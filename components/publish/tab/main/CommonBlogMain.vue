@@ -253,7 +253,7 @@
             @change="picgoPostMethods.picgoOnChange"
           />
           <el-alert
-            v-if="picgoPostData.picgoEnabled"
+            v-if="false && picgoPostData.picgoEnabled"
             :closable="false"
             :title="$t('github.post.picgo.use.tip')"
             type="warning"

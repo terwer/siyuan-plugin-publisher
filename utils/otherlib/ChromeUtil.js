@@ -23,18 +23,17 @@
  * questions.
  */
 
-import { inSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
+import { isInSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
 import {
   getQueryString,
-  isBrowser,
   readJSONFileFormDialog,
   setUrlParameter,
 } from "~/utils/browserUtil"
 import { LogFactory } from "~/utils/logUtil"
-import { isInFirefoxExtension } from "~/utils/otherlib/FirefoxUtil"
 import { isEmptyString, pathJoin } from "~/utils/util"
 import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
 import { getSiyuanCfg } from "~/utils/platform/siyuan/siYuanConfig"
+import { DeviceType, DeviceUtil } from "~/utils/deviceUtil"
 
 const logger = LogFactory.getLogger()
 
@@ -60,21 +59,15 @@ export const getPageUrl = (pageUrl, split, isShare) => {
   }
 
   // 处理内部链接
-  if (typeof chrome.runtime !== "undefined") {
-    if (isShare) {
-      url = "/widgets/sy-post-publisher" + url
-      url = setUrlParameter(url, "from", "chrome")
-
-      const baseUrl = getSiyuanCfg().baseUrl
-      url = pathJoin(baseUrl, url)
-    } else {
-      url = chrome.runtime.getURL(url)
-    }
-  } else {
+  const deviceType = DeviceUtil.getDevice()
+  if (
+    deviceType === DeviceType.DeviceType_Siyuan_Widget ||
+    DeviceType === DeviceType.DeviceType_Siyuan_NewWin
+  ) {
     // 思源笔记链接处理
     url = "/widgets/sy-post-publisher" + url
     let from = getQueryString("from")
-    if (inSiyuan()) {
+    if (isInSiyuan()) {
       from = "siyuan"
     }
     if (isInSiyuanNewWinBrowser()) {
@@ -97,6 +90,17 @@ export const getPageUrl = (pageUrl, split, isShare) => {
 
     // 智能拼接
     url = pathJoin(baseUrl, url)
+  } else if (deviceType === DeviceType.DeviceType_Chrome_Extension) {
+    url = chrome.runtime.getURL(url)
+  } else if (isShare) {
+    url = "/widgets/sy-post-publisher" + url
+    url = setUrlParameter(url, "from", "siyuan")
+    const baseUrl = getSiyuanCfg().baseUrl
+    url = pathJoin(baseUrl, url)
+  } else {
+    url = setUrlParameter(url, "from", "chrome")
+    const baseUrl = getSiyuanCfg().baseUrl
+    url = pathJoin(baseUrl, url)
   }
 
   logger.warn("将要打开页面=>", url)
@@ -108,28 +112,13 @@ export function goToPage(pageUrl) {
   window.open(url)
 }
 
-// export function goToPageWithTarget(pageUrl, target, split) {
-//   const url = getPageUrl(pageUrl, split)
-//   if (target === "_self") {
-//     window.location.href = url
-//   } else {
-//     window.open(url)
-//   }
-// }
-
-/**
- * 检测是否运行在Chrome插件中
- */
-export function isInChromeExtension() {
-  if (!isBrowser()) {
-    return false
+export function goToPageWithTarget(pageUrl, target, split) {
+  const url = getPageUrl(pageUrl, split)
+  if (target === "_self") {
+    window.location.href = url
+  } else {
+    window.open(url)
   }
-  if (isInFirefoxExtension()) {
-    return false
-  }
-  return (
-    !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime)
-  )
 }
 
 /**

@@ -27,7 +27,7 @@ import { getEnv } from "~/utils/envUtil"
 import { LogFactory } from "~/utils/logUtil"
 import { getJSONConf, setJSONConf } from "~/utils/configUtil"
 import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
-import { getQueryString, isBrowser } from "~/utils/browserUtil"
+import { getQueryString, isBrowser, isElectron } from "~/utils/browserUtil"
 import {
   getSiyuanNewWinPageId,
   isInSiyuanNewWinBrowser,
@@ -88,7 +88,7 @@ export const getWidgetId = (): WidgetResult => {
 /**
  * 检测是否处于思源笔记环境中
  */
-export const inSiyuan = (): boolean => {
+export const isInSiyuan = (): boolean => {
   const widgetResult = getWidgetId()
   return widgetResult.isInSiyuan
 }
@@ -96,8 +96,8 @@ export const inSiyuan = (): boolean => {
 /**
  * 检测是否处于思源笔记主窗口或者弹出新窗口中
  */
-export const isSiyuanOrSiyuanNewWin = (): boolean => {
-  return inSiyuan() || isInSiyuanNewWinBrowser()
+export const isInSiyuanOrSiyuanNewWin = (): boolean => {
+  return isElectron
 }
 
 /**
