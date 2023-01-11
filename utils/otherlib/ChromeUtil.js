@@ -53,6 +53,25 @@ export const FROM_CONSTANTS = {
 }
 
 /**
+ * 通过 host 拼接url
+ * @param host
+ * @param srcUrl
+ * @param split
+ * @returns {string}
+ */
+const appendHost = (host, srcUrl, split) => {
+  let url = srcUrl
+  let baseUrl = window.location.protocol + "//" + host
+  if (split && split !== "") {
+    baseUrl = window.location.protocol + "//" + host + split
+  }
+
+  // 智能拼接
+  url = pathJoin(baseUrl, url)
+  return url
+}
+
+/**
  * 在chrome插件打开网页
  *
  * 注意：非chrome环境，pageUrl：/index.html，split：/，实际url为：//index.html
@@ -95,30 +114,20 @@ export const getPageUrl = (pageUrl, split) => {
       url = setUrlParameter(url, "from", from)
     }
 
-    // 处理手动分隔符
+    // 处理host
     let host = window.location.host
     if (isInSiyuanNewWinBrowser()) {
       const ipv4 = window.terwer.ip
       host = ipv4 + ":" + window.location.port
     }
-    let baseUrl = window.location.protocol + "//" + host
-    if (split && split !== "") {
-      baseUrl = window.location.protocol + "//" + host + split
-    }
-
-    // 智能拼接
-    url = pathJoin(baseUrl, url)
+    // 拼接url
+    url = appendHost(host, url, split)
   } else if (deviceType === DeviceType.DeviceType_Chrome_Extension) {
     url = chrome.runtime.getURL(url)
   } else {
     let host = window.location.host
-    let baseUrl = window.location.protocol + "//" + host
-    if (split && split !== "") {
-      baseUrl = window.location.protocol + "//" + host + split
-    }
-    url = setUrlParameter(url, "from", FROM_CONSTANTS.FROM_CHROME)
-    // 智能拼接
-    url = pathJoin(baseUrl, url)
+    // 拼接url
+    url = appendHost(host, url, split)
   }
 
   logger.warn("将要打开页面=>", url)
