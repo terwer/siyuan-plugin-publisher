@@ -27,7 +27,7 @@
   <div class="post-detail-wrap">
     <h1 v-if="inSiyuanNewWin" style="display: none">{{ post.title }}</h1>
     <el-alert
-      class="top-version-tip"
+      class="top-share-tip"
       :title="$t('siyuan.local.share.tip')"
       type="warning"
       :closable="false"
@@ -146,11 +146,11 @@ const handleCopyID = () => {
 }
 
 const handleShareLink = () => {
-  if (isBrowser()) {
-    const pageId = post.value.postid
-    const pageUrl = "/detail/index.html?id=" + pageId
-    const url = getPageUrl(pageUrl, "", true)
+  const pageId = post.value.postid
+  const pageUrl = "/detail/index.html?id=" + pageId
+  const url = getPageUrl(pageUrl, "")
 
+  if (isBrowser()) {
     copyToClipboardInBrowser(url)
   }
 }
@@ -191,6 +191,10 @@ onMounted(async () => {
   font-size: 14px;
   padding: 10px 0;
   min-height: 600px;
+}
+
+.top-share-tip {
+  margin-top: 20px !important;
 }
 
 #post-detail-content img {

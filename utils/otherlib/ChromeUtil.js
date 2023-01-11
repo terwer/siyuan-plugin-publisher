@@ -32,10 +32,25 @@ import {
 import { LogFactory } from "~/utils/logUtil"
 import { isEmptyString, pathJoin } from "~/utils/util"
 import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
-import { getSiyuanCfg } from "~/utils/platform/siyuan/siYuanConfig"
 import { DeviceType, DeviceUtil } from "~/utils/deviceUtil"
 
 const logger = LogFactory.getLogger()
+
+// 思源笔记
+const FROM_SIYUAN = "siyuan"
+// 思源笔记新窗口
+const FROM_SIYUAN_NEWWIN = "siyuanNewWin"
+// Chrome浏览器
+const FROM_CHROME = "chrome"
+
+/**
+ * 来源
+ */
+export const FROM_CONSTANTS = {
+  FROM_SIYUAN,
+  FROM_SIYUAN_NEWWIN,
+  FROM_CHROME,
+}
 
 /**
  * 在chrome插件打开网页
@@ -44,9 +59,8 @@ const logger = LogFactory.getLogger()
  * @param pageUrl 例如：/index.html
  * @param split 例如：/，但部分情况下无需传递此参数
  *
- * @param isShare 是否是分享链接
  */
-export const getPageUrl = (pageUrl, split, isShare) => {
+export const getPageUrl = (pageUrl, split) => {
   // While we could have used `let url = "index.html"`, using runtime.getURL is a bit more robust as
   // it returns a full URL rather than just a path that Chrome needs to be resolved contextually at
   // runtime.
@@ -60,18 +74,22 @@ export const getPageUrl = (pageUrl, split, isShare) => {
 
   // 处理内部链接
   const deviceType = DeviceUtil.getDevice()
+  console.log("deviceType=>", deviceType)
+  let from = getQueryString("from")
+
   if (
     deviceType === DeviceType.DeviceType_Siyuan_Widget ||
-    DeviceType === DeviceType.DeviceType_Siyuan_NewWin
+    deviceType === DeviceType.DeviceType_Siyuan_NewWin ||
+    FROM_CONSTANTS.FROM_SIYUAN === from ||
+    FROM_CONSTANTS.FROM_SIYUAN_NEWWIN === from
   ) {
     // 思源笔记链接处理
     url = "/widgets/sy-post-publisher" + url
-    let from = getQueryString("from")
     if (isInSiyuan()) {
-      from = "siyuan"
+      from = FROM_CONSTANTS.FROM_CHROME
     }
     if (isInSiyuanNewWinBrowser()) {
-      from = "siyuanNewWin"
+      from = FROM_CONSTANTS.FROM_SIYUAN_NEWWIN
     }
     if (!isEmptyString(from)) {
       url = setUrlParameter(url, "from", from)
@@ -92,13 +110,8 @@ export const getPageUrl = (pageUrl, split, isShare) => {
     url = pathJoin(baseUrl, url)
   } else if (deviceType === DeviceType.DeviceType_Chrome_Extension) {
     url = chrome.runtime.getURL(url)
-  } else if (isShare) {
-    url = "/widgets/sy-post-publisher" + url
-    url = setUrlParameter(url, "from", "siyuan")
-    const baseUrl = getSiyuanCfg().baseUrl
-    url = pathJoin(baseUrl, url)
   } else {
-    url = setUrlParameter(url, "from", "chrome")
+    url = setUrlParameter(url, "from", FROM_CONSTANTS.FROM_CHROME)
   }
 
   logger.warn("将要打开页面=>", url)
