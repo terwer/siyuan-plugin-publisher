@@ -1,7 +1,7 @@
 {
   "name": "sy-post-publisher",
   "private": true,
-  "version": "0.6.3",
+  "version": "0.6.4",
   "packageManager": "pnpm@7.18.1",
   "scripts": {
     "serve": "vercel dev --listen 6006",
@@ -20,7 +20,7 @@
     "extChromeWin": "pwsh scripts/ext.ps1",
     "extChromeDev": "bash scripts/extDev.sh",
     "extFirefox": "bash scripts/extFV2.sh",
-    "newVersion": "cd scripts && python3 version.py 0.6.3 && cd ../",
+    "newVersion": "cd scripts && python3 version.py 0.6.4 && cd ../",
     "dcfg": "bash scripts/devWidgetConfig.sh"
   },
   "dependencies": {
@@ -48,12 +48,11 @@
     "loglevel-plugin-prefix": "^0.8.4",
     "pinia": "^2.0.27",
     "plantuml-encoder": "^1.4.0",
-    "sax": "^1.2.4",
     "shorthash2": "^1.0.3",
+    "simple-xmlrpc": "^1.0.2",
     "transliteration": "^2.3.5",
     "vue": "^3.2.37",
-    "vue-i18n": "^9.2.2",
-    "xmlbuilder2": "^3.0.2"
+    "vue-i18n": "^9.2.2"
   },
   "devDependencies": {
     "@esbuild-plugins/node-globals-polyfill": "^0.1.1",

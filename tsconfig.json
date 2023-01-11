@@ -23,8 +23,10 @@
   "include": [
     "./**/*.vue",
     "./**/*.ts",
+    "./**/*.mjs",
     "*.vue",
     "*.ts",
+    "*.mjs",
     "typings/*.d.ts",
     "node_modules/vitest/*.d.ts",
     "node_modules/vitest/*.d.cts",

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -23,14 +23,27 @@
  * questions.
  */
 
-import type { XMLBuilder } from "xmlbuilder2/lib/interfaces"
+import { LogFactory } from "~/utils/logUtil"
+import { SimpleXmlRpcClient, XmlRpcValue } from "simple-xmlrpc"
 
-export class CustomType {
-  tagName = "customType"
+const logger = LogFactory.getLogger("libs/simple-xmlrpc/impl/nodeXmlrpc.ts")
 
-  constructor(public raw: string) {}
+export async function fetchNode(
+  apiUrl: string,
+  reqMethod: string,
+  reqParams: string[]
+): Promise<XmlRpcValue> {
+  try {
+    logger.debug("SimpleXmlRpcClient开始")
+    logger.debug("xmlrpcNodeParams.reqMethod=>", reqMethod)
+    logger.debug("xmlrpcNodeParams.reqParams=>", reqParams)
 
-  serialize(xml: XMLBuilder): XMLBuilder {
-    return xml.ele(this.tagName).txt(this.raw)
+    const client = new SimpleXmlRpcClient(apiUrl)
+    const ret = await client.methodCall(reqMethod, reqParams)
+    logger.debug("SimpleXmlRpcClient结束，ret=>", ret)
+    return ret
+  } catch (e) {
+    logger.error(e)
+    throw new Error("请求处理异常")
   }
 }

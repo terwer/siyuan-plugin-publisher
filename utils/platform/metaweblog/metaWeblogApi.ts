@@ -34,7 +34,7 @@ import { POST_STATUS_CONSTANTS } from "~/utils/constants/postStatusConstants"
 import { isEmptyString } from "~/utils/util"
 import { isBrowser } from "~/utils/browserUtil"
 import { CategoryInfo } from "~/utils/models/categoryInfo"
-import { CommonXmlrpcClient } from "~/libs/simple-xmlrpc/commonXmlrpcClient"
+import { CommonXmlrpcClient } from "~/utils/xmlrpc/commonXmlrpcClient"
 
 /**
  * Metaweblog API的具体实现

@@ -25,7 +25,7 @@
 
 import { LogFactory } from "~/utils/logUtil"
 import { getSiyuanCfg } from "~/utils/platform/siyuan/siYuanConfig"
-import { XmlRpcValue } from "~/libs/simple-xmlrpc/xmlrpc"
+import { XmlRpcValue } from "simple-xmlrpc"
 
 const logger = LogFactory.getLogger(
   "libs/simple-xmlrpc/impl/middlewareXmlrpc.ts"

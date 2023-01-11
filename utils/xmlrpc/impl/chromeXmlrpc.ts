@@ -24,8 +24,8 @@
  */
 
 import { LogFactory } from "~/utils/logUtil"
-import { XmlRpcValue } from "~/libs/simple-xmlrpc/xmlrpc"
-import { fetchMiddleware } from "~/libs/simple-xmlrpc/impl/middlewareXmlrpc"
+import { XmlRpcValue } from "simple-xmlrpc"
+import { fetchMiddleware } from "~/utils/xmlrpc/impl/middlewareXmlrpc"
 
 const logger = LogFactory.getLogger("libs/simple-xmlrpc/impl/chromeXmlrpc.ts")
 
