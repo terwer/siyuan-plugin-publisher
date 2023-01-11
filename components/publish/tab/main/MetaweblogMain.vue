@@ -226,6 +226,20 @@
           </el-button>
         </el-form-item>
 
+        <!-- 使用图床 -->
+        <el-form-item :label="$t('github.post.picgo.use')">
+          <el-switch
+            v-model="picgoPostData.picgoEnabled"
+            @change="picgoPostMethods.picgoOnChange"
+          />
+          <el-alert
+            v-if="false && picgoPostData.picgoEnabled"
+            :closable="false"
+            :title="$t('github.post.picgo.use.tip')"
+            type="warning"
+          />
+        </el-form-item>
+
         <!-- 发布操作 -->
         <el-form-item label="">
           <el-button
@@ -313,6 +327,8 @@ import {
   getPublishStatus,
 } from "~/utils/publishUtil"
 import { CONSTANTS } from "~/utils/constants/constants"
+import { usePicgoPost } from "~/composables/picgo/import/picgoPostCom"
+import { PicgoPostApi } from "~/utils/platform/picgo/picgoPostApi"
 
 const logger = LogFactory.getLogger(
   "components/publish/tab/main/MetaweblogMain.vue"
@@ -349,6 +365,10 @@ const apiTypeInfo = ref(
   t("setting.blog.platform.support.metaweblog") + props.apiType + " "
 )
 const apiStatus = ref(false)
+const picgoPostApi = new PicgoPostApi()
+
+// use
+const { picgoPostData, picgoPostMethods } = usePicgoPost()
 
 const isSlugLoading = ref(false)
 const isDescLoading = ref(false)
@@ -456,6 +476,9 @@ const initPage = async () => {
   if (publishCfg.autoTag && formData.tag.dynamicTags.length === 0) {
     tagSwitch.value = true
   }
+
+  // PicGO开关
+  picgoPostData.picgoEnabled = publishCfg.usePicgo
 
   // 发布状态
   isPublished.value = getPublishStatus(props.apiType, siyuanData.meta)
@@ -746,7 +769,24 @@ const doPublish = async () => {
     // 发布内容
     let content
     const data = await siyuanApi.exportMdContent(siyuanData.pageId)
-    const md = data.content
+    let md = data.content
+
+    // 处理图床
+    if (picgoPostMethods.getPicgoPostData().picgoEnabled) {
+      ElMessage.info(t("github.post.picgo.start.upload"))
+      const picgoPostResult = await picgoPostApi.uploadPostImagesToBed(
+        siyuanData.pageId,
+        siyuanData.meta,
+        md
+      )
+
+      if (picgoPostResult.flag) {
+        md = picgoPostResult.mdContent
+      } else {
+        ElMessage.warning(t("github.post.picgo.picbed.error"))
+      }
+    }
+
     if (PageType.Html === metaweblogCfg.pageType) {
       const html = mdToHtml(md)
       content = removeWidgetTag(html)
@@ -759,6 +799,7 @@ const doPublish = async () => {
         content = removeMdH1(content)
       }
     }
+
     // ===============================
     const post = new Post()
     post.title = formData.title

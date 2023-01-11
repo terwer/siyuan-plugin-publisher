@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -24,6 +24,7 @@
  */
 
 import { IMetaweblogCfg, PageType } from "./IMetaweblogCfg"
+import { MetaweblogPlaceholder } from "~/utils/platform/metaweblog/metaweblogPlaceholder"
 
 /**
  * Metaweblog配置类
@@ -71,6 +72,11 @@ export class MetaweblogCfg implements IMetaweblogCfg {
    */
   pageType: PageType
 
+  /**
+   * 操作提示
+   */
+  placeholder: MetaweblogPlaceholder
+
   constructor(
     home: string,
     apiUrl: string,
@@ -86,5 +92,6 @@ export class MetaweblogCfg implements IMetaweblogCfg {
     this.posidKey = ""
     this.previewUrl = ""
     this.pageType = PageType.Markdown
+    this.placeholder = new MetaweblogPlaceholder()
   }
 }

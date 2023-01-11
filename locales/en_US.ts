@@ -371,4 +371,60 @@ export default {
     "The API address of the KMS platform, for example: http:// localhost: 9564/kms16_release/API/KMS-Multidoc/KMSMultidOWRESTSERVICE",
   "siyuan.local.share.tip":
     "Reminder: If you find that the sharing link or the browser can be displayed or the network connection is rejected, please check according to the following operation. 1: Siyuan Note-> Settings-> About-> Open the network servo; 2: After the browser is opened, click the bottom Siyuan address at the bottom to modify the corresponding address to the local area network IP address.",
+  "setting.cnblogs.home.tip":
+    "The homepage of your blog park is usually: https://www.cnblogs.com/ <your username>",
+  "setting.cnblogs.username.tip":
+    "Your blog garden MetaWeblog login name, you can go to your blog garden background-> Settings, note: login name, not a user nickname (*^▽^*)",
+  "setting.cnblogs.password.tip":
+    "Your blog garden Metaweblog access token, you can go to your blog garden backstage-> Settings",
+  "setting.cnblogs.apiUrl.tip":
+    "Your blog garden Metaweblog access address, you can go to your blog park background-> settings, usually: https://rpc.cnblogs.com/metaweblog/ <Your username>",
+  "setting.cnblogs.previewUrl.tip":
+    "Preview rules for your blog garden article",
+
+  "setting.wordpress.home.tip": "Wordpress homepage",
+  "setting.wordpress.username.tip":
+    "WordPress login name, note: it is login name, not a user nickname (*^▽^*)",
+  "setting.wordpress.password.tip": "Wordpress login password",
+  "setting.wordpress.apiUrl.tip":
+    "WordPress's XMLRPC remote release address, usually: https:// <WordPress blog address> /xmlrpc.php",
+  "setting.wordpress.previewUrl.tip":
+    "The preview rules of the WordPress platform are usually :? P = [Postid]",
+
+  "setting.oschina.home.tip":
+    "Homepage of open source China, usually: https://my.oschina.net/ <Your username>",
+  "setting.oschina.username.tip":
+    "Open source China login name, you can enter the login mailbox",
+  "setting.oschina.password.tip": "Open source China login password",
+  "setting.oschina.apiUrl.tip":
+    "Open source China XMLRPC remote publishing address, usually fixed: https://www.oschina.net/ACTION/xmlrpc",
+  "setting.oschina.previewUrl.tip":
+    "The preview rules of the open source China platform are usually:/blog/[postid]",
+
+  "setting.typecho.home.tip": "Homepage of the Typecho platform",
+  "setting.typecho.username.tip": "Typecho platform login name",
+  "setting.typecho.password.tip": "Typecho platform password",
+  "setting.typecho.apiUrl.tip":
+    "The XMLRPC remote publishing address of the Typecho platform is usually fixed: https: // <platform address> /index.php/xmlrpc",
+  "setting.typecho.previewUrl.tip":
+    "The preview rules of the Typecho platform are usually: /index.php/archives/ [Postid]",
+
+  "setting.jvue.home.tip": "Homepage of the Jvue platform",
+  "setting.jvue.username.tip": "Jvue platform login name",
+  "setting.jvue.password.tip": "Jvue platform password",
+  "setting.jvue.apiUrl.tip":
+    "The XMLRPC remote release address of the JVUE platform is usually fixed: https: // <platform address>/xmlrpc",
+  "setting.jvue.previewUrl.tip":
+    "The preview rules of the Jvue platform are usually:/post/[postid] .html",
+
+  "setting.conf.home.tip":
+    "Confluence Cloud, homepage, usually: https: // <your user name> .atlassian.net/wiki/spaces/<Space name>",
+  "setting.conf.username.tip":
+    "CONFLUENCE login name, you can go to your Atlassian account to get",
+  "setting.conf.password.tip":
+    "Confluence access token, you can go to your Atlassian account to get",
+  "setting.conf.apiUrl.tip":
+    "You can go to https://developper.atlassian.com/Cloud/confluence/rest/v1/1/1/",
+  "setting.conf.previewUrl.tip":
+    "CONFLUENCE platform articles preview rules, usually:/pages/[postid]",
 }

@@ -24,7 +24,7 @@
  */
 
 import { PageType } from "../metaweblog/IMetaweblogCfg"
-import { CommonblogPlaceholder } from "~/utils/platform/commonblog/CommonblogPlaceholder"
+import { CommonblogPlaceholder } from "~/utils/platform/commonblog/commonblogPlaceholder"
 
 /**
  * 通用平台配置接口

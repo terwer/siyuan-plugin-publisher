@@ -1,7 +1,7 @@
 {
   "name": "sy-post-publisher",
   "private": true,
-  "version": "0.6.5",
+  "version": "0.6.7",
   "packageManager": "pnpm@7.18.1",
   "scripts": {
     "serve": "vercel dev --listen 6006",
@@ -20,7 +20,7 @@
     "extChromeWin": "pwsh scripts/ext.ps1",
     "extChromeDev": "bash scripts/extDev.sh",
     "extFirefox": "bash scripts/extFV2.sh",
-    "newVersion": "cd scripts && python3 version.py 0.6.5 && cd ../",
+    "newVersion": "cd scripts && python3 version.py 0.6.7 && cd ../",
     "dcfg": "bash scripts/devWidgetConfig.sh"
   },
   "dependencies": {

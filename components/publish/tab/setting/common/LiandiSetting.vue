@@ -37,7 +37,7 @@ import { ref } from "vue"
 import { API_TYPE_CONSTANTS } from "~/utils/constants/apiTypeConstants"
 import { LiandiCfg } from "~/utils/platform/commonblog/liandi/liandiCfg"
 import CommonBlogSetting from "../CommonBlogSetting.vue"
-import { CommonblogPlaceholder } from "~/utils/platform/commonblog/CommonblogPlaceholder"
+import { CommonblogPlaceholder } from "~/utils/platform/commonblog/commonblogPlaceholder"
 import { useI18n } from "vue-i18n"
 
 const { t } = useI18n()

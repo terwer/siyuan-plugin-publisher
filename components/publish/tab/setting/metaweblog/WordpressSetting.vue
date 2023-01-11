@@ -1,5 +1,5 @@
 <!--
-  - Copyright (c) 2022, Terwer . All rights reserved.
+  - Copyright (c) 2022-2023, Terwer . All rights reserved.
   - DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
   -
   - This code is free software; you can redistribute it and/or modify it
@@ -33,6 +33,8 @@ import { ref } from "vue"
 import { WordpressCfg } from "~/utils/platform/wordpress/wordpressCfg"
 
 import MetaweblogSetting from "../MetaweblogSetting.vue"
+import { MetaweblogPlaceholder } from "~/utils/platform/metaweblog/metaweblogPlaceholder"
+import { useI18n } from "vue-i18n"
 
 // const props = defineProps({
 //   isReload: {
@@ -50,5 +52,15 @@ import MetaweblogSetting from "../MetaweblogSetting.vue"
 // })
 
 const apiType = ref(API_TYPE_CONSTANTS.API_TYPE_WORDPRESS)
-const cfg = ref(new WordpressCfg())
+const { t } = useI18n()
+
+const wpCfg = new WordpressCfg()
+const wpPlaceholder = new MetaweblogPlaceholder()
+wpPlaceholder.homePlaceholder = t("setting.wordpress.home.tip")
+wpPlaceholder.usernamePlaceholder = t("setting.wordpress.username.tip")
+wpPlaceholder.passwordPlaceholder = t("setting.wordpress.password.tip")
+wpPlaceholder.apiUrlPlaceholder = t("setting.wordpress.apiUrl.tip")
+wpPlaceholder.previewUrlPlaceholder = t("setting.wordpress.previewUrl.tip")
+wpCfg.placeholder = wpPlaceholder
+const cfg = ref(wpCfg)
 </script>

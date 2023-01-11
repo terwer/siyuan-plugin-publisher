@@ -1,5 +1,5 @@
 <!--
-  - Copyright (c) 2022, Terwer . All rights reserved.
+  - Copyright (c) 2022-2023, Terwer . All rights reserved.
   - DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
   -
   - This code is free software; you can redistribute it and/or modify it
@@ -33,7 +33,19 @@ import { ref } from "vue"
 import { JVueCfg } from "~/utils/platform/metaweblog/jvue/jvueCfg"
 
 import MetaweblogSetting from "../MetaweblogSetting.vue"
+import { MetaweblogPlaceholder } from "~/utils/platform/metaweblog/metaweblogPlaceholder"
+import { useI18n } from "vue-i18n"
 
 const apiType = ref(API_TYPE_CONSTANTS.API_TYPE_JVUE)
-const cfg = ref(new JVueCfg())
+const { t } = useI18n()
+
+const jvueCfg = new JVueCfg()
+const jvuePlaceholder = new MetaweblogPlaceholder()
+jvuePlaceholder.homePlaceholder = t("setting.jvue.home.tip")
+jvuePlaceholder.usernamePlaceholder = t("setting.jvue.username.tip")
+jvuePlaceholder.passwordPlaceholder = t("setting.jvue.password.tip")
+jvuePlaceholder.apiUrlPlaceholder = t("setting.jvue.apiUrl.tip")
+jvuePlaceholder.previewUrlPlaceholder = t("setting.jvue.previewUrl.tip")
+jvueCfg.placeholder = jvuePlaceholder
+const cfg = ref(jvueCfg)
 </script>
