@@ -1,6 +1,6 @@
 {
   "name": "开发版 - 思源笔记发布辅助工具",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "manifest_version": 3,
   "author": "terwer",
   "description": "思源笔记发布辅助工具，支持博客式只读浏览，多平台文章发布。",

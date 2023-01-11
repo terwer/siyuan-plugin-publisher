@@ -161,7 +161,7 @@ import {
   getSiyuanCfg,
   SiYuanConfig,
 } from "~/utils/platform/siyuan/siYuanConfig"
-import { goToPage, goToPageWithTarget } from "~/utils/otherlib/ChromeUtil"
+import { goToPage } from "~/utils/otherlib/ChromeUtil"
 import {
   clearConf,
   exportConf,
@@ -281,7 +281,9 @@ const handleSiyuanApiSetting = async (formEl) => {
     setTimeout(function () {
       // 关闭对话框
       siyuanApiChangeFormVisible.value = false
-      goToPageWithTarget("/blog/index.html", "_self", "")
+      // goToPageWithTarget("/blog/index.html", "_self", "")
+
+      reloadPage()
     }, 500)
   } catch (e) {
     siyuanApiChangeFormVisible.value = false
