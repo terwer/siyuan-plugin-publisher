@@ -99,8 +99,6 @@ export const getPageUrl = (pageUrl, split, isShare) => {
     url = pathJoin(baseUrl, url)
   } else {
     url = setUrlParameter(url, "from", "chrome")
-    const baseUrl = getSiyuanCfg().baseUrl
-    url = pathJoin(baseUrl, url)
   }
 
   logger.warn("将要打开页面=>", url)
