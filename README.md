@@ -4,7 +4,7 @@
 
 将 [思源笔记](https://github.com/siyuan-note/siyuan) 的文章发布到支持的平台的 **思源笔记挂件**
 
-![version](https://img.shields.io/github/release/terwer/src-sy-post-publisher.svg?style=flat-square)
+![version](https://img.shields.io/github/release/terwer/sy-post-publisher.svg?style=flat-square)
 [![](https://img.shields.io/badge/online-preview-faad14.svg?style=popout-square)](https://publish.terwer.space/blog/index.html)
 ![GitHub last commit](https://img.shields.io/github/last-commit/terwer/src-sy-post-publisher)
 ![](https://img.shields.io/badge/license-GPL-blue.svg?style=popout-square)
