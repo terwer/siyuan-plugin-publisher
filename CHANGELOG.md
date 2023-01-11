@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.6.2](https://github.com/terwer/src-sy-post-publisher/compare/v0.6.1...v0.6.2) (2023-01-11)
+
+
+### Bug Fixes
+
+* [#326](https://github.com/terwer/src-sy-post-publisher/issues/326) 思源配置读取出错 ([b3b8ddd](https://github.com/terwer/src-sy-post-publisher/commit/b3b8ddd5103ec77d9c175f92bcf2a5f3e1e0641e))
+* 修复配置保存之后刷新页面错误的问题 ([6a69cc9](https://github.com/terwer/src-sy-post-publisher/commit/6a69cc99cf22fe8faba6a46c722ed9b71a0a82e3))
+* 局域网文章分享给出提示，因为可能存在伺服未打开的情况 ([9afa0e6](https://github.com/terwer/src-sy-post-publisher/commit/9afa0e68f2d0e4e8521c4b0590cf95e3e093284d))
+
+
+### Miscellaneous
+
+* 先发个小版本0.6.2，解决核心bug ([cdb7a3d](https://github.com/terwer/src-sy-post-publisher/commit/cdb7a3d3b00bc50c4614a3c7dc8b521b671f11eb))
+* 准备开发 0.7.0 ([412a08e](https://github.com/terwer/src-sy-post-publisher/commit/412a08ee51d160a0a79a9082fd94736bd01a55b2))
+
 ## [0.6.1](https://github.com/terwer/src-sy-post-publisher/compare/v0.6.0...v0.6.1) (2023-01-10)
 
 
