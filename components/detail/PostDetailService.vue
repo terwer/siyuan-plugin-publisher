@@ -27,7 +27,7 @@
   <div class="post-detail-wrap">
     <h1 v-if="inSiyuanNewWin" style="display: none">{{ post.title }}</h1>
     <el-alert
-      class="top-version-tip"
+      class="top-share-tip"
       :title="$t('siyuan.local.share.tip')"
       type="warning"
       :closable="false"
@@ -191,6 +191,10 @@ onMounted(async () => {
   font-size: 14px;
   padding: 10px 0;
   min-height: 600px;
+}
+
+.top-share-tip {
+  margin-top: 20px !important;
 }
 
 #post-detail-content img {
