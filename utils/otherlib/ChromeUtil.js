@@ -111,7 +111,14 @@ export const getPageUrl = (pageUrl, split) => {
   } else if (deviceType === DeviceType.DeviceType_Chrome_Extension) {
     url = chrome.runtime.getURL(url)
   } else {
+    let host = window.location.host
+    let baseUrl = window.location.protocol + "//" + host
+    if (split && split !== "") {
+      baseUrl = window.location.protocol + "//" + host + split
+    }
     url = setUrlParameter(url, "from", FROM_CONSTANTS.FROM_CHROME)
+    // 智能拼接
+    url = pathJoin(baseUrl, url)
   }
 
   logger.warn("将要打开页面=>", url)
