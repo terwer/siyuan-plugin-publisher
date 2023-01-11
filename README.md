@@ -231,7 +231,7 @@ VITE_SIYUAN_CONFIG_TOKEN=
 ## PLANT_UML_SERVR=
 
 ## 非挂件模式需要中间服务器实现跨域，生产环境可不设置，使用本项目
-## VITE_MIDDLEWARE_URL=https://publish.terwer.space/api/middleware
+## VITE_MIDDLEWARE_URL=https://api.terwer.space/api/middleware
 VITE_MIDDLEWARE_URL=
 ```
 
@@ -265,7 +265,7 @@ pnpm serve
 `dev` 模式需要先设置环境变量 `VITE_MIDDLEWARE_URL` 用来支持请求跨域，我这里提供一个
 
 ```properties
-VITE_MIDDLEWARE_URL=https://publish.terwer.space/api/middleware
+VITE_MIDDLEWARE_URL=https://api.terwer.space/api/middleware
 ```
 
 然后用下面命令启动，可以支持热加载。
