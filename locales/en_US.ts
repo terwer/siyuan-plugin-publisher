@@ -369,4 +369,6 @@ export default {
     "KMS platform REST account password, please create according to the link instruction",
   "setting.kms.apiurl.tip":
     "The API address of the KMS platform, for example: http:// localhost: 9564/kms16_release/API/KMS-Multidoc/KMSMultidOWRESTSERVICE",
+  "siyuan.local.share.tip":
+    "Reminder: If you find that the sharing link or the browser can be displayed or the network connection is rejected, please check according to the following operation. 1: Siyuan Note-> Settings-> About-> Open the network servo; 2: After the browser is opened, click the bottom Siyuan address at the bottom to modify the corresponding address to the local area network IP address.",
 }

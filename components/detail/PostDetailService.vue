@@ -26,6 +26,12 @@
 <template>
   <div class="post-detail-wrap">
     <h1 v-if="inSiyuanNewWin" style="display: none">{{ post.title }}</h1>
+    <el-alert
+      class="top-version-tip"
+      :title="$t('siyuan.local.share.tip')"
+      type="warning"
+      :closable="false"
+    />
     <blockquote class="post-detail-id">
       <span class="id-text">本文ID：{{ post.postid }}</span>
 

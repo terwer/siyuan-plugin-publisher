@@ -373,4 +373,6 @@ export default {
   "setting.kms.password.tip": "KMS平台Rest账户密码，请按照链接指示创建",
   "setting.kms.apiurl.tip":
     "KMS平台的API地址，例如：http://localhost:9564/kms16_release/api/kms-multidoc/kmsMultidocKnowledgeRestService",
+  "siyuan.local.share.tip":
+    "温馨提示：如果发现分享链接或者浏览器打开无法显示或者网络连接被拒绝，请按照下面操作排查。1：思源笔记->设置->关于->打开网络伺服；2：在浏览器打开之后，点击底部思源地址，修改对应地址为局域网ip地址。",
 }
