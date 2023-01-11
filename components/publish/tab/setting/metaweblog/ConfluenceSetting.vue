@@ -1,5 +1,5 @@
 <!--
-  - Copyright (c) 2022, Terwer . All rights reserved.
+  - Copyright (c) 2022-2023, Terwer . All rights reserved.
   - DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
   -
   - This code is free software; you can redistribute it and/or modify it
@@ -32,7 +32,19 @@ import { API_TYPE_CONSTANTS } from "~/utils/constants/apiTypeConstants"
 import { ref } from "vue"
 import MetaweblogSetting from "../MetaweblogSetting.vue"
 import { ConfCfg } from "~/utils/platform/metaweblog/conf/confCfg"
+import { useI18n } from "vue-i18n"
+import { MetaweblogPlaceholder } from "~/utils/platform/metaweblog/metaweblogPlaceholder"
 
 const apiType = ref(API_TYPE_CONSTANTS.API_TYPE_CONFLUENCE)
-const cfg = ref(new ConfCfg())
+const { t } = useI18n()
+
+const confCfg = new ConfCfg()
+const confPlaceholder = new MetaweblogPlaceholder()
+confPlaceholder.homePlaceholder = t("setting.conf.home.tip")
+confPlaceholder.usernamePlaceholder = t("setting.conf.username.tip")
+confPlaceholder.passwordPlaceholder = t("setting.conf.password.tip")
+confPlaceholder.apiUrlPlaceholder = t("setting.conf.apiUrl.tip")
+confPlaceholder.previewUrlPlaceholder = t("setting.conf.previewUrl.tip")
+confCfg.placeholder = confPlaceholder
+const cfg = ref(confCfg)
 </script>

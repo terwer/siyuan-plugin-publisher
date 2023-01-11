@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2023, Terwer . All rights reserved.
+ * Copyright (c) 2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -23,55 +23,41 @@
  * questions.
  */
 
-import { MetaweblogPlaceholder } from "~/utils/platform/metaweblog/metaweblogPlaceholder"
-
-export enum PageType {
-  Markdown,
-  Html,
-}
-
-/**
- * Metaweblog配置接口
- */
-export interface IMetaweblogCfg {
+export class MetaweblogPlaceholder {
   /**
-   * 首页
+   * 首页操作提示
    */
-  home: string
+  homePlaceholder: string
   /**
-   * API 地址
+   * API 地址操作提示
    */
-  apiUrl: string
+  apiUrlPlaceholder: string
   /**
-   * 用户名
+   * 用户名操作提示
    */
-  username: string
+  usernamePlaceholder: string
   /**
-   * 密码
+   * 密码操作提示
    */
-  password: string
+  passwordPlaceholder: string
   /**
-   * API状态是否正常
+   * API状态是否正常操作提示
    */
-  apiStatus: boolean
+  apiStatusPlaceholder: boolean
   /**
-   * 博客名（API获取）
+   * 博客名（API获取）操作提示
    */
-  blogName: string
+  blogNamePlaceholder: string
   /**
-   * 文章别名key
+   * 文章别名key操作提示
    */
-  posidKey: string
+  posidKeyPlaceholder: string
   /**
-   * 文章预览链接
+   * 文章预览链接操作提示
    */
-  previewUrl: string
+  previewUrlPlaceholder: string
   /**
-   * 文章类型
+   * 文章类型操作提示
    */
-  pageType: PageType
-  /**
-   * 操作提示
-   */
-  placeholder: MetaweblogPlaceholder
+  pageTypePlaceholder: string
 }

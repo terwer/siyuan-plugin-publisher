@@ -1,5 +1,5 @@
 <!--
-  - Copyright (c) 2022, Terwer . All rights reserved.
+  - Copyright (c) 2022-2023, Terwer . All rights reserved.
   - DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
   -
   - This code is free software; you can redistribute it and/or modify it
@@ -162,6 +162,9 @@ import YuqueSetting from "~/components/publish/tab/setting/common/YuqueSetting.v
 import KmsSetting from "~/components/publish/tab/setting/common/KmsSetting.vue"
 import GithubSetting from "~/components/publish/tab/setting/GithubSetting.vue"
 import MetaweblogSetting from "~/components/publish/tab/setting/MetaweblogSetting.vue"
+import { PRE_DEFINED_PLATFORM_KEY_CONSTANTS } from "~/utils/import/PRE_DEFINED_PLATFORM_CONSTANTS"
+import { MetaweblogPlaceholder } from "~/utils/platform/metaweblog/metaweblogPlaceholder"
+import { useI18n } from "vue-i18n"
 
 const logger = LogFactory.getLogger(
   "components/publish/tab/PlatformSetting.vue"
@@ -191,14 +194,67 @@ const formData = reactive({
   wordpressArray: [],
 })
 
+const { t } = useI18n()
+
 const createGCfg = ref((gcfg) => {
   return new DynamicGCfg(gcfg)
 })
 const createMCfg = ref((mcfg) => {
-  return new DynamicMCfg(getDynPostidKey(mcfg.platformKey))
+  const dynMcfg = new DynamicMCfg(getDynPostidKey(mcfg.platformKey))
+
+  // 预定义平台处理
+  const dynTypechoPlaceholder = new MetaweblogPlaceholder()
+  const dynOschinaPlaceholder = new MetaweblogPlaceholder()
+
+  switch (mcfg.platformKey) {
+    case PRE_DEFINED_PLATFORM_KEY_CONSTANTS.PRE_DEFINED_TYPECHO_KEY:
+      dynTypechoPlaceholder.homePlaceholder = t("setting.typecho.home.tip")
+      dynTypechoPlaceholder.usernamePlaceholder = t(
+        "setting.typecho.username.tip"
+      )
+      dynTypechoPlaceholder.passwordPlaceholder = t(
+        "setting.typecho.password.tip"
+      )
+      dynTypechoPlaceholder.apiUrlPlaceholder = t("setting.typecho.apiUrl.tip")
+      dynTypechoPlaceholder.previewUrlPlaceholder = t(
+        "setting.typecho.previewUrl.tip"
+      )
+      dynMcfg.placeholder = dynTypechoPlaceholder
+      break
+    case PRE_DEFINED_PLATFORM_KEY_CONSTANTS.PRE_DEFINED_OSCHINA_KEY:
+      dynOschinaPlaceholder.homePlaceholder = t("setting.oschina.home.tip")
+      dynOschinaPlaceholder.usernamePlaceholder = t(
+        "setting.oschina.username.tip"
+      )
+      dynOschinaPlaceholder.passwordPlaceholder = t(
+        "setting.oschina.password.tip"
+      )
+      dynOschinaPlaceholder.apiUrlPlaceholder = t("setting.oschina.apiUrl.tip")
+      dynOschinaPlaceholder.previewUrlPlaceholder = t(
+        "setting.oschina.previewUrl.tip"
+      )
+      dynMcfg.placeholder = dynOschinaPlaceholder
+      break
+    default:
+      break
+  }
+
+  return dynMcfg
 })
 const createWCfg = ref((wcfg) => {
-  return new DynamicWCfg(getDynPostidKey(wcfg.platformKey))
+  const dynWcfg = new DynamicWCfg(getDynPostidKey(wcfg.platformKey))
+
+  // 预定义平台处理
+  switch (wcfg.platformKey) {
+    case PRE_DEFINED_PLATFORM_KEY_CONSTANTS.PRE_DEFINED_TYPECHO_KEY:
+      break
+    case PRE_DEFINED_PLATFORM_KEY_CONSTANTS.PRE_DEFINED_OSCHINA_KEY:
+      break
+    default:
+      break
+  }
+
+  return dynWcfg
 })
 const initDynCfg = (dynCfg: any[]) => {
   const newCfg = []

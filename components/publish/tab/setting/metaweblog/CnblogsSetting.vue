@@ -1,5 +1,5 @@
 <!--
-  - Copyright (c) 2022, Terwer . All rights reserved.
+  - Copyright (c) 2022-2023, Terwer . All rights reserved.
   - DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
   -
   - This code is free software; you can redistribute it and/or modify it
@@ -32,8 +32,19 @@ import { API_TYPE_CONSTANTS } from "~/utils/constants/apiTypeConstants"
 import { ref } from "vue"
 import { CnblogsCfg } from "~/utils/platform/metaweblog/cnblogs/cnblogsCfg"
 import MetaweblogSetting from "~/components/publish/tab/setting/MetaweblogSetting.vue"
+import { MetaweblogPlaceholder } from "~/utils/platform/metaweblog/metaweblogPlaceholder"
+import { useI18n } from "vue-i18n"
 
 const apiType = ref(API_TYPE_CONSTANTS.API_TYPE_CNBLOGS)
+const { t } = useI18n()
+
 const cnblogsCfg = new CnblogsCfg()
+const cnblogsPlaceholder = new MetaweblogPlaceholder()
+cnblogsPlaceholder.homePlaceholder = t("setting.cnblogs.home.tip")
+cnblogsPlaceholder.usernamePlaceholder = t("setting.cnblogs.username.tip")
+cnblogsPlaceholder.passwordPlaceholder = t("setting.cnblogs.password.tip")
+cnblogsPlaceholder.apiUrlPlaceholder = t("setting.cnblogs.apiUrl.tip")
+cnblogsPlaceholder.previewUrlPlaceholder = t("setting.cnblogs.previewUrl.tip")
+cnblogsCfg.placeholder = cnblogsPlaceholder
 const cfg = ref(cnblogsCfg)
 </script>

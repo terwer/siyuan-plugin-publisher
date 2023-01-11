@@ -1,5 +1,5 @@
 <!--
-  - Copyright (c) 2022, Terwer . All rights reserved.
+  - Copyright (c) 2022-2023, Terwer . All rights reserved.
   - DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
   -
   - This code is free software; you can redistribute it and/or modify it
@@ -47,7 +47,7 @@
       <el-switch v-model="jvueEnabled" @change="jvueOnChange" />
     </el-form-item>
 
-    <el-form-item :label="$t('service.switch.conf')">
+    <el-form-item :label="$t('service.switch.conf')" v-if="false">
       <el-switch v-model="confEnabled" @change="confOnChange" />
     </el-form-item>
 
@@ -109,7 +109,6 @@ import {
   getDynSwitchInactive,
   getSwitchItem,
 } from "~/utils/platform/dynamicConfig"
-import { LogFactory } from "~/utils/logUtil"
 
 // use
 const {

@@ -375,4 +375,58 @@ export default {
     "KMS平台的API地址，例如：http://localhost:9564/kms16_release/api/kms-multidoc/kmsMultidocKnowledgeRestService",
   "siyuan.local.share.tip":
     "温馨提示：如果发现分享链接或者浏览器打开无法显示或者网络连接被拒绝，请按照下面操作排查。1：思源笔记->设置->关于->打开网络伺服；2：在浏览器打开之后，点击底部思源地址，修改对应地址为局域网ip地址。",
+  "setting.cnblogs.home.tip":
+    "您的博客园首页，通常是：https://www.cnblogs.com/<您的用户名>",
+  "setting.cnblogs.username.tip":
+    "您的博客园MetaWeblog登录名，可前往您的博客园后台->设置查看，注意：是登录名，不是用户昵称哦(*^▽^*)",
+  "setting.cnblogs.password.tip":
+    "您的博客园MetaWeblog访问令牌，可前往您的博客园后台->设置查看",
+  "setting.cnblogs.apiUrl.tip":
+    "您的博客园MetaWeblog访问地址，可前往您的博客园后台->设置查看，通常是：https://rpc.cnblogs.com/metaweblog/<您的用户名>",
+  "setting.cnblogs.previewUrl.tip":
+    "博客园平台的文章预览规则，通常是：/p/[postid].html",
+
+  "setting.wordpress.home.tip": "WordPress首页",
+  "setting.wordpress.username.tip":
+    "WordPress登录名，注意：是登录名，不是用户昵称哦(*^▽^*)",
+  "setting.wordpress.password.tip": "WordPress登录密码",
+  "setting.wordpress.apiUrl.tip":
+    "WordPress的xmlrpc远程发布地址，通常是：https://<WordPress博客地址>/xmlrpc.php",
+  "setting.wordpress.previewUrl.tip":
+    "WordPress平台的文章预览规则，通常是：?p=[postid]",
+
+  "setting.oschina.home.tip":
+    "开源中国首页，通常是：https://my.oschina.net/<您的用户名>",
+  "setting.oschina.username.tip": "开源中国登录名，可以输入登录邮箱",
+  "setting.oschina.password.tip": "开源中国登录密码",
+  "setting.oschina.apiUrl.tip":
+    "开源中国的xmlrpc远程发布地址，通常固定是：https://www.oschina.net/action/xmlrpc",
+  "setting.oschina.previewUrl.tip":
+    "开源中国平台的文章预览规则，通常是：/blog/[postid]",
+
+  "setting.typecho.home.tip": "Typecho平台的首页",
+  "setting.typecho.username.tip": "Typecho平台登录名",
+  "setting.typecho.password.tip": "Typecho平台密码",
+  "setting.typecho.apiUrl.tip":
+    "Typecho平台的xmlrpc远程发布地址，通常固定是：https://<平台地址>/index.php/action/xmlrpc",
+  "setting.typecho.previewUrl.tip":
+    "Typecho平台的文章预览规则，通常是：/index.php/archives/[postid]",
+
+  "setting.jvue.home.tip": "JVue平台的首页",
+  "setting.jvue.username.tip": "JVue平台登录名",
+  "setting.jvue.password.tip": "JVue平台密码",
+  "setting.jvue.apiUrl.tip":
+    "JVue平台的xmlrpc远程发布地址，通常固定是：https://<平台地址>/xmlrpc",
+  "setting.jvue.previewUrl.tip":
+    "JVue平台的文章预览规则，通常是：/post/[postid].html",
+
+  "setting.conf.home.tip":
+    "Confluence Cloud，首页，通常是：https://<您的用户名>.atlassian.net/wiki/spaces/<空间名>",
+  "setting.conf.username.tip": "Confluence登录名，可前往您的atlassian账户获取",
+  "setting.conf.password.tip":
+    "Confluence访问令牌，可前往您的atlassian账户获取",
+  "setting.conf.apiUrl.tip":
+    "可前往 https://developer.atlassian.com/cloud/confluence/rest/v1/#api-wiki-rest-api-content-get 查看文档",
+  "setting.conf.previewUrl.tip":
+    "Confluence平台文章预览规则，通常是：/pages/[postid]",
 }

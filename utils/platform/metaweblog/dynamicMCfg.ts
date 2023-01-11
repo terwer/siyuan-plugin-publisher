@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -25,6 +25,7 @@
 
 import { MetaweblogCfg } from "./MetaweblogCfg"
 import { PageType } from "./IMetaweblogCfg"
+import { MetaweblogPlaceholder } from "~/utils/platform/metaweblog/metaweblogPlaceholder"
 
 /**
  * 动态Metaweblog配置类
@@ -35,5 +36,13 @@ export class DynamicMCfg extends MetaweblogCfg {
     this.posidKey = postidKey
     this.previewUrl = "/p/[postid].html"
     this.pageType = PageType.Html
+
+    let dynPlaceholder = new MetaweblogPlaceholder()
+    dynPlaceholder.homePlaceholder = "平台首页"
+    dynPlaceholder.usernamePlaceholder = "用户名"
+    dynPlaceholder.passwordPlaceholder = "密码"
+    dynPlaceholder.apiUrlPlaceholder = "xmlrpc请求的API地址"
+    dynPlaceholder.previewUrlPlaceholder = "预览规则"
+    this.placeholder = dynPlaceholder
   }
 }
