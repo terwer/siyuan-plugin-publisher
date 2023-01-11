@@ -176,3 +176,13 @@ export const copyToClipboardInBrowser = (text) => {
     }
   }
 }
+
+/**
+ * 检测是否运行在Chrome插件中
+ */
+export function isInChromeExtension() {
+  if (!isBrowser()) {
+    return false
+  }
+  return window.location.href.indexOf("chrome-extension://") > -1
+}

@@ -26,7 +26,7 @@
 import express from "express"
 import fetch from "cross-fetch"
 // import { imageToBase64 } from "../utils/otherlib/imageToBase64"
-import { SimpleXmlRpcClient } from "../libs/simple-xmlrpc/custom/SimpleXmlRpcClient"
+import { SimpleXmlRpcClient } from "simple-xmlrpc"
 
 const app = express()
 // 解决req.body undefined

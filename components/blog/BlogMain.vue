@@ -143,7 +143,7 @@
         <el-alert
           class="top-data-tip"
           :title="
-            isInSiyuan
+            isInSiyuanEnv
               ? $t('blog.top-data-tip.siyuan')
               : $t('blog.top-data-tip')
           "
@@ -185,7 +185,7 @@ import { onMounted, ref } from "vue"
 import { LogFactory } from "~/utils/logUtil"
 import { Post } from "~/utils/models/post"
 import { goToPage } from "~/utils/otherlib/ChromeUtil"
-import { getPageId, inSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
+import { getPageId, isInSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
 import { SiYuanApiAdaptor } from "~/utils/platform/siyuan/siYuanApiAdaptor"
 import { mdToHtml, removeTitleNumber } from "~/utils/htmlUtil"
 import { getByLength } from "~/utils/strUtil"
@@ -213,7 +213,7 @@ const showPicgo = ref(false)
 
 const postDetail = ref()
 const publishData = ref()
-const isInSiyuan = ref(false)
+const isInSiyuanEnv = ref(false)
 const isNewWin = ref(true)
 
 const state = ref("")
@@ -447,7 +447,7 @@ const handleNewWinPicgo = (index, row) => {
 }
 
 const initPage = async () => {
-  isInSiyuan.value = inSiyuan()
+  isInSiyuanEnv.value = isInSiyuan()
 
   const publishCfg = getPublishCfg()
   isNewWin.value = parseBoolean(publishCfg.newWin)
@@ -465,7 +465,7 @@ const reloadTableData = async () => {
 
   try {
     const siyuanApi = new SiYuanApiAdaptor()
-    if (isInSiyuan.value || isInSiyuanNewWinBrowser()) {
+    if (isInSiyuanEnv.value || isInSiyuanNewWinBrowser()) {
       const postid = await getPageId()
       logger.warn("处于生产环境，父文档ID为=>", postid)
 

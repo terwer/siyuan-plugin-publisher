@@ -24,7 +24,7 @@
  */
 
 import { reactive } from "vue"
-import { inSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
+import { isInSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
 import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
 
 /**
@@ -35,7 +35,7 @@ import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
 export const usePicgoCommon = () => {
   // private data
   const isDev = process.env.NODE_ENV === "development"
-  const isSiyuanOrSiyuanNewWin = inSiyuan() || isInSiyuanNewWinBrowser()
+  const isSiyuanOrSiyuanNewWin = isInSiyuan() || isInSiyuanNewWinBrowser()
 
   // public data
   const picgoCommonData = reactive({

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -23,36 +23,27 @@
  * questions.
  */
 
-import { HttpRequest } from "./HttpTypes"
-import { XmlRpcFault } from "./XmlRpcFault"
+import { LogFactory } from "~/utils/logUtil"
+import { SimpleXmlRpcClient, XmlRpcValue } from "simple-xmlrpc"
 
-export type XmlRpcValue =
-  | undefined
-  | boolean
-  | number
-  | string
-  | Date
-  | Uint8Array
-  | XmlRpcValue[]
-  | XmlRpcStruct
+const logger = LogFactory.getLogger("libs/simple-xmlrpc/impl/nodeXmlrpc.ts")
 
-export type XmlRpcStruct = { [key: string]: XmlRpcValue }
+export async function fetchNode(
+  apiUrl: string,
+  reqMethod: string,
+  reqParams: string[]
+): Promise<XmlRpcValue> {
+  try {
+    logger.debug("SimpleXmlRpcClient开始")
+    logger.debug("xmlrpcNodeParams.reqMethod=>", reqMethod)
+    logger.debug("xmlrpcNodeParams.reqParams=>", reqParams)
 
-export type Encoding =
-  | "ascii"
-  | "utf-8"
-  | "utf16le"
-  | "ucs2"
-  | "ucs-2"
-  | "base64"
-  | "latin1"
-  | "binary"
-  | "hex"
-
-export type XmlRpcMethodHandler = (
-  methodName: string,
-  args: XmlRpcValue[],
-  req?: HttpRequest
-) => Promise<XmlRpcValue>
-
-export type XmlRpcValueOrFault = XmlRpcValue | XmlRpcFault
+    const client = new SimpleXmlRpcClient(apiUrl)
+    const ret = await client.methodCall(reqMethod, reqParams)
+    logger.debug("SimpleXmlRpcClient结束，ret=>", ret)
+    return ret
+  } catch (e) {
+    logger.error(e)
+    throw new Error("请求处理异常")
+  }
+}

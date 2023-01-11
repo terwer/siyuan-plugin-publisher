@@ -23,14 +23,48 @@
  * questions.
  */
 
-import type { XMLBuilder } from "xmlbuilder2/lib/interfaces"
+import { isInSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
+import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
+import { isInChromeExtension } from "~/utils/browserUtil"
 
-export class CustomType {
-  tagName = "customType"
+export enum DeviceType {
+  /**
+   * 思源笔记新窗口
+   */
+  DeviceType_Siyuan_NewWin,
+  /**
+   * 思源笔记挂件
+   */
+  DeviceType_Siyuan_Widget,
+  DeviceType_Chrome_Extension,
+  DeviceType_Chrome_Browser,
+}
 
-  constructor(public raw: string) {}
+/**
+ * 设备相关
+ * @author terwer
+ * @since 0.6.4
+ */
+export class DeviceUtil {
+  /**
+   * 获取当前设备
+   */
+  public static getDevice() {
+    // 思源笔记挂件
+    if (isInSiyuan()) {
+      return DeviceType.DeviceType_Siyuan_Widget
+    }
 
-  serialize(xml: XMLBuilder): XMLBuilder {
-    return xml.ele(this.tagName).txt(this.raw)
+    // 思源新窗口
+    if (isInSiyuanNewWinBrowser()) {
+      return DeviceType.DeviceType_Siyuan_NewWin
+    }
+
+    // Chrome浏览器插件
+    if (isInChromeExtension()) {
+      return DeviceType.DeviceType_Chrome_Extension
+    }
+
+    return DeviceType.DeviceType_Chrome_Browser
   }
 }
