@@ -2,7 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@element-plus/icons-vue': ^2.0.9
-  '@esbuild-plugins/node-globals-polyfill': ^0.1.1
+  '@esbuild-plugins/node-globals-polyfill': ^0.2.3
   '@esbuild-plugins/node-modules-polyfill': ^0.2.0
   '@fortawesome/fontawesome-svg-core': ^6.2.1
   '@fortawesome/free-brands-svg-icons': ^6.2.1
@@ -95,7 +95,7 @@ dependencies:
   vue-i18n: 9.2.2_vue@3.2.45
 
 devDependencies:
-  '@esbuild-plugins/node-globals-polyfill': 0.1.1
+  '@esbuild-plugins/node-globals-polyfill': 0.2.3
   '@esbuild-plugins/node-modules-polyfill': 0.2.2
   '@types/express': 4.17.15
   '@types/node': 16.18.11
@@ -370,8 +370,8 @@ packages:
       vue: 3.2.45
     dev: false
 
-  /@esbuild-plugins/node-globals-polyfill/0.1.1:
-    resolution: { integrity: sha512-MR0oAA+mlnJWrt1RQVQ+4VYuRJW/P2YmRTv1AsplObyvuBMnPHiizUF95HHYiSsMGLhyGtWufaq2XQg6+iurBg== }
+  /@esbuild-plugins/node-globals-polyfill/0.2.3:
+    resolution: { integrity: sha512-r3MIryXDeXDOZh7ih1l/yE9ZLORCd5e8vWg02azWRGj5SPTuoh69A2AIyn0Z31V/kHBfZ4HgWJ+OK3GTTwLmnw== }
     peerDependencies:
       esbuild: '*'
     dev: true
