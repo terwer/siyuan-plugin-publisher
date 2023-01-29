@@ -35,12 +35,8 @@
           isDark ? $t("theme.mode.light") : $t("theme.mode.dark")
         }}</span>
 
-        <span class="text" v-if="!isInSiyuanEnv">.</span>
-        <span
-          class="text s-dark"
-          @click="changeSiyuanApi()"
-          v-if="!isInSiyuanEnv"
-        >
+        <span class="text">.</span>
+        <span class="text s-dark" @click="changeSiyuanApi()">
           {{ $t("blog.change.siyuan.api") }}
         </span>
 
@@ -298,8 +294,6 @@ const handleSiyuanApiSetting = async (formEl) => {
 }
 
 const initConf = () => {
-  isInSiyuanEnv.value = isInSiyuan()
-
   v.value = version
 
   const siyuanCfg = getSiyuanCfg()

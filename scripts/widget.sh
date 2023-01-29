@@ -40,7 +40,7 @@ rm -rf ./dist/mv2
 rm ./dist/lib/picgo/picgo.cfg.dev.json
 # cp ./dist/lib/picgo/picgo.cfg.json.example ./dist/lib/picgo/picgo.cfg.json
 
-rm -rf ../my-note-docker/workspace/SiYuan/data/widgets/sy-post-publisher/
-mkdir ../my-note-docker/workspace/SiYuan/data/widgets/sy-post-publisher
-cp -r ./dist/* ../my-note-docker/workspace/SiYuan/data/widgets/sy-post-publisher/
+rm -rf ../SiYuanWorkspace/public/data/widgets/sy-post-publisher/
+mkdir ../SiYuanWorkspace/public/data/widgets/sy-post-publisher
+cp -r ./dist/* ../SiYuanWorkspace/public/data/widgets/sy-post-publisher/
 echo "发布完毕."
