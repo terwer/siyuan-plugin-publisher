@@ -1,7 +1,7 @@
 {
   "name": "sy-post-publisher",
   "private": true,
-  "version": "0.6.7",
+  "version": "0.6.8",
   "packageManager": "pnpm@7.18.1",
   "scripts": {
     "serve": "vercel dev --listen 6006",
