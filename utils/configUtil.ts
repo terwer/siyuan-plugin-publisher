@@ -25,6 +25,7 @@
 
 import { LogFactory } from "~/utils/logUtil"
 import { importJSONToLocalStorage } from "~/utils/otherlib/ChromeUtil"
+import { getLocalStorageAdaptor } from "~/utils/otherlib/confUtil"
 import { ElMessage } from "element-plus"
 import { appendStr } from "./strUtil"
 import { isBrowser, reloadPage } from "~/utils/browserUtil"
@@ -38,7 +39,8 @@ const logger = LogFactory.getLogger()
 export const getConf = (key: string): string => {
   // logUtil.logInfo("尝试从localStorage获取数据，key=>", key)
 
-  const value = localStorage.getItem(key)
+  const store = getLocalStorageAdaptor()
+  const value = store.getItem(key)
   if (!value) {
     // logUtil.logInfo("未找到对应数据，key=>", key)
     return ""
@@ -127,7 +129,8 @@ export const setConf = (key: string, value: string): void => {
   // logUtil.logInfo("尝试保存数据到localStorage里key=>", key)
   // logUtil.logInfo("保存数据到localStorage=>", value)
 
-  localStorage.setItem(key, value)
+  const store = getLocalStorageAdaptor()
+  store.setItem(key, value)
 }
 
 /**
@@ -180,11 +183,13 @@ export const toJSONString = (value: Object): String => {
  * @param key
  */
 export const checkKeyExists = (key: string): boolean => {
+  const store = getLocalStorageAdaptor()
+
   let flag = false
 
-  for (let i = 0; i < localStorage.length; i++) {
+  for (let i = 0; i < store.length; i++) {
     // 获取key 索引从0开始
-    const getKey = localStorage.key(i)
+    const getKey = store.key(i)
     if (key === getKey) {
       flag = true
       break
@@ -198,14 +203,16 @@ export const checkKeyExists = (key: string): boolean => {
  * 获取所有配置数据
  */
 export const getAllConf = (): object => {
+  const store = getLocalStorageAdaptor()
+
   // Create an object to store the data from LocalStorage
   const data = {}
 
   // Iterate over the keys in LocalStorage
-  for (let i = 0; i < localStorage.length; i++) {
+  for (let i = 0; i < store.length; i++) {
     // Get the key and value for the current iteration
-    const key = localStorage.key(i)
-    const value = localStorage.getItem(key)
+    const key = store.key(i)
+    const value = store.getItem(key)
 
     // Add the key/value pair to the data object
     data[key] = value
@@ -271,11 +278,13 @@ export const importConf = async (): Promise<void> => {
  * ==========================================
  */
 export const clearConf = (): void => {
+  const store = getLocalStorageAdaptor()
+
   // Remove all data from LocalStorage
-  localStorage.clear()
+  store.clear()
 
   // Check if LocalStorage is empty
-  if (localStorage.length === 0) {
+  if (store.length === 0) {
     console.log("LocalStorage is empty")
   } else {
     console.log("LocalStorage is not empty")
