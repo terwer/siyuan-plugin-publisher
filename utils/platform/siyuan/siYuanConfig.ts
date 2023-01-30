@@ -52,8 +52,8 @@ export class SiYuanConfig {
  * @since 0.6.0
  */
 export const getSiyuanCfg = (): SiYuanConfig => {
-  let baseUrl = getEnv("VITE_SIYUAN_API_URL") // Base Url，开发阶段需要填写
-  let token = getEnv("VITE_SIYUAN_CONFIG_TOKEN") // API token, 无需填写
+  let baseUrl = getEnv("VITE_SIYUAN_API_URL") ?? "" // Base Url
+  let token = getEnv("VITE_SIYUAN_CONFIG_TOKEN") ?? "" // API token, 无需填写
   let middlewareUrl = getEnv("VITE_MIDDLEWARE_URL") ?? "/api/middleware" // 请求代理地址
 
   const siyuanCfg = getJSONConf<SiYuanConfig>(SIYUAN_CONSTANTS.SIYUAN_CFG_KEY)
@@ -65,6 +65,11 @@ export const getSiyuanCfg = (): SiYuanConfig => {
   }
   if (!isEmptyString(siyuanCfg.middlewareUrl)) {
     middlewareUrl = siyuanCfg.middlewareUrl
+  }
+
+  // 如果环境变量没有，获取当前host
+  if (isEmptyString(baseUrl) || baseUrl.indexOf("127.0.0.1") > -1) {
+    baseUrl = window.location.protocol + "//" + window.location.host
   }
 
   return new SiYuanConfig(baseUrl, token, middlewareUrl)

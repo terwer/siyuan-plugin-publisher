@@ -25,7 +25,6 @@
 
 import { isElectron } from "~/utils/browserUtil"
 import { isInSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
-import { version } from "../../package.json"
 
 /**
  * Electron环境使用json保存数据
@@ -33,7 +32,7 @@ import { version } from "../../package.json"
  * @author terwer
  * @since 0.6.8
  */
-export const getLocalStorageAdaptor = () => {
+export const getLocalStorageAdaptor = (cfgfile) => {
   let ret = window.localStorage
 
   if (isElectron) {
@@ -42,7 +41,11 @@ export const getLocalStorageAdaptor = () => {
     } else {
       ret = window.JsonLocalStorage
     }
-    ret.switchCfg("sy-p-cfg-v" + version + ".json")
+    let cfg = "sy-p-cfg.json"
+    if (cfgfile) {
+      cfg = cfgfile
+    }
+    ret.switchCfg(cfg)
   } else {
     ret = window.localStorage
   }
