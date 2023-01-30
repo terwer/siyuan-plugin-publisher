@@ -58,22 +58,41 @@ const init = () => {
     return
   }
 
-  if (!isSiyuanNewWin()) {
-    // 初始化插槽
-    if (isSiyuanWidget()) {
-      const slotLibPath = `${parent.window.siyuan.config.system.dataDir}/widgets/sy-post-publisher/lib/siyuan/silot.js`
-      console.log("iframe挂件将要从以下位置引入插槽", slotLibPath)
-      const initSlot = parent.window.require(slotLibPath)
-      initSlot()
+  // 初始化插槽
+  if (isSiyuanWidget()) {
+    const slotLibPath = `${parent.window.siyuan.config.system.dataDir}/widgets/sy-post-publisher/lib/siyuan/silot.js`
+    console.log("iframe挂件将要从以下位置引入插槽", slotLibPath)
+    const initSlot = parent.window.require(slotLibPath)
+    initSlot()
 
-      // 初始化发布辅助功能
-      const publishHelperLibPath = `${parent.window.siyuan.config.system.dataDir}/widgets/sy-post-publisher/lib/siyuan/publish-helper.js`
+    // 初始化发布辅助功能
+    const publishHelperLibPath = `${parent.window.siyuan.config.system.dataDir}/widgets/sy-post-publisher/lib/siyuan/publish-helper.js`
+    console.log(
+      "iframe挂件将要从以下位置引入发布辅助功能",
+      publishHelperLibPath
+    )
+    const initPublishHelper = parent.window.require(publishHelperLibPath)
+    initPublishHelper()
+
+    // 挂载JsonLocalStorage到window
+    const jsonLocalstorageLibPath = `${parent.window.siyuan.config.system.dataDir}/widgets/sy-post-publisher/lib/json-localstorage/json-localstorage.js`
+    console.log(
+      "iframe挂件将要从以下位置引入json-localstorage",
+      jsonLocalstorageLibPath
+    )
+    const LocalStorage = parent.window.require(jsonLocalstorageLibPath)
+    LocalStorage.init("../../../../storage/syp/")
+  } else {
+    if (isSiyuanNewWin()) {
+      // 挂载JsonLocalStorage到window
+      const jsonLocalstorageLibPath = `${window.terwer.dataDir}/widgets/sy-post-publisher/lib/json-localstorage/json-localstorage.js`
       console.log(
-        "iframe挂件将要从以下位置引入发布辅助功能",
-        publishHelperLibPath
+        "自定义js片段将要从以下位置引入json-localstorage",
+        jsonLocalstorageLibPath
       )
-      const initPublishHelper = parent.window.require(publishHelperLibPath)
-      initPublishHelper()
+      const LocalStorage = window.require(jsonLocalstorageLibPath)
+      // 设置json配置目录
+      LocalStorage.init("../../../../storage/syp/")
     } else {
       const slotLibPath = `${window.siyuan.config.system.dataDir}/widgets/sy-post-publisher/lib/siyuan/silot.js`
       console.log("自定义js片段将要从以下位置引入插槽", slotLibPath)
@@ -88,12 +107,18 @@ const init = () => {
       )
       const initPublishHelper = window.require(publishHelperLibPath)
       initPublishHelper()
+
+      // 挂载JsonLocalStorage到window
+      const jsonLocalstorageLibPath = `${parent.window.siyuan.config.system.dataDir}/widgets/sy-post-publisher/lib/json-localstorage/json-localstorage.js`
+      console.log(
+        "自定义js片段将要从以下位置引入json-localstorage",
+        jsonLocalstorageLibPath
+      )
+      const LocalStorage = window.require(jsonLocalstorageLibPath)
+      // 设置json配置目录
+      LocalStorage.init("../../../../storage/syp/")
     }
   }
-
-  // 挂载JsonLocalStorage到window
-  // const jsonLocalstorageLibPath = `${parent.window.siyuan.config.system.dataDir}/widgets/sy-hello/lib/json-localstorage/json-localstorage.js`
-  // console.log("将要从以下位置引入json-localstorage", jsonLocalstorageLibPath)
 }
 
 // 统一的初始化入口
