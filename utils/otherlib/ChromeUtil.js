@@ -33,6 +33,7 @@ import { LogFactory } from "~/utils/logUtil"
 import { isEmptyString, pathJoin } from "~/utils/util"
 import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
 import { DeviceType, DeviceUtil } from "~/utils/deviceUtil"
+import { getLocalStorageAdaptor } from "~/utils/otherlib/confUtil"
 
 const logger = LogFactory.getLogger()
 
@@ -179,6 +180,8 @@ export async function sendChromeMessage(message) {
  * 导入JSON配置
  */
 export const importJSONToLocalStorage = async () => {
+  const store = getLocalStorageAdaptor()
+
   // Open a file dialog and select a file
   const files = await readJSONFileFormDialog()
 
@@ -194,7 +197,7 @@ export const importJSONToLocalStorage = async () => {
     // Iterate over the key/value pairs in the object
     for (const [key, value] of Object.entries(data)) {
       // Add each pair to LocalStorage
-      localStorage.setItem(key, value)
+      store.setItem(key, value)
     }
   })
 

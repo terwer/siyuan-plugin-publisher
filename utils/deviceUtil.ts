@@ -29,15 +29,21 @@ import { isInChromeExtension } from "~/utils/browserUtil"
 
 export enum DeviceType {
   /**
-   * 思源笔记新窗口
+   * 思源笔记新窗口（Sofill主题新窗口共用）
    */
-  DeviceType_Siyuan_NewWin,
+  DeviceType_Siyuan_NewWin = "Siyuan_NewWin",
   /**
    * 思源笔记挂件
    */
-  DeviceType_Siyuan_Widget,
-  DeviceType_Chrome_Extension,
-  DeviceType_Chrome_Browser,
+  DeviceType_Siyuan_Widget = "Siyuan_Widget",
+  /**
+   * Google Chrome浏览器插件
+   */
+  DeviceType_Chrome_Extension = "Chrome_Extension",
+  /**
+   * Google Chrome浏览器（Docker浏览器共用）
+   */
+  DeviceType_Chrome_Browser = "Chrome_Browser",
 }
 
 /**

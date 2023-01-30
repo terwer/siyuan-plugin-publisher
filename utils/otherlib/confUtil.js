@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2023, Terwer . All rights reserved.
+ * Copyright (c) 2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -23,12 +23,34 @@
  * questions.
  */
 
-import pageUtil from "~/utils/pageUtil"
-import detail from "./App.vue"
+import { isElectron } from "~/utils/browserUtil"
+import { isInSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
 
-;(async () => {
-  // 创建统一的Vue实例
-  const app = await pageUtil.createPage(detail)
-  // 挂载Vue
-  app.mount("#app")
-})()
+/**
+ * Electron环境使用json保存数据
+ *
+ * @author terwer
+ * @since 0.6.8
+ */
+export const getLocalStorageAdaptor = (cfgfile) => {
+  let ret = window.localStorage
+
+  if (isElectron) {
+    if (isInSiyuan()) {
+      ret = parent.window.JsonLocalStorage
+    } else {
+      ret = window.JsonLocalStorage
+    }
+    let cfg = "sy-p-cfg.json"
+    if (cfgfile) {
+      cfg = cfgfile
+    }
+    ret.switchCfg(cfg)
+  } else {
+    ret = window.localStorage
+  }
+
+  return ret
+}
+
+export default {}

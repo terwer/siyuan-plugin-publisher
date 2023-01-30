@@ -26,5 +26,5 @@
 # 一些开发环境的额外配置
 
 # 拷贝可用的PicGO配置
-cp -r ./public/lib/picgo/picgo.cfg.dev.json ../my-note-docker/workspace/SiYuan/data/widgets/sy-post-publisher/lib/picgo/picgo.cfg.json
+cp -r ./public/lib/picgo/picgo.cfg.dev.json ../SiYuanWorkspace/public/data/widgets/sy-post-publisher/lib/picgo/picgo.cfg.json
 echo "dev config copy finished."

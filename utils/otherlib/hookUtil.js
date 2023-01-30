@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2023, Terwer . All rights reserved.
+ * Copyright (c) 2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -23,12 +23,11 @@
  * questions.
  */
 
-import pageUtil from "~/utils/pageUtil"
-import detail from "./App.vue"
+// 警告⚠️：请勿在非思源笔记浏览器环境调用此文件中的任何方法
 
-;(async () => {
-  // 创建统一的Vue实例
-  const app = await pageUtil.createPage(detail)
-  // 挂载Vue
-  app.mount("#app")
-})()
+/**
+ * 设置思源笔记的hook
+ */
+export const initHook = async () => {
+  await import("../../public/lib/siyuanhook.js")
+}

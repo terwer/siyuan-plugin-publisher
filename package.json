@@ -20,7 +20,7 @@
     "extChromeWin": "pwsh scripts/ext.ps1",
     "extChromeDev": "bash scripts/extDev.sh",
     "extFirefox": "bash scripts/extFV2.sh",
-    "newVersion": "cd scripts && python3 version.py 0.6.7 && cd ../",
+    "newVersion": "cd scripts && python3 version.py 0.6.8 && cd ../",
     "dcfg": "bash scripts/devWidgetConfig.sh"
   },
   "dependencies": {
@@ -55,8 +55,8 @@
     "vue-i18n": "^9.2.2"
   },
   "devDependencies": {
-    "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
-    "@esbuild-plugins/node-modules-polyfill": "^0.2.0",
+    "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
+    "@esbuild-plugins/node-modules-polyfill": "^0.1.4",
     "@types/express": "^4.17.13",
     "@types/node": "^16.18.11",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
