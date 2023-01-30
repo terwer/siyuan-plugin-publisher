@@ -27,6 +27,7 @@ pwd
 rm -rf ./dist
 pnpm run build
 cp ./LICENSE ./dist/
+cp ../backup/key.pem ./dist/
 
 # 删除siyuan挂件专属文件
 rm ./dist/widget.json
