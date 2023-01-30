@@ -27,10 +27,6 @@
 
 console.warn("从0.6.8+开始，siyuanhook.js将作为统一的hook入口。")
 
-parent.window.syp = {
-  JsonLocalStorage: null,
-}
-
 const isSiyuanWidget = () => {
   return (
     window.frameElement != null &&
