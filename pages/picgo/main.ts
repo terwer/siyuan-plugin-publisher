@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -26,7 +26,9 @@
 import pageUtil from "~/utils/pageUtil"
 import picgo from "./App.vue"
 
-// 创建统一的Vue实例
-const app = pageUtil.createPage(picgo)
-// 挂载Vue
-app.mount("#app")
+;(async () => {
+  // 创建统一的Vue实例
+  const app = await pageUtil.createPage(picgo)
+  // 挂载Vue
+  app.mount("#app")
+})()

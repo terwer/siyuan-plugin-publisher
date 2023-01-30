@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -34,7 +34,7 @@ const logger = LogFactory.getLogger()
 describe("pageUtil test", () => {
   it("createPage test", async () => {
     // 创建统一的Vue实例
-    const app = pageUtil.createPage(index)
+    const app = await pageUtil.createPage(index)
     expect(app).toBeTruthy()
 
     // 挂载Vue

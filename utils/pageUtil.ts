@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -49,11 +49,17 @@ import PageBeauty from "~/plugins/page-beauty/page-beauty"
 // font-awesome
 import FontAwesome from "~/plugins/font-awesome/font-awesome"
 
+// hook
+import { initHook } from "~/utils/otherlib/hookUtil"
+
 /**
  * 统一的Vue实例创建入口
  * @param rootComponent
  */
-const createPage = (rootComponent: Component): App => {
+const createPage = async (rootComponent: Component): Promise<App> => {
+  // 嵌入hook
+  await initHook()
+
   // Vue初始化
   // const app = createApp(rootComponent)
   const app = createApp({
