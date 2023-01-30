@@ -16,9 +16,9 @@
     "prepare": "husky install",
     "widget": "bash scripts/widget.sh",
     "widgetWin": "pwsh scripts/widget.ps1",
-    "extChrome": "bash scripts/ext.sh",
-    "extChromeWin": "pwsh scripts/ext.ps1",
-    "extChromeDev": "bash scripts/extDev.sh",
+    "ext": "bash scripts/ext.sh",
+    "extWin": "pwsh scripts/ext.ps1",
+    "extDev": "bash scripts/extDev.sh",
     "extFirefox": "bash scripts/extFV2.sh",
     "newVersion": "cd scripts && python3 version.py 0.6.8 && cd ../",
     "dcfg": "bash scripts/devWidgetConfig.sh"

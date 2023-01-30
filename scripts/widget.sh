@@ -43,4 +43,32 @@ rm ./dist/lib/picgo/picgo.cfg.dev.json
 rm -rf ../SiYuanWorkspace/public/data/widgets/sy-post-publisher/
 mkdir ../SiYuanWorkspace/public/data/widgets/sy-post-publisher
 cp -r ./dist/* ../SiYuanWorkspace/public/data/widgets/sy-post-publisher/
+
+cd ../sy-post-publisher
+pwd
+git rm -rf .
+cp -r ../src-sy-post-publisher/dist/.gitignore .
+cp -r ../src-sy-post-publisher/dist/* .
+git add -A
+
+cd ../src-sy-post-publisher
+pwd
+
+PACKAGE_VERSION=$(cat ./package.json \
+  | grep version \
+  | head -1 \
+  | awk -F: '{ print $2 }' \
+  | sed 's/[",]//g')
+PACKAGE_VERSION=`echo $PACKAGE_VERSION | sed s/\ //g`
+echo $PACKAGE_VERSION
+
+TMP_FORDER=./sy-post-publisher-widget-$PACKAGE_VERSION/
+mkdir -p $TMP_FORDER
+cp -r ./dist/* $TMP_FORDER
+BUILD_ZIP_NAME=./build/sy-post-publisher-widget-$PACKAGE_VERSION.zip
+echo 'BUILD_ZIP_NAME=>'$BUILD_ZIP_NAME
+echo 'TMP_FORDER=>'$TMP_FORDER
+zip -r $BUILD_ZIP_NAME $TMP_FORDER -x "*.DS_Store"
+rm -rf $TMP_FORDER
+
 echo "发布完毕."
