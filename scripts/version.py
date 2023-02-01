@@ -13,7 +13,7 @@ def parse_json(filename, version_field, new_version):
     """
 
     # 读取 JSON 文件
-    print("读取文件:" + filename)
+    print("读取文件:" + os.path.abspath(filename))
     with open(filename, "r", encoding="utf-8") as f:
         data = json.load(f)
     # print(data)
