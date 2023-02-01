@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import json
 import os
 import sys
@@ -15,7 +14,7 @@ def parse_json(filename, version_field, new_version):
 
     # 读取 JSON 文件
     print("读取文件:" + filename)
-    with open(filename, 'r', encoding='UTF-8') as f:
+    with open(filename, "r", encoding="utf-8") as f:
         data = json.load(f)
     # print(data)
 
@@ -23,7 +22,7 @@ def parse_json(filename, version_field, new_version):
     data[version_field] = new_version
 
     # 将修改后的 JSON 写回到文件中
-    with open(filename, 'w') as f:
+    with open(filename, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
 
 
