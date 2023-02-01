@@ -2,10 +2,8 @@
   "name": "sy-post-publisher",
   "private": true,
   "version": "0.6.8",
-  "packageManager": "pnpm@7.18.1",
   "scripts": {
-    "serve": "vercel dev --listen 6006",
-    "serveWin": "pwsh scripts/serve.ps1",
+    "serve": "python scripts/serve.py",
     "dev": "vite --port 6006",
     "devWin": "pwsh scripts/dev.ps1",
     "build": "vue-tsc --noEmit && vite build",
@@ -20,7 +18,7 @@
     "extWin": "pwsh scripts/ext.ps1",
     "extDev": "bash scripts/extDev.sh",
     "extFirefox": "bash scripts/extFV2.sh",
-    "newVersion": "cd scripts && python3 version.py 0.6.8 && cd ../",
+    "newVersion": "python scripts/version.py 0.7.0",
     "dcfg": "bash scripts/devWidgetConfig.sh"
   },
   "dependencies": {

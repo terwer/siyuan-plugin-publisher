@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import json
+import os
 import sys
 import argparse
 
@@ -13,7 +14,8 @@ def parse_json(filename, version_field, new_version):
     """
 
     # 读取 JSON 文件
-    with open(filename, 'r') as f:
+    print("读取文件:" + filename)
+    with open(filename, 'r', encoding='UTF-8') as f:
         data = json.load(f)
     # print(data)
 
@@ -25,25 +27,32 @@ def parse_json(filename, version_field, new_version):
         json.dump(data, f, indent=2, ensure_ascii=False)
 
 
-# 打印当前python版本
-print(sys.version)
+if __name__ == "__main__":
+    CWD = "./"
+    if os.getcwd().endswith("scripts"):
+        CWD = "../"
 
-parser = argparse.ArgumentParser()
-parser.add_argument('version', help='the file to be processed')
-parser.add_argument('-v', '--verbose', action='store_true', help='enable verbose output')
-args = parser.parse_args()
+    # 打印当前python版本
+    print("当前python版本:" + sys.version)
+    # 打印当前路径
+    print("当前路径:" + os.path.abspath(CWD))
 
-if args.verbose:
-    print('Verbose mode enabled')
+    parser = argparse.ArgumentParser()
+    parser.add_argument("version", help="the file to be processed")
+    parser.add_argument("-v", "--verbose", action="store_true", help="enable verbose output")
+    args = parser.parse_args()
 
-# widget.json
-parse_json('../public/widget.json', 'version', args.version)
+    if args.verbose:
+        print("Verbose mode enabled")
 
-# manifest.json
-parse_json('../public/manifest.dev.json', 'version', args.version)
-parse_json('../public/manifest.prod.json', 'version', args.version)
+    # widget.json
+    parse_json(CWD + "public/widget.json", "version", args.version)
 
-# mv2 manifest.json
-parse_json('../public/mv2/manifest-v2-for-firefox.json', 'version', args.version)
+    # manifest.json
+    parse_json(CWD + "public/manifest.dev.json", "version", args.version)
+    parse_json(CWD + "public/manifest.prod.json", "version", args.version)
 
-print("修改完毕，新版本为：" + args.version)
+    # mv2 manifest.json
+    parse_json(CWD + "public/mv2/manifest-v2-for-firefox.json", "version", args.version)
+
+    print("修改完毕，新版本为：" + args.version)
