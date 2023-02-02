@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.6.9](https://github.com/terwer/src-sy-post-publisher/compare/v0.6.8...v0.6.9) (2023-02-02)
+
+
+### Bug Fixes
+
+* CI complains of outdated lockfile but says the lockfile is up to date, see https://github.com/pnpm/pnpm/issues/5144 ([ae25cf6](https://github.com/terwer/src-sy-post-publisher/commit/ae25cf635fac937c88fc43106a45431da4f5cd8c))
+* CI complains of outdated lockfile but says the lockfile is up to date, see https://github.com/pnpm/pnpm/issues/5144 ([0b92761](https://github.com/terwer/src-sy-post-publisher/commit/0b92761afc64236e842969e4522ac79e6423ee7f))
+
+
+### Miscellaneous
+
+* **deps-dev:** bump eslint-config-standard-with-typescript ([2a007ec](https://github.com/terwer/src-sy-post-publisher/commit/2a007ecf5c708f0e7ae6f685a0ff148ff541b165))
+* 更新eslint-config-standard-with-typescript ([8f08863](https://github.com/terwer/src-sy-post-publisher/commit/8f08863dfb33c6481aca89b32ea53df452c2eaa0))
+
 ## [0.6.8](https://github.com/terwer/src-sy-post-publisher/compare/v0.6.7...v0.6.8) (2023-01-30)
 
 
