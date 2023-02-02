@@ -63,15 +63,16 @@
 
 import argparse
 import os
+import subprocess
 
 import scriptutils
 
 if __name__ == "__main__":
-    # 获取当前工作空间
-    cwd = scriptutils.get_workdir()
-
     # 切换工作空间
     scriptutils.switch_workdir()
+
+    # 获取当前工作空间
+    cwd = scriptutils.get_workdir()
 
     # 参数解析
     parser = argparse.ArgumentParser()
@@ -129,20 +130,38 @@ if __name__ == "__main__":
         # 读取 JSON 文件
         data = scriptutils.read_json_file(cwd + "package.json")
         v = data["version"]
-        build_folder_name = "./dist/"
-        build_zip_name = "build/sy-post-publisher-widget-" + v + ".zip"
-        scriptutils.mkdir("./build")
-        print("build_folder_name:" + build_folder_name)
-        print("build_zip_name:" + build_zip_name)
 
-        scriptutils.rm_file(build_zip_name)
-        scriptutils.zip_folder(build_folder_name, build_zip_name)
+        src_folder = dist_folder
+        tmp_folder_name = "./sy-post-publisher"
+        build_zip_path = "./build"
+        build_zip_name = "sy-post-publisher-widget-" + v + ".zip"
+
+        # 压缩dist为zip
+        scriptutils.zip_folder(src_folder, tmp_folder_name, build_zip_path, build_zip_name)
         print("将dist文件打包成zip，用于挂件版本发布.")
 
     if args.test:
+        scriptutils.cp_folder(dist_folder, "../SiYuanWorkspace/public/data/widgets/sy-post-publisher/", True)
         print("拷贝文件到本地 public 工作空间测试.")
 
     if args.publish:
+        os.chdir("../sy-post-publisher")
+        print("挂件发布切换路径，当前路径:" + os.getcwd())
+
+        # 删除所有文件
+        os.system("git rm -rf .")
+
+        # 拷贝文件
+        os.chdir("../src-sy-post-publisher")
+        scriptutils.cp_folder("./dist", "../sy-post-publisher")
+        scriptutils.cp_file("./.gitignore", "../sy-post-publisher")
+
+        # 添加新文件到仓库
+        os.chdir("../sy-post-publisher")
+        os.system("git add -A")
+
+        os.chdir("../src-sy-post-publisher")
+        print("路径还原，当前路径:" + os.getcwd())
         print("拷贝文件到 sy-post-publisher 用于挂件版本发布.")
 
     print("发布完毕.")

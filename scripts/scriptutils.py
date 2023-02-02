@@ -65,6 +65,7 @@ import distutils
 import glob
 import json
 import os
+import pathlib
 import shutil
 import sys
 import zipfile
@@ -128,6 +129,21 @@ def rm_files(regex):
         rm_file(file)
 
 
+def cp_folder(src, dst, remove_folder=False):
+    """
+    拷贝文件夹
+    :param src: 源文件夹，例如："/path/to/source/folder"
+    :param dst: 目的地，例如："/path/to/destination/folder"
+    :param remove_folder: 是否删除文件夹
+    """
+    if os.path.exists(dst) and remove_folder:
+        rm_folder(dst)
+
+    if not os.path.exists(dst):
+        mkdir(dst)
+    shutil.copytree(src, dst, ignore_dangling_symlinks=True, dirs_exist_ok=True)
+
+
 def mkdir(dirname):
     """
     创建目录
@@ -169,19 +185,25 @@ def write_json_file(filename, data):
         json.dump(data, f, indent=2, ensure_ascii=False)
 
 
-def zip_folder(folder, filename):
+def zip_folder(src_folder, tmp_folder_name, build_zip_path, build_zip_name):
     """
     压缩文件夹为zip
-    :param folder: 文件夹
-    :param filename: 文件名
-    :return:
+    :param src_folder: 需要压缩的文件所在的目录
+    :param tmp_folder_name: 临时目录，也是解压后的默认目录
+    :param build_zip_path: zip保存目录
+    :param build_zip_name: zip文件名称
     """
-    with zipfile.ZipFile(filename, 'w') as zf:
-        for root, dirs, files in os.walk(folder):
-            for file in files:
-                # 第一行写法包括目录本身，第二行不包括目录
-                # zf.write(os.path.join(root, file))
-                zf.write(os.path.join(root, file), compress_type=zipfile.ZIP_DEFLATED)
+    mkdir(tmp_folder_name)
+    cp_folder(src_folder, tmp_folder_name)
+
+    mkdir(build_zip_path)
+    print("tmp_folder_name:" + tmp_folder_name)
+    print("build_zip_path:" + build_zip_path)
+    print("build_zip_name:" + build_zip_name)
+
+    rm_file(build_zip_name)
+    create_zip(tmp_folder_name, build_zip_name, [], build_zip_path)
+    rm_folder(tmp_folder_name)
 
 
 def create_zip(root_path, file_name, ignored=[], storage_path=None):
@@ -202,11 +224,11 @@ def create_zip(root_path, file_name, ignored=[], storage_path=None):
     else:
         zip_root = os.path.join(root_path, file_name)
 
-    zipf = zipfile.ZipFile(zip_root, 'w', zipfile.ZIP_DEFLATED)
+    zipf = zipfile.ZipFile(zip_root, 'w', zipfile.ZIP_STORED)
 
     def iter_subtree(path, layer=0):
         # iter the directory
-        path = zipfile.Path(path)
+        path = pathlib.Path(path)
         for p in path.iterdir():
             if layer == 0 and p.name in ignored:
                 continue

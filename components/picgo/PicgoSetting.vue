@@ -43,4 +43,6 @@
 </template>
 <script setup lang="ts">
 import { isElectron } from "~/utils/browserUtil"
+
+console.log("pico test")
 </script>
