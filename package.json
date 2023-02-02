@@ -4,8 +4,7 @@
   "version": "0.6.8",
   "scripts": {
     "serve": "python scripts/serve.py",
-    "dev": "vite --port 6006",
-    "devWin": "pwsh scripts/dev.ps1",
+    "dev": "python scripts/dev.py",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
     "test": "vitest --watch",
