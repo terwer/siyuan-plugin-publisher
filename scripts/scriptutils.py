@@ -176,7 +176,12 @@ def zip_folder(folder, filename):
     :param filename: 文件名
     :return:
     """
-    print("aaa")
+    with zipfile.ZipFile(filename, 'w') as zf:
+        for root, dirs, files in os.walk(folder):
+            for file in files:
+                # 第一行写法包括目录本身，第二行不包括目录
+                # zf.write(os.path.join(root, file))
+                zf.write(os.path.join(root, file), compress_type=zipfile.ZIP_DEFLATED)
 
 
 def create_zip(root_path, file_name, ignored=[], storage_path=None):

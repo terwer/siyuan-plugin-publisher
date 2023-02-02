@@ -136,7 +136,7 @@ if __name__ == "__main__":
         print("build_zip_name:" + build_zip_name)
 
         scriptutils.rm_file(build_zip_name)
-        scriptutils.create_zip(build_folder_name, build_zip_name)
+        scriptutils.zip_folder(build_folder_name, build_zip_name)
         print("将dist文件打包成zip，用于挂件版本发布.")
 
     if args.test:
