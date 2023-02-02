@@ -40,11 +40,30 @@
 #  Please contact Terwer, Shenzhen, Guangdong, China, youweics@163.com
 #  or visit www.terwer.space if you need additional information or have any
 #  questions.
+#
+#  This code is free software; you can redistribute it and/or modify it
+#  under the terms of the GNU General Public License version 2 only, as
+#  published by the Free Software Foundation.  Terwer designates this
+#  particular file as subject to the "Classpath" exception as provided
+#  by Terwer in the LICENSE file that accompanied this code.
+#
+#  This code is distributed in the hope that it will be useful, but WITHOUT
+#  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+#  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+#  version 2 for more details (a copy is included in the LICENSE file that
+#  accompanied this code).
+#
+#  You should have received a copy of the GNU General Public License version
+#  2 along with this work; if not, write to the Free Software Foundation,
+#  Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+#  Please contact Terwer, Shenzhen, Guangdong, China, youweics@163.com
+#  or visit www.terwer.space if you need additional information or have any
+#  questions.
 
 import argparse
-import json
-import os
-import sys
+
+import scriptutils
 
 
 def parse_json(filename, version_field, new_version):
@@ -56,29 +75,20 @@ def parse_json(filename, version_field, new_version):
     """
 
     # 读取 JSON 文件
-    print("读取文件:" + os.path.abspath(filename))
-    with open(filename, "r", encoding="utf-8") as f:
-        data = json.load(f)
-    # print(data)
+    data = scriptutils.read_json_file(filename)
 
     # 修改 JSON 文件中的属性
     data[version_field] = new_version
 
     # 将修改后的 JSON 写回到文件中
-    with open(filename, "w", encoding="utf-8") as f:
-        json.dump(data, f, indent=2, ensure_ascii=False)
+    scriptutils.write_json_file(filename, data)
 
 
 if __name__ == "__main__":
-    CWD = "./"
-    if os.getcwd().endswith("scripts"):
-        CWD = "../"
+    # 获取当前工作空间
+    cwd = scriptutils.get_workdir()
 
-    # 打印当前python版本
-    print("当前python版本:" + sys.version)
-    # 打印当前路径
-    print("当前路径:" + os.path.abspath(CWD))
-
+    # 参数解析
     parser = argparse.ArgumentParser()
     parser.add_argument("version", help="the file to be processed")
     parser.add_argument("-v", "--verbose", action="store_true", help="enable verbose output")
@@ -88,13 +98,13 @@ if __name__ == "__main__":
         print("Verbose mode enabled")
 
     # widget.json
-    parse_json(CWD + "public/widget.json", "version", args.version)
+    parse_json(cwd + "public/widget.json", "version", args.version)
 
     # manifest.json
-    parse_json(CWD + "public/manifest.dev.json", "version", args.version)
-    parse_json(CWD + "public/manifest.prod.json", "version", args.version)
+    parse_json(cwd + "public/manifest.dev.json", "version", args.version)
+    parse_json(cwd + "public/manifest.prod.json", "version", args.version)
 
     # mv2 manifest.json
-    parse_json(CWD + "public/mv2/manifest-v2-for-firefox.json", "version", args.version)
+    parse_json(cwd + "public/mv2/manifest-v2-for-firefox.json", "version", args.version)
 
     print("修改完毕，新版本为：" + args.version)

@@ -1,5 +1,6 @@
+
 #
-# Copyright (c) 2022-2023, Terwer . All rights reserved.
+# Copyright (c) 2023, Terwer . All rights reserved.
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
 # This code is free software; you can redistribute it and/or modify it
@@ -23,16 +24,6 @@
 # questions.
 #
 
-# 删除Chrome插件专属文件
-rm ./dist/background.js
-rm ./dist/manifest*.json
-# 删除Firefox的专属文件
-rm -rf ./dist/mv2
-
-# Picgo配置文件
-rm ./dist/lib/picgo/picgo.cfg.dev.json
-# cp ./dist/lib/picgo/picgo.cfg.json.example ./dist/lib/picgo/picgo.cfg.json
-
 rm -rf ../SiYuanWorkspace/public/data/widgets/sy-post-publisher/
 mkdir ../SiYuanWorkspace/public/data/widgets/sy-post-publisher
 cp -r ./dist/* ../SiYuanWorkspace/public/data/widgets/sy-post-publisher/
@@ -46,22 +37,5 @@ git add -A
 
 cd ../src-sy-post-publisher
 pwd
-
-PACKAGE_VERSION=$(cat ./package.json \
-  | grep version \
-  | head -1 \
-  | awk -F: '{ print $2 }' \
-  | sed 's/[",]//g')
-PACKAGE_VERSION=`echo $PACKAGE_VERSION | sed s/\ //g`
-echo $PACKAGE_VERSION
-
-TMP_FORDER=./sy-post-publisher-widget-$PACKAGE_VERSION/
-mkdir -p $TMP_FORDER
-cp -r ./dist/* $TMP_FORDER
-BUILD_ZIP_NAME=./build/sy-post-publisher-widget-$PACKAGE_VERSION.zip
-echo 'BUILD_ZIP_NAME=>'$BUILD_ZIP_NAME
-echo 'TMP_FORDER=>'$TMP_FORDER
-zip -r $BUILD_ZIP_NAME $TMP_FORDER -x "*.DS_Store"
-rm -rf $TMP_FORDER
 
 echo "发布完毕."
