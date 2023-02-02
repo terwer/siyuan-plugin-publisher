@@ -200,6 +200,12 @@ pnpm dev
 
 http://localhost:3000/blog/index.html
 
+## 一键打包
+
+```bash
+pnpm package
+```
+
 ## 部署
 
 从 0.0.3+ 版本开始，思源笔记发布辅助工具提供 3 种部署方式。

@@ -13,7 +13,8 @@
     "prepare": "husky install",
     "new": "python scripts/version.py 0.7.0",
     "widget": "python scripts/widget.py",
-    "ext": "python scripts/ext.py"
+    "ext": "python scripts/ext.py",
+    "package": "pnpm widget && pnpm ext"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.0.9",
