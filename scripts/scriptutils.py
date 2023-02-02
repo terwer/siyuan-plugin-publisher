@@ -119,6 +119,18 @@ def rm_file(filename):
         os.remove(filename)
 
 
+def mv_file(src, dst):
+    """
+    移动文件
+    :param src: 源文件
+    :param dst: 目标文件
+    """
+    if os.path.exists(dst):
+        rm_file(dst)
+    if os.path.exists(src):
+        file_util.move_file(src, dst)
+
+
 def rm_files(regex):
     """
     正则删除文件

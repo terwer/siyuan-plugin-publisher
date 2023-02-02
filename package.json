@@ -11,13 +11,9 @@
     "docs": "jsdoc -c jsdoc.json utils/api.ts",
     "prettier": "prettier --write .",
     "prepare": "husky install",
+    "new": "python scripts/version.py 0.7.0",
     "widget": "python scripts/widget.py",
-    "ext": "bash scripts/ext.sh",
-    "extWin": "pwsh scripts/ext.ps1",
-    "extDev": "bash scripts/extDev.sh",
-    "extFirefox": "bash scripts/extFV2.sh",
-    "newVersion": "python scripts/version.py 0.7.0",
-    "dcfg": "bash scripts/devWidgetConfig.sh"
+    "ext": "python scripts/ext.py"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.0.9",
