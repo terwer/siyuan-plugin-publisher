@@ -78,6 +78,15 @@ const init = () => {
     )
     const LocalStorage = parent.window.require(jsonLocalstorageLibPath)
     LocalStorage.init("../../../../storage/syp/")
+
+    // 初始化主题适配
+    const themeAdaptorLibPath = `${parent.window.siyuan.config.system.dataDir}/widgets/sy-post-publisher/lib/siyuan/theme.js`
+    console.log(
+      "iframe挂件将要从以下位置引入主题适配脚本theme.js",
+      themeAdaptorLibPath
+    )
+    const initTheme = parent.window.require(themeAdaptorLibPath)
+    setTimeout(initTheme, 1000)
   } else {
     if (isSiyuanNewWin()) {
       // 挂载JsonLocalStorage到window

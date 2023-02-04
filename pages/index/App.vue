@@ -42,10 +42,14 @@ import BlogIndex from "~/components/blog/BlogIndex.vue"
 import PublishIndex from "~/components/publish/PublishIndex.vue"
 import { onMounted, ref } from "vue"
 import { LogFactory } from "~/utils/logUtil"
-import { getPageId, getWidgetId } from "~/utils/platform/siyuan/siyuanUtil"
+import {
+  getPageId,
+  isInSiyuan,
+  isInSiyuanOrSiyuanNewWin,
+} from "~/utils/platform/siyuan/siyuanUtil"
 import { SiYuanApiAdaptor } from "~/utils/platform/siyuan/siYuanApiAdaptor"
 import { isInChromeExtension } from "~/utils/browserUtil"
-import {
+import siyuanBrowserUtil, {
   getSiyuanNewWinPageId,
   isInSiyuanNewWinBrowser,
 } from "~/utils/otherlib/siyuanBrowserUtil"
@@ -57,8 +61,11 @@ const isPublish = ref(false)
 const init = async () => {
   logger.warn("MODE=>", import.meta.env.MODE)
 
-  const widgetResult = getWidgetId()
-  if (widgetResult.isInSiyuan || isInSiyuanNewWinBrowser()) {
+  if (isInSiyuanOrSiyuanNewWin()) {
+    if (isInSiyuan()) {
+      setTimeout(siyuanBrowserUtil.fitTheme, 1200)
+    }
+
     let postid
     if (isInSiyuanNewWinBrowser()) {
       const newWinPageId = getSiyuanNewWinPageId()

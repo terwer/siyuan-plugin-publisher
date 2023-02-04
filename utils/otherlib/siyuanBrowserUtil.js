@@ -90,3 +90,23 @@ export const getSiyuanNewWinPageId = () => {
   }
   return pageId
 }
+
+/**
+ * 适配主题外观
+ */
+const fitTheme = () => {
+  const syWin = parent.window
+  const customstyle = syWin.customstyle
+  document.documentElement.style.setProperty(
+    "--custom-app-bg-color",
+    customstyle.backgroundColor
+  )
+  console.log("适配--custom-app-bg-color完成=>", customstyle.backgroundColor)
+}
+
+// 统一访问入口
+const siyuanBrowserUtil = {
+  fitTheme,
+}
+
+export default siyuanBrowserUtil
