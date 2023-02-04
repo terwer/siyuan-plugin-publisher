@@ -50,7 +50,7 @@ specifiers:
   prettier: 2.8.3
   sass: ^1.56.1
   shorthash2: ^1.0.3
-  simple-xmlrpc: ^1.1.0
+  simple-xmlrpc: ^1.1.1
   transliteration: ^2.3.5
   typescript: ^4.9.3
   unplugin-vue-components: ^0.22.11
@@ -89,7 +89,7 @@ dependencies:
   pinia: 2.0.28_prq2uz4lho2pwp6irk4cfkrxwu
   plantuml-encoder: 1.4.0
   shorthash2: 1.0.3
-  simple-xmlrpc: 1.1.0
+  simple-xmlrpc: 1.1.1
   transliteration: 2.3.5
   vue: 3.2.45
   vue-i18n: 9.2.2_vue@3.2.45
@@ -5424,8 +5424,8 @@ packages:
     resolution: { integrity: sha512-wnD2ZE+l+SPC/uoS0vXeE9L1+0wuaMqKlfz9AMUo38JsyLSBWSFcHR1Rri62LZc12vLr1gb3jl7iwQhgwpAbGQ== }
     dev: true
 
-  /simple-xmlrpc/1.1.0:
-    resolution: { integrity: sha512-YAm/3y3SZDPobBAfGLyAl4W1sErdp4tKhixhrU6So64Y3iMM54LZ9Q+8TyUT+e8N20EsPbqbIL4XLKMiEyXdgw== }
+  /simple-xmlrpc/1.1.1:
+    resolution: { integrity: sha512-EgkggUQicoTUY3aY9NZdGQgBMQFRlz4jKEUiZAgfPdLomA+lV4sPOg14Pd/WiRYgSuFH65rvOjKuvVA2Z2Er8g== }
     dependencies:
       byte-base64: 1.1.0
       cross-fetch: 3.1.5
