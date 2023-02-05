@@ -146,6 +146,7 @@ export class MetaWeblogApi {
       METAWEBLOG_METHOD_CONSTANTS.NEW_POST,
       [this.apiType, username, password, postStruct, publish]
     )
+    ret = ret + ""
     ret = ret.replace(/"/g, "")
     this.logger.debug("ret=>", ret)
 
