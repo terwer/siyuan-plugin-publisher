@@ -55,7 +55,7 @@
       <dynamic-platform />
     </el-tab-pane>
     <el-tab-pane name="picgo-setting" :label="$t('picgo.pic.setting')">
-      <div style="padding: 16px 20px">
+      <div style="padding-right: 20px">
         <picgo-setting />
       </div>
     </el-tab-pane>

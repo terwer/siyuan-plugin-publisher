@@ -427,4 +427,14 @@ export default {
     "You can go to https://developper.atlassian.com/Cloud/confluence/rest/v1/1/1/",
   "setting.conf.previewUrl.tip":
     "CONFLUENCE platform articles preview rules, usually:/pages/[postid]",
+  "setting.picgo.refer.to": "For details, please refer to:",
+  "setting.picgo.refer.to.online.doc":
+    "Picgo configuration online documentation",
+  "setting.picgo.picbed": "Picbed setting",
+  "setting.picgo.picgo": "PicGO setting",
+  "setting.picgo.picbed.github": "Github",
+  "setting.picgo.picbed.aliyun.oss": "Aliyun OSS",
+  "setting.picgo.picbed.tencent.cos": "Tencent cos",
+  "setting.picgo.picbed.qiniu": "Qiniu yun",
+  "setting.picgo.picbed.youpai": "Youpai yun",
 }

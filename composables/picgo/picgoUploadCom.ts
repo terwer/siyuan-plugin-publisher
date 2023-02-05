@@ -79,6 +79,11 @@ export const usePicgoUpload = (props, deps, refs) => {
   // public methods
   const picgoUploadMethods = {
     handlePicgoSetting: async () => {
+      if (picgoCommonData.showDebugMsg) {
+        picgoUploadData.dialogPicgoSettingFormVisible = true
+        return
+      }
+
       if (!isElectron) {
         await ElMessageBox.alert(
           t("picgo.pic.setting.no.tip"),

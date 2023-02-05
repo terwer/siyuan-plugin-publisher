@@ -24,17 +24,40 @@
   -->
 
 <template>
-  <div v-if="isElectron">
-    <div>{{ $t("picgo.siyuan.tip") }} 。</div>
-    <p></p>
-    <p>
-      详情请参考：<a
-        target="_blank"
-        href="https://docs.publish.terwer.space/post/picgo-diagram-bed-use-zxqqec.html"
-        >PicoGO配置在线文档</a
-      >
-    </p>
-    <h1>预计0.7.0会新增比较友好的图形化配置页面，敬请期待。</h1>
+  <div v-if="isElectron || picgoCommonData.showDebugMsg">
+    <blockquote class="picgo-setting-tip">
+      <div>
+        {{ $t("picgo.siyuan.tip") }} 。 从 0.7.0+
+        开始，支持多个配置文件切换，默认的 PicGO 配置文件为：
+        <pre
+          style="display: inline-block"
+        ><code>[思源工作空间]/data/storage/syp/picgo.cfg.json</code></pre>
+        。
+        {{ $t("setting.picgo.refer.to") }}
+        <a
+          target="_blank"
+          href="https://docs.publish.terwer.space/post/picgo-diagram-bed-use-zxqqec.html"
+          >{{ $t("setting.picgo.refer.to.online.doc") }}</a
+        >
+        或者
+        <a
+          href="https://picgo.github.io/PicGo-Core-Doc/zh/guide/config.html#%E6%89%8B%E5%8A%A8%E7%94%9F%E6%88%90"
+          >PicGO 官方文档</a
+        >
+        。
+      </div>
+    </blockquote>
+
+    <!-- PicGO配置 -->
+    <el-tabs type="border-card">
+      <el-tab-pane :label="$t('setting.picgo.picbed')">
+        <!-- 图床类型 -->
+        <picbed-setting />
+      </el-tab-pane>
+      <el-tab-pane :label="$t('setting.picgo.picgo')">
+        <picgo-config-setting />
+      </el-tab-pane>
+    </el-tabs>
   </div>
   <div v-else>
     <p>{{ $t("picgo.chrome.tip") }} 。</p>
@@ -43,6 +66,32 @@
 </template>
 <script setup lang="ts">
 import { isElectron } from "~/utils/browserUtil"
+import { usePicgoCommon } from "~/composables/picgo/picgoCommonCom"
+import PicbedSetting from "~/components/picgo/setting/PicbedSetting.vue"
+import PicgoConfigSetting from "~/components/picgo/setting/PicgoConfigSetting.vue"
 
-console.log("pico test")
+// uses
+const { picgoCommonData } = usePicgoCommon()
 </script>
+
+<style scoped>
+.picgo-setting-tip {
+  display: block;
+  border: solid 1px green;
+  border-radius: 4px;
+  /* padding-bottom: 10px; */
+  background: var(--custom-app-bg-color);
+  /* margin-bottom: 10px; */
+  margin-inline-start: 0;
+  margin-inline-end: 0;
+  margin: 0 0 10px;
+  padding: 0 16px 12px;
+}
+
+@media all and (orientation: portrait) {
+  .picgo-setting-tip {
+    padding-top: 16px;
+    padding-bottom: 16px;
+  }
+}
+</style>
