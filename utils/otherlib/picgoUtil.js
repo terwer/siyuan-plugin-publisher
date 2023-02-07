@@ -173,25 +173,25 @@ const completeUploaderMetaConfig = (originData) => {
  * @author terwer
  * @since 0.7.0
  */
-// export const getPicBedConfig = (type) => {
-//   const syWin = siyuanBrowserUtil.getSiyuanWindow()
-//   const picgo = syWin.SyPicgo.getPicgoObj()
-//
-//   const name = picgo.helper.uploader.get(type)?.name || type
-//   if (picgo.helper.uploader.get(type)?.config) {
-//     const _config = picgo.helper.uploader.get(type).config(picgo)
-//     const config = handleConfigWithFunction(_config)
-//     return {
-//       config,
-//       name,
-//     }
-//   } else {
-//     return {
-//       config: [],
-//       name,
-//     }
-//   }
-// }
+export const getPicBedConfig = (type) => {
+  const syWin = siyuanBrowserUtil.getSiyuanWindow()
+  const picgo = syWin.SyPicgo.getPicgoObj()
+
+  const name = picgo.helper.uploader.get(type)?.name || type
+  if (picgo.helper.uploader.get(type)?.config) {
+    const _config = picgo.helper.uploader.get(type).config(picgo)
+    const config = handleConfigWithFunction(_config)
+    return {
+      config,
+      name,
+    }
+  } else {
+    return {
+      config: [],
+      name,
+    }
+  }
+}
 
 /**
  * upgrade old uploader config to new format
@@ -368,6 +368,9 @@ const picgoUtil = {
   // config
   getPicgoConfig,
   savePicgoConfig,
+
+  // form
+  getPicBedConfig,
 
   // uploader
   getPicBeds,

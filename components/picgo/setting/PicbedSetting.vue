@@ -114,6 +114,9 @@
       <div class="profile-form" v-else>
         <picbed-config-form
           :config="profileData.curConfig"
+          :config-id="profileData.defaultConfigId"
+          :is-new-form="isNewForm"
+          :type="type"
           @on-change="emitBackFn"
         />
       </div>
@@ -199,16 +202,6 @@ function selectItem(id: string) {
 }
 
 /**
- * 获取当前表单数据
- */
-function getCurConfigFormData(): IStringKeyMap[] {
-  const configId = profileData.defaultConfigId
-  const curTypeConfigList =
-    picgoUtil.getPicgoConfig(`uploader.${type.value}.configList`) || []
-  return curTypeConfigList.find((i) => i._id === configId) || {}
-}
-
-/**
  * 新增配置
  */
 function addNewConfig() {
@@ -223,7 +216,7 @@ function addNewConfig() {
  * @param id 配置ID
  */
 function editConfig(id: string) {
-  const config = getCurConfigFormData()
+  const config = picgoUtil.getPicBedConfig(type.value)
   profileData.curConfig = config
 
   isNewForm.value = false
