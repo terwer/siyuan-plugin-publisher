@@ -24,5 +24,76 @@
   -->
 
 <template>
-  <div>Picgo config setting form</div>
+  <div>
+    <el-form>
+      <el-form-item :label="$t('setting.picgo.picgo.open.config.file')">
+        <el-button>{{ $t("setting.picgo.picgo.click.to.open") }}</el-button>
+      </el-form-item>
+
+      <el-form-item
+        :style="{ marginRight: '-64px' }"
+        :label="$t('setting.picgo.picgo.choose.showed.picbed')"
+      >
+        <el-checkbox-group
+          v-model="form.showPicBedList"
+          @change="handleShowPicBedListChange"
+        >
+          <el-checkbox
+            v-for="item in picBed"
+            :key="item.name"
+            :label="item.name"
+          />
+        </el-checkbox-group>
+      </el-form-item>
+    </el-form>
+  </div>
 </template>
+
+<script lang="ts" setup>
+import { onBeforeMount, reactive, ref } from "vue"
+import picgoUtil from "~/utils/otherlib/picgoUtil"
+import { LogFactory } from "~/utils/logUtil"
+
+const logger = LogFactory.getLogger(
+  "components/picgo/setting/PicgoConfigSetting.vue"
+)
+
+const picBed = ref<IPicBedType[]>([])
+const form = reactive({
+  showPicBedList: [],
+})
+
+function getPicBeds() {
+  const picBeds = picgoUtil.getPicBeds() as IPicBedType[]
+  picBed.value = picBeds
+  logger.warn("获取支持的图床类型：", picBeds)
+
+  form.showPicBedList = picBed.value
+    .map((item: IPicBedType) => {
+      if (item.visible) {
+        return item.name
+      }
+      return null
+    })
+    .filter((item) => item) as string[]
+}
+
+function handleShowPicBedListChange(val: ICheckBoxValueType[]) {
+  const list = picBed.value.map((item) => {
+    if (!val.includes(item.name)) {
+      item.visible = false
+    } else {
+      item.visible = true
+    }
+    return item
+  })
+  picgoUtil.savePicgoConfig({
+    "picBed.list": list,
+  })
+}
+
+onBeforeMount(() => {
+  // 获取图床列表
+  getPicBeds()
+})
+</script>

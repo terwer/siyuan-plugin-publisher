@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2023, Terwer . All rights reserved.
+ * Copyright (c) 2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -23,26 +23,21 @@
  * questions.
  */
 
-import shortHash from "shorthash2"
-import { uuid } from "uuidv4"
-
 /**
- * 唯一ID
+ * 图床类型定义
  */
-export function newID(): string {
-  const newstr = new Date().toISOString()
-  return shortHash(newstr).toLowerCase()
+interface IPicBedType {
+  type: string
+  name: string
+  visible: boolean
 }
 
-/**
- * ID生成统一入口
- */
-const newUuid = () => {
-  return uuid()
+type ICheckBoxValueType = boolean | string | number
+
+interface IObj {
+  [propName: string]: any
 }
 
-const idUtil = {
-  newUuid,
+interface IStringKeyMap {
+  [propName: string]: any
 }
-
-export default idUtil

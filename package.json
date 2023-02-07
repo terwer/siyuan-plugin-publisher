@@ -44,6 +44,7 @@
     "shorthash2": "^1.0.3",
     "simple-xmlrpc": "^1.1.1",
     "transliteration": "^2.3.5",
+    "uuidv4": "^6.2.13",
     "vue": "^3.2.37",
     "vue-i18n": "^9.2.2"
   },

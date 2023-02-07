@@ -149,6 +149,16 @@
           <font-awesome-icon icon="fa-solid fa-image" />
         </el-button>
 
+        <!-- 统一设置 -->
+        <el-button
+          v-if="showOpenBtn"
+          class="b3-button--picture"
+          type="success"
+          @click="handleWinSet"
+        >
+          <font-awesome-icon icon="fa-solid fa-gear" />
+        </el-button>
+
         <!-- 关闭 -->
         <!--
         <el-tooltip
@@ -276,6 +286,18 @@ const handleWinPicture = async () => {
   try {
     const widgetResult = getWidgetId()
     await doOpenExportWin(widgetResult.widgetId, "picgo/index.html")
+
+    // event
+    pageIdChanged()
+  } catch (e) {
+    logger.error(t("main.opt.failure"), "=>", e)
+    ElMessage.error(appendStr(t("main.opt.failure"), "=>", e))
+  }
+}
+
+const handleWinSet = async () => {
+  try {
+    await doOpenExportWin(undefined, "set/index.html")
 
     // event
     pageIdChanged()

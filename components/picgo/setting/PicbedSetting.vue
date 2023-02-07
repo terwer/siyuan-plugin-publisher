@@ -27,13 +27,13 @@
   <div>
     <el-form-item>
       <el-button-group>
-        <el-button type="primary"
-          >{{ $t("setting.picgo.picbed.github") }}
+        <el-button
+          :type="arrayUtil.getRandomItem(btnTypes)"
+          v-for="item in picBedData.showPicBedList"
+          :key="item.name"
+          @click="handlePicBedTypeChange(item)"
+          >{{ item.name }}
         </el-button>
-        <el-button>{{ $t("setting.picgo.picbed.aliyun.oss") }}</el-button>
-        <el-button>{{ $t("setting.picgo.picbed.tencent.cos") }}</el-button>
-        <el-button>{{ $t("setting.picgo.picbed.qiniu") }}</el-button>
-        <el-button>{{ $t("setting.picgo.picbed.youpai") }}</el-button>
       </el-button-group>
     </el-form-item>
 
@@ -112,10 +112,36 @@ import { PicbedType } from "~/utils/common/picbedType"
 import { ElCard } from "element-plus"
 import { formatIsoToZhDate } from "~/utils/dateUtil"
 import { PicbedConfig } from "~/utils/platform/picgo/picbedConfig"
+import picgoUtil from "~/utils/otherlib/picgoUtil"
+import { LogFactory } from "~/utils/logUtil"
+import arrayUtil from "~/utils/arrayUtil"
 
+const logger = LogFactory.getLogger(
+  "components/picgo/setting/PicbedSetting.vue"
+)
+
+const picBedData = reactive({
+  showPicBedList: <IPicBedType[]>[],
+})
 const profileData = reactive({
   profileList: <PicbedConfig[]>[],
 })
+
+// 按钮类型
+const btnTypes = ["primary", "success", "info", "warning", "danger"]
+
+const getPicBeds = () => {
+  const picBeds = picgoUtil.getPicBeds() as IPicBedType[]
+  logger.warn("获取支持的图床类型：", picBeds)
+  picBedData.showPicBedList = picBeds
+    .map((item: IPicBedType) => {
+      if (item.visible) {
+        return item
+      }
+      return null
+    })
+    .filter((item) => item) as IPicBedType[]
+}
 
 const getProfileList = (bedType: PicbedType) => {
   const picbedCfgList = <PicbedConfig[]>[]
@@ -136,7 +162,13 @@ const getProfileList = (bedType: PicbedType) => {
   return picbedCfgList
 }
 
+const handlePicBedTypeChange = (item: IPicBedType) => {
+  console.log("item=>", item)
+}
+
 onMounted(() => {
+  // 获取图床列表
+  getPicBeds()
   profileData.profileList = getProfileList(PicbedType.PICBED_GITHUB)
 })
 </script>

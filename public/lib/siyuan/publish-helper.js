@@ -234,7 +234,7 @@ const initPublishHelper = () => {
         (response) => {
           window.siyuan.printWin.loadURL(response.data.url)
           // 打开开发者工具
-          window.siyuan.printWin.webContents.openDevTools()
+          // window.siyuan.printWin.webContents.openDevTools()
         }
       )
     })

@@ -55,9 +55,7 @@
       <dynamic-platform />
     </el-tab-pane>
     <el-tab-pane name="picgo-setting" :label="$t('picgo.pic.setting')">
-      <div style="padding-right: 20px">
-        <picgo-setting />
-      </div>
+      <picgo-setting />
     </el-tab-pane>
     <el-tab-pane :label="$t('service.tab.change.local')" name="general-setting">
       <general-setting :is-reload="isReloadServiceTab" />

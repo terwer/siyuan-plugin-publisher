@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2023, Terwer . All rights reserved.
+ * Copyright (c) 2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -23,26 +23,20 @@
  * questions.
  */
 
-import shortHash from "shorthash2"
-import { uuid } from "uuidv4"
-
 /**
- * 唯一ID
+ * 从数组随机获取一个元素
+ *
+ * @param arr  数组
+ * @author terwer
+ * @since 0.7.0
  */
-export function newID(): string {
-  const newstr = new Date().toISOString()
-  return shortHash(newstr).toLowerCase()
+const getRandomItem = (arr) => {
+  let randomElement = arr[Math.floor(Math.random() * arr.length)]
+  return randomElement
 }
 
-/**
- * ID生成统一入口
- */
-const newUuid = () => {
-  return uuid()
+const arrayUtil = {
+  getRandomItem,
 }
 
-const idUtil = {
-  newUuid,
-}
-
-export default idUtil
+export default arrayUtil

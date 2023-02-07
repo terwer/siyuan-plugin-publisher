@@ -24,7 +24,7 @@
   -->
 
 <template>
-  <div v-if="isElectron || picgoCommonData.showDebugMsg">
+  <div v-if="isElectron" style="padding-right: 20px">
     <blockquote class="picgo-setting-tip">
       <div>
         {{ $t("picgo.siyuan.tip") }} 。 从 0.7.0+
@@ -66,12 +66,8 @@
 </template>
 <script setup lang="ts">
 import { isElectron } from "~/utils/browserUtil"
-import { usePicgoCommon } from "~/composables/picgo/picgoCommonCom"
 import PicbedSetting from "~/components/picgo/setting/PicbedSetting.vue"
 import PicgoConfigSetting from "~/components/picgo/setting/PicgoConfigSetting.vue"
-
-// uses
-const { picgoCommonData } = usePicgoCommon()
 </script>
 
 <style scoped>
