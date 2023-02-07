@@ -119,10 +119,13 @@
 
 <script lang="ts" setup>
 import { ArrowLeft } from "@element-plus/icons-vue"
-import { onBeforeMount, reactive, ref, toRefs, watch } from "vue"
+import { onBeforeMount, reactive, ref } from "vue"
 import { FormInstance } from "element-plus"
-import { cloneDeep, union } from "lodash"
-import picgoUtil from "~/utils/otherlib/picgoUtil"
+import { LogFactory } from "~/utils/logUtil"
+
+const logger = LogFactory.getLogger(
+  "components/picgo/setting/PicbedConfigForm.vue"
+)
 
 const props = defineProps({
   type: String,
@@ -136,62 +139,6 @@ const emits = defineEmits(["on-change"])
 
 const configList = ref<IPicGoPluginConfig[]>([])
 const ruleForm = reactive<IStringKeyMap>({})
-
-watch(
-  toRefs(props.config),
-  (val) => {
-    handleConfigChange(val)
-  },
-  {
-    deep: true,
-    immediate: true,
-  }
-)
-
-function handleConfigChange(val: any) {
-  handleConfig(val)
-}
-
-/**
- * 获取当前表单数据
- */
-function getCurConfigFormData(): IStringKeyMap[] {
-  const configId = props.configId
-  const curTypeConfigList =
-    picgoUtil.getPicgoConfig(`uploader.${props.type}.configList`) || []
-  return curTypeConfigList.find((i) => i._id === configId) || {}
-}
-
-function handleConfig(val: IPicGoPluginConfig[]) {
-  const config = getCurConfigFormData()
-  const configId = props.isNewForm ? undefined : props.configId
-  Object.assign(ruleForm, config)
-  if (val.length > 0) {
-    configList.value = cloneDeep(val).map((item) => {
-      if (!configId) return item
-      let defaultValue =
-        item.default !== undefined
-          ? item.default
-          : item.type === "checkbox"
-          ? []
-          : null
-      if (item.type === "checkbox") {
-        const defaults =
-          item.choices
-            ?.filter((i: any) => {
-              return i.checked
-            })
-            .map((i: any) => i.value) || []
-        defaultValue = union(defaultValue, defaults)
-      }
-      if (config && config[item.name] !== undefined) {
-        defaultValue = config[item.name]
-      }
-      ruleForm[item.name] = defaultValue
-      return item
-    })
-  }
-}
 
 async function validate(): Promise<IStringKeyMap | false> {
   return new Promise((resolve) => {
@@ -218,6 +165,8 @@ const onSubmit = async () => {
 }
 
 const initPage = () => {
+  logger.warn("configList=>", configList)
+
   ruleForm._configName = props?.config?._configName ?? "New Config"
 }
 
