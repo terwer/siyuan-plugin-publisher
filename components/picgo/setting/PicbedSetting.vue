@@ -30,11 +30,7 @@
       <el-button-group>
         <el-button
           v-for="item in picBedData.showPicBedList"
-          :type="
-            currentPicbed === item.type
-              ? 'primary'
-              : arrayUtil.getRandomItem(btnTypes)
-          "
+          :type="currentPicbed === item.type ? 'primary' : ''"
           :key="item.name"
           @click="handlePicBedTypeChange(item)"
           >{{ item.name }}
@@ -99,16 +95,19 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, reactive, ref } from "vue"
+import { onMounted, reactive, ref, watch } from "vue"
 import { ElCard } from "element-plus"
 import picgoUtil from "~/utils/otherlib/picgoUtil"
 import { LogFactory } from "~/utils/logUtil"
-import arrayUtil from "~/utils/arrayUtil"
 import PicbedConfigForm from "~/components/picgo/setting/PicbedConfigForm.vue"
 
 const logger = LogFactory.getLogger(
   "components/picgo/setting/PicbedSetting.vue"
 )
+
+const props = defineProps({
+  isReload: Boolean,
+})
 
 const picBedData = reactive({
   showPicBedList: <IPicBedType[]>[],
@@ -120,8 +119,7 @@ const profileData = reactive({
   },
 })
 
-// 按钮类型
-const btnTypes = ["success", "info", "warning", "danger"]
+// 当前图床类型
 const currentPicbed = ref("")
 
 const getPicBeds = () => {
@@ -162,6 +160,15 @@ const reloadConfig = (bedType = undefined) => {
   picBedData.showPicBedList = picbeds
   profileData.profileList = getProfileList(bedType)
 }
+
+/* 监听props */
+watch(
+  () => props.isReload,
+  () => {
+    reloadConfig()
+    logger.debug("picbed-setting初始化")
+  }
+)
 
 onMounted(() => {
   // 重新加载配置

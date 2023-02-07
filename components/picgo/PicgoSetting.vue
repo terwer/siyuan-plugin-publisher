@@ -49,10 +49,10 @@
     </blockquote>
 
     <!-- PicGO配置 -->
-    <el-tabs type="border-card">
+    <el-tabs type="border-card" @tab-click="picgoSettingTabChange">
       <el-tab-pane :label="$t('setting.picgo.picbed')">
         <!-- 图床类型 -->
-        <picbed-setting />
+        <picbed-setting :is-reload="isReload" />
       </el-tab-pane>
       <el-tab-pane :label="$t('setting.picgo.picgo')">
         <picgo-config-setting />
@@ -68,6 +68,13 @@
 import { isElectron } from "~/utils/browserUtil"
 import PicbedSetting from "~/components/picgo/setting/PicbedSetting.vue"
 import PicgoConfigSetting from "~/components/picgo/setting/PicgoConfigSetting.vue"
+import { ref } from "vue"
+
+const isReload = ref(false)
+
+const picgoSettingTabChange = () => {
+  isReload.value = !isReload.value
+}
 </script>
 
 <style scoped>

@@ -50,7 +50,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onBeforeMount, reactive, ref } from "vue"
+import { onBeforeMount, reactive, ref, watch } from "vue"
 import picgoUtil from "~/utils/otherlib/picgoUtil"
 import { LogFactory } from "~/utils/logUtil"
 
