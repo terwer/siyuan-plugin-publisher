@@ -26,6 +26,10 @@
 // 警告⚠️：请勿在非思源笔记浏览器环境调用此文件中的任何方法
 
 import { ElMessage } from "element-plus"
+import {
+  isInSiyuan,
+  isInSiyuanOrSiyuanNewWin,
+} from "~/utils/platform/siyuan/siyuanUtil"
 
 const SIYUAN_BROWSER_CONSTANTS_SIYUAN_EXPORT_CLOSE = "siyuan-export-close"
 
@@ -34,13 +38,22 @@ const SIYUAN_BROWSER_CONSTANTS_SIYUAN_EXPORT_CLOSE = "siyuan-export-close"
  * @returns {boolean}
  */
 export const isInSiyuanNewWinBrowser = () => {
-  // console.log("inSiyuan=>", inSiyuan())
-  // console.log("isBrowser=>", isBrowser())
-  // console.log("window.terwer=>", window.terwer !== "undefined")
-  // if (window.terwer && window.terwer.pageId) {
-  //   console.log("window.terwer.pageId=>", window.terwer.pageId)
-  // }
   return typeof window.terwer !== "undefined"
+}
+
+/**
+ * 获取可操作的Window
+ */
+const getSiyuanWindow = () => {
+  if (!isInSiyuanOrSiyuanNewWin()) {
+    return window
+  }
+
+  if (isInSiyuan()) {
+    return parent.window
+  } else {
+    return window
+  }
 }
 
 /**
@@ -107,6 +120,7 @@ const fitTheme = () => {
 // 统一访问入口
 const siyuanBrowserUtil = {
   fitTheme,
+  getSiyuanWindow,
 }
 
 export default siyuanBrowserUtil

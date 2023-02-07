@@ -27,6 +27,7 @@ import { PicGoUploadApi } from "~/utils/platform/picgo/picGoUploadApi"
 import { isInSiyuanOrSiyuanNewWin } from "~/utils/platform/siyuan/siyuanUtil"
 import idUtil from "~/utils/idUtil"
 import strUtil from "~/utils/strUtil"
+import siyuanBrowserUtil from "~/utils/otherlib/siyuanBrowserUtil"
 
 // Pico上传Api封装
 const picGoUploadApi = new PicGoUploadApi()
@@ -38,7 +39,8 @@ const picGoUploadApi = new PicGoUploadApi()
  * @since 0.7.0
  */
 const getPicBeds = () => {
-  const picgo = window.SyPicgo.getPicgoObj()
+  const syWin = siyuanBrowserUtil.getSiyuanWindow()
+  const picgo = syWin.SyPicgo.getPicgoObj()
 
   const picBedTypes = picgo.helper.uploader.getIdList()
   const picBedFromDB = picgo.getConfig("picBed.list") || []
@@ -71,7 +73,8 @@ const getPicBeds = () => {
  * @param value ?: any
  */
 const savePicgoConfig = (_config, value = "") => {
-  const picgo = window.SyPicgo.getPicgoObj()
+  const syWin = siyuanBrowserUtil.getSiyuanWindow()
+  const picgo = syWin.SyPicgo.getPicgoObj()
 
   let config
   if (typeof _config === "string") {
@@ -83,6 +86,7 @@ const savePicgoConfig = (_config, value = "") => {
   }
 
   picgo.saveConfig(config)
+  console.log("savePicgoConfig finished.")
 }
 
 /**
@@ -93,7 +97,8 @@ const uploadByPicGO = async (input) => {
   // 通过PicGO上传图片
   if (input) {
     if (isInSiyuanOrSiyuanNewWin()) {
-      const syPicgo = window.SyPicgo
+      const syWin = siyuanBrowserUtil.getSiyuanWindow()
+      const syPicgo = syWin.SyPicgo
       return syPicgo.upload(input)
     } else {
       // HTTP调用本地客户端上传
@@ -102,7 +107,8 @@ const uploadByPicGO = async (input) => {
   } else {
     // 通过PicGO上传剪贴板图片
     if (isInSiyuanOrSiyuanNewWin()) {
-      const syPicgo = window.SyPicgo
+      const syWin = siyuanBrowserUtil.getSiyuanWindow()
+      const syPicgo = syWin.SyPicgo
       return syPicgo.uploadFormClipboard()
     } else {
       // HTTP调用本地客户端上传
@@ -143,7 +149,8 @@ const completeUploaderMetaConfig = (originData) => {
  * & not just read from
  */
 export const getPicBedConfig = (type) => {
-  const picgo = window.SyPicgo.getPicgoObj()
+  const syWin = siyuanBrowserUtil.getSiyuanWindow()
+  const picgo = syWin.SyPicgo.getPicgoObj()
 
   const name = picgo.helper.uploader.get(type)?.name || type
   if (picgo.helper.uploader.get(type)?.config) {
@@ -169,7 +176,8 @@ export const getPicBedConfig = (type) => {
  * @param id 配置id
  */
 const changeCurrentUploader = (type, config, id) => {
-  const picgo = window.SyPicgo.getPicgoObj()
+  const syWin = siyuanBrowserUtil.getSiyuanWindow()
+  const picgo = syWin.SyPicgo.getPicgoObj()
 
   if (!type) {
     return
@@ -191,7 +199,8 @@ const changeCurrentUploader = (type, config, id) => {
 }
 
 const selectUploaderConfig = (type, id) => {
-  const picgo = window.SyPicgo.getPicgoObj()
+  const syWin = siyuanBrowserUtil.getSiyuanWindow()
+  const picgo = syWin.SyPicgo.getPicgoObj()
 
   const { configList } = getUploaderConfigList(type)
   const config = configList.find((item) => item._id === id)
@@ -207,7 +216,8 @@ const selectUploaderConfig = (type, id) => {
  * upgrade old uploader config to new format
  */
 const upgradeUploaderConfig = (type) => {
-  const picgo = window.SyPicgo.getPicgoObj()
+  const syWin = siyuanBrowserUtil.getSiyuanWindow()
+  const picgo = syWin.SyPicgo.getPicgoObj()
 
   const uploaderConfig = picgo.getConfig(`picBed.${type}`) ?? {}
   if (!uploaderConfig._id) {
@@ -229,7 +239,8 @@ const upgradeUploaderConfig = (type) => {
 }
 
 const getUploaderConfigList = (type) => {
-  const picgo = window.SyPicgo.getPicgoObj()
+  const syWin = siyuanBrowserUtil.getSiyuanWindow()
+  const picgo = syWin.SyPicgo.getPicgoObj()
 
   if (!type) {
     return {
@@ -252,7 +263,8 @@ const getUploaderConfigList = (type) => {
 }
 
 export const updateUploaderConfig = (type, id, config) => {
-  const picgo = window.SyPicgo.getPicgoObj()
+  const syWin = siyuanBrowserUtil.getSiyuanWindow()
+  const picgo = syWin.SyPicgo.getPicgoObj()
 
   const { configList, defaultId } = getUploaderConfigList(type)
   const existConfig = configList.find((item) => item._id === id)
@@ -278,6 +290,9 @@ export const updateUploaderConfig = (type, id, config) => {
  * delete uploader config by type & id
  */
 export const deleteUploaderConfig = (type, id) => {
+  const syWin = siyuanBrowserUtil.getSiyuanWindow()
+  const picgo = syWin.SyPicgo.getPicgoObj()
+
   const { configList, defaultId } = getUploaderConfigList(type)
   if (configList.length <= 1) {
     return
