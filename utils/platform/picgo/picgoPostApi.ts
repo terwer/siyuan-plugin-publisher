@@ -35,7 +35,7 @@ import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
 import { isElectron } from "~/utils/browserUtil"
 import { getSiyuanNewWinDataDir } from "~/utils/otherlib/siyuanBrowserUtil"
 import { isFileExist } from "~/utils/otherlib/ChromeUtil"
-import { uploadByPicGO } from "~/utils/otherlib/picgoUtil"
+import picgoUtil from "~/utils/otherlib/picgoUtil"
 import { ElMessage } from "element-plus"
 
 /**
@@ -240,7 +240,7 @@ export class PicgoPostApi {
     filePaths.push(imageFullPath)
 
     // 批量上传
-    const imageJson: any = await uploadByPicGO(filePaths)
+    const imageJson: any = await picgoUtil.uploadByPicGO(filePaths)
     this.logger.warn("图片上传完成，imageJson=>", imageJson)
     const imageJsonObj = JSON.parse(imageJson)
     // 处理后续

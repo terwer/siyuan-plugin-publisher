@@ -29,7 +29,7 @@ import { useI18n } from "vue-i18n"
 import { LogFactory } from "~/utils/logUtil"
 import { isInSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
 import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
-import { uploadByPicGO } from "~/utils/otherlib/picgoUtil"
+import picgoUtil from "~/utils/otherlib/picgoUtil"
 import { isElectron } from "~/utils/browserUtil"
 import { ImageItem } from "~/utils/models/imageItem"
 
@@ -144,7 +144,7 @@ export const usePicgoUpload = (props, deps, refs) => {
           }
         }
 
-        const imgInfos = await uploadByPicGO(filePaths)
+        const imgInfos = await picgoUtil.uploadByPicGO(filePaths)
         // 处理后续
         doAfterUpload(imgInfos)
 
@@ -164,7 +164,7 @@ export const usePicgoUpload = (props, deps, refs) => {
       picgoCommonData.isUploadLoading = true
 
       try {
-        const imgInfos = await uploadByPicGO()
+        const imgInfos = await picgoUtil.uploadByPicGO()
         // 处理后续
         doAfterUpload(imgInfos)
 

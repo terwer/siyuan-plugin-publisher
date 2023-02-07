@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -23,59 +23,42 @@
  * questions.
  */
 
-import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
 import { PicGoUploadApi } from "~/utils/platform/picgo/picGoUploadApi"
+import { isInSiyuanOrSiyuanNewWin } from "~/utils/platform/siyuan/siyuanUtil"
 
 // Pico上传Api封装
 const picGoUploadApi = new PicGoUploadApi()
 
 /**
- * 通过PicGO上传图片，主窗口
- * @returns {Promise<void>}
- */
-// export async function uploadQuickByPicGO() {
-//   const syWin = window.parent
-//   if (syWin.terwer && syWin.terwer.picGoUpload) {
-//     return syWin.terwer.picGoUpload()
-//   } else {
-//     ElMessage.warning(
-//       "uploadByPicGO失败，未找到hook方法，请在自定义js片段添加 import('/widgets/sy-post-publisher/lib/siyuanhook.js') ，并重启思源笔记"
-//     )
-//   }
-// }
-
-/**
  * 通过PicGO上传图片
  * @returns {Promise<any[]>}
  */
-export async function uploadByPicGO(input) {
+const uploadByPicGO = async (input) => {
+  // 通过PicGO上传图片
   if (input) {
-    if (isInSiyuanNewWinBrowser()) {
-      return uploadNewWinByPicGO(input)
+    if (isInSiyuanOrSiyuanNewWin()) {
+      const syPicgo = window.SyPicgo
+      return syPicgo.upload(input)
     } else {
+      // HTTP调用本地客户端上传
       return picGoUploadApi.upload(input)
     }
   } else {
-    if (isInSiyuanNewWinBrowser()) {
-      return uploadNewWinClipboardByPicGO()
+    // 通过PicGO上传剪贴板图片
+    if (isInSiyuanOrSiyuanNewWin()) {
+      const syPicgo = window.SyPicgo
+      return syPicgo.uploadFormClipboard()
     } else {
+      // HTTP调用本地客户端上传
       return picGoUploadApi.upload()
     }
   }
 }
 
 /**
- * 通过PicGO上传图片，思源笔记新窗口
- * @returns {Promise<any[]>}
+ * PicGO相关操作统一访问入口
  */
-async function uploadNewWinByPicGO(input) {
-  return await window.terwer.picgoExtension.upload(input)
+const picgoUtil = {
+  uploadByPicGO,
 }
-
-/**
- * 通过PicGO上传剪贴板图片，思源笔记新窗口
- * @returns {Promise<any[]>}
- */
-async function uploadNewWinClipboardByPicGO() {
-  return await window.terwer.picgoExtension.uploadFormClipboard()
-}
+export default picgoUtil
