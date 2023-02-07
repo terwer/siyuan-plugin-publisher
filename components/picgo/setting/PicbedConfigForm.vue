@@ -24,5 +24,133 @@
   -->
 
 <template>
-  <div>config form</div>
+  <div class="config-form-box">
+    <div class="config-form-header">
+      <el-page-header :icon="ArrowLeft" title="返回" @click="onBack">
+        <template #content>
+          <div class="flex items-center">
+            <span
+              class="text-large font-600 mr-3"
+              :title="ruleForm._configName"
+            >
+              {{ ruleForm._configName }}
+            </span>
+          </div>
+        </template>
+      </el-page-header>
+    </div>
+
+    <div class="config-form">
+      <el-form
+        ref="$form"
+        label-position="left"
+        label-width="50%"
+        :model="ruleForm"
+        size="small"
+      >
+        <el-form-item
+          :label="$t('setting.picgo.picbed.uploader.config.name')"
+          required
+          prop="_configName"
+        >
+          <el-input
+            v-model="ruleForm._configName"
+            :placeholder="
+              $t('setting.picgo.picbed.uploader.config.name.placeholder')
+            "
+          />
+        </el-form-item>
+
+        <!-- dynamic config -->
+        <el-form-item
+          v-for="(item, index) in configList"
+          :key="item.name + index"
+          :label="item.alias || item.name"
+          :required="item.required"
+          :prop="item.name"
+        >
+          <el-input
+            v-if="item.type === 'input' || item.type === 'password'"
+            v-model="ruleForm[item.name]"
+            :type="item.type === 'password' ? 'password' : 'input'"
+            :placeholder="item.message || item.name"
+          />
+          <el-select
+            v-else-if="item.type === 'list' && item.choices"
+            v-model="ruleForm[item.name]"
+            :placeholder="item.message || item.name"
+          >
+            <el-option
+              v-for="choice in item.choices"
+              :key="choice.name || choice.value || choice"
+              :label="choice.name || choice.value || choice"
+              :value="choice.value || choice"
+            />
+          </el-select>
+          <el-select
+            v-else-if="item.type === 'checkbox' && item.choices"
+            v-model="ruleForm[item.name]"
+            :placeholder="item.message || item.name"
+            multiple
+            collapse-tags
+          >
+            <el-option
+              v-for="choice in item.choices"
+              :key="choice.value || choice"
+              :label="choice.name || choice.value || choice"
+              :value="choice.value || choice"
+            />
+          </el-select>
+          <el-switch
+            v-else-if="item.type === 'confirm'"
+            v-model="ruleForm[item.name]"
+            active-text="yes"
+            inactive-text="no"
+          />
+        </el-form-item>
+
+        <el-form-item>
+          <el-button @click="onSubmit">{{ $t("main.opt.ok") }}</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
+  </div>
 </template>
+
+<script lang="ts" setup>
+import { ArrowLeft } from "@element-plus/icons-vue"
+import { onBeforeMount, reactive, ref } from "vue"
+
+const props = defineProps({
+  config: Object,
+})
+
+const emits = defineEmits(["on-change"])
+
+const configList = ref<IPicGoPluginConfig[]>([])
+const ruleForm = reactive<IStringKeyMap>({})
+
+const onBack = () => {
+  emits("on-change")
+}
+
+const onSubmit = () => {
+  alert("onSubmit")
+
+  onBack()
+}
+
+const initPage = () => {
+  ruleForm._configName = props?.config?._configName ?? "New Config"
+}
+
+onBeforeMount(() => {
+  initPage()
+})
+</script>
+
+<style scoped>
+.config-form-header {
+  margin: 10px 0;
+}
+</style>

@@ -31,6 +31,11 @@ const initTheme = () => {
   }
   console.warn("sy-post-publisher 外观适配")
 
+  const themeMode = document
+    .querySelector("html")
+    .getAttribute("data-theme-mode")
+  console.log("themeMode=>", themeMode)
+
   const element = window.document.querySelector(".protyle")
   const computedStyle = window.getComputedStyle(element)
   const bgColor = computedStyle.getPropertyValue("background-color")

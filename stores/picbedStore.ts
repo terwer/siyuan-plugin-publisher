@@ -23,44 +23,20 @@
  * questions.
  */
 
-/**
- * 图床类型定义
- */
-interface IPicBedType {
-  type: string
-  name: string
-  visible: boolean
-}
-
-type ICheckBoxValueType = boolean | string | number
-
-interface IObj {
-  [propName: string]: any
-}
-
-interface IStringKeyMap {
-  [propName: string]: any
-}
+import { defineStore } from "pinia"
+import { ref } from "vue"
 
 /**
- * 某个PicGO平台配置列表
+ * 默认PicGO平台
  */
-interface IUploaderConfigItem {
-  configList: IUploaderConfigListItem[]
-  defaultId: string
-}
+export const usePicbedStore = defineStore("picbedStore", () => {
+  const defaultPicBed = ref("github")
 
-type IUploaderConfigListItem = IStringKeyMap & IUploaderListItemMetaInfo
+  function setDefaultPicBed(type: string): void {
+    defaultPicBed.value = type
+    console.log("setDefaultPicBed=>", defaultPicBed.value)
+  }
 
-interface IPicGoPluginConfig {
-  name: string
-  type: string
-  required: boolean
-  default?: any
-  alias?: string
-  choices?: {
-    name?: string
-    value?: any
-  }[]
-  [propName: string]: any
-}
+  const picbedStore = { defaultPicBed, setDefaultPicBed }
+  return picbedStore
+})

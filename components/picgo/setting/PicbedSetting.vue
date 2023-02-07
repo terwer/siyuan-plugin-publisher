@@ -25,12 +25,18 @@
 
 <template>
   <div class="picbed-setting">
+    <el-alert
+      :title="$t('setting.picgo.picbed.current.tip') + type"
+      type="success"
+      :closable="false"
+    />
+
     <!-- 图床配置列表 -->
     <div class="bed-type-list">
       <el-button-group>
         <el-button
           v-for="item in picBedData.showPicBedList"
-          :type="currentPicbed === item.type ? 'primary' : ''"
+          :type="type === item.type ? 'primary' : ''"
           :key="item.name"
           @click="handlePicBedTypeChange(item)"
           >{{ item.name }}
@@ -39,56 +45,77 @@
     </div>
 
     <div class="profile-box">
-      <!-- 图床配置列表 -->
-      <div class="profile-card-box">
-        <div
-          v-bind:key="config._id"
-          class="profile-card-item"
-          v-for="config in profileData.profileList.configList"
-        >
-          <el-card>
-            <div class="profile-card-line">
-              <span>{{ config._configName }}</span>
-              <span class="pull-right">
-                <el-tooltip
-                  :content="$t('main.opt.edit')"
-                  class="box-item"
-                  effect="dark"
-                  placement="bottom"
-                  popper-class="publish-menu-tooltip"
-                >
-                  <el-button>
-                    <font-awesome-icon icon="fa-solid fa-pen-to-square" />
-                  </el-button>
-                </el-tooltip>
-                <el-tooltip
-                  :content="$t('main.opt.delete')"
-                  class="box-item"
-                  effect="dark"
-                  placement="bottom"
-                  popper-class="publish-menu-tooltip"
-                >
-                  <el-button>
-                    <font-awesome-icon icon="fa-solid fa-trash-can" />
-                  </el-button>
-                </el-tooltip>
-              </span>
-            </div>
-            <div>{{ config._updatedAt }}</div>
-            <div
-              :class="{
-                selected: config._id === profileData.profileList.defaultId,
-              }"
-            >
-              {{ $t("setting.picgo.picbed.selected.tip") }}
-            </div>
-          </el-card>
+      <div class="profile-setting" v-if="!showConfigForm">
+        <!-- 图床配置列表 -->
+        <div class="profile-card-box">
+          <div
+            v-bind:key="config._id"
+            class="profile-card-item"
+            v-for="config in profileData.curConfigList"
+            @click="() => selectItem(config._id)"
+          >
+            <el-card>
+              <div class="profile-card-line">
+                <span>{{ config._configName }}</span>
+                <span class="pull-right">
+                  <el-tooltip
+                    :content="$t('main.opt.edit')"
+                    class="box-item"
+                    effect="dark"
+                    placement="bottom"
+                    popper-class="publish-menu-tooltip"
+                  >
+                    <el-button @click.stop="editConfig(config._id)">
+                      <font-awesome-icon icon="fa-solid fa-pen-to-square" />
+                    </el-button>
+                  </el-tooltip>
+                  <el-tooltip
+                    :content="$t('main.opt.delete')"
+                    class="box-item"
+                    effect="dark"
+                    placement="bottom"
+                    popper-class="publish-menu-tooltip"
+                  >
+                    <el-button @click.stop="deleteConfig(config._id)">
+                      <font-awesome-icon icon="fa-solid fa-trash-can" />
+                    </el-button>
+                  </el-tooltip>
+                </span>
+              </div>
+              <div class="profile-date">
+                {{ dateUtil.formatTimestampToZhDate(config._updatedAt) }}
+              </div>
+              <div
+                :class="{
+                  selected: config._id === profileData.defaultConfigId,
+                }"
+              >
+                {{ $t("setting.picgo.picbed.selected.tip") }}
+              </div>
+            </el-card>
+          </div>
+          <div class="profile-card-item" @click="addNewConfig">+</div>
+        </div>
+
+        <!-- 配置操作 -->
+        <div class="profile-action">
+          <el-button
+            class="set-default-btn"
+            type="success"
+            :disabled="picbedStore.defaultPicBed === type"
+            @click="setDefaultPicBed(type)"
+          >
+            {{ $t("setting.picgo.picbed.set.default") }}
+          </el-button>
         </div>
       </div>
 
       <!-- 图床配置表单 -->
-      <div class="profile-form">
-        <picbed-config-form />
+      <div class="profile-form" v-else>
+        <picbed-config-form
+          :config="profileData.curConfig"
+          @on-change="emitBackFn"
+        />
       </div>
     </div>
   </div>
@@ -96,10 +123,13 @@
 
 <script lang="ts" setup>
 import { onMounted, reactive, ref, watch } from "vue"
-import { ElCard } from "element-plus"
+import { ElCard, ElMessage } from "element-plus"
 import picgoUtil from "~/utils/otherlib/picgoUtil"
 import { LogFactory } from "~/utils/logUtil"
 import PicbedConfigForm from "~/components/picgo/setting/PicbedConfigForm.vue"
+import dateUtil from "../../../utils/dateUtil"
+import { usePicbedStore } from "~/stores/picbedStore"
+import { useI18n } from "vue-i18n"
 
 const logger = LogFactory.getLogger(
   "components/picgo/setting/PicbedSetting.vue"
@@ -109,18 +139,29 @@ const props = defineProps({
   isReload: Boolean,
 })
 
+// 图床数据
 const picBedData = reactive({
   showPicBedList: <IPicBedType[]>[],
 })
+// 配置数据
 const profileData = reactive({
-  profileList: {
-    configList: [],
-    defaultId: "",
-  },
+  // 当前配置ID
+  defaultConfigId: "",
+  // 当前图床配置列表
+  curConfigList: [],
+  // 当前配置
+  curConfig: {},
 })
 
 // 当前图床类型
-const currentPicbed = ref("")
+const type = ref("")
+// use
+const picbedStore = usePicbedStore()
+const { t } = useI18n()
+
+// 表单展示
+const isNewForm = ref(false)
+const showConfigForm = ref(false)
 
 const getPicBeds = () => {
   const picBeds = picgoUtil.getPicBeds() as IPicBedType[]
@@ -140,10 +181,78 @@ const getProfileList = (bedType: string): IUploaderConfigItem => {
 }
 
 const handlePicBedTypeChange = (item: IPicBedType) => {
-  currentPicbed.value = item.type
-
+  type.value = item.type
   reloadConfig(item.type)
   logger.info("item=>", item)
+}
+
+/**
+ * 选择默认配置
+ * @param id 配置ID
+ */
+function selectItem(id: string) {
+  profileData.defaultConfigId = id
+  const config = picgoUtil.selectUploaderConfig(type.value, id)
+
+  logger.info("selectItem config=>", config)
+  alert("selectItem=>" + id)
+}
+
+/**
+ * 获取当前表单数据
+ */
+function getCurConfigFormData(): IStringKeyMap[] {
+  const configId = profileData.defaultConfigId
+  const curTypeConfigList =
+    picgoUtil.getPicgoConfig(`uploader.${type.value}.configList`) || []
+  return curTypeConfigList.find((i) => i._id === configId) || {}
+}
+
+/**
+ * 新增配置
+ */
+function addNewConfig() {
+  profileData.curConfig = {}
+
+  isNewForm.value = true
+  showConfigForm.value = true
+}
+
+/**
+ * 编辑配置
+ * @param id 配置ID
+ */
+function editConfig(id: string) {
+  const config = getCurConfigFormData()
+  profileData.curConfig = config
+
+  isNewForm.value = false
+  showConfigForm.value = true
+}
+
+/**
+ * 删除配置
+ * @param id 配置ID
+ */
+function deleteConfig(id: string) {
+  picgoUtil.deleteUploaderConfig(type.value, id)
+}
+
+function emitBackFn() {
+  isNewForm.value = false
+  showConfigForm.value = false
+}
+
+function setDefaultPicBed(tp: string) {
+  picgoUtil.savePicgoConfig({
+    "picBed.current": tp,
+    "picBed.uploader": tp,
+  })
+
+  picbedStore.setDefaultPicBed(tp)
+
+  logger.info("当前存储的图床类型=>", tp)
+  ElMessage.success(t("main.opt.success"))
 }
 
 const reloadConfig = (bedType = undefined) => {
@@ -155,10 +264,12 @@ const reloadConfig = (bedType = undefined) => {
     bedType = picbeds.length > 0 ? picbeds[0].type : "github"
   }
 
-  currentPicbed.value = bedType
+  type.value = bedType
 
   picBedData.showPicBedList = picbeds
-  profileData.profileList = getProfileList(bedType)
+  const profileList = getProfileList(bedType)
+  profileData.curConfigList = profileList.configList
+  profileData.defaultConfigId = profileList.defaultId
 }
 
 /* 监听props */
@@ -177,10 +288,23 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.bed-type-list {
+  margin-top: 10px;
+}
+
 .profile-card-item {
   display: inline-block;
   margin-right: 10px;
   width: 48%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.profile-card-item .profile-date {
+  font-size: 12px;
+  color: var(--el-text-color-primary);
+  margin: 10px 0;
 }
 
 .profile-card-item .selected {

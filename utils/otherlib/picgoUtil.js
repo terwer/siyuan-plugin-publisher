@@ -60,8 +60,19 @@ const getPicBeds = () => {
       return 0
     })
 
-  console.warn("获取支持的图床类型：", picBeds)
+  // console.warn("获取支持的图床类型：", picBeds)
   return picBeds
+}
+
+/**
+ * 获取PicGO配置的通用方法
+ * @param key key
+ */
+const getPicgoConfig = (key) => {
+  const syWin = siyuanBrowserUtil.getSiyuanWindow()
+  const picgo = syWin.SyPicgo.getPicgoObj()
+
+  return picgo.getConfig(key)
 }
 
 /**
@@ -162,25 +173,25 @@ const completeUploaderMetaConfig = (originData) => {
  * @author terwer
  * @since 0.7.0
  */
-export const getPicBedConfig = (type) => {
-  const syWin = siyuanBrowserUtil.getSiyuanWindow()
-  const picgo = syWin.SyPicgo.getPicgoObj()
-
-  const name = picgo.helper.uploader.get(type)?.name || type
-  if (picgo.helper.uploader.get(type)?.config) {
-    const _config = picgo.helper.uploader.get(type).config(picgo)
-    const config = handleConfigWithFunction(_config)
-    return {
-      config,
-      name,
-    }
-  } else {
-    return {
-      config: [],
-      name,
-    }
-  }
-}
+// export const getPicBedConfig = (type) => {
+//   const syWin = siyuanBrowserUtil.getSiyuanWindow()
+//   const picgo = syWin.SyPicgo.getPicgoObj()
+//
+//   const name = picgo.helper.uploader.get(type)?.name || type
+//   if (picgo.helper.uploader.get(type)?.config) {
+//     const _config = picgo.helper.uploader.get(type).config(picgo)
+//     const config = handleConfigWithFunction(_config)
+//     return {
+//       config,
+//       name,
+//     }
+//   } else {
+//     return {
+//       config: [],
+//       name,
+//     }
+//   }
+// }
 
 /**
  * upgrade old uploader config to new format
@@ -242,7 +253,7 @@ const getUploaderConfigList = (type) => {
     configList,
     defaultId,
   }
-  console.warn("获取当前图床配置列表：", configItem)
+  // console.warn("获取当前图床配置列表：", configItem)
   return configItem
 }
 
@@ -276,6 +287,14 @@ const changeCurrentUploader = (type, config, id) => {
   })
 }
 
+/**
+ * 选择当前图床
+ *
+ * @param type 当前图床类型
+ * @param id 当前图床配置ID
+ * @author terwer
+ * @since 0.7.0
+ */
 const selectUploaderConfig = (type, id) => {
   const syWin = siyuanBrowserUtil.getSiyuanWindow()
   const picgo = syWin.SyPicgo.getPicgoObj()
@@ -288,6 +307,8 @@ const selectUploaderConfig = (type, id) => {
       [`picBed.${type}`]: config,
     })
   }
+
+  return config
 }
 
 export const updateUploaderConfig = (type, id, config) => {
@@ -344,9 +365,18 @@ export const deleteUploaderConfig = (type, id) => {
  * PicGO相关操作统一访问入口
  */
 const picgoUtil = {
-  getPicBeds,
+  // config
+  getPicgoConfig,
   savePicgoConfig,
+
+  // uploader
+  getPicBeds,
   getUploaderConfigList,
+  selectUploaderConfig,
+  changeCurrentUploader,
+  deleteUploaderConfig,
+
+  // upload
   uploadByPicGO,
 }
 export default picgoUtil

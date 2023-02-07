@@ -86,6 +86,12 @@ const picgoSettingTabChange = () => {
   margin-inline-start: 0;
   margin-inline-end: 0;
   margin: 0 0 10px;
-  padding: 16px;
+  padding: 16px 16px 0;
+}
+
+@media only screen and (max-width: 900px) {
+  .picgo-setting-tip {
+    padding-bottom: 16px;
+  }
 }
 </style>

@@ -438,4 +438,9 @@ export default {
   "setting.picgo.picgo.click.to.open": "Click open",
   "setting.picgo.picgo.choose.showed.picbed": "Please select showed picbed",
   "setting.picgo.picbed.selected.tip": "Selected",
+  "setting.picgo.picbed.set.default": "Set as default picbed",
+  "setting.picgo.picbed.current.tip": "Current picbed is:",
+  "setting.picgo.picbed.uploader.config.name": "Picbed config name",
+  "setting.picgo.picbed.uploader.config.name.placeholder":
+    "Please input config name",
 }
