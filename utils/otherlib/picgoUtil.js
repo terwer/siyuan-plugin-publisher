@@ -60,6 +60,7 @@ const getPicBeds = () => {
       return 0
     })
 
+  console.warn("获取支持的图床类型：", picBeds)
   return picBeds
 }
 
@@ -117,6 +118,10 @@ const uploadByPicGO = async (input) => {
   }
 }
 
+/**
+ * 配置处理
+ * @param config 配置
+ */
 const handleConfigWithFunction = (config) => {
   for (const i in config) {
     if (typeof config[i].default === "function") {
@@ -129,12 +134,17 @@ const handleConfigWithFunction = (config) => {
   return config
 }
 
+/**
+ * 增加配置元数据
+ *
+ * @param originData 原始数据
+ */
 const completeUploaderMetaConfig = (originData) => {
   return Object.assign(
     {
       _configName: "Default",
     },
-    trimValues(originData),
+    strUtil.trimValues(originData),
     {
       _id: idUtil.newUuid(),
       _createdAt: Date.now(),
@@ -145,8 +155,12 @@ const completeUploaderMetaConfig = (originData) => {
 
 /**
  * get picbed config by type
+ *
  * it will trigger the uploader config function & get the uploader config result
  * & not just read from
+ *
+ * @author terwer
+ * @since 0.7.0
  */
 export const getPicBedConfig = (type) => {
   const syWin = siyuanBrowserUtil.getSiyuanWindow()
@@ -166,6 +180,70 @@ export const getPicBedConfig = (type) => {
       name,
     }
   }
+}
+
+/**
+ * upgrade old uploader config to new format
+ *
+ * @param type type
+ * @author terwer
+ * @since 0.7.0
+ */
+const upgradeUploaderConfig = (type) => {
+  const syWin = siyuanBrowserUtil.getSiyuanWindow()
+  const picgo = syWin.SyPicgo.getPicgoObj()
+
+  const uploaderConfig = picgo.getConfig(`picBed.${type}`) ?? {}
+  if (!uploaderConfig._id) {
+    Object.assign(uploaderConfig, completeUploaderMetaConfig(uploaderConfig))
+  }
+
+  const uploaderConfigList = [uploaderConfig]
+  picgo.saveConfig({
+    [`uploader.${type}`]: {
+      configList: uploaderConfigList,
+      defaultId: uploaderConfig._id,
+    },
+    [`picBed.${type}`]: uploaderConfig,
+  })
+  return {
+    configList: uploaderConfigList,
+    defaultId: uploaderConfig._id,
+  }
+}
+
+/**
+ * 获取上传配置列表
+ *
+ * @param type 图床类型
+ * @author terwer
+ * @since 0.7.0
+ */
+const getUploaderConfigList = (type) => {
+  const syWin = siyuanBrowserUtil.getSiyuanWindow()
+  const picgo = syWin.SyPicgo.getPicgoObj()
+
+  if (!type) {
+    return {
+      configList: [],
+      defaultId: "",
+    }
+  }
+  const currentUploaderConfig = picgo.getConfig(`uploader.${type}`) ?? {}
+  let configList = currentUploaderConfig.configList
+  let defaultId = currentUploaderConfig.defaultId || ""
+  if (!configList) {
+    const res = upgradeUploaderConfig(type)
+    configList = res.configList
+    defaultId = res.defaultId
+  }
+
+  const configItem = {
+    configList,
+    defaultId,
+  }
+  console.warn("获取当前图床配置列表：", configItem)
+  return configItem
 }
 
 /**
@@ -209,56 +287,6 @@ const selectUploaderConfig = (type, id) => {
       [`uploader.${type}.defaultId`]: id,
       [`picBed.${type}`]: config,
     })
-  }
-}
-
-/**
- * upgrade old uploader config to new format
- */
-const upgradeUploaderConfig = (type) => {
-  const syWin = siyuanBrowserUtil.getSiyuanWindow()
-  const picgo = syWin.SyPicgo.getPicgoObj()
-
-  const uploaderConfig = picgo.getConfig(`picBed.${type}`) ?? {}
-  if (!uploaderConfig._id) {
-    Object.assign(uploaderConfig, completeUploaderMetaConfig(uploaderConfig))
-  }
-
-  const uploaderConfigList = [uploaderConfig]
-  picgo.saveConfig({
-    [`uploader.${type}`]: {
-      configList: uploaderConfigList,
-      defaultId: uploaderConfig._id,
-    },
-    [`picBed.${type}`]: uploaderConfig,
-  })
-  return {
-    configList: uploaderConfigList,
-    defaultId: uploaderConfig._id,
-  }
-}
-
-const getUploaderConfigList = (type) => {
-  const syWin = siyuanBrowserUtil.getSiyuanWindow()
-  const picgo = syWin.SyPicgo.getPicgoObj()
-
-  if (!type) {
-    return {
-      configList: [],
-      defaultId: "",
-    }
-  }
-  const currentUploaderConfig = picgo.getConfig(`uploader.${type}`) ?? {}
-  let configList = currentUploaderConfig.configList
-  let defaultId = currentUploaderConfig.defaultId || ""
-  if (!configList) {
-    const res = upgradeUploaderConfig(type)
-    configList = res.configList
-    defaultId = res.defaultId
-  }
-  return {
-    configList,
-    defaultId,
   }
 }
 
@@ -318,6 +346,7 @@ export const deleteUploaderConfig = (type, id) => {
 const picgoUtil = {
   getPicBeds,
   savePicgoConfig,
+  getUploaderConfigList,
   uploadByPicGO,
 }
 export default picgoUtil

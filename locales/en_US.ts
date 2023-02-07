@@ -437,4 +437,5 @@ export default {
   "setting.picgo.picgo.open.config.file": "Open config file",
   "setting.picgo.picgo.click.to.open": "Click open",
   "setting.picgo.picgo.choose.showed.picbed": "Please select showed picbed",
+  "setting.picgo.picbed.selected.tip": "Selected",
 }

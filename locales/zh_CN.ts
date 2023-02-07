@@ -437,4 +437,5 @@ export default {
   "setting.picgo.picgo.open.config.file": "打开配置文件",
   "setting.picgo.picgo.click.to.open": "点击打开",
   "setting.picgo.picgo.choose.showed.picbed": "请选择显示的图床",
+  "setting.picgo.picbed.selected.tip": "已选中",
 }

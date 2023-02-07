@@ -75,19 +75,10 @@ import PicgoConfigSetting from "~/components/picgo/setting/PicgoConfigSetting.vu
   display: block;
   border: solid 1px green;
   border-radius: 4px;
-  /* padding-bottom: 10px; */
   background: var(--custom-app-bg-color);
-  /* margin-bottom: 10px; */
   margin-inline-start: 0;
   margin-inline-end: 0;
   margin: 0 0 10px;
-  padding: 0 16px 12px;
-}
-
-@media only screen and (max-width: 900px) {
-  .picgo-setting-tip {
-    padding-top: 16px;
-    padding-bottom: 16px;
-  }
+  padding: 16px;
 }
 </style>

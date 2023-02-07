@@ -24,7 +24,7 @@
  */
 
 import shortHash from "shorthash2"
-import { uuid } from "uuidv4"
+import { v4 as uuidv4 } from "uuid"
 
 /**
  * 唯一ID
@@ -38,7 +38,7 @@ export function newID(): string {
  * ID生成统一入口
  */
 const newUuid = () => {
-  return uuid()
+  return uuidv4()
 }
 
 const idUtil = {

@@ -41,3 +41,13 @@ interface IObj {
 interface IStringKeyMap {
   [propName: string]: any
 }
+
+/**
+ * 某个PicGO平台配置列表
+ */
+interface IUploaderConfigItem {
+  configList: IUploaderConfigListItem[]
+  defaultId: string
+}
+
+type IUploaderConfigListItem = IStringKeyMap & IUploaderListItemMetaInfo

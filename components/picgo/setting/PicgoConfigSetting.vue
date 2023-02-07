@@ -66,7 +66,6 @@ const form = reactive({
 function getPicBeds() {
   const picBeds = picgoUtil.getPicBeds() as IPicBedType[]
   picBed.value = picBeds
-  logger.warn("获取支持的图床类型：", picBeds)
 
   form.showPicBedList = picBed.value
     .map((item: IPicBedType) => {
