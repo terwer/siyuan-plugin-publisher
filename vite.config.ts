@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -119,6 +119,14 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
             entry: "/pages/picgo/main.ts",
             data: {
               title: "Picgo图床",
+            },
+          },
+          {
+            name: "set",
+            filename: "set/index.html",
+            entry: "/pages/set/main.ts",
+            data: {
+              title: "统一配置页面",
             },
           },
         ],
