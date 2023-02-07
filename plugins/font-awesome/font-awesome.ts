@@ -41,8 +41,10 @@ import {
   faListOl,
   faMagnifyingGlass,
   faPaste,
+  faPenToSquare,
   faRectangleList,
   faShareNodes,
+  faTrashCan,
   faUpload,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons"
@@ -70,6 +72,8 @@ const FontAwesome: PluginObject<any> = {
     library.add(faFileImport)
     library.add(faGear)
     library.add(faArrowRotateRight)
+    library.add(faTrashCan)
+    library.add(faPenToSquare)
 
     Vue.component("font-awesome-icon", FontAwesomeIcon)
     logger.debug("FontAwesome inited")

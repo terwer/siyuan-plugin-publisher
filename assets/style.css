@@ -86,6 +86,11 @@ code {
   }
 }
 
+/* common */
+.pull-right {
+  float: right;
+}
+
 /* util */
 .disabled-click {
   pointer-events: none;
@@ -140,4 +145,8 @@ code {
   --el-dialog-width: 88% !important;
   --el-dialog-margin-top: 10vh;
   margin: var(--el-dialog-margin-top, 15vh) auto 0 5.5%;
+}
+
+.el-card__body {
+  --el-card-padding: 10px;
 }

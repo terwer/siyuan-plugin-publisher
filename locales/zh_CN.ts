@@ -434,7 +434,9 @@ export default {
   "setting.picgo.picgo": "PicGO设置",
   "setting.picgo.picbed.github": "Github",
   "setting.picgo.picbed.aliyun.oss": "阿里云OSS",
-  "setting.picgo.picbed.tencent.cos": "腾讯cos",
+  "setting.picgo.picbed.tencent.cos": "腾讯COS",
   "setting.picgo.picbed.qiniu": "七牛云",
   "setting.picgo.picbed.youpai": "又拍云",
+  "main.opt.edit": "编辑",
+  "main.opt.delete": "删除",
 }

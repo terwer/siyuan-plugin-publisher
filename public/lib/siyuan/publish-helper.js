@@ -190,8 +190,6 @@ const initPublishHelper = () => {
           window.terwer={};
           window.terwer.pageId="${newWinPageId}";
           window.terwer.dataDir="${dataDir}";
-          window.terwer.picgoExtension = require("${dataDir}/widgets/sy-post-publisher/lib/picgo/picgo.js").default;
-          window.terwer.picgoExtension.activate("${dataDir}/widgets/sy-post-publisher/lib/picgo/picgo.cfg.json");
           window.terwer.ip = "${ipv4}";
           window.terwer.currentWindowId = ${currentWindowId};
           </script>`
@@ -236,7 +234,7 @@ const initPublishHelper = () => {
         (response) => {
           window.siyuan.printWin.loadURL(response.data.url)
           // 打开开发者工具
-          // window.siyuan.printWin.webContents.openDevTools()
+          window.siyuan.printWin.webContents.openDevTools()
         }
       )
     })

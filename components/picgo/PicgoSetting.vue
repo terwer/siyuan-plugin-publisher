@@ -31,7 +31,7 @@
         开始，支持多个配置文件切换，默认的 PicGO 配置文件为：
         <pre
           style="display: inline-block"
-        ><code>[思源工作空间]/data/storage/syp/picgo.cfg.json</code></pre>
+        ><code>[思源工作空间]/data/storage/syp/picgo/picgo.cfg.json</code></pre>
         。
         {{ $t("setting.picgo.refer.to") }}
         <a
@@ -88,7 +88,7 @@ const { picgoCommonData } = usePicgoCommon()
   padding: 0 16px 12px;
 }
 
-@media all and (orientation: portrait) {
+@media only screen and (max-width: 900px) {
   .picgo-setting-tip {
     padding-top: 16px;
     padding-bottom: 16px;

@@ -437,4 +437,6 @@ export default {
   "setting.picgo.picbed.tencent.cos": "Tencent cos",
   "setting.picgo.picbed.qiniu": "Qiniu yun",
   "setting.picgo.picbed.youpai": "Youpai yun",
+  "main.opt.edit": "Edit",
+  "main.opt.delete": "Delete",
 }
