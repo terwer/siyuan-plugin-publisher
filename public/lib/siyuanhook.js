@@ -115,7 +115,8 @@ const getCrossPlatformAppDataFolder = () => {
       "/Library/Application Support"
     )
   } else if (syWin.process.platform === "win32") {
-    configFilePath = path.join(syWin.process.env.APPDATA, "Roaming")
+    // Roaming包含在APPDATA中了
+    configFilePath = syWin.process.env.APPDATA
   } else if (syWin.process.platform === "linux") {
     configFilePath = syWin.process.env.HOME
   }
