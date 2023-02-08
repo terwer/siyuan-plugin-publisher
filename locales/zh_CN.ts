@@ -439,6 +439,7 @@ export default {
   "setting.picgo.picgo.choose.showed.picbed": "请选择显示的图床",
   "setting.picgo.picbed.selected.tip": "已选中",
   "setting.picgo.picbed.set.default": "设为默认图床",
+  "setting.picgo.picbed.current.selected.tip": "已选中图床：",
   "setting.picgo.picbed.current.tip": "当前默认图床是：",
   "setting.picgo.picbed.uploader.config.name": "图床配置名",
   "setting.picgo.picbed.uploader.config.name.placeholder": "请输入配置名称",

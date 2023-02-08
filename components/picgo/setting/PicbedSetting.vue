@@ -26,7 +26,13 @@
 <template>
   <div class="picbed-setting">
     <el-alert
-      :title="$t('setting.picgo.picbed.current.tip') + type"
+      :title="
+        $t('setting.picgo.picbed.current.selected.tip') +
+        type +
+        '，' +
+        $t('setting.picgo.picbed.current.tip') +
+        defaultType
+      "
       type="success"
       :closable="false"
     />
@@ -160,8 +166,9 @@ const profileData = reactive({
   curConfigId: "",
 })
 
-// 当前图床类型
+// 当前选择的图床类型
 const type = ref("")
+const defaultType = ref("")
 // use
 const picbedStore = usePicbedStore()
 const { t } = useI18n()
@@ -169,6 +176,17 @@ const { t } = useI18n()
 // 表单展示
 const isNewForm = ref(false)
 const showConfigForm = ref(false)
+
+/**
+ * 获取当前图床
+ */
+const getCurrentUploader = () => {
+  return (
+    picgoUtil.getPicgoConfig("picBed.uploader") ||
+    picgoUtil.getPicgoConfig("picBed.current") ||
+    "github"
+  )
+}
 
 const getPicBeds = () => {
   const picBeds = picgoUtil.getPicBeds() as IPicBedType[]
@@ -264,6 +282,8 @@ function setDefaultPicBed(tp: string) {
 
   picbedStore.setDefaultPicBed(tp)
 
+  defaultType.value = tp
+
   logger.info("当前存储的图床类型=>", tp)
   ElMessage.success(t("main.opt.success"))
 }
@@ -283,6 +303,9 @@ const reloadConfig = (bedType = undefined) => {
   const profileList = getProfileList(bedType)
   profileData.curConfigList = profileList.configList
   profileData.defaultConfigId = profileList.defaultId
+
+  defaultType.value = getCurrentUploader()
+  picbedStore.setDefaultPicBed(defaultType.value)
 }
 
 /* 监听props */

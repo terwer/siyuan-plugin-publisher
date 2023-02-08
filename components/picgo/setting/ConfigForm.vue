@@ -31,9 +31,9 @@
           <div class="flex items-center">
             <span
               class="text-large font-600 mr-3"
-              :title="ruleForm._configName"
+              :title="configRuleForm._configName"
             >
-              {{ ruleForm._configName }}
+              {{ configRuleForm._configName }}
             </span>
           </div>
         </template>
@@ -41,20 +41,14 @@
     </div>
 
     <div class="config-form">
-      <el-form
-        ref="$form"
-        label-position="left"
-        label-width="50%"
-        :model="ruleForm"
-        size="small"
-      >
+      <el-form ref="$configForm" label-width="120px" :model="configRuleForm">
         <el-form-item
           :label="$t('setting.picgo.picbed.uploader.config.name')"
           required
           prop="_configName"
         >
           <el-input
-            v-model="ruleForm._configName"
+            v-model="configRuleForm._configName"
             :placeholder="
               $t('setting.picgo.picbed.uploader.config.name.placeholder')
             "
@@ -71,13 +65,13 @@
         >
           <el-input
             v-if="item.type === 'input' || item.type === 'password'"
-            v-model="ruleForm[item.name]"
+            v-model="configRuleForm[item.name]"
             :type="item.type === 'password' ? 'password' : 'input'"
             :placeholder="item.message || item.name"
           />
           <el-select
             v-else-if="item.type === 'list' && item.choices"
-            v-model="ruleForm[item.name]"
+            v-model="configRuleForm[item.name]"
             :placeholder="item.message || item.name"
           >
             <el-option
@@ -89,7 +83,7 @@
           </el-select>
           <el-select
             v-else-if="item.type === 'checkbox' && item.choices"
-            v-model="ruleForm[item.name]"
+            v-model="configRuleForm[item.name]"
             :placeholder="item.message || item.name"
             multiple
             collapse-tags
@@ -103,7 +97,7 @@
           </el-select>
           <el-switch
             v-else-if="item.type === 'confirm'"
-            v-model="ruleForm[item.name]"
+            v-model="configRuleForm[item.name]"
             active-text="yes"
             inactive-text="no"
           />
@@ -140,11 +134,11 @@ const props = defineProps({
   isNewForm: Boolean,
 })
 
-const $form = ref<FormInstance>()
+const $configForm = ref<FormInstance>()
 const emits = defineEmits(["on-change"])
 
 const configList = ref<IPicGoPluginConfig[]>([])
-const ruleForm = reactive<IStringKeyMap>({})
+const configRuleForm = reactive<IStringKeyMap>({})
 
 watch(
   props.config,
@@ -188,8 +182,8 @@ function getCurConfigFormData() {
 function handleConfig(val: IPicGoPluginConfig[]) {
   const config = props.isNewForm ? {} : getCurConfigFormData()
   const configId = props.isNewForm ? undefined : props.configId
-  Object.assign(ruleForm, config)
-  logger.debug("form属性=>", ruleForm)
+  Object.assign(configRuleForm, config)
+  logger.debug("form属性=>", configRuleForm)
   logger.debug("configId=>", configId)
 
   // 追加form属性
@@ -217,21 +211,21 @@ function handleConfig(val: IPicGoPluginConfig[]) {
       if (config && config[item.name] !== undefined) {
         defaultValue = config[item.name]
       }
-      ruleForm[item.name] = defaultValue
+      configRuleForm[item.name] = defaultValue
       return item
     })
   }
 
-  logger.debug("完整form属性=>", ruleForm)
+  logger.debug("完整form属性=>", configRuleForm)
   logger.debug("动态配置configList=>", configList.value)
   logger.debug("追加form完成.")
 }
 
 async function validate(): Promise<IStringKeyMap | false> {
   return new Promise((resolve) => {
-    $form.value?.validate((valid: boolean) => {
+    $configForm.value?.validate((valid: boolean) => {
       if (valid) {
-        resolve(ruleForm)
+        resolve(configRuleForm)
       } else {
         resolve(false)
         return false
@@ -253,7 +247,7 @@ const onSubmit = async () => {
 
 // const initPage = () => {
 //   logger.warn("configList=>", configList)
-//   ruleForm._configName = props?.config?._configName ?? "New Config"
+//   configRuleForm._configName = props?.config?._configName ?? "New Config"
 // }
 
 // onBeforeMount(() => {
