@@ -291,6 +291,9 @@ const initSiyuanNewWin = () => {
   // 挂载JsonLocalStorage到window
   initMethods.initLocalStorageMethod("思源笔记新窗口")
 
+  // 初始化发布辅助功能
+  initMethods.initPublishHelper("思源笔记新窗口")
+
   // 初始化PicGO配置
   initMethods.initPicgoExtension("思源笔记新窗口")
 }
