@@ -112,11 +112,12 @@
 
       <!-- 图床配置表单 -->
       <div class="profile-form" v-else>
-        <picbed-config-form
+        <config-form
+          config-type="uploader"
+          :id="type"
           :config="profileData.curConfig"
           :config-id="profileData.defaultConfigId"
           :is-new-form="isNewForm"
-          :type="type"
           @on-change="emitBackFn"
         />
       </div>
@@ -125,14 +126,14 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, reactive, ref, watch } from "vue"
+import { onMounted, reactive, ref, toRaw, watch } from "vue"
 import { ElCard, ElMessage } from "element-plus"
 import picgoUtil from "~/utils/otherlib/picgoUtil"
 import { LogFactory } from "~/utils/logUtil"
-import PicbedConfigForm from "~/components/picgo/setting/PicbedConfigForm.vue"
 import dateUtil from "../../../utils/dateUtil"
 import { usePicbedStore } from "~/stores/picbedStore"
 import { useI18n } from "vue-i18n"
+import ConfigForm from "~/components/picgo/setting/ConfigForm.vue"
 
 const logger = LogFactory.getLogger(
   "components/picgo/setting/PicbedSetting.vue"
@@ -148,12 +149,15 @@ const picBedData = reactive({
 })
 // 配置数据
 const profileData = reactive({
-  // 当前配置ID
+  // 默认配置I项D
   defaultConfigId: "",
+
   // 当前图床配置列表
   curConfigList: [],
   // 当前配置
   curConfig: {},
+  // 当前配置项ID
+  curConfigId: "",
 })
 
 // 当前图床类型
@@ -186,7 +190,7 @@ const getProfileList = (bedType: string): IUploaderConfigItem => {
 const handlePicBedTypeChange = (item: IPicBedType) => {
   type.value = item.type
   reloadConfig(item.type)
-  logger.info("item=>", item)
+  logger.debug("item=>", item)
 }
 
 /**
@@ -197,8 +201,7 @@ function selectItem(id: string) {
   profileData.defaultConfigId = id
   const config = picgoUtil.selectUploaderConfig(type.value, id)
 
-  logger.info("selectItem config=>", config)
-  alert("selectItem=>" + id)
+  logger.debug("selectItem config=>", config)
 }
 
 /**
@@ -209,6 +212,14 @@ function addNewConfig() {
 
   isNewForm.value = true
   showConfigForm.value = true
+
+  logger.debug(
+    "editConfig profileData.defaultConfigId=>",
+    profileData.defaultConfigId
+  )
+  logger.debug("editConfig id=>", undefined)
+  logger.debug("editConfig type=>", toRaw(type))
+  logger.debug("editConfig config=>", toRaw(profileData.curConfig))
 }
 
 /**
@@ -221,6 +232,14 @@ function editConfig(id: string) {
 
   isNewForm.value = false
   showConfigForm.value = true
+
+  logger.info(
+    "editConfig profileData.defaultConfigId=>",
+    profileData.defaultConfigId
+  )
+  logger.debug("editConfig id=>", id)
+  logger.debug("editConfig type=>", toRaw(type))
+  logger.debug("editConfig config=>", toRaw(profileData.curConfig))
 }
 
 /**

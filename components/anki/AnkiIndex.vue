@@ -238,7 +238,7 @@ const initPage = async () => {
   formData.ankiInfo.forEach((item) => {
     formData.ankiMap[item.id] = item
 
-    logger.info("item.value=>", item.value)
+    logger.debug("item.value=>", item.value)
     let deckArr = []
     let tagArr = []
     if (!isEmptyString(item.value)) {
@@ -299,7 +299,7 @@ const saveAnkiInfo = (blockId: string) => {
     [ankiInfo.name]: ankiInfo.value,
   }
   siyuanApi.setBlockAttrs(blockId, customAttr)
-  logger.info("anki标记已保存，ankiInfo=>", ankiInfo)
+  logger.debug("anki标记已保存，ankiInfo=>", ankiInfo)
   ElMessage.success(t("main.opt.success"))
 }
 

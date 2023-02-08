@@ -26,6 +26,7 @@
 import { reactive } from "vue"
 import { isInSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
 import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
+import envUtil from "~/utils/envUtil"
 
 /**
  * Picgo公共组件
@@ -34,7 +35,7 @@ import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
  */
 export const usePicgoCommon = () => {
   // private data
-  const isDev = process.env.NODE_ENV === "development"
+  const isDev = envUtil.isDev
   const isSiyuanOrSiyuanNewWin = isInSiyuan() || isInSiyuanNewWinBrowser()
 
   // public data

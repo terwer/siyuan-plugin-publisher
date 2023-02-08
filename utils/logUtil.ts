@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -25,7 +25,7 @@
 
 // 开发阶段开启所有日志
 // 发布阶段只开启WARN和ERROR日志
-import { getBooleanEnv } from "./envUtil"
+import envUtil, { getBooleanEnv } from "./envUtil"
 import loglevel, { Logger } from "loglevel"
 import prefix from "loglevel-plugin-prefix"
 
@@ -53,7 +53,7 @@ const chalk = {
 // }
 
 const isTest = process.env.TEST === "true"
-const isDev = process.env.NODE_ENV === "development"
+const isDev = envUtil.isDev
 const LOG_INFO_ENABLED = getBooleanEnv("VITE_LOG_INFO_ENABLED") ?? false
 const LOG_LEVEL_DEBUG = "DEBUG"
 const LOG_LEVEL_INFO = "INFO"

@@ -49,7 +49,7 @@ const logger = LogFactory.getLogger("plugins/page-beauty/page-beauty.ts")
 const PageBeauty: PluginObject<any> = {
   install(Vue) {
     Vue.directive("beauty", (el: HTMLElement) => {
-      logger.info("PageBeauty is rendering ...")
+      logger.debug("PageBeauty is rendering ...")
 
       // links
       const links = el.querySelectorAll("a")
@@ -72,13 +72,13 @@ const PageBeauty: PluginObject<any> = {
 
             // 获取跳转链接
             const href = link.getAttribute("href")
-            // logger.info("href=>", href)
+            logger.debug("href=>", href)
             if (!isEmptyString(href)) {
               goToPage(href)
             }
           })
         })
-        console.log("链接处理完毕，全部新窗口打开.")
+        logger.debug("链接处理完毕，全部新窗口打开.")
       }
 
       // assets
@@ -93,7 +93,7 @@ const PageBeauty: PluginObject<any> = {
             img.setAttribute("src", imgUrl)
           }
         })
-        console.log("本地图片处理完毕，已修复图片展示.")
+        logger.debug("本地图片处理完毕，已修复图片展示.")
       }
     })
   },

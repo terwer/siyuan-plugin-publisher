@@ -165,7 +165,7 @@ const completeUploaderMetaConfig = (originData) => {
 }
 
 /**
- * get picbed config by type
+ * get picbed config by type，获取的是表单属性详细信息
  *
  * it will trigger the uploader config function & get the uploader config result
  * & not just read from

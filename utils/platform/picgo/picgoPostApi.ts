@@ -168,11 +168,11 @@ export class PicgoPostApi {
       }
 
       // 处理链接替换
-      this.logger.info(
+      this.logger.debug(
         "准备替换正文图片，replaceMap=>",
         JSON.stringify(replaceMap)
       )
-      this.logger.info(
+      this.logger.debug(
         "开始替换正文，原文=>",
         JSON.stringify({ mdContent: mdContent })
       )
@@ -180,15 +180,15 @@ export class PicgoPostApi {
         mdContent,
         replaceMap
       )
-      this.logger.info(
+      this.logger.debug(
         "图片链接替换完成，新正文=>",
         JSON.stringify({ newmdContent: ret.mdContent })
       )
 
       ret.flag = true
-      this.logger.info("正文替换完成，最终结果=>", ret)
+      this.logger.debug("正文替换完成，最终结果=>", ret)
     } catch (e) {
-      this.logger.info("文章图片上传失败=>", e)
+      this.logger.error("文章图片上传失败=>", e)
     }
     return Promise.resolve(ret)
   }

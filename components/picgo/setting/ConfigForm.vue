@@ -119,17 +119,23 @@
 
 <script lang="ts" setup>
 import { ArrowLeft } from "@element-plus/icons-vue"
-import { onBeforeMount, reactive, ref } from "vue"
+import { reactive, ref, toRaw, watch } from "vue"
 import { FormInstance } from "element-plus"
 import { LogFactory } from "~/utils/logUtil"
+import picgoUtil from "~/utils/otherlib/picgoUtil"
+import { cloneDeep, union } from "lodash-es"
 
 const logger = LogFactory.getLogger(
   "components/picgo/setting/PicbedConfigForm.vue"
 )
 
 const props = defineProps({
-  type: String,
+  // 配置类型：plugin、transfer还是uploader
+  configType: String,
+  // 对于uploader来说是图床类型
+  id: String,
   config: Object,
+  // 当前配置项的uuid
   configId: String,
   isNewForm: Boolean,
 })
@@ -139,6 +145,87 @@ const emits = defineEmits(["on-change"])
 
 const configList = ref<IPicGoPluginConfig[]>([])
 const ruleForm = reactive<IStringKeyMap>({})
+
+watch(
+  props.config,
+  (val: IPicGoPluginConfig[]) => {
+    logger.info("检测到配置文件变化，val=>", val)
+    handleConfigChange(val)
+  },
+  {
+    deep: true,
+    immediate: true,
+  }
+)
+
+// function getConfigType () {
+//   switch (props.configType) {
+//     case 'plugin': {
+//       return props.id
+//     }
+//     case 'uploader': {
+//       return `picBed.${props.id}`
+//     }
+//     case 'transformer': {
+//       return `transformer.${props.id}`
+//     }
+//     default:
+//       return 'unknown'
+//   }
+// }
+
+function handleConfigChange(val: any) {
+  handleConfig(val)
+}
+
+function getCurConfigFormData() {
+  const configId = props.configId
+  const curTypeConfigList =
+    picgoUtil.getPicgoConfig(`uploader.${props.id}.configList`) || []
+  return curTypeConfigList.find((i) => i._id === configId) || {}
+}
+
+function handleConfig(val: IPicGoPluginConfig[]) {
+  const config = props.isNewForm ? {} : getCurConfigFormData()
+  const configId = props.isNewForm ? undefined : props.configId
+  Object.assign(ruleForm, config)
+  logger.debug("form属性=>", config)
+  logger.debug("configId=>", configId)
+
+  // 追加form属性
+  const rawVal = toRaw(val)
+  logger.debug("追加form属性rawVal=>", rawVal)
+
+  if (rawVal.length > 0) {
+    configList.value = cloneDeep(rawVal).map((item) => {
+      if (!configId) return item
+      let defaultValue =
+        item.default !== undefined
+          ? item.default
+          : item.type === "checkbox"
+          ? []
+          : null
+      if (item.type === "checkbox") {
+        const defaults =
+          item.choices
+            ?.filter((i: any) => {
+              return i.checked
+            })
+            .map((i: any) => i.value) || []
+        defaultValue = union(defaultValue, defaults)
+      }
+      if (config && config[item.name] !== undefined) {
+        defaultValue = config[item.name]
+      }
+      ruleForm[item.name] = defaultValue
+      return item
+    })
+  }
+
+  logger.debug("完整form属性=>", config)
+  logger.debug("动态配置configList=>", toRaw(configList))
+  logger.debug("追加form完成.")
+}
 
 async function validate(): Promise<IStringKeyMap | false> {
   return new Promise((resolve) => {
@@ -164,15 +251,14 @@ const onSubmit = async () => {
   }
 }
 
-const initPage = () => {
-  logger.warn("configList=>", configList)
+// const initPage = () => {
+//   logger.warn("configList=>", configList)
+//   ruleForm._configName = props?.config?._configName ?? "New Config"
+// }
 
-  ruleForm._configName = props?.config?._configName ?? "New Config"
-}
-
-onBeforeMount(() => {
-  initPage()
-})
+// onBeforeMount(() => {
+//   initPage()
+// })
 </script>
 
 <style scoped>

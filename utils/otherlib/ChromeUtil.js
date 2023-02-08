@@ -88,7 +88,7 @@ export const getPageUrl = (pageUrl, split) => {
   let url = pageUrl
   // 外部链接
   if (url.startsWith("http") || url.startsWith("https")) {
-    logger.info("当前是外部链接，直接跳转")
+    logger.debug("当前是外部链接，直接跳转")
     return url
   }
 
