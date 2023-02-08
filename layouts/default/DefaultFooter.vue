@@ -36,27 +36,12 @@
         }}</span>
 
         <span class="text">.</span>
-        <span class="text s-dark" @click="changeSiyuanApi()">
-          {{ $t("blog.change.siyuan.api") }}
+        <span class="text s-dark">
+          {{ $t("setting.conf.transport") }}
         </span>
 
-        <span class="text">.</span>
-        <span class="text s-dark" @click="exportConfig()">
-          {{ $t("setting.conf.export") }}
-        </span>
-
-        <span class="text">.</span>
-        <span class="text s-dark" @click="importConfig()">
-          {{ $t("setting.conf.import") }}
-        </span>
-
-        <span class="text">.</span>
-        <span class="text s-dark" @click="clearConfig()">
-          {{ $t("setting.conf.clear") }}
-        </span>
-
-        <span class="text">.</span>
-        <span class="text s-dark" @click="newWin()">
+        <span class="text" v-if="isChrome">.</span>
+        <span class="text s-dark" @click="newWin()" v-if="isChrome">
           {{ $t("blog.newwin.open") }}
         </span>
 
@@ -69,31 +54,10 @@
         -----------------------------------------------------------------------------
         -->
         <!-- 思源地址设置弹窗 -->
-        <el-dialog
-          v-model="siyuanApiChangeFormVisible"
-          :title="$t('blog.change.siyuan.api')"
-        >
-          <siyuan-api-setting
-            @on-change="
-              () => {
-                siyuanApiChangeFormVisible = false
-              }
-            "
-            :show-cancel="true"
-          />
-        </el-dialog>
 
-        <!-- 导入选择弹窗 -->
+        <!-- 导出导出弹窗 -->
         <el-dialog
-          v-model="settingImportFormVisible"
-          :title="$t('setting.conf.export')"
-        >
-          <transport-select />
-        </el-dialog>
-
-        <!-- 导出选择弹窗 -->
-        <el-dialog
-          v-model="settingExportFormVisible"
+          v-model="transportFormVisible"
           :title="$t('setting.conf.import')"
         >
           <transport-select />
@@ -114,32 +78,27 @@
 <script lang="ts" setup>
 import { useDark, useToggle } from "@vueuse/core"
 import { onMounted, ref } from "vue"
-import { ElMessage, ElMessageBox } from "element-plus"
-import { useI18n } from "vue-i18n"
 import { LogFactory } from "~/utils/logUtil"
 import { isInSiyuanWidget } from "~/utils/platform/siyuan/siyuanUtil"
 import { goToPage } from "~/utils/otherlib/ChromeUtil"
-import { clearConf } from "~/utils/configUtil"
 import { version } from "../../package.json"
-import { isBrowser, reloadPage } from "~/utils/browserUtil"
+import { isBrowser } from "~/utils/browserUtil"
 import { nowYear } from "~/utils/dateUtil"
 import SetIndex from "~/components/set/SetIndex.vue"
-import SiyuanApiSetting from "~/components/set/siyuanApiSetting.vue"
 import TransportSelect from "~/components/transport/TransportSelect.vue"
+import { DeviceType, DeviceUtil } from "~/utils/deviceUtil"
 
 const logger = LogFactory.getLogger("layouts/default/DefaultFooter")
-
-const { t } = useI18n()
 
 const isDark = useDark()
 const toggleDark = useToggle(isDark)
 
 const v = ref("0.0.3")
 
-const siyuanApiChangeFormVisible = ref(false)
-const settingImportFormVisible = ref(false)
-const settingExportFormVisible = ref(false)
+const transportFormVisible = ref(false)
 const generalSettingFormVisible = ref(false)
+
+const isChrome = ref(false)
 
 const goGithub = () => {
   window.open("https://github.com/terwer/src-sy-post-publisher")
@@ -153,40 +112,16 @@ const openGeneralSetting = () => {
   generalSettingFormVisible.value = true
 }
 
-const exportConfig = () => {
-  settingExportFormVisible.value = true
-}
-
-const importConfig = async () => {
-  settingImportFormVisible.value = true
-}
-
-const clearConfig = () => {
-  ElMessageBox.confirm(t("main.opt.warning.tip"), t("main.opt.warning"), {
-    confirmButtonText: t("main.opt.ok"),
-    cancelButtonText: t("main.opt.cancel"),
-    type: "warning",
-  })
-    .then(async () => {
-      clearConf()
-
-      reloadPage()
-      ElMessage.success(t("main.opt.success"))
-    })
-    .catch(() => {
-      // ElMessage({
-      //   type: 'error',
-      //   message: t("main.opt.failure"),
-      // })
-    })
-}
-
-const changeSiyuanApi = () => {
-  siyuanApiChangeFormVisible.value = true
-}
-
 const initConf = () => {
   v.value = version
+
+  const deviceType = DeviceUtil.getDevice()
+  if (
+    deviceType === DeviceType.DeviceType_Chrome_Extension ||
+    deviceType === DeviceType.DeviceType_Chrome_Browser
+  ) {
+    isChrome.value = true
+  }
 }
 
 onMounted(() => {

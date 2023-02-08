@@ -282,6 +282,7 @@ export default {
     "如果没有部署代理，可以使用我的共享地址：https://api.terwer.space/api/middleware 。出于性能考虑，建议自己部署一份，请使用 https://github.com/terwer/node-metaweblog-api-adaptor 此项目进行部署。",
   "setting.conf.export": "导出配置",
   "setting.conf.import": "导入配置",
+  "setting.conf.transport": "导入导出",
   "setting.conf.clear": "清空配置",
   "page.no.id": "请求非法，原因：pageId获取失败",
   "yaml.show.type.yaml": "YAML",

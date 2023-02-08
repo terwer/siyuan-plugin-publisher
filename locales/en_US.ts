@@ -276,6 +276,7 @@ export default {
   "setting.blog.siyuan.current.apiurl": "Current apiUrl=>",
   "setting.conf.export": "Export config",
   "setting.conf.import": "Import config",
+  "setting.conf.transport": "Transport",
   "setting.conf.clear": "Clear config",
   "page.no.id": "pageId fetch error",
   "main.read.mode": "Readonly",

@@ -73,6 +73,7 @@
 
       <!-- 管理图片 -->
       <el-tooltip
+        v-if="false"
         class="box-item"
         effect="dark"
         :content="$t('post.detail.button.pic.manage')"
@@ -85,6 +86,7 @@
 
       <!-- 管理Anki -->
       <el-tooltip
+        v-if="false"
         class="box-item"
         effect="dark"
         :content="$t('post.detail.button.anki.mark')"
