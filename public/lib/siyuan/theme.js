@@ -36,7 +36,9 @@ const initTheme = () => {
     .getAttribute("data-theme-mode")
   console.log("themeMode=>", themeMode)
 
-  const element = window.document.querySelector(".protyle")
+  const element = window.document.querySelector(
+    "#layouts>.fn__flex>.fn__flex-column:not(.layout__center)>.fn__flex>div[data-type=wnd]"
+  )
   const computedStyle = window.getComputedStyle(element)
   const bgColor = computedStyle.getPropertyValue("background-color")
   window.customstyle.backgroundColor = bgColor

@@ -141,12 +141,43 @@ code {
   margin-top: 10px !important;
 }
 
+.el-card__body {
+  text-align: left !important;
+  --el-card-padding: 10px;
+}
+
 .el-dialog {
   --el-dialog-width: 88% !important;
   --el-dialog-margin-top: 10vh;
   margin: var(--el-dialog-margin-top, 15vh) auto 0 5.5%;
+  text-align: left !important;
 }
 
-.el-card__body {
-  --el-card-padding: 10px;
+.el-dialog__header {
+  text-align: left !important;
+}
+
+.el-dialog__body {
+  padding-bottom: 10px !important;
+}
+
+.dialog-action {
+  margin: calc(var(--el-dialog-padding-primary) + 16px)
+    var(--el-dialog-padding-primary);
+  margin-bottom: 0;
+  padding-bottom: 0;
+  padding-right: 0;
+  margin-right: 0;
+}
+
+.dialog-action .el-form-item {
+  margin-bottom: 0 !important;
+}
+
+.dialog-action .el-form-item__content {
+  justify-content: flex-end;
+}
+
+.dialog-action .el-form-item__content .el-button {
+  margin-left: 10px;
 }

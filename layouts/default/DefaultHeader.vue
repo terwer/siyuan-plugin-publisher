@@ -197,7 +197,10 @@ import {
   isInSiyuanNewWinBrowser,
 } from "~/utils/otherlib/siyuanBrowserUtil"
 import { ElMessage } from "element-plus"
-import { getWidgetId, isInSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
+import {
+  getWidgetId,
+  isInSiyuanWidget,
+} from "~/utils/platform/siyuan/siyuanUtil"
 import { getPublishCfg } from "~/utils/publishUtil"
 import { appendStr } from "~/utils/strUtil"
 import { useI18n } from "vue-i18n"
@@ -350,7 +353,7 @@ const pageIdChanged = () => {
 
 onMounted(() => {
   // 思源新窗口，或者思源挂件才会有这两个按钮
-  if (isInSiyuanNewWinBrowser() || isInSiyuan()) {
+  if (isInSiyuanNewWinBrowser() || isInSiyuanWidget()) {
     // init
     const publishCfg = getPublishCfg()
 

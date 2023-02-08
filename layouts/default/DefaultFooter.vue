@@ -62,88 +62,49 @@
 
         <span class="text">.</span>
         <span class="text s-dark" @click="openGeneralSetting()">
-          {{ $t("service.tab.change.local") }}
+          {{ $t("setting.blog.index") }}
         </span>
 
         <!--
         -----------------------------------------------------------------------------
         -->
-
-        <!-- 思源笔记设置弹窗 -->
+        <!-- 思源地址设置弹窗 -->
         <el-dialog
           v-model="siyuanApiChangeFormVisible"
           :title="$t('blog.change.siyuan.api')"
         >
-          <el-form
-            ref="siyuanApiSettingFormRef"
-            :model="siyuanApiChangeForm"
-            :rules="siyuanApiChangeRules"
-          >
-            <el-form-item
-              :label="$t('setting.blog.apiurl')"
-              :label-width="formLabelWidth"
-              prop="apiUrl"
-            >
-              <el-input
-                v-model="siyuanApiChangeForm.apiUrl"
-                autocomplete="off"
-                :placeholder="$t('setting.blog.siyuan.apiurl')"
-              />
-            </el-form-item>
-            <el-form-item
-              :label="$t('setting.blog.password')"
-              :label-width="formLabelWidth"
-              prop="pwd"
-            >
-              <el-input
-                v-model="siyuanApiChangeForm.pwd"
-                type="password"
-                autocomplete="off"
-                :placeholder="$t('setting.blog.siyuan.password')"
-                show-password
-              />
-            </el-form-item>
-            <el-form-item
-              :label="$t('setting.blog.middlewareUrl')"
-              :label-width="formLabelWidth"
-              prop="middlewareUrl"
-            >
-              <el-input
-                v-model="siyuanApiChangeForm.middlewareUrl"
-                autocomplete="off"
-                :placeholder="$t('setting.blog.middlewareUrl.tip')"
-              />
-            </el-form-item>
-            <el-form-item>
-              <el-alert
-                class="top-data-tip middleware-tip"
-                :title="$t('setting.blog.middlewareUrl.my.tip')"
-                type="success"
-                :closable="false"
-              />
-            </el-form-item>
-          </el-form>
+          <siyuan-api-setting
+            @on-change="
+              () => {
+                siyuanApiChangeFormVisible = false
+              }
+            "
+            :show-cancel="true"
+          />
+        </el-dialog>
 
-          <template #footer>
-            <span class="dialog-footer">
-              <el-button @click="siyuanApiChangeFormVisible = false">{{
-                $t("main.opt.cancel")
-              }}</el-button>
-              <el-button
-                type="primary"
-                @click="handleSiyuanApiSetting(siyuanApiSettingFormRef)"
-                >{{ $t("main.opt.ok") }}</el-button
-              >
-            </span>
-          </template>
+        <!-- 导入选择弹窗 -->
+        <el-dialog
+          v-model="settingImportFormVisible"
+          :title="$t('setting.conf.export')"
+        >
+          <transport-select />
+        </el-dialog>
+
+        <!-- 导出选择弹窗 -->
+        <el-dialog
+          v-model="settingExportFormVisible"
+          :title="$t('setting.conf.import')"
+        >
+          <transport-select />
         </el-dialog>
 
         <!-- 通用设置弹窗 -->
         <el-dialog
           v-model="generalSettingFormVisible"
-          :title="$t('service.tab.change.local')"
+          :title="$t('setting.blog.index')"
         >
-          <general-setting />
+          <set-index />
         </el-dialog>
       </div>
     </div>
@@ -152,27 +113,19 @@
 
 <script lang="ts" setup>
 import { useDark, useToggle } from "@vueuse/core"
-import { onMounted, reactive, ref } from "vue"
-import { ElMessage, ElMessageBox, FormRules } from "element-plus"
+import { onMounted, ref } from "vue"
+import { ElMessage, ElMessageBox } from "element-plus"
 import { useI18n } from "vue-i18n"
 import { LogFactory } from "~/utils/logUtil"
-import { isInSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
-import {
-  getSiyuanCfg,
-  SiYuanConfig,
-} from "~/utils/platform/siyuan/siYuanConfig"
+import { isInSiyuanWidget } from "~/utils/platform/siyuan/siyuanUtil"
 import { goToPage } from "~/utils/otherlib/ChromeUtil"
-import {
-  clearConf,
-  exportConf,
-  importConf,
-  setJSONConf,
-} from "~/utils/configUtil"
-import { SIYUAN_CONSTANTS } from "~/utils/constants/siyuanConstants"
+import { clearConf } from "~/utils/configUtil"
 import { version } from "../../package.json"
 import { isBrowser, reloadPage } from "~/utils/browserUtil"
-import GeneralSetting from "~/components/publish/tab/GeneralSetting.vue"
 import { nowYear } from "~/utils/dateUtil"
+import SetIndex from "~/components/set/SetIndex.vue"
+import SiyuanApiSetting from "~/components/set/siyuanApiSetting.vue"
+import TransportSelect from "~/components/transport/TransportSelect.vue"
 
 const logger = LogFactory.getLogger("layouts/default/DefaultFooter")
 
@@ -181,53 +134,31 @@ const { t } = useI18n()
 const isDark = useDark()
 const toggleDark = useToggle(isDark)
 
-const isInSiyuanEnv = ref(false)
 const v = ref("0.0.3")
 
-const formLabelWidth = "140px"
 const siyuanApiChangeFormVisible = ref(false)
-const siyuanApiSettingFormRef = ref()
-const siyuanApiChangeForm = reactive({
-  apiUrl: "http://127.0.0.1:6806",
-  pwd: "",
-  middlewareUrl: "",
-})
-const siyuanApiChangeRules = reactive<FormRules>({
-  apiUrl: [
-    {
-      required: true,
-      message: () => t("form.validate.name.required"),
-    },
-  ],
-  pwd: [
-    {
-      required: false,
-      message: () => t("form.validate.name.required"),
-    },
-  ],
-})
-
+const settingImportFormVisible = ref(false)
+const settingExportFormVisible = ref(false)
 const generalSettingFormVisible = ref(false)
 
 const goGithub = () => {
   window.open("https://github.com/terwer/src-sy-post-publisher")
 }
 
-const openGeneralSetting = () => {
-  generalSettingFormVisible.value = true
-}
-
 const newWin = () => {
   goToPage("/blog/index.html")
 }
 
+const openGeneralSetting = () => {
+  generalSettingFormVisible.value = true
+}
+
 const exportConfig = () => {
-  const confName = `sy-p-cfg-v${v.value}.json`
-  exportConf(confName)
+  settingExportFormVisible.value = true
 }
 
 const importConfig = async () => {
-  await importConf()
+  settingImportFormVisible.value = true
 }
 
 const clearConfig = () => {
@@ -254,58 +185,12 @@ const changeSiyuanApi = () => {
   siyuanApiChangeFormVisible.value = true
 }
 
-const handleSiyuanApiSetting = async (formEl) => {
-  if (!formEl) return
-  const result = await formEl.validate((valid, fields) => {
-    if (valid) {
-      logger.debug("校验成功")
-    } else {
-      logger.error(t("main.opt.failure"), fields)
-      ElMessage.error(t("main.opt.failure"))
-    }
-  })
-  if (!result) {
-    return
-  }
-
-  // 保存思源笔记配置数据
-  try {
-    const siyuanCfg = new SiYuanConfig(
-      siyuanApiChangeForm.apiUrl,
-      siyuanApiChangeForm.pwd,
-      siyuanApiChangeForm.middlewareUrl
-    )
-    setJSONConf<SiYuanConfig>(SIYUAN_CONSTANTS.SIYUAN_CFG_KEY, siyuanCfg)
-    logger.debug("保存思源配置", siyuanCfg)
-    ElMessage.success(t("main.opt.success"))
-    setTimeout(function () {
-      // 关闭对话框
-      siyuanApiChangeFormVisible.value = false
-      // goToPageWithTarget("/blog/index.html", "_self", "")
-
-      reloadPage()
-    }, 500)
-  } catch (e) {
-    siyuanApiChangeFormVisible.value = false
-
-    ElMessage.error(t("main.opt.failure"))
-    logger.error(t("main.opt.failure"), e)
-  }
-}
-
 const initConf = () => {
   v.value = version
-
-  const siyuanCfg = getSiyuanCfg()
-
-  siyuanApiChangeForm.apiUrl = siyuanCfg.baseUrl
-  siyuanApiChangeForm.pwd = siyuanCfg.token
-  siyuanApiChangeForm.middlewareUrl = siyuanCfg.middlewareUrl
-  logger.debug("初始化思源配置", siyuanCfg)
 }
 
 onMounted(() => {
-  if (isInSiyuan()) {
+  if (isInSiyuanWidget()) {
     logger.info("恭喜你，正在以挂件模式运行")
   } else {
     logger.info(
@@ -323,11 +208,6 @@ onMounted(() => {
 })
 </script>
 
-<style>
-.el-dialog__header {
-  text-align: left !important;
-}
-</style>
 <style scoped>
 .footer {
   font-size: 12px;

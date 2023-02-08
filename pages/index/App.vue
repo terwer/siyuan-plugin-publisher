@@ -44,8 +44,8 @@ import { onMounted, ref } from "vue"
 import { LogFactory } from "~/utils/logUtil"
 import {
   getPageId,
-  isInSiyuan,
   isInSiyuanOrSiyuanNewWin,
+  isInSiyuanWidget,
 } from "~/utils/platform/siyuan/siyuanUtil"
 import { SiYuanApiAdaptor } from "~/utils/platform/siyuan/siYuanApiAdaptor"
 import { isInChromeExtension } from "~/utils/browserUtil"
@@ -62,7 +62,7 @@ const init = async () => {
   logger.warn("MODE=>", import.meta.env.MODE)
 
   if (isInSiyuanOrSiyuanNewWin()) {
-    if (isInSiyuan()) {
+    if (isInSiyuanWidget()) {
       setTimeout(siyuanBrowserUtil.fitTheme, 3500)
     }
 

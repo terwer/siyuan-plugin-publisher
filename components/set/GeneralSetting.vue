@@ -1,5 +1,5 @@
 <!--
-  - Copyright (c) 2023, Terwer . All rights reserved.
+  - Copyright (c) 2022-2023, Terwer . All rights reserved.
   - DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
   -  
   - This code is free software; you can redistribute it and/or modify it
@@ -24,33 +24,20 @@
   -->
 
 <template>
-  <el-tabs tab-position="left">
-    <el-tab-pane :label="$t('blog.change.siyuan.api')">
-      <siyuan-api-setting :show-cancel="false" />
-    </el-tab-pane>
-    <el-tab-pane :label="$t('dynamic.platform.new')">
-      <dynamic-platform />
-    </el-tab-pane>
-    <el-tab-pane :label="$t('service.tab.service.switch')">
-      <service-switch />
-    </el-tab-pane>
-    <el-tab-pane :label="$t('service.tab.publish.setting')">
-      <platform-setting />
-    </el-tab-pane>
-    <el-tab-pane :label="$t('picgo.pic.setting')">
-      <picgo-setting />
-    </el-tab-pane>
-    <el-tab-pane :label="$t('service.tab.change.local')">
-      <general-setting />
-    </el-tab-pane>
-  </el-tabs>
+  <div class="general-setting">
+    <change-local />
+    <preference-setting :is-reload="props.isReload" />
+  </div>
 </template>
 
-<script setup lang="ts">
-import PlatformSetting from "~/components/publish/tab/PlatformSetting.vue"
-import ServiceSwitch from "~/components/publish/tab/ServiceSwitch.vue"
-import DynamicPlatform from "~/components/publish/tab/DynamicPlatform.vue"
-import PicgoSetting from "~/components/picgo/PicgoSetting.vue"
-import GeneralSetting from "~/components/set/GeneralSetting.vue"
-import SiyuanApiSetting from "~/components/set/siyuanApiSetting.vue"
+<script lang="ts" setup>
+import ChangeLocal from "~/components/set/preference/ChangeLocal.vue"
+import PreferenceSetting from "~/components/set/preference/PreferenceSetting.vue"
+
+const props = defineProps({
+  isReload: {
+    type: Boolean,
+    default: false,
+  },
+})
 </script>

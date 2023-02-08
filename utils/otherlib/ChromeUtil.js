@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { isInSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
+import { isInSiyuanWidget } from "~/utils/platform/siyuan/siyuanUtil"
 import {
   getQueryString,
   readJSONFileFormDialog,
@@ -105,7 +105,7 @@ export const getPageUrl = (pageUrl, split) => {
   ) {
     // 思源笔记链接处理
     url = "/widgets/sy-post-publisher" + url
-    if (isInSiyuan()) {
+    if (isInSiyuanWidget()) {
       from = FROM_CONSTANTS.FROM_CHROME
     }
     if (isInSiyuanNewWinBrowser()) {

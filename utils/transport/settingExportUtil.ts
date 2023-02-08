@@ -23,42 +23,4 @@
  * questions.
  */
 
-import { reactive } from "vue"
-import { isInSiyuanWidget } from "~/utils/platform/siyuan/siyuanUtil"
-import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
-import envUtil from "~/utils/envUtil"
-
-/**
- * Picgo公共组件
- * @author terwer
- * @since 0.6.1
- */
-export const usePicgoCommon = () => {
-  // private data
-  const isDev = envUtil.isDev
-  const isSiyuanOrSiyuanNewWin = isInSiyuanWidget() || isInSiyuanNewWinBrowser()
-
-  // public data
-  const picgoCommonData = reactive({
-    isUploadLoading: false,
-    popWidth: 400,
-    showDebugMsg: isDev,
-    loggerMsg: "",
-    isSiyuanOrSiyuanNewWin: isSiyuanOrSiyuanNewWin,
-    fileList: {
-      files: [],
-    },
-  })
-
-  // public methods
-  const picgoCommonMethods = {
-    getPicgoCommonData: () => {
-      return picgoCommonData
-    },
-  }
-
-  return {
-    picgoCommonData,
-    picgoCommonMethods,
-  }
-}
+export default {}

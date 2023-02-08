@@ -1,5 +1,5 @@
 <!--
-  - Copyright (c) 2022, Terwer . All rights reserved.
+  - Copyright (c) 2022-2023, Terwer . All rights reserved.
   - DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
   -
   - This code is free software; you can redistribute it and/or modify it
@@ -184,7 +184,7 @@ import {
 } from "~/utils/platform/dynamicConfig"
 import { LogFactory } from "~/utils/logUtil"
 import { checkKeyExists } from "~/utils/configUtil"
-import { importPreDefinedPlatform } from "~/utils/import/importUtil"
+import { importPreDefinedPlatform } from "~/utils/platform/import/platformImportUtil"
 
 const logger = LogFactory.getLogger(
   "components/publish/tab/DynamicPlatform.vue"

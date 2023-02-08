@@ -121,6 +121,7 @@ export default {
   "main.opt.tip": "Tips",
   "setting.noneed": "No need setting",
   "setting.blog.setting": " Setting",
+  "setting.blog.index": "System setting",
   "setting.blog.type": "Blog type",
   "setting.blog.type.placeholder": "Please select type",
   "setting.blog.type.wordpress.value": "Wordpress",

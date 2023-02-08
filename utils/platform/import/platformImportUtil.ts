@@ -34,7 +34,7 @@ import {
 import { checkKeyExists } from "~/utils/configUtil"
 import * as pre from "./pre.json"
 import { LogFactory } from "~/utils/logUtil"
-import { PRE_DEFINED_PLATFORM_KEY_CONSTANTS } from "~/utils/import/PRE_DEFINED_PLATFORM_CONSTANTS"
+import { PRE_DEFINED_PLATFORM_KEY_CONSTANTS } from "~/utils/platform/import/PRE_DEFINED_PLATFORM_CONSTANTS"
 
 const logger = LogFactory.getLogger("utils/import/importUtil.ts")
 

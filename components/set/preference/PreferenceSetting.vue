@@ -25,7 +25,7 @@
 
 <template>
   <div class="preference-setting">
-    <el-form label-width="100px">
+    <el-form label-width="150px" inline>
       <el-form-item :label="$t('preference.setting.fixTitle')">
         <el-switch
           v-model="formData.fixTitle"

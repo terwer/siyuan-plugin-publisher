@@ -27,8 +27,8 @@
 
 import { ElMessage } from "element-plus"
 import {
-  isInSiyuan,
   isInSiyuanOrSiyuanNewWin,
+  isInSiyuanWidget,
 } from "~/utils/platform/siyuan/siyuanUtil"
 
 const SIYUAN_BROWSER_CONSTANTS_SIYUAN_EXPORT_CLOSE = "siyuan-export-close"
@@ -49,7 +49,7 @@ const getSiyuanWindow = () => {
     return window
   }
 
-  if (isInSiyuan()) {
+  if (isInSiyuanWidget()) {
     return parent.window
   } else {
     return window

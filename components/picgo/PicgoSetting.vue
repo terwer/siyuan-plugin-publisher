@@ -29,7 +29,9 @@
       <div>
         {{ $t("picgo.siyuan.tip") }} 。 从 0.7.0+
         开始，支持多个配置文件切换，当前系统默认的 PicGO 配置文件为：
-        <pre style="display: inline-block"><code>{{ picgoCfg }}</code></pre>
+        <pre
+          style="display: inline-block"
+        ><code>{{ picgoUtil.getPicgoCfgPath() }}</code></pre>
         。
         {{ $t("setting.picgo.refer.to") }}
         <a
@@ -58,8 +60,10 @@
     </el-tabs>
   </div>
   <div v-else>
-    <p>{{ $t("picgo.chrome.tip") }} 。</p>
-    <p>{{ $t("picgo.pic.setting.no.tip") }} 。</p>
+    <div class="picgo-browser-tip">
+      <p>{{ $t("picgo.chrome.tip") }} 。</p>
+      <p>{{ $t("picgo.pic.setting.no.tip") }} 。</p>
+    </div>
   </div>
 </template>
 <script setup lang="ts">
@@ -70,7 +74,6 @@ import { ref } from "vue"
 import picgoUtil from "~/utils/otherlib/picgoUtil"
 
 const isReload = ref(false)
-const picgoCfg = picgoUtil.getPicgoCfgPath()
 
 const picgoSettingTabChange = () => {
   isReload.value = !isReload.value
@@ -86,12 +89,11 @@ const picgoSettingTabChange = () => {
   margin-inline-start: 0;
   margin-inline-end: 0;
   margin: 0 0 10px;
-  padding: 16px 16px 0;
+  padding: 16px 16px 16px;
 }
 
-@media only screen and (max-width: 900px) {
-  .picgo-setting-tip {
-    padding-bottom: 16px;
-  }
+.picgo-browser-tip {
+  margin-left: 10px;
+  margin-right: 10px;
 }
 </style>

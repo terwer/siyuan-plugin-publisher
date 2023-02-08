@@ -162,7 +162,7 @@ import YuqueSetting from "~/components/publish/tab/setting/common/YuqueSetting.v
 import KmsSetting from "~/components/publish/tab/setting/common/KmsSetting.vue"
 import GithubSetting from "~/components/publish/tab/setting/GithubSetting.vue"
 import MetaweblogSetting from "~/components/publish/tab/setting/MetaweblogSetting.vue"
-import { PRE_DEFINED_PLATFORM_KEY_CONSTANTS } from "~/utils/import/PRE_DEFINED_PLATFORM_CONSTANTS"
+import { PRE_DEFINED_PLATFORM_KEY_CONSTANTS } from "~/utils/platform/import/PRE_DEFINED_PLATFORM_CONSTANTS"
 import { MetaweblogPlaceholder } from "~/utils/platform/metaweblog/metaweblogPlaceholder"
 import { useI18n } from "vue-i18n"
 
