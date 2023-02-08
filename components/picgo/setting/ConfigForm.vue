@@ -241,6 +241,11 @@ const onBack = () => {
 const onSubmit = async () => {
   const result = (await validate()) || false
   if (result !== false) {
+    // 图床配置表单
+    if (props.configType === "uploader") {
+      picgoUtil.updateUploaderConfig(props.id, result?._id, result)
+    }
+
     onBack()
   }
 }

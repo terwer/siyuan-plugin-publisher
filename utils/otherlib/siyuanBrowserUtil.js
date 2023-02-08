@@ -57,8 +57,7 @@ const getSiyuanWindow = () => {
 }
 
 /**
- * 获取数据目录
- * @returns {*|string}
+ * 获取新窗口数据目录
  */
 export const getSiyuanNewWinDataDir = () => {
   return window.terwer.dataDir ?? "/notfound"

@@ -28,10 +28,8 @@
     <blockquote class="picgo-setting-tip">
       <div>
         {{ $t("picgo.siyuan.tip") }} 。 从 0.7.0+
-        开始，支持多个配置文件切换，默认的 PicGO 配置文件为：
-        <pre
-          style="display: inline-block"
-        ><code>[思源工作空间]/data/storage/syp/picgo/picgo.cfg.json</code></pre>
+        开始，支持多个配置文件切换，当前系统默认的 PicGO 配置文件为：
+        <pre style="display: inline-block"><code>{{ picgoCfg }}</code></pre>
         。
         {{ $t("setting.picgo.refer.to") }}
         <a
@@ -69,8 +67,10 @@ import { isElectron } from "~/utils/browserUtil"
 import PicbedSetting from "~/components/picgo/setting/PicbedSetting.vue"
 import PicgoConfigSetting from "~/components/picgo/setting/PicgoConfigSetting.vue"
 import { ref } from "vue"
+import picgoUtil from "~/utils/otherlib/picgoUtil"
 
 const isReload = ref(false)
+const picgoCfg = picgoUtil.getPicgoCfgPath()
 
 const picgoSettingTabChange = () => {
   isReload.value = !isReload.value

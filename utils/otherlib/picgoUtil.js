@@ -311,6 +311,15 @@ const selectUploaderConfig = (type, id) => {
   return config
 }
 
+/**
+ * 更新图床配置
+ *
+ * @param type 图床类型
+ * @param id 图床配置ID
+ * @param config 图床配置
+ * @author terwer
+ * @since 0.7.0
+ */
 export const updateUploaderConfig = (type, id, config) => {
   const syWin = siyuanBrowserUtil.getSiyuanWindow()
   const picgo = syWin.SyPicgo.getPicgoObj()
@@ -362,6 +371,17 @@ export const deleteUploaderConfig = (type, id) => {
 }
 
 /**
+ * PicGO配置文件路径
+ */
+const getPicgoCfgPath = () => {
+  const syWin = siyuanBrowserUtil.getSiyuanWindow()
+  const picgo = syWin.SyPicgo.getPicgoObj()
+
+  const picgo_cfg_070 = "test"
+  return picgo_cfg_070
+}
+
+/**
  * PicGO相关操作统一访问入口
  */
 const picgoUtil = {
@@ -378,8 +398,11 @@ const picgoUtil = {
   selectUploaderConfig,
   changeCurrentUploader,
   deleteUploaderConfig,
+  updateUploaderConfig,
 
   // upload
   uploadByPicGO,
+
+  getPicgoCfgPath,
 }
 export default picgoUtil

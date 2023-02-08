@@ -25,7 +25,7 @@
 
 <template>
   <div>
-    <el-form>
+    <el-form label-width="125px">
       <el-form-item :label="$t('setting.picgo.picgo.open.config.file')">
         <el-button>{{ $t("setting.picgo.picgo.click.to.open") }}</el-button>
       </el-form-item>

@@ -23,10 +23,27 @@
  * questions.
  */
 
-// 警告⚠️：请勿在非思源笔记浏览器环境调用此文件中的任何方法
+// 警告1⚠️：请勿在非思源笔记浏览器环境调用此文件中的任何方法
+// 警告2⚠️：此文件请勿引用其他任何需要编译的类库
+// 提示3⚠️：此文件是挂件唯一的hook入口
 
 console.warn("从0.6.8+开始，siyuanhook.js将作为统一的hook入口。")
 
+/**
+ * 是否是Electron环境，等价于isInSiyuanOrSiyuanNewWin
+ */
+const isElectron = /Electron/.test(navigator.userAgent)
+
+/**
+ * 思源笔记或者思源笔记新窗口，等价于Electron环境
+ */
+const isInSiyuanOrSiyuanNewWin = () => {
+  return isElectron
+}
+
+/**
+ * 思源笔记Iframe挂件环境
+ */
 const isSiyuanWidget = () => {
   return (
     window.frameElement != null &&
@@ -38,106 +55,227 @@ const isSiyuanWidget = () => {
   )
 }
 
+/**
+ * 思源笔记新窗口
+ */
 const isSiyuanNewWin = () => {
   return typeof window.terwer !== "undefined"
 }
 
+/**
+ * 获取可操作的Window
+ */
+const getSiyuanWindow = () => {
+  if (!isInSiyuanOrSiyuanNewWin()) {
+    return window
+  }
+
+  if (isSiyuanWidget()) {
+    return parent.window
+  } else {
+    return window
+  }
+}
+
+/**
+ * 获取新窗口数据目录
+ */
+const getSiyuanNewWinDataDir = () => {
+  return window.terwer.dataDir ?? "/notfound"
+}
+
+/**
+ * 获取数据目录
+ */
+export const getSiyuanDataDir = () => {
+  const syWin = getSiyuanWindow()
+
+  if (isSiyuanWidget()) {
+    return syWin.siyuan.config.system.dataDir
+  } else {
+    if (isSiyuanNewWin()) {
+      return getSiyuanNewWinDataDir()
+    } else {
+      return syWin.siyuan.config.system.dataDir
+    }
+  }
+}
+
+/**
+ * 获取跨平台的配置文件路径
+ */
+const getCrossPlatformAppDataFolder = () => {
+  const syWin = getSiyuanWindow()
+  const path = syWin.require("path")
+
+  let configFilePath
+  if (process.platform === "darwin") {
+    configFilePath = path.join(process.env.HOME, "/Library/Application Support")
+  } else if (process.platform === "win32") {
+    configFilePath = path.join(process.env.APPDATA, "Roaming")
+  } else if (process.platform === "linux") {
+    configFilePath = process.env.HOME
+  }
+
+  return configFilePath
+}
+
+/**
+ * 引入依赖
+ *
+ * @param entryName 运行模式名称
+ * @param libpath 依赖全路径
+ * @param alias 依赖别名
+ * @author terwer
+ * @since 0.7.0
+ */
+const requireLib = (entryName, libpath, alias) => {
+  const syWin = getSiyuanWindow()
+  console.log(entryName + "将要从以下位置引入" + alias, libpath)
+  return syWin.require(libpath)
+}
+
+// 初始化方法统一定义
+const initMethods = {
+  /**
+   * 初始化 sy-post-publisher 配置文件存储，适用于【iframe挂件模式】、【新窗口模式】以及【js片段模式】
+   */
+  initLocalStorageMethod: (entryName) => {
+    const syWin = getSiyuanWindow()
+    const dataDir = getSiyuanDataDir()
+
+    // 挂载JsonLocalStorage到window
+    const LocalStorage = requireLib(
+      entryName,
+      `${dataDir}/widgets/sy-post-publisher/lib/json-localstorage/json-localstorage.js`,
+      "json-localstorage"
+    )
+    LocalStorage.init("../../../../storage/syp/")
+  },
+
+  /**
+   * 初始化插槽，仅【iframe挂件模式】、【自定义js片段模式】可用
+   * @param entryName 入口名称
+   */
+  initSlotMethod: (entryName) => {
+    const syWin = getSiyuanWindow()
+
+    // 初始化插槽
+    const initSlot = requireLib(
+      entryName,
+      `${syWin.siyuan.config.system.dataDir}/widgets/sy-post-publisher/lib/siyuan/silot.js`,
+      "插槽"
+    )
+    initSlot()
+  },
+
+  /**
+   * 初始化主题适配，仅【iframe挂件模式】可用
+   * @param entryName 入口名称
+   */
+  initThemeAdaptor: (entryName) => {
+    const syWin = getSiyuanWindow()
+
+    // 初始化主题适配
+    const initTheme = requireLib(
+      entryName,
+      `${syWin.siyuan.config.system.dataDir}/widgets/sy-post-publisher/lib/siyuan/theme.js`,
+      "自定义主题片段"
+    )
+    setTimeout(initTheme, 1000)
+  },
+}
+
 // iframe挂件
 const initIframeWidaget = () => {
-  // 初始化插槽
-  const slotLibPath = `${parent.window.siyuan.config.system.dataDir}/widgets/sy-post-publisher/lib/siyuan/silot.js`
-  console.log("iframe挂件将要从以下位置引入插槽", slotLibPath)
-  const initSlot = parent.window.require(slotLibPath)
-  initSlot()
-
   // 挂载JsonLocalStorage到window
-  const jsonLocalstorageLibPath = `${parent.window.siyuan.config.system.dataDir}/widgets/sy-post-publisher/lib/json-localstorage/json-localstorage.js`
-  console.log(
-    "iframe挂件将要从以下位置引入json-localstorage",
-    jsonLocalstorageLibPath
-  )
-  const LocalStorage = parent.window.require(jsonLocalstorageLibPath)
-  LocalStorage.init("../../../../storage/syp/")
+  initMethods.initLocalStorageMethod("iframe挂件")
 
-  // 挂载PicGO到window
-  const syPicgoLibPath = `${parent.window.siyuan.config.system.dataDir}/widgets/sy-post-publisher/lib/picgo/picgo.js`
-  console.log("iframe挂件将要从以下位置引入sy-picgo", syPicgoLibPath)
-  const picgoExtension = parent.window.require(syPicgoLibPath).default
-  picgoExtension.initPicgo(
-    `${parent.window.siyuan.config.system.dataDir}/storage/syp/picgo/picgo.cfg.json`
-  )
-
-  // 初始化发布辅助功能
-  const publishHelperLibPath = `${parent.window.siyuan.config.system.dataDir}/widgets/sy-post-publisher/lib/siyuan/publish-helper.js`
-  console.log("iframe挂件将要从以下位置引入发布辅助功能", publishHelperLibPath)
-  const initPublishHelper = parent.window.require(publishHelperLibPath)
-  initPublishHelper()
+  // 初始化插槽
+  initMethods.initSlotMethod("iframe挂件")
 
   // 初始化主题适配
-  const themeAdaptorLibPath = `${parent.window.siyuan.config.system.dataDir}/widgets/sy-post-publisher/lib/siyuan/theme.js`
-  console.log(
-    "iframe挂件将要从以下位置引入主题适配脚本theme.js",
-    themeAdaptorLibPath
-  )
-  const initTheme = parent.window.require(themeAdaptorLibPath)
-  setTimeout(initTheme, 1000)
+  initMethods.initThemeAdaptor("iframe挂件")
+
+  // // 挂载PicGO到window
+  // const syPicgoLibPath = `${parent.window.siyuan.config.system.dataDir}/widgets/sy-post-publisher/lib/picgo/picgo.js`
+  // console.log("iframe挂件将要从以下位置引入sy-picgo", syPicgoLibPath)
+  // const picgoExtension = parent.window.require(syPicgoLibPath).default
+  // // PicGO存储到配置目录，便于后面插件
+  // const path = parent.window.require("path")
+  // const appDataFolder = getCrossPlatformAppDataFolder(path)
+  // // const picgo_cfg_070 = `${parent.window.siyuan.config.system.dataDir}/storage/syp/picgo/picgo.cfg.json`
+  // const picgo_cfg_067 = `${parent.window.siyuan.config.system.dataDir}/widgets/sy-post-publisher/lib/picgo/picgo.cfg.json`
+  // const picgo_cfg_070 = path.join(appDataFolder, "sy-picgo", "picgo.cfg.json")
+  // const fs = parent.window.require("fs")
+  // if (fs.existsSync(picgo_cfg_067) && !fs.existsSync(picgo_cfg_070)) {
+  //   console.warn("检测到旧的PicGO配置文件，启动迁移")
+  //   fs.copySync(picgo_cfg_067, picgo_cfg_070)
+  // }
+  // picgoExtension.initPicgo(picgo_cfg_070)
+  //
+  // // 初始化发布辅助功能
+  // const publishHelperLibPath = `${parent.window.siyuan.config.system.dataDir}/widgets/sy-post-publisher/lib/siyuan/publish-helper.js`
+  // console.log("iframe挂件将要从以下位置引入发布辅助功能", publishHelperLibPath)
+  // const initPublishHelper = parent.window.require(publishHelperLibPath)
+  // initPublishHelper()
+  //
 }
 
 // 新窗口打开
 const initSiyuanNewWin = () => {
   // 挂载JsonLocalStorage到window
-  const jsonLocalstorageLibPath = `${window.terwer.dataDir}/widgets/sy-post-publisher/lib/json-localstorage/json-localstorage.js`
-  console.log(
-    "思源笔记新窗口将要从以下位置引入json-localstorage",
-    jsonLocalstorageLibPath
-  )
-  const LocalStorage = window.require(jsonLocalstorageLibPath)
-  // 设置json配置目录
-  LocalStorage.init("../../../../storage/syp/")
+  initMethods.initLocalStorageMethod("思源笔记新窗口")
 
-  // 挂载PicGO到window
-  const syPicgoLibPath = `${window.terwer.dataDir}/widgets/sy-post-publisher/lib/picgo/picgo.js`
-  console.log("思源笔记新窗口将要从以下位置引入sy-picgo", syPicgoLibPath)
-  const picgoExtension = window.require(syPicgoLibPath).default
-  picgoExtension.initPicgo(
-    `${window.terwer.dataDir}/storage/syp/picgo/picgo.cfg.json`
-  )
+  // // 挂载PicGO到window
+  // const syPicgoLibPath = `${window.terwer.dataDir}/widgets/sy-post-publisher/lib/picgo/picgo.js`
+  // console.log("思源笔记新窗口将要从以下位置引入sy-picgo", syPicgoLibPath)
+  // const picgoExtension = window.require(syPicgoLibPath).default
+  // // PicGO存储到配置目录，便于后面插件
+  // const path = window.require("path")
+  // const appDataFolder = getCrossPlatformAppDataFolder(path)
+  // // const picgo_cfg_070 = `${window.terwer.dataDir}/storage/syp/picgo/picgo.cfg.json`
+  // const picgo_cfg_067 = `${window.terwer.dataDir}/widgets/sy-post-publisher/lib/picgo/picgo.cfg.json`
+  // const picgo_cfg_070 = path.join(appDataFolder, "sy-picgo", "picgo.cfg.json")
+  // const fs = window.require("fs")
+  // if (fs.existsSync(picgo_cfg_067)) {
+  //   fs.copySync(picgo_cfg_067, picgo_cfg_070)
+  // }
+  // picgoExtension.initPicgo(picgo_cfg_070)
 }
 
 // js片段
 const initJsCode = () => {
-  // 初始化插槽
-  const slotLibPath = `${window.siyuan.config.system.dataDir}/widgets/sy-post-publisher/lib/siyuan/silot.js`
-  console.log("自定义js片段将要从以下位置引入插槽", slotLibPath)
-  const initSlot = window.require(slotLibPath)
-  initSlot()
-
   // 挂载JsonLocalStorage到window
-  const jsonLocalstorageLibPath = `${window.siyuan.config.system.dataDir}/widgets/sy-post-publisher/lib/json-localstorage/json-localstorage.js`
-  console.log(
-    "自定义js片段将要从以下位置引入json-localstorage",
-    jsonLocalstorageLibPath
-  )
-  const LocalStorage = window.require(jsonLocalstorageLibPath)
-  // 设置json配置目录
-  LocalStorage.init("../../../../storage/syp/")
+  initMethods.initLocalStorageMethod("自定义js片段")
 
-  // 挂载PicGO到window
-  const syPicgoLibPath = `${window.siyuan.config.system.dataDir}/widgets/sy-post-publisher/lib/picgo/picgo.js`
-  console.log("自定义js片段将要从以下位置引入sy-picgo", syPicgoLibPath)
-  const picgoExtension = window.require(syPicgoLibPath).default
-  picgoExtension.initPicgo(
-    `${window.siyuan.config.system.dataDir}/storage/syp/picgo/picgo.cfg.json`
-  )
+  // 初始化插槽
+  initMethods.initSlotMethod("iframe挂件")
 
-  // 初始化发布辅助功能
-  const publishHelperLibPath = `${window.siyuan.config.system.dataDir}/widgets/sy-post-publisher/lib/siyuan/publish-helper.js`
-  console.log(
-    "自定义js片段将要从以下位置引入发布辅助功能",
-    publishHelperLibPath
-  )
-  const initPublishHelper = window.require(publishHelperLibPath)
-  initPublishHelper()
+  // // 挂载PicGO到window
+  // const syPicgoLibPath = `${window.siyuan.config.system.dataDir}/widgets/sy-post-publisher/lib/picgo/picgo.js`
+  // console.log("自定义js片段将要从以下位置引入sy-picgo", syPicgoLibPath)
+  // const picgoExtension = window.require(syPicgoLibPath).default
+  // // PicGO存储到配置目录，便于后面插件
+  // const path = window.require("path")
+  // const appDataFolder = getCrossPlatformAppDataFolder(path)
+  // // const picgo_cfg_070 = `${window.siyuan.config.system.dataDir}/storage/syp/picgo/picgo.cfg.json`
+  // const picgo_cfg_067 = `${window.siyuan.config.system.dataDir}/widgets/sy-post-publisher/lib/picgo/picgo.cfg.json`
+  // const picgo_cfg_070 = path.join(appDataFolder, "sy-picgo", "picgo.cfg.json")
+  // const fs = window.require("fs")
+  // if (fs.existsSync(picgo_cfg_067)) {
+  //   fs.copySync(picgo_cfg_067, picgo_cfg_070)
+  // }
+  // picgoExtension.initPicgo(picgo_cfg_070)
+  //
+  // // 初始化发布辅助功能
+  // const publishHelperLibPath = `${window.siyuan.config.system.dataDir}/widgets/sy-post-publisher/lib/siyuan/publish-helper.js`
+  // console.log(
+  //   "自定义js片段将要从以下位置引入发布辅助功能",
+  //   publishHelperLibPath
+  // )
+  // const initPublishHelper = window.require(publishHelperLibPath)
+  // initPublishHelper()
 }
 
 // init
