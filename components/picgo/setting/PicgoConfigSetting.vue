@@ -27,7 +27,9 @@
   <div>
     <el-form label-width="125px">
       <el-form-item :label="$t('setting.picgo.picgo.open.config.file')">
-        <el-button>{{ $t("setting.picgo.picgo.click.to.open") }}</el-button>
+        <el-button @click="handleOpenFile"
+          >{{ $t("setting.picgo.picgo.click.to.open") }}
+        </el-button>
       </el-form-item>
 
       <el-form-item :label="$t('setting.picgo.picgo.choose.showed.picbed')">
@@ -50,6 +52,7 @@
 import { onBeforeMount, reactive, ref } from "vue"
 import picgoUtil from "~/utils/otherlib/picgoUtil"
 import { LogFactory } from "~/utils/logUtil"
+import siyuanBrowserUtil from "~/utils/otherlib/siyuanBrowserUtil"
 
 const logger = LogFactory.getLogger(
   "components/picgo/setting/PicgoConfigSetting.vue"
@@ -87,6 +90,11 @@ function handleShowPicBedListChange(val: ICheckBoxValueType[]) {
     "picBed.list": list,
   })
   logger.debug("保存启用的图床", list)
+}
+
+const handleOpenFile = () => {
+  const picgoCfgPath = picgoUtil.getPicgoCfgPath()
+  siyuanBrowserUtil.openPath(picgoCfgPath)
 }
 
 onBeforeMount(() => {

@@ -117,10 +117,28 @@ const fitTheme = () => {
   console.log("适配customstyle完成=>", customstyle)
 }
 
+/**
+ * 打开文件
+ * @param absFilePath 文件绝对路径
+ */
+const openPath = (absFilePath) => {
+  const syWin = getSiyuanWindow()
+
+  if (syWin.syp && syWin.syp.openPath) {
+    // 打开弹窗
+    syWin.syp.openPath(absFilePath)
+  } else {
+    ElMessage.warning(
+      "openPath失败，未找到hook方法，请在自定义js片段添加 import('/widgets/sy-post-publisher/lib/siyuanhook.js') ，并重启思源笔记"
+    )
+  }
+}
+
 // 统一访问入口
 const siyuanBrowserUtil = {
   fitTheme,
   getSiyuanWindow,
+  openPath,
 }
 
 export default siyuanBrowserUtil

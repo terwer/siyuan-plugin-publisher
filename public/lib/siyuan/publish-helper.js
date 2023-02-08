@@ -70,6 +70,16 @@ const initPublishHelper = () => {
   window.syp = {
     pageId: undefined,
     renderPublishHelper: () => {},
+    openPath: () => {},
+  }
+
+  /**
+   * 打开文件
+   * @param absFilePath 文件绝对路径
+   */
+  window.syp.openPath = (absFilePath) => {
+    const { shell } = window.require("electron")
+    shell.openPath(absFilePath)
   }
 
   /**

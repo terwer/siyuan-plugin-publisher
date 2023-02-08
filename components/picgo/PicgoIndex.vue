@@ -275,6 +275,10 @@ const { picgoManageData, picgoManageMethods } = usePicgoManage(props, {
   margin: 16px 0 16px;
 }
 
+.upload-status {
+  margin-top: 10px;
+}
+
 .upload-btn-list {
 }
 
