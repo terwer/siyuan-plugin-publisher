@@ -198,7 +198,7 @@ const initMethods = {
       `${dataDir}/widgets/sy-post-publisher/lib/siyuan/theme.js`,
       "自定义主题片段"
     )
-    setTimeout(initTheme, 1000)
+    setTimeout(initTheme, 3000)
   },
 
   /**

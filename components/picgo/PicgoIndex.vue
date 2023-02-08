@@ -25,6 +25,12 @@
 
 <template>
   <div class="picgo-body">
+    <el-alert
+      :title="$t('setting.picgo.index.tip')"
+      type="warning"
+      :closable="false"
+    />
+
     <!-- 上传状态 -->
     <div class="upload-status">
       <el-button text :loading="picgoCommonData.isUploadLoading"

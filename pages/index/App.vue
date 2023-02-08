@@ -63,7 +63,7 @@ const init = async () => {
 
   if (isInSiyuanOrSiyuanNewWin()) {
     if (isInSiyuan()) {
-      setTimeout(siyuanBrowserUtil.fitTheme, 1200)
+      setTimeout(siyuanBrowserUtil.fitTheme, 3500)
     }
 
     let postid

@@ -443,4 +443,6 @@ export default {
   "setting.picgo.picbed.current.tip": "当前默认图床是：",
   "setting.picgo.picbed.uploader.config.name": "图床配置名",
   "setting.picgo.picbed.uploader.config.name.placeholder": "请输入配置名称",
+  "setting.picgo.index.tip":
+    "注意：此处上传的图片不会自动插入文档中，请手动点击复制按钮复制链接，然后Ctrl+V粘贴到文档中。该图片列表仅展示此文档包含的图片。",
 }

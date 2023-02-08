@@ -61,9 +61,16 @@ export const usePicgoUpload = (props, deps, refs) => {
    * @param imgInfos
    */
   const doAfterUpload = (imgInfos) => {
-    picgoCommonData.loggerMsg = imgInfos
+    let imageJson
+    if (typeof imgInfos == "string") {
+      logger.warn("doAfterUpload返回的是字符串，需要解析")
+      imageJson = JSON.parse(imgInfos)
+    } else {
+      imageJson = imgInfos
+    }
 
-    const imageJson = JSON.parse(imgInfos)
+    picgoCommonData.loggerMsg = JSON.stringify(imgInfos)
+    logger.debug("doAfterUpload,imgInfos=>", imgInfos)
 
     if (imageJson && imageJson.length > 0) {
       imageJson.forEach((img) => {

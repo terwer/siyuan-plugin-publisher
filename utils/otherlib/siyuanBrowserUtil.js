@@ -82,10 +82,11 @@ export const doCloseExportWin = () => {
  * 打开的时候 syWin = window.parent
  */
 export const doOpenExportWin = async (pageId, pageUrl) => {
-  const syWin = window.parent
-  if (syWin.terwer && syWin.terwer.renderPublishHelper) {
+  const syWin = getSiyuanWindow()
+
+  if (syWin.syp && syWin.syp.renderPublishHelper) {
     // 打开弹窗
-    syWin.terwer.renderPublishHelper(pageId, pageUrl)
+    syWin.syp.renderPublishHelper(pageId, pageUrl)
   } else {
     ElMessage.warning(
       "renderPublishHelper失败，未找到hook方法，请在自定义js片段添加 import('/widgets/sy-post-publisher/lib/siyuanhook.js') ，并重启思源笔记"
@@ -113,7 +114,7 @@ const fitTheme = () => {
     "--custom-app-bg-color",
     customstyle.backgroundColor
   )
-  console.log("适配--custom-app-bg-color完成=>", customstyle.backgroundColor)
+  console.log("适配customstyle完成=>", customstyle)
 }
 
 // 统一访问入口

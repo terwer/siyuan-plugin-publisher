@@ -39,8 +39,9 @@ const initTheme = () => {
   const element = window.document.querySelector(".protyle")
   const computedStyle = window.getComputedStyle(element)
   const bgColor = computedStyle.getPropertyValue("background-color")
-  console.log("custom backgroundColor=>", bgColor)
   window.customstyle.backgroundColor = bgColor
+
+  console.log("开始customstyle适配=>", window.customstyle)
 }
 
 module.exports = initTheme
