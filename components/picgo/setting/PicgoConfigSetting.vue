@@ -30,10 +30,7 @@
         <el-button>{{ $t("setting.picgo.picgo.click.to.open") }}</el-button>
       </el-form-item>
 
-      <el-form-item
-        :style="{ marginRight: '-64px' }"
-        :label="$t('setting.picgo.picgo.choose.showed.picbed')"
-      >
+      <el-form-item :label="$t('setting.picgo.picgo.choose.showed.picbed')">
         <el-checkbox-group
           v-model="form.showPicBedList"
           @change="handleShowPicBedListChange"
@@ -50,7 +47,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onBeforeMount, reactive, ref, watch } from "vue"
+import { onBeforeMount, reactive, ref } from "vue"
 import picgoUtil from "~/utils/otherlib/picgoUtil"
 import { LogFactory } from "~/utils/logUtil"
 
@@ -89,6 +86,7 @@ function handleShowPicBedListChange(val: ICheckBoxValueType[]) {
   picgoUtil.savePicgoConfig({
     "picBed.list": list,
   })
+  logger.debug("保存启用的图床", list)
 }
 
 onBeforeMount(() => {

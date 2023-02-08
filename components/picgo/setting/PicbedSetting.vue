@@ -206,6 +206,8 @@ const getProfileList = (bedType: string): IUploaderConfigItem => {
 }
 
 const handlePicBedTypeChange = (item: IPicBedType) => {
+  emitBackFn()
+
   type.value = item.type
   reloadConfig(item.type)
   logger.debug("item=>", item)
