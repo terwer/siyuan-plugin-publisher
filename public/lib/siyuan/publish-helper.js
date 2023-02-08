@@ -67,7 +67,7 @@ const initPublishHelper = () => {
   /**
    * 思源笔记弹窗参数定义
    */
-  window.terwer = {
+  window.syp = {
     pageId: undefined,
     renderPublishHelper: () => {},
   }
@@ -77,7 +77,7 @@ const initPublishHelper = () => {
    * @param pageId 文章ID
    * @param pageUrl 页面地址
    */
-  window.terwer.renderPublishHelper = (pageId, pageUrl) => {
+  window.syp.renderPublishHelper = (pageId, pageUrl) => {
     const { app, BrowserWindow, getCurrentWindow } =
       window.require("@electron/remote")
     // enable webContents
@@ -233,8 +233,7 @@ const initPublishHelper = () => {
         { content: html },
         (response) => {
           window.siyuan.printWin.loadURL(response.data.url)
-          // 打开开发者工具
-          // window.siyuan.printWin.webContents.openDevTools()
+          window.siyuan.printWin.webContents.openDevTools()
         }
       )
     })
