@@ -210,8 +210,8 @@ const initMethods = {
     const dataDir = getSiyuanDataDir()
 
     // 防止重复挂载
-    if (syWin.terwer) {
-      console.warn("terwer已挂载，忽略", entryName)
+    if (syWin.syp) {
+      console.warn("syp已挂载，忽略", entryName)
       return
     }
 
@@ -243,20 +243,27 @@ const initMethods = {
       entryName,
       `${dataDir}/widgets/sy-post-publisher/lib/picgo/picgo.js`,
       "sy-picgo"
-    )
+    ).default
 
     // PicGO存储到配置目录，便于后面插件
     const path = syWin.require("path")
     const fs = syWin.require("fs")
 
+    // 配置文件初始化与数据迁移
     const appDataFolder = getCrossPlatformAppDataFolder()
     const picgo_cfg_067 = `${dataDir}/widgets/sy-post-publisher/lib/picgo/picgo.cfg.json`
-    const picgo_cfg_070 = path.join(appDataFolder, "sy-picgo", "picgo.cfg.json")
+    const picgo_cfg_folder_070 = path.join(appDataFolder, "sy-picgo")
+    if (!fs.existsSync(picgo_cfg_folder_070)) {
+      fs.mkdirSync(picgo_cfg_folder_070)
+    }
+    const picgo_cfg_070 = path.join(picgo_cfg_folder_070, "picgo.cfg.json")
     if (fs.existsSync(picgo_cfg_067) && !fs.existsSync(picgo_cfg_070)) {
       console.warn("检测到旧的PicGO配置文件，启动迁移")
-      fs.copySync(picgo_cfg_067, picgo_cfg_070)
+      fs.copyFileSync(picgo_cfg_067, picgo_cfg_070)
     }
     console.warn("PicGO配置文件初始化为=>", picgo_cfg_070)
+
+    // 初始化
     picgoExtension.initPicgo(picgo_cfg_070)
   },
 }

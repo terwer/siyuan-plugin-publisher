@@ -233,7 +233,7 @@ const initPublishHelper = () => {
         { content: html },
         (response) => {
           window.siyuan.printWin.loadURL(response.data.url)
-          window.siyuan.printWin.webContents.openDevTools()
+          // window.siyuan.printWin.webContents.openDevTools()
         }
       )
     })

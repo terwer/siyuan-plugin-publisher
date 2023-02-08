@@ -329,7 +329,7 @@ export const updateUploaderConfig = (type, id, config) => {
   let updatedConfig
   let updatedDefaultId = defaultId
   if (existConfig) {
-    updatedConfig = Object.assign(existConfig, trimValues(config), {
+    updatedConfig = Object.assign(existConfig, strUtil.trimValues(config), {
       _updatedAt: Date.now(),
     })
   } else {
@@ -377,7 +377,7 @@ const getPicgoCfgPath = () => {
   const syWin = siyuanBrowserUtil.getSiyuanWindow()
   const picgo = syWin.SyPicgo.getPicgoObj()
 
-  const picgo_cfg_070 = "test"
+  const picgo_cfg_070 = picgo.configPath
   return picgo_cfg_070
 }
 

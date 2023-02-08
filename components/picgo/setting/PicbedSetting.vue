@@ -122,7 +122,7 @@
           config-type="uploader"
           :id="type"
           :config="profileData.curConfig"
-          :config-id="profileData.defaultConfigId"
+          :config-id="profileData.curConfigId"
           :is-new-form="isNewForm"
           @on-change="emitBackFn"
         />
@@ -230,16 +230,13 @@ function selectItem(id: string) {
 function addNewConfig() {
   const configObj = picgoUtil.getPicBedConfig(type.value)
   profileData.curConfig = configObj.config
+  profileData.curConfigId = undefined
 
   isNewForm.value = true
   showConfigForm.value = true
 
-  logger.debug(
-    "editConfig profileData.defaultConfigId=>",
-    profileData.defaultConfigId
-  )
-  logger.debug("addNewConfig id=>", undefined)
   logger.debug("addNewConfig type=>", type.value)
+  logger.debug("addNewConfig id=>", profileData.curConfigId)
   logger.debug("addNewConfig config=>", toRaw(profileData.curConfig))
 }
 
@@ -250,16 +247,13 @@ function addNewConfig() {
 function editConfig(id: string) {
   const configObj = picgoUtil.getPicBedConfig(type.value)
   profileData.curConfig = configObj.config
+  profileData.curConfigId = id
 
   isNewForm.value = false
   showConfigForm.value = true
 
-  logger.info(
-    "editConfig profileData.defaultConfigId=>",
-    profileData.defaultConfigId
-  )
-  logger.debug("editConfig id=>", id)
   logger.debug("editConfig type=>", type.value)
+  logger.debug("editConfig id=>", profileData.curConfigId)
   logger.debug("editConfig config=>", toRaw(profileData.curConfig))
 }
 
