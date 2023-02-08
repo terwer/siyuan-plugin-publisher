@@ -109,12 +109,15 @@ const getCrossPlatformAppDataFolder = () => {
   const path = syWin.require("path")
 
   let configFilePath
-  if (process.platform === "darwin") {
-    configFilePath = path.join(process.env.HOME, "/Library/Application Support")
-  } else if (process.platform === "win32") {
-    configFilePath = path.join(process.env.APPDATA, "Roaming")
-  } else if (process.platform === "linux") {
-    configFilePath = process.env.HOME
+  if (syWin.process.platform === "darwin") {
+    configFilePath = path.join(
+      syWin.process.env.HOME,
+      "/Library/Application Support"
+    )
+  } else if (syWin.process.platform === "win32") {
+    configFilePath = path.join(syWin.process.env.APPDATA, "Roaming")
+  } else if (syWin.process.platform === "linux") {
+    configFilePath = syWin.process.env.HOME
   }
 
   return configFilePath
@@ -144,6 +147,12 @@ const initMethods = {
     const syWin = getSiyuanWindow()
     const dataDir = getSiyuanDataDir()
 
+    // 防止重复挂载
+    if (syWin.JsonLocalStorage) {
+      console.warn("JsonLocalStorage已挂载，忽略", entryName)
+      return
+    }
+
     // 挂载JsonLocalStorage到window
     const LocalStorage = requireLib(
       entryName,
@@ -158,31 +167,97 @@ const initMethods = {
    * @param entryName 入口名称
    */
   initSlotMethod: (entryName) => {
-    const syWin = getSiyuanWindow()
+    const dataDir = getSiyuanDataDir()
 
     // 初始化插槽
     const initSlot = requireLib(
       entryName,
-      `${syWin.siyuan.config.system.dataDir}/widgets/sy-post-publisher/lib/siyuan/silot.js`,
+      `${dataDir}/widgets/sy-post-publisher/lib/siyuan/silot.js`,
       "插槽"
     )
     initSlot()
   },
 
   /**
-   * 初始化主题适配，仅【iframe挂件模式】可用
+   * 初始化主题适配，仅【iframe挂件模式】、【自定义js片段模式】可用
    * @param entryName 入口名称
    */
   initThemeAdaptor: (entryName) => {
     const syWin = getSiyuanWindow()
+    const dataDir = getSiyuanDataDir()
+
+    // 防止重复挂载
+    if (syWin.customstyle) {
+      console.warn("customstyle已挂载，忽略", entryName)
+      return
+    }
 
     // 初始化主题适配
     const initTheme = requireLib(
       entryName,
-      `${syWin.siyuan.config.system.dataDir}/widgets/sy-post-publisher/lib/siyuan/theme.js`,
+      `${dataDir}/widgets/sy-post-publisher/lib/siyuan/theme.js`,
       "自定义主题片段"
     )
     setTimeout(initTheme, 1000)
+  },
+
+  /**
+   * 初始化初始化发布辅助功能，仅【iframe挂件模式】、【自定义js片段模式】可用
+   * @param entryName 入口名称
+   */
+  initPublishHelper: (entryName) => {
+    const syWin = getSiyuanWindow()
+    const dataDir = getSiyuanDataDir()
+
+    // 防止重复挂载
+    if (syWin.terwer) {
+      console.warn("terwer已挂载，忽略", entryName)
+      return
+    }
+
+    // 初始化发布辅助功能
+    const initPublishHelper = requireLib(
+      entryName,
+      `${dataDir}/widgets/sy-post-publisher/lib/siyuan/publish-helper.js`,
+      "发布辅助功能"
+    )
+    initPublishHelper()
+  },
+
+  /**
+   * 初始化 PicGO 配置，适用于【iframe挂件模式】、【新窗口模式】以及【js片段模式】
+   * @param entryName 入口名称
+   */
+  initPicgoExtension: (entryName) => {
+    const syWin = getSiyuanWindow()
+    const dataDir = getSiyuanDataDir()
+
+    // 防止重复挂载
+    if (syWin.SyPicgo) {
+      console.warn("SyPicgo已挂载，忽略", entryName)
+      return
+    }
+
+    // 挂载PicGO到window
+    const picgoExtension = requireLib(
+      entryName,
+      `${dataDir}/widgets/sy-post-publisher/lib/picgo/picgo.js`,
+      "sy-picgo"
+    )
+
+    // PicGO存储到配置目录，便于后面插件
+    const path = syWin.require("path")
+    const fs = syWin.require("fs")
+
+    const appDataFolder = getCrossPlatformAppDataFolder()
+    const picgo_cfg_067 = `${dataDir}/widgets/sy-post-publisher/lib/picgo/picgo.cfg.json`
+    const picgo_cfg_070 = path.join(appDataFolder, "sy-picgo", "picgo.cfg.json")
+    if (fs.existsSync(picgo_cfg_067) && !fs.existsSync(picgo_cfg_070)) {
+      console.warn("检测到旧的PicGO配置文件，启动迁移")
+      fs.copySync(picgo_cfg_067, picgo_cfg_070)
+    }
+    console.warn("PicGO配置文件初始化为=>", picgo_cfg_070)
+    picgoExtension.initPicgo(picgo_cfg_070)
   },
 }
 
@@ -197,29 +272,11 @@ const initIframeWidaget = () => {
   // 初始化主题适配
   initMethods.initThemeAdaptor("iframe挂件")
 
-  // // 挂载PicGO到window
-  // const syPicgoLibPath = `${parent.window.siyuan.config.system.dataDir}/widgets/sy-post-publisher/lib/picgo/picgo.js`
-  // console.log("iframe挂件将要从以下位置引入sy-picgo", syPicgoLibPath)
-  // const picgoExtension = parent.window.require(syPicgoLibPath).default
-  // // PicGO存储到配置目录，便于后面插件
-  // const path = parent.window.require("path")
-  // const appDataFolder = getCrossPlatformAppDataFolder(path)
-  // // const picgo_cfg_070 = `${parent.window.siyuan.config.system.dataDir}/storage/syp/picgo/picgo.cfg.json`
-  // const picgo_cfg_067 = `${parent.window.siyuan.config.system.dataDir}/widgets/sy-post-publisher/lib/picgo/picgo.cfg.json`
-  // const picgo_cfg_070 = path.join(appDataFolder, "sy-picgo", "picgo.cfg.json")
-  // const fs = parent.window.require("fs")
-  // if (fs.existsSync(picgo_cfg_067) && !fs.existsSync(picgo_cfg_070)) {
-  //   console.warn("检测到旧的PicGO配置文件，启动迁移")
-  //   fs.copySync(picgo_cfg_067, picgo_cfg_070)
-  // }
-  // picgoExtension.initPicgo(picgo_cfg_070)
-  //
-  // // 初始化发布辅助功能
-  // const publishHelperLibPath = `${parent.window.siyuan.config.system.dataDir}/widgets/sy-post-publisher/lib/siyuan/publish-helper.js`
-  // console.log("iframe挂件将要从以下位置引入发布辅助功能", publishHelperLibPath)
-  // const initPublishHelper = parent.window.require(publishHelperLibPath)
-  // initPublishHelper()
-  //
+  // 初始化发布辅助功能
+  initMethods.initPublishHelper("iframe挂件")
+
+  // 初始化PicGO配置
+  initMethods.initPicgoExtension("iframe挂件")
 }
 
 // 新窗口打开
@@ -227,21 +284,8 @@ const initSiyuanNewWin = () => {
   // 挂载JsonLocalStorage到window
   initMethods.initLocalStorageMethod("思源笔记新窗口")
 
-  // // 挂载PicGO到window
-  // const syPicgoLibPath = `${window.terwer.dataDir}/widgets/sy-post-publisher/lib/picgo/picgo.js`
-  // console.log("思源笔记新窗口将要从以下位置引入sy-picgo", syPicgoLibPath)
-  // const picgoExtension = window.require(syPicgoLibPath).default
-  // // PicGO存储到配置目录，便于后面插件
-  // const path = window.require("path")
-  // const appDataFolder = getCrossPlatformAppDataFolder(path)
-  // // const picgo_cfg_070 = `${window.terwer.dataDir}/storage/syp/picgo/picgo.cfg.json`
-  // const picgo_cfg_067 = `${window.terwer.dataDir}/widgets/sy-post-publisher/lib/picgo/picgo.cfg.json`
-  // const picgo_cfg_070 = path.join(appDataFolder, "sy-picgo", "picgo.cfg.json")
-  // const fs = window.require("fs")
-  // if (fs.existsSync(picgo_cfg_067)) {
-  //   fs.copySync(picgo_cfg_067, picgo_cfg_070)
-  // }
-  // picgoExtension.initPicgo(picgo_cfg_070)
+  // 初始化PicGO配置
+  initMethods.initPicgoExtension("思源笔记新窗口")
 }
 
 // js片段
@@ -250,32 +294,16 @@ const initJsCode = () => {
   initMethods.initLocalStorageMethod("自定义js片段")
 
   // 初始化插槽
-  initMethods.initSlotMethod("iframe挂件")
+  initMethods.initSlotMethod("自定义js片段")
 
-  // // 挂载PicGO到window
-  // const syPicgoLibPath = `${window.siyuan.config.system.dataDir}/widgets/sy-post-publisher/lib/picgo/picgo.js`
-  // console.log("自定义js片段将要从以下位置引入sy-picgo", syPicgoLibPath)
-  // const picgoExtension = window.require(syPicgoLibPath).default
-  // // PicGO存储到配置目录，便于后面插件
-  // const path = window.require("path")
-  // const appDataFolder = getCrossPlatformAppDataFolder(path)
-  // // const picgo_cfg_070 = `${window.siyuan.config.system.dataDir}/storage/syp/picgo/picgo.cfg.json`
-  // const picgo_cfg_067 = `${window.siyuan.config.system.dataDir}/widgets/sy-post-publisher/lib/picgo/picgo.cfg.json`
-  // const picgo_cfg_070 = path.join(appDataFolder, "sy-picgo", "picgo.cfg.json")
-  // const fs = window.require("fs")
-  // if (fs.existsSync(picgo_cfg_067)) {
-  //   fs.copySync(picgo_cfg_067, picgo_cfg_070)
-  // }
-  // picgoExtension.initPicgo(picgo_cfg_070)
-  //
-  // // 初始化发布辅助功能
-  // const publishHelperLibPath = `${window.siyuan.config.system.dataDir}/widgets/sy-post-publisher/lib/siyuan/publish-helper.js`
-  // console.log(
-  //   "自定义js片段将要从以下位置引入发布辅助功能",
-  //   publishHelperLibPath
-  // )
-  // const initPublishHelper = window.require(publishHelperLibPath)
-  // initPublishHelper()
+  // 初始化主题适配
+  initMethods.initThemeAdaptor("自定义js片段")
+
+  // 初始化发布辅助功能
+  initMethods.initPublishHelper("自定义js片段")
+
+  // 初始化PicGO配置
+  initMethods.initPicgoExtension("自定义js片段")
 }
 
 // init
