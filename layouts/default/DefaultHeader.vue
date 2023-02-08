@@ -199,7 +199,6 @@ import {
 import { ElMessage } from "element-plus"
 import { getWidgetId, isInSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
 import { getPublishCfg } from "~/utils/publishUtil"
-import { getBooleanEnv } from "~/utils/envUtil"
 import { appendStr } from "~/utils/strUtil"
 import { useI18n } from "vue-i18n"
 import { LogFactory } from "~/utils/logUtil"
@@ -368,20 +367,6 @@ onMounted(() => {
 
     showTitle.value = true
   }
-
-  // ==================
-  // Debug mode start
-  // ==================
-  const debugMode = getBooleanEnv("VITE_DEBUG_MODE")
-  if (debugMode) {
-    showOpenBtn.value = true
-    showCloseBtn.value = true
-
-    showTitle.value = false
-  }
-  // ==================
-  // Debug mode end
-  // ==================
 })
 </script>
 

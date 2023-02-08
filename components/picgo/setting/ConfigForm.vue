@@ -189,7 +189,7 @@ function handleConfig(val: IPicGoPluginConfig[]) {
   const config = props.isNewForm ? {} : getCurConfigFormData()
   const configId = props.isNewForm ? undefined : props.configId
   Object.assign(ruleForm, config)
-  logger.debug("form属性=>", config)
+  logger.debug("form属性=>", ruleForm)
   logger.debug("configId=>", configId)
 
   // 追加form属性
@@ -222,8 +222,8 @@ function handleConfig(val: IPicGoPluginConfig[]) {
     })
   }
 
-  logger.debug("完整form属性=>", config)
-  logger.debug("动态配置configList=>", toRaw(configList))
+  logger.debug("完整form属性=>", ruleForm)
+  logger.debug("动态配置configList=>", configList.value)
   logger.debug("追加form完成.")
 }
 

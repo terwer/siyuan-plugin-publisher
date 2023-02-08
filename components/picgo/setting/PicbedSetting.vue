@@ -208,7 +208,8 @@ function selectItem(id: string) {
  * 新增配置
  */
 function addNewConfig() {
-  profileData.curConfig = {}
+  const configObj = picgoUtil.getPicBedConfig(type.value)
+  profileData.curConfig = configObj.config
 
   isNewForm.value = true
   showConfigForm.value = true
@@ -217,9 +218,9 @@ function addNewConfig() {
     "editConfig profileData.defaultConfigId=>",
     profileData.defaultConfigId
   )
-  logger.debug("editConfig id=>", undefined)
-  logger.debug("editConfig type=>", toRaw(type))
-  logger.debug("editConfig config=>", toRaw(profileData.curConfig))
+  logger.debug("addNewConfig id=>", undefined)
+  logger.debug("addNewConfig type=>", type.value)
+  logger.debug("addNewConfig config=>", toRaw(profileData.curConfig))
 }
 
 /**
@@ -227,8 +228,8 @@ function addNewConfig() {
  * @param id 配置ID
  */
 function editConfig(id: string) {
-  const config = picgoUtil.getPicBedConfig(type.value)
-  profileData.curConfig = config
+  const configObj = picgoUtil.getPicBedConfig(type.value)
+  profileData.curConfig = configObj.config
 
   isNewForm.value = false
   showConfigForm.value = true
@@ -238,7 +239,7 @@ function editConfig(id: string) {
     profileData.defaultConfigId
   )
   logger.debug("editConfig id=>", id)
-  logger.debug("editConfig type=>", toRaw(type))
+  logger.debug("editConfig type=>", type.value)
   logger.debug("editConfig config=>", toRaw(profileData.curConfig))
 }
 
