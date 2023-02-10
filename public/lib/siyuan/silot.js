@@ -36,22 +36,9 @@ const initSlot = () => {
   showPreviousWidgetsSlot()
 
   function DocumentShowPreviousWidget() {
-    var syWin = window
-    var openDoc = syWin.document.querySelectorAll(
+    var openDoc = window.document.querySelectorAll(
       ".layout-tab-container>.fn__flex-1.protyle:not(.fn__none)"
     )
-    // 挂件需要用parent
-    if (openDoc.length === 0) {
-      syWin = parent.window
-      openDoc = syWin.document.querySelectorAll(
-        ".layout-tab-container>.fn__flex-1.protyle:not(.fn__none)"
-      )
-    }
-    // console.log("openDoc=>", openDoc)
-
-    // ===============================
-    // 上面判断完成后使用syWin代替Window
-    // ===============================
 
     var allDocumentTitleElement = []
     for (let index = 0; index < openDoc.length; index++) {

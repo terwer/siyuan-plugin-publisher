@@ -256,6 +256,7 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
           "stat",
           "readFile",
           "fs",
+          "path",
           "@electron/remote",
           "/lib/siyuanhook.js",
         ],

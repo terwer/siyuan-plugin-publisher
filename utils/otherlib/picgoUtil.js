@@ -375,7 +375,11 @@ export const deleteUploaderConfig = (type, id) => {
  */
 const getPicgoCfgPath = () => {
   const syWin = siyuanBrowserUtil.getSiyuanWindow()
-  const picgo = syWin.SyPicgo.getPicgoObj()
+  const picgo = syWin?.SyPicgo?.getPicgoObj()
+
+  if (!picgo) {
+    return "[PicGO未挂载]"
+  }
 
   const picgo_cfg_070 = picgo.configPath
   return picgo_cfg_070

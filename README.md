@@ -23,21 +23,28 @@
 <a title="Downloads" target="_blank" href="https://github.com/terwer/src-sy-post-publisher/releases"><img src="https://img.shields.io/github/downloads/terwer/src-sy-post-publisher/total.svg?label=extension-downloads&style=flat-square&color=blueviolet"></a>
 <a title="Downloads" target="_blank" href="https://github.com/terwer/src-sy-post-publisher/releases"><img src="https://img.shields.io/github/downloads/terwer/sy-post-publisher/total.svg?label=widget-downloads&style=flat-square&color=blue"></a>
 
-## v0.6.8 特性一览<sup>new</sup>
+## v0.7.0 特性一览<sup>new</sup>
 
-- 提供通用的集成接口，方便思源笔记主题集成本插件
-- 重构数据存储方案，思源笔记内部使用 JSON 存储，解决多空间随机端口问题
+### PicGO 相关
+
+- 新增用户友好的 PicGO 图形化配置界面
+- 优化 PicGO 配置，支持 PicGO 插件
+
+### 系统配置相关
+
+- 整合系统所有配置项，提供统一的配置入口
+
+### 发布体验相关
 
 ## 快速上手
 
-### 挂件版挂载菜单打开新窗口操作方式快速上手
+### 挂件版挂载菜单打开新窗口操作方式快速上手 <sup>强烈推荐</sup> <sup>0.4.2+</sup>
 
 首先在设置 - 集市 - 挂件 中下载 sy-post-publisher
 
 点击设置 - 外观- 代码片段，代码片段加上下面的 `js` 片段，然后重启思源
 
 ```js
-// 如果不喜欢这个菜单，直接去掉这个代码片段引用即可，去掉之后仍然可以通过挂件版通用方式使用
 import("/widgets/sy-post-publisher/lib/siyuanhook.js")
 ```
 
@@ -45,8 +52,7 @@ import("/widgets/sy-post-publisher/lib/siyuanhook.js")
 
 ![](https://img1.terwer.space/api/public/20221228-175950.jpeg)
 
-详情请参考: [挂件模式用挂载菜单的方式使用](https://docs.publish.terwer.space/post/the-pendant-mode-is-used-in-the-method-of-mounting-menu-169wrw.html)<sup>
-强烈推荐</sup> <sup>0.4.2+</sup>
+详情请参考: [挂件模式用挂载菜单的方式使用](https://docs.publish.terwer.space/post/the-pendant-mode-is-used-in-the-method-of-mounting-menu-169wrw.html)
 
 ### 挂件版通用方式快速上手
 
@@ -58,7 +64,9 @@ import("/widgets/sy-post-publisher/lib/siyuanhook.js")
 
 然后选择你需要的平台然后进行设置
 
-点击发布即可
+点击发布即可。
+
+温馨提示：0.7.0+ 之后通过通用版使用会自动激活菜单。
 
 ### 浏览器插件快速上手
 

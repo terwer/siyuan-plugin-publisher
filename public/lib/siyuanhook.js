@@ -102,29 +102,6 @@ export const getSiyuanDataDir = () => {
 }
 
 /**
- * 获取跨平台的配置文件路径
- */
-const getCrossPlatformAppDataFolder = () => {
-  const syWin = getSiyuanWindow()
-  const path = syWin.require("path")
-
-  let configFilePath
-  if (syWin.process.platform === "darwin") {
-    configFilePath = path.join(
-      syWin.process.env.HOME,
-      "/Library/Application Support"
-    )
-  } else if (syWin.process.platform === "win32") {
-    // Roaming包含在APPDATA中了
-    configFilePath = syWin.process.env.APPDATA
-  } else if (syWin.process.platform === "linux") {
-    configFilePath = syWin.process.env.HOME
-  }
-
-  return configFilePath
-}
-
-/**
  * 引入依赖
  *
  * @param entryName 运行模式名称
@@ -232,6 +209,8 @@ const initMethods = {
   initPicgoExtension: (entryName) => {
     const syWin = getSiyuanWindow()
     const dataDir = getSiyuanDataDir()
+    console.log("initPicgoExtension=>", dataDir)
+    console.log("syWin=>", syWin)
 
     // 防止重复挂载
     if (syWin.SyPicgo) {
@@ -247,25 +226,29 @@ const initMethods = {
     ).default
 
     // PicGO存储到配置目录，便于后面插件
-    const path = syWin.require("path")
-    const fs = syWin.require("fs")
+    const appDataFolder = picgoExtension.getCrossPlatformAppDataFolder()
+    console.log("appDataFolder=>", appDataFolder)
 
-    // 配置文件初始化与数据迁移
-    const appDataFolder = getCrossPlatformAppDataFolder()
     const picgo_cfg_067 = `${dataDir}/widgets/sy-post-publisher/lib/picgo/picgo.cfg.json`
-    const picgo_cfg_folder_070 = path.join(appDataFolder, "sy-picgo")
-    if (!fs.existsSync(picgo_cfg_folder_070)) {
-      fs.mkdirSync(picgo_cfg_folder_070)
-    }
-    const picgo_cfg_070 = path.join(picgo_cfg_folder_070, "picgo.cfg.json")
-    if (fs.existsSync(picgo_cfg_067) && !fs.existsSync(picgo_cfg_070)) {
-      console.warn("检测到旧的PicGO配置文件，启动迁移")
-      fs.copyFileSync(picgo_cfg_067, picgo_cfg_070)
-    }
+    const picgo_cfg_folder_070 = picgoExtension.joinPath(
+      appDataFolder,
+      "sy-picgo"
+    )
+    const picgo_cfg_070 = picgoExtension.joinPath(
+      picgo_cfg_folder_070,
+      "picgo.cfg.json"
+    )
+    picgoExtension.upgradeCfg(
+      picgo_cfg_067,
+      picgo_cfg_folder_070,
+      picgo_cfg_070
+    )
     console.warn("PicGO配置文件初始化为=>", picgo_cfg_070)
 
     // 初始化
-    picgoExtension.initPicgo(picgo_cfg_070)
+    const syPicgo = picgoExtension.initPicgo(picgo_cfg_070)
+    syWin.SyPicgo = syPicgo
+    console.log("syPicgo=>", syPicgo)
   },
 }
 
@@ -344,4 +327,11 @@ const init = () => {
 }
 
 // 统一的初始化入口
-init()
+try {
+  init()
+} catch (e) {
+  console.warn(
+    "初始化siyuanhook失败，可能导致扩展功能无法使用，请知悉。错误信息如下",
+    e
+  )
+}
