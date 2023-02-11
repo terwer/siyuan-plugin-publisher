@@ -62,5 +62,43 @@ interface IPicGoPluginConfig {
     name?: string
     value?: any
   }[]
+
   [propName: string]: any
+}
+
+/**
+ * PocGO配置文件；诶下定义
+ */
+interface IConfig {
+  picBed: {
+    uploader: string
+    current?: string
+    smms?: ISmmsConfig
+    qiniu?: IQiniuConfig
+    upyun?: IUpyunConfig
+    tcyun?: ITcyunConfig
+    github?: IGithubConfig
+    aliyun?: IAliyunConfig
+    imgur?: IImgurConfig
+    transformer?: string
+    /** for uploader */
+    proxy?: string
+    [others: string]: any
+  }
+  picgoPlugins: {
+    [pluginName: string]: boolean
+  }
+  debug?: boolean
+  silent?: boolean
+  settings?: {
+    logLevel?: string
+    logPath?: string
+    /** for npm */
+    registry?: string
+    /** for npm */
+    proxy?: string
+    [others: string]: any
+  }
+
+  [configOptions: string]: any
 }

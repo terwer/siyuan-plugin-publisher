@@ -68,7 +68,7 @@ const getPicBeds = () => {
  * 获取PicGO配置的通用方法
  * @param key key
  */
-const getPicgoConfig = (key) => {
+const getPicgoConfig = (key = undefined) => {
   const syWin = siyuanBrowserUtil.getSiyuanWindow()
   const picgo = syWin.SyPicgo.getPicgoObj()
 

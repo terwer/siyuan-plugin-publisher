@@ -26,12 +26,14 @@
 <template>
   <div>
     <el-form label-width="125px">
+      <!-- 打开PicGO配置文件 -->
       <el-form-item :label="$t('setting.picgo.picgo.open.config.file')">
         <el-button @click="handleOpenFile"
           >{{ $t("setting.picgo.picgo.click.to.open") }}
         </el-button>
       </el-form-item>
 
+      <!-- 图床开个、、开关 -->
       <el-form-item :label="$t('setting.picgo.picgo.choose.showed.picbed')">
         <el-checkbox-group
           v-model="form.showPicBedList"
@@ -43,6 +45,16 @@
             :label="item.name"
           />
         </el-checkbox-group>
+      </el-form-item>
+
+      <!-- 时间戳重命名 -->
+      <el-form-item :label="$t('setting.picgo.setting.timestamp.rename')">
+        <el-switch
+          v-model="form.autoRename"
+          :active-text="$t('setting.picgo.setting.open')"
+          :inactive-text="$t('setting.picgo.setting.close')"
+          @change="handleAutoRename"
+        />
       </el-form-item>
     </el-form>
   </div>
@@ -61,6 +73,7 @@ const logger = LogFactory.getLogger(
 const picBed = ref<IPicBedType[]>([])
 const form = reactive({
   showPicBedList: [],
+  autoRename: false,
 })
 
 function getPicBeds() {
@@ -97,8 +110,26 @@ const handleOpenFile = () => {
   siyuanBrowserUtil.openPath(picgoCfgPath)
 }
 
+const handleAutoRename = (val: ICheckBoxValueType) => {
+  picgoUtil.savePicgoConfig({
+    "settings.autoRename": val,
+  })
+}
+
+async function initData() {
+  const config = picgoUtil.getPicgoConfig()
+  logger.warn("PicGO setting initData=>", initData)
+  if (config !== undefined) {
+    const settings = config.settings || {}
+    // 重命名默认开启，防止图片路径问题
+    form.autoRename = settings.autoRename || true
+  }
+}
+
 onBeforeMount(() => {
   // 获取图床列表
   getPicBeds()
+
+  initData()
 })
 </script>
