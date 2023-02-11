@@ -69,14 +69,16 @@ export class PicgoPostApi {
       const originUrl = retImg
       let imgUrl = retImg
 
+      // 获取属性存储的映射数据
       let fileMap = {}
-      if (!(imgUrl.indexOf("http") > -1) && imgUrl.indexOf("assets") > -1) {
-        this.logger.debug("attrs=>", attrs)
-        if (!isEmptyString(attrs[CONSTANTS.PICGO_FILE_MAP_KEY])) {
-          fileMap = parseJSONObj(attrs[CONSTANTS.PICGO_FILE_MAP_KEY])
-          this.logger.debug("fileMap=>", fileMap)
-        }
+      this.logger.debug("attrs=>", attrs)
+      if (!isEmptyString(attrs[CONSTANTS.PICGO_FILE_MAP_KEY])) {
+        fileMap = parseJSONObj(attrs[CONSTANTS.PICGO_FILE_MAP_KEY])
+        this.logger.debug("fileMap=>", fileMap)
+      }
 
+      // 处理思源本地图片预览
+      if (/^assets/.test(originUrl)) {
         const baseUrl = getSiyuanCfg().baseUrl
         imgUrl = pathJoin(baseUrl, "/" + imgUrl)
         isLocal = true
@@ -96,6 +98,8 @@ export class PicgoPostApi {
         }
       }
 
+      // imageItem.originUrl = decodeURIComponent(imageItem.originUrl)
+      imageItem.url = decodeURIComponent(imageItem.url)
       this.logger.debug("imageItem=>", imageItem)
       ret.push(imageItem)
     }

@@ -27,6 +27,7 @@ import { reactive } from "vue"
 import { isInSiyuanWidget } from "~/utils/platform/siyuan/siyuanUtil"
 import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
 import envUtil from "~/utils/envUtil"
+import { ImageItem } from "~/utils/models/imageItem"
 
 /**
  * Picgo公共组件
@@ -46,7 +47,7 @@ export const usePicgoCommon = () => {
     loggerMsg: "",
     isSiyuanOrSiyuanNewWin: isSiyuanOrSiyuanNewWin,
     fileList: {
-      files: [],
+      files: <ImageItem[]>[],
     },
   })
 

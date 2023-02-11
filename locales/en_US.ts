@@ -448,4 +448,5 @@ export default {
     "Please input config name",
   "setting.picgo.index.tip":
     "Note: The image uploaded here will not be automatically inserted into the document. Please manually click the copy button to copy the link, and then Ctrl+V to paste it into the document. This picture list only shows the pictures contained in this document.",
+  "setting.picgo.index.copy.link": "Copy link",
 }

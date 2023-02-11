@@ -29,6 +29,7 @@ import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
 import { getPageId } from "~/utils/platform/siyuan/siyuanUtil"
 import { ImageParser } from "~/utils/parser/imageParser"
 import { PicgoPostApi } from "~/utils/platform/picgo/picgoPostApi"
+import { ImageItem } from "~/utils/models/imageItem"
 
 /**
  * Picgo页面初始化组件
@@ -79,7 +80,7 @@ export const usePicgoInitPage = (props, deps) => {
 
     // 页面属性
     for (let i = 0; i < imageItemArray.length; i++) {
-      const imageItem = imageItemArray[i]
+      const imageItem = imageItemArray[i] as ImageItem
       picgoCommonData.fileList.files.push(imageItem)
     }
   }

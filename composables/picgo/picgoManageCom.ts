@@ -117,7 +117,7 @@ export const usePicgoManage = (props, deps) => {
               picgoCommonData.isUploadLoading = false
 
               ElMessage.success("图片已经成功上传至图床，即将刷新页面")
-              reloadPage()
+              // reloadPage()
             } catch (e) {
               picgoCommonData.isUploadLoading = false
 
@@ -145,7 +145,7 @@ export const usePicgoManage = (props, deps) => {
           picgoCommonData.isUploadLoading = false
 
           ElMessage.success("图片已经成功上传至图床，即将刷新页面")
-          reloadPage()
+          // reloadPage()
         } catch (e) {
           picgoCommonData.isUploadLoading = false
 

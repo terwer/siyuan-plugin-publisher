@@ -27,12 +27,14 @@
   <div v-if="isElectron" style="padding-right: 20px">
     <blockquote class="picgo-setting-tip">
       <div>
-        {{ $t("picgo.siyuan.tip") }} 。 从 0.7.0+
-        开始，支持多个配置文件切换，当前系统默认的 PicGO 配置文件为：
+        {{ $t("picgo.siyuan.tip") }} 。 当前系统默认的 PicGO 配置文件为：
         <pre
           style="display: inline-block"
         ><code>{{ picgoUtil.getPicgoCfgPath() }}</code></pre>
         。
+        多个图床中，只能有一个图床设置为默认。默认图床会在上传的时候自动生效。从
+        0.7.0+
+        开始，单个图床支持多份配置切换，每个图床只能有一个选中的配置生效。
         {{ $t("setting.picgo.refer.to") }}
         <a
           target="_blank"
