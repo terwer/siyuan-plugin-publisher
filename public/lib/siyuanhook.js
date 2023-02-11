@@ -258,7 +258,7 @@ const initIframeWidaget = () => {
   initMethods.initLocalStorageMethod("iframe挂件")
 
   // 初始化插槽
-  initMethods.initSlotMethod("iframe挂件")
+  // initMethods.initSlotMethod("iframe挂件")
 
   // 初始化主题适配
   initMethods.initThemeAdaptor("iframe挂件")

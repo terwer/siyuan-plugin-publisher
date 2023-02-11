@@ -42,9 +42,6 @@
     >
       <platform-setting :is-reload="isReloadServiceTab" />
     </el-tab-pane>
-    <el-tab-pane name="post-bind" :label="$t('service.tab.post.bind')">
-      <PostBind :is-reload="isReloadServiceTab" :page-id="props.pageId" />
-    </el-tab-pane>
     <el-tab-pane
       name="service-switch"
       :label="$t('service.tab.service.switch')"
@@ -54,12 +51,6 @@
     <el-tab-pane name="dynamic-platform" :label="$t('dynamic.platform.new')">
       <dynamic-platform />
     </el-tab-pane>
-    <el-tab-pane name="picgo-setting" :label="$t('picgo.pic.setting')">
-      <picgo-setting />
-    </el-tab-pane>
-    <el-tab-pane :label="$t('service.tab.change.local')" name="general-setting">
-      <general-setting :is-reload="isReloadServiceTab" />
-    </el-tab-pane>
   </el-tabs>
 </template>
 
@@ -68,11 +59,8 @@ import { ref } from "vue"
 import { LogFactory } from "~/utils/logUtil"
 import DynamicPlatform from "~/components/publish/tab/DynamicPlatform.vue"
 import ServiceSwitch from "~/components/publish/tab/ServiceSwitch.vue"
-import PostBind from "~/components/publish/tab/PostBind.vue"
 import PlatformSetting from "~/components/publish/tab/PlatformSetting.vue"
 import PlatformMain from "~/components/publish/tab/PlatformMain.vue"
-import GeneralSetting from "~/components/set/GeneralSetting.vue"
-import PicgoSetting from "~/components/picgo/PicgoSetting.vue"
 
 const logger = LogFactory.getLogger("components/publish/PublishService.vue")
 

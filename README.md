@@ -16,7 +16,9 @@
 
 ![](https://img1.terwer.space/api/public/202212181127124.png)
 
-## 状态
+使用之前请务必详细阅读 [快速上手指南](#快速上手指南)
+
+## 项目运行状态
 
 [![dev checks](https://img.shields.io/github/checks-status/terwer/src-sy-post-publisher/main?label=main)](https://github.com/terwer/src-sy-post-publisher)
 [![dev checks](https://img.shields.io/github/checks-status/terwer/src-sy-post-publisher/dev?label=dev)](https://github.com/terwer/src-sy-post-publisher/tree/dev)
@@ -36,25 +38,38 @@
 
 ### 发布体验相关
 
-## 快速上手
+## 快速上手指南
 
-### 挂件版挂载菜单打开新窗口操作方式快速上手 <sup>强烈推荐</sup> <sup>0.4.2+</sup>
+### FAQ
+
+Q1：使用此思源笔记挂件或者浏览器插件有什么注意事项吗？
+
+A1：有。 **特别提示：各种使用模式请不要混合使用，使用其中一种即可。避免因为混用导致配置同步问题。**
+
+Q2：有哪些方式可以使用？具体步骤是什么？
+
+A2：请参考下面三种模式及其详细说明。特别注意温馨提示的内容。
+
+### 模式一：挂件版挂载菜单打开新窗口操作方式快速上手 <sup>强烈推荐</sup> <sup>0.4.2+</sup>
 
 首先在设置 - 集市 - 挂件 中下载 sy-post-publisher
 
 点击设置 - 外观- 代码片段，代码片段加上下面的 `js` 片段，然后重启思源
 
 ```js
+// 如果不喜欢这个菜单，直接去掉这个代码片段引用即可，去掉之后仍然可以通过挂件版通用方式使用
 import("/widgets/sy-post-publisher/lib/siyuanhook.js")
 ```
 
-点击按钮开始体验
+点击按钮开始体验。
 
 ![](https://img1.terwer.space/api/public/20221228-175950.jpeg)
 
 详情请参考: [挂件模式用挂载菜单的方式使用](https://docs.publish.terwer.space/post/the-pendant-mode-is-used-in-the-method-of-mounting-menu-169wrw.html)
 
-### 挂件版通用方式快速上手
+温馨提示：此模式下，功能已经是最全面的了，直接使用菜单功能即可，请不要再添加挂件。避免因为混用导致配置同步问题。
+
+### 模式二：挂件版通用方式快速上手
 
 首先在设置 - 集市 - 挂件 中下载 sy-post-publisher
 
@@ -66,9 +81,9 @@ import("/widgets/sy-post-publisher/lib/siyuanhook.js")
 
 点击发布即可。
 
-温馨提示：0.7.0+ 之后通过通用版使用会自动激活菜单。
+温馨提示：不建议通用版模式下添加 JS 片段，可能会导致配置不同步问题。要么单独使用通用版，要么单独使用挂载菜单。
 
-### 浏览器插件快速上手
+### 模式三：浏览器插件快速上手
 
 参考 [浏览器插件快速上手指南](https://docs.publish.terwer.space/docs/getting-started/#%E6%B5%8F%E8%A7%88%E5%99%A8%E6%8F%92%E4%BB%B6%E6%96%B9%E5%BC%8F%E4%BD%BF%E7%94%A8)
 
