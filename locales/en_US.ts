@@ -452,4 +452,5 @@ export default {
   "setting.picgo.setting.timestamp.rename": "Timestamp rename",
   "setting.picgo.setting.close": "Close",
   "setting.picgo.setting.open": "Open",
+  "setting.picgo.setting.log.file": "Log file",
 }

@@ -371,6 +371,20 @@ export const deleteUploaderConfig = (type, id) => {
 }
 
 /**
+ * PicGO配置根路径
+ */
+const getPicgoBasedir = () => {
+  const syWin = siyuanBrowserUtil.getSiyuanWindow()
+  const picgo = syWin?.SyPicgo?.getPicgoObj()
+
+  if (!picgo) {
+    return "[PicGO未挂载]"
+  }
+
+  return picgo.baseDir
+}
+
+/**
  * PicGO配置文件路径
  */
 const getPicgoCfgPath = () => {
@@ -381,8 +395,23 @@ const getPicgoCfgPath = () => {
     return "[PicGO未挂载]"
   }
 
-  const picgo_cfg_070 = picgo.configPath
-  return picgo_cfg_070
+  return picgo.configPath
+}
+
+/**
+ * 获取配置文件
+ * @param filename 文件名
+ */
+const getPicgoCfgFile = (filename) => {
+  const syWin = siyuanBrowserUtil.getSiyuanWindow()
+  const syPicgo = syWin?.SyPicgo
+  const picgo = syPicgo?.getPicgoObj()
+
+  if (!picgo) {
+    return "[PicGO未挂载]"
+  }
+
+  return syPicgo.combinePath(picgo.baseDir, filename)
 }
 
 /**
@@ -407,6 +436,11 @@ const picgoUtil = {
   // upload
   uploadByPicGO,
 
+  // /Users/terwer/Library/Application Support/sy-picgo/
+  getPicgoBasedir,
+  // /Users/terwer/Library/Application Support/sy-picgo/picgo.cfg.json
   getPicgoCfgPath,
+  // /Users/terwer/Library/Application Support/sy-picgo/[filename]
+  getPicgoCfgFile,
 }
 export default picgoUtil

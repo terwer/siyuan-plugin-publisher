@@ -451,4 +451,5 @@ export default {
   "setting.picgo.setting.timestamp.rename": "时间戳重命名",
   "setting.picgo.setting.close": "关",
   "setting.picgo.setting.open": "开",
+  "setting.picgo.setting.log.file": "日志文件",
 }

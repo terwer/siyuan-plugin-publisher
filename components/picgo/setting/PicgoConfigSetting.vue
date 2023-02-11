@@ -28,12 +28,19 @@
     <el-form label-width="125px">
       <!-- 打开PicGO配置文件 -->
       <el-form-item :label="$t('setting.picgo.picgo.open.config.file')">
-        <el-button @click="handleOpenFile"
+        <el-button @click="handleOpenFile('picgo.cfg.json')"
           >{{ $t("setting.picgo.picgo.click.to.open") }}
         </el-button>
       </el-form-item>
 
-      <!-- 图床开个、、开关 -->
+      <!-- 打开PicGO日志文件 -->
+      <el-form-item :label="$t('setting.picgo.setting.log.file')">
+        <el-button @click="handleOpenFile('picgo.log')"
+          >{{ $t("setting.picgo.picgo.click.to.open") }}
+        </el-button>
+      </el-form-item>
+
+      <!-- 图床开关 -->
       <el-form-item :label="$t('setting.picgo.picgo.choose.showed.picbed')">
         <el-checkbox-group
           v-model="form.showPicBedList"
@@ -105,9 +112,10 @@ function handleShowPicBedListChange(val: ICheckBoxValueType[]) {
   logger.debug("保存启用的图床", list)
 }
 
-const handleOpenFile = () => {
-  const picgoCfgPath = picgoUtil.getPicgoCfgPath()
-  siyuanBrowserUtil.openPath(picgoCfgPath)
+const handleOpenFile = (filename) => {
+  const picgoCfgfile = picgoUtil.getPicgoCfgFile(filename)
+  logger.warn("即将打开文件=>", picgoCfgfile)
+  siyuanBrowserUtil.openPath(picgoCfgfile)
 }
 
 const handleAutoRename = (val: ICheckBoxValueType) => {
@@ -118,7 +126,7 @@ const handleAutoRename = (val: ICheckBoxValueType) => {
 
 async function initData() {
   const config = picgoUtil.getPicgoConfig()
-  logger.warn("PicGO setting initData=>", initData)
+  logger.debug("PicGO setting initData=>", config)
   if (config !== undefined) {
     const settings = config.settings || {}
     // 重命名默认开启，防止图片路径问题
