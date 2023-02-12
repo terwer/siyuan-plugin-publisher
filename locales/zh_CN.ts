@@ -452,4 +452,7 @@ export default {
   "setting.picgo.setting.close": "关",
   "setting.picgo.setting.open": "开",
   "setting.picgo.setting.log.file": "日志文件",
+  "setting.picgo.plugin": "插件设置",
+  "setting.picgo.plugin.list": "插件列表",
+  "setting.picgo.plugin.import.local": "导入本地插件",
 }

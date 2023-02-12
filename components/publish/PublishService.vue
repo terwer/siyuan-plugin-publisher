@@ -51,6 +51,9 @@
     <el-tab-pane name="dynamic-platform" :label="$t('dynamic.platform.new')">
       <dynamic-platform />
     </el-tab-pane>
+    <el-tab-pane name="picgo-setting" :label="$t('picgo.pic.setting')">
+      <picgo-setting />
+    </el-tab-pane>
   </el-tabs>
 </template>
 
@@ -61,6 +64,7 @@ import DynamicPlatform from "~/components/publish/tab/DynamicPlatform.vue"
 import ServiceSwitch from "~/components/publish/tab/ServiceSwitch.vue"
 import PlatformSetting from "~/components/publish/tab/PlatformSetting.vue"
 import PlatformMain from "~/components/publish/tab/PlatformMain.vue"
+import PicgoSetting from "~/components/picgo/PicgoSetting.vue"
 
 const logger = LogFactory.getLogger("components/publish/PublishService.vue")
 

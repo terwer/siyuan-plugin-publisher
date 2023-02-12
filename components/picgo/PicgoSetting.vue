@@ -57,7 +57,12 @@
         <picbed-setting :is-reload="isReload" />
       </el-tab-pane>
       <el-tab-pane :label="$t('setting.picgo.picgo')">
+        <!-- PicGO配置 -->
         <picgo-config-setting />
+      </el-tab-pane>
+      <el-tab-pane :label="$t('setting.picgo.plugin')">
+        <!-- PicGO插件配置 -->
+        <picgo-plugin-setting />
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -74,6 +79,7 @@ import PicbedSetting from "~/components/picgo/setting/PicbedSetting.vue"
 import PicgoConfigSetting from "~/components/picgo/setting/PicgoConfigSetting.vue"
 import { ref } from "vue"
 import picgoUtil from "~/utils/otherlib/picgoUtil"
+import PicgoPluginSetting from "~/components/picgo/setting/PicgoPluginSetting.vue"
 
 const isReload = ref(false)
 

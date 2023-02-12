@@ -139,7 +139,7 @@ import { LogFactory } from "~/utils/logUtil"
 import dateUtil from "../../../utils/dateUtil"
 import { usePicbedStore } from "~/stores/picbedStore"
 import { useI18n } from "vue-i18n"
-import ConfigForm from "~/components/picgo/setting/ConfigForm.vue"
+import ConfigForm from "~/components/picgo/common/ConfigForm.vue"
 
 const logger = LogFactory.getLogger(
   "components/picgo/setting/PicbedSetting.vue"

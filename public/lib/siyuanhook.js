@@ -66,13 +66,12 @@ const isSiyuanNewWin = () => {
  * 获取可操作的Window
  */
 const getSiyuanWindow = () => {
-  if (!isInSiyuanOrSiyuanNewWin()) {
-    return window
-  }
-
   if (isSiyuanWidget()) {
     return parent.window
   } else {
+    if (isSiyuanNewWin()) {
+      return window
+    }
     return window
   }
 }
@@ -221,7 +220,7 @@ const initMethods = {
     // 挂载PicGO到window
     const picgoExtension = requireLib(
       entryName,
-      `${dataDir}/widgets/sy-post-publisher/lib/picgo/picgo.js`,
+      `${dataDir}/widgets/sy-post-publisher/lib/picgo/syPicgo.js`,
       "sy-picgo"
     ).default
 

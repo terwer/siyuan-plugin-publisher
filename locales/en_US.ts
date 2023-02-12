@@ -453,4 +453,7 @@ export default {
   "setting.picgo.setting.close": "Close",
   "setting.picgo.setting.open": "Open",
   "setting.picgo.setting.log.file": "Log file",
+  "setting.picgo.plugin": "Plugin setting",
+  "setting.picgo.plugin.list": "Plugin list",
+  "setting.picgo.plugin.import.local": "Import local plugin",
 }

@@ -1,7 +1,7 @@
 {
   "name": "sy-post-publisher",
   "private": true,
-  "version": "0.7.0-beta5",
+  "version": "0.7.0-beta6",
   "scripts": {
     "serve": "python scripts/serve.py",
     "dev": "python scripts/dev.py",
@@ -11,13 +11,13 @@
     "docs": "jsdoc -c jsdoc.json utils/api.ts",
     "prettier": "prettier --write .",
     "prepare": "husky install",
-    "new": "python scripts/version.py 0.7.0-beta5",
+    "new": "python scripts/version.py 0.7.0-beta6",
     "widget": "python scripts/widget.py",
     "ext": "python scripts/ext.py",
     "package": "pnpm widget && pnpm ext"
   },
   "dependencies": {
-    "@element-plus/icons-vue": "^2.0.9",
+    "@element-plus/icons-vue": "^2.0.10",
     "@fortawesome/fontawesome-svg-core": "^6.2.1",
     "@fortawesome/free-brands-svg-icons": "^6.2.1",
     "@fortawesome/free-regular-svg-icons": "^6.2.1",
@@ -73,6 +73,7 @@
     "node-localstorage": "^2.2.1",
     "prettier": "2.8.3",
     "sass": "^1.56.1",
+    "stylus": "^0.59.0",
     "typescript": "^4.9.3",
     "unplugin-vue-components": "^0.22.11",
     "vercel": "^28.7.0",

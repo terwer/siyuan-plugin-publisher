@@ -414,6 +414,13 @@ const getPicgoCfgFile = (filename) => {
   return syPicgo.combinePath(picgo.baseDir, filename)
 }
 
+const ipcHandleImportLocalPlugin = () => {
+  const syWin = siyuanBrowserUtil.getSiyuanWindow()
+  const syPicgo = syWin?.SyPicgo
+
+  syPicgo.ipcMethods.handleImportLocalPlugin()
+}
+
 /**
  * PicGO相关操作统一访问入口
  */
@@ -442,5 +449,8 @@ const picgoUtil = {
   getPicgoCfgPath,
   // /Users/terwer/Library/Application Support/sy-picgo/[filename]
   getPicgoCfgFile,
+
+  // Ipc
+  ipcHandleImportLocalPlugin,
 }
 export default picgoUtil

@@ -31,8 +31,6 @@ import {
   isInSiyuanWidget,
 } from "~/utils/platform/siyuan/siyuanUtil"
 
-const SIYUAN_BROWSER_CONSTANTS_SIYUAN_EXPORT_CLOSE = "siyuan-export-close"
-
 /**
  * 是否在思源浏览器
  * @returns {boolean}
@@ -45,13 +43,12 @@ export const isInSiyuanNewWinBrowser = () => {
  * 获取可操作的Window
  */
 const getSiyuanWindow = () => {
-  if (!isInSiyuanOrSiyuanNewWin()) {
-    return window
-  }
-
   if (isInSiyuanWidget()) {
     return parent.window
   } else {
+    if (isInSiyuanOrSiyuanNewWin()) {
+      return window
+    }
     return window
   }
 }
@@ -64,17 +61,13 @@ export const getSiyuanNewWinDataDir = () => {
 }
 
 /**
- * 关闭思源导出窗口
+ * 关闭思源窗口
  */
 export const doCloseExportWin = () => {
-  const { ipcRenderer } = require("electron")
-  // const currentWindowId = getCurrentWindow().id
-  const currentWindowId = window.terwer.currentWindowId
-  console.log("currentWindowId=>", currentWindowId)
-  ipcRenderer.send(
-    SIYUAN_BROWSER_CONSTANTS_SIYUAN_EXPORT_CLOSE,
-    currentWindowId
-  )
+  const syWin = getSiyuanWindow()
+
+  const { getCurrentWindow } = syWin.require("@electron/remote")
+  getCurrentWindow().close()
 }
 
 /**
@@ -86,7 +79,7 @@ export const doOpenExportWin = async (pageId, pageUrl) => {
 
   if (syWin.syp && syWin.syp.renderPublishHelper) {
     // 打开弹窗
-    syWin.syp.renderPublishHelper(pageId, pageUrl)
+    syWin.syp.renderPublishHelper(pageId, pageUrl, syWin)
   } else {
     ElMessage.warning(
       "renderPublishHelper失败，未找到hook方法，请在自定义js片段添加 import('/widgets/sy-post-publisher/lib/siyuanhook.js') ，并重启思源笔记"

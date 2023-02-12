@@ -41,3 +41,5 @@ out
 .pnpm-store
 public/lib/picgo/picgo.cfg.json
 public/lib/picgo/picgo.cfg.dev.json
+
+__pycache__

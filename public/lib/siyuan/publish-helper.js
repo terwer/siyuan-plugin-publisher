@@ -86,12 +86,14 @@ const initPublishHelper = () => {
    * 新窗口打开插件页面
    * @param pageId 文章ID
    * @param pageUrl 页面地址
+   * @param mainWin 可选（打开此页面的Window对象）
    */
-  window.syp.renderPublishHelper = (pageId, pageUrl) => {
+  window.syp.renderPublishHelper = (pageId, pageUrl, mainWin = window) => {
     const { app, BrowserWindow, getCurrentWindow } =
-      window.require("@electron/remote")
-    // enable webContents
-    // require("@electron/remote").require("@electron/remote/main").enable(serverHost.webContents)
+      mainWin.require("@electron/remote")
+    const remote = mainWin
+      .require("@electron/remote")
+      .require("@electron/remote/main")
 
     const fetchPost = (url, data, cb, headers) => {
       const init = {
@@ -208,7 +210,7 @@ const initPublishHelper = () => {
       )
     }).then(function (html) {
       const mainWindow = getCurrentWindow()
-      window.siyuan.printWin = new BrowserWindow({
+      const newWin = new BrowserWindow({
         parent: mainWindow,
         modal: true,
         show: true,
@@ -234,16 +236,21 @@ const initPublishHelper = () => {
           contextIsolation: false,
         },
       })
-      window.siyuan.printWin.webContents.userAgent = `SiYuan/${app.getVersion()} https://b3log.org/siyuan Electron`
-      window.siyuan.printWin.once("ready-to-show", () => {
-        window.siyuan.printWin.webContents.setZoomFactor(1)
+
+      newWin.webContents.userAgent = `SiYuan/${app.getVersion()} https://b3log.org/siyuan Electron`
+      // 允许
+      remote.enable(newWin.webContents)
+
+      newWin.once("ready-to-show", () => {
+        newWin.webContents.setZoomFactor(1)
       })
+
       fetchPost(
         "/api/export/exportTempContent",
         { content: html },
         (response) => {
-          window.siyuan.printWin.loadURL(response.data.url)
-          // window.siyuan.printWin.webContents.openDevTools()
+          newWin.loadURL(response.data.url)
+          // newWin.webContents.openDevTools()
         }
       )
     })
