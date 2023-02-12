@@ -26,10 +26,7 @@
 // 警告⚠️：请勿在非思源笔记浏览器环境调用此文件中的任何方法
 
 import { ElMessage } from "element-plus"
-import {
-  isInSiyuanOrSiyuanNewWin,
-  isInSiyuanWidget,
-} from "~/utils/platform/siyuan/siyuanUtil"
+import { isInSiyuanWidget } from "~/utils/platform/siyuan/siyuanUtil"
 
 /**
  * 是否在思源浏览器
@@ -46,7 +43,7 @@ const getSiyuanWindow = () => {
   if (isInSiyuanWidget()) {
     return parent.window
   } else {
-    if (isInSiyuanOrSiyuanNewWin()) {
+    if (isInSiyuanNewWinBrowser()) {
       return window
     }
     return window
