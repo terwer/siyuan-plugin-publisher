@@ -46,7 +46,7 @@
         :closable="false"
         v-if="!apiStatus"
       />
-      <el-form label-wilabel-wdth="120px">
+      <el-form label-width="120px">
         <!-- 文章标题 -->
         <div class="form-post-title">
           <el-form-item :label="$t('main.title')">
