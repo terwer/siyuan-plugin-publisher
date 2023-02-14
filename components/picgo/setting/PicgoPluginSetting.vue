@@ -52,7 +52,7 @@ function goAwesomeList() {
 }
 
 function handleImportLocalPlugin() {
-  picgoUtil.ipcHandleImportLocalPlugin()
+  picgoUtil.ipcHandleEvent("importLocalPlugin")
 }
 </script>
 

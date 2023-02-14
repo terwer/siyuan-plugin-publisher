@@ -414,11 +414,17 @@ const getPicgoCfgFile = (filename) => {
   return syPicgo.combinePath(picgo.baseDir, filename)
 }
 
-const ipcHandleImportLocalPlugin = () => {
+/**
+ * 统一发送消息的入口
+ *
+ * @param channel 频道
+ * @param args 参数
+ */
+const ipcHandleEvent = (channel, args = {}) => {
   const syWin = siyuanBrowserUtil.getSiyuanWindow()
   const syPicgo = syWin?.SyPicgo
 
-  syPicgo.ipcMethods.handleImportLocalPlugin()
+  syPicgo.ipcMethods.handleEvent(channel, args)
 }
 
 /**
@@ -451,6 +457,6 @@ const picgoUtil = {
   getPicgoCfgFile,
 
   // Ipc
-  ipcHandleImportLocalPlugin,
+  ipcHandleEvent,
 }
 export default picgoUtil
