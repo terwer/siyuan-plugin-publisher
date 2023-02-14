@@ -184,7 +184,7 @@ const updateCard = async () => {
           type: "error",
           message:
             t("main.opt.failure") +
-            "，请将 ankisiyuan 或者 ankisiyuan.exe 复制到 data/widgets 目录=>" +
+            "，请将 ankisiyuan.bin 或者 ankisiyuan.exe 复制到 data/widgets/sy-post-publisher/lib/cmd 目录=>" +
             e,
         })
         logger.error(t("main.opt.failure") + "=>" + e)
