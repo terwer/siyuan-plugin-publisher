@@ -124,8 +124,8 @@
               class="button"
               :data-block-id="o.id"
               @click="saveAnkiInfo(o.id)"
-              >保存Anki标记</el-button
-            >
+              >保存Anki标记
+            </el-button>
           </div>
         </el-card>
       </el-col>
@@ -174,7 +174,7 @@ const updateCard = async () => {
   })
     .then(async () => {
       const dataDir: string = getSiyuanNewWinDataDir()
-      const ankisiyuanPath = `${dataDir}/widgets/ankisiyuan.bin`
+      const ankisiyuanPath = `${dataDir}/widgets/sy-post-publisher/lib/cmd/ankisiyuan.bin`
       const result = await scriptUtil.execShellCmd(ankisiyuanPath)
       ElMessage.success("操作成功，执行结果=>" + result)
     })
@@ -348,6 +348,7 @@ onMounted(async () => {
 .anki-card-col {
   margin: 8px 0;
 }
+
 .anki-value {
   margin: 16px 0;
 }
