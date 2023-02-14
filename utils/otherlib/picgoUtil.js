@@ -419,12 +419,29 @@ const getPicgoCfgFile = (filename) => {
  *
  * @param channel 频道
  * @param args 参数
+ * @author terwer
+ * @since 0.7.0
  */
 const ipcHandleEvent = (channel, args = {}) => {
   const syWin = siyuanBrowserUtil.getSiyuanWindow()
   const syPicgo = syWin?.SyPicgo
 
   syPicgo.ipcMethods.handleEvent(channel, args)
+}
+
+/**
+ * 统一注册消息的入口
+ *
+ * @param channel 频道
+ * @param data 数据
+ * @author terwer
+ * @since 0.7.0
+ */
+const ipcRegisterEvent = (channel, data = {}) => {
+  const syWin = siyuanBrowserUtil.getSiyuanWindow()
+  const syPicgo = syWin?.SyPicgo
+
+  syPicgo.ipcMethods.registerEvent(channel, data)
 }
 
 /**
@@ -458,5 +475,6 @@ const picgoUtil = {
 
   // Ipc
   ipcHandleEvent,
+  ipcRegisterEvent,
 }
 export default picgoUtil

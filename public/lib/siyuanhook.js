@@ -249,6 +249,26 @@ const initMethods = {
     syWin.SyPicgo = syPicgo
     console.log("syPicgo=>", syPicgo)
   },
+
+  initCmder: () => {
+    const syWin = getSiyuanWindow()
+    const dataDir = getSiyuanDataDir()
+
+    // 防止重复挂载
+    if (syWin.SyCmd) {
+      console.warn("SyCmd已挂载，忽略", entryName)
+      return
+    }
+
+    // 挂载SyCmd到window
+    const syCmd = requireLib(
+      entryName,
+      `${dataDir}/widgets/sy-post-publisher/lib/cmd/scriptUtil.js`,
+      "sy-cmd"
+    ).default
+    syWin.SyCmd = syCmd
+    console.log("syCmd=>", syCmd)
+  },
 }
 
 // iframe挂件
@@ -267,6 +287,9 @@ const initIframeWidaget = () => {
 
   // 初始化PicGO配置
   initMethods.initPicgoExtension("iframe挂件")
+
+  // 初始化SyCmd配置
+  initMethods.initCmder("iframe挂件")
 }
 
 // 新窗口打开
@@ -279,6 +302,9 @@ const initSiyuanNewWin = () => {
 
   // 初始化PicGO配置
   initMethods.initPicgoExtension("思源笔记新窗口")
+
+  // 初始化SyCmd配置
+  initMethods.initCmder("思源笔记新窗口")
 }
 
 // js片段
@@ -297,6 +323,9 @@ const initJsCode = () => {
 
   // 初始化PicGO配置
   initMethods.initPicgoExtension("自定义js片段")
+
+  // 初始化SyCmd配置
+  initMethods.initCmder("自定义js片段")
 }
 
 // init

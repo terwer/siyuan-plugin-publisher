@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -30,7 +30,7 @@ import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
 const { spawn } = isInSiyuanNewWinBrowser() ? require("child_process") : ""
 const process = isInSiyuanNewWinBrowser() ? require("process") : ""
 
-function cmd(...command) {
+async function cmd(...command) {
   let p = spawn(command[0], command.slice(1))
   return new Promise((resolve, reject) => {
     p.stdout.on("data", (x) => {
@@ -52,9 +52,16 @@ function cmd(...command) {
  * @param shell
  * @returns {Promise<undefined>}
  */
-export async function execShellCmd(shell) {
+async function execShellCmd(shell) {
   console.log("exec shell=>", shell)
   const ret = await cmd("bash", "-c", shell)
   console.log("exec finished=>", ret)
   return ret
 }
+
+const scriptUtil = {
+  cmd,
+  execShellCmd,
+}
+
+export default scriptUtil

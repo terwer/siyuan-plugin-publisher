@@ -46,7 +46,30 @@
 
 <script lang="ts" setup>
 import picgoUtil from "~/utils/otherlib/picgoUtil"
+import { LogFactory } from "~/utils/logUtil"
+import { ElMessage } from "element-plus"
 
+const logger = LogFactory.getLogger(
+  "components/picgo/setting/PicgoPluginSetting.vue"
+)
+
+// register events
+picgoUtil.ipcRegisterEvent("pluginList", (evt, data) => {
+  logger.info("PicgoPluginSetting接收到pluginList事件,data=>", data)
+
+  const rawArgs = data.rawArgs
+  if (rawArgs.success) {
+    // const list = rawArgs.list
+    // pluginList.value = list
+    // pluginNameList.value = list.map(item => item.fullName)
+
+    logger.info("插件已经成功安装.")
+  } else {
+    ElMessage.error(rawArgs.error)
+  }
+})
+
+// handles
 function goAwesomeList() {
   window.open("https://github.com/PicGo/Awesome-PicGo")
 }
