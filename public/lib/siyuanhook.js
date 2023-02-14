@@ -250,7 +250,11 @@ const initMethods = {
     console.log("syPicgo=>", syPicgo)
   },
 
-  initCmder: () => {
+  /**
+   * 初始化 SyCmd 配置，适用于【iframe挂件模式】、【新窗口模式】以及【js片段模式】
+   * @param entryName 入口名称
+   */
+  initCmder: (entryName) => {
     const syWin = getSiyuanWindow()
     const dataDir = getSiyuanDataDir()
 
@@ -263,9 +267,9 @@ const initMethods = {
     // 挂载SyCmd到window
     const syCmd = requireLib(
       entryName,
-      `${dataDir}/widgets/sy-post-publisher/lib/cmd/scriptUtil.js`,
+      `${dataDir}/widgets/sy-post-publisher/lib/cmd/syCmd.js`,
       "sy-cmd"
-    ).default
+    )
     syWin.SyCmd = syCmd
     console.log("syCmd=>", syCmd)
   },

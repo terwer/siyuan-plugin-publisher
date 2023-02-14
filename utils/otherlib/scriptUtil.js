@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2023, Terwer . All rights reserved.
+ * Copyright (c) 2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -23,44 +23,21 @@
  * questions.
  */
 
-// 警告⚠️：请勿在非思源笔记浏览器环境调用此文件中的任何方法
-
-import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
-
-const { spawn } = isInSiyuanNewWinBrowser() ? require("child_process") : ""
-const process = isInSiyuanNewWinBrowser() ? require("process") : ""
-
-async function cmd(...command) {
-  let p = spawn(command[0], command.slice(1))
-  return new Promise((resolve, reject) => {
-    p.stdout.on("data", (x) => {
-      process.stdout.write(x.toString())
-      resolve(x.toString())
-    })
-    p.stderr.on("data", (x) => {
-      process.stderr.write(x.toString())
-      reject(x.toString())
-    })
-    p.on("exit", (code) => {
-      resolve(code)
-    })
-  })
-}
+import siyuanBrowserUtil from "~/utils/otherlib/siyuanBrowserUtil"
 
 /**
  * 执行shell脚本
+ *
  * @param shell
- * @returns {Promise<undefined>}
  */
-async function execShellCmd(shell) {
-  console.log("exec shell=>", shell)
-  const ret = await cmd("bash", "-c", shell)
-  console.log("exec finished=>", ret)
-  return ret
+const execShellCmd = async (shell) => {
+  const syWin = siyuanBrowserUtil.getSiyuanWindow()
+  const syCmd = syWin?.SyCmd
+
+  return await syCmd.execShellCmd(shell)
 }
 
 const scriptUtil = {
-  cmd,
   execShellCmd,
 }
 

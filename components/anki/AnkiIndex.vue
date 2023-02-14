@@ -25,9 +25,12 @@
 
 <template>
   <div class="anki-body">
-    <el-button type="primary" @click="updateCard" v-if="false"
-      >更新卡片</el-button
-    >
+    <el-button
+      type="primary"
+      @click="updateCard"
+      v-if="isInSiyuanNewWinBrowser()"
+      >更新卡片
+    </el-button>
     <el-row :gutter="12">
       <el-col
         v-for="(o, index) in formData.ankiInfo"
@@ -139,8 +142,11 @@ import { useI18n } from "vue-i18n"
 import { LogFactory } from "~/utils/logUtil"
 import { isEmptyString } from "~/utils/util"
 import { appendStr } from "~/utils/strUtil"
-import { execShellCmd } from "~/utils/otherlib/shellUtil"
-import { getSiyuanNewWinDataDir } from "~/utils/otherlib/siyuanBrowserUtil"
+import {
+  getSiyuanNewWinDataDir,
+  isInSiyuanNewWinBrowser,
+} from "~/utils/otherlib/siyuanBrowserUtil"
+import scriptUtil from "~/utils/otherlib/scriptUtil"
 
 const logger = LogFactory.getLogger("components/anki/AnkiIndex.vue")
 const { t } = useI18n()
@@ -169,7 +175,7 @@ const updateCard = async () => {
     .then(async () => {
       const dataDir: string = getSiyuanNewWinDataDir()
       const ankisiyuanPath = `${dataDir}/widgets/ankisiyuan.bin`
-      const result = await execShellCmd(ankisiyuanPath)
+      const result = await scriptUtil.execShellCmd(ankisiyuanPath)
       ElMessage.success("操作成功，执行结果=>" + result)
     })
     .catch((e) => {
