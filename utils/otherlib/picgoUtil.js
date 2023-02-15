@@ -415,6 +415,21 @@ const getPicgoCfgFile = (filename) => {
 }
 
 /**
+ * 获取当前PicGO版本
+ */
+const getPicgoVersion = () => {
+  const syWin = siyuanBrowserUtil.getSiyuanWindow()
+  const syPicgo = syWin?.SyPicgo
+  const picgo = syPicgo?.getPicgoObj()
+
+  if (!picgo) {
+    return "1.5.0"
+  }
+
+  return picgo.VERSION
+}
+
+/**
  * 统一发送消息的入口
  *
  * @param channel 频道
@@ -476,5 +491,7 @@ const picgoUtil = {
   // Ipc
   ipcHandleEvent,
   ipcRegisterEvent,
+
+  getPicgoVersion,
 }
 export default picgoUtil

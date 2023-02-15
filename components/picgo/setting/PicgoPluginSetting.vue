@@ -43,6 +43,27 @@
     </div>
 
     <div class="plugin-list-box">
+      <div class="plugin-search-box">
+        <el-row
+          class="handle-bar"
+          :class="{ 'cut-width': pluginData.pluginList.length > 6 }"
+        >
+          <el-input
+            v-model="searchText"
+            :placeholder="$t('setting.picgo.plugin.search.placeholder')"
+          >
+            <template #suffix>
+              <el-icon
+                class="el-input__icon"
+                style="cursor: pointer"
+                @click="cleanSearch"
+              >
+                <font-awesome-icon icon="fa-solid fa-xmark" />
+              </el-icon>
+            </template>
+          </el-input>
+        </el-row>
+      </div>
       <div class="plugin-list-tip">
         {{ "当前共有" + pluginData.pluginList.length + "个插件。" }}
       </div>
@@ -145,7 +166,6 @@ const logger = LogFactory.getLogger(
 )
 
 // vars
-const __static = ""
 const loading = ref(false)
 const searchText = ref("")
 const pluginData = reactive({
@@ -154,7 +174,7 @@ const pluginData = reactive({
 })
 const os = ref("")
 const defaultLogo = ref(
-  `this.src="file://${__static.replace(/\\/g, "/")}/roundLogo.png"`
+  `this.src="/widgets/sy-post-publisher/lib/picgo/picgo-logo.png"`
 )
 const npmSearchText = computed(() => {
   return searchText.value.match("picgo-plugin-")
@@ -204,11 +224,15 @@ async function buildContextMenu(plugin: IPicGoPlugin) {
 }
 
 function _getSearchResult(val: string) {
-  // this.$http.get(`https://api.npms.io/v2/search?q=${val}`)
-  fetch(`https://registry.npmjs.com/-/v1/search?text=${val}`)
-    .then((res) => res.json())
-    .then((res: INPMSearchResult) => {
-      pluginData.pluginList = res.data.objects
+  const fetchUrl = `https://registry.npmjs.com/-/v1/search?text=${val}`
+  logger.info("npmjs请求fetchUrl=>", fetchUrl)
+  fetch(fetchUrl)
+    .then(async (response) => {
+      const json = await response.json() // 返回的json
+      const list: INPMSearchResultObject[] = json?.objects ?? []
+      logger.info("npmjs返回的package列表list=>", list)
+
+      pluginData.pluginList = list
         .filter((item: INPMSearchResultObject) => {
           return item.package.name.includes("picgo-plugin-")
         })
@@ -261,6 +285,10 @@ function handleSearchResult(item: INPMSearchResultObject) {
     gui,
     ing: false, // installing or uninstalling
   }
+}
+
+function cleanSearch() {
+  searchText.value = ""
 }
 
 // register events
@@ -379,7 +407,7 @@ $darwinBg = #172426
 
     .cli-only-badge
       position absolute
-      right 0px
+      right 0
       top 0
       font-size 12px
       padding 3px 8px
@@ -467,13 +495,13 @@ $darwinBg = #172426
       transition all .2s ease-in-out
 
       &.reload
-        right 0px
+        right 0
 
       &.ing
-        right 0px
+        right 0
 
       &.install
-        right 0px
+        right 0
 
         &:hover
           background: #1B9EF3

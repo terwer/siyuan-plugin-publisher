@@ -49,6 +49,19 @@
         。
       </div>
     </blockquote>
+    <div class="version-tip">
+      当前PicGo版本为
+      <a href="https://github.com/terwer/Electron-PicGo-Core" target="_blank"
+        >electron-picgo</a
+      >
+      v{{ picgoVersion }} ， 对 Electron 环境进行了更好的适配 ，由
+      <a href="https://github.com/terwer" target="_blank">terwer</a> 负责维护
+      。感谢原始
+      <a href="https://github.com/PicGo/PicGo-Core" target="_blank"
+        >PicGo-Core</a
+      >
+      项目。
+    </div>
 
     <!-- PicGO配置 -->
     <el-tabs type="border-card" @tab-click="picgoSettingTabChange">
@@ -77,15 +90,20 @@
 import { isElectron } from "~/utils/browserUtil"
 import PicbedSetting from "~/components/picgo/setting/PicbedSetting.vue"
 import PicgoConfigSetting from "~/components/picgo/setting/PicgoConfigSetting.vue"
-import { ref } from "vue"
+import { onBeforeMount, ref } from "vue"
 import picgoUtil from "~/utils/otherlib/picgoUtil"
 import PicgoPluginSetting from "~/components/picgo/setting/PicgoPluginSetting.vue"
 
 const isReload = ref(false)
+const picgoVersion = ref("")
 
 const picgoSettingTabChange = () => {
   isReload.value = !isReload.value
 }
+
+onBeforeMount(() => {
+  picgoVersion.value = picgoUtil.getPicgoVersion()
+})
 </script>
 
 <style scoped>
@@ -103,5 +121,9 @@ const picgoSettingTabChange = () => {
 .picgo-browser-tip {
   margin-left: 10px;
   margin-right: 10px;
+}
+
+.version-tip {
+  margin: 10px 0;
 }
 </style>

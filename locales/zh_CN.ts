@@ -459,4 +459,6 @@ export default {
   "setting.picgo.plugin.installing": "安装中",
   "setting.picgo.plugin.installed": "已安装",
   "setting.picgo.plugin.doing.something": "进行中",
+  "setting.picgo.plugin.search.placeholder":
+    "搜索npm上的PicGo插件，或者点击上方按钮查看优秀插件列表",
 }

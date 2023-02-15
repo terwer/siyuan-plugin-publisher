@@ -460,4 +460,6 @@ export default {
   "setting.picgo.plugin.installing": "Installing",
   "setting.picgo.plugin.installed": "Installed",
   "setting.picgo.plugin.doing.something": "Loading",
+  "setting.picgo.plugin.search.placeholder":
+    "Search the picgo plug -in on NPM, or click the button above to view the excellent plug -in list",
 }
