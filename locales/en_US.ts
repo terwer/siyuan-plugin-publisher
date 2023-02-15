@@ -456,4 +456,8 @@ export default {
   "setting.picgo.plugin": "Plugin setting",
   "setting.picgo.plugin.list": "Plugin list",
   "setting.picgo.plugin.import.local": "Import local plugin",
+  "setting.picgo.plugin.install": "Install",
+  "setting.picgo.plugin.installing": "Installing",
+  "setting.picgo.plugin.installed": "Installed",
+  "setting.picgo.plugin.doing.something": "Loading",
 }

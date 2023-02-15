@@ -41,6 +41,83 @@
         </el-button>
       </el-tooltip>
     </div>
+
+    <el-row v-loading="loading" :gutter="10" class="plugin-list">
+      <el-col
+        v-for="item in pluginList"
+        :key="item.fullName"
+        class="plugin-item__container"
+        :span="12"
+      >
+        <div class="plugin-item" :class="{ darwin: os === 'darwin' }">
+          <div v-if="!item.gui" class="cli-only-badge" title="CLI only">
+            CLI
+          </div>
+          <img
+            class="plugin-item__logo"
+            :src="item.logo"
+            :onerror="defaultLogo"
+            alt="img"
+          />
+          <div
+            class="plugin-item__content"
+            :class="{ disabled: !item.enabled }"
+          >
+            <div class="plugin-item__name" @click="openHomepage(item.homepage)">
+              {{ item.name }} <small>{{ " " + item.version }}</small>
+            </div>
+            <div class="plugin-item__desc" :title="item.description">
+              {{ item.description }}
+            </div>
+            <div class="plugin-item__info-bar">
+              <span class="plugin-item__author">
+                {{ item.author }}
+              </span>
+              <span class="plugin-item__config">
+                <template v-if="searchText">
+                  <template v-if="!item.hasInstall">
+                    <span
+                      v-if="!item.ing"
+                      class="config-button install"
+                      @click="installPlugin(item)"
+                    >
+                      {{ $t("setting.picgo.plugin.install") }}
+                    </span>
+                    <span v-else-if="item.ing" class="config-button ing">
+                      {{ $t("setting.picgo.plugin.installing") }}
+                    </span>
+                  </template>
+                  <span v-else class="config-button ing">
+                    {{ $t("setting.picgo.plugin.installed") }}
+                  </span>
+                </template>
+                <template v-else>
+                  <span v-if="item.ing" class="config-button ing">
+                    {{ $t("setting.picgo.plugin.doing.something") }}
+                  </span>
+                  <template v-else>
+                    <el-icon
+                      v-if="item.enabled"
+                      class="el-icon-setting"
+                      @click="buildContextMenu(item)"
+                    >
+                      <font-awesome-icon icon="fa-solid fa-gear" />
+                    </el-icon>
+                    <el-icon
+                      v-else
+                      class="el-icon-remove-outline"
+                      @click="buildContextMenu(item)"
+                    >
+                      <font-awesome-icon icon="fa-solid fa-trash-can" />
+                    </el-icon>
+                  </template>
+                </template>
+              </span>
+            </div>
+          </div>
+        </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -48,35 +125,67 @@
 import picgoUtil from "~/utils/otherlib/picgoUtil"
 import { LogFactory } from "~/utils/logUtil"
 import { ElMessage } from "element-plus"
+import { onBeforeMount, ref } from "vue"
+import { goToPage } from "~/utils/otherlib/ChromeUtil"
+import sysUtil from "~/utils/otherlib/sysUtil"
 
 const logger = LogFactory.getLogger(
   "components/picgo/setting/PicgoPluginSetting.vue"
 )
 
-// register events
-picgoUtil.ipcRegisterEvent("pluginList", (evt, data) => {
-  logger.info("PicgoPluginSetting接收到pluginList事件,data=>", data)
-
-  const rawArgs = data.rawArgs
-  if (rawArgs.success) {
-    // const list = rawArgs.list
-    // pluginList.value = list
-    // pluginNameList.value = list.map(item => item.fullName)
-
-    logger.info("插件已经成功安装.")
-  } else {
-    ElMessage.error(rawArgs.error)
-  }
-})
+// vars
+const __static = ""
+const loading = ref(false)
+const searchText = ref("")
+const pluginList = ref<IPicGoPlugin[]>([])
+const os = ref("")
+const defaultLogo = ref(
+  `this.src="file://${__static.replace(/\\/g, "/")}/roundLogo.png"`
+)
 
 // handles
+function openHomepage(url: string) {
+  if (url) {
+    goToPage(url)
+  }
+}
+
 function goAwesomeList() {
-  window.open("https://github.com/PicGo/Awesome-PicGo")
+  goToPage("https://github.com/PicGo/Awesome-PicGo")
 }
 
 function handleImportLocalPlugin() {
   picgoUtil.ipcHandleEvent("importLocalPlugin")
 }
+
+function installPlugin(item: IPicGoPlugin) {
+  alert("installPlugin")
+}
+
+async function buildContextMenu(plugin: IPicGoPlugin) {
+  // sendToMain(SHOW_PLUGIN_PAGE_MENU, plugin)
+  alert("buildContextMenu")
+}
+
+// register events
+onBeforeMount(() => {
+  os.value = sysUtil.getOS()
+
+  picgoUtil.ipcRegisterEvent("pluginList", (evt, data) => {
+    logger.info("PicgoPluginSetting接收到pluginList事件,data=>", data)
+
+    const rawArgs = data.rawArgs
+    if (rawArgs.success) {
+      // const list = rawArgs.list
+      // pluginList.value = list
+      // pluginNameList.value = list.map(item => item.fullName)
+
+      logger.info("插件已经成功安装.")
+    } else {
+      ElMessage.error(rawArgs.error)
+    }
+  })
+})
 </script>
 
 <style lang="stylus">

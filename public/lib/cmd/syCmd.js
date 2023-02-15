@@ -36,17 +36,40 @@ const process = isElectron ? require("process") : ""
 async function cmd(...command) {
   let p = spawn(command[0], command.slice(1))
   return new Promise((resolve, reject) => {
-    p.stdout.on("data", (x) => {
-      process.stdout.write(x.toString())
-      resolve(x.toString())
-    })
-    p.stderr.on("data", (x) => {
-      process.stderr.write(x.toString())
-      reject(x.toString())
-    })
-    p.on("exit", (code) => {
-      resolve(code)
-    })
+    let output = ""
+    try {
+      p.stdout.on("data", (x) => {
+        // process.stdout.write(x.toString())
+        // resolve(x.toString())
+        output += x.toString()
+      })
+
+      p.stderr.on("data", (x) => {
+        // process.stderr.write(x.toString())
+        // reject(x.toString())
+        output += x.toString()
+      })
+
+      p.on("exit", (code) => {
+        // resolve(code)
+        output += code
+      })
+
+      p.on("close", (code) => {
+        let ret
+        if (!code) {
+          ret = { code: 0, data: output }
+        } else {
+          ret = { code: code, data: output }
+        }
+
+        console.log("命令执行完毕.", ret)
+        resolve(ret)
+      })
+    } catch (e) {
+      console.log("命令执行出错.", e)
+      reject({ code: -1, data: e.toString() })
+    }
   })
 }
 

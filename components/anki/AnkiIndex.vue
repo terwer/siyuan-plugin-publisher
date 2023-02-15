@@ -28,6 +28,7 @@
     <el-button
       type="primary"
       @click="updateCard"
+      :loading="isAnkiLoading"
       v-if="isInSiyuanNewWinBrowser()"
       >更新卡片
     </el-button>
@@ -135,7 +136,7 @@
 
 <script lang="ts" setup>
 import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
-import { onMounted, reactive, watch } from "vue"
+import { onMounted, reactive, ref, watch } from "vue"
 import { getPageId } from "~/utils/platform/siyuan/siyuanUtil"
 import { ElMessage, ElMessageBox } from "element-plus"
 import { useI18n } from "vue-i18n"
@@ -150,6 +151,7 @@ import scriptUtil from "~/utils/otherlib/scriptUtil"
 
 const logger = LogFactory.getLogger("components/anki/AnkiIndex.vue")
 const { t } = useI18n()
+
 const siyuanApi = new SiYuanApi()
 const formData = reactive({
   ankiInfo: null,
@@ -157,6 +159,8 @@ const formData = reactive({
   deckMap: {},
   tagMap: {},
 })
+
+const isAnkiLoading = ref(false)
 
 // props
 const props = defineProps({
@@ -173,12 +177,22 @@ const updateCard = async () => {
     type: "warning",
   })
     .then(async () => {
+      isAnkiLoading.value = true
+
       const dataDir: string = getSiyuanNewWinDataDir()
       const ankisiyuanPath = `${dataDir}/widgets/sy-post-publisher/lib/cmd/ankisiyuan.bin`
       const result = await scriptUtil.execShellCmd(ankisiyuanPath)
-      ElMessage.success("操作成功，执行结果=>" + result)
+      if (result.code === 0) {
+        ElMessage.success("操作成功，执行结果=>" + result.data)
+      } else {
+        ElMessage.error("操异常，错误消息=>" + result.data)
+      }
+
+      isAnkiLoading.value = false
     })
     .catch((e) => {
+      isAnkiLoading.value = false
+
       if (e.toString().indexOf("cancel") <= -1) {
         ElMessage({
           type: "error",

@@ -455,4 +455,8 @@ export default {
   "setting.picgo.plugin": "插件设置",
   "setting.picgo.plugin.list": "插件列表",
   "setting.picgo.plugin.import.local": "导入本地插件",
+  "setting.picgo.plugin.install": "安装",
+  "setting.picgo.plugin.installing": "安装中",
+  "setting.picgo.plugin.installed": "已安装",
+  "setting.picgo.plugin.doing.something": "进行中",
 }
