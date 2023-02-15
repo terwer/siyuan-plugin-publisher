@@ -25,6 +25,22 @@
 
 <template>
   <div v-if="isElectron" style="padding-right: 20px">
+    <!-- PicGO配置 -->
+    <el-tabs type="border-card" @tab-click="picgoSettingTabChange">
+      <el-tab-pane :label="$t('setting.picgo.picbed')">
+        <!-- 图床类型 -->
+        <picbed-setting :is-reload="isReload" />
+      </el-tab-pane>
+      <el-tab-pane :label="$t('setting.picgo.picgo')">
+        <!-- PicGO配置 -->
+        <picgo-config-setting />
+      </el-tab-pane>
+      <el-tab-pane :label="$t('setting.picgo.plugin')">
+        <!-- PicGO插件配置 -->
+        <picgo-plugin-setting />
+      </el-tab-pane>
+    </el-tabs>
+
     <blockquote class="picgo-setting-tip">
       <div>
         {{ $t("picgo.siyuan.tip") }} 。 当前系统默认的 PicGO 配置文件为：
@@ -62,22 +78,6 @@
       >
       项目。
     </div>
-
-    <!-- PicGO配置 -->
-    <el-tabs type="border-card" @tab-click="picgoSettingTabChange">
-      <el-tab-pane :label="$t('setting.picgo.picbed')">
-        <!-- 图床类型 -->
-        <picbed-setting :is-reload="isReload" />
-      </el-tab-pane>
-      <el-tab-pane :label="$t('setting.picgo.picgo')">
-        <!-- PicGO配置 -->
-        <picgo-config-setting />
-      </el-tab-pane>
-      <el-tab-pane :label="$t('setting.picgo.plugin')">
-        <!-- PicGO插件配置 -->
-        <picgo-plugin-setting />
-      </el-tab-pane>
-    </el-tabs>
   </div>
   <div v-else>
     <div class="picgo-browser-tip">
@@ -114,7 +114,7 @@ onBeforeMount(() => {
   background: var(--custom-app-bg-color);
   margin-inline-start: 0;
   margin-inline-end: 0;
-  margin: 0 0 10px;
+  margin: 10px 0 10px;
   padding: 16px 16px 16px;
 }
 
