@@ -128,4 +128,25 @@ interface IConfig {
   [configOptions: string]: any
 }
 
-declare let __static: string
+interface INPMSearchResult {
+  data: {
+    objects: INPMSearchResultObject[]
+  }
+}
+
+interface INPMSearchResultObject {
+  package: {
+    name: string
+    scope: string
+    version: string
+    description: string
+    keywords: string[]
+    author: {
+      name: string
+    }
+    links: {
+      npm: string
+      homepage: string
+    }
+  }
+}

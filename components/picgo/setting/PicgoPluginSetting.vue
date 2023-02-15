@@ -42,82 +42,92 @@
       </el-tooltip>
     </div>
 
-    <el-row v-loading="loading" :gutter="10" class="plugin-list">
-      <el-col
-        v-for="item in pluginList"
-        :key="item.fullName"
-        class="plugin-item__container"
-        :span="12"
-      >
-        <div class="plugin-item" :class="{ darwin: os === 'darwin' }">
-          <div v-if="!item.gui" class="cli-only-badge" title="CLI only">
-            CLI
-          </div>
-          <img
-            class="plugin-item__logo"
-            :src="item.logo"
-            :onerror="defaultLogo"
-            alt="img"
-          />
-          <div
-            class="plugin-item__content"
-            :class="{ disabled: !item.enabled }"
+    <div class="plugin-list-box">
+      <div class="plugin-list-tip">
+        {{ "当前共有" + pluginData.pluginList.length + "个插件。" }}
+      </div>
+      <div>
+        <el-row v-loading="loading" :gutter="10" class="plugin-list">
+          <el-col
+            v-for="item in pluginData.pluginList"
+            :key="item.fullName"
+            class="plugin-item__container"
+            :span="12"
           >
-            <div class="plugin-item__name" @click="openHomepage(item.homepage)">
-              {{ item.name }} <small>{{ " " + item.version }}</small>
-            </div>
-            <div class="plugin-item__desc" :title="item.description">
-              {{ item.description }}
-            </div>
-            <div class="plugin-item__info-bar">
-              <span class="plugin-item__author">
-                {{ item.author }}
-              </span>
-              <span class="plugin-item__config">
-                <template v-if="searchText">
-                  <template v-if="!item.hasInstall">
-                    <span
-                      v-if="!item.ing"
-                      class="config-button install"
-                      @click="installPlugin(item)"
-                    >
-                      {{ $t("setting.picgo.plugin.install") }}
-                    </span>
-                    <span v-else-if="item.ing" class="config-button ing">
-                      {{ $t("setting.picgo.plugin.installing") }}
-                    </span>
-                  </template>
-                  <span v-else class="config-button ing">
-                    {{ $t("setting.picgo.plugin.installed") }}
+            <div class="plugin-item" :class="{ darwin: os === 'darwin' }">
+              <div v-if="!item.gui" class="cli-only-badge" title="CLI only">
+                CLI
+              </div>
+              <img
+                class="plugin-item__logo"
+                :src="item.logo"
+                :onerror="defaultLogo"
+                alt="img"
+              />
+              <div
+                class="plugin-item__content"
+                :class="{ disabled: !item.enabled }"
+              >
+                <div
+                  class="plugin-item__name"
+                  @click="openHomepage(item.homepage)"
+                >
+                  {{ item.name }} <small>{{ " " + item.version }}</small>
+                </div>
+                <div class="plugin-item__desc" :title="item.description">
+                  {{ item.description }}
+                </div>
+                <div class="plugin-item__info-bar">
+                  <span class="plugin-item__author">
+                    {{ item.author }}
                   </span>
-                </template>
-                <template v-else>
-                  <span v-if="item.ing" class="config-button ing">
-                    {{ $t("setting.picgo.plugin.doing.something") }}
+                  <span class="plugin-item__config">
+                    <template v-if="searchText">
+                      <template v-if="!item.hasInstall">
+                        <span
+                          v-if="!item.ing"
+                          class="config-button install"
+                          @click="installPlugin(item)"
+                        >
+                          {{ $t("setting.picgo.plugin.install") }}
+                        </span>
+                        <span v-else-if="item.ing" class="config-button ing">
+                          {{ $t("setting.picgo.plugin.installing") }}
+                        </span>
+                      </template>
+                      <span v-else class="config-button ing">
+                        {{ $t("setting.picgo.plugin.installed") }}
+                      </span>
+                    </template>
+                    <template v-else>
+                      <span v-if="item.ing" class="config-button ing">
+                        {{ $t("setting.picgo.plugin.doing.something") }}
+                      </span>
+                      <template v-else>
+                        <el-icon
+                          v-if="item.enabled"
+                          class="el-icon-setting"
+                          @click="buildContextMenu(item)"
+                        >
+                          <font-awesome-icon icon="fa-solid fa-gear" />
+                        </el-icon>
+                        <el-icon
+                          v-else
+                          class="el-icon-remove-outline"
+                          @click="buildContextMenu(item)"
+                        >
+                          <font-awesome-icon icon="fa-solid fa-trash-can" />
+                        </el-icon>
+                      </template>
+                    </template>
                   </span>
-                  <template v-else>
-                    <el-icon
-                      v-if="item.enabled"
-                      class="el-icon-setting"
-                      @click="buildContextMenu(item)"
-                    >
-                      <font-awesome-icon icon="fa-solid fa-gear" />
-                    </el-icon>
-                    <el-icon
-                      v-else
-                      class="el-icon-remove-outline"
-                      @click="buildContextMenu(item)"
-                    >
-                      <font-awesome-icon icon="fa-solid fa-trash-can" />
-                    </el-icon>
-                  </template>
-                </template>
-              </span>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      </el-col>
-    </el-row>
+          </el-col>
+        </el-row>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -125,9 +135,10 @@
 import picgoUtil from "~/utils/otherlib/picgoUtil"
 import { LogFactory } from "~/utils/logUtil"
 import { ElMessage } from "element-plus"
-import { onBeforeMount, ref } from "vue"
+import { computed, onBeforeMount, reactive, ref, watch } from "vue"
 import { goToPage } from "~/utils/otherlib/ChromeUtil"
 import sysUtil from "~/utils/otherlib/sysUtil"
+import { debounce, DebouncedFunc } from "lodash"
 
 const logger = LogFactory.getLogger(
   "components/picgo/setting/PicgoPluginSetting.vue"
@@ -137,13 +148,38 @@ const logger = LogFactory.getLogger(
 const __static = ""
 const loading = ref(false)
 const searchText = ref("")
-const pluginList = ref<IPicGoPlugin[]>([])
+const pluginData = reactive({
+  pluginList: <IPicGoPlugin[]>[],
+  pluginNameList: <string[]>[],
+})
 const os = ref("")
 const defaultLogo = ref(
   `this.src="file://${__static.replace(/\\/g, "/")}/roundLogo.png"`
 )
+const npmSearchText = computed(() => {
+  return searchText.value.match("picgo-plugin-")
+    ? searchText.value
+    : searchText.value !== ""
+    ? `picgo-plugin-${searchText.value}`
+    : searchText.value
+})
+let getSearchResult: DebouncedFunc<(val: string) => void>
+
+watch(npmSearchText, (val: string) => {
+  if (val) {
+    loading.value = true
+    pluginData.pluginList = []
+    getSearchResult(val)
+  } else {
+    getPluginList()
+  }
+})
 
 // handles
+function getPluginList() {
+  picgoUtil.ipcHandleEvent("getPluginList")
+}
+
 function openHomepage(url: string) {
   if (url) {
     goToPage(url)
@@ -167,6 +203,66 @@ async function buildContextMenu(plugin: IPicGoPlugin) {
   alert("buildContextMenu")
 }
 
+function _getSearchResult(val: string) {
+  // this.$http.get(`https://api.npms.io/v2/search?q=${val}`)
+  fetch(`https://registry.npmjs.com/-/v1/search?text=${val}`)
+    .then((res) => res.json())
+    .then((res: INPMSearchResult) => {
+      pluginData.pluginList = res.data.objects
+        .filter((item: INPMSearchResultObject) => {
+          return item.package.name.includes("picgo-plugin-")
+        })
+        .map((item: INPMSearchResultObject) => {
+          return handleSearchResult(item)
+        })
+      loading.value = false
+    })
+    .catch((err) => {
+      console.log(err)
+      loading.value = false
+    })
+}
+
+/**
+ * streamline the full plugin name to a simple one
+ * for example:
+ * 1. picgo-plugin-xxx -> xxx
+ * 2. @xxx/picgo-plugin-yyy -> yyy
+ * @param name pluginFullName
+ */
+const handleStreamlinePluginName = (name: string) => {
+  if (/^@[^/]+\/picgo-plugin-/.test(name)) {
+    return name.replace(/^@[^/]+\/picgo-plugin-/, "")
+  } else {
+    return name.replace(/picgo-plugin-/, "")
+  }
+}
+
+function handleSearchResult(item: INPMSearchResultObject) {
+  const name = handleStreamlinePluginName(item.package.name)
+  let gui = false
+  if (item.package.keywords && item.package.keywords.length > 0) {
+    if (item.package.keywords.includes("picgo-gui-plugin")) {
+      gui = true
+    }
+  }
+  return {
+    name,
+    fullName: item.package.name,
+    author: item.package.author.name,
+    description: item.package.description,
+    logo: `https://cdn.jsdelivr.net/npm/${item.package.name}/logo.png`,
+    config: {},
+    homepage: item.package.links ? item.package.links.homepage : "",
+    hasInstall: pluginData.pluginNameList.some(
+      (plugin) => plugin === item.package.name
+    ),
+    version: item.package.version,
+    gui,
+    ing: false, // installing or uninstalling
+  }
+}
+
 // register events
 onBeforeMount(() => {
   os.value = sysUtil.getOS()
@@ -176,15 +272,18 @@ onBeforeMount(() => {
 
     const rawArgs = data.rawArgs
     if (rawArgs.success) {
-      // const list = rawArgs.list
-      // pluginList.value = list
-      // pluginNameList.value = list.map(item => item.fullName)
+      const list = rawArgs.data
+      pluginData.pluginList = list
+      pluginData.pluginNameList = list.map((item) => item.fullName)
 
-      logger.info("插件已经成功安装.")
+      logger.info("插件列表已经成功加载.", list)
     } else {
       ElMessage.error(rawArgs.error)
     }
   })
+
+  getPluginList()
+  getSearchResult = debounce(_getSearchResult, 50)
 })
 </script>
 
@@ -197,6 +296,9 @@ $darwinBg = #172426
   .el-loading-mask
     background-color rgba(0, 0, 0, 0.8)
 
+  .plugin-list-tip
+    padding: 8px 15px;
+
   .plugin-list
     align-content flex-start
     height: 339px;
@@ -204,8 +306,8 @@ $darwinBg = #172426
     padding: 8px 15px;
     overflow-y: auto;
     overflow-x: hidden;
-    position: absolute;
-    top: 70px;
+    position: relative;
+    top: 10px;
     left: 5px;
     transition: all 0.2s ease-in-out 0.1s;
     width: 100%

@@ -67,7 +67,6 @@ declare module "@vue/runtime-core" {
     ElTooltip: typeof import("element-plus/es")["ElTooltip"]
     ElTreeSelect: typeof import("element-plus/es")["ElTreeSelect"]
   }
-
   export interface ComponentCustomProperties {
     vLoading: typeof import("element-plus/es")["ElLoadingDirective"]
   }
