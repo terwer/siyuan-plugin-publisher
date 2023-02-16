@@ -261,7 +261,7 @@ const initPublishHelper = () => {
         { content: html },
         (response) => {
           newWin.loadURL(response.data.url)
-          newWin.webContents.openDevTools()
+          // newWin.webContents.openDevTools()
         }
       )
     })

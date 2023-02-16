@@ -28,9 +28,11 @@
     <div class="footer">
       <div>
         <span class="text"> &copy;2011-{{ nowYear() }} </span>
-        <span class="s-dark" @click="goGithub()"> sy-post-publisher </span>
+        <span class="text s-dark" @click="goGithub()"
+          >&nbsp;sy-post-publisher&nbsp;</span
+        >
 
-        <span class="text"> v{{ v }} </span>
+        <span class="text">v{{ v }}&nbsp;</span>
 
         <span class="text s-dark" @click="goAbout()">{{
           $t("syp.about")
