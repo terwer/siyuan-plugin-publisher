@@ -477,4 +477,5 @@ export default {
     "Note: The attributes above the horizontal line will change the behavior of uploading pictures, and the configuration can be stored automatically. The attribute below the horizontal line is only used when installing the plug -in, and you need to click the [Confirm] button to save.",
   "setting.picgo.plugin.install.success":
     "The plug -in has been successfully installed, please clear the search keyword refresh list. Click the plug -in corresponding [Settings] icon to view the plug -in details and customize the plug -in",
+  "syp.about": "About me",
 }

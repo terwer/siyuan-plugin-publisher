@@ -30,7 +30,13 @@
         <span class="text"> &copy;2011-{{ nowYear() }} </span>
         <span class="s-dark" @click="goGithub()"> sy-post-publisher </span>
 
-        <span class="text"> v{{ v }} . </span>
+        <span class="text"> v{{ v }} </span>
+
+        <span class="text s-dark" @click="goAbout()">{{
+          $t("syp.about")
+        }}</span>
+
+        <span class="text">.</span>
         <span class="text s-dark" @click="toggleDark()">{{
           isDark ? $t("theme.mode.light") : $t("theme.mode.dark")
         }}</span>
@@ -102,6 +108,10 @@ const isChrome = ref(false)
 
 const goGithub = () => {
   window.open("https://github.com/terwer/src-sy-post-publisher")
+}
+
+const goAbout = () => {
+  window.open("https://www.terwer.space/about")
 }
 
 const newWin = () => {
