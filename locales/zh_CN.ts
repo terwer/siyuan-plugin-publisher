@@ -265,7 +265,7 @@ export default {
   "config.platform.none": "没有启用的发布平台，请前往服务开关开启",
   "post.delete.by.platform": "文章已被平台自行删除，请点击取消强制解除关联",
   "blog.top-data-tip":
-    "温馨提示：1. 0.1.0+ 以后，可通过【思源地址】来修改默认伺服配置，支持本地和远程；如果是远程还需要设置token，如果使用浏览器插件或者挂件之外的访问方式还需要设置跨域请求代理。 2、升级新版之前强烈建议导出配置，防止配置丢失。 3、如果出现新版本不兼容的异常情况，建议清空配置。此操作不可恢复，请谨慎操作！",
+    "温馨提示：1. 0.1.0+ 以后，可通过【偏好设置->思源地址】来修改默认伺服配置，支持本地和远程；如果是远程还需要设置token，如果使用浏览器插件或者挂件之外的访问方式还需要设置跨域请求代理。 2、升级新版之前强烈建议导出配置，防止配置丢失。 3、如果出现新版本不兼容的异常情况，建议清空配置。此操作不可恢复，请谨慎操作！",
   "blog.top-data-tip.siyuan":
     "温馨提示：1、当前处于挂件模式，从 0.1.0 版本开始，无需在所有页面引用挂件了，只需要在父级页面引用一个挂件即可。具体规则如下：(1). 如果检测到没有子文档，会兼容 0.0.3 版本以前的方式，展示当前文档的发布页面。 (2). 如果检测到有子文档，会以列表加分页的方式展示所有子文档列表。可单独选择某个子文档进行发布操作。 2、升级新版之前强烈建议导出配置，防止配置丢失。 3、如果出现新版本不兼容的异常情况，建议清空配置。此操作不可恢复，请谨慎操作！",
   "blog.newwin.open": "新窗打开",
@@ -460,5 +460,20 @@ export default {
   "setting.picgo.plugin.installed": "已安装",
   "setting.picgo.plugin.doing.something": "进行中",
   "setting.picgo.plugin.search.placeholder":
-    "搜索npm上的PicGo插件，或者点击上方按钮查看优秀插件列表",
+    "搜索npm上的PicGo插件，或者点击上方按钮查看优秀插件列表。推荐：watermark、gitlab-files",
+  "setting.picgo.plugin.gui.not.implemented":
+    "该插件未对可视化界面进行优化, 是否继续安装?",
+  "setting.picgo.setting.node.path": "Node安装路径",
+  "setting.picgo.setting.node.path.tip":
+    "请输入Node安装完整路径，例如：/opt/node16/bin，Node版本>=16",
+  "setting.picgo.setting.node.registry": "NPM的registry",
+  "setting.picgo.setting.node.registry.tip":
+    "国内推荐：https://registry.npmmirror.com",
+  "setting.picgo.setting.node.proxy": "NPM代理",
+  "setting.picgo.setting.node.proxy.tip":
+    "一般可留空，如有特殊需求可设置自定义代理",
+  "setting.picgo.setting.config.tip":
+    "注意：横线以上的属性会改变上传图片的行为，配置可自动保存。横线以下的属性仅仅在安装插件时用到，并且需要点击【确认】按钮才能保存。",
+  "setting.picgo.plugin.install.success":
+    "插件已经成功安装，请清除搜索关键字刷新列表。点击插件对应【设置】图标可查看插件详情，并对插件进行自定义设置。如果是图床扩展，请关闭重新打开，然后启用图床并进行设置。",
 }

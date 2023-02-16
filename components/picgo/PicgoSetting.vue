@@ -77,6 +77,21 @@
         >PicGo-Core</a
       >
       项目。
+      <p>
+        特别提示：picgo插件未经过全量测试，不保证所有插件都能运行，目前已经测试可用的插件如下：
+      </p>
+      <p>
+        <a href="https://github.com/fhyoga/picgo-plugin-watermark"
+          >picgo-plugin-watermark</a
+        >
+        搜索关键词：watermark
+      </p>
+      <p>
+        <a href="https://github.com/D-W-X/picgo-plugin-gitlab-files"
+          >picgo-plugin-gitlab-files</a
+        >
+        搜索关键词：gitlab-files
+      </p>
     </div>
   </div>
   <div v-else>

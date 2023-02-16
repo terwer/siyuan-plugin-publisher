@@ -460,6 +460,38 @@ const ipcRegisterEvent = (channel, data = {}) => {
 }
 
 /**
+ * 构建插件菜单
+ *
+ * @param plugin 插件对象
+ *
+ * @author terwer
+ * @since 0.7.0
+ */
+const buildPluginMenu = (plugin) => {
+  // 根据插件构造菜单
+  const syWin = siyuanBrowserUtil.getSiyuanWindow()
+  const template = [
+    {
+      label: "卸载插件",
+      click() {
+        // const window = windowManager.get(IWindowList.SETTING_WINDOW)!
+        //   window.webContents.send(PICGO_HANDLE_PLUGIN_ING, plugin.fullName)
+        // picgoCoreIPC.handlePluginUninstall(plugin.fullName)
+        alert("卸载插件")
+      },
+    },
+  ]
+  const menu = syWin.syp.buildMenu(template, syWin)
+
+  // 显示菜单
+  const { getCurrentWindow } = syWin.require("@electron/remote")
+  const elecWin = getCurrentWindow()
+  menu.popup({
+    elecWin,
+  })
+}
+
+/**
  * PicGO相关操作统一访问入口
  */
 const picgoUtil = {
@@ -493,5 +525,8 @@ const picgoUtil = {
   ipcRegisterEvent,
 
   getPicgoVersion,
+
+  // 构建插件菜单
+  buildPluginMenu,
 }
 export default picgoUtil

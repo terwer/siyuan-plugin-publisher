@@ -41,7 +41,7 @@
     </div>
 
     <div class="config-form">
-      <el-form ref="$configForm" label-width="150px" :model="configRuleForm">
+      <el-form ref="$configForm" label-width="180px" :model="configRuleForm">
         <el-form-item
           :label="$t('setting.picgo.picbed.uploader.config.name')"
           required

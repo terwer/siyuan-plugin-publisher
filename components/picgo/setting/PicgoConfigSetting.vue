@@ -63,6 +63,37 @@
           @change="handleAutoRename"
         />
       </el-form-item>
+
+      <el-divider />
+
+      <p>
+        {{ $t("setting.picgo.setting.config.tip") }}
+      </p>
+
+      <!-- NODE安装路径 -->
+      <el-form-item :label="$t('setting.picgo.setting.node.path')">
+        <el-input
+          v-model="form.nodePath"
+          :placeholder="$t('setting.picgo.setting.node.path.tip')"
+        />
+      </el-form-item>
+      <el-form-item :label="$t('setting.picgo.setting.node.registry')">
+        <el-input
+          v-model="form.nodeRegistry"
+          :placeholder="$t('setting.picgo.setting.node.registry.tip')"
+        />
+      </el-form-item>
+      <el-form-item :label="$t('setting.picgo.setting.node.proxy')">
+        <el-input
+          v-model="form.nodeProxy"
+          :placeholder="$t('setting.picgo.setting.node.proxy.tip')"
+        />
+      </el-form-item>
+      <el-form-item>
+        <el-button @click="handleSaveNodeConfig"
+          >{{ $t("main.opt.ok") }}
+        </el-button>
+      </el-form-item>
     </el-form>
   </div>
 </template>
@@ -72,15 +103,22 @@ import { onBeforeMount, reactive, ref } from "vue"
 import picgoUtil from "~/utils/otherlib/picgoUtil"
 import { LogFactory } from "~/utils/logUtil"
 import siyuanBrowserUtil from "~/utils/otherlib/siyuanBrowserUtil"
+import { ElDivider, ElMessage } from "element-plus"
+import { useI18n } from "vue-i18n"
 
 const logger = LogFactory.getLogger(
   "components/picgo/setting/PicgoConfigSetting.vue"
 )
 
+const { t } = useI18n()
+
 const picBed = ref<IPicBedType[]>([])
 const form = reactive({
   showPicBedList: [],
   autoRename: false,
+  nodePath: "",
+  nodeRegistry: "https://registry.npmmirror.com",
+  nodeProxy: "",
 })
 
 function getPicBeds() {
@@ -124,6 +162,21 @@ const handleAutoRename = (val: ICheckBoxValueType) => {
   })
 }
 
+const handleSaveNodeConfig = () => {
+  form.nodePath = form.nodePath.trim()
+  form.nodeRegistry = form.nodeRegistry.trim()
+  form.nodeProxy = form.nodeProxy.trim()
+
+  picgoUtil.savePicgoConfig({
+    "settings.nodePath": form.nodePath,
+    "settings.registry":
+      form.nodeRegistry === "" ? undefined : form.nodeRegistry,
+    "settings.proxy": form.nodeProxy === "" ? undefined : form.nodeProxy,
+  })
+
+  ElMessage.success(t("main.opt.success"))
+}
+
 async function initData() {
   const config = picgoUtil.getPicgoConfig()
   logger.debug("PicGO setting initData=>", config)
@@ -131,6 +184,9 @@ async function initData() {
     const settings = config.settings || {}
     // 重命名默认开启，防止图片路径问题
     form.autoRename = settings.autoRename || true
+    form.nodePath = settings.nodePath || ""
+    form.nodeRegistry = settings.registry || ""
+    form.nodeProxy = settings.nodeProxy || ""
   }
 }
 

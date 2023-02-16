@@ -35,6 +35,7 @@
       <el-tooltip
         :content="$t('setting.picgo.plugin.import.local')"
         placement="left"
+        v-if="false"
       >
         <el-button class="el-icon-download" @click="handleImportLocalPlugin">
           <font-awesome-icon icon="fa-solid fa-download" />
@@ -155,15 +156,18 @@
 <script lang="ts" setup>
 import picgoUtil from "~/utils/otherlib/picgoUtil"
 import { LogFactory } from "~/utils/logUtil"
-import { ElMessage } from "element-plus"
+import { ElMessage, ElMessageBox } from "element-plus"
 import { computed, onBeforeMount, reactive, ref, watch } from "vue"
 import { goToPage } from "~/utils/otherlib/ChromeUtil"
 import sysUtil from "~/utils/otherlib/sysUtil"
 import { debounce, DebouncedFunc } from "lodash"
+import { useI18n } from "vue-i18n"
 
 const logger = LogFactory.getLogger(
   "components/picgo/setting/PicgoPluginSetting.vue"
 )
+
+const { t } = useI18n()
 
 // vars
 const loading = ref(false)
@@ -215,12 +219,31 @@ function handleImportLocalPlugin() {
 }
 
 function installPlugin(item: IPicGoPlugin) {
-  alert("installPlugin")
+  if (!item.gui) {
+    ElMessageBox.confirm(
+      t("setting.picgo.plugin.gui.not.implemented"),
+      t("main.opt.tip"),
+      {
+        confirmButtonText: t("main.opt.ok"),
+        cancelButtonText: t("main.opt.cancel"),
+        type: "warning",
+      }
+    )
+      .then(() => {
+        item.ing = true
+        picgoUtil.ipcHandleEvent("installPlugin", item.fullName)
+      })
+      .catch(() => {
+        logger.warn("Install canceled")
+      })
+  } else {
+    item.ing = true
+    picgoUtil.ipcHandleEvent("installPlugin", item.fullName)
+  }
 }
 
 async function buildContextMenu(plugin: IPicGoPlugin) {
-  // sendToMain(SHOW_PLUGIN_PAGE_MENU, plugin)
-  alert("buildContextMenu")
+  picgoUtil.buildPluginMenu(plugin)
 }
 
 function _getSearchResult(val: string) {
@@ -310,6 +333,27 @@ onBeforeMount(() => {
     }
   })
 
+  picgoUtil.ipcRegisterEvent("installPluginFinished", (evt, data) => {
+    loading.value = false
+    logger.info(
+      "PicgoPluginSetting接收到installPluginFinished事件,data=>",
+      data
+    )
+
+    const body = data.rawArgs.body
+    const success = data.rawArgs.success
+    pluginData.pluginList.forEach((item) => {
+      if (item.fullName === body) {
+        item.ing = false
+        item.hasInstall = success
+      }
+    })
+
+    if (success) {
+      ElMessage.success(t("setting.picgo.plugin.install.success"))
+    }
+  })
+
   getPluginList()
   getSearchResult = debounce(_getSearchResult, 50)
 })
@@ -329,7 +373,6 @@ $darwinBg = #172426
 
   .plugin-list
     align-content flex-start
-    height: 339px;
     box-sizing: border-box;
     padding: 8px 15px;
     overflow-y: auto;

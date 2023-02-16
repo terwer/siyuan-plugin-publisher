@@ -89,7 +89,9 @@ import("/widgets/sy-post-publisher/lib/siyuanhook.js")
 
 Q3: `siyuanhook.js` 新增挂载了哪些对象？在哪些场景挂载？目的是什么？
 
-A3：SyPicgo、syp、terwer（仅新窗口）、SyCmd。仅在 `Electron` 环境（即思源笔记内部挂载）。浏览器插件和自部署模式无此功能。目的是为了扩展思源笔记的功能。
+A3：SyPicgo、syp、terwer（仅新窗口）、SyCmd。仅在 `Electron` 环境（即思源笔记内部挂载）。
+
+浏览器插件和自部署模式无此功能。目的是为了扩展思源笔记的功能。
 
 ## 支持平台
 

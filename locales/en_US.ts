@@ -462,4 +462,19 @@ export default {
   "setting.picgo.plugin.doing.something": "Loading",
   "setting.picgo.plugin.search.placeholder":
     "Search the picgo plug -in on NPM, or click the button above to view the excellent plug -in list",
+  "setting.picgo.plugin.gui.not.implemented":
+    "This plug -in does not optimize the visual interface, is it continued to be installed?",
+  "setting.picgo.setting.node.path": "Node install path",
+  "setting.picgo.setting.node.path.tip":
+    "Please enter Node to install the full path, for example: /opt/node-v16.14.0-darwin-x64/bin, node version> = 16",
+  "setting.picgo.setting.node.registry": "NPM registry",
+  "setting.picgo.setting.node.registry.tip":
+    "Mainland recommend：https://registry.npmmirror.com",
+  "setting.picgo.setting.node.proxy": "NPM proxy",
+  "setting.picgo.setting.node.proxy.tip":
+    "Generally, you can leave empty. If you have special needs, you can set a custom agent",
+  "setting.picgo.setting.config.tip":
+    "Note: The attributes above the horizontal line will change the behavior of uploading pictures, and the configuration can be stored automatically. The attribute below the horizontal line is only used when installing the plug -in, and you need to click the [Confirm] button to save.",
+  "setting.picgo.plugin.install.success":
+    "The plug -in has been successfully installed, please clear the search keyword refresh list. Click the plug -in corresponding [Settings] icon to view the plug -in details and customize the plug -in",
 }
