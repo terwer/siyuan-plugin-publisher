@@ -69,8 +69,9 @@ const initPublishHelper = () => {
    */
   window.syp = {
     pageId: undefined,
-    renderPublishHelper: () => {},
-    openPath: () => {},
+    renderPublishHelper: (pageId, pageUrl, mainWin = window) => {},
+    openPath: (absFilePath) => {},
+    buildMenu: (template, mainWin = window) => {},
   }
 
   /**
@@ -80,6 +81,16 @@ const initPublishHelper = () => {
   window.syp.openPath = (absFilePath) => {
     const { shell } = window.require("electron")
     shell.openPath(absFilePath)
+  }
+
+  /**
+   * 构建菜单
+   * @param template electron菜单模板
+   * @param mainWin 可选（打开此菜单的Window对象）
+   */
+  window.syp.buildMenu = (template, mainWin = window) => {
+    const { Menu } = mainWin.require("@electron/remote")
+    return Menu.buildFromTemplate(template)
   }
 
   /**
@@ -250,7 +261,7 @@ const initPublishHelper = () => {
         { content: html },
         (response) => {
           newWin.loadURL(response.data.url)
-          // newWin.webContents.openDevTools()
+          newWin.webContents.openDevTools()
         }
       )
     })
