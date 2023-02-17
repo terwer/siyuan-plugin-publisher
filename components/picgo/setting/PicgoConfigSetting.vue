@@ -188,8 +188,14 @@ function initData() {
     // 重命名默认开启，防止图片路径问题
     form.autoRename = settings.autoRename || true
     form.nodePath = settings.nodePath || ""
-    form.nodeRegistry = settings.registry || ""
+    form.nodeRegistry = settings.registry || DEFAULT_NPM_REGISTRY
     form.nodeProxy = settings.nodeProxy || ""
+
+    // 初始化默认配置
+    picgoUtil.savePicgoConfig({
+      "settings.autoRename": form.autoRename,
+      "settings.registry": form.nodeRegistry,
+    })
   }
 }
 

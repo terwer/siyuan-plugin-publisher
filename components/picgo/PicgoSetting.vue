@@ -87,10 +87,14 @@
         搜索关键词：watermark
       </p>
       <p>
-        <a href="https://github.com/D-W-X/picgo-plugin-gitlab-files"
-          >picgo-plugin-gitlab-files</a
+        <a href="https://github.com/wayjam/picgo-plugin-s3">picgo-plugin-s3</a>
+        搜索关键词：s3
+      </p>
+      <p>
+        <a href="https://github.com/Herbertzz/picgo-plugin-minio"
+          >picgo-plugin-minio</a
         >
-        搜索关键词：gitlab-files
+        搜索关键词：minio
       </p>
     </div>
   </div>
