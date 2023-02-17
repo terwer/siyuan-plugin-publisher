@@ -112,12 +112,13 @@ const logger = LogFactory.getLogger(
 
 const { t } = useI18n()
 
+const DEFAULT_NPM_REGISTRY = "https://registry.npmmirror.com"
 const picBed = ref<IPicBedType[]>([])
 const form = reactive({
   showPicBedList: [],
   autoRename: false,
   nodePath: "",
-  nodeRegistry: "https://registry.npmmirror.com",
+  nodeRegistry: DEFAULT_NPM_REGISTRY,
   nodeProxy: "",
 })
 
@@ -167,17 +168,19 @@ const handleSaveNodeConfig = () => {
   form.nodeRegistry = form.nodeRegistry.trim()
   form.nodeProxy = form.nodeProxy.trim()
 
+  form.nodeRegistry =
+    form.nodeRegistry === "" ? DEFAULT_NPM_REGISTRY : form.nodeRegistry
+
   picgoUtil.savePicgoConfig({
     "settings.nodePath": form.nodePath,
-    "settings.registry":
-      form.nodeRegistry === "" ? undefined : form.nodeRegistry,
+    "settings.registry": form.nodeRegistry,
     "settings.proxy": form.nodeProxy === "" ? undefined : form.nodeProxy,
   })
 
   ElMessage.success(t("main.opt.success"))
 }
 
-async function initData() {
+function initData() {
   const config = picgoUtil.getPicgoConfig()
   logger.debug("PicGO setting initData=>", config)
   if (config !== undefined) {
@@ -191,6 +194,10 @@ async function initData() {
 }
 
 onBeforeMount(() => {
+  picgoUtil.ipcRegisterEvent("getPicBeds", (evt, data) => {
+    getPicBeds()
+  })
+
   // 获取图床列表
   getPicBeds()
 

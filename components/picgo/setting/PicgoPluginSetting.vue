@@ -163,7 +163,6 @@ import sysUtil from "~/utils/otherlib/sysUtil"
 import { debounce, DebouncedFunc } from "lodash"
 import { useI18n } from "vue-i18n"
 import { PicgoPageMenuType } from "~/utils/platform/picgo/picgoPlugin"
-import { reloadPage } from "~/utils/browserUtil"
 
 const logger = LogFactory.getLogger(
   "components/picgo/setting/PicgoPluginSetting.vue"
@@ -367,6 +366,7 @@ onBeforeMount(() => {
     })
 
     if (success) {
+      picgoUtil.ipcHandleEvent("getPicBeds")
       ElMessage.success(t("setting.picgo.plugin.install.success"))
     } else {
       ElMessage.error(errMsg)
@@ -408,6 +408,8 @@ onBeforeMount(() => {
           if (item.config.uploader.name) {
             picgoUtil.handleRestoreState("uploader", item.config.uploader.name)
           }
+
+          picgoUtil.ipcHandleEvent("getPicBeds")
         }
         return item.fullName !== fullName
       })
@@ -415,8 +417,8 @@ onBeforeMount(() => {
         (item) => item !== fullName
       )
 
+      getPluginList()
       ElMessage.success(t("setting.picgo.plugin.uninstall.success"))
-      reloadPage()
     } else {
       ElMessage.error(errMsg)
     }
