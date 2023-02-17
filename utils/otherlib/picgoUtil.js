@@ -487,6 +487,18 @@ const ipcRegisterEvent = (channel, data = {}) => {
 }
 
 /**
+ * 移除事件监听
+ *
+ * @param channel 频道
+ */
+const ipcRemoveEvent = (channel) => {
+  const syWin = siyuanBrowserUtil.getSiyuanWindow()
+  const syPicgo = syWin?.SyPicgo
+
+  syPicgo.ipcMethods.removeEvent(channel)
+}
+
+/**
  * 构建插件菜单
  *
  * @param plugin 插件对象
@@ -554,6 +566,7 @@ const picgoUtil = {
   // Ipc
   ipcHandleEvent,
   ipcRegisterEvent,
+  ipcRemoveEvent,
 
   getPicgoVersion,
 

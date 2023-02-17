@@ -99,7 +99,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onBeforeMount, reactive, ref } from "vue"
+import { onBeforeMount, onBeforeUnmount, reactive, ref } from "vue"
 import picgoUtil from "~/utils/otherlib/picgoUtil"
 import { LogFactory } from "~/utils/logUtil"
 import siyuanBrowserUtil from "~/utils/otherlib/siyuanBrowserUtil"
@@ -199,6 +199,7 @@ function initData() {
   }
 }
 
+// register events
 onBeforeMount(() => {
   picgoUtil.ipcRegisterEvent("getPicBeds", (evt, data) => {
     getPicBeds()
@@ -208,5 +209,10 @@ onBeforeMount(() => {
   getPicBeds()
 
   initData()
+})
+
+// remove events
+onBeforeUnmount(() => {
+  picgoUtil.ipcRemoveEvent("getPicBeds")
 })
 </script>

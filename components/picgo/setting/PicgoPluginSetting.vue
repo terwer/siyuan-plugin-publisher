@@ -157,7 +157,14 @@
 import picgoUtil from "~/utils/otherlib/picgoUtil"
 import { LogFactory } from "~/utils/logUtil"
 import { ElMessage, ElMessageBox } from "element-plus"
-import { computed, onBeforeMount, reactive, ref, watch } from "vue"
+import {
+  computed,
+  onBeforeMount,
+  onBeforeUnmount,
+  reactive,
+  ref,
+  watch,
+} from "vue"
 import { goToPage } from "~/utils/otherlib/ChromeUtil"
 import sysUtil from "~/utils/otherlib/sysUtil"
 import { debounce, DebouncedFunc } from "lodash"
@@ -427,6 +434,14 @@ onBeforeMount(() => {
 
   getPluginList()
   getSearchResult = debounce(_getSearchResult, 50)
+})
+
+// remove events
+onBeforeUnmount(() => {
+  picgoUtil.ipcRemoveEvent("pluginList")
+  picgoUtil.ipcRemoveEvent("installPluginFinished")
+  picgoUtil.ipcRemoveEvent("picgoHandlePluginIng")
+  picgoUtil.ipcRemoveEvent("uninstallSuccess")
 })
 </script>
 
