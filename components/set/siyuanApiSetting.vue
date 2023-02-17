@@ -163,11 +163,8 @@ const handleOk = async (formEl) => {
     setJSONConf<SiYuanConfig>(SIYUAN_CONSTANTS.SIYUAN_CFG_KEY, siyuanCfg)
     logger.debug("保存思源配置", siyuanCfg)
     ElMessage.success(t("main.opt.success"))
-    setTimeout(function () {
-      onBack()
-
-      reloadPage()
-    }, 500)
+    onBack()
+    reloadPage()
   } catch (e) {
     onBack()
 

@@ -256,11 +256,7 @@ export const importConf = async (): Promise<void> => {
 
     ElMessage.success("导入成功")
 
-    if (isBrowser()) {
-      setTimeout(function () {
-        reloadPage()
-      }, 500)
-    }
+    reloadPage()
   } catch (e) {
     if (e.toString().indexOf("AbortError") > -1) {
       logger.warn("您取消了导入=>", e)

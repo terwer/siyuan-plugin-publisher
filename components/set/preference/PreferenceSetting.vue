@@ -175,11 +175,7 @@ const saveConf = () => {
   )
   logger.debug("偏好设置已保存")
 
-  if (isBrowser()) {
-    setTimeout(function () {
-      reloadPage()
-    }, 500)
-  }
+  reloadPage()
 }
 
 const initConf = () => {

@@ -478,4 +478,5 @@ export default {
     "插件已经成功安装，请清除搜索关键字刷新列表。点击插件对应【设置】图标可查看插件详情，并对插件进行自定义设置。如果是图床扩展，请关闭重新打开，然后启用图床并进行设置。",
   "syp.about": "关于作者",
   "setting.picgo.plugin.uninstall": "卸载插件",
+  "setting.picgo.plugin.uninstall.success": "插件已经成功卸载。",
 }

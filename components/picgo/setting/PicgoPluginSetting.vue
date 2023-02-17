@@ -163,6 +163,7 @@ import sysUtil from "~/utils/otherlib/sysUtil"
 import { debounce, DebouncedFunc } from "lodash"
 import { useI18n } from "vue-i18n"
 import { PicgoPageMenuType } from "~/utils/platform/picgo/picgoPlugin"
+import { reloadPage } from "~/utils/browserUtil"
 
 const logger = LogFactory.getLogger(
   "components/picgo/setting/PicgoPluginSetting.vue"
@@ -394,27 +395,28 @@ onBeforeMount(() => {
     const success = data.rawArgs.success
     const errMsg = data.rawArgs.errMsg
 
-    pluginData.pluginList = pluginData.pluginList.filter((item) => {
-      if (item.fullName === fullName) {
-        // restore Uploader & Transformer after uninstalling
-        if (item.config.transformer.name) {
-          alert("handle transformer")
-          // handleRestoreState('transformer', item.config.transformer.name)
-        }
-        if (item.config.uploader.name) {
-          alert("handle uploader")
-          // handleRestoreState('uploader', item.config.uploader.name)
-        }
-        // getPicBeds()
-      }
-      return item.fullName !== fullName
-    })
-    pluginData.pluginNameList = pluginData.pluginNameList.filter(
-      (item) => item !== fullName
-    )
-
     if (success) {
-      ElMessage.success(t("setting.picgo.plugin.install.success"))
+      pluginData.pluginList = pluginData.pluginList.filter((item) => {
+        if (item.fullName === fullName) {
+          // restore Uploader & Transformer after uninstalling
+          if (item.config.transformer.name) {
+            picgoUtil.handleRestoreState(
+              "transformer",
+              item.config.transformer.name
+            )
+          }
+          if (item.config.uploader.name) {
+            picgoUtil.handleRestoreState("uploader", item.config.uploader.name)
+          }
+        }
+        return item.fullName !== fullName
+      })
+      pluginData.pluginNameList = pluginData.pluginNameList.filter(
+        (item) => item !== fullName
+      )
+
+      ElMessage.success(t("setting.picgo.plugin.uninstall.success"))
+      reloadPage()
     } else {
       ElMessage.error(errMsg)
     }

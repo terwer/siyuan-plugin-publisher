@@ -431,6 +431,32 @@ const getPicgoVersion = () => {
 }
 
 /**
+ * restore Uploader & Transformer
+ *
+ * @param item 插件项
+ * @param name 名称
+ */
+const handleRestoreState = (item, name) => {
+  if (item === "uploader") {
+    const current = getPicgoConfig("picBed.current")
+    if (current === name) {
+      savePicgoConfig({
+        "picBed.current": "github",
+        "picBed.uploader": "github",
+      })
+    }
+  }
+  if (item === "transformer") {
+    const current = getPicgoConfig("picBed.transformer")
+    if (current === name) {
+      savePicgoConfig({
+        "picBed.transformer": "path",
+      })
+    }
+  }
+}
+
+/**
  * 统一发送消息的入口
  *
  * @param channel 频道
@@ -533,5 +559,7 @@ const picgoUtil = {
 
   // 构建插件菜单
   buildPluginMenu,
+
+  handleRestoreState,
 }
 export default picgoUtil
