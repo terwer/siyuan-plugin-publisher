@@ -417,11 +417,12 @@ onBeforeMount(() => {
         (item) => item !== fullName
       )
 
-      getPluginList()
       ElMessage.success(t("setting.picgo.plugin.uninstall.success"))
     } else {
       ElMessage.error(errMsg)
     }
+
+    loading.value = false
   })
 
   getPluginList()
