@@ -27,6 +27,7 @@
 
 import { ElMessage } from "element-plus"
 import { isInSiyuanWidget } from "~/utils/platform/siyuan/siyuanUtil"
+import envUtil from "~/utils/envUtil"
 
 /**
  * 是否在思源浏览器
@@ -76,7 +77,7 @@ export const doOpenExportWin = async (pageId, pageUrl) => {
 
   if (syWin.syp && syWin.syp.renderPublishHelper) {
     // 打开弹窗
-    syWin.syp.renderPublishHelper(pageId, pageUrl, syWin)
+    syWin.syp.renderPublishHelper(pageId, pageUrl, syWin, envUtil.isDev)
   } else {
     ElMessage.warning(
       "renderPublishHelper失败，未找到hook方法，请在自定义js片段添加 import('/widgets/sy-post-publisher/lib/siyuanhook.js') ，并重启思源笔记"

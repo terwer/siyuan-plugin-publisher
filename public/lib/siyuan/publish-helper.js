@@ -98,8 +98,14 @@ const initPublishHelper = () => {
    * @param pageId 文章ID
    * @param pageUrl 页面地址
    * @param mainWin 可选（打开此页面的Window对象）
+   * @param isDev 可选（是否调试模式）
    */
-  window.syp.renderPublishHelper = (pageId, pageUrl, mainWin = window) => {
+  window.syp.renderPublishHelper = (
+    pageId,
+    pageUrl,
+    mainWin = window,
+    isDev = false
+  ) => {
     const { app, BrowserWindow, getCurrentWindow } =
       mainWin.require("@electron/remote")
     const remote = mainWin
@@ -261,7 +267,9 @@ const initPublishHelper = () => {
         { content: html },
         (response) => {
           newWin.loadURL(response.data.url)
-          // newWin.webContents.openDevTools()
+          if (isDev) {
+            newWin.webContents.openDevTools()
+          }
         }
       )
     })

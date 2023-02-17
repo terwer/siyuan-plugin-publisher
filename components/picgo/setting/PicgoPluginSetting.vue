@@ -162,6 +162,7 @@ import { goToPage } from "~/utils/otherlib/ChromeUtil"
 import sysUtil from "~/utils/otherlib/sysUtil"
 import { debounce, DebouncedFunc } from "lodash"
 import { useI18n } from "vue-i18n"
+import { PicgoPageMenuType } from "~/utils/platform/picgo/picgoPlugin"
 
 const logger = LogFactory.getLogger(
   "components/picgo/setting/PicgoPluginSetting.vue"
@@ -243,7 +244,20 @@ function installPlugin(item: IPicGoPlugin) {
 }
 
 async function buildContextMenu(plugin: IPicGoPlugin) {
-  picgoUtil.buildPluginMenu(plugin)
+  picgoUtil.buildPluginMenu(plugin, _getI18nMessage)
+}
+
+function _getI18nMessage(key: PicgoPageMenuType) {
+  const retArr = []
+  switch (key) {
+    case PicgoPageMenuType.PicgoPageMenuType_Uninstall:
+      retArr["setting.picgo.plugin.uninstall"] = t(
+        "setting.picgo.plugin.uninstall"
+      )
+      break
+  }
+
+  return retArr
 }
 
 function _getSearchResult(val: string) {
@@ -342,6 +356,8 @@ onBeforeMount(() => {
 
     const body = data.rawArgs.body
     const success = data.rawArgs.success
+    const errMsg = data.rawArgs.errMsg
+
     pluginData.pluginList.forEach((item) => {
       if (item.fullName === body) {
         item.ing = false
@@ -351,6 +367,56 @@ onBeforeMount(() => {
 
     if (success) {
       ElMessage.success(t("setting.picgo.plugin.install.success"))
+    } else {
+      ElMessage.error(errMsg)
+    }
+  })
+
+  picgoUtil.ipcRegisterEvent("picgoHandlePluginIng", (evt, data) => {
+    const fullName: string = data.rawArgs
+
+    pluginData.pluginList.forEach((item) => {
+      if (item.fullName === fullName || item.name === fullName) {
+        item.ing = true
+      }
+    })
+    loading.value = true
+  })
+
+  picgoUtil.ipcRegisterEvent("uninstallSuccess", (evt, data) => {
+    loading.value = false
+    logger.info(
+      "PicgoPluginSetting接收到installPluginFinished事件,data=>",
+      data
+    )
+
+    const fullName = data.rawArgs.body
+    const success = data.rawArgs.success
+    const errMsg = data.rawArgs.errMsg
+
+    pluginData.pluginList = pluginData.pluginList.filter((item) => {
+      if (item.fullName === fullName) {
+        // restore Uploader & Transformer after uninstalling
+        if (item.config.transformer.name) {
+          alert("handle transformer")
+          // handleRestoreState('transformer', item.config.transformer.name)
+        }
+        if (item.config.uploader.name) {
+          alert("handle uploader")
+          // handleRestoreState('uploader', item.config.uploader.name)
+        }
+        // getPicBeds()
+      }
+      return item.fullName !== fullName
+    })
+    pluginData.pluginNameList = pluginData.pluginNameList.filter(
+      (item) => item !== fullName
+    )
+
+    if (success) {
+      ElMessage.success(t("setting.picgo.plugin.install.success"))
+    } else {
+      ElMessage.error(errMsg)
     }
   })
 

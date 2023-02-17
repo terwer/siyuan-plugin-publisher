@@ -28,6 +28,7 @@ import { isInSiyuanOrSiyuanNewWin } from "~/utils/platform/siyuan/siyuanUtil"
 import idUtil from "~/utils/idUtil"
 import strUtil from "~/utils/strUtil"
 import siyuanBrowserUtil from "~/utils/otherlib/siyuanBrowserUtil"
+import { PicgoPageMenuType } from "~/utils/platform/picgo/picgoPlugin"
 
 // Pico上传Api封装
 const picGoUploadApi = new PicGoUploadApi()
@@ -463,24 +464,28 @@ const ipcRegisterEvent = (channel, data = {}) => {
  * 构建插件菜单
  *
  * @param plugin 插件对象
- *
+ * @param i18nFunc 获取国际化资源的回调
  * @author terwer
  * @since 0.7.0
  */
-const buildPluginMenu = (plugin) => {
+const buildPluginMenu = (plugin, i18nFunc) => {
   // 根据插件构造菜单
   const syWin = siyuanBrowserUtil.getSiyuanWindow()
-  const template = [
-    {
-      label: "卸载插件",
-      click() {
-        // const window = windowManager.get(IWindowList.SETTING_WINDOW)!
-        //   window.webContents.send(PICGO_HANDLE_PLUGIN_ING, plugin.fullName)
-        // picgoCoreIPC.handlePluginUninstall(plugin.fullName)
-        alert("卸载插件")
-      },
+  const template = []
+
+  // 卸载插件菜单
+  const uninstallI18n = i18nFunc(PicgoPageMenuType.PicgoPageMenuType_Uninstall)
+  const uninstallItem = {
+    label: uninstallI18n["setting.picgo.plugin.uninstall"],
+    click() {
+      // 卸载中事件
+      ipcHandleEvent("picgoHandlePluginIng", plugin.fullName)
+      // 处理卸载事件
+      ipcHandleEvent("uninstallPlugin", plugin.fullName)
     },
-  ]
+  }
+  template.push(uninstallItem)
+
   const menu = syWin.syp.buildMenu(template, syWin)
 
   // 显示菜单

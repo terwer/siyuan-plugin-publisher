@@ -28,6 +28,7 @@ import os
 import pathlib
 import shutil
 import sys
+import time
 import zipfile
 from distutils import dir_util
 from distutils import file_util
@@ -211,3 +212,14 @@ def create_zip(root_path, file_name, ignored=[], storage_path=None):
 
     iter_subtree(root_path)
     zipf.close()
+
+def get_filename_from_time():
+    """
+    根据时间命名文件
+    :return: 根据时间生成的名称
+    """
+    # 获取当前的时间
+    now_time = time.localtime()
+    # 使用strftime函数把时间转换成想要的格式
+    filename = time.strftime("%Y%m%d%H%M%S", now_time)  # 输出结果为：20210126095555
+    return filename

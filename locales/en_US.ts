@@ -478,4 +478,5 @@ export default {
   "setting.picgo.plugin.install.success":
     "The plug -in has been successfully installed, please clear the search keyword refresh list. Click the plug -in corresponding [Settings] icon to view the plug -in details and customize the plug -in",
   "syp.about": "About me",
+  "setting.picgo.plugin.uninstall": "Uninstall plugin",
 }
