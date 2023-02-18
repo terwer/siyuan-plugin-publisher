@@ -511,6 +511,50 @@ const buildPluginMenu = (plugin, i18nFunc) => {
   const syWin = siyuanBrowserUtil.getSiyuanWindow()
   const template = []
 
+  // 启用插件
+  const enableI18n = i18nFunc(PicgoPageMenuType.PicgoPageMenuType_Enable)
+  const enableItem = {
+    label: enableI18n["setting.picgo.plugin.enable"],
+    enabled: !plugin.enabled,
+    click() {
+      savePicgoConfig({
+        [`picgoPlugins.${plugin.fullName}`]: true,
+      })
+      // ipcHandleEvent("picgoTogglePlugin", {
+      //   fullName:plugin.fullName,
+      //   status:true
+      // })
+    },
+  }
+
+  // 禁用插件
+  const disableI18n = i18nFunc(PicgoPageMenuType.PicgoPageMenuType_Disable)
+  const disableItem = {
+    label: disableI18n["setting.picgo.plugin.disable"],
+    enabled: plugin.enabled,
+    click() {
+      savePicgoConfig({
+        [`picgoPlugins.${plugin.fullName}`]: false,
+      })
+      // const window = windowManager.get(IWindowList.SETTING_WINDOW)!
+      //   window.webContents.send(PICGO_HANDLE_PLUGIN_ING, plugin.fullName)
+      // window.webContents.send(PICGO_TOGGLE_PLUGIN, plugin.fullName, false)
+      // window.webContents.send(PICGO_HANDLE_PLUGIN_DONE, plugin.fullName)
+
+      // ipcHandleEvent("picgoTogglePlugin", {
+      //   fullName:plugin.fullName,
+      //   status:false
+      // })
+
+      if (plugin.config.transformer.name) {
+        handleRestoreState("transformer", plugin.config.transformer.name)
+      }
+      if (plugin.config.uploader.name) {
+        handleRestoreState("uploader", plugin.config.uploader.name)
+      }
+    },
+  }
+
   // 卸载插件菜单
   const uninstallI18n = i18nFunc(PicgoPageMenuType.PicgoPageMenuType_Uninstall)
   const uninstallItem = {
@@ -522,7 +566,45 @@ const buildPluginMenu = (plugin, i18nFunc) => {
       ipcHandleEvent("uninstallPlugin", plugin.fullName)
     },
   }
+
+  // 更新插件
+  const updateI18n = i18nFunc(PicgoPageMenuType.PicgoPageMenuType_Update)
+  const updateItem = {
+    label: updateI18n["setting.picgo.plugin.update"],
+    click() {
+      ipcHandleEvent("picgoHandlePluginIng", plugin.fullName)
+      ipcHandleEvent("updatePlugin", plugin.fullName)
+    },
+  }
+
+  // 固定菜单
+  template.push(enableItem)
+  template.push(disableItem)
   template.push(uninstallItem)
+  template.push(updateItem)
+
+  // 插件自定义菜单配置
+  const pluginI18n = i18nFunc(PicgoPageMenuType.PicgoPageMenuType_Plugin)
+  for (const i in plugin.config) {
+    if (plugin.config[i].config.length > 0) {
+      const obj = {
+        label: `${pluginI18n["setting.picgo.plugin.config.setting"]} - ${
+          plugin.config[i].fullName || plugin.config[i].name
+        }`,
+        click() {
+          const currentType = i
+          const configName = plugin.config[i].fullName || plugin.config[i].name
+          const config = plugin.config[i].config
+          ipcHandleEvent("picgoConfigPlugin", {
+            currentType: currentType,
+            configName: configName,
+            config: config,
+          })
+        },
+      }
+      template.push(obj)
+    }
+  }
 
   const menu = syWin.syp.buildMenu(template, syWin)
 

@@ -479,4 +479,8 @@ export default {
   "syp.about": "关于作者",
   "setting.picgo.plugin.uninstall": "卸载插件",
   "setting.picgo.plugin.uninstall.success": "插件已经成功卸载。",
+  "setting.picgo.plugin.enable": "启用插件",
+  "setting.picgo.plugin.disable": "禁用插件",
+  "setting.picgo.plugin.update": "更新插件",
+  "setting.picgo.plugin.config.setting": "插件设置",
 }

@@ -262,6 +262,28 @@ function _getI18nMessage(key: PicgoPageMenuType) {
         "setting.picgo.plugin.uninstall"
       )
       break
+    case PicgoPageMenuType.PicgoPageMenuType_Enable:
+      retArr["setting.picgo.plugin.enable"] = t("setting.picgo.plugin.enable")
+      break
+    case PicgoPageMenuType.PicgoPageMenuType_Disable:
+      retArr["setting.picgo.plugin.disable"] = t("setting.picgo.plugin.disable")
+      break
+    case PicgoPageMenuType.PicgoPageMenuType_Update:
+      retArr["setting.picgo.plugin.update"] = t("setting.picgo.plugin.update")
+      break
+    case PicgoPageMenuType.PicgoPageMenuType_ConfigThing:
+      break
+    case PicgoPageMenuType.PicgoPageMenuType_Transfer:
+      retArr["setting.picgo.plugin.enable"] = t("setting.picgo.plugin.enable")
+      retArr["setting.picgo.plugin.disable"] = t("setting.picgo.plugin.disable")
+      break
+    case PicgoPageMenuType.PicgoPageMenuType_Plugin:
+      retArr["setting.picgo.plugin.config.setting"] = t(
+        "setting.picgo.plugin.config.setting"
+      )
+      break
+    default:
+      break
   }
 
   return retArr
@@ -432,6 +454,26 @@ onBeforeMount(() => {
     loading.value = false
   })
 
+  picgoUtil.ipcRegisterEvent("picgoConfigPlugin", (evt, data) => {
+    loading.value = false
+    logger.info("PicgoPluginSetting接收到picgoConfigPlugin事件,data=>", data)
+
+    // 'plugin' | 'transformer' | 'uploader'
+    const _currentType: "plugin" | "transformer" | "uploader" =
+      data.rawArgs.currentType
+    const _configName: string = data.rawArgs.configName
+    const _config: any = data.rawArgs.config
+
+    logger.info("_currentType=>", _currentType)
+    logger.info("_configName=>", _configName)
+    logger.info("_config=>", _config)
+
+    // currentType.value = _currentType
+    // configName.value = _configName
+    // dialogVisible.value = true
+    // config.value = _config
+  })
+
   getPluginList()
   getSearchResult = debounce(_getSearchResult, 50)
 })
@@ -442,6 +484,7 @@ onBeforeUnmount(() => {
   picgoUtil.ipcRemoveEvent("installPluginFinished")
   picgoUtil.ipcRemoveEvent("picgoHandlePluginIng")
   picgoUtil.ipcRemoveEvent("uninstallSuccess")
+  picgoUtil.ipcRemoveEvent("picgoConfigPlugin")
 })
 </script>
 

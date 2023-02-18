@@ -481,4 +481,8 @@ export default {
   "setting.picgo.plugin.uninstall": "Uninstall plugin",
   "setting.picgo.plugin.uninstall.success":
     "Plugin is uninstalled successfully",
+  "setting.picgo.plugin.enable": "Enable plugin",
+  "setting.picgo.plugin.disable": "Disable plugin",
+  "setting.picgo.plugin.update": "Update plugin",
+  "setting.picgo.plugin.config.setting": "Plugin setting",
 }

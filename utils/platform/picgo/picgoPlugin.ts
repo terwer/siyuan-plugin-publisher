@@ -28,4 +28,10 @@
  */
 export enum PicgoPageMenuType {
   PicgoPageMenuType_Uninstall = "uninstall",
+  PicgoPageMenuType_Disable = "disable",
+  PicgoPageMenuType_Enable = "enable",
+  PicgoPageMenuType_Update = "update",
+  PicgoPageMenuType_ConfigThing = "configThing",
+  PicgoPageMenuType_Transfer = "transformer",
+  PicgoPageMenuType_Plugin = "plugin",
 }
