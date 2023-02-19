@@ -84,7 +84,7 @@
         <a href="https://github.com/terwer/picgo-plugin-watermark-elec"
           >picgo-plugin-watermark-elec</a
         >
-        搜索关键词：watermark
+        搜索关键词：watermark-elec
       </p>
       <p>
         <a href="https://github.com/wayjam/picgo-plugin-s3">picgo-plugin-s3</a>

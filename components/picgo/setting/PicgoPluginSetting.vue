@@ -711,6 +711,7 @@ $darwinBg = #172426
 
       &.work
         background: #3c8833;
+        margin-right: 20px;
 
       &.nowork
         background: #843333;
