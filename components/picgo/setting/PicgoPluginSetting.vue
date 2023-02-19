@@ -401,9 +401,7 @@ onBeforeMount(() => {
     const rawArgs = data.rawArgs
     if (rawArgs.success) {
       const list = rawArgs.data
-      pluginData.pluginList = list.map((item) => {
-        item.isWork = checkWork(item)
-      })
+      pluginData.pluginList = list
       pluginData.pluginNameList = list.map((item) => item.fullName)
 
       logger.info("插件列表已经成功加载.", list)
