@@ -85,7 +85,7 @@ const getPicgoConfig = (key = undefined) => {
  * @param _config IObj | string
  * @param value ?: any
  */
-const savePicgoConfig = (_config, value = "") => {
+const savePicgoConfig = (_config, value = undefined) => {
   const syWin = siyuanBrowserUtil.getSiyuanWindow()
   const picgo = syWin.SyPicgo.getPicgoObj()
 
@@ -586,23 +586,27 @@ const buildPluginMenu = (plugin, i18nFunc) => {
   // 插件自定义菜单配置
   const pluginI18n = i18nFunc(PicgoPageMenuType.PicgoPageMenuType_Plugin)
   for (const i in plugin.config) {
-    if (plugin.config[i].config.length > 0) {
-      const obj = {
-        label: `${pluginI18n["setting.picgo.plugin.config.setting"]} - ${
-          plugin.config[i].fullName || plugin.config[i].name
-        }`,
-        click() {
-          const currentType = i
-          const configName = plugin.config[i].fullName || plugin.config[i].name
-          const config = plugin.config[i].config
-          ipcHandleEvent("picgoConfigPlugin", {
-            currentType: currentType,
-            configName: configName,
-            config: config,
-          })
-        },
+    // 图床分多份单独配置
+    if (i !== "uploader") {
+      if (plugin.config[i].config.length > 0) {
+        const obj = {
+          label: `${pluginI18n["setting.picgo.plugin.config.setting"]} - ${
+            plugin.config[i].fullName || plugin.config[i].name
+          }`,
+          click() {
+            const currentType = i
+            const configName =
+              plugin.config[i].fullName || plugin.config[i].name
+            const config = plugin.config[i].config
+            ipcHandleEvent("picgoConfigPlugin", {
+              currentType: currentType,
+              configName: configName,
+              config: config,
+            })
+          },
+        }
+        template.push(obj)
       }
-      template.push(obj)
     }
   }
 

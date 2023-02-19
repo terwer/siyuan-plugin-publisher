@@ -445,6 +445,8 @@ export default {
   "setting.picgo.picbed.current.tip": "当前默认图床是：",
   "setting.picgo.picbed.uploader.config.name": "图床配置名",
   "setting.picgo.picbed.uploader.config.name.placeholder": "请输入配置名称",
+  "setting.picgo.config.name": "配置名称",
+  "setting.picgo.config.name.placeholder": "请输入配置名称",
   "setting.picgo.index.tip":
     "注意：1、此处上传的图片不会自动插入文档中，请手动点击按钮复制链接，然后 Ctrl+V 粘贴到文档中。2、对于文档当中原本已经存在的本地图片，点击上传之后不会直接替换原始图片，只会存储本地图片与图床图片的映射信息，需要在发布文章时手动勾选【使用图床】才会进行临时链接替换，请知悉。这样做是为了不破坏其他地方对文档图片的处理。当然，您也可以手动复制图床链接，然后删除原图片，替换为图床图片。3、该图片列表仅展示此文档包含的图片。",
   "setting.picgo.index.copy.link": "复制链接",
@@ -483,4 +485,6 @@ export default {
   "setting.picgo.plugin.disable": "禁用插件",
   "setting.picgo.plugin.update": "更新插件",
   "setting.picgo.plugin.config.setting": "插件设置",
+  "setting.picgo.plugin.work": "兼容",
+  "setting.picgo.plugin.nowork": "不兼容",
 }

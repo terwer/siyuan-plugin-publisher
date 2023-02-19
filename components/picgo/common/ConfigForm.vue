@@ -43,15 +43,13 @@
     <div class="config-form">
       <el-form ref="$configForm" label-width="250px" :model="configRuleForm">
         <el-form-item
-          :label="$t('setting.picgo.picbed.uploader.config.name')"
+          :label="$t('setting.picgo.config.name')"
           required
           prop="_configName"
         >
           <el-input
             v-model="configRuleForm._configName"
-            :placeholder="
-              $t('setting.picgo.picbed.uploader.config.name.placeholder')
-            "
+            :placeholder="$t('setting.picgo.config.name.placeholder')"
           />
         </el-form-item>
 
@@ -126,9 +124,10 @@ const logger = LogFactory.getLogger(
 const props = defineProps({
   // 配置类型：plugin、transfer还是uploader
   configType: String,
+  config: Object,
+
   // 对于uploader来说是图床类型
   id: String,
-  config: Object,
   // 当前配置项的uuid
   configId: String,
   isNewForm: Boolean,
@@ -174,9 +173,32 @@ function handleConfigChange(val: any) {
 
 function getCurConfigFormData() {
   const configId = props.configId
-  const curTypeConfigList =
-    picgoUtil.getPicgoConfig(`uploader.${props.id}.configList`) || []
-  return curTypeConfigList.find((i) => i._id === configId) || {}
+  let curConfig
+  switch (props.configType) {
+    case "plugin": {
+      curConfig = picgoUtil.getPicgoConfig(`${props.configId}`) || {
+        _configName: props.configId,
+      }
+      break
+    }
+    case "uploader": {
+      const curTypeConfigList =
+        picgoUtil.getPicgoConfig(`uploader.${props.id}.configList`) || []
+      curConfig = curTypeConfigList.find((i) => i._id === configId) || {}
+      break
+    }
+    case "transformer": {
+      curConfig =
+        picgoUtil.getPicgoConfig(`transformer.${props.configId}`) || {}
+      break
+    }
+    default:
+      curConfig = {}
+      break
+  }
+
+  console.log("curConfig=>", curConfig)
+  return curConfig
 }
 
 function handleConfig(val: IPicGoPluginConfig[]) {
@@ -240,24 +262,24 @@ const onBack = () => {
 
 const onSubmit = async () => {
   const result = (await validate()) || false
+
+  console.log("准备保存配置result", result)
   if (result !== false) {
-    // 图床配置表单
-    if (props.configType === "uploader") {
-      picgoUtil.updateUploaderConfig(props.id, result?._id, result)
+    switch (props.configType) {
+      case "plugin":
+        picgoUtil.savePicgoConfig(`${props.configId}`, result)
+        break
+      case "uploader":
+        picgoUtil.updateUploaderConfig(props.id, result?._id, result)
+        break
+      case "transformer":
+        picgoUtil.savePicgoConfig(`transformer.${props.configId}`, result)
+        break
     }
-
-    onBack()
   }
+
+  onBack()
 }
-
-// const initPage = () => {
-//   logger.warn("configList=>", configList)
-//   configRuleForm._configName = props?.config?._configName ?? "New Config"
-// }
-
-// onBeforeMount(() => {
-//   initPage()
-// })
 </script>
 
 <style scoped>

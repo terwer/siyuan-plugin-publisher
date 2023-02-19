@@ -81,8 +81,8 @@
         特别提示：picgo插件未经过全量测试，不保证所有插件都能运行，目前已经测试可用的插件如下：
       </p>
       <p>
-        <a href="https://github.com/fhyoga/picgo-plugin-watermark"
-          >picgo-plugin-watermark</a
+        <a href="https://github.com/terwer/picgo-plugin-watermark-elec"
+          >picgo-plugin-watermark-elec</a
         >
         搜索关键词：watermark
       </p>

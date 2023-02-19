@@ -446,6 +446,8 @@ export default {
   "setting.picgo.picbed.uploader.config.name": "Picbed config name",
   "setting.picgo.picbed.uploader.config.name.placeholder":
     "Please input config name",
+  "setting.picgo.config.name": "Config name",
+  "setting.picgo.config.name.placeholder": "Please input config name",
   "setting.picgo.index.tip":
     "Note: The image uploaded here will not be automatically inserted into the document. Please manually click the copy button to copy the link, and then Ctrl+V to paste it into the document. This picture list only shows the pictures contained in this document.",
   "setting.picgo.index.copy.link": "Copy link",
@@ -485,4 +487,6 @@ export default {
   "setting.picgo.plugin.disable": "Disable plugin",
   "setting.picgo.plugin.update": "Update plugin",
   "setting.picgo.plugin.config.setting": "Plugin setting",
+  "setting.picgo.plugin.work": "Work",
+  "setting.picgo.plugin.nowork": "Nowork",
 }

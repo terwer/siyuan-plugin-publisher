@@ -35,7 +35,6 @@
       <el-tooltip
         :content="$t('setting.picgo.plugin.import.local')"
         placement="left"
-        v-if="false"
       >
         <el-button class="el-icon-download" @click="handleImportLocalPlugin">
           <font-awesome-icon icon="fa-solid fa-download" />
@@ -43,7 +42,7 @@
       </el-tooltip>
     </div>
 
-    <div class="plugin-list-box">
+    <div class="plugin-list-box" v-if="!showPluginConfigForm">
       <div class="plugin-search-box">
         <el-row
           class="handle-bar"
@@ -104,6 +103,12 @@
                     {{ item.author }}
                   </span>
                   <span class="plugin-item__config">
+                    <span class="config-button work" v-if="checkWork(item)">
+                      {{ $t("setting.picgo.plugin.work") }}
+                    </span>
+                    <span class="config-button nowork" v-else>
+                      {{ $t("setting.picgo.plugin.nowork") }}
+                    </span>
                     <template v-if="searchText">
                       <template v-if="!item.hasInstall">
                         <span
@@ -150,6 +155,17 @@
         </el-row>
       </div>
     </div>
+    <!-- 插件自定义配置表单 -->
+    <div class="plugin-config-form" v-else>
+      <config-form
+        :config-type="pluginConfigData.currentType"
+        :id="pluginConfigData.currentType"
+        :config-id="pluginConfigData.configName"
+        :config="pluginConfigData.config"
+        :is-new-form="false"
+        @on-change="emitBackFn"
+      />
+    </div>
   </div>
 </template>
 
@@ -170,6 +186,7 @@ import sysUtil from "~/utils/otherlib/sysUtil"
 import { debounce, DebouncedFunc } from "lodash"
 import { useI18n } from "vue-i18n"
 import { PicgoPageMenuType } from "~/utils/platform/picgo/picgoPlugin"
+import ConfigForm from "~/components/picgo/common/ConfigForm.vue"
 
 const logger = LogFactory.getLogger(
   "components/picgo/setting/PicgoPluginSetting.vue"
@@ -196,6 +213,12 @@ const npmSearchText = computed(() => {
     : searchText.value
 })
 let getSearchResult: DebouncedFunc<(val: string) => void>
+const showPluginConfigForm = ref(false)
+const pluginConfigData = reactive({
+  currentType: "plugin",
+  configName: "",
+  config: {},
+})
 
 watch(npmSearchText, (val: string) => {
   if (val) {
@@ -207,9 +230,19 @@ watch(npmSearchText, (val: string) => {
   }
 })
 
+function emitBackFn() {
+  showPluginConfigForm.value = false
+}
+
 // handles
 function getPluginList() {
   picgoUtil.ipcHandleEvent("getPluginList")
+}
+
+const checkWork = (item) => {
+  console.log("checkWork item=>", item)
+  const WORKED_PLUGINS = ["watermark-elec", "s3", "minio"]
+  return WORKED_PLUGINS.includes(item.name)
 }
 
 function openHomepage(url: string) {
@@ -336,6 +369,7 @@ function handleSearchResult(item: INPMSearchResultObject) {
       gui = true
     }
   }
+
   return {
     name,
     fullName: item.package.name,
@@ -367,7 +401,9 @@ onBeforeMount(() => {
     const rawArgs = data.rawArgs
     if (rawArgs.success) {
       const list = rawArgs.data
-      pluginData.pluginList = list
+      pluginData.pluginList = list.map((item) => {
+        item.isWork = checkWork(item)
+      })
       pluginData.pluginNameList = list.map((item) => item.fullName)
 
       logger.info("插件列表已经成功加载.", list)
@@ -468,10 +504,10 @@ onBeforeMount(() => {
     logger.info("_configName=>", _configName)
     logger.info("_config=>", _config)
 
-    // currentType.value = _currentType
-    // configName.value = _configName
-    // dialogVisible.value = true
-    // config.value = _config
+    pluginConfigData.currentType = _currentType
+    pluginConfigData.configName = _configName
+    pluginConfigData.config = _config
+    showPluginConfigForm.value = true
   })
 
   getPluginList()
@@ -674,6 +710,13 @@ $darwinBg = #172426
 
       &.install
         right 0
+
+      &.work
+        background: #3c8833;
+
+      &.nowork
+        background: #843333;
+        margin-right: 20px;
 
         &:hover
           background: #1B9EF3
