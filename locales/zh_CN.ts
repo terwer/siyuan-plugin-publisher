@@ -462,7 +462,7 @@ export default {
   "setting.picgo.plugin.installed": "已安装",
   "setting.picgo.plugin.doing.something": "进行中",
   "setting.picgo.plugin.search.placeholder":
-    "搜索npm上的PicGo插件，或者点击上方按钮查看优秀插件列表。推荐：watermark、gitlab-files",
+    "搜索npm上的PicGo插件，或者点击上方按钮查看优秀插件列表。推荐：watermark-elec、s3",
   "setting.picgo.plugin.gui.not.implemented":
     "该插件未对可视化界面进行优化, 是否继续安装?",
   "setting.picgo.setting.node.path": "Node安装路径",
