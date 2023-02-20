@@ -714,6 +714,7 @@ $darwinBg = #172426
 
       &.install
         right 0
+        width 36px
 
       &.work
         background: #3c8833
@@ -722,7 +723,7 @@ $darwinBg = #172426
 
       &.nowork
         background: #843333
-        margin-right: 20px;
+        margin-right: 32px;
         cursor: default
 
         &:hover
