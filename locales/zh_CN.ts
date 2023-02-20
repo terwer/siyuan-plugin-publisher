@@ -485,6 +485,7 @@ export default {
   "setting.picgo.plugin.disable": "禁用插件",
   "setting.picgo.plugin.update": "更新插件",
   "setting.picgo.plugin.config.setting": "插件设置",
-  "setting.picgo.plugin.work": "兼容",
+  "setting.picgo.plugin.work": "已兼容",
   "setting.picgo.plugin.nowork": "不兼容",
+  "setting.picgo.plugin.nouse": "不可用",
 }

@@ -103,20 +103,26 @@
                     {{ item.author }}
                   </span>
                   <span class="plugin-item__config">
-                    <span class="config-button work" v-if="checkWork(item)">
-                      {{ $t("setting.picgo.plugin.work") }}
-                    </span>
-                    <span class="config-button nowork" v-else>
-                      {{ $t("setting.picgo.plugin.nowork") }}
-                    </span>
                     <template v-if="searchText">
+                      <span class="config-button work" v-if="checkWork(item)">
+                        {{ $t("setting.picgo.plugin.work") }}
+                      </span>
+                      <span class="config-button nowork" v-else>
+                        {{ $t("setting.picgo.plugin.nowork") }}
+                      </span>
                       <template v-if="!item.hasInstall">
                         <span
-                          v-if="!item.ing"
+                          v-if="!item.ing && checkWork(item)"
                           class="config-button install"
                           @click="installPlugin(item)"
                         >
                           {{ $t("setting.picgo.plugin.install") }}
+                        </span>
+                        <span
+                          v-else-if="!item.ing && !checkWork(item)"
+                          class="config-button ing"
+                        >
+                          {{ $t("setting.picgo.plugin.nouse") }}
                         </span>
                         <span v-else-if="item.ing" class="config-button ing">
                           {{ $t("setting.picgo.plugin.installing") }}
@@ -710,12 +716,14 @@ $darwinBg = #172426
         right 0
 
       &.work
-        background: #3c8833;
-        margin-right: 20px;
+        background: #3c8833
+        margin-right: 32px
+        cursor: default
 
       &.nowork
-        background: #843333;
+        background: #843333
         margin-right: 20px;
+        cursor: default
 
         &:hover
           background: #1B9EF3

@@ -489,4 +489,5 @@ export default {
   "setting.picgo.plugin.config.setting": "Plugin setting",
   "setting.picgo.plugin.work": "Work",
   "setting.picgo.plugin.nowork": "Nowork",
+  "setting.picgo.plugin.nouse": "Nouse",
 }
