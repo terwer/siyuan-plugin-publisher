@@ -492,7 +492,6 @@ export default {
   "setting.picgo.plugin.nowork": "Nowork",
   "setting.picgo.plugin.nouse": "Nouse",
   "setting.picgo.plugin.update.success": "Update success",
-
   "setting.conf.import.syp": "Import pendant configuration",
   "setting.conf.import.picgo": "Import picgo configuration",
   "setting.conf.export.syp": "Export pendant configuration",

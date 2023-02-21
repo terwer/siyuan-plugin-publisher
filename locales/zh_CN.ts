@@ -490,7 +490,6 @@ export default {
   "setting.picgo.plugin.nowork": "不兼容",
   "setting.picgo.plugin.nouse": "不可用",
   "setting.picgo.plugin.update.success": "更新成功",
-
   "setting.conf.import.syp": "导入挂件配置",
   "setting.conf.import.picgo": "导入PicGO配置",
   "setting.conf.export.syp": "导出挂件配置",

@@ -32,12 +32,12 @@
             {{ $t("setting.conf.export.syp") }}
           </el-button>
         </div>
-        <el-alert
-          :title="$t('setting.conf.export.syp.tip')"
-          type="success"
-          :closable="false"
-        />
       </template>
+      <el-alert
+        :title="$t('setting.conf.export.syp.tip')"
+        type="success"
+        :closable="false"
+      />
     </el-card>
 
     <el-card class="box-card" v-if="isElectron">
