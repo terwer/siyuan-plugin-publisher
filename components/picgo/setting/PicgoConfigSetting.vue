@@ -64,36 +64,38 @@
         />
       </el-form-item>
 
-      <el-divider />
+      <div v-if="isInSiyuanNewWinBrowser()">
+        <el-divider />
 
-      <p>
-        {{ $t("setting.picgo.setting.config.tip") }}
-      </p>
+        <p>
+          {{ $t("setting.picgo.setting.config.tip") }}
+        </p>
 
-      <!-- NODE安装路径 -->
-      <el-form-item :label="$t('setting.picgo.setting.node.path')">
-        <el-input
-          v-model="form.nodePath"
-          :placeholder="$t('setting.picgo.setting.node.path.tip')"
-        />
-      </el-form-item>
-      <el-form-item :label="$t('setting.picgo.setting.node.registry')">
-        <el-input
-          v-model="form.nodeRegistry"
-          :placeholder="$t('setting.picgo.setting.node.registry.tip')"
-        />
-      </el-form-item>
-      <el-form-item :label="$t('setting.picgo.setting.node.proxy')">
-        <el-input
-          v-model="form.nodeProxy"
-          :placeholder="$t('setting.picgo.setting.node.proxy.tip')"
-        />
-      </el-form-item>
-      <el-form-item>
-        <el-button @click="handleSaveNodeConfig"
-          >{{ $t("main.opt.ok") }}
-        </el-button>
-      </el-form-item>
+        <!-- NODE安装路径 -->
+        <el-form-item :label="$t('setting.picgo.setting.node.path')">
+          <el-input
+            v-model="form.nodePath"
+            :placeholder="$t('setting.picgo.setting.node.path.tip')"
+          />
+        </el-form-item>
+        <el-form-item :label="$t('setting.picgo.setting.node.registry')">
+          <el-input
+            v-model="form.nodeRegistry"
+            :placeholder="$t('setting.picgo.setting.node.registry.tip')"
+          />
+        </el-form-item>
+        <el-form-item :label="$t('setting.picgo.setting.node.proxy')">
+          <el-input
+            v-model="form.nodeProxy"
+            :placeholder="$t('setting.picgo.setting.node.proxy.tip')"
+          />
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="handleSaveNodeConfig"
+            >{{ $t("main.opt.ok") }}
+          </el-button>
+        </el-form-item>
+      </div>
     </el-form>
   </div>
 </template>
@@ -102,7 +104,9 @@
 import { onBeforeMount, onBeforeUnmount, reactive, ref } from "vue"
 import picgoUtil from "~/utils/otherlib/picgoUtil"
 import { LogFactory } from "~/utils/logUtil"
-import siyuanBrowserUtil from "~/utils/otherlib/siyuanBrowserUtil"
+import siyuanBrowserUtil, {
+  isInSiyuanNewWinBrowser,
+} from "~/utils/otherlib/siyuanBrowserUtil"
 import { ElDivider, ElMessage } from "element-plus"
 import { useI18n } from "vue-i18n"
 

@@ -35,7 +35,10 @@
         <!-- PicGO配置 -->
         <picgo-config-setting />
       </el-tab-pane>
-      <el-tab-pane :label="$t('setting.picgo.plugin')">
+      <el-tab-pane
+        :label="$t('setting.picgo.plugin')"
+        v-if="isInSiyuanNewWinBrowser()"
+      >
         <!-- PicGO插件配置 -->
         <picgo-plugin-setting />
       </el-tab-pane>
@@ -112,6 +115,7 @@ import PicgoConfigSetting from "~/components/picgo/setting/PicgoConfigSetting.vu
 import { onBeforeMount, ref } from "vue"
 import picgoUtil from "~/utils/otherlib/picgoUtil"
 import PicgoPluginSetting from "~/components/picgo/setting/PicgoPluginSetting.vue"
+import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
 
 const isReload = ref(false)
 const picgoVersion = ref("")
