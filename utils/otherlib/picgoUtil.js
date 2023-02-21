@@ -29,7 +29,7 @@ import idUtil from "~/utils/idUtil"
 import strUtil from "~/utils/strUtil"
 import siyuanBrowserUtil from "~/utils/otherlib/siyuanBrowserUtil"
 import { PicgoPageMenuType } from "~/utils/platform/picgo/picgoPlugin"
-import browserUtil, { reloadPage } from "~/utils/browserUtil"
+import browserUtil from "~/utils/browserUtil"
 
 // Pico上传Api封装
 const picGoUploadApi = new PicGoUploadApi()
@@ -573,7 +573,7 @@ const buildPluginMenu = (plugin, i18nFunc) => {
   template.push(enableItem)
   template.push(disableItem)
   template.push(uninstallItem)
-  template.push(updateItem)
+  // template.push(updateItem)
 
   template.push({
     label: " -------- ",

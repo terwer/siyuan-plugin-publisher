@@ -441,6 +441,8 @@ onBeforeMount(() => {
     } else {
       ElMessage.error(errMsg)
     }
+
+    reloadPage()
   })
 
   picgoUtil.ipcRegisterEvent("picgoHandlePluginIng", (evt, data) => {
@@ -506,12 +508,10 @@ onBeforeMount(() => {
     pluginData.pluginList.forEach((item) => {
       if (item.fullName === body) {
         item.ing = false
-        item.hasInstall = success
       }
     })
 
     if (success) {
-      picgoUtil.ipcHandleEvent("getPicBeds")
       ElMessage.success(t("setting.picgo.plugin.update.success"))
     } else {
       ElMessage.error(errMsg)
