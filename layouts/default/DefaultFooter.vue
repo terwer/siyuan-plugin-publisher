@@ -49,7 +49,7 @@
         </span>
 
         <span class="text" v-if="isChrome">.</span>
-        <span class="text s-dark" @click="newWin()" v-if="isChrome">
+        <span class="text s-dark" @click="newWin()">
           {{ $t("blog.newwin.open") }}
         </span>
 
