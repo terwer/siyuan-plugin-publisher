@@ -48,7 +48,7 @@
           {{ $t("setting.conf.transport") }}
         </span>
 
-        <span class="text" v-if="isChrome">.</span>
+        <span class="text">.</span>
         <span class="text s-dark" @click="newWin()">
           {{ $t("blog.newwin.open") }}
         </span>
