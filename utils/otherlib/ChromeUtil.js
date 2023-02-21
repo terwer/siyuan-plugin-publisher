@@ -26,6 +26,7 @@
 import { isInSiyuanWidget } from "~/utils/platform/siyuan/siyuanUtil"
 import {
   getQueryString,
+  isInChromeExtension,
   readJSONFileFormDialog,
   setUrlParameter,
 } from "~/utils/browserUtil"
@@ -106,10 +107,13 @@ export const getPageUrl = (pageUrl, split) => {
     // 思源笔记链接处理
     url = "/widgets/sy-post-publisher" + url
     if (isInSiyuanWidget()) {
-      from = FROM_CONSTANTS.FROM_CHROME
+      from = FROM_CONSTANTS.FROM_SIYUAN
     }
     if (isInSiyuanNewWinBrowser()) {
       from = FROM_CONSTANTS.FROM_SIYUAN_NEWWIN
+    }
+    if (isInChromeExtension()) {
+      from = FROM_CONSTANTS.FROM_CHROME
     }
     if (!isEmptyString(from)) {
       url = setUrlParameter(url, "from", from)
