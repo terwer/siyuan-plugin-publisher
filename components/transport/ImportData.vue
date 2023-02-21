@@ -25,25 +25,51 @@
 
 <template>
   <div>
-    <el-tabs v-model="activeName" class="transport-tabs">
-      <el-tab-pane :label="$t('setting.conf.export')" name="export">
-        <export-data />
-      </el-tab-pane>
-      <el-tab-pane :label="$t('setting.conf.import')" name="import">
-        <import-data />
-      </el-tab-pane>
-      <el-tab-pane :label="$t('setting.conf.clear')" name="clear">
-        <clear-data />
-      </el-tab-pane>
-    </el-tabs>
+    <el-card class="box-card">
+      <template #header>
+        <div class="card-header">
+          <el-button type="primary" @click="handleImportSyp">
+            {{ $t("setting.conf.import.syp") }}
+          </el-button>
+        </div>
+      </template>
+      <el-alert
+        :title="$t('setting.conf.import.syp.tip')"
+        type="info"
+        :closable="false"
+      />
+    </el-card>
+
+    <el-card class="box-card" v-if="isElectron">
+      <template #header>
+        <div class="card-header">
+          <el-button type="danger" @click="handleImportPicgo">
+            {{ $t("setting.conf.import.picgo") }}
+          </el-button>
+        </div>
+      </template>
+      <el-alert
+        :title="$t('setting.conf.import.picgo.tip')"
+        type="info"
+        :closable="false"
+      />
+    </el-card>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue"
-import ImportData from "~/components/transport/ImportData.vue"
-import ExportData from "~/components/transport/ExportData.vue"
-import ClearData from "~/components/transport/ClearData.vue"
+import { isElectron } from "~/utils/browserUtil"
+import { importConf } from "~/utils/configUtil"
 
-const activeName = ref("export")
+const handleImportSyp = async () => {
+  await importConf()
+}
+
+const handleImportPicgo = () => {}
 </script>
+
+<style scoped>
+.box-card {
+  margin-top: 16px;
+}
+</style>

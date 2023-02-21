@@ -44,7 +44,7 @@
         }}</span>
 
         <span class="text">.</span>
-        <span class="text s-dark">
+        <span class="text s-dark" @click="openTransportSetting">
           {{ $t("setting.conf.transport") }}
         </span>
 
@@ -66,7 +66,7 @@
         <!-- 导出导出弹窗 -->
         <el-dialog
           v-model="transportFormVisible"
-          :title="$t('setting.conf.import')"
+          :title="$t('setting.conf.transport')"
         >
           <transport-select />
         </el-dialog>
@@ -89,24 +89,23 @@ import { onMounted, ref } from "vue"
 import { LogFactory } from "~/utils/logUtil"
 import { isInSiyuanWidget } from "~/utils/platform/siyuan/siyuanUtil"
 import { goToPage } from "~/utils/otherlib/ChromeUtil"
-import { version } from "../../package.json"
 import { isBrowser } from "~/utils/browserUtil"
 import { nowYear } from "~/utils/dateUtil"
 import SetIndex from "~/components/set/SetIndex.vue"
 import TransportSelect from "~/components/transport/TransportSelect.vue"
 import { DeviceType, DeviceUtil } from "~/utils/deviceUtil"
+import { version } from "../../package.json"
 
 const logger = LogFactory.getLogger("layouts/default/DefaultFooter")
 
 const isDark = useDark()
 const toggleDark = useToggle(isDark)
 
-const v = ref("0.0.3")
-
 const transportFormVisible = ref(false)
 const generalSettingFormVisible = ref(false)
 
 const isChrome = ref(false)
+const v = ref(version)
 
 const goGithub = () => {
   window.open("https://github.com/terwer/src-sy-post-publisher")
@@ -120,13 +119,15 @@ const newWin = () => {
   goToPage("/blog/index.html")
 }
 
+const openTransportSetting = () => {
+  transportFormVisible.value = true
+}
+
 const openGeneralSetting = () => {
   generalSettingFormVisible.value = true
 }
 
 const initConf = () => {
-  v.value = version
-
   const deviceType = DeviceUtil.getDevice()
   if (
     deviceType === DeviceType.DeviceType_Chrome_Extension ||

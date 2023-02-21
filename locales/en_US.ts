@@ -492,4 +492,21 @@ export default {
   "setting.picgo.plugin.nowork": "Nowork",
   "setting.picgo.plugin.nouse": "Nouse",
   "setting.picgo.plugin.update.success": "Update success",
+
+  "setting.conf.import.syp": "Import pendant configuration",
+  "setting.conf.import.picgo": "Import picgo configuration",
+  "setting.conf.export.syp": "Export pendant configuration",
+  "setting.conf.export.picgo": "Export picgo configuration",
+  "setting.conf.import.syp.tip":
+    "Please select effective historical backup JSON files for import. Note: The pendant configuration will be replaced.",
+  "setting.conf.import.picgo.tip":
+    "Please select effective historical backup JSON files for import. Note: PICGO configuration will be replaced directly. For the compatibility of configuration, please uninstall all plug -in and perform the picgo configuration export operation. Uninstall the PICGO plugin will not delete the plug -in configuration, only the plug -in file and the plug -in registration record will be deleted. Please rest assured.",
+  "setting.conf.export.syp.tip":
+    "The corresponding JSON configuration file will be exported, and configuration backups are strongly recommended. In principle, support is compatible. If there is any compatibility problem, it will be specifically explained.",
+  "setting.conf.export.picgo.tip":
+    "The corresponding JSON configuration file will be exported, and configuration backups are strongly recommended. In principle, support is compatible. If there is any compatibility problem, it will be specifically explained.",
+  "setting.conf.clear.syp": "Clear pendant configuration",
+  "setting.conf.clear.picgo": "Clear picgo configuration",
+  "setting.conf.clear.tip":
+    "Clear configuration cannot be restored, please do it carefully. It is strongly recommended to backup configuration first.",
 }
