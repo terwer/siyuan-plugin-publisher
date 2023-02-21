@@ -29,6 +29,7 @@ import idUtil from "~/utils/idUtil"
 import strUtil from "~/utils/strUtil"
 import siyuanBrowserUtil from "~/utils/otherlib/siyuanBrowserUtil"
 import { PicgoPageMenuType } from "~/utils/platform/picgo/picgoPlugin"
+import browserUtil, { reloadPage } from "~/utils/browserUtil"
 
 // Pico上传Api封装
 const picGoUploadApi = new PicGoUploadApi()
@@ -520,10 +521,8 @@ const buildPluginMenu = (plugin, i18nFunc) => {
       savePicgoConfig({
         [`picgoPlugins.${plugin.fullName}`]: true,
       })
-      // ipcHandleEvent("picgoTogglePlugin", {
-      //   fullName:plugin.fullName,
-      //   status:true
-      // })
+
+      browserUtil.reloadPageWithMessage("插件已启用，即将刷新页面...")
     },
   }
 
@@ -536,15 +535,6 @@ const buildPluginMenu = (plugin, i18nFunc) => {
       savePicgoConfig({
         [`picgoPlugins.${plugin.fullName}`]: false,
       })
-      // const window = windowManager.get(IWindowList.SETTING_WINDOW)!
-      //   window.webContents.send(PICGO_HANDLE_PLUGIN_ING, plugin.fullName)
-      // window.webContents.send(PICGO_TOGGLE_PLUGIN, plugin.fullName, false)
-      // window.webContents.send(PICGO_HANDLE_PLUGIN_DONE, plugin.fullName)
-
-      // ipcHandleEvent("picgoTogglePlugin", {
-      //   fullName:plugin.fullName,
-      //   status:false
-      // })
 
       if (plugin.config.transformer.name) {
         handleRestoreState("transformer", plugin.config.transformer.name)
@@ -552,6 +542,8 @@ const buildPluginMenu = (plugin, i18nFunc) => {
       if (plugin.config.uploader.name) {
         handleRestoreState("uploader", plugin.config.uploader.name)
       }
+
+      browserUtil.reloadPageWithMessage("插件已禁用，即将刷新页面...")
     },
   }
 
@@ -582,6 +574,11 @@ const buildPluginMenu = (plugin, i18nFunc) => {
   template.push(disableItem)
   template.push(uninstallItem)
   template.push(updateItem)
+
+  template.push({
+    label: " -------- ",
+    click() {},
+  })
 
   // 插件自定义菜单配置
   const pluginI18n = i18nFunc(PicgoPageMenuType.PicgoPageMenuType_Plugin)

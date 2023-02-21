@@ -96,7 +96,11 @@
                   selected: config._id === profileData.defaultConfigId,
                 }"
               >
-                {{ $t("setting.picgo.picbed.selected.tip") }}
+                {{
+                  config._id === profileData.defaultConfigId
+                    ? $t("setting.picgo.picbed.selected.tip")
+                    : $t("setting.picgo.picbed.unselected.tip")
+                }}
               </div>
             </el-card>
           </div>

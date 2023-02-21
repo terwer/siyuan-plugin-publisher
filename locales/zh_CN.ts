@@ -440,6 +440,7 @@ export default {
   "setting.picgo.picgo.click.to.open": "点击打开",
   "setting.picgo.picgo.choose.showed.picbed": "请选择显示的图床",
   "setting.picgo.picbed.selected.tip": "已选中",
+  "setting.picgo.picbed.unselected.tip": "未选中",
   "setting.picgo.picbed.set.default": "设为默认图床",
   "setting.picgo.picbed.current.selected.tip": "已选中图床：",
   "setting.picgo.picbed.current.tip": "当前默认图床是：",
@@ -488,4 +489,5 @@ export default {
   "setting.picgo.plugin.work": "已兼容",
   "setting.picgo.plugin.nowork": "不兼容",
   "setting.picgo.plugin.nouse": "不可用",
+  "setting.picgo.plugin.update.success": "更新成功",
 }

@@ -440,6 +440,7 @@ export default {
   "setting.picgo.picgo.click.to.open": "Click open",
   "setting.picgo.picgo.choose.showed.picbed": "Please select showed picbed",
   "setting.picgo.picbed.selected.tip": "Selected",
+  "setting.picgo.picbed.unselected.tip": "Unselected",
   "setting.picgo.picbed.set.default": "Set as default picbed",
   "setting.picgo.picbed.current.selected.tip": "Current selected picbed is:",
   "setting.picgo.picbed.current.tip": "Current picbed is:",
@@ -490,4 +491,5 @@ export default {
   "setting.picgo.plugin.work": "Work",
   "setting.picgo.plugin.nowork": "Nowork",
   "setting.picgo.plugin.nouse": "Nouse",
+  "setting.picgo.plugin.update.success": "Update success",
 }

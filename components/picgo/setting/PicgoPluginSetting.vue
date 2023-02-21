@@ -193,6 +193,7 @@ import { debounce, DebouncedFunc } from "lodash"
 import { useI18n } from "vue-i18n"
 import { PicgoPageMenuType } from "~/utils/platform/picgo/picgoPlugin"
 import ConfigForm from "~/components/picgo/common/ConfigForm.vue"
+import { reloadPage } from "~/utils/browserUtil"
 
 const logger = LogFactory.getLogger(
   "components/picgo/setting/PicgoPluginSetting.vue"
@@ -494,6 +495,34 @@ onBeforeMount(() => {
     loading.value = false
   })
 
+  picgoUtil.ipcRegisterEvent("updateSuccess", (evt, data) => {
+    loading.value = false
+    logger.info("PicgoPluginSetting接收到updateSuccess事件,data=>", data)
+
+    const body = data.rawArgs.body
+    const success = data.rawArgs.success
+    const errMsg = data.rawArgs.errMsg
+
+    pluginData.pluginList.forEach((item) => {
+      if (item.fullName === body) {
+        item.ing = false
+        item.hasInstall = success
+      }
+    })
+
+    if (success) {
+      picgoUtil.ipcHandleEvent("getPicBeds")
+      ElMessage.success(t("setting.picgo.plugin.update.success"))
+    } else {
+      ElMessage.error(errMsg)
+    }
+
+    showPluginConfigForm.value = false
+    loading.value = false
+
+    reloadPage()
+  })
+
   picgoUtil.ipcRegisterEvent("picgoConfigPlugin", (evt, data) => {
     loading.value = false
     logger.info("PicgoPluginSetting接收到picgoConfigPlugin事件,data=>", data)
@@ -524,6 +553,7 @@ onBeforeUnmount(() => {
   picgoUtil.ipcRemoveEvent("installPluginFinished")
   picgoUtil.ipcRemoveEvent("picgoHandlePluginIng")
   picgoUtil.ipcRemoveEvent("uninstallSuccess")
+  picgoUtil.ipcRemoveEvent("updateSuccess")
   picgoUtil.ipcRemoveEvent("picgoConfigPlugin")
 })
 </script>
