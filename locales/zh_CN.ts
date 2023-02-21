@@ -506,4 +506,6 @@ export default {
   "setting.conf.clear.picgo": "清空PicGO配置",
   "setting.conf.clear.tip":
     "清空配置不可恢复，请谨慎操作。强烈建议先备份配置。",
+  "setting.conf.clear.picgo.tip":
+    "清空配置不可恢复，请谨慎操作。强烈建议先备份配置。此操作会删除PicGO相关配置文件夹，包括配置、插件、缓存等，仅在PicGO加载发生异常，并且完全无法使用的时候使用，否则丢失配置后果自负！",
 }

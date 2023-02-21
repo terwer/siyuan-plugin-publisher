@@ -49,7 +49,7 @@
         </div>
       </template>
       <el-alert
-        :title="$t('setting.conf.clear.tip')"
+        :title="$t('setting.conf.clear.picgo.tip')"
         type="error"
         :closable="false"
       />
@@ -62,6 +62,7 @@ import { ElMessageBox } from "element-plus"
 import { useI18n } from "vue-i18n"
 import { clearConf } from "~/utils/configUtil"
 import browserUtil, { isElectron } from "~/utils/browserUtil"
+import picgoUtil from "~/utils/otherlib/picgoUtil"
 
 const { t } = useI18n()
 
@@ -73,7 +74,6 @@ const handleClearSyp = () => {
   })
     .then(async () => {
       clearConf()
-
       browserUtil.reloadPageWithMessage(t("main.opt.success"))
     })
     .catch(() => {
@@ -84,5 +84,21 @@ const handleClearSyp = () => {
     })
 }
 
-const handleClearPicgo = () => {}
+const handleClearPicgo = () => {
+  ElMessageBox.confirm(t("main.opt.warning.tip"), t("main.opt.warning"), {
+    confirmButtonText: t("main.opt.ok"),
+    cancelButtonText: t("main.opt.cancel"),
+    type: "warning",
+  })
+    .then(async () => {
+      picgoUtil.clearPicgoCfg()
+      browserUtil.reloadPageWithMessage(t("main.opt.success"))
+    })
+    .catch(() => {
+      // ElMessage({
+      //   type: 'error',
+      //   message: t("main.opt.failure"),
+      // })
+    })
+}
 </script>

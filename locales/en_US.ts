@@ -508,4 +508,6 @@ export default {
   "setting.conf.clear.picgo": "Clear picgo configuration",
   "setting.conf.clear.tip":
     "Clear configuration cannot be restored, please do it carefully. It is strongly recommended to backup configuration first.",
+  "setting.conf.clear.picgo.tip":
+    "Clear configuration cannot be restored, please do it carefully. It is strongly recommended to backup configuration first. This operation will delete PicGo -related configuration folders, including configuration, plug -in, cache, etc. It is used only when picgo is completely unavailable, otherwise the consequences of the loss of configuration will be at your own risk!",
 }

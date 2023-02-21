@@ -618,6 +618,26 @@ const buildPluginMenu = (plugin, i18nFunc) => {
 }
 
 /**
+ * 配置操作
+ */
+const backupPicgoCfg = () => {}
+/**
+ * 配置操作
+ */
+const importPicgoCfg = () => {}
+/**
+ * 配置操作
+ */
+const clearPicgoCfg = () => {
+  // 根据插件构造菜单
+  const syWin = siyuanBrowserUtil.getSiyuanWindow()
+  const basedir = getPicgoBasedir()
+  const syPicgo = syWin?.SyPicgo
+
+  syPicgo.rmFolder(basedir)
+}
+
+/**
  * PicGO相关操作统一访问入口
  */
 const picgoUtil = {
@@ -657,5 +677,8 @@ const picgoUtil = {
   buildPluginMenu,
 
   handleRestoreState,
+
+  // 配置操作
+  clearPicgoCfg,
 }
 export default picgoUtil
