@@ -29,6 +29,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
 import { LogFactory } from "~/utils/logUtil"
 import {
   faArrowRotateRight,
+  faBellSlash,
   faBolt,
   faBookOpenReader,
   faCartShopping,
@@ -79,6 +80,7 @@ const FontAwesome: PluginObject<any> = {
     library.add(faShopify)
     library.add(faCartShopping)
     library.add(faLink)
+    library.add(faBellSlash)
 
     Vue.component("font-awesome-icon", FontAwesomeIcon)
     logger.debug("FontAwesome inited")

@@ -149,7 +149,7 @@
                           class="el-icon-remove-outline"
                           @click="buildContextMenu(item)"
                         >
-                          <font-awesome-icon icon="fa-solid fa-trash-can" />
+                          <font-awesome-icon icon="fa-solid fa-bell-slash" />
                         </el-icon>
                       </template>
                     </template>

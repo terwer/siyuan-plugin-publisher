@@ -4,24 +4,20 @@
 
 将 [思源笔记](https://github.com/siyuan-note/siyuan) 的文章发布到支持的平台的 **思源笔记挂件**
 
+[![dev checks](https://img.shields.io/github/checks-status/terwer/src-sy-post-publisher/dev?label=build)](https://github.com/terwer/src-sy-post-publisher/tree/dev)
 ![version](https://img.shields.io/github/release/terwer/sy-post-publisher.svg?style=flat-square)
-[![](https://img.shields.io/badge/online-preview-faad14.svg?style=popout-square)](https://publish.terwer.space/blog/index.html)
 ![GitHub last commit](https://img.shields.io/github/last-commit/terwer/src-sy-post-publisher)
 ![](https://img.shields.io/badge/license-GPL-blue.svg?style=popout-square)
 
-[![](https://img.shields.io/badge/%E9%A1%B9%E7%9B%AE%E6%BA%90%E7%A0%81-code-brightgreen)](https://github.com/terwer/src-sy-post-publisher)
-[![](https://img.shields.io/badge/%E5%B8%AE%E5%8A%A9%E6%96%87%E6%A1%A3-doc-blue)](https://docs.publish.terwer.space)
-[![](https://img.shields.io/badge/视频教程（旧）-video-purple)](https://docs.publish.terwer.space/post/configure-entry-video-brpm9.html)
-[![](https://img.shields.io/badge/视频教程（新）-video-red)](https://docs.publish.terwer.space/post/the-pendant-mode-is-used-in-the-method-of-mounting-menu-169wrw.html#%E8%A7%86%E9%A2%91%E6%95%99%E7%A8%8B)
+[![](https://img.shields.io/badge/帮助文档-doc-blue)](https://docs.publish.terwer.space)
+[![](https://img.shields.io/badge/视频教程-video-red)](https://docs.publish.terwer.space/post/the-pendant-mode-is-used-in-the-method-of-mounting-menu-169wrw.html#%E8%A7%86%E9%A2%91%E6%95%99%E7%A8%8B)
+[![](https://img.shields.io/badge/在线体验-preview-faad14.svg?style=popout-square)](https://publish.terwer.space/blog/index.html)
+[![](https://img.shields.io/badge/项目源码-code-red)](https://github.com/terwer/src-sy-post-publisher)
 
-![](https://img1.terwer.space/api/public/202212181127124.png)
+![](https://static.terwergreen.com/img/202302222313542.png)
 
 使用之前请务必详细阅读 [快速上手指南](#快速上手指南)
 
-## 项目运行状态
-
-[![dev checks](https://img.shields.io/github/checks-status/terwer/src-sy-post-publisher/main?label=main)](https://github.com/terwer/src-sy-post-publisher)
-[![dev checks](https://img.shields.io/github/checks-status/terwer/src-sy-post-publisher/dev?label=dev)](https://github.com/terwer/src-sy-post-publisher/tree/dev)
 <a title="Downloads" target="_blank" href="https://github.com/terwer/src-sy-post-publisher/releases"><img src="https://img.shields.io/github/downloads/terwer/src-sy-post-publisher/total.svg?label=extension-downloads&style=flat-square&color=blueviolet"></a>
 <a title="Downloads" target="_blank" href="https://github.com/terwer/src-sy-post-publisher/releases"><img src="https://img.shields.io/github/downloads/terwer/sy-post-publisher/total.svg?label=widget-downloads&style=flat-square&color=blue"></a>
 
@@ -34,9 +30,14 @@
 
 ### 系统配置相关
 
-- 整合系统所有配置项，提供统一的配置入口
+- 整合系统所有配置项，提供统一的配置入口底部的【偏好设置】
+- 统一整合导入导出操作位底部的【导入导出】
+- 整合【思源 API 地址】设置到【偏好设置】的一个 tab 页
+- 整合原通用设置为【个性设置】，操作入口移到【偏好设置】的一个 tab 页
 
 ### 发布体验相关
+
+- 【文章绑定】操作非配置项，也是可选功能，放在发布页面容易造成误解，现将操作移入详情页，仅在需要将平台文章与思源笔记建立联系时候使用。新增文章无需操作，新增会自动进行绑定
 
 ## 快速上手指南
 
@@ -44,7 +45,8 @@
 
 Q1：使用此思源笔记挂件或者浏览器插件有什么注意事项吗？
 
-A1：有。 **特别提示：【自定义 JS 片段】请不要和【挂件通用版】混合使用，使用其中一种即可。避免因为混用导致配置同步问题。** 浏览器插件无限制。
+A1：有。 **特别提示：【自定义 JS 片段】请不要和【挂件通用版】混合使用，使用其中一种即可。避免因为混用导致配置同步问题。**
+浏览器插件无限制。
 
 Q2：有哪些方式可以使用？具体步骤是什么？
 
