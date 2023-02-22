@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.6.9](https://github.com/terwer/src-sy-post-publisher/compare/v0.6.8...v0.6.9) (2023-02-22)
+
+
+### Bug Fixes
+
+* CI complains of outdated lockfile but says the lockfile is up to date, see https://github.com/pnpm/pnpm/issues/5144 ([ae25cf6](https://github.com/terwer/src-sy-post-publisher/commit/ae25cf635fac937c88fc43106a45431da4f5cd8c))
+* CI complains of outdated lockfile but says the lockfile is up to date, see https://github.com/pnpm/pnpm/issues/5144 ([0b92761](https://github.com/terwer/src-sy-post-publisher/commit/0b92761afc64236e842969e4522ac79e6423ee7f))
+* **deps:** bump browser-fs-access from 0.31.2 to 0.32.1 ([5ccf58f](https://github.com/terwer/src-sy-post-publisher/commit/5ccf58fe8e093697ed5d75ec861e28da48510c7e))
+
+
+### Miscellaneous
+
+* **deps-dev:** bump eslint-config-standard-with-typescript ([2a007ec](https://github.com/terwer/src-sy-post-publisher/commit/2a007ecf5c708f0e7ae6f685a0ff148ff541b165))
+* **deps-dev:** bump prettier from 2.8.3 to 2.8.4 ([fd3ec1a](https://github.com/terwer/src-sy-post-publisher/commit/fd3ec1a054d7225c8d3c5bcfc96db353c8511e91))
+* **deps-dev:** bump unplugin-vue-components from 0.22.12 to 0.24.0 ([a60a31f](https://github.com/terwer/src-sy-post-publisher/commit/a60a31f2fa25051d8de78da38a7440492dab02a8))
+* update browser-fs-access ([000610d](https://github.com/terwer/src-sy-post-publisher/commit/000610db65afe77717be07c1b1fef19965dda32f))
+* update plugin ([51fd486](https://github.com/terwer/src-sy-post-publisher/commit/51fd4862003b65620e2cd6e5e487f206adcdc1e8))
+* upgrade prettier ([64d5852](https://github.com/terwer/src-sy-post-publisher/commit/64d585271ee368429b8a6d7e98e9bf06c7442e1d))
+* 更新eslint-config-standard-with-typescript ([8f08863](https://github.com/terwer/src-sy-post-publisher/commit/8f08863dfb33c6481aca89b32ea53df452c2eaa0))
+
 ## [0.6.8](https://github.com/terwer/src-sy-post-publisher/compare/v0.6.7...v0.6.8) (2023-01-30)
 
 
