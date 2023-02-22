@@ -1,5 +1,5 @@
 <!--
-  - Copyright (c) 2022, Terwer . All rights reserved.
+  - Copyright (c) 2022-2023, Terwer . All rights reserved.
   - DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
   -
   - This code is free software; you can redistribute it and/or modify it
@@ -135,9 +135,6 @@
     <el-form-item>
       <el-button type="primary" @click="submitForm(ruleFormRef)"
         >{{ $t("post.bind.conf.save") }}
-      </el-button>
-      <el-button @click="resetForm(ruleFormRef)"
-        >{{ $t("post.bind.conf.cancel") }}
       </el-button>
     </el-form-item>
   </el-form>
