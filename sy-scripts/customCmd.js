@@ -23,6 +23,13 @@
  * questions.
  */
 
+// 执行自定义脚本
+const result = await window.SyCmd.customCmd(
+  "/Users/terwer/Documents/mydocs/SiYuanWorkspace/public/data/widgets/sy-post-publisher/lib/cmd/ankisiyuan.bin"
+)
+console.log("-----------------------")
+result.data
+
 // 执行shell脚本
 const shellResult = await window.SyCmd.customShellCmd("ls")
 console.log("-----------------------")
