@@ -38,20 +38,35 @@ const cmd = async (c) => {
 }
 
 /**
- * 执行shell脚本
+ * 执行命令
  *
- * @param shell
+ * @param cmd 命令
+ * @param args 参数
+ * @param cwd 工作目录
  */
-const execShellCmd = async (shell) => {
+const customCmd = async (cmd, args, cwd) => {
   const syWin = siyuanBrowserUtil.getSiyuanWindow()
   const syCmd = syWin?.SyCmd
 
-  return await syCmd.execShellCmd(shell)
+  return await syCmd.customCmd(cmd, args, {}, cwd)
+}
+
+/**
+ * 执行shell脚本
+ *
+ * @param shell shell
+ */
+const customShellCmd = async (shell) => {
+  const syWin = siyuanBrowserUtil.getSiyuanWindow()
+  const syCmd = syWin?.SyCmd
+
+  return await syCmd.customShellCmd(shell)
 }
 
 const scriptUtil = {
-  execShellCmd,
   cmd,
+  customCmd,
+  customShellCmd,
 }
 
 export default scriptUtil

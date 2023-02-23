@@ -59,10 +59,11 @@ async function cmd(...command) {
  * @param cmd 命令
  * @param args 参数数组
  * @param env 环境变量（可选）
+ * @param cwd 执行路径（可选）
  */
-async function customCmd(cmd, args, env = {}) {
+async function customCmd(cmd, args, env = {}, cwd = process.cwd()) {
   let p = spawn(cmd, args, {
-    cwd: process.cwd(),
+    cwd: cwd,
     env: Object.assign({}, process.env, env),
   })
   return new Promise((resolve, reject) => {
@@ -106,25 +107,52 @@ async function customCmd(cmd, args, env = {}) {
 /**
  * 执行shell脚本
  *
- * @param shell
+ * @param shell shell命令
+ * @param cwd 工作目录
  */
-async function customShellCmd(shell) {
-  const ret = await customCmd("bash", ["-c", shell])
+async function customShellCmd(shell, cwd = undefined) {
+  const ret = await customCmd("bash", ["-c", shell], cwd)
   return ret
 }
 
-const customPyCmd = async (pyCmd, pyArgs, pyPath = undefined) => {
+/**
+ * 执行python命令
+ *
+ * @param pyCmd python命令
+ * @param pyArgs 参数
+ * @param pyPath python环境变量
+ * @param cwd 工作目录
+ */
+const customPyCmd = async (
+  pyCmd,
+  pyArgs,
+  pyPath = undefined,
+  cwd = undefined
+) => {
   const env = {
     PATH: getEnvPath(pyPath),
   }
-  return await customCmd(pyCmd, pyArgs, env)
+  return await customCmd(pyCmd, pyArgs, env, cwd)
 }
 
-const customNodeCmd = async (nodeCmd, nodeArgs, nodePath = undefined) => {
+/**
+ * 执行Node命令
+ *
+ * @param nodeCmd node命令
+ * @param nodeArgs 参数
+ * @param nodePath Node环境变量
+ * @param cwd 工作目录
+ */
+const customNodeCmd = async (
+  nodeCmd,
+  nodeArgs,
+  nodePath = undefined,
+  cwd = undefined
+) => {
   const env = {
     PATH: getEnvPath(nodePath),
   }
-  return await customCmd(nodeCmd, nodeArgs, env)
+  return await customCmd(nodeCmd, nodeArgs, env, cwd)
 }
 
 const syCmd = {

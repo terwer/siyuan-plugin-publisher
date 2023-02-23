@@ -25,7 +25,10 @@
 
 // 执行自定义脚本
 const result = await window.SyCmd.customCmd(
-  "/Users/terwer/Documents/mydocs/SiYuanWorkspace/public/data/widgets/sy-post-publisher/lib/cmd/ankisiyuan.bin"
+  "/Users/terwer/Documents/mydocs/SiYuanWorkspace/public/data/widgets/sy-post-publisher/lib/cmd/ankisiyuan.bin",
+  [],
+  {},
+  "/Users/terwer/Documents/mydocs/SiYuanWorkspace/public/data/widgets/sy-post-publisher/lib/cmd"
 )
 console.log("-----------------------")
 result.data

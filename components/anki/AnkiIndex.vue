@@ -180,13 +180,16 @@ const updateCard = async () => {
       isAnkiLoading.value = true
 
       const dataDir: string = getSiyuanNewWinDataDir()
+      const workDir = `${dataDir}/widgets/sy-post-publisher/lib/cmd`
       const ankisiyuanPath = `${dataDir}/widgets/sy-post-publisher/lib/cmd/ankisiyuan.bin`
       logger.info("ankisiyuanPath=>", ankisiyuanPath)
-      const result = await scriptUtil.cmd(ankisiyuanPath)
+      const result = await scriptUtil.customCmd(ankisiyuanPath, [], workDir)
       if (result.code === 0) {
-        ElMessage.success("操作成功，执行结果=>" + result.data)
+        ElMessage.success(
+          "操作成功，执行结果=>" + result.data.split("\n").slice(-2).join(" ")
+        )
       } else {
-        ElMessage.error("操异常，错误消息=>" + result.data)
+        ElMessage.error("操作异常，错误消息=>" + result.data)
       }
 
       isAnkiLoading.value = false
