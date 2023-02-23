@@ -181,7 +181,8 @@ const updateCard = async () => {
 
       const dataDir: string = getSiyuanNewWinDataDir()
       const ankisiyuanPath = `${dataDir}/widgets/sy-post-publisher/lib/cmd/ankisiyuan.bin`
-      const result = await scriptUtil.execShellCmd(ankisiyuanPath)
+      logger.info("ankisiyuanPath=>", ankisiyuanPath)
+      const result = await scriptUtil.cmd(ankisiyuanPath)
       if (result.code === 0) {
         ElMessage.success("操作成功，执行结果=>" + result.data)
       } else {
@@ -265,19 +266,23 @@ const initPage = async () => {
       const valueArr = item.value?.split("\n")
       deckArr = valueArr[0]
         ?.replace(/"/g, "")
-        .replace(/&quot;/g, "")
         .replace(/deck_name=/g, "")
         ?.split("::")
       if (valueArr.length > 1) {
         tagArr = valueArr[1]
           ?.replace(/"/g, "")
-          .replace(/&quot;/g, "")
           .replace(/tags=\[/g, "")
           .replace(/]/g, "")
           .split(",")
       }
     }
 
+    deckArr = deckArr.filter(function (str) {
+      return str !== ""
+    })
+    tagArr = tagArr.filter(function (str) {
+      return str !== ""
+    })
     logger.debug("deckArr=>", deckArr)
     logger.debug("tagArr=>", tagArr)
 

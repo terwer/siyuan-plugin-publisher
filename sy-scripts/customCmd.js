@@ -23,35 +23,19 @@
  * questions.
  */
 
-import siyuanBrowserUtil from "~/utils/otherlib/siyuanBrowserUtil"
+// 执行shell脚本
+const shellResult = await window.SyCmd.customShellCmd("ls")
+console.log("-----------------------")
+shellResult.data
 
-/**
- * 执行命令
- *
- * @param c
- */
-const cmd = async (c) => {
-  const syWin = siyuanBrowserUtil.getSiyuanWindow()
-  const syCmd = syWin?.SyCmd
+// 执行python脚本
+const pyPath = "/Users/terwer/Documents/mydocs/my-scripts/venv/bin"
+const pyResult = await window.SyCmd.customPyCmd("python", ["-V"], pyPath)
+console.log("-----------------------")
+pyResult.data
 
-  return await syCmd.cmd(c)
-}
-
-/**
- * 执行shell脚本
- *
- * @param shell
- */
-const execShellCmd = async (shell) => {
-  const syWin = siyuanBrowserUtil.getSiyuanWindow()
-  const syCmd = syWin?.SyCmd
-
-  return await syCmd.execShellCmd(shell)
-}
-
-const scriptUtil = {
-  execShellCmd,
-  cmd,
-}
-
-export default scriptUtil
+// 执行node脚本
+const nodePath = "/Users/terwer/Documents/app/node-v16.14.0-darwin-x64/bin"
+const nodeResult = await window.SyCmd.customNodeCmd("node", ["-v"], nodePath)
+console.log("-----------------------")
+nodeResult.data

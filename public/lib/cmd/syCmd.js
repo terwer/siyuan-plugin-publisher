@@ -28,35 +28,65 @@
 /**
  * 是否是Electron环境，等价于isInSiyuanOrSiyuanNewWin
  */
-const isElectron = /Electron/.test(navigator.userAgent)
+const { spawn } = require("child_process")
 
-const { spawn } = isElectron ? require("child_process") : ""
-const process = isElectron ? require("process") : ""
+/**
+ * 获取Path环境变量
+ */
+const getEnvPath = (CUSTOM_PATH) => {
+  let ENV_PATH = process.env.PATH
 
+  const NEW_ENV_PATH = CUSTOM_PATH || ""
+  if (NEW_ENV_PATH !== "") {
+    ENV_PATH = process.env.PATH + ":" + NEW_ENV_PATH
+  }
+
+  return ENV_PATH
+}
+
+/**
+ * 简单执行命令
+ *
+ * @param command
+ */
 async function cmd(...command) {
-  let p = spawn(command[0], command.slice(1))
+  return await customCmd(command[0], [command.slice(1)])
+}
+
+/**
+ * 自定义命令
+ *
+ * @param cmd 命令
+ * @param args 参数数组
+ * @param env 环境变量（可选）
+ */
+async function customCmd(cmd, args, env = {}) {
+  let p = spawn(cmd, args, {
+    cwd: process.cwd(),
+    env: Object.assign({}, process.env, env),
+  })
   return new Promise((resolve, reject) => {
     let output = ""
     try {
-      p.stdout.on("data", (x) => {
-        // process.stdout.write(x.toString())
-        // resolve(x.toString())
-        output += x.toString()
-      })
+      if (p.stdout) {
+        p.stdout.on("data", (x) => {
+          output += x.toString()
+        })
+      }
 
-      p.stderr.on("data", (x) => {
-        // process.stderr.write(x.toString())
-        // reject(x.toString())
-        output += x.toString()
-      })
+      if (p.stderr) {
+        p.stderr.on("data", (x) => {
+          output += x.toString()
+        })
+      }
 
       p.on("exit", (code) => {
-        // resolve(code)
-        output += code
+        console.log("exit code=>", code)
       })
 
       p.on("close", (code) => {
         let ret
+        output = output.replace(/\n$/, "")
         if (!code) {
           ret = { code: 0, data: output }
         } else {
@@ -75,19 +105,34 @@ async function cmd(...command) {
 
 /**
  * 执行shell脚本
+ *
  * @param shell
- * @returns {Promise<undefined>}
  */
-async function execShellCmd(shell) {
-  console.log("exec shell=>", shell)
-  const ret = await cmd("bash", "-c", shell)
-  console.log("exec finished=>", ret)
+async function customShellCmd(shell) {
+  const ret = await customCmd("bash", ["-c", shell])
   return ret
+}
+
+const customPyCmd = async (pyCmd, pyArgs, pyPath = undefined) => {
+  const env = {
+    PATH: getEnvPath(pyPath),
+  }
+  return await customCmd(pyCmd, pyArgs, env)
+}
+
+const customNodeCmd = async (nodeCmd, nodeArgs, nodePath = undefined) => {
+  const env = {
+    PATH: getEnvPath(nodePath),
+  }
+  return await customCmd(nodeCmd, nodeArgs, env)
 }
 
 const syCmd = {
   cmd,
-  execShellCmd,
+  customCmd,
+  customShellCmd,
+  customPyCmd,
+  customNodeCmd,
 }
 
 module.exports = syCmd
