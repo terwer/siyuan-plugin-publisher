@@ -25,6 +25,13 @@
 
 <template>
   <div class="anki-body">
+    <el-alert
+      class="top-version-tip"
+      v-if="hasEncodedChar"
+      title="检测到Anki标记已被转义，可能是使用了优化排版导致，请点击保存自动修复。若无法自动修复，请删除重新修改保存。注意：可能有缓存，保存之后可间隔一段时间再来看。"
+      type="error"
+      :closable="false"
+    />
     <el-button
       type="primary"
       @click="updateCard"
@@ -142,12 +149,13 @@ import { ElMessage, ElMessageBox } from "element-plus"
 import { useI18n } from "vue-i18n"
 import { LogFactory } from "~/utils/logUtil"
 import { isEmptyString } from "~/utils/util"
-import { appendStr } from "~/utils/strUtil"
+import strUtil, { appendStr } from "~/utils/strUtil"
 import {
   getSiyuanNewWinDataDir,
   isInSiyuanNewWinBrowser,
 } from "~/utils/otherlib/siyuanBrowserUtil"
 import scriptUtil from "~/utils/otherlib/scriptUtil"
+import browserUtil from "~/utils/browserUtil"
 
 const logger = LogFactory.getLogger("components/anki/AnkiIndex.vue")
 const { t } = useI18n()
@@ -161,6 +169,9 @@ const formData = reactive({
 })
 
 const isAnkiLoading = ref(false)
+// 已知问题1
+const unexpectedCharArray = ["&quot;", "&amp;", "amp;", "quot;"]
+const hasEncodedChar = ref(false)
 
 // props
 const props = defineProps({
@@ -267,16 +278,21 @@ const initPage = async () => {
     let tagArr = []
     if (!isEmptyString(item.value)) {
       const valueArr = item.value?.split("\n")
-      deckArr = valueArr[0]
-        ?.replace(/"/g, "")
-        .replace(/deck_name=/g, "")
-        ?.split("::")
+      const deckStr = valueArr[0]?.replace(/"/g, "").replace(/deck_name=/g, "")
+      deckArr = deckStr?.split("::")
+      if (strUtil.includeInArray(deckStr, unexpectedCharArray)) {
+        hasEncodedChar.value = true
+      }
+
       if (valueArr.length > 1) {
-        tagArr = valueArr[1]
+        const tagStr = valueArr[1]
           ?.replace(/"/g, "")
           .replace(/tags=\[/g, "")
           .replace(/]/g, "")
-          .split(",")
+        tagArr = tagStr.split(",")
+        if (strUtil.includeInArray(tagStr, unexpectedCharArray)) {
+          hasEncodedChar.value = true
+        }
       }
     }
 
@@ -302,7 +318,7 @@ const initPage = async () => {
   })
 }
 
-const saveAnkiInfo = (blockId: string) => {
+const saveAnkiInfo = async (blockId: string) => {
   logger.debug("blockId=>", blockId)
   const ankiInfo = formData.ankiMap[blockId]
   const deckInfo = formData.deckMap[blockId]
@@ -321,25 +337,37 @@ const saveAnkiInfo = (blockId: string) => {
     "tags=",
     JSON.stringify(tagInfo.dynamicTags)
   )
+
+  // 处理错误转义的字符
+  for (let k = 0; k < unexpectedCharArray.length; k++) {
+    const ch = unexpectedCharArray[k]
+    ankiValue = ankiValue.replace(new RegExp(ch, "g"), "")
+  }
+
   ankiInfo.value = ankiValue
+  logger.info("准备保存anki标记，ankiInfo=>", ankiInfo.value)
 
   const customAttr = {
     [ankiInfo.name]: ankiInfo.value,
   }
-  siyuanApi.setBlockAttrs(blockId, customAttr)
-  logger.debug("anki标记已保存，ankiInfo=>", ankiInfo)
-  ElMessage.success(t("main.opt.success"))
+  await siyuanApi.setBlockAttrs(blockId, customAttr)
+
+  if (hasEncodedChar.value) {
+    browserUtil.reloadPageWithMessage(t("main.opt.success"))
+  } else {
+    ElMessage.success(t("main.opt.success"))
+  }
 }
 
 /* 监听props */
 watch(
   () => props.pageId,
-  /**/ (oldValue, newValue) => {
+  /**/ async (oldValue, newValue) => {
     // Here you can add you functionality
     // as described in the name you will get old and new value of watched property
     // 默认选中vuepress
     // setBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY, true)
-    initPage()
+    await initPage()
     logger.debug("Anki初始化")
   }
 )

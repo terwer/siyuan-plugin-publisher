@@ -153,9 +153,27 @@ const getRawData = (args: any): any => {
   return args
 }
 
+/**
+ * 判断字符串中，是否包含数组中任何一个元素
+ * @param str 字符串
+ * @param arr 字符串数组
+ */
+const includeInArray = (str: string, arr: string[]) => {
+  let flag = false
+  for (let i = 0; i < arr.length; i++) {
+    const item = arr[i]
+    if (str.indexOf(item) > -1) {
+      flag = true
+    }
+  }
+
+  return flag
+}
+
 const strUtil = {
   trimValues,
   getRawData,
+  includeInArray,
 }
 
 export default strUtil
