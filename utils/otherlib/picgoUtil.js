@@ -633,7 +633,7 @@ const backupPicgoCfg = () => {
 
   const cfgPath = getPicgoCfgPath()
   const json = syPicgo.readFileAsJson(cfgPath)
-  const filename = "picgo-cfg-v" + picgo.GUI_VERSION + ".json"
+  const filename = "sy-picgo-cfg-v" + picgo.GUI_VERSION + ".json"
   configUtil.downloadFileFromJson(json, filename)
 }
 
