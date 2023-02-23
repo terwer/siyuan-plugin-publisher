@@ -27,9 +27,11 @@ import { PicGoUploadApi } from "~/utils/platform/picgo/picGoUploadApi"
 import { isInSiyuanOrSiyuanNewWin } from "~/utils/platform/siyuan/siyuanUtil"
 import idUtil from "~/utils/idUtil"
 import strUtil from "~/utils/strUtil"
+import configUtil from "~/utils/configUtil"
 import siyuanBrowserUtil from "~/utils/otherlib/siyuanBrowserUtil"
 import { PicgoPageMenuType } from "~/utils/platform/picgo/picgoPlugin"
 import browserUtil from "~/utils/browserUtil"
+import { importJSONData } from "~/utils/otherlib/ChromeUtil"
 
 // Pico上传Api封装
 const picGoUploadApi = new PicGoUploadApi()
@@ -620,11 +622,40 @@ const buildPluginMenu = (plugin, i18nFunc) => {
 /**
  * 配置操作
  */
-const backupPicgoCfg = () => {}
+const backupPicgoCfg = () => {
+  const syWin = siyuanBrowserUtil.getSiyuanWindow()
+  const syPicgo = syWin?.SyPicgo
+  const picgo = syPicgo?.getPicgoObj()
+
+  if (!picgo) {
+    throw new Error("[PicGO未挂载]")
+  }
+
+  const cfgPath = getPicgoCfgPath()
+  const json = syPicgo.readFileAsJson(cfgPath)
+  const filename = "picgo-cfg-v" + picgo.GUI_VERSION + ".json"
+  configUtil.downloadFileFromJson(json, filename)
+}
+
 /**
  * 配置操作
  */
-const importPicgoCfg = () => {}
+const importPicgoCfg = async () => {
+  const syWin = siyuanBrowserUtil.getSiyuanWindow()
+  const syPicgo = syWin?.SyPicgo
+
+  const cfgPath = getPicgoCfgPath()
+
+  await importJSONData(function (data) {
+    // 插件注册信息不导入
+    data["picgoPlugins"] = {}
+    const jsonstr = JSON.stringify(data)
+    syPicgo.restoreCfg(jsonstr, cfgPath)
+
+    browserUtil.reloadPageWithMessage("导入成功")
+  })
+}
+
 /**
  * 配置操作
  */
@@ -680,5 +711,7 @@ const picgoUtil = {
 
   // 配置操作
   clearPicgoCfg,
+  backupPicgoCfg,
+  importPicgoCfg,
 }
 export default picgoUtil

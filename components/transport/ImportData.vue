@@ -60,12 +60,15 @@
 <script lang="ts" setup>
 import { isElectron } from "~/utils/browserUtil"
 import { importConf } from "~/utils/configUtil"
+import picgoUtil from "~/utils/otherlib/picgoUtil"
 
 const handleImportSyp = async () => {
   await importConf()
 }
 
-const handleImportPicgo = () => {}
+const handleImportPicgo = async () => {
+  await picgoUtil.importPicgoCfg()
+}
 </script>
 
 <style scoped>

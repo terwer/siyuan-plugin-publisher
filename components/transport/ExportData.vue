@@ -61,13 +61,16 @@
 import { isElectron } from "~/utils/browserUtil"
 import { exportConf } from "~/utils/configUtil"
 import { version } from "../../package.json"
+import picgoUtil from "~/utils/otherlib/picgoUtil"
 
 const handleExportSyp = () => {
   const confName = `sy-p-cfg-v${version}.json`
   exportConf(confName)
 }
 
-const handleExportPicgo = () => {}
+const handleExportPicgo = () => {
+  picgoUtil.backupPicgoCfg()
+}
 </script>
 
 <style scoped>

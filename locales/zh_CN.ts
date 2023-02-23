@@ -497,7 +497,7 @@ export default {
   "setting.conf.import.syp.tip":
     "请选择有效的历史备份json文件进行导入。注意：挂件配置会进行配置替换。",
   "setting.conf.import.picgo.tip":
-    "请选择有效的历史备份json文件进行导入。注意：PicGO配置会直接进行文件替换。为了配置的兼容性，请卸载所有插件之后，进行PicGO配置导出操作。卸载PicGO插件不会删除插件配置，只会删除插件文件以及插件注册记录。请放心卸载。",
+    "请选择有效的历史备份json文件进行导入。注意：PicGO插件的注册信息不导入。为了配置的兼容性，请卸载所有插件之后，进行PicGO配置导出操作。卸载PicGO插件不会删除插件配置，只会删除插件文件以及插件注册记录。请放心卸载。",
   "setting.conf.export.syp.tip":
     "将导出对应的json配置文件，强烈建议定期进行配置备份。原则上支持向后兼容。如有不兼容问题，会特别说明。",
   "setting.conf.export.picgo.tip":

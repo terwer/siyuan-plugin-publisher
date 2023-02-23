@@ -181,11 +181,11 @@ export async function sendChromeMessage(message) {
 }
 
 /**
- * 导入JSON配置
+ * 导入JSON数据
+ *
+ * @param callback 回调
  */
-export const importJSONToLocalStorage = async () => {
-  const store = getLocalStorageAdaptor()
-
+export const importJSONData = async (callback) => {
   // Open a file dialog and select a file
   const files = await readJSONFileFormDialog()
 
@@ -198,15 +198,26 @@ export const importJSONToLocalStorage = async () => {
     const data = JSON.parse(reader.result)
 
     console.log("准备导入配置，读取到的配置数据为=>", data)
+    callback(data)
+  })
+
+  // Read the file as a string of text
+  reader.readAsText(files[0])
+}
+
+/**
+ * 导入JSON配置
+ */
+export const importJSONToLocalStorage = async () => {
+  const store = getLocalStorageAdaptor()
+
+  await importJSONData(function (data) {
     // Iterate over the key/value pairs in the object
     for (const [key, value] of Object.entries(data)) {
       // Add each pair to LocalStorage
       store.setItem(key, value)
     }
   })
-
-  // Read the file as a string of text
-  reader.readAsText(files[0])
 }
 
 /**
