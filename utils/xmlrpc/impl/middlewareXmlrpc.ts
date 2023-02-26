@@ -26,10 +26,9 @@
 import { LogFactory } from "~/utils/logUtil"
 import { getSiyuanCfg } from "~/utils/platform/siyuan/siYuanConfig"
 import { XmlRpcValue } from "simple-xmlrpc"
+import jsonUtil from "~/utils/jsonUtil"
 
-const logger = LogFactory.getLogger(
-  "libs/simple-xmlrpc/impl/middlewareXmlrpc.ts"
-)
+const logger = LogFactory.getLogger("utils/xmlrpc/impl/middlewareXmlrpc.ts")
 
 /**
  * 请求中转支持浏览器跨域
@@ -71,10 +70,13 @@ export async function fetchMiddleware(
 
   const response: Response = await fetch(middleApiUrl, middleFetchOption)
   const resText = await response.text()
+  logger.debug("fetchMiddleware结束，resText", resText)
 
-  const ret = JSON.parse(resText) || []
+  const ret = jsonUtil.safeParse<any>(resText, [])
+  logger.debug("fetchMiddleware结束，resJson", ret)
   if (ret.faultCode) {
-    this.logger.error("代理请求异常，错误信息如下：", ret.faultString)
+    logger.error("代理请求异常，错误信息如下：", ret.faultString)
+    throw new Error(ret.faultString)
   }
   return ret
 }

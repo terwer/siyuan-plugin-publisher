@@ -42,7 +42,7 @@
     "pinia": "^2.0.27",
     "plantuml-encoder": "^1.4.0",
     "shorthash2": "^1.0.3",
-    "simple-xmlrpc": "^1.1.1",
+    "simple-xmlrpc": "^1.2.0",
     "transliteration": "^2.3.5",
     "uuid": "^9.0.0",
     "vue": "^3.2.37",

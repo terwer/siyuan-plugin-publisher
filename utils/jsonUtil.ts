@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2023, Terwer . All rights reserved.
+ * Copyright (c) 2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -23,27 +23,40 @@
  * questions.
  */
 
-import { LogFactory } from "~/utils/logUtil"
-import { SimpleXmlRpcClient, XmlRpcValue } from "simple-xmlrpc"
+import { isEmptyString } from "~/utils/util"
 
-const logger = LogFactory.getLogger("utils/xmlrpc/impl/nodeXmlrpc.ts")
+/**
+ * JSON处理一共工具类
+ *
+ * @author terwer
+ * @since 0.7.0
+ */
+class JsonUtil {
+  /**
+   * 安全的解析json
+   *
+   * @param str json字符串
+   * @param def 默认值
+   */
+  public safeParse<T>(str: string, def: T): T {
+    let ret
 
-export async function fetchNode(
-  apiUrl: string,
-  reqMethod: string,
-  reqParams: string[]
-): Promise<XmlRpcValue> {
-  try {
-    logger.debug("SimpleXmlRpcClient开始")
-    logger.debug("xmlrpcNodeParams.reqMethod=>", reqMethod)
-    logger.debug("xmlrpcNodeParams.reqParams=>", reqParams)
+    // 如果字符创为空或者undefined等，返回默认json
+    if (isEmptyString(str)) {
+      ret = def
+    }
 
-    const client = new SimpleXmlRpcClient(apiUrl)
-    const ret = await client.methodCall(reqMethod, reqParams)
-    logger.debug("SimpleXmlRpcClient结束，ret=>", ret)
+    // 尝试解析json
+    ret = JSON.parse(str) || def
+
+    // 如果json被二次转义，在尝试解析一次
+    if (typeof ret === "string") {
+      ret = JSON.parse(ret) || def
+    }
+
     return ret
-  } catch (e) {
-    logger.error(e)
-    throw new Error("请求处理异常")
   }
 }
+
+const jsonUtil = new JsonUtil()
+export default jsonUtil

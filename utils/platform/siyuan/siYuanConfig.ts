@@ -23,10 +23,11 @@
  * questions.
  */
 
-import { getEnv } from "~/utils/envUtil"
+import envUtil, { getEnv } from "~/utils/envUtil"
 import { getJSONConf } from "~/utils/configUtil"
 import { SIYUAN_CONSTANTS } from "~/utils/constants/siyuanConstants"
 import { isEmptyString } from "~/utils/util"
+import { isInChromeExtension } from "~/utils/browserUtil"
 
 /**
  * 思源笔记配置
@@ -54,8 +55,9 @@ export class SiYuanConfig {
 export const getSiyuanCfg = (): SiYuanConfig => {
   let baseUrl = getEnv("VITE_SIYUAN_API_URL") ?? "" // Base Url
   let token = getEnv("VITE_SIYUAN_CONFIG_TOKEN") ?? "" // API token, 无需填写
-  let middlewareUrl = getEnv("VITE_MIDDLEWARE_URL") ?? "/api/middleware" // 请求代理地址
+  let middlewareUrl = getEnv("VITE_MIDDLEWARE_URL") ?? "" // 请求代理地址
 
+  // 优先获取配置里面保存的数据
   const siyuanCfg = getJSONConf<SiYuanConfig>(SIYUAN_CONSTANTS.SIYUAN_CFG_KEY)
   if (!isEmptyString(siyuanCfg.baseUrl)) {
     baseUrl = siyuanCfg.baseUrl
@@ -67,9 +69,19 @@ export const getSiyuanCfg = (): SiYuanConfig => {
     middlewareUrl = siyuanCfg.middlewareUrl
   }
 
-  // 如果环境变量没有，获取当前host
-  if (isEmptyString(baseUrl) || baseUrl.indexOf("127.0.0.1") > -1) {
-    baseUrl = window.location.protocol + "//" + window.location.host
+  // 如果配置没数据，给默认值
+  if (isEmptyString(baseUrl)) {
+    if (isInChromeExtension() || envUtil.isDev) {
+      baseUrl = "http://127.0.0.1:6806"
+    } else {
+      baseUrl = window.location.protocol + "//" + window.location.host
+    }
+  }
+  if (isEmptyString(token)) {
+    token = ""
+  }
+  if (isEmptyString(middlewareUrl)) {
+    middlewareUrl = "https://api.terwer.space/api/middleware"
   }
 
   return new SiYuanConfig(baseUrl, token, middlewareUrl)

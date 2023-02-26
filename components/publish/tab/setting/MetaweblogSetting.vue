@@ -158,6 +158,7 @@ const apiTypeInfo = ref(
 const valiConf = async () => {
   isLoading.value = true
 
+  let errMsg
   try {
     // 先保存
     saveConf(true)
@@ -182,11 +183,12 @@ const valiConf = async () => {
     // 刷新状态
     setJSONConf(props.apiType, cfg)
   } catch (e) {
+    errMsg = e
     console.error(e)
   }
 
   if (!apiStatus.value) {
-    ElMessage.error(t("setting.blog.vali.error"))
+    ElMessage.error(t("setting.blog.vali.error") + "=>" + errMsg)
   } else {
     ElMessage.success(t("main.opt.success"))
   }
