@@ -23,6 +23,8 @@
 
 ## v0.7.0 特性一览<sup>new</sup>
 
+⚠️ 特别提醒: `0.7.0` 为灰度测试版本，所以随时可能发布 `0.7.x` 修复版本，请考虑好之后再升级。
+
 ### PicGO 相关
 
 - 新增用户友好的 PicGO 图形化配置界面
@@ -64,8 +66,6 @@ import("/widgets/sy-post-publisher/lib/siyuanhook.js")
 ```
 
 点击按钮开始体验。
-
-![](https://img1.terwer.space/api/public/20221228-175950.jpeg)
 
 详情请参考: [挂件模式用挂载菜单的方式使用](https://docs.publish.terwer.space/post/the-pendant-mode-is-used-in-the-method-of-mounting-menu-169wrw.html)
 
