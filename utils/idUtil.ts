@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -24,6 +24,7 @@
  */
 
 import shortHash from "shorthash2"
+import { v4 as uuidv4 } from "uuid"
 
 /**
  * 唯一ID
@@ -32,3 +33,16 @@ export function newID(): string {
   const newstr = new Date().toISOString()
   return shortHash(newstr).toLowerCase()
 }
+
+/**
+ * ID生成统一入口
+ */
+const newUuid = () => {
+  return uuidv4()
+}
+
+const idUtil = {
+  newUuid,
+}
+
+export default idUtil

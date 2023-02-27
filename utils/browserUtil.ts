@@ -134,6 +134,26 @@ export const reloadPage = (): void => {
   }, 200)
 }
 
+/**
+ * 刷新当前tab页面
+ *
+ * @param msg 消息提示
+ * @param type 消息类型
+ */
+const reloadPageWithMessage = (msg, type = "success"): void => {
+  if (type == "success") {
+    ElMessage.success(msg)
+  } else if (type == "warn") {
+    ElMessage.warning(msg)
+  }
+
+  setTimeout(function () {
+    if (isBrowser()) {
+      window.location.reload()
+    }
+  }, 200)
+}
+
 export const readJSONFileFormDialog = async (): Promise<FileWithHandle[]> => {
   return await fileOpen({
     description: "JSON files",
@@ -186,3 +206,9 @@ export function isInChromeExtension() {
   }
   return window.location.href.indexOf("chrome-extension://") > -1
 }
+
+const browserUtil = {
+  reloadPageWithMessage,
+}
+
+export default browserUtil

@@ -25,6 +25,12 @@
 
 <template>
   <div class="picgo-body">
+    <el-alert
+      :title="$t('setting.picgo.index.tip')"
+      type="warning"
+      :closable="false"
+    />
+
     <!-- 上传状态 -->
     <div class="upload-status">
       <el-button text :loading="picgoCommonData.isUploadLoading"
@@ -159,7 +165,7 @@
           <!-- 复制图片链接 -->
           <el-popover
             placement="bottom"
-            :title="f.name"
+            :title="$t('setting.picgo.index.copy.link')"
             :width="picgoCommonData.popWidth"
             trigger="hover"
             :content="f.url"
@@ -267,6 +273,10 @@ const { picgoManageData, picgoManageMethods } = usePicgoManage(props, {
   padding: 10px;
   background: var(--custom-app-bg-color);
   margin: 16px 0 16px;
+}
+
+.upload-status {
+  margin-top: 10px;
 }
 
 .upload-btn-list {

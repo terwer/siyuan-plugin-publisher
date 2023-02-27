@@ -1,7 +1,29 @@
-#!/usr/bin/env python3
-import json
-import sys
+#  Copyright (c) 2023, Terwer . All rights reserved.
+#  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+#
+#  This code is free software; you can redistribute it and/or modify it
+#  under the terms of the GNU General Public License version 2 only, as
+#  published by the Free Software Foundation.  Terwer designates this
+#  particular file as subject to the "Classpath" exception as provided
+#  by Terwer in the LICENSE file that accompanied this code.
+#
+#  This code is distributed in the hope that it will be useful, but WITHOUT
+#  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+#  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+#  version 2 for more details (a copy is included in the LICENSE file that
+#  accompanied this code).
+#
+#  You should have received a copy of the GNU General Public License version
+#  2 along with this work; if not, write to the Free Software Foundation,
+#  Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+#  Please contact Terwer, Shenzhen, Guangdong, China, youweics@163.com
+#  or visit www.terwer.space if you need additional information or have any
+#  questions.
+
 import argparse
+
+import scriptutils
 
 
 def parse_json(filename, version_field, new_version):
@@ -13,37 +35,36 @@ def parse_json(filename, version_field, new_version):
     """
 
     # 读取 JSON 文件
-    with open(filename, 'r') as f:
-        data = json.load(f)
-    # print(data)
+    data = scriptutils.read_json_file(filename)
 
     # 修改 JSON 文件中的属性
     data[version_field] = new_version
 
     # 将修改后的 JSON 写回到文件中
-    with open(filename, 'w') as f:
-        json.dump(data, f, indent=2, ensure_ascii=False)
+    scriptutils.write_json_file(filename, data)
 
 
-# 打印当前python版本
-print(sys.version)
+if __name__ == "__main__":
+    # 获取当前工作空间
+    cwd = scriptutils.get_workdir()
 
-parser = argparse.ArgumentParser()
-parser.add_argument('version', help='the file to be processed')
-parser.add_argument('-v', '--verbose', action='store_true', help='enable verbose output')
-args = parser.parse_args()
+    # 参数解析
+    parser = argparse.ArgumentParser()
+    parser.add_argument("version", help="the file to be processed")
+    parser.add_argument("-v", "--verbose", action="store_true", help="enable verbose output")
+    args = parser.parse_args()
 
-if args.verbose:
-    print('Verbose mode enabled')
+    if args.verbose:
+        print("Verbose mode enabled")
 
-# widget.json
-parse_json('../public/widget.json', 'version', args.version)
+    # widget.json
+    parse_json(cwd + "public/widget.json", "version", args.version)
 
-# manifest.json
-parse_json('../public/manifest.dev.json', 'version', args.version)
-parse_json('../public/manifest.prod.json', 'version', args.version)
+    # manifest.json
+    parse_json(cwd + "public/manifest.dev.json", "version", args.version)
+    parse_json(cwd + "public/manifest.prod.json", "version", args.version)
 
-# mv2 manifest.json
-parse_json('../public/mv2/manifest-v2-for-firefox.json', 'version', args.version)
+    # mv2 manifest.json
+    parse_json(cwd + "public/mv2/manifest-v2-for-firefox.json", "version", args.version)
 
-print("修改完毕，新版本为：" + args.version)
+    print("修改完毕，新版本为：" + args.version)

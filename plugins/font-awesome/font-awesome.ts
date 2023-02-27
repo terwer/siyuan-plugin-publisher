@@ -29,8 +29,10 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
 import { LogFactory } from "~/utils/logUtil"
 import {
   faArrowRotateRight,
+  faBellSlash,
   faBolt,
   faBookOpenReader,
+  faCartShopping,
   faCircleXmark,
   faCreditCard,
   faDownload,
@@ -38,15 +40,18 @@ import {
   faFileLines,
   faGear,
   faImage,
+  faLink,
   faListOl,
   faMagnifyingGlass,
   faPaste,
+  faPenToSquare,
   faRectangleList,
   faShareNodes,
+  faTrashCan,
   faUpload,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons"
-import { faChrome } from "@fortawesome/free-brands-svg-icons"
+import { faChrome, faShopify } from "@fortawesome/free-brands-svg-icons"
 
 const logger = LogFactory.getLogger("plugins/font-awesome/font-awesome.ts")
 
@@ -70,6 +75,12 @@ const FontAwesome: PluginObject<any> = {
     library.add(faFileImport)
     library.add(faGear)
     library.add(faArrowRotateRight)
+    library.add(faTrashCan)
+    library.add(faPenToSquare)
+    library.add(faShopify)
+    library.add(faCartShopping)
+    library.add(faLink)
+    library.add(faBellSlash)
 
     Vue.component("font-awesome-icon", FontAwesomeIcon)
     logger.debug("FontAwesome inited")

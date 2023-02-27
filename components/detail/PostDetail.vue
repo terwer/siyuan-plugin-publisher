@@ -100,7 +100,7 @@ const afterPrint = () => {
 
 const initPage = async () => {
   const pageId = await getPageId(true, props.pageId)
-  logger.info("pageId=>", pageId)
+  logger.debug("pageId=>", pageId)
   if (!pageId || pageId === "") {
     return
   }

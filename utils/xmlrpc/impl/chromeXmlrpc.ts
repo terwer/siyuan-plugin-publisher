@@ -27,7 +27,7 @@ import { LogFactory } from "~/utils/logUtil"
 import { XmlRpcValue } from "simple-xmlrpc"
 import { fetchMiddleware } from "~/utils/xmlrpc/impl/middlewareXmlrpc"
 
-const logger = LogFactory.getLogger("libs/simple-xmlrpc/impl/chromeXmlrpc.ts")
+const logger = LogFactory.getLogger("utils/xmlrpc/impl/chromeXmlrpc.ts")
 
 /**
  * 自定义xmlrpc的请求与解析，通过Chrome发送事件交互

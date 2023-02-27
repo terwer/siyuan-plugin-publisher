@@ -234,3 +234,19 @@ export const calcLastSeconds = function (isoDateStr: string): number {
 export const nowYear = () => {
   return new Date().getFullYear()
 }
+
+/**
+ * 时间戳转时间
+ * @param timestamp 时间戳
+ */
+const formatTimestampToZhDate = (timestamp) => {
+  if (typeof timestamp == "string") {
+    timestamp = parseInt(timestamp)
+  }
+  return formatIsoToZhDate(new Date(timestamp).toISOString(), true)
+}
+
+const dateUtil = {
+  formatTimestampToZhDate,
+}
+export default dateUtil

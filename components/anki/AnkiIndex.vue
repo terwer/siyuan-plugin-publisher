@@ -25,9 +25,20 @@
 
 <template>
   <div class="anki-body">
-    <el-button type="primary" @click="updateCard" v-if="false"
-      >更新卡片</el-button
-    >
+    <el-alert
+      class="top-version-tip"
+      v-if="hasEncodedChar"
+      title="检测到Anki标记已被转义，可能是使用了优化排版导致，请点击保存自动修复。若无法自动修复，请删除重新修改保存。注意：可能有缓存，保存之后可间隔一段时间再来看。"
+      type="error"
+      :closable="false"
+    />
+    <el-button
+      type="primary"
+      @click="updateCard"
+      :loading="isAnkiLoading"
+      v-if="isInSiyuanNewWinBrowser()"
+      >更新卡片
+    </el-button>
     <el-row :gutter="12">
       <el-col
         v-for="(o, index) in formData.ankiInfo"
@@ -121,8 +132,8 @@
               class="button"
               :data-block-id="o.id"
               @click="saveAnkiInfo(o.id)"
-              >保存Anki标记</el-button
-            >
+              >保存Anki标记
+            </el-button>
           </div>
         </el-card>
       </el-col>
@@ -132,18 +143,23 @@
 
 <script lang="ts" setup>
 import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
-import { onMounted, reactive, watch } from "vue"
+import { onMounted, reactive, ref, watch } from "vue"
 import { getPageId } from "~/utils/platform/siyuan/siyuanUtil"
 import { ElMessage, ElMessageBox } from "element-plus"
 import { useI18n } from "vue-i18n"
 import { LogFactory } from "~/utils/logUtil"
 import { isEmptyString } from "~/utils/util"
-import { appendStr } from "~/utils/strUtil"
-import { execShellCmd } from "~/utils/otherlib/shellUtil"
-import { getSiyuanNewWinDataDir } from "~/utils/otherlib/siyuanBrowserUtil"
+import strUtil, { appendStr } from "~/utils/strUtil"
+import {
+  getSiyuanNewWinDataDir,
+  isInSiyuanNewWinBrowser,
+} from "~/utils/otherlib/siyuanBrowserUtil"
+import scriptUtil from "~/utils/otherlib/scriptUtil"
+import browserUtil from "~/utils/browserUtil"
 
 const logger = LogFactory.getLogger("components/anki/AnkiIndex.vue")
 const { t } = useI18n()
+
 const siyuanApi = new SiYuanApi()
 const formData = reactive({
   ankiInfo: null,
@@ -151,6 +167,11 @@ const formData = reactive({
   deckMap: {},
   tagMap: {},
 })
+
+const isAnkiLoading = ref(false)
+// 已知问题1
+const unexpectedCharArray = ["&quot;", "&amp;", "amp;", "quot;"]
+const hasEncodedChar = ref(false)
 
 // props
 const props = defineProps({
@@ -167,18 +188,32 @@ const updateCard = async () => {
     type: "warning",
   })
     .then(async () => {
+      isAnkiLoading.value = true
+
       const dataDir: string = getSiyuanNewWinDataDir()
-      const ankisiyuanPath = `${dataDir}/widgets/ankisiyuan.bin`
-      const result = await execShellCmd(ankisiyuanPath)
-      ElMessage.success("操作成功，执行结果=>" + result)
+      const workDir = `${dataDir}/widgets/sy-post-publisher/lib/cmd`
+      const ankisiyuanPath = `${dataDir}/widgets/sy-post-publisher/lib/cmd/ankisiyuan.bin`
+      logger.info("ankisiyuanPath=>", ankisiyuanPath)
+      const result = await scriptUtil.customCmd(ankisiyuanPath, [], workDir)
+      if (result.code === 0) {
+        ElMessage.success(
+          "操作成功，执行结果=>" + result.data.split("\n").slice(-2).join(" ")
+        )
+      } else {
+        ElMessage.error("操作异常，错误消息=>" + result.data)
+      }
+
+      isAnkiLoading.value = false
     })
     .catch((e) => {
+      isAnkiLoading.value = false
+
       if (e.toString().indexOf("cancel") <= -1) {
         ElMessage({
           type: "error",
           message:
             t("main.opt.failure") +
-            "，请将 ankisiyuan 或者 ankisiyuan.exe 复制到 data/widgets 目录=>" +
+            "，请将 ankisiyuan.bin 或者 ankisiyuan.exe 复制到 data/widgets/sy-post-publisher/lib/cmd 目录=>" +
             e,
         })
         logger.error(t("main.opt.failure") + "=>" + e)
@@ -238,26 +273,35 @@ const initPage = async () => {
   formData.ankiInfo.forEach((item) => {
     formData.ankiMap[item.id] = item
 
-    logger.info("item.value=>", item.value)
+    logger.debug("item.value=>", item.value)
     let deckArr = []
     let tagArr = []
     if (!isEmptyString(item.value)) {
       const valueArr = item.value?.split("\n")
-      deckArr = valueArr[0]
-        ?.replace(/"/g, "")
-        .replace(/&quot;/g, "")
-        .replace(/deck_name=/g, "")
-        ?.split("::")
+      const deckStr = valueArr[0]?.replace(/"/g, "").replace(/deck_name=/g, "")
+      deckArr = deckStr?.split("::")
+      if (strUtil.includeInArray(deckStr, unexpectedCharArray)) {
+        hasEncodedChar.value = true
+      }
+
       if (valueArr.length > 1) {
-        tagArr = valueArr[1]
+        const tagStr = valueArr[1]
           ?.replace(/"/g, "")
-          .replace(/&quot;/g, "")
           .replace(/tags=\[/g, "")
           .replace(/]/g, "")
-          .split(",")
+        tagArr = tagStr.split(",")
+        if (strUtil.includeInArray(tagStr, unexpectedCharArray)) {
+          hasEncodedChar.value = true
+        }
       }
     }
 
+    deckArr = deckArr.filter(function (str) {
+      return str !== ""
+    })
+    tagArr = tagArr.filter(function (str) {
+      return str !== ""
+    })
     logger.debug("deckArr=>", deckArr)
     logger.debug("tagArr=>", tagArr)
 
@@ -274,7 +318,7 @@ const initPage = async () => {
   })
 }
 
-const saveAnkiInfo = (blockId: string) => {
+const saveAnkiInfo = async (blockId: string) => {
   logger.debug("blockId=>", blockId)
   const ankiInfo = formData.ankiMap[blockId]
   const deckInfo = formData.deckMap[blockId]
@@ -293,25 +337,37 @@ const saveAnkiInfo = (blockId: string) => {
     "tags=",
     JSON.stringify(tagInfo.dynamicTags)
   )
+
+  // 处理错误转义的字符
+  for (let k = 0; k < unexpectedCharArray.length; k++) {
+    const ch = unexpectedCharArray[k]
+    ankiValue = ankiValue.replace(new RegExp(ch, "g"), "")
+  }
+
   ankiInfo.value = ankiValue
+  logger.info("准备保存anki标记，ankiInfo=>", ankiInfo.value)
 
   const customAttr = {
     [ankiInfo.name]: ankiInfo.value,
   }
-  siyuanApi.setBlockAttrs(blockId, customAttr)
-  logger.info("anki标记已保存，ankiInfo=>", ankiInfo)
-  ElMessage.success(t("main.opt.success"))
+  await siyuanApi.setBlockAttrs(blockId, customAttr)
+
+  if (hasEncodedChar.value) {
+    browserUtil.reloadPageWithMessage(t("main.opt.success"))
+  } else {
+    ElMessage.success(t("main.opt.success"))
+  }
 }
 
 /* 监听props */
 watch(
   () => props.pageId,
-  /**/ (oldValue, newValue) => {
+  /**/ async (oldValue, newValue) => {
     // Here you can add you functionality
     // as described in the name you will get old and new value of watched property
     // 默认选中vuepress
     // setBooleanConf(SWITCH_CONSTANTS.SWITCH_VUEPRESS_KEY, true)
-    initPage()
+    await initPage()
     logger.debug("Anki初始化")
   }
 )
@@ -342,6 +398,7 @@ onMounted(async () => {
 .anki-card-col {
   margin: 8px 0;
 }
+
 .anki-value {
   margin: 16px 0;
 }

@@ -76,4 +76,8 @@ export class PublishPreference {
    * 是否使用PicGO
    */
   usePicgo: boolean
+  /**
+   * 挂件背景色
+   */
+  mainBg: string
 }

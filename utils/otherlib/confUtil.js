@@ -24,7 +24,7 @@
  */
 
 import { isElectron } from "~/utils/browserUtil"
-import { isInSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
+import { isInSiyuanWidget } from "~/utils/platform/siyuan/siyuanUtil"
 
 /**
  * Electron环境使用json保存数据
@@ -36,7 +36,7 @@ export const getLocalStorageAdaptor = (cfgfile) => {
   let ret = window.localStorage
 
   if (isElectron) {
-    if (isInSiyuan()) {
+    if (isInSiyuanWidget()) {
       ret = parent.window.JsonLocalStorage
     } else {
       ret = window.JsonLocalStorage

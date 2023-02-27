@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -24,6 +24,7 @@
  */
 
 import { removeTitleNumber } from "~/utils/htmlUtil"
+import { isReactive, isRef, toRaw, unref } from "vue"
 
 /**
  * @function unescapeHTML 还原html脚本 < > & " '
@@ -110,3 +111,69 @@ export const removeBom = (str: string): string => {
 
   return str
 }
+
+const trimValues = (obj: IStringKeyMap) => {
+  const newObj = {} as IStringKeyMap
+  Object.keys(obj).forEach((key) => {
+    newObj[key] = typeof obj[key] === "string" ? obj[key].trim() : obj[key]
+  })
+  return newObj
+}
+
+/**
+ * get raw data from reactive or ref
+ */
+const getRawData = (args: any): any => {
+  if (Array.isArray(args)) {
+    const data = args.map((item: any) => {
+      if (isRef(item)) {
+        return unref(item)
+      }
+      if (isReactive(item)) {
+        return toRaw(item)
+      }
+      return getRawData(item)
+    })
+    return data
+  }
+  if (typeof args === "object") {
+    const data = {} as IStringKeyMap
+    Object.keys(args).forEach((key) => {
+      const item = args[key]
+      if (isRef(item)) {
+        data[key] = unref(item)
+      } else if (isReactive(item)) {
+        data[key] = toRaw(item)
+      } else {
+        data[key] = getRawData(item)
+      }
+    })
+    return data
+  }
+  return args
+}
+
+/**
+ * 判断字符串中，是否包含数组中任何一个元素
+ * @param str 字符串
+ * @param arr 字符串数组
+ */
+const includeInArray = (str: string, arr: string[]) => {
+  let flag = false
+  for (let i = 0; i < arr.length; i++) {
+    const item = arr[i]
+    if (str.indexOf(item) > -1) {
+      flag = true
+    }
+  }
+
+  return flag
+}
+
+const strUtil = {
+  trimValues,
+  getRawData,
+  includeInArray,
+}
+
+export default strUtil

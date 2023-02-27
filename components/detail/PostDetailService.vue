@@ -94,6 +94,18 @@
           <font-awesome-icon icon="fa-solid fa-credit-card" />
         </el-button>
       </el-tooltip>
+
+      <!-- 文章绑定 -->
+      <el-tooltip
+        class="box-item"
+        effect="dark"
+        :content="$t('service.tab.post.bind')"
+        placement="bottom-start"
+      >
+        <el-button size="small" type="success" @click="handlePostBind">
+          <font-awesome-icon icon="fa-solid fa-link" />
+        </el-button>
+      </el-tooltip>
     </blockquote>
     <div
       id="post-detail-content"
@@ -101,6 +113,15 @@
       v-highlight
       v-html="post.description"
     ></div>
+
+    <!-- ------------------------------------------------ -->
+
+    <el-dialog
+      v-model="postBindDialogVisible"
+      :title="$t('service.tab.post.bind')"
+    >
+      <post-bind :page-id="props.pageId" />
+    </el-dialog>
   </div>
 </template>
 
@@ -113,6 +134,7 @@ import { LogFactory } from "~/utils/logUtil"
 import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
 import { copyToClipboardInBrowser, isBrowser } from "~/utils/browserUtil"
 import { getPageUrl, goToPage } from "~/utils/otherlib/ChromeUtil"
+import PostBind from "~/components/publish/tab/PostBind.vue"
 
 const logger = LogFactory.getLogger(
   "components/blog/themes/default/PostDetailService.vue"
@@ -138,6 +160,7 @@ watch(
 
 const defaultPost = new Post()
 const post = ref(defaultPost)
+const postBindDialogVisible = ref(false)
 
 const handleCopyID = () => {
   if (isBrowser()) {
@@ -168,6 +191,10 @@ const handleOpenPicgo = () => {
 const handleOpenAnki = () => {
   const pageId = post.value.postid
   goToPage("/anki/index.html?id=" + pageId)
+}
+
+const handlePostBind = () => {
+  postBindDialogVisible.value = true
 }
 
 const initPage = async () => {

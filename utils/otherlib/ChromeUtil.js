@@ -23,9 +23,10 @@
  * questions.
  */
 
-import { isInSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
+import { isInSiyuanWidget } from "~/utils/platform/siyuan/siyuanUtil"
 import {
   getQueryString,
+  isInChromeExtension,
   readJSONFileFormDialog,
   setUrlParameter,
 } from "~/utils/browserUtil"
@@ -88,7 +89,7 @@ export const getPageUrl = (pageUrl, split) => {
   let url = pageUrl
   // 外部链接
   if (url.startsWith("http") || url.startsWith("https")) {
-    logger.info("当前是外部链接，直接跳转")
+    logger.debug("当前是外部链接，直接跳转")
     return url
   }
 
@@ -105,11 +106,14 @@ export const getPageUrl = (pageUrl, split) => {
   ) {
     // 思源笔记链接处理
     url = "/widgets/sy-post-publisher" + url
-    if (isInSiyuan()) {
-      from = FROM_CONSTANTS.FROM_CHROME
+    if (isInSiyuanWidget()) {
+      from = FROM_CONSTANTS.FROM_SIYUAN
     }
     if (isInSiyuanNewWinBrowser()) {
       from = FROM_CONSTANTS.FROM_SIYUAN_NEWWIN
+    }
+    if (isInChromeExtension()) {
+      from = FROM_CONSTANTS.FROM_CHROME
     }
     if (!isEmptyString(from)) {
       url = setUrlParameter(url, "from", from)
@@ -177,11 +181,11 @@ export async function sendChromeMessage(message) {
 }
 
 /**
- * 导入JSON配置
+ * 导入JSON数据
+ *
+ * @param callback 回调
  */
-export const importJSONToLocalStorage = async () => {
-  const store = getLocalStorageAdaptor()
-
+export const importJSONData = async (callback) => {
   // Open a file dialog and select a file
   const files = await readJSONFileFormDialog()
 
@@ -194,15 +198,26 @@ export const importJSONToLocalStorage = async () => {
     const data = JSON.parse(reader.result)
 
     console.log("准备导入配置，读取到的配置数据为=>", data)
+    callback(data)
+  })
+
+  // Read the file as a string of text
+  reader.readAsText(files[0])
+}
+
+/**
+ * 导入JSON配置
+ */
+export const importJSONToLocalStorage = async () => {
+  const store = getLocalStorageAdaptor()
+
+  await importJSONData(function (data) {
     // Iterate over the key/value pairs in the object
     for (const [key, value] of Object.entries(data)) {
       // Add each pair to LocalStorage
       store.setItem(key, value)
     }
   })
-
-  // Read the file as a string of text
-  reader.readAsText(files[0])
 }
 
 /**

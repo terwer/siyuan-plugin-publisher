@@ -26,7 +26,7 @@
 import { LogFactory } from "~/utils/logUtil"
 import { SimpleXmlRpcClient, XmlRpcValue } from "simple-xmlrpc"
 
-const logger = LogFactory.getLogger("libs/simple-xmlrpc/impl/nodeXmlrpc.ts")
+const logger = LogFactory.getLogger("utils/xmlrpc/impl/nodeXmlrpc.ts")
 
 export async function fetchNode(
   apiUrl: string,

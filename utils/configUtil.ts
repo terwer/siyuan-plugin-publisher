@@ -28,7 +28,7 @@ import { importJSONToLocalStorage } from "~/utils/otherlib/ChromeUtil"
 import { getLocalStorageAdaptor } from "~/utils/otherlib/confUtil"
 import { ElMessage } from "element-plus"
 import { appendStr } from "./strUtil"
-import { isBrowser, reloadPage } from "~/utils/browserUtil"
+import { reloadPage } from "~/utils/browserUtil"
 
 const logger = LogFactory.getLogger()
 
@@ -223,15 +223,12 @@ export const getAllConf = (): object => {
 }
 
 /**
- * 导出所有配置
+ * 下载json文件
+ *
+ * @param json json字符串
+ * @param filename 下载文件名
  */
-export const exportConf = (filename): void => {
-  // Get all data from LocalStorage as an object
-  const data = getAllConf()
-
-  // Convert the data to a JSON string
-  const json = JSON.stringify(data)
-
+const downloadFileFromJson = (json: string, filename?: string): void => {
   // Create a new Blob with the JSON string as its contents
   const blob = new Blob([json], { type: "application/json" })
 
@@ -248,6 +245,20 @@ export const exportConf = (filename): void => {
 }
 
 /**
+ * 导出所有配置
+ */
+export const exportConf = (filename): void => {
+  // Get all data from LocalStorage as an object
+  const data = getAllConf()
+
+  // Convert the data to a JSON string
+  const json = JSON.stringify(data)
+
+  // Download
+  downloadFileFromJson(json, filename)
+}
+
+/**
  * 导入JSON配置文件到本地
  */
 export const importConf = async (): Promise<void> => {
@@ -256,11 +267,7 @@ export const importConf = async (): Promise<void> => {
 
     ElMessage.success("导入成功")
 
-    if (isBrowser()) {
-      setTimeout(function () {
-        reloadPage()
-      }, 500)
-    }
+    reloadPage()
   } catch (e) {
     if (e.toString().indexOf("AbortError") > -1) {
       logger.warn("您取消了导入=>", e)
@@ -290,3 +297,9 @@ export const clearConf = (): void => {
     console.log("LocalStorage is not empty")
   }
 }
+
+const configUtil = {
+  downloadFileFromJson,
+}
+
+export default configUtil

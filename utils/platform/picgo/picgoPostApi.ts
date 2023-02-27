@@ -35,7 +35,7 @@ import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
 import { isElectron } from "~/utils/browserUtil"
 import { getSiyuanNewWinDataDir } from "~/utils/otherlib/siyuanBrowserUtil"
 import { isFileExist } from "~/utils/otherlib/ChromeUtil"
-import { uploadByPicGO } from "~/utils/otherlib/picgoUtil"
+import picgoUtil from "~/utils/otherlib/picgoUtil"
 import { ElMessage } from "element-plus"
 
 /**
@@ -69,14 +69,16 @@ export class PicgoPostApi {
       const originUrl = retImg
       let imgUrl = retImg
 
+      // 获取属性存储的映射数据
       let fileMap = {}
-      if (!(imgUrl.indexOf("http") > -1) && imgUrl.indexOf("assets") > -1) {
-        this.logger.debug("attrs=>", attrs)
-        if (!isEmptyString(attrs[CONSTANTS.PICGO_FILE_MAP_KEY])) {
-          fileMap = parseJSONObj(attrs[CONSTANTS.PICGO_FILE_MAP_KEY])
-          this.logger.debug("fileMap=>", fileMap)
-        }
+      this.logger.debug("attrs=>", attrs)
+      if (!isEmptyString(attrs[CONSTANTS.PICGO_FILE_MAP_KEY])) {
+        fileMap = parseJSONObj(attrs[CONSTANTS.PICGO_FILE_MAP_KEY])
+        this.logger.debug("fileMap=>", fileMap)
+      }
 
+      // 处理思源本地图片预览
+      if (/^assets/.test(originUrl)) {
         const baseUrl = getSiyuanCfg().baseUrl
         imgUrl = pathJoin(baseUrl, "/" + imgUrl)
         isLocal = true
@@ -96,6 +98,8 @@ export class PicgoPostApi {
         }
       }
 
+      // imageItem.originUrl = decodeURIComponent(imageItem.originUrl)
+      imageItem.url = decodeURIComponent(imageItem.url)
       this.logger.debug("imageItem=>", imageItem)
       ret.push(imageItem)
     }
@@ -168,11 +172,11 @@ export class PicgoPostApi {
       }
 
       // 处理链接替换
-      this.logger.info(
+      this.logger.debug(
         "准备替换正文图片，replaceMap=>",
         JSON.stringify(replaceMap)
       )
-      this.logger.info(
+      this.logger.debug(
         "开始替换正文，原文=>",
         JSON.stringify({ mdContent: mdContent })
       )
@@ -180,15 +184,15 @@ export class PicgoPostApi {
         mdContent,
         replaceMap
       )
-      this.logger.info(
+      this.logger.debug(
         "图片链接替换完成，新正文=>",
         JSON.stringify({ newmdContent: ret.mdContent })
       )
 
       ret.flag = true
-      this.logger.info("正文替换完成，最终结果=>", ret)
+      this.logger.debug("正文替换完成，最终结果=>", ret)
     } catch (e) {
-      this.logger.info("文章图片上传失败=>", e)
+      this.logger.error("文章图片上传失败=>", e)
     }
     return Promise.resolve(ret)
   }
@@ -240,7 +244,7 @@ export class PicgoPostApi {
     filePaths.push(imageFullPath)
 
     // 批量上传
-    const imageJson: any = await uploadByPicGO(filePaths)
+    const imageJson: any = await picgoUtil.uploadByPicGO(filePaths)
     this.logger.warn("图片上传完成，imageJson=>", imageJson)
     const imageJsonObj = JSON.parse(imageJson)
     // 处理后续

@@ -149,6 +149,16 @@
           <font-awesome-icon icon="fa-solid fa-image" />
         </el-button>
 
+        <!-- 统一设置 -->
+        <el-button
+          v-if="showOpenBtn"
+          class="b3-button--picture"
+          type="success"
+          @click="handleWinSet"
+        >
+          <font-awesome-icon icon="fa-solid fa-gear" />
+        </el-button>
+
         <!-- 关闭 -->
         <!--
         <el-tooltip
@@ -187,9 +197,11 @@ import {
   isInSiyuanNewWinBrowser,
 } from "~/utils/otherlib/siyuanBrowserUtil"
 import { ElMessage } from "element-plus"
-import { getWidgetId, isInSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
+import {
+  getWidgetId,
+  isInSiyuanWidget,
+} from "~/utils/platform/siyuan/siyuanUtil"
 import { getPublishCfg } from "~/utils/publishUtil"
-import { getBooleanEnv } from "~/utils/envUtil"
 import { appendStr } from "~/utils/strUtil"
 import { useI18n } from "vue-i18n"
 import { LogFactory } from "~/utils/logUtil"
@@ -285,6 +297,18 @@ const handleWinPicture = async () => {
   }
 }
 
+const handleWinSet = async () => {
+  try {
+    await doOpenExportWin(undefined, "set/index.html")
+
+    // event
+    pageIdChanged()
+  } catch (e) {
+    logger.error(t("main.opt.failure"), "=>", e)
+    ElMessage.error(appendStr(t("main.opt.failure"), "=>", e))
+  }
+}
+
 const handleWinClose = () => {
   if (showCloseBtn.value) {
     try {
@@ -329,7 +353,7 @@ const pageIdChanged = () => {
 
 onMounted(() => {
   // 思源新窗口，或者思源挂件才会有这两个按钮
-  if (isInSiyuanNewWinBrowser() || isInSiyuan()) {
+  if (isInSiyuanNewWinBrowser() || isInSiyuanWidget()) {
     // init
     const publishCfg = getPublishCfg()
 
@@ -346,20 +370,6 @@ onMounted(() => {
 
     showTitle.value = true
   }
-
-  // ==================
-  // Debug mode start
-  // ==================
-  const debugMode = getBooleanEnv("VITE_DEBUG_MODE")
-  if (debugMode) {
-    showOpenBtn.value = true
-    showCloseBtn.value = true
-
-    showTitle.value = false
-  }
-  // ==================
-  // Debug mode end
-  // ==================
 })
 </script>
 

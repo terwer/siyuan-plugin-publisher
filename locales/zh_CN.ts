@@ -33,7 +33,7 @@ export default {
   "service.tab.publish.setting": "发布配置",
   "service.tab.post.bind": "文章绑定",
   "service.tab.service.switch": "服务开关",
-  "service.tab.change.local": "通用设置",
+  "service.tab.change.local": "个性设置",
   "main.publish.editmode": "编辑模式",
   "main.publish.editmode.simple": "简洁模式",
   "main.publish.editmode.complex": "详细模式",
@@ -122,6 +122,7 @@ export default {
   "main.opt.warning.tip": "此操作不可恢复，是否继续？",
   "setting.noneed": "无需配置",
   "setting.blog.setting": "设置",
+  "setting.blog.index": "偏好设置",
   "setting.blog.type": "博客类型",
   "setting.blog.type.placeholder": "请选择博客类型",
   "setting.blog.type.wordpress.value": "Wordpress",
@@ -225,7 +226,7 @@ export default {
   "form.validate.name.required": "请输入名称",
   "form.validate.name.length": "长度必须在0到1之间",
   "form.validate.github.auto.delete": "自动删除",
-  "dynamic.platform.new": "新增平台",
+  "dynamic.platform.new": "平台管理",
   "dynamic.platform.tip":
     "如果内置的发布服务无法满足或者需要添加多个实例，您可以在这里添加受支持的平台，目前支持Github（HUGO、HEXO、Jekyll等）、metaweblog API（开源中国等）和Wordpress API",
   "dynamic.platform.type": "平台类型[必选]",
@@ -264,10 +265,10 @@ export default {
   "config.platform.none": "没有启用的发布平台，请前往服务开关开启",
   "post.delete.by.platform": "文章已被平台自行删除，请点击取消强制解除关联",
   "blog.top-data-tip":
-    "温馨提示：1. 0.1.0+ 以后，可通过【思源地址】来修改默认伺服配置，支持本地和远程；如果是远程还需要设置token，如果使用浏览器插件或者挂件之外的访问方式还需要设置跨域请求代理。 2、升级新版之前强烈建议导出配置，防止配置丢失。 3、如果出现新版本不兼容的异常情况，建议清空配置。此操作不可恢复，请谨慎操作！",
+    "温馨提示：1. 0.1.0+ 以后，可通过【偏好设置->思源地址】来修改默认伺服配置，支持本地和远程；如果是远程还需要设置token，如果使用浏览器插件或者挂件之外的访问方式还需要设置跨域请求代理。 2、升级新版之前强烈建议导出配置，防止配置丢失。 3、如果出现新版本不兼容的异常情况，建议清空配置。此操作不可恢复，请谨慎操作！",
   "blog.top-data-tip.siyuan":
     "温馨提示：1、当前处于挂件模式，从 0.1.0 版本开始，无需在所有页面引用挂件了，只需要在父级页面引用一个挂件即可。具体规则如下：(1). 如果检测到没有子文档，会兼容 0.0.3 版本以前的方式，展示当前文档的发布页面。 (2). 如果检测到有子文档，会以列表加分页的方式展示所有子文档列表。可单独选择某个子文档进行发布操作。 2、升级新版之前强烈建议导出配置，防止配置丢失。 3、如果出现新版本不兼容的异常情况，建议清空配置。此操作不可恢复，请谨慎操作！",
-  "blog.newwin.open": "新窗打开",
+  "blog.newwin.open": "页签模式",
   "blog.change.siyuan.api": "思源地址",
   "setting.blog.siyuan.password":
     "思源笔记鉴权Token，请从【设置->关于】复制，如果是本地笔记留空即可",
@@ -281,6 +282,7 @@ export default {
     "如果没有部署代理，可以使用我的共享地址：https://api.terwer.space/api/middleware 。出于性能考虑，建议自己部署一份，请使用 https://github.com/terwer/node-metaweblog-api-adaptor 此项目进行部署。",
   "setting.conf.export": "导出配置",
   "setting.conf.import": "导入配置",
+  "setting.conf.transport": "导入导出",
   "setting.conf.clear": "清空配置",
   "page.no.id": "请求非法，原因：pageId获取失败",
   "yaml.show.type.yaml": "YAML",
@@ -318,8 +320,7 @@ export default {
   "anki.siyuan.tag.new": "新标签",
   "picgo.chrome.tip":
     "您当前使用的是浏览器插件，需要从这里下载配置 PicGO 客户端：https://github.com/Molunerfinn/PicGo/releases",
-  "picgo.siyuan.tip":
-    "您当前使用的是思源笔记挂件，需要自行配置已经集成好的PicGO，挂件版 PicGO 配置文件在：`[思源工作空间]/data/widgets/sy-post-publisher/lib/picgo/picgo.cfg.json`，请参考PicGO官方文档进行配置：https://picgo.github.io/PicGo-Core-Doc/zh/guide/config.html#%E6%89%8B%E5%8A%A8%E7%94%9F%E6%88%90",
+  "picgo.siyuan.tip": "您当前使用的是思源笔记挂件，PicGO已内置，只需配置即可",
   "post.detail.button.copy.id": "复制本文ID",
   "post.detail.button.share.link": "复制分享链接",
   "post.detail.button.browser.open": "默认浏览器打开",
@@ -419,7 +420,6 @@ export default {
     "JVue平台的xmlrpc远程发布地址，通常固定是：https://<平台地址>/xmlrpc",
   "setting.jvue.previewUrl.tip":
     "JVue平台的文章预览规则，通常是：/post/[postid].html",
-
   "setting.conf.home.tip":
     "Confluence Cloud，首页，通常是：https://<您的用户名>.atlassian.net/wiki/spaces/<空间名>",
   "setting.conf.username.tip": "Confluence登录名，可前往您的atlassian账户获取",
@@ -429,4 +429,85 @@ export default {
     "可前往 https://developer.atlassian.com/cloud/confluence/rest/v1/#api-wiki-rest-api-content-get 查看文档",
   "setting.conf.previewUrl.tip":
     "Confluence平台文章预览规则，通常是：/pages/[postid]",
+  "setting.picgo.refer.to": "详情请参考：",
+  "setting.picgo.refer.to.online.doc": "PicGO配置在线文档",
+  "setting.picgo.picbed": "图床设置",
+  "setting.picgo.picgo": "PicGO设置",
+  "main.opt.edit": "编辑",
+  "main.opt.delete": "删除",
+  "setting.picgo.picgo.open.config.file": "打开配置文件",
+  "setting.picgo.picgo.click.to.open": "点击打开",
+  "setting.picgo.picgo.choose.showed.picbed": "请选择显示的图床",
+  "setting.picgo.picbed.selected.tip": "已选中",
+  "setting.picgo.picbed.unselected.tip": "未选中",
+  "setting.picgo.picbed.set.default": "设为默认图床",
+  "setting.picgo.picbed.current.selected.tip": "已选中图床：",
+  "setting.picgo.picbed.current.tip": "当前默认图床是：",
+  "setting.picgo.picbed.uploader.config.name": "图床配置名",
+  "setting.picgo.picbed.uploader.config.name.placeholder": "请输入配置名称",
+  "setting.picgo.config.name": "配置名称",
+  "setting.picgo.config.name.placeholder": "请输入配置名称",
+  "setting.picgo.index.tip":
+    "注意：1、此处上传的图片不会自动插入文档中，请手动点击按钮复制链接，然后 Ctrl+V 粘贴到文档中。2、对于文档当中原本已经存在的本地图片，点击上传之后不会直接替换原始图片，只会存储本地图片与图床图片的映射信息，需要在发布文章时手动勾选【使用图床】才会进行临时链接替换，请知悉。这样做是为了不破坏其他地方对文档图片的处理。当然，您也可以手动复制图床链接，然后删除原图片，替换为图床图片。3、该图片列表仅展示此文档包含的图片。",
+  "setting.picgo.index.copy.link": "复制链接",
+  "setting.picgo.setting.timestamp.rename": "时间戳重命名",
+  "setting.picgo.setting.close": "关",
+  "setting.picgo.setting.open": "开",
+  "setting.picgo.setting.log.file": "日志文件",
+  "setting.picgo.plugin": "插件设置",
+  "setting.picgo.plugin.list": "插件列表",
+  "setting.picgo.plugin.import.local": "导入本地插件",
+  "setting.picgo.plugin.install": "安装",
+  "setting.picgo.plugin.installing": "安装中",
+  "setting.picgo.plugin.installed": "已安装",
+  "setting.picgo.plugin.doing.something": "进行中",
+  "setting.picgo.plugin.search.placeholder":
+    "搜索npm上的PicGo插件，或者点击上方按钮查看优秀插件列表。推荐：watermark-elec、s3",
+  "setting.picgo.plugin.gui.not.implemented":
+    "该插件未对可视化界面进行优化, 是否继续安装?",
+  "setting.picgo.setting.node.path": "Node安装路径",
+  "setting.picgo.setting.node.path.tip":
+    "请输入Node安装完整路径，例如：/opt/node16/bin，Node版本>=16",
+  "setting.picgo.setting.node.registry": "NPM的registry",
+  "setting.picgo.setting.node.registry.tip":
+    "国内推荐：https://registry.npmmirror.com",
+  "setting.picgo.setting.node.proxy": "NPM代理",
+  "setting.picgo.setting.node.proxy.tip":
+    "一般可留空，如有特殊需求可设置自定义代理",
+  "setting.picgo.setting.config.tip":
+    "注意：横线以上的属性会改变上传图片的行为，配置可自动保存。横线以下的属性仅仅在安装插件时用到，并且需要点击【确认】按钮才能保存。",
+  "setting.picgo.plugin.install.success":
+    "插件已经成功安装，请清除搜索关键字刷新列表。点击插件对应【设置】图标可查看插件详情，并对插件进行自定义设置。如果是图床扩展，请关闭重新打开，然后启用图床并进行设置。",
+  "syp.about": "关于作者",
+  "setting.picgo.plugin.uninstall": "卸载插件",
+  "setting.picgo.plugin.uninstall.success": "插件已经成功卸载。",
+  "setting.picgo.plugin.enable": "启用插件",
+  "setting.picgo.plugin.disable": "禁用插件",
+  "setting.picgo.plugin.update": "更新插件",
+  "setting.picgo.plugin.config.setting": "插件设置",
+  "setting.picgo.plugin.work": "已兼容",
+  "setting.picgo.plugin.nowork": "不兼容",
+  "setting.picgo.plugin.nouse": "不可用",
+  "setting.picgo.plugin.update.success": "更新成功",
+  "setting.conf.import.syp": "导入挂件配置",
+  "setting.conf.import.picgo": "导入PicGO配置",
+  "setting.conf.export.syp": "导出挂件配置",
+  "setting.conf.export.picgo": "导出PicGO配置",
+  "setting.conf.import.syp.tip":
+    "请选择有效的历史备份json文件进行导入。注意：挂件配置会进行配置替换。",
+  "setting.conf.import.picgo.tip":
+    "请选择有效的历史备份json文件进行导入。注意：PicGO插件的注册信息不导入。为了配置的兼容性，请卸载所有插件之后，进行PicGO配置导出操作。卸载PicGO插件不会删除插件配置，只会删除插件文件以及插件注册记录。请放心卸载。",
+  "setting.conf.export.syp.tip":
+    "将导出对应的json配置文件，强烈建议定期进行配置备份。原则上支持向后兼容。如有不兼容问题，会特别说明。",
+  "setting.conf.export.picgo.tip":
+    "将导出对应的json配置文件，强烈建议定期进行配置备份。原则上支持向后兼容。如有不兼容问题，会特别说明。",
+  "setting.conf.clear.syp": "清空挂件配置",
+  "setting.conf.clear.picgo": "清空PicGO配置",
+  "setting.conf.clear.tip":
+    "清空配置不可恢复，请谨慎操作。强烈建议先备份配置。",
+  "setting.conf.clear.picgo.tip":
+    "清空配置不可恢复，请谨慎操作。强烈建议先备份配置。此操作会删除PicGO相关配置文件夹，包括配置、插件、缓存等，仅在PicGO加载发生异常，并且完全无法使用的时候使用，否则丢失配置后果自负！",
+  "setting.main.background": "挂件背景",
+  "setting.main.background.tip":
+    "支持16进制和rgb，例如：#000000，未设置或者留空不变。如果新窗口设置，请重新刷新文档。",
 }

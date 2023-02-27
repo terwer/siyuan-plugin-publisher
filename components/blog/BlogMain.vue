@@ -185,7 +185,7 @@ import { onMounted, ref } from "vue"
 import { LogFactory } from "~/utils/logUtil"
 import { Post } from "~/utils/models/post"
 import { goToPage } from "~/utils/otherlib/ChromeUtil"
-import { getPageId, isInSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
+import { getPageId, isInSiyuanWidget } from "~/utils/platform/siyuan/siyuanUtil"
 import { SiYuanApiAdaptor } from "~/utils/platform/siyuan/siYuanApiAdaptor"
 import { mdToHtml, removeTitleNumber } from "~/utils/htmlUtil"
 import { getByLength } from "~/utils/strUtil"
@@ -447,7 +447,7 @@ const handleNewWinPicgo = (index, row) => {
 }
 
 const initPage = async () => {
-  isInSiyuanEnv.value = isInSiyuan()
+  isInSiyuanEnv.value = isInSiyuanWidget()
 
   const publishCfg = getPublishCfg()
   isNewWin.value = parseBoolean(publishCfg.newWin)

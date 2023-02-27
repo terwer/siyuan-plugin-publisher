@@ -24,8 +24,10 @@
  */
 
 import { reactive } from "vue"
-import { isInSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
+import { isInSiyuanWidget } from "~/utils/platform/siyuan/siyuanUtil"
 import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
+import envUtil from "~/utils/envUtil"
+import { ImageItem } from "~/utils/models/imageItem"
 
 /**
  * Picgo公共组件
@@ -34,8 +36,8 @@ import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
  */
 export const usePicgoCommon = () => {
   // private data
-  const isDev = process.env.NODE_ENV === "development"
-  const isSiyuanOrSiyuanNewWin = isInSiyuan() || isInSiyuanNewWinBrowser()
+  const isDev = envUtil.isDev
+  const isSiyuanOrSiyuanNewWin = isInSiyuanWidget() || isInSiyuanNewWinBrowser()
 
   // public data
   const picgoCommonData = reactive({
@@ -45,7 +47,7 @@ export const usePicgoCommon = () => {
     loggerMsg: "",
     isSiyuanOrSiyuanNewWin: isSiyuanOrSiyuanNewWin,
     fileList: {
-      files: [],
+      files: <ImageItem[]>[],
     },
   })
 

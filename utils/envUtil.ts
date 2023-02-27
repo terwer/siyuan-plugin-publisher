@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -66,3 +66,16 @@ export const getBooleanEnv = (key: string): boolean => {
   }
   return env
 }
+
+// 是否是开发阶段调试
+const isNodeDev = process.env.NODE_ENV === "development"
+const isDev = isNodeDev || getBooleanEnv("VITE_DEBUG_MODE")
+
+/**
+ * 环境变量统一入口
+ */
+const envUtil = {
+  isNodeDev,
+  isDev,
+}
+export default envUtil

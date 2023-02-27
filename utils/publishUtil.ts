@@ -55,7 +55,7 @@ export function getApiParams<T>(apiType: string): T {
  * @param meta 元数据
  */
 export const getPublishStatus = (apiType: string, meta: any): boolean => {
-  logger.info("根据平台类型获取发布状态，apiType=>", apiType)
+  logger.debug("根据平台类型获取发布状态，apiType=>", apiType)
   const githubTypeArray = [
     API_TYPE_CONSTANTS.API_TYPE_VUEPRESS,
     API_TYPE_CONSTANTS.API_TYPE_HUGO,

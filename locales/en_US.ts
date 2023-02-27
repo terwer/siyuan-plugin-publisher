@@ -121,6 +121,7 @@ export default {
   "main.opt.tip": "Tips",
   "setting.noneed": "No need setting",
   "setting.blog.setting": " Setting",
+  "setting.blog.index": "System setting",
   "setting.blog.type": "Blog type",
   "setting.blog.type.placeholder": "Please select type",
   "setting.blog.type.wordpress.value": "Wordpress",
@@ -275,6 +276,7 @@ export default {
   "setting.blog.siyuan.current.apiurl": "Current apiUrl=>",
   "setting.conf.export": "Export config",
   "setting.conf.import": "Import config",
+  "setting.conf.transport": "Transport",
   "setting.conf.clear": "Clear config",
   "page.no.id": "pageId fetch error",
   "main.read.mode": "Readonly",
@@ -427,4 +429,88 @@ export default {
     "You can go to https://developper.atlassian.com/Cloud/confluence/rest/v1/1/1/",
   "setting.conf.previewUrl.tip":
     "CONFLUENCE platform articles preview rules, usually:/pages/[postid]",
+  "setting.picgo.refer.to": "For details, please refer to:",
+  "setting.picgo.refer.to.online.doc":
+    "Picgo configuration online documentation",
+  "setting.picgo.picbed": "Picbed setting",
+  "setting.picgo.picgo": "PicGO setting",
+  "main.opt.edit": "Edit",
+  "main.opt.delete": "Delete",
+  "setting.picgo.picgo.open.config.file": "Open config file",
+  "setting.picgo.picgo.click.to.open": "Click open",
+  "setting.picgo.picgo.choose.showed.picbed": "Please select showed picbed",
+  "setting.picgo.picbed.selected.tip": "Selected",
+  "setting.picgo.picbed.unselected.tip": "Unselected",
+  "setting.picgo.picbed.set.default": "Set as default picbed",
+  "setting.picgo.picbed.current.selected.tip": "Current selected picbed is:",
+  "setting.picgo.picbed.current.tip": "Current picbed is:",
+  "setting.picgo.picbed.uploader.config.name": "Picbed config name",
+  "setting.picgo.picbed.uploader.config.name.placeholder":
+    "Please input config name",
+  "setting.picgo.config.name": "Config name",
+  "setting.picgo.config.name.placeholder": "Please input config name",
+  "setting.picgo.index.tip":
+    "Note: The image uploaded here will not be automatically inserted into the document. Please manually click the copy button to copy the link, and then Ctrl+V to paste it into the document. This picture list only shows the pictures contained in this document.",
+  "setting.picgo.index.copy.link": "Copy link",
+  "setting.picgo.setting.timestamp.rename": "Timestamp rename",
+  "setting.picgo.setting.close": "Close",
+  "setting.picgo.setting.open": "Open",
+  "setting.picgo.setting.log.file": "Log file",
+  "setting.picgo.plugin": "Plugin setting",
+  "setting.picgo.plugin.list": "Plugin list",
+  "setting.picgo.plugin.import.local": "Import local plugin",
+  "setting.picgo.plugin.install": "Install",
+  "setting.picgo.plugin.installing": "Installing",
+  "setting.picgo.plugin.installed": "Installed",
+  "setting.picgo.plugin.doing.something": "Loading",
+  "setting.picgo.plugin.search.placeholder":
+    "Search the picgo plug -in on NPM, or click the button above to view the excellent plug -in list",
+  "setting.picgo.plugin.gui.not.implemented":
+    "This plug -in does not optimize the visual interface, is it continued to be installed?",
+  "setting.picgo.setting.node.path": "Node install path",
+  "setting.picgo.setting.node.path.tip":
+    "Please enter Node to install the full path, for example: /opt/node-v16.14.0-darwin-x64/bin, node version> = 16",
+  "setting.picgo.setting.node.registry": "NPM registry",
+  "setting.picgo.setting.node.registry.tip":
+    "Mainland recommend：https://registry.npmmirror.com",
+  "setting.picgo.setting.node.proxy": "NPM proxy",
+  "setting.picgo.setting.node.proxy.tip":
+    "Generally, you can leave empty. If you have special needs, you can set a custom agent",
+  "setting.picgo.setting.config.tip":
+    "Note: The attributes above the horizontal line will change the behavior of uploading pictures, and the configuration can be stored automatically. The attribute below the horizontal line is only used when installing the plug -in, and you need to click the [Confirm] button to save.",
+  "setting.picgo.plugin.install.success":
+    "The plug -in has been successfully installed, please clear the search keyword refresh list. Click the plug -in corresponding [Settings] icon to view the plug -in details and customize the plug -in",
+  "syp.about": "About me",
+  "setting.picgo.plugin.uninstall": "Uninstall plugin",
+  "setting.picgo.plugin.uninstall.success":
+    "Plugin is uninstalled successfully",
+  "setting.picgo.plugin.enable": "Enable plugin",
+  "setting.picgo.plugin.disable": "Disable plugin",
+  "setting.picgo.plugin.update": "Update plugin",
+  "setting.picgo.plugin.config.setting": "Plugin setting",
+  "setting.picgo.plugin.work": "Work",
+  "setting.picgo.plugin.nowork": "Nowork",
+  "setting.picgo.plugin.nouse": "Nouse",
+  "setting.picgo.plugin.update.success": "Update success",
+  "setting.conf.import.syp": "Import pendant configuration",
+  "setting.conf.import.picgo": "Import picgo configuration",
+  "setting.conf.export.syp": "Export pendant configuration",
+  "setting.conf.export.picgo": "Export picgo configuration",
+  "setting.conf.import.syp.tip":
+    "Please select effective historical backup JSON files for import. Note: The pendant configuration will be replaced.",
+  "setting.conf.import.picgo.tip":
+    "Please select effective historical backup JSON files for import. Note: PICGO configuration will be replaced directly. For the compatibility of configuration, please uninstall all plug -in and perform the picgo configuration export operation. Uninstall the PICGO plugin will not delete the plug -in configuration, only the plug -in file and the plug -in registration record will be deleted. Please rest assured.",
+  "setting.conf.export.syp.tip":
+    "The corresponding JSON configuration file will be exported, and configuration backups are strongly recommended. In principle, support is compatible. If there is any compatibility problem, it will be specifically explained.",
+  "setting.conf.export.picgo.tip":
+    "The corresponding JSON configuration file will be exported, and configuration backups are strongly recommended. In principle, support is compatible. If there is any compatibility problem, it will be specifically explained.",
+  "setting.conf.clear.syp": "Clear pendant configuration",
+  "setting.conf.clear.picgo": "Clear picgo configuration",
+  "setting.conf.clear.tip":
+    "Clear configuration cannot be restored, please do it carefully. It is strongly recommended to backup configuration first.",
+  "setting.conf.clear.picgo.tip":
+    "Clear configuration cannot be restored, please do it carefully. It is strongly recommended to backup configuration first. This operation will delete PicGo -related configuration folders, including configuration, plug -in, cache, etc. It is used only when picgo is completely unavailable, otherwise the consequences of the loss of configuration will be at your own risk!",
+  "setting.main.background": "Widget background",
+  "setting.main.background.tip":
+    "Support hexadecimal and RGB, for example: #000000, no settings or staying empty unchanged",
 }

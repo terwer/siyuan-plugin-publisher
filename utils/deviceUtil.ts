@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { isInSiyuan } from "~/utils/platform/siyuan/siyuanUtil"
+import { isInSiyuanWidget } from "~/utils/platform/siyuan/siyuanUtil"
 import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
 import { isInChromeExtension } from "~/utils/browserUtil"
 
@@ -57,7 +57,7 @@ export class DeviceUtil {
    */
   public static getDevice() {
     // 思源笔记挂件
-    if (isInSiyuan()) {
+    if (isInSiyuanWidget()) {
       return DeviceType.DeviceType_Siyuan_Widget
     }
 

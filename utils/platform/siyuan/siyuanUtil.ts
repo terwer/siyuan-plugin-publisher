@@ -88,7 +88,7 @@ export const getWidgetId = (): WidgetResult => {
 /**
  * 检测是否处于思源笔记环境中
  */
-export const isInSiyuan = (): boolean => {
+export const isInSiyuanWidget = (): boolean => {
   const widgetResult = getWidgetId()
   return widgetResult.isInSiyuan
 }

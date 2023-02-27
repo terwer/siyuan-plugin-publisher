@@ -24,7 +24,7 @@
   -->
 
 <template>
-  <el-form class="switch-form" inline>
+  <el-form class="switch-form" inline label-width="150px">
     <!-- Github -->
     <el-form-item :label="$t('service.switch.vuepress')">
       <el-switch v-model="vuepressEnabled" @change="vuepressOnChange" />
@@ -216,6 +216,6 @@ onMounted(() => {
 
 <style scoped>
 .switch-form {
-  margin: 16px 10px;
+  margin: 0 10px 16px;
 }
 </style>

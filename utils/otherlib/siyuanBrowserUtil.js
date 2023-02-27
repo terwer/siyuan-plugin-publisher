@@ -26,43 +26,47 @@
 // 警告⚠️：请勿在非思源笔记浏览器环境调用此文件中的任何方法
 
 import { ElMessage } from "element-plus"
-
-const SIYUAN_BROWSER_CONSTANTS_SIYUAN_EXPORT_CLOSE = "siyuan-export-close"
+import { isInSiyuanWidget } from "~/utils/platform/siyuan/siyuanUtil"
+import envUtil from "~/utils/envUtil"
+import { isEmptyString } from "~/utils/util"
 
 /**
  * 是否在思源浏览器
  * @returns {boolean}
  */
 export const isInSiyuanNewWinBrowser = () => {
-  // console.log("inSiyuan=>", inSiyuan())
-  // console.log("isBrowser=>", isBrowser())
-  // console.log("window.terwer=>", window.terwer !== "undefined")
-  // if (window.terwer && window.terwer.pageId) {
-  //   console.log("window.terwer.pageId=>", window.terwer.pageId)
-  // }
   return typeof window.terwer !== "undefined"
 }
 
 /**
- * 获取数据目录
- * @returns {*|string}
+ * 获取可操作的Window
+ */
+const getSiyuanWindow = () => {
+  if (isInSiyuanWidget()) {
+    return parent.window
+  } else {
+    if (isInSiyuanNewWinBrowser()) {
+      return window
+    }
+    return window
+  }
+}
+
+/**
+ * 获取新窗口数据目录
  */
 export const getSiyuanNewWinDataDir = () => {
   return window.terwer.dataDir ?? "/notfound"
 }
 
 /**
- * 关闭思源导出窗口
+ * 关闭思源窗口
  */
 export const doCloseExportWin = () => {
-  const { ipcRenderer } = require("electron")
-  // const currentWindowId = getCurrentWindow().id
-  const currentWindowId = window.terwer.currentWindowId
-  console.log("currentWindowId=>", currentWindowId)
-  ipcRenderer.send(
-    SIYUAN_BROWSER_CONSTANTS_SIYUAN_EXPORT_CLOSE,
-    currentWindowId
-  )
+  const syWin = getSiyuanWindow()
+
+  const { getCurrentWindow } = syWin.require("@electron/remote")
+  getCurrentWindow().close()
 }
 
 /**
@@ -70,10 +74,11 @@ export const doCloseExportWin = () => {
  * 打开的时候 syWin = window.parent
  */
 export const doOpenExportWin = async (pageId, pageUrl) => {
-  const syWin = window.parent
-  if (syWin.terwer && syWin.terwer.renderPublishHelper) {
+  const syWin = getSiyuanWindow()
+
+  if (syWin.syp && syWin.syp.renderPublishHelper) {
     // 打开弹窗
-    syWin.terwer.renderPublishHelper(pageId, pageUrl)
+    syWin.syp.renderPublishHelper(pageId, pageUrl, syWin, envUtil.isDev)
   } else {
     ElMessage.warning(
       "renderPublishHelper失败，未找到hook方法，请在自定义js片段添加 import('/widgets/sy-post-publisher/lib/siyuanhook.js') ，并重启思源笔记"
@@ -90,3 +95,61 @@ export const getSiyuanNewWinPageId = () => {
   }
   return pageId
 }
+
+/**
+ * 适配主题外观
+ */
+const fitTheme = () => {
+  const syWin = parent.window
+  const customstyle = syWin.customstyle
+  fitThemeCustom(customstyle)
+}
+
+/**
+ * 用给定的颜色自定义背景
+ * @param customstyle 自定义样式
+ */
+const fitThemeCustom = (customstyle) => {
+  const customAppBgColor = getComputedStyle(
+    document.documentElement
+  ).getPropertyValue("--custom-app-bg-color")
+  // 样式不一致才去适配
+  if (
+    !isEmptyString(customstyle.backgroundColor) &&
+    customstyle.backgroundColor !== customAppBgColor
+  ) {
+    document.documentElement.style.setProperty(
+      "--custom-app-bg-color",
+      customstyle.backgroundColor
+    )
+
+    console.log("重新适配customstyle完成=>", customstyle)
+  }
+}
+
+/**
+ * 打开文件
+ * @param absFilePath 文件绝对路径
+ */
+const openPath = (absFilePath) => {
+  const syWin = getSiyuanWindow()
+
+  if (syWin.syp && syWin.syp.openPath) {
+    // 打开弹窗
+    syWin.syp.openPath(absFilePath)
+  } else {
+    ElMessage.warning(
+      "openPath失败，未找到hook方法，请在自定义js片段添加 import('/widgets/sy-post-publisher/lib/siyuanhook.js') ，并重启思源笔记"
+    )
+  }
+}
+
+// 统一访问入口
+const siyuanBrowserUtil = {
+  fitTheme,
+  fitThemeCustom,
+  getSiyuanWindow,
+  openPath,
+}
+
+export default siyuanBrowserUtil

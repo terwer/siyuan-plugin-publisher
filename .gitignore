@@ -9,6 +9,7 @@ lerna-debug.log*
 
 node_modules
 dist
+build
 dist-ssr
 *.local
 
@@ -40,3 +41,5 @@ out
 .pnpm-store
 public/lib/picgo/picgo.cfg.json
 public/lib/picgo/picgo.cfg.dev.json
+
+__pycache__
