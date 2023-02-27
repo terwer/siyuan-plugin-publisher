@@ -92,34 +92,69 @@
               <div style="text-align: center">操作</div>
             </template>
             <template #default="scope">
-              <!-- 预览 -->
-              <el-button
-                size="small"
-                @click="handleView(scope.$index, scope.row)"
-              >
-                <font-awesome-icon icon="fa-solid fa-book-open-reader" />
-              </el-button>
               <!-- 发布 -->
-              <el-button
-                size="small"
-                @click="handleEdit(scope.$index, scope.row)"
+              <el-tooltip
+                :content="$t('siyuan.browser.menu.publish.btn')"
+                class="box-item"
+                effect="light"
+                placement="right"
+                popper-class="publish-menu-tooltip"
               >
-                <font-awesome-icon icon="fa-solid fa-upload" />
-              </el-button>
+                <el-button
+                  size="small"
+                  @click="handleEdit(scope.$index, scope.row)"
+                >
+                  <font-awesome-icon icon="fa-solid fa-upload" />
+                </el-button>
+              </el-tooltip>
+
+              <!-- 预览 -->
+              <el-tooltip
+                :content="$t('siyuan.browser.menu.preview.btn')"
+                class="box-item"
+                effect="light"
+                placement="right"
+                popper-class="publish-menu-tooltip"
+              >
+                <el-button
+                  size="small"
+                  @click="handleView(scope.$index, scope.row)"
+                >
+                  <font-awesome-icon icon="fa-solid fa-book-open-reader" />
+                </el-button>
+              </el-tooltip>
+
               <!-- anki -->
-              <el-button
-                size="small"
-                @click="handleAnki(scope.$index, scope.row)"
+              <el-tooltip
+                :content="$t('siyuan.browser.menu.anki.btn')"
+                class="box-item"
+                effect="light"
+                placement="right"
+                popper-class="publish-menu-tooltip"
               >
-                <font-awesome-icon icon="fa-solid fa-credit-card" />
-              </el-button>
+                <el-button
+                  size="small"
+                  @click="handleAnki(scope.$index, scope.row)"
+                >
+                  <font-awesome-icon icon="fa-solid fa-credit-card" />
+                </el-button>
+              </el-tooltip>
+
               <!-- picgo -->
-              <el-button
-                size="small"
-                @click="handlePicgo(scope.$index, scope.row)"
+              <el-tooltip
+                :content="$t('siyuan.browser.menu.picture.btn')"
+                class="box-item"
+                effect="light"
+                placement="right"
+                popper-class="publish-menu-tooltip"
               >
-                <font-awesome-icon icon="fa-solid fa-image" />
-              </el-button>
+                <el-button
+                  size="small"
+                  @click="handlePicgo(scope.$index, scope.row)"
+                >
+                  <font-awesome-icon icon="fa-solid fa-image" />
+                </el-button>
+              </el-tooltip>
             </template>
           </el-table-column>
         </el-table>
@@ -180,25 +215,25 @@
 </template>
 
 <script lang="ts" setup>
-import { useI18n } from "vue-i18n"
-import { onMounted, ref } from "vue"
-import { LogFactory } from "~/utils/logUtil"
-import { Post } from "~/utils/models/post"
-import { goToPage } from "~/utils/otherlib/ChromeUtil"
-import { getPageId, isInSiyuanWidget } from "~/utils/platform/siyuan/siyuanUtil"
-import { SiYuanApiAdaptor } from "~/utils/platform/siyuan/siYuanApiAdaptor"
-import { mdToHtml, removeTitleNumber } from "~/utils/htmlUtil"
-import { getByLength } from "~/utils/strUtil"
-import { CONSTANTS } from "~/utils/constants/constants"
-import { formatIsoToZhDate } from "~/utils/dateUtil"
-import { ElMessage, ElMessageBox } from "element-plus"
-import SingleBlogDetail from "~/components/blog/singleWin/SingleBlogDetail.vue"
-import SinglePublish from "~/components/blog/singleWin/singlePublish.vue"
-import { getPublishCfg } from "~/utils/publishUtil"
-import { isEmptyString, parseBoolean } from "~/utils/util"
-import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
-import SingleAnki from "~/components/blog/singleWin/SingleAnki.vue"
-import SinglePicgo from "~/components/blog/singleWin/SinglePicgo.vue"
+import { useI18n } from "vue-i18n";
+import { onMounted, ref, toRaw } from "vue";
+import { LogFactory } from "~/utils/logUtil";
+import { Post } from "~/utils/models/post";
+import { goToPage } from "~/utils/otherlib/ChromeUtil";
+import { getPageId, isInSiyuanWidget } from "~/utils/platform/siyuan/siyuanUtil";
+import { SiYuanApiAdaptor } from "~/utils/platform/siyuan/siYuanApiAdaptor";
+import { mdToHtml, removeTitleNumber } from "~/utils/htmlUtil";
+import { getByLength } from "~/utils/strUtil";
+import { CONSTANTS } from "~/utils/constants/constants";
+import { formatIsoToZhDate } from "~/utils/dateUtil";
+import { ElMessage, ElMessageBox } from "element-plus";
+import SingleBlogDetail from "~/components/blog/singleWin/SingleBlogDetail.vue";
+import SinglePublish from "~/components/blog/singleWin/singlePublish.vue";
+import { getPublishCfg } from "~/utils/publishUtil";
+import { isEmptyString, parseBoolean } from "~/utils/util";
+import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil";
+import SingleAnki from "~/components/blog/singleWin/SingleAnki.vue";
+import SinglePicgo from "~/components/blog/singleWin/SinglePicgo.vue";
 
 const logger = LogFactory.getLogger()
 const { t } = useI18n()
@@ -322,16 +357,18 @@ const emitPublishPageFn = (post) => {
 }
 
 const handleEdit = (index, row) => {
+  console.log(toRaw(row));
+  return;
   if (isNewWin.value) {
-    handleNewWinEdit(index, row)
+    handleNewWinEdit(index, row);
   } else {
-    const post = new Post()
-    post.postid = row.postid
-    post.title = row.title
-    publishData.value = post
+    const post = new Post();
+    post.postid = row.postid;
+    post.title = row.title;
+    publishData.value = post;
 
-    showPublish.value = true
-    showHome.value = false
+    showPublish.value = true;
+    showHome.value = false;
     showDetail.value = false
     showAnki.value = false
     showPicgo.value = false

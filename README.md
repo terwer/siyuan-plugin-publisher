@@ -23,10 +23,17 @@
 
 ## v0.7.0 特性一览<sup>new</sup>
 
+⚠️ 特别提醒: `0.7.0` 为灰度测试版本，所以随时可能发布 `0.7.x` 修复版本，请考虑好之后再升级。
+
 ### PicGO 相关
 
 - 新增用户友好的 PicGO 图形化配置界面
-- 优化 PicGO 配置，支持 PicGO 插件
+- 优化 PicGO 配置，支持 PicGO 插件（目前支持水印、s3、minio三个插件）
+- PicGO默认图床为github
+- PicGO支持图片重命名
+- 云床配置buffer读取报错问题，测试常用图床
+- PicGO引入事件监听机制，支持事件注册、事件发布
+- PicGO支持读取多个图床，单个图床支持多份配置
 
 ### 系统配置相关
 
@@ -38,6 +45,20 @@
 ### 发布体验相关
 
 - 【文章绑定】操作非配置项，也是可选功能，放在发布页面容易造成误解，现将操作移入详情页，仅在需要将平台文章与思源笔记建立联系时候使用。新增文章无需操作，新增会自动进行绑定
+- 修复浏览器插件不能使用http，只能用https问题
+- 修复typecho发布文章未成功解析文章id
+- 文章列表图标添加tooltip
+- 插槽按钮添加文字提示
+- 新窗口打开时操作按钮fixed不随页面滑动
+
+### 开发者相关
+
+- 使用python重构项目构建脚本-支持一键打包
+- 挂载SyCmd，适配Anki同步（目前仅Mac可用）
+
+### 其他
+
+- 修复已知问题，升级部分组件。
 
 ## 快速上手指南
 
@@ -64,8 +85,6 @@ import("/widgets/sy-post-publisher/lib/siyuanhook.js")
 ```
 
 点击按钮开始体验。
-
-![](https://img1.terwer.space/api/public/20221228-175950.jpeg)
 
 详情请参考: [挂件模式用挂载菜单的方式使用](https://docs.publish.terwer.space/post/the-pendant-mode-is-used-in-the-method-of-mounting-menu-169wrw.html)
 

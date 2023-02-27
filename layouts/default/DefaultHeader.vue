@@ -60,17 +60,24 @@
         >
         </el-tooltip>
         -->
-        <el-button
-          v-if="showOpenBtn"
-          class="b3-button--open"
-          type="success"
-          @click="handleWinOpen"
+        <el-tooltip
+          :content="$t('siyuan.browser.menu.publish.btn')"
+          class="box-item"
+          effect="light"
+          placement="right"
+          popper-class="publish-menu-tooltip"
         >
-          <font-awesome-icon icon="fa-solid fa-upload" />
-        </el-button>
+          <el-button
+            v-if="showOpenBtn"
+            class="b3-button--open"
+            type="success"
+            @click="handleWinOpen"
+          >
+            <font-awesome-icon icon="fa-solid fa-upload" />
+          </el-button>
+        </el-tooltip>
 
         <!-- 文章预览 -->
-        <!--
         <el-tooltip
           :content="$t('siyuan.browser.menu.preview.btn')"
           class="box-item"
@@ -78,19 +85,17 @@
           placement="right"
           popper-class="publish-menu-tooltip"
         >
+          <el-button
+            v-if="showOpenBtn"
+            class="b3-button--preview"
+            type="success"
+            @click="handleWinPreview"
+          >
+            <font-awesome-icon icon="fa-solid fa-book-open-reader" />
+          </el-button>
         </el-tooltip>
-        -->
-        <el-button
-          v-if="showOpenBtn"
-          class="b3-button--preview"
-          type="success"
-          @click="handleWinPreview"
-        >
-          <font-awesome-icon icon="fa-solid fa-book-open-reader" />
-        </el-button>
 
         <!-- 文章管理 -->
-        <!--
         <el-tooltip
           :content="$t('siyuan.browser.menu.manage.btn')"
           class="box-item"
@@ -98,19 +103,17 @@
           placement="right"
           popper-class="publish-menu-tooltip"
         >
+          <el-button
+            v-if="showOpenBtn"
+            class="b3-button--preview"
+            type="success"
+            @click="handleWinManage"
+          >
+            <font-awesome-icon icon="fa-solid fa-rectangle-list" />
+          </el-button>
         </el-tooltip>
-        -->
-        <el-button
-          v-if="showOpenBtn"
-          class="b3-button--preview"
-          type="success"
-          @click="handleWinManage"
-        >
-          <font-awesome-icon icon="fa-solid fa-rectangle-list" />
-        </el-button>
 
         <!-- Anki标记 -->
-        <!--
         <el-tooltip
           :content="$t('siyuan.browser.menu.anki.btn')"
           class="box-item"
@@ -118,19 +121,17 @@
           placement="right"
           popper-class="publish-menu-tooltip"
         >
+          <el-button
+            v-if="showOpenBtn"
+            class="b3-button--anki"
+            type="success"
+            @click="handleWinAnki"
+          >
+            <font-awesome-icon icon="fa-solid fa-credit-card" />
+          </el-button>
         </el-tooltip>
-        -->
-        <el-button
-          v-if="showOpenBtn"
-          class="b3-button--anki"
-          type="success"
-          @click="handleWinAnki"
-        >
-          <font-awesome-icon icon="fa-solid fa-credit-card" />
-        </el-button>
 
         <!-- 图床 -->
-        <!--
         <el-tooltip
           :content="$t('siyuan.browser.menu.picture.btn')"
           class="box-item"
@@ -138,26 +139,33 @@
           placement="right"
           popper-class="publish-menu-tooltip"
         >
+          <el-button
+            v-if="showOpenBtn"
+            class="b3-button--picture"
+            type="success"
+            @click="handleWinPicture"
+          >
+            <font-awesome-icon icon="fa-solid fa-image" />
+          </el-button>
         </el-tooltip>
-        -->
-        <el-button
-          v-if="showOpenBtn"
-          class="b3-button--picture"
-          type="success"
-          @click="handleWinPicture"
-        >
-          <font-awesome-icon icon="fa-solid fa-image" />
-        </el-button>
 
         <!-- 统一设置 -->
-        <el-button
-          v-if="showOpenBtn"
-          class="b3-button--picture"
-          type="success"
-          @click="handleWinSet"
+        <el-tooltip
+          :content="$t('siyuan.browser.menu.setting.btn')"
+          class="box-item"
+          effect="light"
+          placement="right"
+          popper-class="publish-menu-tooltip"
         >
-          <font-awesome-icon icon="fa-solid fa-gear" />
-        </el-button>
+          <el-button
+            v-if="showOpenBtn"
+            class="b3-button--picture"
+            type="success"
+            @click="handleWinSet"
+          >
+            <font-awesome-icon icon="fa-solid fa-gear" />
+          </el-button>
+        </el-tooltip>
 
         <!-- 关闭 -->
         <!--
@@ -190,23 +198,17 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from "vue"
-import {
-  doCloseExportWin,
-  doOpenExportWin,
-  isInSiyuanNewWinBrowser,
-} from "~/utils/otherlib/siyuanBrowserUtil"
-import { ElMessage } from "element-plus"
-import {
-  getWidgetId,
-  isInSiyuanWidget,
-} from "~/utils/platform/siyuan/siyuanUtil"
-import { getPublishCfg } from "~/utils/publishUtil"
-import { appendStr } from "~/utils/strUtil"
-import { useI18n } from "vue-i18n"
-import { LogFactory } from "~/utils/logUtil"
-import { isElectron } from "~/utils/browserUtil"
-import { isSlot, isWindows } from "~/utils/otherlib/ChromeUtil"
+import { onMounted, ref } from "vue";
+import { doCloseExportWin, doOpenExportWin, isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil";
+import { ElMessage } from "element-plus";
+import { getWidgetId, isInSiyuanWidget } from "~/utils/platform/siyuan/siyuanUtil";
+import { getPublishCfg } from "~/utils/publishUtil";
+import { appendStr } from "~/utils/strUtil";
+import { useI18n } from "vue-i18n";
+import { LogFactory } from "~/utils/logUtil";
+import { isElectron } from "~/utils/browserUtil";
+import { isSlot, isWindows } from "~/utils/otherlib/ChromeUtil";
+import envUtil from "~/utils/envUtil";
 
 const { t } = useI18n()
 const logger = LogFactory.getLogger("layouts/default/DefaultHeader.vue")
@@ -360,15 +362,22 @@ onMounted(() => {
     showCloseBtn.value = isInSiyuanNewWinBrowser() || publishCfg.showCloseBtn
     showOpenBtn.value = showCloseBtn.value
 
-    showTitle.value = false
+    showTitle.value = false;
 
     // event
-    pageIdChanged()
+    pageIdChanged();
   } else {
-    showOpenBtn.value = false
-    showCloseBtn.value = true
+    showOpenBtn.value = false;
+    showCloseBtn.value = true;
 
-    showTitle.value = true
+    showTitle.value = true;
+  }
+
+  // 开发阶段调试菜单
+  if (envUtil.isDev) {
+    // showOpenBtn.value = true
+    // showCloseBtn.value = true
+    // showTitle.value = false
   }
 })
 </script>
@@ -398,6 +407,8 @@ onMounted(() => {
 }
 
 #publisher-header .b3-button--cancel {
-  float: right;
+  right: 20px;
+  position: fixed;
+  z-index: 99;
 }
 </style>
