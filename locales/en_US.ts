@@ -302,6 +302,7 @@ export default {
   "siyuan.browser.menu.manage.btn": "Manage",
   "siyuan.browser.menu.anki.btn": "Anki",
   "siyuan.browser.menu.picture.btn": "PicGO",
+  "siyuan.browser.menu.setting.btn": "Setting",
   "anki.siyuan.deck": "Deck",
   "anki.siyuan.deck.new": "New deck",
   "anki.siyuan.tag": "Tag",

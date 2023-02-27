@@ -314,6 +314,7 @@ export default {
   "siyuan.browser.menu.manage.btn": "文章管理（全部文章统一管理）",
   "siyuan.browser.menu.anki.btn": "Anki标记（配合ankisiyuan生成Anki标记）",
   "siyuan.browser.menu.picture.btn": "PicGO图床（支持图床配置与图片上传）",
+  "siyuan.browser.menu.setting.btn": "偏好设置（系统设置统一入口）",
   "anki.siyuan.deck": "牌组",
   "anki.siyuan.deck.new": "新牌组",
   "anki.siyuan.tag": "标签",
