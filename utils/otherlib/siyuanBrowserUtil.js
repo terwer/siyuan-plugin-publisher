@@ -28,6 +28,7 @@
 import { ElMessage } from "element-plus"
 import { isInSiyuanWidget } from "~/utils/platform/siyuan/siyuanUtil"
 import envUtil from "~/utils/envUtil"
+import { isEmptyString } from "~/utils/util"
 
 /**
  * 是否在思源浏览器
@@ -101,11 +102,29 @@ export const getSiyuanNewWinPageId = () => {
 const fitTheme = () => {
   const syWin = parent.window
   const customstyle = syWin.customstyle
-  document.documentElement.style.setProperty(
-    "--custom-app-bg-color",
-    customstyle.backgroundColor
-  )
-  console.log("适配customstyle完成=>", customstyle)
+  fitThemeCustom(customstyle)
+}
+
+/**
+ * 用给定的颜色自定义背景
+ * @param customstyle 自定义样式
+ */
+const fitThemeCustom = (customstyle) => {
+  const customAppBgColor = getComputedStyle(
+    document.documentElement
+  ).getPropertyValue("--custom-app-bg-color")
+  // 样式不一致才去适配
+  if (
+    !isEmptyString(customstyle.backgroundColor) &&
+    customstyle.backgroundColor !== customAppBgColor
+  ) {
+    document.documentElement.style.setProperty(
+      "--custom-app-bg-color",
+      customstyle.backgroundColor
+    )
+
+    console.log("重新适配customstyle完成=>", customstyle)
+  }
 }
 
 /**
@@ -128,6 +147,7 @@ const openPath = (absFilePath) => {
 // 统一访问入口
 const siyuanBrowserUtil = {
   fitTheme,
+  fitThemeCustom,
   getSiyuanWindow,
   openPath,
 }

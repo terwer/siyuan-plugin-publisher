@@ -128,6 +128,11 @@ const openGeneralSetting = () => {
 }
 
 const initConf = () => {
+  // const publishCfg = getPublishCfg()
+  // siyuanBrowserUtil.fitThemeCustom({
+  //   backgroundColor: publishCfg.mainBg,
+  // })
+
   const deviceType = DeviceUtil.getDevice()
   if (
     deviceType === DeviceType.DeviceType_Chrome_Extension ||

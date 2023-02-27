@@ -63,6 +63,24 @@
         />
       </el-form-item>
     </el-form>
+
+    <el-form label-width="150px" v-if="false">
+      <el-divider />
+
+      <el-form-item :label="$t('setting.main.background')">
+        <el-color-picker v-model="formData.mainBg" />
+        <el-alert
+          :title="$t('setting.main.background.tip')"
+          type="warning"
+          :closable="false"
+        />
+      </el-form-item>
+      <el-form-item>
+        <el-button @click="formMethods.handleSavePreference"
+          >{{ $t("main.opt.ok") }}
+        </el-button>
+      </el-form-item>
+    </el-form>
   </div>
 </template>
 
@@ -73,7 +91,7 @@ import { PublishPreference } from "~/utils/models/publishPreference"
 import { setJSONConf } from "~/utils/configUtil"
 import { CONSTANTS } from "~/utils/constants/constants"
 import { LogFactory } from "~/utils/logUtil"
-import { isBrowser, reloadPage } from "~/utils/browserUtil"
+import { reloadPage } from "~/utils/browserUtil"
 import { parseBoolean } from "~/utils/util"
 import { ElMessageBox } from "element-plus"
 import { useI18n } from "vue-i18n"
@@ -97,6 +115,7 @@ const formData = reactive({
   autoTag: false,
   showCloseBtn: false,
   usePicgo: false,
+  mainBg: "",
 })
 
 const formMethods = {
@@ -158,6 +177,9 @@ const formMethods = {
 
     saveConf()
   },
+  handleSavePreference: () => {
+    saveConf()
+  },
 }
 
 const saveConf = () => {
@@ -168,6 +190,7 @@ const saveConf = () => {
   publishCfg.autoTag = parseBoolean(formData.autoTag)
   publishCfg.showCloseBtn = parseBoolean(formData.showCloseBtn)
   publishCfg.usePicgo = parseBoolean(formData.usePicgo)
+  publishCfg.mainBg = formData.mainBg
 
   setJSONConf<PublishPreference>(
     CONSTANTS.PUBLISH_PREFERENCE_CONFIG_KEY,
@@ -187,6 +210,7 @@ const initConf = () => {
   formData.autoTag = parseBoolean(publishCfg.autoTag)
   formData.showCloseBtn = parseBoolean(publishCfg.showCloseBtn)
   formData.usePicgo = parseBoolean(publishCfg.usePicgo)
+  formData.mainBg = publishCfg.mainBg
 }
 
 onMounted(() => {

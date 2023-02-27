@@ -31,16 +31,10 @@ const initTheme = () => {
   }
   console.warn("sy-post-publisher 外观适配")
 
-  const themeMode = document
-    .querySelector("html")
-    .getAttribute("data-theme-mode")
-  console.log("themeMode=>", themeMode)
-
-  const element = window.document.querySelector(
-    "#layouts>.fn__flex>.fn__flex-column:not(.layout__center)>.fn__flex>div[data-type=wnd]"
+  const bgColor = getComputedStyle(document.documentElement).getPropertyValue(
+    "--b3-theme-background"
   )
-  const computedStyle = window.getComputedStyle(element)
-  const bgColor = computedStyle.getPropertyValue("background-color")
+  // const bgColor = "var(--b3-theme-background)"
   window.customstyle.backgroundColor = bgColor
 
   console.log("开始customstyle适配=>", window.customstyle)

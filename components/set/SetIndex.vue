@@ -25,6 +25,9 @@
 
 <template>
   <el-tabs tab-position="left">
+    <el-tab-pane :label="$t('service.tab.change.local')">
+      <general-setting />
+    </el-tab-pane>
     <el-tab-pane :label="$t('blog.change.siyuan.api')">
       <siyuan-api-setting :show-cancel="false" />
     </el-tab-pane>
@@ -39,9 +42,6 @@
     </el-tab-pane>
     <el-tab-pane :label="$t('picgo.pic.setting')">
       <picgo-setting />
-    </el-tab-pane>
-    <el-tab-pane :label="$t('service.tab.change.local')">
-      <general-setting />
     </el-tab-pane>
   </el-tabs>
 </template>

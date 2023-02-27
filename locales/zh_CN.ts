@@ -420,7 +420,6 @@ export default {
     "JVue平台的xmlrpc远程发布地址，通常固定是：https://<平台地址>/xmlrpc",
   "setting.jvue.previewUrl.tip":
     "JVue平台的文章预览规则，通常是：/post/[postid].html",
-
   "setting.conf.home.tip":
     "Confluence Cloud，首页，通常是：https://<您的用户名>.atlassian.net/wiki/spaces/<空间名>",
   "setting.conf.username.tip": "Confluence登录名，可前往您的atlassian账户获取",
@@ -508,4 +507,7 @@ export default {
     "清空配置不可恢复，请谨慎操作。强烈建议先备份配置。",
   "setting.conf.clear.picgo.tip":
     "清空配置不可恢复，请谨慎操作。强烈建议先备份配置。此操作会删除PicGO相关配置文件夹，包括配置、插件、缓存等，仅在PicGO加载发生异常，并且完全无法使用的时候使用，否则丢失配置后果自负！",
+  "setting.main.background": "挂件背景",
+  "setting.main.background.tip":
+    "支持16进制和rgb，例如：#000000，未设置或者留空不变。如果新窗口设置，请重新刷新文档。",
 }
