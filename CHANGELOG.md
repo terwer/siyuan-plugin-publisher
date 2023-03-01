@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.8.0](https://github.com/terwer/src-sy-post-publisher/compare/v0.7.0...v0.8.0) (2023-03-01)
+
+
+### Features
+
+* [#276](https://github.com/terwer/src-sy-post-publisher/issues/276) 新窗口打开时操作按钮fixed不随页面滑动 ([03a6bd5](https://github.com/terwer/src-sy-post-publisher/commit/03a6bd51fc5c4da218f5f4b3c1ae2cd8ba358ee4))
+
+
+### Bug Fixes
+
+* **deps:** bump browser-fs-access from 0.32.1 to 0.33.0 ([7af5c5c](https://github.com/terwer/src-sy-post-publisher/commit/7af5c5cb1ded0c3e6405b95acf87a5dc90acf6a1))
+
+
+### Miscellaneous
+
+* **deps-dev:** bump @vitest/coverage-c8 from 0.28.5 to 0.29.1 ([c38d9fe](https://github.com/terwer/src-sy-post-publisher/commit/c38d9fec15f85e6042773a469379138ed46086c7))
+* update coverage-c8 ([0d8dd27](https://github.com/terwer/src-sy-post-publisher/commit/0d8dd273d289e937a7e57362e60d0565e545fc32))
+
 ## [0.7.0](https://github.com/terwer/src-sy-post-publisher/compare/v0.6.8...v0.7.0) (2023-02-27)
 
 
