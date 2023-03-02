@@ -2802,8 +2802,8 @@ packages:
     dev: true
 
   /@vitejs/plugin-vue/3.2.0_vite@3.2.5+vue@3.2.47:
-    resolution: { integrity: sha512-E0tnaL4fr+qkdCNxJ+Xd0yM31UwMkQje76fsDVBBUCoGOUPexu2VDUYHL8P4CwV+zMvWw6nlRw19OnRKmYAJpw== }
-    engines: { node: ^14.18.0 || >=16.0.0 }
+    resolution: {integrity: sha512-E0tnaL4fr+qkdCNxJ+Xd0yM31UwMkQje76fsDVBBUCoGOUPexu2VDUYHL8P4CwV+zMvWw6nlRw19OnRKmYAJpw==}
+    engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
       vite: ^3.0.0
       vue: ^3.2.25
@@ -2813,7 +2813,7 @@ packages:
     dev: true
 
   /@vitest/coverage-c8/0.29.1_vitest@0.29.1:
-    resolution: { integrity: sha512-YQZp1xGNxOcZD/zQBvD4bNpUDMJW7+FhBAEBlgvJp+DQ+aNK+dKcoWOTfsod27KQhXSr6UUYI8EYXWCOQqY6Eg== }
+    resolution: {integrity: sha512-YQZp1xGNxOcZD/zQBvD4bNpUDMJW7+FhBAEBlgvJp+DQ+aNK+dKcoWOTfsod27KQhXSr6UUYI8EYXWCOQqY6Eg==}
     peerDependencies:
       vitest: '>=0.29.0 <1'
     dependencies:
@@ -2824,7 +2824,7 @@ packages:
     dev: true
 
   /@vitest/expect/0.29.1:
-    resolution: { integrity: sha512-VFt1u34D+/L4pqjLA8VGPdHbdF8dgjX9Nq573L9KG6/7MIAL9jmbEIKpXudmxjoTwcyczOXRyDuUWBQHZafjoA== }
+    resolution: {integrity: sha512-VFt1u34D+/L4pqjLA8VGPdHbdF8dgjX9Nq573L9KG6/7MIAL9jmbEIKpXudmxjoTwcyczOXRyDuUWBQHZafjoA==}
     dependencies:
       '@vitest/spy': 0.29.1
       '@vitest/utils': 0.29.1
@@ -3475,27 +3475,27 @@ packages:
     dev: true
 
   /brace/0.11.1:
-    resolution: { integrity: sha512-Fc8Ne62jJlKHiG/ajlonC4Sd66Pq68fFwK4ihJGNZpGqboc324SQk+lRvMzpPRuJOmfrJefdG8/7JdWX4bzJ2Q== }
+    resolution: {integrity: sha512-Fc8Ne62jJlKHiG/ajlonC4Sd66Pq68fFwK4ihJGNZpGqboc324SQk+lRvMzpPRuJOmfrJefdG8/7JdWX4bzJ2Q==}
     dev: true
 
   /braces/3.0.2:
-    resolution: { integrity: sha512-b8um+L1RzM3WDSzvhm6gIz1yfTbBt6YTlcEKAvsmqCZZFw46z626lVj9j1yEPW33H5H+lBQpZMP1k8l+78Ha0A== }
-    engines: { node: '>=8' }
+    resolution: {integrity: sha512-b8um+L1RzM3WDSzvhm6gIz1yfTbBt6YTlcEKAvsmqCZZFw46z626lVj9j1yEPW33H5H+lBQpZMP1k8l+78Ha0A==}
+    engines: {node: '>=8'}
     dependencies:
       fill-range: 7.0.1
 
   /browser-fs-access/0.33.0:
-    resolution: { integrity: sha512-OIroFiFdNcITJnLCJUoJBRWLf6lu/e7h24Ik0khWg7Ozn+sR+asYiSeiPpXmV32OgogSNiOqCoaI1/7vrl1T+Q== }
+    resolution: {integrity: sha512-OIroFiFdNcITJnLCJUoJBRWLf6lu/e7h24Ik0khWg7Ozn+sR+asYiSeiPpXmV32OgogSNiOqCoaI1/7vrl1T+Q==}
     dev: false
 
   /browserify-zlib/0.1.4:
-    resolution: { integrity: sha512-19OEpq7vWgsH6WkvkBJQDFvJS1uPcbFOQ4v9CU839dO+ZZXUZO6XpE6hNCqvlIIj+4fZvRiJ6DsAQ382GwiyTQ== }
+    resolution: {integrity: sha512-19OEpq7vWgsH6WkvkBJQDFvJS1uPcbFOQ4v9CU839dO+ZZXUZO6XpE6hNCqvlIIj+4fZvRiJ6DsAQ382GwiyTQ==}
     dependencies:
       pako: 0.2.9
     dev: true
 
   /browserslist/4.21.5:
-    resolution: { integrity: sha512-tUkiguQGW7S3IhB7N+c2MV/HZPSCPAAiYBZXLsBhFB/PCy6ZKKsZrmBayHV9fdGV/ARIfJ14NkxKzRDjvp7L6w== }
+    resolution: {integrity: sha512-tUkiguQGW7S3IhB7N+c2MV/HZPSCPAAiYBZXLsBhFB/PCy6ZKKsZrmBayHV9fdGV/ARIfJ14NkxKzRDjvp7L6w==}
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
