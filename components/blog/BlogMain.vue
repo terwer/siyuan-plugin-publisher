@@ -357,8 +357,6 @@ const emitPublishPageFn = (post) => {
 }
 
 const handleEdit = (index, row) => {
-  console.log(toRaw(row));
-  return;
   if (isNewWin.value) {
     handleNewWinEdit(index, row);
   } else {
