@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.7.1](https://github.com/terwer/src-sy-post-publisher/compare/v0.7.0...v0.7.1) (2023-03-03)
+
+
+### Bug Fixes
+
+* [#416](https://github.com/terwer/src-sy-post-publisher/issues/416) 修复 PicGO 配置文件迁移路径问题 ([3e6c9bc](https://github.com/terwer/src-sy-post-publisher/commit/3e6c9bcbd64b776b24e223daf9b73339a43410a1))
+* **deps:** bump browser-fs-access from 0.32.1 to 0.33.0 ([7af5c5c](https://github.com/terwer/src-sy-post-publisher/commit/7af5c5cb1ded0c3e6405b95acf87a5dc90acf6a1))
+* fix file fomatter ([e34ab70](https://github.com/terwer/src-sy-post-publisher/commit/e34ab70481ae0b5a201610043d05c3c19678967e))
+* 修复 PicGO 配置文件迁移路径问题 ([6f7e90c](https://github.com/terwer/src-sy-post-publisher/commit/6f7e90cea622f6693a195d34e7e43db904b9972a))
+
+
+### Miscellaneous
+
+* **deps-dev:** bump @vitest/coverage-c8 from 0.28.5 to 0.29.1 ([edbef57](https://github.com/terwer/src-sy-post-publisher/commit/edbef5715c41aa762fdb9649d7b0c86b84da63bf))
+* remove unused log ([442c052](https://github.com/terwer/src-sy-post-publisher/commit/442c05204402b5975b8192e86973a74712848431))
+* update coverage-c8 ([60e81aa](https://github.com/terwer/src-sy-post-publisher/commit/60e81aaec490e3b226bf65fb533737cc80da7ca1))
+
 ## [0.7.0](https://github.com/terwer/src-sy-post-publisher/compare/v0.6.8...v0.7.0) (2023-02-27)
 
 
