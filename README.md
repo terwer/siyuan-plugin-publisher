@@ -21,6 +21,10 @@
 <a title="Downloads" target="_blank" href="https://github.com/terwer/src-sy-post-publisher/releases"><img src="https://img.shields.io/github/downloads/terwer/src-sy-post-publisher/total.svg?label=extension-downloads&style=flat-square&color=blueviolet"></a>
 <a title="Downloads" target="_blank" href="https://github.com/terwer/src-sy-post-publisher/releases"><img src="https://img.shields.io/github/downloads/terwer/sy-post-publisher/total.svg?label=widget-downloads&style=flat-square&color=blue"></a>
 
+## v0.7.1 Bug修复
+
+- 修复 PicGO 旧的配置文件迁移过程中路径拼接错误问题
+
 ## v0.7.0 特性一览<sup>new</sup>
 
 ⚠️ 特别提醒: `0.7.0` 为灰度测试版本，所以随时可能发布 `0.7.x` 修复版本，请考虑好之后再升级。

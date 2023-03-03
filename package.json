@@ -11,7 +11,7 @@
     "docs": "jsdoc -c jsdoc.json utils/api.ts",
     "prettier": "prettier --write .",
     "prepare": "husky install",
-    "new": "python scripts/version.py 0.7.0",
+    "new": "python scripts/version.py 0.7.1",
     "widget": "python scripts/widget.py",
     "ext": "python scripts/ext.py",
     "package": "pnpm widget && pnpm ext"
