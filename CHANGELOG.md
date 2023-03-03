@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.8.0](https://github.com/terwer/src-sy-post-publisher/compare/v0.7.0...v0.8.0) (2023-03-03)
+
+
+### Features
+
+* [#276](https://github.com/terwer/src-sy-post-publisher/issues/276) 新窗口打开时操作按钮fixed不随页面滑动 ([03a6bd5](https://github.com/terwer/src-sy-post-publisher/commit/03a6bd51fc5c4da218f5f4b3c1ae2cd8ba358ee4))
+
+
+### Bug Fixes
+
+* [#416](https://github.com/terwer/src-sy-post-publisher/issues/416) 修复 PicGO 配置文件迁移路径问题 ([834968a](https://github.com/terwer/src-sy-post-publisher/commit/834968a32cf237314fb6c0e52346794f7d4388d2))
+* **deps:** bump browser-fs-access from 0.32.1 to 0.33.0 ([7af5c5c](https://github.com/terwer/src-sy-post-publisher/commit/7af5c5cb1ded0c3e6405b95acf87a5dc90acf6a1))
+* 修复 PicGO 配置文件迁移路径问题 ([b34aa17](https://github.com/terwer/src-sy-post-publisher/commit/b34aa17e621f4d672d4d6b3a5e638e64f1154d83))
+
+
+### Miscellaneous
+
+* **deps-dev:** bump @vitest/coverage-c8 from 0.28.5 to 0.29.1 ([c38d9fe](https://github.com/terwer/src-sy-post-publisher/commit/c38d9fec15f85e6042773a469379138ed46086c7))
+* remove unused log ([92e79d8](https://github.com/terwer/src-sy-post-publisher/commit/92e79d8e0fc32040fe5e28b4cefd26cdcebb825d))
+* update coverage-c8 ([0d8dd27](https://github.com/terwer/src-sy-post-publisher/commit/0d8dd273d289e937a7e57362e60d0565e545fc32))
+
 ## [0.7.0](https://github.com/terwer/src-sy-post-publisher/compare/v0.6.8...v0.7.0) (2023-02-27)
 
 
