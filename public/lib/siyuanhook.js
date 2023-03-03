@@ -233,10 +233,7 @@ const initMethods = {
       appDataFolder,
       "sy-picgo"
     )
-    const picgo_cfg_070 = picgoExtension.joinPath(
-      picgo_cfg_folder_070,
-      "picgo.cfg.json"
-    )
+    const picgo_cfg_070 = "picgo.cfg.json"
     picgoExtension.upgradeCfg(
       picgo_cfg_067,
       picgo_cfg_folder_070,
