@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.7.2](https://github.com/terwer/src-sy-post-publisher/compare/v0.7.1...v0.7.2) (2023-03-04)
+
+
+### Bug Fixes
+
+* fix siyuanhook ([724b182](https://github.com/terwer/src-sy-post-publisher/commit/724b1823c4434dd4c2b0232c8e1dbea54fdac0c1))
+* fix siyuanhook ([d68861f](https://github.com/terwer/src-sy-post-publisher/commit/d68861fc31e9f86b42fd8977b209c18fcd89767e))
+* fix siyuanhook ([4ab3d55](https://github.com/terwer/src-sy-post-publisher/commit/4ab3d551a432ecf317b8f57920ce41ab2110927b))
+
+
+### Miscellaneous
+
+* fix eslint ([31a2d06](https://github.com/terwer/src-sy-post-publisher/commit/31a2d06b2c15668200d8da12600a025bf260672c))
+
 ## [0.7.1](https://github.com/terwer/src-sy-post-publisher/compare/v0.7.0...v0.7.1) (2023-03-03)
 
 
