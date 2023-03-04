@@ -208,8 +208,8 @@ const initMethods = {
   initPicgoExtension: (entryName) => {
     const syWin = getSiyuanWindow()
     const dataDir = getSiyuanDataDir()
-    console.log("initPicgoExtension=>", dataDir)
-    console.log("syWin=>", syWin)
+    // console.log("initPicgoExtension=>", dataDir)
+    // console.log("syWin=>", syWin)
 
     // 防止重复挂载
     if (syWin.SyPicgo) {
@@ -233,11 +233,16 @@ const initMethods = {
       appDataFolder,
       "sy-picgo"
     )
-    const picgo_cfg_070 = "picgo.cfg.json"
+    const picgo_cfg_070_file = "picgo.cfg.json"
+    const picgo_cfg_070 = picgoExtension.joinPath(
+      picgo_cfg_folder_070,
+      picgo_cfg_070_file
+    )
+
     picgoExtension.upgradeCfg(
       picgo_cfg_067,
       picgo_cfg_folder_070,
-      picgo_cfg_070
+      picgo_cfg_070_file
     )
     console.warn("PicGO配置文件初始化为=>", picgo_cfg_070)
 
