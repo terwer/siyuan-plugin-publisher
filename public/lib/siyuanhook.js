@@ -208,8 +208,8 @@ const initMethods = {
   initPicgoExtension: (entryName) => {
     const syWin = getSiyuanWindow()
     const dataDir = getSiyuanDataDir()
-    console.log("initPicgoExtension=>", dataDir)
-    console.log("syWin=>", syWin)
+    // console.log("initPicgoExtension=>", dataDir)
+    // console.log("syWin=>", syWin)
 
     // 防止重复挂载
     if (syWin.SyPicgo) {
