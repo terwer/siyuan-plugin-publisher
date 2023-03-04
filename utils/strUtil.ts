@@ -51,7 +51,7 @@ export const getByLength = (
   if (allText.length < length) {
     return allText
   }
-  if (ignore === true) {
+  if (ignore) {
     return allText.substring(0, length)
   }
   return allText.substring(0, length) + "..."
@@ -78,10 +78,10 @@ export const appendStr = (...str: string[]): string => {
  * @param fmtTitle
  */
 export const mdFileToTitle = (fmtTitle: string): string => {
-  if (fmtTitle.indexOf(".md") > -1) {
+  if (fmtTitle.includes(".md")) {
     fmtTitle = fmtTitle.replace(/\.md/g, "")
   }
-  if (fmtTitle.indexOf(".") > -1) {
+  if (fmtTitle.includes(".")) {
     fmtTitle = removeTitleNumber(fmtTitle)
   }
   return fmtTitle
@@ -95,7 +95,7 @@ export const removeBom = (str: string): string => {
   const supportedImages = [".png", ".jpg", ".gif"]
   supportedImages.forEach((ext) => {
     // const ext = ".png"
-    if (str.indexOf(ext) > -1) {
+    if (str.includes(ext)) {
       str = str.substring(0, str.indexOf(ext)) + ext
     }
   })
@@ -158,11 +158,11 @@ const getRawData = (args: any): any => {
  * @param str 字符串
  * @param arr 字符串数组
  */
-const includeInArray = (str: string, arr: string[]) => {
+const includeInArray = (str: string, arr: string[]): boolean => {
   let flag = false
   for (let i = 0; i < arr.length; i++) {
     const item = arr[i]
-    if (str.indexOf(item) > -1) {
+    if (str.includes(item)) {
       flag = true
     }
   }

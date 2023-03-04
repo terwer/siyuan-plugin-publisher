@@ -168,7 +168,7 @@ export const setJSONConf = <T>(key: string, value: T): void => {
  * Object解析为JSON字符串
  * @param value JSON字符串
  */
-export const toJSONString = (value: Object): String => {
+export const toJSONString = (value: unknown): string => {
   logger.debug("++++++++++++++++++++++++++++++")
   logger.debug("尝试将Object转换为JSON字符串", value)
 
