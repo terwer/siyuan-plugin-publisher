@@ -21,7 +21,12 @@
 <a title="Downloads" target="_blank" href="https://github.com/terwer/src-sy-post-publisher/releases"><img src="https://img.shields.io/github/downloads/terwer/src-sy-post-publisher/total.svg?label=extension-downloads&style=flat-square&color=blueviolet"></a>
 <a title="Downloads" target="_blank" href="https://github.com/terwer/src-sy-post-publisher/releases"><img src="https://img.shields.io/github/downloads/terwer/sy-post-publisher/total.svg?label=widget-downloads&style=flat-square&color=blue"></a>
 
-## v0.7.1 Bug修复
+## v0.7.2 Bug 修复
+
+- 修复 PicGO 初始化失败问题
+-
+
+## v0.7.1 Bug 修复
 
 - 修复 PicGO 旧的配置文件迁移过程中路径拼接错误问题
 
@@ -32,12 +37,12 @@
 ### PicGO 相关
 
 - 新增用户友好的 PicGO 图形化配置界面
-- 优化 PicGO 配置，支持 PicGO 插件（目前支持水印、s3、minio三个插件）
-- PicGO默认图床为github
-- PicGO支持图片重命名
-- 云床配置buffer读取报错问题，测试常用图床
-- PicGO引入事件监听机制，支持事件注册、事件发布
-- PicGO支持读取多个图床，单个图床支持多份配置
+- 优化 PicGO 配置，支持 PicGO 插件（目前支持水印、s3、minio 三个插件）
+- PicGO 默认图床为 github
+- PicGO 支持图片重命名
+- 云床配置 buffer 读取报错问题，测试常用图床
+- PicGO 引入事件监听机制，支持事件注册、事件发布
+- PicGO 支持读取多个图床，单个图床支持多份配置
 
 ### 系统配置相关
 
@@ -49,16 +54,16 @@
 ### 发布体验相关
 
 - 【文章绑定】操作非配置项，也是可选功能，放在发布页面容易造成误解，现将操作移入详情页，仅在需要将平台文章与思源笔记建立联系时候使用。新增文章无需操作，新增会自动进行绑定
-- 修复浏览器插件不能使用http，只能用https问题
-- 修复typecho发布文章未成功解析文章id
-- 文章列表图标添加tooltip
+- 修复浏览器插件不能使用 http，只能用 https 问题
+- 修复 typecho 发布文章未成功解析文章 id
+- 文章列表图标添加 tooltip
 - 插槽按钮添加文字提示
-- 新窗口打开时操作按钮fixed不随页面滑动
+- 新窗口打开时操作按钮 fixed 不随页面滑动
 
 ### 开发者相关
 
-- 使用python重构项目构建脚本-支持一键打包
-- 挂载SyCmd，适配Anki同步（目前仅Mac可用）
+- 使用 python 重构项目构建脚本-支持一键打包
+- 挂载 SyCmd，适配 Anki 同步（目前仅 Mac 可用）
 
 ### 其他
 
