@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.3](https://github.com/terwer/src-sy-post-publisher/compare/v0.7.2...v0.7.3) (2023-03-04)
+
+
+### Bug Fixes
+
+* fix siyuanhook ([1603a61](https://github.com/terwer/src-sy-post-publisher/commit/1603a61a21205a57ec34cea3880b42c4a292fc4a))
+
 ## [0.7.2](https://github.com/terwer/src-sy-post-publisher/compare/v0.7.1...v0.7.2) (2023-03-04)
 
 

@@ -1,7 +1,7 @@
 {
   "name": "sy-post-publisher",
   "private": true,
-  "version": "0.7.2",
+  "version": "0.7.3",
   "scripts": {
     "serve": "python scripts/serve.py",
     "dev": "python scripts/dev.py",
