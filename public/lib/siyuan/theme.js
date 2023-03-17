@@ -29,7 +29,7 @@ const initTheme = () => {
   window.customstyle = {
     backgroundColor: "",
   }
-  console.warn("sy-post-publisher 外观适配")
+  // console.warn("sy-post-publisher 外观适配")
 
   const bgColor = getComputedStyle(document.documentElement).getPropertyValue(
     "--b3-theme-background"
@@ -37,7 +37,7 @@ const initTheme = () => {
   // const bgColor = "var(--b3-theme-background)"
   window.customstyle.backgroundColor = bgColor
 
-  console.log("开始customstyle适配=>", window.customstyle)
+  // console.log("开始customstyle适配=>", window.customstyle)
 }
 
 module.exports = initTheme

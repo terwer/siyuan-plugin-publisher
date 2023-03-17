@@ -60,12 +60,17 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
   const logInfoEnabled = env.VITE_LOG_INFO_ENABLED
   console.log("logInfoEnabled=>", logInfoEnabled)
 
+  // @ts-ignore
   return {
     plugins: [
       vue(),
       // https://blog.csdn.net/pzy_666/article/details/123017630
       // PkgConfig(),
       // OptimizationPersist(),
+      // removeConsole({
+      //   // 需要删除的console类型
+      //   includes: ["debug", "log", "warn", "error"],
+      // }),
       // https://github.com/emosheeep/vite-plugin-virtual-mpa
       createMpaPlugin({
         pages: [
@@ -159,6 +164,7 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
         ],
       }),
       // https://github.com/WarrenJones/vite-plugin-require-transform/issues/10
+      // @ts-ignore
       vitePluginRequireTransform({}),
     ],
     // 项目根目录
@@ -249,7 +255,15 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
       // minify: 'terser',
       // 不压缩，用于调试
       // minify: isProd,
-      minify: false,
+      // minify: false,
+      minify: "terser",
+      terserOptions: {
+        compress: {
+          //生产环境时移除console
+          drop_console: true,
+          drop_debugger: true,
+        },
+      },
 
       rollupOptions: {
         external: [

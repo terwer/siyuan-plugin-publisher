@@ -19,6 +19,7 @@
     "extraFileExtensions": [".vue"]
   },
   "plugins": ["@typescript-eslint", "vue"],
+  "ignorePatterns": ["node_modules/", ".vercel/", ".idea/", "*.js", "*.d.ts", "*.mts", "*.map", "vite.config.ts"],
   "rules": {
     "vue/multi-word-component-names": "off",
     "@typescript-eslint/strict-boolean-expressions": 0,

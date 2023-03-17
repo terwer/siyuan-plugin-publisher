@@ -165,7 +165,7 @@ const initPublishHelper = () => {
           }
         })
         .catch((e) => {
-          console.warn("fetch post error", e)
+          // console.warn("fetch post error", e)
           if (
             url === "/api/transactions" &&
             (e.message === "Failed to fetch" ||
@@ -200,7 +200,7 @@ const initPublishHelper = () => {
         `${window.siyuan.config.system.dataDir}/widgets/sy-post-publisher/${url}`,
         function (err, data) {
           if (err) {
-            console.log(err)
+            console.error(err)
           }
           let dataDir = `${window.siyuan.config.system.dataDir}`
           // 修复Windows路径问题
@@ -209,10 +209,10 @@ const initPublishHelper = () => {
           const ipv4 = getIPv4()
           const mainWindow = getCurrentWindow()
           const currentWindowId = mainWindow.id
-          console.log("dataDir=>", dataDir)
-          console.log("newWinPageId=>", newWinPageId)
-          console.log("ipv4=>", ipv4)
-          console.log("currentWindowId=>", currentWindowId)
+          // console.log("dataDir=>", dataDir)
+          // console.log("newWinPageId=>", newWinPageId)
+          // console.log("ipv4=>", ipv4)
+          // console.log("currentWindowId=>", currentWindowId)
 
           var txt = data.toString().replace(/<!--.*-->/gs, "")
           txt += `<script>

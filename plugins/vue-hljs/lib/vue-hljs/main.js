@@ -75,7 +75,9 @@ vueHljs.install = (Vue) => {
   // 代码复制
   hljs.addPlugin(
     new CopyButtonPlugin({
-      callback: (text, el) => console.log("Copied to clipboard", text),
+      callback: (text, el) => {
+        console.log("Copied to clipboard", text)
+      },
     })
   )
 

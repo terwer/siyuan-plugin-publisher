@@ -65,7 +65,7 @@ prefix.reg(loglevel)
 if (isTest || isDev) {
   loglevel.setLevel(LOG_LEVEL_DEBUG)
 } else {
-  loglevel.setLevel(LOG_INFO_ENABLED ? LOG_LEVEL_INFO : LOG_LEVEL_WARN)
+  loglevel.setLevel(LOG_INFO_ENABLED ? LOG_LEVEL_INFO : LOG_LEVEL_ERROR)
 }
 
 prefix.apply(loglevel, {
