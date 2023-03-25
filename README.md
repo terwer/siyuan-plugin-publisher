@@ -30,6 +30,8 @@
 ### 新特性
 
 - 发布至语雀支持笔记间的内部链接替换
+- 博客园、WordPress、Typecho 平台支持笔记间的内部链接替换
+- Github 平台（HUGO、Hexo、Vitepress 等）支持笔记间的内部链接替换
 
 ### 开发重构
 
