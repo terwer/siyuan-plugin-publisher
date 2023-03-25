@@ -163,10 +163,10 @@ function initData() {
   if (config !== undefined) {
     const settings = config.settings || {}
     // 重命名默认开启，防止图片路径问题
-    form.autoRename = settings.autoRename || true
-    form.nodePath = settings.nodePath || ""
-    form.nodeRegistry = settings.registry || DEFAULT_NPM_REGISTRY
-    form.nodeProxy = settings.nodeProxy || ""
+    form.autoRename = settings.autoRename ?? true
+    form.nodePath = settings.nodePath ?? ""
+    form.nodeRegistry = settings.registry ?? DEFAULT_NPM_REGISTRY
+    form.nodeProxy = settings.nodeProxy ?? ""
 
     // 初始化默认配置
     picgoUtil.savePicgoConfig({
