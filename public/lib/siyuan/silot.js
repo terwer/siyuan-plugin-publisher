@@ -26,7 +26,7 @@
 // 警告⚠️：请勿在非思源笔记浏览器环境调用此文件中的任何方法
 
 const initSlot = () => {
-  console.warn("在所有文档前面加上一个挂件插槽")
+  // console.warn("在所有文档前面加上一个挂件插槽")
 
   function showPreviousWidgetsSlot() {
     setInterval(DocumentShowPreviousWidget, 300)

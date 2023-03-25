@@ -151,4 +151,4 @@ var LocalStorage
   }
 })(LocalStorage || (LocalStorage = {}))
 module.exports = LocalStorage
-console.log("json-localstorage register success")
+// console.log("json-localstorage register success")
