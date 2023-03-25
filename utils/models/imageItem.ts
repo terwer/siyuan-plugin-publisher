@@ -60,8 +60,6 @@ export class ImageItem {
     this.hash = getFileHash(this.name)
 
     const urlAttrs = url.split(" ")
-    console.error(url)
-    console.error(urlAttrs)
     if (urlAttrs.length > 1) {
       this.url = urlAttrs[0]
       this.alt = urlAttrs[1].replace(/"/g, "")

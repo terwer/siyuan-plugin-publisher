@@ -240,7 +240,7 @@ import { PageType } from "~/utils/platform/metaweblog/IMetaweblogCfg"
 import { Post } from "~/utils/models/post"
 import { LogFactory } from "~/utils/logUtil"
 import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
-import { getPageId } from "~/utils/platform/siyuan/siyuanUtil"
+import { getPageId, isInSiyuanWidget } from "~/utils/platform/siyuan/siyuanUtil"
 import { getConf, getJSONConf, setConf } from "~/utils/configUtil"
 import { cutWords, isEmptyObject, isEmptyString, jiebaToHotWords, pinyinSlugify, zhSlugify } from "~/utils/util"
 import { calcLastSeconds, formatNumToZhDate } from "~/utils/dateUtil"
@@ -719,6 +719,11 @@ const oneclickAttr = async (hideTip) => {
 }
 
 const checkLimit = (lastmodKey) => {
+  // 限制开关
+  if (!props.limitRate) {
+    return false
+  }
+
   const flag = false
 
   const lastmodDate = getConf(lastmodKey)
@@ -734,7 +739,9 @@ const checkLimit = (lastmodKey) => {
     ElMessage.error(
       "由于【" +
         props.apiType +
-        "】平台的限制，每6分钟之内只能发布或者更新一次文章，距离上一次发布时间为：" +
+        "】平台的限制，每" +
+        props.limitSeconds +
+        "秒之内只能发布或者更新一次文章，距离上一次发布时间为：" +
         s +
         "秒，仍需等待：" +
         (props.limitSeconds - s) +
@@ -822,14 +829,38 @@ const doPublish = async () => {
       md = imageParser.removeImages(md)
     } else {
       // 处理图床
-      if (picgoPostMethods.getPicgoPostData().picgoEnabled) {
+      if (picgoPostData.picgoEnabled) {
         ElMessage.info(t("github.post.picgo.start.upload"))
-        const picgoPostResult = await picgoPostApi.uploadPostImagesToBed(siyuanData.pageId, siyuanData.meta, md)
+        const picgoPostResult = await picgoPostApi.checkPostImages(siyuanData.meta, md)
+        // 没有图片直接跳过
+        if (picgoPostResult.localImages.length > 0) {
+          if (picgoPostResult.unuploadImages.length > 0) {
+            // 思源主窗口，但是有图片没上传完毕
+            if (isInSiyuanWidget()) {
+              throw new Error(
+                "检测到有未上传的图片，由于Electron技术限制，挂件通用版不支持上传，仅提供链接替换，请先上传完毕再使用发布。您也可以取消使用图床，或者使用新窗口方式发布。"
+              )
+            }
 
-        if (picgoPostResult.flag) {
-          md = picgoPostResult.mdContent
-        } else {
-          ElMessage.warning(t("github.post.picgo.picbed.error"))
+            md = await picgoPostApi.uploadPostImagesToBed(
+              siyuanData.pageId,
+              siyuanData.meta,
+              md,
+              picgoPostResult.localImages,
+              picgoPostResult.unuploadImages,
+              false
+            )
+          } else {
+            // 图片都上传过了，直接替换
+            md = await picgoPostApi.uploadPostImagesToBed(
+              siyuanData.pageId,
+              siyuanData.meta,
+              md,
+              picgoPostResult.localImages,
+              picgoPostResult.unuploadImages,
+              true
+            )
+          }
         }
       }
     }
