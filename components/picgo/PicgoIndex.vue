@@ -25,17 +25,11 @@
 
 <template>
   <div class="picgo-body">
-    <el-alert
-      :title="$t('setting.picgo.index.tip')"
-      type="warning"
-      :closable="false"
-    />
+    <el-alert :title="$t('setting.picgo.index.tip')" type="warning" :closable="false" />
 
     <!-- 上传状态 -->
     <div class="upload-status">
-      <el-button text :loading="picgoCommonData.isUploadLoading"
-        >{{ $t("picgo.upload.status") }}
-      </el-button>
+      <el-button text :loading="picgoCommonData.isUploadLoading">{{ $t("picgo.upload.status") }} </el-button>
     </div>
 
     <!-- 操作按钮 -->
@@ -61,31 +55,15 @@
       </el-tooltip>
 
       <!-- 剪贴板上传 -->
-      <el-tooltip
-        class="box-item"
-        effect="dark"
-        :content="$t('picgo.upload.clipboard')"
-        placement="top-start"
-      >
-        <el-button
-          type="primary"
-          @click="picgoUploadMethods.doUploadPicFromClipboard"
-        >
+      <el-tooltip class="box-item" effect="dark" :content="$t('picgo.upload.clipboard')" placement="top-start">
+        <el-button type="primary" @click="picgoUploadMethods.doUploadPicFromClipboard">
           <font-awesome-icon icon="fa-solid fa-paste" />
         </el-button>
       </el-tooltip>
 
       <!-- 上传所有图到图床 -->
-      <el-tooltip
-        class="box-item"
-        effect="dark"
-        :content="$t('picgo.upload.onclick')"
-        placement="top-start"
-      >
-        <el-button
-          type="success"
-          @click="picgoManageMethods.handleUploadAllImagesToBed"
-        >
+      <el-tooltip class="box-item" effect="dark" :content="$t('picgo.upload.onclick')" placement="top-start">
+        <el-button type="success" @click="picgoManageMethods.handleUploadAllImagesToBed">
           <font-awesome-icon icon="fa-solid fa-upload" />
         </el-button>
       </el-tooltip>
@@ -104,12 +82,7 @@
       </el-tooltip>
 
       <!-- 图床设置 -->
-      <el-tooltip
-        class="box-item"
-        effect="dark"
-        :content="$t('picgo.pic.setting')"
-        placement="top-start"
-      >
+      <el-tooltip class="box-item" effect="dark" :content="$t('picgo.pic.setting')" placement="top-start">
         <el-button type="info" @click="picgoUploadMethods.handlePicgoSetting">
           <font-awesome-icon icon="fa-solid fa-gear" />
         </el-button>
@@ -118,33 +91,19 @@
 
     <!-- 图片列表 -->
     <ul class="file-list">
-      <li
-        class="file-list-item"
-        v-for="f in picgoCommonData.fileList.files"
-        v-bind:key="f.name"
-      >
+      <li class="file-list-item" v-for="f in picgoCommonData.fileList.files" v-bind:key="f.name">
         <div><img :src="f.url" :alt="f.name" /></div>
         <div>
           <!-- 上传本地图片到图床 -->
           <el-tooltip
-            :content="
-              f.isLocal ? $t('picgo.download.local.to.bed') : '重新上传'
-            "
+            :content="f.isLocal ? $t('picgo.download.local.to.bed') : '重新上传'"
             class="box-item"
             effect="dark"
             placement="bottom"
             popper-class="publish-menu-tooltip"
           >
-            <el-button
-              @click="picgoManageMethods.handleUploadCurrentImageToBed(f)"
-            >
-              <font-awesome-icon
-                :icon="
-                  f.isLocal
-                    ? 'fa-solid fa-upload'
-                    : 'fa-solid fa-arrow-rotate-right'
-                "
-              />
+            <el-button @click="picgoManageMethods.handleUploadCurrentImageToBed(f)">
+              <font-awesome-icon :icon="f.isLocal ? 'fa-solid fa-upload' : 'fa-solid fa-arrow-rotate-right'" />
             </el-button>
           </el-tooltip>
 
@@ -165,7 +124,7 @@
           <!-- 复制图片链接 -->
           <el-popover
             placement="bottom"
-            :title="$t('setting.picgo.index.copy.link')"
+            :title="f.alt ? f.alt : $t('setting.picgo.index.copy.link')"
             :width="picgoCommonData.popWidth"
             trigger="hover"
             :content="f.url"
@@ -185,9 +144,7 @@
             placement="bottom"
             popper-class="publish-menu-tooltip"
           >
-            <el-button
-              @click="picgoManageMethods.handlePictureCardPreview(f.url)"
-            >
+            <el-button @click="picgoManageMethods.handlePictureCardPreview(f.url)">
               <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
             </el-button>
           </el-tooltip>
@@ -200,29 +157,17 @@
       v-model="picgoManageData.dialogPreviewVisible"
       :title="$t('picgo.pic.preview') + ' - ' + picgoManageData.dialogImageUrl"
     >
-      <img
-        w-full
-        :src="picgoManageData.dialogImageUrl"
-        alt="Preview Image"
-        class="img-big-preview"
-      />
+      <img w-full :src="picgoManageData.dialogImageUrl" alt="Preview Image" class="img-big-preview" />
     </el-dialog>
 
     <!-- Picgo设置 -->
-    <el-dialog
-      v-model="picgoUploadData.dialogPicgoSettingFormVisible"
-      :title="$t('picgo.pic.setting')"
-    >
+    <el-dialog v-model="picgoUploadData.dialogPicgoSettingFormVisible" :title="$t('picgo.pic.setting')">
       <picgo-setting />
     </el-dialog>
 
     <!-- 日志显示 -->
     <div class="log-msg" v-if="picgoCommonData.showDebugMsg">
-      <el-input
-        type="textarea"
-        :autosize="{ minRows: 5, maxRows: 10 }"
-        v-model="picgoCommonData.loggerMsg"
-      />
+      <el-input type="textarea" :autosize="{ minRows: 5, maxRows: 10 }" v-model="picgoCommonData.loggerMsg" />
     </div>
   </div>
 </template>
@@ -250,11 +195,7 @@ const refSelectedFiles = ref()
 // uses
 const { picgoCommonData, picgoCommonMethods } = usePicgoCommon()
 const { picgoInitMethods } = usePicgoInitPage(props, { picgoCommonMethods })
-const { picgoUploadData, picgoUploadMethods } = usePicgoUpload(
-  props,
-  { picgoCommonMethods },
-  { refSelectedFiles }
-)
+const { picgoUploadData, picgoUploadMethods } = usePicgoUpload(props, { picgoCommonMethods }, { refSelectedFiles })
 const { picgoManageData, picgoManageMethods } = usePicgoManage(props, {
   picgoCommonMethods,
   picgoInitMethods,

@@ -220,10 +220,7 @@ export class ImageParser {
    * @param content 正文
    * @param replaceMap 替换信息
    */
-  public replaceImagesWithImageItemArray(
-    content: string,
-    replaceMap: any
-  ): string {
+  public replaceImagesWithImageItemArray(content: string, replaceMap: any): string {
     let newcontent = content
 
     const imgRegex = /!\[.*]\(assets\/.*\..*\)/g
@@ -241,11 +238,11 @@ export class ImageParser {
       const src = img.replace(/!\[.*]\(/g, "").replace(/\)/, "")
       this.logger.debug("src=>", src)
 
-      let newImg
       const tempImageItem = new ImageItem(src, "", true)
       const hash = tempImageItem.hash
-      const replaceImageItem = replaceMap[hash]
-      newImg = `![](${replaceImageItem.url})`
+      const replaceImageItem: ImageItem = replaceMap[hash]
+      const alt = replaceImageItem.alt ?? ""
+      const newImg = `![${alt}](${replaceImageItem.url})`
       this.logger.debug("newImg=>", newImg)
 
       newcontent = newcontent.replaceAll(img, newImg)
