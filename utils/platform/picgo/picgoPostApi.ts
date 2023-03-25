@@ -37,6 +37,7 @@ import { getSiyuanNewWinDataDir } from "~/utils/otherlib/siyuanBrowserUtil"
 import { isFileExist } from "~/utils/otherlib/ChromeUtil"
 import picgoUtil from "~/utils/otherlib/picgoUtil"
 import { ElMessage } from "element-plus"
+import { isInSiyuanWidget } from "~/utils/platform/siyuan/siyuanUtil"
 
 /**
  * Picgo与文章交互的通用方法
@@ -117,12 +118,16 @@ export class PicgoPostApi {
 
     if (uniqueLocalImages.length == 0) {
       ret.flag = false
+      ret.hasImages = false
       ret.mdContent = mdContent
+      ret.errmsg = "文章中没有图片"
       return Promise.resolve(ret)
     }
 
     // 开始上传
     try {
+      ret.hasImages = true
+
       const imageItemArray = await this.doConvertImagesToImagesItemArray(attrs, uniqueLocalImages)
 
       let replaceMap = {}
@@ -139,6 +144,12 @@ export class PicgoPostApi {
         }
 
         hasLocalImages = true
+        if (isInSiyuanWidget() && hasLocalImages) {
+          throw new Error(
+            "检测到有未上传的图片，由于Electron技术限制，挂件通用版不支持上传，仅提供链接替换，请先上传完毕再使用发布。您也可以取消使用图床，或者使用新窗口方式发布。"
+          )
+        }
+
         // 实际上传逻辑
         await this.uploadSingleImageToBed(pageId, attrs, imageItem)
         // 上传完成，需要获取最新链接
@@ -161,6 +172,8 @@ export class PicgoPostApi {
       ret.flag = true
       this.logger.debug("正文替换完成，最终结果=>", ret)
     } catch (e) {
+      ret.flag = false
+      ret.errmsg = e
       this.logger.error("文章图片上传失败=>", e)
     }
     return Promise.resolve(ret)

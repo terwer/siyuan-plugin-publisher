@@ -184,8 +184,26 @@
         <!-- 使用图床 -->
         <el-form-item :label="$t('github.post.picgo.use')">
           <el-switch v-model="picgoPostData.picgoEnabled" @change="picgoPostMethods.picgoOnChange" />
+          <el-tooltip
+            v-if="picgoPostData.picgoEnabled && !isInSiyuanNewWinBrowser()"
+            :content="$t('siyuan.browser.menu.picture.btn')"
+            class="box-item"
+            effect="light"
+            placement="right"
+            popper-class="publish-menu-tooltip"
+          >
+            <el-button
+              class="pic-manage-btn"
+              type="success"
+              size="small"
+              @click="picgoPostMethods.handlePicgoManage(siyuanData.pageId)"
+            >
+              <font-awesome-icon icon="fa-solid fa-image" />
+              {{ $t("setting.picgo.manage") }}
+            </el-button>
+          </el-tooltip>
           <el-alert
-            v-if="false && picgoPostData.picgoEnabled"
+            v-if="picgoPostData.picgoEnabled"
             :closable="false"
             :title="$t('github.post.picgo.use.tip')"
             type="warning"
@@ -249,6 +267,7 @@ import { ImageParser } from "~/utils/parser/imageParser"
 import { usePicgoPost } from "~/composables/picgo/import/picgoPostCom"
 import { PicgoPostApi } from "~/utils/platform/picgo/picgoPostApi"
 import { LinkParser } from "~/utils/parser/LinkParser"
+import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
 
 const logger = LogFactory.getLogger("components/publish/tab/main/CommonBlogMain.vue")
 const siyuanApi = new SiYuanApi()
@@ -823,13 +842,14 @@ const doPublish = async () => {
     } else {
       // 处理图床
       if (picgoPostMethods.getPicgoPostData().picgoEnabled) {
-        ElMessage.info(t("github.post.picgo.start.upload"))
         const picgoPostResult = await picgoPostApi.uploadPostImagesToBed(siyuanData.pageId, siyuanData.meta, md)
-
-        if (picgoPostResult.flag) {
-          md = picgoPostResult.mdContent
-        } else {
-          ElMessage.warning(t("github.post.picgo.picbed.error"))
+        // 有图片才上传
+        if (picgoPostResult.hasImages) {
+          if (picgoPostResult.flag) {
+            md = picgoPostResult.mdContent
+          } else {
+            ElMessage.error(t("github.post.picgo.picbed.error") + "=>" + picgoPostResult.errmsg)
+          }
         }
       }
     }

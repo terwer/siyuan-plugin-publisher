@@ -137,18 +137,16 @@ export const usePublish = (props, deps?: any) => {
 
           // 处理图床
           if (picgoPostMethods.getPicgoPostData().picgoEnabled) {
-            ElMessage.info(t("github.post.picgo.start.upload"))
             const siyuanPage = siyuanPageMethods.getSiyuanPageData().dataObj
-            const picgoPostResult = await picgoPostApi.uploadPostImagesToBed(
-              siyuanPage.pageId,
-              siyuanPage.meta,
-              mdFullContent
-            )
 
-            if (picgoPostResult.flag) {
-              md = picgoPostResult.mdContent
-            } else {
-              ElMessage.warning(t("github.post.picgo.picbed.error"))
+            const picgoPostResult = await picgoPostApi.uploadPostImagesToBed(siyuanPage.pageId, siyuanPage.meta, md)
+            // 有图片才上传
+            if (picgoPostResult.hasImages) {
+              if (picgoPostResult.flag) {
+                md = picgoPostResult.mdContent
+              } else {
+                ElMessage.warning(t("github.post.picgo.picbed.error") + "=>" + picgoPostResult.errmsg)
+              }
             }
           }
 

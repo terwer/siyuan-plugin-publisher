@@ -181,3 +181,10 @@ code {
 .dialog-action .el-form-item__content .el-button {
   margin-left: 10px;
 }
+
+.pic-manage-btn{
+  margin-left: 10px;
+}
+.pic-manage-btn svg{
+  margin-right: 5px;
+}

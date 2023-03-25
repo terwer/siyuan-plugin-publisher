@@ -50,8 +50,7 @@ export default {
   "main.publish.github.choose.path.use.default": "Default path",
   "main.publish.github.choose.path.use.default.tip":
     "Using the default directory, all articles are published in the configuration default directory, no need to select the directory every time it is published",
-  "main.publish.github.no.tip":
-    "You have not opened github release, please copy the right text on your own",
+  "main.publish.github.no.tip": "You have not opened github release, please copy the right text on your own",
   "main.publish.github.choose.title": "File name",
   "main.publish.github.choose.title.tip":
     "Vuepress-theme-VDoing support file name plus serial number to identify. If you don’t know this usage, please do not modify the file name",
@@ -116,8 +115,7 @@ export default {
   "main.opt.warning": "Warning",
   "main.opt.ok": "Confirm",
   "main.opt.cancel": "Cancel",
-  "main.opt.warning.tip":
-    "The operation will delete the data, whether to continue?",
+  "main.opt.warning.tip": "The operation will delete the data, whether to continue?",
   "main.opt.tip": "Tips",
   "setting.noneed": "No need setting",
   "setting.blog.setting": " Setting",
@@ -135,14 +133,12 @@ export default {
   "setting.blog.type.github.repo": "Github repo",
   "setting.blog.type.github.repo.tip": "Github repo, eg:terwer.github.io",
   "setting.blog.type.github.token": "Github token",
-  "setting.blog.type.github.token.tip":
-    "Github token, eg:ghp_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  "setting.blog.type.github.token.tip": "Github token, eg:ghp_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
   "setting.blog.type.github.token.gen": "Generate Github Personal Token",
   "setting.blog.type.github.default.path": "Doc path",
   "setting.blog.type.github.default.path.tip": "Doc path, eg:docs/_posts",
   "setting.blog.type.github.msg": "Commit msg",
-  "setting.blog.type.github.msg.tip":
-    "Commit msg, eg:auto published by sy-post-publisher",
+  "setting.blog.type.github.msg.tip": "Commit msg, eg:auto published by sy-post-publisher",
   "setting.blog.type.github.author": "Author",
   "setting.blog.type.github.author.tip": "Author, eg:terwer",
   "setting.blog.type.github.email": "Email",
@@ -170,12 +166,10 @@ export default {
     "Please verify the configuration to ensure the availability of the API, and it will not be used without verification.",
   "setting.blog.vali.ing": "Validating...",
   "setting.blog.vali.ok": "Available",
-  "setting.blog.vali.ok.metaweblog":
-    "The configuration has been saved and verified",
+  "setting.blog.vali.ok.metaweblog": "The configuration has been saved and verified",
   "setting.blog.vali.error": "Validate error",
   "setting.blog.platform.support.github": "Current github supported platform:",
-  "setting.blog.platform.support.metaweblog":
-    "Current metaweblog supported platform:",
+  "setting.blog.platform.support.metaweblog": "Current metaweblog supported platform:",
   "setting.blog.cancel": "Cancel",
   "setting.vuepress": "Vuepress",
   "setting.hugo": "Hugo",
@@ -231,8 +225,7 @@ export default {
   "dynamic.platform.type.wordpress": "Wordpress",
   "dynamic.platform.type.custom": "Custom",
   "dynamic.platform.key": "Platform key",
-  "dynamic.platform.key.tip":
-    "The unique logo of the platform, cannot be repeated, for example: myblog",
+  "dynamic.platform.key.tip": "The unique logo of the platform, cannot be repeated, for example: myblog",
   "dynamic.platform.type.github": "Github",
   "dynamic.platform.name": "Platform name",
   "dynamic.platform.name.tip": "Platform name, for example: my blog",
@@ -244,11 +237,9 @@ export default {
     "Deleting this platform will completely remove the relevant configuration information of this platform. Do you continue?",
   "dynamic.platform.opt.item.select": "Item no select",
   "dynamic.platform.opt.item.select.tip": "The current selection is:",
-  "dynamic.platform.opt.item.no.select.tip":
-    "Please select the line to be deleted",
+  "dynamic.platform.opt.item.no.select.tip": "Please select the line to be deleted",
   "setting.common.home": "Home",
-  "setting.common.tip":
-    "The platform homepage is used to preview articles, for example: https://terwork.space",
+  "setting.common.tip": "The platform homepage is used to preview articles, for example: https://terwork.space",
   "setting.common.apiurl": "API",
   "setting.common.token": "Token",
   "setting.common.token.gen": "Token addr",
@@ -269,8 +260,7 @@ export default {
     "It is currently in the pendant mode. Starting from version 0.1.0, there is no need to reference the pendant on all pages. You only need to reference a pendant on the parent page. The specific rules are as follows: 1. If there are no subsidiaries, it will be compatible with the previous method of version 0.0.3 to display the release page of the current document. 2. If a subsidiary document is detected, all the subsidiaries will be displayed in a list and paging. You can choose a sub -document separately for release operations.",
   "blog.newwin.open": "Open in a new window",
   "blog.change.siyuan.api": "Modify Siyuan API address",
-  "setting.blog.siyuan.password":
-    "Siyuan Note token, please copying from【set up-> about 】",
+  "setting.blog.siyuan.password": "Siyuan Note token, please copying from【set up-> about 】",
   "setting.blog.siyuan.apiurl":
     "The API address of Siyuan Note, including ports, for example: http://127.0.0.0.1: 6806",
   "setting.blog.siyuan.current.apiurl": "Current apiUrl=>",
@@ -288,8 +278,7 @@ export default {
   "main.yaml.no.save":
     "Have you edited YAML, do you synchronize to attributes, and cancel the loss of YAML modification?",
   "setting.github.baseUrl": "Git repo index",
-  "setting.github.baseUrl.tip":
-    "Git platform address is used for md file preview, the default is: https://github.com",
+  "setting.github.baseUrl.tip": "Git platform address is used for md file preview, the default is: https://github.com",
   "preference.setting.fixTitle": "Fix title",
   "preference.setting.removeH1": "Remove h1",
   "preference.setting.removeH1.tip":
@@ -336,11 +325,9 @@ export default {
   "github.menu.title.placeholder":
     "The menu column title (HUGO platform is dedicated, but the empty is not displayed in the menu)",
   "github.weight": "Weight",
-  "github.weight.placeholder":
-    "Weight (decide to display the order, the smaller the display, the more upward)",
+  "github.weight.placeholder": "Weight (decide to display the order, the smaller the display, the more upward)",
   "github.use.date": "Show date",
-  "github.use.date.no.warn":
-    "You have closed the date show that it will not generate the date field in Formatter",
+  "github.use.date.no.warn": "You have closed the date show that it will not generate the date field in Formatter",
   "github.post.picgo.use": "Use picbed",
   "github.post.picgo.use.tip":
     "To enable this option, the local picture will be uploaded to the custom diagram bed (the remote picture is not uploaded), please make sure that the PICGO diagram bed configuration is correct",
@@ -348,61 +335,47 @@ export default {
     "The picture bed has been opened, and the picture bed is about to upload the picture bed to the bed",
   "github.post.picgo.picbed.error":
     "The picture uploaded to the picture bed failed, it may be an error in the configuration of the graph, please check the picture bed configuration",
-  "setting.yuque.home.tip":
-    "The homepage of the language bird platform is usually fixed: https://www.yuque.com/",
+  "setting.yuque.home.tip": "The homepage of the language bird platform is usually fixed: https://www.yuque.com/",
   "setting.yuque.username.tip":
     "The user name of the spark platform, note that the user name is fixed in [account settings], not the user nickname (*^▽^*)",
   "setting.yuque.password.tip":
     "For the token of the spark platform, please follow the link to get it. You only need to grant the document to read and modify the two permissions.",
   "setting.yuque.apiurl.tip":
     "The API address of the language bird platform is usually fixed: https://www.yuque.com/api/v2",
-  "setting.liandi.home.tip":
-    "The homepage of the chain drop platform is usually fixed: https://ld246.com/",
+  "setting.liandi.home.tip": "The homepage of the chain drop platform is usually fixed: https://ld246.com/",
   "setting.liandi.username.tip":
     "The user name of the chain drop platform, note that after clicking [Personal Homepage], the user name displayed behind the MEMBER on the URL is not a user nickname (*^▽^*)",
-  "setting.liandi.password.tip":
-    "Token on the chain drop platform, please click on the link to get",
-  "setting.liandi.apiurl.tip":
-    "The API address of the chain drop platform is usually fixed: https://ld246.com/api/v2",
-  "setting.kms.home.tip":
-    "KMS platform homepage, for example: http:// localhost: 9564/kms16_release/kms/multidoc",
-  "setting.kms.username.tip":
-    "KMS platform REST account user name, please create according to the link instruction",
-  "setting.kms.password.tip":
-    "KMS platform REST account password, please create according to the link instruction",
+  "setting.liandi.password.tip": "Token on the chain drop platform, please click on the link to get",
+  "setting.liandi.apiurl.tip": "The API address of the chain drop platform is usually fixed: https://ld246.com/api/v2",
+  "setting.kms.home.tip": "KMS platform homepage, for example: http:// localhost: 9564/kms16_release/kms/multidoc",
+  "setting.kms.username.tip": "KMS platform REST account user name, please create according to the link instruction",
+  "setting.kms.password.tip": "KMS platform REST account password, please create according to the link instruction",
   "setting.kms.apiurl.tip":
     "The API address of the KMS platform, for example: http:// localhost: 9564/kms16_release/API/KMS-Multidoc/KMSMultidOWRESTSERVICE",
   "siyuan.local.share.tip":
     "Reminder: If you find that the sharing link or the browser can be displayed or the network connection is rejected, please check according to the following operation. 1: Siyuan Note-> Settings-> About-> Open the network servo; 2: After the browser is opened, click the bottom Siyuan address at the bottom to modify the corresponding address to the local area network IP address.",
-  "setting.cnblogs.home.tip":
-    "The homepage of your blog park is usually: https://www.cnblogs.com/ <your username>",
+  "setting.cnblogs.home.tip": "The homepage of your blog park is usually: https://www.cnblogs.com/ <your username>",
   "setting.cnblogs.username.tip":
     "Your blog garden MetaWeblog login name, you can go to your blog garden background-> Settings, note: login name, not a user nickname (*^▽^*)",
   "setting.cnblogs.password.tip":
     "Your blog garden Metaweblog access token, you can go to your blog garden backstage-> Settings",
   "setting.cnblogs.apiUrl.tip":
     "Your blog garden Metaweblog access address, you can go to your blog park background-> settings, usually: https://rpc.cnblogs.com/metaweblog/ <Your username>",
-  "setting.cnblogs.previewUrl.tip":
-    "Preview rules for your blog garden article",
+  "setting.cnblogs.previewUrl.tip": "Preview rules for your blog garden article",
 
   "setting.wordpress.home.tip": "Wordpress homepage",
-  "setting.wordpress.username.tip":
-    "WordPress login name, note: it is login name, not a user nickname (*^▽^*)",
+  "setting.wordpress.username.tip": "WordPress login name, note: it is login name, not a user nickname (*^▽^*)",
   "setting.wordpress.password.tip": "Wordpress login password",
   "setting.wordpress.apiUrl.tip":
     "WordPress's XMLRPC remote release address, usually: https:// <WordPress blog address> /xmlrpc.php",
-  "setting.wordpress.previewUrl.tip":
-    "The preview rules of the WordPress platform are usually :? P = [Postid]",
+  "setting.wordpress.previewUrl.tip": "The preview rules of the WordPress platform are usually :? P = [Postid]",
 
-  "setting.oschina.home.tip":
-    "Homepage of open source China, usually: https://my.oschina.net/ <Your username>",
-  "setting.oschina.username.tip":
-    "Open source China login name, you can enter the login mailbox",
+  "setting.oschina.home.tip": "Homepage of open source China, usually: https://my.oschina.net/ <Your username>",
+  "setting.oschina.username.tip": "Open source China login name, you can enter the login mailbox",
   "setting.oschina.password.tip": "Open source China login password",
   "setting.oschina.apiUrl.tip":
     "Open source China XMLRPC remote publishing address, usually fixed: https://www.oschina.net/ACTION/xmlrpc",
-  "setting.oschina.previewUrl.tip":
-    "The preview rules of the open source China platform are usually:/blog/[postid]",
+  "setting.oschina.previewUrl.tip": "The preview rules of the open source China platform are usually:/blog/[postid]",
 
   "setting.typecho.home.tip": "Homepage of the Typecho platform",
   "setting.typecho.username.tip": "Typecho platform login name",
@@ -417,22 +390,16 @@ export default {
   "setting.jvue.password.tip": "Jvue platform password",
   "setting.jvue.apiUrl.tip":
     "The XMLRPC remote release address of the JVUE platform is usually fixed: https: // <platform address>/xmlrpc",
-  "setting.jvue.previewUrl.tip":
-    "The preview rules of the Jvue platform are usually:/post/[postid] .html",
+  "setting.jvue.previewUrl.tip": "The preview rules of the Jvue platform are usually:/post/[postid] .html",
 
   "setting.conf.home.tip":
     "Confluence Cloud, homepage, usually: https: // <your user name> .atlassian.net/wiki/spaces/<Space name>",
-  "setting.conf.username.tip":
-    "CONFLUENCE login name, you can go to your Atlassian account to get",
-  "setting.conf.password.tip":
-    "Confluence access token, you can go to your Atlassian account to get",
-  "setting.conf.apiUrl.tip":
-    "You can go to https://developper.atlassian.com/Cloud/confluence/rest/v1/1/1/",
-  "setting.conf.previewUrl.tip":
-    "CONFLUENCE platform articles preview rules, usually:/pages/[postid]",
+  "setting.conf.username.tip": "CONFLUENCE login name, you can go to your Atlassian account to get",
+  "setting.conf.password.tip": "Confluence access token, you can go to your Atlassian account to get",
+  "setting.conf.apiUrl.tip": "You can go to https://developper.atlassian.com/Cloud/confluence/rest/v1/1/1/",
+  "setting.conf.previewUrl.tip": "CONFLUENCE platform articles preview rules, usually:/pages/[postid]",
   "setting.picgo.refer.to": "For details, please refer to:",
-  "setting.picgo.refer.to.online.doc":
-    "Picgo configuration online documentation",
+  "setting.picgo.refer.to.online.doc": "Picgo configuration online documentation",
   "setting.picgo.picbed": "Picbed setting",
   "setting.picgo.picgo": "PicGO setting",
   "main.opt.edit": "Edit",
@@ -446,8 +413,7 @@ export default {
   "setting.picgo.picbed.current.selected.tip": "Current selected picbed is:",
   "setting.picgo.picbed.current.tip": "Current picbed is:",
   "setting.picgo.picbed.uploader.config.name": "Picbed config name",
-  "setting.picgo.picbed.uploader.config.name.placeholder":
-    "Please input config name",
+  "setting.picgo.picbed.uploader.config.name.placeholder": "Please input config name",
   "setting.picgo.config.name": "Config name",
   "setting.picgo.config.name.placeholder": "Please input config name",
   "setting.picgo.index.tip":
@@ -472,8 +438,7 @@ export default {
   "setting.picgo.setting.node.path.tip":
     "Please enter Node to install the full path, for example: /opt/node-v16.14.0-darwin-x64/bin, node version> = 16",
   "setting.picgo.setting.node.registry": "NPM registry",
-  "setting.picgo.setting.node.registry.tip":
-    "Mainland recommend：https://registry.npmmirror.com",
+  "setting.picgo.setting.node.registry.tip": "Mainland recommend：https://registry.npmmirror.com",
   "setting.picgo.setting.node.proxy": "NPM proxy",
   "setting.picgo.setting.node.proxy.tip":
     "Generally, you can leave empty. If you have special needs, you can set a custom agent",
@@ -483,8 +448,7 @@ export default {
     "The plug -in has been successfully installed, please clear the search keyword refresh list. Click the plug -in corresponding [Settings] icon to view the plug -in details and customize the plug -in",
   "syp.about": "About me",
   "setting.picgo.plugin.uninstall": "Uninstall plugin",
-  "setting.picgo.plugin.uninstall.success":
-    "Plugin is uninstalled successfully",
+  "setting.picgo.plugin.uninstall.success": "Plugin is uninstalled successfully",
   "setting.picgo.plugin.enable": "Enable plugin",
   "setting.picgo.plugin.disable": "Disable plugin",
   "setting.picgo.plugin.update": "Update plugin",
@@ -514,4 +478,5 @@ export default {
   "setting.main.background": "Widget background",
   "setting.main.background.tip":
     "Support hexadecimal and RGB, for example: #000000, no settings or staying empty unchanged",
+  "setting.picgo.manage": "Picture manage",
 }

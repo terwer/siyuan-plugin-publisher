@@ -32,7 +32,15 @@ export class PicgoPostResult {
    */
   flag: boolean
   /**
+   * 是否有图片
+   */
+  hasImages: boolean
+  /**
    * 处理后的文章链接
    */
   mdContent: string
+  /**
+   * 错误信息
+   */
+  errmsg: string
 }
