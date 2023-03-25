@@ -64,7 +64,7 @@ export class ImageItem {
     this.hash = getFileHash(this.name)
     this.url = url
     this.isLocal = isLocal
-    this.alt = alt
-    this.title = title
+    this.alt = alt ?? ""
+    this.title = title ?? ""
   }
 }
