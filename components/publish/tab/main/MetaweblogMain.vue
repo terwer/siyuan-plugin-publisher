@@ -242,6 +242,8 @@ import { CONSTANTS } from "~/utils/constants/constants"
 import { usePicgoPost } from "~/composables/picgo/import/picgoPostCom"
 import { PicgoPostApi } from "~/utils/platform/picgo/picgoPostApi"
 import { LinkParser } from "~/utils/parser/LinkParser"
+import siyuanBrowserUtil from "~/utils/otherlib/siyuanBrowserUtil"
+import { isElectron } from "~/utils/browserUtil"
 
 const logger = LogFactory.getLogger("components/publish/tab/main/MetaweblogMain.vue")
 const siyuanApi = new SiYuanApi()

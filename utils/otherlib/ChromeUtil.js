@@ -27,7 +27,7 @@ import { isInSiyuanWidget } from "~/utils/platform/siyuan/siyuanUtil"
 import { getQueryString, isInChromeExtension, readJSONFileFormDialog, setUrlParameter } from "~/utils/browserUtil"
 import { LogFactory } from "~/utils/logUtil"
 import { isEmptyString, pathJoin } from "~/utils/util"
-import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
+import siyuanBrowserUtil, { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
 import { DeviceType, DeviceUtil } from "~/utils/deviceUtil"
 import { getLocalStorageAdaptor } from "~/utils/otherlib/confUtil"
 
@@ -231,7 +231,8 @@ export const isSlot = getQueryString("isSlot") === "true"
  * @returns {boolean}
  */
 export const isFileExist = (filepath) => {
-  const fs = require("fs")
+  const syWin = siyuanBrowserUtil.getSiyuanWindow()
+  const fs = syWin.require("fs")
 
   if (fs.existsSync(filepath)) {
     console.log("File exists")

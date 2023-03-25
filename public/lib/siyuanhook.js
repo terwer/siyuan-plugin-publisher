@@ -49,9 +49,7 @@ const isSiyuanWidget = () => {
     window.frameElement != null &&
     window.frameElement.parentElement != null &&
     window.frameElement.parentElement.parentElement != null &&
-    window.frameElement.parentElement.parentElement.getAttribute(
-      "data-node-id"
-    ) !== ""
+    window.frameElement.parentElement.parentElement.getAttribute("data-node-id") !== ""
   )
 }
 
@@ -59,7 +57,7 @@ const isSiyuanWidget = () => {
  * 思源笔记新窗口
  */
 const isSiyuanNewWin = () => {
-  return typeof window.terwer !== "undefined"
+  return typeof window.terwer !== "undefined" && typeof window.terwer.currentWindowId !== "undefined"
 }
 
 /**
@@ -147,11 +145,7 @@ const initMethods = {
     const dataDir = getSiyuanDataDir()
 
     // 初始化插槽
-    const initSlot = requireLib(
-      entryName,
-      `${dataDir}/widgets/sy-post-publisher/lib/siyuan/silot.js`,
-      "插槽"
-    )
+    const initSlot = requireLib(entryName, `${dataDir}/widgets/sy-post-publisher/lib/siyuan/silot.js`, "插槽")
     initSlot()
   },
 
@@ -185,6 +179,14 @@ const initMethods = {
   initPublishHelper: (entryName) => {
     const syWin = getSiyuanWindow()
     const dataDir = getSiyuanDataDir()
+
+    if (typeof syWin.terwer == "undefined") {
+      // 支持挂件版本
+      syWin.terwer = {
+        dataDir: "",
+      }
+      syWin.terwer.dataDir = dataDir
+    }
 
     // 防止重复挂载
     if (syWin.syp) {
@@ -229,21 +231,11 @@ const initMethods = {
     console.log("appDataFolder=>", appDataFolder)
 
     const picgo_cfg_067 = `${dataDir}/widgets/sy-post-publisher/lib/picgo/picgo.cfg.json`
-    const picgo_cfg_folder_070 = picgoExtension.joinPath(
-      appDataFolder,
-      "sy-picgo"
-    )
+    const picgo_cfg_folder_070 = picgoExtension.joinPath(appDataFolder, "sy-picgo")
     const picgo_cfg_070_file = "picgo.cfg.json"
-    const picgo_cfg_070 = picgoExtension.joinPath(
-      picgo_cfg_folder_070,
-      picgo_cfg_070_file
-    )
+    const picgo_cfg_070 = picgoExtension.joinPath(picgo_cfg_folder_070, picgo_cfg_070_file)
 
-    picgoExtension.upgradeCfg(
-      picgo_cfg_067,
-      picgo_cfg_folder_070,
-      picgo_cfg_070_file
-    )
+    picgoExtension.upgradeCfg(picgo_cfg_067, picgo_cfg_folder_070, picgo_cfg_070_file)
     console.warn("PicGO配置文件初始化为=>", picgo_cfg_070)
 
     // 初始化
@@ -267,11 +259,7 @@ const initMethods = {
     }
 
     // 挂载SyCmd到window
-    const syCmd = requireLib(
-      entryName,
-      `${dataDir}/widgets/sy-post-publisher/lib/cmd/syCmd.js`,
-      "sy-cmd"
-    )
+    const syCmd = requireLib(entryName, `${dataDir}/widgets/sy-post-publisher/lib/cmd/syCmd.js`, "sy-cmd")
     syWin.SyCmd = syCmd
     console.log("syCmd=>", syCmd)
   },
@@ -364,8 +352,5 @@ const init = () => {
 try {
   init()
 } catch (e) {
-  console.warn(
-    "初始化siyuanhook失败，可能导致扩展功能无法使用，请知悉。错误信息如下",
-    e
-  )
+  console.warn("初始化siyuanhook失败，可能导致扩展功能无法使用，请知悉。错误信息如下", e)
 }

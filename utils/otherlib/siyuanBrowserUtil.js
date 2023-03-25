@@ -35,7 +35,7 @@ import { isEmptyString } from "~/utils/util"
  * @returns {boolean}
  */
 export const isInSiyuanNewWinBrowser = () => {
-  return typeof window.terwer !== "undefined"
+  return typeof window.terwer !== "undefined" && typeof window.terwer.currentWindowId !== "undefined"
 }
 
 /**
@@ -56,7 +56,8 @@ const getSiyuanWindow = () => {
  * 获取新窗口数据目录
  */
 export const getSiyuanNewWinDataDir = () => {
-  return window.terwer.dataDir ?? "/notfound"
+  const syWin = getSiyuanWindow()
+  return syWin.terwer.dataDir ?? "/notfound"
 }
 
 /**
@@ -110,18 +111,10 @@ const fitTheme = () => {
  * @param customstyle 自定义样式
  */
 const fitThemeCustom = (customstyle) => {
-  const customAppBgColor = getComputedStyle(
-    document.documentElement
-  ).getPropertyValue("--custom-app-bg-color")
+  const customAppBgColor = getComputedStyle(document.documentElement).getPropertyValue("--custom-app-bg-color")
   // 样式不一致才去适配
-  if (
-    !isEmptyString(customstyle.backgroundColor) &&
-    customstyle.backgroundColor !== customAppBgColor
-  ) {
-    document.documentElement.style.setProperty(
-      "--custom-app-bg-color",
-      customstyle.backgroundColor
-    )
+  if (!isEmptyString(customstyle.backgroundColor) && customstyle.backgroundColor !== customAppBgColor) {
+    document.documentElement.style.setProperty("--custom-app-bg-color", customstyle.backgroundColor)
 
     console.log("重新适配customstyle完成=>", customstyle)
   }
