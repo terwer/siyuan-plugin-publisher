@@ -21,6 +21,20 @@
 <a title="Downloads" target="_blank" href="https://github.com/terwer/src-sy-post-publisher/releases"><img src="https://img.shields.io/github/downloads/terwer/src-sy-post-publisher/total.svg?label=extension-downloads&style=flat-square&color=blueviolet"></a>
 <a title="Downloads" target="_blank" href="https://github.com/terwer/src-sy-post-publisher/releases"><img src="https://img.shields.io/github/downloads/terwer/sy-post-publisher/total.svg?label=widget-downloads&style=flat-square&color=blue"></a>
 
+## v0.8.0
+
+### Bug 修复
+
+- 修复 PicGO 初始化失败问题
+
+### 新特性
+
+- 发布至语雀支持笔记间的内部链接替换
+
+### 开发重构
+
+- 移除不必要的日志打印
+
 ## v0.7.2 Bug 修复
 
 - 修复 PicGO 初始化失败问题
