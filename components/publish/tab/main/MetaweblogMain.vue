@@ -241,6 +241,7 @@ import { getApiParams, getPublishCfg, getPublishStatus } from "~/utils/publishUt
 import { CONSTANTS } from "~/utils/constants/constants"
 import { usePicgoPost } from "~/composables/picgo/import/picgoPostCom"
 import { PicgoPostApi } from "~/utils/platform/picgo/picgoPostApi"
+import { LinkParser } from "~/utils/parser/LinkParser";
 
 const logger = LogFactory.getLogger("components/publish/tab/main/MetaweblogMain.vue")
 const siyuanApi = new SiYuanApi()
@@ -274,6 +275,7 @@ const blogName = ref("")
 const apiTypeInfo = ref(t("setting.blog.platform.support.metaweblog") + props.apiType + " ")
 const apiStatus = ref(false)
 const picgoPostApi = new PicgoPostApi()
+const linkParser = new LinkParser()
 
 // use
 const { picgoPostData, picgoPostMethods } = usePicgoPost()
@@ -675,6 +677,9 @@ const doPublish = async () => {
     let content
     const data = await siyuanApi.exportMdContent(siyuanData.pageId)
     let md = data.content
+
+    // 引用链接替换
+    md = await linkParser.convertSiyuanLinkToPlatformLink(md, api)
 
     // 处理图床
     if (picgoPostMethods.getPicgoPostData().picgoEnabled) {

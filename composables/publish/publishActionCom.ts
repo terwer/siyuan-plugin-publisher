@@ -36,6 +36,7 @@ import { CONSTANTS } from "~/utils/constants/constants"
 import { PicgoPostApi } from "~/utils/platform/picgo/picgoPostApi"
 import { API } from "~/utils/api"
 import { Post } from "~/utils/models/post"
+import { LinkParser } from "~/utils/parser/LinkParser";
 
 /**
  * 通用的发布操作组件
@@ -48,6 +49,7 @@ export const usePublish = (props, deps?: any) => {
   const { t } = useI18n()
   const siyuanApi = new SiYuanApi()
   const picgoPostApi = new PicgoPostApi()
+  const linkParser = new LinkParser()
   // public data
   const publishData = reactive({
     isPublishLoading: false,
@@ -128,7 +130,10 @@ export const usePublish = (props, deps?: any) => {
           const mdFullContent = yamlMethods.getYamlData().mdFullContent
 
           // 最终发布的内容
-          let publishContent = mdFullContent
+          let md = mdFullContent
+
+          // 引用链接替换
+          md = await linkParser.convertSiyuanLinkToPlatformLink(md, api)
 
           // 处理图床
           if (picgoPostMethods.getPicgoPostData().picgoEnabled) {
@@ -141,21 +146,21 @@ export const usePublish = (props, deps?: any) => {
             )
 
             if (picgoPostResult.flag) {
-              publishContent = picgoPostResult.mdContent
+              md = picgoPostResult.mdContent
             } else {
               ElMessage.warning(t("github.post.picgo.picbed.error"))
             }
           }
 
           // 最终发布的内容
-          logger.debug("即将发布的内容，publishContent=>", { publishContent })
+          logger.debug("即将发布的内容，publishContent=>", { publishContent: md })
 
           // 发布
           // initGithubPages之后发布路径就是最新完整的
           const docPath = githubPagesMethods.getGithubPagesData().publishPath
           const post = new Post()
           post.postid = docPath
-          post.description = publishContent
+          post.description = md
           let res
           if (initPublishMethods.getInitPublishData().isPublished) {
             res = await api.editPost(post.postid, post)

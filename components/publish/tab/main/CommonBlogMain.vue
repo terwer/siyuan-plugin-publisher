@@ -29,7 +29,7 @@
       <el-alert class="top-version-tip" :title="apiTypeInfo + blogName" type="info" :closable="false" />
       <el-alert
         class="top-version-tip"
-        title="暂时不支持编辑所属知识库。如果您想移动文档，请先点击取消删除该文档，然后重新选择新的知识库发布。"
+        title="由于语雀平台的限制，暂时不支持编辑所属知识库。如果您想移动文档，请先点击取消删除该文档，然后重新选择新的知识库发布。"
         type="warning"
         :closable="false"
         v-if="useCat && isPublished"
