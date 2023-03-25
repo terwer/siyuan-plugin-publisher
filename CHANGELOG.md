@@ -1,5 +1,40 @@
 # Changelog
 
+## [0.8.0](https://github.com/terwer/src-sy-post-publisher/compare/v0.7.2...v0.8.0) (2023-03-25)
+
+
+### Features
+
+* Github平台（HUGO、Hexo、Vitepress等）支持笔记间的内部链接替换 ([a976a4c](https://github.com/terwer/src-sy-post-publisher/commit/a976a4c7b8506eecae3e8d1f8c754a1bc2745682))
+* 博客园、WordPress、Typecho平台支持笔记间的内部链接替换 ([3294b4a](https://github.com/terwer/src-sy-post-publisher/commit/3294b4aa394ac9c47e294ae26901a1e786012489))
+* 发布至语雀支持笔记间的内部链接替换 ([2cc4cc1](https://github.com/terwer/src-sy-post-publisher/commit/2cc4cc121e84c16c1aafc96de92e53cbea3aac8b))
+
+
+### Bug Fixes
+
+* [#434](https://github.com/terwer/src-sy-post-publisher/issues/434) 文章没有图片时候图床错误文章发布失败 ([3f286fa](https://github.com/terwer/src-sy-post-publisher/commit/3f286fa1df18d6f29cc773374a5ba48287ee44b6))
+* [#434](https://github.com/terwer/src-sy-post-publisher/issues/434) 文章没有图片时候图床错误文章发布失败 ([53b5016](https://github.com/terwer/src-sy-post-publisher/commit/53b5016d40580099cb8d943c0e8be98dafca1d46))
+* fix siyuanhook ([1603a61](https://github.com/terwer/src-sy-post-publisher/commit/1603a61a21205a57ec34cea3880b42c4a292fc4a))
+* 修复 PicGo 设置中的时间戳重命名关闭后会自动打开的问题 ([e673f58](https://github.com/terwer/src-sy-post-publisher/commit/e673f5879167b6eb889b688353c1d1e77611f6f8))
+* 修复普通挂件版使用方式WordPress和博客园发布文章报错问题 ([d6a21e1](https://github.com/terwer/src-sy-post-publisher/commit/d6a21e1ea1fced6f6f1128705e09214da7f01dc8))
+* 由于Electron主窗口机制问题，图片上传仅支持新窗口 ([20c9a85](https://github.com/terwer/src-sy-post-publisher/commit/20c9a851afb26ebdcf32c62b3b561204878990bd))
+
+
+### Miscellaneous
+
+* [#420](https://github.com/terwer/src-sy-post-publisher/issues/420) ankisiyuan.bin 默认不提供，手动下载，减小打包体积 ([9598fb1](https://github.com/terwer/src-sy-post-publisher/commit/9598fb1a3b4458aee9fc2525c232972b848cd4ad))
+* 主窗口移除Picgo支持 ([6061125](https://github.com/terwer/src-sy-post-publisher/commit/60611250fea6204ed7a88b2751abd96e81109492))
+* 主窗口移除Picgo支持 ([2dfc155](https://github.com/terwer/src-sy-post-publisher/commit/2dfc15581c30ce0e5f30cd88d366dbf91575fd3c))
+* 主窗口移除Picgo支持 ([a974954](https://github.com/terwer/src-sy-post-publisher/commit/a97495429a2a4b8dda88088aab922d9c4a906fbc))
+* 主窗口移除Picgo支持 ([1e93a30](https://github.com/terwer/src-sy-post-publisher/commit/1e93a309c45ffa3d4ed6f4cbe5a26c2017a78641))
+* 主窗口移除Picgo支持 ([60ffbc0](https://github.com/terwer/src-sy-post-publisher/commit/60ffbc09eb4f5c45f85e21125335d905c30eb707))
+* 主窗口移除Picgo支持 ([e4fa948](https://github.com/terwer/src-sy-post-publisher/commit/e4fa9489f01fe2f298a81b4c10c76b8bae5a001d))
+* 主窗口移除Picgo支持 ([6ef1127](https://github.com/terwer/src-sy-post-publisher/commit/6ef1127f8470e1426720a72662b0415c86517d84))
+* 主窗口移除Picgo支持 ([dd13c10](https://github.com/terwer/src-sy-post-publisher/commit/dd13c100b8d394f431f611d55e5eb5b81a549b0c))
+* 主窗口移除Picgo支持 ([18f7d61](https://github.com/terwer/src-sy-post-publisher/commit/18f7d618f3dfef1f0654caf3c4decd62120f95d9))
+* 修复图片有备注时无法上传问题 ([054eddd](https://github.com/terwer/src-sy-post-publisher/commit/054eddda8cf7198e70930e897de7b4a3bcfb8045))
+* 移除不必要的日志打印 ([cb68777](https://github.com/terwer/src-sy-post-publisher/commit/cb6877728262223a42c3a015352454c63e1abb1e))
+
 ## [0.7.2](https://github.com/terwer/src-sy-post-publisher/compare/v0.7.1...v0.7.2) (2023-03-04)
 
 
