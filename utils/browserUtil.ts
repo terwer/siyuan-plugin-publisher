@@ -23,27 +23,25 @@
  * questions.
  */
 
-import { fileOpen, FileWithHandle } from "browser-fs-access"
+import { fileOpen, type FileWithHandle } from "browser-fs-access"
 import { ElMessage } from "element-plus"
 
 /**
  * 是否在浏览器
  * @see {@link https://github.com/flexdinesh/browser-or-node/blob/master/src/index.js#L1 isBrowser}
  */
-export const isBrowser = (): boolean =>
-  typeof window !== "undefined" && typeof window.document !== "undefined"
+export const isBrowser = (): boolean => typeof window !== "undefined" && typeof window.document !== "undefined"
 
 /**
  * 检测是否是本地请求
  * @param apiUrl 请求地址
  */
-export const isLocalhost = (apiUrl: string): boolean =>
-  apiUrl.indexOf("127.0.0.1") > -1
+export const isLocalhost = (apiUrl: string): boolean => apiUrl.includes("127.0.0.1")
 
 /**
  * 检测是否是Electron
  */
-export const isElectron = /Electron/.test(navigator.userAgent)
+export const isElectron = typeof navigator !== "undefined" && navigator.userAgent.includes("Electron")
 
 /**
  * 获取url参数
@@ -72,11 +70,7 @@ export const getQueryString = (sParam: string): string => {
  * @param paramName 参数名
  * @param paramValue 参数值
  */
-const replaceUrlParam = (
-  url: string,
-  paramName: string,
-  paramValue: string
-): string => {
+const replaceUrlParam = (url: string, paramName: string, paramValue: string): string => {
   if (paramValue == null) {
     paramValue = ""
   }
@@ -94,11 +88,7 @@ const replaceUrlParam = (
  * @param key
  * @param value
  */
-export const setUrlParameter = (
-  urlstring: string,
-  key: string,
-  value: string
-): string => {
+export const setUrlParameter = (urlstring: string, key: string, value: string): string => {
   if (!isBrowser()) {
     return ""
   }
@@ -204,7 +194,7 @@ export function isInChromeExtension() {
   if (!isBrowser()) {
     return false
   }
-  return window.location.href.indexOf("chrome-extension://") > -1
+  return window.location.href.includes("chrome-extension://")
 }
 
 const browserUtil = {

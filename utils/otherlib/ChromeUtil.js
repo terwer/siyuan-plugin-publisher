@@ -24,12 +24,7 @@
  */
 
 import { isInSiyuanWidget } from "~/utils/platform/siyuan/siyuanUtil"
-import {
-  getQueryString,
-  isInChromeExtension,
-  readJSONFileFormDialog,
-  setUrlParameter,
-} from "~/utils/browserUtil"
+import { getQueryString, isInChromeExtension, readJSONFileFormDialog, setUrlParameter } from "~/utils/browserUtil"
 import { LogFactory } from "~/utils/logUtil"
 import { isEmptyString, pathJoin } from "~/utils/util"
 import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
@@ -223,7 +218,7 @@ export const importJSONToLocalStorage = async () => {
 /**
  * 检测是否是Windows
  */
-export const isWindows = "Windows" === navigator?.userAgentData?.platform
+export const isWindows = typeof navigator !== "undefined" && "Windows" === navigator?.userAgentData?.platform
 
 /**
  * 是否在插槽里面

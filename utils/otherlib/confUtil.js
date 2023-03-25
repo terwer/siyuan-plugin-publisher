@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { isElectron } from "~/utils/browserUtil"
+import { isBrowser, isElectron } from "~/utils/browserUtil"
 import { isInSiyuanWidget } from "~/utils/platform/siyuan/siyuanUtil"
 
 /**
@@ -33,7 +33,7 @@ import { isInSiyuanWidget } from "~/utils/platform/siyuan/siyuanUtil"
  * @since 0.6.8
  */
 export const getLocalStorageAdaptor = (cfgfile) => {
-  let ret = window.localStorage
+  let ret
 
   if (isElectron) {
     if (isInSiyuanWidget()) {
@@ -47,7 +47,11 @@ export const getLocalStorageAdaptor = (cfgfile) => {
     }
     ret.switchCfg(cfg)
   } else {
-    ret = window.localStorage
+    if (isBrowser()) {
+      ret = window.localStorage
+    } else {
+      ret = global.localStorage
+    }
   }
 
   return ret
