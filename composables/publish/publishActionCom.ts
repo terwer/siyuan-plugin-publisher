@@ -36,6 +36,7 @@ import { CONSTANTS } from "~/utils/constants/constants"
 import { PicgoPostApi } from "~/utils/platform/picgo/picgoPostApi"
 import { API } from "~/utils/api"
 import { Post } from "~/utils/models/post"
+import { LinkParser } from "~/utils/parser/LinkParser"
 
 /**
  * 通用的发布操作组件
@@ -48,6 +49,7 @@ export const usePublish = (props, deps?: any) => {
   const { t } = useI18n()
   const siyuanApi = new SiYuanApi()
   const picgoPostApi = new PicgoPostApi()
+  const linkParser = new LinkParser()
   // public data
   const publishData = reactive({
     isPublishLoading: false,
@@ -102,14 +104,9 @@ export const usePublish = (props, deps?: any) => {
         // api不可用但是开启了发布
         if (!isOk && githubPagesMethods.getGithubPagesData().githubEnabled) {
           publishData.isPublishLoading = false
-          ElMessage.error(
-            "检测到api不可用或者配置错误，无法发布到Github，请转到源码模式自行复制文本"
-          )
+          ElMessage.error("检测到api不可用或者配置错误，无法发布到Github，请转到源码模式自行复制文本")
           return
-        } else if (
-          isOk &&
-          githubPagesMethods.getGithubPagesData().githubEnabled
-        ) {
+        } else if (isOk && githubPagesMethods.getGithubPagesData().githubEnabled) {
           // api可用并且开启了发布
           logger.debug("开始真正调用api发布到Github")
 
@@ -133,34 +130,35 @@ export const usePublish = (props, deps?: any) => {
           const mdFullContent = yamlMethods.getYamlData().mdFullContent
 
           // 最终发布的内容
-          let publishContent = mdFullContent
+          let md = mdFullContent
+
+          // 引用链接替换
+          md = await linkParser.convertSiyuanLinkToPlatformLink(md, api)
 
           // 处理图床
           if (picgoPostMethods.getPicgoPostData().picgoEnabled) {
-            ElMessage.info(t("github.post.picgo.start.upload"))
             const siyuanPage = siyuanPageMethods.getSiyuanPageData().dataObj
-            const picgoPostResult = await picgoPostApi.uploadPostImagesToBed(
-              siyuanPage.pageId,
-              siyuanPage.meta,
-              mdFullContent
-            )
 
-            if (picgoPostResult.flag) {
-              publishContent = picgoPostResult.mdContent
-            } else {
-              ElMessage.warning(t("github.post.picgo.picbed.error"))
+            const picgoPostResult = await picgoPostApi.uploadPostImagesToBed(siyuanPage.pageId, siyuanPage.meta, md)
+            // 有图片才上传
+            if (picgoPostResult.hasImages) {
+              if (picgoPostResult.flag) {
+                md = picgoPostResult.mdContent
+              } else {
+                ElMessage.error(t("github.post.picgo.picbed.error") + "=>" + picgoPostResult.errmsg)
+              }
             }
           }
 
           // 最终发布的内容
-          logger.debug("即将发布的内容，publishContent=>", { publishContent })
+          logger.debug("即将发布的内容，publishContent=>", { publishContent: md })
 
           // 发布
           // initGithubPages之后发布路径就是最新完整的
           const docPath = githubPagesMethods.getGithubPagesData().publishPath
           const post = new Post()
           post.postid = docPath
-          post.description = publishContent
+          post.description = md
           let res
           if (initPublishMethods.getInitPublishData().isPublished) {
             res = await api.editPost(post.postid, post)
@@ -184,10 +182,7 @@ export const usePublish = (props, deps?: any) => {
           // 获取最新属性
           const pageId = await siyuanPageMethods.getPageId()
           await siyuanApi.setBlockAttrs(pageId, customAttr)
-          logger.debug(
-            props.apiType + "_Main发布成功，保存路径,meta=>",
-            customAttr
-          )
+          logger.debug(props.apiType + "_Main发布成功，保存路径,meta=>", customAttr)
 
           // 刷新属性数据
           await initPublishMethods.initPage()

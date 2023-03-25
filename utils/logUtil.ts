@@ -65,15 +65,13 @@ prefix.reg(loglevel)
 if (isTest || isDev) {
   loglevel.setLevel(LOG_LEVEL_DEBUG)
 } else {
-  loglevel.setLevel(LOG_INFO_ENABLED ? LOG_LEVEL_INFO : LOG_LEVEL_WARN)
+  loglevel.setLevel(LOG_INFO_ENABLED ? LOG_LEVEL_INFO : LOG_LEVEL_ERROR)
 }
 
 prefix.apply(loglevel, {
   format(level, name, timestamp) {
     const strarr = []
-    strarr.push(
-      chalk.gray("[") + chalk.green(timestamp).toString() + chalk.gray("]")
-    )
+    strarr.push(chalk.gray("[") + chalk.green(timestamp).toString() + chalk.gray("]"))
 
     switch (level) {
       case LOG_LEVEL_INFO:

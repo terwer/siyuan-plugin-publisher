@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -43,15 +43,8 @@ export class YuqueApiAdaptor extends CommonblogApiAdaptor implements IApi {
 
   constructor() {
     super(API_TYPE_CONSTANTS.API_TYPE_YUQUE)
-    this.logger = LogFactory.getLogger(
-      "utils/platform/commonblog/yuque/yuqueApiAdaptor.ts"
-    )
-    this.yuqueApi = new YuqueApi(
-      this.cfg.apiUrl,
-      this.cfg.blogid ?? "",
-      this.cfg.username ?? "",
-      this.cfg.token ?? ""
-    )
+    this.logger = LogFactory.getLogger("utils/platform/commonblog/yuque/yuqueApiAdaptor.ts")
+    this.yuqueApi = new YuqueApi(this.cfg.apiUrl, this.cfg.blogid ?? "", this.cfg.username ?? "", this.cfg.token ?? "")
   }
 
   public async getUsersBlogs(): Promise<UserBlog[]> {
@@ -74,17 +67,10 @@ export class YuqueApiAdaptor extends CommonblogApiAdaptor implements IApi {
 
   async deletePost(postid: string): Promise<boolean> {
     const yuquePostidKey = this.getYuquePostKey(postid)
-    return await this.yuqueApi.delDoc(
-      yuquePostidKey.docId,
-      yuquePostidKey.docRepo
-    )
+    return await this.yuqueApi.delDoc(yuquePostidKey.docId, yuquePostidKey.docRepo)
   }
 
-  async editPost(
-    postid: string,
-    post: Post,
-    publish?: boolean
-  ): Promise<boolean> {
+  async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
     const yuquePostidKey = this.getYuquePostKey(postid)
     return await this.yuqueApi.updateDoc(
       yuquePostidKey.docId,
@@ -98,28 +84,16 @@ export class YuqueApiAdaptor extends CommonblogApiAdaptor implements IApi {
   async newPost(post: Post, publish?: boolean): Promise<string> {
     if (post.cate_slugs != null && post.cate_slugs.length > 0) {
       const repo = post.cate_slugs[0]
-      return await this.yuqueApi.addDoc(
-        post.title,
-        post.wp_slug,
-        post.description,
-        repo
-      )
+      return await this.yuqueApi.addDoc(post.title, post.wp_slug, post.description, repo)
     } else {
-      return await this.yuqueApi.addDoc(
-        post.title,
-        post.wp_slug,
-        post.description
-      )
+      return await this.yuqueApi.addDoc(post.title, post.wp_slug, post.description)
     }
   }
 
   async getPost(postid: string, useSlug?: boolean): Promise<Post> {
     const yuquePostidKey = this.getYuquePostKey(postid)
 
-    const yuqueDoc = await this.yuqueApi.getDoc(
-      yuquePostidKey.docId,
-      yuquePostidKey.docRepo
-    )
+    const yuqueDoc = await this.yuqueApi.getDoc(yuquePostidKey.docId, yuquePostidKey.docRepo)
     this.logger.debug("yuqueDoc=>", yuqueDoc)
 
     const commonPost = new Post()

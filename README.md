@@ -21,6 +21,28 @@
 <a title="Downloads" target="_blank" href="https://github.com/terwer/src-sy-post-publisher/releases"><img src="https://img.shields.io/github/downloads/terwer/src-sy-post-publisher/total.svg?label=extension-downloads&style=flat-square&color=blueviolet"></a>
 <a title="Downloads" target="_blank" href="https://github.com/terwer/src-sy-post-publisher/releases"><img src="https://img.shields.io/github/downloads/terwer/sy-post-publisher/total.svg?label=widget-downloads&style=flat-square&color=blue"></a>
 
+## v0.8.0
+
+### Bug 修复
+
+- 修复普通挂件版使用方式 WordPress 和博客园发布文章报错问题
+- 修复图片有备注时无法上传问题，现在支持显示备注为图片的 alt
+- 修复 PicGo 设置中的时间戳重命名关闭后会自动打开的问题
+- #434 文章没有图片时候图床错误文章发布失败
+
+### 新特性
+
+- 发布至语雀支持笔记间的内部链接替换
+- 博客园、WordPress、Typecho 平台支持笔记间的内部链接替换
+- Github 平台（HUGO、Hexo、Vitepress 等）支持笔记间的内部链接替换
+- 普通挂件版使用方式支持使用图床[受限于 Electron 机制，主窗口直接上传会导致内核崩溃，目前仅支持链接替换，上传仍需打开新窗口]
+
+### 开发重构
+
+- 移除不必要的日志打印
+- #420 ankisiyuan.bin（仅支持 Mac） 默认不提供，手动下载，减小打包体积
+- 鉴于主窗口直接上传会导致内核崩溃，主窗口移除 PicGO 支持，仅支持新窗口模式使用 PicGO
+
 ## v0.7.2 Bug 修复
 
 - 修复 PicGO 初始化失败问题
@@ -67,6 +89,10 @@
 ### 其他
 
 - 修复已知问题，升级部分组件。
+
+温馨提示：
+
+`0.7.0` 之前的更新日志请参考 [CHANGELOG](CHANGELOG.md)
 
 ## 快速上手指南
 

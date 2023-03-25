@@ -133,11 +133,7 @@ var LocalStorage
   }
 
   function writeFile(obj) {
-    return fs.writeFileSync(
-      getFilepath(),
-      JSON.stringify(obj),
-      getFileOptions()
-    )
+    return fs.writeFileSync(getFilepath(), JSON.stringify(obj), getFileOptions())
   }
 
   function getFilepath() {
@@ -155,4 +151,4 @@ var LocalStorage
   }
 })(LocalStorage || (LocalStorage = {}))
 module.exports = LocalStorage
-console.log("json-localstorage register success")
+// console.log("json-localstorage register success")

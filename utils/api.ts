@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -72,11 +72,7 @@ export interface IApi {
    * @see {@link https://codex.wordpress.org/XML-RPC_MetaWeblog_API#metaWeblog.getRecentPosts getRecentPosts}
    * @returns {Promise<Array<Post>>}
    */
-  getRecentPosts: (
-    numOfPosts: number,
-    page?: number,
-    keyword?: string
-  ) => Promise<Post[]>
+  getRecentPosts: (numOfPosts: number, page?: number, keyword?: string) => Promise<Post[]>
 
   /**
    * @description 文章详情
@@ -261,11 +257,7 @@ export class API implements IApi {
     return await this.apiAdaptor.getRecentPostsCount(keyword)
   }
 
-  public async getRecentPosts(
-    numOfPosts: number,
-    page?: number,
-    keyword?: string
-  ): Promise<Post[]> {
+  public async getRecentPosts(numOfPosts: number, page?: number, keyword?: string): Promise<Post[]> {
     return await this.apiAdaptor.getRecentPosts(numOfPosts, page, keyword)
   }
 
@@ -277,11 +269,7 @@ export class API implements IApi {
     return await this.apiAdaptor.getPost(postid, useSlug)
   }
 
-  public async editPost(
-    postid: string,
-    post: Post,
-    publish?: boolean
-  ): Promise<boolean> {
+  public async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
     return await this.apiAdaptor.editPost(postid, post, publish)
   }
 

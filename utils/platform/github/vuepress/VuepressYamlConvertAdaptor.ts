@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -23,10 +23,7 @@
  * questions.
  */
 
-import {
-  IYamlConvertAdaptor,
-  YamlConvertAdaptor,
-} from "~/utils/platform/yamlConvertAdaptor"
+import { IYamlConvertAdaptor, YamlConvertAdaptor } from "~/utils/platform/yamlConvertAdaptor"
 import { PostForm } from "~/utils/models/postForm"
 import { YamlFormatObj } from "~/utils/models/yamlFormatObj"
 import { LogFactory } from "~/utils/logUtil"
@@ -35,13 +32,8 @@ import { obj2Yaml } from "~/utils/yamlUtil"
 import { IGithubCfg } from "~/utils/platform/github/githubCfg"
 import { isEmptyString, pathJoin } from "~/utils/util"
 
-export class VuepressYamlConvertAdaptor
-  extends YamlConvertAdaptor
-  implements IYamlConvertAdaptor
-{
-  private readonly logger = LogFactory.getLogger(
-    "utils/platform/github/vuepress/VuepressYamlConvertAdaptor.ts"
-  )
+export class VuepressYamlConvertAdaptor extends YamlConvertAdaptor implements IYamlConvertAdaptor {
+  private readonly logger = LogFactory.getLogger("utils/platform/github/vuepress/VuepressYamlConvertAdaptor.ts")
 
   convertToYaml(postForm: PostForm, githubCfg?: IGithubCfg): YamlFormatObj {
     let yamlFormatObj: YamlFormatObj = new YamlFormatObj()
@@ -53,10 +45,7 @@ export class VuepressYamlConvertAdaptor
     // permalink
     let link = "/post/" + postForm.formData.customSlug + ".html"
     if (githubCfg && !isEmptyString(githubCfg.previewUrl)) {
-      link = githubCfg.previewUrl.replace(
-        "[postid]",
-        postForm.formData.customSlug
-      )
+      link = githubCfg.previewUrl.replace("[postid]", postForm.formData.customSlug)
     }
     this.logger.debug("link=>", link)
     yamlFormatObj.yamlObj.permalink = link
@@ -100,17 +89,13 @@ export class VuepressYamlConvertAdaptor
 
     yamlFormatObj.formatter = yaml
     yamlFormatObj.mdContent = postForm.formData.mdContent
-    yamlFormatObj.mdFullContent =
-      yamlFormatObj.formatter + "\n\n" + yamlFormatObj.mdContent
+    yamlFormatObj.mdFullContent = yamlFormatObj.formatter + "\n\n" + yamlFormatObj.mdContent
     yamlFormatObj.htmlContent = postForm.formData.htmlContent
 
     return yamlFormatObj
   }
 
-  convertToAttr(
-    yamlFormatObj: YamlFormatObj,
-    githubCfg?: IGithubCfg
-  ): PostForm {
+  convertToAttr(yamlFormatObj: YamlFormatObj, githubCfg?: IGithubCfg): PostForm {
     const yamlObj = yamlFormatObj.yamlObj
 
     const postForm = new PostForm()
@@ -120,10 +105,7 @@ export class VuepressYamlConvertAdaptor
       .replace("/post/", "")
       .replace(".html", "")
       .replace("/", "")
-    postForm.formData.created = formatIsoToZhDate(
-      yamlObj.date.toISOString(),
-      false
-    )
+    postForm.formData.created = formatIsoToZhDate(yamlObj.date.toISOString(), false)
 
     const yamlMeta = yamlObj.meta
     for (let i = 0; i < yamlMeta.length; i++) {

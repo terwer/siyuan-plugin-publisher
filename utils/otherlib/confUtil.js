@@ -33,7 +33,7 @@ import { isInSiyuanWidget } from "~/utils/platform/siyuan/siyuanUtil"
  * @since 0.6.8
  */
 export const getLocalStorageAdaptor = (cfgfile) => {
-  let ret = window.localStorage
+  let ret = typeof window !== "undefined" ? window.localStorage : global.localStorage
 
   if (isElectron) {
     if (isInSiyuanWidget()) {
@@ -46,8 +46,6 @@ export const getLocalStorageAdaptor = (cfgfile) => {
       cfg = cfgfile
     }
     ret.switchCfg(cfg)
-  } else {
-    ret = window.localStorage
   }
 
   return ret

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -46,11 +46,7 @@ export class CommonblogApiAdaptor implements IApi {
     throw new Error("该功能未实现，请在子类重写该方法")
   }
 
-  public async editPost(
-    postid: string,
-    post: Post,
-    publish?: boolean
-  ): Promise<boolean> {
+  public async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
     throw new Error("该功能未实现，请在子类重写该方法")
   }
 
@@ -58,11 +54,7 @@ export class CommonblogApiAdaptor implements IApi {
     throw new Error("该功能未实现，请在子类重写该方法")
   }
 
-  public async getRecentPosts(
-    numOfPosts: number,
-    page?: number,
-    keyword?: string
-  ): Promise<Post[]> {
+  public async getRecentPosts(numOfPosts: number, page?: number, keyword?: string): Promise<Post[]> {
     throw new Error("该功能未实现，请在子类重写该方法")
   }
 

@@ -16,12 +16,7 @@
   "host_permissions": ["*://*/*"],
   "web_accessible_resources": [
     {
-      "resources": [
-        "blog/index.html",
-        "detail/index.html",
-        "publish/index.html",
-        "index.html"
-      ],
+      "resources": ["blog/index.html", "detail/index.html", "publish/index.html", "index.html"],
       "matches": ["<all_urls>"]
     }
   ],

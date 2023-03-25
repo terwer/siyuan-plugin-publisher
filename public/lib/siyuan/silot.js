@@ -26,7 +26,7 @@
 // 警告⚠️：请勿在非思源笔记浏览器环境调用此文件中的任何方法
 
 const initSlot = () => {
-  console.warn("在所有文档前面加上一个挂件插槽")
+  // console.warn("在所有文档前面加上一个挂件插槽")
 
   function showPreviousWidgetsSlot() {
     setInterval(DocumentShowPreviousWidget, 300)
@@ -36,9 +36,7 @@ const initSlot = () => {
   showPreviousWidgetsSlot()
 
   function DocumentShowPreviousWidget() {
-    var openDoc = window.document.querySelectorAll(
-      ".layout-tab-container>.fn__flex-1.protyle:not(.fn__none)"
-    )
+    var openDoc = window.document.querySelectorAll(".layout-tab-container>.fn__flex-1.protyle:not(.fn__none)")
 
     var allDocumentTitleElement = []
     for (let index = 0; index < openDoc.length; index++) {
@@ -54,25 +52,19 @@ const initSlot = () => {
         !element.parentElement.querySelector(".previous-widgets-slot") &&
         element.parentElement.parentElement.querySelector("[data-node-id]")
       ) {
-        var documentPreviousWidgetsSlotElement = CreatePreviousWidgetsSlot(
-          element.parentElement
-        )
+        var documentPreviousWidgetsSlotElement = CreatePreviousWidgetsSlot(element.parentElement)
         element.parentElement.appendChild(documentPreviousWidgetsSlotElement)
       }
     }
 
     function CreatePreviousWidgetsSlot(element) {
-      let cloneNode = element.parentElement
-        .querySelector(".protyle-wysiwyg")
-        .cloneNode(false)
+      let cloneNode = element.parentElement.querySelector(".protyle-wysiwyg").cloneNode(false)
       cloneNode.innerHTML = `
   <div class="iframe-content">
       <iframe src="/widgets/sy-post-publisher/?isSlot=true" scrolling="no"></iframe>
   </div>
   `
-      let id = element.parentElement.parentElement
-        .querySelector("[data-node-id]")
-        .getAttribute("data-node-id")
+      let id = element.parentElement.parentElement.querySelector("[data-node-id]").getAttribute("data-node-id")
       cloneNode.setAttribute("data-node-id", id)
       cloneNode.setAttribute("contenteditable", false)
       cloneNode.setAttribute("style", "padding: 0;")

@@ -26,15 +26,10 @@
 <template>
   <el-container>
     <el-main class="common-main" v-if="!isInitLoading">
+      <el-alert class="top-version-tip" :title="apiTypeInfo + blogName" type="info" :closable="false" />
       <el-alert
         class="top-version-tip"
-        :title="apiTypeInfo + blogName"
-        type="info"
-        :closable="false"
-      />
-      <el-alert
-        class="top-version-tip"
-        title="暂时不支持编辑所属知识库。如果您想移动文档，请先点击取消删除该文档，然后重新选择新的知识库发布。"
+        title="由于语雀平台的限制，暂时不支持编辑所属知识库。如果您想移动文档，请先点击取消删除该文档，然后重新选择新的知识库发布。"
         type="warning"
         :closable="false"
         v-if="useCat && isPublished"
@@ -57,14 +52,10 @@
         <!-- 编辑模式 -->
         <el-form-item :label="$t('main.publish.editmode')">
           <el-button-group>
-            <el-button
-              :type="editMode ? 'default' : 'primary'"
-              @click="simpleMode"
+            <el-button :type="editMode ? 'default' : 'primary'" @click="simpleMode"
               >{{ $t("main.publish.editmode.simple") }}
             </el-button>
-            <el-button
-              :type="editMode ? 'primary' : 'default'"
-              @click="complexMode"
+            <el-button :type="editMode ? 'primary' : 'default'" @click="complexMode"
               >{{ $t("main.publish.editmode.complex") }}
             </el-button>
           </el-button-group>
@@ -73,12 +64,7 @@
         <!-- 刷新别名 -->
         <el-form-item :label="$t('main.force.refresh')" v-if="editMode">
           <el-switch v-model="forceRefresh" />
-          <el-alert
-            :title="$t('main.force.refresh.tip')"
-            type="warning"
-            :closable="false"
-            v-if="!forceRefresh"
-          />
+          <el-alert :title="$t('main.force.refresh.tip')" type="warning" :closable="false" v-if="!forceRefresh" />
         </el-form-item>
 
         <!-- 文章别名 -->
@@ -87,33 +73,17 @@
         </el-form-item>
         <el-form-item v-if="editMode">
           <el-checkbox-group v-model="formData.checkList">
-            <el-checkbox label="1"
-              >{{ $t("main.use.google.translate") }}
-            </el-checkbox>
+            <el-checkbox label="1">{{ $t("main.use.google.translate") }} </el-checkbox>
           </el-checkbox-group>
         </el-form-item>
         <el-form-item v-if="editMode">
-          <el-button
-            type="primary"
-            class="make-slug-btn"
-            @click="makeSlug"
-            :loading="isSlugLoading"
-          >
-            {{
-              isSlugLoading
-                ? $t("main.opt.loading")
-                : $t("main.auto.fetch.slug")
-            }}
+          <el-button type="primary" class="make-slug-btn" @click="makeSlug" :loading="isSlugLoading">
+            {{ isSlugLoading ? $t("main.opt.loading") : $t("main.auto.fetch.slug") }}
           </el-button>
         </el-form-item>
         <el-form-item :label="$t('main.use.hash')" v-if="editMode">
           <el-switch v-model="slugHashEnabled" />
-          <el-alert
-            :title="$t('main.use.hash.tip')"
-            type="warning"
-            :closable="false"
-            v-if="!slugHashEnabled"
-          />
+          <el-alert :title="$t('main.use.hash.tip')" type="warning" :closable="false" v-if="!slugHashEnabled" />
         </el-form-item>
 
         <!-- 摘要 -->
@@ -122,11 +92,7 @@
         </el-form-item>
         <el-form-item v-if="editMode">
           <el-button type="primary" @click="makeDesc" :loading="isDescLoading">
-            {{
-              isDescLoading
-                ? $t("main.opt.loading")
-                : $t("main.auto.fetch.desc")
-            }}
+            {{ isDescLoading ? $t("main.opt.loading") : $t("main.auto.fetch.desc") }}
           </el-button>
         </el-form-item>
 
@@ -167,29 +133,18 @@
             @keyup.enter="tagHandleInputConfirm"
             @blur="tagHandleInputConfirm"
           />
-          <el-button
-            v-else
-            class="button-new-tag ml-1 el-tag"
-            size="small"
-            @click="tagShowInput"
-          >
+          <el-button v-else class="button-new-tag ml-1 el-tag" size="small" @click="tagShowInput">
             {{ $t("main.tag.new") }}
           </el-button>
         </el-form-item>
         <el-form-item v-if="editMode">
           <el-button type="primary" @click="fetchTag" :loading="isTagLoading">
-            {{
-              isTagLoading ? $t("main.opt.loading") : $t("main.auto.fetch.tag")
-            }}
+            {{ isTagLoading ? $t("main.opt.loading") : $t("main.auto.fetch.tag") }}
           </el-button>
         </el-form-item>
 
         <!-- 分类 -->
-        <el-form-item
-          :label="$t('main.cat')"
-          style="width: 100%"
-          v-if="props.useCat"
-        >
+        <el-form-item :label="$t('main.cat')" style="width: 100%" v-if="props.useCat">
           <el-select
             v-if="catEnabled"
             v-model="formData.cat.categorySelected"
@@ -199,12 +154,7 @@
             size="default"
             @change="handleCatNodeSingleCheck"
           >
-            <el-option
-              v-for="item in formData.cat.categoryList"
-              :key="item.value"
-              :label="item.label"
-              :value="item"
-            />
+            <el-option v-for="item in formData.cat.categoryList" :key="item.value" :label="item.label" :value="item" />
           </el-select>
           <el-select
             v-else
@@ -216,12 +166,7 @@
             size="default"
             @change="handleCatNodeSingleCheck"
           >
-            <el-option
-              v-for="item in formData.cat.categoryList"
-              :key="item.value"
-              :label="item.label"
-              :value="item"
-            />
+            <el-option v-for="item in formData.cat.categoryList" :key="item.value" :label="item.label" :value="item" />
           </el-select>
         </el-form-item>
 
@@ -230,30 +175,35 @@
         -->
         <!-- 一键生成属性-->
         <el-form-item v-if="editMode" :label="$t('main.opt.quick')">
-          <el-button
-            type="primary"
-            @click="oneclickAttr"
-            :loading="isGenLoading"
-          >
-            {{
-              isGenLoading
-                ? $t("main.opt.loading")
-                : $t("main.publish.oneclick.attr")
-            }}
+          <el-button type="primary" @click="oneclickAttr" :loading="isGenLoading">
+            {{ isGenLoading ? $t("main.opt.loading") : $t("main.publish.oneclick.attr") }}
           </el-button>
-          <el-button type="primary" @click="saveAttrToSiyuan"
-            >{{ $t("main.save.attr.to.siyuan") }}
-          </el-button>
+          <el-button type="primary" @click="saveAttrToSiyuan">{{ $t("main.save.attr.to.siyuan") }} </el-button>
         </el-form-item>
 
         <!-- 使用图床 -->
         <el-form-item :label="$t('github.post.picgo.use')">
-          <el-switch
-            v-model="picgoPostData.picgoEnabled"
-            @change="picgoPostMethods.picgoOnChange"
-          />
+          <el-switch v-model="picgoPostData.picgoEnabled" @change="picgoPostMethods.picgoOnChange" />
+          <el-tooltip
+            v-if="picgoPostData.picgoEnabled && !isInSiyuanNewWinBrowser()"
+            :content="$t('siyuan.browser.menu.picture.btn')"
+            class="box-item"
+            effect="light"
+            placement="right"
+            popper-class="publish-menu-tooltip"
+          >
+            <el-button
+              class="pic-manage-btn"
+              type="success"
+              size="small"
+              @click="picgoPostMethods.handlePicgoManage(siyuanData.pageId)"
+            >
+              <font-awesome-icon icon="fa-solid fa-image" />
+              {{ $t("setting.picgo.manage") }}
+            </el-button>
+          </el-tooltip>
           <el-alert
-            v-if="false && picgoPostData.picgoEnabled"
+            v-if="picgoPostData.picgoEnabled"
             :closable="false"
             :title="$t('github.post.picgo.use.tip')"
             type="warning"
@@ -262,22 +212,10 @@
 
         <!-- 发布操作 -->
         <el-form-item label="">
-          <el-button
-            type="primary"
-            @click="publishConfirm"
-            :loading="isPublishLoading"
-            >{{
-              isPublishLoading
-                ? $t("main.publish.loading")
-                : isPublished
-                ? $t("main.update")
-                : $t("main.publish")
-            }}
+          <el-button type="primary" @click="publishConfirm" :loading="isPublishLoading"
+            >{{ isPublishLoading ? $t("main.publish.loading") : isPublished ? $t("main.update") : $t("main.publish") }}
           </el-button>
-          <el-button
-            v-if="isPublished"
-            :loading="isCancelLoading"
-            @click="cancelPublish"
+          <el-button v-if="isPublished" :loading="isCancelLoading" @click="cancelPublish"
             >{{ $t("main.cancel") }}
           </el-button>
         </el-form-item>
@@ -285,19 +223,11 @@
         <!-- 文章状态 -->
         <el-form-item>
           <el-button type="danger" text disabled>
-            {{
-              isPublished
-                ? $t("main.publish.status.published")
-                : $t("main.publish.status.unpublish")
-            }}
+            {{ isPublished ? $t("main.publish.status.published") : $t("main.publish.status.unpublish") }}
           </el-button>
-          <a
-            :href="previewUrl"
-            :title="previewUrl"
-            target="_blank"
-            v-if="isPublished"
-            >{{ $t("main.publish.see.preview") }}</a
-          >
+          <a :href="previewUrl" :title="previewUrl" target="_blank" v-if="isPublished">{{
+            $t("main.publish.see.preview")
+          }}</a>
         </el-form-item>
       </el-form>
     </el-main>
@@ -306,10 +236,7 @@
 </template>
 
 <script lang="ts" setup>
-import {
-  CommonblogCfg,
-  ICommonblogCfg,
-} from "~/utils/platform/commonblog/commonblogCfg"
+import { CommonblogCfg, ICommonblogCfg } from "~/utils/platform/commonblog/commonblogCfg"
 import { nextTick, onMounted, reactive, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { SIYUAN_PAGE_ATTR_KEY } from "~/utils/constants/siyuanPageConstants"
@@ -333,26 +260,20 @@ import { LogFactory } from "~/utils/logUtil"
 import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
 import { getPageId } from "~/utils/platform/siyuan/siyuanUtil"
 import { getConf, getJSONConf, setConf } from "~/utils/configUtil"
-import {
-  cutWords,
-  isEmptyObject,
-  isEmptyString,
-  jiebaToHotWords,
-  pinyinSlugify,
-  zhSlugify,
-} from "~/utils/util"
+import { cutWords, isEmptyObject, isEmptyString, jiebaToHotWords, pinyinSlugify, zhSlugify } from "~/utils/util"
 import { calcLastSeconds, formatNumToZhDate } from "~/utils/dateUtil"
 import { getPublishCfg, getPublishStatus } from "~/utils/publishUtil"
 import { ImageParser } from "~/utils/parser/imageParser"
 import { usePicgoPost } from "~/composables/picgo/import/picgoPostCom"
 import { PicgoPostApi } from "~/utils/platform/picgo/picgoPostApi"
+import { LinkParser } from "~/utils/parser/LinkParser"
+import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
 
-const logger = LogFactory.getLogger(
-  "components/publish/tab/main/CommonBlogMain.vue"
-)
+const logger = LogFactory.getLogger("components/publish/tab/main/CommonBlogMain.vue")
 const siyuanApi = new SiYuanApi()
 // 图片解析器
 const imageParser = new ImageParser()
+const linkParser = new LinkParser()
 
 const { t } = useI18n()
 
@@ -412,9 +333,7 @@ const props = defineProps({
 })
 
 const blogName = ref("")
-const apiTypeInfo = ref(
-  t("setting.blog.platform.support.common") + props.apiType + " "
-)
+const apiTypeInfo = ref(t("setting.blog.platform.support.common") + props.apiType + " ")
 const apiStatus = ref(false)
 const picgoPostApi = new PicgoPostApi()
 
@@ -516,10 +435,8 @@ const initPage = async () => {
     fmtTitle = removeTitleNumber(page.content)
   }
   formData.title = fmtTitle
-  formData.customSlug =
-    siyuanData.meta[SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_SLUG_KEY]
-  formData.desc =
-    siyuanData.meta[SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_DESC_KEY]
+  formData.customSlug = siyuanData.meta[SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_SLUG_KEY]
+  formData.desc = siyuanData.meta[SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_DESC_KEY]
   formData.created = formatNumToZhDate(page.created)
 
   // 标签
@@ -786,8 +703,7 @@ const handleCatNodeSingleCheck = (val) => {
 
 const saveAttrToSiyuan = async (hideTip) => {
   const customAttr = {
-    [SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_SLUG_KEY]:
-      formData.customSlug,
+    [SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_SLUG_KEY]: formData.customSlug,
     [SIYUAN_PAGE_ATTR_KEY.SIYUAN_PAGE_ATTR_CUSTOM_DESC_KEY]: formData.desc,
     tags: formData.tag.dynamicTags.join(","),
   }
@@ -824,6 +740,11 @@ const oneclickAttr = async (hideTip) => {
 const checkLimit = (lastmodKey) => {
   const flag = false
 
+  // 限制开关
+  if (!props.limitRate) {
+    return false
+  }
+
   const lastmodDate = getConf(lastmodKey)
   // 没发布过，不限制
   if (isEmptyString(lastmodDate)) {
@@ -837,7 +758,9 @@ const checkLimit = (lastmodKey) => {
     ElMessage.error(
       "由于【" +
         props.apiType +
-        "】平台的限制，每6分钟之内只能发布或者更新一次文章，距离上一次发布时间为：" +
+        "】平台的限制，每" +
+        props.limitSeconds +
+        "秒之内只能发布或者更新一次文章，距离上一次发布时间为：" +
         s +
         "秒，仍需等待：" +
         (props.limitSeconds - s) +
@@ -916,6 +839,9 @@ const doPublish = async () => {
     //   md = await imageParser.replaceImagesWithBase64(md)
     // }
 
+    // 引用链接替换
+    md = await linkParser.convertSiyuanLinkToPlatformLink(md, api)
+
     // 如果设置了移除图片，则忽略
     // 正常情况下，如果图床开启，上传文档到图床
     if (props.removeImage) {
@@ -923,17 +849,14 @@ const doPublish = async () => {
     } else {
       // 处理图床
       if (picgoPostMethods.getPicgoPostData().picgoEnabled) {
-        ElMessage.info(t("github.post.picgo.start.upload"))
-        const picgoPostResult = await picgoPostApi.uploadPostImagesToBed(
-          siyuanData.pageId,
-          siyuanData.meta,
-          md
-        )
-
-        if (picgoPostResult.flag) {
-          md = picgoPostResult.mdContent
-        } else {
-          ElMessage.warning(t("github.post.picgo.picbed.error"))
+        const picgoPostResult = await picgoPostApi.uploadPostImagesToBed(siyuanData.pageId, siyuanData.meta, md)
+        // 有图片才上传
+        if (picgoPostResult.hasImages) {
+          if (picgoPostResult.flag) {
+            md = picgoPostResult.mdContent
+          } else {
+            ElMessage.error(t("github.post.picgo.picbed.error") + "=>" + picgoPostResult.errmsg)
+          }
         }
       }
     }

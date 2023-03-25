@@ -37,16 +37,16 @@ import { getSiyuanNewWinDataDir } from "~/utils/otherlib/siyuanBrowserUtil"
 import { isFileExist } from "~/utils/otherlib/ChromeUtil"
 import picgoUtil from "~/utils/otherlib/picgoUtil"
 import { ElMessage } from "element-plus"
+import { isInSiyuanWidget } from "~/utils/platform/siyuan/siyuanUtil"
+import { type ParsedImage } from "~/utils/models/parsedImage"
 
 /**
  * Picgo与文章交互的通用方法
  */
 export class PicgoPostApi {
-  private readonly logger = LogFactory.getLogger(
-    "utils/platform/picgo/picgoPostApi.ts"
-  )
-  private imageParser: ImageParser
-  private siyuanApi: SiYuanApi
+  private readonly logger = LogFactory.getLogger("utils/platform/picgo/picgoPostApi.ts")
+  private readonly imageParser: ImageParser
+  private readonly siyuanApi: SiYuanApi
 
   constructor() {
     this.imageParser = new ImageParser()
@@ -55,19 +55,16 @@ export class PicgoPostApi {
 
   /**
    * 将字符串数组格式的图片信息转换成图片对象数组
+   *
    * @param attrs 文章属性
    * @param retImgs  字符串数组格式的图片信息
    */
-  public async doConvertImagesToImagesItemArray(
-    attrs,
-    retImgs: any[]
-  ): Promise<ImageItem[]> {
-    let ret = <ImageItem[]>[]
+  public async doConvertImagesToImagesItemArray(attrs, retImgs: ParsedImage[]): Promise<ImageItem[]> {
+    const ret = [] as ImageItem[]
     for (let i = 0; i < retImgs.length; i++) {
       const retImg = retImgs[i]
-      let isLocal = false
-      const originUrl = retImg
-      let imgUrl = retImg
+      const originUrl = retImg.url
+      let imgUrl = retImg.url
 
       // 获取属性存储的映射数据
       let fileMap = {}
@@ -78,17 +75,14 @@ export class PicgoPostApi {
       }
 
       // 处理思源本地图片预览
-      if (/^assets/.test(originUrl)) {
+      // 这个是从思源查出来解析的是否是本地
+      if (retImg.isLocal) {
         const baseUrl = getSiyuanCfg().baseUrl
         imgUrl = pathJoin(baseUrl, "/" + imgUrl)
-        isLocal = true
       }
 
-      const imageItem = new ImageItem(originUrl, imgUrl, isLocal)
-      // logger.debug("imageItem.hash imageItem.name=>", imageItem.name)
-      // logger.debug("imageItem.hash fileMap=>", fileMap)
-      // logger.debug("imageItem.hash=>", imageItem.hash)
-      // logger.debug("fileMap[imageItem.hash]=>", fileMap[imageItem.hash])
+      const imageItem = new ImageItem(originUrl, imgUrl, retImg.isLocal, retImg.alt, retImg.title)
+      // fileMap 查出来的是是否上传，上传了，isLocal就false
       if (fileMap[imageItem.hash]) {
         const newImageItem = fileMap[imageItem.hash]
         this.logger.debug("newImageItem=>", newImageItem)
@@ -104,6 +98,7 @@ export class PicgoPostApi {
       ret.push(imageItem)
     }
 
+    console.error("ret=>", ret)
     return ret
   }
 
@@ -113,31 +108,28 @@ export class PicgoPostApi {
    * @param attrs 文章属性
    * @param mdContent 文章的Markdown文本
    */
-  public async uploadPostImagesToBed(
-    pageId: string,
-    attrs: any,
-    mdContent: string
-  ): Promise<PicgoPostResult> {
-    let ret = new PicgoPostResult()
+  public async uploadPostImagesToBed(pageId: string, attrs: any, mdContent: string): Promise<PicgoPostResult> {
+    const ret = new PicgoPostResult()
 
     const localImages = this.imageParser.parseLocalImagesToArray(mdContent)
     const uniqueLocalImages = [...new Set([...localImages])]
     this.logger.debug("uniqueLocalImages=>", uniqueLocalImages)
 
-    if (uniqueLocalImages.length == 0) {
+    if (uniqueLocalImages.length === 0) {
       ret.flag = false
+      ret.hasImages = false
       ret.mdContent = mdContent
-      return Promise.resolve(ret)
+      ret.errmsg = "文章中没有图片"
+      return await Promise.resolve(ret)
     }
 
     // 开始上传
     try {
-      const imageItemArray = await this.doConvertImagesToImagesItemArray(
-        attrs,
-        uniqueLocalImages
-      )
+      ret.hasImages = true
 
-      let replaceMap = {}
+      const imageItemArray = await this.doConvertImagesToImagesItemArray(attrs, uniqueLocalImages)
+
+      const replaceMap = {}
       let hasLocalImages = false
       for (let i = 0; i < imageItemArray.length; i++) {
         const imageItem = imageItemArray[i]
@@ -146,25 +138,24 @@ export class PicgoPostApi {
         }
 
         if (!imageItem.isLocal) {
-          this.logger.warn(
-            "已经上传过图床，请勿重复上传=>",
-            imageItem.originUrl
-          )
+          this.logger.warn("已经上传过图床，请勿重复上传=>", imageItem.originUrl)
           continue
         }
 
         hasLocalImages = true
+        if (isInSiyuanWidget() && hasLocalImages) {
+          throw new Error(
+            "检测到有未上传的图片，由于Electron技术限制，挂件通用版不支持上传，仅提供链接替换，请先上传完毕再使用发布。您也可以取消使用图床，或者使用新窗口方式发布。"
+          )
+        }
+
         // 实际上传逻辑
         await this.uploadSingleImageToBed(pageId, attrs, imageItem)
         // 上传完成，需要获取最新链接
         const newattrs = await this.siyuanApi.getBlockAttrs(pageId)
         const newfileMap = parseJSONObj(newattrs[CONSTANTS.PICGO_FILE_MAP_KEY])
         const newImageItem: ImageItem = newfileMap[imageItem.hash]
-        replaceMap[imageItem.hash] = new ImageItem(
-          newImageItem.originUrl,
-          newImageItem.url,
-          false
-        )
+        replaceMap[imageItem.hash] = new ImageItem(newImageItem.originUrl, newImageItem.url, false)
       }
 
       if (!hasLocalImages) {
@@ -172,29 +163,19 @@ export class PicgoPostApi {
       }
 
       // 处理链接替换
-      this.logger.debug(
-        "准备替换正文图片，replaceMap=>",
-        JSON.stringify(replaceMap)
-      )
-      this.logger.debug(
-        "开始替换正文，原文=>",
-        JSON.stringify({ mdContent: mdContent })
-      )
-      ret.mdContent = this.imageParser.replaceImagesWithImageItemArray(
-        mdContent,
-        replaceMap
-      )
-      this.logger.debug(
-        "图片链接替换完成，新正文=>",
-        JSON.stringify({ newmdContent: ret.mdContent })
-      )
+      this.logger.debug("准备替换正文图片，replaceMap=>", JSON.stringify(replaceMap))
+      this.logger.debug("开始替换正文，原文=>", JSON.stringify({ mdContent }))
+      ret.mdContent = this.imageParser.replaceImagesWithImageItemArray(mdContent, replaceMap)
+      this.logger.debug("图片链接替换完成，新正文=>", JSON.stringify({ newmdContent: ret.mdContent }))
 
       ret.flag = true
       this.logger.debug("正文替换完成，最终结果=>", ret)
     } catch (e) {
+      ret.flag = false
+      ret.errmsg = e
       this.logger.error("文章图片上传失败=>", e)
     }
-    return Promise.resolve(ret)
+    return await Promise.resolve(ret)
   }
 
   /**
@@ -216,19 +197,16 @@ export class PicgoPostApi {
 
     // 处理上传
     const filePaths = []
-    if (forceUpload !== true && !imageItem.isLocal) {
+    if (!forceUpload && !imageItem.isLocal) {
       this.logger.warn("非本地图片，忽略=>", imageItem.url)
       return
     }
 
     let imageFullPath
     if (isElectron) {
-      const imagePath = imageItem.originUrl.substring(
-        imageItem.originUrl.indexOf("assets"),
-        imageItem.originUrl.length
-      )
       const dataDir: string = getSiyuanNewWinDataDir()
-      imageFullPath = `${dataDir}/${imagePath}`
+      imageFullPath = `${dataDir}/assets/${imageItem.name}`
+      this.logger.info("Will upload picture from", imageFullPath)
 
       // 不存在就用网页url
       if (!isFileExist(imageFullPath)) {
@@ -237,10 +215,7 @@ export class PicgoPostApi {
     } else {
       imageFullPath = imageItem.url
     }
-    this.logger.warn(
-      "isElectron=>" + isElectron + ", imageFullPath=>",
-      imageFullPath
-    )
+    this.logger.warn("isElectron=>" + isElectron + ", imageFullPath=>", imageFullPath)
     filePaths.push(imageFullPath)
 
     // 批量上传
@@ -250,7 +225,7 @@ export class PicgoPostApi {
     // 处理后续
     if (imageJsonObj && imageJsonObj.length > 0) {
       const img = imageJsonObj[0]
-      if (!img || !img.imgUrl || isEmptyString(img.imgUrl)) {
+      if (!img?.imgUrl || isEmptyString(img.imgUrl)) {
         throw new Error(
           "图片上传失败，可能原因：PicGO配置错误或者该平台不支持图片覆盖，请检查配置或者尝试上传新图片。请打开picgo.log查看更多信息"
         )
@@ -258,9 +233,7 @@ export class PicgoPostApi {
       const newImageItem = new ImageItem(imageItem.originUrl, img.imgUrl, false)
       fileMap[newImageItem.hash] = newImageItem
     } else {
-      throw new Error(
-        "图片上传失败，可能原因：PicGO配置错误，请检查配置。请打开picgo.log查看更多信息"
-      )
+      throw new Error("图片上传失败，可能原因：PicGO配置错误，请检查配置。请打开picgo.log查看更多信息")
     }
 
     this.logger.warn("newFileMap=>", fileMap)

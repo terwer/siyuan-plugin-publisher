@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -40,9 +40,7 @@ import { getPublishCfg } from "~/utils/publishUtil"
  * 思源笔记API适配器
  */
 export class SiYuanApiAdaptor implements IApi {
-  private readonly logger = LogFactory.getLogger(
-    "utils/platform/siyuan/siYuanApiAdaptor.ts"
-  )
+  private readonly logger = LogFactory.getLogger("utils/platform/siyuan/siYuanApiAdaptor.ts")
   private readonly siyuanApi: SiYuanApi
 
   constructor() {
@@ -105,9 +103,7 @@ export class SiYuanApiAdaptor implements IApi {
       commonPost.postid = siyuanPost.root_id
       commonPost.title = siyuanPost.content
       commonPost.permalink =
-        customSlug === ""
-          ? appendStr("/post/", siyuanPost.root_id)
-          : appendStr("/post/", customSlug, ".html")
+        customSlug === "" ? appendStr("/post/", siyuanPost.root_id) : appendStr("/post/", customSlug, ".html")
       // commonPost.isPublished = isPublished
       commonPost.mt_keywords = page.mt_keywords
       commonPost.description = page.description
@@ -123,7 +119,7 @@ export class SiYuanApiAdaptor implements IApi {
 
     let pid = postid
     if (useSlug) {
-      const pidObj = await this.siyuanApi.getBlockBySlug(postid)
+      const pidObj = await this.siyuanApi.getRootBlockBySlug(postid)
       if (pidObj) {
         pid = pidObj.root_id
       }
@@ -179,11 +175,7 @@ export class SiYuanApiAdaptor implements IApi {
     return commonPost
   }
 
-  public async editPost(
-    postid: string,
-    post: Post,
-    publish?: boolean
-  ): Promise<boolean> {
+  public async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
     return false
   }
 
@@ -211,12 +203,7 @@ export class SiYuanApiAdaptor implements IApi {
     return await this.siyuanApi.getSubdocCount(postid)
   }
 
-  public async getSubPosts(
-    postid: string,
-    numOfPosts: number,
-    page: number,
-    keyword?: string
-  ): Promise<Post[]> {
+  public async getSubPosts(postid: string, numOfPosts: number, page: number, keyword?: string): Promise<Post[]> {
     const result: Post[] = []
 
     let pg = 0
@@ -224,12 +211,7 @@ export class SiYuanApiAdaptor implements IApi {
       pg = page
     }
     const k = keyword ?? ""
-    const siyuanPosts = await this.siyuanApi.getSubdocs(
-      postid,
-      pg,
-      numOfPosts,
-      k
-    )
+    const siyuanPosts = await this.siyuanApi.getSubdocs(postid, pg, numOfPosts, k)
     this.logger.debug("siyuanPosts=>", siyuanPosts)
 
     for (let i = 0; i < siyuanPosts.length; i++) {
@@ -257,9 +239,7 @@ export class SiYuanApiAdaptor implements IApi {
       commonPost.postid = siyuanPost.root_id
       commonPost.title = siyuanPost.content
       commonPost.permalink =
-        customSlug === ""
-          ? appendStr("/post/", siyuanPost.root_id)
-          : appendStr("/post/", customSlug, ".html")
+        customSlug === "" ? appendStr("/post/", siyuanPost.root_id) : appendStr("/post/", customSlug, ".html")
       // commonPost.isPublished = isPublished
       commonPost.mt_keywords = page.mt_keywords
       commonPost.description = page.description

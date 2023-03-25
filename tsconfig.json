@@ -32,14 +32,7 @@
     "node_modules/vitest/*.d.cts",
     "node_modules/.pnpm/vitest@0.25.3_32bectir4jwfrzzeqodcdh256u/node_modules/vitest/globals.d.ts"
   ],
-  "exclude": [
-    ".github",
-    ".husky",
-    ".vercel",
-    "node_modules",
-    "dist",
-    "vite.config.ts"
-  ],
+  "exclude": [".github", ".husky", ".vercel", "node_modules", "dist", "vite.config.ts"],
   "references": [
     {
       "path": "./tsconfig.node.json"

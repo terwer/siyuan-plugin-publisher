@@ -51,12 +51,33 @@ import FontAwesome from "~/plugins/font-awesome/font-awesome"
 
 // hook
 import { initHook } from "~/utils/otherlib/hookUtil"
+import { isElectron } from "~/utils/browserUtil"
+import siyuanBrowserUtil from "~/utils/otherlib/siyuanBrowserUtil"
 
 /**
  * 统一的Vue实例创建入口
  * @param rootComponent
  */
 const createPage = async (rootComponent: Component): Promise<App> => {
+  // 解决Buffer无法使用问题
+  if (isElectron) {
+    // Electron环境
+    if (typeof Buffer === "undefined") {
+      window.Buffer = require("rollup-plugin-node-polyfills/polyfills/buffer-es6").Buffer
+    }
+    const syWin = siyuanBrowserUtil.getSiyuanWindow()
+    if (typeof syWin.Buffer === "undefined") {
+      syWin.Buffer = Buffer
+    }
+    // console.log("Buffer=>", Buffer)
+    // console.log("syWin.Buffer=>", syWin.Buffer)
+  } else {
+    // Chrome浏览器环境
+    if (typeof Buffer === "undefined") {
+      window.Buffer = require("rollup-plugin-node-polyfills/polyfills/buffer-es6").Buffer
+    }
+  }
+
   // 嵌入hook
   await initHook()
 

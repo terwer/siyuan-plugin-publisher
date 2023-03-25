@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -71,11 +71,7 @@ export class DynamicConfig {
    */
   yamlConverter?: YamlConvertAdaptor
 
-  constructor(
-    platformType: PlatformType,
-    platformKey: string,
-    platformName: string
-  ) {
+  constructor(platformType: PlatformType, platformKey: string, platformName: string) {
     this.platformType = platformType
     this.platformKey = platformKey
     this.platformName = platformName
@@ -211,10 +207,7 @@ export function setDynamicJsonCfg(dynamicConfigArray: DynamicConfig[]): void {
  * @param ptype 平台类型
  * @param subtype 子平台类型
  */
-export function getNewPlatformKey(
-  ptype: PlatformType,
-  subtype: SubPlatformType
-): string {
+export function getNewPlatformKey(ptype: PlatformType, subtype: SubPlatformType): string {
   let ret
   const newId = newID()
   ret = ptype.toLowerCase()
@@ -228,10 +221,7 @@ export function getNewPlatformKey(
 /**
  * 检测动态平台key是否重复
  */
-export function isDynamicKeyExists(
-  dynamicConfigArray: DynamicConfig[],
-  key: string
-): boolean {
+export function isDynamicKeyExists(dynamicConfigArray: DynamicConfig[], key: string): boolean {
   let flag = false
   // logUtil.logInfo("isDynamicKeyExists,dynamicConfigArray=>")
   // logUtil.logInfo(dynamicConfigArray)
@@ -250,11 +240,7 @@ export function isDynamicKeyExists(
  * @param subtype 子平台
  * @param isShowSubtype 是否显示子平台
  */
-export function getDefaultPlatformName(
-  ptype: PlatformType,
-  subtype: SubPlatformType,
-  isShowSubtype: boolean
-): string {
+export function getDefaultPlatformName(ptype: PlatformType, subtype: SubPlatformType, isShowSubtype: boolean): string {
   if (PlatformType.Github === ptype && SubPlatformType.NONE === subtype) {
     return ""
   }
@@ -336,9 +322,7 @@ export function getDynPostidKey(platformKey: string): string {
  * 根据平台key获取YAML转换器
  * @param platformKey
  */
-export const getDynYamlConverterAdaptor = (
-  platformKey: string
-): YamlConvertAdaptor => {
+export const getDynYamlConverterAdaptor = (platformKey: string): YamlConvertAdaptor => {
   let yamlConverter = new YamlConvertAdaptor()
   if (platformKey.includes("-")) {
     const typeArr = platformKey.split("-")
@@ -353,9 +337,7 @@ export const getDynYamlConverterAdaptor = (
         yamlConverter = new HexoYamlConverterAdaptor()
       } else if (ptype.includes(SubPlatformType.Github_Jekyll.toLowerCase())) {
         yamlConverter = new JekyllYamlConverterAdaptor()
-      } else if (
-        ptype.includes(SubPlatformType.Github_Vitepress.toLowerCase())
-      ) {
+      } else if (ptype.includes(SubPlatformType.Github_Vitepress.toLowerCase())) {
         yamlConverter = new VitepressYamlConverterAdaptor()
       } else if (ptype.includes(SubPlatformType.Github_Nuxt.toLowerCase())) {
         yamlConverter = new NuxtYamlConverterAdaptor()

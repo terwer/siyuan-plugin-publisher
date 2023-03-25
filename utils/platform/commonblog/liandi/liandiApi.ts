@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -51,9 +51,7 @@ export class LiandiApi extends CommonblogApi {
    */
   constructor(baseUrl: string, username: string, token: string) {
     super()
-    this.logger = LogFactory.getLogger(
-      "utils/platform/commonblog/liandi/liandiApi.ts"
-    )
+    this.logger = LogFactory.getLogger("utils/platform/commonblog/liandi/liandiApi.ts")
     this.baseUrl = baseUrl
     this.username = username
     this.token = token
@@ -72,11 +70,7 @@ export class LiandiApi extends CommonblogApi {
   /**
    * 发布帖子
    */
-  public async addArticle(
-    title: string,
-    content: string,
-    tags: string
-  ): Promise<string> {
+  public async addArticle(title: string, content: string, tags: string): Promise<string> {
     const url = "/article"
     const data = {
       articleTitle: title,
@@ -110,12 +104,7 @@ export class LiandiApi extends CommonblogApi {
   /**
    * 发布帖子
    */
-  public async updateArticle(
-    articleId: string,
-    title: string,
-    content: string,
-    tags: string
-  ): Promise<boolean> {
+  public async updateArticle(articleId: string, title: string, content: string, tags: string): Promise<boolean> {
     const url = "/article/" + articleId
     const data = {
       articleTitle: title,
@@ -139,12 +128,7 @@ export class LiandiApi extends CommonblogApi {
    * @param useToken 是否使用权限TOKEN
    * @private
    */
-  private async liandiRequest(
-    url: string,
-    data?: any,
-    method?: string,
-    useToken?: boolean
-  ): Promise<any> {
+  private async liandiRequest(url: string, data?: any, method?: string, useToken?: boolean): Promise<any> {
     // 设置请求参数
     const apiUrl = this.baseUrl + url
 

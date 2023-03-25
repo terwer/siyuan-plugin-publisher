@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -36,9 +36,7 @@ import { appendStr } from "~/utils/strUtil"
  * https://github.com/siyuan-note/siyuan/blob/master/API_zh_CN.md#%E9%89%B4%E6%9D%83
  */
 export class SiYuanApi {
-  private readonly logger = LogFactory.getLogger(
-    "utils/platform/siyuan/siYuanApi.ts"
-  )
+  private readonly logger = LogFactory.getLogger("utils/platform/siyuan/siYuanApi.ts")
 
   /**
    * 分页获取根文档
@@ -75,11 +73,7 @@ export class SiYuanApi {
    * @param pagesize 数目
    * @param keyword 可选，搜索关键字
    */
-  public async getRootBlocks(
-    page: number,
-    pagesize: number,
-    keyword: string
-  ): Promise<any> {
+  public async getRootBlocks(page: number, pagesize: number, keyword: string): Promise<any> {
     const stmt = `select DISTINCT b2.root_id,b2.parent_id,b2.content from blocks b2 
         WHERE 1==1
         AND b2.id IN (
@@ -87,9 +81,7 @@ export class SiYuanApi {
                 FROM blocks b1
                 WHERE 1 = 1
                 AND (b1.root_id ='${keyword}' OR (b1.content LIKE '%${keyword}%') OR (b1.tag LIKE '%${keyword}%'))
-                ORDER BY b1.updated DESC,b1.created DESC LIMIT ${
-                  page * pagesize
-                },${pagesize}
+                ORDER BY b1.updated DESC,b1.created DESC LIMIT ${page * pagesize},${pagesize}
         )
         ORDER BY b2.updated DESC,b2.created DESC`
     return await this.sql(stmt)
@@ -134,21 +126,14 @@ export class SiYuanApi {
    * @param pagesize 数目
    * @param keyword 关键字
    */
-  public async getSubdocs(
-    docId: string,
-    page: number,
-    pagesize: number,
-    keyword: string
-  ): Promise<any> {
+  public async getSubdocs(docId: string, page: number, pagesize: number, keyword: string): Promise<any> {
     const stmt = `SELECT DISTINCT b2.root_id,b2.content,b2.path FROM blocks b2
         WHERE b2.id IN (
           SELECT DISTINCT b1.root_id
              FROM blocks b1
              WHERE b1.root_id='${docId}' OR b1.path like '%/${docId}%'
              AND ((b1.content LIKE '%${keyword}%') OR (b1.tag LIKE '%${keyword}%'))
-             ORDER BY b1.updated DESC,b1.created DESC LIMIT ${
-               page * pagesize
-             },${pagesize}
+             ORDER BY b1.updated DESC,b1.created DESC LIMIT ${page * pagesize},${pagesize}
         )
         ORDER BY b2.content,b2.updated DESC,b2.created DESC,id`
 
@@ -214,10 +199,19 @@ where b.root_id = '${blockId}'
    * 以slug获取思源块信息
    * @param slug 内容快别名
    */
-  public async getBlockBySlug(slug: string): Promise<any> {
-    const stmt = `select root_id from attributes 
-               where name='custom-slug' and value='${slug}' 
-               limit 1`
+  public async getRootBlockBySlug(slug: string): Promise<any> {
+    const stmt = `select root_id from attributes where name='custom-slug' and value='${slug}' limit 1`
+    const data = await this.sql(stmt)
+    return data[0]
+  }
+
+  /**
+   * 以内容块ID获取根块
+   *
+   * @param blockID 内容块ID
+   */
+  public async getRootBlock(blockID: string): Promise<any> {
+    const stmt = `select root_id from blocks where id='${blockID}' limit 1`
     const data = await this.sql(stmt)
     return data[0]
   }
@@ -239,6 +233,18 @@ where b.root_id = '${blockId}'
    * @param blockId
    */
   public async getBlockAttrs(blockId: string): Promise<any> {
+    const data = {
+      id: blockId,
+    }
+    const url = "/api/attr/getBlockAttrs"
+    return await this.siyuanRequest(url, data)
+  }
+
+  /**
+   * 获取块属性
+   * @param blockId
+   */
+  public async getRootBlockAttrs(blockId: string): Promise<any> {
     const data = {
       id: blockId,
     }
@@ -294,12 +300,7 @@ where b.root_id = '${blockId}'
    * @param method 请求方法 GET | POST
    * @param useToken 权限TOKEN
    */
-  private async siyuanRequest(
-    url: string,
-    data: any,
-    method?: string,
-    useToken?: boolean
-  ): Promise<any> {
+  private async siyuanRequest(url: string, data: any, method?: string, useToken?: boolean): Promise<any> {
     const siyuanCfg = getSiyuanCfg()
 
     if (siyuanCfg.baseUrl !== "") {

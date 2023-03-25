@@ -45,6 +45,9 @@ console.log("isProd=>", isProd)
 const isSiyuanBuild = process.env.BUILD_TYPE === "siyuan"
 console.log("isSiyuanBuild=>", isSiyuanBuild)
 
+const debugMode = process.env.VITE_DEBUG_MODE === "true"
+console.log("debugMode=>", debugMode)
+
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode, ssrBuild }) => {
   const env = loadEnv(mode, process.cwd())
@@ -146,10 +149,7 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
         // if you want to use Vue I18n Legacy API, you need to set `compositionOnly: false`
         // compositionOnly: false,
         // you need to set i18n resource including paths !
-        include: resolve(
-          dirname(fileURLToPath(import.meta.url)),
-          "locales/index.ts"
-        ),
+        include: resolve(dirname(fileURLToPath(import.meta.url)), "locales/index.ts"),
       }),
       Components({
         resolvers: [
@@ -159,6 +159,7 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
         ],
       }),
       // https://github.com/WarrenJones/vite-plugin-require-transform/issues/10
+      // @ts-ignore
       vitePluginRequireTransform({}),
     ],
     // 项目根目录
@@ -193,16 +194,11 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
         os: "rollup-plugin-node-polyfills/polyfills/os",
         assert: "rollup-plugin-node-polyfills/polyfills/assert",
         constants: "rollup-plugin-node-polyfills/polyfills/constants",
-        _stream_duplex:
-          "rollup-plugin-node-polyfills/polyfills/readable-stream/duplex",
-        _stream_passthrough:
-          "rollup-plugin-node-polyfills/polyfills/readable-stream/passthrough",
-        _stream_readable:
-          "rollup-plugin-node-polyfills/polyfills/readable-stream/readable",
-        _stream_writable:
-          "rollup-plugin-node-polyfills/polyfills/readable-stream/writable",
-        _stream_transform:
-          "rollup-plugin-node-polyfills/polyfills/readable-stream/transform",
+        _stream_duplex: "rollup-plugin-node-polyfills/polyfills/readable-stream/duplex",
+        _stream_passthrough: "rollup-plugin-node-polyfills/polyfills/readable-stream/passthrough",
+        _stream_readable: "rollup-plugin-node-polyfills/polyfills/readable-stream/readable",
+        _stream_writable: "rollup-plugin-node-polyfills/polyfills/readable-stream/writable",
+        _stream_transform: "rollup-plugin-node-polyfills/polyfills/readable-stream/transform",
         timers: "rollup-plugin-node-polyfills/polyfills/timers",
         console: "rollup-plugin-node-polyfills/polyfills/console",
         vm: "rollup-plugin-node-polyfills/polyfills/vm",
@@ -248,18 +244,17 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
       // boolean | 'terser' | 'esbuild'
       // minify: 'terser',
       // 不压缩，用于调试
-      // minify: isProd,
-      minify: false,
+      minify: debugMode == true ? true : "terser",
+      terserOptions: {
+        compress: {
+          // 生产环境时移除console
+          drop_console: true,
+          drop_debugger: true,
+        },
+      },
 
       rollupOptions: {
-        external: [
-          "stat",
-          "readFile",
-          "fs",
-          "path",
-          "@electron/remote",
-          "/lib/siyuanhook.js",
-        ],
+        external: ["stat", "readFile", "fs", "path", "@electron/remote", "/lib/siyuanhook.js"],
         output: {
           chunkFileNames: "static/js/[name]-[hash].js",
           entryFileNames: "static/js/[name]-[hash].js",

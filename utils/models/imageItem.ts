@@ -46,15 +46,25 @@ export class ImageItem {
    */
   url: string
   /**
+   * 资源备注
+   */
+  alt?: string
+  /**
+   * 标题
+   */
+  title?: string
+  /**
    * 是否本地
    */
   isLocal: boolean
 
-  constructor(originUrl: string, url: string, isLocal: boolean) {
+  constructor(originUrl: string, url: string, isLocal: boolean, alt?: string, title?: string) {
     this.originUrl = originUrl
     this.name = originUrl.substring(originUrl.lastIndexOf("/") + 1)
     this.hash = getFileHash(this.name)
     this.url = url
     this.isLocal = isLocal
+    this.alt = alt ?? ""
+    this.title = title ?? ""
   }
 }

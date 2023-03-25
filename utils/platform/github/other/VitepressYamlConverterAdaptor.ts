@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -23,10 +23,7 @@
  * questions.
  */
 
-import {
-  IYamlConvertAdaptor,
-  YamlConvertAdaptor,
-} from "~/utils/platform/yamlConvertAdaptor"
+import { IYamlConvertAdaptor, YamlConvertAdaptor } from "~/utils/platform/yamlConvertAdaptor"
 import { PostForm } from "~/utils/models/postForm"
 import { IGithubCfg } from "~/utils/platform/github/githubCfg"
 import { YamlFormatObj } from "~/utils/models/yamlFormatObj"
@@ -38,13 +35,8 @@ import { LogFactory } from "~/utils/logUtil"
  * Vitepress的YAML解析器
  * @see https://vitepress.vuejs.org/config/frontmatter-configs#layout
  */
-export class VitepressYamlConverterAdaptor
-  extends YamlConvertAdaptor
-  implements IYamlConvertAdaptor
-{
-  private readonly logger = LogFactory.getLogger(
-    "utils/platform/github/other/VitepressYamlConverterAdaptor.ts"
-  )
+export class VitepressYamlConverterAdaptor extends YamlConvertAdaptor implements IYamlConvertAdaptor {
+  private readonly logger = LogFactory.getLogger("utils/platform/github/other/VitepressYamlConverterAdaptor.ts")
 
   convertToYaml(postForm: PostForm, githubCfg?: IGithubCfg): YamlFormatObj {
     let yamlFormatObj: YamlFormatObj = new YamlFormatObj()
@@ -54,8 +46,7 @@ export class VitepressYamlConverterAdaptor
     yamlFormatObj.yamlObj.title = postForm.formData.title
 
     // titleTemplate
-    yamlFormatObj.yamlObj.titleTemplate =
-      "Vite & Vue powered static site generator"
+    yamlFormatObj.yamlObj.titleTemplate = "Vite & Vue powered static site generator"
 
     // description
     yamlFormatObj.yamlObj.description = postForm.formData.title + " description"
@@ -80,17 +71,13 @@ export class VitepressYamlConverterAdaptor
 
     yamlFormatObj.formatter = yaml
     yamlFormatObj.mdContent = postForm.formData.mdContent
-    yamlFormatObj.mdFullContent =
-      yamlFormatObj.formatter + "\n\n" + yamlFormatObj.mdContent
+    yamlFormatObj.mdFullContent = yamlFormatObj.formatter + "\n\n" + yamlFormatObj.mdContent
     yamlFormatObj.htmlContent = postForm.formData.htmlContent
 
     return yamlFormatObj
   }
 
-  convertToAttr(
-    yamlFormatObj: YamlFormatObj,
-    githubCfg?: IGithubCfg
-  ): PostForm {
+  convertToAttr(yamlFormatObj: YamlFormatObj, githubCfg?: IGithubCfg): PostForm {
     return super.convertToAttr(yamlFormatObj, githubCfg)
   }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -38,17 +38,10 @@ export interface IYamlConvertAdaptor {
  */
 export class YamlConvertAdaptor implements IYamlConvertAdaptor {
   convertToYaml(postForm: PostForm, githubCfg?: IGithubCfg): YamlFormatObj {
-    throw new Error(
-      "YamlConvertAdaptor.convertToYaml: 该功能未实现，请在子类重写该方法"
-    )
+    throw new Error("YamlConvertAdaptor.convertToYaml: 该功能未实现，请在子类重写该方法")
   }
 
-  convertToAttr(
-    yamlFormatObj: YamlFormatObj,
-    githubCfg?: IGithubCfg
-  ): PostForm {
-    throw new Error(
-      "YamlConvertAdaptor.convertToAttr: 该功能未实现，请在子类重写该方法"
-    )
+  convertToAttr(yamlFormatObj: YamlFormatObj, githubCfg?: IGithubCfg): PostForm {
+    throw new Error("YamlConvertAdaptor.convertToAttr: 该功能未实现，请在子类重写该方法")
   }
 }

@@ -103,10 +103,7 @@ vueHljs.install = (Vue) => {
           // console.log(isActive)
 
           const item = document.createElement("li")
-          item.setAttribute(
-            "class",
-            isActive ? "code-tab-item current" : "code-tab-item"
-          )
+          item.setAttribute("class", isActive ? "code-tab-item current" : "code-tab-item")
           item.innerHTML = title || ""
           item.addEventListener("click", function (event) {
             const targetElement = event.target
@@ -120,10 +117,7 @@ vueHljs.install = (Vue) => {
 
             // 设置tab
             codeBlocks.forEach((cb) => {
-              if (
-                cb.attributes.getNamedItem("title")?.value ===
-                targetElement.innerHTML
-              ) {
+              if (cb.attributes.getNamedItem("title")?.value === targetElement.innerHTML) {
                 cb.setAttribute("active", "")
               } else {
                 cb.removeAttribute("active")
@@ -147,8 +141,7 @@ vueHljs.install = (Vue) => {
       const umlstr = unescapeHTML(item.innerHTML)
       const encoded = plantumlEncoder.encode(umlstr)
       // const encoded = "SrJGjLDmibBmICt9oGS0"
-      const plantUMLServer =
-        process.env.PLANT_UML_SERVR || "https://www.plantuml.com/plantuml/svg/"
+      const plantUMLServer = process.env.PLANT_UML_SERVR || "https://www.plantuml.com/plantuml/svg/"
       const url = plantUMLServer + encoded
 
       const newNode = document.createElement("img")
@@ -167,8 +160,7 @@ vueHljs.install = (Vue) => {
         html = html.replace(/并且/g, "AND")
         html = html.replace(/或者/g, "OR")
         html = encodeURIComponent(html)
-        const newHtml =
-          '<img src="' + "https://latex.codecogs.com/svg.image?" + html + '" />'
+        const newHtml = '<img src="' + "https://latex.codecogs.com/svg.image?" + html + '" />'
         item.innerHTML = newHtml
       } else {
         const newHtml = "$" + item.innerHTML + "$"
@@ -188,8 +180,7 @@ vueHljs.install = (Vue) => {
         html = html.replace(/并且/g, "AND")
         html = html.replace(/或者/g, "OR")
         html = encodeURIComponent(html)
-        const newHtml =
-          '<img src="' + "https://latex.codecogs.com/svg.image?" + html + '" />'
+        const newHtml = '<img src="' + "https://latex.codecogs.com/svg.image?" + html + '" />'
         item.innerHTML = newHtml
       } else {
         const newHtml = "$$" + item.innerHTML + "$$"

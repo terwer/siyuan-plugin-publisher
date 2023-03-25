@@ -1,5 +1,5 @@
 <!--
-  - Copyright (c) 2022, Terwer . All rights reserved.
+  - Copyright (c) 2022-2023, Terwer . All rights reserved.
   - DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
   -
   - This code is free software; you can redistribute it and/or modify it
@@ -37,11 +37,7 @@
         type="primary"
         @click="slugMethods.makeSlug"
       >
-        {{
-          slugData.isSlugLoading
-            ? $t("main.opt.loading")
-            : $t("main.auto.fetch.slug")
-        }}
+        {{ slugData.isSlugLoading ? $t("main.opt.loading") : $t("main.auto.fetch.slug") }}
       </el-button>
     </el-form>
   </div>
@@ -51,8 +47,5 @@
 import { useSlug } from "~/composables/publish/makeSlugCom"
 import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
 
-const { slugData, slugMethods } = useSlug(
-  "20220831131637-zdnmp2m",
-  new SiYuanApi()
-)
+const { slugData, slugMethods } = useSlug("20220831131637-zdnmp2m", new SiYuanApi())
 </script>
