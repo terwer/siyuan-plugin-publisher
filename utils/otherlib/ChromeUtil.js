@@ -230,15 +230,14 @@ export const isSlot = getQueryString("isSlot") === "true"
  * 检测文件是否存在
  * @returns {boolean}
  */
-export const isFileExist = (filepath) => {
-  const syWin = siyuanBrowserUtil.getSiyuanWindow()
-  const fs = syWin.require("fs")
-
-  if (fs.existsSync(filepath)) {
-    console.log("File exists")
-    return true
-  } else {
-    console.log("File does not exist")
-    return false
-  }
-}
+// export const isFileExist = (filepath) => {
+//   const fs = require("fs")
+//
+//   if (fs.existsSync(filepath)) {
+//     console.log("File exists")
+//     return true
+//   } else {
+//     console.log("File does not exist")
+//     return false
+//   }
+// }

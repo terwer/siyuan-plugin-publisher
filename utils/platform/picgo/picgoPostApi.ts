@@ -34,9 +34,7 @@ import { getSiyuanCfg } from "~/utils/platform/siyuan/siYuanConfig"
 import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
 import { isElectron } from "~/utils/browserUtil"
 import { getSiyuanNewWinDataDir } from "~/utils/otherlib/siyuanBrowserUtil"
-import { isFileExist } from "~/utils/otherlib/ChromeUtil"
 import picgoUtil from "~/utils/otherlib/picgoUtil"
-import { ElMessage } from "element-plus"
 
 /**
  * Picgo与文章交互的通用方法
@@ -80,10 +78,6 @@ export class PicgoPostApi {
       }
 
       const imageItem = new ImageItem(originUrl, imgUrl, isLocal)
-      // logger.debug("imageItem.hash imageItem.name=>", imageItem.name)
-      // logger.debug("imageItem.hash fileMap=>", fileMap)
-      // logger.debug("imageItem.hash=>", imageItem.hash)
-      // logger.debug("fileMap[imageItem.hash]=>", fileMap[imageItem.hash])
       if (fileMap[imageItem.hash]) {
         const newImageItem = fileMap[imageItem.hash]
         this.logger.debug("newImageItem=>", newImageItem)
@@ -130,8 +124,9 @@ export class PicgoPostApi {
 
     ret.localImages = imageItemArray
     ret.unuploadImages = unuploadedImages
-    this.logger.debug("localImages=>", ret.localImages)
-    this.logger.debug("unuploadImages=>", ret.unuploadImages)
+    this.logger.debug("attrs=>", attrs)
+    this.logger.debug("uniqueLocalImages=>", uniqueLocalImages)
+    this.logger.debug("ret=>", ret)
 
     return ret
   }
@@ -225,9 +220,9 @@ export class PicgoPostApi {
       imageFullPath = `${dataDir}/${imagePath}`
 
       // 不存在就用网页url
-      if (!isFileExist(imageFullPath)) {
-        imageFullPath = imageItem.url
-      }
+      // if (!isFileExist(imageFullPath)) {
+      //   imageFullPath = imageItem.url
+      // }
     } else {
       imageFullPath = imageItem.url
     }
