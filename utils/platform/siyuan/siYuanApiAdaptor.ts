@@ -119,7 +119,7 @@ export class SiYuanApiAdaptor implements IApi {
 
     let pid = postid
     if (useSlug) {
-      const pidObj = await this.siyuanApi.getRootBlockBySlug(postid)
+      const pidObj = await this.siyuanApi.getBlockBySlug(postid)
       if (pidObj) {
         pid = pidObj.root_id
       }

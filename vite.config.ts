@@ -45,6 +45,9 @@ console.log("isProd=>", isProd)
 const isSiyuanBuild = process.env.BUILD_TYPE === "siyuan"
 console.log("isSiyuanBuild=>", isSiyuanBuild)
 
+const debugMode = process.env.VITE_DEBUG_MODE === "true"
+console.log("debugMode=>", debugMode)
+
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode, ssrBuild }) => {
   const env = loadEnv(mode, process.cwd())
@@ -60,20 +63,12 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
   const logInfoEnabled = env.VITE_LOG_INFO_ENABLED
   console.log("logInfoEnabled=>", logInfoEnabled)
 
-  const debugMode = env.VITE_DEBUG_MODE
-  console.log("debugMode=>", debugMode)
-
-  // @ts-ignore
   return {
     plugins: [
       vue(),
       // https://blog.csdn.net/pzy_666/article/details/123017630
       // PkgConfig(),
       // OptimizationPersist(),
-      // removeConsole({
-      //   // 需要删除的console类型
-      //   includes: ["debug", "log", "warn", "error"],
-      // }),
       // https://github.com/emosheeep/vite-plugin-virtual-mpa
       createMpaPlugin({
         pages: [
@@ -248,11 +243,11 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
       // 或是用来指定是应用哪种混淆器
       // boolean | 'terser' | 'esbuild'
       // minify: 'terser',
-      // 调试模式不压缩
-      minify: debugMode ? false : "terser",
+      // 不压缩，用于调试
+      minify: debugMode == true ? true : "terser",
       terserOptions: {
         compress: {
-          //生产环境时移除console
+          // 生产环境时移除console
           drop_console: true,
           drop_debugger: true,
         },

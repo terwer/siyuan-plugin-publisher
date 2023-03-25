@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { fileOpen, type FileWithHandle } from "browser-fs-access"
+import { fileOpen, FileWithHandle } from "browser-fs-access"
 import { ElMessage } from "element-plus"
 
 /**
@@ -36,12 +36,12 @@ export const isBrowser = (): boolean => typeof window !== "undefined" && typeof 
  * 检测是否是本地请求
  * @param apiUrl 请求地址
  */
-export const isLocalhost = (apiUrl: string): boolean => apiUrl.includes("127.0.0.1")
+export const isLocalhost = (apiUrl: string): boolean => apiUrl.indexOf("127.0.0.1") > -1
 
 /**
  * 检测是否是Electron
  */
-export const isElectron = typeof navigator !== "undefined" && navigator.userAgent.includes("Electron")
+export const isElectron = /Electron/.test(navigator.userAgent)
 
 /**
  * 获取url参数
@@ -194,7 +194,7 @@ export function isInChromeExtension() {
   if (!isBrowser()) {
     return false
   }
-  return window.location.href.includes("chrome-extension://")
+  return window.location.href.indexOf("chrome-extension://") > -1
 }
 
 const browserUtil = {

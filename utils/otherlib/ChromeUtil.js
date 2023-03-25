@@ -27,7 +27,7 @@ import { isInSiyuanWidget } from "~/utils/platform/siyuan/siyuanUtil"
 import { getQueryString, isInChromeExtension, readJSONFileFormDialog, setUrlParameter } from "~/utils/browserUtil"
 import { LogFactory } from "~/utils/logUtil"
 import { isEmptyString, pathJoin } from "~/utils/util"
-import siyuanBrowserUtil, { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
+import { isInSiyuanNewWinBrowser } from "~/utils/otherlib/siyuanBrowserUtil"
 import { DeviceType, DeviceUtil } from "~/utils/deviceUtil"
 import { getLocalStorageAdaptor } from "~/utils/otherlib/confUtil"
 
@@ -218,7 +218,7 @@ export const importJSONToLocalStorage = async () => {
 /**
  * 检测是否是Windows
  */
-export const isWindows = typeof navigator !== "undefined" && "Windows" === navigator?.userAgentData?.platform
+export const isWindows = "Windows" === navigator?.userAgentData?.platform
 
 /**
  * 是否在插槽里面
@@ -230,14 +230,14 @@ export const isSlot = getQueryString("isSlot") === "true"
  * 检测文件是否存在
  * @returns {boolean}
  */
-// export const isFileExist = (filepath) => {
-//   const fs = require("fs")
-//
-//   if (fs.existsSync(filepath)) {
-//     console.log("File exists")
-//     return true
-//   } else {
-//     console.log("File does not exist")
-//     return false
-//   }
-// }
+export const isFileExist = (filepath) => {
+  const fs = require("fs")
+
+  if (fs.existsSync(filepath)) {
+    console.log("File exists")
+    return true
+  } else {
+    console.log("File does not exist")
+    return false
+  }
+}

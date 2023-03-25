@@ -124,7 +124,7 @@
           <!-- 复制图片链接 -->
           <el-popover
             placement="bottom"
-            :title="f.alt ? f.alt : $t('setting.picgo.index.copy.link')"
+            :title="$t('setting.picgo.index.copy.link')"
             :width="picgoCommonData.popWidth"
             trigger="hover"
             :content="f.url"

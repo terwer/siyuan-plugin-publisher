@@ -42,10 +42,10 @@ var LocalStorage
     LocalStorage.filepath = filepath
 
     window.JsonLocalStorage = LocalStorage
-    // console.log("挂载window.JsonLocalStorage", window.JsonLocalStorage)
+    console.log("挂载window.JsonLocalStorage", window.JsonLocalStorage)
 
-    // const fullpath = path.join(__dirname, LocalStorage.filepath)
-    // console.log("设置json配置目录", fullpath)
+    const fullpath = path.join(__dirname, LocalStorage.filepath)
+    console.log("设置json配置目录", fullpath)
   }
 
   LocalStorage.init = init
@@ -133,11 +133,7 @@ var LocalStorage
   }
 
   function writeFile(obj) {
-    return fs.writeFileSync(
-      getFilepath(),
-      JSON.stringify(obj),
-      getFileOptions()
-    )
+    return fs.writeFileSync(getFilepath(), JSON.stringify(obj), getFileOptions())
   }
 
   function getFilepath() {
@@ -155,4 +151,4 @@ var LocalStorage
   }
 })(LocalStorage || (LocalStorage = {}))
 module.exports = LocalStorage
-// console.log("json-localstorage register success")
+console.log("json-localstorage register success")

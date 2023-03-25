@@ -23,19 +23,16 @@
  * questions.
  */
 
-import { ImageItem } from "~/utils/models/imageItem"
-
 /**
  * Picgo处理文章统一返回结果
  */
 export class PicgoPostResult {
   /**
-   * 全部本地图片
+   * 是否成功
    */
-  localImages: ImageItem[]
-
+  flag: boolean
   /**
-   * 没上传的本地图片
+   * 处理后的文章链接
    */
-  unuploadImages: ImageItem[]
+  mdContent: string
 }

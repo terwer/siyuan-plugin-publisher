@@ -232,7 +232,7 @@ import { API } from "~/utils/api"
 import { Post } from "~/utils/models/post"
 import { API_TYPE_CONSTANTS } from "~/utils/constants/apiTypeConstants"
 import { LogFactory } from "~/utils/logUtil"
-import { getPageId, isInSiyuanWidget } from "~/utils/platform/siyuan/siyuanUtil";
+import { getPageId } from "~/utils/platform/siyuan/siyuanUtil"
 import { getJSONConf } from "~/utils/configUtil"
 import { cutWords, isEmptyObject, isEmptyString, jiebaToHotWords, pinyinSlugify, zhSlugify } from "~/utils/util"
 import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
@@ -241,9 +241,6 @@ import { getApiParams, getPublishCfg, getPublishStatus } from "~/utils/publishUt
 import { CONSTANTS } from "~/utils/constants/constants"
 import { usePicgoPost } from "~/composables/picgo/import/picgoPostCom"
 import { PicgoPostApi } from "~/utils/platform/picgo/picgoPostApi"
-import { LinkParser } from "~/utils/parser/LinkParser"
-import siyuanBrowserUtil from "~/utils/otherlib/siyuanBrowserUtil"
-import { isElectron } from "~/utils/browserUtil"
 
 const logger = LogFactory.getLogger("components/publish/tab/main/MetaweblogMain.vue")
 const siyuanApi = new SiYuanApi()
@@ -277,7 +274,6 @@ const blogName = ref("")
 const apiTypeInfo = ref(t("setting.blog.platform.support.metaweblog") + props.apiType + " ")
 const apiStatus = ref(false)
 const picgoPostApi = new PicgoPostApi()
-const linkParser = new LinkParser()
 
 // use
 const { picgoPostData, picgoPostMethods } = usePicgoPost()
@@ -680,42 +676,15 @@ const doPublish = async () => {
     const data = await siyuanApi.exportMdContent(siyuanData.pageId)
     let md = data.content
 
-    // 引用链接替换
-    md = await linkParser.convertSiyuanLinkToPlatformLink(md, api)
-
     // 处理图床
     if (picgoPostMethods.getPicgoPostData().picgoEnabled) {
       ElMessage.info(t("github.post.picgo.start.upload"))
-      const picgoPostResult = await picgoPostApi.checkPostImages(siyuanData.meta, md)
-      // 没有图片直接跳过
-      if (picgoPostResult.localImages.length > 0) {
-        if (picgoPostResult.unuploadImages.length > 0) {
-          // 思源主窗口，但是有图片没上传完毕
-          if (isInSiyuanWidget()) {
-            throw new Error(
-              "检测到有未上传的图片，由于Electron技术限制，挂件通用版不支持上传，仅提供链接替换，请先上传完毕再使用发布。您也可以取消使用图床，或者使用新窗口方式发布。"
-            )
-          }
+      const picgoPostResult = await picgoPostApi.uploadPostImagesToBed(siyuanData.pageId, siyuanData.meta, md)
 
-          md = await picgoPostApi.uploadPostImagesToBed(
-            siyuanData.pageId,
-            siyuanData.meta,
-            md,
-            picgoPostResult.localImages,
-            picgoPostResult.unuploadImages,
-            false
-          )
-        } else {
-          // 图片都上传过了，直接替换
-          md = await picgoPostApi.uploadPostImagesToBed(
-            siyuanData.pageId,
-            siyuanData.meta,
-            md,
-            picgoPostResult.localImages,
-            picgoPostResult.unuploadImages,
-            true
-          )
-        }
+      if (picgoPostResult.flag) {
+        md = picgoPostResult.mdContent
+      } else {
+        ElMessage.warning(t("github.post.picgo.picbed.error"))
       }
     }
 
@@ -780,10 +749,6 @@ const doPublish = async () => {
   } catch (e) {
     isPublishLoading.value = false
     logger.error("发布异常", e)
-    ElMessage.error({
-      dangerouslyUseHTMLString: true,
-      message: t("main.opt.failure") + "=>" + e,
-    })
   }
 
   isPublishLoading.value = false

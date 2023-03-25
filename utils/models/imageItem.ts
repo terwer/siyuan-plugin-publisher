@@ -46,10 +46,6 @@ export class ImageItem {
    */
   url: string
   /**
-   * 资源备注
-   */
-  alt?: string
-  /**
    * 是否本地
    */
   isLocal: boolean
@@ -58,15 +54,7 @@ export class ImageItem {
     this.originUrl = originUrl
     this.name = originUrl.substring(originUrl.lastIndexOf("/") + 1)
     this.hash = getFileHash(this.name)
-
-    const urlAttrs = url.split(" ")
-    if (urlAttrs.length > 1) {
-      this.url = urlAttrs[0]
-      this.alt = urlAttrs[1].replace(/"/g, "")
-    } else {
-      this.url = url
-    }
-
+    this.url = url
     this.isLocal = isLocal
   }
 }
