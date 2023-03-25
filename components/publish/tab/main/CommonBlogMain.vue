@@ -248,11 +248,13 @@ import { getPublishCfg, getPublishStatus } from "~/utils/publishUtil"
 import { ImageParser } from "~/utils/parser/imageParser"
 import { usePicgoPost } from "~/composables/picgo/import/picgoPostCom"
 import { PicgoPostApi } from "~/utils/platform/picgo/picgoPostApi"
+import { LinkParser } from "~/utils/parser/LinkParser"
 
 const logger = LogFactory.getLogger("components/publish/tab/main/CommonBlogMain.vue")
 const siyuanApi = new SiYuanApi()
 // 图片解析器
 const imageParser = new ImageParser()
+const linkParser = new LinkParser()
 
 const { t } = useI18n()
 
@@ -810,6 +812,9 @@ const doPublish = async () => {
     //   ElMessage.warning("使用base64可能会导致请求体太大请求失败，请知悉")
     //   md = await imageParser.replaceImagesWithBase64(md)
     // }
+
+    // 引用链接替换
+    md = await linkParser.convertSiyuanLinkToPlatformLink(md, api)
 
     // 如果设置了移除图片，则忽略
     // 正常情况下，如果图床开启，上传文档到图床

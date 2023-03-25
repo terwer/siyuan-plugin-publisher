@@ -218,7 +218,7 @@ export const importJSONToLocalStorage = async () => {
 /**
  * 检测是否是Windows
  */
-export const isWindows = "Windows" === navigator?.userAgentData?.platform
+export const isWindows = typeof navigator !== "undefined" && "Windows" === navigator?.userAgentData?.platform
 
 /**
  * 是否在插槽里面

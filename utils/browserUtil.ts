@@ -41,7 +41,7 @@ export const isLocalhost = (apiUrl: string): boolean => apiUrl.indexOf("127.0.0.
 /**
  * 检测是否是Electron
  */
-export const isElectron = /Electron/.test(navigator.userAgent)
+export const isElectron = typeof navigator !== "undefined" && /Electron/.test(navigator.userAgent)
 
 /**
  * 获取url参数

@@ -199,10 +199,19 @@ where b.root_id = '${blockId}'
    * 以slug获取思源块信息
    * @param slug 内容快别名
    */
-  public async getBlockBySlug(slug: string): Promise<any> {
-    const stmt = `select root_id from attributes 
-               where name='custom-slug' and value='${slug}' 
-               limit 1`
+  public async getRootBlockBySlug(slug: string): Promise<any> {
+    const stmt = `select root_id from attributes where name='custom-slug' and value='${slug}' limit 1`
+    const data = await this.sql(stmt)
+    return data[0]
+  }
+
+  /**
+   * 以内容块ID获取根块
+   *
+   * @param blockID 内容块ID
+   */
+  public async getRootBlock(blockID: string): Promise<any> {
+    const stmt = `select root_id from blocks where id='${blockID}' limit 1`
     const data = await this.sql(stmt)
     return data[0]
   }
@@ -224,6 +233,18 @@ where b.root_id = '${blockId}'
    * @param blockId
    */
   public async getBlockAttrs(blockId: string): Promise<any> {
+    const data = {
+      id: blockId,
+    }
+    const url = "/api/attr/getBlockAttrs"
+    return await this.siyuanRequest(url, data)
+  }
+
+  /**
+   * 获取块属性
+   * @param blockId
+   */
+  public async getRootBlockAttrs(blockId: string): Promise<any> {
     const data = {
       id: blockId,
     }
