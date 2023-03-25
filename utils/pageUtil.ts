@@ -60,23 +60,23 @@ import siyuanBrowserUtil from "~/utils/otherlib/siyuanBrowserUtil"
  */
 const createPage = async (rootComponent: Component): Promise<App> => {
   // 解决Buffer无法使用问题
-  // if (isElectron) {
-  //   // Electron环境
-  //   if (typeof Buffer === "undefined") {
-  //     window.Buffer = require("rollup-plugin-node-polyfills/polyfills/buffer-es6").Buffer
-  //   }
-  //   const syWin = siyuanBrowserUtil.getSiyuanWindow()
-  //   if (typeof syWin.Buffer === "undefined") {
-  //     syWin.Buffer = syWin.require("rollup-plugin-node-polyfills/polyfills/buffer-es6").Buffer
-  //   }
-  //   // console.log("Buffer=>", Buffer)
-  //   // console.log("syWin.Buffer=>", syWin.Buffer)
-  // } else {
-  //   // Chrome浏览器环境
-  //   if (typeof Buffer === "undefined") {
-  //     window.Buffer = require("rollup-plugin-node-polyfills/polyfills/buffer-es6").Buffer
-  //   }
-  // }
+  if (isElectron) {
+    // Electron环境
+    if (typeof Buffer === "undefined") {
+      window.Buffer = require("rollup-plugin-node-polyfills/polyfills/buffer-es6").Buffer
+    }
+    const syWin = siyuanBrowserUtil.getSiyuanWindow()
+    if (typeof syWin.Buffer === "undefined") {
+      syWin.Buffer = syWin.require("rollup-plugin-node-polyfills/polyfills/buffer-es6").Buffer
+    }
+    // console.log("Buffer=>", Buffer)
+    // console.log("syWin.Buffer=>", syWin.Buffer)
+  } else {
+    // Chrome浏览器环境
+    if (typeof Buffer === "undefined") {
+      window.Buffer = require("rollup-plugin-node-polyfills/polyfills/buffer-es6").Buffer
+    }
+  }
 
   // 嵌入hook
   await initHook()

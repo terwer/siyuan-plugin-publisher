@@ -35,7 +35,7 @@ import { isEmptyString } from "~/utils/util"
  * @returns {boolean}
  */
 export const isInSiyuanNewWinBrowser = () => {
-  return typeof window.terwer !== "undefined" && typeof window.terwer.currentWindowId !== "undefined"
+  return typeof window.terwer !== "undefined"
 }
 
 /**
@@ -56,8 +56,7 @@ const getSiyuanWindow = () => {
  * 获取新窗口数据目录
  */
 export const getSiyuanNewWinDataDir = () => {
-  const syWin = getSiyuanWindow()
-  return syWin.terwer.dataDir ?? "/notfound"
+  return window.terwer.dataDir ?? "/notfound"
 }
 
 /**

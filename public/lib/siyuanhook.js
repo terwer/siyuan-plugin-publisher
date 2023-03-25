@@ -57,7 +57,7 @@ const isSiyuanWidget = () => {
  * 思源笔记新窗口
  */
 const isSiyuanNewWin = () => {
-  return typeof window.terwer !== "undefined" && typeof window.terwer.currentWindowId !== "undefined"
+  return typeof window.terwer !== "undefined"
 }
 
 /**
@@ -179,14 +179,6 @@ const initMethods = {
   initPublishHelper: (entryName) => {
     const syWin = getSiyuanWindow()
     const dataDir = getSiyuanDataDir()
-
-    if (typeof syWin.terwer == "undefined") {
-      // 支持挂件版本
-      syWin.terwer = {
-        dataDir: "",
-      }
-      syWin.terwer.dataDir = dataDir
-    }
 
     // 防止重复挂载
     if (syWin.syp) {
