@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -74,10 +74,7 @@ export class GithubApi {
   async getPageData(docPath: string): Promise<any> {
     let data
 
-    if (
-      isEmptyString(this.githubCfg.githubUser) ||
-      isEmptyString(this.githubCfg.githubRepo)
-    ) {
+    if (isEmptyString(this.githubCfg.githubUser) || isEmptyString(this.githubCfg.githubRepo)) {
       throw new Error("分类获取失败")
     }
 
@@ -111,22 +108,12 @@ export class GithubApi {
    * @param mdContent Markdown文本
    * @param sha 文件的sha，undefined表示新建，更新需要传sha字符串
    */
-  protected async createOrUpdatePage(
-    docPath: string,
-    mdContent: string,
-    sha: any
-  ): Promise<any> {
+  protected async createOrUpdatePage(docPath: string, mdContent: string, sha: any): Promise<any> {
     let data
 
     // const base64 = Buffer.from(mdContent).toString('base64');
     const base64 = Base64.toBase64(mdContent)
-    const route =
-      "PUT /repos/" +
-      this.githubCfg.githubUser +
-      "/" +
-      this.githubCfg.githubRepo +
-      "/contents/" +
-      docPath
+    const route = "PUT /repos/" + this.githubCfg.githubUser + "/" + this.githubCfg.githubRepo + "/contents/" + docPath
     const options = {
       owner: this.githubCfg.githubUser,
       repo: this.githubCfg.githubRepo,
@@ -164,12 +151,7 @@ export class GithubApi {
     let data
 
     const route =
-      "DELETE /repos/" +
-      this.githubCfg.githubUser +
-      "/" +
-      this.githubCfg.githubRepo +
-      "/contents/" +
-      docPath
+      "DELETE /repos/" + this.githubCfg.githubUser + "/" + this.githubCfg.githubRepo + "/contents/" + docPath
     const options = {
       owner: this.githubCfg.githubUser,
       repo: this.githubCfg.githubRepo,
@@ -200,10 +182,7 @@ export class GithubApi {
    * @param docPath 相对于根仓库的完整路径，包括文件名和扩展名
    * @param mdContent Markdown文本
    */
-  public async publishGithubPage(
-    docPath: string,
-    mdContent: string
-  ): Promise<any> {
+  public async publishGithubPage(docPath: string, mdContent: string): Promise<any> {
     // https://github.com/terwer/src-sy-post-publisher/issues/21
     const sha = undefined
     const res = await this.createOrUpdatePage(docPath, mdContent, sha)
@@ -216,10 +195,7 @@ export class GithubApi {
    * @param docPath
    * @param mdContent
    */
-  public async updateGithubPage(
-    docPath: string,
-    mdContent: string
-  ): Promise<any> {
+  public async updateGithubPage(docPath: string, mdContent: string): Promise<any> {
     // https://github.com/terwer/src-sy-post-publisher/issues/21
     const sha = await this.getPageSha(docPath)
 

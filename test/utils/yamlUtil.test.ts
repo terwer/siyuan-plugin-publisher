@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -30,23 +30,23 @@ import path from "path"
 import { readFileSync } from "~/utils/fileUtil"
 
 describe("yamlUtil test", () => {
-  const logger = LogFactory.getLogger();
+  const logger = LogFactory.getLogger()
 
   it("yaml2Obj test", async () => {
-    const filename = path.resolve("./", "test/data/demo", "yaml.txt");
-    const yaml = await readFileSync(filename);
+    const filename = path.resolve("./", "test/data/demo", "yaml.txt")
+    const yaml = await readFileSync(filename)
 
-    const obj = yaml2Obj(yaml);
-    logger.info("obj=>", obj);
-    logger.info("objStr=>", JSON.stringify(obj));
-  });
+    const obj = yaml2Obj(yaml)
+    logger.info("obj=>", obj)
+    logger.info("objStr=>", JSON.stringify(obj))
+  })
 
   it("obj2yaml test", async () => {
-    const filename = path.resolve("./", "test/data/demo", "yamlObj.txt");
-    const objStr = await readFileSync(filename);
+    const filename = path.resolve("./", "test/data/demo", "yamlObj.txt")
+    const objStr = await readFileSync(filename)
 
-    const obj = JSON.parse(objStr);
-    const yaml = obj2Yaml(obj);
-    logger.info("yaml=>", yaml);
-  });
+    const obj = JSON.parse(objStr)
+    const yaml = obj2Yaml(obj)
+    logger.info("yaml=>", yaml)
+  })
 })

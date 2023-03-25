@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -23,10 +23,10 @@
  * questions.
  */
 
-import fs from "fs-extra";
-import { LogFactory } from "~/utils/logUtil";
+import fs from "fs-extra"
+import { LogFactory } from "~/utils/logUtil"
 
-const logger = LogFactory.getLogger();
+const logger = LogFactory.getLogger()
 
 // 此类中的方法不适合浏览器，请勿在浏览器环境使用
 
@@ -37,7 +37,7 @@ const logger = LogFactory.getLogger();
  */
 export const copyFileSync = (fromPath: string, toPath: string): void => {
   try {
-    fs.copySync(fromPath, toPath, {});
+    fs.copySync(fromPath, toPath, {})
   } catch (e) {
     logger.error(e)
     throw e
@@ -49,10 +49,7 @@ export const copyFileSync = (fromPath: string, toPath: string): void => {
  * @param fromPath 源路径
  * @param toPath 目标路径
  */
-export async function copyFile(
-  fromPath: string,
-  toPath: string
-): Promise<void> {
+export async function copyFile(fromPath: string, toPath: string): Promise<void> {
   try {
     await fs.copy(fromPath, toPath)
   } catch (e) {

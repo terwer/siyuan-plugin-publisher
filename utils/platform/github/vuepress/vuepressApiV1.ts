@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -36,9 +36,7 @@ export class VuepressApiV1 extends GithubApi {
 
   constructor(vuepressCfg: VuepressCfg) {
     super(vuepressCfg)
-    this.logger = LogFactory.getLogger(
-      "utils/platform/github/vuepress/vuepressApiV1.ts"
-    )
+    this.logger = LogFactory.getLogger("utils/platform/github/vuepress/vuepressApiV1.ts")
     this.vuepressCfg = vuepressCfg
   }
 

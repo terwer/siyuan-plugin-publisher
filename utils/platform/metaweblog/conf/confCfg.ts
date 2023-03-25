@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -32,12 +32,7 @@ import { PageType } from "../IMetaweblogCfg"
  */
 export class ConfCfg extends MetaweblogCfg {
   constructor() {
-    super(
-      "https://youweics.atlassian.net/wiki/spaces/[spaceKey]",
-      "http://localhost:3000/api/xmlrpc",
-      "",
-      ""
-    )
+    super("https://youweics.atlassian.net/wiki/spaces/[spaceKey]", "http://localhost:3000/api/xmlrpc", "", "")
     this.posidKey = POSTID_KEY_CONSTANTS.CONFLUENCE_POSTID_KEY
     this.previewUrl = "pages/[postid]"
     this.pageType = PageType.Html

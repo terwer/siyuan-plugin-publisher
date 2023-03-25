@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -35,13 +35,10 @@ export class KmsCfg extends CommonblogCfg {
     super()
 
     this.home = "http://localhost:9564/kms16_release/kms/multidoc"
-    this.apiUrl =
-      "http://localhost:9564/kms16_release/api/kms-multidoc/kmsMultidocKnowledgeRestService"
-    this.tokenSettingUrl =
-      "http://localhost:9564/kms16_release/sys/profile/index.jsp#integrate/RestService/"
+    this.apiUrl = "http://localhost:9564/kms16_release/api/kms-multidoc/kmsMultidocKnowledgeRestService"
+    this.tokenSettingUrl = "http://localhost:9564/kms16_release/sys/profile/index.jsp#integrate/RestService/"
     this.posidKey = POSTID_KEY_CONSTANTS.KMS_POSTID_KEY
-    this.previewUrl =
-      "/kms_multidoc_knowledge/kmsMultidocKnowledge.do?method=view&fdId=[postid]"
+    this.previewUrl = "/kms_multidoc_knowledge/kmsMultidocKnowledge.do?method=view&fdId=[postid]"
     this.pageType = PageType.Html
   }
 }

@@ -29,7 +29,7 @@ import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
 import { getPageId } from "~/utils/platform/siyuan/siyuanUtil"
 import { ImageParser } from "~/utils/parser/imageParser"
 import { PicgoPostApi } from "~/utils/platform/picgo/picgoPostApi"
-import { ImageItem } from "~/utils/models/imageItem"
+import { ParsedImage } from "~/utils/models/parsedImage"
 
 /**
  * Picgo页面初始化组件
@@ -52,7 +52,7 @@ export const usePicgoInitPage = (props, deps) => {
     const pageId = await getPageId(true, props.pageId)
 
     // 图片信息
-    const imageBlocks = await siyuanApi.getImageBlocksByID(pageId)
+    const imageBlocks: any[] = await siyuanApi.getImageBlocksByID(pageId)
     logger.debug("查询文章中的图片块=>", imageBlocks)
 
     if (!imageBlocks || imageBlocks.length === 0) {
@@ -60,9 +60,9 @@ export const usePicgoInitPage = (props, deps) => {
     }
 
     // 解析图片地址
-    let retImgs = []
+    let retImgs: ParsedImage[] = []
     imageBlocks.forEach((page) => {
-      const parsedImages = imageParser.parseImagesToArray(page.markdown)
+      const parsedImages: ParsedImage[] = imageParser.parseImagesToArray(page.markdown)
 
       // 会有很多重复值
       // retImgs = retImgs.concat(retImgs, parsedImages)
@@ -73,14 +73,11 @@ export const usePicgoInitPage = (props, deps) => {
 
     // 将字符串数组格式的图片信息转换成图片对象数组
     const attrs = await siyuanApi.getBlockAttrs(pageId)
-    const imageItemArray = await picgoPostApi.doConvertImagesToImagesItemArray(
-      attrs,
-      retImgs
-    )
+    const imageItemArray = await picgoPostApi.doConvertImagesToImagesItemArray(attrs, retImgs)
 
     // 页面属性
     for (let i = 0; i < imageItemArray.length; i++) {
-      const imageItem = imageItemArray[i] as ImageItem
+      const imageItem = imageItemArray[i]
       picgoCommonData.fileList.files.push(imageItem)
     }
   }

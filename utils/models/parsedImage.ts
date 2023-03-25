@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2023, Terwer . All rights reserved.
+ * Copyright (c) 2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -23,22 +23,27 @@
  * questions.
  */
 
-import { CommonblogCfg } from "~/utils/platform/commonblog/commonblogCfg"
-import { POSTID_KEY_CONSTANTS } from "~/utils/constants/postidKeyConstants"
-import { PageType } from "~/utils/platform/metaweblog/IMetaweblogCfg"
-
 /**
- * 语雀配置
+ * 解析的图片
+ *
+ * @author terwer
+ * @since 0.8.0
  */
-export class YuqueCfg extends CommonblogCfg {
-  constructor() {
-    super()
-
-    this.home = "https://www.yuque.com/"
-    this.apiUrl = "https://www.yuque.com/api/v2"
-    this.tokenSettingUrl = "https://www.yuque.com/settings/tokens"
-    this.posidKey = POSTID_KEY_CONSTANTS.YUQUE_POSTID_KEY
-    this.previewUrl = "/[notebook]/[postid]"
-    this.pageType = PageType.Markdown
-  }
+export class ParsedImage {
+  /**
+   * 链接
+   */
+  url: string
+  /**
+   * 备注
+   */
+  alt: string
+  /**
+   * 标题
+   */
+  title: string
+  /**
+   * 是否本地
+   */
+  isLocal: boolean
 }

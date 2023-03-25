@@ -740,6 +740,11 @@ const oneclickAttr = async (hideTip) => {
 const checkLimit = (lastmodKey) => {
   const flag = false
 
+  // 限制开关
+  if (!props.limitRate) {
+    return false
+  }
+
   const lastmodDate = getConf(lastmodKey)
   // 没发布过，不限制
   if (isEmptyString(lastmodDate)) {
@@ -753,7 +758,9 @@ const checkLimit = (lastmodKey) => {
     ElMessage.error(
       "由于【" +
         props.apiType +
-        "】平台的限制，每6分钟之内只能发布或者更新一次文章，距离上一次发布时间为：" +
+        "】平台的限制，每" +
+        props.limitSeconds +
+        "秒之内只能发布或者更新一次文章，距离上一次发布时间为：" +
         s +
         "秒，仍需等待：" +
         (props.limitSeconds - s) +

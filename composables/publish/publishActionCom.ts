@@ -36,7 +36,7 @@ import { CONSTANTS } from "~/utils/constants/constants"
 import { PicgoPostApi } from "~/utils/platform/picgo/picgoPostApi"
 import { API } from "~/utils/api"
 import { Post } from "~/utils/models/post"
-import { LinkParser } from "~/utils/parser/LinkParser";
+import { LinkParser } from "~/utils/parser/LinkParser"
 
 /**
  * 通用的发布操作组件
@@ -145,7 +145,7 @@ export const usePublish = (props, deps?: any) => {
               if (picgoPostResult.flag) {
                 md = picgoPostResult.mdContent
               } else {
-                ElMessage.warning(t("github.post.picgo.picbed.error") + "=>" + picgoPostResult.errmsg)
+                ElMessage.error(t("github.post.picgo.picbed.error") + "=>" + picgoPostResult.errmsg)
               }
             }
           }

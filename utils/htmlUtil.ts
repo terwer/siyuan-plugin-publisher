@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -52,8 +52,7 @@ export const removeWidgetTag = (str: string): string => {
   newstr = newstr.replace(publisherRegex, "")
 
   // 新版发布挂件
-  const syPublisherRegex =
-    /<iframe.*src="\/widgets\/sy-post-publisher.*<\/iframe>/g
+  const syPublisherRegex = /<iframe.*src="\/widgets\/sy-post-publisher.*<\/iframe>/g
   newstr = newstr.replace(syPublisherRegex, "")
 
   // 文章属性挂件
@@ -130,11 +129,7 @@ const filterHtml = (str: string): string => {
  * @param ignore 不要结尾省略号
  * @returns {string} 结果
  */
-export const parseHtml = (
-  html: string,
-  length: number,
-  ignore?: boolean
-): string => {
+export const parseHtml = (html: string, length: number, ignore?: boolean): string => {
   const allText = filterHtml(html)
   if (allText.length < length) {
     return allText

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -42,14 +42,8 @@ export class LiandiApiAdaptor extends CommonblogApiAdaptor implements IApi {
 
   constructor() {
     super(API_TYPE_CONSTANTS.API_TYPE_LIANDI)
-    this.logger = LogFactory.getLogger(
-      "utils/platform/commonblog/liandi/liandiApiAdaptor.ts"
-    )
-    this.liandiApi = new LiandiApi(
-      this.cfg.apiUrl,
-      this.cfg.username ?? "",
-      this.cfg.token ?? ""
-    )
+    this.logger = LogFactory.getLogger("utils/platform/commonblog/liandi/liandiApiAdaptor.ts")
+    this.liandiApi = new LiandiApi(this.cfg.apiUrl, this.cfg.username ?? "", this.cfg.token ?? "")
   }
 
   public async getUsersBlogs(): Promise<UserBlog[]> {
@@ -80,28 +74,15 @@ export class LiandiApiAdaptor extends CommonblogApiAdaptor implements IApi {
     throw new Error("链滴社区API不支持删除帖子")
   }
 
-  async editPost(
-    postid: string,
-    post: Post,
-    publish?: boolean
-  ): Promise<boolean> {
-    const result = await this.liandiApi.updateArticle(
-      postid,
-      post.title,
-      post.description,
-      post.mt_keywords
-    )
+  async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
+    const result = await this.liandiApi.updateArticle(postid, post.title, post.description, post.mt_keywords)
     this.logger.debug("liandi newPost=>", result)
     return result
   }
 
   async newPost(post: Post, publish?: boolean): Promise<string> {
     // 错误已经抛过了，这里不在重复
-    const result = await this.liandiApi.addArticle(
-      post.title,
-      post.description,
-      post.mt_keywords
-    )
+    const result = await this.liandiApi.addArticle(post.title, post.description, post.mt_keywords)
     this.logger.warn("liandi newPost=>", result)
 
     return result ?? ""

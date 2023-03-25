@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -23,9 +23,9 @@
  * questions.
  */
 
-import { describe } from "vitest";
-import { mount } from "@vue/test-utils";
-import { nextTick } from "vue";
+import { describe } from "vitest"
+import { mount } from "@vue/test-utils"
+import { nextTick } from "vue"
 
 const Counter = {
   template: `
@@ -34,23 +34,23 @@ const Counter = {
   `,
   data() {
     return {
-      count: 0
-    };
+      count: 0,
+    }
   },
   methods: {
     handleClick() {
-      this.count += 1;
-    }
-  }
-};
+      this.count += 1
+    },
+  },
+}
 
 test("increments by 1", async () => {
-  const wrapper = mount(Counter);
+  const wrapper = mount(Counter)
 
   // wrapper.find("button").trigger("click")
   // await nextTick()
 
-  await wrapper.find("button").trigger("click");
+  await wrapper.find("button").trigger("click")
 
-  expect(wrapper.html()).toContain("Count: 1");
-});
+  expect(wrapper.html()).toContain("Count: 1")
+})

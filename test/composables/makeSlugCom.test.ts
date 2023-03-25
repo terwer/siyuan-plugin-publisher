@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -23,33 +23,33 @@
  * questions.
  */
 
-import { describe } from "vitest";
-import { LogFactory } from "~/utils/logUtil";
-import { flushPromises, mount } from "@vue/test-utils";
-import TestSlug from "~/test/composables/TestSlug.vue";
-import path from "path";
-import { readFileSync } from "~/utils/fileUtil";
-import { setJSONConf } from "~/utils/configUtil";
-import { TEST_CONSTANTS } from "~/test/TEST_CONSTANTS";
+import { describe } from "vitest"
+import { LogFactory } from "~/utils/logUtil"
+import { flushPromises, mount } from "@vue/test-utils"
+import TestSlug from "~/test/composables/TestSlug.vue"
+import path from "path"
+import { readFileSync } from "~/utils/fileUtil"
+import { setJSONConf } from "~/utils/configUtil"
+import { TEST_CONSTANTS } from "~/test/TEST_CONSTANTS"
 
 describe("makeSlug test", async () => {
-  const logger = LogFactory.getLogger();
+  const logger = LogFactory.getLogger()
 
   it("init", () => {
-    const filename = path.resolve("./", "test/data/demo", "siyuanPage.txt");
-    const pageStr = readFileSync(filename);
-    setJSONConf(TEST_CONSTANTS.CONSTANTS_SIYUAN_PAGE, pageStr);
-    logger.info("pageStr=>", pageStr);
-  });
+    const filename = path.resolve("./", "test/data/demo", "siyuanPage.txt")
+    const pageStr = readFileSync(filename)
+    setJSONConf(TEST_CONSTANTS.CONSTANTS_SIYUAN_PAGE, pageStr)
+    logger.info("pageStr=>", pageStr)
+  })
 
   it("useSlug test", async () => {
-    const wrapper = mount(TestSlug);
-    await flushPromises();
+    const wrapper = mount(TestSlug)
+    await flushPromises()
 
-    await wrapper.find("#makeSlugBtn").trigger("click");
-    await flushPromises();
+    await wrapper.find("#makeSlugBtn").trigger("click")
+    await flushPromises()
 
     // const result = wrapper.html()
     // logger.info("slugComponent HTML=>", result)
-  });
-});
+  })
+})

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -39,16 +39,9 @@ export class YuqueApi extends CommonblogApi {
   private readonly username: string
   private readonly token: string
 
-  constructor(
-    baseUrl: string,
-    blogid: string,
-    username: string,
-    token: string
-  ) {
+  constructor(baseUrl: string, blogid: string, username: string, token: string) {
     super()
-    this.logger = LogFactory.getLogger(
-      "utils/platform/commonblog/yuque/yuqueApi.ts"
-    )
+    this.logger = LogFactory.getLogger("utils/platform/commonblog/yuque/yuqueApi.ts")
     this.baseUrl = baseUrl
     this.blogid = blogid
     this.username = username
@@ -71,12 +64,7 @@ export class YuqueApi extends CommonblogApi {
    * @param content 内容
    * @param repo 知识库（可选）
    */
-  public async addDoc(
-    title: string,
-    slug: string,
-    content: string,
-    repo?: string
-  ): Promise<string> {
+  public async addDoc(title: string, slug: string, content: string, repo?: string): Promise<string> {
     let url = "/repos/" + this.blogid + "/docs"
     if (repo) {
       url = "/repos/" + repo + "/docs"
@@ -105,13 +93,7 @@ export class YuqueApi extends CommonblogApi {
    * @param content 内容
    * @param repo 知识库（可选）
    */
-  public async updateDoc(
-    docId: string,
-    title: string,
-    slug: string,
-    content: string,
-    repo?: string
-  ): Promise<boolean> {
+  public async updateDoc(docId: string, title: string, slug: string, content: string, repo?: string): Promise<boolean> {
     let url = "/repos/" + this.blogid + "/docs/" + docId
     if (repo) {
       url = "/repos/" + repo + "/docs/" + docId
@@ -180,11 +162,7 @@ export class YuqueApi extends CommonblogApi {
    * @param method 请求方法 GET | POST
    * @private
    */
-  private async yuqueRequest(
-    url: string,
-    data?: any,
-    method?: string
-  ): Promise<any> {
+  private async yuqueRequest(url: string, data?: any, method?: string): Promise<any> {
     // 设置请求参数
     const apiUrl = this.baseUrl + url
 

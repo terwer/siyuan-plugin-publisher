@@ -26,6 +26,7 @@
 import { LogFactory } from "~/utils/logUtil"
 // import { imageToBase64 } from "~/utils/otherlib/imageToBase64"
 import { ImageItem } from "~/utils/models/imageItem"
+import { type ParsedImage } from "~/utils/models/parsedImage"
 
 /**
  * 图片解析器
@@ -142,13 +143,13 @@ export class ImageParser {
    * @param content 图片块
    * @private
    */
-  public parseImagesToArray(content: string): string[] {
-    let ret = []
+  public parseImagesToArray(content: string): ParsedImage[] {
+    let ret = [] as ParsedImage[]
     const remoteImages = this.parseRemoteImagesToArray(content)
     const localImages = this.parseLocalImagesToArray(content)
 
     // 会有很多重复值
-    // ret = ret.concat(remoteImages,localImages)
+    // ret = ret.concat(remoteImages, localImages)
     // 下面的写法可以去重
     ret = [...new Set([...remoteImages, ...localImages])]
 
@@ -157,62 +158,59 @@ export class ImageParser {
 
   /**
    * 解析图片块为远程图片链接
-   * @param content 图片块
+   *
+   * @param markdownText 图片块
    * @private
    */
-  private parseRemoteImagesToArray(content: string): string[] {
-    let ret = []
-    let newcontent = content
+  public parseRemoteImagesToArray(markdownText: string): ParsedImage[] {
+    // 定义正则表达式来匹配以 http 或 https 开头的 Markdown 格式的图片链接
+    const regex = /!\[(.*?)\]\(((https|http|ftp)?:\/\/[^\s/$.?#].[^\s]*)\s*"(.*?)"\)\s*{:\s*([^\n]*)}/g
 
-    const imgRegex = /!\[.*]\((http|https):\/.*\/.*\)/g
-    const matches = newcontent.match(imgRegex)
-    // 没有图片，无需处理
-    if (matches == null || matches.length === 0) {
-      return ret
+    // 使用正则表达式来匹配 Markdown 格式的图片链接，并提取其中的各个属性
+    const ParsedImages = []
+    for (const match of markdownText.matchAll(regex)) {
+      const altText = match[1] ? match[1] : ""
+      const url = match[2] ? match[2] : ""
+      const title = match[3] ? match[3].replace(/"/g, "") : ""
+
+      // 将图片链接的各个属性封装成一个对象，并添加到数组中
+      ParsedImages.push({
+        url,
+        alt: altText,
+        title,
+        isLocal: false,
+      })
     }
-
-    for (let i = 0; i < matches.length; i++) {
-      const match = matches[i]
-      this.logger.debug("img=>", match)
-
-      const src = match.replace(/!\[.*]\(/g, "").replace(/\)/, "")
-      ret.push(src)
-      this.logger.debug("src=>", src)
-    }
-
     this.logger.debug("远程图片解析完毕.")
-    return ret
+    return ParsedImages
   }
 
   /**
    * 解析图片块为本地图片链接
-   * @param content 图片块
+   *
+   * @param markdownText 图片块
    */
-  public parseLocalImagesToArray(content: string): string[] {
-    let ret = []
-    let newcontent = content
+  public parseLocalImagesToArray(markdownText: string): ParsedImage[] {
+    // 定义正则表达式来匹配以 assets 开头但不以 http、https 或 ftp 开头的 Markdown 格式的图片链接
+    const regex = /!\[(.*?)\]\(((?!http|https|ftp)assets\/.*?)\s*("(?:.*[^"])")?\)\s*(\{(?:.*[^"])})?/g
 
-    const imgRegex = /!\[.*]\(assets\/.*\..*\)/g
-    const matches = newcontent.match(imgRegex)
-    // 没有图片，无需处理
-    if (matches == null || matches.length === 0) {
-      return ret
+    // 使用正则表达式来匹配 Markdown 格式的图片链接，并提取其中的各个属性
+    const ParsedImages = []
+    for (const match of markdownText.matchAll(regex)) {
+      const altText = match[1] ? match[1] : ""
+      const url = match[2] ? match[2] : ""
+      const title = match[3] ? match[3].replace(/"/g, "") : ""
+
+      // 将图片链接的各个属性封装成一个对象，并添加到数组中
+      ParsedImages.push({
+        url,
+        alt: altText,
+        title,
+        isLocal: true,
+      })
     }
-
-    for (let i = 0; i < matches.length; i++) {
-      const match = matches[i]
-      this.logger.debug("img=>", match)
-
-      const src = match.replace(/!\[.*]\(/g, "").replace(/\)/, "")
-      // 远程图片不能算
-      if (src.includes("http")) {
-        continue
-      }
-      ret.push(src)
-      this.logger.debug("src=>", src)
-    }
-
-    return ret
+    this.logger.debug("本地图片解析完毕.")
+    return ParsedImages
   }
 
   /**
@@ -238,11 +236,11 @@ export class ImageParser {
       const src = img.replace(/!\[.*]\(/g, "").replace(/\)/, "")
       this.logger.debug("src=>", src)
 
-      let newImg
       const tempImageItem = new ImageItem(src, "", true)
       const hash = tempImageItem.hash
-      const replaceImageItem = replaceMap[hash]
-      newImg = `![](${replaceImageItem.url})`
+      const replaceImageItem: ImageItem = replaceMap[hash]
+      const alt = replaceImageItem.alt ?? ""
+      const newImg = `![${alt}](${replaceImageItem.url})`
       this.logger.debug("newImg=>", newImg)
 
       newcontent = newcontent.replaceAll(img, newImg)

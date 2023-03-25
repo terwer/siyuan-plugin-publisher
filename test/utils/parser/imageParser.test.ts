@@ -24,14 +24,39 @@
  */
 
 import { describe } from "vitest"
+import { ImageParser } from "~/utils/parser/imageParser"
 
-describe("syCmd test", async () => {
-  it("cmd test", async () => {
-    const syCmd = require("public/lib/cmd/syCmd.js")
-    // const syCmd = window.SyCmd
+describe("test imageParser", () => {
+  it("test1", () => {
+    const imageParser = new ImageParser()
+    const content =
+      '​![远程锚文本](https://img1.terwer.space/202303232307565.png "远程图片标题"){: parent-style="max-width: 714px;"}'
+    const images = imageParser.parseImagesToArray(content)
+    console.log(images)
+  })
 
-    const result = await (syCmd.customPyCmd("python", ["-V"]) as Promise<any>)
-    console.log("-----------------------")
-    console.log(result.data)
+  it("test2", () => {
+    const imageParser = new ImageParser()
+    const content =
+      '​![本地锚文本](assets/image-20230325160900-tfvy42x.png "这是个图片标题"){: parent-style="max-width: 714px;"}​'
+    const images = imageParser.parseImagesToArray(content)
+    console.log(images)
+  })
+
+  it("test3", () => {
+    const imageParser = new ImageParser()
+    const markdownText = `
+# 这是一个标题
+
+这是一段普通文本，其中包含了三个图片链接：
+
+![图片1](assets/image1.png)
+![图片2](assets/image2.png){: style="width: 50%;"}
+![图片3](http://example.com/assets/image3.png)
+
+这是另一段普通文本。
+`
+    const parsedImages = imageParser.parseImagesToArray(markdownText)
+    console.log(parsedImages)
   })
 })

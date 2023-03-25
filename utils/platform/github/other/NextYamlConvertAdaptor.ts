@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -23,10 +23,7 @@
  * questions.
  */
 
-import {
-  IYamlConvertAdaptor,
-  YamlConvertAdaptor,
-} from "~/utils/platform/yamlConvertAdaptor"
+import { IYamlConvertAdaptor, YamlConvertAdaptor } from "~/utils/platform/yamlConvertAdaptor"
 import { PostForm } from "~/utils/models/postForm"
 import { IGithubCfg } from "~/utils/platform/github/githubCfg"
 import { YamlFormatObj } from "~/utils/models/yamlFormatObj"
@@ -37,13 +34,8 @@ import { covertStringToDate } from "~/utils/dateUtil"
 /**
  * Next的YAML解析器
  */
-export class NextYamlConvertAdaptor
-  extends YamlConvertAdaptor
-  implements IYamlConvertAdaptor
-{
-  private readonly logger = LogFactory.getLogger(
-    "utils/platform/github/other/NextYamlConvertAdaptor.ts"
-  )
+export class NextYamlConvertAdaptor extends YamlConvertAdaptor implements IYamlConvertAdaptor {
+  private readonly logger = LogFactory.getLogger("utils/platform/github/other/NextYamlConvertAdaptor.ts")
 
   convertToYaml(postForm: PostForm, githubCfg?: IGithubCfg): YamlFormatObj {
     let yamlFormatObj: YamlFormatObj = new YamlFormatObj()
@@ -64,17 +56,13 @@ export class NextYamlConvertAdaptor
     // formatter
     yamlFormatObj.formatter = obj2Yaml(yamlFormatObj.yamlObj)
     yamlFormatObj.mdContent = postForm.formData.mdContent
-    yamlFormatObj.mdFullContent =
-      yamlFormatObj.formatter + "\n\n" + yamlFormatObj.mdContent
+    yamlFormatObj.mdFullContent = yamlFormatObj.formatter + "\n\n" + yamlFormatObj.mdContent
     yamlFormatObj.htmlContent = postForm.formData.htmlContent
 
     return yamlFormatObj
   }
 
-  convertToAttr(
-    yamlFormatObj: YamlFormatObj,
-    githubCfg?: IGithubCfg
-  ): PostForm {
+  convertToAttr(yamlFormatObj: YamlFormatObj, githubCfg?: IGithubCfg): PostForm {
     return super.convertToAttr(yamlFormatObj, githubCfg)
   }
 }

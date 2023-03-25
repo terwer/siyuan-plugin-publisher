@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -31,8 +31,7 @@ describe("strUtil test", () => {
   const logger = LogFactory.getLogger()
 
   it("removeBom test", () => {
-    const str =
-      "https://img1.terwer.space/api/public/20220929000423.png%E2%80%8B"
+    const str = "https://img1.terwer.space/api/public/20220929000423.png%E2%80%8B"
     const result = removeBom(str)
     logger.info("removeBom result=>", "[" + result + "]")
   })

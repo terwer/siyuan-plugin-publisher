@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -23,15 +23,15 @@
  * questions.
  */
 
-import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi";
-import { LogFactory } from "~/utils/logUtil";
+import { SiYuanApi } from "~/utils/platform/siyuan/siYuanApi"
+import { LogFactory } from "~/utils/logUtil"
 
 describe("SiyuanApi test", () => {
-  const logger = LogFactory.getLogger();
+  const logger = LogFactory.getLogger()
 
   it("siyuanApi", async () => {
-    const siyuanApi = new SiYuanApi();
-    const result = await siyuanApi.getBlockByID("20220831131637-zdnmp2m");
-    logger.info("getBlockByID测试结果=>", JSON.stringify(result));
-  });
-});
+    const siyuanApi = new SiYuanApi()
+    const result = await siyuanApi.getBlockByID("20220831131637-zdnmp2m")
+    logger.info("getBlockByID测试结果=>", JSON.stringify(result))
+  })
+})

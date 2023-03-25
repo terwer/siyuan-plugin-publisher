@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -24,11 +24,7 @@
  */
 
 import { GithubCfg } from "~/utils/platform/github/githubCfg"
-import {
-  DynamicConfig,
-  getDynPostidKey,
-  SubPlatformType,
-} from "~/utils/platform/dynamicConfig"
+import { DynamicConfig, getDynPostidKey, SubPlatformType } from "~/utils/platform/dynamicConfig"
 
 /**
  * 动态Github配置类

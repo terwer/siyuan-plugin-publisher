@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -23,10 +23,7 @@
  * questions.
  */
 
-import {
-  IYamlConvertAdaptor,
-  YamlConvertAdaptor,
-} from "~/utils/platform/yamlConvertAdaptor"
+import { IYamlConvertAdaptor, YamlConvertAdaptor } from "~/utils/platform/yamlConvertAdaptor"
 import { PostForm } from "~/utils/models/postForm"
 import { IGithubCfg } from "~/utils/platform/github/githubCfg"
 import { YamlFormatObj } from "~/utils/models/yamlFormatObj"
@@ -38,13 +35,8 @@ import { isEmptyString } from "~/utils/util"
 /**
  * Jekyll平台的YAML解析器
  */
-export class JekyllYamlConverterAdaptor
-  extends YamlConvertAdaptor
-  implements IYamlConvertAdaptor
-{
-  private readonly logger = LogFactory.getLogger(
-    "utils/platform/github/jekyll/JekyllYamlConverterAdaptor.ts"
-  )
+export class JekyllYamlConverterAdaptor extends YamlConvertAdaptor implements IYamlConvertAdaptor {
+  private readonly logger = LogFactory.getLogger("utils/platform/github/jekyll/JekyllYamlConverterAdaptor.ts")
 
   // https://github.com/terwer/terwer.github.io/blob/gh-pages/_posts/2017-04-20-post-content-styles.md?plain=1
   convertToYaml(postForm: PostForm, githubCfg?: IGithubCfg): YamlFormatObj {
@@ -64,14 +56,9 @@ export class JekyllYamlConverterAdaptor
     yamlFormatObj.yamlObj.title = postForm.formData.title
     let link = "/post/" + postForm.formData.customSlug + ".html"
     if (githubCfg && !isEmptyString(githubCfg.previewUrl)) {
-      link = githubCfg.previewUrl.replace(
-        "[postid]",
-        postForm.formData.customSlug
-      )
+      link = githubCfg.previewUrl.replace("[postid]", postForm.formData.customSlug)
 
-      const created = formatIsoToZhDate(
-        yamlFormatObj.yamlObj.date.toISOString()
-      )
+      const created = formatIsoToZhDate(yamlFormatObj.yamlObj.date.toISOString())
       const datearr = created.split(" ")[0]
       const numarr = datearr.split("-")
       this.logger.debug("created numarr=>", numarr)
@@ -84,10 +71,7 @@ export class JekyllYamlConverterAdaptor
       link = link.replace(/\[dd]/g, d)
 
       if (yamlFormatObj.yamlObj.categories.length > 0) {
-        link = link.replace(
-          /\[cats]/,
-          yamlFormatObj.yamlObj.categories.join("/")
-        )
+        link = link.replace(/\[cats]/, yamlFormatObj.yamlObj.categories.join("/"))
       } else {
         link = link.replace(/\/\[cats]/, "")
       }
@@ -112,17 +96,13 @@ export class JekyllYamlConverterAdaptor
 
     yamlFormatObj.formatter = yaml
     yamlFormatObj.mdContent = postForm.formData.mdContent
-    yamlFormatObj.mdFullContent =
-      yamlFormatObj.formatter + "\n\n" + yamlFormatObj.mdContent
+    yamlFormatObj.mdFullContent = yamlFormatObj.formatter + "\n\n" + yamlFormatObj.mdContent
     yamlFormatObj.htmlContent = postForm.formData.htmlContent
 
     return yamlFormatObj
   }
 
-  convertToAttr(
-    yamlFormatObj: YamlFormatObj,
-    githubCfg?: IGithubCfg
-  ): PostForm {
+  convertToAttr(yamlFormatObj: YamlFormatObj, githubCfg?: IGithubCfg): PostForm {
     return super.convertToAttr(yamlFormatObj, githubCfg)
   }
 }

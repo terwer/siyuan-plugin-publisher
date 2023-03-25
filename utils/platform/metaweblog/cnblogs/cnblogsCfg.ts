@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -32,12 +32,7 @@ import { PageType } from "../IMetaweblogCfg"
  */
 export class CnblogsCfg extends MetaweblogCfg {
   constructor() {
-    super(
-      "https://www.cnblogs.com/[yourblog]",
-      "https://rpc.cnblogs.com/metaweblog/[yourblog]",
-      "",
-      ""
-    )
+    super("https://www.cnblogs.com/[yourblog]", "https://rpc.cnblogs.com/metaweblog/[yourblog]", "", "")
     this.posidKey = POSTID_KEY_CONSTANTS.CNBLOGS_POSTID_KEY
     this.previewUrl = "/p/[postid].html"
     this.pageType = PageType.Markdown
