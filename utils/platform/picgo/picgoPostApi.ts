@@ -155,7 +155,13 @@ export class PicgoPostApi {
         const newattrs = await this.siyuanApi.getBlockAttrs(pageId)
         const newfileMap = parseJSONObj(newattrs[CONSTANTS.PICGO_FILE_MAP_KEY])
         const newImageItem: ImageItem = newfileMap[imageItem.hash]
-        replaceMap[imageItem.hash] = new ImageItem(newImageItem.originUrl, newImageItem.url, false)
+        replaceMap[imageItem.hash] = new ImageItem(
+          newImageItem.originUrl,
+          newImageItem.url,
+          false,
+          newImageItem.alt,
+          newImageItem.title
+        )
       }
 
       if (!hasLocalImages) {
@@ -230,7 +236,7 @@ export class PicgoPostApi {
           "图片上传失败，可能原因：PicGO配置错误或者该平台不支持图片覆盖，请检查配置或者尝试上传新图片。请打开picgo.log查看更多信息"
         )
       }
-      const newImageItem = new ImageItem(imageItem.originUrl, img.imgUrl, false)
+      const newImageItem = new ImageItem(imageItem.originUrl, img.imgUrl, false, imageItem.alt, imageItem.title)
       fileMap[newImageItem.hash] = newImageItem
     } else {
       throw new Error("图片上传失败，可能原因：PicGO配置错误，请检查配置。请打开picgo.log查看更多信息")

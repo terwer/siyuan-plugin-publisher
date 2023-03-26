@@ -59,4 +59,44 @@ describe("test imageParser", () => {
     const parsedImages = imageParser.parseImagesToArray(markdownText)
     console.log(parsedImages)
   })
+
+  it("test replace", () => {
+    const imageParser = new ImageParser()
+
+    const replaceMap = {
+      "63bd812969c9458c6be98dff6ba9541b": {
+        name: "image-20230326112608-uhk49kj.png",
+        hash: "63bd812969c9458c6be98dff6ba9541b",
+        originUrl: "assets/image-20230326112608-uhk49kj.png",
+        url: "https://img1.terwer.space/api/public/202303261126045.png",
+        alt: "image",
+        title: "",
+        isLocal: false,
+      },
+      "333a739dd1b6a3ecbcff34d162dd96c6": {
+        name: "image-20230326112821-n4e5h1k.png",
+        hash: "333a739dd1b6a3ecbcff34d162dd96c6",
+        originUrl: "assets/image-20230326112821-n4e5h1k.png",
+        url: "https://img1.terwer.space/api/public/202303261137833.png",
+        alt: "image2",
+        title: "",
+        isLocal: false,
+      },
+      "60d68bcc4ff6a8f1956412efa141e58e": {
+        name: "image-20230326112843-fqdp0tm.png",
+        hash: "60d68bcc4ff6a8f1956412efa141e58e",
+        originUrl: "assets/image-20230326112843-fqdp0tm.png",
+        url: "https://img1.terwer.space/api/public/202303261129815.png",
+        alt: "image3333",
+        title: "哈哈哈哈",
+        isLocal: false,
+      },
+    }
+    const content = {
+      mdContent:
+        '# 图片备注测试\n\n这是测试文字\n\n外链图片\n\n​![](https://www.terwer.space/img/logo.png)​\n\n‍\n\n本地assets图片\n\n​![image](assets/image-20230326112608-uhk49kj.png)​\n\n‍\n\n改备注\n\n​![image2](assets/image-20230326112821-n4e5h1k.png)​\n\n‍\n\n改备注和标题\n\n​![image3333](assets/image-20230326112843-fqdp0tm.png "哈哈哈哈")​\n',
+    }.mdContent
+    const replacedContent = imageParser.replaceImagesWithImageItemArray(content, replaceMap)
+    console.log(replacedContent)
+  })
 })
