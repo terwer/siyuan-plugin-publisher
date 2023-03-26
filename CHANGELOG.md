@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.1](https://github.com/terwer/src-sy-post-publisher/compare/v0.8.0...v0.8.1) (2023-03-26)
+
+
+### Miscellaneous
+
+* release 0.8.0 ([29336cd](https://github.com/terwer/src-sy-post-publisher/commit/29336cd847064971bc842e44aee75a8e90c226a8))
+
 ## [0.8.0](https://github.com/terwer/src-sy-post-publisher/compare/v0.7.2...v0.8.0) (2023-03-25)
 
 
