@@ -235,12 +235,25 @@ export class ImageParser {
 
       const src = img.replace(/!\[.*]\(/g, "").replace(/\)/, "")
       this.logger.debug("src=>", src)
+      let url
+      let title
+      const urlAttrs = src.split(" ")
+      if (urlAttrs.length > 1) {
+        url = urlAttrs[0]
+        title = urlAttrs[1].replace(/"/g, "")
+      } else {
+        url = urlAttrs[0]
+      }
 
-      const tempImageItem = new ImageItem(src, "", true)
+      const tempImageItem = new ImageItem(url, "", true)
       const hash = tempImageItem.hash
       const replaceImageItem: ImageItem = replaceMap[hash]
       const alt = replaceImageItem?.alt ?? ""
-      const newImg = `![${alt}](${replaceImageItem?.url})`
+
+      let newImg = `![${alt}](${replaceImageItem?.url})`
+      if (title) {
+        newImg = `![${alt}](${replaceImageItem?.url} "${title}")`
+      }
       this.logger.debug("newImg=>", newImg)
 
       newcontent = newcontent.replaceAll(img, newImg)
