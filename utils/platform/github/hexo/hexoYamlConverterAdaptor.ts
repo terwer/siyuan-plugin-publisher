@@ -105,6 +105,9 @@ export class HexoYamlConverterAdaptor
     // comments
     yamlFormatObj.yamlObj.comments = true
 
+    // toc
+    yamlFormatObj.yamlObj.toc = true
+
     // formatter
     let yaml = obj2Yaml(yamlFormatObj.yamlObj)
     // 修复yaml的ISO日期格式（js-yaml转换的才需要）
