@@ -25,7 +25,7 @@
     "@fortawesome/vue-fontawesome": "^3.0.2",
     "@intlify/vite-plugin-vue-i18n": "^6.0.1",
     "@octokit/core": "^4.0.4",
-    "@vueuse/components": "^9.6.0",
+    "@vueuse/components": "^10.0.2",
     "@vueuse/core": "^9.6.0",
     "blueimp-md5-es6": "^2.7.4",
     "browser-fs-access": "^0.33.0",
