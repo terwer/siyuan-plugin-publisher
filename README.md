@@ -1,5 +1,15 @@
 # sy-post-publisher
 
+⚠️特别提醒：
+
+> 由于集市大更新，现在已经 [支持挂件打包](https://github.com/siyuan-note/bazaar/issues/1095) ，所以已迁移此源码仓库到挂件仓库，避免维护带来的额外工作。  
+
+>  [sy-post-publisher](https://github.com/terwer/sy-post-publisher) 将持续维护更新并发布新版本。此仓库将仅作为归档查看使用。      
+
+> 如需建议，请直接移步仓库 [sy-post-publisher](https://github.com/terwer/sy-post-publisher) 新建issue 。       
+
+> 0.8.0+ 以上的后续版本下载也请移步 [sy-post-publisher](https://github.com/terwer/sy-post-publisher) ，感谢支持！     
+
 ![](https://img1.terwer.space/api/public/202212181125714.png)
 
 将 [思源笔记](https://github.com/siyuan-note/siyuan) 的文章发布到支持的平台的 **思源笔记挂件**
