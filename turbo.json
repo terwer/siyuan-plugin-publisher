@@ -1,0 +1,65 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": ["**/.env.*local"],
+  "pipeline": {
+    "lint": {
+      "outputs": []
+    },
+    "dev": {
+      "cache": false
+    },
+    "clientDev": {
+      "cache": false
+    },
+    "serverDev": {
+      "cache": false
+    },
+    "nodeDev": {
+      "cache": false
+    },
+    "build": {
+      "cache": false,
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
+    "dockerBuild": {
+      "cache": false
+    },
+    "vercelBuild": {
+      "cache": false,
+      "dependsOn": ["^build"]
+    },
+    "siyuanBuild": {
+      "cache": false
+    },
+    "clientBuild": {
+      "cache": false
+    },
+    "staticBuild": {
+      "cache": false
+    },
+    "serverBuild": {
+      "cache": false
+    },
+    "localBuild": {
+      "cache": false
+    },
+    "nodeBuild": {
+      "cache": false
+    },
+    "test": {
+      "dependsOn": ["^build"]
+    },
+    "preview": {
+      "dependsOn": ["^build"]
+    },
+    "doc": {
+      "dependsOn": ["^build"]
+    },
+    "md": {
+      "dependsOn": ["^doc"]
+    },
+    "apidev": {},
+    "apibuild": {}
+  }
+}
