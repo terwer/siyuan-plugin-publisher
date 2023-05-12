@@ -6,7 +6,8 @@
 
 > 🌹温馨提示：这个插件是原 `思源笔记发布工具` 挂件的插件升级版，功能包含原有挂件提供的所有功能，同时提供了方便的菜单操作入口，并进行了一系列问题修复和体验优化。
 
-> 如果想看 `0.8.0` 之前的版本，请参考我之前写的的挂件：[sy-post-publisher](https://github.com/terwer/src-sy-post-publisher)
+> 如果想看 `0.8.0`
+> 之前的版本，请参考我之前写的的挂件：[sy-post-publisher](https://github.com/terwer/src-sy-post-publisher)
 
 ## 核心特色
 
@@ -58,11 +59,11 @@
 
 排名不分先后
 
-| Name        | version | vendor      |
-|-------------|---------|-------------|
-| turbo       | 1.9+    | Vercel      |
-| esbuild     | 0.17+   | evanw       |
-| vite        | 4.2+    | Evan You    |
-| Svelte      | 3.57+   | Rich Harris |
-| TypeScript  | 5.0+    | Microsoft   |
-| siyuan-note | 2.9.0+  | D,V         |
+|    Name     | version |   vendor    |
+|:-----------:|:-------:|:-----------:|
+|    turbo    |  1.9+   |   Vercel    |
+|   esbuild   |  0.17+  |    evanw    |
+|    vite     |  4.2+   |  Evan You   |
+|   Svelte    |  3.57+  | Rich Harris |
+| TypeScript  |  5.0+   |  Microsoft  |
+| siyuan-note | 2.9.0+  |     D,V     |
