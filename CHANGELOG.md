@@ -1,5 +1,33 @@
 # Changelog
 
+## [1.0.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v0.8.0...v1.0.0) (2023-05-12)
+
+
+### ⚠ BREAKING CHANGES
+
+* 全面采用插件系统API重构，并进行细节性优化和bug修复，除了菜单插槽移除之外，其他原有功能将完全移植。
+
+### Features
+
+* 迁移仓库到集市挂件仓库 ([1343906](https://github.com/terwer/siyuan-plugin-publisher/commit/13439061349c43b080cb0c8fa1070e7af3e0b126))
+
+
+### Bug Fixes
+
+* Allow toc in hexo as default ([1650edc](https://github.com/terwer/siyuan-plugin-publisher/commit/1650edc8aaeb6f31eb72a4857bda50124e02d6d6))
+* 调整版本号规则 ([23e228d](https://github.com/terwer/siyuan-plugin-publisher/commit/23e228d60f76f006d6d119ee32a92d596c2dbb5b))
+
+
+### Code Refactoring
+
+* 全新升级为插件版 ([0337410](https://github.com/terwer/siyuan-plugin-publisher/commit/0337410b2f4c6b8d4fc4519ac0526aa2fc40505c)), closes [#502](https://github.com/terwer/siyuan-plugin-publisher/issues/502)
+
+
+### Miscellaneous
+
+* release 0.8.0 ([29336cd](https://github.com/terwer/siyuan-plugin-publisher/commit/29336cd847064971bc842e44aee75a8e90c226a8))
+* 优化构建流程 ([f4aeea1](https://github.com/terwer/siyuan-plugin-publisher/commit/f4aeea1c618638a7774105a87b3e690d6d5d3927))
+
 ## [0.8.0](https://github.com/terwer/src-sy-post-publisher/compare/v0.7.2...v0.8.0) (2023-03-25)
 
 
