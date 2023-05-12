@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "check": "svelte-check --tsconfig ./tsconfig.json"
+    "check": "svelte-check --tsconfig ./tsconfig.json",
+    "syncVersion": "echo 'syncVersion in app'"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^2.0.3",

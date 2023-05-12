@@ -47,6 +47,12 @@
     "nodeBuild": {
       "cache": false
     },
+    "package": {
+      "cache": false
+    },
+    "syncVersion": {
+      "cache": false
+    },
     "test": {
       "dependsOn": ["^build"]
     },

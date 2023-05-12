@@ -18,6 +18,8 @@
     "dockerBuild": "turbo run dockerBuild",
     "vercelBuild": "turbo run vercelBuild",
     "siyuanBuild": "turbo run siyuanBuild",
+    "syncVersion": "turbo run syncVersion",
+    "package": "echo 'package in root'",
     "test": "turbo run test",
     "start": "turbo run start",
     "doc": "turbo run doc",
