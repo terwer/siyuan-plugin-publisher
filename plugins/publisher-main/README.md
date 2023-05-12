@@ -11,7 +11,7 @@
 ## Deps
 
 ```
-## Congregations! zhi-env need no deps, it is just pure js code 🎉
+## Congregations! publisher-main need no deps, it is just pure js code 🎉
 ```
 
 ## Dev

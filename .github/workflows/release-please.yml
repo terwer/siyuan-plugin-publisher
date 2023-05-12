@@ -2,7 +2,6 @@ on:
   push:
     branches:
       - main
-      - dev
 
 name: release-please
 jobs:
@@ -17,7 +16,7 @@ jobs:
           release-type: node
           package-name: release-please-action
           ## branch to open pull release PR against (detected by default)
-          default-branch: dev
+          default-branch: main
           ## Should breaking changes before 1.0.0 produce minor bumps? Default false
           bump-minor-pre-major: false
           ## Should feat changes before 1.0.0 produce patch bumps instead of minor bumps? Default false

@@ -62,7 +62,6 @@
 |    Name     | version |   vendor    |
 |:-----------:|:-------:|:-----------:|
 |    turbo    |  1.9+   |   Vercel    |
-|   esbuild   |  0.17+  |    evanw    |
 |    vite     |  4.2+   |  Evan You   |
 |   Svelte    |  3.57+  | Rich Harris |
 | TypeScript  |  5.0+   |  Microsoft  |
