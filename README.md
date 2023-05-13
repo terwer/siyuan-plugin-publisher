@@ -2,7 +2,9 @@
 
 # Publish Tool
 
-Publishing articles from siyuan-note to platforms such as Yuque, cnblogs, WordPress, Typecho, Hexo, Hugo, etc.
+![](https://raw.githubusercontent.com/terwer/siyuan-plugin-publisher/main/plugins/publisher-main/public/icon.png)
+
+Publishing articles from siyuan-note to platforms such as Yuque, Cnblogs, WordPress, Typecho, Hexo, Hugo, etc.
 
 Support features such as fast publishing, image bed management, platform expansion, smart labels, etc.
 
@@ -36,7 +38,7 @@ This plugin promises that all functions will be free forever. If you want to sup
 
 Names not listed in order
 
-- cnblogs
+- Cnblogs
 - WordPress
 - Yu Que
 - Github

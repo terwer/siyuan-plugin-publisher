@@ -1,7 +1,7 @@
 {
   "name": "siyuan-plugin-publisher",
   "version": "0.8.0",
-  "description": "Publishing articles from siyuan-note to platforms such as Yuque, cnblogs, WordPress, Typecho, HUGO, HEXO, etc.",
+  "description": "Publishing articles from siyuan-note to platforms such as Yuque, Cnblogs, WordPress, Typecho, HUGO, HEXO, etc.",
   "private": true,
   "workspaces": [
     "tools/*",

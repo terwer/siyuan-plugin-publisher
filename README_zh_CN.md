@@ -2,7 +2,9 @@
 
 # 发布工具
 
-将思源笔记的文章发布到语雀、cnblogs、WordPress、Typecho、Hexo、Hugo 等支持的开放平台，支持极速发布、图床管理、平台扩展、智能标签等特色功能。
+![](https://raw.githubusercontent.com/terwer/siyuan-plugin-publisher/main/plugins/publisher-main/public/icon.png)
+
+将思源笔记的文章发布到语雀、Cnblogs、WordPress、Typecho、Hexo、Hugo 等支持的开放平台，支持极速发布、图床管理、平台扩展、智能标签等特色功能。
 
 本插件承诺，所有功能永久免费。如果您想支持开发者，请在这里 [随意打赏](https://github.com/terwer/siyuan-plugin-publisher/blob/main/README_zh_CN.md#捐赠)。
 
