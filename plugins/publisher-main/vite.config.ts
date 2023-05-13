@@ -5,6 +5,7 @@ import { defineConfig } from "vite"
 import minimist from "minimist"
 import { viteStaticCopy } from "vite-plugin-static-copy"
 import livereload from "rollup-plugin-livereload"
+import { svelte } from "@sveltejs/vite-plugin-svelte"
 
 const args = minimist(process.argv.slice(2))
 const isWatch = args.watch || args.w
@@ -16,6 +17,8 @@ console.log("distDir=>", distDir)
 
 export default defineConfig({
   plugins: [
+    svelte(),
+
     viteStaticCopy({
       targets: [
         {
@@ -85,22 +88,22 @@ export default defineConfig({
         // entryFileNames: "static/js/[name]-[hash].js",
         entryFileNames: "[name].js",
         assetFileNames: "static/[ext]/[name]-[hash].[ext]",
-        manualChunks(id) {
-          if (id.includes("node_modules")) {
-            let arr = id.toString().split("node_modules/")[1].split("/")
-            // pnpm单独处理
-            if (id.includes(".pnpm")) {
-              arr = id.toString().split(".pnpm/")[1].split("/")
-            }
-            const dep = arr[0].split("@")[0].replace(/\./g, "-")
-            // console.log("id=>", id)
-            // console.log("dep=>", dep)
-            if (dep !== "") {
-              return "vendor_" + dep
-            }
-            return "vendor"
-          }
-        },
+        // manualChunks(id) {
+        //   if (id.includes("node_modules")) {
+        //     let arr = id.toString().split("node_modules/")[1].split("/")
+        //     // pnpm单独处理
+        //     if (id.includes(".pnpm")) {
+        //       arr = id.toString().split(".pnpm/")[1].split("/")
+        //     }
+        //     const dep = arr[0].split("@")[0].replace(/\./g, "-")
+        //     // console.log("id=>", id)
+        //     // console.log("dep=>", dep)
+        //     if (dep !== "") {
+        //       return "vendor_" + dep
+        //     }
+        //     return "vendor"
+        //   }
+        // },
       },
     },
   },

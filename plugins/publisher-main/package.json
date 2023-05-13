@@ -2,7 +2,7 @@
   "name": "publisher-main",
   "private": true,
   "version": "1.1.3",
-  "type": "commonjs",
+  "type": "module",
   "scripts": {
     "serve": "vite",
     "dev": "vite build --watch",
@@ -12,8 +12,11 @@
     "syncVersion": "echo 'syncVersion in main'"
   },
   "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^2.0.3",
     "@terwer/eslint-config-custom": "^1.2.0",
     "@terwer/vite-config-custom": "^0.4.0",
-    "siyuan": "^0.7.1"
+    "@tsconfig/svelte": "^4.0.1",
+    "siyuan": "^0.7.1",
+    "svelte": "^3.57.0"
   }
 }
