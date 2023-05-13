@@ -3,6 +3,7 @@
 import { resolve } from "path"
 import { defineConfig } from "vite"
 import minimist from "minimist"
+import { viteStaticCopy } from "vite-plugin-static-copy"
 import livereload from "rollup-plugin-livereload"
 
 const args = minimist(process.argv.slice(2))
@@ -14,6 +15,17 @@ console.log("isWatch=>", isWatch)
 console.log("distDir=>", distDir)
 
 export default defineConfig({
+  plugins: [
+    viteStaticCopy({
+      targets: [
+        {
+          src: "../../README*.md",
+          dest: "./",
+        },
+      ],
+    }),
+  ],
+
   // 项目根目录
   // root: "./",
 

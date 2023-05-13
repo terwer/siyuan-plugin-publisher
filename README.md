@@ -4,6 +4,10 @@
 
 Publishing articles from siyuan-note to platforms such as Yuque, cnblogs, WordPress, Typecho, HUGO, HEXO, etc.
 
+Support features such as fast publishing, image bed management, platform expansion, smart labels, etc.
+
+This plugin promises that all functions will be free forever. If you want to support the developer, please [Donate freely](https://github.com/terwer/siyuan-plugin-publisher#Donate).
+
 > 🌹Reminder: This plugin is an upgraded version of the original `Siyuan Notes Publishing Tool` widget. Its functions
 > include all the functions provided by the original widget. It also provides a convenient menu operation entry, and has
 > carried out a series of bug fixes and experience optimization.
@@ -42,7 +46,7 @@ Names not listed in order
 ## Platform Adaptation Plan
 
 If you have a platform you want to use, but this tool has not yet been implemented, you can submit
-the [Siyuan Note Publishing Tool Plugin Platform Adaptation Tracking Form](https://terwergreen.feishu.cn/share/base/form/shrcnGRdThUiqnhBg15xgclMM0c )
+the [Siyuan Note Publishing Tool Plugin Platform Adaptation Tracking Form](https://terwergreen.feishu.cn/share/base/form/shrcnGRdThUiqnhBg15xgclMM0c%20)
 , the developer will consider including it in the development plan.
 
 For platform adaptation, please refer
@@ -55,22 +59,27 @@ more useful tools~
 
 ### Wechat
 
+<div>
 <img src="https://static-rs-terwer.oss-cn-beijing.aliyuncs.com/donate/wechat.jpg" alt="wechat" style="width:280px;height:375px;" />
+</div>
 
 ### Alipay
 
+<div>
 <img src="https://static-rs-terwer.oss-cn-beijing.aliyuncs.com/donate/alipay.jpg" alt="alipay" style="width:280px;height:375px;" />
+</div>
 
-# 感谢
+# Thanks
 
-Thanks to the third-party framework for supporting the bottom layer of this project
+- Thanks to the third-party framework for supporting the bottom layer of this project
 
-Names not listed in order
+  Names not listed in order
 
-|    Name     | version |   vendor    |
-|:-----------:|:-------:|:-----------:|
-|    turbo    |  1.9+   |   Vercel    |
-|    vite     |  4.2+   |  Evan You   |
-|   Svelte    |  3.57+  | Rich Harris |
-| TypeScript  |  5.0+   |  Microsoft  |
-| siyuan-note | 2.9.0+  |     D,V     |
+  |Name|version|vendor|
+    | :---------: | :-----: | :---------: |
+  |turbo|1.9+|Vercel|
+  |vite|4.2+|Evan You|
+  |Svelte|3.57+|Rich Harris|
+  |TypeScript|5.0+|Microsoft|
+  |siyuan-note|2.9.0+|D,V|
+- Thanks to [leolee9086](https://github.com/leolee9086) for the icon resource

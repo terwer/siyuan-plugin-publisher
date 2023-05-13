@@ -9,7 +9,7 @@
   },
   "description": {
     "default": "Publishing articles from siyuan-note to platforms such as Yuque, cnblogs, WordPress, Typecho, HUGO, HEXO, etc.",
-    "zh_CN": "将思源笔记的文章发布到语雀、博客园、WordPress、Typecho、HUGO、HEXO等平台"
+    "zh_CN": "将思源笔记的文章发布到语雀、博客园、WordPress、Typecho、HUGO、HEXO等平台，支持极速发布、图床管理、平台扩展、智能标签等特色功能"
   },
   "readme": {
     "default": "README.md",

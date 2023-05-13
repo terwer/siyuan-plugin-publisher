@@ -1,7 +1,11 @@
 import { Plugin } from "siyuan"
 
-export default class PluginSample extends Plugin {
+export default class PublishTool extends Plugin {
   onload() {
-    console.log("Publish Tool loaded2333")
+    console.log("Publish Tool loaded")
+  }
+
+  onunload() {
+    console.log("Publish Tool unloaded")
   }
 }
