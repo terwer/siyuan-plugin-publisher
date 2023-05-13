@@ -6,7 +6,7 @@ Publishing articles from siyuan-note to platforms such as Yuque, cnblogs, WordPr
 
 Support features such as fast publishing, image bed management, platform expansion, smart labels, etc.
 
-This plugin promises that all functions will be free forever. If you want to support the developer, please [Donate freely](https://github.com/terwer/siyuan-plugin-publisher#Donate).
+This plugin promises that all functions will be free forever. If you want to support the developer, please [Donate](https://github.com/terwer/siyuan-plugin-publisher#Donate) freely.
 
 > 🌹Reminder: This plugin is an upgraded version of the original `Siyuan Notes Publishing Tool` widget. Its functions
 > include all the functions provided by the original widget. It also provides a convenient menu operation entry, and has
