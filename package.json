@@ -10,11 +10,9 @@
     "plugins/*"
   ],
   "scripts": {
+    "serve": "turbo run serve",
     "dev": "turbo run dev",
     "build": "turbo run build",
-    "localBuild": "turbo run localBuild",
-    "staticBuild": "turbo run staticBuild",
-    "nodeBuild": "turbo run nodeBuild",
     "dockerBuild": "turbo run dockerBuild",
     "vercelBuild": "turbo run vercelBuild",
     "siyuanBuild": "turbo run siyuanBuild",
@@ -22,7 +20,6 @@
     "package": "echo 'package in root'",
     "test": "turbo run test",
     "start": "turbo run start",
-    "doc": "turbo run doc",
     "lint": "turbo run lint",
     "graph": " turbo run build --graph=dependency-graph.png",
     "prepare": "is-ci || husky install",

@@ -1,5 +1,7 @@
-const init = () => {
-  return "ok"
-}
+import { Plugin } from "siyuan"
 
-export default init
+export default class PluginSample extends Plugin {
+  onload() {
+    console.log("Publish Tool loaded2333")
+  }
+}

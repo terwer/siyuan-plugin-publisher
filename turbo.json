@@ -5,16 +5,10 @@
     "lint": {
       "outputs": []
     },
+    "serve": {
+      "cache": false
+    },
     "dev": {
-      "cache": false
-    },
-    "clientDev": {
-      "cache": false
-    },
-    "serverDev": {
-      "cache": false
-    },
-    "nodeDev": {
       "cache": false
     },
     "build": {
@@ -32,21 +26,6 @@
     "siyuanBuild": {
       "cache": false
     },
-    "clientBuild": {
-      "cache": false
-    },
-    "staticBuild": {
-      "cache": false
-    },
-    "serverBuild": {
-      "cache": false
-    },
-    "localBuild": {
-      "cache": false
-    },
-    "nodeBuild": {
-      "cache": false
-    },
     "package": {
       "cache": false
     },
@@ -58,14 +37,6 @@
     },
     "preview": {
       "dependsOn": ["^build"]
-    },
-    "doc": {
-      "dependsOn": ["^build"]
-    },
-    "md": {
-      "dependsOn": ["^doc"]
-    },
-    "apidev": {},
-    "apibuild": {}
+    }
   }
 }

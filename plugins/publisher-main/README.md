@@ -1,6 +1,6 @@
 # publisher-main
 
-
+main module for publisher
 
 ## Usage
 

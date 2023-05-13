@@ -1,6 +1,6 @@
-# Svelte + TS + Vite
+# publisher-app
 
-This template should help get you started developing with Svelte and TypeScript in Vite.
+app module for publisher
 
 ## Recommended IDE Setup
 
