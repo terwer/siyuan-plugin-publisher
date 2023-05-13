@@ -2,7 +2,7 @@
 
 # Publish Tool
 
-Publishing articles from siyuan-note to platforms such as Yuque, cnblogs, WordPress, Typecho, HUGO, HEXO, etc.
+Publishing articles from siyuan-note to platforms such as Yuque, cnblogs, WordPress, Typecho, Hexo, Hugo, etc.
 
 Support features such as fast publishing, image bed management, platform expansion, smart labels, etc.
 
