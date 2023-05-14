@@ -1,6 +1,7 @@
 {
   "publishTool": "Publish Tool",
   "setting": "Setting",
+  "settingMenuTips": "Let creation return to fun",
   "cancel": "Cancel",
   "save": "Save"
 }

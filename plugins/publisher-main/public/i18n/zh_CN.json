@@ -1,6 +1,7 @@
 {
   "publishTool": "发布工具",
   "setting": "设置",
+  "settingMenuTips": "让创作回归乐趣",
   "cancel": "取消",
   "save": "保存"
 }
