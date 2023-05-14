@@ -2,7 +2,7 @@
 
 import { resolve } from "path"
 import { defineConfig } from "vite"
-import minimist from "minimist";
+import minimist from "minimist"
 
 const args = minimist(process.argv.slice(2))
 const isWatch = args.watch || args.w
@@ -19,7 +19,7 @@ export default defineConfig({
       entry: resolve(__dirname, "src/siyuanhook.ts"),
       // the proper extensions will be added
       fileName: "siyuanhook",
-      formats: ["cjs"],
+      formats: ["es"],
     },
     rollupOptions: {
       // make sure to externalize deps that shouldn't be bundled
