@@ -4,7 +4,6 @@
   "description": "Publishing articles from siyuan-note to platforms such as Yuque, Cnblogs, WordPress, Typecho, HUGO, HEXO, etc.",
   "private": true,
   "workspaces": [
-    "tools/*",
     "libs/*",
     "apps/*",
     "plugins/*"
@@ -32,6 +31,7 @@
   },
   "devDependencies": {
     "turbo": "^1.9.4",
+    "@terwer/changelog-parser": "^1.1.0",
     "@terwer/commit-config-custom": "latest",
     "@terwer/eslint-config-custom": "latest"
   },

@@ -4,6 +4,9 @@ importers:
 
   .:
     devDependencies:
+      '@terwer/changelog-parser':
+        specifier: ^1.1.0
+        version: registry.npmjs.org/@terwer/changelog-parser@1.1.0
       '@terwer/commit-config-custom':
         specifier: latest
         version: registry.npmjs.org/@terwer/commit-config-custom@1.0.2(@commitlint/cli@17.6.3)(@commitlint/config-angular@17.6.3)(@commitlint/cz-commitlint@17.5.0)(@commitlint/prompt-cli@17.6.3)(commitizen@4.3.0)(husky@8.0.3)(inquirer@8.2.5)(is-ci@3.0.1)
@@ -80,6 +83,35 @@ importers:
       typescript:
         specifier: ^5.0.4
         version: registry.npmjs.org/typescript@5.0.4
+
+  libs/publisher-bridge:
+    dependencies:
+      '@terwer/publisher-hook':
+        specifier: workspace:*
+        version: link:../publisher-hook
+    devDependencies:
+      '@terwer/eslint-config-custom':
+        specifier: ^1.2.0
+        version: registry.npmjs.org/@terwer/eslint-config-custom@1.2.0(@nuxt/eslint-config@0.1.1)(@typescript-eslint/eslint-plugin@5.59.5)(astro-eslint-parser@0.13.3)(eslint-config-prettier@8.8.0)(eslint-config-turbo@1.9.4)(eslint-plugin-prettier@4.2.1)(eslint-plugin-svelte@2.28.0)(eslint-plugin-vue@9.12.0)(eslint@8.40.0)(prettier-plugin-svelte@2.10.0)(prettier@2.8.8)(typescript@5.0.4)
+      '@terwer/vite-config-custom':
+        specifier: ^0.2.0
+        version: registry.npmjs.org/@terwer/vite-config-custom@0.2.0(jsdom@22.0.0)(tslib@2.5.0)(typescript@5.0.4)(vite-plugin-css-injected-by-js@3.1.1)(vite-plugin-dts@2.3.0)(vite-plugin-static-copy@0.15.0)(vite-tsconfig-paths@4.2.0)(vite@4.3.5)(vitest@0.31.0)
+
+  libs/publisher-hook:
+    dependencies:
+      zhi-device:
+        specifier: ^0.5.0
+        version: registry.npmjs.org/zhi-device@0.5.0
+      zhi-log:
+        specifier: ^1.13.0
+        version: registry.npmjs.org/zhi-log@1.13.0
+    devDependencies:
+      '@terwer/eslint-config-custom':
+        specifier: ^1.2.0
+        version: registry.npmjs.org/@terwer/eslint-config-custom@1.2.0(@nuxt/eslint-config@0.1.1)(@typescript-eslint/eslint-plugin@5.59.5)(astro-eslint-parser@0.13.3)(eslint-config-prettier@8.8.0)(eslint-config-turbo@1.9.4)(eslint-plugin-prettier@4.2.1)(eslint-plugin-svelte@2.28.0)(eslint-plugin-vue@9.12.0)(eslint@8.40.0)(prettier-plugin-svelte@2.10.0)(prettier@2.8.8)(typescript@5.0.4)
+      '@terwer/vite-config-custom':
+        specifier: ^0.2.0
+        version: registry.npmjs.org/@terwer/vite-config-custom@0.2.0(jsdom@22.0.0)(tslib@2.5.0)(typescript@5.0.4)(vite-plugin-css-injected-by-js@3.1.1)(vite-plugin-dts@2.3.0)(vite-plugin-static-copy@0.15.0)(vite-tsconfig-paths@4.2.0)(vite@4.3.5)(vitest@0.31.0)
 
   plugins/publisher-main:
     dependencies:
@@ -3981,6 +4013,12 @@ packages:
       defer-to-connect: registry.npmjs.org/defer-to-connect@1.1.3
     dev: false
 
+  registry.npmjs.org/@terwer/changelog-parser@1.1.0:
+    resolution: {integrity: sha512-FNw6GtP4qXSz5vX+QKxjYULU+RtbydynhSqoWj2dkYjymY7GFb1N0WltSXT8VVB81USqzqAvPZsSx0XD2O5JRQ==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@terwer/changelog-parser/-/changelog-parser-1.1.0.tgz}
+    name: '@terwer/changelog-parser'
+    version: 1.1.0
+    dev: true
+
   registry.npmjs.org/@terwer/commit-config-custom@1.0.2(@commitlint/cli@17.6.3)(@commitlint/config-angular@17.6.3)(@commitlint/cz-commitlint@17.5.0)(@commitlint/prompt-cli@17.6.3)(commitizen@4.3.0)(husky@8.0.3)(inquirer@8.2.5)(is-ci@3.0.1):
     resolution: {integrity: sha512-Ub3h8OcOYrI5jNdbE43OC0D1G2SLXo2eKZahv9Mb99xtbjNR85TsktmSSrV8eM+ULBd5y1Ie0gsuaMU9cgLZJQ==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@terwer/commit-config-custom/-/commit-config-custom-1.0.2.tgz}
     id: registry.npmjs.org/@terwer/commit-config-custom/1.0.2
@@ -4037,6 +4075,33 @@ packages:
       prettier: registry.npmjs.org/prettier@2.8.8
       prettier-plugin-svelte: registry.npmjs.org/prettier-plugin-svelte@2.10.0(prettier@2.8.8)(svelte@3.57.0)
       typescript: registry.npmjs.org/typescript@5.0.4
+    dev: true
+
+  registry.npmjs.org/@terwer/vite-config-custom@0.2.0(jsdom@22.0.0)(tslib@2.5.0)(typescript@5.0.4)(vite-plugin-css-injected-by-js@3.1.1)(vite-plugin-dts@2.3.0)(vite-plugin-static-copy@0.15.0)(vite-tsconfig-paths@4.2.0)(vite@4.3.5)(vitest@0.31.0):
+    resolution: {integrity: sha512-uDFFlKmP2rBErHj4DK1aGBg5YfoLBoEEoEGOKvxUZsMJpkpU3YMYu8aCETp6aP0NRCpyXml7qFz4CMxgzNp6QA==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@terwer/vite-config-custom/-/vite-config-custom-0.2.0.tgz}
+    id: registry.npmjs.org/@terwer/vite-config-custom/0.2.0
+    name: '@terwer/vite-config-custom'
+    version: 0.2.0
+    peerDependencies:
+      jsdom: ^22.0.0
+      tslib: ^2.5.0
+      typescript: ^5.0.4
+      vite: ^4.3.5
+      vite-plugin-css-injected-by-js: ^3.1.1
+      vite-plugin-dts: ^2.3.0
+      vite-plugin-static-copy: ^0.15.0
+      vite-tsconfig-paths: ^4.2.0
+      vitest: ^0.31.0
+    dependencies:
+      jsdom: registry.npmjs.org/jsdom@22.0.0
+      tslib: registry.npmjs.org/tslib@2.5.0
+      typescript: registry.npmjs.org/typescript@5.0.4
+      vite: registry.npmjs.org/vite@4.3.5(@types/node@20.1.4)
+      vite-plugin-css-injected-by-js: registry.npmjs.org/vite-plugin-css-injected-by-js@3.1.1(vite@4.3.5)
+      vite-plugin-dts: registry.npmjs.org/vite-plugin-dts@2.3.0(@types/node@20.1.4)(vite@4.3.5)
+      vite-plugin-static-copy: registry.npmjs.org/vite-plugin-static-copy@0.15.0(vite@4.3.5)
+      vite-tsconfig-paths: registry.npmjs.org/vite-tsconfig-paths@4.2.0(typescript@5.0.4)(vite@4.3.5)
+      vitest: registry.npmjs.org/vitest@0.31.0(jsdom@22.0.0)
     dev: true
 
   registry.npmjs.org/@terwer/vite-config-custom@0.4.0(jsdom@22.0.0)(rollup-plugin-livereload@2.0.5)(tslib@2.5.0)(typescript@5.0.4)(vite-plugin-css-injected-by-js@3.1.1)(vite-plugin-dts@2.3.0)(vite-plugin-no-bundle@2.0.2)(vite-plugin-static-copy@0.15.0)(vite-tsconfig-paths@4.2.0)(vite@4.3.5)(vitest@0.31.0):
@@ -5158,6 +5223,13 @@ packages:
       string-width: registry.npmjs.org/string-width@4.2.3
     dev: false
 
+  registry.npmjs.org/ansi-colors@4.1.3:
+    resolution: {integrity: sha512-/6w/C21Pm1A7aZitlI5Ni/2J6FFQN8i1Cvz3kHABAAbw93v/NlvKdVOqz7CCWz/3iv/JplRSEEZ83XION15ovw==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/ansi-colors/-/ansi-colors-4.1.3.tgz}
+    name: ansi-colors
+    version: 4.1.3
+    engines: {node: '>=6'}
+    dev: false
+
   registry.npmjs.org/ansi-escapes@3.2.0:
     resolution: {integrity: sha512-cBhpre4ma+U0T1oM5fXg7Dy1Jw7zzwv7lt/GoCpr+hDQJoYnKVPLL4dCvSEFMmQurOQvSrwT7SL/DAlhBI97RQ==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/ansi-escapes/-/ansi-escapes-3.2.0.tgz}
     name: ansi-escapes
@@ -5750,6 +5822,13 @@ packages:
     name: callsites
     version: 3.1.0
     engines: {node: '>=6'}
+
+  registry.npmjs.org/callsites@4.0.0:
+    resolution: {integrity: sha512-y3jRROutgpKdz5vzEhWM34TidDU8vkJppF8dszITeb1PQmSqV3DTxyV8G/lyO/DNvtE1YTedehmw9MPZsCBHxQ==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/callsites/-/callsites-4.0.0.tgz}
+    name: callsites
+    version: 4.0.0
+    engines: {node: '>=12.20'}
+    dev: false
 
   registry.npmjs.org/camel-case@4.1.2:
     resolution: {integrity: sha512-gxGWBrTT1JuMx6R+o5PTXMmUnhnVzLQ9SNutD4YqKtI6ap897t3tKECYla6gCWEkplXnlNybEkZg9GEGxKFCgw==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/camel-case/-/camel-case-4.1.2.tgz}
@@ -9619,7 +9698,6 @@ packages:
     name: kleur
     version: 4.1.5
     engines: {node: '>=6'}
-    dev: true
 
   registry.npmjs.org/klona@2.0.6:
     resolution: {integrity: sha512-dhG34DXATL5hSxJbIexCft8FChFXtmskoZYnoPWjXQuebWYCNkVeV3KkGegCK9CP1oswI/vQibS2GY7Em/sJJA==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/klona/-/klona-2.0.6.tgz}
@@ -9878,6 +9956,19 @@ packages:
       chalk: registry.npmjs.org/chalk@4.1.2
       is-unicode-supported: registry.npmjs.org/is-unicode-supported@0.1.0
     dev: true
+
+  registry.npmjs.org/loglevel-plugin-prefix@0.8.4:
+    resolution: {integrity: sha512-WpG9CcFAOjz/FtNht+QJeGpvVl/cdR6P0z6OcXSkr8wFJOsV2GRj2j10JLfjuA4aYkcKCNIEqRGCyTife9R8/g==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/loglevel-plugin-prefix/-/loglevel-plugin-prefix-0.8.4.tgz}
+    name: loglevel-plugin-prefix
+    version: 0.8.4
+    dev: false
+
+  registry.npmjs.org/loglevel@1.8.1:
+    resolution: {integrity: sha512-tCRIJM51SHjAayKwC+QAg8hT8vg6z7GSgLJKGvzuPb1Wc+hLzqtuVLxp6/HzSPOozuK+8ErAhy7U/sVzw8Dgfg==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/loglevel/-/loglevel-1.8.1.tgz}
+    name: loglevel
+    version: 1.8.1
+    engines: {node: '>= 0.6.0'}
+    dev: false
 
   registry.npmjs.org/longest@2.0.1:
     resolution: {integrity: sha512-Ajzxb8CM6WAnFjgiloPsI3bF+WCxcvhdIG3KNA2KN962+tdBsHcuQ4k4qX/EcS/2CRkcc0iAkR956Nib6aXU/Q==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/longest/-/longest-2.0.1.tgz}
@@ -15246,6 +15337,26 @@ packages:
     resolution: {integrity: sha512-fa3oPl7zA76ecSHTkPG4v3t66fd8uvPxIGgoddI17ORx/TuyYW8LaKP0ULy7y2O+ZpUQc2+Hr+Qb76kf35Gf9w==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/zhi-device/-/zhi-device-0.5.0.tgz}
     name: zhi-device
     version: 0.5.0
+    dev: false
+
+  registry.npmjs.org/zhi-env@1.17.0:
+    resolution: {integrity: sha512-NumaWeqn3sII6H8h0qg+v/Y/kSnywkrx4lBKuf6UpDDImvKfbu8tDM22V2vrLOemTDiJmPl/pql64DM8H9MYlA==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/zhi-env/-/zhi-env-1.17.0.tgz}
+    name: zhi-env
+    version: 1.17.0
+    dev: false
+
+  registry.npmjs.org/zhi-log@1.13.0:
+    resolution: {integrity: sha512-aB6CvNBYWKKOsJ/DSYgKuEaONumk7YspS3NrkTd3Q5s/oxsqBlFXsL+2fkTCET9tB/+S1wCA4iMNOJFZQo/v1g==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/zhi-log/-/zhi-log-1.13.0.tgz}
+    name: zhi-log
+    version: 1.13.0
+    dependencies:
+      ansi-colors: registry.npmjs.org/ansi-colors@4.1.3
+      callsites: registry.npmjs.org/callsites@4.0.0
+      kleur: registry.npmjs.org/kleur@4.1.5
+      loglevel: registry.npmjs.org/loglevel@1.8.1
+      loglevel-plugin-prefix: registry.npmjs.org/loglevel-plugin-prefix@0.8.4
+      zhi-device: registry.npmjs.org/zhi-device@0.5.0
+      zhi-env: registry.npmjs.org/zhi-env@1.17.0
     dev: false
 
   registry.npmjs.org/zwitch@1.0.5:

@@ -127,9 +127,8 @@ export default class PublishTool extends Plugin {
     const publisherIndex = `/widgets/sy-post-publisher/index.html`
 
     if (deviceType == DeviceTypeEnum.DeviceType_Siyuan_MainWin) {
-      import("/plugins/publish-tool/lib/bridge/hook/index.js" as any).then((hook) => {
+      import("/plugins/publish-tool/lib/bridge/index.js" as any).then((hook) => {
         const publisherHook = new hook.default()
-        console.log(publisherHook)
         publisherHook.init().then(() => {
           // 发布首页
           // const pageId: any = "111111"

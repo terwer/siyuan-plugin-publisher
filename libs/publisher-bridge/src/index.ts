@@ -1,5 +1,3 @@
-const init = () => {
-  return "ok"
-}
+import PublishBridge from "./publish-bridge"
 
-export default init
+export default PublishBridge

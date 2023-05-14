@@ -1,5 +1,2 @@
-const init = () => {
-  return "ok"
-}
-
-export default init
+import PublishHook from "./publish-hook"
+export default PublishHook
