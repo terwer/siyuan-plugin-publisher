@@ -85,8 +85,17 @@
 
 ‍
 
-* Q5：我需要发布的平台，发布工具没有提供怎么办？
-* A5：参考：[平台适配计划](https://github.com/terwer/siyuan-plugin-publisher/blob/main/README_zh_CN.md#平台适配计划 "平台适配计划")​
+* Q5：我的历史配置数据项迁移到插件，可以吗？
+* A5：**可以。**
+
+  请在 `设置->导入导出->导入挂件版历史数据。` 操作。
+  
+  注意：挂件版配置数据导入仅支持 `sy-p-cfg-v0.8.0.json` 和 `picgo.json` 。
+
+‍
+
+* Q6：我需要发布的平台，发布工具没有提供怎么办？
+* A6：参考：[平台适配计划](https://github.com/terwer/siyuan-plugin-publisher/blob/main/README_zh_CN.md#平台适配计划 "平台适配计划")​
 
 ## 捐赠
 

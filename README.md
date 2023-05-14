@@ -74,7 +74,7 @@ to [Latest Adaptation](https://terwergreen.feishu.cn/share/base/view/shrcnWT2IGI
 
   A3：**Yes.**
 
-  The plugin has a built-in bridge by default, which can invoke the widget through the plugin. This feature needs to be turned on in `Settings -> Use Widget`​.
+  The plugin has a builtin bridge by default, which can invoke the widget through the plugin. This feature needs to be turned on in `Settings -> Use Widget`​.
 
   <u>Note 1: The plugin version uses the builtin menu of the plugin system, and the menu slot will be disabled when the widget version is activated via plugin. ​</u>
 
@@ -94,8 +94,18 @@ to [Latest Adaptation](https://terwergreen.feishu.cn/share/base/view/shrcnWT2IGI
 
 ‍
 
-* Q5：What should I do if the platform I need to publish is not provided by the publishing tool?
-* A5：Reference: [Platform Adaptation Plan](https://github.com/terwer/siyuan-plugin-publisher/blob/main/README_zh_CN.md#platform-adaptation-plan "Platform Adaptation Plan")
+* Q5：Is it possible to migrate my historical configuration data items to the plugin?
+
+* A5：**Yes.**
+
+  Please go to `Settings->Import and Export->Import the historical data of the widget version. ` Operation. 
+
+  Note: The widget version configuration data import only supports `sy-p-cfg-v0.8.0.json` and `picgo.json`.
+
+‍
+
+* Q6：What should I do if the platform I need to publish is not provided by the publishing tool?
+* A6：Reference: [Platform Adaptation Plan](https://github.com/terwer/siyuan-plugin-publisher/blob/main/README_zh_CN.md#platform-adaptation-plan "Platform Adaptation Plan")
 
 
 ## Donate
