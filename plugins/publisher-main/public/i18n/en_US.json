@@ -2,7 +2,7 @@
   "publishTool": "Publish Tool",
   "setting": "Setting",
   "settingMenuTips": "Let creation return to fun",
-  "publisherWidget": "Publisher Widget[deprecated]",
+  "publisherWidget": "Publisher Widget",
   "cancel": "Cancel",
   "save": "Save"
 }

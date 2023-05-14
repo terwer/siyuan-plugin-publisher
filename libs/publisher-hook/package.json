@@ -1,0 +1,30 @@
+{
+  "name": "publisher-hook",
+  "version": "0.0.1",
+  "type": "module",
+  "description": "siyuanhook for sy-post-publisher widget",
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
+  "repository": "terwer/zhi",
+  "homepage": "https://github.com/terwer/zhi/tree/main/libs/publisher-hook",
+  "author": "terwer",
+  "license": "GPL",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "keywords": [
+    "zhi",
+    "lib"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "start": "vite preview",
+    "test": "vitest --watch"
+  },
+  "devDependencies": {
+    "@terwer/eslint-config-custom": "^1.2.0",
+    "@terwer/vite-config-custom": "^0.2.0"
+  }
+}
