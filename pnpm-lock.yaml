@@ -82,6 +82,10 @@ importers:
         version: registry.npmjs.org/typescript@5.0.4
 
   plugins/publisher-main:
+    dependencies:
+      zhi-device:
+        specifier: ^0.5.0
+        version: registry.npmjs.org/zhi-device@0.5.0
     devDependencies:
       '@sveltejs/vite-plugin-svelte':
         specifier: ^2.0.3
@@ -15237,6 +15241,12 @@ packages:
     optionalDependencies:
       commander: registry.npmjs.org/commander@9.5.0
     dev: true
+
+  registry.npmjs.org/zhi-device@0.5.0:
+    resolution: {integrity: sha512-fa3oPl7zA76ecSHTkPG4v3t66fd8uvPxIGgoddI17ORx/TuyYW8LaKP0ULy7y2O+ZpUQc2+Hr+Qb76kf35Gf9w==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/zhi-device/-/zhi-device-0.5.0.tgz}
+    name: zhi-device
+    version: 0.5.0
+    dev: false
 
   registry.npmjs.org/zwitch@1.0.5:
     resolution: {integrity: sha512-V50KMwwzqJV0NpZIZFwfOD5/lyny3WlSzRiXgA0G7VUnRlqttta1L6UQIHzd6EuBY/cHGfwTIck7w1yH6Q5zUw==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/zwitch/-/zwitch-1.0.5.tgz}

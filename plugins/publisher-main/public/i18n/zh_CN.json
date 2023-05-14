@@ -2,6 +2,7 @@
   "publishTool": "发布工具",
   "setting": "设置",
   "settingMenuTips": "让创作回归乐趣",
+  "publisherWidget": "挂件版[已废弃]",
   "cancel": "取消",
   "save": "保存"
 }
