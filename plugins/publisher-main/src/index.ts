@@ -43,7 +43,7 @@ export default class PublishTool extends Plugin {
 
     const menu = new Menu("topBarSample")
     menu.addItem({
-      icon: "iconInfo",
+      icon: "iconSettings",
       label: this.i18n.setting,
       click: () => {
         this._showSettingDialog()
@@ -52,7 +52,7 @@ export default class PublishTool extends Plugin {
 
     menu.addSeparator()
     menu.addItem({
-      icon: "iconInfo",
+      icon: "iconTransform",
       label: this.i18n.publisherWidget,
       click: () => {
         this._showPublisherWidget()
@@ -129,8 +129,6 @@ export default class PublishTool extends Plugin {
 
     const publisherIndex = `/widgets/sy-post-publisher/index.html`
 
-    console.log(this.env)
-    console.log(this.env.isDev())
     if (deviceType == DeviceTypeEnum.DeviceType_Siyuan_MainWin) {
       import("/plugins/publish-tool/lib/bridge/index.js" as any).then((bridge) => {
         const publisherBridge = new bridge.default()
@@ -147,8 +145,7 @@ export default class PublishTool extends Plugin {
           // const widgetId = "1111111"
           // const pageUrl = "detail/index.html"
 
-          // win.syp.renderPublishHelper(pageId, pageUrl, win, this.env.isDev())
-          win.syp.renderPublishHelper(pageId, pageUrl, win, true)
+          win.syp.renderPublishHelper(pageId, pageUrl, win, this.env.isDev())
           console.log("publisherHook inited")
         })
       })
