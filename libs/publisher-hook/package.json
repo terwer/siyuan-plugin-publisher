@@ -1,6 +1,6 @@
 {
   "name": "@terwer/publisher-hook",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "type": "module",
   "description": "siyuanhook for sy-post-publisher widget",
   "main": "./dist/index.js",
@@ -31,5 +31,8 @@
   "dependencies": {
     "zhi-device": "^0.5.0",
     "zhi-log": "^1.13.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

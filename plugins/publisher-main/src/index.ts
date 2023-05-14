@@ -1,12 +1,15 @@
 import { Dialog, isMobile, Menu, Plugin } from "siyuan"
 import App from "./App.svelte"
 import { DeviceDetection, DeviceTypeEnum } from "zhi-device"
+import { Env } from "zhi-env"
 
 const STORAGE_NAME = "menu-config"
 const SETTING_CONTAINER = "publish-tool-setting"
 
 // https://github.com/sveltejs/svelte-preprocess/issues/91#issuecomment-548527600
 export default class PublishTool extends Plugin {
+  private env: Env = new Env(import.meta.env)
+
   // lifecycle
   public onload() {
     this._addTopBar()
@@ -126,10 +129,12 @@ export default class PublishTool extends Plugin {
 
     const publisherIndex = `/widgets/sy-post-publisher/index.html`
 
+    console.log(this.env)
+    console.log(this.env.isDev())
     if (deviceType == DeviceTypeEnum.DeviceType_Siyuan_MainWin) {
-      import("/plugins/publish-tool/lib/bridge/index.js" as any).then((hook) => {
-        const publisherHook = new hook.default()
-        publisherHook.init().then(() => {
+      import("/plugins/publish-tool/lib/bridge/index.js" as any).then((bridge) => {
+        const publisherBridge = new bridge.default()
+        publisherBridge.init().then(() => {
           // 发布首页
           // const pageId: any = "111111"
           // const pageUrl = "index.html"
@@ -142,7 +147,7 @@ export default class PublishTool extends Plugin {
           // const widgetId = "1111111"
           // const pageUrl = "detail/index.html"
 
-          win.syp.renderPublishHelper(pageId, pageUrl, win, true)
+          win.syp.renderPublishHelper(pageId, pageUrl, win, this.env.isDev())
           console.log("publisherHook inited")
         })
       })
