@@ -5,8 +5,8 @@
   "description": "siyuanhook for sy-post-publisher widget",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
-  "repository": "terwer/zhi",
-  "homepage": "https://github.com/terwer/zhi/tree/main/libs/publisher-hook",
+  "repository": "terwer/siyuan-plugin-publisher",
+  "homepage": "https://github.com/terwer/siyuan-plugin-publisher/tree/main/libs/publisher-hook",
   "author": "terwer",
   "license": "GPL",
   "files": [
