@@ -1,6 +1,6 @@
 {
   "name": "@terwer/publisher-hook",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "type": "module",
   "description": "siyuanhook for sy-post-publisher widget",
   "main": "./dist/index.js",
