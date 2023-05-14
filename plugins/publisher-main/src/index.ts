@@ -147,7 +147,8 @@ export default class PublishTool extends Plugin {
           // const widgetId = "1111111"
           // const pageUrl = "detail/index.html"
 
-          win.syp.renderPublishHelper(pageId, pageUrl, win, this.env.isDev())
+          // win.syp.renderPublishHelper(pageId, pageUrl, win, this.env.isDev())
+          win.syp.renderPublishHelper(pageId, pageUrl, win, true)
           console.log("publisherHook inited")
         })
       })

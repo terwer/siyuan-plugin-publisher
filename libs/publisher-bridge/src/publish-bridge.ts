@@ -23,7 +23,7 @@
  * questions.
  */
 
-import PublishHook from "@terwer/publisher-hook"
+import { PublishHook } from "@terwer/publisher-hook"
 import { Env } from "zhi-env"
 import { LogFactory, LogLevelEnum, DefaultLogger } from "zhi-log"
 import { SiyuanDevice } from "zhi-device"
