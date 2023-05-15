@@ -36,6 +36,7 @@
     "@terwer/changelog-parser": "^1.1.0",
     "@terwer/commit-config-custom": "latest",
     "@terwer/eslint-config-custom": "latest",
+    "archiver": "^5.3.1",
     "execa": "^7.1.1",
     "turbo": "^1.9.4"
   },
