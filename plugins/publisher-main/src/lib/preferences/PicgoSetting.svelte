@@ -22,18 +22,4 @@
   - or visit www.terwer.space if you need additional information or have any
   - questions.
   -->
-
-<script lang="ts">
-  import { Route, Router } from "svelte-routing"
-  import Preferences from "./routes/Preferences.svelte"
-  import Publish from "./routes/Publish.svelte"
-
-  export let url = "/"
-</script>
-
-<Router {url}>
-  <div>
-    <Route path="/setting" component={Preferences} />
-    <Route path="/" component={Publish} />
-  </div>
-</Router>
+<div>PicgoSetting</div>

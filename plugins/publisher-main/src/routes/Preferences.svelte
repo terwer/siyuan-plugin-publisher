@@ -24,16 +24,12 @@
   -->
 
 <script lang="ts">
-  import { Route, Router } from "svelte-routing"
-  import Preferences from "./routes/Preferences.svelte"
-  import Publish from "./routes/Publish.svelte"
-
-  export let url = "/"
+  import PublishSetting from "../lib/preferences/PublishSetting.svelte"
+  import PicgoSetting from "../lib/preferences/PicgoSetting.svelte"
+  import GeneralSetting from "../lib/preferences/GeneralSetting.svelte"
 </script>
 
-<Router {url}>
-  <div>
-    <Route path="/setting" component={Preferences} />
-    <Route path="/" component={Publish} />
-  </div>
-</Router>
+<h1>Preferences</h1>
+<GeneralSetting />
+<PublishSetting />
+<PicgoSetting />

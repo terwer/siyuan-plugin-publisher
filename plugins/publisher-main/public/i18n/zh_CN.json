@@ -4,5 +4,7 @@
   "settingMenuTips": "让创作回归乐趣",
   "publisherWidget": "挂件版",
   "cancel": "取消",
-  "save": "保存"
+  "save": "保存",
+  "publishTo": "发布到...",
+  "platformCnblogs": "博客园"
 }

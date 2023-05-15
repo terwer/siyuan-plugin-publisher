@@ -3,10 +3,12 @@ import App from "./App.svelte"
 import { DeviceDetection, DeviceTypeEnum } from "zhi-device"
 import { Env } from "zhi-env"
 import { CustomLogFactory, DefaultLogger } from "zhi-log"
+import "./index.styl"
 
 const STORAGE_NAME = "menu-config"
 const SETTING_CONTAINER = "publish-tool-setting"
 
+// https://github.com/vitejs/vite/issues/6582#issuecomment-1546954468
 // https://github.com/sveltejs/svelte-preprocess/issues/91#issuecomment-548527600
 export default class PublishTool extends Plugin {
   private env: Env = new Env(process.env)
@@ -44,6 +46,23 @@ export default class PublishTool extends Plugin {
     }
 
     const menu = new Menu("topBarSample")
+    // 发布到
+    menu.addItem({
+      icon: `iconRiffCard`,
+      label: this.i18n.publishTo,
+      submenu: [
+        {
+          iconHTML: `<span class="pt-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M0 64C0 46.3 14.3 32 32 32c229.8 0 416 186.2 416 416c0 17.7-14.3 32-32 32s-32-14.3-32-32C384 253.6 226.4 96 32 96C14.3 96 0 81.7 0 64zM0 416a64 64 0 1 1 128 0A64 64 0 1 1 0 416zM32 160c159.1 0 288 128.9 288 288c0 17.7-14.3 32-32 32s-32-14.3-32-32c0-123.7-100.3-224-224-224c-17.7 0-32-14.3-32-32s14.3-32 32-32z"/></svg></span>`,
+          label: this.i18n.platformCnblogs,
+          click: () => {
+            this.logger.debug("发布到博客园")
+          },
+        },
+      ],
+    })
+
+    // 设置
+    menu.addSeparator()
     menu.addItem({
       icon: "iconSettings",
       label: this.i18n.setting,
@@ -52,6 +71,7 @@ export default class PublishTool extends Plugin {
       },
     })
 
+    // 挂件版
     menu.addSeparator()
     menu.addItem({
       icon: "iconTransform",
@@ -61,12 +81,26 @@ export default class PublishTool extends Plugin {
       },
     })
 
+    // slogan
     menu.addSeparator()
     menu.addItem({
       icon: "iconSparkles",
       label: this.data[STORAGE_NAME] || this.i18n.settingMenuTips,
       type: "readonly",
     })
+
+    // 调试阶段显示当前文档ID
+    if (this.env.isDev()) {
+      const pageId = "112123e343242-2323"
+      menu.addSeparator()
+      menu.addItem({
+        label: pageId,
+        type: "readonly",
+        click: () => {
+          this.logger.debug("当前文档ID已复制", pageId)
+        },
+      })
+    }
     if (isMobile()) {
       menu.fullscreen()
     } else {
@@ -88,21 +122,10 @@ export default class PublishTool extends Plugin {
     // setting
     new App({
       target: document.getElementById(SETTING_CONTAINER) as HTMLElement,
+      props: {
+        url: "/setting",
+      },
     })
-
-    // const inputElement = dialog.element.querySelector("textarea") as HTMLTextAreaElement
-    // const btnsElement = dialog.element.querySelectorAll(".b3-button")
-    // dialog.bindInput(inputElement, () => {
-    //   ;(btnsElement[1] as HTMLButtonElement).click()
-    // })
-    // inputElement.focus()
-    // btnsElement[0].addEventListener("click", () => {
-    //   dialog.destroy()
-    // })
-    // btnsElement[1].addEventListener("click", () => {
-    //   this.saveData(STORAGE_NAME, inputElement.value)
-    //   dialog.destroy()
-    // })
   }
 
   private _showPublisherDialog(publisherIndex: string) {

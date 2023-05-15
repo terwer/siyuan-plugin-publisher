@@ -4,5 +4,7 @@
   "settingMenuTips": "Let creation return to fun",
   "publisherWidget": "Publisher Widget",
   "cancel": "Cancel",
-  "save": "Save"
+  "save": "Save",
+  "publishTo": "Publish to...",
+  "platformCnblogs": "Cnblogs"
 }

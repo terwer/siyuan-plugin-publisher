@@ -35,4 +35,5 @@ jobs:
         run: pnpm build
 
       - name: Package
-        run: pnpm package
+        # 上面的 Build 已经构建过了，这里可以忽略 Build ，避免重复运行
+        run: pnpm package -s

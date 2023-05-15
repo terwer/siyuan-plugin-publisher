@@ -105,25 +105,8 @@ export default defineConfig({
 
       output: {
         chunkFileNames: "static/js/[name]-[hash].js",
-        // entryFileNames: "static/js/[name]-[hash].js",
         entryFileNames: "[name].js",
-        assetFileNames: "static/[ext]/[name]-[hash].[ext]",
-        // manualChunks(id) {
-        //   if (id.includes("node_modules")) {
-        //     let arr = id.toString().split("node_modules/")[1].split("/")
-        //     // pnpm单独处理
-        //     if (id.includes(".pnpm")) {
-        //       arr = id.toString().split(".pnpm/")[1].split("/")
-        //     }
-        //     const dep = arr[0].split("@")[0].replace(/\./g, "-")
-        //     // console.log("id=>", id)
-        //     // console.log("dep=>", dep)
-        //     if (dep !== "") {
-        //       return "vendor_" + dep
-        //     }
-        //     return "vendor"
-        //   }
-        // },
+        assetFileNames: "[name].[ext]",
       },
     },
   },
