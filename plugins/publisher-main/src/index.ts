@@ -36,7 +36,7 @@ export default class PublishTool extends Plugin {
     const topBarElement = this.addTopBar({
       icon: iconPublish.iconPlane,
       title: this.i18n.publishTool,
-      position: "right",
+      position: "left",
       callback: () => {
         this._addMenu(topBarElement.getBoundingClientRect())
       },
@@ -49,6 +49,8 @@ export default class PublishTool extends Plugin {
     }
 
     const menu = new Menu("topBarSample")
+
+    const cnblogsEnabled = false
     // 发布到
     menu.addItem({
       icon: `iconRiffCard`,
@@ -57,9 +59,58 @@ export default class PublishTool extends Plugin {
         {
           iconHTML: iconPublish.iconCnblogs,
           label: this.i18n.platformCnblogs,
+          disabled: !cnblogsEnabled,
           click: () => {
             this.logger.debug("发布到博客园")
           },
+        },
+        {
+          iconHTML: iconPublish.iconTypecho,
+          label: this.i18n.platformTypecho,
+          click: () => {
+            this.logger.debug("发布到Typecho")
+          },
+        },
+        {
+          iconHTML: iconPublish.iconWordpress,
+          label: this.i18n.platformWordpress,
+          click: () => {
+            this.logger.debug("发布到WordPress")
+          },
+        },
+        {
+          iconHTML: iconPublish.iconYuque,
+          label: this.i18n.platformYuque,
+          click: () => {
+            this.logger.debug("发布到语雀")
+          },
+        },
+        {
+          iconHTML: iconPublish.iconGithub,
+          label: this.i18n.platformGithub,
+          submenu: [
+            {
+              iconHTML: iconPublish.iconHexo,
+              label: this.i18n.platformHexo,
+              click: () => {
+                this.logger.debug("发布到Hexo")
+              },
+            },
+            {
+              iconHTML: iconPublish.iconHugo,
+              label: this.i18n.platformHugo,
+              click: () => {
+                this.logger.debug("发布到Hugo")
+              },
+            },
+            {
+              iconHTML: iconPublish.iconVue,
+              label: this.i18n.platformVitepress,
+              click: () => {
+                this.logger.debug("发布到Vitepress")
+              },
+            },
+          ],
         },
       ],
     })
@@ -84,15 +135,18 @@ export default class PublishTool extends Plugin {
       },
       submenu: [
         {
+          iconHTML: iconPublish.iconPreference,
           label: this.i18n.settingGeneral,
           click: () => {
             console.log(11111)
           },
         },
         {
+          iconHTML: iconPublish.iconPicbed,
           label: this.i18n.settingPicbed,
         },
         {
+          iconHTML: iconPublish.iconPublish,
           label: this.i18n.settingPublish,
         },
       ],
