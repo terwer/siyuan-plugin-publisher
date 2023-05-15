@@ -33,3 +33,6 @@ jobs:
 
       - name: Build
         run: pnpm build
+
+      - name: Package
+        run: pnpm package
