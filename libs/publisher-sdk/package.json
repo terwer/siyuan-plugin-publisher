@@ -1,0 +1,34 @@
+{
+  "name": "@terwer/publisher-sdk",
+  "version": "0.0.1",
+  "type": "module",
+  "description": "a common sdk for publishing post to every platform",
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
+  "repository": "terwer/siyuan-plugin-publisher",
+  "homepage": "https://github.com/terwer/siyuan-plugin-publisher/tree/main/libs/publisher-sdk",
+  "author": "terwer",
+  "license": "GPL",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "keywords": [
+    "zhi",
+    "lib"
+  ],
+  "scripts": {
+    "serve": "vite",
+    "dev": "vite build --watch",
+    "build": "vite build",
+    "start": "vite preview",
+    "test": "vitest --watch"
+  },
+  "devDependencies": {
+    "@terwer/eslint-config-custom": "^1.2.0",
+    "@terwer/vite-config-custom": "^0.2.0"
+  },
+  "dependencies": {
+    "zhi-siyuan-api": "^1.1.1"
+  }
+}

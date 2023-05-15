@@ -21,7 +21,6 @@
     "svelte-routing": "^1.8.8"
   },
   "dependencies": {
-    "zhi-device": "^0.5.0",
-    "zhi-log": "^1.13.0"
+    "@terwer/publisher-sdk": "workspace:*"
   }
 }

@@ -7,6 +7,7 @@ import PageUtil from "./utils/pageUtil"
 import Constants from "./utils/constants"
 import iconPublish from "./utils/svg"
 import HtmlUtils from "./utils/htmlUtils"
+import { SiyuanKernelApi } from "zhi-siyuan-api"
 
 const STORAGE_NAME = "menu-config"
 
@@ -16,6 +17,8 @@ const STORAGE_NAME = "menu-config"
 export default class PublishTool extends Plugin {
   private env: Env = new Env(process.env)
   private logger: DefaultLogger = new CustomLogFactory(undefined, "publish-tool", this.env).getLogger("main")
+
+  private kernelApi: SiyuanKernelApi = new SiyuanKernelApi(this.env)
 
   // lifecycle
   public onload() {
@@ -170,7 +173,11 @@ export default class PublishTool extends Plugin {
       label: this.i18n.copyPageId,
       click: async () => {
         await HtmlUtils.copyToClipboard(pageId)
-        this.logger.info("当前文档ID已复制", pageId)
+        this.kernelApi.pushMsg({
+          msg: `当前文档ID已复制=>${pageId}`,
+          timeout: 3000,
+        })
+        // this.logger.info("当前文档ID已复制", pageId)
       },
     })
 
