@@ -7,11 +7,12 @@ import { viteStaticCopy } from "vite-plugin-static-copy"
 import livereload from "rollup-plugin-livereload"
 import { svelte } from "@sveltejs/vite-plugin-svelte"
 
-const mode = process.env.NODE_ENV
 const args = minimist(process.argv.slice(2))
 const isWatch = args.watch || args.w
 const devDistDir = "/Users/terwer/Documents/mydocs/SiYuanWorkspace/public/data/plugins/publish-tool"
 const distDir = isWatch ? devDistDir : "./dist"
+// const mode = process.env.NODE_ENV
+const mode = isWatch ? "development" : "production"
 
 const defineEnv = () => {
   const env = loadEnv(mode, process.cwd())
@@ -70,6 +71,7 @@ export default defineConfig({
 
     // 输出路径
     outDir: distDir,
+    emptyOutDir: false,
 
     // 生成静态资源的存放路径
     // assetsDir: "./assets",
@@ -84,14 +86,7 @@ export default defineConfig({
     // 或是用来指定是应用哪种混淆器
     // boolean | 'terser' | 'esbuild'
     // 不压缩，用于调试
-    minify: isWatch ? false : "terser",
-    terserOptions: {
-      compress: {
-        // 生产环境时移除console
-        drop_console: true,
-        drop_debugger: true,
-      },
-    },
+    minify: isWatch,
 
     lib: {
       // Could also be a dictionary or array of multiple entry points
@@ -106,7 +101,7 @@ export default defineConfig({
 
       // make sure to externalize deps that shouldn't be bundled
       // into your library
-      external: ["siyuan", "/plugins/publish-tool/lib/bridge/index.js"],
+      external: ["siyuan", "process", "/plugins/publish-tool/lib/bridge/index.js"],
 
       output: {
         chunkFileNames: "static/js/[name]-[hash].js",

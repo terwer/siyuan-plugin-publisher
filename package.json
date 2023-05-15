@@ -1,6 +1,7 @@
 {
   "name": "siyuan-plugin-publisher",
   "version": "0.8.0",
+  "type": "module",
   "description": "Publishing articles from siyuan-note to platforms such as Yuque, Cnblogs, WordPress, Typecho, HUGO, HEXO, etc.",
   "private": true,
   "workspaces": [
@@ -15,8 +16,10 @@
     "dockerBuild": "turbo run dockerBuild",
     "vercelBuild": "turbo run vercelBuild",
     "siyuanBuild": "turbo run siyuanBuild",
-    "syncVersion": "turbo run syncVersion",
-    "package": "echo 'package in root'",
+    "syncVersion": "ts-node-esm --experimental-specifier-resolution=node tools/syncVersion.ts",
+    "parseChangelog": "ts-node-esm --experimental-specifier-resolution=node tools/changelogParser.ts",
+    "prepareRelease": "pnpm syncVersion && pnpm parseChangelog",
+    "package": "ts-node-esm --experimental-specifier-resolution=node tools/packageApp.ts",
     "test": "turbo run test",
     "start": "turbo run start",
     "lint": "turbo run lint",
@@ -30,10 +33,11 @@
     }
   },
   "devDependencies": {
-    "turbo": "^1.9.4",
     "@terwer/changelog-parser": "^1.1.0",
     "@terwer/commit-config-custom": "latest",
-    "@terwer/eslint-config-custom": "latest"
+    "@terwer/eslint-config-custom": "latest",
+    "execa": "^7.1.1",
+    "turbo": "^1.9.4"
   },
   "engines": {
     "node": ">=16.0.0"

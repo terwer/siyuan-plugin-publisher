@@ -2,17 +2,15 @@ import { Dialog, isMobile, Menu, Plugin } from "siyuan"
 import App from "./App.svelte"
 import { DeviceDetection, DeviceTypeEnum } from "zhi-device"
 import { Env } from "zhi-env"
-import { CustomLogFactory, DefaultLogger, LogLevelEnum } from "zhi-log"
+import { CustomLogFactory, DefaultLogger } from "zhi-log"
 
 const STORAGE_NAME = "menu-config"
 const SETTING_CONTAINER = "publish-tool-setting"
 
 // https://github.com/sveltejs/svelte-preprocess/issues/91#issuecomment-548527600
 export default class PublishTool extends Plugin {
-  private env: Env = new Env(import.meta.env)
-  private logger: DefaultLogger = new CustomLogFactory(LogLevelEnum.LOG_LEVEL_INFO, "publish-tool", this.env).getLogger(
-    "main"
-  )
+  private env: Env = new Env(process.env)
+  private logger: DefaultLogger = new CustomLogFactory(undefined, "publish-tool", this.env).getLogger("main")
 
   // lifecycle
   public onload() {

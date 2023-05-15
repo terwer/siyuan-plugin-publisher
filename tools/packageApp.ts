@@ -23,9 +23,11 @@
  * questions.
  */
 
-module.exports = {
-    semi: false,
-    singleQuote: false,
-    printWidth: 120,
-    plugins: ["prettier-plugin-svelte"]
+class PackageApp {
+
 }
+
+
+;(async () => {
+  console.log("app packaged.")
+})()

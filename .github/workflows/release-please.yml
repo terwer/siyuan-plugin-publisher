@@ -78,7 +78,7 @@ jobs:
       - name: Prepare new version
         if: ${{ steps.release.outputs.release_created }}
         run: |
-          pnpm syncVersion ${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}.${{ steps.release.outputs.patch }}
+          pnpm prepareRelease
 
       # Build for production and Archive package
       - name: Build for production

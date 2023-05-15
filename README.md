@@ -56,9 +56,13 @@ to [Latest Adaptation](https://terwergreen.feishu.cn/share/base/view/shrcnWT2IGI
 
 ## FAQ
 
-* Q1：How to install the Publish Tool plugin?
+* Q1：How to install the publishing tool plugin? Where can I find his entrance after installation?
 
-  A1：Find `Bazaar->Plugins->Publish Tools` Download and enable. No other action required. This is no different from the download and installation of other plugins.
+  A1：Find **`Bazaar->Plugins->Publishing Tools`** to download and enable.
+
+  The installation process requires no further action. This is no different from the download and installation of other plugins.
+
+  After the installation is complete, find the ✈️ icon on the top right toolbar, click the menu, and follow the corresponding instructions to use it.
 
 ‍
 
