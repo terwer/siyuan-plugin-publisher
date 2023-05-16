@@ -20,6 +20,16 @@ main module for publisher
 pnpm dev -F publisher-main
 ```
 
+```
+"zhi-blog-api": "/Users/terwer/Documents/mydocs/zhi-framework/zhi/libs/zhi-blog-api",
+"zhi-siyuan-api": "/Users/terwer/Documents/mydocs/zhi-framework/zhi/libs/zhi-siyuan-api",
+"zhi-publisher-sdk": "/Users/terwer/Documents/mydocs/zhi-framework/zhi/libs/zhi-publisher-sdk"
+
+"zhi-blog-api": "^1.1.0",
+"zhi-publisher-sdk": "^0.0.1",
+"zhi-siyuan-api": "^1.1.1"
+```
+
 ## Build
 
 ```bash
