@@ -28,7 +28,7 @@
   import Publish from "./routes/Publish.svelte"
   import Picbed from "./routes/Picbed.svelte"
   import Preferences from "./routes/Preferences.svelte"
-  import Constants from "./utils/constants"
+  import Constants from "./utils/Constants"
 
   export let url = `/${Constants.Page.Publish}`
 </script>
