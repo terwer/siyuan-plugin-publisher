@@ -8,7 +8,7 @@ import Constants from "./utils/constants"
 import iconPublish from "./utils/svg"
 import HtmlUtils from "./utils/htmlUtils"
 import { SiyuanKernelApi } from "zhi-siyuan-api"
-import { PublishSdk } from "@terwer/publisher-sdk"
+import { PublishSdk } from "zhi-publisher-sdk"
 import { BlogTypeEnum } from "zhi-blog-api"
 
 const STORAGE_NAME = "menu-config"

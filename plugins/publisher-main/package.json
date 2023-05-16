@@ -21,6 +21,8 @@
     "svelte-routing": "^1.8.8"
   },
   "dependencies": {
-    "@terwer/publisher-sdk": "workspace:*"
+    "zhi-blog-api": "/Users/terwer/Documents/mydocs/zhi-framework/zhi/libs/zhi-blog-api",
+    "zhi-siyuan-api": "/Users/terwer/Documents/mydocs/zhi-framework/zhi/libs/zhi-siyuan-api",
+    "zhi-publisher-sdk": "/Users/terwer/Documents/mydocs/zhi-framework/zhi/libs/zhi-publisher-sdk"
   }
 }
