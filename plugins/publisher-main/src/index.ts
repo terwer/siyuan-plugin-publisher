@@ -8,6 +8,8 @@ import Constants from "./utils/constants"
 import iconPublish from "./utils/svg"
 import HtmlUtils from "./utils/htmlUtils"
 import { SiyuanKernelApi } from "zhi-siyuan-api"
+import { PublishSdk } from "@terwer/publisher-sdk"
+import { BlogTypeEnum } from "zhi-blog-api"
 
 const STORAGE_NAME = "menu-config"
 
@@ -53,7 +55,6 @@ export default class PublishTool extends Plugin {
 
     const menu = new Menu("topBarSample")
 
-    const cnblogsEnabled = false
     // 发布到
     menu.addItem({
       icon: `iconRiffCard`,
@@ -62,14 +63,16 @@ export default class PublishTool extends Plugin {
         {
           iconHTML: iconPublish.iconCnblogs,
           label: this.i18n.platformCnblogs,
-          disabled: !cnblogsEnabled,
-          click: () => {
-            this.logger.debug("发布到博客园")
+          click: async () => {
+            const blogApi = PublishSdk.blogApi(BlogTypeEnum.BlogTypeEnum_Metaweblog)
+            const usersBlogs = blogApi.getUsersBlogs()
+            this.logger.debug("发布到博客园", usersBlogs)
           },
         },
         {
           iconHTML: iconPublish.iconTypecho,
           label: this.i18n.platformTypecho,
+          disabled: true,
           click: () => {
             this.logger.debug("发布到Typecho")
           },

@@ -1,5 +1,2 @@
-const init = () => {
-  return "ok"
-}
-
-export default init
+import PublishSdk from "./publish-sdk"
+export { PublishSdk }

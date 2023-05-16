@@ -35,13 +35,13 @@ module.exports = {
     [
       "docusaurus-plugin-typedoc",
       {
-        id: "publisher-main",
-        entryPoints: ["../../plugins/publisher-main/src/index.ts"],
-        tsconfig: "../../plugins/publisher-main/tsconfig.json",
+        id: "publisher-sdk",
+        entryPoints: ["../../libs/publisher-sdk/src/index.ts"],
+        tsconfig: "../../libs/publisher-sdk/tsconfig.json",
         plugin: ["typedoc-plugin-rename-defaults"],
-        out: "publisher-main",
+        out: "publisher-sdk",
         sidebar: {
-          categoryLabel: "Publisher Main",
+          categoryLabel: "Publisher Sdk",
         },
       },
     ],
