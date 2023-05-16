@@ -16,7 +16,7 @@ const STORAGE_NAME = "menu-config"
 // https://github.com/siyuan-note/siyuan/pull/8188/
 // https://github.com/vitejs/vite/issues/6582#issuecomment-1546954468
 // https://github.com/sveltejs/svelte-preprocess/issues/91#issuecomment-548527600
-export default class PublishTool extends Plugin {
+export default class PublishToolPlugin extends Plugin {
   private env: Env = new Env(process.env)
   private logger: DefaultLogger = new CustomLogFactory(undefined, "publish-tool", this.env).getLogger("main")
 
@@ -25,11 +25,11 @@ export default class PublishTool extends Plugin {
   // lifecycle
   public onload() {
     this._addTopBar()
-    this.logger.debug(`Publish Tool loaded ${new Date().getTime()}`)
+    this.logger.debug(`Publisher loaded at 1111 ${new Date().getTime()}`)
   }
 
   public onunload() {
-    this.logger.debug("Publish Tool unloaded")
+    this.logger.debug("Publisher unloaded")
   }
 
   public openSetting() {
@@ -204,14 +204,15 @@ export default class PublishTool extends Plugin {
   }
 
   private _showPicbedDialog() {
-    new Dialog({
-      title: `${this.i18n.picbed} - ${this.i18n.publishTool}`,
-      content: `<div id="${PageUtil.getElementId(Constants.Page.Picbed)}"></div>`,
-      width: isMobile() ? "92vw" : "520px",
-    })
+    // new Dialog({
+    //   title: `${this.i18n.picbed} - ${this.i18n.publishTool}`,
+    //   content: `<div id="${PageUtil.getElementId(Constants.Page.Picbed)}"></div>`,
+    //   width: isMobile() ? "92vw" : "520px",
+    // })
 
     // setting
-    PageUtil.createApp(Constants.Page.Picbed)
+    // PageUtil.createApp(Constants.Page.Picbed)
+    this._showPublisherWidget("picgo")
   }
 
   private _showSettingDialog() {
@@ -244,34 +245,49 @@ export default class PublishTool extends Plugin {
     } as any)
   }
 
-  private _showPublisherWidget() {
+  private _showPublisherWidget(type?: "blog" | "detail" | "picgo") {
     const win = window as any
     const deviceType: DeviceTypeEnum = DeviceDetection.getDevice()
     this.logger.info(`you are from ${deviceType}`)
 
-    const publisherIndex = `/widgets/sy-post-publisher/index.html`
+    let pageId: string | undefined = PageUtil.getPageId()
+    if (pageId == "") {
+      pageId = undefined
+    }
+    this.logger.debug("pageId=>", pageId)
 
     if (deviceType == DeviceTypeEnum.DeviceType_Siyuan_MainWin) {
-      import("/plugins/publish-tool/lib/bridge/index.js" as any).then((bridge) => {
+      import("/plugins/siyuan-publisher/lib/bridge/index.js" as any).then((bridge) => {
         const publisherBridge = new bridge.default()
         publisherBridge.init().then(() => {
-          // 发布首页
-          const pageId = PageUtil.getPageId()
-          const pageUrl = "index.html"
-
-          // 博客首页
-          // const pageId: any = undefined
-          // const pageUrl = "blog/index.html"
-
-          // 详情
-          // const pageId = PageUtil.getPageId()
-          // const pageUrl = "detail/index.html"
+          let pageUrl
+          switch (type) {
+            case "blog":
+              // 博客首页
+              pageUrl = "blog/index.html"
+              break
+            case "detail":
+              // 详情
+              pageUrl = "detail/index.html"
+              break
+            case "picgo":
+              pageUrl = "picgo/index.html"
+              break
+            default:
+              // 发布首页
+              pageUrl = "index.html"
+              break
+          }
+          if (!pageId && pageUrl === "index.html") {
+            pageUrl = "blog/index.html"
+          }
 
           win.syp.renderPublishHelper(pageId, pageUrl, win, this.env.isDev())
           this.logger.debug("publisherHook inited")
         })
       })
     } else {
+      const publisherIndex = `/widgets/sy-post-publisher/index.html`
       this._showPublisherDialog(publisherIndex)
     }
   }

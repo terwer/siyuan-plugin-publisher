@@ -1,6 +1,6 @@
 [中文](README_zh_CN.md)
 
-# Publish Tool
+# Publisher
 
 ![](https://raw.githubusercontent.com/terwer/siyuan-plugin-publisher/main/plugins/publisher-main/public/icon.png)
 

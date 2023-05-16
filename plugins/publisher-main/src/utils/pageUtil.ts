@@ -36,7 +36,7 @@ class PageUtil {
   }
 
   public static getElementId(pageId: string) {
-    return pageId === "" ? "home" : `publish-tool-${pageId}`
+    return pageId === "" ? "home" : `siyuan-publisher-${pageId}`
   }
 
   public static createApp(pageId: string): App {

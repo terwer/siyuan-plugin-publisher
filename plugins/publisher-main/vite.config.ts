@@ -9,7 +9,7 @@ import { svelte } from "@sveltejs/vite-plugin-svelte"
 
 const args = minimist(process.argv.slice(2))
 const isWatch = args.watch || args.w
-const devDistDir = "/Users/terwer/Documents/mydocs/SiYuanWorkspace/public/data/plugins/publish-tool"
+const devDistDir = "/Users/terwer/Documents/mydocs/SiYuanWorkspace/public/data/plugins/siyuan-publisher"
 const distDir = isWatch ? devDistDir : "./dist"
 // const mode = process.env.NODE_ENV
 const mode = isWatch ? "development" : "production"
@@ -101,7 +101,7 @@ export default defineConfig({
 
       // make sure to externalize deps that shouldn't be bundled
       // into your library
-      external: ["siyuan", "process", "/plugins/publish-tool/lib/bridge/index.js"],
+      external: ["siyuan", "process", "/plugins/siyuan-publisher/lib/bridge/index.js"],
 
       output: {
         chunkFileNames: "static/js/[name]-[hash].js",

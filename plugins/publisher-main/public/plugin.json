@@ -1,10 +1,10 @@
 {
-  "name": "publish-tool",
+  "name": "siyuan-publisher",
   "author": "terwer",
   "url": "https://github.com/terwer/siyuan-plugin-publisher",
   "version": "0.8.0",
   "displayName": {
-    "default": "Publish Tool",
+    "default": "Publisher",
     "zh_CN": "发布工具"
   },
   "description": {
@@ -21,7 +21,7 @@
   ],
   "funding": {
     "custom": [
-      "https://afdian.net/a/terwer"
+      "https://img1.terwer.space/api/public/202305170050348.jpg"
     ]
   }
 }
