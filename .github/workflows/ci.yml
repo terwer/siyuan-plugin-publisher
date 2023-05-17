@@ -3,7 +3,6 @@ name: CI
 on:
   push:
     branches:
-      - main
       - dev
 
 jobs:
@@ -35,5 +34,4 @@ jobs:
         run: pnpm build
 
       - name: Package
-        # 上面的 Build 已经构建过了，这里可以忽略 Build ，避免重复运行
-        run: pnpm package -s
+        run: pnpm package

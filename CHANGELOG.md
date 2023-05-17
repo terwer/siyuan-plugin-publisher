@@ -1,416 +1,181 @@
 # Changelog
 
 ## [0.8.0](https://github.com/terwer/src-sy-post-publisher/compare/v0.7.2...v0.8.0) (2023-03-25)
-
-
 ### Features
-
-* Github平台（HUGO、Hexo、Vitepress等）支持笔记间的内部链接替换 ([a976a4c](https://github.com/terwer/src-sy-post-publisher/commit/a976a4c7b8506eecae3e8d1f8c754a1bc2745682))
-* 博客园、WordPress、Typecho平台支持笔记间的内部链接替换 ([3294b4a](https://github.com/terwer/src-sy-post-publisher/commit/3294b4aa394ac9c47e294ae26901a1e786012489))
+* github平台（hugo、hexo、vitepress等）支持笔记间的内部链接替换 ([a976a4c](https://github.com/terwer/src-sy-post-publisher/commit/a976a4c7b8506eecae3e8d1f8c754a1bc2745682))
+* 博客园、wordpress、typecho平台支持笔记间的内部链接替换 ([3294b4a](https://github.com/terwer/src-sy-post-publisher/commit/3294b4aa394ac9c47e294ae26901a1e786012489))
 * 发布至语雀支持笔记间的内部链接替换 ([2cc4cc1](https://github.com/terwer/src-sy-post-publisher/commit/2cc4cc121e84c16c1aafc96de92e53cbea3aac8b))
-
-
 ### Bug Fixes
-
-* [#434](https://github.com/terwer/src-sy-post-publisher/issues/434) 文章没有图片时候图床错误文章发布失败 ([3f286fa](https://github.com/terwer/src-sy-post-publisher/commit/3f286fa1df18d6f29cc773374a5ba48287ee44b6))
 * [#434](https://github.com/terwer/src-sy-post-publisher/issues/434) 文章没有图片时候图床错误文章发布失败 ([53b5016](https://github.com/terwer/src-sy-post-publisher/commit/53b5016d40580099cb8d943c0e8be98dafca1d46))
-* fix siyuanhook ([1603a61](https://github.com/terwer/src-sy-post-publisher/commit/1603a61a21205a57ec34cea3880b42c4a292fc4a))
-* 修复 PicGo 设置中的时间戳重命名关闭后会自动打开的问题 ([e673f58](https://github.com/terwer/src-sy-post-publisher/commit/e673f5879167b6eb889b688353c1d1e77611f6f8))
-* 修复普通挂件版使用方式WordPress和博客园发布文章报错问题 ([d6a21e1](https://github.com/terwer/src-sy-post-publisher/commit/d6a21e1ea1fced6f6f1128705e09214da7f01dc8))
-* 由于Electron主窗口机制问题，图片上传仅支持新窗口 ([20c9a85](https://github.com/terwer/src-sy-post-publisher/commit/20c9a851afb26ebdcf32c62b3b561204878990bd))
-
-
+* fix siyuanhook ([4ab3d55](https://github.com/terwer/src-sy-post-publisher/commit/4ab3d551a432ecf317b8f57920ce41ab2110927b))
+* 修复 picgo 设置中的时间戳重命名关闭后会自动打开的问题 ([e673f58](https://github.com/terwer/src-sy-post-publisher/commit/e673f5879167b6eb889b688353c1d1e77611f6f8))
+* 修复普通挂件版使用方式wordpress和博客园发布文章报错问题 ([d6a21e1](https://github.com/terwer/src-sy-post-publisher/commit/d6a21e1ea1fced6f6f1128705e09214da7f01dc8))
+* 由于electron主窗口机制问题，图片上传仅支持新窗口 ([20c9a85](https://github.com/terwer/src-sy-post-publisher/commit/20c9a851afb26ebdcf32c62b3b561204878990bd))
 ### Miscellaneous
-
 * [#420](https://github.com/terwer/src-sy-post-publisher/issues/420) ankisiyuan.bin 默认不提供，手动下载，减小打包体积 ([9598fb1](https://github.com/terwer/src-sy-post-publisher/commit/9598fb1a3b4458aee9fc2525c232972b848cd4ad))
-* 主窗口移除Picgo支持 ([6061125](https://github.com/terwer/src-sy-post-publisher/commit/60611250fea6204ed7a88b2751abd96e81109492))
-* 主窗口移除Picgo支持 ([2dfc155](https://github.com/terwer/src-sy-post-publisher/commit/2dfc15581c30ce0e5f30cd88d366dbf91575fd3c))
-* 主窗口移除Picgo支持 ([a974954](https://github.com/terwer/src-sy-post-publisher/commit/a97495429a2a4b8dda88088aab922d9c4a906fbc))
-* 主窗口移除Picgo支持 ([1e93a30](https://github.com/terwer/src-sy-post-publisher/commit/1e93a309c45ffa3d4ed6f4cbe5a26c2017a78641))
-* 主窗口移除Picgo支持 ([60ffbc0](https://github.com/terwer/src-sy-post-publisher/commit/60ffbc09eb4f5c45f85e21125335d905c30eb707))
-* 主窗口移除Picgo支持 ([e4fa948](https://github.com/terwer/src-sy-post-publisher/commit/e4fa9489f01fe2f298a81b4c10c76b8bae5a001d))
-* 主窗口移除Picgo支持 ([6ef1127](https://github.com/terwer/src-sy-post-publisher/commit/6ef1127f8470e1426720a72662b0415c86517d84))
-* 主窗口移除Picgo支持 ([dd13c10](https://github.com/terwer/src-sy-post-publisher/commit/dd13c100b8d394f431f611d55e5eb5b81a549b0c))
-* 主窗口移除Picgo支持 ([18f7d61](https://github.com/terwer/src-sy-post-publisher/commit/18f7d618f3dfef1f0654caf3c4decd62120f95d9))
+* 主窗口移除picgo支持 ([18f7d61](https://github.com/terwer/src-sy-post-publisher/commit/18f7d618f3dfef1f0654caf3c4decd62120f95d9))
 * 修复图片有备注时无法上传问题 ([054eddd](https://github.com/terwer/src-sy-post-publisher/commit/054eddda8cf7198e70930e897de7b4a3bcfb8045))
 * 移除不必要的日志打印 ([cb68777](https://github.com/terwer/src-sy-post-publisher/commit/cb6877728262223a42c3a015352454c63e1abb1e))
-
 ## [0.7.2](https://github.com/terwer/src-sy-post-publisher/compare/v0.7.1...v0.7.2) (2023-03-04)
-
-
-### Bug Fixes
-
-* fix siyuanhook ([724b182](https://github.com/terwer/src-sy-post-publisher/commit/724b1823c4434dd4c2b0232c8e1dbea54fdac0c1))
-* fix siyuanhook ([d68861f](https://github.com/terwer/src-sy-post-publisher/commit/d68861fc31e9f86b42fd8977b209c18fcd89767e))
-* fix siyuanhook ([4ab3d55](https://github.com/terwer/src-sy-post-publisher/commit/4ab3d551a432ecf317b8f57920ce41ab2110927b))
-
-
-### Miscellaneous
-
 * fix eslint ([31a2d06](https://github.com/terwer/src-sy-post-publisher/commit/31a2d06b2c15668200d8da12600a025bf260672c))
-
 ## [0.7.1](https://github.com/terwer/src-sy-post-publisher/compare/v0.7.0...v0.7.1) (2023-03-03)
-
-
-### Bug Fixes
-
 * [#416](https://github.com/terwer/src-sy-post-publisher/issues/416) 修复 PicGO 配置文件迁移路径问题 ([3e6c9bc](https://github.com/terwer/src-sy-post-publisher/commit/3e6c9bcbd64b776b24e223daf9b73339a43410a1))
 * **deps:** bump browser-fs-access from 0.32.1 to 0.33.0 ([7af5c5c](https://github.com/terwer/src-sy-post-publisher/commit/7af5c5cb1ded0c3e6405b95acf87a5dc90acf6a1))
 * fix file fomatter ([e34ab70](https://github.com/terwer/src-sy-post-publisher/commit/e34ab70481ae0b5a201610043d05c3c19678967e))
-* 修复 PicGO 配置文件迁移路径问题 ([6f7e90c](https://github.com/terwer/src-sy-post-publisher/commit/6f7e90cea622f6693a195d34e7e43db904b9972a))
-
-
-### Miscellaneous
-
+* 修复 picgo 配置文件迁移路径问题 ([6f7e90c](https://github.com/terwer/src-sy-post-publisher/commit/6f7e90cea622f6693a195d34e7e43db904b9972a))
 * **deps-dev:** bump @vitest/coverage-c8 from 0.28.5 to 0.29.1 ([edbef57](https://github.com/terwer/src-sy-post-publisher/commit/edbef5715c41aa762fdb9649d7b0c86b84da63bf))
 * remove unused log ([442c052](https://github.com/terwer/src-sy-post-publisher/commit/442c05204402b5975b8192e86973a74712848431))
 * update coverage-c8 ([60e81aa](https://github.com/terwer/src-sy-post-publisher/commit/60e81aaec490e3b226bf65fb533737cc80da7ca1))
-
 ## [0.7.0](https://github.com/terwer/src-sy-post-publisher/compare/v0.6.8...v0.7.0) (2023-02-27)
-
-
-### Features
-
 * [#209](https://github.com/terwer/src-sy-post-publisher/issues/209) 发布页面新增按钮支持绑定文章 ([239927b](https://github.com/terwer/src-sy-post-publisher/commit/239927b9593441ce6e646301d240c357915d1a9e))
 * [#276](https://github.com/terwer/src-sy-post-publisher/issues/276) 新窗口打开时操作按钮fixed不随页面滑动 ([1a094b2](https://github.com/terwer/src-sy-post-publisher/commit/1a094b20aabdaa0643e9638ac860a90b81f4731d))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-0.7.0-beta1 ([8a11a68](https://github.com/terwer/src-sy-post-publisher/commit/8a11a68f3412e752bee93c1d19ee738ec57db365))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-0.7.0-beta1 release ([eb50672](https://github.com/terwer/src-sy-post-publisher/commit/eb50672ff480ce17e5e5ee5fe64d259966af6c0e))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-hook文件重构 ([10d9704](https://github.com/terwer/src-sy-post-publisher/commit/10d9704df3e9bd1d282572567e772c194e3b38f8))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-PicGO相关操作统一访问入口 ([bf8f3c6](https://github.com/terwer/src-sy-post-publisher/commit/bf8f3c69aa08de49dfef02d26069cde6c3957efb))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-PicGO配置数据迁移 ([58093a2](https://github.com/terwer/src-sy-post-publisher/commit/58093a2397cbbe8a0620474852d8cdcc5718aead))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-事件监听 ([295bfaf](https://github.com/terwer/src-sy-post-publisher/commit/295bfafba5abf0c8a78f1b5ed2a22602e5062991))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-事件监听 ([6272909](https://github.com/terwer/src-sy-post-publisher/commit/6272909c35cfdb549f5ec43a6cdee1aa630fab7f))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-事件监听 ([ad3ca12](https://github.com/terwer/src-sy-post-publisher/commit/ad3ca12dcc56da0fbff281c96eed1e08fe8cf5bb))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-事件监听 ([1ab10c7](https://github.com/terwer/src-sy-post-publisher/commit/1ab10c7c0fbcde61fd8357ef2dd558ff1ef23ff6))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-仅新窗口模式支持插件 ([69cda25](https://github.com/terwer/src-sy-post-publisher/commit/69cda255152333c3ef6efc8b9e00b648409c2e90))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-优化PicGo表单样式 ([b3fc594](https://github.com/terwer/src-sy-post-publisher/commit/b3fc59452d445fa73dffc6cc0902793e0a827357))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-优化事件监听 ([65837fb](https://github.com/terwer/src-sy-post-publisher/commit/65837fbf358cef537e9170f8dca27ebd5184e07c))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-优化事件监听 ([9b3bb69](https://github.com/terwer/src-sy-post-publisher/commit/9b3bb69aab9b12bfe4cd36282a7f7f200d15c6e5))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-优化卸载操作体验 ([8d4424a](https://github.com/terwer/src-sy-post-publisher/commit/8d4424a4eac6ddee289cdd20df60c4695de6e14f))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-优化插件c操作图标 ([955363b](https://github.com/terwer/src-sy-post-publisher/commit/955363b3aee8183d30e9094ffe89dca702a12684))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-优化插件安装卸载 ([972e646](https://github.com/terwer/src-sy-post-publisher/commit/972e646361cfa2be05cc8015b68f6eb063a5e0a3))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-优化插件安装卸载 ([08ff96d](https://github.com/terwer/src-sy-post-publisher/commit/08ff96d32225cbb18261722fbe110f4dfaadbb3b))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-优化插件展示 ([5dcf4e1](https://github.com/terwer/src-sy-post-publisher/commit/5dcf4e1954a728f42cf107bdbc61b634db60bfa6))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-优化插件展示 ([c050861](https://github.com/terwer/src-sy-post-publisher/commit/c05086118173922734d012b86b1c7ea8248fa4af))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-优化插件操作体验展示 ([3da5fcf](https://github.com/terwer/src-sy-post-publisher/commit/3da5fcf68c749f53e8fb9acc7e56c570040b0813))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-优化插件操作体验展示 ([ff8c1b2](https://github.com/terwer/src-sy-post-publisher/commit/ff8c1b22cf59ea5c5917ded2de0693f22ad13099))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-优化插件菜单 ([4d2a032](https://github.com/terwer/src-sy-post-publisher/commit/4d2a0321b61830ec7f16ca56d96649b26c2f63b5))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-修复aliyun上传保报错问题 ([5cdab06](https://github.com/terwer/src-sy-post-publisher/commit/5cdab066c1a99c78d499676205beeb9716b342e7))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-修复Windows配置文件路径问题 ([b657095](https://github.com/terwer/src-sy-post-publisher/commit/b6570956f1143404fee04f510cb02b6b898f3b79))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-修复上传错误与显示问题 ([d91b042](https://github.com/terwer/src-sy-post-publisher/commit/d91b042237356cc3775dff30dc057df30380b74c))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-修复云床配置buffer读取报错问题 ([fdd0047](https://github.com/terwer/src-sy-post-publisher/commit/fdd004794b86ae35d0dbd9f716041ff87326150e))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-修复云床配置buffer读取报错问题 ([e4db381](https://github.com/terwer/src-sy-post-publisher/commit/e4db38101d5a3f8d0f38255809fcfbd418f9e8e5))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-修复云床配置buffer读取报错问题 ([c9f3398](https://github.com/terwer/src-sy-post-publisher/commit/c9f3398e0a3db21008f0e4064a7f60817ba15aa3))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-修复云床配置buffer读取报错问题 ([68e55dc](https://github.com/terwer/src-sy-post-publisher/commit/68e55dcb4fb431f583693e3b9c3928ba9f03018d))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-修复云床配置buffer读取报错问题 ([c686039](https://github.com/terwer/src-sy-post-publisher/commit/c686039649e299fd9a264799d76bc9287d4caae6))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-修复云床配置不生效与upyun上传保报错问题 ([9514946](https://github.com/terwer/src-sy-post-publisher/commit/95149460a84b8f0265c7e2223557ecc767a550fa))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-修复云床配置不生效与upyun上传保报错问题 ([a247b58](https://github.com/terwer/src-sy-post-publisher/commit/a247b58e3dc042d5c9c6b666cd3a6ff392f57b82))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-修复插件卸载抖动问题 ([5945c16](https://github.com/terwer/src-sy-post-publisher/commit/5945c16b1971e9845548dae92979cd2887ec580a))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-修复配置文件路径问题 ([359620a](https://github.com/terwer/src-sy-post-publisher/commit/359620a554cc406acfaca40cfc047dc29687e6fe))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-升级PicGO ([7f7f539](https://github.com/terwer/src-sy-post-publisher/commit/7f7f5390f2e04578e36e074cc34694e327d14a1e))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-升级sy-picgo ([aff2f81](https://github.com/terwer/src-sy-post-publisher/commit/aff2f81a7440ef135bdf5e3db66aef4574c05a43))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-升级sy-picgo ([13175ed](https://github.com/terwer/src-sy-post-publisher/commit/13175eda40cf1d9c5da2bd9f53d02d24855f23d2))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-图床类型展示 ([ec8ef2e](https://github.com/terwer/src-sy-post-publisher/commit/ec8ef2e5c5fd389a7c05afc32fb24cea35917c5c))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-基本配置界面 ([f82f98d](https://github.com/terwer/src-sy-post-publisher/commit/f82f98d4dc5e56a7a42069636a9dffd88d72b443))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-增强SyCmd ([b08a794](https://github.com/terwer/src-sy-post-publisher/commit/b08a794c82a6b05f7b33acbd986734e44c37cc1b))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-增强SyCmd ([2ce65a1](https://github.com/terwer/src-sy-post-publisher/commit/2ce65a1ec4bd7003c82ac9f13e1c8bb79e7ebc7a))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-增强SyCmd，适配Anki同步 ([96de9a8](https://github.com/terwer/src-sy-post-publisher/commit/96de9a87b944b3358401df707f8b05dea344425a))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-完成插件菜单以及插件安装环境 ([328484d](https://github.com/terwer/src-sy-post-publisher/commit/328484d118a2091742a2eb4eadbf0f2a9df0fe2d))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-完成插件菜单以及插件安装环境 ([054b942](https://github.com/terwer/src-sy-post-publisher/commit/054b94297894c50b9581c15fbe6706c859cc4580))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-展示插件列表 ([03d9956](https://github.com/terwer/src-sy-post-publisher/commit/03d99567d2a4f3fa0c3bc5ec4d17a208274ca4af))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-打开配置文件 ([597f42a](https://github.com/terwer/src-sy-post-publisher/commit/597f42a5ca7df9b14861a4f7019f68fdec1e3bc9))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-打开配置文件支持新窗口模式 ([d3de877](https://github.com/terwer/src-sy-post-publisher/commit/d3de87715efc3bed42750418020d2c112800c655))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-挂载SyCmd ([72dbeea](https://github.com/terwer/src-sy-post-publisher/commit/72dbeeacd9e1885fbff4747d3ea7d3c867bc3055))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-挂载SyCmd ([263bd4a](https://github.com/terwer/src-sy-post-publisher/commit/263bd4a0d794653882443197a91f54668c77c28d))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-挂载SyCmd，调整日志级别 ([01f18b4](https://github.com/terwer/src-sy-post-publisher/commit/01f18b485bd17a899ba31e50b2ab51853676d0da))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-提示放在底部避免影响主功能 ([0665098](https://github.com/terwer/src-sy-post-publisher/commit/06650982dd2ca4b5b4a5671ffe19878d7267bc2f))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-插件兼容测试 ([c2322aa](https://github.com/terwer/src-sy-post-publisher/commit/c2322aa214d9fe0fa657556fee8b72b8efa81d4a))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-插件卸载 ([4b8ea7e](https://github.com/terwer/src-sy-post-publisher/commit/4b8ea7e1e78db514130a9603cc5ef45367cc795e))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-插件卸载 ([65b078d](https://github.com/terwer/src-sy-post-publisher/commit/65b078d306f38421719d5da2ec961b10006f5f67))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-插件卸载 ([8b4d5d8](https://github.com/terwer/src-sy-post-publisher/commit/8b4d5d8ac95c3c40092c8d7d37a64185df2300c8))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-插件适配 ([4e3611b](https://github.com/terwer/src-sy-post-publisher/commit/4e3611b0881ae43ba2186a6c46d6fad8c3a4f7a5))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-插件适配 ([89fe368](https://github.com/terwer/src-sy-post-publisher/commit/89fe368dd692c3fa091d435708eae1c38f9037c1))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-插件适配 ([09db466](https://github.com/terwer/src-sy-post-publisher/commit/09db46680721fb8f1361e6dd064c6c0ddbcd4722))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-插件适配 ([56a5345](https://github.com/terwer/src-sy-post-publisher/commit/56a5345fc49fcd41e8651b3120ca7ef41ab5153a))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-支持图片重命名 ([7f93ca5](https://github.com/terwer/src-sy-post-publisher/commit/7f93ca58f9df283a34c4e4a9a049e37eb7061e39))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-支持图片重命名 ([16643b5](https://github.com/terwer/src-sy-post-publisher/commit/16643b5eaff4eb34c8887b1a1d3040cfe93ee339))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-支持图片重命名 ([270d8a2](https://github.com/terwer/src-sy-post-publisher/commit/270d8a25461dd12af69c1b828fb2699711799a7e))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-支持打开PicGO日志文件 ([cb886e9](https://github.com/terwer/src-sy-post-publisher/commit/cb886e9bca69d4a24b36d72bdeb7e026efadc510))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-改进PicGO引入方式，多配置文件定义 ([cbd780f](https://github.com/terwer/src-sy-post-publisher/commit/cbd780f40cb6df3c855ffbc541e54cf72f0a90ae))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-显示PicGo插件列表 ([d602943](https://github.com/terwer/src-sy-post-publisher/commit/d602943ba4786b3e6d7c7c421720479caaafb01a))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-显示PicGo插件列表 ([8cc17c9](https://github.com/terwer/src-sy-post-publisher/commit/8cc17c9e850955663bfe5137550c608e5f433c3b))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-显示PicGo插件列表与版本号 ([c421ca1](https://github.com/terwer/src-sy-post-publisher/commit/c421ca149f10d8b4d0d0101bdd16bcd5b5c9ecab))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-移除事件注册 ([38a77a5](https://github.com/terwer/src-sy-post-publisher/commit/38a77a5c8132356c4d5bac021b088a72784d276e))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-移除事件注册 ([f26c481](https://github.com/terwer/src-sy-post-publisher/commit/f26c481d691f036fa15397e01081c5a52bfe27a0))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-获取支持的图床类型 ([3b6ee60](https://github.com/terwer/src-sy-post-publisher/commit/3b6ee6064102b9ec1a57498710c7d99c3284650f))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-读取多个图床配置列表 ([92088bc](https://github.com/terwer/src-sy-post-publisher/commit/92088bc91a184cefe75c184ff53e2339609563a7))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-配置列表处理 ([b1d7dbb](https://github.com/terwer/src-sy-post-publisher/commit/b1d7dbba49971c4b3f095e7a643aa0c5f1545180))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-配置列表处理 ([346c71f](https://github.com/terwer/src-sy-post-publisher/commit/346c71f39336172aef680de6434fcd72cca5ee82))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-配置刷新 ([81a82d8](https://github.com/terwer/src-sy-post-publisher/commit/81a82d8b286247cbe3ae9b6ea8ef4dfc300326fb))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-配置界面样式修复 ([f05e829](https://github.com/terwer/src-sy-post-publisher/commit/f05e829bdb2a8c1775062e928257c2c8561b472c))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-配置表单处理 ([e249ea0](https://github.com/terwer/src-sy-post-publisher/commit/e249ea0bf6ed6b82f2a8e7e1fc82aa6694d16f97))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-配置表单展示 ([7587fa8](https://github.com/terwer/src-sy-post-publisher/commit/7587fa8179e2eb22d94081c6fd4d3389e06c39d0))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-防止组件重复注册 ([8b0eb3b](https://github.com/terwer/src-sy-post-publisher/commit/8b0eb3bbd5ebcbc22dfc7ac333ed9973f1d8683f))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-默认图床 ([e4233c4](https://github.com/terwer/src-sy-post-publisher/commit/e4233c41318b06ff512a3bcecbc9814150fb266a))
-* [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-默认图床 ([24b0fb9](https://github.com/terwer/src-sy-post-publisher/commit/24b0fb978f7068b1a077d521fb6273b030d42459))
 * [#319](https://github.com/terwer/src-sy-post-publisher/issues/319) PicGO图形化配置界面-默认图床为github ([51a2353](https://github.com/terwer/src-sy-post-publisher/commit/51a2353de7e1d78708823cce527fdb045ecdd32b))
-* [#341](https://github.com/terwer/src-sy-post-publisher/issues/341) 整合所有配置，提供单一统一的配置入口页面 ([0d5c8ff](https://github.com/terwer/src-sy-post-publisher/commit/0d5c8ff78e4c7d51f46b17bf5d716d7ecdd1036c))
-* [#341](https://github.com/terwer/src-sy-post-publisher/issues/341) 整合所有配置，提供单一统一的配置入口页面 ([1dc5713](https://github.com/terwer/src-sy-post-publisher/commit/1dc57136a115ef9f18c59cf764f4ae151581ef04))
-* [#341](https://github.com/terwer/src-sy-post-publisher/issues/341) 整合所有配置，提供单一统一的配置入口页面-功能菜单调整 ([4e4cb8c](https://github.com/terwer/src-sy-post-publisher/commit/4e4cb8c097fb934343bb45b3bf68fce3fd610258))
-* [#341](https://github.com/terwer/src-sy-post-publisher/issues/341) 整合所有配置，提供单一统一的配置入口页面-功能菜单调整 ([b6f9ee1](https://github.com/terwer/src-sy-post-publisher/commit/b6f9ee1063a917655eef5dd66a77cca1304526d2))
-* [#341](https://github.com/terwer/src-sy-post-publisher/issues/341) 整合所有配置，提供单一统一的配置入口页面-功能菜单调整 ([29106e3](https://github.com/terwer/src-sy-post-publisher/commit/29106e37ee8b5fd6d4a2c0524b5f31901dbe35e3))
 * [#341](https://github.com/terwer/src-sy-post-publisher/issues/341) 整合所有配置，提供单一统一的配置入口页面-整合思源地址配置到底部统一的偏好设置 ([7c8b3f3](https://github.com/terwer/src-sy-post-publisher/commit/7c8b3f301c7deab67d1d8fa11874e35141398329))
-* [#374](https://github.com/terwer/src-sy-post-publisher/issues/374) 使用python重构项目构建脚本-抽取python工具类 ([80c9898](https://github.com/terwer/src-sy-post-publisher/commit/80c98988105dcb4bfe08386b773a922c861cd98a))
-* [#374](https://github.com/terwer/src-sy-post-publisher/issues/374) 使用python重构项目构建脚本-支持一键打包 ([3e6be09](https://github.com/terwer/src-sy-post-publisher/commit/3e6be09e6ebacf635fa7f2c414b31b1b122839ea))
-* [#374](https://github.com/terwer/src-sy-post-publisher/issues/374) 使用python重构项目构建脚本-重构dev命令脚本 ([5d37cef](https://github.com/terwer/src-sy-post-publisher/commit/5d37cef34d78560e2badf2bb0ccf25cc72e06494))
-* [#374](https://github.com/terwer/src-sy-post-publisher/issues/374) 使用python重构项目构建脚本-重构挂件打包脚本 ([56317b0](https://github.com/terwer/src-sy-post-publisher/commit/56317b0058b19b0b71fc4a1138569aaf67652655))
-* [#374](https://github.com/terwer/src-sy-post-publisher/issues/374) 使用python重构项目构建脚本-重构挂件打包脚本 ([ff4dc4c](https://github.com/terwer/src-sy-post-publisher/commit/ff4dc4c6ac676175e9935897135495781cac8d1e))
-* [#374](https://github.com/terwer/src-sy-post-publisher/issues/374) 使用python重构项目构建脚本-重构挂件打包脚本 ([6e2d66d](https://github.com/terwer/src-sy-post-publisher/commit/6e2d66d51f8c4b24585ea4c6dcfbe57cbb593da9))
-* [#374](https://github.com/terwer/src-sy-post-publisher/issues/374) 使用python重构项目构建脚本-重构浏览器插件打包脚本 ([a5f6f54](https://github.com/terwer/src-sy-post-publisher/commit/a5f6f540a2bad0467f07447e0937e3e534eeee5d))
-* [#374](https://github.com/terwer/src-sy-post-publisher/issues/374) 使用python重构项目构建脚本-重构浏览器插件打包脚本 ([d186e33](https://github.com/terwer/src-sy-post-publisher/commit/d186e334a36eccd95422048845f0b91f336be6e3))
-* [#374](https://github.com/terwer/src-sy-post-publisher/issues/374) 使用python重构项目构建脚本-重构浏览器插件打包脚本 ([6267a6a](https://github.com/terwer/src-sy-post-publisher/commit/6267a6a8cf97c32fd7493459846283f68467b9cb))
-* [#374](https://github.com/terwer/src-sy-post-publisher/issues/374) 使用python重构项目构建脚本-重构浏览器插件打包脚本 ([a0e022f](https://github.com/terwer/src-sy-post-publisher/commit/a0e022fde291caf78d6a32172744bfbe41b50f90))
-* [#374](https://github.com/terwer/src-sy-post-publisher/issues/374) 使用python重构项目构建脚本-重构浏览器插件打包脚本 ([c4c0954](https://github.com/terwer/src-sy-post-publisher/commit/c4c0954004b6c44b0901d73ce33da637b86a3762))
 * [#374](https://github.com/terwer/src-sy-post-publisher/issues/374) 使用python重构项目构建脚本-重构浏览器插件打包脚本 ([0c2da6d](https://github.com/terwer/src-sy-post-publisher/commit/0c2da6de922590d012b3a150db56ca335e81de5e))
-* [#375](https://github.com/terwer/src-sy-post-publisher/issues/375) 适配挂件背景 ([821bcba](https://github.com/terwer/src-sy-post-publisher/commit/821bcba457b5a70cbea476cad7f1b23961d14726))
 * [#375](https://github.com/terwer/src-sy-post-publisher/issues/375) 适配挂件背景 ([f66ccbf](https://github.com/terwer/src-sy-post-publisher/commit/f66ccbf555a1d780089419efe3ad25e077b5a3c2))
 * [#388](https://github.com/terwer/src-sy-post-publisher/issues/388) 支持自定义挂件背景色用来适配不同的主题 ([c1b1a7a](https://github.com/terwer/src-sy-post-publisher/commit/c1b1a7ac7ddb91e67cd25973ef9781fda7c40504))
-* 统一导入导出配置 ([62c867f](https://github.com/terwer/src-sy-post-publisher/commit/62c867f2e3eb0dae852c5c2dce4ff2475430428b))
 * 统一导入导出配置 ([99ca865](https://github.com/terwer/src-sy-post-publisher/commit/99ca865cebed6d267efbc0035e322f4045d1fb94))
 * 重构构建脚本 ([9f8376e](https://github.com/terwer/src-sy-post-publisher/commit/9f8376eebef0977ca792de87f09ef90664000989))
 * 重构构建脚本-解决新版本脚本乱码问题 ([a23ede1](https://github.com/terwer/src-sy-post-publisher/commit/a23ede131a15e3dd23b577c25c555c4332bc710f))
-* 重构构建脚本-重构serve命令脚本 ([cf77782](https://github.com/terwer/src-sy-post-publisher/commit/cf7778205111b13624fc202ae604a83dd371cab9))
 * 重构构建脚本-重构serve命令脚本 ([b60aeb4](https://github.com/terwer/src-sy-post-publisher/commit/b60aeb4850f4c235235332ed77feff537f5b4b0b))
 * 重构构建脚本-重构新版本脚本 ([f77a706](https://github.com/terwer/src-sy-post-publisher/commit/f77a7069e604242bab5c70d56f250317fb8720eb))
-
-
-### Bug Fixes
-
 * [#376](https://github.com/terwer/src-sy-post-publisher/issues/376) typecho发布文章未成功解析文章id ([f5975f5](https://github.com/terwer/src-sy-post-publisher/commit/f5975f514ea62ab2464067be550d10f6c3c480fc))
 * [#385](https://github.com/terwer/src-sy-post-publisher/issues/385) 路径问题可能导致挂载过程思源崩溃页面空白问题 ([0f18eda](https://github.com/terwer/src-sy-post-publisher/commit/0f18eda86420727e79223c57756aade6e650b43f))
 * [#394](https://github.com/terwer/src-sy-post-publisher/issues/394) 思源内部Anki同步报错 ([d2e6492](https://github.com/terwer/src-sy-post-publisher/commit/d2e6492a0a917576b6551c21b35a8c5d6b55f112))
 * [#400](https://github.com/terwer/src-sy-post-publisher/issues/400) 浏览器插件不能使用http，只能用https-优化请求代理错误处理 ([1dd35c2](https://github.com/terwer/src-sy-post-publisher/commit/1dd35c2be39822312605eef94bc71e0bbac8de85))
-* CI complains of outdated lockfile but says the lockfile is up to date, see https://github.com/pnpm/pnpm/issues/5144 ([ae25cf6](https://github.com/terwer/src-sy-post-publisher/commit/ae25cf635fac937c88fc43106a45431da4f5cd8c))
-* CI complains of outdated lockfile but says the lockfile is up to date, see https://github.com/pnpm/pnpm/issues/5144 ([0b92761](https://github.com/terwer/src-sy-post-publisher/commit/0b92761afc64236e842969e4522ac79e6423ee7f))
+* ci complains of outdated lockfile but says the lockfile is up to date, see https://github.com/pnpm/pnpm/issues/5144 ([0b92761](https://github.com/terwer/src-sy-post-publisher/commit/0b92761afc64236e842969e4522ac79e6423ee7f))
 * **deps:** bump actions/checkout from 2 to 3 ([5cee6c7](https://github.com/terwer/src-sy-post-publisher/commit/5cee6c7eaf9227c6bfe9ef042b0e1214b59a8471))
 * **deps:** bump browser-fs-access from 0.31.2 to 0.32.1 ([5ccf58f](https://github.com/terwer/src-sy-post-publisher/commit/5ccf58fe8e093697ed5d75ec861e28da48510c7e))
-
-
-### Miscellaneous
-
-* **deps-dev:** bump eslint-config-standard-with-typescript ([2a007ec](https://github.com/terwer/src-sy-post-publisher/commit/2a007ecf5c708f0e7ae6f685a0ff148ff541b165))
+* **deps-dev:** bump eslint-config-standard-with-typescript ([a8866cf](https://github.com/terwer/src-sy-post-publisher/commit/a8866cf6545b7d8e05a0d541e38f942c157cf65f))
 * **deps-dev:** bump prettier from 2.8.3 to 2.8.4 ([fd3ec1a](https://github.com/terwer/src-sy-post-publisher/commit/fd3ec1a054d7225c8d3c5bcfc96db353c8511e91))
 * **deps-dev:** bump unplugin-vue-components from 0.22.12 to 0.24.0 ([a60a31f](https://github.com/terwer/src-sy-post-publisher/commit/a60a31f2fa25051d8de78da38a7440492dab02a8))
 * **deps-dev:** bump vitest from 0.28.5 to 0.29.1 ([11e0869](https://github.com/terwer/src-sy-post-publisher/commit/11e0869996da87350091ac11be67293811a3ddb5))
-* release 0.6.8 ([d3d45d5](https://github.com/terwer/src-sy-post-publisher/commit/d3d45d5d1c2b60e10fcd1a86363052dec42d87d7))
 * release 0.6.8 ([5015fa2](https://github.com/terwer/src-sy-post-publisher/commit/5015fa2d54cddffd065cd0cde83c6ad08114cd3e))
 * update browser-fs-access ([000610d](https://github.com/terwer/src-sy-post-publisher/commit/000610db65afe77717be07c1b1fef19965dda32f))
-* update plugin ([d1ea78a](https://github.com/terwer/src-sy-post-publisher/commit/d1ea78a853ee0a7255b74e242db4b32d0cca58ac))
 * update plugin ([51fd486](https://github.com/terwer/src-sy-post-publisher/commit/51fd4862003b65620e2cd6e5e487f206adcdc1e8))
-* upgrade prettier ([0c408a1](https://github.com/terwer/src-sy-post-publisher/commit/0c408a151fd6234e06f4ecf218250f50a6777356))
-* upgrade prettier ([975afab](https://github.com/terwer/src-sy-post-publisher/commit/975afab6aa06ce840eccb3b0fd171dcc1fb80fe4))
 * upgrade prettier ([64d5852](https://github.com/terwer/src-sy-post-publisher/commit/64d585271ee368429b8a6d7e98e9bf06c7442e1d))
 * y优化界面展示 ([3a3d100](https://github.com/terwer/src-sy-post-publisher/commit/3a3d100ad6c24000a713e3e488a5b2dd194a9508))
 * 优化日志输出 ([ff5a997](https://github.com/terwer/src-sy-post-publisher/commit/ff5a997c1cba4780c99f119a225eedad659f3da8))
 * 修复页面展示问题 ([92d75d6](https://github.com/terwer/src-sy-post-publisher/commit/92d75d6e5b2a30bb8aa211b3d52c9993fc958349))
 * 新增说明 ([9793a1a](https://github.com/terwer/src-sy-post-publisher/commit/9793a1aaf817f6cec54d4f0517d0f2370d48b08a))
 * 更新eslint-config-standard-with-typescript ([8f08863](https://github.com/terwer/src-sy-post-publisher/commit/8f08863dfb33c6481aca89b32ea53df452c2eaa0))
-* 添加灰度测试提示 ([48e84c6](https://github.com/terwer/src-sy-post-publisher/commit/48e84c69fdf47ca34c8763bb0c06d7b9a006242f))
-* 添加灰度测试提示 ([576e72a](https://github.com/terwer/src-sy-post-publisher/commit/576e72a14f8f6085e50fce652413c906377480d0))
 * 添加灰度测试提示 ([202205a](https://github.com/terwer/src-sy-post-publisher/commit/202205aba4c30ef6405a61d321d5093cea3cae2e))
-
 ## [0.6.8](https://github.com/terwer/src-sy-post-publisher/compare/v0.6.7...v0.6.8) (2023-01-30)
-
-
-### Bug Fixes
-
 * [#326](https://github.com/terwer/src-sy-post-publisher/issues/326) 思源配置读取出错 ([b3b8ddd](https://github.com/terwer/src-sy-post-publisher/commit/b3b8ddd5103ec77d9c175f92bcf2a5f3e1e0641e))
 * [#338](https://github.com/terwer/src-sy-post-publisher/issues/338) 联动Sofill=主题，提供统一的hook入口，除了js片段之外，新增挂件触发插槽显示 ([c55437e](https://github.com/terwer/src-sy-post-publisher/commit/c55437ef1686aec8c841538c8606869017c1fe0c))
 * [#340](https://github.com/terwer/src-sy-post-publisher/issues/340) README精简 ([38aa0ee](https://github.com/terwer/src-sy-post-publisher/commit/38aa0ee5c7471c7ac339471d91ec25a88d79003f))
-* [#342](https://github.com/terwer/src-sy-post-publisher/issues/342) 适配2.6.3+的localstorage改动，重构配置数据存储方案-Eletron环境使用JsonLocalStorage ([fadf6da](https://github.com/terwer/src-sy-post-publisher/commit/fadf6da30a99878b22dd439e4de4cd1804843db0))
-* [#342](https://github.com/terwer/src-sy-post-publisher/issues/342) 适配2.6.3+的localstorage改动，重构配置数据存储方案-Eletron环境使用JsonLocalStorage ([9f05f68](https://github.com/terwer/src-sy-post-publisher/commit/9f05f680734a1902cfcd3f4600d5f24b0f62771b))
 * [#342](https://github.com/terwer/src-sy-post-publisher/issues/342) 适配2.6.3+的localstorage改动，重构配置数据存储方案-多空间配置适配 ([5c051d9](https://github.com/terwer/src-sy-post-publisher/commit/5c051d9b1895c5fc692867997213d2c79192ca68))
-* Metaweblog平台增加友好提示 ([9699356](https://github.com/terwer/src-sy-post-publisher/commit/9699356aaa4ca8ec4c6ecbc4942e9d40b22d0487))
-* Metaweblog平台支持图床 ([6b1c95d](https://github.com/terwer/src-sy-post-publisher/commit/6b1c95d7e70eaff9013aa60e02ff5f5ab368b305))
+* metaweblog平台增加友好提示 ([9699356](https://github.com/terwer/src-sy-post-publisher/commit/9699356aaa4ca8ec4c6ecbc4942e9d40b22d0487))
+* metaweblog平台支持图床 ([6b1c95d](https://github.com/terwer/src-sy-post-publisher/commit/6b1c95d7e70eaff9013aa60e02ff5f5ab368b305))
 * 优化设备判断 ([ddfb467](https://github.com/terwer/src-sy-post-publisher/commit/ddfb467791c8098d27b4332c396c13e21a3efd2e))
-* 优化设备判断-Chrome跳转链接修复 ([305f046](https://github.com/terwer/src-sy-post-publisher/commit/305f0463244ec515732b0f50a9769c947d2d22cb))
+* 优化设备判断-chrome跳转链接修复 ([305f046](https://github.com/terwer/src-sy-post-publisher/commit/305f0463244ec515732b0f50a9769c947d2d22cb))
 * 优化设备判断-优化url处理 ([aae7ee0](https://github.com/terwer/src-sy-post-publisher/commit/aae7ee0ee3f1d1bcd759d80ceb9cf55928c65db3))
 * 优化设备判断-优化链接来源判断 ([9d238ce](https://github.com/terwer/src-sy-post-publisher/commit/9d238ceebed421a1f14393b87b554d74c6f60ca7))
-* 优化设备判断-修复Chrome分享链接问题 ([f6d693b](https://github.com/terwer/src-sy-post-publisher/commit/f6d693b6ba81016b97c39aeb043ad348458f3c66))
+* 优化设备判断-修复chrome分享链接问题 ([f6d693b](https://github.com/terwer/src-sy-post-publisher/commit/f6d693b6ba81016b97c39aeb043ad348458f3c66))
 * 优化设备判断-修复链接跳转 ([c0d37b5](https://github.com/terwer/src-sy-post-publisher/commit/c0d37b5f2276a9c3ed01bb6e19f5d34bc9fab799))
 * 修复配置保存之后刷新页面错误的问题 ([6a69cc9](https://github.com/terwer/src-sy-post-publisher/commit/6a69cc99cf22fe8faba6a46c722ed9b71a0a82e3))
 * 切换跨域代理 ([79f8882](https://github.com/terwer/src-sy-post-publisher/commit/79f8882872ab8f5feda4729351d79ffbee541e5d))
 * 局域网文章分享给出提示，因为可能存在伺服未打开的情况 ([9afa0e6](https://github.com/terwer/src-sy-post-publisher/commit/9afa0e68f2d0e4e8521c4b0590cf95e3e093284d))
 * 提前simple-xmlrpc为新项目 ([6b099eb](https://github.com/terwer/src-sy-post-publisher/commit/6b099ebd4d34278a663105f0b19ebd5ecd99ce92))
-
-
-### Miscellaneous
-
 * **deps-dev:** bump @esbuild-plugins/node-modules-polyfill ([ba8eab9](https://github.com/terwer/src-sy-post-publisher/commit/ba8eab95254853e09a19fb744f5ff74e5b755dd4))
 * **deps-dev:** bump @vitest/coverage-c8 from 0.27.3 to 0.28.2 ([1125eaf](https://github.com/terwer/src-sy-post-publisher/commit/1125eafe82f992c5554d06f4651bc343166332e7))
-* **deps-dev:** bump eslint-config-standard-with-typescript ([9010a2f](https://github.com/terwer/src-sy-post-publisher/commit/9010a2ff04e1831678542558f10af92bee7f0aa6))
-* **deps-dev:** bump eslint-config-standard-with-typescript ([d2009d2](https://github.com/terwer/src-sy-post-publisher/commit/d2009d224965d509e012e0ed41f57f33bf91dc7b))
 * **deps-dev:** bump prettier from 2.8.2 to 2.8.3 ([e1ed42c](https://github.com/terwer/src-sy-post-publisher/commit/e1ed42c234488ebcd7de0c535d2a31050a71d64c))
 * **deps-dev:** bump vitest from 0.27.3 to 0.28.2 ([c12654d](https://github.com/terwer/src-sy-post-publisher/commit/c12654de6d1fa7e5dc2ba58b651a47f3a4a70221))
-* fix build error ([ae044d1](https://github.com/terwer/src-sy-post-publisher/commit/ae044d1495c249db0e9edadaa0df564c61552263))
-* fix build error ([5a8f5cd](https://github.com/terwer/src-sy-post-publisher/commit/5a8f5cd3313d66dcf79b8581f80064cfc15060e5))
-* fix build error ([92bb68b](https://github.com/terwer/src-sy-post-publisher/commit/92bb68b2d9a10e0b9e7084c0b2491b31c94ca81c))
-* fix build error ([f06b101](https://github.com/terwer/src-sy-post-publisher/commit/f06b101e003bc8ccb4bd112a200bffa4e8c39618))
-* fix build error ([ed9ac60](https://github.com/terwer/src-sy-post-publisher/commit/ed9ac6048e5966c352ea5adbbb0cfa5b28e8df6d))
-* fix build error ([c00972c](https://github.com/terwer/src-sy-post-publisher/commit/c00972c5c4084b74f4f35e5f8428346a2e2fa8aa))
-* fix build error ([6a5d88b](https://github.com/terwer/src-sy-post-publisher/commit/6a5d88b77ba901d56ab91ff9a3c68bcb81768d4c))
 * fix build error ([6a0899a](https://github.com/terwer/src-sy-post-publisher/commit/6a0899aa9aa8457dcca111afa5aef76e8ce2f03b))
-* fix imports ([73d2504](https://github.com/terwer/src-sy-post-publisher/commit/73d250461a28bd7b52b65349cdbdcd855271422a))
-* fix imports ([2814951](https://github.com/terwer/src-sy-post-publisher/commit/2814951ca1c2c3bbfa849d9877580e9df91862f9))
+* fix imports ([862c67f](https://github.com/terwer/src-sy-post-publisher/commit/862c67ff277467f7455378c07232f7ee20e9b851))
 * pretty code ([071b6c0](https://github.com/terwer/src-sy-post-publisher/commit/071b6c0996c55256e7a6ed35adc22de374c12c23))
 * remove pnpm-lock.yaml ([c76dc14](https://github.com/terwer/src-sy-post-publisher/commit/c76dc1490aa91e755c29edc919bbd2e38f8add47))
 * start 0.6.8 ([ed4bd82](https://github.com/terwer/src-sy-post-publisher/commit/ed4bd821c0ee36ffce5918ffc7b108e040928037))
-* start 0.7.0 ([1658ff9](https://github.com/terwer/src-sy-post-publisher/commit/1658ff9ff0197f62ae3abb2d4eebc33942aea4aa))
 * start 0.7.0 ([105ba99](https://github.com/terwer/src-sy-post-publisher/commit/105ba99a094a30059f7160eec99728144d67387f))
 * update @types/node ([58bb4cd](https://github.com/terwer/src-sy-post-publisher/commit/58bb4cd16f07f059a66b4265f2b328c27df5e325))
 * update node-globals-polyfill ([85b09af](https://github.com/terwer/src-sy-post-publisher/commit/85b09af08c179988e7645e837d9a35c1c132a237))
 * 先发个小版本0.6.2，解决核心bug ([cdb7a3d](https://github.com/terwer/src-sy-post-publisher/commit/cdb7a3d3b00bc50c4614a3c7dc8b521b671f11eb))
 * 准备开发 0.7.0 ([412a08e](https://github.com/terwer/src-sy-post-publisher/commit/412a08ee51d160a0a79a9082fd94736bd01a55b2))
-
 ## [0.6.1](https://github.com/terwer/src-sy-post-publisher/compare/v0.6.0...v0.6.1) (2023-01-10)
-
-
-### Bug Fixes
-
-* [#235](https://github.com/terwer/src-sy-post-publisher/issues/235) 支持复制分享链接-Chrome浏览器插件只处理分享链接，其他情况保持不变 ([d147676](https://github.com/terwer/src-sy-post-publisher/commit/d147676d431f19d8a3950a143384c958078165a5))
-* [#235](https://github.com/terwer/src-sy-post-publisher/issues/235) 支持复制分享链接-修复分享链接地址问题 ([2e9bac5](https://github.com/terwer/src-sy-post-publisher/commit/2e9bac54e7a7d026950ce5b693a25369fb1d718e))
-* [#235](https://github.com/terwer/src-sy-post-publisher/issues/235) 支持复制分享链接-修复分享链接复制问题 ([8b46c1e](https://github.com/terwer/src-sy-post-publisher/commit/8b46c1e31118f570d594384712f07a609e3bdaab))
-* [#235](https://github.com/terwer/src-sy-post-publisher/issues/235) 支持复制分享链接-修复链接来源 ([5e49552](https://github.com/terwer/src-sy-post-publisher/commit/5e4955259b9b760a956dbb5fbc65697088914b8f))
-* [#235](https://github.com/terwer/src-sy-post-publisher/issues/235) 支持复制分享链接-修复链接错误 ([fb54016](https://github.com/terwer/src-sy-post-publisher/commit/fb5401638f36811064c89324ae4040bb1a23f00d))
 * [#235](https://github.com/terwer/src-sy-post-publisher/issues/235) 支持复制分享链接，支持预览页面使用系统默认浏览器打开 ([a19b367](https://github.com/terwer/src-sy-post-publisher/commit/a19b36748434c0678dd0fd429a8dcdbe5f914e06))
 * [#264](https://github.com/terwer/src-sy-post-publisher/issues/264) 虚拟链接转换为真实链接 ([c633334](https://github.com/terwer/src-sy-post-publisher/commit/c63333433f67e607655341b7ebe1d9a13613d018))
 * [#304](https://github.com/terwer/src-sy-post-publisher/issues/304) 文章图片有备注的时候解析错误 ([4612d01](https://github.com/terwer/src-sy-post-publisher/commit/4612d01d2a9d69cd7b7824e6d17c1cbc6bcf2b81))
-* [#309](https://github.com/terwer/src-sy-post-publisher/issues/309) 深度适配Typecho ([12c8e44](https://github.com/terwer/src-sy-post-publisher/commit/12c8e44cae53b98044b5c3bf0007e41f220dab66))
+* [#309](https://github.com/terwer/src-sy-post-publisher/issues/309) 深度适配Typecho-移除头部错误信息 ([975ccfd](https://github.com/terwer/src-sy-post-publisher/commit/975ccfd7e90c9bdf141f879fc97b411acd6918cf))
 * [#311](https://github.com/terwer/src-sy-post-publisher/issues/311) Github系列平台支持单篇文章重新设置formatter ([72569a7](https://github.com/terwer/src-sy-post-publisher/commit/72569a7553849bd89799c29cff8cb8f0fdd5cf59))
 * [#314](https://github.com/terwer/src-sy-post-publisher/issues/314) HUGO平台支持修改菜单标题和权重 ([2fd2274](https://github.com/terwer/src-sy-post-publisher/commit/2fd22740be2502952c7c263ff167fb5724c0f3c7))
 * [#315](https://github.com/terwer/src-sy-post-publisher/issues/315) Github单独生成所有属性需要刷新页面 ([9c6eb87](https://github.com/terwer/src-sy-post-publisher/commit/9c6eb87f5e7b4ae8c9560d9dbf0b10fc846657c6))
-* Github平台支持上传图片到图床 ([da17e2b](https://github.com/terwer/src-sy-post-publisher/commit/da17e2baa22794e78a358172bf50d3569693861d))
-* Github平台支持上传图片到图床-适配成功 ([da5e16d](https://github.com/terwer/src-sy-post-publisher/commit/da5e16def97e3804cbe436ed61aa4406c0a11ff6))
-* Metaweblog平台适配新的Xmlrpc解析库 ([c9d9241](https://github.com/terwer/src-sy-post-publisher/commit/c9d924155753686f6a913c2b907c1fea7fe80422))
-* Metaweblog平台适配新的Xmlrpc解析库 ([aa6dc4f](https://github.com/terwer/src-sy-post-publisher/commit/aa6dc4f1dc7ffa9000f0bd160576b63bbe18213c))
-* Metaweblog的Chrome插件暂时走代理 ([3c47f8a](https://github.com/terwer/src-sy-post-publisher/commit/3c47f8a5305e6e23c0a7351411afc292d54ae98c))
-* Picgo配置文件优化 ([6e27ccd](https://github.com/terwer/src-sy-post-publisher/commit/6e27ccda5c0b36285ef98c3633efe05b92b98c0e))
+* github平台支持上传图片到图床 ([da17e2b](https://github.com/terwer/src-sy-post-publisher/commit/da17e2baa22794e78a358172bf50d3569693861d))
+* github平台支持上传图片到图床-适配成功 ([da5e16d](https://github.com/terwer/src-sy-post-publisher/commit/da5e16def97e3804cbe436ed61aa4406c0a11ff6))
+* metaweblog平台适配新的xmlrpc解析库 ([aa6dc4f](https://github.com/terwer/src-sy-post-publisher/commit/aa6dc4f1dc7ffa9000f0bd160576b63bbe18213c))
+* metaweblog的chrome插件暂时走代理 ([3c47f8a](https://github.com/terwer/src-sy-post-publisher/commit/3c47f8a5305e6e23c0a7351411afc292d54ae98c))
+* picgo配置文件优化 ([6e27ccd](https://github.com/terwer/src-sy-post-publisher/commit/6e27ccda5c0b36285ef98c3633efe05b92b98c0e))
 * 下载图片到本地其实不太需要，搁置 ([17c94ac](https://github.com/terwer/src-sy-post-publisher/commit/17c94ace138a7b7b40dbda306a6244a84ec0246d))
-* 代码块新增Markdown支持 ([350d123](https://github.com/terwer/src-sy-post-publisher/commit/350d12315e8751481cc4480a586cd11e6331cf50))
+* 代码块新增markdown支持 ([350d123](https://github.com/terwer/src-sy-post-publisher/commit/350d12315e8751481cc4480a586cd11e6331cf50))
 * 代码高亮新增php语言 ([49cb6d8](https://github.com/terwer/src-sy-post-publisher/commit/49cb6d8a26db1596f17e88cf869948fdec9f1107))
 * 优化blockquote样式 ([97e18d5](https://github.com/terwer/src-sy-post-publisher/commit/97e18d5c9c68883f7f8ccfee271e62a9fbf7b1d5))
-* 优化PicGO图片列表展示 ([832f11d](https://github.com/terwer/src-sy-post-publisher/commit/832f11d7b47d1d334ee0f865fbc07fe1cd902ded))
-* 优化PicGO图片预览 ([6e10b31](https://github.com/terwer/src-sy-post-publisher/commit/6e10b31ded1f11629d7ed49033c0e90232a3d0ee))
-* 优化PicGO路径读取 ([b897cec](https://github.com/terwer/src-sy-post-publisher/commit/b897ceccd2d98cc1f490f00e201be38784350730))
+* 优化picgo图片列表展示 ([832f11d](https://github.com/terwer/src-sy-post-publisher/commit/832f11d7b47d1d334ee0f865fbc07fe1cd902ded))
+* 优化picgo图片预览 ([6e10b31](https://github.com/terwer/src-sy-post-publisher/commit/6e10b31ded1f11629d7ed49033c0e90232a3d0ee))
+* 优化picgo路径读取 ([b897cec](https://github.com/terwer/src-sy-post-publisher/commit/b897ceccd2d98cc1f490f00e201be38784350730))
 * 优化体验，非插槽不显示按钮 ([b340bd2](https://github.com/terwer/src-sy-post-publisher/commit/b340bd267ed09e511a0539a6b8c41530b3cabe6b))
 * 优化按钮，新增图床配置按钮 ([25b0480](https://github.com/terwer/src-sy-post-publisher/commit/25b0480af0534554dbee36099bc0ba5063d0f690))
 * 优化按钮图标 ([5b71ccc](https://github.com/terwer/src-sy-post-publisher/commit/5b71ccc955a7dd4ef740d940185410d76c4fb930))
 * 优化操作图标 ([0565da4](https://github.com/terwer/src-sy-post-publisher/commit/0565da4dbf25b7152f596d93c6626e554cf70d06))
 * 优化本地图片完整链接展示错误问题 ([1541a00](https://github.com/terwer/src-sy-post-publisher/commit/1541a0020b741333be92a62274f3a8d6fc9130dd))
 * 优化详情页操作按钮 ([6db3250](https://github.com/terwer/src-sy-post-publisher/commit/6db3250b6f5a584b0423806c0dc93cb7c106f2e8))
-* 修复Docsy不显示文档问题 ([6e7f76c](https://github.com/terwer/src-sy-post-publisher/commit/6e7f76cf9ef3564a092b10ae553a9388af16e376))
-* 修复Github平台发布状态bug ([45b9264](https://github.com/terwer/src-sy-post-publisher/commit/45b92640b2189d3aa01c22ccb9d6c335222c1f22))
+* 修复docsy不显示文档问题 ([6e7f76c](https://github.com/terwer/src-sy-post-publisher/commit/6e7f76cf9ef3564a092b10ae553a9388af16e376))
+* 修复github平台发布状态bug ([45b9264](https://github.com/terwer/src-sy-post-publisher/commit/45b92640b2189d3aa01c22ccb9d6c335222c1f22))
 * 修复md5依赖库 ([11eeaf3](https://github.com/terwer/src-sy-post-publisher/commit/11eeaf334ed010b02fd5e3a89cf89028f477feeb))
 * 修复平台判断问题 ([2e105b0](https://github.com/terwer/src-sy-post-publisher/commit/2e105b02cf18b930f86070daedc4b143d966f2a7))
-* 修复当前页面未正确显示问题 ([90cb6eb](https://github.com/terwer/src-sy-post-publisher/commit/90cb6ebb2c0dba5048333bdce40b497ebcf4ff41))
 * 修复当前页面未正确显示问题 ([397f2ee](https://github.com/terwer/src-sy-post-publisher/commit/397f2ee3551f09a984fc83e9726afe38ff089337))
 * 修复思源笔记2.6.3版本之后弹出窗口无法关闭的问题 ([985258f](https://github.com/terwer/src-sy-post-publisher/commit/985258f682f7ec8a9497d178eae8c00b5b380f05))
 * 修复标签样式错乱问题 ([f489996](https://github.com/terwer/src-sy-post-publisher/commit/f48999606806dc3e2bb5bd3bce2b154fd2b622c2))
-* 修复通用API请求错误 ([45cea7e](https://github.com/terwer/src-sy-post-publisher/commit/45cea7e14025d27b8d43d3605f083feb921a3a29))
+* 修复通用api请求错误 ([45cea7e](https://github.com/terwer/src-sy-post-publisher/commit/45cea7e14025d27b8d43d3605f083feb921a3a29))
 * 修复错误信息返回 ([b26b76c](https://github.com/terwer/src-sy-post-publisher/commit/b26b76c9b857dd49ca875c9ba9e98363cea89297))
-* 修改英文默认字体为Time new man，此字体展示公式更美观 ([42e4c1d](https://github.com/terwer/src-sy-post-publisher/commit/42e4c1d5619181ec10af94c195bb18f43a9c7f77))
+* 修改英文默认字体为time new man，此字体展示公式更美观 ([42e4c1d](https://github.com/terwer/src-sy-post-publisher/commit/42e4c1d5619181ec10af94c195bb18f43a9c7f77))
 * 图床列表支持单个图片强制上传覆盖 ([96ee6ac](https://github.com/terwer/src-sy-post-publisher/commit/96ee6acfe411c5e7ab19f0b860e317c2f0b2a371))
 * 图床支持重新上传图片 ([9b27cf0](https://github.com/terwer/src-sy-post-publisher/commit/9b27cf0e07c68546df3faf5936eb8e11f351fc1a))
 * 图床适配公共平台 ([849d1d1](https://github.com/terwer/src-sy-post-publisher/commit/849d1d135f41f7c8ff4649ec6d7e051aa7391f87))
 * 处理数据加载失败的情况 ([aa6d2a3](https://github.com/terwer/src-sy-post-publisher/commit/aa6d2a3c1de3a84f84d2a2c6982637a2219ff17d))
 * 导出数据格式改为sy-p-v-[version]-json ([c42c2b4](https://github.com/terwer/src-sy-post-publisher/commit/c42c2b47599eb05446145fe4cee14f28fa2b9feb))
-* 封装文章图片上传到图床的公共方法 ([c2f2ea2](https://github.com/terwer/src-sy-post-publisher/commit/c2f2ea26f0295d2abeeaca4d25052fd25d1a7d40))
-* 封装文章图片上传到图床的公共方法 ([5f5317d](https://github.com/terwer/src-sy-post-publisher/commit/5f5317d14bf3206696fab1a88017c7204615ffc9))
 * 封装文章图片上传到图床的公共方法 ([9760285](https://github.com/terwer/src-sy-post-publisher/commit/9760285228f40210cf90ab570097732551bb486b))
 * 废弃发布时候的双链替换 ([be64013](https://github.com/terwer/src-sy-post-publisher/commit/be64013dfddb5418e0f0aeede7b3bae18b74a34a))
 * 忽略不是本地图片的链接 ([6ece79f](https://github.com/terwer/src-sy-post-publisher/commit/6ece79fcf5500a38bdf4c105c75eb1f93c1085b9))
-* 提供更友好的PicGO错误提示 ([dc779ed](https://github.com/terwer/src-sy-post-publisher/commit/dc779ed2965f110ca892496deb3d11179cdd165e))
-* 文章列表加入loading提升用户体验 ([87f4b21](https://github.com/terwer/src-sy-post-publisher/commit/87f4b215bfd3d006a0088c565a923c5dd77b8811))
+* 提供更友好的picgo错误提示 ([dc779ed](https://github.com/terwer/src-sy-post-publisher/commit/dc779ed2965f110ca892496deb3d11179cdd165e))
 * 文章列表加入loading提升用户体验 ([c727600](https://github.com/terwer/src-sy-post-publisher/commit/c72760005c590fd3a6a38e067c840fedaafe3d14))
 * 新增图床全局开关 ([e410615](https://github.com/terwer/src-sy-post-publisher/commit/e4106153d73f489f6b16ef2a50eb11b2720db53d))
-* 新增成功提示 ([7e6a699](https://github.com/terwer/src-sy-post-publisher/commit/7e6a699c859f1bb9cae00b7b829665931d1fee74))
 * 新增成功提示 ([c102f3d](https://github.com/terwer/src-sy-post-publisher/commit/c102f3d90f7add478972362488fdb66cf357a57c))
 * 新增链接解析器 ([861f029](https://github.com/terwer/src-sy-post-publisher/commit/861f029a5981ea1076109e56f4c1efafb00e8d5b))
 * 本地资源单个文件上传到图床 ([c031533](https://github.com/terwer/src-sy-post-publisher/commit/c031533f4b447a5a381ed9814f19f56005502716))
-* 极致简化简洁模式下的Github平台发布操作 ([948a5d8](https://github.com/terwer/src-sy-post-publisher/commit/948a5d8a6a41a803611a61fba2dff689b641e30a))
+* 极致简化简洁模式下的github平台发布操作 ([948a5d8](https://github.com/terwer/src-sy-post-publisher/commit/948a5d8a6a41a803611a61fba2dff689b641e30a))
 * 极致简化简洁模式下的其他平台发布操作 ([23564de](https://github.com/terwer/src-sy-post-publisher/commit/23564deeb9846268a1b3ad4f605cb47dc8824c57))
 * 浏览器插件设置项增加提示 ([56786d3](https://github.com/terwer/src-sy-post-publisher/commit/56786d36282fb8268850568ea50a2515ea7591cf))
 * 统一代理地址获取 ([8b8f466](https://github.com/terwer/src-sy-post-publisher/commit/8b8f466fa72ef3fc18a9658ed41851a8a5bc75ee))
-* 美化Picgo上传按钮 ([6a176ce](https://github.com/terwer/src-sy-post-publisher/commit/6a176cee54a31963b59effddef2c1c65c2ca50bc))
-* 计划支持Docsy ([9ca06f8](https://github.com/terwer/src-sy-post-publisher/commit/9ca06f801f71b6c651c239d17f290e5e53548efc))
+* 美化picgo上传按钮 ([6a176ce](https://github.com/terwer/src-sy-post-publisher/commit/6a176cee54a31963b59effddef2c1c65c2ca50bc))
+* 计划支持docsy ([9ca06f8](https://github.com/terwer/src-sy-post-publisher/commit/9ca06f801f71b6c651c239d17f290e5e53548efc))
 * 通用平台新增更加友好的提示 ([5d59fdb](https://github.com/terwer/src-sy-post-publisher/commit/5d59fdbd186a5acde55ca2bd263ca1e7c2dfeb07))
 * 隐藏浏览器放插件由于限制而无法实现的功能 ([c7172ee](https://github.com/terwer/src-sy-post-publisher/commit/c7172ee35ed59f1a0eaba96fd774adc4d3b3651e))
-
-
-### Miscellaneous
-
-* [#309](https://github.com/terwer/src-sy-post-publisher/issues/309) 深度适配Typecho-移除头部错误信息 ([975ccfd](https://github.com/terwer/src-sy-post-publisher/commit/975ccfd7e90c9bdf141f879fc97b411acd6918cf))
-* [#310](https://github.com/terwer/src-sy-post-publisher/issues/310) 更换xmlrpc解析库 ([7fb24b7](https://github.com/terwer/src-sy-post-publisher/commit/7fb24b7d1a07aeca551385ded5e0b9537991a668))
-* [#310](https://github.com/terwer/src-sy-post-publisher/issues/310) 更换xmlrpc解析库-通用同一套请求逻辑 ([511a9f5](https://github.com/terwer/src-sy-post-publisher/commit/511a9f526136d58122ec73a28cd560a33a199807))
 * [#310](https://github.com/terwer/src-sy-post-publisher/issues/310) 更换xmlrpc解析库-通用同一套请求逻辑 ([d49f535](https://github.com/terwer/src-sy-post-publisher/commit/d49f5353ffc33b041da69daa52385e99f6981ce4))
 * **deps-dev:** bump @vitest/coverage-c8 from 0.26.3 to 0.27.0 ([58d15e6](https://github.com/terwer/src-sy-post-publisher/commit/58d15e60cc15671ac74bae9fcc37b9100e4ddd87))
-* **deps-dev:** bump eslint-config-standard-with-typescript ([cd41105](https://github.com/terwer/src-sy-post-publisher/commit/cd4110504aa3e0b4ea776e2c7c2bfd4630296fb1))
 * **deps-dev:** bump prettier from 2.8.1 to 2.8.2 ([b2e83de](https://github.com/terwer/src-sy-post-publisher/commit/b2e83de5110532172092515a3983e29bcd9664d1))
 * **deps-dev:** bump vitest from 0.26.3 to 0.27.0 ([276be85](https://github.com/terwer/src-sy-post-publisher/commit/276be85b5c20544caf2e86c63a99e9d80cd8e18d))
-* release 0.6.0 ([d17f9ed](https://github.com/terwer/src-sy-post-publisher/commit/d17f9eda25c2344c3bd20ea1efb65121096fe6a5))
 * release 0.6.0 ([226e963](https://github.com/terwer/src-sy-post-publisher/commit/226e963751e0f3cad05d524b54a34ed72066fd9a))
 * 修复注释被忽略问题 ([d66a151](https://github.com/terwer/src-sy-post-publisher/commit/d66a151a6e7021fa4b2b755853583a6d4f80a816))
 * 升级eslint ([49e224b](https://github.com/terwer/src-sy-post-publisher/commit/49e224b012848e6498ae8da229558ff6785d15a4))
-* 升级PicGO-core ([de0f8bc](https://github.com/terwer/src-sy-post-publisher/commit/de0f8bcff63c765535d154e7b8a5a5319165a65c))
-* 升级PicGO-core ([682f42c](https://github.com/terwer/src-sy-post-publisher/commit/682f42c86df7f828a248d0fe3387fcda51a8d795))
+* 升级picgo-core ([682f42c](https://github.com/terwer/src-sy-post-publisher/commit/682f42c86df7f828a248d0fe3387fcda51a8d795))
 * 升级依赖 ([a25f672](https://github.com/terwer/src-sy-post-publisher/commit/a25f672771cdfe84af52906090268259b2160b38))
-* 对Picgo组件进行组件化重构 ([713a9e8](https://github.com/terwer/src-sy-post-publisher/commit/713a9e874cbaa2ae4ab4bfe996ee267dd940e5bb))
-* 提供PicoGO配置在线文档 ([f514fc0](https://github.com/terwer/src-sy-post-publisher/commit/f514fc0f019319385daf76dd760976810baff58e))
+* 对picgo组件进行组件化重构 ([713a9e8](https://github.com/terwer/src-sy-post-publisher/commit/713a9e874cbaa2ae4ab4bfe996ee267dd940e5bb))
+* 提供picogo配置在线文档 ([f514fc0](https://github.com/terwer/src-sy-post-publisher/commit/f514fc0f019319385daf76dd760976810baff58e))
 * 文章发布时图床批量上传的错误由发布逻辑自己控制，公共接口只提供返回消息 ([5ae587e](https://github.com/terwer/src-sy-post-publisher/commit/5ae587e2154bb1eff1e45886115a12a3af0322f6))
 * 更新文档链接 ([1df39eb](https://github.com/terwer/src-sy-post-publisher/commit/1df39eb66d7b443aa48c28ea4b56a238dfaafc8c))
-
 ## [0.6.0](https://github.com/terwer/src-sy-post-publisher/compare/v0.5.1...v0.6.0) (2022-12-29)
-
-
-### Features
-
-* [#132](https://github.com/terwer/src-sy-post-publisher/issues/132) 集成PicGO以及图床-上传接口调整 ([b224ab1](https://github.com/terwer/src-sy-post-publisher/commit/b224ab173b36b2440e1a034293d98a2d6865168e))
-* [#132](https://github.com/terwer/src-sy-post-publisher/issues/132) 集成PicGO以及图床-修复Windows路径问题 ([b81dd85](https://github.com/terwer/src-sy-post-publisher/commit/b81dd85cc92814cc5b8712bc4637c9107016ae4b))
-* [#132](https://github.com/terwer/src-sy-post-publisher/issues/132) 集成PicGO以及图床-关闭按钮优化 ([1a488e6](https://github.com/terwer/src-sy-post-publisher/commit/1a488e60c04431c013799af27d0d6055d3b266d6))
-* [#132](https://github.com/terwer/src-sy-post-publisher/issues/132) 集成PicGO以及图床-新增功能菜单按钮 ([2cc434c](https://github.com/terwer/src-sy-post-publisher/commit/2cc434cac303841240b063095d31427928e40a17))
-* [#132](https://github.com/terwer/src-sy-post-publisher/issues/132) 集成PicGO以及图床-样式优化 ([5222890](https://github.com/terwer/src-sy-post-publisher/commit/52228901a94a4363f37339c1118cc5f5f7d512f9))
-* [#132](https://github.com/terwer/src-sy-post-publisher/issues/132) 集成PicGO以及图床-读取文章图片块 ([e08b0b6](https://github.com/terwer/src-sy-post-publisher/commit/e08b0b664c811471c450d5d908720e0773c31b71))
 * [#132](https://github.com/terwer/src-sy-post-publisher/issues/132) 集成PicGO以及图床-非electron环境支持剪贴板上传 ([b6dea35](https://github.com/terwer/src-sy-post-publisher/commit/b6dea359f6d4e4dd0ecf04205667fed4a484092f))
-* [#285](https://github.com/terwer/src-sy-post-publisher/issues/285) 支持生成ankilink牌组标记 ([d39df30](https://github.com/terwer/src-sy-post-publisher/commit/d39df3046150aeefdc593eff311c3749f2dbfd52))
-* [#285](https://github.com/terwer/src-sy-post-publisher/issues/285) 支持生成ankilink牌组标记-修复牌组重复问题 ([0f7d9aa](https://github.com/terwer/src-sy-post-publisher/commit/0f7d9aa8dcbdf24805fc449ea8946d185ac52017))
-* [#285](https://github.com/terwer/src-sy-post-publisher/issues/285) 支持生成ankilink牌组标记-列表新增牌组标记管理按钮 ([23eb689](https://github.com/terwer/src-sy-post-publisher/commit/23eb689f23aabd86bf590908cb40894e7f63d3e0))
-* [#285](https://github.com/terwer/src-sy-post-publisher/issues/285) 支持生成ankilink牌组标记-基本展示和保存 ([f94a53c](https://github.com/terwer/src-sy-post-publisher/commit/f94a53cbe0214c984270701c2d27f9970c1b8bac))
-* [#285](https://github.com/terwer/src-sy-post-publisher/issues/285) 支持生成ankilink牌组标记-完善牌组展示 ([ab32f12](https://github.com/terwer/src-sy-post-publisher/commit/ab32f1219fd6339e756acef672730e0cbc9c977b))
-* [#285](https://github.com/terwer/src-sy-post-publisher/issues/285) 支持生成ankilink牌组标记-完成Ankisiyuan标记 ([07f8d7e](https://github.com/terwer/src-sy-post-publisher/commit/07f8d7e28d7a7fa37ccfb5983e88abda04f810a8))
-* [#285](https://github.com/terwer/src-sy-post-publisher/issues/285) 支持生成ankilink牌组标记-完成牌组标记 ([4214897](https://github.com/terwer/src-sy-post-publisher/commit/4214897ad3660bcc6069b549174388239b30b9c9))
 * [#285](https://github.com/terwer/src-sy-post-publisher/issues/285) 支持生成ankilink牌组标记-调用shell的公共方法 ([51f6a68](https://github.com/terwer/src-sy-post-publisher/commit/51f6a6807246946383d6a7fbc44236c452ad122f))
-* 集成PicGO以及图床-Pico上传 ([8d26ff6](https://github.com/terwer/src-sy-post-publisher/commit/8d26ff649f6a60092b52529c9a74d3710dba0573))
-* 集成PicGO以及图床-Pico依赖库 ([6ec387c](https://github.com/terwer/src-sy-post-publisher/commit/6ec387c45d11f44393e69b13d1807d05cf010b79))
-* 集成PicGO以及图床-Pico依赖库 ([6f57baa](https://github.com/terwer/src-sy-post-publisher/commit/6f57baa70c2715fe85741feff9a293a3e824c652))
-* 集成PicGO以及图床-Pico图床可用 ([4800d48](https://github.com/terwer/src-sy-post-publisher/commit/4800d480c378d926bf4bdd5158c7d05535e39cbc))
-* 集成PicGO以及图床-修复图标 ([a764286](https://github.com/terwer/src-sy-post-publisher/commit/a76428650735721a88bc7e3b21ca18d971557000))
-* 集成PicGO以及图床-图片路径复制 ([503e3ad](https://github.com/terwer/src-sy-post-publisher/commit/503e3ad963bda87f1b5db9f377c96089477a0e31))
-* 集成PicGO以及图床-展示文章中的图片 ([f5341a1](https://github.com/terwer/src-sy-post-publisher/commit/f5341a12b3b15a327af1dc1bf99c777875c2cfc6))
-* 集成PicGO以及图床-提取并构建构建单独可运行的PicGo依赖库 ([9741111](https://github.com/terwer/src-sy-post-publisher/commit/9741111f117c2dd0fa2e3d298bbd853424bffa0e))
-* 集成PicGO以及图床-提取并构建构建单独可运行的PicGo依赖库 ([2026f1d](https://github.com/terwer/src-sy-post-publisher/commit/2026f1d3856dc754c226597c662d7e1ef50b84a4))
-* 集成PicGO以及图床-提取并构建构建单独可运行的PicGo依赖库 ([f83957c](https://github.com/terwer/src-sy-post-publisher/commit/f83957c58df386391f941f9d46299d6351acc872))
-* 集成PicGO以及图床-显示操作状态 ([1332329](https://github.com/terwer/src-sy-post-publisher/commit/13323293362340228061ac017e0ad8a8a5844123))
-
-
-### Bug Fixes
-
+* 集成picgo以及图床-pico上传 ([8d26ff6](https://github.com/terwer/src-sy-post-publisher/commit/8d26ff649f6a60092b52529c9a74d3710dba0573))
+* 集成picgo以及图床-pico依赖库 ([6f57baa](https://github.com/terwer/src-sy-post-publisher/commit/6f57baa70c2715fe85741feff9a293a3e824c652))
+* 集成picgo以及图床-pico图床可用 ([4800d48](https://github.com/terwer/src-sy-post-publisher/commit/4800d480c378d926bf4bdd5158c7d05535e39cbc))
+* 集成picgo以及图床-修复图标 ([a764286](https://github.com/terwer/src-sy-post-publisher/commit/a76428650735721a88bc7e3b21ca18d971557000))
+* 集成picgo以及图床-图片路径复制 ([503e3ad](https://github.com/terwer/src-sy-post-publisher/commit/503e3ad963bda87f1b5db9f377c96089477a0e31))
+* 集成picgo以及图床-展示文章中的图片 ([f5341a1](https://github.com/terwer/src-sy-post-publisher/commit/f5341a12b3b15a327af1dc1bf99c777875c2cfc6))
+* 集成picgo以及图床-提取并构建构建单独可运行的picgo依赖库 ([f83957c](https://github.com/terwer/src-sy-post-publisher/commit/f83957c58df386391f941f9d46299d6351acc872))
+* 集成picgo以及图床-显示操作状态 ([1332329](https://github.com/terwer/src-sy-post-publisher/commit/13323293362340228061ac017e0ad8a8a5844123))
 * 修复未生成属性时点击发布造成的文件名错误问题 ([a98eef8](https://github.com/terwer/src-sy-post-publisher/commit/a98eef8002a21722aaa70e3ac9ca49b724f3b05c))
-* 修改Window构建脚本，优化构建体验 ([2bac0eb](https://github.com/terwer/src-sy-post-publisher/commit/2bac0eb8721c7d18e33083231e4bce1e3693166a))
+* 修改window构建脚本，优化构建体验 ([2bac0eb](https://github.com/terwer/src-sy-post-publisher/commit/2bac0eb8721c7d18e33083231e4bce1e3693166a))
 * 未修改过别名才去更改 ([03e2736](https://github.com/terwer/src-sy-post-publisher/commit/03e27360ede3364befd2ab2f36b91cfe3c3a618b))
-
-
-### Miscellaneous
-
 * add script comment ([fd961e3](https://github.com/terwer/src-sy-post-publisher/commit/fd961e3a27fca83992988b8736fc94545f30b08e))
 * **deps-dev:** bump @vitest/coverage-c8 from 0.25.8 to 0.26.2 ([fca56ba](https://github.com/terwer/src-sy-post-publisher/commit/fca56baf8cec698ae0314530e4343ea899d7e749))
 * **deps-dev:** bump vitest from 0.25.8 to 0.26.2 ([97f450a](https://github.com/terwer/src-sy-post-publisher/commit/97f450ad0e8ccfe32575a554ddbd964908c464d1))
@@ -420,103 +185,33 @@
 * release 0.5.1 ([82a1067](https://github.com/terwer/src-sy-post-publisher/commit/82a106791f72fe3a140f7d37d20dcf1696c02b58))
 * update deps ([92c3dc5](https://github.com/terwer/src-sy-post-publisher/commit/92c3dc53f651c474c065bc12270d8a4069fdbaf2))
 * use python script change new version ([64eb99c](https://github.com/terwer/src-sy-post-publisher/commit/64eb99c3960c99ad5742b71055d561e99455e741))
-* 新增FontAwesome感谢 ([b7d19b8](https://github.com/terwer/src-sy-post-publisher/commit/b7d19b808f5f3f2eb9808f9178e2ba01b323cc08))
-
+* 新增fontawesome感谢 ([b7d19b8](https://github.com/terwer/src-sy-post-publisher/commit/b7d19b808f5f3f2eb9808f9178e2ba01b323cc08))
 ## [0.5.1](https://github.com/terwer/src-sy-post-publisher/compare/v0.5.0...v0.5.1) (2022-12-17)
-
-
-### Bug Fixes
-
-* [#275](https://github.com/terwer/src-sy-post-publisher/issues/275) 保存属性到思源需要刷新页面 ([120ec34](https://github.com/terwer/src-sy-post-publisher/commit/120ec348cdb8840913d5ea84fef64b47b451b6b7))
 * [#275](https://github.com/terwer/src-sy-post-publisher/issues/275) 保存属性到思源需要刷新页面-成功提示 ([d5602f5](https://github.com/terwer/src-sy-post-publisher/commit/d5602f56aec752ce1e583e47ffb1fcfdbe803acc))
 * [#280](https://github.com/terwer/src-sy-post-publisher/issues/280) 弹窗新窗口打开404 ([361b397](https://github.com/terwer/src-sy-post-publisher/commit/361b397a2cf836273f05112df09c2716fce0fbc5))
 * [#281](https://github.com/terwer/src-sy-post-publisher/issues/281) 文章搜索支持ID ([6573afc](https://github.com/terwer/src-sy-post-publisher/commit/6573afcb1f2f924ec47962a681ec8f014d59786b))
-* [#282](https://github.com/terwer/src-sy-post-publisher/issues/282) 弹窗支持手动切换发布页面与列表-新增一个单独预览按钮 ([ad8c030](https://github.com/terwer/src-sy-post-publisher/commit/ad8c030905b68b1b95ceaca7c776ae67a29a4976))
-* [#282](https://github.com/terwer/src-sy-post-publisher/issues/282) 弹窗支持手动切换发布页面与列表-新增一个管理所有文章的按钮 ([c57a605](https://github.com/terwer/src-sy-post-publisher/commit/c57a605e03b02a712a16c5cdb8a7ace09bb30ab2))
 * [#282](https://github.com/terwer/src-sy-post-publisher/issues/282) 弹窗支持手动切换发布页面与列表-美化按钮图标 ([fe745c1](https://github.com/terwer/src-sy-post-publisher/commit/fe745c1d9db7e011d3e0a6aaee2edcea42294fae))
-* 修复文章预览H1标签问题 ([58df259](https://github.com/terwer/src-sy-post-publisher/commit/58df25942585119d30b3d3c67446dedaf8cb73e0))
-
-
-### Miscellaneous
-
-* 0.5.0 release ([6150b1e](https://github.com/terwer/src-sy-post-publisher/commit/6150b1e9c1fabfd5b8b691faa8d9b63dcdf38410))
+* 修复文章预览h1标签问题 ([58df259](https://github.com/terwer/src-sy-post-publisher/commit/58df25942585119d30b3d3c67446dedaf8cb73e0))
 * 0.5.0 release ([7f162d0](https://github.com/terwer/src-sy-post-publisher/commit/7f162d05e1d6af9196d0e9fad940f6a25a43e21f))
 * fix doc ([cc14f05](https://github.com/terwer/src-sy-post-publisher/commit/cc14f058568c368ac2f5533c0d370839765facfc))
-* 新增感谢说明 ([f6586db](https://github.com/terwer/src-sy-post-publisher/commit/f6586db7ebdda7759b30417786ead98e5e09449a))
 * 新增感谢说明 ([e953552](https://github.com/terwer/src-sy-post-publisher/commit/e9535522ef1d9024cf28a68a1da54323a6599eb1))
-* 新增感谢说明，QQ群 ([8e77a8b](https://github.com/terwer/src-sy-post-publisher/commit/8e77a8b2eee5ec55ef6099dc811544f33238e3da))
-
+* 新增感谢说明，qq群 ([8e77a8b](https://github.com/terwer/src-sy-post-publisher/commit/8e77a8b2eee5ec55ef6099dc811544f33238e3da))
 ## [0.5.0](https://github.com/terwer/src-sy-post-publisher/compare/v0.4.1...v0.5.0) (2022-12-15)
-
-
-### Features
-
-* [#213](https://github.com/terwer/src-sy-post-publisher/issues/213) 挂件模式用挂载菜单的方式使用 ([0de9a73](https://github.com/terwer/src-sy-post-publisher/commit/0de9a73b7f333e74bb6a40c4e5f015d428edfd51))
-* [#213](https://github.com/terwer/src-sy-post-publisher/issues/213) 挂件模式用挂载菜单的方式使用-hook挂件按钮 ([0b08791](https://github.com/terwer/src-sy-post-publisher/commit/0b08791ff513349406299c8d0bd856c0d1ad96e9))
-* [#213](https://github.com/terwer/src-sy-post-publisher/issues/213) 挂件模式用挂载菜单的方式使用-优化弹窗体验，改进子文档 ([2a94252](https://github.com/terwer/src-sy-post-publisher/commit/2a94252a6074b6fbf200782988bae1cb7fe9c614))
-* [#213](https://github.com/terwer/src-sy-post-publisher/issues/213) 挂件模式用挂载菜单的方式使用-弹窗关闭 ([430d73a](https://github.com/terwer/src-sy-post-publisher/commit/430d73a6ff1a7cdf035ac50b5c3bf5ea66dd2932))
 * [#213](https://github.com/terwer/src-sy-post-publisher/issues/213) 挂件模式用挂载菜单的方式使用-样式优化，pageId错误逻辑修复 ([1a20189](https://github.com/terwer/src-sy-post-publisher/commit/1a20189450b27e7139a67e2979a7431713739dee))
-
-
-### Miscellaneous
-
-* **deps-dev:** bump eslint-config-standard-with-typescript ([a8866cf](https://github.com/terwer/src-sy-post-publisher/commit/a8866cf6545b7d8e05a0d541e38f942c157cf65f))
-* widget 0.4.1 ([0e3e526](https://github.com/terwer/src-sy-post-publisher/commit/0e3e5266006019960d61d04aa350c3b05907fe88))
 * widget 0.4.1 ([d9386f3](https://github.com/terwer/src-sy-post-publisher/commit/d9386f3978248d2083e6278764ceaabe51d68c53))
 * 修改项目说明 ([739b69b](https://github.com/terwer/src-sy-post-publisher/commit/739b69beeb7b3bbbda54fc6fcef22257715bbef2))
 * 升级eslint，更改下载统计 ([9ad0592](https://github.com/terwer/src-sy-post-publisher/commit/9ad0592201782acff8fcb6478f661455a4d08754))
-
 ## [0.4.1](https://github.com/terwer/src-sy-post-publisher/compare/v0.4.0...v0.4.1) (2022-12-14)
-
-
-### Miscellaneous
-
 * 更新文档说明 ([5e20d65](https://github.com/terwer/src-sy-post-publisher/commit/5e20d656bd482402dcc8001cee3cb160f70d477e))
-
 ## [0.4.0](https://github.com/terwer/src-sy-post-publisher/compare/v0.3.0...v0.4.0) (2022-12-14)
-
-
-### Features
-
-* [#133](https://github.com/terwer/src-sy-post-publisher/issues/133) 支持Github系列-HUGO平台适配 ([4d25fbd](https://github.com/terwer/src-sy-post-publisher/commit/4d25fbddb807c431569cfda7156a983cddc4f8bb))
-* [#133](https://github.com/terwer/src-sy-post-publisher/issues/133) 支持Github系列-Jekyll平台适配 ([9bdbd19](https://github.com/terwer/src-sy-post-publisher/commit/9bdbd1903db1c87566c15106a7d67a057de86b27))
-* [#133](https://github.com/terwer/src-sy-post-publisher/issues/133) 支持Github系列-Vuepress动态平台YAML解析器 ([99a1927](https://github.com/terwer/src-sy-post-publisher/commit/99a192760b80b2a9c961571877d7e48f1f698134))
-* [#133](https://github.com/terwer/src-sy-post-publisher/issues/133) 支持Github系列-优化第一次发布体验 ([83b6df6](https://github.com/terwer/src-sy-post-publisher/commit/83b6df6966b240c46f941725bcbe9e46932fc4c3))
-* [#133](https://github.com/terwer/src-sy-post-publisher/issues/133) 支持Github系列-支持Hexo平台 ([a52bda9](https://github.com/terwer/src-sy-post-publisher/commit/a52bda9b37e093d9dac8ccab90fcb610aac89304))
-* [#133](https://github.com/terwer/src-sy-post-publisher/issues/133) 支持Github系列-新增构建状态展示 ([d6728ad](https://github.com/terwer/src-sy-post-publisher/commit/d6728ad90b344836197bbf5314decfad5c280fc9))
-* [#133](https://github.com/terwer/src-sy-post-publisher/issues/133) 支持Github系列-适配Next ([15cdc31](https://github.com/terwer/src-sy-post-publisher/commit/15cdc31853f64e67c697dede808017cd77109a52))
-* [#133](https://github.com/terwer/src-sy-post-publisher/issues/133) 支持Github系列-适配Nuxt content ([992c881](https://github.com/terwer/src-sy-post-publisher/commit/992c8818f371402b11d708dfadfc7c6f0c41d63c))
-* [#133](https://github.com/terwer/src-sy-post-publisher/issues/133) 支持Github系列-适配Vitepress ([0931e26](https://github.com/terwer/src-sy-post-publisher/commit/0931e269d361b0e669431eaf0cc849548487d030))
-* [#133](https://github.com/terwer/src-sy-post-publisher/issues/133) 支持Github系列-预定义平台导入 ([7eadae1](https://github.com/terwer/src-sy-post-publisher/commit/7eadae1f2b14d0d3ecbc6487c75accffcb782692))
-
-
-### Bug Fixes
-
-* [#133](https://github.com/terwer/src-sy-post-publisher/issues/133) 支持Github系列-修复Jekyll平台预览路径问题 ([07e51a7](https://github.com/terwer/src-sy-post-publisher/commit/07e51a7013abea452548da1c34f4cdcb634e7e28))
-* [#133](https://github.com/terwer/src-sy-post-publisher/issues/133) 支持Github系列-修复Markdown挂件代码未去掉问题 ([8a06125](https://github.com/terwer/src-sy-post-publisher/commit/8a061255acb033eb6dc3f368862bd96546841004))
-* [#133](https://github.com/terwer/src-sy-post-publisher/issues/133) 支持Github系列-修复YAML更改错误提示 ([f39f1f3](https://github.com/terwer/src-sy-post-publisher/commit/f39f1f3e1c8de4fb456e8c87a5f1f76567bc3608))
-* [#133](https://github.com/terwer/src-sy-post-publisher/issues/133) 支持Github系列-修复YAML格式问题 ([119e87e](https://github.com/terwer/src-sy-post-publisher/commit/119e87e4c93d8947cbd6e9634e14f13f37467325))
-* [#133](https://github.com/terwer/src-sy-post-publisher/issues/133) 支持Github系列-修复发布路径问题 ([bdfe99f](https://github.com/terwer/src-sy-post-publisher/commit/bdfe99f6dcfb9c3df0db0e61108abe2bed396216))
-* [#133](https://github.com/terwer/src-sy-post-publisher/issues/133) 支持Github系列-修复弹窗 ([d5f6579](https://github.com/terwer/src-sy-post-publisher/commit/d5f657975c9e82dbfe22b84e2bdfccc0a8cf2880))
-* [#133](https://github.com/terwer/src-sy-post-publisher/issues/133) 支持Github系列-修复日期问题 ([9f09069](https://github.com/terwer/src-sy-post-publisher/commit/9f09069123c00dec7fd8f5b6c61c01441f00660a))
-* [#133](https://github.com/terwer/src-sy-post-publisher/issues/133) 支持Github系列-修复误删除Markdown代码注释问题 ([865921f](https://github.com/terwer/src-sy-post-publisher/commit/865921f41fe693d18f082d0d8e58d2b2dd03caca))
+* [#133](https://github.com/terwer/src-sy-post-publisher/issues/133) 支持Github系列-源码模式展示方式切换 ([558950c](https://github.com/terwer/src-sy-post-publisher/commit/558950caab418456a803a22ac74f14159e5f67e3))
 * [#268](https://github.com/terwer/src-sy-post-publisher/issues/268) 直接点击发布，不生成属性，文件名会undefined ([01d3bf7](https://github.com/terwer/src-sy-post-publisher/commit/01d3bf73884d2b46c6855b71f050c7a2ce441989))
-
-
-### Miscellaneous
-
 * 优化项目说明 ([4d60d86](https://github.com/terwer/src-sy-post-publisher/commit/4d60d868b79a33581b7095d366c247a2280037e1))
 * 新增0.2.0项特性说明 ([2619353](https://github.com/terwer/src-sy-post-publisher/commit/2619353615b5f25a29292e88767b701d60bfb451))
-
 ## [0.3.0](https://github.com/terwer/src-sy-post-publisher/compare/v0.2.0...v0.3.0) (2022-12-13)
-
-
-### Features
-
-* [#133](https://github.com/terwer/src-sy-post-publisher/issues/133) 支持Github系列-源码模式展示方式切换 ([558950c](https://github.com/terwer/src-sy-post-publisher/commit/558950caab418456a803a22ac74f14159e5f67e3))
-* 组件化重构-Github pages组件 ([31353dd](https://github.com/terwer/src-sy-post-publisher/commit/31353dd56ba446c3a4418419e470ba1485e61308))
-* 组件化重构-YAML转换 ([731e324](https://github.com/terwer/src-sy-post-publisher/commit/731e32496754980ec60e40092503cb47c8bd0f3c))
-* 组件化重构-YAML转文章属性 ([8be4954](https://github.com/terwer/src-sy-post-publisher/commit/8be4954288b15b6e52b42b24f0b1ab916d3821d1))
+* 组件化重构-github pages组件 ([31353dd](https://github.com/terwer/src-sy-post-publisher/commit/31353dd56ba446c3a4418419e470ba1485e61308))
+* 组件化重构-yaml转换 ([731e324](https://github.com/terwer/src-sy-post-publisher/commit/731e32496754980ec60e40092503cb47c8bd0f3c))
+* 组件化重构-yaml转文章属性 ([8be4954](https://github.com/terwer/src-sy-post-publisher/commit/8be4954288b15b6e52b42b24f0b1ab916d3821d1))
 * 组件化重构-y优化自定义组件结构 ([5979782](https://github.com/terwer/src-sy-post-publisher/commit/5979782d2c58a97370ef62fe291e93db3204afa6))
 * 组件化重构-y优化预览规则 ([2b811e2](https://github.com/terwer/src-sy-post-publisher/commit/2b811e2092f0bb6cc9bb22c896e5687f3bc43a61))
 * 组件化重构-优化tab刷新 ([d6c01fd](https://github.com/terwer/src-sy-post-publisher/commit/d6c01fdfc54b16e68f16f9769f0bacb865a2b7ab))
@@ -529,38 +224,25 @@
 * 组件化重构-提取生成摘要组件 ([9d4d7fd](https://github.com/terwer/src-sy-post-publisher/commit/9d4d7fd8321e7b667b49b128135fbce4161b8652))
 * 组件化重构-文章取消发布 ([864a72d](https://github.com/terwer/src-sy-post-publisher/commit/864a72df14f0f510860dc5ca06fba94c68d4af14))
 * 组件化重构-文章预览规则调整 ([8b30665](https://github.com/terwer/src-sy-post-publisher/commit/8b3066596c9fb3280b53d3a6e97832ad9b7d32fb))
-* 组件化重构-新增只读模式查看YAML ([ad9ca14](https://github.com/terwer/src-sy-post-publisher/commit/ad9ca147abce58b18e62034fed97e0f151b41f76))
+* 组件化重构-新增只读模式查看yaml ([ad9ca14](https://github.com/terwer/src-sy-post-publisher/commit/ad9ca147abce58b18e62034fed97e0f151b41f76))
 * 组件化重构-新增新窗口开关 ([ef9f465](https://github.com/terwer/src-sy-post-publisher/commit/ef9f46536f9ad987c1f2e8455957b9daea8ae5b8))
 * 组件化重构-移除冗余的配置 ([6a4c72c](https://github.com/terwer/src-sy-post-publisher/commit/6a4c72c5e5d9a8ae2befb410b1bbde4ee11fc90d))
 * 组件化重构-简化操作按钮 ([b22ea25](https://github.com/terwer/src-sy-post-publisher/commit/b22ea258ef8081e57c85948057ba74e6821fd40a))
 * 组件化重构-通用设置优化 ([0e64757](https://github.com/terwer/src-sy-post-publisher/commit/0e64757815abd348e20fc6e78309f0cfe62abdd7))
 * 组件化重构-页面初始化组件提取 ([d571e87](https://github.com/terwer/src-sy-post-publisher/commit/d571e87d2f6100d16a8bf9dfc9ceb910f2893801))
-
-
-### Bug Fixes
-
 * 修复版本检测构建失败问题 ([ce0b4f6](https://github.com/terwer/src-sy-post-publisher/commit/ce0b4f6c95d985dd276876a94c9360dff30d1e12))
 * 组件化重构-修复转换未及时更新问题 ([dfbf9de](https://github.com/terwer/src-sy-post-publisher/commit/dfbf9de79e296e53c7075db0c9820c0874a624fc))
-
-
-### Miscellaneous
-
 * **deps-dev:** bump happy-dom from 7.8.1 to 8.1.0 ([9ac1e24](https://github.com/terwer/src-sy-post-publisher/commit/9ac1e24b5c744973a9f579ab7a12bf4e0cf23afe))
 * **deps-dev:** bump prettier from 2.8.0 to 2.8.1 ([82e1667](https://github.com/terwer/src-sy-post-publisher/commit/82e16678d3eb69a9cbde39607659bf8d651c3854))
-* fix imports ([862c67f](https://github.com/terwer/src-sy-post-publisher/commit/862c67ff277467f7455378c07232f7ee20e9b851))
 * 合并历史记录 ([3c94bfc](https://github.com/terwer/src-sy-post-publisher/commit/3c94bfca1089efb5188683d4938f18d2c46e11ff))
 * 思源页面数据封装 ([929d19b](https://github.com/terwer/src-sy-post-publisher/commit/929d19b737c62195e6382e263d42ad253ec198ed))
 * 组件化重构 ([6ab2504](https://github.com/terwer/src-sy-post-publisher/commit/6ab25041794a4005ef31eaa0b83e5db78d728c8d))
-* 组件化重构-FormData转YAML ([940ec77](https://github.com/terwer/src-sy-post-publisher/commit/940ec77b45234fdd29685433102ca29a514b0f99))
+* 组件化重构-formdata转yaml ([940ec77](https://github.com/terwer/src-sy-post-publisher/commit/940ec77b45234fdd29685433102ca29a514b0f99))
 * 组件化重构-抽取别名生成组件 ([b09e7a5](https://github.com/terwer/src-sy-post-publisher/commit/b09e7a5273083cb4b16e1d8e6e75c19ce0e3acb8))
 * 组件化重构-改进源码模式 ([94541df](https://github.com/terwer/src-sy-post-publisher/commit/94541df113d79d7cd8862f4fc0dc2e00c0d87db2))
 * 组件化重构-文章别名 ([69d29f1](https://github.com/terwer/src-sy-post-publisher/commit/69d29f15399eded2234d66bd34d5156912c0ad45))
 * 调整目录结构 ([cd9b0a9](https://github.com/terwer/src-sy-post-publisher/commit/cd9b0a9a84322f6c6a8b1729c853a1551b8cf090))
-
 ## [0.2.0](https://github.com/terwer/src-sy-post-publisher/compare/v0.1.0...v0.2.0) (2022-12-07)
-
-### Features
-
 - [#101](https://github.com/terwer/src-sy-post-publisher/issues/101) 代码优化以及空状态处理 ([f3444dc](https://github.com/terwer/src-sy-post-publisher/commit/f3444dc1e61135749e99a4b26d70cd1b29a4cc8b))
 - [#101](https://github.com/terwer/src-sy-post-publisher/issues/101) 错误处理 ([b19b813](https://github.com/terwer/src-sy-post-publisher/commit/b19b8137a90fbd000ec136e71ead82a2a51f88c4))
 - [#13](https://github.com/terwer/src-sy-post-publisher/issues/13) v0.0.1 发版说明 ([40a8043](https://github.com/terwer/src-sy-post-publisher/commit/40a8043c88c963a0158e9d14bf916c68e7600289))
@@ -815,13 +497,10 @@
 - release-please 集成 ([4215e0c](https://github.com/terwer/src-sy-post-publisher/commit/4215e0cfd1c3e9770b5402615b82f74282627b2d))
 - release-please 集成 ([79c0597](https://github.com/terwer/src-sy-post-publisher/commit/79c059742a82ac1e94dee80a7f19a2b33b55f039))
 - release-please 集成 ([9f8f490](https://github.com/terwer/src-sy-post-publisher/commit/9f8f490ed186ecbb814abc769f43d7708c432f7b))
-- Support Docker Dev Envoronments ([650e5e6](https://github.com/terwer/src-sy-post-publisher/commit/650e5e688c470f6af1cb74be4c73417093132532))
+- support docker dev envoronments ([650e5e6](https://github.com/terwer/src-sy-post-publisher/commit/650e5e688c470f6af1cb74be4c73417093132532))
 - unit tests ([c06b769](https://github.com/terwer/src-sy-post-publisher/commit/c06b7690c6dde07b56e25854d4904e0a9e25c1b3))
 - 自定义类型文件 ([574abed](https://github.com/terwer/src-sy-post-publisher/commit/574abed407e4b447d66abfa4772c8d0d636a5eb2))
 - 项目打包瘦身 ([db2d311](https://github.com/terwer/src-sy-post-publisher/commit/db2d3115cf17199ad74ac428c0c46f07734ce34f))
-
-### Bug Fixes
-
 - [#112](https://github.com/terwer/src-sy-post-publisher/issues/112) Chrome 公式单独渲染 ([c84971f](https://github.com/terwer/src-sy-post-publisher/commit/c84971f60d8f57f27055506ad22c06204c785bc3))
 - [#112](https://github.com/terwer/src-sy-post-publisher/issues/112) UI 持续优化 ([a99ea3a](https://github.com/terwer/src-sy-post-publisher/commit/a99ea3af3117e7905f193973cf1176b9bf1c7c04))
 - [#112](https://github.com/terwer/src-sy-post-publisher/issues/112) 优先使用落霞孤鹜字体 ([3d04f74](https://github.com/terwer/src-sy-post-publisher/commit/3d04f7414ac6de73abb351e79820fecf827f524b))
@@ -863,10 +542,7 @@
 - 发布页面样式优化 ([422a3c9](https://github.com/terwer/src-sy-post-publisher/commit/422a3c9cd6d7d3ea7c8c942b67e065cea52b6c7b))
 - 导入取消不提示错误，不打扰用户 ([0d41624](https://github.com/terwer/src-sy-post-publisher/commit/0d4162425e927e023b32fbb712d4c06998526a00))
 - 导出不刷新页面，导入成功之后才刷新页面 ([ef26986](https://github.com/terwer/src-sy-post-publisher/commit/ef26986150c02d84c35945e56d983e8ff20cdc63))
-- 添加 Window 构建脚本，优化构建体验 ([30e6d8f](https://github.com/terwer/src-sy-post-publisher/commit/30e6d8fdae7a1ef12cb2f35d68567dd1c25a6376))
-
-### Miscellaneous
-
+- 添加 window 构建脚本，优化构建体验 ([30e6d8f](https://github.com/terwer/src-sy-post-publisher/commit/30e6d8fdae7a1ef12cb2f35d68567dd1c25a6376))
 - component test ([6dd319d](https://github.com/terwer/src-sy-post-publisher/commit/6dd319d7e71b2152ffa589067e403af6301a99ea))
 - **deps-dev:** bump @vitest/coverage-c8 from 0.25.2 to 0.25.3 ([2ae763c](https://github.com/terwer/src-sy-post-publisher/commit/2ae763c0f0361cb889b4ba626af7801bfd2f4a73))
 - **deps-dev:** bump unplugin-vue-components from 0.22.9 to 0.22.11 ([0bfc0dc](https://github.com/terwer/src-sy-post-publisher/commit/0bfc0dcf5b8db73678e78b7fa4e13b09266d039c))
@@ -877,15 +553,15 @@
 - **deps-dev:** bump vue-tsc from 1.0.9 to 1.0.10 ([1ee6583](https://github.com/terwer/src-sy-post-publisher/commit/1ee658382ae6b554308c8a47cdf384d41ee6148d))
 - fix build error ([5ead9ed](https://github.com/terwer/src-sy-post-publisher/commit/5ead9ed47be6e235a09e5fe33e56bd6e9d271cc1))
 - fix build error ([6b8e4e7](https://github.com/terwer/src-sy-post-publisher/commit/6b8e4e78ad20c454e319b6ed22d2091a7054d8c8))
-- fix CHANGELOG ([dbe39e6](https://github.com/terwer/src-sy-post-publisher/commit/dbe39e65d311337d8dafd7fe5e1f32f134211871))
+- fix changelog ([dbe39e6](https://github.com/terwer/src-sy-post-publisher/commit/dbe39e65d311337d8dafd7fe5e1f32f134211871))
 - fix error ([bf03d89](https://github.com/terwer/src-sy-post-publisher/commit/bf03d89cea8a75091be882b531b614aefa32d746))
 - fix style ([305942b](https://github.com/terwer/src-sy-post-publisher/commit/305942b5e9dba28d0d57d89128176746cb21892a))
 - **main:** release 0.1.0 ([90048a5](https://github.com/terwer/src-sy-post-publisher/commit/90048a5fe5582d7a65ea571243de7e88a875fea8))
 - prettier 重构 ([eda85bb](https://github.com/terwer/src-sy-post-publisher/commit/eda85bb56fce0278bd4ef92f252b368f5fc351a1))
 - prettier 重构 ([ee7a98a](https://github.com/terwer/src-sy-post-publisher/commit/ee7a98af77cf02f330128936f20a39d9510eef66))
-- prettier 重构-Update Copyright ([a493a5f](https://github.com/terwer/src-sy-post-publisher/commit/a493a5fe8dc9aaaa33af0f7dead16827c197ed7a))
-- prettier 重构-Update Copyright ([b38902b](https://github.com/terwer/src-sy-post-publisher/commit/b38902b241388f0372288e3baefd109cd40e4a61))
-- prettier 重构-Update Copyright ([7c9c2c0](https://github.com/terwer/src-sy-post-publisher/commit/7c9c2c01d5b72dcecebbeeefb47ecf82df54ce68))
+- prettier 重构-update copyright ([a493a5f](https://github.com/terwer/src-sy-post-publisher/commit/a493a5fe8dc9aaaa33af0f7dead16827c197ed7a))
+- prettier 重构-update copyright ([b38902b](https://github.com/terwer/src-sy-post-publisher/commit/b38902b241388f0372288e3baefd109cd40e4a61))
+- prettier 重构-update copyright ([7c9c2c0](https://github.com/terwer/src-sy-post-publisher/commit/7c9c2c01d5b72dcecebbeeefb47ecf82df54ce68))
 - prettier 重构-使用 loglevel 重构日志框架 ([39a9a48](https://github.com/terwer/src-sy-post-publisher/commit/39a9a489420d88b21a66a23352f59766ca4ce4df))
 - prettier 重构-公共方法测试 ([0b9ca89](https://github.com/terwer/src-sy-post-publisher/commit/0b9ca89819febc807472a31efc2472eedc6f584d))
 - prettier 重构-挂载 app 测试 ([b411bb3](https://github.com/terwer/src-sy-post-publisher/commit/b411bb38822a0bf12579cd5561e073c50d13672b))
@@ -906,12 +582,12 @@
 - 灰色模式 ([81c1f13](https://github.com/terwer/src-sy-post-publisher/commit/81c1f13934c857fb8d63c045f3d650782bfad703))
 - 集成 jsdoc 和 better-docs ([44bf3f5](https://github.com/terwer/src-sy-post-publisher/commit/44bf3f58f0a834e9a18b8502a91d6797cbaf8a5b))
 - 集成 jsdoc 和 better-docs ([e20aa7e](https://github.com/terwer/src-sy-post-publisher/commit/e20aa7ed50fb272df21736985f10f54b7df6fc3d))
-- 项目重构-pageId 优先级修复 ([762ef30](https://github.com/terwer/src-sy-post-publisher/commit/762ef30d72a7e3abd38b517111ff461c5b177e72))
+- 项目重构-pageid 优先级修复 ([762ef30](https://github.com/terwer/src-sy-post-publisher/commit/762ef30d72a7e3abd38b517111ff461c5b177e72))
 - 项目重构-yaml 解析 ([6595ef8](https://github.com/terwer/src-sy-post-publisher/commit/6595ef8865c19f36884501222218d1c8123979b5))
 - 项目重构-优化构建脚本，修复错误 ([ff01c2a](https://github.com/terwer/src-sy-post-publisher/commit/ff01c2a8d16fdb874d90ad3507c257e0b240c4e2))
 - 项目重构-动态平台 ([b2d3a61](https://github.com/terwer/src-sy-post-publisher/commit/b2d3a616c855ea241fa5cbdce63787fb5103a7e9))
-- 项目重构-发布平台 API 整合 ([5dd04e4](https://github.com/terwer/src-sy-post-publisher/commit/5dd04e4a8a5d8fc2ad3b92557e027d1d4f86f2e0))
-- 项目重构-发布平台 API 重构 ([95bf6ac](https://github.com/terwer/src-sy-post-publisher/commit/95bf6ac464272c75957601924dd2e18ac0223f3a))
+- 项目重构-发布平台 api 整合 ([5dd04e4](https://github.com/terwer/src-sy-post-publisher/commit/5dd04e4a8a5d8fc2ad3b92557e027d1d4f86f2e0))
+- 项目重构-发布平台 api 重构 ([95bf6ac](https://github.com/terwer/src-sy-post-publisher/commit/95bf6ac464272c75957601924dd2e18ac0223f3a))
 - 项目重构-发布平台配置 ([8c88b01](https://github.com/terwer/src-sy-post-publisher/commit/8c88b0152c10c270d0f1bb08ed7a1289be57199a))
 - 项目重构-发布页面重构 ([9f8c750](https://github.com/terwer/src-sy-post-publisher/commit/9f8c750c7ab05ca84fe996789cda637cfd754322))
 - 项目重构-平台开关 ([ce6dd47](https://github.com/terwer/src-sy-post-publisher/commit/ce6dd4700d86045d298d257d08cf58eef69873d6))
@@ -922,6 +598,6 @@
 - 项目重构-版本号与暗黑模式切换样式 ([d09634e](https://github.com/terwer/src-sy-post-publisher/commit/d09634e1ed88e1c835a1d2baac01b4eb286f314a))
 - 项目重构-语言设置 ([aeb3181](https://github.com/terwer/src-sy-post-publisher/commit/aeb3181268695fb0bc264db0eefea8603b915e22))
 - 项目重构-请求代理重构 ([8638e14](https://github.com/terwer/src-sy-post-publisher/commit/8638e1491acfde695ebd35fbfb72eb809e65d3ef))
-- 项目重构-调整 Markdown 渲染库 ([8e1bf98](https://github.com/terwer/src-sy-post-publisher/commit/8e1bf9854f384bdfb922852a4cd8c1a3ff705b6a))
+- 项目重构-调整 markdown 渲染库 ([8e1bf98](https://github.com/terwer/src-sy-post-publisher/commit/8e1bf9854f384bdfb922852a4cd8c1a3ff705b6a))
 - 项目重构-重构图片解析器 ([a0fd062](https://github.com/terwer/src-sy-post-publisher/commit/a0fd062af0c200f35b5fc5cbcd9649cb2ab860fd))
 - 项目重构-页面适配 ([043236d](https://github.com/terwer/src-sy-post-publisher/commit/043236d3162b09ff420700f9aa70e1b817d3e869))

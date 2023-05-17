@@ -1,50 +1,30 @@
 {
-  "name": "siyuan-plugin-publisher",
+  "name": "siyuan-plugin-importer",
   "version": "0.8.0",
   "type": "module",
-  "description": "Publishing articles from siyuan-note to platforms such as Yuque, Cnblogs, WordPress, Typecho, HUGO, HEXO, etc.",
-  "private": true,
-  "workspaces": [
-    "libs/*",
-    "apps/*",
-    "plugins/*"
-  ],
+  "description": "Import from epub, docx, html etc. to siyuan-note",
+  "repository": "terwer/siyuan-plugin-importer",
+  "homepage": "https://github.com/terwer/siyuan-plugin-importer",
+  "author": "terwer",
+  "license": "MIT",
   "scripts": {
-    "serve": "turbo run serve",
-    "dev": "turbo run dev",
-    "build": "turbo run build",
-    "dockerBuild": "turbo run dockerBuild",
-    "vercelBuild": "turbo run vercelBuild",
-    "siyuanBuild": "turbo run siyuanBuild",
-    "syncVersion": "ts-node-esm --experimental-specifier-resolution=node tools/syncVersion.ts",
-    "parseChangelog": "ts-node-esm --experimental-specifier-resolution=node tools/changelogParser.ts",
+    "serve": "vite",
+    "dev": "vite build --watch",
+    "build": "vite build",
+    "start": "vite preview",
+    "test": "vitest --watch",
+    "syncVersion": "python scripts/version.py",
+    "parseChangelog": "python scripts/parse_changelog.py",
     "prepareRelease": "pnpm syncVersion && pnpm parseChangelog",
-    "package": "ts-node-esm --experimental-specifier-resolution=node tools/packageApp.ts",
-    "test": "turbo run test",
-    "start": "turbo run start",
-    "lint": "turbo run lint",
-    "graph": " turbo run build --graph=dependency-graph.png",
-    "prepare": "is-ci || husky install",
-    "cz": "git-cz"
-  },
-  "config": {
-    "commitizen": {
-      "path": "@commitlint/cz-commitlint"
-    }
+    "package": "python scripts/package.py"
   },
   "devDependencies": {
-    "@terwer/changelog-parser": "^1.1.0",
-    "@terwer/commit-config-custom": "latest",
-    "@terwer/eslint-config-custom": "latest",
-    "archiver": "^5.3.1",
-    "execa": "^7.1.1",
-    "turbo": "^1.9.4"
-  },
-  "engines": {
-    "node": ">=16.0.0"
-  },
-  "packageManager": "pnpm@8.1.1",
-  "repository": "terwer/siyuan-plugin-publisher",
-  "homepage": "https://terwer.space",
-  "author": "terwer"
+    "@sveltejs/vite-plugin-svelte": "^2.0.3",
+    "@terwer/eslint-config-custom": "^1.2.0",
+    "@terwer/vite-config-custom": "^0.6.0",
+    "@tsconfig/svelte": "^4.0.1",
+    "siyuan": "^0.7.1",
+    "stylus": "^0.59.0",
+    "svelte": "^3.57.0"
+  }
 }

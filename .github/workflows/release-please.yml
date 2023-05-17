@@ -80,8 +80,13 @@ jobs:
         run: |
           pnpm prepareRelease
 
-      # Build for production and Archive package
+      # Build for production
       - name: Build for production
+        if: ${{ steps.release.outputs.release_created }}
+        run: pnpm build
+
+      # Archive package
+      - name: Archive package
         if: ${{ steps.release.outputs.release_created }}
         run: pnpm package
 
@@ -92,6 +97,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
+          ls -l ./build
           for f in $(find ./build -name '*.zip'); do
             gh release upload ${{ steps.release.outputs.tag_name }} $f
           done

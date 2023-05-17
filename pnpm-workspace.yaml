@@ -1,4 +1,0 @@
-packages:
-  - "libs/*"     # libraries
-  - "apps/*"     # apps
-  - "plugins/*"  # plugins
