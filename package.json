@@ -23,8 +23,17 @@
     "@terwer/eslint-config-custom": "^1.2.0",
     "@terwer/vite-config-custom": "^0.6.0",
     "@tsconfig/svelte": "^4.0.1",
+    "@types/node": "16",
+    "fast-glob": "^3.2.12",
+    "glob": "^7.2.3",
+    "minimist": "^1.2.8",
+    "rollup-plugin-livereload": "^2.0.5",
     "siyuan": "^0.7.1",
     "stylus": "^0.59.0",
-    "svelte": "^3.57.0"
+    "svelte": "^3.57.0",
+    "ts-node": "^10.9.1",
+    "vite": "^4.3.7",
+    "vite-plugin-static-copy": "^0.15.0",
+    "vitest": "^0.31.1"
   }
 }

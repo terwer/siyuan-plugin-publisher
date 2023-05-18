@@ -6,6 +6,7 @@ import minimist from "minimist"
 import { viteStaticCopy } from "vite-plugin-static-copy"
 import livereload from "rollup-plugin-livereload"
 import { svelte } from "@sveltejs/vite-plugin-svelte"
+import fg from "fast-glob"
 
 const args = minimist(process.argv.slice(2))
 const isWatch = args.watch || args.w || false
@@ -71,11 +72,27 @@ export default defineConfig({
       formats: ["cjs"],
     },
     rollupOptions: {
-      plugins: [...(isWatch ? [livereload(devDistDir)] : [])] as Plugin[],
+      plugins: [
+        ...(isWatch
+          ? [
+              livereload(devDistDir),
+              {
+                //监听静态资源文件
+                name: "watch-external",
+                async buildStart() {
+                  const files = await fg(["src/i18n/*.json", "./README*.md", "./plugin.json"])
+                  for (const file of files) {
+                    this.addWatchFile(file)
+                  }
+                },
+              },
+            ]
+          : []),
+      ] as Plugin[],
 
       // make sure to externalize deps that shouldn't be bundled
       // into your library
-      external: ["siyuan", "process","/plugins/siyuan-publisher/iife/zhi-device/index.iife.js"],
+      external: ["siyuan", "process", "/plugins/siyuan-publisher/iife/zhi-device/index.iife.js"],
 
       output: {
         entryFileNames: "[name].js",
