@@ -37,7 +37,11 @@
       "node",
       "vite/client",
       "svelte"
-    ]
+    ],
+
+    "paths": {
+      "~/*": ["./*"]
+    }
   },
   "include": [
     "tools/**/*.ts",

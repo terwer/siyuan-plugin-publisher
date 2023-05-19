@@ -33,6 +33,7 @@
     "svelte": "^3.57.0",
     "ts-node": "^10.9.1",
     "vite": "^4.3.7",
+    "vite-plugin-dynamic-import": "^1.4.0",
     "vite-plugin-static-copy": "^0.15.0",
     "vitest": "^0.31.1"
   }

@@ -7,6 +7,9 @@ import { viteStaticCopy } from "vite-plugin-static-copy"
 import livereload from "rollup-plugin-livereload"
 import { svelte } from "@sveltejs/vite-plugin-svelte"
 import fg from "fast-glob"
+import path from "path"
+import dynamicImport from "vite-plugin-dynamic-import"
+import noBundlePlugin from "vite-plugin-no-bundle"
 
 const args = minimist(process.argv.slice(2))
 const isWatch = args.watch || args.w || false
@@ -40,6 +43,9 @@ export default defineConfig({
         },
       ],
     }),
+
+    noBundlePlugin(),
+    dynamicImport(/* options */),
   ],
 
   // https://github.com/vitejs/vite/issues/1930
@@ -48,6 +54,14 @@ export default defineConfig({
   // 在这里自定义变量
   define: {
     "process.env.DEV_MODE": `"${isWatch}"`,
+  },
+
+  resolve: {
+    alias: {
+      "~": path.resolve(__dirname, "./"),
+      "zhi-device": "/plugins/siyuan-publisher/libs/zhi-device/index.cjs",
+      "zhi-env": "/plugins/siyuan-publisher/libs/zhi-env/index.js",
+    },
   },
 
   build: {
@@ -62,7 +76,7 @@ export default defineConfig({
     // 或是用来指定是应用哪种混淆器
     // boolean | 'terser' | 'esbuild'
     // 不压缩，用于调试
-    minify: isWatch,
+    minify: !isWatch,
 
     lib: {
       // Could also be a dictionary or array of multiple entry points
@@ -92,7 +106,7 @@ export default defineConfig({
 
       // make sure to externalize deps that shouldn't be bundled
       // into your library
-      external: ["siyuan", "process", "/plugins/siyuan-publisher/iife/zhi-device/index.iife.js"],
+      external: ["siyuan", "process", "zhi-device", "zhi-env"],
 
       output: {
         entryFileNames: "[name].js",
