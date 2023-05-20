@@ -26,14 +26,26 @@ export default class PublisherPlugin extends Plugin {
     ZhiCommon
     ZhiUtil
   }
-  public zhiBlogApi
-  public zhiSiyuanApi
   public zhiElectron
+  public zhiBlogApi: {
+    BlogConstants
+    BlogTypeEnum
+    BlogApi
+  }
+  public zhiSiyuanApi: {
+    SiyuanConstants
+    SiyuanConfig
+    SiYuanApiAdaptor
+  }
+  public zhiPublisherSdk: {
+    PublishSdk
+  }
 
   // 初始化常用工具类
-  private env
+  // private env
   private logger
-  private common
+  // private common
+  private blogApi
 
   // lifecycle
   async onload() {
@@ -41,11 +53,14 @@ export default class PublisherPlugin extends Plugin {
     await initLibs(this)
 
     // 初始化常用工具类
-    this.env = Utils.zhiEnv(this)
-    this.logger = Utils.zhiLog(this, "publisher-index")
-    this.common = Utils.zhiCommon(this)
+    await this.initUtils()
+
+    // 业务逻辑
+    const posts = await this.blogApi.getRecentPosts(10)
+    this.logger.info("siyuan recent post=>", posts)
 
     // 初始化菜单按钮
+    // TODO
 
     this.logger.info(this.i18n.publisherLoaded)
   }
@@ -57,4 +72,23 @@ export default class PublisherPlugin extends Plugin {
   // ======================
   // private functions
   // ======================
+  private async initUtils() {
+    // this.env = Utils.zhiEnv(this)
+    this.logger = Utils.zhiLog(this, "publisher-index")
+    // this.common = Utils.zhiCommon(this)
+
+    // blogApi
+    const publishSdk = this.zhiPublisherSdk.PublishSdk
+    publishSdk.init({
+      Env: this.zhiEnv.Env,
+      BlogConstants: this.zhiBlogApi.BlogConstants,
+      BlogTypeEnum: this.zhiBlogApi.BlogTypeEnum,
+      SiyuanConstants: this.zhiSiyuanApi.SiyuanConstants,
+      SiyuanConfig: this.zhiSiyuanApi.SiyuanConfig,
+      SiYuanApiAdaptor: this.zhiSiyuanApi.SiYuanApiAdaptor,
+      BlogApi: this.zhiBlogApi.BlogApi,
+    })
+    const cfg = new this.zhiSiyuanApi.SiyuanConfig("", "")
+    this.blogApi = publishSdk.blogApi(this.zhiBlogApi.BlogTypeEnum.BlogTypeEnum_Siyuan, cfg)
+  }
 }

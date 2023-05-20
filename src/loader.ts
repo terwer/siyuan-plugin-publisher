@@ -39,4 +39,26 @@ export const initLibs = async (pluginInstance: PublisherPlugin) => {
     ZhiCommon: zhiCommon["ZhiCommon"],
     ZhiUtil: zhiCommon["ZhiUtil"],
   }
+
+  // zhi-blog-api
+  const zhiBlogApi = (await pluginInstance.importDep("./libs/zhi-blog-api/index.js")) as any
+  pluginInstance.zhiBlogApi = {
+    BlogConstants: zhiBlogApi["BlogConstants"],
+    BlogTypeEnum: zhiBlogApi["BlogTypeEnum"],
+    BlogApi: zhiBlogApi["BlogApi"],
+  }
+
+  // zhi-siyuan-api
+  const zhiSiyuanApi = (await pluginInstance.importDep("./libs/zhi-siyuan-api/index.js")) as any
+  pluginInstance.zhiSiyuanApi = {
+    SiyuanConstants: zhiSiyuanApi["SiyuanConstants"],
+    SiyuanConfig: zhiSiyuanApi["SiyuanConfig"],
+    SiYuanApiAdaptor: zhiSiyuanApi["SiYuanApiAdaptor"],
+  }
+
+  // zhi-publisher-sdk
+  const zhiPublisherSdk = (await pluginInstance.importDep("./libs/zhi-publisher-sdk/index.js")) as any
+  pluginInstance.zhiPublisherSdk = {
+    PublishSdk: zhiPublisherSdk["PublishSdk"],
+  }
 }
