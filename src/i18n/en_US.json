@@ -1,5 +1,7 @@
 {
-  "publishTool": "Publisher",
+  "publisher": "Publisher",
+  "publisherLoaded": "Importer loaded",
+  "publisherUnloaded": "Importer unloaded",
   "publish": "Publish",
   "picbed": "Upload picture to picbed",
   "setting": "Setting",

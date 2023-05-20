@@ -18,7 +18,7 @@ export class Utils {
   public static zhiEnv(pluginInstance: PublisherPlugin) {
     if (!this.env) {
       // 环境变量需要在使用的时候显式指定
-      this.env = new pluginInstance.zhiEnv.Env(process.env)
+      this.env = new pluginInstance.zhiEnv.Env(import.meta.env)
     }
     return this.env
   }
@@ -34,7 +34,7 @@ export class Utils {
     pluginInstance.zhiCommon.ZhiUtil.initEnv(env)
 
     // 用 common 里面的，这里面我封装了日志缓存
-    return pluginInstance.zhiCommon.ZhiUtil.zhiLog(loggerName)
+    return pluginInstance.zhiCommon.ZhiUtil.zhiLogWithSign("publisher", loggerName)
   }
 
   /**

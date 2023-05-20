@@ -46,7 +46,12 @@ export default class PublisherPlugin extends Plugin {
     this.common = Utils.zhiCommon(this)
 
     // 初始化菜单按钮
-    this.logger.info("publisher loaded")
+
+    this.logger.info(this.i18n.publisherLoaded)
+  }
+
+  async onunload() {
+    this.logger.info(this.i18n.publisherUnloaded)
   }
 
   // ======================

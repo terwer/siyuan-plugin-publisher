@@ -1,5 +1,7 @@
 {
-  "publishTool": "发布工具",
+  "publisher": "发布工具",
+  "publisherLoaded": "发布工具已加载",
+  "publisherUnloaded": "发布工具已卸载",
   "publish": "发布",
   "picbed": "上传图片到图床",
   "setting": "设置",
