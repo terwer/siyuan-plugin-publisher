@@ -1,9 +1,12 @@
-import { isMobile, Menu, Plugin } from "siyuan"
+import { Dialog, isMobile, Menu, Plugin } from "siyuan"
 import "./index.styl"
 import { initLibs } from "~/src/loader"
 import { initTools } from "~/src/tools"
 import iconPublish from "~/src/utils/svg"
-import { Utils } from "~/src/utils/utils";
+import { Utils } from "~/src/utils/utils"
+import HtmlUtils from "~/src/utils/htmlUtils"
+import PageUtil from "~/src/utils/pageUtil"
+import { Page } from "~/src/constants"
 
 export default class PublisherPlugin extends Plugin {
   public fs
@@ -70,6 +73,10 @@ export default class PublisherPlugin extends Plugin {
     this.logger.info(this.i18n.publisherUnloaded)
   }
 
+  public openSetting() {
+    this.showSettingDialog()
+  }
+
   // ======================
   // private functions
   // ======================
@@ -110,21 +117,22 @@ export default class PublisherPlugin extends Plugin {
           label: this.i18n.platformTypecho,
           disabled: true,
           click: () => {
-            this.logger.debug("发布到Typecho")
+            this.logger.info("发布到Typecho")
           },
         },
         {
           iconHTML: iconPublish.iconWordpress,
           label: this.i18n.platformWordpress,
           click: () => {
-            this.logger.debug("发布到WordPress")
+            this.showPublisherDialog()
+            this.logger.info("发布到WordPress")
           },
         },
         {
           iconHTML: iconPublish.iconYuque,
           label: this.i18n.platformYuque,
           click: () => {
-            this.logger.debug("发布到语雀")
+            this.logger.info("发布到语雀")
           },
         },
         {
@@ -135,21 +143,21 @@ export default class PublisherPlugin extends Plugin {
               iconHTML: iconPublish.iconHexo,
               label: this.i18n.platformHexo,
               click: () => {
-                this.logger.debug("发布到Hexo")
+                this.logger.info("发布到Hexo")
               },
             },
             {
               iconHTML: iconPublish.iconHugo,
               label: this.i18n.platformHugo,
               click: () => {
-                this.logger.debug("发布到Hugo")
+                this.logger.info("发布到Hugo")
               },
             },
             {
               iconHTML: iconPublish.iconVue,
               label: this.i18n.platformVitepress,
               click: () => {
-                this.logger.debug("发布到Vitepress")
+                this.logger.info("发布到Vitepress")
               },
             },
           ],
@@ -162,7 +170,9 @@ export default class PublisherPlugin extends Plugin {
     menu.addItem({
       iconHTML: iconPublish.iconPicture,
       label: this.i18n.picbed,
-      // click: () => {},
+      click: () => {
+        this.showPicbedDialog()
+      },
     })
 
     // 设置
@@ -170,7 +180,9 @@ export default class PublisherPlugin extends Plugin {
     menu.addItem({
       icon: "iconSettings",
       label: this.i18n.setting,
-      // click: () => {},
+      click: () => {
+        this.showSettingDialog()
+      },
       submenu: [
         {
           iconHTML: iconPublish.iconPreference,
@@ -189,18 +201,18 @@ export default class PublisherPlugin extends Plugin {
     })
 
     // 当前文档ID
-    // const pageId = PageUtil.getPageId()
+    const pageId = PageUtil.getPageId()
     menu.addSeparator()
     menu.addItem({
       iconHTML: iconPublish.iconOl,
       label: this.i18n.copyPageId,
       click: async () => {
-        // await HtmlUtils.copyToClipboard(pageId)
-        // this.kernelApi.pushMsg({
+        await HtmlUtils.copyToClipboard(pageId)
+        // this.zhiSiyuanApi.kernelApi.pushMsg({
         //   msg: `当前文档ID已复制=>${pageId}`,
         //   timeout: 3000,
         // })
-        // this.logger.info("当前文档ID已复制", pageId)
+        this.logger.info("当前文档ID已复制", pageId)
       },
     })
 
@@ -221,5 +233,38 @@ export default class PublisherPlugin extends Plugin {
         isLeft: true,
       })
     }
+  }
+
+  private showSettingDialog() {
+    new Dialog({
+      title: `${this.i18n.setting} - ${this.i18n.publisher}`,
+      content: `<div id="${PageUtil.getElementId(Page.Setting)}"></div>`,
+      width: isMobile() ? "92vw" : "520px",
+    })
+
+    // setting
+    PageUtil.createApp(Page.Setting)
+  }
+
+  private showPublisherDialog() {
+    new Dialog({
+      title: `${this.i18n.setting} - ${this.i18n.publisher}`,
+      content: `<div id="${PageUtil.getElementId(Page.Publish)}"></div>`,
+      width: isMobile() ? "92vw" : "520px",
+    })
+
+    // setting
+    PageUtil.createApp(Page.Publish)
+  }
+
+  private showPicbedDialog() {
+    new Dialog({
+      title: `${this.i18n.picbed} - ${this.i18n.publisher}`,
+      content: `<div id="${PageUtil.getElementId(Page.Picbed)}"></div>`,
+      width: isMobile() ? "92vw" : "520px",
+    })
+
+    // setting
+    PageUtil.createApp(Page.Picbed)
   }
 }

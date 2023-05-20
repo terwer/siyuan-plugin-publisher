@@ -37,6 +37,9 @@ devDependencies:
   svelte:
     specifier: ^3.57.0
     version: 3.57.0
+  svelte-routing:
+    specifier: ^1.8.9
+    version: 1.8.9
   ts-node:
     specifier: ^10.9.1
     version: 10.9.1(@types/node@16.0.0)(typescript@5.0.4)
@@ -2769,6 +2772,10 @@ packages:
       svelte: '>=3.19.0'
     dependencies:
       svelte: 3.57.0
+    dev: true
+
+  /svelte-routing@1.8.9:
+    resolution: {integrity: sha512-4+J1F57sKkI5+d5nhCQs2ChPo9tn0gIFqFaA38c+yNYZ5UzsGq80mCVA2E0tqPtkO2VzZTJD0Lw2P8N3Z/068g==}
     dev: true
 
   /svelte@3.57.0:
