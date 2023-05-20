@@ -16,7 +16,11 @@ export default class PublisherPlugin extends Plugin {
   public zhiEnv: {
     Env
   }
-  public zhiLog
+  public zhiLog: {
+    LogFactory
+    DefaultLogger
+    crossChalk
+  }
   public zhiCommon
   public zhiBlogApi
   public zhiSiyuanApi
@@ -31,6 +35,7 @@ export default class PublisherPlugin extends Plugin {
     console.log(this.zhiDevice.DeviceDetection.getDevice())
     console.log(this.zhiDevice.DeviceTypeEnum)
     console.log(this.zhiEnv.Env)
+    console.log(this.zhiLog.LogFactory)
   }
 
   // ======================

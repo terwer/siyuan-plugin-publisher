@@ -19,8 +19,17 @@ export const initLibs = async (pluginInstance: PublisherPlugin) => {
     DeviceTypeEnum: zhiDevice["DeviceTypeEnum"],
   }
 
+  // zhi-env
   const zhiEnv = (await pluginInstance.importDep("./libs/zhi-env/index.js")) as any
   pluginInstance.zhiEnv = {
     Env: zhiEnv["Env"],
+  }
+
+  // zhi-log
+  const zhiLog = (await pluginInstance.importDep("./libs/zhi-log/index.js")) as any
+  pluginInstance.zhiLog = {
+    LogFactory: zhiLog["LogFactory"],
+    DefaultLogger: zhiLog["DefaultLogger"],
+    crossChalk: zhiLog["crossChalk"],
   }
 }
