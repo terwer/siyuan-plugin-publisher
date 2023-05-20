@@ -32,4 +32,11 @@ export const initLibs = async (pluginInstance: PublisherPlugin) => {
     DefaultLogger: zhiLog["DefaultLogger"],
     crossChalk: zhiLog["crossChalk"],
   }
+
+  // zhi-common
+  const zhiCommon = (await pluginInstance.importDep("./libs/zhi-common/index.js")) as any
+  pluginInstance.zhiCommon = {
+    ZhiCommon: zhiCommon["ZhiCommon"],
+    ZhiUtil: zhiCommon["ZhiUtil"],
+  }
 }

@@ -1,6 +1,7 @@
 import { Plugin } from "siyuan"
 import "./index.styl"
 import { initLibs } from "~/src/loader"
+import { Utils } from "~/src/utils/utils"
 
 export default class PublisherPlugin extends Plugin {
   public fs
@@ -21,21 +22,31 @@ export default class PublisherPlugin extends Plugin {
     DefaultLogger
     crossChalk
   }
-  public zhiCommon
+  public zhiCommon: {
+    ZhiCommon
+    ZhiUtil
+  }
   public zhiBlogApi
   public zhiSiyuanApi
   public zhiElectron
+
+  // 初始化常用工具类
+  private env
+  private logger
+  private common
 
   // lifecycle
   async onload() {
     // 初始化基础类库
     await initLibs(this)
 
+    // 初始化常用工具类
+    this.env = Utils.zhiEnv(this)
+    this.logger = Utils.zhiLog(this, "publisher-index")
+    this.common = Utils.zhiCommon(this)
+
     // 初始化菜单按钮
-    console.log(this.zhiDevice.DeviceDetection.getDevice())
-    console.log(this.zhiDevice.DeviceTypeEnum)
-    console.log(this.zhiEnv.Env)
-    console.log(this.zhiLog.LogFactory)
+    this.logger.info("publisher loaded")
   }
 
   // ======================

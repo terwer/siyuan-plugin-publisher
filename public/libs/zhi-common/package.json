@@ -1,0 +1,41 @@
+{
+  "name": "zhi-common",
+  "version": "1.5.3",
+  "type": "module",
+  "description": "a collection of util tools",
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
+  "repository": "terwer/zhi",
+  "homepage": "https://github.com/terwer/zhi/tree/main/libs/zhi-common",
+  "author": "terwer",
+  "license": "GPL",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "keywords": [
+    "zhi",
+    "lib"
+  ],
+  "scripts": {
+    "serve": "vite",
+    "dev": "vite build --watch",
+    "build": "vite build",
+    "start": "vite preview",
+    "test": "vitest --watch"
+  },
+  "devDependencies": {
+    "@terwer/eslint-config-custom": "workspace:*",
+    "@terwer/tsconfig": "workspace:*",
+    "@terwer/vite-config-custom": "workspace:*",
+    "@types/showdown": "^2.0.1"
+  },
+  "dependencies": {
+    "ajv": "^8.12.0",
+    "compare-versions": "5.0.3",
+    "showdown": "^2.1.0",
+    "zhi-device": "workspace:*",
+    "zhi-env": "workspace:*",
+    "zhi-log": "workspace:*"
+  }
+}
