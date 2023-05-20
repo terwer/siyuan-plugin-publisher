@@ -39,7 +39,7 @@ declare module "siyuan" {
         sid: string
     }
 
-    declare interface IPluginDockTab {
+     interface IPluginDockTab {
         position: "LeftTop" | "LeftBottom" | "RightTop" | "RightBottom" | "BottomLeft" | "BottomRight",
         size: { width: number, height: number },
         icon: string,
