@@ -8,8 +8,14 @@ export default class PublisherPlugin extends Plugin {
   public importDep: (moduleName: any) => Promise<any>
 
   // 基础类库
-  public zhiDevice
-  public zhiEnv
+  public zhiDevice: {
+    DeviceDetection
+    SiyuanDevice
+    DeviceTypeEnum
+  }
+  public zhiEnv: {
+    Env
+  }
   public zhiLog
   public zhiCommon
   public zhiBlogApi
@@ -20,6 +26,11 @@ export default class PublisherPlugin extends Plugin {
   async onload() {
     // 初始化基础类库
     await initLibs(this)
+
+    // 初始化菜单按钮
+    console.log(this.zhiDevice.DeviceDetection.getDevice())
+    console.log(this.zhiDevice.DeviceTypeEnum)
+    console.log(this.zhiEnv.Env)
   }
 
   // ======================
