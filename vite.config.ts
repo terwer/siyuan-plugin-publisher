@@ -1,15 +1,12 @@
 /// <reference types="vitest" />
 
-import { resolve } from "path"
-import { defineConfig, loadEnv } from "vite"
+import path, { resolve } from "path"
+import { defineConfig } from "vite"
 import minimist from "minimist"
 import { viteStaticCopy } from "vite-plugin-static-copy"
 import livereload from "rollup-plugin-livereload"
 import { svelte } from "@sveltejs/vite-plugin-svelte"
 import fg from "fast-glob"
-import path from "path"
-import dynamicImport from "vite-plugin-dynamic-import"
-import noBundlePlugin from "vite-plugin-no-bundle"
 
 const args = minimist(process.argv.slice(2))
 const isWatch = args.watch || args.w || false
@@ -43,9 +40,6 @@ export default defineConfig({
         },
       ],
     }),
-
-    noBundlePlugin(),
-    dynamicImport(/* options */),
   ],
 
   // https://github.com/vitejs/vite/issues/1930
@@ -59,8 +53,6 @@ export default defineConfig({
   resolve: {
     alias: {
       "~": path.resolve(__dirname, "./"),
-      "zhi-device": "/plugins/siyuan-publisher/libs/zhi-device/index.cjs",
-      "zhi-env": "/plugins/siyuan-publisher/libs/zhi-env/index.js",
     },
   },
 
@@ -106,7 +98,7 @@ export default defineConfig({
 
       // make sure to externalize deps that shouldn't be bundled
       // into your library
-      external: ["siyuan", "process", "zhi-device", "zhi-env"],
+      external: ["siyuan", "process"],
 
       output: {
         entryFileNames: "[name].js",

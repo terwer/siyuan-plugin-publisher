@@ -1,22 +1,28 @@
 import { Plugin } from "siyuan"
 import "./index.styl"
+import { initLibs } from "~/src/loader"
 
-export default class PublishToolPlugin extends Plugin {
+export default class PublisherPlugin extends Plugin {
+  public fs
+  public path
+  public importDep: (moduleName: any) => Promise<any>
+
+  // 基础类库
+  public zhiDevice
+  public zhiEnv
+  public zhiLog
+  public zhiCommon
+  public zhiBlogApi
+  public zhiSiyuanApi
+  public zhiElectron
+
   // lifecycle
   async onload() {
-    await this._initZhiLibs()
-    console.log(`Publisher loaded at ${new Date().getTime()}`)
-  }
-
-  async onunload() {
-    console.log("Publisher unloaded")
+    // 初始化基础类库
+    await initLibs(this)
   }
 
   // ======================
   // private functions
   // ======================
-  private async _initZhiLibs() {
-    // const zhiDevice = await import("~/public/libs/zhi-device/index.cjs" as any)
-    // console.log("zhiDevice=>", zhiDevice)
-  }
 }

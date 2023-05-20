@@ -47,6 +47,7 @@
     "tools/**/*.ts",
     "src/**/*.ts",
     "src/**/*.d.ts",
+    "public/**/*.d.ts",
     "src/**/*.tsx",
     "src/**/*.vue"
   ],
