@@ -9,8 +9,8 @@ import SiyuanConfig from "./siyuanConfig";
  * @since 1.0.0
  */
 declare class SiYuanApiAdaptor implements IBlogApi {
-    private readonly logger;
-    private readonly common;
+    private logger;
+    private common;
     private readonly siyuanKernelApi;
     private readonly cfg;
     /**
@@ -19,6 +19,7 @@ declare class SiYuanApiAdaptor implements IBlogApi {
      * @param cfg - 环境变量 或者 配置项
      */
     constructor(cfg: Env | SiyuanConfig);
+    init(appInstance: any): void;
     deletePost(postid: string): Promise<boolean>;
     editPost(postid: string, post: Post, publish?: boolean): Promise<boolean>;
     getCategories(): Promise<CategoryInfo[]>;

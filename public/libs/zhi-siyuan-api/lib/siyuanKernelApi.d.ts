@@ -21,9 +21,9 @@ declare class SiyuanKernelApi implements ISiyuanKernelApi {
      * 思源笔记服务端API版本号
      */
     readonly VERSION: string;
-    private readonly logger;
-    private readonly env;
-    private readonly common;
+    private logger;
+    private env;
+    private common;
     readonly siyuanConfig: SiyuanConfig;
     /**
      * 初始化思源服务端 API
@@ -31,6 +31,7 @@ declare class SiyuanKernelApi implements ISiyuanKernelApi {
      * @param cfg - 环境变量 或者 配置项
      */
     constructor(cfg: Env | SiyuanConfig);
+    init(appInstance: any): void;
     /**
      * 分页获取根文档
      *

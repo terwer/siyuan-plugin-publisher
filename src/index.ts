@@ -1,7 +1,7 @@
 import { Plugin } from "siyuan"
 import "./index.styl"
 import { initLibs } from "~/src/loader"
-import { Utils } from "~/src/utils/utils"
+import { initTools } from "~/src/tools"
 
 export default class PublisherPlugin extends Plugin {
   public fs
@@ -26,7 +26,7 @@ export default class PublisherPlugin extends Plugin {
     ZhiCommon
     ZhiUtil
   }
-  public zhiElectron
+  // public zhiElectron
   public zhiBlogApi: {
     BlogConstants
     BlogTypeEnum
@@ -43,17 +43,16 @@ export default class PublisherPlugin extends Plugin {
 
   // 初始化常用工具类
   // private env
-  private logger
+  public logger
   // private common
-  private blogApi
+  public blogApi
 
   // lifecycle
   async onload() {
     // 初始化基础类库
     await initLibs(this)
-
     // 初始化常用工具类
-    await this.initUtils()
+    await initTools(this)
 
     // 业务逻辑
     const posts = await this.blogApi.getRecentPosts(10)
@@ -72,23 +71,4 @@ export default class PublisherPlugin extends Plugin {
   // ======================
   // private functions
   // ======================
-  private async initUtils() {
-    // this.env = Utils.zhiEnv(this)
-    this.logger = Utils.zhiLog(this, "publisher-index")
-    // this.common = Utils.zhiCommon(this)
-
-    // blogApi
-    const publishSdk = this.zhiPublisherSdk.PublishSdk
-    publishSdk.init({
-      Env: this.zhiEnv.Env,
-      BlogConstants: this.zhiBlogApi.BlogConstants,
-      BlogTypeEnum: this.zhiBlogApi.BlogTypeEnum,
-      SiyuanConstants: this.zhiSiyuanApi.SiyuanConstants,
-      SiyuanConfig: this.zhiSiyuanApi.SiyuanConfig,
-      SiYuanApiAdaptor: this.zhiSiyuanApi.SiYuanApiAdaptor,
-      BlogApi: this.zhiBlogApi.BlogApi,
-    })
-    const cfg = new this.zhiSiyuanApi.SiyuanConfig("", "")
-    this.blogApi = publishSdk.blogApi(this.zhiBlogApi.BlogTypeEnum.BlogTypeEnum_Siyuan, cfg)
-  }
 }

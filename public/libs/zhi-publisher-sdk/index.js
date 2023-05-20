@@ -1,12 +1,12 @@
 var r = Object.defineProperty;
-var g = (i, t, s) => t in i ? r(i, t, { enumerable: !0, configurable: !0, writable: !0, value: s }) : i[t] = s;
-var n = (i, t, s) => (g(i, typeof t != "symbol" ? t + "" : t, s), s);
-(function(i, t) {
-  !i || i.getElementById("livereloadscript") || (t = i.createElement("script"), t.async = 1, t.src = "//" + (self.location.host || "localhost").split(":")[0] + ":35730/livereload.js?snipver=1", t.id = "livereloadscript", i.getElementsByTagName("head")[0].appendChild(t));
+var g = (n, t, s) => t in n ? r(n, t, { enumerable: !0, configurable: !0, writable: !0, value: s }) : n[t] = s;
+var i = (n, t, s) => (g(n, typeof t != "symbol" ? t + "" : t, s), s);
+(function(n, t) {
+  !n || n.getElementById("livereloadscript") || (t = n.createElement("script"), t.async = 1, t.src = "//" + (self.location.host || "localhost").split(":")[0] + ":35729/livereload.js?snipver=1", t.id = "livereloadscript", n.getElementsByTagName("head")[0].appendChild(t));
 })(self.document);
 class a {
   static init(t) {
-    this.Env = t.Env, this.BlogConstants = t.BlogConstants, this.BlogTypeEnum = t.BlogTypeEnum, this.SiyuanConstants = t.SiyuanConstants, this.SiyuanConfig = t.SiyuanConfig, this.SiYuanApiAdaptor = t.SiYuanApiAdaptor, this.BlogApi = t.BlogApi;
+    this.appInstance = t.appInstance, this.Env = t.Env, this.BlogConstants = t.BlogConstants, this.BlogTypeEnum = t.BlogTypeEnum, this.SiyuanConstants = t.SiyuanConstants, this.SiyuanConfig = t.SiyuanConfig, this.SiYuanApiAdaptor = t.SiYuanApiAdaptor, this.BlogApi = t.BlogApi;
   }
   /**
    * 获取 siyuan-kernel-api 实例
@@ -23,10 +23,10 @@ class a {
           break;
         default: {
           if (t instanceof this.Env) {
-            const p = t.getEnvOrDefault(this.SiyuanConstants.VITE_SIYUAN_API_URL_KEY, "http://127.0.0.1:6806"), c = t.getStringEnv(this.SiyuanConstants.VITE_SIYUAN_AUTH_TOKEN_KEY), l = new this.SiyuanConfig(p, c);
-            l.fixTitle = !0, e = new this.SiYuanApiAdaptor(l);
+            const c = t.getEnvOrDefault(this.SiyuanConstants.VITE_SIYUAN_API_URL_KEY, "http://127.0.0.1:6806"), l = t.getStringEnv(this.SiyuanConstants.VITE_SIYUAN_AUTH_TOKEN_KEY), p = new this.SiyuanConfig(c, l);
+            p.fixTitle = !0, e = new this.SiYuanApiAdaptor(p);
           } else
-            e = new this.SiYuanApiAdaptor(s);
+            e = new this.SiYuanApiAdaptor(s), e.init(this.appInstance);
           break;
         }
       }
@@ -41,7 +41,7 @@ class a {
  * BlogApi
  * @private
  */
-n(a, "bApi"), n(a, "Env"), n(a, "BlogConstants"), n(a, "BlogTypeEnum"), n(a, "SiyuanConstants"), n(a, "SiyuanConfig"), n(a, "SiYuanApiAdaptor"), n(a, "BlogApi");
+i(a, "appInstance"), i(a, "bApi"), i(a, "Env"), i(a, "BlogConstants"), i(a, "BlogTypeEnum"), i(a, "SiyuanConstants"), i(a, "SiyuanConfig"), i(a, "SiYuanApiAdaptor"), i(a, "BlogApi");
 export {
   a as PublishSdk
 };

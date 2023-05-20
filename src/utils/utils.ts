@@ -45,4 +45,21 @@ export class Utils {
   public static zhiCommon(pluginInstance: PublisherPlugin) {
     return pluginInstance.zhiCommon.ZhiUtil.zhiCommon()
   }
+
+  public static blogApi(appInstance: PublisherPlugin, blogType?: any, blogCfg?: any) {
+    const publishSdk = appInstance.zhiPublisherSdk.PublishSdk
+    publishSdk.init({
+      appInstance: appInstance,
+      Env: appInstance.zhiEnv.Env,
+      BlogConstants: appInstance.zhiBlogApi.BlogConstants,
+      BlogTypeEnum: appInstance.zhiBlogApi.BlogTypeEnum,
+      SiyuanConstants: appInstance.zhiSiyuanApi.SiyuanConstants,
+      SiyuanConfig: appInstance.zhiSiyuanApi.SiyuanConfig,
+      SiYuanApiAdaptor: appInstance.zhiSiyuanApi.SiYuanApiAdaptor,
+      BlogApi: appInstance.zhiBlogApi.BlogApi,
+    })
+    const type = blogType ?? appInstance.zhiBlogApi.BlogTypeEnum.BlogTypeEnum_Siyuan
+    const cfg = blogCfg ?? new appInstance.zhiSiyuanApi.SiyuanConfig("", "")
+    return publishSdk.blogApi(type, cfg)
+  }
 }

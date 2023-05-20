@@ -35,7 +35,6 @@
   "dependencies": {
     "zhi-env": "workspace:*",
     "zhi-log": "workspace:*",
-    "zhi-common": "workspace:*",
     "zhi-blog-api": "workspace:*"
   }
 }

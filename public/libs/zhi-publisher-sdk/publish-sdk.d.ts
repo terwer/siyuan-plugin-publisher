@@ -10,6 +10,7 @@ declare class PublishSdk {
      * BlogApi
      * @private
      */
+    private static appInstance;
     private static bApi;
     private static Env;
     private static BlogConstants;
@@ -19,6 +20,7 @@ declare class PublishSdk {
     private static SiYuanApiAdaptor;
     private static BlogApi;
     static init(options: {
+        appInstance: any;
         Env: any;
         BlogConstants: any;
         BlogTypeEnum: any;
