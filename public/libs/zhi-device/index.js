@@ -1,9 +1,6 @@
 var g = Object.defineProperty;
-var P = (i, e, t) => e in i ? g(i, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : i[e] = t;
-var r = (i, e, t) => (P(i, typeof e != "symbol" ? e + "" : e, t), t);
-(function(i, e) {
-  !i || i.getElementById("livereloadscript") || (e = i.createElement("script"), e.async = 1, e.src = "//" + (self.location.host || "localhost").split(":")[0] + ":35729/livereload.js?snipver=1", e.id = "livereloadscript", i.getElementsByTagName("head")[0].appendChild(e));
-})(self.document);
+var P = (a, e, t) => e in a ? g(a, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : a[e] = t;
+var r = (a, e, t) => (P(a, typeof e != "symbol" ? e + "" : e, t), t);
 const u = class {
   /**
    * 检测是否运行在Chrome插件中
@@ -12,28 +9,28 @@ const u = class {
     return u.isInBrowser ? window.location.href.indexOf("chrome-extension://") > -1 : !1;
   }
 };
-let a = u;
+let i = u;
 /**
  * 是否在浏览器环境
  */
-r(a, "isNode", typeof process < "u"), /**
+r(i, "isNode", typeof process < "u"), /**
  * 是否在浏览器环境
  */
-r(a, "isInBrowser", typeof window < "u"), /**
+r(i, "isInBrowser", typeof window < "u"), /**
  * 浏览器路径分隔符
  */
-r(a, "BrowserSeperator", "/"), /**
+r(i, "BrowserSeperator", "/"), /**
  * 是否是Electron环境
  */
-r(a, "isElectron", () => !u.isInBrowser || !window.navigator || !window.navigator.userAgent ? !1 : /Electron/.test(window.navigator.userAgent)), /**
+r(i, "isElectron", () => !u.isInBrowser || !window.navigator || !window.navigator.userAgent ? !1 : /Electron/.test(window.navigator.userAgent)), /**
  * 是否有Node环境，目前包括 Electron 和 Node
  */
-r(a, "hasNodeEnv", () => u.isElectron() || u.isNode), /**
+r(i, "hasNodeEnv", () => u.isElectron() || u.isNode), /**
  * 获取url参数
  *
  * @param sParam - 参数
  */
-r(a, "getQueryString", (e) => {
+r(i, "getQueryString", (e) => {
   if (!u.isInBrowser)
     return "";
   const n = window.location.search.substring(1).split("&");
@@ -60,7 +57,7 @@ r(a, "getQueryString", (e) => {
  * @param paramName - 参数名
  * @param paramValue - 参数值
  */
-r(a, "replaceUrlParam", (e, t, n) => {
+r(i, "replaceUrlParam", (e, t, n) => {
   n == null && (n = "");
   const s = new RegExp("\\b(" + t + "=).*?(&|#|$)");
   if (e.search(s) >= 0)
@@ -76,7 +73,7 @@ r(a, "replaceUrlParam", (e, t, n) => {
  * @param key - key
  * @param value - value
  */
-r(a, "setUrlParameter", (e, t, n) => {
+r(i, "setUrlParameter", (e, t, n) => {
   if (e.includes(t))
     return u.replaceUrlParam(e, t, n);
   const s = e.split("#");
@@ -89,7 +86,7 @@ r(a, "setUrlParameter", (e, t, n) => {
  * @param tabname - tabname
  * @param t - 延迟时间
  */
-r(a, "reloadTabPage", (e, t = 200) => {
+r(i, "reloadTabPage", (e, t = 200) => {
   setTimeout(function() {
     if (u.isInBrowser) {
       const n = window.location.href;
@@ -99,7 +96,7 @@ r(a, "reloadTabPage", (e, t = 200) => {
 }), /**
  * 刷新当前tab页面
  */
-r(a, "reloadPage", () => {
+r(i, "reloadPage", () => {
   setTimeout(function() {
     u.isInBrowser && window.location.reload();
   }, 200);
@@ -109,18 +106,18 @@ r(a, "reloadPage", () => {
  * @param msg - 消息提示
  * @param cb - 回调
  */
-r(a, "reloadPageWithMessageCallback", (e, t) => {
+r(i, "reloadPageWithMessageCallback", (e, t) => {
   t && t(e), setTimeout(function() {
     u.isInBrowser && window.location.reload();
   }, 200);
 });
-var o = /* @__PURE__ */ ((i) => (i.BasePathType_Appearance = "Appearance", i.BasePathType_Data = "Data", i.BasePathType_Themes = "Themes", i.BasePathType_ZhiTheme = "ZhiTheme", i.BasePathType_None = "None", i))(o || {});
+var o = /* @__PURE__ */ ((a) => (a.BasePathType_Appearance = "Appearance", a.BasePathType_Data = "Data", a.BasePathType_Themes = "Themes", a.BasePathType_ZhiTheme = "ZhiTheme", a.BasePathType_None = "None", a))(o || {});
 const h = class {
   /**
    * 检测是否运行在思源打开的浏览器中
    */
   static isInSiyuanBrowser() {
-    return a.isInBrowser ? typeof window.siyuan < "u" && typeof window.Lute < "u" : !1;
+    return i.isInBrowser ? typeof window.siyuan < "u" && typeof window.Lute < "u" : !1;
   }
   /**
    * 思源笔记 window 对象
@@ -242,7 +239,7 @@ const h = class {
    * @param paths - 路径数组
    */
   static joinPath(...e) {
-    if (a.hasNodeEnv()) {
+    if (i.hasNodeEnv()) {
       const t = this.requireLib("path");
       if (t)
         return t.join(...e);
@@ -250,7 +247,7 @@ const h = class {
     return this.browserJoinPath(...e);
   }
   static browserJoinPath(...e) {
-    return e.join(a.BrowserSeperator);
+    return e.join(i.BrowserSeperator);
   }
   /**
    * 思源笔记 conf 目录
@@ -302,7 +299,7 @@ const h = class {
    * @since 0.1.0
    */
   static siyuanThemePath() {
-    if (a.hasNodeEnv())
+    if (i.hasNodeEnv())
       return this.joinPath(this.siyuanAppearancePath(), "themes");
     {
       const e = this.siyuanWindow();
@@ -332,11 +329,11 @@ const h = class {
     return this.browserJoinPath(this.siyuanThemeRelativePath(), "zhi");
   }
 };
-let p = h;
+let w = h;
 /**
  * 思源笔记iframe挂件环境
  */
-r(p, "isInSiyuanWidget", () => a.isInBrowser ? window.frameElement != null && window.frameElement.parentElement != null && window.frameElement.parentElement.parentElement != null && window.frameElement.parentElement.parentElement.getAttribute("data-node-id") !== "" : !1), /**
+r(w, "isInSiyuanWidget", () => i.isInBrowser ? window.frameElement != null && window.frameElement.parentElement != null && window.frameElement.parentElement.parentElement != null && window.frameElement.parentElement.parentElement.getAttribute("data-node-id") !== "" : !1), /**
  * 思源笔记新窗口
  *
  * @deprecated window.terwer 判断方式已废弃，建议以后打开新窗口注入 window.siyuanNewWin ，这样语义会更容易理解
@@ -344,7 +341,7 @@ r(p, "isInSiyuanWidget", () => a.isInBrowser ? window.frameElement != null && wi
  * @version 0.1.0
  * @since 0.0.1
  */
-r(p, "isInSiyuanNewWin", () => !a.isInBrowser || !a.isElectron() ? !1 : typeof window.terwer < "u" || typeof window.siyuanNewWin < "u"), // =========================
+r(w, "isInSiyuanNewWin", () => !i.isInBrowser || !i.isElectron() ? !1 : typeof window.terwer < "u" || typeof window.siyuanNewWin < "u"), // =========================
 // require start
 // =========================
 /**
@@ -354,8 +351,8 @@ r(p, "isInSiyuanNewWin", () => !a.isInBrowser || !a.isElectron() ? !1 : typeof w
  * @param abs - 可选，是否使用觉得路径，默认是 true ， 启用之后 type参数无效
  * @param type - 可选，以谁的基本路径为准
  */
-r(p, "requireLib", (e, t = !0, n = o.BasePathType_None) => {
-  if (!a.hasNodeEnv())
+r(w, "requireLib", (e, t = !0, n = o.BasePathType_None) => {
+  if (!i.hasNodeEnv())
     throw new Error("require ony works on node env");
   let s = e;
   if (!t)
@@ -385,29 +382,29 @@ r(p, "requireLib", (e, t = !0, n = o.BasePathType_None) => {
  *
  * @param libpath - 相对于 appearance 的相对路径
  */
-r(p, "requireAppearanceLib", (e) => h.requireLib(e, !1, o.BasePathType_Appearance)), /**
+r(w, "requireAppearanceLib", (e) => h.requireLib(e, !1, o.BasePathType_Appearance)), /**
  * 引入依赖，以 data 的基本路径为准
  *
  * @param libpath - 相对于 data 的相对路径
  */
-r(p, "requireDataLib", (e) => h.requireLib(e, !1, o.BasePathType_Data)), /**
+r(w, "requireDataLib", (e) => h.requireLib(e, !1, o.BasePathType_Data)), /**
  * 引入依赖，以 theme 的基本路径为准
  *
  * @param libpath - 相对于 theme 的相对路径
  */
-r(p, "requireThemesLib", (e) => h.requireLib(e, !1, o.BasePathType_Themes)), /**
+r(w, "requireThemesLib", (e) => h.requireLib(e, !1, o.BasePathType_Themes)), /**
  * 引入依赖，以 ZhiTheme 的基本路径为准
  *
  * @param libpath - 相对于 ZhiTheme 的相对路径
  */
-r(p, "requireZhiThemeLib", (e) => h.requireLib(e, !1, o.BasePathType_ZhiTheme));
-var w = /* @__PURE__ */ ((i) => (i.DeviceType_Mobile_Device = "Mobile", i.DeviceType_Siyuan_Widget = "Siyuan_Widget", i.DeviceType_Siyuan_NewWin = "Siyuan_NewWindow", i.DeviceType_Siyuan_MainWin = "Siyuan_MainWindow", i.DeviceType_Siyuan_Browser = "Siyuan_Browser", i.DeviceType_Chrome_Extension = "Chrome_Extension", i.DeviceType_Chrome_Browser = "Chrome_Browser", i.DeviceType_Node = "Node", i))(w || {});
-class T {
+r(w, "requireZhiThemeLib", (e) => h.requireLib(e, !1, o.BasePathType_ZhiTheme));
+var p = /* @__PURE__ */ ((a) => (a.DeviceType_Mobile_Device = "Mobile", a.DeviceType_Siyuan_Widget = "Siyuan_Widget", a.DeviceType_Siyuan_NewWin = "Siyuan_NewWindow", a.DeviceType_Siyuan_MainWin = "Siyuan_MainWindow", a.DeviceType_Siyuan_Browser = "Siyuan_Browser", a.DeviceType_Chrome_Extension = "Chrome_Extension", a.DeviceType_Chrome_Browser = "Chrome_Browser", a.DeviceType_Node = "Node", a))(p || {});
+class v {
   /**
    * 获取当前设备
    */
   static getDevice() {
-    return this.detectMobileDevice() ? w.DeviceType_Mobile_Device : p.isInSiyuanWidget() ? w.DeviceType_Siyuan_Widget : p.isInSiyuanNewWin() ? w.DeviceType_Siyuan_NewWin : a.isElectron() ? w.DeviceType_Siyuan_MainWin : p.isInSiyuanBrowser() ? w.DeviceType_Siyuan_Browser : a.isInChromeExtension() ? w.DeviceType_Chrome_Extension : a.isNode ? w.DeviceType_Node : w.DeviceType_Chrome_Browser;
+    return this.detectMobileDevice() ? p.DeviceType_Mobile_Device : w.isInSiyuanWidget() ? p.DeviceType_Siyuan_Widget : w.isInSiyuanNewWin() ? p.DeviceType_Siyuan_NewWin : i.isElectron() ? p.DeviceType_Siyuan_MainWin : w.isInSiyuanBrowser() ? p.DeviceType_Siyuan_Browser : i.isInChromeExtension() ? p.DeviceType_Chrome_Extension : i.isNode ? p.DeviceType_Node : p.DeviceType_Chrome_Browser;
   }
   /**
    * 检测移动端
@@ -415,7 +412,7 @@ class T {
    */
   static detectMobileDevice() {
     let e = !1;
-    return a.isInBrowser && function(t) {
+    return i.isInBrowser && function(t) {
       (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(
         t
       ) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw-(n|u)|c55\/|capi|ccwa|cdm-|cell|chtm|cldc|cmd-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc-s|devi|dica|dmob|do(c|p)o|ds(12|-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(-|_)|g1 u|g560|gene|gf-5|g-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd-(m|p|t)|hei-|hi(pt|ta)|hp( i|ip)|hs-c|ht(c(-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i-(20|go|ma)|i230|iac( |-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|-[a-w])|libw|lynx|m1-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|-([1-8]|c))|phil|pire|pl(ay|uc)|pn-2|po(ck|rt|se)|prox|psio|pt-g|qa-a|qc(07|12|21|32|60|-[2-7]|i-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h-|oo|p-)|sdk\/|se(c(-|0|1)|47|mc|nd|ri)|sgh-|shar|sie(-|m)|sk-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h-|v-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl-|tdg-|tel(i|m)|tim-|t-mo|to(pl|sh)|ts(70|m-|m3|m5)|tx-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas-|your|zeto|zte-/i.test(
@@ -426,8 +423,8 @@ class T {
 }
 export {
   o as BasePathTypeEnum,
-  a as BrowserUtil,
-  T as DeviceDetection,
-  w as DeviceTypeEnum,
-  p as SiyuanDevice
+  i as BrowserUtil,
+  v as DeviceDetection,
+  p as DeviceTypeEnum,
+  w as SiyuanDevice
 };

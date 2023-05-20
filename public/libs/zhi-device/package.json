@@ -1,6 +1,6 @@
 {
   "name": "zhi-device",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "type": "module",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
@@ -21,7 +21,8 @@
     "electron"
   ],
   "scripts": {
-    "dev": "vite",
+    "serve": "vite",
+    "dev": "vite build --watch",
     "build": "vite build",
     "start": "vite preview",
     "test": "vitest --watch"

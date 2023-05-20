@@ -1,6 +1,6 @@
 {
   "name": "zhi-env",
-  "version": "1.17.0",
+  "version": "1.17.1",
   "type": "module",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
@@ -19,7 +19,8 @@
     "env"
   ],
   "scripts": {
-    "dev": "vite",
+    "serve": "vite",
+    "dev": "vite build --watch",
     "build": "vite build",
     "start": "vite preview",
     "test": "vitest --watch"
