@@ -29,6 +29,9 @@
   import Picbed from "./routes/Picbed.svelte"
   import Preferences from "./routes/Preferences.svelte"
   import { Page } from "~/src/constants"
+  import GeneralSetting from "~/src/lib/preferences/GeneralSetting.svelte"
+  import PicgoSetting from "~/src/lib/preferences/PicgoSetting.svelte"
+  import PublishSetting from "~/src/lib/preferences/PublishSetting.svelte"
 
   export let url = `/${Page.Publish}`
 </script>
@@ -38,5 +41,8 @@
     <Route path={`/${Page.Publish}`} component={Publish} />
     <Route path={`/${Page.Picbed}`} component={Picbed} />
     <Route path={`/${Page.Setting}`} component={Preferences} />
+    <Route path={`/${Page.GeneralSetting}`} component={GeneralSetting} />
+    <Route path={`/${Page.PicgoSetting}`} component={PicgoSetting} />
+    <Route path={`/${Page.PublishSetting}`} component={PublishSetting} />
   </div>
 </Router>

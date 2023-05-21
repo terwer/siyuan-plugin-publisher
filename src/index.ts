@@ -74,7 +74,7 @@ export default class PublisherPlugin extends Plugin {
   }
 
   public openSetting() {
-    this.showSettingDialog()
+    this.showSettingDialog(this.i18n.setting, Page.Setting)
   }
 
   // ======================
@@ -181,21 +181,29 @@ export default class PublisherPlugin extends Plugin {
       icon: "iconSettings",
       label: this.i18n.setting,
       click: () => {
-        this.showSettingDialog()
+        this.showSettingDialog(this.i18n.setting, Page.Setting)
       },
       submenu: [
         {
           iconHTML: iconPublish.iconPreference,
           label: this.i18n.settingGeneral,
-          // click: () => {},
+          click: () => {
+            this.showSettingDialog(this.i18n.settingGeneral, Page.GeneralSetting)
+          },
         },
         {
           iconHTML: iconPublish.iconPicbed,
           label: this.i18n.settingPicbed,
+          click: () => {
+            this.showSettingDialog(this.i18n.settingPicbed, Page.PicgoSetting)
+          },
         },
         {
           iconHTML: iconPublish.iconPublish,
           label: this.i18n.settingPublish,
+          click: () => {
+            this.showSettingDialog(this.i18n.settingPublish, Page.PublishSetting)
+          },
         },
       ],
     })
@@ -235,15 +243,15 @@ export default class PublisherPlugin extends Plugin {
     }
   }
 
-  private showSettingDialog() {
+  private showSettingDialog(settingTitle: string, settingKey: string) {
     new Dialog({
-      title: `${this.i18n.setting} - ${this.i18n.publisher}`,
-      content: `<div id="${PageUtil.getElementId(Page.Setting)}"></div>`,
+      title: `${settingTitle} - ${this.i18n.publisher}`,
+      content: `<div id="${PageUtil.getElementId(settingKey)}"></div>`,
       width: isMobile() ? "92vw" : "520px",
     })
 
     // setting
-    PageUtil.createApp(Page.Setting)
+    PageUtil.createApp(settingKey)
   }
 
   private showPublisherDialog() {

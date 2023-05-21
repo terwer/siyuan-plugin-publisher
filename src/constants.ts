@@ -12,4 +12,7 @@ export const Page = {
   Publish: "",
   Picbed: "picbed",
   Setting: "setting",
+  GeneralSetting: "setting/general",
+  PicgoSetting: "setting/picgo",
+  PublishSetting: "setting/publish",
 }
