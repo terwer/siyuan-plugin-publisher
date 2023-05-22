@@ -6,7 +6,7 @@ import iconPublish from "~/src/utils/svg"
 import { Utils } from "~/src/utils/utils"
 import HtmlUtils from "~/src/utils/htmlUtils"
 import PageUtil from "~/src/utils/pageUtil"
-import { Page } from "~/src/constants"
+import { isDev, Page } from "~/src/constants"
 
 export default class PublisherPlugin extends Plugin {
   public fs
@@ -41,6 +41,7 @@ export default class PublisherPlugin extends Plugin {
     SiyuanConstants
     SiyuanConfig
     SiYuanApiAdaptor
+    SiyuanKernelApi
   }
   public zhiPublisherSdk: {
     PublishSdk
@@ -51,6 +52,7 @@ export default class PublisherPlugin extends Plugin {
   public logger
   // private common
   public blogApi
+  public kernelApi
 
   // lifecycle
   async onload() {
@@ -88,6 +90,10 @@ export default class PublisherPlugin extends Plugin {
       callback: () => {
         this.initMenu(topBarElement.getBoundingClientRect())
       },
+    })
+    //添加右键菜单
+    topBarElement.addEventListener("contextmenu", () => {
+      this.showSettingDialog(this.i18n.setting, Page.Setting)
     })
   }
 
@@ -171,7 +177,11 @@ export default class PublisherPlugin extends Plugin {
       iconHTML: iconPublish.iconPicture,
       label: this.i18n.picbed,
       click: () => {
-        this.showPicbedDialog()
+        // 使用插件版图床
+        // this.showPicbedDialog()
+
+        // 使用挂件版图床
+        this.showWidgetPublisherWindow("picgo")
       },
     })
 
@@ -216,10 +226,10 @@ export default class PublisherPlugin extends Plugin {
       label: this.i18n.copyPageId,
       click: async () => {
         await HtmlUtils.copyToClipboard(pageId)
-        // this.zhiSiyuanApi.kernelApi.pushMsg({
-        //   msg: `当前文档ID已复制=>${pageId}`,
-        //   timeout: 3000,
-        // })
+        this.kernelApi.pushMsg({
+          msg: `当前文档ID已复制=>${pageId}`,
+          timeout: 3000,
+        })
         this.logger.info("当前文档ID已复制", pageId)
       },
     })
@@ -247,7 +257,9 @@ export default class PublisherPlugin extends Plugin {
     new Dialog({
       title: `${settingTitle} - ${this.i18n.publisher}`,
       content: `<div id="${PageUtil.getElementId(settingKey)}"></div>`,
-      width: isMobile() ? "92vw" : "520px",
+      // width: isMobile() ? "92vw" : "520px",
+      width: isMobile() ? "92vw" : "900px",
+      // height: "750px",
     })
 
     // setting
@@ -274,5 +286,72 @@ export default class PublisherPlugin extends Plugin {
 
     // setting
     PageUtil.createApp(Page.Picbed)
+  }
+
+  // widget functions
+  private showWidgetPublisherDialog(publisherIndex: string) {
+    const contentHtml = `<style>
+        iframe {
+          width: 100%;
+          height: 100%;
+          border: none;
+        }
+        </style>
+        <iframe src="${publisherIndex}" width="100%"></iframe>`
+
+    new Dialog({
+      title: this.i18n.siyuanBlog,
+      transparent: false,
+      content: contentHtml,
+      width: "90%",
+      height: "750px",
+    } as any)
+  }
+
+  private showWidgetPublisherWindow(type?: "blog" | "detail" | "picgo") {
+    const win = window as any
+    const deviceType = this.zhiDevice.DeviceDetection.getDevice()
+    this.logger.info(`you are from ${deviceType}`)
+
+    let pageId: string | undefined = PageUtil.getPageId()
+    if (pageId == "") {
+      pageId = undefined
+    }
+    this.logger.debug("pageId=>", pageId)
+
+    if (deviceType == this.zhiDevice.DeviceTypeEnum.DeviceType_Siyuan_MainWin) {
+      this.importDep("./libs/plugin-publisher-bridge/index.js").then((bridge) => {
+        const publisherBridge = new bridge.default()
+        publisherBridge.init().then(() => {
+          let pageUrl
+          switch (type) {
+            case "blog":
+              // 博客首页
+              pageUrl = "blog/index.html"
+              break
+            case "detail":
+              // 详情
+              pageUrl = "detail/index.html"
+              break
+            case "picgo":
+              pageUrl = "picgo/index.html"
+              break
+            default:
+              // 发布首页
+              pageUrl = "index.html"
+              break
+          }
+          if (!pageId && pageUrl === "index.html") {
+            pageUrl = "blog/index.html"
+          }
+
+          win.syp.renderPublishHelper(pageId, pageUrl, win, isDev)
+          this.logger.debug("publisherHook inited")
+        })
+      })
+    } else {
+      const publisherIndex = `/widgets/sy-post-publisher/index.html`
+      this.showWidgetPublisherDialog(publisherIndex)
+    }
   }
 }

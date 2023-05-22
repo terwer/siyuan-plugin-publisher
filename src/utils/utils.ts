@@ -9,6 +9,8 @@ import PublisherPlugin from "~/src"
  */
 export class Utils {
   private static env
+  private static kApi
+  private static bApi
 
   /**
    * 通用环境变量
@@ -46,20 +48,31 @@ export class Utils {
     return pluginInstance.zhiCommon.ZhiUtil.zhiCommon()
   }
 
+  public static kernelApi(appInstance: PublisherPlugin) {
+    if (!this.kApi) {
+      const cfg = new appInstance.zhiSiyuanApi.SiyuanConfig("", "")
+      this.kApi = new appInstance.zhiSiyuanApi.SiyuanKernelApi(cfg)
+      this.kApi.init(appInstance)
+    }
+    return this.kApi
+  }
   public static blogApi(appInstance: PublisherPlugin, blogType?: any, blogCfg?: any) {
-    const publishSdk = appInstance.zhiPublisherSdk.PublishSdk
-    publishSdk.init({
-      appInstance: appInstance,
-      Env: appInstance.zhiEnv.Env,
-      BlogConstants: appInstance.zhiBlogApi.BlogConstants,
-      BlogTypeEnum: appInstance.zhiBlogApi.BlogTypeEnum,
-      SiyuanConstants: appInstance.zhiSiyuanApi.SiyuanConstants,
-      SiyuanConfig: appInstance.zhiSiyuanApi.SiyuanConfig,
-      SiYuanApiAdaptor: appInstance.zhiSiyuanApi.SiYuanApiAdaptor,
-      BlogApi: appInstance.zhiBlogApi.BlogApi,
-    })
-    const type = blogType ?? appInstance.zhiBlogApi.BlogTypeEnum.BlogTypeEnum_Siyuan
-    const cfg = blogCfg ?? new appInstance.zhiSiyuanApi.SiyuanConfig("", "")
-    return publishSdk.blogApi(type, cfg)
+    if (!this.bApi) {
+      const publishSdk = appInstance.zhiPublisherSdk.PublishSdk
+      publishSdk.init({
+        appInstance: appInstance,
+        Env: appInstance.zhiEnv.Env,
+        BlogConstants: appInstance.zhiBlogApi.BlogConstants,
+        BlogTypeEnum: appInstance.zhiBlogApi.BlogTypeEnum,
+        SiyuanConstants: appInstance.zhiSiyuanApi.SiyuanConstants,
+        SiyuanConfig: appInstance.zhiSiyuanApi.SiyuanConfig,
+        SiYuanApiAdaptor: appInstance.zhiSiyuanApi.SiYuanApiAdaptor,
+        BlogApi: appInstance.zhiBlogApi.BlogApi,
+      })
+      const type = blogType ?? appInstance.zhiBlogApi.BlogTypeEnum.BlogTypeEnum_Siyuan
+      const cfg = blogCfg ?? new appInstance.zhiSiyuanApi.SiyuanConfig("", "")
+      this.bApi = publishSdk.blogApi(type, cfg)
+    }
+    return this.bApi
   }
 }

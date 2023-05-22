@@ -11,6 +11,9 @@ export const initTools = async (appInstance: PublisherPlugin) => {
   appInstance.logger = Utils.zhiLog(appInstance, "publisher-index")
   // this.common = Utils.zhiCommon(appInstance)
 
+  // kernelApi
+  appInstance.kernelApi = Utils.kernelApi(appInstance)
+
   // blogApi
   appInstance.blogApi = Utils.blogApi(appInstance)
 }

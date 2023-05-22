@@ -54,6 +54,7 @@ export const initLibs = async (pluginInstance: PublisherPlugin) => {
     SiyuanConstants: zhiSiyuanApi["SiyuanConstants"],
     SiyuanConfig: zhiSiyuanApi["SiyuanConfig"],
     SiYuanApiAdaptor: zhiSiyuanApi["SiYuanApiAdaptor"],
+    SiyuanKernelApi: zhiSiyuanApi["SiyuanKernelApi"]
   }
 
   // zhi-publisher-sdk

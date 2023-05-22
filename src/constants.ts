@@ -1,5 +1,6 @@
 export const moduleBase = "/plugins/siyuan-publisher"
 export const pluginDataPath = "/data/storage/petal/siyuan-publisher"
+export const isDev = process.env.DEV_MODE === "true"
 
 /**
  * 常量
