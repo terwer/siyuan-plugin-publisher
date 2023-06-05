@@ -1,78 +1,24 @@
-import PublisherPlugin from "~/src"
-
-/**
- * 通用工具类
+/*
+ * Copyright (c) 2023, Terwer . All rights reserved.
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * @author terwer
- * @version 1.0.0
- * @since 1.0.0
+ * This code is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License version 2 only, as
+ * published by the Free Software Foundation.  Terwer designates this
+ * particular file as subject to the "Classpath" exception as provided
+ * by Terwer in the LICENSE file that accompanied this code.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+ * version 2 for more details (a copy is included in the LICENSE file that
+ * accompanied this code).
+ *
+ * You should have received a copy of the GNU General Public License version
+ * 2 along with this work; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * Please contact Terwer, Shenzhen, Guangdong, China, youweics@163.com
+ * or visit www.terwer.space if you need additional information or have any
+ * questions.
  */
-export class Utils {
-  private static env
-  private static kApi
-  private static bApi
-
-  /**
-   * 通用环境变量
-   *
-   * @param pluginInstance - 插件实例
-   */
-  public static zhiEnv(pluginInstance: PublisherPlugin) {
-    if (!this.env) {
-      // 环境变量需要在使用的时候显式指定
-      this.env = new pluginInstance.zhiEnv.Env(import.meta.env)
-    }
-    return this.env
-  }
-
-  /**
-   * 通用日志
-   *
-   * @param pluginInstance - 插件实例
-   * @param loggerName - 日志名称
-   */
-  public static zhiLog(pluginInstance: PublisherPlugin, loggerName: string) {
-    const env = this.zhiEnv(pluginInstance)
-    pluginInstance.zhiCommon.ZhiUtil.initEnv(env)
-
-    // 用 common 里面的，这里面我封装了日志缓存
-    return pluginInstance.zhiCommon.ZhiUtil.zhiLogWithSign("publisher", loggerName)
-  }
-
-  /**
-   * 通用工具入口
-   *
-   * @param pluginInstance - 插件实例
-   */
-  public static zhiCommon(pluginInstance: PublisherPlugin) {
-    return pluginInstance.zhiCommon.ZhiUtil.zhiCommon()
-  }
-
-  public static kernelApi(appInstance: PublisherPlugin) {
-    if (!this.kApi) {
-      const cfg = new appInstance.zhiSiyuanApi.SiyuanConfig("", "")
-      this.kApi = new appInstance.zhiSiyuanApi.SiyuanKernelApi(cfg)
-      this.kApi.init(appInstance)
-    }
-    return this.kApi
-  }
-  public static blogApi(appInstance: PublisherPlugin, blogType?: any, blogCfg?: any) {
-    if (!this.bApi) {
-      const publishSdk = appInstance.zhiPublisherSdk.PublishSdk
-      publishSdk.init({
-        appInstance: appInstance,
-        Env: appInstance.zhiEnv.Env,
-        BlogConstants: appInstance.zhiBlogApi.BlogConstants,
-        BlogTypeEnum: appInstance.zhiBlogApi.BlogTypeEnum,
-        SiyuanConstants: appInstance.zhiSiyuanApi.SiyuanConstants,
-        SiyuanConfig: appInstance.zhiSiyuanApi.SiyuanConfig,
-        SiYuanApiAdaptor: appInstance.zhiSiyuanApi.SiYuanApiAdaptor,
-        BlogApi: appInstance.zhiBlogApi.BlogApi,
-      })
-      const type = blogType ?? appInstance.zhiBlogApi.BlogTypeEnum.BlogTypeEnum_Siyuan
-      const cfg = blogCfg ?? new appInstance.zhiSiyuanApi.SiyuanConfig("", "")
-      this.bApi = publishSdk.blogApi(type, cfg)
-    }
-    return this.bApi
-  }
-}

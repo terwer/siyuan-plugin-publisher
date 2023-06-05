@@ -23,30 +23,17 @@
  * questions.
  */
 
-import App from "../App.svelte"
-
 /**
- * 页面统一入口，根据路由创建不同页面
+ * 文档工具类
  */
 class PageUtil {
   public static getPageId() {
-    const element = document.querySelector(".protyle-title")
-    const result = element ? element.getAttribute("data-node-id") : null
-    return result ?? ""
-  }
-
-  public static getElementId(pageId: string) {
-    return pageId === "" ? "home" : `publisher-${pageId}`
-  }
-
-  public static createApp(pageId: string): App {
-    const elementId = this.getElementId(pageId)
-    return new App({
-      target: document.getElementById(elementId) as HTMLElement,
-      props: {
-        url: `/${pageId}`,
-      },
-    })
+    // 查找包含 protyle 类但不包含 fn__none 的 div 元素
+    const protyleElement = document.querySelector("div.protyle:not(.fn__none)")
+    // 在该 div 元素下查找包含 protyle-title 类的 div 元素，并查找 data-node-id 属性
+    const protyleTitleElement = protyleElement?.querySelector("div.protyle-title")
+    // 如果该元素存在 data-node-id 属性，则获取其值并返回，否则返回空字符串
+    return protyleTitleElement?.hasAttribute("data-node-id") ? protyleTitleElement.getAttribute("data-node-id") : ""
   }
 }
 

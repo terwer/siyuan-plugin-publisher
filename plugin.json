@@ -1,15 +1,15 @@
 {
-  "name": "siyuan-publisher",
+  "name": "demo",
   "author": "terwer",
-  "url": "https://github.com/terwer/siyuan-plugin-publisher",
-  "version": "0.8.0",
+  "url": "https://github.com/terwer/siyuan-plugin-demo",
+  "version": "0.0.1",
   "displayName": {
-    "default": "Publisher",
-    "zh_CN": "发布工具"
+    "default": "Demo",
+    "zh_CN": "示例"
   },
   "description": {
-    "default": "Publishing articles from siyuan-note to platforms such as Yuque, Cnblogs, WordPress, Typecho, Hexo, Hugo, etc.",
-    "zh_CN": "将思源笔记的文章发布到语雀、博客园、WordPress、Typecho、Hexo、Hugo等平台，支持极速发布、图床管理、平台扩展、智能标签等特色功能"
+    "default": "This a demo plugin project",
+    "zh_CN": "这是一个示例插件项目"
   },
   "readme": {
     "default": "README.md",

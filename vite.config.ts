@@ -1,7 +1,5 @@
-/// <reference types="vitest" />
-
-import path, { resolve } from "path"
-import { defineConfig } from "vite"
+import { resolve } from "path"
+import { defineConfig, loadEnv } from "vite"
 import minimist from "minimist"
 import { viteStaticCopy } from "vite-plugin-static-copy"
 import livereload from "rollup-plugin-livereload"
@@ -10,7 +8,11 @@ import fg from "fast-glob"
 
 const args = minimist(process.argv.slice(2))
 const isWatch = args.watch || args.w || false
-const devDistDir = "/Users/terwer/Documents/mydocs/SiYuanWorkspace/public/data/plugins/siyuan-publisher"
+const isWindows = process.platform === "win32"
+let devDistDir = "/Users/terwer/Documents/mydocs/SiYuanWorkspace/public/data/plugins/siyuan-plugin-custom-slug"
+if (isWindows) {
+  devDistDir = "C:\\Users\\terwer\\Documents\\mydocs\\SiyuanWorkspace\\public\\data\\plugins\\siyuan-plugin-custom-slug"
+}
 const distDir = isWatch ? devDistDir : "./dist"
 
 console.log("isWatch=>", isWatch)
@@ -52,12 +54,6 @@ export default defineConfig({
   // 在这里自定义变量
   define: {
     "process.env.DEV_MODE": `"${isWatch}"`,
-  },
-
-  resolve: {
-    alias: {
-      "~": path.resolve(__dirname, "./"),
-    },
   },
 
   build: {
@@ -114,11 +110,5 @@ export default defineConfig({
         },
       },
     },
-  },
-
-  test: {
-    globals: true,
-    environment: "jsdom",
-    include: ["src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
   },
 })
