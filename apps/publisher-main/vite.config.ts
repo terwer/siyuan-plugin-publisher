@@ -1,5 +1,5 @@
 import { resolve } from "path"
-import { defineConfig, loadEnv } from "vite"
+import { defineConfig } from "vite"
 import minimist from "minimist"
 import { viteStaticCopy } from "vite-plugin-static-copy"
 import livereload from "rollup-plugin-livereload"
@@ -9,9 +9,9 @@ import fg from "fast-glob"
 const args = minimist(process.argv.slice(2))
 const isWatch = args.watch || args.w || false
 const isWindows = process.platform === "win32"
-let devDistDir = "/Users/terwer/Documents/mydocs/SiYuanWorkspace/public/data/plugins/siyuan-plugin-random-doc"
+let devDistDir = "/Users/terwer/Documents/mydocs/SiYuanWorkspace/public/data/plugins/siyuan-plugin-publisher"
 if (isWindows) {
-  devDistDir = "C:\\Users\\terwer\\Documents\\mydocs\\SiyuanWorkspace\\public\\data\\plugins\\siyuan-plugin-random-doc"
+  devDistDir = "C:\\Users\\terwer\\Documents\\mydocs\\SiyuanWorkspace\\public\\data\\plugins\\siyuan-plugin-publisher"
 }
 const distDir = isWatch ? devDistDir : "./dist"
 
@@ -25,23 +25,23 @@ export default defineConfig({
     viteStaticCopy({
       targets: [
         {
-          src: "./README*.md",
+          src: "../../README*.md",
           dest: "./",
         },
         {
-          src: "./LICENSE",
+          src: "../../LICENSE",
           dest: "./",
         },
         {
-          src: "./icon.png",
+          src: "../../icon.png",
           dest: "./",
         },
         {
-          src: "./preview.png",
+          src: "../../preview.png",
           dest: "./",
         },
         {
-          src: "./plugin.json",
+          src: "../../plugin.json",
           dest: "./",
         },
         {
@@ -90,7 +90,7 @@ export default defineConfig({
                 //监听静态资源文件
                 name: "watch-external",
                 async buildStart() {
-                  const files = await fg(["src/i18n/*.json", "./README*.md", "./plugin.json"])
+                  const files = await fg(["src/i18n/*.json", "../../README*.md", "../../plugin.json"])
                   for (const file of files) {
                     this.addWatchFile(file)
                   }

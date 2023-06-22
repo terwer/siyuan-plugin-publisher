@@ -1,13 +1,13 @@
 {
   "name": "publisher-app",
-  "type": "module",
   "version": "0.0.1",
+  "type": "module",
+  "description": "app module for publisher plugin",
   "scripts": {
     "dev": "astro dev",
-    "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "types": "astro"
   },
   "dependencies": {
     "astro": "^2.7.0"

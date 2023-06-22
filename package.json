@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
+    "start": "astro dev",
     "lint": "turbo run lint",
+    "types": "turbo run types",
     "cz": "git-cz"
   },
   "config": {
