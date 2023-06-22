@@ -2,7 +2,7 @@
 
 # Publisher
 
-![](https://raw.githubusercontent.com/terwer/siyuan-plugin-publisher/main/plugins/publisher-main/public/icon.png)
+![](https://raw.githubusercontent.com/terwer/siyuan-plugin-publisher/main/apps/publisher-main/public/icon.png)
 
 Publishing articles from siyuan-note to platforms such as Yuque, Cnblogs, WordPress, Typecho, Hexo, Hugo and more.
 
@@ -22,7 +22,7 @@ This plugin promises that all functions will be free forever. If you want to sup
 - **Extremely fast release**: One-time configuration, one-click release
 - **Picture bed management**: Integrate PicGO picture bed, support s3, minio, watermark plugin
 - **Support for extensions**: Based on the unified blog API specification, built-in support for metaweblogAPI, WordPress
-  and Github, and provides a unified adapter, which can theoretically be extended to any platform
+  and GitHub, and provides a unified adapter, which can theoretically be extended to any platform
 - **Platform switch**: All platforms support enabling and disabling, the blog garden is enabled by default, and can be
   disabled at any time
 - **Dynamic Newly Added**: Support custom adding platform

@@ -9,9 +9,9 @@ import fg from "fast-glob"
 const args = minimist(process.argv.slice(2))
 const isWatch = args.watch || args.w || false
 const isWindows = process.platform === "win32"
-let devDistDir = "/Users/terwer/Documents/mydocs/SiYuanWorkspace/public/data/plugins/siyuan-plugin-publisher"
+let devDistDir = "/Users/terwer/Documents/mydocs/SiYuanWorkspace/public/data/plugins/siyuan-plugin-random-doc"
 if (isWindows) {
-  devDistDir = "C:\\Users\\terwer\\Documents\\mydocs\\SiyuanWorkspace\\public\\data\\plugins\\siyuan-plugin-publisher"
+  devDistDir = "C:\\Users\\terwer\\Documents\\mydocs\\SiyuanWorkspace\\public\\data\\plugins\\siyuan-plugin-random-doc"
 }
 const distDir = isWatch ? devDistDir : "./dist"
 
@@ -26,6 +26,10 @@ export default defineConfig({
       targets: [
         {
           src: "./README*.md",
+          dest: "./",
+        },
+        {
+          src: "./LICENSE",
           dest: "./",
         },
         {

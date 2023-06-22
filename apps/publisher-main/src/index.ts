@@ -35,14 +35,14 @@ export default class ImporterPlugin extends Plugin {
   constructor(options: { app: App; id: string; name: string; i18n: IObject }) {
     super(options)
 
-    this.logger = simpleLogger("index", "publisher", isDev)
+    this.logger = simpleLogger("index", "demo", isDev)
   }
 
   onload() {
-    this.logger.info("Publisher loaded")
+    this.logger.info("Demo loaded")
   }
 
   onunload() {
-    this.logger.info("Publisher unloaded")
+    this.logger.info("Demo loaded")
   }
 }

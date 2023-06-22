@@ -1,0 +1,44 @@
+{
+  "name": "siyuan-plugin-random-doc",
+  "version": "1.0.1",
+  "type": "module",
+  "description": "Document is like a box of chocolates. You never know what you're going to get",
+  "repository": "terwer/siyuan-plugin-random-doc",
+  "homepage": "https://github.com/terwer/siyuan-plugin-random-doc",
+  "author": "terwer",
+  "license": "MIT",
+  "scripts": {
+    "serve": "vite",
+    "dev": "vite build --watch",
+    "build": "vite build",
+    "start": "vite preview",
+    "test": "vitest --watch",
+    "syncVersion": "python scripts/version.py",
+    "parseChangelog": "python scripts/parse_changelog.py",
+    "prepareRelease": "pnpm syncVersion && pnpm parseChangelog",
+    "package": "python scripts/package.py"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^2.4.1",
+    "@terwer/eslint-config-custom": "^1.3.4",
+    "@tsconfig/svelte": "^4.0.1",
+    "@types/minimist": "1.2.2",
+    "fast-glob": "^3.2.12",
+    "jsdom": "^22.0.0",
+    "minimist": "^1.2.8",
+    "rollup-plugin-livereload": "^2.0.5",
+    "siyuan": "^0.7.2",
+    "stylus": "^0.59.0",
+    "svelte": "^3.59.1",
+    "typescript": "^5.0.4",
+    "vite": "^4.3.5",
+    "vite-plugin-dts": "^2.3.0",
+    "vite-plugin-node-polyfills": "^0.8.2",
+    "vite-plugin-static-copy": "^0.16.0",
+    "vite-tsconfig-paths": "^4.2.0",
+    "vitest": "^0.32.0"
+  },
+  "dependencies": {
+    "zhi-lib-base": "^0.2.4"
+  }
+}
