@@ -2,7 +2,7 @@
 
 # 发布工具
 
-![](https://raw.githubusercontent.com/terwer/siyuan-plugin-publisher/main/apps/publisher-main/public/icon.png)
+![](https://raw.githubusercontent.com/terwer/siyuan-plugin-publisher/main/icon.png)
 
 将思源笔记的文章发布到语雀、Cnblogs、WordPress、Typecho、Hexo、Hugo 等平台，支持极速发布、图床管理、平台扩展、智能标签等特色功能。
 

@@ -2,7 +2,7 @@
 
 # Publisher
 
-![](https://raw.githubusercontent.com/terwer/siyuan-plugin-publisher/main/apps/publisher-main/public/icon.png)
+![](https://raw.githubusercontent.com/terwer/siyuan-plugin-publisher/main/icon.png)
 
 Publishing articles from siyuan-note to platforms such as Yuque, Cnblogs, WordPress, Typecho, Hexo, Hugo and more.
 
