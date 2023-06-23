@@ -23,33 +23,30 @@
  * questions.
  */
 
-import { App, IObject, Plugin, getFrontend } from "siyuan"
-import { createAppLogger } from "./appLogger"
-import { Topbar } from "./topbar"
+import { Dialog } from "siyuan"
+import PublisherPlugin from "./index"
 
-import "../index.styl"
-import { SiyuanConfig, SiyuanKernelApi } from "zhi-siyuan-api"
+/**
+ * 打开 iframe 弹窗
+ *
+ * @param pluginInstance 插件实例
+ * @param pageIndex 地址
+ */
+export const showIframeDialog = (pluginInstance: PublisherPlugin, pageIndex: string) => {
+  const contentHtml = `<style>
+        iframe {
+          width: 100%;
+          height: 100%;
+          border: none;
+        }
+        </style>
+        <iframe src="${pageIndex}" width="100%"></iframe>`
 
-export default class PublisherPlugin extends Plugin {
-  private logger
-  private topbar
-
-  public isMobile: boolean
-  public kernelApi: SiyuanKernelApi
-
-  constructor(options: { app: App; id: string; name: string; i18n: IObject }) {
-    super(options)
-
-    this.logger = createAppLogger("index")
-    const frontEnd = getFrontend()
-    this.isMobile = frontEnd === "mobile" || frontEnd === "browser-mobile"
-    const siyuanConfig = new SiyuanConfig("", "")
-    this.kernelApi = new SiyuanKernelApi(siyuanConfig)
-
-    this.topbar = new Topbar(this)
-  }
-
-  onload() {
-    this.topbar.initTopbar()
-  }
+  new Dialog({
+    title: pluginInstance.i18n.siyuanBlog,
+    transparent: false,
+    content: contentHtml,
+    width: "90%",
+    height: "750px",
+  } as any)
 }

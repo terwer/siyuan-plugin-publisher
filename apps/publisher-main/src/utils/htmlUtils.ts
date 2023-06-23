@@ -23,33 +23,15 @@
  * questions.
  */
 
-import { App, IObject, Plugin, getFrontend } from "siyuan"
-import { createAppLogger } from "./appLogger"
-import { Topbar } from "./topbar"
-
-import "../index.styl"
-import { SiyuanConfig, SiyuanKernelApi } from "zhi-siyuan-api"
-
-export default class PublisherPlugin extends Plugin {
-  private logger
-  private topbar
-
-  public isMobile: boolean
-  public kernelApi: SiyuanKernelApi
-
-  constructor(options: { app: App; id: string; name: string; i18n: IObject }) {
-    super(options)
-
-    this.logger = createAppLogger("index")
-    const frontEnd = getFrontend()
-    this.isMobile = frontEnd === "mobile" || frontEnd === "browser-mobile"
-    const siyuanConfig = new SiyuanConfig("", "")
-    this.kernelApi = new SiyuanKernelApi(siyuanConfig)
-
-    this.topbar = new Topbar(this)
-  }
-
-  onload() {
-    this.topbar.initTopbar()
+class HtmlUtils {
+  public static async copyToClipboard(text: string): Promise<boolean> {
+    try {
+      await navigator.clipboard.writeText(text)
+      return true
+    } catch (err) {
+      throw new Error("复制失败！" + err)
+    }
   }
 }
+
+export default HtmlUtils

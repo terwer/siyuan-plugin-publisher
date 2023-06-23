@@ -18,6 +18,6 @@
   "devDependencies": {
     "@terwer/commit-config-custom": "^1.0.9",
     "@terwer/eslint-config-custom": "^1.3.6",
-    "turbo": "^1.10.4"
+    "turbo": "^1.10.5"
   }
 }

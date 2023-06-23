@@ -1,2 +1,23 @@
 {
+  "publishTool": "发布工具",
+  "publish": "发布",
+  "picbed": "上传图片到图床",
+  "setting": "设置",
+  "settingGeneral": "偏好设置",
+  "settingPicbed": "图床管理",
+  "settingPublish": "发布设置",
+  "settingMenuTips": "让创作回归乐趣",
+  "copyPageId": "复制文档ID",
+  "publisherWidget": "挂件版",
+  "cancel": "取消",
+  "save": "保存",
+  "publishTo": "发布到...",
+  "platformCnblogs": "博客园",
+  "platformTypecho": "Typecho",
+  "platformWordpress": "WordPress",
+  "platformYuque": "语雀",
+  "platformGithub": "Github",
+  "platformHexo": "Hexo",
+  "platformHugo": "Hugo",
+  "platformVitepress": "Vitepress"
 }
