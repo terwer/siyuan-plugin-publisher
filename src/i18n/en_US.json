@@ -1,6 +1,7 @@
 {
   "publishTool": "Publisher",
   "publish": "Publish",
+  "preview": "Preview",
   "picbed": "Upload picture to picbed",
   "setting": "Setting",
   "settingGeneral": "General setting",
@@ -12,6 +13,7 @@
   "cancel": "Cancel",
   "save": "Save",
   "publishTo": "Publish to...",
+  "publishNormal": "Publish normal",
   "platformCnblogs": "Cnblogs",
   "platformTypecho": "Typecho",
   "platformWordpress": "WordPress",

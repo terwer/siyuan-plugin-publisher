@@ -41,8 +41,10 @@ export default class PublisherPlugin extends Plugin {
     super(options)
 
     this.logger = createAppLogger("index")
+
     const frontEnd = getFrontend()
     this.isMobile = frontEnd === "mobile" || frontEnd === "browser-mobile"
+
     const siyuanConfig = new SiyuanConfig("", "")
     this.kernelApi = new SiyuanKernelApi(siyuanConfig)
 

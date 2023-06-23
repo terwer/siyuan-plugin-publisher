@@ -78,7 +78,7 @@ to [Latest Adaptation](https://terwergreen.feishu.cn/share/base/view/shrcnWT2IGI
 
   A3：**Yes.**
 
-  The plugin has a builtin bridge by default, which can invoke the widget through the plugin. This feature needs to be turned on in `Settings -> Use Widget`​.
+  The plugin has a builtin bridge by default, which can invoke the widget through the plugin. This feature needs to be turned on in `Settings -> Use WidgetInvoke`​.
 
   <u>Note 1: The plugin version uses the builtin menu of the plugin system, and the menu slot will be disabled when the widget version is activated via plugin. ​</u>
 
@@ -88,7 +88,7 @@ to [Latest Adaptation](https://terwergreen.feishu.cn/share/base/view/shrcnWT2IGI
 
 ‍
 
-* Q4：I used to use `Custom JS Fragment`​ or add `Widget`​ directly, do I still need to download the plugin now?
+* Q4：I used to use `Custom JS Fragment`​ or add `WidgetInvoke`​ directly, do I still need to download the plugin now?
 
   A4：**Optional.** But we highly recommended to remove JS snippets and widgets to download the plugin version.
 

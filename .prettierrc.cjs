@@ -24,7 +24,8 @@
  */
 
 module.exports = {
-  semi: false,
-  singleQuote: false,
-  printWidth: 120
+    semi: false,
+    singleQuote: false,
+    printWidth: 120,
+    plugins: ["prettier-plugin-svelte"]
 }

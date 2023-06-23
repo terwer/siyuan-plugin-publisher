@@ -3,7 +3,6 @@ import { defineConfig } from "vite"
 import minimist from "minimist"
 import { viteStaticCopy } from "vite-plugin-static-copy"
 import livereload from "rollup-plugin-livereload"
-import { svelte } from "@sveltejs/vite-plugin-svelte"
 import fg from "fast-glob"
 
 const args = minimist(process.argv.slice(2))
@@ -20,28 +19,26 @@ console.log("distDir=>", distDir)
 
 export default defineConfig({
   plugins: [
-    svelte(),
-
     viteStaticCopy({
       targets: [
         {
-          src: "../../README*.md",
+          src: "./README*.md",
           dest: "./",
         },
         {
-          src: "../../LICENSE",
+          src: "./LICENSE",
           dest: "./",
         },
         {
-          src: "../../icon.png",
+          src: "./icon.png",
           dest: "./",
         },
         {
-          src: "../../preview.png",
+          src: "./preview.png",
           dest: "./",
         },
         {
-          src: "../../plugin.json",
+          src: "./plugin.json",
           dest: "./",
         },
         {
@@ -90,7 +87,7 @@ export default defineConfig({
                 //监听静态资源文件
                 name: "watch-external",
                 async buildStart() {
-                  const files = await fg(["src/i18n/*.json", "../../README*.md", "../../plugin.json"])
+                  const files = await fg(["src/i18n/*.json", "./README*.md", "./plugin.json"])
                   for (const file of files) {
                     this.addWatchFile(file)
                   }

@@ -1,4 +1,0 @@
-packages:
-  - "tools/*"    # tools
-  - "libs/*"     # libraries
-  - "apps/*"     # apps

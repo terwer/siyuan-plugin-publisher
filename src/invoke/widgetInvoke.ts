@@ -24,25 +24,25 @@
  */
 
 import { DeviceDetection, DeviceTypeEnum } from "zhi-device"
-import { createAppLogger } from "./appLogger"
-import PageUtil from "./utils/pageUtil"
-import { showIframeDialog } from "./iframeDialog"
-import { isDev } from "./Constants"
-import PublisherPlugin from "./index"
+import { createAppLogger } from "../appLogger"
+import PageUtil from "../utils/pageUtil"
+import { showIframeDialog } from "../iframeDialog"
+import { isDev } from "../Constants"
+import PublisherPlugin from "../index"
 
 /**
  * 挂件相关
  */
-export class Widget {
+export class WidgetInvoke {
   private logger
   private readonly pluginInstance
 
   constructor(pluginInstance: PublisherPlugin) {
-    this.logger = createAppLogger("widget")
+    this.logger = createAppLogger("widget-invoke")
     this.pluginInstance = pluginInstance
   }
 
-  public showPublisherWidget(type?: "blog" | "detail" | "picgo") {
+  public showPublisherWidget(type?: "blog") {
     const win = window as any
     const deviceType: DeviceTypeEnum = DeviceDetection.getDevice()
     this.logger.info(`you are from ${deviceType}`)
@@ -63,13 +63,6 @@ export class Widget {
             case "blog":
               // 博客首页
               pageUrl = "blog/index.html"
-              break
-            case "detail":
-              // 详情
-              pageUrl = "detail/index.html"
-              break
-            case "picgo":
-              pageUrl = "picgo/index.html"
               break
             default:
               // 发布首页
