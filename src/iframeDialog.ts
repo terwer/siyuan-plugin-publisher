@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { Dialog } from "siyuan"
+import { Dialog, IObject } from "siyuan"
 import PublisherPlugin from "./index"
 
 /**
@@ -31,8 +31,13 @@ import PublisherPlugin from "./index"
  *
  * @param pluginInstance 插件实例
  * @param pageIndex 地址
+ * @param destroyCallback 关闭回调
  */
-export const showIframeDialog = (pluginInstance: PublisherPlugin, pageIndex: string) => {
+export const showIframeDialog = (
+  pluginInstance: PublisherPlugin,
+  pageIndex: string,
+  destroyCallback?: (options?: IObject) => void
+) => {
   const contentHtml = `<style>
         iframe {
           width: 100%;
@@ -46,7 +51,8 @@ export const showIframeDialog = (pluginInstance: PublisherPlugin, pageIndex: str
     title: pluginInstance.i18n.siyuanBlog,
     transparent: false,
     content: contentHtml,
-    width: "90%",
-    height: "750px",
+    width: "60%",
+    height: "650px",
+    destroyCallback: destroyCallback,
   } as any)
 }

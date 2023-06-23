@@ -27,6 +27,7 @@ import PublisherPlugin from "../index"
 import { createAppLogger } from "../appLogger"
 import { showIframeDialog } from "../iframeDialog"
 import PageUtil from "../utils/pageUtil"
+import { IObject } from "siyuan"
 
 /**
  * 插件相关
@@ -43,11 +44,33 @@ export class PluginInvoke {
   }
 
   public async showBlogDialog() {
+    const pageId: string | undefined = PageUtil.getPageId()
+
+    // 检测是否安装博客插件
     await this.preCheckPicgoPlugin()
 
-    const pageId: string | undefined = PageUtil.getPageId()
+    // 临时开启预览权限
+    let isShared = false
+    const attrs = await this.pluginInstance.kernelApi.getBlockAttrs(pageId)
+    if (attrs["custom-publish-status"] === "publish") {
+      isShared = true
+    } else {
+      await this.pluginInstance.kernelApi.setBlockAttrs(pageId, {
+        "custom-publish-status": "preview",
+      })
+      this.logger.info("The document is not shared, will temporarily turn on preview permissions")
+    }
+
     const pageUrl = `${this.blogPluginBase}/post/${pageId}`
-    showIframeDialog(this.pluginInstance, pageUrl)
+    showIframeDialog(this.pluginInstance, pageUrl, async (options?: IObject) => {
+      // 回收预览权限
+      if (!isShared) {
+        await this.pluginInstance.kernelApi.setBlockAttrs(pageId, {
+          "custom-publish-status": "draft",
+        })
+        this.logger.info("Temporary permissions are turned off")
+      }
+    })
   }
 
   public async showPicbedDialog() {
