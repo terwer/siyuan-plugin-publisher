@@ -3,6 +3,17 @@
   "author": "terwer",
   "url": "https://github.com/terwer/siyuan-plugin-publisher",
   "version": "0.0.1",
+  "minAppVersion": "2.9.0",
+  "backends": [
+    "windows",
+    "linux",
+    "darwin",
+    "docker"
+  ],
+  "frontends": [
+    "desktop",
+    "desktop-window"
+  ],
   "displayName": {
     "default": "Publisher",
     "zh_CN": "发布工具"

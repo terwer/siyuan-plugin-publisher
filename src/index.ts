@@ -24,11 +24,12 @@
  */
 
 import { App, IObject, Plugin, getFrontend } from "siyuan"
+import { SiyuanConfig, SiyuanKernelApi } from "zhi-siyuan-api"
 import { createAppLogger } from "./appLogger"
+import { WidgetInvoke } from "./invoke/widgetInvoke"
 import { Topbar } from "./topbar"
 
 import "../index.styl"
-import { SiyuanConfig, SiyuanKernelApi } from "zhi-siyuan-api"
 
 export default class PublisherPlugin extends Plugin {
   private logger
@@ -36,6 +37,7 @@ export default class PublisherPlugin extends Plugin {
 
   public isMobile: boolean
   public kernelApi: SiyuanKernelApi
+  private widgetInvoke
 
   constructor(options: { app: App; id: string; name: string; i18n: IObject }) {
     super(options)
@@ -49,6 +51,11 @@ export default class PublisherPlugin extends Plugin {
     this.kernelApi = new SiyuanKernelApi(siyuanConfig)
 
     this.topbar = new Topbar(this)
+    this.widgetInvoke = new WidgetInvoke(this)
+  }
+
+  openSetting(): void {
+    this.widgetInvoke.showPublisherSettingDialog()
   }
 
   onload() {

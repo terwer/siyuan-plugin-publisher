@@ -42,7 +42,27 @@ export class WidgetInvoke {
     this.pluginInstance = pluginInstance
   }
 
-  public showPublisherWidget(type?: "blog") {
+  public showPublisherPublishDialog() {
+    this.showPage("/")
+  }
+
+  public showPublisherSettingDialog() {
+    this.showPage("/setting")
+  }
+
+  public showPublisherGeneralSettingDialog() {
+    this.showPage("/setting/general")
+  }
+
+  public showPublisherPublishSettingDialog() {
+    this.showPage("/setting/publish")
+  }
+
+  public showPublisherPlatformSettingDialog() {
+    this.showPage("/setting/platform")
+  }
+
+  private showPage(pageUrl) {
     const win = window as any
     const deviceType: DeviceTypeEnum = DeviceDetection.getDevice()
     this.logger.info(`you are from ${deviceType}`)
@@ -53,33 +73,7 @@ export class WidgetInvoke {
     }
     this.logger.debug("pageId=>", pageId)
 
-    if (deviceType == DeviceTypeEnum.DeviceType_Siyuan_MainWin) {
-      const libBase = "/plugins/siyuan-publisher/"
-      import(`${libBase}/libs/plugin-publisher-bridge/index.js` as any).then((bridge) => {
-        const publisherBridge = new bridge.default()
-        publisherBridge.init().then(() => {
-          let pageUrl
-          switch (type) {
-            case "blog":
-              // 博客首页
-              pageUrl = "blog/index.html"
-              break
-            default:
-              // 发布首页
-              pageUrl = "index.html"
-              break
-          }
-          if (!pageId && pageUrl === "index.html") {
-            pageUrl = "blog/index.html"
-          }
-
-          win.syp.renderPublishHelper(pageId, pageUrl, win, isDev)
-          this.logger.debug("publisherHook inited")
-        })
-      })
-    } else {
-      const publisherIndex = `/widgets/sy-post-publisher/index.html`
-      showIframeDialog(this.pluginInstance, publisherIndex)
-    }
+    const url = `/widgets/sy-post-publisher/#${pageUrl}`
+    showIframeDialog(this.pluginInstance, url)
   }
 }

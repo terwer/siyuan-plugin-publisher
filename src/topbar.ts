@@ -132,7 +132,7 @@ export class Topbar {
       iconHTML: icons.iconPen,
       label: this.pluginInstance.i18n.publishNormal,
       click: () => {
-        this.widgetInvoke.showPublisherWidget("blog")
+        this.widgetInvoke.showPublisherPublishDialog()
       },
     })
 
@@ -162,13 +162,22 @@ export class Topbar {
       icon: "iconSettings",
       label: this.pluginInstance.i18n.setting,
       click: () => {
-        // this.showSettingDialog()
+        this.widgetInvoke.showPublisherSettingDialog()
       },
       submenu: [
         {
-          iconHTML: icons.iconPreference,
-          label: this.pluginInstance.i18n.settingGeneral,
-          click: () => {},
+          iconHTML: icons.iconPublish,
+          label: this.pluginInstance.i18n.settingPublish,
+          click: () => {
+            this.widgetInvoke.showPublisherPublishSettingDialog()
+          },
+        },
+        {
+          iconHTML: icons.iconPlatform,
+          label: this.pluginInstance.i18n.settingPlatform,
+          click: () => {
+            this.widgetInvoke.showPublisherPlatformSettingDialog()
+          },
         },
         {
           iconHTML: icons.iconPicbed,
@@ -178,8 +187,11 @@ export class Topbar {
           },
         },
         {
-          iconHTML: icons.iconPublish,
-          label: this.pluginInstance.i18n.settingPublish,
+          iconHTML: icons.iconPreference,
+          label: this.pluginInstance.i18n.settingGeneral,
+          click: () => {
+            this.widgetInvoke.showPublisherGeneralSettingDialog()
+          },
         },
       ],
     })
