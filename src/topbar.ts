@@ -162,7 +162,7 @@ export class Topbar {
       icon: "iconSettings",
       label: this.pluginInstance.i18n.setting,
       click: () => {
-        this.widgetInvoke.showPublisherSettingDialog()
+        // this.widgetInvoke.showPublisherSettingDialog()
       },
       submenu: [
         {
@@ -170,13 +170,6 @@ export class Topbar {
           label: this.pluginInstance.i18n.settingPublish,
           click: () => {
             this.widgetInvoke.showPublisherPublishSettingDialog()
-          },
-        },
-        {
-          iconHTML: icons.iconPlatform,
-          label: this.pluginInstance.i18n.settingPlatform,
-          click: () => {
-            this.widgetInvoke.showPublisherPlatformSettingDialog()
           },
         },
         {
