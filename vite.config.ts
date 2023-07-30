@@ -8,11 +8,12 @@ import fg from "fast-glob"
 const args = minimist(process.argv.slice(2))
 const isWatch = args.watch || args.w || false
 const isWindows = process.platform === "win32"
-const devDistDir = "/Users/terwer/Documents/mydocs/SiYuanWorkspace/test/data/plugins/siyuan-plugin-publisher"
+let devDistDir = "/Users/terwer/Documents/mydocs/SiYuanWorkspace/test/data/plugins/siyuan-plugin-publisher"
 // let devDistDir = "/Users/terwer/Documents/mydocs/SiYuanWorkspace/public/data/plugins/siyuan-plugin-publisher"
-// if (isWindows) {
-//   devDistDir = "C:\\Users\\terwer\\Documents\\mydocs\\SiyuanWorkspace\\public\\data\\plugins\\siyuan-plugin-publisher"
-// }
+if (isWindows) {
+  devDistDir = "C:\\Users\\terwer\\Documents\\mydocs\\SiyuanWorkspace\\test\\data\\plugins\\siyuan-plugin-publisher"
+  // devDistDir = "C:\\Users\\terwer\\Documents\\mydocs\\SiyuanWorkspace\\public\\data\\plugins\\siyuan-plugin-publisher"
+}
 const distDir = isWatch ? devDistDir : "./dist"
 
 console.log("isWatch=>", isWatch)

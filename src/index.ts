@@ -55,7 +55,7 @@ export default class PublisherPlugin extends Plugin {
   }
 
   openSetting(): void {
-    this.widgetInvoke.showPublisherSettingDialog()
+    this.widgetInvoke.showPublisherPublishSettingDialog()
   }
 
   onload() {

@@ -46,10 +46,6 @@ export class WidgetInvoke {
     this.showPage("/")
   }
 
-  public showPublisherSettingDialog() {
-    this.showPage("/setting")
-  }
-
   public showPublisherGeneralSettingDialog() {
     this.showPage("/setting/general")
   }
