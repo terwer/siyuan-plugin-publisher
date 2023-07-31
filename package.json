@@ -37,7 +37,7 @@
   "dependencies": {
     "zhi-common": "^1.11.5",
     "zhi-device": "^2.3.0",
-    "zhi-lib-base": "^0.2.6",
+    "zhi-lib-base": "^0.4.2",
     "zhi-siyuan-api": "^1.28.2"
   }
 }
