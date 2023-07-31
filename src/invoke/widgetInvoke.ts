@@ -58,7 +58,7 @@ export class WidgetInvoke {
       showMessage(`平台key和文档ID不能为空，注意：您必须打开当前文档才能进行发布操作`, 2000, "error")
       return
     }
-    await this.showPage(`/workers/quickPublish/${key}/${pageId}`, false, "20%", "10%", true)
+    await this.showPage(`/workers/quickPublish/${key}/${pageId}`, false, "480px", "55px", true)
   }
 
   public async showPublisherPublishSettingDialog() {
