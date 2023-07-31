@@ -19,31 +19,31 @@ This plugin promises that all functions will be free forever. If you want to sup
 
 ## Core Features
 
-- **Extremely fast release**: One-time configuration, one-click release
-- **Picture bed management**: Integrate PicGO picture bed, support s3, minio, watermark plugin
-- **Support for extensions**: Based on the unified blog API specification, built-in support for metaweblogAPI, WordPress
+- [X] **Extremely fast release**: One-time configuration, one-click release
+- [ ] **Picture bed management**: Integrate PicGO picture bed, support s3, minio, watermark plugin
+- [X] **Support for extensions**: Based on the unified blog API specification, built-in support for metaweblogAPI, WordPress
   and GitHub, and provides a unified adapter, which can theoretically be extended to any platform
-- **Platform switch**: All platforms support enabling and disabling, the blog garden is enabled by default, and can be
+- [X] **Platform switch**: All platforms support enabling and disabling, the blog garden is enabled by default, and can be
   disabled at any time
-- **Dynamic Newly Added**: Support custom adding platform
-- **Smart Classification**: Support smart tags, smart slug aliases, smart summaries, and continue to improve
-- **Article Binding**: Support linking existing platform articles to Siyuan Notes to facilitate follow-up management,
+- [X] **Dynamic Newly Added**: Support custom adding platform
+- [ ] **Smart Classification**: Support smart tags, smart slug aliases, smart summaries, and continue to improve
+- [ ] **Article Binding**: Support linking existing platform articles to Siyuan Notes to facilitate follow-up management,
   support Siyuan->platform one-way synchronization
-- **Adapt to Theme**: Automatically adapt to dark mode and light mode
-- **Language support**: multi-language support, support Chinese version and English version
-- **Release view**: Support multiple release views, simple mode, detailed mode and source code mode
-- **Multiple deployments**: support Siyuan notes plugin, Chrome browser extension, self-deployment
+- [X] **Adapt to Theme**: Automatically adapt to dark mode and light mode
+- [X] **Language support**: multi-language support, support Chinese version and English version
+- [ ] **Release view**: Support multiple release views, simple mode, detailed mode and source code mode
+- [X] **Multiple deployments**: support Siyuan notes plugin<sup>Highly recommended</sup>, Chrome browser extension, self-deployment
 
 ## Platform List
 
 Names not listed in order
 
-- Cnblogs
-- WordPress
-- Yu Que
-- Github
-    - Hexo
-    - Hugo
+- [X] Cnblogs
+- [ ] WordPress
+- [X] Yuque
+- [ ] Github
+  - [ ] Hexo
+  - [ ] Hugo
 
 ## Platform Adaptation Plan
 
