@@ -1,22 +1,11 @@
 # platform
-.github
-.husky
-.settings
-.vercel
-.vscode
 
 # Ignore artifacts:
-build
-coverage
 dist
-extension
 node_modules
-out
 
-# Ignore all HTML files:
-*.html
+# Ignore all dts files:
+*.d.ts
 
 # lib
-*.min.js
-*mathjax*
 /pnpm-lock.yaml

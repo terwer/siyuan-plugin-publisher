@@ -114,7 +114,16 @@ def cp_folder(src, dst, remove_folder=False):
 
     if not os.path.exists(dst):
         mkdir(dst)
-    shutil.copytree(src, dst, ignore_dangling_symlinks=True, dirs_exist_ok=True)
+
+    try:
+        shutil.copytree(src, dst)
+    except FileExistsError:
+        # 如果目标文件夹已经存在，则删除它并重试
+        shutil.rmtree(dst)
+        shutil.copytree(src, dst)
+    except Exception as e:
+        print(f"无法拷贝文件夹,{e}")
+        raise e
 
 
 def mkdir(dirname):
@@ -212,6 +221,7 @@ def create_zip(root_path, file_name, ignored=[], storage_path=None):
 
     iter_subtree(root_path)
     zipf.close()
+
 
 def get_filename_from_time():
     """
