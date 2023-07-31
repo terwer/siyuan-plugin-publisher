@@ -32,7 +32,7 @@
     "vite-plugin-node-polyfills": "^0.8.2",
     "vite-plugin-static-copy": "^0.16.0",
     "vite-tsconfig-paths": "^4.2.0",
-    "vitest": "^0.32.4"
+    "vitest": "^0.33.0"
   },
   "dependencies": {
     "zhi-common": "^1.11.5",
