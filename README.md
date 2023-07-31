@@ -15,7 +15,7 @@ This plugin promises that all functions will be free forever. If you want to sup
 > carried out a series of bug fixes and experience optimization.
 
 > If you want to see previous 0.8.x plugin version, please refer to my original
-> widget: [sy-post-publisher](https://github.com/terwer/src-sy-post-publisher)
+> widget here: [sy-post-publisher](https://github.com/terwer/src-sy-post-publisher)
 
 ## Core Features
 
