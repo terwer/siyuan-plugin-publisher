@@ -23,13 +23,14 @@
  * questions.
  */
 
-import { App, IObject, Plugin, getFrontend } from "siyuan"
+import { App, getFrontend, IObject, Plugin } from "siyuan"
 import { SiyuanConfig, SiyuanKernelApi } from "zhi-siyuan-api"
 import { createAppLogger } from "./appLogger"
 import { WidgetInvoke } from "./invoke/widgetInvoke"
 import { Topbar } from "./topbar"
 
 import "../index.styl"
+import { ConfigManager } from "./store/config"
 
 export default class PublisherPlugin extends Plugin {
   private logger
@@ -38,6 +39,7 @@ export default class PublisherPlugin extends Plugin {
   public isMobile: boolean
   public kernelApi: SiyuanKernelApi
   private widgetInvoke
+  private cfg
 
   constructor(options: { app: App; id: string; name: string; i18n: IObject }) {
     super(options)
@@ -58,7 +60,10 @@ export default class PublisherPlugin extends Plugin {
     this.widgetInvoke.showPublisherPublishSettingDialog()
   }
 
-  onload() {
+  async onload() {
+    // 预加载数据
+    this.cfg = await ConfigManager.loadConfig(this)
+    // 初始化菜单
     this.topbar.initTopbar()
   }
 }

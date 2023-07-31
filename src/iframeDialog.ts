@@ -31,11 +31,17 @@ import PublisherPlugin from "./index"
  *
  * @param pluginInstance 插件实例
  * @param pageIndex 地址
+ * @param w 宽度
+ * @param h 高度
+ * @param noscroll 是否允许滚动
  * @param destroyCallback 关闭回调
  */
 export const showIframeDialog = (
   pluginInstance: PublisherPlugin,
   pageIndex: string,
+  w?: string,
+  h?: string,
+  noscroll?: boolean,
   destroyCallback?: (options?: IObject) => void
 ) => {
   const contentHtml = `<style>
@@ -45,14 +51,14 @@ export const showIframeDialog = (
           border: none;
         }
         </style>
-        <iframe src="${pageIndex}" width="100%"></iframe>`
+        <iframe src="${pageIndex}" width="100%" scrolling="${noscroll ? "no" : "yes"}"></iframe>`
 
   new Dialog({
     title: pluginInstance.i18n.siyuanBlog,
     transparent: false,
     content: contentHtml,
-    width: "60%",
-    height: "650px",
+    width: w ?? "60%",
+    height: h ?? "650px",
     destroyCallback: destroyCallback,
   } as any)
 }

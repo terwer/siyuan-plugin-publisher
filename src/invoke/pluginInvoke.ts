@@ -23,11 +23,12 @@
  * questions.
  */
 
-import PublisherPlugin from "../index"
-import { createAppLogger } from "../appLogger"
-import { showIframeDialog } from "../iframeDialog"
-import PageUtil from "../utils/pageUtil"
-import { IObject } from "siyuan"
+import PublisherPlugin from "../index";
+import { createAppLogger } from "../appLogger";
+import { showIframeDialog } from "../iframeDialog";
+import PageUtil from "../utils/pageUtil";
+import { IObject, showMessage } from "siyuan";
+import { isFileExists } from "../utils/utils";
 
 /**
  * 插件相关
@@ -47,7 +48,10 @@ export class PluginInvoke {
     const pageId: string | undefined = PageUtil.getPageId()
 
     // 检测是否安装博客插件
-    await this.preCheckPicgoPlugin()
+    const flag = await this.preCheckBlogPlugin()
+    if (!flag) {
+      return
+    }
 
     // 临时开启预览权限
     let isShared = false
@@ -62,7 +66,7 @@ export class PluginInvoke {
     }
 
     const pageUrl = `${this.blogPluginBase}/post/${pageId}`
-    showIframeDialog(this.pluginInstance, pageUrl, async (options?: IObject) => {
+    showIframeDialog(this.pluginInstance, pageUrl, undefined, undefined, undefined, async (options?: IObject) => {
       // 回收预览权限
       if (!isShared) {
         await this.pluginInstance.kernelApi.setBlockAttrs(pageId, {
@@ -74,7 +78,10 @@ export class PluginInvoke {
   }
 
   public async showPicbedDialog() {
-    await this.preCheckPicgoPlugin()
+    const flag = await this.preCheckPicgoPlugin()
+    if (!flag) {
+      return
+    }
 
     const pageId: string | undefined = PageUtil.getPageId()
     const pageUrl = `${this.picgoPluginBase}/?pageId=${pageId}`
@@ -82,7 +89,10 @@ export class PluginInvoke {
   }
 
   public async showPicbedSettingDialog() {
-    await this.preCheckPicgoPlugin()
+    const flag = await this.preCheckPicgoPlugin()
+    if (!flag) {
+      return
+    }
 
     const pageId: string | undefined = PageUtil.getPageId()
     const pageUrl = `${this.picgoPluginBase}/setting?pageId=${pageId}`
@@ -90,19 +100,30 @@ export class PluginInvoke {
   }
 
   private async preCheckPicgoPlugin() {
-    // TODO 检测是否安装 picgo 插件
-    const isInstalled = true
+    // 检测是否安装 picgo 插件
+    const isInstalled = await isFileExists(
+      this.pluginInstance.kernelApi,
+      "/data/plugins/siyuan-plugin-picgo/plugin.json",
+      "text"
+    )
     if (!isInstalled) {
       // 安装
+      showMessage(`该功能需要Picgo插件支持，请在集市安装 [Picgo插件] 最新版`, 2000, "error")
+      return false
     }
     return true
   }
 
   private async preCheckBlogPlugin() {
-    // TODO 检测是否安装 blog 插件
-    const isInstalled = true
+    // 检测是否安装 blog 插件
+    const isInstalled = await isFileExists(
+      this.pluginInstance.kernelApi,
+      "/data/plugins/siyuan-blog/plugin.json",
+      "text"
+    )
     if (!isInstalled) {
-      // 安装
+      showMessage(`该功能需要在线分享插件支持，请在集市安装 [在线分享] 插件最新版`, 7000, "error")
+      return false
     }
     return true
   }

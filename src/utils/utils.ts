@@ -22,3 +22,25 @@
  * or visit www.terwer.space if you need additional information or have any
  * questions.
  */
+
+import KernelApi from "../api/kernel-api"
+import { StrUtil } from "zhi-common"
+
+/**
+ * 文件是否存在
+ *
+ * @param kernelApi - kernelApi
+ * @param p - 路径
+ * @param type - 类型
+ */
+export const isFileExists = async (kernelApi: KernelApi, p: string, type: "text" | "json") => {
+  try {
+    const res = await kernelApi.getFile(p, type)
+    if (type === "text") {
+      return !StrUtil.isEmptyString(res)
+    }
+    return res !== null
+  } catch {
+    return false
+  }
+}

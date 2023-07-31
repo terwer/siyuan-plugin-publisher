@@ -25,12 +25,14 @@
 
 import PublisherPlugin from "./index"
 import { icons } from "./utils/svg"
-import { Menu } from "siyuan"
+import { IMenuItemOption, Menu } from "siyuan"
 import PageUtil from "./utils/pageUtil"
 import HtmlUtils from "./utils/htmlUtils"
 import { createAppLogger } from "./appLogger"
 import { WidgetInvoke } from "./invoke/widgetInvoke"
 import { PluginInvoke } from "./invoke/pluginInvoke"
+import { ObjectUtil } from "zhi-common"
+import { DYNAMIC_CONFIG_KEY } from "./Constants"
 
 /**
  * 顶部按钮
@@ -54,76 +56,48 @@ export class Topbar {
       title: this.pluginInstance.i18n.publishTool,
       position: "left",
       callback: async () => {
-        await this.addMenu(topBarElement.getBoundingClientRect())
+        const quickMenus = await this.getQuickMenus()
+        await this.addMenu(topBarElement.getBoundingClientRect(), quickMenus)
       },
     })
   }
 
-  private async addMenu(rect: DOMRect) {
+  private async getQuickMenus() {
+    const submenus = <IMenuItemOption[]>[]
+    // 读取配置
+    if (ObjectUtil.isEmptyObject(this.pluginInstance.cfg)) {
+      // 配置错误，直接返回空
+      return submenus
+    }
+    const setting = this.pluginInstance.cfg
+    const dynJsonCfg = setting[DYNAMIC_CONFIG_KEY] as any
+    this.logger.info("dynJsonCfg =>", dynJsonCfg.totalCfg)
+    // 构造发布菜单
+    dynJsonCfg.totalCfg.forEach((config: any) => {
+      if (config.isEnabled === true) {
+        const submenu = {
+          iconHTML: `<span class="iconfont-icon">${config.platformIcon}</span>`,
+          label: config.platformName,
+          disabled: !config.isAuth,
+          click: async () => {
+            const key = config.platformKey
+            await this.widgetInvoke.showPublisherQuickPublishDialog(key)
+          },
+        }
+        submenus.push(submenu)
+      }
+    })
+    return submenus
+  }
+
+  private async addMenu(rect: DOMRect, quickMenus: IMenuItemOption[]) {
     const menu = new Menu("publisherMenu")
 
     // 一键发布
     menu.addItem({
       icon: `iconRiffCard`,
       label: this.pluginInstance.i18n.publishTo,
-      submenu: [
-        {
-          iconHTML: icons.iconCnblogs,
-          label: this.pluginInstance.i18n.platformCnblogs,
-          click: async () => {
-            this.logger.debug("发布到博客园")
-          },
-        },
-        {
-          iconHTML: icons.iconTypecho,
-          label: this.pluginInstance.i18n.platformTypecho,
-          disabled: true,
-          click: () => {
-            this.logger.debug("发布到Typecho")
-          },
-        },
-        {
-          iconHTML: icons.iconWordpress,
-          label: this.pluginInstance.i18n.platformWordpress,
-          click: () => {
-            this.logger.debug("发布到WordPress")
-          },
-        },
-        {
-          iconHTML: icons.iconYuque,
-          label: this.pluginInstance.i18n.platformYuque,
-          click: () => {
-            this.logger.debug("发布到语雀")
-          },
-        },
-        {
-          iconHTML: icons.iconGithub,
-          label: this.pluginInstance.i18n.platformGithub,
-          submenu: [
-            {
-              iconHTML: icons.iconHexo,
-              label: this.pluginInstance.i18n.platformHexo,
-              click: () => {
-                this.logger.debug("发布到Hexo")
-              },
-            },
-            {
-              iconHTML: icons.iconHugo,
-              label: this.pluginInstance.i18n.platformHugo,
-              click: () => {
-                this.logger.debug("发布到Hugo")
-              },
-            },
-            {
-              iconHTML: icons.iconVue,
-              label: this.pluginInstance.i18n.platformVitepress,
-              click: () => {
-                this.logger.debug("发布到Vitepress")
-              },
-            },
-          ],
-        },
-      ],
+      submenu: quickMenus,
     })
 
     // 常规发布
@@ -147,23 +121,21 @@ export class Topbar {
     })
 
     // 图床
-    menu.addSeparator()
-    menu.addItem({
-      iconHTML: icons.iconPicture,
-      label: this.pluginInstance.i18n.picbed,
-      click: async () => {
-        await this.pluginInvoke.showPicbedDialog()
-      },
-    })
+    // menu.addSeparator()
+    // menu.addItem({
+    //   iconHTML: icons.iconPicture,
+    //   label: this.pluginInstance.i18n.picbed,
+    //   click: async () => {
+    //     await this.pluginInvoke.showPicbedDialog()
+    //   },
+    // })
 
     // 设置
     menu.addSeparator()
     menu.addItem({
       icon: "iconSettings",
       label: this.pluginInstance.i18n.setting,
-      click: () => {
-        // this.widgetInvoke.showPublisherSettingDialog()
-      },
+      click: () => {},
       submenu: [
         {
           iconHTML: icons.iconPublish,
@@ -172,13 +144,13 @@ export class Topbar {
             this.widgetInvoke.showPublisherPublishSettingDialog()
           },
         },
-        {
-          iconHTML: icons.iconPicbed,
-          label: this.pluginInstance.i18n.settingPicbed,
-          click: async () => {
-            await this.pluginInvoke.showPicbedSettingDialog()
-          },
-        },
+        // {
+        //   iconHTML: icons.iconPicbed,
+        //   label: this.pluginInstance.i18n.settingPicbed,
+        //   click: async () => {
+        //     await this.pluginInvoke.showPicbedSettingDialog()
+        //   },
+        // },
         {
           iconHTML: icons.iconPreference,
           label: this.pluginInstance.i18n.settingGeneral,

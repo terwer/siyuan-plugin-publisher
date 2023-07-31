@@ -23,45 +23,24 @@
  * questions.
  */
 
-import { BaseApi } from "./base-api"
-import { siyuanApiToken, siyuanApiUrl } from "../Constants"
+import PublisherPlugin from "../index"
+import { JsonUtil } from "zhi-common"
 
 /**
- * 思源笔记服务端API v2.8.9
- *
- * @see {@link https://github.com/siyuan-note/siyuan/blob/master/API_zh_CN.md API}
- *
- * @author terwer
- * @version 0.0.1
- * @since 0.0.1
+ * 配置管理类
+ * 提供配置的加载、保存和删除功能
  */
-class KernelApi extends BaseApi {
+export class ConfigManager {
+  private static storageKey = "/data/storage/syp/sy-p-plus-cfg.json"
+
   /**
-   * 读取文件
+   * 加载配置
    *
-   * @param path - 文件路径，例如：/data/20210808180117-6v0mkxr/20200923234011-ieuun1p.sy
-   * @param type - 类型
+   * @param pluginInstance PublisherPlugin的实例
+   * @returns 返回配置对象
    */
-  public async getFile(path: string, type: "text" | "json") {
-    const response = await fetch(`${siyuanApiUrl}/api/file/getFile`, {
-      method: "POST",
-      headers: {
-        Authorization: `Token ${siyuanApiToken}`,
-      },
-      body: JSON.stringify({
-        path: path,
-      }),
-    })
-    if (response.status === 200) {
-      if (type === "text") {
-        return await response.text()
-      }
-      if (type === "json") {
-        return await response.json()
-      }
-    }
-    return null
+  public static async loadConfig(pluginInstance: PublisherPlugin): Promise<any> {
+    const configStr = await pluginInstance.kernelApi.getFile(this.storageKey, "text")
+    return JsonUtil.safeParse<any>(configStr, {} as any)
   }
 }
-
-export default KernelApi
