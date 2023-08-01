@@ -29,7 +29,6 @@ import { AppInstance } from "~/src/appInstance.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { CnblogsConstants } from "~/src/adaptors/api/cnblogs/cnblogsConstants.ts"
 import { MetaweblogBlogApi } from "~/src/adaptors/api/base/metaweblog/metaweblogBlogApi.ts"
-import { StrUtil } from "zhi-common"
 
 /**
  * 博客园 API 适配器
@@ -62,11 +61,6 @@ class CnblogsApiAdaptor extends MetaweblogBlogApi {
     ])
     this.logger.debug("getUsersBlogs=>", result)
     return result
-  }
-
-  public override async getPreviewUrl(postid: string): Promise<string> {
-    const previewUrl = this.cfg.previewUrl.replace(/\[postid\]/g, postid)
-    return StrUtil.pathJoin(this.cfg.home ?? "", previewUrl)
   }
 
   public override async deletePost(postid: string): Promise<boolean> {

@@ -34,7 +34,7 @@ class MetaweblogConstants {
   public static METHOD_GET_USERS_BLOGS = "metaWeblog.getUsersBlogs"
   public static METHOD_NEW_POST = "metaWeblog.newPost"
   public static METHOD_EDIT_POST = "metaWeblog.editPost"
-  public static METHOD_DELETE_POST = "blogger.deletePost"
+  public static METHOD_DELETE_POST = "metaWeblog.deletePost"
   public static METHOD_GET_RECENT_POSTS = "metaWeblog.getRecentPosts"
   public static METHOD_GET_POST = "metaWeblog.getPost"
   public static METHOD_GET_CATEGORIES = "metaWeblog.getCategories"
