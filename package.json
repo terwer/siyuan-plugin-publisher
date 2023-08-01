@@ -12,7 +12,7 @@
     "build": "pnpm pluginBuild && pnpm siyuanBuild",
     "pluginBuild": "python scripts/plugin_build.py",
     "siyuanBuild": "python scripts/siyuan_build.py",
-    "vercelBuild": "python scripts/vercel_build.py",
+    "vercelBuild": "python3 scripts/vercel_build.py",
     "nginxBuild": "python scripts/nginx_build.py",
     "widgetBuild": "python scripts/widget_build.py",
     "extBuild": "python scripts/ext_build.py",
