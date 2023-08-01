@@ -1,9 +1,25 @@
 # Changelog
 
+## [1.1.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.0.0...v1.1.0) (2023-08-01)
+### Features
+* [#83](https://github.com/terwer/siyuan-plugin-publisher/issues/83) 多平台分发需要考虑同步更新思源笔记 ([103203d](https://github.com/terwer/siyuan-plugin-publisher/commit/103203d3ad867991f0d86909fcb82bcc2f0cd7ad))
+* 仓库同步 ([7960387](https://github.com/terwer/siyuan-plugin-publisher/commit/7960387d1d11216d5bd072db4d26735cf277f048))
+* 插件挂件源码合并 https://github.com/terwer/sy-post-publisher/issues/89 https://github.com/terwer/siyuan-plugin-publisher/issues/522 ([c18023f](https://github.com/terwer/siyuan-plugin-publisher/commit/c18023f3c9c9a649e1d08a84d89673d29b2a29db))
+* 整合挂件功能 ([61c83c7](https://github.com/terwer/siyuan-plugin-publisher/commit/61c83c756c965235eed576a3c6f4e75cee3972f9))
+* 新增扩展菜单 ([6fb007d](https://github.com/terwer/siyuan-plugin-publisher/commit/6fb007df7b04ee212065eb2135903e01a2ab5637))
+### Bug Fixes
+* 修复 cross-fetch 版本问题，必须使用 cross-fetch 3 ([69b33dc](https://github.com/terwer/siyuan-plugin-publisher/commit/69b33dca0f04da05113dab530e03b23d1082c2b8))
+* 修复常规发布参数缺失问题 ([e1afcd9](https://github.com/terwer/siyuan-plugin-publisher/commit/e1afcd923fe64fe53e44dd9df43c44ef5e433005))
+* 修复构建错误 ([32e8f61](https://github.com/terwer/siyuan-plugin-publisher/commit/32e8f61d193d0a979c4417653bc8b202b0be7b04))
+* 修复菜单加载顺序问题导致的可能无法显示的问题 ([de27e0a](https://github.com/terwer/siyuan-plugin-publisher/commit/de27e0a33fe3fa47dd2b9ea497a01aacea164fbc))
+* 修复语雀编辑文章可能出错的问题 ([44261c9](https://github.com/terwer/siyuan-plugin-publisher/commit/44261c93fe776836ffa936b32725ae9748527f19))
+* 修复语雀预览链接错误问题 ([b9620cb](https://github.com/terwer/siyuan-plugin-publisher/commit/b9620cb10b12d1a39d24cc47d06ed81f232f2013))
+* 还原 cross-fetch ([7b26de0](https://github.com/terwer/siyuan-plugin-publisher/commit/7b26de09487866843a1cbca3c9695183cb22e7a9))
+### Miscellaneous
+* 优化代码构建 ([123a2d2](https://github.com/terwer/siyuan-plugin-publisher/commit/123a2d2013adb19fbfe7a24fbf42893e8fc361f7))
 ## [1.0.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v0.8.0...v1.0.0) (2023-07-31)
 ### ⚠ BREAKING CHANGES
 * 全面采用插件系统api重构，并进行细节性优化和bug修复，除了菜单插槽移除之外，其他原有功能将完全移植。
-### Features
 * add publisher hook and bridge ([dc34341](https://github.com/terwer/siyuan-plugin-publisher/commit/dc343414cd1f120a6dde6bf34420ec8c30b42454))
 * fix ci ([30982fe](https://github.com/terwer/siyuan-plugin-publisher/commit/30982fe6160805efbcfc1313e716e069e92d37b4))
 * **publisher-main:** 加载插件菜单 ([a621fbf](https://github.com/terwer/siyuan-plugin-publisher/commit/a621fbf722cc04f5a18adca71524e33a7b43d4ab))
@@ -38,7 +54,6 @@
 * 版本号同步 ([4192aa1](https://github.com/terwer/siyuan-plugin-publisher/commit/4192aa13c90a839fc3033e8a242c25d61c6cc7cf))
 * 移动 sdk 到类库项目 ([e19d45c](https://github.com/terwer/siyuan-plugin-publisher/commit/e19d45c32e4c1933d8597f497658d62d940f9c72))
 * 迁移仓库到集市挂件仓库 ([1343906](https://github.com/terwer/siyuan-plugin-publisher/commit/13439061349c43b080cb0c8fa1070e7af3e0b126))
-### Bug Fixes
 * allow toc in hexo as default ([1650edc](https://github.com/terwer/siyuan-plugin-publisher/commit/1650edc8aaeb6f31eb72a4857bda50124e02d6d6))
 * **deps:** bump pnpm/action-setup from 2.2.4 to 2.4.0 ([255b55a](https://github.com/terwer/siyuan-plugin-publisher/commit/255b55a488802c1e738ab4300346851cce749afc))
 * **deps:** bump zhi-lib-base from 0.2.6 to 0.4.2 ([f879df2](https://github.com/terwer/siyuan-plugin-publisher/commit/f879df2e00be10709770dbaa172b4d6599ed0fde))
@@ -56,7 +71,6 @@
 * 新增页面路由 ([a8cd654](https://github.com/terwer/siyuan-plugin-publisher/commit/a8cd6543413e8cd8d88bb443e9b915c509b2a470))
 * 更新代码校验规则 ([1be577b](https://github.com/terwer/siyuan-plugin-publisher/commit/1be577b8842cc8772e50f3db2820c07b27913e97))
 * 项目结构重构 ([1129f3d](https://github.com/terwer/siyuan-plugin-publisher/commit/1129f3d83e5bd297664bbd91e0d083af71ca1719))
-### Miscellaneous
 * **deps-dev:** bump svelte from 3.59.2 to 4.1.2 ([03393d2](https://github.com/terwer/siyuan-plugin-publisher/commit/03393d2ec1a0373aea298dbfd685dd3e1fec8ff2))
 * **deps-dev:** bump vite-plugin-static-copy from 0.16.0 to 0.17.0 ([feea39d](https://github.com/terwer/siyuan-plugin-publisher/commit/feea39d39bff74051fe0d68153b0628b00bff53f))
 * **deps-dev:** bump vitest from 0.32.4 to 0.33.0 ([f2ce507](https://github.com/terwer/siyuan-plugin-publisher/commit/f2ce507ea537601d7dba21de84524274ec1cbee4))

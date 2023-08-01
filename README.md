@@ -14,6 +14,17 @@ This plugin promises that the basic functions will be free forever, and the foll
 >
 > In addition to [Extended Functions], **Other functions do not require any dependencies** , and there is no need to download the previous widget, which is already built-in in the plugin.
 
+## Recent critical updates and bug fixes
+
+- Fixed missing general release parameters
+- Fixed an issue where menu loading order issues may not be displayed
+- Multi-platform distribution needs to consider synchronizing and updating Siyuan notes
+- Fixed an issue where there could be an error in editing articles
+- Fixed the wrong issue of Lark Preview link
+- Added extended menu
+- Warehouse synchronization
+- Plug-in widget source code merging
+
 ## Core Features
 
 - [X] **Extremely fast release**: One-time configuration, one-click release
