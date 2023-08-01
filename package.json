@@ -44,6 +44,7 @@
     "@element-plus/icons-vue": "^2.1.0",
     "@vueuse/components": "^10.3.0",
     "@vueuse/core": "^10.3.0",
+    "cross-fetch": "^4.0.0",
     "element-plus": "^2.3.8",
     "js-base64": "^3.7.5",
     "pinia": "^2.1.6",

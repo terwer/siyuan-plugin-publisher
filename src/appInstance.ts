@@ -27,6 +27,7 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { DeviceDetection } from "zhi-device"
 import xmlbuilder2 from "xmlbuilder2"
 import { Deserializer, Serializer, SimpleXmlRpcClient, XmlrpcUtil } from "simple-xmlrpc"
+import fetch from "cross-fetch"
 
 /**
  * 应用实例
@@ -43,7 +44,6 @@ export class AppInstance {
     this.logger = createAppLogger("app-instance")
     this.deviceType = DeviceDetection.getDevice()
 
-    // Node 18 已经原生支持fetch，不再 polyfill
     this.fetch = fetch
     this.xmlbuilder2 = xmlbuilder2
     this.simpleXmlrpc = {
