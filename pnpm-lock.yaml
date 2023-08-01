@@ -69,8 +69,8 @@ dependencies:
     specifier: ^0.4.2
     version: 0.4.2
   zhi-siyuan-api:
-    specifier: ^1.28.2
-    version: 1.28.2
+    specifier: ^1.29.0
+    version: 1.29.0
   zhi-xmlrpc-middleware:
     specifier: ^0.3.0
     version: 0.3.0
@@ -154,8 +154,8 @@ packages:
     resolution: {integrity: sha512-dlR6LdS+0SzOAPx/TPRhnoi7hE251OVeT2Snw0RguNbBSbjUHdWr0l3vcUUDg26rEysT89kCbtw1lVorBXLLCg==}
     dev: true
 
-  /@astrojs/compiler@1.6.3:
-    resolution: {integrity: sha512-n0xTuBznKspc0plk6RHBOlSv/EwQGyMNSxEOPj7HMeiRNnXX4woeSopN9hQsLkqraDds1eRvB4u99buWgVNJig==}
+  /@astrojs/compiler@1.7.0:
+    resolution: {integrity: sha512-+wXur+Nr2WyeGmccBetjUOE1P7Aut8oGzDI+wFhJ31L3Fb8/dsUCRdeVzNTFzkMI7BH5DXy+yUnDz4vudQE5JQ==}
     dev: true
 
   /@babel/helper-string-parser@7.22.5:
@@ -1676,10 +1676,10 @@ packages:
     resolution: {integrity: sha512-n+fb6O40SM6sD36lGwgVIE3zeVQUMdl6ZHaHEjRI4zdaBu658XaAV1YDztF7Iga5kmeOxJYB87mcQ+lUnQs0Nw==}
     engines: {node: ^14.18.0 || >=16.0.0}
     dependencies:
-      '@astrojs/compiler': 1.6.3
+      '@astrojs/compiler': 1.7.0
       '@typescript-eslint/scope-manager': 5.62.0
       '@typescript-eslint/types': 5.62.0
-      astrojs-compiler-sync: 0.3.3(@astrojs/compiler@1.6.3)
+      astrojs-compiler-sync: 0.3.3(@astrojs/compiler@1.7.0)
       debug: 4.3.4
       eslint-visitor-keys: 3.4.2
       espree: 9.6.1
@@ -1688,13 +1688,13 @@ packages:
       - supports-color
     dev: true
 
-  /astrojs-compiler-sync@0.3.3(@astrojs/compiler@1.6.3):
+  /astrojs-compiler-sync@0.3.3(@astrojs/compiler@1.7.0):
     resolution: {integrity: sha512-LbhchWgsvjvRBb5n5ez8/Q/f9ZKViuox27VxMDOdTUm8MRv9U7phzOiLue5KluqTmC0z1LId4gY2SekvoDrkuw==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
       '@astrojs/compiler': '>=0.27.0'
     dependencies:
-      '@astrojs/compiler': 1.6.3
+      '@astrojs/compiler': 1.7.0
       synckit: 0.8.5
     dev: true
 
@@ -5460,8 +5460,8 @@ packages:
     resolution: {integrity: sha512-kfKgN4hb5efUf+k5Y9028CVV1p/hsnK0NbRsxI3uwJoTlHfTBjfi6ZfrkhDn+XEnEYeWidO75sx4RdcnT7C3KA==}
     dev: false
 
-  /zhi-siyuan-api@1.28.2:
-    resolution: {integrity: sha512-Fyynrrqi7zktP0tDQo/oVCCYJjEsXbyOc4C201amX+Fu6JzGhqfW4Y5eT2tpAm83rbkOPen8t/7kDARN3kmVCw==}
+  /zhi-siyuan-api@1.29.0:
+    resolution: {integrity: sha512-7DxC3/EF1Fz4AjiaygiLmVxtQJx0aBJY0WKlYPdcu1zKvV96i3YpbHV7lgTwE9pDY/EqK6vq4oVl52/haJv0ng==}
     dependencies:
       zhi-blog-api: 1.20.1
       zhi-common: 1.11.5
