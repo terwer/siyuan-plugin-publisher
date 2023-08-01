@@ -64,6 +64,6 @@ export default class PublisherPlugin extends Plugin {
     // 预加载数据
     this.cfg = await ConfigManager.loadConfig(this)
     // 初始化菜单
-    this.topbar.initTopbar()
+    await this.topbar.initTopbar()
   }
 }
