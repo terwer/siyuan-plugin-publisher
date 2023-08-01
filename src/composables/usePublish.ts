@@ -165,6 +165,19 @@ const usePublish = () => {
       logger.info("api=>", api)
 
       singleFormData.publishProcessStatus = await api.deletePost(postid)
+
+      // 删除成功才去移除文章发布信息
+      if (!StrUtil.isEmptyString(posidKey)) {
+        const postMeta = singleFormData.setting[id] ?? {}
+        const updatedPostMeta = { ...postMeta }
+        if (updatedPostMeta.hasOwnProperty(posidKey)) {
+          delete updatedPostMeta[posidKey]
+        }
+
+        singleFormData.setting[id] = updatedPostMeta
+        await updateSetting(singleFormData.setting)
+        logger.info(`[${key}] [${id}] 文章发布信息已移除`)
+      }
     } catch (e) {
       singleFormData.errMsg = t("main.opt.failure") + "=>" + e
       logger.error(e)
@@ -175,20 +188,6 @@ const usePublish = () => {
       })
     }
 
-    // 移除文章发布信息
-    const posidKey = singleFormData.cfg.posidKey
-    if (!StrUtil.isEmptyString(posidKey)) {
-      const postMeta = singleFormData.setting[id] ?? {}
-      const updatedPostMeta = { ...postMeta }
-      if (updatedPostMeta.hasOwnProperty(posidKey)) {
-        delete updatedPostMeta[posidKey]
-      }
-
-      singleFormData.setting[id] = updatedPostMeta
-      await updateSetting(singleFormData.setting)
-      logger.info(`[${key}] [${id}] 文章发布信息已移除`)
-    }
-
     return {
       key: key,
       status: singleFormData.publishProcessStatus,
@@ -196,10 +195,48 @@ const usePublish = () => {
     }
   }
 
+  const doForceSingleDelete = async (key: string, id: string) => {
+    try {
+      // 加载配置
+      singleFormData.setting = await getSetting()
+      singleFormData.cfg = JsonUtil.safeParse<any>(singleFormData.setting[key], {} as any)
+
+      // 检测是否发布
+      const posidKey = singleFormData.cfg.posidKey
+      if (StrUtil.isEmptyString(posidKey)) {
+        throw new Error("配置错误，posidKey不能为空，请检查配置")
+      }
+      if (!StrUtil.isEmptyString(posidKey)) {
+        const postMeta = singleFormData.setting[id] ?? {}
+        const updatedPostMeta = { ...postMeta }
+        if (updatedPostMeta.hasOwnProperty(posidKey)) {
+          delete updatedPostMeta[posidKey]
+        }
+
+        singleFormData.setting[id] = updatedPostMeta
+        await updateSetting(singleFormData.setting)
+
+        await kernelApi.pushMsg({
+          msg: t("main.opt.ok"),
+          timeout: 2000,
+        })
+        logger.info(`[${key}] [${id}] 文章发布信息已强制移除`)
+      }
+    } catch (e) {
+      logger.error(e)
+      // ElMessage.error(singleFormData.errMsg)
+      await kernelApi.pushErrMsg({
+        msg: t("main.opt.failure") + "=>" + e,
+        timeout: 7000,
+      })
+    }
+  }
+
   return {
     singleFormData,
     doSinglePublish,
     doSingleDelete,
+    doForceSingleDelete,
   }
 }
 

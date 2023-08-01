@@ -43,13 +43,17 @@ const params = reactive(route.params)
 const key = params.key as string
 const id = params.id as string
 
+const formData = reactive({
+  processResult: {} as any,
+})
+
 onMounted(async () => {
   singleFormData.isPublishLoading = true
   setTimeout(async () => {
     logger.info("单个快速发布开始")
     // 思源笔记原始文章数据
     const doc = await blogApi.getPost(id)
-    await doSinglePublish(key, id, doc)
+    formData.processResult = await doSinglePublish(key, id, doc)
     logger.info("单个快速发布结束")
     singleFormData.isPublishLoading = false
   }, 200)
@@ -70,10 +74,17 @@ onMounted(async () => {
         发布中，请稍后...：
       </div>
       <div v-else-if="singleFormData.publishProcessStatus" class="success-tips">
-        {{ singleFormData.isAdd ? "发布到" : "更新文章到" }} [博客园] 成功，
+        {{ singleFormData.isAdd ? "发布到" : "更新文章到" }}
+        [{{ formData.processResult.key }}]
+        {{ StrUtil.isEmptyString(formData.processResult.name) ? "" : `[${formData.processResult.name}]` }}
+        成功，
         <a :href="singleFormData.previewUrl" target="_blank">查看文章</a>
       </div>
-      <div v-else class="fail-tips">{{ singleFormData.isAdd ? "发布到" : "更新文章到" }} [博客园] 失败！</div>
+      <div v-else class="fail-tips">
+        {{ singleFormData.isAdd ? "发布到" : "更新文章到" }} [{{ formData.processResult.key }}]
+        {{ StrUtil.isEmptyString(formData.processResult.name) ? "" : `[${formData.processResult.name}]` }}
+        失败！
+      </div>
     </div>
   </div>
 </template>
