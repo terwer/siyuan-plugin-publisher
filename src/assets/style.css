@@ -1,0 +1,180 @@
+/*
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * This code is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License version 2 only, as
+ * published by the Free Software Foundation.  Terwer designates this
+ * particular file as subject to the "Classpath" exception as provided
+ * by Terwer in the LICENSE file that accompanied this code.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+ * version 2 for more details (a copy is included in the LICENSE file that
+ * accompanied this code).
+ *
+ * You should have received a copy of the GNU General Public License version
+ * 2 along with this work; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * Please contact Terwer, Shenzhen, Guangdong, China, youweics@163.com
+ * or visit www.terwer.space if you need additional information or have any
+ * questions.
+ */
+
+@import "./webfont.css";
+
+html {
+  /*filter: grayscale(1);*/
+  --el-font-family: var(--g-font-family) !important;
+  --custom-app-color: #161616;
+  --custom-app-bg-color: #ffffff;
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-size: 100%;
+  height: 97.5%;
+}
+
+#app {
+  color: var(--custom-app-color);
+  background: var(--custom-app-bg-color);
+  padding: 10px 0;
+  min-width: 600px;
+  min-height: 99%;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #535bf2;
+}
+
+:root {
+  --g-font-family: "Open Sans", "LXGW WenKai", "JetBrains Mono", "-apple-system", "Microsoft YaHei", "Times New Roman",
+    "方正北魏楷书_GBK";
+  font-family: var(--g-font-family) !important;
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Mono font (optional) */
+pre,
+code {
+  font-family: var(--g-font-family) !important;
+  tab-size: 4;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+}
+
+/* common */
+.pull-right {
+  float: right;
+}
+
+/* util */
+.disabled-click {
+  pointer-events: none;
+}
+
+/* table */
+.post-detail-content-box table {
+  font-family: var(--g-font-family);
+  font-size: 14px;
+  color: #333333;
+  border-width: 1px;
+  border-color: #666666;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.post-detail-content-box table th {
+  border-width: 1px;
+  padding: 8px;
+  border-style: solid;
+  border-color: #666666;
+  background-color: #dedede;
+}
+
+.post-detail-content-box table td {
+  border-width: 1px;
+  padding: 8px;
+  border-style: solid;
+  border-color: #666666;
+  background-color: #ffffff;
+}
+
+.el-header {
+  --el-header-padding: 0 20px;
+  --el-header-height: 20px !important;
+}
+
+.el-alert {
+  margin-top: 10px !important;
+}
+
+.el-card__body {
+  text-align: left !important;
+  --el-card-padding: 10px;
+}
+
+.el-dialog {
+  --el-dialog-width: 88% !important;
+  --el-dialog-margin-top: 10vh;
+  margin: var(--el-dialog-margin-top, 15vh) auto 0 5.5%;
+  text-align: left !important;
+}
+
+.el-dialog__header {
+  text-align: left !important;
+}
+
+.el-dialog__body {
+  padding-bottom: 10px !important;
+}
+
+.dialog-action {
+  margin: calc(var(--el-dialog-padding-primary) + 16px) var(--el-dialog-padding-primary);
+  margin-bottom: 0;
+  padding-bottom: 0;
+  padding-right: 0;
+  margin-right: 0;
+}
+
+.dialog-action .el-form-item {
+  margin-bottom: 0 !important;
+}
+
+.dialog-action .el-form-item__content {
+  justify-content: flex-end;
+}
+
+.dialog-action .el-form-item__content .el-button {
+  margin-left: 10px;
+}
+
+.pic-manage-btn {
+  margin-left: 10px;
+}
+.pic-manage-btn svg {
+  margin-right: 5px;
+}

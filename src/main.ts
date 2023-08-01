@@ -25,14 +25,14 @@
 
 import { createApp } from "vue"
 import App from "./App.vue"
-// import { createAppLogger } from "~/src/utils/appLogger.ts"
-// import { useVueRouter } from "./composables/useVueRouter.ts"
-// import i18n from "~/src/locales"
-// import "element-plus/dist/index.css"
-// import "element-plus/theme-chalk/dark/css-vars.css"
-// import { InjectKeys } from "~/src/utils/injectKeys.ts"
-// import { AppInstance } from "~/src/appInstance.ts"
-// import { createPinia } from "pinia"
+import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { useVueRouter } from "./composables/useVueRouter.ts"
+import i18n from "~/src/locales"
+import "element-plus/dist/index.css"
+import "element-plus/theme-chalk/dark/css-vars.css"
+import { InjectKeys } from "~/src/utils/injectKeys.ts"
+import { AppInstance } from "~/src/appInstance.ts"
+import { createPinia } from "pinia"
 
 /**
  * Vue 入口
@@ -42,37 +42,37 @@ import App from "./App.vue"
  * @since 0.0.1
  */
 const createVueApp = async () => {
-  // const logger = createAppLogger("vue-main-entry")
+  const logger = createAppLogger("vue-main-entry")
 
   // https://stackoverflow.com/a/62383325/4037224
   const app = createApp(App)
 
-  // // 国际化
-  // app.use(i18n)
-  //
-  // // pinia
-  // const pinia = createPinia()
-  // app.use(pinia)
-  //
-  // // router
-  // const router = useVueRouter()
-  // app.use(router)
-  //
-  // // appInstance
-  // const appInstance = new AppInstance()
-  // app.provide(InjectKeys.APP_INSTANCE, appInstance)
-  // logger.info("appInstance provided=>", appInstance)
-  //
-  // // ElementPlus 包太大，需要改成按需引入
-  // // https://element-plus.org/zh-CN/guide/quickstart.html#%E6%8C%89%E9%9C%80%E5%AF%BC%E5%85%A5
-  // // app.use(ElementPlus)
+  // 国际化
+  app.use(i18n)
+
+  // pinia
+  const pinia = createPinia()
+  app.use(pinia)
+
+  // router
+  const router = useVueRouter()
+  app.use(router)
+
+  // appInstance
+  const appInstance = new AppInstance()
+  app.provide(InjectKeys.APP_INSTANCE, appInstance)
+  logger.info("appInstance provided=>", appInstance)
+
+  // ElementPlus 包太大，需要改成按需引入
+  // https://element-plus.org/zh-CN/guide/quickstart.html#%E6%8C%89%E9%9C%80%E5%AF%BC%E5%85%A5
+  // app.use(ElementPlus)
 
   // 挂载 vue app
   app.mount("#app")
 
-  // // 暴露 Vue 实例
-  // app.provide(InjectKeys.VUE_INSTANCE, app)
-  // logger.info("vue app created")
+  // 暴露 Vue 实例
+  app.provide(InjectKeys.VUE_INSTANCE, app)
+  logger.info("vue app created")
 }
 
 ;(async () => {
