@@ -17,7 +17,8 @@
     "syncVersion": "python scripts/version.py",
     "parseChangelog": "python scripts/parse_changelog.py",
     "prepareRelease": "pnpm syncVersion && pnpm parseChangelog",
-    "package": "pnpm build && pnpm widgetBuild && pnpm extBuild && pnpm extBuild -t firefox"
+    "package": "pnpm build && pnpm widgetBuild && pnpm extBuild && pnpm extBuild -t firefox",
+    "syncWidgetRepo": "python scripts/sync_widget_repo.py"
   },
   "devDependencies": {
     "@terwer/esbuild-config-custom": "^1.0.12",

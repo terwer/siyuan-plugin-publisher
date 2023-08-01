@@ -234,3 +234,9 @@ def get_filename_from_time():
     # 使用strftime函数把时间转换成想要的格式
     filename = time.strftime("%Y%m%d%H%M%S", now_time)  # 输出结果为：20210126095555
     return filename
+
+
+# 解压文件到目标路径
+def unzip_file(zip_path, dest_path):
+    with zipfile.ZipFile(zip_path, 'r') as zipf:
+        zipf.extractall(dest_path)
