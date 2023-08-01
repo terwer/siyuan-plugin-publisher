@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.1.0...v1.1.1) (2023-08-01)
+
+
+### Bug Fixes
+
+* 修改构建错误 ([0681ebd](https://github.com/terwer/siyuan-plugin-publisher/commit/0681ebd97572f2b6651a37c60e67669b8f9c563b))
+
 ## [1.1.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.0.0...v1.1.0) (2023-08-01)
 ### Features
 * [#83](https://github.com/terwer/siyuan-plugin-publisher/issues/83) 多平台分发需要考虑同步更新思源笔记 ([103203d](https://github.com/terwer/siyuan-plugin-publisher/commit/103203d3ad867991f0d86909fcb82bcc2f0cd7ad))
