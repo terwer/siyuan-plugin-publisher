@@ -189,7 +189,7 @@ onMounted(async () => {
           <div v-if="formData.successBatchResults.length > 0" class="success-result success-tips">
             已分发成功的结果如下：
             <p v-for="ret in formData.successBatchResults">
-              <span class="platform">[{{ ret.key }}] [{{ ret.name }}]</span>
+              <span class="platform">[{{ ret.key }}] {{ StrUtil.isEmptyString(ret.name) ? "" : `[${ret.name}]` }}</span>
               ，
               <a :href="ret.previewUrl" target="_blank">查看文章</a>
             </p>

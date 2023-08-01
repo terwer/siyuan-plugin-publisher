@@ -117,7 +117,7 @@ const usePublish = () => {
       }
       const previewUrl = await api.getPreviewUrl(singleFormData.postid)
       const isAbsoluteUrl = /^http/.test(previewUrl)
-      singleFormData.previewUrl = isAbsoluteUrl ? previewUrl : `${singleFormData.cfg.home}${previewUrl}`
+      singleFormData.previewUrl = isAbsoluteUrl ? previewUrl : `${singleFormData.cfg?.home ?? ""}${previewUrl}`
 
       singleFormData.publishProcessStatus = true
     } catch (e) {
