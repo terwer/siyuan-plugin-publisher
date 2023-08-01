@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.2.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.1.2...v1.2.0) (2023-08-01)
+
+
+### Features
+
+* 体验优化，防止重复提交 ([6cb0ddc](https://github.com/terwer/siyuan-plugin-publisher/commit/6cb0ddc7286d7e4f2ae1417e91962be985353e83))
+* 支持 Metaweblog ([6d442fb](https://github.com/terwer/siyuan-plugin-publisher/commit/6d442fba5ddc253091a7be193cec91c8b58a812f))
+* 支持 Typecho ([8068502](https://github.com/terwer/siyuan-plugin-publisher/commit/80685023c4afdf5c8e28814b2f4878a721e0e53d))
+* 支持 WordPress ([36d905a](https://github.com/terwer/siyuan-plugin-publisher/commit/36d905a2fecb30f09a00f027e3952c87593e5dbd))
+
 ## [1.1.2](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.1.1...v1.1.2) (2023-08-01)
 ### Bug Fixes
 * 修复插件包缺失问题 ([41b5686](https://github.com/terwer/siyuan-plugin-publisher/commit/41b5686891af330d38a31d124e3f48028da8be63))
