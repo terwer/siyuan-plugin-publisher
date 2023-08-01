@@ -89,7 +89,7 @@ initPage()
         </el-space>
       </div>
       <div class="add-action">
-        <el-button type="primary" size="large" @click="handleAddPlatform">
+        <el-button type="primary" size="large" @click="handleAddPlatform(undefined)">
           添加自定义 {{ formData.ptype.title }} 对接
         </el-button>
       </div>

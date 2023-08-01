@@ -36,7 +36,10 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
 const logger = createAppLogger("publish-platform")
 
 const props = defineProps({
-  id: "" as string,
+  id: {
+    type: String,
+    default: "",
+  },
 })
 
 // uses
