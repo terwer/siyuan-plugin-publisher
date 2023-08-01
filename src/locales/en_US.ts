@@ -387,6 +387,12 @@ export default {
   "setting.typecho.previewUrl.tip":
     "The preview rules of the Typecho platform are usually: /index.php/archives/ [Postid]",
 
+  "setting.metaweblog.home.tip": "The homepage of the Metaweblog platform",
+  "setting.metaweblog.username.tip": "Metaweblog platform login",
+  "setting.metaweblog.password.tip": "Metaweblog platform password",
+  "setting.metaweblog.apiUrl.tip": "The xmlrpc remote publishing address for the Metaweblog platform",
+  "setting.metaweblog.previewUrl.tip": "Article preview rules for the Metaweblog platform, [postid] can be composed article ID placeholder",
+
   "setting.jvue.home.tip": "Homepage of the Jvue platform",
   "setting.jvue.username.tip": "Jvue platform login name",
   "setting.jvue.password.tip": "Jvue platform password",

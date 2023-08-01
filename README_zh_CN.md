@@ -44,9 +44,11 @@
 
 排名不分先后
 
-- [X] 博客园
-- [ ] WordPress
 - [X] 语雀
+- [X] 博客园
+- [X] Metaweblog
+- [X] Typecho
+- [X] WordPress
 - [ ] Github
     - [ ] Hexo
     - [ ] Hugo

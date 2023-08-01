@@ -24,13 +24,12 @@
  */
 
 import { DeviceDetection, DeviceTypeEnum } from "zhi-device"
-import { createAppLogger } from "../appLogger"
+import { createSiyuanAppLogger } from "../appLogger"
 import PageUtil from "../utils/pageUtil"
 import { showIframeDialog } from "../iframeDialog"
 import PublisherPlugin from "../index"
 import { StrUtil } from "zhi-common"
 import { showMessage } from "siyuan"
-import { isFileExists } from "../utils/utils"
 
 /**
  * 挂件相关
@@ -40,7 +39,7 @@ export class WidgetInvoke {
   private readonly pluginInstance
 
   constructor(pluginInstance: PublisherPlugin) {
-    this.logger = createAppLogger("widget-invoke")
+    this.logger = createSiyuanAppLogger("widget-invoke")
     this.pluginInstance = pluginInstance
   }
 

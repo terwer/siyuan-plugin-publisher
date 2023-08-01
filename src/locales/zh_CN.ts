@@ -383,6 +383,12 @@ export default {
     "Typecho平台的xmlrpc远程发布地址，通常固定是：https://<平台地址>/index.php/action/xmlrpc",
   "setting.typecho.previewUrl.tip": "Typecho平台的文章预览规则，通常是：/index.php/archives/[postid]",
 
+  "setting.metaweblog.home.tip": "Metaweblog平台的首页",
+  "setting.metaweblog.username.tip": "Metaweblog平台登录名",
+  "setting.metaweblog.password.tip": "Metaweblog平台密码",
+  "setting.metaweblog.apiUrl.tip": "Metaweblog平台的xmlrpc远程发布地址",
+  "setting.metaweblog.previewUrl.tip": "Metaweblog平台的文章预览规则，[postid]可作文文章ID占位符",
+
   "setting.jvue.home.tip": "JVue平台的首页",
   "setting.jvue.username.tip": "JVue平台登录名",
   "setting.jvue.password.tip": "JVue平台密码",

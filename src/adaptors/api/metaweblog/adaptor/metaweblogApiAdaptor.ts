@@ -23,34 +23,14 @@
  * questions.
  */
 
-import { isSiyuanDev } from "./Constants"
-import { simpleLogger } from "zhi-lib-base"
+import { MetaweblogBlogApi } from "~/src/adaptors/api/base/metaweblog/metaweblogBlogApi.ts"
 
 /**
- * 使用 eruda 更好的控制日志
- */
-if (typeof window !== "undefined") {
-  const econole = (window as any)?.eruda?.get("console")
-  window.console = isSiyuanDev && econole ? econole : window.console
-}
-
-/**
- * 简单的日志接口
- */
-interface ILogger {
-  debug: (msg: string, obj?: any) => void
-  info: (msg: string, obj?: any) => void
-  warn: (msg: string, obj?: any) => void
-  error: (msg: string | Error, obj?: any) => void
-}
-
-/**
- * 一个简单轻量级的日志记录器
+ * Metaweblog API 适配器
  *
  * @author terwer
- * @version 1.0.0
- * @since 1.0.0
+ * @version 0.9.0
+ * @since 0.9.0
  */
-export const createSiyuanAppLogger = (name: string): ILogger => {
-  return simpleLogger(name, "publisher", isSiyuanDev)
-}
+class MetaweblogApiAdaptor extends MetaweblogBlogApi {}
+export { MetaweblogApiAdaptor }

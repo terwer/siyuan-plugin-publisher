@@ -36,6 +36,7 @@ import { useJianshuWeb } from "~/src/adaptors/web/jianshu/useJianshuWeb.ts"
 import { useJuejinWeb } from "~/src/adaptors/web/juejin/useJuejinWeb.ts"
 import { useWechatWeb } from "~/src/adaptors/web/wechat/useWechatWeb.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
+import { useMetaweblogApi } from "~/src/adaptors/api/metaweblog/useMetaweblogApi.ts"
 
 /**
  * 适配器统一入口
@@ -59,6 +60,11 @@ class Adaptors {
     switch (type) {
       case SubPlatformType.Common_Yuque: {
         const { blogApi } = await useYuqueApi(key, newCfg)
+        blogAdaptor = blogApi
+        break
+      }
+      case SubPlatformType.Metaweblog_Metaweblog: {
+        const { blogApi } = await useMetaweblogApi(key, newCfg)
         blogAdaptor = blogApi
         break
       }

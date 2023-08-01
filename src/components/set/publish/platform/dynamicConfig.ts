@@ -177,6 +177,7 @@ export enum SubPlatformType {
   // Github_Next = "Next",
 
   // Metaweblog
+  Metaweblog_Metaweblog = "Metaweblog",
   Metaweblog_Cnblogs = "Cnblogs",
   Metaweblog_Typecho = "Typecho",
 
@@ -229,6 +230,7 @@ export function getSubtypeList(ptype: PlatformType): SubPlatformType[] {
       // subtypeList.push(SubPlatformType.Github_Next)
       break
     case PlatformType.Metaweblog:
+      subtypeList.push(SubPlatformType.Metaweblog_Metaweblog)
       subtypeList.push(SubPlatformType.Metaweblog_Cnblogs)
       subtypeList.push(SubPlatformType.Metaweblog_Typecho)
       break

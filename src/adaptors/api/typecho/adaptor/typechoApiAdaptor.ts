@@ -23,13 +23,13 @@
  * questions.
  */
 
-import {AppInstance} from "~/src/appInstance.ts"
-import {createAppLogger} from "~/src/utils/appLogger.ts"
-import {TypechoConfig} from "~/src/adaptors/api/typecho/config/typechoConfig.ts"
-import {MetaweblogBlogApi} from "~/src/adaptors/api/base/metaweblog/metaweblogBlogApi.ts"
+import { AppInstance } from "~/src/appInstance.ts"
+import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { TypechoConfig } from "~/src/adaptors/api/typecho/config/typechoConfig.ts"
+import { MetaweblogBlogApi } from "~/src/adaptors/api/base/metaweblog/metaweblogBlogApi.ts"
 
 /**
- * WordPress API 适配器
+ * Typecho API 适配器
  *
  * @author terwer
  * @version 0.9.0
@@ -37,7 +37,7 @@ import {MetaweblogBlogApi} from "~/src/adaptors/api/base/metaweblog/metaweblogBl
  */
 class TypechoApiAdaptor extends MetaweblogBlogApi {
   /**
-   * 初始化 WordPress API 适配器
+   * 初始化 Typecho API 适配器
    *
    * @param appInstance 应用实例
    * @param cfg 配置项

@@ -24,7 +24,7 @@
  */
 
 import PublisherPlugin from "../index"
-import { createAppLogger } from "../appLogger"
+import { createSiyuanAppLogger } from "../appLogger"
 import { showIframeDialog } from "../iframeDialog"
 import PageUtil from "../utils/pageUtil"
 import { IObject } from "siyuan"
@@ -40,7 +40,7 @@ export class PluginInvoke {
   private blogPluginBase = "/plugins/siyuan-blog/#"
 
   constructor(pluginInstance: PublisherPlugin) {
-    this.logger = createAppLogger("plugin-invoke")
+    this.logger = createSiyuanAppLogger("plugin-invoke")
     this.pluginInstance = pluginInstance
   }
 
