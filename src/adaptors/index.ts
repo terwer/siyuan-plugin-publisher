@@ -35,6 +35,7 @@ import { useCsdnWeb } from "~/src/adaptors/web/csdn/useCsdnWeb.ts"
 import { useJianshuWeb } from "~/src/adaptors/web/jianshu/useJianshuWeb.ts"
 import { useJuejinWeb } from "~/src/adaptors/web/juejin/useJuejinWeb.ts"
 import { useWechatWeb } from "~/src/adaptors/web/wechat/useWechatWeb.ts"
+import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 
 /**
  * 适配器统一入口
@@ -99,6 +100,11 @@ class Adaptors {
       case SubPlatformType.Custom_Wechat: {
         const { webApi } = await useWechatWeb(key, newCfg)
         blogAdaptor = webApi
+        break
+      }
+      case SubPlatformType.System_Siyuan: {
+        const { blogApi } = useSiyuanApi()
+        blogAdaptor = blogApi
         break
       }
       default: {
