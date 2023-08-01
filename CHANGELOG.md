@@ -1,7 +1,12 @@
 # Changelog
 
-## [1.1.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.1.0...v1.1.1) (2023-08-01)
+## [1.1.2](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.1.1...v1.1.2) (2023-08-01)
 ### Bug Fixes
+* 修复插件包缺失问题 ([41b5686](https://github.com/terwer/siyuan-plugin-publisher/commit/41b5686891af330d38a31d124e3f48028da8be63))
+* 修复语雀客户端报错问题 ([1d72fff](https://github.com/terwer/siyuan-plugin-publisher/commit/1d72fff05cc93d5e66ec2da714e6a1f7fe2eb9d2))
+### Miscellaneous
+* 新增 vercel 和 nginx 构建支持 ([6fda465](https://github.com/terwer/siyuan-plugin-publisher/commit/6fda465a9c1e1200c598ff3ba6f237424c24c623))
+## [1.1.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.1.0...v1.1.1) (2023-08-01)
 * 修改构建错误 ([0681ebd](https://github.com/terwer/siyuan-plugin-publisher/commit/0681ebd97572f2b6651a37c60e67669b8f9c563b))
 ## [1.1.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.0.0...v1.1.0) (2023-08-01)
 ### Features
@@ -17,7 +22,6 @@
 * 修复语雀编辑文章可能出错的问题 ([44261c9](https://github.com/terwer/siyuan-plugin-publisher/commit/44261c93fe776836ffa936b32725ae9748527f19))
 * 修复语雀预览链接错误问题 ([b9620cb](https://github.com/terwer/siyuan-plugin-publisher/commit/b9620cb10b12d1a39d24cc47d06ed81f232f2013))
 * 还原 cross-fetch ([7b26de0](https://github.com/terwer/siyuan-plugin-publisher/commit/7b26de09487866843a1cbca3c9695183cb22e7a9))
-### Miscellaneous
 * 优化代码构建 ([123a2d2](https://github.com/terwer/siyuan-plugin-publisher/commit/123a2d2013adb19fbfe7a24fbf42893e8fc361f7))
 ## [1.0.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v0.8.0...v1.0.0) (2023-07-31)
 ### ⚠ BREAKING CHANGES

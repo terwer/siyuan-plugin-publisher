@@ -24,6 +24,9 @@ This plugin promises that the basic functions will be free forever, and the foll
 - Added extended menu
 - Warehouse synchronization
 - Plug-in widget source code merging
+- Fixed missing plugin package
+- Fixed the error issue of the Wordbird client
+- Added Vercel and NGINX build support
 
 ## Core Features
 
