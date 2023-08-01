@@ -60,8 +60,8 @@ dependencies:
     specifier: ^2.3.0
     version: 2.3.0
   zhi-fetch-middleware:
-    specifier: ^0.1.20
-    version: 0.1.20
+    specifier: ^0.2.5
+    version: 0.2.5
   zhi-github-middleware:
     specifier: ^0.1.2
     version: 0.1.2
@@ -799,6 +799,11 @@ packages:
     engines: {node: '>=6.0.0'}
     dev: true
 
+  /@jridgewell/resolve-uri@3.1.1:
+    resolution: {integrity: sha512-dSYZh7HhCDtCKm4QakX0xFpsRDqjjtZf/kjI/v3T3Nwt5r8/qz/M19F9ySyOqU94SXBmeG9ttTul+YnR4LOxFA==}
+    engines: {node: '>=6.0.0'}
+    dev: true
+
   /@jridgewell/set-array@1.1.2:
     resolution: {integrity: sha512-xnkseuNADM0gt2bs+BvhO0p78Mk762YnZdsuzFV018NoG1Sj1SCQvpSqa7XUaTam5vAGasABV9qXASMKnFMwMw==}
     engines: {node: '>=6.0.0'}
@@ -828,7 +833,7 @@ packages:
   /@jridgewell/trace-mapping@0.3.9:
     resolution: {integrity: sha512-3Belt6tdc8bPgAtbcmdtNJlirVoTmEb5e2gC94PnkwEW9jI6CAHUeoG85tjWP5WquqfavoMtMwiG4P926ZKKuQ==}
     dependencies:
-      '@jridgewell/resolve-uri': 3.1.0
+      '@jridgewell/resolve-uri': 3.1.1
       '@jridgewell/sourcemap-codec': 1.4.15
     dev: true
 
@@ -6373,8 +6378,8 @@ packages:
     resolution: {integrity: sha512-we04mMt4BEqeKDxoqdJQsDFYImYlcp/yaAIkpxpMGg+9tBURfNeHPHIHkFias9VbM8yuk6xjAX6B2xJjvYE/iw==}
     dev: false
 
-  /zhi-fetch-middleware@0.1.20:
-    resolution: {integrity: sha512-SbrrALam1OlurWZ1gGpxzWj6kvGr3lyJvCr5WwiFsFdwAIyQ/H4Qd0Bg5p/RyrM69q1EMIVAoJgBn34MYKab6g==}
+  /zhi-fetch-middleware@0.2.5:
+    resolution: {integrity: sha512-cLpiz4W6eFUIr0ug3elgYR1B8sF1WeBilANKIGzAjk/ALCIvDwKBumQ1WrGRBW7HrSHqcLHB5IfyFJv33QoZUw==}
     dependencies:
       zhi-common: 1.11.5
       zhi-device: 2.3.0
