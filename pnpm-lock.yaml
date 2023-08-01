@@ -15,8 +15,8 @@ dependencies:
     specifier: ^10.3.0
     version: 10.3.0(vue@3.3.4)
   cross-fetch:
-    specifier: ^4.0.0
-    version: 4.0.0
+    specifier: ^3.1.8
+    version: 3.1.8
   element-plus:
     specifier: ^2.3.8
     version: 2.3.8(vue@3.3.4)
@@ -33,8 +33,8 @@ dependencies:
     specifier: ^1.4.2
     version: 1.4.2
   siyuan:
-    specifier: ^0.7.8
-    version: 0.7.8
+    specifier: ^0.7.9
+    version: 0.7.9
   uuid:
     specifier: ^9.0.0
     version: 9.0.0
@@ -83,7 +83,7 @@ devDependencies:
     specifier: ^1.3.6
     version: 1.3.6(@nuxt/eslint-config@0.1.1)(@typescript-eslint/eslint-plugin@5.62.0)(astro-eslint-parser@0.13.3)(eslint-config-prettier@8.9.0)(eslint-config-turbo@1.10.12)(eslint-plugin-prettier@4.2.1)(eslint-plugin-svelte@2.32.4)(eslint-plugin-vue@9.16.1)(eslint@8.46.0)(prettier-plugin-svelte@2.10.1)(prettier@2.8.8)(typescript@5.1.6)
   '@types/node':
-    specifier: '18'
+    specifier: ^18.17.1
     version: 18.17.1
   '@vitejs/plugin-vue':
     specifier: ^4.2.3
@@ -122,8 +122,8 @@ devDependencies:
     specifier: ^3.2.0
     version: 3.2.0(vite@4.4.7)
   vite-plugin-node-polyfills:
-    specifier: ^0.9.0
-    version: 0.9.0(vite@4.4.7)
+    specifier: ^0.8.2
+    version: 0.8.2(vite@4.4.7)
   vitest:
     specifier: ^0.33.0
     version: 0.33.0(stylus@0.59.0)
@@ -2053,8 +2053,8 @@ packages:
     resolution: {integrity: sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==}
     dev: true
 
-  /cross-fetch@4.0.0:
-    resolution: {integrity: sha512-e4a5N8lVvuLgAWgnCrLr2PP0YyDOTHa9H/Rj54dirp61qXnNq46m82bRhNqIA5VccJtWBvPTFRV3TtvHUKPB1g==}
+  /cross-fetch@3.1.8:
+    resolution: {integrity: sha512-cvA+JwZoU0Xq+h6WkMvAUqPEYy92Obet6UdKLfW60qn99ftItKjB5T+BkyWOFWe2pUyfQ+IJHmpOTznqk1M6Kg==}
     dependencies:
       node-fetch: 2.6.12
     transitivePeerDependencies:
@@ -4520,8 +4520,8 @@ packages:
       sax: 1.2.4
     dev: false
 
-  /siyuan@0.7.8:
-    resolution: {integrity: sha512-49aQRgva9Cj5u1PuXPAfsug6GHeuhdrb7AnWBqJKyPRaVI2IskmPuisIDWIkG7JhVJ1e1KCg813a2G9QOpYRkQ==}
+  /siyuan@0.7.9:
+    resolution: {integrity: sha512-X5olBQhfkgyPRF+d8agpcbAaFnCSvSkN3LWX7XU9jApmCfpJ/4PAmK7mKPfR1YGBpjFLRa/xTrv11BQ3hxN15Q==}
     dev: false
 
   /slash@3.0.0:
@@ -5090,8 +5090,8 @@ packages:
       vite: 4.4.7(@types/node@18.17.1)(stylus@0.59.0)
     dev: true
 
-  /vite-plugin-node-polyfills@0.9.0(vite@4.4.7):
-    resolution: {integrity: sha512-+i+WPUuIBhJy+ODfxx6S6FTl28URCxUszbl/IL4GwrZvbqqY/8VDIp+zpjMS8Us/a7GwN4Iaqr/fVIBtkNQojQ==}
+  /vite-plugin-node-polyfills@0.8.2(vite@4.4.7):
+    resolution: {integrity: sha512-amOUVWwNvcuKxfWM9vpS8sAqvew28KXyR597OHO7BXWJFxr+QX4qB3XTDhWoRivj89TIZe4JTJTZwBHtIJ3ygQ==}
     peerDependencies:
       vite: ^2.0.0 || ^3.0.0 || ^4.0.0
     dependencies:
