@@ -1,6 +1,18 @@
+# idea
 .idea
-.DS_Store
-node_modules
+
+# build
 dist
-build
-__pycache__
+lib
+!src/lib
+node_modules
+
+# api-extractor
+etc
+temp
+tsdoc-metadata.json
+
+# env
+.env.development
+.env.production
+.env.test
