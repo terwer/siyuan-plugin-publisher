@@ -1,12 +1,8 @@
 # Changelog
 
 ## [1.1.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.1.0...v1.1.1) (2023-08-01)
-
-
 ### Bug Fixes
-
 * 修改构建错误 ([0681ebd](https://github.com/terwer/siyuan-plugin-publisher/commit/0681ebd97572f2b6651a37c60e67669b8f9c563b))
-
 ## [1.1.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.0.0...v1.1.0) (2023-08-01)
 ### Features
 * [#83](https://github.com/terwer/siyuan-plugin-publisher/issues/83) 多平台分发需要考虑同步更新思源笔记 ([103203d](https://github.com/terwer/siyuan-plugin-publisher/commit/103203d3ad867991f0d86909fcb82bcc2f0cd7ad))
@@ -14,7 +10,6 @@
 * 插件挂件源码合并 https://github.com/terwer/sy-post-publisher/issues/89 https://github.com/terwer/siyuan-plugin-publisher/issues/522 ([c18023f](https://github.com/terwer/siyuan-plugin-publisher/commit/c18023f3c9c9a649e1d08a84d89673d29b2a29db))
 * 整合挂件功能 ([61c83c7](https://github.com/terwer/siyuan-plugin-publisher/commit/61c83c756c965235eed576a3c6f4e75cee3972f9))
 * 新增扩展菜单 ([6fb007d](https://github.com/terwer/siyuan-plugin-publisher/commit/6fb007df7b04ee212065eb2135903e01a2ab5637))
-### Bug Fixes
 * 修复 cross-fetch 版本问题，必须使用 cross-fetch 3 ([69b33dc](https://github.com/terwer/siyuan-plugin-publisher/commit/69b33dca0f04da05113dab530e03b23d1082c2b8))
 * 修复常规发布参数缺失问题 ([e1afcd9](https://github.com/terwer/siyuan-plugin-publisher/commit/e1afcd923fe64fe53e44dd9df43c44ef5e433005))
 * 修复构建错误 ([32e8f61](https://github.com/terwer/siyuan-plugin-publisher/commit/32e8f61d193d0a979c4417653bc8b202b0be7b04))
