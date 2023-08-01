@@ -58,11 +58,11 @@ const isWatch = args.watch || args.w || false
 // const isDev = isServe || isWatch || debugMode
 const isDev = false
 const isWindows = process.platform === "win32"
-let devDistDir = "/Users/terwer/Documents/mydocs/SiYuanWorkspace/test/data/widgets/sy-post-publisher"
-// let devDistDir = "/Users/terwer/Documents/mydocs/SiYuanWorkspace/public/data/widgets/sy-post-publisher"
+let devDistDir = "/Users/terwer/Documents/mydocs/SiYuanWorkspace/test/data/plugins/siyuan-plugin-publisher"
+// let devDistDir = "/Users/terwer/Documents/mydocs/SiYuanWorkspace/public/data/plugins/siyuan-plugin-publisher"
 if (isWindows) {
-  devDistDir = "C:\\Users\\terwer\\Documents\\mydocs\\SiyuanWorkspace\\test\\data\\widgets\\sy-post-publisher"
-  // devDistDir = "C:\\Users\\terwer\\Documents\\mydocs\\SiyuanWorkspace\\public\widgets\sy-post-publisher"
+  devDistDir = "C:\\Users\\terwer\\Documents\\mydocs\\SiyuanWorkspace\\test\\data\\plugins\\siyuan-plugin-publisher"
+  // devDistDir = "C:\\Users\\terwer\\Documents\\mydocs\\SiyuanWorkspace\\public\plugins\siyuan-plugin-publisher"
 }
 const isSiyuanBuild = process.env.BUILD_TYPE === "siyuan"
 const isWidgetBuild = process.env.BUILD_TYPE === "widget"

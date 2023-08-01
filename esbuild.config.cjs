@@ -29,11 +29,14 @@ const { copy } = require("esbuild-plugin-copy")
 
 const args = minimist(process.argv.slice(2))
 const isWatch = args.watch || args.w || false
+const isServe = args.serve || args.s || false
 
 const baseDir = isWatch
   ? "/Users/terwer/Documents/mydocs/SiYuanWorkspace/test/data/plugins/siyuan-plugin-publisher"
+  : isServe
+  ? "/Users/terwer/Documents/mydocs/SiYuanWorkspace/test/data/plugins/siyuan-plugin-publisher"
   : "./"
-const distDir = isWatch ? baseDir : path.join(baseDir, "dist")
+const distDir = isWatch || isServe ? baseDir : path.join(baseDir, "dist")
 
 module.exports = {
   esbuildConfig: {

@@ -7,6 +7,8 @@
   "author": "terwer",
   "license": "MIT",
   "scripts": {
+    "serve": "python scripts/serve.py",
+    "dev": "python scripts/dev.py",
     "build": "pnpm pluginBuild && pnpm siyuanBuild",
     "pluginBuild": "python scripts/plugin_build.py",
     "siyuanBuild": "python scripts/siyuan_build.py",
