@@ -8,14 +8,11 @@ Publishing articles from siyuan-note to platforms such as Yuque, Cnblogs, WordPr
 
 Support features such as fast publishing, image bed management, platform expansion, smart labels, etc.
 
-This plugin promises that all functions will be free forever. If you want to support the developer, please [Donate](https://github.com/terwer/siyuan-plugin-publisher#Donate) freely.
+This plugin promises that the basic functions will be free forever, and the follow-up related to intelligent AI may be charged, and the closed beta stage is completely free. If you want to support developers, please [feel free to support](https://github.com/terwer/siyuan-plugin-publisher/blob/main/README_zh_CN.md#Donate) here.
 
-> 🌹Reminder: This plugin is an upgraded version of the original `Siyuan Notes Publishing Tool` widget. Its functions
-> include all the functions provided by the original widget. It also provides a convenient menu operation entry, and has
-> carried out a series of bug fixes and experience optimization.
-
-> If you want to see previous 0.8.x plugin version, please refer to my original
-> widget here: [sy-post-publisher](https://github.com/terwer/src-sy-post-publisher)
+> 🌹 Tips: This plugin is an upgraded version of the original 'Siyuan Note Publishing Tool' widget, which includes all the functions provided by the original widget, provides a convenient menu operation entry, and has carried out a series of problem fixes and experience optimizations.
+>
+> In addition to [Extended Functions], **Other functions do not require any dependencies** , and there is no need to download the previous widget, which is already built-in in the plugin.
 
 ## Core Features
 
@@ -54,6 +51,10 @@ the [Siyuan Note Publishing Tool Plugin Platform Adaptation Tracking Form](https
 For platform adaptation, please refer
 to [Latest Adaptation](https://terwergreen.feishu.cn/share/base/view/shrcnWT2IGIz1r94z9qvqUghDzd)
 
+## Update history
+
+Please check [CHANGELOG](./CHANGELOG.MD)
+
 ## FAQ
 
 * Q1：How to install the publishing tool plugin? Where can I find his entrance after installation?
@@ -64,39 +65,35 @@ to [Latest Adaptation](https://terwergreen.feishu.cn/share/base/view/shrcnWT2IGI
 
   After the installation is complete, find the ✈️ icon on the top right toolbar, click the menu, and follow the corresponding instructions to use it.
 
-‍
 
 * Q2：After installing the publishing tool plugin, do I still need to install the widget?
 
-  A2：**unnecessary. ​**
+  A2：**unnecessary. **
 
   The plugin version contains all the functions of the widget version.
 
-‍
 
 * Q3：I am not used to the operation of the new version, and I want to continue to use the previous widget through the plugin, is that possible?
 
   A3：**Yes.**
 
-  The plugin has a builtin bridge by default, which can invoke the widget through the plugin. This feature needs to be turned on in `Settings -> Use WidgetInvoke`​.
+  The plugin has a builtin bridge by default, which can invoke the widget through the plugin. This feature needs to be turned on in `Settings -> Use WidgetInvoke`.
 
-  <u>Note 1: The plugin version uses the builtin menu of the plugin system, and the menu slot will be disabled when the widget version is activated via plugin. ​</u>
+  <u>Note 1: The plugin version uses the builtin menu of the plugin system, and the menu slot will be disabled when the widget version is activated via plugin. </u>
 
   <u>Note 2: After opening the widget version, all functions of the plugin version will be disabled to avoid confusion.</u>
 
   **We strongly recommend you to use the plugin version, because the plugin version will be the main version for long-term maintenance in the future, and the widget version is obsolete, and it is only used to fix problems and compatible with historical users.**
 
-‍
 
-* Q4：I used to use `Custom JS Fragment`​ or add `WidgetInvoke`​ directly, do I still need to download the plugin now?
+* Q4：I used to use `Custom JS Fragment` or add `WidgetInvoke` directly, do I still need to download the plugin now?
 
   A4：**Optional.** But we highly recommended to remove JS snippets and widgets to download the plugin version.
 
-  If you don't want to use the plugin version, you don't need to download it, just use the original `custom JS fragment`​ or add `widget`​ to continue using.
+  If you don't want to use the plugin version, you don't need to download it, just use the original `custom JS fragment` or add `widget` to continue using.
 
-  If you want to use the plugin version, then we strongly recommend that you delete the previously added `custom JS snippets`​ and `widgets`​, download the plugin version directly, and enable it. No other additional action is required.
+  If you want to use the plugin version, then we strongly recommend that you delete the previously added `custom JS snippets` and `widgets`, download the plugin version directly, and enable it. No other additional action is required.
 
-‍
 
 * Q5：Is it possible to migrate my historical configuration data items to the plugin?
 
@@ -106,11 +103,9 @@ to [Latest Adaptation](https://terwergreen.feishu.cn/share/base/view/shrcnWT2IGI
 
   Note: The widget version configuration data import only supports `sy-p-cfg-v0.8.0.json` and `picgo.json`.
 
-‍
 
 * Q6：What should I do if the platform I need to publish is not provided by the publishing tool?
 * A6：Reference: [Platform Adaptation Plan](https://github.com/terwer/siyuan-plugin-publisher/blob/main/README_zh_CN.md#platform-adaptation-plan "Platform Adaptation Plan")
-
 
 ## Donate
 

@@ -69,3 +69,12 @@ if __name__ == "__main__":
 
     # plugin.json
     parse_json(cwd + "plugin.json", "version", args.version)
+
+    # widget.json
+    parse_json(cwd + "widget.json", "version", args.version)
+
+    # manifest.json
+    parse_json(cwd + "src/extensions/manifest.json", "version", args.version)
+
+    # mv2 manifest.json
+    parse_json(cwd + "src/extensions/mv2/manifest-v2-for-firefox.json", "version", args.version)

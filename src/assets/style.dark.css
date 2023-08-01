@@ -1,0 +1,110 @@
+/*
+ * Copyright (c) 2022, Terwer . All rights reserved.
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * This code is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License version 2 only, as
+ * published by the Free Software Foundation.  Terwer designates this
+ * particular file as subject to the "Classpath" exception as provided
+ * by Terwer in the LICENSE file that accompanied this code.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+ * version 2 for more details (a copy is included in the LICENSE file that
+ * accompanied this code).
+ *
+ * You should have received a copy of the GNU General Public License version
+ * 2 along with this work; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * Please contact Terwer, Shenzhen, Guangdong, China, youweics@163.com
+ * or visit www.terwer.space if you need additional information or have any
+ * questions.
+ */
+
+html.dark {
+  /* 自定义深色背景颜色 */
+  --custom-app-color: #ffffff;
+  --custom-app-bg-color: #000000;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+}
+
+html.dark .post-detail-content-box .hljs {
+  color: #ffffff;
+  background-color: #161616 !important;
+  border: 1px solid #ccc !important;
+}
+
+/* dark table */
+html.dark .post-detail-content-box table {
+  color: #ffffff;
+  border-color: #ccc;
+}
+
+html.dark .post-detail-content-box table th {
+  border-color: #ccc;
+  background-color: #161616;
+}
+
+html.dark .post-detail-content-box table td {
+  border-color: #ccc;
+  background-color: #161616;
+}
+
+html.dark .el-header h1 {
+  --custom-title-text-color: #ffffff;
+}
+
+html.dark .el-page-header__left {
+  color: #ffffff;
+}
+
+html.dark .post-detail-content-box {
+  color: #ffffff;
+}
+
+/** dark code */
+html.dark .post-detail-content-box .hljs {
+  color: #ffffff;
+  background-color: #161616 !important;
+  border: 1px solid #ccc !important;
+}
+
+html.dark code {
+  color: #2fd945 !important;
+}
+
+html.dark .hljs-keyword,
+html.dark .hljs-selector-tag,
+html.dark .hljs-built_in,
+html.dark .hljs-name,
+html.dark .hljs-tag {
+  color: #539dc5 !important;
+}
+
+html.dark .post-detail-content-box .hljs-string,
+html.dark .post-detail-content-box .hljs-title,
+html.dark .post-detail-content-box .hljs-section,
+html.dark .post-detail-content-box .hljs-attribute,
+html.dark .post-detail-content-box .hljs-literal,
+html.dark .post-detail-content-box .hljs-template-tag,
+html.dark .post-detail-content-box .hljs-template-variable,
+html.dark .post-detail-content-box .hljs-type,
+html.dark .post-detail-content-box .hljs-addition {
+  color: #2fd945 !important;
+}
+
+html.dark .language-math {
+  color: #ffffff;
+  background: var(--custom-app-bg-color);
+}

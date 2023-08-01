@@ -1,0 +1,19 @@
+{
+  "publishTool": "Publisher",
+  "publish": "Publish",
+  "preview": "Preview",
+  "picbed": "Upload picture to picbed",
+  "setting": "Setting",
+  "settingGeneral": "General setting",
+  "settingPicbed": "Picbed manage",
+  "settingPublish": "Publish setting",
+  "settingPlatform": "Platform setting",
+  "settingMenuTips": "Let creation return to fun",
+  "copyPageId": "Copy pageId",
+  "publisherWidget": "Publisher Widget",
+  "cancel": "Cancel",
+  "save": "Save",
+  "publishTo": "Publish to...",
+  "publishNormal": "Publish normal",
+  "extendFunction": "Extended functionality"
+}

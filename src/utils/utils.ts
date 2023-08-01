@@ -23,24 +23,76 @@
  * questions.
  */
 
-import KernelApi from "../api/kernel-api"
+import { AppInstance } from "~/src/appInstance.ts"
+import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { BlogAdaptor, WebAdaptor } from "zhi-blog-api"
 import { StrUtil } from "zhi-common"
 
 /**
- * 文件是否存在
+ * 通用工具类
  *
- * @param kernelApi - kernelApi
- * @param p - 路径
- * @param type - 类型
+ * @author terwer
+ * @version 0.9.0
+ * @since 0.9.0
  */
-export const isFileExists = async (kernelApi: KernelApi, p: string, type: "text" | "json") => {
-  try {
-    const res = await kernelApi.getFile(p, type)
-    if (type === "text") {
-      return !StrUtil.isEmptyString(res)
+export class Utils {
+  private static logger = createAppLogger("publisher-widget-utils")
+
+  public static blogApi(appInstance: AppInstance, apiAdaptor: any) {
+    if (!apiAdaptor) {
+      throw new Error("apiAdaptor cannot be null")
     }
-    return res !== null
-  } catch {
-    return false
+
+    if (!apiAdaptor.getUsersBlogs) {
+      this.logger.error("apiAdaptor must implements BlogApi", apiAdaptor)
+      throw new Error(`apiAdaptor must implements BlogApi => ${this.getObjectName(apiAdaptor)}`)
+    }
+
+    return new BlogAdaptor(apiAdaptor)
+  }
+
+  public static webApi(appInstance: AppInstance, webAdaptor: any) {
+    if (!webAdaptor) {
+      throw new Error("webAdaptor cannot be null")
+    }
+
+    if (!webAdaptor.getMetaData) {
+      this.logger.error("webAdaptor must implements WebApi", webAdaptor)
+      throw new Error(`webAdaptor must implements WebApi => ${this.getObjectName(webAdaptor)}`)
+    }
+
+    return new WebAdaptor(webAdaptor)
+  }
+
+  private static getObjectName(obj) {
+    try {
+      // 判断是否为类
+      if (typeof obj === "function" && /^class\s/.test(obj.toString())) {
+        return obj.name
+      }
+      // 判断是否为函数
+      else if (typeof obj === "function") {
+        return obj.name || "anonymous function"
+      }
+      // 判断是否为枚举
+      else if (typeof obj === "object" && Object.values(obj.constructor).includes(obj)) {
+        return Object.keys(obj.constructor)[Object.values(obj.constructor).indexOf(obj)]
+      }
+      // 判断是否为属性
+      else if (typeof obj !== "object") {
+        return obj
+      }
+      // 默认返回空字符串
+      else {
+        return "{}"
+      }
+    } catch (e) {
+      console.error(e)
+      return "{}"
+    }
+  }
+
+  public static emptyOrDefault(value: any, defaultValue: any) {
+    return StrUtil.isEmptyString(value) ? defaultValue : value
   }
 }

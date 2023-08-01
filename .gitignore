@@ -1,6 +1,34 @@
+# idea
 .idea
 .DS_Store
-node_modules
+
+# build
 dist
-build
+lib
+!src/lib
+node_modules
+
+# api-extractor
+etc
+temp
+tsdoc-metadata.json
+
+# env
+.env.development
+.env.production
+.env.test
+
+# Scripts
+venv
 __pycache__
+cookie.txt
+token.txt
+
+# ext
+extension
+build
+
+# widget
+widget
+archive.zip
+components.d.ts
