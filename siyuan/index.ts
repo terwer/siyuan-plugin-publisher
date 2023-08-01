@@ -25,7 +25,7 @@
 
 import { App, getFrontend, IObject, Plugin } from "siyuan"
 import { SiyuanConfig, SiyuanKernelApi } from "zhi-siyuan-api"
-import { createAppLogger } from "./appLogger"
+import { createSiyuanAppLogger } from "./appLogger"
 import { WidgetInvoke } from "./invoke/widgetInvoke"
 import { Topbar } from "./topbar"
 
@@ -44,7 +44,7 @@ export default class PublisherPlugin extends Plugin {
   constructor(options: { app: App; id: string; name: string; i18n: IObject }) {
     super(options)
 
-    this.logger = createAppLogger("index")
+    this.logger = createSiyuanAppLogger("index")
 
     const frontEnd = getFrontend()
     this.isMobile = frontEnd === "mobile" || frontEnd === "browser-mobile"

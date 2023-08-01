@@ -49,9 +49,11 @@ This plugin promises that the basic functions will be free forever, and the foll
 
 Names not listed in order
 
-- [X] Cnblogs
-- [ ] WordPress
 - [X] Yuque
+- [X] Metaweblog
+- [X] Cnblogs
+- [X] Typecho
+- [X] WordPress
 - [ ] Github
   - [ ] Hexo
   - [ ] Hugo

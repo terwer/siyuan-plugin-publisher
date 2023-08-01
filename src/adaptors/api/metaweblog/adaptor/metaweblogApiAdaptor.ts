@@ -23,21 +23,14 @@
  * questions.
  */
 
+import { MetaweblogBlogApi } from "~/src/adaptors/api/base/metaweblog/metaweblogBlogApi.ts"
+
 /**
- * 预定义 Metaweblog 变量
+ * Metaweblog API 适配器
  *
  * @author terwer
  * @version 0.9.0
  * @since 0.9.0
  */
-class MetaweblogConstants {
-  public static METHOD_GET_USERS_BLOGS = "metaWeblog.getUsersBlogs"
-  public static METHOD_NEW_POST = "metaWeblog.newPost"
-  public static METHOD_EDIT_POST = "metaWeblog.editPost"
-  public static METHOD_DELETE_POST = "metaWeblog.deletePost"
-  public static METHOD_GET_RECENT_POSTS = "metaWeblog.getRecentPosts"
-  public static METHOD_GET_POST = "metaWeblog.getPost"
-  public static METHOD_GET_CATEGORIES = "metaWeblog.getCategories"
-}
-
-export { MetaweblogConstants }
+class MetaweblogApiAdaptor extends MetaweblogBlogApi {}
+export { MetaweblogApiAdaptor }

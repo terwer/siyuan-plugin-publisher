@@ -64,6 +64,7 @@ const formData = reactive({
   failBatchResults: <any[]>[],
 
   dynList: <string[]>[],
+  actionEnable: true,
 })
 
 const handlePublish = async () => {
@@ -86,6 +87,8 @@ const handlePublish = async () => {
       }
     }
 
+    // 需要刷新才能继续操作，防止重复提交
+    formData.actionEnable = false
     formData.showProcessResult = true
     if (formData.errCount === 0) {
       ElMessage.success("多平台文章分发成功")
@@ -140,6 +143,8 @@ const doDelete = async () => {
       }
     }
 
+    // 需要刷新才能继续操作，防止重复提交
+    formData.actionEnable = false
     formData.showProcessResult = true
     if (formData.errCount === 0) {
       ElMessage.success("多平台文章删除成功")
@@ -185,6 +190,7 @@ onMounted(async () => {
           </div>
           <div v-for="errRet in formData.failBatchResults">
             [{{ errRet.key }}] {{ StrUtil.isEmptyString(errRet.name) ? "" : `[${errRet.name}]` }} {{ errRet.errMsg }}
+            <a href="javascript:void(0)" @click="doSingleDelete(errRet.key, id)">强制解除关联</a>
           </div>
           <div v-if="formData.successBatchResults.length > 0" class="success-result success-tips">
             已分发成功的结果如下：
@@ -220,11 +226,22 @@ onMounted(async () => {
 
             <!-- 发布 -->
             <el-form-item label-width="100px" class="form-action">
-              <el-button type="primary" :loading="formData.isPublishLoading" @click="handlePublish">
-                {{ t("main.publish") }}
+              <el-button
+                type="primary"
+                :loading="formData.isPublishLoading"
+                @click="handlePublish"
+                :disabled="!formData.actionEnable"
+              >
+                {{ t("main.publish.start") }}
               </el-button>
-              <el-button type="danger" :loading="formData.isDeleteLoading" @click="handleDelete">
-                {{ t("main.cancel") }}
+              <el-button
+                type="danger"
+                :loading="formData.isDeleteLoading"
+                @click="handleDelete"
+                :disabled="!formData.actionEnable"
+                class="btn-rm-action"
+              >
+                {{ t("main.publish.remove") }}
               </el-button>
             </el-form-item>
           </el-form>
@@ -257,4 +274,7 @@ onMounted(async () => {
 
 .refresh-page
   cursor pointer
+
+//.btn-rm-action
+//  margin-left 60px
 </style>

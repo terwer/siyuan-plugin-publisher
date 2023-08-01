@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { isDev, siyuanApiToken, siyuanApiUrl } from "../Constants"
+import { isSiyuanDev, siyuanApiToken, siyuanApiUrl } from "../Constants"
 import { simpleLogger } from "zhi-lib-base"
 
 /**
@@ -50,7 +50,7 @@ export class BaseApi {
   private logger
 
   constructor() {
-    this.logger = simpleLogger("base-api", "custom-slug", isDev)
+    this.logger = simpleLogger("base-api", "publisher", isSiyuanDev)
   }
 
   /**
@@ -86,14 +86,14 @@ export class BaseApi {
       })
     }
 
-    if (isDev) {
+    if (isSiyuanDev) {
       this.logger.info("开始向思源请求数据，reqUrl=>", reqUrl)
       this.logger.info("开始向思源请求数据，fetchOps=>", fetchOps)
     }
 
     const response = await fetch(reqUrl, fetchOps)
     const resJson = (await response.json()) as SiyuanData
-    if (isDev) {
+    if (isSiyuanDev) {
       this.logger.info("思源请求数据返回，resJson=>", resJson)
     }
     return resJson

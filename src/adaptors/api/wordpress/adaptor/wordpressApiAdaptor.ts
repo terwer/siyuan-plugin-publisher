@@ -23,12 +23,10 @@
  * questions.
  */
 
-import { BlogApi, UserBlog } from "zhi-blog-api"
 import { WordpressConfig } from "~/src/adaptors/api/wordpress/config/wordpressConfig.ts"
-import { CommonXmlrpcClient } from "zhi-xmlrpc-middleware"
 import { AppInstance } from "~/src/appInstance.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { WordpressConstants } from "~/src/adaptors/api/wordpress/wordpressConstants.ts"
+import { MetaweblogBlogApi } from "~/src/adaptors/api/base/metaweblog/metaweblogBlogApi.ts"
 
 /**
  * WordPress API 适配器
@@ -37,11 +35,7 @@ import { WordpressConstants } from "~/src/adaptors/api/wordpress/wordpressConsta
  * @version 0.9.0
  * @since 0.9.0
  */
-class WordpressApiAdaptor extends BlogApi {
-  private readonly logger
-  private readonly cfg: WordpressConfig
-  private readonly commonXmlrpcClient
-
+class WordpressApiAdaptor extends MetaweblogBlogApi {
   /**
    * 初始化 WordPress API 适配器
    *
@@ -49,24 +43,9 @@ class WordpressApiAdaptor extends BlogApi {
    * @param cfg 配置项
    */
   constructor(appInstance: AppInstance, cfg: WordpressConfig) {
-    super()
-
-    this.cfg = cfg
+    super(appInstance, cfg)
     this.logger = createAppLogger("wordpress-api-adaptor")
-    this.commonXmlrpcClient = new CommonXmlrpcClient(appInstance, cfg.apiUrl)
-  }
-
-  public override async getUsersBlogs(): Promise<Array<UserBlog>> {
-    let result: UserBlog[] = []
-    result = await this.wordpressCall(WordpressConstants.METHOD_GET_USERS_BLOGS, [])
-    this.logger.debug("getUsersBlogs=>", result)
-    return result
-  }
-
-  private async wordpressCall(method: string, params: string[]) {
-    const parameters = ["wordpress", this.cfg.username, this.cfg.password]
-    params.forEach((param) => parameters.push(param))
-    return await this.commonXmlrpcClient.methodCall(method, parameters, this.cfg.middlewareUrl)
+    this.cfg.blogid = "wordpress"
   }
 }
 export { WordpressApiAdaptor }

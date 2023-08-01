@@ -28,7 +28,7 @@ import { icons } from "./utils/svg"
 import { IMenuItemOption, Menu, showMessage } from "siyuan"
 import PageUtil from "./utils/pageUtil"
 import HtmlUtils from "./utils/htmlUtils"
-import { createAppLogger } from "./appLogger"
+import { createSiyuanAppLogger } from "./appLogger"
 import { WidgetInvoke } from "./invoke/widgetInvoke"
 import { PluginInvoke } from "./invoke/pluginInvoke"
 import { ObjectUtil } from "zhi-common"
@@ -44,7 +44,7 @@ export class Topbar {
   private pluginInvoke
 
   constructor(pluginInstance: PublisherPlugin) {
-    this.logger = createAppLogger("topbar")
+    this.logger = createSiyuanAppLogger("topbar")
     this.pluginInstance = pluginInstance
     this.pluginInvoke = new PluginInvoke(pluginInstance)
     this.widgetInvoke = new WidgetInvoke(pluginInstance)
@@ -75,9 +75,20 @@ export class Topbar {
     this.logger.info("dynJsonCfg =>", dynJsonCfg.totalCfg)
     // 构造发布菜单
     dynJsonCfg.totalCfg.forEach((config: any) => {
+      let icon = `<span class="iconfont-icon">${config.platformIcon}</span>`
+      // 修复图片不展示问题
+      if (/^\<img/.test(config.platformIcon) && config.platformIcon.indexOf("./images") > -1) {
+        icon = config.platformIcon.replace(
+          /\.\/images/g,
+          `${window.location.origin}/plugins/siyuan-plugin-publisher/images`
+        )
+        icon = `<span class="img-icon">${icon}</span>`
+      }
       if (config.isEnabled === true) {
+        // http://127.0.0.1:6806/plugins/siyuan-plugin-publisher/i
+
         const submenu = {
-          iconHTML: `<span class="iconfont-icon">${config.platformIcon}</span>`,
+          iconHTML: `${icon}`,
           label: config.platformName,
           disabled: !config.isAuth,
           click: async () => {

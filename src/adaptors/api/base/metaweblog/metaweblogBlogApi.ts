@@ -169,10 +169,16 @@ class MetaweblogBlogApi extends BlogApi {
       postid,
       this.cfg.username,
       this.cfg.password,
+      false,
     ])
     this.logger.debug("ret=>", ret)
 
     return ret
+  }
+
+  public async getPreviewUrl(postid: string): Promise<string> {
+    const previewUrl = this.cfg.previewUrl.replace(/\[postid\]/g, postid)
+    return StrUtil.pathJoin(this.cfg.home ?? "", previewUrl)
   }
 
   public async getCategories(): Promise<CategoryInfo[]> {

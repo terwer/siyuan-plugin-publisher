@@ -48,7 +48,7 @@ class TypechoConfig extends MetaweblogConfig {
     const { home, apiUrl } = TypechoUtils.parseHomeAndUrl(homeAddr)
     this.home = home
     this.apiUrl = apiUrl
-    this.previewUrl = "/?p=[postid]"
+    this.previewUrl = "/index.php/archives/[postid]"
     this.pageType = PageTypeEnum.Markdown
   }
 }

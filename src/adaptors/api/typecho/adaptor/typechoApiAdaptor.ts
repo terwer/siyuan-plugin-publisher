@@ -23,50 +23,29 @@
  * questions.
  */
 
-import { BlogApi, UserBlog } from "zhi-blog-api"
-import { CommonXmlrpcClient } from "zhi-xmlrpc-middleware"
 import { AppInstance } from "~/src/appInstance.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { TypechoConfig } from "~/src/adaptors/api/typecho/config/typechoConfig.ts"
-import { TypechoConstants } from "~/src/adaptors/api/typecho/typechoConstants.ts"
+import { MetaweblogBlogApi } from "~/src/adaptors/api/base/metaweblog/metaweblogBlogApi.ts"
 
 /**
- * WordPress API 适配器
+ * Typecho API 适配器
  *
  * @author terwer
  * @version 0.9.0
  * @since 0.9.0
  */
-class TypechoApiAdaptor extends BlogApi {
-  private readonly logger
-  private readonly cfg: TypechoConfig
-  private readonly commonXmlrpcClient
-
+class TypechoApiAdaptor extends MetaweblogBlogApi {
   /**
-   * 初始化 WordPress API 适配器
+   * 初始化 Typecho API 适配器
    *
    * @param appInstance 应用实例
    * @param cfg 配置项
    */
   constructor(appInstance: AppInstance, cfg: TypechoConfig) {
-    super()
-
-    this.cfg = cfg
+    super(appInstance, cfg)
     this.logger = createAppLogger("typecho-api-adaptor")
-    this.commonXmlrpcClient = new CommonXmlrpcClient(appInstance, cfg.apiUrl)
-  }
-
-  public override async getUsersBlogs(): Promise<Array<UserBlog>> {
-    let result: UserBlog[] = []
-    result = await this.typechoCall(TypechoConstants.METHOD_GET_USERS_BLOGS, [])
-    this.logger.debug("getUsersBlogs=>", result)
-    return result
-  }
-
-  private async typechoCall(method: string, params: string[]) {
-    const parameters = ["typecho", this.cfg.username, this.cfg.password]
-    params.forEach((param) => parameters.push(param))
-    return await this.commonXmlrpcClient.methodCall(method, parameters, this.cfg.middlewareUrl)
+    this.cfg.blogid = "typecho"
   }
 }
 export { TypechoApiAdaptor }

@@ -30,8 +30,6 @@
  * @version 0.9.0
  * @since 0.9.0
  */
-class WordpressConstants {
-  public static METHOD_GET_USERS_BLOGS = "metaWeblog.getUsersBlogs"
-}
+class WordpressConstants {}
 
 export { WordpressConstants }

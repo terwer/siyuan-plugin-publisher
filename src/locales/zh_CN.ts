@@ -383,6 +383,12 @@ export default {
     "Typecho平台的xmlrpc远程发布地址，通常固定是：https://<平台地址>/index.php/action/xmlrpc",
   "setting.typecho.previewUrl.tip": "Typecho平台的文章预览规则，通常是：/index.php/archives/[postid]",
 
+  "setting.metaweblog.home.tip": "Metaweblog平台的首页",
+  "setting.metaweblog.username.tip": "Metaweblog平台登录名",
+  "setting.metaweblog.password.tip": "Metaweblog平台密码",
+  "setting.metaweblog.apiUrl.tip": "Metaweblog平台的xmlrpc远程发布地址",
+  "setting.metaweblog.previewUrl.tip": "Metaweblog平台的文章预览规则，[postid]可作文文章ID占位符",
+
   "setting.jvue.home.tip": "JVue平台的首页",
   "setting.jvue.username.tip": "JVue平台登录名",
   "setting.jvue.password.tip": "JVue平台密码",
@@ -484,7 +490,8 @@ export default {
   "setting.platform.metaweblog.desc":
     "目前支持Metaweblog的平台有：博客园、Typecho等，采用 API 授权。MetaWeblog API 作为XML-RPC Web 服务实现，是目前公认的开放博客标准。",
   "setting.platform.custom": "自定义 HTTP 协议",
-  "setting.platform.custom.desc": "目前支持自定义HTTP协议的平台有：知乎、简书、掘金等，采用网页授权。自定义HTTP协议通过类似 WeChatSync 的方式实现。",
+  "setting.platform.custom.desc":
+    "目前支持自定义HTTP协议的平台有：知乎、简书、掘金等，采用网页授权。自定义HTTP协议通过类似 WeChatSync 的方式实现。",
   "setting.platform.right.tips0": "特别提示：",
   "setting.platform.right.tips1": "1、在这里可以进行发布配置，直接点击 [设置图标] 即可进行配置。",
   "setting.platform.right.tips2": "2、如需新增平台，直接点击左侧 + 按钮即可。",
@@ -502,4 +509,6 @@ export default {
   "setting.upgrade.syp.doTip2": "检测到旧配置，准备升级配置文件",
   "setting.upgrade.syp.doTip3": "旧配置升级",
   "setting.upgrade.syp.doTip4": "没有版本更新，跳过升级",
+  "main.publish.start": "开始同步",
+  "main.publish.remove": "批量删除",
 }

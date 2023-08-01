@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { isDev } from "./Constants"
+import { isSiyuanDev } from "./Constants"
 import { simpleLogger } from "zhi-lib-base"
 
 /**
@@ -31,7 +31,7 @@ import { simpleLogger } from "zhi-lib-base"
  */
 if (typeof window !== "undefined") {
   const econole = (window as any)?.eruda?.get("console")
-  window.console = isDev && econole ? econole : window.console
+  window.console = isSiyuanDev && econole ? econole : window.console
 }
 
 /**
@@ -51,6 +51,6 @@ interface ILogger {
  * @version 1.0.0
  * @since 1.0.0
  */
-export const createAppLogger = (name: string): ILogger => {
-  return simpleLogger(name, "publisher", isDev)
+export const createSiyuanAppLogger = (name: string): ILogger => {
+  return simpleLogger(name, "publisher", isSiyuanDev)
 }

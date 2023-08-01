@@ -68,10 +68,10 @@ class CommonStorage implements StorageLikeAsync {
     this.logger.info(`Retrieving value for '${key}' from CommonStorage.`)
     let ret
     if (this.storageViaSiyuanApi) {
-      // 如果当前运行在思源笔记中，则直接返回 null
+      // 如果当前运行在思源笔记中
       try {
         ret = (await this.kernelApi.getFile(key, "text")) ?? ""
-        this.logger.debug(`Use SiYuan Api LocalStorageAdaptor to getItem - Retrieving '${key}', Value: ${ret}`)
+        // this.logger.debug(`Use SiYuan Api LocalStorageAdaptor to getItem - Retrieving '${key}', Value: ${ret}`)
       } catch (error) {
         this.logger.error(`Failed to get value for key '${key}' from SiYuan Api LocalStorageAdaptor. Error:`, error)
       }
@@ -80,7 +80,7 @@ class CommonStorage implements StorageLikeAsync {
         const win = SiyuanDevice.siyuanWindow()
         const value = win.localStorage.getItem(key)
         ret = value ?? ""
-        this.logger.debug(`Use Browser LocalStorageAdaptor to getItem - Retrieving '${key}', Value: ${ret}`)
+        // this.logger.debug(`Use Browser LocalStorageAdaptor to getItem - Retrieving '${key}', Value: ${ret}`)
       } catch (error) {
         this.logger.error(`Failed to get value for key '${key}' from Browser LocalStorageAdaptor. Error:`, error)
       }
@@ -90,7 +90,7 @@ class CommonStorage implements StorageLikeAsync {
     if (StrUtil.isEmptyString(ret)) {
       ret = "{}"
     }
-    this.logger.debug(`Final getItem - '${key}', Value: '${ret}'`)
+    // this.logger.debug(`Final getItem - '${key}', Value: '${ret}'`)
     return ret
   }
 
@@ -112,15 +112,15 @@ class CommonStorage implements StorageLikeAsync {
    * @returns 一个 Promise，在设置值后解析。
    */
   public async setItem(key: string, value: string): Promise<void> {
-    this.logger.debug(`Setting value for '${key}' in CommonStorage to '${value}'.`)
+    // this.logger.debug(`Setting value for '${key}' in CommonStorage to '${value}'.`)
     if (this.storageViaSiyuanApi) {
       // 如果当前运行在思源笔记中，则直接返回空字符串
       await this.kernelApi.saveTextData(key, value)
-      this.logger.debug(`Use SiYuan Api LocalStorageAdaptor to setItem - Key '${key}', Value: '${value}'`)
+      this.logger.debug(`Use SiYuan Api LocalStorageAdaptor to setItem - Key '${key}'`)
     } else {
       const win = SiyuanDevice.siyuanWindow()
       win.localStorage.setItem(key, value)
-      this.logger.debug(`Use Browser LocalStorageAdaptor to setItem - Key '${key}', Value: '${value}'`)
+      this.logger.debug(`Use Browser LocalStorageAdaptor to setItem - Key '${key}'`)
     }
   }
 }
