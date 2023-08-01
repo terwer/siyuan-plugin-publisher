@@ -29,7 +29,7 @@ import { createAppLogger } from "./appLogger"
 import { WidgetInvoke } from "./invoke/widgetInvoke"
 import { Topbar } from "./topbar"
 
-import "../index.styl"
+import "./index.styl"
 import { ConfigManager } from "./store/config"
 
 export default class PublisherPlugin extends Plugin {
