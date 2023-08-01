@@ -9,7 +9,7 @@
   "scripts": {
     "serve": "python scripts/serve.py",
     "dev": "python scripts/dev.py",
-    "build": "pnpm pluginBuild && pnpm siyuanBuild",
+    "build": "python scripts/build.py",
     "pluginBuild": "python scripts/plugin_build.py",
     "siyuanBuild": "python scripts/siyuan_build.py",
     "vercelBuild": "python3 scripts/vercel_build.py",
