@@ -23,11 +23,11 @@
  * questions.
  */
 
-import { BlogApi, CategoryInfo, Post, UserBlog } from "zhi-blog-api"
-import { YuqueApi } from "~/src/adaptors/api/yuque/adaptor/yuqueApi.ts"
-import { YuqueConfig } from "~/src/adaptors/api/yuque/config/yuqueConfig.ts"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { StrUtil } from "zhi-common"
+import {BlogApi, CategoryInfo, Post, UserBlog} from "zhi-blog-api"
+import {YuqueApi} from "~/src/adaptors/api/yuque/adaptor/yuqueApi.ts"
+import {YuqueConfig} from "~/src/adaptors/api/yuque/config/yuqueConfig.ts"
+import {createAppLogger} from "~/src/utils/appLogger.ts"
+import {StrUtil} from "zhi-common"
 
 /**
  * Yuque API 适配器
@@ -146,7 +146,6 @@ class YuqueApiAdaptor extends BlogApi {
     const docId = yuquePostidKey.docId
     const repo = yuquePostidKey.docRepo ?? this.cfg.blogid ?? ""
     const postUrl = purl.replace("[postid]", docId).replace("[notebook]", repo)
-    // 路径组合
     return StrUtil.pathJoin(this.cfg.home ?? "", postUrl)
   }
 

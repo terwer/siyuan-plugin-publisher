@@ -2,33 +2,27 @@ module.exports = {
   extends: [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:svelte/recommended",
+    "plugin:vue/vue3-recommended",
     "turbo",
     "prettier",
   ],
 
-  parser: "@typescript-eslint/parser",
+  // https://eslint.vuejs.org/user-guide/#how-to-use-a-custom-parser
+  parser: "vue-eslint-parser",
+  parserOptions: {
+    parser: "@typescript-eslint/parser",
+  },
 
-  overrides: [
-    {
-      files: ["*.svelte"],
-      parser: "svelte-eslint-parser",
-      // Parse the script in `.svelte` as TypeScript by adding the following configuration.
-      parserOptions: {
-        parser: "@typescript-eslint/parser",
-      },
-    },
-  ],
-
-  plugins: ["@typescript-eslint", "prettier"],
+  plugins: ["@typescript-eslint", "vue", "prettier"],
 
   rules: {
     // Note: you must disable the base rule as it can report incorrect errors
     semi: "off",
     quotes: "off",
     "no-undef": "off",
-    "no-async-promise-executor": "off",
+    "vue/no-v-htm": "off",
     "@typescript-eslint/no-empty-function": "off",
+    "@typescript-eslint/no-empty-interface": "off",
     "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/no-this-alias": "off",
     "@typescript-eslint/no-non-null-assertion": "off",

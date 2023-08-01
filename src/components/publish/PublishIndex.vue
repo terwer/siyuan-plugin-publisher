@@ -27,28 +27,34 @@
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import PublishTips from "~/src/components/publish/form/PublishTips.vue"
 import PublishPlatform from "~/src/components/publish/form/PublishPlatform.vue"
-import PublishTags from "~/src/components/publish/form/PublishTags.vue"
-import { onMounted, reactive } from "vue"
+import { markRaw, onMounted, reactive } from "vue"
 import { useRoute } from "vue-router"
 import { usePublish } from "~/src/composables/usePublish.ts"
 import { getWidgetId } from "~/src/utils/widgetUtils.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { Post } from "zhi-blog-api"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import { ElMessage } from "element-plus"
+import { ElMessage, ElMessageBox } from "element-plus"
+import { StrUtil } from "zhi-common"
+import { pre } from "~/src/utils/import/pre.ts"
+import { Delete } from "@element-plus/icons-vue"
 
 const logger = createAppLogger("publisher-index")
 
 // uses
 const { t } = useVueI18n()
-const { doSinglePublish } = usePublish()
+const { doSinglePublish, doSingleDelete } = usePublish()
 const { blogApi } = useSiyuanApi()
 const { query } = useRoute()
 
 // datas
+const sysKeys = pre.systemCfg.map((item) => {
+  return item.platformKey
+})
 const id = (query.id ?? getWidgetId()) as string
 const formData = reactive({
   isPublishLoading: false,
+  isDeleteLoading: false,
 
   showProcessResult: false,
   doc: {} as Post,
@@ -92,6 +98,54 @@ const handlePublish = async () => {
   }
 }
 
+const handleDelete = async () => {
+  ElMessageBox.confirm(`确认要删除平台 ${formData.dynList.join("、")} 下面的文章吗，此平台文章数据也将永久删除 [注意：系统内置平台会忽略，不做删除] ？`, "温馨提示", {
+    type: "error",
+    icon: markRaw(Delete),
+    confirmButtonText: t("main.opt.ok"),
+    cancelButtonText: t("main.opt.cancel"),
+  })
+    .then(async () => {
+      await doDelete()
+    })
+    .catch(() => {})
+}
+
+const doDelete = async () => {
+  try {
+    formData.isDeleteLoading = true
+    if (formData.dynList.length === 0) {
+      throw new Error("必须选择一个分发平台")
+    }
+
+    formData.errCount = 0
+    formData.failBatchResults = []
+    formData.successBatchResults = []
+    for (const key of formData.dynList) {
+      if (sysKeys.includes(key)) {
+        logger.info(`[${key}] 系统内置平台，不可删除，跳过`)
+        continue
+      }
+      const batchResult = await doSingleDelete(key, id)
+      if (!batchResult.status) {
+        formData.failBatchResults.push(batchResult)
+        formData.errCount++
+      }
+    }
+
+    formData.showProcessResult = true
+    if (formData.errCount === 0) {
+      ElMessage.success("多平台文章删除成功")
+    } else {
+      ElMessage.error(`多平台文章删除失败，失败个数：${formData.errCount}`)
+    }
+  } catch (error) {
+    ElMessage.error(error.message)
+  } finally {
+    formData.isDeleteLoading = false
+  }
+}
+
 const syncDynList = (selectedKeys: string[]) => {
   formData.dynList = selectedKeys
 }
@@ -118,7 +172,7 @@ onMounted(async () => {
             错误平台个数 [{{ formData.errCount }}] ，选择的总平台数 [{{ formData.dynList.length }}] 。
           </div>
           <div v-for="errRet in formData.failBatchResults">
-            [{{ errRet.key }}] [{{ errRet.name }}] {{ errRet.errMsg }}
+            [{{ errRet.key }}] {{ StrUtil.isEmptyString(errRet.name) ? "" : `[${errRet.name}]` }} {{ errRet.errMsg }}
           </div>
           <div v-if="formData.successBatchResults.length > 0" class="success-result success-tips">
             已分发成功的结果如下：
@@ -153,11 +207,13 @@ onMounted(async () => {
             -->
 
             <!-- 发布 -->
-            <el-form-item>
+            <el-form-item label-width="100px" class="form-action">
               <el-button type="primary" :loading="formData.isPublishLoading" @click="handlePublish">
                 {{ t("main.publish") }}
               </el-button>
-              <el-button>{{ t("main.cancel") }}</el-button>
+              <el-button type="danger" :loading="formData.isDeleteLoading" @click="handleDelete">
+                {{ t("main.cancel") }}
+              </el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -172,6 +228,9 @@ onMounted(async () => {
   font-size 14px
   .platform
     color var(--el-color-info)
+
+:deep(.form-action .el-form-item__content)
+  margin-left 0 !important
 
 .error-total-msg
   margin 10px 0

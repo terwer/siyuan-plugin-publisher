@@ -50,6 +50,10 @@ const formData = reactive({
 
 const emit = defineEmits(["emitSyncDynList"])
 
+if (emit) {
+  logger.info("selectedKeys=>", formData.selectedKeys)
+  emit("emitSyncDynList", formData.selectedKeys)
+}
 const handleCheck = (key: string) => {
   if (formData.selectedKeys.includes(key)) {
     // 如果 formData.selectedKeys 数组中包含 key，则从数组中删除 key

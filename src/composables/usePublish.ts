@@ -109,7 +109,8 @@ const usePublish = () => {
         logger.info("new post=>", result)
       }
       const previewUrl = await api.getPreviewUrl(singleFormData.postid)
-      singleFormData.previewUrl = `${singleFormData.cfg.home}${previewUrl}`
+      const isAbsoluteUrl = /^http/.test(previewUrl);
+      singleFormData.previewUrl = isAbsoluteUrl ? previewUrl : `${singleFormData.cfg.home}${previewUrl}`;
 
       singleFormData.publishProcessStatus = true
     } catch (e) {
@@ -132,9 +133,66 @@ const usePublish = () => {
     }
   }
 
+  const doSingleDelete = async (key: string, id: string) => {
+    try {
+      // 加载配置
+      singleFormData.setting = await getSetting()
+      singleFormData.cfg = JsonUtil.safeParse<any>(singleFormData.setting[key], {} as any)
+
+      // 检测是否发布
+      const posidKey = singleFormData.cfg.posidKey
+      if (StrUtil.isEmptyString(posidKey)) {
+        throw new Error("配置错误，posidKey不能为空，请检查配置")
+      }
+
+      const postMeta = singleFormData.setting[id] ?? {}
+      const postid = postMeta[posidKey] ?? ""
+      if (StrUtil.isEmptyString(postid)) {
+        throw new Error("未找到postid，无法删除，请手动在平台删除")
+      }
+
+      // 初始化API
+      const appInstance = new AppInstance()
+      const apiAdaptor = await Adaptors.getAdaptor(key)
+      const api = Utils.blogApi(appInstance, apiAdaptor)
+      logger.info("api=>", api)
+
+      singleFormData.publishProcessStatus = await api.deletePost(postid)
+    } catch (e) {
+      singleFormData.errMsg = t("main.opt.failure") + "=>" + e
+      logger.error(e)
+      // ElMessage.error(singleFormData.errMsg)
+      await kernelApi.pushErrMsg({
+        msg: singleFormData.errMsg,
+        timeout: 7000,
+      })
+    }
+
+    // 移除文章发布信息
+    const posidKey = singleFormData.cfg.posidKey
+    if (!StrUtil.isEmptyString(posidKey)) {
+      const postMeta = singleFormData.setting[id] ?? {};
+      const updatedPostMeta = { ...postMeta };
+      if (updatedPostMeta.hasOwnProperty(posidKey)) {
+        delete updatedPostMeta[posidKey];
+      }
+
+      singleFormData.setting[id] = updatedPostMeta;
+      await updateSetting(singleFormData.setting)
+      logger.info(`[${key}] [${id}] 文章发布信息已移除`)
+    }
+
+    return {
+      key: key,
+      status: singleFormData.publishProcessStatus,
+      errMsg: singleFormData.errMsg,
+    }
+  }
+
   return {
     singleFormData,
     doSinglePublish,
+    doSingleDelete,
   }
 }
 
