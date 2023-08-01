@@ -14,5 +14,13 @@
   "cancel": "Cancel",
   "save": "Save",
   "publishTo": "Publish to...",
-  "publishNormal": "Publish normal"
+  "publishNormal": "Publish normal",
+  "platformCnblogs": "Cnblogs",
+  "platformTypecho": "Typecho",
+  "platformWordpress": "WordPress",
+  "platformYuque": "Yuque",
+  "platformGithub": "Github",
+  "platformHexo": "Hexo",
+  "platformHugo": "Hugo",
+  "platformVitepress": "Vitepress"
 }

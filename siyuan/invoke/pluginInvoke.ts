@@ -23,12 +23,12 @@
  * questions.
  */
 
-import PublisherPlugin from "../index"
-import { createAppLogger } from "../appLogger"
-import { showIframeDialog } from "../iframeDialog"
-import PageUtil from "../utils/pageUtil"
-import { IObject, showMessage } from "siyuan"
-import { isFileExists } from "../utils/utils"
+import PublisherPlugin from "../index";
+import { createAppLogger } from "../appLogger";
+import { showIframeDialog } from "../iframeDialog";
+import PageUtil from "../utils/pageUtil";
+import { IObject, showMessage } from "siyuan";
+import { isFileExists } from "../utils/utils";
 
 /**
  * 插件相关
