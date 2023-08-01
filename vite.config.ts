@@ -55,8 +55,8 @@ const args = minimist(process.argv.slice(2))
 const debugMode = false
 const isServe = process.env.IS_SERVE
 const isWatch = args.watch || args.w || false
-// const isDev = isServe || isWatch || debugMode
-const isDev = false
+const isDev = isServe || isWatch || debugMode
+// const isDev = false
 const isWindows = process.platform === "win32"
 let devDistDir = "/Users/terwer/Documents/mydocs/SiYuanWorkspace/test/data/plugins/siyuan-plugin-publisher"
 // let devDistDir = "/Users/terwer/Documents/mydocs/SiYuanWorkspace/public/data/plugins/siyuan-plugin-publisher"

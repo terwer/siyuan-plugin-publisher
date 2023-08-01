@@ -35,4 +35,7 @@ if __name__ == "__main__":
     # 获取当前工作目录
     print(os.getcwd())
 
-    os.system("zhi-build --production")
+    # 设置环境变量
+    os.environ['BUILD_TYPE'] = 'vercel'
+
+    os.system("vue-tsc --noEmit && vite build")

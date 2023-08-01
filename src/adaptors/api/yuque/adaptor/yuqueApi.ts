@@ -26,6 +26,7 @@
 import { CommonFetchClient } from "zhi-fetch-middleware"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { ObjectUtil } from "zhi-common"
+import { isDev } from "~/src/utils/constants.ts"
 
 /**
  * 语雀API
@@ -50,7 +51,7 @@ export class YuqueApi {
     middlewareUrl?: string
   ) {
     this.logger = createAppLogger("yuque-api")
-    this.commonFetchClient = new CommonFetchClient(appInstance, baseUrl)
+    this.commonFetchClient = new CommonFetchClient(appInstance, baseUrl, middlewareUrl, isDev)
     this.baseUrl = baseUrl
     this.blogid = blogid
     this.username = username
