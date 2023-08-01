@@ -232,15 +232,16 @@ onMounted(async () => {
                 @click="handlePublish"
                 :disabled="!formData.actionEnable"
               >
-                {{ t("main.publish") }}
+                {{ t("main.publish.start") }}
               </el-button>
               <el-button
                 type="danger"
                 :loading="formData.isDeleteLoading"
                 @click="handleDelete"
                 :disabled="!formData.actionEnable"
+                class="btn-rm-action"
               >
-                {{ t("main.cancel") }}
+                {{ t("main.publish.remove") }}
               </el-button>
             </el-form-item>
           </el-form>
@@ -273,4 +274,7 @@ onMounted(async () => {
 
 .refresh-page
   cursor pointer
+
+//.btn-rm-action
+//  margin-left 60px
 </style>

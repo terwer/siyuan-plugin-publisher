@@ -515,4 +515,6 @@ export default {
   "setting.upgrade.syp.doTip2": "Detected old configuration, preparation to upgrade the configuration file",
   "setting.upgrade.syp.doTip3": "Old configuration upgraded",
   "setting.upgrade.syp.doTip4": "No update for version, skip upgrade",
+  "main.publish.start": "Start syncing",
+  "main.publish.remove": "Remove",
 }
