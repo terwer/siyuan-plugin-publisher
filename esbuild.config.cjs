@@ -31,11 +31,12 @@ const args = minimist(process.argv.slice(2))
 const isWatch = args.watch || args.w || false
 const isServe = args.serve || args.s || false
 
-const baseDir = isWatch
-  ? "/Users/terwer/Documents/mydocs/SiYuanWorkspace/test/data/plugins/siyuan-plugin-publisher"
-  : isServe
-  ? "/Users/terwer/Documents/mydocs/SiYuanWorkspace/test/data/plugins/siyuan-plugin-publisher"
-  : "./"
+let baseDir
+if (isWatch || isServe) {
+  baseDir = "/Users/terwer/Documents/mydocs/SiYuanWorkspace/test/data/plugins/siyuan-plugin-publisher"
+} else {
+  baseDir = "./"
+}
 const distDir = isWatch || isServe ? baseDir : path.join(baseDir, "dist")
 
 module.exports = {
