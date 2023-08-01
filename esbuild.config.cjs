@@ -1,84 +1,89 @@
 /*
- * Copyright (c) 2023, Terwer . All rights reserved.
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * MIT License
  *
- * This code is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License version 2 only, as
- * published by the Free Software Foundation.  Terwer designates this
- * particular file as subject to the "Classpath" exception as provided
- * by Terwer in the LICENSE file that accompanied this code.
+ * Copyright (c) 2023. Terwer
  *
- * This code is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
- * version 2 for more details (a copy is included in the LICENSE file that
- * accompanied this code).
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- * You should have received a copy of the GNU General Public License version
- * 2 along with this work; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  *
- * Please contact Terwer, Shenzhen, Guangdong, China, youweics@163.com
- * or visit www.terwer.space if you need additional information or have any
- * questions.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 const path = require("path")
 const minimist = require("minimist")
-const { dtsPlugin } = require("esbuild-plugin-d.ts")
+const stylePlugin = require("esbuild-style-plugin")
 const { copy } = require("esbuild-plugin-copy")
-// import inlineImage from "esbuild-plugin-inline-image"
 
 const args = minimist(process.argv.slice(2))
-// const isProduction = args.production || args.prod
-const outDir = args.outDir || args.o
+const isWatch = args.watch || args.w || false
 
-// for outer custom output for dev
-const baseDir = outDir ?? "./"
-const distDir = outDir ? baseDir : path.join(baseDir, "dist")
+const baseDir = isWatch
+  ? "/Users/terwer/Documents/mydocs/SiYuanWorkspace/test/data/plugins/siyuan-plugin-publisher"
+  : "./"
+const distDir = isWatch ? baseDir : path.join(baseDir, "dist")
 
-// const defineEnv = {
-//   NODE_ENV: isProduction ? "production" : "development",
-//   ...getNormalizedEnvDefines(["NODE", "VITE_"]),
-// }
-// const coreDefine = {
-//   "import.meta.env": JSON.stringify(defineEnv),
-// }
-
-/**
- * 构建配置
- */
 module.exports = {
   esbuildConfig: {
-    entryPoints: ["src/index.ts"],
+    entryPoints: ["siyuan/index.ts"],
     outfile: path.join(distDir, "index.js"),
-    format: "esm",
-    // define: { ...coreDefine },
+    bundle: true,
+    format: "cjs",
+    external: ["siyuan"],
+    define: { "process.env.DEV_MODE": `"${isWatch}"` },
     plugins: [
-      dtsPlugin(),
+      stylePlugin(),
+
       copy({
         // this is equal to process.cwd(), which means we use cwd path as base path to resolve `to` path
         // if not specified, this plugin uses ESBuild.build outdir/outfile options as base path.
         resolveFrom: "cwd",
         assets: [
           // copy folder
-          // {
-          //   from: "./public/**/*",
-          //   to: [distDir],
-          // },
+          {
+            from: "./siyuan/i18n/*",
+            to: [path.join(distDir, "i18n")],
+          },
           // copy one file
           {
             from: ["./README.md"],
             to: [path.join(distDir, "/README.md")],
           },
+          {
+            from: ["./README_zh_CN.md"],
+            to: [path.join(distDir, "/README_zh_CN.md")],
+          },
+          {
+            from: ["./preview.png"],
+            to: [path.join(distDir, "/preview.png")],
+          },
+          {
+            from: ["./icon.png"],
+            to: [path.join(distDir, "/icon.png")],
+          },
+          {
+            from: ["./plugin.json"],
+            to: [path.join(distDir, "/plugin.json")],
+          },
+          {
+            from: ["./policy.md"],
+            to: [path.join(distDir, "/policy.md")],
+          },
         ],
         watch: true,
       }),
-      // inlineImage({
-      //   limit: 5000,
-      //   extensions: ["png", "jpg", "jpeg", "gif", "svg", "webp"],
-      // }),
-    ]
+    ],
   },
-  customConfig: {},
 }

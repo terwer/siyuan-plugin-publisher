@@ -1,25 +1,25 @@
 {
   "name": "siyuan-plugin-publisher",
-  "version": "0.1.0",
-  "type": "module",
+  "version": "1.0.0",
   "description": "Publishing articles from siyuan-note to platforms such as Yuque, Cnblogs, WordPress, Typecho, Hexo, Hugo and more",
-  "main": "./dist/index.js",
-  "typings": "./dist/index.d.ts",
-  "repository": "terwer/zhi",
-  "homepage": "https://github.com/terwer/zhi/tree/main/apps/siyuan-plugin-publisher",
+  "repository": "terwer/siyuan-plugin-publisher",
+  "homepage": "https://github.com/terwer/siyuan-plugin-publisher",
   "author": "terwer",
   "license": "MIT",
-  "keywords": [],
   "scripts": {
-    "dev": "zhi-build --watch",
-    "build": "zhi-build --production",
-    "test": "vitest",
-    "lint": "eslint 'src/**/*.{ts,js}' --fix"
+    "pluginBuild": "zhi-build --production"
   },
   "devDependencies": {
-    "@terwer/esbuild-config-custom": "workspace:*",
-    "@terwer/eslint-config-custom": "workspace:*",
-    "@terwer/vitest-config-custom": "workspace:*",
-    "@terwer/tsconfig": "workspace:*"
+    "@terwer/esbuild-config-custom": "^1.0.12",
+    "@terwer/eslint-config-custom": "^1.3.6",
+    "esbuild-plugin-copy": "^2.1.1",
+    "esbuild-style-plugin": "^1.6.2",
+    "minimist": "^1.2.8"
+  },
+  "dependencies": {
+    "siyuan": "^0.7.8",
+    "zhi-device": "^2.3.0",
+    "zhi-lib-base": "^0.4.2",
+    "zhi-siyuan-api": "^1.28.2"
   }
 }
