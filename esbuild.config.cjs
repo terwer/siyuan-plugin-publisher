@@ -77,10 +77,6 @@ module.exports = {
             from: ["./plugin.json"],
             to: [path.join(distDir, "/plugin.json")],
           },
-          {
-            from: ["./policy.md"],
-            to: [path.join(distDir, "/policy.md")],
-          },
         ],
         watch: true,
       }),

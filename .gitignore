@@ -17,3 +17,16 @@ tsdoc-metadata.json
 .env.development
 .env.production
 .env.test
+
+# Scripts
+venv
+__pycache__
+cookie.txt
+token.txt
+
+# ext
+extension
+build
+
+# widget
+widget
