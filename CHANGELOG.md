@@ -1,15 +1,11 @@
 # Changelog
 
 ## [1.2.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.1.2...v1.2.0) (2023-08-01)
-
-
 ### Features
-
 * 体验优化，防止重复提交 ([6cb0ddc](https://github.com/terwer/siyuan-plugin-publisher/commit/6cb0ddc7286d7e4f2ae1417e91962be985353e83))
-* 支持 Metaweblog ([6d442fb](https://github.com/terwer/siyuan-plugin-publisher/commit/6d442fba5ddc253091a7be193cec91c8b58a812f))
-* 支持 Typecho ([8068502](https://github.com/terwer/siyuan-plugin-publisher/commit/80685023c4afdf5c8e28814b2f4878a721e0e53d))
-* 支持 WordPress ([36d905a](https://github.com/terwer/siyuan-plugin-publisher/commit/36d905a2fecb30f09a00f027e3952c87593e5dbd))
-
+* 支持 metaweblog ([6d442fb](https://github.com/terwer/siyuan-plugin-publisher/commit/6d442fba5ddc253091a7be193cec91c8b58a812f))
+* 支持 typecho ([8068502](https://github.com/terwer/siyuan-plugin-publisher/commit/80685023c4afdf5c8e28814b2f4878a721e0e53d))
+* 支持 wordpress ([36d905a](https://github.com/terwer/siyuan-plugin-publisher/commit/36d905a2fecb30f09a00f027e3952c87593e5dbd))
 ## [1.1.2](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.1.1...v1.1.2) (2023-08-01)
 ### Bug Fixes
 * 修复插件包缺失问题 ([41b5686](https://github.com/terwer/siyuan-plugin-publisher/commit/41b5686891af330d38a31d124e3f48028da8be63))
@@ -19,7 +15,6 @@
 ## [1.1.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.1.0...v1.1.1) (2023-08-01)
 * 修改构建错误 ([0681ebd](https://github.com/terwer/siyuan-plugin-publisher/commit/0681ebd97572f2b6651a37c60e67669b8f9c563b))
 ## [1.1.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.0.0...v1.1.0) (2023-08-01)
-### Features
 * [#83](https://github.com/terwer/siyuan-plugin-publisher/issues/83) 多平台分发需要考虑同步更新思源笔记 ([103203d](https://github.com/terwer/siyuan-plugin-publisher/commit/103203d3ad867991f0d86909fcb82bcc2f0cd7ad))
 * 仓库同步 ([7960387](https://github.com/terwer/siyuan-plugin-publisher/commit/7960387d1d11216d5bd072db4d26735cf277f048))
 * 插件挂件源码合并 https://github.com/terwer/sy-post-publisher/issues/89 https://github.com/terwer/siyuan-plugin-publisher/issues/522 ([c18023f](https://github.com/terwer/siyuan-plugin-publisher/commit/c18023f3c9c9a649e1d08a84d89673d29b2a29db))

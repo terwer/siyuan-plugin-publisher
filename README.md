@@ -14,8 +14,23 @@ This plugin promises that the basic functions will be free forever, and the foll
 >
 > In addition to [Extended Functions], **Other functions do not require any dependencies** , and there is no need to download the previous widget, which is already built-in in the plugin.
 
+## Platform List
+
+Names not listed in order
+
+- [X] Yuque
+- [X] Metaweblog
+- [X] Cnblogs
+- [X] Typecho
+- [X] WordPress
+- [ ] Github
+  - [ ] Hexo
+  - [ ] Hugo
+
 ## Recent critical updates and bug fixes
 
+- Support for Yuque, Cnblogs, Metaweblog, TypeEcho, WordPress
+- Experience optimization to prevent duplicate submissions
 - Fixed missing general release parameters
 - Fixed an issue where menu loading order issues may not be displayed
 - Multi-platform distribution needs to consider synchronizing and updating Siyuan notes
@@ -44,19 +59,6 @@ This plugin promises that the basic functions will be free forever, and the foll
 - [X] **Language support**: multi-language support, support Chinese version and English version
 - [ ] **Release view**: Support multiple release views, simple mode, detailed mode and source code mode
 - [X] **Multiple deployments**: support Siyuan notes plugin<sup>Highly recommended</sup>, Chrome browser extension, self-deployment
-
-## Platform List
-
-Names not listed in order
-
-- [X] Yuque
-- [X] Metaweblog
-- [X] Cnblogs
-- [X] Typecho
-- [X] WordPress
-- [ ] Github
-  - [ ] Hexo
-  - [ ] Hugo
 
 ## Platform Adaptation Plan
 
