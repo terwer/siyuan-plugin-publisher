@@ -50,14 +50,14 @@ export class Topbar {
     this.widgetInvoke = new WidgetInvoke(pluginInstance)
   }
 
-  public initTopbar() {
+  public async initTopbar() {
+    const quickMenus = await this.getQuickMenus()
     const topBarElement = this.pluginInstance.addTopBar({
       icon: icons.iconPlane,
       title: this.pluginInstance.i18n.publishTool,
       position: "left",
-      callback: async () => {
-        const quickMenus = await this.getQuickMenus()
-        await this.addMenu(topBarElement.getBoundingClientRect(), quickMenus)
+      callback: () => {
+        this.addMenu(topBarElement.getBoundingClientRect(), quickMenus)
       },
     })
   }
@@ -90,7 +90,7 @@ export class Topbar {
     return submenus
   }
 
-  private async addMenu(rect: DOMRect, quickMenus: IMenuItemOption[]) {
+  private addMenu(rect: DOMRect, quickMenus: IMenuItemOption[]) {
     const menu = new Menu("publisherMenu")
 
     // 一键发布
