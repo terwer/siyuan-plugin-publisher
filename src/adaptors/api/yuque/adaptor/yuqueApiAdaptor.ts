@@ -23,11 +23,11 @@
  * questions.
  */
 
-import {BlogApi, CategoryInfo, Post, UserBlog} from "zhi-blog-api"
-import {YuqueApi} from "~/src/adaptors/api/yuque/adaptor/yuqueApi.ts"
-import {YuqueConfig} from "~/src/adaptors/api/yuque/config/yuqueConfig.ts"
-import {createAppLogger} from "~/src/utils/appLogger.ts"
-import {StrUtil} from "zhi-common"
+import { BlogApi, CategoryInfo, Post, UserBlog } from "zhi-blog-api"
+import { YuqueApi } from "~/src/adaptors/api/yuque/adaptor/yuqueApi.ts"
+import { YuqueConfig } from "~/src/adaptors/api/yuque/config/yuqueConfig.ts"
+import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { StrUtil } from "zhi-common"
 
 /**
  * Yuque API 适配器
@@ -88,6 +88,10 @@ class YuqueApiAdaptor extends BlogApi {
   public async newPost(post: Post, publish?: boolean): Promise<string> {
     if (post.cate_slugs != null && post.cate_slugs.length > 0) {
       const repo = post.cate_slugs[0]
+      return await this.yuqueApi.addDoc(post.title, post.wp_slug, post.description, repo)
+    } else if (!StrUtil.isEmptyString(this.cfg.blogid)) {
+      // 确保最新的文章ID都包含了笔记本信息，防止以后文章出错
+      const repo = this.cfg.blogid
       return await this.yuqueApi.addDoc(post.title, post.wp_slug, post.description, repo)
     } else {
       return await this.yuqueApi.addDoc(post.title, post.wp_slug, post.description)
@@ -151,6 +155,7 @@ class YuqueApiAdaptor extends BlogApi {
 
   /**
    * 获取封装的postid
+   *
    * @param postid
    * @private postid
    */

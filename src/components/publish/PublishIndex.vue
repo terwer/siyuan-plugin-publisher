@@ -38,6 +38,7 @@ import { ElMessage, ElMessageBox } from "element-plus"
 import { StrUtil } from "zhi-common"
 import { pre } from "~/src/utils/import/pre.ts"
 import { Delete } from "@element-plus/icons-vue"
+import { BrowserUtil } from "zhi-device"
 
 const logger = createAppLogger("publisher-index")
 
@@ -99,12 +100,18 @@ const handlePublish = async () => {
 }
 
 const handleDelete = async () => {
-  ElMessageBox.confirm(`确认要删除平台 ${formData.dynList.join("、")} 下面的文章吗，此平台文章数据也将永久删除 [注意：系统内置平台会忽略，不做删除] ？`, "温馨提示", {
-    type: "error",
-    icon: markRaw(Delete),
-    confirmButtonText: t("main.opt.ok"),
-    cancelButtonText: t("main.opt.cancel"),
-  })
+  ElMessageBox.confirm(
+    `确认要删除平台 ${formData.dynList.join(
+      "、"
+    )} 下面的文章吗，此平台文章数据也将永久删除 [注意：系统内置平台会忽略，不做删除] ？`,
+    "温馨提示",
+    {
+      type: "error",
+      icon: markRaw(Delete),
+      confirmButtonText: t("main.opt.ok"),
+      cancelButtonText: t("main.opt.cancel"),
+    }
+  )
     .then(async () => {
       await doDelete()
     })
@@ -150,6 +157,10 @@ const syncDynList = (selectedKeys: string[]) => {
   formData.dynList = selectedKeys
 }
 
+const handleRefresh = () => {
+  BrowserUtil.reloadPage()
+}
+
 onMounted(async () => {
   logger.info("获取到的ID为=>", id)
   // 思源笔记原始文章数据
@@ -170,6 +181,7 @@ onMounted(async () => {
         >
           <div class="error-total-msg">
             错误平台个数 [{{ formData.errCount }}] ，选择的总平台数 [{{ formData.dynList.length }}] 。
+            <a class="refresh-page" @click="handleRefresh">刷新页面</a>
           </div>
           <div v-for="errRet in formData.failBatchResults">
             [{{ errRet.key }}] {{ StrUtil.isEmptyString(errRet.name) ? "" : `[${errRet.name}]` }} {{ errRet.errMsg }}
@@ -196,7 +208,7 @@ onMounted(async () => {
             <el-divider border-style="dashed" />
 
             <!-- 分发平台 -->
-            <publish-platform @emitSyncDynList="syncDynList" />
+            <publish-platform :id="id" @emitSyncDynList="syncDynList" />
             <el-divider border-style="dashed" />
 
             <!--
@@ -242,4 +254,7 @@ onMounted(async () => {
   color var(--el-color-success)
 .fail-tips
   color var(--el-color-error)
+
+.refresh-page
+  cursor pointer
 </style>

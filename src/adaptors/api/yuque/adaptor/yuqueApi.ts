@@ -93,7 +93,12 @@ export class YuqueApi {
       throw new Error("请求语雀API异常")
     }
 
-    return String(result.id)
+    // 包含了笔记本需要返回标识笔记本的ID，否则更新可能报错
+    if (repo) {
+      return `${result.id}_${repo}`
+    } else {
+      return `${result.id}`
+    }
   }
 
   /**
