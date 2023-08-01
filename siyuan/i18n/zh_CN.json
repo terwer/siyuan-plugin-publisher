@@ -15,12 +15,5 @@
   "save": "保存",
   "publishTo": "一键发布",
   "publishNormal": "常规发布",
-  "platformCnblogs": "博客园",
-  "platformTypecho": "Typecho",
-  "platformWordpress": "WordPress",
-  "platformYuque": "语雀",
-  "platformGithub": "Github",
-  "platformHexo": "Hexo",
-  "platformHugo": "Hugo",
-  "platformVitepress": "Vitepress"
+  "extendFunction": "扩展功能"
 }

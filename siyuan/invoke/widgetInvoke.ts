@@ -82,12 +82,7 @@ export class WidgetInvoke {
     const deviceType: DeviceTypeEnum = DeviceDetection.getDevice()
     this.logger.info(`you are from ${deviceType}`)
 
-    const flag = await this.preCheckSypWidget()
-    if (!flag) {
-      return
-    }
-
-    const url = `/widgets/sy-post-publisher/#${pageUrl}`
+    const url = `/plugins/siyuan-plugin-publisher/#${pageUrl}`
     this.logger.info("will show iframe page =>", url)
 
     if (isReload) {
@@ -98,20 +93,5 @@ export class WidgetInvoke {
     } else {
       showIframeDialog(this.pluginInstance, url, w, h, noscroll)
     }
-  }
-
-  private async preCheckSypWidget() {
-    // 检测是否安装 发布挂件
-    const isInstalled = await isFileExists(
-      this.pluginInstance.kernelApi,
-      "/data/widgets/sy-post-publisher/widget.json",
-      "text"
-    )
-    if (!isInstalled) {
-      // 安装
-      showMessage(`该功能需要发布工具挂件版支持，请在集市安装 [发布工具挂件版] 挂件 v0.9.0+ 以上版本`, 7000, "error")
-      return
-    }
-    return true
   }
 }

@@ -25,7 +25,7 @@
 
 import PublisherPlugin from "./index"
 import { icons } from "./utils/svg"
-import { IMenuItemOption, Menu } from "siyuan"
+import { IMenuItemOption, Menu, showMessage } from "siyuan"
 import PageUtil from "./utils/pageUtil"
 import HtmlUtils from "./utils/htmlUtils"
 import { createAppLogger } from "./appLogger"
@@ -52,12 +52,13 @@ export class Topbar {
 
   public async initTopbar() {
     const quickMenus = await this.getQuickMenus()
+    const extendMenus = await this.getExtendMenus()
     const topBarElement = this.pluginInstance.addTopBar({
       icon: icons.iconPlane,
       title: this.pluginInstance.i18n.publishTool,
       position: "left",
       callback: () => {
-        this.addMenu(topBarElement.getBoundingClientRect(), quickMenus)
+        this.addMenu(topBarElement.getBoundingClientRect(), quickMenus, extendMenus)
       },
     })
   }
@@ -87,10 +88,58 @@ export class Topbar {
         submenus.push(submenu)
       }
     })
+
+    if (submenus.length == 0) {
+      return undefined
+    }
     return submenus
   }
 
-  private addMenu(rect: DOMRect, quickMenus: IMenuItemOption[]) {
+  private async getExtendMenus() {
+    const isBlogInstalled = await this.pluginInvoke.preCheckBlogPlugin()
+    const isPicgoInstalled = await this.pluginInvoke.preCheckPicgoPlugin()
+    this.logger.info(`isBlogInstalled=>${isBlogInstalled}`)
+    this.logger.info(`isPicgoInstalled=>${isPicgoInstalled}`)
+
+    const extmenus = <IMenuItemOption[]>[]
+    if (isBlogInstalled) {
+      // 发布预览
+      const extPreviewMenu = {
+        iconHTML: icons.iconEye,
+        label: this.pluginInstance.i18n.preview,
+        click: () => {
+          this.pluginInvoke.showBlogDialog()
+        },
+      }
+      extmenus.push(extPreviewMenu)
+    }
+    if (isPicgoInstalled) {
+      // 图床
+      const extPicBedMenu = {
+        iconHTML: icons.iconPicture,
+        label: this.pluginInstance.i18n.picbed,
+        click: async () => {
+          await this.pluginInvoke.showPicbedDialog()
+        },
+      }
+      extmenus.push(extPicBedMenu)
+
+      const extPicBedSettingMenu = {
+        iconHTML: icons.iconPicbed,
+        label: this.pluginInstance.i18n.settingPicbed,
+        click: async () => {
+          await this.pluginInvoke.showPicbedSettingDialog()
+        },
+      }
+      extmenus.push(extPicBedSettingMenu)
+    }
+    if (extmenus.length == 0) {
+      return undefined
+    }
+    return extmenus
+  }
+
+  private addMenu(rect: DOMRect, quickMenus: IMenuItemOption[], extendMenus: IMenuItemOption[]) {
     const menu = new Menu("publisherMenu")
 
     // 一键发布
@@ -98,6 +147,11 @@ export class Topbar {
       icon: `iconRiffCard`,
       label: this.pluginInstance.i18n.publishTo,
       submenu: quickMenus,
+      click: () => {
+        if (!quickMenus) {
+          showMessage("请先在 设置->发布设置配置平台并启用", 7000, "error")
+        }
+      },
     })
 
     // 常规发布
@@ -110,25 +164,22 @@ export class Topbar {
       },
     })
 
-    // 发布预览
+    // 扩展功能
     menu.addSeparator()
     menu.addItem({
-      iconHTML: icons.iconEye,
-      label: this.pluginInstance.i18n.preview,
+      icon: `iconBazaar`,
+      label: this.pluginInstance.i18n.extendFunction,
+      submenu: extendMenus,
       click: () => {
-        this.pluginInvoke.showBlogDialog()
+        if (!extendMenus) {
+          showMessage(
+            "扩展功能需配合其他插件使用，目前支持在线分享、PicGo插件。请先下载在并启用扩展插件。",
+            7000,
+            "error"
+          )
+        }
       },
     })
-
-    // 图床
-    // menu.addSeparator()
-    // menu.addItem({
-    //   iconHTML: icons.iconPicture,
-    //   label: this.pluginInstance.i18n.picbed,
-    //   click: async () => {
-    //     await this.pluginInvoke.showPicbedDialog()
-    //   },
-    // })
 
     // 设置
     menu.addSeparator()
@@ -144,13 +195,6 @@ export class Topbar {
             this.widgetInvoke.showPublisherPublishSettingDialog()
           },
         },
-        // {
-        //   iconHTML: icons.iconPicbed,
-        //   label: this.pluginInstance.i18n.settingPicbed,
-        //   click: async () => {
-        //     await this.pluginInvoke.showPicbedSettingDialog()
-        //   },
-        // },
         {
           iconHTML: icons.iconPreference,
           label: this.pluginInstance.i18n.settingGeneral,
