@@ -12,7 +12,7 @@
   ],
   "frontends": [
     "desktop",
-    "desktop-window"
+    "browser-desktop"
   ],
   "displayName": {
     "default": "sy-post-publisher",
