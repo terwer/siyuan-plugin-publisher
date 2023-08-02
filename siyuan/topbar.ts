@@ -169,7 +169,7 @@ export class Topbar {
     menu.addSeparator()
     menu.addItem({
       iconHTML: icons.iconPen,
-      label: this.pluginInstance.i18n.publishNormal,
+      label: this.pluginInstance.i18n.batchSync,
       click: () => {
         this.widgetInvoke.showPublisherPublishDialog()
       },
