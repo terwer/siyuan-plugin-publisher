@@ -151,9 +151,10 @@ onMounted(async () => {
                   @click="handlePublish"
                   :disabled="!formData.actionEnable"
                 >
-                  {{ t("main.publish") }}
+                  {{ method === MethodEnum.METHOD_ADD ? t("main.publish") : t("main.update") }}
                 </el-button>
                 <el-button
+                  v-if="method === MethodEnum.METHOD_EDIT"
                   type="danger"
                   :loading="formData.isDeleteLoading"
                   @click="handleDelete"

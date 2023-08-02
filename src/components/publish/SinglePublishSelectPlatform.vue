@@ -50,7 +50,7 @@ const { getSetting } = useSettingStore()
 
 // datas
 const formData = reactive({
-  dynamicConfigArray: [] as DynamicConfig[],
+  enabledConfigArray: [] as DynamicConfig[],
 
   postMeta: {} as any,
 })
@@ -80,7 +80,8 @@ const checkHasPublished = (key: string) => {
 const initPage = async () => {
   const setting = await getSetting()
   const dynJsonCfg = JsonUtil.safeParse<DynamicJsonCfg>(setting[DYNAMIC_CONFIG_KEY], {} as DynamicJsonCfg)
-  formData.dynamicConfigArray = dynJsonCfg?.totalCfg || []
+  const dynamicConfigArray = dynJsonCfg?.totalCfg || []
+  formData.enabledConfigArray = dynamicConfigArray.filter((item) => item.isEnabled && item.isAuth)
   formData.postMeta = setting[props.id]
 }
 
@@ -101,7 +102,7 @@ onMounted(async () => {
       :span="8"
       :title="cfg.platformName"
       class="platform-select-card"
-      v-for="cfg in formData.dynamicConfigArray"
+      v-for="cfg in formData.enabledConfigArray"
       @click="handleSingleDoPublish(cfg.platformKey)"
     >
       <el-card class="card-item">

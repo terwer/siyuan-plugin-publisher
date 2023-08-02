@@ -64,6 +64,7 @@ const usePublish = () => {
     postid: "",
     previewUrl: "",
 
+    // 常规发布专用
     siyuanPost: {} as Post,
     platformPost: {} as Post,
     mergedPost: {} as Post,
