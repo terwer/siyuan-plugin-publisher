@@ -28,8 +28,8 @@ import { onMounted, reactive } from "vue"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useRouter } from "vue-router"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { DynamicConfig, DynamicJsonCfg } from "~/src/components/set/publish/platform/dynamicConfig.ts"
-import { HtmlUtil, JsonUtil } from "zhi-common"
+import { DynamicConfig, DynamicJsonCfg, getDynPostidKey } from "~/src/components/set/publish/platform/dynamicConfig.ts"
+import { HtmlUtil, JsonUtil, StrUtil } from "zhi-common"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 
@@ -51,6 +51,8 @@ const { getSetting } = useSettingStore()
 // datas
 const formData = reactive({
   dynamicConfigArray: [] as DynamicConfig[],
+
+  postMeta: {} as any,
 })
 
 // methods
@@ -66,10 +68,18 @@ const handleSingleDoPublish = (key: string) => {
   router.push(query)
 }
 
+const checkHasPublished = (key: string) => {
+  const postidKey = getDynPostidKey(key)
+  const postMetaValue = formData.postMeta[postidKey]
+
+  return !StrUtil.isEmptyString(postMetaValue)
+}
+
 const initPage = async () => {
   const setting = await getSetting()
   const dynJsonCfg = JsonUtil.safeParse<DynamicJsonCfg>(setting[DYNAMIC_CONFIG_KEY], {} as DynamicJsonCfg)
   formData.dynamicConfigArray = dynJsonCfg?.totalCfg || []
+  formData.postMeta = setting[props.id]
 }
 
 onMounted(async () => {
@@ -86,7 +96,7 @@ onMounted(async () => {
 
   <el-row :gutter="20" class="row-box">
     <el-col
-      :span="12"
+      :span="8"
       :title="cfg.platformName"
       class="platform-select-card"
       v-for="cfg in formData.dynamicConfigArray"
@@ -94,12 +104,16 @@ onMounted(async () => {
     >
       <el-card class="card-item">
         <div class="icon-list">
-          <el-badge type="danger" value="未发布" class="item">
+          <el-badge
+            :type="checkHasPublished(cfg.platformKey) ? 'success' : 'danger'"
+            :value="checkHasPublished(cfg.platformKey) ? '已发布' : '未发布'"
+            class="item"
+          >
             <el-text class="define-item">
               <i class="el-icon">
                 <span v-html="cfg?.platformIcon"></span>
               </i>
-              {{ HtmlUtil.parseHtml(cfg.platformName, 12) }}
+              {{ HtmlUtil.parseHtml(cfg.platformName, 11) }}
             </el-text>
           </el-badge>
         </div>
@@ -135,7 +149,7 @@ $icon_size = 32px
       font-weight 600
       margin-bottom 12px
     .icon-list
-      text-align center
+      text-align left
       gap 10px
       .define-item
         color var(--el-color-primary)
