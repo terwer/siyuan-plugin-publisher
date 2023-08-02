@@ -94,12 +94,14 @@ onMounted(async () => {
     >
       <el-card class="card-item">
         <div class="icon-list">
-          <el-text class="define-item">
-            <i class="el-icon">
-              <span v-html="cfg?.platformIcon"></span>
-            </i>
-            {{ HtmlUtil.parseHtml(cfg.platformName, 12) }}
-          </el-text>
+          <el-badge type="danger" value="未发布" class="item">
+            <el-text class="define-item">
+              <i class="el-icon">
+                <span v-html="cfg?.platformIcon"></span>
+              </i>
+              {{ HtmlUtil.parseHtml(cfg.platformName, 12) }}
+            </el-text>
+          </el-badge>
         </div>
       </el-card>
     </el-col>
@@ -118,7 +120,11 @@ $icon_size = 32px
 .card-item
   padding 0
 
+.item
+  margin-top 10px
+
 .row-box
+  cursor pointer
   margin 0 !important
   padding 0
   .platform-select-card
