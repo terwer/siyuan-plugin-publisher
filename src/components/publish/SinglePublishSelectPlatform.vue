@@ -24,11 +24,44 @@
   -->
 
 <script setup lang="ts">
-import PublishIndex from "~/src/components/publish/PublishIndex.vue"
+import { reactive } from "vue"
+import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useRouter } from "vue-router"
+import { createAppLogger } from "~/src/utils/appLogger.ts"
+
+const logger = createAppLogger("single-publish-select-platform")
+
+// props
+const props = defineProps({
+  id: {
+    type: String,
+    default: "",
+  },
+})
+
+// uses
+const { t } = useVueI18n()
+const router = useRouter()
+
+// datas
+const formData = reactive({})
+
+// methods
+const handleSingleDoPublish = (key: string) => {
+  const path = `/publish/singlePublish/doPublish/${key}/${props.id}`
+  logger.info("will go to =>", path)
+  const query = {
+    path: path,
+    query: {
+      showBack: "true",
+    },
+  }
+  router.push(query)
+}
 </script>
 
 <template>
-  <publish-index />
+  <div @click="handleSingleDoPublish('testkey')">select platform</div>
 </template>
 
-<style scoped></style>
+<style scoped lang="stylus"></style>

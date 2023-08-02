@@ -24,7 +24,9 @@
  */
 
 import { createRouter, createWebHashHistory, Router, RouteRecordRaw } from "vue-router"
-import Home from "~/src/pages/Home.vue"
+import BatchPublish from "~/src/pages/BatchPublish.vue"
+import SinglePublish from "~/src/pages/SinglePublish.vue"
+import SinglePublishDoPublish from "~/src/components/publish/SinglePublishDoPublish.vue"
 import Setting from "~/src/pages/Setting.vue"
 import GeneralSetting from "~/src/components/set/GeneralSetting.vue"
 import PublishSetting from "~/src/components/set/PublishSetting.vue"
@@ -32,7 +34,7 @@ import SettingEntry from "~/src/components/set/publish/singleplatform/SettingEnt
 import PlatformAddForm from "~/src/components/set/publish/PlatformAddForm.vue"
 import PlatformUpdateForm from "~/src/components/set/publish/PlatformUpdateForm.vue"
 import PlatformQuickAdd from "~/src/components/set/publish/PlatformQuickAdd.vue"
-import QuickPublish from "~/src/workers/quickPublish.vue"
+import QuickPublish from "~/src/workers/QuickPublish.vue"
 
 const ApiTest = () => import("~/src/pages/ApiTest.vue")
 const SiyuanTest = () => import("~/src/components/test/SiyuanTest.vue")
@@ -43,8 +45,17 @@ const YuqueTest = () => import("~/src/components/test/YuqueTest.vue")
 const ZhihuTest = () => import("~/src/components/test/ZhihuTest.vue")
 
 const routes: RouteRecordRaw[] = [
-  { path: "/", component: Home },
+  // 极速发布
   { path: "/workers/quickPublish/:key/:id", component: QuickPublish },
+  // 常规发布
+  // ?id=<id>
+  { path: "/publish/singlePublish", component: SinglePublish },
+  { path: "/publish/singlePublish/doPublish/:key/:id", component: SinglePublishDoPublish },
+  // 批量分发
+  // /?id=<id>
+  { path: "/", component: BatchPublish },
+  { path: "/publish/batchPublish", component: BatchPublish },
+
   {
     path: "/test",
     component: ApiTest,
@@ -58,6 +69,7 @@ const routes: RouteRecordRaw[] = [
       { path: "zhihu", component: ZhihuTest },
     ],
   },
+
   {
     path: "/setting",
     component: Setting,

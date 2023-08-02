@@ -43,7 +43,7 @@ export class WidgetInvoke {
     this.pluginInstance = pluginInstance
   }
 
-  public async showPublisherPublishDialog() {
+  public async showPublisherBatchPublishDialog() {
     let pageId: string | undefined = PageUtil.getPageId()
     if (pageId == "") {
       pageId = undefined
@@ -54,6 +54,19 @@ export class WidgetInvoke {
       return
     }
     await this.showPage(`/?id=${pageId}`)
+  }
+
+  public async showPublisherSinglePublishDialog() {
+    let pageId: string | undefined = PageUtil.getPageId()
+    if (pageId == "") {
+      pageId = undefined
+    }
+    this.logger.debug("pageId=>", pageId)
+    if (StrUtil.isEmptyString(pageId)) {
+      showMessage(`文档ID不能为空，注意：您必须打开当前文档才能进行发布操作`, 2000, "error")
+      return
+    }
+    await this.showPage(`/publish/singlePublish?id=${pageId}`)
   }
 
   public async showPublisherQuickPublishDialog(key: string) {

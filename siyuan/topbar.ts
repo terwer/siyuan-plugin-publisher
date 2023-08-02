@@ -173,23 +173,23 @@ export class Topbar {
       },
     })
 
-    // 批量分发
-    menu.addSeparator()
-    menu.addItem({
-      iconHTML: `iconMove`,
-      label: this.pluginInstance.i18n.batchSync,
-      click: () => {
-        this.widgetInvoke.showPublisherPublishDialog()
-      },
-    })
-
     // 常规发布
     menu.addSeparator()
     menu.addItem({
       iconHTML: icons.iconPen,
       label: this.pluginInstance.i18n.publishNormal,
       click: () => {
-        // this.widgetInvoke.showPublisherPublishDialog()
+        this.widgetInvoke.showPublisherSinglePublishDialog()
+      },
+    })
+
+    // 批量分发
+    menu.addSeparator()
+    menu.addItem({
+      iconHTML: `<svg class="b3-menu__icon" style=""><use xlink:href="#iconMove"></use></svg>`,
+      label: this.pluginInstance.i18n.batchSync,
+      click: () => {
+        this.widgetInvoke.showPublisherBatchPublishDialog()
       },
     })
 

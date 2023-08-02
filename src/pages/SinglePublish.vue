@@ -24,9 +24,14 @@
   -->
 
 <script setup lang="ts">
-import PublishSetting from "~/src/components/set/PublishSetting.vue"
+import SinglePublishSelectPlatform from "~/src/components/publish/SinglePublishSelectPlatform.vue"
+import { getWidgetId } from "~/src/utils/widgetUtils.ts"
+import { useRoute } from "vue-router"
+
+const { query } = useRoute()
+const id = (query.id ?? getWidgetId()) as string
 </script>
 
 <template>
-  <publish-setting />
+  <single-publish-select-platform :id="id" />
 </template>

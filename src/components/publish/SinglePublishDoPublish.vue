@@ -24,9 +24,20 @@
   -->
 
 <script setup lang="ts">
-import PublishSetting from "~/src/components/set/PublishSetting.vue"
+import { reactive } from "vue"
+import { useRoute } from "vue-router"
+
+// uses
+const route = useRoute()
+
+// datas
+const params = reactive(route.params)
+const key = params.key as string
+const id = params.id as string
 </script>
 
 <template>
-  <publish-setting />
+  <div>single publish do publish</div>
 </template>
+
+<style scoped lang="stylus"></style>
