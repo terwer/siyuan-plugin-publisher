@@ -2,7 +2,7 @@
 
 # Publisher
 
-![](https://raw.githubusercontent.com/terwer/siyuan-plugin-publisher/main/icon.png)
+![](./icon.png)
 
 Publishing articles from siyuan-note to platforms such as Yuque, Cnblogs, WordPress, Typecho, Hexo, Hugo and more.
 
@@ -20,9 +20,45 @@ Support features such as fast publishing, image bed management, platform expansi
 
 ![](./help/help_2.png)
 
-If you still can't use this step after this step, welcome [New issue] (https://github.com/terwer/siyuan-plugin-publisher/issues/new).
+If you still can't use this step after this step, [New issue](https://github.com/terwer/siyuan-plugin-publisher/issues/new) is welcome.
 
-**This tip will be removed after the stable release. **
+**This tip will be removed after the stable release.**
+
+## Recent critical updates and bug fixes
+
+- Urgently fix the error problem that may be caused by the first opening
+- Support for Yuque, Cnblogs, Metaweblog, TypeEcho, WordPress
+- Experience optimization to prevent duplicate submissions
+- Fixed missing general release parameters
+- Fixed an issue where menu loading order issues may not be displayed
+- Multi-platform distribution needs to consider synchronizing and updating Siyuan notes
+- Fixed an issue where there could be an error in editing articles
+- Fixed the wrong issue of Lark Preview link
+- Added extended menu
+- Warehouse synchronization
+- Plug-in widget source code merging
+- Fixed missing plugin package
+- Fixed the error issue of the Yuque client
+- Added Vercel and NGINX build support
+
+## Compatibility of Origin notes
+
+This plugin supports almost all devices and platforms of Siyuan Note, and the specific compatibility is as follows:
+
+- [X] Siyuan Note Client (zero configuration) <sup>is highly recommended</sup>
+- [X] Servo environment (cross-domain request proxy needs to be set)
+  - [X] CentSource Note Browser Servo
+  - [X] Siyuan Note Client Servo
+  - [X] Siyuan Notemaker mobile servo
+- [X] Siyuan Note docker version (need to set up cross-domain request proxy)
+
+**Note: If it is a LAN servo, you need to deploy the cross-domain proxy on the LAN.**
+
+**Set up the method, clone https://github.com/terwer/node-metaweblog-api-adaptor then `pnpm install & pnpm dev`, after startup the proxy address is https://<local-IP>:3000/api/middleware .**
+
+**If the Internet needs to be deployed on the Internet, the cross-domain request proxy of the Internet can also be used directly: https://api.terwer.space/api/middleware**
+
+**It may be migrated to the official forward proxy to achieve zero configuration in the future, but for now you must set it yourself, you can follow the progress here.**
 
 ## Platform List
 
@@ -36,22 +72,6 @@ Names not listed in order
 - [ ] Github
   - [ ] Hexo
   - [ ] Hugo
-
-## Recent critical updates and bug fixes
-
-- Support for Yuque, Cnblogs, Metaweblog, TypeEcho, WordPress
-- Experience optimization to prevent duplicate submissions
-- Fixed missing general release parameters
-- Fixed an issue where menu loading order issues may not be displayed
-- Multi-platform distribution needs to consider synchronizing and updating Siyuan notes
-- Fixed an issue where there could be an error in editing articles
-- Fixed the wrong issue of Lark Preview link
-- Added extended menu
-- Warehouse synchronization
-- Plug-in widget source code merging
-- Fixed missing plugin package
-- Fixed the error issue of the Wordbird client
-- Added Vercel and NGINX build support
 
 ## Core Features
 
@@ -102,22 +122,15 @@ Please check [CHANGELOG](./CHANGELOG.MD)
 
 * Q2：After installing the publishing tool plugin, do I still need to install the widget?
 
-  A2：**unnecessary. **
+  A2：**unnecessary.**
 
   The plugin version contains all the functions of the widget version.
 
+* Q3: I am not used to the new version of the operation and want to continue to use the previous widget, can I?
 
-* Q3：I am not used to the operation of the new version, and I want to continue to use the previous widget through the plugin, is that possible?
+  A3:**Yes but not recommended.**
 
-  A3：**Yes.**
-
-  The plugin has a builtin bridge by default, which can invoke the widget through the plugin. This feature needs to be turned on in `Settings -> Use WidgetInvoke`.
-
-  <u>Note 1: The plugin version uses the builtin menu of the plugin system, and the menu slot will be disabled when the widget version is activated via plugin. </u>
-
-  <u>Note 2: After opening the widget version, all functions of the plugin version will be disabled to avoid confusion.</u>
-
-  **We strongly recommend you to use the plugin version, because the plugin version will be the main version for long-term maintenance in the future, and the widget version is obsolete, and it is only used to fix problems and compatible with historical users.**
+  **We strongly recommend that you use the plug-in version directly, because the plug-in version will be the main version for long-term maintenance in the future, and the hanger version has been deprecated only as a fix for problems and compatible with historical users.**
 
 
 * Q4：I used to use `Custom JS Fragment` or add `WidgetInvoke` directly, do I still need to download the plugin now?

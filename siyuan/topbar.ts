@@ -33,6 +33,7 @@ import { WidgetInvoke } from "./invoke/widgetInvoke"
 import { PluginInvoke } from "./invoke/pluginInvoke"
 import { ObjectUtil } from "zhi-common"
 import { DYNAMIC_CONFIG_KEY } from "./Constants"
+import { ConfigManager } from "~/siyuan/store/config.ts"
 
 /**
  * 顶部按钮
@@ -50,27 +51,34 @@ export class Topbar {
     this.widgetInvoke = new WidgetInvoke(pluginInstance)
   }
 
-  public async initTopbar() {
-    const quickMenus = await this.getQuickMenus()
-    const extendMenus = await this.getExtendMenus()
+  public initTopbar() {
+    const self = this
     const topBarElement = this.pluginInstance.addTopBar({
       icon: icons.iconPlane,
       title: this.pluginInstance.i18n.publishTool,
       position: "left",
-      callback: () => {
-        this.addMenu(topBarElement.getBoundingClientRect(), quickMenus, extendMenus)
-      },
+      callback: () => {},
+    })
+    topBarElement.addEventListener("click", async () => {
+      // 预加载数据
+      const setting = await ConfigManager.loadConfig(self.pluginInstance)
+      // 快速发布
+      const quickMenus = self.getQuickMenus(setting)
+      // 扩展菜单
+      const extendMenus = await self.getExtendMenus()
+      // 初始化菜单
+      this.addMenu(topBarElement.getBoundingClientRect(), quickMenus, extendMenus)
+      self.logger.info("publisher menu loaded")
     })
   }
 
-  private async getQuickMenus() {
+  private getQuickMenus(setting: any) {
     const submenus = <IMenuItemOption[]>[]
     // 读取配置
-    if (ObjectUtil.isEmptyObject(this.pluginInstance.cfg)) {
+    if (ObjectUtil.isEmptyObject(setting)) {
       // 配置错误，直接返回空
       return submenus
     }
-    const setting = this.pluginInstance.cfg
     const dynJsonCfg = setting[DYNAMIC_CONFIG_KEY] as any
     this.logger.info("dynJsonCfg =>", dynJsonCfg.totalCfg)
     // 构造发布菜单

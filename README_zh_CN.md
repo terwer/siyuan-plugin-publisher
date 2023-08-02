@@ -2,7 +2,7 @@
 
 # 发布工具
 
-![](https://raw.githubusercontent.com/terwer/siyuan-plugin-publisher/main/icon.png)
+![](./icon.png)
 
 将思源笔记的文章发布到语雀、Cnblogs、WordPress、Typecho、Hexo、Hugo 等平台，支持极速发布、图床管理、平台扩展、智能标签等特色功能。
 
@@ -22,19 +22,6 @@
 
 **本提示会在稳定版发布后移除。**
 
-## 平台列表
-
-排名不分先后
-
-- [X] 语雀
-- [X] 博客园
-- [X] Metaweblog
-- [X] Typecho
-- [X] WordPress
-- [ ] Github
-  - [ ] Hexo
-  - [ ] Hugo
-
 ## 最近的关键更新与 Bug 修复
 
 - 紧急修复第一次打开可能导致的报错问题
@@ -51,6 +38,38 @@
 - 修复插件包缺失问题
 - 修复语雀客户端报错问题
 - 新增 Vercel 和 Nginx 构建支持
+
+## 思源笔记兼容情况
+
+本插件支持思源笔记几乎所有设备和平台，具体兼容情况如下：
+
+- [X] 思源笔记客户端（零配置）<sup>强烈推荐</sup>
+- [X] 伺服环境（需要设置跨域请求代理）
+  - [X] 思源笔记浏览器伺服
+  - [X] 思源笔记客户端伺服
+  - [X] 思源笔记客移动端伺服
+- [X] 思源笔记docker版（需要设置跨域请求代理）
+
+**注意：如果是局域网伺服，需要在局域网自行部署跨域代理。**
+
+**设置方法，clone https://github.com/terwer/node-metaweblog-api-adaptor 然后 `pnpm install && pnpm dev`，启动之后代理地址为：https://<局域网IP>:3000/api/middleware 。** 
+
+**如果是外网需要部署在外网，外网的跨域请求代理也可以直接使用：https://api.terwer.space/api/middleware**
+
+**后续可能会迁移到官方的正向代理实现零配置，但是目前还是必须要自己设置，可在这里关注进展。**
+
+## 平台列表
+
+排名不分先后
+
+- [X] 语雀
+- [X] 博客园
+- [X] Metaweblog
+- [X] Typecho
+- [X] WordPress
+- [ ] Github
+  - [ ] Hexo
+  - [ ] Hugo
 
 ## 核心特色
 
