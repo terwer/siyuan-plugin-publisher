@@ -62,7 +62,7 @@ const formData = reactive({
   isDeleteLoading: false,
 
   showProcessResult: false,
-  doc: {} as Post,
+  siyuanPost: {} as Post,
   errCount: 0,
   successBatchResults: <any[]>[],
   failBatchResults: <any[]>[],
@@ -82,7 +82,7 @@ const handlePublish = async () => {
     formData.failBatchResults = []
     formData.successBatchResults = []
     for (const key of formData.dynList) {
-      const batchResult = await doSinglePublish(key, props.id, formData.doc)
+      const batchResult = await doSinglePublish(key, props.id, formData.siyuanPost)
       if (batchResult.status) {
         formData.successBatchResults.push(batchResult)
       } else {
@@ -173,12 +173,12 @@ const handleRefresh = () => {
 onMounted(async () => {
   logger.info("获取到的ID为=>", props.id)
   // 思源笔记原始文章数据
-  formData.doc = await blogApi.getPost(props.id)
+  formData.siyuanPost = await blogApi.getPost(props.id)
 })
 </script>
 
 <template>
-  <div id="publish-index">
+  <div id="batch-publish-index">
     <el-container>
       <el-main>
         <!-- 提示 -->
@@ -212,7 +212,7 @@ onMounted(async () => {
             <!-- 文章标题 -->
             <div class="form-post-title">
               <el-form-item :label="t('main.title')">
-                <el-input v-model="formData.doc.title" />
+                <el-input v-model="formData.siyuanPost.title" />
               </el-form-item>
             </div>
             <el-divider border-style="dashed" />

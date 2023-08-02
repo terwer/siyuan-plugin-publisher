@@ -51,8 +51,8 @@ dependencies:
     specifier: ^3.1.1
     version: 3.1.1
   zhi-blog-api:
-    specifier: ^1.20.1
-    version: 1.20.1
+    specifier: ^1.20.2
+    version: 1.20.2
   zhi-common:
     specifier: ^1.11.6
     version: 1.11.6
@@ -69,8 +69,8 @@ dependencies:
     specifier: ^0.4.2
     version: 0.4.2
   zhi-siyuan-api:
-    specifier: ^1.29.1
-    version: 1.29.1
+    specifier: ^1.29.2
+    version: 1.29.2
   zhi-xmlrpc-middleware:
     specifier: ^0.4.1
     version: 0.4.1
@@ -5481,8 +5481,8 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /strip-literal@1.0.1:
-    resolution: {integrity: sha512-QZTsipNpa2Ppr6v1AmJHESqJ3Uz247MUS0OjrnnZjFAvEoWqxuyFuXn2xLgMtRnijJShAa1HL0gtJyUs7u7n3Q==}
+  /strip-literal@1.1.0:
+    resolution: {integrity: sha512-KH41jC/ZiLwhFf3aKkcj6CJZYbRfD/GAb4d05KPwbhjSswohY0wArniCcNIhgAhrudpzzYnXmSu0NLp2b6rsMg==}
     dependencies:
       acorn: 8.10.0
     dev: true
@@ -5821,8 +5821,8 @@ packages:
     resolution: {integrity: sha512-RsPyTbqORDNDxqAdQPQBpgqhWle1VcTSou/FraClYlHf6TZnQcGslpLcAphNR+sQW4q5lLWLbOsRlh9j24baQg==}
     dev: true
 
-  /unimport@3.1.0:
-    resolution: {integrity: sha512-ybK3NVWh30MdiqSyqakrrQOeiXyu5507tDA0tUf7VJHrsq4DM6S43gR7oAsZaFojM32hzX982Lqw02D3yf2aiA==}
+  /unimport@3.1.1:
+    resolution: {integrity: sha512-B7NRqP6imrhT70RWS46QeCB4EdmoO+LgSmdDp7YiylYSmPEbRmampXhSfarp2ZBofnvK/oUnM0c5d8Oy/oF09w==}
     dependencies:
       '@rollup/pluginutils': 5.0.2
       escape-string-regexp: 5.0.0
@@ -5833,7 +5833,7 @@ packages:
       pathe: 1.1.1
       pkg-types: 1.0.3
       scule: 1.0.0
-      strip-literal: 1.0.1
+      strip-literal: 1.1.0
       unplugin: 1.4.0
     transitivePeerDependencies:
       - rollup
@@ -5867,7 +5867,7 @@ packages:
       local-pkg: 0.4.3
       magic-string: 0.30.2
       minimatch: 9.0.3
-      unimport: 3.1.0
+      unimport: 3.1.1
       unplugin: 1.4.0
     transitivePeerDependencies:
       - rollup
@@ -6114,7 +6114,7 @@ packages:
       pathe: 1.1.1
       picocolors: 1.0.0
       std-env: 3.3.3
-      strip-literal: 1.0.1
+      strip-literal: 1.1.0
       tinybench: 2.5.0
       tinypool: 0.7.0
       vite: 4.4.8(@types/node@18.17.1)(stylus@0.59.0)
@@ -6362,8 +6362,8 @@ packages:
     engines: {node: '>=12.20'}
     dev: true
 
-  /zhi-blog-api@1.20.1:
-    resolution: {integrity: sha512-8jjOvnd6Sh3oKqg4tiwx0A2AWbiWTvhYGAN1FZnOo5UaozpNAe4YsGfshkfhG/GAxT0gkoeY/MY9iQQde/YndA==}
+  /zhi-blog-api@1.20.2:
+    resolution: {integrity: sha512-1trKXFeL5NJTrIUG5zuhWyEb//5jG1eSbb72Dq10Z+6xhRXFmEKiVxLTe5jZva3AIaLJe4UuN2yr4K9IqBGWUQ==}
     dependencies:
       zhi-lib-base: 0.4.2
     dev: false
@@ -6399,10 +6399,10 @@ packages:
     resolution: {integrity: sha512-kfKgN4hb5efUf+k5Y9028CVV1p/hsnK0NbRsxI3uwJoTlHfTBjfi6ZfrkhDn+XEnEYeWidO75sx4RdcnT7C3KA==}
     dev: false
 
-  /zhi-siyuan-api@1.29.1:
-    resolution: {integrity: sha512-yfK+KG3YrmZLyp4+jEtVYRKVA0Hx7uF8KVta0YozgH1wRg5+4hgJG/Sjx7dVQ5DXyPybGp3nkPV7pePwZ8XEKw==}
+  /zhi-siyuan-api@1.29.2:
+    resolution: {integrity: sha512-REvz97sdSUB5/K8oNDe3MZsu9uLd4Q0jHRATzWwNtnXoR8K9Hdw4ZKZ3RAJUyZQ9ns9eW8gm1UE93JKyKLh97w==}
     dependencies:
-      zhi-blog-api: 1.20.1
+      zhi-blog-api: 1.20.2
       zhi-common: 1.11.6
       zhi-lib-base: 0.4.2
     dev: false

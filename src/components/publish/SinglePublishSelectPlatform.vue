@@ -57,12 +57,14 @@ const formData = reactive({
 
 // methods
 const handleSingleDoPublish = (key: string) => {
+  const method = checkHasPublished(key) ? "edit" : "add"
   const path = `/publish/singlePublish/doPublish/${key}/${props.id}`
   logger.info("will go to =>", path)
   const query = {
     path: path,
     query: {
       showBack: "true",
+      method: method,
     },
   }
   router.push(query)
