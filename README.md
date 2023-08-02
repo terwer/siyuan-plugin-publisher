@@ -39,6 +39,7 @@ Names not listed in order
 
 ## Recent critical updates and bug fixes
 
+- Urgently fix the error problem that may be caused by the first opening
 - Support for Yuque, Cnblogs, Metaweblog, TypeEcho, WordPress
 - Experience optimization to prevent duplicate submissions
 - Fixed missing general release parameters
