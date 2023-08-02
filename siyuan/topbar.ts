@@ -74,7 +74,7 @@ export class Topbar {
     const dynJsonCfg = setting[DYNAMIC_CONFIG_KEY] as any
     this.logger.info("dynJsonCfg =>", dynJsonCfg.totalCfg)
     // 构造发布菜单
-    dynJsonCfg.totalCfg.forEach((config: any) => {
+    dynJsonCfg.totalCfg?.forEach((config: any) => {
       let icon = `<span class="iconfont-icon">${config.platformIcon}</span>`
       // 修复图片不展示问题
       if (/^\<img/.test(config.platformIcon) && config.platformIcon.indexOf("./images") > -1) {
@@ -169,7 +169,7 @@ export class Topbar {
     menu.addSeparator()
     menu.addItem({
       iconHTML: icons.iconPen,
-      label: this.pluginInstance.i18n.publishNormal,
+      label: this.pluginInstance.i18n.batchSync,
       click: () => {
         this.widgetInvoke.showPublisherPublishDialog()
       },

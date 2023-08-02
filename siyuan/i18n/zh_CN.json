@@ -14,6 +14,7 @@
   "cancel": "取消",
   "save": "保存",
   "publishTo": "一键发布",
+  "batchSync": "批量分发",
   "publishNormal": "常规发布",
   "extendFunction": "扩展功能"
 }
