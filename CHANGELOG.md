@@ -1,19 +1,12 @@
 # Changelog
 
 ## [1.2.2](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.2.1...v1.2.2) (2023-08-02)
-
-
 ### Bug Fixes
-
 * 修复重启可能出现的图标不加载问题 ([aab8d7f](https://github.com/terwer/siyuan-plugin-publisher/commit/aab8d7f83d254eb799462758de49da890724ee19))
 * 兼容伺服浏览器 ([a3a046a](https://github.com/terwer/siyuan-plugin-publisher/commit/a3a046a30caa1c1926c0f79520c04b24223e1057))
-* 新增兼容情况 ([6291730](https://github.com/terwer/siyuan-plugin-publisher/commit/62917306431d2eb067fb9a4ea413e392f67fecd8))
-* 新增兼容情况 ([7ce0747](https://github.com/terwer/siyuan-plugin-publisher/commit/7ce07470b5c74153f0781af263a17953680d6bec))
 * 新增兼容情况 ([dcbb671](https://github.com/terwer/siyuan-plugin-publisher/commit/dcbb6715bed0d34f0faa906a0cca54a08e39e3a4))
 * 设置完成关闭弹窗取消重加载，提升体验 ([df955c9](https://github.com/terwer/siyuan-plugin-publisher/commit/df955c90cd290ad34b4e3f95177134c0d3e8d0e3))
-
 ## [1.2.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.2.0...v1.2.1) (2023-08-02)
-### Bug Fixes
 * **deps:** bump zhi-xmlrpc-middleware from 0.3.0 to 0.4.0 ([1c16b2c](https://github.com/terwer/siyuan-plugin-publisher/commit/1c16b2c15ad5bccc982dfa0849be3e8a20ecd095))
 * 修复第一次打开可能导致的报错问题 ([b05894e](https://github.com/terwer/siyuan-plugin-publisher/commit/b05894e8a40e58dc16583aba00cc91235181764b))
 * 常规发布改为批量分发 ([dc06680](https://github.com/terwer/siyuan-plugin-publisher/commit/dc066801e84d2553b97e0a84432f22ccd2f86221))
