@@ -64,7 +64,7 @@ if (emit) {
 const handleCheck = (key: string) => {
   if (formData.selectedKeys.includes(key)) {
     // 如果 formData.selectedKeys 数组中包含 key，则从数组中删除 key
-    formData.selectedKeys = formData.selectedKeys.filter((item: string) => item !== key)
+    formData.selectedKeys = formData.selectedKeys?.filter((item: string) => item !== key)??[]
   } else {
     // 如果 formData.selectedKeys 数组中不包含 key，则将其添加到数组中
     formData.selectedKeys.push(key)
@@ -80,7 +80,7 @@ onMounted(async () => {
   const setting = await getSetting()
   const dynJsonCfg = JsonUtil.safeParse<DynamicJsonCfg>(setting[DYNAMIC_CONFIG_KEY], {} as DynamicJsonCfg)
   // 过滤出已启用并且配置可用的平台
-  const enabledConfigs = dynJsonCfg?.totalCfg.filter(
+  const enabledConfigs = dynJsonCfg.totalCfg?.filter(
     (config: DynamicConfig) => config.isEnabled === true && config.isAuth === true
   )
   // 默认展示通用平台
