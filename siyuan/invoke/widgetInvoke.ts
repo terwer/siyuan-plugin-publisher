@@ -70,7 +70,7 @@ export class WidgetInvoke {
   }
 
   public async showPublisherPublishSettingDialog() {
-    await this.showPage("/setting/publish", true)
+    await this.showPage("/setting/publish")
   }
 
   public async showPublisherGeneralSettingDialog() {
