@@ -20,9 +20,28 @@ Support features such as fast publishing, image bed management, platform expansi
 
 ![](./help/help_2.png)
 
-If you still can't use this step after this step, welcome [New issue] (https://github.com/terwer/siyuan-plugin-publisher/issues/new).
+If you still can't use this step after this step, [New issue](https://github.com/terwer/siyuan-plugin-publisher/issues/new) is welcome.
 
 **This tip will be removed after the stable release.**
+
+## Compatibility of Origin notes
+
+This plugin supports almost all devices and platforms of Siyuan Note, and the specific compatibility is as follows:
+
+- [X] Siyuan Note Client (zero configuration) <sup>is highly recommended</sup>
+- [X] Servo environment (cross-domain request proxy needs to be set)
+  - [X] CentSource Note Browser Servo
+  - [X] Siyuan Note Client Servo
+  - [X] Siyuan Notemaker mobile servo
+- [X] Siyuan Note docker version (need to set up cross-domain request proxy)
+
+**Note: If it is a LAN servo, you need to deploy the cross-domain proxy on the LAN.**
+
+**Set up the method, clone https://github.com/terwer/node-metaweblog-api-adaptor then 'pnpm install & pnpm dev', after startup the proxy address is<局域网IP>: https:// :3000/api/middleware .**
+
+**If the Internet needs to be deployed on the Internet, the cross-domain request proxy of the Internet can also be used directly: https://api.terwer.space/api/middleware**
+
+**It may be migrated to the official forward proxy to achieve zero configuration in the future, but for now you must set it yourself, you can follow the progress here.**
 
 ## Platform List
 
