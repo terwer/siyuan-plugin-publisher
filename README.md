@@ -22,7 +22,7 @@ Support features such as fast publishing, image bed management, platform expansi
 
 If you still can't use this step after this step, welcome [New issue] (https://github.com/terwer/siyuan-plugin-publisher/issues/new).
 
-**This tip will be removed after the stable release. **
+**This tip will be removed after the stable release.**
 
 ## Platform List
 
