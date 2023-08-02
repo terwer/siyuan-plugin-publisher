@@ -24,6 +24,23 @@ If you still can't use this step after this step, [New issue](https://github.com
 
 **This tip will be removed after the stable release.**
 
+## Recent critical updates and bug fixes
+
+- Urgently fix the error problem that may be caused by the first opening
+- Support for Yuque, Cnblogs, Metaweblog, TypeEcho, WordPress
+- Experience optimization to prevent duplicate submissions
+- Fixed missing general release parameters
+- Fixed an issue where menu loading order issues may not be displayed
+- Multi-platform distribution needs to consider synchronizing and updating Siyuan notes
+- Fixed an issue where there could be an error in editing articles
+- Fixed the wrong issue of Lark Preview link
+- Added extended menu
+- Warehouse synchronization
+- Plug-in widget source code merging
+- Fixed missing plugin package
+- Fixed the error issue of the Yuque client
+- Added Vercel and NGINX build support
+
 ## Compatibility of Origin notes
 
 This plugin supports almost all devices and platforms of Siyuan Note, and the specific compatibility is as follows:
@@ -37,7 +54,7 @@ This plugin supports almost all devices and platforms of Siyuan Note, and the sp
 
 **Note: If it is a LAN servo, you need to deploy the cross-domain proxy on the LAN.**
 
-**Set up the method, clone https://github.com/terwer/node-metaweblog-api-adaptor then 'pnpm install & pnpm dev', after startup the proxy address is<局域网IP>: https:// :3000/api/middleware .**
+**Set up the method, clone https://github.com/terwer/node-metaweblog-api-adaptor then `pnpm install & pnpm dev`, after startup the proxy address is https://<local-IP>:3000/api/middleware .**
 
 **If the Internet needs to be deployed on the Internet, the cross-domain request proxy of the Internet can also be used directly: https://api.terwer.space/api/middleware**
 
@@ -55,23 +72,6 @@ Names not listed in order
 - [ ] Github
   - [ ] Hexo
   - [ ] Hugo
-
-## Recent critical updates and bug fixes
-
-- Urgently fix the error problem that may be caused by the first opening
-- Support for Yuque, Cnblogs, Metaweblog, TypeEcho, WordPress
-- Experience optimization to prevent duplicate submissions
-- Fixed missing general release parameters
-- Fixed an issue where menu loading order issues may not be displayed
-- Multi-platform distribution needs to consider synchronizing and updating Siyuan notes
-- Fixed an issue where there could be an error in editing articles
-- Fixed the wrong issue of Lark Preview link
-- Added extended menu
-- Warehouse synchronization
-- Plug-in widget source code merging
-- Fixed missing plugin package
-- Fixed the error issue of the Wordbird client
-- Added Vercel and NGINX build support
 
 ## Core Features
 
