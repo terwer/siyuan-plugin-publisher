@@ -8,11 +8,21 @@ Publishing articles from siyuan-note to platforms such as Yuque, Cnblogs, WordPr
 
 Support features such as fast publishing, image bed management, platform expansion, smart labels, etc.
 
-This plugin promises that the basic functions will be free forever, and the follow-up related to intelligent AI may be charged, and the closed beta stage is completely free. If you want to support developers, please [feel free to support](https://github.com/terwer/siyuan-plugin-publisher/blob/main/README_zh_CN.md#Donate) here.
+> **Note: This plugin is in the rapid iteration and pre-beta testing stage, the function is not yet stable, if you encounter the problem that you cannot use it, you can try the following steps to fix it:**
 
-> 🌹 Tips: This plugin is an upgraded version of the original 'Siyuan Note Publishing Tool' widget, which includes all the functions provided by the original widget, provides a convenient menu operation entry, and has carried out a series of problem fixes and experience optimizations.
->
-> In addition to [Extended Functions], **Other functions do not require any dependencies** , and there is no need to download the previous widget, which is already built-in in the plugin.
+(1) Uninstall the plugin
+
+![](./help/help_1.png)
+
+(2) Download and install again
+
+(3) Re-enable
+
+![](./help/help_2.png)
+
+If you still can't use this step after this step, welcome [New issue] (https://github.com/terwer/siyuan-plugin-publisher/issues/new).
+
+**This tip will be removed after the stable release. **
 
 ## Platform List
 
@@ -59,6 +69,12 @@ Names not listed in order
 - [X] **Language support**: multi-language support, support Chinese version and English version
 - [ ] **Release view**: Support multiple release views, simple mode, detailed mode and source code mode
 - [X] **Multiple deployments**: support Siyuan notes plugin<sup>Highly recommended</sup>, Chrome browser extension, self-deployment
+
+This plugin promises that the basic functions will be free forever, and the follow-up related to intelligent AI may be charged, and the closed beta stage is completely free. If you want to support developers, please [feel free to support](https://github.com/terwer/siyuan-plugin-publisher/blob/main/README_zh_CN.md#Donate) here.
+
+> 🌹 Tips: This plugin is an upgraded version of the original 'Siyuan Note Publishing Tool' widget, which includes all the functions provided by the original widget, provides a convenient menu operation entry, and has carried out a series of problem fixes and experience optimizations.
+>
+> In addition to [Extended Functions], **Other functions do not require any dependencies** , and there is no need to download the previous widget, which is already built-in in the plugin.
 
 ## Platform Adaptation Plan
 
