@@ -122,22 +122,15 @@ Please check [CHANGELOG](./CHANGELOG.MD)
 
 * Q2：After installing the publishing tool plugin, do I still need to install the widget?
 
-  A2：**unnecessary. **
+  A2：**unnecessary.**
 
   The plugin version contains all the functions of the widget version.
 
+* Q3: I am not used to the new version of the operation and want to continue to use the previous widget, can I?
 
-* Q3：I am not used to the operation of the new version, and I want to continue to use the previous widget through the plugin, is that possible?
+  A3:**Yes but not recommended.**
 
-  A3：**Yes.**
-
-  The plugin has a builtin bridge by default, which can invoke the widget through the plugin. This feature needs to be turned on in `Settings -> Use WidgetInvoke`.
-
-  <u>Note 1: The plugin version uses the builtin menu of the plugin system, and the menu slot will be disabled when the widget version is activated via plugin. </u>
-
-  <u>Note 2: After opening the widget version, all functions of the plugin version will be disabled to avoid confusion.</u>
-
-  **We strongly recommend you to use the plugin version, because the plugin version will be the main version for long-term maintenance in the future, and the widget version is obsolete, and it is only used to fix problems and compatible with historical users.**
+  **We strongly recommend that you use the plug-in version directly, because the plug-in version will be the main version for long-term maintenance in the future, and the hanger version has been deprecated only as a fix for problems and compatible with historical users.**
 
 
 * Q4：I used to use `Custom JS Fragment` or add `WidgetInvoke` directly, do I still need to download the plugin now?
