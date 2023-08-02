@@ -26,6 +26,9 @@ If you still can't use this step after this step, [New issue](https://github.com
 
 ## Recent critical updates and bug fixes
 
+- Close the pop-up window after setting to cancel the reload and improve the experience
+- Fixed the issue that icons did not load when rebooting
+- Compatible with servo browsers
 - Urgently fix the error problem that may be caused by the first opening
 - Support for Yuque, Cnblogs, Metaweblog, TypeEcho, WordPress
 - Experience optimization to prevent duplicate submissions
