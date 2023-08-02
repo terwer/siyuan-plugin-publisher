@@ -24,10 +24,14 @@
   -->
 
 <script setup lang="ts">
-import { reactive } from "vue"
+import { onMounted, reactive } from "vue"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useRouter } from "vue-router"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { DynamicConfig, DynamicJsonCfg } from "~/src/components/set/publish/platform/dynamicConfig.ts"
+import { HtmlUtil, JsonUtil } from "zhi-common"
+import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
+import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 
 const logger = createAppLogger("single-publish-select-platform")
 
@@ -42,9 +46,12 @@ const props = defineProps({
 // uses
 const { t } = useVueI18n()
 const router = useRouter()
+const { getSetting } = useSettingStore()
 
 // datas
-const formData = reactive({})
+const formData = reactive({
+  dynamicConfigArray: [] as DynamicConfig[],
+})
 
 // methods
 const handleSingleDoPublish = (key: string) => {
@@ -58,10 +65,86 @@ const handleSingleDoPublish = (key: string) => {
   }
   router.push(query)
 }
+
+const initPage = async () => {
+  const setting = await getSetting()
+  const dynJsonCfg = JsonUtil.safeParse<DynamicJsonCfg>(setting[DYNAMIC_CONFIG_KEY], {} as DynamicJsonCfg)
+  formData.dynamicConfigArray = dynJsonCfg?.totalCfg || []
+}
+
+onMounted(async () => {
+  await initPage()
+})
 </script>
 
 <template>
-  <div @click="handleSingleDoPublish('testkey')">select platform</div>
+  <div class="platform-desc">
+    <p>
+      <el-alert class="desc-tip" type="warning" title="点击图标进入对应平台的发布页面"></el-alert>
+    </p>
+  </div>
+
+  <el-row :gutter="20" class="row-box">
+    <el-col
+      :span="12"
+      :title="cfg.platformName"
+      class="platform-select-card"
+      v-for="cfg in formData.dynamicConfigArray"
+      @click="handleSingleDoPublish(cfg.platformKey)"
+    >
+      <el-card class="card-item">
+        <div class="icon-list">
+          <el-text class="define-item">
+            <i class="el-icon">
+              <span v-html="cfg?.platformIcon"></span>
+            </i>
+            {{ HtmlUtil.parseHtml(cfg.platformName, 12) }}
+          </el-text>
+        </div>
+      </el-card>
+    </el-col>
+  </el-row>
 </template>
 
-<style scoped lang="stylus"></style>
+<style scoped lang="stylus">
+$icon_size = 32px
+
+.platform-desc
+  font-size 14px
+  margin 0 10px
+  .desc-tip
+    padding-left 0
+
+.card-item
+  padding 0
+
+.row-box
+  margin 0 !important
+  padding 0
+  .platform-select-card
+    margin-bottom 10px
+    height 100%
+    .platform-title
+      font-size 24px
+      font-weight 600
+      margin-bottom 12px
+    .icon-list
+      text-align center
+      gap 10px
+      .define-item
+        color var(--el-color-primary)
+        //color var(--el-button-bg-color)
+        cursor pointer
+        font-size $icon_size
+        &:hover
+          color var(--el-color-primary-light-3)
+        :deep(.el-icon)
+          //color var(--el-color-primary)
+          width $icon_size
+          height $icon_size
+          margin-right -4px
+          vertical-align middle
+        :deep(.el-icon svg)
+          width $icon_size
+          height $icon_size
+</style>

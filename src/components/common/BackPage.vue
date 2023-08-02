@@ -46,7 +46,6 @@ const props = defineProps({
 })
 
 // datas
-const params = reactive(route.params)
 const showBack = ref(query.showBack === "true")
 
 const onBack = () => {

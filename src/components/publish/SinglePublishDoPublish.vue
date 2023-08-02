@@ -26,6 +26,7 @@
 <script setup lang="ts">
 import { reactive } from "vue"
 import { useRoute } from "vue-router"
+import BackPage from "~/src/components/common/BackPage.vue"
 
 // uses
 const route = useRoute()
@@ -37,7 +38,9 @@ const id = params.id as string
 </script>
 
 <template>
-  <div>single publish do publish</div>
+  <back-page :title="'常规发布 - ' + key">
+    <div>single publish do publish {{ id }}</div>
+  </back-page>
 </template>
 
 <style scoped lang="stylus"></style>
