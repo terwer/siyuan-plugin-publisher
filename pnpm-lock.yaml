@@ -54,8 +54,8 @@ dependencies:
     specifier: ^1.20.1
     version: 1.20.1
   zhi-common:
-    specifier: ^1.11.5
-    version: 1.11.5
+    specifier: ^1.11.6
+    version: 1.11.6
   zhi-device:
     specifier: ^2.3.0
     version: 2.3.0
@@ -6370,6 +6370,12 @@ packages:
 
   /zhi-common@1.11.5:
     resolution: {integrity: sha512-j3W7/71axu5npROK+4Vroy5tP2SHmPPLxMT/oMQCakAQ5h04Cc4Q9KMgGXJEcGPmVsQtfy0+iAYF4cv6h6HsYg==}
+    dependencies:
+      zhi-lib-base: 0.4.2
+    dev: false
+
+  /zhi-common@1.11.6:
+    resolution: {integrity: sha512-gkMR/t0udj+d/etou4OLZHed+PSD+DehI6fQHGy4nzDR1IhIGSbynuPwuYSOZSxrYS1Yx1w1nNCA5brugAXb6w==}
     dependencies:
       zhi-lib-base: 0.4.2
     dev: false
