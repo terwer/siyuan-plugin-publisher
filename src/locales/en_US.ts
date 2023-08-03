@@ -345,6 +345,13 @@ export default {
     "For the token of the spark platform, please follow the link to get it. You only need to grant the document to read and modify the two permissions.",
   "setting.yuque.apiurl.tip":
     "The API address of the language bird platform is usually fixed: https://www.yuque.com/api/v2",
+  "setting.yuque.previewUrl.tip": "Article preview rules for the Yuque platform, Usually: /[notebook]/[postid]",
+
+  "setting.notion.home.tip": "The homepage of the Notion platform is usually fixed: https://www.notion.so/",
+  "setting.notion.password.tip": "For the token of the Notion platform, please click the link to get it, you need to check the three permissions of [Read content], [Update content], and [Insert content].",
+  "setting.notion.apiurl.tip": "The API address of the Notion platform is usually fixed: https://api.notion.com/v1",
+  "setting.notion.previewUrl.tip": "Article preview rules for the Notion platform, usually:/[postid]",
+
   "setting.liandi.home.tip": "The homepage of the chain drop platform is usually fixed: https://ld246.com/",
   "setting.liandi.username.tip":
     "The user name of the chain drop platform, note that after clicking [Personal Homepage], the user name displayed behind the MEMBER on the URL is not a user nickname (*^▽^*)",

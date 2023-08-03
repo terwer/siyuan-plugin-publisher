@@ -103,22 +103,24 @@ const valiConf = async () => {
       const userBlog = usersBlogs[0]
 
       // 首次未保存验证的时候才去更新
-      if (StrUtil.isEmptyString(formData.cfg.blogid)) {
+      if (StrUtil.isEmptyString(formData.cfg?.blogid)) {
         formData.cfg.blogid = userBlog.blogid
         formData.cfg.blogName = userBlog.blogName
       }
 
       formData.cfg.apiStatus = true
     } else {
+      errMsg = "接口返回信息不完整，请检查接口适配器"
       formData.cfg.apiStatus = false
     }
   } catch (e) {
     formData.cfg.apiStatus = false
     errMsg = e
-    console.error(e)
+    logger.error(e)
   }
 
   if (!formData.cfg.apiStatus) {
+    logger.error(errMsg.toString(),"")
     ElMessage.error(t("setting.blog.vali.error") + "=>" + errMsg)
   } else {
     ElMessage.success(t("main.opt.success"))

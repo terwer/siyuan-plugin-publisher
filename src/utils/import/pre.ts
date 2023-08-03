@@ -17,6 +17,15 @@ export const pre = {
       authMode: AuthMode.API,
       isEnabled: false,
     },
+    {
+      platformType: PlatformType.Common,
+      subPlatformType: SubPlatformType.Common_Notion,
+      platformKey: "common_Notion",
+      platformName: "Notion",
+      platformIcon: svgIcons.iconIFNotion,
+      authMode: AuthMode.API,
+      isEnabled: false,
+    },
   ],
   githubCfg: <DynamicConfig[]>[
     {

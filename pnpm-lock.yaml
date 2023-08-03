@@ -8,6 +8,9 @@ dependencies:
   '@element-plus/icons-vue':
     specifier: ^2.1.0
     version: 2.1.0(vue@3.3.4)
+  '@notionhq/client':
+    specifier: ^2.2.10
+    version: 2.2.10
   '@vueuse/components':
     specifier: ^10.3.0
     version: 10.3.0(vue@3.3.4)
@@ -51,29 +54,29 @@ dependencies:
     specifier: ^3.1.1
     version: 3.1.1
   zhi-blog-api:
-    specifier: ^1.20.3
-    version: 1.20.3
+    specifier: ^1.20.4
+    version: 1.20.4
   zhi-common:
-    specifier: ^1.11.6
-    version: 1.11.6
+    specifier: ^1.11.7
+    version: 1.11.7
   zhi-device:
     specifier: ^2.3.0
     version: 2.3.0
   zhi-fetch-middleware:
-    specifier: ^0.2.6
-    version: 0.2.6
+    specifier: ^0.2.7
+    version: 0.2.7
   zhi-github-middleware:
-    specifier: ^0.1.3
-    version: 0.1.3
+    specifier: ^0.1.4
+    version: 0.1.4
   zhi-lib-base:
+    specifier: ^0.4.3
+    version: 0.4.3
+  zhi-siyuan-api:
+    specifier: ^1.29.4
+    version: 1.29.4
+  zhi-xmlrpc-middleware:
     specifier: ^0.4.2
     version: 0.4.2
-  zhi-siyuan-api:
-    specifier: ^1.29.3
-    version: 1.29.3
-  zhi-xmlrpc-middleware:
-    specifier: ^0.4.1
-    version: 0.4.1
 
 devDependencies:
   '@terwer/esbuild-config-custom':
@@ -848,7 +851,7 @@ packages:
       nopt: 5.0.0
       npmlog: 5.0.1
       rimraf: 3.0.2
-      semver: 7.3.8
+      semver: 7.5.4
       tar: 6.1.15
     transitivePeerDependencies:
       - encoding
@@ -875,6 +878,16 @@ packages:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.15.0
     dev: true
+
+  /@notionhq/client@2.2.10:
+    resolution: {integrity: sha512-MggdzjB320UI2fUFR5XmUBbRBaqNr3QCBHQyK2CqbiO2T29p8RzzQBm5c7RJqvFhi7P0MaLjuY1CI8ypGEYssg==}
+    engines: {node: '>=12'}
+    dependencies:
+      '@types/node-fetch': 2.6.4
+      node-fetch: 2.6.12
+    transitivePeerDependencies:
+      - encoding
+    dev: false
 
   /@nuxt/eslint-config@0.1.1(eslint@8.46.0):
     resolution: {integrity: sha512-znm1xlbhldUubB2XGx6Ca5uarwlIieKf0o8CtxtF6eEauDbpa3T2p3JnTcdguMW2nj1YPneoGmhshANfOlghiQ==}
@@ -1186,13 +1199,19 @@ packages:
       form-data: 3.0.1
     dev: true
 
+  /@types/node-fetch@2.6.4:
+    resolution: {integrity: sha512-1ZX9fcN4Rvkvgv4E6PAY5WXUFWFcRWxZa3EW83UjycOB9ljJCedb2CupIP4RZMEwF/M3eTcCihbBRgwtGbg5Rg==}
+    dependencies:
+      '@types/node': 18.17.1
+      form-data: 3.0.1
+    dev: false
+
   /@types/node@14.18.33:
     resolution: {integrity: sha512-qelS/Ra6sacc4loe/3MSjXNL1dNQ/GjxNHVzuChwMfmk7HuycRLVQN2qNY3XahK+fZc5E2szqQSKUyAF0E+2bg==}
     dev: true
 
   /@types/node@18.17.1:
     resolution: {integrity: sha512-xlR1jahfizdplZYRU59JlUx9uzF1ARa8jbhM11ccpCJya8kvos5jwdm2ZAgxSCwOl0fq21svP18EVwPBXMQudw==}
-    dev: true
 
   /@types/sass@1.45.0:
     resolution: {integrity: sha512-jn7qwGFmJHwUSphV8zZneO3GmtlgLsmhs/LQyVvQbIIa+fzGMUiHI4HXJZL3FT8MJmgXWbLGiVVY7ElvHq6vDA==}
@@ -2031,7 +2050,6 @@ packages:
 
   /asynckit@0.4.0:
     resolution: {integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==}
-    dev: true
 
   /available-typed-arrays@1.0.5:
     resolution: {integrity: sha512-DMD0KiN46eipeziST1LPP/STfDU0sufISXmjSgvVsoU2tqxctQeASejWcfNtxYKqETM1UxQ8sp2OrSBWpHY6sw==}
@@ -2338,7 +2356,6 @@ packages:
     engines: {node: '>= 0.8'}
     dependencies:
       delayed-stream: 1.0.0
-    dev: true
 
   /commander@2.20.3:
     resolution: {integrity: sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==}
@@ -2551,7 +2568,6 @@ packages:
   /delayed-stream@1.0.0:
     resolution: {integrity: sha512-ZySD7Nf91aLB0RxL4KGrKHBXl7Eds1DAmEdcoVawXnLD7SDhpNgtuII2aAkg7a7QS41jxPSZ17p4VdGnMHk3MQ==}
     engines: {node: '>=0.4.0'}
-    dev: true
 
   /delegates@1.0.0:
     resolution: {integrity: sha512-bd2L678uiWATM6m5Z1VzNCErI3jiGzt6HGY8OVICs40JQq/HALfbyNJmp0UDakEY4pMMaN0Ly5om/B1VI/+xfQ==}
@@ -3669,7 +3685,6 @@ packages:
       asynckit: 0.4.0
       combined-stream: 1.0.8
       mime-types: 2.1.35
-    dev: true
 
   /fs-extra@10.1.0:
     resolution: {integrity: sha512-oRXApq54ETRj4eMiFzGnHWGy+zo5raudjuxN0b8H7s/RU2oW0Wvsx9O0ACRN/kRq9E8Vu/ReskGB5o3ji+FzHQ==}
@@ -4343,7 +4358,7 @@ packages:
     resolution: {integrity: sha512-g3FeP20LNwhALb/6Cz6Dd4F2ngze0jz7tbzrD2wAV+o9FeNHe4rL+yK2md0J/fiSf1sa1ADhXqi5+oVwOM/eGw==}
     engines: {node: '>=8'}
     dependencies:
-      semver: 6.3.1
+      semver: 6.1.1
     dev: true
 
   /make-error@1.3.6:
@@ -4394,14 +4409,12 @@ packages:
   /mime-db@1.52.0:
     resolution: {integrity: sha512-sPU4uV7dYlvtWJxwwxHD0PuihVNiE7TyAbQ5SWxDCB9mUYvOgroQOwYQQOKPJ8CIbE+1ETVlOoK1UC2nU3gYvg==}
     engines: {node: '>= 0.6'}
-    dev: true
 
   /mime-types@2.1.35:
     resolution: {integrity: sha512-ZDY+bPm5zTTF+YpCrAU9nK0UgICYPT0QtT1NZWFv4s++TNkcgVaT0g6+4R2uI4MjQjzysHB1zxuWL50hzaeXiw==}
     engines: {node: '>= 0.6'}
     dependencies:
       mime-db: 1.52.0
-    dev: true
 
   /mimic-fn@2.1.0:
     resolution: {integrity: sha512-OqbOk5oEQeAZ8WXWydlu9HJjz9WVdEIvamMCcXmuqUYjTknH/sqsWvhQ3vgwKFRR1HpjvNBKQ37nbJgYzGqGcg==}
@@ -5271,11 +5284,6 @@ packages:
 
   /semver@6.1.1:
     resolution: {integrity: sha512-rWYq2e5iYW+fFe/oPPtYJxYgjBm8sC4rmoGdUOgBB7VnwKt6HrL793l2voH1UlsyYZpJ4g0wfjnTEO1s1NP2eQ==}
-    hasBin: true
-    dev: true
-
-  /semver@6.3.1:
-    resolution: {integrity: sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==}
     hasBin: true
     dev: true
 
@@ -6362,55 +6370,55 @@ packages:
     engines: {node: '>=12.20'}
     dev: true
 
-  /zhi-blog-api@1.20.3:
-    resolution: {integrity: sha512-UE4U3JAkrYSksdFrsXzxB2EwV0+wP/sHm3X1T5I3oVT5HqknHCf5Px9pNBLDYT3BhrT7bdjpCNCPIDaXMv+9Tw==}
+  /zhi-blog-api@1.20.4:
+    resolution: {integrity: sha512-DXGP+XPbFIIC00dCyJ4vadGWZbhTvi0udbX1NSZSQyuCyhpHnPGxqdTtbQ530RlVtaKqwiERgTJSsPeqaSP7Ww==}
     dependencies:
-      zhi-lib-base: 0.4.2
+      zhi-lib-base: 0.4.3
     dev: false
 
-  /zhi-common@1.11.6:
-    resolution: {integrity: sha512-gkMR/t0udj+d/etou4OLZHed+PSD+DehI6fQHGy4nzDR1IhIGSbynuPwuYSOZSxrYS1Yx1w1nNCA5brugAXb6w==}
+  /zhi-common@1.11.7:
+    resolution: {integrity: sha512-WxGz1NSW/Lp9L+oYCmhVRnaKChnms9oOs9xuyxeAbmHSfE++ytQVbY+0z8Hw+X2/8VZKlfqzi7goOSCmGq2wfw==}
     dependencies:
-      zhi-lib-base: 0.4.2
+      zhi-lib-base: 0.4.3
     dev: false
 
   /zhi-device@2.3.0:
     resolution: {integrity: sha512-we04mMt4BEqeKDxoqdJQsDFYImYlcp/yaAIkpxpMGg+9tBURfNeHPHIHkFias9VbM8yuk6xjAX6B2xJjvYE/iw==}
     dev: false
 
-  /zhi-fetch-middleware@0.2.6:
-    resolution: {integrity: sha512-R0m0/0CMKZl9N3aGgw8IbXSEE/kKYRxOjqzLoV5GmFPd9pSv6X1cSVSr9tGNnVEw50JhiFbn1bHZVXAnHYWwmA==}
+  /zhi-fetch-middleware@0.2.7:
+    resolution: {integrity: sha512-hc+jo9bDhHZ8o05HRhmWCFHUTQx1gTXktjEI/iH/GCrvruE8mygpCfEYG3MxRQ+GYExcpMBl/NPcpIJhfvlo1w==}
     dependencies:
-      zhi-common: 1.11.6
+      zhi-common: 1.11.7
       zhi-device: 2.3.0
-      zhi-lib-base: 0.4.2
+      zhi-lib-base: 0.4.3
     dev: false
 
-  /zhi-github-middleware@0.1.3:
-    resolution: {integrity: sha512-DsiofanlwDRayrT/jDI3HhgH1UZmrcN9AJJPK0FfDnG/etE/XAfRYgp+7jqldfTHI+UPumN1aOYwbVty9ghiWA==}
+  /zhi-github-middleware@0.1.4:
+    resolution: {integrity: sha512-aug5BXTTpK1tR6Dfv8fUegPEQfEDYkW1E5TFSNwTbCov9eqdqj82nfQxd8VZxu9jXrfOL9V41YrnIXYrZQNb0Q==}
     dependencies:
       '@octokit/core': 5.0.0
       js-base64: 3.7.5
-      zhi-common: 1.11.6
-      zhi-lib-base: 0.4.2
+      zhi-common: 1.11.7
+      zhi-lib-base: 0.4.3
     dev: false
 
-  /zhi-lib-base@0.4.2:
-    resolution: {integrity: sha512-kfKgN4hb5efUf+k5Y9028CVV1p/hsnK0NbRsxI3uwJoTlHfTBjfi6ZfrkhDn+XEnEYeWidO75sx4RdcnT7C3KA==}
+  /zhi-lib-base@0.4.3:
+    resolution: {integrity: sha512-jahOcJ4MjJ9gAPM/nwgF65p2dPyggRgKFJPT0WDtyoabQw4sCUSOJ1Cps18Rq6lt4agH5yqAObz/mPdVz/bHWw==}
     dev: false
 
-  /zhi-siyuan-api@1.29.3:
-    resolution: {integrity: sha512-eE3VNCWnLmTECY1hLMgJvyuba3qobpSyeL8F3tsXH2QUzx41F667S9SsHvYP0ZSfoS2UL/iJ3GoNOcmm2flvUA==}
+  /zhi-siyuan-api@1.29.4:
+    resolution: {integrity: sha512-tQ8ZoIAlK5oSfddo7phP+uDmHRgnqiwYRyAWGHe48nIQpp1sPFOvcx8D9XkO2j8oWAcN58fv4ZNqtVY/EwyXiw==}
     dependencies:
-      zhi-blog-api: 1.20.3
-      zhi-common: 1.11.6
-      zhi-lib-base: 0.4.2
+      zhi-blog-api: 1.20.4
+      zhi-common: 1.11.7
+      zhi-lib-base: 0.4.3
     dev: false
 
-  /zhi-xmlrpc-middleware@0.4.1:
-    resolution: {integrity: sha512-CIYs7ggcxULL3b3uZeFA+rOj1pjEJZhHjJrXKFpRADft+pbSAalwx6y71tjo+INAYjnHk6r7y54k0mgCoOohnA==}
+  /zhi-xmlrpc-middleware@0.4.2:
+    resolution: {integrity: sha512-agxVaaGcyuBmqZZpJPQ5RkKQlLSGxennYoZtlfXLSNUJjfD9yqMr5liUlbXfgrFdVsvCDCmPf2TZ/LreUOpGDw==}
     dependencies:
-      zhi-common: 1.11.6
+      zhi-common: 1.11.7
       zhi-device: 2.3.0
-      zhi-lib-base: 0.4.2
+      zhi-lib-base: 0.4.3
     dev: false

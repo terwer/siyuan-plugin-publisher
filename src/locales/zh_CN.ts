@@ -340,11 +340,19 @@ export default {
     "启用此选项，将会自动将此文档包含的所有本地图片上传至自定义图床（远程图片不上传），请确保PicGO图床配置正确",
   "github.post.picgo.start.upload": "图床已开启，即将上传本地图片到图床",
   "github.post.picgo.picbed.error": "文档可能已经成功发布，但是图片上传失败或者当前场景不支持图片上传，详细信息",
+
   "setting.yuque.home.tip": "语雀平台首页，通常固定是：https://www.yuque.com/",
   "setting.yuque.username.tip": "语雀平台用户名，注意是【账户设置】里面固定连接里面的用户名，不是用户昵称哦(*^▽^*)",
   "setting.yuque.password.tip":
     "语雀平台的Token，请按照链接点击获取，只需要勾选【读取你的知识库】和【修改和读取你的文档】两个权限即可",
   "setting.yuque.apiurl.tip": "语雀平台的API地址，通常固定是：https://www.yuque.com/api/v2",
+  "setting.yuque.previewUrl.tip": "语雀平台的文章预览规则，通常是：/[notebook]/[postid]",
+
+  "setting.notion.home.tip": "Notion平台首页，通常固定是：https://www.notion.so/",
+  "setting.notion.password.tip": "Notion平台的Token，请按照链接点击获取，需要勾选【Read content】、【Update content】、【Insert content】三个权限",
+  "setting.notion.apiurl.tip": "Notion平台的API地址，通常固定是：https://api.notion.com/v1",
+  "setting.notion.previewUrl.tip": "Notion平台的文章预览规则，通常是：/[postid]",
+
   "setting.liandi.home.tip": "链滴平台首页，通常固定是：https://ld246.com/",
   "setting.liandi.username.tip":
     "链滴平台用户名，注意是点击【个人主页】之后URL上member后面显示的用户名，不是用户昵称哦(*^▽^*)",
