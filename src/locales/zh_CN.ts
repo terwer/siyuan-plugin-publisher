@@ -116,6 +116,7 @@ export default {
   "main.opt.tip": "温馨提示",
   "main.opt.ok": "确认",
   "main.opt.cancel": "取消",
+  "main.opt.select": "请选择",
   "main.opt.warning.tip": "此操作不可恢复，是否继续？",
   "setting.noneed": "无需配置",
   "setting.blog.setting": "设置",
@@ -511,4 +512,5 @@ export default {
   "setting.upgrade.syp.doTip4": "没有版本更新，跳过升级",
   "main.publish.start": "开始同步",
   "main.publish.remove": "批量删除",
+  "setting.blog.knowledge.space":"知识空间/知识库"
 }

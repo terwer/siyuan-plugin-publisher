@@ -116,6 +116,7 @@ export default {
   "main.opt.warning": "Warning",
   "main.opt.ok": "Confirm",
   "main.opt.cancel": "Cancel",
+  "main.opt.select": "Select",
   "main.opt.warning.tip": "The operation will delete the data, whether to continue?",
   "main.opt.tip": "Tips",
   "setting.noneed": "No need setting",
@@ -391,7 +392,8 @@ export default {
   "setting.metaweblog.username.tip": "Metaweblog platform login",
   "setting.metaweblog.password.tip": "Metaweblog platform password",
   "setting.metaweblog.apiUrl.tip": "The xmlrpc remote publishing address for the Metaweblog platform",
-  "setting.metaweblog.previewUrl.tip": "Article preview rules for the Metaweblog platform, [postid] can be composed article ID placeholder",
+  "setting.metaweblog.previewUrl.tip":
+    "Article preview rules for the Metaweblog platform, [postid] can be composed article ID placeholder",
 
   "setting.jvue.home.tip": "Homepage of the Jvue platform",
   "setting.jvue.username.tip": "Jvue platform login name",
@@ -523,4 +525,5 @@ export default {
   "setting.upgrade.syp.doTip4": "No update for version, skip upgrade",
   "main.publish.start": "Start syncing",
   "main.publish.remove": "Remove",
+  "setting.blog.knowledge.space": "Knowledge space/Knowledge base",
 }

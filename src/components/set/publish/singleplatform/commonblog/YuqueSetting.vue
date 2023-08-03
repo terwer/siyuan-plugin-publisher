@@ -46,6 +46,7 @@ yuquePlaceholder.usernamePlaceholder = t("setting.yuque.username.tip")
 yuquePlaceholder.passwordPlaceholder = t("setting.yuque.password.tip")
 yuquePlaceholder.apiUrlPlaceholder = t("setting.yuque.apiurl.tip")
 yuqueCfg.placeholder = yuquePlaceholder
+yuqueCfg.enableKnowledgeSpace = true
 </script>
 
 <template>
