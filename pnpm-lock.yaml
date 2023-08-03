@@ -72,8 +72,8 @@ dependencies:
     specifier: ^1.29.0
     version: 1.29.0
   zhi-xmlrpc-middleware:
-    specifier: ^0.4.0
-    version: 0.4.0
+    specifier: ^0.4.1
+    version: 0.4.1
 
 devDependencies:
   '@terwer/esbuild-config-custom':
@@ -6374,6 +6374,12 @@ packages:
       zhi-lib-base: 0.4.2
     dev: false
 
+  /zhi-common@1.11.6:
+    resolution: {integrity: sha512-gkMR/t0udj+d/etou4OLZHed+PSD+DehI6fQHGy4nzDR1IhIGSbynuPwuYSOZSxrYS1Yx1w1nNCA5brugAXb6w==}
+    dependencies:
+      zhi-lib-base: 0.4.2
+    dev: false
+
   /zhi-device@2.3.0:
     resolution: {integrity: sha512-we04mMt4BEqeKDxoqdJQsDFYImYlcp/yaAIkpxpMGg+9tBURfNeHPHIHkFias9VbM8yuk6xjAX6B2xJjvYE/iw==}
     dev: false
@@ -6407,10 +6413,10 @@ packages:
       zhi-lib-base: 0.4.2
     dev: false
 
-  /zhi-xmlrpc-middleware@0.4.0:
-    resolution: {integrity: sha512-YwiGlaZ1CP+Y7ZBEas2216fQ4nJuxby3rLZerJviWssAq33INUWlaYJYKfbKuudpzJhy0GA/ocb5ddBECcIcKQ==}
+  /zhi-xmlrpc-middleware@0.4.1:
+    resolution: {integrity: sha512-CIYs7ggcxULL3b3uZeFA+rOj1pjEJZhHjJrXKFpRADft+pbSAalwx6y71tjo+INAYjnHk6r7y54k0mgCoOohnA==}
     dependencies:
-      zhi-common: 1.11.5
+      zhi-common: 1.11.6
       zhi-device: 2.3.0
       zhi-lib-base: 0.4.2
     dev: false
