@@ -54,8 +54,8 @@ dependencies:
     specifier: ^1.20.1
     version: 1.20.1
   zhi-common:
-    specifier: ^1.11.5
-    version: 1.11.5
+    specifier: ^1.11.7
+    version: 1.11.7
   zhi-device:
     specifier: ^2.3.0
     version: 2.3.0
@@ -6374,6 +6374,12 @@ packages:
       zhi-lib-base: 0.4.2
     dev: false
 
+  /zhi-common@1.11.7:
+    resolution: {integrity: sha512-WxGz1NSW/Lp9L+oYCmhVRnaKChnms9oOs9xuyxeAbmHSfE++ytQVbY+0z8Hw+X2/8VZKlfqzi7goOSCmGq2wfw==}
+    dependencies:
+      zhi-lib-base: 0.4.3
+    dev: false
+
   /zhi-device@2.3.0:
     resolution: {integrity: sha512-we04mMt4BEqeKDxoqdJQsDFYImYlcp/yaAIkpxpMGg+9tBURfNeHPHIHkFias9VbM8yuk6xjAX6B2xJjvYE/iw==}
     dev: false
@@ -6397,6 +6403,10 @@ packages:
 
   /zhi-lib-base@0.4.2:
     resolution: {integrity: sha512-kfKgN4hb5efUf+k5Y9028CVV1p/hsnK0NbRsxI3uwJoTlHfTBjfi6ZfrkhDn+XEnEYeWidO75sx4RdcnT7C3KA==}
+    dev: false
+
+  /zhi-lib-base@0.4.3:
+    resolution: {integrity: sha512-jahOcJ4MjJ9gAPM/nwgF65p2dPyggRgKFJPT0WDtyoabQw4sCUSOJ1Cps18Rq6lt4agH5yqAObz/mPdVz/bHWw==}
     dev: false
 
   /zhi-siyuan-api@1.29.0:
