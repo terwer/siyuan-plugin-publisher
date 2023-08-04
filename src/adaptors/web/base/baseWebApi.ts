@@ -29,7 +29,6 @@ import { AppInstance } from "~/src/appInstance.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
-import { ZhihuConfig } from "~/src/adaptors/web/zhihu/config/zhihuConfig.ts"
 import { JsonUtil } from "zhi-common"
 
 /**
@@ -39,7 +38,7 @@ import { JsonUtil } from "zhi-common"
  * @version 0.9.0
  * @since 0.9.0
  */
-export class WebAuthApi extends WebApi {
+class BaseWebApi extends WebApi {
   protected logger
   protected cfg: WebConfig
   private readonly kernelApi: SiyuanKernelApi
@@ -57,7 +56,7 @@ export class WebAuthApi extends WebApi {
     super()
 
     this.cfg = cfg
-    this.logger = createAppLogger("web-auth-api")
+    this.logger = createAppLogger("base-web-api")
     const { kernelApi } = useSiyuanApi()
     const { isInSiyuanWidget, isInChromeExtension } = useSiyuanDevice()
     this.kernelApi = kernelApi
@@ -66,7 +65,7 @@ export class WebAuthApi extends WebApi {
     this.isInChromeExtension = isInChromeExtension()
   }
 
-  public updateCfg(cfg: ZhihuConfig) {
+  public updateCfg(cfg: WebConfig) {
     this.cfg = cfg
   }
 
@@ -133,3 +132,5 @@ export class WebAuthApi extends WebApi {
     }
   }
 }
+
+export { BaseWebApi }

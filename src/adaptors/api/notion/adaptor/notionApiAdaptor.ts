@@ -23,25 +23,62 @@
  * questions.
  */
 
-import { BlogApi, UserBlog } from "zhi-blog-api"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { UserBlog } from "zhi-blog-api"
+import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
 import { NotionConfig } from "~/src/adaptors/api/notion/config/notionConfig.ts"
+import { createAppLogger } from "~/src/utils/appLogger.ts"
 
 /**
  * Notion API 适配器
  */
-class NotionApiAdaptor extends BlogApi {
-  private readonly logger
-  private readonly cfg
-
+class NotionApiAdaptor extends BaseBlogApi {
   constructor(appInstance: any, cfg: NotionConfig) {
-    super()
+    super(appInstance, cfg)
     this.logger = createAppLogger("notion-api-adaptor")
-    this.cfg = cfg
   }
 
   public async getUsersBlogs(): Promise<UserBlog[]> {
-    return []
+    const result: UserBlog[] = []
+
+    // https://developers.notion.com/reference/post-search
+    const params = {
+      page_size: 10,
+      filter: {
+        value: "page",
+        property: "object",
+      },
+    }
+    const headers = {
+      Authorization: `Bearer ${this.cfg.password}`,
+      "Notion-Version": "2022-06-28",
+    }
+    const searchResp = await this.proxyFetch("/search", [headers], params, "POST", "application/json")
+    this.logger.debug("notion searchResp results=>", searchResp)
+    if (searchResp.status === 401) {
+      throw new Error(searchResp.message)
+    }
+    const pages = searchResp.results as any
+    this.logger.debug("notion database results=>", pages)
+
+    // https://stackoverflow.com/a/75537092/4037224
+    if (pages.length === 0) {
+      throw new Error(
+        "no shared page linked to your connection, you must have at least one page as root page, see more at: https://stackoverflow.com/a/75537092/4037224"
+      )
+    }
+
+    // 数据适配
+    pages.forEach((item: any) => {
+      const userblog: UserBlog = new UserBlog()
+      userblog.blogid = item.id
+      const titles = item?.properties?.title?.title ?? []
+      userblog.blogName = titles.map((x: any) => x.plain_text).join("")
+      userblog.url = item.public_url
+      result.push(userblog)
+    })
+    this.logger.debug("get usersBlogs result=>", result)
+
+    return result
   }
 }
 

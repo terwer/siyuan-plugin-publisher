@@ -28,7 +28,7 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { AppInstance } from "~/src/appInstance.ts"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
-import { computed, reactive, ref, toRaw } from "vue"
+import { onMounted, reactive, ref } from "vue"
 import {
   DynamicConfig,
   DynamicJsonCfg,
@@ -37,20 +37,22 @@ import {
 } from "~/src/components/set/publish/platform/dynamicConfig.ts"
 import { SypConfig } from "~/syp.config.ts"
 import { CommonblogConfig } from "~/src/adaptors/api/base/commonblog/config/CommonblogConfig.ts"
-import { onMounted } from "vue"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
 import { PageTypeEnum, PasswordType } from "zhi-blog-api"
 import Adaptors from "~/src/adaptors"
 import { Utils } from "~/src/utils/utils.ts"
 import { ElMessage } from "element-plus"
+import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 
 const logger = createAppLogger("commonblog-setting")
 // appInstance
 const appInstance = new AppInstance()
 
+// uses
 const { t } = useVueI18n()
 const { getSetting, updateSetting } = useSettingStore()
+const { isStorageViaSiyuanApi } = useSiyuanApi()
 
 const props = defineProps({
   apiType: {
@@ -87,6 +89,7 @@ const formData = reactive({
   setting: {} as typeof SypConfig,
   dynamicConfigArray: [] as DynamicConfig[],
 
+  useSiyuanApi: false,
   isInit: false,
 })
 
@@ -100,12 +103,26 @@ const valiConf = async () => {
     const api = Utils.blogApi(appInstance, commonblogApiAdaptor)
     const usersBlogs = await api.getUsersBlogs()
     if (usersBlogs && usersBlogs.length > 0) {
-      const userBlog = usersBlogs[0]
-
       // 首次未保存验证的时候才去更新
       if (StrUtil.isEmptyString(formData.cfg?.blogid)) {
+        // 首次验证需要初始化下拉选择
+        if (formData.kwSpaces.length == 0) {
+          usersBlogs.forEach((item) => {
+            const kwItem = {
+              label: item.blogName,
+              value: item.blogid,
+            }
+            formData.kwSpaces.push(kwItem)
+          })
+        }
+
+        // 初始化选中
+        const userBlog = usersBlogs[0]
         formData.cfg.blogid = userBlog.blogid
         formData.cfg.blogName = userBlog.blogName
+
+        // 初始化顶部提示
+        formData.settingTips = getSettingTips()
       }
 
       formData.cfg.apiStatus = true
@@ -120,7 +137,7 @@ const valiConf = async () => {
   }
 
   if (!formData.cfg.apiStatus) {
-    logger.error(errMsg.toString(),"")
+    logger.error(errMsg.toString(), "")
     ElMessage.error(t("setting.blog.vali.error") + "=>" + errMsg)
   } else {
     ElMessage.success(t("main.opt.success"))
@@ -197,12 +214,15 @@ const initConf = async () => {
       await initKwSpaces()
     }
     formData.settingTips = getSettingTips()
+  } else {
+    ElMessage.error("Read init config error, your config may not work")
   }
 }
 
 onMounted(async () => {
   // 初始化
   await initConf()
+  formData.useSiyuanApi = isStorageViaSiyuanApi()
   formData.isInit = true
 })
 </script>
@@ -262,7 +282,7 @@ onMounted(async () => {
       </el-radio-group>
     </el-form-item>
     <!-- 知识空间 -->
-    <el-form-item :label="t('setting.blog.knowledge.space')" v-if="props.cfg?.enableKnowledgeSpace">
+    <el-form-item :label="props.cfg?.knowledgeSpaceTitle" v-if="props.cfg?.enableKnowledgeSpace">
       <el-select
         v-model="formData.cfg.blogid"
         class="m-2"
@@ -273,7 +293,7 @@ onMounted(async () => {
       </el-select>
     </el-form-item>
     <!-- 跨域代理地址 -->
-    <el-form-item :label="t('setting.blog.middlewareUrl')">
+    <el-form-item v-if="!formData.useSiyuanApi" :label="t('setting.blog.middlewareUrl')">
       <el-input v-model="formData.cfg.middlewareUrl" :placeholder="t('setting.blog.middlewareUrl.tip')" />
       <el-alert
         :closable="false"

@@ -66,6 +66,7 @@
 排名不分先后
 
 - [X] 语雀
+- [ ] 语雀网页授权版
 - [X] 博客园
 - [X] Metaweblog
 - [X] Typecho
@@ -73,6 +74,8 @@
 - [ ] Github
   - [ ] Hexo
   - [ ] Hugo
+- [X] Notion
+- [ ] Notion 网页授权版
 
 ## 核心特色
 

@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { WebAuthApi } from "~/src/adaptors/web/base/web/WebAuthApi.ts"
+import {BaseWebApi} from "~/src/adaptors/web/base/baseWebApi.ts";
 
 /**
  * 掘金网页授权适配器
@@ -33,7 +33,7 @@ import { WebAuthApi } from "~/src/adaptors/web/base/web/WebAuthApi.ts"
  * @version 0.9.0
  * @since 0.9.0
  */
-class WechatWebAdaptor extends WebAuthApi {
+class WechatWebAdaptor extends BaseWebApi {
   public async getMetaData(): Promise<any> {
     const res = await this.proxyFetch("https://mp.weixin.qq.com/")
     console.log("WechatWebAdaptor res=>", res)

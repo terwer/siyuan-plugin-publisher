@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { WebAuthApi } from "~/src/adaptors/web/base/web/WebAuthApi.ts"
+import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
 
 /**
  * 掘金网页授权适配器
@@ -33,7 +33,7 @@ import { WebAuthApi } from "~/src/adaptors/web/base/web/WebAuthApi.ts"
  * @version 0.9.0
  * @since 0.9.0
  */
-class JuejinWebAdaptor extends WebAuthApi {
+class JuejinWebAdaptor extends BaseWebApi {
   public async getMetaData(): Promise<any> {
     const res = await this.proxyFetch("https://api.juejin.cn/user_api/v1/user/get")
     const flag = !!res.data.user_id
@@ -43,12 +43,12 @@ class JuejinWebAdaptor extends WebAuthApi {
       uid: res.data.user_id,
       title: res.data.user_name,
       avatar: res.data.avatar_large,
-      type: 'juejin',
-      displayName: '掘金',
+      type: "juejin",
+      displayName: "掘金",
       raw: res.data,
-      supportTypes: ['markdown', 'html'],
-      home: 'https://juejin.cn/editor/drafts',
-      icon: 'https://juejin.cn/favicon.ico',
+      supportTypes: ["markdown", "html"],
+      home: "https://juejin.cn/editor/drafts",
+      icon: "https://juejin.cn/favicon.ico",
     }
   }
 }

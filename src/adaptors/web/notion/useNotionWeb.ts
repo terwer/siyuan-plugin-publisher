@@ -23,23 +23,7 @@
  * questions.
  */
 
-import { PageTypeEnum, PasswordType } from "zhi-blog-api"
-import { CommonblogConfig } from "~/src/adaptors/api/base/commonblog/config/CommonblogConfig.ts"
-
-/**
- * Notion 配置
- */
-class NotionConfig extends CommonblogConfig {
-  constructor(password: string, middlewareUrl?: string) {
-    super("https://www.notion.so/", "https://api.notion.com/v1", "", password, middlewareUrl)
-
-    this.tokenSettingUrl = "https://www.notion.so/my-integrations"
-    this.previewUrl = "/[postid]"
-    this.pageType = PageTypeEnum.Markdown
-    this.passwordType = PasswordType.PasswordType_Token
-    this.knowledgeSpaceTitle = "根页面"
-    this.enableKnowledgeSpace = true
-  }
-}
-
-export { NotionConfig }
+// TODO
+// 网页授权版 Notion
+// https://github.com/NotionX/react-notion-x/tree/master/packages/notion-client
+// https://github.com/NotionX/react-notion-x/issues/115
