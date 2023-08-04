@@ -146,15 +146,16 @@ initPage()
       <el-alert
         class="top-tip"
         :title="'当前平台类型为=>' + formData.dynCfg.platformKey"
-        type="warning"
+        type="info"
         :closable="false"
       />
       <el-alert
         class="top-tip"
         :title="'子平台类型为=>' + formData.dynCfg.subPlatformType"
-        type="warning"
+        type="info"
         :closable="false"
       />
+      <el-alert class="top-tip" title="注意：为了保留配置信息的完整性，编辑平台时授权方式不可修改，如需切换，请新建新的实例" type="warning" :closable="false" />
       <!-- 平台key -->
       <el-form-item :label="t('dynamic.platform.key')" prop="platformKey">
         {{ formData.dynCfg.platformKey }}
@@ -178,7 +179,7 @@ initPage()
       </el-form-item>
       <!-- 授权方式 -->
       <el-form-item label="授权方式" prop="authMode">
-        <el-select v-model="formData.dynCfg.authMode" placeholder="请选择">
+        <el-select v-model="formData.dynCfg.authMode" placeholder="请选择" :disabled="true">
           <el-option :value="AuthMode.API" label="API授权" />
           <el-option :value="AuthMode.WEBSITE" label="网页授权" />
         </el-select>

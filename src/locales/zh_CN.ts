@@ -488,7 +488,7 @@ export default {
   "setting.platform.add.this": "新增此平台",
   "setting.platform.universal": "通用平台",
   "setting.platform.universal.desc":
-    "目前支持的通用平台有：语雀，采用API授权。这些平台通常提供了现代化的REST API，可以方便的进行集成。",
+    "目前支持的通用平台有：语雀、Notion等，采用API授权。这些平台通常提供了现代化的REST API，可以方便的进行集成。",
   "setting.platform.wordpress": "WordPress",
   "setting.platform.wordpress.desc":
     "Wordpress 通过Xmlrpc API支持，采用 API 授权。WordPress是一个自由开源的博客软件和内容管理系统，具有数量众多的优质插件和主题。",

@@ -75,7 +75,7 @@ initPage()
       <div class="platform-desc">
         <p>{{ formData.ptype.description }}</p>
         <p>
-          <el-alert class="desc-tip" type="warning" title="点击图标快速添加，或者点击下方按钮自定义添加"></el-alert>
+          <el-alert class="desc-tip" type="info" title="点击图标快速添加，或者点击下方按钮自定义添加"></el-alert>
         </p>
       </div>
       <div class="icon-list">
