@@ -60,8 +60,8 @@ dependencies:
     specifier: ^2.3.0
     version: 2.3.0
   zhi-fetch-middleware:
-    specifier: ^0.2.5
-    version: 0.2.5
+    specifier: ^0.2.7
+    version: 0.2.7
   zhi-github-middleware:
     specifier: ^0.1.2
     version: 0.1.2
@@ -6374,16 +6374,22 @@ packages:
       zhi-lib-base: 0.4.2
     dev: false
 
+  /zhi-common@1.11.7:
+    resolution: {integrity: sha512-WxGz1NSW/Lp9L+oYCmhVRnaKChnms9oOs9xuyxeAbmHSfE++ytQVbY+0z8Hw+X2/8VZKlfqzi7goOSCmGq2wfw==}
+    dependencies:
+      zhi-lib-base: 0.4.3
+    dev: false
+
   /zhi-device@2.3.0:
     resolution: {integrity: sha512-we04mMt4BEqeKDxoqdJQsDFYImYlcp/yaAIkpxpMGg+9tBURfNeHPHIHkFias9VbM8yuk6xjAX6B2xJjvYE/iw==}
     dev: false
 
-  /zhi-fetch-middleware@0.2.5:
-    resolution: {integrity: sha512-cLpiz4W6eFUIr0ug3elgYR1B8sF1WeBilANKIGzAjk/ALCIvDwKBumQ1WrGRBW7HrSHqcLHB5IfyFJv33QoZUw==}
+  /zhi-fetch-middleware@0.2.7:
+    resolution: {integrity: sha512-hc+jo9bDhHZ8o05HRhmWCFHUTQx1gTXktjEI/iH/GCrvruE8mygpCfEYG3MxRQ+GYExcpMBl/NPcpIJhfvlo1w==}
     dependencies:
-      zhi-common: 1.11.5
+      zhi-common: 1.11.7
       zhi-device: 2.3.0
-      zhi-lib-base: 0.4.2
+      zhi-lib-base: 0.4.3
     dev: false
 
   /zhi-github-middleware@0.1.2:
@@ -6397,6 +6403,10 @@ packages:
 
   /zhi-lib-base@0.4.2:
     resolution: {integrity: sha512-kfKgN4hb5efUf+k5Y9028CVV1p/hsnK0NbRsxI3uwJoTlHfTBjfi6ZfrkhDn+XEnEYeWidO75sx4RdcnT7C3KA==}
+    dev: false
+
+  /zhi-lib-base@0.4.3:
+    resolution: {integrity: sha512-jahOcJ4MjJ9gAPM/nwgF65p2dPyggRgKFJPT0WDtyoabQw4sCUSOJ1Cps18Rq6lt4agH5yqAObz/mPdVz/bHWw==}
     dev: false
 
   /zhi-siyuan-api@1.29.0:
