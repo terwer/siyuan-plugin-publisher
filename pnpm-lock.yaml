@@ -66,8 +66,8 @@ dependencies:
     specifier: ^0.1.2
     version: 0.1.2
   zhi-lib-base:
-    specifier: ^0.4.2
-    version: 0.4.2
+    specifier: ^0.4.3
+    version: 0.4.3
   zhi-siyuan-api:
     specifier: ^1.29.0
     version: 1.29.0
@@ -6397,6 +6397,10 @@ packages:
 
   /zhi-lib-base@0.4.2:
     resolution: {integrity: sha512-kfKgN4hb5efUf+k5Y9028CVV1p/hsnK0NbRsxI3uwJoTlHfTBjfi6ZfrkhDn+XEnEYeWidO75sx4RdcnT7C3KA==}
+    dev: false
+
+  /zhi-lib-base@0.4.3:
+    resolution: {integrity: sha512-jahOcJ4MjJ9gAPM/nwgF65p2dPyggRgKFJPT0WDtyoabQw4sCUSOJ1Cps18Rq6lt4agH5yqAObz/mPdVz/bHWw==}
     dev: false
 
   /zhi-siyuan-api@1.29.0:
