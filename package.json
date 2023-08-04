@@ -66,7 +66,7 @@
     "zhi-fetch-middleware": "^0.2.5",
     "zhi-github-middleware": "^0.1.2",
     "zhi-lib-base": "^0.4.2",
-    "zhi-siyuan-api": "^1.29.0",
+    "zhi-siyuan-api": "^1.29.4",
     "zhi-xmlrpc-middleware": "^0.4.0"
   }
 }
