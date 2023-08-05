@@ -22,14 +22,15 @@
  * or visit www.terwer.space if you need additional information or have any
  * questions.
  */
-import {BlogApi, BlogConfig} from "zhi-blog-api"
-import {SiyuanKernelApi} from "zhi-siyuan-api"
-import {CommonFetchClient} from "zhi-fetch-middleware"
-import {AppInstance} from "~/src/appInstance.ts"
-import {createAppLogger, ILogger} from "~/src/utils/appLogger.ts"
-import {useSiyuanApi} from "~/src/composables/useSiyuanApi.ts"
-import {JsonUtil, ObjectUtil, StrUtil} from "zhi-common"
-import {isDev} from "~/src/utils/constants.ts"
+
+import { BlogApi, BlogConfig } from "zhi-blog-api"
+import { SiyuanKernelApi } from "zhi-siyuan-api"
+import { CommonFetchClient } from "zhi-fetch-middleware"
+import { AppInstance } from "~/src/appInstance.ts"
+import { createAppLogger, ILogger } from "~/src/utils/appLogger.ts"
+import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
+import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
+import { isDev } from "~/src/utils/constants.ts"
 
 /**
  * API授权统一封装基类

@@ -308,10 +308,7 @@ class YuqueApiAdaptor extends BaseBlogApi {
     this.logger.debug("向语雀请求数据，params =>", params)
 
     // 使用兼容的fetch调用并返回统一的JSON数据
-    let body = ""
-    if (!ObjectUtil.isEmptyObject(params)) {
-      body = JSON.stringify(params)
-    }
+    const body = ObjectUtil.isEmptyObject(params) ? "" :  JSON.stringify(params);
     const resJson = await this.proxyFetch(url, [headers], body, method, contentType)
     this.logger.debug("向语雀请求数据，resJson =>", resJson)
 

@@ -35,6 +35,7 @@ import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { pre } from "~/src/utils/import/pre.ts"
 import { DynamicConfig } from "~/src/components/set/publish/platform/dynamicConfig.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
+import { ElMessage } from "element-plus"
 
 const logger = createAppLogger("single-publish-do-publish")
 
@@ -44,6 +45,7 @@ const route = useRoute()
 const { doInitPage } = usePublish()
 const { query } = useRoute()
 const { kernelApi, blogApi } = useSiyuanApi()
+const { doSinglePublish } = usePublish()
 
 // datas
 const sysKeys = pre.systemCfg.map((item) => {
@@ -65,10 +67,35 @@ const formData = reactive({
   mergedPost: {} as Post,
 
   singleFormData: {} as any,
+  changeTips: {
+    title: "",
+  },
+
   actionEnable: true,
 })
 
-const handlePublish = async () => {}
+const handlePublish = async () => {
+  try {
+    formData.isPublishLoading = true
+    logger.info("单个常规发布开始")
+    const processResult = await doSinglePublish(key, id, formData.mergedPost)
+
+    logger.info("normal publish processResult =>", processResult)
+    logger.info("单个常规发布结束")
+
+    // 刷新页面
+    formData.isInit = false
+    formData.actionEnable = false
+    await initPage()
+    // 需要刷新才能继续操作，防止重复提交
+    formData.isInit = true
+    formData.actionEnable = true
+  } catch (error) {
+    ElMessage.error(error.message)
+  } finally {
+    formData.isPublishLoading = false
+  }
+}
 
 const handleDelete = async () => {}
 
@@ -91,14 +118,21 @@ const showChangeTip = (v1: string, v2: string) => {
   return `系统标题为 [${v1}] ， 已在远程平台被修改为 [${v2}]`
 }
 
-onMounted(async () => {
-  logger.info("获取到的ID为=>", id)
+const refreshChangeTips = () => {
+  formData.changeTips.title = showChangeTip(formData.siyuanPost.title, formData.platformPost.title)
+}
+
+const initPage = async () => {
   try {
     formData.singleFormData = await doInitPage(key, id, method)
 
+    // 文章元数据
     formData.siyuanPost = formData.singleFormData.siyuanPost
     formData.platformPost = formData.singleFormData.platformPost
     formData.mergedPost = formData.singleFormData.mergedPost
+
+    // 刷新比对提示
+    refreshChangeTips()
 
     logger.debug("formData.platformPost=>", formData.platformPost)
   } catch (e) {
@@ -109,7 +143,12 @@ onMounted(async () => {
       timeout: 7000,
     })
   }
+}
 
+onMounted(async () => {
+  logger.info("获取到的ID为=>", id)
+
+  await initPage()
   formData.isInit = true
 })
 </script>
@@ -132,7 +171,7 @@ onMounted(async () => {
                 <el-alert
                   v-if="method === MethodEnum.METHOD_EDIT && formData.siyuanPost.title !== formData.platformPost.title"
                   class="top-tip"
-                  :title="showChangeTip(formData.siyuanPost.title, formData.platformPost.title)"
+                  :title="formData.changeTips.title"
                   type="error"
                   :closable="false"
                 />
