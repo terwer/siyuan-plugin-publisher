@@ -30,7 +30,7 @@ import { JsonUtil, StrUtil } from "zhi-common"
 import { AppInstance } from "~/src/appInstance.ts"
 import Adaptors from "~/src/adaptors"
 import { Utils } from "~/src/utils/utils.ts"
-import { Post } from "zhi-blog-api"
+import { BlogAdaptor, Post } from "zhi-blog-api"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
@@ -119,9 +119,9 @@ const usePublish = () => {
         const result = await api.editPost(singleFormData.postid, doc)
         logger.info("edit post=>", result)
       }
-      const previewUrl = await api.getPreviewUrl(singleFormData.postid)
-      const isAbsoluteUrl = /^http/.test(previewUrl)
-      singleFormData.previewUrl = isAbsoluteUrl ? previewUrl : `${singleFormData.cfg?.home ?? ""}${previewUrl}`
+
+      // 更新预览链接
+      await setPreviewUrl(api, singleFormData.postid)
 
       singleFormData.publishProcessStatus = true
     } catch (e) {
@@ -236,6 +236,12 @@ const usePublish = () => {
     }
   }
 
+  const setPreviewUrl = async (api: BlogAdaptor, postid: string) => {
+    const previewUrl = await api.getPreviewUrl(postid)
+    const isAbsoluteUrl = /^http/.test(previewUrl)
+    singleFormData.previewUrl = isAbsoluteUrl ? previewUrl : `${singleFormData.cfg?.home ?? ""}${previewUrl}`
+  }
+
   const assignValue = (title1: string, title2: string) => (title1.length > title2.length ? title1 : title2)
 
   const doInitPage = async (key: string, id: string, method: MethodEnum = MethodEnum.METHOD_ADD) => {
@@ -287,6 +293,9 @@ const usePublish = () => {
       singleFormData.mergedPost.title = assignValue(singleFormData.siyuanPost.title, singleFormData.platformPost.title)
       // 正文以思源笔记为准
       singleFormData.mergedPost.description = singleFormData.siyuanPost.description
+
+      // 更新预览链接
+      await setPreviewUrl(api, postid)
     }
     return singleFormData
   }

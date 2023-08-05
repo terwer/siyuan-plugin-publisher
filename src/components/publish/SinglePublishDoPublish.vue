@@ -24,7 +24,7 @@
   -->
 
 <script setup lang="ts">
-import { onMounted, reactive } from "vue"
+import { markRaw, onMounted, reactive } from "vue"
 import { useRoute } from "vue-router"
 import BackPage from "~/src/components/common/BackPage.vue"
 import { usePublish } from "~/src/composables/usePublish.ts"
@@ -32,10 +32,10 @@ import { MethodEnum } from "~/src/models/methodEnum.ts"
 import { Post } from "zhi-blog-api"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import { pre } from "~/src/utils/import/pre.ts"
 import { DynamicConfig } from "~/src/components/set/publish/platform/dynamicConfig.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
-import { ElMessage } from "element-plus"
+import { ElMessage, ElMessageBox } from "element-plus"
+import { Delete } from "@element-plus/icons-vue"
 
 const logger = createAppLogger("single-publish-do-publish")
 
@@ -44,19 +44,15 @@ const { t } = useVueI18n()
 const route = useRoute()
 const { doInitPage } = usePublish()
 const { query } = useRoute()
-const { kernelApi, blogApi } = useSiyuanApi()
-const { doSinglePublish } = usePublish()
+const { kernelApi } = useSiyuanApi()
+const { doSinglePublish, doSingleDelete } = usePublish()
 
 // datas
-const sysKeys = pre.systemCfg.map((item) => {
-  return item.platformKey
-})
 const params = reactive(route.params)
 const key = params.key as string
 const id = params.id as string
 const method = query.method as MethodEnum
 
-const dynList = sysKeys.concat(key)
 const formData = reactive({
   isInit: false,
   isPublishLoading: false,
@@ -97,13 +93,61 @@ const handlePublish = async () => {
   }
 }
 
-const handleDelete = async () => {}
+const handleDelete = async () => {
+  const platformName = getPlatformName()
+  const blogName = getBlogName()
+  ElMessageBox.confirm(
+    `确认要删除 [${platformName} - ${blogName}] 下的这篇文章吗，此平台的文章数据将永久删除 ？`,
+    "温馨提示",
+    {
+      type: "error",
+      icon: markRaw(Delete),
+      confirmButtonText: t("main.opt.ok"),
+      cancelButtonText: t("main.opt.cancel"),
+    }
+  )
+    .then(async () => {
+      await doDelete()
+    })
+    .catch(() => {})
+}
+
+const doDelete = async () => {
+  try {
+    formData.isDeleteLoading = true
+    await doSingleDelete(key, id)
+
+    // 刷新页面
+    formData.isInit = false
+    formData.actionEnable = false
+    await initPage()
+    // 需要刷新才能继续操作，防止重复提交
+    formData.isInit = true
+    formData.actionEnable = true
+
+    const platformName = getPlatformName()
+    const blogName = getBlogName()
+    ElMessage.success(`[${platformName} - ${blogName}] 文章删除成功`)
+  } catch (error) {
+    ElMessage.error(error.message)
+  } finally {
+    formData.isDeleteLoading = false
+  }
+}
+
+const getPlatformName = () => {
+  const dynCfg = formData.singleFormData?.dynCfg as DynamicConfig
+  return dynCfg?.platformName || ""
+}
+
+const getBlogName = () => {
+  const cfg = formData.singleFormData?.cfg as any
+  return cfg?.blogName || ""
+}
 
 const getTitle = () => {
-  const dynCfg = formData.singleFormData?.dynCfg as DynamicConfig
-  const cfg = formData.singleFormData?.cfg as any
-  const platformName = dynCfg?.platformName || ""
-  const blogName = cfg?.blogName || ""
+  const platformName = getPlatformName()
+  const blogName = getBlogName()
 
   let title = "当前操作的平台为 - "
   title += platformName ? platformName : key
@@ -204,6 +248,24 @@ onMounted(async () => {
                 >
                   {{ t("main.cancel") }}
                 </el-button>
+              </el-form-item>
+
+              <!-- 文章状态 -->
+              <el-form-item>
+                <el-button :type="method === MethodEnum.METHOD_EDIT ? 'success' : 'danger'" text disabled>
+                  {{
+                    method === MethodEnum.METHOD_EDIT
+                      ? t("main.publish.status.published")
+                      : t("main.publish.status.unpublish")
+                  }}
+                </el-button>
+                <a
+                  v-if="method === MethodEnum.METHOD_EDIT"
+                  :href="formData.singleFormData.previewUrl"
+                  :title="formData.singleFormData.previewUrl"
+                  target="_blank"
+                  >{{ t("main.publish.see.preview") }}</a
+                >
               </el-form-item>
             </el-form>
           </div>

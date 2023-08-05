@@ -110,7 +110,7 @@ const handleDelete = async () => {
   ElMessageBox.confirm(
     `确认要删除平台 ${formData.dynList.join(
       "、"
-    )} 下面的文章吗，此平台文章数据也将永久删除 [注意：系统内置平台会忽略，不做删除] ？`,
+    )} 下的这篇文章吗，此平台文章数据也将永久删除 [注意：系统内置平台会忽略，不做删除] ？`,
     "温馨提示",
     {
       type: "error",
