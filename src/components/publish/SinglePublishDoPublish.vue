@@ -36,6 +36,8 @@ import { DynamicConfig } from "~/src/components/set/publish/platform/dynamicConf
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { ElMessage, ElMessageBox } from "element-plus"
 import { Delete } from "@element-plus/icons-vue"
+import { BrowserUtil } from "zhi-device"
+import { StrUtil } from "zhi-common"
 
 const logger = createAppLogger("single-publish-do-publish")
 
@@ -51,10 +53,10 @@ const { doSinglePublish, doSingleDelete } = usePublish()
 const params = reactive(route.params)
 const key = params.key as string
 const id = params.id as string
-const method = query.method as MethodEnum
 
 const formData = reactive({
   isInit: false,
+  method: query.method as MethodEnum,
   isPublishLoading: false,
   isDeleteLoading: false,
 
@@ -73,6 +75,8 @@ const formData = reactive({
 const handlePublish = async () => {
   try {
     formData.isPublishLoading = true
+    formData.actionEnable = false
+
     logger.info("单个常规发布开始")
     const processResult = await doSinglePublish(key, id, formData.mergedPost)
 
@@ -80,11 +84,19 @@ const handlePublish = async () => {
     logger.info("单个常规发布结束")
 
     // 刷新页面
-    formData.isInit = false
-    formData.actionEnable = false
-    await initPage()
-    // 需要刷新才能继续操作，防止重复提交
-    formData.isInit = true
+    // 如果是发布并且发布成功
+    if (formData.method === MethodEnum.METHOD_ADD) {
+      formData.method = MethodEnum.METHOD_EDIT
+      window.location.href = BrowserUtil.setUrlParameter(window.location.href, "method", formData.method)
+      // 因为hash的原因，需要再刷新一次
+      window.location.reload()
+    } else {
+      // 需要刷新才能继续操作，防止重复提交
+      formData.isInit = false
+      await initPage()
+      formData.isInit = true
+    }
+
     formData.actionEnable = true
   } catch (error) {
     ElMessage.error(error.message)
@@ -115,19 +127,22 @@ const handleDelete = async () => {
 const doDelete = async () => {
   try {
     formData.isDeleteLoading = true
+    formData.actionEnable = false
+
     await doSingleDelete(key, id)
 
     // 刷新页面
-    formData.isInit = false
-    formData.actionEnable = false
-    await initPage()
-    // 需要刷新才能继续操作，防止重复提交
-    formData.isInit = true
-    formData.actionEnable = true
-
     const platformName = getPlatformName()
     const blogName = getBlogName()
     ElMessage.success(`[${platformName} - ${blogName}] 文章删除成功`)
+
+    // 如果是发布并且发布成功
+    setTimeout(() => {
+      formData.method = MethodEnum.METHOD_ADD
+      window.location.href = BrowserUtil.setUrlParameter(window.location.href, "method", formData.method)
+      // 因为hash的原因，需要再刷新一次
+      window.location.reload()
+    }, 200)
   } catch (error) {
     ElMessage.error(error.message)
   } finally {
@@ -159,6 +174,9 @@ const getTitle = () => {
 }
 
 const showChangeTip = (v1: string, v2: string) => {
+  if (StrUtil.isEmptyString(v2)) {
+    return ""
+  }
   return `系统标题为 [${v1}] ， 已在远程平台被修改为 [${v2}]`
 }
 
@@ -168,7 +186,7 @@ const refreshChangeTips = () => {
 
 const initPage = async () => {
   try {
-    formData.singleFormData = await doInitPage(key, id, method)
+    formData.singleFormData = await doInitPage(key, id, formData.method)
 
     // 文章元数据
     formData.siyuanPost = formData.singleFormData.siyuanPost
@@ -177,7 +195,6 @@ const initPage = async () => {
 
     // 刷新比对提示
     refreshChangeTips()
-
     logger.debug("formData.platformPost=>", formData.platformPost)
   } catch (e) {
     const errMsg = t("main.opt.failure") + "=>" + e
@@ -213,7 +230,11 @@ onMounted(async () => {
                   <el-input v-model="formData.mergedPost.title" />
                 </el-form-item>
                 <el-alert
-                  v-if="method === MethodEnum.METHOD_EDIT && formData.siyuanPost.title !== formData.platformPost.title"
+                  v-if="
+                    formData.method === MethodEnum.METHOD_EDIT &&
+                    !StrUtil.isEmptyString(formData.changeTips.title) &&
+                    formData.siyuanPost.title !== formData.platformPost.title
+                  "
                   class="top-tip"
                   :title="formData.changeTips.title"
                   type="error"
@@ -236,10 +257,10 @@ onMounted(async () => {
                   @click="handlePublish"
                   :disabled="!formData.actionEnable"
                 >
-                  {{ method === MethodEnum.METHOD_ADD ? t("main.publish") : t("main.update") }}
+                  {{ formData.method === MethodEnum.METHOD_ADD ? t("main.publish") : t("main.update") }}
                 </el-button>
                 <el-button
-                  v-if="method === MethodEnum.METHOD_EDIT"
+                  v-if="formData.method === MethodEnum.METHOD_EDIT"
                   type="danger"
                   :loading="formData.isDeleteLoading"
                   @click="handleDelete"
@@ -252,15 +273,15 @@ onMounted(async () => {
 
               <!-- 文章状态 -->
               <el-form-item>
-                <el-button :type="method === MethodEnum.METHOD_EDIT ? 'success' : 'danger'" text disabled>
+                <el-button :type="formData.method === MethodEnum.METHOD_EDIT ? 'success' : 'danger'" text disabled>
                   {{
-                    method === MethodEnum.METHOD_EDIT
+                    formData.method === MethodEnum.METHOD_EDIT
                       ? t("main.publish.status.published")
                       : t("main.publish.status.unpublish")
                   }}
                 </el-button>
                 <a
-                  v-if="method === MethodEnum.METHOD_EDIT"
+                  v-if="formData.method === MethodEnum.METHOD_EDIT"
                   :href="formData.singleFormData.previewUrl"
                   :title="formData.singleFormData.previewUrl"
                   target="_blank"
