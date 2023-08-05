@@ -26,9 +26,9 @@
 <script setup lang="ts">
 import CommonBlogSetting from "~/src/components/set/publish/singleplatform/CommonBlogSetting.vue"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import { useYuqueApi } from "~/src/adaptors/api/yuque/useYuqueApi.ts"
-import { YuqueConfig } from "~/src/adaptors/api/yuque/config/yuqueConfig.ts"
-import { YuquePlaceHolder } from "~/src/adaptors/api/yuque/config/yuquePlaceHolder.ts"
+import {useNotionApi} from "~/src/adaptors/api/notion/useNotionApi.ts";
+import {NotionConfig} from "~/src/adaptors/api/notion/config/notionConfig.ts";
+import {NotionPlaceHolder} from "~/src/adaptors/api/notion/config/notionPlaceHolder.ts";
 
 const props = defineProps({
   apiType: {
@@ -38,19 +38,18 @@ const props = defineProps({
 })
 
 const { t } = useVueI18n()
-const { cfg } = await useYuqueApi(props.apiType)
-const yuqueCfg = cfg as YuqueConfig
-const yuquePlaceholder = new YuquePlaceHolder()
-yuquePlaceholder.homePlaceholder = t("setting.yuque.home.tip")
-yuquePlaceholder.usernamePlaceholder = t("setting.yuque.username.tip")
-yuquePlaceholder.passwordPlaceholder = t("setting.yuque.password.tip")
-yuquePlaceholder.apiUrlPlaceholder = t("setting.yuque.apiurl.tip")
-yuquePlaceholder.previewUrlPlaceholder = t("setting.yuque.previewUrl.tip")
-yuqueCfg.placeholder = yuquePlaceholder
-yuqueCfg.knowledgeSpaceTitle = "知识库"
-yuqueCfg.enableKnowledgeSpace = true
+const { cfg } = await useNotionApi(props.apiType)
+const notionCfg = cfg as NotionConfig
+const notionPlaceholder = new NotionPlaceHolder()
+notionPlaceholder.homePlaceholder = t("setting.notion.home.tip")
+notionPlaceholder.passwordPlaceholder = t("setting.notion.password.tip")
+notionPlaceholder.apiUrlPlaceholder = t("setting.notion.apiurl.tip")
+notionPlaceholder.previewUrlPlaceholder = t("setting.notion.previewUrl.tip")
+notionCfg.placeholder = notionPlaceholder
+notionCfg.knowledgeSpaceTitle = "根页面"
+notionCfg.enableKnowledgeSpace = true
 </script>
 
 <template>
-  <common-blog-setting :api-type="props.apiType" :cfg="yuqueCfg" />
+  <common-blog-setting :api-type="props.apiType" :cfg="notionCfg" />
 </template>

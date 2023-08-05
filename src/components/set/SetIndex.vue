@@ -24,22 +24,9 @@
   -->
 
 <script setup lang="ts">
-import GeneralSetting from "~/src/components/set/GeneralSetting.vue"
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import PublishSetting from "~/src/components/set/PublishSetting.vue"
-
-const { t } = useVueI18n()
 </script>
 
 <template>
-  <el-tabs tab-position="left">
-    <el-tab-pane :label="t('service.tab.publish.setting')">
-      <publish-setting />
-    </el-tab-pane>
-    <el-tab-pane :label="t('service.tab.change.local')">
-      <general-setting />
-    </el-tab-pane>
-  </el-tabs>
+  <publish-setting />
 </template>
-
-<style scoped></style>

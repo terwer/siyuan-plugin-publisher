@@ -38,6 +38,8 @@ class YuqueConfig extends CommonblogConfig {
     this.pageType = PageTypeEnum.Markdown
     this.usernameEnabled = true
     this.passwordType = PasswordType.PasswordType_Token
+    this.knowledgeSpaceTitle = "知识库"
+    this.enableKnowledgeSpace = true
   }
 }
 

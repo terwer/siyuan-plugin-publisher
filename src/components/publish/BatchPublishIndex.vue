@@ -28,9 +28,7 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
 import PublishTips from "~/src/components/publish/form/PublishTips.vue"
 import PublishPlatform from "~/src/components/publish/form/PublishPlatform.vue"
 import { markRaw, onMounted, reactive } from "vue"
-import { useRoute } from "vue-router"
 import { usePublish } from "~/src/composables/usePublish.ts"
-import { getWidgetId } from "~/src/utils/widgetUtils.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { Post } from "zhi-blog-api"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
@@ -42,23 +40,29 @@ import { BrowserUtil } from "zhi-device"
 
 const logger = createAppLogger("publisher-index")
 
+// props
+const props = defineProps({
+  id: {
+    type: String,
+    default: "",
+  },
+})
+
 // uses
 const { t } = useVueI18n()
 const { doSinglePublish, doSingleDelete } = usePublish()
 const { blogApi } = useSiyuanApi()
-const { query } = useRoute()
 
 // datas
 const sysKeys = pre.systemCfg.map((item) => {
   return item.platformKey
 })
-const id = (query.id ?? getWidgetId()) as string
 const formData = reactive({
   isPublishLoading: false,
   isDeleteLoading: false,
 
   showProcessResult: false,
-  doc: {} as Post,
+  siyuanPost: {} as Post,
   errCount: 0,
   successBatchResults: <any[]>[],
   failBatchResults: <any[]>[],
@@ -78,7 +82,7 @@ const handlePublish = async () => {
     formData.failBatchResults = []
     formData.successBatchResults = []
     for (const key of formData.dynList) {
-      const batchResult = await doSinglePublish(key, id, formData.doc)
+      const batchResult = await doSinglePublish(key, props.id, formData.siyuanPost)
       if (batchResult.status) {
         formData.successBatchResults.push(batchResult)
       } else {
@@ -106,7 +110,7 @@ const handleDelete = async () => {
   ElMessageBox.confirm(
     `确认要删除平台 ${formData.dynList.join(
       "、"
-    )} 下面的文章吗，此平台文章数据也将永久删除 [注意：系统内置平台会忽略，不做删除] ？`,
+    )} 下的这篇文章吗，此平台文章数据也将永久删除 [注意：系统内置平台会忽略，不做删除] ？`,
     "温馨提示",
     {
       type: "error",
@@ -136,7 +140,7 @@ const doDelete = async () => {
         logger.info(`[${key}] 系统内置平台，不可删除，跳过`)
         continue
       }
-      const batchResult = await doSingleDelete(key, id)
+      const batchResult = await doSingleDelete(key, props.id)
       if (!batchResult.status) {
         formData.failBatchResults.push(batchResult)
         formData.errCount++
@@ -167,14 +171,14 @@ const handleRefresh = () => {
 }
 
 onMounted(async () => {
-  logger.info("获取到的ID为=>", id)
+  logger.info("获取到的ID为=>", props.id)
   // 思源笔记原始文章数据
-  formData.doc = await blogApi.getPost(id)
+  formData.siyuanPost = await blogApi.getPost(props.id)
 })
 </script>
 
 <template>
-  <div id="publish-index">
+  <div id="batch-publish-index">
     <el-container>
       <el-main>
         <!-- 提示 -->
@@ -190,7 +194,7 @@ onMounted(async () => {
           </div>
           <div v-for="errRet in formData.failBatchResults">
             [{{ errRet.key }}] {{ StrUtil.isEmptyString(errRet.name) ? "" : `[${errRet.name}]` }} {{ errRet.errMsg }}
-            <a href="javascript:void(0)" @click="doSingleDelete(errRet.key, id)">强制解除关联</a>
+            <a href="javascript:void(0)" @click="doSingleDelete(errRet.key, props.id)">强制解除关联</a>
           </div>
           <div v-if="formData.successBatchResults.length > 0" class="success-result success-tips">
             已分发成功的结果如下：
@@ -208,13 +212,13 @@ onMounted(async () => {
             <!-- 文章标题 -->
             <div class="form-post-title">
               <el-form-item :label="t('main.title')">
-                <el-input v-model="formData.doc.title" />
+                <el-input v-model="formData.siyuanPost.title" />
               </el-form-item>
             </div>
             <el-divider border-style="dashed" />
 
             <!-- 分发平台 -->
-            <publish-platform :id="id" @emitSyncDynList="syncDynList" />
+            <publish-platform :id="props.id" @emitSyncDynList="syncDynList" />
             <el-divider border-style="dashed" />
 
             <!--

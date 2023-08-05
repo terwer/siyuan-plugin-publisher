@@ -46,11 +46,16 @@ const props = defineProps({
 })
 
 // datas
-const params = reactive(route.params)
 const showBack = ref(query.showBack === "true")
 
+// emits
+const emit = defineEmits(["backEmit"])
+
 const onBack = () => {
-  router.back()
+  if (emit && emit("backEmit") as any) {
+  } else {
+    router.back()
+  }
 }
 </script>
 

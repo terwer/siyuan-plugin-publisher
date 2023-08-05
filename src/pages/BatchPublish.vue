@@ -24,11 +24,14 @@
   -->
 
 <script setup lang="ts">
-import PublishIndex from "~/src/components/publish/PublishIndex.vue"
+import BatchPublishIndex from "~/src/components/publish/BatchPublishIndex.vue"
+import { getWidgetId } from "~/src/utils/widgetUtils.ts"
+import { useRoute } from "vue-router"
+
+const { query } = useRoute()
+const id = (query.id ?? getWidgetId()) as string
 </script>
 
 <template>
-  <publish-index />
+  <batch-publish-index :id="id" />
 </template>
-
-<style scoped></style>

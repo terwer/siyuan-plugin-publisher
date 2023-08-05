@@ -10,6 +10,7 @@ import Components from "unplugin-vue-components/vite"
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers"
 import { nodePolyfills } from "vite-plugin-node-polyfills"
 
+// methods start
 const getAppBase = (isSiyuanBuild: boolean, isWidgetBuild: boolean, isStaticBuild: boolean): string => {
   if (isSiyuanBuild) {
     return "/plugins/siyuan-plugin-publisher/"
@@ -22,13 +23,14 @@ const getAppBase = (isSiyuanBuild: boolean, isWidgetBuild: boolean, isStaticBuil
   }
 }
 
-const getDefineEnv = (isDevMode: boolean) => {
+const getDefineEnv = (isDevMode: boolean, debugMode: boolean) => {
   const mode = process.env.NODE_ENV
   console.log("isServe=>", isServe)
   console.log("mode=>", mode)
 
   const defaultEnv = {
     DEV_MODE: `${isDevMode}`,
+    DEBUG_MODE: `${debugMode}`,
     APP_BASE: `${appBase}`,
     NODE_ENV: "development",
     VITE_DEFAULT_TYPE: `siyuan`,
@@ -50,13 +52,15 @@ const getDefineEnv = (isDevMode: boolean) => {
 
   return defineEnv
 }
+// methods end
 
+// config
 const args = minimist(process.argv.slice(2))
-const debugMode = false
+// 开启之后可以同eruda接管日志
+const debugMode = process.env.DEBUG_MODE === "true"
 const isServe = process.env.IS_SERVE
 const isWatch = args.watch || args.w || false
 const isDev = isServe || isWatch || debugMode
-// const isDev = false
 const isWindows = process.platform === "win32"
 let devDistDir = "/Users/terwer/Documents/mydocs/SiYuanWorkspace/test/data/plugins/siyuan-plugin-publisher"
 // let devDistDir = "/Users/terwer/Documents/mydocs/SiYuanWorkspace/public/data/plugins/siyuan-plugin-publisher"
@@ -67,7 +71,7 @@ if (isWindows) {
 const isSiyuanBuild = process.env.BUILD_TYPE === "siyuan"
 const isWidgetBuild = process.env.BUILD_TYPE === "widget"
 const isStaticBuild = process.env.BUILD_TYPE === "static"
-const isChromeBuild = process.env.BUILD_TYPE === "chrome"
+// const isChromeBuild = process.env.BUILD_TYPE === "chrome"
 const distDir = isWatch ? devDistDir : isWidgetBuild ? "widget" : "./dist"
 const appBase = getAppBase(isSiyuanBuild, isWidgetBuild, isStaticBuild)
 
@@ -97,7 +101,7 @@ export default defineConfig({
       inject: {
         // 在 body 标签底部插入指定的 JavaScript 文件
         tags:
-          isDev && !isChromeBuild
+          isDev && debugMode
             ? [
                 {
                   tag: "script",
@@ -125,7 +129,7 @@ export default defineConfig({
               ],
         data: {
           title: "eruda",
-          injectScript: isDev && !isChromeBuild ? `<script>eruda.init();</script>` : "",
+          injectScript: isDev && debugMode ? `<script>eruda.init();</script>` : "",
         },
       },
     }),
@@ -156,7 +160,7 @@ export default defineConfig({
   // https://vitejs.dev/guide/env-and-mode.html#env-files
   // https://github.com/vitejs/vite/discussions/3058#discussioncomment-2115319
   // 在这里自定义变量
-  define: getDefineEnv(isDev),
+  define: getDefineEnv(isDev, debugMode),
 
   resolve: {
     alias: {

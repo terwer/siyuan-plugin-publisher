@@ -29,8 +29,8 @@ import { AppInstance } from "~/src/appInstance.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
-import { ZhihuConfig } from "~/src/adaptors/web/zhihu/config/zhihuConfig.ts"
 import { JsonUtil } from "zhi-common"
+import {isDev} from "~/src/utils/constants.ts";
 
 /**
  * 网页授权统一封装基类
@@ -39,7 +39,7 @@ import { JsonUtil } from "zhi-common"
  * @version 0.9.0
  * @since 0.9.0
  */
-export class WebAuthApi extends WebApi {
+class BaseWebApi extends WebApi {
   protected logger
   protected cfg: WebConfig
   private readonly kernelApi: SiyuanKernelApi
@@ -57,16 +57,16 @@ export class WebAuthApi extends WebApi {
     super()
 
     this.cfg = cfg
-    this.logger = createAppLogger("web-auth-api")
+    this.logger = createAppLogger("base-web-api")
     const { kernelApi } = useSiyuanApi()
     const { isInSiyuanWidget, isInChromeExtension } = useSiyuanDevice()
     this.kernelApi = kernelApi
-    this.commonFetchClient = new CommonFetchClient(appInstance)
+    this.commonFetchClient = new CommonFetchClient(appInstance, cfg.apiUrl, cfg.middlewareUrl, isDev)
     this.isInSiyuanWidget = isInSiyuanWidget()
     this.isInChromeExtension = isInChromeExtension()
   }
 
-  public updateCfg(cfg: ZhihuConfig) {
+  public updateCfg(cfg: WebConfig) {
     this.cfg = cfg
   }
 
@@ -127,9 +127,11 @@ export class WebAuthApi extends WebApi {
       }
       this.logger.info("commonFetchClient from proxyFetch url =>", url)
       this.logger.info("commonFetchClient from proxyFetch fetchOptions =>", fetchOptions)
-      const res = await this.commonFetchClient.fetchCall(url, fetchOptions, this.cfg.middlewareUrl)
+      const res = await this.commonFetchClient.fetchCall(url, fetchOptions)
       this.logger.debug("commonFetchClient res from proxyFetch =>", res)
       return res
     }
   }
 }
+
+export { BaseWebApi }

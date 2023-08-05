@@ -23,9 +23,23 @@
  * questions.
  */
 
-import { CommonWebConfig } from "~/src/adaptors/web/base/config/CommonWebConfig.ts"
+import { PageTypeEnum, PasswordType } from "zhi-blog-api"
+import { CommonblogConfig } from "~/src/adaptors/api/base/commonblog/config/CommonblogConfig.ts"
 
 /**
- * 简书配置
+ * Notion 配置
  */
-export class JianshuConfig extends CommonWebConfig {}
+class NotionConfig extends CommonblogConfig {
+  constructor(password: string, middlewareUrl?: string) {
+    super("https://www.notion.so/", "https://api.notion.com/v1", "", password, middlewareUrl)
+
+    this.tokenSettingUrl = "https://www.notion.so/my-integrations"
+    this.previewUrl = "/[postid]"
+    this.pageType = PageTypeEnum.Markdown
+    this.passwordType = PasswordType.PasswordType_Token
+    this.knowledgeSpaceTitle = "根页面"
+    this.enableKnowledgeSpace = true
+  }
+}
+
+export { NotionConfig }

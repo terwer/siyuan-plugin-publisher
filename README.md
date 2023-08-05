@@ -63,11 +63,14 @@ This plugin supports almost all devices and platforms of Siyuan Note, and the sp
 
 **It may be migrated to the official forward proxy to achieve zero configuration in the future, but for now you must set it yourself, you can follow the progress here.**
 
+- Progress 1: The Yuque and Notion platforms have used the built-in forward proxy and do not need to be configured.
+
 ## Platform List
 
 Names not listed in order
 
 - [X] Yuque
+- [ ] Web authed of Yuque
 - [X] Metaweblog
 - [X] Cnblogs
 - [X] Typecho
@@ -75,6 +78,8 @@ Names not listed in order
 - [ ] Github
   - [ ] Hexo
   - [ ] Hugo
+- [X] Notion
+- [ ] Web authed of Notion
 
 ## Core Features
 

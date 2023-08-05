@@ -26,6 +26,7 @@
 import { SiYuanApiAdaptor, SiyuanConfig, SiyuanKernelApi } from "zhi-siyuan-api"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { Utils } from "~/src/utils/utils.ts"
+import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 
 /**
  * 通用 Siyuan API 封装
@@ -39,6 +40,7 @@ export const useSiyuanApi = () => {
   siyuanConfig.cookie = Utils.emptyOrDefault(process.env.VITE_SIYUAN_COOKIE, "")
   const blogApi = new SiYuanApiAdaptor(siyuanConfig)
   const kernelApi = new SiyuanKernelApi(siyuanConfig)
+  const { isInChromeExtension } = useSiyuanDevice()
 
   const isStorageViaSiyuanApi = () => {
     // docker - 在 .env.docker 配置 VITE_DEFAULT_TYPE=siyuan
@@ -54,9 +56,18 @@ export const useSiyuanApi = () => {
     return storeViaSiyuanApi
   }
 
+  const isUseSiyuanProxy = () => {
+    if (isInChromeExtension()) {
+      return false
+    }
+
+    return isStorageViaSiyuanApi()
+  }
+
   return {
     blogApi,
     kernelApi,
     isStorageViaSiyuanApi,
+    isUseSiyuanProxy,
   }
 }

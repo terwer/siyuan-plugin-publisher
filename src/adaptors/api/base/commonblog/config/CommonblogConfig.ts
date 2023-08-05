@@ -61,6 +61,11 @@ export class CommonblogConfig extends BlogConfig {
   public override blogName = ""
 
   /**
+   * 开启知识空间
+   */
+  public override enableKnowledgeSpace = false
+
+  /**
    * 文章别名key
    */
   public override posidKey = ""

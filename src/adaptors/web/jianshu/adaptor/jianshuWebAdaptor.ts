@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { WebAuthApi } from "~/src/adaptors/web/base/web/WebAuthApi.ts"
+import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
 
 /**
  * 简书网页授权适配器
@@ -33,7 +33,7 @@ import { WebAuthApi } from "~/src/adaptors/web/base/web/WebAuthApi.ts"
  * @version 0.9.0
  * @since 0.9.0
  */
-class JianshuWebAdaptor extends WebAuthApi {
+class JianshuWebAdaptor extends BaseWebApi {
   public async getMetaData(): Promise<any> {
     const res = await this.proxyFetch("https://www.jianshu.com/settings/basic.json")
     const notebooks = await this.proxyFetch("https://www.jianshu.com/author/notebooks")

@@ -210,9 +210,8 @@ const kmsHandleApi = async () => {
           method: "POST",
         }
 
-        const middlewareUrl = "http://127.0.0.1:3000/api/middleware"
         const commonFetchClient = new CommonFetchClient(appInstance, requestUrl)
-        const result = await commonFetchClient.fetchCall(endpointUrl, fetchOptions, middlewareUrl)
+        const result = await commonFetchClient.fetchCall(endpointUrl, fetchOptions)
         // const kmsCfg = {}
         // const kmsApiAdaptor = {}
         // const kmsApi = Utils.blogApi(appInstance, kmsApiAdaptor)

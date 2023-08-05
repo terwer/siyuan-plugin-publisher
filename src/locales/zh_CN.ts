@@ -116,6 +116,7 @@ export default {
   "main.opt.tip": "温馨提示",
   "main.opt.ok": "确认",
   "main.opt.cancel": "取消",
+  "main.opt.select": "请选择",
   "main.opt.warning.tip": "此操作不可恢复，是否继续？",
   "setting.noneed": "无需配置",
   "setting.blog.setting": "设置",
@@ -339,11 +340,20 @@ export default {
     "启用此选项，将会自动将此文档包含的所有本地图片上传至自定义图床（远程图片不上传），请确保PicGO图床配置正确",
   "github.post.picgo.start.upload": "图床已开启，即将上传本地图片到图床",
   "github.post.picgo.picbed.error": "文档可能已经成功发布，但是图片上传失败或者当前场景不支持图片上传，详细信息",
+
   "setting.yuque.home.tip": "语雀平台首页，通常固定是：https://www.yuque.com/",
   "setting.yuque.username.tip": "语雀平台用户名，注意是【账户设置】里面固定连接里面的用户名，不是用户昵称哦(*^▽^*)",
   "setting.yuque.password.tip":
     "语雀平台的Token，请按照链接点击获取，只需要勾选【读取你的知识库】和【修改和读取你的文档】两个权限即可",
   "setting.yuque.apiurl.tip": "语雀平台的API地址，通常固定是：https://www.yuque.com/api/v2",
+  "setting.yuque.previewUrl.tip": "语雀平台的文章预览规则，通常是：/[notebook]/[postid]",
+
+  "setting.notion.home.tip": "Notion平台首页，通常固定是：https://www.notion.so/",
+  "setting.notion.password.tip":
+    "Notion平台的Token，请按照链接点击获取，需要勾选【Read content】、【Update content】、【Insert content】三个权限",
+  "setting.notion.apiurl.tip": "Notion平台的API地址，通常固定是：https://api.notion.com/v1",
+  "setting.notion.previewUrl.tip": "Notion平台的文章预览规则，通常是：/[postid]",
+
   "setting.liandi.home.tip": "链滴平台首页，通常固定是：https://ld246.com/",
   "setting.liandi.username.tip":
     "链滴平台用户名，注意是点击【个人主页】之后URL上member后面显示的用户名，不是用户昵称哦(*^▽^*)",
@@ -479,7 +489,7 @@ export default {
   "setting.platform.add.this": "新增此平台",
   "setting.platform.universal": "通用平台",
   "setting.platform.universal.desc":
-    "目前支持的通用平台有：语雀，采用API授权。这些平台通常提供了现代化的REST API，可以方便的进行集成。",
+    "目前支持的通用平台有：语雀、Notion等，采用API授权。这些平台通常提供了现代化的REST API，可以方便的进行集成。",
   "setting.platform.wordpress": "WordPress",
   "setting.platform.wordpress.desc":
     "Wordpress 通过Xmlrpc API支持，采用 API 授权。WordPress是一个自由开源的博客软件和内容管理系统，具有数量众多的优质插件和主题。",
@@ -511,4 +521,7 @@ export default {
   "setting.upgrade.syp.doTip4": "没有版本更新，跳过升级",
   "main.publish.start": "开始同步",
   "main.publish.remove": "批量删除",
+  "setting.blog.knowledge.space": "知识空间/知识库",
+  "main.data.empty": "暂无数据",
+  "enableKnowledgeSpace.Tips": "验证通过之后，将列出可用的 [[knowledge-space-title]] 列表，您可以根据需要修改默认 [[knowledge-space-title]] 并保存",
 }

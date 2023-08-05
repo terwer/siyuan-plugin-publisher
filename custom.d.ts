@@ -23,9 +23,4 @@
  * questions.
  */
 
-import { CommonWebConfig } from "~/src/adaptors/web/base/config/CommonWebConfig.ts"
-
-/**
- * 简书配置
- */
-export class JianshuConfig extends CommonWebConfig {}
+declare module "markdown-to-notion"

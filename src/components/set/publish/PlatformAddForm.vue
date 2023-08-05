@@ -222,14 +222,14 @@ initPage()
         type="error"
         :closable="false"
       />
-      <el-alert class="top-tip" :title="'当前平台类型为=>' + ptype" type="warning" :closable="false" />
+      <el-alert class="top-tip" :title="'当前平台类型为=>' + ptype" type="info" :closable="false" />
       <!-- 子平台名称 -->
       <el-form-item v-if="formData.subtypeOptions.length > 0" label="子平台类型">
         <el-select v-model="formData.subtype" class="m-2" placeholder="请选择" @change="handleSubPlatformTypeChange">
           <el-option v-for="item in formData.subtypeOptions" :key="item" :label="item" :value="item" />
         </el-select>
       </el-form-item>
-      <el-alert v-else class="top-tip" :title="'子平台类型为=>' + formData.subtype" type="warning" :closable="false" />
+      <el-alert v-else class="top-tip" :title="'子平台类型为=>' + formData.subtype" type="info" :closable="false" />
       <!-- 平台key -->
       <el-form-item :label="t('dynamic.platform.key')" prop="platformKey">
         {{ formData.dynCfg.platformKey }}

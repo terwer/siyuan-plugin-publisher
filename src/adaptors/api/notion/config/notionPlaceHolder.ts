@@ -23,9 +23,11 @@
  * questions.
  */
 
-import { CommonWebConfig } from "~/src/adaptors/web/base/config/CommonWebConfig.ts"
+import { CommonblogPlaceholder } from "~/src/adaptors/api/base/commonblog/config/CommonblogPlaceholder.ts"
 
 /**
- * 简书配置
+ * Notion 配置提示
  */
-export class JianshuConfig extends CommonWebConfig {}
+class NotionPlaceHolder extends CommonblogPlaceholder {}
+
+export { NotionPlaceHolder }

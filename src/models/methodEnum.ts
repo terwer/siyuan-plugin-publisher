@@ -23,9 +23,17 @@
  * questions.
  */
 
-import { CommonWebConfig } from "~/src/adaptors/web/base/config/CommonWebConfig.ts"
-
 /**
- * 简书配置
+ * 方法定义
  */
-export class JianshuConfig extends CommonWebConfig {}
+export enum MethodEnum {
+  /**
+   * 新增
+   */
+  METHOD_ADD = "add",
+
+  /**
+   * 编辑
+   */
+  METHOD_EDIT = "edit",
+}

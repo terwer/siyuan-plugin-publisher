@@ -23,9 +23,7 @@
  * questions.
  */
 
-import { CommonWebConfig } from "~/src/adaptors/web/base/config/CommonWebConfig.ts"
-
-/**
- * 简书配置
- */
-export class JianshuConfig extends CommonWebConfig {}
+// TODO
+// 网页授权版 Notion
+// https://github.com/NotionX/react-notion-x/tree/master/packages/notion-client
+// https://github.com/NotionX/react-notion-x/issues/115
