@@ -4,7 +4,7 @@
 
 ![](./icon.png)
 
-Publishing articles from siyuan-note to platforms such as Yuque, Cnblogs, WordPress, Typecho, Hexo, Hugo and more.
+Publish articles from Siyuan Notes to platforms such as Yuque, Notion, Cnblogs, WordPress, Typecho, Hexo, Zhihu and more.
 
 Support features such as fast publishing, image bed management, platform expansion, smart labels, etc.
 
@@ -26,6 +26,11 @@ If you still can't use this step after this step, [New issue](https://github.com
 
 ## Recent critical updates and bug fixes
 
+- Notion and Yuque platforms use the forward agent of Siyuan Note to improve performance
+- Regular publishing supports article comparison
+- Added notion support
+- Support for changing the default knowledge base
+- Added support for general releases with fine-grained configuration
 - Close the pop-up window after setting to cancel the reload and improve the experience
 - Fixed the issue that icons did not load when rebooting
 - Compatible with servo browsers
@@ -80,6 +85,7 @@ Names not listed in order
   - [ ] Hugo
 - [X] Notion
 - [ ] Web authed of Notion
+- [ ] Zhihu
 
 ## Core Features
 
