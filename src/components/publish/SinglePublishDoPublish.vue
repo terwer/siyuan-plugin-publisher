@@ -99,6 +99,8 @@ onMounted(async () => {
     formData.siyuanPost = formData.singleFormData.siyuanPost
     formData.platformPost = formData.singleFormData.platformPost
     formData.mergedPost = formData.singleFormData.mergedPost
+
+    logger.debug("formData.platformPost=>", formData.platformPost)
   } catch (e) {
     const errMsg = t("main.opt.failure") + "=>" + e
     logger.error(errMsg)

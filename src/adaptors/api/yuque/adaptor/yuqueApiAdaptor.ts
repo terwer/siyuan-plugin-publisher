@@ -27,7 +27,7 @@ import { CategoryInfo, Post, UserBlog } from "zhi-blog-api"
 import { YuqueConfig } from "~/src/adaptors/api/yuque/config/yuqueConfig.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
-import { StrUtil } from "zhi-common"
+import { ObjectUtil, StrUtil } from "zhi-common"
 
 /**
  * Yuque API 适配器
@@ -146,15 +146,7 @@ class YuqueApiAdaptor extends BaseBlogApi {
    */
   private async getRepos() {
     const url = "/users/" + this.cfg.username + "/repos"
-    const headers = {
-      "X-Auth-Token": this.cfg.password,
-    }
-    const repoResp = await this.proxyFetch(url, [headers], {}, "GET", "application/json")
-    this.logger.debug("yuque repoResp=>", repoResp)
-    if (repoResp?.status === 401) {
-      throw new Error(repoResp?.message)
-    }
-    const repos = repoResp.data
+    const repos = await this.yuqueRequest(url, {}, "GET")
     this.logger.debug("yuque repos=>", repos)
     return repos
   }
@@ -173,27 +165,23 @@ class YuqueApiAdaptor extends BaseBlogApi {
       url = "/repos/" + repo + "/docs"
       this.logger.warn("yuque addDoc with repo", repo)
     }
-    const headers = {
-      "X-Auth-Token": this.cfg.password,
-    }
     const params = {
       title,
       slug,
       format: "markdown",
       body: content,
     }
-    const result = await this.proxyFetch(url, [headers], params, "POST", "application/json")
-    const resultData = result.data
-    this.logger.debug("yuqueRequest addDoc=>", resultData)
+    const result = await this.yuqueRequest(url, params, "POST")
+    this.logger.debug("yuqueRequest addDoc=>", result)
     if (!result) {
       throw new Error("请求语雀API异常")
     }
 
     // 包含了笔记本需要返回标识笔记本的ID，否则更新可能报错
     if (repo) {
-      return `${resultData.id}_${repo}`
+      return `${result.id}_${repo}`
     } else {
-      return `${resultData.id}`
+      return `${result.id}`
     }
   }
 
@@ -218,16 +206,13 @@ class YuqueApiAdaptor extends BaseBlogApi {
       url = "/repos/" + repo + "/docs/" + docId
       this.logger.warn("yuque updateDoc with repo", repo)
     }
-    const headers = {
-      "X-Auth-Token": this.cfg.password,
-    }
     const params = {
       title,
       slug,
       body: content,
       _force_asl: 1,
     }
-    const result = await this.proxyFetch(url, [headers], params, "PUT", "application/json")
+    const result = await this.yuqueRequest(url, params, "PUT")
     if (!result) {
       throw new Error("请求语雀API异常")
     }
@@ -271,10 +256,7 @@ class YuqueApiAdaptor extends BaseBlogApi {
       url = "/repos/" + repo + "/docs/" + docId
       this.logger.warn("yuque delDoc with repo", repo)
     }
-    const headers = {
-      "X-Auth-Token": this.cfg.password,
-    }
-    const result = await this.proxyFetch(url, [headers], {}, "DELETE", "application/json")
+    const result = await this.yuqueRequest(url, {}, "DELETE")
     if (!result) {
       throw new Error("请求语雀API异常")
     }
@@ -294,15 +276,50 @@ class YuqueApiAdaptor extends BaseBlogApi {
       url = "/repos/" + repo + "/docs/" + docId
       this.logger.warn("yuque getDoc with repo", repo)
     }
-    const headers = {
-      "X-Auth-Token": this.cfg.password,
-    }
-    const result = await this.proxyFetch(url, [headers], {}, "GET", "application/json")
+    const result = await this.yuqueRequest(url, {}, "GET")
     if (!result) {
       throw new Error("请求语雀API异常")
     }
 
     return result
+  }
+
+  /**
+   * 向语雀请求数据
+   *
+   * @param url 请求地址
+   * @param params 数据
+   * @param method 请求方法 GET | POST | PUT | DELETE
+   * @private
+   */
+  private async yuqueRequest(
+    url: string,
+    params?: any,
+    method: "GET" | "POST" | "PUT" | "DELETE" = "POST"
+  ): Promise<any> {
+    const contentType = "application/json"
+    const headers = {
+      "Content-Type": contentType,
+      "X-Auth-Token": this.cfg.password,
+    }
+
+    // 打印日志
+    this.logger.debug("向语雀请求数据，url =>", url)
+    this.logger.debug("向语雀请求数据，params =>", params)
+
+    // 使用兼容的fetch调用并返回统一的JSON数据
+    let body = ""
+    if (!ObjectUtil.isEmptyObject(params)) {
+      body = JSON.stringify(params)
+    }
+    const resJson = await this.proxyFetch(url, [headers], body, method, contentType)
+    this.logger.debug("向语雀请求数据，resJson =>", resJson)
+
+    if (resJson?.status === 401) {
+      throw new Error(resJson?.message)
+    }
+
+    return resJson.data ? resJson.data : null
   }
 }
 

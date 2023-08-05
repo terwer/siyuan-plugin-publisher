@@ -22,15 +22,14 @@
  * or visit www.terwer.space if you need additional information or have any
  * questions.
  */
-import { BlogApi, BlogConfig } from "zhi-blog-api"
-import { SiyuanKernelApi } from "zhi-siyuan-api"
-import { CommonFetchClient } from "zhi-fetch-middleware"
-import { AppInstance } from "~/src/appInstance.ts"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
-import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
-import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
-import { isDev } from "~/src/utils/constants.ts"
+import {BlogApi, BlogConfig} from "zhi-blog-api"
+import {SiyuanKernelApi} from "zhi-siyuan-api"
+import {CommonFetchClient} from "zhi-fetch-middleware"
+import {AppInstance} from "~/src/appInstance.ts"
+import {createAppLogger, ILogger} from "~/src/utils/appLogger.ts"
+import {useSiyuanApi} from "~/src/composables/useSiyuanApi.ts"
+import {JsonUtil, ObjectUtil, StrUtil} from "zhi-common"
+import {isDev} from "~/src/utils/constants.ts"
 
 /**
  * API授权统一封装基类
@@ -40,13 +39,11 @@ import { isDev } from "~/src/utils/constants.ts"
  * @since 0.9.0
  */
 export class BaseBlogApi extends BlogApi {
-  protected logger
+  protected logger: ILogger
   protected cfg: BlogConfig
   private readonly kernelApi: SiyuanKernelApi
   private readonly commonFetchClient: CommonFetchClient
-  private isInChromeExtension
-  private isInSiyuanWidget
-  private isStorageViaSiyuanApi
+  private readonly useSiyuanProxy: boolean
 
   /**
    * 初始化API授权适配器
@@ -59,13 +56,11 @@ export class BaseBlogApi extends BlogApi {
 
     this.cfg = cfg
     this.logger = createAppLogger("base-blog-api")
-    const { kernelApi, isStorageViaSiyuanApi } = useSiyuanApi()
-    const { isInChromeExtension, isInSiyuanWidget } = useSiyuanDevice()
-    this.kernelApi = kernelApi
     this.commonFetchClient = new CommonFetchClient(appInstance, cfg.apiUrl, cfg.middlewareUrl, isDev)
-    this.isInChromeExtension = isInChromeExtension()
-    this.isInSiyuanWidget = isInSiyuanWidget()
-    this.isStorageViaSiyuanApi = isStorageViaSiyuanApi()
+
+    const { kernelApi, isUseSiyuanProxy } = useSiyuanApi()
+    this.kernelApi = kernelApi
+    this.useSiyuanProxy = isUseSiyuanProxy()
   }
 
   // ================
@@ -84,84 +79,48 @@ export class BaseBlogApi extends BlogApi {
   protected async proxyFetch(
     url: string,
     headers: any[],
-    params: any = {},
+    params: any,
     method: "GET" | "POST" | "PUT" | "DELETE" = "GET",
     contentType: string = "application/json"
   ): Promise<any> {
-    let body
-    // 兼容字符类型的body
+    let body: any
     if (typeof params === "string" && !StrUtil.isEmptyString(params)) {
-      body = JSON.stringify(params)
-    }
-    // 兼容object类型的body
-    if (typeof params === "object" && !ObjectUtil.isEmptyObject(params)) {
+      body = params
+    } else if (typeof params === "object" && !ObjectUtil.isEmptyObject(params)) {
       body = params
     }
 
-    if (this.isInChromeExtension) {
-      this.logger.info("using chrome background")
-      const fetchOptions: any = {
-        method: method,
-        headers: headers,
-      }
-      if (body) {
-        fetchOptions.body = body
-      }
-      this.logger.info("commonFetchClient from proxyFetch url =>", url)
-      this.logger.info("commonFetchClient from proxyFetch fetchOptions =>", fetchOptions)
-      const res = await this.commonFetchClient.fetchCall(url, fetchOptions)
-      this.logger.debug("commonFetchClient res from proxyFetch =>", res)
-      return res
-    } else if (this.isInSiyuanWidget) {
-      this.logger.info("using siyuan electron api")
-      const apiUrl = `${this.cfg.apiUrl}${url}`
-      const header = headers.length > 0 ? headers[0] : {}
-      let fetchOptions: any = {
-        method,
-        headers: {
-          ...header,
-          ...{
-            "Content-Type": contentType,
-          },
-        },
-      }
-      if (body) {
-        fetchOptions.body = body
-      }
-
-      this.logger.info("commonFetchClient from electron url =>", apiUrl)
-      this.logger.info("commonFetchClient from electron fetchOptions =>", fetchOptions)
-      const res = await this.commonFetchClient.fetchCall(apiUrl, fetchOptions)
-      this.logger.debug("commonFetchClient res from electron =>", res)
-      return res
-    } else if (this.isStorageViaSiyuanApi) {
+    if (this.useSiyuanProxy) {
       this.logger.info("using siyuan forwardProxy")
       const apiUrl = `${this.cfg.apiUrl}${url}`
-      this.logger.info("commonFetchClient from forwardProxy url =>", apiUrl)
-      this.logger.info("commonFetchClient from forwardProxy fetchOptions =>", {
+      this.logger.info("siyuan forwardProxy url =>", apiUrl)
+      this.logger.info("siyuan forwardProxy fetchOptions =>", {
         headers,
         body,
         method,
         contentType,
       })
       const fetchResult = await this.kernelApi.forwardProxy(apiUrl, headers, body, method, contentType, 7000)
-      this.logger.debug("proxyFetch result=>", fetchResult)
+      this.logger.debug("siyuan forwardProxy result=>", fetchResult)
       const resText = fetchResult?.body
       const res = JsonUtil.safeParse<any>(resText, {} as any)
       return res
     } else {
-      this.logger.info("using middleware proxy")
-      const fetchOptions: any = {
-        method: method,
-        headers: headers,
+      this.logger.info("using commonFetchClient")
+      const header = headers.length > 0 ? headers[0] : {}
+      let fetchOptions: any = {
+        method,
+        headers: {
+          ...header,
+        },
       }
       if (body) {
         fetchOptions.body = body
       }
-      this.logger.info("commonFetchClient from proxyFetch url =>", url)
-      this.logger.info("commonFetchClient from proxyFetch fetchOptions =>", fetchOptions)
+      this.logger.info("commonFetchClient url =>", url)
+      this.logger.info("commonFetchClient fetchOptions =>", fetchOptions)
       const res = await this.commonFetchClient.fetchCall(url, fetchOptions)
-      this.logger.debug("commonFetchClient res from proxyFetch =>", res)
+      this.logger.debug("commonFetchClient res =>", res)
       return res
     }
   }

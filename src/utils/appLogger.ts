@@ -34,7 +34,7 @@ window.console = isDev ? (window as any).eruda.get("console") : window.console
 /**
  * 简单的日志接口
  */
-interface ILogger {
+export interface ILogger {
   debug: (msg: string, obj?: any) => void
   info: (msg: string, obj?: any) => void
   warn: (msg: string, obj?: any) => void
