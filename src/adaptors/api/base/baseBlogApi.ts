@@ -29,7 +29,8 @@ import { AppInstance } from "~/src/appInstance.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
-import { JsonUtil } from "zhi-common"
+import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
+import { isDev } from "~/src/utils/constants.ts"
 
 /**
  * API授权统一封装基类
@@ -61,7 +62,7 @@ export class BaseBlogApi extends BlogApi {
     const { kernelApi, isStorageViaSiyuanApi } = useSiyuanApi()
     const { isInChromeExtension, isInSiyuanWidget } = useSiyuanDevice()
     this.kernelApi = kernelApi
-    this.commonFetchClient = new CommonFetchClient(appInstance)
+    this.commonFetchClient = new CommonFetchClient(appInstance, cfg.apiUrl, cfg.middlewareUrl, isDev)
     this.isInChromeExtension = isInChromeExtension()
     this.isInSiyuanWidget = isInSiyuanWidget()
     this.isStorageViaSiyuanApi = isStorageViaSiyuanApi()
@@ -87,12 +88,24 @@ export class BaseBlogApi extends BlogApi {
     method: "GET" | "POST" | "PUT" | "DELETE" = "GET",
     contentType: string = "application/json"
   ): Promise<any> {
+    let body
+    // 兼容字符类型的body
+    if (typeof params === "string" && !StrUtil.isEmptyString(params)) {
+      body = JSON.stringify(params)
+    }
+    // 兼容object类型的body
+    if (typeof params === "object" && !ObjectUtil.isEmptyObject(params)) {
+      body = params
+    }
+
     if (this.isInChromeExtension) {
       this.logger.info("using chrome background")
-      const fetchOptions = {
+      const fetchOptions: any = {
         method: method,
         headers: headers,
-        body: params,
+      }
+      if (body) {
+        fetchOptions.body = body
       }
       this.logger.info("commonFetchClient from proxyFetch url =>", url)
       this.logger.info("commonFetchClient from proxyFetch fetchOptions =>", fetchOptions)
@@ -102,15 +115,20 @@ export class BaseBlogApi extends BlogApi {
     } else if (this.isInSiyuanWidget) {
       this.logger.info("using siyuan electron api")
       const apiUrl = `${this.cfg.apiUrl}${url}`
-      let header = {}
-      if (headers.length > 0) {
-        header = headers[0]
+      const header = headers.length > 0 ? headers[0] : {}
+      let fetchOptions: any = {
+        method,
+        headers: {
+          ...header,
+          ...{
+            "Content-Type": contentType,
+          },
+        },
       }
-      const fetchOptions = {
-        method: method,
-        headers: header,
-        body: params,
+      if (body) {
+        fetchOptions.body = body
       }
+
       this.logger.info("commonFetchClient from electron url =>", apiUrl)
       this.logger.info("commonFetchClient from electron fetchOptions =>", fetchOptions)
       const res = await this.commonFetchClient.fetchCall(apiUrl, fetchOptions)
@@ -122,25 +140,27 @@ export class BaseBlogApi extends BlogApi {
       this.logger.info("commonFetchClient from forwardProxy url =>", apiUrl)
       this.logger.info("commonFetchClient from forwardProxy fetchOptions =>", {
         headers,
-        params,
+        body,
         method,
         contentType,
       })
-      const fetchResult = await this.kernelApi.forwardProxy(apiUrl, headers, params, method, contentType, 7000)
+      const fetchResult = await this.kernelApi.forwardProxy(apiUrl, headers, body, method, contentType, 7000)
       this.logger.debug("proxyFetch result=>", fetchResult)
       const resText = fetchResult?.body
       const res = JsonUtil.safeParse<any>(resText, {} as any)
       return res
     } else {
       this.logger.info("using middleware proxy")
-      const fetchOptions = {
+      const fetchOptions: any = {
         method: method,
         headers: headers,
-        body: params,
+      }
+      if (body) {
+        fetchOptions.body = body
       }
       this.logger.info("commonFetchClient from proxyFetch url =>", url)
       this.logger.info("commonFetchClient from proxyFetch fetchOptions =>", fetchOptions)
-      const res = await this.commonFetchClient.fetchCall(url, fetchOptions, this.cfg.middlewareUrl)
+      const res = await this.commonFetchClient.fetchCall(url, fetchOptions)
       this.logger.debug("commonFetchClient res from proxyFetch =>", res)
       return res
     }

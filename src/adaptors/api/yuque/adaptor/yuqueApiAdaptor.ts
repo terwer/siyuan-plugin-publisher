@@ -183,16 +183,17 @@ class YuqueApiAdaptor extends BaseBlogApi {
       body: content,
     }
     const result = await this.proxyFetch(url, [headers], params, "POST", "application/json")
-    this.logger.debug("yuqueRequest addDoc=>", result)
+    const resultData = result.data
+    this.logger.debug("yuqueRequest addDoc=>", resultData)
     if (!result) {
       throw new Error("请求语雀API异常")
     }
 
     // 包含了笔记本需要返回标识笔记本的ID，否则更新可能报错
     if (repo) {
-      return `${result.id}_${repo}`
+      return `${resultData.id}_${repo}`
     } else {
-      return `${result.id}`
+      return `${resultData.id}`
     }
   }
 

@@ -30,6 +30,7 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import { JsonUtil } from "zhi-common"
+import {isDev} from "~/src/utils/constants.ts";
 
 /**
  * 网页授权统一封装基类
@@ -60,7 +61,7 @@ class BaseWebApi extends WebApi {
     const { kernelApi } = useSiyuanApi()
     const { isInSiyuanWidget, isInChromeExtension } = useSiyuanDevice()
     this.kernelApi = kernelApi
-    this.commonFetchClient = new CommonFetchClient(appInstance)
+    this.commonFetchClient = new CommonFetchClient(appInstance, cfg.apiUrl, cfg.middlewareUrl, isDev)
     this.isInSiyuanWidget = isInSiyuanWidget()
     this.isInChromeExtension = isInChromeExtension()
   }
@@ -126,7 +127,7 @@ class BaseWebApi extends WebApi {
       }
       this.logger.info("commonFetchClient from proxyFetch url =>", url)
       this.logger.info("commonFetchClient from proxyFetch fetchOptions =>", fetchOptions)
-      const res = await this.commonFetchClient.fetchCall(url, fetchOptions, this.cfg.middlewareUrl)
+      const res = await this.commonFetchClient.fetchCall(url, fetchOptions)
       this.logger.debug("commonFetchClient res from proxyFetch =>", res)
       return res
     }
