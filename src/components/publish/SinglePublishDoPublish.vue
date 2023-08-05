@@ -25,7 +25,7 @@
 
 <script setup lang="ts">
 import { markRaw, onMounted, reactive } from "vue"
-import { useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import BackPage from "~/src/components/common/BackPage.vue"
 import { usePublish } from "~/src/composables/usePublish.ts"
 import { MethodEnum } from "~/src/models/methodEnum.ts"
@@ -48,6 +48,7 @@ const { doInitPage } = usePublish()
 const { query } = useRoute()
 const { kernelApi } = useSiyuanApi()
 const { doSinglePublish, doSingleDelete } = usePublish()
+const router = useRouter()
 
 // datas
 const params = reactive(route.params)
@@ -206,6 +207,17 @@ const initPage = async () => {
   }
 }
 
+const onBack = () => {
+  const path = `/publish/singlePublish`
+  logger.info("will go to =>", path)
+  const query = {
+    path: path,
+    query: {
+      id: id,
+    },
+  }
+  router.push(query)
+}
 onMounted(async () => {
   logger.info("获取到的ID为=>", id)
 
@@ -215,7 +227,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <back-page title="常规发布">
+  <back-page title="常规发布" @backEmit="onBack">
     <el-skeleton class="placeholder" v-if="!formData.isInit" :rows="5" animated />
     <div v-else id="batch-publish-index">
       <el-alert class="top-tip" :title="getTitle()" type="info" :closable="false" />

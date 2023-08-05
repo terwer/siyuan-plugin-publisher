@@ -48,8 +48,15 @@ const props = defineProps({
 // datas
 const showBack = ref(query.showBack === "true")
 
+// emits
+const emit = defineEmits(["backEmit"])
+
 const onBack = () => {
-  router.back()
+  if (emit) {
+    emit("backEmit")
+  } else {
+    router.back()
+  }
 }
 </script>
 
