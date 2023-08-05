@@ -52,8 +52,7 @@ const showBack = ref(query.showBack === "true")
 const emit = defineEmits(["backEmit"])
 
 const onBack = () => {
-  if (emit) {
-    emit("backEmit")
+  if (emit && emit("backEmit") as any) {
   } else {
     router.back()
   }

@@ -27,14 +27,6 @@
       "~/*": ["./*"]
     }
   },
-  "include": [
-    "*.ts",
-    "*.d.ts",
-    "**/**/*.ts",
-    "**/**/*.d.ts",
-    "*.vue",
-    "**/**/*.vue",
-    "src/picgo.d.ts"
-  ],
+  "include": ["*.ts", "*.vue", "*.d.ts", "**/**/*.ts", "**/**/*.d.ts", "**/**/*.vue", "custom.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

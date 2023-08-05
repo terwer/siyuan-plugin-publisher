@@ -24,13 +24,13 @@
  */
 
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { reactive } from "vue"
+import { reactive, toRaw } from "vue"
 import { SypConfig } from "~/syp.config.ts"
 import { JsonUtil, StrUtil } from "zhi-common"
 import { AppInstance } from "~/src/appInstance.ts"
 import Adaptors from "~/src/adaptors"
 import { Utils } from "~/src/utils/utils.ts"
-import { BlogAdaptor, Post } from "zhi-blog-api"
+import { BlogAdaptor, BlogConfig, PageTypeEnum, Post } from "zhi-blog-api"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
@@ -102,8 +102,11 @@ const usePublish = () => {
       singleFormData.isAdd = StrUtil.isEmptyString(singleFormData.postid)
       if (singleFormData.isAdd) {
         logger.info("文章未发布，准备发布")
+        logger.debug("before preHandlePost newPost, doc=>", toRaw(doc))
+        const post = preHandlePost(doc, singleFormData.cfg)
+        logger.debug("after preHandlePost newPost, doc=>", toRaw(post))
         // result 正常情况下就是 postid
-        const result = await api.newPost(doc)
+        const result = await api.newPost(post)
 
         // 写入postid到配置
         singleFormData.postid = result
@@ -115,8 +118,11 @@ const usePublish = () => {
         logger.info("new post=>", result)
       } else {
         logger.info("文章已发布，准备更新")
+        logger.debug("before preHandlePost editPost, doc=>", toRaw(doc))
+        const post = preHandlePost(doc, singleFormData.cfg)
+        logger.debug("after preHandlePost editPost, doc=>", toRaw(post))
         // result 正常情况下是 true
-        const result = await api.editPost(singleFormData.postid, doc)
+        const result = await api.editPost(singleFormData.postid, post)
         logger.info("edit post=>", result)
       }
 
@@ -242,11 +248,21 @@ const usePublish = () => {
     singleFormData.previewUrl = isAbsoluteUrl ? previewUrl : `${singleFormData.cfg?.home ?? ""}${previewUrl}`
   }
 
+  const preHandlePost = (doc: Post, cfg: BlogConfig): Post => {
+    const post = doc
+    // 发布格式
+    if (cfg.pageType == PageTypeEnum.Markdown) {
+      post.description = post.markdown
+    }
+    return post
+  }
+
   const assignValue = (title1: string, title2: string) => (title1.length > title2.length ? title1 : title2)
 
   const doInitPage = async (key: string, id: string, method: MethodEnum = MethodEnum.METHOD_ADD) => {
     // 思源笔记原始文章数据
     singleFormData.siyuanPost = await blogApi.getPost(id)
+    logger.debug("doInitPage init siyuanPost =>", toRaw(singleFormData.siyuanPost))
 
     // 加载配置
     singleFormData.setting = await getSetting()
@@ -281,6 +297,7 @@ const usePublish = () => {
       singleFormData.mergedPost = new Post()
       singleFormData.mergedPost.title = singleFormData.siyuanPost.title
       singleFormData.mergedPost.description = singleFormData.siyuanPost.description
+      singleFormData.mergedPost.markdown = singleFormData.siyuanPost.markdown
     } else {
       logger.info("Reading post from remote platform")
       if (StrUtil.isEmptyString(postid)) {
@@ -293,6 +310,7 @@ const usePublish = () => {
       singleFormData.mergedPost.title = assignValue(singleFormData.siyuanPost.title, singleFormData.platformPost.title)
       // 正文以思源笔记为准
       singleFormData.mergedPost.description = singleFormData.siyuanPost.description
+      singleFormData.mergedPost.markdown = singleFormData.siyuanPost.markdown
 
       // 更新预览链接
       await setPreviewUrl(api, postid)

@@ -81,7 +81,7 @@ export class BaseBlogApi extends BlogApi {
     url: string,
     headers: any[],
     params: any,
-    method: "GET" | "POST" | "PUT" | "DELETE" = "GET",
+    method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" = "GET",
     contentType: string = "application/json"
   ): Promise<any> {
     let body: any

@@ -56,20 +56,13 @@ class YuqueApiAdaptor extends BaseBlogApi {
   }
 
   public async newPost(post: Post, publish?: boolean): Promise<string> {
-    if (post.cate_slugs != null && post.cate_slugs.length > 0) {
-      const repo = post.cate_slugs[0]
-      return await this.addDoc(post.title, post.wp_slug, post.description, repo)
-    } else if (!StrUtil.isEmptyString(this.cfg.blogid)) {
-      // 确保最新的文章ID都包含了笔记本信息，防止以后文章出错
-      const repo = this.cfg.blogid
-      return await this.addDoc(post.title, post.wp_slug, post.description, repo)
-    } else {
-      return await this.addDoc(post.title, post.wp_slug, post.description)
-    }
+    // 确保最新的文章ID都包含了笔记本信息，防止以后文章出错
+    const repo = post.cate_slugs?.[0] ?? this.cfg.blogid
+    return await this.addDoc(post.title, post.wp_slug, post.description, repo)
   }
 
   public async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
-    const yuquePostidKey = this.getYuquePostKey(postid)
+    const yuquePostidKey = this.getYuquePostidKey(postid)
     return await this.updateDoc(
       yuquePostidKey.docId,
       post.title,
@@ -80,12 +73,12 @@ class YuqueApiAdaptor extends BaseBlogApi {
   }
 
   public async deletePost(postid: string): Promise<boolean> {
-    const yuquePostidKey = this.getYuquePostKey(postid)
+    const yuquePostidKey = this.getYuquePostidKey(postid)
     return await this.delDoc(yuquePostidKey.docId, yuquePostidKey.docRepo)
   }
 
   public async getPost(postid: string, useSlug?: boolean): Promise<Post> {
-    const yuquePostidKey = this.getYuquePostKey(postid)
+    const yuquePostidKey = this.getYuquePostidKey(postid)
 
     const yuqueDoc = await this.getDoc(yuquePostidKey.docId, yuquePostidKey.docRepo)
     this.logger.debug("yuqueDoc=>", yuqueDoc)
@@ -131,7 +124,7 @@ class YuqueApiAdaptor extends BaseBlogApi {
   public async getPreviewUrl(postid: string): Promise<string> {
     // 替换文章链接
     const purl = this.cfg.previewUrl ?? ""
-    const yuquePostidKey = this.getYuquePostKey(postid)
+    const yuquePostidKey = this.getYuquePostidKey(postid)
     const docId = yuquePostidKey.docId
     const repo = yuquePostidKey.docRepo ?? this.cfg.blogid ?? ""
     const postUrl = purl.replace("[postid]", docId).replace("[notebook]", repo)
@@ -226,7 +219,7 @@ class YuqueApiAdaptor extends BaseBlogApi {
    * @param postid
    * @private postid
    */
-  private getYuquePostKey(postid: string): any {
+  private getYuquePostidKey(postid: string): any {
     let docId
     let docRepo
     if (postid.indexOf("_") > 0) {
@@ -308,7 +301,7 @@ class YuqueApiAdaptor extends BaseBlogApi {
     this.logger.debug("向语雀请求数据，params =>", params)
 
     // 使用兼容的fetch调用并返回统一的JSON数据
-    const body = ObjectUtil.isEmptyObject(params) ? "" :  JSON.stringify(params);
+    const body = ObjectUtil.isEmptyObject(params) ? "" : JSON.stringify(params)
     const resJson = await this.proxyFetch(url, [headers], body, method, contentType)
     this.logger.debug("向语雀请求数据，resJson =>", resJson)
 

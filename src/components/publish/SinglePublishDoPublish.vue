@@ -80,27 +80,32 @@ const handlePublish = async () => {
 
     logger.info("单个常规发布开始")
     const processResult = await doSinglePublish(key, id, formData.mergedPost)
-
     logger.info("normal publish processResult =>", processResult)
     logger.info("单个常规发布结束")
 
-    // 刷新页面
-    // 如果是发布并且发布成功
-    if (formData.method === MethodEnum.METHOD_ADD) {
-      formData.method = MethodEnum.METHOD_EDIT
-      window.location.href = BrowserUtil.setUrlParameter(window.location.href, "method", formData.method)
-      // 因为hash的原因，需要再刷新一次
-      window.location.reload()
+    if (processResult.status) {
+      // 刷新页面
+      // 如果是发布并且发布成功
+      if (formData.method === MethodEnum.METHOD_ADD) {
+        formData.method = MethodEnum.METHOD_EDIT
+        window.location.href = BrowserUtil.setUrlParameter(window.location.href, "method", formData.method)
+        // 因为hash的原因，需要再刷新一次
+        window.location.reload()
+      } else {
+        // 需要刷新才能继续操作，防止重复提交
+        formData.isInit = false
+        await initPage()
+        formData.isInit = true
+      }
     } else {
-      // 需要刷新才能继续操作，防止重复提交
-      formData.isInit = false
-      await initPage()
-      formData.isInit = true
+      ElMessage.error(processResult.errMsg)
+      logger.error(processResult.errMsg)
     }
 
     formData.actionEnable = true
-  } catch (error) {
-    ElMessage.error(error.message)
+  } catch (e) {
+    ElMessage.error(e.message)
+    logger.error(e)
   } finally {
     formData.isPublishLoading = false
   }
@@ -130,22 +135,27 @@ const doDelete = async () => {
     formData.isDeleteLoading = true
     formData.actionEnable = false
 
-    await doSingleDelete(key, id)
+    const processResult = await doSingleDelete(key, id)
+    if (processResult.status) {
+      // 刷新页面
+      const platformName = getPlatformName()
+      const blogName = getBlogName()
+      ElMessage.success(`[${platformName} - ${blogName}] 文章删除成功`)
 
-    // 刷新页面
-    const platformName = getPlatformName()
-    const blogName = getBlogName()
-    ElMessage.success(`[${platformName} - ${blogName}] 文章删除成功`)
-
-    // 如果是发布并且发布成功
-    setTimeout(() => {
-      formData.method = MethodEnum.METHOD_ADD
-      window.location.href = BrowserUtil.setUrlParameter(window.location.href, "method", formData.method)
-      // 因为hash的原因，需要再刷新一次
-      window.location.reload()
-    }, 200)
-  } catch (error) {
-    ElMessage.error(error.message)
+      // 如果是发布并且发布成功
+      setTimeout(() => {
+        formData.method = MethodEnum.METHOD_ADD
+        window.location.href = BrowserUtil.setUrlParameter(window.location.href, "method", formData.method)
+        // 因为hash的原因，需要再刷新一次
+        window.location.reload()
+      }, 200)
+    } else {
+      ElMessage.error(processResult.errMsg)
+      logger.error(processResult.errMsg)
+    }
+  } catch (e) {
+    ElMessage.error(e.message)
+    logger.error(e)
   } finally {
     formData.isDeleteLoading = false
   }
@@ -218,6 +228,7 @@ const onBack = () => {
   }
   router.push(query)
 }
+
 onMounted(async () => {
   logger.info("获取到的ID为=>", id)
 
@@ -258,8 +269,9 @@ onMounted(async () => {
               <!--
              ----------------------------------------------------------------------
              -->
-              <!-- 标签 -->
+              <!-- 标签
               <publish-tags />
+              -->
 
               <!-- 发布 -->
               <el-form-item label-width="100px" class="form-action">
