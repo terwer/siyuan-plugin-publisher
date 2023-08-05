@@ -63,7 +63,7 @@ class NotionApiAdaptor extends BaseBlogApi {
   }
 
   public async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
-    return await super.editPost(postid, post)
+    return await this.updatePage(postid, post.title, post.description)
   }
 
   public async deletePost(postid: string): Promise<boolean> {
@@ -72,7 +72,14 @@ class NotionApiAdaptor extends BaseBlogApi {
   }
 
   public async getPost(postid: string, useSlug?: boolean): Promise<Post> {
-    return await super.getPost(postid)
+    const notionPostidKey = this.getNotionPostidKey(postid)
+    const notionPage = await this.getPage(notionPostidKey.pageId)
+    this.logger.debug("notionPage=>", notionPage)
+    const commonPost = new Post()
+    const titles = notionPage?.properties?.title?.title ?? []
+    commonPost.title = titles.map((x: any) => x.plain_text).join("")
+    commonPost.description = "暂不支持Notion正文"
+    return commonPost
   }
 
   public async getCategories(): Promise<CategoryInfo[]> {
@@ -155,7 +162,7 @@ class NotionApiAdaptor extends BaseBlogApi {
 
     // 保存url，否则后面打不开
     const url = resp.url
-    const endUrl = url.split("/").slice(-1)[0];
+    const endUrl = url.split("/").slice(-1)[0]
     return `${resp.id}_${endUrl}`
   }
 
@@ -170,6 +177,24 @@ class NotionApiAdaptor extends BaseBlogApi {
       throw new Error("Notion delete page error")
     }
     return resp.archived
+  }
+
+  private async updatePage(pageId: string, title: string, markdownText: string) {
+    let flag = true
+    if (flag) {
+      throw new Error("Notion是基于块的API，暂时不支持更新，如需更新，请删除之后重新发布")
+    }
+    return false
+  }
+
+  private async getPage(pageId: string): Promise<any> {
+    this.logger.debug("before getPage, pageId=>", pageId)
+    const url = `/pages/${pageId}`
+    const resp = await this.notionRequest(url, {}, "GET")
+    if (resp.object !== "page") {
+      throw new Error("Notion get page error")
+    }
+    return resp
   }
 
   /**
