@@ -349,7 +349,8 @@ export default {
   "setting.yuque.previewUrl.tip": "语雀平台的文章预览规则，通常是：/[notebook]/[postid]",
 
   "setting.notion.home.tip": "Notion平台首页，通常固定是：https://www.notion.so/",
-  "setting.notion.password.tip": "Notion平台的Token，请按照链接点击获取，需要勾选【Read content】、【Update content】、【Insert content】三个权限",
+  "setting.notion.password.tip":
+    "Notion平台的Token，请按照链接点击获取，需要勾选【Read content】、【Update content】、【Insert content】三个权限",
   "setting.notion.apiurl.tip": "Notion平台的API地址，通常固定是：https://api.notion.com/v1",
   "setting.notion.previewUrl.tip": "Notion平台的文章预览规则，通常是：/[postid]",
 
@@ -520,5 +521,7 @@ export default {
   "setting.upgrade.syp.doTip4": "没有版本更新，跳过升级",
   "main.publish.start": "开始同步",
   "main.publish.remove": "批量删除",
-  "setting.blog.knowledge.space":"知识空间/知识库"
+  "setting.blog.knowledge.space": "知识空间/知识库",
+  "main.data.empty": "暂无数据",
+  "enableKnowledgeSpace.Tips": "验证通过之后，将列出可用的 [[knowledge-space-title]] 列表，您可以根据需要修改默认 [[knowledge-space-title]] 并保存",
 }

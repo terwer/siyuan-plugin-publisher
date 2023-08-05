@@ -533,4 +533,6 @@ export default {
   "main.publish.start": "Start syncing",
   "main.publish.remove": "Remove",
   "setting.blog.knowledge.space": "Knowledge space/Knowledge base",
+  "main.data.empty": "No data",
+  "enableKnowledgeSpace.Tips": "After validation, a list of available knowledge spaces is listed, and you can modify the default knowledge spaces as needed and save them",
 }

@@ -84,7 +84,7 @@ export class BaseBlogApi extends BlogApi {
     url: string,
     headers: any[],
     params: any = {},
-    method: "GET" | "POST" = "GET",
+    method: "GET" | "POST" | "PUT" | "DELETE" = "GET",
     contentType: string = "application/json"
   ): Promise<any> {
     if (this.isInChromeExtension) {

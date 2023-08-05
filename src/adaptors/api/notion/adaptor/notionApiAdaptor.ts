@@ -41,6 +41,10 @@ class NotionApiAdaptor extends BaseBlogApi {
     const result: UserBlog[] = []
 
     // https://developers.notion.com/reference/post-search
+    const headers = {
+      Authorization: `Bearer ${this.cfg.password}`,
+      "Notion-Version": "2022-06-28",
+    }
     const params = {
       page_size: 10,
       filter: {
@@ -48,17 +52,13 @@ class NotionApiAdaptor extends BaseBlogApi {
         property: "object",
       },
     }
-    const headers = {
-      Authorization: `Bearer ${this.cfg.password}`,
-      "Notion-Version": "2022-06-28",
-    }
     const searchResp = await this.proxyFetch("/search", [headers], params, "POST", "application/json")
-    this.logger.debug("notion searchResp results=>", searchResp)
-    if (searchResp.status === 401) {
-      throw new Error(searchResp.message)
+    this.logger.debug("notion searchResp=>", searchResp)
+    if (searchResp?.status === 401) {
+      throw new Error(searchResp?.message)
     }
     const pages = searchResp.results as any
-    this.logger.debug("notion database results=>", pages)
+    this.logger.debug("notion pages=>", pages)
 
     // https://stackoverflow.com/a/75537092/4037224
     if (pages.length === 0) {

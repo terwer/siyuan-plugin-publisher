@@ -231,6 +231,13 @@ onMounted(async () => {
   <el-skeleton class="placeholder" v-if="!formData.isInit" :rows="5" animated />
   <el-form v-else label-width="120px">
     <el-alert :closable="false" :title="formData.settingTips" class="top-tip" type="info" />
+    <el-alert
+      v-if="props.cfg?.enableKnowledgeSpace"
+      :closable="false"
+      :title="t('enableKnowledgeSpace.Tips').replace(/\[knowledge-space-title\]/g, props.cfg?.knowledgeSpaceTitle)"
+      class="top-tip"
+      type="info"
+    />
     <!-- 首页 -->
     <el-form-item :label="t('setting.common.home')">
       <el-input v-model="formData.cfg.home" :placeholder="props.cfg?.placeholder.homePlaceholder" />
@@ -287,6 +294,7 @@ onMounted(async () => {
         v-model="formData.cfg.blogid"
         class="m-2"
         :placeholder="t('main.opt.select')"
+        :no-data-text="t('main.data.empty')"
         @change="handleKeSpaceChange"
       >
         <el-option v-for="item in formData.kwSpaces" :key="item.value" :label="item.label" :value="item.value" />
