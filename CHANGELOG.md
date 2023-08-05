@@ -1,5 +1,35 @@
 # Changelog
 
+## [1.3.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.2.2...v1.3.0) (2023-08-05)
+
+
+### Features
+
+* 升级fetch组件 ([e244c5f](https://github.com/terwer/siyuan-plugin-publisher/commit/e244c5f05d0f8bf952e6dee069a45fcd2d9ced7f))
+* 升级fetch组件 ([48d808c](https://github.com/terwer/siyuan-plugin-publisher/commit/48d808c8d9260cdc7f419f80baa22f7adb19fb4f))
+* 常规发布支持文章比对 ([4d34248](https://github.com/terwer/siyuan-plugin-publisher/commit/4d34248425bbd3282a4bccb3902cc329125e3ca9))
+* 常规发布显示预览链接 ([b770962](https://github.com/terwer/siyuan-plugin-publisher/commit/b770962fbba6295f72235bf60aab8c6b1a9c8ea0))
+* 常规发布显示预览链接 ([c2eceaa](https://github.com/terwer/siyuan-plugin-publisher/commit/c2eceaa5372ee57b65661c9ac6fc581ed9054148))
+* 支持 Notion 发布新页面、删除页面 ([f9c6ef0](https://github.com/terwer/siyuan-plugin-publisher/commit/f9c6ef00979368995ce6c18ea9d24ca87c8fc0df))
+* 支持获取Notion标题 ([ab6db18](https://github.com/terwer/siyuan-plugin-publisher/commit/ab6db18317635124a8b7eb8c194ef41b206724ee))
+* 新增 Notion 支持 ([e97a7ab](https://github.com/terwer/siyuan-plugin-publisher/commit/e97a7ab067597b9caaf7893d31cf827cae060ed2))
+* 新增 Notion 支持 - 使用思源 API 正向代理 ([4f1e53a](https://github.com/terwer/siyuan-plugin-publisher/commit/4f1e53a934ac49498747fcc588c1318f598de8ca))
+* 新增支持细粒度配置的常规发布 ([691670e](https://github.com/terwer/siyuan-plugin-publisher/commit/691670e4d32071aa934d68d7f56ab6c1bd652ef3))
+* 新增支持细粒度配置的常规发布 ([0c8eedc](https://github.com/terwer/siyuan-plugin-publisher/commit/0c8eedc62f3adca871865b6a5e95ee2f05c71c23))
+* 新增支持细粒度配置的常规发布-初始化 ([e7be6b0](https://github.com/terwer/siyuan-plugin-publisher/commit/e7be6b09499b81debcb3db5e5e60ddf9a262e22b))
+* 新增支持细粒度配置的常规发布-发布状态 ([a0a1b64](https://github.com/terwer/siyuan-plugin-publisher/commit/a0a1b64b5172baf903cff4a3df00a8bde455090d))
+* 新增支持细粒度配置的常规发布-只能选择启用平台 ([119038e](https://github.com/terwer/siyuan-plugin-publisher/commit/119038e6dbe05be81dbd012f72453783e5d77e74))
+* 新增支持细粒度配置的常规发布-平台选择 ([2c8c47c](https://github.com/terwer/siyuan-plugin-publisher/commit/2c8c47cc8a3637255b9836a382d0194b7923db37))
+* 新增支持细粒度配置的常规发布-平台选择 ([0d95d33](https://github.com/terwer/siyuan-plugin-publisher/commit/0d95d334c25563b4420df5841f668ad782cc1472))
+* 编辑平台时禁止修改授权方式 ([7dbc4a0](https://github.com/terwer/siyuan-plugin-publisher/commit/7dbc4a0d3955da986f23ca2f54973a51fc577490))
+* 语雀使用思源 API 正向代理 ([f7f283f](https://github.com/terwer/siyuan-plugin-publisher/commit/f7f283fe0292e21fbc3127541d8892086ae211b2))
+* 语雀支持更改默认知识库 ([db02695](https://github.com/terwer/siyuan-plugin-publisher/commit/db0269571f68ac91097c540a9d546d75717b0eb0))
+
+
+### Bug Fixes
+
+* 修复常规发布返回问题 ([b7adffa](https://github.com/terwer/siyuan-plugin-publisher/commit/b7adffabbfce282f3fba57a3dceaeb21fbf59195))
+
 ## [1.2.2](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.2.1...v1.2.2) (2023-08-02)
 ### Bug Fixes
 * 修复重启可能出现的图标不加载问题 ([aab8d7f](https://github.com/terwer/siyuan-plugin-publisher/commit/aab8d7f83d254eb799462758de49da890724ee19))
