@@ -24,7 +24,7 @@
   -->
 
 <script setup lang="ts">
-import { CommonGithubConfig } from "~/src/adaptors/api/base/github/config/CommonGithubConfig.ts"
+import { CommonGithubConfig } from "~/src/adaptors/api/base/github/CommonGithubConfig.ts"
 
 // props
 const props = defineProps({

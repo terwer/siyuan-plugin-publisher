@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { CommonGithubConfig } from "~/src/adaptors/api/base/github/config/CommonGithubConfig.ts"
+import { CommonGithubConfig } from "~/src/adaptors/api/base/github/CommonGithubConfig.ts"
 import { PageTypeEnum, PasswordType } from "zhi-blog-api"
 
 /**
