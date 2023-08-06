@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.3.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.3.0...v1.3.1) (2023-08-06)
+
+
+### Bug Fixes
+
+* 修复可能出现的postid不存在的问题 ([b3d2091](https://github.com/terwer/siyuan-plugin-publisher/commit/b3d209102b2a92d3ac5a61680b7db8db709489f7))
+* 修复可能出现的postid不存在的问题 ([51f63b4](https://github.com/terwer/siyuan-plugin-publisher/commit/51f63b4a2ae6561311084dce617514acd24cca78))
+* 修复批量分发删除异常问题 ([602c26a](https://github.com/terwer/siyuan-plugin-publisher/commit/602c26a123f8893d3c7af63e2afa2a27f1c4a7b1))
+* 修复批量分发报错问题 ([55ead01](https://github.com/terwer/siyuan-plugin-publisher/commit/55ead01c9b5abf56c46ec3072e1e35ba42763d9b))
+
 ## [1.3.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.2.2...v1.3.0) (2023-08-05)
 ### Features
 * 升级fetch组件 ([48d808c](https://github.com/terwer/siyuan-plugin-publisher/commit/48d808c8d9260cdc7f419f80baa22f7adb19fb4f))
