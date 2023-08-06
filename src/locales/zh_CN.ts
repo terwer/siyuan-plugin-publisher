@@ -142,7 +142,7 @@ export default {
   "setting.blog.type.github.default.path.tip":
     "存储目录（相对于仓库根目录的相对路径，默认所有文章都发布在这里），例如：docs/_posts",
   "setting.blog.type.github.msg": "提交信息",
-  "setting.blog.type.github.msg.tip": "提交信息，例如：auto published by sy-post-publisher",
+  "setting.blog.type.github.msg.tip": "提交信息，例如：auto published by siyuan-publish-publisher",
   "setting.blog.type.github.author": "作者",
   "setting.blog.type.github.author.tip": "作者，例如：terwer",
   "setting.blog.type.github.email": "邮箱",
@@ -153,11 +153,11 @@ export default {
   "setting.blog.password": "密码/Token",
   "setting.blog.apiurl": "API地址",
   "setting.blog.github.apiurl.tip": "Github 的 REST API 地址，通常是：https://api.github.com",
+  "setting.blog.previewPostUrl": "文章预览规则",
+  "setting.blog.previewPostUrl.tip":
+    "预览规则（占位符：[yyyy] [MM] [dd] [postid]），例如：/post/[postid].html 或者 /[cats]/[yyyy]/[mm]/[dd]/[postid].html",
   "setting.blog.previewUrl": "预览规则",
   "setting.blog.previewUrl.tip":
-    "预览规则（占位符：[yyyy] [MM] [dd] [postid]），例如：/post/[postid].html 或者 /[cats]/[yyyy]/[mm]/[dd]/[postid].html",
-  "setting.blog.previewMdUrl": "MD预览规则",
-  "setting.blog.previewMdUrl.tip":
     "MD文件预览规则（占位符：[user] [repo] [branch] [docpath]），通常是：/[user]/[repo]/blob/[branch]/[docpath]",
   "setting.blog.mdFilenameRule": "文件规则",
   "setting.blog.mdFilenameRule.tip":
