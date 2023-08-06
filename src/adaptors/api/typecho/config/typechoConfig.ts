@@ -49,7 +49,7 @@ class TypechoConfig extends MetaweblogConfig {
     this.home = home
     this.apiUrl = apiUrl
     this.previewUrl = "/index.php/archives/[postid]"
-    this.pageType = PageTypeEnum.Markdown
+    this.pageType = PageTypeEnum.Html
   }
 }
 

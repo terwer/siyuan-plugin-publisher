@@ -119,14 +119,13 @@ class MetaweblogBlogApi extends BlogApi {
 
   /**
    * 新建文章
-   * @param post
-   * @param publish
+   *
+   * @param post - 文章
+   * @param publish - 可选，不传递默认是发布，传递false才是草稿
    */
-  public async newPost(post: Post, publish: boolean = true): Promise<string> {
-    // 草稿
-    if (!publish) {
-      post.post_status = PostStatusEnum.PostStatusEnum_Draft
-    }
+  public async newPost(post: Post, publish?: boolean): Promise<string> {
+    // 不传递默认是发布，传递false才是草稿
+    post.post_status = publish === false ? PostStatusEnum.PostStatusEnum_Draft : PostStatusEnum.PostStatusEnum_Publish
 
     const postStruct = this.createPostStruct(post)
     this.logger.debug("postStruct=>", postStruct)
@@ -144,11 +143,16 @@ class MetaweblogBlogApi extends BlogApi {
     return ret
   }
 
-  public async editPost(postid: string, post: Post, publish: boolean = true): Promise<boolean> {
-    // 草稿
-    if (!publish) {
-      post.post_status = PostStatusEnum.PostStatusEnum_Draft
-    }
+  /**
+   * 编辑文章
+   *
+   * @param postid - 文章ID
+   * @param post - 文章
+   * @param publish - 可选，不传递默认是发布，传递false才是草稿
+   */
+  public async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
+    // 不传递默认是发布，传递false才是草稿
+    post.post_status = publish === false ? PostStatusEnum.PostStatusEnum_Draft : PostStatusEnum.PostStatusEnum_Publish
 
     const postStruct = this.createPostStruct(post)
     this.logger.debug("postStruct=>", postStruct)

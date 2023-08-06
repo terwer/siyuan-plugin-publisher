@@ -36,7 +36,7 @@ If you still can't use this step after this step, [New issue](https://github.com
 - Fixed the issue that icons did not load when rebooting
 - Compatible with servo browsers
 - Urgently fix the error problem that may be caused by the first opening
-- Support for Yuque, Cnblogs, Metaweblog, TypeEcho, WordPress
+- Support for Yuque, Cnblogs, Metaweblog, Typecho, WordPress
 
 ## Compatibility of Origin notes
 
