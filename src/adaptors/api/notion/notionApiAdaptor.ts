@@ -25,7 +25,7 @@
 
 import { CategoryInfo, Post, UserBlog } from "zhi-blog-api"
 import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
-import { NotionConfig } from "~/src/adaptors/api/notion/config/notionConfig.ts"
+import { NotionConfig } from "~/src/adaptors/api/notion/notionConfig.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { ObjectUtil, StrUtil } from "zhi-common"
 import { NotionMarkdownConverter } from "zhi-notion-markdown"

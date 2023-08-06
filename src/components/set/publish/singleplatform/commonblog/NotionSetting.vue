@@ -27,8 +27,8 @@
 import CommonBlogSetting from "~/src/components/set/publish/singleplatform/base/CommonBlogSetting.vue"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import {useNotionApi} from "~/src/adaptors/api/notion/useNotionApi.ts";
-import {NotionConfig} from "~/src/adaptors/api/notion/config/notionConfig.ts";
-import {NotionPlaceHolder} from "~/src/adaptors/api/notion/config/notionPlaceHolder.ts";
+import {NotionConfig} from "~/src/adaptors/api/notion/notionConfig.ts";
+import {NotionPlaceHolder} from "~/src/adaptors/api/notion/notionPlaceHolder.ts";
 
 const props = defineProps({
   apiType: {

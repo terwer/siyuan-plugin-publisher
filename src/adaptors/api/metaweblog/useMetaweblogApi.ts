@@ -30,7 +30,7 @@ import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { Utils } from "~/src/utils/utils.ts"
 import { getDynPostidKey } from "~/src/platform/dynamicConfig.ts"
-import { MetaweblogApiAdaptor } from "~/src/adaptors/api/metaweblog/adaptor/metaweblogApiAdaptor.ts"
+import { MetaweblogApiAdaptor } from "~/src/adaptors/api/metaweblog/metaweblogApiAdaptor.ts"
 
 /**
  * 使用Metaweblog API的自定义hook
