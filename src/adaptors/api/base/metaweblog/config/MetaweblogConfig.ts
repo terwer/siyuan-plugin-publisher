@@ -104,7 +104,7 @@ export class MetaweblogConfig extends BlogConfig {
     this.blogName = ""
     this.posidKey = ""
     this.previewUrl = ""
-    this.pageType = PageTypeEnum.Markdown
+    this.pageType = PageTypeEnum.Html
     this.placeholder = new MetaweblogPlaceholder()
     this.middlewareUrl = middlewareUrl
   }
