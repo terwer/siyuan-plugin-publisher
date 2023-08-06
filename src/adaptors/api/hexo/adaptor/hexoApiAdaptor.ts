@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { CommonGithubApiAdaptor } from "~/src/adaptors/api/base/github/adaptor/CommonGithubApiAdaptor.ts"
+import { CommonGithubApiAdaptor } from "~/src/adaptors/api/base/github/CommonGithubApiAdaptor.ts"
 
 /**
  * Hexo API 适配器
