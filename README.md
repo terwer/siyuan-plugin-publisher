@@ -26,6 +26,7 @@ If you still can't use this step after this step, [New issue](https://github.com
 
 ## Recent critical updates and bug fixes
 
+- Fixed the batch distribution error issue
 - Notion and Yuque platforms use the forward agent of Siyuan Note to improve performance
 - Regular publishing supports article comparison
 - Added notion support
@@ -36,18 +37,6 @@ If you still can't use this step after this step, [New issue](https://github.com
 - Compatible with servo browsers
 - Urgently fix the error problem that may be caused by the first opening
 - Support for Yuque, Cnblogs, Metaweblog, TypeEcho, WordPress
-- Experience optimization to prevent duplicate submissions
-- Fixed missing general release parameters
-- Fixed an issue where menu loading order issues may not be displayed
-- Multi-platform distribution needs to consider synchronizing and updating Siyuan notes
-- Fixed an issue where there could be an error in editing articles
-- Fixed the wrong issue of Lark Preview link
-- Added extended menu
-- Warehouse synchronization
-- Plug-in widget source code merging
-- Fixed missing plugin package
-- Fixed the error issue of the Yuque client
-- Added Vercel and NGINX build support
 
 ## Compatibility of Origin notes
 

@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.3.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.3.0...v1.3.1) (2023-08-06)
+### Bug Fixes
+* 修复可能出现的postid不存在的问题 ([51f63b4](https://github.com/terwer/siyuan-plugin-publisher/commit/51f63b4a2ae6561311084dce617514acd24cca78))
+* 修复批量分发删除异常问题 ([602c26a](https://github.com/terwer/siyuan-plugin-publisher/commit/602c26a123f8893d3c7af63e2afa2a27f1c4a7b1))
+* 修复批量分发报错问题 ([55ead01](https://github.com/terwer/siyuan-plugin-publisher/commit/55ead01c9b5abf56c46ec3072e1e35ba42763d9b))
 ## [1.3.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.2.2...v1.3.0) (2023-08-05)
 ### Features
 * 升级fetch组件 ([48d808c](https://github.com/terwer/siyuan-plugin-publisher/commit/48d808c8d9260cdc7f419f80baa22f7adb19fb4f))
@@ -17,7 +22,6 @@
 * 编辑平台时禁止修改授权方式 ([7dbc4a0](https://github.com/terwer/siyuan-plugin-publisher/commit/7dbc4a0d3955da986f23ca2f54973a51fc577490))
 * 语雀使用思源 api 正向代理 ([f7f283f](https://github.com/terwer/siyuan-plugin-publisher/commit/f7f283fe0292e21fbc3127541d8892086ae211b2))
 * 语雀支持更改默认知识库 ([db02695](https://github.com/terwer/siyuan-plugin-publisher/commit/db0269571f68ac91097c540a9d546d75717b0eb0))
-### Bug Fixes
 * 修复常规发布返回问题 ([b7adffa](https://github.com/terwer/siyuan-plugin-publisher/commit/b7adffabbfce282f3fba57a3dceaeb21fbf59195))
 ## [1.2.2](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.2.1...v1.2.2) (2023-08-02)
 * 修复重启可能出现的图标不加载问题 ([aab8d7f](https://github.com/terwer/siyuan-plugin-publisher/commit/aab8d7f83d254eb799462758de49da890724ee19))
