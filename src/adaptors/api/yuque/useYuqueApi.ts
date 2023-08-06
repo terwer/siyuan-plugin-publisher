@@ -29,7 +29,7 @@ import { Utils } from "~/src/utils/utils.ts"
 import { YuqueConfig } from "~/src/adaptors/api/yuque/yuqueConfig.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import {JsonUtil, ObjectUtil, StrUtil} from "zhi-common"
-import { getDynPostidKey } from "~/src/platform/dynamicConfig.ts"
+import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { YuqueApiAdaptor } from "~/src/adaptors/api/yuque/yuqueApiAdaptor.ts"
 
 const useYuqueApi = async (key: string, newCfg?: YuqueConfig) => {

@@ -34,7 +34,7 @@ import {
   DynamicJsonCfg,
   getDynCfgByKey,
   setDynamicJsonCfg,
-} from "~/src/platform/dynamicConfig.ts"
+} from "~/src/platforms/dynamicConfig.ts"
 import { SypConfig } from "~/syp.config.ts"
 import { CommonblogConfig } from "~/src/adaptors/api/base/CommonblogConfig.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"

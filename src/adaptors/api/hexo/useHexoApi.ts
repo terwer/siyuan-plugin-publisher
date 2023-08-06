@@ -28,7 +28,7 @@ import { AppInstance } from "~/src/appInstance.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { Utils } from "~/src/utils/utils.ts"
-import { getDynPostidKey } from "~/src/platform/dynamicConfig.ts"
+import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { HexoConfig } from "~/src/adaptors/api/hexo/hexoConfig.ts"
 import { HexoApiAdaptor } from "~/src/adaptors/api/hexo/hexoApiAdaptor.ts"
 

@@ -95,7 +95,8 @@ export class MetaweblogConfig extends CommonblogConfig {
   public showTokenTip = false
 
   constructor(home: string, apiUrl: string, username: string, password: string, middlewareUrl?: string) {
-    super()
+    super(home, apiUrl, username, password, middlewareUrl)
+
     this.home = home
     this.apiUrl = apiUrl
     this.username = username

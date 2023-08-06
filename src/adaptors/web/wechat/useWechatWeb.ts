@@ -29,7 +29,7 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { Utils } from "~/src/utils/utils.ts"
-import { getDynPostidKey } from "~/src/platform/dynamicConfig.ts"
+import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { WechatWebAdaptor } from "~/src/adaptors/web/wechat/wechatWebAdaptor.ts"
 
 /**

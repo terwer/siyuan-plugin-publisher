@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { DynamicConfig, PlatformType } from "~/src/platform/dynamicConfig.ts"
+import { DynamicConfig, PlatformType } from "~/src/platforms/dynamicConfig.ts"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { pre } from "~/src/utils/import/pre.ts"
 

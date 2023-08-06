@@ -24,7 +24,7 @@
   -->
 
 <script setup lang="ts">
-import { DynamicConfig, PlatformType } from "~/src/platform/dynamicConfig.ts"
+import { DynamicConfig, PlatformType } from "~/src/platforms/dynamicConfig.ts"
 import { useRoute, useRouter } from "vue-router"
 import BackPage from "~/src/components/common/BackPage.vue"
 import { reactive } from "vue"

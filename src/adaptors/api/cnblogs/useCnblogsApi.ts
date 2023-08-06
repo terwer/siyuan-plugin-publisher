@@ -29,8 +29,8 @@ import { CnblogsConfig } from "~/src/adaptors/api/cnblogs/cnblogsConfig.ts"
 import { CnblogsApiAdaptor } from "~/src/adaptors/api/cnblogs/cnblogsApiAdaptor.ts"
 import { AppInstance } from "~/src/appInstance.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
-import {JsonUtil, ObjectUtil, StrUtil} from "zhi-common"
-import { getDynPostidKey } from "~/src/platform/dynamicConfig.ts"
+import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
+import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 
 /**
  * 使用Cnblogs API的自定义hook

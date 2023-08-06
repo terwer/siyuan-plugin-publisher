@@ -36,7 +36,7 @@ import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { pre } from "~/src/utils/import/pre.ts"
 import { MethodEnum } from "~/src/models/methodEnum.ts"
-import { DynamicConfig, DynamicJsonCfg, getDynCfgByKey } from "~/src/platform/dynamicConfig.ts"
+import { DynamicConfig, DynamicJsonCfg, getDynCfgByKey } from "~/src/platforms/dynamicConfig.ts"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
 
 /**
