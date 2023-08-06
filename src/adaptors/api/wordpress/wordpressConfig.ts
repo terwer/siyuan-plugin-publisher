@@ -50,6 +50,8 @@ class WordpressConfig extends MetaweblogConfig {
     this.apiUrl = apiUrl
     this.previewUrl = "/?p=[postid]"
     this.pageType = PageTypeEnum.Html
+    this.usernameEnabled = true
+    this.showTokenTip = false
   }
 }
 

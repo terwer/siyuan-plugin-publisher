@@ -25,7 +25,7 @@
 
 <script lang="ts" setup>
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import MetaweblogSetting from "~/src/components/set/publish/singleplatform/base/platform/MetaweblogSetting.vue"
+import MetaweblogSetting from "~/src/components/set/publish/singleplatform/base/impl/MetaweblogSetting.vue"
 import { useWordpressApi } from "~/src/adaptors/api/wordpress/useWordpressApi.ts"
 import { WordpressConfig } from "~/src/adaptors/api/wordpress/wordpressConfig.ts"
 import { WordpressPlaceholder } from "~/src/adaptors/api/wordpress/wordpressPlaceholder.ts"
@@ -60,6 +60,8 @@ wpPlaceholder.passwordPlaceholder = t("setting.wordpress.password.tip")
 wpPlaceholder.apiUrlPlaceholder = t("setting.wordpress.apiUrl.tip")
 wpPlaceholder.previewUrlPlaceholder = t("setting.wordpress.previewUrl.tip")
 wpCfg.placeholder = wpPlaceholder
+wpCfg.usernameEnabled = true
+wpCfg.showTokenTip = false
 </script>
 
 <template>

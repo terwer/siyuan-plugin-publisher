@@ -23,8 +23,8 @@
  * questions.
  */
 
-import {PageTypeEnum} from "zhi-blog-api"
-import {MetaweblogConfig} from "~/src/adaptors/api/base/metaweblog/MetaweblogConfig.ts"
+import { PageTypeEnum, PasswordType } from "zhi-blog-api"
+import { MetaweblogConfig } from "~/src/adaptors/api/base/metaweblog/MetaweblogConfig.ts"
 
 /**
  * 博客园配置
@@ -47,6 +47,8 @@ class CnblogsConfig extends MetaweblogConfig {
     this.tokenSettingUrl = "https://i.cnblogs.com/settings"
     this.previewUrl = "/p/[postid].html"
     this.pageType = PageTypeEnum.Markdown
+    this.usernameEnabled = true
+    this.passwordType = PasswordType.PasswordType_Token
     this.showTokenTip = true
   }
 }

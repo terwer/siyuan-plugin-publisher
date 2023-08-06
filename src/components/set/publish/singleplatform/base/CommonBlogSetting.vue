@@ -29,12 +29,7 @@ import { AppInstance } from "~/src/appInstance.ts"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { onMounted, reactive, ref } from "vue"
-import {
-  DynamicConfig,
-  DynamicJsonCfg,
-  getDynCfgByKey,
-  setDynamicJsonCfg,
-} from "~/src/platforms/dynamicConfig.ts"
+import { DynamicConfig, DynamicJsonCfg, getDynCfgByKey, setDynamicJsonCfg } from "~/src/platforms/dynamicConfig.ts"
 import { SypConfig } from "~/syp.config.ts"
 import { CommonblogConfig } from "~/src/adaptors/api/base/CommonblogConfig.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
@@ -66,6 +61,15 @@ const props = defineProps({
   },
 })
 
+// emits
+const emit = defineEmits(["onHomeChange"])
+const handleHomeChange = (value: string | number): void => {
+  if (emit) {
+    emit("onHomeChange", value, formData.cfg)
+  }
+}
+
+// methods
 const getSettingTips = (bid?: string) => {
   const apiTypeInfo = t("setting.blog.platform.support.common") + props.apiType + " "
   let blogName = formData.cfg.blogName
@@ -79,6 +83,7 @@ const getSettingTips = (bid?: string) => {
   return apiTypeInfo + blogName
 }
 
+// datas
 const isLoading = ref(false)
 const formData = reactive({
   cfg: {} as CommonblogConfig,
@@ -93,6 +98,7 @@ const formData = reactive({
   isInit: false,
 })
 
+// methods
 const valiConf = async () => {
   isLoading.value = true
 
@@ -170,6 +176,7 @@ const handleKeSpaceChange = (val: any) => {
   formData.settingTips = getSettingTips(val)
 }
 
+// init methods
 const initKwSpaces = async () => {
   try {
     const commonblogApiAdaptor = await Adaptors.getAdaptor(props.apiType, formData.cfg as any)
@@ -219,6 +226,7 @@ const initConf = async () => {
   }
 }
 
+// lifecycles
 onMounted(async () => {
   // 初始化
   await initConf()
@@ -240,7 +248,11 @@ onMounted(async () => {
     />
     <!-- 首页 -->
     <el-form-item :label="t('setting.common.home')">
-      <el-input v-model="formData.cfg.home" :placeholder="props.cfg?.placeholder.homePlaceholder" />
+      <el-input
+        v-model="formData.cfg.home"
+        :placeholder="props.cfg?.placeholder.homePlaceholder"
+        @input="handleHomeChange"
+      />
     </el-form-item>
     <!-- API 地址 -->
     <el-form-item :label="t('setting.common.apiurl')">
@@ -261,7 +273,7 @@ onMounted(async () => {
         show-password
         :placeholder="props.cfg.placeholder.passwordPlaceholder"
       />
-      <a :href="props.cfg.tokenSettingUrl" target="_blank"
+      <a v-if="props.cfg.showTokenTip" :href="props.cfg.tokenSettingUrl" target="_blank"
         >{{ t("setting.common.username.gen") }}：{{ props.cfg.tokenSettingUrl }}</a
       >
     </el-form-item>
@@ -273,8 +285,8 @@ onMounted(async () => {
         show-password
         :placeholder="props.cfg.placeholder.passwordPlaceholder"
       />
-      <a :href="props.cfg.tokenSettingUrl" target="_blank"
-        >{{ t("setting.common.token.gen") }}：{{ props.cfg.tokenSettingUrl }}</a
+      <a v-if="props.cfg.showTokenTip" :href="props.cfg.tokenSettingUrl" target="_blank"
+        >{{ t("setting.common.token.gen") }}：{{ props.cfg.tokenSettingUrl }}333</a
       >
     </el-form-item>
     <!-- 预览地址 -->

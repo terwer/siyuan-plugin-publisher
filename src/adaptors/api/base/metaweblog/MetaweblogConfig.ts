@@ -108,6 +108,8 @@ export class MetaweblogConfig extends CommonblogConfig {
     this.previewUrl = ""
     this.pageType = PageTypeEnum.Html
     this.placeholder = new MetaweblogPlaceholder()
+    this.usernameEnabled = true
+    this.showTokenTip = false
     this.middlewareUrl = middlewareUrl
   }
 }

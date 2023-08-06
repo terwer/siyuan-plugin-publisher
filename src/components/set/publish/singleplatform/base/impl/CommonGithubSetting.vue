@@ -33,7 +33,8 @@ const props = defineProps({
     default: "",
   },
   cfg: {
-    type: CommonGithubConfig,
+    // 必须继承CommonGithubConfig
+    type: Object,
     default: null,
   },
 })
