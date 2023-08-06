@@ -125,12 +125,7 @@ class MetaweblogBlogApi extends BlogApi {
    */
   public async newPost(post: Post, publish?: boolean): Promise<string> {
     // 不传递默认是发布，传递false才是草稿
-    publish = publish ?? true
-
-    // 草稿
-    if (!publish) {
-      post.post_status = PostStatusEnum.PostStatusEnum_Draft
-    }
+    post.post_status = publish === false ? PostStatusEnum.PostStatusEnum_Draft : PostStatusEnum.PostStatusEnum_Publish
 
     const postStruct = this.createPostStruct(post)
     this.logger.debug("postStruct=>", postStruct)
@@ -157,12 +152,7 @@ class MetaweblogBlogApi extends BlogApi {
    */
   public async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
     // 不传递默认是发布，传递false才是草稿
-    publish = publish ?? true
-
-    // 草稿
-    if (!publish) {
-      post.post_status = PostStatusEnum.PostStatusEnum_Draft
-    }
+    post.post_status = publish === false ? PostStatusEnum.PostStatusEnum_Draft : PostStatusEnum.PostStatusEnum_Publish
 
     const postStruct = this.createPostStruct(post)
     this.logger.debug("postStruct=>", postStruct)
