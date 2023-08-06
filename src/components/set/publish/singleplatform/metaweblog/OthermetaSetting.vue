@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useMetaweblogApi } from "~/src/adaptors/api/metaweblog/useMetaweblogApi.ts"
-import MetaweblogSetting from "~/src/components/set/publish/singleplatform/MetaweblogSetting.vue"
+import MetaweblogSetting from "~/src/components/set/publish/singleplatform/base/platform/MetaweblogSetting.vue"
 import { MetaweblogConfig } from "~/src/adaptors/api/base/metaweblog/config/MetaweblogConfig.ts"
 import { MetaweblogPlaceholder } from "~/src/adaptors/api/base/metaweblog/config/MetaweblogPlaceholder.ts"
 

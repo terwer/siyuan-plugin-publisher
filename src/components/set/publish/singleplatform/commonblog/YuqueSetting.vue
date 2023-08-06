@@ -24,7 +24,7 @@
   -->
 
 <script setup lang="ts">
-import CommonBlogSetting from "~/src/components/set/publish/singleplatform/CommonBlogSetting.vue"
+import CommonBlogSetting from "~/src/components/set/publish/singleplatform/base/CommonBlogSetting.vue"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useYuqueApi } from "~/src/adaptors/api/yuque/useYuqueApi.ts"
 import { YuqueConfig } from "~/src/adaptors/api/yuque/config/yuqueConfig.ts"

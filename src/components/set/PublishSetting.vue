@@ -51,7 +51,7 @@ import { Utils } from "~/src/utils/utils.ts"
 import { AppInstance } from "~/src/appInstance.ts"
 import { ElectronCookie, WebConfig } from "zhi-blog-api"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
-import CookieSetting from "~/src/components/set/publish/singleplatform/CookieSetting.vue"
+import CookieSetting from "~/src/components/set/publish/singleplatform/web/CookieSetting.vue"
 
 const logger = createAppLogger("publish-setting")
 

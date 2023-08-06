@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { CommonblogPlaceholder } from "~/src/adaptors/api/base/commonblog/config/CommonblogPlaceholder.ts"
+import { CommonblogPlaceholder } from "~/src/adaptors/api/base/CommonblogPlaceholder.ts"
 
 /**
  * Notion 配置提示

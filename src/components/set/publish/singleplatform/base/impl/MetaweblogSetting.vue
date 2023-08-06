@@ -1,5 +1,5 @@
 <!--
-  - Copyright (c) 2023, Terwer . All rights reserved.
+  - Copyright (c) 2022-2023, Terwer . All rights reserved.
   - DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
   -
   - This code is free software; you can redistribute it and/or modify it
@@ -23,33 +23,20 @@
   - questions.
   -->
 
-<script setup lang="ts">
-import CommonBlogSetting from "~/src/components/set/publish/singleplatform/base/CommonBlogSetting.vue"
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import {useNotionApi} from "~/src/adaptors/api/notion/useNotionApi.ts";
-import {NotionConfig} from "~/src/adaptors/api/notion/config/notionConfig.ts";
-import {NotionPlaceHolder} from "~/src/adaptors/api/notion/config/notionPlaceHolder.ts";
-
+<script lang="ts" setup>
 const props = defineProps({
   apiType: {
     type: String,
     default: "",
   },
+  cfg: {
+    // 必须继承MetaweblogConfig
+    type: Object,
+    default: null,
+  },
 })
-
-const { t } = useVueI18n()
-const { cfg } = await useNotionApi(props.apiType)
-const notionCfg = cfg as NotionConfig
-const notionPlaceholder = new NotionPlaceHolder()
-notionPlaceholder.homePlaceholder = t("setting.notion.home.tip")
-notionPlaceholder.passwordPlaceholder = t("setting.notion.password.tip")
-notionPlaceholder.apiUrlPlaceholder = t("setting.notion.apiurl.tip")
-notionPlaceholder.previewUrlPlaceholder = t("setting.notion.previewUrl.tip")
-notionCfg.placeholder = notionPlaceholder
-notionCfg.knowledgeSpaceTitle = "根页面"
-notionCfg.enableKnowledgeSpace = true
 </script>
 
 <template>
-  <common-blog-setting :api-type="props.apiType" :cfg="notionCfg" />
+  <common-blog-setting :api-type="props.apiType" :cfg="props.cfg" />
 </template>

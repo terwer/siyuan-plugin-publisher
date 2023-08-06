@@ -24,7 +24,7 @@
  */
 
 import { PageTypeEnum, PasswordType } from "zhi-blog-api"
-import { CommonblogConfig } from "~/src/adaptors/api/base/commonblog/config/CommonblogConfig.ts"
+import { CommonblogConfig } from "~/src/adaptors/api/base/CommonblogConfig.ts"
 
 /**
  * Notion 配置
