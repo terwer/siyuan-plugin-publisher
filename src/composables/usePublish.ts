@@ -251,7 +251,7 @@ const usePublish = () => {
   const preHandlePost = (doc: Post, cfg: BlogConfig): Post => {
     const post = doc
     // 发布格式
-    if (cfg.pageType == PageTypeEnum.Markdown) {
+    if (cfg?.pageType == PageTypeEnum.Markdown) {
       post.description = post.markdown
     }
     return post
