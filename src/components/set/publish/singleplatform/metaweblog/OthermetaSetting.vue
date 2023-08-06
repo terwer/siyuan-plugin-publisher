@@ -2,8 +2,8 @@
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useMetaweblogApi } from "~/src/adaptors/api/metaweblog/useMetaweblogApi.ts"
 import MetaweblogSetting from "~/src/components/set/publish/singleplatform/base/platform/MetaweblogSetting.vue"
-import { MetaweblogConfig } from "~/src/adaptors/api/base/metaweblog/config/MetaweblogConfig.ts"
-import { MetaweblogPlaceholder } from "~/src/adaptors/api/base/metaweblog/config/MetaweblogPlaceholder.ts"
+import { MetaweblogConfig } from "~/src/adaptors/api/base/metaweblog/MetaweblogConfig.ts"
+import { MetaweblogPlaceholder } from "~/src/adaptors/api/base/metaweblog/MetaweblogPlaceholder.ts"
 
 const props = defineProps({
   apiType: {

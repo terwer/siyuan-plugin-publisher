@@ -23,13 +23,14 @@
  * questions.
  */
 
-import { BlogConfig, PageTypeEnum } from "zhi-blog-api"
-import { MetaweblogPlaceholder } from "~/src/adaptors/api/base/metaweblog/config/MetaweblogPlaceholder.ts"
+import { PageTypeEnum } from "zhi-blog-api"
+import { MetaweblogPlaceholder } from "~/src/adaptors/api/base/metaweblog/MetaweblogPlaceholder.ts"
+import { CommonblogConfig } from "~/src/adaptors/api/base/CommonblogConfig.ts"
 
 /**
  * Metaweblog配置类
  */
-export class MetaweblogConfig extends BlogConfig {
+export class MetaweblogConfig extends CommonblogConfig {
   /**
    * 首页
    */

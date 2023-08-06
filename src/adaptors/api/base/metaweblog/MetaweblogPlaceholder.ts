@@ -23,12 +23,12 @@
  * questions.
  */
 
-import { BlogPlaceholder } from "zhi-blog-api"
+import { CommonblogPlaceholder } from "~/src/adaptors/api/base/CommonblogPlaceholder.ts"
 
 /**
  * Metaweblog 操作提示
  */
-export class MetaweblogPlaceholder extends BlogPlaceholder {
+export class MetaweblogPlaceholder extends CommonblogPlaceholder {
   /**
    * 首页操作提示
    */

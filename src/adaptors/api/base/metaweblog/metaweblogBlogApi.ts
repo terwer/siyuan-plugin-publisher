@@ -25,10 +25,9 @@
 
 import { BlogApi, CategoryInfo, Post, PostStatusEnum, UserBlog } from "zhi-blog-api"
 import { AppInstance } from "~/src/appInstance.ts"
-import { CnblogsConfig } from "~/src/adaptors/api/cnblogs/config/cnblogsConfig.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { CommonXmlrpcClient } from "zhi-xmlrpc-middleware"
-import { MetaweblogConfig } from "~/src/adaptors/api/base/metaweblog/config/MetaweblogConfig.ts"
+import { MetaweblogConfig } from "~/src/adaptors/api/base/metaweblog/MetaweblogConfig.ts"
 import { MetaweblogConstants } from "~/src/adaptors/api/base/metaweblog/metaweblogConstants.ts"
 import { StrUtil } from "zhi-common"
 import { BrowserUtil } from "zhi-device"
@@ -51,7 +50,7 @@ class MetaweblogBlogApi extends BlogApi {
    * @param appInstance 应用实例
    * @param cfg 配置项
    */
-  constructor(appInstance: AppInstance, cfg: CnblogsConfig) {
+  constructor(appInstance: AppInstance, cfg: MetaweblogConfig) {
     super()
 
     this.cfg = cfg

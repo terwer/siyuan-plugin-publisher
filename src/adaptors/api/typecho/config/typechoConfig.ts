@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { MetaweblogConfig } from "~/src/adaptors/api/base/metaweblog/config/MetaweblogConfig.ts"
+import { MetaweblogConfig } from "~/src/adaptors/api/base/metaweblog/MetaweblogConfig.ts"
 import { PageTypeEnum } from "zhi-blog-api"
 import TypechoUtils from "~/src/adaptors/api/typecho/typechoUtils.ts"
 
