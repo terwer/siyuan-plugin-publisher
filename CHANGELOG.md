@@ -1,18 +1,13 @@
 # Changelog
 
 ## [1.3.2](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.3.1...v1.3.2) (2023-08-06)
-
-
 ### Bug Fixes
-
 * fix typo ([94f77ba](https://github.com/terwer/siyuan-plugin-publisher/commit/94f77bab0e977166370a20861e2eb6c2c65751e5))
-* Typecho默认发布为HTML ([a952a03](https://github.com/terwer/siyuan-plugin-publisher/commit/a952a03d7e2c9274193797d8055d320293b76ba2))
-* 修复Typecho更新不生效问题 ([78b269b](https://github.com/terwer/siyuan-plugin-publisher/commit/78b269b0f45efa3a62b429cfb9b913e2a02ccea8))
-* 修复Typecho默认发布状态为草稿的问题 ([c6b36dc](https://github.com/terwer/siyuan-plugin-publisher/commit/c6b36dcad275bab7589a70ddc63bd9359d390667))
-* 修复WordPress初始化错误的问题 ([2aa08ba](https://github.com/terwer/siyuan-plugin-publisher/commit/2aa08ba1a0b69185b08ff05f5d5ad50b900527be))
-
+* typecho默认发布为html ([a952a03](https://github.com/terwer/siyuan-plugin-publisher/commit/a952a03d7e2c9274193797d8055d320293b76ba2))
+* 修复typecho更新不生效问题 ([78b269b](https://github.com/terwer/siyuan-plugin-publisher/commit/78b269b0f45efa3a62b429cfb9b913e2a02ccea8))
+* 修复typecho默认发布状态为草稿的问题 ([c6b36dc](https://github.com/terwer/siyuan-plugin-publisher/commit/c6b36dcad275bab7589a70ddc63bd9359d390667))
+* 修复wordpress初始化错误的问题 ([2aa08ba](https://github.com/terwer/siyuan-plugin-publisher/commit/2aa08ba1a0b69185b08ff05f5d5ad50b900527be))
 ## [1.3.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.3.0...v1.3.1) (2023-08-06)
-### Bug Fixes
 * 修复可能出现的postid不存在的问题 ([51f63b4](https://github.com/terwer/siyuan-plugin-publisher/commit/51f63b4a2ae6561311084dce617514acd24cca78))
 * 修复批量分发删除异常问题 ([602c26a](https://github.com/terwer/siyuan-plugin-publisher/commit/602c26a123f8893d3c7af63e2afa2a27f1c4a7b1))
 * 修复批量分发报错问题 ([55ead01](https://github.com/terwer/siyuan-plugin-publisher/commit/55ead01c9b5abf56c46ec3072e1e35ba42763d9b))
