@@ -28,9 +28,9 @@ import { AppInstance } from "~/src/appInstance.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { Utils } from "~/src/utils/utils.ts"
-import { getDynPostidKey } from "~/src/components/set/publish/platform/dynamicConfig.ts"
-import { HexoConfig } from "~/src/adaptors/api/hexo/config/hexoConfig.ts"
-import { HexoApiAdaptor } from "~/src/adaptors/api/hexo/adaptor/hexoApiAdaptor.ts"
+import { getDynPostidKey } from "~/src/platform/dynamicConfig.ts"
+import { HexoConfig } from "~/src/adaptors/api/hexo/hexoConfig.ts"
+import { HexoApiAdaptor } from "~/src/adaptors/api/hexo/hexoApiAdaptor.ts"
 
 const useHexoApi = async (key: string, newCfg?: HexoConfig) => {
   // 创建应用日志记录器

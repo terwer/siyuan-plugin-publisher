@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { CommonGithubPlaceholder } from "~/src/adaptors/api/base/github/config/CommonGithubPlaceholder.ts"
+import { CommonGithubPlaceholder } from "~/src/adaptors/api/base/github/CommonGithubPlaceholder.ts"
 
 class HexoPlaceHolder extends CommonGithubPlaceholder {}
 

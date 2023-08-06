@@ -24,7 +24,7 @@
  */
 
 import { BlogAdaptor, WebAdaptor } from "zhi-blog-api"
-import { getSubPlatformTypeByKey, SubPlatformType } from "~/src/components/set/publish/platform/dynamicConfig.ts"
+import { getSubPlatformTypeByKey, SubPlatformType } from "~/src/platform/dynamicConfig.ts"
 import { useCnblogsApi } from "~/src/adaptors/api/cnblogs/useCnblogsApi.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useWordpressApi } from "~/src/adaptors/api/wordpress/useWordpressApi.ts"

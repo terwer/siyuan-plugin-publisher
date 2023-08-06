@@ -29,7 +29,7 @@ import { Utils } from "~/src/utils/utils.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { TypechoConfig } from "~/src/adaptors/api/typecho/config/typechoConfig.ts"
 import {JsonUtil, ObjectUtil, StrUtil} from "zhi-common"
-import { getDynPostidKey } from "~/src/components/set/publish/platform/dynamicConfig.ts"
+import { getDynPostidKey } from "~/src/platform/dynamicConfig.ts"
 import { TypechoApiAdaptor } from "~/src/adaptors/api/typecho/adaptor/typechoApiAdaptor.ts"
 
 /**

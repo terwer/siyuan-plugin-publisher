@@ -35,7 +35,7 @@ import {
   PlatformType,
   setDynamicJsonCfg,
   SubPlatformType,
-} from "~/src/components/set/publish/platform/dynamicConfig.ts"
+} from "~/src/platform/dynamicConfig.ts"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useRoute, useRouter } from "vue-router"

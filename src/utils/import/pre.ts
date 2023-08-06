@@ -3,7 +3,7 @@ import {
   DynamicConfig,
   PlatformType,
   SubPlatformType,
-} from "~/src/components/set/publish/platform/dynamicConfig.ts"
+} from "~/src/platform/dynamicConfig.ts"
 import { svgIcons } from "~/src/utils/svgIcons.ts"
 
 export const pre = {

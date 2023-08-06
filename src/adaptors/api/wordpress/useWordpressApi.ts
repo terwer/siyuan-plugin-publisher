@@ -30,7 +30,7 @@ import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import {JsonUtil, ObjectUtil, StrUtil} from "zhi-common"
 import { WordpressConfig } from "~/src/adaptors/api/wordpress/config/wordpressConfig.ts"
 import { WordpressApiAdaptor } from "~/src/adaptors/api/wordpress/adaptor/wordpressApiAdaptor.ts"
-import { getDynPostidKey } from "~/src/components/set/publish/platform/dynamicConfig.ts"
+import { getDynPostidKey } from "~/src/platform/dynamicConfig.ts"
 
 /**
  * 使用Wordpress API的自定义hook

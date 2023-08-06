@@ -28,7 +28,7 @@ import {
   getSubPlatformTypeByKey,
   PlatformType,
   SubPlatformType,
-} from "~/src/components/set/publish/platform/dynamicConfig.ts"
+} from "~/src/platform/dynamicConfig.ts"
 import { describe, it, expect } from "vitest"
 
 describe("test dynamicConfig", () => {

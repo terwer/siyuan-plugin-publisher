@@ -26,8 +26,8 @@
 <script setup lang="ts">
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useHexoApi } from "~/src/adaptors/api/hexo/useHexoApi.ts"
-import { HexoConfig } from "~/src/adaptors/api/hexo/config/hexoConfig.ts"
-import { HexoPlaceHolder } from "~/src/adaptors/api/hexo/config/hexoPlaceHolder.ts"
+import { HexoConfig } from "~/src/adaptors/api/hexo/hexoConfig.ts"
+import { HexoPlaceHolder } from "~/src/adaptors/api/hexo/hexoPlaceHolder.ts"
 
 const props = defineProps({
   apiType: {

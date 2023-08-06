@@ -39,7 +39,7 @@ import {
   PlatformType,
   replacePlatformByKey,
   setDynamicJsonCfg,
-} from "~/src/components/set/publish/platform/dynamicConfig.ts"
+} from "~/src/platform/dynamicConfig.ts"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
 import { useRouter } from "vue-router"
 import { usePlatformDefine } from "~/src/composables/usePlatformDefine.ts"

@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { YamlConvertAdaptor } from "~/src/components/set/publish/platform/yamlConvertAdaptor.ts"
+import { YamlConvertAdaptor } from "~/src/platform/yamlConvertAdaptor.ts"
 import idUtil from "~/src/utils/idUtil.ts"
 import { StrUtil } from "zhi-common"
 
