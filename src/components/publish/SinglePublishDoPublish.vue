@@ -238,7 +238,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <back-page title="常规发布" @backEmit="onBack">
+  <back-page title="常规发布" :has-back-emit="true" @backEmit="onBack">
     <el-skeleton class="placeholder" v-if="!formData.isInit" :rows="5" animated />
     <div v-else id="batch-publish-index">
       <el-alert class="top-tip" :title="getTitle()" type="info" :closable="false" />

@@ -27,7 +27,7 @@
 // uses
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useRoute, useRouter } from "vue-router"
-import { reactive, ref } from "vue"
+import { ref } from "vue"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { ArrowLeft } from "@element-plus/icons-vue"
 
@@ -43,6 +43,10 @@ const props = defineProps({
     type: String,
     default: "",
   },
+  hasBackEmit: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 // datas
@@ -52,8 +56,11 @@ const showBack = ref(query.showBack === "true")
 const emit = defineEmits(["backEmit"])
 
 const onBack = () => {
-  if (emit && emit("backEmit") as any) {
+  if (emit && props.hasBackEmit) {
+    logger.info("using backEmit do back")
+    emit("backEmit")
   } else {
+    logger.warn("no backEmit, using router handle back")
     router.back()
   }
 }
