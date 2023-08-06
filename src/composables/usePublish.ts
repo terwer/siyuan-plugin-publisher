@@ -177,12 +177,10 @@ const usePublish = () => {
       singleFormData.publishProcessStatus = await api.deletePost(postid)
 
       // 删除成功才去移除文章发布信息
-      if (!StrUtil.isEmptyString(posidKey)) {
+      if (singleFormData.publishProcessStatus) {
         const postMeta = singleFormData.setting[id] ?? {}
         const updatedPostMeta = { ...postMeta }
-        if (updatedPostMeta.hasOwnProperty(posidKey)) {
-          delete updatedPostMeta[posidKey]
-        }
+        delete updatedPostMeta[posidKey]
 
         singleFormData.setting[id] = updatedPostMeta
         await updateSetting(singleFormData.setting)
