@@ -26,7 +26,7 @@
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { reactive, toRaw } from "vue"
 import { SypConfig } from "~/syp.config.ts"
-import { JsonUtil, StrUtil } from "zhi-common"
+import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { AppInstance } from "~/src/appInstance.ts"
 import Adaptors from "~/src/adaptors"
 import { Utils } from "~/src/utils/utils.ts"
@@ -95,8 +95,9 @@ const usePublish = () => {
         if (StrUtil.isEmptyString(posidKey)) {
           throw new Error("配置错误，posidKey不能为空，请检查配置")
         }
-        const postMeta = singleFormData.setting[id] ?? {}
-        singleFormData.postid = postMeta[posidKey] ?? ""
+
+        const postMeta = ObjectUtil.getProperty(singleFormData.setting, id, {})
+        singleFormData.postid = ObjectUtil.getProperty(postMeta, posidKey)
       }
 
       singleFormData.isAdd = StrUtil.isEmptyString(singleFormData.postid)
@@ -111,7 +112,8 @@ const usePublish = () => {
         // 写入postid到配置
         singleFormData.postid = result
         const posidKey = singleFormData.cfg.posidKey
-        const postMeta = singleFormData.setting[id] ?? {}
+
+        const postMeta = ObjectUtil.getProperty(singleFormData.setting, id, {})
         postMeta[posidKey] = singleFormData.postid
         singleFormData.setting[id] = postMeta
         await updateSetting(singleFormData.setting)
@@ -162,8 +164,8 @@ const usePublish = () => {
         throw new Error("配置错误，posidKey不能为空，请检查配置")
       }
 
-      const postMeta = singleFormData.setting[id] ?? {}
-      const postid = postMeta[posidKey] ?? ""
+      const postMeta = ObjectUtil.getProperty(singleFormData.setting, id, {})
+      const postid = ObjectUtil.getProperty(postMeta, posidKey)
       if (StrUtil.isEmptyString(postid)) {
         throw new Error("未找到postid，无法删除，请手动在平台删除")
       }
@@ -177,8 +179,8 @@ const usePublish = () => {
       singleFormData.publishProcessStatus = await api.deletePost(postid)
 
       // 删除成功才去移除文章发布信息
-      if (!StrUtil.isEmptyString(posidKey)) {
-        const postMeta = singleFormData.setting[id] ?? {}
+      if (singleFormData.publishProcessStatus) {
+        const postMeta = ObjectUtil.getProperty(singleFormData.setting, id, {})
         const updatedPostMeta = { ...postMeta }
         if (updatedPostMeta.hasOwnProperty(posidKey)) {
           delete updatedPostMeta[posidKey]
@@ -217,7 +219,7 @@ const usePublish = () => {
         throw new Error("配置错误，posidKey不能为空，请检查配置")
       }
       if (!StrUtil.isEmptyString(posidKey)) {
-        const postMeta = singleFormData.setting[id] ?? {}
+        const postMeta = ObjectUtil.getProperty(singleFormData.setting, id, {})
         const updatedPostMeta = { ...postMeta }
         if (updatedPostMeta.hasOwnProperty(posidKey)) {
           delete updatedPostMeta[posidKey]
@@ -251,7 +253,7 @@ const usePublish = () => {
   const preHandlePost = (doc: Post, cfg: BlogConfig): Post => {
     const post = doc
     // 发布格式
-    if (cfg.pageType == PageTypeEnum.Markdown) {
+    if (cfg?.pageType == PageTypeEnum.Markdown) {
       post.description = post.markdown
     }
     return post
@@ -283,8 +285,8 @@ const usePublish = () => {
       throw new Error("配置错误，posidKey不能为空，请检查配置")
     }
 
-    const postMeta = singleFormData.setting[id] ?? {}
-    const postid = postMeta[posidKey] ?? ""
+    const postMeta = ObjectUtil.getProperty(singleFormData.setting, id, {})
+    const postid = ObjectUtil.getProperty(postMeta, posidKey)
 
     // 初始化API
     const appInstance = new AppInstance()

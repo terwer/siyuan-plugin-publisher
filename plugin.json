@@ -19,8 +19,8 @@
     "zh_CN": "发布工具"
   },
   "description": {
-    "default": "Publishing articles from siyuan-note to platforms such as Yuque, Cnblogs, WordPress, Typecho, Hexo, Hugo and more",
-    "zh_CN": "将思源笔记的文章发布到语雀、Cnblogs、WordPress、Typecho、Hexo、Hugo 等平台，支持极速发布、图床管理、平台扩展、智能标签等特色功能"
+    "default": "Publish articles from Siyuan Notes to platforms such as Yuque, Notion, Cnblogs, WordPress, Typecho, Hexo, Zhihu and more",
+    "zh_CN": "将思源笔记的文章发布到语雀、Notion、Cnblogs、WordPress、Typecho、Hexo、知乎 等平台，支持极速发布、图床管理、平台扩展、智能标签等特色功能"
   },
   "readme": {
     "default": "README.md",
