@@ -23,17 +23,8 @@
  * questions.
  */
 
-import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
+import { CommonGithubPlaceholder } from "~/src/adaptors/api/base/github/config/CommonGithubPlaceholder.ts"
 
-/**
- * Github API 适配器
- *
- * @author terwer
- * @version 0.9.0
- * @since 0.9.0
- */
-class CommonGithubApiAdaptor extends BaseBlogApi {
+class HexoPlaceHolder extends CommonGithubPlaceholder {}
 
-}
-
-export { CommonGithubApiAdaptor }
+export { HexoPlaceHolder }

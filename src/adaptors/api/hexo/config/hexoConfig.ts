@@ -23,26 +23,16 @@
  * questions.
  */
 
-import { PasswordType } from "zhi-blog-api"
-import { CommonblogConfig } from "~/src/adaptors/api/base/commonblog/config/CommonblogConfig.ts"
+import { CommonGithubConfig } from "~/src/adaptors/api/base/github/config/CommonGithubConfig.ts"
+import { PageTypeEnum, PasswordType } from "zhi-blog-api"
 
 /**
- * CommonGithubConfig 类用于存储 GitHub 相关配置信息
+ * 博 Hexo 配置
+ *
+ * @author terwer
+ * @since 1.3.2
  */
-class CommonGithubConfig extends CommonblogConfig {
-  public githubRepo: string
-  public githubBranch: string
-  public defaultPath: string
-
-  /**
-   * 构造函数
-   *
-   * @param {string} githubUsername - GitHub 用户名
-   * @param {string} githubAuthToken - GitHub 访问令牌
-   * @param {string} githubRepo - GitHub 仓库
-   * @param {string} githubBranch - GitHub 分支
-   * @param {string} middlewareUrl - 跨域代理 URL
-   */
+class HexoConfig extends CommonGithubConfig {
   constructor(
     githubUsername: string,
     githubAuthToken: string,
@@ -50,20 +40,16 @@ class CommonGithubConfig extends CommonblogConfig {
     githubBranch: string,
     middlewareUrl?: string
   ) {
-    super("https://github.com", "", githubUsername, githubAuthToken, middlewareUrl)
+    super(githubUsername, githubAuthToken, githubRepo, githubBranch, middlewareUrl)
 
-    this.username = githubUsername
-    this.password = githubAuthToken
-    this.usernameEnabled = true
+    this.tokenSettingUrl = "https://github.com/settings/tokens"
+    this.defaultPath = "source/_posts"
+    this.previewUrl = "/[user]/[repo]/blob/[branch]/[docpath]"
+    // this.previewPostUrl = "/post/[postid].html"
+    // this.mdFilenameRule = "[slug].md"
+    this.pageType = PageTypeEnum.Markdown
     this.passwordType = PasswordType.PasswordType_Token
-    this.githubRepo = githubRepo
-    this.githubBranch = githubBranch
-    this.defaultPath = "/"
-    this.blogid = ""
-    this.blogName = ""
-
-    this.middlewareUrl = middlewareUrl
   }
 }
 
-export { CommonGithubConfig }
+export { HexoConfig }

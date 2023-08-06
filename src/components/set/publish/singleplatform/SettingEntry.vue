@@ -48,6 +48,7 @@ const subtype = getSubPlatformTypeByKey(apiType)
   <back-page :title="t('setting.entry.title') + apiType">
     <yuque-setting v-if="subtype === SubPlatformType.Common_Yuque" :api-type="apiType" />
     <notion-setting v-else-if="subtype === SubPlatformType.Common_Notion" :api-type="apiType" />
+    <hexo-setting v-else-if="subtype === SubPlatformType.Github_Hexo" :api-type="apiType" />
     <othermeta-setting v-else-if="subtype === SubPlatformType.Metaweblog_Metaweblog" :api-type="apiType" />
     <cnblogs-setting v-else-if="subtype === SubPlatformType.Metaweblog_Cnblogs" :api-type="apiType" />
     <wordpress-setting v-else-if="subtype === SubPlatformType.Wordpress_Wordpress" :api-type="apiType" />

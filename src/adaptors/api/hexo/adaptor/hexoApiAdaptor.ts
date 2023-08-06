@@ -23,17 +23,15 @@
  * questions.
  */
 
-import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
+import { CommonGithubApiAdaptor } from "~/src/adaptors/api/base/github/adaptor/CommonGithubApiAdaptor.ts"
 
 /**
- * Github API 适配器
+ * Hexo API 适配器
  *
  * @author terwer
- * @version 0.9.0
- * @since 0.9.0
+ * @version 1.3.2
+ * @since 0.8.1
  */
-class CommonGithubApiAdaptor extends BaseBlogApi {
+class HexoApiAdaptor extends CommonGithubApiAdaptor {}
 
-}
-
-export { CommonGithubApiAdaptor }
+export { HexoApiAdaptor }
