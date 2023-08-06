@@ -20,6 +20,8 @@ Support features such as fast publishing, image bed management, platform expansi
 
 ![](./help/help_2.png)
 
+(4) If a platform configuration is incomplete, you can disable the platform configuration, then delete the platform and add it again.
+
 If you still can't use this step after this step, [New issue](https://github.com/terwer/siyuan-plugin-publisher/issues/new) is welcome.
 
 **This tip will be removed after the stable release.**

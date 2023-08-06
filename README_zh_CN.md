@@ -18,6 +18,8 @@
 
 ![](./help/help_2.png)
 
+（4）如果某个平台配置不完整，可以禁用平台配置、然后删除这个平台并重新添加。
+
 若此步骤之后还是无法使用，或者您有任何建议和需求，欢迎 [新建issue](https://github.com/terwer/siyuan-plugin-publisher/issues/new) 。
 
 **本提示会在稳定版发布后移除。**

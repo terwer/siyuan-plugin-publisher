@@ -31,6 +31,7 @@ import { Utils } from "~/src/utils/utils.ts"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { HexoConfig } from "~/src/adaptors/api/hexo/hexoConfig.ts"
 import { HexoApiAdaptor } from "~/src/adaptors/api/hexo/hexoApiAdaptor.ts"
+import { HexoYamlConverterAdaptor } from "~/src/adaptors/api/hexo/hexoYamlConverterAdaptor.ts"
 
 const useHexoApi = async (key: string, newCfg?: HexoConfig) => {
   // 创建应用日志记录器
@@ -75,12 +76,16 @@ const useHexoApi = async (key: string, newCfg?: HexoConfig) => {
     }
   }
 
+  // 创建 Hexo 的 yamlAdaptor
+  const yamlAdaptor = new HexoYamlConverterAdaptor()
+
   // 创建 Hexo API 适配器
   const blogApi = new HexoApiAdaptor(appInstance, cfg)
   logger.info("Hexo API created successfully.", cfg)
 
   return {
     cfg,
+    yamlAdaptor,
     blogApi,
   }
 }

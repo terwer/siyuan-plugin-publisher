@@ -54,17 +54,17 @@ dependencies:
     specifier: ^1.20.11
     version: 1.20.11
   zhi-common:
-    specifier: ^1.11.10
-    version: 1.11.10
+    specifier: ^1.12.1
+    version: 1.12.1
   zhi-device:
     specifier: ^2.3.0
     version: 2.3.0
   zhi-fetch-middleware:
-    specifier: ^0.2.10
-    version: 0.2.10
+    specifier: ^0.2.12
+    version: 0.2.12
   zhi-github-middleware:
-    specifier: ^0.1.7
-    version: 0.1.7
+    specifier: ^0.1.9
+    version: 0.1.9
   zhi-lib-base:
     specifier: ^0.4.4
     version: 0.4.4
@@ -72,11 +72,11 @@ dependencies:
     specifier: ^0.1.1
     version: 0.1.1
   zhi-siyuan-api:
-    specifier: ^2.0.1
-    version: 2.0.1
+    specifier: ^2.0.3
+    version: 2.0.3
   zhi-xmlrpc-middleware:
-    specifier: ^0.4.5
-    version: 0.4.5
+    specifier: ^0.4.7
+    version: 0.4.7
 
 devDependencies:
   '@intlify/vite-plugin-vue-i18n':
@@ -2066,7 +2066,6 @@ packages:
 
   /argparse@2.0.1:
     resolution: {integrity: sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==}
-    dev: true
 
   /aria-query@5.3.0:
     resolution: {integrity: sha512-b0P0sZPKtyu8HkeRAfCq0IfURZK+SuwMjY1UXGBU27wpAiTwQAIlq56IbIO+ytk/JjS1fMR14ee5WBBfKi5J6A==}
@@ -4354,7 +4353,6 @@ packages:
     hasBin: true
     dependencies:
       argparse: 2.0.1
-    dev: true
 
   /json-schema-to-ts@1.6.4:
     resolution: {integrity: sha512-pR4yQ9DHz6itqswtHCm26mw45FSNfQ9rEQjosaZErhn5J3J2sIViQiz8rDaezjKAhFGpmsoczYVBgGHzFw/stA==}
@@ -6834,9 +6832,10 @@ packages:
       zhi-lib-base: 0.4.4
     dev: false
 
-  /zhi-common@1.11.10:
-    resolution: {integrity: sha512-uUg5STMDV25jbKTud//LlW+wsmWWVT/Csesn4S+nYKyrmRcf/vHzK5KhCKphqVz6ZQGsxPxi3hCvAnUoPn/Ovw==}
+  /zhi-common@1.12.1:
+    resolution: {integrity: sha512-9PjWI6Wqk/X/WnZSqgMC1GY5fZx8U1gwpo8K5JDSZZaT5uii8uG/YNGU/tC9MHwj9zj828L+mYjDTaluk1PETQ==}
     dependencies:
+      js-yaml: 4.1.0
       zhi-lib-base: 0.4.4
     dev: false
 
@@ -6844,20 +6843,20 @@ packages:
     resolution: {integrity: sha512-we04mMt4BEqeKDxoqdJQsDFYImYlcp/yaAIkpxpMGg+9tBURfNeHPHIHkFias9VbM8yuk6xjAX6B2xJjvYE/iw==}
     dev: false
 
-  /zhi-fetch-middleware@0.2.10:
-    resolution: {integrity: sha512-B+/XIqHhd7Xy3LErR/tiEfwDFW2PdkYy8X7+vYpCwnXbGqGHtjinK3LqDZnOv0/0e/NHsmycVeuEaI4GORMaTw==}
+  /zhi-fetch-middleware@0.2.12:
+    resolution: {integrity: sha512-j8bZ+sXhHkZR+906Nb/l+3V29aR//NjKYeCG1cCqf2jEiKGbJJGx7cB/LkLunODBoKpg5etcEX3GGNg48VOBWA==}
     dependencies:
-      zhi-common: 1.11.10
+      zhi-common: 1.12.1
       zhi-device: 2.3.0
       zhi-lib-base: 0.4.4
     dev: false
 
-  /zhi-github-middleware@0.1.7:
-    resolution: {integrity: sha512-pnFsxwzFAkSvgH/cPEM73UUVUWWG1MgNWLM38179KDasHj6ipVgyznfnA5u2I0FbrFT/qxZv0muUFqCItjXuVw==}
+  /zhi-github-middleware@0.1.9:
+    resolution: {integrity: sha512-69I6wGIdZf1HubHMGFYf6kP6wyxvbG5xxyR1LSbNPGM4D6oQZSWJgNt+KWPJT7sosGQH8WSC1tO7+7Apm9H0Fw==}
     dependencies:
       '@octokit/core': 5.0.0
       js-base64: 3.7.5
-      zhi-common: 1.11.10
+      zhi-common: 1.12.1
       zhi-lib-base: 0.4.4
     dev: false
 
@@ -6875,18 +6874,18 @@ packages:
       - supports-color
     dev: false
 
-  /zhi-siyuan-api@2.0.1:
-    resolution: {integrity: sha512-jwd1EVoA7Tr1n0ExxD1Xo8WCZPUG/zl4B48GMkA4s8FeMA55XcPt9qsnGEFky2WbW/QaIxzfx2MwYOfjchtH6A==}
+  /zhi-siyuan-api@2.0.3:
+    resolution: {integrity: sha512-l7hEC1B9lfETgXNh+4W1ZFPch9jrXWmGOQv5bH1jO8CHXxOhqt2yjILr+5z/R9LiKSlgQguP06aBP3nbs+m0aQ==}
     dependencies:
       zhi-blog-api: 1.20.11
-      zhi-common: 1.11.10
+      zhi-common: 1.12.1
       zhi-lib-base: 0.4.4
     dev: false
 
-  /zhi-xmlrpc-middleware@0.4.5:
-    resolution: {integrity: sha512-vBFpwOUb2ibBhJCZxoSdftws7IyzXUoXtsF7qm/l851aPj3afBTKLYAcagmh7YHfplGfIYSddbghKqbVAgqEAA==}
+  /zhi-xmlrpc-middleware@0.4.7:
+    resolution: {integrity: sha512-4JkOdu75cUzs3Urz1faHyhU2DQs9X2+DQpvAt2Ayr9Ax4+bZdg35rm4JB5gm+aqYv/k4cd8B+SjSa/mOAR5how==}
     dependencies:
-      zhi-common: 1.11.10
+      zhi-common: 1.12.1
       zhi-device: 2.3.0
       zhi-lib-base: 0.4.4
     dev: false
