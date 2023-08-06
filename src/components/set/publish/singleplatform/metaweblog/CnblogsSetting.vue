@@ -26,8 +26,8 @@
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useCnblogsApi } from "~/src/adaptors/api/cnblogs/useCnblogsApi.ts"
 import MetaweblogSetting from "~/src/components/set/publish/singleplatform/base/platform/MetaweblogSetting.vue"
-import { CnblogsPlaceholder } from "~/src/adaptors/api/cnblogs/config/cnblogsPlaceholder.ts"
-import { CnblogsConfig } from "~/src/adaptors/api/cnblogs/config/cnblogsConfig.ts"
+import { CnblogsPlaceholder } from "~/src/adaptors/api/cnblogs/cnblogsPlaceholder.ts"
+import { CnblogsConfig } from "~/src/adaptors/api/cnblogs/cnblogsConfig.ts"
 
 const props = defineProps({
   apiType: {

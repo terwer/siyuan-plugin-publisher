@@ -24,7 +24,7 @@
  */
 
 import { UserBlog } from "zhi-blog-api"
-import { CnblogsConfig } from "~/src/adaptors/api/cnblogs/config/cnblogsConfig.ts"
+import { CnblogsConfig } from "~/src/adaptors/api/cnblogs/cnblogsConfig.ts"
 import { AppInstance } from "~/src/appInstance.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { CnblogsConstants } from "~/src/adaptors/api/cnblogs/cnblogsConstants.ts"

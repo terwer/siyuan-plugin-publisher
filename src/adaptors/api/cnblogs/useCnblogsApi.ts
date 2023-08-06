@@ -25,8 +25,8 @@
 
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { Utils } from "~/src/utils/utils.ts"
-import { CnblogsConfig } from "~/src/adaptors/api/cnblogs/config/cnblogsConfig.ts"
-import { CnblogsApiAdaptor } from "~/src/adaptors/api/cnblogs/adaptor/cnblogsApiAdaptor.ts"
+import { CnblogsConfig } from "~/src/adaptors/api/cnblogs/cnblogsConfig.ts"
+import { CnblogsApiAdaptor } from "~/src/adaptors/api/cnblogs/cnblogsApiAdaptor.ts"
 import { AppInstance } from "~/src/appInstance.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import {JsonUtil, ObjectUtil, StrUtil} from "zhi-common"
