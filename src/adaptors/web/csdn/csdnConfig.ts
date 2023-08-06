@@ -23,9 +23,9 @@
  * questions.
  */
 
-import { CommonWebConfig } from "~/src/adaptors/web/base/config/CommonWebConfig.ts"
+import { CommonWebConfig } from "~/src/adaptors/web/base/CommonWebConfig.ts"
 
 /**
- * 简书配置
+ * CSDN配置
  */
-export class JianshuConfig extends CommonWebConfig {}
+export class CsdnConfig extends CommonWebConfig {}

@@ -23,9 +23,9 @@
  * questions.
  */
 
-import { CommonWebConfig } from "~/src/adaptors/web/base/config/CommonWebConfig.ts"
+import { CommonWebConfig } from "~/src/adaptors/web/base/CommonWebConfig.ts"
 
 /**
- * CSDN配置
+ * 微信公众号配置
  */
-export class CsdnConfig extends CommonWebConfig {}
+export class WechatConfig extends CommonWebConfig {}

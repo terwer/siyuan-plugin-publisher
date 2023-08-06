@@ -23,8 +23,8 @@
  * questions.
  */
 
-import { ZhihuWebAdaptor } from "~/src/adaptors/web/zhihu/adaptor/zhihuWebAdaptor.ts"
-import { ZhihuConfig } from "~/src/adaptors/web/zhihu/config/zhihuConfig.ts"
+import { ZhihuWebAdaptor } from "~/src/adaptors/web/zhihu/zhihuWebAdaptor.ts"
+import { ZhihuConfig } from "~/src/adaptors/web/zhihu/zhihuConfig.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { AppInstance } from "~/src/appInstance.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"

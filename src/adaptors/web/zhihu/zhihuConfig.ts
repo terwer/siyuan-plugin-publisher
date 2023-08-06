@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { CommonWebConfig } from "~/src/adaptors/web/base/config/CommonWebConfig.ts"
+import { CommonWebConfig } from "~/src/adaptors/web/base/CommonWebConfig.ts"
 
 /**
  * 知乎配置

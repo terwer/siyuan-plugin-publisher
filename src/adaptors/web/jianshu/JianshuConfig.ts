@@ -23,9 +23,9 @@
  * questions.
  */
 
-import { CommonWebConfig } from "~/src/adaptors/web/base/config/CommonWebConfig.ts"
+import { CommonWebConfig } from "~/src/adaptors/web/base/CommonWebConfig.ts"
 
 /**
- * 掘金配置
+ * 简书配置
  */
-export class JuejinConfig extends CommonWebConfig {}
+export class JianshuConfig extends CommonWebConfig {}

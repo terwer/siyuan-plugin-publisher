@@ -23,9 +23,9 @@
  * questions.
  */
 
-import { CommonWebConfig } from "~/src/adaptors/web/base/config/CommonWebConfig.ts"
+import { CommonWebConfig } from "~/src/adaptors/web/base/CommonWebConfig.ts"
 
 /**
- * 微信公众号配置
+ * 掘金配置
  */
-export class WechatConfig extends CommonWebConfig {}
+export class JuejinConfig extends CommonWebConfig {}
