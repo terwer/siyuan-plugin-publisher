@@ -49,7 +49,7 @@ class WordpressConfig extends MetaweblogConfig {
     this.home = home
     this.apiUrl = apiUrl
     this.previewUrl = "/?p=[postid]"
-    this.pageType = PageTypeEnum.Markdown
+    this.pageType = PageTypeEnum.Html
   }
 }
 
