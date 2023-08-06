@@ -26,6 +26,7 @@ If you still can't use this step after this step, [New issue](https://github.com
 
 ## Recent critical updates and bug fixes
 
+- Fixed the issue that typecho updates did not take effect
 - Fixed the batch distribution error issue
 - Notion and Yuque platforms use the forward agent of Siyuan Note to improve performance
 - Regular publishing supports article comparison
