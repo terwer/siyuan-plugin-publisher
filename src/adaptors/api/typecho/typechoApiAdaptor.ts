@@ -25,7 +25,7 @@
 
 import { AppInstance } from "~/src/appInstance.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { TypechoConfig } from "~/src/adaptors/api/typecho/config/typechoConfig.ts"
+import { TypechoConfig } from "~/src/adaptors/api/typecho/typechoConfig.ts"
 import { MetaweblogBlogApi } from "~/src/adaptors/api/base/metaweblog/metaweblogBlogApi.ts"
 
 /**
