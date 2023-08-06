@@ -33,8 +33,8 @@ import { MediaObject } from "zhi-blog-api"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { Base64 } from "js-base64"
 import { CommonFetchClient } from "zhi-fetch-middleware"
-import { YuqueConfig } from "~/src/adaptors/api/yuque/config/yuqueConfig.ts"
-import { YuqueApiAdaptor } from "~/src/adaptors/api/yuque/adaptor/yuqueApiAdaptor.ts"
+import { YuqueConfig } from "~/src/adaptors/api/yuque/yuqueConfig.ts"
+import { YuqueApiAdaptor } from "~/src/adaptors/api/yuque/yuqueApiAdaptor.ts"
 import Adaptors from "~/src/adaptors"
 
 const logger = createAppLogger("yuque-test")
