@@ -35,7 +35,7 @@ const logger = createAppLogger("quick-publish-worker")
 
 // uses
 const route = useRoute()
-const { singleFormData, doSinglePublish } = usePublish()
+const { singleFormData, doSinglePublish, assignSlug } = usePublish()
 const { blogApi } = useSiyuanApi()
 
 // datas
@@ -52,7 +52,9 @@ onMounted(async () => {
   setTimeout(async () => {
     logger.info("单个快速发布开始")
     // 思源笔记原始文章数据
-    const doc = await blogApi.getPost(id)
+    let doc = await blogApi.getPost(id)
+    // 初始化别名
+    doc = await assignSlug(doc, id)
     formData.processResult = await doSinglePublish(key, id, doc)
     logger.info("单个快速发布结束")
     singleFormData.isPublishLoading = false

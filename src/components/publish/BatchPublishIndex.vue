@@ -50,7 +50,7 @@ const props = defineProps({
 
 // uses
 const { t } = useVueI18n()
-const { doSinglePublish, doSingleDelete } = usePublish()
+const { doSinglePublish, doSingleDelete,assignSlug } = usePublish()
 const { blogApi } = useSiyuanApi()
 
 // datas
@@ -174,6 +174,8 @@ onMounted(async () => {
   logger.info("获取到的ID为=>", props.id)
   // 思源笔记原始文章数据
   formData.siyuanPost = await blogApi.getPost(props.id)
+  // 初始化别名
+  formData.siyuanPost = await assignSlug(formData.siyuanPost, props.id)
 })
 </script>
 

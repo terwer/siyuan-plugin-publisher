@@ -89,9 +89,6 @@ console.log("isStaticBuild=>", isStaticBuild)
 export default defineConfig({
   plugins: [
     vue(),
-    vueI18n({
-      include: path.resolve(__dirname, "./path/to/src/locales/**"),
-    }),
 
     AutoImport({
       resolvers: [ElementPlusResolver()],
@@ -169,7 +166,6 @@ export default defineConfig({
   resolve: {
     alias: {
       "~": path.resolve(__dirname, "./"),
-      "vue-i18n": "vue-i18n/dist/vue-i18n.runtime.esm-bundler.js",
     },
   },
 

@@ -28,7 +28,6 @@ import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useHexoApi } from "~/src/adaptors/api/hexo/useHexoApi.ts"
 import { HexoConfig } from "~/src/adaptors/api/hexo/hexoConfig.ts"
 import { HexoPlaceHolder } from "~/src/adaptors/api/hexo/hexoPlaceHolder.ts"
-import { StrUtil } from "zhi-common"
 
 const props = defineProps({
   apiType: {
@@ -49,8 +48,6 @@ hexoPlaceholder.previewUrlPlaceholder = t("setting.blog.previewMdUrl.tip")
 hexoCfg.placeholder = hexoPlaceholder
 hexoCfg.usernameEnabled = true
 hexoCfg.showTokenTip = true
-// hexoCfg.knowledgeSpaceTitle = "知识库"
-// hexoCfg.enableKnowledgeSpace = true
 </script>
 
 <template>

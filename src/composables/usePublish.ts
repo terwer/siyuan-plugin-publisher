@@ -26,7 +26,7 @@
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { reactive, toRaw } from "vue"
 import { SypConfig } from "~/syp.config.ts"
-import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
+import { AliasTranslator, JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { AppInstance } from "~/src/appInstance.ts"
 import Adaptors from "~/src/adaptors"
 import { Utils } from "~/src/utils/utils.ts"
@@ -261,6 +261,20 @@ const usePublish = () => {
 
   const assignValue = (title1: string, title2: string) => (title1.length > title2.length ? title1 : title2)
 
+  /**
+   * 分配别名并设置文章的slug字段
+   *
+   * @param post - 文章对象
+   * @param id - 思源笔记的唯一ID
+   */
+  const assignSlug = async (post: Post, id: string) => {
+    if (StrUtil.isEmptyString(post.wp_slug)) {
+      const slug = await AliasTranslator.wordSlugify(post.title, true)
+      post.wp_slug = `${slug}_${id}`
+    }
+    return post
+  }
+
   const doInitPage = async (key: string, id: string, method: MethodEnum = MethodEnum.METHOD_ADD) => {
     // 思源笔记原始文章数据
     singleFormData.siyuanPost = await blogApi.getPost(id)
@@ -300,6 +314,7 @@ const usePublish = () => {
       singleFormData.mergedPost.title = singleFormData.siyuanPost.title
       singleFormData.mergedPost.description = singleFormData.siyuanPost.description
       singleFormData.mergedPost.markdown = singleFormData.siyuanPost.markdown
+      singleFormData.mergedPost.wp_slug = singleFormData.siyuanPost.wp_slug
     } else {
       logger.info("Reading post from remote platform")
       if (StrUtil.isEmptyString(postid)) {
@@ -313,10 +328,16 @@ const usePublish = () => {
       // 正文以思源笔记为准
       singleFormData.mergedPost.description = singleFormData.siyuanPost.description
       singleFormData.mergedPost.markdown = singleFormData.siyuanPost.markdown
+      // 别名以远程平台为准
+      singleFormData.mergedPost.wp_slug = singleFormData.platformPost.wp_slug
 
       // 更新预览链接
       await setPreviewUrl(api, postid)
     }
+
+    // 公共部分
+    // 初始化别名
+    singleFormData.mergedPost = await assignSlug(singleFormData.mergedPost, id)
     return singleFormData
   }
 
@@ -326,6 +347,7 @@ const usePublish = () => {
     doSingleDelete,
     doForceSingleDelete,
     doInitPage,
+    assignSlug,
   }
 }
 
