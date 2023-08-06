@@ -29,7 +29,7 @@ import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useRouter } from "vue-router"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { DynamicConfig, DynamicJsonCfg, getDynPostidKey } from "~/src/components/set/publish/platform/dynamicConfig.ts"
-import { HtmlUtil, JsonUtil, StrUtil } from "zhi-common"
+import { HtmlUtil, JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 
@@ -72,7 +72,7 @@ const handleSingleDoPublish = (key: string) => {
 
 const checkHasPublished = (key: string) => {
   const postidKey = getDynPostidKey(key)
-  const postMetaValue = formData.postMeta.hasOwnProperty(postidKey) ? formData.postMeta[postidKey] : undefined
+  const postMetaValue = ObjectUtil.getProperty(formData.postMeta, postidKey)
 
   return !StrUtil.isEmptyString(postMetaValue)
 }
@@ -82,7 +82,7 @@ const initPage = async () => {
   const dynJsonCfg = JsonUtil.safeParse<DynamicJsonCfg>(setting[DYNAMIC_CONFIG_KEY], {} as DynamicJsonCfg)
   const dynamicConfigArray = dynJsonCfg?.totalCfg || []
   formData.enabledConfigArray = dynamicConfigArray.filter((item) => item.isEnabled && item.isAuth)
-  formData.postMeta = setting[props.id]
+  formData.postMeta = ObjectUtil.getProperty(setting, props.id, {})
 }
 
 onMounted(async () => {
