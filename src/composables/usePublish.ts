@@ -96,7 +96,8 @@ const usePublish = () => {
           throw new Error("配置错误，posidKey不能为空，请检查配置")
         }
         const postMeta = singleFormData.setting[id] ?? {}
-        singleFormData.postid = postMeta[posidKey] ?? ""
+        const postMetaValue = postMeta.hasOwnProperty(posidKey) ? postMeta[posidKey] : undefined
+        singleFormData.postid = postMetaValue ?? ""
       }
 
       singleFormData.isAdd = StrUtil.isEmptyString(singleFormData.postid)
@@ -180,7 +181,9 @@ const usePublish = () => {
       if (singleFormData.publishProcessStatus) {
         const postMeta = singleFormData.setting[id] ?? {}
         const updatedPostMeta = { ...postMeta }
-        delete updatedPostMeta[posidKey]
+        if (updatedPostMeta.hasOwnProperty(posidKey)) {
+          delete updatedPostMeta[posidKey]
+        }
 
         singleFormData.setting[id] = updatedPostMeta
         await updateSetting(singleFormData.setting)

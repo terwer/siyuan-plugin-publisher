@@ -72,7 +72,7 @@ const handleSingleDoPublish = (key: string) => {
 
 const checkHasPublished = (key: string) => {
   const postidKey = getDynPostidKey(key)
-  const postMetaValue = formData.postMeta[postidKey]
+  const postMetaValue = formData.postMeta.hasOwnProperty(postidKey) ? formData.postMeta[postidKey] : undefined
 
   return !StrUtil.isEmptyString(postMetaValue)
 }
