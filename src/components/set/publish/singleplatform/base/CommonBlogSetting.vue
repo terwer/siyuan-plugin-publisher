@@ -28,7 +28,7 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { AppInstance } from "~/src/appInstance.ts"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
-import { onMounted, reactive, ref } from "vue"
+import { onMounted, reactive, ref, toRaw } from "vue"
 import { DynamicConfig, DynamicJsonCfg, getDynCfgByKey, setDynamicJsonCfg } from "~/src/platforms/dynamicConfig.ts"
 import { SypConfig } from "~/syp.config.ts"
 import { CommonblogConfig } from "~/src/adaptors/api/base/CommonblogConfig.ts"
@@ -159,6 +159,10 @@ const valiConf = async () => {
 }
 
 const saveConf = async (hideTip?: any) => {
+  logger.debug("prepare to store cfg=>", {
+    cfg: toRaw(formData.cfg),
+  })
+
   logger.debug("Commonblog通用Setting保存配置")
   // 平台使用配置
   formData.setting[props.apiType] = formData.cfg
@@ -246,6 +250,7 @@ onMounted(async () => {
       class="top-tip"
       type="info"
     />
+    <slot name="header" :cfg="formData.cfg"></slot>
     <!-- 首页 -->
     <el-form-item :label="t('setting.common.home')">
       <el-input
@@ -286,9 +291,10 @@ onMounted(async () => {
         :placeholder="props.cfg.placeholder.passwordPlaceholder"
       />
       <a v-if="props.cfg.showTokenTip" :href="props.cfg.tokenSettingUrl" target="_blank"
-        >{{ t("setting.common.token.gen") }}：{{ props.cfg.tokenSettingUrl }}333</a
+        >{{ t("setting.common.token.gen") }}：{{ props.cfg.tokenSettingUrl }}</a
       >
     </el-form-item>
+    <slot name="main" :cfg="formData.cfg" />
     <!-- 预览地址 -->
     <el-form-item :label="t('setting.blog.previewUrl')">
       <el-input v-model="formData.cfg.previewUrl" :placeholder="props.cfg?.placeholder.previewUrlPlaceholder" />
@@ -345,6 +351,7 @@ onMounted(async () => {
       <el-button type="primary" @click="saveConf">{{ t("setting.blog.save") }}</el-button>
       <el-button>{{ t("setting.blog.cancel") }}</el-button>
     </el-form-item>
+    <slot name="footer" :cfg="formData.cfg" />
   </el-form>
 </template>
 

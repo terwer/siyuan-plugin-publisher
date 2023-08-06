@@ -148,15 +148,17 @@ export default {
   "setting.blog.type.github.email": "邮箱",
   "setting.blog.type.github.email.tip": "邮箱",
   "setting.blog.url": "博客网址",
+  "setting.blog.github.url.tip": "Github首页地址",
   "setting.blog.username": "账号",
   "setting.blog.password": "密码/Token",
   "setting.blog.apiurl": "API地址",
+  "setting.blog.github.apiurl.tip": "Github 的 REST API 地址，通常是：https://api.github.com",
   "setting.blog.previewUrl": "预览规则",
   "setting.blog.previewUrl.tip":
     "预览规则（占位符：[yyyy] [MM] [dd] [postid]），例如：/post/[postid].html 或者 /[cats]/[yyyy]/[mm]/[dd]/[postid].html",
   "setting.blog.previewMdUrl": "MD预览规则",
   "setting.blog.previewMdUrl.tip":
-    "MD文件预览规则（占位符：[user] [repo] [branch] [docpath]），例如：/[user]/[repo]/blob/[branch]/[docpath]",
+    "MD文件预览规则（占位符：[user] [repo] [branch] [docpath]），通常是：/[user]/[repo]/blob/[branch]/[docpath]",
   "setting.blog.mdFilenameRule": "文件规则",
   "setting.blog.mdFilenameRule.tip":
     "Markdown文件名规则（占位符：[yyyy] [MM] [dd] [slug] [filename] ），例如：[filename].md 或者 [yyyy]-[mm]-[dd]-[slug].md",
@@ -404,12 +406,14 @@ export default {
   "setting.jvue.password.tip": "JVue平台密码",
   "setting.jvue.apiUrl.tip": "JVue平台的xmlrpc远程发布地址，通常固定是：https://<平台地址>/xmlrpc",
   "setting.jvue.previewUrl.tip": "JVue平台的文章预览规则，通常是：/post/[postid].html",
+
   "setting.conf.home.tip": "Confluence Cloud，首页，通常是：https://<您的用户名>.atlassian.net/wiki/spaces/<空间名>",
   "setting.conf.username.tip": "Confluence登录名，可前往您的atlassian账户获取",
   "setting.conf.password.tip": "Confluence访问令牌，可前往您的atlassian账户获取",
   "setting.conf.apiUrl.tip":
     "可前往 https://developer.atlassian.com/cloud/confluence/rest/v1/#api-wiki-rest-api-content-get 查看文档",
   "setting.conf.previewUrl.tip": "Confluence平台文章预览规则，通常是：/pages/[postid]",
+
   "setting.picgo.refer.to": "详情请参考：",
   "setting.picgo.refer.to.online.doc": "PicGO配置在线文档",
   "setting.picgo.picbed": "图床设置",
@@ -523,5 +527,6 @@ export default {
   "main.publish.remove": "批量删除",
   "setting.blog.knowledge.space": "知识空间/知识库",
   "main.data.empty": "暂无数据",
-  "enableKnowledgeSpace.Tips": "验证通过之后，将列出可用的 [[knowledge-space-title]] 列表，您可以根据需要修改默认 [[knowledge-space-title]] 并保存",
+  "enableKnowledgeSpace.Tips":
+    "验证通过之后，将列出可用的 [[knowledge-space-title]] 列表，您可以根据需要修改默认 [[knowledge-space-title]] 并保存",
 }

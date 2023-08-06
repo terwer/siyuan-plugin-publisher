@@ -28,6 +28,7 @@ import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useHexoApi } from "~/src/adaptors/api/hexo/useHexoApi.ts"
 import { HexoConfig } from "~/src/adaptors/api/hexo/hexoConfig.ts"
 import { HexoPlaceHolder } from "~/src/adaptors/api/hexo/hexoPlaceHolder.ts"
+import { StrUtil } from "zhi-common"
 
 const props = defineProps({
   apiType: {
@@ -40,18 +41,24 @@ const { t } = useVueI18n()
 const { cfg } = await useHexoApi(props.apiType)
 const hexoCfg = cfg as HexoConfig
 const hexoPlaceholder = new HexoPlaceHolder()
-hexoPlaceholder.homePlaceholder = t("setting.hexo.home.tip")
-hexoPlaceholder.usernamePlaceholder = t("setting.hexo.username.tip")
-hexoPlaceholder.passwordPlaceholder = t("setting.hexo.password.tip")
-hexoPlaceholder.apiUrlPlaceholder = t("setting.hexo.apiurl.tip")
-hexoPlaceholder.previewUrlPlaceholder = t("setting.hexo.previewUrl.tip")
+hexoPlaceholder.homePlaceholder = t("setting.blog.github.url.tip")
+hexoPlaceholder.usernamePlaceholder = t("setting.blog.type.github.user.tip")
+hexoPlaceholder.passwordPlaceholder = t("setting.blog.type.github.token.tip")
+hexoPlaceholder.apiUrlPlaceholder = t("setting.blog.github.apiurl.tip")
+hexoPlaceholder.previewUrlPlaceholder = t("setting.blog.previewMdUrl.tip")
 hexoCfg.placeholder = hexoPlaceholder
+hexoCfg.usernameEnabled = true
+hexoCfg.showTokenTip = true
 // hexoCfg.knowledgeSpaceTitle = "知识库"
 // hexoCfg.enableKnowledgeSpace = true
 </script>
 
 <template>
-  <common-github-setting :api-type="props.apiType" :cfg="hexoCfg" />
+  <common-github-setting :api-type="props.apiType" :cfg="hexoCfg">
+    <template #header="header"> </template>
+    <template #main="main"> </template>
+    <template #footer="footer"> </template>
+  </common-github-setting>
 </template>
 
 <style scoped lang="stylus"></style>

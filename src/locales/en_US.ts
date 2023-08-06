@@ -146,6 +146,8 @@ export default {
   "setting.blog.type.github.email": "Email",
   "setting.blog.type.github.email.tip": "Email",
   "setting.blog.url": "Blog addr",
+  "setting.blog.github.url.tip": "Github homepage address",
+  "setting.blog.github.apiurl.tip": "Github's REST API address, typically: https://api.github.com",
   "setting.blog.previewUrl": "Preview rule",
   "setting.blog.previewUrl.tip":
     "Preview Rules (place occupied: [yyyy] [mm] [dd] [postid]), for example:/post/[postid].html or /[cats]/[yyyy]/[mm]/[dd]/[[dd]/[postid].html",
@@ -415,6 +417,7 @@ export default {
   "setting.conf.password.tip": "Confluence access token, you can go to your Atlassian account to get",
   "setting.conf.apiUrl.tip": "You can go to https://developper.atlassian.com/Cloud/confluence/rest/v1/1/1/",
   "setting.conf.previewUrl.tip": "CONFLUENCE platform articles preview rules, usually:/pages/[postid]",
+
   "setting.picgo.refer.to": "For details, please refer to:",
   "setting.picgo.refer.to.online.doc": "Picgo configuration online documentation",
   "setting.picgo.picbed": "Picbed setting",

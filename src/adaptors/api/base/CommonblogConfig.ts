@@ -125,6 +125,11 @@ export class CommonblogConfig extends BlogConfig {
    */
   public usernameEnabled = false
 
+  /**
+   * 是否展示Token设置地址
+   */
+  public showTokenTip = false
+
   constructor(home: string, apiUrl: string, username: string, password: string, middlewareUrl?: string) {
     super()
     this.home = home

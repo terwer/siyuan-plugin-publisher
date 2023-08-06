@@ -43,6 +43,7 @@ class HexoConfig extends CommonGithubConfig {
     super(githubUsername, githubAuthToken, githubRepo, githubBranch, middlewareUrl)
 
     this.tokenSettingUrl = "https://github.com/settings/tokens"
+    this.showTokenTip = true
     this.defaultPath = "source/_posts"
     this.previewUrl = "/[user]/[repo]/blob/[branch]/[docpath]"
     // this.previewPostUrl = "/post/[postid].html"

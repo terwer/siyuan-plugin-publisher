@@ -89,11 +89,6 @@ export class MetaweblogConfig extends CommonblogConfig {
    */
   public override middlewareUrl = ""
 
-  /**
-   * 是否展示Token设置地址
-   */
-  public showTokenTip = false
-
   constructor(home: string, apiUrl: string, username: string, password: string, middlewareUrl?: string) {
     super(home, apiUrl, username, password, middlewareUrl)
 

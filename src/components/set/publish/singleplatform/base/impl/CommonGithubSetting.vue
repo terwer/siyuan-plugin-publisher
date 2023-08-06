@@ -24,9 +24,9 @@
   -->
 
 <script setup lang="ts">
-import { CommonGithubConfig } from "~/src/adaptors/api/base/github/CommonGithubConfig.ts"
-
 // props
+import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+
 const props = defineProps({
   apiType: {
     type: String,
@@ -38,10 +38,42 @@ const props = defineProps({
     default: null,
   },
 })
+
+const { t } = useVueI18n()
 </script>
 
 <template>
-  <common-blog-setting :api-type="props.apiType" :cfg="props.cfg" />
+  <common-blog-setting :api-type="props.apiType" :cfg="props.cfg">
+    <template #header="header">
+      <slot name="header" :cfg="header.cfg" />
+    </template>
+
+    <template #main="main">
+      <!-- Github仓库名 -->
+      <el-form-item :label="t('setting.blog.type.github.repo')">
+        <el-input v-model="(main.cfg as any).githubRepo" :placeholder="t('setting.blog.type.github.repo.tip')" />
+      </el-form-item>
+      <!-- Github分支名 -->
+      <el-form-item :label="t('setting.blog.type.github.default.branch')">
+        <el-input
+          v-model="(main.cfg as any).githubBranch"
+          :placeholder="t('setting.blog.type.github.default.branch.tip')"
+        />
+      </el-form-item>
+      <!-- 存储路径 -->
+      <el-form-item :label="t('setting.blog.type.github.default.path')">
+        <el-input
+          v-model="(main.cfg as any).defaultPath"
+          :placeholder="t('setting.blog.type.github.default.path.tip')"
+        />
+      </el-form-item>
+      <slot name="main" :cfg="main.cfg" />
+    </template>
+
+    <template #footer="footer">
+      <slot name="footer" :cfg="footer.cfg" />
+    </template>
+  </common-blog-setting>
 </template>
 
 <style scoped lang="stylus">

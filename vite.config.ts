@@ -9,6 +9,7 @@ import AutoImport from "unplugin-auto-import/vite"
 import Components from "unplugin-vue-components/vite"
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers"
 import { nodePolyfills } from "vite-plugin-node-polyfills"
+import vueI18n from "@intlify/vite-plugin-vue-i18n"
 
 // methods start
 const getAppBase = (isSiyuanBuild: boolean, isWidgetBuild: boolean, isStaticBuild: boolean): string => {
@@ -88,6 +89,9 @@ console.log("isStaticBuild=>", isStaticBuild)
 export default defineConfig({
   plugins: [
     vue(),
+    vueI18n({
+      include: path.resolve(__dirname, "./path/to/src/locales/**"),
+    }),
 
     AutoImport({
       resolvers: [ElementPlusResolver()],
@@ -165,6 +169,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "~": path.resolve(__dirname, "./"),
+      "vue-i18n": "vue-i18n/dist/vue-i18n.runtime.esm-bundler.js",
     },
   },
 

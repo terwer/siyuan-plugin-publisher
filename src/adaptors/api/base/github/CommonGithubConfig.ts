@@ -50,12 +50,16 @@ class CommonGithubConfig extends CommonblogConfig {
     githubBranch: string,
     middlewareUrl?: string
   ) {
-    super("https://github.com", "", githubUsername, githubAuthToken, middlewareUrl)
+    super("https://github.com", "https://api.github.com", githubUsername, githubAuthToken, middlewareUrl)
+
 
     this.username = githubUsername
-    this.password = githubAuthToken
     this.usernameEnabled = true
+    this.password = githubAuthToken
     this.passwordType = PasswordType.PasswordType_Token
+    this.tokenSettingUrl = "https://github.com/settings/tokens"
+    this.showTokenTip = true
+    this.previewUrl = "/[user]/[repo]/blob/[branch]/[docpath]"
     this.githubRepo = githubRepo
     this.githubBranch = githubBranch
     this.defaultPath = "/"
