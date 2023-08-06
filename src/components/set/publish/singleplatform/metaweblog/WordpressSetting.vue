@@ -27,8 +27,8 @@
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import MetaweblogSetting from "~/src/components/set/publish/singleplatform/base/platform/MetaweblogSetting.vue"
 import { useWordpressApi } from "~/src/adaptors/api/wordpress/useWordpressApi.ts"
-import { WordpressConfig } from "~/src/adaptors/api/wordpress/config/wordpressConfig.ts"
-import { WordpressPlaceholder } from "~/src/adaptors/api/wordpress/config/wordpressPlaceholder.ts"
+import { WordpressConfig } from "~/src/adaptors/api/wordpress/wordpressConfig.ts"
+import { WordpressPlaceholder } from "~/src/adaptors/api/wordpress/wordpressPlaceholder.ts"
 import WordpressUtils from "~/src/adaptors/api/wordpress/wordpressUtils.ts"
 import { StrUtil } from "zhi-common"
 

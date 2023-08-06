@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { WordpressConfig } from "~/src/adaptors/api/wordpress/config/wordpressConfig.ts"
+import { WordpressConfig } from "~/src/adaptors/api/wordpress/wordpressConfig.ts"
 import { AppInstance } from "~/src/appInstance.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { MetaweblogBlogApi } from "~/src/adaptors/api/base/metaweblog/metaweblogBlogApi.ts"
