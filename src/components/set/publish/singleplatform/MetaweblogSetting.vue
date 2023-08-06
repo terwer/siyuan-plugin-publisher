@@ -89,8 +89,8 @@ const valiConf = async () => {
 
       formData.cfg.blogid = userBlog.blogid
       formData.cfg.blogName = userBlog.blogName
+
       formData.cfg.apiStatus = true
-      formData.dynCfg.isAuth = true
     } else {
       formData.cfg.apiStatus = false
     }

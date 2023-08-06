@@ -23,17 +23,10 @@
  * questions.
  */
 
-import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
+import { CommonblogPlaceholder } from "~/src/adaptors/api/base/commonblog/config/CommonblogPlaceholder.ts"
 
 /**
- * Github API 适配器
- *
- * @author terwer
- * @version 0.9.0
- * @since 0.9.0
+ * Github 操作提示
  */
-class CommonGithubApiAdaptor extends BaseBlogApi {
-
-}
-
-export { CommonGithubApiAdaptor }
+class CommonGithubPlaceholder extends CommonblogPlaceholder {}
+export { CommonGithubPlaceholder }
