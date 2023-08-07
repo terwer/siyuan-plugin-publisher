@@ -28,6 +28,8 @@ If you still can't use this step after this step, [New issue](https://github.com
 
 ## Recent critical updates and bug fixes
 
+- Support article binding
+- HEXO supports YAML
 - Support automatic generation of article aliases
 - Unified integration of platform configurations
 - Complete HEXO adaptation
@@ -39,8 +41,6 @@ If you still can't use this step after this step, [New issue](https://github.com
 - Added notion support
 - Support for changing the default knowledge base
 - Added support for general releases with fine-grained configuration
-- Close the pop-up window after setting to cancel the reload and improve the experience
-- Fixed the issue that icons did not load when rebooting
 - Support for Yuque, Cnblogs, Metaweblog, Typecho, WordPress
 
 ## Compatibility of Origin notes

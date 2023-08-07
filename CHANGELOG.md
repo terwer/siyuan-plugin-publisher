@@ -1,10 +1,14 @@
 # Changelog
 
-## [1.4.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.4.0...v1.4.1) (2023-08-07)
+## [1.5.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.4.1...v1.5.0) (2023-08-07)
+### Features
+* hexo 支持 yaml ([a230ff0](https://github.com/terwer/siyuan-plugin-publisher/commit/a230ff0d6979516563bc005807ea2085b3b9880c))
+* 支持文章绑定 ([e3a92d0](https://github.com/terwer/siyuan-plugin-publisher/commit/e3a92d0d2d0e67d4e97cd864f5cd707c02f97610))
 ### Bug Fixes
+* fix typo ([94f77ba](https://github.com/terwer/siyuan-plugin-publisher/commit/94f77bab0e977166370a20861e2eb6c2c65751e5))
+## [1.4.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.4.0...v1.4.1) (2023-08-07)
 * 修复构建错误 ([32e8f61](https://github.com/terwer/siyuan-plugin-publisher/commit/32e8f61d193d0a979c4417653bc8b202b0be7b04))
 ## [1.4.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.3.2...v1.4.0) (2023-08-07)
-### Features
 * hexo 平台设置 ([77950ed](https://github.com/terwer/siyuan-plugin-publisher/commit/77950ed45f0bf5eda4eed9a0afd1a3ba18a53c43))
 * hexo 平台设置 - 增加 yaml 转换器 ([97a13ee](https://github.com/terwer/siyuan-plugin-publisher/commit/97a13ee2392ccbeacfe8f46dcd8a20e33b0ae7bf))
 * 修复别名问题 ([4634b7d](https://github.com/terwer/siyuan-plugin-publisher/commit/4634b7de98a950b4405cfa07dc1408fbb5ff1561))
@@ -23,7 +27,6 @@
 * 集成单元测试 ([25be93a](https://github.com/terwer/siyuan-plugin-publisher/commit/25be93aaab26330020429838e3883745458bafbc))
 * 修复常规发布返回异常问题 ([f0ba519](https://github.com/terwer/siyuan-plugin-publisher/commit/f0ba5191e02e6f96bc73d3c349c88c6fdc5240df))
 ## [1.3.2](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.3.1...v1.3.2) (2023-08-06)
-* fix typo ([94f77ba](https://github.com/terwer/siyuan-plugin-publisher/commit/94f77bab0e977166370a20861e2eb6c2c65751e5))
 * typecho默认发布为html ([a952a03](https://github.com/terwer/siyuan-plugin-publisher/commit/a952a03d7e2c9274193797d8055d320293b76ba2))
 * 修复typecho更新不生效问题 ([78b269b](https://github.com/terwer/siyuan-plugin-publisher/commit/78b269b0f45efa3a62b429cfb9b913e2a02ccea8))
 * 修复typecho默认发布状态为草稿的问题 ([c6b36dc](https://github.com/terwer/siyuan-plugin-publisher/commit/c6b36dcad275bab7589a70ddc63bd9359d390667))
