@@ -81,6 +81,8 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
 
   public async newPost(post: Post, publish?: boolean): Promise<string> {
     this.logger.debug("start newPost =>", { post: toRaw(post) })
+    const filename = post.wp_slug
+    const docPath = `/xxx/${filename}.md`
     throw new Error("newPost 开发中...")
     // const docPath = `${post.wp_slug}`
     // const res = await this.githubClient.publishGithubPage(docPath, post.description)

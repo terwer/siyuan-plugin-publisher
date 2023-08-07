@@ -9,7 +9,6 @@ import AutoImport from "unplugin-auto-import/vite"
 import Components from "unplugin-vue-components/vite"
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers"
 import { nodePolyfills } from "vite-plugin-node-polyfills"
-import vueI18n from "@intlify/vite-plugin-vue-i18n"
 
 // methods start
 const getAppBase = (isSiyuanBuild: boolean, isWidgetBuild: boolean, isStaticBuild: boolean): string => {
@@ -229,4 +228,18 @@ export default defineConfig({
       },
     },
   },
-})
+
+  test: {
+    globals: true,
+    environment: "jsdom",
+    // environment: "node",
+    // environment: "happy-dom",
+    setupFiles: ["./src/setup.ts"],
+    include: ["src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
+    server: {
+      deps: {
+        inline: ["element-plus"],
+      },
+    },
+  },
+} as any)

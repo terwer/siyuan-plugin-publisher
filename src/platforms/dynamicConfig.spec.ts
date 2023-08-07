@@ -45,6 +45,6 @@ describe("test dynamicConfig", () => {
     const subtype = SubPlatformType.Common_Yuque
     const result = getNewPlatformKey(ptype, subtype)
     console.log("result=>", result)
-    expect(result).toMatch(/common_Zhihu-\w+/)
+    expect(result).toMatch(/common_Yuque-\w+/)
   })
 })

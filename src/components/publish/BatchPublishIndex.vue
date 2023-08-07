@@ -50,13 +50,14 @@ const props = defineProps({
 
 // uses
 const { t } = useVueI18n()
-const { doSinglePublish, doSingleDelete,assignSlug } = usePublish()
+const { doSinglePublish, doSingleDelete, assignAttrs } = usePublish()
 const { blogApi } = useSiyuanApi()
 
 // datas
 const sysKeys = pre.systemCfg.map((item) => {
   return item.platformKey
 })
+const id = StrUtil.isEmptyString(props.id) ? process.env.VITE_DEV_PAGE_ID : props.id
 const formData = reactive({
   isPublishLoading: false,
   isDeleteLoading: false,
@@ -82,7 +83,7 @@ const handlePublish = async () => {
     formData.failBatchResults = []
     formData.successBatchResults = []
     for (const key of formData.dynList) {
-      const batchResult = await doSinglePublish(key, props.id, formData.siyuanPost)
+      const batchResult = await doSinglePublish(key, id, formData.siyuanPost)
       if (batchResult.status) {
         formData.successBatchResults.push(batchResult)
       } else {
@@ -140,7 +141,7 @@ const doDelete = async () => {
         logger.info(`[${key}] 系统内置平台，不可删除，跳过`)
         continue
       }
-      const batchResult = await doSingleDelete(key, props.id)
+      const batchResult = await doSingleDelete(key, id)
       if (!batchResult.status) {
         formData.failBatchResults.push(batchResult)
         formData.errCount++
@@ -171,11 +172,11 @@ const handleRefresh = () => {
 }
 
 onMounted(async () => {
-  logger.info("获取到的ID为=>", props.id)
+  logger.info("获取到的ID为=>", id)
   // 思源笔记原始文章数据
-  formData.siyuanPost = await blogApi.getPost(props.id)
-  // 初始化别名
-  formData.siyuanPost = await assignSlug(formData.siyuanPost, props.id)
+  formData.siyuanPost = await blogApi.getPost(id)
+  // 初始化属性
+  formData.siyuanPost = await assignAttrs(formData.siyuanPost)
 })
 </script>
 

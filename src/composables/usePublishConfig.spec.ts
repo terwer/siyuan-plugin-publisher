@@ -23,23 +23,41 @@
  * questions.
  */
 
-import { createVueApp } from "./utils/VueUtils"
-import { InjectKeys } from "./utils/injectKeys"
-import { createAppLogger } from "./utils/appLogger"
+import { beforeEach, describe, it } from "vitest"
+import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
+import { config, mount } from "@vue/test-utils"
+import App from "~/src/App.vue"
+import { createVueApp } from "~/src/utils/VueUtils.ts"
+import { InjectKeys } from "~/src/utils/injectKeys.ts"
 
-import "element-plus/dist/index.css"
-import "element-plus/theme-chalk/dark/css-vars.css"
-
-;(async () => {
-  const logger = createAppLogger("main")
-
+describe("test usePublishConfig", async () => {
   const instance = await createVueApp()
   const app = instance.app
 
-  // 挂载 vue app
-  app.mount("#app")
+  beforeEach(async () => {
+    // apply plugins
+    config.global.plugins = [instance.i18n, instance.router]
 
-  // 暴露 Vue 实例
-  app.provide(InjectKeys.VUE_INSTANCE, app)
-  logger.info("vue app created")
-})()
+    // mock env
+    process.env.VITE_DEFAULT_TYPE = "siyuan"
+    process.env.VITE_SIYUAN_API_URL = "http://127.0.0.1:6806"
+    process.env.VITE_SIYUAN_AUTH_TOKEN = ""
+    process.env.VITE_DEV_PAGE_ID = "20230731201306-ps6ld6p"
+    // 等价于访问首页: http://localhost:5173/#/?id=20230731201306-ps6ld6p
+
+    const wrapper = mount(App)
+    // 暴露 Vue 实例
+    app.provide(InjectKeys.VUE_INSTANCE, app)
+    console.log(wrapper.html())
+  })
+
+  it("test getPublishCfg", async () => {
+    // 创建测试用例
+    const inputKey = "exampleKey"
+    const { getPublishCfg } = usePublishConfig()
+
+    // 调用被测函数
+    const result = await getPublishCfg(inputKey)
+    console.log("result =>", result)
+  })
+})

@@ -27,16 +27,21 @@
 import { onMounted, reactive } from "vue"
 import { useRoute } from "vue-router"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { StrUtil } from "zhi-common"
+import { JsonUtil, StrUtil } from "zhi-common"
 import { usePublish } from "~/src/composables/usePublish.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
+import { AppInstance } from "~/src/appInstance.ts"
+import Adaptors from "~/src/adaptors"
+import { Utils } from "~/src/utils/utils.ts"
+import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 
 const logger = createAppLogger("quick-publish-worker")
 
 // uses
 const route = useRoute()
-const { singleFormData, doSinglePublish, assignSlug } = usePublish()
+const { singleFormData, doSinglePublish, assignAttrs } = usePublish()
 const { blogApi } = useSiyuanApi()
+const { getSetting, updateSetting } = useSettingStore()
 
 // datas
 const params = reactive(route.params)
@@ -51,11 +56,19 @@ onMounted(async () => {
   singleFormData.isPublishLoading = true
   setTimeout(async () => {
     logger.info("单个快速发布开始")
+    // 加载配置
+    singleFormData.setting = await getSetting()
+    singleFormData.cfg = JsonUtil.safeParse<any>(singleFormData.setting[key], {} as any)
+    // 初始化API
+    const appInstance = new AppInstance()
+    const apiAdaptor = await Adaptors.getAdaptor(key)
+    const api = Utils.blogApi(appInstance, apiAdaptor)
+    logger.info("api=>", api)
     // 思源笔记原始文章数据
-    let doc = await blogApi.getPost(id)
-    // 初始化别名
-    doc = await assignSlug(doc, id)
-    formData.processResult = await doSinglePublish(key, id, doc)
+    let siyuanPost = await blogApi.getPost(id)
+    // 初始化属性
+    siyuanPost = await assignAttrs(siyuanPost)
+    formData.processResult = await doSinglePublish(key, id, siyuanPost)
     logger.info("单个快速发布结束")
     singleFormData.isPublishLoading = false
   }, 200)

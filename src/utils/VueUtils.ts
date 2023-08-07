@@ -23,43 +23,49 @@
  * questions.
  */
 
-import { isDebugMode, isDev } from "~/src/utils/constants.ts"
-import { simpleLogger } from "zhi-lib-base"
+import { createApp } from "vue"
+import App from "~/src/App.vue"
+import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { useVueRouter } from "~/src/composables/useVueRouter.ts"
+import i18n from "~/src/locales"
+import { InjectKeys } from "~/src/utils/injectKeys.ts"
+import { AppInstance } from "~/src/appInstance.ts"
+import { createPinia } from "pinia"
 
 /**
- * 使用 eruda 更好的控制日志
- */
-if (typeof window === "undefined") {
-  global.console = console
-} else {
-  window.console = isDev && isDebugMode ? (window as any).eruda.get("console") : window.console
-}
-
-/**
- * 简单的日志接口
- */
-export interface ILogger {
-  debug: (msg: string, obj?: any) => void
-  info: (msg: string, obj?: any) => void
-  warn: (msg: string, obj?: any) => void
-  error: (msg: string | Error, obj?: any) => void
-}
-
-/**
- * 一个简单轻量级的日志记录器
+ * Vue 入口
  *
  * @author terwer
  * @version 0.9.0
- * @since 0.9.0
+ * @since 0.0.1
  */
-export const createAppLogger = (name: string): ILogger => {
-  return simpleLogger(name, "publisher-widget", isDev)
+const createVueApp = async (isMount?: boolean) => {
+  const logger = createAppLogger("vue-main-entry")
+
+  // https://stackoverflow.com/a/62383325/4037224
+  const app = createApp(App)
+
+  // 国际化
+  app.use(i18n)
+
+  // pinia
+  const pinia = createPinia()
+  app.use(pinia)
+
+  // router
+  const router = useVueRouter()
+  app.use(router)
+
+  // appInstance
+  const appInstance = new AppInstance()
+  app.provide(InjectKeys.APP_INSTANCE, appInstance)
+  logger.info("appInstance provided=>", appInstance)
+
+  // ElementPlus 包太大，需要改成按需引入
+  // https://element-plus.org/zh-CN/guide/quickstart.html#%E6%8C%89%E9%9C%80%E5%AF%BC%E5%85%A5
+  // app.use(ElementPlus)
+
+  return { i18n, router, app }
 }
 
-/**
- * 销毁日志
- */
-// export const destroyLogger = (): void => {
-//   const win = window as any
-//   win.eruda.destroy()
-// }
+export { createVueApp }

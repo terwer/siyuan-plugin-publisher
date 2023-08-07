@@ -23,43 +23,38 @@
  * questions.
  */
 
-import { isDebugMode, isDev } from "~/src/utils/constants.ts"
-import { simpleLogger } from "zhi-lib-base"
+import { SypConfig } from "~/syp.config.ts"
+import { CommonblogConfig } from "~/src/adaptors/api/base/CommonblogConfig.ts"
+import { DynamicConfig } from "~/src/platforms/dynamicConfig.ts"
 
 /**
- * 使用 eruda 更好的控制日志
- */
-if (typeof window === "undefined") {
-  global.console = console
-} else {
-  window.console = isDev && isDebugMode ? (window as any).eruda.get("console") : window.console
-}
-
-/**
- * 简单的日志接口
- */
-export interface ILogger {
-  debug: (msg: string, obj?: any) => void
-  info: (msg: string, obj?: any) => void
-  warn: (msg: string, obj?: any) => void
-  error: (msg: string | Error, obj?: any) => void
-}
-
-/**
- * 一个简单轻量级的日志记录器
+ * 表示发布配置的接口
  *
+ * @interface IPublishCfg
  * @author terwer
- * @version 0.9.0
- * @since 0.9.0
+ * @since 1.3.2
  */
-export const createAppLogger = (name: string): ILogger => {
-  return simpleLogger(name, "publisher-widget", isDev)
+interface IPublishCfg {
+  /**
+   * SypConfig 类型的设置值
+   *
+   * @type {typeof SypConfig}
+   */
+  setting: typeof SypConfig
+
+  /**
+   * CommonblogConfig 类型的配置对象
+   *
+   * @type {CommonblogConfig}
+   */
+  cfg: CommonblogConfig
+
+  /**
+   * DynamicConfig 类型的动态配置对象
+   *
+   * @type {DynamicConfig}
+   */
+  dynCfg: DynamicConfig
 }
 
-/**
- * 销毁日志
- */
-// export const destroyLogger = (): void => {
-//   const win = window as any
-//   win.eruda.destroy()
-// }
+export type { IPublishCfg }
