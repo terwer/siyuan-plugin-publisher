@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.4.0...v1.4.1) (2023-08-07)
+
+
+### Bug Fixes
+
+* 修复构建错误 ([5a83283](https://github.com/terwer/siyuan-plugin-publisher/commit/5a832838e6ce72c032a4640e0b7fb58420ad0aa8))
+
 ## [1.4.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.3.2...v1.4.0) (2023-08-07)
 ### Features
 * hexo 平台设置 ([77950ed](https://github.com/terwer/siyuan-plugin-publisher/commit/77950ed45f0bf5eda4eed9a0afd1a3ba18a53c43))
