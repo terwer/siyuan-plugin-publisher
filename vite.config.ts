@@ -228,4 +228,18 @@ export default defineConfig({
       },
     },
   },
-})
+
+  test: {
+    globals: true,
+    environment: "jsdom",
+    // environment: "node",
+    // environment: "happy-dom",
+    setupFiles: ["./src/setup.ts"],
+    include: ["src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
+    server: {
+      deps: {
+        inline: ["element-plus"],
+      },
+    },
+  },
+} as any)

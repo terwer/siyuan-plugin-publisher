@@ -23,14 +23,14 @@
  * questions.
  */
 
-import { MetaweblogConfig } from "~/src/adaptors/api/base/metaweblog/config/MetaweblogConfig.ts"
+import { MetaweblogConfig } from "~/src/adaptors/api/base/metaweblog/MetaweblogConfig.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { AppInstance } from "~/src/appInstance.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { Utils } from "~/src/utils/utils.ts"
-import { getDynPostidKey } from "~/src/components/set/publish/platform/dynamicConfig.ts"
-import { MetaweblogApiAdaptor } from "~/src/adaptors/api/metaweblog/adaptor/metaweblogApiAdaptor.ts"
+import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
+import { MetaweblogApiAdaptor } from "~/src/adaptors/api/metaweblog/metaweblogApiAdaptor.ts"
 
 /**
  * 使用Metaweblog API的自定义hook

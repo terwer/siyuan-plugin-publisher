@@ -25,9 +25,10 @@
 <script lang="ts" setup>
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useCnblogsApi } from "~/src/adaptors/api/cnblogs/useCnblogsApi.ts"
-import MetaweblogSetting from "~/src/components/set/publish/singleplatform/MetaweblogSetting.vue"
-import { CnblogsPlaceholder } from "~/src/adaptors/api/cnblogs/config/cnblogsPlaceholder.ts"
-import { CnblogsConfig } from "~/src/adaptors/api/cnblogs/config/cnblogsConfig.ts"
+import MetaweblogSetting from "~/src/components/set/publish/singleplatform/base/impl/MetaweblogSetting.vue"
+import { CnblogsPlaceholder } from "~/src/adaptors/api/cnblogs/cnblogsPlaceholder.ts"
+import { CnblogsConfig } from "~/src/adaptors/api/cnblogs/cnblogsConfig.ts"
+import { PasswordType } from "zhi-blog-api"
 
 const props = defineProps({
   apiType: {
@@ -47,6 +48,8 @@ cnblogsPlaceholder.passwordPlaceholder = t("setting.cnblogs.password.tip")
 cnblogsPlaceholder.apiUrlPlaceholder = t("setting.cnblogs.apiUrl.tip")
 cnblogsPlaceholder.previewUrlPlaceholder = t("setting.cnblogs.previewUrl.tip")
 cnblogsCfg.placeholder = cnblogsPlaceholder
+cnblogsCfg.usernameEnabled = true
+cnblogsCfg.passwordType = PasswordType.PasswordType_Token
 </script>
 
 <template>

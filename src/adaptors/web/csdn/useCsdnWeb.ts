@@ -23,14 +23,14 @@
  * questions.
  */
 
-import { CsdnConfig } from "~/src/adaptors/web/csdn/config/csdnConfig.ts"
+import { CsdnConfig } from "~/src/adaptors/web/csdn/csdnConfig.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { AppInstance } from "~/src/appInstance.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { Utils } from "~/src/utils/utils.ts"
-import { getDynPostidKey } from "~/src/components/set/publish/platform/dynamicConfig.ts"
-import { CsdnWebAdaptor } from "~/src/adaptors/web/csdn/adaptor/csdnWebAdaptor.ts"
+import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
+import { CsdnWebAdaptor } from "~/src/adaptors/web/csdn/csdnWebAdaptor.ts"
 
 /**
  * 用于获取CsdnWeb的API的自定义Hook

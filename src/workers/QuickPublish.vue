@@ -30,6 +30,7 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { StrUtil } from "zhi-common"
 import { usePublish } from "~/src/composables/usePublish.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
+import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
 
 const logger = createAppLogger("quick-publish-worker")
 
@@ -37,6 +38,7 @@ const logger = createAppLogger("quick-publish-worker")
 const route = useRoute()
 const { singleFormData, doSinglePublish } = usePublish()
 const { blogApi } = useSiyuanApi()
+const { getPublishCfg } = usePublishConfig()
 
 // datas
 const params = reactive(route.params)
@@ -52,8 +54,10 @@ onMounted(async () => {
   setTimeout(async () => {
     logger.info("单个快速发布开始")
     // 思源笔记原始文章数据
-    const doc = await blogApi.getPost(id)
-    formData.processResult = await doSinglePublish(key, id, doc)
+    const siyuanPost = await blogApi.getPost(id)
+    // 初始化属性
+    const publishCfg = await getPublishCfg(key)
+    formData.processResult = await doSinglePublish(key, id, publishCfg, siyuanPost)
     logger.info("单个快速发布结束")
     singleFormData.isPublishLoading = false
   }, 200)
@@ -78,7 +82,7 @@ onMounted(async () => {
         [{{ formData.processResult.key }}]
         {{ StrUtil.isEmptyString(formData.processResult.name) ? "" : `[${formData.processResult.name}]` }}
         成功，
-        <a :href="singleFormData.previewUrl" target="_blank">查看文章</a>
+        <a :href="formData.processResult.previewUrl" target="_blank">查看文章</a>
       </div>
       <div v-else class="fail-tips">
         {{ singleFormData.isAdd ? "发布到" : "更新文章到" }} [{{ formData.processResult.key }}]

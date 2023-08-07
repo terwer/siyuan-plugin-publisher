@@ -30,7 +30,7 @@ import SinglePublishDoPublish from "~/src/components/publish/SinglePublishDoPubl
 import Setting from "~/src/pages/Setting.vue"
 import GeneralSetting from "~/src/components/set/GeneralSetting.vue"
 import PublishSetting from "~/src/components/set/PublishSetting.vue"
-import SettingEntry from "~/src/components/set/publish/singleplatform/SettingEntry.vue"
+import SettingEntry from "~/src/components/set/publish/singleplatform/SingleSettingIndex.vue"
 import PlatformAddForm from "~/src/components/set/publish/PlatformAddForm.vue"
 import PlatformUpdateForm from "~/src/components/set/publish/PlatformUpdateForm.vue"
 import PlatformQuickAdd from "~/src/components/set/publish/PlatformQuickAdd.vue"

@@ -26,11 +26,11 @@
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { AppInstance } from "~/src/appInstance.ts"
 import { Utils } from "~/src/utils/utils.ts"
-import { YuqueConfig } from "~/src/adaptors/api/yuque/config/yuqueConfig.ts"
+import { YuqueConfig } from "~/src/adaptors/api/yuque/yuqueConfig.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import {JsonUtil, ObjectUtil, StrUtil} from "zhi-common"
-import { getDynPostidKey } from "~/src/components/set/publish/platform/dynamicConfig.ts"
-import { YuqueApiAdaptor } from "~/src/adaptors/api/yuque/adaptor/yuqueApiAdaptor.ts"
+import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
+import { YuqueApiAdaptor } from "~/src/adaptors/api/yuque/yuqueApiAdaptor.ts"
 
 const useYuqueApi = async (key: string, newCfg?: YuqueConfig) => {
   // 创建应用日志记录器

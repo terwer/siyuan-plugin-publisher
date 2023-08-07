@@ -23,14 +23,14 @@
  * questions.
  */
 
-import { JianshuConfig } from "~/src/adaptors/web/jianshu/config/JianshuConfig.ts"
+import { JianshuConfig } from "~/src/adaptors/web/jianshu/JianshuConfig.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { AppInstance } from "~/src/appInstance.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { Utils } from "~/src/utils/utils.ts"
-import { getDynPostidKey } from "~/src/components/set/publish/platform/dynamicConfig.ts"
-import { JianshuWebAdaptor } from "~/src/adaptors/web/jianshu/adaptor/jianshuWebAdaptor.ts"
+import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
+import { JianshuWebAdaptor } from "~/src/adaptors/web/jianshu/jianshuWebAdaptor.ts"
 
 /**
  * 用于获取JianshuWeb的API的自定义Hook

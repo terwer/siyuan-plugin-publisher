@@ -23,14 +23,14 @@
  * questions.
  */
 
-import { WechatConfig } from "~/src/adaptors/web/wechat/config/WechatConfig.ts"
+import { WechatConfig } from "~/src/adaptors/web/wechat/WechatConfig.ts"
 import { AppInstance } from "~/src/appInstance.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { Utils } from "~/src/utils/utils.ts"
-import { getDynPostidKey } from "~/src/components/set/publish/platform/dynamicConfig.ts"
-import { WechatWebAdaptor } from "~/src/adaptors/web/wechat/adaptor/wechatWebAdaptor.ts"
+import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
+import { WechatWebAdaptor } from "~/src/adaptors/web/wechat/wechatWebAdaptor.ts"
 
 /**
  * 用于获取WechatWeb的API的自定义Hook

@@ -37,7 +37,7 @@ import {
   PlatformType,
   replacePlatformByKey,
   setDynamicJsonCfg,
-} from "~/src/components/set/publish/platform/dynamicConfig.ts"
+} from "~/src/platforms/dynamicConfig.ts"
 import { JsonUtil } from "zhi-common"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
 import { SypConfig } from "~/syp.config.ts"

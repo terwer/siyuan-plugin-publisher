@@ -26,7 +26,7 @@ import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import { StrUtil } from "zhi-common"
 import { BrowserUtil, SiyuanDevice } from "zhi-device"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { DynamicConfig } from "~/src/components/set/publish/platform/dynamicConfig.ts"
+import { DynamicConfig } from "~/src/platforms/dynamicConfig.ts"
 
 const logger = createAppLogger("widget-utils")
 

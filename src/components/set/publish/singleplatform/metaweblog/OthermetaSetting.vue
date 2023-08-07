@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useMetaweblogApi } from "~/src/adaptors/api/metaweblog/useMetaweblogApi.ts"
-import MetaweblogSetting from "~/src/components/set/publish/singleplatform/MetaweblogSetting.vue"
-import { MetaweblogConfig } from "~/src/adaptors/api/base/metaweblog/config/MetaweblogConfig.ts"
-import { MetaweblogPlaceholder } from "~/src/adaptors/api/base/metaweblog/config/MetaweblogPlaceholder.ts"
+import MetaweblogSetting from "~/src/components/set/publish/singleplatform/base/impl/MetaweblogSetting.vue"
+import { MetaweblogConfig } from "~/src/adaptors/api/base/metaweblog/MetaweblogConfig.ts"
+import { MetaweblogPlaceholder } from "~/src/adaptors/api/base/metaweblog/MetaweblogPlaceholder.ts"
 
 const props = defineProps({
   apiType: {
@@ -23,6 +23,8 @@ metaweblogPlaceholder.passwordPlaceholder = t("setting.metaweblog.password.tip")
 metaweblogPlaceholder.apiUrlPlaceholder = t("setting.metaweblog.apiUrl.tip")
 metaweblogPlaceholder.previewUrlPlaceholder = t("setting.metaweblog.previewUrl.tip")
 metaweblogCfg.placeholder = metaweblogPlaceholder
+metaweblogCfg.usernameEnabled = true
+metaweblogCfg.showTokenTip = false
 </script>
 
 <template>

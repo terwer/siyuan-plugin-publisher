@@ -29,7 +29,11 @@ import { simpleLogger } from "zhi-lib-base"
 /**
  * 使用 eruda 更好的控制日志
  */
-window.console = isDev && isDebugMode ? (window as any).eruda.get("console") : window.console
+if (typeof window === "undefined") {
+  global.console = console
+} else {
+  window.console = isDev && isDebugMode ? (window as any).eruda.get("console") : window.console
+}
 
 /**
  * 简单的日志接口

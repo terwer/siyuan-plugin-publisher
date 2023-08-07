@@ -26,7 +26,7 @@
 <script setup lang="ts">
 import { onMounted, reactive } from "vue"
 import { JsonUtil, StrUtil } from "zhi-common"
-import { DynamicConfig, DynamicJsonCfg, getDynPostidKey } from "~/src/components/set/publish/platform/dynamicConfig.ts"
+import { DynamicConfig, DynamicJsonCfg, getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { svgIcons } from "../../../utils/svgIcons.ts"

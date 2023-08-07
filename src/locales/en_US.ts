@@ -146,11 +146,13 @@ export default {
   "setting.blog.type.github.email": "Email",
   "setting.blog.type.github.email.tip": "Email",
   "setting.blog.url": "Blog addr",
-  "setting.blog.previewUrl": "Preview rule",
-  "setting.blog.previewUrl.tip":
+  "setting.blog.github.url.tip": "Github homepage address",
+  "setting.blog.github.apiurl.tip": "Github's REST API address, typically: https://api.github.com",
+  "setting.blog.previewPostUrl": "Preview rule",
+  "setting.blog.previewPostUrl.tip":
     "Preview Rules (place occupied: [yyyy] [mm] [dd] [postid]), for example:/post/[postid].html or /[cats]/[yyyy]/[mm]/[dd]/[[dd]/[postid].html",
-  "setting.blog.previewMdUrl": "MD preview rule",
-  "setting.blog.previewMdUrl.tip":
+  "setting.blog.previewUrl": "MD preview rule",
+  "setting.blog.previewUrl.tip":
     "MD file preview rules (place occupied: [user] [repo] [Branch] [docpath]), for example:/[user]/[repo]/blob/[branch]/[docpath]",
   "setting.blog.mdFilenameRule": "File rule",
   "setting.blog.mdFilenameRule.tip":
@@ -415,6 +417,7 @@ export default {
   "setting.conf.password.tip": "Confluence access token, you can go to your Atlassian account to get",
   "setting.conf.apiUrl.tip": "You can go to https://developper.atlassian.com/Cloud/confluence/rest/v1/1/1/",
   "setting.conf.previewUrl.tip": "CONFLUENCE platform articles preview rules, usually:/pages/[postid]",
+
   "setting.picgo.refer.to": "For details, please refer to:",
   "setting.picgo.refer.to.online.doc": "Picgo configuration online documentation",
   "setting.picgo.picbed": "Picbed setting",

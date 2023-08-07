@@ -32,3 +32,6 @@ build
 widget
 archive.zip
 components.d.ts
+
+# test
+coverage

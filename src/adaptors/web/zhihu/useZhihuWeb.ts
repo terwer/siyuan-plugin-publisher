@@ -23,14 +23,14 @@
  * questions.
  */
 
-import { ZhihuWebAdaptor } from "~/src/adaptors/web/zhihu/adaptor/zhihuWebAdaptor.ts"
-import { ZhihuConfig } from "~/src/adaptors/web/zhihu/config/zhihuConfig.ts"
+import { ZhihuWebAdaptor } from "~/src/adaptors/web/zhihu/zhihuWebAdaptor.ts"
+import { ZhihuConfig } from "~/src/adaptors/web/zhihu/zhihuConfig.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { AppInstance } from "~/src/appInstance.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { Utils } from "~/src/utils/utils.ts"
-import { getDynPostidKey } from "~/src/components/set/publish/platform/dynamicConfig.ts"
+import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 
 /**
  * 用于获取ZhihuWeb的API的自定义Hook

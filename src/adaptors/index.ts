@@ -24,7 +24,7 @@
  */
 
 import { BlogAdaptor, WebAdaptor } from "zhi-blog-api"
-import { getSubPlatformTypeByKey, SubPlatformType } from "~/src/components/set/publish/platform/dynamicConfig.ts"
+import { getSubPlatformTypeByKey, SubPlatformType } from "~/src/platforms/dynamicConfig.ts"
 import { useCnblogsApi } from "~/src/adaptors/api/cnblogs/useCnblogsApi.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useWordpressApi } from "~/src/adaptors/api/wordpress/useWordpressApi.ts"
@@ -38,6 +38,8 @@ import { useWechatWeb } from "~/src/adaptors/web/wechat/useWechatWeb.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { useMetaweblogApi } from "~/src/adaptors/api/metaweblog/useMetaweblogApi.ts"
 import { useNotionApi } from "~/src/adaptors/api/notion/useNotionApi.ts"
+import { YamlConvertAdaptor } from "~/src/platforms/yamlConvertAdaptor.ts"
+import { useHexoApi } from "~/src/adaptors/api/hexo/useHexoApi.ts"
 
 /**
  * 适配器统一入口
@@ -66,6 +68,11 @@ class Adaptors {
       }
       case SubPlatformType.Common_Notion: {
         const { blogApi } = await useNotionApi(key, newCfg)
+        blogAdaptor = blogApi
+        break
+      }
+      case SubPlatformType.Github_Hexo: {
+        const { blogApi } = await useHexoApi(key, newCfg)
         blogAdaptor = blogApi
         break
       }
@@ -125,6 +132,25 @@ class Adaptors {
     }
     this.logger.debug(`get blogAdaptor from key ${key}=>`, blogAdaptor)
     return blogAdaptor
+  }
+
+  /**
+   * 根据平台key查找YAML适配器
+   *
+   * @param key
+   * @param newCfg
+   */
+  public static async getYamlAdaptor(key: string, newCfg?: any): Promise<YamlConvertAdaptor> {
+    let yamlAdaptor = null
+    const type: SubPlatformType = getSubPlatformTypeByKey(key)
+
+    switch (type) {
+      default: {
+        break
+      }
+    }
+    this.logger.debug(`get yamlAdaptor from key ${key}=>`, yamlAdaptor)
+    return yamlAdaptor
   }
 }
 

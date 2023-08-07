@@ -25,11 +25,11 @@
 
 <script lang="ts" setup>
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import MetaweblogSetting from "~/src/components/set/publish/singleplatform/MetaweblogSetting.vue"
+import MetaweblogSetting from "~/src/components/set/publish/singleplatform/base/impl/MetaweblogSetting.vue"
 import { StrUtil } from "zhi-common"
 import TypechoUtils from "~/src/adaptors/api/typecho/typechoUtils.ts"
-import { TypechoConfig } from "~/src/adaptors/api/typecho/config/typechoConfig.ts"
-import { TypechoPlaceholder } from "~/src/adaptors/api/typecho/config/typechoPlaceholder.ts"
+import { TypechoConfig } from "~/src/adaptors/api/typecho/typechoConfig.ts"
+import { TypechoPlaceholder } from "~/src/adaptors/api/typecho/typechoPlaceholder.ts"
 import { useTypechoApi } from "~/src/adaptors/api/typecho/useTypechoApi.ts"
 
 const props = defineProps({
@@ -60,6 +60,8 @@ tcPlaceholder.passwordPlaceholder = t("setting.typecho.password.tip")
 tcPlaceholder.apiUrlPlaceholder = t("setting.typecho.apiUrl.tip")
 tcPlaceholder.previewUrlPlaceholder = t("setting.typecho.previewUrl.tip")
 tcCfg.placeholder = tcPlaceholder
+tcCfg.usernameEnabled = true
+tcCfg.showTokenTip = false
 </script>
 
 <template>

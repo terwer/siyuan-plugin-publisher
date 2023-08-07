@@ -23,14 +23,14 @@
  * questions.
  */
 
-import { JuejinConfig } from "~/src/adaptors/web/juejin/config/JuejinConfig.ts"
+import { JuejinConfig } from "~/src/adaptors/web/juejin/JuejinConfig.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { AppInstance } from "~/src/appInstance.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { Utils } from "~/src/utils/utils.ts"
-import { getDynPostidKey } from "~/src/components/set/publish/platform/dynamicConfig.ts"
-import { JuejinWebAdaptor } from "~/src/adaptors/web/juejin/adaptor/juejinWebAdaptor.ts"
+import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
+import { JuejinWebAdaptor } from "~/src/adaptors/web/juejin/juejinWebAdaptor.ts"
 
 /**
  * 用于获取JuejinWeb的API的自定义Hook
