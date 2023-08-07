@@ -1,5 +1,8 @@
 # Changelog
 
+## [1.4.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.4.0...v1.4.1) (2023-08-07)
+### Bug Fixes
+* 修复构建错误 ([32e8f61](https://github.com/terwer/siyuan-plugin-publisher/commit/32e8f61d193d0a979c4417653bc8b202b0be7b04))
 ## [1.4.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.3.2...v1.4.0) (2023-08-07)
 ### Features
 * hexo 平台设置 ([77950ed](https://github.com/terwer/siyuan-plugin-publisher/commit/77950ed45f0bf5eda4eed9a0afd1a3ba18a53c43))
@@ -18,7 +21,6 @@
 * 统一整合各平台配置-wordpress ([703e09c](https://github.com/terwer/siyuan-plugin-publisher/commit/703e09c42fc8f1b280f3c548e1bd80b1d5f7682b))
 * 统一整合各平台配置-yuque ([c56b84a](https://github.com/terwer/siyuan-plugin-publisher/commit/c56b84a761dea156567d6345a920268897e64f9d))
 * 集成单元测试 ([25be93a](https://github.com/terwer/siyuan-plugin-publisher/commit/25be93aaab26330020429838e3883745458bafbc))
-### Bug Fixes
 * 修复常规发布返回异常问题 ([f0ba519](https://github.com/terwer/siyuan-plugin-publisher/commit/f0ba5191e02e6f96bc73d3c349c88c6fdc5240df))
 ## [1.3.2](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.3.1...v1.3.2) (2023-08-06)
 * fix typo ([94f77ba](https://github.com/terwer/siyuan-plugin-publisher/commit/94f77bab0e977166370a20861e2eb6c2c65751e5))
@@ -78,7 +80,6 @@
 * 新增扩展菜单 ([6fb007d](https://github.com/terwer/siyuan-plugin-publisher/commit/6fb007df7b04ee212065eb2135903e01a2ab5637))
 * 修复 cross-fetch 版本问题，必须使用 cross-fetch 3 ([69b33dc](https://github.com/terwer/siyuan-plugin-publisher/commit/69b33dca0f04da05113dab530e03b23d1082c2b8))
 * 修复常规发布参数缺失问题 ([e1afcd9](https://github.com/terwer/siyuan-plugin-publisher/commit/e1afcd923fe64fe53e44dd9df43c44ef5e433005))
-* 修复构建错误 ([32e8f61](https://github.com/terwer/siyuan-plugin-publisher/commit/32e8f61d193d0a979c4417653bc8b202b0be7b04))
 * 修复菜单加载顺序问题导致的可能无法显示的问题 ([de27e0a](https://github.com/terwer/siyuan-plugin-publisher/commit/de27e0a33fe3fa47dd2b9ea497a01aacea164fbc))
 * 修复语雀编辑文章可能出错的问题 ([44261c9](https://github.com/terwer/siyuan-plugin-publisher/commit/44261c93fe776836ffa936b32725ae9748527f19))
 * 修复语雀预览链接错误问题 ([b9620cb](https://github.com/terwer/siyuan-plugin-publisher/commit/b9620cb10b12d1a39d24cc47d06ed81f232f2013))

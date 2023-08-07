@@ -28,6 +28,7 @@ If you still can't use this step after this step, [New issue](https://github.com
 
 ## Recent critical updates and bug fixes
 
+- Support automatic generation of article aliases
 - Unified integration of platform configurations
 - Complete HEXO adaptation
 - Fixed the issue where regular publishing returned an exception
