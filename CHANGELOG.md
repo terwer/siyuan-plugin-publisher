@@ -1,40 +1,26 @@
 # Changelog
 
 ## [1.4.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.3.2...v1.4.0) (2023-08-07)
-
-
 ### Features
-
-* Hexo 平台设置 ([dccf414](https://github.com/terwer/siyuan-plugin-publisher/commit/dccf41414257e93faeb4ece8cc2f67231a461b1e))
-* Hexo 平台设置 ([77950ed](https://github.com/terwer/siyuan-plugin-publisher/commit/77950ed45f0bf5eda4eed9a0afd1a3ba18a53c43))
-* Hexo 平台设置 - 增加 YAML 转换器 ([97a13ee](https://github.com/terwer/siyuan-plugin-publisher/commit/97a13ee2392ccbeacfe8f46dcd8a20e33b0ae7bf))
+* hexo 平台设置 ([77950ed](https://github.com/terwer/siyuan-plugin-publisher/commit/77950ed45f0bf5eda4eed9a0afd1a3ba18a53c43))
+* hexo 平台设置 - 增加 yaml 转换器 ([97a13ee](https://github.com/terwer/siyuan-plugin-publisher/commit/97a13ee2392ccbeacfe8f46dcd8a20e33b0ae7bf))
 * 修复别名问题 ([4634b7d](https://github.com/terwer/siyuan-plugin-publisher/commit/4634b7de98a950b4405cfa07dc1408fbb5ff1561))
 * 同意整合各平台配置 ([56e9769](https://github.com/terwer/siyuan-plugin-publisher/commit/56e976996c0dfe7d61fff858027b0cd37297ee66))
-* 完成 Hexo 适配 ([5081d7b](https://github.com/terwer/siyuan-plugin-publisher/commit/5081d7b52fef77a13eeb5a45dca8a53108018e8a))
+* 完成 hexo 适配 ([5081d7b](https://github.com/terwer/siyuan-plugin-publisher/commit/5081d7b52fef77a13eeb5a45dca8a53108018e8a))
 * 新增别名支持 ([4a7b1a2](https://github.com/terwer/siyuan-plugin-publisher/commit/4a7b1a2d6b1254bd6a2456542853597e3348e6b7))
-* 统一整合各平台配置 ([68f11e5](https://github.com/terwer/siyuan-plugin-publisher/commit/68f11e5e258fe05d6a19cacf7a23b631825346e7))
-* 统一整合各平台配置 ([1bf9849](https://github.com/terwer/siyuan-plugin-publisher/commit/1bf9849830e08d5e6371020c7e09d6688efa39a2))
-* 统一整合各平台配置 ([a25a0c4](https://github.com/terwer/siyuan-plugin-publisher/commit/a25a0c4f4b3ed420004e07670839b8d2c1617593))
-* 统一整合各平台配置 ([02f743e](https://github.com/terwer/siyuan-plugin-publisher/commit/02f743e17ead209b6f50304dc6cebe98acf5e1bb))
-* 统一整合各平台配置 ([0653ad2](https://github.com/terwer/siyuan-plugin-publisher/commit/0653ad2cbc8dd6f3914a14eface0b25098ef6e70))
 * 统一整合各平台配置 ([91ce36c](https://github.com/terwer/siyuan-plugin-publisher/commit/91ce36cc40cddcc00cc8e1bf4d94404b5e756b93))
-* 统一整合各平台配置-Cnblogs ([e4b8a61](https://github.com/terwer/siyuan-plugin-publisher/commit/e4b8a61d6760177c811df337e76cb0762236eeaa))
-* 统一整合各平台配置-Github ([42b25a6](https://github.com/terwer/siyuan-plugin-publisher/commit/42b25a6f53f307b143cd5b9cae342d2a9696a530))
-* 统一整合各平台配置-Hexo ([4a5d091](https://github.com/terwer/siyuan-plugin-publisher/commit/4a5d09150054011c67f21e6dfed5b7de1001ac8a))
-* 统一整合各平台配置-Metaweblog ([2477fa3](https://github.com/terwer/siyuan-plugin-publisher/commit/2477fa30c8e89b95637d452bef751dfbab7c1f69))
-* 统一整合各平台配置-Notion ([47f132e](https://github.com/terwer/siyuan-plugin-publisher/commit/47f132e8555cae0dc3ffb326ce4ee1b7667dd57c))
-* 统一整合各平台配置-Typecho ([18e9e48](https://github.com/terwer/siyuan-plugin-publisher/commit/18e9e481486ad40431e88bc42370cb4573bc8590))
-* 统一整合各平台配置-WordPress ([703e09c](https://github.com/terwer/siyuan-plugin-publisher/commit/703e09c42fc8f1b280f3c548e1bd80b1d5f7682b))
-* 统一整合各平台配置-Yuque ([c56b84a](https://github.com/terwer/siyuan-plugin-publisher/commit/c56b84a761dea156567d6345a920268897e64f9d))
+* 统一整合各平台配置-cnblogs ([e4b8a61](https://github.com/terwer/siyuan-plugin-publisher/commit/e4b8a61d6760177c811df337e76cb0762236eeaa))
+* 统一整合各平台配置-github ([42b25a6](https://github.com/terwer/siyuan-plugin-publisher/commit/42b25a6f53f307b143cd5b9cae342d2a9696a530))
+* 统一整合各平台配置-hexo ([4a5d091](https://github.com/terwer/siyuan-plugin-publisher/commit/4a5d09150054011c67f21e6dfed5b7de1001ac8a))
+* 统一整合各平台配置-metaweblog ([2477fa3](https://github.com/terwer/siyuan-plugin-publisher/commit/2477fa30c8e89b95637d452bef751dfbab7c1f69))
+* 统一整合各平台配置-notion ([47f132e](https://github.com/terwer/siyuan-plugin-publisher/commit/47f132e8555cae0dc3ffb326ce4ee1b7667dd57c))
+* 统一整合各平台配置-typecho ([18e9e48](https://github.com/terwer/siyuan-plugin-publisher/commit/18e9e481486ad40431e88bc42370cb4573bc8590))
+* 统一整合各平台配置-wordpress ([703e09c](https://github.com/terwer/siyuan-plugin-publisher/commit/703e09c42fc8f1b280f3c548e1bd80b1d5f7682b))
+* 统一整合各平台配置-yuque ([c56b84a](https://github.com/terwer/siyuan-plugin-publisher/commit/c56b84a761dea156567d6345a920268897e64f9d))
 * 集成单元测试 ([25be93a](https://github.com/terwer/siyuan-plugin-publisher/commit/25be93aaab26330020429838e3883745458bafbc))
-
-
 ### Bug Fixes
-
 * 修复常规发布返回异常问题 ([f0ba519](https://github.com/terwer/siyuan-plugin-publisher/commit/f0ba5191e02e6f96bc73d3c349c88c6fdc5240df))
-
 ## [1.3.2](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.3.1...v1.3.2) (2023-08-06)
-### Bug Fixes
 * fix typo ([94f77ba](https://github.com/terwer/siyuan-plugin-publisher/commit/94f77bab0e977166370a20861e2eb6c2c65751e5))
 * typecho默认发布为html ([a952a03](https://github.com/terwer/siyuan-plugin-publisher/commit/a952a03d7e2c9274193797d8055d320293b76ba2))
 * 修复typecho更新不生效问题 ([78b269b](https://github.com/terwer/siyuan-plugin-publisher/commit/78b269b0f45efa3a62b429cfb9b913e2a02ccea8))
@@ -45,7 +31,6 @@
 * 修复批量分发删除异常问题 ([602c26a](https://github.com/terwer/siyuan-plugin-publisher/commit/602c26a123f8893d3c7af63e2afa2a27f1c4a7b1))
 * 修复批量分发报错问题 ([55ead01](https://github.com/terwer/siyuan-plugin-publisher/commit/55ead01c9b5abf56c46ec3072e1e35ba42763d9b))
 ## [1.3.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.2.2...v1.3.0) (2023-08-05)
-### Features
 * 升级fetch组件 ([48d808c](https://github.com/terwer/siyuan-plugin-publisher/commit/48d808c8d9260cdc7f419f80baa22f7adb19fb4f))
 * 常规发布支持文章比对 ([4d34248](https://github.com/terwer/siyuan-plugin-publisher/commit/4d34248425bbd3282a4bccb3902cc329125e3ca9))
 * 常规发布显示预览链接 ([c2eceaa](https://github.com/terwer/siyuan-plugin-publisher/commit/c2eceaa5372ee57b65661c9ac6fc581ed9054148))

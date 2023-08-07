@@ -28,6 +28,9 @@ If you still can't use this step after this step, [New issue](https://github.com
 
 ## Recent critical updates and bug fixes
 
+- Unified integration of platform configurations
+- Complete HEXO adaptation
+- Fixed the issue where regular publishing returned an exception
 - Fixed the issue that typecho updates did not take effect
 - Fixed the batch distribution error issue
 - Notion and Yuque platforms use the forward agent of Siyuan Note to improve performance
@@ -37,8 +40,6 @@ If you still can't use this step after this step, [New issue](https://github.com
 - Added support for general releases with fine-grained configuration
 - Close the pop-up window after setting to cancel the reload and improve the experience
 - Fixed the issue that icons did not load when rebooting
-- Compatible with servo browsers
-- Urgently fix the error problem that may be caused by the first opening
 - Support for Yuque, Cnblogs, Metaweblog, Typecho, WordPress
 
 ## Compatibility of Origin notes
