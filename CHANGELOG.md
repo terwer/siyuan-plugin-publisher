@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.5.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.4.1...v1.5.0) (2023-08-07)
+
+
+### Features
+
+* Hexo 支持 YAML ([a230ff0](https://github.com/terwer/siyuan-plugin-publisher/commit/a230ff0d6979516563bc005807ea2085b3b9880c))
+* 支持文章绑定 ([15ef655](https://github.com/terwer/siyuan-plugin-publisher/commit/15ef655e9d15ed8e03b80c42957f1f34fb12b397))
+* 支持文章绑定 ([e3a92d0](https://github.com/terwer/siyuan-plugin-publisher/commit/e3a92d0d2d0e67d4e97cd864f5cd707c02f97610))
+
+
+### Bug Fixes
+
+* fix typo ([8a8bf8d](https://github.com/terwer/siyuan-plugin-publisher/commit/8a8bf8d0ca2d12ce9befede13e03fa1e10eae46c))
+
 ## [1.4.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.4.0...v1.4.1) (2023-08-07)
 ### Bug Fixes
 * 修复构建错误 ([32e8f61](https://github.com/terwer/siyuan-plugin-publisher/commit/32e8f61d193d0a979c4417653bc8b202b0be7b04))
