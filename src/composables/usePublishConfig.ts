@@ -83,9 +83,22 @@ const usePublishConfig = () => {
     return api
   }
 
+  /**
+   * 获取YAML API
+   *
+   * @param key - 平台配置的键值
+   * @param newCfg - 可选参数，用于指定新的配置
+   * @returns 返回一个Promise，包含YAML适配器
+   */
+  const getYamlApi = async (key: string, newCfg?: any) => {
+    const yamlAdaptor = await Adaptors.getYamlAdaptor(key, newCfg)
+    return yamlAdaptor
+  }
+
   return {
     getPublishCfg,
     getPublishApi,
+    getYamlApi,
   }
 }
 
