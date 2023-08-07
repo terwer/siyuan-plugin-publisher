@@ -141,16 +141,21 @@ class Adaptors {
    * @param newCfg
    */
   public static async getYamlAdaptor(key: string, newCfg?: any): Promise<YamlConvertAdaptor> {
-    let yamlAdaptor = null
+    let yamlAdp = null
     const type: SubPlatformType = getSubPlatformTypeByKey(key)
 
     switch (type) {
+      case SubPlatformType.Github_Hexo: {
+        const { yamlAdaptor } = await useHexoApi(key, newCfg)
+        yamlAdp = yamlAdaptor
+        break
+      }
       default: {
         break
       }
     }
-    this.logger.debug(`get yamlAdaptor from key ${key}=>`, yamlAdaptor)
-    return yamlAdaptor
+    this.logger.debug(`get yamlAdaptor from key ${key}=>`, yamlAdp)
+    return yamlAdp
   }
 }
 

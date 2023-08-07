@@ -24,13 +24,18 @@
   -->
 
 <script setup lang="ts">
-import ChangeLocal from "~/src/components/set/preference/ChangeLocal.vue"
+import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+
+const { t } = useVueI18n()
 </script>
 
 <template>
-  <div class="general-setting">
-    <change-local />
-  </div>
+  <el-tabs tab-position="left">
+    <el-tab-pane :label="t('service.tab.change.local')">
+      <change-local />
+    </el-tab-pane>
+    <el-tab-pane :label="t('service.tab.post.bind')">
+      <post-bind />
+    </el-tab-pane>
+  </el-tabs>
 </template>
-
-<style scoped></style>

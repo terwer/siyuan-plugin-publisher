@@ -51,8 +51,8 @@ dependencies:
     specifier: ^3.1.1
     version: 3.1.1
   zhi-blog-api:
-    specifier: ^1.20.12
-    version: 1.20.12
+    specifier: ^1.20.13
+    version: 1.20.13
   zhi-common:
     specifier: ^1.14.0
     version: 1.14.0
@@ -72,8 +72,8 @@ dependencies:
     specifier: ^0.1.2
     version: 0.1.2
   zhi-siyuan-api:
-    specifier: ^2.0.13
-    version: 2.0.13
+    specifier: ^2.0.14
+    version: 2.0.14
   zhi-xmlrpc-middleware:
     specifier: ^0.4.13
     version: 0.4.13
@@ -7188,8 +7188,8 @@ packages:
     engines: {node: '>=12.20'}
     dev: true
 
-  /zhi-blog-api@1.20.12:
-    resolution: {integrity: sha512-NRpxpEzVf8xn083VBHk5yu7nhptyzrIRRWbcg/eAp1z06dXpvkq7bJ2iIUZwqZ6b2zmxuU7KIaqfwdAd1sXCjg==}
+  /zhi-blog-api@1.20.13:
+    resolution: {integrity: sha512-2G9jOfa7MIUgoA7vBOsU5nJgrbtjrBx9Y4siWaOp/g7tlD3xdLs79HCnUpMSTOA4YAwbHRAO/1Rszutw57tTCA==}
     dependencies:
       zhi-lib-base: 0.4.4
     dev: false
@@ -7239,10 +7239,10 @@ packages:
       - supports-color
     dev: false
 
-  /zhi-siyuan-api@2.0.13:
-    resolution: {integrity: sha512-d8KXiLqUpF9OrCE/WYBmthC9Y8f67FT8HMw2ltx0WMhURQUP80l4Y+jc3mtAA7PpZ1+a5fL/L6jSLSL09jaGkw==}
+  /zhi-siyuan-api@2.0.14:
+    resolution: {integrity: sha512-m1CtKfv26idaginV83doLrlv7xLVVeifSJZwPI6LJcBpg66ZPeTJceUeKBJIFQNfkokXUj2aVVisPIy/ruod0g==}
     dependencies:
-      zhi-blog-api: 1.20.12
+      zhi-blog-api: 1.20.13
       zhi-common: 1.14.0
       zhi-lib-base: 0.4.4
     dev: false

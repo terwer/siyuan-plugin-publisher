@@ -24,7 +24,7 @@
  */
 
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { isReactive, isRef, reactive, toRaw } from "vue"
+import { reactive, toRaw } from "vue"
 import { SypConfig } from "~/syp.config.ts"
 import { AliasTranslator, ObjectUtil, StrUtil } from "zhi-common"
 import { BlogAdaptor, BlogConfig, PageTypeEnum, Post, PostStatusEnum } from "zhi-blog-api"
@@ -37,6 +37,8 @@ import { DynamicConfig } from "~/src/platforms/dynamicConfig.ts"
 import { CommonblogConfig } from "~/src/adaptors/api/base/CommonblogConfig.ts"
 import { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
+import { YamlConvertAdaptor } from "~/src/platforms/yamlConvertAdaptor.ts"
+import { YamlFormatObj } from "~/src/models/yamlFormatObj.ts"
 
 /**
  * 通用发布组件
@@ -52,7 +54,7 @@ const usePublish = () => {
   const { t } = useVueI18n()
   const { getSetting, updateSetting } = useSettingStore()
   const { kernelApi, blogApi } = useSiyuanApi()
-  const { getPublishApi } = usePublishConfig()
+  const { getPublishApi, getYamlApi } = usePublishConfig()
 
   // datas
   const singleFormData = reactive({
@@ -102,6 +104,14 @@ const usePublish = () => {
       logger.debug(`after preHandlePost, doc=>`, toRaw(post))
 
       // 平台相关的预处理
+      const yamlApi: YamlConvertAdaptor = await getYamlApi(key, cfg)
+      if (yamlApi instanceof YamlConvertAdaptor) {
+        const yamlObj: YamlFormatObj = yamlApi.convertToYaml(post, cfg)
+        post.description = yamlObj.mdFullContent
+        logger.info("handled yaml using YamlConvertAdaptor")
+      } else {
+        logger.info("yaml adaptor not found, ignore convert")
+      }
 
       // 初始化API
       const api = await getPublishApi(key, cfg)
@@ -267,6 +277,8 @@ const usePublish = () => {
     // 发布格式
     if (cfg?.pageType == PageTypeEnum.Markdown) {
       post.description = post.markdown
+    } else {
+      post.description = post.html
     }
     return post
   }

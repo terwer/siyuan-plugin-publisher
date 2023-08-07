@@ -67,16 +67,13 @@
 排名不分先后
 
 - [X] 语雀
-- [ ] 语雀网页授权版
 - [X] 博客园
 - [X] Metaweblog
 - [X] Typecho
 - [X] WordPress
-- [ ] Github
-  - [ ] Hexo
-  - [ ] Hugo
+- [X] Github
+  - [X] Hexo
 - [X] Notion
-- [ ] Notion 网页授权版
 - [ ] 知乎
 
 ## 核心特色

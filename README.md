@@ -69,16 +69,13 @@ This plugin supports almost all devices and platforms of Siyuan Note, and the sp
 Names not listed in order
 
 - [X] Yuque
-- [ ] Web authed of Yuque
 - [X] Metaweblog
 - [X] Cnblogs
 - [X] Typecho
 - [X] WordPress
-- [ ] Github
-  - [ ] Hexo
-  - [ ] Hugo
+- [X] Github
+  - [X] Hexo
 - [X] Notion
-- [ ] Web authed of Notion
 - [ ] Zhihu
 
 ## Core Features
