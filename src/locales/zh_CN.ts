@@ -529,4 +529,5 @@ export default {
   "main.data.empty": "暂无数据",
   "enableKnowledgeSpace.Tips":
     "验证通过之后，将列出可用的 [[knowledge-space-title]] 列表，您可以根据需要修改默认 [[knowledge-space-title]] 并保存",
+  "post.bind.auto.tips": "此处ID为发布工具自动保存，仅作为修复数据使用，如果您不清楚原理，请勿修改",
 }

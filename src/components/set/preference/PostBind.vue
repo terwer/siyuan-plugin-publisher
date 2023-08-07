@@ -105,6 +105,7 @@ onMounted(async () => {
 
 <template>
   <el-form label-width="85px" class="post-bind-form" ref="ruleFormRef" :model="ruleForm" :rules="rules" status-icon>
+    <el-alert class="top-tip" :title="t('post.bind.auto.tips')" type="error" :closable="false" />
     <!-- 动态配置 -->
     <el-form-item
       v-for="(cfg, index) in formData.dynamicConfigArray"
@@ -121,4 +122,12 @@ onMounted(async () => {
   </el-form>
 </template>
 
-<style scoped lang="stylus"></style>
+<style scoped lang="stylus">
+.post-bind-form
+  padding 0 10px
+  padding-left 0
+
+.top-tip
+  margin 10px 0
+  padding-left 0
+</style>

@@ -538,4 +538,5 @@ export default {
   "setting.blog.knowledge.space": "Knowledge space/Knowledge base",
   "main.data.empty": "No data",
   "enableKnowledgeSpace.Tips": "After validation, a list of available knowledge spaces is listed, and you can modify the default knowledge spaces as needed and save them",
+  "post.bind.auto.tips": "The ID here is automatically saved by the publishing tool, if you are not clear about the principle, please do not modify it",
 }
