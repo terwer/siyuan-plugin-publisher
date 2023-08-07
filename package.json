@@ -69,7 +69,7 @@
     "zhi-common": "^1.14.0",
     "zhi-device": "^2.3.0",
     "zhi-fetch-middleware": "^0.2.18",
-    "zhi-github-middleware": "^0.1.18",
+    "zhi-github-middleware": "^0.2.0",
     "zhi-lib-base": "^0.4.4",
     "zhi-notion-markdown": "^0.1.2",
     "zhi-siyuan-api": "^2.0.12",
