@@ -90,6 +90,8 @@ const usePublish = () => {
         postid = ObjectUtil.getProperty(postMeta, posidKey)
       }
       singleFormData.isAdd = StrUtil.isEmptyString(postid)
+      // 保证postid一致
+      doc.postid = postid
 
       // 分配属性
       doc = await assignAttrs(doc, id, publishCfg)
@@ -329,7 +331,7 @@ const usePublish = () => {
 
     // 思源笔记原始文章数据
     const siyuanPost = await blogApi.getPost(id)
-    const platformPost = new Post()
+    let platformPost = new Post()
     let mergedPost = new Post()
     logger.debug("doInitPage start init siyuanPost =>", toRaw(siyuanPost))
 
@@ -343,7 +345,7 @@ const usePublish = () => {
       }
 
       // 查询平台文章
-      const platformPost = await api.getPost(postid)
+      platformPost = await api.getPost(postid)
 
       // 暂时不合并
       mergedPost = siyuanPost

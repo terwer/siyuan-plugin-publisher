@@ -30,6 +30,7 @@ import { CommonGithubClient, GithubConfig } from "zhi-github-middleware"
 import { CommonGithubConfig } from "~/src/adaptors/api/base/github/CommonGithubConfig.ts"
 import { StrUtil } from "zhi-common"
 import { toRaw } from "vue"
+import { Base64 } from "js-base64"
 
 /**
  * Github API 适配器
@@ -94,10 +95,34 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
     return res.content.path
   }
 
-  async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
+  public async getPost(postid: string, useSlug?: boolean): Promise<Post> {
+    this.logger.debug("start getPost =>", { postid: postid })
+
+    const res = await this.githubClient.getPageData(postid)
+    this.logger.debug("getPost finished =>", res)
+    if (!res) {
+      throw new Error("Github 调用API异常")
+    }
+
+    const commonPost = new Post()
+    commonPost.postid = res.path
+    // commonPost.title = res.name
+    commonPost.description = Base64.fromBase64(res.content)
+
+    const cats = []
+    const catSlugs = []
+    commonPost.categories = cats
+    commonPost.cate_slugs = catSlugs
+
+    return commonPost
+  }
+
+  public async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
+    this.logger.debug("start editPost =>", { postid: postid, post: toRaw(post) })
+
     const res = await this.githubClient.updateGithubPage(post.postid, post.description)
     if (!res?.content?.path) {
-      throw new Error("Hugo调用API异常")
+      throw new Error("Github 调用API异常")
     }
     return true
   }
@@ -105,22 +130,25 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
   public async deletePost(postid: string): Promise<boolean> {
     const res = await this.githubClient.deleteGithubPage(postid)
     if (!res?.commit?.sha) {
-      throw new Error("Hugo调用API异常")
+      throw new Error("Github 调用API异常")
     }
     return true
   }
 
   public async getCategories(): Promise<CategoryInfo[]> {
-    return await Promise.resolve([])
+    return Promise.resolve([])
   }
 
   public async getPreviewUrl(postid: string): Promise<string> {
-    let previewUrl: string = "/test"
-    // const newPostid = postid.substring(postid.lastIndexOf("/") + 1).replace(".md", "")
-    // previewUrl = this.cfg.previewUrl.replace("[postid]", newPostid)
-    // // 路径组合
-    // previewUrl = StrUtil.pathJoin(StrUtil.pathJoin(this.cfg.home, this.cfg.username), previewUrl)
-    //
+    const cfg = this.cfg as CommonGithubConfig
+    let previewUrl: string
+    previewUrl = cfg.previewUrl
+      .replace("[user]", cfg.username)
+      .replace("[repo]", cfg.githubRepo)
+      .replace("[branch]", cfg.githubBranch)
+      .replace("[docpath]", postid)
+    // 路径组合
+    previewUrl = StrUtil.pathJoin(this.cfg.home, previewUrl)
     return previewUrl
   }
 

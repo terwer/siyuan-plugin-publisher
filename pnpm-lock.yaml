@@ -54,14 +54,14 @@ dependencies:
     specifier: ^1.20.11
     version: 1.20.11
   zhi-common:
-    specifier: ^1.13.4
-    version: 1.13.4
+    specifier: ^1.14.0
+    version: 1.14.0
   zhi-device:
     specifier: ^2.3.0
     version: 2.3.0
   zhi-fetch-middleware:
-    specifier: ^0.2.17
-    version: 0.2.17
+    specifier: ^0.2.18
+    version: 0.2.18
   zhi-github-middleware:
     specifier: ^0.1.18
     version: 0.1.18
@@ -72,11 +72,11 @@ dependencies:
     specifier: ^0.1.2
     version: 0.1.2
   zhi-siyuan-api:
-    specifier: ^2.0.11
-    version: 2.0.11
+    specifier: ^2.0.12
+    version: 2.0.12
   zhi-xmlrpc-middleware:
-    specifier: ^0.4.12
-    version: 0.4.12
+    specifier: ^0.4.13
+    version: 0.4.13
 
 devDependencies:
   '@terwer/esbuild-config-custom':
@@ -90,7 +90,7 @@ devDependencies:
     version: 18.17.3
   '@vitejs/plugin-vue':
     specifier: ^4.2.3
-    version: 4.2.3(vite@4.4.8)(vue@3.3.4)
+    version: 4.2.3(vite@4.4.9)(vue@3.3.4)
   '@vitest/coverage-v8':
     specifier: ^0.34.1
     version: 0.34.1(vitest@0.34.1)
@@ -131,14 +131,14 @@ devDependencies:
     specifier: ^31.2.2
     version: 31.2.2
   vite:
-    specifier: ^4.4.8
-    version: 4.4.8(@types/node@18.17.3)(stylus@0.59.0)
+    specifier: ^4.4.9
+    version: 4.4.9(@types/node@18.17.3)(stylus@0.59.0)
   vite-plugin-html:
     specifier: ^3.2.0
-    version: 3.2.0(vite@4.4.8)
+    version: 3.2.0(vite@4.4.9)
   vite-plugin-node-polyfills:
     specifier: ^0.8.2
-    version: 0.8.2(vite@4.4.8)
+    version: 0.8.2(vite@4.4.9)
   vitest:
     specifier: ^0.34.1
     version: 0.34.1(jsdom@22.1.0)(stylus@0.59.0)
@@ -1682,14 +1682,14 @@ packages:
       ts-morph: 12.0.0
     dev: true
 
-  /@vitejs/plugin-vue@4.2.3(vite@4.4.8)(vue@3.3.4):
+  /@vitejs/plugin-vue@4.2.3(vite@4.4.9)(vue@3.3.4):
     resolution: {integrity: sha512-R6JDUfiZbJA9cMiguQ7jxALsgiprjBeHL5ikpXfJCH62pPHtI+JdJ5xWj6Ev73yXSlYl86+blXn1kZHQ7uElxw==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
       vite: ^4.0.0
       vue: ^3.2.25
     dependencies:
-      vite: 4.4.8(@types/node@18.17.3)(stylus@0.59.0)
+      vite: 4.4.9(@types/node@18.17.3)(stylus@0.59.0)
       vue: 3.3.4
     dev: true
 
@@ -6734,7 +6734,7 @@ packages:
       mlly: 1.4.0
       pathe: 1.1.1
       picocolors: 1.0.0
-      vite: 4.4.8(@types/node@18.17.3)(stylus@0.59.0)
+      vite: 4.4.9(@types/node@18.17.3)(stylus@0.59.0)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -6746,7 +6746,7 @@ packages:
       - terser
     dev: true
 
-  /vite-plugin-html@3.2.0(vite@4.4.8):
+  /vite-plugin-html@3.2.0(vite@4.4.9):
     resolution: {integrity: sha512-2VLCeDiHmV/BqqNn5h2V+4280KRgQzCFN47cst3WiNK848klESPQnzuC3okH5XHtgwHH/6s1Ho/YV6yIO0pgoQ==}
     peerDependencies:
       vite: '>=2.0.0'
@@ -6763,23 +6763,23 @@ packages:
       html-minifier-terser: 6.1.0
       node-html-parser: 5.4.2
       pathe: 0.2.0
-      vite: 4.4.8(@types/node@18.17.3)(stylus@0.59.0)
+      vite: 4.4.9(@types/node@18.17.3)(stylus@0.59.0)
     dev: true
 
-  /vite-plugin-node-polyfills@0.8.2(vite@4.4.8):
+  /vite-plugin-node-polyfills@0.8.2(vite@4.4.9):
     resolution: {integrity: sha512-amOUVWwNvcuKxfWM9vpS8sAqvew28KXyR597OHO7BXWJFxr+QX4qB3XTDhWoRivj89TIZe4JTJTZwBHtIJ3ygQ==}
     peerDependencies:
       vite: ^2.0.0 || ^3.0.0 || ^4.0.0
     dependencies:
       '@rollup/plugin-inject': 5.0.3
       node-stdlib-browser: 1.2.0
-      vite: 4.4.8(@types/node@18.17.3)(stylus@0.59.0)
+      vite: 4.4.9(@types/node@18.17.3)(stylus@0.59.0)
     transitivePeerDependencies:
       - rollup
     dev: true
 
-  /vite@4.4.8(@types/node@18.17.3)(stylus@0.59.0):
-    resolution: {integrity: sha512-LONawOUUjxQridNWGQlNizfKH89qPigK36XhMI7COMGztz8KNY0JHim7/xDd71CZwGT4HtSRgI7Hy+RlhG0Gvg==}
+  /vite@4.4.9(@types/node@18.17.3)(stylus@0.59.0):
+    resolution: {integrity: sha512-2mbUn2LlUmNASWwSCNSJ/EG2HuSRTnVNaydp6vMCm5VIqJsjMfbIWtbH2kDuwUVW5mMUKKZvGPX/rqeqVvv1XA==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
     peerDependencies:
@@ -6868,7 +6868,7 @@ packages:
       strip-literal: 1.3.0
       tinybench: 2.5.0
       tinypool: 0.7.0
-      vite: 4.4.8(@types/node@18.17.3)(stylus@0.59.0)
+      vite: 4.4.9(@types/node@18.17.3)(stylus@0.59.0)
       vite-node: 0.34.1(@types/node@18.17.3)(stylus@0.59.0)
       why-is-node-running: 2.2.2
     transitivePeerDependencies:
@@ -7204,14 +7204,24 @@ packages:
       zhi-lib-base: 0.4.4
     dev: false
 
+  /zhi-common@1.14.0:
+    resolution: {integrity: sha512-pvAA85NzxakjeWFP2xH1N2SQjUU0Kxa1m63nBpWauTpRtDO6XI0dVK7a3qOAilgXasW+SiIRerbqHWPSd3l7mQ==}
+    dependencies:
+      js-yaml: 4.1.0
+      shorthash2: 1.0.3
+      transliteration: 2.3.5
+      vue: 3.3.4
+      zhi-lib-base: 0.4.4
+    dev: false
+
   /zhi-device@2.3.0:
     resolution: {integrity: sha512-we04mMt4BEqeKDxoqdJQsDFYImYlcp/yaAIkpxpMGg+9tBURfNeHPHIHkFias9VbM8yuk6xjAX6B2xJjvYE/iw==}
     dev: false
 
-  /zhi-fetch-middleware@0.2.17:
-    resolution: {integrity: sha512-XpUMVYlMzx3sVwZwamGIm8O3r8QtV8h6NjL3EA4HxbERGTwgrzQK3QF4qJ/WSpP8rv5yPJ+sYhG8DUYEHcWF8g==}
+  /zhi-fetch-middleware@0.2.18:
+    resolution: {integrity: sha512-3CqhQectc7wMjnyNHJycVke/DhZiym8TSY6O71okyuXPA846/XpK8gD5YfuTWf7kc1U32I52vNj6NFgONr9HNQ==}
     dependencies:
-      zhi-common: 1.13.4
+      zhi-common: 1.14.0
       zhi-device: 2.3.0
       zhi-lib-base: 0.4.4
     dev: false
@@ -7239,18 +7249,18 @@ packages:
       - supports-color
     dev: false
 
-  /zhi-siyuan-api@2.0.11:
-    resolution: {integrity: sha512-TAUvP3JrFZt1+xfdcEfmpaoTJvwYrWzK/bLAQ9HkrxNHQYu+P0zddHWIKVDbyim6pYxh3qSv13fU/vno1+itMA==}
+  /zhi-siyuan-api@2.0.12:
+    resolution: {integrity: sha512-COLf2JDTruBwFgHKSAs9ZQdQbdVjF4Wi6XK52LD+fx3Bfa0UZcXSBUWMlR4W9/lPNpdtdiahE4/x9HM5ee31bg==}
     dependencies:
       zhi-blog-api: 1.20.11
-      zhi-common: 1.13.4
+      zhi-common: 1.14.0
       zhi-lib-base: 0.4.4
     dev: false
 
-  /zhi-xmlrpc-middleware@0.4.12:
-    resolution: {integrity: sha512-Z24JdPHZW2IPcEpIvtjs+60Z1ek2FA13iWEYslblfFqQXvsnwn25Wed0NtG48EatIWlx998V9r5Fpff1v794BA==}
+  /zhi-xmlrpc-middleware@0.4.13:
+    resolution: {integrity: sha512-LyUf6CsKYKgrSku06xPpBf+8WKCmcbVFx+a6es7oce7V+0pmgV0FH6kLyXsat6MOwdbaO9T0WVlXUrd1vFjp7w==}
     dependencies:
-      zhi-common: 1.13.4
+      zhi-common: 1.14.0
       zhi-device: 2.3.0
       zhi-lib-base: 0.4.4
     dev: false
