@@ -98,7 +98,7 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
   public async getPost(postid: string, useSlug?: boolean): Promise<Post> {
     this.logger.debug("start getPost =>", { postid: postid })
 
-    const res = await this.githubClient.getPageData(postid)
+    const res = await this.githubClient.getGithubPage(postid)
     this.logger.debug("getPost finished =>", res)
     if (!res) {
       throw new Error("Github 调用API异常")
