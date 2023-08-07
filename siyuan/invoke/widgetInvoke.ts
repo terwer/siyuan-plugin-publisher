@@ -87,7 +87,12 @@ export class WidgetInvoke {
   }
 
   public async showPublisherGeneralSettingDialog() {
-    await this.showPage("/setting/general")
+    let pageId: string | undefined = PageUtil.getPageId()
+    if (pageId == "") {
+      pageId = undefined
+    }
+    this.logger.debug("pageId=>", pageId)
+    await this.showPage(`/setting/general?id=${pageId}`)
   }
 
   private async showPage(pageUrl: string, isReload?: boolean, w?: string, h?: string, noscroll?: boolean) {

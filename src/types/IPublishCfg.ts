@@ -43,6 +43,11 @@ interface IPublishCfg {
   setting: typeof SypConfig
 
   /**
+   * 平台配置集合
+   */
+  dynamicConfigArray: DynamicConfig[]
+
+  /**
    * CommonblogConfig 类型的配置对象
    *
    * @type {CommonblogConfig}

@@ -95,6 +95,7 @@ const routes: RouteRecordRaw[] = [
     path: "/setting/platform/single/:key",
     component: SettingEntry,
   },
+  // /?id=<id>
   {
     path: "/setting/general",
     component: GeneralSetting,

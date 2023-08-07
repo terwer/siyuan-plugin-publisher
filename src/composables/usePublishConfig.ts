@@ -41,7 +41,7 @@ import { CommonblogConfig } from "~/src/adaptors/api/base/CommonblogConfig.ts"
  * @since 1.3.2
  */
 const usePublishConfig = () => {
-  const { getSetting, updateSetting } = useSettingStore()
+  const { getSetting } = useSettingStore()
   const appInstance = new AppInstance()
 
   /**
@@ -50,22 +50,32 @@ const usePublishConfig = () => {
    * @param {string} key - 配置键名
    * @returns {Promise<IPublishCfg>} - 返回一个 Promise 对象，包含发布配置项
    */
-  const getPublishCfg = async (key: string): Promise<IPublishCfg> => {
+  const getPublishCfg = async (key?: string): Promise<IPublishCfg> => {
     // 加载配置
     const setting = await getSetting()
-
-    // 平台配置
-    const cfg = JsonUtil.safeParse<any>(setting[key], {} as any)
 
     // 平台定义
     const dynJsonCfg = JsonUtil.safeParse<DynamicJsonCfg>(setting[DYNAMIC_CONFIG_KEY], {} as DynamicJsonCfg)
     const dynamicConfigArray = dynJsonCfg?.totalCfg || []
-    const dynCfg = getDynCfgByKey(dynamicConfigArray, key)
 
-    return {
-      setting,
-      cfg,
-      dynCfg,
+    // 平台配置
+    if (key) {
+      return {
+        setting,
+        dynamicConfigArray,
+        cfg: undefined,
+        dynCfg: undefined,
+      }
+    } else {
+      const cfg = JsonUtil.safeParse<any>(setting[key], {} as any)
+      const dynCfg = getDynCfgByKey(dynamicConfigArray, key)
+
+      return {
+        setting,
+        dynamicConfigArray,
+        cfg,
+        dynCfg,
+      }
     }
   }
 
