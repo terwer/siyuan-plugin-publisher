@@ -52,12 +52,19 @@ describe("test usePublishConfig", async () => {
   })
 
   it("test getPublishCfg", async () => {
-    // 创建测试用例
-    const inputKey = "exampleKey"
+    const key = "github_Hexo"
     const { getPublishCfg } = usePublishConfig()
 
-    // 调用被测函数
-    const result = await getPublishCfg(inputKey)
-    console.log("result =>", result)
+    const publishCfg = await getPublishCfg(key)
+    console.log("publishCfg =>", publishCfg)
+  })
+
+  it("test getPublishApi", async () => {
+    const key = "github_Hexo"
+    const { getPublishCfg, getPublishApi } = usePublishConfig()
+
+    const publishCfg = await getPublishCfg(key)
+    const api = await getPublishApi(key, publishCfg.cfg)
+    console.log("api =>", api)
   })
 })

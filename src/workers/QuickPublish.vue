@@ -27,21 +27,18 @@
 import { onMounted, reactive } from "vue"
 import { useRoute } from "vue-router"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { JsonUtil, StrUtil } from "zhi-common"
+import { StrUtil } from "zhi-common"
 import { usePublish } from "~/src/composables/usePublish.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
-import { AppInstance } from "~/src/appInstance.ts"
-import Adaptors from "~/src/adaptors"
-import { Utils } from "~/src/utils/utils.ts"
-import { useSettingStore } from "~/src/stores/useSettingStore.ts"
+import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
 
 const logger = createAppLogger("quick-publish-worker")
 
 // uses
 const route = useRoute()
-const { singleFormData, doSinglePublish, assignAttrs } = usePublish()
+const { singleFormData, doSinglePublish } = usePublish()
 const { blogApi } = useSiyuanApi()
-const { getSetting, updateSetting } = useSettingStore()
+const { getPublishCfg } = usePublishConfig()
 
 // datas
 const params = reactive(route.params)
@@ -56,19 +53,11 @@ onMounted(async () => {
   singleFormData.isPublishLoading = true
   setTimeout(async () => {
     logger.info("单个快速发布开始")
-    // 加载配置
-    singleFormData.setting = await getSetting()
-    singleFormData.cfg = JsonUtil.safeParse<any>(singleFormData.setting[key], {} as any)
-    // 初始化API
-    const appInstance = new AppInstance()
-    const apiAdaptor = await Adaptors.getAdaptor(key)
-    const api = Utils.blogApi(appInstance, apiAdaptor)
-    logger.info("api=>", api)
     // 思源笔记原始文章数据
-    let siyuanPost = await blogApi.getPost(id)
+    const siyuanPost = await blogApi.getPost(id)
     // 初始化属性
-    siyuanPost = await assignAttrs(siyuanPost)
-    formData.processResult = await doSinglePublish(key, id, siyuanPost)
+    const publishCfg = await getPublishCfg(key)
+    formData.processResult = await doSinglePublish(key, id, publishCfg, siyuanPost)
     logger.info("单个快速发布结束")
     singleFormData.isPublishLoading = false
   }, 200)
@@ -93,7 +82,7 @@ onMounted(async () => {
         [{{ formData.processResult.key }}]
         {{ StrUtil.isEmptyString(formData.processResult.name) ? "" : `[${formData.processResult.name}]` }}
         成功，
-        <a :href="singleFormData.previewUrl" target="_blank">查看文章</a>
+        <a :href="formData.processResult.previewUrl" target="_blank">查看文章</a>
       </div>
       <div v-else class="fail-tips">
         {{ singleFormData.isAdd ? "发布到" : "更新文章到" }} [{{ formData.processResult.key }}]

@@ -81,16 +81,17 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
 
   public async newPost(post: Post, publish?: boolean): Promise<string> {
     this.logger.debug("start newPost =>", { post: toRaw(post) })
+    const cfg = this.cfg as CommonGithubConfig
+
     const filename = post.wp_slug
-    const docPath = `/xxx/${filename}.md`
-    throw new Error("newPost 开发中...")
-    // const docPath = `${post.wp_slug}`
-    // const res = await this.githubClient.publishGithubPage(docPath, post.description)
-    //
-    // if (!res?.content?.path) {
-    //   throw new Error("Github 调用API异常")
-    // }
-    // return res.content.path
+    const defaultPath = post.cate_slugs?.[0] ?? cfg.blogid
+    const docPath = `${defaultPath}/${filename}.md`
+    const res = await this.githubClient.publishGithubPage(docPath, post.description)
+
+    if (!res?.content?.path) {
+      throw new Error("Github 调用API异常")
+    }
+    return res.content.path
   }
 
   async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {

@@ -38,6 +38,8 @@ import { ElMessage, ElMessageBox } from "element-plus"
 import { Delete } from "@element-plus/icons-vue"
 import { BrowserUtil } from "zhi-device"
 import { StrUtil } from "zhi-common"
+import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
+import { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 
 const logger = createAppLogger("single-publish-do-publish")
 
@@ -49,6 +51,7 @@ const { query } = useRoute()
 const { kernelApi } = useSiyuanApi()
 const { doSinglePublish, doSingleDelete } = usePublish()
 const router = useRouter()
+const { getPublishCfg } = usePublishConfig()
 
 // datas
 const params = reactive(route.params)
@@ -57,15 +60,19 @@ const id = params.id as string
 
 const formData = reactive({
   isInit: false,
+
   method: query.method as MethodEnum,
   isPublishLoading: false,
   isDeleteLoading: false,
+
+  publishCfg: {} as IPublishCfg,
 
   siyuanPost: {} as Post,
   platformPost: {} as Post,
   mergedPost: {} as Post,
 
-  singleFormData: {} as any,
+  postPreviewUrl: "",
+
   changeTips: {
     title: "",
   },
@@ -79,7 +86,7 @@ const handlePublish = async () => {
     formData.actionEnable = false
 
     logger.info("单个常规发布开始")
-    const processResult = await doSinglePublish(key, id, formData.mergedPost)
+    const processResult = await doSinglePublish(key, id, formData.publishCfg as IPublishCfg, formData.mergedPost)
     logger.info("normal publish processResult =>", processResult)
     logger.info("单个常规发布结束")
 
@@ -135,7 +142,7 @@ const doDelete = async () => {
     formData.isDeleteLoading = true
     formData.actionEnable = false
 
-    const processResult = await doSingleDelete(key, id)
+    const processResult = await doSingleDelete(key, id, formData.publishCfg as IPublishCfg)
     if (processResult.status) {
       // 刷新页面
       const platformName = getPlatformName()
@@ -162,12 +169,12 @@ const doDelete = async () => {
 }
 
 const getPlatformName = () => {
-  const dynCfg = formData.singleFormData?.dynCfg as DynamicConfig
+  const dynCfg = formData.publishCfg?.dynCfg as DynamicConfig
   return dynCfg?.platformName || ""
 }
 
 const getBlogName = () => {
-  const cfg = formData.singleFormData?.cfg as any
+  const cfg = formData.publishCfg?.cfg as any
   return cfg?.blogName || ""
 }
 
@@ -197,16 +204,24 @@ const refreshChangeTips = () => {
 
 const initPage = async () => {
   try {
-    formData.singleFormData = await doInitPage(key, id, formData.method)
+    // 初始化属性
+    formData.publishCfg = await getPublishCfg(key)
+    const { siyuanPost, platformPost, mergedPost, postPreviewUrl } = await doInitPage(
+      key,
+      id,
+      formData.method,
+      formData.publishCfg as IPublishCfg
+    )
 
     // 文章元数据
-    formData.siyuanPost = formData.singleFormData.siyuanPost
-    formData.platformPost = formData.singleFormData.platformPost
-    formData.mergedPost = formData.singleFormData.mergedPost
+    formData.siyuanPost = siyuanPost
+    formData.platformPost = platformPost
+    formData.mergedPost = mergedPost
+
+    formData.postPreviewUrl = postPreviewUrl
 
     // 刷新比对提示
     refreshChangeTips()
-    logger.debug("formData.platformPost=>", formData.platformPost)
   } catch (e) {
     const errMsg = t("main.opt.failure") + "=>" + e
     logger.error(errMsg)
@@ -306,8 +321,8 @@ onMounted(async () => {
                 </el-button>
                 <a
                   v-if="formData.method === MethodEnum.METHOD_EDIT"
-                  :href="formData.singleFormData.previewUrl"
-                  :title="formData.singleFormData.previewUrl"
+                  :href="formData.postPreviewUrl"
+                  :title="formData.postPreviewUrl"
                   target="_blank"
                   >{{ t("main.publish.see.preview") }}</a
                 >
