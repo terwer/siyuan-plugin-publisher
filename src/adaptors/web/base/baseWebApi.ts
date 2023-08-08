@@ -22,15 +22,15 @@
  * or visit www.terwer.space if you need additional information or have any
  * questions.
  */
-import { ElectronCookie, WebApi, WebConfig } from "zhi-blog-api"
+import { ElectronCookie, Post, WebApi, WebConfig } from "zhi-blog-api"
 import { SiyuanKernelApi } from "zhi-siyuan-api"
 import { CommonFetchClient } from "zhi-fetch-middleware"
 import { AppInstance } from "~/src/appInstance.ts"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { createAppLogger, ILogger } from "~/src/utils/appLogger.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import { JsonUtil } from "zhi-common"
-import {isDev} from "~/src/utils/constants.ts";
+import { isDev } from "~/src/utils/constants.ts"
 
 /**
  * 网页授权统一封装基类
@@ -40,12 +40,12 @@ import {isDev} from "~/src/utils/constants.ts";
  * @since 0.9.0
  */
 class BaseWebApi extends WebApi {
-  protected logger
+  protected logger: ILogger
   protected cfg: WebConfig
   private readonly kernelApi: SiyuanKernelApi
   private readonly commonFetchClient: CommonFetchClient
-  private isInSiyuanWidget
-  private isInChromeExtension
+  private isInSiyuanWidget: boolean
+  private isInChromeExtension: boolean
 
   /**
    * 初始化网页授权 API 适配器
@@ -66,12 +66,23 @@ class BaseWebApi extends WebApi {
     this.isInChromeExtension = isInChromeExtension()
   }
 
+  // web 适配器专有
+
   public updateCfg(cfg: WebConfig) {
     this.cfg = cfg
   }
 
   public async buildCookie(cookies: ElectronCookie[]): Promise<string> {
     return cookies.map((cookie) => `${cookie.name}=${cookie.value}`).join(";")
+  }
+
+  // 兼容的方法
+  public async newPost(post: Post, publish?: boolean): Promise<string> {
+    const res = await this.addPost(post)
+    if (res.status !== "success") {
+      throw new Error("网页授权发布文章异常")
+    }
+    return res.id
   }
 
   // ================

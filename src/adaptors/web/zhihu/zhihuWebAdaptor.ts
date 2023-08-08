@@ -24,6 +24,7 @@
  */
 
 import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
+import { Post } from "zhi-blog-api"
 
 /**
  * 知乎网页授权适配器
@@ -66,9 +67,30 @@ class ZhihuWebAdaptor extends BaseWebApi {
     }
   }
 
-  // public async getPreviewUrl(postid: string): Promise<string> {
-  //   return Promise.resolve(`https://zhuanlan.zhihu.com/p/${postid}`)
-  // }
+  public async addPost(post: Post) {
+    let res
+
+    throw new Error("开发中")
+    // var res = await $.ajax({
+    //   url: 'https://zhuanlan.zhihu.com/api/articles/drafts',
+    //   type: 'POST',
+    //   dataType: 'JSON',
+    //   contentType: 'application/json',
+    //   data: JSON.stringify({
+    //     title: post.post_title,
+    //     // content: post.post_content
+    //   }),
+    // })
+    // console.log(res)
+    return {
+      status: "success",
+      post_id: res.id,
+    }
+  }
+
+  public async getPreviewUrl(postid: string): Promise<string> {
+    return `https://zhuanlan.zhihu.com/p/${postid}`
+  }
 }
 
 export { ZhihuWebAdaptor }
