@@ -28,16 +28,14 @@ If you still can't use this step after this step, [New issue](https://github.com
 
 ## Recent critical updates and bug fixes
 
+- Optimized HEXO article link conversion rules
+- Fixed configuration fetch error
+- Fixed the issue where the widget gets the document ID incorrectly
 - Support article binding
 - HEXO supports YAML
 - Support automatic generation of article aliases
 - Unified integration of platform configurations
 - Complete HEXO adaptation
-- Fixed the issue where regular publishing returned an exception
-- Fixed the issue that typecho updates did not take effect
-- Fixed the batch distribution error issue
-- Notion and Yuque platforms use the forward agent of Siyuan Note to improve performance
-- Regular publishing supports article comparison
 - Added notion support
 - Support for changing the default knowledge base
 - Added support for general releases with fine-grained configuration

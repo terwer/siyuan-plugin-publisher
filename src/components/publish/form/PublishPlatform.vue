@@ -83,8 +83,6 @@ onMounted(async () => {
   const enabledConfigs = dynJsonCfg.totalCfg?.filter(
     (config: DynamicConfig) => config.isEnabled === true && config.isAuth === true
   )
-  logger.info("setting=>", toRaw(setting))
-  logger.info("props.id=>", props.id)
   const postMeta = setting[props.id] ?? {}
   // 默认展示通用平台
   formData.dynamicConfigArray = enabledConfigs || []
@@ -92,8 +90,6 @@ onMounted(async () => {
   formData.dynamicConfigArray.forEach((item) => {
     const key = item.platformKey
     const posidKey = getDynPostidKey(key)
-    logger.info("postMeta=>", toRaw(postMeta))
-    logger.info("posidKey=>", posidKey)
     if (!StrUtil.isEmptyString(posidKey)) {
       const postid = postMeta[posidKey] ?? ""
       if (!StrUtil.isEmptyString(postid)) {
