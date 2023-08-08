@@ -83,10 +83,10 @@ onMounted(async () => {
   const enabledConfigs = dynJsonCfg.totalCfg?.filter(
     (config: DynamicConfig) => config.isEnabled === true && config.isAuth === true
   )
-  const postMeta = setting[props.id] ?? {}
   // 默认展示通用平台
   formData.dynamicConfigArray = enabledConfigs || []
   // 检测是否已经发布
+  const postMeta = setting[props.id] ?? {}
   formData.dynamicConfigArray.forEach((item) => {
     const key = item.platformKey
     const posidKey = getDynPostidKey(key)
