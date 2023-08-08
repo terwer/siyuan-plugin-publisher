@@ -28,6 +28,9 @@ If you still can't use this step after this step, [New issue](https://github.com
 
 ## Recent critical updates and bug fixes
 
+- Optimized HEXO article link conversion rules
+- Fixed configuration fetch error
+- Fixed the issue where the widget gets the document ID incorrectly
 - Support article binding
 - HEXO supports YAML
 - Support automatic generation of article aliases
