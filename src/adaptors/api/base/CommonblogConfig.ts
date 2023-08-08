@@ -126,6 +126,11 @@ export class CommonblogConfig extends BlogConfig {
   public usernameEnabled = false
 
   /**
+   * 是否启用用户名
+   */
+  public allowPreviewUrlChange = true
+
+  /**
    * 是否展示Token设置地址
    */
   public showTokenTip = false
@@ -145,5 +150,6 @@ export class CommonblogConfig extends BlogConfig {
     this.placeholder = new MetaweblogPlaceholder()
     this.middlewareUrl = middlewareUrl
     this.usernameEnabled = false
+    this.allowPreviewUrlChange = true
   }
 }

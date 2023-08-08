@@ -297,7 +297,11 @@ onMounted(async () => {
     <slot name="main" :cfg="formData.cfg" />
     <!-- 预览地址 -->
     <el-form-item :label="t('setting.blog.previewUrl')">
-      <el-input v-model="formData.cfg.previewUrl" :placeholder="props.cfg?.placeholder.previewUrlPlaceholder" />
+      <el-input
+        v-model="formData.cfg.previewUrl"
+        :placeholder="props.cfg?.placeholder.previewUrlPlaceholder"
+        :disabled="!props.cfg.allowPreviewUrlChange"
+      />
     </el-form-item>
     <el-form-item :label="t('setting.blog.pageType')">
       <el-radio-group v-model="formData.cfg.pageType" class="ml-4">

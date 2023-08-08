@@ -47,6 +47,7 @@ yuquePlaceholder.passwordPlaceholder = t("setting.yuque.password.tip")
 yuquePlaceholder.apiUrlPlaceholder = t("setting.yuque.apiurl.tip")
 yuquePlaceholder.previewUrlPlaceholder = t("setting.yuque.previewUrl.tip")
 yuqueCfg.placeholder = yuquePlaceholder
+// 正式版发布之后删除下面配置
 yuqueCfg.knowledgeSpaceTitle = "知识库"
 yuqueCfg.enableKnowledgeSpace = true
 </script>

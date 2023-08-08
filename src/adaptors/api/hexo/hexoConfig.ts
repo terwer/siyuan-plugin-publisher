@@ -50,6 +50,7 @@ class HexoConfig extends CommonGithubConfig {
     // this.mdFilenameRule = "[slug].md"
     this.pageType = PageTypeEnum.Markdown
     this.passwordType = PasswordType.PasswordType_Token
+    this.allowPreviewUrlChange = false
   }
 }
 
