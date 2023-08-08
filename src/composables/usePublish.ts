@@ -26,7 +26,7 @@
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { reactive, toRaw } from "vue"
 import { SypConfig } from "~/syp.config.ts"
-import {AliasTranslator, DateUtil, ObjectUtil, StrUtil} from "zhi-common"
+import { AliasTranslator, DateUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { BlogAdaptor, BlogConfig, PageTypeEnum, Post, PostStatusEnum } from "zhi-blog-api"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
@@ -39,6 +39,7 @@ import { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
 import { YamlConvertAdaptor } from "~/src/platforms/yamlConvertAdaptor.ts"
 import { YamlFormatObj } from "~/src/models/yamlFormatObj.ts"
+import { ElMessage } from "element-plus"
 
 /**
  * 通用发布组件
@@ -244,9 +245,10 @@ const usePublish = () => {
         if (updatedPostMeta.hasOwnProperty(posidKey)) {
           delete updatedPostMeta[posidKey]
         }
-        if (updatedPostMeta.hasOwnProperty("custom-slug")) {
-          delete updatedPostMeta["custom-slug"]
-        }
+        // 别名不能删除，因为别的平台可能还用
+        // if (updatedPostMeta.hasOwnProperty("custom-slug")) {
+        //   delete updatedPostMeta["custom-slug"]
+        // }
 
         setting[id] = updatedPostMeta
         await updateSetting(setting)
@@ -256,8 +258,10 @@ const usePublish = () => {
           timeout: 2000,
         })
         logger.info(`[${key}] [${id}] 文章发布信息已强制移除`)
+        ElMessage.success(`[${key}] [${id}] 文章发布信息已强制移除`)
       }
     } catch (e) {
+      ElMessage.error(t("main.opt.failure") + "=>" + e)
       logger.error(e)
       await kernelApi.pushErrMsg({
         msg: t("main.opt.failure") + "=>" + e,
