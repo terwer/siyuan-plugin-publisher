@@ -60,13 +60,6 @@ const usePublishConfig = () => {
 
     // 平台配置
     if (key) {
-      return {
-        setting,
-        dynamicConfigArray,
-        cfg: undefined,
-        dynCfg: undefined,
-      }
-    } else {
       const cfg = JsonUtil.safeParse<any>(setting[key], {} as any)
       const dynCfg = getDynCfgByKey(dynamicConfigArray, key)
 
@@ -75,6 +68,13 @@ const usePublishConfig = () => {
         dynamicConfigArray,
         cfg,
         dynCfg,
+      }
+    } else {
+      return {
+        setting,
+        dynamicConfigArray,
+        cfg: undefined,
+        dynCfg: undefined,
       }
     }
   }
