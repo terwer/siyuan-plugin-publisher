@@ -1,16 +1,10 @@
 # Changelog
 
 ## [1.5.2](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.5.1...v1.5.2) (2023-08-08)
-
-
 ### Bug Fixes
-
-* 修复挂件获取文档ID错误的问题 ([c33122a](https://github.com/terwer/siyuan-plugin-publisher/commit/c33122aafb6fc96a29659839da18a11cca79541b))
-
-## [1.5.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.5.0...v1.5.1) (2023-08-08)
-### Bug Fixes
-* 优化 hexo 文章链接转换规则 ([0021c29](https://github.com/terwer/siyuan-plugin-publisher/commit/0021c29f6a020b9c55d5b0de4b1824eb8da4b079))
 * 修复挂件获取文档id错误的问题 ([364f689](https://github.com/terwer/siyuan-plugin-publisher/commit/364f689359d88589a85fdaa251ac66856dfed819))
+## [1.5.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.5.0...v1.5.1) (2023-08-08)
+* 优化 hexo 文章链接转换规则 ([0021c29](https://github.com/terwer/siyuan-plugin-publisher/commit/0021c29f6a020b9c55d5b0de4b1824eb8da4b079))
 * 修复配置获取错误问题 ([f7dc02b](https://github.com/terwer/siyuan-plugin-publisher/commit/f7dc02bc458a6105f061a144a555690292b95636))
 ## [1.5.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.4.1...v1.5.0) (2023-08-07)
 ### Features
