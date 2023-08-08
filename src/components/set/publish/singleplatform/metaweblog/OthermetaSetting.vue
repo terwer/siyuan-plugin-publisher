@@ -23,6 +23,7 @@ metaweblogPlaceholder.passwordPlaceholder = t("setting.metaweblog.password.tip")
 metaweblogPlaceholder.apiUrlPlaceholder = t("setting.metaweblog.apiUrl.tip")
 metaweblogPlaceholder.previewUrlPlaceholder = t("setting.metaweblog.previewUrl.tip")
 metaweblogCfg.placeholder = metaweblogPlaceholder
+// 正式版发布之后删除下面配置
 metaweblogCfg.usernameEnabled = true
 metaweblogCfg.showTokenTip = false
 </script>

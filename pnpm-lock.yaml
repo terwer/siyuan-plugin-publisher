@@ -54,17 +54,17 @@ dependencies:
     specifier: ^1.20.13
     version: 1.20.13
   zhi-common:
-    specifier: ^1.14.0
-    version: 1.14.0
+    specifier: ^1.14.1
+    version: 1.14.1
   zhi-device:
     specifier: ^2.3.0
     version: 2.3.0
   zhi-fetch-middleware:
-    specifier: ^0.2.18
-    version: 0.2.18
+    specifier: ^0.2.19
+    version: 0.2.19
   zhi-github-middleware:
-    specifier: ^0.2.0
-    version: 0.2.0
+    specifier: ^0.2.1
+    version: 0.2.1
   zhi-lib-base:
     specifier: ^0.4.4
     version: 0.4.4
@@ -72,11 +72,11 @@ dependencies:
     specifier: ^0.1.2
     version: 0.1.2
   zhi-siyuan-api:
-    specifier: ^2.0.14
-    version: 2.0.14
+    specifier: ^2.0.15
+    version: 2.0.15
   zhi-xmlrpc-middleware:
-    specifier: ^0.4.13
-    version: 0.4.13
+    specifier: ^0.4.14
+    version: 0.4.14
 
 devDependencies:
   '@terwer/esbuild-config-custom':
@@ -153,8 +153,8 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /@adobe/css-tools@4.2.0:
-    resolution: {integrity: sha512-E09FiIft46CmH5Qnjb0wsW54/YQd69LsxeKUOWawmws1XWvyFGURnAChH0mlr7YPFR1ofwvUQfcL0J3lMxXqPA==}
+  /@adobe/css-tools@4.3.0:
+    resolution: {integrity: sha512-+RNNcQvw2V1bmnBTPAtOLfW/9mhH2vC67+rUSi5T8EtEWt6lEnGNY2GuhZ1/YwbgikT1TkhvidCDmN5Q5YCo/w==}
     dev: true
 
   /@ampproject/remapping@2.2.1:
@@ -162,7 +162,7 @@ packages:
     engines: {node: '>=6.0.0'}
     dependencies:
       '@jridgewell/gen-mapping': 0.3.3
-      '@jridgewell/trace-mapping': 0.3.18
+      '@jridgewell/trace-mapping': 0.3.19
     dev: true
 
   /@antfu/utils@0.7.5:
@@ -181,12 +181,12 @@ packages:
     resolution: {integrity: sha512-aJXu+6lErq8ltp+JhkJUfk1MTGyuA4v7f3pA+BJ5HLfNC6nAQ0Cpi9uOquUj8Hehg0aUiHzWQbOVJGao6ztBAQ==}
     engines: {node: '>=6.9.0'}
 
-  /@babel/parser@7.22.7:
-    resolution: {integrity: sha512-7NF8pOkHP5o2vpmGgNGcfAeCvOYhGLyA3Z4eBQkT1RJlWu47n63bCs93QfJ2hIAFCil7L5P2IWhs1oToVgrL0Q==}
+  /@babel/parser@7.22.10:
+    resolution: {integrity: sha512-lNbdGsQb9ekfsnjFGhEiF4hfFqGgfOP3H3d27re3n+CGhNuTSUEQdfWk556sTLNTloczcdM5TYF2LhzmDQKyvQ==}
     engines: {node: '>=6.0.0'}
     hasBin: true
     dependencies:
-      '@babel/types': 7.22.5
+      '@babel/types': 7.22.10
 
   /@babel/runtime@7.12.1:
     resolution: {integrity: sha512-J5AIf3vPj3UwXaAzb5j1xM4WAQDX3EMgemF8rjCP3SoW09LfRKAXQKt6CoVYl230P6iWdRcBbnLDDdnqWxZSCA==}
@@ -194,8 +194,8 @@ packages:
       regenerator-runtime: 0.13.11
     dev: true
 
-  /@babel/types@7.22.5:
-    resolution: {integrity: sha512-zo3MIHGOkPOfoRXitsgHLjEXmlDaD/5KU1Uzuc9GNiZPhSqVxVRtxuPaSBZDsYZ9qV88AjtMtWW7ww98loJ9KA==}
+  /@babel/types@7.22.10:
+    resolution: {integrity: sha512-obaoigiLrlDZ7TUQln/8m4mSqIW2QFeOrCQc9r+xsaHGNoplVNYlRVpsfE8Vj35GEm2ZH4ZhrNYogs/3fj85kg==}
     engines: {node: '>=6.9.0'}
     dependencies:
       '@babel/helper-string-parser': 7.22.5
@@ -812,12 +812,7 @@ packages:
     dependencies:
       '@jridgewell/set-array': 1.1.2
       '@jridgewell/sourcemap-codec': 1.4.15
-      '@jridgewell/trace-mapping': 0.3.18
-    dev: true
-
-  /@jridgewell/resolve-uri@3.1.0:
-    resolution: {integrity: sha512-F2msla3tad+Mfht5cJq7LSXcdudKTWCVYUgw6pLFOOHSTtZlj6SWNYAp+AhuqLmWdBO2X5hPrLcu8cVP8fy28w==}
-    engines: {node: '>=6.0.0'}
+      '@jridgewell/trace-mapping': 0.3.19
     dev: true
 
   /@jridgewell/resolve-uri@3.1.1:
@@ -834,21 +829,17 @@ packages:
     resolution: {integrity: sha512-UTYAUj/wviwdsMfzoSJspJxbkH5o1snzwX0//0ENX1u/55kkZZkcTZP6u9bwKGkv+dkk9at4m1Cpt0uY80kcpQ==}
     dependencies:
       '@jridgewell/gen-mapping': 0.3.3
-      '@jridgewell/trace-mapping': 0.3.18
-    dev: true
-
-  /@jridgewell/sourcemap-codec@1.4.14:
-    resolution: {integrity: sha512-XPSJHWmi394fuUuzDnGz1wiKqWfo1yXecHQMRf2l6hztTO+nPru658AyDngaBe7isIxEkRsPR3FZh+s7iVa4Uw==}
+      '@jridgewell/trace-mapping': 0.3.19
     dev: true
 
   /@jridgewell/sourcemap-codec@1.4.15:
     resolution: {integrity: sha512-eF2rxCRulEKXHTRiDrDy6erMYWqNw4LPdQ8UQA4huuxaQsVeRPFl2oM8oDGxMFhJUWZf9McpLtJasDDZb/Bpeg==}
 
-  /@jridgewell/trace-mapping@0.3.18:
-    resolution: {integrity: sha512-w+niJYzMHdd7USdiH2U6869nqhD2nbfZXND5Yp93qIbEmnDNk7PD48o+YchRVpzMU7M6jVCbenTR7PA1FLQ9pA==}
+  /@jridgewell/trace-mapping@0.3.19:
+    resolution: {integrity: sha512-kf37QtfW+Hwx/buWGMPcR60iF9ziHa6r/CZJIHbmcm4+0qrXiVdxegAH0F6yddEVQ7zdkjcGCgCzUu+BcbhQxw==}
     dependencies:
-      '@jridgewell/resolve-uri': 3.1.0
-      '@jridgewell/sourcemap-codec': 1.4.14
+      '@jridgewell/resolve-uri': 3.1.1
+      '@jridgewell/sourcemap-codec': 1.4.15
     dev: true
 
   /@jridgewell/trace-mapping@0.3.9:
@@ -1773,7 +1764,7 @@ packages:
   /@vue/compiler-core@3.3.4:
     resolution: {integrity: sha512-cquyDNvZ6jTbf/+x+AgM2Arrp6G4Dzbb0R64jiG804HRMfRiFXWI6kqUVqZ6ZR0bQhIoQjB4+2bhNtVwndW15g==}
     dependencies:
-      '@babel/parser': 7.22.7
+      '@babel/parser': 7.22.10
       '@vue/shared': 3.3.4
       estree-walker: 2.0.2
       source-map-js: 1.0.2
@@ -1787,7 +1778,7 @@ packages:
   /@vue/compiler-sfc@3.3.4:
     resolution: {integrity: sha512-6y/d8uw+5TkCuzBkgLS0v3lSM3hJDntFEiUORM11pQ/hKvkhSKZrXW6i69UyXlJQisJxuUEJKAWEqWbWsLeNKQ==}
     dependencies:
-      '@babel/parser': 7.22.7
+      '@babel/parser': 7.22.10
       '@vue/compiler-core': 3.3.4
       '@vue/compiler-dom': 3.3.4
       '@vue/compiler-ssr': 3.3.4
@@ -1830,7 +1821,7 @@ packages:
   /@vue/reactivity-transform@3.3.4:
     resolution: {integrity: sha512-MXgwjako4nu5WFLAjpBnCj/ieqcjE2aJBINUNQzkZQfzIZA4xn+0fV1tIYBJvvva3N3OvKGofRLvQIwEQPpaXw==}
     dependencies:
-      '@babel/parser': 7.22.7
+      '@babel/parser': 7.22.10
       '@vue/compiler-core': 3.3.4
       '@vue/shared': 3.3.4
       estree-walker: 2.0.2
@@ -6133,7 +6124,7 @@ packages:
     resolution: {integrity: sha512-lQ9w/XIOH5ZHVNuNbWW8D822r+/wBSO/d6XvtyHLF7LW4KaCIDeVbvn5DF8fGCJAUCwVhVi/h6J0NUcnylUEjg==}
     hasBin: true
     dependencies:
-      '@adobe/css-tools': 4.2.0
+      '@adobe/css-tools': 4.3.0
       debug: 4.3.4
       glob: 7.2.3
       sax: 1.2.4
@@ -6191,7 +6182,7 @@ packages:
     dependencies:
       '@ampproject/remapping': 2.2.1
       '@jridgewell/sourcemap-codec': 1.4.15
-      '@jridgewell/trace-mapping': 0.3.18
+      '@jridgewell/trace-mapping': 0.3.19
       acorn: 8.10.0
       aria-query: 5.3.0
       axobject-query: 3.2.1
@@ -6681,7 +6672,7 @@ packages:
     resolution: {integrity: sha512-6z3GW9x8G1gd+JIIgQQQxXuiJtCXeAjp6RaPEPLv62mH3iPHPxV6W3robxtCzNErRo6ZwTmzWhsbNvjyEBKzKA==}
     engines: {node: '>=10.12.0'}
     dependencies:
-      '@jridgewell/trace-mapping': 0.3.18
+      '@jridgewell/trace-mapping': 0.3.19
       '@types/istanbul-lib-coverage': 2.0.4
       convert-source-map: 1.9.0
     dev: true
@@ -7194,8 +7185,8 @@ packages:
       zhi-lib-base: 0.4.4
     dev: false
 
-  /zhi-common@1.14.0:
-    resolution: {integrity: sha512-pvAA85NzxakjeWFP2xH1N2SQjUU0Kxa1m63nBpWauTpRtDO6XI0dVK7a3qOAilgXasW+SiIRerbqHWPSd3l7mQ==}
+  /zhi-common@1.14.1:
+    resolution: {integrity: sha512-euAUWXtwrbOx+6IP3w9JLwoHtI9Ntv7bUvLePK1yKpJk/83DzRmRj/ymzl31ppnVYUL/Vkb00OT/VhFiqV2P1w==}
     dependencies:
       js-yaml: 4.1.0
       shorthash2: 1.0.3
@@ -7208,20 +7199,20 @@ packages:
     resolution: {integrity: sha512-we04mMt4BEqeKDxoqdJQsDFYImYlcp/yaAIkpxpMGg+9tBURfNeHPHIHkFias9VbM8yuk6xjAX6B2xJjvYE/iw==}
     dev: false
 
-  /zhi-fetch-middleware@0.2.18:
-    resolution: {integrity: sha512-3CqhQectc7wMjnyNHJycVke/DhZiym8TSY6O71okyuXPA846/XpK8gD5YfuTWf7kc1U32I52vNj6NFgONr9HNQ==}
+  /zhi-fetch-middleware@0.2.19:
+    resolution: {integrity: sha512-3mtlPPLP3aR+tuFTmQzHs1c0qxUvyUCVs+IQpJOU66Qxckd64m1Qp+F0ZpV4UV/6Xy9wwz/AG4JdT32vsKzxTg==}
     dependencies:
-      zhi-common: 1.14.0
+      zhi-common: 1.14.1
       zhi-device: 2.3.0
       zhi-lib-base: 0.4.4
     dev: false
 
-  /zhi-github-middleware@0.2.0:
-    resolution: {integrity: sha512-U3prP32FcTzOn5VmvLmkt1S3a76ntCO33jt7rGGHHf1NQTgiozRTj5T3EByf/79urZJ2xBtf02cbvX7J+JOWvg==}
+  /zhi-github-middleware@0.2.1:
+    resolution: {integrity: sha512-prvIirH/fHEMDRw3nypzrpXDkBux3IECj2KMfy/QanH+XG6dwoQGNvrkVu0wMFtu22VN1AuXNiLAG7+PYpEtlw==}
     dependencies:
       '@octokit/core': 5.0.0
       js-base64: 3.7.5
-      zhi-common: 1.14.0
+      zhi-common: 1.14.1
       zhi-lib-base: 0.4.4
     dev: false
 
@@ -7239,18 +7230,18 @@ packages:
       - supports-color
     dev: false
 
-  /zhi-siyuan-api@2.0.14:
-    resolution: {integrity: sha512-m1CtKfv26idaginV83doLrlv7xLVVeifSJZwPI6LJcBpg66ZPeTJceUeKBJIFQNfkokXUj2aVVisPIy/ruod0g==}
+  /zhi-siyuan-api@2.0.15:
+    resolution: {integrity: sha512-UeJvlWOLMjIfyEaJJ5Og63LK+Q68q/DtmVx8miI/K6XqzQfK8jh14JMmK609i/v5Z/bGHvZEzPsX37dPe4IQgA==}
     dependencies:
       zhi-blog-api: 1.20.13
-      zhi-common: 1.14.0
+      zhi-common: 1.14.1
       zhi-lib-base: 0.4.4
     dev: false
 
-  /zhi-xmlrpc-middleware@0.4.13:
-    resolution: {integrity: sha512-LyUf6CsKYKgrSku06xPpBf+8WKCmcbVFx+a6es7oce7V+0pmgV0FH6kLyXsat6MOwdbaO9T0WVlXUrd1vFjp7w==}
+  /zhi-xmlrpc-middleware@0.4.14:
+    resolution: {integrity: sha512-3S+S/nAhoyQHRqv10jA+QmlR9bip2FpuvKI3tg2dkgxJL/Ek95PpgK1NAi4HjyjqyyoeWJ7frJWo/zAT/YiEaQ==}
     dependencies:
-      zhi-common: 1.14.0
+      zhi-common: 1.14.1
       zhi-device: 2.3.0
       zhi-lib-base: 0.4.4
     dev: false

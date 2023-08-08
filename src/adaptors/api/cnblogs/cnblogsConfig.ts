@@ -50,6 +50,7 @@ class CnblogsConfig extends MetaweblogConfig {
     this.usernameEnabled = true
     this.passwordType = PasswordType.PasswordType_Token
     this.showTokenTip = true
+    this.allowPreviewUrlChange = true
   }
 }
 

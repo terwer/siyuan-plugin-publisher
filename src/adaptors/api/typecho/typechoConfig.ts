@@ -23,9 +23,9 @@
  * questions.
  */
 
-import { MetaweblogConfig } from "~/src/adaptors/api/base/metaweblog/MetaweblogConfig.ts"
 import { PageTypeEnum } from "zhi-blog-api"
 import TypechoUtils from "~/src/adaptors/api/typecho/typechoUtils.ts"
+import { MetaweblogConfig } from "~/src/adaptors/api/base/metaweblog/MetaweblogConfig.ts"
 
 /**
  * Typecho 配置
@@ -51,6 +51,7 @@ class TypechoConfig extends MetaweblogConfig {
     this.previewUrl = "/index.php/archives/[postid]"
     this.pageType = PageTypeEnum.Html
     this.showTokenTip = false
+    this.allowPreviewUrlChange = true
   }
 }
 

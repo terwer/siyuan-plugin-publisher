@@ -52,6 +52,7 @@ class WordpressConfig extends MetaweblogConfig {
     this.pageType = PageTypeEnum.Html
     this.usernameEnabled = true
     this.showTokenTip = false
+    this.allowPreviewUrlChange = true
   }
 }
 

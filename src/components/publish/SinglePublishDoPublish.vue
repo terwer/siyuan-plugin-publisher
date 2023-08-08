@@ -229,6 +229,7 @@ const initPage = async () => {
       msg: errMsg,
       timeout: 7000,
     })
+    throw e
   }
 }
 

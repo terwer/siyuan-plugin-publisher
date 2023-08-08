@@ -46,6 +46,7 @@ notionPlaceholder.passwordPlaceholder = t("setting.notion.password.tip")
 notionPlaceholder.apiUrlPlaceholder = t("setting.notion.apiurl.tip")
 notionPlaceholder.previewUrlPlaceholder = t("setting.notion.previewUrl.tip")
 notionCfg.placeholder = notionPlaceholder
+// 正式版发布之后删除下面配置
 notionCfg.knowledgeSpaceTitle = "根页面"
 notionCfg.enableKnowledgeSpace = true
 </script>

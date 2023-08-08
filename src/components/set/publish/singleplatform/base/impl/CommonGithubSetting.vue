@@ -85,6 +85,7 @@ const toggleAdvance = () => {
           <el-input
             v-model="(main.cfg as any).defaultPath"
             :placeholder="t('setting.blog.type.github.default.path.tip')"
+            :disabled="true"
           />
         </el-form-item>
         <!-- 提交信息 -->
@@ -101,7 +102,11 @@ const toggleAdvance = () => {
         </el-form-item>
         <!-- 文件规则 -->
         <el-form-item :label="t('setting.blog.mdFilenameRule')">
-          <el-input v-model="(main.cfg as any).mdFilenameRule" :placeholder="t('setting.blog.mdFilenameRule.tip')" />
+          <el-input
+            v-model="(main.cfg as any).mdFilenameRule"
+            :placeholder="t('setting.blog.mdFilenameRule.tip')"
+            :disabled="true"
+          />
         </el-form-item>
         <!-- 文章预览规则 -->
         <el-form-item :label="t('setting.blog.previewPostUrl')">

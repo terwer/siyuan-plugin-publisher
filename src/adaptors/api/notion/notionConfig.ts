@@ -39,6 +39,7 @@ class NotionConfig extends CommonblogConfig {
     this.passwordType = PasswordType.PasswordType_Token
     this.knowledgeSpaceTitle = "根页面"
     this.enableKnowledgeSpace = true
+    this.allowPreviewUrlChange = false
   }
 }
 

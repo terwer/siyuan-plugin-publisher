@@ -168,34 +168,30 @@ const doOpenBrowserWindow = (
 }
 
 /**
- * 获取挂件所在的块ID
- * 如果挂件未找到或块ID无效，则返回空字符串。
+ * 获取主窗口页面的节点ID
+ *
+ * @param doc - 父窗口的 document 对象
+ * @returns 返回页面的节点ID，如果不存在，则返回undefined
  */
-export const getWidgetId = (): string => {
-  // 检查是否在 iframe 中
-  if (
-    window.frameElement == null ||
-    window.frameElement.parentElement == null ||
-    window.frameElement.parentElement.parentElement == null
-  ) {
-    // 如果不在 iframe 中，返回空字符串
-    return ""
-  }
+const getMainWindowPageId = (doc: Document): string | undefined => {
+  // 查找包含 protyle 类但不包含 fn__none 的 div 元素
+  const protyleElement = doc.querySelector("div.protyle:not(.fn__none)")
 
-  // 获取 iframe 的父级父级元素（即挂件所在的块）
-  const widgetContainer = window.frameElement.parentElement.parentElement
-  if (!widgetContainer) {
-    // 如果父级父级元素不存在，返回空字符串
-    return ""
-  }
+  // 在该 div 元素下查找包含 protyle-title 类的 div 元素，并获取 data-node-id 属性的值
+  const protyleTitleElement = protyleElement?.querySelector("div.protyle-title")
+  const nodeId = protyleTitleElement?.getAttribute("data-node-id")
 
-  // 获取块的唯一标识符（数据节点ID）
-  const widgetId = widgetContainer.getAttribute("data-node-id")
-  if (!widgetId) {
-    // 如果块的唯一标识符不存在，返回空字符串
-    return ""
-  }
+  return nodeId
+}
 
+/**
+ * 获取挂件所在的块ID
+ *
+ * 如果挂件未找到或块ID无效，则返回undefined
+ * @returns 返回挂件所在的块ID，如果不存在，则返回undefined
+ */
+export const getWidgetId = (): string | undefined => {
+  const parentDocument = window.parent.document
   // 返回挂件所在的块ID
-  return widgetId
+  return getMainWindowPageId(parentDocument)
 }

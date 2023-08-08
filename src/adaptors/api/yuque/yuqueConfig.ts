@@ -40,6 +40,7 @@ class YuqueConfig extends CommonblogConfig {
     this.passwordType = PasswordType.PasswordType_Token
     this.knowledgeSpaceTitle = "知识库"
     this.enableKnowledgeSpace = true
+    this.allowPreviewUrlChange = false
   }
 }
 
