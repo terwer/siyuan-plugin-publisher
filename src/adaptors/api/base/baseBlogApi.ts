@@ -71,16 +71,15 @@ export class BaseBlogApi extends BlogApi {
    * 网页授权通用的请求代理
    *
    * @param url - url
-   * @param headers - headers
-   * @param params - 参数
-   * @param method - method
-   @param contentType -
-   * @param contentType - 
+   * @param headers - headers，默认是[]
+   * @param params - 参数，默认是 {}
+   * @param method - 方法，默认是GET
+   * @param contentType - 类型，默认是 application/json
    */
   protected async proxyFetch(
     url: string,
-    headers: any[],
-    params: any,
+    headers: any[] = [],
+    params: any = {},
     method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" = "GET",
     contentType: string = "application/json"
   ): Promise<any> {

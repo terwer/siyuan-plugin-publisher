@@ -41,6 +41,7 @@ if __name__ == "__main__":
 
     # 设置环境变量
     os.environ['IS_SERVE'] = 'true'
+    os.environ['VITE_DEFAULT_TYPE'] = 'siyuan'
     os.environ['VITE_SIYUAN_API_URL'] = URL
     os.environ['VITE_SIYUAN_AUTH_TOKEN'] = TOKEN
     os.environ['VITE_SIYUAN_COOKIE'] = COOKIE

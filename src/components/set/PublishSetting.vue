@@ -35,7 +35,7 @@ import {
   AuthMode,
   deletePlatformByKey,
   DynamicConfig,
-  DynamicJsonCfg,
+  DynamicJsonCfg, getDynPostidKey,
   PlatformType,
   replacePlatformByKey,
   setDynamicJsonCfg,

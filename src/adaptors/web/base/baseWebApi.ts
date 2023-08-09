@@ -28,7 +28,6 @@ import { CommonFetchClient } from "zhi-fetch-middleware"
 import { AppInstance } from "~/src/appInstance.ts"
 import { createAppLogger, ILogger } from "~/src/utils/appLogger.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
-import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import { JsonUtil } from "zhi-common"
 import { isDev } from "~/src/utils/constants.ts"
 
@@ -44,8 +43,7 @@ class BaseWebApi extends WebApi {
   protected cfg: WebConfig
   private readonly kernelApi: SiyuanKernelApi
   private readonly commonFetchClient: CommonFetchClient
-  private isInSiyuanWidget: boolean
-  private isInChromeExtension: boolean
+  private readonly useSiyuanProxy: boolean
 
   /**
    * 初始化网页授权 API 适配器
@@ -58,12 +56,11 @@ class BaseWebApi extends WebApi {
 
     this.cfg = cfg
     this.logger = createAppLogger("base-web-api")
-    const { kernelApi } = useSiyuanApi()
-    const { isInSiyuanWidget, isInChromeExtension } = useSiyuanDevice()
-    this.kernelApi = kernelApi
     this.commonFetchClient = new CommonFetchClient(appInstance, cfg.apiUrl, cfg.middlewareUrl, isDev)
-    this.isInSiyuanWidget = isInSiyuanWidget()
-    this.isInChromeExtension = isInChromeExtension()
+
+    const { kernelApi, isUseSiyuanProxy } = useSiyuanApi()
+    this.kernelApi = kernelApi
+    this.useSiyuanProxy = isUseSiyuanProxy()
   }
 
   // web 适配器专有
@@ -82,7 +79,7 @@ class BaseWebApi extends WebApi {
     if (res.status !== "success") {
       throw new Error("网页授权发布文章异常")
     }
-    return res.id
+    return res.post_id
   }
 
   // ================
@@ -92,48 +89,49 @@ class BaseWebApi extends WebApi {
    * 网页授权通用的请求代理
    *
    * @param url - url
-   * @param params - 参数
+   * @param headers - 请求头，默认取 password 作为 cookie
+   * @param params - 参数，默认是 {}
+   * @param method - 方法，默认是GET
+   * @param contentType - 类型，默认是 application/json
    */
-  protected async proxyFetch(url: string, params: any = {}): Promise<any> {
-    if (this.isInSiyuanWidget) {
+  protected async proxyFetch(
+    url: string,
+    headers: any[] = [],
+    params: any = {},
+    method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" = "GET",
+    contentType: string = "application/json"
+  ): Promise<any> {
+    if (this.useSiyuanProxy) {
       this.logger.info("using siyuan forwardProxy")
       const fetchResult = await this.kernelApi.forwardProxy(
         url,
-        [
-          {
-            Cookie: this.cfg.password,
-          },
-        ],
+        headers.length > 0
+          ? headers
+          : [
+              {
+                Cookie: this.cfg.password,
+              },
+            ],
         params,
-        "GET",
-        "application/json",
+        method,
+        contentType,
         7000
       )
       this.logger.debug("proxyFetch result=>", fetchResult)
       const resText = fetchResult?.body
+      // 后续调试可打开这个日志
+      // this.logger.debug("proxyFetch resText=>", resText)
       const res = JsonUtil.safeParse<any>(resText, {} as any)
-      return res
-    } else if (this.isInChromeExtension) {
-      this.logger.info("using chrome background")
-      const fetchOptions = {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Cookie: this.cfg.password,
-        },
-      }
-      this.logger.info("commonFetchClient from proxyFetch url =>", url)
-      this.logger.info("commonFetchClient from proxyFetch fetchOptions =>", fetchOptions)
-      const res = await this.commonFetchClient.fetchCall(url, fetchOptions)
-      this.logger.debug("commonFetchClient res from proxyFetch =>", res)
       return res
     } else {
       this.logger.info("using middleware proxy")
+      const header = headers.length > 0 ? headers[0] : {}
       const fetchOptions = {
-        method: "GET",
+        method: method,
         headers: {
           "Content-Type": "application/json",
           Cookie: this.cfg.password,
+          ...header,
         },
       }
       this.logger.info("commonFetchClient from proxyFetch url =>", url)
