@@ -28,4 +28,8 @@ import { CommonWebConfig } from "~/src/adaptors/web/base/CommonWebConfig.ts"
 /**
  * 微信公众号配置
  */
-export class WechatConfig extends CommonWebConfig {}
+export class WechatConfig extends CommonWebConfig {
+  constructor(username: string, password: string, middlewareUrl?: string) {
+    super("", "", username, password, middlewareUrl)
+  }
+}

@@ -59,7 +59,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
       uid: res.uid,
       title: res.name,
       avatar: res.avatar_url,
-      supportTypes: ["markdown"],
+      supportTypes: ["html"],
       type: "zhihu",
       displayName: "知乎",
       home: "https://www.zhihu.com/settings/account",

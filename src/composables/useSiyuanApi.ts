@@ -34,7 +34,7 @@ import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 export const useSiyuanApi = () => {
   const logger = createAppLogger("use-siyuan-api")
 
-  const siyuanApiUrl = Utils.emptyOrDefault(process.env.VITE_SIYUAN_API_URL, "http:/127.0.0.1:6806")
+  const siyuanApiUrl = Utils.emptyOrDefault(process.env.VITE_SIYUAN_API_URL, "")
   const siyuanAuthToken = Utils.emptyOrDefault(process.env.VITE_SIYUAN_AUTH_TOKEN, "")
   const siyuanConfig = new SiyuanConfig(siyuanApiUrl, siyuanAuthToken)
   siyuanConfig.cookie = Utils.emptyOrDefault(process.env.VITE_SIYUAN_COOKIE, "")
@@ -68,6 +68,7 @@ export const useSiyuanApi = () => {
   return {
     blogApi,
     kernelApi,
+    cfg: siyuanConfig,
     isStorageViaSiyuanApi,
     isUseSiyuanProxy,
   }

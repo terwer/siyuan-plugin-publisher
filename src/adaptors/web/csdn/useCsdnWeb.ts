@@ -56,8 +56,12 @@ const useCsdnWeb = async (key?: string, newCfg?: CsdnConfig) => {
     // 如果配置为空，则使用默认的环境变量值，并记录日志
     if (ObjectUtil.isEmptyObject(cfg)) {
       // 从环境变量获取Csdn的cookie
+      const middlewareUrl = Utils.emptyOrDefault(
+        process.env.VITE_MIDDLEWARE_URL,
+        "https://api.terwer.space/api/middleware"
+      )
       const csdnCookie = Utils.emptyOrDefault(process.env.VITE_CSDN_AUTH_TOKEN, "")
-      cfg = new CsdnConfig(csdnCookie)
+      cfg = new CsdnConfig("", csdnCookie, middlewareUrl)
       logger.debug("Configuration is empty, using default environment variables.")
     } else {
       logger.info("Using configuration from settings...")

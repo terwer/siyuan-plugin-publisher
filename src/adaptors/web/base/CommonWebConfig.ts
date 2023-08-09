@@ -23,9 +23,28 @@
  * questions.
  */
 
-import { WebConfig } from "zhi-blog-api"
+import { PageTypeEnum, WebConfig } from "zhi-blog-api"
+import { MetaweblogPlaceholder } from "~/src/adaptors/api/base/metaweblog/MetaweblogPlaceholder.ts"
 
 /**
  * 网页授权配置
  */
-export class CommonWebConfig extends WebConfig {}
+export class CommonWebConfig extends WebConfig {
+  constructor(home: string, apiUrl: string, username: string, password: string, middlewareUrl?: string) {
+    super(password, middlewareUrl)
+
+    this.home = home
+    this.apiUrl = apiUrl
+    this.username = username
+
+    this.password = password
+    this.apiStatus = false
+    this.blogid = ""
+    this.blogName = ""
+    this.posidKey = ""
+    this.previewUrl = ""
+    this.pageType = PageTypeEnum.Markdown
+    this.placeholder = new MetaweblogPlaceholder()
+    this.middlewareUrl = middlewareUrl
+  }
+}

@@ -48,10 +48,6 @@ cnblogsPlaceholder.passwordPlaceholder = t("setting.cnblogs.password.tip")
 cnblogsPlaceholder.apiUrlPlaceholder = t("setting.cnblogs.apiUrl.tip")
 cnblogsPlaceholder.previewUrlPlaceholder = t("setting.cnblogs.previewUrl.tip")
 cnblogsCfg.placeholder = cnblogsPlaceholder
-// 正式版发布之后删除下面配置
-cnblogsCfg.usernameEnabled = true
-cnblogsCfg.passwordType = PasswordType.PasswordType_Token
-cnblogsCfg.allowPreviewUrlChange = true
 </script>
 
 <template>

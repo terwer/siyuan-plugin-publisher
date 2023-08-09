@@ -60,10 +60,6 @@ wpPlaceholder.passwordPlaceholder = t("setting.wordpress.password.tip")
 wpPlaceholder.apiUrlPlaceholder = t("setting.wordpress.apiUrl.tip")
 wpPlaceholder.previewUrlPlaceholder = t("setting.wordpress.previewUrl.tip")
 wpCfg.placeholder = wpPlaceholder
-// 正式版发布之后删除下面配置
-wpCfg.usernameEnabled = true
-wpCfg.showTokenTip = false
-wpCfg.allowPreviewUrlChange = true
 </script>
 
 <template>

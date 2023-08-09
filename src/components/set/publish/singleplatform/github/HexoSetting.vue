@@ -46,9 +46,6 @@ hexoPlaceholder.passwordPlaceholder = t("setting.blog.type.github.token.tip")
 hexoPlaceholder.apiUrlPlaceholder = t("setting.blog.github.apiurl.tip")
 hexoPlaceholder.previewUrlPlaceholder = t("setting.blog.previewUrl.tip")
 hexoCfg.placeholder = hexoPlaceholder
-hexoCfg.usernameEnabled = true
-hexoCfg.showTokenTip = true
-hexoCfg.allowPreviewUrlChange = false
 </script>
 
 <template>

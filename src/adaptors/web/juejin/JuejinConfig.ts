@@ -28,4 +28,8 @@ import { CommonWebConfig } from "~/src/adaptors/web/base/CommonWebConfig.ts"
 /**
  * 掘金配置
  */
-export class JuejinConfig extends CommonWebConfig {}
+export class JuejinConfig extends CommonWebConfig {
+  constructor(username: string, password: string, middlewareUrl?: string) {
+    super("", "", username, password, middlewareUrl)
+  }
+}

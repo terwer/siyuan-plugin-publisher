@@ -151,5 +151,6 @@ export class CommonblogConfig extends BlogConfig {
     this.middlewareUrl = middlewareUrl
     this.usernameEnabled = false
     this.allowPreviewUrlChange = true
+    this.showTokenTip = false
   }
 }

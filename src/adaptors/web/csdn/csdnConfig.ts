@@ -28,4 +28,8 @@ import { CommonWebConfig } from "~/src/adaptors/web/base/CommonWebConfig.ts"
 /**
  * CSDN配置
  */
-export class CsdnConfig extends CommonWebConfig {}
+export class CsdnConfig extends CommonWebConfig {
+  constructor(username: string, password: string, middlewareUrl?: string) {
+    super("", "", username, password, middlewareUrl)
+  }
+}
