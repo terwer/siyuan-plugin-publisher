@@ -55,9 +55,13 @@ const useZhihuWeb = async (key?: string, newCfg?: ZhihuConfig) => {
     cfg = JsonUtil.safeParse<ZhihuConfig>(setting[key], {} as ZhihuConfig)
     // 如果配置为空，则使用默认的环境变量值，并记录日志
     if (ObjectUtil.isEmptyObject(cfg)) {
+      const middlewareUrl = Utils.emptyOrDefault(
+        process.env.VITE_MIDDLEWARE_URL,
+        "https://api.terwer.space/api/middleware"
+      )
       // 从环境变量获取Zhihu的cookie
       const zhihuCookie = Utils.emptyOrDefault(process.env.VITE_ZHIHU_AUTH_TOKEN, "")
-      cfg = new ZhihuConfig(zhihuCookie)
+      cfg = new ZhihuConfig("", zhihuCookie, middlewareUrl)
       logger.debug("Configuration is empty, using default environment variables.")
     } else {
       logger.info("Using configuration from settings...")
@@ -66,7 +70,7 @@ const useZhihuWeb = async (key?: string, newCfg?: ZhihuConfig) => {
       process.env.VITE_MIDDLEWARE_URL,
       "https://api.terwer.space/api/middleware"
     )
-    if(StrUtil.isEmptyString(cfg.middlewareUrl)){
+    if (StrUtil.isEmptyString(cfg.middlewareUrl)) {
       cfg.middlewareUrl = middlewareUrl
     }
     // 初始化posidKey
@@ -78,6 +82,7 @@ const useZhihuWeb = async (key?: string, newCfg?: ZhihuConfig) => {
 
   const webApi = new ZhihuWebAdaptor(appInstance, cfg)
   return {
+    cfg,
     webApi,
   }
 }

@@ -33,6 +33,7 @@ import CnblogsSetting from "~/src/components/set/publish/singleplatform/metawebl
 import WordpressSetting from "~/src/components/set/publish/singleplatform/metaweblog/WordpressSetting.vue"
 import TypechoSetting from "~/src/components/set/publish/singleplatform/metaweblog/TypechoSetting.vue"
 import YuqueSetting from "~/src/components/set/publish/singleplatform/commonblog/YuqueSetting.vue"
+import ZhihuSetting from "~/src/components/set/publish/singleplatform/web/ZhihuSetting.vue"
 
 // uses
 const { t } = useVueI18n()
@@ -51,8 +52,9 @@ const subtype = getSubPlatformTypeByKey(apiType)
     <hexo-setting v-else-if="subtype === SubPlatformType.Github_Hexo" :api-type="apiType" />
     <othermeta-setting v-else-if="subtype === SubPlatformType.Metaweblog_Metaweblog" :api-type="apiType" />
     <cnblogs-setting v-else-if="subtype === SubPlatformType.Metaweblog_Cnblogs" :api-type="apiType" />
-    <wordpress-setting v-else-if="subtype === SubPlatformType.Wordpress_Wordpress" :api-type="apiType" />
     <typecho-setting v-else-if="subtype === SubPlatformType.Metaweblog_Typecho" :api-type="apiType" />
+    <wordpress-setting v-else-if="subtype === SubPlatformType.Wordpress_Wordpress" :api-type="apiType" />
+    <zhihu-setting v-else-if="subtype === SubPlatformType.Custom_Zhihu" :api-type="apiType"></zhihu-setting>
     <span v-else>
       <el-alert :closable="false" :title="t('setting.entry.not.supported')" class="top-tip" type="error" />
     </span>

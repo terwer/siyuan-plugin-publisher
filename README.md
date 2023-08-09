@@ -8,38 +8,20 @@ Publish articles from Siyuan Notes to platforms such as Yuque, Notion, Cnblogs, 
 
 Support features such as fast publishing, image bed management, platform expansion, smart labels, etc.
 
-> **Note: This plugin is in the rapid iteration and pre-beta testing stage, the function is not yet stable, if you encounter the problem that you cannot use it, you can try the following steps to fix it:**
+> **Front Announcement: Publish Tool's First Stable Version '1.6.0' Released!**
 
-(1) Uninstall the plugin
+We recommend that you use the `uninstall->install` method to update. If the configuration is abnormal, please back up `[workspace]/data/storage/syp/sy-p-plus-cfg.json` , and then delete it, this configuration file will be automatically initialized the first time it is used.
 
-![](./help/help_1.png)
-
-(2) Download and install again
-
-(3) Re-enable
-
-![](./help/help_2.png)
-
-(4) If a platform configuration is incomplete, you can disable the platform configuration, then delete the platform and add it again.
-
-If you still can't use this step after this step, [New issue](https://github.com/terwer/siyuan-plugin-publisher/issues/new) is welcome.
-
-**This tip will be removed after the stable release.**
+In later releases, the release configuration will only be backward compatible to `1.6.0+`.
 
 ## Recent critical updates and bug fixes
 
-- Optimized HEXO article link conversion rules
-- Fixed configuration fetch error
-- Fixed the issue where the widget gets the document ID incorrectly
-- Support article binding
-- HEXO supports YAML
+- Support publishing to Zhihu
+- Support for publishing to Hexo
+- Support for publishing to Notion
+- Support for Yuque,Cnblogs, Metaweblog, Typecho, WordPress
 - Support automatic generation of article aliases
-- Unified integration of platform configurations
-- Complete HEXO adaptation
-- Added notion support
 - Support for changing the default knowledge base
-- Added support for general releases with fine-grained configuration
-- Support for Yuque, Cnblogs, Metaweblog, Typecho, WordPress
 
 ## Compatibility of Origin notes
 
@@ -74,7 +56,7 @@ Names not listed in order
 - [X] Github
   - [X] Hexo
 - [X] Notion
-- [ ] Zhihu
+- [X] Zhihu
 
 ## Core Features
 

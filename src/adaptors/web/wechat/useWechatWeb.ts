@@ -55,9 +55,13 @@ const useWechatWeb = async (key?: string, newCfg?: WechatConfig) => {
     cfg = JsonUtil.safeParse<WechatConfig>(setting[key], {} as WechatConfig)
     // 如果配置为空，则使用默认的环境变量值，并记录日志
     if (ObjectUtil.isEmptyObject(cfg)) {
+      const middlewareUrl = Utils.emptyOrDefault(
+        process.env.VITE_MIDDLEWARE_URL,
+        "https://api.terwer.space/api/middleware"
+      )
       // 从环境变量获取Wechat的cookie
       const wechatCookie = Utils.emptyOrDefault(process.env.VITE_WECHAT_AUTH_TOKEN, "")
-      cfg = new WechatConfig(wechatCookie)
+      cfg = new WechatConfig("", wechatCookie, middlewareUrl)
       logger.debug("Configuration is empty, using default environment variables.")
     } else {
       logger.info("Using configuration from settings...")

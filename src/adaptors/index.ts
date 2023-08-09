@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { BlogAdaptor, WebAdaptor } from "zhi-blog-api"
+import { BlogAdaptor, BlogConfig, WebAdaptor } from "zhi-blog-api"
 import { getSubPlatformTypeByKey, SubPlatformType } from "~/src/platforms/dynamicConfig.ts"
 import { useCnblogsApi } from "~/src/adaptors/api/cnblogs/useCnblogsApi.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
@@ -31,10 +31,6 @@ import { useWordpressApi } from "~/src/adaptors/api/wordpress/useWordpressApi.ts
 import { useTypechoApi } from "~/src/adaptors/api/typecho/useTypechoApi.ts"
 import { useYuqueApi } from "~/src/adaptors/api/yuque/useYuqueApi.ts"
 import { useZhihuWeb } from "~/src/adaptors/web/zhihu/useZhihuWeb.ts"
-import { useCsdnWeb } from "~/src/adaptors/web/csdn/useCsdnWeb.ts"
-import { useJianshuWeb } from "~/src/adaptors/web/jianshu/useJianshuWeb.ts"
-import { useJuejinWeb } from "~/src/adaptors/web/juejin/useJuejinWeb.ts"
-import { useWechatWeb } from "~/src/adaptors/web/wechat/useWechatWeb.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { useMetaweblogApi } from "~/src/adaptors/api/metaweblog/useMetaweblogApi.ts"
 import { useNotionApi } from "~/src/adaptors/api/notion/useNotionApi.ts"
@@ -49,6 +45,90 @@ import { useHexoApi } from "~/src/adaptors/api/hexo/useHexoApi.ts"
  */
 class Adaptors {
   private static logger = createAppLogger("adaptors")
+
+  /**
+   * 根据平台key查找配置
+   *
+   * @param key
+   */
+  public static async getCfg(key: string): Promise<BlogConfig> {
+    let conf = null
+    const type: SubPlatformType = getSubPlatformTypeByKey(key)
+
+    switch (type) {
+      case SubPlatformType.Common_Yuque: {
+        const { cfg } = await useYuqueApi(key)
+        conf = cfg
+        break
+      }
+      case SubPlatformType.Common_Notion: {
+        const { cfg } = await useNotionApi(key)
+        conf = cfg
+        break
+      }
+      case SubPlatformType.Github_Hexo: {
+        const { cfg } = await useHexoApi(key)
+        conf = cfg
+        break
+      }
+      case SubPlatformType.Metaweblog_Metaweblog: {
+        const { cfg } = await useMetaweblogApi(key)
+        conf = cfg
+        break
+      }
+      case SubPlatformType.Metaweblog_Cnblogs: {
+        const { cfg } = await useCnblogsApi(key)
+        conf = cfg
+        break
+      }
+      case SubPlatformType.Metaweblog_Typecho: {
+        const { cfg } = await useTypechoApi(key)
+        conf = cfg
+        break
+      }
+      case SubPlatformType.Wordpress_Wordpress: {
+        const { cfg } = await useWordpressApi(key)
+        conf = cfg
+        break
+      }
+      case SubPlatformType.Custom_Zhihu: {
+        const { cfg } = await useZhihuWeb(key)
+        conf = cfg
+        break
+      }
+      // case SubPlatformType.Custom_CSDN: {
+      //   const { cfg } = await useCsdnWeb(key)
+      //   conf = cfg
+      //   break
+      // }
+      // case SubPlatformType.Custom_Jianshu: {
+      //   const { cfg } = await useJianshuWeb(key)
+      //   conf = cfg
+      //   break
+      // }
+      // case SubPlatformType.Custom_Juejin: {
+      //   const { cfg } = await useJuejinWeb(key)
+      //   conf = cfg
+      //   break
+      // }
+      // case SubPlatformType.Custom_Wechat: {
+      //   const { cfg } = await useWechatWeb(key)
+      //   conf = cfg
+      //   break
+      // }
+      case SubPlatformType.System_Siyuan: {
+        const { cfg } = useSiyuanApi()
+        conf = cfg
+        break
+      }
+      default: {
+        conf = {}
+        break
+      }
+    }
+    this.logger.debug(`get conf from key ${key}=>`, conf)
+    return conf
+  }
 
   /**
    * 根据平台key查找适配器
@@ -101,26 +181,26 @@ class Adaptors {
         blogAdaptor = webApi
         break
       }
-      case SubPlatformType.Custom_CSDN: {
-        const { webApi } = await useCsdnWeb(key, newCfg)
-        blogAdaptor = webApi
-        break
-      }
-      case SubPlatformType.Custom_Jianshu: {
-        const { webApi } = await useJianshuWeb(key, newCfg)
-        blogAdaptor = webApi
-        break
-      }
-      case SubPlatformType.Custom_Juejin: {
-        const { webApi } = await useJuejinWeb(key, newCfg)
-        blogAdaptor = webApi
-        break
-      }
-      case SubPlatformType.Custom_Wechat: {
-        const { webApi } = await useWechatWeb(key, newCfg)
-        blogAdaptor = webApi
-        break
-      }
+      // case SubPlatformType.Custom_CSDN: {
+      //   const { webApi } = await useCsdnWeb(key, newCfg)
+      //   blogAdaptor = webApi
+      //   break
+      // }
+      // case SubPlatformType.Custom_Jianshu: {
+      //   const { webApi } = await useJianshuWeb(key, newCfg)
+      //   blogAdaptor = webApi
+      //   break
+      // }
+      // case SubPlatformType.Custom_Juejin: {
+      //   const { webApi } = await useJuejinWeb(key, newCfg)
+      //   blogAdaptor = webApi
+      //   break
+      // }
+      // case SubPlatformType.Custom_Wechat: {
+      //   const { webApi } = await useWechatWeb(key, newCfg)
+      //   blogAdaptor = webApi
+      //   break
+      // }
       case SubPlatformType.System_Siyuan: {
         const { blogApi } = useSiyuanApi()
         blogAdaptor = blogApi
@@ -130,7 +210,7 @@ class Adaptors {
         break
       }
     }
-    this.logger.debug(`get blogAdaptor from key ${key}=>`, blogAdaptor)
+    this.logger.debug(`get blogAdaptor from key ${key}`)
     return blogAdaptor
   }
 

@@ -24,8 +24,19 @@
  */
 
 import { CommonWebConfig } from "~/src/adaptors/web/base/CommonWebConfig.ts"
+import { PageTypeEnum, PasswordType } from "zhi-blog-api"
 
 /**
  * 知乎配置
  */
-export class ZhihuConfig extends CommonWebConfig {}
+export class ZhihuConfig extends CommonWebConfig {
+  constructor(username: string, password: string, middlewareUrl?: string) {
+    super("https://zhuanlan.zhihu.com", "https://zhuanlan.zhihu.com/api", username, password, middlewareUrl)
+    this.previewUrl = "/p/[postid]"
+    this.pageType = PageTypeEnum.Html
+    this.usernameEnabled = true
+    this.passwordType = PasswordType.PasswordType_Cookie
+    this.knowledgeSpaceTitle = "专栏"
+    this.enableKnowledgeSpace = true
+  }
+}

@@ -123,6 +123,8 @@ class MetaweblogBlogApi extends BlogApi {
    * @param publish - 可选，不传递默认是发布，传递false才是草稿
    */
   public async newPost(post: Post, publish?: boolean): Promise<string> {
+    publish = publish ?? true
+
     // 不传递默认是发布，传递false才是草稿
     post.post_status = publish === false ? PostStatusEnum.PostStatusEnum_Draft : PostStatusEnum.PostStatusEnum_Publish
 
@@ -150,6 +152,8 @@ class MetaweblogBlogApi extends BlogApi {
    * @param publish - 可选，不传递默认是发布，传递false才是草稿
    */
   public async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
+    publish = publish ?? true
+
     // 不传递默认是发布，传递false才是草稿
     post.post_status = publish === false ? PostStatusEnum.PostStatusEnum_Draft : PostStatusEnum.PostStatusEnum_Publish
 

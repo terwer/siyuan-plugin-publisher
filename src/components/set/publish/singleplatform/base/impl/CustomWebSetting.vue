@@ -22,32 +22,20 @@
   - or visit www.terwer.space if you need additional information or have any
   - questions.
   -->
-
-<script setup lang="ts">
-import CommonBlogSetting from "~/src/components/set/publish/singleplatform/base/CommonBlogSetting.vue"
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import {useNotionApi} from "~/src/adaptors/api/notion/useNotionApi.ts";
-import {NotionConfig} from "~/src/adaptors/api/notion/notionConfig.ts";
-import {NotionPlaceHolder} from "~/src/adaptors/api/notion/notionPlaceHolder.ts";
-
+<script lang="ts" setup>
 const props = defineProps({
   apiType: {
     type: String,
     default: "",
   },
+  cfg: {
+    // 必须继承MetaweblogConfig
+    type: Object,
+    default: null,
+  },
 })
-
-const { t } = useVueI18n()
-const { cfg } = await useNotionApi(props.apiType)
-const notionCfg = cfg as NotionConfig
-const notionPlaceholder = new NotionPlaceHolder()
-notionPlaceholder.homePlaceholder = t("setting.notion.home.tip")
-notionPlaceholder.passwordPlaceholder = t("setting.notion.password.tip")
-notionPlaceholder.apiUrlPlaceholder = t("setting.notion.apiurl.tip")
-notionPlaceholder.previewUrlPlaceholder = t("setting.notion.previewUrl.tip")
-notionCfg.placeholder = notionPlaceholder
 </script>
 
 <template>
-  <common-blog-setting :api-type="props.apiType" :cfg="notionCfg" />
+  <common-blog-setting :api-type="props.apiType" :cfg="props.cfg" />
 </template>

@@ -102,7 +102,7 @@ const submitForm = async (formEl) => {
         type="error"
         :closable="false"
       />
-      <!-- 平台图标 -->
+      <!-- 平台cookie -->
       <el-form-item label="平台Cookie">
         <el-input
           v-model="formData.settingCfgData.password"

@@ -52,7 +52,7 @@ const props = defineProps({
 
 // uses
 const { t } = useVueI18n()
-const { doSinglePublish, doSingleDelete } = usePublish()
+const { doSinglePublish, doSingleDelete, doForceSingleDelete } = usePublish()
 const { blogApi } = useSiyuanApi()
 const { getPublishCfg } = usePublishConfig()
 
@@ -177,6 +177,16 @@ const doDelete = async () => {
   }
 }
 
+const handleForceDelete = async (key: string, id: string, publishCfg: IPublishCfg) => {
+  try {
+    await doForceSingleDelete(key, id, publishCfg)
+  } catch (error) {
+    ElMessage.error(error.message)
+  } finally {
+    formData.isDeleteLoading = false
+  }
+}
+
 const syncDynList = (selectedKeys: string[]) => {
   formData.dynList = selectedKeys
 }
@@ -211,7 +221,7 @@ onMounted(async () => {
             [{{ errRet.key }}] {{ StrUtil.isEmptyString(errRet.name) ? "" : `[${errRet.name}]` }} {{ errRet.errMsg }}
             <a
               href="javascript:void(0)"
-              @click="doSingleDelete(errRet.key, props.id, formData.publishCfg as IPublishCfg)"
+              @click="handleForceDelete(errRet.key, props.id, formData.publishCfg as IPublishCfg)"
               >强制解除关联</a
             >
           </div>

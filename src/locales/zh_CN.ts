@@ -414,6 +414,12 @@ export default {
     "可前往 https://developer.atlassian.com/cloud/confluence/rest/v1/#api-wiki-rest-api-content-get 查看文档",
   "setting.conf.previewUrl.tip": "Confluence平台文章预览规则，通常是：/pages/[postid]",
 
+  "setting.zhihu.home.tip": "专栏首页地址，通常固定",
+  "setting.zhihu.username.tip": "知乎用户名，必须设置正确，否则无法获取专栏",
+  "setting.zhihu.password.tip": "知乎Cookie，请勿修改",
+  "setting.zhihu.apiUrl.tip": "通常固定，请勿修改",
+  "setting.zhihu.previewUrl.tip": "知乎平台文章预览规则，通常是：//[postid]",
+
   "setting.picgo.refer.to": "详情请参考：",
   "setting.picgo.refer.to.online.doc": "PicGO配置在线文档",
   "setting.picgo.picbed": "图床设置",
@@ -505,7 +511,7 @@ export default {
     "目前支持Metaweblog的平台有：博客园、Typecho等，采用 API 授权。MetaWeblog API 作为XML-RPC Web 服务实现，是目前公认的开放博客标准。",
   "setting.platform.custom": "自定义 HTTP 协议",
   "setting.platform.custom.desc":
-    "目前支持自定义HTTP协议的平台有：知乎、简书、掘金等，采用网页授权。自定义HTTP协议通过类似 WeChatSync 的方式实现。",
+    "目前支持自定义HTTP协议的平台有：知乎等，采用网页授权。自定义HTTP协议通过类似 WeChatSync 的方式实现。",
   "setting.platform.right.tips0": "特别提示：",
   "setting.platform.right.tips1": "1、在这里可以进行发布配置，直接点击 [设置图标] 即可进行配置。",
   "setting.platform.right.tips2": "2、如需新增平台，直接点击左侧 + 按钮即可。",

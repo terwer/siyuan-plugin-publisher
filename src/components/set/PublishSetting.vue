@@ -36,6 +36,7 @@ import {
   deletePlatformByKey,
   DynamicConfig,
   DynamicJsonCfg,
+  getDynPostidKey,
   PlatformType,
   replacePlatformByKey,
   setDynamicJsonCfg,
@@ -51,7 +52,8 @@ import { Utils } from "~/src/utils/utils.ts"
 import { AppInstance } from "~/src/appInstance.ts"
 import { ElectronCookie, WebConfig } from "zhi-blog-api"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
-import CookieSetting from "~/src/components/set/publish/singleplatform/web/CookieSetting.vue"
+import CookieSetting from "~/src/components/set/publish/singleplatform/base/CookieSetting.vue"
+import { CommonWebConfig } from "~/src/adaptors/web/base/CommonWebConfig.ts"
 
 const logger = createAppLogger("publish-setting")
 
@@ -142,22 +144,22 @@ const handlePlatformEnabled = async (cfg: DynamicConfig) => {
 }
 
 const handleSinglePlatformSetting = async (cfg: DynamicConfig) => {
-  if (cfg.authMode === AuthMode.API) {
-    const key = cfg.platformKey
-    await router.push({
-      path: `/setting/platform/single/${key}`,
-      query: {
-        showBack: "true",
-      },
-    })
+  const key = cfg.platformKey
+  await router.push({
+    path: `/setting/platform/single/${key}`,
+    query: {
+      showBack: "true",
+    },
+  })
+}
+
+const handleSinglePlatformWebAuth = async (cfg: DynamicConfig) => {
+  if (isInSiyuanWidget()) {
+    await _handleOpenBrowserAuth(cfg)
+  } else if (isInChromeExtension()) {
+    _handleChromeExtensionAuth(cfg)
   } else {
-    if (isInSiyuanWidget()) {
-      await _handleOpenBrowserAuth(cfg)
-    } else if (isInChromeExtension()) {
-      _handleChromeExtensionAuth(cfg)
-    } else {
-      await _handleSetCookieAuth(cfg)
-    }
+    await _handleSetCookieAuth(cfg)
   }
 }
 
@@ -251,7 +253,7 @@ const handleValidateWebAuth = async (cfg: DynamicConfig) => {
   }
 }
 
-const _handleValidateOpenBrowserAuth = (cfg: DynamicConfig) => {
+const _handleValidateOpenBrowserAuth = (dynCfg: DynamicConfig) => {
   // 设置将要读取的域名
   const cookieCb = async (dynCfg: DynamicConfig, cookies: ElectronCookie[]) => {
     // ElMessage.info("验证中，请关注状态，没有授权表示不可用，已授权表示该平台可正常使用...")
@@ -260,13 +262,14 @@ const _handleValidateOpenBrowserAuth = (cfg: DynamicConfig) => {
 
     try {
       const appInstance = new AppInstance()
-      const apiAdaptor = await Adaptors.getAdaptor(dynCfg.platformKey)
+      const cfg = (await Adaptors.getCfg(dynCfg.platformKey)) as CommonWebConfig
+      const apiAdaptor = await Adaptors.getAdaptor(dynCfg.platformKey, cfg)
       const api = Utils.webApi(appInstance, apiAdaptor)
 
       // 构造对应平台的cookie
       const cookieStr = await api.buildCookie(cookies)
       // 更新cookie
-      const newSettingCfg = JsonUtil.safeParse<WebConfig>(formData.setting[dynCfg.platformKey], {} as WebConfig)
+      const newSettingCfg = cfg
       newSettingCfg.password = cookieStr
       formData.setting[dynCfg.platformKey] = newSettingCfg
       // 更新cookie
@@ -305,45 +308,47 @@ const _handleValidateOpenBrowserAuth = (cfg: DynamicConfig) => {
     formData.webAuthLoadingMap[dynCfg.platformKey] = false
   }
 
-  openBrowserWindow(cfg.authUrl, cfg, cookieCb)
+  openBrowserWindow(dynCfg.authUrl, dynCfg, cookieCb)
 }
 
-const _handleValidateChromeExtensionAuth = async (cfg: DynamicConfig) => {
-  formData.webAuthLoadingMap[cfg.platformKey] = true
+const _handleValidateChromeExtensionAuth = async (dynCfg: DynamicConfig) => {
+  formData.webAuthLoadingMap[dynCfg.platformKey] = true
 
   try {
     const appInstance = new AppInstance()
-    const apiAdaptor = await Adaptors.getAdaptor(cfg.platformKey)
+    // 这里会有配置初始化
+    const cfg = (await Adaptors.getCfg(dynCfg.platformKey)) as CommonWebConfig
+    const apiAdaptor = await Adaptors.getAdaptor(dynCfg.platformKey, cfg)
     const api = Utils.webApi(appInstance, apiAdaptor)
     const metadata = await api.getMetaData()
     // logger.debug("chrome extension get meta data=>", metadata)
     if (metadata.flag) {
-      cfg.isAuth = true
-      const newSettingCfg2 = JsonUtil.safeParse<WebConfig>(formData.setting[cfg.platformKey], {} as WebConfig)
-      newSettingCfg2.metadata = metadata
-      // newSettingCfg2
-      formData.setting[cfg.platformKey] = newSettingCfg2
+      dynCfg.isAuth = true
+      const newSettingCfg = cfg
+      newSettingCfg.metadata = metadata
+      // settingConf
+      formData.setting[dynCfg.platformKey] = newSettingCfg
       // 更新metadata
       await updateSetting(formData.setting)
       logger.info("已更新最新的metadata")
       ElMessage.success("验证成功，该平台可正常使用")
     } else {
-      cfg.isAuth = false
+      dynCfg.isAuth = false
       ElMessage.error("验证失败，该平台将不可用")
     }
   } catch (e) {
-    cfg.isAuth = false
+    dynCfg.isAuth = false
     ElMessage.error(t("main.opt.failure") + "=>" + e)
     logger.error(e)
   }
 
-  formData.dynamicConfigArray = replacePlatformByKey(formData.dynamicConfigArray, cfg.platformKey, cfg)
+  formData.dynamicConfigArray = replacePlatformByKey(formData.dynamicConfigArray, dynCfg.platformKey, dynCfg)
   // 替换删除后的平台配置
   const dynJsonCfg = setDynamicJsonCfg(formData.dynamicConfigArray)
   formData.setting[DYNAMIC_CONFIG_KEY] = dynJsonCfg
   // 更新状态
   await updateSetting(formData.setting)
-  formData.webAuthLoadingMap[cfg.platformKey] = false
+  formData.webAuthLoadingMap[dynCfg.platformKey] = false
 }
 
 const _handleValidateCookieAuth = async (cfg: DynamicConfig) => {
@@ -525,20 +530,40 @@ onMounted(async () => {
                           inactive-text="未启用"
                           @change="handlePlatformEnabled(platform)"
                         ></el-switch>
+                        <!-- 通用平台设置 -->
                         <el-text
-                          v-if="platform.isEnabled"
-                          :class="
-                            platform.authMode === AuthMode.API
-                              ? 'action-btn action-setting'
-                              : 'action-btn action-web-setting'
-                          "
+                          v-if="platform.isEnabled && platform.authMode === AuthMode.API"
+                          class="action-btn action-setting"
                           @click="handleSinglePlatformSetting(platform)"
                         >
                           <el-icon>
                             <Tools />
                           </el-icon>
-                          {{ platform.authMode === AuthMode.API ? "设置" : platform.isAuth ? "再次授权" : "授权" }}
+                          设置
                         </el-text>
+                        <!-- 通用平台设置 -->
+                        <el-text
+                          v-if="platform.isEnabled && platform.authMode === AuthMode.WEBSITE && platform.isAuth"
+                          class="action-btn action-setting"
+                          @click="handleSinglePlatformSetting(platform)"
+                        >
+                          <el-icon>
+                            <Tools />
+                          </el-icon>
+                          设置
+                        </el-text>
+                        <!-- 平台授权 -->
+                        <el-text
+                          v-if="platform.isEnabled && platform.authMode === AuthMode.WEBSITE"
+                          class="action-btn action-web-setting"
+                          @click="handleSinglePlatformWebAuth(platform)"
+                        >
+                          <el-icon>
+                            <Tools />
+                          </el-icon>
+                          {{ platform.isAuth ? "再次授权" : "授权" }}
+                        </el-text>
+                        <!-- 平台验证 -->
                         <el-button
                           v-if="platform.isEnabled && platform.authMode === AuthMode.WEBSITE && !platform.isAuth"
                           class="action-btn action-web-auth"

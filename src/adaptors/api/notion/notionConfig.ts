@@ -34,6 +34,7 @@ class NotionConfig extends CommonblogConfig {
     super("https://www.notion.so/", "https://api.notion.com/v1", "", password, middlewareUrl)
 
     this.tokenSettingUrl = "https://www.notion.so/my-integrations"
+    this.showTokenTip = true
     this.previewUrl = "/[postid]"
     this.pageType = PageTypeEnum.Markdown
     this.passwordType = PasswordType.PasswordType_Token

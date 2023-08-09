@@ -34,6 +34,7 @@ class YuqueConfig extends CommonblogConfig {
     super("https://www.yuque.com/", "https://www.yuque.com/api/v2", username, password, middlewareUrl)
 
     this.tokenSettingUrl = "https://www.yuque.com/settings/tokens"
+    this.showTokenTip = true
     this.previewUrl = "/[notebook]/[postid]"
     this.pageType = PageTypeEnum.Markdown
     this.usernameEnabled = true

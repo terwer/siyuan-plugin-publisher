@@ -23,13 +23,8 @@
  * questions.
  */
 
-import { CommonWebConfig } from "~/src/adaptors/web/base/CommonWebConfig.ts"
+import { CommonWebPlaceholder } from "~/src/adaptors/web/base/CommonWebPlaceholder.ts"
 
-/**
- * 简书配置
- */
-export class JianshuConfig extends CommonWebConfig {
-  constructor(username: string, password: string, middlewareUrl?: string) {
-    super("", "", username, password, middlewareUrl)
-  }
-}
+class ZhihuPlaceholder extends CommonWebPlaceholder {}
+
+export { ZhihuPlaceholder }

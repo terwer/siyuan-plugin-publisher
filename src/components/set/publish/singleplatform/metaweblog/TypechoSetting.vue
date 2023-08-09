@@ -60,10 +60,6 @@ tcPlaceholder.passwordPlaceholder = t("setting.typecho.password.tip")
 tcPlaceholder.apiUrlPlaceholder = t("setting.typecho.apiUrl.tip")
 tcPlaceholder.previewUrlPlaceholder = t("setting.typecho.previewUrl.tip")
 tcCfg.placeholder = tcPlaceholder
-// 正式版发布之后删除下面配置
-tcCfg.usernameEnabled = true
-tcCfg.showTokenTip = false
-tcCfg.allowPreviewUrlChange = true
 </script>
 
 <template>

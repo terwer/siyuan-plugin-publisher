@@ -23,9 +23,8 @@
  * questions.
  */
 
-import { BlogConfig, PageTypeEnum } from "zhi-blog-api"
-import { MetaweblogPlaceholder } from "~/src/adaptors/api/base/metaweblog/MetaweblogPlaceholder.ts"
-import { CommonblogPlaceholder } from "~/src/adaptors/api/base/CommonblogPlaceholder.ts"
+import {BlogConfig, PageTypeEnum} from "zhi-blog-api"
+import {CommonblogPlaceholder} from "~/src/adaptors/api/base/CommonblogPlaceholder.ts"
 
 /*
  * Copyright (c) 2023, Terwer . All rights reserved.
@@ -53,87 +52,9 @@ import { CommonblogPlaceholder } from "~/src/adaptors/api/base/CommonblogPlaceho
  */
 export class CommonblogConfig extends BlogConfig {
   /**
-   * 首页
-   */
-  public override home = ""
-
-  /**
-   * API地址
-   */
-  public override apiUrl = ""
-  /**
-   * 用户名
-   */
-  public override username = ""
-  /**
-   * 密码
-   */
-  public override password = ""
-
-  /**
-   * 是否发布
-   */
-  public override apiStatus = false
-
-  /**
-   * 博客ID
-   */
-  public override blogid = ""
-
-  /**
-   * 博客名（API获取）
-   */
-  public override blogName = ""
-
-  /**
-   * 开启知识空间
-   */
-  public override enableKnowledgeSpace = false
-
-  /**
-   * 文章别名key
-   */
-  public override posidKey = ""
-
-  /**
-   * 文章预览链接
-   */
-  public override previewUrl = ""
-
-  /**
-   * 文章类型
-   */
-  public override pageType = PageTypeEnum.Markdown
-
-  /**
-   * token设置地址
-   */
-  public override tokenSettingUrl = ""
-
-  /**
    * 操作提示
    */
   public override placeholder = {} as CommonblogPlaceholder
-
-  /**
-   * 代理地址
-   */
-  public override middlewareUrl = ""
-
-  /**
-   * 是否启用用户名
-   */
-  public usernameEnabled = false
-
-  /**
-   * 是否启用用户名
-   */
-  public allowPreviewUrlChange = true
-
-  /**
-   * 是否展示Token设置地址
-   */
-  public showTokenTip = false
 
   constructor(home: string, apiUrl: string, username: string, password: string, middlewareUrl?: string) {
     super()
@@ -147,9 +68,10 @@ export class CommonblogConfig extends BlogConfig {
     this.posidKey = ""
     this.previewUrl = ""
     this.pageType = PageTypeEnum.Markdown
-    this.placeholder = new MetaweblogPlaceholder()
     this.middlewareUrl = middlewareUrl
     this.usernameEnabled = false
     this.allowPreviewUrlChange = true
+    this.showTokenTip = false
+    this.placeholder = new CommonblogPlaceholder()
   }
 }

@@ -27,9 +27,9 @@
     "syncWidgetRepo": "python scripts/sync_widget_repo.py"
   },
   "devDependencies": {
-    "@terwer/esbuild-config-custom": "^1.0.12",
+    "@terwer/esbuild-config-custom": "^1.2.0",
     "@terwer/eslint-config-custom": "^1.3.6",
-    "@types/node": "^18.17.3",
+    "@types/node": "^18.17.4",
     "@vitejs/plugin-vue": "^4.2.3",
     "@vitest/coverage-v8": "^0.34.1",
     "@vue/test-utils": "^2.4.1",
@@ -43,7 +43,7 @@
     "typescript": "^5.1.6",
     "unplugin-auto-import": "^0.16.6",
     "unplugin-vue-components": "^0.25.1",
-    "vercel": "^31.2.2",
+    "vercel": "^31.2.3",
     "vite": "^4.4.9",
     "vite-plugin-html": "^3.2.0",
     "vite-plugin-node-polyfills": "^0.8.2",
@@ -54,6 +54,7 @@
     "@element-plus/icons-vue": "^2.1.0",
     "@vueuse/components": "^10.3.0",
     "@vueuse/core": "^10.3.0",
+    "cheerio": "1.0.0-rc.12",
     "cross-fetch": "^3.1.8",
     "element-plus": "^2.3.9",
     "js-base64": "^3.7.5",
@@ -66,14 +67,14 @@
     "vue-i18n": "^9.2.2",
     "vue-router": "^4.2.4",
     "xmlbuilder2": "^3.1.1",
-    "zhi-blog-api": "^1.20.13",
+    "zhi-blog-api": "^1.20.17",
     "zhi-common": "^1.14.1",
     "zhi-device": "^2.3.0",
     "zhi-fetch-middleware": "^0.2.19",
     "zhi-github-middleware": "^0.2.1",
     "zhi-lib-base": "^0.4.4",
     "zhi-notion-markdown": "^0.1.2",
-    "zhi-siyuan-api": "^2.0.15",
+    "zhi-siyuan-api": "^2.0.19",
     "zhi-xmlrpc-middleware": "^0.4.14"
   }
 }

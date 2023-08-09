@@ -29,4 +29,5 @@ import { CommonblogPlaceholder } from "~/src/adaptors/api/base/CommonblogPlaceho
  * Github 操作提示
  */
 class CommonGithubPlaceholder extends CommonblogPlaceholder {}
+
 export { CommonGithubPlaceholder }

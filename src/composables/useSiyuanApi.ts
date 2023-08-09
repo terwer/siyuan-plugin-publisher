@@ -50,8 +50,9 @@ export const useSiyuanApi = () => {
     // 插件SPA(Docker浏览器客户端) - VITE_DEFAULT_TYPE: siyuan
     // 插件SPA(本地客户端浏览器) - VITE_DEFAULT_TYPE: siyuan
     // const storeViaSiyuanApi = process.env.VITE_DEFAULT_TYPE === "siyuan"
-    const storeViaSiyuanApi = process.env.VITE_DEFAULT_TYPE === "siyuan"
-    logger.info("defaultType=>", process.env.VITE_DEFAULT_TYPE)
+    const defaultType = process.env.VITE_DEFAULT_TYPE ?? "siyuan"
+    const storeViaSiyuanApi = defaultType === "siyuan"
+    logger.info("defaultType=>", defaultType)
     logger.info("storeViaSiyuanApi=>", String(storeViaSiyuanApi))
     return storeViaSiyuanApi
   }
@@ -67,6 +68,7 @@ export const useSiyuanApi = () => {
   return {
     blogApi,
     kernelApi,
+    cfg: siyuanConfig,
     isStorageViaSiyuanApi,
     isUseSiyuanProxy,
   }

@@ -270,7 +270,7 @@ onMounted(async () => {
     <!-- 密码 -->
     <el-form-item
       :label="t('setting.common.password')"
-      v-if="props.cfg.passwordType === PasswordType.PasswordType_Password"
+      v-if="formData.cfg.passwordType === PasswordType.PasswordType_Password"
     >
       <el-input
         type="password"
@@ -283,16 +283,36 @@ onMounted(async () => {
       >
     </el-form-item>
     <!-- token -->
-    <el-form-item v-else :label="t('setting.common.token')">
+    <el-form-item
+      v-else-if="formData.cfg.passwordType === PasswordType.PasswordType_Token"
+      :label="t('setting.common.token')"
+    >
       <el-input
         type="password"
         v-model="formData.cfg.password"
         show-password
         :placeholder="props.cfg.placeholder.passwordPlaceholder"
       />
-      <a v-if="props.cfg.showTokenTip" :href="props.cfg.tokenSettingUrl" target="_blank"
+      <a v-if="formData.cfg.showTokenTip" :href="props.cfg.tokenSettingUrl" target="_blank"
         >{{ t("setting.common.token.gen") }}：{{ props.cfg.tokenSettingUrl }}</a
       >
+    </el-form-item>
+    <!-- 平台cookie -->
+    <el-form-item v-else label="平台Cookie">
+      <el-input
+        v-model="formData.cfg.password"
+        style="width: 75%; margin-right: 16px"
+        placeholder="请直接粘贴平台cookie，为了您的隐私安全，请勿泄露cookie给任何人"
+        type="textarea"
+        :rows="10"
+        :disabled="true"
+      />
+      <el-alert
+        :closable="false"
+        title="此处数据为网页授权自动生成，仅在您本地浏览器存储，不支持修改。为了您的安全，请勿泄露此处信息给任何人。"
+        class="inline-tip"
+        type="error"
+      />
     </el-form-item>
     <slot name="main" :cfg="formData.cfg" />
     <!-- 预览地址 -->
@@ -364,5 +384,8 @@ onMounted(async () => {
   margin-top 10px
 .top-tip
   margin 10px 0
+  padding-left 0
+.inline-tip
+  margin 0
   padding-left 0
 </style>

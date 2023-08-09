@@ -24,11 +24,11 @@
   -->
 
 <script setup lang="ts">
-import CommonBlogSetting from "~/src/components/set/publish/singleplatform/base/CommonBlogSetting.vue"
+import CustomWebSetting from "~/src/components/set/publish/singleplatform/base/impl/CustomWebSetting.vue"
+import { ZhihuConfig } from "~/src/adaptors/web/zhihu/zhihuConfig.ts"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import {useNotionApi} from "~/src/adaptors/api/notion/useNotionApi.ts";
-import {NotionConfig} from "~/src/adaptors/api/notion/notionConfig.ts";
-import {NotionPlaceHolder} from "~/src/adaptors/api/notion/notionPlaceHolder.ts";
+import { useZhihuWeb } from "~/src/adaptors/web/zhihu/useZhihuWeb.ts"
+import { ZhihuPlaceholder } from "~/src/adaptors/web/zhihu/zhihuPlaceholder.ts"
 
 const props = defineProps({
   apiType: {
@@ -38,16 +38,18 @@ const props = defineProps({
 })
 
 const { t } = useVueI18n()
-const { cfg } = await useNotionApi(props.apiType)
-const notionCfg = cfg as NotionConfig
-const notionPlaceholder = new NotionPlaceHolder()
-notionPlaceholder.homePlaceholder = t("setting.notion.home.tip")
-notionPlaceholder.passwordPlaceholder = t("setting.notion.password.tip")
-notionPlaceholder.apiUrlPlaceholder = t("setting.notion.apiurl.tip")
-notionPlaceholder.previewUrlPlaceholder = t("setting.notion.previewUrl.tip")
-notionCfg.placeholder = notionPlaceholder
+const { cfg } = await useZhihuWeb(props.apiType)
+
+const zhihuCfg = cfg as ZhihuConfig
+const zhihuPlaceholder = new ZhihuPlaceholder()
+zhihuPlaceholder.homePlaceholder = t("setting.zhihu.home.tip")
+zhihuPlaceholder.apiUrlPlaceholder = t("setting.zhihu.apiUrl.tip")
+zhihuPlaceholder.usernamePlaceholder = t("setting.zhihu.username.tip")
+zhihuPlaceholder.passwordPlaceholder = t("setting.zhihu.password.tip")
+zhihuPlaceholder.previewUrlPlaceholder = t("setting.zhihu.previewUrl.tip")
+zhihuCfg.placeholder = zhihuPlaceholder
 </script>
 
 <template>
-  <common-blog-setting :api-type="props.apiType" :cfg="notionCfg" />
+  <custom-web-setting :api-type="props.apiType" :cfg="zhihuCfg" />
 </template>
