@@ -1,5 +1,8 @@
 # Changelog
 
+## [1.6.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.6.0...v1.6.1) (2023-08-09)
+### Bug Fixes
+* lodash-es ([29b65ed](https://github.com/terwer/siyuan-plugin-publisher/commit/29b65ed7d4672eee1a54b16552f281afd0344df6))
 ## [1.6.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.5.2...v1.6.0) (2023-08-09)
 ### Features
 * 修正博客园markdown分类问题 ([ea1950d](https://github.com/terwer/siyuan-plugin-publisher/commit/ea1950d32e3886889bacbdbbdce9e52b9bbbc61d))
@@ -8,7 +11,6 @@
 * 支持发布到知乎 ([0a8d119](https://github.com/terwer/siyuan-plugin-publisher/commit/0a8d11928a8fb507eea1e03e7c8096928ae14baf))
 * 支持自定义设置知乎专栏 ([506c2d6](https://github.com/terwer/siyuan-plugin-publisher/commit/506c2d6b65be6e0a1f36145cf3d9c9f4d3066578))
 * 适配知乎完成 ([5a2406a](https://github.com/terwer/siyuan-plugin-publisher/commit/5a2406ab4aedccc8411fd1bd0650cf5fd92dcc84))
-### Bug Fixes
 * 修复强制删除提示不明确的问题 ([e5d745e](https://github.com/terwer/siyuan-plugin-publisher/commit/e5d745ec8897586e8d0b0c1ca615e907e2d108c2))
 ## [1.5.2](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.5.1...v1.5.2) (2023-08-08)
 * 修复挂件获取文档id错误的问题 ([364f689](https://github.com/terwer/siyuan-plugin-publisher/commit/364f689359d88589a85fdaa251ac66856dfed819))
