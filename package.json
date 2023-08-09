@@ -54,6 +54,7 @@
     "@element-plus/icons-vue": "^2.1.0",
     "@vueuse/components": "^10.3.0",
     "@vueuse/core": "^10.3.0",
+    "cheerio": "1.0.0-rc.12",
     "cross-fetch": "^3.1.8",
     "element-plus": "^2.3.9",
     "js-base64": "^3.7.5",
@@ -66,14 +67,14 @@
     "vue-i18n": "^9.2.2",
     "vue-router": "^4.2.4",
     "xmlbuilder2": "^3.1.1",
-    "zhi-blog-api": "^1.20.15",
+    "zhi-blog-api": "^1.20.17",
     "zhi-common": "^1.14.1",
     "zhi-device": "^2.3.0",
     "zhi-fetch-middleware": "^0.2.19",
     "zhi-github-middleware": "^0.2.1",
     "zhi-lib-base": "^0.4.4",
     "zhi-notion-markdown": "^0.1.2",
-    "zhi-siyuan-api": "^2.0.17",
+    "zhi-siyuan-api": "^2.0.19",
     "zhi-xmlrpc-middleware": "^0.4.14"
   }
 }

@@ -24,19 +24,22 @@
  */
 
 import { PageTypeEnum, WebConfig } from "zhi-blog-api"
-import { MetaweblogPlaceholder } from "~/src/adaptors/api/base/metaweblog/MetaweblogPlaceholder.ts"
+import { CommonWebPlaceholder } from "~/src/adaptors/web/base/CommonWebPlaceholder.ts"
 
 /**
  * 网页授权配置
  */
 export class CommonWebConfig extends WebConfig {
+  /**
+   * 操作提示
+   */
+  public override placeholder = {} as CommonWebPlaceholder
+
   constructor(home: string, apiUrl: string, username: string, password: string, middlewareUrl?: string) {
     super(password, middlewareUrl)
-
     this.home = home
     this.apiUrl = apiUrl
     this.username = username
-
     this.password = password
     this.apiStatus = false
     this.blogid = ""
@@ -44,7 +47,10 @@ export class CommonWebConfig extends WebConfig {
     this.posidKey = ""
     this.previewUrl = ""
     this.pageType = PageTypeEnum.Markdown
-    this.placeholder = new MetaweblogPlaceholder()
     this.middlewareUrl = middlewareUrl
+    this.usernameEnabled = false
+    this.allowPreviewUrlChange = true
+    this.showTokenTip = false
+    this.placeholder = new CommonWebPlaceholder()
   }
 }

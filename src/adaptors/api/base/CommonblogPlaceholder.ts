@@ -23,58 +23,9 @@
  * questions.
  */
 
-
 import { BlogPlaceholder } from "zhi-blog-api"
 
 /**
  * Metaweblog 操作提示
  */
-export class CommonblogPlaceholder extends BlogPlaceholder {
-  /**
-   * 首页操作提示
-   */
-  public override homePlaceholder = ""
-
-  /**
-   * API 地址操作提示
-   */
-  public override apiUrlPlaceholder = ""
-
-  /**
-   * 用户名操作提示
-   */
-  public override usernamePlaceholder = ""
-
-  /**
-   * 密码操作提示
-   */
-  public override passwordPlaceholder = ""
-
-  /**
-   * API状态是否正常操作提示
-   */
-  public override apiStatusPlaceholder = false
-
-  /**
-   * 博客名（API获取）操作提示
-   */
-  public override blogNamePlaceholder = ""
-
-  /**
-   * 文章别名key操作提示
-   */
-  public override posidKeyPlaceholder = ""
-  /**
-   * 文章预览链接操作提示
-   */
-  public override previewUrlPlaceholder = ""
-  /**
-   * 文章类型操作提示
-   */
-  public override pageTypePlaceholder = ""
-
-  constructor() {
-    super()
-  }
-}
-
+export class CommonblogPlaceholder extends BlogPlaceholder {}

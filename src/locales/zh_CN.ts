@@ -414,6 +414,12 @@ export default {
     "可前往 https://developer.atlassian.com/cloud/confluence/rest/v1/#api-wiki-rest-api-content-get 查看文档",
   "setting.conf.previewUrl.tip": "Confluence平台文章预览规则，通常是：/pages/[postid]",
 
+  "setting.zhihu.home.tip": "专栏首页地址，通常固定",
+  "setting.zhihu.username.tip": "知乎用户名，必须设置正确，否则无法获取专栏",
+  "setting.zhihu.password.tip": "知乎Cookie，请勿修改",
+  "setting.zhihu.apiUrl.tip": "通常固定，请勿修改",
+  "setting.zhihu.previewUrl.tip": "知乎平台文章预览规则，通常是：//[postid]",
+
   "setting.picgo.refer.to": "详情请参考：",
   "setting.picgo.refer.to.online.doc": "PicGO配置在线文档",
   "setting.picgo.picbed": "图床设置",

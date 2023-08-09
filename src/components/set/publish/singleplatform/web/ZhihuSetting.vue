@@ -42,6 +42,11 @@ const { cfg } = await useZhihuWeb(props.apiType)
 
 const zhihuCfg = cfg as ZhihuConfig
 const zhihuPlaceholder = new ZhihuPlaceholder()
+zhihuPlaceholder.homePlaceholder = t("setting.zhihu.home.tip")
+zhihuPlaceholder.apiUrlPlaceholder = t("setting.zhihu.apiUrl.tip")
+zhihuPlaceholder.usernamePlaceholder = t("setting.zhihu.username.tip")
+zhihuPlaceholder.passwordPlaceholder = t("setting.zhihu.password.tip")
+zhihuPlaceholder.previewUrlPlaceholder = t("setting.zhihu.previewUrl.tip")
 zhihuCfg.placeholder = zhihuPlaceholder
 </script>
 

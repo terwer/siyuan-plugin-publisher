@@ -210,7 +210,7 @@ class Adaptors {
         break
       }
     }
-    this.logger.debug(`get blogAdaptor from key ${key}=>`, blogAdaptor)
+    this.logger.debug(`get blogAdaptor from key ${key}`)
     return blogAdaptor
   }
 

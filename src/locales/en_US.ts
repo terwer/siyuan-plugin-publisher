@@ -418,6 +418,12 @@ export default {
   "setting.conf.apiUrl.tip": "You can go to https://developper.atlassian.com/Cloud/confluence/rest/v1/1/1/",
   "setting.conf.previewUrl.tip": "CONFLUENCE platform articles preview rules, usually:/pages/[postid]",
 
+  "setting.zhihu.home.tip": "The address of the front page of the column, usually fixed",
+  "setting.zhihu.username.tip": "Zhihu username, must be set correctly, otherwise you cannot get the column",
+  "setting.zhihu.password.tip": "Know cookies, please do not modify them",
+  "setting.zhihu.apiUrl.tip": "Usually fixed, do not modify",
+  "setting.zhihu.previewUrl.tip": "Zhihu platform article preview rules, usually: //[postid]",
+
   "setting.picgo.refer.to": "For details, please refer to:",
   "setting.picgo.refer.to.online.doc": "Picgo configuration online documentation",
   "setting.picgo.picbed": "Picbed setting",

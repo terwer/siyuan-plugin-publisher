@@ -121,8 +121,12 @@ class BaseWebApi extends WebApi {
       const resText = fetchResult?.body
       // 后续调试可打开这个日志
       // this.logger.debug("proxyFetch resText=>", resText)
-      const res = JsonUtil.safeParse<any>(resText, {} as any)
-      return res
+      if (contentType === "application/json") {
+        const res = JsonUtil.safeParse<any>(resText, {} as any)
+        return res
+      } else {
+        return resText
+      }
     } else {
       this.logger.info("using middleware proxy")
       const header = headers.length > 0 ? headers[0] : {}
