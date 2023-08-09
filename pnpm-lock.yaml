@@ -86,8 +86,8 @@ devDependencies:
     specifier: ^1.3.6
     version: 1.3.6(@nuxt/eslint-config@0.1.1)(@typescript-eslint/eslint-plugin@5.62.0)(astro-eslint-parser@0.13.3)(eslint-config-prettier@8.10.0)(eslint-config-turbo@1.10.12)(eslint-plugin-prettier@4.2.1)(eslint-plugin-svelte@2.32.4)(eslint-plugin-vue@9.16.1)(eslint@8.46.0)(prettier-plugin-svelte@2.10.1)(prettier@2.8.8)(typescript@5.1.6)
   '@types/node':
-    specifier: ^18.17.3
-    version: 18.17.3
+    specifier: ^20.4.9
+    version: 20.4.9
   '@vitejs/plugin-vue':
     specifier: ^4.2.3
     version: 4.2.3(vite@4.4.9)(vue@3.3.4)
@@ -132,7 +132,7 @@ devDependencies:
     version: 31.2.2
   vite:
     specifier: ^4.4.9
-    version: 4.4.9(@types/node@18.17.3)(stylus@0.59.0)
+    version: 4.4.9(@types/node@20.4.9)(stylus@0.59.0)
   vite-plugin-html:
     specifier: ^3.2.0
     version: 3.2.0(vite@4.4.9)
@@ -1255,6 +1255,10 @@ packages:
   /@types/node@18.17.3:
     resolution: {integrity: sha512-2x8HWtFk0S99zqVQABU9wTpr8wPoaDHZUcAkoTKH+nL7kPv3WUI9cRi/Kk5Mz4xdqXSqTkKP7IWNoQQYCnDsTA==}
 
+  /@types/node@20.4.9:
+    resolution: {integrity: sha512-8e2HYcg7ohnTUbHk8focoklEQYvemQmu9M/f43DZVx43kHn0tE3BY/6gSDxS7k0SprtS0NHvj+L80cGLnoOUcQ==}
+    dev: true
+
   /@types/sass@1.45.0:
     resolution: {integrity: sha512-jn7qwGFmJHwUSphV8zZneO3GmtlgLsmhs/LQyVvQbIIa+fzGMUiHI4HXJZL3FT8MJmgXWbLGiVVY7ElvHq6vDA==}
     deprecated: This is a stub types definition. sass provides its own type definitions, so you do not need this installed.
@@ -1680,7 +1684,7 @@ packages:
       vite: ^4.0.0
       vue: ^3.2.25
     dependencies:
-      vite: 4.4.9(@types/node@18.17.3)(stylus@0.59.0)
+      vite: 4.4.9(@types/node@20.4.9)(stylus@0.59.0)
       vue: 3.3.4
     dev: true
 
@@ -6754,7 +6758,7 @@ packages:
       html-minifier-terser: 6.1.0
       node-html-parser: 5.4.2
       pathe: 0.2.0
-      vite: 4.4.9(@types/node@18.17.3)(stylus@0.59.0)
+      vite: 4.4.9(@types/node@20.4.9)(stylus@0.59.0)
     dev: true
 
   /vite-plugin-node-polyfills@0.8.2(vite@4.4.9):
@@ -6764,7 +6768,7 @@ packages:
     dependencies:
       '@rollup/plugin-inject': 5.0.3
       node-stdlib-browser: 1.2.0
-      vite: 4.4.9(@types/node@18.17.3)(stylus@0.59.0)
+      vite: 4.4.9(@types/node@20.4.9)(stylus@0.59.0)
     transitivePeerDependencies:
       - rollup
     dev: true
@@ -6798,6 +6802,43 @@ packages:
         optional: true
     dependencies:
       '@types/node': 18.17.3
+      esbuild: 0.18.19
+      postcss: 8.4.27
+      rollup: 3.27.2
+      stylus: 0.59.0
+    optionalDependencies:
+      fsevents: 2.3.2
+    dev: true
+
+  /vite@4.4.9(@types/node@20.4.9)(stylus@0.59.0):
+    resolution: {integrity: sha512-2mbUn2LlUmNASWwSCNSJ/EG2HuSRTnVNaydp6vMCm5VIqJsjMfbIWtbH2kDuwUVW5mMUKKZvGPX/rqeqVvv1XA==}
+    engines: {node: ^14.18.0 || >=16.0.0}
+    hasBin: true
+    peerDependencies:
+      '@types/node': '>= 14'
+      less: '*'
+      lightningcss: ^1.21.0
+      sass: '*'
+      stylus: '*'
+      sugarss: '*'
+      terser: ^5.4.0
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+      less:
+        optional: true
+      lightningcss:
+        optional: true
+      sass:
+        optional: true
+      stylus:
+        optional: true
+      sugarss:
+        optional: true
+      terser:
+        optional: true
+    dependencies:
+      '@types/node': 20.4.9
       esbuild: 0.18.19
       postcss: 8.4.27
       rollup: 3.27.2
