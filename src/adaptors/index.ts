@@ -101,26 +101,26 @@ class Adaptors {
         blogAdaptor = webApi
         break
       }
-      case SubPlatformType.Custom_CSDN: {
-        const { webApi } = await useCsdnWeb(key, newCfg)
-        blogAdaptor = webApi
-        break
-      }
-      case SubPlatformType.Custom_Jianshu: {
-        const { webApi } = await useJianshuWeb(key, newCfg)
-        blogAdaptor = webApi
-        break
-      }
-      case SubPlatformType.Custom_Juejin: {
-        const { webApi } = await useJuejinWeb(key, newCfg)
-        blogAdaptor = webApi
-        break
-      }
-      case SubPlatformType.Custom_Wechat: {
-        const { webApi } = await useWechatWeb(key, newCfg)
-        blogAdaptor = webApi
-        break
-      }
+      // case SubPlatformType.Custom_CSDN: {
+      //   const { webApi } = await useCsdnWeb(key, newCfg)
+      //   blogAdaptor = webApi
+      //   break
+      // }
+      // case SubPlatformType.Custom_Jianshu: {
+      //   const { webApi } = await useJianshuWeb(key, newCfg)
+      //   blogAdaptor = webApi
+      //   break
+      // }
+      // case SubPlatformType.Custom_Juejin: {
+      //   const { webApi } = await useJuejinWeb(key, newCfg)
+      //   blogAdaptor = webApi
+      //   break
+      // }
+      // case SubPlatformType.Custom_Wechat: {
+      //   const { webApi } = await useWechatWeb(key, newCfg)
+      //   blogAdaptor = webApi
+      //   break
+      // }
       case SubPlatformType.System_Siyuan: {
         const { blogApi } = useSiyuanApi()
         blogAdaptor = blogApi
