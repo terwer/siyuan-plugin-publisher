@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.6.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.5.2...v1.6.0) (2023-08-09)
+
+
+### Features
+
+* 修正博客园Markdown分类问题 ([ea1950d](https://github.com/terwer/siyuan-plugin-publisher/commit/ea1950d32e3886889bacbdbbdce9e52b9bbbc61d))
+* 发布首个稳定版 ([945df12](https://github.com/terwer/siyuan-plugin-publisher/commit/945df12a6ecf89b02d3aa2cdba6119f152a247a7))
+* 开始适配知乎 ([8db460c](https://github.com/terwer/siyuan-plugin-publisher/commit/8db460c7c3bf4426f80ae206eb2fabd40029d67f))
+* 支持发布到知乎 ([4723632](https://github.com/terwer/siyuan-plugin-publisher/commit/47236327667ccb4901aef0f474055e3cae459025))
+* 支持发布到知乎 ([0a8d119](https://github.com/terwer/siyuan-plugin-publisher/commit/0a8d11928a8fb507eea1e03e7c8096928ae14baf))
+* 支持自定义设置知乎专栏 ([506c2d6](https://github.com/terwer/siyuan-plugin-publisher/commit/506c2d6b65be6e0a1f36145cf3d9c9f4d3066578))
+* 适配知乎完成 ([f76e7f4](https://github.com/terwer/siyuan-plugin-publisher/commit/f76e7f4aff10720da381ba9c576ce1a84a8e39b7))
+* 适配知乎完成 ([5a2406a](https://github.com/terwer/siyuan-plugin-publisher/commit/5a2406ab4aedccc8411fd1bd0650cf5fd92dcc84))
+
+
+### Bug Fixes
+
+* 修复强制删除提示不明确的问题 ([e5d745e](https://github.com/terwer/siyuan-plugin-publisher/commit/e5d745ec8897586e8d0b0c1ca615e907e2d108c2))
+
 ## [1.5.2](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.5.1...v1.5.2) (2023-08-08)
 ### Bug Fixes
 * 修复挂件获取文档id错误的问题 ([364f689](https://github.com/terwer/siyuan-plugin-publisher/commit/364f689359d88589a85fdaa251ac66856dfed819))
