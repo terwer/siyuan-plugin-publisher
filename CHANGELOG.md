@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.6.0...v1.6.1) (2023-08-09)
+
+
+### Bug Fixes
+
+* lodash-es ([29b65ed](https://github.com/terwer/siyuan-plugin-publisher/commit/29b65ed7d4672eee1a54b16552f281afd0344df6))
+
 ## [1.6.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.5.2...v1.6.0) (2023-08-09)
 ### Features
 * 修正博客园markdown分类问题 ([ea1950d](https://github.com/terwer/siyuan-plugin-publisher/commit/ea1950d32e3886889bacbdbbdce9e52b9bbbc61d))
