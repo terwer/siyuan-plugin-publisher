@@ -24,9 +24,7 @@
  */
 
 import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
-import { Post, UserBlog } from "zhi-blog-api"
-import { types } from "sass"
-import Error = types.Error
+import { Post } from "zhi-blog-api"
 
 /**
  * 知乎网页授权适配器
@@ -61,7 +59,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
       uid: res.uid,
       title: res.name,
       avatar: res.avatar_url,
-      supportTypes: ["markdown"],
+      supportTypes: ["html"],
       type: "zhihu",
       displayName: "知乎",
       home: "https://www.zhihu.com/settings/account",
@@ -70,95 +68,28 @@ class ZhihuWebAdaptor extends BaseWebApi {
   }
 
   public async addPost(post: Post) {
-    const params = JSON.stringify({
-      title: post.title,
-      content: post.description,
-    })
-    const res = await this.proxyFetch("https://zhuanlan.zhihu.com/api/articles/drafts", [], params, "POST")
-    this.logger.debug("save zhihu draft res=>", res)
+    let res
 
-    if (!res.id) {
-      throw new Error("知乎文章发布失败")
-    }
-
-    // 目前是存草稿，现在需要把它设置为发布
-    const pubParams = JSON.stringify({
-      column: null,
-      commentPermission: "anyone",
-      disclaimer_type: "none",
-      disclaimer_status: "close",
-      table_of_contents_enabled: false,
-      commercial_report_info: { commercial_types: [] },
-      commercial_zhitask_bind_info: null,
-    })
-    const pubRes = await this.proxyFetch(
-      `https://zhuanlan.zhihu.com/api/articles/${res.id}/publish`,
-      [],
-      pubParams,
-      "PUT"
-    )
-    this.logger.debug("publish zhihu article pubRes=>", pubRes)
-
+    throw new Error("开发中")
+    // var res = await $.ajax({
+    //   url: 'https://zhuanlan.zhihu.com/api/articles/drafts',
+    //   type: 'POST',
+    //   dataType: 'JSON',
+    //   contentType: 'application/json',
+    //   data: JSON.stringify({
+    //     title: post.post_title,
+    //     // content: post.post_content
+    //   }),
+    // })
+    // console.log(res)
     return {
       status: "success",
-      post_id: res.id.toString(),
+      post_id: res.id,
     }
   }
 
   public async getPreviewUrl(postid: string): Promise<string> {
     return `https://zhuanlan.zhihu.com/p/${postid}`
-  }
-
-  public async deletePost(postid: string): Promise<boolean> {
-    let flag = false
-    try {
-      const res = await this.proxyFetch(`https://www.zhihu.com/api/v4/articles/${postid}`, [], {}, "DELETE")
-      this.logger.debug("delete zhihu article res=>", res)
-      if (res.success) {
-        flag = true
-      } else {
-        throw new Error(res.error.message)
-      }
-    } catch (e) {
-      this.logger.error("知乎文章删除失败", e)
-      throw e
-    }
-
-    return flag
-  }
-
-  public async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
-    // 先更新草稿
-    const params = JSON.stringify({
-      title: post.title,
-      content: post.description,
-      table_of_contents: false,
-      delta_time: 10,
-    })
-
-    try {
-      await this.proxyFetch(`https://zhuanlan.zhihu.com/api/articles/${postid}/draft`, [], params, "PATCH")
-      this.logger.debug("updated zhihu draft")
-    } catch (e) {
-      throw new Error("知乎文章更新失败")
-    }
-
-    // 目前是存草稿，现在需要把它设置为发布
-    const pubParams = JSON.stringify({
-      disclaimer_type: "none",
-      disclaimer_status: "close",
-      table_of_contents_enabled: false,
-      commercial_report_info: { commercial_types: [] },
-      commercial_zhitask_bind_info: null,
-    })
-    const pubRes = await this.proxyFetch(
-      `https://zhuanlan.zhihu.com/api/articles/${postid}/publish`,
-      [],
-      pubParams,
-      "PUT"
-    )
-    this.logger.debug("edit zhihu pubRes=>", pubRes)
-    return true
   }
 }
 
