@@ -630,7 +630,7 @@ onMounted(async () => {
                     <h2>FAQ:</h2>
                     <div class="setting-help">
                       不会配置，或者配置遇到问题？<a
-                        href="https://educated-cook-23c.notion.site/1cdc3ab5db72442e99fa25922584d9b1"
+                        href="https://blog.terwer.space/s/20230810132040-nn4q7vs"
                         target="_blank"
                         >请点击这里查看完整版平台配置指南</a
                       >
