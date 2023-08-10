@@ -627,12 +627,27 @@ onMounted(async () => {
                       </div>
                     </div>
 
+                    <h2>FAQ:</h2>
+                    <div class="setting-help">
+                      不会配置，或者配置遇到问题？<a
+                        href="https://educated-cook-23c.notion.site/1cdc3ab5db72442e99fa25922584d9b1"
+                        target="_blank"
+                        >请点击这里查看完整版平台配置指南</a
+                      >
+                    </div>
+
                     <div class="tips-form">
-                      <a
+                      我想要的平台这里没有？<a
                         href="https://terwergreen.feishu.cn/share/base/form/shrcnGRdThUiqnhBg15xgclMM0c"
                         target="_blank"
                       >
-                        发布工具平台适配跟踪表
+                        点击这里提交发布工具平台适配跟踪表
+                      </a>
+                    </div>
+
+                    <div class="tips-form">
+                      我还有其他问题或者想私下沟通作者？<a href="mailto:youweics@163.com">
+                        直接发邮件到：youweics@163.com
                       </a>
                     </div>
                   </div>
@@ -684,6 +699,10 @@ html[class="dark"]
     color var(--el-button-text-color)
 
 .publish-setting-right-content
+  .setting-help
+    font-size 12px
+    margin-top 14px
+
   .right-setting-tips
     text-align left
     padding-left 10px
