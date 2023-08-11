@@ -16,6 +16,8 @@ In later releases, the release configuration will only be backward compatible to
 
 ## Recent critical updates and bug fixes
 
+- Support replacing picture bed image links with Picgo plugin
+- Fixed the issue that the release preview of the authorization code mode was invalidated
 - Support publishing to Zhihu
 - Support for publishing to Hexo
 - Support for publishing to Notion
@@ -61,14 +63,14 @@ Names not listed in order
 ## Core Features
 
 - [X] **Extremely fast release**: One-time configuration, one-click release
-- [ ] **Picture bed management**: Integrate PicGO picture bed, support s3, minio, watermark plugin
+- [Z] **Picture bed management**: Integrate PicGO picture bed, support s3, minio, watermark plugin
 - [X] **Support for extensions**: Based on the unified blog API specification, built-in support for metaweblogAPI, WordPress
   and GitHub, and provides a unified adapter, which can theoretically be extended to any platform
 - [X] **Platform switch**: All platforms support enabling and disabling, the blog garden is enabled by default, and can be
   disabled at any time
 - [X] **Dynamic Newly Added**: Support custom adding platform
 - [ ] **Smart Classification**: Support smart tags, smart slug aliases, smart summaries, and continue to improve
-- [ ] **Article Binding**: Support linking existing platform articles to Siyuan Notes to facilitate follow-up management,
+- [X] **Article Binding**: Support linking existing platform articles to Siyuan Notes to facilitate follow-up management,
   support Siyuan->platform one-way synchronization
 - [X] **Adapt to Theme**: Automatically adapt to dark mode and light mode
 - [X] **Language support**: multi-language support, support Chinese version and English version
