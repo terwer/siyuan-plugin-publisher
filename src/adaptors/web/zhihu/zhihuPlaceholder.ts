@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { CommonWebPlaceholder } from "~/src/adaptors/web/base/CommonWebPlaceholder.ts"
+import { CommonWebPlaceholder } from "~/src/adaptors/web/base/commonWebPlaceholder.ts"
 
 class ZhihuPlaceholder extends CommonWebPlaceholder {}
 

@@ -23,14 +23,14 @@
  * questions.
  */
 
-import { MetaweblogConfig } from "~/src/adaptors/api/base/metaweblog/MetaweblogConfig.ts"
+import { MetaweblogConfig } from "~/src/adaptors/api/base/metaweblog/metaweblogConfig.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { AppInstance } from "~/src/appInstance.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { Utils } from "~/src/utils/utils.ts"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
-import { MetaweblogApiAdaptor } from "~/src/adaptors/api/metaweblog/metaweblogApiAdaptor.ts"
+import { MetaweblogBlogApiAdaptor } from "~/src/adaptors/api/base/metaweblog/metaweblogBlogApiAdaptor.ts"
 
 /**
  * 使用Metaweblog API的自定义hook
@@ -84,7 +84,7 @@ export const useMetaweblogApi = async (key?: string, newCfg?: MetaweblogConfig) 
   }
 
   // 创建Metaweblog API适配器
-  const blogApi = new MetaweblogApiAdaptor(appInstance, cfg)
+  const blogApi = new MetaweblogBlogApiAdaptor(appInstance, cfg)
 
   // 记录Metaweblog API创建成功
   logger.info("Metaweblog API created successfully.")

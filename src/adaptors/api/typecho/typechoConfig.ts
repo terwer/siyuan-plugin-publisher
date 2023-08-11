@@ -25,7 +25,7 @@
 
 import { PageTypeEnum } from "zhi-blog-api"
 import TypechoUtils from "~/src/adaptors/api/typecho/typechoUtils.ts"
-import { MetaweblogConfig } from "~/src/adaptors/api/base/metaweblog/MetaweblogConfig.ts"
+import { MetaweblogConfig } from "~/src/adaptors/api/base/metaweblog/metaweblogConfig.ts"
 
 /**
  * Typecho 配置

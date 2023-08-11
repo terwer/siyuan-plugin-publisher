@@ -23,7 +23,7 @@
  * questions.
  */
 
-import {BaseWebApi} from "~/src/adaptors/web/base/baseWebApi.ts";
+import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
 
 /**
  * 掘金网页授权适配器

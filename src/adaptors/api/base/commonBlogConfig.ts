@@ -23,13 +23,32 @@
  * questions.
  */
 
-import { CommonWebConfig } from "~/src/adaptors/web/base/CommonWebConfig.ts"
+import { BlogConfig, PageTypeEnum } from "zhi-blog-api"
+import { CommonBlogPlaceholder } from "~/src/adaptors/api/base/commonBlogPlaceholder.ts"
 
-/**
- * 微信公众号配置
- */
-export class WechatConfig extends CommonWebConfig {
-  constructor(username: string, password: string, middlewareUrl?: string) {
-    super("", "", username, password, middlewareUrl)
+export class CommonBlogConfig extends BlogConfig {
+
+  /**
+   * 操作提示
+   */
+  public override placeholder = {} as CommonBlogPlaceholder
+
+  constructor(home: string, apiUrl: string, username: string, password: string, middlewareUrl?: string) {
+    super()
+    this.home = home
+    this.apiUrl = apiUrl
+    this.username = username
+    this.password = password
+    this.apiStatus = false
+    this.blogid = ""
+    this.blogName = ""
+    this.posidKey = ""
+    this.previewUrl = ""
+    this.pageType = PageTypeEnum.Markdown
+    this.middlewareUrl = middlewareUrl
+    this.usernameEnabled = false
+    this.allowPreviewUrlChange = true
+    this.showTokenTip = false
+    this.placeholder = new CommonBlogPlaceholder()
   }
 }

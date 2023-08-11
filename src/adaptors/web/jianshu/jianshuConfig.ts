@@ -23,9 +23,13 @@
  * questions.
  */
 
-import { CommonblogPlaceholder } from "~/src/adaptors/api/base/CommonblogPlaceholder.ts"
+import { CommonWebConfig } from "~/src/adaptors/web/base/commonWebConfig.ts"
 
 /**
- * Metaweblog 操作提示
+ * 简书配置
  */
-export class MetaweblogPlaceholder extends CommonblogPlaceholder {}
+export class JianshuConfig extends CommonWebConfig {
+  constructor(username: string, password: string, middlewareUrl?: string) {
+    super("", "", username, password, middlewareUrl)
+  }
+}

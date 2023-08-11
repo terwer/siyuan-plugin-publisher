@@ -24,9 +24,9 @@
  */
 
 import { YamlFormatObj } from "~/src/models/yamlFormatObj.ts"
-import { CommonGithubConfig } from "~/src/adaptors/api/base/github/CommonGithubConfig.ts"
+import { CommonGithubConfig } from "~/src/adaptors/api/base/github/commonGithubConfig.ts"
 import { Post } from "zhi-blog-api"
-import { CommonblogConfig } from "~/src/adaptors/api/base/CommonblogConfig.ts"
+import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
 
 export interface IYamlConvertAdaptor {
   convertToYaml(post: Post, githubCfg?: CommonGithubConfig): YamlFormatObj
@@ -38,11 +38,11 @@ export interface IYamlConvertAdaptor {
  * YAML转换适配器
  */
 export class YamlConvertAdaptor implements IYamlConvertAdaptor {
-  convertToYaml(post: Post, cfg?: CommonblogConfig): YamlFormatObj {
+  convertToYaml(post: Post, cfg?: CommonBlogConfig): YamlFormatObj {
     throw new Error("YamlConvertAdaptor.convertToYaml: 该功能未实现，请在子类重写该方法")
   }
 
-  convertToAttr(yamlFormatObj: YamlFormatObj, cfg?: CommonblogConfig): Post {
+  convertToAttr(yamlFormatObj: YamlFormatObj, cfg?: CommonBlogConfig): Post {
     throw new Error("YamlConvertAdaptor.convertToAttr: 该功能未实现，请在子类重写该方法")
   }
 }

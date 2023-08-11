@@ -23,11 +23,10 @@
  * questions.
  */
 
-import { PicgoPostApi } from "siyuan-plugin-picgo"
+import { ImageParser, ParsedImage, PicgoPostApi } from "siyuan-plugin-picgo"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { ElMessage } from "element-plus"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { StrUtil } from "zhi-common"
 
 /**
@@ -38,7 +37,6 @@ import { StrUtil } from "zhi-common"
  */
 const usePicgoBridge = () => {
   const logger = createAppLogger("use-picgo-bridge")
-  const { t } = useVueI18n()
   const { kernelApi, blogApi } = useSiyuanApi()
   const picgoPostApi = new PicgoPostApi(kernelApi)
 
@@ -50,6 +48,7 @@ const usePicgoBridge = () => {
    */
   const handlePicgo = async (pageId: string, mdContent?: string) => {
     let md: string = mdContent
+    const picgoErrMsg = "文档可能已经成功发布，但是图片上传失败或者当前场景不支持图片上传，详细信息=>"
 
     try {
       const attrs = await kernelApi.getBlockAttrs(pageId)
@@ -70,22 +69,43 @@ const usePicgoBridge = () => {
         if (picgoPostResult.flag) {
           md = picgoPostResult.mdContent
         } else {
-          logger.warn(t("github.post.picgo.picbed.error") + "=>" + picgoPostResult.errmsg)
-          ElMessage.warning(t("github.post.picgo.picbed.error") + "=>" + picgoPostResult.errmsg)
+          logger.warn(picgoErrMsg + picgoPostResult.errmsg)
+          ElMessage.warning(picgoErrMsg + picgoPostResult.errmsg)
         }
       } else {
-        logger.info(t("github.post.picgo.picbed.error") + "=>" + picgoPostResult.errmsg)
+        logger.info(picgoErrMsg + picgoPostResult.errmsg)
       }
     } catch (e) {
-      logger.error(t("github.post.picgo.picbed.error") + "=>", e)
-      ElMessage.error(t("github.post.picgo.picbed.error") + "=>" + e)
+      logger.error(picgoErrMsg, e)
+      ElMessage.error("文档可能已经成功发布，但是图片上传失败或者当前场景不支持图片上传，详细信息=>" + e)
     }
 
     return md
   }
 
+  /**
+   * 从 Markdown 中提取图片项
+   *
+   * @param pageId - 思源笔记的文档ID
+   * @param md - Markdown字符串
+   * @returns 解析后的图片数组
+   */
+  const getImageItemsFromMd = async (pageId: string, md: string): Promise<ParsedImage[]> => {
+    const imageParser = new ImageParser()
+    let retImgs: ParsedImage[] = []
+    const parsedImages = imageParser.parseImagesToArray(md)
+    retImgs = [...new Set([...retImgs, ...parsedImages])]
+    logger.debug("retImgs=>", retImgs)
+
+    const attrs = await kernelApi.getBlockAttrs(pageId)
+    const imageItemArray = await picgoPostApi.doConvertImagesToImagesItemArray(attrs, retImgs)
+    logger.debug("imageItemArray=>", imageItemArray)
+    return imageItemArray
+  }
+
   return {
     handlePicgo,
+    getImageItemsFromMd,
   }
 }
 

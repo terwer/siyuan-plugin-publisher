@@ -23,14 +23,9 @@
  * questions.
  */
 
-import { MetaweblogBlogApi } from "~/src/adaptors/api/base/metaweblog/metaweblogBlogApi.ts"
+import { CommonBlogPlaceholder } from "~/src/adaptors/api/base/commonBlogPlaceholder.ts"
 
 /**
- * Metaweblog API 适配器
- *
- * @author terwer
- * @version 0.9.0
- * @since 0.9.0
+ * Metaweblog 操作提示
  */
-class MetaweblogApiAdaptor extends MetaweblogBlogApi {}
-export { MetaweblogApiAdaptor }
+export class MetaweblogPlaceholder extends CommonBlogPlaceholder {}

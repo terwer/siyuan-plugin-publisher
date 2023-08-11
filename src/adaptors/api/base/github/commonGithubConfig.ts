@@ -24,12 +24,12 @@
  */
 
 import { PasswordType } from "zhi-blog-api"
-import { CommonblogConfig } from "~/src/adaptors/api/base/CommonblogConfig.ts"
+import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
 
 /**
  * CommonGithubConfig 类用于存储 GitHub 相关配置信息
  */
-class CommonGithubConfig extends CommonblogConfig {
+class CommonGithubConfig extends CommonBlogConfig {
   /**
    * Github仓库名称
    */

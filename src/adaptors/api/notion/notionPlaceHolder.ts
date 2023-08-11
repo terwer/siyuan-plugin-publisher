@@ -23,11 +23,11 @@
  * questions.
  */
 
-import { CommonblogPlaceholder } from "~/src/adaptors/api/base/CommonblogPlaceholder.ts"
+import { CommonBlogPlaceholder } from "~/src/adaptors/api/base/commonBlogPlaceholder.ts"
 
 /**
  * Notion 配置提示
  */
-class NotionPlaceHolder extends CommonblogPlaceholder {}
+class NotionPlaceHolder extends CommonBlogPlaceholder {}
 
 export { NotionPlaceHolder }

@@ -22,7 +22,7 @@
  * or visit www.terwer.space if you need additional information or have any
  * questions.
  */
-import { ElectronCookie, Post, WebApi, WebConfig } from "zhi-blog-api"
+import { Attachment, ElectronCookie, MediaObject, Post, WebApi, WebConfig } from "zhi-blog-api"
 import { SiyuanKernelApi } from "zhi-siyuan-api"
 import { CommonFetchClient } from "zhi-fetch-middleware"
 import { AppInstance } from "~/src/appInstance.ts"
@@ -73,6 +73,11 @@ class BaseWebApi extends WebApi {
     return cookies.map((cookie) => `${cookie.name}=${cookie.value}`).join(";")
   }
 
+  public async preEditPost(post: Post, id?: string, publishCfg?: any): Promise<Post> {
+    this.logger.info("未处理，原样返回。如需处理，请在子类重写")
+    return post
+  }
+
   // 兼容的方法
   public async newPost(post: Post, publish?: boolean): Promise<string> {
     const res = await this.addPost(post)
@@ -80,6 +85,32 @@ class BaseWebApi extends WebApi {
       throw new Error("网页授权发布文章异常")
     }
     return res.post_id
+  }
+
+  public async newMediaObject(mediaObject: MediaObject, customHandler?: any): Promise<Attachment> {
+    const bits = mediaObject.bits
+    const res = await this.uploadFile(bits as any)
+    return {
+      attachment_id: res?.id,
+      date_created_gmt: new Date(),
+      parent: 0,
+      link: res?.url,
+      title: "20220616-132401-001.jpg",
+      caption: "",
+      description: "",
+      metadata: {
+        width: 0,
+        height: 0,
+        file: "",
+        filesize: 113032,
+        sizes: [],
+      },
+      type: "image/jpeg",
+      thumbnail: "https://terwergreen.files.wordpress.com/2022/06/20220616-132401-001.jpg?w=150",
+      id: "4108",
+      file: "20220616-132401-001.jpg",
+      url: "http://terwergreen.files.wordpress.com/2022/06/20220616-132401-001.jpg",
+    }
   }
 
   // ================

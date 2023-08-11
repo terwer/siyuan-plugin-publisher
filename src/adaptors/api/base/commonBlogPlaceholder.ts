@@ -23,13 +23,9 @@
  * questions.
  */
 
-import { CommonWebConfig } from "~/src/adaptors/web/base/CommonWebConfig.ts"
+import { BlogPlaceholder } from "zhi-blog-api"
 
 /**
- * 简书配置
+ * Metaweblog 操作提示
  */
-export class JianshuConfig extends CommonWebConfig {
-  constructor(username: string, password: string, middlewareUrl?: string) {
-    super("", "", username, password, middlewareUrl)
-  }
-}
+export class CommonBlogPlaceholder extends BlogPlaceholder {}

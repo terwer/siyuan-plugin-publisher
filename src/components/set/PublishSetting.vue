@@ -52,7 +52,7 @@ import { AppInstance } from "~/src/appInstance.ts"
 import { ElectronCookie, WebConfig } from "zhi-blog-api"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import CookieSetting from "~/src/components/set/publish/singleplatform/base/CookieSetting.vue"
-import { CommonWebConfig } from "~/src/adaptors/web/base/CommonWebConfig.ts"
+import { CommonWebConfig } from "~/src/adaptors/web/base/commonWebConfig.ts"
 
 const logger = createAppLogger("publish-setting")
 
@@ -295,7 +295,7 @@ const _handleValidateOpenBrowserAuth = (dynCfg: DynamicConfig) => {
     } catch (e) {
       dynCfg.isAuth = false
       ElMessage.error(t("main.opt.failure") + "=>" + e)
-      logger.error(e)
+      logger.error(t("main.opt.failure") + "=>", e)
     }
 
     formData.dynamicConfigArray = replacePlatformByKey(formData.dynamicConfigArray, dynCfg.platformKey, dynCfg)
@@ -338,7 +338,7 @@ const _handleValidateChromeExtensionAuth = async (dynCfg: DynamicConfig) => {
   } catch (e) {
     dynCfg.isAuth = false
     ElMessage.error(t("main.opt.failure") + "=>" + e)
-    logger.error(e)
+    logger.error(t("main.opt.failure") + "=>", e)
   }
 
   formData.dynamicConfigArray = replacePlatformByKey(formData.dynamicConfigArray, dynCfg.platformKey, dynCfg)
@@ -411,7 +411,7 @@ const handleCheckAndUpgrade = async () => {
   } catch (e) {
     formData.logMessage += `\n${t("setting.upgrade.syp.tip4")}` + e
     ElMessage.error(t("main.opt.failure") + "=>" + e)
-    logger.error(e)
+    logger.error(t("main.opt.failure") + "=>", e)
   }
   formData.logMessage += `\n${t("setting.upgrade.syp.tip5")}`
   formData.isUpgradeLoading = false

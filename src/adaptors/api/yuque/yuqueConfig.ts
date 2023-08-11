@@ -24,12 +24,12 @@
  */
 
 import { PageTypeEnum, PasswordType } from "zhi-blog-api"
-import { CommonblogConfig } from "~/src/adaptors/api/base/CommonblogConfig.ts"
+import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
 
 /**
  * Yuque 配置
  */
-class YuqueConfig extends CommonblogConfig {
+class YuqueConfig extends CommonBlogConfig {
   constructor(username: string, password: string, middlewareUrl?: string) {
     super("https://www.yuque.com/", "https://www.yuque.com/api/v2", username, password, middlewareUrl)
 

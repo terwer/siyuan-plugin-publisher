@@ -28,7 +28,7 @@ import { AppInstance } from "~/src/appInstance.ts"
 import { Utils } from "~/src/utils/utils.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { TypechoConfig } from "~/src/adaptors/api/typecho/typechoConfig.ts"
-import {JsonUtil, ObjectUtil, StrUtil} from "zhi-common"
+import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { TypechoApiAdaptor } from "~/src/adaptors/api/typecho/typechoApiAdaptor.ts"
 

@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { createVueApp } from "./utils/VueUtils"
+import { createVueApp } from "./utils/vueUtils"
 import { InjectKeys } from "./utils/injectKeys"
 import { createAppLogger } from "./utils/appLogger"
 

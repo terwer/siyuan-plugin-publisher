@@ -32,7 +32,7 @@ import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { DynamicJsonCfg, getDynCfgByKey } from "~/src/platforms/dynamicConfig.ts"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
 import { BlogAdaptor, WebAdaptor } from "zhi-blog-api"
-import { CommonblogConfig } from "~/src/adaptors/api/base/CommonblogConfig.ts"
+import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
 
 /**
  * 获取发布配置的自定义钩子
@@ -86,29 +86,28 @@ const usePublishConfig = () => {
    * @param cfg - 可选的配置项
    * @returns Promise<BlogAdaptor | WebAdaptor> - 返回一个 Promise 对象，包含 BlogAdaptor 或 WebAdaptor
    */
-  const getPublishApi = async (key: string, cfg?: CommonblogConfig): Promise<BlogAdaptor | WebAdaptor> => {
+  const getPublishApi = async (key: string, cfg?: CommonBlogConfig): Promise<BlogAdaptor | WebAdaptor> => {
     // 初始化API
     const apiAdaptor = await Adaptors.getAdaptor(key, cfg)
     const api = Utils.blogApi(appInstance, apiAdaptor)
     return api
   }
 
-  /**
-   * 获取YAML API
-   *
-   * @param key - 平台配置的键值
-   * @param newCfg - 可选参数，用于指定新的配置
-   * @returns 返回一个Promise，包含YAML适配器
-   */
-  const getYamlApi = async (key: string, newCfg?: any) => {
-    const yamlAdaptor = await Adaptors.getYamlAdaptor(key, newCfg)
-    return yamlAdaptor
-  }
+  // /**
+  //  * 获取YAML API
+  //  *
+  //  * @param key - 平台配置的键值
+  //  * @param newCfg - 可选参数，用于指定新的配置
+  //  * @returns 返回一个Promise，包含YAML适配器
+  //  */
+  // const getYamlApi = async (key: string, newCfg?: any) => {
+  //   const yamlAdaptor = await Adaptors.getYamlAdaptor(key, newCfg)
+  //   return yamlAdaptor
+  // }
 
   return {
     getPublishCfg,
     getPublishApi,
-    getYamlApi,
   }
 }
 

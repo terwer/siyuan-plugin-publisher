@@ -24,9 +24,10 @@
  */
 
 import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
-import { Post, UserBlog } from "zhi-blog-api"
+import { MediaObject, Post, UserBlog } from "zhi-blog-api"
 import * as cheerio from "cheerio"
 import { JsonUtil, StrUtil } from "zhi-common"
+import { usePicgoBridge } from "~/src/composables/usePicgoBridge.ts"
 
 /**
  * 知乎网页授权适配器
@@ -93,6 +94,24 @@ class ZhihuWebAdaptor extends BaseWebApi {
 
     this.logger.debug("getUsersBlogs=>", result)
     return result
+  }
+
+  public async preEditPost(post: Post, dynCfg: any): Promise<Post> {
+    // 找到所有的图片
+    const { getImageItemsFromMd } = usePicgoBridge()
+    const images = await getImageItemsFromMd(post.postid, post.markdown)
+    if (images.length === 0) {
+      this.logger.info("未找到图片，不处理")
+      return post
+    }
+    // 批量处理图片上传
+    this.logger.info(`找到${images.length}张图片，开始上传`)
+    const file = null
+    const mediaObject = new MediaObject("20220616-132401-001.jpg", "image/jpeg", file)
+    this.newMediaObject(mediaObject)
+    throw new Error("开发中")
+    this.logger.info("图片全部上传完成")
+    return post
   }
 
   public async addPost(post: Post) {
@@ -175,6 +194,31 @@ class ZhihuWebAdaptor extends BaseWebApi {
     return true
   }
 
+  public async getPreviewUrl(postid: string): Promise<string> {
+    return `https://zhuanlan.zhihu.com/p/${postid}`
+  }
+
+  public async deletePost(postid: string): Promise<boolean> {
+    let flag = false
+    try {
+      const res = await this.proxyFetch(`https://www.zhihu.com/api/v4/articles/${postid}`, [], {}, "DELETE")
+      this.logger.debug("delete zhihu article res=>", res)
+      if (res.success) {
+        flag = true
+      } else {
+        throw new Error(res.error.message)
+      }
+    } catch (e) {
+      this.logger.error("知乎文章删除失败", e)
+      throw e
+    }
+
+    return flag
+  }
+
+  // ================
+  // private methods
+  // ================
   /**
    * 收录文章到专栏
    *
@@ -197,26 +241,8 @@ class ZhihuWebAdaptor extends BaseWebApi {
     this.logger.info("文章收录到专栏成功")
   }
 
-  public async getPreviewUrl(postid: string): Promise<string> {
-    return `https://zhuanlan.zhihu.com/p/${postid}`
-  }
-
-  public async deletePost(postid: string): Promise<boolean> {
-    let flag = false
-    try {
-      const res = await this.proxyFetch(`https://www.zhihu.com/api/v4/articles/${postid}`, [], {}, "DELETE")
-      this.logger.debug("delete zhihu article res=>", res)
-      if (res.success) {
-        flag = true
-      } else {
-        throw new Error(res.error.message)
-      }
-    } catch (e) {
-      this.logger.error("知乎文章删除失败", e)
-      throw e
-    }
-
-    return flag
+  public async uploadFile(file: File): Promise<any> {
+    return await super.uploadFile(file)
   }
 }
 

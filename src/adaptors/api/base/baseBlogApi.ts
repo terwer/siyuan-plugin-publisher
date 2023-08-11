@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { BlogApi, BlogConfig } from "zhi-blog-api"
+import { BlogApi, BlogConfig, Post } from "zhi-blog-api"
 import { SiyuanKernelApi } from "zhi-siyuan-api"
 import { CommonFetchClient } from "zhi-fetch-middleware"
 import { AppInstance } from "~/src/appInstance.ts"
@@ -62,6 +62,11 @@ export class BaseBlogApi extends BlogApi {
     const { kernelApi, isUseSiyuanProxy } = useSiyuanApi()
     this.kernelApi = kernelApi
     this.useSiyuanProxy = isUseSiyuanProxy()
+  }
+
+  public async preEditPost(post: Post, id?: string, publishCfg?: any): Promise<Post> {
+    this.logger.info("未处理，原样返回。如需处理，请在子类重写")
+    return post
   }
 
   // ================

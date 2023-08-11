@@ -24,7 +24,7 @@
  */
 
 import { SypConfig } from "~/syp.config.ts"
-import { CommonblogConfig } from "~/src/adaptors/api/base/CommonblogConfig.ts"
+import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
 import { DynamicConfig } from "~/src/platforms/dynamicConfig.ts"
 
 /**
@@ -48,11 +48,11 @@ interface IPublishCfg {
   dynamicConfigArray: DynamicConfig[]
 
   /**
-   * CommonblogConfig 类型的配置对象
+   * CommonBlogConfig 类型的配置对象
    *
-   * @type {CommonblogConfig}
+   * @type {CommonBlogConfig}
    */
-  cfg: CommonblogConfig
+  cfg: CommonBlogConfig
 
   /**
    * DynamicConfig 类型的动态配置对象

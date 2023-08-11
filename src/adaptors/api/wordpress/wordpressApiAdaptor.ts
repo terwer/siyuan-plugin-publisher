@@ -26,7 +26,7 @@
 import { WordpressConfig } from "~/src/adaptors/api/wordpress/wordpressConfig.ts"
 import { AppInstance } from "~/src/appInstance.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { MetaweblogBlogApi } from "~/src/adaptors/api/base/metaweblog/metaweblogBlogApi.ts"
+import { MetaweblogBlogApiAdaptor } from "~/src/adaptors/api/base/metaweblog/metaweblogBlogApiAdaptor.ts"
 
 /**
  * WordPress API 适配器
@@ -35,7 +35,7 @@ import { MetaweblogBlogApi } from "~/src/adaptors/api/base/metaweblog/metaweblog
  * @version 0.9.0
  * @since 0.9.0
  */
-class WordpressApiAdaptor extends MetaweblogBlogApi {
+class WordpressApiAdaptor extends MetaweblogBlogApiAdaptor {
   /**
    * 初始化 WordPress API 适配器
    *
