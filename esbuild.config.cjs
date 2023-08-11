@@ -34,6 +34,7 @@ const isServe = args.serve || args.s || false
 let baseDir
 if (isWatch || isServe) {
   baseDir = "/Users/terwer/Documents/mydocs/SiYuanWorkspace/test/data/plugins/siyuan-plugin-publisher"
+  // baseDir = "/Users/terwer/Documents/mydocs/SiYuanWorkspace/public/data/plugins/siyuan-plugin-publisher"
 } else {
   baseDir = "./"
 }

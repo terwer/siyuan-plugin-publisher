@@ -28,7 +28,7 @@
     <div class="footer">
       <div>
         <span class="text"> &copy;2011-{{ nowYear }} </span>
-        <span class="text s-dark" @click="goGithub()">&nbsp;sy-post-publisher&nbsp;</span>
+        <span class="text s-dark" @click="goGithub()">&nbsp;siyuan-plugin-publisher&nbsp;</span>
 
         <span class="text" @click="goToApiTest">v{{ v }}&nbsp;</span>
 
@@ -83,7 +83,7 @@ const nowYear = DateUtil.nowYear()
 const router = useRouter()
 
 const goGithub = () => {
-  window.open("https://github.com/terwer/sy-post-publisher")
+  window.open("https://github.com/terwer/siyuan-plugin-publisher")
 }
 
 const goAbout = () => {

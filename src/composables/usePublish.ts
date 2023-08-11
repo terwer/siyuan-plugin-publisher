@@ -26,8 +26,8 @@
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { reactive, toRaw } from "vue"
 import { SypConfig } from "~/syp.config.ts"
-import { AliasTranslator, DateUtil, ObjectUtil, StrUtil } from "zhi-common"
-import { BlogAdaptor, BlogConfig, PageTypeEnum, Post, PostStatusEnum } from "zhi-blog-api"
+import { AliasTranslator, ObjectUtil, StrUtil } from "zhi-common"
+import { BlogAdaptor, PageTypeEnum, Post, PostStatusEnum } from "zhi-blog-api"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
@@ -40,6 +40,8 @@ import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
 import { YamlConvertAdaptor } from "~/src/platforms/yamlConvertAdaptor.ts"
 import { YamlFormatObj } from "~/src/models/yamlFormatObj.ts"
 import { ElMessage } from "element-plus"
+import { usePicgoBridge } from "~/src/composables/usePicgoBridge.ts"
+import { LuteUtil } from "~/src/utils/luteUtil.ts"
 
 /**
  * 通用发布组件
@@ -56,6 +58,7 @@ const usePublish = () => {
   const { getSetting, updateSetting } = useSettingStore()
   const { kernelApi, blogApi } = useSiyuanApi()
   const { getPublishApi, getYamlApi } = usePublishConfig()
+  const { handlePicgo } = usePicgoBridge()
 
   // datas
   const singleFormData = reactive({
@@ -65,6 +68,14 @@ const usePublish = () => {
     errMsg: "",
   })
 
+  /**
+   * 统一的发布操作
+   *
+   * @param key - 平台 key
+   * @param id - 思源笔记的ID
+   * @param publishCfg - 发布配置
+   * @param doc - 思源笔记原始文档
+   */
   const doSinglePublish = async (key: string, id: string, publishCfg: IPublishCfg, doc: Post) => {
     const setting: typeof SypConfig = publishCfg.setting
     const cfg: CommonblogConfig = publishCfg.cfg
@@ -93,15 +104,20 @@ const usePublish = () => {
         postid = ObjectUtil.getProperty(postMeta, posidKey)
       }
       singleFormData.isAdd = StrUtil.isEmptyString(postid)
+
+      let post = doc
       // 保证postid一致
-      doc.postid = postid
+      post.postid = postid
+      // ===================================
+      // 文章处理开始
+      // ===================================
 
       // 分配属性
-      doc = await assignAttrs(doc, id, publishCfg)
+      post = await assignAttrs(post, id, publishCfg)
 
       // 全局的预处理
-      logger.debug(`before preHandlePost, isAdd ${singleFormData.isAdd}, doc=>`, toRaw(doc))
-      const post = preHandlePost(doc, cfg)
+      logger.debug(`before preHandlePost, isAdd ${singleFormData.isAdd}, doc=>`, toRaw(post))
+      post = await preHandlePost(post, id, publishCfg)
       logger.debug(`after preHandlePost, doc=>`, toRaw(post))
 
       // 平台相关的预处理
@@ -113,6 +129,9 @@ const usePublish = () => {
       } else {
         logger.info("yaml adaptor not found, ignore convert")
       }
+      // ===================================
+      // 文章处理结束
+      // ===================================
 
       // 初始化API
       const api = await getPublishApi(key, cfg)
@@ -129,7 +148,7 @@ const usePublish = () => {
         const posidKey = cfg.posidKey
         const postMeta = ObjectUtil.getProperty(setting, id, {})
         postMeta[posidKey] = postid
-        postMeta["custom-slug"] = doc.wp_slug
+        postMeta["custom-slug"] = post.wp_slug
         setting[id] = postMeta
         await updateSetting(setting)
 
@@ -142,7 +161,7 @@ const usePublish = () => {
 
         // 写入属性到配置
         const postMeta = ObjectUtil.getProperty(setting, id, {})
-        postMeta["custom-slug"] = doc.wp_slug
+        postMeta["custom-slug"] = post.wp_slug
         setting[id] = postMeta
         await updateSetting(setting)
 
@@ -172,6 +191,13 @@ const usePublish = () => {
     }
   }
 
+  /**
+   * 统一的删除操作
+   *
+   * @param key - 平台 key
+   * @param id - 思源笔记的ID
+   * @param publishCfg - 发布配置
+   */
   const doSingleDelete = async (key: string, id: string, publishCfg: IPublishCfg) => {
     const setting: typeof SypConfig = publishCfg.setting
     const cfg: CommonblogConfig = publishCfg.cfg
@@ -228,6 +254,13 @@ const usePublish = () => {
     }
   }
 
+  /**
+   * 统一的强制删除操作
+   *
+   * @param key - 平台 key
+   * @param id - 思源笔记的ID
+   * @param publishCfg - 发布配置
+   */
   const doForceSingleDelete = async (key: string, id: string, publishCfg: IPublishCfg) => {
     try {
       const setting: typeof SypConfig = publishCfg.setting
@@ -276,8 +309,26 @@ const usePublish = () => {
     return isAbsoluteUrl ? previewUrl : `${cfg?.home ?? ""}${previewUrl}`
   }
 
-  const preHandlePost = (doc: Post, cfg: BlogConfig): Post => {
-    const post = doc
+  /**
+   * 文章预处理 - 仅在发布的时候调用
+   *
+   * @param post - 文章对象
+   * @param id - 思源笔记文档ID
+   * @param publishCfg - 发布配置
+   */
+  const preHandlePost = async (post: Post, id: string, publishCfg: IPublishCfg): Promise<Post> => {
+    const cfg: CommonblogConfig = publishCfg.cfg
+
+    // 图片替换
+    logger.debug("开始图片处理, post =>", { post })
+    post.markdown = await handlePicgo(id, post.markdown)
+    // 利用 lute 把 md 转换成 html
+    post.html = LuteUtil.mdToHtml(post.markdown)
+    logger.debug("图片处理完毕, post.markdown =>", post.markdown)
+
+    // 平台特定的图片上传
+    // 例如知乎不支持链接，需要自行上传
+
     // 发布格式
     if (cfg?.pageType == PageTypeEnum.Markdown) {
       post.description = post.markdown
@@ -290,7 +341,7 @@ const usePublish = () => {
   // const assignCompareValue = (title1: string, title2: string) => (title1.length > title2.length ? title1 : title2)
 
   /**
-   * 分配属性
+   * 分配属性 - 初始化和发布都可能调用
    *
    * @param post - 文章对象
    * @param id - 思源笔记文档ID
