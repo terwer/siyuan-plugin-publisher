@@ -38,6 +38,9 @@ dependencies:
   siyuan:
     specifier: ^0.7.9
     version: 0.7.9
+  siyuan-plugin-picgo:
+    specifier: ^1.2.0
+    version: 1.2.0(typescript@5.1.6)
   uuid:
     specifier: ^9.0.0
     version: 9.0.0
@@ -57,17 +60,17 @@ dependencies:
     specifier: ^1.20.17
     version: 1.20.17
   zhi-common:
-    specifier: ^1.14.1
-    version: 1.14.1
+    specifier: ^1.14.2
+    version: 1.14.2
   zhi-device:
     specifier: ^2.3.0
     version: 2.3.0
   zhi-fetch-middleware:
-    specifier: ^0.2.19
-    version: 0.2.19
+    specifier: ^0.2.20
+    version: 0.2.20
   zhi-github-middleware:
-    specifier: ^0.2.1
-    version: 0.2.1
+    specifier: ^0.2.2
+    version: 0.2.2
   zhi-lib-base:
     specifier: ^0.4.4
     version: 0.4.4
@@ -75,11 +78,11 @@ dependencies:
     specifier: ^0.1.2
     version: 0.1.2
   zhi-siyuan-api:
-    specifier: ^2.0.19
-    version: 2.0.19
+    specifier: ^2.0.21
+    version: 2.0.21
   zhi-xmlrpc-middleware:
-    specifier: ^0.4.14
-    version: 0.4.14
+    specifier: ^0.4.15
+    version: 0.4.15
 
 devDependencies:
   '@terwer/esbuild-config-custom':
@@ -727,6 +730,46 @@ packages:
     resolution: {integrity: sha512-m0G6wlnhm/AX0H12IOWtK8gASEMffnX08RtKkCgTdHb9JpHKGloI7icFfLg9ZmQeavcvR0PKmzxClyuFPSjKWw==}
     dev: false
 
+  /@fortawesome/fontawesome-common-types@6.4.2:
+    resolution: {integrity: sha512-1DgP7f+XQIJbLFCTX1V2QnxVmpLdKdzzo2k8EmvDOePfchaIGQ9eCHj2up3/jNEbZuBqel5OxiaOJf37TWauRA==}
+    engines: {node: '>=6'}
+    requiresBuild: true
+    dev: false
+
+  /@fortawesome/fontawesome-svg-core@6.4.2:
+    resolution: {integrity: sha512-gjYDSKv3TrM2sLTOKBc5rH9ckje8Wrwgx1CxAPbN5N3Fm4prfi7NsJVWd1jklp7i5uSCVwhZS5qlhMXqLrpAIg==}
+    engines: {node: '>=6'}
+    requiresBuild: true
+    dependencies:
+      '@fortawesome/fontawesome-common-types': 6.4.2
+    dev: false
+
+  /@fortawesome/free-brands-svg-icons@6.4.2:
+    resolution: {integrity: sha512-LKOwJX0I7+mR/cvvf6qIiqcERbdnY+24zgpUSouySml+5w8B4BJOx8EhDR/FTKAu06W12fmUIcv6lzPSwYKGGg==}
+    engines: {node: '>=6'}
+    requiresBuild: true
+    dependencies:
+      '@fortawesome/fontawesome-common-types': 6.4.2
+    dev: false
+
+  /@fortawesome/free-solid-svg-icons@6.4.2:
+    resolution: {integrity: sha512-sYwXurXUEQS32fZz9hVCUUv/xu49PEJEyUOsA51l6PU/qVgfbTb2glsTEaJngVVT8VqBATRIdh7XVgV1JF1LkA==}
+    engines: {node: '>=6'}
+    requiresBuild: true
+    dependencies:
+      '@fortawesome/fontawesome-common-types': 6.4.2
+    dev: false
+
+  /@fortawesome/vue-fontawesome@3.0.3(@fortawesome/fontawesome-svg-core@6.4.2)(vue@3.3.4):
+    resolution: {integrity: sha512-KCPHi9QemVXGMrfuwf3nNnNo129resAIQWut9QTAMXmXqL2ErABC6ohd2yY5Ipq0CLWNbKHk8TMdTXL/Zf3ZhA==}
+    peerDependencies:
+      '@fortawesome/fontawesome-svg-core': ~1 || ~6
+      vue: '>= 3.0.0 < 4'
+    dependencies:
+      '@fortawesome/fontawesome-svg-core': 6.4.2
+      vue: 3.3.4
+    dev: false
+
   /@humanwhocodes/config-array@0.11.10:
     resolution: {integrity: sha512-KVVjQmNUepDVGXNuoRRdmmEjruj0KfiGSbS8LVc12LMsWDQzRXJ0qdhN8L8uUigKpfEHRhlaQFY0ib1tnUbNeQ==}
     engines: {node: '>=10.10.0'}
@@ -1220,11 +1263,11 @@ packages:
   /@types/lodash-es@4.17.8:
     resolution: {integrity: sha512-euY3XQcZmIzSy7YH5+Unb3b2X12Wtk54YWINBvvGQ5SmMvwb11JQskGsfkH/5HXK77Kr8GF0wkVDIxzAisWtog==}
     dependencies:
-      '@types/lodash': 4.14.196
+      '@types/lodash': 4.14.197
     dev: false
 
-  /@types/lodash@4.14.196:
-    resolution: {integrity: sha512-22y3o88f4a94mKljsZcanlNWPzO0uBsBdzLAngf2tp533LzZcQzb6+eZPJ+vCTt+bqF2XnvT9gejTLsAcJAJyQ==}
+  /@types/lodash@4.14.197:
+    resolution: {integrity: sha512-BMVOiWs0uNxHVlHBgzTIqJYmj+PgCo4euloGF+5m4okL3rEYzM2EEv78mw8zWSMM57dM7kVIgJ2QDvwHSoCI5g==}
     dev: false
 
   /@types/mdast@3.0.12:
@@ -1262,7 +1305,7 @@ packages:
     resolution: {integrity: sha512-jn7qwGFmJHwUSphV8zZneO3GmtlgLsmhs/LQyVvQbIIa+fzGMUiHI4HXJZL3FT8MJmgXWbLGiVVY7ElvHq6vDA==}
     deprecated: This is a stub types definition. sass provides its own type definitions, so you do not need this installed.
     dependencies:
-      sass: 1.64.2
+      sass: 1.65.1
     dev: true
 
   /@types/semver@7.5.0:
@@ -2179,6 +2222,10 @@ packages:
       file-uri-to-path: 1.0.0
     dev: true
 
+  /blueimp-md5-es6@2.7.4:
+    resolution: {integrity: sha512-q7+/MX+2BXdOY0DanEdHSbY5TeTSuM7PotaHmvng9fqEPxNhLVLuj849Vag5x7vAmvZBzxBhh780gq6rJxT/rA==}
+    dev: false
+
   /bn.js@4.12.0:
     resolution: {integrity: sha512-c98Bf3tPniI+scsdk237ku1Dc3ujXQTSgyiPUDEOe7tRkhrqridvh8klBv0HCEso1OLOYcHuCv/cS6DNxKH+ZA==}
     dev: true
@@ -2220,6 +2267,10 @@ packages:
   /brorand@1.1.0:
     resolution: {integrity: sha512-cKV8tMCEpQs4hK/ik71d6LrPOnpkpGBR0wzxqr68g2m/LB2GxVYQroAjMJZRVM1Y4BCjCKc3vAamxSzOY2RP+w==}
     dev: true
+
+  /browser-fs-access@0.34.1:
+    resolution: {integrity: sha512-HPaRf2yimp8kWSuWJXc8Mi78dPbDzfduA+Gyq14H4jlMvd6XNfIRm36Y2yRLaa4x0gwcGuepj4zf14oiTlxrxQ==}
+    dev: false
 
   /browser-resolve@2.0.0:
     resolution: {integrity: sha512-7sWsQlYL2rGLy2IWm8WL8DCTJvYLc/qlOnsakDac87SOoCd16WLsaAMdCiAqsTNHIe+SXfaqyxyo6THoWqs8WQ==}
@@ -2929,7 +2980,7 @@ packages:
       '@element-plus/icons-vue': 2.1.0(vue@3.3.4)
       '@floating-ui/dom': 1.5.1
       '@popperjs/core': /@sxzz/popperjs-es@2.11.7
-      '@types/lodash': 4.14.196
+      '@types/lodash': 4.14.197
       '@types/lodash-es': 4.17.8
       '@vueuse/core': 9.13.0(vue@3.3.4)
       async-validator: 4.2.5
@@ -4024,7 +4075,7 @@ packages:
     hasBin: true
     dependencies:
       foreground-child: 3.1.1
-      jackspeak: 2.2.2
+      jackspeak: 2.2.3
       minimatch: 9.0.3
       minipass: 7.0.2
       path-scurry: 1.10.1
@@ -4496,8 +4547,8 @@ packages:
       istanbul-lib-report: 3.0.1
     dev: true
 
-  /jackspeak@2.2.2:
-    resolution: {integrity: sha512-mgNtVv4vUuaKA97yxUHoA3+FkuhtxkjdXEWOyB/N76fjy0FjezEt34oy3epBtvCvS+7DyKwqCFWx/oJLV5+kCg==}
+  /jackspeak@2.2.3:
+    resolution: {integrity: sha512-pF0kfjmg8DJLxDrizHoCZGUFz4P4czQ3HyfW4BU0ffebYkzAVlBywp5zaxW/TM+r0sGbmrQdi8EQQVTJFxnGsQ==}
     engines: {node: '>=14'}
     dependencies:
       '@isaacs/cliui': 8.0.2
@@ -4743,8 +4794,8 @@ packages:
       tslib: 2.6.1
     dev: true
 
-  /lru-cache@10.0.0:
-    resolution: {integrity: sha512-svTf/fzsKHffP42sujkO/Rjs37BCIsQVRCeNYIm9WN8rgT7ffoUnRtZCqU+6BqcSBdv8gwJeTz8knJpgACeQMw==}
+  /lru-cache@10.0.1:
+    resolution: {integrity: sha512-IJ4uwUTi2qCccrioU6g9g/5rvvVl13bsdczUUcqbciD9iLr095yj8DQKdObriEvuNSx325N1rV1O0sJFszx75g==}
     engines: {node: 14 || >=16.14}
     dev: true
 
@@ -5456,7 +5507,7 @@ packages:
     resolution: {integrity: sha512-MkhCqzzBEpPvxxQ71Md0b1Kk51W01lrYvlMzSUaIzNsODdd7mqhiimSZlr+VegAz5Z6Vzt9Xg2ttE//XBhH3EQ==}
     engines: {node: '>=16 || 14 >=14.17'}
     dependencies:
-      lru-cache: 10.0.0
+      lru-cache: 10.0.1
       minipass: 7.0.2
     dev: true
 
@@ -5948,8 +5999,8 @@ packages:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
     dev: true
 
-  /sass@1.64.2:
-    resolution: {integrity: sha512-TnDlfc+CRnUAgLO9D8cQLFu/GIjJIzJCGkE7o4ekIGQOH7T3GetiRR/PsTWJUHhkzcSPrARkPI+gNWn5alCzDg==}
+  /sass@1.65.1:
+    resolution: {integrity: sha512-9DINwtHmA41SEd36eVPQ9BJKpn7eKDQmUHmpI0y5Zv2Rcorrh0zS+cFrt050hdNbmmCNKTW3hV5mWfuegNRsEA==}
     engines: {node: '>=14.0.0'}
     hasBin: true
     dependencies:
@@ -6056,6 +6107,36 @@ packages:
     dependencies:
       byte-base64: 1.1.0
       sax: 1.2.4
+    dev: false
+
+  /siyuan-plugin-picgo@1.2.0(typescript@5.1.6):
+    resolution: {integrity: sha512-FrEo8XbJeMS5XsD1BGdIqaNFGi2RcVcmMOif629ZBFNqyCPfsziQVgpfIlbFE5jWkPh5dWrO8ZnUR6BIVb9bBw==}
+    dependencies:
+      '@element-plus/icons-vue': 2.1.0(vue@3.3.4)
+      '@fortawesome/fontawesome-svg-core': 6.4.2
+      '@fortawesome/free-brands-svg-icons': 6.4.2
+      '@fortawesome/free-solid-svg-icons': 6.4.2
+      '@fortawesome/vue-fontawesome': 3.0.3(@fortawesome/fontawesome-svg-core@6.4.2)(vue@3.3.4)
+      '@vueuse/core': 10.3.0(vue@3.3.4)
+      blueimp-md5-es6: 2.7.4
+      browser-fs-access: 0.34.1
+      element-plus: 2.3.9(vue@3.3.4)
+      lodash: 4.17.21
+      lodash-es: 4.17.21
+      pinia: 2.1.6(typescript@5.1.6)(vue@3.3.4)
+      siyuan: 0.7.9
+      uuid: 9.0.0
+      vue: 3.3.4
+      vue-i18n: 9.2.2(vue@3.3.4)
+      vue-router: 4.2.4(vue@3.3.4)
+      zhi-common: 1.14.2
+      zhi-device: 2.3.0
+      zhi-fetch-middleware: 0.2.20
+      zhi-lib-base: 0.4.4
+      zhi-siyuan-api: 2.0.21
+    transitivePeerDependencies:
+      - '@vue/composition-api'
+      - typescript
     dev: false
 
   /siyuan@0.7.9:
@@ -7248,8 +7329,8 @@ packages:
       zhi-lib-base: 0.4.4
     dev: false
 
-  /zhi-common@1.14.1:
-    resolution: {integrity: sha512-euAUWXtwrbOx+6IP3w9JLwoHtI9Ntv7bUvLePK1yKpJk/83DzRmRj/ymzl31ppnVYUL/Vkb00OT/VhFiqV2P1w==}
+  /zhi-common@1.14.2:
+    resolution: {integrity: sha512-UeGLPvhNF5djrcR5srHrA67hGIL1L5wU8IVuwHWL281aJC5JfB/UE00Np1lGT8R0YwqJsE0jy4u9vf2jfJEjSw==}
     dependencies:
       js-yaml: 4.1.0
       shorthash2: 1.0.3
@@ -7262,20 +7343,20 @@ packages:
     resolution: {integrity: sha512-we04mMt4BEqeKDxoqdJQsDFYImYlcp/yaAIkpxpMGg+9tBURfNeHPHIHkFias9VbM8yuk6xjAX6B2xJjvYE/iw==}
     dev: false
 
-  /zhi-fetch-middleware@0.2.19:
-    resolution: {integrity: sha512-3mtlPPLP3aR+tuFTmQzHs1c0qxUvyUCVs+IQpJOU66Qxckd64m1Qp+F0ZpV4UV/6Xy9wwz/AG4JdT32vsKzxTg==}
+  /zhi-fetch-middleware@0.2.20:
+    resolution: {integrity: sha512-WPgvjEwyBxN9wQGncmR3TyEd/mTGzkHj3sJsKHdgkyrJlcxhJK1LPX0v20XKVR4KcHyehDyz3QjDxLSdTwcfLQ==}
     dependencies:
-      zhi-common: 1.14.1
+      zhi-common: 1.14.2
       zhi-device: 2.3.0
       zhi-lib-base: 0.4.4
     dev: false
 
-  /zhi-github-middleware@0.2.1:
-    resolution: {integrity: sha512-prvIirH/fHEMDRw3nypzrpXDkBux3IECj2KMfy/QanH+XG6dwoQGNvrkVu0wMFtu22VN1AuXNiLAG7+PYpEtlw==}
+  /zhi-github-middleware@0.2.2:
+    resolution: {integrity: sha512-Nja/IIPxSGOg1hpxjAeHf0C4scNZReCURLUzU31Dvv4fRU5qdLxhvOkAJVtHUAp6yfg65/1rminSYsFeRMCBWA==}
     dependencies:
       '@octokit/core': 5.0.0
       js-base64: 3.7.5
-      zhi-common: 1.14.1
+      zhi-common: 1.14.2
       zhi-lib-base: 0.4.4
     dev: false
 
@@ -7293,18 +7374,18 @@ packages:
       - supports-color
     dev: false
 
-  /zhi-siyuan-api@2.0.19:
-    resolution: {integrity: sha512-Y1HzNoqI95BmqI9fmon7TWzbtcqZr7n2L9eMx3M9TLFrne8IulRRIMKGQuqGKcM08Qiyc40lz1pG8ZIFd9cYtQ==}
+  /zhi-siyuan-api@2.0.21:
+    resolution: {integrity: sha512-fGlvQ4Cb62DBY/8r2yMhZohgQOj0LHSp+/3OEIii4LZzN7+a7FBZawzaHSQo/e+Dpr8taZV3pEr0SBG7LyIDOA==}
     dependencies:
       zhi-blog-api: 1.20.17
-      zhi-common: 1.14.1
+      zhi-common: 1.14.2
       zhi-lib-base: 0.4.4
     dev: false
 
-  /zhi-xmlrpc-middleware@0.4.14:
-    resolution: {integrity: sha512-3S+S/nAhoyQHRqv10jA+QmlR9bip2FpuvKI3tg2dkgxJL/Ek95PpgK1NAi4HjyjqyyoeWJ7frJWo/zAT/YiEaQ==}
+  /zhi-xmlrpc-middleware@0.4.15:
+    resolution: {integrity: sha512-XmqKZPyeyO+IU3wwDc1GPghevCFW6Ix9DKWW1MnXC4QsPTsQK8b3UN6OlMKTGqfj2mPle1Kg8H/01AihE7utrA==}
     dependencies:
-      zhi-common: 1.14.1
+      zhi-common: 1.14.2
       zhi-device: 2.3.0
       zhi-lib-base: 0.4.4
     dev: false

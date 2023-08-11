@@ -36,7 +36,6 @@ import {
   deletePlatformByKey,
   DynamicConfig,
   DynamicJsonCfg,
-  getDynPostidKey,
   PlatformType,
   replacePlatformByKey,
   setDynamicJsonCfg,
