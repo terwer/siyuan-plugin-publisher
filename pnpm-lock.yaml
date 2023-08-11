@@ -75,8 +75,8 @@ dependencies:
     specifier: ^0.1.2
     version: 0.1.2
   zhi-siyuan-api:
-    specifier: ^2.0.19
-    version: 2.0.19
+    specifier: ^2.0.20
+    version: 2.0.20
   zhi-xmlrpc-middleware:
     specifier: ^0.4.14
     version: 0.4.14
@@ -7293,8 +7293,8 @@ packages:
       - supports-color
     dev: false
 
-  /zhi-siyuan-api@2.0.19:
-    resolution: {integrity: sha512-Y1HzNoqI95BmqI9fmon7TWzbtcqZr7n2L9eMx3M9TLFrne8IulRRIMKGQuqGKcM08Qiyc40lz1pG8ZIFd9cYtQ==}
+  /zhi-siyuan-api@2.0.20:
+    resolution: {integrity: sha512-pJD6LSvy7tzZfriNPcGX3/VLiToGVbWYDTvle/cauNHKgkNeY/8FnKLWqa0R+WjSiEHGls7WkUKWUUqrJtiSOw==}
     dependencies:
       zhi-blog-api: 1.20.17
       zhi-common: 1.14.1
