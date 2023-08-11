@@ -1,24 +1,14 @@
 # Changelog
 
 ## [1.7.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.6.1...v1.7.0) (2023-08-11)
-
-
 ### Features
-
 * [#593](https://github.com/terwer/siyuan-plugin-publisher/issues/593) 插件版支持图床替换图片 ([bc645c0](https://github.com/terwer/siyuan-plugin-publisher/commit/bc645c0751016daabfa2e309882f988bd46e49ac))
-
-
 ### Bug Fixes
-
 * 修复授权码模式发布预览失效问题 ([633dabf](https://github.com/terwer/siyuan-plugin-publisher/commit/633dabf97fef63883cd9cd7865becbdab7a07677))
-* 添加帮助文档链接 ([10bd726](https://github.com/terwer/siyuan-plugin-publisher/commit/10bd72676309a79b0d310ab4805636b551c73bac))
 * 添加帮助文档链接 ([f9deaf4](https://github.com/terwer/siyuan-plugin-publisher/commit/f9deaf4c7ec2ec423a9ab02789e96ad7534051df))
-
 ## [1.6.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.6.0...v1.6.1) (2023-08-09)
-### Bug Fixes
 * lodash-es ([29b65ed](https://github.com/terwer/siyuan-plugin-publisher/commit/29b65ed7d4672eee1a54b16552f281afd0344df6))
 ## [1.6.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.5.2...v1.6.0) (2023-08-09)
-### Features
 * 修正博客园markdown分类问题 ([ea1950d](https://github.com/terwer/siyuan-plugin-publisher/commit/ea1950d32e3886889bacbdbbdce9e52b9bbbc61d))
 * 发布首个稳定版 ([945df12](https://github.com/terwer/siyuan-plugin-publisher/commit/945df12a6ecf89b02d3aa2cdba6119f152a247a7))
 * 开始适配知乎 ([8db460c](https://github.com/terwer/siyuan-plugin-publisher/commit/8db460c7c3bf4426f80ae206eb2fabd40029d67f))
