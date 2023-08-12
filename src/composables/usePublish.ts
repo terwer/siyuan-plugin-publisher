@@ -127,7 +127,7 @@ const usePublish = () => {
 
       // 平台相关的预处理 - 仅在发布的时候调用
       logger.debug(`before preEditPost, isAdd ${singleFormData.isAdd}, post=>`, toRaw(post))
-      post = await api.preEditPost(post, dynCfg)
+      post = await api.preEditPost(post, id, publishCfg)
       logger.debug(`after preEditPost, post=>`, toRaw(post))
 
       // 发布格式

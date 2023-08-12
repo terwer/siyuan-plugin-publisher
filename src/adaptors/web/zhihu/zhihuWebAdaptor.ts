@@ -28,6 +28,7 @@ import { MediaObject, Post, UserBlog } from "zhi-blog-api"
 import * as cheerio from "cheerio"
 import { JsonUtil, StrUtil } from "zhi-common"
 import { usePicgoBridge } from "~/src/composables/usePicgoBridge.ts"
+import { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 
 /**
  * 知乎网页授权适配器
@@ -96,10 +97,11 @@ class ZhihuWebAdaptor extends BaseWebApi {
     return result
   }
 
-  public async preEditPost(post: Post, dynCfg: any): Promise<Post> {
+  public async preEditPost(post: Post, id?: string, publishCfg?: any): Promise<Post> {
+    const pubCfg = publishCfg as IPublishCfg
     // 找到所有的图片
     const { getImageItemsFromMd } = usePicgoBridge()
-    const images = await getImageItemsFromMd(post.postid, post.markdown)
+    const images = await getImageItemsFromMd(id, post.markdown)
     if (images.length === 0) {
       this.logger.info("未找到图片，不处理")
       return post

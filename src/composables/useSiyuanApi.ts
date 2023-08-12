@@ -39,6 +39,7 @@ export const useSiyuanApi = () => {
   const siyuanConfig = new SiyuanConfig(siyuanApiUrl, siyuanAuthToken)
   siyuanConfig.cookie = Utils.emptyOrDefault(process.env.VITE_SIYUAN_COOKIE, "")
   siyuanConfig.fixTitle = true
+
   const blogApi = new SiYuanApiAdaptor(siyuanConfig)
   const kernelApi = new SiyuanKernelApi(siyuanConfig)
   const { isInChromeExtension } = useSiyuanDevice()
@@ -69,7 +70,7 @@ export const useSiyuanApi = () => {
   return {
     blogApi,
     kernelApi,
-    cfg: siyuanConfig,
+    siyuanConfig,
     isStorageViaSiyuanApi,
     isUseSiyuanProxy,
   }

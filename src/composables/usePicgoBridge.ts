@@ -37,7 +37,7 @@ import { StrUtil } from "zhi-common"
  */
 const usePicgoBridge = () => {
   const logger = createAppLogger("use-picgo-bridge")
-  const { kernelApi, blogApi } = useSiyuanApi()
+  const { siyuanConfig, kernelApi, blogApi } = useSiyuanApi()
   const picgoPostApi = new PicgoPostApi(kernelApi)
 
   /**
@@ -93,12 +93,14 @@ const usePicgoBridge = () => {
   const getImageItemsFromMd = async (pageId: string, md: string): Promise<ParsedImage[]> => {
     const imageParser = new ImageParser()
     let retImgs: ParsedImage[] = []
+    logger.debug("getImageItemsFromMd=>", { md })
     const parsedImages = imageParser.parseImagesToArray(md)
     retImgs = [...new Set([...retImgs, ...parsedImages])]
     logger.debug("retImgs=>", retImgs)
 
     const attrs = await kernelApi.getBlockAttrs(pageId)
-    const imageItemArray = await picgoPostApi.doConvertImagesToImagesItemArray(attrs, retImgs)
+    const baseUrl = siyuanConfig.apiUrl ?? ""
+    const imageItemArray = await picgoPostApi.doConvertImagesToImagesItemArray(attrs, retImgs, baseUrl)
     logger.debug("imageItemArray=>", imageItemArray)
     return imageItemArray
   }
