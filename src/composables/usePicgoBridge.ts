@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { ImageParser, ParsedImage, PicgoPostApi } from "siyuan-plugin-picgo"
+import { ImageItem, ImageParser, ParsedImage, PicgoPostApi } from "siyuan-plugin-picgo"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { ElMessage } from "element-plus"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
@@ -90,7 +90,7 @@ const usePicgoBridge = () => {
    * @param md - Markdown字符串
    * @returns 解析后的图片数组
    */
-  const getImageItemsFromMd = async (pageId: string, md: string): Promise<ParsedImage[]> => {
+  const getImageItemsFromMd = async (pageId: string, md: string): Promise<ImageItem[]> => {
     const imageParser = new ImageParser()
     let retImgs: ParsedImage[] = []
     logger.debug("getImageItemsFromMd=>", { md })

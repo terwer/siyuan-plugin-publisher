@@ -116,6 +116,14 @@ class BaseWebApi extends WebApi {
   // ================
   // private methods
   // ================
+  protected async readFileToBlob(url: string) {
+    const response = await this.proxyFetch(url, [], {}, "GET", "image/jpeg")
+    const body = response.body
+    const blobData = new Blob([body], { type: response.contentType })
+    this.logger.debug("blobData =>", blobData)
+    return blobData
+  }
+
   /**
    * 网页授权通用的请求代理
    *
@@ -149,14 +157,17 @@ class BaseWebApi extends WebApi {
         7000
       )
       this.logger.debug("proxyFetch result=>", fetchResult)
-      const resText = fetchResult?.body
       // 后续调试可打开这个日志
       // this.logger.debug("proxyFetch resText=>", resText)
       if (contentType === "application/json") {
+        const resText = fetchResult?.body
         const res = JsonUtil.safeParse<any>(resText, {} as any)
         return res
-      } else {
+      } else if (contentType === "text/html") {
+        const resText = fetchResult?.body
         return resText
+      } else {
+        return fetchResult
       }
     } else {
       this.logger.info("using middleware proxy")

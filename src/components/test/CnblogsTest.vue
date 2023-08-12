@@ -29,12 +29,14 @@ import { Utils } from "~/src/utils/utils.ts"
 import { reactive, ref } from "vue"
 import { fileToBuffer } from "~/src/utils/polyfillUtils.ts"
 import { SimpleXmlRpcClient } from "simple-xmlrpc"
-import {MediaObject, Post} from "zhi-blog-api"
+import { MediaObject, Post } from "zhi-blog-api"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import Adaptors from "~/src/adaptors"
-import {SiYuanApiAdaptor, SiyuanConfig} from "zhi-siyuan-api";
+import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 
 const logger = createAppLogger("cnblogs-test")
+
+const { t } = useVueI18n()
 
 const params = ref("{}")
 const showParamFile = ref(false)
@@ -297,6 +299,8 @@ const cnblogsHandleApi = async () => {
         break
       }
       case METHOD_NEW_MEDIA_OBJECT: {
+        const key = "metaweblog_Cnblogs"
+
         const file = paramFile.value
         const bits = await fileToBuffer(file)
         const mediaObject = new MediaObject(file.name, file.type, bits)
@@ -309,9 +313,9 @@ const cnblogsHandleApi = async () => {
           bits: mediaObject.bits,
           overwrite: true,
         }
-        const xmlrpcApiUrl = "http://127.0.0.1:3000/xmlrpc.php"
-        const client = new SimpleXmlRpcClient(xmlrpcApiUrl, "", {})
-        const result = await client.methodCall("metaWeblog.newMediaObject", ["", "terwer", "123456", metadata])
+        const cfg = await Adaptors.getCfg(key)
+        const client = new SimpleXmlRpcClient(appInstance, cfg.apiUrl, {})
+        const result = await client.methodCall("metaWeblog.newMediaObject", ["", cfg.username, cfg.password, metadata])
         logMessage.value = JSON.stringify(result)
         logger.info("cnblogs new mediaObject result=>", result)
         break

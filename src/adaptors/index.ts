@@ -116,8 +116,8 @@ class Adaptors {
       //   break
       // }
       case SubPlatformType.System_Siyuan: {
-        const { cfg } = useSiyuanApi()
-        conf = cfg
+        const { siyuanConfig } = useSiyuanApi()
+        conf = siyuanConfig
         break
       }
       default: {

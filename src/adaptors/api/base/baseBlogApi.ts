@@ -72,6 +72,14 @@ export class BaseBlogApi extends BlogApi {
   // ================
   // private methods
   // ================
+  protected async readFileToBlob(url: string) {
+    const response = await this.proxyFetch(url, [], {}, "GET", "image/jpeg")
+    const body = response.body
+    const blobData = new Blob([body], { type: response.contentType })
+    this.logger.debug("blobData =>", blobData)
+    return blobData
+  }
+
   /**
    * 网页授权通用的请求代理
    *
@@ -107,9 +115,18 @@ export class BaseBlogApi extends BlogApi {
       })
       const fetchResult = await this.kernelApi.forwardProxy(apiUrl, headers, body, method, contentType, 7000)
       this.logger.debug("siyuan forwardProxy result=>", fetchResult)
-      const resText = fetchResult?.body
-      const res = JsonUtil.safeParse<any>(resText, {} as any)
-      return res
+      // 后续调试可打开这个日志
+      // this.logger.debug("proxyFetch resText=>", resText)
+      if (contentType === "application/json") {
+        const resText = fetchResult?.body
+        const res = JsonUtil.safeParse<any>(resText, {} as any)
+        return res
+      } else if (contentType === "text/html") {
+        const resText = fetchResult?.body
+        return resText
+      } else {
+        return fetchResult
+      }
     } else {
       this.logger.info("using commonFetchClient")
       const header = headers.length > 0 ? headers[0] : {}

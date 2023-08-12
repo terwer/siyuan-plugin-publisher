@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { CategoryInfo, Post, PostStatusEnum, UserBlog } from "zhi-blog-api"
+import { Attachment, CategoryInfo, MediaObject, Post, PostStatusEnum, UserBlog } from "zhi-blog-api"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { CommonXmlrpcClient } from "zhi-xmlrpc-middleware"
 import { MetaweblogConstants } from "~/src/adaptors/api/base/metaweblog/metaweblogConstants.ts"
@@ -31,6 +31,8 @@ import { StrUtil } from "zhi-common"
 import { BrowserUtil } from "zhi-device"
 import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
 import { MetaweblogConfig } from "~/src/adaptors/api/base/metaweblog/metaweblogConfig.ts"
+import { result } from "lodash-es"
+import { data } from "cheerio/lib/api/attributes"
 
 /**
  * MetaweblogBlogApi 类继承自 BaseBlogApi 类，并为 Metaweblog API 提供了额外的功能
@@ -208,6 +210,23 @@ class MetaweblogBlogApiAdaptor extends BaseBlogApi {
     }
 
     return result
+  }
+
+  public async newMediaObject(mediaObject: MediaObject, customHandler?: any): Promise<Attachment> {
+    let ret: Attachment
+    try {
+      ret = await this.metaweblogCall(MetaweblogConstants.METHOD_NEW_MEDIA_OBJECT, [
+        this.cfg.blogid,
+        this.cfg.username,
+        this.cfg.password,
+        mediaObject,
+      ])
+      this.logger.debug("上传媒体完成, ret =>", ret)
+    } catch (e) {
+      this.logger.error("媒体上传失败", e)
+    }
+
+    return ret
   }
 
   protected async metaweblogCall(method: string, params: any[]) {

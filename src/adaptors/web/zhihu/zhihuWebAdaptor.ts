@@ -98,7 +98,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
   }
 
   public async preEditPost(post: Post, id?: string, publishCfg?: any): Promise<Post> {
-    const pubCfg = publishCfg as IPublishCfg
+    // const pubCfg = publishCfg as IPublishCfg
     // 找到所有的图片
     const { getImageItemsFromMd } = usePicgoBridge()
     const images = await getImageItemsFromMd(id, post.markdown)
@@ -108,10 +108,19 @@ class ZhihuWebAdaptor extends BaseWebApi {
     }
     // 批量处理图片上传
     this.logger.info(`找到${images.length}张图片，开始上传`)
-    const file = null
-    const mediaObject = new MediaObject("20220616-132401-001.jpg", "image/jpeg", file)
-    this.newMediaObject(mediaObject)
-    throw new Error("开发中")
+
+    for (const image of images) {
+      const imageBlob = await this.readFileToBlob(image.url)
+      this.logger.debug("read blob from image", { imageBlob })
+      const file = new File([imageBlob], image.name, { type: imageBlob.type, lastModified: Date.now() })
+      this.logger.debug("convert blob to file", { imageBlob })
+
+      const mediaObject = new MediaObject(image.name, imageBlob.type, file as any)
+      const attachResult = await this.newMediaObject(mediaObject)
+      this.logger.debug("attachResult =>", attachResult)
+      throw new Error("开发中")
+    }
+
     this.logger.info("图片全部上传完成")
     return post
   }

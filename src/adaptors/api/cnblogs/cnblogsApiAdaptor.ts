@@ -23,12 +23,13 @@
  * questions.
  */
 
-import { Post, UserBlog } from "zhi-blog-api"
+import {MediaObject, Post, UserBlog} from "zhi-blog-api"
 import { CnblogsConfig } from "~/src/adaptors/api/cnblogs/cnblogsConfig.ts"
 import { AppInstance } from "~/src/appInstance.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { CnblogsConstants } from "~/src/adaptors/api/cnblogs/cnblogsConstants.ts"
 import { MetaweblogBlogApiAdaptor } from "~/src/adaptors/api/base/metaweblog/metaweblogBlogApiAdaptor.ts"
+import {usePicgoBridge} from "~/src/composables/usePicgoBridge.ts";
 
 /**
  * 博客园 API 适配器
@@ -62,6 +63,35 @@ class CnblogsApiAdaptor extends MetaweblogBlogApiAdaptor {
     this.logger.debug("getUsersBlogs=>", result)
     return result
   }
+
+  public async preEditPost(post: Post, id?: string, publishCfg?: any): Promise<Post> {
+    // const pubCfg = publishCfg as IPublishCfg
+    // 找到所有的图片
+    const { getImageItemsFromMd } = usePicgoBridge()
+    const images = await getImageItemsFromMd(id, post.markdown)
+    if (images.length === 0) {
+      this.logger.info("未找到图片，不处理")
+      return post
+    }
+    // 批量处理图片上传
+    this.logger.info(`找到${images.length}张图片，开始上传`)
+
+    for (const image of images) {
+      const imageBlob = await this.readFileToBlob(image.url)
+      this.logger.debug("read blob from image", { imageBlob })
+      const file = new File([imageBlob], image.name, { type: imageBlob.type, lastModified: Date.now() })
+      this.logger.debug("convert blob to file", { imageBlob })
+
+      const mediaObject = new MediaObject(image.name, imageBlob.type, file as any)
+      const attachResult = await this.newMediaObject(mediaObject)
+      this.logger.debug("attachResult =>", attachResult)
+      throw new Error("开发中")
+    }
+
+    this.logger.info("图片全部上传完成")
+    return post
+  }
+
 
   public async newPost(post: Post, publish?: boolean): Promise<string> {
     // 设置markdown分类
