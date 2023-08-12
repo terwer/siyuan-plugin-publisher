@@ -46,14 +46,19 @@
         </span>
         -->
 
-        <span v-if="isChromeExtension" class="text">.</span>
-        <span v-if="isChromeExtension" class="text s-dark" @click="newWin()">
-          {{ t("blog.newwin.open") }}
+        <span class="text">.</span>
+        <span class="text s-dark" @click="handlePublishSetting">
+          {{ t("service.tab.publish.setting") }}
         </span>
 
         <span class="text">.</span>
         <span class="text s-dark" @click="handleSiyuanSetting">
           {{ t("siyuan.config.setting") }}
+        </span>
+
+        <span v-if="isChromeExtension" class="text">.</span>
+        <span v-if="isChromeExtension" class="text s-dark" @click="newWin()">
+          {{ t("blog.newwin.open") }}
         </span>
       </div>
     </div>
@@ -101,6 +106,13 @@ const newWin = () => {
   const rt = chrome.runtime as any
   const url = rt.getURL("/index.html#/")
   window.open(url)
+}
+
+const handlePublishSetting = async () => {
+  await router.push({
+    path: "/setting/publish",
+    query: { showBack: "true" },
+  })
 }
 
 const handleSiyuanSetting = async () => {
