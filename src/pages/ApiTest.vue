@@ -41,29 +41,31 @@ const changeTab = (tab: TabsPaneContext, event: Event) => {
 </script>
 
 <template>
-  <div class="tab-container">
-    <h1>ApiTest</h1>
-    <el-tabs v-model="activeTab" type="border-card" @tab-click="changeTab">
-      <el-tab-pane label="Siyuan" name="siyuan">
-        <router-view></router-view>
-      </el-tab-pane>
-      <el-tab-pane label="Cnblogs" name="cnblogs">
-        <router-view></router-view>
-      </el-tab-pane>
-      <el-tab-pane label="Wordpress" name="wordpress">
-        <router-view></router-view>
-      </el-tab-pane>
-      <el-tab-pane label="Typecho" name="typecho">
-        <router-view></router-view>
-      </el-tab-pane>
-      <el-tab-pane label="Yuque" name="yuque">
-        <router-view></router-view>
-      </el-tab-pane>
-      <el-tab-pane label="Zhihu" name="zhihu">
-        <router-view></router-view>
-      </el-tab-pane>
-    </el-tabs>
-  </div>
+  <back-page title="组件接口测试">
+    <div class="tab-container">
+      <h1>ApiTest</h1>
+      <el-tabs v-model="activeTab" type="border-card" @tab-click="changeTab">
+        <el-tab-pane label="Siyuan" name="siyuan">
+          <router-view></router-view>
+        </el-tab-pane>
+        <el-tab-pane label="Cnblogs" name="cnblogs">
+          <router-view></router-view>
+        </el-tab-pane>
+        <el-tab-pane label="Wordpress" name="wordpress">
+          <router-view></router-view>
+        </el-tab-pane>
+        <el-tab-pane label="Typecho" name="typecho">
+          <router-view></router-view>
+        </el-tab-pane>
+        <el-tab-pane label="Yuque" name="yuque">
+          <router-view></router-view>
+        </el-tab-pane>
+        <el-tab-pane label="Zhihu" name="zhihu">
+          <router-view></router-view>
+        </el-tab-pane>
+      </el-tabs>
+    </div>
+  </back-page>
 </template>
 
 <style lang="stylus" scoped>

@@ -56,6 +56,9 @@
           {{ t("siyuan.config.setting") }}
         </span>
 
+        <span class="text" v-if="isDev">.</span>
+        <span class="text s-dark" @click="handleTest" v-if="isDev"> 组件测试 </span>
+
         <span v-if="isChromeExtension" class="text">.</span>
         <span v-if="isChromeExtension" class="text s-dark" @click="newWin()">
           {{ t("blog.newwin.open") }}
@@ -74,6 +77,7 @@ import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { DateUtil } from "zhi-common"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import { useRouter } from "vue-router"
+import { isDev } from "~/src/utils/constants.ts"
 
 const logger = createAppLogger("default-footer")
 const { t } = useVueI18n()
@@ -118,6 +122,13 @@ const handlePublishSetting = async () => {
 const handleSiyuanSetting = async () => {
   await router.push({
     path: "/setting/siyuan",
+    query: { showBack: "true" },
+  })
+}
+
+const handleTest = async () => {
+  await router.push({
+    path: "/test",
     query: { showBack: "true" },
   })
 }
