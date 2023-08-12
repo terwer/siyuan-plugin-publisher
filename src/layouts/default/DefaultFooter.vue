@@ -51,9 +51,10 @@
           {{ t("blog.newwin.open") }}
         </span>
 
-        <!--
-        -----------------------------------------------------------------------------
-        -->
+        <span class="text">.</span>
+        <span class="text s-dark" @click="handleSiyuanSetting">
+          {{ t("siyuan.config.setting") }}
+        </span>
       </div>
     </div>
   </div>
@@ -100,6 +101,13 @@ const newWin = () => {
   const rt = chrome.runtime as any
   const url = rt.getURL("/index.html#/")
   window.open(url)
+}
+
+const handleSiyuanSetting = async () => {
+  await router.push({
+    path: "/setting/siyuan",
+    query: { showBack: "true" },
+  })
 }
 </script>
 

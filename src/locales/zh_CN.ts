@@ -264,8 +264,6 @@ export default {
     "温馨提示：1、当前处于挂件模式，从 0.1.0 版本开始，无需在所有页面引用挂件了，只需要在父级页面引用一个挂件即可。具体规则如下：(1). 如果检测到没有子文档，会兼容 0.0.3 版本以前的方式，展示当前文档的发布页面。 (2). 如果检测到有子文档，会以列表加分页的方式展示所有子文档列表。可单独选择某个子文档进行发布操作。 2、升级新版之前强烈建议导出配置，防止配置丢失。 3、如果出现新版本不兼容的异常情况，建议清空配置。此操作不可恢复，请谨慎操作！",
   "blog.newwin.open": "页签模式",
   "blog.change.siyuan.api": "思源地址",
-  "setting.blog.siyuan.password": "思源笔记鉴权Token，请从【设置->关于】复制，如果是本地笔记留空即可",
-  "setting.blog.siyuan.apiurl": "思源笔记的API地址，包括端口，例如：http://127.0.0.1:6806",
   "setting.blog.siyuan.current.apiurl": "当前API地址=>",
   "setting.blog.middlewareUrl": "跨域请求代理",
   "setting.blog.middlewareUrl.tip": "某些场景下需要（例如自部署模式，Nginx伺服等、vite开发环境伺服等），其他情况可忽略",
@@ -536,4 +534,9 @@ export default {
   "enableKnowledgeSpace.Tips":
     "验证通过之后，将列出可用的 [[knowledge-space-title]] 列表，您可以根据需要修改默认 [[knowledge-space-title]] 并保存",
   "post.bind.auto.tips": "此处ID为发布工具自动保存，仅作为修复数据使用，如果您不清楚原理，请勿修改",
+  "siyuan.config.setting": "思源设置",
+  "setting.blog.siyuan.apiurl": "思源API地址",
+  "setting.blog.siyuan.apiurl.tip": "思源笔记的API地址，包括端口，默认是：http://127.0.0.1:6806",
+  "setting.blog.siyuan.password": "思源Token",
+  "setting.blog.siyuan.password.tip": "思源笔记鉴权Token，请从【设置->关于】复制，如果是本地笔记留空即可",
 }
