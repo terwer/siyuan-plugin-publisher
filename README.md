@@ -8,7 +8,7 @@ Publish articles from Siyuan Notes to platforms such as Yuque, Notion, Cnblogs, 
 
 Support features such as fast publishing, image bed management, platform expansion, smart labels, etc.
 
-> **Front Announcement: Publish Tool's First Stable Version '1.6.0' Released!**
+> **Front Announcement: Publish Tool's first platform-wide version `1.8.0` using the forward agent of Siyuan Note!**
 
 We recommend that you use the `uninstall->install` method to update. If the configuration is abnormal, please back up `[workspace]/data/storage/syp/sy-p-plus-cfg.json` , and then delete it, this configuration file will be automatically initialized the first time it is used.
 
