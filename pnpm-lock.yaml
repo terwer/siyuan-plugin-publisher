@@ -66,8 +66,8 @@ dependencies:
     specifier: ^2.3.0
     version: 2.3.0
   zhi-fetch-middleware:
-    specifier: ^0.2.20
-    version: 0.2.20
+    specifier: ^0.2.21
+    version: 0.2.21
   zhi-github-middleware:
     specifier: ^0.2.2
     version: 0.2.2
@@ -4077,7 +4077,7 @@ packages:
       foreground-child: 3.1.1
       jackspeak: 2.2.3
       minimatch: 9.0.3
-      minipass: 7.0.2
+      minipass: 7.0.3
       path-scurry: 1.10.1
     dev: true
 
@@ -5118,8 +5118,8 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /minipass@7.0.2:
-    resolution: {integrity: sha512-eL79dXrE1q9dBbDCLg7xfn/vl7MS4F1gvJAgjJrQli/jbQWdUttuVawphqpffoIYfRdq78LHx6GP4bU/EQ2ATA==}
+  /minipass@7.0.3:
+    resolution: {integrity: sha512-LhbbwCfz3vsb12j/WkWQPZfKTsgqIe1Nf/ti1pKjYESGLHIVjWU96G9/ljLH4F9mWNVhlQOm0VySdAWzf05dpg==}
     engines: {node: '>=16 || 14 >=14.17'}
     dev: true
 
@@ -5508,7 +5508,7 @@ packages:
     engines: {node: '>=16 || 14 >=14.17'}
     dependencies:
       lru-cache: 10.0.1
-      minipass: 7.0.2
+      minipass: 7.0.3
     dev: true
 
   /path-to-regexp@6.1.0:
@@ -6131,7 +6131,7 @@ packages:
       vue-router: 4.2.4(vue@3.3.4)
       zhi-common: 1.14.2
       zhi-device: 2.3.0
-      zhi-fetch-middleware: 0.2.20
+      zhi-fetch-middleware: 0.2.21
       zhi-lib-base: 0.4.4
       zhi-siyuan-api: 2.0.26
     transitivePeerDependencies:
@@ -7343,8 +7343,8 @@ packages:
     resolution: {integrity: sha512-we04mMt4BEqeKDxoqdJQsDFYImYlcp/yaAIkpxpMGg+9tBURfNeHPHIHkFias9VbM8yuk6xjAX6B2xJjvYE/iw==}
     dev: false
 
-  /zhi-fetch-middleware@0.2.20:
-    resolution: {integrity: sha512-WPgvjEwyBxN9wQGncmR3TyEd/mTGzkHj3sJsKHdgkyrJlcxhJK1LPX0v20XKVR4KcHyehDyz3QjDxLSdTwcfLQ==}
+  /zhi-fetch-middleware@0.2.21:
+    resolution: {integrity: sha512-W+m5mqNMn7GcDsUaDBsDS9w5V+yJsPyBKwlssnnW3ENAavRLYF/7dTkQe/TXLuW36Y3V8981jF6rcw1s6mMOeg==}
     dependencies:
       zhi-common: 1.14.2
       zhi-device: 2.3.0

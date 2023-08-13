@@ -69,8 +69,9 @@ const useProxy = (middlewareUrl?: string) => {
     method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" = "GET",
     contentType: string = "application/json"
   ) => {
-    if (isUseSiyuanProxy) {
-      logger.info("Using Siyuan forwardProxy")
+    const siyuanSupported = ["application/json", "text/html", "text/xml"]
+    if (isUseSiyuanProxy && siyuanSupported.includes(contentType)) {
+      logger.info("Using Siyuan forwardProxy, contentType=>", contentType)
       let body: any
       if (typeof params === "string" && !StrUtil.isEmptyString(params)) {
         body = params
@@ -95,8 +96,12 @@ const useProxy = (middlewareUrl?: string) => {
       } else if (contentType === "text/html") {
         const resText = fetchResult?.body
         return resText
+      } else if (contentType === "text/xml") {
+        const resText = fetchResult?.body
+        return resText
       } else {
-        return fetchResult
+        logger.error("SiYuan proxy not supported for content type:", contentType)
+        throw new Error("SiYuan proxy not supported for content type:" + contentType)
       }
     } else {
       logger.info("Using middleware proxy")
@@ -126,7 +131,7 @@ const useProxy = (middlewareUrl?: string) => {
   const proxyXmlrpc = async (url: string, reqMethod: string, reqParams: any[]) => {
     const body = serializer.serializeMethodCall(reqMethod, reqParams)
     const res = await proxyFetch(url, [], body, "POST", "text/xml")
-    let resText = res.body
+    let resText = res
     resText = XmlrpcUtil.removeXmlHeader(resText)
     const deserializer = new Deserializer()
     const resJson = await deserializer.deserializeMethodResponse(resText)
@@ -134,7 +139,21 @@ const useProxy = (middlewareUrl?: string) => {
     return resJson
   }
 
-  return { proxyFetch, proxyXmlrpc }
+  /**
+   * 使用代理请求获取 Blob 数据
+   *
+   * @param url - 请求的 URL
+   * @returns 返回请求的 Blob 数据
+   */
+  const proxyBlob = async (url: string): Promise<Blob> => {
+    const contentType = "image/png"
+    const response = await proxyFetch(url, [], {}, "GET", contentType)
+    const ab = await response.arrayBuffer()
+    logger.debug("arrayBuffer =>", ab)
+    return new Blob([ab], { type: contentType })
+  }
+
+  return { proxyFetch, proxyXmlrpc, proxyBlob }
 }
 
 export { useProxy }

@@ -45,3 +45,19 @@ export const fileToBuffer = async (file: any): Promise<any> => {
     reader.readAsArrayBuffer(file)
   })
 }
+
+export const blobToBuffer = (blob: Blob): Promise<Buffer> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onloadend = () => {
+      if (reader.readyState === FileReader.DONE) {
+        const arrayBuffer = reader.result as ArrayBuffer
+        const buffer = Buffer.from(arrayBuffer)
+        resolve(buffer)
+      } else {
+        reject(new Error("Failed to convert Blob to Buffer."))
+      }
+    }
+    reader.readAsArrayBuffer(blob)
+  })
+}

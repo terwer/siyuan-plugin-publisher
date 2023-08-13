@@ -64,11 +64,4 @@ export class BaseBlogApi extends BlogApi {
   // ================
   // private methods
   // ================
-  public async readFileToBlob(url: string) {
-    const response = await this.proxyFetch(url, [], {}, "GET", "image/jpeg")
-    const body = response.body
-    const blobData = new Blob([body], { type: response.contentType })
-    this.logger.debug("blobData =>", blobData)
-    return blobData
-  }
 }

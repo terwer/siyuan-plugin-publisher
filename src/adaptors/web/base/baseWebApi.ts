@@ -81,40 +81,34 @@ class BaseWebApi extends WebApi {
 
   public async newMediaObject(mediaObject: MediaObject, customHandler?: any): Promise<Attachment> {
     const bits = mediaObject.bits
-    const res = await this.uploadFile(bits as any)
+    const blob = new Blob([bits], { type: mediaObject.type })
+    const res = await this.uploadFile(blob as File)
     return {
       attachment_id: res?.id,
       date_created_gmt: new Date(),
       parent: 0,
       link: res?.url,
-      title: "20220616-132401-001.jpg",
+      title: mediaObject.name,
       caption: "",
       description: "",
       metadata: {
         width: 0,
         height: 0,
         file: "",
-        filesize: 113032,
+        filesize: 0,
         sizes: [],
       },
-      type: "image/jpeg",
-      thumbnail: "https://terwergreen.files.wordpress.com/2022/06/20220616-132401-001.jpg?w=150",
-      id: "4108",
-      file: "20220616-132401-001.jpg",
-      url: "http://terwergreen.files.wordpress.com/2022/06/20220616-132401-001.jpg",
+      type: mediaObject.type,
+      thumbnail: "",
+      id: res?.article_id,
+      file: mediaObject.name,
+      url: res.url,
     }
   }
 
   // ================
   // private methods
   // ================
-  public async readFileToBlob(url: string) {
-    const response = await this.proxyFetch(url, [], {}, "GET", "image/jpeg")
-    const body = response.body
-    const blobData = new Blob([body], { type: response.contentType })
-    this.logger.debug("blobData =>", blobData)
-    return blobData
-  }
 }
 
 export { BaseWebApi }

@@ -27,11 +27,12 @@
 import { AppInstance } from "~/src/appInstance.ts"
 import { Utils } from "~/src/utils/utils.ts"
 import { reactive, ref } from "vue"
-import { fileToBuffer } from "~/src/utils/polyfillUtils.ts"
 import { MediaObject, Post } from "zhi-blog-api"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import Adaptors from "~/src/adaptors"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useProxy } from "~/src/composables/useProxy.ts"
+import { blobToBuffer, fileToBuffer, toBuffer } from "~/src/utils/polyfillUtils.ts"
 
 const logger = createAppLogger("cnblogs-test")
 
@@ -306,21 +307,44 @@ const cnblogsHandleApi = async () => {
         break
       }
       case METHOD_NEW_MEDIA_OBJECT: {
-        const key = "metaweblog_Cnblogs"
+        // const key = "metaweblog_Cnblogs"
+        //
+        // const file = paramFile.value
+        // const bits = await fileToBuffer(file)
+        // const mediaObject = new MediaObject(file.name, file.type, bits)
+        // logger.info("mediaObject=>", mediaObject)
+        //
+        // // 设置文件的元数据
+        // const cnblogsApiAdaptor = await Adaptors.getAdaptor(key)
+        // const cnblogsApi = Utils.blogApi(appInstance, cnblogsApiAdaptor)
+        // logger.info("cnblogsApi=>", cnblogsApi)
+        // const result = await cnblogsApi.newMediaObject(mediaObject)
+        // logMessage.value = JSON.stringify(result)
+        // logger.info("cnblogs new mediaObject result=>", result)
 
-        const file = paramFile.value
-        const bits = await fileToBuffer(file)
-        const mediaObject = new MediaObject(file.name, file.type, bits)
-        logger.info("mediaObject=>", mediaObject)
+        // upload url
+        const key = "metaweblog_Cnblogs"
 
         // 设置文件的元数据
         const cnblogsApiAdaptor = await Adaptors.getAdaptor(key)
+        const cfg = await Adaptors.getCfg(key)
         const cnblogsApi = Utils.blogApi(appInstance, cnblogsApiAdaptor)
+        const { proxyBlob } = useProxy(cfg.middlewareUrl)
         logger.info("cnblogsApi=>", cnblogsApi)
+
+        const imageUrl = "https://static-rs-terwer.oss-cn-beijing.aliyuncs.com/test/image-20230812091531-hibwr1g.png"
+        const imageName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1)
+        const imageBlob = await proxyBlob(imageUrl)
+        const bits = await blobToBuffer(imageBlob)
+        logger.debug("bits=>", bits)
+        const mediaObject = new MediaObject(imageName, "image/png", bits)
+        logger.info("mediaObject=>", mediaObject)
+
         const result = await cnblogsApi.newMediaObject(mediaObject)
         logMessage.value = JSON.stringify(result)
         logger.info("cnblogs new mediaObject result=>", result)
 
+        // SimpleXmlRpcClient
         // const key = "metaweblog_Cnblogs"
         //
         // const file = paramFile.value
@@ -341,7 +365,7 @@ const cnblogsHandleApi = async () => {
         // logMessage.value = JSON.stringify(result)
         // logger.info("cnblogs new mediaObject result=>", result)
 
-        // proxy
+        // proxyXmlrpc
         // const key = "metaweblog_Cnblogs"
         // const cfg = await Adaptors.getCfg(key)
         // const { proxyXmlrpc } = useProxy(cfg.middlewareUrl)
