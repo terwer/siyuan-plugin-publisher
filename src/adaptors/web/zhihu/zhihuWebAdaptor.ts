@@ -29,8 +29,7 @@ import * as cheerio from "cheerio"
 import { JsonUtil, StrUtil } from "zhi-common"
 import { usePicgoBridge } from "~/src/composables/usePicgoBridge.ts"
 import { IPublishCfg } from "~/src/types/IPublishCfg.ts"
-import { useProxy } from "~/src/composables/useProxy.ts"
-import { blobToBuffer } from "~/src/utils/polyfillUtils.ts"
+import { base64ToBuffer, remoteImageToBase64Info } from "~/src/utils/polyfillUtils.ts"
 
 /**
  * 知乎网页授权适配器
@@ -104,7 +103,6 @@ class ZhihuWebAdaptor extends BaseWebApi {
     const cfg = pubCfg.cfg
 
     const { getImageItemsFromMd } = usePicgoBridge()
-    const { proxyBlob } = useProxy(cfg.middlewareUrl)
 
     // 找到所有的图片
     const images = await getImageItemsFromMd(id, post.markdown)
@@ -117,9 +115,9 @@ class ZhihuWebAdaptor extends BaseWebApi {
 
     for (const image of images) {
       const imageUrl = image.url
-      const imageBlob = await proxyBlob(imageUrl)
-      const bits = await blobToBuffer(imageBlob)
-      const mediaObject = new MediaObject(image.name, imageBlob.type, bits)
+      const base64Info = await remoteImageToBase64Info(imageUrl)
+      const bits = base64ToBuffer(base64Info.imageBase64)
+      const mediaObject = new MediaObject(image.name, base64Info.mimeType, bits)
       this.logger.debug("before upload, mediaObject =>", mediaObject)
       const attachResult = await this.newMediaObject(mediaObject)
       this.logger.debug("attachResult =>", attachResult)

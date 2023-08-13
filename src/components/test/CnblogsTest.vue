@@ -31,8 +31,7 @@ import { MediaObject, Post } from "zhi-blog-api"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import Adaptors from "~/src/adaptors"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import { useProxy } from "~/src/composables/useProxy.ts"
-import { blobToBuffer, fileToBuffer, toBuffer } from "~/src/utils/polyfillUtils.ts"
+import { base64ToBuffer, remoteImageToBase64 } from "~/src/utils/polyfillUtils.ts"
 
 const logger = createAppLogger("cnblogs-test")
 
@@ -327,15 +326,15 @@ const cnblogsHandleApi = async () => {
 
         // 设置文件的元数据
         const cnblogsApiAdaptor = await Adaptors.getAdaptor(key)
-        const cfg = await Adaptors.getCfg(key)
         const cnblogsApi = Utils.blogApi(appInstance, cnblogsApiAdaptor)
-        const { proxyBlob } = useProxy(cfg.middlewareUrl)
         logger.info("cnblogsApi=>", cnblogsApi)
 
         const imageUrl = "https://static-rs-terwer.oss-cn-beijing.aliyuncs.com/test/image-20230812091531-hibwr1g.png"
         const imageName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1)
-        const imageBlob = await proxyBlob(imageUrl)
-        const bits = await blobToBuffer(imageBlob)
+        const imageBase64 = await remoteImageToBase64(imageUrl)
+        logger.debug("imageBase64=>", { imageBase64 })
+
+        const bits = base64ToBuffer(imageBase64)
         logger.debug("bits=>", bits)
         const mediaObject = new MediaObject(imageName, "image/png", bits)
         logger.info("mediaObject=>", mediaObject)

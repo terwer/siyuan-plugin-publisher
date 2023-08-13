@@ -139,21 +139,7 @@ const useProxy = (middlewareUrl?: string) => {
     return resJson
   }
 
-  /**
-   * 使用代理请求获取 Blob 数据
-   *
-   * @param url - 请求的 URL
-   * @returns 返回请求的 Blob 数据
-   */
-  const proxyBlob = async (url: string): Promise<Blob> => {
-    const contentType = "image/png"
-    const response = await proxyFetch(url, [], {}, "GET", contentType)
-    const ab = await response.arrayBuffer()
-    logger.debug("arrayBuffer =>", ab)
-    return new Blob([ab], { type: contentType })
-  }
-
-  return { proxyFetch, proxyXmlrpc, proxyBlob }
+  return { proxyFetch, proxyXmlrpc }
 }
 
 export { useProxy }

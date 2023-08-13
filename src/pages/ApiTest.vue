@@ -24,20 +24,31 @@
   -->
 
 <script setup lang="ts">
-import { ref } from "vue"
+import { onMounted, ref } from "vue"
 import { ElTabPane, ElTabs, TabsPaneContext } from "element-plus"
-import { useRouter } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 
 const logger = createAppLogger("api-test")
 const router = useRouter()
+const route = useRoute()
+
+const currentPath = route.path
 const activeTab = ref<string>("siyuan")
+activeTab.value = currentPath.replace("/test/", "").trim()
 
 const changeTab = (tab: TabsPaneContext, event: Event) => {
   const toRoute = `/test/${tab.paneName}`
   logger.info(`toRoute=>${toRoute}`)
   router.push({ path: toRoute })
 }
+
+// onMounted(() => {
+//   const path = currentPath.replace("/test/", "")
+//   if (path !== "") {
+//     activeTab.value = path
+//   }
+// })
 </script>
 
 <template>

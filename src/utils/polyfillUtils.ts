@@ -24,6 +24,7 @@
  */
 
 import { Buffer } from "node:buffer"
+import { Base64 } from "js-base64"
 
 /**
  * 将 file 对象转换为 Buffer
@@ -46,18 +47,93 @@ export const fileToBuffer = async (file: any): Promise<any> => {
   })
 }
 
-export const blobToBuffer = (blob: Blob): Promise<Buffer> => {
+/**
+ * 提取 base64 编码字符串中的 mime 类型。
+ *
+ * @param base64Str - 包含 base64 编码数据的字符串
+ * @returns 提取到的 mime 类型，如果未找到则返回空字符串
+ */
+const extractMimeType = (base64Str: string): string => {
+  const match = base64Str.match(/^data:(.*?);base64,/)
+  if (match && match[1]) {
+    return match[1]
+  }
+  return ""
+}
+
+/**
+ * 将指定URL的图片文件转换为Base64编码字符串
+ *
+ * @param imageUrl 图片文件的URL地址
+ * @returns 图片文件的Base64编码字符串
+ */
+export const remoteImageToBase64 = async (imageUrl: string): Promise<string> => {
+  const base64String = await readFileToBase64(imageUrl)
+  const imageBase64 = base64String.split(";base64,").pop() || ""
+  return imageBase64
+}
+
+/**
+ * 将远程图片转换为 base64 编码字符串，并获取图片名称和 mime 类型。
+ *
+ * @param imageUrl - 包含远程图片URL的字符串
+ * @returns 包含图片名称、mime 类型和 base64 编码字符串的对象
+ */
+export const remoteImageToBase64Info = async (
+  imageUrl: string
+): Promise<{ imageName: string; mimeType: string; imageBase64: string }> => {
+  const base64String = await readFileToBase64(imageUrl)
+  const imageBase64 = base64String.split(";base64,").pop() || ""
+  const imageName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1)
+  const mimeType = extractMimeType(base64String)
+
+  return {
+    imageName,
+    mimeType,
+    imageBase64,
+  }
+}
+
+/**
+ * 将Base64编码的字符串转换为Buffer对象
+ *
+ * @param base64Str Base64编码的字符串
+ * @returns Buffer对象
+ */
+export const base64ToBuffer = (base64Str: string): Buffer => {
+  const uintArray = Base64.toUint8Array(base64Str)
+  const buffer = Buffer.from(uintArray)
+  return buffer
+}
+
+// ================
+// private methods
+// ================
+function readFileToBase64(url: string): Promise<string> {
   return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onloadend = () => {
-      if (reader.readyState === FileReader.DONE) {
-        const arrayBuffer = reader.result as ArrayBuffer
-        const buffer = Buffer.from(arrayBuffer)
-        resolve(buffer)
-      } else {
-        reject(new Error("Failed to convert Blob to Buffer."))
+    ;(async () => {
+      let body = null
+      try {
+        const response = await fetch(url)
+        body = await response.blob()
+      } catch (e) {
+        return reject(e)
       }
-    }
-    reader.readAsArrayBuffer(blob)
+      if (body != null) {
+        const reader = new FileReader()
+        reader.readAsDataURL(body)
+        reader.onloadend = function () {
+          var base64data = reader.result as string
+          resolve(base64data)
+        }
+        reader.onerror = function (e) {
+          reject(e)
+        }
+      }
+    })()
   })
+}
+
+const uintArrayToBuffer = (uint8Array: Uint8Array): Buffer => {
+  return Buffer.from(uint8Array)
 }
