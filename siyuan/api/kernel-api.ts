@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { BaseApi } from "./base-api"
+import { BaseKernelApi } from "./base-kernel-api.ts"
 import { siyuanApiToken, siyuanApiUrl } from "../Constants"
 
 /**
@@ -35,7 +35,7 @@ import { siyuanApiToken, siyuanApiUrl } from "../Constants"
  * @version 0.0.1
  * @since 0.0.1
  */
-class KernelApi extends BaseApi {
+class KernelApi extends BaseKernelApi {
   /**
    * 读取文件
    *

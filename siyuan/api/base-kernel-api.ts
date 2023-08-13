@@ -46,11 +46,11 @@ export interface SiyuanData {
   data: any[] | object | null | undefined
 }
 
-export class BaseApi {
+export class BaseKernelApi {
   private logger
 
   constructor() {
-    this.logger = simpleLogger("base-api", "publisher", isSiyuanDev)
+    this.logger = simpleLogger("base-kernel-api", "publisher", isSiyuanDev)
   }
 
   /**
