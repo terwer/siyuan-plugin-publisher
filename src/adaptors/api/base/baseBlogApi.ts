@@ -27,6 +27,7 @@ import { BlogApi, BlogConfig, Post } from "zhi-blog-api"
 import { AppInstance } from "~/src/appInstance.ts"
 import { createAppLogger, ILogger } from "~/src/utils/appLogger.ts"
 import { useProxy } from "~/src/composables/useProxy.ts"
+import { BaseExtendApi } from "~/src/adaptors/base/baseExtendApi.ts"
 
 /**
  * API授权统一封装基类
@@ -39,6 +40,7 @@ export class BaseBlogApi extends BlogApi {
   protected logger: ILogger
   protected cfg: BlogConfig
   protected readonly proxyFetch: any
+  protected readonly baseExtendApi: BaseExtendApi
 
   /**
    * 初始化API授权适配器
@@ -51,14 +53,14 @@ export class BaseBlogApi extends BlogApi {
 
     this.cfg = cfg
     this.logger = createAppLogger("base-blog-api")
+    this.baseExtendApi = new BaseExtendApi(this)
 
     const { proxyFetch } = useProxy(cfg.middlewareUrl)
     this.proxyFetch = proxyFetch
   }
 
   public async preEditPost(post: Post, id?: string, publishCfg?: any): Promise<Post> {
-    this.logger.info("未处理，原样返回。如需处理，请在子类重写")
-    return post
+    return await this.baseExtendApi.preEditPost(post, id, publishCfg)
   }
 
   // ================

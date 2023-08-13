@@ -39,7 +39,6 @@ import { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
 import { ElMessage } from "element-plus"
 import { usePicgoBridge } from "~/src/composables/usePicgoBridge.ts"
-import { LuteUtil } from "~/src/utils/luteUtil.ts"
 
 /**
  * 通用发布组件
@@ -56,7 +55,6 @@ const usePublish = () => {
   const { updateSetting } = useSettingStore()
   const { kernelApi, blogApi } = useSiyuanApi()
   const { getPublishApi } = usePublishConfig()
-  const { handlePicgo } = usePicgoBridge()
 
   // datas
   const singleFormData = reactive({
@@ -113,11 +111,6 @@ const usePublish = () => {
       // 分配文章属性 - 初始化和发布都会调用
       post = await assignAttrs(post, id, publishCfg)
 
-      // 全局正文预处理 - 仅在发布的时候调用
-      logger.debug(`before preHandlePost, isAdd ${singleFormData.isAdd}, doc=>`, toRaw(post))
-      post = await preHandlePost(post, id, publishCfg)
-      logger.debug(`after preHandlePost, post=>`, toRaw(post))
-
       // ===================================
       // 文章处理结束
       // ===================================
@@ -125,7 +118,7 @@ const usePublish = () => {
       // 初始化API
       const api = await getPublishApi(key, cfg)
 
-      // 平台相关的预处理 - 仅在发布的时候调用
+      // 平台相关的正文预处理 - 仅在发布的时候调用
       logger.debug(`before preEditPost, isAdd ${singleFormData.isAdd}, post=>`, toRaw(post))
       post = await api.preEditPost(post, id, publishCfg)
       logger.debug(`after preEditPost, post=>`, toRaw(post))
@@ -309,26 +302,6 @@ const usePublish = () => {
     const previewUrl = await api.getPreviewUrl(postid)
     const isAbsoluteUrl = /^http/.test(previewUrl)
     return isAbsoluteUrl ? previewUrl : `${cfg?.home ?? ""}${previewUrl}`
-  }
-
-  /**
-   * 文章预处理 - 仅在发布的时候调用
-   *
-   * @param post - 文章对象
-   * @param id - 思源笔记文档ID
-   * @param publishCfg - 发布配置
-   */
-  const preHandlePost = async (post: Post, id: string, publishCfg: IPublishCfg): Promise<Post> => {
-    const cfg: CommonBlogConfig = publishCfg.cfg
-
-    // 图片替换
-    logger.debug("开始图片处理, post =>", { post })
-    post.markdown = await handlePicgo(id, post.markdown)
-    // 利用 lute 把 md 转换成 html
-    post.html = LuteUtil.mdToHtml(post.markdown)
-    logger.debug("图片处理完毕, post.markdown =>", { md: post.markdown })
-
-    return post
   }
 
   // const assignCompareValue = (title1: string, title2: string) => (title1.length > title2.length ? title1 : title2)

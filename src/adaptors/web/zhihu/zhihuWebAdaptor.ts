@@ -24,12 +24,9 @@
  */
 
 import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
-import { MediaObject, Post, UserBlog } from "zhi-blog-api"
+import { Post, UserBlog } from "zhi-blog-api"
 import * as cheerio from "cheerio"
 import { JsonUtil, StrUtil } from "zhi-common"
-import { usePicgoBridge } from "~/src/composables/usePicgoBridge.ts"
-import { IPublishCfg } from "~/src/types/IPublishCfg.ts"
-import { base64ToBuffer, remoteImageToBase64Info } from "~/src/utils/polyfillUtils.ts"
 
 /**
  * 知乎网页授权适配器
@@ -96,36 +93,6 @@ class ZhihuWebAdaptor extends BaseWebApi {
 
     this.logger.debug("getUsersBlogs=>", result)
     return result
-  }
-
-  public async preEditPost(post: Post, id?: string, publishCfg?: any): Promise<Post> {
-    const pubCfg = publishCfg as IPublishCfg
-    const cfg = pubCfg.cfg
-
-    const { getImageItemsFromMd } = usePicgoBridge()
-
-    // 找到所有的图片
-    const images = await getImageItemsFromMd(id, post.markdown)
-    if (images.length === 0) {
-      this.logger.info("未找到图片，不处理")
-      return post
-    }
-    // 批量处理图片上传
-    this.logger.info(`找到${images.length}张图片，开始上传`)
-
-    for (const image of images) {
-      const imageUrl = image.url
-      const base64Info = await remoteImageToBase64Info(imageUrl)
-      const bits = base64ToBuffer(base64Info.imageBase64)
-      const mediaObject = new MediaObject(image.name, base64Info.mimeType, bits)
-      this.logger.debug("before upload, mediaObject =>", mediaObject)
-      const attachResult = await this.newMediaObject(mediaObject)
-      this.logger.debug("attachResult =>", attachResult)
-      throw new Error("开发中")
-    }
-
-    this.logger.info("图片全部上传完成")
-    return post
   }
 
   public async addPost(post: Post) {
@@ -258,6 +225,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
   public async uploadFile(file: File): Promise<any> {
     this.logger.debug("zhihu start uploadFile =>", file)
 
+    throw new Error("开发中=>zhihu uploadFile")
     return {}
   }
 }

@@ -26,6 +26,7 @@ import { Attachment, ElectronCookie, MediaObject, Post, WebApi, WebConfig } from
 import { AppInstance } from "~/src/appInstance.ts"
 import { createAppLogger, ILogger } from "~/src/utils/appLogger.ts"
 import { useProxy } from "~/src/composables/useProxy.ts"
+import { BaseExtendApi } from "~/src/adaptors/base/baseExtendApi.ts"
 
 /**
  * 网页授权统一封装基类
@@ -38,6 +39,7 @@ class BaseWebApi extends WebApi {
   protected logger: ILogger
   protected cfg: WebConfig
   protected readonly proxyFetch: any
+  protected readonly baseExtendApi: BaseExtendApi
 
   /**
    * 初始化网页授权 API 适配器
@@ -50,6 +52,7 @@ class BaseWebApi extends WebApi {
 
     this.cfg = cfg
     this.logger = createAppLogger("base-web-api")
+    this.baseExtendApi = new BaseExtendApi(this)
 
     const { proxyFetch } = useProxy(cfg.middlewareUrl)
     this.proxyFetch = proxyFetch
@@ -66,8 +69,7 @@ class BaseWebApi extends WebApi {
   }
 
   public async preEditPost(post: Post, id?: string, publishCfg?: any): Promise<Post> {
-    this.logger.info("未处理，原样返回。如需处理，请在子类重写")
-    return post
+    return await this.baseExtendApi.preEditPost(post, id, publishCfg)
   }
 
   // 兼容的方法
