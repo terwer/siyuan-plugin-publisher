@@ -25,14 +25,12 @@
 
 import { Attachment, CategoryInfo, MediaObject, Post, PostStatusEnum, UserBlog } from "zhi-blog-api"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { CommonXmlrpcClient } from "zhi-xmlrpc-middleware"
 import { MetaweblogConstants } from "~/src/adaptors/api/base/metaweblog/metaweblogConstants.ts"
 import { StrUtil } from "zhi-common"
 import { BrowserUtil } from "zhi-device"
 import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
 import { MetaweblogConfig } from "~/src/adaptors/api/base/metaweblog/metaweblogConfig.ts"
-import { result } from "lodash-es"
-import { data } from "cheerio/lib/api/attributes"
+import { useProxy } from "~/src/composables/useProxy.ts"
 
 /**
  * MetaweblogBlogApi 类继承自 BaseBlogApi 类，并为 Metaweblog API 提供了额外的功能
@@ -42,7 +40,7 @@ import { data } from "cheerio/lib/api/attributes"
  * @since 0.9.0
  */
 class MetaweblogBlogApiAdaptor extends BaseBlogApi {
-  private readonly commonXmlrpcClient: CommonXmlrpcClient
+  private readonly proxyXmlrpc: any
 
   /**
    * 初始化 metaweblog API 适配器
@@ -55,7 +53,8 @@ class MetaweblogBlogApiAdaptor extends BaseBlogApi {
 
     this.cfg.blogid = "metaweblog"
     this.logger = createAppLogger("metaweblog-api-adaptor")
-    this.commonXmlrpcClient = new CommonXmlrpcClient(appInstance, cfg.apiUrl)
+    const { proxyXmlrpc } = useProxy(cfg.middlewareUrl)
+    this.proxyXmlrpc = proxyXmlrpc
   }
 
   public override async getUsersBlogs(): Promise<Array<UserBlog>> {
@@ -230,7 +229,7 @@ class MetaweblogBlogApiAdaptor extends BaseBlogApi {
   }
 
   protected async metaweblogCall(method: string, params: any[]) {
-    return await this.commonXmlrpcClient.methodCall(method, params, this.cfg.middlewareUrl)
+    return await this.proxyXmlrpc(this.cfg.apiUrl, method, params)
   }
 
   /**

@@ -16,6 +16,7 @@ In later releases, the release configuration will only be backward compatible to
 
 ## Recent critical updates and bug fixes
 
+- All platforms migrated to official forward proxy
 - Support replacing picture bed image links with Picgo plugin
 - Fixed the issue that the release preview of the authorization code mode was invalidated
 - Support publishing to Zhihu
@@ -30,21 +31,14 @@ In later releases, the release configuration will only be backward compatible to
 This plugin supports almost all devices and platforms of Siyuan Note, and the specific compatibility is as follows:
 
 - [X] Siyuan Note Client (zero configuration) <sup>is highly recommended</sup>
-- [X] Servo environment (cross-domain request proxy needs to be set)
+- [X] Servo environment (Zero configuration, cross-domain request proxy built-in)
   - [X] CentSource Note Browser Servo
   - [X] Siyuan Note Client Servo
   - [X] Siyuan Notemaker mobile servo
-- [X] Siyuan Note docker version (need to set up cross-domain request proxy)
+- [X] Siyuan Note docker version (Zero configuration, cross-domain request proxy built-in)
 
-**Note: If it is a LAN servo, you need to deploy the cross-domain proxy on the LAN.**
+🎉 **All platforms have been migrated to the official forward proxy, achieving zero user configuration and supporting cross-domain request proxies by default 🎉**
 
-**Set up the method, clone https://github.com/terwer/node-metaweblog-api-adaptor then `pnpm install & pnpm dev`, after startup the proxy address is https://<local-IP>:3000/api/middleware .**
-
-**If the Internet needs to be deployed on the Internet, the cross-domain request proxy of the Internet can also be used directly: https://api.terwer.space/api/middleware**
-
-**It may be migrated to the official forward proxy to achieve zero configuration in the future, but for now you must set it yourself, you can follow the progress here.**
-
-- Progress 1: The Yuque and Notion platforms have used the built-in forward proxy and do not need to be configured.
 
 ## Platform List
 
