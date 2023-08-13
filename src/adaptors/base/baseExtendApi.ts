@@ -57,7 +57,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     const cfg: CommonBlogConfig = publishCfg.cfg
 
     // const unsupportedPicturePlatform = ["custom_Zhihu","common_notion"]，判断key包含zhihu、notion，custom_Zhihu 或者 /custom_Zhihu-\w+/
-    // PictureStoreTypeEnum.Picgo 如果设置了图片存储方式 PicGO图床 类型就使用 PicGO图床 上传
+    // PictureStoreTypeEnum.Picgo 先检测是否安装了Picgo插件，如果设置了图片存储方式 PicGO图床 类型就使用 PicGO图床 上传
     // PictureStoreTypeEnum.Platform or key in unsupportedPicturePlatform 如果设置了图片存储方式为 平台存储 类型或者 知乎、Notion等不兼容链接方式的平台，就使用 平台特定的存储方式 上传
     // PictureStoreTypeEnum.Default 默认不处理，即使用 思源笔记图床 上传
 
