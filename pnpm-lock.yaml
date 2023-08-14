@@ -66,8 +66,8 @@ dependencies:
     specifier: ^2.3.0
     version: 2.3.0
   zhi-fetch-middleware:
-    specifier: ^0.2.20
-    version: 0.2.20
+    specifier: ^0.2.21
+    version: 0.2.21
   zhi-github-middleware:
     specifier: ^0.2.2
     version: 0.2.2
@@ -6131,7 +6131,7 @@ packages:
       vue-router: 4.2.4(vue@3.3.4)
       zhi-common: 1.14.2
       zhi-device: 2.3.0
-      zhi-fetch-middleware: 0.2.20
+      zhi-fetch-middleware: 0.2.21
       zhi-lib-base: 0.4.4
       zhi-siyuan-api: 2.0.21
     transitivePeerDependencies:
@@ -7343,8 +7343,8 @@ packages:
     resolution: {integrity: sha512-we04mMt4BEqeKDxoqdJQsDFYImYlcp/yaAIkpxpMGg+9tBURfNeHPHIHkFias9VbM8yuk6xjAX6B2xJjvYE/iw==}
     dev: false
 
-  /zhi-fetch-middleware@0.2.20:
-    resolution: {integrity: sha512-WPgvjEwyBxN9wQGncmR3TyEd/mTGzkHj3sJsKHdgkyrJlcxhJK1LPX0v20XKVR4KcHyehDyz3QjDxLSdTwcfLQ==}
+  /zhi-fetch-middleware@0.2.21:
+    resolution: {integrity: sha512-W+m5mqNMn7GcDsUaDBsDS9w5V+yJsPyBKwlssnnW3ENAavRLYF/7dTkQe/TXLuW36Y3V8981jF6rcw1s6mMOeg==}
     dependencies:
       zhi-common: 1.14.2
       zhi-device: 2.3.0
