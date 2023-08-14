@@ -39,7 +39,7 @@ import { BaseExtendApi } from "~/src/adaptors/base/baseExtendApi.ts"
 export class BaseBlogApi extends BlogApi {
   protected logger: ILogger
   protected cfg: BlogConfig
-  protected readonly proxyFetch: any
+  public readonly proxyFetch: any
   protected readonly baseExtendApi: BaseExtendApi
 
   /**

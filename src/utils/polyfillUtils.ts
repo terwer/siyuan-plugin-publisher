@@ -62,18 +62,6 @@ const extractMimeType = (base64Str: string): string => {
 }
 
 /**
- * 将指定URL的图片文件转换为Base64编码字符串
- *
- * @param imageUrl 图片文件的URL地址
- * @returns 图片文件的Base64编码字符串
- */
-export const remoteImageToBase64 = async (imageUrl: string): Promise<string> => {
-  const base64String = await readFileToBase64(imageUrl)
-  const imageBase64 = base64String.split(";base64,").pop() || ""
-  return imageBase64
-}
-
-/**
  * 将远程图片转换为 base64 编码字符串，并获取图片名称和 mime 类型。
  *
  * @param imageUrl - 包含远程图片URL的字符串
@@ -83,6 +71,13 @@ export const remoteImageToBase64Info = async (
   imageUrl: string
 ): Promise<{ imageName: string; mimeType: string; imageBase64: string }> => {
   const base64String = await readFileToBase64(imageUrl)
+  return toBase64Info(imageUrl, base64String)
+}
+
+export const toBase64Info = (
+  imageUrl: string,
+  base64String: string
+): { imageName: string; mimeType: string; imageBase64: string } => {
   const imageBase64 = base64String.split(";base64,").pop() || ""
   const imageName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1)
   const mimeType = extractMimeType(base64String)
@@ -114,7 +109,7 @@ function readFileToBase64(url: string): Promise<string> {
     ;(async () => {
       let body = null
       try {
-        const response = await fetch(url)
+        const response = await window.fetch(url)
         body = await response.blob()
       } catch (e) {
         return reject(e)

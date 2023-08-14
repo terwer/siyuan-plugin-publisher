@@ -69,7 +69,7 @@ const useProxy = (middlewareUrl?: string) => {
     method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" = "GET",
     contentType: string = "application/json"
   ) => {
-    const siyuanSupported = ["application/json", "text/html", "text/xml"]
+    const siyuanSupported = ["application/json", "text/html", "text/xml", "image/png"]
     if (isUseSiyuanProxy && siyuanSupported.includes(contentType)) {
       logger.info("Using Siyuan forwardProxy, contentType=>", contentType)
       let body: any
@@ -100,8 +100,8 @@ const useProxy = (middlewareUrl?: string) => {
         const resText = fetchResult?.body
         return resText
       } else {
-        logger.error("SiYuan proxy not supported for content type:", contentType)
-        throw new Error("SiYuan proxy not supported for content type:" + contentType)
+        logger.error("SiYuan proxy directly response fetchResult for content type:", contentType)
+        return fetchResult
       }
     } else {
       logger.info("Using middleware proxy")

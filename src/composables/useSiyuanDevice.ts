@@ -34,26 +34,26 @@ export const useSiyuanDevice = () => {
 
   const isInSiyuanMainWin = () => {
     const deviceType = DeviceDetection.getDevice()
-    const isSiyuanOrSiyuanNewWin = deviceType === DeviceTypeEnum.DeviceType_Siyuan_MainWin
+    const isSiyuanMainWin = deviceType === DeviceTypeEnum.DeviceType_Siyuan_MainWin
     logger.debug("deviceType=>", deviceType)
-    logger.debug("isSiyuanOrSiyuanNewWin=>", String(isSiyuanOrSiyuanNewWin))
-    return isSiyuanOrSiyuanNewWin
+    logger.debug("isSiyuanMainWin=>", String(isSiyuanMainWin))
+    return isSiyuanMainWin
   }
 
   const isInSiyuanWidget = () => {
     const deviceType = DeviceDetection.getDevice()
-    const isSiyuanOrSiyuanNewWin = deviceType === DeviceTypeEnum.DeviceType_Siyuan_Widget
+    const isSiyuanWidget = deviceType === DeviceTypeEnum.DeviceType_Siyuan_Widget
     logger.debug("deviceType=>", deviceType)
-    logger.debug("isSiyuanOrSiyuanNewWin=>", String(isSiyuanOrSiyuanNewWin))
-    return isSiyuanOrSiyuanNewWin
+    logger.debug("isSiyuanWidget=>", String(isSiyuanWidget))
+    return isSiyuanWidget
   }
 
   const isInChromeExtension = () => {
     const deviceType = DeviceDetection.getDevice()
-    const isSiyuanOrSiyuanNewWin = deviceType === DeviceTypeEnum.DeviceType_Chrome_Extension
+    const isChromeExtension = deviceType === DeviceTypeEnum.DeviceType_Chrome_Extension
     logger.debug("deviceType=>", deviceType)
-    logger.debug("isSiyuanOrSiyuanNewWin=>", String(isSiyuanOrSiyuanNewWin))
-    return isSiyuanOrSiyuanNewWin
+    logger.debug("isChromeExtension=>", String(isChromeExtension))
+    return isChromeExtension
   }
 
   const isInSiyuanOrSiyuanNewWin = () => {

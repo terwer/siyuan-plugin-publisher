@@ -30,7 +30,7 @@ import { reactive, ref } from "vue"
 import { MediaObject } from "zhi-blog-api"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import Adaptors from "~/src/adaptors"
-import { base64ToBuffer, remoteImageToBase64 } from "~/src/utils/polyfillUtils.ts"
+import { base64ToBuffer, remoteImageToBase64Info } from "~/src/utils/polyfillUtils.ts"
 
 const logger = createAppLogger("typecho-test")
 
@@ -228,7 +228,8 @@ const typechoHandleApi = async () => {
 
         const imageUrl = "https://static-rs-terwer.oss-cn-beijing.aliyuncs.com/test/image-20230812091531-hibwr1g.png"
         const imageName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1)
-        const imageBase64 = await remoteImageToBase64(imageUrl)
+        const base64Info = await remoteImageToBase64Info(imageUrl)
+        const imageBase64 = base64Info.imageBase64
         logger.debug("imageBase64=>", { imageBase64 })
 
         const bits = base64ToBuffer(imageBase64)

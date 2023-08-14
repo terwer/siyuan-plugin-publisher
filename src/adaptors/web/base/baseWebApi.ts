@@ -38,7 +38,7 @@ import { BaseExtendApi } from "~/src/adaptors/base/baseExtendApi.ts"
 class BaseWebApi extends WebApi {
   protected logger: ILogger
   protected cfg: WebConfig
-  protected readonly proxyFetch: any
+  public readonly proxyFetch: any
   protected readonly baseExtendApi: BaseExtendApi
 
   /**
@@ -83,6 +83,7 @@ class BaseWebApi extends WebApi {
 
   public async newMediaObject(mediaObject: MediaObject, customHandler?: any): Promise<Attachment> {
     const bits = mediaObject.bits
+    this.logger.debug("newMediaObject on baseWebApi =>", mediaObject)
     const blob = new Blob([bits], { type: mediaObject.type })
     const res = await this.uploadFile(blob as File)
     return {
