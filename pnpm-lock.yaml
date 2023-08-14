@@ -57,8 +57,8 @@ dependencies:
     specifier: ^3.1.1
     version: 3.1.1
   zhi-blog-api:
-    specifier: ^1.20.17
-    version: 1.20.17
+    specifier: ^1.20.21
+    version: 1.20.21
   zhi-common:
     specifier: ^1.14.2
     version: 1.14.2
@@ -7325,6 +7325,12 @@ packages:
 
   /zhi-blog-api@1.20.17:
     resolution: {integrity: sha512-OnAEh0SHmkQvDPmfM1UBcvvXHk4fwUVgXb4w2F6bqO+RDye8B49VaPSwvLUyNI7MaHIFbIyE1yFcupJd3P3/uQ==}
+    dependencies:
+      zhi-lib-base: 0.4.4
+    dev: false
+
+  /zhi-blog-api@1.20.21:
+    resolution: {integrity: sha512-0cDqukNxvIoAa8rK8qdh3rulAqH1qNH2cGSunK1vl3nbMVAAeCQVR4XiDXDMwxer68bjVY9z1HQDN2v2cjctog==}
     dependencies:
       zhi-lib-base: 0.4.4
     dev: false
