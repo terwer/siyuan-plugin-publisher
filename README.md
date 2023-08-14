@@ -165,7 +165,7 @@ more useful tools~
   Names not listed in order
 
   |Name|version|vendor|
-      | :---------: | :-----: | :---------: |
+  | :---------: | :-----: | :---------: |
   |turbo|1.9+|Vercel|
   |vite|4.2+|Evan You|
   |Svelte|3.57+|Rich Harris|
