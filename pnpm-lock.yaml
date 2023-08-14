@@ -39,8 +39,8 @@ dependencies:
     specifier: ^0.7.9
     version: 0.7.9
   siyuan-plugin-picgo:
-    specifier: ^1.2.0
-    version: 1.2.0(typescript@5.1.6)
+    specifier: ^1.4.4
+    version: 1.4.4(typescript@5.1.6)
   uuid:
     specifier: ^9.0.0
     version: 9.0.0
@@ -6109,8 +6109,8 @@ packages:
       sax: 1.2.4
     dev: false
 
-  /siyuan-plugin-picgo@1.2.0(typescript@5.1.6):
-    resolution: {integrity: sha512-FrEo8XbJeMS5XsD1BGdIqaNFGi2RcVcmMOif629ZBFNqyCPfsziQVgpfIlbFE5jWkPh5dWrO8ZnUR6BIVb9bBw==}
+  /siyuan-plugin-picgo@1.4.4(typescript@5.1.6):
+    resolution: {integrity: sha512-ZUFHzoq1UEWpI3achLlDRnjtNmHULP1DnnIRQIGn7wJD3FBsbpXyleLlgjAoAz0QhsC79byKBqjTsUKVR+xaLQ==}
     dependencies:
       '@element-plus/icons-vue': 2.1.0(vue@3.3.4)
       '@fortawesome/fontawesome-svg-core': 6.4.2
