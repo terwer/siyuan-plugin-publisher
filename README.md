@@ -18,8 +18,8 @@ In later releases, the release configuration will only be backward compatible to
 
 ## Recent critical updates and bug fixes
 
+- Zhihu platform supports automatic image upload
 - When the Picgo plugin is not installed, some platforms can use the built-in image upload, such as Cnblogs, Typecho, WordPress
-- [General release] The Hexo platform supports custom Yaml
 - Platforms that do not support image link replacement use the platform's own image upload, such as Zhihu, Notion, adapting...
 - All platforms migrated to official forward proxy
 - Support replacing picture bed image links with Picgo plugin

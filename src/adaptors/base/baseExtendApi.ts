@@ -188,7 +188,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
       base64Info = toBase64Info(url, base64String)
     }
 
-    this.logger.info("readFileToBase64 proxyFetch base64Info =>", { base64Info })
+    this.logger.debug("readFileToBase64 proxyFetch base64Info =>", { base64Info })
     return base64Info
   }
 }

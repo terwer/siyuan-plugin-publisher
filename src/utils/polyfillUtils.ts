@@ -129,6 +129,7 @@ function readFileToBase64(url: string): Promise<string> {
   })
 }
 
-const uintArrayToBuffer = (uint8Array: Uint8Array): Buffer => {
+export const arrayToBuffer = (ab: ArrayBuffer): Buffer => {
+  const uint8Array = new Uint8Array(ab)
   return Buffer.from(uint8Array)
 }

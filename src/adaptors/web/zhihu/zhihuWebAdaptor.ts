@@ -27,6 +27,9 @@ import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
 import { Post, UserBlog } from "zhi-blog-api"
 import * as cheerio from "cheerio"
 import { JsonUtil, StrUtil } from "zhi-common"
+import CryptoJS from "crypto-js"
+import { arrayToBuffer } from "~/src/utils/polyfillUtils.ts"
+import {SiyuanDevice} from "zhi-device";
 
 /**
  * 知乎网页授权适配器
@@ -226,11 +229,87 @@ class ZhihuWebAdaptor extends BaseWebApi {
     this.logger.info("文章收录到专栏成功")
   }
 
-  public async uploadFile(file: File): Promise<any> {
+  public async uploadFile(file: File | Blob): Promise<any> {
     this.logger.debug("zhihu start uploadFile =>", file)
+    if (file instanceof Blob) {
+      // 1. 获取图片hash
+      const ab = await file.arrayBuffer()
+      const bits = arrayToBuffer(ab)
+      const hash = CryptoJS.MD5(bits.toString("utf8")).toString()
+      // const wordArray = CryptoJS.enc.Latin1.parse(bits.toString("latin1"))
+      // const hash = CryptoJS.MD5(wordArray).toString()
+      const params = JSON.stringify({
+        image_hash: hash,
+        source: "article",
+      })
+      this.logger.debug("zhihu uploadFile, params =>", params)
+      const fileResp = await this.webProxyFetch("https://api.zhihu.com/images", [], params, "POST")
+      this.logger.debug("zhihu uploadFile, fileResp =>", fileResp)
 
-    throw new Error("开发中=>zhihu uploadFile")
+      // 开始上传
+      const upload_file = fileResp.upload_file
+      if (fileResp.upload_file.state == 1) {
+        const imgDetail = await this.untilImageDone(upload_file.image_id)
+        this.logger.debug("imgDetail", imgDetail)
+        upload_file.object_key = imgDetail.original_hash
+      } else {
+        const token = fileResp.upload_token
+        try {
+          // https://help.aliyun.com/zh/oss/developer-reference/simple-upload-8?spm=a2c4g.11186623.0.0.7e531769TAYbAL#concept-2161572
+          let client = new OSS({
+            endpoint: "https://zhihu-pics-upload.zhimg.com",
+            accessKeyId: token.access_id,
+            accessKeySecret: token.access_key,
+            stsToken: token.access_token,
+            cname: true,
+            bucket: "zhihu-pics",
+          })
+          const finalUrl = await client.put(upload_file.object_key, new Blob([bits]))
+          this.logger.debug("zhihu uploadFile finished", { client, finalUrl })
+        } catch (e) {
+          this.logger.error("知乎图片上传失败 =>", e)
+          throw new Error("知乎图片上传失败, 错误原因 =>" + e)
+        }
+      }
+
+      if (file.type === "image/gif") {
+        // add extension for gif
+        upload_file.object_key = upload_file.object_key + ".gif"
+      }
+      return {
+        id: upload_file.object_key,
+        object_key: upload_file.object_key,
+        // url: "https://pic1.zhimg.com/80/v2-af46e3b737c2d69b5f24420009f59455_1440w.jpeg",
+        url: "https://pic4.zhimg.com/" + upload_file.object_key,
+        // url: 'https://pic1.zhimg.com/80/' + upload_file.object_key + '_hd.png',
+      }
+    }
+
     return {}
+  }
+
+  // ================
+  // private methods
+  // ================
+  private async untilImageDone(image_id: string): Promise<any> {
+    const that = this
+    return new Promise(function (resolve, reject) {
+      function waitToNext() {
+        that.logger.debug("untilImageDone start processing...", image_id)
+        ;(async () => {
+          const imgDetail = await that.webProxyFetch(`https://api.zhihu.com/images/${image_id}`, [], {}, "GET")
+          that.logger.debug("imgDetail", imgDetail)
+          if (imgDetail.status != "processing") {
+            that.logger.info("image upload all done")
+            resolve(imgDetail)
+          } else {
+            that.logger.debug("go next", waitToNext)
+            setTimeout(waitToNext, 300)
+          }
+        })()
+      }
+      waitToNext()
+    })
   }
 }
 
