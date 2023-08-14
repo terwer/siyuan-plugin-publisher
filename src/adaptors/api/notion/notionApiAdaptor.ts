@@ -154,7 +154,7 @@ class NotionApiAdaptor extends BaseBlogApi {
       },
       children: notionObject,
     }
-    this.logger.debug("before createPage, notionObject=>", notionObject)
+    this.logger.debug("before createPage =>", { markdownText, notionObject })
     const resp = await this.notionRequest("/pages", params, "POST")
     if (resp.object !== "page") {
       throw new Error("Notion create page error")
