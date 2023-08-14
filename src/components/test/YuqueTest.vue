@@ -36,8 +36,11 @@ import { CommonFetchClient } from "zhi-fetch-middleware"
 import { YuqueConfig } from "~/src/adaptors/api/yuque/yuqueConfig.ts"
 import { YuqueApiAdaptor } from "~/src/adaptors/api/yuque/yuqueApiAdaptor.ts"
 import Adaptors from "~/src/adaptors"
+import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 
 const logger = createAppLogger("yuque-test")
+
+const { t } = useVueI18n()
 
 const params = ref("{}")
 const showParamFile = ref(false)
@@ -253,7 +256,7 @@ const yuqueHandleApi = async () => {
     isLoading.value = false
   } catch (e) {
     logMessage.value = e
-    logger.error(e)
+    logger.error(t("main.opt.failure") + "=>", e)
     isLoading.value = false
   }
 }

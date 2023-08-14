@@ -23,34 +23,31 @@
  * questions.
  */
 
-import { PageTypeEnum, WebConfig } from "zhi-blog-api"
-import { CommonWebPlaceholder } from "~/src/adaptors/web/base/CommonWebPlaceholder.ts"
+import { SiyuanConfig } from "zhi-siyuan-api"
+import { RemovableRef, StorageSerializers, useLocalStorage } from "@vueuse/core"
 
-/**
- * 网页授权配置
- */
-export class CommonWebConfig extends WebConfig {
+const useSiyuanSetting = () => {
+  const storageKey = "siyuan-cfg"
+
   /**
-   * 操作提示
+   * 获取思源笔记配置
+   *
+   * @author terwer
+   * @since 0.6.0
    */
-  public override placeholder = {} as CommonWebPlaceholder
-
-  constructor(home: string, apiUrl: string, username: string, password: string, middlewareUrl?: string) {
-    super(password, middlewareUrl)
-    this.home = home
-    this.apiUrl = apiUrl
-    this.username = username
-    this.password = password
-    this.apiStatus = false
-    this.blogid = ""
-    this.blogName = ""
-    this.posidKey = ""
-    this.previewUrl = ""
-    this.pageType = PageTypeEnum.Markdown
-    this.middlewareUrl = middlewareUrl
-    this.usernameEnabled = false
-    this.allowPreviewUrlChange = true
-    this.showTokenTip = false
-    this.placeholder = new CommonWebPlaceholder()
+  const getSiyuanSetting = (): RemovableRef<SiyuanConfig> => {
+    let baseUrl = "http://127.0.0.1:6806"
+    let token = ""
+    let middlewareUrl = "https://api.terwer.space/api/middleware"
+    const initialValue = new SiyuanConfig(baseUrl, token)
+    initialValue.middlewareUrl = middlewareUrl
+    const siyuanConfig = useLocalStorage<SiyuanConfig>(storageKey, initialValue, {
+      serializer: StorageSerializers.object,
+    })
+    return siyuanConfig
   }
+
+  return { getSiyuanSetting }
 }
+
+export { useSiyuanSetting }

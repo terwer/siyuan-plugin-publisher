@@ -23,14 +23,12 @@
  * questions.
  */
 
-import { createApp } from "vue"
+import {createApp} from "vue"
 import App from "~/src/App.vue"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { useVueRouter } from "~/src/composables/useVueRouter.ts"
+import {createAppLogger} from "~/src/utils/appLogger.ts"
+import {useVueRouter} from "~/src/composables/useVueRouter.ts"
 import i18n from "~/src/locales"
-import { InjectKeys } from "~/src/utils/injectKeys.ts"
-import { AppInstance } from "~/src/appInstance.ts"
-import { createPinia } from "pinia"
+import {createPinia} from "pinia"
 
 /**
  * Vue 入口
@@ -55,11 +53,6 @@ const createVueApp = async (isMount?: boolean) => {
   // router
   const router = useVueRouter()
   app.use(router)
-
-  // appInstance
-  const appInstance = new AppInstance()
-  app.provide(InjectKeys.APP_INSTANCE, appInstance)
-  logger.info("appInstance provided=>", appInstance)
 
   // ElementPlus 包太大，需要改成按需引入
   // https://element-plus.org/zh-CN/guide/quickstart.html#%E6%8C%89%E9%9C%80%E5%AF%BC%E5%85%A5

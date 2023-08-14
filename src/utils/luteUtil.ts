@@ -51,7 +51,7 @@ class LuteUtil {
     this.logger.info("使用Lute渲染Markdown")
     const lute = Lute.New()
     const html = lute.MarkdownStr("", md)
-    this.logger.debug("md to html =>", html)
+    this.logger.debug("md to html =>", { html })
     return html
   }
 }

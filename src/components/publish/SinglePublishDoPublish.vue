@@ -112,7 +112,7 @@ const handlePublish = async () => {
     formData.actionEnable = true
   } catch (e) {
     ElMessage.error(e.message)
-    logger.error(e)
+    logger.error(t("main.opt.failure") + "=>", e)
   } finally {
     formData.isPublishLoading = false
   }
@@ -162,7 +162,7 @@ const doDelete = async () => {
     }
   } catch (e) {
     ElMessage.error(e.message)
-    logger.error(e)
+    logger.error(t("main.opt.failure") + "=>", e)
   } finally {
     formData.isDeleteLoading = false
   }
@@ -224,7 +224,7 @@ const initPage = async () => {
     refreshChangeTips()
   } catch (e) {
     const errMsg = t("main.opt.failure") + "=>" + e
-    logger.error(errMsg)
+    logger.error(t("main.opt.failure") + "=>", e)
     await kernelApi.pushErrMsg({
       msg: errMsg,
       timeout: 7000,

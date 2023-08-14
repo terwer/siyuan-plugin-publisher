@@ -23,13 +23,11 @@
  * questions.
  */
 
-import { CommonWebConfig } from "~/src/adaptors/web/base/CommonWebConfig.ts"
+import { CommonBlogPlaceholder } from "~/src/adaptors/api/base/commonBlogPlaceholder.ts"
 
 /**
- * 简书配置
+ * Github 操作提示
  */
-export class JianshuConfig extends CommonWebConfig {
-  constructor(username: string, password: string, middlewareUrl?: string) {
-    super("", "", username, password, middlewareUrl)
-  }
-}
+class CommonGithubPlaceholder extends CommonBlogPlaceholder {}
+
+export { CommonGithubPlaceholder }

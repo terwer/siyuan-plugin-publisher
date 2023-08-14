@@ -31,8 +31,11 @@ import { fileToBuffer } from "~/src/utils/polyfillUtils.ts"
 import { SimpleXmlRpcClient } from "simple-xmlrpc"
 import { MediaObject } from "zhi-blog-api"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 
 const logger = createAppLogger("wordpress-test")
+
+const { t } = useVueI18n()
 
 const params = ref("{}")
 const showParamFile = ref(false)
@@ -248,7 +251,7 @@ const wordpressHandleApi = async () => {
     isLoading.value = false
   } catch (e) {
     logMessage.value = e
-    logger.error(e)
+    logger.error(t("main.opt.failure") + "=>", e)
     isLoading.value = false
   }
 }

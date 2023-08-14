@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { JuejinConfig } from "~/src/adaptors/web/juejin/JuejinConfig.ts"
+import { JuejinConfig } from "~/src/adaptors/web/juejin/juejinConfig.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { AppInstance } from "~/src/appInstance.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"

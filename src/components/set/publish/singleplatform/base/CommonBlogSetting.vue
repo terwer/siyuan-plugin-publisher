@@ -31,7 +31,7 @@ import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { onMounted, reactive, ref, toRaw } from "vue"
 import { DynamicConfig, DynamicJsonCfg, getDynCfgByKey, setDynamicJsonCfg } from "~/src/platforms/dynamicConfig.ts"
 import { SypConfig } from "~/syp.config.ts"
-import { CommonblogConfig } from "~/src/adaptors/api/base/CommonblogConfig.ts"
+import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
 import { PageTypeEnum, PasswordType } from "zhi-blog-api"
@@ -86,7 +86,7 @@ const getSettingTips = (bid?: string) => {
 // datas
 const isLoading = ref(false)
 const formData = reactive({
-  cfg: {} as CommonblogConfig,
+  cfg: {} as CommonBlogConfig,
   settingTips: "",
   kwSpaces: [],
 
@@ -139,11 +139,11 @@ const valiConf = async () => {
   } catch (e) {
     formData.cfg.apiStatus = false
     errMsg = e
-    logger.error(e)
+    logger.error(t("main.opt.failure") + "=>", e)
   }
 
   if (!formData.cfg.apiStatus) {
-    logger.error(errMsg.toString(), "")
+    logger.error(errMsg.toString())
     ElMessage.error(t("setting.blog.vali.error") + "=>" + errMsg)
   } else {
     ElMessage.success(t("main.opt.success"))
@@ -209,11 +209,11 @@ const initConf = async () => {
   formData.dynCfg = getDynCfgByKey(formData.dynamicConfigArray, props.apiType)
 
   logger.debug("Commonblog通用Setting配置初始化")
-  let conf = props.cfg as CommonblogConfig
+  let conf = props.cfg as CommonBlogConfig
   // 如果没有配置。读取默认配置
   if (ObjectUtil.isEmptyObject(conf)) {
     const apiConf = formData.setting[props.apiType]
-    conf = JsonUtil.safeParse<CommonblogConfig>(apiConf, {} as CommonblogConfig)
+    conf = JsonUtil.safeParse<CommonBlogConfig>(apiConf, {} as CommonBlogConfig)
   }
 
   if (conf) {

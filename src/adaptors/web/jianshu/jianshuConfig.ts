@@ -23,12 +23,12 @@
  * questions.
  */
 
-import { CommonWebConfig } from "~/src/adaptors/web/base/CommonWebConfig.ts"
+import { CommonWebConfig } from "~/src/adaptors/web/base/commonWebConfig.ts"
 
 /**
- * 微信公众号配置
+ * 简书配置
  */
-export class WechatConfig extends CommonWebConfig {
+export class JianshuConfig extends CommonWebConfig {
   constructor(username: string, password: string, middlewareUrl?: string) {
     super("", "", username, password, middlewareUrl)
   }

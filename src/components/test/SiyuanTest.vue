@@ -31,8 +31,12 @@ import { Utils } from "~/src/utils/utils.ts"
 import { SiYuanApiAdaptor, SiyuanConfig, SiyuanKernelApi } from "zhi-siyuan-api"
 import { MediaObject, Post } from "zhi-blog-api"
 import { fileToBuffer } from "~/src/utils/polyfillUtils.ts"
+import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 
 const logger = createAppLogger("siyuan-test")
+
+// uses
+const { t } = useVueI18n()
 
 const params = ref("{}")
 const showParamFile = ref(false)
@@ -324,7 +328,7 @@ const siyuanHandleApi = async () => {
     isLoading.value = false
   } catch (e) {
     logMessage.value = e
-    logger.error(e)
+    logger.error(t("main.opt.failure") + "=>", e)
     isLoading.value = false
   }
 }

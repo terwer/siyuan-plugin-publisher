@@ -24,7 +24,7 @@
  */
 
 import { PageTypeEnum, PasswordType } from "zhi-blog-api"
-import { MetaweblogConfig } from "~/src/adaptors/api/base/metaweblog/MetaweblogConfig.ts"
+import { MetaweblogConfig } from "~/src/adaptors/api/base/metaweblog/metaweblogConfig.ts"
 
 /**
  * 博客园配置

@@ -34,7 +34,6 @@ import { useZhihuWeb } from "~/src/adaptors/web/zhihu/useZhihuWeb.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { useMetaweblogApi } from "~/src/adaptors/api/metaweblog/useMetaweblogApi.ts"
 import { useNotionApi } from "~/src/adaptors/api/notion/useNotionApi.ts"
-import { YamlConvertAdaptor } from "~/src/platforms/yamlConvertAdaptor.ts"
 import { useHexoApi } from "~/src/adaptors/api/hexo/useHexoApi.ts"
 
 /**
@@ -117,8 +116,8 @@ class Adaptors {
       //   break
       // }
       case SubPlatformType.System_Siyuan: {
-        const { cfg } = useSiyuanApi()
-        conf = cfg
+        const { siyuanConfig } = useSiyuanApi()
+        conf = siyuanConfig
         break
       }
       default: {
@@ -214,29 +213,30 @@ class Adaptors {
     return blogAdaptor
   }
 
-  /**
-   * 根据平台key查找YAML适配器
-   *
-   * @param key
-   * @param newCfg
-   */
-  public static async getYamlAdaptor(key: string, newCfg?: any): Promise<YamlConvertAdaptor> {
-    let yamlAdp = null
-    const type: SubPlatformType = getSubPlatformTypeByKey(key)
-
-    switch (type) {
-      case SubPlatformType.Github_Hexo: {
-        const { yamlAdaptor } = await useHexoApi(key, newCfg)
-        yamlAdp = yamlAdaptor
-        break
-      }
-      default: {
-        break
-      }
-    }
-    this.logger.debug(`get yamlAdaptor from key ${key}=>`, yamlAdp)
-    return yamlAdp
-  }
+  // 新增 preEditPost ， 此方法不再需要
+  // /**
+  //  * 根据平台key查找YAML适配器
+  //  *
+  //  * @param key
+  //  * @param newCfg
+  //  */
+  // public static async getYamlAdaptor(key: string, newCfg?: any): Promise<YamlConvertAdaptor> {
+  //   let yamlAdp = null
+  //   const type: SubPlatformType = getSubPlatformTypeByKey(key)
+  //
+  //   switch (type) {
+  //     case SubPlatformType.Github_Hexo: {
+  //       const { yamlAdaptor } = await useHexoApi(key, newCfg)
+  //       yamlAdp = yamlAdaptor
+  //       break
+  //     }
+  //     default: {
+  //       break
+  //     }
+  //   }
+  //   this.logger.debug(`get yamlAdaptor from key ${key}=>`, yamlAdp)
+  //   return yamlAdp
+  // }
 }
 
 export default Adaptors

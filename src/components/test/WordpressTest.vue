@@ -32,8 +32,11 @@ import { SimpleXmlRpcClient } from "simple-xmlrpc"
 import { MediaObject } from "zhi-blog-api"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import Adaptors from "~/src/adaptors"
+import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 
 const logger = createAppLogger("wordpress-test")
+
+const { t } = useVueI18n()
 
 const params = ref("{}")
 const showParamFile = ref(false)
@@ -229,6 +232,8 @@ const wordpressHandleApi = async () => {
         break
       }
       case METHOD_NEW_MEDIA_OBJECT: {
+        const key = "wordpress_Wordpress"
+
         const file = paramFile.value
         const bits = await fileToBuffer(file)
         const mediaObject = new MediaObject(file.name, file.type, bits)
@@ -241,11 +246,31 @@ const wordpressHandleApi = async () => {
           bits: mediaObject.bits,
           overwrite: true,
         }
-        const xmlrpcApiUrl = "http://127.0.0.1:3000/xmlrpc.php"
-        const client = new SimpleXmlRpcClient(xmlrpcApiUrl, "", {})
-        const result = await client.methodCall("metaWeblog.newMediaObject", ["", "terwer", "123456", metadata])
+        const wordpressApiAdaptor = await Adaptors.getAdaptor(key)
+        const wordpressApi = Utils.blogApi(appInstance, wordpressApiAdaptor)
+        const result = await wordpressApi.newMediaObject(metadata)
         logMessage.value = JSON.stringify(result)
         logger.info("wordpress new mediaObject result=>", result)
+
+        // const key = "wordpress_Wordpress"
+        //
+        // const file = paramFile.value
+        // const bits = await fileToBuffer(file)
+        // const mediaObject = new MediaObject(file.name, file.type, bits)
+        // logger.info("mediaObject=>", mediaObject)
+        //
+        // // 设置文件的元数据
+        // const metadata = {
+        //   name: mediaObject.name,
+        //   type: mediaObject.type,
+        //   bits: mediaObject.bits,
+        //   overwrite: true,
+        // }
+        // const cfg = await Adaptors.getCfg(key)
+        // const client = new SimpleXmlRpcClient(appInstance, cfg.apiUrl, {})
+        // const result = await client.methodCall("metaWeblog.newMediaObject", ["", cfg.username, cfg.password, metadata])
+        // logMessage.value = JSON.stringify(result)
+        // logger.info("wordpress new mediaObject result=>", result)
         break
       }
       default:
@@ -255,7 +280,7 @@ const wordpressHandleApi = async () => {
     isLoading.value = false
   } catch (e) {
     logMessage.value = e
-    logger.error(e)
+    logger.error(t("main.opt.failure") + "=>", e)
     isLoading.value = false
   }
 }

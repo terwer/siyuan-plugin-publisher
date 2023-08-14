@@ -27,11 +27,10 @@
 import { AppInstance } from "~/src/appInstance.ts"
 import { Utils } from "~/src/utils/utils.ts"
 import { reactive, ref } from "vue"
-import { fileToBuffer } from "~/src/utils/polyfillUtils.ts"
-import { SimpleXmlRpcClient } from "simple-xmlrpc"
 import { MediaObject } from "zhi-blog-api"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import Adaptors from "~/src/adaptors"
+import { base64ToBuffer, remoteImageToBase64Info } from "~/src/utils/polyfillUtils.ts"
 
 const logger = createAppLogger("typecho-test")
 
@@ -223,23 +222,65 @@ const typechoHandleApi = async () => {
         break
       }
       case METHOD_NEW_MEDIA_OBJECT: {
-        const file = paramFile.value
-        const bits = await fileToBuffer(file)
-        const mediaObject = new MediaObject(file.name, file.type, bits)
+        const key = "metaweblog_Typecho"
+
+        const typechoApiAdaptor = await Adaptors.getAdaptor(key)
+
+        const imageUrl = "https://static-rs-terwer.oss-cn-beijing.aliyuncs.com/test/image-20230812091531-hibwr1g.png"
+        const imageName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1)
+        const base64Info = await remoteImageToBase64Info(imageUrl)
+        const imageBase64 = base64Info.imageBase64
+        logger.debug("imageBase64=>", { imageBase64 })
+
+        const bits = base64ToBuffer(imageBase64)
+        logger.debug("bits=>", bits)
+
+        const mediaObject = new MediaObject(imageName, "image/png", bits)
         logger.info("mediaObject=>", mediaObject)
 
-        // 设置文件的元数据
-        const metadata = {
-          name: mediaObject.name,
-          type: mediaObject.type,
-          bits: mediaObject.bits,
-          overwrite: true,
-        }
-        const xmlrpcApiUrl = "http://127.0.0.1:3000/xmlrpc.php"
-        const client = new SimpleXmlRpcClient(xmlrpcApiUrl, "", {})
-        const result = await client.methodCall("metaWeblog.newMediaObject", ["", "terwer", "123456", metadata])
+        const typechoApi = Utils.blogApi(appInstance, typechoApiAdaptor)
+        logger.info("typechoApi=>", typechoApi)
+        const result = await typechoApi.newMediaObject(mediaObject)
         logMessage.value = JSON.stringify(result)
         logger.info("typecho new mediaObject result=>", result)
+
+        // const key = "metaweblog_Typecho"
+        //
+        // const file = paramFile.value
+        // const bits = await fileToBuffer(file)
+        // const mediaObject = new MediaObject(file.name, file.type, bits)
+        // logger.info("mediaObject=>", mediaObject)
+        //
+        // // 设置文件的元数据
+        // const metadata = {
+        //   name: mediaObject.name,
+        //   type: mediaObject.type,
+        //   bits: mediaObject.bits,
+        //   overwrite: true,
+        // }
+        // const typechoApiAdaptor = await Adaptors.getAdaptor(key)
+        // const typechoApi = Utils.blogApi(appInstance, typechoApiAdaptor)
+        // const result = await typechoApi.newMediaObject(metadata)
+        // logMessage.value = JSON.stringify(result)
+        // logger.info("typecho new mediaObject result=>", result)
+
+        // const file = paramFile.value
+        // const bits = await fileToBuffer(file)
+        // const mediaObject = new MediaObject(file.name, file.type, bits)
+        // logger.info("mediaObject=>", mediaObject)
+        //
+        // // 设置文件的元数据
+        // const metadata = {
+        //   name: mediaObject.name,
+        //   type: mediaObject.type,
+        //   bits: mediaObject.bits,
+        //   overwrite: true,
+        // }
+        // const xmlrpcApiUrl = "http://127.0.0.1:3000/xmlrpc.php"
+        // const client = new SimpleXmlRpcClient(xmlrpcApiUrl, "", {})
+        // const result = await client.methodCall("metaWeblog.newMediaObject", ["", "terwer", "123456", metadata])
+        // logMessage.value = JSON.stringify(result)
+        // logger.info("typecho new mediaObject result=>", result)
         break
       }
       default:

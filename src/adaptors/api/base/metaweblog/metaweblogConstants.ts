@@ -38,6 +38,7 @@ class MetaweblogConstants {
   public static METHOD_GET_RECENT_POSTS = "metaWeblog.getRecentPosts"
   public static METHOD_GET_POST = "metaWeblog.getPost"
   public static METHOD_GET_CATEGORIES = "metaWeblog.getCategories"
+  public static METHOD_NEW_MEDIA_OBJECT = "metaWeblog.newMediaObject"
 }
 
 export { MetaweblogConstants }

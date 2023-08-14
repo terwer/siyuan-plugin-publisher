@@ -265,9 +265,6 @@ export default {
     "It is currently in the pendant mode. Starting from version 0.1.0, there is no need to reference the pendant on all pages. You only need to reference a pendant on the parent page. The specific rules are as follows: 1. If there are no subsidiaries, it will be compatible with the previous method of version 0.0.3 to display the release page of the current document. 2. If a subsidiary document is detected, all the subsidiaries will be displayed in a list and paging. You can choose a sub -document separately for release operations.",
   "blog.newwin.open": "Open in a new window",
   "blog.change.siyuan.api": "Modify Siyuan API address",
-  "setting.blog.siyuan.password": "Siyuan Note token, please copying from【set up-> about 】",
-  "setting.blog.siyuan.apiurl":
-    "The API address of Siyuan Note, including ports, for example: http://127.0.0.0.1: 6806",
   "setting.blog.siyuan.current.apiurl": "Current apiUrl=>",
   "setting.conf.export": "Export config",
   "setting.conf.import": "Import config",
@@ -545,4 +542,9 @@ export default {
   "main.data.empty": "No data",
   "enableKnowledgeSpace.Tips": "After validation, a list of available knowledge spaces is listed, and you can modify the default knowledge spaces as needed and save them",
   "post.bind.auto.tips": "The ID here is automatically saved by the publishing tool, if you are not clear about the principle, please do not modify it",
+  "siyuan.config.setting": "Source settings",
+  "setting.blog.siyuan.apiurl": "Siyuan API address",
+  "setting.blog.siyuan.apiurl.tip": "The API address of Siyuan Note, including ports, The default address of Siyuan API is: http://127.0.0.1;6806",
+  "setting.blog.siyuan.password": "Siyuan Token",
+  "setting.blog.siyuan.password.tip": "Siyuan Token, which is empty by default",
 }

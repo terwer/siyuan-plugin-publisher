@@ -27,8 +27,7 @@ import { beforeEach, describe, it } from "vitest"
 import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
 import { config, mount } from "@vue/test-utils"
 import App from "~/src/App.vue"
-import { createVueApp } from "~/src/utils/VueUtils.ts"
-import { InjectKeys } from "~/src/utils/injectKeys.ts"
+import { createVueApp } from "~/src/utils/vueUtils.ts"
 
 describe("test usePublishConfig", async () => {
   const instance = await createVueApp()
@@ -46,8 +45,6 @@ describe("test usePublishConfig", async () => {
     // 等价于访问首页: http://localhost:5173/#/?id=20230731201306-ps6ld6p
 
     const wrapper = mount(App)
-    // 暴露 Vue 实例
-    app.provide(InjectKeys.VUE_INSTANCE, app)
     console.log(wrapper.html())
   })
 

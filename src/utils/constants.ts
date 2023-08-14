@@ -30,3 +30,13 @@ export const isDebugMode = process.env.DEBUG_MODE === "true"
  * 动态配置key，全系统唯一，请勿更改
  */
 export const DYNAMIC_CONFIG_KEY = "dynamic-config"
+
+/**
+ * 必须使用平台自带的图片上传的平台
+ */
+export const MUST_USE_OWN_PLATFORM = ["custom_Zhihu"]
+
+/**
+ * 必须使用图床的平台
+ */
+export const MUST_USE_PICBED_PLATFORM = ["common_Yuque", "common_Notion", "common_Hexo"]

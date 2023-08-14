@@ -23,11 +23,32 @@
  * questions.
  */
 
-import { CommonblogPlaceholder } from "~/src/adaptors/api/base/CommonblogPlaceholder.ts"
+import { BlogConfig, PageTypeEnum } from "zhi-blog-api"
+import { CommonBlogPlaceholder } from "~/src/adaptors/api/base/commonBlogPlaceholder.ts"
 
-/**
- * Github 操作提示
- */
-class CommonGithubPlaceholder extends CommonblogPlaceholder {}
+export class CommonBlogConfig extends BlogConfig {
 
-export { CommonGithubPlaceholder }
+  /**
+   * 操作提示
+   */
+  public override placeholder = {} as CommonBlogPlaceholder
+
+  constructor(home: string, apiUrl: string, username: string, password: string, middlewareUrl?: string) {
+    super()
+    this.home = home
+    this.apiUrl = apiUrl
+    this.username = username
+    this.password = password
+    this.apiStatus = false
+    this.blogid = ""
+    this.blogName = ""
+    this.posidKey = ""
+    this.previewUrl = ""
+    this.pageType = PageTypeEnum.Markdown
+    this.middlewareUrl = middlewareUrl
+    this.usernameEnabled = false
+    this.allowPreviewUrlChange = true
+    this.showTokenTip = false
+    this.placeholder = new CommonBlogPlaceholder()
+  }
+}

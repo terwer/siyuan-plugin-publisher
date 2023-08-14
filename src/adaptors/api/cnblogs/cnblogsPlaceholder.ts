@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { MetaweblogPlaceholder } from "~/src/adaptors/api/base/metaweblog/MetaweblogPlaceholder.ts"
+import { MetaweblogPlaceholder } from "~/src/adaptors/api/base/metaweblog/metaweblogPlaceholder.ts"
 
 /**
  * 博客园操作提示

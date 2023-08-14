@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { JianshuConfig } from "~/src/adaptors/web/jianshu/JianshuConfig.ts"
+import { JianshuConfig } from "~/src/adaptors/web/jianshu/jianshuConfig.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { AppInstance } from "~/src/appInstance.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"

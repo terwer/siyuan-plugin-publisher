@@ -23,4 +23,4 @@
  * questions.
  */
 
-declare module "markdown-to-notion"
+declare module "zhi-notion-markdown"

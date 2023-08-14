@@ -23,8 +23,7 @@
  * questions.
  */
 
-import { createVueApp } from "./utils/VueUtils"
-import { InjectKeys } from "./utils/injectKeys"
+import { createVueApp } from "./utils/vueUtils"
 import { createAppLogger } from "./utils/appLogger"
 
 import "element-plus/dist/index.css"
@@ -38,8 +37,5 @@ import "element-plus/theme-chalk/dark/css-vars.css"
 
   // 挂载 vue app
   app.mount("#app")
-
-  // 暴露 Vue 实例
-  app.provide(InjectKeys.VUE_INSTANCE, app)
   logger.info("vue app created")
 })()

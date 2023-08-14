@@ -23,11 +23,13 @@
  * questions.
  */
 
-import { MetaweblogPlaceholder } from "~/src/adaptors/api/base/metaweblog/metaweblogPlaceholder.ts"
+import { CommonWebConfig } from "~/src/adaptors/web/base/commonWebConfig.ts"
 
 /**
- * WordPress 操作提示
+ * 掘金配置
  */
-class TypechoPlaceholder extends MetaweblogPlaceholder {}
-
-export { TypechoPlaceholder }
+export class JuejinConfig extends CommonWebConfig {
+  constructor(username: string, password: string, middlewareUrl?: string) {
+    super("", "", username, password, middlewareUrl)
+  }
+}

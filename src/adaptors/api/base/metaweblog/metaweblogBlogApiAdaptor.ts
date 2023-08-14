@@ -23,26 +23,24 @@
  * questions.
  */
 
-import { BlogApi, CategoryInfo, Post, PostStatusEnum, UserBlog } from "zhi-blog-api"
-import { AppInstance } from "~/src/appInstance.ts"
+import { Attachment, CategoryInfo, MediaObject, Post, PostStatusEnum, UserBlog } from "zhi-blog-api"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { CommonXmlrpcClient } from "zhi-xmlrpc-middleware"
-import { MetaweblogConfig } from "~/src/adaptors/api/base/metaweblog/MetaweblogConfig.ts"
 import { MetaweblogConstants } from "~/src/adaptors/api/base/metaweblog/metaweblogConstants.ts"
 import { StrUtil } from "zhi-common"
 import { BrowserUtil } from "zhi-device"
+import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
+import { MetaweblogConfig } from "~/src/adaptors/api/base/metaweblog/metaweblogConfig.ts"
+import { useProxy } from "~/src/composables/useProxy.ts"
 
 /**
- * MetaweblogBlogApi 类继承自 BlogApi 类，并为 Metaweblog API 提供了额外的功能
+ * MetaweblogBlogApi 类继承自 BaseBlogApi 类，并为 Metaweblog API 提供了额外的功能
  *
  * @author terwer
  * @version 0.9.0
  * @since 0.9.0
  */
-class MetaweblogBlogApi extends BlogApi {
-  protected readonly cfg: MetaweblogConfig
-  protected logger
-  private readonly commonXmlrpcClient
+class MetaweblogBlogApiAdaptor extends BaseBlogApi {
+  private readonly proxyXmlrpc: any
 
   /**
    * 初始化 metaweblog API 适配器
@@ -50,13 +48,13 @@ class MetaweblogBlogApi extends BlogApi {
    * @param appInstance 应用实例
    * @param cfg 配置项
    */
-  constructor(appInstance: AppInstance, cfg: MetaweblogConfig) {
-    super()
+  constructor(appInstance: any, cfg: MetaweblogConfig) {
+    super(appInstance, cfg)
 
-    this.cfg = cfg
     this.cfg.blogid = "metaweblog"
     this.logger = createAppLogger("metaweblog-api-adaptor")
-    this.commonXmlrpcClient = new CommonXmlrpcClient(appInstance, cfg.apiUrl)
+    const { proxyXmlrpc } = useProxy(cfg.middlewareUrl)
+    this.proxyXmlrpc = proxyXmlrpc
   }
 
   public override async getUsersBlogs(): Promise<Array<UserBlog>> {
@@ -75,11 +73,11 @@ class MetaweblogBlogApi extends BlogApi {
    *
    * @param keyword
    */
-  public override async getRecentPostsCount(keyword?: string): Promise<number> {
+  public async getRecentPostsCount(keyword?: string): Promise<number> {
     return 0
   }
 
-  public override async getRecentPosts(numOfPosts: number): Promise<Post[]> {
+  public async getRecentPosts(numOfPosts: number): Promise<Post[]> {
     const result: Post[] = []
     const blogPosts = await this.metaweblogCall(MetaweblogConstants.METHOD_GET_RECENT_POSTS, [
       this.cfg.blogid,
@@ -213,8 +211,25 @@ class MetaweblogBlogApi extends BlogApi {
     return result
   }
 
+  public async newMediaObject(mediaObject: MediaObject, customHandler?: any): Promise<Attachment> {
+    let ret: Attachment
+    try {
+      ret = await this.metaweblogCall(MetaweblogConstants.METHOD_NEW_MEDIA_OBJECT, [
+        this.cfg.blogid,
+        this.cfg.username,
+        this.cfg.password,
+        mediaObject,
+      ])
+      this.logger.debug("上传媒体完成, ret =>", ret)
+    } catch (e) {
+      this.logger.error("媒体上传失败", e)
+    }
+
+    return ret
+  }
+
   protected async metaweblogCall(method: string, params: any[]) {
-    return await this.commonXmlrpcClient.methodCall(method, params, this.cfg.middlewareUrl)
+    return await this.proxyXmlrpc(this.cfg.apiUrl, method, params)
   }
 
   /**
@@ -287,4 +302,4 @@ class MetaweblogBlogApi extends BlogApi {
   }
 }
 
-export { MetaweblogBlogApi }
+export { MetaweblogBlogApiAdaptor }

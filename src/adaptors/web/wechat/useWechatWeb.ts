@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { WechatConfig } from "~/src/adaptors/web/wechat/WechatConfig.ts"
+import { WechatConfig } from "~/src/adaptors/web/wechat/wechatConfig.ts"
 import { AppInstance } from "~/src/appInstance.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"

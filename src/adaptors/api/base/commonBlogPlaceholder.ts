@@ -23,10 +23,9 @@
  * questions.
  */
 
+import { BlogPlaceholder } from "zhi-blog-api"
+
 /**
- * 依赖注入 key 通用定义
+ * Metaweblog 操作提示
  */
-export enum InjectKeys {
-  VUE_INSTANCE = "vueInstance",
-  APP_INSTANCE = "appInstance",
-}
+export class CommonBlogPlaceholder extends BlogPlaceholder {}

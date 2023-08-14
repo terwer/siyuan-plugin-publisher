@@ -23,14 +23,11 @@
  * questions.
  */
 
-import { BlogApi, BlogConfig } from "zhi-blog-api"
-import { SiyuanKernelApi } from "zhi-siyuan-api"
-import { CommonFetchClient } from "zhi-fetch-middleware"
+import { BlogApi, BlogConfig, Post } from "zhi-blog-api"
 import { AppInstance } from "~/src/appInstance.ts"
 import { createAppLogger, ILogger } from "~/src/utils/appLogger.ts"
-import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
-import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
-import { isDev } from "~/src/utils/constants.ts"
+import { useProxy } from "~/src/composables/useProxy.ts"
+import { BaseExtendApi } from "~/src/adaptors/base/baseExtendApi.ts"
 
 /**
  * API授权统一封装基类
@@ -42,9 +39,8 @@ import { isDev } from "~/src/utils/constants.ts"
 export class BaseBlogApi extends BlogApi {
   protected logger: ILogger
   protected cfg: BlogConfig
-  private readonly kernelApi: SiyuanKernelApi
-  private readonly commonFetchClient: CommonFetchClient
-  private readonly useSiyuanProxy: boolean
+  public readonly proxyFetch: any
+  protected readonly baseExtendApi: BaseExtendApi
 
   /**
    * 初始化API授权适配器
@@ -57,71 +53,17 @@ export class BaseBlogApi extends BlogApi {
 
     this.cfg = cfg
     this.logger = createAppLogger("base-blog-api")
-    this.commonFetchClient = new CommonFetchClient(appInstance, cfg.apiUrl, cfg.middlewareUrl, isDev)
+    this.baseExtendApi = new BaseExtendApi(this)
 
-    const { kernelApi, isUseSiyuanProxy } = useSiyuanApi()
-    this.kernelApi = kernelApi
-    this.useSiyuanProxy = isUseSiyuanProxy()
+    const { proxyFetch } = useProxy(cfg.middlewareUrl)
+    this.proxyFetch = proxyFetch
+  }
+
+  public async preEditPost(post: Post, id?: string, publishCfg?: any): Promise<Post> {
+    return await this.baseExtendApi.preEditPost(post, id, publishCfg)
   }
 
   // ================
   // private methods
   // ================
-  /**
-   * 网页授权通用的请求代理
-   *
-   * @param url - url
-   * @param headers - headers，默认是[]
-   * @param params - 参数，默认是 {}
-   * @param method - 方法，默认是GET
-   * @param contentType - 类型，默认是 application/json
-   */
-  protected async proxyFetch(
-    url: string,
-    headers: any[] = [],
-    params: any = {},
-    method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" = "GET",
-    contentType: string = "application/json"
-  ): Promise<any> {
-    let body: any
-    if (typeof params === "string" && !StrUtil.isEmptyString(params)) {
-      body = params
-    } else if (typeof params === "object" && !ObjectUtil.isEmptyObject(params)) {
-      body = params
-    }
-
-    if (this.useSiyuanProxy) {
-      this.logger.info("using siyuan forwardProxy")
-      const apiUrl = `${this.cfg.apiUrl}${url}`
-      this.logger.info("siyuan forwardProxy url =>", apiUrl)
-      this.logger.info("siyuan forwardProxy fetchOptions =>", {
-        headers,
-        body,
-        method,
-        contentType,
-      })
-      const fetchResult = await this.kernelApi.forwardProxy(apiUrl, headers, body, method, contentType, 7000)
-      this.logger.debug("siyuan forwardProxy result=>", fetchResult)
-      const resText = fetchResult?.body
-      const res = JsonUtil.safeParse<any>(resText, {} as any)
-      return res
-    } else {
-      this.logger.info("using commonFetchClient")
-      const header = headers.length > 0 ? headers[0] : {}
-      let fetchOptions: any = {
-        method,
-        headers: {
-          ...header,
-        },
-      }
-      if (body) {
-        fetchOptions.body = body
-      }
-      this.logger.info("commonFetchClient url =>", url)
-      this.logger.info("commonFetchClient fetchOptions =>", fetchOptions)
-      const res = await this.commonFetchClient.fetchCall(url, fetchOptions)
-      this.logger.debug("commonFetchClient res =>", res)
-      return res
-    }
-  }
 }

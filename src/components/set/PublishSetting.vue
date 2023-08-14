@@ -52,7 +52,7 @@ import { AppInstance } from "~/src/appInstance.ts"
 import { ElectronCookie, WebConfig } from "zhi-blog-api"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import CookieSetting from "~/src/components/set/publish/singleplatform/base/CookieSetting.vue"
-import { CommonWebConfig } from "~/src/adaptors/web/base/CommonWebConfig.ts"
+import { CommonWebConfig } from "~/src/adaptors/web/base/commonWebConfig.ts"
 
 const logger = createAppLogger("publish-setting")
 
@@ -295,7 +295,7 @@ const _handleValidateOpenBrowserAuth = (dynCfg: DynamicConfig) => {
     } catch (e) {
       dynCfg.isAuth = false
       ElMessage.error(t("main.opt.failure") + "=>" + e)
-      logger.error(e)
+      logger.error(t("main.opt.failure") + "=>", e)
     }
 
     formData.dynamicConfigArray = replacePlatformByKey(formData.dynamicConfigArray, dynCfg.platformKey, dynCfg)
@@ -338,7 +338,7 @@ const _handleValidateChromeExtensionAuth = async (dynCfg: DynamicConfig) => {
   } catch (e) {
     dynCfg.isAuth = false
     ElMessage.error(t("main.opt.failure") + "=>" + e)
-    logger.error(e)
+    logger.error(t("main.opt.failure") + "=>", e)
   }
 
   formData.dynamicConfigArray = replacePlatformByKey(formData.dynamicConfigArray, dynCfg.platformKey, dynCfg)
@@ -411,7 +411,7 @@ const handleCheckAndUpgrade = async () => {
   } catch (e) {
     formData.logMessage += `\n${t("setting.upgrade.syp.tip4")}` + e
     ElMessage.error(t("main.opt.failure") + "=>" + e)
-    logger.error(e)
+    logger.error(t("main.opt.failure") + "=>", e)
   }
   formData.logMessage += `\n${t("setting.upgrade.syp.tip5")}`
   formData.isUpgradeLoading = false
@@ -434,245 +434,247 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="publish-setting-body">
-    <el-row :gutter="20" class="row-item">
-      <el-col :span="2" class="col-item">
-        <el-menu class="publish-setting-left-menu">
-          <el-menu-item
-            :class="formData.showAdd ? 'left-menu-item' : 'left-menu-item menu-item-selected'"
-            @click="handleHidePlatform"
-          >
-            <template #title>
-              <span> {{ t("service.tab.publish.setting") }} </span>
-            </template>
-          </el-menu-item>
-          <el-menu-item
-            :class="!formData.showAdd ? 'left-menu-item' : 'left-menu-item menu-item-selected'"
-            @click="handleShowPlatform"
-          >
-            <template #title>
-              <span> + {{ t("setting.platform.add") }} </span>
-            </template>
-          </el-menu-item>
-        </el-menu>
-      </el-col>
-      <el-col :span="22" class="col-item">
-        <div class="publish-setting-right-content">
-          <div v-if="formData.showAdd">
-            <el-row :gutter="20" class="row-item">
-              <el-col
-                v-for="p in formData.platformTypeList"
-                :key="p.type"
-                :span="12"
-                class="col-item"
-                @click="handleAddPlatformStep(p.type)"
-              >
-                <el-card class="platform-right-card">
-                  <img :src="p.img" class="image" alt="" />
-                  <div class="right-card-text">
-                    <span>{{ p.title }}</span>
-                    <div>
-                      <div class="text-desc">{{ p.description }}</div>
-                      <div class="add-btn">
-                        <el-button size="small" type="primary">{{ t("setting.platform.add.this") }}</el-button>
-                      </div>
-                    </div>
-                  </div>
-                </el-card>
-              </el-col>
-            </el-row>
-          </div>
-          <div v-else-if="formData.dynamicConfigArray.length === 0">
-            <el-alert class="no-tip" type="error" :title="t('platform.must.select.one')"></el-alert>
-          </div>
-          <div v-else>
-            <div class="publish-right-setting">
-              <el-row :gutter="20" class="platform-list">
+  <back-page :title="t('service.tab.publish.setting')">
+    <div class="publish-setting-body">
+      <el-row :gutter="20" class="row-item">
+        <el-col :span="2" class="col-item">
+          <el-menu class="publish-setting-left-menu">
+            <el-menu-item
+              :class="formData.showAdd ? 'left-menu-item' : 'left-menu-item menu-item-selected'"
+              @click="handleHidePlatform"
+            >
+              <template #title>
+                <span> {{ t("service.tab.publish.setting") }} </span>
+              </template>
+            </el-menu-item>
+            <el-menu-item
+              :class="!formData.showAdd ? 'left-menu-item' : 'left-menu-item menu-item-selected'"
+              @click="handleShowPlatform"
+            >
+              <template #title>
+                <span> + {{ t("setting.platform.add") }} </span>
+              </template>
+            </el-menu-item>
+          </el-menu>
+        </el-col>
+        <el-col :span="22" class="col-item">
+          <div class="publish-setting-right-content">
+            <div v-if="formData.showAdd">
+              <el-row :gutter="20" class="row-item">
                 <el-col
-                  v-for="platform in formData.dynamicConfigArray"
-                  :key="platform.platformKey"
-                  :span="11"
-                  class="platform-item-box"
+                  v-for="p in formData.platformTypeList"
+                  :key="p.type"
+                  :span="12"
+                  class="col-item"
+                  @click="handleAddPlatformStep(p.type)"
                 >
-                  <div class="platform-item">
-                    <el-icon class="item-left-icon">
-                      <span class="item-icon" v-html="platform.platformIcon"></span>
-                    </el-icon>
-                    <div class="item-right">
-                      <div class="text">
-                        <el-badge
-                          :value="
-                            platform.isAuth ? '已授权' : platform.authMode === AuthMode.API ? '设置无效' : '没有授权'
-                          "
-                          class="badge-item"
-                          :type="platform.isAuth ? 'success' : 'danger'"
-                        >
-                          <span>{{ platform.platformName }}</span>
-                          <span class="name-edit" @click="handleChangePlatformDefine(platform)">
-                            <el-icon> <span v-html="svgIcons.iconIFEdit"></span> </el-icon>
-                          </span>
-                          <el-text
-                            :type="platform.authMode === AuthMode.API ? 'primary' : 'info'"
-                            class="auth-mode-text"
-                          >
-                            {{ platform.authMode === AuthMode.API ? "API授权" : "网页授权" }}
-                          </el-text>
-                        </el-badge>
-                      </div>
-                      <div class="actions">
-                        <el-switch
-                          v-model="platform.isEnabled"
-                          inline-prompt
-                          size="small"
-                          class="action-btn action-switch"
-                          active-text="已启用"
-                          inactive-text="未启用"
-                          @change="handlePlatformEnabled(platform)"
-                        ></el-switch>
-                        <!-- 通用平台设置 -->
-                        <el-text
-                          v-if="platform.isEnabled && platform.authMode === AuthMode.API"
-                          class="action-btn action-setting"
-                          @click="handleSinglePlatformSetting(platform)"
-                        >
-                          <el-icon>
-                            <Tools />
-                          </el-icon>
-                          设置
-                        </el-text>
-                        <!-- 通用平台设置 -->
-                        <el-text
-                          v-if="platform.isEnabled && platform.authMode === AuthMode.WEBSITE && platform.isAuth"
-                          class="action-btn action-setting"
-                          @click="handleSinglePlatformSetting(platform)"
-                        >
-                          <el-icon>
-                            <Tools />
-                          </el-icon>
-                          设置
-                        </el-text>
-                        <!-- 平台授权 -->
-                        <el-text
-                          v-if="platform.isEnabled && platform.authMode === AuthMode.WEBSITE"
-                          class="action-btn action-web-setting"
-                          @click="handleSinglePlatformWebAuth(platform)"
-                        >
-                          <el-icon>
-                            <Tools />
-                          </el-icon>
-                          {{ platform.isAuth ? "再次授权" : "授权" }}
-                        </el-text>
-                        <!-- 平台验证 -->
-                        <el-button
-                          v-if="platform.isEnabled && platform.authMode === AuthMode.WEBSITE && !platform.isAuth"
-                          class="action-btn action-web-auth"
-                          @click="handleValidateWebAuth(platform)"
-                          :size="'small'"
-                          :loading="formData.webAuthLoadingMap[platform.platformKey] === true"
-                        >
-                          <el-icon>
-                            <Lock />
-                          </el-icon>
-                          验证
-                        </el-button>
-                        <el-text
-                          v-if="!platform.isEnabled"
-                          class="action-btn action-del"
-                          @click="handleSinglePlatformDelete(platform)"
-                        >
-                          <el-icon>
-                            <Delete />
-                          </el-icon>
-                          删除
-                        </el-text>
-                      </div>
-                    </div>
-                  </div>
-                </el-col>
-              </el-row>
-              <el-row>
-                <el-col>
-                  <div class="import-pre-action">
-                    <el-button size="small" type="primary" @click="handleImportPre">导入预定义平台</el-button>
-                    <el-button
-                      size="small"
-                      type="danger"
-                      :loading="formData.isUpgradeLoading"
-                      @click="handleCheckAndUpgrade"
-                    >
-                      检测并迁移历史配置
-                    </el-button>
-                  </div>
-                  <div class="log-message-box">
-                    <el-input
-                      v-if="formData.showLogMessage"
-                      v-model="formData.logMessage"
-                      type="textarea"
-                      :rows="10"
-                      placeholder="日志信息"
-                    ></el-input>
-                  </div>
-
-                  <div class="right-setting-tips">
-                    <div class="el-alert el-alert--warning is-light" role="alert">
-                      <div class="el-alert__content">
-                        <div class="el-alert__title">
-                          <div>{{ t("setting.platform.right.tips0") }}</div>
-                          <div>{{ t("setting.platform.right.tips1") }}</div>
-                          <div>{{ t("setting.platform.right.tips2") }}</div>
-                          <div>{{ t("setting.platform.right.tips3") }}</div>
-                          <div>{{ t("setting.platform.right.tips4") }}</div>
+                  <el-card class="platform-right-card">
+                    <img :src="p.img" class="image" alt="" />
+                    <div class="right-card-text">
+                      <span>{{ p.title }}</span>
+                      <div>
+                        <div class="text-desc">{{ p.description }}</div>
+                        <div class="add-btn">
+                          <el-button size="small" type="primary">{{ t("setting.platform.add.this") }}</el-button>
                         </div>
                       </div>
                     </div>
-
-                    <h2>FAQ:</h2>
-                    <div class="setting-help">
-                      不会配置，或者配置遇到问题？<a
-                        href="https://blog.terwer.space/s/20230810132040-nn4q7vs"
-                        target="_blank"
-                        >请点击这里查看完整版平台配置指南</a
-                      >
-                    </div>
-
-                    <div class="tips-form">
-                      我想要的平台这里没有？<a
-                        href="https://terwergreen.feishu.cn/share/base/form/shrcnGRdThUiqnhBg15xgclMM0c"
-                        target="_blank"
-                      >
-                        点击这里提交发布工具平台适配跟踪表
-                      </a>
-                    </div>
-
-                    <div class="tips-form">
-                      我还有其他问题或者想私下沟通作者？<a href="mailto:youweics@163.com">
-                        直接发邮件到：youweics@163.com
-                      </a>
-                    </div>
-                  </div>
+                  </el-card>
                 </el-col>
               </el-row>
             </div>
+            <div v-else-if="formData.dynamicConfigArray.length === 0">
+              <el-alert class="no-tip" type="error" :title="t('platform.must.select.one')"></el-alert>
+            </div>
+            <div v-else>
+              <div class="publish-right-setting">
+                <el-row :gutter="20" class="platform-list">
+                  <el-col
+                    v-for="platform in formData.dynamicConfigArray"
+                    :key="platform.platformKey"
+                    :span="11"
+                    class="platform-item-box"
+                  >
+                    <div class="platform-item">
+                      <el-icon class="item-left-icon">
+                        <span class="item-icon" v-html="platform.platformIcon"></span>
+                      </el-icon>
+                      <div class="item-right">
+                        <div class="text">
+                          <el-badge
+                            :value="
+                              platform.isAuth ? '已授权' : platform.authMode === AuthMode.API ? '设置无效' : '没有授权'
+                            "
+                            class="badge-item"
+                            :type="platform.isAuth ? 'success' : 'danger'"
+                          >
+                            <span>{{ platform.platformName }}</span>
+                            <span class="name-edit" @click="handleChangePlatformDefine(platform)">
+                              <el-icon> <span v-html="svgIcons.iconIFEdit"></span> </el-icon>
+                            </span>
+                            <el-text
+                              :type="platform.authMode === AuthMode.API ? 'primary' : 'info'"
+                              class="auth-mode-text"
+                            >
+                              {{ platform.authMode === AuthMode.API ? "API授权" : "网页授权" }}
+                            </el-text>
+                          </el-badge>
+                        </div>
+                        <div class="actions">
+                          <el-switch
+                            v-model="platform.isEnabled"
+                            inline-prompt
+                            size="small"
+                            class="action-btn action-switch"
+                            active-text="已启用"
+                            inactive-text="未启用"
+                            @change="handlePlatformEnabled(platform)"
+                          ></el-switch>
+                          <!-- 通用平台设置 -->
+                          <el-text
+                            v-if="platform.isEnabled && platform.authMode === AuthMode.API"
+                            class="action-btn action-setting"
+                            @click="handleSinglePlatformSetting(platform)"
+                          >
+                            <el-icon>
+                              <Tools />
+                            </el-icon>
+                            设置
+                          </el-text>
+                          <!-- 通用平台设置 -->
+                          <el-text
+                            v-if="platform.isEnabled && platform.authMode === AuthMode.WEBSITE && platform.isAuth"
+                            class="action-btn action-setting"
+                            @click="handleSinglePlatformSetting(platform)"
+                          >
+                            <el-icon>
+                              <Tools />
+                            </el-icon>
+                            设置
+                          </el-text>
+                          <!-- 平台授权 -->
+                          <el-text
+                            v-if="platform.isEnabled && platform.authMode === AuthMode.WEBSITE"
+                            class="action-btn action-web-setting"
+                            @click="handleSinglePlatformWebAuth(platform)"
+                          >
+                            <el-icon>
+                              <Tools />
+                            </el-icon>
+                            {{ platform.isAuth ? "再次授权" : "授权" }}
+                          </el-text>
+                          <!-- 平台验证 -->
+                          <el-button
+                            v-if="platform.isEnabled && platform.authMode === AuthMode.WEBSITE && !platform.isAuth"
+                            class="action-btn action-web-auth"
+                            @click="handleValidateWebAuth(platform)"
+                            :size="'small'"
+                            :loading="formData.webAuthLoadingMap[platform.platformKey] === true"
+                          >
+                            <el-icon>
+                              <Lock />
+                            </el-icon>
+                            验证
+                          </el-button>
+                          <el-text
+                            v-if="!platform.isEnabled"
+                            class="action-btn action-del"
+                            @click="handleSinglePlatformDelete(platform)"
+                          >
+                            <el-icon>
+                              <Delete />
+                            </el-icon>
+                            删除
+                          </el-text>
+                        </div>
+                      </div>
+                    </div>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col>
+                    <div class="import-pre-action">
+                      <el-button size="small" type="primary" @click="handleImportPre">导入预定义平台</el-button>
+                      <el-button
+                        size="small"
+                        type="danger"
+                        :loading="formData.isUpgradeLoading"
+                        @click="handleCheckAndUpgrade"
+                      >
+                        检测并迁移历史配置
+                      </el-button>
+                    </div>
+                    <div class="log-message-box">
+                      <el-input
+                        v-if="formData.showLogMessage"
+                        v-model="formData.logMessage"
+                        type="textarea"
+                        :rows="10"
+                        placeholder="日志信息"
+                      ></el-input>
+                    </div>
+
+                    <div class="right-setting-tips">
+                      <div class="el-alert el-alert--warning is-light" role="alert">
+                        <div class="el-alert__content">
+                          <div class="el-alert__title">
+                            <div>{{ t("setting.platform.right.tips0") }}</div>
+                            <div>{{ t("setting.platform.right.tips1") }}</div>
+                            <div>{{ t("setting.platform.right.tips2") }}</div>
+                            <div>{{ t("setting.platform.right.tips3") }}</div>
+                            <div>{{ t("setting.platform.right.tips4") }}</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <h2>FAQ:</h2>
+                      <div class="setting-help">
+                        不会配置，或者配置遇到问题？<a
+                          href="https://blog.terwer.space/s/20230810132040-nn4q7vs"
+                          target="_blank"
+                          >请点击这里查看完整版平台配置指南</a
+                        >
+                      </div>
+
+                      <div class="tips-form">
+                        我想要的平台这里没有？<a
+                          href="https://terwergreen.feishu.cn/share/base/form/shrcnGRdThUiqnhBg15xgclMM0c"
+                          target="_blank"
+                        >
+                          点击这里提交发布工具平台适配跟踪表
+                        </a>
+                      </div>
+
+                      <div class="tips-form">
+                        我还有其他问题或者想私下沟通作者？<a href="mailto:youweics@163.com">
+                          直接发邮件到：youweics@163.com
+                        </a>
+                      </div>
+                    </div>
+                  </el-col>
+                </el-row>
+              </div>
+            </div>
           </div>
-        </div>
-      </el-col>
-    </el-row>
+        </el-col>
+      </el-row>
 
-    <!--
-    -----------------------------------------------------------------------------
-    -->
-    <!-- cookie设置弹窗 -->
+      <!--
+      -----------------------------------------------------------------------------
+      -->
+      <!-- cookie设置弹窗 -->
 
-    <!-- 通用设置弹窗 -->
-    <el-dialog v-model="formData.cookieSettingFormVisible" :title="formData.dlgCookieTitle">
-      <cookie-setting
-        :key="formData.dlgKey"
-        :setting="formData.setting"
-        :setting-cfg="formData.dlgSettingCfg"
-        @emitHideDlg="handleHideCookieDlg"
-      />
-    </el-dialog>
-  </div>
+      <!-- 通用设置弹窗 -->
+      <el-dialog v-model="formData.cookieSettingFormVisible" :title="formData.dlgCookieTitle">
+        <cookie-setting
+          :key="formData.dlgKey"
+          :setting="formData.setting"
+          :setting-cfg="formData.dlgSettingCfg"
+          @emitHideDlg="handleHideCookieDlg"
+        />
+      </el-dialog>
+    </div>
+  </back-page>
 </template>
 
 <style scoped lang="stylus">

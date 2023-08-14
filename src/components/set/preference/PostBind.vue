@@ -79,7 +79,7 @@ const submitForm = async (formEl: any) => {
     await updateSetting(setting)
     ElMessage.success(t("main.opt.success"))
   } catch (e) {
-    logger.error(e)
+    logger.error(t("main.opt.failure") + "=>", e)
     ElMessage.error(t("main.opt.failure") + "=>" + e)
   }
 }

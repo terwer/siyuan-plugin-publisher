@@ -35,6 +35,8 @@ import PlatformAddForm from "~/src/components/set/publish/PlatformAddForm.vue"
 import PlatformUpdateForm from "~/src/components/set/publish/PlatformUpdateForm.vue"
 import PlatformQuickAdd from "~/src/components/set/publish/PlatformQuickAdd.vue"
 import QuickPublish from "~/src/workers/QuickPublish.vue"
+import SiyuanSetting from "~/src/components/set/SiyuanSetting.vue"
+import OtherTest from "~/src/pages/OtherTest.vue"
 
 const ApiTest = () => import("~/src/pages/ApiTest.vue")
 const SiyuanTest = () => import("~/src/components/test/SiyuanTest.vue")
@@ -71,6 +73,11 @@ const routes: RouteRecordRaw[] = [
   },
 
   {
+    path: "/test/other",
+    component: OtherTest,
+  },
+
+  {
     path: "/setting",
     component: Setting,
   },
@@ -99,6 +106,10 @@ const routes: RouteRecordRaw[] = [
   {
     path: "/setting/general",
     component: GeneralSetting,
+  },
+  {
+    path: "/setting/siyuan",
+    component: SiyuanSetting,
   },
 ]
 

@@ -23,7 +23,12 @@
  * questions.
  */
 
-import { CommonGithubApiAdaptor } from "~/src/adaptors/api/base/github/CommonGithubApiAdaptor.ts"
+import { CommonGithubApiAdaptor } from "~/src/adaptors/api/base/github/commonGithubApiAdaptor.ts"
+import { Post } from "zhi-blog-api"
+import { CommonGithubConfig } from "~/src/adaptors/api/base/github/commonGithubConfig.ts"
+import { YamlConvertAdaptor } from "~/src/platforms/yamlConvertAdaptor.ts"
+import { YamlFormatObj } from "~/src/models/yamlFormatObj.ts"
+import { HexoYamlConverterAdaptor } from "~/src/adaptors/api/hexo/hexoYamlConverterAdaptor.ts"
 
 /**
  * Hexo API 适配器
@@ -32,6 +37,20 @@ import { CommonGithubApiAdaptor } from "~/src/adaptors/api/base/github/CommonGit
  * @version 1.3.2
  * @since 0.8.1
  */
-class HexoApiAdaptor extends CommonGithubApiAdaptor {}
+class HexoApiAdaptor extends CommonGithubApiAdaptor {
+  public async preEditPost(post: Post, id?: string, publishCfg?: any): Promise<Post> {
+    // 调用父类预处理
+    await super.preEditPost(post, id, publishCfg)
+    this.logger.info("handled preEditPost with parent")
+
+    // 处理 YAML
+    const cfg = this.cfg as CommonGithubConfig
+    const yamlApi: YamlConvertAdaptor = new HexoYamlConverterAdaptor()
+    const yamlObj: YamlFormatObj = yamlApi.convertToYaml(post, cfg)
+    post.description = yamlObj.mdFullContent
+    this.logger.info("handled yaml using HexoYamlConverterAdaptor")
+    return post
+  }
+}
 
 export { HexoApiAdaptor }

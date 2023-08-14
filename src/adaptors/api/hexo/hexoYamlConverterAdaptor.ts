@@ -27,9 +27,9 @@ import { YamlConvertAdaptor } from "~/src/platforms/yamlConvertAdaptor.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { YamlFormatObj } from "~/src/models/yamlFormatObj.ts"
 import { Post } from "zhi-blog-api"
-import { CommonblogConfig } from "~/src/adaptors/api/base/CommonblogConfig.ts"
+import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
 import { DateUtil, StrUtil, YamlUtil } from "zhi-common"
-import { CommonGithubConfig } from "~/src/adaptors/api/base/github/CommonGithubConfig.ts"
+import { CommonGithubConfig } from "~/src/adaptors/api/base/github/commonGithubConfig.ts"
 
 /**
  * Hexo平台的YAML解析器
@@ -40,7 +40,7 @@ import { CommonGithubConfig } from "~/src/adaptors/api/base/github/CommonGithubC
 export class HexoYamlConverterAdaptor extends YamlConvertAdaptor {
   private readonly logger = createAppLogger("hexo-yaml-converter-adaptor")
 
-  convertToYaml(post: Post, cfg?: CommonblogConfig): YamlFormatObj {
+  convertToYaml(post: Post, cfg?: CommonBlogConfig): YamlFormatObj {
     let yamlFormatObj: YamlFormatObj = new YamlFormatObj()
     this.logger.debug("您正在使用 Hexo Yaml Converter", post)
 
@@ -108,7 +108,7 @@ export class HexoYamlConverterAdaptor extends YamlConvertAdaptor {
     return yamlFormatObj
   }
 
-  convertToAttr(yamlFormatObj: YamlFormatObj, cfg?: CommonblogConfig): Post {
+  convertToAttr(yamlFormatObj: YamlFormatObj, cfg?: CommonBlogConfig): Post {
     return super.convertToAttr(yamlFormatObj, cfg)
   }
 }

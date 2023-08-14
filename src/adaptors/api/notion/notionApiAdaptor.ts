@@ -154,7 +154,7 @@ class NotionApiAdaptor extends BaseBlogApi {
       },
       children: notionObject,
     }
-    this.logger.debug("before createPage, notionObject=>", notionObject)
+    this.logger.debug("before createPage =>", { markdownText, notionObject })
     const resp = await this.notionRequest("/pages", params, "POST")
     if (resp.object !== "page") {
       throw new Error("Notion create page error")
@@ -242,12 +242,13 @@ class NotionApiAdaptor extends BaseBlogApi {
     }
 
     // 打印日志
-    this.logger.debug("向Notion请求数据，url =>", url)
+    const apiUrl = `${this.cfg.apiUrl}${url}`
+    this.logger.debug("向Notion请求数据，apiUrl =>", apiUrl)
     this.logger.debug("向Notion请求数据，params =>", params)
 
     // 使用兼容的fetch调用并返回统一的JSON数据
     const body = ObjectUtil.isEmptyObject(params) ? {} : params
-    const resJson = await this.proxyFetch(url, [headers], body, method, contentType)
+    const resJson = await this.proxyFetch(apiUrl, [headers], body, method, contentType)
     this.logger.debug("向Notion请求数据，resJson =>", resJson)
 
     if (resJson?.status === 400 || resJson?.status === 401 || resJson?.status === 404 || resJson?.status === 429) {

@@ -23,11 +23,11 @@
  * questions.
  */
 
-import { CommonblogPlaceholder } from "~/src/adaptors/api/base/CommonblogPlaceholder.ts"
+import { CommonBlogPlaceholder } from "~/src/adaptors/api/base/commonBlogPlaceholder.ts"
 
 /**
  * Yuque 配置提示
  */
-class YuquePlaceHolder extends CommonblogPlaceholder {}
+class YuquePlaceHolder extends CommonBlogPlaceholder {}
 
 export { YuquePlaceHolder }

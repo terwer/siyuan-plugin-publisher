@@ -28,7 +28,7 @@ import { createSiyuanAppLogger } from "../appLogger"
 import { showIframeDialog } from "../iframeDialog"
 import PageUtil from "../utils/pageUtil"
 import { IObject } from "siyuan"
-import { isFileExists } from "../utils/utils"
+import { isSiyuanFileExists } from "../utils/utils"
 
 /**
  * 插件相关
@@ -87,10 +87,10 @@ export class PluginInvoke {
 
   public async preCheckPicgoPlugin() {
     // 检测是否安装 picgo 插件
-    return await isFileExists(this.pluginInstance.kernelApi, "/data/plugins/siyuan-plugin-picgo/plugin.json", "text")
+    return await isSiyuanFileExists(this.pluginInstance.kernelApi, "/data/plugins/siyuan-plugin-picgo/plugin.json", "text")
   }
 
   public async preCheckBlogPlugin() {
-    return await isFileExists(this.pluginInstance.kernelApi, "/data/plugins/siyuan-blog/plugin.json", "text")
+    return await isSiyuanFileExists(this.pluginInstance.kernelApi, "/data/plugins/siyuan-blog/plugin.json", "text")
   }
 }

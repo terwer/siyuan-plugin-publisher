@@ -28,7 +28,7 @@ import { CnblogsConfig } from "~/src/adaptors/api/cnblogs/cnblogsConfig.ts"
 import { AppInstance } from "~/src/appInstance.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { CnblogsConstants } from "~/src/adaptors/api/cnblogs/cnblogsConstants.ts"
-import { MetaweblogBlogApi } from "~/src/adaptors/api/base/metaweblog/metaweblogBlogApi.ts"
+import { MetaweblogBlogApiAdaptor } from "~/src/adaptors/api/base/metaweblog/metaweblogBlogApiAdaptor.ts"
 
 /**
  * 博客园 API 适配器
@@ -39,7 +39,7 @@ import { MetaweblogBlogApi } from "~/src/adaptors/api/base/metaweblog/metaweblog
  * @version 0.9.0
  * @since 0.9.0
  */
-class CnblogsApiAdaptor extends MetaweblogBlogApi {
+class CnblogsApiAdaptor extends MetaweblogBlogApiAdaptor {
   /**
    * 初始化博客园 API 适配器
    *

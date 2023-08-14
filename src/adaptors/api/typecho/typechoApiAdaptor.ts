@@ -26,7 +26,7 @@
 import { AppInstance } from "~/src/appInstance.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { TypechoConfig } from "~/src/adaptors/api/typecho/typechoConfig.ts"
-import { MetaweblogBlogApi } from "~/src/adaptors/api/base/metaweblog/metaweblogBlogApi.ts"
+import { MetaweblogBlogApiAdaptor } from "~/src/adaptors/api/base/metaweblog/metaweblogBlogApiAdaptor.ts"
 
 /**
  * Typecho API 适配器
@@ -35,7 +35,7 @@ import { MetaweblogBlogApi } from "~/src/adaptors/api/base/metaweblog/metaweblog
  * @version 0.9.0
  * @since 0.9.0
  */
-class TypechoApiAdaptor extends MetaweblogBlogApi {
+class TypechoApiAdaptor extends MetaweblogBlogApiAdaptor {
   /**
    * 初始化 Typecho API 适配器
    *

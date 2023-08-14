@@ -23,9 +23,13 @@
  * questions.
  */
 
-import { BlogPlaceholder } from "zhi-blog-api"
+import { CommonWebConfig } from "~/src/adaptors/web/base/commonWebConfig.ts"
 
 /**
- * Metaweblog 操作提示
+ * 微信公众号配置
  */
-export class CommonblogPlaceholder extends BlogPlaceholder {}
+export class WechatConfig extends CommonWebConfig {
+  constructor(username: string, password: string, middlewareUrl?: string) {
+    super("", "", username, password, middlewareUrl)
+  }
+}

@@ -25,7 +25,6 @@
 
 <script setup lang="ts">
 import { AppInstance } from "~/src/appInstance.ts"
-import { Utils } from "~/src/utils/utils.ts"
 import { reactive, ref } from "vue"
 import { fileToBuffer } from "~/src/utils/polyfillUtils.ts"
 import { SimpleXmlRpcClient } from "simple-xmlrpc"
@@ -33,8 +32,11 @@ import { MediaObject } from "zhi-blog-api"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { Base64 } from "js-base64"
 import { CommonFetchClient } from "zhi-fetch-middleware"
+import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 
 const logger = createAppLogger("wordpress-test")
+
+const { t } = useVueI18n()
 
 const params = ref("{}")
 const showParamFile = ref(false)
@@ -271,7 +273,7 @@ const kmsHandleApi = async () => {
     isLoading.value = false
   } catch (e) {
     logMessage.value = e
-    logger.error(e)
+    logger.error(t("main.opt.failure") + "=>", e)
     isLoading.value = false
   }
 }

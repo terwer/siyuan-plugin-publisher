@@ -27,14 +27,15 @@
 import { AppInstance } from "~/src/appInstance.ts"
 import { Utils } from "~/src/utils/utils.ts"
 import { reactive, ref } from "vue"
-import { fileToBuffer } from "~/src/utils/polyfillUtils.ts"
-import { SimpleXmlRpcClient } from "simple-xmlrpc"
-import {MediaObject, Post} from "zhi-blog-api"
+import { MediaObject, Post } from "zhi-blog-api"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import Adaptors from "~/src/adaptors"
-import {SiYuanApiAdaptor, SiyuanConfig} from "zhi-siyuan-api";
+import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { base64ToBuffer, remoteImageToBase64Info } from "~/src/utils/polyfillUtils.ts"
 
 const logger = createAppLogger("cnblogs-test")
+
+const { t } = useVueI18n()
 
 const params = ref("{}")
 const showParamFile = ref(false)
@@ -198,6 +199,14 @@ const cnblogsHandleApi = async () => {
         const result = await cnblogsApi.getUsersBlogs()
         logMessage.value = JSON.stringify(result)
         logger.info("cnblogs users blogs=>", result)
+
+        // const key = "metaweblog_Cnblogs"
+        // const cfg = await Adaptors.getCfg(key)
+        // const { proxyXmlrpc } = useProxy(cfg.middlewareUrl)
+        //
+        // const result = await proxyXmlrpc(cfg.apiUrl, "blogger.getUsersBlogs", ["", cfg.username, cfg.password])
+        // logMessage.value = JSON.stringify(result)
+        // logger.info("cnblogs users blogs=>", result)
         break
       }
       case METHOD_GET_RECENT_POSTS_COUNT: {
@@ -297,23 +306,89 @@ const cnblogsHandleApi = async () => {
         break
       }
       case METHOD_NEW_MEDIA_OBJECT: {
-        const file = paramFile.value
-        const bits = await fileToBuffer(file)
-        const mediaObject = new MediaObject(file.name, file.type, bits)
-        logger.info("mediaObject=>", mediaObject)
+        // const key = "metaweblog_Cnblogs"
+        //
+        // const file = paramFile.value
+        // const bits = await fileToBuffer(file)
+        // const mediaObject = new MediaObject(file.name, file.type, bits)
+        // logger.info("mediaObject=>", mediaObject)
+        //
+        // // 设置文件的元数据
+        // const cnblogsApiAdaptor = await Adaptors.getAdaptor(key)
+        // const cnblogsApi = Utils.blogApi(appInstance, cnblogsApiAdaptor)
+        // logger.info("cnblogsApi=>", cnblogsApi)
+        // const result = await cnblogsApi.newMediaObject(mediaObject)
+        // logMessage.value = JSON.stringify(result)
+        // logger.info("cnblogs new mediaObject result=>", result)
+
+        // upload url
+        const key = "metaweblog_Cnblogs"
 
         // 设置文件的元数据
-        const metadata = {
-          name: mediaObject.name,
-          type: mediaObject.type,
-          bits: mediaObject.bits,
-          overwrite: true,
-        }
-        const xmlrpcApiUrl = "http://127.0.0.1:3000/xmlrpc.php"
-        const client = new SimpleXmlRpcClient(xmlrpcApiUrl, "", {})
-        const result = await client.methodCall("metaWeblog.newMediaObject", ["", "terwer", "123456", metadata])
+        const cnblogsApiAdaptor = await Adaptors.getAdaptor(key)
+        const cnblogsApi = Utils.blogApi(appInstance, cnblogsApiAdaptor)
+        logger.info("cnblogsApi=>", cnblogsApi)
+
+        const imageUrl = "https://static-rs-terwer.oss-cn-beijing.aliyuncs.com/test/image-20230812091531-hibwr1g.png"
+        const base64Info = await remoteImageToBase64Info(imageUrl)
+        const imageBase64 = base64Info.imageBase64
+        logger.debug("imageBase64=>", { imageBase64 })
+
+        const bits = base64ToBuffer(imageBase64)
+        logger.debug("bits=>", bits)
+        const mediaObject = new MediaObject(base64Info.imageName, base64Info.mimeType, bits)
+        logger.info("mediaObject=>", mediaObject)
+
+        const result = await cnblogsApi.newMediaObject(mediaObject)
         logMessage.value = JSON.stringify(result)
         logger.info("cnblogs new mediaObject result=>", result)
+
+        // SimpleXmlRpcClient
+        // const key = "metaweblog_Cnblogs"
+        //
+        // const file = paramFile.value
+        // const bits = await fileToBuffer(file)
+        // const mediaObject = new MediaObject(file.name, file.type, bits)
+        // logger.info("mediaObject=>", mediaObject)
+        //
+        // // 设置文件的元数据
+        // const metadata = {
+        //   name: mediaObject.name,
+        //   type: mediaObject.type,
+        //   bits: mediaObject.bits,
+        //   overwrite: true,
+        // }
+        // const cfg = await Adaptors.getCfg(key)
+        // const client = new SimpleXmlRpcClient(appInstance, cfg.apiUrl, {})
+        // const result = await client.methodCall("metaWeblog.newMediaObject", ["", cfg.username, cfg.password, metadata])
+        // logMessage.value = JSON.stringify(result)
+        // logger.info("cnblogs new mediaObject result=>", result)
+
+        // proxyXmlrpc
+        // const key = "metaweblog_Cnblogs"
+        // const cfg = await Adaptors.getCfg(key)
+        // const { proxyXmlrpc } = useProxy(cfg.middlewareUrl)
+        //
+        // const file = paramFile.value
+        // const bits = await fileToBuffer(file)
+        // const mediaObject = new MediaObject(file.name, file.type, bits)
+        // logger.info("mediaObject=>", mediaObject)
+        //
+        // // 设置文件的元数据
+        // const metadata = {
+        //   name: mediaObject.name,
+        //   type: mediaObject.type,
+        //   bits: mediaObject.bits,
+        //   overwrite: true,
+        // }
+        // const result = await proxyXmlrpc(cfg.apiUrl, "metaWeblog.newMediaObject", [
+        //   "",
+        //   cfg.username,
+        //   cfg.password,
+        //   metadata,
+        // ])
+        // logMessage.value = JSON.stringify(result)
+        // logger.info("cnblogs new mediaObject result=>", result)
         break
       }
       default:
@@ -323,7 +398,7 @@ const cnblogsHandleApi = async () => {
     isLoading.value = false
   } catch (e) {
     logMessage.value = e
-    logger.error(e)
+    logger.error(t("main.opt.failure") + "=>", e)
     isLoading.value = false
   }
 }

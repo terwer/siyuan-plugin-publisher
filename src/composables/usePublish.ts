@@ -34,14 +34,11 @@ import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { pre } from "~/src/utils/import/pre.ts"
 import { MethodEnum } from "~/src/models/methodEnum.ts"
 import { DynamicConfig } from "~/src/platforms/dynamicConfig.ts"
-import { CommonblogConfig } from "~/src/adaptors/api/base/CommonblogConfig.ts"
+import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
 import { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
-import { YamlConvertAdaptor } from "~/src/platforms/yamlConvertAdaptor.ts"
-import { YamlFormatObj } from "~/src/models/yamlFormatObj.ts"
 import { ElMessage } from "element-plus"
 import { usePicgoBridge } from "~/src/composables/usePicgoBridge.ts"
-import { LuteUtil } from "~/src/utils/luteUtil.ts"
 
 /**
  * 通用发布组件
@@ -55,10 +52,9 @@ const usePublish = () => {
 
   // uses
   const { t } = useVueI18n()
-  const { getSetting, updateSetting } = useSettingStore()
+  const { updateSetting } = useSettingStore()
   const { kernelApi, blogApi } = useSiyuanApi()
-  const { getPublishApi, getYamlApi } = usePublishConfig()
-  const { handlePicgo } = usePicgoBridge()
+  const { getPublishApi } = usePublishConfig()
 
   // datas
   const singleFormData = reactive({
@@ -78,7 +74,7 @@ const usePublish = () => {
    */
   const doSinglePublish = async (key: string, id: string, publishCfg: IPublishCfg, doc: Post) => {
     const setting: typeof SypConfig = publishCfg.setting
-    const cfg: CommonblogConfig = publishCfg.cfg
+    const cfg: CommonBlogConfig = publishCfg.cfg
     const dynCfg: DynamicConfig = publishCfg.dynCfg
 
     // vars
@@ -87,7 +83,7 @@ const usePublish = () => {
     try {
       // 系统内置
       const isSys = pre.systemCfg.some((item) => item.platformKey === key)
-      logger.info("isSys=>", isSys)
+      logger.info(`isSys=>${isSys}`)
 
       // 校验
       if (isSys) {
@@ -112,29 +108,28 @@ const usePublish = () => {
       // 文章处理开始
       // ===================================
 
-      // 分配属性
+      // 分配文章属性 - 初始化和发布都会调用
       post = await assignAttrs(post, id, publishCfg)
 
-      // 全局的预处理
-      logger.debug(`before preHandlePost, isAdd ${singleFormData.isAdd}, doc=>`, toRaw(post))
-      post = await preHandlePost(post, id, publishCfg)
-      logger.debug(`after preHandlePost, doc=>`, toRaw(post))
-
-      // 平台相关的预处理
-      const yamlApi: YamlConvertAdaptor = await getYamlApi(key, cfg)
-      if (yamlApi instanceof YamlConvertAdaptor) {
-        const yamlObj: YamlFormatObj = yamlApi.convertToYaml(post, cfg)
-        post.description = yamlObj.mdFullContent
-        logger.info("handled yaml using YamlConvertAdaptor")
-      } else {
-        logger.info("yaml adaptor not found, ignore convert")
-      }
       // ===================================
       // 文章处理结束
       // ===================================
 
       // 初始化API
       const api = await getPublishApi(key, cfg)
+
+      // 平台相关的正文预处理 - 仅在发布的时候调用
+      logger.debug(`before preEditPost, isAdd ${singleFormData.isAdd}, post=>`, toRaw(post))
+      post = await api.preEditPost(post, id, publishCfg)
+      logger.debug(`after preEditPost, post=>`, toRaw(post))
+
+      // 发布格式
+      if (cfg?.pageType == PageTypeEnum.Markdown) {
+        post.description = post.markdown
+      } else {
+        post.description = post.html
+      }
+      logger.debug("文章全部预处理完毕，最终结果", { post })
 
       // 处理发布：新增 或者 更新
       if (singleFormData.isAdd) {
@@ -174,7 +169,7 @@ const usePublish = () => {
       singleFormData.publishProcessStatus = true
     } catch (e) {
       singleFormData.errMsg = t("main.opt.failure") + "=>" + e
-      logger.error(e)
+      logger.error(t("main.opt.failure") + "=>", e)
       await kernelApi.pushErrMsg({
         msg: singleFormData.errMsg,
         timeout: 7000,
@@ -200,7 +195,7 @@ const usePublish = () => {
    */
   const doSingleDelete = async (key: string, id: string, publishCfg: IPublishCfg) => {
     const setting: typeof SypConfig = publishCfg.setting
-    const cfg: CommonblogConfig = publishCfg.cfg
+    const cfg: CommonBlogConfig = publishCfg.cfg
     const dynCfg: DynamicConfig = publishCfg.dynCfg
 
     try {
@@ -239,7 +234,7 @@ const usePublish = () => {
       }
     } catch (e) {
       singleFormData.errMsg = t("main.opt.failure") + "=>" + e
-      logger.error(e)
+      logger.error(t("main.opt.failure") + "=>", e)
       // ElMessage.error(singleFormData.errMsg)
       await kernelApi.pushErrMsg({
         msg: singleFormData.errMsg,
@@ -264,7 +259,7 @@ const usePublish = () => {
   const doForceSingleDelete = async (key: string, id: string, publishCfg: IPublishCfg) => {
     try {
       const setting: typeof SypConfig = publishCfg.setting
-      const cfg: CommonblogConfig = publishCfg.cfg
+      const cfg: CommonBlogConfig = publishCfg.cfg
       const dynCfg: DynamicConfig = publishCfg.dynCfg
 
       // 检测是否发布
@@ -295,7 +290,7 @@ const usePublish = () => {
       }
     } catch (e) {
       ElMessage.error(t("main.opt.failure") + "=>" + e)
-      logger.error(e)
+      logger.error(t("main.opt.failure") + "=>", e)
       await kernelApi.pushErrMsg({
         msg: t("main.opt.failure") + "=>" + e,
         timeout: 7000,
@@ -303,39 +298,10 @@ const usePublish = () => {
     }
   }
 
-  const getPostPreviewUrl = async (api: BlogAdaptor, postid: string, cfg: CommonblogConfig) => {
+  const getPostPreviewUrl = async (api: BlogAdaptor, postid: string, cfg: CommonBlogConfig) => {
     const previewUrl = await api.getPreviewUrl(postid)
     const isAbsoluteUrl = /^http/.test(previewUrl)
     return isAbsoluteUrl ? previewUrl : `${cfg?.home ?? ""}${previewUrl}`
-  }
-
-  /**
-   * 文章预处理 - 仅在发布的时候调用
-   *
-   * @param post - 文章对象
-   * @param id - 思源笔记文档ID
-   * @param publishCfg - 发布配置
-   */
-  const preHandlePost = async (post: Post, id: string, publishCfg: IPublishCfg): Promise<Post> => {
-    const cfg: CommonblogConfig = publishCfg.cfg
-
-    // 图片替换
-    logger.debug("开始图片处理, post =>", { post })
-    post.markdown = await handlePicgo(id, post.markdown)
-    // 利用 lute 把 md 转换成 html
-    post.html = LuteUtil.mdToHtml(post.markdown)
-    logger.debug("图片处理完毕, post.markdown =>", post.markdown)
-
-    // 平台特定的图片上传
-    // 例如知乎不支持链接，需要自行上传
-
-    // 发布格式
-    if (cfg?.pageType == PageTypeEnum.Markdown) {
-      post.description = post.markdown
-    } else {
-      post.description = post.html
-    }
-    return post
   }
 
   // const assignCompareValue = (title1: string, title2: string) => (title1.length > title2.length ? title1 : title2)
@@ -349,7 +315,7 @@ const usePublish = () => {
    */
   const assignAttrs = async (post: Post, id: string, publishCfg: IPublishCfg) => {
     const setting: typeof SypConfig = publishCfg.setting
-    const cfg: CommonblogConfig = publishCfg.cfg
+    const cfg: CommonBlogConfig = publishCfg.cfg
     const dynCfg: DynamicConfig = publishCfg.dynCfg
     const postMeta = ObjectUtil.getProperty(setting, id, {})
 
@@ -378,7 +344,7 @@ const usePublish = () => {
     publishCfg: IPublishCfg
   ) => {
     const setting: typeof SypConfig = publishCfg.setting
-    const cfg: CommonblogConfig = publishCfg.cfg
+    const cfg: CommonBlogConfig = publishCfg.cfg
     const dynCfg: DynamicConfig = publishCfg.dynCfg
 
     // 检测是否发布

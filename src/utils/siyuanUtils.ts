@@ -23,14 +23,24 @@
  * questions.
  */
 
-import { MetaweblogBlogApi } from "~/src/adaptors/api/base/metaweblog/metaweblogBlogApi.ts"
+import { SiyuanKernelApi } from "zhi-siyuan-api"
+import { StrUtil } from "zhi-common"
 
 /**
- * Metaweblog API 适配器
+ * 文件是否存在
  *
- * @author terwer
- * @version 0.9.0
- * @since 0.9.0
+ * @param kernelApi - kernelApi
+ * @param p - 路径
+ * @param type - 类型
  */
-class MetaweblogApiAdaptor extends MetaweblogBlogApi {}
-export { MetaweblogApiAdaptor }
+export const isFileExists = async (kernelApi: SiyuanKernelApi, p: string, type: "text" | "json") => {
+  try {
+    const res = await kernelApi.getFile(p, type)
+    if (type === "text") {
+      return !StrUtil.isEmptyString(res)
+    }
+    return res !== null
+  } catch {
+    return false
+  }
+}

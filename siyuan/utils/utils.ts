@@ -33,7 +33,7 @@ import { StrUtil } from "zhi-common"
  * @param p - 路径
  * @param type - 类型
  */
-export const isFileExists = async (kernelApi: KernelApi, p: string, type: "text" | "json") => {
+export const isSiyuanFileExists = async (kernelApi: KernelApi, p: string, type: "text" | "json") => {
   try {
     const res = await kernelApi.getFile(p, type)
     if (type === "text") {

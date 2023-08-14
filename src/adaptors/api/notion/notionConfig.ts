@@ -24,12 +24,12 @@
  */
 
 import { PageTypeEnum, PasswordType } from "zhi-blog-api"
-import { CommonblogConfig } from "~/src/adaptors/api/base/CommonblogConfig.ts"
+import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
 
 /**
  * Notion 配置
  */
-class NotionConfig extends CommonblogConfig {
+class NotionConfig extends CommonBlogConfig {
   constructor(password: string, middlewareUrl?: string) {
     super("https://www.notion.so/", "https://api.notion.com/v1", "", password, middlewareUrl)
 

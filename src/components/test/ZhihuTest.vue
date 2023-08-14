@@ -29,8 +29,12 @@ import { reactive, ref } from "vue"
 import { AppInstance } from "~/src/appInstance.ts"
 import Adaptors from "~/src/adaptors"
 import { Utils } from "~/src/utils/utils.ts"
+import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 
 const logger = createAppLogger("zhihu-test")
+
+// uses
+const { t } = useVueI18n()
 
 const params = ref("{}")
 const showParamFile = ref(false)
@@ -97,7 +101,7 @@ const zhihuHandleApi = async () => {
     isLoading.value = false
   } catch (e) {
     logMessage.value = e
-    logger.error(e)
+    logger.error(t("main.opt.failure") + "=>", e)
     isLoading.value = false
   }
 }

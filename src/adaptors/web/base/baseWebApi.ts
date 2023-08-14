@@ -22,14 +22,11 @@
  * or visit www.terwer.space if you need additional information or have any
  * questions.
  */
-import { ElectronCookie, Post, WebApi, WebConfig } from "zhi-blog-api"
-import { SiyuanKernelApi } from "zhi-siyuan-api"
-import { CommonFetchClient } from "zhi-fetch-middleware"
+import { Attachment, ElectronCookie, MediaObject, Post, WebApi, WebConfig } from "zhi-blog-api"
 import { AppInstance } from "~/src/appInstance.ts"
 import { createAppLogger, ILogger } from "~/src/utils/appLogger.ts"
-import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
-import { JsonUtil } from "zhi-common"
-import { isDev } from "~/src/utils/constants.ts"
+import { useProxy } from "~/src/composables/useProxy.ts"
+import { BaseExtendApi } from "~/src/adaptors/base/baseExtendApi.ts"
 
 /**
  * 网页授权统一封装基类
@@ -41,9 +38,8 @@ import { isDev } from "~/src/utils/constants.ts"
 class BaseWebApi extends WebApi {
   protected logger: ILogger
   protected cfg: WebConfig
-  private readonly kernelApi: SiyuanKernelApi
-  private readonly commonFetchClient: CommonFetchClient
-  private readonly useSiyuanProxy: boolean
+  protected readonly baseExtendApi: BaseExtendApi
+  public readonly proxyFetch: any
 
   /**
    * 初始化网页授权 API 适配器
@@ -56,11 +52,10 @@ class BaseWebApi extends WebApi {
 
     this.cfg = cfg
     this.logger = createAppLogger("base-web-api")
-    this.commonFetchClient = new CommonFetchClient(appInstance, cfg.apiUrl, cfg.middlewareUrl, isDev)
+    this.baseExtendApi = new BaseExtendApi(this)
 
-    const { kernelApi, isUseSiyuanProxy } = useSiyuanApi()
-    this.kernelApi = kernelApi
-    this.useSiyuanProxy = isUseSiyuanProxy()
+    const { proxyFetch } = useProxy(cfg.middlewareUrl)
+    this.proxyFetch = proxyFetch
   }
 
   // web 适配器专有
@@ -73,6 +68,10 @@ class BaseWebApi extends WebApi {
     return cookies.map((cookie) => `${cookie.name}=${cookie.value}`).join(";")
   }
 
+  public async preEditPost(post: Post, id?: string, publishCfg?: any): Promise<Post> {
+    return await this.baseExtendApi.preEditPost(post, id, publishCfg)
+  }
+
   // 兼容的方法
   public async newPost(post: Post, publish?: boolean): Promise<string> {
     const res = await this.addPost(post)
@@ -82,68 +81,62 @@ class BaseWebApi extends WebApi {
     return res.post_id
   }
 
+  public async newMediaObject(mediaObject: MediaObject, customHandler?: any): Promise<Attachment> {
+    const bits = mediaObject.bits
+    this.logger.debug("newMediaObject on baseWebApi =>", mediaObject)
+    const blob = new Blob([bits], { type: mediaObject.type })
+    const res = await this.uploadFile(blob as File)
+    return {
+      attachment_id: res?.id,
+      date_created_gmt: new Date(),
+      parent: 0,
+      link: res?.url,
+      title: mediaObject.name,
+      caption: "",
+      description: "",
+      metadata: {
+        width: 0,
+        height: 0,
+        file: "",
+        filesize: 0,
+        sizes: [],
+      },
+      type: mediaObject.type,
+      thumbnail: "",
+      id: res?.article_id,
+      file: mediaObject.name,
+      url: res.url,
+    }
+  }
+
   // ================
   // private methods
   // ================
   /**
-   * 网页授权通用的请求代理
+   * 默认添加 Cookie 的网页授权代理
    *
-   * @param url - url
-   * @param headers - 请求头，默认取 password 作为 cookie
-   * @param params - 参数，默认是 {}
-   * @param method - 方法，默认是GET
-   * @param contentType - 类型，默认是 application/json
+   * @param url - 请求的 URL
+   * @param headers - 请求的头部信息
+   * @param params - 请求的参数
+   * @param method - 请求的 HTTP 方法
+   * @param contentType - 请求的内容类型
+   * @returns 返回一个 Promise，解析为响应结果
    */
-  protected async proxyFetch(
+  public async webProxyFetch(
     url: string,
     headers: any[] = [],
     params: any = {},
     method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" = "GET",
     contentType: string = "application/json"
-  ): Promise<any> {
-    if (this.useSiyuanProxy) {
-      this.logger.info("using siyuan forwardProxy")
-      const fetchResult = await this.kernelApi.forwardProxy(
-        url,
-        headers.length > 0
-          ? headers
-          : [
-              {
-                Cookie: this.cfg.password,
-              },
-            ],
-        params,
-        method,
-        contentType,
-        7000
-      )
-      this.logger.debug("proxyFetch result=>", fetchResult)
-      const resText = fetchResult?.body
-      // 后续调试可打开这个日志
-      // this.logger.debug("proxyFetch resText=>", resText)
-      if (contentType === "application/json") {
-        const res = JsonUtil.safeParse<any>(resText, {} as any)
-        return res
-      } else {
-        return resText
-      }
-    } else {
-      this.logger.info("using middleware proxy")
-      const header = headers.length > 0 ? headers[0] : {}
-      const fetchOptions = {
-        method: method,
-        headers: {
-          "Content-Type": "application/json",
-          Cookie: this.cfg.password,
-          ...header,
-        },
-      }
-      this.logger.info("commonFetchClient from proxyFetch url =>", url)
-      this.logger.info("commonFetchClient from proxyFetch fetchOptions =>", fetchOptions)
-      const res = await this.commonFetchClient.fetchCall(url, fetchOptions)
-      this.logger.debug("commonFetchClient res from proxyFetch =>", res)
-      return res
-    }
+  ) {
+    const header = headers.length > 0 ? headers[0] : {}
+    const webHeaders = [
+      {
+        Cookie: this.cfg.password,
+        ...header,
+      },
+    ]
+    return await this.proxyFetch(url, webHeaders, params, method, contentType)
   }
 }
 
