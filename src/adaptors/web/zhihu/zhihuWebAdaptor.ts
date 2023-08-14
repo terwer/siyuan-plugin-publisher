@@ -29,7 +29,7 @@ import * as cheerio from "cheerio"
 import { JsonUtil, StrUtil } from "zhi-common"
 import CryptoJS from "crypto-js"
 import { arrayToBuffer } from "~/src/utils/polyfillUtils.ts"
-import {SiyuanDevice} from "zhi-device";
+import { getAliOssClient } from "~/src/vendors/alioss/s3oss.ts"
 
 /**
  * 知乎网页授权适配器
@@ -255,15 +255,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
       } else {
         const token = fileResp.upload_token
         try {
-          // https://help.aliyun.com/zh/oss/developer-reference/simple-upload-8?spm=a2c4g.11186623.0.0.7e531769TAYbAL#concept-2161572
-          let client = new OSS({
-            endpoint: "https://zhihu-pics-upload.zhimg.com",
-            accessKeyId: token.access_id,
-            accessKeySecret: token.access_key,
-            stsToken: token.access_token,
-            cname: true,
-            bucket: "zhihu-pics",
-          })
+          const client = getAliOssClient("https://zhihu-pics-upload.zhimg.com", "zhihu-pics", token)
           const finalUrl = await client.put(upload_file.object_key, new Blob([bits]))
           this.logger.debug("zhihu uploadFile finished", { client, finalUrl })
         } catch (e) {
