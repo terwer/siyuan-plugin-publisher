@@ -1,5 +1,43 @@
 # Changelog
 
+## [1.8.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.7.0...v1.8.0) (2023-08-14)
+
+
+### Features
+
+* 底部新增发布配置快捷入口 ([e2eec4c](https://github.com/terwer/siyuan-plugin-publisher/commit/e2eec4c493b1e1dece965f8c87e573a772583fcc))
+* 所有平台迁移到官方的正向代理 ([65a30dd](https://github.com/terwer/siyuan-plugin-publisher/commit/65a30dd779529d0d61bf646e0e1e5e942bb25ac9))
+* 所有平台迁移到官方的正向代理 ([c4de13f](https://github.com/terwer/siyuan-plugin-publisher/commit/c4de13f77c65b74b7db3284729cf4434a6ec6d47))
+* 支持接入平台自有能力进行图片上传 ([d081734](https://github.com/terwer/siyuan-plugin-publisher/commit/d081734740dd5fa8632952888a8f00dcd7641582))
+* 支持接入平台自有能力进行图片上传 ([efccca6](https://github.com/terwer/siyuan-plugin-publisher/commit/efccca6e2c03d2affcc912ec657a2f0ea1822324))
+* 新增思源配置 ([202c2ce](https://github.com/terwer/siyuan-plugin-publisher/commit/202c2ce861489da1da4ce48b91bb73dac774c96e))
+
+
+### Bug Fixes
+
+* 修复思源配置 ([75712b8](https://github.com/terwer/siyuan-plugin-publisher/commit/75712b84b7e743d3dcb2b741aaab5c441405c834))
+* 兼容平台图片上传 ([c512e93](https://github.com/terwer/siyuan-plugin-publisher/commit/c512e9308f60c44bb756668080a27e8f015eef18))
+* 兼容平台图片上传 ([47472af](https://github.com/terwer/siyuan-plugin-publisher/commit/47472af2259592e2929cf14edc168e59ae3c65ab))
+* 兼容平台图片上传-Picgo 插件检测 ([0764c83](https://github.com/terwer/siyuan-plugin-publisher/commit/0764c83de725551da0b645a464ee8298f49bdf15))
+* 兼容平台图片上传-Picgo 插件检测 ([090425c](https://github.com/terwer/siyuan-plugin-publisher/commit/090425ccec393ef0f582b89e91f846d35c850b80))
+* 兼容平台图片上传-排查Notion图片解析错误问题 ([24d2c8a](https://github.com/terwer/siyuan-plugin-publisher/commit/24d2c8a4ba8cd5824936a9098c8e4db65872d6e8))
+* 兼容平台图片上传-支持远程图片链接 ([e5f10c4](https://github.com/terwer/siyuan-plugin-publisher/commit/e5f10c4e53bf048ee61a2b4fe2794a6e1e3eac3f))
+* 兼容平台图片上传-支持远程图片链接 ([cf82997](https://github.com/terwer/siyuan-plugin-publisher/commit/cf82997aa26971b833010c6afcc423f540f1c73d))
+* 兼容平台图片上传-知乎平台支持图片上传 ([4df324a](https://github.com/terwer/siyuan-plugin-publisher/commit/4df324ad5187d51c8a57be95aa3a38cc658c0f8a))
+* 兼容平台图片上传-知乎平台支持图片上传 ([c3e1c54](https://github.com/terwer/siyuan-plugin-publisher/commit/c3e1c54c2ae20fe54d86b313e4fa4fce9a57615b))
+* 兼容平台图片上传-统一所有平台的预处理逻辑 ([6c01950](https://github.com/terwer/siyuan-plugin-publisher/commit/6c01950f9c68588acd7a75899ae6845e5c3b4931))
+* 兼容平台图片上传-统一所有平台的预处理逻辑 ([a83a216](https://github.com/terwer/siyuan-plugin-publisher/commit/a83a21683155095cb4ef463124298144c8b0fa33))
+* 兼容平台图片上传-统一所有平台的预处理逻辑 ([a85ba70](https://github.com/terwer/siyuan-plugin-publisher/commit/a85ba7079880785c434692195c7d57a5fcf0974b))
+* 兼容平台图片上传-统一所有平台的预处理逻辑 ([f0fe499](https://github.com/terwer/siyuan-plugin-publisher/commit/f0fe49964343dbf1174ed6f2d9a96af61c97bc8d))
+* 兼容平台图片上传-统一所有平台的预处理逻辑 ([6d9aba3](https://github.com/terwer/siyuan-plugin-publisher/commit/6d9aba3eb7e3b6a67fcc34e9ecabd697fe00ff50))
+* 兼容平台图片上传-解决Notion图片解析错误问题 ([6c99367](https://github.com/terwer/siyuan-plugin-publisher/commit/6c9936746d4a65bf5a1ec9f2f8fba6c15a125902))
+* 博客园 Electron 平台图片上传成功 ([0af57ce](https://github.com/terwer/siyuan-plugin-publisher/commit/0af57ce8067fc1e5227654a13bc0bed0bf1b4fb1))
+
+
+### Miscellaneous
+
+* **deps-dev:** bump vite-plugin-node-polyfills from 0.8.2 to 0.11.1 ([55c389b](https://github.com/terwer/siyuan-plugin-publisher/commit/55c389b7e699c4bd7c33b8787dec98300cd16cc3))
+
 ## [1.7.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.6.1...v1.7.0) (2023-08-11)
 ### Features
 * [#593](https://github.com/terwer/siyuan-plugin-publisher/issues/593) 插件版支持图床替换图片 ([bc645c0](https://github.com/terwer/siyuan-plugin-publisher/commit/bc645c0751016daabfa2e309882f988bd46e49ac))
