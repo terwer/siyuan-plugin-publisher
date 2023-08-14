@@ -32,6 +32,11 @@ export const isDebugMode = process.env.DEBUG_MODE === "true"
 export const DYNAMIC_CONFIG_KEY = "dynamic-config"
 
 /**
- * 不支持图床的平台
+ * 必须使用平台自带的图片上传的平台
  */
-export const UN_SUPPORTED_PICTURE_PLATFORM = ["custom_Zhihu", "common_Notion"]
+export const MUST_USE_OWN_PLATFORM = ["custom_Zhihu", "common_Notion"]
+
+/**
+ * 必须使用图床的平台
+ */
+export const MUST_USE_PICBED_PLATFORM = ["common_Yuque", "common_Hexo"]

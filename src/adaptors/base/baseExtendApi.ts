@@ -38,7 +38,7 @@ import { isFileExists } from "~/src/utils/siyuanUtils.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { SiyuanKernelApi } from "zhi-siyuan-api"
 import { DynamicConfig } from "~/src/platforms/dynamicConfig.ts"
-import { UN_SUPPORTED_PICTURE_PLATFORM } from "~/src/utils/constants.ts"
+import { MUST_USE_OWN_PLATFORM, MUST_USE_PICBED_PLATFORM } from "~/src/utils/constants.ts"
 
 /**
  * 各种模式共享的扩展基类
@@ -70,20 +70,25 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     const dynCfg: DynamicConfig = publishCfg.dynCfg
 
     // 判断key包含 custom_Zhihu 或者 /custom_Zhihu-\w+/
-    const unsupportedPicturePlatform: string[] = UN_SUPPORTED_PICTURE_PLATFORM
+    const mustUseOwnPlatform: string[] = MUST_USE_OWN_PLATFORM
+    const mustUsePicbedPlatform: string[] = MUST_USE_PICBED_PLATFORM
     const isPicgoInstalled: boolean = await this.checkPicgoInstalled()
     if (!isPicgoInstalled) {
       this.logger.warn("未安装 PicGO 插件，将使用平台上传图片")
     }
     // 注意如果 platformKey=custom_Zhihu 或者 custom_Zhihu-xxx custom_Notion-xxx 也算 可以参考 /custom_Zhihu-\w+/
-    const notSupportPictureUrl: boolean = unsupportedPicturePlatform.some((platform) => {
+    const mustUseOwn: boolean = mustUseOwnPlatform.some((platform) => {
       const regex = new RegExp(`${platform}(-\\w+)?`)
       return regex.test(dynCfg.platformKey)
     })
-    if (notSupportPictureUrl) {
+    const mustUsePicbed: boolean = mustUsePicbedPlatform.some((platform) => {
+      const regex = new RegExp(`${platform}(-\\w+)?`)
+      return regex.test(dynCfg.platformKey)
+    })
+    if (mustUseOwn) {
       this.logger.warn("该平台不支持 Picgo 插件，将使用平台上传图片")
     }
-    const usePicgo: boolean = isPicgoInstalled && !notSupportPictureUrl
+    const usePicgo: boolean = isPicgoInstalled && !mustUseOwn
 
     if (usePicgo) {
       // ==========================
@@ -95,9 +100,8 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
       post.markdown = await this.picgoBridge.handlePicgo(id, post.markdown)
       this.logger.debug("图片处理完毕, post.markdown =>", { md: post.markdown })
     } else {
-      if (!notSupportPictureUrl) {
-        const errMsg =
-          "文章可能已经发布成功，但是检测到您未安装Picgo插件，将无法进行图片上传，如需使用图床功能，请在集市下载并配置Picgo插件"
+      if (mustUsePicbed) {
+        const errMsg = "检测到您未安装Picgo插件，该平台的图片将无法处理，如需使用图床功能，请在集市下载并配置Picgo插件"
         this.logger.error(errMsg)
         await this.kernelApi.pushMsg({
           msg: errMsg,
@@ -141,6 +145,16 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
 
         // 图片替换
         this.logger.info("平台图片全部上传完成，将开始进行连接替换，urlMap =>", urlMap)
+        const pictureReplacePattern = new RegExp(
+          Object.keys(urlMap)
+            .map((key) => `\\b${key}\\b`)
+            .join("|"),
+          "g"
+        )
+        const replaceUrl = (match: string): string => {
+          return urlMap[match] || match
+        }
+        post.markdown = post.markdown.replace(pictureReplacePattern, replaceUrl)
       }
     }
 
