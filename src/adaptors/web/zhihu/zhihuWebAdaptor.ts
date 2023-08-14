@@ -51,7 +51,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
   // }
 
   public async getMetaData(): Promise<any> {
-    const res = await this.proxyFetch(
+    const res = await this.webProxyFetch(
       "https://www.zhihu.com/api/v4/me?include=account_status%2Cis_bind_phone%2Cis_force_renamed%2Cemail%2Crenamed_fullname"
     )
     const flag = !!res.uid
@@ -73,7 +73,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
     let result: UserBlog[] = []
 
     const url = `https://www.zhihu.com/people/${this.cfg.username}/columns`
-    const res = await this.proxyFetch(url, [], {}, "GET", "text/html")
+    const res = await this.webProxyFetch(url, [], {}, "GET", "text/html")
     this.logger.debug("get zhihu columns dom =>", { res })
     const $ = cheerio.load(res)
     const scriptContent = $("#js-initialData").html()
@@ -100,7 +100,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
       title: post.title,
       content: post.description,
     })
-    const res = await this.proxyFetch("https://zhuanlan.zhihu.com/api/articles/drafts", [], params, "POST")
+    const res = await this.webProxyFetch("https://zhuanlan.zhihu.com/api/articles/drafts", [], params, "POST")
     this.logger.debug("save zhihu draft res=>", res)
 
     if (!res.id) {
@@ -118,7 +118,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
       commercial_report_info: { commercial_types: [] },
       commercial_zhitask_bind_info: null,
     })
-    const pubRes = await this.proxyFetch(
+    const pubRes = await this.webProxyFetch(
       `https://zhuanlan.zhihu.com/api/articles/${res.id}/publish`,
       [],
       pubParams,
@@ -145,11 +145,15 @@ class ZhihuWebAdaptor extends BaseWebApi {
       delta_time: 10,
     })
 
-    try {
-      await this.proxyFetch(`https://zhuanlan.zhihu.com/api/articles/${postid}/draft`, [], params, "PATCH")
-      this.logger.debug("updated zhihu draft")
-    } catch (e) {
-      throw new Error("知乎文章更新失败")
+    const draftRes = await this.webProxyFetch(
+      `https://zhuanlan.zhihu.com/api/articles/${postid}/draft`,
+      [],
+      params,
+      "PATCH"
+    )
+    this.logger.debug("updated zhihu draft =>", draftRes)
+    if (draftRes?.error?.message) {
+      throw new Error(`知乎文章更新失败：[${draftRes.error.name}] ` + draftRes.error.message)
     }
 
     // 目前是存草稿，现在需要把它设置为发布
@@ -160,7 +164,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
       commercial_report_info: { commercial_types: [] },
       commercial_zhitask_bind_info: null,
     })
-    const pubRes = await this.proxyFetch(
+    const pubRes = await this.webProxyFetch(
       `https://zhuanlan.zhihu.com/api/articles/${postid}/publish`,
       [],
       pubParams,
@@ -182,7 +186,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
   public async deletePost(postid: string): Promise<boolean> {
     let flag = false
     try {
-      const res = await this.proxyFetch(`https://www.zhihu.com/api/v4/articles/${postid}`, [], {}, "DELETE")
+      const res = await this.webProxyFetch(`https://www.zhihu.com/api/v4/articles/${postid}`, [], {}, "DELETE")
       this.logger.debug("delete zhihu article res=>", res)
       if (res.success) {
         flag = true
@@ -215,7 +219,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
 
     try {
       const params = { type: "article", id: articleId }
-      await this.proxyFetch(`https://www.zhihu.com/api/v4/columns/${columnId}/items`, [], params, "POST")
+      await this.webProxyFetch(`https://www.zhihu.com/api/v4/columns/${columnId}/items`, [], params, "POST")
     } catch (e) {
       this.logger.error("文章收录到专栏失败", e)
     }

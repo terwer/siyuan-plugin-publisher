@@ -93,8 +93,6 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
       this.logger.info("使用 PicGO上传图片")
       this.logger.debug("开始图片处理, post =>", { post })
       post.markdown = await this.picgoBridge.handlePicgo(id, post.markdown)
-      // 利用 lute 把 md 转换成 html
-      post.html = LuteUtil.mdToHtml(post.markdown)
       this.logger.debug("图片处理完毕, post.markdown =>", { md: post.markdown })
     } else {
       if (!notSupportPictureUrl) {
@@ -146,6 +144,8 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
       }
     }
 
+    // 利用 lute 把 md 转换成 html
+    post.html = LuteUtil.mdToHtml(post.markdown)
     return post
   }
 

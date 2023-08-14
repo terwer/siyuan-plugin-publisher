@@ -79,7 +79,7 @@ const useProxy = (middlewareUrl?: string) => {
         body = params
       }
       const reqUrl = `${apiUrl}${url}`
-      logger.info("siyuan forwardProxy url =>", apiUrl)
+      logger.info("siyuan forwardProxy url =>", reqUrl)
       logger.info("siyuan forwardProxy fetchOptions =>", {
         headers,
         body,
@@ -91,8 +91,8 @@ const useProxy = (middlewareUrl?: string) => {
 
       if (contentType === "application/json") {
         const resText = fetchResult?.body
-        const res = JsonUtil.safeParse<any>(resText, {} as any)
-        return res
+        const resJson = JsonUtil.safeParse<any>(resText, {} as any)
+        return resJson
       } else if (contentType === "text/html") {
         const resText = fetchResult?.body
         return resText

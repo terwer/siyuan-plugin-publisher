@@ -34,4 +34,4 @@ export const DYNAMIC_CONFIG_KEY = "dynamic-config"
 /**
  * 不支持图床的平台
  */
-export const UN_SUPPORTED_PICTURE_PLATFORM = ["custom_Zhihu", "custom_Notion"]
+export const UN_SUPPORTED_PICTURE_PLATFORM = ["custom_Zhihu", "common_Notion"]
