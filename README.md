@@ -8,9 +8,11 @@ Publish articles from Siyuan Notes to platforms such as Yuque, Notion, Cnblogs, 
 
 Support features such as fast publishing, image bed management, platform expansion, smart labels, etc.
 
-> **Front Announcement 1: Publish Tool's first platform-wide version `1.8.0` using the forward agent of Siyuan Note!**
+> **Front Announcement 1: Release Tool's first platform-wide version `1.8.0` using the forward agent of Siyuan Note!**
+>
+> **Front Announcement 2: The first version of the release tool that fully supports image upload `1.8.0` is released!**
 
-> **Front Announcement 2: The first version of the Publish Tool that fully supports image upload [Zhihu and Notion are adapting, Yuque and Hyo need Picgo plug-in support, and Metaweblog series platforms come with image upload] version `1.8.0` released!**
+Tips: Zhihu uses the image upload of the Zhihu platform, Yuque, Notion, and Hexo need Picgo plugin support, and the Metaweblog series platform supports both Picgo plugin and self-contained image upload (install Picgo plugin to use Picgo plugin, otherwise use their own platform)
 
 We recommend that you use the `uninstall->install` method to update. If the configuration is abnormal, please back up `[workspace]/data/storage/syp/sy-p-plus-cfg.json` , and then delete it, this configuration file will be automatically initialized the first time it is used.
 
@@ -18,10 +20,9 @@ In later releases, the release configuration will only be backward compatible to
 
 ## Recent critical updates and bug fixes
 
+- Yuque, Notion, and Hexo support image links, and automatic upload requires Picgo plugin support
 - Zhihu platform supports automatic image upload
 - When the Picgo plugin is not installed, some platforms can use the built-in image upload, such as Cnblogs, Typecho, WordPress
-- Platforms that do not support image link replacement use the platform's own image upload, such as Zhihu, Notion, adapting...
-- All platforms migrated to official forward proxy
 - Support replacing picture bed image links with Picgo plugin
 - Fixed the issue that the release preview of the authorization code mode was invalidated
 - Support publishing to Zhihu

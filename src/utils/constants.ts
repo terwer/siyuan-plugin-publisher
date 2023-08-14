@@ -39,4 +39,4 @@ export const MUST_USE_OWN_PLATFORM = ["custom_Zhihu"]
 /**
  * 必须使用图床的平台
  */
-export const MUST_USE_PICBED_PLATFORM = ["common_Yuque", "common_Hexo"]
+export const MUST_USE_PICBED_PLATFORM = ["common_Yuque", "common_Notion", "common_Hexo"]
