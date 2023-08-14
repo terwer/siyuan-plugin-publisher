@@ -38,6 +38,7 @@ import { isFileExists } from "~/src/utils/siyuanUtils.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { SiyuanKernelApi } from "zhi-siyuan-api"
 import { DynamicConfig } from "~/src/platforms/dynamicConfig.ts"
+import { UN_SUPPORTED_PICTURE_PLATFORM } from "~/src/utils/constants.ts"
 
 /**
  * 各种模式共享的扩展基类
@@ -68,8 +69,8 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     const cfg: BlogConfig = publishCfg.cfg
     const dynCfg: DynamicConfig = publishCfg.dynCfg
 
-    // 判断key包含zhihu、notion，custom_Zhihu 或者 /custom_Zhihu-\w+/
-    const unsupportedPicturePlatform: string[] = ["custom_Zhihu", "custom_Notion"]
+    // 判断key包含 custom_Zhihu 或者 /custom_Zhihu-\w+/
+    const unsupportedPicturePlatform: string[] = UN_SUPPORTED_PICTURE_PLATFORM
     const isPicgoInstalled: boolean = await this.checkPicgoInstalled()
     if (!isPicgoInstalled) {
       this.logger.warn("未安装 PicGO 插件，将使用平台上传图片")
@@ -89,39 +90,60 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
       // 使用 PicGO上传图片
       // ==========================
       // 图片替换
-      this.logger.debug("使用 PicGO上传图片")
+      this.logger.info("使用 PicGO上传图片")
       this.logger.debug("开始图片处理, post =>", { post })
       post.markdown = await this.picgoBridge.handlePicgo(id, post.markdown)
       // 利用 lute 把 md 转换成 html
       post.html = LuteUtil.mdToHtml(post.markdown)
       this.logger.debug("图片处理完毕, post.markdown =>", { md: post.markdown })
     } else {
-      // ==========================
-      // 使用平台上传图片
-      // ==========================
-      this.logger.debug("使用平台上传图片")
-      // 找到所有的图片
-      const images = await this.picgoBridge.getImageItemsFromMd(id, post.markdown)
-      if (images.length === 0) {
-        this.logger.info("未找到图片，不处理")
-        return post
-      }
-      // 批量处理图片上传
-      this.logger.info(`找到${images.length}张图片，开始上传`)
-      const urlMap = {}
-      for (const image of images) {
-        const imageUrl = image.url
-        const base64Info = await this.readFileToBase64(imageUrl, cfg)
-        const bits = base64ToBuffer(base64Info.imageBase64)
-        const mediaObject = new MediaObject(image.name, base64Info.mimeType, bits)
-        this.logger.debug("before upload, mediaObject =>", mediaObject)
-        const attachResult = await this.api.newMediaObject(mediaObject)
-        this.logger.debug("attachResult =>", attachResult)
-        if (attachResult && attachResult.url) {
-          urlMap[image.originUrl] = attachResult.url
+      if (!notSupportPictureUrl) {
+        const errMsg =
+          "文章可能已经发布成功，但是检测到您未安装Picgo插件，将无法进行图片上传，如需使用图床功能，请在集市下载并配置Picgo插件"
+        this.logger.error(errMsg)
+        await this.kernelApi.pushMsg({
+          msg: errMsg,
+          timeout: 7000,
+        })
+      } else {
+        // ==========================
+        // 使用平台上传图片
+        // ==========================
+        this.logger.info("使用平台上传图片")
+        // 找到所有的图片
+        const images = await this.picgoBridge.getImageItemsFromMd(id, post.markdown)
+        if (images.length === 0) {
+          this.logger.info("未找到图片，不处理")
+          return post
         }
+        // 批量处理图片上传
+        this.logger.info(`找到${images.length}张图片，开始上传`)
+        const urlMap = {}
+        try {
+          for (const image of images) {
+            const imageUrl = image.url
+            const base64Info = await this.readFileToBase64(imageUrl, cfg)
+            const bits = base64ToBuffer(base64Info.imageBase64)
+            const mediaObject = new MediaObject(image.name, base64Info.mimeType, bits)
+            this.logger.debug("before upload, mediaObject =>", mediaObject)
+            const attachResult = await this.api.newMediaObject(mediaObject)
+            this.logger.debug("attachResult =>", attachResult)
+            if (attachResult && attachResult.url) {
+              urlMap[image.originUrl] = attachResult.url
+            }
+          }
+        } catch (e) {
+          const errMsg2 = "文章可能已经发布成功，但是平台图片上传失败"
+          this.logger.error(errMsg2, e)
+          await this.kernelApi.pushMsg({
+            msg: errMsg2,
+            timeout: 7000,
+          })
+        }
+
+        // 图片替换
+        this.logger.info("平台图片全部上传完成，将开始进行连接替换，urlMap =>", urlMap)
       }
-      this.logger.info("平台图片全部上传完成，urlMap =>", urlMap)
     }
 
     return post

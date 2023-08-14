@@ -30,3 +30,8 @@ export const isDebugMode = process.env.DEBUG_MODE === "true"
  * 动态配置key，全系统唯一，请勿更改
  */
 export const DYNAMIC_CONFIG_KEY = "dynamic-config"
+
+/**
+ * 不支持图床的平台
+ */
+export const UN_SUPPORTED_PICTURE_PLATFORM = ["custom_Zhihu", "custom_Notion"]

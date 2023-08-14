@@ -83,7 +83,7 @@ const usePublish = () => {
     try {
       // 系统内置
       const isSys = pre.systemCfg.some((item) => item.platformKey === key)
-      logger.info("isSys=>", isSys)
+      logger.info(`isSys=>${isSys}`)
 
       // 校验
       if (isSys) {
