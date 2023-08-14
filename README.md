@@ -63,7 +63,7 @@ Names not listed in order
 ## Core Features
 
 - [X] **Extremely fast release**: One-time configuration, one-click release
-- [Z] **Picture bed management**: Integrate PicGO picture bed, support s3, minio, watermark plugin
+- [X] **Picture bed management**: Integrate PicGO picture bed, support s3, minio, watermark plugin
 - [X] **Support for extensions**: Based on the unified blog API specification, built-in support for metaweblogAPI, WordPress
   and GitHub, and provides a unified adapter, which can theoretically be extended to any platform
 - [X] **Platform switch**: All platforms support enabling and disabling, the blog garden is enabled by default, and can be
