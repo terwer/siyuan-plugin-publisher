@@ -28,7 +28,7 @@ In later releases, the release configuration will only be backward compatible to
 - Support publishing to Zhihu
 - Support for publishing to Hexo
 - Support for publishing to Notion
-- Support for Yuque,Cnblogs, Metaweblog, Typecho, WordPress
+- Support for Yuque, Cnblogs, Metaweblog, Typecho, WordPress
 - Support automatic generation of article aliases
 - Support for changing the default knowledge base
 
@@ -40,7 +40,7 @@ This plugin supports almost all devices and platforms of Siyuan Note, and the sp
 - [X] Servo environment (Zero configuration, cross-domain request proxy built-in)
   - [X] CentSource Note Browser Servo
   - [X] Siyuan Note Client Servo
-  - [X] Siyuan Notemaker mobile servo
+  - [X] Siyuan Note mobile servo
 - [X] Siyuan Note docker version (Zero configuration, cross-domain request proxy built-in)
 
 🎉 **All platforms have been migrated to the official forward proxy, achieving zero user configuration and supporting cross-domain request proxies by default 🎉**
