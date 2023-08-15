@@ -280,8 +280,10 @@ export default {
   "yaml.show.type.html": "HTML正文",
   "main.read.mode": "只读模式",
   "main.edit.mode": "编辑模式",
-  "main.read.mode.tip":
-    "温馨提示：只读模式下点击可直接复制，编辑模式下需要点击复制按钮复制。YAML转文章属性仅支持title、permalink、date、description、tags",
+  "main.read.mode.tip1": "温馨提示：为了数据一致性，多平台分发或者未提供YAML适配器时无法处理平台属性，YAML将仅显示公共属性且只能只读。",
+  "main.read.mode.tip2": "！！！YAML如有修改，请务必点击保存按钮，否则修改内容将丢失！！！",
+  "main.read.mode.tip3": "为了标识文章的唯一性，slug修改将忽略，其他属性可同步。",
+  "main.read.mode.tip4": "！！！此功能为高级功能，如果您不清楚YAML语法和用途，请勿修改！！！",
   "main.opt.onclick.confirm.tip":
     "此操作默认将重新生成除别名以外的所有属性，如果只想修改个别属性，请在详细模式点击单独的功能按钮进行对应操作，是否继续？",
   "main.cat.list.error": "分类获取失败",

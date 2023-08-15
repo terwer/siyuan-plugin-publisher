@@ -273,7 +273,9 @@ export default {
   "page.no.id": "pageId fetch error",
   "main.read.mode": "Readonly",
   "main.edit.mode": "Editable",
-  "main.read.mode.tip": "Readonly tips",
+  "main.read.mode.tip1": "Tips: The multi-platform distribution mode will display the built-in public YAML, and the general release can display the platform's custom YAML.",
+  "main.read.mode.tip2": "To identify the uniqueness of the article, slug modifications are ignored and other attributes can be synchronized.",
+  "main.read.mode.tip3": "！！！ This feature is advanced, if you are unclear about the YAML syntax and purpose, do not modify it!!",
   "main.opt.onclick.confirm.tip":
     "This operation will re -generate all attributes other than alias. If you just want to modify individual attributes, please click the individual function button to operate in the detailed mode. Do you continue?",
   "main.cat.list.error": "Category list get error",

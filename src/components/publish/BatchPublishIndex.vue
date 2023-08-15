@@ -39,6 +39,8 @@ import { BrowserUtil } from "zhi-device"
 import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
 import { Post } from "zhi-blog-api"
 import { IPublishCfg } from "~/src/types/IPublishCfg.ts"
+import { PageEditMode } from "~/src/models/pageEditMode.ts"
+import EditModeSelect from "~/src/components/publish/form/EditModeSelect.vue"
 
 const logger = createAppLogger("publisher-index")
 
@@ -74,7 +76,18 @@ const formData = reactive({
   siyuanPost: {} as Post,
   publishCfg: {} as IPublishCfg,
 
+  // =========================
+  // sync attrs start
+  // =========================
+  // 平台列表
   dynList: <string[]>[],
+
+  // 页面模式
+  editType: PageEditMode.EditMode_simple,
+  // =========================
+  // sync attrs end
+  // =========================
+
   actionEnable: true,
 })
 
@@ -187,8 +200,14 @@ const handleForceDelete = async (key: string, id: string, publishCfg: IPublishCf
   }
 }
 
+const syncEditMode = (val: PageEditMode) => {
+  formData.editType = val
+  logger.debug("syncEditMode in batch publish")
+}
+
 const syncDynList = (selectedKeys: string[]) => {
   formData.dynList = selectedKeys
+  logger.debug("syncDynList in batch publish")
 }
 
 const handleRefresh = () => {
@@ -238,24 +257,40 @@ onMounted(async () => {
         <!-- 表单数据 -->
         <div class="publish-form">
           <el-form label-width="100px">
-            <!-- 文章标题 -->
-            <div class="form-post-title">
-              <el-form-item :label="t('main.title')">
-                <el-input v-model="formData.siyuanPost.title" />
-              </el-form-item>
+            <!-- 编辑模式选择 -->
+            <edit-mode-select @emitSyncEditMode="syncEditMode" />
+
+            <!--
+            --------------------------------------
+            编辑模式开始
+            --------------------------------------
+            -->
+            <source-mode v-if="formData.editType === PageEditMode.EditMode_source" v-model="formData.siyuanPost" />
+            <div v-else class="normal-mode">
+              <!-- 文章标题 -->
+              <div class="form-post-title">
+                <el-form-item :label="t('main.title')">
+                  <el-input v-model="formData.siyuanPost.title" />
+                </el-form-item>
+              </div>
+              <el-divider border-style="dashed" />
+
+              <!--
+              ----------------------------------------------------------------------
+              -->
+              <!-- 标签
+              <publish-tags />
+              -->
             </div>
-            <el-divider border-style="dashed" />
+            <!--
+            --------------------------------------
+            编辑模式结束
+            --------------------------------------
+            -->
 
             <!-- 分发平台 -->
             <publish-platform :id="props.id" @emitSyncDynList="syncDynList" />
             <el-divider border-style="dashed" />
-
-            <!--
-            ----------------------------------------------------------------------
-            -->
-            <!-- 标签
-            <publish-tags />
-            -->
 
             <!-- 发布 -->
             <el-form-item label-width="100px" class="form-action">
@@ -285,6 +320,10 @@ onMounted(async () => {
 </template>
 
 <style lang="stylus" scoped>
+.top-tip
+  margin 10px 0
+  padding-left 0
+
 .batch-result
   margin 16px 0
   font-size 14px

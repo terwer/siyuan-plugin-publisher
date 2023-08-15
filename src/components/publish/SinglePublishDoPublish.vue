@@ -40,13 +40,15 @@ import { BrowserUtil } from "zhi-device"
 import { StrUtil } from "zhi-common"
 import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
 import { IPublishCfg } from "~/src/types/IPublishCfg.ts"
+import { PageEditMode } from "~/src/models/pageEditMode.ts"
+import EditModeSelect from "~/src/components/publish/form/EditModeSelect.vue"
 
 const logger = createAppLogger("single-publish-do-publish")
 
 // uses
 const { t } = useVueI18n()
 const route = useRoute()
-const { doInitPage } = usePublish()
+const { initPublishMethods } = usePublish()
 const { query } = useRoute()
 const { kernelApi } = useSiyuanApi()
 const { doSinglePublish, doSingleDelete } = usePublish()
@@ -76,6 +78,15 @@ const formData = reactive({
   changeTips: {
     title: "",
   },
+
+  // =========================
+  // sync attrs start
+  // =========================
+  // 页面模式
+  editType: PageEditMode.EditMode_simple,
+  // =========================
+  // sync attrs end
+  // =========================
 
   actionEnable: true,
 })
@@ -202,11 +213,20 @@ const refreshChangeTips = () => {
   formData.changeTips.title = showChangeTip(formData.siyuanPost.title, formData.platformPost.title)
 }
 
+const syncEditMode = (val: PageEditMode) => {
+  formData.editType = val
+  logger.debug("syncEditMode in single publish")
+}
+
+const syncPost = (post: Post) => {
+  formData.siyuanPost = post
+}
+
 const initPage = async () => {
   try {
     // 初始化属性
     formData.publishCfg = await getPublishCfg(key)
-    const { siyuanPost, platformPost, mergedPost, postPreviewUrl } = await doInitPage(
+    const { siyuanPost, platformPost, mergedPost, postPreviewUrl } = await initPublishMethods.doInitPage(
       key,
       id,
       formData.method,
@@ -263,30 +283,52 @@ onMounted(async () => {
           <!-- 表单数据 -->
           <div class="publish-form">
             <el-form label-width="100px">
-              <!-- 文章标题 -->
-              <div class="form-post-title">
-                <el-form-item :label="t('main.title')">
-                  <el-input v-model="formData.mergedPost.title" />
-                </el-form-item>
-                <el-alert
-                  v-if="
-                    formData.method === MethodEnum.METHOD_EDIT &&
-                    !StrUtil.isEmptyString(formData.changeTips.title) &&
-                    formData.siyuanPost.title !== formData.platformPost.title
-                  "
-                  class="top-tip"
-                  :title="formData.changeTips.title"
-                  type="error"
-                  :closable="false"
-                />
-              </div>
-              <el-divider border-style="dashed" />
+              <!-- 编辑模式选择 -->
+              <edit-mode-select @emitSyncEditMode="syncEditMode" />
 
               <!--
-             ----------------------------------------------------------------------
-             -->
-              <!-- 标签
-              <publish-tags />
+              --------------------------------------
+              编辑模式开始
+              --------------------------------------
+              -->
+              <source-mode
+                v-if="formData.editType === PageEditMode.EditMode_source"
+                v-model="formData.siyuanPost"
+                :api-type="key"
+                :cfg="formData.publishCfg.cfg"
+                @emitSyncPost="syncPost"
+              />
+              <div v-else class="normal-mode">
+                <!-- 文章标题 -->
+                <div class="form-post-title">
+                  <el-form-item :label="t('main.title')">
+                    <el-input v-model="formData.mergedPost.title" />
+                  </el-form-item>
+                  <el-alert
+                    v-if="
+                      formData.method === MethodEnum.METHOD_EDIT &&
+                      !StrUtil.isEmptyString(formData.changeTips.title) &&
+                      formData.siyuanPost.title !== formData.platformPost.title
+                    "
+                    class="top-tip"
+                    :title="formData.changeTips.title"
+                    type="error"
+                    :closable="false"
+                  />
+                </div>
+                <el-divider border-style="dashed" />
+
+                <!--
+                ----------------------------------------------------------------------
+                -->
+                <!-- 标签
+                <publish-tags />
+                -->
+              </div>
+              <!--
+              --------------------------------------
+              编辑模式结束
+              --------------------------------------
               -->
 
               <!-- 发布 -->

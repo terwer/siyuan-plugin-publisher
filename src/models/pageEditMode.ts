@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -23,15 +23,23 @@
  * questions.
  */
 
-import { CommonGithubApiAdaptor } from "~/src/adaptors/api/base/github/commonGithubApiAdaptor.ts"
-
 /**
- * Hexo API 适配器
+ * 编辑模式
  *
  * @author terwer
- * @version 1.3.2
- * @since 0.8.1
+ * @since 0.6.0
  */
-class HexoApiAdaptor extends CommonGithubApiAdaptor {}
-
-export { HexoApiAdaptor }
+export enum PageEditMode {
+  /**
+   * 简洁模式
+   */
+  EditMode_simple,
+  /**
+   * 详细模式
+   */
+  EditMode_complex,
+  /**
+   * 源码模式
+   */
+  EditMode_source,
+}

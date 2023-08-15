@@ -28,9 +28,14 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { CategoryInfo, Post, UserBlog } from "zhi-blog-api"
 import { CommonGithubClient, GithubConfig } from "zhi-github-middleware"
 import { CommonGithubConfig } from "~/src/adaptors/api/base/github/commonGithubConfig.ts"
-import { StrUtil } from "zhi-common"
+import { ObjectUtil, StrUtil } from "zhi-common"
 import { toRaw } from "vue"
 import { Base64 } from "js-base64"
+import { YamlConvertAdaptor } from "~/src/platforms/yamlConvertAdaptor.ts"
+import { YamlFormatObj } from "~/src/models/yamlFormatObj.ts"
+import Adaptors from "~/src/adaptors"
+import { DynamicConfig, getDynYamlKey } from "~/src/platforms/dynamicConfig.ts"
+import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 
 /**
  * Github API 适配器
@@ -41,6 +46,7 @@ import { Base64 } from "js-base64"
  */
 class CommonGithubApiAdaptor extends BaseBlogApi {
   private githubClient: CommonGithubClient
+  private settingStore
 
   constructor(appInstance: any, cfg: CommonGithubConfig) {
     super(appInstance, cfg)
@@ -58,6 +64,7 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
     githubConfig.mdFilenameRule = cfg.mdFilenameRule
 
     this.githubClient = new CommonGithubClient(githubConfig)
+    this.settingStore = useSettingStore()
   }
 
   public async getUsersBlogs(): Promise<UserBlog[]> {
@@ -78,6 +85,28 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
     this.logger.debug("result result =>", result)
 
     return result
+  }
+
+  public async preEditPost(post: Post, id?: string, publishCfg?: any): Promise<Post> {
+    // 调用父类预处理
+    await super.preEditPost(post, id, publishCfg)
+    this.logger.info("handled preEditPost with parent")
+
+    const dynCfg = publishCfg.dynCfg as DynamicConfig
+    const cfg = this.cfg as CommonGithubConfig
+    // 处理 YAML
+    const yamlKey = getDynYamlKey(dynCfg.platformKey)
+    const setting = await this.settingStore.getSetting()
+    const postMeta = ObjectUtil.getProperty(setting, id, {})
+    const yaml = ObjectUtil.getProperty(postMeta, yamlKey, "---\n---")
+    this.logger.debug("get stored yaml from postMeta =>", yaml)
+
+    throw new Error("开发中")
+    const yamlApi: YamlConvertAdaptor = await Adaptors.getYamlAdaptor(dynCfg.platformKey, cfg)
+    const yamlObj: YamlFormatObj = yamlApi.convertToYaml(post, cfg)
+    post.description = yamlObj.mdFullContent
+    this.logger.info("handled yaml using HexoYamlConverterAdaptor")
+    return post
   }
 
   public async newPost(post: Post, publish?: boolean): Promise<string> {

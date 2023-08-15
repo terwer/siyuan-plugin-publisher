@@ -39,6 +39,7 @@ import { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
 import { ElMessage } from "element-plus"
 import { usePicgoBridge } from "~/src/composables/usePicgoBridge.ts"
+import {PageEditMode} from "~/src/models/pageEditMode.ts";
 
 /**
  * 通用发布组件
@@ -337,67 +338,69 @@ const usePublish = () => {
     return post
   }
 
-  const doInitPage = async (
-    key: string,
-    id: string,
-    method: MethodEnum = MethodEnum.METHOD_ADD,
-    publishCfg: IPublishCfg
-  ) => {
-    const setting: typeof SypConfig = publishCfg.setting
-    const cfg: CommonBlogConfig = publishCfg.cfg
-    const dynCfg: DynamicConfig = publishCfg.dynCfg
+  const initPublishMethods = {
+     doInitPage : async (
+      key: string,
+      id: string,
+      method: MethodEnum = MethodEnum.METHOD_ADD,
+      publishCfg: IPublishCfg
+    ) => {
+      const setting: typeof SypConfig = publishCfg.setting
+      const cfg: CommonBlogConfig = publishCfg.cfg
+      const dynCfg: DynamicConfig = publishCfg.dynCfg
 
-    // 检测是否发布
-    const posidKey = cfg.posidKey
-    if (StrUtil.isEmptyString(posidKey)) {
-      throw new Error("配置错误，posidKey不能为空，请检查配置")
-    }
-
-    const postMeta = ObjectUtil.getProperty(setting, id, {})
-    const postid = ObjectUtil.getProperty(postMeta, posidKey)
-
-    // 初始化API
-    const api = await getPublishApi(key, cfg)
-
-    // vars
-    let postPreviewUrl: string = ""
-
-    // 思源笔记原始文章数据
-    const siyuanPost = await blogApi.getPost(id)
-    let platformPost = new Post()
-    let mergedPost = new Post()
-    logger.debug("doInitPage start init siyuanPost =>", toRaw(siyuanPost))
-
-    if (method === MethodEnum.METHOD_ADD) {
-      logger.info("Add, using siyuan post")
-      mergedPost = siyuanPost
-    } else {
-      logger.info("Reading post from remote platform")
-      if (StrUtil.isEmptyString(postid)) {
-        throw new Error("未找到postid，将无法进行更新")
+      // 检测是否发布
+      const posidKey = cfg.posidKey
+      if (StrUtil.isEmptyString(posidKey)) {
+        throw new Error("配置错误，posidKey不能为空，请检查配置")
       }
 
-      // 查询平台文章
-      platformPost = await api.getPost(postid)
+      const postMeta = ObjectUtil.getProperty(setting, id, {})
+      const postid = ObjectUtil.getProperty(postMeta, posidKey)
 
-      // 暂时不合并
-      mergedPost = siyuanPost
+      // 初始化API
+      const api = await getPublishApi(key, cfg)
 
-      // 更新预览链接
-      postPreviewUrl = await getPostPreviewUrl(api, postid, cfg)
-    }
+      // vars
+      let postPreviewUrl: string = ""
 
-    // 初始化属性
-    mergedPost = await assignAttrs(mergedPost, id, publishCfg)
+      // 思源笔记原始文章数据
+      const siyuanPost = await blogApi.getPost(id)
+      let platformPost = new Post()
+      let mergedPost = new Post()
+      logger.debug("doInitPage start init siyuanPost =>", toRaw(siyuanPost))
 
-    logger.debug("doInitPage finished platformPost =>", toRaw(platformPost))
-    logger.debug("doInitPage finished mergedPost =>", toRaw(mergedPost))
+      if (method === MethodEnum.METHOD_ADD) {
+        logger.info("Add, using siyuan post")
+        mergedPost = siyuanPost
+      } else {
+        logger.info("Reading post from remote platform")
+        if (StrUtil.isEmptyString(postid)) {
+          throw new Error("未找到postid，将无法进行更新")
+        }
 
-    return {
-      siyuanPost,
-      platformPost,
-      mergedPost,
-      postPreviewUrl,
+        // 查询平台文章
+        platformPost = await api.getPost(postid)
+
+        // 暂时不合并
+        mergedPost = siyuanPost
+
+        // 更新预览链接
+        postPreviewUrl = await getPostPreviewUrl(api, postid, cfg)
+      }
+
+      // 初始化属性
+      mergedPost = await assignAttrs(mergedPost, id, publishCfg)
+
+      logger.debug("doInitPage finished platformPost =>", toRaw(platformPost))
+      logger.debug("doInitPage finished mergedPost =>", toRaw(mergedPost))
+
+      return {
+        siyuanPost,
+        platformPost,
+        mergedPost,
+        postPreviewUrl,
+      }
     }
   }
 
@@ -406,7 +409,7 @@ const usePublish = () => {
     doSinglePublish,
     doSingleDelete,
     doForceSingleDelete,
-    doInitPage,
+    initPublishMethods,
     assignAttrs,
   }
 }

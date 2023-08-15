@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -23,15 +23,12 @@
  * questions.
  */
 
-import { CommonGithubApiAdaptor } from "~/src/adaptors/api/base/github/commonGithubApiAdaptor.ts"
-
 /**
- * Hexo API 适配器
- *
- * @author terwer
- * @version 1.3.2
- * @since 0.8.1
+ * 源码显示类型
  */
-class HexoApiAdaptor extends CommonGithubApiAdaptor {}
-
-export { HexoApiAdaptor }
+export enum SourceContentShowType {
+  YAML,
+  CONTENT,
+  YAML_CONTENT,
+  HTML_CONTENT,
+}

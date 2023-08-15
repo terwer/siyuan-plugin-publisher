@@ -35,6 +35,7 @@ import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { useMetaweblogApi } from "~/src/adaptors/api/metaweblog/useMetaweblogApi.ts"
 import { useNotionApi } from "~/src/adaptors/api/notion/useNotionApi.ts"
 import { useHexoApi } from "~/src/adaptors/api/hexo/useHexoApi.ts"
+import { YamlConvertAdaptor } from "~/src/platforms/yamlConvertAdaptor.ts"
 
 /**
  * 适配器统一入口
@@ -211,6 +212,30 @@ class Adaptors {
     }
     this.logger.debug(`get blogAdaptor from key ${key}`)
     return blogAdaptor
+  }
+
+  /**
+   * 根据平台key查找YAML适配器
+   *
+   * @param key
+   * @param newCfg
+   */
+  public static async getYamlAdaptor(key: string, newCfg?: any): Promise<YamlConvertAdaptor> {
+    let yamlAdp = null
+    const type: SubPlatformType = getSubPlatformTypeByKey(key)
+
+    switch (type) {
+      case SubPlatformType.Github_Hexo: {
+        const { yamlAdaptor } = await useHexoApi(key, newCfg)
+        yamlAdp = yamlAdaptor
+        break
+      }
+      default: {
+        break
+      }
+    }
+    this.logger.debug(`get yamlAdaptor from key ${key}=>`, yamlAdp)
+    return yamlAdp
   }
 }
 

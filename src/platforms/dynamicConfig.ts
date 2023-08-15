@@ -419,10 +419,21 @@ export function deletePlatformByKey(dynamicConfigArray: any[], key: string): any
 // =====================
 /**
  * 获取动态文章ID的key
+ *
  * @param platformKey
  */
 export function getDynPostidKey(platformKey: string): string {
   return "custom-" + platformKey + "-post-id"
+}
+
+// =====================
+/**
+ * 获取动态YAML的key
+ *
+ * @param platformKey
+ */
+export function getDynYamlKey(platformKey: string): string {
+  return "custom-" + platformKey + "-yaml"
 }
 
 // ======================
