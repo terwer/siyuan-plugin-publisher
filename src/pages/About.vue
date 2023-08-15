@@ -23,10 +23,60 @@
   - questions.
   -->
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref } from "vue"
+import { version, dependencies } from "../../package.json"
+import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+
+const { t } = useVueI18n()
+const v = ref(version)
+</script>
 
 <template>
-  <div>这里是关于</div>
+  <div id="about-box">
+    <div class="logo">
+      <img src="../../icon.png" alt="logo" />
+    </div>
+    <div class="notice">
+      <p class="title">发布工具 v{{ v }}</p>
+
+      <div class="param slogan">
+        {{ t("slogan.make.written.fun") }}
+      </div>
+      <div class="space"></div>
+      <div class="param">Created by terwer</div>
+
+      <div class="space"></div>
+      <div class="third-libs">
+        <div class="lib-title">Thanks for third party libraries:</div>
+        <div class="lib-item" v-for="(value, key) in dependencies">{{ key }} ({{ value }})</div>
+      </div>
+    </div>
+  </div>
 </template>
 
-<style scoped lang="stylus"></style>
+<style scoped lang="stylus">
+#about-box
+  padding 16px 20px
+  .logo
+    display inline-block
+    vertical-align top
+  .notice
+    display inline-block
+    vertical-align top
+    padding-left 20px
+    .param
+      padding 10px 0
+    .space
+      padding-bottom 10px
+    .slogan
+      font-size 24px
+    .third-libs
+      .lib-title
+        font-weight bold
+        margin-bottom 4px
+      .lib-item
+        font-size 14px
+        padding 4px 0
+        color #bbb
+</style>

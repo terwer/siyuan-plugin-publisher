@@ -347,7 +347,8 @@ export default {
   "setting.yuque.previewUrl.tip": "Article preview rules for the Yuque platform, Usually: /[notebook]/[postid]",
 
   "setting.notion.home.tip": "The homepage of the Notion platform is usually fixed: https://www.notion.so/",
-  "setting.notion.password.tip": "For the token of the Notion platform, please click the link to get it, you need to check the three permissions of [Read content], [Update content], and [Insert content].",
+  "setting.notion.password.tip":
+    "For the token of the Notion platform, please click the link to get it, you need to check the three permissions of [Read content], [Update content], and [Insert content].",
   "setting.notion.apiurl.tip": "The API address of the Notion platform is usually fixed: https://api.notion.com/v1",
   "setting.notion.previewUrl.tip": "Article preview rules for the Notion platform, usually:/[postid]",
 
@@ -540,11 +541,15 @@ export default {
   "main.publish.remove": "Remove",
   "setting.blog.knowledge.space": "Knowledge space/Knowledge base",
   "main.data.empty": "No data",
-  "enableKnowledgeSpace.Tips": "After validation, a list of available knowledge spaces is listed, and you can modify the default knowledge spaces as needed and save them",
-  "post.bind.auto.tips": "The ID here is automatically saved by the publishing tool, if you are not clear about the principle, please do not modify it",
+  "enableKnowledgeSpace.Tips":
+    "After validation, a list of available knowledge spaces is listed, and you can modify the default knowledge spaces as needed and save them",
+  "post.bind.auto.tips":
+    "The ID here is automatically saved by the publishing tool, if you are not clear about the principle, please do not modify it",
   "siyuan.config.setting": "Source settings",
   "setting.blog.siyuan.apiurl": "Siyuan API address",
-  "setting.blog.siyuan.apiurl.tip": "The API address of Siyuan Note, including ports, The default address of Siyuan API is: http://127.0.0.1;6806",
+  "setting.blog.siyuan.apiurl.tip":
+    "The API address of Siyuan Note, including ports, The default address of Siyuan API is: http://127.0.0.1;6806",
   "setting.blog.siyuan.password": "Siyuan Token",
   "setting.blog.siyuan.password.tip": "Siyuan Token, which is empty by default",
+  "slogan.make.written.fun": "Let creation return to fun",
 }

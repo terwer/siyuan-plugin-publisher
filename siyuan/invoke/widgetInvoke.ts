@@ -101,7 +101,7 @@ export class WidgetInvoke {
       pageId = undefined
     }
     this.logger.debug("pageId=>", pageId)
-    await this.showPage(`/setting/about?id=${pageId}`)
+    await this.showPage(`/about?id=${pageId}`)
   }
 
   private async showPage(pageUrl: string, isReload?: boolean, w?: string, h?: string, noscroll?: boolean) {

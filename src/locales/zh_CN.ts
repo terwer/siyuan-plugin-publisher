@@ -539,4 +539,5 @@ export default {
   "setting.blog.siyuan.apiurl.tip": "思源笔记的API地址，包括端口，默认是：http://127.0.0.1:6806",
   "setting.blog.siyuan.password": "思源Token",
   "setting.blog.siyuan.password.tip": "思源笔记鉴权Token，请从【设置->关于】复制，如果是本地笔记留空即可",
+  "slogan.make.written.fun": "让创作回归乐趣",
 }
