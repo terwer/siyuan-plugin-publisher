@@ -91,8 +91,8 @@ const formData = reactive({
           padding 4px 0
           color #bbb
 
-.param.slogan
-  background linear-gradient(to right, #ff0000, #00ff00, #0000ff)
+.param.slogan span
+  background-image linear-gradient(to right, #222222, #bbb)
   -webkit-background-clip text
   -webkit-text-fill-color transparent
 </style>
