@@ -24,12 +24,16 @@
   -->
 
 <script setup lang="ts">
-import { ref } from "vue"
-import { version, dependencies } from "../../package.json"
+import { reactive } from "vue"
+import { dependencies, version } from "../../package.json"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 
 const { t } = useVueI18n()
-const v = ref(version)
+
+const formData = reactive({
+  v: version,
+  deps: dependencies,
+})
 </script>
 
 <template>
@@ -38,7 +42,7 @@ const v = ref(version)
       <img src="../../icon.png" alt="logo" />
     </div>
     <div class="notice">
-      <p class="title">发布工具 v{{ v }}</p>
+      <p class="title">发布工具 v{{ formData.v }}</p>
 
       <div class="param slogan">
         <span>{{ t("slogan.make.written.fun") }}</span>
@@ -50,7 +54,7 @@ const v = ref(version)
       <div class="third-libs">
         <div class="lib-title">Thanks for third party libraries:</div>
         <div class="lib-container">
-          <div class="lib-item" v-for="(value, key) in dependencies">{{ key }} ({{ value }})</div>
+          <div class="lib-item" v-for="(value, key) in formData.deps">{{ key }} ({{ value }})</div>
         </div>
       </div>
     </div>
