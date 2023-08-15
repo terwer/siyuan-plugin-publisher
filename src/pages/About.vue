@@ -41,7 +41,7 @@ const v = ref(version)
       <p class="title">发布工具 v{{ v }}</p>
 
       <div class="param slogan">
-        {{ t("slogan.make.written.fun") }}
+        <span>{{ t("slogan.make.written.fun") }}</span>
       </div>
       <div class="space"></div>
       <div class="param">Created by terwer</div>
@@ -49,7 +49,9 @@ const v = ref(version)
       <div class="space"></div>
       <div class="third-libs">
         <div class="lib-title">Thanks for third party libraries:</div>
-        <div class="lib-item" v-for="(value, key) in dependencies">{{ key }} ({{ value }})</div>
+        <div class="lib-container">
+          <div class="lib-item" v-for="(value, key) in dependencies">{{ key }} ({{ value }})</div>
+        </div>
       </div>
     </div>
   </div>
@@ -65,6 +67,7 @@ const v = ref(version)
     display inline-block
     vertical-align top
     padding-left 20px
+    width 80%
     .param
       padding 10px 0
     .space
@@ -75,8 +78,17 @@ const v = ref(version)
       .lib-title
         font-weight bold
         margin-bottom 4px
-      .lib-item
-        font-size 14px
-        padding 4px 0
-        color #bbb
+      .lib-container
+        display flex
+        flex-wrap wrap
+        .lib-item
+          width 50%
+          font-size 14px
+          padding 4px 0
+          color #bbb
+
+.param.slogan
+  background linear-gradient(to right, #ff0000, #00ff00, #0000ff)
+  -webkit-background-clip text
+  -webkit-text-fill-color transparent
 </style>
