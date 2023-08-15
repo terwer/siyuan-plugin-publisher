@@ -67,6 +67,9 @@ const formData = reactive({
   .logo
     display inline-block
     vertical-align top
+    img
+      width 160px
+      height 160px
   .notice
     display inline-block
     vertical-align top
@@ -92,7 +95,12 @@ const formData = reactive({
           color #bbb
 
 .param.slogan span
-  background-image linear-gradient(to right, #222222, #bbb)
+  // 红色色系
+  background-image linear-gradient(to right, #E03E2F, #f1c0b6)
+  // 灰白色系
+  // background-image linear-gradient(to right, #222222, #bbb)
+  // 蓝色色系
+  // background-image linear-gradient(to right, #0079ff, #36a1ff)
   -webkit-background-clip text
   -webkit-text-fill-color transparent
 </style>
