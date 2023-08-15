@@ -212,31 +212,6 @@ class Adaptors {
     this.logger.debug(`get blogAdaptor from key ${key}`)
     return blogAdaptor
   }
-
-  // 新增 preEditPost ， 此方法不再需要
-  // /**
-  //  * 根据平台key查找YAML适配器
-  //  *
-  //  * @param key
-  //  * @param newCfg
-  //  */
-  // public static async getYamlAdaptor(key: string, newCfg?: any): Promise<YamlConvertAdaptor> {
-  //   let yamlAdp = null
-  //   const type: SubPlatformType = getSubPlatformTypeByKey(key)
-  //
-  //   switch (type) {
-  //     case SubPlatformType.Github_Hexo: {
-  //       const { yamlAdaptor } = await useHexoApi(key, newCfg)
-  //       yamlAdp = yamlAdaptor
-  //       break
-  //     }
-  //     default: {
-  //       break
-  //     }
-  //   }
-  //   this.logger.debug(`get yamlAdaptor from key ${key}=>`, yamlAdp)
-  //   return yamlAdp
-  // }
 }
 
 export default Adaptors

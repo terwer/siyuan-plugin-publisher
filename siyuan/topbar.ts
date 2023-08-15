@@ -254,8 +254,10 @@ export class Topbar {
     menu.addSeparator()
     menu.addItem({
       icon: "iconSparkles",
-      label: this.pluginInstance.i18n.settingMenuTips,
-      type: "readonly",
+      label: this.pluginInstance.i18n.settingAbout,
+      click: () => {
+        this.widgetInvoke.showPublisherAboutDialog()
+      },
     })
 
     if (this.pluginInstance.isMobile) {

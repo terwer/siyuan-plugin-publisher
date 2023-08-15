@@ -39,13 +39,6 @@
           isDark ? t("theme.mode.light") : t("theme.mode.dark")
         }}</span>
 
-        <!--
-        <span class="text">.</span>
-        <span class="text s-dark" @click="openTransportSetting">
-          {{ t("setting.conf.transport") }}
-        </span>
-        -->
-
         <span class="text">.</span>
         <span class="text s-dark" @click="handlePublishSetting">
           {{ t("service.tab.publish.setting") }}
@@ -56,8 +49,8 @@
           {{ t("siyuan.config.setting") }}
         </span>
 
-        <span class="text" v-if="isDev">.</span>
-        <span class="text s-dark" @click="handleTest" v-if="isDev"> 组件测试 </span>
+        <span v-if="isDev" class="text">.</span>
+        <span v-if="isDev" class="text s-dark" @click="handleTest"> 组件测试 </span>
 
         <span v-if="isChromeExtension" class="text">.</span>
         <span v-if="isChromeExtension" class="text s-dark" @click="newWin()">

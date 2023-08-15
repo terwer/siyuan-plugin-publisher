@@ -23,28 +23,10 @@
   - questions.
   -->
 
-<script setup lang="ts">
-import { BrowserUtil } from "zhi-device"
-import { usePicgoBridge } from "~/src/composables/usePicgoBridge.ts"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
-
-const logger = createAppLogger("picgo-test")
-const { handlePicgo } = usePicgoBridge()
-
-// props
-const props = defineProps({
-  pageId: {
-    type: String,
-    default: BrowserUtil.getQueryParam("pageId"),
-  },
-})
-
-const testHandlePicgo = async () => {
-  const md = await handlePicgo(props.pageId)
-  logger.debug("图片处理完毕, md =>", md)
-}
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <el-button @click="testHandlePicgo">测试</el-button>
+  <div>这里是关于</div>
 </template>
+
+<style scoped lang="stylus"></style>

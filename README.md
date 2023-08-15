@@ -4,13 +4,13 @@
 
 ![](./icon.png)
 
-Publish articles from Siyuan Notes to platforms such as Yuque, Notion, Cnblogs, WordPress, Typecho, Hexo, Zhihu and more.
+Publish articles from siyuan-note to platforms such as Yuque, Notion, Cnblogs, WordPress, Typecho, Hexo, Zhihu and more.
 
 Support features such as fast publishing, image bed management, platform expansion, smart labels, etc.
 
-> **Front Announcement 1: Release Tool's first platform-wide version `1.8.0` using the forward agent of Siyuan Note!**
+> **Front Announcement 1: Publish Tool's first platform-wide version `1.8.0` using the forward agent of Siyuan Note!**
 >
-> **Front Announcement 2: The first version of the release tool that fully supports image upload `1.8.0` is released!**
+> **Front Announcement 2: The first version of the Publish Tool that fully supports image upload `1.8.0` is released!**
 
 Tips: Zhihu uses the image upload of the Zhihu platform, Yuque, Notion, and Hexo need Picgo plugin support, and the Metaweblog series platform supports both Picgo plugin and self-contained image upload (install Picgo plugin to use Picgo plugin, otherwise use their own platform)
 
@@ -70,7 +70,7 @@ Names not listed in order
   disabled at any time
 - [X] **Dynamic Newly Added**: Support custom adding platform
 - [ ] **Smart Classification**: Support smart tags, smart slug aliases, smart summaries, and continue to improve
-- [X] **Article Binding**: Support linking existing platform articles to Siyuan Notes to facilitate follow-up management,
+- [X] **Article Binding**: Support linking existing platform articles to siyuan-note to facilitate follow-up management,
   support Siyuan->platform one-way synchronization
 - [X] **Adapt to Theme**: Automatically adapt to dark mode and light mode
 - [X] **Language support**: multi-language support, support Chinese version and English version

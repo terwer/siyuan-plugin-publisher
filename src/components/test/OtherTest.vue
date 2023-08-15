@@ -54,14 +54,21 @@ const testHandleNotion = () => {
 </script>
 
 <template>
-  <div>
-    <el-form>
-      <el-form-item>
-        <el-input v-model="formData.content" style="width: 75%; margin-right: 16px" type="textarea" :rows="10" />
-      </el-form-item>
-      <el-form-item>
-        <el-button @click="testHandleNotion">测试Notion</el-button>
-      </el-form-item>
-    </el-form>
-  </div>
+  <back-page title="其他测试">
+    <div id="other-test">
+      <el-form>
+        <el-form-item>
+          <el-input v-model="formData.content" style="width: 75%; margin-right: 16px" type="textarea" :rows="10" />
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="testHandleNotion">测试Notion</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
+  </back-page>
 </template>
+
+<style scoped lang="stylus">
+#other-test
+  margin 16px 20px
+</style>

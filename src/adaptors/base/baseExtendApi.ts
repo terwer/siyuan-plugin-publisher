@@ -53,6 +53,11 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
   private readonly isSiyuanOrSiyuanNewWin: boolean
   private readonly kernelApi: SiyuanKernelApi
 
+  /**
+   * 构造函数用于创建一个新的实例
+   *
+   * @param api - 一个 BaseBlogApi 或 BaseWebApi 实例，用于与 API 进行通信
+   */
   constructor(api: BaseBlogApi | BaseWebApi) {
     super()
     this.logger = createAppLogger("base-extend-api")
@@ -65,7 +70,32 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     this.kernelApi = kernelApi
   }
 
+  /**
+   * 在保存前编辑文章
+   *
+   * @param post - 要编辑的文章
+   * @param id - 文章的可选 ID
+   * @param publishCfg - 发布配置的可选参数
+   * @returns 一个 Promise，解析为编辑后的文章
+   */
   public async preEditPost(post: Post, id?: string, publishCfg?: any): Promise<Post> {
+    // 处理图片
+    post = await this.handlePictures(post, id, publishCfg)
+    return post
+  }
+
+  // ================
+  // private methods
+  // ================
+  /**
+   * 处理图片
+   *
+   * @param post - 要处理图片的 Post 对象
+   * @param id - （可选）图片 ID
+   * @param publishCfg - （可选）发布配置参数
+   * @returns 一个 Promise，解析为处理后的 Post 对象
+   */
+  private async handlePictures(post: Post, id?: string, publishCfg?: any): Promise<Post> {
     const cfg: BlogConfig = publishCfg.cfg
     const dynCfg: DynamicConfig = publishCfg.dynCfg
 
@@ -163,14 +193,23 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     return post
   }
 
-  // ================
-  // private methods
-  // ================
+  /**
+   * 检查 Picgo 是否已安装
+   *
+   * @returns 一个 Promise，解析为布尔值，表示是否已安装 Picgo
+   */
   private async checkPicgoInstalled() {
     // 检测是否安装 picgo 插件
     return await isFileExists(this.kernelApi, "/data/plugins/siyuan-plugin-picgo/plugin.json", "text")
   }
 
+  /**
+   * 读取文件并将其转换为 Base64 编码
+   *
+   * @param url - 要读取的文件的 URL
+   * @param cfg - 博客配置对象
+   * @returns 一个 Promise，解析为文件的 Base64 编码字符串
+   */
   private async readFileToBase64(url: string, cfg: BlogConfig): Promise<any> {
     let base64Info: any
     if (this.isSiyuanOrSiyuanNewWin) {
