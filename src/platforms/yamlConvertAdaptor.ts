@@ -31,7 +31,7 @@ import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
 export interface IYamlConvertAdaptor {
   convertToYaml(post: Post, githubCfg?: CommonGithubConfig): YamlFormatObj
 
-  convertToAttr(yamlObj: YamlFormatObj, githubCfg?: CommonGithubConfig): Post
+  convertToAttr(post: Post, yamlObj: YamlFormatObj, githubCfg?: CommonGithubConfig): Post
 }
 
 /**
@@ -42,7 +42,7 @@ export class YamlConvertAdaptor implements IYamlConvertAdaptor {
     throw new Error("YamlConvertAdaptor.convertToYaml: 该功能未实现，请在子类重写该方法")
   }
 
-  convertToAttr(yamlFormatObj: YamlFormatObj, cfg?: CommonBlogConfig): Post {
+  convertToAttr(post: Post, yamlFormatObj: YamlFormatObj, cfg?: CommonBlogConfig): Post {
     throw new Error("YamlConvertAdaptor.convertToAttr: 该功能未实现，请在子类重写该方法")
   }
 }

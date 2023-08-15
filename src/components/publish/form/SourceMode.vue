@@ -129,10 +129,11 @@ const onYamlContentInput = (val: any) => {
   logger.debug("val =>", val)
   try {
     const yamlObj = YamlUtil.yaml2Obj(formData.yamlFormatObj.formatter)
-    const updatedPost = formData.yamlAdaptor.convertToAttr(yamlObj, formData.cfg)
+    formData.yamlFormatObj.yamlObj = yamlObj
+    formData.siyuanPost = formData.yamlAdaptor.convertToAttr(formData.siyuanPost, formData.yamlFormatObj, formData.cfg)
     // 在这里用 emit 更新到父组件
-    logger.debug("准备emit =>", updatedPost)
-    emit("emitSyncPost", updatedPost)
+    logger.debug("准备emit =>", formData.siyuanPost)
+    emit("emitSyncPost", formData.siyuanPost)
     formData.syncStatus = "success"
     formData.syncMessage = "YAML已解析成功并同步。同步时间 =>" + new Date().toISOString()
   } catch (e) {
@@ -257,11 +258,13 @@ await initPage()
       </el-form-item>
     </div>
 
+    <!--
     <div id="yaml-action">
       <el-form-item>
         <el-button size="small" type="danger">保存YAML</el-button>
       </el-form-item>
     </div>
+    -->
 
     <!-- 只读提示 -->
     <div id="yaml-read-mode-tip">
@@ -273,6 +276,7 @@ await initPage()
           :title="t('main.read.mode.tip1')"
           type="error"
         />
+        <!--
         <el-alert
           v-if="!formData.readonlyMode"
           class="top-yaml-tip"
@@ -280,6 +284,7 @@ await initPage()
           :title="t('main.read.mode.tip2')"
           type="warning"
         />
+        -->
         <el-alert
           v-if="!formData.readonlyMode"
           class="top-yaml-tip"
