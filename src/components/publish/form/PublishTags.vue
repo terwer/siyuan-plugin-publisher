@@ -28,7 +28,7 @@ import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { nextTick, reactive, ref, watch } from "vue"
 import { ElMessage } from "element-plus"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { SmartUtil } from "zhi-common"
+import { SmartUtil, StrUtil } from "zhi-common"
 
 const logger = createAppLogger("publish-tags")
 const { t } = useVueI18n()
@@ -60,7 +60,7 @@ const formData = reactive({
   pageId: props.pageId,
   tag: {
     inputValue: "",
-    dynamicTags: <string[]>props.tags.split(","),
+    dynamicTags: <string[]>(StrUtil.isEmptyString(props.tags) ? [] : props.tags.split(",")),
     inputVisible: false,
   },
   html: props.content,
@@ -73,9 +73,13 @@ watch(
   }
 )
 
+const emit = defineEmits(["emitSyncTags"])
+
 const tagMethods = {
   handleTagClose: (tag: any) => {
     formData.tag.dynamicTags.splice(formData.tag.dynamicTags.indexOf(tag), 1)
+
+    emit("emitSyncTags", formData.tag.dynamicTags)
   },
   tagShowInput: () => {
     formData.tag.inputVisible = true
@@ -86,6 +90,8 @@ const tagMethods = {
   handleTagInputConfirm: () => {
     if (formData.tag.inputValue) {
       formData.tag.dynamicTags.push(formData.tag.inputValue)
+
+      emit("emitSyncTags", formData.tag.dynamicTags)
     }
     formData.tag.inputVisible = false
     formData.tag.inputValue = ""
@@ -100,6 +106,7 @@ const tagMethods = {
           formData.tag.dynamicTags.push(hotTags[i])
         }
       }
+      emit("emitSyncTags", formData.tag.dynamicTags)
 
       ElMessage.success("使用人工智能智能提取标签成功")
     } catch (e: any) {
@@ -109,35 +116,6 @@ const tagMethods = {
 
     formData.isTagLoading = false
   },
-
-  /**
-   * 初始化
-   */
-  // initTag: (siyuanData: SiyuanDataObj) => {
-  //   // 初始化标签
-  //   formData.tag.dynamicTags = []
-  //   const tagstr = siyuanData.meta.tags || ""
-  //   const tgarr = tagstr.split(",")
-  //   for (let i = 0; i < tgarr.length; i++) {
-  //     const tg = tgarr[i]
-  //     if (tg !== "") {
-  //       formData.tag.dynamicTags.push(tgarr[i])
-  //     }
-  //   }
-  // },
-
-  // /**
-  //  * 同步FormData到属性
-  //  * @param postForm
-  //  */
-  // syncTag: (postForm: PostForm) => {
-  //   for (let i = 0; i < postForm.formData.tag.dynamicTags.length; i++) {
-  //     const tag = postForm.formData.tag.dynamicTags[i]
-  //     if (!formData.tag.dynamicTags.includes(tag) && tag !== "") {
-  //       formData.tag.dynamicTags.push(tag)
-  //     }
-  //   }
-  // },
 }
 </script>
 

@@ -57,9 +57,9 @@ export class HexoYamlConverterAdaptor extends YamlConvertAdaptor {
     // excerpt
     yamlFormatObj.yamlObj.excerpt = post.shortDesc
 
-    // // tags
-    // yamlFormatObj.yamlObj.tags = postForm.formData.tag.dynamicTags
-    //
+    // tags
+    yamlFormatObj.yamlObj.tags = post.mt_keywords.split(",")
+
     // // categories
     // yamlFormatObj.yamlObj.categories = postForm.formData.categories
 
@@ -117,8 +117,11 @@ export class HexoYamlConverterAdaptor extends YamlConvertAdaptor {
     post.dateCreated = DateUtil.convertStringToDate(yamlFormatObj.yamlObj.date)
     post.dateUpdated = DateUtil.convertStringToDate(yamlFormatObj.yamlObj.updated)
 
-    // 其他属性
+    // 摘要
     post.shortDesc = yamlFormatObj.yamlObj.excerpt
+
+    // 标签
+    post.mt_keywords = yamlFormatObj.yamlObj.tags.join(",")
 
     post.yaml = YamlUtil.obj2Yaml(yamlFormatObj.yamlObj)
     post.markdown = `${post.yaml}\n${post.markdown}`

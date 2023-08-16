@@ -227,6 +227,11 @@ const syncDesc = (val: string) => {
   logger.debug("syncDesc in batch publish")
 }
 
+const syncTags = (val: string[]) => {
+  formData.siyuanPost.mt_keywords = val.join(",")
+  logger.debug("syncTags in batch publish")
+}
+
 const syncPublishTime = (val1: Date, val2: Date) => {
   formData.siyuanPost.dateCreated = val1
   formData.siyuanPost.dateUpdated = val2
@@ -337,6 +342,7 @@ onMounted(async () => {
                   v-model:page-id="id"
                   v-model:tags="formData.siyuanPost.mt_keywords"
                   v-model:content="formData.siyuanPost.html"
+                  @emitSyncTags="syncTags"
                 />
 
                 <!-- 分类

@@ -24,7 +24,7 @@
   -->
 
 <script setup lang="ts">
-import {markRaw, onMounted, reactive, toRaw} from "vue"
+import { markRaw, onMounted, reactive, toRaw } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import BackPage from "~/src/components/common/BackPage.vue"
 import { usePublish } from "~/src/composables/usePublish.ts"
@@ -241,18 +241,23 @@ const syncAiSwitch = (val: boolean) => {
 }
 
 const syncDesc = (val: string) => {
-  formData.siyuanPost.shortDesc = val
+  formData.mergedPost.shortDesc = val
   logger.debug("syncDesc in single publish")
 }
 
+const syncTags = (val: string[]) => {
+  formData.mergedPost.mt_keywords = val.join(",")
+  logger.debug("syncTags in single publish")
+}
+
 const syncPublishTime = (val1: Date, val2: Date) => {
-  formData.siyuanPost.dateCreated = val1
-  formData.siyuanPost.dateUpdated = val2
+  formData.mergedPost.dateCreated = val1
+  formData.mergedPost.dateUpdated = val2
   logger.debug("syncPublishTime in single publish")
 }
 
 const syncPost = (post: Post) => {
-  formData.siyuanPost = post
+  formData.mergedPost = post
 }
 
 const onBack = () => {
@@ -373,10 +378,17 @@ onMounted(async () => {
                   />
 
                   <!-- 标签 -->
-                  <publish-tags />
+                  <publish-tags
+                    v-model:use-ai="formData.useAi"
+                    v-model:page-id="id"
+                    v-model:tags="formData.mergedPost.mt_keywords"
+                    v-model:content="formData.mergedPost.html"
+                    @emitSyncTags="syncTags"
+                  />
 
-                  <!-- 分类 -->
+                  <!-- 分类
                   <publish-categories />
+                  -->
 
                   <!-- 发布时间 -->
                   <publish-time v-model="formData.mergedPost" @emitSyncPublishTime="syncPublishTime" />
