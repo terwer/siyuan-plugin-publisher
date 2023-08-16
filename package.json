@@ -77,7 +77,7 @@
     "zhi-github-middleware": "^0.2.8",
     "zhi-lib-base": "^0.4.4",
     "zhi-notion-markdown": "^0.1.4",
-    "zhi-siyuan-api": "^2.1.6",
+    "zhi-siyuan-api": "^2.1.7",
     "zhi-xmlrpc-middleware": "^0.4.22"
   }
 }

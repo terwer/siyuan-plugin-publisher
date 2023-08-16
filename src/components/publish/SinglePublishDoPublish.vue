@@ -81,8 +81,11 @@ const formData = reactive({
   },
 
   // =========================
-  // sync attrs start
+  // extra sync attrs start
   // =========================
+  // AI开关
+  useAi: false,
+
   // 页面模式
   editType: PageEditMode.EditMode_simple,
   // =========================
@@ -222,7 +225,7 @@ const syncEditMode = (val: PageEditMode) => {
 const syncPublishTime = (val1: Date, val2: Date) => {
   formData.siyuanPost.dateCreated = val1
   formData.siyuanPost.dateUpdated = val2
-  logger.debug("syncPublishTime in batch publish")
+  logger.debug("syncPublishTime in single publish")
 }
 
 const syncPost = (post: Post) => {

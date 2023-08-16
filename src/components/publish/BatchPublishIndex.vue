@@ -42,6 +42,7 @@ import { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 import { PageEditMode } from "~/src/models/pageEditMode.ts"
 import EditModeSelect from "~/src/components/publish/form/EditModeSelect.vue"
 import PublishTime from "~/src/components/publish/form/PublishTime.vue"
+import AiSwitch from "~/src/components/publish/form/AiSwitch.vue"
 
 const logger = createAppLogger("publisher-index")
 
@@ -65,9 +66,11 @@ const sysKeys = pre.systemCfg.map((item) => {
 })
 const id = StrUtil.isEmptyString(props.id) ? process.env.VITE_DEV_PAGE_ID : props.id
 const formData = reactive({
+  // loading
   isPublishLoading: false,
   isDeleteLoading: false,
 
+  // process
   showProcessResult: false,
   errCount: 0,
   successBatchResults: <any[]>[],
@@ -78,8 +81,11 @@ const formData = reactive({
   publishCfg: {} as IPublishCfg,
 
   // =========================
-  // sync attrs start
+  // extra sync attrs start
   // =========================
+  // AI开关
+  useAi: false,
+
   // 平台列表
   dynList: <string[]>[],
 
@@ -201,6 +207,11 @@ const handleForceDelete = async (key: string, id: string, publishCfg: IPublishCf
   }
 }
 
+const syncAiSwitch = (val: boolean) => {
+  formData.useAi = val
+  logger.debug(`syncAiSwitch in batch publish => ${formData.useAi}`)
+}
+
 const syncEditMode = (val: PageEditMode) => {
   formData.editType = val
   logger.debug("syncEditMode in batch publish")
@@ -209,6 +220,11 @@ const syncEditMode = (val: PageEditMode) => {
 const syncDynList = (selectedKeys: string[]) => {
   formData.dynList = selectedKeys
   logger.debug("syncDynList in batch publish")
+}
+
+const syncDesc = (val: string) => {
+  formData.siyuanPost.shortDesc = val
+  logger.debug("syncDesc in batch publish")
 }
 
 const syncPublishTime = (val1: Date, val2: Date) => {
@@ -283,10 +299,22 @@ onMounted(async () => {
               <el-divider border-style="dashed" />
 
               <div v-if="formData.editType === PageEditMode.EditMode_complex" class="complex-mode">
-                <!-- 别名字段 -->
+                <!-- AI开关 -->
+                <ai-switch @emitSyncAiSwitch="syncAiSwitch" />
+
+                <!-- 别名 -->
                 <el-form-item :label="t('main.slug')">
                   <el-input v-model="formData.siyuanPost.wp_slug" :disabled="true" />
                 </el-form-item>
+
+                <!-- 摘要 -->
+                <publish-description
+                  v-model:use-ai="formData.useAi"
+                  v-model:page-id="id"
+                  v-model:desc="formData.siyuanPost.shortDesc"
+                  v-model:content="formData.siyuanPost.html"
+                  @emitSyncDesc="syncDesc"
+                />
 
                 <!-- 标签 -->
                 <publish-tags />
