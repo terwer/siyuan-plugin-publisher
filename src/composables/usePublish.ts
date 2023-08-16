@@ -38,8 +38,6 @@ import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
 import { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
 import { ElMessage } from "element-plus"
-import { usePicgoBridge } from "~/src/composables/usePicgoBridge.ts"
-import {PageEditMode} from "~/src/models/pageEditMode.ts";
 
 /**
  * 通用发布组件
@@ -339,7 +337,7 @@ const usePublish = () => {
   }
 
   const initPublishMethods = {
-     doInitPage : async (
+    doInitPage: async (
       key: string,
       id: string,
       method: MethodEnum = MethodEnum.METHOD_ADD,
@@ -366,8 +364,8 @@ const usePublish = () => {
 
       // 思源笔记原始文章数据
       const siyuanPost = await blogApi.getPost(id)
-      let platformPost = new Post()
-      let mergedPost = new Post()
+      let platformPost = {} as Post
+      let mergedPost = siyuanPost
       logger.debug("doInitPage start init siyuanPost =>", toRaw(siyuanPost))
 
       if (method === MethodEnum.METHOD_ADD) {
@@ -381,9 +379,7 @@ const usePublish = () => {
 
         // 查询平台文章
         platformPost = await api.getPost(postid)
-
-        // 暂时不合并
-        mergedPost = siyuanPost
+        // 更新属性
 
         // 更新预览链接
         postPreviewUrl = await getPostPreviewUrl(api, postid, cfg)
@@ -401,7 +397,7 @@ const usePublish = () => {
         mergedPost,
         postPreviewUrl,
       }
-    }
+    },
   }
 
   return {

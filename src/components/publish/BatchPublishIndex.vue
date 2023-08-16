@@ -27,7 +27,7 @@
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import PublishTips from "~/src/components/publish/form/PublishTips.vue"
 import PublishPlatform from "~/src/components/publish/form/PublishPlatform.vue"
-import { markRaw, onMounted, reactive } from "vue"
+import { markRaw, onMounted, reactive, toRaw } from "vue"
 import { usePublish } from "~/src/composables/usePublish.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
@@ -91,7 +91,7 @@ const formData = reactive({
   dynList: <string[]>[],
 
   // 页面模式
-  editType: isDev ? PageEditMode.EditMode_complex : PageEditMode.EditMode_simple,
+  editType: PageEditMode.EditMode_simple,
   // =========================
   // sync attrs end
   // =========================
@@ -242,6 +242,8 @@ onMounted(async () => {
   // 思源笔记原始文章数据
   const siyuanPost = await blogApi.getPost(id)
   formData.siyuanPost = siyuanPost
+  formData.editType = isDev ? PageEditMode.EditMode_complex : PageEditMode.EditMode_simple
+  logger.debug("batch inited siyuanPost =>", toRaw(formData.siyuanPost))
 })
 </script>
 
@@ -282,7 +284,7 @@ onMounted(async () => {
         <div class="publish-form">
           <el-form label-width="100px">
             <!-- 编辑模式选择 -->
-            <edit-mode-select @emitSyncEditMode="syncEditMode" />
+            <edit-mode-select v-model:edit-type="formData.editType" @emitSyncEditMode="syncEditMode" />
 
             <!--
             --------------------------------------

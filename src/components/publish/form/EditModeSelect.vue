@@ -25,21 +25,34 @@
 
 <script setup lang="ts">
 import { PageEditMode } from "~/src/models/pageEditMode.ts"
-import { reactive } from "vue"
+import { reactive, watch } from "vue"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import { isDev } from "~/src/utils/constants.ts"
 
 const { t } = useVueI18n()
 
-const pageModeData = reactive({
-  etype: isDev ? PageEditMode.EditMode_complex : PageEditMode.EditMode_simple,
+const props = defineProps({
+  editType: {
+    type: Number,
+    default: PageEditMode.EditMode_simple,
+  },
 })
+
+const formData = reactive({
+  etype: props.editType,
+})
+
+watch(
+  () => props.editType,
+  (newValue) => {
+    formData.etype = newValue
+  }
+)
 
 const emit = defineEmits(["emitSyncEditMode"])
 
 // methods
 const onEditModeChange = (val: PageEditMode) => {
-  pageModeData.etype = val
+  formData.etype = val
   emit("emitSyncEditMode", val)
 }
 </script>
@@ -50,17 +63,17 @@ const onEditModeChange = (val: PageEditMode) => {
     <el-form-item :label="t('main.publish.editmode')">
       <el-button-group>
         <el-button
-          :type="pageModeData.etype === PageEditMode.EditMode_simple ? 'primary' : 'default'"
+          :type="formData.etype === PageEditMode.EditMode_simple ? 'primary' : 'default'"
           @click="onEditModeChange(PageEditMode.EditMode_simple)"
           >{{ t("main.publish.editmode.simple") }}
         </el-button>
         <el-button
-          :type="pageModeData.etype === PageEditMode.EditMode_complex ? 'primary' : 'default'"
+          :type="formData.etype === PageEditMode.EditMode_complex ? 'primary' : 'default'"
           @click="onEditModeChange(PageEditMode.EditMode_complex)"
           >{{ t("main.publish.editmode.complex") }}
         </el-button>
         <el-button
-          :type="pageModeData.etype === PageEditMode.EditMode_source ? 'primary' : 'default'"
+          :type="formData.etype === PageEditMode.EditMode_source ? 'primary' : 'default'"
           @click="onEditModeChange(PageEditMode.EditMode_source)"
           >{{ t("main.publish.editmode.source") }}
         </el-button>

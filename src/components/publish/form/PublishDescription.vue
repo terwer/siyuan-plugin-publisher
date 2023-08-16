@@ -79,6 +79,10 @@ const handleMakeDesc = async () => {
   try {
     if (formData.useAi) {
       ElMessage.warning("使用人工智能提取摘要")
+      if (StrUtil.isEmptyString(formData.html)) {
+        throw new Error("正文为空，无法生成摘要")
+      }
+      logger.debug("使用人工智能提取摘要", { q: formData.html })
       const result = await SmartUtil.autoSummary(formData.html)
       logger.debug("auto summary reault =>", result)
       if (!StrUtil.isEmptyString(result.errMsg)) {

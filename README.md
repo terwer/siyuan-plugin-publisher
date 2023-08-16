@@ -69,12 +69,12 @@ Names not listed in order
 - [X] **Platform switch**: All platforms support enabling and disabling, the blog garden is enabled by default, and can be
   disabled at any time
 - [X] **Dynamic Newly Added**: Support custom adding platform
-- [ ] **Smart Classification**: Support smart tags, smart slug aliases, smart summaries, and continue to improve
+- [X] **Smart Classification**: Support smart tags, smart slug aliases, smart summaries, and continue to improve
 - [X] **Article Binding**: Support linking existing platform articles to siyuan-note to facilitate follow-up management,
   support Siyuan->platform one-way synchronization
 - [X] **Adapt to Theme**: Automatically adapt to dark mode and light mode
 - [X] **Language support**: multi-language support, support Chinese version and English version
-- [ ] **Release view**: Support multiple release views, simple mode, detailed mode and source code mode
+- [X] **Release view**: Support multiple release views, simple mode, detailed mode and source code mode
 - [X] **Multiple deployments**: support Siyuan notes plugin<sup>Highly recommended</sup>, Chrome browser extension, self-deployment
 
 This plugin promises that the basic functions will be free forever, and the follow-up related to intelligent AI may be charged, and the closed beta stage is completely free. If you want to support developers, please [feel free to support](https://github.com/terwer/siyuan-plugin-publisher/blob/main/README_zh_CN.md#Donate) here.

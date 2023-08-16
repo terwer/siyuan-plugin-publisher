@@ -88,7 +88,7 @@ const formData = reactive({
   useAi: isDev,
 
   // 页面模式
-  editType: isDev ? PageEditMode.EditMode_complex : PageEditMode.EditMode_simple,
+  editType: PageEditMode.EditMode_simple,
   // =========================
   // sync attrs end
   // =========================
@@ -283,8 +283,8 @@ const onBack = () => {
 
 onMounted(async () => {
   logger.info("获取到的ID为=>", id)
-
   await initPage()
+  formData.editType = isDev ? PageEditMode.EditMode_complex : PageEditMode.EditMode_simple
   formData.isInit = true
 })
 </script>
@@ -300,7 +300,7 @@ onMounted(async () => {
           <div class="publish-form">
             <el-form label-width="100px">
               <!-- 编辑模式选择 -->
-              <edit-mode-select @emitSyncEditMode="syncEditMode" />
+              <edit-mode-select v-model:edit-type="formData.editType" @emitSyncEditMode="syncEditMode" />
 
               <!--
               --------------------------------------
@@ -309,7 +309,7 @@ onMounted(async () => {
               -->
               <source-mode
                 v-if="formData.editType === PageEditMode.EditMode_source"
-                v-model="formData.siyuanPost"
+                v-model="formData.mergedPost"
                 :api-type="key"
                 :cfg="formData.publishCfg.cfg"
                 @emitSyncPost="syncPost"
@@ -320,32 +320,21 @@ onMounted(async () => {
                   <el-form-item :label="t('main.title')">
                     <el-input v-model="formData.mergedPost.title" />
                   </el-form-item>
-                  <el-alert
-                    v-if="
-                      formData.method === MethodEnum.METHOD_EDIT &&
-                      !StrUtil.isEmptyString(formData.changeTips.title) &&
-                      formData.siyuanPost.title !== formData.platformPost.title
-                    "
-                    class="top-tip"
-                    :title="formData.changeTips.title"
-                    type="error"
-                    :closable="false"
-                  />
                 </div>
                 <el-divider border-style="dashed" />
 
                 <div v-if="formData.editType === PageEditMode.EditMode_complex" class="complex-mode">
                   <!-- 别名字段 -->
                   <el-form-item :label="t('main.slug')">
-                    <el-input v-model="formData.siyuanPost.wp_slug" :disabled="true" />
+                    <el-input v-model="formData.mergedPost.wp_slug" :disabled="true" />
                   </el-form-item>
 
                   <!-- 摘要 -->
                   <publish-description
                     v-model:use-ai="formData.useAi"
                     v-model:page-id="id"
-                    v-model:desc="formData.siyuanPost.shortDesc"
-                    v-model:content="formData.siyuanPost.html"
+                    v-model:desc="formData.mergedPost.shortDesc"
+                    v-model:content="formData.mergedPost.html"
                     @emitSyncDesc="syncDesc"
                   />
 
@@ -353,7 +342,7 @@ onMounted(async () => {
                   <publish-tags />
 
                   <!-- 发布时间 -->
-                  <publish-time v-model="formData.siyuanPost" @emitSyncPublishTime="syncPublishTime" />
+                  <publish-time v-model="formData.mergedPost" @emitSyncPublishTime="syncPublishTime" />
 
                   <el-divider border-style="dashed" />
                 </div>
