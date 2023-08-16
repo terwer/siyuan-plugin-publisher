@@ -38,9 +38,8 @@ const emit = defineEmits(["emitSyncEditMode"])
 
 // methods
 const onEditModeChange = (val: PageEditMode) => {
-  if (emit) {
-    emit("emitSyncEditMode", val)
-  }
+  pageModeData.etype = val
+  emit("emitSyncEditMode", val)
 }
 </script>
 

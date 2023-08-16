@@ -89,8 +89,12 @@ const goGithub = () => {
   window.open("https://github.com/terwer/siyuan-plugin-publisher")
 }
 
-const goAbout = () => {
-  window.open("https://blog.terwer.space/about")
+const goAbout = async () => {
+  // window.open("https://blog.terwer.space/about")
+  await router.push({
+    path: "/about",
+    query: { showBack: "true" },
+  })
 }
 
 const goToApiTest = () => {

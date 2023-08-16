@@ -31,7 +31,7 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { Post } from "zhi-blog-api"
 import { BrowserUtil } from "zhi-device"
 import { ElMessage } from "element-plus"
-import { StrUtil, YamlUtil } from "zhi-common"
+import { DateUtil, StrUtil, YamlUtil } from "zhi-common"
 import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
 import { YamlFormatObj } from "~/src/models/yamlFormatObj.ts"
 import Adaptors from "~/src/adaptors"
@@ -135,7 +135,7 @@ const onYamlContentInput = (val: any) => {
     logger.debug("准备emit =>", formData.siyuanPost)
     emit("emitSyncPost", formData.siyuanPost)
     formData.syncStatus = "success"
-    formData.syncMessage = "YAML已解析成功并同步。同步时间 =>" + new Date().toISOString()
+    formData.syncMessage = "YAML已解析成功并同步。同步时间 =>" + DateUtil.formatIsoToZh(new Date().toISOString(), true)
   } catch (e) {
     formData.syncStatus = "error"
     formData.syncMessage = "YAML解析失败，YAML将不可用，错误如下 =>" + e

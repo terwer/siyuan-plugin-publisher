@@ -48,7 +48,7 @@ export class HexoYamlConverterAdaptor extends YamlConvertAdaptor {
     yamlFormatObj.yamlObj.title = post.title
 
     // date
-    // yamlFormatObj.yamlObj.date = post.dateCreated
+    yamlFormatObj.yamlObj.date = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true)
 
     // updated
     yamlFormatObj.yamlObj.updated = DateUtil.formatIsoToZh(new Date().toISOString(), true)
@@ -97,8 +97,6 @@ export class HexoYamlConverterAdaptor extends YamlConvertAdaptor {
 
     // formatter
     let yaml = YamlUtil.obj2Yaml(yamlFormatObj.yamlObj)
-    // 修复yaml的ISO日期格式（js-yaml转换的才需要）
-    yaml = DateUtil.formatIsoToZhDate(yaml)
     this.logger.debug("yaml=>", yaml)
 
     yamlFormatObj.formatter = yaml

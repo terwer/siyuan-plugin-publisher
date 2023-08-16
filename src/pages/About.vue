@@ -37,28 +37,30 @@ const formData = reactive({
 </script>
 
 <template>
-  <div id="about-box">
-    <div class="logo">
-      <img src="../../icon.png" alt="logo" />
-    </div>
-    <div class="notice">
-      <p class="title">发布工具 v{{ formData.v }}</p>
-
-      <div class="param slogan">
-        <span>{{ t("slogan.make.written.fun") }}</span>
+  <back-page title="关于作者">
+    <div id="about-box">
+      <div class="logo">
+        <img src="../../icon.png" alt="logo" />
       </div>
-      <div class="space"></div>
-      <div class="param">Created by terwer</div>
+      <div class="notice">
+        <p class="title">发布工具 v{{ formData.v }}</p>
 
-      <div class="space"></div>
-      <div class="third-libs">
-        <div class="lib-title">Thanks for third party libraries:</div>
-        <div class="lib-container">
-          <div class="lib-item" v-for="(value, key) in formData.deps">{{ key }} ({{ value }})</div>
+        <div class="param slogan">
+          <span>{{ t("slogan.make.written.fun") }}</span>
+        </div>
+        <div class="space"></div>
+        <div class="param">Created by <a href="https://terwer.space/about.html" target="_blank">terwer</a></div>
+
+        <div class="space"></div>
+        <div class="third-libs">
+          <div class="lib-title">Thanks for third party libraries:</div>
+          <div class="lib-container">
+            <div class="lib-item" v-for="(value, key) in formData.deps">{{ key }} ({{ value }})</div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </back-page>
 </template>
 
 <style scoped lang="stylus">
