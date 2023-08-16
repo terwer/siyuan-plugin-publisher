@@ -312,8 +312,6 @@ const usePublish = () => {
   const initPublishMethods = {
     assignInitAttrs: async (post: Post, id: string, publishCfg: IPublishCfg) => {
       const setting: typeof SypConfig = publishCfg.setting
-      const cfg: CommonBlogConfig = publishCfg.cfg
-      const dynCfg: DynamicConfig = publishCfg.dynCfg
       const postMeta = ObjectUtil.getProperty(setting, id, {})
 
       // 别名

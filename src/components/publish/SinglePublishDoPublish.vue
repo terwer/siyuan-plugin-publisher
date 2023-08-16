@@ -258,8 +258,6 @@ const onBack = () => {
 
 const initPage = async () => {
   try {
-    // 初始化属性
-    formData.publishCfg = await getPublishCfg(key)
     // 初始化单篇文章
     const { siyuanPost, platformPost, mergedPost, postPreviewUrl } = await initPublishMethods.doInitSinglePage(
       key,
@@ -290,6 +288,8 @@ const initPage = async () => {
 
 onMounted(async () => {
   logger.info("获取到的ID为=>", id)
+  // 初始化属性
+  formData.publishCfg = await getPublishCfg(key)
   // 单篇文章初始化
   await initPage()
   // 元数据初始化
