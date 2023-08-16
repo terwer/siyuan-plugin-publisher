@@ -53,12 +53,19 @@ onMounted(async () => {
   singleFormData.isPublishLoading = true
   setTimeout(async () => {
     logger.info("单个快速发布开始")
-    // 思源笔记原始文章数据
-    let siyuanPost = await blogApi.getPost(id)
+    // ==================
+    // 初始化开始
+    // ==================
     // 初始化属性
     const publishCfg = await getPublishCfg(key)
+    // 思源笔记原始文章数据
+    let siyuanPost = await blogApi.getPost(id)
     // 元数据初始化
     siyuanPost = await initPublishMethods.assignInitAttrs(siyuanPost, id, publishCfg)
+    // ==================
+    // 初始化结束
+    // ==================
+    // 开始发布
     formData.processResult = await doSinglePublish(key, id, publishCfg, siyuanPost)
     logger.info("单个快速发布结束")
     singleFormData.isPublishLoading = false

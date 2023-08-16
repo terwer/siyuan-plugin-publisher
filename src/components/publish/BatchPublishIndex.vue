@@ -238,14 +238,20 @@ const handleRefresh = () => {
 }
 
 onMounted(async () => {
+  // ==================
+  // 初始化开始
+  // ==================
+  // 初始化属性
+  formData.publishCfg = await getPublishCfg()
   // 思源笔记原始文章数据
   const siyuanPost = await blogApi.getPost(id)
   formData.siyuanPost = siyuanPost
-  // 初始化属性
-  formData.publishCfg = await getPublishCfg()
   // 元数据初始化
   formData.siyuanPost = await initPublishMethods.assignInitAttrs(formData.siyuanPost, id, formData.publishCfg)
   logger.debug("batch inited siyuanPost =>", toRaw(formData.siyuanPost))
+  // ==================
+  // 初始化结束
+  // ==================
 
   // 这里可以控制一些功能开关
   formData.useAi = isDev

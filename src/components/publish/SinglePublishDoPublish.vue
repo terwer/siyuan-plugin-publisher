@@ -288,6 +288,9 @@ const initPage = async () => {
 
 onMounted(async () => {
   logger.info("获取到的ID为=>", id)
+  // ==================
+  // 初始化开始
+  // ==================
   // 初始化属性
   formData.publishCfg = await getPublishCfg(key)
   // 单篇文章初始化
@@ -295,6 +298,9 @@ onMounted(async () => {
   // 元数据初始化
   formData.mergedPost = await initPublishMethods.assignInitAttrs(formData.mergedPost, id, formData.publishCfg)
   formData.isInit = true
+  // ==================
+  // 初始化结束
+  // ==================
 
   // 这里可以控制一些功能开关
   formData.useAi = isDev
