@@ -28,7 +28,7 @@
 </script>
 
 <template>
-
+<div>树形单选分类</div>
 </template>
 
 <style scoped lang="stylus">

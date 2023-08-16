@@ -24,15 +24,35 @@
   -->
 
 <script setup lang="ts">
+import { CategoryTypeEnum } from "zhi-blog-api"
+import { reactive } from "vue"
 
+const props = defineProps({
+  categoryType: {
+    type: String,
+    default: CategoryTypeEnum.CategoryType_None,
+  },
+})
+
+const formData = reactive({
+  categoryType: props.categoryType,
+})
 </script>
 
 <template>
-<div>
-  发布分类
-</div>
+  <div v-if="formData.categoryType === CategoryTypeEnum.CategoryType_Single">
+    <single-category />
+  </div>
+  <div v-else-if="formData.categoryType === CategoryTypeEnum.CategoryType_Multi">
+    <multi-categories />
+  </div>
+  <div v-else-if="formData.categoryType === CategoryTypeEnum.CategoryType_Tree_Single">
+    <tree-single-category />
+  </div>
+  <div v-else-if="formData.categoryType === CategoryTypeEnum.CategoryType_Tree_Multi">
+    <tree-multi-categories />
+  </div>
+  <div v-else></div>
 </template>
 
-<style scoped lang="stylus">
-
-</style>
+<style scoped lang="stylus"></style>

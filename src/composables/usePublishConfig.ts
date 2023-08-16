@@ -60,7 +60,8 @@ const usePublishConfig = () => {
 
     // 平台配置
     if (key) {
-      const cfg = JsonUtil.safeParse<any>(setting[key], {} as any)
+      const storedCfg = JsonUtil.safeParse<any>(setting[key], {} as any)
+      const cfg = await Adaptors.getCfg(key, storedCfg)
       const dynCfg = getDynCfgByKey(dynamicConfigArray, key)
 
       return {

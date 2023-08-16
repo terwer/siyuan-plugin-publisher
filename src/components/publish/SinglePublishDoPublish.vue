@@ -386,9 +386,8 @@ onMounted(async () => {
                     @emitSyncTags="syncTags"
                   />
 
-                  <!-- 分类
-                  <publish-categories />
-                  -->
+                  <!-- 分类 -->
+                  <publish-categories v-model:category-type="formData.publishCfg.cfg.categoryType" />
 
                   <!-- 发布时间 -->
                   <publish-time v-model="formData.mergedPost" @emitSyncPublishTime="syncPublishTime" />

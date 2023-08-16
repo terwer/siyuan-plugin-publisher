@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { BlogAdaptor, BlogConfig, WebAdaptor } from "zhi-blog-api"
+import { BlogAdaptor, WebAdaptor } from "zhi-blog-api"
 import { getSubPlatformTypeByKey, SubPlatformType } from "~/src/platforms/dynamicConfig.ts"
 import { useCnblogsApi } from "~/src/adaptors/api/cnblogs/useCnblogsApi.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
@@ -36,6 +36,7 @@ import { useMetaweblogApi } from "~/src/adaptors/api/metaweblog/useMetaweblogApi
 import { useNotionApi } from "~/src/adaptors/api/notion/useNotionApi.ts"
 import { useHexoApi } from "~/src/adaptors/api/hexo/useHexoApi.ts"
 import { YamlConvertAdaptor } from "~/src/platforms/yamlConvertAdaptor.ts"
+import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
 
 /**
  * 适配器统一入口
@@ -50,49 +51,50 @@ class Adaptors {
    * 根据平台key查找配置
    *
    * @param key
+   * @param newCfg
    */
-  public static async getCfg(key: string): Promise<BlogConfig> {
+  public static async getCfg(key: string, newCfg?: any): Promise<CommonBlogConfig> {
     let conf = null
     const type: SubPlatformType = getSubPlatformTypeByKey(key)
 
     switch (type) {
       case SubPlatformType.Common_Yuque: {
-        const { cfg } = await useYuqueApi(key)
+        const { cfg } = await useYuqueApi(key, newCfg)
         conf = cfg
         break
       }
       case SubPlatformType.Common_Notion: {
-        const { cfg } = await useNotionApi(key)
+        const { cfg } = await useNotionApi(key, newCfg)
         conf = cfg
         break
       }
       case SubPlatformType.Github_Hexo: {
-        const { cfg } = await useHexoApi(key)
+        const { cfg } = await useHexoApi(key, newCfg)
         conf = cfg
         break
       }
       case SubPlatformType.Metaweblog_Metaweblog: {
-        const { cfg } = await useMetaweblogApi(key)
+        const { cfg } = await useMetaweblogApi(key, newCfg)
         conf = cfg
         break
       }
       case SubPlatformType.Metaweblog_Cnblogs: {
-        const { cfg } = await useCnblogsApi(key)
+        const { cfg } = await useCnblogsApi(key, newCfg)
         conf = cfg
         break
       }
       case SubPlatformType.Metaweblog_Typecho: {
-        const { cfg } = await useTypechoApi(key)
+        const { cfg } = await useTypechoApi(key, newCfg)
         conf = cfg
         break
       }
       case SubPlatformType.Wordpress_Wordpress: {
-        const { cfg } = await useWordpressApi(key)
+        const { cfg } = await useWordpressApi(key, newCfg)
         conf = cfg
         break
       }
       case SubPlatformType.Custom_Zhihu: {
-        const { cfg } = await useZhihuWeb(key)
+        const { cfg } = await useZhihuWeb(key, newCfg)
         conf = cfg
         break
       }

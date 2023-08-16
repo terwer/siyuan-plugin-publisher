@@ -23,14 +23,10 @@
   - questions.
   -->
 
-<script setup lang="ts">
-
-</script>
+<script setup lang="ts"></script>
 
 <template>
-
+  <div>简单单选分类</div>
 </template>
 
-<style scoped lang="stylus">
-
-</style>
+<style scoped lang="stylus"></style>

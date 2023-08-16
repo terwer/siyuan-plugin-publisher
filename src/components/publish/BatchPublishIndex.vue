@@ -37,7 +37,7 @@ import { pre } from "~/src/utils/import/pre.ts"
 import { Delete } from "@element-plus/icons-vue"
 import { BrowserUtil } from "zhi-device"
 import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
-import { Post } from "zhi-blog-api"
+import { CategoryTypeEnum, Post } from "zhi-blog-api"
 import { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 import { PageEditMode } from "~/src/models/pageEditMode.ts"
 import EditModeSelect from "~/src/components/publish/form/EditModeSelect.vue"
@@ -345,9 +345,8 @@ onMounted(async () => {
                   @emitSyncTags="syncTags"
                 />
 
-                <!-- 分类
-                <publish-categories />
-                -->
+                <!-- 分类 -->
+                <publish-categories v-model:category-type="CategoryTypeEnum.CategoryType_Single" />
 
                 <!-- 发布时间 -->
                 <publish-time v-model="formData.siyuanPost" @emitSyncPublishTime="syncPublishTime" />
