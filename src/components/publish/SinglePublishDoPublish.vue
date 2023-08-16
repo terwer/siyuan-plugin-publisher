@@ -45,6 +45,7 @@ import EditModeSelect from "~/src/components/publish/form/EditModeSelect.vue"
 import PublishTime from "~/src/components/publish/form/PublishTime.vue"
 import { isDev } from "~/src/utils/constants.ts"
 import AiSwitch from "~/src/components/publish/form/AiSwitch.vue"
+import { pre } from "~/src/utils/import/pre.ts"
 
 const logger = createAppLogger("single-publish-do-publish")
 
@@ -59,6 +60,9 @@ const router = useRouter()
 const { getPublishCfg } = usePublishConfig()
 
 // datas
+const sysKeys = pre.systemCfg.map((item) => {
+  return item.platformKey
+})
 const params = reactive(route.params)
 const key = params.key as string
 const id = params.id as string
@@ -101,6 +105,13 @@ const handlePublish = async () => {
   try {
     formData.isPublishLoading = true
     formData.actionEnable = false
+
+    logger.info("保存到系统平台开始")
+    for (const sysKey of sysKeys) {
+      const sysPublishCfg = await getPublishCfg(sysKey)
+      await doSinglePublish(sysKey, id, sysPublishCfg, formData.mergedPost)
+    }
+    logger.info("保存到系统平台结束")
 
     logger.info("单个常规发布开始")
     const processResult = await doSinglePublish(key, id, formData.publishCfg as IPublishCfg, formData.mergedPost)

@@ -121,8 +121,7 @@ const usePublish = () => {
       } else {
         post.description = post.html
       }
-      logger.debug("文章全部预处理完毕，最终结果", { post: toRaw(post) })
-      throw new Error("开发中")
+      logger.debug(`文章全部预处理完毕，最终结果 =>id=${id},key=${key},`, { post: toRaw(post) })
       // ===================================
       // 文章处理结束
       // ===================================
@@ -165,7 +164,7 @@ const usePublish = () => {
       singleFormData.publishProcessStatus = true
     } catch (e) {
       singleFormData.errMsg = t("main.opt.failure") + "=>" + e
-      logger.error(t("main.opt.failure") + "=>", e)
+      // logger.error(t("main.opt.failure") + "=>", e)
       await kernelApi.pushErrMsg({
         msg: singleFormData.errMsg,
         timeout: 7000,
@@ -230,7 +229,7 @@ const usePublish = () => {
       }
     } catch (e) {
       singleFormData.errMsg = t("main.opt.failure") + "=>" + e
-      logger.error(t("main.opt.failure") + "=>", e)
+      // logger.error(t("main.opt.failure") + "=>", e)
       // ElMessage.error(singleFormData.errMsg)
       await kernelApi.pushErrMsg({
         msg: singleFormData.errMsg,

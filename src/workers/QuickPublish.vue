@@ -31,6 +31,7 @@ import { StrUtil } from "zhi-common"
 import { usePublish } from "~/src/composables/usePublish.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
+import { pre } from "~/src/utils/import/pre.ts"
 
 const logger = createAppLogger("quick-publish-worker")
 
@@ -41,6 +42,9 @@ const { blogApi } = useSiyuanApi()
 const { getPublishCfg } = usePublishConfig()
 
 // datas
+const sysKeys = pre.systemCfg.map((item) => {
+  return item.platformKey
+})
 const params = reactive(route.params)
 const key = params.key as string
 const id = params.id as string
@@ -52,7 +56,6 @@ const formData = reactive({
 onMounted(async () => {
   singleFormData.isPublishLoading = true
   setTimeout(async () => {
-    logger.info("单个快速发布开始")
     // ==================
     // 初始化开始
     // ==================
@@ -65,7 +68,16 @@ onMounted(async () => {
     // ==================
     // 初始化结束
     // ==================
+
     // 开始发布
+    logger.info("保存到系统平台开始")
+    for (const sysKey of sysKeys) {
+      const sysPublishCfg = await getPublishCfg(sysKey)
+      await doSinglePublish(sysKey, id, sysPublishCfg, siyuanPost)
+    }
+    logger.info("保存到系统平台结束")
+
+    logger.info("单个快速发布开始")
     formData.processResult = await doSinglePublish(key, id, publishCfg, siyuanPost)
     logger.info("单个快速发布结束")
     singleFormData.isPublishLoading = false

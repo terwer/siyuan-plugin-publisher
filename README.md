@@ -8,9 +8,9 @@ Publish articles from siyuan-note to platforms such as Yuque, Notion, Cnblogs, W
 
 Support features such as fast publishing, image bed management, platform expansion, smart labels, etc.
 
-> **Front Announcement 1: Publish Tool's first platform-wide version `1.8.0` using the forward agent of Siyuan Note!**
+> **Front Announcement 1: Publish Tool's first version that supports release views `1.9.0` is released!**
 >
-> **Front Announcement 2: The first version of the Publish Tool that fully supports image upload `1.8.0` is released!**
+> **Front Announcement 2: The version `1.8.0` that fully supports image upload for all platforms and the forward agent using siyuan-note is released!**
 
 Tips: Zhihu uses the image upload of the Zhihu platform, Yuque, Notion, and Hexo need Picgo plugin support, and the Metaweblog series platform supports both Picgo plugin and self-contained image upload (install Picgo plugin to use Picgo plugin, otherwise use their own platform)
 
@@ -20,6 +20,9 @@ In later releases, the release configuration will only be backward compatible to
 
 ## Recent critical updates and bug fixes
 
+- Support multiple publishing views, simple mode, detailed mode and source mode
+- Support to modify summary, tags, classification
+- The Hexo platform supports custom modification of YAML
 - Yuque, Notion, and Hexo support image links, and automatic upload requires Picgo plugin support
 - Zhihu platform supports automatic image upload
 - When the Picgo plugin is not installed, some platforms can use the built-in image upload, such as Cnblogs, Typecho, WordPress
@@ -69,7 +72,7 @@ Names not listed in order
 - [X] **Platform switch**: All platforms support enabling and disabling, the blog garden is enabled by default, and can be
   disabled at any time
 - [X] **Dynamic Newly Added**: Support custom adding platform
-- [X] **Smart Classification**: Support smart tags, smart slug aliases, smart summaries, and continue to improve
+- [X] **Smart Classification**: Support smart tags, smart slug aliases, smart summaries, and continue to improve.Smart tags and smart summaries is currently in the invitation experience stage, if you want to experience, you can email youweics@163.com, I will send you a plugin experience package containing AI.
 - [X] **Article Binding**: Support linking existing platform articles to siyuan-note to facilitate follow-up management,
   support Siyuan->platform one-way synchronization
 - [X] **Adapt to Theme**: Automatically adapt to dark mode and light mode
