@@ -42,6 +42,7 @@ import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
 import { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 import { PageEditMode } from "~/src/models/pageEditMode.ts"
 import EditModeSelect from "~/src/components/publish/form/EditModeSelect.vue"
+import PublishTime from "~/src/components/publish/form/PublishTime.vue"
 
 const logger = createAppLogger("single-publish-do-publish")
 
@@ -218,6 +219,12 @@ const syncEditMode = (val: PageEditMode) => {
   logger.debug("syncEditMode in single publish")
 }
 
+const syncPublishTime = (val1: Date, val2: Date) => {
+  formData.siyuanPost.dateCreated = val1
+  formData.siyuanPost.dateUpdated = val2
+  logger.debug("syncPublishTime in batch publish")
+}
+
 const syncPost = (post: Post) => {
   formData.siyuanPost = post
 }
@@ -318,12 +325,20 @@ onMounted(async () => {
                 </div>
                 <el-divider border-style="dashed" />
 
-                <!--
-                ----------------------------------------------------------------------
-                -->
-                <!-- 标签
-                <publish-tags />
-                -->
+                <div v-if="formData.editType === PageEditMode.EditMode_complex" class="complex-mode">
+                  <!-- 别名字段 -->
+                  <el-form-item :label="t('main.slug')">
+                    <el-input v-model="formData.siyuanPost.wp_slug" :disabled="true" />
+                  </el-form-item>
+
+                  <!-- 标签 -->
+                  <publish-tags />
+
+                  <!-- 发布时间 -->
+                  <publish-time v-model="formData.siyuanPost" @emitSyncPublishTime="syncPublishTime" />
+
+                  <el-divider border-style="dashed" />
+                </div>
               </div>
               <!--
               --------------------------------------

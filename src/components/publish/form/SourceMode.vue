@@ -114,10 +114,10 @@ const onYamlContentFocus = (event: any) => {
   if (BrowserUtil.isInBrowser) {
     try {
       BrowserUtil.copyToClipboardInBrowser(formData.yamlContent)
-      ElMessage.success(t("main.opt.success"))
+      ElMessage.success(t("main.copy.success"))
     } catch (e) {
-      logger.error(t("main.opt.failure"), e)
-      ElMessage.error(t("main.opt.failure") + "=>" + e)
+      logger.error(t("main.copy.failure"), e)
+      ElMessage.error(t("main.copy.failure") + "=>" + e)
     }
   }
 }
@@ -160,10 +160,10 @@ const initPage = async () => {
   let yfmObj: YamlFormatObj = new YamlFormatObj()
   const post = formData.siyuanPost
   formData.cfg = props.cfg as CommonBlogConfig
-  formData.yamlAdaptor = await Adaptors.getYamlAdaptor(props.apiType, formData.cfg)
-  if (formData.yamlAdaptor === null) {
-    formData.readonlyMode = true
-  }
+  // 没有平台 Key，不展示 YAML
+  formData.yamlAdaptor = formData.readonlyMode ? null : await Adaptors.getYamlAdaptor(props.apiType, formData.cfg)
+  // 如果传了 key ，但是没有 YAML 适配器，还是不能展示
+  formData.readonlyMode = formData.yamlAdaptor === null
 
   // 批量分发，此时 apiType 为空
   if (formData.readonlyMode) {
@@ -285,6 +285,7 @@ await initPage()
           type="warning"
         />
         -->
+        <!--
         <el-alert
           v-if="!formData.readonlyMode"
           class="top-yaml-tip"
@@ -292,6 +293,7 @@ await initPage()
           :title="t('main.read.mode.tip3')"
           type="error"
         />
+        -->
         <el-alert
           v-if="!formData.readonlyMode"
           class="top-yaml-tip"
@@ -344,7 +346,9 @@ html.dark .source-opt a
 :deep(.readonly-textarea .el-textarea__inner)
   background-color #f0f0f0
   color #888
+  cursor default
 </style>
+
 <style lang="css">
 html.dark .readonly-textarea .el-textarea__inner {
   background-color: #333;

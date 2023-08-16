@@ -51,7 +51,7 @@ export class HexoYamlConverterAdaptor extends YamlConvertAdaptor {
     yamlFormatObj.yamlObj.date = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true)
 
     // updated
-    yamlFormatObj.yamlObj.updated = DateUtil.formatIsoToZh(new Date().toISOString(), true)
+    yamlFormatObj.yamlObj.updated = DateUtil.formatIsoToZh(post.dateUpdated.toISOString(), true)
 
     // excerpt
     yamlFormatObj.yamlObj.excerpt = post.shortDesc
@@ -108,7 +108,14 @@ export class HexoYamlConverterAdaptor extends YamlConvertAdaptor {
 
   convertToAttr(post: Post, yamlFormatObj: YamlFormatObj, cfg?: CommonBlogConfig): Post {
     this.logger.debug("开始转换YAML到Post", yamlFormatObj)
+
+    // 标题
     post.title = yamlFormatObj.yamlObj.title
+
+    // 发布时间
+    post.dateCreated = DateUtil.convertStringToDate(yamlFormatObj.yamlObj.date)
+    post.dateUpdated = DateUtil.convertStringToDate(yamlFormatObj.yamlObj.updated)
+
     // 其他属性
     // ...
 

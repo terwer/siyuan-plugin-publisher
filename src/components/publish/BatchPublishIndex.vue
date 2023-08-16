@@ -27,12 +27,12 @@
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import PublishTips from "~/src/components/publish/form/PublishTips.vue"
 import PublishPlatform from "~/src/components/publish/form/PublishPlatform.vue"
-import { markRaw, onMounted, reactive } from "vue"
+import { markRaw, onMounted, reactive, ref } from "vue"
 import { usePublish } from "~/src/composables/usePublish.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { ElMessage, ElMessageBox } from "element-plus"
-import { StrUtil } from "zhi-common"
+import { DateUtil, StrUtil } from "zhi-common"
 import { pre } from "~/src/utils/import/pre.ts"
 import { Delete } from "@element-plus/icons-vue"
 import { BrowserUtil } from "zhi-device"
@@ -41,6 +41,7 @@ import { Post } from "zhi-blog-api"
 import { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 import { PageEditMode } from "~/src/models/pageEditMode.ts"
 import EditModeSelect from "~/src/components/publish/form/EditModeSelect.vue"
+import PublishTime from "~/src/components/publish/form/PublishTime.vue"
 
 const logger = createAppLogger("publisher-index")
 
@@ -210,6 +211,12 @@ const syncDynList = (selectedKeys: string[]) => {
   logger.debug("syncDynList in batch publish")
 }
 
+const syncPublishTime = (val1: Date, val2: Date) => {
+  formData.siyuanPost.dateCreated = val1
+  formData.siyuanPost.dateUpdated = val2
+  logger.debug("syncPublishTime in batch publish")
+}
+
 const handleRefresh = () => {
   BrowserUtil.reloadPage()
 }
@@ -275,12 +282,20 @@ onMounted(async () => {
               </div>
               <el-divider border-style="dashed" />
 
-              <!--
-              ----------------------------------------------------------------------
-              -->
-              <!-- 标签
-              <publish-tags />
-              -->
+              <div v-if="formData.editType === PageEditMode.EditMode_complex" class="complex-mode">
+                <!-- 别名字段 -->
+                <el-form-item :label="t('main.slug')">
+                  <el-input v-model="formData.siyuanPost.wp_slug" :disabled="true" />
+                </el-form-item>
+
+                <!-- 标签 -->
+                <publish-tags />
+
+                <!-- 发布时间 -->
+                <publish-time v-model="formData.siyuanPost" @emitSyncPublishTime="syncPublishTime" />
+
+                <el-divider border-style="dashed" />
+              </div>
             </div>
             <!--
             --------------------------------------
