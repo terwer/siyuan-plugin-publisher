@@ -31,6 +31,10 @@ import { CommonGithubConfig } from "~/src/adaptors/api/base/github/commonGithubC
 import { StrUtil } from "zhi-common"
 import { toRaw } from "vue"
 import { Base64 } from "js-base64"
+import { DynamicConfig } from "~/src/platforms/dynamicConfig.ts"
+import Adaptors from "~/src/adaptors"
+import { YamlConvertAdaptor } from "~/src/platforms/yamlConvertAdaptor.ts"
+import { YamlFormatObj } from "~/src/models/yamlFormatObj.ts"
 
 /**
  * Github API 适配器
@@ -83,7 +87,20 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
   public async preEditPost(post: Post, id?: string, publishCfg?: any): Promise<Post> {
     // 调用父类预处理
     await super.preEditPost(post, id, publishCfg)
-    this.logger.info("handled preEditPost with parent", { post: toRaw(post) })
+    this.logger.debug("handled preEditPost with parent", { post: toRaw(post) })
+
+    const cfg = publishCfg.cfg as CommonGithubConfig
+    const dynCfg = publishCfg.dynCfg as DynamicConfig
+    const yamlApi: YamlConvertAdaptor = await Adaptors.getYamlAdaptor(dynCfg.platformKey, cfg)
+    if (null !== yamlApi) {
+      // 先生成对应平台的yaml
+      const yamlObj: YamlFormatObj = yamlApi.convertToYaml(post, cfg)
+      this.logger.debug("generate yamlObj using YamlConverterAdaptor =>", yamlObj)
+      // 同步发布内容
+      post.markdown = yamlObj.mdFullContent
+      this.logger.info("handled yaml using YamlConverterAdaptor")
+    }
+
     return post
   }
 

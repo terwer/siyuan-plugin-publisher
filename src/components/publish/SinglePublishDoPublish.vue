@@ -44,6 +44,7 @@ import { PageEditMode } from "~/src/models/pageEditMode.ts"
 import EditModeSelect from "~/src/components/publish/form/EditModeSelect.vue"
 import PublishTime from "~/src/components/publish/form/PublishTime.vue"
 import { isDev } from "~/src/utils/constants.ts"
+import AiSwitch from "~/src/components/publish/form/AiSwitch.vue"
 
 const logger = createAppLogger("single-publish-do-publish")
 
@@ -85,7 +86,7 @@ const formData = reactive({
   // extra sync attrs start
   // =========================
   // AI开关
-  useAi: isDev,
+  useAi: false,
 
   // 页面模式
   editType: PageEditMode.EditMode_simple,
@@ -223,6 +224,11 @@ const syncEditMode = (val: PageEditMode) => {
   logger.debug("syncEditMode in single publish")
 }
 
+const syncAiSwitch = (val: boolean) => {
+  formData.useAi = val
+  logger.debug(`syncAiSwitch in single publish => ${formData.useAi}`)
+}
+
 const syncDesc = (val: string) => {
   formData.siyuanPost.shortDesc = val
   logger.debug("syncDesc in single publish")
@@ -238,11 +244,24 @@ const syncPost = (post: Post) => {
   formData.siyuanPost = post
 }
 
+const onBack = () => {
+  const path = `/publish/singlePublish`
+  logger.info("will go to =>", path)
+  const query = {
+    path: path,
+    query: {
+      id: id,
+    },
+  }
+  router.push(query)
+}
+
 const initPage = async () => {
   try {
     // 初始化属性
     formData.publishCfg = await getPublishCfg(key)
-    const { siyuanPost, platformPost, mergedPost, postPreviewUrl } = await initPublishMethods.doInitPage(
+    // 初始化单篇文章
+    const { siyuanPost, platformPost, mergedPost, postPreviewUrl } = await initPublishMethods.doInitSinglePage(
       key,
       id,
       formData.method,
@@ -269,23 +288,17 @@ const initPage = async () => {
   }
 }
 
-const onBack = () => {
-  const path = `/publish/singlePublish`
-  logger.info("will go to =>", path)
-  const query = {
-    path: path,
-    query: {
-      id: id,
-    },
-  }
-  router.push(query)
-}
-
 onMounted(async () => {
   logger.info("获取到的ID为=>", id)
+  // 单篇文章初始化
   await initPage()
-  formData.editType = isDev ? PageEditMode.EditMode_complex : PageEditMode.EditMode_simple
+  // 元数据初始化
+  formData.mergedPost = await initPublishMethods.assignInitAttrs(formData.mergedPost, id, formData.publishCfg)
   formData.isInit = true
+
+  // 这里可以控制一些功能开关
+  formData.useAi = isDev
+  formData.editType = isDev ? PageEditMode.EditMode_complex : PageEditMode.EditMode_simple
 })
 </script>
 
@@ -324,6 +337,9 @@ onMounted(async () => {
                 <el-divider border-style="dashed" />
 
                 <div v-if="formData.editType === PageEditMode.EditMode_complex" class="complex-mode">
+                  <!-- AI开关 -->
+                  <ai-switch v-if="formData.useAi" v-model:use-ai="formData.useAi" @emitSyncAiSwitch="syncAiSwitch" />
+
                   <!-- 别名字段 -->
                   <el-form-item :label="t('main.slug')">
                     <el-input v-model="formData.mergedPost.wp_slug" :disabled="true" />

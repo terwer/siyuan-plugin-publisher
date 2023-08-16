@@ -103,20 +103,13 @@ const usePublish = () => {
       let post = doc
       // 保证postid一致
       post.postid = postid
-      // ===================================
-      // 文章处理开始
-      // ===================================
-
-      // 分配文章属性 - 初始化和发布都会调用
-      post = await assignAttrs(post, id, publishCfg)
-
-      // ===================================
-      // 文章处理结束
-      // ===================================
 
       // 初始化API
       const api = await getPublishApi(key, cfg)
 
+      // ===================================
+      // 文章处理开始
+      // ===================================
       // 平台相关的正文预处理 - 仅在发布的时候调用
       logger.debug(`before preEditPost, isAdd ${singleFormData.isAdd}, post=>`, toRaw(post))
       post = await api.preEditPost(post, id, publishCfg)
@@ -128,7 +121,11 @@ const usePublish = () => {
       } else {
         post.description = post.html
       }
-      logger.debug("文章全部预处理完毕，最终结果", { post })
+      logger.debug("文章全部预处理完毕，最终结果", { post: toRaw(post) })
+      throw new Error("开发中")
+      // ===================================
+      // 文章处理结束
+      // ===================================
 
       // 处理发布：新增 或者 更新
       if (singleFormData.isAdd) {
@@ -306,38 +303,38 @@ const usePublish = () => {
   // const assignCompareValue = (title1: string, title2: string) => (title1.length > title2.length ? title1 : title2)
 
   /**
-   * 分配属性 - 初始化和发布都可能调用
+   * 初始化调用
    *
    * @param post - 文章对象
    * @param id - 思源笔记文档ID
    * @param publishCfg - 发布配置
    */
-  const assignAttrs = async (post: Post, id: string, publishCfg: IPublishCfg) => {
-    const setting: typeof SypConfig = publishCfg.setting
-    const cfg: CommonBlogConfig = publishCfg.cfg
-    const dynCfg: DynamicConfig = publishCfg.dynCfg
-    const postMeta = ObjectUtil.getProperty(setting, id, {})
-
-    // 别名
-    const slug = ObjectUtil.getProperty(postMeta, "custom-slug", post.wp_slug)
-    if (!StrUtil.isEmptyString(slug)) {
-      post.wp_slug = slug
-      logger.info("Using existing siyuan note slug")
-    } else {
-      // 如果wp_slug为空，则生成一个新的slug
-      const slug = await AliasTranslator.getPageSlug(post.title, true)
-      post.wp_slug = `${slug}`
-      logger.info("Generated new slug")
-    }
-
-    // 发布状态
-    post.post_status = PostStatusEnum.PostStatusEnum_Publish
-
-    return post
-  }
-
   const initPublishMethods = {
-    doInitPage: async (
+    assignInitAttrs: async (post: Post, id: string, publishCfg: IPublishCfg) => {
+      const setting: typeof SypConfig = publishCfg.setting
+      const cfg: CommonBlogConfig = publishCfg.cfg
+      const dynCfg: DynamicConfig = publishCfg.dynCfg
+      const postMeta = ObjectUtil.getProperty(setting, id, {})
+
+      // 别名
+      const slug = ObjectUtil.getProperty(postMeta, "custom-slug", post.wp_slug)
+      if (!StrUtil.isEmptyString(slug)) {
+        post.wp_slug = slug
+        logger.info("Using existing siyuan note slug")
+      } else {
+        // 如果wp_slug为空，则生成一个新的slug
+        const slug = await AliasTranslator.getPageSlug(post.title, true)
+        post.wp_slug = `${slug}`
+        logger.info("Generated new slug")
+      }
+
+      // 发布状态
+      post.post_status = PostStatusEnum.PostStatusEnum_Publish
+      return post
+    },
+
+    // 常规发布初始化
+    doInitSinglePage: async (
       key: string,
       id: string,
       method: MethodEnum = MethodEnum.METHOD_ADD,
@@ -385,9 +382,6 @@ const usePublish = () => {
         postPreviewUrl = await getPostPreviewUrl(api, postid, cfg)
       }
 
-      // 初始化属性
-      mergedPost = await assignAttrs(mergedPost, id, publishCfg)
-
       logger.debug("doInitPage finished platformPost =>", toRaw(platformPost))
       logger.debug("doInitPage finished mergedPost =>", toRaw(mergedPost))
 
@@ -406,7 +400,6 @@ const usePublish = () => {
     doSingleDelete,
     doForceSingleDelete,
     initPublishMethods,
-    assignAttrs,
   }
 }
 

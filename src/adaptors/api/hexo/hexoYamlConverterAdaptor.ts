@@ -30,6 +30,7 @@ import { Post } from "zhi-blog-api"
 import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
 import { DateUtil, StrUtil, YamlUtil } from "zhi-common"
 import { CommonGithubConfig } from "~/src/adaptors/api/base/github/commonGithubConfig.ts"
+import { LuteUtil } from "~/src/utils/luteUtil.ts"
 
 /**
  * Hexo平台的YAML解析器
@@ -117,7 +118,7 @@ export class HexoYamlConverterAdaptor extends YamlConvertAdaptor {
     post.dateUpdated = DateUtil.convertStringToDate(yamlFormatObj.yamlObj.updated)
 
     // 其他属性
-    // ...
+    post.shortDesc = yamlFormatObj.yamlObj.excerpt
 
     post.yaml = YamlUtil.obj2Yaml(yamlFormatObj.yamlObj)
     post.markdown = `${post.yaml}\n${post.markdown}`

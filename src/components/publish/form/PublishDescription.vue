@@ -29,11 +29,9 @@ import { reactive, watch } from "vue"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { ElMessage } from "element-plus"
 import { HtmlUtil, SmartUtil, StrUtil } from "zhi-common"
-import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 
 const logger = createAppLogger("publish-description")
 const { t } = useVueI18n()
-const { kernelApi } = useSiyuanApi()
 
 const props = defineProps({
   useAi: {
@@ -68,6 +66,7 @@ watch(
   () => props.useAi,
   (newValue) => {
     formData.useAi = newValue
+    alert(111)
   }
 )
 
@@ -94,12 +93,6 @@ const handleMakeDesc = async () => {
       formData.desc = HtmlUtil.parseHtml(formData.html, MAX_PREVIEW_LENGTH, true)
       ElMessage.info(`未开启人工智能，直接截取文章前${MAX_PREVIEW_LENGTH}个字符作为摘要`)
     }
-
-    // 保存属性到思源
-    const customAttr = {
-      memo: formData.desc,
-    }
-    await kernelApi.setBlockAttrs(formData.pageId, customAttr)
 
     ElMessage.success(t("main.opt.success"))
   } catch (e) {

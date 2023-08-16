@@ -57,7 +57,7 @@ const props = defineProps({
 
 // uses
 const { t } = useVueI18n()
-const { doSinglePublish, doSingleDelete, doForceSingleDelete } = usePublish()
+const { doSinglePublish, doSingleDelete, doForceSingleDelete, initPublishMethods } = usePublish()
 const { blogApi } = useSiyuanApi()
 const { getPublishCfg } = usePublishConfig()
 
@@ -85,7 +85,7 @@ const formData = reactive({
   // extra sync attrs start
   // =========================
   // AI开关
-  useAi: isDev,
+  useAi: false,
 
   // 平台列表
   dynList: <string[]>[],
@@ -110,12 +110,11 @@ const handlePublish = async () => {
     formData.failBatchResults = []
     formData.successBatchResults = []
     for (const key of formData.dynList) {
-      // 思源笔记原始文章数据
-      const siyuanPost = await blogApi.getPost(id)
-      // 初始化属性
+      // 文章发布数据不同平台共享
+      // 平台相关的配置，需要各自重新获取
       const publishCfg = await getPublishCfg(key)
       formData.publishCfg = publishCfg
-      const batchResult = await doSinglePublish(key, id, publishCfg, siyuanPost)
+      const batchResult = await doSinglePublish(key, id, publishCfg, formData.siyuanPost)
       if (batchResult.status) {
         formData.successBatchResults.push(batchResult)
       } else {
@@ -242,8 +241,13 @@ onMounted(async () => {
   // 思源笔记原始文章数据
   const siyuanPost = await blogApi.getPost(id)
   formData.siyuanPost = siyuanPost
-  formData.editType = isDev ? PageEditMode.EditMode_complex : PageEditMode.EditMode_simple
+  // 元数据初始化
+  formData.siyuanPost = await initPublishMethods.assignInitAttrs(formData.siyuanPost, id, formData.publishCfg)
   logger.debug("batch inited siyuanPost =>", toRaw(formData.siyuanPost))
+
+  // 这里可以控制一些功能开关
+  formData.useAi = isDev
+  formData.editType = isDev ? PageEditMode.EditMode_complex : PageEditMode.EditMode_simple
 })
 </script>
 
