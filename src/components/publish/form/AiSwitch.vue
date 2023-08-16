@@ -31,8 +31,15 @@ import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 
 const { t } = useVueI18n()
 
+const props = defineProps({
+  useAi: {
+    type: Boolean,
+    default: false,
+  },
+})
+
 const formData = reactive({
-  useAi: false,
+  useAi: props.useAi,
 })
 
 const emit = defineEmits(["emitSyncAiSwitch"])

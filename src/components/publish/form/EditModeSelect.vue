@@ -27,11 +27,12 @@
 import { PageEditMode } from "~/src/models/pageEditMode.ts"
 import { reactive } from "vue"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { isDev } from "~/src/utils/constants.ts"
 
 const { t } = useVueI18n()
 
 const pageModeData = reactive({
-  etype: PageEditMode.EditMode_simple,
+  etype: isDev ? PageEditMode.EditMode_complex : PageEditMode.EditMode_simple,
 })
 
 const emit = defineEmits(["emitSyncEditMode"])

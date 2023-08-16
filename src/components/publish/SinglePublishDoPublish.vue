@@ -43,6 +43,7 @@ import { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 import { PageEditMode } from "~/src/models/pageEditMode.ts"
 import EditModeSelect from "~/src/components/publish/form/EditModeSelect.vue"
 import PublishTime from "~/src/components/publish/form/PublishTime.vue"
+import { isDev } from "~/src/utils/constants.ts"
 
 const logger = createAppLogger("single-publish-do-publish")
 
@@ -84,10 +85,10 @@ const formData = reactive({
   // extra sync attrs start
   // =========================
   // AI开关
-  useAi: false,
+  useAi: isDev,
 
   // 页面模式
-  editType: PageEditMode.EditMode_simple,
+  editType: isDev ? PageEditMode.EditMode_complex : PageEditMode.EditMode_simple,
   // =========================
   // sync attrs end
   // =========================
@@ -222,6 +223,11 @@ const syncEditMode = (val: PageEditMode) => {
   logger.debug("syncEditMode in single publish")
 }
 
+const syncDesc = (val: string) => {
+  formData.siyuanPost.shortDesc = val
+  logger.debug("syncDesc in single publish")
+}
+
 const syncPublishTime = (val1: Date, val2: Date) => {
   formData.siyuanPost.dateCreated = val1
   formData.siyuanPost.dateUpdated = val2
@@ -333,6 +339,15 @@ onMounted(async () => {
                   <el-form-item :label="t('main.slug')">
                     <el-input v-model="formData.siyuanPost.wp_slug" :disabled="true" />
                   </el-form-item>
+
+                  <!-- 摘要 -->
+                  <publish-description
+                    v-model:use-ai="formData.useAi"
+                    v-model:page-id="id"
+                    v-model:desc="formData.siyuanPost.shortDesc"
+                    v-model:content="formData.siyuanPost.html"
+                    @emitSyncDesc="syncDesc"
+                  />
 
                   <!-- 标签 -->
                   <publish-tags />

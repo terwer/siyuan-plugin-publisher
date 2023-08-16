@@ -28,7 +28,7 @@ import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { reactive, watch } from "vue"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { ElMessage } from "element-plus"
-import { HtmlUtil } from "zhi-common"
+import { HtmlUtil, SmartUtil, StrUtil } from "zhi-common"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 
 const logger = createAppLogger("publish-description")
@@ -78,9 +78,14 @@ const handleMakeDesc = async () => {
   formData.isDescLoading = true
   try {
     if (formData.useAi) {
-      ElMessage.warning("使用人工智能提取摘要。开发中...")
-      formData.isDescLoading = false
-      return
+      ElMessage.warning("使用人工智能提取摘要")
+      const result = await SmartUtil.autoSummary(formData.html)
+      logger.debug("auto summary reault =>", result)
+      if (!StrUtil.isEmptyString(result.errMsg)) {
+        throw new Error(result.errMsg)
+      } else {
+        formData.desc = result.result
+      }
     } else {
       formData.desc = HtmlUtil.parseHtml(formData.html, MAX_PREVIEW_LENGTH, true)
       ElMessage.info(`未开启人工智能，直接截取文章前${MAX_PREVIEW_LENGTH}个字符作为摘要`)

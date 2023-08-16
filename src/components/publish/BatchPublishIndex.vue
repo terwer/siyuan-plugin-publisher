@@ -27,12 +27,12 @@
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import PublishTips from "~/src/components/publish/form/PublishTips.vue"
 import PublishPlatform from "~/src/components/publish/form/PublishPlatform.vue"
-import { markRaw, onMounted, reactive, ref } from "vue"
+import { markRaw, onMounted, reactive } from "vue"
 import { usePublish } from "~/src/composables/usePublish.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { ElMessage, ElMessageBox } from "element-plus"
-import { DateUtil, StrUtil } from "zhi-common"
+import { StrUtil } from "zhi-common"
 import { pre } from "~/src/utils/import/pre.ts"
 import { Delete } from "@element-plus/icons-vue"
 import { BrowserUtil } from "zhi-device"
@@ -43,6 +43,7 @@ import { PageEditMode } from "~/src/models/pageEditMode.ts"
 import EditModeSelect from "~/src/components/publish/form/EditModeSelect.vue"
 import PublishTime from "~/src/components/publish/form/PublishTime.vue"
 import AiSwitch from "~/src/components/publish/form/AiSwitch.vue"
+import { isDev } from "~/src/utils/constants.ts"
 
 const logger = createAppLogger("publisher-index")
 
@@ -84,13 +85,13 @@ const formData = reactive({
   // extra sync attrs start
   // =========================
   // AI开关
-  useAi: false,
+  useAi: isDev,
 
   // 平台列表
   dynList: <string[]>[],
 
   // 页面模式
-  editType: PageEditMode.EditMode_simple,
+  editType: isDev ? PageEditMode.EditMode_complex : PageEditMode.EditMode_simple,
   // =========================
   // sync attrs end
   // =========================
@@ -300,7 +301,7 @@ onMounted(async () => {
 
               <div v-if="formData.editType === PageEditMode.EditMode_complex" class="complex-mode">
                 <!-- AI开关 -->
-                <ai-switch @emitSyncAiSwitch="syncAiSwitch" />
+                <ai-switch v-if="formData.useAi" v-model:use-ai="formData.useAi" @emitSyncAiSwitch="syncAiSwitch" />
 
                 <!-- 别名 -->
                 <el-form-item :label="t('main.slug')">
