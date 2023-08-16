@@ -72,7 +72,7 @@
     "xmlbuilder2": "^3.1.1",
     "zhi-blog-api": "^1.20.22",
     "zhi-common": "^1.14.2",
-    "zhi-device": "^2.3.0",
+    "zhi-device": "^2.3.1",
     "zhi-fetch-middleware": "^0.2.21",
     "zhi-github-middleware": "^0.2.2",
     "zhi-lib-base": "^0.4.4",
