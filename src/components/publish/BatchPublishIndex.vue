@@ -315,7 +315,7 @@ onMounted(async () => {
 
               <div v-if="formData.editType === PageEditMode.EditMode_complex" class="complex-mode">
                 <!-- AI开关 -->
-                <ai-switch v-if="formData.useAi" v-model:use-ai="formData.useAi" @emitSyncAiSwitch="syncAiSwitch" />
+                <ai-switch v-model:use-ai="formData.useAi" @emitSyncAiSwitch="syncAiSwitch" />
 
                 <!-- 别名 -->
                 <el-form-item :label="t('main.slug')">
@@ -332,7 +332,16 @@ onMounted(async () => {
                 />
 
                 <!-- 标签 -->
-                <publish-tags />
+                <publish-tags
+                  v-model:use-ai="formData.useAi"
+                  v-model:page-id="id"
+                  v-model:tags="formData.siyuanPost.mt_keywords"
+                  v-model:content="formData.siyuanPost.html"
+                />
+
+                <!-- 分类
+                <publish-categories />
+                -->
 
                 <!-- 发布时间 -->
                 <publish-time v-model="formData.siyuanPost" @emitSyncPublishTime="syncPublishTime" />

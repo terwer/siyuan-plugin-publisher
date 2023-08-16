@@ -24,7 +24,7 @@
   -->
 
 <script setup lang="ts">
-import { onMounted, reactive } from "vue"
+import {onMounted, reactive, toRaw} from "vue"
 import { useRoute } from "vue-router"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { StrUtil } from "zhi-common"
@@ -65,6 +65,7 @@ onMounted(async () => {
     let siyuanPost = await blogApi.getPost(id)
     // 元数据初始化
     siyuanPost = await initPublishMethods.assignInitAttrs(siyuanPost, id, publishCfg)
+    logger.debug("quick publish inited siyuanPost =>", toRaw(siyuanPost))
     // ==================
     // 初始化结束
     // ==================

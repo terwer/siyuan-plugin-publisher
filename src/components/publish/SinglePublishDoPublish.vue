@@ -24,7 +24,7 @@
   -->
 
 <script setup lang="ts">
-import { markRaw, onMounted, reactive } from "vue"
+import {markRaw, onMounted, reactive, toRaw} from "vue"
 import { useRoute, useRouter } from "vue-router"
 import BackPage from "~/src/components/common/BackPage.vue"
 import { usePublish } from "~/src/composables/usePublish.ts"
@@ -309,6 +309,7 @@ onMounted(async () => {
   // 元数据初始化
   formData.mergedPost = await initPublishMethods.assignInitAttrs(formData.mergedPost, id, formData.publishCfg)
   formData.isInit = true
+  logger.debug("single publish inited mergedPost =>", toRaw(formData.mergedPost))
   // ==================
   // 初始化结束
   // ==================
@@ -373,6 +374,9 @@ onMounted(async () => {
 
                   <!-- 标签 -->
                   <publish-tags />
+
+                  <!-- 分类 -->
+                  <publish-categories />
 
                   <!-- 发布时间 -->
                   <publish-time v-model="formData.mergedPost" @emitSyncPublishTime="syncPublishTime" />

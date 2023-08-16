@@ -66,7 +66,6 @@ watch(
   () => props.useAi,
   (newValue) => {
     formData.useAi = newValue
-    alert(111)
   }
 )
 
@@ -77,7 +76,6 @@ const handleMakeDesc = async () => {
   formData.isDescLoading = true
   try {
     if (formData.useAi) {
-      ElMessage.warning("使用人工智能提取摘要")
       if (StrUtil.isEmptyString(formData.html)) {
         throw new Error("正文为空，无法生成摘要")
       }
@@ -89,12 +87,12 @@ const handleMakeDesc = async () => {
       } else {
         formData.desc = result.result
       }
+      ElMessage.warning("使用人工智能提取摘要成功")
     } else {
       formData.desc = HtmlUtil.parseHtml(formData.html, MAX_PREVIEW_LENGTH, true)
-      ElMessage.info(`未开启人工智能，直接截取文章前${MAX_PREVIEW_LENGTH}个字符作为摘要`)
+      ElMessage.success(`操作成功，未开启人工智能，直接截取文章前${MAX_PREVIEW_LENGTH}个字符作为摘要`)
     }
-
-    ElMessage.success(t("main.opt.success"))
+    // ElMessage.success(t("main.opt.success"))
   } catch (e) {
     logger.error(t("main.opt.failure") + "=>", e)
     ElMessage.error(t("main.opt.failure") + "=>", e)
@@ -112,7 +110,13 @@ const onDescChange = () => {
 <template>
   <div class="form-desc">
     <el-form-item :label="t('main.desc')">
-      <el-input v-model="formData.desc" :autosize="{ minRows: 3, maxRows: 16 }" type="textarea" @input="onDescChange" />
+      <el-input
+        v-model="formData.desc"
+        :autosize="{ minRows: 3, maxRows: 16 }"
+        type="textarea"
+        placeholder="请输入文章摘要"
+        @input="onDescChange"
+      />
     </el-form-item>
     <el-form-item>
       <el-button size="small" :loading="formData.isDescLoading" type="primary" @click="handleMakeDesc">

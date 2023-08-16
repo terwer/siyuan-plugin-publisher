@@ -65,7 +65,17 @@ const onAiSwitchChange = (val: boolean) => {
         emit("emitSyncAiSwitch", formData.useAi)
       })
   } else {
-    emit("emitSyncAiSwitch", formData.useAi)
+    ElMessageBox.confirm(`人工智能服务关闭之后将使用基础功能，是否继续？`, "温馨提示", {
+      type: "error",
+      icon: markRaw(Warning),
+      confirmButtonText: t("main.opt.ok"),
+      cancelButtonText: t("main.opt.cancel"),
+    })
+      .then(async () => {
+        emit("emitSyncAiSwitch", formData.useAi)
+        ElMessage.warning("人工智能服务[内测版]已关闭，将使用基础功能！")
+      })
+      .catch(() => {})
   }
 }
 </script>
