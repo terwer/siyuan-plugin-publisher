@@ -84,8 +84,8 @@ dependencies:
     specifier: ^2.0.27
     version: 2.0.27
   zhi-xmlrpc-middleware:
-    specifier: ^0.4.15
-    version: 0.4.15
+    specifier: ^0.5.1
+    version: 0.5.1
 
 devDependencies:
   '@terwer/esbuild-config-custom':
@@ -7362,8 +7362,22 @@ packages:
       zhi-lib-base: 0.4.4
     dev: false
 
+  /zhi-common@1.20.0:
+    resolution: {integrity: sha512-9RBhHVMI6EiYAYk2c8el1S47o7V9nLBWdPzhhl3t0wyMMYvWiYx92kGmSQ0PmN5Ove5fIApjzqlrsCm/IZy4+Q==}
+    dependencies:
+      js-yaml: 4.1.0
+      shorthash2: 1.0.3
+      transliteration: 2.3.5
+      vue: 3.3.4
+      zhi-lib-base: 0.4.4
+    dev: false
+
   /zhi-device@2.3.0:
     resolution: {integrity: sha512-we04mMt4BEqeKDxoqdJQsDFYImYlcp/yaAIkpxpMGg+9tBURfNeHPHIHkFias9VbM8yuk6xjAX6B2xJjvYE/iw==}
+    dev: false
+
+  /zhi-device@2.3.1:
+    resolution: {integrity: sha512-HLNroA/bIHrEPQTaOC0gZyR42FpaxSJb/lc+LqWvtlazsxeOiYAc9HhFHBwJFdbikMqCogFWVFtGG7OMLYmaKg==}
     dev: false
 
   /zhi-fetch-middleware@0.2.21:
@@ -7405,11 +7419,11 @@ packages:
       zhi-lib-base: 0.4.4
     dev: false
 
-  /zhi-xmlrpc-middleware@0.4.15:
-    resolution: {integrity: sha512-XmqKZPyeyO+IU3wwDc1GPghevCFW6Ix9DKWW1MnXC4QsPTsQK8b3UN6OlMKTGqfj2mPle1Kg8H/01AihE7utrA==}
+  /zhi-xmlrpc-middleware@0.5.1:
+    resolution: {integrity: sha512-MLLnfrwjVRs6iubVLJHwtfcjczx/gkKodb94qdNHznB3STdNKjc09feMG6vqGMbU0L+JZDWzI7X/Qm+laIMyfw==}
     dependencies:
-      zhi-common: 1.14.2
-      zhi-device: 2.3.0
+      zhi-common: 1.20.0
+      zhi-device: 2.3.1
       zhi-lib-base: 0.4.4
     dev: false
 
