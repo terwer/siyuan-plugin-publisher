@@ -364,7 +364,6 @@ const usePublish = () => {
 
       if (method === MethodEnum.METHOD_ADD) {
         logger.info("Add, using siyuan post")
-        mergedPost = siyuanPost
       } else {
         logger.info("Reading post from remote platform")
         if (StrUtil.isEmptyString(postid)) {
@@ -374,6 +373,7 @@ const usePublish = () => {
         // 查询平台文章
         platformPost = await api.getPost(postid)
         // 更新属性
+        mergedPost.cate_slugs = platformPost.cate_slugs
 
         // 更新预览链接
         postPreviewUrl = await getPostPreviewUrl(api, postid, cfg)

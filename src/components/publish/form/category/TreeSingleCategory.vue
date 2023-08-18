@@ -24,13 +24,18 @@
   -->
 
 <script setup lang="ts">
+import { ITreeSingleCategoryConfig } from "~/src/types/ICategoryConfig.ts"
 
+const props = defineProps({
+  categoryConfig: {
+    type: Object as () => ITreeSingleCategoryConfig,
+    default: {},
+  },
+})
 </script>
 
 <template>
-<div>树形单选分类</div>
+  <div>树形单选分类</div>
 </template>
 
-<style scoped lang="stylus">
-
-</style>
+<style scoped lang="stylus"></style>

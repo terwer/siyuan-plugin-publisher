@@ -44,6 +44,7 @@ import EditModeSelect from "~/src/components/publish/form/EditModeSelect.vue"
 import PublishTime from "~/src/components/publish/form/PublishTime.vue"
 import AiSwitch from "~/src/components/publish/form/AiSwitch.vue"
 import { isDev } from "~/src/utils/constants.ts"
+import { ICategoryConfig, ISingleCategoryConfig } from "~/src/types/ICategoryConfig.ts"
 
 const logger = createAppLogger("publisher-index")
 
@@ -80,6 +81,9 @@ const formData = reactive({
   // 单个平台信息
   siyuanPost: {} as Post,
   publishCfg: {} as IPublishCfg,
+
+  // 分类配置
+  categoryConfig: {} as ICategoryConfig,
 
   // =========================
   // extra sync attrs start
@@ -253,6 +257,16 @@ onMounted(async () => {
   formData.siyuanPost = siyuanPost
   // 元数据初始化
   formData.siyuanPost = await initPublishMethods.assignInitAttrs(formData.siyuanPost, id, formData.publishCfg)
+
+  // 分类数据初始化
+  formData.categoryConfig = {
+    cateEnabled: true,
+    readonlyMode: true,
+    pageId: id,
+    categories: formData.siyuanPost.categories,
+    cateSlugs: formData.siyuanPost.cate_slugs,
+  } as ISingleCategoryConfig
+
   logger.debug("batch inited siyuanPost =>", toRaw(formData.siyuanPost))
   // ==================
   // 初始化结束
@@ -346,7 +360,10 @@ onMounted(async () => {
                 />
 
                 <!-- 分类 -->
-                <publish-categories v-model:category-type="CategoryTypeEnum.CategoryType_Single" />
+                <publish-categories
+                  v-model:category-type="CategoryTypeEnum.CategoryType_Single"
+                  v-model:category-config="formData.categoryConfig"
+                />
 
                 <!-- 发布时间 -->
                 <publish-time v-model="formData.siyuanPost" @emitSyncPublishTime="syncPublishTime" />

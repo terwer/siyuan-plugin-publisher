@@ -556,4 +556,5 @@ export default {
   "setting.blog.siyuan.password": "Siyuan Token",
   "setting.blog.siyuan.password.tip": "Siyuan Token, which is empty by default",
   "slogan.make.written.fun": "Let creation return to fun",
+  "category.batch.not.supported": "Note: Some platforms in the bulk distribution mode do not support public classification, such as Yuque and Zhihu",
 }

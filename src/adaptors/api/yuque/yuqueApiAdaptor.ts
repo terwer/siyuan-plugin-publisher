@@ -109,7 +109,7 @@ class YuqueApiAdaptor extends BaseBlogApi {
         // 只获取文档库
         if (repo.type === "Book") {
           const cat = new CategoryInfo()
-          cat.categoryId = repo.slug
+          cat.categoryId = `${this.cfg.username}/${repo.slug}`
           cat.categoryName = repo.name
           cat.description = repo.name
           cat.categoryDescription = repo.name

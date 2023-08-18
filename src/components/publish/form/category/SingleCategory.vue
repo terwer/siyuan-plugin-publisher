@@ -23,10 +23,180 @@
   - questions.
   -->
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { onMounted, reactive, toRaw, watch } from "vue"
+import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { CategoryInfo } from "zhi-blog-api"
+import Adaptors from "~/src/adaptors"
+import { StrUtil } from "zhi-common"
+import { ISingleCategoryConfig } from "~/src/types/ICategoryConfig.ts"
+import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
+
+const logger = createAppLogger("single-category")
+const { t } = useVueI18n()
+const { kernelApi } = useSiyuanApi()
+
+const props = defineProps({
+  categoryConfig: {
+    type: Object as () => ISingleCategoryConfig,
+    default: {},
+  },
+})
+
+const formData = reactive({
+  categoryConfig: props.categoryConfig,
+  useRemoteData: !StrUtil.isEmptyString(props.categoryConfig.apiType),
+  cate: {
+    categorySelected: "",
+    categoryList: [],
+  },
+})
+
+// emits
+const emit = defineEmits(["emitSyncSingleCates"])
+
+// methods
+const handleCatNodeSingleCheck = (val: any) => {
+  const value = val
+  const label = formData.cate.categoryList.find((x) => x.value === value)?.label ?? ""
+  logger.debug("value=>", value)
+  logger.debug("label=>", value)
+  const cfg = formData.categoryConfig.cfg
+  const cates = []
+  const cateSlugs = []
+
+  if (cfg.enableKnowledgeSpace) {
+    cates.push(label)
+    cateSlugs.push(value)
+  } else {
+    const cates = []
+    cates.push(label)
+  }
+
+  formData.categoryConfig.categories = cates
+  formData.categoryConfig.cateSlugs = cateSlugs
+
+  emit("emitSyncSingleCates", cates, cateSlugs)
+
+  logger.debug("categories=>", formData.categoryConfig.categories)
+  logger.debug("cat_slugs=>", formData.categoryConfig.cateSlugs)
+}
+
+const initPage = async () => {
+  if (formData.categoryConfig.cateEnabled) {
+    let categoryInfoList: CategoryInfo[] = []
+    logger.debug(`useRemoteData => ${formData.useRemoteData}`)
+    if (formData.useRemoteData) {
+      // 获取远程分类列表
+      const cfg = formData.categoryConfig.cfg
+      const api = await Adaptors.getAdaptor(formData.categoryConfig.apiType, cfg)
+      categoryInfoList = await api.getCategories()
+      logger.debug("getCategories for single category", categoryInfoList)
+
+      if (categoryInfoList.length > 0) {
+        // 分类列表
+        formData.cate.categoryList = categoryInfoList.map((item: CategoryInfo) => ({
+          value: item.categoryId,
+          label: item.categoryName,
+        }))
+
+        const cates = formData.categoryConfig.categories
+        const cateSlugs = formData.categoryConfig.cateSlugs
+        // 当前选中
+        if (cfg.enableKnowledgeSpace) {
+          logger.debug("knowledgeSpace is enabled =>", {
+            cates: toRaw(cates),
+            cateSlugs: toRaw(cateSlugs),
+          })
+
+          // 先读取保存的，否则使用默认
+          formData.cate.categorySelected = cateSlugs.length > 0 ? cateSlugs[0] : cfg.blogid
+          // 默认未设置，获取第一个
+          if (StrUtil.isEmptyString(formData.cate.categorySelected)) {
+            formData.cate.categorySelected = categoryInfoList[0].categoryId
+          }
+        } else {
+          // 先读取保存的，否则使用默认
+          formData.cate.categorySelected = cates.length > 0 ? cates[0] : cfg.blogid
+          // 默认未设置，获取第一个
+          if (StrUtil.isEmptyString(formData.cate.categorySelected)) {
+            formData.cate.categorySelected = categoryInfoList[0].categoryId
+          }
+        }
+      }
+    } else {
+      // 批量分发，直接组装公共分类
+      const cates = formData.categoryConfig.categories ?? []
+      categoryInfoList = cates.map((x: string) => {
+        const categoryInfo = new CategoryInfo()
+        categoryInfo.categoryId = x
+        categoryInfo.categoryName = x
+        categoryInfo.categoryDescription = x
+        return categoryInfo
+      })
+
+      if (categoryInfoList.length > 0) {
+        // 分类列表
+        formData.cate.categoryList = categoryInfoList.map((item: CategoryInfo) => ({
+          value: item.categoryId,
+          label: item.categoryName,
+        }))
+
+        // 当前选中
+        formData.cate.categorySelected = categoryInfoList[0].categoryId
+      }
+
+      logger.debug("公共分类 =>", { cates: toRaw(cates) })
+    }
+  }
+}
+
+onMounted(async () => {
+  await initPage()
+})
+</script>
 
 <template>
-  <div>简单单选分类</div>
+  <div class="single-category" v-if="formData.cate.categoryList.length > 0">
+    <el-form-item :label="t('main.cat')" style="width: 100%" v-if="!formData.categoryConfig.readonlyMode">
+      <el-select
+        v-model="formData.cate.categorySelected"
+        placeholder="请选择"
+        no-data-text="暂无数据"
+        class="m-2"
+        size="default"
+        @change="handleCatNodeSingleCheck"
+      >
+        <el-option
+          v-for="item in formData.cate.categoryList"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        />
+      </el-select>
+    </el-form-item>
+    <el-form-item v-else :label="t('main.cat')" style="width: 100%">
+      <el-select
+        v-model="formData.cate.categorySelected"
+        disabled
+        placeholder="请选择"
+        no-data-text="暂无数据"
+        class="m-2"
+        size="default"
+        @change="handleCatNodeSingleCheck"
+      >
+        <el-option v-for="item in formData.cate.categoryList" :key="item.value" :label="item.label" :value="item" />
+      </el-select>
+    </el-form-item>
+    <el-form-item>
+      <el-alert :closable="false" :title="t('category.batch.not.supported')" class="form-item-tip" type="warning" />
+    </el-form-item>
+  </div>
 </template>
 
-<style scoped lang="stylus"></style>
+<style scoped lang="stylus">
+.form-item-tip
+  padding 2px 4px
+  margin 0 10px 0 0
+</style>

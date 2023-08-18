@@ -282,7 +282,8 @@ export default {
   "yaml.show.type.html": "HTML正文",
   "main.read.mode": "只读模式",
   "main.edit.mode": "编辑模式",
-  "main.read.mode.tip1": "温馨提示：为了数据一致性，多平台分发或者未提供YAML适配器时无法处理平台属性，YAML将仅显示公共属性且只能只读。",
+  "main.read.mode.tip1":
+    "温馨提示：为了数据一致性，多平台分发或者未提供YAML适配器时无法处理平台属性，YAML将仅显示公共属性且只能只读。",
   "main.read.mode.tip2": "YAML如有修改，请务必点击保存按钮，否则修改内容将丢失！",
   "main.read.mode.tip3": "为了标识文章的唯一性，slug修改将忽略，其他属性可同步。",
   "main.read.mode.tip4": "此功能为高级功能，如果您不清楚YAML语法和用途，请勿修改！",
@@ -544,4 +545,5 @@ export default {
   "setting.blog.siyuan.password": "思源Token",
   "setting.blog.siyuan.password.tip": "思源笔记鉴权Token，请从【设置->关于】复制，如果是本地笔记留空即可",
   "slogan.make.written.fun": "让创作回归乐趣",
+  "category.batch.not.supported": "注意：批量分发模式部分平台不支持公共分类，例如语雀、知乎等",
 }

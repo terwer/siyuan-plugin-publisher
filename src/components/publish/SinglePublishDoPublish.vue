@@ -29,7 +29,7 @@ import { useRoute, useRouter } from "vue-router"
 import BackPage from "~/src/components/common/BackPage.vue"
 import { usePublish } from "~/src/composables/usePublish.ts"
 import { MethodEnum } from "~/src/models/methodEnum.ts"
-import { Post } from "zhi-blog-api"
+import { BlogConfig, Post } from "zhi-blog-api"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { DynamicConfig } from "~/src/platforms/dynamicConfig.ts"
@@ -46,6 +46,7 @@ import PublishTime from "~/src/components/publish/form/PublishTime.vue"
 import { isDev } from "~/src/utils/constants.ts"
 import AiSwitch from "~/src/components/publish/form/AiSwitch.vue"
 import { pre } from "~/src/utils/import/pre.ts"
+import { ICategoryConfig } from "~/src/types/ICategoryConfig.ts"
 
 const logger = createAppLogger("single-publish-do-publish")
 
@@ -74,17 +75,17 @@ const formData = reactive({
   isPublishLoading: false,
   isDeleteLoading: false,
 
-  publishCfg: {} as IPublishCfg,
-
+  // 单个平台信息
   siyuanPost: {} as Post,
   platformPost: {} as Post,
   mergedPost: {} as Post,
+  publishCfg: {} as IPublishCfg,
+
+  // 分类配置
+  categoryConfig: {} as ICategoryConfig,
 
   postPreviewUrl: "",
-
-  changeTips: {
-    title: "",
-  },
+  changeTips: { title: "" },
 
   // =========================
   // extra sync attrs start
@@ -250,6 +251,12 @@ const syncTags = (val: string[]) => {
   logger.debug("syncTags in single publish")
 }
 
+const syncCates = (cates: string[], cateSlugs: string[]) => {
+  formData.mergedPost.categories = cates
+  formData.mergedPost.cate_slugs = cateSlugs
+  logger.debug("syncCates in single publish")
+}
+
 const syncPublishTime = (val1: Date, val2: Date) => {
   formData.mergedPost.dateCreated = val1
   formData.mergedPost.dateUpdated = val2
@@ -287,6 +294,7 @@ const initPage = async () => {
     formData.platformPost = platformPost
     formData.mergedPost = mergedPost
 
+    // 预览链接
     formData.postPreviewUrl = postPreviewUrl
 
     // 刷新比对提示
@@ -314,6 +322,18 @@ onMounted(async () => {
   // 元数据初始化
   formData.mergedPost = await initPublishMethods.assignInitAttrs(formData.mergedPost, id, formData.publishCfg)
   formData.isInit = true
+
+  // 分类数据初始化
+  const cfg = formData.publishCfg.cfg as BlogConfig
+  formData.categoryConfig = {
+    cateEnabled: true,
+    readonlyMode: formData.method === MethodEnum.METHOD_EDIT,
+    apiType: key,
+    cfg: cfg,
+    categories: formData.mergedPost.categories,
+    cateSlugs: formData.mergedPost.cate_slugs,
+  }
+
   logger.debug("single publish inited mergedPost =>", toRaw(formData.mergedPost))
   // ==================
   // 初始化结束
@@ -387,7 +407,11 @@ onMounted(async () => {
                   />
 
                   <!-- 分类 -->
-                  <publish-categories v-model:category-type="formData.publishCfg.cfg.categoryType" />
+                  <publish-categories
+                    v-model:category-type="formData.publishCfg.cfg.categoryType"
+                    v-model:category-config="formData.categoryConfig"
+                    @emitSyncCates="syncCates"
+                  />
 
                   <!-- 发布时间 -->
                   <publish-time v-model="formData.mergedPost" @emitSyncPublishTime="syncPublishTime" />

@@ -24,13 +24,18 @@
   -->
 
 <script setup lang="ts">
+import { IMultiCategoriesConfig } from "~/src/types/ICategoryConfig.ts"
 
+const props = defineProps({
+  categoryConfig: {
+    type: Object as () => IMultiCategoriesConfig,
+    default: {},
+  },
+})
 </script>
 
 <template>
-<div>简单多选分类</div>
+  <div>简单多选分类</div>
 </template>
 
-<style scoped lang="stylus">
-
-</style>
+<style scoped lang="stylus"></style>

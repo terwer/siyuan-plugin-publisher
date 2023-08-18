@@ -31,6 +31,7 @@ import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { YuqueApiAdaptor } from "~/src/adaptors/api/yuque/yuqueApiAdaptor.ts"
+import { CategoryTypeEnum } from "zhi-blog-api"
 
 const useYuqueApi = async (key: string, newCfg?: YuqueConfig) => {
   // 创建应用日志记录器
@@ -72,6 +73,11 @@ const useYuqueApi = async (key: string, newCfg?: YuqueConfig) => {
       cfg.posidKey = getDynPostidKey(key)
     }
   }
+
+  // Yuque 使用单选分类
+  cfg.categoryType = CategoryTypeEnum.CategoryType_Single
+  // 启用知识库作为分类
+  cfg.enableKnowledgeSpace = true
 
   // 创建 Yuque API 适配器
   const blogApi = new YuqueApiAdaptor(appInstance, cfg)

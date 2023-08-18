@@ -79,6 +79,17 @@ class NotionApiAdaptor extends BaseBlogApi {
     const titles = notionPage?.properties?.title?.title ?? []
     commonPost.title = titles.map((x: any) => x.plain_text).join("")
     commonPost.description = "暂不支持Notion正文"
+
+    // const book = yuqueDoc.book
+    // const cats = []
+    // const catSlugs = []
+    //
+    // cats.push(book.name)
+    // commonPost.categories = cats
+    //
+    // catSlugs.push(book.namespace)
+    // commonPost.cate_slugs = catSlugs
+
     return commonPost
   }
 
