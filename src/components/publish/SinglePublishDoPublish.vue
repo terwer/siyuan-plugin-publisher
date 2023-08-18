@@ -334,7 +334,7 @@ onMounted(async () => {
   const cfg = formData.publishCfg.cfg as BlogConfig
   formData.categoryConfig = {
     cateEnabled: true,
-    readonlyMode: formData.method === MethodEnum.METHOD_EDIT,
+    readonlyMode: formData.method === MethodEnum.METHOD_EDIT && !cfg.cateAllowChange,
     readonlyModeTip: cfg.placeholder.cateReadonlyModeTip,
     apiType: key,
     cfg: cfg,

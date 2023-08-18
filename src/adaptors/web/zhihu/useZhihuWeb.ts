@@ -83,6 +83,7 @@ const useZhihuWeb = async (key?: string, newCfg?: ZhihuConfig) => {
 
   // 知乎使用单选分类作为专栏
   cfg.categoryType = CategoryTypeEnum.CategoryType_Single
+  cfg.cateAllowChange = false
   // 启用专栏作为分类
   cfg.enableKnowledgeSpace = true
   cfg.placeholder.cateReadonlyModeTip =

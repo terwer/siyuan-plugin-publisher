@@ -76,6 +76,7 @@ const useYuqueApi = async (key: string, newCfg?: YuqueConfig) => {
 
   // Yuque 使用单选分类作为知识空间
   cfg.categoryType = CategoryTypeEnum.CategoryType_Single
+  cfg.cateAllowChange = false
   // 启用知识库作为分类
   cfg.enableKnowledgeSpace = true
   cfg.placeholder.cateReadonlyModeTip =
