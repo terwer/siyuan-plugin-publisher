@@ -57,12 +57,12 @@ const formData = reactive({
 const emit = defineEmits(["emitSyncCates"])
 
 // methods
-const syncSingleCates = (cates: string[], cateSlugs: string[]) => {
-  emit("emitSyncCates", cates, cateSlugs)
+const syncPubCates = (cates: string[], cateSlugs: string[]) => {
   logger.debug("sync single cates =>", {
     cates: toRaw(cates),
     cateSlugs: toRaw(cateSlugs),
   })
+  emit("emitSyncCates", cates, cateSlugs)
 }
 </script>
 
@@ -70,7 +70,7 @@ const syncSingleCates = (cates: string[], cateSlugs: string[]) => {
   <div v-if="formData.categoryType === CategoryTypeEnum.CategoryType_Single">
     <single-category
       v-model:category-config="formData.categoryConfig as ISingleCategoryConfig"
-      @emitSyncSingleCates="syncSingleCates"
+      @emitSyncSingleCates="syncPubCates"
     />
   </div>
   <div v-else-if="formData.categoryType === CategoryTypeEnum.CategoryType_Multi">

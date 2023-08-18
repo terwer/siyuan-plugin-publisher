@@ -262,6 +262,7 @@ onMounted(async () => {
   formData.categoryConfig = {
     cateEnabled: true,
     readonlyMode: true,
+    readonlyModeTip: t("category.batch.not.supported"),
     pageId: id,
     categories: formData.siyuanPost.categories,
     cateSlugs: formData.siyuanPost.cate_slugs,

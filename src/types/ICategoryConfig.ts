@@ -43,6 +43,11 @@ interface ICategoryConfig {
   readonlyMode: boolean
 
   /**
+   * 只读模式提示
+   */
+  readonlyModeTip: string
+
+  /**
    * 思源笔记的文档ID
    */
   pageId?: string

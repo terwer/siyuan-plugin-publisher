@@ -546,4 +546,5 @@ export default {
   "setting.blog.siyuan.password.tip": "思源笔记鉴权Token，请从【设置->关于】复制，如果是本地笔记留空即可",
   "slogan.make.written.fun": "让创作回归乐趣",
   "category.batch.not.supported": "注意：批量分发模式部分平台不支持公共分类，例如语雀、知乎等",
+  "yuque.edit.cate.no.change": "由于语雀平台的限制，暂时不支持编辑所属知识库。如果您想移动文档，请先点击取消删除该文档，然后重新选择新的知识库发布",
 }

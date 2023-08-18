@@ -24,7 +24,7 @@
   -->
 
 <script setup lang="ts">
-import { markRaw, onMounted, reactive, toRaw } from "vue"
+import { computed, markRaw, onMounted, reactive, toRaw } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import BackPage from "~/src/components/common/BackPage.vue"
 import { usePublish } from "~/src/composables/usePublish.ts"
@@ -203,11 +203,18 @@ const getPlatformName = () => {
 }
 
 const getBlogName = () => {
-  const cfg = formData.publishCfg?.cfg as any
-  return cfg?.blogName || ""
+  const cfg = formData.publishCfg?.cfg as BlogConfig
+  let blogName = cfg?.blogName || ""
+  if (cfg.enableKnowledgeSpace) {
+    if (formData.mergedPost.cate_slugs.length > 0) {
+      const cateName = formData.mergedPost.categories[0]
+      blogName = cateName ?? ""
+    }
+  }
+  return blogName
 }
 
-const getTitle = () => {
+const topTitle = computed(() => {
   const platformName = getPlatformName()
   const blogName = getBlogName()
 
@@ -218,7 +225,7 @@ const getTitle = () => {
   }
 
   return title
-}
+})
 
 const showChangeTip = (v1: string, v2: string) => {
   if (StrUtil.isEmptyString(v2)) {
@@ -328,6 +335,7 @@ onMounted(async () => {
   formData.categoryConfig = {
     cateEnabled: true,
     readonlyMode: formData.method === MethodEnum.METHOD_EDIT,
+    readonlyModeTip: cfg.placeholder.cateReadonlyModeTip,
     apiType: key,
     cfg: cfg,
     categories: formData.mergedPost.categories,
@@ -349,7 +357,7 @@ onMounted(async () => {
   <back-page title="常规发布" :has-back-emit="true" @backEmit="onBack">
     <el-skeleton class="placeholder" v-if="!formData.isInit" :rows="5" animated />
     <div v-else id="batch-publish-index">
-      <el-alert class="top-tip" :title="getTitle()" type="info" :closable="false" />
+      <el-alert class="top-tip" :title="topTitle" type="info" :closable="false" />
       <el-container>
         <el-main>
           <!-- 表单数据 -->

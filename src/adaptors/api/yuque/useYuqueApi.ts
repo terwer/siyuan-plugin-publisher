@@ -78,6 +78,8 @@ const useYuqueApi = async (key: string, newCfg?: YuqueConfig) => {
   cfg.categoryType = CategoryTypeEnum.CategoryType_Single
   // 启用知识库作为分类
   cfg.enableKnowledgeSpace = true
+  cfg.placeholder.cateReadonlyModeTip =
+    "由于语雀平台的限制，暂时不支持编辑所属知识库。如果您想移动文档，请先点击取消删除该文档，然后重新选择新的知识库发布"
 
   // 创建 Yuque API 适配器
   const blogApi = new YuqueApiAdaptor(appInstance, cfg)
