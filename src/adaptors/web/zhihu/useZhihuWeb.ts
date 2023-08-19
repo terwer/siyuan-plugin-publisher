@@ -83,9 +83,9 @@ const useZhihuWeb = async (key?: string, newCfg?: ZhihuConfig) => {
 
   // 知乎使用单选分类作为专栏
   cfg.categoryType = CategoryTypeEnum.CategoryType_Single
-  cfg.cateAllowChange = false
+  cfg.allowCateChange = false
   // 启用专栏作为分类
-  cfg.enableKnowledgeSpace = true
+  cfg.knowledgeSpaceEnabled = true
   cfg.placeholder.cateReadonlyModeTip =
     "由于知乎平台的限制，暂时不支持编辑所属专栏。如果您想移动文档，请先点击取消删除该文档，然后重新选择新的专栏发布"
 

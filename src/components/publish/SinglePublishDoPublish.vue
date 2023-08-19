@@ -205,7 +205,7 @@ const getPlatformName = () => {
 const getBlogName = () => {
   const cfg = formData.publishCfg?.cfg as BlogConfig
   let blogName = cfg?.blogName || ""
-  if (cfg.enableKnowledgeSpace) {
+  if (cfg.knowledgeSpaceEnabled) {
     if (formData.mergedPost.cate_slugs.length > 0) {
       const cateName = formData.mergedPost.categories[0]
       blogName = cateName ?? ""
@@ -334,7 +334,7 @@ onMounted(async () => {
   const cfg = formData.publishCfg.cfg as BlogConfig
   formData.categoryConfig = {
     cateEnabled: true,
-    readonlyMode: formData.method === MethodEnum.METHOD_EDIT && !cfg.cateAllowChange,
+    readonlyMode: formData.method === MethodEnum.METHOD_EDIT && !cfg.allowCateChange,
     readonlyModeTip: cfg.placeholder.cateReadonlyModeTip,
     apiType: key,
     cfg: cfg,

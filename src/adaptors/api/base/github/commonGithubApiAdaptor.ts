@@ -163,6 +163,11 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
     return Promise.resolve([])
   }
 
+  public async getCategoryTreeNodes(docPath: string): Promise<any[]> {
+    const res = await this.githubClient.getGithubPageTreeNode(docPath)
+    return res
+  }
+
   public async getPreviewUrl(postid: string): Promise<string> {
     const cfg = this.cfg as CommonGithubConfig
     let previewUrl: string

@@ -57,7 +57,7 @@ const emit = defineEmits(["emitSyncSingleCates"])
 // computes
 const cateTitle = computed(() => {
   let cateTitle = t("main.cat")
-  if (formData.useRemoteData && formData?.categoryConfig?.cfg.enableKnowledgeSpace) {
+  if (formData.useRemoteData && formData?.categoryConfig?.cfg.knowledgeSpaceEnabled) {
     cateTitle = formData?.categoryConfig?.cfg.knowledgeSpaceTitle
   }
   return cateTitle
@@ -73,7 +73,7 @@ const handleCatNodeSingleCheck = (val: any) => {
   const cates = []
   const cateSlugs = []
 
-  if (cfg.enableKnowledgeSpace) {
+  if (cfg.knowledgeSpaceEnabled) {
     cates.push(label)
     cateSlugs.push(value)
   } else {
@@ -111,7 +111,7 @@ const initPage = async () => {
         })
 
         // 当前选中
-        if (cfg.enableKnowledgeSpace) {
+        if (cfg.knowledgeSpaceEnabled) {
           const cateSlugs = formData.categoryConfig.cateSlugs
           // 先读取保存的，否则使用默认
           formData.cate.categorySelected = cateSlugs.length > 0 ? cateSlugs[0] : cfg.blogid

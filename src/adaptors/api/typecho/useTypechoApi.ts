@@ -85,7 +85,7 @@ export const useTypechoApi = async (key?: string, newCfg?: TypechoConfig) => {
 
   // Typecho使用多选分类
   cfg.categoryType = CategoryTypeEnum.CategoryType_Multi
-  cfg.cateAllowChange = true
+  cfg.allowCateChange = true
 
   // 创建Typecho API适配器
   const blogApi = new TypechoApiAdaptor(appInstance, cfg)

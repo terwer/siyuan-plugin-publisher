@@ -37,6 +37,6 @@ export class ZhihuConfig extends CommonWebConfig {
     this.usernameEnabled = true
     this.passwordType = PasswordType.PasswordType_Cookie
     this.knowledgeSpaceTitle = "专栏"
-    this.enableKnowledgeSpace = true
+    this.knowledgeSpaceEnabled = true
   }
 }

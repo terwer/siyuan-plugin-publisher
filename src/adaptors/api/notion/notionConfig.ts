@@ -39,7 +39,7 @@ class NotionConfig extends CommonBlogConfig {
     this.pageType = PageTypeEnum.Markdown
     this.passwordType = PasswordType.PasswordType_Token
     this.knowledgeSpaceTitle = "根页面"
-    this.enableKnowledgeSpace = true
+    this.knowledgeSpaceEnabled = true
     this.allowPreviewUrlChange = false
   }
 }
