@@ -74,7 +74,10 @@ const syncPubCates = (cates: string[], cateSlugs: string[]) => {
     />
   </div>
   <div v-else-if="formData.categoryType === CategoryTypeEnum.CategoryType_Multi">
-    <multi-categories v-model:category-config="formData.categoryConfig as IMultiCategoriesConfig" />
+    <multi-categories
+      v-model:category-config="formData.categoryConfig as IMultiCategoriesConfig"
+      @emitSyncMultiCates="syncPubCates"
+    />
   </div>
   <div v-else-if="formData.categoryType === CategoryTypeEnum.CategoryType_Tree_Single">
     <tree-single-category v-model:category-config="formData.categoryConfig as ITreeSingleCategoryConfig" />

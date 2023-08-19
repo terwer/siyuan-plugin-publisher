@@ -8,13 +8,15 @@ Publish articles from siyuan-note to platforms such as Yuque, Notion, Cnblogs, W
 
 Support features such as fast publishing, image bed management, platform expansion, smart labels, etc.
 
-> **Front Announcement 1: Publish Tool's first version that supports release views `1.9.0` is released!**
+> **Front Announcement 1: `1.9.0` version of the Publish Tool, the first to support release view and AI beta early adopter version, is released!**
+>
+> **Note: Due to cost relationships, AI features will be charged after the end of the Common Test.**
 >
 > **Front Announcement 2: The version `1.8.0` that fully supports image upload for all platforms and the forward agent using siyuan-note is released!**
 
 Tips: Zhihu uses the image upload of the Zhihu platform, Yuque, Notion, and Hexo need Picgo plugin support, and the Metaweblog series platform supports both Picgo plugin and self-contained image upload (install Picgo plugin to use Picgo plugin, otherwise use their own platform)
 
-We recommend that you use the `uninstall->install` method to update. If the configuration is abnormal, please back up `[workspace]/data/storage/syp/sy-p-plus-cfg.json` , and then delete it, this configuration file will be automatically initialized the first time it is used.
+We recommend that you use the `uninstall->install` method to update. If the configuration is abnormal, please backup `[workspace]/data/storage/syp/sy-p-plus-cfg.json` , and then delete it, this configuration file will be automatically initialized the first time it is used.
 
 In later releases, the release configuration will only be backward compatible to `1.6.0+`.
 

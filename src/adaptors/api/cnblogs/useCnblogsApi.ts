@@ -87,7 +87,7 @@ export const useCnblogsApi = async (key?: string, newCfg?: CnblogsConfig) => {
     }
   }
 
-  // 知乎使用单选分类作为专栏
+  // 博客园使用多选分类
   cfg.categoryType = CategoryTypeEnum.CategoryType_Multi
   cfg.cateAllowChange = true
 

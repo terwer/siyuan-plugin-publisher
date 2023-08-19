@@ -24,18 +24,16 @@
   -->
 
 <script setup lang="ts">
-import { computed, onMounted, reactive, toRaw, watch } from "vue"
+import { computed, onMounted, reactive, toRaw } from "vue"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { CategoryInfo } from "zhi-blog-api"
 import Adaptors from "~/src/adaptors"
 import { StrUtil } from "zhi-common"
 import { ISingleCategoryConfig } from "~/src/types/ICategoryConfig.ts"
-import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 
 const logger = createAppLogger("single-category")
 const { t } = useVueI18n()
-const { kernelApi } = useSiyuanApi()
 
 const props = defineProps({
   categoryConfig: {
@@ -176,7 +174,7 @@ onMounted(async () => {
 
 <template>
   <div class="single-category" v-if="formData.cate.categoryList.length > 0">
-    <el-form-item :label="cateTitle" v-if="!formData.categoryConfig.readonlyMode">
+    <el-form-item :label="cateTitle">
       <el-select
         v-model="formData.cate.categorySelected"
         placeholder="请选择"
@@ -184,24 +182,7 @@ onMounted(async () => {
         class="m-2"
         size="default"
         @change="handleCatNodeSingleCheck"
-      >
-        <el-option
-          v-for="item in formData.cate.categoryList"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        />
-      </el-select>
-    </el-form-item>
-    <el-form-item v-else :label="cateTitle">
-      <el-select
-        v-model="formData.cate.categorySelected"
-        disabled
-        placeholder="请选择"
-        no-data-text="暂无数据"
-        class="m-2"
-        size="default"
-        @change="handleCatNodeSingleCheck"
+        :disabled="formData.categoryConfig.readonlyMode"
       >
         <el-option
           v-for="item in formData.cate.categoryList"
@@ -221,4 +202,28 @@ onMounted(async () => {
 .form-item-tip
   padding 2px 4px
   margin 0 10px 0 0
+
+.single-category
+  :deep(.el-tag.el-tag--info)
+    --el-tag-bg-color var(--el-color-primary-light-9)
+    --el-tag-border-color var(--el-color-primary-light-8)
+    --el-tag-hover-color var(--el-color-primary)
+    --el-tag-text-color var(--el-color-primary)
+    background-color var(--el-tag-bg-color)
+    border-color var(--el-tag-border-color)
+    color var(--el-tag-text-color)
+    display inline-flex
+    justify-content center
+    align-items center
+    vertical-align middle
+    height 24px
+    padding 0 9px
+    font-size var(--el-tag-font-size)
+    line-height 1
+    border-width 1px
+    border-style solid
+    border-radius var(--el-tag-border-radius)
+    box-sizing border-box
+    white-space nowrap
+    --el-icon-size 14px
 </style>

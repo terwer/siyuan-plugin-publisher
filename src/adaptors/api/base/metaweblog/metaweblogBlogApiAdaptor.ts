@@ -199,10 +199,15 @@ class MetaweblogBlogApiAdaptor extends BaseBlogApi {
       this.logger.debug("获取的分类信息，dataArr=>", dataArr)
 
       dataArr.forEach((item: any) => {
-        const cat = new CategoryInfo()
-        cat.description = item.description
-        cat.categoryId = item.categoryId
-        result.push(cat)
+        const cate = new CategoryInfo()
+        cate.categoryId = item.categoryId
+        cate.categoryName = item.categoryName
+        cate.description = item.description
+        cate.categoryDescription = item.categoryDescription
+        cate.htmlUrl = item.htmlUrl
+        cate.parentId = item.parentId
+        cate.rssUrl = item.rssUrl
+        result.push(cate)
       })
     } catch (e) {
       this.logger.error("分类获取失败", e)

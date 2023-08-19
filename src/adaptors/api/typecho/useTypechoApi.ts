@@ -31,6 +31,7 @@ import { TypechoConfig } from "~/src/adaptors/api/typecho/typechoConfig.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { TypechoApiAdaptor } from "~/src/adaptors/api/typecho/typechoApiAdaptor.ts"
+import {CategoryTypeEnum} from "zhi-blog-api";
 
 /**
  * 使用Typecho API的自定义hook
@@ -81,6 +82,10 @@ export const useTypechoApi = async (key?: string, newCfg?: TypechoConfig) => {
       cfg.posidKey = getDynPostidKey(key)
     }
   }
+
+  // Typecho使用多选分类
+  cfg.categoryType = CategoryTypeEnum.CategoryType_Multi
+  cfg.cateAllowChange = true
 
   // 创建Typecho API适配器
   const blogApi = new TypechoApiAdaptor(appInstance, cfg)

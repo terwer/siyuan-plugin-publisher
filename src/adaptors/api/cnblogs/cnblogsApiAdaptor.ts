@@ -23,12 +23,13 @@
  * questions.
  */
 
-import { Post, UserBlog } from "zhi-blog-api"
+import { CategoryInfo, Post, UserBlog } from "zhi-blog-api"
 import { CnblogsConfig } from "~/src/adaptors/api/cnblogs/cnblogsConfig.ts"
 import { AppInstance } from "~/src/appInstance.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { CnblogsConstants } from "~/src/adaptors/api/cnblogs/cnblogsConstants.ts"
 import { MetaweblogBlogApiAdaptor } from "~/src/adaptors/api/base/metaweblog/metaweblogBlogApiAdaptor.ts"
+import { MetaweblogConstants } from "~/src/adaptors/api/base/metaweblog/metaweblogConstants.ts"
 
 /**
  * 博客园 API 适配器
@@ -40,6 +41,8 @@ import { MetaweblogBlogApiAdaptor } from "~/src/adaptors/api/base/metaweblog/met
  * @since 0.9.0
  */
 class CnblogsApiAdaptor extends MetaweblogBlogApiAdaptor {
+  private readonly MD_CATEGORY = "[Markdown]"
+
   /**
    * 初始化博客园 API 适配器
    *
@@ -88,12 +91,43 @@ class CnblogsApiAdaptor extends MetaweblogBlogApiAdaptor {
     return ret
   }
 
-  private assignMdCategory(post: Post) {
-    const MD_CATEGORY = "[Markdown]"
-    const cats = post.categories ?? []
+  public override async getCategories(): Promise<CategoryInfo[]> {
+    const result = [] as CategoryInfo[]
 
-    if (cats.length === 0 || cats.some((cat) => cat.toLowerCase() === MD_CATEGORY.toLowerCase())) {
-      cats.push(MD_CATEGORY)
+    try {
+      const ret = await this.metaweblogCall(MetaweblogConstants.METHOD_GET_CATEGORIES, [
+        this.cfg.blogid,
+        this.cfg.username,
+        this.cfg.password,
+      ])
+      const dataArr = ret
+      this.logger.debug("博客园获取的分类信息，dataArr=>", dataArr)
+
+      dataArr.forEach((item: any) => {
+        const cate = new CategoryInfo()
+        // MD 分类默认不展示
+        if (item.title !== this.MD_CATEGORY) {
+          cate.categoryId = item.categoryid
+          cate.categoryName = item.title
+          cate.description = item.description
+          cate.categoryDescription = item.categoryDescription
+          cate.htmlUrl = item.htmlUrl
+          cate.parentId = item.parentId
+          cate.rssUrl = item.rssUrl
+          result.push(cate)
+        }
+      })
+    } catch (e) {
+      this.logger.error("博客园分类获取失败", e)
+    }
+
+    return result
+  }
+
+  private assignMdCategory(post: Post) {
+    const cates = post.categories ?? []
+    if (!cates.some((cate) => cate.toLowerCase() === this.MD_CATEGORY.toLowerCase())) {
+      cates.push(this.MD_CATEGORY)
     }
 
     return post

@@ -236,6 +236,12 @@ const syncTags = (val: string[]) => {
   logger.debug("syncTags in batch publish")
 }
 
+const syncCates = (cates: string[], cateSlugs: string[]) => {
+  formData.siyuanPost.categories = cates
+  formData.siyuanPost.cate_slugs = cateSlugs
+  logger.debug("syncCates in batch publish")
+}
+
 const syncPublishTime = (val1: Date, val2: Date) => {
   formData.siyuanPost.dateCreated = val1
   formData.siyuanPost.dateUpdated = val2
@@ -261,7 +267,7 @@ onMounted(async () => {
   // 分类数据初始化
   formData.categoryConfig = {
     cateEnabled: true,
-    readonlyMode: true,
+    readonlyMode: false,
     readonlyModeTip: t("category.batch.not.supported"),
     pageId: id,
     categories: formData.siyuanPost.categories,
@@ -362,8 +368,9 @@ onMounted(async () => {
 
                 <!-- 分类 -->
                 <publish-categories
-                  v-model:category-type="CategoryTypeEnum.CategoryType_Single"
+                  v-model:category-type="CategoryTypeEnum.CategoryType_Multi"
                   v-model:category-config="formData.categoryConfig"
+                  @emitSyncCates="syncCates"
                 />
 
                 <!-- 发布时间 -->
