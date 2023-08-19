@@ -8,11 +8,9 @@ Publish articles from siyuan-note to platforms such as Yuque, Notion, Cnblogs, W
 
 Support features such as fast publishing, image bed management, platform expansion, smart labels, etc.
 
-> **Front Announcement 1: `1.9.0` version of the Publish Tool, the first to support release view and AI beta early adopter version, is released!**
+> **Front Announcement 1: The first version `1.9.0` for Publish Tools that supports release view and AI beta early adopter is released!**
 >
-> **Note: Due to cost relationships, AI features will be charged after the end of the Common Test.**
->
-> **Front Announcement 2: The version `1.8.0` that fully supports image upload for all platforms and the forward agent using siyuan-note is released!**
+> **Front Announcement 2: Version `1.8.0` released with full support for image upload in the Publish Tools!**
 
 Tips: Zhihu uses the image upload of the Zhihu platform, Yuque, Notion, and Hexo need Picgo plugin support, and the Metaweblog series platform supports both Picgo plugin and self-contained image upload (install Picgo plugin to use Picgo plugin, otherwise use their own platform)
 
@@ -56,13 +54,13 @@ This plugin supports almost all devices and platforms of Siyuan Note, and the sp
 Names not listed in order
 
 - [X] Yuque
+- [X] Notion
+- [X] Github
+  - [X] Hexo
 - [X] Metaweblog
 - [X] Cnblogs
 - [X] Typecho
 - [X] WordPress
-- [X] Github
-  - [X] Hexo
-- [X] Notion
 - [X] Zhihu
 
 ## Core Features
@@ -176,4 +174,4 @@ more useful tools~
   |Svelte|3.57+|Rich Harris|
   |TypeScript|5.0+|Microsoft|
   |siyuan-note|2.9.0+|D,V|
-- Thanks to [leolee9086](https://github.com/leolee9086) for the icon resource
+- Thanks to [leolee9086](https://github.com/leolee9086) and [ciwoyipang]() for the icon resource

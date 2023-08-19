@@ -78,7 +78,8 @@ const useHexoApi = async (key: string, newCfg?: HexoConfig) => {
   }
 
   // Hexo 使用树形单选分类
-  cfg.categoryType = CategoryTypeEnum.CategoryType_Tree_Single
+  cfg.categoryType = CategoryTypeEnum.CategoryType_Multi
+  cfg.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Tree_Single
 
   // 创建 Hexo 的 yamlAdaptor
   const yamlAdaptor = new HexoYamlConverterAdaptor()

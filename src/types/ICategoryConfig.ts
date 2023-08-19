@@ -63,14 +63,14 @@ interface ICategoryConfig {
   cfg?: BlogConfig
 
   /**
-   * 类别列表
+   * 类别名称，与类别别名二选一
    */
-  categories: string[]
+  categories?: string[]
 
   /**
-   * 类别链接列表
+   * 类别别名列表，与类别名称二选一
    */
-  cateSlugs: string[]
+  cateSlugs?: string[]
 }
 
 /**

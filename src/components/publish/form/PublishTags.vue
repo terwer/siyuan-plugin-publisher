@@ -154,9 +154,10 @@ const tagMethods = {
 </template>
 
 <style lang="stylus" scoped>
-:deep(.pub-tag)
-  margin-right 10px
+.form-tags
+  :deep(.pub-tag)
+    margin-right 10px
 
-:deep(.pub-tag-input)
-  max-width 120px
+  :deep(.pub-tag-input)
+    max-width 120px
 </style>

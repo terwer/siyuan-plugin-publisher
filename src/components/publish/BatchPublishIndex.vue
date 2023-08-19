@@ -236,9 +236,8 @@ const syncTags = (val: string[]) => {
   logger.debug("syncTags in batch publish")
 }
 
-const syncCates = (cates: string[], cateSlugs: string[]) => {
+const syncCates = (cates: string[]) => {
   formData.siyuanPost.categories = cates
-  formData.siyuanPost.cate_slugs = cateSlugs
   logger.debug("syncCates in batch publish")
 }
 
@@ -263,16 +262,6 @@ onMounted(async () => {
   formData.siyuanPost = siyuanPost
   // 元数据初始化
   formData.siyuanPost = await initPublishMethods.assignInitAttrs(formData.siyuanPost, id, formData.publishCfg)
-
-  // 分类数据初始化
-  formData.categoryConfig = {
-    cateEnabled: true,
-    readonlyMode: false,
-    readonlyModeTip: t("category.batch.not.supported"),
-    pageId: id,
-    categories: formData.siyuanPost.categories,
-    cateSlugs: formData.siyuanPost.cate_slugs,
-  } as ISingleCategoryConfig
 
   logger.debug("batch inited siyuanPost =>", toRaw(formData.siyuanPost))
   // ==================
@@ -341,7 +330,7 @@ onMounted(async () => {
 
               <div v-if="formData.editType === PageEditMode.EditMode_complex" class="complex-mode">
                 <!-- AI开关 -->
-                <ai-switch v-model:use-ai="formData.useAi" @emitSyncAiSwitch="syncAiSwitch" />
+                <ai-switch v-if="formData.useAi" v-model:use-ai="formData.useAi" @emitSyncAiSwitch="syncAiSwitch" />
 
                 <!-- 别名 -->
                 <el-form-item :label="t('main.slug')">
@@ -366,12 +355,8 @@ onMounted(async () => {
                   @emitSyncTags="syncTags"
                 />
 
-                <!-- 分类 -->
-                <publish-categories
-                  v-model:category-type="CategoryTypeEnum.CategoryType_Multi"
-                  v-model:category-config="formData.categoryConfig"
-                  @emitSyncCates="syncCates"
-                />
+                <!-- 公共分类 -->
+                <common-categories v-model:cates="formData.siyuanPost.categories" @emitSyncCates="syncCates" />
 
                 <!-- 发布时间 -->
                 <publish-time v-model="formData.siyuanPost" @emitSyncPublishTime="syncPublishTime" />

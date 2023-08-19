@@ -68,7 +68,7 @@ const customLoad = async (node: any, resolve: any) => {
   const cfg = formData.categoryConfig.cfg
   const api = await Adaptors.getAdaptor(formData.categoryConfig.apiType, cfg)
 
-  let docPath
+  let docPath: string
   let parentDocPath = node.data.value || ""
   // 第一次加载并且保存过目录
   if (parentDocPath === "" && formData.path.customPath !== "") {

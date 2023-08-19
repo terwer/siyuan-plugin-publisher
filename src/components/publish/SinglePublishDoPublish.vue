@@ -47,6 +47,7 @@ import { isDev } from "~/src/utils/constants.ts"
 import AiSwitch from "~/src/components/publish/form/AiSwitch.vue"
 import { pre } from "~/src/utils/import/pre.ts"
 import { ICategoryConfig } from "~/src/types/ICategoryConfig.ts"
+import PublishKnowledgeSpace from "~/src/components/publish/form/PublishKnowledgeSpace.vue";
 
 const logger = createAppLogger("single-publish-do-publish")
 
@@ -83,6 +84,8 @@ const formData = reactive({
 
   // 分类配置
   categoryConfig: {} as ICategoryConfig,
+  // 知识空间配置
+  knowledgeSpaceConfig: {} as ICategoryConfig,
 
   postPreviewUrl: "",
   changeTips: { title: "" },
@@ -258,10 +261,14 @@ const syncTags = (val: string[]) => {
   logger.debug("syncTags in single publish")
 }
 
-const syncCates = (cates: string[], cateSlugs: string[]) => {
+const syncCates = (cates: string[]) => {
   formData.mergedPost.categories = cates
-  formData.mergedPost.cate_slugs = cateSlugs
   logger.debug("syncCates in single publish")
+}
+
+const syncCateSlugs = (cateSlugs: string[]) => {
+  formData.mergedPost.cate_slugs = cateSlugs
+  logger.debug("syncCateSlugs in single publish")
 }
 
 const syncPublishTime = (val1: Date, val2: Date) => {
@@ -330,8 +337,8 @@ onMounted(async () => {
   formData.mergedPost = await initPublishMethods.assignInitAttrs(formData.mergedPost, id, formData.publishCfg)
   formData.isInit = true
 
-  // 分类数据初始化
   const cfg = formData.publishCfg.cfg as BlogConfig
+  // 分类数据初始化
   formData.categoryConfig = {
     cateEnabled: true,
     readonlyMode: formData.method === MethodEnum.METHOD_EDIT && !cfg.allowCateChange,
@@ -339,6 +346,14 @@ onMounted(async () => {
     apiType: key,
     cfg: cfg,
     categories: formData.mergedPost.categories,
+  }
+  // 知识空间
+  formData.knowledgeSpaceConfig = {
+    cateEnabled: true,
+    readonlyMode: formData.method === MethodEnum.METHOD_EDIT && !cfg.allowCateChange,
+    readonlyModeTip: cfg.placeholder.cateReadonlyModeTip,
+    apiType: key,
+    cfg: cfg,
     cateSlugs: formData.mergedPost.cate_slugs,
   }
 
@@ -419,6 +434,13 @@ onMounted(async () => {
                     v-model:category-type="formData.publishCfg.cfg.categoryType"
                     v-model:category-config="formData.categoryConfig"
                     @emitSyncCates="syncCates"
+                  />
+
+                  <!-- 知识空间 -->
+                  <publish-knowledge-space
+                    v-model:category-type="formData.publishCfg.cfg.knowledgeSpaceType"
+                    v-model:category-config="formData.knowledgeSpaceConfig"
+                    @emitSyncCates="syncCateSlugs"
                   />
 
                   <!-- 发布时间 -->
