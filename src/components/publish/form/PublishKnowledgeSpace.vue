@@ -25,12 +25,11 @@
 
 <script setup lang="ts">
 import { CategoryTypeEnum } from "zhi-blog-api"
-import { reactive, toRaw, watch } from "vue"
+import { reactive, toRaw } from "vue"
 import {
   ICategoryConfig,
   IMultiCategoriesConfig,
   ISingleCategoryConfig,
-  ITreeMultiCategoriesConfig,
   ITreeSingleCategoryConfig,
 } from "~/src/types/ICategoryConfig.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
@@ -38,19 +37,19 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
 const logger = createAppLogger("publish-categories")
 
 const props = defineProps({
-  categoryType: {
+  knowledgeSpaceType: {
     type: String as () => CategoryTypeEnum,
     default: CategoryTypeEnum.CategoryType_None,
   },
-  categoryConfig: {
+  knowledgeSpaceConfig: {
     type: Object as () => ICategoryConfig,
     default: {},
   },
 })
 
 const formData = reactive({
-  categoryType: props.categoryType,
-  categoryConfig: props.categoryConfig,
+  knowledgeSpaceType: props.knowledgeSpaceType,
+  knowledgeSpaceConfig: props.knowledgeSpaceConfig,
 })
 
 // emits
@@ -67,20 +66,11 @@ const syncPubCates = (cates: string[], cateSlugs: string[]) => {
 </script>
 
 <template>
-  <div v-if="formData.categoryType === CategoryTypeEnum.CategoryType_Single">
-    <single-category
-      v-model:category-config="formData.categoryConfig as ISingleCategoryConfig"
-      @emitSyncSingleCates="syncPubCates"
-    />
+  <div v-if="formData.knowledgeSpaceType === CategoryTypeEnum.CategoryType_Single">
+    <single-knowledge-space @emitSyncSingleCates="syncPubCates" />
   </div>
-  <div v-else-if="formData.categoryType === CategoryTypeEnum.CategoryType_Multi">
-    <multi-categories
-      v-model:category-config="formData.categoryConfig as IMultiCategoriesConfig"
-      @emitSyncMultiCates="syncPubCates"
-    />
-  </div>
-  <div v-else-if="formData.categoryType === CategoryTypeEnum.CategoryType_Tree_Single">
-    <tree-single-category v-model:category-config="formData.categoryConfig as ITreeSingleCategoryConfig" />
+  <div v-else-if="formData.knowledgeSpaceType === CategoryTypeEnum.CategoryType_Tree_Single">
+    <tree-single-knowledge-space />
   </div>
   <div v-else></div>
 </template>

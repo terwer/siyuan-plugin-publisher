@@ -25,16 +25,12 @@
 
 import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { CategoryInfo, Post, UserBlog } from "zhi-blog-api"
+import { CategoryInfo, Post, UserBlog, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
 import { CommonGithubClient, GithubConfig } from "zhi-github-middleware"
 import { CommonGithubConfig } from "~/src/adaptors/api/base/github/commonGithubConfig.ts"
-import { StrUtil } from "zhi-common"
+import { StrUtil, YamlUtil } from "zhi-common"
 import { toRaw } from "vue"
 import { Base64 } from "js-base64"
-import { DynamicConfig } from "~/src/platforms/dynamicConfig.ts"
-import Adaptors from "~/src/adaptors"
-import { YamlConvertAdaptor } from "~/src/platforms/yamlConvertAdaptor.ts"
-import { YamlFormatObj } from "~/src/models/yamlFormatObj.ts"
 
 /**
  * Github API 适配器
@@ -89,12 +85,10 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
     await super.preEditPost(post, id, publishCfg)
     this.logger.debug("handled preEditPost with parent", { post: toRaw(post) })
 
-    const cfg = publishCfg.cfg as CommonGithubConfig
-    const dynCfg = publishCfg.dynCfg as DynamicConfig
-    const yamlApi: YamlConvertAdaptor = await Adaptors.getYamlAdaptor(dynCfg.platformKey, cfg)
-    if (null !== yamlApi) {
+    const yamlAdaptor: YamlConvertAdaptor = this.getYamlAdaptor()
+    if (null !== yamlAdaptor) {
       // 先生成对应平台的yaml
-      const yamlObj: YamlFormatObj = yamlApi.convertToYaml(post, cfg)
+      const yamlObj: YamlFormatObj = yamlAdaptor.convertToYaml(post, this.cfg)
       this.logger.debug("generate yamlObj using YamlConverterAdaptor =>", yamlObj)
       // 同步发布内容
       post.markdown = yamlObj.mdFullContent
@@ -128,14 +122,24 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
       throw new Error("Github 调用API异常")
     }
 
-    const commonPost = new Post()
+    let commonPost = new Post()
     commonPost.postid = res.path
-    // commonPost.title = res.name
-    commonPost.description = Base64.fromBase64(res.content)
+    commonPost.markdown = Base64.fromBase64(res.content)
+    commonPost.description = commonPost.markdown
 
-    const cats = []
+    // YAML属性转换
+    const yamlAdaptor: YamlConvertAdaptor = this.getYamlAdaptor()
+    if (null !== yamlAdaptor) {
+      const yamlObj = YamlUtil.yaml2Obj(commonPost.description)
+      commonPost = yamlAdaptor.convertToAttr(commonPost, yamlObj, this.cfg)
+      this.logger.debug("generate yamlObj using YamlConverterAdaptor =>", yamlObj)
+      this.logger.info("handled yaml using YamlConverterAdaptor")
+    }
+
+    // 初始化知识空间
     const catSlugs = []
-    commonPost.categories = cats
+    const extractedPath = res.path.replace(res.name, "").replace(/\/$/, "")
+    catSlugs.push(extractedPath)
     commonPost.cate_slugs = catSlugs
 
     return commonPost

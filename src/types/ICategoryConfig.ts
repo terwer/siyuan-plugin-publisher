@@ -45,7 +45,7 @@ interface ICategoryConfig {
   /**
    * 只读模式提示
    */
-  readonlyModeTip: string
+  readonlyModeTip?: string
 
   /**
    * 思源笔记的文档ID

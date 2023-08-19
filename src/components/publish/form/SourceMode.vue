@@ -28,14 +28,12 @@ import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { reactive, toRaw } from "vue"
 import { SourceContentShowType } from "~/src/models/sourceContentShowType.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { Post } from "zhi-blog-api"
+import {Post, YamlConvertAdaptor, YamlFormatObj} from "zhi-blog-api"
 import { BrowserUtil } from "zhi-device"
 import { ElMessage } from "element-plus"
 import { DateUtil, StrUtil, YamlUtil } from "zhi-common"
 import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
-import { YamlFormatObj } from "~/src/models/yamlFormatObj.ts"
 import Adaptors from "~/src/adaptors"
-import { YamlConvertAdaptor } from "~/src/platforms/yamlConvertAdaptor.ts"
 
 const logger = createAppLogger("source-mode")
 const { t } = useVueI18n()

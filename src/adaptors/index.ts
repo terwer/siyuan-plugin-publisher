@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { BlogAdaptor, WebAdaptor } from "zhi-blog-api"
+import { BlogAdaptor, WebAdaptor, YamlConvertAdaptor } from "zhi-blog-api"
 import { getSubPlatformTypeByKey, SubPlatformType } from "~/src/platforms/dynamicConfig.ts"
 import { useCnblogsApi } from "~/src/adaptors/api/cnblogs/useCnblogsApi.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
@@ -35,7 +35,6 @@ import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { useMetaweblogApi } from "~/src/adaptors/api/metaweblog/useMetaweblogApi.ts"
 import { useNotionApi } from "~/src/adaptors/api/notion/useNotionApi.ts"
 import { useHexoApi } from "~/src/adaptors/api/hexo/useHexoApi.ts"
-import { YamlConvertAdaptor } from "~/src/platforms/yamlConvertAdaptor.ts"
 import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
 
 /**

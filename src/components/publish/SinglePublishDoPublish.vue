@@ -47,7 +47,7 @@ import { isDev } from "~/src/utils/constants.ts"
 import AiSwitch from "~/src/components/publish/form/AiSwitch.vue"
 import { pre } from "~/src/utils/import/pre.ts"
 import { ICategoryConfig } from "~/src/types/ICategoryConfig.ts"
-import PublishKnowledgeSpace from "~/src/components/publish/form/PublishKnowledgeSpace.vue";
+import PublishKnowledgeSpace from "~/src/components/publish/form/PublishKnowledgeSpace.vue"
 
 const logger = createAppLogger("single-publish-do-publish")
 
@@ -341,10 +341,7 @@ onMounted(async () => {
   // 分类数据初始化
   formData.categoryConfig = {
     cateEnabled: true,
-    readonlyMode: formData.method === MethodEnum.METHOD_EDIT && !cfg.allowCateChange,
-    readonlyModeTip: cfg.placeholder.cateReadonlyModeTip,
-    apiType: key,
-    cfg: cfg,
+    readonlyMode: false,
     categories: formData.mergedPost.categories,
   }
   // 知识空间
@@ -438,8 +435,8 @@ onMounted(async () => {
 
                   <!-- 知识空间 -->
                   <publish-knowledge-space
-                    v-model:category-type="formData.publishCfg.cfg.knowledgeSpaceType"
-                    v-model:category-config="formData.knowledgeSpaceConfig"
+                    v-model:knowledge-space-type="formData.publishCfg.cfg.knowledgeSpaceType"
+                    v-model:knowledge-space-config="formData.knowledgeSpaceConfig"
                     @emitSyncCates="syncCateSlugs"
                   />
 

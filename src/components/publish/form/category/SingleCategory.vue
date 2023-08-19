@@ -141,7 +141,7 @@ const initPage = async () => {
         }
       }
     } else {
-      // 批量分发，直接组装公共分类
+      // 直接读取已有分类
       const cates = formData.categoryConfig.categories ?? []
       categoryInfoList = cates.map((x: string) => {
         const categoryInfo = new CategoryInfo()
