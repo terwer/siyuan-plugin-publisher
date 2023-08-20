@@ -49,7 +49,6 @@ const props = defineProps({
 const formData = reactive({
   knowledgeSpaceConfig: props.knowledgeSpaceConfig,
   cateSlugs: props.cateSlugs,
-  useRemoteData: !StrUtil.isEmptyString(props.knowledgeSpaceConfig.apiType),
   path: {
     // 当前选中
     customPath: "",
@@ -115,7 +114,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="tree-single-cateslugs">
+  <div class="tree-single-cateslugs" v-if="formData.knowledgeSpaceConfig.cateEnabled">
     <el-form-item :label="t('main.publish.github.choose.path')">
       <el-tree-select
         v-model="formData.path.customPath"

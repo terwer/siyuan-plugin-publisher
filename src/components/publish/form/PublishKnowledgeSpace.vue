@@ -67,14 +67,15 @@ const syncPubCateSlugs = (cateSlugs: string[]) => {
 <template>
   <div v-if="formData.knowledgeSpaceType === CategoryTypeEnum.CategoryType_Single">
     <single-knowledge-space
-      :knowledge-space-config="formData.knowledgeSpaceConfig"
+      v-model:knowledge-space-config="formData.knowledgeSpaceConfig"
+      v-model:cate-slugs="formData.cateSlugs"
       @emitSyncSingleCateSlugs="syncPubCateSlugs"
     />
   </div>
   <div v-else-if="formData.knowledgeSpaceType === CategoryTypeEnum.CategoryType_Tree_Single">
     <tree-single-knowledge-space
-      :knowledge-space-config="formData.knowledgeSpaceConfig"
-      :cate-slugs="formData.cateSlugs"
+      v-model:knowledge-space-config="formData.knowledgeSpaceConfig"
+      v-model:cate-slugs="formData.cateSlugs"
       @emitSyncTreeSingleCateSlugs="syncPubCateSlugs"
     />
   </div>

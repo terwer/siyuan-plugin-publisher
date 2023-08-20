@@ -75,11 +75,11 @@ const useYuqueApi = async (key: string, newCfg?: YuqueConfig) => {
   }
 
   // Yuque 使用单选分类作为知识空间
-  cfg.categoryType = CategoryTypeEnum.CategoryType_Single
-  cfg.allowCateChange = false
-  // 启用知识库作为分类
+  cfg.cateEnabled = false
   cfg.knowledgeSpaceEnabled = true
-  cfg.placeholder.cateReadonlyModeTip =
+  cfg.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Single
+  cfg.allowKnowledgeSpaceChange = false
+  cfg.placeholder.knowledgeSpaceReadonlyModeTip =
     "由于语雀平台的限制，暂时不支持编辑所属知识库。如果您想移动文档，请先点击取消删除该文档，然后重新选择新的知识库发布"
 
   // 创建 Yuque API 适配器

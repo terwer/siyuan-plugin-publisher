@@ -51,13 +51,20 @@ export class HexoYamlConverterAdaptor extends YamlConvertAdaptor {
     yamlFormatObj.yamlObj.updated = DateUtil.formatIsoToZh(post.dateUpdated.toISOString(), true)
 
     // excerpt
-    yamlFormatObj.yamlObj.excerpt = post.shortDesc
+    if (!StrUtil.isEmptyString(post.shortDesc)) {
+      yamlFormatObj.yamlObj.excerpt = post.shortDesc
+    }
 
     // tags
-    yamlFormatObj.yamlObj.tags = post.mt_keywords.split(",")
+    if (!StrUtil.isEmptyString(post.mt_keywords)) {
+      const tags = post.mt_keywords.split(",")
+      yamlFormatObj.yamlObj.tags = tags
+    }
 
     // categories
-    yamlFormatObj.yamlObj.categories = post.categories
+    if (post.categories.length > 0) {
+      yamlFormatObj.yamlObj.categories = post.categories
+    }
 
     // permalink
     let link = "/post/" + post.wp_slug + ".html"
@@ -124,9 +131,9 @@ export class HexoYamlConverterAdaptor extends YamlConvertAdaptor {
 
     // 添加新的YAML
     post.yaml = YamlUtil.obj2Yaml(yamlFormatObj.yamlObj)
-    const regex = /^---\n([\s\S]*?\n)---/;
+    const regex = /^---\n([\s\S]*?\n)---/
     if (regex.test(post.markdown)) {
-      post.markdown = post.markdown.replace(regex, "");
+      post.markdown = post.markdown.replace(regex, "")
       this.logger.debug("发现原有的YAML，已移除")
     }
     post.markdown = `${post.yaml}\n${post.markdown}`

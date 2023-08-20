@@ -341,7 +341,7 @@ onMounted(async () => {
   const cfg = formData.publishCfg.cfg as BlogConfig
   // 分类数据初始化
   formData.categoryConfig = {
-    cateEnabled: true,
+    cateEnabled: cfg.cateEnabled,
     readonlyMode: formData.method === MethodEnum.METHOD_EDIT && !cfg.allowCateChange,
     readonlyModeTip: cfg.placeholder.cateReadonlyModeTip,
     apiType: key,
@@ -349,7 +349,7 @@ onMounted(async () => {
   }
   // 知识空间
   formData.knowledgeSpaceConfig = {
-    cateEnabled: true,
+    cateEnabled: cfg.knowledgeSpaceEnabled,
     readonlyMode: formData.method === MethodEnum.METHOD_EDIT && !cfg.allowKnowledgeSpaceChange,
     readonlyModeTip: cfg.placeholder.knowledgeSpaceReadonlyModeTip,
     apiType: key,

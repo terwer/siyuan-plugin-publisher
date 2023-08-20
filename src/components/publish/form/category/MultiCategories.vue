@@ -178,7 +178,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="multi-categories" v-if="formData.cate.categoryList.length > 0">
+  <div class="multi-categories" v-if="formData.categoryConfig.cateEnabled">
     <el-form-item :label="t('main.cat')">
       <el-tree-select
         style="width: 100%"

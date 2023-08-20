@@ -78,9 +78,11 @@ const useHexoApi = async (key: string, newCfg?: HexoConfig) => {
   }
 
   // 分类
+  cfg.cateEnabled = true
   cfg.allowCateChange = true
   cfg.categoryType = CategoryTypeEnum.CategoryType_Multi
   // 知识空间
+  cfg.knowledgeSpaceEnabled = true
   cfg.allowKnowledgeSpaceChange = false
   cfg.placeholder.knowledgeSpaceReadonlyModeTip = "Hexo 平台暂不支持修改发布目录，如需修改，请删除之后重新发布"
   cfg.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Tree_Single

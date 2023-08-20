@@ -87,13 +87,9 @@ class YuqueApiAdaptor extends BaseBlogApi {
     commonPost.title = yuqueDoc.title
     commonPost.description = yuqueDoc.body
 
+    // 语雀知识库
     const book = yuqueDoc.book
-    const cats = []
     const catSlugs = []
-
-    cats.push(book.name)
-    commonPost.categories = cats
-
     catSlugs.push(book.namespace)
     commonPost.cate_slugs = catSlugs
 
