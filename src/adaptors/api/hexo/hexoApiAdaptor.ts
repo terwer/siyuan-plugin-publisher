@@ -24,6 +24,8 @@
  */
 
 import { CommonGithubApiAdaptor } from "~/src/adaptors/api/base/github/commonGithubApiAdaptor.ts"
+import { YamlConvertAdaptor } from "zhi-blog-api"
+import { HexoYamlConverterAdaptor } from "~/src/adaptors/api/hexo/hexoYamlConverterAdaptor.ts"
 
 /**
  * Hexo API 适配器
@@ -32,6 +34,10 @@ import { CommonGithubApiAdaptor } from "~/src/adaptors/api/base/github/commonGit
  * @version 1.3.2
  * @since 0.8.1
  */
-class HexoApiAdaptor extends CommonGithubApiAdaptor {}
+class HexoApiAdaptor extends CommonGithubApiAdaptor {
+  public override getYamlAdaptor(): YamlConvertAdaptor {
+    return new HexoYamlConverterAdaptor()
+  }
+}
 
 export { HexoApiAdaptor }

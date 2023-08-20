@@ -102,8 +102,9 @@ const cateMethods = {
       </el-button>
     </el-form-item>
     <el-form-item>
-      <el-alert :closable="false" :title="t('category.batch.not.supported')" class="form-item-tip form-item-bottom" type="warning" />
+      <el-alert :closable="false" :title="t('category.batch.not.supported')" class="form-item-tip" type="warning" />
     </el-form-item>
+    <div class="form-item-bottom"></div>
   </div>
 </template>
 

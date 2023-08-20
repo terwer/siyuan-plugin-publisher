@@ -56,8 +56,8 @@ export class HexoYamlConverterAdaptor extends YamlConvertAdaptor {
     // tags
     yamlFormatObj.yamlObj.tags = post.mt_keywords.split(",")
 
-    // // categories
-    // yamlFormatObj.yamlObj.categories = postForm.formData.categories
+    // categories
+    yamlFormatObj.yamlObj.categories = post.categories
 
     // permalink
     let link = "/post/" + post.wp_slug + ".html"
@@ -107,20 +107,31 @@ export class HexoYamlConverterAdaptor extends YamlConvertAdaptor {
     this.logger.debug("开始转换YAML到Post", yamlFormatObj)
 
     // 标题
-    post.title = yamlFormatObj.yamlObj.title
+    post.title = yamlFormatObj.yamlObj?.title
 
     // 发布时间
     post.dateCreated = DateUtil.convertStringToDate(yamlFormatObj.yamlObj.date)
     post.dateUpdated = DateUtil.convertStringToDate(yamlFormatObj.yamlObj.updated)
 
     // 摘要
-    post.shortDesc = yamlFormatObj.yamlObj.excerpt
+    post.shortDesc = yamlFormatObj.yamlObj?.excerpt
 
     // 标签
-    post.mt_keywords = yamlFormatObj.yamlObj.tags.join(",")
+    post.mt_keywords = yamlFormatObj.yamlObj?.tags?.join(",")
 
+    // 分类
+    post.categories = yamlFormatObj.yamlObj?.categories
+
+    // 添加新的YAML
     post.yaml = YamlUtil.obj2Yaml(yamlFormatObj.yamlObj)
+    const regex = /^---\n([\s\S]*?\n)---/;
+    if (regex.test(post.markdown)) {
+      post.markdown = post.markdown.replace(regex, "");
+      this.logger.debug("发现原有的YAML，已移除")
+    }
     post.markdown = `${post.yaml}\n${post.markdown}`
+
+    this.logger.debug("转换完成，post =>", post)
     return post
   }
 }

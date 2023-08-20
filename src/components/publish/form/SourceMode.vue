@@ -28,7 +28,7 @@ import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { reactive, toRaw } from "vue"
 import { SourceContentShowType } from "~/src/models/sourceContentShowType.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import {Post, YamlConvertAdaptor, YamlFormatObj} from "zhi-blog-api"
+import { Post, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
 import { BrowserUtil } from "zhi-device"
 import { ElMessage } from "element-plus"
 import { DateUtil, StrUtil, YamlUtil } from "zhi-common"
@@ -130,7 +130,9 @@ const onYamlContentInput = (val: any) => {
     formData.yamlFormatObj.yamlObj = yamlObj
     formData.siyuanPost = formData.yamlAdaptor.convertToAttr(formData.siyuanPost, formData.yamlFormatObj, formData.cfg)
     // 在这里用 emit 更新到父组件
-    logger.debug("准备emit =>", formData.siyuanPost)
+    logger.debug("准备emit =>", {
+      post: toRaw(formData.siyuanPost),
+    })
     emit("emitSyncPost", formData.siyuanPost)
     formData.syncStatus = "success"
     formData.syncMessage = "YAML已解析成功并同步。同步时间 =>" + DateUtil.formatIsoToZh(new Date().toISOString(), true)

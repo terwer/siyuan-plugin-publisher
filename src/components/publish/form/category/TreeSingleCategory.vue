@@ -40,6 +40,10 @@ const props = defineProps({
     type: Object as () => ITreeSingleCategoryConfig,
     default: {},
   },
+  categories: {
+    type: Array,
+    default: <string[]>[],
+  }
 })
 
 const formData = reactive({
@@ -56,6 +60,9 @@ const formData = reactive({
     },
   },
 })
+
+// emits
+const emit = defineEmits(["emitSyncTreeSingleCates"])
 
 // methods
 const customLoad = async (node: any, resolve: any) => {

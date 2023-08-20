@@ -35,20 +35,6 @@ In later releases, the release configuration will only be backward compatible to
 - Support automatic generation of article aliases
 - Support for changing the default knowledge base
 
-## Compatibility of Origin notes
-
-This plugin supports almost all devices and platforms of Siyuan Note, and the specific compatibility is as follows:
-
-- [X] Siyuan Note Client (zero configuration) <sup>is highly recommended</sup>
-- [X] Servo environment (Zero configuration, cross-domain request proxy built-in)
-  - [X] CentSource Note Browser Servo
-  - [X] Siyuan Note Client Servo
-  - [X] Siyuan Note mobile servo
-- [X] Siyuan Note docker version (Zero configuration, cross-domain request proxy built-in)
-
-🎉 **All platforms have been migrated to the official forward proxy, achieving zero user configuration and supporting cross-domain request proxies by default 🎉**
-
-
 ## Platform List
 
 Names not listed in order
@@ -85,6 +71,30 @@ This plugin promises that the basic functions will be free forever, and the foll
 > 🌹 Tips: This plugin is an upgraded version of the original 'Siyuan Note Publishing Tool' widget, which includes all the functions provided by the original widget, provides a convenient menu operation entry, and has carried out a series of problem fixes and experience optimizations.
 >
 > In addition to [Extended Functions], **Other functions do not require any dependencies** , and there is no need to download the previous widget, which is already built-in in the plugin.
+
+## Compatibility of Origin notes
+
+This plugin supports almost all devices and platforms of Siyuan Note, and the specific compatibility is as follows:
+
+- [X] Siyuan Note Client (zero configuration) <sup>is highly recommended</sup>
+- [X] Servo environment (Zero configuration, cross-domain request proxy built-in)
+  - [X] CentSource Note Browser Servo
+  - [X] Siyuan Note Client Servo
+  - [X] Siyuan Note mobile servo
+- [X] Siyuan Note docker version (Zero configuration, cross-domain request proxy built-in)
+
+🎉 **All platforms have been migrated to the official forward proxy, achieving zero user configuration and supporting cross-domain request proxies by default 🎉**
+
+## Supported taxonomy
+
+- [ ] Classification
+  - [ ] Single selection classification
+  - [X] Multi-select classification
+  - [ ] Tree-shaped radio classification
+
+- [ ] Knowledge space
+  - [ ] Single selection knowledge space
+  - [X] Tree-shaped radio knowledge space
 
 ## Platform Adaptation Plan
 

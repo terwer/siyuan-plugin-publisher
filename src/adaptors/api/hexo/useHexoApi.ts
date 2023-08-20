@@ -77,8 +77,12 @@ const useHexoApi = async (key: string, newCfg?: HexoConfig) => {
     }
   }
 
-  // Hexo 使用树形单选分类
+  // 分类
+  cfg.allowCateChange = true
   cfg.categoryType = CategoryTypeEnum.CategoryType_Multi
+  // 知识空间
+  cfg.allowKnowledgeSpaceChange = false
+  cfg.placeholder.knowledgeSpaceReadonlyModeTip = "Hexo 平台暂不支持修改发布目录，如需修改，请删除之后重新发布"
   cfg.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Tree_Single
 
   // 创建 Hexo 的 yamlAdaptor

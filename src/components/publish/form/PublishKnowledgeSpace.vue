@@ -26,12 +26,7 @@
 <script setup lang="ts">
 import { CategoryTypeEnum } from "zhi-blog-api"
 import { reactive, toRaw } from "vue"
-import {
-  ICategoryConfig,
-  IMultiCategoriesConfig,
-  ISingleCategoryConfig,
-  ITreeSingleCategoryConfig,
-} from "~/src/types/ICategoryConfig.ts"
+import { ICategoryConfig } from "~/src/types/ICategoryConfig.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 
 const logger = createAppLogger("publish-categories")
@@ -45,32 +40,43 @@ const props = defineProps({
     type: Object as () => ICategoryConfig,
     default: {},
   },
+  cateSlugs: {
+    type: Array,
+    default: <string[]>[],
+  },
 })
 
 const formData = reactive({
   knowledgeSpaceType: props.knowledgeSpaceType,
   knowledgeSpaceConfig: props.knowledgeSpaceConfig,
+  cateSlugs: props.cateSlugs,
 })
 
 // emits
-const emit = defineEmits(["emitSyncCates"])
+const emit = defineEmits(["emitSyncCateSlugs"])
 
 // methods
-const syncPubCates = (cates: string[], cateSlugs: string[]) => {
-  logger.debug("sync single cates =>", {
-    cates: toRaw(cates),
+const syncPubCateSlugs = (cateSlugs: string[]) => {
+  logger.debug("sync single cateSlugs =>", {
     cateSlugs: toRaw(cateSlugs),
   })
-  emit("emitSyncCates", cates, cateSlugs)
+  emit("emitSyncCateSlugs", cateSlugs)
 }
 </script>
 
 <template>
   <div v-if="formData.knowledgeSpaceType === CategoryTypeEnum.CategoryType_Single">
-    <single-knowledge-space @emitSyncSingleCates="syncPubCates" />
+    <single-knowledge-space
+      :knowledge-space-config="formData.knowledgeSpaceConfig"
+      @emitSyncSingleCateSlugs="syncPubCateSlugs"
+    />
   </div>
   <div v-else-if="formData.knowledgeSpaceType === CategoryTypeEnum.CategoryType_Tree_Single">
-    <tree-single-knowledge-space />
+    <tree-single-knowledge-space
+      :knowledge-space-config="formData.knowledgeSpaceConfig"
+      :cate-slugs="formData.cateSlugs"
+      @emitSyncTreeSingleCateSlugs="syncPubCateSlugs"
+    />
   </div>
   <div v-else></div>
 </template>

@@ -279,6 +279,7 @@ const syncPublishTime = (val1: Date, val2: Date) => {
 
 const syncPost = (post: Post) => {
   formData.mergedPost = post
+  logger.debug("syncPost in single publish")
 }
 
 const onBack = () => {
@@ -341,17 +342,18 @@ onMounted(async () => {
   // 分类数据初始化
   formData.categoryConfig = {
     cateEnabled: true,
-    readonlyMode: false,
-    categories: formData.mergedPost.categories,
-  }
-  // 知识空间
-  formData.knowledgeSpaceConfig = {
-    cateEnabled: true,
     readonlyMode: formData.method === MethodEnum.METHOD_EDIT && !cfg.allowCateChange,
     readonlyModeTip: cfg.placeholder.cateReadonlyModeTip,
     apiType: key,
     cfg: cfg,
-    cateSlugs: formData.mergedPost.cate_slugs,
+  }
+  // 知识空间
+  formData.knowledgeSpaceConfig = {
+    cateEnabled: true,
+    readonlyMode: formData.method === MethodEnum.METHOD_EDIT && !cfg.allowKnowledgeSpaceChange,
+    readonlyModeTip: cfg.placeholder.knowledgeSpaceReadonlyModeTip,
+    apiType: key,
+    cfg: cfg,
   }
 
   logger.debug("single publish inited mergedPost =>", toRaw(formData.mergedPost))
@@ -430,6 +432,7 @@ onMounted(async () => {
                   <publish-categories
                     v-model:category-type="formData.publishCfg.cfg.categoryType"
                     v-model:category-config="formData.categoryConfig"
+                    v-model:categories="formData.mergedPost.categories"
                     @emitSyncCates="syncCates"
                   />
 
@@ -437,7 +440,8 @@ onMounted(async () => {
                   <publish-knowledge-space
                     v-model:knowledge-space-type="formData.publishCfg.cfg.knowledgeSpaceType"
                     v-model:knowledge-space-config="formData.knowledgeSpaceConfig"
-                    @emitSyncCates="syncCateSlugs"
+                    v-model:cate-slugs="formData.mergedPost.cate_slugs"
+                    @emitSyncCateSlugs="syncCateSlugs"
                   />
 
                   <!-- 发布时间 -->

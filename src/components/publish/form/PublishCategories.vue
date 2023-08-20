@@ -25,12 +25,11 @@
 
 <script setup lang="ts">
 import { CategoryTypeEnum } from "zhi-blog-api"
-import { reactive, toRaw, watch } from "vue"
+import { reactive, toRaw } from "vue"
 import {
   ICategoryConfig,
   IMultiCategoriesConfig,
   ISingleCategoryConfig,
-  ITreeMultiCategoriesConfig,
   ITreeSingleCategoryConfig,
 } from "~/src/types/ICategoryConfig.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
@@ -46,23 +45,28 @@ const props = defineProps({
     type: Object as () => ICategoryConfig,
     default: {},
   },
+  categories: {
+    type: Array,
+    default: <string[]>[],
+  },
 })
 
 const formData = reactive({
   categoryType: props.categoryType,
   categoryConfig: props.categoryConfig,
+  categories: props.categories,
 })
 
 // emits
 const emit = defineEmits(["emitSyncCates"])
 
 // methods
-const syncPubCates = (cates: string[], cateSlugs: string[]) => {
+const syncPubCates = (cates: string[]) => {
   logger.debug("sync single cates =>", {
     cates: toRaw(cates),
-    cateSlugs: toRaw(cateSlugs),
   })
-  emit("emitSyncCates", cates, cateSlugs)
+  formData.categories = cates
+  emit("emitSyncCates", cates)
 }
 </script>
 
@@ -70,17 +74,23 @@ const syncPubCates = (cates: string[], cateSlugs: string[]) => {
   <div v-if="formData.categoryType === CategoryTypeEnum.CategoryType_Single">
     <single-category
       v-model:category-config="formData.categoryConfig as ISingleCategoryConfig"
+      v-model:categories="formData.categories"
       @emitSyncSingleCates="syncPubCates"
     />
   </div>
   <div v-else-if="formData.categoryType === CategoryTypeEnum.CategoryType_Multi">
     <multi-categories
       v-model:category-config="formData.categoryConfig as IMultiCategoriesConfig"
+      v-model:categories="formData.categories"
       @emitSyncMultiCates="syncPubCates"
     />
   </div>
   <div v-else-if="formData.categoryType === CategoryTypeEnum.CategoryType_Tree_Single">
-    <tree-single-category v-model:category-config="formData.categoryConfig as ITreeSingleCategoryConfig" />
+    <tree-single-category
+      v-model:category-config="formData.categoryConfig as ITreeSingleCategoryConfig"
+      v-model:categories="formData.categories"
+      @emitSyncTreeSingleCates="syncPubCates"
+    />
   </div>
   <div v-else></div>
 </template>

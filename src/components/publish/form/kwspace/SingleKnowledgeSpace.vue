@@ -24,13 +24,28 @@
   -->
 
 <script setup lang="ts">
+import { ISingleCategoryConfig } from "~/src/types/ICategoryConfig.ts"
+import { reactive } from "vue"
 
+const props = defineProps({
+  knowledgeSpaceConfig: {
+    type: Object as () => ISingleCategoryConfig,
+    default: {},
+  },
+  cateSlugs: {
+    type: Array,
+    default: <string[]>[],
+  },
+})
+
+const formData = reactive({
+  knowledgeSpaceConfig: props.knowledgeSpaceConfig,
+  cateSlugs: props.cateSlugs,
+})
 </script>
 
 <template>
-<div>单选知识空间</div>
+  <div>单选知识空间</div>
 </template>
 
-<style scoped lang="stylus">
-
-</style>
+<style scoped lang="stylus"></style>

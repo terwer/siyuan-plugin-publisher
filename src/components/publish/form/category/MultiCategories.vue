@@ -40,10 +40,15 @@ const props = defineProps({
     type: Object as () => IMultiCategoriesConfig,
     default: {},
   },
+  categories: {
+    type: Array,
+    default: <string[]>[],
+  },
 })
 
 const formData = reactive({
   categoryConfig: props.categoryConfig,
+  categories: props.categories,
   useRemoteData: !StrUtil.isEmptyString(props.categoryConfig.apiType),
   cate: {
     categorySelected: <string[]>[],
@@ -71,25 +76,33 @@ const handleCatNodeCheck = (data: any[], status: any) => {
   values.forEach((item: any) => {
     cates.push(item.toString())
   })
-  formData.categoryConfig.categories = cates
+  formData.categories = cates
   logger.debug(" formData.categories=>", {
-    categories: toRaw(formData.categoryConfig.categories),
+    categories: toRaw(formData.categories),
   })
 
-  emit("emitSyncMultiCates", cates, [])
+  emit("emitSyncMultiCates", cates)
 }
 
 const handleRemoveTag = (val: string) => {
   const value = val
   logger.debug("准备删除 =>", value)
 
-  const cates = formData.categoryConfig.categories.filter((cate) => cate !== value)
-  formData.categoryConfig.categories = cates
+  const cates = formData.categories.filter((cate) => cate !== value)
+  formData.categories = cates
   logger.debug("formData.categories=>", {
-    categories: toRaw(formData.categoryConfig.categories),
+    categories: toRaw(formData.categories),
   })
 
-  emit("emitSyncMultiCates", cates, [])
+  emit("emitSyncMultiCates", cates)
+}
+
+const onCatChange = (val: string) => {
+  const value = val
+  logger.debug("选中项已改变 =>", value)
+
+  const cates = value
+  emit("emitSyncMultiCates", cates)
 }
 
 const initPage = async () => {
@@ -101,6 +114,15 @@ const initPage = async () => {
       const cfg = formData.categoryConfig.cfg
       const api = await Adaptors.getAdaptor(formData.categoryConfig.apiType, cfg)
       categoryInfoList = await api.getCategories()
+      // 未提供分类列表的，读取选择的
+      if (categoryInfoList.length === 0) {
+        categoryInfoList = formData.categories.map((x: string) => {
+          const cateInfo = new CategoryInfo()
+          cateInfo.categoryId = x
+          cateInfo.categoryName = x
+          return cateInfo
+        })
+      }
       logger.debug("getCategories for multi categories", categoryInfoList)
 
       if (categoryInfoList.length > 0) {
@@ -114,18 +136,18 @@ const initPage = async () => {
         })
 
         // 当前选中
-        const cates = formData.categoryConfig.categories
+        const cates = formData.categories
         // 先读取保存的，否则使用默认
         formData.cate.categorySelected = cates
         // 默认未设置，获取第一个
-        emit("emitSyncMultiCates", cates, [])
+        emit("emitSyncMultiCates", cates)
         logger.debug("muti cates is syncing =>", {
           cates: toRaw(cates),
         })
       }
     } else {
-      // 批量分发，直接组装公共分类
-      const cates = formData.categoryConfig.categories ?? []
+      // 直接读取已有分类
+      const cates = formData.categories ?? []
       categoryInfoList = cates.map((x: string) => {
         const categoryInfo = new CategoryInfo()
         categoryInfo.categoryId = x
@@ -145,7 +167,7 @@ const initPage = async () => {
         formData.cate.categorySelected = cates
       }
 
-      logger.debug("公共分类 =>", { cates: toRaw(cates) })
+      logger.debug("读取已有分类 =>", { cates: toRaw(cates) })
     }
   }
 }
@@ -162,6 +184,8 @@ onMounted(async () => {
         style="width: 100%"
         v-model="formData.cate.categorySelected"
         :data="formData.cate.categoryList"
+        filterable
+        allow-create
         multiple
         :check-on-click-node="true"
         :render-after-expand="false"
@@ -173,6 +197,7 @@ onMounted(async () => {
         @node-click="handleCatNodeClick"
         @check="handleCatNodeCheck"
         @remove-tag="handleRemoveTag"
+        @change="onCatChange"
       />
     </el-form-item>
   </div>

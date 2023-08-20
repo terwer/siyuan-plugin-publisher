@@ -40,6 +40,10 @@ const props = defineProps({
     type: Object as () => ISingleCategoryConfig,
     default: {},
   },
+  categories: {
+    type: Array,
+    default: <string[]>[],
+  }
 })
 
 const formData = reactive({
@@ -162,7 +166,7 @@ const initPage = async () => {
         formData.cate.categorySelected = categoryInfoList[0].categoryId
       }
 
-      logger.debug("公共分类 =>", { cates: toRaw(cates) })
+      logger.debug("读取已有分类 =>", { cates: toRaw(cates) })
     }
   }
 }

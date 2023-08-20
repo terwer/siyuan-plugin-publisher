@@ -130,10 +130,12 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
     // YAML属性转换
     const yamlAdaptor: YamlConvertAdaptor = this.getYamlAdaptor()
     if (null !== yamlAdaptor) {
-      const yamlObj = YamlUtil.yaml2Obj(commonPost.description)
-      commonPost = yamlAdaptor.convertToAttr(commonPost, yamlObj, this.cfg)
-      this.logger.debug("generate yamlObj using YamlConverterAdaptor =>", yamlObj)
-      this.logger.info("handled yaml using YamlConverterAdaptor")
+      const yamlObj = await YamlUtil.yaml2ObjAsync(commonPost.description)
+      const yamlFormatObj = new YamlFormatObj()
+      yamlFormatObj.yamlObj = yamlObj
+      this.logger.debug("extract frontFormatter, yamlFormatObj =>", yamlFormatObj)
+      commonPost = yamlAdaptor.convertToAttr(commonPost, yamlFormatObj, this.cfg)
+      this.logger.debug("handled yamlObj using YamlConverterAdaptor =>", yamlObj)
     }
 
     // 初始化知识空间
