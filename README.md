@@ -21,7 +21,7 @@ In later releases, the release configuration will only be backward compatible to
 ## Recent critical updates and bug fixes
 
 - Support multiple publishing views, simple mode, detailed mode and source mode
-- Support to modify summary, tags, classification
+- Support to modify summary, tags, classification, knowledge space
 - The Hexo platform supports custom modification of YAML
 - Yuque, Notion, and Hexo support image links, and automatic upload requires Picgo plugin support
 - Zhihu platform supports automatic image upload

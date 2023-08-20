@@ -48,7 +48,7 @@ const props = defineProps({
 
 const formData = reactive({
   categoryConfig: props.categoryConfig,
-  categories: props.categories,
+  categories: <string[]>props.categories,
   useRemoteData: !StrUtil.isEmptyString(props.categoryConfig.apiType),
   cate: {
     categorySelected: <string[]>[],

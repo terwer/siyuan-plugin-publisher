@@ -43,11 +43,12 @@ const props = defineProps({
   categories: {
     type: Array,
     default: <string[]>[],
-  }
+  },
 })
 
 const formData = reactive({
   categoryConfig: props.categoryConfig,
+  categories: <string[]>props.categories,
   useRemoteData: !StrUtil.isEmptyString(props.categoryConfig.apiType),
   cate: {
     categorySelected: "",
@@ -75,22 +76,18 @@ const handleCatNodeSingleCheck = (val: any) => {
   logger.debug("label=>", value)
   const cfg = formData.categoryConfig.cfg
   const cates = []
-  const cateSlugs = []
 
   if (cfg.knowledgeSpaceEnabled) {
     cates.push(label)
-    cateSlugs.push(value)
   } else {
     const cates = []
     cates.push(label)
   }
 
-  formData.categoryConfig.categories = cates
-  formData.categoryConfig.cateSlugs = cateSlugs
-  logger.debug("categories=>", formData.categoryConfig.categories)
-  logger.debug("cat_slugs=>", formData.categoryConfig.cateSlugs)
+  formData.categories = cates
+  logger.debug("categories=>", formData.categories)
 
-  emit("emitSyncSingleCates", cates, cateSlugs)
+  emit("emitSyncSingleCates", cates)
 }
 
 const initPage = async () => {
@@ -114,39 +111,21 @@ const initPage = async () => {
           categoryList: toRaw(formData.cate.categoryList),
         })
 
-        // 当前选中
-        if (cfg.knowledgeSpaceEnabled) {
-          const cateSlugs = formData.categoryConfig.cateSlugs
-          // 先读取保存的，否则使用默认
-          formData.cate.categorySelected = cateSlugs.length > 0 ? cateSlugs[0] : cfg.blogid
-          // 默认未设置，获取第一个
-          if (StrUtil.isEmptyString(formData.cate.categorySelected)) {
-            formData.cate.categorySelected = categoryInfoList[0].categoryId
-          }
-          const cates = []
-          const cate = formData.cate.categoryList.find((x) => x.value === formData.cate.categorySelected)?.label ?? ""
-          cates.push(cate)
-          emit("emitSyncSingleCates", cates, cateSlugs)
-          logger.debug("knowledgeSpace is enabled =>", {
-            cateSlugs: toRaw(cateSlugs),
-          })
-        } else {
-          const cates = formData.categoryConfig.categories
-          // 先读取保存的，否则使用默认
-          formData.cate.categorySelected = cates.length > 0 ? cates[0] : cfg.blogid
-          // 默认未设置，获取第一个
-          if (StrUtil.isEmptyString(formData.cate.categorySelected)) {
-            formData.cate.categorySelected = categoryInfoList[0].categoryId
-          }
-          emit("emitSyncSingleCates", cates, [])
-          logger.debug("knowledgeSpace is disabled =>", {
-            cateSlugs: toRaw(cates),
-          })
+        const cates = formData.categories
+        // 先读取保存的，否则使用默认
+        formData.cate.categorySelected = cates.length > 0 ? cates[0] : cfg.blogid
+        // 默认未设置，获取第一个
+        if (StrUtil.isEmptyString(formData.cate.categorySelected)) {
+          formData.cate.categorySelected = categoryInfoList[0].categoryId
         }
+        emit("emitSyncSingleCates", cates)
+        logger.debug("knowledgeSpace is disabled =>", {
+          cateSlugs: toRaw(cates),
+        })
       }
     } else {
       // 直接读取已有分类
-      const cates = formData.categoryConfig.categories ?? []
+      const cates = formData.categories ?? []
       categoryInfoList = cates.map((x: string) => {
         const categoryInfo = new CategoryInfo()
         categoryInfo.categoryId = x
