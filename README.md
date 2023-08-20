@@ -87,13 +87,11 @@ This plugin supports almost all devices and platforms of Siyuan Note, and the sp
 
 ## Supported taxonomy
 
-- [ ] Classification
-  - [ ] Single selection classification
+- [X] Classification
   - [X] Multi-select classification
-  - [ ] Tree-shaped radio classification
 
-- [ ] Knowledge space
-  - [ ] Single selection knowledge space
+- [X] Knowledge space
+  - [X] Single-choice knowledge space
   - [X] Tree-shaped radio knowledge space
 
 ## Platform Adaptation Plan

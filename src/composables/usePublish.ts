@@ -299,8 +299,6 @@ const usePublish = () => {
     return isAbsoluteUrl ? previewUrl : `${cfg?.home ?? ""}${previewUrl}`
   }
 
-  // const assignCompareValue = (title1: string, title2: string) => (title1.length > title2.length ? title1 : title2)
-
   /**
    * 初始化调用
    *
