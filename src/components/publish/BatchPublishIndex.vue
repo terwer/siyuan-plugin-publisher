@@ -114,11 +114,21 @@ const handlePublish = async () => {
     formData.failBatchResults = []
     formData.successBatchResults = []
     for (const key of formData.dynList) {
-      // 文章发布数据不同平台共享
-      // 平台相关的配置，需要各自重新获取
-      const publishCfg = await getPublishCfg(key)
-      formData.publishCfg = publishCfg
-      const batchResult = await doSinglePublish(key, id, publishCfg, formData.siyuanPost)
+      if (sysKeys.includes(key)) {
+        logger.info(`[${key}] 系统内置平台`)
+      } else {
+        logger.info(`[${key}] 自定义平台`)
+        // 文章发布数据不同平台共享
+        // 平台相关的配置，需要各自重新获取
+        const publishCfg = await getPublishCfg(key)
+        formData.publishCfg = publishCfg
+        // 思源笔记原始文章数据
+        const siyuanPost = await blogApi.getPost(id)
+        // 元数据初始化
+        formData.siyuanPost = await initPublishMethods.assignInitAttrs(siyuanPost, id, formData.publishCfg)
+      }
+
+      const batchResult = await doSinglePublish(key, id, formData.publishCfg, formData.siyuanPost)
       if (batchResult.status) {
         formData.successBatchResults.push(batchResult)
       } else {
@@ -262,7 +272,6 @@ onMounted(async () => {
   formData.siyuanPost = siyuanPost
   // 元数据初始化
   formData.siyuanPost = await initPublishMethods.assignInitAttrs(formData.siyuanPost, id, formData.publishCfg)
-
   logger.debug("batch inited siyuanPost =>", toRaw(formData.siyuanPost))
   // ==================
   // 初始化结束
