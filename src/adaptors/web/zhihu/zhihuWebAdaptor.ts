@@ -30,8 +30,6 @@ import { JsonUtil, StrUtil } from "zhi-common"
 import CryptoJS from "crypto-js"
 import { arrayToBuffer } from "~/src/utils/polyfillUtils.ts"
 import { getAliOssClient } from "~/src/vendors/alioss/s3oss.ts"
-import { types } from "sass"
-import Error = types.Error
 
 /**
  * 知乎网页授权适配器
