@@ -28,7 +28,6 @@ import { useCnblogsApi } from "~/src/adaptors/api/cnblogs/useCnblogsApi.ts"
 import MetaweblogSetting from "~/src/components/set/publish/singleplatform/base/impl/MetaweblogSetting.vue"
 import { CnblogsPlaceholder } from "~/src/adaptors/api/cnblogs/cnblogsPlaceholder.ts"
 import { CnblogsConfig } from "~/src/adaptors/api/cnblogs/cnblogsConfig.ts"
-import { PasswordType } from "zhi-blog-api"
 
 const props = defineProps({
   apiType: {

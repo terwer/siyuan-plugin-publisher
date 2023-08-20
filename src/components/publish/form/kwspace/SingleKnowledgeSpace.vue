@@ -26,7 +26,6 @@
 <script setup lang="ts">
 import { ISingleCategoryConfig } from "~/src/types/ICategoryConfig.ts"
 import { computed, onMounted, reactive, toRaw } from "vue"
-import { StrUtil } from "zhi-common"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { CategoryInfo } from "zhi-blog-api"

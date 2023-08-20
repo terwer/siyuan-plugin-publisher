@@ -31,7 +31,7 @@ import { TypechoConfig } from "~/src/adaptors/api/typecho/typechoConfig.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { TypechoApiAdaptor } from "~/src/adaptors/api/typecho/typechoApiAdaptor.ts"
-import {CategoryTypeEnum} from "zhi-blog-api";
+import { CategoryTypeEnum } from "zhi-blog-api"
 
 /**
  * 使用Typecho API的自定义hook

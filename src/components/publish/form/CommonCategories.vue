@@ -27,7 +27,6 @@
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { nextTick, reactive, ref } from "vue"
-import { StrUtil } from "zhi-common"
 
 const logger = createAppLogger("common-categories")
 const { t } = useVueI18n()

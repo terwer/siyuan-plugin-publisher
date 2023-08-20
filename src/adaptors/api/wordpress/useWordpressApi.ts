@@ -31,7 +31,7 @@ import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { WordpressConfig } from "~/src/adaptors/api/wordpress/wordpressConfig.ts"
 import { WordpressApiAdaptor } from "~/src/adaptors/api/wordpress/wordpressApiAdaptor.ts"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
-import {CategoryTypeEnum} from "zhi-blog-api";
+import { CategoryTypeEnum } from "zhi-blog-api"
 
 /**
  * 使用Wordpress API的自定义hook

@@ -24,7 +24,7 @@
  */
 
 import { MetaweblogConfig } from "~/src/adaptors/api/base/metaweblog/metaweblogConfig.ts"
-import {CategoryTypeEnum, PageTypeEnum} from "zhi-blog-api"
+import { CategoryTypeEnum, PageTypeEnum } from "zhi-blog-api"
 import WordpressUtils from "~/src/adaptors/api/wordpress/wordpressUtils.ts"
 
 /**

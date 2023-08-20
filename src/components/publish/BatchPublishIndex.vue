@@ -37,14 +37,14 @@ import { pre } from "~/src/utils/import/pre.ts"
 import { Delete } from "@element-plus/icons-vue"
 import { BrowserUtil } from "zhi-device"
 import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
-import { CategoryTypeEnum, Post } from "zhi-blog-api"
+import { Post } from "zhi-blog-api"
 import { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 import { PageEditMode } from "~/src/models/pageEditMode.ts"
 import EditModeSelect from "~/src/components/publish/form/EditModeSelect.vue"
 import PublishTime from "~/src/components/publish/form/PublishTime.vue"
 import AiSwitch from "~/src/components/publish/form/AiSwitch.vue"
 import { isDev } from "~/src/utils/constants.ts"
-import { ICategoryConfig, ISingleCategoryConfig } from "~/src/types/ICategoryConfig.ts"
+import { ICategoryConfig } from "~/src/types/ICategoryConfig.ts"
 
 const logger = createAppLogger("publisher-index")
 

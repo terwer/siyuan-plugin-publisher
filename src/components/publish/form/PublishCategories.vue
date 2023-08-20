@@ -26,12 +26,7 @@
 <script setup lang="ts">
 import { CategoryTypeEnum } from "zhi-blog-api"
 import { reactive, toRaw } from "vue"
-import {
-  ICategoryConfig,
-  IMultiCategoriesConfig,
-  ISingleCategoryConfig,
-  ITreeSingleCategoryConfig,
-} from "~/src/types/ICategoryConfig.ts"
+import { ICategoryConfig, IMultiCategoriesConfig } from "~/src/types/ICategoryConfig.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 
 const logger = createAppLogger("publish-categories")

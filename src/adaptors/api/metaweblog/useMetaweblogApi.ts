@@ -31,7 +31,7 @@ import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { Utils } from "~/src/utils/utils.ts"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { MetaweblogBlogApiAdaptor } from "~/src/adaptors/api/base/metaweblog/metaweblogBlogApiAdaptor.ts"
-import {CategoryTypeEnum} from "zhi-blog-api";
+import { CategoryTypeEnum } from "zhi-blog-api"
 
 /**
  * 使用Metaweblog API的自定义hook

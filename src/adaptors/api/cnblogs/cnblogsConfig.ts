@@ -23,7 +23,7 @@
  * questions.
  */
 
-import {CategoryTypeEnum, PageTypeEnum, PasswordType} from "zhi-blog-api"
+import { CategoryTypeEnum, PageTypeEnum, PasswordType } from "zhi-blog-api"
 import { MetaweblogConfig } from "~/src/adaptors/api/base/metaweblog/metaweblogConfig.ts"
 
 /**

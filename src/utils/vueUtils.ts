@@ -23,12 +23,12 @@
  * questions.
  */
 
-import {createApp} from "vue"
+import { createApp } from "vue"
 import App from "~/src/App.vue"
-import {createAppLogger} from "~/src/utils/appLogger.ts"
-import {useVueRouter} from "~/src/composables/useVueRouter.ts"
+import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { useVueRouter } from "~/src/composables/useVueRouter.ts"
 import i18n from "~/src/locales"
-import {createPinia} from "pinia"
+import { createPinia } from "pinia"
 
 /**
  * Vue 入口

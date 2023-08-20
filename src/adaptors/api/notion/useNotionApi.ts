@@ -31,7 +31,7 @@ import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { NotionApiAdaptor } from "~/src/adaptors/api/notion/notionApiAdaptor.ts"
-import {CategoryTypeEnum} from "zhi-blog-api";
+import { CategoryTypeEnum } from "zhi-blog-api"
 
 const useNotionApi = async (key: string, newCfg?: NotionConfig) => {
   // 创建应用日志记录器

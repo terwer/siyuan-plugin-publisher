@@ -25,10 +25,9 @@
 
 <script setup lang="ts">
 import { ITreeSingleCategoryConfig } from "~/src/types/ICategoryConfig.ts"
-import { onMounted, reactive, ref, toRaw } from "vue"
+import { onMounted, reactive, toRaw } from "vue"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import { StrUtil } from "zhi-common"
 import { ElMessage } from "element-plus"
 import Adaptors from "~/src/adaptors"
 

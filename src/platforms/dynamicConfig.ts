@@ -25,7 +25,6 @@
 
 import idUtil from "~/src/utils/idUtil.ts"
 import { StrUtil } from "zhi-common"
-import { YamlConvertAdaptor } from "zhi-blog-api"
 
 export class DynamicConfig {
   /**
