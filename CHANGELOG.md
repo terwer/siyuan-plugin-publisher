@@ -1,64 +1,31 @@
 # Changelog
 
 ## [1.9.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.8.0...v1.9.0) (2023-08-21)
-
-
 ### Features
-
-* Hexo 平台支持修改自定义 YAML ([651ec0d](https://github.com/terwer/siyuan-plugin-publisher/commit/651ec0d8979889776ff85a5646f0607d708fa952))
-* Hexo 平台支持修改自定义 YAML ([e9ce0da](https://github.com/terwer/siyuan-plugin-publisher/commit/e9ce0daa43d990762715a918527f218c6863cb21))
-* 优化部分交互 ([141732c](https://github.com/terwer/siyuan-plugin-publisher/commit/141732c549429019838835de56bff846b105ab1c))
-* 优化部分交互 ([2e27bcf](https://github.com/terwer/siyuan-plugin-publisher/commit/2e27bcf07f51bac92168f85729b6fd853e8414ba))
-* 优化部分交互 ([d482c40](https://github.com/terwer/siyuan-plugin-publisher/commit/d482c40aed84d50011656d4374099280ce3a6761))
-* 优化部分交互 ([969d02f](https://github.com/terwer/siyuan-plugin-publisher/commit/969d02fb483e324c3a086d366e6cb6d1bdb8af4d))
+* hexo 平台支持修改自定义 yaml ([e9ce0da](https://github.com/terwer/siyuan-plugin-publisher/commit/e9ce0daa43d990762715a918527f218c6863cb21))
 * 优化部分交互 ([fea1af2](https://github.com/terwer/siyuan-plugin-publisher/commit/fea1af27ccff2d6f75aed174a984de9ec861b3ea))
-* 属性以YAML格式存储到文档自定义属性 ([6c6c7b4](https://github.com/terwer/siyuan-plugin-publisher/commit/6c6c7b417d2ea01cc805b9c62b80f09a778b00fc))
-* 属性以YAML格式存储到文档自定义属性 ([f147b96](https://github.com/terwer/siyuan-plugin-publisher/commit/f147b9678bc47663982f9dea8185512b0635d123))
-* 属性以YAML格式存储到文档自定义属性 ([9e8b17b](https://github.com/terwer/siyuan-plugin-publisher/commit/9e8b17b2f367090f70f6ecebef2184b0a376eef2))
+* 属性以yaml格式存储到文档自定义属性 ([9e8b17b](https://github.com/terwer/siyuan-plugin-publisher/commit/9e8b17b2f367090f70f6ecebef2184b0a376eef2))
 * 批量分发支持标签与分类合并 ([2e29bb4](https://github.com/terwer/siyuan-plugin-publisher/commit/2e29bb40afd48f5370b0630fc76f4c7de72a6773))
-* 支持发布视图 ([d94f96a](https://github.com/terwer/siyuan-plugin-publisher/commit/d94f96a58e7d34af9adc8daf733abbea1b231819))
-* 支持发布视图 ([95f2844](https://github.com/terwer/siyuan-plugin-publisher/commit/95f2844406750a40ea346a4d4ddeef6afdaf4b1b))
-* 支持发布视图 ([f2c3b4d](https://github.com/terwer/siyuan-plugin-publisher/commit/f2c3b4d06be37a0b124e64522c7bf1724365b667))
-* 支持发布视图 ([ad03f60](https://github.com/terwer/siyuan-plugin-publisher/commit/ad03f605cb6b93a595892d546bd2ee692b43ea8c))
 * 支持发布视图 ([c286a64](https://github.com/terwer/siyuan-plugin-publisher/commit/c286a64586a5d3f9e0bb22cfbc14eb2fee0c2e13))
 * 支持文章分类 ([782f4fb](https://github.com/terwer/siyuan-plugin-publisher/commit/782f4fb05cb8494be91f64b06028be6e5e2225a9))
 * 支持文章分类-公共分类 ([66d3b54](https://github.com/terwer/siyuan-plugin-publisher/commit/66d3b54913f3dc3a26dd398b74396a290b273d81))
-* 支持文章分类-单选分类 ([8b9076e](https://github.com/terwer/siyuan-plugin-publisher/commit/8b9076ef85e7802058af823449a7c6af55a012e4))
-* 支持文章分类-单选分类 ([5e772af](https://github.com/terwer/siyuan-plugin-publisher/commit/5e772af6912b4c7cab857c519c0babd1ea0640f8))
 * 支持文章分类-单选分类 ([4ca3ecd](https://github.com/terwer/siyuan-plugin-publisher/commit/4ca3ecddcd2b0eeb0378f633168d83afa6a408e6))
-* 支持文章分类-多选分类 ([f0bc264](https://github.com/terwer/siyuan-plugin-publisher/commit/f0bc26436130a9e96a54d0c75e3ae9596b6cac73))
 * 支持文章分类-多选分类 ([3d031b9](https://github.com/terwer/siyuan-plugin-publisher/commit/3d031b9e652cccb6cc5f7945bd00bc5d177914cc))
-* 支持文章分类-树形单选分类 ([9593c4a](https://github.com/terwer/siyuan-plugin-publisher/commit/9593c4a2c9ee26dba576762477cd21146c4851e8))
 * 支持文章分类-树形单选分类 ([17538ca](https://github.com/terwer/siyuan-plugin-publisher/commit/17538ca93458bc3164e34296c5ec6dc5280311bf))
-* 支持文章标签 ([058ce4e](https://github.com/terwer/siyuan-plugin-publisher/commit/058ce4ea515223f0ab2178bdfbcaa051ba910f7a))
 * 支持文章标签 ([37833d1](https://github.com/terwer/siyuan-plugin-publisher/commit/37833d1d3ebee9042d90369b8612df0657079c3f))
-* 支持生成摘要 ([b041ca9](https://github.com/terwer/siyuan-plugin-publisher/commit/b041ca9de362c1b5866c9a9eddb0b35d8cd98c8b))
 * 支持生成摘要 ([9aa12fa](https://github.com/terwer/siyuan-plugin-publisher/commit/9aa12fab3b64faa6b0d42df3586085701eed9db1))
-* 支持知识空间-树形单选知识空间 ([95de409](https://github.com/terwer/siyuan-plugin-publisher/commit/95de409472ea66fbe141b6037d5a6f49b186c38f))
-* 支持知识空间-树形单选知识空间 ([771ffac](https://github.com/terwer/siyuan-plugin-publisher/commit/771ffac12e5ca9e4bb52c3257e46425a943fef3d))
-* 支持知识空间-树形单选知识空间 ([5196eeb](https://github.com/terwer/siyuan-plugin-publisher/commit/5196eebdd5501d2b0b0775072ca550cedf85a792))
 * 支持知识空间-树形单选知识空间 ([eb9c56c](https://github.com/terwer/siyuan-plugin-publisher/commit/eb9c56cb0e58966da22eb23023d389ec7dd18ff6))
 * 支持细粒度控制发布属性-支持修改发布时间和更新时间 ([f866652](https://github.com/terwer/siyuan-plugin-publisher/commit/f8666523dbfbb43a517da490882b4041972f04c0))
-* 新 LOGO ，新征程 ([4d7e85f](https://github.com/terwer/siyuan-plugin-publisher/commit/4d7e85fead108c6dcb85133a35a84477bf8ffc4f))
-* 新 LOGO ，新征程 ([c85cf7c](https://github.com/terwer/siyuan-plugin-publisher/commit/c85cf7ccd503cf99c07142dd61e96547179b4fb6))
-* 新 LOGO ，新征程 ([49c2d7c](https://github.com/terwer/siyuan-plugin-publisher/commit/49c2d7cfec28cf24dc8f7277db3576b611d779b6))
+* 新 logo ，新征程 ([49c2d7c](https://github.com/terwer/siyuan-plugin-publisher/commit/49c2d7cfec28cf24dc8f7277db3576b611d779b6))
 * 新增人工智能开关 ([6bbd3c8](https://github.com/terwer/siyuan-plugin-publisher/commit/6bbd3c8f8fcc3f53cae124313bb62e19638bb0ab))
 * 源码模式支持替换图片 ([09583e4](https://github.com/terwer/siyuan-plugin-publisher/commit/09583e4026441c686193784612d125f0da68afe8))
-
-
 ### Bug Fixes
-
-* 移除错误引用 ([515e3eb](https://github.com/terwer/siyuan-plugin-publisher/commit/515e3eb648b85ca8e5cdc0894cd6dc773e200510))
-* 移除错误引用 ([1a4bdd4](https://github.com/terwer/siyuan-plugin-publisher/commit/1a4bdd435a1c1d6939e08043eac0b1358d98c153))
 * 移除错误引用 ([a7e5d39](https://github.com/terwer/siyuan-plugin-publisher/commit/a7e5d3913f80fd4a668a5730bcb76bb5c3741c7e))
-
 ## [1.8.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.7.0...v1.8.0) (2023-08-14)
-### Features
 * 底部新增发布配置快捷入口 ([e2eec4c](https://github.com/terwer/siyuan-plugin-publisher/commit/e2eec4c493b1e1dece965f8c87e573a772583fcc))
 * 所有平台迁移到官方的正向代理 ([c4de13f](https://github.com/terwer/siyuan-plugin-publisher/commit/c4de13f77c65b74b7db3284729cf4434a6ec6d47))
 * 支持接入平台自有能力进行图片上传 ([efccca6](https://github.com/terwer/siyuan-plugin-publisher/commit/efccca6e2c03d2affcc912ec657a2f0ea1822324))
 * 新增思源配置 ([202c2ce](https://github.com/terwer/siyuan-plugin-publisher/commit/202c2ce861489da1da4ce48b91bb73dac774c96e))
-### Bug Fixes
 * 修复思源配置 ([75712b8](https://github.com/terwer/siyuan-plugin-publisher/commit/75712b84b7e743d3dcb2b741aaab5c441405c834))
 * 兼容平台图片上传 ([47472af](https://github.com/terwer/siyuan-plugin-publisher/commit/47472af2259592e2929cf14edc168e59ae3c65ab))
 * 兼容平台图片上传-picgo 插件检测 ([090425c](https://github.com/terwer/siyuan-plugin-publisher/commit/090425ccec393ef0f582b89e91f846d35c850b80))
