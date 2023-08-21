@@ -24,10 +24,7 @@
  */
 
 import { CommonGithubApiAdaptor } from "~/src/adaptors/api/base/github/commonGithubApiAdaptor.ts"
-import { Post } from "zhi-blog-api"
-import { CommonGithubConfig } from "~/src/adaptors/api/base/github/commonGithubConfig.ts"
-import { YamlConvertAdaptor } from "~/src/platforms/yamlConvertAdaptor.ts"
-import { YamlFormatObj } from "~/src/models/yamlFormatObj.ts"
+import { YamlConvertAdaptor } from "zhi-blog-api"
 import { HexoYamlConverterAdaptor } from "~/src/adaptors/api/hexo/hexoYamlConverterAdaptor.ts"
 
 /**
@@ -38,18 +35,8 @@ import { HexoYamlConverterAdaptor } from "~/src/adaptors/api/hexo/hexoYamlConver
  * @since 0.8.1
  */
 class HexoApiAdaptor extends CommonGithubApiAdaptor {
-  public async preEditPost(post: Post, id?: string, publishCfg?: any): Promise<Post> {
-    // 调用父类预处理
-    await super.preEditPost(post, id, publishCfg)
-    this.logger.info("handled preEditPost with parent")
-
-    // 处理 YAML
-    const cfg = this.cfg as CommonGithubConfig
-    const yamlApi: YamlConvertAdaptor = new HexoYamlConverterAdaptor()
-    const yamlObj: YamlFormatObj = yamlApi.convertToYaml(post, cfg)
-    post.description = yamlObj.mdFullContent
-    this.logger.info("handled yaml using HexoYamlConverterAdaptor")
-    return post
+  public override getYamlAdaptor(): YamlConvertAdaptor {
+    return new HexoYamlConverterAdaptor()
   }
 }
 

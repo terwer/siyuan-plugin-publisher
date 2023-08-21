@@ -23,11 +23,11 @@
  * questions.
  */
 
-import {App, getFrontend, IObject, Plugin} from "siyuan"
-import {SiyuanConfig, SiyuanKernelApi} from "zhi-siyuan-api"
-import {createSiyuanAppLogger} from "./appLogger"
-import {WidgetInvoke} from "./invoke/widgetInvoke"
-import {Topbar} from "./topbar"
+import { App, getFrontend, IObject, Plugin } from "siyuan"
+import { SiyuanConfig, SiyuanKernelApi } from "zhi-siyuan-api"
+import { createSiyuanAppLogger } from "./appLogger"
+import { WidgetInvoke } from "./invoke/widgetInvoke"
+import { Topbar } from "./topbar"
 
 import "./index.styl"
 

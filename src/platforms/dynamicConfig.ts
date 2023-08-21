@@ -23,7 +23,6 @@
  * questions.
  */
 
-import { YamlConvertAdaptor } from "~/src/platforms/yamlConvertAdaptor.ts"
 import idUtil from "~/src/utils/idUtil.ts"
 import { StrUtil } from "zhi-common"
 
@@ -87,18 +86,12 @@ export class DynamicConfig {
    */
   isSys: boolean
 
-  /**
-   * YAML转换器
-   */
-  yamlConverter?: YamlConvertAdaptor
-
   constructor(
     platformType: PlatformType,
     platformKey: string,
     platformName: string,
     subPlatformType?: SubPlatformType,
-    platformIcon?: string,
-    yamlConverter?: YamlConvertAdaptor
+    platformIcon?: string
   ) {
     this.platformType = platformType
     this.platformKey = platformKey
@@ -110,7 +103,6 @@ export class DynamicConfig {
 
     this.subPlatformType = subPlatformType
     this.platformIcon = platformIcon
-    this.yamlConverter = yamlConverter
   }
 }
 
@@ -414,48 +406,20 @@ export function deletePlatformByKey(dynamicConfigArray: any[], key: string): any
   return dynamicConfigArray.filter((item) => item.platformKey !== key)
 }
 
-// =====================
-// 动态平台文章ID规则
-// =====================
 /**
  * 获取动态文章ID的key
+ *
  * @param platformKey
  */
 export function getDynPostidKey(platformKey: string): string {
   return "custom-" + platformKey + "-post-id"
 }
 
-// ======================
-// 动态平台Object对象初始化
-// ======================
 /**
- * 根据平台key获取YAML转换器
+ * 获取动态YAML的key
+ *
  * @param platformKey
  */
-export const getDynYamlConverterAdaptor = (platformKey: string): YamlConvertAdaptor => {
-  const yamlConverter = new YamlConvertAdaptor()
-  if (platformKey.includes("-")) {
-    const typeArr = platformKey.split("-")
-    if (typeArr.length > 0) {
-      const ptype = typeArr[0].toLowerCase()
-
-      // if (ptype.includes(SubPlatformType.Github_Vuepress.toLowerCase())) {
-      //   yamlConverter = new VuepressYamlConvertAdaptor()
-      // } else if (ptype.includes(SubPlatformType.Github_Hugo.toLowerCase())) {
-      //   yamlConverter = new HugoYamlConverterAdaptor()
-      // } else if (ptype.includes(SubPlatformType.Github_Hexo.toLowerCase())) {
-      //   yamlConverter = new HexoYamlConverterAdaptor()
-      // } else if (ptype.includes(SubPlatformType.Github_Jekyll.toLowerCase())) {
-      //   yamlConverter = new JekyllYamlConverterAdaptor()
-      // } else if (ptype.includes(SubPlatformType.Github_Vitepress.toLowerCase())) {
-      //   yamlConverter = new VitepressYamlConverterAdaptor()
-      // } else if (ptype.includes(SubPlatformType.Github_Nuxt.toLowerCase())) {
-      //   yamlConverter = new NuxtYamlConverterAdaptor()
-      // } else if (ptype.includes(SubPlatformType.Github_Next.toLowerCase())) {
-      //   yamlConverter = new NextYamlConvertAdaptor()
-      // }
-    }
-  }
-
-  return yamlConverter
+export function getDynYamlKey(platformKey: string): string {
+  return "custom-" + platformKey.replace(/_/g, "-") + "-yaml"
 }

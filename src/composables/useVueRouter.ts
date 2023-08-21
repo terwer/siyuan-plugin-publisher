@@ -36,15 +36,16 @@ import PlatformUpdateForm from "~/src/components/set/publish/PlatformUpdateForm.
 import PlatformQuickAdd from "~/src/components/set/publish/PlatformQuickAdd.vue"
 import QuickPublish from "~/src/workers/QuickPublish.vue"
 import SiyuanSetting from "~/src/components/set/SiyuanSetting.vue"
-import OtherTest from "~/src/pages/OtherTest.vue"
-
-const ApiTest = () => import("~/src/pages/ApiTest.vue")
-const SiyuanTest = () => import("~/src/components/test/SiyuanTest.vue")
-const CnblogsTest = () => import("~/src/components/test/CnblogsTest.vue")
-const WordpressTest = () => import("~/src/components/test/WordpressTest.vue")
-const TypechoTest = () => import("~/src/components/test/TypechoTest.vue")
-const YuqueTest = () => import("~/src/components/test/YuqueTest.vue")
-const ZhihuTest = () => import("~/src/components/test/ZhihuTest.vue")
+import OtherTest from "~/src/components/test/OtherTest.vue"
+import PicgoTest from "~/src/components/test/PicgoTest.vue"
+import CnblogsTest from "~/src/components/test/CnblogsTest.vue"
+import SiyuanTest from "~/src/components/test/SiyuanTest.vue"
+import WordpressTest from "~/src/components/test/WordpressTest.vue"
+import TypechoTest from "~/src/components/test/TypechoTest.vue"
+import YuqueTest from "~/src/components/test/YuqueTest.vue"
+import ZhihuTest from "~/src/components/test/ZhihuTest.vue"
+import Test from "~/src/pages/Test.vue"
+import About from "~/src/pages/About.vue"
 
 const routes: RouteRecordRaw[] = [
   // 极速发布
@@ -58,25 +59,45 @@ const routes: RouteRecordRaw[] = [
   { path: "/", component: BatchPublish },
   { path: "/publish/batchPublish", component: BatchPublish },
 
+  // 测试
   {
     path: "/test",
-    component: ApiTest,
-    children: [
-      { path: "", component: SiyuanTest },
-      { path: "siyuan", component: SiyuanTest },
-      { path: "cnblogs", component: CnblogsTest },
-      { path: "wordpress", component: WordpressTest },
-      { path: "typecho", component: TypechoTest },
-      { path: "yuque", component: YuqueTest },
-      { path: "zhihu", component: ZhihuTest },
-    ],
+    component: Test,
   },
-
+  {
+    path: "/test/siyuan",
+    component: SiyuanTest,
+  },
+  {
+    path: "/test/cnblogs",
+    component: CnblogsTest,
+  },
+  {
+    path: "/test/wordpress",
+    component: WordpressTest,
+  },
+  {
+    path: "/test/typecho",
+    component: TypechoTest,
+  },
+  {
+    path: "/test/yuque",
+    component: YuqueTest,
+  },
+  {
+    path: "/test/zhihu",
+    component: ZhihuTest,
+  },
+  {
+    path: "/test/picgo",
+    component: PicgoTest,
+  },
   {
     path: "/test/other",
     component: OtherTest,
   },
 
+  // 设置
   {
     path: "/setting",
     component: Setting,
@@ -110,6 +131,12 @@ const routes: RouteRecordRaw[] = [
   {
     path: "/setting/siyuan",
     component: SiyuanSetting,
+  },
+
+  // 关于
+  {
+    path: "/about",
+    component: About,
   },
 ]
 

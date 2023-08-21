@@ -4,22 +4,25 @@
 
 ![](./icon.png)
 
-Publish articles from Siyuan Notes to platforms such as Yuque, Notion, Cnblogs, WordPress, Typecho, Hexo, Zhihu and more.
+Publish articles from siyuan-note to platforms such as Yuque, Notion, Cnblogs, WordPress, Typecho, Hexo, Zhihu and more.
 
 Support features such as fast publishing, image bed management, platform expansion, smart labels, etc.
 
-> **Front Announcement 1: Release Tool's first platform-wide version `1.8.0` using the forward agent of Siyuan Note!**
+> **Front Announcement 1: The first version `1.9.0` for Publish Tools that supports release view and AI beta early adopter is released!**
 >
-> **Front Announcement 2: The first version of the release tool that fully supports image upload `1.8.0` is released!**
+> **Front Announcement 2: Version `1.8.0` released with full support for image upload in the Publish Tools!**
 
 Tips: Zhihu uses the image upload of the Zhihu platform, Yuque, Notion, and Hexo need Picgo plugin support, and the Metaweblog series platform supports both Picgo plugin and self-contained image upload (install Picgo plugin to use Picgo plugin, otherwise use their own platform)
 
-We recommend that you use the `uninstall->install` method to update. If the configuration is abnormal, please back up `[workspace]/data/storage/syp/sy-p-plus-cfg.json` , and then delete it, this configuration file will be automatically initialized the first time it is used.
+We recommend that you use the `uninstall->install` method to update. If the configuration is abnormal, please backup `[workspace]/data/storage/syp/sy-p-plus-cfg.json` , and then delete it, this configuration file will be automatically initialized the first time it is used.
 
 In later releases, the release configuration will only be backward compatible to `1.6.0+`.
 
 ## Recent critical updates and bug fixes
 
+- Support multiple publishing views, simple mode, detailed mode and source mode
+- Support to modify summary, tags, classification, knowledge space
+- The Hexo platform supports custom modification of YAML
 - Yuque, Notion, and Hexo support image links, and automatic upload requires Picgo plugin support
 - Zhihu platform supports automatic image upload
 - When the Picgo plugin is not installed, some platforms can use the built-in image upload, such as Cnblogs, Typecho, WordPress
@@ -28,9 +31,46 @@ In later releases, the release configuration will only be backward compatible to
 - Support publishing to Zhihu
 - Support for publishing to Hexo
 - Support for publishing to Notion
-- Support for Yuque,Cnblogs, Metaweblog, Typecho, WordPress
+- Support for Yuque, Cnblogs, Metaweblog, Typecho, WordPress
 - Support automatic generation of article aliases
 - Support for changing the default knowledge base
+
+## Platform List
+
+Names not listed in order
+
+- [X] Yuque
+- [X] Notion
+- [X] Github
+  - [X] Hexo
+- [X] Metaweblog
+- [X] Cnblogs
+- [X] Typecho
+- [X] WordPress
+- [X] Zhihu
+
+## Core Features
+
+- [X] **Extremely fast release**: One-time configuration, one-click release
+- [X] **Picture bed management**: Integrate PicGO picture bed, support s3, minio, watermark plugin
+- [X] **Support for extensions**: Based on the unified blog API specification, built-in support for metaweblogAPI, WordPress
+  and GitHub, and provides a unified adapter, which can theoretically be extended to any platform
+- [X] **Platform switch**: All platforms support enabling and disabling, the blog garden is enabled by default, and can be
+  disabled at any time
+- [X] **Dynamic Newly Added**: Support custom adding platform
+- [X] **Smart Classification**: Support smart tags, smart slug aliases, smart summaries, and continue to improve.Smart tags and smart summaries is currently in the invitation experience stage, if you want to experience, you can email youweics@163.com, I will send you a plugin experience package containing AI.
+- [X] **Article Binding**: Support linking existing platform articles to siyuan-note to facilitate follow-up management,
+  support Siyuan->platform one-way synchronization
+- [X] **Adapt to Theme**: Automatically adapt to dark mode and light mode
+- [X] **Language support**: multi-language support, support Chinese version and English version
+- [X] **Release view**: Support multiple release views, simple mode, detailed mode and source code mode
+- [X] **Multiple deployments**: support Siyuan notes plugin<sup>Highly recommended</sup>, Chrome browser extension, self-deployment
+
+This plugin promises that the basic functions will be free forever, and the follow-up related to intelligent AI may be charged, and the closed beta stage is completely free. If you want to support developers, please [feel free to support](https://github.com/terwer/siyuan-plugin-publisher/blob/main/README_zh_CN.md#Donate) here.
+
+> 🌹 Tips: This plugin is an upgraded version of the original 'Siyuan Note Publishing Tool' widget, which includes all the functions provided by the original widget, provides a convenient menu operation entry, and has carried out a series of problem fixes and experience optimizations.
+>
+> In addition to [Extended Functions], **Other functions do not require any dependencies** , and there is no need to download the previous widget, which is already built-in in the plugin.
 
 ## Compatibility of Origin notes
 
@@ -40,48 +80,19 @@ This plugin supports almost all devices and platforms of Siyuan Note, and the sp
 - [X] Servo environment (Zero configuration, cross-domain request proxy built-in)
   - [X] CentSource Note Browser Servo
   - [X] Siyuan Note Client Servo
-  - [X] Siyuan Notemaker mobile servo
+  - [X] Siyuan Note mobile servo
 - [X] Siyuan Note docker version (Zero configuration, cross-domain request proxy built-in)
 
 🎉 **All platforms have been migrated to the official forward proxy, achieving zero user configuration and supporting cross-domain request proxies by default 🎉**
 
+## Supported taxonomy
 
-## Platform List
+- [X] Classification
+  - [X] Multi-select classification
 
-Names not listed in order
-
-- [X] Yuque
-- [X] Metaweblog
-- [X] Cnblogs
-- [X] Typecho
-- [X] WordPress
-- [X] Github
-  - [X] Hexo
-- [X] Notion
-- [X] Zhihu
-
-## Core Features
-
-- [X] **Extremely fast release**: One-time configuration, one-click release
-- [Z] **Picture bed management**: Integrate PicGO picture bed, support s3, minio, watermark plugin
-- [X] **Support for extensions**: Based on the unified blog API specification, built-in support for metaweblogAPI, WordPress
-  and GitHub, and provides a unified adapter, which can theoretically be extended to any platform
-- [X] **Platform switch**: All platforms support enabling and disabling, the blog garden is enabled by default, and can be
-  disabled at any time
-- [X] **Dynamic Newly Added**: Support custom adding platform
-- [ ] **Smart Classification**: Support smart tags, smart slug aliases, smart summaries, and continue to improve
-- [X] **Article Binding**: Support linking existing platform articles to Siyuan Notes to facilitate follow-up management,
-  support Siyuan->platform one-way synchronization
-- [X] **Adapt to Theme**: Automatically adapt to dark mode and light mode
-- [X] **Language support**: multi-language support, support Chinese version and English version
-- [ ] **Release view**: Support multiple release views, simple mode, detailed mode and source code mode
-- [X] **Multiple deployments**: support Siyuan notes plugin<sup>Highly recommended</sup>, Chrome browser extension, self-deployment
-
-This plugin promises that the basic functions will be free forever, and the follow-up related to intelligent AI may be charged, and the closed beta stage is completely free. If you want to support developers, please [feel free to support](https://github.com/terwer/siyuan-plugin-publisher/blob/main/README_zh_CN.md#Donate) here.
-
-> 🌹 Tips: This plugin is an upgraded version of the original 'Siyuan Note Publishing Tool' widget, which includes all the functions provided by the original widget, provides a convenient menu operation entry, and has carried out a series of problem fixes and experience optimizations.
->
-> In addition to [Extended Functions], **Other functions do not require any dependencies** , and there is no need to download the previous widget, which is already built-in in the plugin.
+- [X] Knowledge space
+  - [X] Single-choice knowledge space
+  - [X] Tree-shaped radio knowledge space
 
 ## Platform Adaptation Plan
 
@@ -165,10 +176,10 @@ more useful tools~
   Names not listed in order
 
   |Name|version|vendor|
-      | :---------: | :-----: | :---------: |
+  | :---------: | :-----: | :---------: |
   |turbo|1.9+|Vercel|
   |vite|4.2+|Evan You|
   |Svelte|3.57+|Rich Harris|
   |TypeScript|5.0+|Microsoft|
   |siyuan-note|2.9.0+|D,V|
-- Thanks to [leolee9086](https://github.com/leolee9086) for the icon resource
+- Thanks to [leolee9086](https://github.com/leolee9086) and [ciwoyipang]() for the icon resource

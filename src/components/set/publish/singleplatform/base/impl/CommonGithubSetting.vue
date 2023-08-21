@@ -26,7 +26,7 @@
 <script setup lang="ts">
 // props
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import { reactive, ref } from "vue"
+import { reactive } from "vue"
 
 const props = defineProps({
   apiType: {

@@ -24,7 +24,7 @@
  */
 
 import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
-import { Post, UserBlog } from "zhi-blog-api"
+import { CategoryInfo, Post, UserBlog } from "zhi-blog-api"
 import * as cheerio from "cheerio"
 import { JsonUtil, StrUtil } from "zhi-common"
 import CryptoJS from "crypto-js"
@@ -175,8 +175,8 @@ class ZhihuWebAdaptor extends BaseWebApi {
     )
 
     // 收录文章到专栏
-    const column = post.cate_slugs?.[0] ?? this.cfg.blogid
-    await this.addPostToColumn(column, postid)
+    // const column = post.cate_slugs?.[0] ?? this.cfg.blogid
+    // await this.addPostToColumn(column, postid)
 
     this.logger.debug("edit zhihu pubRes=>", pubRes)
     return true
@@ -202,6 +202,32 @@ class ZhihuWebAdaptor extends BaseWebApi {
     }
 
     return flag
+  }
+
+  public async getCategories(): Promise<CategoryInfo[]> {
+    const cats = [] as CategoryInfo[]
+
+    const url = `https://www.zhihu.com/people/${this.cfg.username}/columns`
+    const res = await this.webProxyFetch(url, [], {}, "GET", "text/html")
+    this.logger.debug("get zhihu columns dom =>", { res })
+    const $ = cheerio.load(res)
+    const scriptContent = $("#js-initialData").html()
+    const initJson = JsonUtil.safeParse<any>(scriptContent, {})
+    this.logger.debug("get column initJson=>", initJson)
+    const columns = initJson?.initialState?.entities?.columns ?? {}
+    this.logger.debug("get columns=>", columns)
+
+    Object.keys(columns).map((key) => {
+      const cat = new CategoryInfo()
+      const item = columns[key]
+      cat.categoryId = item.id
+      cat.categoryName = item.title
+      cat.description = item.url
+      cat.categoryDescription = item.url
+      cats.push(cat)
+    })
+
+    return cats
   }
 
   // ================

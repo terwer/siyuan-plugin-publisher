@@ -31,10 +31,6 @@ import { fileToBuffer } from "~/src/utils/polyfillUtils.ts"
 import { SimpleXmlRpcClient } from "simple-xmlrpc"
 import { MediaObject } from "zhi-blog-api"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { Base64 } from "js-base64"
-import { CommonFetchClient } from "zhi-fetch-middleware"
-import { YuqueConfig } from "~/src/adaptors/api/yuque/yuqueConfig.ts"
-import { YuqueApiAdaptor } from "~/src/adaptors/api/yuque/yuqueApiAdaptor.ts"
 import Adaptors from "~/src/adaptors"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 
@@ -263,26 +259,28 @@ const yuqueHandleApi = async () => {
 </script>
 
 <template>
-  <div id="yuque-test">
-    <div class="method-list">
-      <el-select v-model="methodOption" class="m-2" placeholder="请选择方法名称" @change="onMethodChange">
-        <el-option v-for="item in methodOptions.options" :key="item.value" :label="item.label" :value="item.value" />
-      </el-select>
-    </div>
+  <back-page title="语雀测试">
+    <div id="yuque-test">
+      <div class="method-list">
+        <el-select v-model="methodOption" class="m-2" placeholder="请选择方法名称" @change="onMethodChange">
+          <el-option v-for="item in methodOptions.options" :key="item.value" :label="item.label" :value="item.value" />
+        </el-select>
+      </div>
 
-    <div class="item">
-      <el-button type="primary" :loading="isLoading" @click="yuqueHandleApi">开始测试yuque</el-button>
-    </div>
+      <div class="item">
+        <el-button type="primary" :loading="isLoading" @click="yuqueHandleApi">开始测试yuque</el-button>
+      </div>
 
-    <div class="item"><el-button>入参</el-button></div>
-    <div class="item"><el-input v-model="params" type="textarea" :rows="5"></el-input></div>
-    <div v-if="showParamFile" class="item"><input type="file" @change="onImageSelect" /></div>
+      <div class="item"><el-button>入参</el-button></div>
+      <div class="item"><el-input v-model="params" type="textarea" :rows="5"></el-input></div>
+      <div v-if="showParamFile" class="item"><input type="file" @change="onImageSelect" /></div>
 
-    <div class="item"><el-button>结果</el-button></div>
-    <div class="item">
-      <el-input v-model="logMessage" type="textarea" :rows="10" placeholder="日志信息"></el-input>
+      <div class="item"><el-button>结果</el-button></div>
+      <div class="item">
+        <el-input v-model="logMessage" type="textarea" :rows="10" placeholder="日志信息"></el-input>
+      </div>
     </div>
-  </div>
+  </back-page>
 </template>
 
 <style lang="stylus" scoped>

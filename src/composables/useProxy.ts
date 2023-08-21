@@ -86,7 +86,7 @@ const useProxy = (middlewareUrl?: string) => {
         method,
         contentType,
       })
-      const fetchResult = await kernelApi.forwardProxy(reqUrl, headers, body, method, contentType, 7000)
+      const fetchResult = await kernelApi.forwardProxy(reqUrl, headers, body, method, contentType, 30000)
       logger.debug("proxyFetch result =>", fetchResult)
 
       if (contentType === "application/json") {

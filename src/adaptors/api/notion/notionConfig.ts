@@ -38,9 +38,13 @@ class NotionConfig extends CommonBlogConfig {
     this.previewUrl = "/[postid]"
     this.pageType = PageTypeEnum.Markdown
     this.passwordType = PasswordType.PasswordType_Token
-    this.knowledgeSpaceTitle = "根页面"
-    this.enableKnowledgeSpace = true
     this.allowPreviewUrlChange = false
+    this.cateEnabled = false
+    this.knowledgeSpaceEnabled = true
+    this.knowledgeSpaceTitle = "根页面"
+    this.allowKnowledgeSpaceChange = false
+    this.placeholder.knowledgeSpaceReadonlyModeTip =
+      "由于Notion平台的限制，暂时不支持编辑所属父页面。如果您想移动文档，请先点击取消删除该文档，然后重新选择新的根页面发布"
   }
 }
 

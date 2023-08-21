@@ -31,6 +31,7 @@ import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { YuqueApiAdaptor } from "~/src/adaptors/api/yuque/yuqueApiAdaptor.ts"
+import { CategoryTypeEnum } from "zhi-blog-api"
 
 const useYuqueApi = async (key: string, newCfg?: YuqueConfig) => {
   // 创建应用日志记录器
@@ -72,6 +73,14 @@ const useYuqueApi = async (key: string, newCfg?: YuqueConfig) => {
       cfg.posidKey = getDynPostidKey(key)
     }
   }
+
+  // Yuque 使用单选分类作为知识空间
+  cfg.cateEnabled = false
+  cfg.knowledgeSpaceEnabled = true
+  cfg.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Single
+  cfg.allowKnowledgeSpaceChange = false
+  cfg.placeholder.knowledgeSpaceReadonlyModeTip =
+    "由于语雀平台的限制，暂时不支持编辑所属知识库。如果您想移动文档，请先点击取消删除该文档，然后重新选择新的知识库发布"
 
   // 创建 Yuque API 适配器
   const blogApi = new YuqueApiAdaptor(appInstance, cfg)

@@ -31,6 +31,7 @@ import { AppInstance } from "~/src/appInstance.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
+import { CategoryTypeEnum } from "zhi-blog-api"
 
 /**
  * 使用Cnblogs API的自定义hook
@@ -85,6 +86,12 @@ export const useCnblogsApi = async (key?: string, newCfg?: CnblogsConfig) => {
       cfg.posidKey = getDynPostidKey(key)
     }
   }
+
+  // 博客园使用多选分类
+  cfg.cateEnabled = true
+  cfg.categoryType = CategoryTypeEnum.CategoryType_Multi
+  cfg.allowCateChange = true
+  cfg.knowledgeSpaceEnabled = false
 
   // 创建Cnblogs API适配器
   const blogApi = new CnblogsApiAdaptor(appInstance, cfg)

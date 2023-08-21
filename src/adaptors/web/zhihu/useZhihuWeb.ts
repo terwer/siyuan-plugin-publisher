@@ -31,6 +31,7 @@ import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { Utils } from "~/src/utils/utils.ts"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
+import { CategoryTypeEnum } from "zhi-blog-api"
 
 /**
  * 用于获取ZhihuWeb的API的自定义Hook
@@ -79,6 +80,14 @@ const useZhihuWeb = async (key?: string, newCfg?: ZhihuConfig) => {
       cfg.posidKey = getDynPostidKey(key)
     }
   }
+
+  // 知乎使用单选分类作为专栏
+  cfg.cateEnabled = false
+  cfg.knowledgeSpaceEnabled = true
+  cfg.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Single
+  cfg.allowKnowledgeSpaceChange = false
+  cfg.placeholder.knowledgeSpaceReadonlyModeTip =
+    "由于知乎平台的限制，暂时不支持编辑所属专栏。如果您想移动文档，请先点击取消删除该文档，然后重新选择新的专栏发布"
 
   const webApi = new ZhihuWebAdaptor(appInstance, cfg)
   return {

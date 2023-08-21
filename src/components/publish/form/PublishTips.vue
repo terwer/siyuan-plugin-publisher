@@ -23,11 +23,14 @@
   - questions.
   -->
 
-<script setup lang="ts"></script>
-
 <template>
   <div class="publish-tips">
-    <el-alert :closable="false" title="多平台文章分发。其中思源笔记为内置平台，这里的修改发布后，也会同步更新思源笔记" class="top-tip" type="info" />
+    <el-alert
+      :closable="false"
+      title="多平台文章分发。其中思源笔记为内置平台，这里的修改发布后，也会同步更新思源笔记"
+      class="top-tip"
+      type="info"
+    />
   </div>
 </template>
 

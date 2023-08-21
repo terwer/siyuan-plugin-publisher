@@ -24,29 +24,22 @@
  */
 
 /**
- * 通用的YAML模型定义
+ * 编辑模式
+ *
  * @author terwer
- * @since 0.1.0
+ * @since 0.6.0
  */
-export class YamlFormatObj {
+export enum PageEditMode {
   /**
-   * YAML
+   * 简洁模式
    */
-  yamlObj = {} as any
+  EditMode_simple,
   /**
-   * YAML字符串
+   * 详细模式
    */
-  formatter = ""
+  EditMode_complex,
   /**
-   * Markdown文本
+   * 源码模式
    */
-  mdContent = ""
-  /**
-   * YAML+MD
-   */
-  mdFullContent: string
-  /**
-   * HTML文本
-   */
-  htmlContent: string
+  EditMode_source,
 }

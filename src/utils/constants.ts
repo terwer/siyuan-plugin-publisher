@@ -24,6 +24,7 @@
  */
 
 export const isDev = process.env.DEV_MODE === "true"
+// export const isDev = false
 export const isDebugMode = process.env.DEBUG_MODE === "true"
 
 /**

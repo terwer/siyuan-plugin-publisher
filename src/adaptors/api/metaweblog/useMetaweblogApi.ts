@@ -31,6 +31,7 @@ import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { Utils } from "~/src/utils/utils.ts"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { MetaweblogBlogApiAdaptor } from "~/src/adaptors/api/base/metaweblog/metaweblogBlogApiAdaptor.ts"
+import { CategoryTypeEnum } from "zhi-blog-api"
 
 /**
  * 使用Metaweblog API的自定义hook
@@ -82,6 +83,12 @@ export const useMetaweblogApi = async (key?: string, newCfg?: MetaweblogConfig) 
       cfg.posidKey = getDynPostidKey(key)
     }
   }
+
+  // Metaweblog 默认支持多选分类
+  cfg.cateEnabled = true
+  cfg.categoryType = CategoryTypeEnum.CategoryType_Multi
+  cfg.allowCateChange = true
+  cfg.knowledgeSpaceEnabled = false
 
   // 创建Metaweblog API适配器
   const blogApi = new MetaweblogBlogApiAdaptor(appInstance, cfg)

@@ -70,7 +70,9 @@ export default {
   "main.desc": "文章摘要",
   "main.auto.fetch.desc": "自动提取摘要",
   "main.create.time": "发布时间",
+  "main.update.time": "更新时间",
   "main.create.time.placeholder": "请选择发布时间",
+  "main.update.time.placeholder": "请选择更新时间",
   "main.tag": "文章标签",
   "main.tag.new": "新标签",
   "main.auto.fetch.tag": "自动提取标签",
@@ -280,8 +282,11 @@ export default {
   "yaml.show.type.html": "HTML正文",
   "main.read.mode": "只读模式",
   "main.edit.mode": "编辑模式",
-  "main.read.mode.tip":
-    "温馨提示：只读模式下点击可直接复制，编辑模式下需要点击复制按钮复制。YAML转文章属性仅支持title、permalink、date、description、tags",
+  "main.read.mode.tip1":
+    "温馨提示：为了数据一致性，多平台分发或者未提供YAML适配器时无法处理平台属性，YAML将仅显示公共属性且只能只读。",
+  "main.read.mode.tip2": "YAML如有修改，请务必点击保存按钮，否则修改内容将丢失！",
+  "main.read.mode.tip3": "为了标识文章的唯一性，slug修改将忽略，其他属性可同步。",
+  "main.read.mode.tip4": "此功能为高级功能，如果您不清楚YAML语法和用途，请勿修改！",
   "main.opt.onclick.confirm.tip":
     "此操作默认将重新生成除别名以外的所有属性，如果只想修改个别属性，请在详细模式点击单独的功能按钮进行对应操作，是否继续？",
   "main.cat.list.error": "分类获取失败",
@@ -539,4 +544,10 @@ export default {
   "setting.blog.siyuan.apiurl.tip": "思源笔记的API地址，包括端口，默认是：http://127.0.0.1:6806",
   "setting.blog.siyuan.password": "思源Token",
   "setting.blog.siyuan.password.tip": "思源笔记鉴权Token，请从【设置->关于】复制，如果是本地笔记留空即可",
+  "slogan.make.written.fun": "让创作回归乐趣",
+  "category.batch.not.supported": "注意：批量分发模式部分平台不支持公共分类，例如语雀、知乎等",
+  "yuque.edit.cate.no.change":
+    "由于语雀平台的限制，暂时不支持编辑所属知识库。如果您想移动文档，请先点击取消删除该文档，然后重新选择新的知识库发布",
+  "main.commonn.cate.title": "公共分类",
+  "main.cate.new": "新增分类",
 }

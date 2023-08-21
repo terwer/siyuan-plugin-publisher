@@ -116,7 +116,7 @@ onMounted(async () => {
               <i class="el-icon">
                 <span v-html="cfg?.platformIcon"></span>
               </i>
-              {{ HtmlUtil.parseHtml(cfg.platformName, 11) }}
+              {{ StrUtil.upperFirst(HtmlUtil.parseHtml(cfg.platformName, 11)) }}
             </el-text>
           </el-badge>
         </div>

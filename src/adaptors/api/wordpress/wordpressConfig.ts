@@ -24,7 +24,7 @@
  */
 
 import { MetaweblogConfig } from "~/src/adaptors/api/base/metaweblog/metaweblogConfig.ts"
-import { PageTypeEnum } from "zhi-blog-api"
+import { CategoryTypeEnum, PageTypeEnum } from "zhi-blog-api"
 import WordpressUtils from "~/src/adaptors/api/wordpress/wordpressUtils.ts"
 
 /**
@@ -53,6 +53,10 @@ class WordpressConfig extends MetaweblogConfig {
     this.usernameEnabled = true
     this.showTokenTip = false
     this.allowPreviewUrlChange = true
+    this.cateEnabled = true
+    this.categoryType = CategoryTypeEnum.CategoryType_Multi
+    this.allowCateChange = true
+    this.knowledgeSpaceEnabled = false
   }
 }
 

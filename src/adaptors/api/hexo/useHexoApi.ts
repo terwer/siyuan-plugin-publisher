@@ -32,6 +32,7 @@ import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { HexoConfig } from "~/src/adaptors/api/hexo/hexoConfig.ts"
 import { HexoApiAdaptor } from "~/src/adaptors/api/hexo/hexoApiAdaptor.ts"
 import { HexoYamlConverterAdaptor } from "~/src/adaptors/api/hexo/hexoYamlConverterAdaptor.ts"
+import { CategoryTypeEnum } from "zhi-blog-api"
 
 const useHexoApi = async (key: string, newCfg?: HexoConfig) => {
   // 创建应用日志记录器
@@ -75,6 +76,16 @@ const useHexoApi = async (key: string, newCfg?: HexoConfig) => {
       cfg.posidKey = getDynPostidKey(key)
     }
   }
+
+  // 分类
+  cfg.cateEnabled = true
+  cfg.allowCateChange = true
+  cfg.categoryType = CategoryTypeEnum.CategoryType_Multi
+  // 知识空间
+  cfg.knowledgeSpaceEnabled = true
+  cfg.allowKnowledgeSpaceChange = false
+  cfg.placeholder.knowledgeSpaceReadonlyModeTip = "Hexo 平台暂不支持修改发布目录，如需修改，请删除之后重新发布"
+  cfg.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Tree_Single
 
   // 创建 Hexo 的 yamlAdaptor
   const yamlAdaptor = new HexoYamlConverterAdaptor()

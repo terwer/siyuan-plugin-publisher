@@ -24,23 +24,27 @@
   -->
 
 <script setup lang="ts">
-import { onMounted, reactive } from "vue"
+import {onMounted, reactive, toRaw} from "vue"
 import { useRoute } from "vue-router"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { StrUtil } from "zhi-common"
 import { usePublish } from "~/src/composables/usePublish.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
+import { pre } from "~/src/utils/import/pre.ts"
 
 const logger = createAppLogger("quick-publish-worker")
 
 // uses
 const route = useRoute()
-const { singleFormData, doSinglePublish } = usePublish()
+const { singleFormData, doSinglePublish, initPublishMethods } = usePublish()
 const { blogApi } = useSiyuanApi()
 const { getPublishCfg } = usePublishConfig()
 
 // datas
+const sysKeys = pre.systemCfg.map((item) => {
+  return item.platformKey
+})
 const params = reactive(route.params)
 const key = params.key as string
 const id = params.id as string
@@ -52,11 +56,29 @@ const formData = reactive({
 onMounted(async () => {
   singleFormData.isPublishLoading = true
   setTimeout(async () => {
-    logger.info("单个快速发布开始")
-    // 思源笔记原始文章数据
-    const siyuanPost = await blogApi.getPost(id)
+    // ==================
+    // 初始化开始
+    // ==================
     // 初始化属性
     const publishCfg = await getPublishCfg(key)
+    // 思源笔记原始文章数据
+    let siyuanPost = await blogApi.getPost(id)
+    // 元数据初始化
+    siyuanPost = await initPublishMethods.assignInitAttrs(siyuanPost, id, publishCfg)
+    logger.debug("quick publish inited siyuanPost =>", toRaw(siyuanPost))
+    // ==================
+    // 初始化结束
+    // ==================
+
+    // 开始发布
+    logger.info("保存到系统平台开始")
+    for (const sysKey of sysKeys) {
+      const sysPublishCfg = await getPublishCfg(sysKey)
+      await doSinglePublish(sysKey, id, sysPublishCfg, siyuanPost)
+    }
+    logger.info("保存到系统平台结束")
+
+    logger.info("单个快速发布开始")
     formData.processResult = await doSinglePublish(key, id, publishCfg, siyuanPost)
     logger.info("单个快速发布结束")
     singleFormData.isPublishLoading = false

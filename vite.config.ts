@@ -164,6 +164,12 @@ export default defineConfig({
     // https://github.com/davidmyersdev/vite-plugin-node-polyfills/blob/main/test/src/main.ts
     nodePolyfills({
       exclude: ["fs"],
+      globals: {
+        // can also be 'build', 'dev', or false
+        Buffer: true,
+        global: true,
+        process: false,
+      },
       protocolImports: true,
     }),
   ],

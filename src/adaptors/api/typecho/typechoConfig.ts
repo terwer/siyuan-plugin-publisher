@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { PageTypeEnum } from "zhi-blog-api"
+import { CategoryTypeEnum, PageTypeEnum } from "zhi-blog-api"
 import TypechoUtils from "~/src/adaptors/api/typecho/typechoUtils.ts"
 import { MetaweblogConfig } from "~/src/adaptors/api/base/metaweblog/metaweblogConfig.ts"
 
@@ -52,6 +52,10 @@ class TypechoConfig extends MetaweblogConfig {
     this.pageType = PageTypeEnum.Html
     this.showTokenTip = false
     this.allowPreviewUrlChange = true
+    this.cateEnabled = true
+    this.categoryType = CategoryTypeEnum.CategoryType_Multi
+    this.allowCateChange = true
+    this.knowledgeSpaceEnabled = false
   }
 }
 

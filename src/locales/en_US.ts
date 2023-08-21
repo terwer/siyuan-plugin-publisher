@@ -72,7 +72,9 @@ export default {
   "main.desc": "Post desc",
   "main.auto.fetch.desc": "Auto fetch desc",
   "main.create.time": "Pub time",
+  "main.update.time": "Update time",
   "main.create.time.placeholder": "Please select time",
+  "main.update.time.placeholder": "Please select time",
   "main.tag": "Post tag",
   "main.tag.new": "New tag",
   "main.auto.fetch.tag": "Auto fetch tag",
@@ -273,7 +275,9 @@ export default {
   "page.no.id": "pageId fetch error",
   "main.read.mode": "Readonly",
   "main.edit.mode": "Editable",
-  "main.read.mode.tip": "Readonly tips",
+  "main.read.mode.tip1": "Tips: The multi-platform distribution mode will display the built-in public YAML, and the general release can display the platform's custom YAML.",
+  "main.read.mode.tip2": "To identify the uniqueness of the article, slug modifications are ignored and other attributes can be synchronized.",
+  "main.read.mode.tip3": "！！！ This feature is advanced, if you are unclear about the YAML syntax and purpose, do not modify it!!",
   "main.opt.onclick.confirm.tip":
     "This operation will re -generate all attributes other than alias. If you just want to modify individual attributes, please click the individual function button to operate in the detailed mode. Do you continue?",
   "main.cat.list.error": "Category list get error",
@@ -347,7 +351,8 @@ export default {
   "setting.yuque.previewUrl.tip": "Article preview rules for the Yuque platform, Usually: /[notebook]/[postid]",
 
   "setting.notion.home.tip": "The homepage of the Notion platform is usually fixed: https://www.notion.so/",
-  "setting.notion.password.tip": "For the token of the Notion platform, please click the link to get it, you need to check the three permissions of [Read content], [Update content], and [Insert content].",
+  "setting.notion.password.tip":
+    "For the token of the Notion platform, please click the link to get it, you need to check the three permissions of [Read content], [Update content], and [Insert content].",
   "setting.notion.apiurl.tip": "The API address of the Notion platform is usually fixed: https://api.notion.com/v1",
   "setting.notion.previewUrl.tip": "Article preview rules for the Notion platform, usually:/[postid]",
 
@@ -540,11 +545,19 @@ export default {
   "main.publish.remove": "Remove",
   "setting.blog.knowledge.space": "Knowledge space/Knowledge base",
   "main.data.empty": "No data",
-  "enableKnowledgeSpace.Tips": "After validation, a list of available knowledge spaces is listed, and you can modify the default knowledge spaces as needed and save them",
-  "post.bind.auto.tips": "The ID here is automatically saved by the publishing tool, if you are not clear about the principle, please do not modify it",
+  "enableKnowledgeSpace.Tips":
+    "After validation, a list of available knowledge spaces is listed, and you can modify the default knowledge spaces as needed and save them",
+  "post.bind.auto.tips":
+    "The ID here is automatically saved by the publishing tool, if you are not clear about the principle, please do not modify it",
   "siyuan.config.setting": "Source settings",
   "setting.blog.siyuan.apiurl": "Siyuan API address",
-  "setting.blog.siyuan.apiurl.tip": "The API address of Siyuan Note, including ports, The default address of Siyuan API is: http://127.0.0.1;6806",
+  "setting.blog.siyuan.apiurl.tip":
+    "The API address of Siyuan Note, including ports, The default address of Siyuan API is: http://127.0.0.1;6806",
   "setting.blog.siyuan.password": "Siyuan Token",
   "setting.blog.siyuan.password.tip": "Siyuan Token, which is empty by default",
+  "slogan.make.written.fun": "Let creation return to fun",
+  "category.batch.not.supported": "Note: Some platforms in the bulk distribution mode do not support public classification, such as Yuque and Zhihu",
+  "yuque.edit.cate.no.change": "Due to the limitations of the Yuque platform, editing the knowledge base is not supported at the moment. If you want to move a document, click Undelete and then select the new knowledge base publication again",
+  "main.commonn.cate.title": "Public category",
+  "main.cate.new": "New category",
 }

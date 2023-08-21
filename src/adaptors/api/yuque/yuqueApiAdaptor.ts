@@ -87,13 +87,9 @@ class YuqueApiAdaptor extends BaseBlogApi {
     commonPost.title = yuqueDoc.title
     commonPost.description = yuqueDoc.body
 
+    // 语雀知识库
     const book = yuqueDoc.book
-    const cats = []
     const catSlugs = []
-
-    cats.push(book.name)
-    commonPost.categories = cats
-
     catSlugs.push(book.namespace)
     commonPost.cate_slugs = catSlugs
 
@@ -109,7 +105,7 @@ class YuqueApiAdaptor extends BaseBlogApi {
         // 只获取文档库
         if (repo.type === "Book") {
           const cat = new CategoryInfo()
-          cat.categoryId = repo.slug
+          cat.categoryId = `${this.cfg.username}/${repo.slug}`
           cat.categoryName = repo.name
           cat.description = repo.name
           cat.categoryDescription = repo.name

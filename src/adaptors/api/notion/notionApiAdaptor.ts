@@ -75,10 +75,18 @@ class NotionApiAdaptor extends BaseBlogApi {
     const notionPostidKey = this.getNotionPostidKey(postid)
     const notionPage = await this.getPage(notionPostidKey.pageId)
     this.logger.debug("notionPage=>", notionPage)
+    this.logger.debug("postid=>", postid)
     const commonPost = new Post()
     const titles = notionPage?.properties?.title?.title ?? []
     commonPost.title = titles.map((x: any) => x.plain_text).join("")
     commonPost.description = "暂不支持Notion正文"
+
+    // notion根页面
+    const parentPageId = notionPage?.parent?.page_id
+    const catSlugs = []
+    catSlugs.push(parentPageId)
+    commonPost.cate_slugs = catSlugs
+
     return commonPost
   }
 

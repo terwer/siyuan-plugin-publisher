@@ -23,26 +23,19 @@
  * questions.
  */
 
-import { YamlFormatObj } from "~/src/models/yamlFormatObj.ts"
-import { CommonGithubConfig } from "~/src/adaptors/api/base/github/commonGithubConfig.ts"
-import { Post } from "zhi-blog-api"
-import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
-
-export interface IYamlConvertAdaptor {
-  convertToYaml(post: Post, githubCfg?: CommonGithubConfig): YamlFormatObj
-
-  convertToAttr(yamlObj: YamlFormatObj, githubCfg?: CommonGithubConfig): Post
-}
-
 /**
- * YAML转换适配器
+ * 枚举，表示不同的分发模式
  */
-export class YamlConvertAdaptor implements IYamlConvertAdaptor {
-  convertToYaml(post: Post, cfg?: CommonBlogConfig): YamlFormatObj {
-    throw new Error("YamlConvertAdaptor.convertToYaml: 该功能未实现，请在子类重写该方法")
-  }
+enum DistributionPattern {
+  /**
+   * 表示 "覆盖" 模式
+   */
+  Override = "Override",
 
-  convertToAttr(yamlFormatObj: YamlFormatObj, cfg?: CommonBlogConfig): Post {
-    throw new Error("YamlConvertAdaptor.convertToAttr: 该功能未实现，请在子类重写该方法")
-  }
+  /**
+   * 表示 "合并" 模式
+   */
+  Merge = "Merge",
 }
+
+export { DistributionPattern }

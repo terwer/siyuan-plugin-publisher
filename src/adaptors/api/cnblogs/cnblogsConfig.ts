@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { PageTypeEnum, PasswordType } from "zhi-blog-api"
+import { CategoryTypeEnum, PageTypeEnum, PasswordType } from "zhi-blog-api"
 import { MetaweblogConfig } from "~/src/adaptors/api/base/metaweblog/metaweblogConfig.ts"
 
 /**
@@ -51,6 +51,10 @@ class CnblogsConfig extends MetaweblogConfig {
     this.passwordType = PasswordType.PasswordType_Token
     this.showTokenTip = true
     this.allowPreviewUrlChange = true
+    this.cateEnabled = true
+    this.categoryType = CategoryTypeEnum.CategoryType_Multi
+    this.allowCateChange = true
+    this.knowledgeSpaceEnabled = false
   }
 }
 

@@ -95,6 +95,15 @@ export class WidgetInvoke {
     await this.showPage(`/setting/general?id=${pageId}`)
   }
 
+  public async showPublisherAboutDialog() {
+    let pageId: string | undefined = PageUtil.getPageId()
+    if (pageId == "") {
+      pageId = undefined
+    }
+    this.logger.debug("pageId=>", pageId)
+    await this.showPage(`/about?id=${pageId}`)
+  }
+
   private async showPage(pageUrl: string, isReload?: boolean, w?: string, h?: string, noscroll?: boolean) {
     const deviceType: DeviceTypeEnum = DeviceDetection.getDevice()
     this.logger.info(`you are from ${deviceType}`)

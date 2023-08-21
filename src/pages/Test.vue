@@ -24,44 +24,64 @@
   -->
 
 <script setup lang="ts">
-import { reactive } from "vue"
-import { NotionMarkdownConverter } from "zhi-notion-markdown"
+import { useRouter } from "vue-router"
 
-const md = `
+const router = useRouter()
 
-​​![image](https://img1.terwer.space/api/public/202308142037187.png)​​
+const components = [
+  {
+    title: "思源笔记测试",
+    path: "/test/siyuan",
+  },
+  {
+    title: "博客园测试",
+    path: "/test/cnblogs",
+  },
+  {
+    title: "WordPress测试",
+    path: "/test/wordpress",
+  },
+  {
+    title: "Typecho测试",
+    path: "/test/typecho",
+  },
+  {
+    title: "语雀测试",
+    path: "/test/yuque",
+  },
+  {
+    title: "知乎测试",
+    path: "/test/zhihu",
+  },
+  {
+    title: "Picgo测试",
+    path: "/test/picgo",
+  },
+  {
+    title: "其他测试",
+    path: "/test/other",
+  },
+]
 
-dfgvdfgfd
-
-地方GV发的
-
-​![image](https://img1.terwer.space/api/public/202308142036226.png)​
-
-‍
-
-​![](https://img1.terwer.space/202308142041443.png)​
-`
-
-const formData = reactive({
-  content: md,
-})
-
-const testHandleNotion = () => {
-  const markdownText = formData.content
-  const notionObject = NotionMarkdownConverter.markdownToNotion(markdownText)
-  console.log("notionObject =>", notionObject)
+const handleGoTest = async (item: any) => {
+  await router.push({
+    path: item.path,
+    query: { showBack: "true" },
+  })
 }
 </script>
 
 <template>
-  <div>
-    <el-form>
-      <el-form-item>
-        <el-input v-model="formData.content" style="width: 75%; margin-right: 16px" type="textarea" :rows="10" />
-      </el-form-item>
-      <el-form-item>
-        <el-button @click="testHandleNotion">测试Notion</el-button>
-      </el-form-item>
-    </el-form>
-  </div>
+  <back-page title="组件测试">
+    <div id="test-list">
+      <el-button v-for="item in components" @click="handleGoTest(item)" type="primary" size="large">
+        {{ item.title }}
+      </el-button>
+    </div>
+  </back-page>
 </template>
+
+<style scoped lang="stylus">
+#test-list
+  margin 16px 20px
+</style>

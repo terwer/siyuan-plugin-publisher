@@ -25,10 +25,10 @@
 
 import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { CategoryInfo, Post, UserBlog } from "zhi-blog-api"
+import { CategoryInfo, Post, UserBlog, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
 import { CommonGithubClient, GithubConfig } from "zhi-github-middleware"
 import { CommonGithubConfig } from "~/src/adaptors/api/base/github/commonGithubConfig.ts"
-import { StrUtil } from "zhi-common"
+import { StrUtil, YamlUtil } from "zhi-common"
 import { toRaw } from "vue"
 import { Base64 } from "js-base64"
 
@@ -80,6 +80,24 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
     return result
   }
 
+  public async preEditPost(post: Post, id?: string, publishCfg?: any): Promise<Post> {
+    // 调用父类预处理
+    await super.preEditPost(post, id, publishCfg)
+    this.logger.debug("handled preEditPost with parent", { post: toRaw(post) })
+
+    const yamlAdaptor: YamlConvertAdaptor = this.getYamlAdaptor()
+    if (null !== yamlAdaptor) {
+      // 先生成对应平台的yaml
+      const yamlObj: YamlFormatObj = yamlAdaptor.convertToYaml(post, this.cfg)
+      this.logger.debug("generate yamlObj using YamlConverterAdaptor =>", yamlObj)
+      // 同步发布内容
+      post.markdown = yamlObj.mdFullContent
+      this.logger.info("handled yaml using YamlConverterAdaptor")
+    }
+
+    return post
+  }
+
   public async newPost(post: Post, publish?: boolean): Promise<string> {
     this.logger.debug("start newPost =>", { post: toRaw(post) })
     const cfg = this.cfg as CommonGithubConfig
@@ -104,14 +122,26 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
       throw new Error("Github 调用API异常")
     }
 
-    const commonPost = new Post()
+    let commonPost = new Post()
     commonPost.postid = res.path
-    // commonPost.title = res.name
-    commonPost.description = Base64.fromBase64(res.content)
+    commonPost.markdown = Base64.fromBase64(res.content)
+    commonPost.description = commonPost.markdown
 
-    const cats = []
+    // YAML属性转换
+    const yamlAdaptor: YamlConvertAdaptor = this.getYamlAdaptor()
+    if (null !== yamlAdaptor) {
+      const yamlObj = await YamlUtil.yaml2ObjAsync(commonPost.description)
+      const yamlFormatObj = new YamlFormatObj()
+      yamlFormatObj.yamlObj = yamlObj
+      this.logger.debug("extract frontFormatter, yamlFormatObj =>", yamlFormatObj)
+      commonPost = yamlAdaptor.convertToAttr(commonPost, yamlFormatObj, this.cfg)
+      this.logger.debug("handled yamlObj using YamlConverterAdaptor =>", yamlObj)
+    }
+
+    // 初始化知识空间
     const catSlugs = []
-    commonPost.categories = cats
+    const extractedPath = res.path.replace(res.name, "").replace(/\/$/, "")
+    catSlugs.push(extractedPath)
     commonPost.cate_slugs = catSlugs
 
     return commonPost
@@ -137,6 +167,11 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
 
   public async getCategories(): Promise<CategoryInfo[]> {
     return Promise.resolve([])
+  }
+
+  public async getCategoryTreeNodes(docPath: string): Promise<any[]> {
+    const res = await this.githubClient.getGithubPageTreeNode(docPath)
+    return res
   }
 
   public async getPreviewUrl(postid: string): Promise<string> {

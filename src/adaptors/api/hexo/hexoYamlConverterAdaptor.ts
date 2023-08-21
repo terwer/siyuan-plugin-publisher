@@ -23,11 +23,8 @@
  * questions.
  */
 
-import { YamlConvertAdaptor } from "~/src/platforms/yamlConvertAdaptor.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { YamlFormatObj } from "~/src/models/yamlFormatObj.ts"
-import { Post } from "zhi-blog-api"
-import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
+import { BlogConfig, Post, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
 import { DateUtil, StrUtil, YamlUtil } from "zhi-common"
 import { CommonGithubConfig } from "~/src/adaptors/api/base/github/commonGithubConfig.ts"
 
@@ -40,7 +37,7 @@ import { CommonGithubConfig } from "~/src/adaptors/api/base/github/commonGithubC
 export class HexoYamlConverterAdaptor extends YamlConvertAdaptor {
   private readonly logger = createAppLogger("hexo-yaml-converter-adaptor")
 
-  convertToYaml(post: Post, cfg?: CommonBlogConfig): YamlFormatObj {
+  convertToYaml(post: Post, cfg?: BlogConfig): YamlFormatObj {
     let yamlFormatObj: YamlFormatObj = new YamlFormatObj()
     this.logger.debug("您正在使用 Hexo Yaml Converter", post)
 
@@ -48,19 +45,26 @@ export class HexoYamlConverterAdaptor extends YamlConvertAdaptor {
     yamlFormatObj.yamlObj.title = post.title
 
     // date
-    // yamlFormatObj.yamlObj.date = post.dateCreated
+    yamlFormatObj.yamlObj.date = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true)
 
     // updated
-    yamlFormatObj.yamlObj.updated = DateUtil.formatIsoToZhDate(new Date().toISOString())
+    yamlFormatObj.yamlObj.updated = DateUtil.formatIsoToZh(post.dateUpdated.toISOString(), true)
 
     // excerpt
-    yamlFormatObj.yamlObj.excerpt = post.shortDesc
+    if (!StrUtil.isEmptyString(post.shortDesc)) {
+      yamlFormatObj.yamlObj.excerpt = post.shortDesc
+    }
 
-    // // tags
-    // yamlFormatObj.yamlObj.tags = postForm.formData.tag.dynamicTags
-    //
-    // // categories
-    // yamlFormatObj.yamlObj.categories = postForm.formData.categories
+    // tags
+    if (!StrUtil.isEmptyString(post.mt_keywords)) {
+      const tags = post.mt_keywords.split(",")
+      yamlFormatObj.yamlObj.tags = tags
+    }
+
+    // categories
+    if (post.categories.length > 0) {
+      yamlFormatObj.yamlObj.categories = post.categories
+    }
 
     // permalink
     let link = "/post/" + post.wp_slug + ".html"
@@ -97,8 +101,6 @@ export class HexoYamlConverterAdaptor extends YamlConvertAdaptor {
 
     // formatter
     let yaml = YamlUtil.obj2Yaml(yamlFormatObj.yamlObj)
-    // 修复yaml的ISO日期格式（js-yaml转换的才需要）
-    yaml = DateUtil.formatIsoToZhDate(yaml)
     this.logger.debug("yaml=>", yaml)
 
     yamlFormatObj.formatter = yaml
@@ -108,7 +110,35 @@ export class HexoYamlConverterAdaptor extends YamlConvertAdaptor {
     return yamlFormatObj
   }
 
-  convertToAttr(yamlFormatObj: YamlFormatObj, cfg?: CommonBlogConfig): Post {
-    return super.convertToAttr(yamlFormatObj, cfg)
+  convertToAttr(post: Post, yamlFormatObj: YamlFormatObj, cfg?: BlogConfig): Post {
+    this.logger.debug("开始转换YAML到Post", yamlFormatObj)
+
+    // 标题
+    post.title = yamlFormatObj.yamlObj?.title
+
+    // 发布时间
+    post.dateCreated = DateUtil.convertStringToDate(yamlFormatObj.yamlObj.date)
+    post.dateUpdated = DateUtil.convertStringToDate(yamlFormatObj.yamlObj.updated)
+
+    // 摘要
+    post.shortDesc = yamlFormatObj.yamlObj?.excerpt
+
+    // 标签
+    post.mt_keywords = yamlFormatObj.yamlObj?.tags?.join(",")
+
+    // 分类
+    post.categories = yamlFormatObj.yamlObj?.categories
+
+    // 添加新的YAML
+    post.yaml = YamlUtil.obj2Yaml(yamlFormatObj.yamlObj)
+    const regex = /^---\n([\s\S]*?\n)---/
+    if (regex.test(post.markdown)) {
+      post.markdown = post.markdown.replace(regex, "")
+      this.logger.debug("发现原有的YAML，已移除")
+    }
+    post.markdown = `${post.yaml}\n${post.markdown}`
+
+    this.logger.debug("转换完成，post =>", post)
+    return post
   }
 }

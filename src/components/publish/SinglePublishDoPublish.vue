@@ -24,12 +24,12 @@
   -->
 
 <script setup lang="ts">
-import { markRaw, onMounted, reactive } from "vue"
+import { computed, markRaw, onMounted, reactive, toRaw } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import BackPage from "~/src/components/common/BackPage.vue"
 import { usePublish } from "~/src/composables/usePublish.ts"
 import { MethodEnum } from "~/src/models/methodEnum.ts"
-import { Post } from "zhi-blog-api"
+import { BlogConfig, Post } from "zhi-blog-api"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { DynamicConfig } from "~/src/platforms/dynamicConfig.ts"
@@ -40,13 +40,23 @@ import { BrowserUtil } from "zhi-device"
 import { StrUtil } from "zhi-common"
 import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
 import { IPublishCfg } from "~/src/types/IPublishCfg.ts"
+import { PageEditMode } from "~/src/models/pageEditMode.ts"
+import EditModeSelect from "~/src/components/publish/form/EditModeSelect.vue"
+import PublishTime from "~/src/components/publish/form/PublishTime.vue"
+import { isDev } from "~/src/utils/constants.ts"
+import AiSwitch from "~/src/components/publish/form/AiSwitch.vue"
+import { pre } from "~/src/utils/import/pre.ts"
+import { ICategoryConfig } from "~/src/types/ICategoryConfig.ts"
+import PublishKnowledgeSpace from "~/src/components/publish/form/PublishKnowledgeSpace.vue"
+import { SiyuanAttr } from "zhi-siyuan-api"
+import Adaptors from "~/src/adaptors"
 
 const logger = createAppLogger("single-publish-do-publish")
 
 // uses
 const { t } = useVueI18n()
 const route = useRoute()
-const { doInitPage } = usePublish()
+const { initPublishMethods } = usePublish()
 const { query } = useRoute()
 const { kernelApi } = useSiyuanApi()
 const { doSinglePublish, doSingleDelete } = usePublish()
@@ -54,6 +64,9 @@ const router = useRouter()
 const { getPublishCfg } = usePublishConfig()
 
 // datas
+const sysKeys = pre.systemCfg.map((item) => {
+  return item.platformKey
+})
 const params = reactive(route.params)
 const key = params.key as string
 const id = params.id as string
@@ -65,17 +78,31 @@ const formData = reactive({
   isPublishLoading: false,
   isDeleteLoading: false,
 
-  publishCfg: {} as IPublishCfg,
-
+  // 单个平台信息
   siyuanPost: {} as Post,
   platformPost: {} as Post,
   mergedPost: {} as Post,
+  publishCfg: {} as IPublishCfg,
+
+  // 分类配置
+  categoryConfig: {} as ICategoryConfig,
+  // 知识空间配置
+  knowledgeSpaceConfig: {} as ICategoryConfig,
 
   postPreviewUrl: "",
+  changeTips: { title: "" },
 
-  changeTips: {
-    title: "",
-  },
+  // =========================
+  // extra sync attrs start
+  // =========================
+  // AI开关
+  useAi: false,
+
+  // 页面模式
+  editType: PageEditMode.EditMode_simple,
+  // =========================
+  // sync attrs end
+  // =========================
 
   actionEnable: true,
 })
@@ -84,6 +111,13 @@ const handlePublish = async () => {
   try {
     formData.isPublishLoading = true
     formData.actionEnable = false
+
+    logger.info("保存到系统平台开始")
+    for (const sysKey of sysKeys) {
+      const sysPublishCfg = await getPublishCfg(sysKey)
+      await doSinglePublish(sysKey, id, sysPublishCfg, formData.mergedPost)
+    }
+    logger.info("保存到系统平台结束")
 
     logger.info("单个常规发布开始")
     const processResult = await doSinglePublish(key, id, formData.publishCfg as IPublishCfg, formData.mergedPost)
@@ -168,17 +202,35 @@ const doDelete = async () => {
   }
 }
 
+const handleSyncToSiyuan = async () => {
+  const newAttrs = {
+    [SiyuanAttr.Sys_memo]: formData.mergedPost.shortDesc,
+    [SiyuanAttr.Sys_tags]: formData.mergedPost.mt_keywords,
+    [SiyuanAttr.Custom_categories]: formData.mergedPost.categories.join(","),
+  }
+  await kernelApi.setBlockAttrs(id, newAttrs)
+  logger.info("内置平台，保存属性", newAttrs)
+  ElMessage.success("属性已经成功同步到思源")
+}
+
 const getPlatformName = () => {
   const dynCfg = formData.publishCfg?.dynCfg as DynamicConfig
   return dynCfg?.platformName || ""
 }
 
 const getBlogName = () => {
-  const cfg = formData.publishCfg?.cfg as any
-  return cfg?.blogName || ""
+  const cfg = formData.publishCfg?.cfg as BlogConfig
+  let blogName = cfg?.blogName || ""
+  if (cfg.knowledgeSpaceEnabled) {
+    if (formData.mergedPost.cate_slugs.length > 0) {
+      const cateName = formData.mergedPost.categories[0]
+      blogName = cateName ?? ""
+    }
+  }
+  return blogName
 }
 
-const getTitle = () => {
+const topTitle = computed(() => {
   const platformName = getPlatformName()
   const blogName = getBlogName()
 
@@ -189,7 +241,7 @@ const getTitle = () => {
   }
 
   return title
-}
+})
 
 const showChangeTip = (v1: string, v2: string) => {
   if (StrUtil.isEmptyString(v2)) {
@@ -202,11 +254,63 @@ const refreshChangeTips = () => {
   formData.changeTips.title = showChangeTip(formData.siyuanPost.title, formData.platformPost.title)
 }
 
+const syncEditMode = async (val: PageEditMode) => {
+  formData.editType = val
+  logger.debug("syncEditMode in single publish")
+}
+
+const syncAiSwitch = (val: boolean) => {
+  formData.useAi = val
+  logger.debug(`syncAiSwitch in single publish => ${formData.useAi}`)
+}
+
+const syncDesc = (val: string) => {
+  formData.mergedPost.shortDesc = val
+  logger.debug("syncDesc in single publish")
+}
+
+const syncTags = (val: string[]) => {
+  formData.mergedPost.mt_keywords = val.join(",")
+  logger.debug("syncTags in single publish")
+}
+
+const syncCates = (cates: string[]) => {
+  formData.mergedPost.categories = cates
+  logger.debug("syncCates in single publish")
+}
+
+const syncCateSlugs = (cateSlugs: string[]) => {
+  formData.mergedPost.cate_slugs = cateSlugs
+  logger.debug("syncCateSlugs in single publish")
+}
+
+const syncPublishTime = (val1: Date, val2: Date) => {
+  formData.mergedPost.dateCreated = val1
+  formData.mergedPost.dateUpdated = val2
+  logger.debug("syncPublishTime in single publish")
+}
+
+const syncPost = (post: Post) => {
+  formData.mergedPost = post
+  logger.debug("syncPost in single publish")
+}
+
+const onBack = () => {
+  const path = `/publish/singlePublish`
+  logger.info("will go to =>", path)
+  const query = {
+    path: path,
+    query: {
+      id: id,
+    },
+  }
+  router.push(query)
+}
+
 const initPage = async () => {
   try {
-    // 初始化属性
-    formData.publishCfg = await getPublishCfg(key)
-    const { siyuanPost, platformPost, mergedPost, postPreviewUrl } = await doInitPage(
+    // 初始化单篇文章
+    const { siyuanPost, platformPost, mergedPost, postPreviewUrl } = await initPublishMethods.doInitSinglePage(
       key,
       id,
       formData.method,
@@ -218,6 +322,7 @@ const initPage = async () => {
     formData.platformPost = platformPost
     formData.mergedPost = mergedPost
 
+    // 预览链接
     formData.postPreviewUrl = postPreviewUrl
 
     // 刷新比对提示
@@ -233,23 +338,45 @@ const initPage = async () => {
   }
 }
 
-const onBack = () => {
-  const path = `/publish/singlePublish`
-  logger.info("will go to =>", path)
-  const query = {
-    path: path,
-    query: {
-      id: id,
-    },
-  }
-  router.push(query)
-}
-
 onMounted(async () => {
   logger.info("获取到的ID为=>", id)
-
+  // ==================
+  // 初始化开始
+  // ==================
+  // 初始化属性
+  formData.publishCfg = await getPublishCfg(key)
+  // 单篇文章初始化
   await initPage()
+  // 元数据初始化
+  formData.mergedPost = await initPublishMethods.assignInitAttrs(formData.mergedPost, id, formData.publishCfg)
   formData.isInit = true
+
+  const cfg = formData.publishCfg.cfg as BlogConfig
+  // 分类数据初始化
+  formData.categoryConfig = {
+    cateEnabled: cfg.cateEnabled,
+    readonlyMode: formData.method === MethodEnum.METHOD_EDIT && !cfg.allowCateChange,
+    readonlyModeTip: cfg.placeholder.cateReadonlyModeTip,
+    apiType: key,
+    cfg: cfg,
+  }
+  // 知识空间
+  formData.knowledgeSpaceConfig = {
+    cateEnabled: cfg.knowledgeSpaceEnabled,
+    readonlyMode: formData.method === MethodEnum.METHOD_EDIT && !cfg.allowKnowledgeSpaceChange,
+    readonlyModeTip: cfg.placeholder.knowledgeSpaceReadonlyModeTip,
+    apiType: key,
+    cfg: cfg,
+  }
+
+  logger.debug("single publish inited mergedPost =>", toRaw(formData.mergedPost))
+  // ==================
+  // 初始化结束
+  // ==================
+
+  // 这里可以控制一些功能开关
+  formData.useAi = isDev
+  formData.editType = PageEditMode.EditMode_simple
 })
 </script>
 
@@ -257,36 +384,90 @@ onMounted(async () => {
   <back-page title="常规发布" :has-back-emit="true" @backEmit="onBack">
     <el-skeleton class="placeholder" v-if="!formData.isInit" :rows="5" animated />
     <div v-else id="batch-publish-index">
-      <el-alert class="top-tip" :title="getTitle()" type="info" :closable="false" />
+      <el-alert class="top-tip" :title="topTitle" type="info" :closable="false" />
       <el-container>
         <el-main>
           <!-- 表单数据 -->
           <div class="publish-form">
             <el-form label-width="100px">
-              <!-- 文章标题 -->
-              <div class="form-post-title">
-                <el-form-item :label="t('main.title')">
-                  <el-input v-model="formData.mergedPost.title" />
-                </el-form-item>
-                <el-alert
-                  v-if="
-                    formData.method === MethodEnum.METHOD_EDIT &&
-                    !StrUtil.isEmptyString(formData.changeTips.title) &&
-                    formData.siyuanPost.title !== formData.platformPost.title
-                  "
-                  class="top-tip"
-                  :title="formData.changeTips.title"
-                  type="error"
-                  :closable="false"
-                />
-              </div>
-              <el-divider border-style="dashed" />
+              <!-- 编辑模式选择 -->
+              <edit-mode-select v-model:edit-type="formData.editType" @emitSyncEditMode="syncEditMode" />
 
               <!--
-             ----------------------------------------------------------------------
-             -->
-              <!-- 标签
-              <publish-tags />
+              --------------------------------------
+              编辑模式开始
+              --------------------------------------
+              -->
+              <source-mode
+                v-if="formData.editType === PageEditMode.EditMode_source"
+                v-model="formData.mergedPost"
+                :api-type="key"
+                :page-id="id"
+                :cfg="formData.publishCfg.cfg"
+                @emitSyncPost="syncPost"
+              />
+              <div v-else class="normal-mode">
+                <!-- 文章标题 -->
+                <div class="form-post-title">
+                  <el-form-item :label="t('main.title')">
+                    <el-input v-model="formData.mergedPost.title" />
+                  </el-form-item>
+                </div>
+
+                <!-- 知识空间 -->
+                <publish-knowledge-space
+                  v-model:knowledge-space-type="formData.publishCfg.cfg.knowledgeSpaceType"
+                  v-model:knowledge-space-config="formData.knowledgeSpaceConfig"
+                  v-model:cate-slugs="formData.mergedPost.cate_slugs"
+                  @emitSyncCateSlugs="syncCateSlugs"
+                />
+                <el-divider border-style="dashed" />
+
+                <div v-if="formData.editType === PageEditMode.EditMode_complex" class="complex-mode">
+                  <!-- AI开关 -->
+                  <ai-switch v-if="formData.useAi" v-model:use-ai="formData.useAi" @emitSyncAiSwitch="syncAiSwitch" />
+
+                  <!-- 别名字段 -->
+                  <el-form-item :label="t('main.slug')">
+                    <el-input v-model="formData.mergedPost.wp_slug" :disabled="true" />
+                  </el-form-item>
+
+                  <!-- 摘要 -->
+                  <publish-description
+                    v-model:use-ai="formData.useAi"
+                    v-model:page-id="id"
+                    v-model:desc="formData.mergedPost.shortDesc"
+                    v-model:content="formData.mergedPost.html"
+                    @emitSyncDesc="syncDesc"
+                  />
+
+                  <!-- 标签 -->
+                  <publish-tags
+                    v-model:use-ai="formData.useAi"
+                    v-model:page-id="id"
+                    v-model:tags="formData.mergedPost.mt_keywords"
+                    v-model:content="formData.mergedPost.html"
+                    @emitSyncTags="syncTags"
+                  />
+
+                  <!-- 分类 -->
+                  <publish-categories
+                    v-model:category-type="formData.publishCfg.cfg.categoryType"
+                    v-model:category-config="formData.categoryConfig"
+                    v-model:categories="formData.mergedPost.categories"
+                    @emitSyncCates="syncCates"
+                  />
+
+                  <!-- 发布时间 -->
+                  <publish-time v-model="formData.mergedPost" @emitSyncPublishTime="syncPublishTime" />
+
+                  <el-divider border-style="dashed" />
+                </div>
+              </div>
+              <!--
+              --------------------------------------
+              编辑模式结束
+              --------------------------------------
               -->
 
               <!-- 发布 -->
@@ -309,6 +490,7 @@ onMounted(async () => {
                 >
                   {{ t("main.cancel") }}
                 </el-button>
+                <el-button type="warning" @click="handleSyncToSiyuan"> 同步修改到思源笔记 </el-button>
               </el-form-item>
 
               <!-- 文章状态 -->
