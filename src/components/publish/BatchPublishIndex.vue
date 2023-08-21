@@ -45,6 +45,7 @@ import PublishTime from "~/src/components/publish/form/PublishTime.vue"
 import AiSwitch from "~/src/components/publish/form/AiSwitch.vue"
 import { isDev } from "~/src/utils/constants.ts"
 import { ICategoryConfig } from "~/src/types/ICategoryConfig.ts"
+import { SiyuanAttr } from "zhi-siyuan-api"
 
 const logger = createAppLogger("publisher-index")
 
@@ -61,6 +62,7 @@ const { t } = useVueI18n()
 const { doSinglePublish, doSingleDelete, doForceSingleDelete, initPublishMethods } = usePublish()
 const { blogApi } = useSiyuanApi()
 const { getPublishCfg } = usePublishConfig()
+const { kernelApi } = useSiyuanApi()
 
 // datas
 const sysKeys = pre.systemCfg.map((item) => {
@@ -218,6 +220,17 @@ const handleForceDelete = async (key: string, id: string, publishCfg: IPublishCf
   } finally {
     formData.isDeleteLoading = false
   }
+}
+
+const handleSyncToSiyuan = async () => {
+  const newAttrs = {
+    [SiyuanAttr.Sys_memo]: formData.siyuanPost.shortDesc,
+    [SiyuanAttr.Sys_tags]: formData.siyuanPost.mt_keywords,
+    [SiyuanAttr.Custom_categories]: formData.siyuanPost.categories.join(","),
+  }
+  await kernelApi.setBlockAttrs(id, newAttrs)
+  logger.info("内置平台，保存属性", newAttrs)
+  ElMessage.success("属性已经成功同步到思源")
 }
 
 const syncAiSwitch = (val: boolean) => {
@@ -401,6 +414,7 @@ onMounted(async () => {
               >
                 {{ t("main.publish.remove") }}
               </el-button>
+              <el-button type="warning" @click="handleSyncToSiyuan"> 同步修改到思源笔记 </el-button>
             </el-form-item>
           </el-form>
         </div>

@@ -48,6 +48,7 @@ import AiSwitch from "~/src/components/publish/form/AiSwitch.vue"
 import { pre } from "~/src/utils/import/pre.ts"
 import { ICategoryConfig } from "~/src/types/ICategoryConfig.ts"
 import PublishKnowledgeSpace from "~/src/components/publish/form/PublishKnowledgeSpace.vue"
+import { SiyuanAttr } from "zhi-siyuan-api"
 
 const logger = createAppLogger("single-publish-do-publish")
 
@@ -198,6 +199,17 @@ const doDelete = async () => {
   } finally {
     formData.isDeleteLoading = false
   }
+}
+
+const handleSyncToSiyuan = async () => {
+  const newAttrs = {
+    [SiyuanAttr.Sys_memo]: formData.mergedPost.shortDesc,
+    [SiyuanAttr.Sys_tags]: formData.mergedPost.mt_keywords,
+    [SiyuanAttr.Custom_categories]: formData.mergedPost.categories.join(","),
+  }
+  await kernelApi.setBlockAttrs(id, newAttrs)
+  logger.info("内置平台，保存属性", newAttrs)
+  ElMessage.success("属性已经成功同步到思源")
 }
 
 const getPlatformName = () => {
@@ -476,6 +488,7 @@ onMounted(async () => {
                 >
                   {{ t("main.cancel") }}
                 </el-button>
+                <el-button type="warning" @click="handleSyncToSiyuan"> 同步修改到思源笔记 </el-button>
               </el-form-item>
 
               <!-- 文章状态 -->

@@ -179,13 +179,7 @@ const usePublish = () => {
       logger.info("发布完成，准备处理文章属性")
       // 保存属性用于初始化
       if (isSys) {
-        const newAttrs = {
-          [SiyuanAttr.Sys_memo]: post.shortDesc,
-          [SiyuanAttr.Sys_tags]: post.mt_keywords,
-          [SiyuanAttr.Custom_categories]: post.categories.join(","),
-        }
-        await kernelApi.setBlockAttrs(id, newAttrs)
-        logger.info("内置平台，直接保存属性", newAttrs)
+        logger.info("内置平台，忽略保存属性")
       } else {
         const yamlAdaptor: YamlConvertAdaptor = await Adaptors.getYamlAdaptor(key, cfg)
         if (null !== yamlAdaptor) {
@@ -383,14 +377,36 @@ const usePublish = () => {
 
       // 平台相关自定义属性（摘要、标签、分类）
       const key = dynCfg.platformKey
+      // const yamlAdaptor: YamlConvertAdaptor = await Adaptors.getYamlAdaptor(key, cfg)
+      // if (null !== yamlAdaptor) {
+      //   const yamlObj = await YamlUtil.yaml2ObjAsync(post.description)
+      //   const yamlFormatObj = new YamlFormatObj()
+      //   yamlFormatObj.yamlObj = yamlObj
+      //   post = yamlAdaptor.convertToAttr(post, yamlFormatObj, cfg)
+      //   // 去吧别名不被修改
+      //   post.wp_slug = slug
+      // }
       const yamlAdaptor: YamlConvertAdaptor = await Adaptors.getYamlAdaptor(key, cfg)
       if (null !== yamlAdaptor) {
-        const yamlObj = await YamlUtil.yaml2ObjAsync(post.description)
-        const yamlFormatObj = new YamlFormatObj()
-        yamlFormatObj.yamlObj = yamlObj
-        post = yamlAdaptor.convertToAttr(post, yamlFormatObj, cfg)
-        // 去吧别名不被修改
-        post.wp_slug = slug
+        const yamlKey = getDynYamlKey(key)
+        const yaml = await kernelApi.getSingleBlockAttr(id, yamlKey)
+        if(!StrUtil.isEmptyString(yaml)){
+
+        }
+        // 先生成对应平台的yaml
+        // const yamlObj: YamlFormatObj = yamlAdaptor.convertToYaml(post, cfg)
+        // const yaml = yamlObj.formatter
+        // await kernelApi.setSingleBlockAttr(id, yamlKey, yaml)
+        logger.debug("使用自定义的YAML适配器初始化 =>", yaml)
+      } else {
+        const yamlKey = getDynYamlKey(key)
+        const yaml = await kernelApi.getSingleBlockAttr(id, yamlKey)
+        if(!StrUtil.isEmptyString(yaml)){
+
+        }
+        // const yaml = YamlUtil.obj2Yaml(post.toYamlObj())
+        // await kernelApi.setSingleBlockAttr(id, yamlKey, yaml)
+        logger.debug("未找到YAML适配器，使用公共的YAML模型初始化 =>", yaml)
       }
 
       return post
