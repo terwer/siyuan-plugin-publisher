@@ -78,6 +78,7 @@ const formData = reactive({
 
   // 界面动态显示
   yamlContent: "",
+  isSaved: true,
 })
 
 const emit = defineEmits(["emitSyncPost"])
@@ -130,12 +131,18 @@ const onYamlContentFocus = (event: any) => {
 
 const onYamlContentInput = (val: any) => {
   logger.debug("仅在常规发布使用")
-  formData.yamlFormatObj.formatter = val
+  formData.isSaved = false
+  formData.syncStatus = "info"
+  formData.syncMessage = "已修改"
+}
+
+const doSaveContentChange = () => {
+  formData.yamlFormatObj.formatter = formData.yamlContent
   formData.yamlFormatObj.mdFullContent = YamlUtil.addYamlToMd(
     formData.yamlFormatObj.formatter,
     formData.yamlFormatObj.mdContent
   )
-  logger.debug("val =>", val)
+  logger.debug("val =>", formData.yamlContent)
   try {
     const yamlObj = YamlUtil.yaml2Obj(formData.yamlFormatObj.formatter)
     formData.yamlFormatObj.yamlObj = yamlObj
@@ -147,6 +154,7 @@ const onYamlContentInput = (val: any) => {
     emit("emitSyncPost", formData.siyuanPost)
     formData.syncStatus = "success"
     formData.syncMessage = "YAML已解析成功并同步。同步时间 =>" + DateUtil.formatIsoToZh(new Date().toISOString(), true)
+    formData.isSaved = true
   } catch (e) {
     formData.syncStatus = "error"
     formData.syncMessage = "YAML解析失败，YAML将不可用，错误如下 =>" + e
@@ -216,6 +224,9 @@ await initPage()
   <el-skeleton class="placeholder" v-if="formData.isLoading" :rows="5" animated />
   <div class="source-mode" v-else>
     <!-- YAML提示 -->
+    <el-form-item v-if="!formData.isSaved" class="un-saved-tip">
+      检测到有未保存的更更改，是否保存？<a @click="doSaveContentChange">马上保存</a>
+    </el-form-item>
     <el-form-item v-if="!formData.readonlyMode">
       <el-alert
         :closable="false"
@@ -372,6 +383,12 @@ html.dark .source-opt a
   background-color #f0f0f0
   color #888
   cursor default
+
+.un-saved-tip
+  color var(--el-color-danger)
+  margin-bottom 0
+  a
+    cursor pointer
 </style>
 
 <style lang="css">
