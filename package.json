@@ -1,6 +1,6 @@
 {
   "name": "siyuan-plugin-publisher",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "description": "Publish articles from Siyuan Notes to platforms such as Yuque, Notion, Cnblogs, WordPress, Typecho, Hexo, Zhihu and more",
   "repository": "terwer/siyuan-plugin-publisher",
   "homepage": "https://github.com/terwer/siyuan-plugin-publisher",
@@ -70,14 +70,14 @@
     "vue-i18n": "^9.2.2",
     "vue-router": "^4.2.4",
     "xmlbuilder2": "^3.1.1",
-    "zhi-blog-api": "^1.32.1",
-    "zhi-common": "^1.23.0",
+    "zhi-blog-api": "^1.32.2",
+    "zhi-common": "^1.23.1",
     "zhi-device": "^2.3.1",
-    "zhi-fetch-middleware": "^0.3.4",
-    "zhi-github-middleware": "^0.3.4",
+    "zhi-fetch-middleware": "^0.3.5",
+    "zhi-github-middleware": "^0.3.5",
     "zhi-lib-base": "^0.4.4",
     "zhi-notion-markdown": "^0.1.4",
-    "zhi-siyuan-api": "^2.4.3",
-    "zhi-xmlrpc-middleware": "^0.5.4"
+    "zhi-siyuan-api": "^2.4.4",
+    "zhi-xmlrpc-middleware": "^0.5.5"
   }
 }

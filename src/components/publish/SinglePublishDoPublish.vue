@@ -32,7 +32,7 @@ import { MethodEnum } from "~/src/models/methodEnum.ts"
 import { BlogConfig, Post } from "zhi-blog-api"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import { DynamicConfig } from "~/src/platforms/dynamicConfig.ts"
+import { DynamicConfig, getDynYamlKey } from "~/src/platforms/dynamicConfig.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { ElMessage, ElMessageBox } from "element-plus"
 import { Delete } from "@element-plus/icons-vue"
@@ -120,6 +120,7 @@ const handlePublish = async () => {
     logger.info("保存到系统平台结束")
 
     logger.info("单个常规发布开始")
+    await handleSyncPlatformAttrToSiyuan()
     const processResult = await doSinglePublish(key, id, formData.publishCfg as IPublishCfg, formData.mergedPost)
     logger.info("normal publish processResult =>", processResult)
     logger.info("单个常规发布结束")
@@ -134,9 +135,7 @@ const handlePublish = async () => {
         window.location.reload()
       } else {
         // 需要刷新才能继续操作，防止重复提交
-        formData.isInit = false
-        await initPage()
-        formData.isInit = true
+        window.location.reload()
       }
     } else {
       ElMessage.error(processResult.errMsg)
@@ -203,14 +202,26 @@ const doDelete = async () => {
 }
 
 const handleSyncToSiyuan = async () => {
+  await handleSyncSiyuaAttrnToSiyuan()
+  await handleSyncPlatformAttrToSiyuan()
+  ElMessage.success("属性已经成功同步到思源")
+}
+
+const handleSyncSiyuaAttrnToSiyuan = async () => {
   const newAttrs = {
     [SiyuanAttr.Sys_memo]: formData.mergedPost.shortDesc,
     [SiyuanAttr.Sys_tags]: formData.mergedPost.mt_keywords,
     [SiyuanAttr.Custom_categories]: formData.mergedPost.categories.join(","),
   }
   await kernelApi.setBlockAttrs(id, newAttrs)
-  logger.info("内置平台，保存属性", newAttrs)
-  ElMessage.success("属性已经成功同步到思源")
+  logger.debug("保存内置平台属性", newAttrs)
+}
+
+const handleSyncPlatformAttrToSiyuan = async () => {
+  const yaml = formData.mergedPost.yaml
+  const yamlKey = getDynYamlKey(key)
+  await kernelApi.setSingleBlockAttr(id, yamlKey, yaml)
+  logger.debug("保存当前平台属性", { yaml: toRaw(yaml) })
 }
 
 const getPlatformName = () => {

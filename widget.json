@@ -2,7 +2,7 @@
   "name": "sy-post-publisher",
   "author": "terwer",
   "url": "https://github.com/terwer/sy-post-publisher",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "minAppVersion": "2.9.0",
   "backends": [
     "windows",

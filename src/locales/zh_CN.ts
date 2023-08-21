@@ -286,7 +286,7 @@ export default {
     "温馨提示：为了数据一致性，多平台分发或者未提供YAML适配器时无法处理平台属性，YAML将仅显示公共属性且只能只读。",
   "main.read.mode.tip2": "YAML如有修改，请务必点击保存按钮，否则修改内容将丢失！",
   "main.read.mode.tip3": "为了标识文章的唯一性，slug修改将忽略，其他属性可同步。",
-  "main.read.mode.tip4": "此功能为高级功能，如果您不清楚YAML语法和用途，请勿修改！",
+  "main.read.mode.tip4": "如需删除了内置的YAML属性，删除之后请务必先同步到思源笔记，否则切换模式会还原。",
   "main.opt.onclick.confirm.tip":
     "此操作默认将重新生成除别名以外的所有属性，如果只想修改个别属性，请在详细模式点击单独的功能按钮进行对应操作，是否继续？",
   "main.cat.list.error": "分类获取失败",
