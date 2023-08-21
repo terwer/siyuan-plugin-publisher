@@ -78,6 +78,6 @@
     "zhi-lib-base": "^0.4.4",
     "zhi-notion-markdown": "^0.1.4",
     "zhi-siyuan-api": "^2.4.3",
-    "zhi-xmlrpc-middleware": "^0.4.23"
+    "zhi-xmlrpc-middleware": "^0.5.4"
   }
 }

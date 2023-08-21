@@ -84,8 +84,8 @@ dependencies:
     specifier: ^2.4.3
     version: 2.4.3
   zhi-xmlrpc-middleware:
-    specifier: ^0.4.23
-    version: 0.4.23
+    specifier: ^0.5.4
+    version: 0.5.4
 
 devDependencies:
   '@terwer/esbuild-config-custom':
@@ -7420,10 +7420,10 @@ packages:
       zhi-lib-base: 0.4.4
     dev: false
 
-  /zhi-xmlrpc-middleware@0.4.23:
-    resolution: {integrity: sha512-6g3t/hhAikiRYrp//1KSBTy3uX4T768aIsl4xVlpXkE2OI3moio+dDMI5REg3dHn9krcMKKZQ0p45rCg/oR/yw==}
+  /zhi-xmlrpc-middleware@0.5.4:
+    resolution: {integrity: sha512-4TGMHoeP3sIKMr6Eo4DDTtPhvu+4p7CSv7P4ZM25iZuhf9RFKJ6OhunSxevRB2rLVgmwlXy2eCRUu8d6l4Xlug==}
     dependencies:
-      zhi-common: 1.18.0
+      zhi-common: 1.23.0
       zhi-device: 2.3.1
       zhi-lib-base: 0.4.4
     dev: false
