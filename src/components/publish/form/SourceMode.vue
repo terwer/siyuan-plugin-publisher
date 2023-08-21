@@ -131,7 +131,10 @@ const onYamlContentFocus = (event: any) => {
 const onYamlContentInput = (val: any) => {
   logger.debug("仅在常规发布使用")
   formData.yamlFormatObj.formatter = val
-  formData.yamlFormatObj.mdFullContent = `${formData.yamlFormatObj.formatter}\n${formData.yamlFormatObj.mdContent}`
+  formData.yamlFormatObj.mdFullContent = YamlUtil.addYamlToMd(
+    formData.yamlFormatObj.formatter,
+    formData.yamlFormatObj.mdContent
+  )
   logger.debug("val =>", val)
   try {
     const yamlObj = YamlUtil.yaml2Obj(formData.yamlFormatObj.formatter)
@@ -184,7 +187,7 @@ const initPage = async () => {
     if (formData.readonlyMode) {
       yfmObj.formatter = YamlUtil.obj2Yaml(formData.siyuanPost.toYamlObj())
       yfmObj.mdContent = post.markdown
-      yfmObj.mdFullContent = `${yfmObj.formatter}\n${yfmObj.mdContent}`
+      yfmObj.mdFullContent = YamlUtil.addYamlToMd(yfmObj.formatter, yfmObj.mdContent)
       yfmObj.htmlContent = post.html
       logger.debug("未找到YAML适配器，将生成公共的YAML")
     } else {

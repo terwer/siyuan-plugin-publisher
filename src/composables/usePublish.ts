@@ -26,16 +26,8 @@
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { reactive, toRaw } from "vue"
 import { SypConfig } from "~/syp.config.ts"
-import { AliasTranslator, ObjectUtil, StrUtil, YamlUtil } from "zhi-common"
-import {
-  BlogAdaptor,
-  BlogConfig,
-  PageTypeEnum,
-  Post,
-  PostStatusEnum,
-  YamlConvertAdaptor,
-  YamlFormatObj,
-} from "zhi-blog-api"
+import { AliasTranslator, ObjectUtil, StrUtil } from "zhi-common"
+import { BlogAdaptor, BlogConfig, PageTypeEnum, Post, PostStatusEnum } from "zhi-blog-api"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
@@ -45,7 +37,6 @@ import { DynamicConfig, getDynYamlKey } from "~/src/platforms/dynamicConfig.ts"
 import { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
 import { ElMessage } from "element-plus"
-import Adaptors from "~/src/adaptors"
 import { SiyuanAttr } from "zhi-siyuan-api"
 
 /**
@@ -181,22 +172,9 @@ const usePublish = () => {
       if (isSys) {
         logger.info("内置平台，忽略保存属性")
       } else {
-        const yamlAdaptor: YamlConvertAdaptor = await Adaptors.getYamlAdaptor(key, cfg)
-        if (null !== yamlAdaptor) {
-          const yamlKey = getDynYamlKey(key)
-          // 先生成对应平台的yaml
-          const yamlObj: YamlFormatObj = yamlAdaptor.convertToYaml(post, cfg)
-          const yaml = yamlObj.formatter
-          await kernelApi.setSingleBlockAttr(id, yamlKey, yaml)
-          logger.info("使用自定义的YAML适配器")
-        } else {
-          const yamlKey = getDynYamlKey(key)
-          const yaml = YamlUtil.obj2Yaml(post.toYamlObj())
-          await kernelApi.setSingleBlockAttr(id, yamlKey, yaml)
-          logger.warn("未找到YAML适配器，使用公共的YAML模型")
-        }
+        const yamlKey = getDynYamlKey(key)
+        await kernelApi.setSingleBlockAttr(id, yamlKey, post.yaml)
       }
-
       logger.info("文章属性处理完成")
 
       // 更新预览链接
@@ -379,28 +357,9 @@ const usePublish = () => {
 
       // 平台相关自定义属性（摘要、标签、分类）
       const key = dynCfg.platformKey
-      const yamlAdaptor: YamlConvertAdaptor = await Adaptors.getYamlAdaptor(key, cfg)
-      if (null !== yamlAdaptor) {
-        const yamlKey = getDynYamlKey(key)
-        const yaml = await kernelApi.getSingleBlockAttr(id, yamlKey)
-        if (!StrUtil.isEmptyString(yaml)) {
-          const yamlObj = await YamlUtil.yaml2ObjAsync(yaml)
-          const yamlFormatObj = new YamlFormatObj()
-          yamlFormatObj.yamlObj = yamlObj
-          post = yamlAdaptor.convertToAttr(post, yamlFormatObj, cfg)
-          logger.info("使用自定义的YAML适配器初始化 =>", yamlObj)
-          logger.debug("自定义的YAML适配器初始化完毕", { post: toRaw(post) })
-        }
-      } else {
-        const yamlKey = getDynYamlKey(key)
-        const yaml = await kernelApi.getSingleBlockAttr(id, yamlKey)
-        if (!StrUtil.isEmptyString(yaml)) {
-          const yamlObj = await YamlUtil.yaml2ObjAsync(yaml)
-          logger.warn("未找到YAML适配器，使用公共的YAML模型初始化 =>", yamlObj)
-          post.fromYaml(yamlObj)
-          logger.debug("公共的YAML模型初始化完毕", { post: toRaw(post) })
-        }
-      }
+      const yamlKey = getDynYamlKey(key)
+      const yaml = await kernelApi.getSingleBlockAttr(id, yamlKey)
+      post.yaml = yaml
 
       return post
     },
