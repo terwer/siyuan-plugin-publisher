@@ -115,10 +115,9 @@ const handlePublish = async () => {
     formData.successBatchResults = []
     for (const key of formData.dynList) {
       if (sysKeys.includes(key)) {
-        logger.info(`[${key}] 系统内置平台`)
+        logger.info(`开始发布 [${key}] 系统内置平台`)
       } else {
-        logger.info(`[${key}] 自定义平台`)
-        // 文章发布数据不同平台共享
+        logger.info(`开始发布 [${key}] 自定义平台`)
         // 平台相关的配置，需要各自重新获取
         const publishCfg = await getPublishCfg(key)
         formData.publishCfg = publishCfg

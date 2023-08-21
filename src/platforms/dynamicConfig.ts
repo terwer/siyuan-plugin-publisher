@@ -421,5 +421,5 @@ export function getDynPostidKey(platformKey: string): string {
  * @param platformKey
  */
 export function getDynYamlKey(platformKey: string): string {
-  return "custom-" + platformKey + "-yaml"
+  return "custom-" + platformKey.replace(/_/g, "-") + "-yaml"
 }

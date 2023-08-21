@@ -26,18 +26,20 @@
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { reactive, toRaw } from "vue"
 import { SypConfig } from "~/syp.config.ts"
-import { AliasTranslator, ObjectUtil, StrUtil } from "zhi-common"
-import { BlogAdaptor, PageTypeEnum, Post, PostStatusEnum } from "zhi-blog-api"
+import { AliasTranslator, ObjectUtil, StrUtil, YamlUtil } from "zhi-common"
+import { BlogAdaptor, PageTypeEnum, Post, PostStatusEnum, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { pre } from "~/src/utils/import/pre.ts"
 import { MethodEnum } from "~/src/models/methodEnum.ts"
-import { DynamicConfig } from "~/src/platforms/dynamicConfig.ts"
+import { DynamicConfig, getDynYamlKey } from "~/src/platforms/dynamicConfig.ts"
 import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
 import { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
 import { ElMessage } from "element-plus"
+import Adaptors from "~/src/adaptors"
+import { SiyuanAttr } from "~/src/constants/siyuanAttr.ts"
 
 /**
  * 通用发布组件
@@ -138,11 +140,12 @@ const usePublish = () => {
         const posidKey = cfg.posidKey
         const postMeta = ObjectUtil.getProperty(setting, id, {})
         postMeta[posidKey] = postid
-        postMeta["custom-slug"] = post.wp_slug
+        postMeta[SiyuanAttr.Custom_Slug] = post.wp_slug
         setting[id] = postMeta
         await updateSetting(setting)
 
         logger.info("new post=>", result)
+        logger.info("文章发布成功")
       } else {
         logger.info("文章已发布，准备更新")
 
@@ -150,13 +153,47 @@ const usePublish = () => {
         const result = await api.editPost(postid, post)
 
         // 写入属性到配置
+        // 这里更新 slug 的原因是历史文章有可能没有生成过别名
         const postMeta = ObjectUtil.getProperty(setting, id, {})
-        postMeta["custom-slug"] = post.wp_slug
-        setting[id] = postMeta
-        await updateSetting(setting)
+        if (!postMeta.hasOwnProperty(SiyuanAttr.Custom_Slug)) {
+          logger.info("检测到未生成过别名，准备更新别名")
+          postMeta[SiyuanAttr.Custom_Slug] = post.wp_slug
+          setting[id] = postMeta
+          await updateSetting(setting)
+        } else {
+          // 确保别名不被修改
+          post.wp_slug = postMeta[SiyuanAttr.Custom_Slug]
+        }
 
         logger.info("edit post=>", result)
+        logger.info("文章更新成功")
       }
+
+      logger.info("发布完成，准备处理文章属性")
+      // 保存属性用于初始化
+      if (isSys) {
+        const yamlKey = SiyuanAttr.Custom_Yaml
+        const yaml = YamlUtil.obj2Yaml(post.toYamlObj())
+        await kernelApi.setSingleBlockAttr(id, yamlKey, yaml)
+        logger.info("内置平台，保存公共的YAML")
+      } else {
+        const yamlAdaptor: YamlConvertAdaptor = await Adaptors.getYamlAdaptor(key, cfg)
+        if (null !== yamlAdaptor) {
+          const yamlKey = getDynYamlKey(key)
+          // 先生成对应平台的yaml
+          const yamlObj: YamlFormatObj = yamlAdaptor.convertToYaml(post, cfg)
+          const yaml = yamlObj.formatter
+          await kernelApi.setSingleBlockAttr(id, yamlKey, yaml)
+          logger.info("使用自定义的YAML适配器")
+        } else {
+          const yamlKey = getDynYamlKey(key)
+          const yaml = YamlUtil.obj2Yaml(post.toYamlObj())
+          await kernelApi.setSingleBlockAttr(id, yamlKey, yaml)
+          logger.warn("未找到YAML适配器，使用公共的YAML模型")
+        }
+      }
+
+      logger.info("文章属性处理完成")
 
       // 更新预览链接
       postPreviewUrl = await getPostPreviewUrl(api, postid, cfg)
@@ -219,8 +256,8 @@ const usePublish = () => {
         if (updatedPostMeta.hasOwnProperty(posidKey)) {
           delete updatedPostMeta[posidKey]
         }
-        if (updatedPostMeta.hasOwnProperty("custom-slug")) {
-          delete updatedPostMeta["custom-slug"]
+        if (updatedPostMeta.hasOwnProperty(SiyuanAttr.Custom_Slug)) {
+          delete updatedPostMeta[SiyuanAttr.Custom_Slug]
         }
 
         setting[id] = updatedPostMeta
@@ -269,9 +306,6 @@ const usePublish = () => {
           delete updatedPostMeta[posidKey]
         }
         // 别名不能删除，因为别的平台可能还用
-        // if (updatedPostMeta.hasOwnProperty("custom-slug")) {
-        //   delete updatedPostMeta["custom-slug"]
-        // }
 
         setting[id] = updatedPostMeta
         await updateSetting(setting)
@@ -312,7 +346,7 @@ const usePublish = () => {
       const postMeta = ObjectUtil.getProperty(setting, id, {})
 
       // 别名
-      const slug = ObjectUtil.getProperty(postMeta, "custom-slug", post.wp_slug)
+      const slug = ObjectUtil.getProperty(postMeta, SiyuanAttr.Custom_Slug, post.wp_slug)
       if (!StrUtil.isEmptyString(slug)) {
         post.wp_slug = slug
         logger.info("Using existing siyuan note slug")

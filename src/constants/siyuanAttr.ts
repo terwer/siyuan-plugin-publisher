@@ -36,9 +36,9 @@ enum SiyuanAttr {
   Custom_Slug = "custom-slug",
 
   /**
-   * 自定义categories属性
+   * YAML属性
    */
-  Custom_Categories = "custom-categories",
+  Custom_Yaml = "custom-yaml",
 }
 
 export { SiyuanAttr }
