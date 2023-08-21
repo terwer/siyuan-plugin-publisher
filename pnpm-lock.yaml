@@ -39,8 +39,8 @@ dependencies:
     specifier: ^1.4.2
     version: 1.4.2
   siyuan:
-    specifier: ^0.7.9
-    version: 0.7.9
+    specifier: ^0.8.0
+    version: 0.8.0
   siyuan-plugin-picgo:
     specifier: ^1.4.4
     version: 1.4.4(typescript@5.1.6)
@@ -72,8 +72,8 @@ dependencies:
     specifier: ^0.2.29
     version: 0.2.29
   zhi-github-middleware:
-    specifier: ^0.2.9
-    version: 0.2.9
+    specifier: ^0.3.4
+    version: 0.3.4
   zhi-lib-base:
     specifier: ^0.4.4
     version: 0.4.4
@@ -84,8 +84,8 @@ dependencies:
     specifier: ^2.4.3
     version: 2.4.3
   zhi-xmlrpc-middleware:
-    specifier: ^0.4.23
-    version: 0.4.23
+    specifier: ^0.5.4
+    version: 0.5.4
 
 devDependencies:
   '@terwer/esbuild-config-custom':
@@ -6164,6 +6164,10 @@ packages:
     resolution: {integrity: sha512-X5olBQhfkgyPRF+d8agpcbAaFnCSvSkN3LWX7XU9jApmCfpJ/4PAmK7mKPfR1YGBpjFLRa/xTrv11BQ3hxN15Q==}
     dev: false
 
+  /siyuan@0.8.0:
+    resolution: {integrity: sha512-QbT/6YKetvmJ/1D7OaqF/zIK+TUXI6eUPJ48qlbqdJtN8/aN809+hsMz+2xUO5pxq5nc3+hSGomia5sBoXQRwQ==}
+    dev: false
+
   /slash@3.0.0:
     resolution: {integrity: sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==}
     engines: {node: '>=8'}
@@ -7385,12 +7389,12 @@ packages:
       zhi-lib-base: 0.4.4
     dev: false
 
-  /zhi-github-middleware@0.2.9:
-    resolution: {integrity: sha512-4XJVRceIo6eKFnRCePYBRNd+f+z/55CMNX410VsWs0lNABC+Gl6vVm/ZG4u4raf6BN22Qv6d67+djlSTECjpjQ==}
+  /zhi-github-middleware@0.3.4:
+    resolution: {integrity: sha512-xb1sM3SbveBqBdr1hnCDsDgs88fmuhc4GH8a+yqFA+Lscivijq47S+bnWQ0umY7qV8yR4qBqFvuk2U8OxEJy0A==}
     dependencies:
       '@octokit/core': 5.0.0
       js-base64: 3.7.5
-      zhi-common: 1.18.0
+      zhi-common: 1.23.0
       zhi-lib-base: 0.4.4
     dev: false
 
@@ -7416,10 +7420,10 @@ packages:
       zhi-lib-base: 0.4.4
     dev: false
 
-  /zhi-xmlrpc-middleware@0.4.23:
-    resolution: {integrity: sha512-6g3t/hhAikiRYrp//1KSBTy3uX4T768aIsl4xVlpXkE2OI3moio+dDMI5REg3dHn9krcMKKZQ0p45rCg/oR/yw==}
+  /zhi-xmlrpc-middleware@0.5.4:
+    resolution: {integrity: sha512-4TGMHoeP3sIKMr6Eo4DDTtPhvu+4p7CSv7P4ZM25iZuhf9RFKJ6OhunSxevRB2rLVgmwlXy2eCRUu8d6l4Xlug==}
     dependencies:
-      zhi-common: 1.18.0
+      zhi-common: 1.23.0
       zhi-device: 2.3.1
       zhi-lib-base: 0.4.4
     dev: false
