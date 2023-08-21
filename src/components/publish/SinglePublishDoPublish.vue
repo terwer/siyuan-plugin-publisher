@@ -134,9 +134,7 @@ const handlePublish = async () => {
         window.location.reload()
       } else {
         // 需要刷新才能继续操作，防止重复提交
-        formData.isInit = false
-        await initPage()
-        formData.isInit = true
+        window.location.reload()
       }
     } else {
       ElMessage.error(processResult.errMsg)
