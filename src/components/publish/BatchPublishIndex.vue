@@ -270,7 +270,7 @@ onMounted(async () => {
   const siyuanPost = await blogApi.getPost(id)
   formData.siyuanPost = siyuanPost
   // 元数据初始化
-  formData.siyuanPost = await initPublishMethods.assignInitAttrs(formData.siyuanPost, id, formData.publishCfg)
+  formData.siyuanPost = await initPublishMethods.assignInitSlug(formData.siyuanPost, id, formData.publishCfg)
   logger.debug("batch inited siyuanPost =>", toRaw(formData.siyuanPost))
   // ==================
   // 初始化结束

@@ -81,8 +81,8 @@ dependencies:
     specifier: ^0.1.4
     version: 0.1.4
   zhi-siyuan-api:
-    specifier: ^2.3.9
-    version: 2.3.9
+    specifier: ^2.4.1
+    version: 2.4.1
   zhi-xmlrpc-middleware:
     specifier: ^0.4.23
     version: 0.4.23
@@ -6154,7 +6154,7 @@ packages:
       zhi-device: 2.3.1
       zhi-fetch-middleware: 0.2.29
       zhi-lib-base: 0.4.4
-      zhi-siyuan-api: 2.3.9
+      zhi-siyuan-api: 2.4.1
     transitivePeerDependencies:
       - '@vue/composition-api'
       - typescript
@@ -7408,8 +7408,8 @@ packages:
       - supports-color
     dev: false
 
-  /zhi-siyuan-api@2.3.9:
-    resolution: {integrity: sha512-OdYUgWDpEqeE25ZG9j6YewN+F7c8JUFUSSNqxp/POzWC+iBhcgwizj97uy2jtWHHkksLRHNROtKmUiyjA+S8tg==}
+  /zhi-siyuan-api@2.4.1:
+    resolution: {integrity: sha512-CXXosEUgdSRkFHNMdCwNocHsACwieK2cs0gneKDPGrSmG3qMZXmUJxvOO/dwS3Spd1hm2ZXbYZ8n6vBfHhGTPQ==}
     dependencies:
       zhi-blog-api: 1.31.1
       zhi-common: 1.23.0

@@ -27,19 +27,26 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { reactive, toRaw } from "vue"
 import { SypConfig } from "~/syp.config.ts"
 import { AliasTranslator, ObjectUtil, StrUtil, YamlUtil } from "zhi-common"
-import { BlogAdaptor, PageTypeEnum, Post, PostStatusEnum, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
+import {
+  BlogAdaptor,
+  BlogConfig,
+  PageTypeEnum,
+  Post,
+  PostStatusEnum,
+  YamlConvertAdaptor,
+  YamlFormatObj,
+} from "zhi-blog-api"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { pre } from "~/src/utils/import/pre.ts"
 import { MethodEnum } from "~/src/models/methodEnum.ts"
 import { DynamicConfig, getDynYamlKey } from "~/src/platforms/dynamicConfig.ts"
-import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
 import { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
 import { ElMessage } from "element-plus"
 import Adaptors from "~/src/adaptors"
-import { SiyuanAttr } from "~/src/constants/siyuanAttr.ts"
+import { SiyuanAttr } from "zhi-siyuan-api"
 
 /**
  * 通用发布组件
@@ -75,7 +82,7 @@ const usePublish = () => {
    */
   const doSinglePublish = async (key: string, id: string, publishCfg: IPublishCfg, doc: Post) => {
     const setting: typeof SypConfig = publishCfg.setting
-    const cfg: CommonBlogConfig = publishCfg.cfg
+    const cfg: BlogConfig = publishCfg.cfg
     const dynCfg: DynamicConfig = publishCfg.dynCfg
 
     // vars
@@ -140,7 +147,7 @@ const usePublish = () => {
         const posidKey = cfg.posidKey
         const postMeta = ObjectUtil.getProperty(setting, id, {})
         postMeta[posidKey] = postid
-        postMeta[SiyuanAttr.Custom_Slug] = post.wp_slug
+        postMeta[SiyuanAttr.Custom_slug] = post.wp_slug
         setting[id] = postMeta
         await updateSetting(setting)
 
@@ -155,14 +162,14 @@ const usePublish = () => {
         // 写入属性到配置
         // 这里更新 slug 的原因是历史文章有可能没有生成过别名
         const postMeta = ObjectUtil.getProperty(setting, id, {})
-        if (!postMeta.hasOwnProperty(SiyuanAttr.Custom_Slug)) {
+        if (!postMeta.hasOwnProperty(SiyuanAttr.Custom_slug)) {
           logger.info("检测到未生成过别名，准备更新别名")
-          postMeta[SiyuanAttr.Custom_Slug] = post.wp_slug
+          postMeta[SiyuanAttr.Custom_slug] = post.wp_slug
           setting[id] = postMeta
           await updateSetting(setting)
         } else {
           // 确保别名不被修改
-          post.wp_slug = postMeta[SiyuanAttr.Custom_Slug]
+          post.wp_slug = postMeta[SiyuanAttr.Custom_slug]
         }
 
         logger.info("edit post=>", result)
@@ -172,10 +179,13 @@ const usePublish = () => {
       logger.info("发布完成，准备处理文章属性")
       // 保存属性用于初始化
       if (isSys) {
-        const yamlKey = SiyuanAttr.Custom_Yaml
-        const yaml = YamlUtil.obj2Yaml(post.toYamlObj())
-        await kernelApi.setSingleBlockAttr(id, yamlKey, yaml)
-        logger.info("内置平台，保存公共的YAML")
+        const newAttrs = {
+          [SiyuanAttr.Sys_memo]: post.shortDesc,
+          [SiyuanAttr.Sys_tags]: post.mt_keywords,
+          [SiyuanAttr.Custom_categories]: post.categories.join(","),
+        }
+        await kernelApi.setBlockAttrs(id, newAttrs)
+        logger.info("内置平台，直接保存属性", newAttrs)
       } else {
         const yamlAdaptor: YamlConvertAdaptor = await Adaptors.getYamlAdaptor(key, cfg)
         if (null !== yamlAdaptor) {
@@ -227,7 +237,7 @@ const usePublish = () => {
    */
   const doSingleDelete = async (key: string, id: string, publishCfg: IPublishCfg) => {
     const setting: typeof SypConfig = publishCfg.setting
-    const cfg: CommonBlogConfig = publishCfg.cfg
+    const cfg: BlogConfig = publishCfg.cfg
     const dynCfg: DynamicConfig = publishCfg.dynCfg
 
     try {
@@ -256,8 +266,8 @@ const usePublish = () => {
         if (updatedPostMeta.hasOwnProperty(posidKey)) {
           delete updatedPostMeta[posidKey]
         }
-        if (updatedPostMeta.hasOwnProperty(SiyuanAttr.Custom_Slug)) {
-          delete updatedPostMeta[SiyuanAttr.Custom_Slug]
+        if (updatedPostMeta.hasOwnProperty(SiyuanAttr.Custom_slug)) {
+          delete updatedPostMeta[SiyuanAttr.Custom_slug]
         }
 
         setting[id] = updatedPostMeta
@@ -291,7 +301,7 @@ const usePublish = () => {
   const doForceSingleDelete = async (key: string, id: string, publishCfg: IPublishCfg) => {
     try {
       const setting: typeof SypConfig = publishCfg.setting
-      const cfg: CommonBlogConfig = publishCfg.cfg
+      const cfg: BlogConfig = publishCfg.cfg
       const dynCfg: DynamicConfig = publishCfg.dynCfg
 
       // 检测是否发布
@@ -327,7 +337,7 @@ const usePublish = () => {
     }
   }
 
-  const getPostPreviewUrl = async (api: BlogAdaptor, postid: string, cfg: CommonBlogConfig) => {
+  const getPostPreviewUrl = async (api: BlogAdaptor, postid: string, cfg: BlogConfig) => {
     const previewUrl = await api.getPreviewUrl(postid)
     const isAbsoluteUrl = /^http/.test(previewUrl)
     return isAbsoluteUrl ? previewUrl : `${cfg?.home ?? ""}${previewUrl}`
@@ -341,12 +351,12 @@ const usePublish = () => {
    * @param publishCfg - 发布配置
    */
   const initPublishMethods = {
-    assignInitAttrs: async (post: Post, id: string, publishCfg: IPublishCfg) => {
+    assignInitSlug: async (post: Post, id: string, publishCfg: IPublishCfg) => {
       const setting: typeof SypConfig = publishCfg.setting
       const postMeta = ObjectUtil.getProperty(setting, id, {})
 
       // 别名
-      const slug = ObjectUtil.getProperty(postMeta, SiyuanAttr.Custom_Slug, post.wp_slug)
+      const slug = ObjectUtil.getProperty(postMeta, SiyuanAttr.Custom_slug, post.wp_slug)
       if (!StrUtil.isEmptyString(slug)) {
         post.wp_slug = slug
         logger.info("Using existing siyuan note slug")
@@ -362,6 +372,30 @@ const usePublish = () => {
       return post
     },
 
+    assignInitAttrs: async (post: Post, id: string, publishCfg: IPublishCfg) => {
+      const setting: typeof SypConfig = publishCfg.setting
+      const cfg: BlogConfig = publishCfg.cfg
+      const dynCfg: DynamicConfig = publishCfg.dynCfg
+
+      // 别名
+      post = await initPublishMethods.assignInitSlug(post, id, publishCfg)
+      const slug = post.wp_slug
+
+      // 平台相关自定义属性（摘要、标签、分类）
+      const key = dynCfg.platformKey
+      const yamlAdaptor: YamlConvertAdaptor = await Adaptors.getYamlAdaptor(key, cfg)
+      if (null !== yamlAdaptor) {
+        const yamlObj = await YamlUtil.yaml2ObjAsync(post.description)
+        const yamlFormatObj = new YamlFormatObj()
+        yamlFormatObj.yamlObj = yamlObj
+        post = yamlAdaptor.convertToAttr(post, yamlFormatObj, cfg)
+        // 去吧别名不被修改
+        post.wp_slug = slug
+      }
+
+      return post
+    },
+
     // 常规发布初始化
     doInitSinglePage: async (
       key: string,
@@ -370,7 +404,7 @@ const usePublish = () => {
       publishCfg: IPublishCfg
     ) => {
       const setting: typeof SypConfig = publishCfg.setting
-      const cfg: CommonBlogConfig = publishCfg.cfg
+      const cfg: BlogConfig = publishCfg.cfg
       const dynCfg: DynamicConfig = publishCfg.dynCfg
 
       // 检测是否发布
