@@ -345,6 +345,7 @@ const usePublish = () => {
    * @param publishCfg - 发布配置
    */
   const initPublishMethods = {
+    // 别名初始化
     assignInitSlug: async (post: Post, id: string, publishCfg: IPublishCfg) => {
       const setting: typeof SypConfig = publishCfg.setting
       const postMeta = ObjectUtil.getProperty(setting, id, {})
@@ -366,6 +367,7 @@ const usePublish = () => {
       return post
     },
 
+    // 分配平台相关的YAML属性
     assignInitAttrs: async (post: Post, id: string, publishCfg: IPublishCfg) => {
       const setting: typeof SypConfig = publishCfg.setting
       const cfg: BlogConfig = publishCfg.cfg
@@ -448,6 +450,8 @@ const usePublish = () => {
         // 查询平台文章
         platformPost = await api.getPost(postid)
         // 更新属性
+        mergedPost.shortDesc = platformPost.shortDesc
+        mergedPost.mt_keywords = platformPost.mt_keywords
         mergedPost.categories = platformPost.categories
         mergedPost.cate_slugs = platformPost.cate_slugs
 
@@ -464,6 +468,23 @@ const usePublish = () => {
         mergedPost,
         postPreviewUrl,
       }
+    },
+
+    doMergeBatchPost: (post: Post, newPost: Post) => {
+      // 复制原始 post 对象以避免直接修改它
+      const mergedPost = { ...post }
+
+      const postKeywords = post.mt_keywords.split(",")
+      const newPostKeywords = newPost.mt_keywords.split(",")
+      // 合并并去重关键词
+      const mergedKeywords = [...new Set([...postKeywords, ...newPostKeywords])]
+      mergedPost.mt_keywords = mergedKeywords.join(",")
+
+      // 合并并去重分类
+      const mergedCategories = [...new Set([...post.categories, ...newPost.categories])]
+      mergedPost.categories = mergedCategories
+
+      return mergedPost
     },
   }
 

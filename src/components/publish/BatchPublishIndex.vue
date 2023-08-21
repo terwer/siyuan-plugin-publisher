@@ -47,7 +47,6 @@ import { isDev } from "~/src/utils/constants.ts"
 import { ICategoryConfig } from "~/src/types/ICategoryConfig.ts"
 import { SiyuanAttr } from "zhi-siyuan-api"
 import { DistributionPattern } from "~/src/models/distributionPattern.ts"
-import Adaptors from "~/src/adaptors"
 
 const logger = createAppLogger("publisher-index")
 
@@ -119,8 +118,6 @@ const handlePublish = async () => {
     formData.failBatchResults = []
     formData.successBatchResults = []
 
-    // 思源笔记原始文章数据
-    const siyuanPost = formData.siyuanPost
     for (const key of formData.dynList) {
       if (sysKeys.includes(key)) {
         logger.info(`开始发布 [${key}] 系统内置平台`)
@@ -130,15 +127,21 @@ const handlePublish = async () => {
         const publishCfg = await getPublishCfg(key)
         formData.publishCfg = publishCfg
 
+        // 思源笔记原始文章数据
+        const siyuanPost = await blogApi.getPost(id)
+        // 元数据初始化
+        formData.siyuanPost = await initPublishMethods.assignInitSlug(siyuanPost, id, formData.publishCfg)
+
         // 合并模式需要重新获取
         if (formData.distriPattern === DistributionPattern.Merge) {
           // 元数据初始化
           const platformPost = await initPublishMethods.assignInitAttrs(siyuanPost, id, formData.publishCfg)
-          throw new Error("合并模式开发中")
-          const mergedPost = platformPost
-          formData.siyuanPost = mergedPost
-        } else {
-          formData.siyuanPost = siyuanPost
+          const mergedPost = initPublishMethods.doMergeBatchPost(formData.siyuanPost, platformPost)
+          logger.debug("批量分发模式文章已合并", {
+            siyuanPost: toRaw(siyuanPost),
+            platformPost: toRaw(platformPost),
+            mergedPost: toRaw(mergedPost),
+          })
         }
       }
 
@@ -294,9 +297,8 @@ onMounted(async () => {
   formData.publishCfg = await getPublishCfg()
   // 思源笔记原始文章数据
   const siyuanPost = await blogApi.getPost(id)
-  formData.siyuanPost = siyuanPost
   // 元数据初始化
-  formData.siyuanPost = await initPublishMethods.assignInitSlug(formData.siyuanPost, id, formData.publishCfg)
+  formData.siyuanPost = await initPublishMethods.assignInitSlug(siyuanPost, id, formData.publishCfg)
   logger.debug("batch inited siyuanPost =>", toRaw(formData.siyuanPost))
   // ==================
   // 初始化结束
