@@ -69,8 +69,8 @@ dependencies:
     specifier: ^2.3.1
     version: 2.3.1
   zhi-fetch-middleware:
-    specifier: ^0.2.29
-    version: 0.2.29
+    specifier: ^0.3.4
+    version: 0.3.4
   zhi-github-middleware:
     specifier: ^0.3.4
     version: 0.3.4
@@ -7385,6 +7385,14 @@ packages:
     resolution: {integrity: sha512-QUIwvOJ7Aa1EPVPwAflzpvQC8wXvUetdHrFIk+umdVa8L+wYCAF2QTWpCVe4wGe0JClR+V9J8iVlKu9coMZYWw==}
     dependencies:
       zhi-common: 1.18.0
+      zhi-device: 2.3.1
+      zhi-lib-base: 0.4.4
+    dev: false
+
+  /zhi-fetch-middleware@0.3.4:
+    resolution: {integrity: sha512-mU4n+ZXuOoUmXsx5Vl6V0Rucz4esNH3luxaRxE0JBFCfvqnZHGEg6UJSBgHRRq3TDkUjtf8Kn75RSu/r58rB4g==}
+    dependencies:
+      zhi-common: 1.23.0
       zhi-device: 2.3.1
       zhi-lib-base: 0.4.4
     dev: false
