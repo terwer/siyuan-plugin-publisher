@@ -46,6 +46,8 @@ import AiSwitch from "~/src/components/publish/form/AiSwitch.vue"
 import { isDev } from "~/src/utils/constants.ts"
 import { ICategoryConfig } from "~/src/types/ICategoryConfig.ts"
 import { SiyuanAttr } from "zhi-siyuan-api"
+import { DistributionPattern } from "~/src/models/distributionPattern.ts"
+import Adaptors from "~/src/adaptors"
 
 const logger = createAppLogger("publisher-index")
 
@@ -102,6 +104,7 @@ const formData = reactive({
   // sync attrs end
   // =========================
 
+  distriPattern: DistributionPattern.Override,
   actionEnable: true,
 })
 
@@ -115,6 +118,9 @@ const handlePublish = async () => {
     formData.errCount = 0
     formData.failBatchResults = []
     formData.successBatchResults = []
+
+    // 思源笔记原始文章数据
+    const siyuanPost = formData.siyuanPost
     for (const key of formData.dynList) {
       if (sysKeys.includes(key)) {
         logger.info(`开始发布 [${key}] 系统内置平台`)
@@ -123,10 +129,17 @@ const handlePublish = async () => {
         // 平台相关的配置，需要各自重新获取
         const publishCfg = await getPublishCfg(key)
         formData.publishCfg = publishCfg
-        // 思源笔记原始文章数据
-        const siyuanPost = await blogApi.getPost(id)
-        // 元数据初始化
-        formData.siyuanPost = await initPublishMethods.assignInitAttrs(siyuanPost, id, formData.publishCfg)
+
+        // 合并模式需要重新获取
+        if (formData.distriPattern === DistributionPattern.Merge) {
+          // 元数据初始化
+          const platformPost = await initPublishMethods.assignInitAttrs(siyuanPost, id, formData.publishCfg)
+          throw new Error("合并模式开发中")
+          const mergedPost = platformPost
+          formData.siyuanPost = mergedPost
+        } else {
+          formData.siyuanPost = siyuanPost
+        }
       }
 
       const batchResult = await doSinglePublish(key, id, formData.publishCfg, formData.siyuanPost)
@@ -238,7 +251,7 @@ const syncAiSwitch = (val: boolean) => {
   logger.debug(`syncAiSwitch in batch publish => ${formData.useAi}`)
 }
 
-const syncEditMode = (val: PageEditMode) => {
+const syncEditMode = async (val: PageEditMode) => {
   formData.editType = val
   logger.debug("syncEditMode in batch publish")
 }
@@ -291,7 +304,7 @@ onMounted(async () => {
 
   // 这里可以控制一些功能开关
   formData.useAi = isDev
-  formData.editType = isDev ? PageEditMode.EditMode_complex : PageEditMode.EditMode_simple
+  formData.editType = PageEditMode.EditMode_simple
 })
 </script>
 
@@ -339,12 +352,26 @@ onMounted(async () => {
             编辑模式开始
             --------------------------------------
             -->
-            <source-mode v-if="formData.editType === PageEditMode.EditMode_source" v-model="formData.siyuanPost" />
+            <source-mode
+              v-if="formData.editType === PageEditMode.EditMode_source"
+              v-model="formData.siyuanPost"
+              :page-id="id"
+            />
             <div v-else class="normal-mode">
               <!-- 文章标题 -->
               <div class="form-post-title">
                 <el-form-item :label="t('main.title')">
                   <el-input v-model="formData.siyuanPost.title" />
+                </el-form-item>
+              </div>
+
+              <!-- 分发模式 -->
+              <div class="distri-type">
+                <el-form-item label="分发模式">
+                  <el-radio-group v-model="formData.distriPattern" class="ml-4">
+                    <el-radio :label="DistributionPattern.Override" size="large">覆盖</el-radio>
+                    <el-radio :label="DistributionPattern.Merge" size="large">合并</el-radio>
+                  </el-radio-group>
                 </el-form-item>
               </div>
               <el-divider border-style="dashed" />
@@ -451,6 +478,7 @@ onMounted(async () => {
 .refresh-page
   cursor pointer
 
-//.btn-rm-action
-//  margin-left 60px
+.distri-type
+  :deep(.el-form-item)
+    margin-bottom -16px
 </style>

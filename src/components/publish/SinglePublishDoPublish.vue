@@ -49,6 +49,7 @@ import { pre } from "~/src/utils/import/pre.ts"
 import { ICategoryConfig } from "~/src/types/ICategoryConfig.ts"
 import PublishKnowledgeSpace from "~/src/components/publish/form/PublishKnowledgeSpace.vue"
 import { SiyuanAttr } from "zhi-siyuan-api"
+import Adaptors from "~/src/adaptors"
 
 const logger = createAppLogger("single-publish-do-publish")
 
@@ -253,7 +254,7 @@ const refreshChangeTips = () => {
   formData.changeTips.title = showChangeTip(formData.siyuanPost.title, formData.platformPost.title)
 }
 
-const syncEditMode = (val: PageEditMode) => {
+const syncEditMode = async (val: PageEditMode) => {
   formData.editType = val
   logger.debug("syncEditMode in single publish")
 }
@@ -375,7 +376,7 @@ onMounted(async () => {
 
   // 这里可以控制一些功能开关
   formData.useAi = isDev
-  formData.editType = isDev ? PageEditMode.EditMode_complex : PageEditMode.EditMode_simple
+  formData.editType = PageEditMode.EditMode_simple
 })
 </script>
 
@@ -401,6 +402,7 @@ onMounted(async () => {
                 v-if="formData.editType === PageEditMode.EditMode_source"
                 v-model="formData.mergedPost"
                 :api-type="key"
+                :page-id="id"
                 :cfg="formData.publishCfg.cfg"
                 @emitSyncPost="syncPost"
               />
@@ -411,6 +413,14 @@ onMounted(async () => {
                     <el-input v-model="formData.mergedPost.title" />
                   </el-form-item>
                 </div>
+
+                <!-- 知识空间 -->
+                <publish-knowledge-space
+                  v-model:knowledge-space-type="formData.publishCfg.cfg.knowledgeSpaceType"
+                  v-model:knowledge-space-config="formData.knowledgeSpaceConfig"
+                  v-model:cate-slugs="formData.mergedPost.cate_slugs"
+                  @emitSyncCateSlugs="syncCateSlugs"
+                />
                 <el-divider border-style="dashed" />
 
                 <div v-if="formData.editType === PageEditMode.EditMode_complex" class="complex-mode">
@@ -446,14 +456,6 @@ onMounted(async () => {
                     v-model:category-config="formData.categoryConfig"
                     v-model:categories="formData.mergedPost.categories"
                     @emitSyncCates="syncCates"
-                  />
-
-                  <!-- 知识空间 -->
-                  <publish-knowledge-space
-                    v-model:knowledge-space-type="formData.publishCfg.cfg.knowledgeSpaceType"
-                    v-model:knowledge-space-config="formData.knowledgeSpaceConfig"
-                    v-model:cate-slugs="formData.mergedPost.cate_slugs"
-                    @emitSyncCateSlugs="syncCateSlugs"
                   />
 
                   <!-- 发布时间 -->

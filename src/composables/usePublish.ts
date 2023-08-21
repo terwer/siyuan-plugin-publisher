@@ -377,36 +377,27 @@ const usePublish = () => {
 
       // 平台相关自定义属性（摘要、标签、分类）
       const key = dynCfg.platformKey
-      // const yamlAdaptor: YamlConvertAdaptor = await Adaptors.getYamlAdaptor(key, cfg)
-      // if (null !== yamlAdaptor) {
-      //   const yamlObj = await YamlUtil.yaml2ObjAsync(post.description)
-      //   const yamlFormatObj = new YamlFormatObj()
-      //   yamlFormatObj.yamlObj = yamlObj
-      //   post = yamlAdaptor.convertToAttr(post, yamlFormatObj, cfg)
-      //   // 去吧别名不被修改
-      //   post.wp_slug = slug
-      // }
       const yamlAdaptor: YamlConvertAdaptor = await Adaptors.getYamlAdaptor(key, cfg)
       if (null !== yamlAdaptor) {
         const yamlKey = getDynYamlKey(key)
         const yaml = await kernelApi.getSingleBlockAttr(id, yamlKey)
-        if(!StrUtil.isEmptyString(yaml)){
-
+        if (!StrUtil.isEmptyString(yaml)) {
+          const yamlObj = await YamlUtil.yaml2ObjAsync(yaml)
+          const yamlFormatObj = new YamlFormatObj()
+          yamlFormatObj.yamlObj = yamlObj
+          post = yamlAdaptor.convertToAttr(post, yamlFormatObj, cfg)
+          logger.info("使用自定义的YAML适配器初始化 =>", yamlObj)
+          logger.debug("自定义的YAML适配器初始化完毕", { post: toRaw(post) })
         }
-        // 先生成对应平台的yaml
-        // const yamlObj: YamlFormatObj = yamlAdaptor.convertToYaml(post, cfg)
-        // const yaml = yamlObj.formatter
-        // await kernelApi.setSingleBlockAttr(id, yamlKey, yaml)
-        logger.debug("使用自定义的YAML适配器初始化 =>", yaml)
       } else {
         const yamlKey = getDynYamlKey(key)
         const yaml = await kernelApi.getSingleBlockAttr(id, yamlKey)
-        if(!StrUtil.isEmptyString(yaml)){
-
+        if (!StrUtil.isEmptyString(yaml)) {
+          const yamlObj = await YamlUtil.yaml2ObjAsync(yaml)
+          logger.warn("未找到YAML适配器，使用公共的YAML模型初始化 =>", yamlObj)
+          post.fromYaml(yamlObj)
+          logger.debug("公共的YAML模型初始化完毕", { post: toRaw(post) })
         }
-        // const yaml = YamlUtil.obj2Yaml(post.toYamlObj())
-        // await kernelApi.setSingleBlockAttr(id, yamlKey, yaml)
-        logger.debug("未找到YAML适配器，使用公共的YAML模型初始化 =>", yaml)
       }
 
       return post

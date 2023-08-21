@@ -91,13 +91,14 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
    * 处理图片
    *
    * @param post - 要处理图片的 Post 对象
-   * @param id - （可选）图片 ID
+   * @param id - 思源笔记文档 ID
    * @param publishCfg - （可选）发布配置参数
    * @returns 一个 Promise，解析为处理后的 Post 对象
    */
-  private async handlePictures(post: Post, id?: string, publishCfg?: any): Promise<Post> {
-    const cfg: BlogConfig = publishCfg.cfg
-    const dynCfg: DynamicConfig = publishCfg.dynCfg
+  private async handlePictures(post: Post, id: string, publishCfg?: any): Promise<Post> {
+    const cfg: BlogConfig = publishCfg?.cfg
+    const dynCfg: DynamicConfig = publishCfg?.dynCfg
+    const middlewareUrl = cfg?.middlewareUrl
 
     // 判断key包含 custom_Zhihu 或者 /custom_Zhihu-\w+/
     const mustUseOwnPlatform: string[] = MUST_USE_OWN_PLATFORM
@@ -106,15 +107,21 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     if (!isPicgoInstalled) {
       this.logger.warn("未安装 PicGO 插件，将使用平台上传图片")
     }
-    // 注意如果 platformKey=custom_Zhihu 或者 custom_Zhihu-xxx custom_Notion-xxx 也算 可以参考 /custom_Zhihu-\w+/
-    const mustUseOwn: boolean = mustUseOwnPlatform.some((platform) => {
-      const regex = new RegExp(`${platform}(-\\w+)?`)
-      return regex.test(dynCfg.platformKey)
-    })
-    const mustUsePicbed: boolean = mustUsePicbedPlatform.some((platform) => {
-      const regex = new RegExp(`${platform}(-\\w+)?`)
-      return regex.test(dynCfg.platformKey)
-    })
+
+    let mustUseOwn: boolean = false
+    let mustUsePicbed: boolean = false
+    if (dynCfg?.platformKey) {
+      // 注意如果 platformKey=custom_Zhihu 或者 custom_Zhihu-xxx custom_Notion-xxx 也算 可以参考 /custom_Zhihu-\w+/
+      mustUseOwn = mustUseOwnPlatform.some((platform) => {
+        const regex = new RegExp(`${platform}(-\\w+)?`)
+        return regex.test(dynCfg.platformKey)
+      })
+      mustUsePicbed = mustUsePicbedPlatform.some((platform) => {
+        const regex = new RegExp(`${platform}(-\\w+)?`)
+        return regex.test(dynCfg.platformKey)
+      })
+    }
+
     if (mustUseOwn) {
       this.logger.warn("该平台不支持 Picgo 插件，将使用平台上传图片")
     }
@@ -154,7 +161,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
         try {
           for (const image of images) {
             const imageUrl = image.url
-            const base64Info = await this.readFileToBase64(imageUrl, cfg)
+            const base64Info = await this.readFileToBase64(imageUrl, middlewareUrl)
             const bits = base64ToBuffer(base64Info.imageBase64)
             const mediaObject = new MediaObject(image.name, base64Info.mimeType, bits)
             this.logger.debug("before upload, mediaObject =>", mediaObject)
@@ -207,20 +214,18 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
    * 读取文件并将其转换为 Base64 编码
    *
    * @param url - 要读取的文件的 URL
-   * @param cfg - 博客配置对象
+   * @param middlewareUrl - 代理地址
    * @returns 一个 Promise，解析为文件的 Base64 编码字符串
    */
-  private async readFileToBase64(url: string, cfg: BlogConfig): Promise<any> {
+  private async readFileToBase64(url: string, middlewareUrl?: string): Promise<any> {
     let base64Info: any
     if (this.isSiyuanOrSiyuanNewWin) {
       this.logger.info("Inside Siyuan notes, use the built-in request to obtain base64")
       base64Info = await remoteImageToBase64Info(url)
     } else {
       this.logger.info("Outside the browser, use an image proxy")
-      const middlewareUrl = StrUtil.isEmptyString(cfg.middlewareUrl)
-        ? "https://api.terwer.space/api/middleware"
-        : cfg.middlewareUrl
-      const response = await this.api.proxyFetch(`${middlewareUrl}/image`, [], { url: url }, "POST")
+      const proxyUrl = StrUtil.isEmptyString(middlewareUrl) ? "https://api.terwer.space/api/middleware" : middlewareUrl
+      const response = await this.api.proxyFetch(`${proxyUrl}/image`, [], { url: url }, "POST")
       this.logger.debug("readFileToBase64 proxyFetch response =>", response)
       const resBody = response.body
       const base64String = resBody.base64

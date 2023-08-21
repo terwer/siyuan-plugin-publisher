@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2023, Terwer . All rights reserved.
+ * Copyright (c) 2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -24,11 +24,18 @@
  */
 
 /**
- * 源码显示类型
+ * 枚举，表示不同的分发模式
  */
-export enum SourceContentShowType {
-  YAML,
-  MD_CONTENT,
-  YAML_MD_CONTENT,
-  HTML_CONTENT,
+enum DistributionPattern {
+  /**
+   * 表示 "覆盖" 模式
+   */
+  Override = "Override",
+
+  /**
+   * 表示 "合并" 模式
+   */
+  Merge = "Merge",
 }
+
+export { DistributionPattern }

@@ -34,14 +34,20 @@ import { ElMessage } from "element-plus"
 import { DateUtil, StrUtil, YamlUtil } from "zhi-common"
 import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
 import Adaptors from "~/src/adaptors"
+import { usePicgoBridge } from "~/src/composables/usePicgoBridge.ts"
 
 const logger = createAppLogger("source-mode")
 const { t } = useVueI18n()
+const { handlePicgo } = usePicgoBridge()
 
 const props = defineProps({
   modelValue: {
     type: Object,
     default: {} as Post,
+  },
+  pageId: {
+    type: String,
+    default: "",
   },
   apiType: {
     type: String,
@@ -54,7 +60,9 @@ const props = defineProps({
 })
 
 const formData = reactive({
-  stype: SourceContentShowType.YAML,
+  isLoading: false,
+
+  stype: SourceContentShowType.MD_CONTENT,
   contentReadonlyMode: true,
   readonlyMode: StrUtil.isEmptyString(props.apiType),
   syncStatus: "info",
@@ -83,11 +91,11 @@ const onYamlShowTypeChange = (val: SourceContentShowType) => {
       formData.contentReadonlyMode = false
       initYaml(formData.yamlFormatObj.formatter)
       break
-    case SourceContentShowType.CONTENT:
+    case SourceContentShowType.MD_CONTENT:
       formData.contentReadonlyMode = true
       initYaml(formData.yamlFormatObj.mdContent)
       break
-    case SourceContentShowType.YAML_CONTENT:
+    case SourceContentShowType.YAML_MD_CONTENT:
       formData.contentReadonlyMode = true
       initYaml(formData.yamlFormatObj.mdFullContent)
       break
@@ -152,44 +160,58 @@ const onYamlContextMenu = (event: any) => {
  *
  * @param yaml
  */
-const initYaml = (yaml: string) => {
+const initYaml = async (yaml: string) => {
   formData.yamlContent = yaml
 }
 
 const initPage = async () => {
-  let yfmObj: YamlFormatObj = new YamlFormatObj()
-  const post = formData.siyuanPost
-  formData.cfg = props.cfg as CommonBlogConfig
-  // 没有平台 Key，不展示 YAML
-  formData.yamlAdaptor = formData.readonlyMode ? null : await Adaptors.getYamlAdaptor(props.apiType, formData.cfg)
-  // 如果传了 key ，但是没有 YAML 适配器，还是不能展示
-  formData.readonlyMode = formData.yamlAdaptor === null
+  formData.isLoading = true
+  try {
+    let yfmObj: YamlFormatObj = new YamlFormatObj()
+    const post = formData.siyuanPost
+    formData.cfg = props.cfg as CommonBlogConfig
+    // 没有平台 Key，不展示 YAML
+    formData.yamlAdaptor = formData.readonlyMode ? null : await Adaptors.getYamlAdaptor(props.apiType, formData.cfg)
+    // 如果传了 key ，但是没有 YAML 适配器，还是不能展示
+    formData.readonlyMode = formData.yamlAdaptor === null
 
-  // 批量分发，此时 apiType 为空
-  if (formData.readonlyMode) {
-    yfmObj.formatter = YamlUtil.obj2Yaml(formData.siyuanPost.toYamlObj())
-    yfmObj.mdContent = formData.siyuanPost.markdown
-    yfmObj.mdFullContent = `${yfmObj.formatter}\n${yfmObj.mdContent}`
-    yfmObj.htmlContent = post.html
-    logger.debug("未找到YAML适配器，将生成公共的YAML")
-  } else {
-    yfmObj = formData.yamlAdaptor.convertToYaml(post, formData.cfg)
-    logger.debug("常规发布，生成对应平台的YAML, =>", props.apiType)
+    // 处理正文
+    const id = props.pageId
+    const md = await handlePicgo(id, post.markdown)
+    post.markdown = md
+
+    // 批量分发，此时 apiType 为空
+    if (formData.readonlyMode) {
+      yfmObj.formatter = YamlUtil.obj2Yaml(formData.siyuanPost.toYamlObj())
+      yfmObj.mdContent = post.markdown
+      yfmObj.mdFullContent = `${yfmObj.formatter}\n${yfmObj.mdContent}`
+      yfmObj.htmlContent = post.html
+      logger.debug("未找到YAML适配器，将生成公共的YAML")
+    } else {
+      yfmObj = formData.yamlAdaptor.convertToYaml(post, formData.cfg)
+      logger.debug("常规发布，生成对应平台的YAML, =>", props.apiType)
+    }
+
+    // 初始化
+    formData.yamlFormatObj = yfmObj
+    onYamlShowTypeChange(formData.stype)
+    logger.debug(`init Page in source mode, readonlyMode: ${formData.readonlyMode} =>`, {
+      siyuanPost: toRaw(formData.siyuanPost),
+    })
+  } catch (e) {
+    ElMessage.error(e.message)
+    logger.error(t("main.opt.failure") + "=>", e)
+  } finally {
+    formData.isLoading = false
   }
-
-  // 初始化
-  formData.yamlFormatObj = yfmObj
-  onYamlShowTypeChange(formData.stype)
-  logger.debug(`init Page in source mode, readonlyMode: ${formData.readonlyMode} =>`, {
-    siyuanPost: toRaw(formData.siyuanPost),
-  })
 }
 
 await initPage()
 </script>
 
 <template>
-  <div class="source-mode">
+  <el-skeleton class="placeholder" v-if="formData.isLoading" :rows="5" animated />
+  <div class="source-mode" v-else>
     <!-- YAML提示 -->
     <el-form-item v-if="!formData.readonlyMode">
       <el-alert
@@ -210,14 +232,14 @@ await initPage()
           {{ t("yaml.show.type.yaml") }}
         </a>
         <a
-          :class="{ current: formData.stype === SourceContentShowType.CONTENT, middle: true }"
-          @click="onYamlShowTypeChange(SourceContentShowType.CONTENT)"
+          :class="{ current: formData.stype === SourceContentShowType.MD_CONTENT, middle: true }"
+          @click="onYamlShowTypeChange(SourceContentShowType.MD_CONTENT)"
         >
           {{ t("yaml.show.type.md") }}
         </a>
         <a
-          :class="{ current: formData.stype === SourceContentShowType.YAML_CONTENT, middle: true }"
-          @click="onYamlShowTypeChange(SourceContentShowType.YAML_CONTENT)"
+          :class="{ current: formData.stype === SourceContentShowType.YAML_MD_CONTENT, middle: true }"
+          @click="onYamlShowTypeChange(SourceContentShowType.YAML_MD_CONTENT)"
         >
           {{ t("yaml.show.type.yamlmd") }}
         </a>
