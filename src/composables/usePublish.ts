@@ -26,8 +26,16 @@
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { reactive, toRaw } from "vue"
 import { SypConfig } from "~/syp.config.ts"
-import { AliasTranslator, ObjectUtil, StrUtil } from "zhi-common"
-import { BlogAdaptor, BlogConfig, PageTypeEnum, Post, PostStatusEnum } from "zhi-blog-api"
+import { AliasTranslator, ObjectUtil, StrUtil, YamlUtil } from "zhi-common"
+import {
+  BlogAdaptor,
+  BlogConfig,
+  PageTypeEnum,
+  Post,
+  PostStatusEnum,
+  YamlConvertAdaptor,
+  YamlFormatObj,
+} from "zhi-blog-api"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
@@ -38,6 +46,8 @@ import { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
 import { ElMessage } from "element-plus"
 import { SiyuanAttr } from "zhi-siyuan-api"
+import _ from "lodash"
+import Adaptors from "~/src/adaptors"
 
 /**
  * 通用发布组件
@@ -350,16 +360,48 @@ const usePublish = () => {
       const setting: typeof SypConfig = publishCfg.setting
       const cfg: BlogConfig = publishCfg.cfg
       const dynCfg: DynamicConfig = publishCfg.dynCfg
+      const key = dynCfg.platformKey
+      const isSys = pre.systemCfg.some((item) => item.platformKey === key)
 
       // 别名
       post = await initPublishMethods.assignInitSlug(post, id, publishCfg)
       const slug = post.wp_slug
 
-      // 平台相关自定义属性（摘要、标签、分类）
-      const key = dynCfg.platformKey
-      const yamlKey = getDynYamlKey(key)
-      const yaml = await kernelApi.getSingleBlockAttr(id, yamlKey)
-      post.yaml = yaml
+      if (!isSys) {
+        // 平台相关自定义属性（摘要、标签、分类）
+        const yamlKey = getDynYamlKey(key)
+        const yaml = await kernelApi.getSingleBlockAttr(id, yamlKey)
+        const savedYaml = YamlUtil.extractFrontmatter(yaml).trim()
+
+        // YAML属性转换
+        const yamlAdaptor: YamlConvertAdaptor = await Adaptors.getYamlAdaptor(key, cfg)
+        if (null !== yamlAdaptor) {
+          // 有适配器
+          let yamlObj: any
+          if (!StrUtil.isEmptyString(savedYaml)) {
+            yamlObj = YamlUtil.yaml2Obj(savedYaml)
+            logger.info("读取已经存在的YAML，不再使用适配器，直接转换yamlObj")
+          } else {
+            yamlObj = await YamlUtil.yaml2ObjAsync(post.description)
+            logger.info("未保存过YAML，使用适配器生成yamlObj")
+          }
+          const yamlFormatObj = new YamlFormatObj()
+          yamlFormatObj.yamlObj = yamlObj
+          post = yamlAdaptor.convertToAttr(post, yamlFormatObj, cfg)
+          logger.debug("使用适配器转换yamlObj到post完成 =>", yamlObj)
+        } else {
+          // 无适配器
+          if (!StrUtil.isEmptyString(savedYaml)) {
+            const yamlObj = YamlUtil.yaml2Obj(savedYaml)
+            post.yaml = yaml
+            post.fromYaml(yamlObj)
+            logger.info("读取已经存在的YAML，无适配器，使用fromYaml生成默认的yamlObj")
+          } else {
+            // 未保存过，默认不处理
+            logger.info("未保存过YAML，未找到适配器，默认不处理")
+          }
+        }
+      }
 
       return post
     },
@@ -429,9 +471,9 @@ const usePublish = () => {
       }
     },
 
-    doMergeBatchPost: (post: Post, newPost: Post) => {
+    doMergeBatchPost: (post: Post, newPost: Post): Post => {
       // 复制原始 post 对象以避免直接修改它
-      const mergedPost = { ...post }
+      const mergedPost = _.cloneDeep(post) as Post
 
       const postKeywords = post.mt_keywords.split(",")
       const newPostKeywords = newPost.mt_keywords.split(",")

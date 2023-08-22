@@ -25,7 +25,15 @@
 
 import { SiyuanConfig } from "zhi-siyuan-api"
 import { RemovableRef, StorageSerializers, useLocalStorage } from "@vueuse/core"
+import { readonly } from "vue"
 
+/**
+ * 思源笔记设置
+ *
+ * @author terwer
+ * @version 1.8.0
+ * @since 1.8.0
+ */
 const useSiyuanSetting = () => {
   const storageKey = "siyuan-cfg"
 
@@ -47,7 +55,20 @@ const useSiyuanSetting = () => {
     return siyuanConfig
   }
 
-  return { getSiyuanSetting }
+  /**
+   * 获取只读版本的思源笔记配置
+   * 调用现有的 getSiyuanSetting 并转化为只读
+   *
+   * @author terwer
+   * @since 0.6.0
+   */
+  const getReadOnlySiyuanSetting = () => {
+    const siyuanConfigRef = getSiyuanSetting() // 假设 getSiyuanSetting 返回 RemovableRef<SiyuanConfig>
+    const readOnlySiyuanConfigRef = readonly(siyuanConfigRef) // 将 ref 转化为只读的 ref
+    return readOnlySiyuanConfigRef
+  }
+
+  return { getSiyuanSetting, getReadOnlySiyuanSetting }
 }
 
 export { useSiyuanSetting }

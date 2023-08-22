@@ -34,13 +34,13 @@ import { Utils } from "~/src/utils/utils.ts"
  */
 export const useSiyuanApi = () => {
   const logger = createAppLogger("use-siyuan-api")
-  const { getSiyuanSetting } = useSiyuanSetting()
+  const { getReadOnlySiyuanSetting } = useSiyuanSetting()
 
   const envSiyuanApiUrl = Utils.emptyOrDefault(process.env.VITE_SIYUAN_API_URL, "")
   const envSiyuanAuthToken = Utils.emptyOrDefault(process.env.VITE_SIYUAN_AUTH_TOKEN, "")
   const envSiyuanCookie = Utils.emptyOrDefault(process.env.VITE_SIYUAN_COOKIE, "")
 
-  const siyuanSetting = getSiyuanSetting()
+  const siyuanSetting = getReadOnlySiyuanSetting()
   const siyuanApiUrl = siyuanSetting.value.apiUrl ?? envSiyuanApiUrl
   const siyuanAuthToken = siyuanSetting.value.password ?? envSiyuanAuthToken
   const siyuanConfig = new SiyuanConfig(siyuanApiUrl, siyuanAuthToken)
