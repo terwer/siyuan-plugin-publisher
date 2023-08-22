@@ -63,8 +63,8 @@ const useSiyuanSetting = () => {
    * @since 0.6.0
    */
   const getReadOnlySiyuanSetting = () => {
-    const siyuanConfigRef = getSiyuanSetting() // 假设 getSiyuanSetting 返回 RemovableRef<SiyuanConfig>
-    const readOnlySiyuanConfigRef = readonly(siyuanConfigRef) // 将 ref 转化为只读的 ref
+    const siyuanConfigRef = getSiyuanSetting()
+    const readOnlySiyuanConfigRef = readonly(siyuanConfigRef)
     return readOnlySiyuanConfigRef
   }
 

@@ -560,4 +560,9 @@ export default {
   "yuque.edit.cate.no.change": "Due to the limitations of the Yuque platform, editing the knowledge base is not supported at the moment. If you want to move a document, click Undelete and then select the new knowledge base publication again",
   "main.commonn.cate.title": "Public category",
   "main.cate.new": "New category",
+  "pref.setting.aicode": "ChatGPT request key",
+  "pref.setting.aicode.tip": "ChatGPT request key or third-party proxy key, if it is a proxy key, please set the request address",
+  "pref.setting.ai.baseurl": "ChatGPT request address",
+  "pref.setting.ai.baseurl.tip": "The ChatGPT request address, if it is official ChatGPT, can be left blank",
+  "preference.setting.removeWidgetTag": "Remove the widget HTML",
 }

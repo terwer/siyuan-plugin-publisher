@@ -32,6 +32,16 @@ import { PreferenceConfig } from "zhi-blog-api"
  * @since 1.9.1
  * @version 1.9.1
  */
-class PublishPreferenceCfg extends PreferenceConfig {}
+class PublishPreferenceCfg extends PreferenceConfig {
+  /**
+   * AI 体验码
+   */
+  public experimentalAICode: string
+
+  /**
+   * AI 基础地址
+   */
+  public experimentalAIBaseUrl?: string
+}
 
 export { PublishPreferenceCfg }

@@ -24,13 +24,39 @@
   -->
 
 <script setup lang="ts">
+import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { usePublishPreferenceSetting } from "~/src/stores/usePublishPreferenceSetting.ts"
 
+const { t } = useVueI18n()
+const { getPublishPreferenceSetting } = usePublishPreferenceSetting()
+
+const publishPreferenceSettingForm = getPublishPreferenceSetting()
 </script>
 
 <template>
-
+  <el-form label-width="125px" class="publish-preference-setting-form">
+    <el-form-item :label="t('preference.setting.fixTitle')">
+      <el-switch v-model="publishPreferenceSettingForm.fixTitle"></el-switch>
+    </el-form-item>
+    <el-form-item :label="t('preference.setting.removeH1')">
+      <el-switch v-model="publishPreferenceSettingForm.removeFirstH1"></el-switch>
+    </el-form-item>
+    <el-form-item :label="t('preference.setting.removeWidgetTag')">
+      <el-switch v-model="publishPreferenceSettingForm.removeMdWidgetTag"></el-switch>
+    </el-form-item>
+    <el-form-item :label="t('pref.setting.aicode')" prop="apiUrl">
+      <el-input
+        v-model="publishPreferenceSettingForm.experimentalAICode"
+        autocomplete="off"
+        :placeholder="t('pref.setting.aicode.tip')"
+      />
+    </el-form-item>
+    <el-form-item :label="t('pref.setting.ai.baseurl')" prop="apiUrl">
+      <el-input
+        v-model="publishPreferenceSettingForm.experimentalAIBaseUrl"
+        autocomplete="off"
+        :placeholder="t('pref.setting.ai.baseurl.tip')"
+      />
+    </el-form-item>
+  </el-form>
 </template>
-
-<style scoped lang="stylus">
-
-</style>
