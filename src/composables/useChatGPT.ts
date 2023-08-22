@@ -1,0 +1,100 @@
+/*
+ * Copyright (c) 2023, Terwer . All rights reserved.
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * This code is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License version 2 only, as
+ * published by the Free Software Foundation.  Terwer designates this
+ * particular file as subject to the "Classpath" exception as provided
+ * by Terwer in the LICENSE file that accompanied this code.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+ * version 2 for more details (a copy is included in the LICENSE file that
+ * accompanied this code).
+ *
+ * You should have received a copy of the GNU General Public License version
+ * 2 along with this work; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * Please contact Terwer, Shenzhen, Guangdong, China, youweics@163.com
+ * or visit www.terwer.space if you need additional information or have any
+ * questions.
+ */
+
+import { usePublishPreferenceSetting } from "~/src/stores/usePublishPreferenceSetting.ts"
+import { StrUtil } from "zhi-common"
+import { ChatGPTAPI, ChatGPTUnofficialProxyAPI } from "chatgpt"
+import { Utils } from "~/src/utils/utils.ts"
+import { isDev } from "~/src/utils/constants.ts"
+import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+
+/**
+ * 创建一个用于与 ChatGPT 服务进行交互的钩子
+ *
+ * @author terwer
+ * @since 1.9.1
+ */
+const useChatGPT = () => {
+  const logger = createAppLogger("use-chatgpt")
+  const { t } = useVueI18n()
+  const { getReadOnlyPublishPreferenceSetting } = usePublishPreferenceSetting()
+  const pref = getReadOnlyPublishPreferenceSetting()
+
+  // 创建 ChatGPTAPI 实例
+  let api: ChatGPTAPI | ChatGPTUnofficialProxyAPI
+
+  try {
+    // 设置了代理地址创建代理实例，否则使用官方实例
+    if (!StrUtil.isEmptyString(pref.value.experimentalAIProxyUrl)) {
+      api = new ChatGPTUnofficialProxyAPI({
+        accessToken: Utils.emptyOrDefault(process.env.OPENAI_API_KEY, pref.value.experimentalAICode),
+        apiReverseProxyUrl: Utils.emptyOrDefault(process.env.OPENAI_PROXY_URL, pref.value.experimentalAIProxyUrl),
+        debug: isDev,
+        // workaround for https://github.com/transitive-bullshit/chatgpt-api/issues/592
+        fetch: self.fetch.bind(self),
+      })
+    } else {
+      api = new ChatGPTAPI({
+        apiKey: Utils.emptyOrDefault(process.env.OPENAI_ACCESS_TOKEN, pref.value.experimentalAICode),
+        apiBaseUrl: Utils.emptyOrDefault(process.env.OPENAI_BASE_URL, pref.value.experimentalAIBaseUrl),
+        debug: isDev,
+        // workaround for https://github.com/transitive-bullshit/chatgpt-api/issues/592
+        fetch: self.fetch.bind(self),
+      })
+    }
+  } catch (e) {
+    // 初始化 API 失败时，记录错误但继续执行
+    logger.error("Failed to initialize ChatGPT API:", e)
+  }
+
+  /**
+   * 发送聊天查询到 ChatGPT 服务
+   *
+   * @async
+   * @function
+   * @param {string} q - 用户输入的聊天查询
+   * @returns {Promise<string>} - 带有来自 ChatGPT 服务响应的 Promise
+   * @throws {Error} - 如果与 ChatGPT 服务交互时出现问题，则抛出错误
+   * @example
+   * const chatResponse = await chat('你好，ChatGPT！');
+   * console.log(chatResponse); // ChatGPT 生成的响应
+   */
+  const chat = async (q: string): Promise<string> => {
+    try {
+      // 使用 ChatGPTAPI 实例进行聊天操作
+      const res = await api.sendMessage(q)
+      return res.text
+    } catch (e) {
+      logger.error("Chat encountered an error:", e)
+    }
+  }
+
+  return {
+    chat,
+  }
+}
+
+export { useChatGPT }

@@ -194,8 +194,6 @@ const siyuanHandleApi = async () => {
     switch (methodOption.value) {
       case METHOD_GET_USERS_BLOGS: {
         const siyuanCfg = new SiyuanConfig("http://127.0.0.1:6806", "")
-        // 显示指定修复标题
-        siyuanCfg.fixTitle = true
         const siyuanApiAdaptor = new SiYuanApiAdaptor(siyuanCfg)
         const siyuanApi = Utils.blogApi(appInstance, siyuanApiAdaptor)
         const siyuanUsersBlogs = await siyuanApi.getUsersBlogs()
@@ -214,8 +212,6 @@ const siyuanHandleApi = async () => {
       }
       case METHOD_GET_RECENT_POSTS: {
         const siyuanCfg = new SiyuanConfig("http://127.0.0.1:6806", "")
-        // 显示指定修复标题
-        siyuanCfg.fixTitle = true
         const siyuanApiAdaptor = new SiYuanApiAdaptor(siyuanCfg)
         const siyuanApi = Utils.blogApi(appInstance, siyuanApiAdaptor)
         const paramsValue = JSON.parse(params.value)

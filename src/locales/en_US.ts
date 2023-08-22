@@ -565,4 +565,6 @@ export default {
   "pref.setting.ai.baseurl": "ChatGPT request address",
   "pref.setting.ai.baseurl.tip": "The ChatGPT request address, if it is official ChatGPT, can be left blank",
   "preference.setting.removeWidgetTag": "Remove the widget HTML",
+  "pref.setting.ai.proxy.url": "ChatGPT proxy address",
+  "pref.setting.ai.proxy.url.tip": "Can be left blank, note: Filling in the proxy will ignore the ChatGPT request address",
 }

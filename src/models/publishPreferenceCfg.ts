@@ -42,6 +42,11 @@ class PublishPreferenceCfg extends PreferenceConfig {
    * AI 基础地址
    */
   public experimentalAIBaseUrl?: string
+
+  /**
+   * AI 代理地址
+   */
+  public experimentalAIProxyUrl?: string
 }
 
 export { PublishPreferenceCfg }

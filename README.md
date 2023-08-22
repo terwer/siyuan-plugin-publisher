@@ -74,16 +74,7 @@ This plugin promises that the basic functions will be free forever, and the foll
 
 ## Compatibility of Origin notes
 
-This plugin supports almost all devices and platforms of Siyuan Note, and the specific compatibility is as follows:
-
-- [X] Siyuan Note Client (zero configuration) <sup>is highly recommended</sup>
-- [X] Servo environment (Zero configuration, cross-domain request proxy built-in)
-  - [X] CentSource Note Browser Servo
-  - [X] Siyuan Note Client Servo
-  - [X] Siyuan Note mobile servo
-- [X] Siyuan Note docker version (Zero configuration, cross-domain request proxy built-in)
-
-🎉 **All platforms have been migrated to the official forward proxy, achieving zero user configuration and supporting cross-domain request proxies by default 🎉**
+This plugin is fully compatible with `siyuan-note PC Client` , due to limited personal energy, other devices are no longer supported.
 
 ## Supported taxonomy
 

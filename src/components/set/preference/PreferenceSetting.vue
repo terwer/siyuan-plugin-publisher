@@ -44,18 +44,26 @@ const publishPreferenceSettingForm = getPublishPreferenceSetting()
     <el-form-item :label="t('preference.setting.removeWidgetTag')">
       <el-switch v-model="publishPreferenceSettingForm.removeMdWidgetTag"></el-switch>
     </el-form-item>
-    <el-form-item :label="t('pref.setting.aicode')" prop="apiUrl">
+    <el-form-item :label="t('pref.setting.aicode')">
       <el-input
         v-model="publishPreferenceSettingForm.experimentalAICode"
+        type="password"
         autocomplete="off"
         :placeholder="t('pref.setting.aicode.tip')"
       />
     </el-form-item>
-    <el-form-item :label="t('pref.setting.ai.baseurl')" prop="apiUrl">
+    <el-form-item :label="t('pref.setting.ai.baseurl')">
       <el-input
         v-model="publishPreferenceSettingForm.experimentalAIBaseUrl"
         autocomplete="off"
         :placeholder="t('pref.setting.ai.baseurl.tip')"
+      />
+    </el-form-item>
+    <el-form-item :label="t('pref.setting.ai.proxy.url')">
+      <el-input
+        v-model="publishPreferenceSettingForm.experimentalAIProxyUrl"
+        autocomplete="off"
+        :placeholder="t('pref.setting.ai.proxy.url.tip')"
       />
     </el-form-item>
   </el-form>

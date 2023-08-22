@@ -55,6 +55,7 @@
     "@element-plus/icons-vue": "^2.1.0",
     "@vueuse/components": "^10.3.0",
     "@vueuse/core": "^10.3.0",
+    "chatgpt": "^5.2.5",
     "cheerio": "1.0.0-rc.12",
     "cross-fetch": "^3.1.8",
     "crypto-js": "^4.1.1",

@@ -555,4 +555,6 @@ export default {
   "pref.setting.ai.baseurl": "ChatGPT请求地址",
   "pref.setting.ai.baseurl.tip": "ChatGPT请求地址，如果是ChatGPT官方，可留空",
   "preference.setting.removeWidgetTag": "去除挂件HTML",
+  "pref.setting.ai.proxy.url": "ChatGPT代理地址",
+  "pref.setting.ai.proxy.url.tip": "可留空，注意：填写了代理会忽略ChatGPT请求地址",
 }
