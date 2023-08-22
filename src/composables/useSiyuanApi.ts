@@ -28,24 +28,30 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import { useSiyuanSetting } from "~/src/stores/useSiyuanSetting"
 import { Utils } from "~/src/utils/utils.ts"
+import { usePublishPreferenceSetting } from "~/src/stores/usePublishPreferenceSetting.ts"
 
 /**
  * 通用 Siyuan API 封装
  */
 export const useSiyuanApi = () => {
   const logger = createAppLogger("use-siyuan-api")
-  const { getSiyuanSetting } = useSiyuanSetting()
+  const { getReadOnlySiyuanSetting } = useSiyuanSetting()
+  const { getReadOnlyPublishPreferenceSetting } = usePublishPreferenceSetting()
 
   const envSiyuanApiUrl = Utils.emptyOrDefault(process.env.VITE_SIYUAN_API_URL, "")
   const envSiyuanAuthToken = Utils.emptyOrDefault(process.env.VITE_SIYUAN_AUTH_TOKEN, "")
   const envSiyuanCookie = Utils.emptyOrDefault(process.env.VITE_SIYUAN_COOKIE, "")
 
-  const siyuanSetting = getSiyuanSetting()
+  const pref = getReadOnlyPublishPreferenceSetting()
+
+  const siyuanSetting = getReadOnlySiyuanSetting()
   const siyuanApiUrl = siyuanSetting.value.apiUrl ?? envSiyuanApiUrl
   const siyuanAuthToken = siyuanSetting.value.password ?? envSiyuanAuthToken
   const siyuanConfig = new SiyuanConfig(siyuanApiUrl, siyuanAuthToken)
   siyuanConfig.cookie = siyuanSetting.value.cookie ?? envSiyuanCookie
-  siyuanConfig.fixTitle = true
+  siyuanConfig.preferenceConfig.fixTitle = pref.value.fixTitle
+  siyuanConfig.preferenceConfig.removeFirstH1 = pref.value.removeFirstH1
+  siyuanConfig.preferenceConfig.removeMdWidgetTag = pref.value.removeMdWidgetTag
 
   const blogApi = new SiYuanApiAdaptor(siyuanConfig)
   const kernelApi = new SiyuanKernelApi(siyuanConfig)

@@ -47,6 +47,7 @@ import { isDev } from "~/src/utils/constants.ts"
 import { ICategoryConfig } from "~/src/types/ICategoryConfig.ts"
 import { SiyuanAttr } from "zhi-siyuan-api"
 import { DistributionPattern } from "~/src/models/distributionPattern.ts"
+import _ from "lodash"
 
 const logger = createAppLogger("publisher-index")
 
@@ -118,34 +119,33 @@ const handlePublish = async () => {
     formData.failBatchResults = []
     formData.successBatchResults = []
 
+    // 思源笔记原始文章数据
+    const siyuanPost = _.cloneDeep(formData.siyuanPost) as Post
     for (const key of formData.dynList) {
+      let batchItemPost: Post
       if (sysKeys.includes(key)) {
         logger.info(`开始发布 [${key}] 系统内置平台`)
+        batchItemPost = siyuanPost
       } else {
         logger.info(`开始发布 [${key}] 自定义平台`)
         // 平台相关的配置，需要各自重新获取
         const publishCfg = await getPublishCfg(key)
         formData.publishCfg = publishCfg
 
-        // 思源笔记原始文章数据
-        const siyuanPost = await blogApi.getPost(id)
-        // 元数据初始化
-        formData.siyuanPost = await initPublishMethods.assignInitSlug(siyuanPost, id, formData.publishCfg)
+        // 平台相关的元数据初始化
+        batchItemPost = await initPublishMethods.assignInitAttrs(siyuanPost, id, formData.publishCfg)
 
-        // 合并模式需要重新获取
+        // 合并属性
         if (formData.distriPattern === DistributionPattern.Merge) {
-          // 元数据初始化
-          const platformPost = await initPublishMethods.assignInitAttrs(siyuanPost, id, formData.publishCfg)
-          const mergedPost = initPublishMethods.doMergeBatchPost(formData.siyuanPost, platformPost)
+          batchItemPost = initPublishMethods.doMergeBatchPost(siyuanPost, batchItemPost)
           logger.debug("批量分发模式文章已合并", {
             siyuanPost: toRaw(siyuanPost),
-            platformPost: toRaw(platformPost),
-            mergedPost: toRaw(mergedPost),
+            mergedPost: toRaw(batchItemPost),
           })
         }
       }
 
-      const batchResult = await doSinglePublish(key, id, formData.publishCfg, formData.siyuanPost)
+      const batchResult = await doSinglePublish(key, id, formData.publishCfg, batchItemPost)
       if (batchResult.status) {
         formData.successBatchResults.push(batchResult)
       } else {

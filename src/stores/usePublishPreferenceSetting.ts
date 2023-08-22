@@ -23,33 +23,27 @@
  * questions.
  */
 
-import { SiyuanConfig } from "zhi-siyuan-api"
 import { RemovableRef, StorageSerializers, useLocalStorage } from "@vueuse/core"
+import { PublishPreferenceCfg } from "~/src/models/publishPreferenceCfg.ts"
 import { readonly } from "vue"
 
 /**
- * 思源笔记设置
- *
- * @author terwer
- * @version 1.8.0
- * @since 1.8.0
+ * 使用发布偏好设置的自定义钩子
  */
-const useSiyuanSetting = () => {
-  const storageKey = "siyuan-cfg"
+const usePublishPreferenceSetting = () => {
+  // 存储键
+  const storageKey = "publish-preference-cfg"
 
   /**
    * 获取思源笔记配置
    *
+   * @returns {RemovableRef<PublishPreferenceCfg>} 可移除引用的发布偏好设置
    * @author terwer
    * @since 0.6.0
    */
-  const getSiyuanSetting = (): RemovableRef<SiyuanConfig> => {
-    let baseUrl = "http://127.0.0.1:6806"
-    let token = ""
-    let middlewareUrl = "https://api.terwer.space/api/middleware"
-    const initialValue = new SiyuanConfig(baseUrl, token)
-    initialValue.middlewareUrl = middlewareUrl
-    const siyuanConfig = useLocalStorage<SiyuanConfig>(storageKey, initialValue, {
+  const getPublishPreferenceSetting = (): RemovableRef<PublishPreferenceCfg> => {
+    const initialValue = new PublishPreferenceCfg()
+    const siyuanConfig = useLocalStorage<PublishPreferenceCfg>(storageKey, initialValue, {
       serializer: StorageSerializers.object,
     })
     return siyuanConfig
@@ -57,18 +51,22 @@ const useSiyuanSetting = () => {
 
   /**
    * 获取只读版本的思源笔记配置
-   * 调用现有的 getSiyuanSetting 并转化为只读
+   * 调用现有的 getPublishPreferenceSetting 并将其转化为只读引用
    *
-   * @author terwer
+   * @returns 只读引用的发布偏好设置
+   * @author
    * @since 0.6.0
    */
-  const getReadOnlySiyuanSetting = () => {
-    const siyuanConfigRef = getSiyuanSetting()
+  const getReadOnlyPublishPreferenceSetting = () => {
+    const siyuanConfigRef = getPublishPreferenceSetting()
     const readOnlySiyuanConfigRef = readonly(siyuanConfigRef)
     return readOnlySiyuanConfigRef
   }
 
-  return { getSiyuanSetting, getReadOnlySiyuanSetting }
+  return {
+    getPublishPreferenceSetting,
+    getReadOnlyPublishPreferenceSetting,
+  }
 }
 
-export { useSiyuanSetting }
+export { usePublishPreferenceSetting }

@@ -23,52 +23,30 @@
  * questions.
  */
 
-import { SiyuanConfig } from "zhi-siyuan-api"
-import { RemovableRef, StorageSerializers, useLocalStorage } from "@vueuse/core"
-import { readonly } from "vue"
+import { PreferenceConfig } from "zhi-blog-api"
 
 /**
- * 思源笔记设置
+ * 发布偏好设置
  *
  * @author terwer
- * @version 1.8.0
- * @since 1.8.0
+ * @since 1.9.1
+ * @version 1.9.1
  */
-const useSiyuanSetting = () => {
-  const storageKey = "siyuan-cfg"
+class PublishPreferenceCfg extends PreferenceConfig {
+  /**
+   * AI 体验码
+   */
+  public experimentalAICode: string
 
   /**
-   * 获取思源笔记配置
-   *
-   * @author terwer
-   * @since 0.6.0
+   * AI 基础地址
    */
-  const getSiyuanSetting = (): RemovableRef<SiyuanConfig> => {
-    let baseUrl = "http://127.0.0.1:6806"
-    let token = ""
-    let middlewareUrl = "https://api.terwer.space/api/middleware"
-    const initialValue = new SiyuanConfig(baseUrl, token)
-    initialValue.middlewareUrl = middlewareUrl
-    const siyuanConfig = useLocalStorage<SiyuanConfig>(storageKey, initialValue, {
-      serializer: StorageSerializers.object,
-    })
-    return siyuanConfig
-  }
+  public experimentalAIBaseUrl?: string
 
   /**
-   * 获取只读版本的思源笔记配置
-   * 调用现有的 getSiyuanSetting 并转化为只读
-   *
-   * @author terwer
-   * @since 0.6.0
+   * AI 代理地址
    */
-  const getReadOnlySiyuanSetting = () => {
-    const siyuanConfigRef = getSiyuanSetting()
-    const readOnlySiyuanConfigRef = readonly(siyuanConfigRef)
-    return readOnlySiyuanConfigRef
-  }
-
-  return { getSiyuanSetting, getReadOnlySiyuanSetting }
+  public experimentalAIProxyUrl?: string
 }
 
-export { useSiyuanSetting }
+export { PublishPreferenceCfg }

@@ -61,6 +61,10 @@ const components = [
     title: "其他测试",
     path: "/test/other",
   },
+  {
+    title: "ChatGPT测试",
+    path: "/test/chat",
+  },
 ]
 
 const handleGoTest = async (item: any) => {

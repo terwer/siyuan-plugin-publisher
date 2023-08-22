@@ -45,8 +45,8 @@
         </span>
 
         <span class="text">.</span>
-        <span class="text s-dark" @click="handleSiyuanSetting">
-          {{ t("siyuan.config.setting") }}
+        <span class="text s-dark" @click="handlePrefenceSetting">
+          {{ t("service.tab.change.local") }}
         </span>
 
         <span v-if="isDev" class="text">.</span>
@@ -116,9 +116,9 @@ const handlePublishSetting = async () => {
   })
 }
 
-const handleSiyuanSetting = async () => {
+const handlePrefenceSetting = async () => {
   await router.push({
-    path: "/setting/siyuan",
+    path: "/setting/general",
     query: { showBack: "true" },
   })
 }

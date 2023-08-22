@@ -46,6 +46,7 @@ import YuqueTest from "~/src/components/test/YuqueTest.vue"
 import ZhihuTest from "~/src/components/test/ZhihuTest.vue"
 import Test from "~/src/pages/Test.vue"
 import About from "~/src/pages/About.vue"
+import ChatgptTest from "~/src/components/test/ChatgptTest.vue"
 
 const routes: RouteRecordRaw[] = [
   // 极速发布
@@ -95,6 +96,10 @@ const routes: RouteRecordRaw[] = [
   {
     path: "/test/other",
     component: OtherTest,
+  },
+  {
+    path: "/test/chat",
+    component: ChatgptTest,
   },
 
   // 设置

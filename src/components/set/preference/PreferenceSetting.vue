@@ -23,32 +23,47 @@
   - questions.
   -->
 
-<script lang="ts" setup>
+<script setup lang="ts">
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import { useSiyuanSetting } from "~/src/stores/useSiyuanSetting.ts"
+import { usePublishPreferenceSetting } from "~/src/stores/usePublishPreferenceSetting.ts"
 
 const { t } = useVueI18n()
-const { getSiyuanSetting } = useSiyuanSetting()
+const { getPublishPreferenceSetting } = usePublishPreferenceSetting()
 
-const siyuanSettingForm = getSiyuanSetting()
+const publishPreferenceSettingForm = getPublishPreferenceSetting()
 </script>
 
 <template>
-  <el-form label-width="125px" class="siyuan-setting-form">
-    <el-form-item :label="t('setting.blog.siyuan.apiurl')" prop="apiUrl">
-      <el-input
-        v-model="siyuanSettingForm.apiUrl"
-        autocomplete="off"
-        :placeholder="t('setting.blog.siyuan.apiurl.tip')"
-      />
+  <el-form label-width="125px" class="publish-preference-setting-form">
+    <el-form-item :label="t('preference.setting.fixTitle')">
+      <el-switch v-model="publishPreferenceSettingForm.fixTitle"></el-switch>
     </el-form-item>
-    <el-form-item :label="t('setting.blog.siyuan.password')" prop="pwd">
+    <el-form-item :label="t('preference.setting.removeH1')">
+      <el-switch v-model="publishPreferenceSettingForm.removeFirstH1"></el-switch>
+    </el-form-item>
+    <el-form-item :label="t('preference.setting.removeWidgetTag')">
+      <el-switch v-model="publishPreferenceSettingForm.removeMdWidgetTag"></el-switch>
+    </el-form-item>
+    <el-form-item :label="t('pref.setting.aicode')">
       <el-input
-        v-model="siyuanSettingForm.password"
+        v-model="publishPreferenceSettingForm.experimentalAICode"
         type="password"
         autocomplete="off"
-        :placeholder="t('setting.blog.siyuan.password.tip')"
-        show-password
+        :placeholder="t('pref.setting.aicode.tip')"
+      />
+    </el-form-item>
+    <el-form-item :label="t('pref.setting.ai.baseurl')">
+      <el-input
+        v-model="publishPreferenceSettingForm.experimentalAIBaseUrl"
+        autocomplete="off"
+        :placeholder="t('pref.setting.ai.baseurl.tip')"
+      />
+    </el-form-item>
+    <el-form-item :label="t('pref.setting.ai.proxy.url')">
+      <el-input
+        v-model="publishPreferenceSettingForm.experimentalAIProxyUrl"
+        autocomplete="off"
+        :placeholder="t('pref.setting.ai.proxy.url.tip')"
       />
     </el-form-item>
   </el-form>
