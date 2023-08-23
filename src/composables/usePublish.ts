@@ -377,18 +377,10 @@ const usePublish = () => {
         const yamlAdaptor: YamlConvertAdaptor = await Adaptors.getYamlAdaptor(key, cfg)
         if (null !== yamlAdaptor) {
           // 有适配器
-          let yamlObj: any
-          if (!StrUtil.isEmptyString(savedYaml)) {
-            yamlObj = YamlUtil.yaml2Obj(savedYaml)
-            logger.info("读取已经存在的YAML，不再使用适配器，直接转换yamlObj")
-          } else {
-            yamlObj = await YamlUtil.yaml2ObjAsync(post.description)
-            logger.info("未保存过YAML，使用适配器生成yamlObj")
-          }
-          const yamlFormatObj = new YamlFormatObj()
-          yamlFormatObj.yamlObj = yamlObj
+          const yamlFormatObj = yamlAdaptor.convertToYaml(post, cfg)
+          logger.info("未保存过YAML，使用适配器生成yamlObj")
           post = yamlAdaptor.convertToAttr(post, yamlFormatObj, cfg)
-          logger.debug("使用适配器转换yamlObj到post完成 =>", yamlObj)
+          logger.debug("使用适配器转换yamlObj到post完成 =>", yamlFormatObj)
         } else {
           // 无适配器
           if (!StrUtil.isEmptyString(savedYaml)) {
