@@ -24,15 +24,16 @@
   -->
 
 <script setup lang="ts">
+import { reactive } from "vue"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import { reactive, watch } from "vue"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { watch } from "vue"
+import { JsonUtil, StrUtil } from "zhi-common"
 import { ElMessage } from "element-plus"
-import { HtmlUtil, JsonUtil, SmartUtil, StrUtil } from "zhi-common"
-import { prompt, ShortDescAIResult } from "~/src/utils/ai/prompt.ts"
 import { useChatGPT } from "~/src/composables/useChatGPT.ts"
+import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { prompt, TitleAIResult } from "~/src/utils/ai/prompt.ts"
 
-const logger = createAppLogger("publish-description")
+const logger = createAppLogger("publish-title")
 const { t } = useVueI18n()
 
 const props = defineProps({
@@ -40,11 +41,7 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  pageId: {
-    type: String,
-    default: "",
-  },
-  desc: {
+  modelValue: {
     type: String,
     default: "",
   },
@@ -58,21 +55,25 @@ const props = defineProps({
   },
 })
 
-const MAX_PREVIEW_LENGTH = 255
 const formData = reactive({
-  isDescLoading: false,
+  postTitle: props.modelValue,
+  isLoading: false,
   useAi: props.useAi,
-  pageId: props.pageId,
-  desc: props.desc,
   md: props.md,
   html: props.html,
 })
 
-// 对于未强制刷新组件的情况下需要watch或者computed
 watch(
   () => props.useAi,
   (newValue) => {
     formData.useAi = newValue
+  }
+)
+
+watch(
+  () => props.modelValue,
+  (newValue) => {
+    formData.postTitle = newValue
   }
 )
 
@@ -83,71 +84,47 @@ watch(
   }
 )
 
-const emit = defineEmits(["emitSyncDesc"])
+const emit = defineEmits(["emitSyncPublishTitle"])
 
-const handleMakeDesc = async () => {
-  formData.isDescLoading = true
+const handleTitleChange = () => {
+  emit("emitSyncPublishTitle", formData.postTitle)
+}
+
+const handleMakeTitle = async () => {
   try {
-    // if (formData.useAi) {
-    const inputWord = `${formData.md}\n${prompt.shortDescPrompt.content}`
+    formData.isLoading = true
+    const inputWord = `${formData.md}\n${prompt.titlePrompt.content}`
     const { chat } = useChatGPT()
     const chatText = await chat(inputWord)
     if (StrUtil.isEmptyString(chatText)) {
       ElMessage.error("请求错误，请在偏好设置配置请求地址和ChatGPT key！")
       return
     }
-    const resJson = JsonUtil.safeParse<ShortDescAIResult>(chatText, {} as ShortDescAIResult)
-    formData.desc = resJson.desc
-    logger.info("使用AI智能生成的摘要结果 =>", {
+    const resJson = JsonUtil.safeParse<TitleAIResult>(chatText, {} as TitleAIResult)
+    formData.postTitle = resJson.title
+    logger.info("使用AI智能生成的标题结果 =>", {
       inputWord: inputWord,
       chatText: chatText,
     })
-
-    // 自部署无监督摘要
-    // if (StrUtil.isEmptyString(formData.html)) {
-    //   throw new Error("正文为空，无法生成摘要")
-    // }
-    // logger.debug("使用人工智能提取摘要", { q: formData.html })
-    // const result = await SmartUtil.autoSummary(formData.html)
-    // logger.debug("auto summary reault =>", result)
-    // if (!StrUtil.isEmptyString(result.errMsg)) {
-    //   throw new Error(result.errMsg)
-    // } else {
-    //   formData.desc = result.result
-    // }
-    // } else {
-    //   formData.desc = HtmlUtil.parseHtml(formData.html, MAX_PREVIEW_LENGTH, true)
-    //   ElMessage.success(`操作成功，未开启人工智能，直接截取文章前${MAX_PREVIEW_LENGTH}个字符作为摘要`)
-    // }
-    emit("emitSyncDesc", formData.desc)
-    ElMessage.success("使用人工智能提取摘要成功")
+    emit("emitSyncPublishTitle", formData.postTitle)
+    ElMessage.success("使用人工智能提取标题成功")
   } catch (e) {
     logger.error(t("main.opt.failure") + "=>", e)
     ElMessage.error(t("main.opt.failure") + "=>" + e)
   } finally {
-    formData.isDescLoading = false
+    formData.isLoading = false
   }
-}
-
-const onDescChange = () => {
-  emit("emitSyncDesc", formData.desc)
 }
 </script>
 
 <template>
-  <div class="form-desc">
-    <el-form-item :label="t('main.desc')">
-      <el-input
-        v-model="formData.desc"
-        :autosize="{ minRows: 3, maxRows: 16 }"
-        type="textarea"
-        placeholder="请输入文章摘要"
-        @input="onDescChange"
-      />
+  <div class="form-post-title">
+    <el-form-item :label="t('main.title')">
+      <el-input v-model="formData.postTitle" @input="handleTitleChange" />
     </el-form-item>
     <el-form-item v-if="formData.useAi">
-      <el-button size="small" :loading="formData.isDescLoading" type="primary" @click="handleMakeDesc">
-        {{ formData.isDescLoading ? t("main.opt.loading") : t("main.auto.fetch.desc") }}
+      <el-button size="small" :loading="formData.isLoading" type="primary" @click="handleMakeTitle">
+        {{ formData.isLoading ? t("main.opt.loading") : t("main.auto.fetch.title") }}
       </el-button>
     </el-form-item>
   </div>

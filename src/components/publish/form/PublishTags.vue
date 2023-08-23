@@ -28,7 +28,9 @@ import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { nextTick, reactive, ref, watch } from "vue"
 import { ElMessage } from "element-plus"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { SmartUtil, StrUtil } from "zhi-common"
+import { JsonUtil, StrUtil } from "zhi-common"
+import { prompt, TagAIResult } from "~/src/utils/ai/prompt.ts"
+import { useChatGPT } from "~/src/composables/useChatGPT.ts"
 
 const logger = createAppLogger("publish-tags")
 const { t } = useVueI18n()
@@ -46,7 +48,11 @@ const props = defineProps({
     type: String,
     default: "",
   },
-  content: {
+  md: {
+    type: String,
+    default: "",
+  },
+  html: {
     type: String,
     default: "",
   },
@@ -63,7 +69,8 @@ const formData = reactive({
     dynamicTags: <string[]>(StrUtil.isEmptyString(props.tags) ? [] : props.tags.split(",")),
     inputVisible: false,
   },
-  html: props.content,
+  md: props.md,
+  html: props.html,
 })
 
 watch(
@@ -100,21 +107,38 @@ const tagMethods = {
     try {
       formData.isTagLoading = true
 
-      const hotTags = await SmartUtil.autoTags(formData.html, 5)
-      for (let i = 0; i < hotTags.length; i++) {
-        if (!formData.tag.dynamicTags.includes(hotTags[i])) {
-          formData.tag.dynamicTags.push(hotTags[i])
+      const inputWord = `${formData.md}\n${prompt.tagPrompt.content}`
+      const { chat } = useChatGPT()
+      const chatText = await chat(inputWord)
+      if (StrUtil.isEmptyString(chatText)) {
+        ElMessage.error("请求错误，请在偏好设置配置请求地址和ChatGPT key！")
+        return
+      }
+      const resJson = JsonUtil.safeParse<TagAIResult>(chatText, {} as TagAIResult)
+      for (let i = 0; i < resJson.tags.length; i++) {
+        if (!formData.tag.dynamicTags.includes(resJson.tags[i])) {
+          formData.tag.dynamicTags.push(resJson.tags[i])
         }
       }
-      emit("emitSyncTags", formData.tag.dynamicTags)
+      logger.info("使用AI智能生成的标签结果 =>", {
+        inputWord: inputWord,
+        chatText: chatText,
+      })
 
+      // const hotTags = await SmartUtil.autoTags(formData.html, 5)
+      // for (let i = 0; i < hotTags.length; i++) {
+      //   if (!formData.tag.dynamicTags.includes(hotTags[i])) {
+      //     formData.tag.dynamicTags.push(hotTags[i])
+      //   }
+      // }
+      emit("emitSyncTags", formData.tag.dynamicTags)
       ElMessage.success("使用人工智能智能提取标签成功")
     } catch (e: any) {
       logger.error(t("main.opt.failure") + "=>", e)
       ElMessage.error(t("main.opt.failure") + "=>" + e)
+    } finally {
+      formData.isTagLoading = false
     }
-
-    formData.isTagLoading = false
   },
 }
 </script>

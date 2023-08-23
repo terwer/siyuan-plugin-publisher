@@ -8,32 +8,18 @@ Publish articles from siyuan-note to platforms such as Yuque, Notion, Cnblogs, W
 
 Support features such as fast publishing, image bed management, platform expansion, smart labels, etc.
 
-> **Front Announcement 1: The first version `1.9.0` for Publish Tools that supports release view and AI beta early adopter is released!**
->
-> **Front Announcement 2: Version `1.8.0` released with full support for image upload in the Publish Tools!**
+**Front Row Announcement: the first AI-integrated version `1.10.0` of the Publish Tool is released!**
 
-Tips: Zhihu uses the image upload of the Zhihu platform, Yuque, Notion, and Hexo need Picgo plugin support, and the Metaweblog series platform supports both Picgo plugin and self-contained image upload (install Picgo plugin to use Picgo plugin, otherwise use their own platform)
+We recommend updating using the `uninstall->install` method. If there are any configuration issues, please back up `[workspace]/data/storage/syp/sy-p-plus-cfg.json`, then delete it, as this configuration file will be automatically initialized on first use.
 
-We recommend that you use the `uninstall->install` method to update. If the configuration is abnormal, please backup `[workspace]/data/storage/syp/sy-p-plus-cfg.json` , and then delete it, this configuration file will be automatically initialized the first time it is used.
+## Recent Key Updates and Bug Fixes
 
-In later releases, the release configuration will only be backward compatible to `1.6.0+`.
-
-## Recent critical updates and bug fixes
-
-- Support multiple publishing views, simple mode, detailed mode and source mode
-- Support to modify summary, tags, classification, knowledge space
-- The Hexo platform supports custom modification of YAML
-- Yuque, Notion, and Hexo support image links, and automatic upload requires Picgo plugin support
-- Zhihu platform supports automatic image upload
-- When the Picgo plugin is not installed, some platforms can use the built-in image upload, such as Cnblogs, Typecho, WordPress
-- Support replacing picture bed image links with Picgo plugin
-- Fixed the issue that the release preview of the authorization code mode was invalidated
-- Support publishing to Zhihu
-- Support for publishing to Hexo
-- Support for publishing to Notion
-- Support for Yuque, Cnblogs, Metaweblog, Typecho, WordPress
-- Support automatic generation of article aliases
-- Support for changing the default knowledge base
+- Support for manually generating titles, summaries, tags, and categories through AI.
+- AI integration.
+- Support for multiple publishing views: simple mode, detailed mode, and source code mode.
+- Support for summaries, tags, categories, and knowledge spaces.
+- Platforms that do not support image link replacement can use the platform's built-in image upload interface.
+- Support for replacing image links with the Picgo plugin, if available.
 
 ## Platform List
 

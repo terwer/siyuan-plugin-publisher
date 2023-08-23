@@ -16,5 +16,7 @@
   "publishTo": "Publish to...",
   "batchSync": "Batch sync",
   "publishNormal": "Publish normal",
-  "extendFunction": "Extended functionality"
+  "extendFunction": "Extended functionality",
+  "aiChat": "AI chat",
+  "aiChatTab": "AI chat tab"
 }

@@ -536,7 +536,7 @@ export default {
   "main.publish.remove": "批量删除",
   "setting.blog.knowledge.space": "知识空间/知识库",
   "main.data.empty": "暂无数据",
-  "enableKnowledgeSpace.Tips":
+  "knowledgeSpaceEnabled.Tips":
     "验证通过之后，将列出可用的 [[knowledge-space-title]] 列表，您可以根据需要修改默认 [[knowledge-space-title]] 并保存",
   "post.bind.auto.tips": "此处ID为发布工具自动保存，仅作为修复数据使用，如果您不清楚原理，请勿修改",
   "siyuan.config.setting": "思源设置",
@@ -557,4 +557,10 @@ export default {
   "preference.setting.removeWidgetTag": "去除挂件HTML",
   "pref.setting.ai.proxy.url": "ChatGPT代理地址",
   "pref.setting.ai.proxy.url.tip": "可留空，注意：填写了代理会忽略ChatGPT请求地址",
+  "main.auto.fetch.title": "自动提取标题",
+  "main.auto.fetch.cate": "自动提取分类",
+  "category.ai.hand": "由于各平台分类体系不一致，分类需要手动进行校准，不会自动保存",
+  "category.ai.enabled": "检测到您已经配置AI，可请前往详细模式进行操作",
+  "sys.config.ai": "AI设置",
+  "config.ai.use.siyuan": "思源笔记内部，直接使用思源笔记配置，无需配置",
 }

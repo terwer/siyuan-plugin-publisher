@@ -23,46 +23,41 @@
  * questions.
  */
 
-import { PreferenceConfig } from "zhi-blog-api"
-
 /**
- * 发布偏好设置
+ * 表示一个 AI 提示的类，用于存储标题、内容和描述等信息
  *
- * @author terwer
- * @since 1.9.1
- * @version 1.9.1
+ * 使用：const prompt = new AiPrompt("Generate Blog Post",
+ * "Write a blog post about the benefits of AI.",
+ * "Generate a blog post discussing the various advantages of artificial intelligence in different industries.");
  */
-class PublishPreferenceCfg extends PreferenceConfig {
+class AiPrompt {
   /**
-   * AI 体验码
+   * 提示的标题
    */
-  public experimentalUseSiyuanNoteAIConfig: boolean
+  title: string
 
   /**
-   * AI 体验码
+   * 提示的内容
    */
-  public experimentalAIEnabled: boolean
+  content: string
 
   /**
-   * AI 体验码
+   * 提示的描述
    */
-  public experimentalAICode: string
+  description: string
 
   /**
-   * AI 基础地址
+   * 创建一个 AiPrompt 的新实例
+   *
+   * @param title - 提示的标题
+   * @param content - 提示的内容
+   * @param description - 提示的描述
    */
-  public experimentalAIBaseUrl?: string
-
-  /**
-   * AI 代理地址
-   */
-  public experimentalAIProxyUrl?: string
-
-  constructor() {
-    super()
-    this.experimentalUseSiyuanNoteAIConfig = true
-    this.experimentalAIEnabled = false
+  constructor(title: string, content: string, description: string) {
+    this.title = title
+    this.content = content
+    this.description = description
   }
 }
 
-export { PublishPreferenceCfg }
+export { AiPrompt }

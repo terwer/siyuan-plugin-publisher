@@ -26,7 +26,10 @@
 <script setup lang="ts">
 // props
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import { reactive } from "vue"
+import { reactive, toRaw } from "vue"
+import { createAppLogger } from "~/src/utils/appLogger.ts"
+
+const logger = createAppLogger("common-blog-setting")
 
 const props = defineProps({
   apiType: {
@@ -56,6 +59,11 @@ const toggleAdvance = () => {
     formData.advanceBtnText = "隐藏更多配置"
   }
 }
+
+const syncDefaultPath = (cfg: any) => {
+  cfg.blogid = cfg.defaultPath
+  logger.debug("sync defaultPath to blogid", { cfg: toRaw(cfg) })
+}
 </script>
 
 <template>
@@ -84,8 +92,8 @@ const toggleAdvance = () => {
         <el-form-item :label="t('setting.blog.type.github.default.path')">
           <el-input
             v-model="(main.cfg as any).defaultPath"
+            @input="syncDefaultPath(main.cfg)"
             :placeholder="t('setting.blog.type.github.default.path.tip')"
-            :disabled="true"
           />
         </el-form-item>
         <!-- 提交信息 -->

@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { App, getFrontend, IObject, Plugin } from "siyuan"
+import { App, getFrontend, IModel, IObject, Plugin } from "siyuan"
 import { SiyuanConfig, SiyuanKernelApi } from "zhi-siyuan-api"
 import { createSiyuanAppLogger } from "./appLogger"
 import { WidgetInvoke } from "./invoke/widgetInvoke"
@@ -32,12 +32,14 @@ import { Topbar } from "./topbar"
 import "./index.styl"
 
 export default class PublisherPlugin extends Plugin {
-  private logger
-  private topbar
+  private logger: any
+  private topbar: Topbar
 
   public isMobile: boolean
   public kernelApi: SiyuanKernelApi
-  private widgetInvoke
+  private widgetInvoke: WidgetInvoke
+  customTabObject: () => IModel
+  public tabInstance: any
 
   constructor(options: { app: App; id: string; name: string; i18n: IObject }) {
     super(options)
@@ -61,5 +63,21 @@ export default class PublisherPlugin extends Plugin {
   onload() {
     // 初始化菜单
     this.topbar.initTopbar()
+    // 初始化自定义Tab
+    this.initCustomTab()
+  }
+
+  private initCustomTab() {
+    const that = this
+    this.customTabObject = this.addTab({
+      type: "publisher-plugin-custom-tab",
+      async init() {
+        this.element.innerHTML = `<p>加载中...</p>`
+      },
+      destroy() {
+        delete that.tabInstance
+        that.logger.info("publisher custopm tab destroyed")
+      },
+    })
   }
 }

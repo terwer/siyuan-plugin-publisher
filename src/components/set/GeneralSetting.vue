@@ -36,6 +36,9 @@ const { t } = useVueI18n()
       <el-tab-pane :label="t('service.tab.change.local')">
         <preference-setting />
       </el-tab-pane>
+      <el-tab-pane :label="t('sys.config.ai')">
+        <ai-setting />
+      </el-tab-pane>
       <el-tab-pane :label="t('siyuan.config.setting')">
         <siyuan-setting />
       </el-tab-pane>
