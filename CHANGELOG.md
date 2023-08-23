@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.10.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.9.0...v1.10.0) (2023-08-23)
+
+
+### Features
+
+* AI 功能发布 ([ff837b0](https://github.com/terwer/siyuan-plugin-publisher/commit/ff837b0e5282a6994c1ac95689edc7eb1e161140))
+* AI集成 ([c701ce6](https://github.com/terwer/siyuan-plugin-publisher/commit/c701ce600f90c392fe9f07131e5a438374dabb6a))
+* AI集成-支持生成标题和生成摘要 ([dfaacbe](https://github.com/terwer/siyuan-plugin-publisher/commit/dfaacbeb16e5d5ee6a1bc396cc7b5de9b4d294bc))
+* AI集成-支持生成标题和生成摘要 ([2e48ca5](https://github.com/terwer/siyuan-plugin-publisher/commit/2e48ca5bfe9176ce9ead88ab3ee010dd063d5cdd))
+
+
+### Bug Fixes
+
+* **deps:** bump siyuan from 0.8.0 to 0.8.1 ([98fb7e6](https://github.com/terwer/siyuan-plugin-publisher/commit/98fb7e616ac9e365b4ee74320ff555376ac28066))
+* 修复YAML初始化失败问题 ([9ec4af8](https://github.com/terwer/siyuan-plugin-publisher/commit/9ec4af88547c02dec31f29f08a95fdbdb925fae4))
+* 修复知识空间设置错误问题 ([4d558e9](https://github.com/terwer/siyuan-plugin-publisher/commit/4d558e9a8159d1443dedd80ad13e63fb550bbac3))
+* 支持关闭标题处理和正文处理 ([27745f4](https://github.com/terwer/siyuan-plugin-publisher/commit/27745f4e1536840bbaad457d123f1839d8662e96))
+* 新增 AI 功能 ([943d0f0](https://github.com/terwer/siyuan-plugin-publisher/commit/943d0f044815d5fa309fa447bc1a692c345e0339))
+* 重构批量分发初始化 ([e0f7538](https://github.com/terwer/siyuan-plugin-publisher/commit/e0f75383ef82ffecbee963913c12a1e647f86be8))
+
+
+### Miscellaneous
+
+* **deps-dev:** bump vercel from 31.4.0 to 32.0.0 ([d16a791](https://github.com/terwer/siyuan-plugin-publisher/commit/d16a79153f96e1983b576adbe7edbb012e83fa86))
+
 ## [1.9.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.8.0...v1.9.0) (2023-08-21)
 ### Features
 * hexo 平台支持修改自定义 yaml ([e9ce0da](https://github.com/terwer/siyuan-plugin-publisher/commit/e9ce0daa43d990762715a918527f218c6863cb21))
