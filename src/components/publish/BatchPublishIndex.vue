@@ -294,7 +294,7 @@ const handleRefresh = () => {
   BrowserUtil.reloadPage()
 }
 
-const chckedChatGPTEnabled = () => {
+const checkChatGPTEnabled = () => {
   let flag = false
   try {
     useChatGPT()
@@ -321,7 +321,7 @@ onMounted(async () => {
   // ==================
 
   // 这里可以控制一些功能开关
-  formData.useAi = chckedChatGPTEnabled()
+  formData.useAi = checkChatGPTEnabled()
   formData.editType = PageEditMode.EditMode_simple
 })
 </script>

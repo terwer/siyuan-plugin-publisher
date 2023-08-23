@@ -27,7 +27,13 @@
 import { reactive } from "vue"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { watch } from "vue"
+import { JsonUtil, StrUtil } from "zhi-common"
+import { ElMessage } from "element-plus"
+import { useChatGPT } from "~/src/composables/useChatGPT.ts"
+import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { prompt, TitleAIResult } from "~/src/utils/ai/prompt.ts"
 
+const logger = createAppLogger("publish-title")
 const { t } = useVueI18n()
 
 const props = defineProps({
@@ -49,11 +55,12 @@ const props = defineProps({
   },
 })
 
-const TITLE_AI_PROPMTS = ""
 const formData = reactive({
   postTitle: props.modelValue,
   isLoading: false,
   useAi: props.useAi,
+  md: props.md,
+  html: props.html,
 })
 
 watch(
@@ -63,13 +70,51 @@ watch(
   }
 )
 
+watch(
+  () => props.modelValue,
+  (newValue) => {
+    formData.postTitle = newValue
+  }
+)
+
+watch(
+  () => props.md,
+  (newValue) => {
+    formData.md = newValue
+  }
+)
+
 const emit = defineEmits(["emitSyncPublishTitle"])
 
 const handleTitleChange = () => {
   emit("emitSyncPublishTitle", formData.postTitle)
 }
 
-const handleMakeTitle = () => {}
+const handleMakeTitle = async () => {
+  try {
+    formData.isLoading = true
+    const inputWord = `${formData.md}\n${prompt.titlePrompt.content}`
+    const { chat } = useChatGPT()
+    const chatText = await chat(inputWord)
+    if (StrUtil.isEmptyString(chatText)) {
+      ElMessage.error("请求错误，请在偏好设置配置请求地址和ChatGPT key！")
+      return
+    }
+    const resJson = JsonUtil.safeParse<TitleAIResult>(chatText, {} as TitleAIResult)
+    formData.postTitle = resJson.title
+    emit("emitSyncPublishTitle", formData.postTitle)
+    logger.info("使用AI智能生成的标题结果 =>", {
+      inputWord: inputWord,
+      chatText: chatText,
+    })
+    ElMessage.success("使用人工智能提取标题成功")
+  } catch (e) {
+    logger.error(t("main.opt.failure") + "=>", e)
+    ElMessage.error(t("main.opt.failure") + "=>" + e)
+  } finally {
+    formData.isLoading = false
+  }
+}
 </script>
 
 <template>

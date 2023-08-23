@@ -28,7 +28,9 @@ import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { reactive, watch } from "vue"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { ElMessage } from "element-plus"
-import { HtmlUtil, SmartUtil, StrUtil } from "zhi-common"
+import { HtmlUtil, JsonUtil, SmartUtil, StrUtil } from "zhi-common"
+import { prompt, ShortDescAIResult } from "~/src/utils/ai/prompt.ts"
+import { useChatGPT } from "~/src/composables/useChatGPT.ts"
 
 const logger = createAppLogger("publish-description")
 const { t } = useVueI18n()
@@ -74,6 +76,13 @@ watch(
   }
 )
 
+watch(
+  () => props.md,
+  (newValue) => {
+    formData.md = newValue
+  }
+)
+
 const emit = defineEmits(["emitSyncDesc"])
 
 const handleMakeDesc = async () => {
@@ -81,18 +90,33 @@ const handleMakeDesc = async () => {
   formData.isDescLoading = true
   try {
     if (formData.useAi) {
-      if (StrUtil.isEmptyString(formData.html)) {
-        throw new Error("正文为空，无法生成摘要")
+      const inputWord = `${formData.md}\n${prompt.shortDescPrompt.content}`
+      const { chat } = useChatGPT()
+      const chatText = await chat(inputWord)
+      if (StrUtil.isEmptyString(chatText)) {
+        ElMessage.error("请求错误，请在偏好设置配置请求地址和ChatGPT key！")
+        return
       }
-      logger.debug("使用人工智能提取摘要", { q: formData.html })
-      const result = await SmartUtil.autoSummary(formData.html)
-      logger.debug("auto summary reault =>", result)
-      if (!StrUtil.isEmptyString(result.errMsg)) {
-        throw new Error(result.errMsg)
-      } else {
-        formData.desc = result.result
-      }
-      ElMessage.warning("使用人工智能提取摘要成功")
+      const resJson = JsonUtil.safeParse<ShortDescAIResult>(chatText, {} as ShortDescAIResult)
+      formData.desc = resJson.desc
+      logger.info("使用AI智能生成的摘要结果 =>", {
+        inputWord: inputWord,
+        chatText: chatText,
+      })
+
+      // 自部署无监督摘要
+      // if (StrUtil.isEmptyString(formData.html)) {
+      //   throw new Error("正文为空，无法生成摘要")
+      // }
+      // logger.debug("使用人工智能提取摘要", { q: formData.html })
+      // const result = await SmartUtil.autoSummary(formData.html)
+      // logger.debug("auto summary reault =>", result)
+      // if (!StrUtil.isEmptyString(result.errMsg)) {
+      //   throw new Error(result.errMsg)
+      // } else {
+      //   formData.desc = result.result
+      // }
+      ElMessage.success("使用人工智能提取摘要成功")
     } else {
       formData.desc = HtmlUtil.parseHtml(formData.html, MAX_PREVIEW_LENGTH, true)
       ElMessage.success(`操作成功，未开启人工智能，直接截取文章前${MAX_PREVIEW_LENGTH}个字符作为摘要`)
@@ -100,7 +124,7 @@ const handleMakeDesc = async () => {
     // ElMessage.success(t("main.opt.success"))
   } catch (e) {
     logger.error(t("main.opt.failure") + "=>", e)
-    ElMessage.error(t("main.opt.failure") + "=>"+ e)
+    ElMessage.error(t("main.opt.failure") + "=>" + e)
   }
 
   formData.isDescLoading = false

@@ -103,10 +103,11 @@ onMounted(async () => {
     <el-alert
       v-if="formData.usePage && formData.showPage && !StrUtil.isEmptyString(formData.siyuanPost.markdown)"
       :closable="false"
-      :title="`当前上下文为《${formData.siyuanPost.title}》`"
+      :title="`当前为上下文模式，文档上下文为《${formData.siyuanPost.title}》`"
       class="top-tip"
       type="success"
     />
+    <el-alert v-else :closable="false" :title="`当前为自由聊天模式`" class="top-tip" type="info" />
     <el-form class="chatgpt-form">
       <el-form-item>
         <el-input
@@ -118,11 +119,13 @@ onMounted(async () => {
         />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="sendMessage" :loading="formData.isLoading">发送消息</el-button>
-        <el-button type="danger" @click="clearChatOutput">清屏</el-button>
         <div v-if="formData.showPage && !StrUtil.isEmptyString(formData.siyuanPost.markdown)">
           <el-switch v-model="formData.usePage" class="use-context" /> &nbsp; 使用当前文档作为上下文
         </div>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="sendMessage" :loading="formData.isLoading">发送消息</el-button>
+        <el-button type="danger" @click="clearChatOutput">清屏</el-button>
       </el-form-item>
       <el-form-item>
         <div class="chat-output">

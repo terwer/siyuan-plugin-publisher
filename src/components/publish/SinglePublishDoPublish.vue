@@ -354,7 +354,7 @@ const initPage = async () => {
   }
 }
 
-const chckedChatGPTEnabled = () => {
+const checkChatGPTEnabled = () => {
   let flag = false
   try {
     useChatGPT()
@@ -402,7 +402,7 @@ onMounted(async () => {
   // ==================
 
   // 这里可以控制一些功能开关
-  formData.useAi = chckedChatGPTEnabled()
+  formData.useAi = checkChatGPTEnabled()
   formData.editType = PageEditMode.EditMode_simple
 })
 </script>
@@ -445,9 +445,9 @@ onMounted(async () => {
                 <publish-title
                   v-model:use-ai="formData.useAi"
                   v-model="formData.mergedPost.title"
-                  @emitSyncPublishTitle="syncPublishTitle"
                   v-model:md="formData.mergedPost.markdown"
                   v-model:html="formData.mergedPost.html"
+                  @emitSyncPublishTitle="syncPublishTitle"
                 />
 
                 <!-- 知识空间 -->
@@ -478,7 +478,8 @@ onMounted(async () => {
                     v-model:use-ai="formData.useAi"
                     v-model:page-id="id"
                     v-model:desc="formData.mergedPost.shortDesc"
-                    v-model:content="formData.mergedPost.html"
+                    v-model:md="formData.mergedPost.markdown"
+                    v-model:html="formData.mergedPost.html"
                     @emitSyncDesc="syncDesc"
                   />
 
