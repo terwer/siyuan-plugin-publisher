@@ -234,7 +234,12 @@ const getBlogName = () => {
   let blogName = cfg?.blogName || ""
   if (cfg.knowledgeSpaceEnabled) {
     if (formData.mergedPost.cate_slugs.length > 0) {
-      const cateName = formData.mergedPost.categories[0]
+      let cateName: string
+      if (formData.mergedPost?.categories.length > 0) {
+        cateName = formData.mergedPost?.categories[0]
+      } else {
+        cateName = formData.mergedPost?.cate_slugs[0]
+      }
       blogName = cateName ?? ""
     }
   }
