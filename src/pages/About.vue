@@ -32,7 +32,7 @@ const { t } = useVueI18n()
 
 const formData = reactive({
   v: version,
-  deps: dependencies,
+  deps: Object.entries(dependencies).slice(0, 24),
 })
 </script>
 
@@ -55,7 +55,14 @@ const formData = reactive({
         <div class="third-libs">
           <div class="lib-title">Thanks for third party libraries:</div>
           <div class="lib-container">
-            <div class="lib-item" v-for="(value, key) in formData.deps">{{ key }} ({{ value }})</div>
+            <div class="lib-item" v-for="value in formData.deps">
+              {{ value }}
+            </div>
+            <div class="lib-item" v-if="formData.deps.length >= 24">
+              <a target="_blank" href="https://github.com/terwer/siyuan-plugin-publisher/blob/main/package.json#L54"
+                >more...
+              </a>
+            </div>
           </div>
         </div>
       </div>
