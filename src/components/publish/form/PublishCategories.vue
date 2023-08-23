@@ -28,10 +28,17 @@ import { CategoryTypeEnum } from "zhi-blog-api"
 import { reactive, toRaw } from "vue"
 import { ICategoryConfig, IMultiCategoriesConfig } from "~/src/types/ICategoryConfig.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { watch } from "vue"
 
 const logger = createAppLogger("publish-categories")
+const { t } = useVueI18n()
 
 const props = defineProps({
+  useAi: {
+    type: Boolean,
+    default: false,
+  },
   categoryType: {
     type: String as () => CategoryTypeEnum,
     default: CategoryTypeEnum.CategoryType_None,
@@ -44,13 +51,32 @@ const props = defineProps({
     type: Array,
     default: <string[]>[],
   },
+  md: {
+    type: String,
+    default: "",
+  },
+  html: {
+    type: String,
+    default: "",
+  },
 })
 
 const formData = reactive({
   categoryType: props.categoryType,
   categoryConfig: props.categoryConfig,
   categories: props.categories,
+  isLoading: false,
+  useAi: props.useAi,
+  md: props.md,
+  html: props.html,
 })
+
+watch(
+  () => props.useAi,
+  (newValue) => {
+    formData.useAi = newValue
+  }
+)
 
 // emits
 const emit = defineEmits(["emitSyncCates"])
@@ -63,15 +89,40 @@ const syncPubCates = (cates: string[]) => {
   formData.categories = cates
   emit("emitSyncCates", cates)
 }
+
+const fetchCate = () => {}
 </script>
 
 <template>
-  <div v-if="formData.categoryType === CategoryTypeEnum.CategoryType_Multi">
-    <multi-categories
-      v-model:category-config="formData.categoryConfig as IMultiCategoriesConfig"
-      v-model:categories="formData.categories"
-      @emitSyncMultiCates="syncPubCates"
-    />
+  <div class="category-box">
+    <div v-if="formData.categoryType === CategoryTypeEnum.CategoryType_Multi">
+      <multi-categories
+        v-model:category-config="formData.categoryConfig as IMultiCategoriesConfig"
+        v-model:categories="formData.categories"
+        @emitSyncMultiCates="syncPubCates"
+      />
+    </div>
+    <div v-else></div>
+    <div v-if="formData.useAi">
+      推荐的分类
+      <el-form-item>
+        <el-button size="small" :loading="formData.isLoading" type="primary" @click="fetchCate">
+          {{ formData.isLoading ? t("main.opt.loading") : t("main.auto.fetch.cate") }}
+        </el-button>
+      </el-form-item>
+      <el-form-item>
+        <el-alert :closable="false" :title="t('category.ai.hand')" class="form-item-tip" type="warning" />
+      </el-form-item>
+      <div class="form-item-bottom"></div>
+    </div>
   </div>
-  <div v-else></div>
 </template>
+
+<style lang="stylus" scoped>
+.form-item-tip
+  padding 2px 4px
+  margin 0 10px 0 0
+
+.form-item-bottom
+  margin-bottom 16px
+</style>

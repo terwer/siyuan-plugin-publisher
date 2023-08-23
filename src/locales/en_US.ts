@@ -567,4 +567,8 @@ export default {
   "preference.setting.removeWidgetTag": "Remove the widget HTML",
   "pref.setting.ai.proxy.url": "ChatGPT proxy address",
   "pref.setting.ai.proxy.url.tip": "Can be left blank, note: Filling in the proxy will ignore the ChatGPT request address",
+  "main.auto.fetch.title": "Auto fetch title",
+  "main.auto.fetch.cate": "Auto fetch category",
+  "category.ai.hand": "Due to inconsistent classification systems across platforms, classifications need to be calibrated manually and are not automatically saved",
+  "category.ai.enabled": "AI is available, please go to the detailed mode to operate",
 }

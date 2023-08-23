@@ -46,7 +46,11 @@ const props = defineProps({
     type: String,
     default: "",
   },
-  content: {
+  md: {
+    type: String,
+    default: "",
+  },
+  html: {
     type: String,
     default: "",
   },
@@ -58,7 +62,8 @@ const formData = reactive({
   useAi: props.useAi,
   pageId: props.pageId,
   desc: props.desc,
-  html: props.content,
+  md: props.md,
+  html: props.html,
 })
 
 // 对于未强制刷新组件的情况下需要watch或者computed

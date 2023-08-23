@@ -27,11 +27,16 @@
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { nextTick, reactive, ref } from "vue"
+import { watch } from "vue"
 
 const logger = createAppLogger("common-categories")
 const { t } = useVueI18n()
 
 const props = defineProps({
+  useAi: {
+    type: Boolean,
+    default: false,
+  },
   cates: {
     type: Array,
     default: [],
@@ -41,12 +46,21 @@ const props = defineProps({
 // datas
 const tagRefInput = ref()
 const formData = reactive({
+  isLoading: false,
+  useAi: props.useAi,
   cate: {
     inputValue: "",
     dynamicCates: <string[]>(props.cates.length == 0 ? [] : props.cates),
     inputVisible: false,
   },
 })
+
+watch(
+  () => props.useAi,
+  (newValue) => {
+    formData.useAi = newValue
+  }
+)
 
 const emit = defineEmits(["emitSyncCates"])
 
@@ -71,6 +85,7 @@ const cateMethods = {
     formData.cate.inputVisible = false
     formData.cate.inputValue = ""
   },
+  fetchCate: async () => {},
 }
 </script>
 
@@ -100,6 +115,17 @@ const cateMethods = {
         {{ t("main.cate.new") }}
       </el-button>
     </el-form-item>
+    <div v-if="formData.useAi">
+      推荐的分类
+      <el-form-item>
+        <el-button size="small" :loading="formData.isLoading" type="primary" @click="cateMethods.fetchCate">
+          {{ formData.isLoading ? t("main.opt.loading") : t("main.auto.fetch.cate") }}
+        </el-button>
+      </el-form-item>
+      <el-form-item>
+        <el-alert :closable="false" :title="t('category.ai.hand')" class="form-item-tip" type="warning" />
+      </el-form-item>
+    </div>
     <el-form-item>
       <el-alert :closable="false" :title="t('category.batch.not.supported')" class="form-item-tip" type="warning" />
     </el-form-item>

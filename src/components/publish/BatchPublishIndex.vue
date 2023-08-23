@@ -48,6 +48,7 @@ import { ICategoryConfig } from "~/src/types/ICategoryConfig.ts"
 import { SiyuanAttr } from "zhi-siyuan-api"
 import { DistributionPattern } from "~/src/models/distributionPattern.ts"
 import _ from "lodash"
+import PublishTitle from "~/src/components/publish/form/PublishTitle.vue"
 
 const logger = createAppLogger("publisher-index")
 
@@ -254,6 +255,11 @@ const syncAiSwitch = (val: boolean) => {
   logger.debug(`syncAiSwitch in batch publish => ${formData.useAi}`)
 }
 
+const syncPublishTitle = (val: string) => {
+  formData.siyuanPost.title = val
+  logger.debug("syncPublishTitle in batch publish")
+}
+
 const syncEditMode = async (val: PageEditMode) => {
   formData.editType = val
   logger.debug("syncEditMode in batch publish")
@@ -346,6 +352,13 @@ onMounted(async () => {
         <!-- 表单数据 -->
         <div class="publish-form">
           <el-form label-width="100px">
+            <el-alert
+                v-if="formData.useAi"
+                class="top-tip"
+                :title="t('category.ai.enabled')"
+                type="success"
+                :closable="false"
+            />
             <!-- 编辑模式选择 -->
             <edit-mode-select v-model:edit-type="formData.editType" @emitSyncEditMode="syncEditMode" />
 
@@ -361,11 +374,13 @@ onMounted(async () => {
             />
             <div v-else class="normal-mode">
               <!-- 文章标题 -->
-              <div class="form-post-title">
-                <el-form-item :label="t('main.title')">
-                  <el-input v-model="formData.siyuanPost.title" />
-                </el-form-item>
-              </div>
+              <publish-title
+                v-model:use-ai="formData.useAi"
+                v-model="formData.siyuanPost.title"
+                @emitSyncPublishTitle="syncPublishTitle"
+                v-model:md="formData.siyuanPost.markdown"
+                v-model:html="formData.siyuanPost.html"
+              />
 
               <!-- 分发模式 -->
               <div class="distri-type">
@@ -380,7 +395,9 @@ onMounted(async () => {
 
               <div v-if="formData.editType === PageEditMode.EditMode_complex" class="complex-mode">
                 <!-- AI开关 -->
+                <!--
                 <ai-switch v-if="formData.useAi" v-model:use-ai="formData.useAi" @emitSyncAiSwitch="syncAiSwitch" />
+                -->
 
                 <!-- 别名 -->
                 <el-form-item :label="t('main.slug')">
@@ -392,7 +409,8 @@ onMounted(async () => {
                   v-model:use-ai="formData.useAi"
                   v-model:page-id="id"
                   v-model:desc="formData.siyuanPost.shortDesc"
-                  v-model:content="formData.siyuanPost.html"
+                  v-model:md="formData.siyuanPost.markdown"
+                  v-model:html="formData.siyuanPost.html"
                   @emitSyncDesc="syncDesc"
                 />
 
@@ -401,12 +419,19 @@ onMounted(async () => {
                   v-model:use-ai="formData.useAi"
                   v-model:page-id="id"
                   v-model:tags="formData.siyuanPost.mt_keywords"
-                  v-model:content="formData.siyuanPost.html"
+                  v-model:md="formData.siyuanPost.markdown"
+                  v-model:html="formData.siyuanPost.html"
                   @emitSyncTags="syncTags"
                 />
 
                 <!-- 公共分类 -->
-                <common-categories v-model:cates="formData.siyuanPost.categories" @emitSyncCates="syncCates" />
+                <common-categories
+                  v-model:use-ai="formData.useAi"
+                  v-model:cates="formData.siyuanPost.categories"
+                  @emitSyncCates="syncCates"
+                  v-model:md="formData.siyuanPost.markdown"
+                  v-model:html="formData.siyuanPost.html"
+                />
 
                 <!-- 发布时间 -->
                 <publish-time v-model="formData.siyuanPost" @emitSyncPublishTime="syncPublishTime" />

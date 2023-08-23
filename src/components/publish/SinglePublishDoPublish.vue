@@ -50,6 +50,7 @@ import { ICategoryConfig } from "~/src/types/ICategoryConfig.ts"
 import PublishKnowledgeSpace from "~/src/components/publish/form/PublishKnowledgeSpace.vue"
 import { SiyuanAttr } from "zhi-siyuan-api"
 import Adaptors from "~/src/adaptors"
+import PublishTitle from "~/src/components/publish/form/PublishTitle.vue"
 
 const logger = createAppLogger("single-publish-do-publish")
 
@@ -275,6 +276,11 @@ const syncAiSwitch = (val: boolean) => {
   logger.debug(`syncAiSwitch in single publish => ${formData.useAi}`)
 }
 
+const syncPublishTitle = (val: string) => {
+  formData.mergedPost.title = val
+  logger.debug("syncPublishTitle in single publish")
+}
+
 const syncDesc = (val: string) => {
   formData.mergedPost.shortDesc = val
   logger.debug("syncDesc in single publish")
@@ -396,6 +402,13 @@ onMounted(async () => {
     <el-skeleton class="placeholder" v-if="!formData.isInit" :rows="5" animated />
     <div v-else id="batch-publish-index">
       <el-alert class="top-tip" :title="topTitle" type="info" :closable="false" />
+      <el-alert
+        v-if="formData.useAi"
+        class="top-tip"
+        :title="t('category.ai.enabled')"
+        type="success"
+        :closable="false"
+      />
       <el-container>
         <el-main>
           <!-- 表单数据 -->
@@ -419,11 +432,13 @@ onMounted(async () => {
               />
               <div v-else class="normal-mode">
                 <!-- 文章标题 -->
-                <div class="form-post-title">
-                  <el-form-item :label="t('main.title')">
-                    <el-input v-model="formData.mergedPost.title" />
-                  </el-form-item>
-                </div>
+                <publish-title
+                  v-model:use-ai="formData.useAi"
+                  v-model="formData.mergedPost.title"
+                  @emitSyncPublishTitle="syncPublishTitle"
+                  v-model:md="formData.mergedPost.markdown"
+                  v-model:html="formData.mergedPost.html"
+                />
 
                 <!-- 知识空间 -->
                 <publish-knowledge-space
@@ -436,7 +451,12 @@ onMounted(async () => {
 
                 <div v-if="formData.editType === PageEditMode.EditMode_complex" class="complex-mode">
                   <!-- AI开关 -->
+                  <!--
+                  根据配置正确与否自动开启，不再提供手动设置
+                  -->
+                  <!--
                   <ai-switch v-if="formData.useAi" v-model:use-ai="formData.useAi" @emitSyncAiSwitch="syncAiSwitch" />
+                  -->
 
                   <!-- 别名字段 -->
                   <el-form-item :label="t('main.slug')">
@@ -457,15 +477,19 @@ onMounted(async () => {
                     v-model:use-ai="formData.useAi"
                     v-model:page-id="id"
                     v-model:tags="formData.mergedPost.mt_keywords"
-                    v-model:content="formData.mergedPost.html"
+                    v-model:md="formData.mergedPost.markdown"
+                    v-model:html="formData.mergedPost.html"
                     @emitSyncTags="syncTags"
                   />
 
                   <!-- 分类 -->
                   <publish-categories
+                    v-model:use-ai="formData.useAi"
                     v-model:category-type="formData.publishCfg.cfg.categoryType"
                     v-model:category-config="formData.categoryConfig"
                     v-model:categories="formData.mergedPost.categories"
+                    v-model:md="formData.mergedPost.markdown"
+                    v-model:html="formData.mergedPost.html"
                     @emitSyncCates="syncCates"
                   />
 
@@ -535,4 +559,7 @@ onMounted(async () => {
 .top-tip
   margin-top 10px
   padding-left 0
+.form-item-tip
+  padding 2px 4px
+  margin 0 10px 0 0
 </style>

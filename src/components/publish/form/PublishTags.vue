@@ -46,7 +46,11 @@ const props = defineProps({
     type: String,
     default: "",
   },
-  content: {
+  md: {
+    type: String,
+    default: "",
+  },
+  html: {
     type: String,
     default: "",
   },
@@ -63,7 +67,8 @@ const formData = reactive({
     dynamicTags: <string[]>(StrUtil.isEmptyString(props.tags) ? [] : props.tags.split(",")),
     inputVisible: false,
   },
-  html: props.content,
+  md: props.md,
+  html: props.html,
 })
 
 watch(

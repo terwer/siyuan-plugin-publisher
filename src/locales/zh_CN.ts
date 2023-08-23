@@ -557,4 +557,8 @@ export default {
   "preference.setting.removeWidgetTag": "去除挂件HTML",
   "pref.setting.ai.proxy.url": "ChatGPT代理地址",
   "pref.setting.ai.proxy.url.tip": "可留空，注意：填写了代理会忽略ChatGPT请求地址",
+  "main.auto.fetch.title": "自动提取标题",
+  "main.auto.fetch.cate": "自动提取分类",
+  "category.ai.hand": "由于各平台分类体系不一致，分类需要手动进行校准，不会自动保存",
+  "category.ai.enabled": "AI可用，请前往详细模式进行操作",
 }
