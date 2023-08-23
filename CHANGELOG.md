@@ -1,32 +1,20 @@
 # Changelog
 
 ## [1.10.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.9.0...v1.10.0) (2023-08-23)
-
-
 ### Features
-
-* AI 功能发布 ([ff837b0](https://github.com/terwer/siyuan-plugin-publisher/commit/ff837b0e5282a6994c1ac95689edc7eb1e161140))
-* AI集成 ([c701ce6](https://github.com/terwer/siyuan-plugin-publisher/commit/c701ce600f90c392fe9f07131e5a438374dabb6a))
-* AI集成-支持生成标题和生成摘要 ([dfaacbe](https://github.com/terwer/siyuan-plugin-publisher/commit/dfaacbeb16e5d5ee6a1bc396cc7b5de9b4d294bc))
-* AI集成-支持生成标题和生成摘要 ([2e48ca5](https://github.com/terwer/siyuan-plugin-publisher/commit/2e48ca5bfe9176ce9ead88ab3ee010dd063d5cdd))
-
-
+* ai 功能发布 ([ff837b0](https://github.com/terwer/siyuan-plugin-publisher/commit/ff837b0e5282a6994c1ac95689edc7eb1e161140))
+* ai集成 ([c701ce6](https://github.com/terwer/siyuan-plugin-publisher/commit/c701ce600f90c392fe9f07131e5a438374dabb6a))
+* ai集成-支持生成标题和生成摘要 ([2e48ca5](https://github.com/terwer/siyuan-plugin-publisher/commit/2e48ca5bfe9176ce9ead88ab3ee010dd063d5cdd))
 ### Bug Fixes
-
 * **deps:** bump siyuan from 0.8.0 to 0.8.1 ([98fb7e6](https://github.com/terwer/siyuan-plugin-publisher/commit/98fb7e616ac9e365b4ee74320ff555376ac28066))
-* 修复YAML初始化失败问题 ([9ec4af8](https://github.com/terwer/siyuan-plugin-publisher/commit/9ec4af88547c02dec31f29f08a95fdbdb925fae4))
+* 修复yaml初始化失败问题 ([9ec4af8](https://github.com/terwer/siyuan-plugin-publisher/commit/9ec4af88547c02dec31f29f08a95fdbdb925fae4))
 * 修复知识空间设置错误问题 ([4d558e9](https://github.com/terwer/siyuan-plugin-publisher/commit/4d558e9a8159d1443dedd80ad13e63fb550bbac3))
 * 支持关闭标题处理和正文处理 ([27745f4](https://github.com/terwer/siyuan-plugin-publisher/commit/27745f4e1536840bbaad457d123f1839d8662e96))
-* 新增 AI 功能 ([943d0f0](https://github.com/terwer/siyuan-plugin-publisher/commit/943d0f044815d5fa309fa447bc1a692c345e0339))
+* 新增 ai 功能 ([943d0f0](https://github.com/terwer/siyuan-plugin-publisher/commit/943d0f044815d5fa309fa447bc1a692c345e0339))
 * 重构批量分发初始化 ([e0f7538](https://github.com/terwer/siyuan-plugin-publisher/commit/e0f75383ef82ffecbee963913c12a1e647f86be8))
-
-
 ### Miscellaneous
-
 * **deps-dev:** bump vercel from 31.4.0 to 32.0.0 ([d16a791](https://github.com/terwer/siyuan-plugin-publisher/commit/d16a79153f96e1983b576adbe7edbb012e83fa86))
-
 ## [1.9.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.8.0...v1.9.0) (2023-08-21)
-### Features
 * hexo 平台支持修改自定义 yaml ([e9ce0da](https://github.com/terwer/siyuan-plugin-publisher/commit/e9ce0daa43d990762715a918527f218c6863cb21))
 * 优化部分交互 ([fea1af2](https://github.com/terwer/siyuan-plugin-publisher/commit/fea1af27ccff2d6f75aed174a984de9ec861b3ea))
 * 属性以yaml格式存储到文档自定义属性 ([9e8b17b](https://github.com/terwer/siyuan-plugin-publisher/commit/9e8b17b2f367090f70f6ecebef2184b0a376eef2))
@@ -44,7 +32,6 @@
 * 新 logo ，新征程 ([49c2d7c](https://github.com/terwer/siyuan-plugin-publisher/commit/49c2d7cfec28cf24dc8f7277db3576b611d779b6))
 * 新增人工智能开关 ([6bbd3c8](https://github.com/terwer/siyuan-plugin-publisher/commit/6bbd3c8f8fcc3f53cae124313bb62e19638bb0ab))
 * 源码模式支持替换图片 ([09583e4](https://github.com/terwer/siyuan-plugin-publisher/commit/09583e4026441c686193784612d125f0da68afe8))
-### Bug Fixes
 * **deps:** bump siyuan from 0.7.9 to 0.8.0 ([5c01104](https://github.com/terwer/siyuan-plugin-publisher/commit/5c01104ca46d1da06dc4c51a9d227f67b6257b21))
 * **deps:** bump zhi-github-middleware from 0.2.2 to 0.3.4 ([c9ed18b](https://github.com/terwer/siyuan-plugin-publisher/commit/c9ed18b8fcbd65ae8ff64d5ea7c58f11aecb06f5))
 * **deps:** bump zhi-xmlrpc-middleware from 0.4.15 to 0.5.4 ([56931da](https://github.com/terwer/siyuan-plugin-publisher/commit/56931da69614b111d3b78e835bfd7d472a08d6ad))
@@ -63,7 +50,6 @@
 * 兼容平台图片上传-统一所有平台的预处理逻辑 ([6d9aba3](https://github.com/terwer/siyuan-plugin-publisher/commit/6d9aba3eb7e3b6a67fcc34e9ecabd697fe00ff50))
 * 兼容平台图片上传-解决notion图片解析错误问题 ([6c99367](https://github.com/terwer/siyuan-plugin-publisher/commit/6c9936746d4a65bf5a1ec9f2f8fba6c15a125902))
 * 博客园 electron 平台图片上传成功 ([0af57ce](https://github.com/terwer/siyuan-plugin-publisher/commit/0af57ce8067fc1e5227654a13bc0bed0bf1b4fb1))
-### Miscellaneous
 * **deps-dev:** bump vite-plugin-node-polyfills from 0.8.2 to 0.11.1 ([55c389b](https://github.com/terwer/siyuan-plugin-publisher/commit/55c389b7e699c4bd7c33b8787dec98300cd16cc3))
 ## [1.7.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.6.1...v1.7.0) (2023-08-11)
 * [#593](https://github.com/terwer/siyuan-plugin-publisher/issues/593) 插件版支持图床替换图片 ([bc645c0](https://github.com/terwer/siyuan-plugin-publisher/commit/bc645c0751016daabfa2e309882f988bd46e49ac))
