@@ -29,7 +29,7 @@ import { ChatGPTAPI, ChatGPTUnofficialProxyAPI } from "chatgpt"
 import { Utils } from "~/src/utils/utils.ts"
 import { isDev } from "~/src/utils/constants.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { SiyuanDevice } from "zhi-device"
 
 /**
  * 创建一个用于与 ChatGPT 服务进行交互的钩子
@@ -39,14 +39,30 @@ import { useVueI18n } from "~/src/composables/useVueI18n.ts"
  */
 const useChatGPT = () => {
   const logger = createAppLogger("use-chatgpt")
-  const { t } = useVueI18n()
-  const { getReadOnlyPublishPreferenceSetting } = usePublishPreferenceSetting()
+  const { getReadOnlyPublishPreferenceSetting, getPublishPreferenceSetting } = usePublishPreferenceSetting()
+  const changablePref = getPublishPreferenceSetting()
   const pref = getReadOnlyPublishPreferenceSetting()
 
   // 创建 ChatGPTAPI 实例
   let api: ChatGPTAPI | ChatGPTUnofficialProxyAPI
 
   try {
+    // 检测是否使用思源笔记的配置
+    const win = SiyuanDevice.siyuanWindow()
+    const snAiCfg = win?.siyuan?.config?.ai?.openAI
+    logger.info("try load win.siyuan.config =>", snAiCfg)
+    // 使用思源笔记的配置
+    if (snAiCfg) {
+      changablePref.value.experimentalUseSiyuanNoteAIConfig = true
+      changablePref.value.experimentalAIProxyUrl = snAiCfg.apiProxy
+      changablePref.value.experimentalAICode = snAiCfg.apiKey
+      changablePref.value.experimentalAIBaseUrl = snAiCfg.apiBaseURL
+      logger.info("use siyuan-note ai config")
+    } else {
+      changablePref.value.experimentalUseSiyuanNoteAIConfig = false
+      logger.info("use custom ai config")
+    }
+
     // 设置了代理地址创建代理实例，否则使用官方实例
     if (!StrUtil.isEmptyString(pref.value.experimentalAIProxyUrl)) {
       api = new ChatGPTUnofficialProxyAPI({
@@ -68,6 +84,7 @@ const useChatGPT = () => {
   } catch (e) {
     // 初始化 API 失败时，记录错误但继续执行
     logger.error("Failed to initialize ChatGPT API:", e)
+    throw e
   }
 
   /**

@@ -100,7 +100,7 @@ const handleMakeDesc = async () => {
     // ElMessage.success(t("main.opt.success"))
   } catch (e) {
     logger.error(t("main.opt.failure") + "=>", e)
-    ElMessage.error(t("main.opt.failure") + "=>", e)
+    ElMessage.error(t("main.opt.failure") + "=>"+ e)
   }
 
   formData.isDescLoading = false

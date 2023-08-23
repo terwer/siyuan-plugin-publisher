@@ -29,7 +29,7 @@ import PageUtil from "../utils/pageUtil"
 import { showIframeDialog } from "../iframeDialog"
 import PublisherPlugin from "../index"
 import { StrUtil } from "zhi-common"
-import { showMessage } from "siyuan"
+import { openTab, showMessage } from "siyuan"
 
 /**
  * 挂件相关
@@ -54,6 +54,22 @@ export class WidgetInvoke {
       return
     }
     await this.showPage(`/?id=${pageId}`)
+  }
+
+  public async showPublisherAiChatDialog() {
+    let pageId: string | undefined = PageUtil.getPageId()
+    if (pageId == "") {
+      pageId = undefined
+    }
+    await this.showPage(`/ai/chat?id=${pageId}`)
+  }
+
+  public async showPublisherAiChatTab() {
+    let pageId: string | undefined = PageUtil.getPageId()
+    if (pageId == "") {
+      pageId = undefined
+    }
+    this.showTab(`/ai/chat?id=${pageId}`)
   }
 
   public async showPublisherSinglePublishDialog() {
@@ -119,5 +135,34 @@ export class WidgetInvoke {
     } else {
       showIframeDialog(this.pluginInstance, url, w, h, noscroll)
     }
+  }
+
+  private showTab(pageUrl: string, noscroll?: boolean) {
+    // 自定义tab
+    this.pluginInstance.tabInstance = openTab({
+      app: this.pluginInstance.app,
+      custom: {
+        id: "publisher-ai-tab",
+        icon: "iconAccount",
+        title: this.pluginInstance.i18n.aiChatTab,
+        // @ts-expect-error
+        fn: this.pluginInstance.customTabObject,
+      },
+    })
+    const url = `/plugins/siyuan-plugin-publisher/#${pageUrl}`
+    this.logger.info("will show webview page =>", url)
+    // 有高度问题，参考下面的
+    // this.pluginInstance.tabInstance.panelElement.innerHTML = `
+    //   <div class="plugin-publisher__custom-tab">
+    //       <style>iframe { width: 100%; border: none; }</style>
+    //       <iframe src="${url}" width="100%" scrolling="${noscroll ? "no" : "yes"}">
+    //       </iframe>
+    //   </div>`
+
+    // 参考 https://github.com/zuoez02/siyuan-plugin-webview-flomo/blob/main/index.js#L380C20-L382C29
+    this.pluginInstance.tabInstance.panelElement.innerHTML = `
+      <div style="display: flex" class="fn__flex-column fn__flex fn__flex-1 plugin-publisher__custom-tab">
+          <iframe allowfullscreen allowpopups style="border: none" class="fn__flex-column fn__flex  fn__flex-1" src="${url}"></iframe>
+      </div>`
   }
 }

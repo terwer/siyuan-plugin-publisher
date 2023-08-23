@@ -193,6 +193,26 @@ export class Topbar {
       },
     })
 
+    // AI聊天
+    menu.addSeparator()
+    menu.addItem({
+      iconHTML: `<svg class="b3-menu__icon" style=""><use xlink:href="#iconUsers"></use></svg>`,
+      label: this.pluginInstance.i18n.aiChat,
+      click: () => {
+        this.widgetInvoke.showPublisherAiChatDialog()
+      },
+    })
+
+    // AI聊天Tab版
+    menu.addSeparator()
+    menu.addItem({
+      iconHTML: `<svg class="b3-menu__icon" style=""><use xlink:href="#iconAccount"></use></svg>`,
+      label: this.pluginInstance.i18n.aiChatTab,
+      click: () => {
+        this.widgetInvoke.showPublisherAiChatTab()
+      },
+    })
+
     // 扩展功能
     menu.addSeparator()
     menu.addItem({

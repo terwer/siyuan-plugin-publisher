@@ -275,9 +275,12 @@ export default {
   "page.no.id": "pageId fetch error",
   "main.read.mode": "Readonly",
   "main.edit.mode": "Editable",
-  "main.read.mode.tip1": "Tips: The multi-platform distribution mode will display the built-in public YAML, and the general release can display the platform's custom YAML.",
-  "main.read.mode.tip2": "To identify the uniqueness of the article, slug modifications are ignored and other attributes can be synchronized.",
-  "main.read.mode.tip3": "！！！ This feature is advanced, if you are unclear about the YAML syntax and purpose, do not modify it!!",
+  "main.read.mode.tip1":
+    "Tips: The multi-platform distribution mode will display the built-in public YAML, and the general release can display the platform's custom YAML.",
+  "main.read.mode.tip2":
+    "To identify the uniqueness of the article, slug modifications are ignored and other attributes can be synchronized.",
+  "main.read.mode.tip3":
+    "！！！ This feature is advanced, if you are unclear about the YAML syntax and purpose, do not modify it!!",
   "main.opt.onclick.confirm.tip":
     "This operation will re -generate all attributes other than alias. If you just want to modify individual attributes, please click the individual function button to operate in the detailed mode. Do you continue?",
   "main.cat.list.error": "Category list get error",
@@ -556,19 +559,26 @@ export default {
   "setting.blog.siyuan.password": "Siyuan Token",
   "setting.blog.siyuan.password.tip": "Siyuan Token, which is empty by default",
   "slogan.make.written.fun": "Let creation return to fun",
-  "category.batch.not.supported": "Note: Some platforms in the bulk distribution mode do not support public classification, such as Yuque and Zhihu",
-  "yuque.edit.cate.no.change": "Due to the limitations of the Yuque platform, editing the knowledge base is not supported at the moment. If you want to move a document, click Undelete and then select the new knowledge base publication again",
+  "category.batch.not.supported":
+    "Note: Some platforms in the bulk distribution mode do not support public classification, such as Yuque and Zhihu",
+  "yuque.edit.cate.no.change":
+    "Due to the limitations of the Yuque platform, editing the knowledge base is not supported at the moment. If you want to move a document, click Undelete and then select the new knowledge base publication again",
   "main.commonn.cate.title": "Public category",
   "main.cate.new": "New category",
   "pref.setting.aicode": "ChatGPT request key",
-  "pref.setting.aicode.tip": "ChatGPT request key or third-party proxy key, if it is a proxy key, please set the request address",
+  "pref.setting.aicode.tip":
+    "ChatGPT request key or third-party proxy key, if it is a proxy key, please set the request address",
   "pref.setting.ai.baseurl": "ChatGPT request address",
   "pref.setting.ai.baseurl.tip": "The ChatGPT request address, if it is official ChatGPT, can be left blank",
   "preference.setting.removeWidgetTag": "Remove the widget HTML",
   "pref.setting.ai.proxy.url": "ChatGPT proxy address",
-  "pref.setting.ai.proxy.url.tip": "Can be left blank, note: Filling in the proxy will ignore the ChatGPT request address",
+  "pref.setting.ai.proxy.url.tip":
+    "Can be left blank, note: Filling in the proxy will ignore the ChatGPT request address",
   "main.auto.fetch.title": "Auto fetch title",
   "main.auto.fetch.cate": "Auto fetch category",
-  "category.ai.hand": "Due to inconsistent classification systems across platforms, classifications need to be calibrated manually and are not automatically saved",
+  "category.ai.hand":
+    "Due to inconsistent classification systems across platforms, classifications need to be calibrated manually and are not automatically saved",
   "category.ai.enabled": "AI is available, please go to the detailed mode to operate",
+  "sys.config.ai": "AI configuration",
+  "config.ai.use.siyuan": "Inside Siyuan notes, you can directly use Siyuan notes to configure, no configuration is required",
 }

@@ -16,5 +16,7 @@
   "publishTo": "一键发布",
   "batchSync": "批量分发",
   "publishNormal": "常规发布",
-  "extendFunction": "扩展功能"
+  "extendFunction": "扩展功能",
+  "aiChat": "AI聊天",
+  "aiChatTab": "AI聊天(Tab版)"
 }

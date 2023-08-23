@@ -36,6 +36,16 @@ class PublishPreferenceCfg extends PreferenceConfig {
   /**
    * AI 体验码
    */
+  public experimentalUseSiyuanNoteAIConfig: boolean
+
+  /**
+   * AI 体验码
+   */
+  public experimentalAIEnabled: boolean
+
+  /**
+   * AI 体验码
+   */
   public experimentalAICode: string
 
   /**
@@ -47,6 +57,12 @@ class PublishPreferenceCfg extends PreferenceConfig {
    * AI 代理地址
    */
   public experimentalAIProxyUrl?: string
+
+  constructor() {
+    super()
+    this.experimentalUseSiyuanNoteAIConfig = true
+    this.experimentalAIEnabled = false
+  }
 }
 
 export { PublishPreferenceCfg }

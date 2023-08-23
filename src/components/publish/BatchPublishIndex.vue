@@ -42,13 +42,12 @@ import { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 import { PageEditMode } from "~/src/models/pageEditMode.ts"
 import EditModeSelect from "~/src/components/publish/form/EditModeSelect.vue"
 import PublishTime from "~/src/components/publish/form/PublishTime.vue"
-import AiSwitch from "~/src/components/publish/form/AiSwitch.vue"
-import { isDev } from "~/src/utils/constants.ts"
 import { ICategoryConfig } from "~/src/types/ICategoryConfig.ts"
 import { SiyuanAttr } from "zhi-siyuan-api"
 import { DistributionPattern } from "~/src/models/distributionPattern.ts"
 import _ from "lodash"
 import PublishTitle from "~/src/components/publish/form/PublishTitle.vue"
+import { useChatGPT } from "~/src/composables/useChatGPT.ts"
 
 const logger = createAppLogger("publisher-index")
 
@@ -295,6 +294,17 @@ const handleRefresh = () => {
   BrowserUtil.reloadPage()
 }
 
+const chckedChatGPTEnabled = () => {
+  let flag = false
+  try {
+    useChatGPT()
+    flag = true
+  } catch (e) {
+    logger.error(t("main.opt.failure") + "=>", e)
+  }
+  return flag
+}
+
 onMounted(async () => {
   // ==================
   // 初始化开始
@@ -311,7 +321,7 @@ onMounted(async () => {
   // ==================
 
   // 这里可以控制一些功能开关
-  formData.useAi = isDev
+  formData.useAi = chckedChatGPTEnabled()
   formData.editType = PageEditMode.EditMode_simple
 })
 </script>
@@ -353,11 +363,11 @@ onMounted(async () => {
         <div class="publish-form">
           <el-form label-width="100px">
             <el-alert
-                v-if="formData.useAi"
-                class="top-tip"
-                :title="t('category.ai.enabled')"
-                type="success"
-                :closable="false"
+              v-if="formData.useAi"
+              class="top-tip"
+              :title="t('category.ai.enabled')"
+              type="success"
+              :closable="false"
             />
             <!-- 编辑模式选择 -->
             <edit-mode-select v-model:edit-type="formData.editType" @emitSyncEditMode="syncEditMode" />

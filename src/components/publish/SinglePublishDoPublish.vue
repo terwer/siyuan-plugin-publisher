@@ -44,13 +44,12 @@ import { PageEditMode } from "~/src/models/pageEditMode.ts"
 import EditModeSelect from "~/src/components/publish/form/EditModeSelect.vue"
 import PublishTime from "~/src/components/publish/form/PublishTime.vue"
 import { isDev } from "~/src/utils/constants.ts"
-import AiSwitch from "~/src/components/publish/form/AiSwitch.vue"
 import { pre } from "~/src/utils/import/pre.ts"
 import { ICategoryConfig } from "~/src/types/ICategoryConfig.ts"
 import PublishKnowledgeSpace from "~/src/components/publish/form/PublishKnowledgeSpace.vue"
 import { SiyuanAttr } from "zhi-siyuan-api"
-import Adaptors from "~/src/adaptors"
 import PublishTitle from "~/src/components/publish/form/PublishTitle.vue"
+import { useChatGPT } from "~/src/composables/useChatGPT.ts"
 
 const logger = createAppLogger("single-publish-do-publish")
 
@@ -355,6 +354,17 @@ const initPage = async () => {
   }
 }
 
+const chckedChatGPTEnabled = () => {
+  let flag = false
+  try {
+    useChatGPT()
+    flag = true
+  } catch (e) {
+    logger.error(t("main.opt.failure") + "=>", e)
+  }
+  return flag
+}
+
 onMounted(async () => {
   logger.info("获取到的ID为=>", id)
   // ==================
@@ -392,7 +402,7 @@ onMounted(async () => {
   // ==================
 
   // 这里可以控制一些功能开关
-  formData.useAi = isDev
+  formData.useAi = chckedChatGPTEnabled()
   formData.editType = PageEditMode.EditMode_simple
 })
 </script>

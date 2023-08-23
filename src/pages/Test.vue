@@ -77,8 +77,8 @@ const handleGoTest = async (item: any) => {
 
 <template>
   <back-page title="组件测试">
-    <div id="test-list">
-      <el-button v-for="item in components" @click="handleGoTest(item)" type="primary" size="large">
+    <div id="test-list" class="test-list-container">
+      <el-button v-for="item in components" @click="handleGoTest(item)" type="primary" size="large" class="test-button">
         {{ item.title }}
       </el-button>
     </div>
@@ -86,6 +86,16 @@ const handleGoTest = async (item: any) => {
 </template>
 
 <style scoped lang="stylus">
-#test-list
-  margin 16px 20px
+.test-list-container
+  margin-top 16px
+  display flex
+  flex-wrap wrap
+  justify-content flex-start
+  :deep(.el-button+.el-button)
+    margin-left 0
+
+.test-button
+  margin-right 8px
+  margin-left 0
+  margin-bottom 10px
 </style>
