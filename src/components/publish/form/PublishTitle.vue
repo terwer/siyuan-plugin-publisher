@@ -102,11 +102,11 @@ const handleMakeTitle = async () => {
     }
     const resJson = JsonUtil.safeParse<TitleAIResult>(chatText, {} as TitleAIResult)
     formData.postTitle = resJson.title
-    emit("emitSyncPublishTitle", formData.postTitle)
     logger.info("使用AI智能生成的标题结果 =>", {
       inputWord: inputWord,
       chatText: chatText,
     })
+    emit("emitSyncPublishTitle", formData.postTitle)
     ElMessage.success("使用人工智能提取标题成功")
   } catch (e) {
     logger.error(t("main.opt.failure") + "=>", e)
@@ -118,11 +118,11 @@ const handleMakeTitle = async () => {
 </script>
 
 <template>
-  <div class="form-post-title" v-if="formData.useAi">
+  <div class="form-post-title">
     <el-form-item :label="t('main.title')">
       <el-input v-model="formData.postTitle" @input="handleTitleChange" />
     </el-form-item>
-    <el-form-item>
+    <el-form-item v-if="formData.useAi">
       <el-button size="small" :loading="formData.isLoading" type="primary" @click="handleMakeTitle">
         {{ formData.isLoading ? t("main.opt.loading") : t("main.auto.fetch.title") }}
       </el-button>
