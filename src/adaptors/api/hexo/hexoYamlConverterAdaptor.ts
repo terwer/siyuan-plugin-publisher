@@ -40,48 +40,37 @@ export class HexoYamlConverterAdaptor extends YamlConvertAdaptor {
 
   public convertToYaml(post: Post, cfg?: BlogConfig): YamlFormatObj {
     this.logger.debug("您正在使用 Hexo Yaml Converter", { post: toRaw(post) })
-    const savedYaml = YamlUtil.extractFrontmatter(post.yaml).trim()
-    if (!StrUtil.isEmptyString(savedYaml)) {
-      const yamlFormatObj = new YamlFormatObj()
-      const yamlObj = YamlUtil.yaml2Obj(savedYaml)
-      yamlFormatObj.yamlObj = yamlObj
-      yamlFormatObj.formatter = post.yaml
-      yamlFormatObj.mdContent = post.markdown
-      yamlFormatObj.mdFullContent = YamlUtil.addYamlToMd(post.yaml, yamlFormatObj.mdContent)
-      yamlFormatObj.htmlContent = post.html
-      this.logger.info("读取已经存在的YAML")
-      return yamlFormatObj
-    } else {
-      let defaultYFMObj: YamlFormatObj = new YamlFormatObj()
-      // title
-      defaultYFMObj.yamlObj.title = post.title
+    let yamlFormatObj: YamlFormatObj = new YamlFormatObj()
+    // title
+    yamlFormatObj.yamlObj.title = post.title
 
-      // date
-      defaultYFMObj.yamlObj.date = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true)
+    // date
+    yamlFormatObj.yamlObj.date = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true)
 
-      // updated
-      if (!post.dateUpdated) {
-        post.dateUpdated = new Date()
-      }
-      defaultYFMObj.yamlObj.updated = DateUtil.formatIsoToZh(post.dateUpdated.toISOString(), true)
+    // updated
+    if (!post.dateUpdated) {
+      post.dateUpdated = new Date()
+    }
+    yamlFormatObj.yamlObj.updated = DateUtil.formatIsoToZh(post.dateUpdated.toISOString(), true)
 
-      // excerpt
-      if (!StrUtil.isEmptyString(post.shortDesc)) {
-        defaultYFMObj.yamlObj.excerpt = post.shortDesc
-      }
+    // excerpt
+    if (!StrUtil.isEmptyString(post.shortDesc)) {
+      yamlFormatObj.yamlObj.excerpt = post.shortDesc
+    }
 
-      // tags
-      if (!StrUtil.isEmptyString(post.mt_keywords)) {
-        const tags = post.mt_keywords.split(",")
-        defaultYFMObj.yamlObj.tags = tags
-      }
+    // tags
+    if (!StrUtil.isEmptyString(post.mt_keywords)) {
+      const tags = post.mt_keywords.split(",")
+      yamlFormatObj.yamlObj.tags = tags
+    }
 
-      // categories
-      if (post.categories?.length > 0) {
-        defaultYFMObj.yamlObj.categories = post.categories
-      }
+    // categories
+    if (post.categories?.length > 0) {
+      yamlFormatObj.yamlObj.categories = post.categories
+    }
 
-      // permalink
+    // permalink
+    if (cfg.yamlLinkEnabled) {
       let link = "/post/" + post.wp_slug + ".html"
       if (cfg instanceof CommonGithubConfig) {
         const githubCfg = cfg as CommonGithubConfig
@@ -99,32 +88,33 @@ export class HexoYamlConverterAdaptor extends YamlConvertAdaptor {
           link = link.replace(/\[mm]/g, m)
           link = link.replace(/\[dd]/g, d)
 
-          if (defaultYFMObj.yamlObj.categories?.length > 0) {
-            link = link.replace(/\[cats]/, defaultYFMObj.yamlObj.categories.join("/"))
+          if (yamlFormatObj.yamlObj.categories?.length > 0) {
+            link = link.replace(/\[cats]/, yamlFormatObj.yamlObj.categories.join("/"))
           } else {
             link = link.replace(/\/\[cats]/, "")
           }
         }
       }
-      defaultYFMObj.yamlObj.permalink = link
-
-      // comments
-      defaultYFMObj.yamlObj.comments = true
-
-      // toc
-      defaultYFMObj.yamlObj.toc = true
-
-      // formatter
-      let yaml = YamlUtil.obj2Yaml(defaultYFMObj.yamlObj)
-      this.logger.debug("yaml=>", yaml)
-
-      defaultYFMObj.formatter = yaml
-      defaultYFMObj.mdContent = post.markdown
-      defaultYFMObj.mdFullContent = YamlUtil.addYamlToMd(defaultYFMObj.formatter, defaultYFMObj.mdContent)
-      defaultYFMObj.htmlContent = post.html
-      this.logger.info("生成默认的YAML")
-      return defaultYFMObj
+      yamlFormatObj.yamlObj.permalink = link
     }
+
+    // comments
+    yamlFormatObj.yamlObj.comments = true
+
+    // toc
+    yamlFormatObj.yamlObj.toc = true
+
+    // formatter
+    let yaml = YamlUtil.obj2Yaml(yamlFormatObj.yamlObj)
+    this.logger.debug("yaml=>", yaml)
+
+    yamlFormatObj.formatter = yaml
+    yamlFormatObj.mdContent = post.markdown
+    yamlFormatObj.mdFullContent = YamlUtil.addYamlToMd(yamlFormatObj.formatter, yamlFormatObj.mdContent)
+    yamlFormatObj.htmlContent = post.html
+    this.logger.info("生成默认的YAML")
+
+    return yamlFormatObj
   }
 
   public convertToAttr(post: Post, yamlFormatObj: YamlFormatObj, cfg?: BlogConfig): Post {

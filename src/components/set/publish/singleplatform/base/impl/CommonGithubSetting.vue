@@ -77,6 +77,9 @@ const syncDefaultPath = (cfg: any) => {
       <el-form-item :label="t('setting.blog.type.github.repo')">
         <el-input v-model="(main.cfg as any).githubRepo" :placeholder="t('setting.blog.type.github.repo.tip')" />
       </el-form-item>
+      <el-form-item :label="t('setting.blog.yamlLinkEnabled')">
+        <el-switch v-model="(main.cfg as any).yamlLinkEnabled" />
+      </el-form-item>
       <el-form-item>
         <a href="javascript:;" @click="toggleAdvance">{{ formData.advanceBtnText }}</a>
       </el-form-item>

@@ -103,8 +103,6 @@ const formData = reactive({
   // =========================
   // sync attrs end
   // =========================
-
-  distriPattern: DistributionPattern.Override,
   actionEnable: true,
 })
 
@@ -134,15 +132,6 @@ const handlePublish = async () => {
 
         // 平台相关的元数据初始化
         batchItemPost = await initPublishMethods.assignInitAttrs(siyuanPost, id, formData.publishCfg)
-
-        // 合并属性
-        if (formData.distriPattern === DistributionPattern.Merge) {
-          batchItemPost = initPublishMethods.doMergeBatchPost(siyuanPost, batchItemPost)
-          logger.debug("批量分发模式文章已合并", {
-            siyuanPost: toRaw(siyuanPost),
-            mergedPost: toRaw(batchItemPost),
-          })
-        }
       }
 
       const batchResult = await doSinglePublish(key, id, formData.publishCfg, batchItemPost)
@@ -162,8 +151,13 @@ const handlePublish = async () => {
     } else {
       ElMessage.error(`多平台文章分发失败，失败个数：${formData.errCount}`)
     }
-  } catch (error) {
-    ElMessage.error(error.message)
+  } catch (e) {
+    const errMsg = t("main.opt.failure") + "=>" + e
+    logger.error(t("main.opt.failure") + "=>", e)
+    await kernelApi.pushErrMsg({
+      msg: errMsg,
+      timeout: 7000,
+    })
   } finally {
     formData.isPublishLoading = false
   }
@@ -221,8 +215,13 @@ const doDelete = async () => {
     } else {
       ElMessage.error(`多平台文章删除失败，失败个数：${formData.errCount}`)
     }
-  } catch (error) {
-    ElMessage.error(error.message)
+  } catch (e) {
+    const errMsg = t("main.opt.failure") + "=>" + e
+    logger.error(t("main.opt.failure") + "=>", e)
+    await kernelApi.pushErrMsg({
+      msg: errMsg,
+      timeout: 7000,
+    })
   } finally {
     formData.isDeleteLoading = false
   }
@@ -275,7 +274,7 @@ const syncDesc = (val: string) => {
 }
 
 const syncTags = (val: string[]) => {
-  formData.siyuanPost.mt_keywords = val.join(",")
+  formData.siyuanPost.mt_keywords = val?.join(",")
   logger.debug("syncTags in batch publish")
 }
 
@@ -391,16 +390,6 @@ onMounted(async () => {
                 v-model:md="formData.siyuanPost.markdown"
                 v-model:html="formData.siyuanPost.html"
               />
-
-              <!-- 分发模式 -->
-              <div class="distri-type">
-                <el-form-item label="分发模式">
-                  <el-radio-group v-model="formData.distriPattern" class="ml-4">
-                    <el-radio :label="DistributionPattern.Override" size="large">覆盖</el-radio>
-                    <el-radio :label="DistributionPattern.Merge" size="large">合并</el-radio>
-                  </el-radio-group>
-                </el-form-item>
-              </div>
               <el-divider border-style="dashed" />
 
               <div v-if="formData.editType === PageEditMode.EditMode_complex" class="complex-mode">

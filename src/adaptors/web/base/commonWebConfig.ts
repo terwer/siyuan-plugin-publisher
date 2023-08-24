@@ -51,6 +51,7 @@ export class CommonWebConfig extends WebConfig {
     this.usernameEnabled = false
     this.allowPreviewUrlChange = true
     this.showTokenTip = false
+    this.yamlLinkEnabled = true
     this.placeholder = new CommonWebPlaceholder()
   }
 }

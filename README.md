@@ -44,7 +44,8 @@ Names not listed in order
 - [X] **Platform switch**: All platforms support enabling and disabling, the blog garden is enabled by default, and can be
   disabled at any time
 - [X] **Dynamic Newly Added**: Support custom adding platform
-- [X] **Smart Classification**: Support smart tags, smart slug aliases, smart summaries, and continue to improve.Smart tags and smart summaries is currently in the invitation experience stage, if you want to experience, you can email youweics@163.com, I will send you a plugin experience package containing AI.
+- [X] **AI Integration**: Integrate free chat and chat based on the context of the current document
+- [X] **Smart Classification**: Smart slug aliases, smart titles, smart summaries, smart tags, smart classifications are supported.
 - [X] **Article Binding**: Support linking existing platform articles to siyuan-note to facilitate follow-up management,
   support Siyuan->platform one-way synchronization
 - [X] **Adapt to Theme**: Automatically adapt to dark mode and light mode

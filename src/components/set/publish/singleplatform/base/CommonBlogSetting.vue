@@ -335,7 +335,6 @@ onMounted(async () => {
       <el-radio-group v-model="formData.cfg.pageType" class="ml-4">
         <el-radio :label="PageTypeEnum.Markdown" size="large">Markdown</el-radio>
         <el-radio :label="PageTypeEnum.Html" size="large">HTML</el-radio>
-        <el-radio :label="PageTypeEnum.Kramdown" size="large">Kramdown</el-radio>
       </el-radio-group>
     </el-form-item>
     <!-- 知识空间 -->

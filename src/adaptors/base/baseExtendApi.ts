@@ -27,18 +27,19 @@ import { IBlogApi } from "zhi-blog-api/dist/lib/IBlogApi"
 import { IWebApi } from "zhi-blog-api/dist/lib/IWebApi"
 import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
 import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
-import { BlogConfig, MediaObject, Post, WebApi } from "zhi-blog-api"
+import { BlogConfig, MediaObject, Post, WebApi, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
 import { createAppLogger, ILogger } from "~/src/utils/appLogger.ts"
 import { LuteUtil } from "~/src/utils/luteUtil.ts"
 import { usePicgoBridge } from "~/src/composables/usePicgoBridge.ts"
 import { base64ToBuffer, remoteImageToBase64Info, toBase64Info } from "~/src/utils/polyfillUtils.ts"
-import { StrUtil } from "zhi-common"
+import { StrUtil, YamlUtil } from "zhi-common"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import { isFileExists } from "~/src/utils/siyuanUtils.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { SiyuanKernelApi } from "zhi-siyuan-api"
 import { DynamicConfig } from "~/src/platforms/dynamicConfig.ts"
 import { MUST_USE_OWN_PLATFORM, MUST_USE_PICBED_PLATFORM } from "~/src/utils/constants.ts"
+import { toRaw } from "vue"
 
 /**
  * 各种模式共享的扩展基类
@@ -81,12 +82,40 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
   public async preEditPost(post: Post, id?: string, publishCfg?: any): Promise<Post> {
     // 处理图片
     post = await this.handlePictures(post, id, publishCfg)
+    // 处理YAML
+    post = await this.handleYaml(post, id, publishCfg)
     return post
   }
 
   // ================
   // private methods
   // ================
+  private async handleYaml(post: Post, id?: string, publishCfg?: any) {
+    const cfg: BlogConfig = publishCfg?.cfg
+    const yamlAdaptor: YamlConvertAdaptor = this.api.getYamlAdaptor()
+    if (null !== yamlAdaptor) {
+      // 先生成对应平台的yaml
+      const yamlObj: YamlFormatObj = yamlAdaptor.convertToYaml(post, cfg)
+      // 同步发布内容
+      post.yaml = yamlObj.formatter
+      post.markdown = yamlObj.mdFullContent
+      post.html = yamlObj.htmlContent
+      this.logger.info("handled yaml using YamlConverterAdaptor")
+    } else {
+      // 同步发布内容
+      const yamlObj = post.toYamlObj()
+      const yaml = YamlUtil.obj2Yaml(yamlObj)
+      const md = YamlUtil.extractMarkdown(post.markdown)
+      post.yaml = yaml
+      post.markdown = md
+      post.html = LuteUtil.mdToHtml(md)
+      this.logger.info("yaml adaptor not found, using default")
+    }
+
+    this.logger.debug("handledYaml yaml finished =>", { post: toRaw(post) })
+    return post
+  }
+
   /**
    * 处理图片
    *

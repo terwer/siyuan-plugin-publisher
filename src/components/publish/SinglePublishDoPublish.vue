@@ -291,7 +291,7 @@ const syncDesc = (val: string) => {
 }
 
 const syncTags = (val: string[]) => {
-  formData.mergedPost.mt_keywords = val.join(",")
+  formData.mergedPost.mt_keywords = val?.join(",")
   logger.debug("syncTags in single publish")
 }
 

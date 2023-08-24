@@ -22,7 +22,7 @@
  * or visit www.terwer.space if you need additional information or have any
  * questions.
  */
-import { Attachment, ElectronCookie, MediaObject, Post, WebApi, WebConfig } from "zhi-blog-api"
+import { Attachment, ElectronCookie, MediaObject, Post, WebApi, WebConfig, YamlConvertAdaptor } from "zhi-blog-api"
 import { AppInstance } from "~/src/appInstance.ts"
 import { createAppLogger, ILogger } from "~/src/utils/appLogger.ts"
 import { useProxy } from "~/src/composables/useProxy.ts"
@@ -66,6 +66,10 @@ class BaseWebApi extends WebApi {
 
   public async buildCookie(cookies: ElectronCookie[]): Promise<string> {
     return cookies.map((cookie) => `${cookie.name}=${cookie.value}`).join(";")
+  }
+
+  public getYamlAdaptor(): YamlConvertAdaptor {
+    return null
   }
 
   public async preEditPost(post: Post, id?: string, publishCfg?: any): Promise<Post> {
