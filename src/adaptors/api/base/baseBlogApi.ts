@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { BlogApi, BlogConfig, Post } from "zhi-blog-api"
+import { BlogApi, BlogConfig, Post, YamlConvertAdaptor } from "zhi-blog-api"
 import { AppInstance } from "~/src/appInstance.ts"
 import { createAppLogger, ILogger } from "~/src/utils/appLogger.ts"
 import { useProxy } from "~/src/composables/useProxy.ts"
@@ -57,6 +57,10 @@ export class BaseBlogApi extends BlogApi {
 
     const { proxyFetch } = useProxy(cfg.middlewareUrl)
     this.proxyFetch = proxyFetch
+  }
+
+  public getYamlAdaptor(): YamlConvertAdaptor {
+    return this.baseExtendApi.getYamlAdaptor()
   }
 
   public async preEditPost(post: Post, id?: string, publishCfg?: any): Promise<Post> {

@@ -563,4 +563,5 @@ export default {
   "category.ai.enabled": "检测到您已经配置AI，可请前往详细模式进行操作",
   "sys.config.ai": "AI设置",
   "config.ai.use.siyuan": "思源笔记内部，直接使用思源笔记配置，无需配置",
+  "setting.blog.yamlLinkEnabled": "YAML永久链接",
 }

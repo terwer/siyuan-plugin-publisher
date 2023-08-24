@@ -581,4 +581,5 @@ export default {
   "category.ai.enabled": "AI is available, please go to the detailed mode to operate",
   "sys.config.ai": "AI configuration",
   "config.ai.use.siyuan": "Inside Siyuan notes, you can directly use Siyuan notes to configure, no configuration is required",
+  "setting.blog.yamlLinkEnabled": "YAML permalink",
 }

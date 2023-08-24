@@ -371,20 +371,29 @@ const usePublish = () => {
         // 平台相关自定义属性（摘要、标签、分类）
         const yamlKey = getDynYamlKey(key)
         const yaml = await kernelApi.getSingleBlockAttr(id, yamlKey)
-        const savedYaml = YamlUtil.extractFrontmatter(yaml).trim()
+        const checkYaml = YamlUtil.extractFrontmatter(yaml).trim()
 
         // YAML属性转换
         const yamlAdaptor: YamlConvertAdaptor = await Adaptors.getYamlAdaptor(key, cfg)
         if (null !== yamlAdaptor) {
           // 有适配器
-          const yamlFormatObj = yamlAdaptor.convertToYaml(post, cfg)
-          logger.info("未保存过YAML，使用适配器生成yamlObj")
+          let yamlFormatObj: YamlFormatObj
+          if (!StrUtil.isEmptyString(checkYaml)) {
+            yamlFormatObj = new YamlFormatObj()
+            const yamlObj = await YamlUtil.yaml2ObjAsync(yaml)
+            yamlFormatObj.yamlObj = yamlObj
+            logger.info("YAML已保存，初始化生成yamlFormatObj", { yamlFormatObj: toRaw(yamlFormatObj) })
+          } else {
+            yamlFormatObj = yamlAdaptor.convertToYaml(post, cfg)
+            logger.info("YAML未保存，使用适配器生成默认的yamlFormatObj", { yamlFormatObj: toRaw(yamlFormatObj) })
+          }
+          post.yaml = yaml
           post = yamlAdaptor.convertToAttr(post, yamlFormatObj, cfg)
-          logger.debug("使用适配器转换yamlObj到post完成 =>", yamlFormatObj)
+          logger.debug("使用适配器转换yamlObj到post完成 =>", { post: toRaw(post) })
         } else {
           // 无适配器
-          if (!StrUtil.isEmptyString(savedYaml)) {
-            const yamlObj = YamlUtil.yaml2Obj(savedYaml)
+          if (!StrUtil.isEmptyString(checkYaml)) {
+            const yamlObj = await YamlUtil.yaml2ObjAsync(yaml)
             post.yaml = yaml
             post.fromYaml(yamlObj)
             logger.info("读取已经存在的YAML，无适配器，使用fromYaml生成默认的yamlObj")

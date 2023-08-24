@@ -80,24 +80,6 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
     return result
   }
 
-  public async preEditPost(post: Post, id?: string, publishCfg?: any): Promise<Post> {
-    // 调用父类预处理
-    await super.preEditPost(post, id, publishCfg)
-    this.logger.debug("handled preEditPost with parent", { post: toRaw(post) })
-
-    const yamlAdaptor: YamlConvertAdaptor = this.getYamlAdaptor()
-    if (null !== yamlAdaptor) {
-      // 先生成对应平台的yaml
-      const yamlObj: YamlFormatObj = yamlAdaptor.convertToYaml(post, this.cfg)
-      this.logger.debug("generate yamlObj using YamlConverterAdaptor =>", yamlObj)
-      // 同步发布内容
-      post.markdown = yamlObj.mdFullContent
-      this.logger.info("handled yaml using YamlConverterAdaptor")
-    }
-
-    return post
-  }
-
   public async newPost(post: Post, publish?: boolean): Promise<string> {
     this.logger.debug("start newPost =>", { post: toRaw(post) })
     const cfg = this.cfg as CommonGithubConfig
