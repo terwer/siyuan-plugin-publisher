@@ -113,6 +113,7 @@ export class HexoYamlConverterAdaptor extends YamlConvertAdaptor {
     yamlFormatObj.mdFullContent = YamlUtil.addYamlToMd(yamlFormatObj.formatter, yamlFormatObj.mdContent)
     yamlFormatObj.htmlContent = post.html
     this.logger.info("生成默认的YAML")
+
     return yamlFormatObj
   }
 

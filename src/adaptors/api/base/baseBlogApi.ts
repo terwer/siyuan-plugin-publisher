@@ -60,7 +60,7 @@ export class BaseBlogApi extends BlogApi {
   }
 
   public getYamlAdaptor(): YamlConvertAdaptor {
-    return this.baseExtendApi.getYamlAdaptor()
+    return null
   }
 
   public async preEditPost(post: Post, id?: string, publishCfg?: any): Promise<Post> {

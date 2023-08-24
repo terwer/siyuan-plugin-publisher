@@ -71,11 +71,6 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     this.kernelApi = kernelApi
   }
 
-  public getYamlAdaptor(): YamlConvertAdaptor {
-    this.logger.info("return default yaml adaptor null, you may implement it in sub class for custom")
-    return null
-  }
-
   /**
    * 在保存前编辑文章
    *
@@ -97,7 +92,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
   // ================
   private async handleYaml(post: Post, id?: string, publishCfg?: any) {
     const cfg: BlogConfig = publishCfg?.cfg
-    const yamlAdaptor: YamlConvertAdaptor = this.getYamlAdaptor()
+    const yamlAdaptor: YamlConvertAdaptor = this.api.getYamlAdaptor()
     if (null !== yamlAdaptor) {
       // 先生成对应平台的yaml
       const yamlObj: YamlFormatObj = yamlAdaptor.convertToYaml(post, cfg)
@@ -110,10 +105,10 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
       // 同步发布内容
       const yamlObj = post.toYamlObj()
       const yaml = YamlUtil.obj2Yaml(yamlObj)
-      const md = post.markdown
+      const md = YamlUtil.extractMarkdown(post.markdown)
       post.yaml = yaml
-      post.markdown = YamlUtil.addYamlToMd(yaml, md)
-      post.html = LuteUtil.mdToHtml(post.markdown)
+      post.markdown = md
+      post.html = LuteUtil.mdToHtml(md)
       this.logger.info("yaml adaptor not found, using default")
     }
 
