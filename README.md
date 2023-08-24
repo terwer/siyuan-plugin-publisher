@@ -37,21 +37,18 @@ Names not listed in order
 
 ## Core Features
 
-- [X] **Extremely fast release**: One-time configuration, one-click release
-- [X] **Picture bed management**: Integrate PicGO picture bed, support s3, minio, watermark plugin
-- [X] **Support for extensions**: Based on the unified blog API specification, built-in support for metaweblogAPI, WordPress
-  and GitHub, and provides a unified adapter, which can theoretically be extended to any platform
-- [X] **Platform switch**: All platforms support enabling and disabling, the blog garden is enabled by default, and can be
-  disabled at any time
-- [X] **Dynamic Newly Added**: Support custom adding platform
-- [X] **AI Integration**: Integrate free chat and chat based on the context of the current document
-- [X] **Smart Classification**: Smart slug aliases, smart titles, smart summaries, smart tags, smart classifications are supported.
-- [X] **Article Binding**: Support linking existing platform articles to siyuan-note to facilitate follow-up management,
-  support Siyuan->platform one-way synchronization
-- [X] **Adapt to Theme**: Automatically adapt to dark mode and light mode
-- [X] **Language support**: multi-language support, support Chinese version and English version
-- [X] **Release view**: Support multiple release views, simple mode, detailed mode and source code mode
-- [X] **Multiple deployments**: support Siyuan notes plugin<sup>Highly recommended</sup>, Chrome browser extension, self-deployment
+- [X] **Rapid Publishing**: One-time configuration, one-click publishing.
+- [X] **Image Hosting Management**: Integrated with PicGO image hosting, supports s3, minio, watermark plugins. Requires installation of [Picgo plugin](https://github.com/terwer/siyuan-plugin-picgo) from the marketplace. **Currently only available for PC client**.
+- [X] **Extension Support**: Built on a unified blog API specification, with built-in metaweblogAPI, WordPress, Wechatsync, and Github support. Provides a unified adapter, theoretically extensible to any platform.
+- [X] **Platform Toggle**: Enable or disable all platforms.
+- [X] **Dynamic Addition**: Supports custom adding of platforms.
+- [X] **AI Integration**: Integrates freeform chat and context-based chat based on the current document.
+- [X] **Intelligent Categorization**: Supports intelligent slug aliases, intelligent titles, intelligent summaries, intelligent tags, intelligent categories.
+- [X] **Article Association**: Supports linking existing platform articles to SiYuan notes for convenient future management. Supports one-way synchronization from SiYuan to platforms.
+- [X] **Theme Adaptation**: Automatically adapts to dark mode and light mode.
+- [X] **Language Support**: Multi-language support, including Chinese and English versions.
+- [X] **Publishing Views**: Supports various publishing views - simple mode, detailed mode, and source code mode.
+- [X] **Multiple Deployment Options**: Supports SiYuan Note plugin <sup>highly recommended</sup>, Chrome browser extension, and self-deployment.
 
 This plugin promises that the basic functions will be free forever, and the follow-up related to intelligent AI may be charged, and the closed beta stage is completely free. If you want to support developers, please [feel free to support](https://github.com/terwer/siyuan-plugin-publisher/blob/main/README_zh_CN.md#Donate) here.
 
