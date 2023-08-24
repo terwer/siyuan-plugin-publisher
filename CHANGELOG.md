@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.10.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.10.0...v1.10.1) (2023-08-24)
+
+
+### Bug Fixes
+
+* Hexo 配置支持关闭永久链接 ([c085f76](https://github.com/terwer/siyuan-plugin-publisher/commit/c085f763059e09eaad9e24fa81ab7d1d6b5a86c0))
+* 修复批量分发属性错误问题 ([1101caf](https://github.com/terwer/siyuan-plugin-publisher/commit/1101caf2ec7845f40212dc5d4cd3ee92f59ac42c))
+
 ## [1.10.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.9.0...v1.10.0) (2023-08-23)
 ### Features
 * ai 功能发布 ([ff837b0](https://github.com/terwer/siyuan-plugin-publisher/commit/ff837b0e5282a6994c1ac95689edc7eb1e161140))
