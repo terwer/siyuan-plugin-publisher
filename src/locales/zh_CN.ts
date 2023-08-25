@@ -564,4 +564,6 @@ export default {
   "sys.config.ai": "AI设置",
   "config.ai.use.siyuan": "思源笔记内部，直接使用思源笔记配置，无需配置",
   "setting.blog.yamlLinkEnabled": "YAML永久链接",
+  "distri.type.overide.warn": "注意：覆盖模式下会用当前数据覆盖所有选择的平台，请谨慎操作。",
+  "distri.type.merge.warn": "注意：为了保留平台数据，合并模式下，标题和摘要的修改无效，您可在在常规发布单独修改对应平台的标题和摘要，标签和分类会与所选择的平台数据合并。",
 }

@@ -103,6 +103,8 @@ const formData = reactive({
   // =========================
   // sync attrs end
   // =========================
+
+  distriPattern: DistributionPattern.Merge,
   actionEnable: true,
 })
 
@@ -132,6 +134,21 @@ const handlePublish = async () => {
 
         // 平台相关的元数据初始化
         batchItemPost = await initPublishMethods.assignInitAttrs(siyuanPost, id, formData.publishCfg)
+
+        // 合并属性
+        if (formData.distriPattern === DistributionPattern.Override) {
+          batchItemPost = initPublishMethods.doOverideBatchPost(siyuanPost, batchItemPost)
+          logger.debug("批量分发模式文章已覆盖", {
+            siyuanPost: toRaw(siyuanPost),
+            mergedPost: toRaw(batchItemPost),
+          })
+        } else {
+          batchItemPost = initPublishMethods.doMergeBatchPost(siyuanPost, batchItemPost)
+          logger.debug("批量分发模式文章已合并", {
+            siyuanPost: toRaw(siyuanPost),
+            mergedPost: toRaw(batchItemPost),
+          })
+        }
       }
 
       const batchResult = await doSinglePublish(key, id, formData.publishCfg, batchItemPost)
@@ -390,6 +407,32 @@ onMounted(async () => {
                 v-model:md="formData.siyuanPost.markdown"
                 v-model:html="formData.siyuanPost.html"
               />
+
+              <!-- 分发模式 -->
+              <div class="distri-type">
+                <el-form-item label="分发模式">
+                  <el-radio-group v-model="formData.distriPattern" class="ml-4 distri-type-check">
+                    <el-radio :label="DistributionPattern.Override" size="large">覆盖</el-radio>
+                    <el-radio :label="DistributionPattern.Merge" size="large">合并</el-radio>
+                  </el-radio-group>
+                </el-form-item>
+                <el-form-item class="distri-tip">
+                  <el-alert
+                    v-if="formData.distriPattern === DistributionPattern.Override"
+                    :closable="false"
+                    :title="t('distri.type.overide.warn')"
+                    class="distri-tip-alert"
+                    type="error"
+                  />
+                  <el-alert
+                    v-else
+                    :closable="false"
+                    :title="t('distri.type.merge.warn')"
+                    class="distri-tip-alert"
+                    type="warning"
+                  />
+                </el-form-item>
+              </div>
               <el-divider border-style="dashed" />
 
               <div v-if="formData.editType === PageEditMode.EditMode_complex" class="complex-mode">
@@ -479,7 +522,8 @@ onMounted(async () => {
 <style lang="stylus" scoped>
 .top-tip
   margin 10px 0
-  padding-left 0
+  padding 6px 0
+  padding-top 8px
 
 .batch-result
   margin 16px 0
@@ -507,4 +551,11 @@ onMounted(async () => {
 .distri-type
   :deep(.el-form-item)
     margin-bottom -16px
+.distri-type-check
+  margin-top -3px
+.distri-tip
+  margin-top 10px
+  .distri-tip-alert
+    margin 10px 0
+    padding: 2px 0
 </style>
