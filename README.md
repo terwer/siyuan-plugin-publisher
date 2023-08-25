@@ -10,16 +10,9 @@ Support features such as fast publishing, image bed management, platform expansi
 
 **Front Row Announcement: the first AI-integrated version `1.10.0` of the Publish Tool is released!**
 
-We recommend updating using the `uninstall->install` method. If there are any configuration issues, please back up `[workspace]/data/storage/syp/sy-p-plus-cfg.json`, then delete it, as this configuration file will be automatically initialized on first use.
+## Update history
 
-## Recent Key Updates and Bug Fixes
-
-- Support for manually generating titles, summaries, tags, and categories through AI.
-- AI integration.
-- Support for multiple publishing views: simple mode, detailed mode, and source code mode.
-- Support for summaries, tags, categories, and knowledge spaces.
-- Platforms that do not support image link replacement can use the platform's built-in image upload interface.
-- Support for replacing image links with the Picgo plugin, if available.
+Please check [CHANGELOG](./CHANGELOG.MD)
 
 ## Platform List
 
@@ -77,10 +70,6 @@ the [Siyuan Note Publishing Tool Plugin Platform Adaptation Tracking Form](https
 
 For platform adaptation, please refer
 to [Latest Adaptation](https://terwergreen.feishu.cn/share/base/view/shrcnWT2IGIz1r94z9qvqUghDzd)
-
-## Update history
-
-Please check [CHANGELOG](./CHANGELOG.MD)
 
 ## FAQ
 

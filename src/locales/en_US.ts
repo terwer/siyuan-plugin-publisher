@@ -584,4 +584,5 @@ export default {
   "setting.blog.yamlLinkEnabled": "YAML permalink",
   "distri.type.overide.warn": "Note: Please use caution when overwriting the selected platform with the current data.",
   "distri.type.merge.warn": "Note: In merge mode, the title and abstract changes are not valid, and the labels and categories are merged with the selected platform data.",
+  "preference.setting.keepTitle": "Do not update the original title"
 }

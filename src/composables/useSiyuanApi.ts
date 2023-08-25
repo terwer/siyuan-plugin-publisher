@@ -50,6 +50,7 @@ export const useSiyuanApi = () => {
   const siyuanConfig = new SiyuanConfig(siyuanApiUrl, siyuanAuthToken)
   siyuanConfig.cookie = siyuanSetting.value.cookie ?? envSiyuanCookie
   siyuanConfig.preferenceConfig.fixTitle = pref.value.fixTitle
+  siyuanConfig.preferenceConfig.keepTitle = pref.value.keepTitle
   siyuanConfig.preferenceConfig.removeFirstH1 = pref.value.removeFirstH1
   siyuanConfig.preferenceConfig.removeMdWidgetTag = pref.value.removeMdWidgetTag
 
