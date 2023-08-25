@@ -34,9 +34,12 @@ const publishPreferenceSettingForm = getPublishPreferenceSetting()
 </script>
 
 <template>
-  <el-form label-width="125px" class="publish-preference-setting-form">
+  <el-form inline label-width="125px" class="publish-preference-setting-form">
     <el-form-item :label="t('preference.setting.fixTitle')">
       <el-switch v-model="publishPreferenceSettingForm.fixTitle"></el-switch>
+    </el-form-item>
+    <el-form-item :label="t('preference.setting.keepTitle')">
+      <el-switch v-model="publishPreferenceSettingForm.keepTitle"></el-switch>
     </el-form-item>
     <el-form-item :label="t('preference.setting.removeH1')">
       <el-switch v-model="publishPreferenceSettingForm.removeFirstH1"></el-switch>

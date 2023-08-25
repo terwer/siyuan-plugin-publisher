@@ -31,6 +31,7 @@ import { ElMessage } from "element-plus"
 import { HtmlUtil, JsonUtil, SmartUtil, StrUtil } from "zhi-common"
 import { prompt, ShortDescAIResult } from "~/src/utils/ai/prompt.ts"
 import { useChatGPT } from "~/src/composables/useChatGPT.ts"
+import { AiConstants } from "~/src/utils/ai/AiConstants.ts"
 
 const logger = createAppLogger("publish-description")
 const { t } = useVueI18n()
@@ -76,10 +77,17 @@ watch(
   }
 )
 
+// watch(
+//   () => props.md,
+//   (newValue) => {
+//     formData.md = newValue
+//   }
+// )
+
 watch(
-  () => props.md,
+  () => props.html,
   (newValue) => {
-    formData.md = newValue
+    formData.html = newValue
   }
 )
 
@@ -89,14 +97,20 @@ const handleMakeDesc = async () => {
   formData.isDescLoading = true
   try {
     // if (formData.useAi) {
-    const inputWord = `${formData.md}\n${prompt.shortDescPrompt.content}`
+    const inputWord = prompt.shortDescPrompt.content
     const { chat } = useChatGPT()
-    const chatText = await chat(inputWord)
+    const chatText = await chat(inputWord, {
+      name: "desc",
+      systemMessage: HtmlUtil.parseHtml(formData.html, AiConstants.MAX_INPUT_TOKEN_LENGTH, true),
+    })
     if (StrUtil.isEmptyString(chatText)) {
       ElMessage.error("请求错误，请在偏好设置配置请求地址和ChatGPT key！")
       return
     }
     const resJson = JsonUtil.safeParse<ShortDescAIResult>(chatText, {} as ShortDescAIResult)
+    if (StrUtil.isEmptyString(resJson?.desc)) {
+      throw new Error("文档信息量太少，未能抽取有效信息")
+    }
     formData.desc = resJson.desc
     logger.info("使用AI智能生成的摘要结果 =>", {
       inputWord: inputWord,

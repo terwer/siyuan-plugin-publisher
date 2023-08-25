@@ -361,12 +361,19 @@ const initPage = async () => {
 
 const checkChatGPTEnabled = () => {
   let flag = false
-  try {
-    useChatGPT()
-    flag = true
-  } catch (e) {
-    logger.error(t("main.opt.failure") + "=>", e)
+  let attempts = 0
+
+  while (!flag && attempts < 3) {
+    try {
+      useChatGPT()
+      flag = true
+    } catch (e) {
+      logger.error(`${t("main.opt.failure")} => ${e}`)
+      attempts++
+    }
   }
+
+  logger.info(`第${attempts}次尝试就检测AI状态: ${flag}`)
   return flag
 }
 
