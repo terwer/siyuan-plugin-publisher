@@ -1,20 +1,15 @@
 # Changelog
 
 ## [1.10.2](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.10.1...v1.10.2) (2023-08-25)
-
-
 ### Bug Fixes
-
 * **deps:** bump zhi-lib-base from 0.4.4 to 0.5.0 ([0388459](https://github.com/terwer/siyuan-plugin-publisher/commit/03884599b69f0be18034a8e7ef1eaa09a9950a97))
-* 优化AI指令 ([733f0cf](https://github.com/terwer/siyuan-plugin-publisher/commit/733f0cf3ddd56c9f24e8bf93c387d16e6b659ebb))
+* 优化ai指令 ([733f0cf](https://github.com/terwer/siyuan-plugin-publisher/commit/733f0cf3ddd56c9f24e8bf93c387d16e6b659ebb))
 * 优化token检测 ([d43f6b4](https://github.com/terwer/siyuan-plugin-publisher/commit/d43f6b4cd9f223584fa2195b7bb1148bf61eea57))
 * 优化配置 ([d85f950](https://github.com/terwer/siyuan-plugin-publisher/commit/d85f950bdc509a93eef0939caa317f92c6dc3f9a))
-* 修复AI提示字符超出问题 ([6f7af83](https://github.com/terwer/siyuan-plugin-publisher/commit/6f7af83d7ffac776766283bfadb9952a9a1b27e3))
+* 修复ai提示字符超出问题 ([6f7af83](https://github.com/terwer/siyuan-plugin-publisher/commit/6f7af83d7ffac776766283bfadb9952a9a1b27e3))
 * 删除文章需移除属性 ([d9d624c](https://github.com/terwer/siyuan-plugin-publisher/commit/d9d624ca68665da20c5647783ee090a57c5f9b6a))
 * 回滚批量分发的覆盖与合并并进行优化 ([bb6f1e5](https://github.com/terwer/siyuan-plugin-publisher/commit/bb6f1e572ce72497caa4553fb5b5cd3cde6685ab))
-
 ## [1.10.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.10.0...v1.10.1) (2023-08-24)
-### Bug Fixes
 * hexo 配置支持关闭永久链接 ([c085f76](https://github.com/terwer/siyuan-plugin-publisher/commit/c085f763059e09eaad9e24fa81ab7d1d6b5a86c0))
 * 修复批量分发属性错误问题 ([1101caf](https://github.com/terwer/siyuan-plugin-publisher/commit/1101caf2ec7845f40212dc5d4cd3ee92f59ac42c))
 ## [1.10.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.9.0...v1.10.0) (2023-08-23)
