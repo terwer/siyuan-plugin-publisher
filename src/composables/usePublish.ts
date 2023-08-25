@@ -255,6 +255,11 @@ const usePublish = () => {
         setting[id] = updatedPostMeta
         await updateSetting(setting)
         logger.info(`[${key}] [${id}] 文章发布信息已移除`)
+
+        // 清空属性
+        const yamlKey = getDynYamlKey(key)
+        await kernelApi.setSingleBlockAttr(id, yamlKey, "")
+        logger.info(`[${key}] [${id}] 属性已移除`)
       }
     } catch (e) {
       singleFormData.errMsg = t("main.opt.failure") + "=>" + e
