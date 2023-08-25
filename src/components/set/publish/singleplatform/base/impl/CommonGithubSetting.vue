@@ -83,22 +83,22 @@ const syncDefaultPath = (cfg: any) => {
       <el-form-item>
         <a href="javascript:;" @click="toggleAdvance">{{ formData.advanceBtnText }}</a>
       </el-form-item>
+      <!-- Github分支名 -->
+      <el-form-item :label="t('setting.blog.type.github.default.branch')">
+        <el-input
+          v-model="(main.cfg as any).githubBranch"
+          :placeholder="t('setting.blog.type.github.default.branch.tip')"
+        />
+      </el-form-item>
+      <!-- 存储路径 -->
+      <el-form-item :label="t('setting.blog.type.github.default.path')">
+        <el-input
+          v-model="(main.cfg as any).defaultPath"
+          @input="syncDefaultPath(main.cfg)"
+          :placeholder="t('setting.blog.type.github.default.path.tip')"
+        />
+      </el-form-item>
       <div v-if="formData.showAdvancedConfig">
-        <!-- Github分支名 -->
-        <el-form-item :label="t('setting.blog.type.github.default.branch')">
-          <el-input
-            v-model="(main.cfg as any).githubBranch"
-            :placeholder="t('setting.blog.type.github.default.branch.tip')"
-          />
-        </el-form-item>
-        <!-- 存储路径 -->
-        <el-form-item :label="t('setting.blog.type.github.default.path')">
-          <el-input
-            v-model="(main.cfg as any).defaultPath"
-            @input="syncDefaultPath(main.cfg)"
-            :placeholder="t('setting.blog.type.github.default.path.tip')"
-          />
-        </el-form-item>
         <!-- 提交信息 -->
         <el-form-item :label="t('setting.blog.type.github.msg')">
           <el-input v-model="(main.cfg as any).defaultMsg" :placeholder="t('setting.blog.type.github.msg.tip')" />
