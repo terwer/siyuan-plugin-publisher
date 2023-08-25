@@ -25,7 +25,7 @@
 
 import { usePublishPreferenceSetting } from "~/src/stores/usePublishPreferenceSetting.ts"
 import { StrUtil } from "zhi-common"
-import { ChatGPTAPI, ChatGPTUnofficialProxyAPI } from "chatgpt"
+import { ChatGPTAPI, ChatGPTUnofficialProxyAPI, SendMessageOptions } from "chatgpt"
 import { Utils } from "~/src/utils/utils.ts"
 import { isDev } from "~/src/utils/constants.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
@@ -34,6 +34,8 @@ import { SiyuanDevice } from "zhi-device"
 /**
  * 创建一个用于与 ChatGPT 服务进行交互的钩子
  *
+ * https://github.com/transitive-bullshit/chatgpt-api
+ * https://prompts.chat/
  * @author terwer
  * @since 1.9.1
  */
@@ -93,16 +95,19 @@ const useChatGPT = () => {
    * @async
    * @function
    * @param {string} q - 用户输入的聊天查询
+   * @param opts - 选项
    * @returns {Promise<string>} - 带有来自 ChatGPT 服务响应的 Promise
    * @throws {Error} - 如果与 ChatGPT 服务交互时出现问题，则抛出错误
    * @example
    * const chatResponse = await chat('你好，ChatGPT！');
    * console.log(chatResponse); // ChatGPT 生成的响应
    */
-  const chat = async (q: string): Promise<string> => {
+  const chat = async (q: string, opts?: SendMessageOptions): Promise<string> => {
     try {
       // 使用 ChatGPTAPI 实例进行聊天操作
-      const res = await api.sendMessage(q)
+      logger.debug("chat q =>", { q, opts })
+      const res = await api.sendMessage(q, opts)
+      logger.debug("chat res =>", res)
       return res.text
     } catch (e) {
       logger.error("Chat encountered an error:", e)

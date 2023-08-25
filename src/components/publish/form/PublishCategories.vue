@@ -32,8 +32,9 @@ import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { watch } from "vue"
 import { CategoryAIResult, prompt, TagAIResult } from "~/src/utils/ai/prompt.ts"
 import { useChatGPT } from "~/src/composables/useChatGPT.ts"
-import { JsonUtil, StrUtil } from "zhi-common"
+import {HtmlUtil, JsonUtil, StrUtil} from "zhi-common"
 import { ElMessage } from "element-plus"
+import {AiConstants} from "~/src/utils/ai/AiConstants.ts";
 
 const logger = createAppLogger("publish-categories")
 const { t } = useVueI18n()
@@ -83,6 +84,13 @@ watch(
   }
 )
 
+watch(
+    () => props.html,
+    (newValue) => {
+      formData.html = newValue
+    }
+)
+
 // emits
 const emit = defineEmits(["emitSyncCates"])
 
@@ -99,14 +107,20 @@ const fetchCate = async () => {
   try {
     formData.isLoading = true
 
-    const inputWord = `${formData.md}\n${prompt.categoryPrompt.content}`
+    const inputWord = prompt.categoryPrompt.content
     const { chat } = useChatGPT()
-    const chatText = await chat(inputWord)
+    const chatText = await chat(inputWord,{
+      name: "categories",
+      systemMessage: HtmlUtil.parseHtml(formData.html, AiConstants.MAX_INPUT_TOKEN_LENGTH, true),
+    })
     if (StrUtil.isEmptyString(chatText)) {
       ElMessage.error("请求错误，请在偏好设置配置请求地址和ChatGPT key！")
       return
     }
     const resJson = JsonUtil.safeParse<CategoryAIResult>(chatText, {} as CategoryAIResult)
+    if (!resJson?.categories || resJson?.categories.length == 0) {
+      throw new Error("文档信息量太少，未能抽取有效信息")
+    }
     formData.recommCates = resJson.categories
     logger.info("使用AI智能生成的分类结果 =>", {
       inputWord: inputWord,
