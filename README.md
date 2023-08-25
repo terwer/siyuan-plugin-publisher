@@ -10,6 +10,14 @@ Support features such as fast publishing, image bed management, platform expansi
 
 **Front Row Announcement: the first AI-integrated version `1.10.0` of the Publish Tool is released!**
 
+Attention:
+
+1. Important notice from GitHub-related platforms: Deployment is only supported for source code. Deployment is only supported for source code. Deployment is only supported for source code. It's emphasized for clarity.
+
+2. This plugin undergoes frequent updates. To prevent unpredictable errors due to program caching, please follow the process of `uninstalling` first and then `reinstalling` for updates.
+
+3. **In case of plugin malfunction due to configuration issues**, please back up `[workspace]/data/storage/syp/sy-p-plus-cfg.json` and then delete it. This configuration file will be automatically initialized upon first use. **Please refrain from performing this action when the plugin is functional**.
+
 ## Update history
 
 Please check [CHANGELOG](./CHANGELOG.MD)
