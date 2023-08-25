@@ -28,6 +28,10 @@ Names not listed in order
 - [X] WordPress
 - [X] Zhihu
 
+Github related platforms special tips:
+
+Only source code deployment, only source code deployment, and only source code deployment are supported. Say important things three times.
+
 ## Core Features
 
 - [X] **Rapid Publishing**: One-time configuration, one-click publishing.
