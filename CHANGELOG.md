@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.10.3](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.10.2...v1.10.3) (2023-08-26)
+
+
+### Bug Fixes
+
+* 修复 WordPress 摘要更新未生效的问题 ([65feeb2](https://github.com/terwer/siyuan-plugin-publisher/commit/65feeb267cc8f71f05da643aa9d85f0a0e8189d3))
+* 摘要同步 ([f761572](https://github.com/terwer/siyuan-plugin-publisher/commit/f761572ab2c341e0179883c3980165103b12e6b1))
+
 ## [1.10.2](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.10.1...v1.10.2) (2023-08-25)
 ### Bug Fixes
 * **deps:** bump zhi-lib-base from 0.4.4 to 0.5.0 ([0388459](https://github.com/terwer/siyuan-plugin-publisher/commit/03884599b69f0be18034a8e7ef1eaa09a9950a97))
