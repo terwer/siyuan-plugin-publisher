@@ -287,6 +287,8 @@ const syncDynList = (selectedKeys: string[]) => {
 
 const syncDesc = (val: string) => {
   formData.siyuanPost.shortDesc = val
+  formData.siyuanPost.mt_text_more = val
+  formData.siyuanPost.mt_excerpt = val
   logger.debug("syncDesc in batch publish")
 }
 

@@ -125,6 +125,9 @@ const usePublish = () => {
       post = await api.preEditPost(post, id, publishCfg)
       logger.debug(`after preEditPost, post=>`, toRaw(post))
 
+      // 同步摘要
+      post.mt_excerpt = post.shortDesc
+      post.mt_text_more = post.shortDesc
       // 发布格式
       if (cfg?.pageType == PageTypeEnum.Markdown) {
         post.description = post.markdown
