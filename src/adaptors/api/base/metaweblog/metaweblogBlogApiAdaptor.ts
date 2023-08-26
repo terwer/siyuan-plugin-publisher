@@ -257,6 +257,18 @@ class MetaweblogBlogApiAdaptor extends BaseBlogApi {
       })
     }
 
+    if (!StrUtil.isEmptyString(post.mt_excerpt)) {
+      Object.assign(postObj, {
+        mt_excerpt: post.mt_excerpt,
+      })
+    }
+
+    if (!StrUtil.isEmptyString(post.mt_text_more)) {
+      Object.assign(postObj, {
+        mt_text_more: post.mt_text_more,
+      })
+    }
+
     if (!StrUtil.isEmptyString(post.description)) {
       Object.assign(postObj, {
         description: post.description,
@@ -294,16 +306,6 @@ class MetaweblogBlogApiAdaptor extends BaseBlogApi {
     }
 
     return postObj
-    // return {
-    //     title: post.title || '',
-    //     mt_keywords: post.mt_keywords || '',
-    //     description: post.description || '',
-    //     wp_slug: post.wp_slug || '',
-    //     dateCreated: post.dateCreated.toISOString() || new Date().toISOString(),
-    //     categories: post.categories || [],
-    //     post_status: post.post_status || POST_STATUS_CONSTANTS.POST_STATUS_PUBLISH,
-    //     wp_password: post.wp_password || ''
-    // }
   }
 }
 
