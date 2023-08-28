@@ -287,6 +287,8 @@ const syncPublishTitle = (val: string) => {
 
 const syncDesc = (val: string) => {
   formData.mergedPost.shortDesc = val
+  formData.mergedPost.mt_text_more = val
+  formData.mergedPost.mt_excerpt = val
   logger.debug("syncDesc in single publish")
 }
 
