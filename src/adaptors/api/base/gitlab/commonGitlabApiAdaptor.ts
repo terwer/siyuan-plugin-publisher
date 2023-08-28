@@ -29,7 +29,6 @@ import { CommonGitlabConfig } from "~/src/adaptors/api/base/gitlab/commonGitlabC
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { CommonGitlabClient } from "zhi-gitlab-middleware"
 import { UserBlog } from "zhi-blog-api"
-import { CommonGithubConfig } from "~/src/adaptors/api/base/github/commonGithubConfig.ts"
 import { StrUtil } from "zhi-common"
 
 /**
@@ -69,7 +68,7 @@ class CommonGitlabApiAdaptor extends BaseBlogApi {
     // 数据适配
     if (nodes && nodes.length > 0) {
       const userblog: UserBlog = new UserBlog()
-      const cfg = this.cfg as CommonGithubConfig
+      const cfg = this.cfg as CommonGitlabConfig
       userblog.blogid = cfg.defaultPath
       userblog.blogName = cfg.defaultPath
       userblog.url = StrUtil.pathJoin(StrUtil.pathJoin(cfg.home, cfg.username), cfg.githubRepo)

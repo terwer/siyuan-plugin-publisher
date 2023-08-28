@@ -286,8 +286,8 @@ onMounted(async () => {
         show-password
         :placeholder="props.cfg.placeholder.passwordPlaceholder"
       />
-      <a v-if="props.cfg.showTokenTip" :href="props.cfg.tokenSettingUrl" target="_blank"
-        >{{ t("setting.common.username.gen") }}：{{ props.cfg.tokenSettingUrl }}</a
+      <a v-if="formData.cfg.showTokenTip" :href="formData.cfg.tokenSettingUrl" target="_blank"
+        >{{ t("setting.common.username.gen") }}：{{ formData.cfg.tokenSettingUrl }}</a
       >
     </el-form-item>
     <!-- token -->
@@ -301,8 +301,8 @@ onMounted(async () => {
         show-password
         :placeholder="props.cfg.placeholder.passwordPlaceholder"
       />
-      <a v-if="formData.cfg.showTokenTip" :href="props.cfg.tokenSettingUrl" target="_blank"
-        >{{ t("setting.common.token.gen") }}：{{ props.cfg.tokenSettingUrl }}</a
+      <a v-if="formData.cfg.showTokenTip" :href="formData.cfg.tokenSettingUrl" target="_blank"
+        >{{ t("setting.common.token.gen") }}：{{ formData.cfg.tokenSettingUrl }}</a
       >
     </el-form-item>
     <!-- 平台cookie -->

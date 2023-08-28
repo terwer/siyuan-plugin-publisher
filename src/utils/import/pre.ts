@@ -1,11 +1,53 @@
-import {
-  AuthMode,
-  DynamicConfig,
-  PlatformType,
-  SubPlatformType,
-} from "~/src/platforms/dynamicConfig.ts"
+import { AuthMode, DynamicConfig, PlatformType, SubPlatformType } from "~/src/platforms/dynamicConfig.ts"
 import { svgIcons } from "~/src/utils/svgIcons.ts"
 
+/**
+ * 通用平台定义
+ */
+export const mainPre = (t: any) => {
+  return [
+    {
+      type: PlatformType.Common,
+      title: t("setting.platform.universal"),
+      img: "./images/universal.webp",
+      description: t("setting.platform.universal.desc"),
+    },
+    {
+      type: PlatformType.Github,
+      title: t("setting.platform.github"),
+      img: "./images/github.png",
+      description: t("setting.platform.github.desc"),
+    },
+    {
+      type: PlatformType.Gitlab,
+      title: t("setting.platform.gitlab"),
+      img: "./images/gitlab.jpg",
+      description: t("setting.platform.gitlab.desc"),
+    },
+    {
+      type: PlatformType.Metaweblog,
+      title: t("setting.platform.metaweblog"),
+      img: "./images/xmlrpc.png",
+      description: t("setting.platform.metaweblog.desc"),
+    },
+    {
+      type: PlatformType.Wordpress,
+      title: t("setting.platform.wordpress"),
+      img: "./images/wordpress-logo.svg",
+      description: t("setting.platform.wordpress.desc"),
+    },
+    {
+      type: PlatformType.Custom,
+      title: t("setting.platform.custom"),
+      img: "./images/http.png",
+      description: t("setting.platform.custom.desc"),
+    },
+  ]
+}
+
+/**
+ * 子平台预定义
+ */
 export const pre = {
   commonCfg: <DynamicConfig[]>[
     {
@@ -64,6 +106,17 @@ export const pre = {
     //   authMode: AuthMode.API,
     //   isEnabled: false
     // },
+  ],
+  gitlabCfg: <DynamicConfig[]>[
+    {
+      platformType: PlatformType.Gitlab,
+      subPlatformType: SubPlatformType.Gitlab_Hexo,
+      platformKey: "gitlab_Gitlabhexo",
+      platformName: "Gitlabhexo",
+      platformIcon: svgIcons.iconIFHexoGitlab,
+      authMode: AuthMode.API,
+      isEnabled: false,
+    },
   ],
   metaweblogCfg: <DynamicConfig[]>[
     {

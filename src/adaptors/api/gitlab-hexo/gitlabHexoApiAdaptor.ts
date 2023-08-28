@@ -23,24 +23,21 @@
  * questions.
  */
 
-import { describe, it } from "vitest"
-import { AppInstance } from "~/src/appInstance.ts"
-import { CommonGitlabConfig } from "~/src/adaptors/api/base/gitlab/commonGitlabConfig.ts"
+import { YamlConvertAdaptor } from "zhi-blog-api"
+import { GitlabHexoYamlConverterAdaptor } from "~/src/adaptors/api/gitlab-hexo/gitlabHexoYamlConverterAdaptor.ts"
 import { CommonGitlabApiAdaptor } from "~/src/adaptors/api/base/gitlab/commonGitlabApiAdaptor.ts"
 
-describe("test commonGitlabApiAdaptor", () => {
-  const appInstance = new AppInstance()
-  const gitlabCfg = new CommonGitlabConfig("terwer", "glpat-d2vTv8xEJQwmVUyw4VMr", "terwer-github-io", "main")
-  gitlabCfg.apiUrl = "http://localhost:8002"
-  gitlabCfg.home = "http://localhost:8002"
-  gitlabCfg.defaultMsg = "auto published by siyuan-plugin-publisher"
-  gitlabCfg.email = "youweics@163.com"
-  gitlabCfg.author = "terwer"
-  gitlabCfg.defaultPath = ""
-  const api = new CommonGitlabApiAdaptor(appInstance, gitlabCfg)
+/**
+ * Hexo API 适配器
+ *
+ * @author terwer
+ * @version 1.3.2
+ * @since 0.8.1
+ */
+class GitlabHexoApiAdaptor extends CommonGitlabApiAdaptor {
+  public override getYamlAdaptor(): YamlConvertAdaptor {
+    return new GitlabHexoYamlConverterAdaptor()
+  }
+}
 
-  it("test getUsersBlogs", async () => {
-    const result = await api.getUsersBlogs()
-    console.log(result)
-  })
-})
+export { GitlabHexoApiAdaptor }

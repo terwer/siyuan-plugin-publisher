@@ -133,8 +133,8 @@ export default {
   "setting.blog.type.github.label": "Github",
   "setting.blog.type.github.user": "Github用户名",
   "setting.blog.type.github.user.tip": "Github用户名，例如：terwer",
-  "setting.blog.type.github.repo": "Github仓库名",
-  "setting.blog.type.github.repo.tip": "Github仓库名，例如：terwer.github.io",
+  "setting.blog.type.github.repo": "git仓库名",
+  "setting.blog.type.github.repo.tip": "git仓库名，例如：hexo-blog",
   "setting.blog.type.github.token": "Github令牌",
   "setting.blog.type.github.token.tip": "Github令牌，例如：ghp_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
   "setting.blog.type.github.token.gen": "Github 个人令牌生成地址",
@@ -509,6 +509,9 @@ export default {
   "setting.platform.github": "Github",
   "setting.platform.github.desc":
     "目前支持Github发布的的平台有：Hexo、Hugo、Jekyll、Vitepress等，采用 API 授权。GitHub 是一个使用 Git 进行软件开发和版本控制的代码平台。",
+  "setting.platform.gitlab": "Gitlab",
+  "setting.platform.gitlab.desc":
+    "Gitlab基本上与Github的使用方式类似，唯一的区别是Gitlab支持自己本地部署或者云服务器部署。",
   "setting.platform.metaweblog": "Metaweblog",
   "setting.platform.metaweblog.desc":
     "目前支持Metaweblog的平台有：博客园、Typecho等，采用 API 授权。MetaWeblog API 作为XML-RPC Web 服务实现，是目前公认的开放博客标准。",
@@ -566,5 +569,11 @@ export default {
   "setting.blog.yamlLinkEnabled": "YAML永久链接",
   "distri.type.overide.warn": "注意：覆盖模式下会用当前数据覆盖所有选择的平台，请谨慎操作。",
   "distri.type.merge.warn": "注意：为了保留平台数据，合并模式下，标题和摘要的修改无效，您可在在常规发布单独修改对应平台的标题和摘要，标签和分类会与所选择的平台数据合并。",
-  "preference.setting.keepTitle": "不更新原始标题"
+  "preference.setting.keepTitle": "不更新原始标题",
+
+  "setting.blog.gitlab.url.tip": "Gitlab首页，例如：http://localhost:8002",
+  "setting.blog.type.gitlab.user.tip": "Gitlab的用户名",
+  "setting.blog.type.gitlab.token.tip": "Gitlab的token，请参考下面链接设置，并保证有api权限",
+  "setting.blog.gitlab.apiurl.tip": "Gitlab的API地址，一般与首页相同",
+  "setting.blog.gitlab.previewUrl.tip": "文章预览地址，一般默认即可",
 }

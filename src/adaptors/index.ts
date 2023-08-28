@@ -36,6 +36,7 @@ import { useMetaweblogApi } from "~/src/adaptors/api/metaweblog/useMetaweblogApi
 import { useNotionApi } from "~/src/adaptors/api/notion/useNotionApi.ts"
 import { useHexoApi } from "~/src/adaptors/api/hexo/useHexoApi.ts"
 import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
+import { useGitlabhexoApi } from "~/src/adaptors/api/gitlab-hexo/useGitlabhexoApi.ts"
 
 /**
  * 适配器统一入口
@@ -69,6 +70,11 @@ class Adaptors {
       }
       case SubPlatformType.Github_Hexo: {
         const { cfg } = await useHexoApi(key, newCfg)
+        conf = cfg
+        break
+      }
+      case SubPlatformType.Gitlab_Hexo: {
+        const { cfg } = await useGitlabhexoApi(key, newCfg)
         conf = cfg
         break
       }
@@ -157,6 +163,11 @@ class Adaptors {
         blogAdaptor = blogApi
         break
       }
+      case SubPlatformType.Gitlab_Hexo: {
+        const { blogApi } = await useGitlabhexoApi(key, newCfg)
+        blogAdaptor = blogApi
+        break
+      }
       case SubPlatformType.Metaweblog_Metaweblog: {
         const { blogApi } = await useMetaweblogApi(key, newCfg)
         blogAdaptor = blogApi
@@ -228,6 +239,11 @@ class Adaptors {
     switch (type) {
       case SubPlatformType.Github_Hexo: {
         const { yamlAdaptor } = await useHexoApi(key, newCfg)
+        yamlAdp = yamlAdaptor
+        break
+      }
+      case SubPlatformType.Gitlab_Hexo: {
+        const { yamlAdaptor } = await useGitlabhexoApi(key, newCfg)
         yamlAdp = yamlAdaptor
         break
       }
