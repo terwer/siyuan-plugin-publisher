@@ -104,8 +104,8 @@ devDependencies:
     specifier: ^4.1.1
     version: 4.1.1
   '@types/node':
-    specifier: ^18.17.11
-    version: 18.17.11
+    specifier: ^20.5.7
+    version: 20.5.7
   '@vitejs/plugin-vue':
     specifier: ^4.3.3
     version: 4.3.3(vite@4.4.9)(vue@3.3.4)
@@ -150,7 +150,7 @@ devDependencies:
     version: 32.1.0
   vite:
     specifier: ^4.4.9
-    version: 4.4.9(@types/node@18.17.11)(stylus@0.59.0)
+    version: 4.4.9(@types/node@20.5.7)(stylus@0.59.0)
   vite-plugin-html:
     specifier: ^3.2.0
     version: 3.2.0(vite@4.4.9)
@@ -1317,6 +1317,10 @@ packages:
   /@types/node@18.17.11:
     resolution: {integrity: sha512-r3hjHPBu+3LzbGBa8DHnr/KAeTEEOrahkcL+cZc4MaBMTM+mk8LtXR+zw+nqfjuDZZzYTYgTcpHuP+BEQk069g==}
 
+  /@types/node@20.5.7:
+    resolution: {integrity: sha512-dP7f3LdZIysZnmvP3ANJYTSwg+wLLl8p7RqniVlV7j+oXSXAbt9h0WIBFmJy5inWZoX9wZN6eXx+YXd9Rh3RBA==}
+    dev: true
+
   /@types/normalize-package-data@2.4.1:
     resolution: {integrity: sha512-Gj7cI7z+98M282Tqmp2K5EIsoouUEzbBJhQQzDE3jSIRk6r9gsz0oUokqIUR4u1R3dMHo0pDHM7sNOHyhulypw==}
     dev: false
@@ -1746,7 +1750,7 @@ packages:
       vite: ^4.0.0
       vue: ^3.2.25
     dependencies:
-      vite: 4.4.9(@types/node@18.17.11)(stylus@0.59.0)
+      vite: 4.4.9(@types/node@20.5.7)(stylus@0.59.0)
       vue: 3.3.4
     dev: true
 
@@ -7226,7 +7230,7 @@ packages:
       html-minifier-terser: 6.1.0
       node-html-parser: 5.4.2
       pathe: 0.2.0
-      vite: 4.4.9(@types/node@18.17.11)(stylus@0.59.0)
+      vite: 4.4.9(@types/node@20.5.7)(stylus@0.59.0)
     dev: true
 
   /vite-plugin-node-polyfills@0.11.3(vite@4.4.9):
@@ -7238,7 +7242,7 @@ packages:
       buffer-polyfill: /buffer@6.0.3
       node-stdlib-browser: 1.2.0
       process: 0.11.10
-      vite: 4.4.9(@types/node@18.17.11)(stylus@0.59.0)
+      vite: 4.4.9(@types/node@20.5.7)(stylus@0.59.0)
     transitivePeerDependencies:
       - rollup
     dev: true
@@ -7272,6 +7276,43 @@ packages:
         optional: true
     dependencies:
       '@types/node': 18.17.11
+      esbuild: 0.18.20
+      postcss: 8.4.28
+      rollup: 3.28.1
+      stylus: 0.59.0
+    optionalDependencies:
+      fsevents: 2.3.3
+    dev: true
+
+  /vite@4.4.9(@types/node@20.5.7)(stylus@0.59.0):
+    resolution: {integrity: sha512-2mbUn2LlUmNASWwSCNSJ/EG2HuSRTnVNaydp6vMCm5VIqJsjMfbIWtbH2kDuwUVW5mMUKKZvGPX/rqeqVvv1XA==}
+    engines: {node: ^14.18.0 || >=16.0.0}
+    hasBin: true
+    peerDependencies:
+      '@types/node': '>= 14'
+      less: '*'
+      lightningcss: ^1.21.0
+      sass: '*'
+      stylus: '*'
+      sugarss: '*'
+      terser: ^5.4.0
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+      less:
+        optional: true
+      lightningcss:
+        optional: true
+      sass:
+        optional: true
+      stylus:
+        optional: true
+      sugarss:
+        optional: true
+      terser:
+        optional: true
+    dependencies:
+      '@types/node': 20.5.7
       esbuild: 0.18.20
       postcss: 8.4.28
       rollup: 3.28.1
