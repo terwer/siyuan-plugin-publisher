@@ -39,7 +39,6 @@ export class AppInstance {
   public fetch: any
   public xmlbuilder2: any
   public simpleXmlrpc: any
-  public CommonFetchClient: any
 
   constructor() {
     this.logger = createAppLogger("app-instance")
