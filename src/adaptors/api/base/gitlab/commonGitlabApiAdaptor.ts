@@ -89,25 +89,25 @@ class CommonGitlabApiAdaptor extends BaseBlogApi {
     const defaultPath = post.cate_slugs?.[0] ?? cfg.blogid
     const docPath = `${defaultPath}/${filename}.md`
     const res = await this.gitlabClient.createRepositoryFile(docPath, post.description)
+    this.logger.debug("gitlab newPost finished =>", res)
 
-    // if (!res?.content?.path) {
-    //   throw new Error("Gitlab 调用API异常")
-    // }
-    // return res.content.path
-    return ""
+    if (!res?.file_path) {
+      throw new Error("Gitlab 调用API异常 =>" + res?.message)
+    }
+    return res.file_path
   }
 
   public async getPost(postid: string, useSlug?: boolean): Promise<Post> {
     this.logger.debug("start getPost =>", { postid: postid })
 
     const res = await this.gitlabClient.getRepositoryFile(postid)
-    this.logger.debug("getPost finished =>", res)
+    this.logger.debug("gitlab getPost finished =>", res)
     if (!res) {
       throw new Error("Gitlab 调用API异常")
     }
 
     let commonPost = new Post()
-    commonPost.postid = res.path
+    commonPost.postid = res.file_path
     commonPost.markdown = Base64.fromBase64(res.content)
     commonPost.description = commonPost.markdown
 
@@ -124,7 +124,7 @@ class CommonGitlabApiAdaptor extends BaseBlogApi {
 
     // 初始化知识空间
     const catSlugs = []
-    const extractedPath = res.path.replace(res.name, "").replace(/\/$/, "")
+    const extractedPath = res.file_path.replace(res.file_name, "").replace(/\/$/, "")
     catSlugs.push(extractedPath)
     commonPost.cate_slugs = catSlugs
 
@@ -133,19 +133,23 @@ class CommonGitlabApiAdaptor extends BaseBlogApi {
 
   public async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
     this.logger.debug("start editPost =>", { postid: postid, post: toRaw(post) })
+    const res = await this.gitlabClient.updateRepositoryFile(post.postid, post.description)
+    this.logger.debug("gitlab editPost finished =>", res)
 
-    // const res = await this.gitlabClient.updateRepositoryFile(post.postid, post.description)
-    // if (!res?.content?.path) {
-    //   throw new Error("Gitlab 调用API异常")
-    // }
+    if (!res?.file_path) {
+      throw new Error("Gitlab 调用API异常")
+    }
     return true
   }
 
   public async deletePost(postid: string): Promise<boolean> {
-    const res = await this.gitlabClient.deleteRepositoryFile(postid)
-    // if (!res?.commit?.sha) {
-    //   throw new Error("Gitlab 调用API异常")
-    // }
+    try {
+      await this.gitlabClient.deleteRepositoryFile(postid)
+      this.logger.debug("gitlab deletePost finished")
+    } catch (e) {
+      throw new Error("Gitlab 调用API异常 =>" + e)
+    }
+
     return true
   }
 
