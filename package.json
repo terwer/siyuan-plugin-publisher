@@ -76,7 +76,7 @@
     "zhi-common": "^1.23.6",
     "zhi-device": "^2.3.1",
     "zhi-fetch-middleware": "^0.3.10",
-    "zhi-github-middleware": "^0.3.9",
+    "zhi-github-middleware": "^0.4.1",
     "zhi-gitlab-middleware": "^0.2.4",
     "zhi-lib-base": "^0.5.0",
     "zhi-notion-markdown": "^0.1.4",
