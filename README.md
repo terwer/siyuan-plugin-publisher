@@ -12,11 +12,19 @@ Support features such as fast publishing, image bed management, platform expansi
 
 Attention:
 
-1. Important notice from GitHub-related platforms: Deployment is only supported for source code. Deployment is only supported for source code. Deployment is only supported for source code. It's emphasized for clarity.
+Note:
 
-2. This plugin undergoes frequent updates. To prevent unpredictable errors due to program caching, please follow the process of `uninstalling` first and then `reinstalling` for updates.
+1. GitHub and related platforms specifically emphasize: Only support source code deployment, only support source code deployment, only support source code deployment. Important matters are stated three times.
 
-3. **In case of plugin malfunction due to configuration issues**, please back up `[workspace]/data/storage/syp/sy-p-plus-cfg.json` and then delete it. This configuration file will be automatically initialized upon first use. **Please refrain from performing this action when the plugin is functional**.
+2. This plugin undergoes frequent iterations. To prevent unpredictable errors caused by program caching, please use the method of `uninstalling` first and then `reinstalling` for updates.
+
+3. **If the configuration is abnormally set, causing this plugin to be completely unusable**, please backup `[workspace]/data/storage/syp/sy-p-plus-cfg.json`, and then delete it. This configuration file will be automatically initialized on first use.
+
+**When performing this operation, it is best to close Joplin first, then delete the configuration, and then open it again. This is to prevent data from being read while open, leading to overwrite and save.**
+
+**Please avoid performing this operation if the plugin is functioning properly.**
+
+> Do you have other questions or suggestions? Please join QQ group `895063267` for discussion.
 
 ## Update history
 

@@ -270,7 +270,7 @@ export default {
   "setting.blog.middlewareUrl": "跨域请求代理",
   "setting.blog.middlewareUrl.tip": "某些场景下需要（例如自部署模式，Nginx伺服等、vite开发环境伺服等），其他情况可忽略",
   "setting.blog.middlewareUrl.my.tip":
-    "如果没有部署代理，可以使用我的共享地址：https://api.terwer.space/api/middleware 。出于性能考虑，建议自己部署一份，请使用 https://github.com/terwer/node-metaweblog-api-adaptor 进行部署。",
+    "大部分情况下不需要，部分场景在浏览器环境下可能需要。如果没有部署代理，可以使用我的共享地址：https://api.terwer.space/api/middleware 。出于性能考虑，建议自己部署一份，请使用 https://github.com/terwer/node-metaweblog-api-adaptor 进行部署。",
   "setting.conf.export": "导出配置",
   "setting.conf.import": "导入配置",
   "setting.conf.transport": "导入导出",
