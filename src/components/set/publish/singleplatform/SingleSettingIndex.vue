@@ -34,6 +34,7 @@ import WordpressSetting from "~/src/components/set/publish/singleplatform/metawe
 import TypechoSetting from "~/src/components/set/publish/singleplatform/metaweblog/TypechoSetting.vue"
 import YuqueSetting from "~/src/components/set/publish/singleplatform/commonblog/YuqueSetting.vue"
 import ZhihuSetting from "~/src/components/set/publish/singleplatform/web/ZhihuSetting.vue"
+import GitlabhexoSetting from "~/src/components/set/publish/singleplatform/gitlab/GitlabhexoSetting.vue"
 
 // uses
 const { t } = useVueI18n()
@@ -50,6 +51,7 @@ const subtype = getSubPlatformTypeByKey(apiType)
     <yuque-setting v-if="subtype === SubPlatformType.Common_Yuque" :api-type="apiType" />
     <notion-setting v-else-if="subtype === SubPlatformType.Common_Notion" :api-type="apiType" />
     <hexo-setting v-else-if="subtype === SubPlatformType.Github_Hexo" :api-type="apiType" />
+    <gitlabhexo-setting v-else-if="subtype === SubPlatformType.Gitlab_Hexo" :api-type="apiType" />
     <othermeta-setting v-else-if="subtype === SubPlatformType.Metaweblog_Metaweblog" :api-type="apiType" />
     <cnblogs-setting v-else-if="subtype === SubPlatformType.Metaweblog_Cnblogs" :api-type="apiType" />
     <typecho-setting v-else-if="subtype === SubPlatformType.Metaweblog_Typecho" :api-type="apiType" />

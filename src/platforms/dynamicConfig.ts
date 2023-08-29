@@ -139,6 +139,11 @@ export enum PlatformType {
   Github = "Github",
 
   /**
+   * Gitlab
+   */
+  Gitlab = "Gitlab",
+
+  /**
    * 自定义(zhihu)
    */
   Custom = "Custom",
@@ -169,6 +174,9 @@ export enum SubPlatformType {
   // Github_Nuxt = "Nuxt",
   // Github_Next = "Next",
 
+  // Gitlab 子平台
+  Gitlab_Hexo = "Gitlabhexo",
+
   // Metaweblog
   Metaweblog_Metaweblog = "Metaweblog",
   Metaweblog_Cnblogs = "Cnblogs",
@@ -197,6 +205,7 @@ export interface DynamicJsonCfg {
   totalCfg: DynamicConfig[]
   commonCfg: DynamicConfig[]
   githubCfg: DynamicConfig[]
+  gitlabCfg: DynamicConfig[]
   metaweblogCfg: DynamicConfig[]
   wordpressCfg: DynamicConfig[]
   customCfg: DynamicConfig[]
@@ -222,6 +231,9 @@ export function getSubtypeList(ptype: PlatformType): SubPlatformType[] {
       // subtypeList.push(SubPlatformType.Github_Vitepress)
       // subtypeList.push(SubPlatformType.Github_Nuxt)
       // subtypeList.push(SubPlatformType.Github_Next)
+      break
+    case PlatformType.Gitlab:
+      subtypeList.push(SubPlatformType.Gitlab_Hexo)
       break
     case PlatformType.Metaweblog:
       subtypeList.push(SubPlatformType.Metaweblog_Metaweblog)
@@ -257,6 +269,7 @@ export function setDynamicJsonCfg(dynamicConfigArray: DynamicConfig[]): DynamicJ
   const totalCfg: DynamicConfig[] = dynamicConfigArray
   const commonCfg: DynamicConfig[] = []
   const githubCfg: DynamicConfig[] = []
+  const gitlabCfg: DynamicConfig[] = []
   const metaweblogCfg: DynamicConfig[] = []
   const wordpressCfg: DynamicConfig[] = []
   const customCfg: DynamicConfig[] = []
@@ -270,6 +283,9 @@ export function setDynamicJsonCfg(dynamicConfigArray: DynamicConfig[]): DynamicJ
         break
       case PlatformType.Github:
         githubCfg.push(item)
+        break
+      case PlatformType.Gitlab:
+        gitlabCfg.push(item)
         break
       case PlatformType.Metaweblog:
         metaweblogCfg.push(item)
@@ -292,6 +308,7 @@ export function setDynamicJsonCfg(dynamicConfigArray: DynamicConfig[]): DynamicJ
     totalCfg,
     commonCfg,
     githubCfg,
+    gitlabCfg,
     metaweblogCfg,
     wordpressCfg,
     customCfg,

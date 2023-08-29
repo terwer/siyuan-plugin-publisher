@@ -135,7 +135,7 @@ export default {
   "setting.blog.type.github.user": "Github user",
   "setting.blog.type.github.user.tip": "Github user, eg:terwer",
   "setting.blog.type.github.repo": "Github repo",
-  "setting.blog.type.github.repo.tip": "Github repo, eg:terwer.github.io",
+  "setting.blog.type.github.repo.tip": "Github repo, eg:hexo-blog",
   "setting.blog.type.github.token": "Github token",
   "setting.blog.type.github.token.tip": "Github token, eg:ghp_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
   "setting.blog.type.github.token.gen": "Generate Github Personal Token",
@@ -509,6 +509,9 @@ export default {
   "setting.main.background": "Widget background",
   "setting.main.background.tip":
     "Support hexadecimal and RGB, for example: #000000, no settings or staying empty unchanged",
+  "setting.platform.gitlab": "Gitlab",
+  "setting.platform.gitlab.desc":
+    "Gitlab is basically similar to Github, except that Gitlab supports its own on-premises or cloud server deployment",
   "setting.picgo.manage": "Picture manage",
   "setting.platform.add": "Add platform",
   "setting.platform.add.this": "Add this platform",
@@ -584,5 +587,11 @@ export default {
   "setting.blog.yamlLinkEnabled": "YAML permalink",
   "distri.type.overide.warn": "Note: Please use caution when overwriting the selected platform with the current data.",
   "distri.type.merge.warn": "Note: In merge mode, the title and abstract changes are not valid, and the labels and categories are merged with the selected platform data.",
-  "preference.setting.keepTitle": "Do not update the original title"
+  "preference.setting.keepTitle": "Do not update the original title",
+
+  "setting.blog.gitlab.url.tip": "GitLab homepage, e.g., http://localhost:8002",
+  "setting.blog.type.gitlab.user.tip": "Username for GitLab",
+  "setting.blog.type.gitlab.token.tip": "Token for GitLab, please refer to the link below for setup and ensure API permissions are granted",
+  "setting.blog.gitlab.apiurl.tip": "GitLab API address, usually the same as the homepage",
+  "setting.blog.gitlab.previewUrl.tip": "Article preview address, usually the default"
 }

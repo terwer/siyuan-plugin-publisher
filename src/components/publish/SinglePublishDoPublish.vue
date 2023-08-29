@@ -518,6 +518,14 @@ onMounted(async () => {
                     @emitSyncCates="syncCates"
                   />
 
+                  <!-- 知识空间 -->
+                  <publish-knowledge-space
+                      v-model:knowledge-space-type="formData.publishCfg.cfg.knowledgeSpaceType"
+                      v-model:knowledge-space-config="formData.knowledgeSpaceConfig"
+                      v-model:cate-slugs="formData.mergedPost.cate_slugs"
+                      @emitSyncCateSlugs="syncCateSlugs"
+                  />
+
                   <!-- 发布时间 -->
                   <publish-time v-model="formData.mergedPost" @emitSyncPublishTime="syncPublishTime" />
 

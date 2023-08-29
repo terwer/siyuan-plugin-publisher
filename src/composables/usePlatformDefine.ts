@@ -25,56 +25,24 @@
 
 import { DynamicConfig, PlatformType } from "~/src/platforms/dynamicConfig.ts"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import { pre } from "~/src/utils/import/pre.ts"
+import { mainPre, pre } from "~/src/utils/import/pre.ts"
 
 /**
- * 通用平台定义
- *
- * @returns {Object} - 包含平台类型列表、getPlatformType函数和getPrePlatform函数的对象。
+ * 通用平台定义。包含平台类型列表、getPlatformType函数和getPrePlatform函数的对象。
  * @since 0.9.0
  */
 export const usePlatformDefine = () => {
   const { t } = useVueI18n()
 
-  const platformTypeList = [
-    {
-      type: PlatformType.Common,
-      title: t("setting.platform.universal"),
-      img: "./images/universal.webp",
-      description: t("setting.platform.universal.desc"),
-    },
-    {
-      type: PlatformType.Github,
-      title: t("setting.platform.github"),
-      img: "./images/github.png",
-      description: t("setting.platform.github.desc"),
-    },
-    {
-      type: PlatformType.Metaweblog,
-      title: t("setting.platform.metaweblog"),
-      img: "./images/xmlrpc.png",
-      description: t("setting.platform.metaweblog.desc"),
-    },
-    {
-      type: PlatformType.Wordpress,
-      title: t("setting.platform.wordpress"),
-      img: "./images/wordpress-logo.svg",
-      description: t("setting.platform.wordpress.desc"),
-    },
-    {
-      type: PlatformType.Custom,
-      title: t("setting.platform.custom"),
-      img: "./images/http.png",
-      description: t("setting.platform.custom.desc"),
-    },
-  ]
+  const platformTypeList = mainPre(t)
 
   const prePlatformList: DynamicConfig[] = [
     ...pre.commonCfg,
     ...pre.githubCfg,
+    ...pre.gitlabCfg,
     ...pre.metaweblogCfg,
     ...pre.wordpressCfg,
-    ...pre.customCfg
+    ...pre.customCfg,
   ]
 
   /**
