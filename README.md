@@ -8,23 +8,9 @@ Publish articles from siyuan-note to platforms such as Yuque, Notion, Cnblogs, W
 
 Support features such as fast publishing, image bed management, platform expansion, smart labels, etc.
 
-**Front Row Announcement: the first AI-integrated version `1.10.0` of the Publish Tool is released!**
+**Facing issues or have suggestions? Please join QQ group `895063267` for discussion. Alternatively, refer to the online documentation below:**
 
-Attention:
-
-Note:
-
-1. GitHub and related platforms specifically emphasize: Only support source code deployment, only support source code deployment, only support source code deployment. Important matters are stated three times.
-
-2. This plugin undergoes frequent iterations. To prevent unpredictable errors caused by program caching, please use the method of `uninstalling` first and then `reinstalling` for updates.
-
-3. **If the configuration is abnormally set, causing this plugin to be completely unusable**, please backup `[workspace]/data/storage/syp/sy-p-plus-cfg.json`, and then delete it. This configuration file will be automatically initialized on first use.
-
-**When performing this operation, it is best to close Joplin first, then delete the configuration, and then open it again. This is to prevent data from being read while open, leading to overwrite and save.**
-
-**Please avoid performing this operation if the plugin is functioning properly.**
-
-> Do you have other questions or suggestions? Please join QQ group `895063267` for discussion.
+> [Click here](https://blog.terwer.space/s/20230810132040-nn4q7vs) to view the latest help documentation.
 
 ## Update history
 

@@ -504,7 +504,7 @@ const usePublish = () => {
       mergedPost.mt_keywords = mergedKeywords.join(",")
 
       // 合并并去重分类
-      const mergedCategories = [...new Set([...post.categories, ...newPost.categories])]
+      const mergedCategories = [...new Set([...(post?.categories ?? []), ...(newPost?.categories ?? [])])]
       mergedPost.categories = mergedCategories
 
       return mergedPost
