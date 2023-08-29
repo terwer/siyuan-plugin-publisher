@@ -87,8 +87,8 @@ dependencies:
     specifier: ^0.1.4
     version: 0.1.4
   zhi-siyuan-api:
-    specifier: ^2.5.15
-    version: 2.5.15
+    specifier: ^2.6.1
+    version: 2.6.1
   zhi-xmlrpc-middleware:
     specifier: ^0.5.9
     version: 0.5.9
@@ -6401,7 +6401,7 @@ packages:
       zhi-device: 2.3.1
       zhi-fetch-middleware: 0.2.29
       zhi-lib-base: 0.4.4
-      zhi-siyuan-api: 2.5.15
+      zhi-siyuan-api: 2.6.1
     transitivePeerDependencies:
       - '@vue/composition-api'
       - typescript
@@ -7662,6 +7662,13 @@ packages:
       zhi-lib-base: 0.5.0
     dev: false
 
+  /zhi-blog-api@1.34.13:
+    resolution: {integrity: sha512-QIB1fSKLphyPvQ2yUcT3JH7U9GxJ1chyAUTGeEnN1n+OsukXCVC9QoyM6bPoNexsVJ6k94Dm0IhYQYw1VxKh1Q==}
+    dependencies:
+      zhi-common: 1.23.6
+      zhi-lib-base: 0.5.0
+    dev: false
+
   /zhi-common@1.18.0:
     resolution: {integrity: sha512-7m8uyV8+kZ0tJky0myjz8Nj1Ad0kNsMNsg4itixnoM0yIYo6VZ7uU+oMd3qmqyA9kcvszD2QXV4w8qlgIDBGfg==}
     dependencies:
@@ -7674,6 +7681,16 @@ packages:
 
   /zhi-common@1.23.5:
     resolution: {integrity: sha512-6FLN6Vv28TnGvVTvDc6nrBKP23Fq5tE/D8IEbrgbL4+1Nd9AHEbZHOzypmXp2snRTvIxw5U8/9wBGzluyq6IMQ==}
+    dependencies:
+      js-yaml: 4.1.0
+      shorthash2: 1.0.3
+      transliteration: 2.3.5
+      vue: 3.3.4
+      zhi-lib-base: 0.5.0
+    dev: false
+
+  /zhi-common@1.23.6:
+    resolution: {integrity: sha512-LcAFgDwCG1WIGoZ1wkVHg+jLCazejrzAfHLSdVdLaiARYGEj0ytAb8pVNU7LwKk/wGmLqjc7rgWt4Jf/l+Hkpg==}
     dependencies:
       js-yaml: 4.1.0
       shorthash2: 1.0.3
@@ -7729,11 +7746,11 @@ packages:
       - supports-color
     dev: false
 
-  /zhi-siyuan-api@2.5.15:
-    resolution: {integrity: sha512-Hc82jlzx2h6v3Ze+w51aPsExW1eSRrtoOdSqw0pq7MG3ZxWtxNdBJ42lEIKA67VkMm5RxcBQTtHf9kVAO9Nt9A==}
+  /zhi-siyuan-api@2.6.1:
+    resolution: {integrity: sha512-2QIW5TgoLp92xs9BhJJ6JvnbnpSSFA+DaRoeHz5SL2rXzJRD2ozTegC43lofWi1M1PQCzDY22NGK0fHrmD1DmQ==}
     dependencies:
-      zhi-blog-api: 1.34.12
-      zhi-common: 1.23.5
+      zhi-blog-api: 1.34.13
+      zhi-common: 1.23.6
       zhi-lib-base: 0.5.0
     dev: false
 
