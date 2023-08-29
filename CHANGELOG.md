@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.11.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.10.3...v1.11.0) (2023-08-29)
+
+
+### Features
+
+* 支持Gitlab ([4a5362f](https://github.com/terwer/siyuan-plugin-publisher/commit/4a5362f049f1dbc9e35f8d597bed8c9e90acac93))
+* 支持Gitlab ([da604bb](https://github.com/terwer/siyuan-plugin-publisher/commit/da604bb6aea373dd399172c8ecbbad88a56f64a5))
+* 支持Gitlab ([91aaf3b](https://github.com/terwer/siyuan-plugin-publisher/commit/91aaf3b462eb8f5855083a7a938e88ec2c8f59cd))
+* 支持Gitlab ([06f71fb](https://github.com/terwer/siyuan-plugin-publisher/commit/06f71fb9f79eebb11a72d55cb78d70fa812d2180))
+* 支持选择知识空间 ([ab1a648](https://github.com/terwer/siyuan-plugin-publisher/commit/ab1a648bbf9b56341861774f24b9e7a8164e9ac5))
+
+
+### Bug Fixes
+
+* **deps:** bump zhi-github-middleware from 0.3.9 to 0.4.1 ([9e16094](https://github.com/terwer/siyuan-plugin-publisher/commit/9e160943cd7d51af27bb6b092d9fb62fdb417a88))
+* 修复 WordPress 摘要更新未生效的问题 ([aa1b004](https://github.com/terwer/siyuan-plugin-publisher/commit/aa1b00465c39c5490cb998e9e98f0b24134aaa65))
+
 ## [1.10.3](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.10.2...v1.10.3) (2023-08-26)
 ### Bug Fixes
 * 修复 wordpress 摘要更新未生效的问题 ([65feeb2](https://github.com/terwer/siyuan-plugin-publisher/commit/65feeb267cc8f71f05da643aa9d85f0a0e8189d3))
