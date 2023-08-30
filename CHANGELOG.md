@@ -1,25 +1,18 @@
 # Changelog
 
+## [1.11.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.11.0...v1.11.1) (2023-08-30)
+### Bug Fixes
+* hexo 深度优化 ([596c09e](https://github.com/terwer/siyuan-plugin-publisher/commit/596c09e251d55ae3fb19f36992814eedf5eb863e))
+* 优化单个文章的删除流程 ([453620f](https://github.com/terwer/siyuan-plugin-publisher/commit/453620f1c640c575fc370cf755af6cbf7507234f))
+* 修复yaml修改不生效的问题 ([ac21891](https://github.com/terwer/siyuan-plugin-publisher/commit/ac21891c7b04f66a433dfd8e1788811026663c92))
+* 新增强制删除 ([629c468](https://github.com/terwer/siyuan-plugin-publisher/commit/629c468b6ee5dd61e73acf4c82041363084c62d8))
 ## [1.11.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.10.3...v1.11.0) (2023-08-29)
-
-
 ### Features
-
-* 支持Gitlab ([4a5362f](https://github.com/terwer/siyuan-plugin-publisher/commit/4a5362f049f1dbc9e35f8d597bed8c9e90acac93))
-* 支持Gitlab ([da604bb](https://github.com/terwer/siyuan-plugin-publisher/commit/da604bb6aea373dd399172c8ecbbad88a56f64a5))
-* 支持Gitlab ([91aaf3b](https://github.com/terwer/siyuan-plugin-publisher/commit/91aaf3b462eb8f5855083a7a938e88ec2c8f59cd))
-* 支持Gitlab ([06f71fb](https://github.com/terwer/siyuan-plugin-publisher/commit/06f71fb9f79eebb11a72d55cb78d70fa812d2180))
+* 支持gitlab ([06f71fb](https://github.com/terwer/siyuan-plugin-publisher/commit/06f71fb9f79eebb11a72d55cb78d70fa812d2180))
 * 支持选择知识空间 ([ab1a648](https://github.com/terwer/siyuan-plugin-publisher/commit/ab1a648bbf9b56341861774f24b9e7a8164e9ac5))
-
-
-### Bug Fixes
-
 * **deps:** bump zhi-github-middleware from 0.3.9 to 0.4.1 ([9e16094](https://github.com/terwer/siyuan-plugin-publisher/commit/9e160943cd7d51af27bb6b092d9fb62fdb417a88))
-* 修复 WordPress 摘要更新未生效的问题 ([aa1b004](https://github.com/terwer/siyuan-plugin-publisher/commit/aa1b00465c39c5490cb998e9e98f0b24134aaa65))
-
-## [1.10.3](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.10.2...v1.10.3) (2023-08-26)
-### Bug Fixes
 * 修复 wordpress 摘要更新未生效的问题 ([65feeb2](https://github.com/terwer/siyuan-plugin-publisher/commit/65feeb267cc8f71f05da643aa9d85f0a0e8189d3))
+## [1.10.3](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.10.2...v1.10.3) (2023-08-26)
 * 摘要同步 ([f761572](https://github.com/terwer/siyuan-plugin-publisher/commit/f761572ab2c341e0179883c3980165103b12e6b1))
 ## [1.10.2](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.10.1...v1.10.2) (2023-08-25)
 * **deps:** bump zhi-lib-base from 0.4.4 to 0.5.0 ([0388459](https://github.com/terwer/siyuan-plugin-publisher/commit/03884599b69f0be18034a8e7ef1eaa09a9950a97))
@@ -33,7 +26,6 @@
 * hexo 配置支持关闭永久链接 ([c085f76](https://github.com/terwer/siyuan-plugin-publisher/commit/c085f763059e09eaad9e24fa81ab7d1d6b5a86c0))
 * 修复批量分发属性错误问题 ([1101caf](https://github.com/terwer/siyuan-plugin-publisher/commit/1101caf2ec7845f40212dc5d4cd3ee92f59ac42c))
 ## [1.10.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.9.0...v1.10.0) (2023-08-23)
-### Features
 * ai 功能发布 ([ff837b0](https://github.com/terwer/siyuan-plugin-publisher/commit/ff837b0e5282a6994c1ac95689edc7eb1e161140))
 * ai集成 ([c701ce6](https://github.com/terwer/siyuan-plugin-publisher/commit/c701ce600f90c392fe9f07131e5a438374dabb6a))
 * ai集成-支持生成标题和生成摘要 ([2e48ca5](https://github.com/terwer/siyuan-plugin-publisher/commit/2e48ca5bfe9176ce9ead88ab3ee010dd063d5cdd))
