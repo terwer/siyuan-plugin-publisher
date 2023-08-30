@@ -81,8 +81,8 @@ dependencies:
     specifier: ^0.4.1
     version: 0.4.1
   zhi-gitlab-middleware:
-    specifier: ^0.2.4
-    version: 0.2.4
+    specifier: ^0.3.1
+    version: 0.3.1
   zhi-lib-base:
     specifier: ^0.5.0
     version: 0.5.0
@@ -7718,11 +7718,10 @@ packages:
       zhi-lib-base: 0.5.0
     dev: false
 
-  /zhi-gitlab-middleware@0.2.4:
-    resolution: {integrity: sha512-hZ/C40C13Da/rW1N6M6+0rxTupctnNsyBjGrmDHwzmZF17xY9xOc8DL6ZGVEsAu8Fx4xsTbilqsy7npzhUOciQ==}
+  /zhi-gitlab-middleware@0.3.1:
+    resolution: {integrity: sha512-ISoX2wF3bJQcVB7WqXKe62GNVx21YdNg+gvzoln6NgwKlHJx/S52Eqrci2XL/BFHnHgn5qneAdX7uvxkcS0+YQ==}
     dependencies:
       zhi-common: 1.23.6
-      zhi-fetch-middleware: 0.3.10
       zhi-lib-base: 0.5.0
     dev: false
 
