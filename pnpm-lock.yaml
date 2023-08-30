@@ -45,8 +45,8 @@ dependencies:
     specifier: ^1.4.2
     version: 1.4.2
   siyuan:
-    specifier: ^0.8.1
-    version: 0.8.1
+    specifier: ^0.8.2
+    version: 0.8.2
   siyuan-plugin-picgo:
     specifier: ^1.4.4
     version: 1.4.4(typescript@5.2.2)
@@ -6418,8 +6418,8 @@ packages:
     resolution: {integrity: sha512-X5olBQhfkgyPRF+d8agpcbAaFnCSvSkN3LWX7XU9jApmCfpJ/4PAmK7mKPfR1YGBpjFLRa/xTrv11BQ3hxN15Q==}
     dev: false
 
-  /siyuan@0.8.1:
-    resolution: {integrity: sha512-IchpxouG2+8lKEpm+tkjK9GpipIzQXY/mdH1V8JMv830ZkyCwTEqSbUJOUf1XcKSmOwadBFa1CAzdZmaQg3a4Q==}
+  /siyuan@0.8.2:
+    resolution: {integrity: sha512-S8+0gBggNjeb73em6KFBw/WCsP/kEZ/k0PDvT5zlJAgB5zC4AOFP9kA1LsW/9UP7w0SKYD/a0UvXWknL/ZPSxA==}
     dev: false
 
   /slash@3.0.0:
