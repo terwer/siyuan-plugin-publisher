@@ -23,6 +23,7 @@
  */
 
 const path = require("path")
+const os = require("os")
 const minimist = require("minimist")
 const stylePlugin = require("esbuild-style-plugin")
 const { copy } = require("esbuild-plugin-copy")
@@ -30,12 +31,16 @@ const { copy } = require("esbuild-plugin-copy")
 const args = minimist(process.argv.slice(2))
 const isWatch = args.watch || args.w || false
 const isServe = args.serve || args.s || false
+const isWindows = os.platform() === "win32"
 
 let baseDir
 if (isWatch || isServe) {
   baseDir = "/Users/terwer/Documents/mydocs/SiYuanWorkspace/test/data/plugins/siyuan-plugin-publisher"
   // baseDir = "/Users/zhangyue/Documents/terwer/SiyuanWorkspace/test/data/plugins/siyuan-plugin-publisher"
   // baseDir = "/Users/terwer/Documents/mydocs/SiYuanWorkspace/public/data/plugins/siyuan-plugin-publisher"
+  if (isWindows) {
+    baseDir = "C:\\Users\\terwer\\Documents\\mydocs\\SiyuanWorkspace\\test\\data\\plugins\\siyuan-plugin-publisher"
+  }
 } else {
   baseDir = "./"
 }
