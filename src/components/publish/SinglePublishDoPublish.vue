@@ -49,7 +49,7 @@ import PublishKnowledgeSpace from "~/src/components/publish/form/PublishKnowledg
 import { SiyuanAttr } from "zhi-siyuan-api"
 import PublishTitle from "~/src/components/publish/form/PublishTitle.vue"
 import { useChatGPT } from "~/src/composables/useChatGPT.ts"
-import _ from "lodash";
+import _ from "lodash"
 
 const logger = createAppLogger("single-publish-do-publish")
 

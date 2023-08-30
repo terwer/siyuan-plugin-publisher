@@ -141,4 +141,4 @@
   |TypeScript|5.0+|Microsoft|
   |siyuan-note|2.9.0+|D,V|
 
-* 感谢 [leolee9086](https://github.com/leolee9086) 提供的图标资源
+* 感谢 [leolee9086](https://github.com/leolee9086) 和 [赐我一胖]() 提供的图标资源
