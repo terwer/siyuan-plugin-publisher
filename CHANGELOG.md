@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.11.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.11.0...v1.11.1) (2023-08-30)
+
+
+### Bug Fixes
+
+* hexo 深度优化 ([4c84d5e](https://github.com/terwer/siyuan-plugin-publisher/commit/4c84d5e4ab8092987ffa26ebcf64f790ec8d2c2a))
+* hexo 深度优化 ([fffdaad](https://github.com/terwer/siyuan-plugin-publisher/commit/fffdaad9ce3f763c1d1da45a1b735c4ed1e4a3a7))
+* hexo 深度优化 ([596c09e](https://github.com/terwer/siyuan-plugin-publisher/commit/596c09e251d55ae3fb19f36992814eedf5eb863e))
+* 优化单个文章的删除流程 ([453620f](https://github.com/terwer/siyuan-plugin-publisher/commit/453620f1c640c575fc370cf755af6cbf7507234f))
+* 修复YAML修改不生效的问题 ([a9afe95](https://github.com/terwer/siyuan-plugin-publisher/commit/a9afe9597139790e47b1e768aec308a3ee677971))
+* 修复YAML修改不生效的问题 ([ac21891](https://github.com/terwer/siyuan-plugin-publisher/commit/ac21891c7b04f66a433dfd8e1788811026663c92))
+* 新增强制删除 ([629c468](https://github.com/terwer/siyuan-plugin-publisher/commit/629c468b6ee5dd61e73acf4c82041363084c62d8))
+
 ## [1.11.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.10.3...v1.11.0) (2023-08-29)
 
 
