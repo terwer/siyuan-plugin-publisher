@@ -519,7 +519,9 @@ onMounted(async () => {
               >
                 {{ t("main.publish.remove") }}
               </el-button>
-              <el-button type="warning" @click="handleSyncToSiyuan"> 同步修改到思源笔记 </el-button>
+              <el-button type="warning" @click="handleSyncToSiyuan" :disabled="!formData.actionEnable">
+                同步修改到思源笔记
+              </el-button>
             </el-form-item>
           </el-form>
         </div>

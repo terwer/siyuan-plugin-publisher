@@ -33,12 +33,12 @@ import { create } from "xmlbuilder2"
  * 应用实例
  */
 export class AppInstance {
-  public logger
-  public deviceType
+  public logger: any
+  public deviceType: any
 
-  public fetch
-  public xmlbuilder2
-  public simpleXmlrpc
+  public fetch: any
+  public xmlbuilder2: any
+  public simpleXmlrpc: any
 
   constructor() {
     this.logger = createAppLogger("app-instance")

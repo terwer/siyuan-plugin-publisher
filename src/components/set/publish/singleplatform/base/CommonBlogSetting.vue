@@ -28,7 +28,7 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { AppInstance } from "~/src/appInstance.ts"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
-import { computed, onMounted, reactive, ref, toRaw, triggerRef, watch } from "vue"
+import { onMounted, reactive, ref, toRaw, watch } from "vue"
 import { DynamicConfig, DynamicJsonCfg, getDynCfgByKey, setDynamicJsonCfg } from "~/src/platforms/dynamicConfig.ts"
 import { SypConfig } from "~/syp.config.ts"
 import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
@@ -80,7 +80,6 @@ const formData = reactive({
   setting: {} as typeof SypConfig,
   dynamicConfigArray: [] as DynamicConfig[],
 
-  useSiyuanApi: false,
   isInit: false,
 })
 
@@ -242,7 +241,6 @@ const initConf = async () => {
 onMounted(async () => {
   // 初始化
   await initConf()
-  formData.useSiyuanApi = isStorageViaSiyuanApi()
   formData.isInit = true
 })
 </script>
@@ -349,7 +347,7 @@ onMounted(async () => {
       </el-select>
     </el-form-item>
     <!-- 跨域代理地址 -->
-    <el-form-item v-if="!formData.useSiyuanApi" :label="t('setting.blog.middlewareUrl')">
+    <el-form-item :label="t('setting.blog.middlewareUrl')">
       <el-input v-model="formData.cfg.middlewareUrl" :placeholder="t('setting.blog.middlewareUrl.tip')" />
       <el-alert
         :closable="false"
