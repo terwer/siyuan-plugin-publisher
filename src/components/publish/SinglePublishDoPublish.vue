@@ -282,10 +282,6 @@ const showChangeTip = (v1: string, v2: string) => {
   return `系统标题为 [${v1}] ， 已在远程平台被修改为 [${v2}]`
 }
 
-const refreshChangeTips = () => {
-  formData.changeTips.title = showChangeTip(formData.siyuanPost.title, formData.platformPost.title)
-}
-
 const syncEditMode = async (val: PageEditMode) => {
   formData.editType = val
   logger.debug("syncEditMode in single publish")
@@ -349,7 +345,7 @@ const onBack = () => {
 const initPage = async () => {
   try {
     // 初始化单篇文章
-    const { siyuanPost, platformPost, mergedPost, postPreviewUrl } = await initPublishMethods.doInitSinglePage(
+    const { mergedPost, postPreviewUrl } = await initPublishMethods.doInitSinglePage(
       key,
       id,
       formData.method,
@@ -357,15 +353,10 @@ const initPage = async () => {
     )
 
     // 文章元数据
-    formData.siyuanPost = siyuanPost
-    formData.platformPost = platformPost
     formData.mergedPost = mergedPost
 
     // 预览链接
     formData.postPreviewUrl = postPreviewUrl
-
-    // 刷新比对提示
-    refreshChangeTips()
   } catch (e) {
     const errMsg = t("main.opt.failure") + "=>" + e
     logger.error(t("main.opt.failure") + "=>", e)
