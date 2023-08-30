@@ -110,7 +110,9 @@ const usePublish = () => {
       }
       singleFormData.isAdd = StrUtil.isEmptyString(postid)
 
-      let post = doc
+      // 确保每次发布都是新的副本
+      const post = _.cloneDeep(doc) as Post
+      logger.debug("准备开始发布处理, doc =>", { post: toRaw(doc) })
       // 保证postid一致
       post.postid = postid
 
@@ -118,25 +120,15 @@ const usePublish = () => {
       const api = await getPublishApi(key, cfg)
 
       // ===================================
-      // 文章处理开始
+      // 文章预处理开始
       // ===================================
-      // 平台相关的正文预处理 - 仅在发布的时候调用
-      logger.debug(`before preEditPost, isAdd ${singleFormData.isAdd}, post=>`, toRaw(post))
-      post = await api.preEditPost(post, id, publishCfg)
-      logger.debug(`after preEditPost, post=>`, toRaw(post))
-
-      // 同步摘要
-      post.mt_excerpt = post.shortDesc
-      post.mt_text_more = post.shortDesc
-      // 发布格式
-      if (cfg?.pageType == PageTypeEnum.Markdown) {
-        post.description = post.markdown
-      } else {
-        post.description = post.html
-      }
-      logger.debug(`文章全部预处理完毕，最终结果 =>id=${id},key=${key},`, { post: toRaw(post) })
+      logger.info(`开始文章预处理, isAdd =>${singleFormData.isAdd}`)
+      logger.debug(`post=>`, toRaw(post))
+      const finalPost = await api.preEditPost(post, id, publishCfg)
+      logger.info(`文章全部预处理完毕，id=${id},key=${key}`)
+      logger.debug(`最终结果 =>`, { finalPost: toRaw(finalPost) })
       // ===================================
-      // 文章处理结束
+      // 文章预处理结束
       // ===================================
 
       // 处理发布：新增 或者 更新
@@ -144,14 +136,14 @@ const usePublish = () => {
         logger.info("文章未发布，准备发布")
 
         // result 正常情况下就是 postid
-        const result = await api.newPost(post)
+        const result = await api.newPost(finalPost)
 
         // 写入属性到配置
         postid = result
         const posidKey = cfg.posidKey
         const postMeta = ObjectUtil.getProperty(setting, id, {})
         postMeta[posidKey] = postid
-        postMeta[SiyuanAttr.Custom_slug] = post.wp_slug
+        postMeta[SiyuanAttr.Custom_slug] = finalPost.wp_slug
         setting[id] = postMeta
         await updateSetting(setting)
 
@@ -161,19 +153,19 @@ const usePublish = () => {
         logger.info("文章已发布，准备更新")
 
         // result 正常情况下是 true
-        const result = await api.editPost(postid, post)
+        const result = await api.editPost(postid, finalPost)
 
         // 写入属性到配置
         // 这里更新 slug 的原因是历史文章有可能没有生成过别名
         const postMeta = ObjectUtil.getProperty(setting, id, {})
         if (!postMeta.hasOwnProperty(SiyuanAttr.Custom_slug)) {
           logger.info("检测到未生成过别名，准备更新别名")
-          postMeta[SiyuanAttr.Custom_slug] = post.wp_slug
+          postMeta[SiyuanAttr.Custom_slug] = finalPost.wp_slug
           setting[id] = postMeta
           await updateSetting(setting)
         } else {
           // 确保别名不被修改
-          post.wp_slug = postMeta[SiyuanAttr.Custom_slug]
+          finalPost.wp_slug = postMeta[SiyuanAttr.Custom_slug]
         }
 
         logger.info("edit post=>", result)
@@ -186,7 +178,7 @@ const usePublish = () => {
         logger.info("内置平台，忽略保存属性")
       } else {
         const yamlKey = getDynYamlKey(key)
-        await kernelApi.setSingleBlockAttr(id, yamlKey, post.yaml)
+        await kernelApi.setSingleBlockAttr(id, yamlKey, finalPost.yaml)
       }
       logger.info("文章属性处理完成")
 

@@ -49,6 +49,7 @@ import PublishKnowledgeSpace from "~/src/components/publish/form/PublishKnowledg
 import { SiyuanAttr } from "zhi-siyuan-api"
 import PublishTitle from "~/src/components/publish/form/PublishTitle.vue"
 import { useChatGPT } from "~/src/composables/useChatGPT.ts"
+import _ from "lodash";
 
 const logger = createAppLogger("single-publish-do-publish")
 
@@ -113,7 +114,8 @@ const handlePublish = async () => {
     logger.info("保存到系统平台开始")
     for (const sysKey of sysKeys) {
       const sysPublishCfg = await getPublishCfg(sysKey)
-      await doSinglePublish(sysKey, id, sysPublishCfg, formData.mergedPost)
+      const siyuanPost = _.cloneDeep(formData.mergedPost) as Post
+      await doSinglePublish(sysKey, id, sysPublishCfg, siyuanPost)
     }
     logger.info("保存到系统平台结束")
 

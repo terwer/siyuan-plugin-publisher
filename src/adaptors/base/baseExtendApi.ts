@@ -27,7 +27,7 @@ import { IBlogApi } from "zhi-blog-api/dist/lib/IBlogApi"
 import { IWebApi } from "zhi-blog-api/dist/lib/IWebApi"
 import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
 import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
-import { BlogConfig, MediaObject, Post, WebApi, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
+import { BlogConfig, MediaObject, PageTypeEnum, Post, WebApi, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
 import { createAppLogger, ILogger } from "~/src/utils/appLogger.ts"
 import { LuteUtil } from "~/src/utils/luteUtil.ts"
 import { usePicgoBridge } from "~/src/composables/usePicgoBridge.ts"
@@ -40,6 +40,7 @@ import { SiyuanKernelApi } from "zhi-siyuan-api"
 import { DynamicConfig } from "~/src/platforms/dynamicConfig.ts"
 import { MUST_USE_OWN_PLATFORM, MUST_USE_PICBED_PLATFORM } from "~/src/utils/constants.ts"
 import { toRaw } from "vue"
+import _ from "lodash"
 
 /**
  * 各种模式共享的扩展基类
@@ -84,50 +85,104 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     post = await this.handlePictures(post, id, publishCfg)
     // 处理YAML
     post = await this.handleYaml(post, id, publishCfg)
+    // 处理其他
+    post = await this.handleOther(post, id, publishCfg)
     return post
   }
 
   // ================
   // private methods
   // ================
-  private async handleYaml(post: Post, id?: string, publishCfg?: any) {
+  /**
+   * 处理其他属性
+   *
+   * @param doc - 要处理YAML的 Post 对象
+   * @param id - 思源笔记文档 ID
+   * @param publishCfg - （可选）发布配置参数
+   * @returns 一个 Promise，解析为处理后的 Post 对象
+   */
+  private async handleOther(doc: Post, id?: string, publishCfg?: any) {
     const cfg: BlogConfig = publishCfg?.cfg
+    const post = _.cloneDeep(doc) as Post
+
+    // 同步摘要
+    post.mt_excerpt = post.shortDesc
+    post.mt_text_more = post.shortDesc
+
+    // 发布格式
+    if (cfg?.pageType == PageTypeEnum.Markdown) {
+      post.description = post.markdown
+    } else {
+      post.description = post.html
+    }
+    return post
+  }
+
+  /**
+   * 处理YAML
+   *
+   * @param doc - 要处理YAML的 Post 对象
+   * @param id - 思源笔记文档 ID
+   * @param publishCfg - （可选）发布配置参数
+   * @returns 一个 Promise，解析为处理后的 Post 对象
+   */
+  private async handleYaml(doc: Post, id?: string, publishCfg?: any) {
+    const cfg: BlogConfig = publishCfg?.cfg
+    const post = _.cloneDeep(doc) as Post
+
+    this.logger.debug("开始处理yaml，post", { post: toRaw(post) })
+
+    // 前台已经处理好，这里无需再处理
+    // const yamlAdaptor: YamlConvertAdaptor = this.api.getYamlAdaptor()
+    // if (null !== yamlAdaptor) {
+    //   // 先生成对应平台的yaml
+    //   const yamlObj: YamlFormatObj = yamlAdaptor.convertToYaml(post, cfg)
+    //   // 同步发布内容
+    //   post.yaml = yamlObj.formatter
+    //   post.markdown = yamlObj.mdFullContent
+    //   post.html = yamlObj.htmlContent
+    //   this.logger.info("handled yaml using YamlConverterAdaptor")
+    // } else {
+    //   // 同步发布内容
+    //   const yamlObj = post.toYamlObj()
+    //   const yaml = YamlUtil.obj2Yaml(yamlObj)
+    //   const md = YamlUtil.extractMarkdown(post.markdown)
+    //   post.yaml = yaml
+    //   post.markdown = md
+    //   post.html = LuteUtil.mdToHtml(md)
+    //   this.logger.info("yaml adaptor not found, using default")
+    // }
+
     const yamlAdaptor: YamlConvertAdaptor = this.api.getYamlAdaptor()
     if (null !== yamlAdaptor) {
-      // 先生成对应平台的yaml
-      const yamlObj: YamlFormatObj = yamlAdaptor.convertToYaml(post, cfg)
-      // 同步发布内容
-      post.yaml = yamlObj.formatter
-      post.markdown = yamlObj.mdFullContent
-      post.html = yamlObj.htmlContent
-      this.logger.info("handled yaml using YamlConverterAdaptor")
-    } else {
-      // 同步发布内容
-      const yamlObj = post.toYamlObj()
-      const yaml = YamlUtil.obj2Yaml(yamlObj)
       const md = YamlUtil.extractMarkdown(post.markdown)
-      post.yaml = yaml
-      post.markdown = md
+      const yaml = post.yaml
+      post.markdown = YamlUtil.addYamlToMd(yaml, md)
       post.html = LuteUtil.mdToHtml(md)
-      this.logger.info("yaml adaptor not found, using default")
+      this.logger.info("检测到该平台已开启YAML适配器，已附加YAML到Markdown正文")
+    } else {
+      this.logger.info("未找到YAML适配器，不作处理")
     }
 
-    this.logger.debug("handledYaml yaml finished =>", { post: toRaw(post) })
+    this.logger.debug("yaml处理之后，post", { post: toRaw(post) })
     return post
   }
 
   /**
    * 处理图片
    *
-   * @param post - 要处理图片的 Post 对象
+   * @param doc - 要处理图片的 Post 对象
    * @param id - 思源笔记文档 ID
    * @param publishCfg - （可选）发布配置参数
    * @returns 一个 Promise，解析为处理后的 Post 对象
    */
-  private async handlePictures(post: Post, id: string, publishCfg?: any): Promise<Post> {
+  private async handlePictures(doc: Post, id: string, publishCfg?: any): Promise<Post> {
     const cfg: BlogConfig = publishCfg?.cfg
     const dynCfg: DynamicConfig = publishCfg?.dynCfg
     const middlewareUrl = cfg?.middlewareUrl
+
+    const post = _.cloneDeep(doc) as Post
+    this.logger.debug("图片处理之前, post =>", { post: toRaw(post) })
 
     // 判断key包含 custom_Zhihu 或者 /custom_Zhihu-\w+/
     const mustUseOwnPlatform: string[] = MUST_USE_OWN_PLATFORM
@@ -162,7 +217,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
       // ==========================
       // 图片替换
       this.logger.info("使用 PicGO上传图片")
-      this.logger.debug("开始图片处理, post =>", { post })
+      this.logger.debug("开始图片处理, post =>", { post: toRaw(post) })
       post.markdown = await this.picgoBridge.handlePicgo(id, post.markdown)
       this.logger.debug("图片处理完毕, post.markdown =>", { md: post.markdown })
     } else {
@@ -226,6 +281,9 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
 
     // 利用 lute 把 md 转换成 html
     post.html = LuteUtil.mdToHtml(post.markdown)
+
+    this.logger.info("图片预处理全部完成")
+    this.logger.debug("图片处理之后，post", { post: toRaw(post) })
     return post
   }
 
