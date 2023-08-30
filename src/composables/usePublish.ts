@@ -27,15 +27,7 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { reactive, toRaw } from "vue"
 import { SypConfig } from "~/syp.config.ts"
 import { AliasTranslator, ObjectUtil, StrUtil, YamlUtil } from "zhi-common"
-import {
-  BlogAdaptor,
-  BlogConfig,
-  PageTypeEnum,
-  Post,
-  PostStatusEnum,
-  YamlConvertAdaptor,
-  YamlFormatObj,
-} from "zhi-blog-api"
+import { BlogAdaptor, BlogConfig, Post, PostStatusEnum, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
