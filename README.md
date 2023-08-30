@@ -24,6 +24,8 @@ Names not listed in order
 - [X] Notion
 - [X] Github
   - [X] Hexo
+- [X] Gitlab
+  - [X] Gitlabhexo
 - [X] Metaweblog
 - [X] Cnblogs
 - [X] Typecho

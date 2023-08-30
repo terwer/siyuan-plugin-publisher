@@ -22,6 +22,8 @@
 - [X] Notion
 - [X] Github
   - [X] Hexo
+- [X] Gitlab
+  - [X] Gitlabhexo
 - [X] Metaweblog
 - [X] 博客园
 - [X] Typecho

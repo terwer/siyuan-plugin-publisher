@@ -32,6 +32,7 @@ import { CategoryInfo, Post, UserBlog, YamlConvertAdaptor, YamlFormatObj } from 
 import { StrUtil, YamlUtil } from "zhi-common"
 import { toRaw } from "vue"
 import { Base64 } from "js-base64"
+import { isDev } from "~/src/utils/constants.ts"
 
 /**
  * Gitlab API 适配器
@@ -57,7 +58,8 @@ class CommonGitlabApiAdaptor extends BaseBlogApi {
       cfg.defaultMsg,
       cfg.email,
       cfg.author,
-      cfg.middlewareUrl
+      cfg.middlewareUrl,
+      isDev
     )
   }
 
@@ -144,8 +146,8 @@ class CommonGitlabApiAdaptor extends BaseBlogApi {
 
   public async deletePost(postid: string): Promise<boolean> {
     try {
-      await this.gitlabClient.deleteRepositoryFile(postid)
-      this.logger.debug("gitlab deletePost finished")
+      const resJson = await this.gitlabClient.deleteRepositoryFile(postid)
+      this.logger.debug("gitlab deletePost finished =>", resJson)
     } catch (e) {
       throw new Error("Gitlab 调用API异常 =>" + e)
     }

@@ -576,4 +576,6 @@ export default {
   "setting.blog.type.gitlab.token.tip": "Gitlab的token，请参考下面链接设置，并保证有api权限",
   "setting.blog.gitlab.apiurl.tip": "Gitlab的API地址，一般与首页相同",
   "setting.blog.gitlab.previewUrl.tip": "文章预览地址，一般默认即可",
+
+  "main.force.cancel": "强制删除"
 }
