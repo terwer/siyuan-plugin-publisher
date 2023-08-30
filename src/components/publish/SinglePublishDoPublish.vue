@@ -43,23 +43,22 @@ import { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 import { PageEditMode } from "~/src/models/pageEditMode.ts"
 import EditModeSelect from "~/src/components/publish/form/EditModeSelect.vue"
 import PublishTime from "~/src/components/publish/form/PublishTime.vue"
-import { isDev } from "~/src/utils/constants.ts"
 import { pre } from "~/src/utils/import/pre.ts"
 import { ICategoryConfig } from "~/src/types/ICategoryConfig.ts"
 import PublishKnowledgeSpace from "~/src/components/publish/form/PublishKnowledgeSpace.vue"
 import { SiyuanAttr } from "zhi-siyuan-api"
 import PublishTitle from "~/src/components/publish/form/PublishTitle.vue"
 import { useChatGPT } from "~/src/composables/useChatGPT.ts"
+import _ from "lodash";
 
 const logger = createAppLogger("single-publish-do-publish")
 
 // uses
 const { t } = useVueI18n()
 const route = useRoute()
-const { initPublishMethods } = usePublish()
 const { query } = useRoute()
 const { kernelApi } = useSiyuanApi()
-const { doSinglePublish, doSingleDelete } = usePublish()
+const { doSinglePublish, doSingleDelete, initPublishMethods, doForceSingleDelete } = usePublish()
 const router = useRouter()
 const { getPublishCfg } = usePublishConfig()
 
@@ -115,7 +114,8 @@ const handlePublish = async () => {
     logger.info("保存到系统平台开始")
     for (const sysKey of sysKeys) {
       const sysPublishCfg = await getPublishCfg(sysKey)
-      await doSinglePublish(sysKey, id, sysPublishCfg, formData.mergedPost)
+      const siyuanPost = _.cloneDeep(formData.mergedPost) as Post
+      await doSinglePublish(sysKey, id, sysPublishCfg, siyuanPost)
     }
     logger.info("保存到系统平台结束")
 
@@ -126,23 +126,17 @@ const handlePublish = async () => {
     logger.info("单个常规发布结束")
 
     if (processResult.status) {
-      // 刷新页面
       // 如果是发布并且发布成功
       if (formData.method === MethodEnum.METHOD_ADD) {
-        formData.method = MethodEnum.METHOD_EDIT
-        window.location.href = BrowserUtil.setUrlParameter(window.location.href, "method", formData.method)
-        // 因为hash的原因，需要再刷新一次
-        window.location.reload()
+        ElMessage.success("文章发布成功！如需编辑请重新打开")
       } else {
-        // 需要刷新才能继续操作，防止重复提交
-        window.location.reload()
+        formData.actionEnable = true
+        ElMessage.success("文章更新成功！")
       }
     } else {
       ElMessage.error(processResult.errMsg)
       logger.error(processResult.errMsg)
     }
-
-    formData.actionEnable = true
   } catch (e) {
     ElMessage.error(e.message)
     logger.error(t("main.opt.failure") + "=>", e)
@@ -190,12 +184,34 @@ const doDelete = async () => {
         window.location.reload()
       }, 200)
     } else {
+      formData.actionEnable = true
       ElMessage.error(processResult.errMsg)
       logger.error(processResult.errMsg)
     }
   } catch (e) {
     ElMessage.error(e.message)
     logger.error(t("main.opt.failure") + "=>", e)
+  } finally {
+    formData.isDeleteLoading = false
+  }
+}
+
+const handleForceDelete = async () => {
+  try {
+    await doForceSingleDelete(key, id, formData.publishCfg as IPublishCfg)
+    const platformName = getPlatformName()
+    const blogName = getBlogName()
+    ElMessage.success(`[${platformName} - ${blogName}] 文章信息已强制删除`)
+
+    // 如果是发布并且发布成功
+    setTimeout(() => {
+      formData.method = MethodEnum.METHOD_ADD
+      window.location.href = BrowserUtil.setUrlParameter(window.location.href, "method", formData.method)
+      // 因为hash的原因，需要再刷新一次
+      window.location.reload()
+    }, 200)
+  } catch (error) {
+    ElMessage.error(error.message)
   } finally {
     formData.isDeleteLoading = false
   }
@@ -520,10 +536,10 @@ onMounted(async () => {
 
                   <!-- 知识空间 -->
                   <publish-knowledge-space
-                      v-model:knowledge-space-type="formData.publishCfg.cfg.knowledgeSpaceType"
-                      v-model:knowledge-space-config="formData.knowledgeSpaceConfig"
-                      v-model:cate-slugs="formData.mergedPost.cate_slugs"
-                      @emitSyncCateSlugs="syncCateSlugs"
+                    v-model:knowledge-space-type="formData.publishCfg.cfg.knowledgeSpaceType"
+                    v-model:knowledge-space-config="formData.knowledgeSpaceConfig"
+                    v-model:cate-slugs="formData.mergedPost.cate_slugs"
+                    @emitSyncCateSlugs="syncCateSlugs"
                   />
 
                   <!-- 发布时间 -->
@@ -558,7 +574,18 @@ onMounted(async () => {
                 >
                   {{ t("main.cancel") }}
                 </el-button>
-                <el-button type="warning" @click="handleSyncToSiyuan"> 同步修改到思源笔记 </el-button>
+                <el-button
+                  v-if="formData.method === MethodEnum.METHOD_EDIT"
+                  type="danger"
+                  @click="handleForceDelete"
+                  :disabled="!formData.actionEnable"
+                  class="btn-rm-action"
+                >
+                  {{ t("main.force.cancel") }}
+                </el-button>
+                <el-button type="warning" @click="handleSyncToSiyuan" :disabled="!formData.actionEnable">
+                  同步修改到思源笔记
+                </el-button>
               </el-form-item>
 
               <!-- 文章状态 -->

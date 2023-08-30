@@ -8,15 +8,9 @@ Publish articles from siyuan-note to platforms such as Yuque, Notion, Cnblogs, W
 
 Support features such as fast publishing, image bed management, platform expansion, smart labels, etc.
 
-**Front Row Announcement: the first AI-integrated version `1.10.0` of the Publish Tool is released!**
+**Facing issues or have suggestions? Please join QQ group `895063267` for discussion. Alternatively, refer to the online documentation below:**
 
-Attention:
-
-1. Important notice from GitHub-related platforms: Deployment is only supported for source code. Deployment is only supported for source code. Deployment is only supported for source code. It's emphasized for clarity.
-
-2. This plugin undergoes frequent updates. To prevent unpredictable errors due to program caching, please follow the process of `uninstalling` first and then `reinstalling` for updates.
-
-3. **In case of plugin malfunction due to configuration issues**, please back up `[workspace]/data/storage/syp/sy-p-plus-cfg.json` and then delete it. This configuration file will be automatically initialized upon first use. **Please refrain from performing this action when the plugin is functional**.
+> [Click here](https://blog.terwer.space/s/20230810132040-nn4q7vs) to view the latest help documentation.
 
 ## Update history
 
@@ -30,6 +24,8 @@ Names not listed in order
 - [X] Notion
 - [X] Github
   - [X] Hexo
+- [X] Gitlab
+  - [X] Gitlabhexo
 - [X] Metaweblog
 - [X] Cnblogs
 - [X] Typecho

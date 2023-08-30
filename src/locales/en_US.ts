@@ -593,5 +593,7 @@ export default {
   "setting.blog.type.gitlab.user.tip": "Username for GitLab",
   "setting.blog.type.gitlab.token.tip": "Token for GitLab, please refer to the link below for setup and ensure API permissions are granted",
   "setting.blog.gitlab.apiurl.tip": "GitLab API address, usually the same as the homepage",
-  "setting.blog.gitlab.previewUrl.tip": "Article preview address, usually the default"
+  "setting.blog.gitlab.previewUrl.tip": "Article preview address, usually the default",
+
+  "main.force.cancel": "Force delete"
 }

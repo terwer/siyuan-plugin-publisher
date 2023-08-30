@@ -270,7 +270,7 @@ export default {
   "setting.blog.middlewareUrl": "跨域请求代理",
   "setting.blog.middlewareUrl.tip": "某些场景下需要（例如自部署模式，Nginx伺服等、vite开发环境伺服等），其他情况可忽略",
   "setting.blog.middlewareUrl.my.tip":
-    "如果没有部署代理，可以使用我的共享地址：https://api.terwer.space/api/middleware 。出于性能考虑，建议自己部署一份，请使用 https://github.com/terwer/node-metaweblog-api-adaptor 进行部署。",
+    "大部分情况下不需要，部分场景在浏览器环境下可能需要。如果没有部署代理，可以使用我的共享地址：https://api.terwer.space/api/middleware 。出于性能考虑，建议自己部署一份，请使用 https://github.com/terwer/node-metaweblog-api-adaptor 进行部署。",
   "setting.conf.export": "导出配置",
   "setting.conf.import": "导入配置",
   "setting.conf.transport": "导入导出",
@@ -576,4 +576,6 @@ export default {
   "setting.blog.type.gitlab.token.tip": "Gitlab的token，请参考下面链接设置，并保证有api权限",
   "setting.blog.gitlab.apiurl.tip": "Gitlab的API地址，一般与首页相同",
   "setting.blog.gitlab.previewUrl.tip": "文章预览地址，一般默认即可",
+
+  "main.force.cancel": "强制删除"
 }
