@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.11.2](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.11.1...v1.11.2) (2023-08-31)
+
+
+### Bug Fixes
+
+* 优化一些属性合并逻辑 ([ea9ba23](https://github.com/terwer/siyuan-plugin-publisher/commit/ea9ba230deec87abbb464711a9fdf75948f7571b))
+* 优化一些属性合并逻辑 ([f8719c7](https://github.com/terwer/siyuan-plugin-publisher/commit/f8719c72986b8a0222434fed0596eb768d6870f8))
+* 修复YAML初始化未读取最新的问题 ([704241b](https://github.com/terwer/siyuan-plugin-publisher/commit/704241b8a99b8f5319706e05a342e6f83cc764d3))
+* 修复YAML初始化错误 ([0922fa6](https://github.com/terwer/siyuan-plugin-publisher/commit/0922fa6a9d7fa7ebfac02d63e10e3c99ecbdf541))
+
+
+### Miscellaneous
+
+* **deps-dev:** bump unplugin-vue-components from 0.25.1 to 0.25.2 ([1ba446a](https://github.com/terwer/siyuan-plugin-publisher/commit/1ba446a25ae7aa021bd4022e80e265bac726cb51))
+* 兼容Windows构建 ([d6939e9](https://github.com/terwer/siyuan-plugin-publisher/commit/d6939e9047ef74238dc906aecfbfe874a7b6e5ae))
+
 ## [1.11.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.11.0...v1.11.1) (2023-08-30)
 ### Bug Fixes
 * hexo 深度优化 ([596c09e](https://github.com/terwer/siyuan-plugin-publisher/commit/596c09e251d55ae3fb19f36992814eedf5eb863e))
