@@ -23,9 +23,10 @@
  * questions.
  */
 
-import { YamlConvertAdaptor } from "zhi-blog-api"
+import { BlogConfig, PageTypeEnum, Post, YamlConvertAdaptor } from "zhi-blog-api"
 import { GitlabHexoYamlConverterAdaptor } from "~/src/adaptors/api/gitlab-hexo/gitlabHexoYamlConverterAdaptor.ts"
 import { CommonGitlabApiAdaptor } from "~/src/adaptors/api/base/gitlab/commonGitlabApiAdaptor.ts"
+import _ from "lodash"
 
 /**
  * Hexo API 适配器
@@ -37,6 +38,35 @@ import { CommonGitlabApiAdaptor } from "~/src/adaptors/api/base/gitlab/commonGit
 class GitlabHexoApiAdaptor extends CommonGitlabApiAdaptor {
   public override getYamlAdaptor(): YamlConvertAdaptor {
     return new GitlabHexoYamlConverterAdaptor()
+  }
+
+  public override async preEditPost(post: Post, id?: string, publishCfg?: any): Promise<Post> {
+    // 公共的属性预处理
+    const doc = await super.preEditPost(post, id, publishCfg)
+
+    // HEXO 自带的处理
+    const cfg: BlogConfig = publishCfg?.cfg
+    const updatedPost = _.cloneDeep(doc) as Post
+
+    // 自定义处理
+    // 成功提示、信息提示、警告提示、错误提示
+    const md = updatedPost.markdown
+    this.logger.info("准备处理 Gitlabhexo 正文")
+    this.logger.debug("md =>", { md: md })
+    let updatedMd = md
+    // MD暂时无法处理标记，先搁置
+    // 处理MD
+    updatedPost.markdown = updatedMd
+    this.logger.info("Gitlabhexo 正文处理完毕")
+    this.logger.debug("updatedMd =>", { updatedMd: updatedMd })
+
+    // 发布格式
+    if (cfg?.pageType == PageTypeEnum.Markdown) {
+      post.description = post.markdown
+    } else {
+      post.description = post.html
+    }
+    return updatedPost
   }
 }
 

@@ -143,11 +143,25 @@ more useful tools~
 
   Names not listed in order
 
-  |Name|version|vendor|
-  | :---------: | :-----: | :---------: |
-  |turbo|1.9+|Vercel|
-  |vite|4.2+|Evan You|
-  |Svelte|3.57+|Rich Harris|
-  |TypeScript|5.0+|Microsoft|
-  |siyuan-note|2.9.0+|D,V|
+  |    Name     | version |vendor|
+  |:-----------:|:-------:| :---------: |
+  |    turbo    |  1.9+   |Vercel| 
+  |     Vue     | 3.3.4+  |Evan You|
+  |    Vite     |  4.2+   |Evan You|
+  | TypeScript  |  5.0+   |Microsoft|
+  | siyuan-note | 2.9.0+  |D,V|
+
 - Thanks to [leolee9086](https://github.com/leolee9086) and [ciwoyipang]() for the icon resource
+
+* Thanks to the enthusiastic support of the following users, I will continue to update and maintain the project!
+
+  - 2023-08-31 *? Donated to [Publish Tool] Thanks for providing the siyuan-note Publish Tool.
+  - 2023-08-14 *? Donated to [Publish Tool]
+  - 2023-08-10 *f Donated to [Publish Tool] for liking the release plugin.
+  - 2023-08-10 *2 Donated to [Publish Tool] to support the development of Source Release Plugin.
+  - 2023-07-13 *亮 Donated to [Document Alias] Is it possible to expand the functionality to H1?
+  - 2023-07-09 *z Donated to [Online Sharing] The online sharing plugin is great, thanks!
+  - 2023-06-14 *俊 Donated to [Document Roaming] Thanks for the Document Roaming feature.
+  - 2023-01-16 *站 Donated to [Import Tool] Finally, we can import epub files.
+
+    If you do not want to display donation information, you can send an email directly to youweics@163.com.

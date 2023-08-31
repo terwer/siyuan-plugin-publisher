@@ -35,10 +35,13 @@ import { DateUtil, StrUtil, YamlUtil } from "zhi-common"
 import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
 import Adaptors from "~/src/adaptors"
 import { usePicgoBridge } from "~/src/composables/usePicgoBridge.ts"
+import { getDynYamlKey } from "~/src/platforms/dynamicConfig.ts"
+import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 
 const logger = createAppLogger("source-mode")
 const { t } = useVueI18n()
 const { handlePicgo } = usePicgoBridge()
+const { kernelApi } = useSiyuanApi()
 
 const props = defineProps({
   modelValue: {
@@ -68,7 +71,9 @@ const formData = reactive({
   syncStatus: "info",
   syncMessage: "未修改",
 
-  cfg: {} as CommonBlogConfig,
+  pageId: props.pageId,
+  apiType: props.apiType,
+  cfg: props.cfg as CommonBlogConfig,
   yamlAdaptor: {} as YamlConvertAdaptor,
 
   // YAML对象
@@ -180,14 +185,13 @@ const initPage = async () => {
   try {
     let yfmObj: YamlFormatObj = new YamlFormatObj()
     const post = formData.siyuanPost
-    formData.cfg = props.cfg as CommonBlogConfig
     // 没有平台 Key，不展示 YAML
-    formData.yamlAdaptor = formData.readonlyMode ? null : await Adaptors.getYamlAdaptor(props.apiType, formData.cfg)
+    formData.yamlAdaptor = formData.readonlyMode ? null : await Adaptors.getYamlAdaptor(formData.apiType, formData.cfg)
     // 如果传了 key ，但是没有 YAML 适配器，还是不能展示
     formData.readonlyMode = formData.yamlAdaptor === null
 
     // 处理正文
-    const id = props.pageId
+    const id = formData.pageId
     const md = await handlePicgo(id, post.markdown)
     post.markdown = md
 
@@ -199,8 +203,27 @@ const initPage = async () => {
       yfmObj.htmlContent = post.html
       logger.debug("未找到YAML适配器，将生成公共的YAML")
     } else {
-      yfmObj = formData.yamlAdaptor.convertToYaml(post, formData.cfg)
-      logger.debug("常规发布，生成对应平台的YAML, =>", props.apiType)
+      // 检测
+      const key = formData.apiType
+      const yamlKey = getDynYamlKey(key)
+      const yaml = await kernelApi.getSingleBlockAttr(id, yamlKey)
+      const checkYaml = YamlUtil.extractFrontmatter(yaml).trim()
+      if (StrUtil.isEmptyString(checkYaml)) {
+        yfmObj = formData.yamlAdaptor.convertToYaml(post, formData.cfg)
+        logger.info("有适配器未保存，生成新的YAML")
+      } else {
+        // yamlFormatObj = new YamlFormatObj()
+        // const yamlObj = await YamlUtil.yaml2ObjAsync(yaml)
+        // yamlFormatObj.yamlObj = yamlFormatObj
+        // getPost以已经处理过了
+        yfmObj.formatter = yaml
+        yfmObj.mdContent = post.markdown
+        yfmObj.mdFullContent = YamlUtil.addYamlToMd(yfmObj.formatter, yfmObj.mdContent)
+        yfmObj.htmlContent = post.html
+        logger.info("有适配器且YAML已保存，无需处理")
+      }
+
+      logger.debug("常规发布，生成对应平台的YAML, =>", key)
     }
 
     // 初始化
