@@ -54,12 +54,12 @@ class HexoApiAdaptor extends CommonGithubApiAdaptor {
     this.logger.info("准备处理 Hexo 正文")
     this.logger.debug("md =>", { md: md })
     let updatedMd = md
-
+    // MD暂时无法处理标记，先搁置
+    // 处理MD
     updatedPost.markdown = updatedMd
     this.logger.info("Hexo 正文处理完毕")
     this.logger.debug("updatedMd =>", { updatedMd: updatedMd })
 
-    throw new Error("开发中")
     // 发布格式
     if (cfg?.pageType == PageTypeEnum.Markdown) {
       post.description = post.markdown
