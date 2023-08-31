@@ -347,8 +347,8 @@ const usePublish = () => {
       return post
     },
 
-    // 分配平台相关的YAML属性
-    assignInitAttrs: async (post: Post, id: string, publishCfg: IPublishCfg) => {
+    // 分配平台相关的初始化属性
+    assignInitAttrs: async (post: Post, id: string, publishCfg: IPublishCfg, method: MethodEnum) => {
       const setting: typeof SypConfig = publishCfg.setting
       const cfg: BlogConfig = publishCfg.cfg
       const dynCfg: DynamicConfig = publishCfg.dynCfg
@@ -357,7 +357,6 @@ const usePublish = () => {
 
       // 别名
       post = await initPublishMethods.assignInitSlug(post, id, publishCfg)
-      const slug = post.wp_slug
 
       if (!isSys) {
         // 平台相关自定义属性（摘要、标签、分类）
@@ -370,18 +369,19 @@ const usePublish = () => {
         if (null !== yamlAdaptor) {
           // 有适配器
           let yamlFormatObj: YamlFormatObj
-          if (!StrUtil.isEmptyString(checkYaml)) {
-            yamlFormatObj = new YamlFormatObj()
-            const yamlObj = await YamlUtil.yaml2ObjAsync(yaml)
-            yamlFormatObj.yamlObj = yamlObj
-            logger.info("YAML已保存，初始化生成yamlFormatObj", { yamlFormatObj: toRaw(yamlFormatObj) })
-          } else {
+          if (StrUtil.isEmptyString(checkYaml)) {
             yamlFormatObj = yamlAdaptor.convertToYaml(post, cfg)
             logger.info("YAML未保存，使用适配器生成默认的yamlFormatObj", { yamlFormatObj: toRaw(yamlFormatObj) })
+            post.yaml = yaml
+            post = yamlAdaptor.convertToAttr(post, yamlFormatObj, cfg)
+            logger.debug("使用适配器初始化转换yamlObj到post完成 =>", { post: toRaw(post) })
+          } else {
+            // yamlFormatObj = new YamlFormatObj()
+            // const yamlObj = await YamlUtil.yaml2ObjAsync(yaml)
+            // yamlFormatObj.yamlObj = yamlFormatObj
+            // getPost以已经处理过了
+            logger.info("有适配器且YAML已保存，无需处理")
           }
-          post.yaml = yaml
-          post = yamlAdaptor.convertToAttr(post, yamlFormatObj, cfg)
-          logger.debug("使用适配器转换yamlObj到post完成 =>", { post: toRaw(post) })
         } else {
           // 无适配器
           if (!StrUtil.isEmptyString(checkYaml)) {
@@ -424,17 +424,16 @@ const usePublish = () => {
 
       // vars
       let postPreviewUrl: string = ""
-
-      // 思源笔记原始文章数据
-      const siyuanPost = await blogApi.getPost(id)
-      let platformPost = {} as Post
-      let mergedPost = siyuanPost
-      logger.debug("doInitPage start init siyuanPost =>", toRaw(siyuanPost))
+      let mergedPost = {} as Post
 
       if (method === MethodEnum.METHOD_ADD) {
         logger.info("Add, using siyuan post")
+        // 思源笔记原始文章数据
+        const siyuanPost = await blogApi.getPost(id)
+        mergedPost = _.cloneDeep(siyuanPost) as Post
         // 更新属性
-        mergedPost.categories = []
+        mergedPost.mt_keywords = mergedPost?.mt_keywords ?? ""
+        mergedPost.categories = mergedPost?.categories ?? []
       } else {
         logger.info("Reading post from remote platform")
         if (StrUtil.isEmptyString(postid)) {
@@ -442,24 +441,16 @@ const usePublish = () => {
         }
 
         // 查询平台文章
-        platformPost = await api.getPost(postid)
-        // 更新属性
-        mergedPost.title = platformPost.title
-        mergedPost.shortDesc = platformPost.shortDesc
-        mergedPost.mt_keywords = platformPost.mt_keywords
-        mergedPost.categories = platformPost.categories
-        mergedPost.cate_slugs = platformPost.cate_slugs
+        const platformPost = await api.getPost(postid)
+        mergedPost = _.cloneDeep(platformPost) as Post
 
         // 更新预览链接
         postPreviewUrl = await getPostPreviewUrl(api, postid, cfg)
       }
 
-      logger.debug("doInitPage finished platformPost =>", toRaw(platformPost))
       logger.debug("doInitPage finished mergedPost =>", toRaw(mergedPost))
 
       return {
-        siyuanPost,
-        platformPost,
         mergedPost,
         postPreviewUrl,
       }
