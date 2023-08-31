@@ -357,7 +357,7 @@ const usePublish = () => {
     },
 
     // 分配平台相关的初始化属性
-    assignInitAttrs: async (post: Post, id: string, publishCfg: IPublishCfg) => {
+    assignInitAttrs: async (doc: Post, id: string, publishCfg: IPublishCfg) => {
       const setting: typeof SypConfig = publishCfg.setting
       const cfg: BlogConfig = publishCfg.cfg
       const dynCfg: DynamicConfig = publishCfg.dynCfg
@@ -365,8 +365,10 @@ const usePublish = () => {
       const isSys = pre.systemCfg.some((item) => item.platformKey === key)
 
       // 别名
-      post = await initPublishMethods.assignInitSlug(post, id, publishCfg)
+      const slugedPost = await initPublishMethods.assignInitSlug(doc, id, publishCfg)
 
+      // 其他属性初始化
+      let post = _.cloneDeep(slugedPost) as Post
       if (!isSys) {
         // 平台相关自定义属性（摘要、标签、分类）
         const yamlKey = getDynYamlKey(key)
