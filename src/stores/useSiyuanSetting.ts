@@ -26,6 +26,8 @@
 import { SiyuanConfig } from "zhi-siyuan-api"
 import { RemovableRef, StorageSerializers, useLocalStorage } from "@vueuse/core"
 import { readonly } from "vue"
+import { SiyuanDevice } from "zhi-device"
+import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 
 /**
  * 思源笔记设置
@@ -36,6 +38,7 @@ import { readonly } from "vue"
  */
 const useSiyuanSetting = () => {
   const storageKey = "siyuan-cfg"
+  const { isInSiyuanOrSiyuanNewWin } = useSiyuanDevice()
 
   /**
    * 获取思源笔记配置
@@ -47,11 +50,23 @@ const useSiyuanSetting = () => {
     let baseUrl = "http://127.0.0.1:6806"
     let token = ""
     let middlewareUrl = "https://api.terwer.space/api/middleware"
-    const initialValue = new SiyuanConfig(baseUrl, token)
+    // PC客户端多个工作空间情况下，自动读取思源地址
+    let origin: string
+    if (isInSiyuanOrSiyuanNewWin()) {
+      const win = SiyuanDevice.siyuanWindow()
+      origin = win?.location.origin
+    }
+
+    const initialValue = new SiyuanConfig(origin ?? baseUrl, token)
     initialValue.middlewareUrl = middlewareUrl
     const siyuanConfig = useLocalStorage<SiyuanConfig>(storageKey, initialValue, {
       serializer: StorageSerializers.object,
     })
+
+    // 更新apiUrl
+    if (origin) {
+      siyuanConfig.value.apiUrl = origin
+    }
     return siyuanConfig
   }
 
