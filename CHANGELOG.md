@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.11.3](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.11.2...v1.11.3) (2023-08-31)
+
+
+### Bug Fixes
+
+* [#435](https://github.com/terwer/siyuan-plugin-publisher/issues/435) 过滤掉思源剪藏插件的引用摘要 ([617be1d](https://github.com/terwer/siyuan-plugin-publisher/commit/617be1de671f2dc424784d6dab49b8152177bf60))
+* [#680](https://github.com/terwer/siyuan-plugin-publisher/issues/680) PC客户端多个工作空间情况下，自动读取思源地址 ([cd8a375](https://github.com/terwer/siyuan-plugin-publisher/commit/cd8a375d4abffc22ee5fe15f78fa43270be3b332))
+* [#692](https://github.com/terwer/siyuan-plugin-publisher/issues/692) 闪卡标记渲染成Markdown之后去除== ([0e1e7f1](https://github.com/terwer/siyuan-plugin-publisher/commit/0e1e7f1592291c340035c304ac98950fb012f2af))
+* 优化AI配置检测机制 ([02a243a](https://github.com/terwer/siyuan-plugin-publisher/commit/02a243aae5b85affba4145cd9178addf7649612d))
+* 修复YAML转换错误 ([53f7196](https://github.com/terwer/siyuan-plugin-publisher/commit/53f71967b18824206673a8b51fe5be38cd6db568))
+* 修复多个平台发布之后数据不一致的问题 ([fd9cfe7](https://github.com/terwer/siyuan-plugin-publisher/commit/fd9cfe702c38d021615c30567abb5a99735444b8))
+
 ## [1.11.2](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.11.1...v1.11.2) (2023-08-31)
 ### Bug Fixes
 * 优化一些属性合并逻辑 ([f8719c7](https://github.com/terwer/siyuan-plugin-publisher/commit/f8719c72986b8a0222434fed0596eb768d6870f8))
