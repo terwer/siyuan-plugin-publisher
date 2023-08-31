@@ -143,13 +143,14 @@ more useful tools~
 
   Names not listed in order
 
-  |Name|version|vendor|
-  | :---------: | :-----: | :---------: |
-  |turbo|1.9+|Vercel|
-  |vite|4.2+|Evan You|
-  |Svelte|3.57+|Rich Harris|
-  |TypeScript|5.0+|Microsoft|
-  |siyuan-note|2.9.0+|D,V|
+  |    Name     | version |vendor|
+  |:-----------:|:-------:| :---------: |
+  |    turbo    |  1.9+   |Vercel| 
+  |     Vue     | 3.3.4+  |Evan You|
+  |    Vite     |  4.2+   |Evan You|
+  | TypeScript  |  5.0+   |Microsoft|
+  | siyuan-note | 2.9.0+  |D,V|
+
 - Thanks to [leolee9086](https://github.com/leolee9086) and [ciwoyipang]() for the icon resource
 
 * Thanks to the enthusiastic support of the following users, I will continue to update and maintain the project!

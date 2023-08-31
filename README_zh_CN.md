@@ -129,17 +129,17 @@
 
 # 感谢
 
-* 感谢第三方框架对本项目底层的支持
+ 感谢第三方框架对本项目底层的支持
 
   排名不分先后
 
-  |Name|version|vendor|
-  | :---------: | :-----: | :---------: |
-  |turbo|1.9+|Vercel|
-  |vite|4.2+|Evan You|
-  |Svelte|3.57+|Rich Harris|
-  |TypeScript|5.0+|Microsoft|
-  |siyuan-note|2.9.0+|D,V|
+  |    Name     | version |vendor|
+  |:-----------:|:-------:| :---------: |
+  |    turbo    |  1.9+   |Vercel| 
+  |     Vue     | 3.3.4+  |Evan You|
+  |    Vite     |  4.2+   |Evan You|
+  | TypeScript  |  5.0+   |Microsoft|
+  | siyuan-note | 2.9.0+  |D,V|
 
 * 感谢 [leolee9086](https://github.com/leolee9086) 和 [赐我一胖]() 提供的图标资源
 
