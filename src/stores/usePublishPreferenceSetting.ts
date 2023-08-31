@@ -26,6 +26,8 @@
 import { RemovableRef, StorageSerializers, useLocalStorage } from "@vueuse/core"
 import { PublishPreferenceCfg } from "~/src/models/publishPreferenceCfg.ts"
 import { readonly } from "vue"
+import {SiyuanDevice} from "zhi-device";
+import {createAppLogger} from "~/src/utils/appLogger.ts";
 
 /**
  * 使用发布偏好设置的自定义钩子
@@ -33,6 +35,7 @@ import { readonly } from "vue"
 const usePublishPreferenceSetting = () => {
   // 存储键
   const storageKey = "publish-preference-cfg"
+  const logger = createAppLogger("use-publish-pref")
 
   /**
    * 获取思源笔记配置
@@ -43,10 +46,27 @@ const usePublishPreferenceSetting = () => {
    */
   const getPublishPreferenceSetting = (): RemovableRef<PublishPreferenceCfg> => {
     const initialValue = new PublishPreferenceCfg()
-    const siyuanConfig = useLocalStorage<PublishPreferenceCfg>(storageKey, initialValue, {
+    const prefConfig = useLocalStorage<PublishPreferenceCfg>(storageKey, initialValue, {
       serializer: StorageSerializers.object,
     })
-    return siyuanConfig
+
+    // 检测是否使用思源笔记的配置
+    const win = SiyuanDevice.siyuanWindow()
+    const snAiCfg = win?.siyuan?.config?.ai?.openAI
+    logger.info("try load win.siyuan.config =>", snAiCfg)
+    // 使用思源笔记的配置
+    if (snAiCfg) {
+      prefConfig.value.experimentalUseSiyuanNoteAIConfig = true
+      prefConfig.value.experimentalAIProxyUrl = snAiCfg.apiProxy
+      prefConfig.value.experimentalAICode = snAiCfg.apiKey
+      prefConfig.value.experimentalAIBaseUrl = snAiCfg.apiBaseURL
+      logger.info("use siyuan-note ai config")
+    } else {
+      prefConfig.value.experimentalUseSiyuanNoteAIConfig = false
+      logger.info("use custom ai config")
+    }
+
+    return prefConfig
   }
 
   /**

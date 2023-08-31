@@ -35,7 +35,7 @@ import { toRaw } from "vue"
  * @author terwer
  * @since 0.8.1
  */
-export class HexoYamlConverterAdaptor extends YamlConvertAdaptor {
+class HexoYamlConverterAdaptor extends YamlConvertAdaptor {
   private readonly logger = createAppLogger("hexo-yaml-converter-adaptor")
 
   public convertToYaml(post: Post, cfg?: BlogConfig): YamlFormatObj {
@@ -149,3 +149,5 @@ export class HexoYamlConverterAdaptor extends YamlConvertAdaptor {
     return post
   }
 }
+
+export { HexoYamlConverterAdaptor }

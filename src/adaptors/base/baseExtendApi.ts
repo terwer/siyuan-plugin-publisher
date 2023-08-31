@@ -81,8 +81,12 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
    * @returns 一个 Promise，解析为编辑后的文章
    */
   public async preEditPost(post: Post, id?: string, publishCfg?: any): Promise<Post> {
+    // 处理摘要
+    post = await this.handleDesc(post, id, publishCfg)
     // 处理图片
     post = await this.handlePictures(post, id, publishCfg)
+    // 处理Md
+    post = await this.handleMd(post, id, publishCfg)
     // 处理YAML
     post = await this.handleYaml(post, id, publishCfg)
     // 处理其他
@@ -93,6 +97,52 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
   // ================
   // private methods
   // ================
+  /**
+   * 处理摘要
+   *
+   * @param doc - 要处理YAML的 Post 对象
+   * @param id - 思源笔记文档 ID
+   * @param publishCfg - （可选）发布配置参数
+   * @returns 一个 Promise，解析为处理后的 Post 对象
+   */
+  private async handleDesc(doc: Post, id?: string, publishCfg?: any) {
+    const post = _.cloneDeep(doc) as Post
+
+    // 同步摘要
+    post.mt_excerpt = post.shortDesc
+    post.mt_text_more = post.shortDesc
+
+    return post
+  }
+
+  /**
+   * 处理正文
+   *
+   * @param doc - 要处理YAML的 Post 对象
+   * @param id - 思源笔记文档 ID
+   * @param publishCfg - （可选）发布配置参数
+   * @returns 一个 Promise，解析为处理后的 Post 对象
+   */
+  private async handleMd(doc: Post, id?: string, publishCfg?: any) {
+    const cfg: BlogConfig = publishCfg?.cfg
+    const post = _.cloneDeep(doc) as Post
+
+    // 处理MD
+    let md = post.markdown
+
+    // #435 过滤掉思源剪藏插件的引用摘要
+    md = YamlUtil.extractMarkdown(md)
+
+    // 处理标记
+    // #691 闪卡标记渲染成Markdown之后去除==
+    md = md.replace(/==([^=]+)==/g, '<span style="font-weight: bold;" class="mark">$1</span>')
+
+    // 汇总结果
+    post.markdown = md
+    this.logger.debug("markdown处理完毕，post", { post: toRaw(post) })
+    return post
+  }
+
   /**
    * 处理其他属性
    *
@@ -105,11 +155,9 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     const cfg: BlogConfig = publishCfg?.cfg
     const post = _.cloneDeep(doc) as Post
 
-    // 同步摘要
-    post.mt_excerpt = post.shortDesc
-    post.mt_text_more = post.shortDesc
-
     // 发布格式
+    const md = YamlUtil.extractMarkdown(post.markdown)
+    post.html = LuteUtil.mdToHtml(md)
     if (cfg?.pageType == PageTypeEnum.Markdown) {
       post.description = post.markdown
     } else {
@@ -158,7 +206,6 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
       const md = YamlUtil.extractMarkdown(post.markdown)
       const yaml = post.yaml
       post.markdown = YamlUtil.addYamlToMd(yaml, md)
-      post.html = LuteUtil.mdToHtml(md)
       this.logger.info("检测到该平台已开启YAML适配器，已附加YAML到Markdown正文")
     } else {
       this.logger.info("未找到YAML适配器，不作处理")
