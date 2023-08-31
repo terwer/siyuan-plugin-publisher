@@ -98,8 +98,8 @@ dependencies:
 
 devDependencies:
   '@terwer/esbuild-config-custom':
-    specifier: ^1.2.0
-    version: 1.2.0(@types/minimist@1.2.2)(dotenv@16.3.1)(esbuild-plugin-copy@2.1.1)(esbuild-plugin-d.ts@1.1.0)(esbuild-plugin-ifdef@1.0.1)(esbuild-plugin-inline-image@0.0.9)(esbuild-plugin-vue3@0.3.2)(esbuild-style-plugin@1.6.2)(esbuild@0.17.19)(minimist@1.2.8)(rimraf@4.4.1)(stylus@0.59.0)
+    specifier: ^2.0.0
+    version: 2.0.0(@types/minimist@1.2.2)(dotenv@16.3.1)(esbuild-plugin-copy@2.1.1)(esbuild-plugin-d.ts@1.1.0)(esbuild-plugin-ifdef@1.0.1)(esbuild-plugin-inline-image@0.0.9)(esbuild-plugin-vue3@0.3.2)(esbuild-style-plugin@1.6.2)(esbuild@0.17.19)(minimist@1.2.8)(rimraf@4.4.1)(stylus@0.59.0)
   '@terwer/eslint-config-custom':
     specifier: ^1.3.6
     version: 1.3.6(@nuxt/eslint-config@0.1.1)(@typescript-eslint/eslint-plugin@5.62.0)(astro-eslint-parser@0.13.3)(eslint-config-prettier@8.10.0)(eslint-config-turbo@1.10.13)(eslint-plugin-prettier@4.2.1)(eslint-plugin-svelte@2.33.0)(eslint-plugin-vue@9.17.0)(eslint@8.48.0)(prettier-plugin-svelte@2.10.1)(prettier@2.8.8)(typescript@5.2.2)
@@ -1151,8 +1151,8 @@ packages:
     resolution: {integrity: sha512-Ccy0NlLkzr0Ex2FKvh2X+OyERHXJ88XJ1MXtsI9y9fGexlaXaVTPzBCRBwIxFkORuOb+uBqeu+RqnpgYTEZRUQ==}
     dev: false
 
-  /@terwer/esbuild-config-custom@1.2.0(@types/minimist@1.2.2)(dotenv@16.3.1)(esbuild-plugin-copy@2.1.1)(esbuild-plugin-d.ts@1.1.0)(esbuild-plugin-ifdef@1.0.1)(esbuild-plugin-inline-image@0.0.9)(esbuild-plugin-vue3@0.3.2)(esbuild-style-plugin@1.6.2)(esbuild@0.17.19)(minimist@1.2.8)(rimraf@4.4.1)(stylus@0.59.0):
-    resolution: {integrity: sha512-8mKotP4DZ+lnB8Mn0jDu8Zv+Bdy1OdtjnbfodI1qO6zr+//BKWx0k6GMh99A2vz1+WNTOvuSu3QiWseWDmFXXQ==}
+  /@terwer/esbuild-config-custom@2.0.0(@types/minimist@1.2.2)(dotenv@16.3.1)(esbuild-plugin-copy@2.1.1)(esbuild-plugin-d.ts@1.1.0)(esbuild-plugin-ifdef@1.0.1)(esbuild-plugin-inline-image@0.0.9)(esbuild-plugin-vue3@0.3.2)(esbuild-style-plugin@1.6.2)(esbuild@0.17.19)(minimist@1.2.8)(rimraf@4.4.1)(stylus@0.59.0):
+    resolution: {integrity: sha512-Uyt/ccoxlnjtxQAL3poCvZVfRr4Img49Y+DDOHFO4qd9zmcYC2WH9f/kBobqxPBAdslHm3n++U85/or4gAZO4w==}
     hasBin: true
     peerDependencies:
       '@types/minimist': ^1.2.2
