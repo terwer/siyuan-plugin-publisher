@@ -348,7 +348,7 @@ const usePublish = () => {
     },
 
     // 分配平台相关的初始化属性
-    assignInitAttrs: async (post: Post, id: string, publishCfg: IPublishCfg, method: MethodEnum) => {
+    assignInitAttrs: async (post: Post, id: string, publishCfg: IPublishCfg) => {
       const setting: typeof SypConfig = publishCfg.setting
       const cfg: BlogConfig = publishCfg.cfg
       const dynCfg: DynamicConfig = publishCfg.dynCfg
