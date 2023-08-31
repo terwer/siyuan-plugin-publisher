@@ -1,7 +1,14 @@
 # Changelog
 
-## [1.11.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.11.0...v1.11.1) (2023-08-30)
+## [1.11.2](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.11.1...v1.11.2) (2023-08-31)
 ### Bug Fixes
+* 优化一些属性合并逻辑 ([f8719c7](https://github.com/terwer/siyuan-plugin-publisher/commit/f8719c72986b8a0222434fed0596eb768d6870f8))
+* 修复yaml初始化未读取最新的问题 ([704241b](https://github.com/terwer/siyuan-plugin-publisher/commit/704241b8a99b8f5319706e05a342e6f83cc764d3))
+* 修复yaml初始化错误 ([0922fa6](https://github.com/terwer/siyuan-plugin-publisher/commit/0922fa6a9d7fa7ebfac02d63e10e3c99ecbdf541))
+### Miscellaneous
+* **deps-dev:** bump unplugin-vue-components from 0.25.1 to 0.25.2 ([1ba446a](https://github.com/terwer/siyuan-plugin-publisher/commit/1ba446a25ae7aa021bd4022e80e265bac726cb51))
+* 兼容windows构建 ([d6939e9](https://github.com/terwer/siyuan-plugin-publisher/commit/d6939e9047ef74238dc906aecfbfe874a7b6e5ae))
+## [1.11.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.11.0...v1.11.1) (2023-08-30)
 * hexo 深度优化 ([596c09e](https://github.com/terwer/siyuan-plugin-publisher/commit/596c09e251d55ae3fb19f36992814eedf5eb863e))
 * 优化单个文章的删除流程 ([453620f](https://github.com/terwer/siyuan-plugin-publisher/commit/453620f1c640c575fc370cf755af6cbf7507234f))
 * 修复yaml修改不生效的问题 ([ac21891](https://github.com/terwer/siyuan-plugin-publisher/commit/ac21891c7b04f66a433dfd8e1788811026663c92))
@@ -35,7 +42,6 @@
 * 支持关闭标题处理和正文处理 ([27745f4](https://github.com/terwer/siyuan-plugin-publisher/commit/27745f4e1536840bbaad457d123f1839d8662e96))
 * 新增 ai 功能 ([943d0f0](https://github.com/terwer/siyuan-plugin-publisher/commit/943d0f044815d5fa309fa447bc1a692c345e0339))
 * 重构批量分发初始化 ([e0f7538](https://github.com/terwer/siyuan-plugin-publisher/commit/e0f75383ef82ffecbee963913c12a1e647f86be8))
-### Miscellaneous
 * **deps-dev:** bump vercel from 31.4.0 to 32.0.0 ([d16a791](https://github.com/terwer/siyuan-plugin-publisher/commit/d16a79153f96e1983b576adbe7edbb012e83fa86))
 ## [1.9.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.8.0...v1.9.0) (2023-08-21)
 * hexo 平台支持修改自定义 yaml ([e9ce0da](https://github.com/terwer/siyuan-plugin-publisher/commit/e9ce0daa43d990762715a918527f218c6863cb21))
