@@ -27,7 +27,15 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { reactive, toRaw } from "vue"
 import { SypConfig } from "~/syp.config.ts"
 import { AliasTranslator, ObjectUtil, StrUtil, YamlUtil } from "zhi-common"
-import { BlogAdaptor, BlogConfig, Post, PostStatusEnum, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
+import {
+  BlogAdaptor,
+  BlogConfig,
+  Post,
+  PostStatusEnum,
+  PostUtil,
+  YamlConvertAdaptor,
+  YamlFormatObj,
+} from "zhi-blog-api"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
@@ -326,10 +334,11 @@ const usePublish = () => {
    */
   const initPublishMethods = {
     // 别名初始化
-    assignInitSlug: async (post: Post, id: string, publishCfg: IPublishCfg) => {
+    assignInitSlug: async (doc: Post, id: string, publishCfg: IPublishCfg) => {
       const setting: typeof SypConfig = publishCfg.setting
       const postMeta = ObjectUtil.getProperty(setting, id, {})
 
+      const post = _.cloneDeep(doc) as Post
       // 别名
       const slug = ObjectUtil.getProperty(postMeta, SiyuanAttr.Custom_slug, post.wp_slug)
       if (!StrUtil.isEmptyString(slug)) {
@@ -387,7 +396,7 @@ const usePublish = () => {
           if (!StrUtil.isEmptyString(checkYaml)) {
             const yamlObj = await YamlUtil.yaml2ObjAsync(yaml)
             post.yaml = yaml
-            post.fromYaml(yamlObj)
+            PostUtil.fromYaml(post, yamlObj)
             logger.info("读取已经存在的YAML，无适配器，使用fromYaml生成默认的yamlObj")
           } else {
             // 未保存过，默认不处理
@@ -479,7 +488,7 @@ const usePublish = () => {
       const mergedPost = _.cloneDeep(newPost) as Post
 
       // 摘要
-      if(StrUtil.isEmptyString(newPost.shortDesc) && StrUtil.isEmptyString(newPost.mt_excerpt)){
+      if (StrUtil.isEmptyString(newPost.shortDesc) && StrUtil.isEmptyString(newPost.mt_excerpt)) {
         mergedPost.shortDesc = post.shortDesc
         mergedPost.mt_excerpt = post.mt_excerpt
       }

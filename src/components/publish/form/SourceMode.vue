@@ -28,7 +28,7 @@ import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { reactive, toRaw } from "vue"
 import { SourceContentShowType } from "~/src/models/sourceContentShowType.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { Post, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
+import { Post, PostUtil, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
 import { BrowserUtil } from "zhi-device"
 import { ElMessage } from "element-plus"
 import { DateUtil, StrUtil, YamlUtil } from "zhi-common"
@@ -197,7 +197,8 @@ const initPage = async () => {
 
     // 批量分发，此时 apiType 为空
     if (formData.readonlyMode) {
-      yfmObj.formatter = YamlUtil.obj2Yaml(formData.siyuanPost.toYamlObj())
+      const yamlObj = PostUtil.toYamlObj(formData.siyuanPost)
+      yfmObj.formatter = YamlUtil.obj2Yaml(yamlObj)
       yfmObj.mdContent = post.markdown
       yfmObj.mdFullContent = YamlUtil.addYamlToMd(yfmObj.formatter, yfmObj.mdContent)
       yfmObj.htmlContent = post.html
