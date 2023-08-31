@@ -24,8 +24,9 @@
  */
 
 import { CommonGithubApiAdaptor } from "~/src/adaptors/api/base/github/commonGithubApiAdaptor.ts"
-import { YamlConvertAdaptor } from "zhi-blog-api"
+import { BlogConfig, PageTypeEnum, Post, YamlConvertAdaptor } from "zhi-blog-api"
 import { HexoYamlConverterAdaptor } from "~/src/adaptors/api/hexo/hexoYamlConverterAdaptor.ts"
+import _ from "lodash"
 
 /**
  * Hexo API 适配器
@@ -37,6 +38,35 @@ import { HexoYamlConverterAdaptor } from "~/src/adaptors/api/hexo/hexoYamlConver
 class HexoApiAdaptor extends CommonGithubApiAdaptor {
   public override getYamlAdaptor(): YamlConvertAdaptor {
     return new HexoYamlConverterAdaptor()
+  }
+
+  public override async preEditPost(post: Post, id?: string, publishCfg?: any): Promise<Post> {
+    // 公共的属性预处理
+    const doc = await super.preEditPost(post, id, publishCfg)
+
+    // HEXO 自带的处理
+    const cfg: BlogConfig = publishCfg?.cfg
+    const updatedPost = _.cloneDeep(doc) as Post
+
+    // 自定义处理
+    // 信息、警告、错误
+    const md = updatedPost.markdown
+    this.logger.info("准备处理 Hexo 正文")
+    this.logger.debug("md =>", { md: md })
+    let updatedMd = md
+
+    updatedPost.markdown = updatedMd
+    this.logger.info("Hexo 正文处理完毕")
+    this.logger.debug("updatedMd =>", { updatedMd: updatedMd })
+
+    throw new Error("开发中")
+    // 发布格式
+    if (cfg?.pageType == PageTypeEnum.Markdown) {
+      post.description = post.markdown
+    } else {
+      post.description = post.html
+    }
+    return updatedPost
   }
 }
 

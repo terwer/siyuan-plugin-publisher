@@ -426,12 +426,12 @@ const usePublish = () => {
       let postPreviewUrl: string = ""
       let mergedPost = {} as Post
 
+      // 思源笔记原始文章数据
+      const siyuanPost = await blogApi.getPost(id)
       if (method === MethodEnum.METHOD_ADD) {
         logger.info("Add, using siyuan post")
-        // 思源笔记原始文章数据
-        const siyuanPost = await blogApi.getPost(id)
-        mergedPost = _.cloneDeep(siyuanPost) as Post
         // 更新属性
+        mergedPost = _.cloneDeep(siyuanPost) as Post
         mergedPost.mt_keywords = mergedPost?.mt_keywords ?? ""
         mergedPost.categories = mergedPost?.categories ?? []
       } else {
@@ -443,6 +443,12 @@ const usePublish = () => {
         // 查询平台文章
         const platformPost = await api.getPost(postid)
         mergedPost = _.cloneDeep(platformPost) as Post
+        // 正文需要使用思源笔记的
+        mergedPost.markdown = siyuanPost.markdown
+        mergedPost.html = siyuanPost.html
+        mergedPost.description = siyuanPost.description
+        // 标签分类需要合并
+        mergedPost = initPublishMethods.doMergeBatchPost(siyuanPost, mergedPost)
 
         // 更新预览链接
         postPreviewUrl = await getPostPreviewUrl(api, postid, cfg)
@@ -471,6 +477,12 @@ const usePublish = () => {
     doMergeBatchPost: (post: Post, newPost: Post): Post => {
       // 复制原始 newPost 对象以避免直接修改它
       const mergedPost = _.cloneDeep(newPost) as Post
+
+      // 摘要
+      if(StrUtil.isEmptyString(newPost.shortDesc) && StrUtil.isEmptyString(newPost.mt_excerpt)){
+        mergedPost.shortDesc = post.shortDesc
+        mergedPost.mt_excerpt = post.mt_excerpt
+      }
 
       const postKeywords = post.mt_keywords.split(",")
       const newPostKeywords = newPost.mt_keywords.split(",")
