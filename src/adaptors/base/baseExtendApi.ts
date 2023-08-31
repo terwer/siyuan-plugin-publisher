@@ -128,11 +128,18 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     const post = _.cloneDeep(doc) as Post
 
     // 处理MD
-    // #435 过滤掉思源剪藏插件的引用摘要
-    const md = post.markdown
-    post.markdown = YamlUtil.extractMarkdown(md)
-    this.logger.debug("markdown处理完毕，post", { post: toRaw(post) })
+    let md = post.markdown
 
+    // #435 过滤掉思源剪藏插件的引用摘要
+    md = YamlUtil.extractMarkdown(md)
+
+    // 处理标记
+    // #691 闪卡标记渲染成Markdown之后去除==
+    md = md.replace(/==([^=]+)==/g, '<span style="font-weight: bold;" class="mark">$1</span>')
+
+    // 汇总结果
+    post.markdown = md
+    this.logger.debug("markdown处理完毕，post", { post: toRaw(post) })
     return post
   }
 
