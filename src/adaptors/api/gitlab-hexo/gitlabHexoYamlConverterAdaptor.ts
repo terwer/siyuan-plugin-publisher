@@ -31,4 +31,6 @@ import { HexoYamlConverterAdaptor } from "~/src/adaptors/api/hexo/hexoYamlConver
  * @author terwer
  * @since 0.8.1
  */
-export class GitlabHexoYamlConverterAdaptor extends HexoYamlConverterAdaptor {}
+class GitlabHexoYamlConverterAdaptor extends HexoYamlConverterAdaptor {}
+
+export { GitlabHexoYamlConverterAdaptor }
