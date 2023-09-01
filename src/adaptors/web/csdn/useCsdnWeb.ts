@@ -31,6 +31,7 @@ import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { Utils } from "~/src/utils/utils.ts"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { CsdnWebAdaptor } from "~/src/adaptors/web/csdn/csdnWebAdaptor.ts"
+import { CategoryTypeEnum } from "zhi-blog-api"
 
 /**
  * 用于获取CsdnWeb的API的自定义Hook
@@ -80,8 +81,16 @@ const useCsdnWeb = async (key?: string, newCfg?: CsdnConfig) => {
     }
   }
 
+  // CSDN使用单选分类作为专栏
+  cfg.cateEnabled = false
+  cfg.knowledgeSpaceEnabled = true
+  cfg.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Single
+  cfg.allowKnowledgeSpaceChange = false
+  cfg.placeholder.knowledgeSpaceReadonlyModeTip = "由于CSDN平台限制，暂时不支持编辑CSDN分类，如需修改，请删除后重新发布"
+
   const webApi = new CsdnWebAdaptor(appInstance, cfg)
   return {
+    cfg,
     webApi,
   }
 }

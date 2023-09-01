@@ -23,25 +23,8 @@
  * questions.
  */
 
-import { CommonWebConfig } from "~/src/adaptors/web/base/commonWebConfig.ts"
-import { CategoryTypeEnum, PageTypeEnum, PasswordType } from "zhi-blog-api"
+import { CommonWebPlaceholder } from "~/src/adaptors/web/base/commonWebPlaceholder.ts"
 
-/**
- * CSDN配置
- */
-export class CsdnConfig extends CommonWebConfig {
-  constructor(username: string, password: string, middlewareUrl?: string) {
-    super("https://blog.csdn.net", "https://blog.csdn.net/api", username, password, middlewareUrl)
-    this.previewUrl = "[userid]/article/details/[postid]"
-    this.pageType = PageTypeEnum.Html
-    this.usernameEnabled = true
-    this.passwordType = PasswordType.PasswordType_Cookie
-    this.cateEnabled = false
-    this.knowledgeSpaceEnabled = true
-    this.knowledgeSpaceTitle = "分类"
-    this.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Single
-    this.allowKnowledgeSpaceChange = false
-    this.placeholder.knowledgeSpaceReadonlyModeTip =
-      "由于CSDN平台限制，暂时不支持编辑CSDN分类，如需修改，请删除后重新发布"
-  }
-}
+class CsdnPlaceholder extends CommonWebPlaceholder {}
+
+export { CsdnPlaceholder }
