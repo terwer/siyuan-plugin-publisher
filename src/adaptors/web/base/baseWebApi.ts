@@ -136,8 +136,8 @@ class BaseWebApi extends WebApi {
     const header = headers.length > 0 ? headers[0] : {}
     const webHeaders = [
       {
-        Cookie: this.cfg.password,
         ...header,
+        Cookie: this.cfg.password,
       },
     ]
     return await this.proxyFetch(url, webHeaders, params, method, contentType)
