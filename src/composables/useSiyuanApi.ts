@@ -23,12 +23,12 @@
  * questions.
  */
 
-import {SiYuanApiAdaptor, SiyuanConfig, SiyuanKernelApi} from "zhi-siyuan-api"
-import {createAppLogger} from "~/src/utils/appLogger.ts"
-import {useSiyuanDevice} from "~/src/composables/useSiyuanDevice.ts"
-import {useSiyuanSetting} from "~/src/stores/useSiyuanSetting"
-import {Utils} from "~/src/utils/utils.ts"
-import {usePublishPreferenceSetting} from "~/src/stores/usePublishPreferenceSetting.ts"
+import { SiYuanApiAdaptor, SiyuanConfig, SiyuanKernelApi } from "zhi-siyuan-api"
+import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
+import { useSiyuanSetting } from "~/src/stores/useSiyuanSetting"
+import { Utils } from "~/src/utils/utils.ts"
+import { usePublishPreferenceSetting } from "~/src/stores/usePublishPreferenceSetting.ts"
 
 /**
  * 通用 Siyuan API 封装
@@ -45,7 +45,7 @@ export const useSiyuanApi = () => {
   const pref = getReadOnlyPublishPreferenceSetting()
   const siyuanSetting = getReadOnlySiyuanSetting()
 
-  const siyuanApiUrl = origin ?? siyuanSetting.value.apiUrl ?? envSiyuanApiUrl
+  const siyuanApiUrl = siyuanSetting.value.apiUrl ?? envSiyuanApiUrl
   const siyuanAuthToken = siyuanSetting.value.password ?? envSiyuanAuthToken
   const siyuanConfig = new SiyuanConfig(siyuanApiUrl, siyuanAuthToken)
   siyuanConfig.cookie = siyuanSetting.value.cookie ?? envSiyuanCookie
