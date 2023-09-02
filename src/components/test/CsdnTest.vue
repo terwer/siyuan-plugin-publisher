@@ -31,7 +31,7 @@ import Adaptors from "~/src/adaptors"
 import { Utils } from "~/src/utils/utils.ts"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 
-const logger = createAppLogger("zhihu-test")
+const logger = createAppLogger("csdn-test")
 
 // uses
 const { t } = useVueI18n()
@@ -44,11 +44,16 @@ const isLoading = ref(false)
 
 const methodOption = ref("getMetaData")
 const METHOD_GET_META_DATA = "getMetaData"
+const METHOD_GET_USERS_BLOGS = "getUsersBlogs"
 const methodOptions = reactive({
   options: [
     {
       value: METHOD_GET_META_DATA,
       label: "获取元数据信息",
+    },
+    {
+      value: METHOD_GET_USERS_BLOGS,
+      label: "获取博客信息",
     },
   ],
 })
@@ -58,6 +63,10 @@ const onMethodChange = (val: string) => {
 
   switch (val) {
     case METHOD_GET_META_DATA: {
+      params.value = "{}"
+      break
+    }
+    case METHOD_GET_USERS_BLOGS: {
       params.value = "{}"
       break
     }
@@ -75,10 +84,10 @@ const onImageSelect = async (event: Event) => {
   }
 }
 
-const zhihuHandleApi = async () => {
+const csdnHandleApi = async () => {
   isLoading.value = true
   logMessage.value = ""
-  logMessage.value = "zhihu requesting..."
+  logMessage.value = "csdn requesting..."
   try {
     // appInstance
     const appInstance = new PublisherAppInstance()
@@ -86,12 +95,21 @@ const zhihuHandleApi = async () => {
 
     switch (methodOption.value) {
       case METHOD_GET_META_DATA: {
-        const key = "custom_Zhihu"
-        const zhihuApiAdaptor = await Adaptors.getAdaptor(key)
-        const zhihuApi = Utils.webApi(appInstance, zhihuApiAdaptor)
-        const result = await zhihuApi.getMetaData()
+        const key = "custom_Csdn"
+        const csdnApiAdaptor = await Adaptors.getAdaptor(key)
+        const csdnApi = Utils.webApi(appInstance, csdnApiAdaptor)
+        const result = await csdnApi.getMetaData()
         logMessage.value = JSON.stringify(result)
-        logger.info("zhihu meta data=>", result)
+        logger.info("csdn meta data=>", result)
+        break
+      }
+      case METHOD_GET_USERS_BLOGS: {
+        const key = "custom_Csdn"
+        const csdnApiAdaptor = await Adaptors.getAdaptor(key)
+        const csdnApi = Utils.webApi(appInstance, csdnApiAdaptor)
+        const result = await csdnApi.getUsersBlogs()
+        logMessage.value = JSON.stringify(result)
+        logger.info("csdn users blogs=>", result)
         break
       }
       default:
@@ -108,8 +126,8 @@ const zhihuHandleApi = async () => {
 </script>
 
 <template>
-  <back-page title="知乎测试">
-    <div id="zhihu-test">
+  <back-page title="CSDN测试">
+    <div id="csdn-test">
       <div class="method-list">
         <el-select v-model="methodOption" class="m-2" placeholder="请选择方法名称" @change="onMethodChange">
           <el-option v-for="item in methodOptions.options" :key="item.value" :label="item.label" :value="item.value" />
@@ -117,7 +135,7 @@ const zhihuHandleApi = async () => {
       </div>
 
       <div class="item">
-        <el-button type="primary" :loading="isLoading" @click="zhihuHandleApi">开始测试zhihu</el-button>
+        <el-button type="primary" :loading="isLoading" @click="csdnHandleApi">开始测试csdn</el-button>
       </div>
 
       <div class="item"><el-button>入参</el-button></div>
@@ -133,7 +151,7 @@ const zhihuHandleApi = async () => {
 </template>
 
 <style lang="stylus" scoped>
-#zhihu-test
+#csdn-test
   margin 16px 20px
   .item
     margin-bottom 8px

@@ -24,7 +24,7 @@
  */
 
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { AppInstance } from "~/src/appInstance.ts"
+import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { Utils } from "~/src/utils/utils.ts"
@@ -42,7 +42,7 @@ const useGitlabhexoApi = async (key: string, newCfg?: GitlabhexoConfig) => {
   logger.info("Start using Gitlabhexo API...")
 
   // 创建应用实例
-  const appInstance = new AppInstance()
+  const appInstance = new PublisherAppInstance()
 
   let cfg: GitlabhexoConfig
   if (newCfg) {

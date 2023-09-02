@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { AppInstance } from "~/src/appInstance.ts"
+import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { TypechoConfig } from "~/src/adaptors/api/typecho/typechoConfig.ts"
 import { MetaweblogBlogApiAdaptor } from "~/src/adaptors/api/base/metaweblog/metaweblogBlogApiAdaptor.ts"
@@ -42,7 +42,7 @@ class TypechoApiAdaptor extends MetaweblogBlogApiAdaptor {
    * @param appInstance 应用实例
    * @param cfg 配置项
    */
-  constructor(appInstance: AppInstance, cfg: TypechoConfig) {
+  constructor(appInstance: PublisherAppInstance, cfg: TypechoConfig) {
     super(appInstance, cfg)
     this.logger = createAppLogger("typecho-api-adaptor")
     this.cfg.blogid = "typecho"

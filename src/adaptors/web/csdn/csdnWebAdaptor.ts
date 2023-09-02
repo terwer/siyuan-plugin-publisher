@@ -26,10 +26,11 @@
 import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
 import CsdnUtils from "~/src/adaptors/web/csdn/csdnUtils.ts"
 import { CsdnConfig } from "~/src/adaptors/web/csdn/csdnConfig.ts"
-import { AppInstance } from "~/src/appInstance.ts"
+import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { CommonFetchClient } from "zhi-fetch-middleware"
 import { isDev } from "~/src/utils/constants.ts"
+import { UserBlog } from "zhi-blog-api"
 
 /**
  * CSDN网页授权适配器
@@ -48,7 +49,7 @@ class CsdnWebAdaptor extends BaseWebApi {
    * @param appInstance 应用实例
    * @param cfg 配置项
    */
-  constructor(appInstance: AppInstance, cfg: CsdnConfig) {
+  constructor(appInstance: PublisherAppInstance, cfg: CsdnConfig) {
     super(appInstance, cfg)
     this.cfg = cfg
 
@@ -72,6 +73,13 @@ class CsdnWebAdaptor extends BaseWebApi {
       home: "https://mp.csdn.net/",
       icon: "https://g.csdnimg.cn/static/logo/favicon32.ico",
     }
+  }
+
+  public async getUsersBlogs(): Promise<Array<UserBlog>> {
+    let result: UserBlog[] = []
+
+    this.logger.debug("getUsersBlogs=>", result)
+    return result
   }
 
   // ================

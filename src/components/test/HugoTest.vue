@@ -24,7 +24,7 @@
   -->
 
 <script setup lang="ts">
-import { AppInstance } from "~/src/appInstance.ts"
+import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { Utils } from "~/src/utils/utils.ts"
 import { reactive, ref } from "vue"
 import { fileToBuffer } from "~/src/utils/polyfillUtils.ts"
@@ -187,7 +187,7 @@ const wordpressHandleApi = async () => {
   logMessage.value = "wordpress requesting..."
   try {
     // appInstance
-    const appInstance = new AppInstance()
+    const appInstance = new PublisherAppInstance()
     logger.info("appInstance=>", appInstance)
 
     switch (methodOption.value) {

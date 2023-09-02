@@ -25,7 +25,7 @@
 
 import { CsdnConfig } from "~/src/adaptors/web/csdn/csdnConfig.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { AppInstance } from "~/src/appInstance.ts"
+import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { Utils } from "~/src/utils/utils.ts"
@@ -44,7 +44,7 @@ const useCsdnWeb = async (key?: string, newCfg?: CsdnConfig) => {
   logger.info("Start using Csdn WebAuth...")
 
   // 创建应用实例
-  const appInstance = new AppInstance()
+  const appInstance = new PublisherAppInstance()
   let cfg: CsdnConfig
   if (newCfg) {
     logger.info("Initialize with the latest newCfg passed in...")

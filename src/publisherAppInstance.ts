@@ -32,7 +32,7 @@ import { create } from "xmlbuilder2"
 /**
  * 应用实例
  */
-export class AppInstance {
+export class PublisherAppInstance {
   public logger: any
   public deviceType: any
 

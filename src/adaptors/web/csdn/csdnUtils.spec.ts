@@ -33,12 +33,27 @@ describe("test csdnUtils", () => {
   })
 
   it("test generateXCaSignature", () => {
-    const url = "https://bizapi.csdn.net/blog-console-api/v1/user/info"
+    // const url = "https://bizapi.csdn.net/blog-console-api/v1/user/info"
+    const url = "https://bizapi.csdn.net/blog/phoenix/console/v1/column/list?type=all"
     const method = "GET"
     const accept = "*/*"
 
     const xCaNonce = CsdnUtils.generateXCaNonce()
     const xCaSignature = CsdnUtils.generateXCaSignature(url, method, accept, xCaNonce)
+
+    console.log("x-ca-nonce:", xCaNonce)
+    console.log("x-ca-signature:", xCaSignature)
+  })
+
+  it("test generateXCaSignature2", () => {
+    // const url = "https://bizapi.csdn.net/blog/phoenix/console/v1/column/save"
+    const url = "https://bizapi.csdn.net/blog/phoenix/console/v1/column/upgrade-column-pay"
+    const method = "POST"
+    const accept = "*/*"
+    const contentType = "application/json"
+
+    const xCaNonce = CsdnUtils.generateXCaNonce()
+    const xCaSignature = CsdnUtils.generateXCaSignature(url, method, accept, xCaNonce, contentType)
 
     console.log("x-ca-nonce:", xCaNonce)
     console.log("x-ca-signature:", xCaSignature)

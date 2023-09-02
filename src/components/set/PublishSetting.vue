@@ -48,7 +48,7 @@ import { svgIcons } from "~/src/utils/svgIcons.ts"
 import { openBrowserWindow } from "~/src/utils/widgetUtils.ts"
 import Adaptors from "~/src/adaptors"
 import { Utils } from "~/src/utils/utils.ts"
-import { AppInstance } from "~/src/appInstance.ts"
+import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { ElectronCookie, WebConfig } from "zhi-blog-api"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import CookieSetting from "~/src/components/set/publish/singleplatform/base/CookieSetting.vue"
@@ -260,7 +260,7 @@ const _handleValidateOpenBrowserAuth = (dynCfg: DynamicConfig) => {
     formData.webAuthLoadingMap[dynCfg.platformKey] = true
 
     try {
-      const appInstance = new AppInstance()
+      const appInstance = new PublisherAppInstance()
       const cfg = (await Adaptors.getCfg(dynCfg.platformKey)) as CommonWebConfig
       const apiAdaptor = await Adaptors.getAdaptor(dynCfg.platformKey, cfg)
       const api = Utils.webApi(appInstance, apiAdaptor)
@@ -314,7 +314,7 @@ const _handleValidateChromeExtensionAuth = async (dynCfg: DynamicConfig) => {
   formData.webAuthLoadingMap[dynCfg.platformKey] = true
 
   try {
-    const appInstance = new AppInstance()
+    const appInstance = new PublisherAppInstance()
     // 这里会有配置初始化
     const cfg = (await Adaptors.getCfg(dynCfg.platformKey)) as CommonWebConfig
     const apiAdaptor = await Adaptors.getAdaptor(dynCfg.platformKey, cfg)

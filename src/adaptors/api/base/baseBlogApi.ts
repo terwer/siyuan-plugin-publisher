@@ -24,7 +24,7 @@
  */
 
 import { BlogApi, BlogConfig, Post, YamlConvertAdaptor } from "zhi-blog-api"
-import { AppInstance } from "~/src/appInstance.ts"
+import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { createAppLogger, ILogger } from "~/src/utils/appLogger.ts"
 import { useProxy } from "~/src/composables/useProxy.ts"
 import { BaseExtendApi } from "~/src/adaptors/base/baseExtendApi.ts"
@@ -48,7 +48,7 @@ export class BaseBlogApi extends BlogApi {
    * @param appInstance 应用实例
    * @param cfg 配置项
    */
-  constructor(appInstance: AppInstance, cfg: BlogConfig) {
+  constructor(appInstance: PublisherAppInstance, cfg: BlogConfig) {
     super()
 
     this.cfg = cfg

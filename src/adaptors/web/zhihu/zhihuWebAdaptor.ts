@@ -46,7 +46,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
   //  * @param appInstance 应用实例
   //  * @param cfg 配置项
   //  */
-  // constructor(appInstance: AppInstance, cfg: ZhihuConfig) {
+  // constructor(appInstance: PublisherAppInstance, cfg: ZhihuConfig) {
   //   super(appInstance, cfg)
   //
   //   this.cfg = cfg

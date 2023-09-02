@@ -24,7 +24,7 @@
   -->
 
 <script setup lang="ts">
-import { AppInstance } from "~/src/appInstance.ts"
+import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { reactive, ref } from "vue"
 import { fileToBuffer } from "~/src/utils/polyfillUtils.ts"
 import { SimpleXmlRpcClient } from "simple-xmlrpc"
@@ -188,7 +188,7 @@ const kmsHandleApi = async () => {
   logMessage.value = "wordpress requesting..."
   try {
     // appInstance
-    const appInstance = new AppInstance()
+    const appInstance = new PublisherAppInstance()
     logger.info("appInstance=>", appInstance)
 
     switch (methodOption.value) {

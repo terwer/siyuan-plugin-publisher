@@ -24,12 +24,12 @@
  */
 
 import { describe, it } from "vitest"
-import { AppInstance } from "~/src/appInstance.ts"
+import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { CommonGitlabConfig } from "~/src/adaptors/api/base/gitlab/commonGitlabConfig.ts"
 import { CommonGitlabApiAdaptor } from "~/src/adaptors/api/base/gitlab/commonGitlabApiAdaptor.ts"
 
 describe("test commonGitlabApiAdaptor", () => {
-  const appInstance = new AppInstance()
+  const appInstance = new PublisherAppInstance()
   const gitlabCfg = new CommonGitlabConfig("terwer", "", "terwer-github-io", "main")
   gitlabCfg.apiUrl = "http://localhost:8002"
   gitlabCfg.home = "http://localhost:8002"

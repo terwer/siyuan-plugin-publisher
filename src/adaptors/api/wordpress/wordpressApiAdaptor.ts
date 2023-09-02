@@ -24,7 +24,7 @@
  */
 
 import { WordpressConfig } from "~/src/adaptors/api/wordpress/wordpressConfig.ts"
-import { AppInstance } from "~/src/appInstance.ts"
+import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { MetaweblogBlogApiAdaptor } from "~/src/adaptors/api/base/metaweblog/metaweblogBlogApiAdaptor.ts"
 
@@ -42,7 +42,7 @@ class WordpressApiAdaptor extends MetaweblogBlogApiAdaptor {
    * @param appInstance 应用实例
    * @param cfg 配置项
    */
-  constructor(appInstance: AppInstance, cfg: WordpressConfig) {
+  constructor(appInstance: PublisherAppInstance, cfg: WordpressConfig) {
     super(appInstance, cfg)
     this.logger = createAppLogger("wordpress-api-adaptor")
     this.cfg.blogid = "wordpress"

@@ -54,6 +54,10 @@ const components = [
     path: "/test/zhihu",
   },
   {
+    title: "CSDN测试",
+    path: "/test/csdn",
+  },
+  {
     title: "Picgo测试",
     path: "/test/picgo",
   },

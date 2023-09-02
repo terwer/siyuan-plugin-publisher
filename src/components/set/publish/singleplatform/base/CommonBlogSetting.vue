@@ -25,7 +25,7 @@
 
 <script lang="ts" setup>
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { AppInstance } from "~/src/appInstance.ts"
+import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { onMounted, reactive, ref, toRaw, watch } from "vue"
@@ -42,7 +42,7 @@ import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 
 const logger = createAppLogger("commonblog-setting")
 // appInstance
-const appInstance = new AppInstance()
+const appInstance = new PublisherAppInstance()
 
 // uses
 const { t } = useVueI18n()

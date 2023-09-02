@@ -23,7 +23,7 @@
  * questions.
  */
 import { Attachment, ElectronCookie, MediaObject, Post, WebApi, WebConfig, YamlConvertAdaptor } from "zhi-blog-api"
-import { AppInstance } from "~/src/appInstance.ts"
+import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { createAppLogger, ILogger } from "~/src/utils/appLogger.ts"
 import { useProxy } from "~/src/composables/useProxy.ts"
 import { BaseExtendApi } from "~/src/adaptors/base/baseExtendApi.ts"
@@ -47,7 +47,7 @@ class BaseWebApi extends WebApi {
    * @param appInstance 应用实例
    * @param cfg 配置项
    */
-  constructor(appInstance: AppInstance, cfg: WebConfig) {
+  constructor(appInstance: PublisherAppInstance, cfg: WebConfig) {
     super()
 
     this.cfg = cfg

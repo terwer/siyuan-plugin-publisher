@@ -24,7 +24,7 @@
  */
 
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { AppInstance } from "~/src/appInstance.ts"
+import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { Utils } from "~/src/utils/utils.ts"
 import { YuqueConfig } from "~/src/adaptors/api/yuque/yuqueConfig.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
@@ -41,7 +41,7 @@ const useYuqueApi = async (key: string, newCfg?: YuqueConfig) => {
   logger.info("Start using Yuque API...")
 
   // 创建应用实例
-  const appInstance = new AppInstance()
+  const appInstance = new PublisherAppInstance()
 
   let cfg: YuqueConfig
   if (newCfg) {
