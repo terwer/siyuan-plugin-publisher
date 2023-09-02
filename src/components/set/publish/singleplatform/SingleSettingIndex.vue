@@ -56,7 +56,8 @@ const subtype = getSubPlatformTypeByKey(apiType)
     <cnblogs-setting v-else-if="subtype === SubPlatformType.Metaweblog_Cnblogs" :api-type="apiType" />
     <typecho-setting v-else-if="subtype === SubPlatformType.Metaweblog_Typecho" :api-type="apiType" />
     <wordpress-setting v-else-if="subtype === SubPlatformType.Wordpress_Wordpress" :api-type="apiType" />
-    <zhihu-setting v-else-if="subtype === SubPlatformType.Custom_Zhihu" :api-type="apiType"></zhihu-setting>
+    <zhihu-setting v-else-if="subtype === SubPlatformType.Custom_Zhihu" :api-type="apiType" />
+    <csdn-setting v-else-if="subtype === SubPlatformType.Custom_CSDN" :api-type="apiType" />
     <span v-else>
       <el-alert :closable="false" :title="t('setting.entry.not.supported')" class="top-tip" type="error" />
     </span>

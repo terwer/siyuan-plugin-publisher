@@ -8,6 +8,8 @@ Publish articles from siyuan-note to platforms such as Yuque, Notion, Cnblogs, W
 
 Support features such as fast publishing, image bed management, platform expansion, smart labels, etc.
 
+🎉 Version `1.12.0` of Publish Tool with the first CSDN support is now available!
+
 **Facing issues or have suggestions? Please join QQ group `895063267` for discussion. Alternatively, refer to the online documentation below:**
 
 > [Click here](https://blog.terwer.space/s/20230810132040-nn4q7vs) to view the latest help documentation.
@@ -31,6 +33,7 @@ Names not listed in order
 - [X] Typecho
 - [X] WordPress
 - [X] Zhihu
+- [X] CSDN
 
 ## Core Features
 

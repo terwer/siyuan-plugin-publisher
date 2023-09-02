@@ -25,7 +25,7 @@
 
 import { JianshuConfig } from "~/src/adaptors/web/jianshu/jianshuConfig.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { AppInstance } from "~/src/appInstance.ts"
+import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { Utils } from "~/src/utils/utils.ts"
@@ -43,7 +43,7 @@ const useJianshuWeb = async (key?: string, newCfg?: JianshuConfig) => {
   logger.info("Start using Jianshu WebAuth...")
 
   // 创建应用实例
-  const appInstance = new AppInstance()
+  const appInstance = new PublisherAppInstance()
   let cfg: JianshuConfig
   if (newCfg) {
     logger.info("Initialize with the latest newCfg passed in...")

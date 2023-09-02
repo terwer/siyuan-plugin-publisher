@@ -24,7 +24,7 @@
  */
 
 import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
-import { AppInstance } from "~/src/appInstance.ts"
+import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { CommonGitlabConfig } from "~/src/adaptors/api/base/gitlab/commonGitlabConfig.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { CommonGitlabClient } from "zhi-gitlab-middleware"
@@ -44,7 +44,7 @@ import { isDev } from "~/src/utils/constants.ts"
 class CommonGitlabApiAdaptor extends BaseBlogApi {
   private gitlabClient: CommonGitlabClient
 
-  constructor(appInstance: AppInstance, cfg: CommonGitlabConfig) {
+  constructor(appInstance: PublisherAppInstance, cfg: CommonGitlabConfig) {
     super(appInstance, cfg)
     this.logger = createAppLogger("common-gitlab-api-adaptor")
 

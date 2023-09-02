@@ -498,11 +498,13 @@ const usePublish = () => {
       const postKeywords = post.mt_keywords.split(",")
       const newPostKeywords = newPost.mt_keywords.split(",")
       // 合并并去重关键词
-      const mergedKeywords = [...new Set([...postKeywords, ...newPostKeywords])]
+      const mergedKeywords = [...new Set([...postKeywords, ...newPostKeywords])].filter((tag) => tag.trim() !== "")
       mergedPost.mt_keywords = mergedKeywords.join(",")
 
       // 合并并去重分类
-      const mergedCategories = [...new Set([...(post?.categories ?? []), ...(newPost?.categories ?? [])])]
+      const mergedCategories = [...new Set([...(post?.categories ?? []), ...(newPost?.categories ?? [])])].filter(
+        (cate) => cate.trim() !== ""
+      )
       mergedPost.categories = mergedCategories
 
       return mergedPost

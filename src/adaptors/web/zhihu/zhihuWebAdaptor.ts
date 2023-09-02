@@ -46,7 +46,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
   //  * @param appInstance 应用实例
   //  * @param cfg 配置项
   //  */
-  // constructor(appInstance: AppInstance, cfg: ZhihuConfig) {
+  // constructor(appInstance: PublisherAppInstance, cfg: ZhihuConfig) {
   //   super(appInstance, cfg)
   //
   //   this.cfg = cfg
@@ -230,33 +230,8 @@ class ZhihuWebAdaptor extends BaseWebApi {
     return cats
   }
 
-  // ================
-  // private methods
-  // ================
-  /**
-   * 收录文章到专栏
-   *
-   * @param columnId - 专栏ID
-   * @param articleId - 文章ID
-   * @private
-   */
-  private async addPostToColumn(columnId: string, articleId: string) {
-    if (StrUtil.isEmptyString(columnId) || StrUtil.isEmptyString(articleId)) {
-      this.logger.info("文章或者专栏为空，不收录")
-      return
-    }
-
-    try {
-      const params = { type: "article", id: articleId }
-      await this.webProxyFetch(`https://www.zhihu.com/api/v4/columns/${columnId}/items`, [], params, "POST")
-    } catch (e) {
-      this.logger.error("文章收录到专栏失败", e)
-    }
-    this.logger.info("文章收录到专栏成功")
-  }
-
-  public async uploadFile(file: File | Blob): Promise<any> {
-    this.logger.debug("zhihu start uploadFile =>", file)
+  public async uploadFile(file: File | Blob, filename?: string): Promise<any> {
+    this.logger.debug(`zhihu start uploadFile ${filename}=>`, file)
     if (file instanceof Blob) {
       // 1. 获取图片hash
       const ab = await file.arrayBuffer()
@@ -272,7 +247,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
       const fileResp = await this.webProxyFetch("https://api.zhihu.com/images", [], params, "POST")
       this.logger.debug("zhihu uploadFile, fileResp =>", fileResp)
 
-      // 开始上传
+      // 2. 开始上传
       const upload_file = fileResp.upload_file
       if (fileResp.upload_file.state == 1) {
         const imgDetail = await this.untilImageDone(upload_file.image_id)
@@ -309,6 +284,28 @@ class ZhihuWebAdaptor extends BaseWebApi {
   // ================
   // private methods
   // ================
+  /**
+   * 收录文章到专栏
+   *
+   * @param columnId - 专栏ID
+   * @param articleId - 文章ID
+   * @private
+   */
+  private async addPostToColumn(columnId: string, articleId: string) {
+    if (StrUtil.isEmptyString(columnId) || StrUtil.isEmptyString(articleId)) {
+      this.logger.info("文章或者专栏为空，不收录")
+      return
+    }
+
+    try {
+      const params = { type: "article", id: articleId }
+      await this.webProxyFetch(`https://www.zhihu.com/api/v4/columns/${columnId}/items`, [], params, "POST")
+    } catch (e) {
+      this.logger.error("文章收录到专栏失败", e)
+    }
+    this.logger.info("文章收录到专栏成功")
+  }
+
   private async untilImageDone(image_id: string): Promise<any> {
     const that = this
     return new Promise(function (resolve, reject) {

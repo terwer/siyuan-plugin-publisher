@@ -23,24 +23,36 @@
  * questions.
  */
 
-import { describe, it } from "vitest"
-import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
-import { CommonGitlabConfig } from "~/src/adaptors/api/base/gitlab/commonGitlabConfig.ts"
-import { CommonGitlabApiAdaptor } from "~/src/adaptors/api/base/gitlab/commonGitlabApiAdaptor.ts"
+import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { DeviceDetection } from "zhi-device"
+import { Deserializer, Serializer, SimpleXmlRpcClient, XmlrpcUtil } from "simple-xmlrpc"
+import fetch from "cross-fetch"
+import { create } from "xmlbuilder2"
 
-describe("test commonGitlabApiAdaptor", () => {
-  const appInstance = new PublisherAppInstance()
-  const gitlabCfg = new CommonGitlabConfig("terwer", "", "terwer-github-io", "main")
-  gitlabCfg.apiUrl = "http://localhost:8002"
-  gitlabCfg.home = "http://localhost:8002"
-  gitlabCfg.defaultMsg = "auto published by siyuan-plugin-publisher"
-  gitlabCfg.email = "youweics@163.com"
-  gitlabCfg.author = "terwer"
-  gitlabCfg.defaultPath = ""
-  const api = new CommonGitlabApiAdaptor(appInstance, gitlabCfg)
+/**
+ * 应用实例
+ */
+export class PublisherAppInstance {
+  public logger: any
+  public deviceType: any
 
-  it("test getUsersBlogs", async () => {
-    const result = await api.getUsersBlogs()
-    console.log(result)
-  })
-})
+  public fetch: any
+  public xmlbuilder2: any
+  public simpleXmlrpc: any
+
+  constructor() {
+    this.logger = createAppLogger("app-instance")
+    this.deviceType = DeviceDetection.getDevice()
+
+    this.fetch = fetch
+    this.xmlbuilder2 = {
+      create,
+    }
+    this.simpleXmlrpc = {
+      SimpleXmlRpcClient: SimpleXmlRpcClient,
+      Serializer: Serializer,
+      Deserializer: Deserializer,
+      XmlrpcUtil: XmlrpcUtil,
+    }
+  }
+}

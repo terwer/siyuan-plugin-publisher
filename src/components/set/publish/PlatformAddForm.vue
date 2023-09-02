@@ -271,7 +271,7 @@ initPage()
       </el-form-item>
       <!-- 是否启用 -->
       <el-form-item label="是否启用">
-        <el-switch v-model="formData.dynCfg.isEnabled" :disabled="formData.isPre" />
+        <el-switch v-model="formData.dynCfg.isEnabled" />
       </el-form-item>
 
       <el-form-item>

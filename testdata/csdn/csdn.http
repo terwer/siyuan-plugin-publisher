@@ -1,0 +1,192 @@
+### 元数据获取
+GET https://bizapi.csdn.net/blog-console-api/v1/user/info
+accept: */*
+x-ca-key: 203803574
+x-ca-nonce: ec9b507f-2ac0-471b-aca5-578077dbd748
+x-ca-signature: Mk83ReazJ90q8Lynu1p6BMdPTJlFha0NH9fr3HioyoU=
+x-ca-signature-headers: x-ca-key,x-ca-nonce
+cookie: {{cookie}}
+
+### 新建专栏
+POST https://bizapi.csdn.net/blog/phoenix/console/v1/column/save
+accept: */*
+content-type: application/json
+x-ca-key: 203803574
+x-ca-nonce: d7ddf39b-0355-4194-b39c-aec133cd9706
+x-ca-signature: fGlk8KO7Ff1bLQ+RNLX8HGpMeHKnJQI7u4X15zk5RMU=
+x-ca-signature-headers: x-ca-key,x-ca-nonce
+cookie: {{cookie}}
+
+{
+  "title": "专栏1",
+  "desc": "测试专栏1",
+  "img_url": "",
+  "end_time": 1693623266646,
+  "is_agree": true,
+  "is_Part": false,
+  "column_price": "99.00",
+  "copy_text": "",
+  "is_column_pay": 0,
+  "isShowApply": true,
+  "blog_star": 0,
+  "frequency": 1,
+  "join_learn": true,
+  "tags": "",
+  "column_id": ""
+}
+
+### 专栏置为付费
+POST https://bizapi.csdn.net/blog/phoenix/console/v1/column/upgrade-column-pay
+accept: */*
+content-type: application/json
+x-ca-key: 203803574
+x-ca-nonce: 8e634508-923e-48e3-8285-255382e81fb7
+x-ca-signature: 4acSb9bIboZ8h2W8H1bw7fIxGofsKYz2+V7ZD2I2lVU=
+x-ca-signature-headers: x-ca-key,x-ca-nonce
+cookie: {{cookie}}
+
+{
+  "title": "专栏1",
+  "desc": "测试专栏1",
+  "img_url": "https://img-blog.csdnimg.cn/20190927151101105.png?x-oss-process=image/resize,m_fixed,h_64,w_64",
+  "end_time": 1693625388846,
+  "is_agree": true,
+  "is_Part": false,
+  "column_price": "99.00",
+  "copy_text": "ces",
+  "is_column_pay": 1,
+  "isShowApply": true,
+  "blog_star": 0,
+  "frequency": 1,
+  "join_learn": true,
+  "tags": "python",
+  "id": 12428423,
+  "is_free": 0,
+  "column_url": "https://blog.csdn.net/oschina_41930958/category_12428423.html",
+  "all_price": [
+    "990",
+    "1990",
+    "2990",
+    "3990",
+    "4990",
+    "5990",
+    "6990",
+    "7990",
+    "8990",
+    "9990",
+    "11990",
+    "12990",
+    "15990",
+    "17990",
+    "19990",
+    "23990",
+    "25990",
+    "29990"
+  ],
+  "sell_type": 1,
+  "act_price": 1990,
+  "column_id": 12428423
+}
+
+
+### 读取专栏列表
+GET https://bizapi.csdn.net/blog/phoenix/console/v1/column/list?type=all
+accept: */*
+x-ca-key: 203803574
+x-ca-nonce: 2483ef3b-fd9c-4ffe-a419-7149f87624e0
+x-ca-signature: 5YtkToSQDX9kShXFghhWtCh9uzKsRKo+CKMFTq668QU=
+x-ca-signature-headers: x-ca-key,x-ca-nonce
+cookie: {{cookie}}
+
+### 读取文章
+GET https://bizapi.csdn.net/blog-console-api/v3/editor/getArticle?id=132625267&model_type
+accept: */*
+x-ca-key: 203803574
+x-ca-nonce: 80fb57f2-0e10-4b94-af19-17b9b02bf360
+x-ca-signature: O1YX1wwLaOg3GysVbxVv4jDOWDW6EBAkC2cjCh7sT5o=
+x-ca-signature-headers: x-ca-key,x-ca-nonce
+cookie: {{cookie}}
+
+### 保存文章
+POST https://bizapi.csdn.net/blog-console-api/v3/mdeditor/saveArticle
+accept: */*
+content-type: application/json
+x-ca-key: 203803574
+x-ca-nonce: c524d108-5549-4faa-b5fb-8cb28a49a9b8
+x-ca-signature: sDP+W2f1w0Oz/brEP5UImA/TaYjrq5qJSpDuK8QSoIM=
+x-ca-signature-headers: x-ca-key,x-ca-nonce
+cookie: {{cookie}}
+
+{
+  "title": "测试2hhhhhh呵呵哈哈哈或",
+  "markdowncontent": "测试文章2\n### 而非888887\n",
+  "content": "<p>测试文章2</p>\n<h3><a id="888887_1"></a>而非888887</h3>\n\n",
+  "readType": "public",
+  "level": 0,
+  "tags": "笔记",
+  "status": 0,
+  "categories": "",
+  "type": "original",
+  "original_link": "",
+  "authorized_status": false,
+  "Description": "",
+  "not_auto_saved": "1",
+  "source": "pc_mdeditor",
+  "cover_images": [],
+  "cover_type": 1,
+  "is_new": 1,
+  "vote_id": 0,
+  "resource_id": "",
+  "pubStatus": "publish"
+}
+
+### 删除文章
+POST https://bizapi.csdn.net/blog/phoenix/console/v1/article/del
+accept: */*
+content-type: application/json
+x-ca-key: 203803574
+x-ca-nonce: c524d108-5549-4faa-b5fb-8cb28a49a9b8
+x-ca-signature: sDP+W2f1w0Oz/brEP5UImA/TaYjrq5qJSpDuK8QSoIM=
+x-ca-signature-headers: x-ca-key,x-ca-nonce
+cookie: {{cookie}}
+
+{
+  "articleId": "132641172",
+  "deep": false
+}
+
+### 更新文章
+POST https://bizapi.csdn.net/blog-console-api/v3/mdeditor/saveArticle
+accept: */*
+content-type: application/json
+x-ca-key: 203803574
+x-ca-nonce: c524d108-5549-4faa-b5fb-8cb28a49a9b8
+x-ca-signature: sDP+W2f1w0Oz/brEP5UImA/TaYjrq5qJSpDuK8QSoIM=
+x-ca-signature-headers: x-ca-key,x-ca-nonce
+cookie: {{cookie}}
+
+{
+  "id": "132641600",
+  "title": "测试文档1",
+  "markdowncontent": "\n\n成功提示\n\n信息提示\n\n警告提示\n\n错误提示\n\n‍\n\n‍\n\n‍\n\n[https://zhuanlan.zhihu.com/p/652617734](https://zhuanlan.zhihu.com/p/652617734)\n\n‍\n\n‍\n\n‍\n\n## 标题测试\n\n* 列表 2\n* 列表 2\n\n1. 有序列表\n2. 有序列表 2\n\n图片测试，远程图片 4\n\n​![](https://img-home.csdnimg.cn/images/20230724024159.png?be=1&origin_url=https://img1.terwer.space/api/public/202308102052670.png)​\n\n图片测试，本地图片\n\n​![外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传](https://img-home.csdnimg.cn/images/20230724024159.png?origin_url=assets%2Fimage-20230810205339-d56f7gc.png&pos_id=img-9Ha2XFTK-1693659929258)​\n\n图片 2\n\n​![](https://img-home.csdnimg.cn/images/20230724024159.png?be=1&origin_url=https://img1.terwer.space/api/public/202308111153888.png)​\n\n测试 814\n\n‍\n\n821 测试\n\n​![外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传](https://img-home.csdnimg.cn/images/20230724024159.png?origin_url=assets%2Fimage-20230821181014-3km58ho.png&pos_id=img-XtJXHX8I-1693659929258)​\n\n‍\n\n‍\n\nces\n\n​![外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传](https://img-home.csdnimg.cn/images/20230724024159.png?origin_url=assets%2Fimage-20230821200241-dagegpc.png&pos_id=img-udftps4o-1693659929259)​\n\n‍\n\n​![外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传](https://img-home.csdnimg.cn/images/20230724024159.png?origin_url=assets%2Fimage-20230821200827-ailo6g3.png&pos_id=img-5jmnh7Ex-1693659929259)​\n\n‍\n\n‍\n\n‍\n\n这是一篇测试文章，等会会删除\n\n‍\n",
+  "content": "<p>成功提示</p>\n<p>信息提示</p>\n<p>警告提示</p>\n<p>错误提示</p>\n<p>‍</p>\n<p>‍</p>\n<p>‍</p>\n<p><a href=\"https: //zhuanlan.zhihu.com/p/652617734\">https://zhuanlan.zhihu.com/p/652617734</a></p>\n<p>‍</p>\n<p>‍</p>\n<p>‍</p>\n<h2><a id=\"_24\"></a>标题测试</h2>\n<ul>\n<li>列表 2</li>\n<li>列表 2</li>\n</ul>\n<ol>\n<li>有序列表</li>\n<li>有序列表 2</li>\n</ol>\n<p>图片测试，远程图片 4</p>\n<p>​<img src=\"https://img-home.csdnimg.cn/images/20230724024159.png?be=1&amp;origin_url=https://img1.terwer.space/api/public/202308102052670.png\" alt=\"\">​</p>\n<p>图片测试，本地图片</p>\n<p>​<img src=\"https://img-home.csdnimg.cn/images/20230724024159.png?origin_url=assets%2Fimage-20230810205339-d56f7gc.png&amp;pos_id=img-9Ha2XFTK-1693659929258\" alt=\"外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传\">​</p>\n<p>图片 2</p>\n<p>​<img src=\"https://img-home.csdnimg.cn/images/20230724024159.png?be=1&amp;origin_url=https://img1.terwer.space/api/public/202308111153888.png\" alt=\"\">​</p>\n<p>测试 814</p>\n<p>‍</p>\n<p>821 测试</p>\n<p>​<img src=\"https://img-home.csdnimg.cn/images/20230724024159.png?origin_url=assets%2Fimage-20230821181014-3km58ho.png&amp;pos_id=img-XtJXHX8I-1693659929258\" alt=\"外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传\">​</p>\n<p>‍</p>\n<p>‍</p>\n<p>ces</p>\n<p>​<img src=\"https://img-home.csdnimg.cn/images/20230724024159.png?origin_url=assets%2Fimage-20230821200241-dagegpc.png&amp;pos_id=img-udftps4o-1693659929259\" alt=\"外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传\">​</p>\n<p>‍</p>\n<p>​<img src=\"https://img-home.csdnimg.cn/images/20230724024159.png?origin_url=assets%2Fimage-20230821200827-ailo6g3.png&amp;pos_id=img-5jmnh7Ex-1693659929259\" alt=\"外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传\">​</p>\n<p>‍</p>\n<p>‍</p>\n<p>‍</p>\n<p>这是一篇测试文章，等会会删除</p>\n<p>‍</p>\n\n",
+  "readType": "public",
+  "level": "1",
+  "tags": "笔记",
+  "status": 0,
+  "categories": "",
+  "type": "original",
+  "original_link": "",
+  "authorized_status": false,
+  "Description": "本文是一篇测试文章，涵盖了成功、提示信息、警告、错误提示，以及标题、列表、图片等内容。文章为了进行格式测试，包括了各种排版元素的展示，但内容并无实际意义。",
+  "resource_url": "",
+  "not_auto_saved": "1",
+  "source": "pc_mdeditor",
+  "cover_images": [],
+  "cover_type": 1,
+  "is_new": 1,
+  "vote_id": 0,
+  "resource_id": "",
+  "pubStatus": "publish"
+}
+

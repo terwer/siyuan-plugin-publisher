@@ -26,7 +26,7 @@
 import { ZhihuWebAdaptor } from "~/src/adaptors/web/zhihu/zhihuWebAdaptor.ts"
 import { ZhihuConfig } from "~/src/adaptors/web/zhihu/zhihuConfig.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { AppInstance } from "~/src/appInstance.ts"
+import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { Utils } from "~/src/utils/utils.ts"
@@ -44,7 +44,7 @@ const useZhihuWeb = async (key?: string, newCfg?: ZhihuConfig) => {
   logger.info("Start using Zhihu WebAuth...")
 
   // 创建应用实例
-  const appInstance = new AppInstance()
+  const appInstance = new PublisherAppInstance()
   let cfg: ZhihuConfig
   if (newCfg) {
     logger.info("Initialize with the latest newCfg passed in...")

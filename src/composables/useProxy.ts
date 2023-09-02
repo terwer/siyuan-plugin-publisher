@@ -27,7 +27,7 @@ import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { CommonFetchClient } from "zhi-fetch-middleware"
 import { isDev } from "~/src/utils/constants.ts"
-import { AppInstance } from "~/src/appInstance.ts"
+import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { Deserializer, Serializer, XmlrpcUtil } from "simple-xmlrpc"
 
@@ -46,7 +46,7 @@ const useProxy = (middlewareUrl?: string) => {
   /**
    * 创建应用程序实例和通用的 fetch 客户端实例
    */
-  const appInstance = new AppInstance()
+  const appInstance = new PublisherAppInstance()
   const apiUrl = ""
   middlewareUrl = middlewareUrl ?? "https://api.terwer.space/api/middleware"
   const commonFetchClient = new CommonFetchClient(appInstance, apiUrl, middlewareUrl, isDev)
@@ -109,7 +109,7 @@ const useProxy = (middlewareUrl?: string) => {
       const fetchOptions = {
         method: method,
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": contentType,
           ...header,
         },
       }

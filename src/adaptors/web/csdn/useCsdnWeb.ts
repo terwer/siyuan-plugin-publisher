@@ -25,12 +25,13 @@
 
 import { CsdnConfig } from "~/src/adaptors/web/csdn/csdnConfig.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { AppInstance } from "~/src/appInstance.ts"
+import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { Utils } from "~/src/utils/utils.ts"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { CsdnWebAdaptor } from "~/src/adaptors/web/csdn/csdnWebAdaptor.ts"
+import { CategoryTypeEnum } from "zhi-blog-api"
 
 /**
  * 用于获取CsdnWeb的API的自定义Hook
@@ -43,7 +44,7 @@ const useCsdnWeb = async (key?: string, newCfg?: CsdnConfig) => {
   logger.info("Start using Csdn WebAuth...")
 
   // 创建应用实例
-  const appInstance = new AppInstance()
+  const appInstance = new PublisherAppInstance()
   let cfg: CsdnConfig
   if (newCfg) {
     logger.info("Initialize with the latest newCfg passed in...")
@@ -80,8 +81,15 @@ const useCsdnWeb = async (key?: string, newCfg?: CsdnConfig) => {
     }
   }
 
+  // CSDN使用多选分类作为专栏
+  cfg.cateEnabled = true
+  cfg.categoryType = CategoryTypeEnum.CategoryType_Multi
+  cfg.allowCateChange = true
+  cfg.knowledgeSpaceEnabled = false
+
   const webApi = new CsdnWebAdaptor(appInstance, cfg)
   return {
+    cfg,
     webApi,
   }
 }

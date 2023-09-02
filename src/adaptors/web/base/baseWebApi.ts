@@ -23,7 +23,7 @@
  * questions.
  */
 import { Attachment, ElectronCookie, MediaObject, Post, WebApi, WebConfig, YamlConvertAdaptor } from "zhi-blog-api"
-import { AppInstance } from "~/src/appInstance.ts"
+import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { createAppLogger, ILogger } from "~/src/utils/appLogger.ts"
 import { useProxy } from "~/src/composables/useProxy.ts"
 import { BaseExtendApi } from "~/src/adaptors/base/baseExtendApi.ts"
@@ -47,7 +47,7 @@ class BaseWebApi extends WebApi {
    * @param appInstance 应用实例
    * @param cfg 配置项
    */
-  constructor(appInstance: AppInstance, cfg: WebConfig) {
+  constructor(appInstance: PublisherAppInstance, cfg: WebConfig) {
     super()
 
     this.cfg = cfg
@@ -89,7 +89,7 @@ class BaseWebApi extends WebApi {
     const bits = mediaObject.bits
     this.logger.debug("newMediaObject on baseWebApi =>", mediaObject)
     const blob = new Blob([bits], { type: mediaObject.type })
-    const res = await this.uploadFile(blob as File)
+    const res = await this.uploadFile(blob as File, mediaObject.name)
     return {
       attachment_id: res?.id,
       date_created_gmt: new Date(),
@@ -136,8 +136,8 @@ class BaseWebApi extends WebApi {
     const header = headers.length > 0 ? headers[0] : {}
     const webHeaders = [
       {
-        Cookie: this.cfg.password,
         ...header,
+        Cookie: this.cfg.password,
       },
     ]
     return await this.proxyFetch(url, webHeaders, params, method, contentType)

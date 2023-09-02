@@ -24,7 +24,7 @@
  */
 
 import { WechatConfig } from "~/src/adaptors/web/wechat/wechatConfig.ts"
-import { AppInstance } from "~/src/appInstance.ts"
+import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
@@ -43,7 +43,7 @@ const useWechatWeb = async (key?: string, newCfg?: WechatConfig) => {
   logger.info("Start using Wechat WebAuth...")
 
   // 创建应用实例
-  const appInstance = new AppInstance()
+  const appInstance = new PublisherAppInstance()
   let cfg: WechatConfig
   if (newCfg) {
     logger.info("Initialize with the latest newCfg passed in...")

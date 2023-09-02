@@ -24,7 +24,7 @@
  */
 
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { AppInstance } from "~/src/appInstance.ts"
+import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { Utils } from "~/src/utils/utils.ts"
 import { NotionConfig } from "~/src/adaptors/api/notion/notionConfig.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
@@ -41,7 +41,7 @@ const useNotionApi = async (key: string, newCfg?: NotionConfig) => {
   logger.info("Start using Notion API...")
 
   // 创建应用实例
-  const appInstance = new AppInstance()
+  const appInstance = new PublisherAppInstance()
 
   let cfg: NotionConfig
   if (newCfg) {

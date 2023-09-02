@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { AppInstance } from "~/src/appInstance.ts"
+import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { BlogAdaptor, WebAdaptor } from "zhi-blog-api"
 import { StrUtil } from "zhi-common"
@@ -38,7 +38,7 @@ import { StrUtil } from "zhi-common"
 export class Utils {
   private static logger = createAppLogger("publisher-widget-utils")
 
-  public static blogApi(appInstance: AppInstance, apiAdaptor: any) {
+  public static blogApi(appInstance: PublisherAppInstance, apiAdaptor: any) {
     if (!apiAdaptor) {
       throw new Error("apiAdaptor cannot be null")
     }
@@ -51,7 +51,7 @@ export class Utils {
     return new BlogAdaptor(apiAdaptor)
   }
 
-  public static webApi(appInstance: AppInstance, webAdaptor: any) {
+  public static webApi(appInstance: PublisherAppInstance, webAdaptor: any) {
     if (!webAdaptor) {
       throw new Error("webAdaptor cannot be null")
     }

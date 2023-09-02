@@ -23,24 +23,37 @@
  * questions.
  */
 
-import { describe, it } from "vitest"
-import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
-import { CommonGitlabConfig } from "~/src/adaptors/api/base/gitlab/commonGitlabConfig.ts"
-import { CommonGitlabApiAdaptor } from "~/src/adaptors/api/base/gitlab/commonGitlabApiAdaptor.ts"
+/**
+ * Web工具类，包含用于操作Cookie的方法
+ *
+ * @since 1.12.0
+ */
+class WebUtils {
+  /**
+   * 从Cookie字符串中读取指定键的值
+   *
+   * @param key - 要查找的Cookie键
+   * @param cookieString - 包含Cookie的字符串
+   * @returns 包含键对应值的Cookie值，如果未找到则返回空字符串
+   */
+  public static readCookie(key: string, cookieString: string): string {
+    // 将Cookie字符串分割成Cookie键值对数组
+    const cookies = cookieString.split(";")
 
-describe("test commonGitlabApiAdaptor", () => {
-  const appInstance = new PublisherAppInstance()
-  const gitlabCfg = new CommonGitlabConfig("terwer", "", "terwer-github-io", "main")
-  gitlabCfg.apiUrl = "http://localhost:8002"
-  gitlabCfg.home = "http://localhost:8002"
-  gitlabCfg.defaultMsg = "auto published by siyuan-plugin-publisher"
-  gitlabCfg.email = "youweics@163.com"
-  gitlabCfg.author = "terwer"
-  gitlabCfg.defaultPath = ""
-  const api = new CommonGitlabApiAdaptor(appInstance, gitlabCfg)
+    // 遍历Cookie数组，查找指定键的Cookie
+    for (const cookie of cookies) {
+      const [cookieKey, cookieValue] = cookie.split("=")
 
-  it("test getUsersBlogs", async () => {
-    const result = await api.getUsersBlogs()
-    console.log(result)
-  })
-})
+      // 去除Cookie键的空白字符并比较是否与指定键相符
+      if (cookieKey.trim() === key) {
+        // 返回解码后的Cookie值，如果解码失败则返回空字符串
+        return decodeURIComponent(cookieValue) ?? ""
+      }
+    }
+
+    // 如果未找到指定键的Cookie则返回空字符串
+    return ""
+  }
+}
+
+export default WebUtils

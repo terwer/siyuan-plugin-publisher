@@ -37,6 +37,7 @@ import { useNotionApi } from "~/src/adaptors/api/notion/useNotionApi.ts"
 import { useHexoApi } from "~/src/adaptors/api/hexo/useHexoApi.ts"
 import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
 import { useGitlabhexoApi } from "~/src/adaptors/api/gitlab-hexo/useGitlabhexoApi.ts"
+import { useCsdnWeb } from "~/src/adaptors/web/csdn/useCsdnWeb.ts"
 
 /**
  * 适配器统一入口
@@ -103,11 +104,11 @@ class Adaptors {
         conf = cfg
         break
       }
-      // case SubPlatformType.Custom_CSDN: {
-      //   const { cfg } = await useCsdnWeb(key)
-      //   conf = cfg
-      //   break
-      // }
+      case SubPlatformType.Custom_CSDN: {
+        const { cfg } = await useCsdnWeb(key)
+        conf = cfg
+        break
+      }
       // case SubPlatformType.Custom_Jianshu: {
       //   const { cfg } = await useJianshuWeb(key)
       //   conf = cfg
@@ -193,11 +194,11 @@ class Adaptors {
         blogAdaptor = webApi
         break
       }
-      // case SubPlatformType.Custom_CSDN: {
-      //   const { webApi } = await useCsdnWeb(key, newCfg)
-      //   blogAdaptor = webApi
-      //   break
-      // }
+      case SubPlatformType.Custom_CSDN: {
+        const { webApi } = await useCsdnWeb(key, newCfg)
+        blogAdaptor = webApi
+        break
+      }
       // case SubPlatformType.Custom_Jianshu: {
       //   const { webApi } = await useJianshuWeb(key, newCfg)
       //   blogAdaptor = webApi

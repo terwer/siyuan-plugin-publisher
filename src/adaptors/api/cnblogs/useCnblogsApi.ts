@@ -27,7 +27,7 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { Utils } from "~/src/utils/utils.ts"
 import { CnblogsConfig } from "~/src/adaptors/api/cnblogs/cnblogsConfig.ts"
 import { CnblogsApiAdaptor } from "~/src/adaptors/api/cnblogs/cnblogsApiAdaptor.ts"
-import { AppInstance } from "~/src/appInstance.ts"
+import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
@@ -50,7 +50,7 @@ export const useCnblogsApi = async (key?: string, newCfg?: CnblogsConfig) => {
   logger.info("Start using Cnblogs API...")
 
   // 创建应用实例
-  const appInstance = new AppInstance()
+  const appInstance = new PublisherAppInstance()
 
   let cfg: CnblogsConfig
   if (newCfg) {

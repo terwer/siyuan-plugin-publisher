@@ -161,18 +161,18 @@ export const pre = {
       domain: "zhihu.com",
       isEnabled: false,
     },
-    // // CSDN 目前有CA验证
-    // {
-    //   platformType: PlatformType.Custom,
-    //   subPlatformType: SubPlatformType.Custom_CSDN,
-    //   platformKey: "custom_Csdn",
-    //   platformName: "CSDN",
-    //   platformIcon: svgIcons.iconIFCSDN,
-    //   authMode: AuthMode.WEBSITE,
-    //   authUrl: "https://passport.csdn.net/login",
-    //   domain: "csdn.net",
-    //   isEnabled: false,
-    // },
+    // CSDN 目前有CA验证
+    {
+      platformType: PlatformType.Custom,
+      subPlatformType: SubPlatformType.Custom_CSDN,
+      platformKey: "custom_Csdn",
+      platformName: "CSDN",
+      platformIcon: svgIcons.iconIFCSDN,
+      authMode: AuthMode.WEBSITE,
+      authUrl: "https://passport.csdn.net/login",
+      domain: "csdn.net",
+      isEnabled: false,
+    },
     // {
     //   platformType: PlatformType.Custom,
     //   subPlatformType: SubPlatformType.Custom_Jianshu,

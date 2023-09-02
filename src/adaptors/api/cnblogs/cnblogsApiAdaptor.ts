@@ -25,7 +25,7 @@
 
 import { CategoryInfo, Post, UserBlog } from "zhi-blog-api"
 import { CnblogsConfig } from "~/src/adaptors/api/cnblogs/cnblogsConfig.ts"
-import { AppInstance } from "~/src/appInstance.ts"
+import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { CnblogsConstants } from "~/src/adaptors/api/cnblogs/cnblogsConstants.ts"
 import { MetaweblogBlogApiAdaptor } from "~/src/adaptors/api/base/metaweblog/metaweblogBlogApiAdaptor.ts"
@@ -49,7 +49,7 @@ class CnblogsApiAdaptor extends MetaweblogBlogApiAdaptor {
    * @param appInstance 应用实例
    * @param cfg 配置项
    */
-  constructor(appInstance: AppInstance, cfg: CnblogsConfig) {
+  constructor(appInstance: PublisherAppInstance, cfg: CnblogsConfig) {
     super(appInstance, cfg)
     this.logger = createAppLogger("cnblogs-api-adaptor")
     this.cfg.blogid = "cnblogs"

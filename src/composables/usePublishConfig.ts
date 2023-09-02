@@ -25,7 +25,7 @@
 
 import { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 import { JsonUtil } from "zhi-common"
-import { AppInstance } from "~/src/appInstance.ts"
+import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import Adaptors from "~/src/adaptors"
 import { Utils } from "~/src/utils/utils.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
@@ -41,7 +41,7 @@ import { BlogAdaptor, BlogConfig, WebAdaptor } from "zhi-blog-api"
  */
 const usePublishConfig = () => {
   const { getSetting } = useSettingStore()
-  const appInstance = new AppInstance()
+  const appInstance = new PublisherAppInstance()
 
   /**
    * 获取指定键的发布配置

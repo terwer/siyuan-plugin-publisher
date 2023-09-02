@@ -24,7 +24,7 @@
  */
 
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { AppInstance } from "~/src/appInstance.ts"
+import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { Utils } from "~/src/utils/utils.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { TypechoConfig } from "~/src/adaptors/api/typecho/typechoConfig.ts"
@@ -50,7 +50,7 @@ export const useTypechoApi = async (key?: string, newCfg?: TypechoConfig) => {
   logger.info("Start using Typecho API...")
 
   // 创建应用实例
-  const appInstance = new AppInstance()
+  const appInstance = new PublisherAppInstance()
 
   let cfg: TypechoConfig
   if (newCfg) {

@@ -26,7 +26,7 @@
 <script setup lang="ts">
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { reactive, ref } from "vue"
-import { AppInstance } from "~/src/appInstance.ts"
+import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { Utils } from "~/src/utils/utils.ts"
 import { SiYuanApiAdaptor, SiyuanConfig, SiyuanKernelApi } from "zhi-siyuan-api"
 import { MediaObject, Post } from "zhi-blog-api"
@@ -188,7 +188,7 @@ const siyuanHandleApi = async () => {
   logMessage.value = "siyuan requesting..."
   try {
     // appInstance
-    const appInstance = new AppInstance()
+    const appInstance = new PublisherAppInstance()
     logger.info("appInstance=>", appInstance)
 
     switch (methodOption.value) {

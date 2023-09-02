@@ -145,7 +145,7 @@ const fetchCate = async () => {
       />
     </div>
     <div v-else></div>
-    <div v-if="formData.useAi">
+    <div v-if="formData.useAi && formData.categoryConfig.cateEnabled">
       <el-form-item v-if="formData.recommCates.length > 0" class="recomm-show">
         推荐的分类：
         <el-tag class="ml-2 recomm-cate" type="success" v-for="rtag in formData.recommCates">{{ rtag }}</el-tag>

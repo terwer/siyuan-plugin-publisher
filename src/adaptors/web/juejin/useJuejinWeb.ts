@@ -25,7 +25,7 @@
 
 import { JuejinConfig } from "~/src/adaptors/web/juejin/juejinConfig.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { AppInstance } from "~/src/appInstance.ts"
+import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { Utils } from "~/src/utils/utils.ts"
@@ -43,7 +43,7 @@ const useJuejinWeb = async (key?: string, newCfg?: JuejinConfig) => {
   logger.info("Start using Juejin WebAuth...")
 
   // 创建应用实例
-  const appInstance = new AppInstance()
+  const appInstance = new PublisherAppInstance()
   let cfg: JuejinConfig
   if (newCfg) {
     logger.info("Initialize with the latest newCfg passed in...")
