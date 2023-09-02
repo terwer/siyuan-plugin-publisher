@@ -1,7 +1,19 @@
 # Changelog
 
-## [1.11.3](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.11.2...v1.11.3) (2023-08-31)
+## [1.12.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.11.3...v1.12.0) (2023-09-02)
+### Features
+* [#130](https://github.com/terwer/siyuan-plugin-publisher/issues/130) 支持发布到CSDN ([5566040](https://github.com/terwer/siyuan-plugin-publisher/commit/5566040934eddcc22d5d1480beab70294e994a28))
+* 支持发布到csdn，完成授权验证 ([3f90230](https://github.com/terwer/siyuan-plugin-publisher/commit/3f90230106e5924401f8e50cfa91958053f8635a))
+* 支持发布到csdn，支持csdn图床 ([958c34b](https://github.com/terwer/siyuan-plugin-publisher/commit/958c34bcdea1f8111097f86c91ddfce3477a1777))
+* 支持发布到csdn，支持专栏 ([6086047](https://github.com/terwer/siyuan-plugin-publisher/commit/6086047a8afa7c66c3060a9cba27d1e4dc7b7075))
+* 支持发布到csdn，支持文章发布、更新和删除 ([0e7eb52](https://github.com/terwer/siyuan-plugin-publisher/commit/0e7eb5260fd09f72fbbf75a5cf5c437a74e4272f))
 ### Bug Fixes
+* 修复调试模式思源地址错误的问题 ([d97499d](https://github.com/terwer/siyuan-plugin-publisher/commit/d97499d8de545ef64bca21536ebeb17e05cf254f))
+### Code Refactoring
+* 重构项目结构 ([9629fbc](https://github.com/terwer/siyuan-plugin-publisher/commit/9629fbc2eab90cc613f7ade523045d6cd8cff7ea))
+### Miscellaneous
+* **deps-dev:** bump vite-plugin-node-polyfills from 0.11.3 to 0.12.0 ([b298b5f](https://github.com/terwer/siyuan-plugin-publisher/commit/b298b5fd2f51f86d5d0f13fa0adedba857eda965))
+## [1.11.3](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.11.2...v1.11.3) (2023-08-31)
 * [#435](https://github.com/terwer/siyuan-plugin-publisher/issues/435) 过滤掉思源剪藏插件的引用摘要 ([617be1d](https://github.com/terwer/siyuan-plugin-publisher/commit/617be1de671f2dc424784d6dab49b8152177bf60))
 * [#680](https://github.com/terwer/siyuan-plugin-publisher/issues/680) PC客户端多个工作空间情况下，自动读取思源地址 ([cd8a375](https://github.com/terwer/siyuan-plugin-publisher/commit/cd8a375d4abffc22ee5fe15f78fa43270be3b332))
 * [#692](https://github.com/terwer/siyuan-plugin-publisher/issues/692) 闪卡标记渲染成Markdown之后去除== ([0e1e7f1](https://github.com/terwer/siyuan-plugin-publisher/commit/0e1e7f1592291c340035c304ac98950fb012f2af))
@@ -12,7 +24,6 @@
 * 优化一些属性合并逻辑 ([f8719c7](https://github.com/terwer/siyuan-plugin-publisher/commit/f8719c72986b8a0222434fed0596eb768d6870f8))
 * 修复yaml初始化未读取最新的问题 ([704241b](https://github.com/terwer/siyuan-plugin-publisher/commit/704241b8a99b8f5319706e05a342e6f83cc764d3))
 * 修复yaml初始化错误 ([0922fa6](https://github.com/terwer/siyuan-plugin-publisher/commit/0922fa6a9d7fa7ebfac02d63e10e3c99ecbdf541))
-### Miscellaneous
 * **deps-dev:** bump unplugin-vue-components from 0.25.1 to 0.25.2 ([1ba446a](https://github.com/terwer/siyuan-plugin-publisher/commit/1ba446a25ae7aa021bd4022e80e265bac726cb51))
 * 兼容windows构建 ([d6939e9](https://github.com/terwer/siyuan-plugin-publisher/commit/d6939e9047ef74238dc906aecfbfe874a7b6e5ae))
 ## [1.11.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.11.0...v1.11.1) (2023-08-30)
@@ -21,7 +32,6 @@
 * 修复yaml修改不生效的问题 ([ac21891](https://github.com/terwer/siyuan-plugin-publisher/commit/ac21891c7b04f66a433dfd8e1788811026663c92))
 * 新增强制删除 ([629c468](https://github.com/terwer/siyuan-plugin-publisher/commit/629c468b6ee5dd61e73acf4c82041363084c62d8))
 ## [1.11.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.10.3...v1.11.0) (2023-08-29)
-### Features
 * 支持gitlab ([06f71fb](https://github.com/terwer/siyuan-plugin-publisher/commit/06f71fb9f79eebb11a72d55cb78d70fa812d2180))
 * 支持选择知识空间 ([ab1a648](https://github.com/terwer/siyuan-plugin-publisher/commit/ab1a648bbf9b56341861774f24b9e7a8164e9ac5))
 * **deps:** bump zhi-github-middleware from 0.3.9 to 0.4.1 ([9e16094](https://github.com/terwer/siyuan-plugin-publisher/commit/9e160943cd7d51af27bb6b092d9fb62fdb417a88))
@@ -233,7 +243,6 @@
 * **deps:** bump zhi-lib-base from 0.2.6 to 0.4.2 ([f879df2](https://github.com/terwer/siyuan-plugin-publisher/commit/f879df2e00be10709770dbaa172b4d6599ed0fde))
 * fix import ([07f5bb5](https://github.com/terwer/siyuan-plugin-publisher/commit/07f5bb58f925faf92e203a8b24495b4d5f9cc793))
 * 调整版本号规则 ([23e228d](https://github.com/terwer/siyuan-plugin-publisher/commit/23e228d60f76f006d6d119ee32a92d596c2dbb5b))
-### Code Refactoring
 * 优化插件菜单 ([f96202a](https://github.com/terwer/siyuan-plugin-publisher/commit/f96202aac973d7ff8379acaa4d9f44d548499626))
 * 全新升级为插件版 ([0337410](https://github.com/terwer/siyuan-plugin-publisher/commit/0337410b2f4c6b8d4fc4519ac0526aa2fc40505c)), closes [#502](https://github.com/terwer/siyuan-plugin-publisher/issues/502)
 * 切换为单项目 ([740f4c5](https://github.com/terwer/siyuan-plugin-publisher/commit/740f4c5ac8da2ee4202f216b8effa1f883d4a61b))
