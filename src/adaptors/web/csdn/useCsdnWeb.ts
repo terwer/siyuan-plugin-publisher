@@ -81,12 +81,11 @@ const useCsdnWeb = async (key?: string, newCfg?: CsdnConfig) => {
     }
   }
 
-  // CSDN使用单选分类作为专栏
-  cfg.cateEnabled = false
-  cfg.knowledgeSpaceEnabled = true
-  cfg.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Single
-  cfg.allowKnowledgeSpaceChange = false
-  cfg.placeholder.knowledgeSpaceReadonlyModeTip = "由于CSDN平台限制，暂时不支持编辑CSDN分类，如需修改，请删除后重新发布"
+  // CSDN使用多选分类作为专栏
+  cfg.cateEnabled = true
+  cfg.categoryType = CategoryTypeEnum.CategoryType_Multi
+  cfg.allowCateChange = true
+  cfg.knowledgeSpaceEnabled = false
 
   const webApi = new CsdnWebAdaptor(appInstance, cfg)
   return {

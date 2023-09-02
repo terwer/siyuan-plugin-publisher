@@ -25,7 +25,7 @@
 
 import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
 import CsdnUtils from "~/src/adaptors/web/csdn/csdnUtils.ts"
-import { CategoryInfo, UserBlog } from "zhi-blog-api"
+import { CategoryInfo, Post, UserBlog } from "zhi-blog-api"
 import { StrUtil } from "zhi-common"
 import WebUtils from "~/src/adaptors/web/base/webUtils.ts"
 
@@ -92,7 +92,7 @@ class CsdnWebAdaptor extends BaseWebApi {
       payCcolumn.forEach((item: any) => {
         const userblog: UserBlog = new UserBlog()
         userblog.blogid = item.id
-        userblog.blogName = `[付费]${item.edit_title}`
+        userblog.blogName = item.edit_title
         userblog.url = item.column_url
         // userblog.imgUrl = item.img_url
         result.push(userblog)
@@ -129,7 +129,7 @@ class CsdnWebAdaptor extends BaseWebApi {
         const cat = new CategoryInfo()
 
         cat.categoryId = item.id
-        cat.categoryName = `[付费]${item.edit_title}`
+        cat.categoryName = item.edit_title
         cat.description = item.column_url
         cat.categoryDescription = item.desc
         cats.push(cat)
@@ -137,6 +137,138 @@ class CsdnWebAdaptor extends BaseWebApi {
     }
 
     return cats
+  }
+
+  public async addPost(post: Post) {
+    // 仅支持MD
+    const params = JSON.stringify({
+      title: post.title,
+      markdowncontent: post.markdown,
+      content: post.html,
+      readType: "public",
+      level: 0,
+      tags: post.mt_keywords,
+      status: 0,
+      categories: post.categories.join(","),
+      type: "original",
+      original_link: "",
+      authorized_status: false,
+      Description: post.shortDesc,
+      not_auto_saved: "1",
+      source: "pc_mdeditor",
+      cover_images: [],
+      cover_type: 1,
+      is_new: 1,
+      vote_id: 0,
+      resource_id: "",
+      pubStatus: "publish",
+    })
+
+    const res = await this.csdnFetch(
+      "https://bizapi.csdn.net/blog-console-api/v3/mdeditor/saveArticle",
+      [],
+      params,
+      "POST"
+    )
+    this.logger.debug("save csdn post res=>", res)
+
+    if (res?.code !== 200) {
+      throw new Error("CSDN文章发布失败，可能是等级不够导致，如过等级不够，请去掉文章标签")
+    }
+
+    const postid = res.data.id.toString()
+
+    return {
+      status: "success",
+      post_id: postid,
+    }
+  }
+
+  public async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
+    // 仅支持MD
+    const params = JSON.stringify({
+      id: postid,
+      title: post.title,
+      markdowncontent: post.markdown,
+      content: post.html,
+      readType: "public",
+      level: "1",
+      tags: post.mt_keywords,
+      status: 0,
+      categories: post.categories.join(","),
+      type: "original",
+      original_link: "",
+      authorized_status: false,
+      Description: post.shortDesc,
+      resource_url: "",
+      not_auto_saved: "1",
+      source: "pc_mdeditor",
+      cover_images: [],
+      cover_type: 1,
+      is_new: 1,
+      vote_id: 0,
+      resource_id: "",
+      pubStatus: "publish",
+    })
+
+    const res = await this.csdnFetch(
+      "https://bizapi.csdn.net/blog-console-api/v3/mdeditor/saveArticle",
+      [],
+      params,
+      "POST"
+    )
+    this.logger.debug("save csdn post res=>", res)
+
+    if (res?.code !== 200) {
+      throw new Error("CSDN文章更新失败，可能是等级不够导致，如过等级不够，请去掉文章标签")
+    }
+
+    this.logger.debug("edit csdn post res=>", res)
+    return true
+  }
+
+  public async getPost(postid: string): Promise<Post> {
+    const res = await this.csdnFetch(`https://bizapi.csdn.net/blog-console-api/v3/editor/getArticle?id=${postid}`)
+    this.logger.debug("get csdn post =>", res)
+
+    const post = new Post()
+    if (res?.code === 200) {
+      const csdnPost = res?.data
+      post.postid = csdnPost.article_id
+      post.title = csdnPost.title
+      post.mt_keywords = csdnPost?.tags ?? ""
+      post.categories = csdnPost?.categories.split(",") ?? []
+    }
+    return post
+  }
+
+  public async deletePost(postid: string): Promise<boolean> {
+    let flag = false
+    try {
+      const params = JSON.stringify({
+        articleId: postid,
+        // 永久删除，默认只删除到回收站
+        deep: false,
+      })
+      const res = await this.csdnFetch(
+        "https://bizapi.csdn.net/blog/phoenix/console/v1/article/del",
+        [],
+        params,
+        "POST"
+      )
+      this.logger.debug("delete csdn article res=>", res)
+
+      if (res?.code !== 200) {
+        throw new Error(res?.message)
+      }
+
+      flag = true
+    } catch (e) {
+      this.logger.error("CSDN文章删除失败", e)
+      throw e
+    }
+
+    return flag
   }
 
   // ================

@@ -36,12 +36,9 @@ export class CsdnConfig extends CommonWebConfig {
     this.pageType = PageTypeEnum.Markdown
     this.usernameEnabled = false
     this.passwordType = PasswordType.PasswordType_Cookie
-    this.cateEnabled = false
-    this.knowledgeSpaceEnabled = true
-    this.knowledgeSpaceTitle = "专栏"
-    this.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Single
-    this.allowKnowledgeSpaceChange = false
-    this.placeholder.knowledgeSpaceReadonlyModeTip =
-      "由于CSDN平台限制，暂时不支持编辑CSDN分类，如需修改，请删除后重新发布"
+    this.cateEnabled = true
+    this.categoryType = CategoryTypeEnum.CategoryType_Multi
+    this.allowCateChange = true
+    this.knowledgeSpaceEnabled = false
   }
 }
