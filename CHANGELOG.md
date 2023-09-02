@@ -1,5 +1,33 @@
 # Changelog
 
+## [1.12.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.11.3...v1.12.0) (2023-09-02)
+
+
+### Features
+
+* [#130](https://github.com/terwer/siyuan-plugin-publisher/issues/130) 支持发布到CSDN ([5566040](https://github.com/terwer/siyuan-plugin-publisher/commit/5566040934eddcc22d5d1480beab70294e994a28))
+* [#130](https://github.com/terwer/siyuan-plugin-publisher/issues/130) 支持发布到CSDN-完成授权验证 ([3f90230](https://github.com/terwer/siyuan-plugin-publisher/commit/3f90230106e5924401f8e50cfa91958053f8635a))
+* [#130](https://github.com/terwer/siyuan-plugin-publisher/issues/130) 支持发布到CSDN-支持CSDN图床 ([958c34b](https://github.com/terwer/siyuan-plugin-publisher/commit/958c34bcdea1f8111097f86c91ddfce3477a1777))
+* [#130](https://github.com/terwer/siyuan-plugin-publisher/issues/130) 支持发布到CSDN-支持CSDN图床 ([d700f52](https://github.com/terwer/siyuan-plugin-publisher/commit/d700f52d2281eb032d5607ca576502df75c0127f))
+* [#130](https://github.com/terwer/siyuan-plugin-publisher/issues/130) 支持发布到CSDN-支持CSDN图床 ([1a13e49](https://github.com/terwer/siyuan-plugin-publisher/commit/1a13e49b0d3c2462ebe9b672ff4916bc0f0f0d6a))
+* [#130](https://github.com/terwer/siyuan-plugin-publisher/issues/130) 支持发布到CSDN-支持专栏 ([6086047](https://github.com/terwer/siyuan-plugin-publisher/commit/6086047a8afa7c66c3060a9cba27d1e4dc7b7075))
+* [#130](https://github.com/terwer/siyuan-plugin-publisher/issues/130) 支持发布到CSDN-支持文章发布、更新和删除 ([0e7eb52](https://github.com/terwer/siyuan-plugin-publisher/commit/0e7eb5260fd09f72fbbf75a5cf5c437a74e4272f))
+
+
+### Bug Fixes
+
+* 修复调试模式思源地址错误的问题 ([d97499d](https://github.com/terwer/siyuan-plugin-publisher/commit/d97499d8de545ef64bca21536ebeb17e05cf254f))
+
+
+### Code Refactoring
+
+* 重构项目结构 ([9629fbc](https://github.com/terwer/siyuan-plugin-publisher/commit/9629fbc2eab90cc613f7ade523045d6cd8cff7ea))
+
+
+### Miscellaneous
+
+* **deps-dev:** bump vite-plugin-node-polyfills from 0.11.3 to 0.12.0 ([b298b5f](https://github.com/terwer/siyuan-plugin-publisher/commit/b298b5fd2f51f86d5d0f13fa0adedba857eda965))
+
 ## [1.11.3](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.11.2...v1.11.3) (2023-08-31)
 ### Bug Fixes
 * [#435](https://github.com/terwer/siyuan-plugin-publisher/issues/435) 过滤掉思源剪藏插件的引用摘要 ([617be1d](https://github.com/terwer/siyuan-plugin-publisher/commit/617be1de671f2dc424784d6dab49b8152177bf60))
