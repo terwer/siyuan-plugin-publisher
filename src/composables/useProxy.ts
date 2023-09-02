@@ -109,7 +109,7 @@ const useProxy = (middlewareUrl?: string) => {
       const fetchOptions = {
         method: method,
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": contentType,
           ...header,
         },
       }

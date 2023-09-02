@@ -26,7 +26,7 @@
 import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
 import CsdnUtils from "~/src/adaptors/web/csdn/csdnUtils.ts"
 import { CategoryInfo, Post, UserBlog } from "zhi-blog-api"
-import { StrUtil } from "zhi-common"
+import { JsonUtil, StrUtil } from "zhi-common"
 import WebUtils from "~/src/adaptors/web/base/webUtils.ts"
 
 /**
@@ -271,9 +271,83 @@ class CsdnWebAdaptor extends BaseWebApi {
     return flag
   }
 
+  public async uploadFile(file: File | Blob, filename?: string): Promise<any> {
+    this.logger.debug(`csdn start uploadFile ${filename}=>`, file)
+    if (file instanceof Blob) {
+      const uploadData = await this.requestUpload(filename)
+      this.logger.debug("csdn image uploadData =>", uploadData)
+      if (!uploadData) {
+        throw new Error("CSDN图片信息获取失败 =>" + filename)
+      }
+
+      const uploadUrl = uploadData.host
+      const formData = new FormData()
+      formData.append("key", uploadData.filePath)
+      formData.append("policy", uploadData.policy)
+      formData.append("OSSAccessKeyId", uploadData.accessId)
+      formData.append("success_action_status", "200")
+      formData.append("signature", uploadData.signature)
+      formData.append("callback", uploadData.callbackUrl)
+      formData.append("file", file)
+
+      this.logger.debug("csdn image upload strat...")
+      const response = await fetch(uploadUrl, {
+        method: "POST",
+        body: formData,
+      })
+      const resText = await response.text()
+      this.logger.debug("csdn image upload success, resText=>", resText)
+      const resJson = JsonUtil.safeParse<any>(resText, {} as any)
+      if (resJson.code !== 200) {
+        throw new Error("CSDN图片上传失败 =>" + filename)
+      }
+      return {
+        id: resJson.data.targetObjectKey,
+        object_key: resJson.data.targetObjectKeyy,
+        url: resJson.data.imageUrl,
+      }
+
+      // 其他方式，待研究。上面的仅PC客户端可用
+      // var res = await this.csdnFetch(uploadUrl, [], params, "POST", "multipart/form-data")
+      // this.logger.debug("csdn image upload success, res=>", res)
+    }
+
+    return {}
+  }
   // ================
   // private methods
   // ================
+  private async requestUpload(filename: string) {
+    const api = "https://imgservice.csdn.net/direct/v1.0/image/upload?watermark=&type=blog&rtype=markdown"
+    const fileExt = filename.split(".").pop()
+    if (!this.validateFileExt(fileExt)) {
+      return null
+    }
+
+    var res = await this.csdnFetch(api, {
+      "x-image-app": "direct_blog",
+      "x-image-suffix": fileExt,
+      "x-image-dir": "direct",
+    })
+    if (res.code !== 200) {
+      this.logger.error("图片可能已经上传，信息如下", res)
+      return null
+    }
+    return res.data
+  }
+
+  private validateFileExt(ext: string): boolean {
+    switch (ext.toLowerCase()) {
+      case "jpg":
+      case "png":
+      case "jpeg":
+      case "gif":
+        return true
+      default:
+        return false
+    }
+  }
+
   private async csdnFetch(
     url: string,
     headers: any = {},

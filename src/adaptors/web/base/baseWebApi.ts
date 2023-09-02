@@ -89,7 +89,7 @@ class BaseWebApi extends WebApi {
     const bits = mediaObject.bits
     this.logger.debug("newMediaObject on baseWebApi =>", mediaObject)
     const blob = new Blob([bits], { type: mediaObject.type })
-    const res = await this.uploadFile(blob as File)
+    const res = await this.uploadFile(blob as File, mediaObject.name)
     return {
       attachment_id: res?.id,
       date_created_gmt: new Date(),
