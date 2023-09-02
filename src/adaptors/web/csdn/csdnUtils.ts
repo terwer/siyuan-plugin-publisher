@@ -62,7 +62,7 @@ class CsdnUtils {
     method: string,
     accept: string,
     uuid: string,
-    content_type?: string | null
+    content_type: string
   ): string {
     // https://github.com/brix/crypto-js/issues/189
     // https://www.npmjs.com/package/crypto-js
@@ -71,7 +71,7 @@ class CsdnUtils {
     let toEnc: string
     if (method === "GET") {
       const path = s.pathname + s.search
-      toEnc = `GET\n${accept}\n\n\n\nx-ca-key:${CsdnUtils.X_CA_KEY}\nx-ca-nonce:${uuid}\n${path}`
+      toEnc = `GET\n${accept}\n\n${content_type}\n\nx-ca-key:${CsdnUtils.X_CA_KEY}\nx-ca-nonce:${uuid}\n${path}`
     } else {
       const path = s.pathname
       toEnc = `POST\n${accept}\n\n${content_type}\n\nx-ca-key:${CsdnUtils.X_CA_KEY}\nx-ca-nonce:${uuid}\n${path}`

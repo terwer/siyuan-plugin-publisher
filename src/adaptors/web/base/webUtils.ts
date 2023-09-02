@@ -23,25 +23,37 @@
  * questions.
  */
 
-import { CommonWebConfig } from "~/src/adaptors/web/base/commonWebConfig.ts"
-import { CategoryTypeEnum, PageTypeEnum, PasswordType } from "zhi-blog-api"
-
 /**
- * CSDN配置
+ * Web工具类，包含用于操作Cookie的方法
+ *
+ * @since 1.12.0
  */
-export class CsdnConfig extends CommonWebConfig {
-  constructor(username: string, password: string, middlewareUrl?: string) {
-    super("https://blog.csdn.net", "https://bizapi.csdn.net", username, password, middlewareUrl)
-    this.previewUrl = "[userid]/article/details/[postid]"
-    this.pageType = PageTypeEnum.Markdown
-    this.usernameEnabled = false
-    this.passwordType = PasswordType.PasswordType_Cookie
-    this.cateEnabled = false
-    this.knowledgeSpaceEnabled = true
-    this.knowledgeSpaceTitle = "专栏"
-    this.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Single
-    this.allowKnowledgeSpaceChange = false
-    this.placeholder.knowledgeSpaceReadonlyModeTip =
-      "由于CSDN平台限制，暂时不支持编辑CSDN分类，如需修改，请删除后重新发布"
+class WebUtils {
+  /**
+   * 从Cookie字符串中读取指定键的值
+   *
+   * @param key - 要查找的Cookie键
+   * @param cookieString - 包含Cookie的字符串
+   * @returns 包含键对应值的Cookie值，如果未找到则返回空字符串
+   */
+  public static readCookie(key: string, cookieString: string): string {
+    // 将Cookie字符串分割成Cookie键值对数组
+    const cookies = cookieString.split(";")
+
+    // 遍历Cookie数组，查找指定键的Cookie
+    for (const cookie of cookies) {
+      const [cookieKey, cookieValue] = cookie.split("=")
+
+      // 去除Cookie键的空白字符并比较是否与指定键相符
+      if (cookieKey.trim() === key) {
+        // 返回解码后的Cookie值，如果解码失败则返回空字符串
+        return decodeURIComponent(cookieValue) ?? ""
+      }
+    }
+
+    // 如果未找到指定键的Cookie则返回空字符串
+    return ""
   }
 }
+
+export default WebUtils

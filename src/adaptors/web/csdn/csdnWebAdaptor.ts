@@ -25,12 +25,9 @@
 
 import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
 import CsdnUtils from "~/src/adaptors/web/csdn/csdnUtils.ts"
-import { CsdnConfig } from "~/src/adaptors/web/csdn/csdnConfig.ts"
-import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { CommonFetchClient } from "zhi-fetch-middleware"
-import { isDev } from "~/src/utils/constants.ts"
-import { UserBlog } from "zhi-blog-api"
+import { CategoryInfo, UserBlog } from "zhi-blog-api"
+import { StrUtil } from "zhi-common"
+import WebUtils from "~/src/adaptors/web/base/webUtils.ts"
 
 /**
  * CSDN网页授权适配器
@@ -41,22 +38,18 @@ import { UserBlog } from "zhi-blog-api"
  * @since 0.9.0
  */
 class CsdnWebAdaptor extends BaseWebApi {
-  private readonly commonFetchClient: any
-
-  /**
-   * 初始化知乎 API 适配器
-   *
-   * @param appInstance 应用实例
-   * @param cfg 配置项
-   */
-  constructor(appInstance: PublisherAppInstance, cfg: CsdnConfig) {
-    super(appInstance, cfg)
-    this.cfg = cfg
-
-    const middlewareUrl = this.cfg.middlewareUrl ?? "https://api.terwer.space/api/middleware"
-    this.commonFetchClient = new CommonFetchClient(appInstance, "", middlewareUrl, isDev)
-    this.logger = createAppLogger("zhihu-web-adaptor")
-  }
+  // /**
+  //  * 初始化CSDN API 适配器
+  //  *
+  //  * @param appInstance 应用实例
+  //  * @param cfg 配置项
+  //  */
+  // constructor(appInstance: PublisherAppInstance, cfg: CsdnConfig) {
+  //   super(appInstance, cfg)
+  //   this.cfg = cfg
+  //
+  //   this.logger = createAppLogger("csdn-web-adaptor")
+  // }
 
   public async getMetaData(): Promise<any> {
     const res = await this.csdnFetch("https://bizapi.csdn.net/blog-console-api/v1/user/info")
@@ -78,8 +71,72 @@ class CsdnWebAdaptor extends BaseWebApi {
   public async getUsersBlogs(): Promise<Array<UserBlog>> {
     let result: UserBlog[] = []
 
+    const res = await this.csdnFetch("https://bizapi.csdn.net/blog/phoenix/console/v1/column/list?type=all")
+    this.logger.debug("get csdn columns =>", res)
+    if (res?.code === 200) {
+      const columnList = res?.data?.list
+      const column = columnList?.column ?? []
+      const payCcolumn = columnList?.pay_column ?? []
+
+      // 普通专栏
+      column.forEach((item: any) => {
+        const userblog: UserBlog = new UserBlog()
+        userblog.blogid = item.id
+        userblog.blogName = item.edit_title
+        userblog.url = item.column_url
+        // userblog.imgUrl = item.img_url
+        result.push(userblog)
+      })
+
+      // 付费专栏
+      payCcolumn.forEach((item: any) => {
+        const userblog: UserBlog = new UserBlog()
+        userblog.blogid = item.id
+        userblog.blogName = `[付费]${item.edit_title}`
+        userblog.url = item.column_url
+        // userblog.imgUrl = item.img_url
+        result.push(userblog)
+      })
+    }
+
     this.logger.debug("getUsersBlogs=>", result)
     return result
+  }
+
+  public async getCategories(): Promise<CategoryInfo[]> {
+    const cats = [] as CategoryInfo[]
+
+    const res = await this.csdnFetch("https://bizapi.csdn.net/blog/phoenix/console/v1/column/list?type=all")
+    this.logger.debug("get csdn columns =>", res)
+    if (res?.code === 200) {
+      const columnList = res?.data?.list
+      const column = columnList?.column ?? []
+      const payCcolumn = columnList?.pay_column ?? []
+
+      // 普通专栏
+      column.forEach((item: any) => {
+        const cat = new CategoryInfo()
+
+        cat.categoryId = item.id
+        cat.categoryName = item.edit_title
+        cat.description = item.column_url
+        cat.categoryDescription = item.desc
+        cats.push(cat)
+      })
+
+      // 付费专栏
+      payCcolumn.forEach((item: any) => {
+        const cat = new CategoryInfo()
+
+        cat.categoryId = item.id
+        cat.categoryName = `[付费]${item.edit_title}`
+        cat.description = item.column_url
+        cat.categoryDescription = item.desc
+        cats.push(cat)
+      })
+    }
+
+    return cats
   }
 
   // ================
@@ -90,40 +147,49 @@ class CsdnWebAdaptor extends BaseWebApi {
     headers: any = {},
     params: any = undefined,
     method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" = "GET",
-    contentType?: string | null
+    contentType: string = "application/json"
   ) {
     // 设置请求头
     const accept = "*/*"
-    const APPLICATION_JSON = "application/json"
     const xcakey = CsdnUtils.X_CA_KEY
     const xCaNonce = CsdnUtils.generateXCaNonce()
     const xCaSignature = CsdnUtils.generateXCaSignature(url, method, accept, xCaNonce, contentType)
 
-    const reqHeader = {
-      accept,
-      ...(contentType ? { "content-type": contentType } : {}),
-      "x-ca-key": xcakey,
-      "x-ca-nonce": xCaNonce,
-      "x-ca-signature": xCaSignature,
-      "x-ca-signature-headers": "x-ca-key,x-ca-nonce",
+    const reqHeaderMap = new Map<string, string>()
+    reqHeaderMap.set("accept", accept)
+    reqHeaderMap.set("content-type", contentType)
+    reqHeaderMap.set("x-ca-key", xcakey)
+    reqHeaderMap.set("x-ca-nonce", xCaNonce)
+    reqHeaderMap.set("x-ca-signature", xCaSignature)
+    reqHeaderMap.set("x-ca-signature-headers", "x-ca-key,x-ca-nonce")
+
+    const mergedHeaders = {
+      ...Object.fromEntries(reqHeaderMap),
       ...headers,
-      Cookie: this.cfg.password,
     }
 
     // 构建请求选项
     const requestOptions: RequestInit = {
       method: method,
-      headers: reqHeader,
+      headers: mergedHeaders,
       body: params,
-      redirect: "follow",
     }
 
     // 发送请求并返回响应
-    const res = await this.commonFetchClient.fetchCall(url, requestOptions)
+    this.logger.debug("csdn url =>", url)
+    this.logger.debug("csdn requestOptions =>", requestOptions)
+    const res = await this.webProxyFetch(url, [mergedHeaders], params, method, contentType)
     if (res?.code !== 200) {
       throw new Error(res?.body?.message)
     }
     return res
+  }
+
+  public async getPreviewUrl(postid: string): Promise<string> {
+    const token = this.cfg.password
+    const userid = WebUtils.readCookie("UserName", token)
+    const previewUrl = this.cfg.previewUrl.replace(/\[userid\]/g, userid).replace(/\[postid\]/g, postid)
+    return StrUtil.pathJoin(this.cfg.home ?? "", previewUrl)
   }
 }
 

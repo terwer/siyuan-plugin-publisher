@@ -429,6 +429,11 @@ export default {
   "setting.zhihu.apiUrl.tip": "Usually fixed, do not modify",
   "setting.zhihu.previewUrl.tip": "Zhihu platform article preview rules, usually: //[postid]",
 
+  "setting.csdn.home.tip": "CSDN blog homepage address, usually fixed",
+  "setting.csdn.password.tip": "CSDN cookies, do not modify",
+  "setting.csdn.apiUrl.tip": "Usually fixed, do not modify",
+  "setting.csdn.previewUrl.tip": "CSDN Platform Article Preview Rules",
+
   "setting.picgo.refer.to": "For details, please refer to:",
   "setting.picgo.refer.to.online.doc": "Picgo configuration online documentation",
   "setting.picgo.picbed": "Picbed setting",

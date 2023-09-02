@@ -37,9 +37,10 @@ describe("test csdnUtils", () => {
     const url = "https://bizapi.csdn.net/blog/phoenix/console/v1/column/list?type=all"
     const method = "GET"
     const accept = "*/*"
+    const contentType = "application/json"
 
     const xCaNonce = CsdnUtils.generateXCaNonce()
-    const xCaSignature = CsdnUtils.generateXCaSignature(url, method, accept, xCaNonce)
+    const xCaSignature = CsdnUtils.generateXCaSignature(url, method, accept, xCaNonce, contentType)
 
     console.log("x-ca-nonce:", xCaNonce)
     console.log("x-ca-signature:", xCaSignature)
