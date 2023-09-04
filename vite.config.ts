@@ -169,7 +169,7 @@ export default defineConfig({
         // can also be 'build', 'dev', or false
         Buffer: true,
         global: true,
-        process: false,
+        process: true,
       },
       protocolImports: true,
     }),
