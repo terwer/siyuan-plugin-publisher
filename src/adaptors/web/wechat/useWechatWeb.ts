@@ -82,6 +82,7 @@ const useWechatWeb = async (key?: string, newCfg?: WechatConfig) => {
 
   const webApi = new WechatWebAdaptor(appInstance, cfg)
   return {
+    cfg,
     webApi,
   }
 }

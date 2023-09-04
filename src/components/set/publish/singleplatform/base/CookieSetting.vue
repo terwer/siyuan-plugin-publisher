@@ -98,7 +98,7 @@ const submitForm = async (formEl) => {
     >
       <el-alert
         class="top-tip"
-        title="检测到当前为浏览器页面，受技术限制无法获取Cookie，请手动粘贴平台Cookie。本插件承诺，所有数据仅在您的本地存储，我们不会上传或者分享你的任何数据，请放心使用。如有疑问请查看帮助文档。"
+        title="检测到当前为浏览器页面或者受平台技术限制，无法获取Cookie，请手动粘贴平台Cookie。本插件承诺，所有数据仅在您的本地存储，我们不会上传或者分享你的任何数据，请放心使用。如有疑问请查看帮助文档。"
         type="error"
         :closable="false"
       />

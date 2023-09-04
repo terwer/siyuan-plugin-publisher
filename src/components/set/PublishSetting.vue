@@ -156,10 +156,14 @@ const handleSinglePlatformSetting = async (cfg: DynamicConfig) => {
 }
 
 const handleSinglePlatformWebAuth = async (cfg: DynamicConfig) => {
-  if (isInSiyuanWidget()) {
-    await _handleOpenBrowserAuth(cfg)
-  } else if (isInChromeExtension()) {
-    _handleChromeExtensionAuth(cfg)
+  if (!cfg.cookieLimit) {
+    if (isInSiyuanWidget()) {
+      await _handleOpenBrowserAuth(cfg)
+    } else if (isInChromeExtension()) {
+      _handleChromeExtensionAuth(cfg)
+    } else {
+      await _handleSetCookieAuth(cfg)
+    }
   } else {
     await _handleSetCookieAuth(cfg)
   }
@@ -246,10 +250,14 @@ const _handleSetCookieAuth = async (cfg: DynamicConfig) => {
 }
 
 const handleValidateWebAuth = async (cfg: DynamicConfig) => {
-  if (isInSiyuanWidget()) {
-    _handleValidateOpenBrowserAuth(cfg)
-  } else if (isInChromeExtension()) {
-    await _handleValidateChromeExtensionAuth(cfg)
+  if (!cfg.cookieLimit) {
+    if (isInSiyuanWidget()) {
+      _handleValidateOpenBrowserAuth(cfg)
+    } else if (isInChromeExtension()) {
+      await _handleValidateChromeExtensionAuth(cfg)
+    } else {
+      await _handleValidateCookieAuth(cfg)
+    }
   } else {
     await _handleValidateCookieAuth(cfg)
   }

@@ -38,6 +38,7 @@ import { useHexoApi } from "~/src/adaptors/api/hexo/useHexoApi.ts"
 import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
 import { useGitlabhexoApi } from "~/src/adaptors/api/gitlab-hexo/useGitlabhexoApi.ts"
 import { useCsdnWeb } from "~/src/adaptors/web/csdn/useCsdnWeb.ts"
+import { useWechatWeb } from "~/src/adaptors/web/wechat/useWechatWeb.ts"
 
 /**
  * 适配器统一入口
@@ -109,6 +110,11 @@ class Adaptors {
         conf = cfg
         break
       }
+      case SubPlatformType.Custom_Wechat: {
+        const { cfg } = await useWechatWeb(key)
+        conf = cfg
+        break
+      }
       // case SubPlatformType.Custom_Jianshu: {
       //   const { cfg } = await useJianshuWeb(key)
       //   conf = cfg
@@ -116,11 +122,6 @@ class Adaptors {
       // }
       // case SubPlatformType.Custom_Juejin: {
       //   const { cfg } = await useJuejinWeb(key)
-      //   conf = cfg
-      //   break
-      // }
-      // case SubPlatformType.Custom_Wechat: {
-      //   const { cfg } = await useWechatWeb(key)
       //   conf = cfg
       //   break
       // }
@@ -199,6 +200,11 @@ class Adaptors {
         blogAdaptor = webApi
         break
       }
+      case SubPlatformType.Custom_Wechat: {
+        const { webApi } = await useWechatWeb(key, newCfg)
+        blogAdaptor = webApi
+        break
+      }
       // case SubPlatformType.Custom_Jianshu: {
       //   const { webApi } = await useJianshuWeb(key, newCfg)
       //   blogAdaptor = webApi
@@ -206,11 +212,6 @@ class Adaptors {
       // }
       // case SubPlatformType.Custom_Juejin: {
       //   const { webApi } = await useJuejinWeb(key, newCfg)
-      //   blogAdaptor = webApi
-      //   break
-      // }
-      // case SubPlatformType.Custom_Wechat: {
-      //   const { webApi } = await useWechatWeb(key, newCfg)
       //   blogAdaptor = webApi
       //   break
       // }

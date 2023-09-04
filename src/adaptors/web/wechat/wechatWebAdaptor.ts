@@ -24,6 +24,8 @@
  */
 
 import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
+import * as cheerio from "cheerio"
+import { StrUtil } from "zhi-common"
 
 /**
  * 掘金网页授权适配器
@@ -35,13 +37,38 @@ import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
  */
 class WechatWebAdaptor extends BaseWebApi {
   public async getMetaData(): Promise<any> {
-    const res = await this.proxyFetch("https://mp.weixin.qq.com/")
-    console.log("WechatWebAdaptor res=>", res)
-    const flag = false
-    this.logger.info(`get wechat metadata finished, flag => ${flag}`)
-    return {
-      flag: flag,
+    const res = await this.webProxyFetch("https://mp.weixin.qq.com/", [], {}, "GET", "text/html")
+    this.logger.debug("WechatWebAdaptor res=>", { res: res })
+    const $ = cheerio.load(res)
+    const scriptElement = $("script")[0]
+    // 获取元素的文本内容
+    const scriptText = $(scriptElement).text()
+    this.logger.debug("scriptElement =>", { scriptText: scriptText })
+
+    const code = scriptText.substring(scriptText.indexOf("window.wx.commonData"))
+    const wx = new Function("window.wx = {}; window.handlerNickname = function(){};" + code + "; return window.wx;")()
+    this.logger.debug(code, wx)
+
+    const commonData = Object.assign({}, wx.commonData)
+    delete (window as any).wx
+    if (!commonData.data.t) {
+      throw new Error("微信公众号未登录或者等于过期，请更新cookie")
     }
+
+    const metadata = {
+      flag: !StrUtil.isEmptyString(commonData.data.t),
+      uid: commonData.data.user_name,
+      title: commonData.data.nick_name,
+      token: commonData.data.t,
+      commonData: commonData,
+      avatar: $(".weui-desktop-account__thumb").eq(0).attr("src"),
+      type: "weixin",
+      supportTypes: ["html"],
+      home: "https://mp.weixin.qq.com",
+      icon: "https://mp.weixin.qq.com/favicon.ico",
+    }
+    this.logger.info(`get wechat metadata finished, flag => ${metadata}`)
+    return metadata
   }
 }
 
