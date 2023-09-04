@@ -24,7 +24,6 @@
  */
 
 export const isDev = process.env.DEV_MODE === "true"
-// export const isDev = false
 export const isDebugMode = process.env.DEBUG_MODE === "true"
 
 /**
@@ -35,9 +34,9 @@ export const DYNAMIC_CONFIG_KEY = "dynamic-config"
 /**
  * 必须使用平台自带的图片上传的平台
  */
-export const MUST_USE_OWN_PLATFORM = ["custom_Zhihu"]
+export const MUST_USE_OWN_PLATFORM = ["custom_Zhihu", "custom_Csdn"]
 
 /**
  * 必须使用图床的平台
  */
-export const MUST_USE_PICBED_PLATFORM = ["common_Yuque", "common_Notion", "common_Hexo"]
+export const MUST_USE_PICBED_PLATFORM = ["common_Yuque", "common_Notion", "common_Hexo", "gitlab_Gitlabhexo"]
