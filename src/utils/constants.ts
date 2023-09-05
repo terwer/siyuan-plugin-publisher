@@ -34,7 +34,7 @@ export const DYNAMIC_CONFIG_KEY = "dynamic-config"
 /**
  * 必须使用平台自带的图片上传的平台
  */
-export const MUST_USE_OWN_PLATFORM = ["custom_Zhihu", "custom_Csdn"]
+export const MUST_USE_OWN_PLATFORM = ["custom_Zhihu", "custom_Csdn", "custom_Wechat"]
 
 /**
  * 必须使用图床的平台

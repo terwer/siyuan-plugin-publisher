@@ -24,8 +24,8 @@
  */
 
 import { SypConfig } from "~/syp.config.ts"
-import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
 import { DynamicConfig } from "~/src/platforms/dynamicConfig.ts"
+import { BlogConfig } from "zhi-blog-api"
 
 /**
  * 表示发布配置的接口
@@ -48,11 +48,11 @@ interface IPublishCfg {
   dynamicConfigArray: DynamicConfig[]
 
   /**
-   * CommonBlogConfig 类型的配置对象
+   * BlogConfig 类型的配置对象
    *
-   * @type {CommonBlogConfig}
+   * @type {BlogConfig}
    */
-  cfg: CommonBlogConfig
+  cfg: BlogConfig
 
   /**
    * DynamicConfig 类型的动态配置对象

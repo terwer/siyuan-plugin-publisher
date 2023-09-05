@@ -26,7 +26,7 @@
 import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
 import * as cheerio from "cheerio"
 import { HtmlUtil, JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
-import {Post, UserBlog} from "zhi-blog-api"
+import { Post, UserBlog } from "zhi-blog-api"
 import { toRaw } from "vue"
 import { isDev } from "~/src/utils/constants.ts"
 
@@ -471,6 +471,14 @@ class WechatWebAdaptor extends BaseWebApi {
   public async getPreviewUrl(postid: string): Promise<string> {
     const token = this.cfg.metadata.token
     return `https://mp.weixin.qq.com/cgi-bin/appmsg?t=media/appmsg_edit&action=edit&type=77&appmsgid=${postid}&token=${token}&lang=zh_CN`
+  }
+
+  public async uploadFile(file: File | Blob, filename?: string): Promise<any> {
+    this.logger.debug(`wechat start uploadFile ${filename}=>`, file)
+    if (file instanceof Blob) {
+    }
+
+    return {}
   }
 }
 
