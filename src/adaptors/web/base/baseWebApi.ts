@@ -36,6 +36,7 @@ import { BaseExtendApi } from "~/src/adaptors/base/baseExtendApi.ts"
  * @since 0.9.0
  */
 class BaseWebApi extends WebApi {
+  protected appInstance: PublisherAppInstance
   protected logger: ILogger
   protected cfg: WebConfig
   protected readonly baseExtendApi: BaseExtendApi
@@ -50,6 +51,7 @@ class BaseWebApi extends WebApi {
   constructor(appInstance: PublisherAppInstance, cfg: WebConfig) {
     super()
 
+    this.appInstance = appInstance
     this.cfg = cfg
     this.logger = createAppLogger("base-web-api")
     this.baseExtendApi = new BaseExtendApi(this)
@@ -78,11 +80,15 @@ class BaseWebApi extends WebApi {
 
   // 兼容的方法
   public async newPost(post: Post, publish?: boolean): Promise<string> {
-    const res = await this.addPost(post)
-    if (res.status !== "success") {
-      throw new Error("网页授权发布文章异常")
+    try {
+      const res = await this.addPost(post)
+      if (res.status !== "success") {
+        throw new Error("网页授权发布文章异常")
+      }
+      return res.post_id
+    } catch (e) {
+      throw e
     }
-    return res.post_id
   }
 
   public async newMediaObject(mediaObject: MediaObject, customHandler?: any): Promise<Attachment> {

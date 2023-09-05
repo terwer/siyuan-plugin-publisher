@@ -24,7 +24,7 @@
  */
 
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { DeviceDetection } from "zhi-device"
+import { DeviceDetection, SiyuanDevice } from "zhi-device"
 import { Deserializer, Serializer, SimpleXmlRpcClient, XmlrpcUtil } from "simple-xmlrpc"
 import fetch from "cross-fetch"
 import { create } from "xmlbuilder2"
@@ -35,6 +35,9 @@ import { create } from "xmlbuilder2"
 export class PublisherAppInstance {
   public logger: any
   public deviceType: any
+
+  public win: any
+  public moduleBase: string
 
   public fetch: any
   public xmlbuilder2: any
@@ -54,5 +57,27 @@ export class PublisherAppInstance {
       Deserializer: Deserializer,
       XmlrpcUtil: XmlrpcUtil,
     }
+
+    this.win = SiyuanDevice.siyuanWindow()
+    this.moduleBase = `${this.win?.siyuan?.config?.system?.workspaceDir}/data${process.env.APP_BASE}`
+  }
+
+  /**
+   * 动态获取 zhi-formdata-fetch
+   */
+  public getFormdataFetch() {
+    /**
+     * 执行网络请求并返回数据
+     *
+     * @param url - 请求的URL地址
+     * @param headers - 请求头信息
+     * @param formData - 可选的FormData对象，用于发送表单数据
+     * @returns 包含响应数据的Promise
+     */
+    // public async doFetch(url: string, headers: Record<string, any>, formData?: FormData) {}
+
+    const depPath = `${this.moduleBase}libs/zhi-formdata-fetch/index.cjs`
+    this.logger.debug(`will require zhi-formdata-fetch from ${depPath}`)
+    return this.win.require(depPath).FormdataFetch as any
   }
 }

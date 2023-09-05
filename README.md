@@ -158,13 +158,15 @@ more useful tools~
 
 * Thanks to the enthusiastic support of the following users, I will continue to update and maintain the project!
 
+  - 2023-09-04 *Xia Donate to [Publish Tool]
+  - 2023-08-31 *Cheng Donate to [Publishing Tool] Thanks for providing the note posting tool, reminder change
   - 2023-08-31 *? Donated to [Publish Tool] Thanks for providing the siyuan-note Publish Tool.
   - 2023-08-14 *? Donated to [Publish Tool]
   - 2023-08-10 *f Donated to [Publish Tool] for liking the release plugin.
   - 2023-08-10 *2 Donated to [Publish Tool] to support the development of Source Release Plugin.
-  - 2023-07-13 *亮 Donated to [Document Alias] Is it possible to expand the functionality to H1?
+  - 2023-07-13 *Liang Donated to [Document Alias] Is it possible to expand the functionality to H1?
   - 2023-07-09 *z Donated to [Online Sharing] The online sharing plugin is great, thanks!
-  - 2023-06-14 *俊 Donated to [Document Roaming] Thanks for the Document Roaming feature.
-  - 2023-01-16 *站 Donated to [Import Tool] Finally, we can import epub files.
+  - 2023-06-14 *Jun Donated to [Document Roaming] Thanks for the Document Roaming feature.
+  - 2023-01-16 *Zhan Donated to [Import Tool] Finally, we can import epub files.
 
     If you do not want to display donation information, you can send an email directly to youweics@163.com.
