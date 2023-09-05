@@ -434,6 +434,11 @@ export default {
   "setting.csdn.apiUrl.tip": "Usually fixed, do not modify",
   "setting.csdn.previewUrl.tip": "CSDN Platform Article Preview Rules",
 
+  "setting.wechat.home.tip": "The address of the home page of the WeChat public account is usually fixed",
+  "setting.wechat.password.tip": "Please do not modify the cookies of WeChat official account",
+  "setting.wechat.apiUrl.tip": "Usually fixed, do not modify",
+  "setting.wechat.previewUrl.tip": "WeChat official account platform article preview rules",
+
   "setting.picgo.refer.to": "For details, please refer to:",
   "setting.picgo.refer.to.online.doc": "Picgo configuration online documentation",
   "setting.picgo.picbed": "Picbed setting",
