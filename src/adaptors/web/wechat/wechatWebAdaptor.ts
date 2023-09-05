@@ -489,17 +489,19 @@ class WechatWebAdaptor extends BaseWebApi {
     // 微信公众号自定义的处理
     const cfg: BlogConfig = publishCfg?.cfg
     const updatedPost = _.cloneDeep(doc) as Post
+    const html = updatedPost.html
     this.logger.info("准备处理微信公众号正文")
-
-    let updatedHtml = post.html
+    this.logger.debug("html =>", { html: html })
+    let updatedHtml = html
 
     // 修复图片格式
     // <img data-s="300,640" class="rich_pages wxw-img js_insertlocalimg"
     // data-src="https://mmbiz.qpic.cn/mmbiz_jpg/oZAZzwd6M3bxCPu3jBlcHa0et8fopdqFF6sywBwb4Uric0f5L67l97DrcPoWhfPNMTicMEPz3ze7ovG054yhUIpA/0?wx_fmt=jpeg"
     // style="" data-ratio="1" data-w="460" data-type="jpeg">
 
-    updatedPost.markdown = updatedHtml
+    updatedPost.html = updatedHtml
     this.logger.info("微信公众号正文处理完毕")
+    this.logger.debug("updatedHtml =>", { updatedHtml: updatedHtml })
 
     // 发布格式
     if (cfg?.pageType == PageTypeEnum.Markdown) {
