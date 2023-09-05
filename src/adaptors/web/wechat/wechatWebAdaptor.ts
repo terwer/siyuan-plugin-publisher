@@ -26,9 +26,10 @@
 import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
 import * as cheerio from "cheerio"
 import { HtmlUtil, JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
-import { Post, UserBlog } from "zhi-blog-api"
+import { BlogConfig, PageTypeEnum, Post, UserBlog } from "zhi-blog-api"
 import { toRaw } from "vue"
 import { isDev } from "~/src/utils/constants.ts"
+import _ from "lodash"
 
 /**
  * 微信公众号网页授权适配器
@@ -479,6 +480,35 @@ class WechatWebAdaptor extends BaseWebApi {
     }
 
     return {}
+  }
+
+  public override async preEditPost(post: Post, id?: string, publishCfg?: any): Promise<Post> {
+    // 公共的属性预处理
+    const doc = await super.preEditPost(post, id, publishCfg)
+
+    // 微信公众号自定义的处理
+    const cfg: BlogConfig = publishCfg?.cfg
+    const updatedPost = _.cloneDeep(doc) as Post
+    this.logger.info("准备处理微信公众号正文")
+
+    let updatedHtml = post.html
+
+    // 修复图片格式
+    // <img data-s="300,640" class="rich_pages wxw-img js_insertlocalimg"
+    // data-src="https://mmbiz.qpic.cn/mmbiz_jpg/oZAZzwd6M3bxCPu3jBlcHa0et8fopdqFF6sywBwb4Uric0f5L67l97DrcPoWhfPNMTicMEPz3ze7ovG054yhUIpA/0?wx_fmt=jpeg"
+    // style="" data-ratio="1" data-w="460" data-type="jpeg">
+
+    updatedPost.markdown = updatedHtml
+    this.logger.info("微信公众号正文处理完毕")
+
+    // 发布格式
+    if (cfg?.pageType == PageTypeEnum.Markdown) {
+      post.description = post.markdown
+    } else {
+      post.description = post.html
+    }
+
+    return updatedPost
   }
 }
 
