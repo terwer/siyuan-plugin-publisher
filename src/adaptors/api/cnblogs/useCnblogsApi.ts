@@ -88,6 +88,7 @@ export const useCnblogsApi = async (key?: string, newCfg?: CnblogsConfig) => {
   }
 
   // 博客园使用多选分类
+  cfg.tagEnabled = true
   cfg.cateEnabled = true
   cfg.categoryType = CategoryTypeEnum.CategoryType_Multi
   cfg.allowCateChange = true

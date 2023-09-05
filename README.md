@@ -8,9 +8,11 @@ Publish articles from siyuan-note to platforms such as Yuque, Notion, Cnblogs, W
 
 Support features such as fast publishing, image bed management, platform expansion, smart labels, etc.
 
-🎉 Version `1.12.0` of Publish Tool with the first CSDN support is now available!
+> 🎉 The first version `1.13.0` of Publish Tool that supports WeChat Official Accounts released!
 
-**Facing issues or have suggestions? Please join QQ group `895063267` for discussion. Alternatively, refer to the online documentation below:**
+> Platform Limitations:
+  - **WeChat Official Accounts**: Publishing Tool now supports posting articles to the WeChat Official Accounts draft box in version `1.13.0` and beyond. However, due to limitations on the WeChat platform in Electron, normal login operations are not possible. Therefore, you will need to visit `https://mp.weixin.qq.com/` yourself, complete the login, copy the cookie, and then paste it into the configuration options.
+  - **Notion**: Since Notion is block-based, not a whole document, it is constrained by technology and does not support updates. To update, you can only delete and then repost it.
 
 > [Click here](https://blog.terwer.space/s/20230810132040-nn4q7vs) to view the latest help documentation.
 

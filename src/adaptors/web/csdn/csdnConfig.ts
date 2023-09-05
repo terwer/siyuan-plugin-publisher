@@ -36,6 +36,7 @@ export class CsdnConfig extends CommonWebConfig {
     this.pageType = PageTypeEnum.Markdown
     this.usernameEnabled = false
     this.passwordType = PasswordType.PasswordType_Cookie
+    this.tagEnabled = true
     this.cateEnabled = true
     this.categoryType = CategoryTypeEnum.CategoryType_Multi
     this.allowCateChange = true

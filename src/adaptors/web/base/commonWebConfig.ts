@@ -52,6 +52,9 @@ export class CommonWebConfig extends WebConfig {
     this.allowPreviewUrlChange = true
     this.showTokenTip = false
     this.yamlLinkEnabled = true
+    this.tagEnabled = false
+    this.cateEnabled = false
+    this.knowledgeSpaceEnabled = false
     this.placeholder = new CommonWebPlaceholder()
   }
 }

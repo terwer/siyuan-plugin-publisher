@@ -81,6 +81,8 @@ const useCsdnWeb = async (key?: string, newCfg?: CsdnConfig) => {
     }
   }
 
+  // 标签
+  cfg.tagEnabled = true
   // CSDN使用多选分类作为专栏
   cfg.cateEnabled = true
   cfg.categoryType = CategoryTypeEnum.CategoryType_Multi

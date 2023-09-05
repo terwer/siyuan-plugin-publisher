@@ -51,6 +51,7 @@ class HexoConfig extends CommonGithubConfig {
     this.pageType = PageTypeEnum.Markdown
     this.passwordType = PasswordType.PasswordType_Token
     this.allowPreviewUrlChange = false
+    this.tagEnabled = true
     this.cateEnabled = true
     this.allowCateChange = true
     this.categoryType = CategoryTypeEnum.CategoryType_Multi

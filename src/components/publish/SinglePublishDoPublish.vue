@@ -506,6 +506,7 @@ onMounted(async () => {
 
                   <!-- 标签 -->
                   <publish-tags
+                    v-if="formData.publishCfg.cfg.tagEnabled"
                     v-model:use-ai="formData.useAi"
                     v-model:page-id="id"
                     v-model:tags="formData.mergedPost.mt_keywords"

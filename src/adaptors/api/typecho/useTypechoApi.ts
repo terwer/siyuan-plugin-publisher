@@ -83,6 +83,8 @@ export const useTypechoApi = async (key?: string, newCfg?: TypechoConfig) => {
     }
   }
 
+  // 标签
+  cfg.tagEnabled = true
   // Typecho使用多选分类
   cfg.cateEnabled = true
   cfg.categoryType = CategoryTypeEnum.CategoryType_Multi

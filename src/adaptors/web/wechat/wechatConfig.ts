@@ -24,12 +24,22 @@
  */
 
 import { CommonWebConfig } from "~/src/adaptors/web/base/commonWebConfig.ts"
+import { PageTypeEnum, PasswordType } from "zhi-blog-api"
 
 /**
  * 微信公众号配置
  */
 export class WechatConfig extends CommonWebConfig {
   constructor(username: string, password: string, middlewareUrl?: string) {
-    super("", "", username, password, middlewareUrl)
+    super("https://mp.weixin.qq.com", "https://mp.weixin.qq.com/cgi-bin/appmsg", username, password, middlewareUrl)
+
+    this.previewUrl =
+      "/cgi-bin/appmsg?t=media/appmsg_edit&action=edit&type=77&appmsgid=[postid]&token=[token]&lang=zh_CN"
+    this.pageType = PageTypeEnum.Html
+    this.passwordType = PasswordType.PasswordType_Cookie
+    this.usernameEnabled = false
+    this.tagEnabled = false
+    this.cateEnabled = false
+    this.knowledgeSpaceEnabled = false
   }
 }

@@ -35,6 +35,7 @@ import TypechoSetting from "~/src/components/set/publish/singleplatform/metawebl
 import YuqueSetting from "~/src/components/set/publish/singleplatform/commonblog/YuqueSetting.vue"
 import ZhihuSetting from "~/src/components/set/publish/singleplatform/web/ZhihuSetting.vue"
 import GitlabhexoSetting from "~/src/components/set/publish/singleplatform/gitlab/GitlabhexoSetting.vue"
+import WechatSetting from "~/src/components/set/publish/singleplatform/web/WechatSetting.vue"
 
 // uses
 const { t } = useVueI18n()
@@ -58,6 +59,7 @@ const subtype = getSubPlatformTypeByKey(apiType)
     <wordpress-setting v-else-if="subtype === SubPlatformType.Wordpress_Wordpress" :api-type="apiType" />
     <zhihu-setting v-else-if="subtype === SubPlatformType.Custom_Zhihu" :api-type="apiType" />
     <csdn-setting v-else-if="subtype === SubPlatformType.Custom_CSDN" :api-type="apiType" />
+    <wechat-setting v-else-if="subtype === SubPlatformType.Custom_Wechat" :api-type="apiType" />
     <span v-else>
       <el-alert :closable="false" :title="t('setting.entry.not.supported')" class="top-tip" type="error" />
     </span>

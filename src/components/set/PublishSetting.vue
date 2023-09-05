@@ -36,6 +36,7 @@ import {
   deletePlatformByKey,
   DynamicConfig,
   DynamicJsonCfg,
+  getDynCfgByKey,
   isDynamicKeyExists,
   PlatformType,
   replacePlatformByKey,
@@ -242,7 +243,9 @@ const _handleSetCookieAuth = async (cfg: DynamicConfig) => {
   }
 
   // 更新cookie
-  const settingCfg = JsonUtil.safeParse<WebConfig>(formData.setting[cfg.platformKey], {} as WebConfig)
+  const storedCfg = JsonUtil.safeParse<any>(formData.setting[cfg.platformKey], {} as any)
+  const settingCfg = (await Adaptors.getCfg(cfg.platformKey, storedCfg)) as WebConfig
+
   formData.dlgKey = cfg.platformKey
   formData.dlgSettingCfg = settingCfg
   formData.dlgCookieTitle = `${cfg.platformName} Cookie 设置`
@@ -656,9 +659,9 @@ onMounted(async () => {
       <!-- 通用设置弹窗 -->
       <el-dialog v-model="formData.cookieSettingFormVisible" :title="formData.dlgCookieTitle">
         <cookie-setting
-          :key="formData.dlgKey"
-          :setting="formData.setting"
-          :setting-cfg="formData.dlgSettingCfg"
+          v-model:api-type="formData.dlgKey"
+          v-model:setting="formData.setting"
+          v-model:setting-cfg="formData.dlgSettingCfg"
           @emitHideDlg="handleHideCookieDlg"
         />
       </el-dialog>
