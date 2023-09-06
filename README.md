@@ -36,6 +36,7 @@ Names not listed in order
 - [X] WordPress
 - [X] Zhihu
 - [X] CSDN
+- [X] Wechat
 
 ## Core Features
 

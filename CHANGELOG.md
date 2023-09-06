@@ -1,13 +1,22 @@
 # Changelog
 
-## [1.12.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.11.3...v1.12.0) (2023-09-02)
+## [1.13.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.12.0...v1.13.0) (2023-09-06)
 ### Features
+* 微信公众号支持 cookie 认证 ([7816ca5](https://github.com/terwer/siyuan-plugin-publisher/commit/7816ca516b3c2630b4a0a635aa9ddb2416439dc7))
+* 微信公众号支持上传图片 ([2384e72](https://github.com/terwer/siyuan-plugin-publisher/commit/2384e72817b05058601351ed263c49b956a830cc))
+* 微信公众号文章发布form表单探索 ([9c6ab1b](https://github.com/terwer/siyuan-plugin-publisher/commit/9c6ab1b1f0f79cd52ec520dd9f161dfdb0e28db4))
+* 微信公众号文章文章更新 ([85e3668](https://github.com/terwer/siyuan-plugin-publisher/commit/85e3668d87bcac8c4fb3d69d495727050d0e5589))
+### Bug Fixes
+* 修复图床插件开启的时候csdn平台的图片问题 ([3eb68c0](https://github.com/terwer/siyuan-plugin-publisher/commit/3eb68c08253ca5db1d257797fee0c26837d306e5))
+* 修复部分文案错误 ([8267742](https://github.com/terwer/siyuan-plugin-publisher/commit/8267742b0fa964b4b0d1f7ea13158c39bf16b8bf))
+* 对不支持标签的平台隐藏标签设置 ([7ecfb23](https://github.com/terwer/siyuan-plugin-publisher/commit/7ecfb235c470129b0333057290a3aba71d053701))
+* 支持平台一键导入 ([1c8934e](https://github.com/terwer/siyuan-plugin-publisher/commit/1c8934ea1e9795ab816f914938d4159a155a9103))
+## [1.12.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.11.3...v1.12.0) (2023-09-02)
 * [#130](https://github.com/terwer/siyuan-plugin-publisher/issues/130) 支持发布到CSDN ([5566040](https://github.com/terwer/siyuan-plugin-publisher/commit/5566040934eddcc22d5d1480beab70294e994a28))
 * 支持发布到csdn，完成授权验证 ([3f90230](https://github.com/terwer/siyuan-plugin-publisher/commit/3f90230106e5924401f8e50cfa91958053f8635a))
 * 支持发布到csdn，支持csdn图床 ([958c34b](https://github.com/terwer/siyuan-plugin-publisher/commit/958c34bcdea1f8111097f86c91ddfce3477a1777))
 * 支持发布到csdn，支持专栏 ([6086047](https://github.com/terwer/siyuan-plugin-publisher/commit/6086047a8afa7c66c3060a9cba27d1e4dc7b7075))
 * 支持发布到csdn，支持文章发布、更新和删除 ([0e7eb52](https://github.com/terwer/siyuan-plugin-publisher/commit/0e7eb5260fd09f72fbbf75a5cf5c437a74e4272f))
-### Bug Fixes
 * 修复调试模式思源地址错误的问题 ([d97499d](https://github.com/terwer/siyuan-plugin-publisher/commit/d97499d8de545ef64bca21536ebeb17e05cf254f))
 ### Code Refactoring
 * 重构项目结构 ([9629fbc](https://github.com/terwer/siyuan-plugin-publisher/commit/9629fbc2eab90cc613f7ade523045d6cd8cff7ea))
