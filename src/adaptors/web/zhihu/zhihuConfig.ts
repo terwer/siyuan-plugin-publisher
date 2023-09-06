@@ -34,8 +34,9 @@ export class ZhihuConfig extends CommonWebConfig {
     super("https://zhuanlan.zhihu.com", "https://zhuanlan.zhihu.com/api", username, password, middlewareUrl)
     this.previewUrl = "/p/[postid]"
     this.pageType = PageTypeEnum.Html
-    this.usernameEnabled = true
     this.passwordType = PasswordType.PasswordType_Cookie
+    this.usernameEnabled = true
+    this.tagEnabled = false
     this.cateEnabled = false
     this.knowledgeSpaceEnabled = true
     this.knowledgeSpaceTitle = "专栏"

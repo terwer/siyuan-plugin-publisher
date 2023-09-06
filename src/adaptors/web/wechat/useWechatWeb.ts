@@ -80,8 +80,14 @@ const useWechatWeb = async (key?: string, newCfg?: WechatConfig) => {
     }
   }
 
+  // 微信公众号不支持标签、分类、知识空间
+  cfg.tagEnabled = false
+  cfg.cateEnabled = false
+  cfg.knowledgeSpaceEnabled = false
+
   const webApi = new WechatWebAdaptor(appInstance, cfg)
   return {
+    cfg,
     webApi,
   }
 }

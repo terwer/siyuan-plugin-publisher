@@ -424,9 +424,14 @@ export default {
   "setting.zhihu.previewUrl.tip": "知乎平台文章预览规则，通常是：/[postid]",
 
   "setting.csdn.home.tip": "CSDN博客首页地址，通常固定",
-  "setting.csdn.password.tip": "CSDNCookie，请勿修改",
+  "setting.csdn.password.tip": "CSDN的Cookie，请勿修改",
   "setting.csdn.apiUrl.tip": "通常固定，请勿修改",
   "setting.csdn.previewUrl.tip": "CSDN平台文章预览规则",
+
+  "setting.wechat.home.tip": "微信公众号首页地址，通常固定",
+  "setting.wechat.password.tip": "微信公众号的Cookie，请勿修改",
+  "setting.wechat.apiUrl.tip": "通常固定，请勿修改",
+  "setting.wechat.previewUrl.tip": "微信公众号平台文章预览规则",
 
   "setting.picgo.refer.to": "详情请参考：",
   "setting.picgo.refer.to.online.doc": "PicGO配置在线文档",

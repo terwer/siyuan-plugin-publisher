@@ -73,6 +73,8 @@ const useNotionApi = async (key: string, newCfg?: NotionConfig) => {
     }
   }
 
+  // 标签
+  cfg.tagEnabled = false
   // Notion 使用单选分类作为知识空间
   cfg.cateEnabled = false
   cfg.knowledgeSpaceEnabled = true

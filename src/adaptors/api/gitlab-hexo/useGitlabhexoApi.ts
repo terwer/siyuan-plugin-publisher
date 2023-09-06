@@ -77,6 +77,8 @@ const useGitlabhexoApi = async (key: string, newCfg?: GitlabhexoConfig) => {
     }
   }
 
+  // 标签
+  cfg.tagEnabled = true
   // 分类
   cfg.cateEnabled = true
   cfg.allowCateChange = true

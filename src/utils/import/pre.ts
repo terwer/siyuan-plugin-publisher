@@ -161,7 +161,7 @@ export const pre = {
       domain: "zhihu.com",
       isEnabled: false,
     },
-    // CSDN 目前有CA验证
+    // CSDN 目前有CA验证 已解决
     {
       platformType: PlatformType.Custom,
       subPlatformType: SubPlatformType.Custom_CSDN,
@@ -171,6 +171,18 @@ export const pre = {
       authMode: AuthMode.WEBSITE,
       authUrl: "https://passport.csdn.net/login",
       domain: "csdn.net",
+      isEnabled: false,
+    },
+    {
+      platformType: PlatformType.Custom,
+      subPlatformType: SubPlatformType.Custom_Wechat,
+      platformKey: "custom_Wechat",
+      platformName: "微信公众号",
+      platformIcon: svgIcons.iconIFWechat,
+      authMode: AuthMode.WEBSITE,
+      authUrl: "https://mp.weixin.qq.com/",
+      domain: "qq.com",
+      cookieLimit: true,
       isEnabled: false,
     },
     // {
@@ -193,17 +205,6 @@ export const pre = {
     //   authMode: AuthMode.WEBSITE,
     //   authUrl: "https://juejin.cn/login",
     //   domain: "juejin.cn",
-    //   isEnabled: false,
-    // },
-    // {
-    //   platformType: PlatformType.Custom,
-    //   subPlatformType: SubPlatformType.Custom_Wechat,
-    //   platformKey: "custom_Wechat",
-    //   platformName: "微信公众号",
-    //   platformIcon: svgIcons.iconIFWechat,
-    //   authMode: AuthMode.WEBSITE,
-    //   authUrl: "https://mp.weixin.qq.com/",
-    //   domain: "qq.com",
     //   isEnabled: false,
     // },
   ],

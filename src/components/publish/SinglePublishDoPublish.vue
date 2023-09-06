@@ -404,7 +404,7 @@ onMounted(async () => {
   formData.categoryConfig = {
     cateEnabled: cfg.cateEnabled,
     readonlyMode: formData.method === MethodEnum.METHOD_EDIT && !cfg.allowCateChange,
-    readonlyModeTip: cfg.placeholder.cateReadonlyModeTip,
+    readonlyModeTip: cfg?.placeholder?.cateReadonlyModeTip,
     apiType: key,
     cfg: cfg,
   }
@@ -412,7 +412,7 @@ onMounted(async () => {
   formData.knowledgeSpaceConfig = {
     cateEnabled: cfg.knowledgeSpaceEnabled,
     readonlyMode: formData.method === MethodEnum.METHOD_EDIT && !cfg.allowKnowledgeSpaceChange,
-    readonlyModeTip: cfg.placeholder.knowledgeSpaceReadonlyModeTip,
+    readonlyModeTip: cfg?.placeholder?.knowledgeSpaceReadonlyModeTip,
     apiType: key,
     cfg: cfg,
   }
@@ -506,6 +506,7 @@ onMounted(async () => {
 
                   <!-- 标签 -->
                   <publish-tags
+                    v-if="formData.publishCfg.cfg.tagEnabled"
                     v-model:use-ai="formData.useAi"
                     v-model:page-id="id"
                     v-model:tags="formData.mergedPost.mt_keywords"

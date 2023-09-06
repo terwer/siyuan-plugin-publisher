@@ -83,6 +83,8 @@ export const useWordpressApi = async (key?: string, newCfg?: WordpressConfig) =>
     }
   }
 
+  // 标签
+  cfg.tagEnabled = true
   // WordPress使用多选分类
   cfg.cateEnabled = true
   cfg.categoryType = CategoryTypeEnum.CategoryType_Multi

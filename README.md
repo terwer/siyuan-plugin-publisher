@@ -8,9 +8,11 @@ Publish articles from siyuan-note to platforms such as Yuque, Notion, Cnblogs, W
 
 Support features such as fast publishing, image bed management, platform expansion, smart labels, etc.
 
-🎉 Version `1.12.0` of Publish Tool with the first CSDN support is now available!
+> 🎉 The first version `1.13.0` of Publish Tool that supports WeChat Official Accounts released!
 
-**Facing issues or have suggestions? Please join QQ group `895063267` for discussion. Alternatively, refer to the online documentation below:**
+> Platform Limitations:
+  - **WeChat Official Accounts**: Publishing Tool now supports posting articles to the WeChat Official Accounts draft box in version `1.13.0` and beyond. However, due to limitations on the WeChat platform in Electron, normal login operations are not possible. Therefore, you will need to visit `https://mp.weixin.qq.com/` yourself, complete the login, copy the cookie, and then paste it into the configuration options.
+  - **Notion**: Since Notion is block-based, not a whole document, it is constrained by technology and does not support updates. To update, you can only delete and then repost it.
 
 > [Click here](https://blog.terwer.space/s/20230810132040-nn4q7vs) to view the latest help documentation.
 
@@ -158,13 +160,15 @@ more useful tools~
 
 * Thanks to the enthusiastic support of the following users, I will continue to update and maintain the project!
 
+  - 2023-09-04 *Xia Donate to [Publish Tool]
+  - 2023-08-31 *Cheng Donate to [Publishing Tool] Thanks for providing the note posting tool, reminder change
   - 2023-08-31 *? Donated to [Publish Tool] Thanks for providing the siyuan-note Publish Tool.
   - 2023-08-14 *? Donated to [Publish Tool]
   - 2023-08-10 *f Donated to [Publish Tool] for liking the release plugin.
   - 2023-08-10 *2 Donated to [Publish Tool] to support the development of Source Release Plugin.
-  - 2023-07-13 *亮 Donated to [Document Alias] Is it possible to expand the functionality to H1?
+  - 2023-07-13 *Liang Donated to [Document Alias] Is it possible to expand the functionality to H1?
   - 2023-07-09 *z Donated to [Online Sharing] The online sharing plugin is great, thanks!
-  - 2023-06-14 *俊 Donated to [Document Roaming] Thanks for the Document Roaming feature.
-  - 2023-01-16 *站 Donated to [Import Tool] Finally, we can import epub files.
+  - 2023-06-14 *Jun Donated to [Document Roaming] Thanks for the Document Roaming feature.
+  - 2023-01-16 *Zhan Donated to [Import Tool] Finally, we can import epub files.
 
     If you do not want to display donation information, you can send an email directly to youweics@163.com.

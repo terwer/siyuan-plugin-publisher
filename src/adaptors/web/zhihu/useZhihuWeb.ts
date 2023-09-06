@@ -81,6 +81,8 @@ const useZhihuWeb = async (key?: string, newCfg?: ZhihuConfig) => {
     }
   }
 
+  // 标签
+  cfg.tagEnabled = false
   // 知乎使用单选分类作为专栏
   cfg.cateEnabled = false
   cfg.knowledgeSpaceEnabled = true

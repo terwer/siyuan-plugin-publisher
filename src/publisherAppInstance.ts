@@ -24,7 +24,7 @@
  */
 
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { DeviceDetection } from "zhi-device"
+import { DeviceDetection, SiyuanDevice } from "zhi-device"
 import { Deserializer, Serializer, SimpleXmlRpcClient, XmlrpcUtil } from "simple-xmlrpc"
 import fetch from "cross-fetch"
 import { create } from "xmlbuilder2"
@@ -35,6 +35,9 @@ import { create } from "xmlbuilder2"
 export class PublisherAppInstance {
   public logger: any
   public deviceType: any
+
+  public win: any
+  public moduleBase: string
 
   public fetch: any
   public xmlbuilder2: any
@@ -54,5 +57,8 @@ export class PublisherAppInstance {
       Deserializer: Deserializer,
       XmlrpcUtil: XmlrpcUtil,
     }
+
+    this.win = SiyuanDevice.siyuanWindow()
+    this.moduleBase = `${this.win?.siyuan?.config?.system?.workspaceDir}/data${process.env.APP_BASE}`
   }
 }

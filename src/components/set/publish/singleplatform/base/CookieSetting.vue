@@ -24,16 +24,17 @@
   -->
 
 <script setup lang="ts">
-import { reactive, ref } from "vue"
+import { reactive, ref, watch } from "vue"
 import { ElMessage, FormRules } from "element-plus"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
+import { StrUtil } from "zhi-common"
 
 const logger = createAppLogger("cookie-setting")
 
 const props = defineProps({
-  key: "" as any,
+  apiType: "" as any,
   setting: {} as any,
   settingCfg: {} as any,
 })
@@ -48,6 +49,7 @@ const { updateSetting } = useSettingStore()
 // datas
 const formRef = ref()
 const formData = reactive({
+  key: props.apiType,
   settingData: props.setting,
   settingCfgData: props.settingCfg,
 })
@@ -76,7 +78,12 @@ const submitForm = async (formEl) => {
     return
   }
 
-  formData.settingData[props.key] = formData.settingCfgData
+  alert(formData.key)
+  if (StrUtil.isEmptyString(formData.key)) {
+    ElMessage.error("平台key不能为空，请排查。如有问题，请联系作者")
+    return
+  }
+  formData.settingData[formData.key] = formData.settingCfgData
   await updateSetting(formData.settingData)
 
   if (emit) {
@@ -98,10 +105,18 @@ const submitForm = async (formEl) => {
     >
       <el-alert
         class="top-tip"
-        title="检测到当前为浏览器页面，受技术限制无法获取Cookie，请手动粘贴平台Cookie。本插件承诺，所有数据仅在您的本地存储，我们不会上传或者分享你的任何数据，请放心使用。如有疑问请查看帮助文档。"
+        title="检测到当前为浏览器页面或者受平台技术限制，无法获取Cookie，请手动粘贴平台Cookie。本插件承诺，所有数据仅在您的本地存储，我们不会上传或者分享你的任何数据，请放心使用。如有疑问请查看帮助文档。"
         type="error"
         :closable="false"
       />
+      <!-- 设置提示 -->
+      <el-form-item>
+        特别提示：受平台限制，当前无法自动获取cookie，请在Chrome浏览器手动打开 &nbsp;
+        <a :href="formData.settingCfgData.home" target="_blank">{{ formData.settingCfgData.home }}</a>
+        &nbsp;并登录，然后使用开发者工具找到cookie，最后复制粘贴到下方文本框，可参考
+        <a href="https://img1.terwer.space/api/public/202309051734289.png" target="_blank">此图片</a>
+        的指引。
+      </el-form-item>
       <!-- 平台cookie -->
       <el-form-item label="平台Cookie">
         <el-input

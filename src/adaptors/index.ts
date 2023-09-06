@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { BlogAdaptor, WebAdaptor, YamlConvertAdaptor } from "zhi-blog-api"
+import { BlogAdaptor, BlogConfig, WebAdaptor, YamlConvertAdaptor } from "zhi-blog-api"
 import { getSubPlatformTypeByKey, SubPlatformType } from "~/src/platforms/dynamicConfig.ts"
 import { useCnblogsApi } from "~/src/adaptors/api/cnblogs/useCnblogsApi.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
@@ -35,9 +35,9 @@ import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { useMetaweblogApi } from "~/src/adaptors/api/metaweblog/useMetaweblogApi.ts"
 import { useNotionApi } from "~/src/adaptors/api/notion/useNotionApi.ts"
 import { useHexoApi } from "~/src/adaptors/api/hexo/useHexoApi.ts"
-import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
 import { useGitlabhexoApi } from "~/src/adaptors/api/gitlab-hexo/useGitlabhexoApi.ts"
 import { useCsdnWeb } from "~/src/adaptors/web/csdn/useCsdnWeb.ts"
+import { useWechatWeb } from "~/src/adaptors/web/wechat/useWechatWeb.ts"
 
 /**
  * 适配器统一入口
@@ -54,7 +54,7 @@ class Adaptors {
    * @param key
    * @param newCfg
    */
-  public static async getCfg(key: string, newCfg?: any): Promise<CommonBlogConfig> {
+  public static async getCfg(key: string, newCfg?: any): Promise<BlogConfig> {
     let conf = null
     const type: SubPlatformType = getSubPlatformTypeByKey(key)
 
@@ -109,6 +109,11 @@ class Adaptors {
         conf = cfg
         break
       }
+      case SubPlatformType.Custom_Wechat: {
+        const { cfg } = await useWechatWeb(key)
+        conf = cfg
+        break
+      }
       // case SubPlatformType.Custom_Jianshu: {
       //   const { cfg } = await useJianshuWeb(key)
       //   conf = cfg
@@ -116,11 +121,6 @@ class Adaptors {
       // }
       // case SubPlatformType.Custom_Juejin: {
       //   const { cfg } = await useJuejinWeb(key)
-      //   conf = cfg
-      //   break
-      // }
-      // case SubPlatformType.Custom_Wechat: {
-      //   const { cfg } = await useWechatWeb(key)
       //   conf = cfg
       //   break
       // }
@@ -199,6 +199,11 @@ class Adaptors {
         blogAdaptor = webApi
         break
       }
+      case SubPlatformType.Custom_Wechat: {
+        const { webApi } = await useWechatWeb(key, newCfg)
+        blogAdaptor = webApi
+        break
+      }
       // case SubPlatformType.Custom_Jianshu: {
       //   const { webApi } = await useJianshuWeb(key, newCfg)
       //   blogAdaptor = webApi
@@ -206,11 +211,6 @@ class Adaptors {
       // }
       // case SubPlatformType.Custom_Juejin: {
       //   const { webApi } = await useJuejinWeb(key, newCfg)
-      //   blogAdaptor = webApi
-      //   break
-      // }
-      // case SubPlatformType.Custom_Wechat: {
-      //   const { webApi } = await useWechatWeb(key, newCfg)
       //   blogAdaptor = webApi
       //   break
       // }

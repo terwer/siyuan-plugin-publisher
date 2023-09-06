@@ -74,6 +74,8 @@ const useYuqueApi = async (key: string, newCfg?: YuqueConfig) => {
     }
   }
 
+  // 标签
+  cfg.tagEnabled = false
   // Yuque 使用单选分类作为知识空间
   cfg.cateEnabled = false
   cfg.knowledgeSpaceEnabled = true

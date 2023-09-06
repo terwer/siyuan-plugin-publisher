@@ -23,5 +23,8 @@
  * questions.
  */
 
-// TODO
-// 网页授权版 Yuque
+import { CommonWebPlaceholder } from "~/src/adaptors/web/base/commonWebPlaceholder.ts"
+
+class WechatPlaceholder extends CommonWebPlaceholder {}
+
+export { WechatPlaceholder }

@@ -454,6 +454,7 @@ const usePublish = () => {
         // 查询平台文章
         const platformPost = await api.getPost(postid)
         mergedPost = _.cloneDeep(platformPost) as Post
+        logger.debug("get init platformPost ok =>", mergedPost)
         // 正文需要使用思源笔记的
         mergedPost.markdown = siyuanPost.markdown
         mergedPost.html = siyuanPost.html
@@ -490,9 +491,11 @@ const usePublish = () => {
       const mergedPost = _.cloneDeep(newPost) as Post
 
       // 摘要
-      if (StrUtil.isEmptyString(newPost.shortDesc) && StrUtil.isEmptyString(newPost.mt_excerpt)) {
-        mergedPost.shortDesc = post.shortDesc
-        mergedPost.mt_excerpt = post.mt_excerpt
+      if (StrUtil.isEmptyString(mergedPost.shortDesc)) {
+        mergedPost.shortDesc = mergedPost.mt_excerpt
+      }
+      if (StrUtil.isEmptyString(mergedPost.mt_excerpt)) {
+        mergedPost.mt_excerpt = mergedPost.shortDesc
       }
 
       const postKeywords = post.mt_keywords.split(",")

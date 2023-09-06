@@ -30,12 +30,14 @@ import { Delete, Lock, Tools, WarningFilled } from "@element-plus/icons-vue"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { SypConfig } from "~/syp.config.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { JsonUtil, StrUtil } from "zhi-common"
+import { JsonUtil } from "zhi-common"
 import {
   AuthMode,
   deletePlatformByKey,
   DynamicConfig,
   DynamicJsonCfg,
+  getDynCfgByKey,
+  isDynamicKeyExists,
   PlatformType,
   replacePlatformByKey,
   setDynamicJsonCfg,
@@ -53,6 +55,8 @@ import { ElectronCookie, WebConfig } from "zhi-blog-api"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import CookieSetting from "~/src/components/set/publish/singleplatform/base/CookieSetting.vue"
 import { CommonWebConfig } from "~/src/adaptors/web/base/commonWebConfig.ts"
+import { pre } from "~/src/utils/import/pre.ts"
+import _ from "lodash"
 
 const logger = createAppLogger("publish-setting")
 
@@ -73,7 +77,7 @@ const formData = reactive({
   dynamicConfigArray: [] as DynamicConfig[],
 
   webAuthLoadingMap: {} as any,
-  isUpgradeLoading: false,
+  isImportLoading: false,
   showLogMessage: false,
   logMessage: "",
 
@@ -153,10 +157,14 @@ const handleSinglePlatformSetting = async (cfg: DynamicConfig) => {
 }
 
 const handleSinglePlatformWebAuth = async (cfg: DynamicConfig) => {
-  if (isInSiyuanWidget()) {
-    await _handleOpenBrowserAuth(cfg)
-  } else if (isInChromeExtension()) {
-    _handleChromeExtensionAuth(cfg)
+  if (!cfg.cookieLimit) {
+    if (isInSiyuanWidget()) {
+      await _handleOpenBrowserAuth(cfg)
+    } else if (isInChromeExtension()) {
+      _handleChromeExtensionAuth(cfg)
+    } else {
+      await _handleSetCookieAuth(cfg)
+    }
   } else {
     await _handleSetCookieAuth(cfg)
   }
@@ -235,7 +243,9 @@ const _handleSetCookieAuth = async (cfg: DynamicConfig) => {
   }
 
   // 更新cookie
-  const settingCfg = JsonUtil.safeParse<WebConfig>(formData.setting[cfg.platformKey], {} as WebConfig)
+  const storedCfg = JsonUtil.safeParse<any>(formData.setting[cfg.platformKey], {} as any)
+  const settingCfg = (await Adaptors.getCfg(cfg.platformKey, storedCfg)) as WebConfig
+
   formData.dlgKey = cfg.platformKey
   formData.dlgSettingCfg = settingCfg
   formData.dlgCookieTitle = `${cfg.platformName} Cookie 设置`
@@ -243,10 +253,14 @@ const _handleSetCookieAuth = async (cfg: DynamicConfig) => {
 }
 
 const handleValidateWebAuth = async (cfg: DynamicConfig) => {
-  if (isInSiyuanWidget()) {
-    _handleValidateOpenBrowserAuth(cfg)
-  } else if (isInChromeExtension()) {
-    await _handleValidateChromeExtensionAuth(cfg)
+  if (!cfg.cookieLimit) {
+    if (isInSiyuanWidget()) {
+      _handleValidateOpenBrowserAuth(cfg)
+    } else if (isInChromeExtension()) {
+      await _handleValidateChromeExtensionAuth(cfg)
+    } else {
+      await _handleValidateCookieAuth(cfg)
+    }
   } else {
     await _handleValidateCookieAuth(cfg)
   }
@@ -357,64 +371,44 @@ const _handleValidateCookieAuth = async (cfg: DynamicConfig) => {
 const handleHideCookieDlg = () => {
   formData.cookieSettingFormVisible = false
 }
-const handleImportPre = () => {
-  ElMessage.info("开发中，敬请期待，您可以自行前往 [新增平台] 选择添加")
-}
 
-const checkAndUpgradeSetting = async (setting: Partial<typeof SypConfig>) => {
-  let isUpgrade = false
-  let logText = ""
-
-  const logMessage = (message: string) => {
-    logger.info(message)
-    logText += `\n${message}`
-  }
-
-  logMessage(t("setting.upgrade.syp.doTip1"))
-
-  if (StrUtil.isEmptyString(setting.version)) {
-    logMessage(t("setting.upgrade.syp.doTip2"))
-
-    // TODO 迁移旧配置
-    // 读取旧的配置文件
-    // 数据转换适配
-    // 更新最新版本号
-    logMessage("TODO，开发中，敬请期待")
-    // setting.version = version
-    //
-    // await updateSetting(setting)
-    //
-    // logMessage(t("setting.upgrade.syp.doTip3"))
-    // isUpgrade = true
-  } else {
-    logMessage(t("setting.upgrade.syp.doTip4"))
-  }
-
-  return { isUpgrade, logText }
-}
-
-const handleCheckAndUpgrade = async () => {
-  formData.isUpgradeLoading = true
-  formData.showLogMessage = true
-  formData.logMessage = ""
-
-  try {
-    formData.logMessage += `${t("setting.upgrade.syp.tip1")}`
-    const { isUpgrade, logText } = await checkAndUpgradeSetting(formData.setting)
-    formData.logMessage += logText
-    if (isUpgrade) {
-      formData.logMessage += `\n${t("setting.upgrade.syp.tip2")}`
-    } else {
-      formData.logMessage += `\n${t("setting.upgrade.syp.tip3")}`
+// 单个大类导入
+const basicImport = (importCfgs: DynamicConfig[]) => {
+  for (const importCfg of importCfgs) {
+    const pkey = importCfg.platformKey
+    const pkeyExist = isDynamicKeyExists(formData.dynamicConfigArray, pkey)
+    if (pkeyExist) {
+      formData.logMessage += `${pkey} 已经存在，忽略导入\n`
+      continue
     }
-    ElMessage.success(t("main.opt.success"))
-  } catch (e) {
-    formData.logMessage += `\n${t("setting.upgrade.syp.tip4")}` + e
-    ElMessage.error(t("main.opt.failure") + "=>" + e)
-    logger.error(t("main.opt.failure") + "=>", e)
+
+    const newCfg = _.cloneDeep(importCfg)
+    formData.dynamicConfigArray.push(newCfg)
+    formData.logMessage += `${pkey} 已加入导入列表\n`
+
+    // 初始化一个空配置
+    formData.setting[newCfg.platformKey] = {}
+    formData.logMessage += `${pkey} 初始化\n`
   }
-  formData.logMessage += `\n${t("setting.upgrade.syp.tip5")}`
-  formData.isUpgradeLoading = false
+}
+
+const handleImportPre = async () => {
+  formData.showLogMessage = true
+  formData.isImportLoading = true
+
+  // 大类导入
+  basicImport(pre.commonCfg)
+  basicImport(pre.githubCfg)
+  basicImport(pre.gitlabCfg)
+  basicImport(pre.metaweblogCfg)
+  basicImport(pre.customCfg)
+
+  // 转换格式并保存
+  const dynJsonCfg = setDynamicJsonCfg(formData.dynamicConfigArray)
+  formData.setting[DYNAMIC_CONFIG_KEY] = dynJsonCfg
+  await updateSetting(formData.setting)
+  formData.isImportLoading = false
+  formData.logMessage += `全部导入成功并保存\n`
 }
 
 const initPage = async () => {
@@ -594,15 +588,13 @@ onMounted(async () => {
                 <el-row>
                   <el-col>
                     <div class="import-pre-action">
-                      <el-button size="small" type="primary" @click="handleImportPre">导入预定义平台</el-button>
                       <el-button
                         size="small"
-                        type="danger"
-                        :loading="formData.isUpgradeLoading"
-                        @click="handleCheckAndUpgrade"
+                        type="primary"
+                        :loading="formData.isImportLoading"
+                        @click="handleImportPre"
+                        >导入预定义平台</el-button
                       >
-                        检测并迁移历史配置
-                      </el-button>
                     </div>
                     <div class="log-message-box">
                       <el-input
@@ -667,9 +659,9 @@ onMounted(async () => {
       <!-- 通用设置弹窗 -->
       <el-dialog v-model="formData.cookieSettingFormVisible" :title="formData.dlgCookieTitle">
         <cookie-setting
-          :key="formData.dlgKey"
-          :setting="formData.setting"
-          :setting-cfg="formData.dlgSettingCfg"
+          v-model:api-type="formData.dlgKey"
+          v-model:setting="formData.setting"
+          v-model:setting-cfg="formData.dlgSettingCfg"
           @emitHideDlg="handleHideCookieDlg"
         />
       </el-dialog>

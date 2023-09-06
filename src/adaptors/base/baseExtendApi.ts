@@ -301,6 +301,11 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
             if (attachResult && attachResult.url) {
               urlMap[image.originUrl] = attachResult.url
             }
+            const platformImageSuccessMsg = `使用平台自带的图片上传能力，已成功上传图片 ${image.name}`
+            await this.kernelApi.pushMsg({
+              msg: platformImageSuccessMsg,
+              timeout: 3000,
+            })
           }
         } catch (e) {
           const errMsg2 = "文章可能已经发布成功，但是平台图片上传失败"

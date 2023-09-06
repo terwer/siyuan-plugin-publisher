@@ -107,7 +107,7 @@ export class MetaweblogConfig extends CommonBlogConfig {
     this.usernameEnabled = true
     this.showTokenTip = false
     this.allowPreviewUrlChange = true
-    this.allowPreviewUrlChange = true
+    this.tagEnabled = true
     this.cateEnabled = true
     this.categoryType = CategoryTypeEnum.CategoryType_Multi
     this.allowCateChange = true

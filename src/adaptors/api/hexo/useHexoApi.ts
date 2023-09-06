@@ -77,6 +77,8 @@ const useHexoApi = async (key: string, newCfg?: HexoConfig) => {
     }
   }
 
+  // 标签
+  cfg.tagEnabled = true
   // 分类
   cfg.cateEnabled = true
   cfg.allowCateChange = true

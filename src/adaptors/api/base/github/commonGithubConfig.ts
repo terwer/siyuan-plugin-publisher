@@ -99,6 +99,9 @@ class CommonGithubConfig extends CommonBlogConfig {
     this.passwordType = PasswordType.PasswordType_Token
     this.tokenSettingUrl = "https://github.com/settings/tokens"
     this.showTokenTip = true
+    this.tagEnabled = true
+    this.cateEnabled = true
+    this.knowledgeSpaceEnabled = false
 
     this.githubRepo = githubRepo
     this.githubBranch = githubBranch

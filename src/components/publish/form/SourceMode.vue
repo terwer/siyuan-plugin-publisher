@@ -249,7 +249,7 @@ await initPage()
   <div class="source-mode" v-else>
     <!-- YAML提示 -->
     <el-form-item v-if="!formData.isSaved" class="un-saved-tip">
-      检测到有未保存的更更改，是否保存？<a @click="doSaveContentChange">马上保存</a>
+      检测到有未保存的更改，是否保存？<a @click="doSaveContentChange">马上保存</a>
     </el-form-item>
     <el-form-item v-if="!formData.readonlyMode">
       <el-alert

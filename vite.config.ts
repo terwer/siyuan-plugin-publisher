@@ -164,12 +164,12 @@ export default defineConfig({
     // 在浏览器中polyfill node
     // https://github.com/davidmyersdev/vite-plugin-node-polyfills/blob/main/test/src/main.ts
     nodePolyfills({
-      exclude: ["fs"],
+      exclude: [],
       globals: {
         // can also be 'build', 'dev', or false
         Buffer: true,
         global: true,
-        process: false,
+        process: true
       },
       protocolImports: true,
     }),

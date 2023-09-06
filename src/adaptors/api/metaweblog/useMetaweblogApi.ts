@@ -84,6 +84,7 @@ export const useMetaweblogApi = async (key?: string, newCfg?: MetaweblogConfig) 
     }
   }
 
+  cfg.tagEnabled = true
   // Metaweblog 默认支持多选分类
   cfg.cateEnabled = true
   cfg.categoryType = CategoryTypeEnum.CategoryType_Multi

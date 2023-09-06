@@ -35,3 +35,12 @@ firefox
 `pnpm extBuild -t firefox`
 
 或者 `pnpm widgetBuild -t firefox -nb`
+
+## 注意事项
+
+下面的类库需要动态引用，不能直接构建
+
+```
+"fetch-blob": "^4.0.0",
+"formdata-polyfill": "^4.0.10",
+```
