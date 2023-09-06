@@ -58,7 +58,7 @@ class JianshuWebAdaptor extends BaseWebApi {
   }
 
   public async getUsersBlogs(): Promise<Array<UserBlog>> {
-    let result: UserBlog[] = []
+    const result: UserBlog[] = []
     const header = {
       accept: "application/json",
     }
@@ -161,8 +161,17 @@ class JianshuWebAdaptor extends BaseWebApi {
       const jianshuPostKey = this.getJianshuPostidKey(postid)
       const pageId = jianshuPostKey.pageId
 
+      // 查询历史版本
+      const header = {
+        accept: "application/json",
+      }
+      const res = await this.webProxyFetch(`https://www.jianshu.com/author/notes/${pageId}/note_logs`, [header])
+      this.logger.debug("jianshu get post version res =>", res)
+
       // 文章更新并发布
-      await this.updateJianshuArticle(pageId, post.title, post.description)
+      const newVersion = res.length + 1
+      this.logger.debug("jianshu update post with new version =>", newVersion)
+      await this.updateJianshuArticle(pageId, post.title, post.description, newVersion)
       flag = true
     } catch (e) {
       this.logger.error("简书文章更新失败", e)

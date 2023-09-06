@@ -108,7 +108,9 @@ class JuejinWebAdaptor extends BaseWebApi {
 
   public async addPost(post: Post) {}
 
-  public async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {}
+  public async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
+    return false
+  }
 }
 
 export { JuejinWebAdaptor }

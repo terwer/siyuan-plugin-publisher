@@ -473,10 +473,11 @@ onMounted(async () => {
 
                 <!-- 知识空间 -->
                 <publish-knowledge-space
-                  v-model:knowledge-space-type="formData.publishCfg.cfg.knowledgeSpaceType"
-                  v-model:knowledge-space-config="formData.knowledgeSpaceConfig"
-                  v-model:cate-slugs="formData.mergedPost.cate_slugs"
-                  @emitSyncCateSlugs="syncCateSlugs"
+                    v-if="formData.publishCfg.cfg.knowledgeSpaceEnabled"
+                    v-model:knowledge-space-type="formData.publishCfg.cfg.knowledgeSpaceType"
+                    v-model:knowledge-space-config="formData.knowledgeSpaceConfig"
+                    v-model:cate-slugs="formData.mergedPost.cate_slugs"
+                    @emitSyncCateSlugs="syncCateSlugs"
                 />
                 <el-divider border-style="dashed" />
 
@@ -517,6 +518,7 @@ onMounted(async () => {
 
                   <!-- 分类 -->
                   <publish-categories
+                    v-if="formData.publishCfg.cfg.cateEnabled"
                     v-model:use-ai="formData.useAi"
                     v-model:category-type="formData.publishCfg.cfg.categoryType"
                     v-model:category-config="formData.categoryConfig"
@@ -524,14 +526,6 @@ onMounted(async () => {
                     v-model:md="formData.mergedPost.markdown"
                     v-model:html="formData.mergedPost.html"
                     @emitSyncCates="syncCates"
-                  />
-
-                  <!-- 知识空间 -->
-                  <publish-knowledge-space
-                    v-model:knowledge-space-type="formData.publishCfg.cfg.knowledgeSpaceType"
-                    v-model:knowledge-space-config="formData.knowledgeSpaceConfig"
-                    v-model:cate-slugs="formData.mergedPost.cate_slugs"
-                    @emitSyncCateSlugs="syncCateSlugs"
                   />
 
                   <!-- 发布时间 -->
