@@ -1,0 +1,34 @@
+### 微信公众号上传图片
+POST https://mp.weixin.qq.com/cgi-bin/filetransfer?action=upload_material&f=json&scene=8&writetype=doublewrite&
+    groupid=1&ticket_id={{ticket_id}}&ticket={{ticket}}&svr_time=1693916599&token={{token}}&
+    lang=zh_CN&seq=1693916636487&t=0.8931425116703591
+Referer: https://mp.weixin.qq.com/cgi-bin/appmsg
+Cookie: {{cookie}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="id"
+
+1693916599992
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="name"
+
+259282.jpeg
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="type"
+
+image/jpeg
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="lastModifiedDate"
+
+Tue Sep 05 2023 20:23:56 GMT+0800
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="size"
+
+93791
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="3259282.jpeg"
+Content-Type: image/jpeg
+
+< ../assets/3259282.jpeg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--

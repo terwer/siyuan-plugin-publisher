@@ -28,8 +28,10 @@ import * as cheerio from "cheerio"
 import { HtmlUtil, JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { BlogConfig, PageTypeEnum, Post, UserBlog } from "zhi-blog-api"
 import { toRaw } from "vue"
-import { isDev } from "~/src/utils/constants.ts"
 import _ from "lodash"
+import { SiyuanDevice } from "zhi-device"
+import { fileToBuffer } from "~/src/utils/polyfillUtils.ts"
+import { CategoryAIResult } from "~/src/utils/ai/prompt.ts"
 
 /**
  * 微信公众号网页授权适配器
@@ -436,39 +438,6 @@ class WechatWebAdaptor extends BaseWebApi {
     return flag
   }
 
-  // ================
-  // private methods
-  // ================
-  /**
-   * 以异步方式从微信获取数据
-   *
-   * @param url - 请求的URL
-   * @param params - 请求参数
-   * @returns 返回包含微信数据的Promise
-   */
-  private async wechatFetch(url: string, params: Record<string, any>) {
-    // headers
-    const headers = {
-      Cookie: this.cfg.password,
-      Referer: "https://mp.weixin.qq.com/cgi-bin/appmsg",
-    }
-
-    // formData
-    const formData: any = new FormData()
-    for (const key in params) {
-      formData.append(key, params[key] ?? "")
-    }
-
-    const FormdataFetch = this.appInstance.getFormdataFetch()
-    const f = new FormdataFetch(isDev)
-    const resText = await f.doFetch(url, headers, formData)
-    this.logger.debug("resText =>", resText)
-    const resJson = JsonUtil.safeParse<any>(resText, {})
-    this.logger.debug("resJson =>", resJson)
-
-    return resJson
-  }
-
   public async getPreviewUrl(postid: string): Promise<string> {
     const token = this.cfg.metadata.token
     return `https://mp.weixin.qq.com/cgi-bin/appmsg?t=media/appmsg_edit&action=edit&type=77&appmsgid=${postid}&token=${token}&lang=zh_CN`
@@ -477,6 +446,46 @@ class WechatWebAdaptor extends BaseWebApi {
   public async uploadFile(file: File | Blob, filename?: string): Promise<any> {
     this.logger.debug(`wechat start uploadFile ${filename}=>`, file)
     if (file instanceof Blob) {
+      const win = this.appInstance.win
+      const { FormData, Blob } = win.require(`${this.appInstance.moduleBase}libs/node-fetch-cjs/dist/index.js`)
+
+      const ticket_id = this.cfg.metadata.commonData.data.user_name
+      const ticket = this.cfg.metadata.commonData.data.ticket
+      const svr_time = this.cfg.metadata.commonData.data.time
+      const token = this.cfg.metadata.commonData.data.t
+      const seq = new Date().getTime()
+      const uploadUrl =
+        `https://mp.weixin.qq.com/cgi-bin/filetransfer?action=upload_material&f=json&scene=8&writetype=doublewrite&groupid=1` +
+        `&ticket_id=${ticket_id}&ticket=${ticket}&svr_time=${svr_time}&token=${token}&lang=zh_CN&seq=${seq}&t=` +
+        Math.random()
+
+      // const fs = win.require("fs")
+      // const fileData = fs.readFileSync("/Users/terwer/Documents/pictures/3259282.jpeg")
+      // const blob = new Blob([fileData], { type: "image/jpeg" })
+
+      const bits = await fileToBuffer(file)
+      const blob = new Blob([bits], { type: file.type })
+
+      const formData: any = new FormData()
+      formData.append("type", file.type)
+      formData.append("id", new Date().getTime())
+      formData.append("name", filename)
+      formData.append("lastModifiedDate", new Date().toString())
+      formData.append("size", file.size)
+      formData.append("file", blob, filename)
+
+      const resJson = await this.wechatFormFetch(uploadUrl, formData)
+      if (resJson.base_resp.err_msg != "ok") {
+        this.logger.error(`微信公众号图片上传失败, ${filename} =>`, resJson.base_resp.err_msg)
+        throw new Error("upload failed =>" + resJson.base_resp.err_msg)
+      }
+      const url = resJson.cdn_url
+
+      return {
+        id: resJson.content,
+        object_key: resJson.content,
+        url: url,
+      }
     }
 
     return {}
@@ -494,11 +503,6 @@ class WechatWebAdaptor extends BaseWebApi {
     this.logger.debug("html =>", { html: html })
     let updatedHtml = html
 
-    // 修复图片格式
-    // <img data-s="300,640" class="rich_pages wxw-img js_insertlocalimg"
-    // data-src="https://mmbiz.qpic.cn/mmbiz_jpg/oZAZzwd6M3bxCPu3jBlcHa0et8fopdqFF6sywBwb4Uric0f5L67l97DrcPoWhfPNMTicMEPz3ze7ovG054yhUIpA/0?wx_fmt=jpeg"
-    // style="" data-ratio="1" data-w="460" data-type="jpeg">
-
     updatedPost.html = updatedHtml
     this.logger.info("微信公众号正文处理完毕")
     this.logger.debug("updatedHtml =>", { updatedHtml: updatedHtml })
@@ -511,6 +515,48 @@ class WechatWebAdaptor extends BaseWebApi {
     }
 
     return updatedPost
+  }
+
+  // ================
+  // private methods
+  // ================
+  /**
+   * 以异步方式从微信获取数据
+   *
+   * @param url - 请求的URL
+   * @param params - 请求参数
+   * @returns 返回包含微信数据的Promise
+   */
+  private async wechatFetch(url: string, params: Record<string, any>) {
+    this.logger.debug("before getFormdataFetch, params =>", params)
+
+    // formData
+    const formData: any = new FormData()
+    for (const key in params) {
+      formData.append(key, params[key] ?? "")
+    }
+
+    return this.wechatFormFetch(url, formData)
+  }
+
+  private async wechatFormFetch(url: string, formData: FormData) {
+    const win = this.appInstance.win
+    const doFetch = win.require(`${this.appInstance.moduleBase}libs/zhi-formdata-fetch/index.cjs`)
+
+    // headers
+    const headers = {
+      Cookie: this.cfg.password,
+      Referer: "https://mp.weixin.qq.com/cgi-bin/appmsg",
+    }
+    this.logger.debug("before zhi-formdata-fetch, headers =>", headers)
+    this.logger.debug("before zhi-formdata-fetch, url =>", url)
+
+    const resText = await doFetch(this.appInstance.moduleBase, url, headers, formData)
+    this.logger.debug("wechat doFetch success, resText =>", resText)
+    const resJson = JsonUtil.safeParse<any>(resText, {} as any)
+    this.logger.debug("wechat doFetch success, resJson=>", resJson)
+
+    return resJson
   }
 }
 

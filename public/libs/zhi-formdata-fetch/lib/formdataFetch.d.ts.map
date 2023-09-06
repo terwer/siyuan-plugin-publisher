@@ -1,1 +1,0 @@
-{"version":3,"file":"formdataFetch.d.ts","sourceRoot":"","sources":["../../src/lib/formdataFetch.ts"],"names":[],"mappings":"AA8CA,cAAM,aAAa;IACjB,OAAO,CAAC,MAAM,CAAK;gBAEP,KAAK,CAAC,EAAE,OAAO;IAI3B;;;;;;;OAOG;IACU,OAAO,CAAC,GAAG,EAAE,MAAM,EAAE,OAAO,EAAE,MAAM,CAAC,MAAM,EAAE,GAAG,CAAC,EAAE,QAAQ,CAAC,EAAE,QAAQ;CAuBpF;AAED,eAAe,aAAa,CAAA"}

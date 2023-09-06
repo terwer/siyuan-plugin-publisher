@@ -1,0 +1,55 @@
+{
+  "name": "node-fetch-cjs",
+  "version": "3.2.10",
+  "description": "A wrapper for node-fetch (a light-weight module that brings Fetch API to node.js) to be used in commonjs environment.",
+  "main": "dist/index.js",
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "types": "./dist/index.d.ts",
+  "engines": {
+    "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "check": "node scripts/check.mjs",
+    "test": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/touchifyapp/node-fetch-cjs.git"
+  },
+  "keywords": [
+    "fetch",
+    "http",
+    "promise",
+    "request",
+    "curl",
+    "wget",
+    "xhr",
+    "whatwg",
+    "cjs",
+    "commonjs"
+  ],
+  "author": "Touchify",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/node-fetch/node-fetch/issues"
+  },
+  "homepage": "https://github.com/node-fetch/node-fetch",
+  "funding": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/node-fetch"
+  },
+  "devDependencies": {
+    "data-uri-to-buffer": "^4.0.0",
+    "esbuild": "^0.13.13",
+    "fetch-blob": "^3.1.4",
+    "formdata-polyfill": "^4.0.10",
+    "jest": "^27.3.1"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.2"
+  }
+}

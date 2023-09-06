@@ -61,23 +61,4 @@ export class PublisherAppInstance {
     this.win = SiyuanDevice.siyuanWindow()
     this.moduleBase = `${this.win?.siyuan?.config?.system?.workspaceDir}/data${process.env.APP_BASE}`
   }
-
-  /**
-   * 动态获取 zhi-formdata-fetch
-   */
-  public getFormdataFetch() {
-    /**
-     * 执行网络请求并返回数据
-     *
-     * @param url - 请求的URL地址
-     * @param headers - 请求头信息
-     * @param formData - 可选的FormData对象，用于发送表单数据
-     * @returns 包含响应数据的Promise
-     */
-    // public async doFetch(url: string, headers: Record<string, any>, formData?: FormData) {}
-
-    const depPath = `${this.moduleBase}libs/zhi-formdata-fetch/index.cjs`
-    this.logger.debug(`will require zhi-formdata-fetch from ${depPath}`)
-    return this.win.require(depPath).FormdataFetch as any
-  }
 }
