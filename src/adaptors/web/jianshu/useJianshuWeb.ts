@@ -31,6 +31,7 @@ import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { Utils } from "~/src/utils/utils.ts"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { JianshuWebAdaptor } from "~/src/adaptors/web/jianshu/jianshuWebAdaptor.ts"
+import {CategoryTypeEnum} from "zhi-blog-api";
 
 /**
  * 用于获取JianshuWeb的API的自定义Hook
@@ -80,8 +81,18 @@ const useJianshuWeb = async (key?: string, newCfg?: JianshuConfig) => {
     }
   }
 
+  cfg.tagEnabled = false
+  cfg.cateEnabled = false
+  cfg.knowledgeSpaceEnabled = true
+  cfg.knowledgeSpaceTitle = "笔记本"
+  cfg.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Single
+  cfg.allowKnowledgeSpaceChange = false
+  cfg.placeholder.knowledgeSpaceReadonlyModeTip =
+    "由于简书平台的限制，暂时不支持编辑所属笔记本。如果您想移动文档，请先点击取消删除该文档，然后重新选择新的笔记本发布"
+
   const webApi = new JianshuWebAdaptor(appInstance, cfg)
   return {
+    cfg,
     webApi,
   }
 }

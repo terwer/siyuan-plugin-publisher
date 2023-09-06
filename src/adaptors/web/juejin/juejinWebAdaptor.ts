@@ -24,6 +24,7 @@
  */
 
 import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
+import { CategoryInfo, Post, UserBlog } from "zhi-blog-api"
 
 /**
  * 掘金网页授权适配器
@@ -35,7 +36,7 @@ import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
  */
 class JuejinWebAdaptor extends BaseWebApi {
   public async getMetaData(): Promise<any> {
-    const res = await this.proxyFetch("https://api.juejin.cn/user_api/v1/user/get")
+    const res = await this.webProxyFetch("https://api.juejin.cn/user_api/v1/user/get")
     const flag = !!res.data.user_id
     this.logger.info(`get juejin metadata finished, flag => ${flag}`)
     return {
@@ -51,6 +52,63 @@ class JuejinWebAdaptor extends BaseWebApi {
       icon: "https://juejin.cn/favicon.ico",
     }
   }
+
+  public async getUsersBlogs(): Promise<Array<UserBlog>> {
+    let result: UserBlog[] = []
+
+    const url = "https://api.juejin.cn/content_api/v1/column/author_center_list"
+    const params = {
+      audit_status: null,
+      page_no: 1,
+      page_size: 10,
+    }
+    const res = await this.webProxyFetch(url, [], params, "POST")
+    this.logger.debug("get juejin columns =>", { res })
+
+    if (res.err_no === 0) {
+      const columns = res.data
+      columns.forEach((item: any) => {
+        const useBlog = new UserBlog()
+
+        useBlog.blogid = item.column_id
+        useBlog.blogName = item.column_version.title
+        useBlog.url = item.column_version.cover
+        result.push(useBlog)
+      })
+    }
+
+    this.logger.debug("getUsersBlogs=>", result)
+    return result
+  }
+
+  public async getCategories(): Promise<CategoryInfo[]> {
+    const cats = [] as CategoryInfo[]
+
+    const url = "https://api.juejin.cn/content_api/v1/column/author_center_list"
+    const params = {
+      audit_status: null,
+      page_no: 1,
+      page_size: 10,
+    }
+    const res = await this.webProxyFetch(url, [], params, "POST")
+    this.logger.debug("get juejin columns =>", { res })
+
+    if (res.err_no === 0) {
+      const columns = res.data
+      columns.forEach((item: any) => {
+        const cat = new CategoryInfo()
+        cat.categoryId = item.column_id
+        cat.categoryName = item.column_version.title
+        cats.push(cat)
+      })
+    }
+
+    return cats
+  }
+
+  public async addPost(post: Post) {}
+
+  public async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {}
 }
 
 export { JuejinWebAdaptor }

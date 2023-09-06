@@ -433,6 +433,16 @@ export default {
   "setting.wechat.apiUrl.tip": "通常固定，请勿修改",
   "setting.wechat.previewUrl.tip": "微信公众号平台文章预览规则",
 
+  "setting.jianshu.home.tip": "简书首页地址，通常固定",
+  "setting.jianshu.password.tip": "简书的Cookie，请勿修改",
+  "setting.jianshu.apiUrl.tip": "通常固定，请勿修改",
+  "setting.jianshu.previewUrl.tip": "简书平台文章预览规则",
+
+  "setting.juejin.home.tip": "掘金首页地址，通常固定",
+  "setting.juejin.password.tip": "掘金的Cookie，请勿修改",
+  "setting.juejin.apiUrl.tip": "通常固定，请勿修改",
+  "setting.juejin.previewUrl.tip": "掘金平台文章预览规则",
+
   "setting.picgo.refer.to": "详情请参考：",
   "setting.picgo.refer.to.online.doc": "PicGO配置在线文档",
   "setting.picgo.picbed": "图床设置",

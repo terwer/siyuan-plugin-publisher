@@ -98,6 +98,10 @@ const useProxy = (middlewareUrl?: string) => {
       )
       logger.debug("proxyFetch result =>", fetchResult)
 
+      if (!(fetchResult.status >= 200 && fetchResult.status < 300)) {
+        throw new Error(fetchResult?.body)
+      }
+
       if (contentType === "application/json") {
         const resText = fetchResult?.body
         const resJson = JsonUtil.safeParse<any>(resText, {} as any)

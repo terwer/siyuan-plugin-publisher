@@ -31,6 +31,7 @@ import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { Utils } from "~/src/utils/utils.ts"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { JuejinWebAdaptor } from "~/src/adaptors/web/juejin/juejinWebAdaptor.ts"
+import { CategoryTypeEnum } from "zhi-blog-api"
 
 /**
  * 用于获取JuejinWeb的API的自定义Hook
@@ -80,8 +81,20 @@ const useJuejinWeb = async (key?: string, newCfg?: JuejinConfig) => {
     }
   }
 
+  cfg.tagEnabled = true
+  // 掘金使用单选分类
+  cfg.cateEnabled = true
+  cfg.categoryType = CategoryTypeEnum.CategoryType_Single
+  cfg.knowledgeSpaceEnabled = true
+  cfg.knowledgeSpaceTitle = "专栏"
+  cfg.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Single
+  cfg.allowKnowledgeSpaceChange = false
+  cfg.placeholder.knowledgeSpaceReadonlyModeTip =
+    "由于掘金平台的限制，暂时不支持编辑所属专栏。如果您想移动文档，请先点击取消删除该文档，然后重新选择新的专栏发布"
+
   const webApi = new JuejinWebAdaptor(appInstance, cfg)
   return {
+    cfg,
     webApi,
   }
 }

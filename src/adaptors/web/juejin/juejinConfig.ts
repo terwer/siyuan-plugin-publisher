@@ -24,12 +24,27 @@
  */
 
 import { CommonWebConfig } from "~/src/adaptors/web/base/commonWebConfig.ts"
+import { CategoryTypeEnum, PageTypeEnum, PasswordType } from "zhi-blog-api"
 
 /**
  * 掘金配置
  */
 export class JuejinConfig extends CommonWebConfig {
   constructor(username: string, password: string, middlewareUrl?: string) {
-    super("", "", username, password, middlewareUrl)
+    super("https://juejin.cn", "https://api.juejin.cn", username, password, middlewareUrl)
+
+    this.previewUrl = "/post/[postid]"
+    this.pageType = PageTypeEnum.Markdown
+    this.passwordType = PasswordType.PasswordType_Cookie
+    this.usernameEnabled = false
+    this.tagEnabled = true
+    this.cateEnabled = true
+    this.categoryType = CategoryTypeEnum.CategoryType_Single
+    this.knowledgeSpaceEnabled = true
+    this.knowledgeSpaceTitle = "专栏"
+    this.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Single
+    this.allowKnowledgeSpaceChange = false
+    this.placeholder.knowledgeSpaceReadonlyModeTip =
+      "由于掘金平台的限制，暂时不支持编辑所属专栏。如果您想移动文档，请先点击取消删除该文档，然后重新选择新的专栏发布"
   }
 }

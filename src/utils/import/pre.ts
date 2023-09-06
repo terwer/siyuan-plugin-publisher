@@ -97,15 +97,6 @@ export const pre = {
     //   authMode: AuthMode.API,
     //   isEnabled: false
     // },
-    // {
-    //   platformType: PlatformType.Github,
-    //   subPlatformType: SubPlatformType.Github_Nuxt,
-    //   platformKey: "github_Nuxt",
-    //   platformName: "Nuxt",
-    //   platformIcon: svgIcons.iconIFNuxt,
-    //   authMode: AuthMode.API,
-    //   isEnabled: false
-    // },
   ],
   gitlabCfg: <DynamicConfig[]>[
     {
@@ -161,7 +152,6 @@ export const pre = {
       domain: "zhihu.com",
       isEnabled: false,
     },
-    // CSDN 目前有CA验证 已解决
     {
       platformType: PlatformType.Custom,
       subPlatformType: SubPlatformType.Custom_CSDN,
@@ -185,28 +175,28 @@ export const pre = {
       cookieLimit: true,
       isEnabled: false,
     },
-    // {
-    //   platformType: PlatformType.Custom,
-    //   subPlatformType: SubPlatformType.Custom_Jianshu,
-    //   platformKey: "custom_Jianshu",
-    //   platformName: "简书",
-    //   platformIcon: svgIcons.iconIFJianshu,
-    //   authMode: AuthMode.WEBSITE,
-    //   authUrl: "https://www.jianshu.com/sign_in",
-    //   domain: "jianshu.com",
-    //   isEnabled: false,
-    // },
-    // {
-    //   platformType: PlatformType.Custom,
-    //   subPlatformType: SubPlatformType.Custom_Juejin,
-    //   platformKey: "custom_Juejin",
-    //   platformName: "掘金",
-    //   platformIcon: svgIcons.iconIFJuejin,
-    //   authMode: AuthMode.WEBSITE,
-    //   authUrl: "https://juejin.cn/login",
-    //   domain: "juejin.cn",
-    //   isEnabled: false,
-    // },
+    {
+      platformType: PlatformType.Custom,
+      subPlatformType: SubPlatformType.Custom_Jianshu,
+      platformKey: "custom_Jianshu",
+      platformName: "简书",
+      platformIcon: svgIcons.iconIFJianshu,
+      authMode: AuthMode.WEBSITE,
+      authUrl: "https://www.jianshu.com/sign_in",
+      domain: "jianshu.com",
+      isEnabled: false,
+    },
+    {
+      platformType: PlatformType.Custom,
+      subPlatformType: SubPlatformType.Custom_Juejin,
+      platformKey: "custom_Juejin",
+      platformName: "掘金",
+      platformIcon: svgIcons.iconIFJuejin,
+      authMode: AuthMode.WEBSITE,
+      authUrl: "https://juejin.cn/login",
+      domain: "juejin.cn",
+      isEnabled: false,
+    },
   ],
   systemCfg: <DynamicConfig[]>[
     {

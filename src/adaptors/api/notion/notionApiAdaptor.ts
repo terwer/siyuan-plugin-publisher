@@ -212,8 +212,8 @@ class NotionApiAdaptor extends BaseBlogApi {
    * @private postid
    */
   private getNotionPostidKey(postid: string): any {
-    let pageId
-    let endUrl
+    let pageId: string
+    let endUrl: string
     if (postid.indexOf("_") > 0) {
       const idArr = postid.split("_")
       pageId = idArr[0]

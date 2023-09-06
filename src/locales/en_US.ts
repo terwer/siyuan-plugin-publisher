@@ -439,6 +439,16 @@ export default {
   "setting.wechat.apiUrl.tip": "Usually fixed, do not modify",
   "setting.wechat.previewUrl.tip": "WeChat official account platform article preview rules",
 
+  "setting.jianshu.home.tip": "Jianshu homepage address, usually fixed",
+  "setting.jianshu.password.tip": "Jianshu's Cookie, do not modify",
+  "setting.jianshu.apiUrl.tip": "Usually fixed, do not modify",
+  "setting.jianshu.previewUrl.tip": "Jianshu platform article preview rules",
+
+  "setting.juejin.home.tip": "Juejin homepage address, usually fixed",
+  "setting.juejin.password.tip": "Juejin's Cookie, do not modify",
+  "setting.juejin.apiUrl.tip": "Usually fixed, do not modify",
+  "setting.juejin.previewUrl.tip": "Juejin platform article preview rules",
+
   "setting.picgo.refer.to": "For details, please refer to:",
   "setting.picgo.refer.to.online.doc": "Picgo configuration online documentation",
   "setting.picgo.picbed": "Picbed setting",

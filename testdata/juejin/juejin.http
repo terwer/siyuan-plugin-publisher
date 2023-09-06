@@ -1,0 +1,11 @@
+### 获取专栏列表
+POST https://api.juejin.cn/content_api/v1/column/author_center_list
+cookie: {{cookie}}
+Content-Type: application/json
+
+{
+  "audit_status": null,
+  "page_no": 1,
+  "page_size": 10
+}
+

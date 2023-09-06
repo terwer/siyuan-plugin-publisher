@@ -176,9 +176,8 @@ export enum SubPlatformType {
   // Github_Hugo = "Hugo",
   // Github_Jekyll = "Jekyll",
   // Github_Vuepress = "Vuepress",
+  // Github_Vuepress = "Vuepress2",
   // Github_Vitepress = "Vitepress",
-  // Github_Nuxt = "Nuxt",
-  // Github_Next = "Next",
 
   // Gitlab 子平台
   Gitlab_Hexo = "Gitlabhexo",
@@ -195,8 +194,8 @@ export enum SubPlatformType {
   Custom_Zhihu = "Zhihu",
   Custom_CSDN = "Csdn",
   Custom_Wechat = "Wechat",
-  // Custom_Jianshu = "Jianshu",
-  // Custom_Juejin = "Juejin",
+  Custom_Jianshu = "Jianshu",
+  Custom_Juejin = "Juejin",
 
   // System
   System_Siyuan = "Siyuan",
@@ -234,9 +233,8 @@ export function getSubtypeList(ptype: PlatformType): SubPlatformType[] {
       // subtypeList.push(SubPlatformType.Github_Hugo)
       // subtypeList.push(SubPlatformType.Github_Jekyll)
       // subtypeList.push(SubPlatformType.Github_Vuepress)
+      // subtypeList.push(SubPlatformType.Github_Vuepress2)
       // subtypeList.push(SubPlatformType.Github_Vitepress)
-      // subtypeList.push(SubPlatformType.Github_Nuxt)
-      // subtypeList.push(SubPlatformType.Github_Next)
       break
     case PlatformType.Gitlab:
       subtypeList.push(SubPlatformType.Gitlab_Hexo)
@@ -253,8 +251,8 @@ export function getSubtypeList(ptype: PlatformType): SubPlatformType[] {
       subtypeList.push(SubPlatformType.Custom_Zhihu)
       subtypeList.push(SubPlatformType.Custom_CSDN)
       subtypeList.push(SubPlatformType.Custom_Wechat)
-      // subtypeList.push(SubPlatformType.Custom_Jianshu)
-      // subtypeList.push(SubPlatformType.Custom_Juejin)
+      subtypeList.push(SubPlatformType.Custom_Jianshu)
+      subtypeList.push(SubPlatformType.Custom_Juejin)
       break
     case PlatformType.System:
       subtypeList.push(SubPlatformType.System_Siyuan)

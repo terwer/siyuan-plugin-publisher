@@ -1,0 +1,47 @@
+### 获取笔记本列表
+GET https://www.jianshu.com/author/notebooks
+accept: application/json
+cookie: {{cookie}}
+
+### 新建文章步骤
+POST https://www.jianshu.com/author/notes
+accept: application/json
+cookie: {{cookie}}
+Content-Type: application/json
+
+{
+  "notebook_id": "35369556",
+  "title": "2023-09-06",
+  "at_bottom": false
+}
+
+### 获取文章正文
+GET https://www.jianshu.com/author/notes/114799841/content
+accept: application/json
+cookie: {{cookie}}
+
+### 文章实时保存
+PUT https://www.jianshu.com/author/notes/114799841
+accept: application/json
+cookie: {{cookie}}
+Content-Type: application/json
+
+{
+  "id": "114799841",
+  "autosave_control": 2,
+  "title": "2023-09-06",
+  "content": "水电费水电费神鼎飞丹砂"
+}
+
+### 文章发布
+POST https://www.jianshu.com/author/notes/114799841/publicize
+accept: application/json
+cookie: {{cookie}}
+Content-Type: application/json
+
+{}
+
+### 文章软删除
+POST https://www.jianshu.com/author/notes/114800503/soft_destroy
+accept: application/json
+cookie: {{cookie}}
