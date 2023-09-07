@@ -69,7 +69,7 @@ const useProxy = (middlewareUrl?: string) => {
     method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" = "GET",
     contentType: string = "application/json"
   ) => {
-    const siyuanSupported = ["application/json", "text/html", "text/xml"]
+    const siyuanSupported = ["application/json", "text/html", "text/xml", ""]
     if (isUseSiyuanProxy && siyuanSupported.includes(contentType)) {
       logger.info("Using Siyuan forwardProxy, contentType=>", contentType)
       let body: any

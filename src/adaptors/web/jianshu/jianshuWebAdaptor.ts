@@ -25,9 +25,9 @@
 
 import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
 import { CategoryInfo, Post, UserBlog } from "zhi-blog-api"
-import * as cheerio from "cheerio"
 import { JsonUtil, StrUtil } from "zhi-common"
 import { ElMessage } from "element-plus"
+import { fileToBuffer } from "~/src/utils/polyfillUtils.ts"
 
 /**
  * 简书网页授权适配器
@@ -180,6 +180,50 @@ class JianshuWebAdaptor extends BaseWebApi {
     return flag
   }
 
+  public async uploadFile(file: File | Blob, filename?: string): Promise<any> {
+    this.logger.debug(`jianshu start uploadFile ${filename}=>`, file)
+    if (file instanceof Blob) {
+      // import
+      const win = this.appInstance.win
+      if (!win.require) {
+        throw new Error("非常抱歉，目前仅思源笔记PC客户端支持上传图片")
+      }
+      const { FormData, Blob } = win.require(`${this.appInstance.moduleBase}libs/node-fetch-cjs/dist/index.js`)
+
+      // uploadUrl
+      const uploadUrl = "https://upload.qiniup.com/"
+
+      // 获取图片二进制数据
+      const bits = await fileToBuffer(file)
+      const blob = new Blob([bits], { type: file.type })
+
+      // formData
+      const tokenReq = await this.webProxyFetch("https://www.jianshu.com/upload_images/token.json?filename=" + filename)
+      this.logger.debug("jianshu get picture token res =>", tokenReq)
+      const formData = new FormData()
+      formData.append("token", tokenReq.token)
+      formData.append("key", tokenReq.key)
+      formData.append("x:protocol", "https")
+      formData.append("file", blob, filename)
+
+      // 发送请求
+      const resJson = await this.jianshuFormFetch(uploadUrl, formData)
+      this.logger.debug("jianshu upload success, resJson =>", resJson)
+      if (!resJson.url) {
+        throw new Error("简书图片上传失败 =>" + filename)
+      }
+
+      const url = resJson.url
+      return {
+        id: tokenReq.key,
+        object_key: tokenReq.key,
+        url: url,
+      }
+    }
+
+    return {}
+  }
+
   // ================
   // private methods
   // ================
@@ -252,6 +296,14 @@ class JianshuWebAdaptor extends BaseWebApi {
       ElMessage.warning("简书文章发布失败，内容已存入草稿 =>" + e)
       this.logger.error("简书文章发布失败", e)
     }
+  }
+
+  private async jianshuFormFetch(url: string, formData: FormData) {
+    // header
+    const header = {}
+
+    const resJson = await this.webFormFetch(url, [header], formData)
+    return resJson
   }
 }
 
