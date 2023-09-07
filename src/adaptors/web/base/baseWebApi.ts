@@ -27,6 +27,7 @@ import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { createAppLogger, ILogger } from "~/src/utils/appLogger.ts"
 import { useProxy } from "~/src/composables/useProxy.ts"
 import { BaseExtendApi } from "~/src/adaptors/base/baseExtendApi.ts"
+import { JsonUtil } from "zhi-common"
 
 /**
  * 网页授权统一封装基类
@@ -147,6 +148,23 @@ class BaseWebApi extends WebApi {
       },
     ]
     return await this.proxyFetch(url, webHeaders, params, method, contentType)
+  }
+
+  public async webFormFetch(url: string, headers: any[], formData: FormData) {
+    const win = this.appInstance.win
+    const doFetch = win.require(`${this.appInstance.moduleBase}libs/zhi-formdata-fetch/index.cjs`)
+
+    // headers
+    const header = headers.length > 0 ? headers[0] : {}
+    this.logger.debug("before zhi-formdata-fetch, headers =>", headers)
+    this.logger.debug("before zhi-formdata-fetch, url =>", url)
+
+    const resText = await doFetch(this.appInstance.moduleBase, url, header, formData)
+    this.logger.debug("webForm doFetch success, resText =>", resText)
+    const resJson = JsonUtil.safeParse<any>(resText, {} as any)
+    this.logger.debug("webForm doFetch success, resJson=>", resJson)
+
+    return resJson
   }
 }
 
