@@ -83,14 +83,11 @@ const useJuejinWeb = async (key?: string, newCfg?: JuejinConfig) => {
 
   cfg.tagEnabled = true
   // 掘金使用单选分类
-  cfg.cateEnabled = true
-  cfg.categoryType = CategoryTypeEnum.CategoryType_Single
+  cfg.cateEnabled = false
   cfg.knowledgeSpaceEnabled = true
-  cfg.knowledgeSpaceTitle = "专栏"
+  cfg.knowledgeSpaceTitle = "分类"
   cfg.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Single
-  cfg.allowKnowledgeSpaceChange = false
-  cfg.placeholder.knowledgeSpaceReadonlyModeTip =
-    "由于掘金平台的限制，暂时不支持编辑所属专栏。如果您想移动文档，请先点击取消删除该文档，然后重新选择新的专栏发布"
+  cfg.allowKnowledgeSpaceChange = true
 
   const webApi = new JuejinWebAdaptor(appInstance, cfg)
   return {

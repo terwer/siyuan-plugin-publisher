@@ -38,10 +38,10 @@ export class JuejinConfig extends CommonWebConfig {
     this.passwordType = PasswordType.PasswordType_Cookie
     this.usernameEnabled = false
     this.tagEnabled = true
-    this.cateEnabled = true
+    this.cateEnabled = false
     this.categoryType = CategoryTypeEnum.CategoryType_Single
     this.knowledgeSpaceEnabled = true
-    this.knowledgeSpaceTitle = "专栏"
+    this.knowledgeSpaceTitle = "分类"
     this.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Single
     this.allowKnowledgeSpaceChange = false
     this.placeholder.knowledgeSpaceReadonlyModeTip =
