@@ -37,14 +37,13 @@ export class JuejinConfig extends CommonWebConfig {
     this.pageType = PageTypeEnum.Markdown
     this.passwordType = PasswordType.PasswordType_Cookie
     this.usernameEnabled = false
-    this.tagEnabled = true
+    this.tagEnabled = false
+    this.slugTagEnabled = true
     this.cateEnabled = false
     this.categoryType = CategoryTypeEnum.CategoryType_Single
     this.knowledgeSpaceEnabled = true
     this.knowledgeSpaceTitle = "分类"
     this.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Single
-    this.allowKnowledgeSpaceChange = false
-    this.placeholder.knowledgeSpaceReadonlyModeTip =
-      "由于掘金平台的限制，暂时不支持编辑所属专栏。如果您想移动文档，请先点击取消删除该文档，然后重新选择新的专栏发布"
+    this.allowKnowledgeSpaceChange = true
   }
 }

@@ -81,8 +81,15 @@ const useJuejinWeb = async (key?: string, newCfg?: JuejinConfig) => {
     }
   }
 
-  cfg.tagEnabled = true
-  // 掘金使用单选分类
+  // 注意：
+  // 分类和知识空间可以共存。但是共存的前提是。知识空间使用getCategories，分类使用getCategoryTreeNodes
+  // 分类使用getCategories时候，不能开启知识空间
+  //
+  // 标签和别名标签不能共存
+  //
+  // 掘金使用单选分类、别名标签
+  cfg.tagEnabled = false
+  cfg.slugTagEnabled = true
   cfg.cateEnabled = false
   cfg.knowledgeSpaceEnabled = true
   cfg.knowledgeSpaceTitle = "分类"
