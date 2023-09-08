@@ -29,11 +29,11 @@ import { CommonGitlabApiAdaptor } from "~/src/adaptors/api/base/gitlab/commonGit
 import _ from "lodash"
 
 /**
- * Hexo API 适配器
+ * Hugo API 适配器
  *
  * @author terwer
- * @version 1.3.2
- * @since 0.8.1
+ * @version 1.14.0
+ * @since 1.14.0
  */
 class GitlabhugoApiAdaptor extends CommonGitlabApiAdaptor {
   public override getYamlAdaptor(): YamlConvertAdaptor {

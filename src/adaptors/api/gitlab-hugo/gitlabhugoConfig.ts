@@ -27,10 +27,10 @@ import { CategoryTypeEnum, PageTypeEnum, PasswordType } from "zhi-blog-api"
 import { HugoConfig } from "~/src/adaptors/api/hugo/hugoConfig.ts"
 
 /**
- * 博 Hexo 配置
+ * Hexo 配置
  *
  * @author terwer
- * @since 1.3.2
+ * @since 1.14.0
  */
 class GitlabhugoConfig extends HugoConfig {
   constructor(
