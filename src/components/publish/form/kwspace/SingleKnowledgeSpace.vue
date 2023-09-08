@@ -52,6 +52,8 @@ const formData = reactive({
     categorySelected: "",
     categoryList: [],
   },
+
+  isInit: false
 })
 
 // emits
@@ -99,12 +101,19 @@ const initPage = async () => {
 }
 
 onMounted(async () => {
-  await initPage()
+  try {
+    await initPage()
+  } catch (e) {
+    logger.error("知识空间加载失败", e)
+  } finally {
+    formData.isInit = true
+  }
 })
 </script>
 
 <template>
-  <div class="single-knowledge-space" v-if="formData.knowledgeSpaceConfig.cateEnabled">
+  <el-skeleton class="placeholder" v-if="!formData.isInit" :rows="1" animated />
+  <div class="single-knowledge-space" v-else>
     <el-form-item :label="cateTitle">
       <el-select
         v-model="formData.cate.categorySelected"

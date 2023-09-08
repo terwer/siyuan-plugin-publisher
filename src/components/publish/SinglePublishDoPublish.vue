@@ -255,7 +255,8 @@ const getBlogName = () => {
       if (formData.mergedPost?.categories?.length > 0) {
         cateName = formData.mergedPost?.categories[0]
       } else {
-        cateName = formData.mergedPost?.cate_slugs[0]
+        // cateName = formData.mergedPost?.cate_slugs[0]
+        cateName = ""
       }
       blogName = cateName ?? ""
     }

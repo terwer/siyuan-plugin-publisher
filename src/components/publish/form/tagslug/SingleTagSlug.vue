@@ -30,7 +30,7 @@ import { TagInfo } from "zhi-blog-api"
 import Adaptors from "~/src/adaptors"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import {computed} from "vue/dist/vue";
+import { computed } from "vue/dist/vue"
 
 const logger = createAppLogger("single-tag-slugs")
 const { t } = useVueI18n()
@@ -58,8 +58,9 @@ const formData = reactive({
     tagSelected: "",
     tagList: [],
   },
-})
 
+  isInit: false,
+})
 
 // emits
 const emit = defineEmits(["emitSyncTagSlugs"])
@@ -100,27 +101,29 @@ const initPage = async () => {
 }
 
 onMounted(async () => {
-  await initPage()
+  try {
+    await initPage()
+  } catch (e) {
+    logger.error("别名标签加载失败", e)
+  } finally {
+    formData.isInit = true
+  }
 })
 </script>
 
 <template>
-  <div class="single-tag-slug">
+  <el-skeleton class="placeholder" v-if="!formData.isInit" :rows="1" animated />
+  <div v-else class="single-tag-slug">
     <el-form-item label="标签">
       <el-select
-          v-model="formData.tag.tagSelected"
-          placeholder="请选择"
-          no-data-text="暂无数据"
-          class="m-2"
-          size="default"
-          @change="handleCatNodeSingleCheck"
+        v-model="formData.tag.tagSelected"
+        placeholder="请选择"
+        no-data-text="暂无数据"
+        class="m-2"
+        size="default"
+        @change="handleCatNodeSingleCheck"
       >
-        <el-option
-            v-for="item in formData.tag.tagList"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-        />
+        <el-option v-for="item in formData.tag.tagList" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
     </el-form-item>
     <div class="form-item-bottom"></div>

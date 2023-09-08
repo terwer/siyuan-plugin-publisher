@@ -190,6 +190,39 @@ class JuejinWebAdaptor extends BaseWebApi {
     return true
   }
 
+  public async getPost(postid: string, useSlug?: boolean): Promise<Post> {
+    const juejinPostKey = this.getJuejinPostidKey(postid)
+    const pageId = juejinPostKey.pageId
+
+    const url = "https://api.juejin.cn/content_api/v1/article/detail"
+    const params = {
+      article_id: pageId,
+    }
+    const res = await this.webProxyFetch(url, [], params, "POST")
+    this.logger.debug("juejin get post res =>", res)
+    if (res.err_no !== 0) {
+      throw new Error("掘金文章获取失败 =>" + res.err_msg)
+    }
+
+    const commonPost = new Post()
+
+    // 掘金标签
+    const tags = res.data.tags ?? []
+    const tagSlugs = []
+    tags.forEach((item: any) => {
+      tagSlugs.push(item.tag_id)
+    })
+    commonPost.tags_slugs = tagSlugs.join(",")
+
+    // 掘金分类
+    const cate = res.data.category.category_id
+    const catSlugs = []
+    catSlugs.push(cate)
+    commonPost.cate_slugs = catSlugs
+
+    return commonPost
+  }
+
   public async getCategories(): Promise<CategoryInfo[]> {
     const cats = [] as CategoryInfo[]
 
