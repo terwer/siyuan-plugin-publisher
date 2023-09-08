@@ -98,3 +98,17 @@ Content-Type: application/json
   "limit": 10,
   "sort_type": 1
 }
+
+### 图片上传-1-getToken
+GET https://api.juejin.cn/imagex/gen_token?client=web
+cookie: {{cookie}}
+Content-Type: application/json
+
+### 图片上传-2-ApplyImageUpload-不可用
+GET https://imagex.bytedanceapi.com/?Action=ApplyImageUpload
+
+### 图片上传-3-CommitImageUpload-不可用
+POST https://imagex.bytedanceapi.com/?Action=CommitImageUpload
+
+### 图片上传-4-获取图片链接-不可用
+GET https://api.juejin.cn/imagex/get_img_url
