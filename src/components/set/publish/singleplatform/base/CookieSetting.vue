@@ -78,7 +78,6 @@ const submitForm = async (formEl) => {
     return
   }
 
-  alert(formData.key)
   if (StrUtil.isEmptyString(formData.key)) {
     ElMessage.error("平台key不能为空，请排查。如有问题，请联系作者")
     return

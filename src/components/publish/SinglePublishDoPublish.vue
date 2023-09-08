@@ -134,6 +134,7 @@ const handlePublish = async () => {
         ElMessage.success("文章更新成功！")
       }
     } else {
+      formData.actionEnable = true
       ElMessage.error(processResult.errMsg)
       logger.error(processResult.errMsg)
     }
@@ -254,7 +255,8 @@ const getBlogName = () => {
       if (formData.mergedPost?.categories?.length > 0) {
         cateName = formData.mergedPost?.categories[0]
       } else {
-        cateName = formData.mergedPost?.cate_slugs[0]
+        // cateName = formData.mergedPost?.cate_slugs[0]
+        cateName = ""
       }
       blogName = cateName ?? ""
     }
@@ -307,6 +309,11 @@ const syncDesc = (val: string) => {
 const syncTags = (val: string[]) => {
   formData.mergedPost.mt_keywords = val?.join(",")
   logger.debug("syncTags in single publish")
+}
+
+const syncTagSlugs = (val: string[]) => {
+  formData.mergedPost.tags_slugs = val?.join(",")
+  logger.debug("syncTagSlugs in single publish")
 }
 
 const syncCates = (cates: string[]) => {
@@ -473,10 +480,20 @@ onMounted(async () => {
 
                 <!-- 知识空间 -->
                 <publish-knowledge-space
+                  v-if="formData.publishCfg.cfg.knowledgeSpaceEnabled"
                   v-model:knowledge-space-type="formData.publishCfg.cfg.knowledgeSpaceType"
                   v-model:knowledge-space-config="formData.knowledgeSpaceConfig"
                   v-model:cate-slugs="formData.mergedPost.cate_slugs"
                   @emitSyncCateSlugs="syncCateSlugs"
+                />
+
+                <!-- 标签别名 -->
+                <single-tag-slug
+                  v-if="formData.publishCfg.cfg.tagSlugEnabled"
+                  v-model:cfg="formData.publishCfg.cfg"
+                  v-model:api-type="key"
+                  v-model:tag-slugs="formData.mergedPost.tags_slugs"
+                  @emitSyncTagSlugs="syncTagSlugs"
                 />
                 <el-divider border-style="dashed" />
 
@@ -517,6 +534,7 @@ onMounted(async () => {
 
                   <!-- 分类 -->
                   <publish-categories
+                    v-if="formData.publishCfg.cfg.cateEnabled"
                     v-model:use-ai="formData.useAi"
                     v-model:category-type="formData.publishCfg.cfg.categoryType"
                     v-model:category-config="formData.categoryConfig"
@@ -524,14 +542,6 @@ onMounted(async () => {
                     v-model:md="formData.mergedPost.markdown"
                     v-model:html="formData.mergedPost.html"
                     @emitSyncCates="syncCates"
-                  />
-
-                  <!-- 知识空间 -->
-                  <publish-knowledge-space
-                    v-model:knowledge-space-type="formData.publishCfg.cfg.knowledgeSpaceType"
-                    v-model:knowledge-space-config="formData.knowledgeSpaceConfig"
-                    v-model:cate-slugs="formData.mergedPost.cate_slugs"
-                    @emitSyncCateSlugs="syncCateSlugs"
                   />
 
                   <!-- 发布时间 -->

@@ -38,6 +38,8 @@ import { useHexoApi } from "~/src/adaptors/api/hexo/useHexoApi.ts"
 import { useGitlabhexoApi } from "~/src/adaptors/api/gitlab-hexo/useGitlabhexoApi.ts"
 import { useCsdnWeb } from "~/src/adaptors/web/csdn/useCsdnWeb.ts"
 import { useWechatWeb } from "~/src/adaptors/web/wechat/useWechatWeb.ts"
+import {useJianshuWeb} from "~/src/adaptors/web/jianshu/useJianshuWeb.ts";
+import {useJuejinWeb} from "~/src/adaptors/web/juejin/useJuejinWeb.ts";
 
 /**
  * 适配器统一入口
@@ -114,16 +116,16 @@ class Adaptors {
         conf = cfg
         break
       }
-      // case SubPlatformType.Custom_Jianshu: {
-      //   const { cfg } = await useJianshuWeb(key)
-      //   conf = cfg
-      //   break
-      // }
-      // case SubPlatformType.Custom_Juejin: {
-      //   const { cfg } = await useJuejinWeb(key)
-      //   conf = cfg
-      //   break
-      // }
+      case SubPlatformType.Custom_Jianshu: {
+        const { cfg } = await useJianshuWeb(key)
+        conf = cfg
+        break
+      }
+      case SubPlatformType.Custom_Juejin: {
+        const { cfg } = await useJuejinWeb(key)
+        conf = cfg
+        break
+      }
       case SubPlatformType.System_Siyuan: {
         const { siyuanConfig } = useSiyuanApi()
         conf = siyuanConfig
@@ -204,16 +206,16 @@ class Adaptors {
         blogAdaptor = webApi
         break
       }
-      // case SubPlatformType.Custom_Jianshu: {
-      //   const { webApi } = await useJianshuWeb(key, newCfg)
-      //   blogAdaptor = webApi
-      //   break
-      // }
-      // case SubPlatformType.Custom_Juejin: {
-      //   const { webApi } = await useJuejinWeb(key, newCfg)
-      //   blogAdaptor = webApi
-      //   break
-      // }
+      case SubPlatformType.Custom_Jianshu: {
+        const { webApi } = await useJianshuWeb(key, newCfg)
+        blogAdaptor = webApi
+        break
+      }
+      case SubPlatformType.Custom_Juejin: {
+        const { webApi } = await useJuejinWeb(key, newCfg)
+        blogAdaptor = webApi
+        break
+      }
       case SubPlatformType.System_Siyuan: {
         const { blogApi } = useSiyuanApi()
         blogAdaptor = blogApi

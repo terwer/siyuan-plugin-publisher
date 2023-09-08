@@ -23,27 +23,8 @@
  * questions.
  */
 
-import { CommonWebConfig } from "~/src/adaptors/web/base/commonWebConfig.ts"
-import { CategoryTypeEnum, PageTypeEnum, PasswordType } from "zhi-blog-api"
+import { CommonWebPlaceholder } from "~/src/adaptors/web/base/commonWebPlaceholder.ts"
 
-/**
- * 简书配置
- */
-export class JianshuConfig extends CommonWebConfig {
-  constructor(username: string, password: string, middlewareUrl?: string) {
-    super("https://www.jianshu.com", "https://www.jianshu.com", username, password, middlewareUrl)
+class JianshuPlaceholder extends CommonWebPlaceholder {}
 
-    this.previewUrl = "/p/[postid]"
-    this.pageType = PageTypeEnum.Markdown
-    this.passwordType = PasswordType.PasswordType_Cookie
-    this.usernameEnabled = false
-    this.tagEnabled = false
-    this.cateEnabled = false
-    this.knowledgeSpaceEnabled = true
-    this.knowledgeSpaceTitle = "笔记本"
-    this.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Single
-    this.allowKnowledgeSpaceChange = false
-    this.placeholder.knowledgeSpaceReadonlyModeTip =
-      "由于简书平台的限制，暂时不支持编辑所属笔记本。如果您想移动文档，请先点击取消删除该文档，然后重新选择新的笔记本发布"
-  }
-}
+export { JianshuPlaceholder }

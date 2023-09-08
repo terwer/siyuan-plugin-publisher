@@ -69,7 +69,7 @@ const useProxy = (middlewareUrl?: string) => {
     method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" = "GET",
     contentType: string = "application/json"
   ) => {
-    const siyuanSupported = ["application/json", "text/html", "text/xml"]
+    const siyuanSupported = ["application/json", "text/html", "text/xml", ""]
     if (isUseSiyuanProxy && siyuanSupported.includes(contentType)) {
       logger.info("Using Siyuan forwardProxy, contentType=>", contentType)
       let body: any
@@ -97,6 +97,10 @@ const useProxy = (middlewareUrl?: string) => {
         30000
       )
       logger.debug("proxyFetch result =>", fetchResult)
+
+      if (!(fetchResult.status >= 200 && fetchResult.status < 300)) {
+        throw new Error(fetchResult?.body)
+      }
 
       if (contentType === "application/json") {
         const resText = fetchResult?.body

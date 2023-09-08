@@ -446,9 +446,14 @@ class WechatWebAdaptor extends BaseWebApi {
   public async uploadFile(file: File | Blob, filename?: string): Promise<any> {
     this.logger.debug(`wechat start uploadFile ${filename}=>`, file)
     if (file instanceof Blob) {
+      // import
       const win = this.appInstance.win
+      if (!win.require) {
+        throw new Error("非常抱歉，目前仅思源笔记PC客户端支持上传图片")
+      }
       const { FormData, Blob } = win.require(`${this.appInstance.moduleBase}libs/node-fetch-cjs/dist/index.js`)
 
+      // uploadUrl
       const ticket_id = this.cfg.metadata.commonData.data.user_name
       const ticket = this.cfg.metadata.commonData.data.ticket
       const svr_time = this.cfg.metadata.commonData.data.time
@@ -459,13 +464,14 @@ class WechatWebAdaptor extends BaseWebApi {
         `&ticket_id=${ticket_id}&ticket=${ticket}&svr_time=${svr_time}&token=${token}&lang=zh_CN&seq=${seq}&t=` +
         Math.random()
 
+      // 获取图片二进制数据
       // const fs = win.require("fs")
       // const fileData = fs.readFileSync("/Users/terwer/Documents/pictures/3259282.jpeg")
       // const blob = new Blob([fileData], { type: "image/jpeg" })
-
       const bits = await fileToBuffer(file)
       const blob = new Blob([bits], { type: file.type })
 
+      // formData
       const formData: any = new FormData()
       formData.append("type", file.type)
       formData.append("id", new Date().getTime())
@@ -474,6 +480,7 @@ class WechatWebAdaptor extends BaseWebApi {
       formData.append("size", file.size)
       formData.append("file", blob, filename)
 
+      // 发送请求
       const resJson = await this.wechatFormFetch(uploadUrl, formData)
       if (resJson.base_resp.err_msg != "ok") {
         this.logger.error(`微信公众号图片上传失败, ${filename} =>`, resJson.base_resp.err_msg)
@@ -540,22 +547,13 @@ class WechatWebAdaptor extends BaseWebApi {
   }
 
   private async wechatFormFetch(url: string, formData: FormData) {
-    const win = this.appInstance.win
-    const doFetch = win.require(`${this.appInstance.moduleBase}libs/zhi-formdata-fetch/index.cjs`)
-
-    // headers
-    const headers = {
+    // header
+    const header = {
       Cookie: this.cfg.password,
       Referer: "https://mp.weixin.qq.com/cgi-bin/appmsg",
     }
-    this.logger.debug("before zhi-formdata-fetch, headers =>", headers)
-    this.logger.debug("before zhi-formdata-fetch, url =>", url)
 
-    const resText = await doFetch(this.appInstance.moduleBase, url, headers, formData)
-    this.logger.debug("wechat doFetch success, resText =>", resText)
-    const resJson = JsonUtil.safeParse<any>(resText, {} as any)
-    this.logger.debug("wechat doFetch success, resJson=>", resJson)
-
+    const resJson = await this.webFormFetch(url, [header], formData)
     return resJson
   }
 }

@@ -24,12 +24,26 @@
  */
 
 import { CommonWebConfig } from "~/src/adaptors/web/base/commonWebConfig.ts"
+import { CategoryTypeEnum, PageTypeEnum, PasswordType } from "zhi-blog-api"
 
 /**
  * 掘金配置
  */
 export class JuejinConfig extends CommonWebConfig {
   constructor(username: string, password: string, middlewareUrl?: string) {
-    super("", "", username, password, middlewareUrl)
+    super("https://juejin.cn", "https://api.juejin.cn", username, password, middlewareUrl)
+
+    this.previewUrl = "/post/[postid]"
+    this.pageType = PageTypeEnum.Markdown
+    this.passwordType = PasswordType.PasswordType_Cookie
+    this.usernameEnabled = false
+    this.tagEnabled = false
+    this.tagSlugEnabled = true
+    this.cateEnabled = false
+    this.categoryType = CategoryTypeEnum.CategoryType_Single
+    this.knowledgeSpaceEnabled = true
+    this.knowledgeSpaceTitle = "分类"
+    this.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Single
+    this.allowKnowledgeSpaceChange = true
   }
 }

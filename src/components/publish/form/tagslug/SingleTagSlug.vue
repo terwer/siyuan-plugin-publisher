@@ -24,46 +24,46 @@
   -->
 
 <script setup lang="ts">
-import { ISingleCategoryConfig } from "~/src/types/ICategoryConfig.ts"
-import { computed, onMounted, reactive, toRaw } from "vue"
+import { onMounted, reactive, toRaw } from "vue"
+import { StrUtil } from "zhi-common"
+import { TagInfo } from "zhi-blog-api"
+import Adaptors from "~/src/adaptors"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import { CategoryInfo } from "zhi-blog-api"
-import Adaptors from "~/src/adaptors"
+import { computed } from "vue/dist/vue"
 
-const logger = createAppLogger("single-knowledge-space")
+const logger = createAppLogger("single-tag-slugs")
 const { t } = useVueI18n()
 
 const props = defineProps({
-  knowledgeSpaceConfig: {
-    type: Object as () => ISingleCategoryConfig,
+  cfg: {
+    type: Object,
     default: {},
   },
-  cateSlugs: {
-    type: Array,
-    default: <string[]>[],
+  apiType: {
+    type: String,
+    default: "",
+  },
+  tagSlugs: {
+    type: String,
+    default: "",
   },
 })
 
 const formData = reactive({
-  knowledgeSpaceConfig: props.knowledgeSpaceConfig,
-  cateSlugs: props.cateSlugs,
-  cate: {
-    categorySelected: "",
-    categoryList: [],
+  cfg: props.cfg,
+  apiType: props.apiType,
+  tagSlugs: <string[]>(StrUtil.isEmptyString(props.tagSlugs) ? [] : props.tagSlugs.split(",")),
+  tag: {
+    tagSelected: "",
+    tagList: [],
   },
 
-  isInit: false
+  isInit: false,
 })
 
 // emits
-const emit = defineEmits(["emitSyncSingleCateSlugs"])
-
-// computes
-const cateTitle = computed(() => {
-  const cateTitle = formData?.knowledgeSpaceConfig?.cfg.knowledgeSpaceTitle ?? t("main.cat")
-  return cateTitle
-})
+const emit = defineEmits(["emitSyncTagSlugs"])
 
 // methods
 const handleCatNodeSingleCheck = (val: any) => {
@@ -71,32 +71,32 @@ const handleCatNodeSingleCheck = (val: any) => {
   logger.debug("value=>", value)
   logger.debug("label=>", value)
 
-  const cateSlugs = []
-  cateSlugs.push(value)
-  formData.cateSlugs = cateSlugs
-  logger.debug("cateSlugs=>", formData.cateSlugs)
+  const tagSlugs = []
+  tagSlugs.push(value)
+  formData.tagSlugs = tagSlugs
+  logger.debug("cateSlugs=>", formData.tagSlugs)
 
-  emit("emitSyncSingleCateSlugs", cateSlugs)
+  emit("emitSyncTagSlugs", tagSlugs)
 }
 
 const initPage = async () => {
-  let categoryInfoList: CategoryInfo[] = []
+  let tagInfoList: TagInfo[] = []
   // 获取远程分类列表
-  const cfg = formData.knowledgeSpaceConfig.cfg
-  const api = await Adaptors.getAdaptor(formData.knowledgeSpaceConfig.apiType, cfg)
-  categoryInfoList = await api.getCategories()
-  logger.debug("getCategories for single category", categoryInfoList)
+  const cfg = formData.cfg
+  const api = await Adaptors.getAdaptor(formData.apiType, cfg)
+  tagInfoList = await api.getTags()
+  logger.debug("getTags for single slug tag", tagInfoList)
 
-  if (categoryInfoList.length > 0) {
+  if (tagInfoList.length > 0) {
     // 分类列表
-    formData.cate.categoryList = categoryInfoList.map((item: CategoryInfo) => ({
-      value: item.categoryId,
-      label: item.categoryName,
+    formData.tag.tagList = tagInfoList.map((item: TagInfo) => ({
+      value: item.tagId,
+      label: item.tagName,
     }))
 
     // 当前选中
-    formData.cate.categorySelected = (formData.cateSlugs?.[0] ?? cfg.blogid ?? "") as string
-    logger.debug("读取已有知识空间 =>", { cateSlugs: toRaw(formData.cateSlugs) })
+    formData.tag.tagSelected = (formData.tagSlugs?.[0] ?? "") as string
+    logger.debug("读取已有别名标签 =>", { tagSlugs: toRaw(formData.tagSlugs) })
   }
 }
 
@@ -104,7 +104,7 @@ onMounted(async () => {
   try {
     await initPage()
   } catch (e) {
-    logger.error("知识空间加载失败", e)
+    logger.error("别名标签加载失败", e)
   } finally {
     formData.isInit = true
   }
@@ -113,32 +113,18 @@ onMounted(async () => {
 
 <template>
   <el-skeleton class="placeholder" v-if="!formData.isInit" :rows="1" animated />
-  <div class="single-knowledge-space" v-else>
-    <el-form-item :label="cateTitle">
+  <div v-else class="single-tag-slug">
+    <el-form-item label="标签">
       <el-select
-        v-model="formData.cate.categorySelected"
+        v-model="formData.tag.tagSelected"
         placeholder="请选择"
         no-data-text="暂无数据"
         class="m-2"
         size="default"
         @change="handleCatNodeSingleCheck"
-        :disabled="formData.knowledgeSpaceConfig.readonlyMode"
       >
-        <el-option
-          v-for="item in formData.cate.categoryList"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        />
+        <el-option v-for="item in formData.tag.tagList" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
-    </el-form-item>
-    <el-form-item v-if="formData.knowledgeSpaceConfig.readonlyMode">
-      <el-alert
-        :closable="false"
-        :title="props.knowledgeSpaceConfig.readonlyModeTip"
-        class="form-item-tip"
-        type="warning"
-      />
     </el-form-item>
     <div class="form-item-bottom"></div>
   </div>
@@ -152,11 +138,11 @@ onMounted(async () => {
 .form-item-bottom
   margin-bottom 16px
 
-.single-knowledge-space
+.single-tag-slug
   :deep(.el-form-item)
     margin-bottom 0
 
-.single-knowledge-space
+.single-tag-slug
   :deep(.el-tag.el-tag--info)
     --el-tag-bg-color var(--el-color-primary-light-9)
     --el-tag-border-color var(--el-color-primary-light-8)

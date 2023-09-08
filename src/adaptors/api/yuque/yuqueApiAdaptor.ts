@@ -216,8 +216,8 @@ class YuqueApiAdaptor extends BaseBlogApi {
    * @private postid
    */
   private getYuquePostidKey(postid: string): any {
-    let docId
-    let docRepo
+    let docId: string
+    let docRepo: string
     if (postid.indexOf("_") > 0) {
       const idArr = postid.split("_")
       docId = idArr[0]
