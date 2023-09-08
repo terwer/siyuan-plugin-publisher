@@ -41,11 +41,11 @@ const { t } = useVueI18n()
 const { cfg } = await useGitlabhugoApi(props.apiType)
 const hugoCfg = cfg as GitlabhugoConfig
 const hugoPlaceholder = new GitlabhugoPlaceHolder()
-hugoPlaceholder.homePlaceholder = t("setting.blog.github.url.tip")
-hugoPlaceholder.usernamePlaceholder = t("setting.blog.type.github.user.tip")
-hugoPlaceholder.passwordPlaceholder = t("setting.blog.type.github.token.tip")
-hugoPlaceholder.apiUrlPlaceholder = t("setting.blog.github.apiurl.tip")
-hugoPlaceholder.previewUrlPlaceholder = t("setting.blog.previewUrl.tip")
+hugoPlaceholder.homePlaceholder = t("setting.blog.gitlab.url.tip")
+hugoPlaceholder.usernamePlaceholder = t("setting.blog.type.gitlab.user.tip")
+hugoPlaceholder.passwordPlaceholder = t("setting.blog.type.gitlab.token.tip")
+hugoPlaceholder.apiUrlPlaceholder = t("setting.blog.gitlab.apiurl.tip")
+hugoPlaceholder.previewUrlPlaceholder = t("setting.blog.gitlab.previewUrl.tip")
 hugoCfg.placeholder = hugoPlaceholder
 
 // 处理事件的方法
@@ -66,5 +66,3 @@ const onHomeChange = (value: string, cfg: GitlabhugoConfig) => {
     <template #footer="footer"> </template>
   </common-github-setting>
 </template>
-
-<style scoped lang="stylus"></style>

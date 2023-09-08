@@ -66,5 +66,3 @@ const onHomeChange = (value: string, cfg: GitlabhexoConfig) => {
     <template #footer="footer"> </template>
   </common-github-setting>
 </template>
-
-<style scoped lang="stylus"></style>

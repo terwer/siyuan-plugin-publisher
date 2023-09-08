@@ -23,16 +23,16 @@
  * questions.
  */
 
+import { CommonGithubConfig } from "~/src/adaptors/api/base/github/commonGithubConfig.ts"
 import { CategoryTypeEnum, PageTypeEnum, PasswordType } from "zhi-blog-api"
-import { HugoConfig } from "~/src/adaptors/api/hugo/hugoConfig.ts"
 
 /**
- * Hexo 配置
+ * Jekyll 配置
  *
  * @author terwer
  * @since 1.14.0
  */
-class GitlabhugoConfig extends HugoConfig {
+class JekyllConfig extends CommonGithubConfig {
   constructor(
     githubUsername: string,
     githubAuthToken: string,
@@ -42,14 +42,13 @@ class GitlabhugoConfig extends HugoConfig {
   ) {
     super(githubUsername, githubAuthToken, githubRepo, githubBranch, middlewareUrl)
 
-    this.home = "[your-gitlab-home]"
-    this.apiUrl = "[your-gitlab-api-url]"
-    this.tokenSettingUrl = "[your-gitlab-host]/-/profile/personal_access_tokens"
+    this.tokenSettingUrl = "https://github.com/settings/tokens"
     this.showTokenTip = true
-    this.defaultPath = "content/post"
+    this.defaultPath = "_posts"
     this.previewUrl = "/[user]/[repo]/blob/[branch]/[docpath]"
+    // this.previewPostUrl = "/[cats]/[yyyy]/[mm]/[dd]/[postid].html"
     this.previewPostUrl = "/post/[postid].html"
-    this.mdFilenameRule = "[slug].md"
+    this.mdFilenameRule = "[yyyy]-[mm]-[dd]-[slug].md"
     this.pageType = PageTypeEnum.Markdown
     this.passwordType = PasswordType.PasswordType_Token
     this.allowPreviewUrlChange = false
@@ -59,9 +58,9 @@ class GitlabhugoConfig extends HugoConfig {
     this.categoryType = CategoryTypeEnum.CategoryType_Multi
     this.knowledgeSpaceEnabled = true
     this.allowKnowledgeSpaceChange = false
-    this.placeholder.knowledgeSpaceReadonlyModeTip = "Githubhugo 平台暂不支持修改发布目录，如需修改，请删除之后重新发布"
+    this.placeholder.knowledgeSpaceReadonlyModeTip = "Jekyll 平台暂不支持修改发布目录，如需修改，请删除之后重新发布"
     this.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Tree_Single
   }
 }
 
-export { GitlabhugoConfig }
+export { JekyllConfig }

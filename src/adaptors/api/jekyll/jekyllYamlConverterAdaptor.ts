@@ -27,43 +27,62 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { BlogConfig, Post, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
 import { DateUtil, StrUtil, YamlUtil } from "zhi-common"
 import { toRaw } from "vue"
+import {CommonGithubConfig} from "~/src/adaptors/api/base/github/commonGithubConfig.ts";
 
 /**
- * Hugo平台的YAML解析器
+ * Jekyll平台的YAML解析器
  *
- * @see {https://gohugo.io/content-management/front-matter/ front-tmatter}
+ * @see {https://jekyllrb.com/docs/front-matter/ front-tmatter}
  * @author terwer
  * @since 0.8.1
  */
-class HugoYamlConverterAdaptor extends YamlConvertAdaptor {
-  private readonly logger = createAppLogger("hugo-yaml-converter-adaptor")
+class JekyllYamlConverterAdaptor extends YamlConvertAdaptor {
+  private readonly logger = createAppLogger("hexo-yaml-converter-adaptor")
 
   public convertToYaml(post: Post, cfg?: BlogConfig): YamlFormatObj {
-    this.logger.debug("您正在使用 Hugo Yaml Converter", { post: toRaw(post) })
+    this.logger.debug("您正在使用 Jekyll Yaml Converter", { post: toRaw(post) })
     let yamlFormatObj: YamlFormatObj = new YamlFormatObj()
+
+    // layout
+    yamlFormatObj.yamlObj.layout = "post"
 
     // title
     yamlFormatObj.yamlObj.title = post.title
 
-    // slug
-    yamlFormatObj.yamlObj.slug = post.wp_slug
-
-    // url
-    if (cfg.yamlLinkEnabled) {
-      yamlFormatObj.yamlObj.url = "/post/" + post.wp_slug + ".html"
-    }
-
     // date
     yamlFormatObj.yamlObj.date = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true)
 
-    // lastmod
-    if (!post.dateUpdated) {
-      post.dateUpdated = new Date()
-    }
-    yamlFormatObj.yamlObj.lastmod = DateUtil.formatIsoToZh(post.dateUpdated.toISOString(), true)
+    // permalink
+    let link = "/post/" + post.wp_slug + ".html"
+    const githubCfg = cfg as CommonGithubConfig
+    if (githubCfg.yamlLinkEnabled && !StrUtil.isEmptyString(githubCfg.previewPostUrl)) {
+      link = githubCfg.previewPostUrl.replace("[postid]", post.wp_slug)
 
-    // toc
-    yamlFormatObj.yamlObj.toc = true
+      const created = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true)
+      const datearr = created.split(" ")[0]
+      const numarr = datearr.split("-")
+      this.logger.debug("created numarr=>", numarr)
+      const y = numarr[0]
+      const m = numarr[1]
+      const d = numarr[2]
+      link = link.replace(/\[yyyy]/g, y)
+      link = link.replace(/\[MM]/g, m)
+      link = link.replace(/\[mm]/g, m)
+      link = link.replace(/\[dd]/g, d)
+
+      if (yamlFormatObj.yamlObj?.categories?.length > 0) {
+        link = link.replace(/\[cats]/, yamlFormatObj.yamlObj.categories.join("/"))
+      } else {
+        link = link.replace(/\/\[cats]/, "")
+      }
+    }
+    this.logger.debug("link=>", link)
+    yamlFormatObj.yamlObj.permalink = link
+
+    // tagline
+    if (!StrUtil.isEmptyString(post.shortDesc)) {
+      yamlFormatObj.yamlObj.tagline = post.shortDesc
+    }
 
     // tags
     if (!StrUtil.isEmptyString(post.mt_keywords)) {
@@ -76,34 +95,8 @@ class HugoYamlConverterAdaptor extends YamlConvertAdaptor {
       yamlFormatObj.yamlObj.categories = post.categories
     }
 
-    // seo
-    if (!StrUtil.isEmptyString(post.mt_keywords)) {
-      yamlFormatObj.yamlObj.keywords = post.mt_keywords
-    }
-    if (!StrUtil.isEmptyString(post.shortDesc)) {
-      yamlFormatObj.yamlObj.description = post.shortDesc
-    }
-
-    // isCJKLanguage
-    yamlFormatObj.yamlObj.isCJKLanguage = true
-
-    // // linkTitle
-    // const linkTitle = post.linkTitle
-    // // weight
-    // const weight = parseInt(post.weight.toString())
-    // if (weight > 0) {
-    //   yamlFormatObj.yamlObj.weight = weight
-    // }
-    // if (!StrUtil.isEmptyString(linkTitle)) {
-    //   yamlFormatObj.yamlObj.linkTitle = linkTitle
-    //   if (weight > 0) {
-    //     yamlFormatObj.yamlObj.menu = {
-    //       main: {
-    //         weight: weight,
-    //       },
-    //     }
-    //   }
-    // }
+    // published
+    yamlFormatObj.yamlObj.published = true
 
     // formatter
     let yaml = YamlUtil.obj2Yaml(yamlFormatObj.yamlObj)
@@ -130,12 +123,9 @@ class HugoYamlConverterAdaptor extends YamlConvertAdaptor {
     if (yamlFormatObj.yamlObj?.date) {
       post.dateCreated = DateUtil.convertStringToDate(yamlFormatObj.yamlObj?.date)
     }
-    if (yamlFormatObj.yamlObj?.lastmod) {
-      post.dateUpdated = DateUtil.convertStringToDate(yamlFormatObj.yamlObj?.lastmod)
-    }
 
     // 摘要
-    post.shortDesc = yamlFormatObj.yamlObj?.description
+    post.shortDesc = yamlFormatObj.yamlObj?.tagline
 
     // 标签
     post.mt_keywords = yamlFormatObj.yamlObj?.tags?.join(",")
@@ -151,4 +141,4 @@ class HugoYamlConverterAdaptor extends YamlConvertAdaptor {
   }
 }
 
-export { HugoYamlConverterAdaptor }
+export { JekyllYamlConverterAdaptor }
