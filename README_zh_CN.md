@@ -6,14 +6,14 @@
 
 将思源笔记的文章发布到语雀、Notion、Cnblogs、WordPress、Typecho、Hexo、知乎 等平台，支持极速发布、图床管理、平台扩展、智能标签等特色功能。
 
-> 🎉 发布工具首个支持微信公众号的版本 `1.13.0` 发布！
+> 🎉 发布工具首个支持简书、掘金以及 Hugo、Jekyll、Vuepress、Vuepress2、Vitepress 的版本 `1.14.0` 发布！
 
 > 平台限制说明
 
   - 所有平台：发布工具每次都会获取思源笔记最新编辑的正文进行覆盖发布。每次发布都会覆盖正文，每次发布都会覆盖正文，每次发布都会覆盖正文。因此，请勿在平台自行修改正文。
   - **微信公众号**：目前，发布工具在 `1.13.0+` 已经支持发布文章到微信公众号草稿箱。但是由于微信平台在 Electron 上有限制，无法正常进行登录操作。因此，只能自己访问 `https://mp.weixin.qq.com/` ，登录完成之后，复制cookie然后粘贴到配置选项。
   - **Notion**: 由于Notion是基于块的，不是整篇文档，受限于技术，notion不支持更新。如需更新，目前只能删除后重新发布。
-
+  - **掘金**：由于掘金平台强制要求，必须填写标签和分类，如果发布不选择默认会加上一个后端分类、程序员标签，否则将无法发布。
 
 **遇到问题或者需求建议？请加QQ群 `895063267` 讨论。或者查看下面的在线文档：**
 
@@ -31,8 +31,18 @@
 - [X] Notion
 - [X] Github
   - [X] Hexo
+  - [X] Hugo
+  - [X] Jekyll
+  - [X] Vuepress
+  - [X] Vuepress2
+  - [X] Vitepress
 - [X] Gitlab
   - [X] Gitlabhexo
+  - [X] Gitlabhugo
+  - [X] Gitlabjekyll
+  - [X] Gitlabvuepress
+  - [X] Gitlabvuepress2
+  - [X] Gitlabvitepress
 - [X] Metaweblog
 - [X] 博客园
 - [X] Typecho
@@ -40,6 +50,8 @@
 - [X] 知乎
 - [X] CSDN
 - [X] 微信公众号
+- [X] 简书
+- [X] 掘金
 
 ## 核心特色
 
@@ -74,6 +86,12 @@
 - [X] 知识空间
   - [X] 单选知识空间
   - [X] 树形单选知识空间
+
+- [X] 标签
+  - [X] 多选标签
+
+- [X] 标签别名
+  - [X] 单选标签别名
 
 ## 平台适配计划
 

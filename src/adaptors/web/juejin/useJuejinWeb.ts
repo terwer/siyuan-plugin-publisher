@@ -89,7 +89,7 @@ const useJuejinWeb = async (key?: string, newCfg?: JuejinConfig) => {
   //
   // 掘金使用单选分类、别名标签
   cfg.tagEnabled = false
-  cfg.slugTagEnabled = true
+  cfg.tagSlugEnabled = true
   cfg.cateEnabled = false
   cfg.knowledgeSpaceEnabled = true
   cfg.knowledgeSpaceTitle = "分类"

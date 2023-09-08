@@ -134,6 +134,7 @@ const handlePublish = async () => {
         ElMessage.success("文章更新成功！")
       }
     } else {
+      formData.actionEnable = true
       ElMessage.error(processResult.errMsg)
       logger.error(processResult.errMsg)
     }
@@ -309,6 +310,11 @@ const syncTags = (val: string[]) => {
   logger.debug("syncTags in single publish")
 }
 
+const syncTagSlugs = (val: string[]) => {
+  formData.mergedPost.tags_slugs = val?.join(",")
+  logger.debug("syncTagSlugs in single publish")
+}
+
 const syncCates = (cates: string[]) => {
   formData.mergedPost.categories = cates
   logger.debug("syncCates in single publish")
@@ -473,11 +479,18 @@ onMounted(async () => {
 
                 <!-- 知识空间 -->
                 <publish-knowledge-space
-                    v-if="formData.publishCfg.cfg.knowledgeSpaceEnabled"
-                    v-model:knowledge-space-type="formData.publishCfg.cfg.knowledgeSpaceType"
-                    v-model:knowledge-space-config="formData.knowledgeSpaceConfig"
-                    v-model:cate-slugs="formData.mergedPost.cate_slugs"
-                    @emitSyncCateSlugs="syncCateSlugs"
+                  v-if="formData.publishCfg.cfg.knowledgeSpaceEnabled"
+                  v-model:knowledge-space-type="formData.publishCfg.cfg.knowledgeSpaceType"
+                  v-model:knowledge-space-config="formData.knowledgeSpaceConfig"
+                  v-model:cate-slugs="formData.mergedPost.cate_slugs"
+                  @emitSyncCateSlugs="syncCateSlugs"
+                />
+
+                <!-- 标签别名 -->
+                <single-tag-slug
+                  v-if="formData.publishCfg.cfg.tagSlugEnabled"
+                  v-model:tag-slugs="formData.mergedPost.tags_slugs"
+                  @emitSyncTagSlugs="syncTagSlugs"
                 />
                 <el-divider border-style="dashed" />
 

@@ -38,7 +38,7 @@ export class JuejinConfig extends CommonWebConfig {
     this.passwordType = PasswordType.PasswordType_Cookie
     this.usernameEnabled = false
     this.tagEnabled = false
-    this.slugTagEnabled = true
+    this.tagSlugEnabled = true
     this.cateEnabled = false
     this.categoryType = CategoryTypeEnum.CategoryType_Single
     this.knowledgeSpaceEnabled = true

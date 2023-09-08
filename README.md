@@ -8,11 +8,12 @@ Publish articles from siyuan-note to platforms such as Yuque, Notion, Cnblogs, W
 
 Support features such as fast publishing, image bed management, platform expansion, smart labels, etc.
 
-> 🎉 The first version `1.13.0` of Publish Tool that supports WeChat Official Accounts released!
+> 🎉 The first version `1.14.0` of Publish Tool that support Jianshu, Juejin and Hugo, Jekyll, Vuepress, Vuepress2, Vitepress is released!
 
 > Platform Limitations:
   - **WeChat Official Accounts**: Publishing Tool now supports posting articles to the WeChat Official Accounts draft box in version `1.13.0` and beyond. However, due to limitations on the WeChat platform in Electron, normal login operations are not possible. Therefore, you will need to visit `https://mp.weixin.qq.com/` yourself, complete the login, copy the cookie, and then paste it into the configuration options.
   - **Notion**: Since Notion is block-based, not a whole document, it is constrained by technology and does not support updates. To update, you can only delete and then repost it.
+  - **Juejin**: Due to the mandatory requirements of the Jujin platform, tags and classifications must be filled in, if you do not select publishing, a backend classification and programmer label will be added by default, otherwise you will not be able to publish.
 
 > [Click here](https://blog.terwer.space/s/20230810132040-nn4q7vs) to view the latest help documentation.
 
@@ -28,8 +29,18 @@ Names not listed in order
 - [X] Notion
 - [X] Github
   - [X] Hexo
+  - [X] Hugo
+  - [X] Jekyll
+  - [X] Vuepress
+  - [X] Vuepress2
+  - [X] Vitepress
 - [X] Gitlab
   - [X] Gitlabhexo
+  - [X] Gitlabhugo
+  - [X] Gitlabjekyll
+  - [X] Gitlabvuepress
+  - [X] Gitlabvuepress2
+  - [X] Gitlabvitepress
 - [X] Metaweblog
 - [X] Cnblogs
 - [X] Typecho
@@ -37,6 +48,8 @@ Names not listed in order
 - [X] Zhihu
 - [X] CSDN
 - [X] Wechat
+- [X] Jianshu
+- [X] Juejin
 
 ## Core Features
 
@@ -71,6 +84,12 @@ This plugin is fully compatible with `siyuan-note PC Client` , due to limited pe
 - [X] Knowledge space
   - [X] Single-choice knowledge space
   - [X] Tree-shaped radio knowledge space
+
+- [X] tag
+  - [X] Multi-select tab
+
+- [X] Label alias
+  - [X] Radio label alias
 
 ## Platform Adaptation Plan
 

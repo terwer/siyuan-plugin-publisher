@@ -80,16 +80,27 @@ class JuejinWebAdaptor extends BaseWebApi {
   }
 
   public async addPost(post: Post) {
-    const cate_slug = post.cate_slugs?.[0] ?? this.cfg.blogid
+    let cate_slug = post.cate_slugs?.[0] ?? this.cfg.blogid
     if (StrUtil.isEmptyString(cate_slug)) {
+      // 默认分类：后端
+      cate_slug = "6809637769959178254"
+      this.logger.error("掘金平台未选择分类，将使用默认分类：后端")
       throw new Error("掘金平台必须选择一个分类")
+    }
+
+    let tag_slug = post.tags_slugs ?? ""
+    if (StrUtil.isEmptyString(tag_slug)) {
+      // 默认贴标签：程序员
+      tag_slug = "6809640482725954000"
+      this.logger.error("掘金平台未选择标签，将使用默认标签：程序员")
+      throw new Error("掘金平台必须选择一个标签")
     }
 
     // 保存草稿
     const draftUrl = "https://api.juejin.cn/content_api/v1/article_draft/create"
     const draftParams = {
       category_id: cate_slug,
-      tag_ids: [],
+      tag_ids: tag_slug.split(","),
       link_url: "",
       cover_image: "",
       title: post.title,
@@ -121,6 +132,11 @@ class JuejinWebAdaptor extends BaseWebApi {
       throw new Error("掘金平台必须选择一个分类")
     }
 
+    const tag_slug = post.tags_slugs ?? ""
+    if (StrUtil.isEmptyString(tag_slug)) {
+      throw new Error("掘金平台必须选择一个标签")
+    }
+
     const juejinPostKey = this.getJuejinPostidKey(postid)
     // const pageId = juejinPostKey.pageId
     const draftId = juejinPostKey.draftId
@@ -130,7 +146,7 @@ class JuejinWebAdaptor extends BaseWebApi {
     const draftParams = {
       id: draftId,
       category_id: cate_slug,
-      tag_ids: [],
+      tag_ids: tag_slug.split(","),
       link_url: "",
       cover_image: "",
       title: post.title,
