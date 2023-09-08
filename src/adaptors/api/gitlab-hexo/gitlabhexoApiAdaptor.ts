@@ -35,7 +35,7 @@ import _ from "lodash"
  * @version 1.3.2
  * @since 0.8.1
  */
-class GitlabHexoApiAdaptor extends CommonGitlabApiAdaptor {
+class GitlabhexoApiAdaptor extends CommonGitlabApiAdaptor {
   public override getYamlAdaptor(): YamlConvertAdaptor {
     return new GitlabHexoYamlConverterAdaptor()
   }
@@ -73,4 +73,4 @@ class GitlabHexoApiAdaptor extends CommonGitlabApiAdaptor {
   }
 }
 
-export { GitlabHexoApiAdaptor }
+export { GitlabhexoApiAdaptor }
