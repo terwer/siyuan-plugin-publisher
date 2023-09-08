@@ -173,14 +173,19 @@ export enum SubPlatformType {
 
   // Github 子平台
   Github_Hexo = "Hexo",
-  // Github_Hugo = "Hugo",
-  // Github_Jekyll = "Jekyll",
-  // Github_Vuepress = "Vuepress",
-  // Github_Vuepress = "Vuepress2",
-  // Github_Vitepress = "Vitepress",
+  Github_Hugo = "Hugo",
+  Github_Jekyll = "Jekyll",
+  Github_Vuepress = "Vuepress",
+  Github_Vuepress2 = "Vuepress2",
+  Github_Vitepress = "Vitepress",
 
   // Gitlab 子平台
   Gitlab_Hexo = "Gitlabhexo",
+  Gitlab_Hugo = "Gitlabhugo",
+  Gitlab_Jekyll = "Gitlabjekyll",
+  Gitlab_Vuepress = "Gitlabvuepress",
+  Gitlab_Vuepress2 = "Gitlabvuepress2",
+  Gitlab_Vitepress = "Gitlabvitepress",
 
   // Metaweblog
   Metaweblog_Metaweblog = "Metaweblog",
@@ -230,14 +235,19 @@ export function getSubtypeList(ptype: PlatformType): SubPlatformType[] {
       break
     case PlatformType.Github:
       subtypeList.push(SubPlatformType.Github_Hexo)
-      // subtypeList.push(SubPlatformType.Github_Hugo)
-      // subtypeList.push(SubPlatformType.Github_Jekyll)
-      // subtypeList.push(SubPlatformType.Github_Vuepress)
-      // subtypeList.push(SubPlatformType.Github_Vuepress2)
-      // subtypeList.push(SubPlatformType.Github_Vitepress)
+      subtypeList.push(SubPlatformType.Github_Hugo)
+      subtypeList.push(SubPlatformType.Github_Jekyll)
+      subtypeList.push(SubPlatformType.Github_Vuepress)
+      subtypeList.push(SubPlatformType.Github_Vuepress2)
+      subtypeList.push(SubPlatformType.Github_Vitepress)
       break
     case PlatformType.Gitlab:
       subtypeList.push(SubPlatformType.Gitlab_Hexo)
+      subtypeList.push(SubPlatformType.Gitlab_Hugo)
+      subtypeList.push(SubPlatformType.Gitlab_Jekyll)
+      subtypeList.push(SubPlatformType.Gitlab_Vuepress)
+      subtypeList.push(SubPlatformType.Gitlab_Vuepress2)
+      subtypeList.push(SubPlatformType.Gitlab_Vitepress)
       break
     case PlatformType.Metaweblog:
       subtypeList.push(SubPlatformType.Metaweblog_Metaweblog)
