@@ -27,12 +27,12 @@ import { CommonGithubConfig } from "~/src/adaptors/api/base/github/commonGithubC
 import { CategoryTypeEnum, PageTypeEnum, PasswordType } from "zhi-blog-api"
 
 /**
- * Hexo 配置
+ * Hugo 配置
  *
  * @author terwer
- * @since 1.3.2
+ * @since 1.14.0
  */
-class HexoConfig extends CommonGithubConfig {
+class HugoConfig extends CommonGithubConfig {
   constructor(
     githubUsername: string,
     githubAuthToken: string,
@@ -44,7 +44,7 @@ class HexoConfig extends CommonGithubConfig {
 
     this.tokenSettingUrl = "https://github.com/settings/tokens"
     this.showTokenTip = true
-    this.defaultPath = "source/_posts"
+    this.defaultPath = "content/post"
     this.previewUrl = "/[user]/[repo]/blob/[branch]/[docpath]"
     this.previewPostUrl = "/post/[postid].html"
     this.mdFilenameRule = "[slug].md"
@@ -57,9 +57,9 @@ class HexoConfig extends CommonGithubConfig {
     this.categoryType = CategoryTypeEnum.CategoryType_Multi
     this.knowledgeSpaceEnabled = true
     this.allowKnowledgeSpaceChange = false
-    this.placeholder.knowledgeSpaceReadonlyModeTip = "Hexo 平台暂不支持修改发布目录，如需修改，请删除之后重新发布"
+    this.placeholder.knowledgeSpaceReadonlyModeTip = "Hugo 平台暂不支持修改发布目录，如需修改，请删除之后重新发布"
     this.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Tree_Single
   }
 }
 
-export { HexoConfig }
+export { HugoConfig }
