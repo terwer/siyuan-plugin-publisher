@@ -65,8 +65,8 @@ dependencies:
     specifier: ^3.1.1
     version: 3.1.1
   zhi-blog-api:
-    specifier: ^1.37.1
-    version: 1.37.1
+    specifier: ^1.39.0
+    version: 1.39.0
   zhi-common:
     specifier: ^1.23.7
     version: 1.23.7
@@ -89,8 +89,8 @@ dependencies:
     specifier: ^0.1.4
     version: 0.1.4
   zhi-siyuan-api:
-    specifier: ^2.9.2
-    version: 2.9.2
+    specifier: ^2.9.4
+    version: 2.9.4
   zhi-xmlrpc-middleware:
     specifier: ^0.5.11
     version: 0.5.11
@@ -6289,7 +6289,7 @@ packages:
       zhi-device: 2.3.1
       zhi-fetch-middleware: 0.2.29
       zhi-lib-base: 0.4.4
-      zhi-siyuan-api: 2.9.2
+      zhi-siyuan-api: 2.9.4
     transitivePeerDependencies:
       - '@vue/composition-api'
       - typescript
@@ -7529,8 +7529,8 @@ packages:
     resolution: {integrity: sha512-9bnSc/HEW2uRy67wc+T8UwauLuPJVn28jb+GtJY16iiKWyvmYJRXVT4UamsAEGQfPohgr2q4Tq0sQbQlxTfi1g==}
     engines: {node: '>=12.20'}
 
-  /zhi-blog-api@1.37.1:
-    resolution: {integrity: sha512-DSreoiF3e8tlm3mbMZAnGr3GHc8PSHqsiOkN78Kvxmsk98C2UOPPr++80n8zAeThIyCvmWO42qz8wt/uXv1ovg==}
+  /zhi-blog-api@1.39.0:
+    resolution: {integrity: sha512-UBDKSaCDAY+3X9EbZ6FcGVD7/cOWKAdcmn6krmiG9sR7LkEWyLQ1GD/RlFG8rjN5IaCtf8ei7eFq/qVCmmWPaw==}
     dependencies:
       zhi-common: 1.23.7
       zhi-lib-base: 0.5.0
@@ -7610,10 +7610,10 @@ packages:
       - supports-color
     dev: false
 
-  /zhi-siyuan-api@2.9.2:
-    resolution: {integrity: sha512-mqbXq3Iijg3dJbnefUudKJrECD1Bdh5eTZrWy+CZOR4DkcaNLOFA97q23Y3X2pvurox7f2SK5lPx1mxb+kX6Ag==}
+  /zhi-siyuan-api@2.9.4:
+    resolution: {integrity: sha512-kPQI/c/gIZQsMN6oNIAH9UWHQbLAG87zR1LwfMRQc9fcPTJh0FkBFPlU7hySTHDRNNmX0EOIdC/8ZeJlyNl/3g==}
     dependencies:
-      zhi-blog-api: 1.37.1
+      zhi-blog-api: 1.39.0
       zhi-common: 1.23.7
       zhi-lib-base: 0.5.0
     dev: false

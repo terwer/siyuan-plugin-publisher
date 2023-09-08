@@ -24,7 +24,7 @@
  */
 
 import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
-import { CategoryInfo, Post, UserBlog } from "zhi-blog-api"
+import { CategoryInfo, Post, TagInfo, UserBlog } from "zhi-blog-api"
 import { StrUtil } from "zhi-common"
 
 /**
@@ -85,7 +85,7 @@ class JuejinWebAdaptor extends BaseWebApi {
       // 默认分类：后端
       cate_slug = "6809637769959178254"
       this.logger.error("掘金平台未选择分类，将使用默认分类：后端")
-      throw new Error("掘金平台必须选择一个分类")
+      // throw new Error("掘金平台必须选择一个分类")
     }
 
     let tag_slug = post.tags_slugs ?? ""
@@ -93,7 +93,7 @@ class JuejinWebAdaptor extends BaseWebApi {
       // 默认贴标签：程序员
       tag_slug = "6809640482725954000"
       this.logger.error("掘金平台未选择标签，将使用默认标签：程序员")
-      throw new Error("掘金平台必须选择一个标签")
+      // throw new Error("掘金平台必须选择一个标签")
     }
 
     // 保存草稿
@@ -209,6 +209,33 @@ class JuejinWebAdaptor extends BaseWebApi {
     }
 
     return cats
+  }
+
+  public async getTags(): Promise<TagInfo[]> {
+    const tags = [] as TagInfo[]
+
+    const header = {
+      accept: "application/json",
+    }
+    const params = {
+      cursor: "0",
+      key_word: "",
+      limit: 10,
+      sort_type: 1,
+    }
+    const res = await this.webProxyFetch("https://api.juejin.cn/tag_api/v1/query_tag_list", [header], params, "POST")
+    this.logger.info(`get juejin categories`, res.data)
+
+    if (res.data && res.data.length > 0) {
+      res.data.forEach((item: any) => {
+        const tag = new TagInfo()
+        tag.tagId = item.tag_id
+        tag.tagName = item.tag.tag_name
+        tags.push(tag)
+      })
+    }
+
+    return tags
   }
   // ================
   // private methods

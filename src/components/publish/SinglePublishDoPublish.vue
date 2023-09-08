@@ -489,6 +489,8 @@ onMounted(async () => {
                 <!-- 标签别名 -->
                 <single-tag-slug
                   v-if="formData.publishCfg.cfg.tagSlugEnabled"
+                  v-model:cfg="formData.publishCfg.cfg"
+                  v-model:api-type="key"
                   v-model:tag-slugs="formData.mergedPost.tags_slugs"
                   @emitSyncTagSlugs="syncTagSlugs"
                 />

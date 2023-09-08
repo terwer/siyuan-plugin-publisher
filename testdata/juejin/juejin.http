@@ -86,3 +86,15 @@ cookie: {{cookie}}
 Content-Type: application/json
 
 {}
+
+### 获取标签列表
+POST https://api.juejin.cn/tag_api/v1/query_tag_list
+cookie: {{cookie}}
+Content-Type: application/json
+
+{
+  "cursor": "0",
+  "key_word": "",
+  "limit": 10,
+  "sort_type": 1
+}
