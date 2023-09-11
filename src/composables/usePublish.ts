@@ -498,8 +498,8 @@ const usePublish = () => {
         mergedPost.mt_excerpt = mergedPost.shortDesc
       }
 
-      const postKeywords = post.mt_keywords.split(",")
-      const newPostKeywords = newPost.mt_keywords.split(",")
+      const postKeywords = post?.mt_keywords?.split(",") ?? []
+      const newPostKeywords = newPost?.mt_keywords?.split(",") ?? []
       // 合并并去重关键词
       const mergedKeywords = [...new Set([...postKeywords, ...newPostKeywords])].filter((tag) => tag.trim() !== "")
       mergedPost.mt_keywords = mergedKeywords.join(",")
