@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 dependencies:
   '@element-plus/icons-vue':
     specifier: ^2.1.0
@@ -154,8 +158,8 @@ devDependencies:
     specifier: ^3.2.0
     version: 3.2.0(vite@4.4.9)
   vite-plugin-node-polyfills:
-    specifier: ^0.12.0
-    version: 0.12.0(vite@4.4.9)
+    specifier: ^0.13.0
+    version: 0.13.0(vite@4.4.9)
   vitest:
     specifier: ^0.34.3
     version: 0.34.3(jsdom@22.1.0)(stylus@0.59.0)
@@ -7106,8 +7110,8 @@ packages:
       vite: 4.4.9(@types/node@18.17.14)(stylus@0.59.0)
     dev: true
 
-  /vite-plugin-node-polyfills@0.12.0(vite@4.4.9):
-    resolution: {integrity: sha512-xZfpD81aNhwEbIjccEiy8Q/hDdnlYqBSeEaUMIukOpGHuMaz65jqrC2lmnF/FXnliovISy2L1n92da0JOvk36A==}
+  /vite-plugin-node-polyfills@0.13.0(vite@4.4.9):
+    resolution: {integrity: sha512-TaTJmGnVz65I1lquc2Y8AYarPJb2r9XZUDWnXUWbAn3krfqXP7v/V9lg7K7NdVTmCXD/GVwUxl1cWLRwRwjnKg==}
     peerDependencies:
       vite: ^2.0.0 || ^3.0.0 || ^4.0.0
     dependencies:
@@ -7629,7 +7633,3 @@ packages:
   /zwitch@1.0.5:
     resolution: {integrity: sha512-V50KMwwzqJV0NpZIZFwfOD5/lyny3WlSzRiXgA0G7VUnRlqttta1L6UQIHzd6EuBY/cHGfwTIck7w1yH6Q5zUw==}
     dev: false
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
