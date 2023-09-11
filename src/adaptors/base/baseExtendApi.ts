@@ -27,7 +27,16 @@ import { IBlogApi } from "zhi-blog-api/dist/lib/IBlogApi"
 import { IWebApi } from "zhi-blog-api/dist/lib/IWebApi"
 import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
 import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
-import { BlogConfig, MediaObject, PageTypeEnum, Post, WebApi, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
+import {
+  BlogConfig,
+  MediaObject,
+  PageTypeEnum,
+  Post,
+  PostUtil,
+  WebApi,
+  YamlConvertAdaptor,
+  YamlFormatObj,
+} from "zhi-blog-api"
 import { createAppLogger, ILogger } from "~/src/utils/appLogger.ts"
 import { LuteUtil } from "~/src/utils/luteUtil.ts"
 import { usePicgoBridge } from "~/src/composables/usePicgoBridge.ts"
@@ -41,6 +50,7 @@ import { DynamicConfig } from "~/src/platforms/dynamicConfig.ts"
 import { MUST_USE_OWN_PLATFORM, MUST_USE_PICBED_PLATFORM } from "~/src/utils/constants.ts"
 import { toRaw } from "vue"
 import _ from "lodash"
+import { usePublishPreferenceSetting } from "~/src/stores/usePublishPreferenceSetting.ts"
 
 /**
  * 各种模式共享的扩展基类
@@ -86,7 +96,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     // 处理摘要
     post = await this.handleDesc(post, id, publishCfg)
     // 处理路径分类
-    post = await this.handleCtegories(post, id, publishCfg)
+    post = await this.handleCategories(post, id, publishCfg)
     // 处理图片
     post = await this.handlePictures(post, id, publishCfg)
     // 处理Md
@@ -136,6 +146,11 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
       .replace(/\[mm\]/g, m)
       .replace(/\[dd\]/g, d)
     post.mdFilename = filename
+    const { getReadOnlyPublishPreferenceSetting } = usePublishPreferenceSetting()
+    const pref = getReadOnlyPublishPreferenceSetting()
+    if (pref.value.fixTitle) {
+      post.title = HtmlUtil.removeTitleNumber(post.title)
+    }
 
     this.logger.debug("处理MD文件名完成，post", { post: toRaw(post) })
     return post
@@ -167,7 +182,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
    * @param publishCfg - （可选）发布配置参数
    * @returns 一个 Promise，解析为处理后的 Post 对象
    */
-  private async handleCtegories(doc: Post, id?: string, publishCfg?: any) {
+  private async handleCategories(doc: Post, id?: string, publishCfg?: any) {
     const cfg: BlogConfig = publishCfg?.cfg
     const post = _.cloneDeep(doc) as Post
 
@@ -176,7 +191,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     if (cfg.usePathCategory) {
       const docPathArray = savePath.split("/")
       if (docPathArray.length > 1) {
-        for (let i = 1; i < docPathArray.length - 1; i++) {
+        for (let i = 1; i < docPathArray.length; i++) {
           const docCate = HtmlUtil.removeTitleNumber(docPathArray[i])
           pathCates.push(docCate)
         }
@@ -185,12 +200,12 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
 
     // 目录分类
     this.logger.info("目录路径转换的分类 =>", pathCates)
-    const mergedCategories = [...new Set(...(pathCates ?? []), [...(post?.categories ?? [])])].filter(
-      (cate: string) => cate.trim() !== ""
-    ) as string[]
+    const mergedCategories = [...new Set([...(pathCates ?? []), ...(post?.categories ?? [])])].filter(
+      (cate) => cate.trim() !== ""
+    )
     post.categories = mergedCategories
     this.logger.info("最终的分类 =>", post.categories)
-
+    this.logger.debug("目录路径转换完成，post", { post: toRaw(post) })
     return post
   }
 
@@ -259,36 +274,36 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
 
     this.logger.debug("开始处理yaml，post", { post: toRaw(post) })
 
-    // 前台已经处理好，这里无需再处理
-    // const yamlAdaptor: YamlConvertAdaptor = this.api.getYamlAdaptor()
-    // if (null !== yamlAdaptor) {
-    //   // 先生成对应平台的yaml
-    //   const yamlObj: YamlFormatObj = yamlAdaptor.convertToYaml(post, cfg)
-    //   // 同步发布内容
-    //   post.yaml = yamlObj.formatter
-    //   post.markdown = yamlObj.mdFullContent
-    //   post.html = yamlObj.htmlContent
-    //   this.logger.info("handled yaml using YamlConverterAdaptor")
-    // } else {
-    //   // 同步发布内容
-    //   const yamlObj = post.toYamlObj()
-    //   const yaml = YamlUtil.obj2Yaml(yamlObj)
-    //   const md = YamlUtil.extractMarkdown(post.markdown)
-    //   post.yaml = yaml
-    //   post.markdown = md
-    //   post.html = LuteUtil.mdToHtml(md)
-    //   this.logger.info("yaml adaptor not found, using default")
-    // }
-
+    // 前面改过属性，需要再生成一次
     const yamlAdaptor: YamlConvertAdaptor = this.api.getYamlAdaptor()
     if (null !== yamlAdaptor) {
-      const md = YamlUtil.extractMarkdown(post.markdown)
-      const yaml = post.yaml
-      post.markdown = YamlUtil.addYamlToMd(yaml, md)
-      this.logger.info("检测到该平台已开启YAML适配器，已附加YAML到Markdown正文")
+      // 先生成对应平台的yaml
+      const yamlObj: YamlFormatObj = yamlAdaptor.convertToYaml(post, cfg)
+      // 同步发布内容
+      post.yaml = yamlObj.formatter
+      post.markdown = yamlObj.mdFullContent
+      post.html = yamlObj.htmlContent
+      this.logger.info("rehandled yaml using YamlConverterAdaptor")
     } else {
-      this.logger.info("未找到YAML适配器，不作处理")
+      // 同步发布内容
+      const yamlObj = PostUtil.toYamlObj(post)
+      const yaml = YamlUtil.obj2Yaml(yamlObj)
+      const md = YamlUtil.extractMarkdown(post.markdown)
+      post.yaml = yaml
+      post.markdown = md
+      post.html = LuteUtil.mdToHtml(md)
+      this.logger.info("yaml adaptor not found, using default")
     }
+
+    // YAML与MD的处理，旧的逻辑，不考虑属性变更的情况
+    // if (null !== yamlAdaptor) {
+    //   const md = YamlUtil.extractMarkdown(post.markdown)
+    //   const yaml = post.yaml
+    //   post.markdown = YamlUtil.addYamlToMd(yaml, md)
+    //   this.logger.info("检测到该平台已开启YAML适配器，已附加YAML到Markdown正文")
+    // } else {
+    //   this.logger.info("未找到YAML适配器，不作处理")
+    // }
 
     this.logger.debug("yaml处理之后，post", { post: toRaw(post) })
     return post

@@ -24,7 +24,7 @@
  */
 
 import { BlogConfig, PageTypeEnum, Post, YamlConvertAdaptor } from "zhi-blog-api"
-import { GitlabHexoYamlConverterAdaptor } from "~/src/adaptors/api/gitlab-hexo/gitlabHexoYamlConverterAdaptor.ts"
+import { GitlabhexoYamlConverterAdaptor } from "~/src/adaptors/api/gitlab-hexo/gitlabhexoYamlConverterAdaptor.ts"
 import { CommonGitlabApiAdaptor } from "~/src/adaptors/api/base/gitlab/commonGitlabApiAdaptor.ts"
 import _ from "lodash"
 
@@ -37,7 +37,7 @@ import _ from "lodash"
  */
 class GitlabhugoApiAdaptor extends CommonGitlabApiAdaptor {
   public override getYamlAdaptor(): YamlConvertAdaptor {
-    return new GitlabHexoYamlConverterAdaptor()
+    return new GitlabhexoYamlConverterAdaptor()
   }
 
   public override async preEditPost(post: Post, id?: string, publishCfg?: any): Promise<Post> {

@@ -24,20 +24,20 @@
  */
 
 import { BlogConfig, PageTypeEnum, Post, YamlConvertAdaptor } from "zhi-blog-api"
-import { GitlabhexoYamlConverterAdaptor } from "~/src/adaptors/api/gitlab-hexo/gitlabhexoYamlConverterAdaptor.ts"
 import { CommonGitlabApiAdaptor } from "~/src/adaptors/api/base/gitlab/commonGitlabApiAdaptor.ts"
 import _ from "lodash"
+import { GitlabvuepressYamlConverterAdaptor } from "~/src/adaptors/api/gitlab-vuepress/gitlabvuepressYamlConverterAdaptor.ts"
 
 /**
- * Gitlabhexo API 适配器
+ * Hexo API 适配器
  *
  * @author terwer
  * @version 1.3.2
  * @since 0.8.1
  */
-class GitlabhexoApiAdaptor extends CommonGitlabApiAdaptor {
+class GitlabvuepressApiAdaptor extends CommonGitlabApiAdaptor {
   public override getYamlAdaptor(): YamlConvertAdaptor {
-    return new GitlabhexoYamlConverterAdaptor()
+    return new GitlabvuepressYamlConverterAdaptor()
   }
 
   public override async preEditPost(post: Post, id?: string, publishCfg?: any): Promise<Post> {
@@ -51,7 +51,7 @@ class GitlabhexoApiAdaptor extends CommonGitlabApiAdaptor {
     // 自定义处理
     // 成功提示、信息提示、警告提示、错误提示
     const md = updatedPost.markdown
-    this.logger.info("准备处理 Gitlabhexo 正文")
+    this.logger.info("准备处理 Gitlabvuepress 正文")
     this.logger.debug("md =>", { md: md })
     let updatedMd = md
 
@@ -59,7 +59,7 @@ class GitlabhexoApiAdaptor extends CommonGitlabApiAdaptor {
     // 处理MD
 
     updatedPost.markdown = updatedMd
-    this.logger.info("Gitlabhexo 正文处理完毕")
+    this.logger.info("Gitlabvuepress 正文处理完毕")
     this.logger.debug("updatedMd =>", { updatedMd: updatedMd })
 
     // 发布格式
@@ -73,4 +73,4 @@ class GitlabhexoApiAdaptor extends CommonGitlabApiAdaptor {
   }
 }
 
-export { GitlabhexoApiAdaptor }
+export { GitlabvuepressApiAdaptor }

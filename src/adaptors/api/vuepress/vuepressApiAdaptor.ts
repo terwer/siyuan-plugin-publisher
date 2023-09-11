@@ -23,21 +23,21 @@
  * questions.
  */
 
+import { CommonGithubApiAdaptor } from "~/src/adaptors/api/base/github/commonGithubApiAdaptor.ts"
 import { BlogConfig, PageTypeEnum, Post, YamlConvertAdaptor } from "zhi-blog-api"
-import { GitlabhexoYamlConverterAdaptor } from "~/src/adaptors/api/gitlab-hexo/gitlabhexoYamlConverterAdaptor.ts"
-import { CommonGitlabApiAdaptor } from "~/src/adaptors/api/base/gitlab/commonGitlabApiAdaptor.ts"
 import _ from "lodash"
+import { VuepressYamlConverterAdaptor } from "~/src/adaptors/api/vuepress/vuepressYamlConverterAdaptor.ts"
 
 /**
- * Gitlabhexo API 适配器
+ * Vuepress API 适配器
  *
  * @author terwer
- * @version 1.3.2
- * @since 0.8.1
+ * @version 1.14.0
+ * @since 1.14.0
  */
-class GitlabhexoApiAdaptor extends CommonGitlabApiAdaptor {
+class VuepressApiAdaptor extends CommonGithubApiAdaptor {
   public override getYamlAdaptor(): YamlConvertAdaptor {
-    return new GitlabhexoYamlConverterAdaptor()
+    return new VuepressYamlConverterAdaptor()
   }
 
   public override async preEditPost(post: Post, id?: string, publishCfg?: any): Promise<Post> {
@@ -49,17 +49,15 @@ class GitlabhexoApiAdaptor extends CommonGitlabApiAdaptor {
     const updatedPost = _.cloneDeep(doc) as Post
 
     // 自定义处理
-    // 成功提示、信息提示、警告提示、错误提示
+    // 信息、警告、错误
     const md = updatedPost.markdown
-    this.logger.info("准备处理 Gitlabhexo 正文")
+    this.logger.info("准备处理 Vuepress 正文")
     this.logger.debug("md =>", { md: md })
     let updatedMd = md
-
     // MD暂时无法处理标记，先搁置
     // 处理MD
-
     updatedPost.markdown = updatedMd
-    this.logger.info("Gitlabhexo 正文处理完毕")
+    this.logger.info("Vuepress 正文处理完毕")
     this.logger.debug("updatedMd =>", { updatedMd: updatedMd })
 
     // 发布格式
@@ -68,9 +66,8 @@ class GitlabhexoApiAdaptor extends CommonGitlabApiAdaptor {
     } else {
       post.description = post.html
     }
-
     return updatedPost
   }
 }
 
-export { GitlabhexoApiAdaptor }
+export { VuepressApiAdaptor }

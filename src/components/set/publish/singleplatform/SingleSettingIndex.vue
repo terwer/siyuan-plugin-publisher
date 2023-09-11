@@ -29,6 +29,8 @@ import { reactive } from "vue"
 import { useRoute } from "vue-router"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { getSubPlatformTypeByKey, SubPlatformType } from "~/src/platforms/dynamicConfig.ts"
+import VuepressSetting from "~/src/components/set/publish/singleplatform/github/VuepressSetting.vue"
+import GitlabvuepressSetting from "~/src/components/set/publish/singleplatform/gitlab/GitlabvuepressSetting.vue"
 
 // uses
 const { t } = useVueI18n()
@@ -47,9 +49,11 @@ const subtype = getSubPlatformTypeByKey(apiType)
     <hexo-setting v-else-if="subtype === SubPlatformType.Github_Hexo" :api-type="apiType" />
     <hugo-setting v-else-if="subtype === SubPlatformType.Github_Hugo" :api-type="apiType" />
     <jekyll-setting v-else-if="subtype === SubPlatformType.Github_Jekyll" :api-type="apiType" />
+    <vuepress-setting v-else-if="subtype === SubPlatformType.Github_Vuepress" :api-type="apiType" />
     <gitlabhexo-setting v-else-if="subtype === SubPlatformType.Gitlab_Hexo" :api-type="apiType" />
     <gitlabhugo-setting v-else-if="subtype === SubPlatformType.Gitlab_Hugo" :api-type="apiType" />
     <gitlabjekyll-setting v-else-if="subtype === SubPlatformType.Gitlab_Jekyll" :api-type="apiType" />
+    <gitlabvuepress-setting v-else-if="subtype === SubPlatformType.Gitlab_Vuepress" :api-type="apiType" />
     <othermeta-setting v-else-if="subtype === SubPlatformType.Metaweblog_Metaweblog" :api-type="apiType" />
     <cnblogs-setting v-else-if="subtype === SubPlatformType.Metaweblog_Cnblogs" :api-type="apiType" />
     <typecho-setting v-else-if="subtype === SubPlatformType.Metaweblog_Typecho" :api-type="apiType" />

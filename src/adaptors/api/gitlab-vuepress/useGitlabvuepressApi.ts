@@ -30,21 +30,21 @@ import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { Utils } from "~/src/utils/utils.ts"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { CategoryTypeEnum } from "zhi-blog-api"
-import { GitlabhexoConfig } from "~/src/adaptors/api/gitlab-hexo/gitlabhexoConfig.ts"
-import { GitlabhexoYamlConverterAdaptor } from "~/src/adaptors/api/gitlab-hexo/gitlabhexoYamlConverterAdaptor.ts"
-import { GitlabhexoApiAdaptor } from "~/src/adaptors/api/gitlab-hexo/gitlabhexoApiAdaptor.ts"
+import { GitlabvuepressConfig } from "~/src/adaptors/api/gitlab-vuepress/gitlabvuepressConfig.ts"
+import { GitlabvuepressYamlConverterAdaptor } from "~/src/adaptors/api/gitlab-vuepress/gitlabvuepressYamlConverterAdaptor.ts"
+import { GitlabvuepressApiAdaptor } from "~/src/adaptors/api/gitlab-vuepress/gitlabvuepressApiAdaptor.ts"
 
-const useGitlabhexoApi = async (key: string, newCfg?: GitlabhexoConfig) => {
+const useGitlabvuepressApi = async (key: string, newCfg?: GitlabvuepressConfig) => {
   // 创建应用日志记录器
   const logger = createAppLogger("use-gitlab-hexo-api")
 
   // 记录开始使用 Hexo API
-  logger.info("Start using Gitlabhexo API...")
+  logger.info("Start using Gitlabvuepress API...")
 
   // 创建应用实例
   const appInstance = new PublisherAppInstance()
 
-  let cfg: GitlabhexoConfig
+  let cfg: GitlabvuepressConfig
   if (newCfg) {
     logger.info("Initialize with the latest newCfg passed in...")
     cfg = newCfg
@@ -52,7 +52,7 @@ const useGitlabhexoApi = async (key: string, newCfg?: GitlabhexoConfig) => {
     // 从配置中获取数据
     const { getSetting } = useSettingStore()
     const setting = await getSetting()
-    cfg = JsonUtil.safeParse<GitlabhexoConfig>(setting[key], {} as GitlabhexoConfig)
+    cfg = JsonUtil.safeParse<GitlabvuepressConfig>(setting[key], {} as GitlabvuepressConfig)
 
     // 如果配置为空，则使用默认的环境变量值，并记录日志
     if (ObjectUtil.isEmptyObject(cfg)) {
@@ -65,7 +65,7 @@ const useGitlabhexoApi = async (key: string, newCfg?: GitlabhexoConfig) => {
         process.env.VITE_MIDDLEWARE_URL,
         "https://api.terwer.space/api/middleware"
       )
-      cfg = new GitlabhexoConfig(githubUsername, githubAuthToken, githubRepo, githubBranch, middlewareUrl)
+      cfg = new GitlabvuepressConfig(githubUsername, githubAuthToken, githubRepo, githubBranch, middlewareUrl)
       logger.info("Configuration is empty, using default environment variables.")
     } else {
       logger.info("Using configuration from settings...")
@@ -78,9 +78,9 @@ const useGitlabhexoApi = async (key: string, newCfg?: GitlabhexoConfig) => {
   }
 
   // 文件规则
-  cfg.mdFilenameRule = "[slug].md"
-  cfg.useMdFilename = false
-  cfg.usePathCategory = false
+  cfg.mdFilenameRule = "[filename].md"
+  cfg.useMdFilename = true
+  cfg.usePathCategory = true
   // 标签
   cfg.tagEnabled = true
   // 分类
@@ -91,15 +91,16 @@ const useGitlabhexoApi = async (key: string, newCfg?: GitlabhexoConfig) => {
   cfg.knowledgeSpaceEnabled = true
   cfg.knowledgeSpaceTitle = "发布目录"
   cfg.allowKnowledgeSpaceChange = false
-  cfg.placeholder.knowledgeSpaceReadonlyModeTip = "Gitlabhexo 平台暂不支持修改发布目录，如需修改，请删除之后重新发布"
+  cfg.placeholder.knowledgeSpaceReadonlyModeTip =
+    "Gitlabvuepress 平台暂不支持修改发布目录，如需修改，请删除之后重新发布"
   cfg.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Tree_Single
 
   // 创建 Hexo 的 yamlAdaptor
-  const yamlAdaptor = new GitlabhexoYamlConverterAdaptor()
+  const yamlAdaptor = new GitlabvuepressYamlConverterAdaptor()
 
   // 创建 Hexo API 适配器
-  const blogApi = new GitlabhexoApiAdaptor(appInstance, cfg)
-  logger.info("Gitlabhexo API created successfully.", cfg)
+  const blogApi = new GitlabvuepressApiAdaptor(appInstance, cfg)
+  logger.info("Gitlabvuepress API created successfully.", cfg)
 
   return {
     cfg,
@@ -108,4 +109,4 @@ const useGitlabhexoApi = async (key: string, newCfg?: GitlabhexoConfig) => {
   }
 }
 
-export { useGitlabhexoApi }
+export { useGitlabvuepressApi }

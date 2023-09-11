@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2023, Terwer . All rights reserved.
+ * Copyright (c) 2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -23,14 +23,8 @@
  * questions.
  */
 
-import { HexoYamlConverterAdaptor } from "~/src/adaptors/api/hexo/hexoYamlConverterAdaptor.ts"
+import { VuepressPlaceHolder } from "~/src/adaptors/api/vuepress/vuepressPlaceHolder.ts"
 
-/**
- * Hexo平台的YAML解析器
- *
- * @author terwer
- * @since 0.8.1
- */
-class GitlabHexoYamlConverterAdaptor extends HexoYamlConverterAdaptor {}
+class GitlabvuepressPlaceHolder extends VuepressPlaceHolder {}
 
-export { GitlabHexoYamlConverterAdaptor }
+export { GitlabvuepressPlaceHolder }

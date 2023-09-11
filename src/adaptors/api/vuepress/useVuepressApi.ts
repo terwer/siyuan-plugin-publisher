@@ -30,21 +30,21 @@ import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { Utils } from "~/src/utils/utils.ts"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { CategoryTypeEnum } from "zhi-blog-api"
-import { GitlabhexoConfig } from "~/src/adaptors/api/gitlab-hexo/gitlabhexoConfig.ts"
-import { GitlabhexoYamlConverterAdaptor } from "~/src/adaptors/api/gitlab-hexo/gitlabhexoYamlConverterAdaptor.ts"
-import { GitlabhexoApiAdaptor } from "~/src/adaptors/api/gitlab-hexo/gitlabhexoApiAdaptor.ts"
+import { VuepressConfig } from "~/src/adaptors/api/vuepress/vuepressConfig.ts"
+import { VuepressYamlConverterAdaptor } from "~/src/adaptors/api/vuepress/vuepressYamlConverterAdaptor.ts"
+import { VuepressApiAdaptor } from "~/src/adaptors/api/vuepress/vuepressApiAdaptor.ts"
 
-const useGitlabhexoApi = async (key: string, newCfg?: GitlabhexoConfig) => {
+const useVuepressApi = async (key: string, newCfg?: VuepressConfig) => {
   // 创建应用日志记录器
-  const logger = createAppLogger("use-gitlab-hexo-api")
+  const logger = createAppLogger("use-vuepress-api")
 
-  // 记录开始使用 Hexo API
-  logger.info("Start using Gitlabhexo API...")
+  // 记录开始使用 Vuepress API
+  logger.info("Start using Vuepress API...")
 
   // 创建应用实例
   const appInstance = new PublisherAppInstance()
 
-  let cfg: GitlabhexoConfig
+  let cfg: VuepressConfig
   if (newCfg) {
     logger.info("Initialize with the latest newCfg passed in...")
     cfg = newCfg
@@ -52,20 +52,20 @@ const useGitlabhexoApi = async (key: string, newCfg?: GitlabhexoConfig) => {
     // 从配置中获取数据
     const { getSetting } = useSettingStore()
     const setting = await getSetting()
-    cfg = JsonUtil.safeParse<GitlabhexoConfig>(setting[key], {} as GitlabhexoConfig)
+    cfg = JsonUtil.safeParse<VuepressConfig>(setting[key], {} as VuepressConfig)
 
     // 如果配置为空，则使用默认的环境变量值，并记录日志
     if (ObjectUtil.isEmptyObject(cfg)) {
-      // 从环境变量获取 Hexo API 的 URL、认证令牌和其他配置信息
-      const githubUsername = Utils.emptyOrDefault(process.env.VITE_GITLAB_USERNAME, "")
-      const githubAuthToken = Utils.emptyOrDefault(process.env.VITE_GITLAB_AUTH_TOKEN, "")
-      const githubRepo = Utils.emptyOrDefault(process.env.VITE_GITLAB_REPO, "")
-      const githubBranch = Utils.emptyOrDefault(process.env.VITE_GITLAB_BRANCH, "main")
+      // 从环境变量获取 Vuepress API 的 URL、认证令牌和其他配置信息
+      const githubUsername = Utils.emptyOrDefault(process.env.VITE_GITHUB_USERNAME, "")
+      const githubAuthToken = Utils.emptyOrDefault(process.env.VITE_GITHUB_AUTH_TOKEN, "")
+      const githubRepo = Utils.emptyOrDefault(process.env.VITE_GITHUB_REPO, "")
+      const githubBranch = Utils.emptyOrDefault(process.env.VITE_GITHUB_BRANCH, "main")
       const middlewareUrl = Utils.emptyOrDefault(
         process.env.VITE_MIDDLEWARE_URL,
         "https://api.terwer.space/api/middleware"
       )
-      cfg = new GitlabhexoConfig(githubUsername, githubAuthToken, githubRepo, githubBranch, middlewareUrl)
+      cfg = new VuepressConfig(githubUsername, githubAuthToken, githubRepo, githubBranch, middlewareUrl)
       logger.info("Configuration is empty, using default environment variables.")
     } else {
       logger.info("Using configuration from settings...")
@@ -77,10 +77,10 @@ const useGitlabhexoApi = async (key: string, newCfg?: GitlabhexoConfig) => {
     }
   }
 
-  // 文件规则
-  cfg.mdFilenameRule = "[slug].md"
-  cfg.useMdFilename = false
-  cfg.usePathCategory = false
+  // 文件规则，占位符
+  cfg.mdFilenameRule = "[filename].md"
+  cfg.useMdFilename = true
+  cfg.usePathCategory = true
   // 标签
   cfg.tagEnabled = true
   // 分类
@@ -91,15 +91,15 @@ const useGitlabhexoApi = async (key: string, newCfg?: GitlabhexoConfig) => {
   cfg.knowledgeSpaceEnabled = true
   cfg.knowledgeSpaceTitle = "发布目录"
   cfg.allowKnowledgeSpaceChange = false
-  cfg.placeholder.knowledgeSpaceReadonlyModeTip = "Gitlabhexo 平台暂不支持修改发布目录，如需修改，请删除之后重新发布"
+  cfg.placeholder.knowledgeSpaceReadonlyModeTip = "Vuepress 平台暂不支持修改发布目录，如需修改，请删除之后重新发布"
   cfg.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Tree_Single
 
-  // 创建 Hexo 的 yamlAdaptor
-  const yamlAdaptor = new GitlabhexoYamlConverterAdaptor()
+  // 创建 Vuepress 的 yamlAdaptor
+  const yamlAdaptor = new VuepressYamlConverterAdaptor()
 
-  // 创建 Hexo API 适配器
-  const blogApi = new GitlabhexoApiAdaptor(appInstance, cfg)
-  logger.info("Gitlabhexo API created successfully.", cfg)
+  // 创建 Vuepress API 适配器
+  const blogApi = new VuepressApiAdaptor(appInstance, cfg)
+  logger.info("Vuepress API created successfully.", cfg)
 
   return {
     cfg,
@@ -108,4 +108,4 @@ const useGitlabhexoApi = async (key: string, newCfg?: GitlabhexoConfig) => {
   }
 }
 
-export { useGitlabhexoApi }
+export { useVuepressApi }
