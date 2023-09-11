@@ -77,6 +77,10 @@ const useGitlabjekyllApi = async (key: string, newCfg?: GitlabjekyllConfig) => {
     }
   }
 
+  // 文件规则
+  cfg.mdFilenameRule = "[yyyy]-[mm]-[dd]-[slug].md"
+  cfg.useMdFilename = false
+  cfg.usePathCategory = false
   // 标签
   cfg.tagEnabled = true
   // 分类

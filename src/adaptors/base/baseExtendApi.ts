@@ -32,7 +32,7 @@ import { createAppLogger, ILogger } from "~/src/utils/appLogger.ts"
 import { LuteUtil } from "~/src/utils/luteUtil.ts"
 import { usePicgoBridge } from "~/src/composables/usePicgoBridge.ts"
 import { base64ToBuffer, remoteImageToBase64Info, toBase64Info } from "~/src/utils/polyfillUtils.ts"
-import { StrUtil, YamlUtil } from "zhi-common"
+import { DateUtil, HtmlUtil, StrUtil, YamlUtil } from "zhi-common"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import { isFileExists } from "~/src/utils/siyuanUtils.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
@@ -81,8 +81,12 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
    * @returns 一个 Promise，解析为编辑后的文章
    */
   public async preEditPost(post: Post, id?: string, publishCfg?: any): Promise<Post> {
+    // 处理MD文件名
+    post = await this.handleFilename(post, id, publishCfg)
     // 处理摘要
     post = await this.handleDesc(post, id, publishCfg)
+    // 处理路径分类
+    post = await this.handleCtegories(post, id, publishCfg)
     // 处理图片
     post = await this.handlePictures(post, id, publishCfg)
     // 处理Md
@@ -98,6 +102,46 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
   // private methods
   // ================
   /**
+   * 处理MD文件名
+   *
+   * @param doc - 要处理YAML的 Post 对象
+   * @param id - 思源笔记文档 ID
+   * @param publishCfg - （可选）发布配置参数
+   * @returns 一个 Promise，解析为处理后的 Post 对象
+   */
+  private async handleFilename(doc: Post, id?: string, publishCfg?: any) {
+    const cfg = publishCfg?.cfg as any
+    const post = _.cloneDeep(doc) as Post
+
+    // 处理文件规则
+    const created = DateUtil.formatIsoToZhDate(post.dateCreated.toISOString(), true)
+    const datearr = created.split(" ")[0]
+    const numarr = datearr.split("-")
+    const y = numarr[0]
+    const m = numarr[1]
+    const d = numarr[2]
+    this.logger.debug("created numarr=>", numarr)
+    let filename = cfg?.mdFilenameRule.replace(/\.md/g, "")
+    if (cfg.useMdFilename) {
+      // 使用真实文件名作为MD文件名
+      filename = filename.replace(/\[filename\]/g, post.title)
+    } else {
+      // 使用别名作为MD文件名
+      filename = filename.replace(/\[slug\]/g, post.wp_slug)
+    }
+    // 年月日
+    filename = filename
+      .replace(/\[yyyy\]/g, y)
+      .replace(/\[MM\]/g, m)
+      .replace(/\[mm\]/g, m)
+      .replace(/\[dd\]/g, d)
+    post.mdFilename = filename
+
+    this.logger.debug("处理MD文件名完成，post", { post: toRaw(post) })
+    return post
+  }
+
+  /**
    * 处理摘要
    *
    * @param doc - 要处理YAML的 Post 对象
@@ -111,6 +155,41 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     // 同步摘要
     post.mt_excerpt = post.shortDesc
     post.mt_text_more = post.shortDesc
+
+    return post
+  }
+
+  /**
+   * 处理路径分类
+   *
+   * @param doc - 要处理YAML的 Post 对象
+   * @param id - 思源笔记文档 ID
+   * @param publishCfg - （可选）发布配置参数
+   * @returns 一个 Promise，解析为处理后的 Post 对象
+   */
+  private async handleCtegories(doc: Post, id?: string, publishCfg?: any) {
+    const cfg: BlogConfig = publishCfg?.cfg
+    const post = _.cloneDeep(doc) as Post
+
+    const savePath = post.cate_slugs?.[0] ?? cfg.blogid
+    const pathCates = []
+    if (cfg.usePathCategory) {
+      const docPathArray = savePath.split("/")
+      if (docPathArray.length > 1) {
+        for (let i = 1; i < docPathArray.length - 1; i++) {
+          const docCate = HtmlUtil.removeTitleNumber(docPathArray[i])
+          pathCates.push(docCate)
+        }
+      }
+    }
+
+    // 目录分类
+    this.logger.info("目录路径转换的分类 =>", pathCates)
+    const mergedCategories = [...new Set(...(pathCates ?? []), [...(post?.categories ?? [])])].filter(
+      (cate: string) => cate.trim() !== ""
+    ) as string[]
+    post.categories = mergedCategories
+    this.logger.info("最终的分类 =>", post.categories)
 
     return post
   }

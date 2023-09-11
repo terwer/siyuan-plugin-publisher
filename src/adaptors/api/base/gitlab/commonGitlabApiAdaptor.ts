@@ -29,10 +29,11 @@ import { CommonGitlabConfig } from "~/src/adaptors/api/base/gitlab/commonGitlabC
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { CommonGitlabClient } from "zhi-gitlab-middleware"
 import { CategoryInfo, Post, UserBlog, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
-import { StrUtil, YamlUtil } from "zhi-common"
+import { DateUtil, HtmlUtil, StrUtil, YamlUtil } from "zhi-common"
 import { toRaw } from "vue"
 import { Base64 } from "js-base64"
 import { isDev } from "~/src/utils/constants.ts"
+import IdUtil from "~/src/utils/idUtil.ts"
 
 /**
  * Gitlab API 适配器
@@ -87,9 +88,13 @@ class CommonGitlabApiAdaptor extends BaseBlogApi {
     this.logger.debug("start newPost =>", { post: toRaw(post) })
     const cfg = this.cfg as CommonGitlabConfig
 
-    const filename = post.wp_slug
-    const defaultPath = post.cate_slugs?.[0] ?? cfg.blogid
-    const docPath = `${defaultPath}/${filename}.md`
+    // 路径处理
+    const savePath = post.cate_slugs?.[0] ?? cfg.blogid
+    const filename = post.mdFilename ?? "auto-" + IdUtil.newID()
+    const docPath = `${savePath}/${filename}.md`
+    this.logger.info("将要最终发送到以下目录 =>", docPath)
+
+    // 开始发布
     const res = await this.gitlabClient.createRepositoryFile(docPath, post.description)
     this.logger.debug("gitlab newPost finished =>", res)
 

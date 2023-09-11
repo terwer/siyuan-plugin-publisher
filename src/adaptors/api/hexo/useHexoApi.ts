@@ -77,6 +77,15 @@ const useHexoApi = async (key: string, newCfg?: HexoConfig) => {
     }
   }
 
+  // 文件规则，占位符
+  // [slug] 别名
+  // [filename] 真实文件名
+  // [yyyy] 年
+  // [mm] 月
+  // [dd] 日
+  cfg.mdFilenameRule = "[slug].md"
+  cfg.useMdFilename = false
+  cfg.usePathCategory = false
   // 标签
   cfg.tagEnabled = true
   // 分类

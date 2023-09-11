@@ -112,6 +112,8 @@ class CommonGithubConfig extends CommonBlogConfig {
     this.author = "terwer"
     this.email = "youweics@163.com"
     this.mdFilenameRule = "[filename].md"
+    this.useMdFilename = false
+    this.usePathCategory = false
 
     this.middlewareUrl = middlewareUrl
   }
