@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 dependencies:
   '@element-plus/icons-vue':
     specifier: ^2.1.0
@@ -65,8 +69,8 @@ dependencies:
     specifier: ^3.1.1
     version: 3.1.1
   zhi-blog-api:
-    specifier: ^1.39.0
-    version: 1.39.0
+    specifier: ^1.43.0
+    version: 1.43.0
   zhi-common:
     specifier: ^1.23.7
     version: 1.23.7
@@ -7536,6 +7540,13 @@ packages:
       zhi-lib-base: 0.5.0
     dev: false
 
+  /zhi-blog-api@1.43.0:
+    resolution: {integrity: sha512-aj5hR7zDvJ0zD470J3/u5TKM3qP8fBgJvm09E2+h0v1xxEwN9Lr2yqpNOZaqrj2igVq2KtPxB4phvyizkH1krA==}
+    dependencies:
+      zhi-common: 1.23.7
+      zhi-lib-base: 0.5.0
+    dev: false
+
   /zhi-common@1.18.0:
     resolution: {integrity: sha512-7m8uyV8+kZ0tJky0myjz8Nj1Ad0kNsMNsg4itixnoM0yIYo6VZ7uU+oMd3qmqyA9kcvszD2QXV4w8qlgIDBGfg==}
     dependencies:
@@ -7629,7 +7640,3 @@ packages:
   /zwitch@1.0.5:
     resolution: {integrity: sha512-V50KMwwzqJV0NpZIZFwfOD5/lyny3WlSzRiXgA0G7VUnRlqttta1L6UQIHzd6EuBY/cHGfwTIck7w1yH6Q5zUw==}
     dev: false
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
