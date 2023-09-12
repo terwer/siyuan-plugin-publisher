@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 dependencies:
   '@element-plus/icons-vue':
     specifier: ^2.1.0
@@ -89,8 +93,8 @@ dependencies:
     specifier: ^0.1.4
     version: 0.1.4
   zhi-siyuan-api:
-    specifier: ^2.9.4
-    version: 2.9.4
+    specifier: ^2.9.8
+    version: 2.9.8
   zhi-xmlrpc-middleware:
     specifier: ^0.5.11
     version: 0.5.11
@@ -6289,7 +6293,7 @@ packages:
       zhi-device: 2.3.1
       zhi-fetch-middleware: 0.2.29
       zhi-lib-base: 0.4.4
-      zhi-siyuan-api: 2.9.4
+      zhi-siyuan-api: 2.9.8
     transitivePeerDependencies:
       - '@vue/composition-api'
       - typescript
@@ -7536,6 +7540,13 @@ packages:
       zhi-lib-base: 0.5.0
     dev: false
 
+  /zhi-blog-api@1.43.0:
+    resolution: {integrity: sha512-aj5hR7zDvJ0zD470J3/u5TKM3qP8fBgJvm09E2+h0v1xxEwN9Lr2yqpNOZaqrj2igVq2KtPxB4phvyizkH1krA==}
+    dependencies:
+      zhi-common: 1.23.7
+      zhi-lib-base: 0.5.0
+    dev: false
+
   /zhi-common@1.18.0:
     resolution: {integrity: sha512-7m8uyV8+kZ0tJky0myjz8Nj1Ad0kNsMNsg4itixnoM0yIYo6VZ7uU+oMd3qmqyA9kcvszD2QXV4w8qlgIDBGfg==}
     dependencies:
@@ -7610,10 +7621,10 @@ packages:
       - supports-color
     dev: false
 
-  /zhi-siyuan-api@2.9.4:
-    resolution: {integrity: sha512-kPQI/c/gIZQsMN6oNIAH9UWHQbLAG87zR1LwfMRQc9fcPTJh0FkBFPlU7hySTHDRNNmX0EOIdC/8ZeJlyNl/3g==}
+  /zhi-siyuan-api@2.9.8:
+    resolution: {integrity: sha512-PLPRNCRmHDlsR1plCdrcTFa1EL3BrGYmNrcm3YjLVJvHxrsYABDSABrdvCoqtimS2/vbCRX8g91RW6135sQqvw==}
     dependencies:
-      zhi-blog-api: 1.39.0
+      zhi-blog-api: 1.43.0
       zhi-common: 1.23.7
       zhi-lib-base: 0.5.0
     dev: false
@@ -7629,7 +7640,3 @@ packages:
   /zwitch@1.0.5:
     resolution: {integrity: sha512-V50KMwwzqJV0NpZIZFwfOD5/lyny3WlSzRiXgA0G7VUnRlqttta1L6UQIHzd6EuBY/cHGfwTIck7w1yH6Q5zUw==}
     dev: false
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
