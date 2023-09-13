@@ -27,6 +27,7 @@ import { CommonGithubApiAdaptor } from "~/src/adaptors/api/base/github/commonGit
 import { BlogConfig, PageTypeEnum, Post, YamlConvertAdaptor } from "zhi-blog-api"
 import _ from "lodash"
 import { VuepressYamlConverterAdaptor } from "~/src/adaptors/api/vuepress/vuepressYamlConverterAdaptor.ts"
+import { YamlUtil } from "zhi-common"
 
 /**
  * Vuepress API 适配器
@@ -49,23 +50,32 @@ class VuepressApiAdaptor extends CommonGithubApiAdaptor {
     const updatedPost = _.cloneDeep(doc) as Post
 
     // 自定义处理
-    // 信息、警告、错误
     const md = updatedPost.markdown
     this.logger.info("准备处理 Vuepress 正文")
     this.logger.debug("md =>", { md: md })
-    let updatedMd = md
-    // MD暂时无法处理标记，先搁置
-    // 处理MD
-    updatedPost.markdown = updatedMd
+    const yfm = YamlUtil.extractFrontmatter(md, true)
+    let updatedMd = YamlUtil.extractMarkdown(md)
+
+    // ======
+    // 摘要
+    const shortDesc = updatedPost.shortDesc ?? ""
+    const descRegex = /(\n{2}<!-- more -->\n{2})/
+    if (!descRegex.test(updatedMd)) {
+      updatedMd = `${shortDesc}\n\n<!-- more -->\n\n${updatedMd}`
+    }
+    // ======
+
+    updatedPost.markdown = `${yfm}\n${updatedMd}`
     this.logger.info("Vuepress 正文处理完毕")
-    this.logger.debug("updatedMd =>", { updatedMd: updatedMd })
+    this.logger.debug("updatedMd =>", { yfm: yfm, updatedMd: updatedMd })
 
     // 发布格式
     if (cfg?.pageType == PageTypeEnum.Markdown) {
-      post.description = post.markdown
+      updatedPost.description = updatedPost.markdown
     } else {
-      post.description = post.html
+      updatedPost.description = updatedPost.html
     }
+
     return updatedPost
   }
 }

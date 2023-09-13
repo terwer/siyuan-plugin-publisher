@@ -24,9 +24,10 @@
  */
 
 import { BlogConfig, PageTypeEnum, Post, YamlConvertAdaptor } from "zhi-blog-api"
-import { GitlabhexoYamlConverterAdaptor } from "~/src/adaptors/api/gitlab-hexo/gitlabhexoYamlConverterAdaptor.ts"
 import { CommonGitlabApiAdaptor } from "~/src/adaptors/api/base/gitlab/commonGitlabApiAdaptor.ts"
 import _ from "lodash"
+import { GitlabjekyllYamlConverterAdaptor } from "~/src/adaptors/api/gitlab-jekyll/gitlabjekyllYamlConverterAdaptor.ts"
+import { YamlUtil } from "zhi-common"
 
 /**
  * Jekyll API 适配器
@@ -37,7 +38,7 @@ import _ from "lodash"
  */
 class GitlabjekyllApiAdaptor extends CommonGitlabApiAdaptor {
   public override getYamlAdaptor(): YamlConvertAdaptor {
-    return new GitlabhexoYamlConverterAdaptor()
+    return new GitlabjekyllYamlConverterAdaptor()
   }
 
   public override async preEditPost(post: Post, id?: string, publishCfg?: any): Promise<Post> {
@@ -49,24 +50,25 @@ class GitlabjekyllApiAdaptor extends CommonGitlabApiAdaptor {
     const updatedPost = _.cloneDeep(doc) as Post
 
     // 自定义处理
-    // 成功提示、信息提示、警告提示、错误提示
     const md = updatedPost.markdown
     this.logger.info("准备处理 Gitlabjekyll 正文")
     this.logger.debug("md =>", { md: md })
-    let updatedMd = md
+    const yfm = YamlUtil.extractFrontmatter(md, true)
+    let updatedMd = YamlUtil.extractMarkdown(md)
 
-    // MD暂时无法处理标记，先搁置
-    // 处理MD
+    // ======
+    // 可修改 updatedMd
+    // ======
 
-    updatedPost.markdown = updatedMd
+    updatedPost.markdown = `${yfm}\n${updatedMd}`
     this.logger.info("Gitlabjekyll 正文处理完毕")
-    this.logger.debug("updatedMd =>", { updatedMd: updatedMd })
+    this.logger.debug("updatedMd =>", { yfm: yfm, updatedMd: updatedMd })
 
     // 发布格式
     if (cfg?.pageType == PageTypeEnum.Markdown) {
-      post.description = post.markdown
+      updatedPost.description = updatedPost.markdown
     } else {
-      post.description = post.html
+      updatedPost.description = updatedPost.html
     }
 
     return updatedPost

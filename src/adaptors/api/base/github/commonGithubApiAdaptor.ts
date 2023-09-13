@@ -112,6 +112,7 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
 
     let commonPost = new Post()
     commonPost.postid = res.path
+    commonPost.mdFilename = res.name
     commonPost.markdown = Base64.fromBase64(res.content)
     commonPost.description = commonPost.markdown
 

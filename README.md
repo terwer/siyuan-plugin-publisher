@@ -8,7 +8,7 @@ Publish articles from siyuan-note to platforms such as Yuque, Notion, Cnblogs, W
 
 Support features such as fast publishing, image bed management, platform expansion, smart labels, etc.
 
-- 🎉 To celebrate the birth of my little angel, I am pleased to announce the release of version `1.14.0` of Publish Tool.
+- 🎉 I am pleased to announce the `1.14.0` release of Publish Tool.
 
 - In this update, we have added several new platforms, including JianShu, Juejin, as well as Hugo, Jekyll, Vuepress, Vuepress2, and Vitepress. The latter platforms are also compatible with both `Github` and `Gitlab`.
 

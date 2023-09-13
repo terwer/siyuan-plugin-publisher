@@ -48,16 +48,17 @@ class VuepressYamlConverterAdaptor extends YamlConvertAdaptor {
     // date
     yamlFormatObj.yamlObj.date = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true)
 
-    // updated
-    if (!post.dateUpdated) {
-      post.dateUpdated = new Date()
-    }
-    yamlFormatObj.yamlObj.updated = DateUtil.formatIsoToZh(post.dateUpdated.toISOString(), true)
-
-    // excerpt
-    if (!StrUtil.isEmptyString(post.shortDesc)) {
-      yamlFormatObj.yamlObj.excerpt = post.shortDesc
-    }
+    // meta
+    yamlFormatObj.yamlObj.meta = [
+      {
+        name: "keywords",
+        content: post.mt_keywords,
+      },
+      {
+        name: "description",
+        content: post.shortDesc,
+      },
+    ]
 
     // tags
     if (!StrUtil.isEmptyString(post.mt_keywords)) {
@@ -73,37 +74,19 @@ class VuepressYamlConverterAdaptor extends YamlConvertAdaptor {
     // permalink
     if (cfg.yamlLinkEnabled) {
       let link = "/post/" + post.wp_slug + ".html"
-      if (cfg instanceof CommonGithubConfig) {
-        const githubCfg = cfg as CommonGithubConfig
-        if (!StrUtil.isEmptyString(cfg.previewPostUrl)) {
-          link = githubCfg.previewPostUrl.replace("[postid]", post.wp_slug)
-          const created = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true)
-          const datearr = created.split(" ")[0]
-          const numarr = datearr.split("-")
-          this.logger.debug("created numarr=>", numarr)
-          const y = numarr[0]
-          const m = numarr[1]
-          const d = numarr[2]
-          link = link.replace(/\[yyyy]/g, y)
-          link = link.replace(/\[MM]/g, m)
-          link = link.replace(/\[mm]/g, m)
-          link = link.replace(/\[dd]/g, d)
-
-          if (yamlFormatObj.yamlObj.categories?.length > 0) {
-            link = link.replace(/\[cats]/, yamlFormatObj.yamlObj.categories.join("/"))
-          } else {
-            link = link.replace(/\/\[cats]/, "")
-          }
-        }
-      }
       yamlFormatObj.yamlObj.permalink = link
     }
 
-    // comments
-    yamlFormatObj.yamlObj.comments = true
-
-    // toc
-    yamlFormatObj.yamlObj.toc = true
+    // author
+    let githubUrl = "https://github.com/terwer"
+    const githubCfg = cfg as CommonGithubConfig
+    if (githubCfg.home) {
+      githubUrl = StrUtil.pathJoin(githubCfg.home, "/" + githubCfg.username)
+    }
+    yamlFormatObj.yamlObj.author = {
+      name: githubCfg.author ?? "terwer",
+      link: githubUrl,
+    }
 
     // formatter
     let yaml = YamlUtil.obj2Yaml(yamlFormatObj.yamlObj)
@@ -130,12 +113,16 @@ class VuepressYamlConverterAdaptor extends YamlConvertAdaptor {
     if (yamlFormatObj.yamlObj?.date) {
       post.dateCreated = DateUtil.convertStringToDate(yamlFormatObj.yamlObj?.date)
     }
-    if (yamlFormatObj.yamlObj?.updated) {
-      post.dateUpdated = DateUtil.convertStringToDate(yamlFormatObj.yamlObj?.updated)
-    }
 
     // 摘要
-    post.shortDesc = yamlFormatObj.yamlObj?.excerpt
+    const yamlMeta = yamlFormatObj.yamlObj.meta
+    for (let i = 0; i < yamlMeta.length; i++) {
+      const m = yamlMeta[i]
+      if (m.name === "description" && !StrUtil.isEmptyString(m.content)) {
+        post.shortDesc = m.content
+        break
+      }
+    }
 
     // 标签
     post.mt_keywords = yamlFormatObj.yamlObj?.tags?.join(",")

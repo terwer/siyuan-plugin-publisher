@@ -115,6 +115,8 @@ class CommonGitlabApiAdaptor extends BaseBlogApi {
 
     let commonPost = new Post()
     commonPost.postid = res.file_path
+    // 文件标题
+    commonPost.mdFilename = res.file_name
     commonPost.markdown = Base64.fromBase64(res.content)
     commonPost.description = commonPost.markdown
 
