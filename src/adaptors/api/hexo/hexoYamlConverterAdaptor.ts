@@ -32,6 +32,7 @@ import { toRaw } from "vue"
 /**
  * Hexo平台的YAML解析器
  *
+ * @see {https://hexo.io/docs/front-matter front-tmatter}
  * @author terwer
  * @since 0.8.1
  */

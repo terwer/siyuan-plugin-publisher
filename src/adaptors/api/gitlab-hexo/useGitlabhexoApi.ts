@@ -31,8 +31,8 @@ import { Utils } from "~/src/utils/utils.ts"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { CategoryTypeEnum } from "zhi-blog-api"
 import { GitlabhexoConfig } from "~/src/adaptors/api/gitlab-hexo/gitlabhexoConfig.ts"
-import { GitlabHexoYamlConverterAdaptor } from "~/src/adaptors/api/gitlab-hexo/gitlabHexoYamlConverterAdaptor.ts"
-import { GitlabHexoApiAdaptor } from "~/src/adaptors/api/gitlab-hexo/gitlabHexoApiAdaptor.ts"
+import { GitlabhexoYamlConverterAdaptor } from "~/src/adaptors/api/gitlab-hexo/gitlabhexoYamlConverterAdaptor.ts"
+import { GitlabhexoApiAdaptor } from "~/src/adaptors/api/gitlab-hexo/gitlabhexoApiAdaptor.ts"
 
 const useGitlabhexoApi = async (key: string, newCfg?: GitlabhexoConfig) => {
   // 创建应用日志记录器
@@ -77,6 +77,10 @@ const useGitlabhexoApi = async (key: string, newCfg?: GitlabhexoConfig) => {
     }
   }
 
+  // 文件规则
+  cfg.mdFilenameRule = "[slug].md"
+  cfg.useMdFilename = false
+  cfg.usePathCategory = false
   // 标签
   cfg.tagEnabled = true
   // 分类
@@ -87,15 +91,15 @@ const useGitlabhexoApi = async (key: string, newCfg?: GitlabhexoConfig) => {
   cfg.knowledgeSpaceEnabled = true
   cfg.knowledgeSpaceTitle = "发布目录"
   cfg.allowKnowledgeSpaceChange = false
-  cfg.placeholder.knowledgeSpaceReadonlyModeTip = "GitlabHexo 平台暂不支持修改发布目录，如需修改，请删除之后重新发布"
+  cfg.placeholder.knowledgeSpaceReadonlyModeTip = "Gitlabhexo 平台暂不支持修改发布目录，如需修改，请删除之后重新发布"
   cfg.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Tree_Single
 
   // 创建 Hexo 的 yamlAdaptor
-  const yamlAdaptor = new GitlabHexoYamlConverterAdaptor()
+  const yamlAdaptor = new GitlabhexoYamlConverterAdaptor()
 
   // 创建 Hexo API 适配器
-  const blogApi = new GitlabHexoApiAdaptor(appInstance, cfg)
-  logger.info("Gitlbhexo API created successfully.", cfg)
+  const blogApi = new GitlabhexoApiAdaptor(appInstance, cfg)
+  logger.info("Gitlabhexo API created successfully.", cfg)
 
   return {
     cfg,

@@ -38,8 +38,18 @@ import { useHexoApi } from "~/src/adaptors/api/hexo/useHexoApi.ts"
 import { useGitlabhexoApi } from "~/src/adaptors/api/gitlab-hexo/useGitlabhexoApi.ts"
 import { useCsdnWeb } from "~/src/adaptors/web/csdn/useCsdnWeb.ts"
 import { useWechatWeb } from "~/src/adaptors/web/wechat/useWechatWeb.ts"
-import {useJianshuWeb} from "~/src/adaptors/web/jianshu/useJianshuWeb.ts";
-import {useJuejinWeb} from "~/src/adaptors/web/juejin/useJuejinWeb.ts";
+import { useJianshuWeb } from "~/src/adaptors/web/jianshu/useJianshuWeb.ts"
+import { useJuejinWeb } from "~/src/adaptors/web/juejin/useJuejinWeb.ts"
+import { useHugoApi } from "~/src/adaptors/api/hugo/useHugoApi.ts"
+import { useGitlabhugoApi } from "~/src/adaptors/api/gitlab-hugo/useGitlabhugoApi.ts"
+import { useJekyllApi } from "~/src/adaptors/api/jekyll/useJekyllApi.ts"
+import { useGitlabjekyllApi } from "~/src/adaptors/api/gitlab-jekyll/useGitlabjekyllApi.ts"
+import { useVuepressApi } from "~/src/adaptors/api/vuepress/useVuepressApi.ts"
+import { useGitlabvuepressApi } from "~/src/adaptors/api/gitlab-vuepress/useGitlabvuepressApi.ts"
+import { useVuepress2Api } from "~/src/adaptors/api/vuepress2/useVuepress2Api.ts"
+import { useVitepressApi } from "~/src/adaptors/api/vitepress/useVitepressApi.ts"
+import { useGitlabvuepress2Api } from "~/src/adaptors/api/gitlab-vuepress2/useGitlabvuepress2Api.ts"
+import { useGitlabvitepressApi } from "~/src/adaptors/api/gitlab-vitepress/useGitlabvitepressApi.ts"
 
 /**
  * 适配器统一入口
@@ -76,8 +86,58 @@ class Adaptors {
         conf = cfg
         break
       }
+      case SubPlatformType.Github_Hugo: {
+        const { cfg } = await useHugoApi(key, newCfg)
+        conf = cfg
+        break
+      }
+      case SubPlatformType.Github_Jekyll: {
+        const { cfg } = await useJekyllApi(key, newCfg)
+        conf = cfg
+        break
+      }
+      case SubPlatformType.Github_Vuepress: {
+        const { cfg } = await useVuepressApi(key, newCfg)
+        conf = cfg
+        break
+      }
+      case SubPlatformType.Github_Vuepress2: {
+        const { cfg } = await useVuepress2Api(key, newCfg)
+        conf = cfg
+        break
+      }
+      case SubPlatformType.Github_Vitepress: {
+        const { cfg } = await useVitepressApi(key, newCfg)
+        conf = cfg
+        break
+      }
       case SubPlatformType.Gitlab_Hexo: {
         const { cfg } = await useGitlabhexoApi(key, newCfg)
+        conf = cfg
+        break
+      }
+      case SubPlatformType.Gitlab_Hugo: {
+        const { cfg } = await useGitlabhugoApi(key, newCfg)
+        conf = cfg
+        break
+      }
+      case SubPlatformType.Gitlab_Jekyll: {
+        const { cfg } = await useGitlabjekyllApi(key, newCfg)
+        conf = cfg
+        break
+      }
+      case SubPlatformType.Gitlab_Vuepress: {
+        const { cfg } = await useGitlabvuepressApi(key, newCfg)
+        conf = cfg
+        break
+      }
+      case SubPlatformType.Gitlab_Vuepress2: {
+        const { cfg } = await useGitlabvuepress2Api(key, newCfg)
+        conf = cfg
+        break
+      }
+      case SubPlatformType.Gitlab_Vitepress: {
+        const { cfg } = await useGitlabvitepressApi(key, newCfg)
         conf = cfg
         break
       }
@@ -166,8 +226,58 @@ class Adaptors {
         blogAdaptor = blogApi
         break
       }
+      case SubPlatformType.Github_Hugo: {
+        const { blogApi } = await useHugoApi(key, newCfg)
+        blogAdaptor = blogApi
+        break
+      }
+      case SubPlatformType.Github_Jekyll: {
+        const { blogApi } = await useJekyllApi(key, newCfg)
+        blogAdaptor = blogApi
+        break
+      }
+      case SubPlatformType.Github_Vuepress: {
+        const { blogApi } = await useVuepressApi(key, newCfg)
+        blogAdaptor = blogApi
+        break
+      }
+      case SubPlatformType.Github_Vuepress2: {
+        const { blogApi } = await useVuepress2Api(key, newCfg)
+        blogAdaptor = blogApi
+        break
+      }
+      case SubPlatformType.Github_Vitepress: {
+        const { blogApi } = await useVitepressApi(key, newCfg)
+        blogAdaptor = blogApi
+        break
+      }
       case SubPlatformType.Gitlab_Hexo: {
         const { blogApi } = await useGitlabhexoApi(key, newCfg)
+        blogAdaptor = blogApi
+        break
+      }
+      case SubPlatformType.Gitlab_Hugo: {
+        const { blogApi } = await useGitlabhugoApi(key, newCfg)
+        blogAdaptor = blogApi
+        break
+      }
+      case SubPlatformType.Gitlab_Jekyll: {
+        const { blogApi } = await useGitlabjekyllApi(key, newCfg)
+        blogAdaptor = blogApi
+        break
+      }
+      case SubPlatformType.Gitlab_Vuepress: {
+        const { blogApi } = await useGitlabvuepressApi(key, newCfg)
+        blogAdaptor = blogApi
+        break
+      }
+      case SubPlatformType.Gitlab_Vuepress2: {
+        const { blogApi } = await useGitlabvuepress2Api(key, newCfg)
+        blogAdaptor = blogApi
+        break
+      }
+      case SubPlatformType.Gitlab_Vitepress: {
+        const { blogApi } = await useGitlabvitepressApi(key, newCfg)
         blogAdaptor = blogApi
         break
       }
@@ -245,8 +355,58 @@ class Adaptors {
         yamlAdp = yamlAdaptor
         break
       }
+      case SubPlatformType.Github_Hugo: {
+        const { yamlAdaptor } = await useHugoApi(key, newCfg)
+        yamlAdp = yamlAdaptor
+        break
+      }
+      case SubPlatformType.Github_Jekyll: {
+        const { yamlAdaptor } = await useJekyllApi(key, newCfg)
+        yamlAdp = yamlAdaptor
+        break
+      }
+      case SubPlatformType.Github_Vuepress: {
+        const { yamlAdaptor } = await useVuepressApi(key, newCfg)
+        yamlAdp = yamlAdaptor
+        break
+      }
+      case SubPlatformType.Github_Vuepress2: {
+        const { yamlAdaptor } = await useVuepress2Api(key, newCfg)
+        yamlAdp = yamlAdaptor
+        break
+      }
+      case SubPlatformType.Github_Vitepress: {
+        const { yamlAdaptor } = await useVitepressApi(key, newCfg)
+        yamlAdp = yamlAdaptor
+        break
+      }
       case SubPlatformType.Gitlab_Hexo: {
         const { yamlAdaptor } = await useGitlabhexoApi(key, newCfg)
+        yamlAdp = yamlAdaptor
+        break
+      }
+      case SubPlatformType.Gitlab_Hugo: {
+        const { yamlAdaptor } = await useGitlabhugoApi(key, newCfg)
+        yamlAdp = yamlAdaptor
+        break
+      }
+      case SubPlatformType.Gitlab_Jekyll: {
+        const { yamlAdaptor } = await useGitlabjekyllApi(key, newCfg)
+        yamlAdp = yamlAdaptor
+        break
+      }
+      case SubPlatformType.Gitlab_Vuepress: {
+        const { yamlAdaptor } = await useGitlabvuepressApi(key, newCfg)
+        yamlAdp = yamlAdaptor
+        break
+      }
+      case SubPlatformType.Gitlab_Vuepress2: {
+        const { yamlAdaptor } = await useGitlabvuepress2Api(key, newCfg)
+        yamlAdp = yamlAdaptor
+        break
+      }
+      case SubPlatformType.Gitlab_Vitepress: {
+        const { yamlAdaptor } = await useGitlabvitepressApi(key, newCfg)
         yamlAdp = yamlAdaptor
         break
       }

@@ -369,6 +369,7 @@ const usePublish = () => {
 
       // 其他属性初始化
       let post = _.cloneDeep(slugedPost) as Post
+      const title = post.title
       if (!isSys) {
         // 平台相关自定义属性（摘要、标签、分类）
         const yamlKey = getDynYamlKey(key)
@@ -405,6 +406,11 @@ const usePublish = () => {
             logger.info("未保存过YAML，未找到适配器，默认不处理")
           }
         }
+      }
+
+      // 文件名
+      if (cfg.useMdFilename && post?.mdFilename.includes(".md")) {
+        post.title = post.mdFilename
       }
 
       return post
@@ -455,6 +461,7 @@ const usePublish = () => {
         const platformPost = await api.getPost(postid)
         mergedPost = _.cloneDeep(platformPost) as Post
         logger.debug("get init platformPost ok =>", mergedPost)
+        mergedPost.title = platformPost.title
         // 正文需要使用思源笔记的
         mergedPost.markdown = siyuanPost.markdown
         mergedPost.html = siyuanPost.html
@@ -498,8 +505,8 @@ const usePublish = () => {
         mergedPost.mt_excerpt = mergedPost.shortDesc
       }
 
-      const postKeywords = post.mt_keywords.split(",")
-      const newPostKeywords = newPost.mt_keywords.split(",")
+      const postKeywords = post?.mt_keywords?.split(",") ?? []
+      const newPostKeywords = newPost?.mt_keywords?.split(",") ?? []
       // 合并并去重关键词
       const mergedKeywords = [...new Set([...postKeywords, ...newPostKeywords])].filter((tag) => tag.trim() !== "")
       mergedPost.mt_keywords = mergedKeywords.join(",")

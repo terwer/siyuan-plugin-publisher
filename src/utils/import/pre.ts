@@ -79,24 +79,51 @@ export const pre = {
       authMode: AuthMode.API,
       isEnabled: false,
     },
-    // {
-    //   platformType: PlatformType.Github,
-    //   subPlatformType: SubPlatformType.Github_Hugo,
-    //   platformKey: "github_Hugo",
-    //   platformName: "Hugo",
-    //   platformIcon: svgIcons.iconIFHugo,
-    //   authMode: AuthMode.API,
-    //   isEnabled: false
-    // },
-    // {
-    //   platformType: PlatformType.Github,
-    //   subPlatformType: SubPlatformType.Github_Vitepress,
-    //   platformKey: "github_Vitepress",
-    //   platformName: "Vitepress",
-    //   platformIcon: svgIcons.iconIFVue,
-    //   authMode: AuthMode.API,
-    //   isEnabled: false
-    // },
+    {
+      platformType: PlatformType.Github,
+      subPlatformType: SubPlatformType.Github_Hugo,
+      platformKey: "github_Hugo",
+      platformName: "Hugo",
+      platformIcon: svgIcons.iconIFHugo,
+      authMode: AuthMode.API,
+      isEnabled: false
+    },
+    {
+      platformType: PlatformType.Github,
+      subPlatformType: SubPlatformType.Github_Jekyll,
+      platformKey: "github_Jekyll",
+      platformName: "Jekyll",
+      platformIcon: svgIcons.iconIFJekyll,
+      authMode: AuthMode.API,
+      isEnabled: false
+    },
+    {
+      platformType: PlatformType.Github,
+      subPlatformType: SubPlatformType.Github_Vuepress,
+      platformKey: "github_Vuepress",
+      platformName: "Vuepress",
+      platformIcon: svgIcons.iconIFVuepress,
+      authMode: AuthMode.API,
+      isEnabled: false
+    },
+    {
+      platformType: PlatformType.Github,
+      subPlatformType: SubPlatformType.Github_Vuepress2,
+      platformKey: "github_Vuepress2",
+      platformName: "Vuepress2",
+      platformIcon: svgIcons.iconIFVuepress2,
+      authMode: AuthMode.API,
+      isEnabled: false
+    },
+    {
+      platformType: PlatformType.Github,
+      subPlatformType: SubPlatformType.Github_Vitepress,
+      platformKey: "github_Vitepress",
+      platformName: "Vitepress",
+      platformIcon: svgIcons.iconIFVue,
+      authMode: AuthMode.API,
+      isEnabled: false
+    },
   ],
   gitlabCfg: <DynamicConfig[]>[
     {
@@ -104,9 +131,54 @@ export const pre = {
       subPlatformType: SubPlatformType.Gitlab_Hexo,
       platformKey: "gitlab_Gitlabhexo",
       platformName: "Gitlabhexo",
-      platformIcon: svgIcons.iconIFHexoGitlab,
+      platformIcon: svgIcons.iconIFHexo,
       authMode: AuthMode.API,
       isEnabled: false,
+    },
+    {
+      platformType: PlatformType.Gitlab,
+      subPlatformType: SubPlatformType.Gitlab_Hugo,
+      platformKey: "gitlab_Gitlabhugo",
+      platformName: "Gitlabhugo",
+      platformIcon: svgIcons.iconIFHugo,
+      authMode: AuthMode.API,
+      isEnabled: false
+    },
+    {
+      platformType: PlatformType.Gitlab,
+      subPlatformType: SubPlatformType.Gitlab_Jekyll,
+      platformKey: "gitlab_Gitlabjekyll",
+      platformName: "Gitlabjekyll",
+      platformIcon: svgIcons.iconIFJekyll,
+      authMode: AuthMode.API,
+      isEnabled: false
+    },
+    {
+      platformType: PlatformType.Gitlab,
+      subPlatformType: SubPlatformType.Gitlab_Vuepress,
+      platformKey: "gitlab_Gitlabvuepress",
+      platformName: "Gitlabvuepress",
+      platformIcon: svgIcons.iconIFVuepress,
+      authMode: AuthMode.API,
+      isEnabled: false
+    },
+    {
+      platformType: PlatformType.Gitlab,
+      subPlatformType: SubPlatformType.Gitlab_Vuepress2,
+      platformKey: "gitlab_Gitlabvuepress2",
+      platformName: "Gitlabvuepress2",
+      platformIcon: svgIcons.iconIFVuepress2,
+      authMode: AuthMode.API,
+      isEnabled: false
+    },
+    {
+      platformType: PlatformType.Gitlab,
+      subPlatformType: SubPlatformType.Gitlab_Vitepress,
+      platformKey: "gitlab_Gitlabvitepress",
+      platformName: "Gitlabvitepress",
+      platformIcon: svgIcons.iconIFVue,
+      authMode: AuthMode.API,
+      isEnabled: false
     },
   ],
   metaweblogCfg: <DynamicConfig[]>[

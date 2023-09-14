@@ -55,5 +55,3 @@ hexoCfg.placeholder = hexoPlaceholder
     <template #footer="footer"> </template>
   </common-github-setting>
 </template>
-
-<style scoped lang="stylus"></style>

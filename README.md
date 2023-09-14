@@ -8,7 +8,11 @@ Publish articles from siyuan-note to platforms such as Yuque, Notion, Cnblogs, W
 
 Support features such as fast publishing, image bed management, platform expansion, smart labels, etc.
 
-> 🎉 The first version `1.14.0` of Publish Tool that support Jianshu, Juejin and Hugo, Jekyll, Vuepress, Vuepress2, Vitepress is released!
+- 🎉 I am pleased to announce the `1.14.0` release of Publish Tool.
+
+- In this update, we have added several new platforms, including JianShu, Juejin, as well as Hugo, Jekyll, Vuepress, Vuepress2, and Vitepress. The latter platforms are also compatible with both `Github` and `Gitlab`.
+
+- Oh, and in this version, the author secretly developed an import feature. You can quickly import predefined platforms using the `Settings` -> `Publish Settings` -> `Import Predefined Platforms` function 😄
 
 > Platform Limitations:
   - **WeChat Official Accounts**: Publishing Tool now supports posting articles to the WeChat Official Accounts draft box in version `1.13.0` and beyond. However, due to limitations on the WeChat platform in Electron, normal login operations are not possible. Therefore, you will need to visit `https://mp.weixin.qq.com/` yourself, complete the login, copy the cookie, and then paste it into the configuration options.

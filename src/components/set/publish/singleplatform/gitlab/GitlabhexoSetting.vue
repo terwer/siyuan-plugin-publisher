@@ -39,14 +39,14 @@ const props = defineProps({
 
 const { t } = useVueI18n()
 const { cfg } = await useGitlabhexoApi(props.apiType)
-const gitlabhexoCfg = cfg as GitlabhexoConfig
+const hexoCfg = cfg as GitlabhexoConfig
 const hexoPlaceholder = new GitlabhexoPlaceHolder()
 hexoPlaceholder.homePlaceholder = t("setting.blog.gitlab.url.tip")
 hexoPlaceholder.usernamePlaceholder = t("setting.blog.type.gitlab.user.tip")
 hexoPlaceholder.passwordPlaceholder = t("setting.blog.type.gitlab.token.tip")
 hexoPlaceholder.apiUrlPlaceholder = t("setting.blog.gitlab.apiurl.tip")
 hexoPlaceholder.previewUrlPlaceholder = t("setting.blog.gitlab.previewUrl.tip")
-gitlabhexoCfg.placeholder = hexoPlaceholder
+hexoCfg.placeholder = hexoPlaceholder
 
 // 处理事件的方法
 const onHomeChange = (value: string, cfg: GitlabhexoConfig) => {
@@ -60,11 +60,9 @@ const onHomeChange = (value: string, cfg: GitlabhexoConfig) => {
 </script>
 
 <template>
-  <common-github-setting :api-type="props.apiType" :cfg="gitlabhexoCfg" @onHomeChange="onHomeChange">
+  <common-github-setting :api-type="props.apiType" :cfg="hexoCfg" @onHomeChange="onHomeChange">
     <template #header="header"> </template>
     <template #main="main"> </template>
     <template #footer="footer"> </template>
   </common-github-setting>
 </template>
-
-<style scoped lang="stylus"></style>

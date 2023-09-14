@@ -24,9 +24,10 @@
  */
 
 import { BlogConfig, PageTypeEnum, Post, YamlConvertAdaptor } from "zhi-blog-api"
-import { GitlabHexoYamlConverterAdaptor } from "~/src/adaptors/api/gitlab-hexo/gitlabHexoYamlConverterAdaptor.ts"
 import { CommonGitlabApiAdaptor } from "~/src/adaptors/api/base/gitlab/commonGitlabApiAdaptor.ts"
 import _ from "lodash"
+import { GitlabvuepressYamlConverterAdaptor } from "~/src/adaptors/api/gitlab-vuepress/gitlabvuepressYamlConverterAdaptor.ts"
+import { YamlUtil } from "zhi-common"
 
 /**
  * Hexo API 适配器
@@ -35,9 +36,9 @@ import _ from "lodash"
  * @version 1.3.2
  * @since 0.8.1
  */
-class GitlabHexoApiAdaptor extends CommonGitlabApiAdaptor {
+class GitlabvuepressApiAdaptor extends CommonGitlabApiAdaptor {
   public override getYamlAdaptor(): YamlConvertAdaptor {
-    return new GitlabHexoYamlConverterAdaptor()
+    return new GitlabvuepressYamlConverterAdaptor()
   }
 
   public override async preEditPost(post: Post, id?: string, publishCfg?: any): Promise<Post> {
@@ -49,28 +50,34 @@ class GitlabHexoApiAdaptor extends CommonGitlabApiAdaptor {
     const updatedPost = _.cloneDeep(doc) as Post
 
     // 自定义处理
-    // 成功提示、信息提示、警告提示、错误提示
     const md = updatedPost.markdown
-    this.logger.info("准备处理 Gitlabhexo 正文")
+    this.logger.info("准备处理 Gitlabvuepress 正文")
     this.logger.debug("md =>", { md: md })
-    let updatedMd = md
+    const yfm = YamlUtil.extractFrontmatter(md, true)
+    let updatedMd = YamlUtil.extractMarkdown(md)
 
-    // MD暂时无法处理标记，先搁置
-    // 处理MD
+    // ======
+    // 摘要
+    const shortDesc = updatedPost.shortDesc ?? ""
+    const descRegex = /(\n{2}<!-- more -->\n{2})/
+    if (!descRegex.test(updatedMd)) {
+      updatedMd = `${shortDesc}\n\n<!-- more -->\n\n${updatedMd}`
+    }
+    // ======
 
-    updatedPost.markdown = updatedMd
-    this.logger.info("Gitlabhexo 正文处理完毕")
-    this.logger.debug("updatedMd =>", { updatedMd: updatedMd })
+    updatedPost.markdown = `${yfm}\n${updatedMd}`
+    this.logger.info("Gitlabvuepress 正文处理完毕")
+    this.logger.debug("updatedMd =>", { yfm: yfm, updatedMd: updatedMd })
 
     // 发布格式
     if (cfg?.pageType == PageTypeEnum.Markdown) {
-      post.description = post.markdown
+      updatedPost.description = updatedPost.markdown
     } else {
-      post.description = post.html
+      updatedPost.description = updatedPost.html
     }
 
     return updatedPost
   }
 }
 
-export { GitlabHexoApiAdaptor }
+export { GitlabvuepressApiAdaptor }

@@ -27,7 +27,7 @@ import { CommonGithubConfig } from "~/src/adaptors/api/base/github/commonGithubC
 import { CategoryTypeEnum, PageTypeEnum, PasswordType } from "zhi-blog-api"
 
 /**
- * 博 Hexo 配置
+ * Hexo 配置
  *
  * @author terwer
  * @since 1.3.2
@@ -59,6 +59,8 @@ class HexoConfig extends CommonGithubConfig {
     this.allowKnowledgeSpaceChange = false
     this.placeholder.knowledgeSpaceReadonlyModeTip = "Hexo 平台暂不支持修改发布目录，如需修改，请删除之后重新发布"
     this.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Tree_Single
+    this.useMdFilename = false
+    this.usePathCategory = false
   }
 }
 
