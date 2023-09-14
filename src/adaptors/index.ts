@@ -46,6 +46,10 @@ import { useJekyllApi } from "~/src/adaptors/api/jekyll/useJekyllApi.ts"
 import { useGitlabjekyllApi } from "~/src/adaptors/api/gitlab-jekyll/useGitlabjekyllApi.ts"
 import { useVuepressApi } from "~/src/adaptors/api/vuepress/useVuepressApi.ts"
 import { useGitlabvuepressApi } from "~/src/adaptors/api/gitlab-vuepress/useGitlabvuepressApi.ts"
+import { useVuepress2Api } from "~/src/adaptors/api/vuepress2/useVuepress2Api.ts"
+import { useVitepressApi } from "~/src/adaptors/api/vitepress/useVitepressApi.ts"
+import { useGitlabvuepress2Api } from "~/src/adaptors/api/gitlab-vuepress2/useGitlabvuepress2Api.ts"
+import { useGitlabvitepressApi } from "~/src/adaptors/api/gitlab-vitepress/useGitlabvitepressApi.ts"
 
 /**
  * 适配器统一入口
@@ -97,6 +101,16 @@ class Adaptors {
         conf = cfg
         break
       }
+      case SubPlatformType.Github_Vuepress2: {
+        const { cfg } = await useVuepress2Api(key, newCfg)
+        conf = cfg
+        break
+      }
+      case SubPlatformType.Github_Vitepress: {
+        const { cfg } = await useVitepressApi(key, newCfg)
+        conf = cfg
+        break
+      }
       case SubPlatformType.Gitlab_Hexo: {
         const { cfg } = await useGitlabhexoApi(key, newCfg)
         conf = cfg
@@ -114,6 +128,16 @@ class Adaptors {
       }
       case SubPlatformType.Gitlab_Vuepress: {
         const { cfg } = await useGitlabvuepressApi(key, newCfg)
+        conf = cfg
+        break
+      }
+      case SubPlatformType.Gitlab_Vuepress2: {
+        const { cfg } = await useGitlabvuepress2Api(key, newCfg)
+        conf = cfg
+        break
+      }
+      case SubPlatformType.Gitlab_Vitepress: {
+        const { cfg } = await useGitlabvitepressApi(key, newCfg)
         conf = cfg
         break
       }
@@ -217,6 +241,16 @@ class Adaptors {
         blogAdaptor = blogApi
         break
       }
+      case SubPlatformType.Github_Vuepress2: {
+        const { blogApi } = await useVuepress2Api(key, newCfg)
+        blogAdaptor = blogApi
+        break
+      }
+      case SubPlatformType.Github_Vitepress: {
+        const { blogApi } = await useVitepressApi(key, newCfg)
+        blogAdaptor = blogApi
+        break
+      }
       case SubPlatformType.Gitlab_Hexo: {
         const { blogApi } = await useGitlabhexoApi(key, newCfg)
         blogAdaptor = blogApi
@@ -234,6 +268,16 @@ class Adaptors {
       }
       case SubPlatformType.Gitlab_Vuepress: {
         const { blogApi } = await useGitlabvuepressApi(key, newCfg)
+        blogAdaptor = blogApi
+        break
+      }
+      case SubPlatformType.Gitlab_Vuepress2: {
+        const { blogApi } = await useGitlabvuepress2Api(key, newCfg)
+        blogAdaptor = blogApi
+        break
+      }
+      case SubPlatformType.Gitlab_Vitepress: {
+        const { blogApi } = await useGitlabvitepressApi(key, newCfg)
         blogAdaptor = blogApi
         break
       }
@@ -326,6 +370,16 @@ class Adaptors {
         yamlAdp = yamlAdaptor
         break
       }
+      case SubPlatformType.Github_Vuepress2: {
+        const { yamlAdaptor } = await useVuepress2Api(key, newCfg)
+        yamlAdp = yamlAdaptor
+        break
+      }
+      case SubPlatformType.Github_Vitepress: {
+        const { yamlAdaptor } = await useVitepressApi(key, newCfg)
+        yamlAdp = yamlAdaptor
+        break
+      }
       case SubPlatformType.Gitlab_Hexo: {
         const { yamlAdaptor } = await useGitlabhexoApi(key, newCfg)
         yamlAdp = yamlAdaptor
@@ -343,6 +397,16 @@ class Adaptors {
       }
       case SubPlatformType.Gitlab_Vuepress: {
         const { yamlAdaptor } = await useGitlabvuepressApi(key, newCfg)
+        yamlAdp = yamlAdaptor
+        break
+      }
+      case SubPlatformType.Gitlab_Vuepress2: {
+        const { yamlAdaptor } = await useGitlabvuepress2Api(key, newCfg)
+        yamlAdp = yamlAdaptor
+        break
+      }
+      case SubPlatformType.Gitlab_Vitepress: {
+        const { yamlAdaptor } = await useGitlabvitepressApi(key, newCfg)
         yamlAdp = yamlAdaptor
         break
       }

@@ -50,10 +50,14 @@ const subtype = getSubPlatformTypeByKey(apiType)
     <hugo-setting v-else-if="subtype === SubPlatformType.Github_Hugo" :api-type="apiType" />
     <jekyll-setting v-else-if="subtype === SubPlatformType.Github_Jekyll" :api-type="apiType" />
     <vuepress-setting v-else-if="subtype === SubPlatformType.Github_Vuepress" :api-type="apiType" />
+    <vuepress2-setting v-else-if="subtype === SubPlatformType.Github_Vuepress2" :api-type="apiType" />
+    <vitepress-setting v-else-if="subtype === SubPlatformType.Github_Vitepress" :api-type="apiType" />
     <gitlabhexo-setting v-else-if="subtype === SubPlatformType.Gitlab_Hexo" :api-type="apiType" />
     <gitlabhugo-setting v-else-if="subtype === SubPlatformType.Gitlab_Hugo" :api-type="apiType" />
     <gitlabjekyll-setting v-else-if="subtype === SubPlatformType.Gitlab_Jekyll" :api-type="apiType" />
     <gitlabvuepress-setting v-else-if="subtype === SubPlatformType.Gitlab_Vuepress" :api-type="apiType" />
+    <gitlabvuepress2-setting v-else-if="subtype === SubPlatformType.Gitlab_Vuepress2" :api-type="apiType" />
+    <gitlabvitepress-setting v-else-if="subtype === SubPlatformType.Gitlab_Vitepress" :api-type="apiType" />
     <othermeta-setting v-else-if="subtype === SubPlatformType.Metaweblog_Metaweblog" :api-type="apiType" />
     <cnblogs-setting v-else-if="subtype === SubPlatformType.Metaweblog_Cnblogs" :api-type="apiType" />
     <typecho-setting v-else-if="subtype === SubPlatformType.Metaweblog_Typecho" :api-type="apiType" />

@@ -57,7 +57,12 @@ class Vuepress2ApiAdaptor extends CommonGithubApiAdaptor {
     let updatedMd = YamlUtil.extractMarkdown(md)
 
     // ======
-    // 可修改 updatedMd
+    // 摘要
+    const shortDesc = updatedPost.shortDesc ?? ""
+    const descRegex = /(\n{2}<!-- more -->\n{2})/
+    if (!descRegex.test(updatedMd)) {
+      updatedMd = `${shortDesc}\n\n<!-- more -->\n\n${updatedMd}`
+    }
     // ======
 
     updatedPost.markdown = `${yfm}\n${updatedMd}`

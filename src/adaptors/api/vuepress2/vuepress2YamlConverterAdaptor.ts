@@ -39,77 +39,54 @@ import { toRaw } from "vue"
 class Vuepress2YamlConverterAdaptor extends YamlConvertAdaptor {
   private readonly logger = createAppLogger("vuepress2-yaml-converter-adaptor")
 
+  /**
+   * 将文章转换为YAML格式对象
+   *
+   * @param post - 要转换的文章对象
+   * @param cfg - 博客配置（可选）
+   * @returns 返回YAML格式对象
+   */
   public convertToYaml(post: Post, cfg?: BlogConfig): YamlFormatObj {
     this.logger.debug("您正在使用 Vuepress2 Yaml Converter", { post: toRaw(post) })
     let yamlFormatObj: YamlFormatObj = new YamlFormatObj()
     // title
     yamlFormatObj.yamlObj.title = post.title
 
+    // short_title
+    yamlFormatObj.yamlObj.short_title = ""
+
     // date
-    yamlFormatObj.yamlObj.date = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true)
+    yamlFormatObj.yamlObj.date = post.dateCreated
 
-    // updated
-    if (!post.dateUpdated) {
-      post.dateUpdated = new Date()
-    }
-    yamlFormatObj.yamlObj.updated = DateUtil.formatIsoToZh(post.dateUpdated.toISOString(), true)
-
-    // excerpt
+    // description
     if (!StrUtil.isEmptyString(post.shortDesc)) {
-      yamlFormatObj.yamlObj.excerpt = post.shortDesc
+      yamlFormatObj.yamlObj.description = post.shortDesc
     }
 
-    // tags
+    // tag
     if (!StrUtil.isEmptyString(post.mt_keywords)) {
-      const tags = post.mt_keywords.split(",")
-      yamlFormatObj.yamlObj.tags = tags
+      const tag = post.mt_keywords.split(",")
+      yamlFormatObj.yamlObj.tag = tag
     }
 
-    // categories
+    // category
     if (post.categories?.length > 0) {
-      yamlFormatObj.yamlObj.categories = post.categories
+      yamlFormatObj.yamlObj.category = post.categories
     }
 
-    // permalink
-    if (cfg.yamlLinkEnabled) {
-      let link = "/post/" + post.wp_slug + ".html"
-      if (cfg instanceof CommonGithubConfig) {
-        const githubCfg = cfg as CommonGithubConfig
-        if (!StrUtil.isEmptyString(cfg.previewPostUrl)) {
-          link = githubCfg.previewPostUrl.replace("[postid]", post.wp_slug)
-          const created = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true)
-          const datearr = created.split(" ")[0]
-          const numarr = datearr.split("-")
-          this.logger.debug("created numarr=>", numarr)
-          const y = numarr[0]
-          const m = numarr[1]
-          const d = numarr[2]
-          link = link.replace(/\[yyyy]/g, y)
-          link = link.replace(/\[MM]/g, m)
-          link = link.replace(/\[mm]/g, m)
-          link = link.replace(/\[dd]/g, d)
+    // article
+    yamlFormatObj.yamlObj.article = true
 
-          if (yamlFormatObj.yamlObj.categories?.length > 0) {
-            link = link.replace(/\[cats]/, yamlFormatObj.yamlObj.categories.join("/"))
-          } else {
-            link = link.replace(/\/\[cats]/, "")
-          }
-        }
-      }
-      yamlFormatObj.yamlObj.permalink = link
-    }
+    // timeline
+    yamlFormatObj.yamlObj.timeline = false
 
-    // comments
-    yamlFormatObj.yamlObj.comments = true
-
-    // toc
-    yamlFormatObj.yamlObj.toc = true
+    // isOriginal
+    yamlFormatObj.yamlObj.isOriginal = true
 
     // formatter
-    let yaml = YamlUtil.obj2Yaml(yamlFormatObj.yamlObj)
-    this.logger.debug("yaml=>", yaml)
+    const yaml = YamlUtil.obj2Yaml(yamlFormatObj.yamlObj)
 
-    yamlFormatObj.formatter = yaml
+    yamlFormatObj.formatter = this.removeTZ(yaml)
     yamlFormatObj.mdContent = post.markdown
     yamlFormatObj.mdFullContent = YamlUtil.addYamlToMd(yamlFormatObj.formatter, yamlFormatObj.mdContent)
     yamlFormatObj.htmlContent = post.html
@@ -118,6 +95,14 @@ class Vuepress2YamlConverterAdaptor extends YamlConvertAdaptor {
     return yamlFormatObj
   }
 
+  /**
+   * 将文章转换为属性
+   *
+   * @param post - 要转换的文章对象
+   * @param yamlFormatObj - YAML 格式对象
+   * @param cfg - 博客配置（可选）
+   * @returns 转换后的文章对象
+   */
   public convertToAttr(post: Post, yamlFormatObj: YamlFormatObj, cfg?: BlogConfig): Post {
     this.logger.debug("开始转换YAML到Post", yamlFormatObj)
 
@@ -128,26 +113,39 @@ class Vuepress2YamlConverterAdaptor extends YamlConvertAdaptor {
 
     // 发布时间
     if (yamlFormatObj.yamlObj?.date) {
-      post.dateCreated = DateUtil.convertStringToDate(yamlFormatObj.yamlObj?.date)
-    }
-    if (yamlFormatObj.yamlObj?.updated) {
-      post.dateUpdated = DateUtil.convertStringToDate(yamlFormatObj.yamlObj?.updated)
+      post.dateCreated = yamlFormatObj.yamlObj?.date
     }
 
     // 摘要
-    post.shortDesc = yamlFormatObj.yamlObj?.excerpt
+    post.shortDesc = yamlFormatObj.yamlObj?.description
 
     // 标签
-    post.mt_keywords = yamlFormatObj.yamlObj?.tags?.join(",")
+    post.mt_keywords = yamlFormatObj.yamlObj?.tag?.join(",")
 
     // 分类
-    post.categories = yamlFormatObj.yamlObj?.categories
+    post.categories = yamlFormatObj.yamlObj?.category
 
     // 添加新的YAML
-    post.yaml = YamlUtil.obj2Yaml(yamlFormatObj.yamlObj)
+    const yaml = YamlUtil.obj2Yaml(yamlFormatObj.yamlObj)
+    post.yaml = this.removeTZ(yaml)
 
     this.logger.debug("转换完成，post =>", post)
     return post
+  }
+
+  // ================
+  // private methods
+  // ================
+  /**
+   * 移除YAML字符串中的时间戳信息（TZ）
+   *
+   * @param {string} yamlString - 要处理的YAML字符串
+   * @returns {string} - 移除了时间戳信息的YAML字符串
+   */
+  private removeTZ(yamlString: string): string {
+    return yamlString.replace(/---([\s\S]*?)---/g, function (match, captureGroup) {
+      return match.replace(/T/g, " ").replace(/\.\d{3}Z/g, "")
+    })
   }
 }
 

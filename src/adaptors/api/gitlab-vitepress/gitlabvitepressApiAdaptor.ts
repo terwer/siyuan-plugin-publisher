@@ -24,10 +24,10 @@
  */
 
 import { BlogConfig, PageTypeEnum, Post, YamlConvertAdaptor } from "zhi-blog-api"
-import { GitlabvitepressYamlConverterAdaptor } from "~/src/adaptors/api/gitlab-hexo/gitlabvitepressYamlConverterAdaptor.ts"
+import { GitlabvitepressYamlConverterAdaptor } from "~/src/adaptors/api/gitlab-vitepress/gitlabvitepressYamlConverterAdaptor.ts"
 import { CommonGitlabApiAdaptor } from "~/src/adaptors/api/base/gitlab/commonGitlabApiAdaptor.ts"
 import _ from "lodash"
-import {YamlUtil} from "zhi-common";
+import { YamlUtil } from "zhi-common"
 
 /**
  * Gitlabvitepress API 适配器

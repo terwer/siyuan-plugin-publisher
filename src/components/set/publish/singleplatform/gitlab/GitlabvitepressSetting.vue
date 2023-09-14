@@ -25,10 +25,10 @@
 
 <script setup lang="ts">
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import { GitlabhexoConfig } from "~/src/adaptors/api/gitlab-hexo/gitlabhexoConfig.ts"
-import { GitlabhexoPlaceHolder } from "~/src/adaptors/api/gitlab-hexo/gitlabhexoPlaceHolder.ts"
-import { useGitlabhexoApi } from "~/src/adaptors/api/gitlab-hexo/useGitlabhexoApi.ts"
 import { StrUtil } from "zhi-common"
+import { useGitlabvitepressApi } from "~/src/adaptors/api/gitlab-vitepress/useGitlabvitepressApi.ts"
+import { GitlabvitepressConfig } from "~/src/adaptors/api/gitlab-vitepress/gitlabvitepressConfig.ts"
+import { GitlabvitepressPlaceHolder } from "~/src/adaptors/api/gitlab-vitepress/gitlabvitepressPlaceHolder.ts"
 
 const props = defineProps({
   apiType: {
@@ -38,18 +38,18 @@ const props = defineProps({
 })
 
 const { t } = useVueI18n()
-const { cfg } = await useGitlabhexoApi(props.apiType)
-const hexoCfg = cfg as GitlabhexoConfig
-const hexoPlaceholder = new GitlabhexoPlaceHolder()
-hexoPlaceholder.homePlaceholder = t("setting.blog.gitlab.url.tip")
-hexoPlaceholder.usernamePlaceholder = t("setting.blog.type.gitlab.user.tip")
-hexoPlaceholder.passwordPlaceholder = t("setting.blog.type.gitlab.token.tip")
-hexoPlaceholder.apiUrlPlaceholder = t("setting.blog.gitlab.apiurl.tip")
-hexoPlaceholder.previewUrlPlaceholder = t("setting.blog.gitlab.previewUrl.tip")
-hexoCfg.placeholder = hexoPlaceholder
+const { cfg } = await useGitlabvitepressApi(props.apiType)
+const vitepressCfg = cfg as GitlabvitepressConfig
+const vitepressPlaceholder = new GitlabvitepressPlaceHolder()
+vitepressPlaceholder.homePlaceholder = t("setting.blog.gitlab.url.tip")
+vitepressPlaceholder.usernamePlaceholder = t("setting.blog.type.gitlab.user.tip")
+vitepressPlaceholder.passwordPlaceholder = t("setting.blog.type.gitlab.token.tip")
+vitepressPlaceholder.apiUrlPlaceholder = t("setting.blog.gitlab.apiurl.tip")
+vitepressPlaceholder.previewUrlPlaceholder = t("setting.blog.gitlab.previewUrl.tip")
+vitepressCfg.placeholder = vitepressPlaceholder
 
 // 处理事件的方法
-const onHomeChange = (value: string, cfg: GitlabhexoConfig) => {
+const onHomeChange = (value: string, cfg: GitlabvitepressConfig) => {
   if (StrUtil.isEmptyString(cfg.home)) {
     cfg.apiUrl = ""
   } else {
@@ -60,7 +60,7 @@ const onHomeChange = (value: string, cfg: GitlabhexoConfig) => {
 </script>
 
 <template>
-  <common-github-setting :api-type="props.apiType" :cfg="hexoCfg" @onHomeChange="onHomeChange">
+  <common-github-setting :api-type="props.apiType" :cfg="vitepressCfg" @onHomeChange="onHomeChange">
     <template #header="header"> </template>
     <template #main="main"> </template>
     <template #footer="footer"> </template>

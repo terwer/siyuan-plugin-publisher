@@ -25,10 +25,9 @@
 
 <script setup lang="ts">
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import { GitlabhexoConfig } from "~/src/adaptors/api/gitlab-hexo/gitlabhexoConfig.ts"
-import { GitlabhexoPlaceHolder } from "~/src/adaptors/api/gitlab-hexo/gitlabhexoPlaceHolder.ts"
-import { useGitlabhexoApi } from "~/src/adaptors/api/gitlab-hexo/useGitlabhexoApi.ts"
-import { StrUtil } from "zhi-common"
+import { useVitepressApi } from "~/src/adaptors/api/vitepress/useVitepressApi.ts"
+import { VitepressConfig } from "~/src/adaptors/api/vitepress/vitepressConfig.ts"
+import { VitepressPlaceHolder } from "~/src/adaptors/api/vitepress/vitepressPlaceHolder.ts"
 
 const props = defineProps({
   apiType: {
@@ -38,29 +37,19 @@ const props = defineProps({
 })
 
 const { t } = useVueI18n()
-const { cfg } = await useGitlabhexoApi(props.apiType)
-const hexoCfg = cfg as GitlabhexoConfig
-const hexoPlaceholder = new GitlabhexoPlaceHolder()
-hexoPlaceholder.homePlaceholder = t("setting.blog.gitlab.url.tip")
-hexoPlaceholder.usernamePlaceholder = t("setting.blog.type.gitlab.user.tip")
-hexoPlaceholder.passwordPlaceholder = t("setting.blog.type.gitlab.token.tip")
-hexoPlaceholder.apiUrlPlaceholder = t("setting.blog.gitlab.apiurl.tip")
-hexoPlaceholder.previewUrlPlaceholder = t("setting.blog.gitlab.previewUrl.tip")
-hexoCfg.placeholder = hexoPlaceholder
-
-// 处理事件的方法
-const onHomeChange = (value: string, cfg: GitlabhexoConfig) => {
-  if (StrUtil.isEmptyString(cfg.home)) {
-    cfg.apiUrl = ""
-  } else {
-    cfg.apiUrl = cfg.home
-    cfg.tokenSettingUrl = `${cfg.home}/-/profile/personal_access_tokens`
-  }
-}
+const { cfg } = await useVitepressApi(props.apiType)
+const vitepressCfg = cfg as VitepressConfig
+const vitepressPlaceholder = new VitepressPlaceHolder()
+vitepressPlaceholder.homePlaceholder = t("setting.blog.github.url.tip")
+vitepressPlaceholder.usernamePlaceholder = t("setting.blog.type.github.user.tip")
+vitepressPlaceholder.passwordPlaceholder = t("setting.blog.type.github.token.tip")
+vitepressPlaceholder.apiUrlPlaceholder = t("setting.blog.github.apiurl.tip")
+vitepressPlaceholder.previewUrlPlaceholder = t("setting.blog.previewUrl.tip")
+vitepressCfg.placeholder = vitepressPlaceholder
 </script>
 
 <template>
-  <common-github-setting :api-type="props.apiType" :cfg="hexoCfg" @onHomeChange="onHomeChange">
+  <common-github-setting :api-type="props.apiType" :cfg="vitepressCfg">
     <template #header="header"> </template>
     <template #main="main"> </template>
     <template #footer="footer"> </template>

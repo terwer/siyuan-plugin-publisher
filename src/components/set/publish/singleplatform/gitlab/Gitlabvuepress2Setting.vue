@@ -25,10 +25,10 @@
 
 <script setup lang="ts">
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import { GitlabhexoConfig } from "~/src/adaptors/api/gitlab-hexo/gitlabhexoConfig.ts"
-import { GitlabhexoPlaceHolder } from "~/src/adaptors/api/gitlab-hexo/gitlabhexoPlaceHolder.ts"
-import { useGitlabhexoApi } from "~/src/adaptors/api/gitlab-hexo/useGitlabhexoApi.ts"
 import { StrUtil } from "zhi-common"
+import { useGitlabvuepress2Api } from "~/src/adaptors/api/gitlab-vuepress2/useGitlabvuepress2Api.ts"
+import { Gitlabvuepress2Config } from "~/src/adaptors/api/gitlab-vuepress2/gitlabvuepress2Config.ts"
+import { GitlabvuepressPlaceHolder } from "~/src/adaptors/api/gitlab-vuepress/gitlabvuepressPlaceHolder.ts"
 
 const props = defineProps({
   apiType: {
@@ -38,18 +38,18 @@ const props = defineProps({
 })
 
 const { t } = useVueI18n()
-const { cfg } = await useGitlabhexoApi(props.apiType)
-const hexoCfg = cfg as GitlabhexoConfig
-const hexoPlaceholder = new GitlabhexoPlaceHolder()
-hexoPlaceholder.homePlaceholder = t("setting.blog.gitlab.url.tip")
-hexoPlaceholder.usernamePlaceholder = t("setting.blog.type.gitlab.user.tip")
-hexoPlaceholder.passwordPlaceholder = t("setting.blog.type.gitlab.token.tip")
-hexoPlaceholder.apiUrlPlaceholder = t("setting.blog.gitlab.apiurl.tip")
-hexoPlaceholder.previewUrlPlaceholder = t("setting.blog.gitlab.previewUrl.tip")
-hexoCfg.placeholder = hexoPlaceholder
+const { cfg } = await useGitlabvuepress2Api(props.apiType)
+const vuepress2Cfg = cfg as Gitlabvuepress2Config
+const vuepress2Placeholder = new GitlabvuepressPlaceHolder()
+vuepress2Placeholder.homePlaceholder = t("setting.blog.gitlab.url.tip")
+vuepress2Placeholder.usernamePlaceholder = t("setting.blog.type.gitlab.user.tip")
+vuepress2Placeholder.passwordPlaceholder = t("setting.blog.type.gitlab.token.tip")
+vuepress2Placeholder.apiUrlPlaceholder = t("setting.blog.gitlab.apiurl.tip")
+vuepress2Placeholder.previewUrlPlaceholder = t("setting.blog.gitlab.previewUrl.tip")
+vuepress2Cfg.placeholder = vuepress2Placeholder
 
 // 处理事件的方法
-const onHomeChange = (value: string, cfg: GitlabhexoConfig) => {
+const onHomeChange = (value: string, cfg: Gitlabvuepress2Config) => {
   if (StrUtil.isEmptyString(cfg.home)) {
     cfg.apiUrl = ""
   } else {
@@ -60,7 +60,7 @@ const onHomeChange = (value: string, cfg: GitlabhexoConfig) => {
 </script>
 
 <template>
-  <common-github-setting :api-type="props.apiType" :cfg="hexoCfg" @onHomeChange="onHomeChange">
+  <common-github-setting :api-type="props.apiType" :cfg="vuepress2Cfg" @onHomeChange="onHomeChange">
     <template #header="header"> </template>
     <template #main="main"> </template>
     <template #footer="footer"> </template>
