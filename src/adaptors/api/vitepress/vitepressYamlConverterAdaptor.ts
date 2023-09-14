@@ -26,13 +26,12 @@
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { BlogConfig, Post, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
 import { DateUtil, StrUtil, YamlUtil } from "zhi-common"
-import { CommonGithubConfig } from "~/src/adaptors/api/base/github/commonGithubConfig.ts"
 import { toRaw } from "vue"
 
 /**
  * Vitepress 平台的YAML解析器
  *
- * @see {https://vitepress.io/docs/front-matter front-tmatter}
+ * @see {https://vitepress.dev/guide/frontmatter front-tmatter}
  * @author terwer
  * @since 0.8.1
  */
@@ -45,65 +44,63 @@ class VitepressYamlConverterAdaptor extends YamlConvertAdaptor {
     // title
     yamlFormatObj.yamlObj.title = post.title
 
+    // titleTemplate
+    // yamlFormatObj.yamlObj.titleTemplate = post.title
+
+    // description
+    if (!StrUtil.isEmptyString(post.shortDesc)) {
+      yamlFormatObj.yamlObj.description = post.shortDesc
+    }
+
     // date
     yamlFormatObj.yamlObj.date = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true)
 
-    // updated
-    if (!post.dateUpdated) {
-      post.dateUpdated = new Date()
-    }
-    yamlFormatObj.yamlObj.updated = DateUtil.formatIsoToZh(post.dateUpdated.toISOString(), true)
-
-    // excerpt
-    if (!StrUtil.isEmptyString(post.shortDesc)) {
-      yamlFormatObj.yamlObj.excerpt = post.shortDesc
-    }
-
-    // tags
-    if (!StrUtil.isEmptyString(post.mt_keywords)) {
-      const tags = post.mt_keywords.split(",")
-      yamlFormatObj.yamlObj.tags = tags
-    }
+    // head
+    yamlFormatObj.yamlObj.head = [
+      [
+        "meta",
+        {
+          name: "description",
+          content: post?.shortDesc ?? "",
+        },
+        "meta",
+        {
+          name: "keywords",
+          content: post?.mt_keywords?.split(",").join(" "),
+        },
+      ],
+    ]
 
     // categories
     if (post.categories?.length > 0) {
       yamlFormatObj.yamlObj.categories = post.categories
     }
 
-    // permalink
-    if (cfg.yamlLinkEnabled) {
-      let link = "/post/" + post.wp_slug + ".html"
-      if (cfg instanceof CommonGithubConfig) {
-        const githubCfg = cfg as CommonGithubConfig
-        if (!StrUtil.isEmptyString(cfg.previewPostUrl)) {
-          link = githubCfg.previewPostUrl.replace("[postid]", post.wp_slug)
-          const created = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true)
-          const datearr = created.split(" ")[0]
-          const numarr = datearr.split("-")
-          this.logger.debug("created numarr=>", numarr)
-          const y = numarr[0]
-          const m = numarr[1]
-          const d = numarr[2]
-          link = link.replace(/\[yyyy]/g, y)
-          link = link.replace(/\[MM]/g, m)
-          link = link.replace(/\[mm]/g, m)
-          link = link.replace(/\[dd]/g, d)
+    // layout
+    // https://vitepress.dev/reference/frontmatter-config#layout
+    // yamlFormatObj.yamlObj.layout = "doc"
 
-          if (yamlFormatObj.yamlObj.categories?.length > 0) {
-            link = link.replace(/\[cats]/, yamlFormatObj.yamlObj.categories.join("/"))
-          } else {
-            link = link.replace(/\/\[cats]/, "")
-          }
-        }
-      }
-      yamlFormatObj.yamlObj.permalink = link
-    }
+    // // date
+    // yamlFormatObj.yamlObj.date = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true)
 
-    // comments
-    yamlFormatObj.yamlObj.comments = true
+    // outline
+    yamlFormatObj.yamlObj.outline = "deep"
 
-    // toc
-    yamlFormatObj.yamlObj.toc = true
+    // navbar
+    // yamlFormatObj.yamlObj.navbar = true
+
+    // sidebar
+    yamlFormatObj.yamlObj.sidebar = false
+
+    // prev && next
+    yamlFormatObj.yamlObj.prev = false
+    yamlFormatObj.yamlObj.next = false
+
+    // lastUpdated
+    // yamlFormatObj.yamlObj.lastUpdated= true
+
+    // editLink
+    // yamlFormatObj.yamlObj.editLink = true
 
     // formatter
     let yaml = YamlUtil.obj2Yaml(yamlFormatObj.yamlObj)
@@ -130,15 +127,23 @@ class VitepressYamlConverterAdaptor extends YamlConvertAdaptor {
     if (yamlFormatObj.yamlObj?.date) {
       post.dateCreated = DateUtil.convertStringToDate(yamlFormatObj.yamlObj?.date)
     }
-    if (yamlFormatObj.yamlObj?.updated) {
-      post.dateUpdated = DateUtil.convertStringToDate(yamlFormatObj.yamlObj?.updated)
-    }
 
     // 摘要
-    post.shortDesc = yamlFormatObj.yamlObj?.excerpt
+    if (yamlFormatObj.yamlObj?.description) {
+      post.shortDesc = yamlFormatObj.yamlObj.description
+    }
 
     // 标签
-    post.mt_keywords = yamlFormatObj.yamlObj?.tags?.join(",")
+    const head = yamlFormatObj.yamlObj?.head
+    if (head && head.length == 4) {
+      for (let i = 0; i < head.length; i++) {
+        const m = head[i]
+        if (m?.name === "keywords" && !StrUtil.isEmptyString(m.content)) {
+          post.mt_keywords = m.content?.split(" ")
+          break
+        }
+      }
+    }
 
     // 分类
     post.categories = yamlFormatObj.yamlObj?.categories

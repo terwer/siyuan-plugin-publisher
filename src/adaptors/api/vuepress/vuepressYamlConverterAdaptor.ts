@@ -52,11 +52,11 @@ class VuepressYamlConverterAdaptor extends YamlConvertAdaptor {
     yamlFormatObj.yamlObj.meta = [
       {
         name: "keywords",
-        content: post.mt_keywords,
+        content: post.mt_keywords.split(",").join(" "),
       },
       {
         name: "description",
-        content: post.shortDesc,
+        content: post.shortDesc ?? "",
       },
     ]
 
