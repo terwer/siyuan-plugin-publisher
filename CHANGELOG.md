@@ -1,5 +1,48 @@
 # Changelog
 
+## [1.14.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.13.0...v1.14.0) (2023-09-14)
+
+
+### Features
+
+* 全面支持Github和Gitlab各平台 ([683e655](https://github.com/terwer/siyuan-plugin-publisher/commit/683e655c1d9aeb826d5a25d3e94ad1af8ebcc8e4))
+* 全面支持Github和Gitlab各平台 ([bdbdc29](https://github.com/terwer/siyuan-plugin-publisher/commit/bdbdc2994154f3ea4631a994aae63b548a5917be))
+* 全面支持Github和Gitlab各平台 ([d1c3144](https://github.com/terwer/siyuan-plugin-publisher/commit/d1c31444a4a3a3a77d82e1e4dd7c2cdb5ab6d9df))
+* 全面支持Github和Gitlab各平台 ([b5e7413](https://github.com/terwer/siyuan-plugin-publisher/commit/b5e7413b7c03558f86f6429ef61bab7255760933))
+* 全面支持Github和Gitlab各平台-Hugo ([5042c13](https://github.com/terwer/siyuan-plugin-publisher/commit/5042c13f4112b4e16966acbbb3e005399a57377d))
+* 全面支持Github和Gitlab各平台-Hugo ([0396d77](https://github.com/terwer/siyuan-plugin-publisher/commit/0396d779a46d3f869091ce949f1e887a1b92650d))
+* 全面支持Github和Gitlab各平台-Jekyll ([9742bf5](https://github.com/terwer/siyuan-plugin-publisher/commit/9742bf5b99c6e4d3373d3fb659e2a91778b5cb8a))
+* 全面支持Github和Gitlab各平台-Jekyll ([1bb4cbe](https://github.com/terwer/siyuan-plugin-publisher/commit/1bb4cbe48196637e9b2438e196ef481c825170d0))
+* 全面支持Github和Gitlab各平台-Vitepress ([a9df74e](https://github.com/terwer/siyuan-plugin-publisher/commit/a9df74e7c950c5b5f70fcf9e47d890b3baea5c18))
+* 全面支持Github和Gitlab各平台-Vuepress ([4bf1cee](https://github.com/terwer/siyuan-plugin-publisher/commit/4bf1ceea5313df7033ef48866c65893b68b392b5))
+* 全面支持Github和Gitlab各平台-Vuepress ([b9d1829](https://github.com/terwer/siyuan-plugin-publisher/commit/b9d18294841cbf797a742e575ce1dc3253b8d611))
+* 全面支持Github和Gitlab各平台-Vuepress2 ([2c4d0ab](https://github.com/terwer/siyuan-plugin-publisher/commit/2c4d0abb4f41301945f262ff8290f3af80be646a))
+* 全面支持Github和Gitlab各平台-Vuepress2 ([92b54c6](https://github.com/terwer/siyuan-plugin-publisher/commit/92b54c67f67a64c8c89ee00be32b5374ae209dac))
+* 全面支持Github和Gitlab各平台-Vuepress2和Vitepress ([485f2ff](https://github.com/terwer/siyuan-plugin-publisher/commit/485f2ff42f1fcbfd119fc070523e0d04b14e2dfd))
+* 抽取网页授权平台图片上传为公共能力且仅支持PC客户端 ([2d0d137](https://github.com/terwer/siyuan-plugin-publisher/commit/2d0d137c07449dadcef2f761c4f45131de2b0f2c))
+* 掘金使用别名标签，新增 getTags 方法、slugTagEnabled 属性 ([f1b2b2d](https://github.com/terwer/siyuan-plugin-publisher/commit/f1b2b2dabb77e95f78634fd82b466c18744e5f6c))
+* 掘金平台分类与标签初始化 ([ce2ef7b](https://github.com/terwer/siyuan-plugin-publisher/commit/ce2ef7bd577a84af1d3eff1413ada56e2c4e88f7))
+* 掘金平台分类与标签初始化 ([e322697](https://github.com/terwer/siyuan-plugin-publisher/commit/e3226971cfdb1eec3fa8e5574c9c8ef5c9fef71f))
+* 掘金平台支持分类与标签 ([a3fa652](https://github.com/terwer/siyuan-plugin-publisher/commit/a3fa6527213b7fb86eef1424992367b9e72f5000))
+* 掘金平台支持分类与标签 ([39d7b00](https://github.com/terwer/siyuan-plugin-publisher/commit/39d7b001f9b3f6b23d4aa4a28a7973171cc653de))
+* 掘金支持专栏作为分类 ([546fec2](https://github.com/terwer/siyuan-plugin-publisher/commit/546fec287dbedaadf1aa5ab367d0ebd15c5e40c2))
+* 支持别名标签 ([975c234](https://github.com/terwer/siyuan-plugin-publisher/commit/975c2343f0574a8c825e104580f9e433933e386d))
+* 支持简书和掘金 ([3c3e49e](https://github.com/terwer/siyuan-plugin-publisher/commit/3c3e49ed713e88069370713a2be1931f1f4dfa79))
+* 支持简书平台上传图片 ([75768e1](https://github.com/terwer/siyuan-plugin-publisher/commit/75768e18b0e728d36cc4644cea3bbf4efca18a4b))
+* 支持简书文章版本 ([6295faa](https://github.com/terwer/siyuan-plugin-publisher/commit/6295faad452b0bab4fdaa3101d400aac647e029f))
+
+
+### Bug Fixes
+
+* 修复 cookie 设置问题 ([642e570](https://github.com/terwer/siyuan-plugin-publisher/commit/642e57040f9410af9162e0f44fcddbb727a2e22f))
+* 修复未初始化标签时初始化异常的问题 ([cea4056](https://github.com/terwer/siyuan-plugin-publisher/commit/cea40561e379ee6c69fdba73c18caf5cdc16921d))
+* 修复知识空间重复显示的问题 ([9671464](https://github.com/terwer/siyuan-plugin-publisher/commit/9671464d4dd4f576e68f80d8956b92d57798fdd1))
+
+
+### Miscellaneous
+
+* **deps-dev:** bump vue-tsc from 1.8.8 to 1.8.10 ([cb26813](https://github.com/terwer/siyuan-plugin-publisher/commit/cb26813dc9f97522c2eba9ec4843b5a2ec09378a))
+
 ## [1.13.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.12.0...v1.13.0) (2023-09-06)
 ### Features
 * 微信公众号支持 cookie 认证 ([7816ca5](https://github.com/terwer/siyuan-plugin-publisher/commit/7816ca516b3c2630b4a0a635aa9ddb2416439dc7))
