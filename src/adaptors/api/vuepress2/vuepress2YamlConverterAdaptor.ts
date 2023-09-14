@@ -25,8 +25,7 @@
 
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { BlogConfig, Post, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
-import { DateUtil, StrUtil, YamlUtil } from "zhi-common"
-import { CommonGithubConfig } from "~/src/adaptors/api/base/github/commonGithubConfig.ts"
+import { StrUtil, YamlUtil } from "zhi-common"
 import { toRaw } from "vue"
 
 /**
