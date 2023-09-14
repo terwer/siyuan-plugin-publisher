@@ -54,8 +54,8 @@ dependencies:
     specifier: ^1.4.4
     version: 1.4.4(typescript@5.2.2)
   uuid:
-    specifier: ^9.0.0
-    version: 9.0.0
+    specifier: ^9.0.1
+    version: 9.0.1
   vue:
     specifier: ^3.3.4
     version: 3.3.4
@@ -2486,7 +2486,7 @@ packages:
       p-timeout: 6.1.2
       quick-lru: 6.1.2
       read-pkg-up: 9.1.0
-      uuid: 9.0.0
+      uuid: 9.0.1
     dev: false
 
   /check-error@1.0.2:
@@ -6277,7 +6277,7 @@ packages:
       lodash-es: 4.17.21
       pinia: 2.1.6(typescript@5.2.2)(vue@3.3.4)
       siyuan: 0.7.9
-      uuid: 9.0.0
+      uuid: 9.0.1
       vue: 3.3.4
       vue-i18n: 9.3.0(vue@3.3.4)
       vue-router: 4.2.4(vue@3.3.4)
@@ -6997,8 +6997,8 @@ packages:
       which-typed-array: 1.1.11
     dev: true
 
-  /uuid@9.0.0:
-    resolution: {integrity: sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==}
+  /uuid@9.0.1:
+    resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
     hasBin: true
     dev: false
 
