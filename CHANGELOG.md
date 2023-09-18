@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.14.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.14.0...v1.14.1) (2023-09-18)
+### Bug Fixes
+* notion支持根页面搜索 ([ef88004](https://github.com/terwer/siyuan-plugin-publisher/commit/ef880045587f3ccf8459a7731ebac3d250c87cfa))
+* 修复非github平台发布错误的问题 ([2a42c3c](https://github.com/terwer/siyuan-plugin-publisher/commit/2a42c3c804b55917780fbc35af27805182759b41))
+* 修复默认导入未导入wordpress的问题 ([00c44b6](https://github.com/terwer/siyuan-plugin-publisher/commit/00c44b6dbb80aa46264ad62359b6da4e19eee0cb))
 ## [1.14.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.13.0...v1.14.0) (2023-09-14)
 ### Features
 * 全面支持github和gitlab各平台 ([b5e7413](https://github.com/terwer/siyuan-plugin-publisher/commit/b5e7413b7c03558f86f6429ef61bab7255760933))
@@ -18,7 +23,6 @@
 * 支持简书和掘金 ([3c3e49e](https://github.com/terwer/siyuan-plugin-publisher/commit/3c3e49ed713e88069370713a2be1931f1f4dfa79))
 * 支持简书平台上传图片 ([75768e1](https://github.com/terwer/siyuan-plugin-publisher/commit/75768e18b0e728d36cc4644cea3bbf4efca18a4b))
 * 支持简书文章版本 ([6295faa](https://github.com/terwer/siyuan-plugin-publisher/commit/6295faad452b0bab4fdaa3101d400aac647e029f))
-### Bug Fixes
 * **deps:** bump uuid from 9.0.0 to 9.0.1 ([9fab366](https://github.com/terwer/siyuan-plugin-publisher/commit/9fab366e87f4fd13c68afcd4b3cb9a862b2001a3))
 * 修复 cookie 设置问题 ([642e570](https://github.com/terwer/siyuan-plugin-publisher/commit/642e57040f9410af9162e0f44fcddbb727a2e22f))
 * 修复未初始化标签时初始化异常的问题 ([cea4056](https://github.com/terwer/siyuan-plugin-publisher/commit/cea40561e379ee6c69fdba73c18caf5cdc16921d))

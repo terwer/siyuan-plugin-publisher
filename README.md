@@ -8,6 +8,10 @@ Publish articles from siyuan-note to platforms such as Yuque, Notion, Cnblogs, W
 
 Support features such as fast publishing, image bed management, platform expansion, smart labels, etc.
 
+> Recent Bug Fix - Version `1.14.1`
+  - This updates have introduced a new feature: Notion now supports root page search. Additionally, we have fixed issues related to incorrect publishing on non-Github platforms and resolved the problem of default imports not importing WordPress.
+  - **If you have experienced issues with publishing in the past, this update should address your concerns. We recommend all users to upgrade.**
+
 > 🎉 I am pleased to announce the `1.14.0` release of Publish Tool.
 
   - In this update, we have added several new platforms, including JianShu, Juejin, as well as Hugo, Jekyll, Vuepress, Vuepress2, and Vitepress. The latter platforms are also compatible with both `Github` and `Gitlab`. 
