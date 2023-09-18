@@ -123,29 +123,33 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     const cfg = publishCfg?.cfg as any
     const post = _.cloneDeep(doc) as Post
 
-    // 处理文件规则
-    const created = DateUtil.formatIsoToZhDate(post.dateCreated.toISOString(), true)
-    const datearr = created.split(" ")[0]
-    const numarr = datearr.split("-")
-    const y = numarr[0]
-    const m = numarr[1]
-    const d = numarr[2]
-    this.logger.debug("created numarr=>", numarr)
-    let filename = cfg?.mdFilenameRule.replace(/\.md/g, "")
-    if (cfg.useMdFilename) {
-      // 使用真实文件名作为MD文件名
-      filename = filename.replace(/\[filename\]/g, post.title)
-    } else {
-      // 使用别名作为MD文件名
-      filename = filename.replace(/\[slug\]/g, post.wp_slug)
+    if (cfg?.mdFilenameRule) {
+      // 处理文件规则
+      const created = DateUtil.formatIsoToZhDate(post.dateCreated.toISOString(), true)
+      const datearr = created.split(" ")[0]
+      const numarr = datearr.split("-")
+      const y = numarr[0]
+      const m = numarr[1]
+      const d = numarr[2]
+      this.logger.debug("created numarr=>", numarr)
+
+      let filename = cfg.mdFilenameRule.replace(/\.md/g, "")
+      if (cfg.useMdFilename) {
+        // 使用真实文件名作为MD文件名
+        filename = filename.replace(/\[filename\]/g, post.title)
+      } else {
+        // 使用别名作为MD文件名
+        filename = filename.replace(/\[slug\]/g, post.wp_slug)
+      }
+      // 年月日
+      filename = filename
+        .replace(/\[yyyy\]/g, y)
+        .replace(/\[MM\]/g, m)
+        .replace(/\[mm\]/g, m)
+        .replace(/\[dd\]/g, d)
+      post.mdFilename = filename
     }
-    // 年月日
-    filename = filename
-      .replace(/\[yyyy\]/g, y)
-      .replace(/\[MM\]/g, m)
-      .replace(/\[mm\]/g, m)
-      .replace(/\[dd\]/g, d)
-    post.mdFilename = filename
+
     const { getReadOnlyPublishPreferenceSetting } = usePublishPreferenceSetting()
     const pref = getReadOnlyPublishPreferenceSetting()
     if (pref.value.fixTitle) {
