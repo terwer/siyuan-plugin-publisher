@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.14.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.14.0...v1.14.1) (2023-09-18)
+
+
+### Bug Fixes
+
+* notion支持根页面搜索 ([ef88004](https://github.com/terwer/siyuan-plugin-publisher/commit/ef880045587f3ccf8459a7731ebac3d250c87cfa))
+* 修复非Github平台发布错误的问题 ([2a42c3c](https://github.com/terwer/siyuan-plugin-publisher/commit/2a42c3c804b55917780fbc35af27805182759b41))
+* 修复默认导入未导入WordPress的问题 ([00c44b6](https://github.com/terwer/siyuan-plugin-publisher/commit/00c44b6dbb80aa46264ad62359b6da4e19eee0cb))
+
 ## [1.14.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.13.0...v1.14.0) (2023-09-14)
 ### Features
 * 全面支持github和gitlab各平台 ([b5e7413](https://github.com/terwer/siyuan-plugin-publisher/commit/b5e7413b7c03558f86f6429ef61bab7255760933))
