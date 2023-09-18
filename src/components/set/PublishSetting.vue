@@ -401,6 +401,7 @@ const handleImportPre = async () => {
   basicImport(pre.githubCfg)
   basicImport(pre.gitlabCfg)
   basicImport(pre.metaweblogCfg)
+  basicImport(pre.wordpressCfg)
   basicImport(pre.customCfg)
 
   // 转换格式并保存
@@ -585,67 +586,70 @@ onMounted(async () => {
                     </div>
                   </el-col>
                 </el-row>
-                <el-row>
-                  <el-col>
-                    <div class="import-pre-action">
-                      <el-button
+              </div>
+            </div>
+            <!-- 公共操作 -->
+            <div class="commmon-action">
+              <el-row>
+                <el-col>
+                  <div class="import-pre-action">
+                    <el-button
                         size="small"
                         type="primary"
                         :loading="formData.isImportLoading"
                         @click="handleImportPre"
-                        >导入预定义平台</el-button
-                      >
-                    </div>
-                    <div class="log-message-box">
-                      <el-input
+                    >导入预定义平台</el-button
+                    >
+                  </div>
+                  <div class="log-message-box">
+                    <el-input
                         v-if="formData.showLogMessage"
                         v-model="formData.logMessage"
                         type="textarea"
                         :rows="10"
                         placeholder="日志信息"
-                      ></el-input>
-                    </div>
+                    ></el-input>
+                  </div>
 
-                    <div class="right-setting-tips">
-                      <div class="el-alert el-alert--warning is-light" role="alert">
-                        <div class="el-alert__content">
-                          <div class="el-alert__title">
-                            <div>{{ t("setting.platform.right.tips0") }}</div>
-                            <div>{{ t("setting.platform.right.tips1") }}</div>
-                            <div>{{ t("setting.platform.right.tips2") }}</div>
-                            <div>{{ t("setting.platform.right.tips3") }}</div>
-                            <div>{{ t("setting.platform.right.tips4") }}</div>
-                          </div>
+                  <div class="right-setting-tips">
+                    <div class="el-alert el-alert--warning is-light" role="alert">
+                      <div class="el-alert__content">
+                        <div class="el-alert__title">
+                          <div>{{ t("setting.platform.right.tips0") }}</div>
+                          <div>{{ t("setting.platform.right.tips1") }}</div>
+                          <div>{{ t("setting.platform.right.tips2") }}</div>
+                          <div>{{ t("setting.platform.right.tips3") }}</div>
+                          <div>{{ t("setting.platform.right.tips4") }}</div>
                         </div>
                       </div>
-
-                      <h2>FAQ:</h2>
-                      <div class="setting-help">
-                        不会配置，或者配置遇到问题？<a
-                          href="https://blog.terwer.space/s/20230810132040-nn4q7vs"
-                          target="_blank"
-                          >请点击这里查看完整版平台配置指南</a
-                        >
-                      </div>
-
-                      <div class="tips-form">
-                        我想要的平台这里没有？<a
-                          href="https://terwergreen.feishu.cn/share/base/form/shrcnGRdThUiqnhBg15xgclMM0c"
-                          target="_blank"
-                        >
-                          点击这里提交发布工具平台适配跟踪表
-                        </a>
-                      </div>
-
-                      <div class="tips-form">
-                        我还有其他问题或者想私下沟通作者？<a href="mailto:youweics@163.com">
-                          直接发邮件到：youweics@163.com
-                        </a>
-                      </div>
                     </div>
-                  </el-col>
-                </el-row>
-              </div>
+
+                    <h2>FAQ:</h2>
+                    <div class="setting-help">
+                      不会配置，或者配置遇到问题？<a
+                        href="https://blog.terwer.space/s/20230810132040-nn4q7vs"
+                        target="_blank"
+                    >请点击这里查看完整版平台配置指南</a
+                    >
+                    </div>
+
+                    <div class="tips-form">
+                      我想要的平台这里没有？<a
+                        href="https://terwergreen.feishu.cn/share/base/form/shrcnGRdThUiqnhBg15xgclMM0c"
+                        target="_blank"
+                    >
+                      点击这里提交发布工具平台适配跟踪表
+                    </a>
+                    </div>
+
+                    <div class="tips-form">
+                      我还有其他问题或者想私下沟通作者？<a href="mailto:youweics@163.com">
+                      直接发邮件到：youweics@163.com
+                    </a>
+                    </div>
+                  </div>
+                </el-col>
+              </el-row>
             </div>
           </div>
         </el-col>
@@ -676,6 +680,10 @@ $icon_size = 32px
   margin-left 10px
   margin-top 10px
 
+.commmon-action
+  margin-top 10px
+  margin-left 0
+
 .publish-setting-left-menu
   text-align center
 
@@ -703,7 +711,7 @@ html[class="dark"]
 
   .import-pre-action
     text-align left
-    margin-left 20px
+    margin-left 10px
 
   .log-message-box
     margin 10px 20px
