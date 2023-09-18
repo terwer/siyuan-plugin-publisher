@@ -38,7 +38,6 @@ import { PageTypeEnum, PasswordType } from "zhi-blog-api"
 import Adaptors from "~/src/adaptors"
 import { Utils } from "~/src/utils/utils.ts"
 import { ElMessage } from "element-plus"
-import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 
 const logger = createAppLogger("commonblog-setting")
 // appInstance
@@ -47,7 +46,6 @@ const appInstance = new PublisherAppInstance()
 // uses
 const { t } = useVueI18n()
 const { getSetting, updateSetting } = useSettingStore()
-const { isStorageViaSiyuanApi } = useSiyuanApi()
 
 const props = defineProps({
   apiType: {
@@ -71,8 +69,11 @@ const handleHomeChange = (value: string | number): void => {
 
 // datas
 const isLoading = ref(false)
+const singleCateSelect = ref(null)
 const formData = reactive({
   cfg: {} as CommonBlogConfig,
+  ksKeyword: "",
+  isCateLoading: false,
   kwSpaces: [],
   settingTips: "",
 
@@ -119,7 +120,7 @@ const valiConf = async () => {
     const commonblogApiAdaptor = await Adaptors.getAdaptor(props.apiType, formData.cfg as any)
     logger.debug("commonblogApiAdaptor=>", commonblogApiAdaptor)
     const api = Utils.blogApi(appInstance, commonblogApiAdaptor)
-    const usersBlogs = await api.getUsersBlogs()
+    const usersBlogs = await api.getUsersBlogs(formData.ksKeyword)
     if (usersBlogs && usersBlogs.length > 0) {
       // 首次未保存验证的时候才去更新
       if (StrUtil.isEmptyString(formData.cfg?.blogid)) {
@@ -186,12 +187,12 @@ const saveConf = async (hideTip?: any) => {
 }
 
 // init methods
-const initKwSpaces = async () => {
+const initKwSpaces = async (keyword?: string) => {
   try {
     const commonblogApiAdaptor = await Adaptors.getAdaptor(props.apiType, formData.cfg as any)
     logger.debug("commonblogApiAdaptor=>", commonblogApiAdaptor)
     const api = Utils.blogApi(appInstance, commonblogApiAdaptor)
-    const usersBlogs = await api.getUsersBlogs()
+    const usersBlogs = await api.getUsersBlogs(keyword)
     if (usersBlogs && usersBlogs.length > 0) {
       usersBlogs.forEach((item) => {
         const kwItem = {
@@ -207,6 +208,27 @@ const initKwSpaces = async () => {
   } catch (e) {
     // ElMessage.error(t("main.opt.failure") + "=>" + e)
     logger.error(t("main.opt.failure"), e)
+  }
+}
+
+const handleCateSearch = async () => {
+  try {
+    formData.isCateLoading = true
+
+    logger.debug("reload categories for single category woth search")
+    formData.kwSpaces = []
+    formData.cfg.blogid = undefined
+    // 初始化知识空间
+    if (props.cfg?.knowledgeSpaceEnabled) {
+      await initKwSpaces(formData.ksKeyword)
+    }
+    // 展开下拉框
+    singleCateSelect.value.visible = true
+  } catch (e) {
+    logger.error("知识空间加载失败", e)
+  } finally {
+    formData.isCateLoading = false
+    formData.isInit = true
   }
 }
 
@@ -230,7 +252,7 @@ const initConf = async () => {
 
     // 初始化知识空间
     if (props.cfg?.knowledgeSpaceEnabled) {
-      await initKwSpaces()
+      await initKwSpaces(formData.ksKeyword)
     }
   } else {
     ElMessage.error("Read init config error, your config may not work")
@@ -336,12 +358,22 @@ onMounted(async () => {
       </el-radio-group>
     </el-form-item>
     <!-- 知识空间 -->
+    <el-form-item class="cate-input" label="搜索关键词" v-if="props.cfg?.cateSearchEnabled">
+      <el-input
+        v-model="formData.ksKeyword"
+        :placeholder="'请输入[' + props.cfg?.knowledgeSpaceTitle + ']搜索关键词，输入完成后请按Enter键或者移走光标'"
+        @change="handleCateSearch"
+      />
+    </el-form-item>
     <el-form-item :label="props.cfg?.knowledgeSpaceTitle" v-if="props.cfg?.knowledgeSpaceEnabled">
       <el-select
         v-model="formData.cfg.blogid"
         class="m-2"
         :placeholder="t('main.opt.select')"
         :no-data-text="t('main.data.empty')"
+        :loading="formData.isCateLoading"
+        loading-text="加载中..."
+        ref="singleCateSelect"
       >
         <el-option v-for="item in formData.kwSpaces" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>

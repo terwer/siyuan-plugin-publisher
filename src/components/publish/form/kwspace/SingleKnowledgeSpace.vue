@@ -25,7 +25,7 @@
 
 <script setup lang="ts">
 import { ISingleCategoryConfig } from "~/src/types/ICategoryConfig.ts"
-import { computed, onMounted, reactive, toRaw } from "vue"
+import { computed, onMounted, reactive, ref, toRaw } from "vue"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { CategoryInfo } from "zhi-blog-api"
@@ -45,6 +45,7 @@ const props = defineProps({
   },
 })
 
+const singleCateSelect = ref(null)
 const formData = reactive({
   knowledgeSpaceConfig: props.knowledgeSpaceConfig,
   cateSlugs: props.cateSlugs,
@@ -52,8 +53,10 @@ const formData = reactive({
     categorySelected: "",
     categoryList: [],
   },
+  ksKeyword: "",
+  isCateLoading: false,
 
-  isInit: false
+  isInit: false,
 })
 
 // emits
@@ -79,12 +82,30 @@ const handleCatNodeSingleCheck = (val: any) => {
   emit("emitSyncSingleCateSlugs", cateSlugs)
 }
 
-const initPage = async () => {
+const handleCateSearch = async () => {
+  try {
+    formData.isCateLoading = true
+
+    logger.debug("reload categories for single category woth search")
+    formData.cate.categoryList = []
+    formData.cate.categorySelected = undefined
+    await initPage(false)
+    // 展开下拉框
+    singleCateSelect.value.visible = true
+  } catch (e) {
+    logger.error("知识空间加载失败", e)
+  } finally {
+    formData.isCateLoading = false
+    formData.isInit = true
+  }
+}
+
+const initPage = async (showInitSelect: boolean) => {
   let categoryInfoList: CategoryInfo[] = []
   // 获取远程分类列表
   const cfg = formData.knowledgeSpaceConfig.cfg
   const api = await Adaptors.getAdaptor(formData.knowledgeSpaceConfig.apiType, cfg)
-  categoryInfoList = await api.getCategories()
+  categoryInfoList = await api.getCategories(formData.ksKeyword)
   logger.debug("getCategories for single category", categoryInfoList)
 
   if (categoryInfoList.length > 0) {
@@ -95,17 +116,21 @@ const initPage = async () => {
     }))
 
     // 当前选中
-    formData.cate.categorySelected = (formData.cateSlugs?.[0] ?? cfg.blogid ?? "") as string
-    logger.debug("读取已有知识空间 =>", { cateSlugs: toRaw(formData.cateSlugs) })
+    if (showInitSelect) {
+      formData.cate.categorySelected = (formData.cateSlugs?.[0] ?? cfg.blogid ?? "") as string
+      logger.debug("读取已有知识空间 =>", { cateSlugs: toRaw(formData.cateSlugs) })
+    }
   }
 }
 
 onMounted(async () => {
   try {
-    await initPage()
+    formData.isCateLoading = true
+    await initPage(true)
   } catch (e) {
     logger.error("知识空间加载失败", e)
   } finally {
+    formData.isCateLoading = false
     formData.isInit = true
   }
 })
@@ -114,6 +139,17 @@ onMounted(async () => {
 <template>
   <el-skeleton class="placeholder" v-if="!formData.isInit" :rows="1" animated />
   <div class="single-knowledge-space" v-else>
+    <el-form-item
+      class="cate-input"
+      label="搜索关键词"
+      v-if="!formData.knowledgeSpaceConfig.readonlyMode && formData.knowledgeSpaceConfig?.cfg?.cateSearchEnabled"
+    >
+      <el-input
+        v-model="formData.ksKeyword"
+        :placeholder="'请输入[' + cateTitle + ']搜索关键词，输入完成后请按Enter键或者移走光标'"
+        @change="handleCateSearch"
+      />
+    </el-form-item>
     <el-form-item :label="cateTitle">
       <el-select
         v-model="formData.cate.categorySelected"
@@ -123,6 +159,9 @@ onMounted(async () => {
         size="default"
         @change="handleCatNodeSingleCheck"
         :disabled="formData.knowledgeSpaceConfig.readonlyMode"
+        :loading="formData.isCateLoading"
+        loading-text="加载中..."
+        ref="singleCateSelect"
       >
         <el-option
           v-for="item in formData.cate.categoryList"
@@ -155,6 +194,10 @@ onMounted(async () => {
 .single-knowledge-space
   :deep(.el-form-item)
     margin-bottom 0
+
+.single-knowledge-space
+  :deep(.cate-input)
+    margin-bottom 10px
 
 .single-knowledge-space
   :deep(.el-tag.el-tag--info)
