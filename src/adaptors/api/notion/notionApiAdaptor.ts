@@ -39,10 +39,10 @@ class NotionApiAdaptor extends BaseBlogApi {
     this.logger = createAppLogger("notion-api-adaptor")
   }
 
-  public async getUsersBlogs(): Promise<UserBlog[]> {
+  public async getUsersBlogs(keyword?: string): Promise<UserBlog[]> {
     const result: UserBlog[] = []
 
-    const pages = await this.getPages()
+    const pages = await this.getPages(keyword)
     // 数据适配
     pages.forEach((item: any) => {
       const userblog: UserBlog = new UserBlog()
@@ -90,10 +90,10 @@ class NotionApiAdaptor extends BaseBlogApi {
     return commonPost
   }
 
-  public async getCategories(): Promise<CategoryInfo[]> {
+  public async getCategories(keyword?: string): Promise<CategoryInfo[]> {
     const cats = [] as CategoryInfo[]
 
-    const pages: any[] = await this.getPages()
+    const pages: any[] = await this.getPages(keyword)
     if (pages && pages.length > 0) {
       pages.forEach((item: any) => {
         const cat = new CategoryInfo()
@@ -122,9 +122,10 @@ class NotionApiAdaptor extends BaseBlogApi {
   // ================
   // private methods
   // ================
-  private async getPages(): Promise<any[]> {
+  private async getPages(keyword?: string): Promise<any[]> {
     const params = {
       page_size: 10,
+      query: keyword ?? "",
       filter: {
         value: "page",
         property: "object",
