@@ -49,16 +49,19 @@ class VuepressYamlConverterAdaptor extends YamlConvertAdaptor {
     yamlFormatObj.yamlObj.date = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true)
 
     // meta
-    yamlFormatObj.yamlObj.meta = [
-      {
+    yamlFormatObj.yamlObj.meta = []
+    if (!StrUtil.isEmptyString(post.mt_keywords)) {
+      yamlFormatObj.yamlObj.meta.push({
         name: "keywords",
-        content: post.mt_keywords.split(",").join(" "),
-      },
-      {
+        content: post.mt_keywords.split(",").join(" ") || "",
+      })
+    }
+    if (!StrUtil.isEmptyString(post.shortDesc)) {
+      yamlFormatObj.yamlObj.meta.push({
         name: "description",
-        content: post.shortDesc ?? "",
-      },
-    ]
+        content: post.shortDesc,
+      })
+    }
 
     // tags
     if (!StrUtil.isEmptyString(post.mt_keywords)) {

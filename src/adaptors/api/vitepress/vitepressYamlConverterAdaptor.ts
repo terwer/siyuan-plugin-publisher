@@ -56,20 +56,19 @@ class VitepressYamlConverterAdaptor extends YamlConvertAdaptor {
     yamlFormatObj.yamlObj.date = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true)
 
     // head
-    yamlFormatObj.yamlObj.head = [
-      [
-        "meta",
-        {
-          name: "description",
-          content: post?.shortDesc ?? "",
-        },
-        "meta",
-        {
-          name: "keywords",
-          content: post?.mt_keywords?.split(",").join(" "),
-        },
-      ],
-    ]
+    yamlFormatObj.yamlObj.head = []
+    if (!StrUtil.isEmptyString(post.mt_keywords)) {
+      yamlFormatObj.yamlObj.head.push({
+        name: "keywords",
+        content: post.mt_keywords.split(",").join(" "),
+      })
+    }
+    if (!StrUtil.isEmptyString(post.shortDesc)) {
+      yamlFormatObj.yamlObj.head.push({
+        name: "description",
+        content: post.shortDesc,
+      })
+    }
 
     // categories
     if (post.categories?.length > 0) {
