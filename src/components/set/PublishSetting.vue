@@ -593,21 +593,17 @@ onMounted(async () => {
               <el-row>
                 <el-col>
                   <div class="import-pre-action">
-                    <el-button
-                        size="small"
-                        type="primary"
-                        :loading="formData.isImportLoading"
-                        @click="handleImportPre"
-                    >导入预定义平台</el-button
+                    <el-button size="small" type="primary" :loading="formData.isImportLoading" @click="handleImportPre"
+                      >导入预定义平台</el-button
                     >
                   </div>
                   <div class="log-message-box">
                     <el-input
-                        v-if="formData.showLogMessage"
-                        v-model="formData.logMessage"
-                        type="textarea"
-                        :rows="10"
-                        placeholder="日志信息"
+                      v-if="formData.showLogMessage"
+                      v-model="formData.logMessage"
+                      type="textarea"
+                      :rows="10"
+                      placeholder="日志信息"
                     ></el-input>
                   </div>
 
@@ -626,26 +622,36 @@ onMounted(async () => {
 
                     <h2>FAQ:</h2>
                     <div class="setting-help">
-                      不会配置，或者配置遇到问题？<a
-                        href="https://blog.terwer.space/s/20230810132040-nn4q7vs"
-                        target="_blank"
-                    >请点击这里查看完整版平台配置指南</a
-                    >
+                      不会配置，或者配置遇到问题？ 请加QQ群
+                      <span style="font-weight: bold; color: red">
+                        <a
+                          href="https://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=1Q1-wOLkBaG-iD0MBnNhNL25tbLSCwZx&authKey=tBdJDGuWuXK%2B77hHlwwT6y8UAp9AGZTwQq6RzUa%2ByX81HCSHu4XVGqY0gbsBUcW0&noverify=0&group_code=895063267"
+                          target="_blank"
+                        >
+                          895063267
+                        </a>
+                      </span>
+                      讨论。
+                    </div>
+
+                    <div class="setting-help">
+                      需要详细的配置指导？请查看在线文档
+                      <a href="https://blog.terwer.space/s/20230810132040-nn4q7vs" target="_blank">平台配置指南</a>
                     </div>
 
                     <div class="tips-form">
                       我想要的平台这里没有？<a
                         href="https://terwergreen.feishu.cn/share/base/form/shrcnGRdThUiqnhBg15xgclMM0c"
                         target="_blank"
-                    >
-                      点击这里提交发布工具平台适配跟踪表
-                    </a>
+                      >
+                        点击这里提交发布工具平台适配跟踪表
+                      </a>
                     </div>
 
                     <div class="tips-form">
                       我还有其他问题或者想私下沟通作者？<a href="mailto:youweics@163.com">
-                      直接发邮件到：youweics@163.com
-                    </a>
+                        直接发邮件到：youweics@163.com
+                      </a>
                     </div>
                   </div>
                 </el-col>
