@@ -29,8 +29,6 @@ import { reactive } from "vue"
 import { useRoute } from "vue-router"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { getSubPlatformTypeByKey, SubPlatformType } from "~/src/platforms/dynamicConfig.ts"
-import VuepressSetting from "~/src/components/set/publish/singleplatform/github/VuepressSetting.vue"
-import GitlabvuepressSetting from "~/src/components/set/publish/singleplatform/gitlab/GitlabvuepressSetting.vue"
 
 // uses
 const { t } = useVueI18n()
@@ -46,6 +44,7 @@ const subtype = getSubPlatformTypeByKey(apiType)
   <back-page :title="t('setting.entry.title') + apiType">
     <yuque-setting v-if="subtype === SubPlatformType.Common_Yuque" :api-type="apiType" />
     <notion-setting v-else-if="subtype === SubPlatformType.Common_Notion" :api-type="apiType" />
+    <halo-setting v-else-if="subtype === SubPlatformType.Common_Halo" :api-type="apiType" />
     <hexo-setting v-else-if="subtype === SubPlatformType.Github_Hexo" :api-type="apiType" />
     <hugo-setting v-else-if="subtype === SubPlatformType.Github_Hugo" :api-type="apiType" />
     <jekyll-setting v-else-if="subtype === SubPlatformType.Github_Jekyll" :api-type="apiType" />

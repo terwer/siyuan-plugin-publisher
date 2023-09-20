@@ -43,7 +43,7 @@ class HaloConfig extends CommonBlogConfig {
     this.home = "[your-halo-home]"
     this.apiUrl = "[your-halo-api-url]"
     this.previewUrl = "/?p=[postid]"
-    this.pageType = PageTypeEnum.Html
+    this.pageType = PageTypeEnum.Markdown
     this.usernameEnabled = true
     this.showTokenTip = false
     this.allowPreviewUrlChange = true
