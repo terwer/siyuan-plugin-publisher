@@ -23,36 +23,33 @@
  * questions.
  */
 
-import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
-import { CategoryTypeEnum, PageTypeEnum } from "zhi-blog-api"
+import { DateUtil } from "zhi-common"
 
 /**
- * Halo 配置
+ * Halo 平台的一些元数据
+ *
+ * @author terwer
+ * @version 1.15.0
+ * @since 1.15.0
  */
-class HaloConfig extends CommonBlogConfig {
-  /**
-   * Halo 配置项
-   *
-   * @param username 用户名
-   * @param password 密码
-   * @param middlewareUrl 代理地址
-   */
-  constructor(username: string, password: string, middlewareUrl?: string) {
-    super("", "", username, password, middlewareUrl)
+class HaloPostMeta {
+  public slug: string
+  public name: string
+  public year: string
+  public month: string
+  public day: string
 
-    this.home = "[your-halo-home]"
-    this.apiUrl = "[your-halo-api-url]"
-    this.previewUrl = "/archives/{slug}"
-    this.pageType = PageTypeEnum.Html
-    this.usernameEnabled = true
-    this.showTokenTip = false
-    this.allowPreviewUrlChange = true
-    this.tagEnabled = true
-    this.cateEnabled = true
-    this.categoryType = CategoryTypeEnum.CategoryType_Multi
-    this.allowCateChange = true
-    this.knowledgeSpaceEnabled = false
+  constructor(slug: string, name: string, dateCreated: Date) {
+    this.slug = slug
+    this.name = name
+
+    const created = DateUtil.formatIsoToZhDate(dateCreated.toISOString(), true)
+    const datearr = created.split(" ")[0]
+    const numarr = datearr.split("-")
+    this.year = numarr[0]
+    this.month = numarr[1]
+    this.day = numarr[2]
   }
 }
 
-export { HaloConfig }
+export { HaloPostMeta }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2023, Terwer . All rights reserved.
+ * Copyright (c) 2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -23,27 +23,37 @@
  * questions.
  */
 
-import shortHash from "shorthash2"
-import { v4 as uuidv4 } from "uuid"
+import * as yaml from "js-yaml"
+import * as matter from "gray-matter"
 
 /**
- * 唯一ID
+ * Halo 平台工具类
+ *
+ * @author terwer
+ * @version 1.15.0
+ * @since 1.15.0
  */
-const newID = (): string => {
-  const newstr = new Date().toISOString()
-  return shortHash(newstr).toLowerCase()
+class HaloUtils {
+  private static options = {
+    engines: {
+      yaml: {
+        parse: (input: string) => yaml.load(input) as object,
+        stringify: (data: object) => {
+          return yaml.dump(data, {
+            styles: { "!!null": "empty" },
+          })
+        },
+      },
+    },
+  }
+
+  public static readMatter(content: string) {
+    return matter(content, this.options)
+  }
+
+  public static mergeMatter(content: string, data: object) {
+    return matter.stringify(content, data, this.options)
+  }
 }
 
-/**
- * ID生成统一入口
- */
-const newUuid = () => {
-  return uuidv4()
-}
-
-const idUtil = {
-  newUuid,
-  newID,
-}
-
-export default idUtil
+export default HaloUtils

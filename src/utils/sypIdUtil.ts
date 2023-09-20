@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -23,36 +23,40 @@
  * questions.
  */
 
-import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
-import { CategoryTypeEnum, PageTypeEnum } from "zhi-blog-api"
+import shortHash from "shorthash2"
+import { v4 as uuidv4 } from "uuid"
 
 /**
- * Halo 配置
+ * 唯一ID
  */
-class HaloConfig extends CommonBlogConfig {
-  /**
-   * Halo 配置项
-   *
-   * @param username 用户名
-   * @param password 密码
-   * @param middlewareUrl 代理地址
-   */
-  constructor(username: string, password: string, middlewareUrl?: string) {
-    super("", "", username, password, middlewareUrl)
-
-    this.home = "[your-halo-home]"
-    this.apiUrl = "[your-halo-api-url]"
-    this.previewUrl = "/archives/{slug}"
-    this.pageType = PageTypeEnum.Html
-    this.usernameEnabled = true
-    this.showTokenTip = false
-    this.allowPreviewUrlChange = true
-    this.tagEnabled = true
-    this.cateEnabled = true
-    this.categoryType = CategoryTypeEnum.CategoryType_Multi
-    this.allowCateChange = true
-    this.knowledgeSpaceEnabled = false
-  }
+const newID = (): string => {
+  const newstr = new Date().toISOString()
+  return shortHash(newstr).toLowerCase()
 }
 
-export { HaloConfig }
+/**
+ * ID生成统一入口
+ */
+const newUuid = () => {
+  return uuidv4()
+}
+
+/**
+ * 生成随机ID
+ */
+const randomUuid = (): string => {
+  const uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+    const r = (Math.random() * 16) | 0,
+      v = c === "x" ? r : (r & 0x3) | 0x8
+    return v.toString(16)
+  })
+  return uuid
+}
+
+const sypIdUtil = {
+  newUuid,
+  newID,
+  randomUuid,
+}
+
+export default sypIdUtil

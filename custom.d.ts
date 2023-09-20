@@ -24,3 +24,4 @@
  */
 
 declare module "zhi-notion-markdown"
+declare module "uuid"

@@ -76,7 +76,7 @@ const useHaloApi = async (key: string, newCfg?: HaloConfig) => {
 
   cfg.usernameEnabled = true
   // 标签
-  cfg.tagEnabled = false
+  cfg.tagEnabled = true
   // Halo 使用多选分类
   cfg.cateEnabled = true
   cfg.categoryType = CategoryTypeEnum.CategoryType_Multi

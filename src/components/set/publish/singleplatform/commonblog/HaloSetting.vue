@@ -42,11 +42,11 @@ const { t } = useVueI18n()
 const { cfg } = await useHaloApi(props.apiType)
 const haloCfg = cfg as HaloConfig
 const haloPlaceholder = new HaloPlaceholder()
-haloPlaceholder.homePlaceholder = t("setting.yuque.home.tip")
-haloPlaceholder.usernamePlaceholder = t("setting.yuque.username.tip")
-haloPlaceholder.passwordPlaceholder = t("setting.yuque.password.tip")
-haloPlaceholder.apiUrlPlaceholder = t("setting.yuque.apiurl.tip")
-haloPlaceholder.previewUrlPlaceholder = t("setting.yuque.previewUrl.tip")
+haloPlaceholder.homePlaceholder = t("setting.halo.home.tip")
+haloPlaceholder.usernamePlaceholder = t("setting.halo.username.tip")
+haloPlaceholder.passwordPlaceholder = t("setting.halo.password.tip")
+haloPlaceholder.apiUrlPlaceholder = t("setting.halo.apiUrl.tip")
+haloPlaceholder.previewUrlPlaceholder = t("setting.halo.previewUrl.tip")
 haloCfg.placeholder = haloPlaceholder
 
 // 处理事件的方法

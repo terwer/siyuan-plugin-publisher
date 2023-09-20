@@ -23,7 +23,7 @@
  * questions.
  */
 
-import idUtil from "~/src/utils/idUtil.ts"
+import sypIdUtil from "~/src/utils/sypIdUtil.ts"
 import { StrUtil } from "zhi-common"
 
 export class DynamicConfig {
@@ -370,7 +370,7 @@ export function getSubPlatformTypeByKey(key: string): SubPlatformType {
  */
 export function getNewPlatformKey(ptype: PlatformType, subtype: SubPlatformType): string {
   let ret: any
-  const newId = idUtil.newID()
+  const newId = sypIdUtil.newID()
   ret = ptype.toLowerCase()
 
   if (!StrUtil.isEmptyString(subtype) && SubPlatformType.NONE !== subtype) {

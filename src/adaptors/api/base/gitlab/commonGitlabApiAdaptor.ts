@@ -33,7 +33,7 @@ import { StrUtil, YamlUtil } from "zhi-common"
 import { toRaw } from "vue"
 import { Base64 } from "js-base64"
 import { isDev } from "~/src/utils/constants.ts"
-import IdUtil from "~/src/utils/idUtil.ts"
+import sypIdUtil from "~/src/utils/sypIdUtil.ts";
 
 /**
  * Gitlab API 适配器
@@ -90,7 +90,7 @@ class CommonGitlabApiAdaptor extends BaseBlogApi {
 
     // 路径处理
     const savePath = post.cate_slugs?.[0] ?? cfg.blogid
-    const filename = post.mdFilename ?? "auto-" + IdUtil.newID()
+    const filename = post.mdFilename ?? "auto-" + sypIdUtil.newID()
     const docPath = `${savePath}/${filename}.md`
     this.logger.info("将要最终发送到以下目录 =>", docPath)
 
