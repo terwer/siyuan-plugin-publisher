@@ -26,8 +26,8 @@
 import { CommonBlogPlaceholder } from "~/src/adaptors/api/base/commonBlogPlaceholder.ts"
 
 /**
- * Yuque 配置提示
+ * Halo 配置提示
  */
-class YuquePlaceHolder extends CommonBlogPlaceholder {}
+class HaloPlaceholder extends CommonBlogPlaceholder {}
 
-export { YuquePlaceHolder }
+export { HaloPlaceholder }

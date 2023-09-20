@@ -23,8 +23,19 @@
  * questions.
  */
 
-import { HexoPlaceHolder } from "~/src/adaptors/api/hexo/hexoPlaceHolder.ts"
+import { HaloConfig } from "~/src/adaptors/api/halo/HaloConfig.ts"
+import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
+import { createAppLogger } from "~/src/utils/appLogger.ts"
 
-class GitlabhexoPlaceHolder extends HexoPlaceHolder {}
+/**
+ * Halo API 适配器
+ * @see [Halo API](https://github.com/halo-sigs/vscode-extension-halo/blob/main/src/service/index.ts)
+ */
+class HaloApiAdaptor extends BaseBlogApi {
+  constructor(appInstance: any, cfg: HaloConfig) {
+    super(appInstance, cfg)
+    this.logger = createAppLogger("halo-api-adaptor")
+  }
+}
 
-export { GitlabhexoPlaceHolder }
+export { HaloApiAdaptor }

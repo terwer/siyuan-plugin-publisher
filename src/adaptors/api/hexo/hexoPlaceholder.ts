@@ -25,6 +25,6 @@
 
 import { CommonGithubPlaceholder } from "~/src/adaptors/api/base/github/commonGithubPlaceholder.ts"
 
-class VuepressPlaceHolder extends CommonGithubPlaceholder {}
+class HexoPlaceholder extends CommonGithubPlaceholder {}
 
-export { VuepressPlaceHolder }
+export { HexoPlaceholder }

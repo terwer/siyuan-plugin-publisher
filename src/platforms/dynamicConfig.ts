@@ -170,6 +170,7 @@ export enum SubPlatformType {
   // Common
   Common_Yuque = "Yuque",
   Common_Notion = "Notion",
+  Common_Halo = "Halo",
 
   // Github 子平台
   Github_Hexo = "Hexo",
@@ -232,6 +233,7 @@ export function getSubtypeList(ptype: PlatformType): SubPlatformType[] {
     case PlatformType.Common:
       subtypeList.push(SubPlatformType.Common_Yuque)
       subtypeList.push(SubPlatformType.Common_Notion)
+      subtypeList.push(SubPlatformType.Common_Halo)
       break
     case PlatformType.Github:
       subtypeList.push(SubPlatformType.Github_Hexo)

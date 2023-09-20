@@ -23,8 +23,8 @@
  * questions.
  */
 
-import { Vuepress2PlaceHolder } from "~/src/adaptors/api/vuepress2/vuepress2PlaceHolder.ts"
+import { HexoPlaceholder } from "~/src/adaptors/api/hexo/hexoPlaceholder.ts"
 
-class Gitlabvuepress2PlaceHolder extends Vuepress2PlaceHolder {}
+class GitlabhexoPlaceholder extends HexoPlaceholder {}
 
-export { Gitlabvuepress2PlaceHolder }
+export { GitlabhexoPlaceholder }

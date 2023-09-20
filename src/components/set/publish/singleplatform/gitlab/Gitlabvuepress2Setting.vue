@@ -28,7 +28,7 @@ import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { StrUtil } from "zhi-common"
 import { useGitlabvuepress2Api } from "~/src/adaptors/api/gitlab-vuepress2/useGitlabvuepress2Api.ts"
 import { Gitlabvuepress2Config } from "~/src/adaptors/api/gitlab-vuepress2/gitlabvuepress2Config.ts"
-import { GitlabvuepressPlaceHolder } from "~/src/adaptors/api/gitlab-vuepress/gitlabvuepressPlaceHolder.ts"
+import { GitlabvuepressPlaceholder } from "~/src/adaptors/api/gitlab-vuepress/gitlabvuepressPlaceholder.ts"
 
 const props = defineProps({
   apiType: {
@@ -40,7 +40,7 @@ const props = defineProps({
 const { t } = useVueI18n()
 const { cfg } = await useGitlabvuepress2Api(props.apiType)
 const vuepress2Cfg = cfg as Gitlabvuepress2Config
-const vuepress2Placeholder = new GitlabvuepressPlaceHolder()
+const vuepress2Placeholder = new GitlabvuepressPlaceholder()
 vuepress2Placeholder.homePlaceholder = t("setting.blog.gitlab.url.tip")
 vuepress2Placeholder.usernamePlaceholder = t("setting.blog.type.gitlab.user.tip")
 vuepress2Placeholder.passwordPlaceholder = t("setting.blog.type.gitlab.token.tip")

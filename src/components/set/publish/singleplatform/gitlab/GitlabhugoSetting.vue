@@ -27,7 +27,7 @@
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useGitlabhugoApi } from "~/src/adaptors/api/gitlab-hugo/useGitlabhugoApi.ts"
 import { GitlabhugoConfig } from "~/src/adaptors/api/gitlab-hugo/gitlabhugoConfig.ts"
-import { GitlabhugoPlaceHolder } from "~/src/adaptors/api/gitlab-hugo/gitlabhugoPlaceHolder.ts"
+import { GitlabhugoPlaceholder } from "~/src/adaptors/api/gitlab-hugo/gitlabhugoPlaceholder.ts"
 import { StrUtil } from "zhi-common"
 
 const props = defineProps({
@@ -40,7 +40,7 @@ const props = defineProps({
 const { t } = useVueI18n()
 const { cfg } = await useGitlabhugoApi(props.apiType)
 const hugoCfg = cfg as GitlabhugoConfig
-const hugoPlaceholder = new GitlabhugoPlaceHolder()
+const hugoPlaceholder = new GitlabhugoPlaceholder()
 hugoPlaceholder.homePlaceholder = t("setting.blog.gitlab.url.tip")
 hugoPlaceholder.usernamePlaceholder = t("setting.blog.type.gitlab.user.tip")
 hugoPlaceholder.passwordPlaceholder = t("setting.blog.type.gitlab.token.tip")

@@ -23,8 +23,8 @@
  * questions.
  */
 
-import { VitepressPlaceHolder } from "~/src/adaptors/api/vitepress/vitepressPlaceHolder.ts"
+import { CommonGithubPlaceholder } from "~/src/adaptors/api/base/github/commonGithubPlaceholder.ts"
 
-class GitlabvitepressPlaceHolder extends VitepressPlaceHolder {}
+class Vuepress2Placeholder extends CommonGithubPlaceholder {}
 
-export { GitlabvitepressPlaceHolder }
+export { Vuepress2Placeholder }

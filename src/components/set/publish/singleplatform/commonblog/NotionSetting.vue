@@ -28,7 +28,7 @@ import CommonBlogSetting from "~/src/components/set/publish/singleplatform/base/
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useNotionApi } from "~/src/adaptors/api/notion/useNotionApi.ts"
 import { NotionConfig } from "~/src/adaptors/api/notion/notionConfig.ts"
-import { NotionPlaceHolder } from "~/src/adaptors/api/notion/notionPlaceHolder.ts"
+import { NotionPlaceholder } from "~/src/adaptors/api/notion/notionPlaceholder.ts"
 
 const props = defineProps({
   apiType: {
@@ -40,7 +40,7 @@ const props = defineProps({
 const { t } = useVueI18n()
 const { cfg } = await useNotionApi(props.apiType)
 const notionCfg = cfg as NotionConfig
-const notionPlaceholder = new NotionPlaceHolder()
+const notionPlaceholder = new NotionPlaceholder()
 notionPlaceholder.homePlaceholder = t("setting.notion.home.tip")
 notionPlaceholder.passwordPlaceholder = t("setting.notion.password.tip")
 notionPlaceholder.apiUrlPlaceholder = t("setting.notion.apiurl.tip")

@@ -23,8 +23,8 @@
  * questions.
  */
 
-import { HugoPlaceHolder } from "~/src/adaptors/api/hugo/hugoPlaceHolder.ts"
+import { CommonGithubPlaceholder } from "~/src/adaptors/api/base/github/commonGithubPlaceholder.ts"
 
-class GitlabhugoPlaceHolder extends HugoPlaceHolder {}
+class HugoPlaceholder extends CommonGithubPlaceholder {}
 
-export { GitlabhugoPlaceHolder }
+export { HugoPlaceholder }

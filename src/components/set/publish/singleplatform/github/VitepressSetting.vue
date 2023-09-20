@@ -27,7 +27,7 @@
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useVitepressApi } from "~/src/adaptors/api/vitepress/useVitepressApi.ts"
 import { VitepressConfig } from "~/src/adaptors/api/vitepress/vitepressConfig.ts"
-import { VitepressPlaceHolder } from "~/src/adaptors/api/vitepress/vitepressPlaceHolder.ts"
+import { VitepressPlaceholder } from "~/src/adaptors/api/vitepress/vitepressPlaceholder.ts"
 
 const props = defineProps({
   apiType: {
@@ -39,7 +39,7 @@ const props = defineProps({
 const { t } = useVueI18n()
 const { cfg } = await useVitepressApi(props.apiType)
 const vitepressCfg = cfg as VitepressConfig
-const vitepressPlaceholder = new VitepressPlaceHolder()
+const vitepressPlaceholder = new VitepressPlaceholder()
 vitepressPlaceholder.homePlaceholder = t("setting.blog.github.url.tip")
 vitepressPlaceholder.usernamePlaceholder = t("setting.blog.type.github.user.tip")
 vitepressPlaceholder.passwordPlaceholder = t("setting.blog.type.github.token.tip")

@@ -27,7 +27,7 @@
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useJekyllApi } from "~/src/adaptors/api/jekyll/useJekyllApi.ts"
 import { JekyllConfig } from "~/src/adaptors/api/jekyll/jekyllConfig.ts"
-import { JekyllPlaceHolder } from "~/src/adaptors/api/jekyll/jekyllPlaceHolder.ts"
+import { JekyllPlaceholder } from "~/src/adaptors/api/jekyll/jekyllPlaceholder.ts"
 
 const props = defineProps({
   apiType: {
@@ -39,7 +39,7 @@ const props = defineProps({
 const { t } = useVueI18n()
 const { cfg } = await useJekyllApi(props.apiType)
 const jekyllCfg = cfg as JekyllConfig
-const jekyllPlaceholder = new JekyllPlaceHolder()
+const jekyllPlaceholder = new JekyllPlaceholder()
 jekyllPlaceholder.homePlaceholder = t("setting.blog.github.url.tip")
 jekyllPlaceholder.usernamePlaceholder = t("setting.blog.type.github.user.tip")
 jekyllPlaceholder.passwordPlaceholder = t("setting.blog.type.github.token.tip")

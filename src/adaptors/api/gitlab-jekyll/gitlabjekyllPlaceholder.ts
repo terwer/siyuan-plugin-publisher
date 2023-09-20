@@ -23,11 +23,8 @@
  * questions.
  */
 
-import { CommonBlogPlaceholder } from "~/src/adaptors/api/base/commonBlogPlaceholder.ts"
+import { JekyllPlaceholder } from "~/src/adaptors/api/jekyll/jekyllPlaceholder.ts"
 
-/**
- * Notion 配置提示
- */
-class NotionPlaceHolder extends CommonBlogPlaceholder {}
+class GitlabjekyllPlaceholder extends JekyllPlaceholder {}
 
-export { NotionPlaceHolder }
+export { GitlabjekyllPlaceholder }

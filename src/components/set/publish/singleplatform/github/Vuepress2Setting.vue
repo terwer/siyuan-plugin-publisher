@@ -27,7 +27,7 @@
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useVuepress2Api } from "~/src/adaptors/api/vuepress2/useVuepress2Api.ts"
 import { Vuepress2Config } from "~/src/adaptors/api/vuepress2/vuepress2Config.ts"
-import { Vuepress2PlaceHolder } from "~/src/adaptors/api/vuepress2/vuepress2PlaceHolder.ts"
+import { Vuepress2Placeholder } from "~/src/adaptors/api/vuepress2/vuepress2Placeholder.ts"
 
 const props = defineProps({
   apiType: {
@@ -39,7 +39,7 @@ const props = defineProps({
 const { t } = useVueI18n()
 const { cfg } = await useVuepress2Api(props.apiType)
 const vuepress2Cfg = cfg as Vuepress2Config
-const vuepress2Placeholder = new Vuepress2PlaceHolder()
+const vuepress2Placeholder = new Vuepress2Placeholder()
 vuepress2Placeholder.homePlaceholder = t("setting.blog.github.url.tip")
 vuepress2Placeholder.usernamePlaceholder = t("setting.blog.type.github.user.tip")
 vuepress2Placeholder.passwordPlaceholder = t("setting.blog.type.github.token.tip")
