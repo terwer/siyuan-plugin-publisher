@@ -8,14 +8,12 @@ Publish articles from siyuan-note to platforms such as Yuque, Notion, Cnblogs, W
 
 Support features such as fast publishing, image bed management, platform expansion, smart labels, etc.
 
-> Recent Bug Fix - Version `1.14.1`
-  - This updates have introduced a new feature: Notion now supports root page search. Additionally, we have fixed issues related to incorrect publishing on non-Github platforms and resolved the problem of default imports not importing WordPress.
-  - **If you have experienced issues with publishing in the past, this update should address your concerns. We recommend all users to upgrade.**
+> Latest New Features: 🎉 Release of Publish Tool New Version `1.15.0`
 
-> 🎉 I am pleased to announce the `1.14.0` release of Publish Tool.
+  - This update introduces the Halo platform. After upgrading to `1.15.0`, you can publish to the Halo2 site.
+  - It also fixes issues related to YAML parsing in certain scenarios, and errors when tags are empty on some platforms.
+  - Oh, in version `1.14.0` and beyond, the author quietly developed an import feature. You can use the `Settings` -> `Publish Settings` -> `Import Predefined Platforms` feature to quickly import builtin platforms 😄
 
-  - In this update, we have added several new platforms, including JianShu, Juejin, as well as Hugo, Jekyll, Vuepress, Vuepress2, and Vitepress. The latter platforms are also compatible with both `Github` and `Gitlab`. 
-  - Oh, and in this version, the author secretly developed an import feature. You can quickly import predefined platforms using the `Settings` -> `Publish Settings` -> `Import Predefined Platforms` function 😄
 
 > Platform Limitations:
   - **WeChat Official Accounts**: Publishing Tool now supports posting articles to the WeChat Official Accounts draft box in version `1.13.0` and beyond. However, due to limitations on the WeChat platform in Electron, normal login operations are not possible. Therefore, you will need to visit `https://mp.weixin.qq.com/` yourself, complete the login, copy the cookie, and then paste it into the configuration options.
@@ -35,6 +33,7 @@ Names not listed in order
 
 - [X] Yuque
 - [X] Notion
+- [X] Halo
 - [X] Github
   - [X] Hexo
   - [X] Hugo
