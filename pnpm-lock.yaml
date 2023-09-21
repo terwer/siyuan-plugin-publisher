@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 dependencies:
   '@element-plus/icons-vue':
     specifier: ^2.1.0
@@ -160,8 +164,8 @@ devDependencies:
     specifier: ^0.34.4
     version: 0.34.4(jsdom@22.1.0)(stylus@0.59.0)
   vue-tsc:
-    specifier: ^1.8.11
-    version: 1.8.11(typescript@5.2.2)
+    specifier: ^1.8.13
+    version: 1.8.13(typescript@5.2.2)
 
 packages:
 
@@ -1812,8 +1816,8 @@ packages:
     resolution: {integrity: sha512-o9KfBeaBmCKl10usN4crU53fYtC1r7jJwdGKjPT24t348rHxgfpZ0xL3Xm/gLUYnc0oTp8LAmrxOeLyu6tbk2Q==}
     dev: false
 
-  /@vue/language-core@1.8.11(typescript@5.2.2):
-    resolution: {integrity: sha512-+MZOBGqGwfld6hpo0DB47x8eNM0dNqk15ZdfOhj19CpvuYuOWCeVdOEGZunKDyo3QLkTn3kLOSysJzg7FDOQBA==}
+  /@vue/language-core@1.8.13(typescript@5.2.2):
+    resolution: {integrity: sha512-nata2fYBZAkl4QJrU+IcArJCMTHt1VP8ePL/Z7eUPC2AF+Cm7Qgo9ksNCPBzZRh1LYjCaSaqV7njqNogwpsMVg==}
     peerDependencies:
       typescript: '*'
     peerDependenciesMeta:
@@ -1884,11 +1888,11 @@ packages:
       vue-component-type-helpers: 1.8.4
     dev: true
 
-  /@vue/typescript@1.8.11(typescript@5.2.2):
-    resolution: {integrity: sha512-skUmMDiPUUtu1flPmf2YybF+PX8IzBtMioQOaNn6Ck/RhdrPJGj1AX/7s3Buf9G6ln+/KHR1XQuti/FFxw5XVA==}
+  /@vue/typescript@1.8.13(typescript@5.2.2):
+    resolution: {integrity: sha512-ALJjHFqQ3dgZVCI/ogAS/dZ7JEhIi1N0Em5I7uwabY1p9RDRK3odLsycMHyxZRjm5dLI15c07eeBloHiD2Otlg==}
     dependencies:
       '@volar/typescript': 1.10.1
-      '@vue/language-core': 1.8.11(typescript@5.2.2)
+      '@vue/language-core': 1.8.13(typescript@5.2.2)
     transitivePeerDependencies:
       - typescript
     dev: true
@@ -7266,14 +7270,14 @@ packages:
       he: 1.2.0
     dev: true
 
-  /vue-tsc@1.8.11(typescript@5.2.2):
-    resolution: {integrity: sha512-BzfiMdPqDHBlysx4g26NkfVHSQwGD/lTRausmxN9sFyjXz34OWfsbkh0YsVkX84Hu65In1fFlxHiG39Tr4Vojg==}
+  /vue-tsc@1.8.13(typescript@5.2.2):
+    resolution: {integrity: sha512-Hl8zUXPVK2KzPtbXeMCN0CSFkwvD96YOtYt9KvJPG9W8QGcNpGk9KHwPuGMxA8blWXSIli7gtsoC+clICEVdVg==}
     hasBin: true
     peerDependencies:
       typescript: '*'
     dependencies:
-      '@vue/language-core': 1.8.11(typescript@5.2.2)
-      '@vue/typescript': 1.8.11(typescript@5.2.2)
+      '@vue/language-core': 1.8.13(typescript@5.2.2)
+      '@vue/typescript': 1.8.13(typescript@5.2.2)
       semver: 7.5.4
       typescript: 5.2.2
     dev: true
@@ -7603,7 +7607,3 @@ packages:
   /zwitch@1.0.5:
     resolution: {integrity: sha512-V50KMwwzqJV0NpZIZFwfOD5/lyny3WlSzRiXgA0G7VUnRlqttta1L6UQIHzd6EuBY/cHGfwTIck7w1yH6Q5zUw==}
     dev: false
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
