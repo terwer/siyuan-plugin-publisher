@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.15.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.14.1...v1.15.0) (2023-09-21)
+
+
+### Features
+
+* 支持 Halo - 支持上传图片 ([3e13fb5](https://github.com/terwer/siyuan-plugin-publisher/commit/3e13fb58dc4bf374956c778d4a1f93b2f63bef01))
+
+
+### Bug Fixes
+
+* 优化帮助指引 ([5a3c99a](https://github.com/terwer/siyuan-plugin-publisher/commit/5a3c99aa87f097ea6c61c50305239d81f92f1ea0))
+* 修复yaml在部分场景下误解析的问题 ([9edd0c0](https://github.com/terwer/siyuan-plugin-publisher/commit/9edd0c09405e8b271fb1a9374ccff3e89087e57c))
+* 修复标签为空时部分平台报错的问题 ([3031c2a](https://github.com/terwer/siyuan-plugin-publisher/commit/3031c2a691a7bb5f350b202ee7c593b66b760db4))
+* 修改关于页面央视错乱问题 ([89c4f8c](https://github.com/terwer/siyuan-plugin-publisher/commit/89c4f8c3aeced81ca11fcc596fc586c145a12942))
+* 支持 Halo ([9bf0746](https://github.com/terwer/siyuan-plugin-publisher/commit/9bf07461362a2f008765c152ea877d99098332d7))
+* 支持 Halo ([125455e](https://github.com/terwer/siyuan-plugin-publisher/commit/125455ee001d60ba8639b68a67af75337135c1a5))
+* 支持 Halo - 基本发布功能 ([8964d66](https://github.com/terwer/siyuan-plugin-publisher/commit/8964d66e40cf233e7da55c6058b9cd3b2e0b9986))
+* 支持 Halo - 新建和更新文章 ([27f5d32](https://github.com/terwer/siyuan-plugin-publisher/commit/27f5d3297c84238f070ebc164666dee2e574a826))
+* 新增CSDN发布说明 ([5df6ed9](https://github.com/terwer/siyuan-plugin-publisher/commit/5df6ed9b59c223ecf7964dbf6fc5f2fc15d20f58))
+
+
+### Miscellaneous
+
+* **deps-dev:** bump vue-tsc from 1.8.11 to 1.8.13 ([7c9c1ac](https://github.com/terwer/siyuan-plugin-publisher/commit/7c9c1ac63cf76e370df79ff8d5e9e10475889f19))
+
 ## [1.14.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.14.0...v1.14.1) (2023-09-18)
 ### Bug Fixes
 * notion支持根页面搜索 ([ef88004](https://github.com/terwer/siyuan-plugin-publisher/commit/ef880045587f3ccf8459a7731ebac3d250c87cfa))
