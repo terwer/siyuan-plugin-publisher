@@ -1,12 +1,24 @@
 # Changelog
 
-## [1.14.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.14.0...v1.14.1) (2023-09-18)
+## [1.15.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.14.1...v1.15.0) (2023-09-21)
+### Features
+* 支持 halo - 支持上传图片 ([3e13fb5](https://github.com/terwer/siyuan-plugin-publisher/commit/3e13fb58dc4bf374956c778d4a1f93b2f63bef01))
 ### Bug Fixes
+* 优化帮助指引 ([5a3c99a](https://github.com/terwer/siyuan-plugin-publisher/commit/5a3c99aa87f097ea6c61c50305239d81f92f1ea0))
+* 修复yaml在部分场景下误解析的问题 ([9edd0c0](https://github.com/terwer/siyuan-plugin-publisher/commit/9edd0c09405e8b271fb1a9374ccff3e89087e57c))
+* 修复标签为空时部分平台报错的问题 ([3031c2a](https://github.com/terwer/siyuan-plugin-publisher/commit/3031c2a691a7bb5f350b202ee7c593b66b760db4))
+* 修改关于页面央视错乱问题 ([89c4f8c](https://github.com/terwer/siyuan-plugin-publisher/commit/89c4f8c3aeced81ca11fcc596fc586c145a12942))
+* 支持 halo ([125455e](https://github.com/terwer/siyuan-plugin-publisher/commit/125455ee001d60ba8639b68a67af75337135c1a5))
+* 支持 halo - 基本发布功能 ([8964d66](https://github.com/terwer/siyuan-plugin-publisher/commit/8964d66e40cf233e7da55c6058b9cd3b2e0b9986))
+* 支持 halo - 新建和更新文章 ([27f5d32](https://github.com/terwer/siyuan-plugin-publisher/commit/27f5d3297c84238f070ebc164666dee2e574a826))
+* 新增csdn发布说明 ([5df6ed9](https://github.com/terwer/siyuan-plugin-publisher/commit/5df6ed9b59c223ecf7964dbf6fc5f2fc15d20f58))
+### Miscellaneous
+* **deps-dev:** bump vue-tsc from 1.8.11 to 1.8.13 ([7c9c1ac](https://github.com/terwer/siyuan-plugin-publisher/commit/7c9c1ac63cf76e370df79ff8d5e9e10475889f19))
+## [1.14.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.14.0...v1.14.1) (2023-09-18)
 * notion支持根页面搜索 ([ef88004](https://github.com/terwer/siyuan-plugin-publisher/commit/ef880045587f3ccf8459a7731ebac3d250c87cfa))
 * 修复非github平台发布错误的问题 ([2a42c3c](https://github.com/terwer/siyuan-plugin-publisher/commit/2a42c3c804b55917780fbc35af27805182759b41))
 * 修复默认导入未导入wordpress的问题 ([00c44b6](https://github.com/terwer/siyuan-plugin-publisher/commit/00c44b6dbb80aa46264ad62359b6da4e19eee0cb))
 ## [1.14.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.13.0...v1.14.0) (2023-09-14)
-### Features
 * 全面支持github和gitlab各平台 ([b5e7413](https://github.com/terwer/siyuan-plugin-publisher/commit/b5e7413b7c03558f86f6429ef61bab7255760933))
 * 全面支持github和gitlab各平台-hugo ([0396d77](https://github.com/terwer/siyuan-plugin-publisher/commit/0396d779a46d3f869091ce949f1e887a1b92650d))
 * 全面支持github和gitlab各平台-jekyll ([1bb4cbe](https://github.com/terwer/siyuan-plugin-publisher/commit/1bb4cbe48196637e9b2438e196ef481c825170d0))
@@ -27,7 +39,6 @@
 * 修复 cookie 设置问题 ([642e570](https://github.com/terwer/siyuan-plugin-publisher/commit/642e57040f9410af9162e0f44fcddbb727a2e22f))
 * 修复未初始化标签时初始化异常的问题 ([cea4056](https://github.com/terwer/siyuan-plugin-publisher/commit/cea40561e379ee6c69fdba73c18caf5cdc16921d))
 * 修复知识空间重复显示的问题 ([9671464](https://github.com/terwer/siyuan-plugin-publisher/commit/9671464d4dd4f576e68f80d8956b92d57798fdd1))
-### Miscellaneous
 * **deps-dev:** bump vercel from 32.1.0 to 32.2.2 ([795221a](https://github.com/terwer/siyuan-plugin-publisher/commit/795221a946b1d1e0fa01a81f8708fce9797052b2))
 * **deps-dev:** bump vite-plugin-node-polyfills from 0.12.0 to 0.14.0 ([412d2f8](https://github.com/terwer/siyuan-plugin-publisher/commit/412d2f8a4184322f380fd0a1e507c0470a9f1420))
 * **deps-dev:** bump vue-tsc from 1.8.8 to 1.8.10 ([cb26813](https://github.com/terwer/siyuan-plugin-publisher/commit/cb26813dc9f97522c2eba9ec4843b5a2ec09378a))
