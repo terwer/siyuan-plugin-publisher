@@ -20,7 +20,15 @@ Support features such as fast publishing, image bed management, platform expansi
   - **Notion**: Since Notion is block-based, not a whole document, it is constrained by technology and does not support updates. To update, you can only delete and then repost it.
   - **Juejin**: Due to the mandatory requirements of the Jujin platform, tags and classifications must be filled in, if you do not select publishing, a backend classification and programmer label will be added by default, otherwise you will not be able to publish.
   - **Juejin**: **Juejin need to review every time they publish an article**, so the preview may be 404 immediately after publishing the article, at which point you can modify the link '/post' to '/spost' for temporary viewing, or wait patiently for the review to pass.
-
+  - **CSDN**: CSDN requires setting tags, which is a requirement of the CSDN platform, and tags cannot be empty.
+    ![](https://img1.terwer.space/api/public/202309211113950.png)
+    If not provided, CSDN will generate an error:
+      ```json
+      {
+        "code": 400,
+        "msg": "Please set article tags"
+      }
+      ```
 > [Click here](https://blog.terwer.space/s/20230810132040-nn4q7vs) to view the latest help documentation.
 
 ## Update history
