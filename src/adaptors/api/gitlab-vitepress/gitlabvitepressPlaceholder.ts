@@ -23,5 +23,8 @@
  * questions.
  */
 
-declare module "zhi-notion-markdown"
-declare module "uuid"
+import { VitepressPlaceholder } from "~/src/adaptors/api/vitepress/vitepressPlaceholder.ts"
+
+class GitlabvitepressPlaceholder extends VitepressPlaceholder {}
+
+export { GitlabvitepressPlaceholder }

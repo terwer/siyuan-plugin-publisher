@@ -83,7 +83,7 @@ const formData = reactive({
     display inline-block
     vertical-align top
     padding-left 20px
-    width 80%
+    width calc(100% - 250px)
     .param
       padding 10px 0
     .space

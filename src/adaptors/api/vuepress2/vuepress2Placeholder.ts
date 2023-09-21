@@ -23,11 +23,8 @@
  * questions.
  */
 
-import { CommonBlogPlaceholder } from "~/src/adaptors/api/base/commonBlogPlaceholder.ts"
+import { CommonGithubPlaceholder } from "~/src/adaptors/api/base/github/commonGithubPlaceholder.ts"
 
-/**
- * Yuque 配置提示
- */
-class YuquePlaceHolder extends CommonBlogPlaceholder {}
+class Vuepress2Placeholder extends CommonGithubPlaceholder {}
 
-export { YuquePlaceHolder }
+export { Vuepress2Placeholder }

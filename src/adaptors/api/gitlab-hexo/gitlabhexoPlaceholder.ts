@@ -23,8 +23,8 @@
  * questions.
  */
 
-import { HexoPlaceHolder } from "~/src/adaptors/api/hexo/hexoPlaceHolder.ts"
+import { HexoPlaceholder } from "~/src/adaptors/api/hexo/hexoPlaceholder.ts"
 
-class GitlabhexoPlaceHolder extends HexoPlaceHolder {}
+class GitlabhexoPlaceholder extends HexoPlaceholder {}
 
-export { GitlabhexoPlaceHolder }
+export { GitlabhexoPlaceholder }

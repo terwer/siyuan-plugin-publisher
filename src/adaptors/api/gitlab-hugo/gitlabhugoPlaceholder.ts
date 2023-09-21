@@ -23,5 +23,8 @@
  * questions.
  */
 
-declare module "zhi-notion-markdown"
-declare module "uuid"
+import { HugoPlaceholder } from "~/src/adaptors/api/hugo/hugoPlaceholder.ts"
+
+class GitlabhugoPlaceholder extends HugoPlaceholder {}
+
+export { GitlabhugoPlaceholder }

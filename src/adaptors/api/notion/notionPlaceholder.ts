@@ -23,8 +23,11 @@
  * questions.
  */
 
-import { HugoPlaceHolder } from "~/src/adaptors/api/hugo/hugoPlaceHolder.ts"
+import { CommonBlogPlaceholder } from "~/src/adaptors/api/base/commonBlogPlaceholder.ts"
 
-class GitlabhugoPlaceHolder extends HugoPlaceHolder {}
+/**
+ * Notion 配置提示
+ */
+class NotionPlaceholder extends CommonBlogPlaceholder {}
 
-export { GitlabhugoPlaceHolder }
+export { NotionPlaceholder }

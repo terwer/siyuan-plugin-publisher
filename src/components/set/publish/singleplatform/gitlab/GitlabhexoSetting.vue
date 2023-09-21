@@ -26,7 +26,7 @@
 <script setup lang="ts">
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { GitlabhexoConfig } from "~/src/adaptors/api/gitlab-hexo/gitlabhexoConfig.ts"
-import { GitlabhexoPlaceHolder } from "~/src/adaptors/api/gitlab-hexo/gitlabhexoPlaceHolder.ts"
+import { GitlabhexoPlaceholder } from "~/src/adaptors/api/gitlab-hexo/gitlabhexoPlaceholder.ts"
 import { useGitlabhexoApi } from "~/src/adaptors/api/gitlab-hexo/useGitlabhexoApi.ts"
 import { StrUtil } from "zhi-common"
 
@@ -40,7 +40,7 @@ const props = defineProps({
 const { t } = useVueI18n()
 const { cfg } = await useGitlabhexoApi(props.apiType)
 const hexoCfg = cfg as GitlabhexoConfig
-const hexoPlaceholder = new GitlabhexoPlaceHolder()
+const hexoPlaceholder = new GitlabhexoPlaceholder()
 hexoPlaceholder.homePlaceholder = t("setting.blog.gitlab.url.tip")
 hexoPlaceholder.usernamePlaceholder = t("setting.blog.type.gitlab.user.tip")
 hexoPlaceholder.passwordPlaceholder = t("setting.blog.type.gitlab.token.tip")

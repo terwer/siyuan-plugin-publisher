@@ -32,6 +32,7 @@ build
 widget
 archive.zip
 components.d.ts
+auto-imports.d.ts
 
 # test
 coverage

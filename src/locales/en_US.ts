@@ -449,6 +449,12 @@ export default {
   "setting.juejin.apiUrl.tip": "Usually fixed, do not modify",
   "setting.juejin.previewUrl.tip": "Juejin platform article preview rules",
 
+  "setting.halo.home.tip": "Halo homepage address, should include the domain and port, for example: http://localhost:8090",
+  "setting.halo.username.tip": "Halo blog login name",
+  "setting.halo.password.tip": "Halo blog login password",
+  "setting.halo.apiUrl.tip": "Halo blog API address, typically the same as the Halo homepage",
+  "setting.halo.previewUrl.tip": "Halo blog article preview rule, default /archives/{slug}, with placeholders {slug} {name} {year} {month} {day}, can be set in [halo-home-url]/console/settings?tab=routeRules",
+
   "setting.picgo.refer.to": "For details, please refer to:",
   "setting.picgo.refer.to.online.doc": "Picgo configuration online documentation",
   "setting.picgo.picbed": "Picbed setting",

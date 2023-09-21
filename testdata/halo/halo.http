@@ -1,0 +1,169 @@
+### 更新
+GET http://localhost:8090/apis/content.halo.run/v1alpha1/posts/43e02387-66d4-4c81-b682-d9912f8ae1f0
+Accept: application/json, text/plain, */*
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+Cache-Control: no-cache
+Connection: keep-alive
+Cookie: {{cookie}}
+Pragma: no-cache
+Referer: http://localhost:8090/console/posts/editor?name=43e02387-66d4-4c81-b682-d9912f8ae1f0
+Sec-Fetch-Dest: empty
+Sec-Fetch-Mode: cors
+Sec-Fetch-Site: same-origin
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36
+X-Requested-With: XMLHttpRequest
+X-XSRF-TOKEN: b3cf960c-9944-4862-8ac5-900d094b5466
+sec-ch-ua: "Google Chrome";v="117", "Not;A=Brand";v="8", "Chromium";v="117"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "macOS"
+
+### 更新2
+PUT http://localhost:8090/apis/content.halo.run/v1alpha1/posts/43e02387-66d4-4c81-b682-d9912f8ae1f0
+Accept: application/json, text/plain, */*
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+Cache-Control: no-cache
+Connection: keep-alive
+Cookie: Webstorm-f47ab5ea=35e776f8-03d5-4354-971d-34b55da326f0; _ga=GA1.1.659711968.1668949168; __gsas=ID=f27169070a6b3d21:T=1673082680:S=ALNI_MZxBVm1QTHQ-A4-u8bbUtkZw5r3Lg; sidebar_collapsed=false; hide_no_ssh_message=false; hide_auto_devops_implicitly_enabled_banner_2=false; visitor_id=edba51f3-38d9-4d43-b237-f08608cd9a4f; Webstorm-f47ab5eb=07a16c94-2964-485d-82db-454f2a7c83bc; Idea-731bc924=f3abf4bc-94d6-4c2e-bace-ebd6be9289f4; Hm_lvt_503f098e7e5b3a5b5d8c5fc2938af002=1677301457; csrftoken=66uGnsvvhDRQjzxDQElN6rRid3E8oYJemIgUCaIsX6uzkk2aq9nA7t9ipPan95BT; _clck=kj8afs|1|f9k|0; _ga_L7WEXVQCR9=GS1.1.1679464226.7.0.1679464226.0.0.0; cookieconsent_status=dismiss; Webstorm-f47ab9aa=9ac0fe04-029a-4068-a681-b5e1f5753382; wp-settings-1=posts_list_mode%3Dlist%26editor%3Dtinymce; wp-settings-time-1=1685353721; Idea-731bcce3=51c78b23-6602-44bd-8f61-b8d920d8fe07; app-config=%7B%7D; event_filter=all; super_sidebar_collapsed=false; username-localhost-8888=2|1:0|10:1694855542|23:username-localhost-8888|196:eyJ1c2VybmFtZSI6ICIwZmI0YTJmMWNlNzA0MTllOTQ4N2YzZjZjYmFjZDE1YyIsICJuYW1lIjogIkFub255bW91cyBFcmlub21lIiwgImRpc3BsYXlfbmFtZSI6ICJBbm9ueW1vdXMgRXJpbm9tZSIsICJpbml0aWFscyI6ICJBRSIsICJjb2xvciI6IG51bGx9|b7564a95f2cb5c2aa9010ad5a3e29a1afa8265f660890a5615bba2b4331fd286; Hm_lvt_ecf13ffee9f4083d9a74b337b541f90b=1694445876,1694596707,1694700380,1694867559; known_sign_in=QlNLMzc2dmg2ZnQzbCtSSlVYUUZpZy84YW1VQUxIRnVxRkt1REJ4aXlHMEY1NmFzMmsya0w4YUEySGgrcjZ2SDVPVTZXL01ZUU5qSFpBQTNjMXVxaVJGTE9oZk90UDM4b0tXR1d2cVV3RlJuZDU4QnBYUGNvbmRueXdKZ05kNDUtLWlxbmdyU1o3QkVJSTdaWEMxQTgxSXc9PQ%3D%3D--fa89e9553241e5ead8890a0a1ee5ae92059de6ce; XSRF-TOKEN=b3cf960c-9944-4862-8ac5-900d094b5466; SESSION=0661b43b-8336-412a-9435-d5b50ed16895
+Origin: http://localhost:8090
+Pragma: no-cache
+Referer: http://localhost:8090/console/posts/editor?name=43e02387-66d4-4c81-b682-d9912f8ae1f0
+Sec-Fetch-Dest: empty
+Sec-Fetch-Mode: cors
+Sec-Fetch-Site: same-origin
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36
+X-Requested-With: XMLHttpRequest
+X-XSRF-TOKEN: b3cf960c-9944-4862-8ac5-900d094b5466
+sec-ch-ua: "Google Chrome";v="117", "Not;A=Brand";v="8", "Chromium";v="117"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "macOS"
+Content-Type: application/json
+
+{
+  "spec": {
+    "title": "jdk8编译",
+    "slug": "jdk8-2ggilv",
+    "releaseSnapshot": "55017e8b-80fe-4efa-8622-3d109692cc5d",
+    "headSnapshot": "55017e8b-80fe-4efa-8622-3d109692cc5d",
+    "baseSnapshot": "55017e8b-80fe-4efa-8622-3d109692cc5d",
+    "owner": "terwer",
+    "template": "",
+    "cover": "",
+    "deleted": false,
+    "publish": true,
+    "publishTime": "2023-09-20T14:10:45.272080040Z",
+    "pinned": false,
+    "allowComment": true,
+    "visible": "PUBLIC",
+    "priority": 0,
+    "excerpt": {
+      "autoGenerate": false,
+      "raw": "本文介绍了在 macOS 系统上编译 OpenJDK 的准备步骤，包括安装必要的依赖和解决常见问题。涵盖了安装 Xcode、配置 FreeType、使用 ccache 加速编译、解决 debug symbols 和 objcopy 相关问题，以及编译 OpenJDK 的步骤。适合需要在 macOS 上编译 OpenJDK 的开发者参考。"
+    },
+    "categories": [
+      "开发工具"
+    ],
+    "tags": [
+      "编译",
+      "OpenJDK",
+      "macOS",
+      "配置",
+      "调试",
+      "tag-QfWEK",
+      "tag-TnfxE",
+      "tag-hXfGP"
+    ],
+    "htmlMetas": []
+  },
+  "status": {
+    "phase": "PUBLISHED",
+    "conditions": [
+      {
+        "type": "PUBLISHED",
+        "status": "TRUE",
+        "lastTransitionTime": "2023-09-20T14:10:45.272067209Z",
+        "message": "Post published successfully.",
+        "reason": "Published"
+      },
+      {
+        "type": "DRAFT",
+        "status": "TRUE",
+        "lastTransitionTime": "2023-09-20T14:10:45.150131356Z",
+        "message": "Drafted post successfully.",
+        "reason": "DraftedSuccessfully"
+      }
+    ],
+    "permalink": "/archives/jdk8-2ggilv",
+    "excerpt": "本文介绍了在 macOS 系统上编译 OpenJDK 的准备步骤，包括安装必要的依赖和解决常见问题。涵盖了安装 Xcode、配置 FreeType、使用 ccache 加速编译、解决 debug symbols 和 objcopy 相关问题，以及编译 OpenJDK 的步骤。适合需要在 macOS 上编译 OpenJDK 的开发者参考。",
+    "inProgress": false,
+    "contributors": [
+      "terwer"
+    ],
+    "lastModifyTime": "2023-09-20T14:10:45.144073163Z"
+  },
+  "apiVersion": "content.halo.run/v1alpha1",
+  "kind": "Post",
+  "metadata": {
+    "finalizers": [
+      "post-protection"
+    ],
+    "name": "43e02387-66d4-4c81-b682-d9912f8ae1f0",
+    "labels": {
+      "content.halo.run/deleted": "false",
+      "content.halo.run/owner": "terwer",
+      "content.halo.run/visible": "PUBLIC",
+      "content.halo.run/published": "true",
+      "content.halo.run/archive-year": "2023",
+      "content.halo.run/archive-month": "09",
+      "content.halo.run/archive-day": "20"
+    },
+    "annotations": {
+      "checksum/config": "4376ce510afb56f97718a07cd4343f2a291430b73d058ac1b3db2777f30c0781",
+      "content.halo.run/permalink-pattern": "/archives/{slug}",
+      "content.halo.run/last-released-snapshot": "55017e8b-80fe-4efa-8622-3d109692cc5d",
+      "content.halo.run/preferred-editor": "default"
+    },
+    "version": 16,
+    "creationTimestamp": "2023-09-20T14:10:45.137981382Z"
+  }
+}
+
+###
+
+
+
+
+### 删除文章
+PUT http://localhost:8090/apis/api.console.halo.run/v1alpha1/posts/d1148a2f-45a3-4222-9cc6-5a6a0d61708f/recycle
+Cookie: {{cookie}}
+
+### 新建文章草稿
+PUT http://localhost:8090/apis/api.console.halo.run/v1alpha1/posts/3eb2030c-7614-4476-a40a-1a9438a0f9ad/content
+Cookie: {{cookie}}
+Content-Type: application/json
+
+{
+  "raw": "<h1 style=\"\" id=\"heading-1\">test</h1><p style=\"\">测试2</p>",
+  "content": "<h1 style=\"\" id=\"heading-1\">test</h1><p style=\"\">测试3</p>",
+  "rawType": "HTML",
+  "snapshotName": "03fb3b5d-8b5d-4f89-b72f-676a67bc818e"
+}
+
+### 新建标签
+POST http://localhost:8090/apis/content.halo.run/v1alpha1/tags
+Cookie: {{cookie}}
+Content-Type: application/json
+
+{
+  "spec": {
+    "displayName": "测试3",
+    "slug": "ce-shi-3",
+    "color": "#ffffff",
+    "cover": ""
+  },
+  "apiVersion": "content.halo.run/v1alpha1",
+  "kind": "Tag",
+  "metadata": {
+    "name": "",
+    "generateName": "tag-"
+  }
+}

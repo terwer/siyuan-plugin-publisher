@@ -28,6 +28,7 @@ import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { createAppLogger, ILogger } from "~/src/utils/appLogger.ts"
 import { useProxy } from "~/src/composables/useProxy.ts"
 import { BaseExtendApi } from "~/src/adaptors/base/baseExtendApi.ts"
+import { JsonUtil } from "zhi-common"
 
 /**
  * API授权统一封装基类
@@ -37,6 +38,7 @@ import { BaseExtendApi } from "~/src/adaptors/base/baseExtendApi.ts"
  * @since 0.9.0
  */
 export class BaseBlogApi extends BlogApi {
+  protected appInstance: PublisherAppInstance
   protected logger: ILogger
   protected cfg: BlogConfig
   public readonly proxyFetch: any
@@ -51,6 +53,7 @@ export class BaseBlogApi extends BlogApi {
   constructor(appInstance: PublisherAppInstance, cfg: BlogConfig) {
     super()
 
+    this.appInstance = appInstance
     this.cfg = cfg
     this.logger = createAppLogger("base-blog-api")
     this.baseExtendApi = new BaseExtendApi(this)
@@ -65,6 +68,23 @@ export class BaseBlogApi extends BlogApi {
 
   public async preEditPost(post: Post, id?: string, publishCfg?: any): Promise<Post> {
     return await this.baseExtendApi.preEditPost(post, id, publishCfg)
+  }
+
+  public async apiFormFetch(url: string, headers: any[], formData: FormData) {
+    const win = this.appInstance.win
+    const doFetch = win.require(`${this.appInstance.moduleBase}libs/zhi-formdata-fetch/index.cjs`)
+
+    // headers
+    const header = headers.length > 0 ? headers[0] : {}
+    this.logger.debug("before zhi-formdata-fetch, headers =>", headers)
+    this.logger.debug("before zhi-formdata-fetch, url =>", url)
+
+    const resText = await doFetch(this.appInstance.moduleBase, url, header, formData)
+    this.logger.debug("apiForm doFetch success, resText =>", resText)
+    const resJson = JsonUtil.safeParse<any>(resText, {} as any)
+    this.logger.debug("apiForm doFetch success, resJson=>", resJson)
+
+    return resJson
   }
 
   // ================

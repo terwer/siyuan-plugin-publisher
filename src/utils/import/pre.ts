@@ -68,6 +68,15 @@ export const pre = {
       authMode: AuthMode.API,
       isEnabled: false,
     },
+    {
+      platformType: PlatformType.Common,
+      subPlatformType: SubPlatformType.Common_Halo,
+      platformKey: "common_Halo",
+      platformName: "Halo",
+      platformIcon: svgIcons.iconIFHalo,
+      authMode: AuthMode.API,
+      isEnabled: false,
+    },
   ],
   githubCfg: <DynamicConfig[]>[
     {

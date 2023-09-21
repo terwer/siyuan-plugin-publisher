@@ -23,8 +23,11 @@
  * questions.
  */
 
-import { CommonGithubPlaceholder } from "~/src/adaptors/api/base/github/commonGithubPlaceholder.ts"
+import { CommonBlogPlaceholder } from "~/src/adaptors/api/base/commonBlogPlaceholder.ts"
 
-class VuepressPlaceHolder extends CommonGithubPlaceholder {}
+/**
+ * Halo 配置提示
+ */
+class HaloPlaceholder extends CommonBlogPlaceholder {}
 
-export { VuepressPlaceHolder }
+export { HaloPlaceholder }

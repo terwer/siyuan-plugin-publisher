@@ -28,7 +28,7 @@ import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { StrUtil } from "zhi-common"
 import { useGitlabvitepressApi } from "~/src/adaptors/api/gitlab-vitepress/useGitlabvitepressApi.ts"
 import { GitlabvitepressConfig } from "~/src/adaptors/api/gitlab-vitepress/gitlabvitepressConfig.ts"
-import { GitlabvitepressPlaceHolder } from "~/src/adaptors/api/gitlab-vitepress/gitlabvitepressPlaceHolder.ts"
+import { GitlabvitepressPlaceholder } from "~/src/adaptors/api/gitlab-vitepress/gitlabvitepressPlaceholder.ts"
 
 const props = defineProps({
   apiType: {
@@ -40,7 +40,7 @@ const props = defineProps({
 const { t } = useVueI18n()
 const { cfg } = await useGitlabvitepressApi(props.apiType)
 const vitepressCfg = cfg as GitlabvitepressConfig
-const vitepressPlaceholder = new GitlabvitepressPlaceHolder()
+const vitepressPlaceholder = new GitlabvitepressPlaceholder()
 vitepressPlaceholder.homePlaceholder = t("setting.blog.gitlab.url.tip")
 vitepressPlaceholder.usernamePlaceholder = t("setting.blog.type.gitlab.user.tip")
 vitepressPlaceholder.passwordPlaceholder = t("setting.blog.type.gitlab.token.tip")

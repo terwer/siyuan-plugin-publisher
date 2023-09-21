@@ -23,8 +23,8 @@
  * questions.
  */
 
-import { VuepressPlaceHolder } from "~/src/adaptors/api/vuepress/vuepressPlaceHolder.ts"
+import { JekyllPlaceholder } from "~/src/adaptors/api/jekyll/jekyllPlaceholder.ts"
 
-class GitlabvuepressPlaceHolder extends VuepressPlaceHolder {}
+class GitlabjekyllPlaceholder extends JekyllPlaceholder {}
 
-export { GitlabvuepressPlaceHolder }
+export { GitlabjekyllPlaceholder }

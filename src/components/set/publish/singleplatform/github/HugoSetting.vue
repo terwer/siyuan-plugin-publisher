@@ -27,7 +27,7 @@
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useHugoApi } from "~/src/adaptors/api/hugo/useHugoApi.ts"
 import { HugoConfig } from "~/src/adaptors/api/hugo/hugoConfig.ts"
-import { HugoPlaceHolder } from "~/src/adaptors/api/hugo/hugoPlaceHolder.ts"
+import { HugoPlaceholder } from "~/src/adaptors/api/hugo/hugoPlaceholder.ts"
 
 const props = defineProps({
   apiType: {
@@ -39,7 +39,7 @@ const props = defineProps({
 const { t } = useVueI18n()
 const { cfg } = await useHugoApi(props.apiType)
 const hugoCfg = cfg as HugoConfig
-const hugoPlaceholder = new HugoPlaceHolder()
+const hugoPlaceholder = new HugoPlaceholder()
 hugoPlaceholder.homePlaceholder = t("setting.blog.github.url.tip")
 hugoPlaceholder.usernamePlaceholder = t("setting.blog.type.github.user.tip")
 hugoPlaceholder.passwordPlaceholder = t("setting.blog.type.github.token.tip")

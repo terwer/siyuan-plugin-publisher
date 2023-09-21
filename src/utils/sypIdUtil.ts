@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023, Terwer . All rights reserved.
+ * Copyright (c) 2022-2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -23,5 +23,40 @@
  * questions.
  */
 
-declare module "zhi-notion-markdown"
-declare module "uuid"
+import shortHash from "shorthash2"
+import { v4 as uuidv4 } from "uuid"
+
+/**
+ * 唯一ID
+ */
+const newID = (): string => {
+  const newstr = new Date().toISOString()
+  return shortHash(newstr).toLowerCase()
+}
+
+/**
+ * ID生成统一入口
+ */
+const newUuid = () => {
+  return uuidv4()
+}
+
+/**
+ * 生成随机ID
+ */
+const randomUuid = (): string => {
+  const uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+    const r = (Math.random() * 16) | 0,
+      v = c === "x" ? r : (r & 0x3) | 0x8
+    return v.toString(16)
+  })
+  return uuid
+}
+
+const sypIdUtil = {
+  newUuid,
+  newID,
+  randomUuid,
+}
+
+export default sypIdUtil

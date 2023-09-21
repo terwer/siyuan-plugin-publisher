@@ -27,7 +27,7 @@
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useHexoApi } from "~/src/adaptors/api/hexo/useHexoApi.ts"
 import { HexoConfig } from "~/src/adaptors/api/hexo/hexoConfig.ts"
-import { HexoPlaceHolder } from "~/src/adaptors/api/hexo/hexoPlaceHolder.ts"
+import { HexoPlaceholder } from "~/src/adaptors/api/hexo/hexoPlaceholder.ts"
 
 const props = defineProps({
   apiType: {
@@ -39,7 +39,7 @@ const props = defineProps({
 const { t } = useVueI18n()
 const { cfg } = await useHexoApi(props.apiType)
 const hexoCfg = cfg as HexoConfig
-const hexoPlaceholder = new HexoPlaceHolder()
+const hexoPlaceholder = new HexoPlaceholder()
 hexoPlaceholder.homePlaceholder = t("setting.blog.github.url.tip")
 hexoPlaceholder.usernamePlaceholder = t("setting.blog.type.github.user.tip")
 hexoPlaceholder.passwordPlaceholder = t("setting.blog.type.github.token.tip")

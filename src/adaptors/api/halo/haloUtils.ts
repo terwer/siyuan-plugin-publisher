@@ -23,8 +23,37 @@
  * questions.
  */
 
-import { VitepressPlaceHolder } from "~/src/adaptors/api/vitepress/vitepressPlaceHolder.ts"
+import * as yaml from "js-yaml"
+import * as matter from "gray-matter"
 
-class GitlabvitepressPlaceHolder extends VitepressPlaceHolder {}
+/**
+ * Halo 平台工具类
+ *
+ * @author terwer
+ * @version 1.15.0
+ * @since 1.15.0
+ */
+class HaloUtils {
+  private static options = {
+    engines: {
+      yaml: {
+        parse: (input: string) => yaml.load(input) as object,
+        stringify: (data: object) => {
+          return yaml.dump(data, {
+            styles: { "!!null": "empty" },
+          })
+        },
+      },
+    },
+  }
 
-export { GitlabvitepressPlaceHolder }
+  public static readMatter(content: string) {
+    return matter(content, this.options)
+  }
+
+  public static mergeMatter(content: string, data: object) {
+    return matter.stringify(content, data, this.options)
+  }
+}
+
+export default HaloUtils

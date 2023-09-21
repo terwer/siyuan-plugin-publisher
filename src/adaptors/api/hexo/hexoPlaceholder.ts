@@ -25,6 +25,6 @@
 
 import { CommonGithubPlaceholder } from "~/src/adaptors/api/base/github/commonGithubPlaceholder.ts"
 
-class HexoPlaceHolder extends CommonGithubPlaceholder {}
+class HexoPlaceholder extends CommonGithubPlaceholder {}
 
-export { HexoPlaceHolder }
+export { HexoPlaceholder }

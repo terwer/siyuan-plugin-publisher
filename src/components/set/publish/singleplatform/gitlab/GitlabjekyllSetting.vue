@@ -28,7 +28,7 @@ import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { StrUtil } from "zhi-common"
 import { useGitlabjekyllApi } from "~/src/adaptors/api/gitlab-jekyll/useGitlabjekyllApi.ts"
 import { GitlabjekyllConfig } from "~/src/adaptors/api/gitlab-jekyll/gitlabjekyllConfig.ts"
-import { GitlabjekyllPlaceHolder } from "~/src/adaptors/api/gitlab-jekyll/gitlabjekyllPlaceHolder.ts"
+import { GitlabjekyllPlaceholder } from "~/src/adaptors/api/gitlab-jekyll/gitlabjekyllPlaceholder.ts"
 
 const props = defineProps({
   apiType: {
@@ -40,7 +40,7 @@ const props = defineProps({
 const { t } = useVueI18n()
 const { cfg } = await useGitlabjekyllApi(props.apiType)
 const jekyllCfg = cfg as GitlabjekyllConfig
-const jekyllPlaceholder = new GitlabjekyllPlaceHolder()
+const jekyllPlaceholder = new GitlabjekyllPlaceholder()
 jekyllPlaceholder.homePlaceholder = t("setting.blog.gitlab.url.tip")
 jekyllPlaceholder.usernamePlaceholder = t("setting.blog.type.gitlab.user.tip")
 jekyllPlaceholder.passwordPlaceholder = t("setting.blog.type.gitlab.token.tip")

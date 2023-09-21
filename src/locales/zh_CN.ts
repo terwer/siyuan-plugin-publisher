@@ -443,6 +443,13 @@ export default {
   "setting.juejin.apiUrl.tip": "通常固定，请勿修改",
   "setting.juejin.previewUrl.tip": "掘金平台文章预览规则",
 
+  "setting.halo.home.tip": "Halo首页地址，需要包括域名端口，例如：http://localhost:8090",
+  "setting.halo.username.tip": "Halo博客登录名",
+  "setting.halo.password.tip": "Halo博客登录密码",
+  "setting.halo.apiUrl.tip": "Halo博客API地址，一般与Halo首页相同",
+  "setting.halo.previewUrl.tip":
+    "Halo博客文章预览规则，默认 /archives/{slug}，占位符有 {slug} {name} {year} {month} {day}，可在 [halo-home-url]/console/settings?tab=routeRules设置",
+
   "setting.picgo.refer.to": "详情请参考：",
   "setting.picgo.refer.to.online.doc": "PicGO配置在线文档",
   "setting.picgo.picbed": "图床设置",
@@ -588,7 +595,8 @@ export default {
   "config.ai.use.siyuan": "思源笔记内部，直接使用思源笔记配置，无需配置",
   "setting.blog.yamlLinkEnabled": "YAML永久链接",
   "distri.type.overide.warn": "注意：覆盖模式下会用当前数据覆盖所有选择的平台，请谨慎操作。",
-  "distri.type.merge.warn": "注意：为了保留平台数据，合并模式下，标题和摘要的修改无效，您可在在常规发布单独修改对应平台的标题和摘要，标签和分类会与所选择的平台数据合并。",
+  "distri.type.merge.warn":
+    "注意：为了保留平台数据，合并模式下，标题和摘要的修改无效，您可在在常规发布单独修改对应平台的标题和摘要，标签和分类会与所选择的平台数据合并。",
   "preference.setting.keepTitle": "不更新原始标题",
 
   "setting.blog.gitlab.url.tip": "Gitlab首页，例如：http://localhost:8002",
@@ -597,5 +605,5 @@ export default {
   "setting.blog.gitlab.apiurl.tip": "Gitlab的API地址，一般与首页相同",
   "setting.blog.gitlab.previewUrl.tip": "文章预览地址，一般默认即可",
 
-  "main.force.cancel": "强制删除"
+  "main.force.cancel": "强制删除",
 }

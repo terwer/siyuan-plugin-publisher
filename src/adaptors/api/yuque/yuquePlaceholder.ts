@@ -23,5 +23,11 @@
  * questions.
  */
 
-declare module "zhi-notion-markdown"
-declare module "uuid"
+import { CommonBlogPlaceholder } from "~/src/adaptors/api/base/commonBlogPlaceholder.ts"
+
+/**
+ * Yuque 配置提示
+ */
+class YuquePlaceholder extends CommonBlogPlaceholder {}
+
+export { YuquePlaceholder }

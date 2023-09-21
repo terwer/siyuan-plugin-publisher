@@ -23,8 +23,36 @@
  * questions.
  */
 
-import { CommonGithubPlaceholder } from "~/src/adaptors/api/base/github/commonGithubPlaceholder.ts"
+import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
+import { CategoryTypeEnum, PageTypeEnum } from "zhi-blog-api"
 
-class JekyllPlaceHolder extends CommonGithubPlaceholder {}
+/**
+ * Halo 配置
+ */
+class HaloConfig extends CommonBlogConfig {
+  /**
+   * Halo 配置项
+   *
+   * @param username 用户名
+   * @param password 密码
+   * @param middlewareUrl 代理地址
+   */
+  constructor(username: string, password: string, middlewareUrl?: string) {
+    super("", "", username, password, middlewareUrl)
 
-export { JekyllPlaceHolder }
+    this.home = "[your-halo-home]"
+    this.apiUrl = "[your-halo-api-url]"
+    this.previewUrl = "/archives/{slug}"
+    this.pageType = PageTypeEnum.Html
+    this.usernameEnabled = true
+    this.showTokenTip = false
+    this.allowPreviewUrlChange = true
+    this.tagEnabled = true
+    this.cateEnabled = true
+    this.categoryType = CategoryTypeEnum.CategoryType_Multi
+    this.allowCateChange = true
+    this.knowledgeSpaceEnabled = false
+  }
+}
+
+export { HaloConfig }

@@ -24,10 +24,12 @@
   -->
 
 <script setup lang="ts">
+import CommonBlogSetting from "~/src/components/set/publish/singleplatform/base/CommonBlogSetting.vue"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import { useVuepress2Api } from "~/src/adaptors/api/vuepress2/useVuepress2Api.ts"
-import { Vuepress2Config } from "~/src/adaptors/api/vuepress2/vuepress2Config.ts"
-import { Vuepress2Placeholder } from "~/src/adaptors/api/vuepress2/vuepress2Placeholder.ts"
+import { useHaloApi } from "~/src/adaptors/api/halo/useHaloApi.ts"
+import { HaloConfig } from "~/src/adaptors/api/halo/HaloConfig.ts"
+import { HaloPlaceholder } from "~/src/adaptors/api/halo/HaloPlaceholder.ts"
+import { StrUtil } from "zhi-common"
 
 const props = defineProps({
   apiType: {
@@ -37,21 +39,26 @@ const props = defineProps({
 })
 
 const { t } = useVueI18n()
-const { cfg } = await useVuepress2Api(props.apiType)
-const vuepress2Cfg = cfg as Vuepress2Config
-const vuepress2Placeholder = new Vuepress2Placeholder()
-vuepress2Placeholder.homePlaceholder = t("setting.blog.github.url.tip")
-vuepress2Placeholder.usernamePlaceholder = t("setting.blog.type.github.user.tip")
-vuepress2Placeholder.passwordPlaceholder = t("setting.blog.type.github.token.tip")
-vuepress2Placeholder.apiUrlPlaceholder = t("setting.blog.github.apiurl.tip")
-vuepress2Placeholder.previewUrlPlaceholder = t("setting.blog.previewUrl.tip")
-vuepress2Cfg.placeholder = vuepress2Placeholder
+const { cfg } = await useHaloApi(props.apiType)
+const haloCfg = cfg as HaloConfig
+const haloPlaceholder = new HaloPlaceholder()
+haloPlaceholder.homePlaceholder = t("setting.halo.home.tip")
+haloPlaceholder.usernamePlaceholder = t("setting.halo.username.tip")
+haloPlaceholder.passwordPlaceholder = t("setting.halo.password.tip")
+haloPlaceholder.apiUrlPlaceholder = t("setting.halo.apiUrl.tip")
+haloPlaceholder.previewUrlPlaceholder = t("setting.halo.previewUrl.tip")
+haloCfg.placeholder = haloPlaceholder
+
+// 处理事件的方法
+const onHomeChange = (value: string, cfg: HaloConfig) => {
+  if (StrUtil.isEmptyString(cfg.home)) {
+    cfg.apiUrl = ""
+  } else {
+    cfg.apiUrl = cfg.home
+  }
+}
 </script>
 
 <template>
-  <common-github-setting :api-type="props.apiType" :cfg="vuepress2Cfg">
-    <template #header="header"> </template>
-    <template #main="main"> </template>
-    <template #footer="footer"> </template>
-  </common-github-setting>
+  <common-blog-setting :api-type="props.apiType" :cfg="haloCfg" @onHomeChange="onHomeChange" />
 </template>
