@@ -26,7 +26,7 @@
 import { HaloConfig } from "~/src/adaptors/api/halo/HaloConfig.ts"
 import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { CategoryInfo, Post, UserBlog } from "zhi-blog-api"
+import { Attachment, CategoryInfo, MediaObject, Post, UserBlog } from "zhi-blog-api"
 import { AliasTranslator, JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { Base64 } from "js-base64"
 import sypIdUtil from "~/src/utils/sypIdUtil.ts"
@@ -197,8 +197,13 @@ class HaloApiAdaptor extends BaseBlogApi {
         params.post.spec.tags = tagNames
       }
 
+      // 更新文章信息
       await this.haloRequest(`/apis/content.halo.run/v1alpha1/posts/${name}`, params.post, "PUT")
       await this.haloRequest(`/apis/api.console.halo.run/v1alpha1/posts/${name}/content`, params.content, "PUT")
+
+      // 重新发布
+      await this.haloRequest(`/apis/api.console.halo.run/v1alpha1/posts/${params.post.metadata.name}/publish`, {}, "PUT")
+      this.logger.debug("halo 文章发布完成")
     } catch (e) {
       this.logger.error("Halo文章更新失败", e)
     }
@@ -215,6 +220,12 @@ class HaloApiAdaptor extends BaseBlogApi {
     this.logger.debug("getPost haloPost =>", { name: name, haloPost: haloPost })
 
     const commonPost = new Post()
+    commonPost.title = haloPost.post.spec.title
+    commonPost.wp_slug = haloPost.post.spec.slug
+    commonPost.shortDesc = haloPost.post.spec.excerpt.raw
+
+    commonPost.tags_slugs = haloPost.post.spec.tags.join(",")
+    commonPost.cate_slugs = haloPost.post.spec.categories
 
     return commonPost
   }
@@ -261,6 +272,66 @@ class HaloApiAdaptor extends BaseBlogApi {
     }
 
     return cats
+  }
+
+  public async newMediaObject(mediaObject: MediaObject, customHandler?: any): Promise<Attachment> {
+    let res: any
+    try {
+      const bits = mediaObject.bits
+      this.logger.debug("newMediaObject on halo =>", mediaObject)
+
+      // import
+      const win = this.appInstance.win
+      if (!win.require) {
+        throw new Error("非常抱歉，目前仅思源笔记PC客户端支持上传图片")
+      }
+      const { FormData, Blob } = win.require(`${this.appInstance.moduleBase}libs/node-fetch-cjs/dist/index.js`)
+      const blob = new Blob([bits], { type: mediaObject.type })
+
+      // uploadUrl
+      const uploadUrl = `${this.cfg.apiUrl}/apis/api.console.halo.run/v1alpha1/attachments/upload`
+
+      // formData
+      const formData = new FormData()
+      formData.append("file", blob, mediaObject.name)
+      formData.append("policyName", "default-policy")
+      formData.append("groupName", "")
+      formData.append("file", blob, mediaObject.name)
+
+      // 发送请求
+      res = await this.haloFormFetch(uploadUrl, formData)
+      this.logger.debug("halo upload success, res =>", res)
+      if (!res.metadata) {
+        throw new Error("Halo图片上传失败 =>" + mediaObject.name)
+      }
+    } catch (e) {
+      this.logger.error("Error uploading image to halo:", e)
+    }
+
+    const siteImgId = res?.spec?.displayName ?? ""
+    const siteArticleId = res?.metadata?.name ?? ""
+    const siteImgUrl = this.cfg.home + res?.metadata?.annotations["storage.halo.run/uri"] ?? ""
+    return {
+      attachment_id: siteImgId,
+      date_created_gmt: new Date(),
+      parent: 0,
+      link: siteImgUrl,
+      title: mediaObject.name,
+      caption: "",
+      description: "",
+      metadata: {
+        width: 0,
+        height: 0,
+        file: "",
+        filesize: 0,
+        sizes: [],
+      },
+      type: mediaObject.type,
+      thumbnail: "",
+      id: siteArticleId,
+      file: mediaObject.name,
+      url: siteImgUrl,
+    }
   }
 
   // ================
@@ -393,18 +464,21 @@ class HaloApiAdaptor extends BaseBlogApi {
    * @param url 请求地址
    * @param params 数据
    * @param method 请求方法 GET | POST | PUT | DELETE
+   * @param header 请求头
    * @private
    */
   private async haloRequest(
     url: string,
     params?: any,
-    method: "GET" | "POST" | "PUT" | "DELETE" = "POST"
+    method: "GET" | "POST" | "PUT" | "DELETE" = "POST",
+    header: Record<any, any> = {}
   ): Promise<any> {
     const contentType = "application/json"
     const basicAuth = "Basic " + Base64.btoa(this.cfg.username + ":" + this.cfg.password)
     const headers = {
       "Content-Type": contentType,
       Authorization: basicAuth,
+      ...header,
     }
 
     // 打印日志
@@ -418,6 +492,16 @@ class HaloApiAdaptor extends BaseBlogApi {
     this.logger.debug("向 Halo 请求数据，resJson =>", resJson)
 
     return resJson ?? null
+  }
+
+  private async haloFormFetch(url: string, formData: FormData) {
+    const basicAuth = "Basic " + Base64.btoa(this.cfg.username + ":" + this.cfg.password)
+    const header = {
+      Authorization: basicAuth,
+    }
+
+    const resJson = await this.apiFormFetch(url, [header], formData)
+    return resJson
   }
 }
 
