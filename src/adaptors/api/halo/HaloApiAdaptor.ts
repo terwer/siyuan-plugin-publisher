@@ -123,14 +123,18 @@ class HaloApiAdaptor extends BaseBlogApi {
     params.post.spec.slug = post.wp_slug
 
     // 标签和分类
-    if (post.categories && post.categories.length > 0) {
-      const categoryNames = await this.getCategoryNames(post.categories)
-      params.post.spec.categories = categoryNames
-    }
-    if (!StrUtil.isEmptyString(post.mt_keywords)) {
-      const tags = post.mt_keywords.split(",")
-      const tagNames = await this.getTagNames(tags)
-      params.post.spec.tags = tagNames
+    try {
+      if (post.categories && post.categories.length > 0) {
+        const categoryNames = await this.getCategoryNames(post.categories)
+        params.post.spec.categories = categoryNames
+      }
+      if (!StrUtil.isEmptyString(post.mt_keywords)) {
+        const tags = post.mt_keywords.split(",")
+        const tagNames = await this.getTagNames(tags)
+        params.post.spec.tags = tagNames
+      }
+    } catch (e) {
+      throw e
     }
 
     // 草稿
@@ -148,6 +152,9 @@ class HaloApiAdaptor extends BaseBlogApi {
     // 生成文章ID
     const postidMeta = new HaloPostMeta(res.spec.slug, res.metadata.name, post.dateCreated)
     this.logger.debug("postidMeta =>", postidMeta)
+
+    // 需要更新一次，否则
+
     return JSON.stringify(postidMeta)
   }
 
@@ -156,40 +163,13 @@ class HaloApiAdaptor extends BaseBlogApi {
     try {
       const haloPostKey = this.getHaloPostidKey(postid)
       const name = haloPostKey.name
-      const params: PostRequest = {
-        post: {
-          spec: {
-            title: "",
-            slug: "",
-            template: "",
-            cover: "",
-            deleted: false,
-            publish: false,
-            publishTime: undefined,
-            pinned: false,
-            allowComment: true,
-            visible: "PUBLIC",
-            priority: 0,
-            excerpt: {
-              autoGenerate: true,
-              raw: "",
-            },
-            categories: [],
-            tags: [],
-            htmlMetas: [],
-          },
-          apiVersion: "content.halo.run/v1alpha1",
-          kind: "Post",
-          metadata: {
-            name: "",
-            annotations: {},
-          },
-        },
-        content: {
-          raw: "",
-          content: "",
-          rawType: "HTML",
-        },
+
+      // 加载最新
+      let params: PostRequest = await this.getHaloPost(name)
+      this.logger.debug("get latest halo post =>", { name: name, haloPost: params })
+
+      if (!params.post) {
+        throw new Error("获取文章信息失败，如果文章删除，请强制删除解除关联")
       }
 
       params.content.raw = post.html
@@ -224,6 +204,19 @@ class HaloApiAdaptor extends BaseBlogApi {
     }
 
     return flag
+  }
+
+  public async getPost(postid: string, useSlug?: boolean): Promise<Post> {
+    const haloPostKey = this.getHaloPostidKey(postid)
+    const name = haloPostKey.name
+
+    // 加载最新
+    const haloPost = await this.getHaloPost(name)
+    this.logger.debug("getPost haloPost =>", { name: name, haloPost: haloPost })
+
+    const commonPost = new Post()
+
+    return commonPost
   }
 
   public async getPreviewUrl(postid: string): Promise<string> {
@@ -284,6 +277,25 @@ class HaloApiAdaptor extends BaseBlogApi {
     return postidJson
   }
 
+  private async getHaloPost(name: string): Promise<PostRequest | undefined> {
+    try {
+      const post = await this.haloRequest(`/apis/content.halo.run/v1alpha1/posts/${name}`, {}, "GET")
+
+      const content = await this.haloRequest(
+        `/apis/api.console.halo.run/v1alpha1/posts/${name}/head-content`,
+        {},
+        "GET"
+      )
+
+      return Promise.resolve({
+        post: post,
+        content: content,
+      })
+    } catch (error) {
+      return Promise.resolve(undefined)
+    }
+  }
+
   public async getCategoryNames(displayNames: string[]): Promise<string[]> {
     const allCategories = await this.getHaloCategories()
 
@@ -291,29 +303,30 @@ class HaloApiAdaptor extends BaseBlogApi {
       (name) => !allCategories.find((item) => item.spec.displayName === name)
     )
 
-    const promises = notExistDisplayNames.map(async (name, index) => {
-      const slug = await AliasTranslator.getPageSlug(name, true)
-      return this.haloRequest(
-        "/apis/content.halo.run/v1alpha1/categories",
-        {
-          spec: {
-            displayName: name,
-            slug: slug,
-            description: "",
-            cover: "",
-            template: "",
-            priority: allCategories.length + index,
-            children: [],
+    const newCategories = await Promise.all(
+      notExistDisplayNames.map(async (name, index) => {
+        const slug = await AliasTranslator.getPageSlug(name, true)
+        const category = await this.haloRequest(
+          "/apis/content.halo.run/v1alpha1/categories",
+          {
+            spec: {
+              displayName: name,
+              slug: slug,
+              description: "",
+              cover: "",
+              template: "",
+              priority: allCategories.length + index,
+              children: [],
+            },
+            apiVersion: "content.halo.run/v1alpha1",
+            kind: "Category",
+            metadata: { name: "", generateName: "category-" },
           },
-          apiVersion: "content.halo.run/v1alpha1",
-          kind: "Category",
-          metadata: { name: "", generateName: "category-" },
-        },
-        "POST"
-      )
-    })
-
-    const newCategories = await Promise.all(promises)
+          "POST"
+        )
+        return category
+      })
+    )
 
     const existNames = displayNames
       .map((name) => {
@@ -322,7 +335,8 @@ class HaloApiAdaptor extends BaseBlogApi {
       })
       .filter(Boolean) as string[]
 
-    return [...existNames, ...newCategories.map((item) => item.data.metadata.name)]
+    this.logger.debug("newCategories =>", newCategories)
+    return [...existNames, ...newCategories.map((item) => item.metadata.name)]
   }
 
   private async getHaloCategories() {
@@ -335,26 +349,27 @@ class HaloApiAdaptor extends BaseBlogApi {
 
     const notExistDisplayNames = displayNames.filter((name) => !allTags.find((item) => item.spec.displayName === name))
 
-    const promises = notExistDisplayNames.map(async (name) => {
-      const slug = await AliasTranslator.getPageSlug(name, true)
-      return this.haloRequest(
-        "/apis/content.halo.run/v1alpha1/tags",
-        {
-          spec: {
-            displayName: name,
-            slug: slug,
-            color: "#ffffff",
-            cover: "",
+    const newTags = await Promise.all(
+      notExistDisplayNames.map(async (name) => {
+        const slug = await AliasTranslator.getPageSlug(name, true)
+        const tag = await this.haloRequest(
+          "/apis/content.halo.run/v1alpha1/tags",
+          {
+            spec: {
+              displayName: name,
+              slug: slug,
+              color: "#ffffff",
+              cover: "",
+            },
+            apiVersion: "content.halo.run/v1alpha1",
+            kind: "Tag",
+            metadata: { name: "", generateName: "tag-" },
           },
-          apiVersion: "content.halo.run/v1alpha1",
-          kind: "Tag",
-          metadata: { name: "", generateName: "tag-" },
-        },
-        "POST"
-      )
-    })
-
-    const newTags = await Promise.all(promises)
+          "POST"
+        )
+        return tag
+      })
+    )
 
     const existNames = displayNames
       .map((name) => {
@@ -363,7 +378,8 @@ class HaloApiAdaptor extends BaseBlogApi {
       })
       .filter(Boolean) as string[]
 
-    return [...existNames, ...newTags.map((item) => item.data.metadata.name)]
+    this.logger.debug("newTags =>", newTags)
+    return [...existNames, ...newTags.map((item) => item.metadata.name)]
   }
 
   private async getHaloTags() {
