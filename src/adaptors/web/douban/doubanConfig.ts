@@ -27,24 +27,27 @@ import { CommonWebConfig } from "~/src/adaptors/web/base/commonWebConfig.ts"
 import { CategoryTypeEnum, PageTypeEnum, PasswordType } from "zhi-blog-api"
 
 /**
- * 知乎配置
+ * 豆瓣配置
  */
-class ZhihuConfig extends CommonWebConfig {
+class DoubanConfig extends CommonWebConfig {
   constructor(username: string, password: string, middlewareUrl?: string) {
-    super("https://zhuanlan.zhihu.com", "https://zhuanlan.zhihu.com/api", username, password, middlewareUrl)
-    this.previewUrl = "/p/[postid]"
-    this.pageType = PageTypeEnum.Html
+    super("https://www.douban.com", "https://www.douban.com", username, password, middlewareUrl)
+
+    // 设置豆瓣的预览URL，使用博客ID作为博客预览的URL参数
+    this.previewUrl = "/note/[noteid]"
+    // 设置页面类型为Markdown或其他适用的类型
+    this.pageType = PageTypeEnum.Markdown
+    // 设置密码类型，使用Cookie来管理密码
     this.passwordType = PasswordType.PasswordType_Cookie
+    // 是否启用用户名
     this.usernameEnabled = true
-    this.tagEnabled = false
-    this.cateEnabled = false
-    this.knowledgeSpaceEnabled = true
-    this.knowledgeSpaceTitle = "专栏"
-    this.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Single
-    this.allowKnowledgeSpaceChange = false
-    this.placeholder.knowledgeSpaceReadonlyModeTip =
-      "由于知乎平台的限制，暂时不支持编辑所属专栏。如果您想移动文档，请先点击取消删除该文档，然后重新选择新的专栏发布"
+    // 是否启用标签
+    this.tagEnabled = true
+    // 是否启用分类
+    this.cateEnabled = true
+    // 是否启用知识空间
+    this.knowledgeSpaceEnabled = false
   }
 }
 
-export { ZhihuConfig }
+export { DoubanConfig }

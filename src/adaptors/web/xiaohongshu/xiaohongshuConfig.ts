@@ -24,27 +24,26 @@
  */
 
 import { CommonWebConfig } from "~/src/adaptors/web/base/commonWebConfig.ts"
-import { CategoryTypeEnum, PageTypeEnum, PasswordType } from "zhi-blog-api"
+import { PageTypeEnum, PasswordType } from "zhi-blog-api"
 
 /**
- * 知乎配置
+ * 小红书配置
  */
-class ZhihuConfig extends CommonWebConfig {
+class XiaohongshuConfig extends CommonWebConfig {
   constructor(username: string, password: string, middlewareUrl?: string) {
-    super("https://zhuanlan.zhihu.com", "https://zhuanlan.zhihu.com/api", username, password, middlewareUrl)
+    super("https://creator.xiaohongshu.com", "https://creator.xiaohongshu.com", username, password, middlewareUrl)
+
     this.previewUrl = "/p/[postid]"
-    this.pageType = PageTypeEnum.Html
+    this.pageType = PageTypeEnum.Markdown
     this.passwordType = PasswordType.PasswordType_Cookie
-    this.usernameEnabled = true
+    this.usernameEnabled = false
+    // 小红书不支持标签
     this.tagEnabled = false
+    // 小红书不支持分类
     this.cateEnabled = false
-    this.knowledgeSpaceEnabled = true
-    this.knowledgeSpaceTitle = "专栏"
-    this.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Single
-    this.allowKnowledgeSpaceChange = false
-    this.placeholder.knowledgeSpaceReadonlyModeTip =
-      "由于知乎平台的限制，暂时不支持编辑所属专栏。如果您想移动文档，请先点击取消删除该文档，然后重新选择新的专栏发布"
+    // 小红书没有知识空间
+    this.knowledgeSpaceEnabled = false
   }
 }
 
-export { ZhihuConfig }
+export { XiaohongshuConfig }

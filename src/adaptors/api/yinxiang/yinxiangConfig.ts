@@ -23,28 +23,31 @@
  * questions.
  */
 
-import { CommonWebConfig } from "~/src/adaptors/web/base/commonWebConfig.ts"
-import { CategoryTypeEnum, PageTypeEnum, PasswordType } from "zhi-blog-api"
+import { PageTypeEnum, PasswordType } from "zhi-blog-api"
+import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
 
 /**
- * 知乎配置
+ * 印象笔记配置
  */
-class ZhihuConfig extends CommonWebConfig {
+class YinxiangConfig extends CommonBlogConfig {
   constructor(username: string, password: string, middlewareUrl?: string) {
-    super("https://zhuanlan.zhihu.com", "https://zhuanlan.zhihu.com/api", username, password, middlewareUrl)
-    this.previewUrl = "/p/[postid]"
+    super("https://dev.yinxiang.com/doc/", "https://dev.yinxiang.com/doc/api/v2", username, password, middlewareUrl)
+
+    this.tokenSettingUrl = "https://dev.yinxiang.com/doc/settings/tokens"
+    this.showTokenTip = true
+    this.previewUrl = "/notebook/[notebook]/note/[noteid]"
     this.pageType = PageTypeEnum.Html
-    this.passwordType = PasswordType.PasswordType_Cookie
     this.usernameEnabled = true
+    this.passwordType = PasswordType.PasswordType_Cookie
+    this.allowPreviewUrlChange = false
     this.tagEnabled = false
     this.cateEnabled = false
     this.knowledgeSpaceEnabled = true
-    this.knowledgeSpaceTitle = "专栏"
-    this.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Single
+    this.knowledgeSpaceTitle = "笔记本"
     this.allowKnowledgeSpaceChange = false
     this.placeholder.knowledgeSpaceReadonlyModeTip =
-      "由于知乎平台的限制，暂时不支持编辑所属专栏。如果您想移动文档，请先点击取消删除该文档，然后重新选择新的专栏发布"
+      "由于印象笔记平台的限制，暂时不支持编辑所属笔记本。如果您想移动笔记，请先取消删除该笔记，然后重新选择新的笔记本发布"
   }
 }
 
-export { ZhihuConfig }
+export { YinxiangConfig }

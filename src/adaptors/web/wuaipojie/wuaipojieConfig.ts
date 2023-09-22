@@ -27,24 +27,24 @@ import { CommonWebConfig } from "~/src/adaptors/web/base/commonWebConfig.ts"
 import { CategoryTypeEnum, PageTypeEnum, PasswordType } from "zhi-blog-api"
 
 /**
- * 知乎配置
+ * 吾爱破解配置
  */
-class ZhihuConfig extends CommonWebConfig {
+class WuaipojieConfig extends CommonWebConfig {
   constructor(username: string, password: string, middlewareUrl?: string) {
-    super("https://zhuanlan.zhihu.com", "https://zhuanlan.zhihu.com/api", username, password, middlewareUrl)
-    this.previewUrl = "/p/[postid]"
+    super("https://www.52pojie.cn", "https://www.52pojie.cn/api", username, password, middlewareUrl)
+    this.previewUrl = "/thread-[threadid]-1-1.html"
     this.pageType = PageTypeEnum.Html
     this.passwordType = PasswordType.PasswordType_Cookie
     this.usernameEnabled = true
     this.tagEnabled = false
     this.cateEnabled = false
     this.knowledgeSpaceEnabled = true
-    this.knowledgeSpaceTitle = "专栏"
+    this.knowledgeSpaceTitle = "帖子"
     this.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Single
     this.allowKnowledgeSpaceChange = false
     this.placeholder.knowledgeSpaceReadonlyModeTip =
-      "由于知乎平台的限制，暂时不支持编辑所属专栏。如果您想移动文档，请先点击取消删除该文档，然后重新选择新的专栏发布"
+      "由于吾爱破解平台的限制，暂时不支持编辑所属帖子。如果您想移动帖子，请先取消删除该帖子，然后重新选择新的帖子发布"
   }
 }
 
-export { ZhihuConfig }
+export { WuaipojieConfig }

@@ -23,28 +23,34 @@
  * questions.
  */
 
-import { CommonWebConfig } from "~/src/adaptors/web/base/commonWebConfig.ts"
-import { CategoryTypeEnum, PageTypeEnum, PasswordType } from "zhi-blog-api"
+import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
 
 /**
- * 知乎配置
+ * Flowus网页授权适配器
+ *
+ * @see [Flowus](https://flowus.cn/)
+ * @author terwer
+ * @version 0.16.0
+ * @since 0.16.0
  */
-class ZhihuConfig extends CommonWebConfig {
-  constructor(username: string, password: string, middlewareUrl?: string) {
-    super("https://zhuanlan.zhihu.com", "https://zhuanlan.zhihu.com/api", username, password, middlewareUrl)
-    this.previewUrl = "/p/[postid]"
-    this.pageType = PageTypeEnum.Html
-    this.passwordType = PasswordType.PasswordType_Cookie
-    this.usernameEnabled = true
-    this.tagEnabled = false
-    this.cateEnabled = false
-    this.knowledgeSpaceEnabled = true
-    this.knowledgeSpaceTitle = "专栏"
-    this.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Single
-    this.allowKnowledgeSpaceChange = false
-    this.placeholder.knowledgeSpaceReadonlyModeTip =
-      "由于知乎平台的限制，暂时不支持编辑所属专栏。如果您想移动文档，请先点击取消删除该文档，然后重新选择新的专栏发布"
+class FlowusWebAdaptor extends BaseWebApi {
+  public async getMetaData(): Promise<any> {
+    const res = await this.webProxyFetch("https://flowus.cn/api/users/me")
+    const flag = res?.code === 200
+    this.logger.info(`get flowus metadata finished, flag => ${flag}`)
+    return {
+      flag: flag,
+      uid: res?.data?.uuid,
+      title: res?.data?.nickname,
+      avatar: res?.data?.avatar,
+      spaceViews: res?.data?.spaceViews,
+      supportTypes: ["html"],
+      type: "flowus",
+      displayName: "Flowus 息流",
+      home: "https://flowus.cn",
+      icon: "https://cdn.allflow.cn/assets/favicon.png",
+    }
   }
 }
 
-export { ZhihuConfig }
+export { FlowusWebAdaptor }
