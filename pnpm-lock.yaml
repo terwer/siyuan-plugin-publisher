@@ -120,7 +120,7 @@ devDependencies:
     version: 18.17.17
   '@vitejs/plugin-vue':
     specifier: ^4.3.4
-    version: 4.3.4(vite@4.4.9)(vue@3.3.4)
+    version: 4.3.4(vite@4.4.11)(vue@3.3.4)
   '@vitest/coverage-v8':
     specifier: ^0.34.4
     version: 0.34.4(vitest@0.34.4)
@@ -161,14 +161,14 @@ devDependencies:
     specifier: ^32.2.5
     version: 32.2.5
   vite:
-    specifier: ^4.4.9
-    version: 4.4.9(@types/node@18.17.17)(stylus@0.59.0)
+    specifier: ^4.4.11
+    version: 4.4.11(@types/node@18.17.17)(stylus@0.59.0)
   vite-plugin-html:
     specifier: ^3.2.0
-    version: 3.2.0(vite@4.4.9)
+    version: 3.2.0(vite@4.4.11)
   vite-plugin-node-polyfills:
     specifier: ^0.14.1
-    version: 0.14.1(vite@4.4.9)
+    version: 0.14.1(vite@4.4.11)
   vitest:
     specifier: ^0.34.4
     version: 0.34.4(jsdom@22.1.0)(stylus@0.59.0)
@@ -1703,14 +1703,14 @@ packages:
       ts-morph: 12.0.0
     dev: true
 
-  /@vitejs/plugin-vue@4.3.4(vite@4.4.9)(vue@3.3.4):
+  /@vitejs/plugin-vue@4.3.4(vite@4.4.11)(vue@3.3.4):
     resolution: {integrity: sha512-ciXNIHKPriERBisHFBvnTbfKa6r9SAesOYXeGDzgegcvy9Q4xdScSHAmKbNT0M3O0S9LKhIf5/G+UYG4NnnzYw==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
       vite: ^4.0.0
       vue: ^3.2.25
     dependencies:
-      vite: 4.4.9(@types/node@18.17.17)(stylus@0.59.0)
+      vite: 4.4.11(@types/node@18.17.17)(stylus@0.59.0)
       vue: 3.3.4
     dev: true
 
@@ -7106,7 +7106,7 @@ packages:
       mlly: 1.4.2
       pathe: 1.1.1
       picocolors: 1.0.0
-      vite: 4.4.9(@types/node@18.17.17)(stylus@0.59.0)
+      vite: 4.4.11(@types/node@18.17.17)(stylus@0.59.0)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -7118,7 +7118,7 @@ packages:
       - terser
     dev: true
 
-  /vite-plugin-html@3.2.0(vite@4.4.9):
+  /vite-plugin-html@3.2.0(vite@4.4.11):
     resolution: {integrity: sha512-2VLCeDiHmV/BqqNn5h2V+4280KRgQzCFN47cst3WiNK848klESPQnzuC3okH5XHtgwHH/6s1Ho/YV6yIO0pgoQ==}
     peerDependencies:
       vite: '>=2.0.0'
@@ -7135,10 +7135,10 @@ packages:
       html-minifier-terser: 6.1.0
       node-html-parser: 5.4.2
       pathe: 0.2.0
-      vite: 4.4.9(@types/node@18.17.17)(stylus@0.59.0)
+      vite: 4.4.11(@types/node@18.17.17)(stylus@0.59.0)
     dev: true
 
-  /vite-plugin-node-polyfills@0.14.1(vite@4.4.9):
+  /vite-plugin-node-polyfills@0.14.1(vite@4.4.11):
     resolution: {integrity: sha512-S5ofYUkXea/d94AHzDwiTA7Pv/yEwzagnjgVEuBZdy7E72GBfK17qpljAlyK3CD+CRcDzAwwl/4bEjKdvZmTGQ==}
     peerDependencies:
       vite: ^2.0.0 || ^3.0.0 || ^4.0.0
@@ -7147,13 +7147,13 @@ packages:
       buffer-polyfill: /buffer@6.0.3
       node-stdlib-browser: 1.2.0
       process: 0.11.10
-      vite: 4.4.9(@types/node@18.17.17)(stylus@0.59.0)
+      vite: 4.4.11(@types/node@18.17.17)(stylus@0.59.0)
     transitivePeerDependencies:
       - rollup
     dev: true
 
-  /vite@4.4.9(@types/node@18.17.17)(stylus@0.59.0):
-    resolution: {integrity: sha512-2mbUn2LlUmNASWwSCNSJ/EG2HuSRTnVNaydp6vMCm5VIqJsjMfbIWtbH2kDuwUVW5mMUKKZvGPX/rqeqVvv1XA==}
+  /vite@4.4.11(@types/node@18.17.17)(stylus@0.59.0):
+    resolution: {integrity: sha512-ksNZJlkcU9b0lBwAGZGGaZHCMqHsc8OpgtoYhsQ4/I2v5cnpmmmqe5pM4nv/4Hn6G/2GhTdj0DhZh2e+Er1q5A==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
     peerDependencies:
@@ -7242,7 +7242,7 @@ packages:
       strip-literal: 1.3.0
       tinybench: 2.5.1
       tinypool: 0.7.0
-      vite: 4.4.9(@types/node@18.17.17)(stylus@0.59.0)
+      vite: 4.4.11(@types/node@18.17.17)(stylus@0.59.0)
       vite-node: 0.34.4(@types/node@18.17.17)(stylus@0.59.0)
       why-is-node-running: 2.2.2
     transitivePeerDependencies:
