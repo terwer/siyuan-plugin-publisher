@@ -10,7 +10,8 @@ Support features such as fast publishing, image bed management, platform expansi
 
 > Latest New Features: 🎉 Release of Publish Tool New Version `1.15.0`
 
-  - This update introduces the Halo platform. After upgrading to `1.15.0`, you can publish to the Halo2 site.
+  - `1.15.1` addresses minor bug fixes for the Juejin platform, resolving issues related to duplicate tags during article editing.
+  - This update introduces the Halo platform. After upgrading to `1.15.0+`, you can publish to the Halo2 site.
   - It also fixes issues related to YAML parsing in certain scenarios, and errors when tags are empty on some platforms.
   - Oh, in version `1.14.0` and beyond, the author quietly developed an import feature. You can use the `Settings` -> `Publish Settings` -> `Import Predefined Platforms` feature to quickly import builtin platforms 😄
 
