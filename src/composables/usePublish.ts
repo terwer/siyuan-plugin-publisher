@@ -302,6 +302,11 @@ const usePublish = () => {
         setting[id] = updatedPostMeta
         await updateSetting(setting)
 
+        // 清空属性
+        const yamlKey = getDynYamlKey(key)
+        await kernelApi.setSingleBlockAttr(id, yamlKey, "")
+        logger.info(`[${key}] [${id}] 属性已移除`)
+
         await kernelApi.pushMsg({
           msg: t("main.opt.ok"),
           timeout: 2000,

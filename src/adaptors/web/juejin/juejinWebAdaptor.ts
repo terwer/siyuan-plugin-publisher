@@ -96,6 +96,13 @@ class JuejinWebAdaptor extends BaseWebApi {
       // throw new Error("掘金平台必须选择一个标签")
     }
 
+    const DEFAULT_DESC =
+      "由于掘金平台的摘要有强制字数要求，这里需要给一下默认文字作为摘要。这里是掘金平台的默认摘要，您可以稍后自行修改。"
+    if (StrUtil.isEmptyString(post.shortDesc) || post.shortDesc.length < DEFAULT_DESC.length) {
+      post.shortDesc = DEFAULT_DESC
+      this.logger.error("掘金平台未设置摘要或者摘要字数不够，将使用默认摘要")
+    }
+
     // 保存草稿
     const draftUrl = "https://api.juejin.cn/content_api/v1/article_draft/create"
     const draftParams = {
@@ -178,8 +185,10 @@ class JuejinWebAdaptor extends BaseWebApi {
 
   public async deletePost(postid: string): Promise<boolean> {
     const url = "https://api.juejin.cn/content_api/v1/article/delete"
+    const juejinPostKey = this.getJuejinPostidKey(postid)
+    const pageId = juejinPostKey.pageId
     const params = {
-      article_id: postid,
+      article_id: pageId,
     }
     const res = await this.webProxyFetch(url, [], params, "POST")
     this.logger.debug("juejin delete post res =>", res)
