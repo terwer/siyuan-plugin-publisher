@@ -43,6 +43,7 @@ Names not listed in order
 - [X] Yuque
 - [X] Notion
 - [X] Halo
+- [ ] Evernote
 - [X] Github
   - [X] Hexo
   - [X] Hugo
@@ -50,6 +51,8 @@ Names not listed in order
   - [X] Vuepress
   - [X] Vuepress2
   - [X] Vitepress
+  - [ ] Antora
+  - [ ] Docsify
 - [X] Gitlab
   - [X] Gitlabhexo
   - [X] Gitlabhugo
@@ -57,15 +60,24 @@ Names not listed in order
   - [X] Gitlabvuepress
   - [X] Gitlabvuepress2
   - [X] Gitlabvitepress
+  - [ ] Gitlabantora
+  - [ ] Gitlabdocsify
 - [X] Metaweblog
-- [X] Cnblogs
+- [X] CnBlogs
 - [X] Typecho
 - [X] WordPress
 - [X] Zhihu
 - [X] CSDN
-- [X] Wechat
+- [X] WeChat Official Account
 - [X] Jianshu
 - [X] Juejin
+- [ ] 52pojie
+- [ ] Bilibili
+- [ ] Xiaohongshu
+- [ ] Douban
+- [ ] Xlog
+- [ ] Mdnice
+- [ ] Flowus
 
 ## Core Features
 

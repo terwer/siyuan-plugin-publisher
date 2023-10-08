@@ -51,6 +51,7 @@ import { useVitepressApi } from "~/src/adaptors/api/vitepress/useVitepressApi.ts
 import { useGitlabvuepress2Api } from "~/src/adaptors/api/gitlab-vuepress2/useGitlabvuepress2Api.ts"
 import { useGitlabvitepressApi } from "~/src/adaptors/api/gitlab-vitepress/useGitlabvitepressApi.ts"
 import { useHaloApi } from "~/src/adaptors/api/halo/useHaloApi.ts"
+import { useFlowusWeb } from "~/src/adaptors/web/flowus/useFlowusWeb.ts"
 
 /**
  * 适配器统一入口
@@ -189,6 +190,11 @@ class Adaptors {
       }
       case SubPlatformType.Custom_Juejin: {
         const { cfg } = await useJuejinWeb(key)
+        conf = cfg
+        break
+      }
+      case SubPlatformType.Custom_Flowus: {
+        const { cfg } = await useFlowusWeb(key)
         conf = cfg
         break
       }
@@ -334,6 +340,11 @@ class Adaptors {
       }
       case SubPlatformType.Custom_Juejin: {
         const { webApi } = await useJuejinWeb(key, newCfg)
+        blogAdaptor = webApi
+        break
+      }
+      case SubPlatformType.Custom_Flowus: {
+        const { webApi } = await useFlowusWeb(key, newCfg)
         blogAdaptor = webApi
         break
       }

@@ -29,7 +29,7 @@ import { CategoryTypeEnum, PageTypeEnum, PasswordType } from "zhi-blog-api"
 /**
  * 简书配置
  */
-export class JianshuConfig extends CommonWebConfig {
+class JianshuConfig extends CommonWebConfig {
   constructor(username: string, password: string, middlewareUrl?: string) {
     super("https://www.jianshu.com", "https://www.jianshu.com", username, password, middlewareUrl)
 
@@ -47,3 +47,5 @@ export class JianshuConfig extends CommonWebConfig {
       "由于简书平台的限制，暂时不支持编辑所属笔记本。如果您想移动文档，请先点击取消删除该文档，然后重新选择新的笔记本发布"
   }
 }
+
+export { JianshuConfig }

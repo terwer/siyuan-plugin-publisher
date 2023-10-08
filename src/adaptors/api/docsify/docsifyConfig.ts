@@ -23,28 +23,38 @@
  * questions.
  */
 
-import { CommonWebConfig } from "~/src/adaptors/web/base/commonWebConfig.ts"
+import { CommonGithubConfig } from "~/src/adaptors/api/base/github/commonGithubConfig.ts"
 import { CategoryTypeEnum, PageTypeEnum, PasswordType } from "zhi-blog-api"
 
 /**
- * 知乎配置
+ * Docsify 配置
  */
-class ZhihuConfig extends CommonWebConfig {
-  constructor(username: string, password: string, middlewareUrl?: string) {
-    super("https://zhuanlan.zhihu.com", "https://zhuanlan.zhihu.com/api", username, password, middlewareUrl)
-    this.previewUrl = "/p/[postid]"
-    this.pageType = PageTypeEnum.Html
-    this.passwordType = PasswordType.PasswordType_Cookie
-    this.usernameEnabled = true
-    this.tagEnabled = false
-    this.cateEnabled = false
+class DocsifyConfig extends CommonGithubConfig {
+  constructor(
+    githubUsername: string,
+    githubAuthToken: string,
+    githubRepo: string,
+    githubBranch: string,
+    middlewareUrl?: string
+  ) {
+    super(githubUsername, githubAuthToken, githubRepo, githubBranch, middlewareUrl)
+
+    // 修改 Docsify 配置特有的属性
+    this.previewUrl = "/[user]/[repo]/blob/[branch]/[docpath]"
+    this.pageType = PageTypeEnum.Markdown
+    this.passwordType = PasswordType.PasswordType_Token
+    this.allowPreviewUrlChange = false
+    this.tagEnabled = true
+    this.cateEnabled = true
+    this.allowCateChange = true
+    this.categoryType = CategoryTypeEnum.CategoryType_Multi
     this.knowledgeSpaceEnabled = true
-    this.knowledgeSpaceTitle = "专栏"
-    this.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Single
     this.allowKnowledgeSpaceChange = false
-    this.placeholder.knowledgeSpaceReadonlyModeTip =
-      "由于知乎平台的限制，暂时不支持编辑所属专栏。如果您想移动文档，请先点击取消删除该文档，然后重新选择新的专栏发布"
+    this.placeholder.knowledgeSpaceReadonlyModeTip = "Docsify 平台暂不支持修改发布目录，如需修改，请删除之后重新发布"
+    this.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Tree_Single
+    this.useMdFilename = false
+    this.usePathCategory = false
   }
 }
 
-export { ZhihuConfig }
+export { DocsifyConfig }
