@@ -1,19 +1,13 @@
 # Changelog
 
 ## [1.15.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.15.0...v1.15.1) (2023-10-08)
-
-
 ### Bug Fixes
-
 * [#744](https://github.com/terwer/siyuan-plugin-publisher/issues/744) WordPress更新文章标签重复 ([1fc2171](https://github.com/terwer/siyuan-plugin-publisher/commit/1fc2171420bd309ce8354f226698f1968ab0349b))
 * **deps:** bump vue-i18n from 9.4.1 to 9.5.0 ([dbb0df7](https://github.com/terwer/siyuan-plugin-publisher/commit/dbb0df790cdd78f1103ba826ce73c3bfc3990b6d))
 * **deps:** bump vue-router from 4.2.4 to 4.2.5 ([11cec9d](https://github.com/terwer/siyuan-plugin-publisher/commit/11cec9d20b02494d6eecfd30eaf31daaa14b16e4))
 * 修复强制删除属性残留问题 ([120d62f](https://github.com/terwer/siyuan-plugin-publisher/commit/120d62f7ddb029a1d328f67c33a001b7870a73dd))
 * 修复掘金平台发布错误的问题 ([4516bb7](https://github.com/terwer/siyuan-plugin-publisher/commit/4516bb74bdecd7635353fd50d2295d8bd41d7330))
-
-
 ### Miscellaneous
-
 * **deps-dev:** bump @vitejs/plugin-vue from 4.3.4 to 4.4.0 ([eea41e0](https://github.com/terwer/siyuan-plugin-publisher/commit/eea41e0a388900bad8eb80f14721c9494e10f902))
 * **deps-dev:** bump @vitest/coverage-v8 from 0.34.4 to 0.34.6 ([df8cec7](https://github.com/terwer/siyuan-plugin-publisher/commit/df8cec75dc5ebdb2e0f6cf580aed825a54ef80b8))
 * **deps-dev:** bump vercel from 32.2.5 to 32.4.1 ([454f6c1](https://github.com/terwer/siyuan-plugin-publisher/commit/454f6c1ad3489b6f7d9fbdfcd69015eb293a8b7e))
@@ -21,11 +15,9 @@
 * **deps-dev:** bump vite-plugin-node-polyfills from 0.14.1 to 0.15.0 ([36c7a87](https://github.com/terwer/siyuan-plugin-publisher/commit/36c7a87a043681bd767a8cc05f6ed3906ce50fa1))
 * **deps-dev:** bump vitest from 0.34.4 to 0.34.6 ([82abb1e](https://github.com/terwer/siyuan-plugin-publisher/commit/82abb1e87fa322fb2d4db8366718d66b39c2a630))
 * **deps-dev:** bump vue-tsc from 1.8.13 to 1.8.15 ([f1b6783](https://github.com/terwer/siyuan-plugin-publisher/commit/f1b67837cb07d333296e482d752b497eaf2c572e))
-
 ## [1.15.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.14.1...v1.15.0) (2023-09-21)
 ### Features
 * 支持 halo - 支持上传图片 ([3e13fb5](https://github.com/terwer/siyuan-plugin-publisher/commit/3e13fb58dc4bf374956c778d4a1f93b2f63bef01))
-### Bug Fixes
 * 优化帮助指引 ([5a3c99a](https://github.com/terwer/siyuan-plugin-publisher/commit/5a3c99aa87f097ea6c61c50305239d81f92f1ea0))
 * 修复yaml在部分场景下误解析的问题 ([9edd0c0](https://github.com/terwer/siyuan-plugin-publisher/commit/9edd0c09405e8b271fb1a9374ccff3e89087e57c))
 * 修复标签为空时部分平台报错的问题 ([3031c2a](https://github.com/terwer/siyuan-plugin-publisher/commit/3031c2a691a7bb5f350b202ee7c593b66b760db4))
@@ -34,7 +26,6 @@
 * 支持 halo - 基本发布功能 ([8964d66](https://github.com/terwer/siyuan-plugin-publisher/commit/8964d66e40cf233e7da55c6058b9cd3b2e0b9986))
 * 支持 halo - 新建和更新文章 ([27f5d32](https://github.com/terwer/siyuan-plugin-publisher/commit/27f5d3297c84238f070ebc164666dee2e574a826))
 * 新增csdn发布说明 ([5df6ed9](https://github.com/terwer/siyuan-plugin-publisher/commit/5df6ed9b59c223ecf7964dbf6fc5f2fc15d20f58))
-### Miscellaneous
 * **deps-dev:** bump vue-tsc from 1.8.11 to 1.8.13 ([7c9c1ac](https://github.com/terwer/siyuan-plugin-publisher/commit/7c9c1ac63cf76e370df79ff8d5e9e10475889f19))
 ## [1.14.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.14.0...v1.14.1) (2023-09-18)
 * notion支持根页面搜索 ([ef88004](https://github.com/terwer/siyuan-plugin-publisher/commit/ef880045587f3ccf8459a7731ebac3d250c87cfa))
