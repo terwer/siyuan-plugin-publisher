@@ -302,6 +302,11 @@ const usePublish = () => {
         setting[id] = updatedPostMeta
         await updateSetting(setting)
 
+        // 清空属性
+        const yamlKey = getDynYamlKey(key)
+        await kernelApi.setSingleBlockAttr(id, yamlKey, "")
+        logger.info(`[${key}] [${id}] 属性已移除`)
+
         await kernelApi.pushMsg({
           msg: t("main.opt.ok"),
           timeout: 2000,
@@ -508,13 +513,21 @@ const usePublish = () => {
       const postKeywords = post?.mt_keywords?.split(",") ?? []
       const newPostKeywords = newPost?.mt_keywords?.split(",") ?? []
       // 合并并去重关键词
-      const mergedKeywords = [...new Set([...postKeywords, ...newPostKeywords])].filter((tag) => tag.trim() !== "")
+      const mergedKeywords = [
+        ...new Set([
+          ...postKeywords.map((tag) => tag.trim()),
+          ...newPostKeywords.map((tag) => tag.trim()),
+        ]),
+      ].filter((tag) => tag.trim() !== "")
       mergedPost.mt_keywords = mergedKeywords.join(",")
 
       // 合并并去重分类
-      const mergedCategories = [...new Set([...(post?.categories ?? []), ...(newPost?.categories ?? [])])].filter(
-        (cate) => cate.trim() !== ""
-      )
+      const mergedCategories = [
+        ...new Set([
+          ...(post?.categories ?? []).map((cate) => cate.trim()),
+          ...(newPost?.categories ?? []).map((cate) => cate.trim()),
+        ]),
+      ].filter((cate) => cate.trim() !== "")
       mergedPost.categories = mergedCategories
 
       return mergedPost
