@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.16.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.15.1...v1.16.0) (2023-10-10)
+
+
+### Features
+
+* [#774](https://github.com/terwer/siyuan-plugin-publisher/issues/774) [#751](https://github.com/terwer/siyuan-plugin-publisher/issues/751) 知乎平台支持公式和表格 ([7af4590](https://github.com/terwer/siyuan-plugin-publisher/commit/7af45902f65b9f34e53acda054714e8cdd057865))
+* [#774](https://github.com/terwer/siyuan-plugin-publisher/issues/774) [#751](https://github.com/terwer/siyuan-plugin-publisher/issues/751) 知乎平台支持公式和表格 ([21f2513](https://github.com/terwer/siyuan-plugin-publisher/commit/21f25135fd5bd14c0daafc62d24ae425e645e90e))
+* Github 和 Gitlab 系列平台支持自定义设置作者主页 ([720c3b4](https://github.com/terwer/siyuan-plugin-publisher/commit/720c3b4a437e6ca546b25376041fd7246976ecca))
+
+
+### Miscellaneous
+
+* **deps-dev:** bump vue-tsc from 1.8.16 to 1.8.18 ([61dadf6](https://github.com/terwer/siyuan-plugin-publisher/commit/61dadf6ec63e1a1d922e76f4219fb973b4c0a546))
+
 ## [1.15.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.15.0...v1.15.1) (2023-10-08)
 ### Bug Fixes
 * [#744](https://github.com/terwer/siyuan-plugin-publisher/issues/744) WordPress更新文章标签重复 ([1fc2171](https://github.com/terwer/siyuan-plugin-publisher/commit/1fc2171420bd309ce8354f226698f1968ab0349b))
