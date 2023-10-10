@@ -8,13 +8,13 @@ Publish articles from siyuan-note to platforms such as Yuque, Notion, Cnblogs, W
 
 Support features such as fast publishing, image bed management, platform expansion, smart labels, etc.
 
-> Latest New Features: 🎉 Release of Publish Tool New Version `1.15.0`
+🎉 Exciting News: New tool version `1.16.0` is out!
 
-  - `1.15.1` addresses minor bug fixes for the Juejin platform, resolving issues related to duplicate tags during article editing.
-  - This update introduces the Halo platform. After upgrading to `1.15.0+`, you can publish to the Halo2 site.
-  - It also fixes issues related to YAML parsing in certain scenarios, and errors when tags are empty on some platforms.
-  - Oh, in version `1.14.0` and beyond, the author quietly developed an import feature. You can use the `Settings` -> `Publish Settings` -> `Import Predefined Platforms` feature to quickly import builtin platforms 😄
-
+- `1.16.0` focuses on enhancing support for **formulas** and **tables** on Zhihu. Additionally, GitHub now allows custom author homepage configuration.
+- `1.15.1` addresses minor issues like fixing publishing errors on Juejin, handling anomalies during article deletion, and resolving tag duplication during article editing.
+- Introducing support for the Halo platform! After upgrading to `1.15.0+`, you can seamlessly publish content to Halo2 sites.
+- In `1.15.0`, fixes were made for misinterpretation of YAML in certain scenarios and publishing errors on platforms when tags were empty.
+- Oh, by the way, starting from version `1.14.0`, the author secretly developed an import feature. You can swiftly import built-in platforms using the `Settings` -> `Publish Settings` -> `Import Predefined Platforms` feature 😄. 
 
 > Platform Limitations:
   - **WeChat Official Accounts**: Publishing Tool now supports posting articles to the WeChat Official Accounts draft box in version `1.13.0` and beyond. However, due to limitations on the WeChat platform in Electron, normal login operations are not possible. Therefore, you will need to visit `https://mp.weixin.qq.com/` yourself, complete the login, copy the cookie, and then paste it into the configuration options.

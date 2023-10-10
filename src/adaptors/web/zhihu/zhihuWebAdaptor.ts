@@ -24,12 +24,14 @@
  */
 
 import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
-import { CategoryInfo, Post, UserBlog } from "zhi-blog-api"
+import { BlogConfig, CategoryInfo, PageTypeEnum, Post, UserBlog } from "zhi-blog-api"
 import * as cheerio from "cheerio"
 import { JsonUtil, StrUtil } from "zhi-common"
 import CryptoJS from "crypto-js"
 import { arrayToBuffer } from "~/src/utils/polyfillUtils.ts"
 import { getAliOssClient } from "~/src/vendors/alioss/s3oss.ts"
+import _ from "lodash"
+import ZhihuUtils from "~/src/adaptors/web/zhihu/zhihuUtils.ts"
 
 /**
  * 知乎网页授权适配器
@@ -96,6 +98,38 @@ class ZhihuWebAdaptor extends BaseWebApi {
 
     this.logger.debug("getUsersBlogs=>", result)
     return result
+  }
+
+  public override async preEditPost(post: Post, id?: string, publishCfg?: any): Promise<Post> {
+    // 公共的属性预处理
+    const doc = await super.preEditPost(post, id, publishCfg)
+
+    // 知乎自定义的处理
+    const cfg: BlogConfig = publishCfg?.cfg
+    const updatedPost = _.cloneDeep(doc) as Post
+    const html = updatedPost.html
+    this.logger.info("准备处理知乎正文")
+    this.logger.debug("html =>", { html: html })
+    let updatedHtml = html
+
+    // 处理表格
+    updatedHtml = ZhihuUtils.processZHTable(updatedHtml)
+    // 处理数学公式
+    updatedHtml = ZhihuUtils.processZHMath(updatedHtml)
+
+    // 处理完毕
+    updatedPost.html = updatedHtml
+    this.logger.info("知乎正文处理完毕")
+    this.logger.debug("updatedHtml =>", { updatedHtml: updatedHtml })
+
+    // 发布格式
+    if (cfg?.pageType == PageTypeEnum.Markdown) {
+      updatedPost.description = updatedPost.markdown
+    } else {
+      updatedPost.description = updatedPost.html
+    }
+
+    return updatedPost
   }
 
   public async addPost(post: Post) {

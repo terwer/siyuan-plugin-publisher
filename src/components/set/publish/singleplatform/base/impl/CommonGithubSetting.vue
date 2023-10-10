@@ -80,9 +80,6 @@ const syncDefaultPath = (cfg: any) => {
       <el-form-item :label="t('setting.blog.yamlLinkEnabled')">
         <el-switch v-model="(main.cfg as any).yamlLinkEnabled" />
       </el-form-item>
-      <el-form-item>
-        <a href="javascript:;" @click="toggleAdvance">{{ formData.advanceBtnText }}</a>
-      </el-form-item>
       <!-- Github分支名 -->
       <el-form-item :label="t('setting.blog.type.github.default.branch')">
         <el-input
@@ -98,6 +95,9 @@ const syncDefaultPath = (cfg: any) => {
           :placeholder="t('setting.blog.type.github.default.path.tip')"
         />
       </el-form-item>
+      <el-form-item>
+        <a href="javascript:;" @click="toggleAdvance">{{ formData.advanceBtnText }}</a>
+      </el-form-item>
       <div v-if="formData.showAdvancedConfig">
         <!-- 提交信息 -->
         <el-form-item :label="t('setting.blog.type.github.msg')">
@@ -110,6 +110,10 @@ const syncDefaultPath = (cfg: any) => {
         <!-- 邮箱 -->
         <el-form-item :label="t('setting.blog.type.github.email')">
           <el-input v-model="(main.cfg as any).email" :placeholder="t('setting.blog.type.github.email.tip')" />
+        </el-form-item>
+        <!-- 作者主页 -->
+        <el-form-item :label="t('setting.blog.type.github.site')">
+          <el-input v-model="(main.cfg as any).site" :placeholder="t('setting.blog.type.github.site.tip')" />
         </el-form-item>
         <!-- 文件规则 -->
         <el-form-item :label="t('setting.blog.mdFilenameRule')">
