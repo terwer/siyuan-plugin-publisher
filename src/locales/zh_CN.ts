@@ -149,6 +149,8 @@ export default {
   "setting.blog.type.github.author.tip": "作者，例如：terwer",
   "setting.blog.type.github.email": "邮箱",
   "setting.blog.type.github.email.tip": "邮箱",
+  "setting.blog.type.github.site": "作者主页",
+  "setting.blog.type.github.site.tip": "作者主页，如果为空默认为：[GitHub地址]/[用户名]",
   "setting.blog.url": "博客网址",
   "setting.blog.github.url.tip": "Github首页地址",
   "setting.blog.username": "账号",
