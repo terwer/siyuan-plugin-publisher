@@ -136,7 +136,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
       let filename = cfg.mdFilenameRule.replace(/\.md/g, "")
       if (cfg.useMdFilename) {
         // 使用真实文件名作为MD文件名
-        filename = filename.replace(/\[filename\]/g, post.title)
+        filename = filename.replace(/\[filename\]/g, post.originalTitle)
       } else {
         // 使用别名作为MD文件名
         filename = filename.replace(/\[slug\]/g, post.wp_slug)

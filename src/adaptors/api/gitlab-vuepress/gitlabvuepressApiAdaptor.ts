@@ -74,22 +74,22 @@ class GitlabvuepressApiAdaptor extends CommonGitlabApiAdaptor {
       const docPath = doc.path
       const saveFile = await this.autoMapPublishDir(docPath)
       updatedPost.cate_slugs = [saveFile]
-      // 自动生成一级目录
-      // ======
-
-      updatedPost.markdown = `${yfm}\n${updatedMd}`
-      this.logger.info("Gitlabvuepress 正文处理完毕")
-      this.logger.debug("updatedMd =>", { yfm: yfm, updatedMd: updatedMd })
-
-      // 发布格式
-      if (cfg?.pageType == PageTypeEnum.Markdown) {
-        updatedPost.description = updatedPost.markdown
-      } else {
-        updatedPost.description = updatedPost.html
-      }
-
-      return updatedPost
     }
+    // 自动生成一级目录
+    // ======
+
+    updatedPost.markdown = `${yfm}\n${updatedMd}`
+    this.logger.info("Gitlabvuepress 正文处理完毕")
+    this.logger.debug("updatedMd =>", { yfm: yfm, updatedMd: updatedMd })
+
+    // 发布格式
+    if (cfg?.pageType == PageTypeEnum.Markdown) {
+      updatedPost.description = updatedPost.markdown
+    } else {
+      updatedPost.description = updatedPost.html
+    }
+
+    return updatedPost
   }
 
   // ================
