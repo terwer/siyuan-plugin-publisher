@@ -60,10 +60,15 @@ const props = defineProps({
 })
 
 // emits
-const emit = defineEmits(["onHomeChange"])
+const emit = defineEmits(["onHomeChange", "onApiUrlChange", "onUsernameChange"])
 const handleHomeChange = (value: string | number): void => {
   if (emit) {
     emit("onHomeChange", value, formData.cfg)
+  }
+}
+const handleUsernameChange = (value: string | number): void => {
+  if (emit) {
+    emit("onUsernameChange", value, formData.cfg)
   }
 }
 
@@ -293,7 +298,11 @@ onMounted(async () => {
     </el-form-item>
     <!-- 登录名 -->
     <el-form-item :label="t('setting.common.username')" v-if="props.cfg.usernameEnabled">
-      <el-input v-model="formData.cfg.username" :placeholder="props.cfg?.placeholder.usernamePlaceholder" />
+      <el-input
+        v-model="formData.cfg.username"
+        :placeholder="props.cfg?.placeholder.usernamePlaceholder"
+        @input="handleUsernameChange"
+      />
     </el-form-item>
     <!-- 密码 -->
     <el-form-item

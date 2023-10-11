@@ -33,7 +33,7 @@ import { StrUtil, YamlUtil } from "zhi-common"
 import { toRaw } from "vue"
 import { Base64 } from "js-base64"
 import { isDev } from "~/src/utils/constants.ts"
-import sypIdUtil from "~/src/utils/sypIdUtil.ts";
+import sypIdUtil from "~/src/utils/sypIdUtil.ts"
 
 /**
  * Gitlab API 适配器
@@ -95,13 +95,31 @@ class CommonGitlabApiAdaptor extends BaseBlogApi {
     this.logger.info("将要最终发送到以下目录 =>", docPath)
 
     // 开始发布
-    const res = await this.gitlabClient.createRepositoryFile(docPath, post.description)
-    this.logger.debug("gitlab newPost finished =>", res)
+    let finalRes: any
+    try {
+      const res = await this.gitlabClient.createRepositoryFile(docPath, post.description)
+      this.logger.debug("gitlab newPost finished =>", res)
+      if (!res?.file_path) {
+        throw new Error("Gitlab 调用API异常 =>" + res?.message)
+      }
 
-    if (!res?.file_path) {
-      throw new Error("Gitlab 调用API异常 =>" + res?.message)
+      finalRes = res
+    } catch (e) {
+      // 失败之后尝试删除旧数据再发一次
+      try {
+        await this.deletePost(docPath)
+      } catch (e) {
+        this.logger.warn("尝试删除失败，忽略", e)
+      }
+      const res2 = await this.gitlabClient.createRepositoryFile(docPath, post.description)
+      if (!res2?.file_path) {
+        throw new Error("重发依旧失败，Gitlab 调用API异常 =>" + res2?.message)
+      }
+
+      finalRes = res2
     }
-    return res.file_path
+
+    return finalRes.file_path
   }
 
   public async getPost(postid: string, useSlug?: boolean): Promise<Post> {

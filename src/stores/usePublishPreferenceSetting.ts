@@ -23,17 +23,19 @@
  * questions.
  */
 
-import { RemovableRef, StorageSerializers, useLocalStorage } from "@vueuse/core"
+import { RemovableRef, StorageSerializers } from "@vueuse/core"
 import { PublishPreferenceCfg } from "~/src/models/publishPreferenceCfg.ts"
 import { readonly } from "vue"
-import {SiyuanDevice} from "zhi-device";
-import {createAppLogger} from "~/src/utils/appLogger.ts";
+import { SiyuanDevice } from "zhi-device"
+import { createAppLogger } from "~/src/utils/appLogger.ts"
+import useCommonLocalStorage from "~/src/stores/common/useCommonLocalStorage.ts"
 
 /**
  * 使用发布偏好设置的自定义钩子
  */
 const usePublishPreferenceSetting = () => {
   // 存储键
+  const filePath = "storage/syp/publish-preference-cfg.json"
   const storageKey = "publish-preference-cfg"
   const logger = createAppLogger("use-publish-pref")
 
@@ -46,7 +48,7 @@ const usePublishPreferenceSetting = () => {
    */
   const getPublishPreferenceSetting = (): RemovableRef<PublishPreferenceCfg> => {
     const initialValue = new PublishPreferenceCfg()
-    const prefConfig = useLocalStorage<PublishPreferenceCfg>(storageKey, initialValue, {
+    const prefConfig = useCommonLocalStorage<PublishPreferenceCfg>(filePath, storageKey, initialValue, {
       serializer: StorageSerializers.object,
     })
 

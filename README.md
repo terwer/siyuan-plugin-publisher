@@ -8,13 +8,16 @@ Publish articles from siyuan-note to platforms such as Yuque, Notion, Cnblogs, W
 
 Support features such as fast publishing, image bed management, platform expansion, smart labels, etc.
 
-> Latest New Features: 🎉 Release of Publish Tool New Version `1.15.0`
+> Latest Feature Release: 🎉 New Publish Tool version `1.17.0` is out! 🚀
 
-  - `1.15.1` addresses minor bug fixes for the Juejin platform, resolving issues related to duplicate tags during article editing.
-  - This update introduces the Halo platform. After upgrading to `1.15.0+`, you can publish to the Halo2 site.
-  - It also fixes issues related to YAML parsing in certain scenarios, and errors when tags are empty on some platforms.
-  - Oh, in version `1.14.0` and beyond, the author quietly developed an import feature. You can use the `Settings` -> `Publish Settings` -> `Import Predefined Platforms` feature to quickly import builtin platforms 😄
+**This might be the most worthwhile update since the National Day. 😄**
 
+- In `1.17.0`, the following significant changes have been made:
+  - Optimization and support for AI effects.
+  - Persistence of preference settings, eliminating concerns about preference configuration being invalidated due to restarts or other situations.
+  - Resolved the issue where Halo publication times were not taking effect.
+  - Fixed the problem of articles previously published with old widgets not being updatable.
+- Ah, by the way, since version `1.14.0`, the author secretly developed an import feature. You can swiftly import built-in platforms using the `Settings` -> `Publish Settings` -> `Import Predefined Platforms` feature. 😄
 
 > Platform Limitations:
   - **WeChat Official Accounts**: Publishing Tool now supports posting articles to the WeChat Official Accounts draft box in version `1.13.0` and beyond. However, due to limitations on the WeChat platform in Electron, normal login operations are not possible. Therefore, you will need to visit `https://mp.weixin.qq.com/` yourself, complete the login, copy the cookie, and then paste it into the configuration options.

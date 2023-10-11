@@ -516,9 +516,9 @@ class WechatWebAdaptor extends BaseWebApi {
 
     // 发布格式
     if (cfg?.pageType == PageTypeEnum.Markdown) {
-      post.description = post.markdown
+      updatedPost.description = updatedPost.markdown
     } else {
-      post.description = post.html
+      updatedPost.description = updatedPost.html
     }
 
     return updatedPost

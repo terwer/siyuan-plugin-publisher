@@ -32,7 +32,7 @@ import { DateUtil, HtmlUtil, StrUtil, YamlUtil } from "zhi-common"
 import { toRaw } from "vue"
 import { Base64 } from "js-base64"
 import { CommonGitlabConfig } from "~/src/adaptors/api/base/gitlab/commonGitlabConfig.ts"
-import sypIdUtil from "~/src/utils/sypIdUtil.ts";
+import sypIdUtil from "~/src/utils/sypIdUtil.ts"
 
 /**
  * Github API 适配器
@@ -93,12 +93,31 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
     this.logger.info("将要最终发送到以下目录 =>", docPath)
 
     // 开始发布
-    const res = await this.githubClient.publishGithubPage(docPath, post.description)
+    let finalRes: any
+    try {
+      const res = await this.githubClient.publishGithubPage(docPath, post.description)
 
-    if (!res?.content?.path) {
-      throw new Error("Github 调用API异常")
+      if (!res?.content?.path) {
+        throw new Error("Github 调用API异常")
+      }
+
+      finalRes = res
+    } catch (e) {
+      // 失败之后尝试删除旧数据再发一次
+      try {
+        await this.deletePost(docPath)
+      } catch (e) {
+        this.logger.warn("尝试删除失败，忽略", e)
+      }
+      const res2 = await this.githubClient.publishGithubPage(docPath, post.description)
+      if (!res2?.content?.path) {
+        throw new Error("重发依旧失败，Github 调用API异常")
+      }
+
+      finalRes = res2
     }
-    return res.content.path
+
+    return finalRes.content.path
   }
 
   public async getPost(postid: string, useSlug?: boolean): Promise<Post> {

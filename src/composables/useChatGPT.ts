@@ -24,11 +24,12 @@
  */
 
 import { usePublishPreferenceSetting } from "~/src/stores/usePublishPreferenceSetting.ts"
-import { StrUtil } from "zhi-common"
+import { HtmlUtil, StrUtil } from "zhi-common"
 import { ChatGPTAPI, ChatGPTUnofficialProxyAPI, SendMessageOptions } from "chatgpt"
 import { Utils } from "~/src/utils/utils.ts"
 import { isDev } from "~/src/utils/constants.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { AiConstants } from "~/src/utils/ai/AiConstants.ts"
 
 /**
  * 创建一个用于与 ChatGPT 服务进行交互的钩子
@@ -96,7 +97,20 @@ const useChatGPT = () => {
     }
   }
 
+  /**
+   * 获取聊天输入
+   *
+   * @param input1 可能为空的输入1，优先级高
+   * @param input2 不为空的输入2，优先级低
+   */
+  const getChatInput = (input1: string, input2: string) => {
+    const md = input1.substring(0, AiConstants.MAX_INPUT_TOKEN_LENGTH)
+    const html = HtmlUtil.parseHtml(input2, AiConstants.MAX_INPUT_TOKEN_LENGTH, true)
+    return Utils.emptyOrDefault(md, html)
+  }
+
   return {
+    getChatInput,
     chat,
   }
 }
