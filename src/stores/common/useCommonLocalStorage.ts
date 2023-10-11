@@ -22,19 +22,19 @@
  * or visit www.terwer.space if you need additional information or have any
  * questions.
  */
-import type {MaybeRefOrGetter, RemovableRef} from "@vueuse/shared"
-import type {StorageLike, UseStorageOptions} from "@vueuse/core"
-import {defaultWindow, useStorage} from "@vueuse/core"
+import type { MaybeRefOrGetter, RemovableRef } from "@vueuse/shared"
+import type { StorageLike, UseStorageOptions } from "@vueuse/core"
+import { defaultWindow, useStorage } from "@vueuse/core"
 import JsonStorage from "~/src/stores/common/jsonStorage.ts"
-import {createAppLogger} from "~/src/utils/appLogger.ts"
-import {useSiyuanDevice} from "~/src/composables/useSiyuanDevice.ts"
+import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 
 const logger = createAppLogger("use-common-local-storage")
 
 /**
- * 通用响应式的 LocalStorage.
+ * 通用响应式的 LocalStorage
  *
- * @see https://vueuse.org/useCommonLocalStorage
+ * @see https://vueuse.org/useLocalStorage
  * @param filePath json文件存储位置，可选，浏览器环境忽略此参数
  * @param key key
  * @param initialValue 初始值

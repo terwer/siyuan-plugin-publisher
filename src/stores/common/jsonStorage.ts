@@ -33,8 +33,8 @@ import { JsonUtil } from "zhi-common"
  * https://github.com/vueuse/vueuse/blob/main/packages/core/ssr-handlers.ts#L11
  *
  * @author terwer
- * @version 1.7.0
- * @since 1.7.0
+ * @version 1.17.0
+ * @since 1.17.0
  */
 class JsonStorage implements StorageLike {
   private readonly logger: any
