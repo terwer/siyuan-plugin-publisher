@@ -153,7 +153,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     const { getReadOnlyPublishPreferenceSetting } = usePublishPreferenceSetting()
     const pref = getReadOnlyPublishPreferenceSetting()
     if (pref.value.fixTitle) {
-      post.title = HtmlUtil.removeTitleNumber(post.title)
+      post.title = HtmlUtil.removeTitleNumber(post.title).replace(/\.md/g, "")
     }
 
     this.logger.debug("处理MD文件名完成，post", { post: toRaw(post) })
