@@ -8,13 +8,16 @@ Publish articles from siyuan-note to platforms such as Yuque, Notion, Cnblogs, W
 
 Support features such as fast publishing, image bed management, platform expansion, smart labels, etc.
 
-🎉 Exciting News: New tool version `1.16.0` is out!
+> Latest Feature Release: 🎉 New Publish Tool version `1.17.0` is out! 🚀
 
-- `1.16.0` focuses on enhancing support for **formulas** and **tables** on Zhihu. Additionally, GitHub now allows custom author homepage configuration.
-- `1.15.1` addresses minor issues like fixing publishing errors on Juejin, handling anomalies during article deletion, and resolving tag duplication during article editing.
-- Introducing support for the Halo platform! After upgrading to `1.15.0+`, you can seamlessly publish content to Halo2 sites.
-- In `1.15.0`, fixes were made for misinterpretation of YAML in certain scenarios and publishing errors on platforms when tags were empty.
-- Oh, by the way, starting from version `1.14.0`, the author secretly developed an import feature. You can swiftly import built-in platforms using the `Settings` -> `Publish Settings` -> `Import Predefined Platforms` feature 😄. 
+**This might be the most worthwhile update since the National Day. 😄**
+
+- In `1.17.0`, the following significant changes have been made:
+  - Optimization and support for AI effects.
+  - Persistence of preference settings, eliminating concerns about preference configuration being invalidated due to restarts or other situations.
+  - Resolved the issue where Halo publication times were not taking effect.
+  - Fixed the problem of articles previously published with old widgets not being updatable.
+- Ah, by the way, since version `1.14.0`, the author secretly developed an import feature. You can swiftly import built-in platforms using the `Settings` -> `Publish Settings` -> `Import Predefined Platforms` feature. 😄
 
 > Platform Limitations:
   - **WeChat Official Accounts**: Publishing Tool now supports posting articles to the WeChat Official Accounts draft box in version `1.13.0` and beyond. However, due to limitations on the WeChat platform in Electron, normal login operations are not possible. Therefore, you will need to visit `https://mp.weixin.qq.com/` yourself, complete the login, copy the cookie, and then paste it into the configuration options.
