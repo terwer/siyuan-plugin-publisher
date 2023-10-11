@@ -63,7 +63,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
   private readonly api: BaseBlogApi | BaseWebApi
   protected readonly picgoBridge: any
   private readonly isSiyuanOrSiyuanNewWin: boolean
-  private readonly kernelApi: SiyuanKernelApi
+  public readonly kernelApi: SiyuanKernelApi
 
   /**
    * 构造函数用于创建一个新的实例
