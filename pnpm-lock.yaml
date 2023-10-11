@@ -107,8 +107,8 @@ dependencies:
 
 devDependencies:
   '@halo-dev/api-client':
-    specifier: ^2.9.0
-    version: 2.9.0
+    specifier: ^2.10.0
+    version: 2.10.0
   '@terwer/eslint-config-custom':
     specifier: ^1.3.6
     version: 1.3.6(@nuxt/eslint-config@0.1.1)(@typescript-eslint/eslint-plugin@5.62.0)(astro-eslint-parser@0.13.3)(eslint-config-prettier@8.10.0)(eslint-config-turbo@1.10.15)(eslint-plugin-prettier@4.2.1)(eslint-plugin-svelte@2.34.0)(eslint-plugin-vue@9.17.0)(eslint@8.51.0)(prettier-plugin-svelte@2.10.1)(prettier@2.8.8)(typescript@5.2.2)
@@ -772,8 +772,8 @@ packages:
       vue: 3.3.4
     dev: false
 
-  /@halo-dev/api-client@2.9.0:
-    resolution: {integrity: sha512-VVnqGruJ+6fpbgPSMIcsO52HvxXRCzbdkC1NXUsUrj+trJX9f++nU1qxsgMFd1cK+XlzdGs3XrNI0eBckT+zxQ==}
+  /@halo-dev/api-client@2.10.0:
+    resolution: {integrity: sha512-c1fgp+xzE1gQ7O36miWU2Oz+Uh1G4Hqs3clxLSxBD7vuvktgndZGZblNDi5morHB9UkiauAIQP0+PH9L9jwBfA==}
     dev: true
 
   /@humanwhocodes/config-array@0.11.11:

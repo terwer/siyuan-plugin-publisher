@@ -27,7 +27,7 @@
     "syncWidgetRepo": "python scripts/sync_widget_repo.py"
   },
   "devDependencies": {
-    "@halo-dev/api-client": "^2.9.0",
+    "@halo-dev/api-client": "^2.10.0",
     "@terwer/eslint-config-custom": "^1.3.6",
     "@types/crypto-js": "^4.1.2",
     "@types/node": "^18.18.4",
