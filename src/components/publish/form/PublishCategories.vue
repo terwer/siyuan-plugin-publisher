@@ -25,16 +25,14 @@
 
 <script setup lang="ts">
 import { CategoryTypeEnum } from "zhi-blog-api"
-import { reactive, toRaw } from "vue"
+import { reactive, toRaw, watch } from "vue"
 import { ICategoryConfig, IMultiCategoriesConfig } from "~/src/types/ICategoryConfig.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import { watch } from "vue"
-import { CategoryAIResult, prompt, TagAIResult } from "~/src/utils/ai/prompt.ts"
+import { CategoryAIResult, prompt } from "~/src/utils/ai/prompt.ts"
 import { useChatGPT } from "~/src/composables/useChatGPT.ts"
-import { HtmlUtil, JsonUtil, StrUtil } from "zhi-common"
+import { JsonUtil, StrUtil } from "zhi-common"
 import { ElMessage } from "element-plus"
-import { AiConstants } from "~/src/utils/ai/AiConstants.ts"
 
 const logger = createAppLogger("publish-categories")
 const { t } = useVueI18n()
@@ -108,12 +106,10 @@ const fetchCate = async () => {
     formData.isLoading = true
 
     const inputWord = prompt.categoryPrompt.content
-    const { chat } = useChatGPT()
+    const { chat, getChatInput } = useChatGPT()
     const chatText = await chat(inputWord, {
       name: "categories",
-      systemMessage:
-        formData.md?.substring(0, AiConstants.MAX_INPUT_TOKEN_LENGTH) ??
-        HtmlUtil.parseHtml(formData.html, AiConstants.MAX_INPUT_TOKEN_LENGTH, true),
+      systemMessage: getChatInput(formData?.md, formData.html),
     })
     if (StrUtil.isEmptyString(chatText)) {
       ElMessage.error("请求错误，请在偏好设置配置请求地址和ChatGPT key！")
