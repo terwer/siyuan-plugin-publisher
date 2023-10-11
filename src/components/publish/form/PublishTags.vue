@@ -28,10 +28,9 @@ import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { nextTick, reactive, ref, watch } from "vue"
 import { ElMessage } from "element-plus"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { HtmlUtil, JsonUtil, StrUtil } from "zhi-common"
+import { JsonUtil, StrUtil } from "zhi-common"
 import { prompt, TagAIResult } from "~/src/utils/ai/prompt.ts"
 import { useChatGPT } from "~/src/composables/useChatGPT.ts"
-import { AiConstants } from "~/src/utils/ai/AiConstants.ts"
 
 const logger = createAppLogger("publish-tags")
 const { t } = useVueI18n()
@@ -116,10 +115,10 @@ const tagMethods = {
       formData.isTagLoading = true
 
       const inputWord = prompt.tagPrompt.content
-      const { chat } = useChatGPT()
+      const { chat, getChatInput } = useChatGPT()
       const chatText = await chat(inputWord, {
         name: "tags",
-        systemMessage: formData.md?.substring(0, AiConstants.MAX_INPUT_TOKEN_LENGTH) ?? (formData.html, AiConstants.MAX_INPUT_TOKEN_LENGTH, true),
+        systemMessage: getChatInput(formData?.md, formData.html),
       })
       if (StrUtil.isEmptyString(chatText)) {
         ElMessage.error("请求错误，请在偏好设置配置请求地址和ChatGPT key！")

@@ -592,7 +592,7 @@ export default {
   "main.auto.fetch.title": "自动提取标题",
   "main.auto.fetch.cate": "自动提取分类",
   "category.ai.hand": "由于各平台分类体系不一致，分类需要手动进行校准，不会自动保存",
-  "category.ai.enabled": "检测到您已经配置AI，可请前往详细模式进行操作",
+  "category.ai.enabled": "检测到您已经配置AI，可请前往详细模式进行操作。小贴士：由于网络或者其他问题，如果第一次失败生成，多试几次或许就能出结果哟~😄",
   "sys.config.ai": "AI设置",
   "config.ai.use.siyuan": "思源笔记内部，直接使用思源笔记配置，无需配置",
   "setting.blog.yamlLinkEnabled": "YAML永久链接",

@@ -28,10 +28,9 @@ import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { reactive, watch } from "vue"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { ElMessage } from "element-plus"
-import { HtmlUtil, JsonUtil, SmartUtil, StrUtil } from "zhi-common"
+import { JsonUtil, StrUtil } from "zhi-common"
 import { prompt, ShortDescAIResult } from "~/src/utils/ai/prompt.ts"
 import { useChatGPT } from "~/src/composables/useChatGPT.ts"
-import { AiConstants } from "~/src/utils/ai/AiConstants.ts"
 
 const logger = createAppLogger("publish-description")
 const { t } = useVueI18n()
@@ -98,10 +97,10 @@ const handleMakeDesc = async () => {
   try {
     // if (formData.useAi) {
     const inputWord = prompt.shortDescPrompt.content
-    const { chat } = useChatGPT()
+    const { chat, getChatInput } = useChatGPT()
     const chatText = await chat(inputWord, {
       name: "desc",
-      systemMessage: formData.md?.substring(0, AiConstants.MAX_INPUT_TOKEN_LENGTH) ?? HtmlUtil.parseHtml(formData.html, AiConstants.MAX_INPUT_TOKEN_LENGTH, true),
+      systemMessage: getChatInput(formData?.md, formData.html),
     })
     if (StrUtil.isEmptyString(chatText)) {
       ElMessage.error("请求错误，请在偏好设置配置请求地址和ChatGPT key！")

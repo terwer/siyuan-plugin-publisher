@@ -24,10 +24,11 @@
  */
 
 import { SiyuanConfig } from "zhi-siyuan-api"
-import { RemovableRef, StorageSerializers, useLocalStorage } from "@vueuse/core"
+import { RemovableRef, StorageSerializers } from "@vueuse/core"
 import { readonly } from "vue"
 import { SiyuanDevice } from "zhi-device"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
+import useCommonLocalStorage from "~/src/stores/common/useCommonLocalStorage.ts"
 
 /**
  * 思源笔记设置
@@ -37,6 +38,7 @@ import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
  * @since 1.8.0
  */
 const useSiyuanSetting = () => {
+  const filePath = "storage/syp/siyuan-cfg.json"
   const storageKey = "siyuan-cfg"
   const { isInSiyuanOrSiyuanNewWin } = useSiyuanDevice()
 
@@ -59,7 +61,7 @@ const useSiyuanSetting = () => {
 
     const initialValue = new SiyuanConfig(origin ?? baseUrl, token)
     initialValue.middlewareUrl = middlewareUrl
-    const siyuanConfig = useLocalStorage<SiyuanConfig>(storageKey, initialValue, {
+    const siyuanConfig = useCommonLocalStorage<SiyuanConfig>(filePath, storageKey, initialValue, {
       serializer: StorageSerializers.object,
     })
 
