@@ -22,8 +22,7 @@
  * or visit www.terwer.space if you need additional information or have any
  * questions.
  */
-import type { MaybeRefOrGetter, RemovableRef } from "@vueuse/shared"
-import type { StorageLike, UseStorageOptions } from "@vueuse/core"
+import type { StorageLike, UseStorageOptions, MaybeRefOrGetter, RemovableRef } from "@vueuse/core"
 import { defaultWindow, useStorage } from "@vueuse/core"
 import JsonStorage from "~/src/stores/common/jsonStorage.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
