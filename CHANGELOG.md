@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.17.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.17.0...v1.17.1) (2023-10-11)
+
+
+### Bug Fixes
+
+* Vuepress 支持自动推测发布目录 ([71e57d3](https://github.com/terwer/siyuan-plugin-publisher/commit/71e57d30b3a61571c282a8561761207ec1e9cac7))
+* 修复 Vuepress 文件名不正确的问题 ([30751e2](https://github.com/terwer/siyuan-plugin-publisher/commit/30751e26273c0838c6ca5f6f912b662e15a0ea3a))
+* 修复 Vuepress 文件名不正确的问题 ([409d6c0](https://github.com/terwer/siyuan-plugin-publisher/commit/409d6c0c5ce67dba07e8de267be3fa5139648550))
+* 修复构建错误 ([c8e934c](https://github.com/terwer/siyuan-plugin-publisher/commit/c8e934c101a847aba5b1349c821c689a680e5dd6))
+
 ## [1.17.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.16.0...v1.17.0) (2023-10-11)
 ### Features
 * [#773](https://github.com/terwer/siyuan-plugin-publisher/issues/773) 偏好设置数据持久化 ([1b2608d](https://github.com/terwer/siyuan-plugin-publisher/commit/1b2608da28cb6bb0bc27e6dd242ee42b06c65cfe))
