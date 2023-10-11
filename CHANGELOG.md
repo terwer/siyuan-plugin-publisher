@@ -1,19 +1,13 @@
 # Changelog
 
 ## [1.17.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.17.0...v1.17.1) (2023-10-11)
-
-
 ### Bug Fixes
-
-* Vuepress 支持自动推测发布目录 ([71e57d3](https://github.com/terwer/siyuan-plugin-publisher/commit/71e57d30b3a61571c282a8561761207ec1e9cac7))
-* 修复 Vuepress 文件名不正确的问题 ([30751e2](https://github.com/terwer/siyuan-plugin-publisher/commit/30751e26273c0838c6ca5f6f912b662e15a0ea3a))
-* 修复 Vuepress 文件名不正确的问题 ([409d6c0](https://github.com/terwer/siyuan-plugin-publisher/commit/409d6c0c5ce67dba07e8de267be3fa5139648550))
-* 修复构建错误 ([c8e934c](https://github.com/terwer/siyuan-plugin-publisher/commit/c8e934c101a847aba5b1349c821c689a680e5dd6))
-
+* vuepress 支持自动推测发布目录 ([71e57d3](https://github.com/terwer/siyuan-plugin-publisher/commit/71e57d30b3a61571c282a8561761207ec1e9cac7))
+* 修复 vuepress 文件名不正确的问题 ([409d6c0](https://github.com/terwer/siyuan-plugin-publisher/commit/409d6c0c5ce67dba07e8de267be3fa5139648550))
+* 修复构建错误 ([32e8f61](https://github.com/terwer/siyuan-plugin-publisher/commit/32e8f61d193d0a979c4417653bc8b202b0be7b04))
 ## [1.17.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.16.0...v1.17.0) (2023-10-11)
 ### Features
 * [#773](https://github.com/terwer/siyuan-plugin-publisher/issues/773) 偏好设置数据持久化 ([1b2608d](https://github.com/terwer/siyuan-plugin-publisher/commit/1b2608da28cb6bb0bc27e6dd242ee42b06c65cfe))
-### Bug Fixes
 * [#754](https://github.com/terwer/siyuan-plugin-publisher/issues/754) 修复旧挂件发布过的文章无法更新的问题 ([3b12563](https://github.com/terwer/siyuan-plugin-publisher/commit/3b12563c37caa2a0c54e6ca6b0cef2c0283a8ec4))
 * [#765](https://github.com/terwer/siyuan-plugin-publisher/issues/765) 修复Halo 平台无法设置发布时间的问题 ([acc6dc9](https://github.com/terwer/siyuan-plugin-publisher/commit/acc6dc91ff3c3dfdc6ce6b04c0c9b52f0ac9de7d))
 * [#775](https://github.com/terwer/siyuan-plugin-publisher/issues/775) ([6fb23fb](https://github.com/terwer/siyuan-plugin-publisher/commit/6fb23fb6ed2cf323d2863ea3bb538d2b21a85fec))
@@ -206,7 +200,6 @@
 * 支持文章绑定 ([e3a92d0](https://github.com/terwer/siyuan-plugin-publisher/commit/e3a92d0d2d0e67d4e97cd864f5cd707c02f97610))
 * fix typo ([94f77ba](https://github.com/terwer/siyuan-plugin-publisher/commit/94f77bab0e977166370a20861e2eb6c2c65751e5))
 ## [1.4.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.4.0...v1.4.1) (2023-08-07)
-* 修复构建错误 ([32e8f61](https://github.com/terwer/siyuan-plugin-publisher/commit/32e8f61d193d0a979c4417653bc8b202b0be7b04))
 ## [1.4.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.3.2...v1.4.0) (2023-08-07)
 * hexo 平台设置 ([77950ed](https://github.com/terwer/siyuan-plugin-publisher/commit/77950ed45f0bf5eda4eed9a0afd1a3ba18a53c43))
 * hexo 平台设置 - 增加 yaml 转换器 ([97a13ee](https://github.com/terwer/siyuan-plugin-publisher/commit/97a13ee2392ccbeacfe8f46dcd8a20e33b0ae7bf))
