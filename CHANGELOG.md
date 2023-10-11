@@ -1,13 +1,23 @@
 # Changelog
 
-## [1.16.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.15.1...v1.16.0) (2023-10-10)
+## [1.17.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.16.0...v1.17.0) (2023-10-11)
 ### Features
+* [#773](https://github.com/terwer/siyuan-plugin-publisher/issues/773) 偏好设置数据持久化 ([1b2608d](https://github.com/terwer/siyuan-plugin-publisher/commit/1b2608da28cb6bb0bc27e6dd242ee42b06c65cfe))
+### Bug Fixes
+* [#754](https://github.com/terwer/siyuan-plugin-publisher/issues/754) 修复旧挂件发布过的文章无法更新的问题 ([3b12563](https://github.com/terwer/siyuan-plugin-publisher/commit/3b12563c37caa2a0c54e6ca6b0cef2c0283a8ec4))
+* [#765](https://github.com/terwer/siyuan-plugin-publisher/issues/765) 修复Halo 平台无法设置发布时间的问题 ([acc6dc9](https://github.com/terwer/siyuan-plugin-publisher/commit/acc6dc91ff3c3dfdc6ce6b04c0c9b52f0ac9de7d))
+* [#775](https://github.com/terwer/siyuan-plugin-publisher/issues/775) ([6fb23fb](https://github.com/terwer/siyuan-plugin-publisher/commit/6fb23fb6ed2cf323d2863ea3bb538d2b21a85fec))
+* AI-generated desc lose space and case info [#775](https://github.com/terwer/siyuan-plugin-publisher/issues/775) ([e4f07f7](https://github.com/terwer/siyuan-plugin-publisher/commit/e4f07f7dd37bc2a89e670275362c39d0b742c84c))
+* **deps:** bump siyuan from 0.8.4 to 0.8.5 ([f57609c](https://github.com/terwer/siyuan-plugin-publisher/commit/f57609c18eda3a7d5888709d1ba36bbfed3bb598))
+* 进一步优化 ai 效果 ([b2ccb55](https://github.com/terwer/siyuan-plugin-publisher/commit/b2ccb55abfcfd924968cac928bd2879041f95d3a))
+### Miscellaneous
+* **deps-dev:** bump @halo-dev/api-client from 2.9.0 to 2.10.0 ([bc92f28](https://github.com/terwer/siyuan-plugin-publisher/commit/bc92f28d0469096841faff1de81c6db506915246))
+* merge [#780](https://github.com/terwer/siyuan-plugin-publisher/issues/780) ([ad93890](https://github.com/terwer/siyuan-plugin-publisher/commit/ad93890359d4278664613d48df0576713fdf570d))
+## [1.16.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.15.1...v1.16.0) (2023-10-10)
 * [#774](https://github.com/terwer/siyuan-plugin-publisher/issues/774) [#751](https://github.com/terwer/siyuan-plugin-publisher/issues/751) 知乎平台支持公式和表格 ([21f2513](https://github.com/terwer/siyuan-plugin-publisher/commit/21f25135fd5bd14c0daafc62d24ae425e645e90e))
 * github 和 gitlab 系列平台支持自定义设置作者主页 ([720c3b4](https://github.com/terwer/siyuan-plugin-publisher/commit/720c3b4a437e6ca546b25376041fd7246976ecca))
-### Miscellaneous
 * **deps-dev:** bump vue-tsc from 1.8.16 to 1.8.18 ([61dadf6](https://github.com/terwer/siyuan-plugin-publisher/commit/61dadf6ec63e1a1d922e76f4219fb973b4c0a546))
 ## [1.15.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.15.0...v1.15.1) (2023-10-08)
-### Bug Fixes
 * [#744](https://github.com/terwer/siyuan-plugin-publisher/issues/744) WordPress更新文章标签重复 ([1fc2171](https://github.com/terwer/siyuan-plugin-publisher/commit/1fc2171420bd309ce8354f226698f1968ab0349b))
 * **deps:** bump vue-i18n from 9.4.1 to 9.5.0 ([dbb0df7](https://github.com/terwer/siyuan-plugin-publisher/commit/dbb0df790cdd78f1103ba826ce73c3bfc3990b6d))
 * **deps:** bump vue-router from 4.2.4 to 4.2.5 ([11cec9d](https://github.com/terwer/siyuan-plugin-publisher/commit/11cec9d20b02494d6eecfd30eaf31daaa14b16e4))
