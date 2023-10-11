@@ -116,7 +116,9 @@ const cateMethods = {
       const { chat } = useChatGPT()
       const chatText = await chat(inputWord, {
         name: "categories",
-        systemMessage: formData.md?.substring(0, AiConstants.MAX_INPUT_TOKEN_LENGTH) ?? HtmlUtil.parseHtml(formData.html, AiConstants.MAX_INPUT_TOKEN_LENGTH, true),
+        systemMessage:
+          formData.md?.substring(0, AiConstants.MAX_INPUT_TOKEN_LENGTH) ??
+          HtmlUtil.parseHtml(formData.html, AiConstants.MAX_INPUT_TOKEN_LENGTH, true),
       })
       if (StrUtil.isEmptyString(chatText)) {
         ElMessage.error("请求错误，请在偏好设置配置请求地址和ChatGPT key！")

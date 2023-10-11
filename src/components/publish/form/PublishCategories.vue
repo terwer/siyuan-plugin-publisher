@@ -32,9 +32,9 @@ import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { watch } from "vue"
 import { CategoryAIResult, prompt, TagAIResult } from "~/src/utils/ai/prompt.ts"
 import { useChatGPT } from "~/src/composables/useChatGPT.ts"
-import {HtmlUtil, JsonUtil, StrUtil} from "zhi-common"
+import { HtmlUtil, JsonUtil, StrUtil } from "zhi-common"
 import { ElMessage } from "element-plus"
-import {AiConstants} from "~/src/utils/ai/AiConstants.ts";
+import { AiConstants } from "~/src/utils/ai/AiConstants.ts"
 
 const logger = createAppLogger("publish-categories")
 const { t } = useVueI18n()
@@ -85,10 +85,10 @@ watch(
 )
 
 watch(
-    () => props.html,
-    (newValue) => {
-      formData.html = newValue
-    }
+  () => props.html,
+  (newValue) => {
+    formData.html = newValue
+  }
 )
 
 // emits
@@ -109,9 +109,11 @@ const fetchCate = async () => {
 
     const inputWord = prompt.categoryPrompt.content
     const { chat } = useChatGPT()
-    const chatText = await chat(inputWord,{
+    const chatText = await chat(inputWord, {
       name: "categories",
-      systemMessage: formData.md?.substring(0, AiConstants.MAX_INPUT_TOKEN_LENGTH) ?? HtmlUtil.parseHtml(formData.html, AiConstants.MAX_INPUT_TOKEN_LENGTH, true),
+      systemMessage:
+        formData.md?.substring(0, AiConstants.MAX_INPUT_TOKEN_LENGTH) ??
+        HtmlUtil.parseHtml(formData.html, AiConstants.MAX_INPUT_TOKEN_LENGTH, true),
     })
     if (StrUtil.isEmptyString(chatText)) {
       ElMessage.error("请求错误，请在偏好设置配置请求地址和ChatGPT key！")
