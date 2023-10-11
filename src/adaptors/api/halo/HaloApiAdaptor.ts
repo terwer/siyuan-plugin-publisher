@@ -30,18 +30,8 @@ import { Attachment, CategoryInfo, MediaObject, Post, UserBlog } from "zhi-blog-
 import { AliasTranslator, JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { Base64 } from "js-base64"
 import sypIdUtil from "~/src/utils/sypIdUtil.ts"
-import {
-  Category,
-  CategoryList,
-  ListedPost,
-  ListedPostList,
-  Policy,
-  PostRequest,
-  Tag,
-  TagList,
-} from "@halo-dev/api-client"
+import { PostRequest } from "@halo-dev/api-client"
 import { HaloPostMeta } from "~/src/adaptors/api/halo/HaloPostMeta.ts"
-import HaloUtils from "~/src/adaptors/api/halo/haloUtils.ts"
 
 /**
  * Halo API 适配器
@@ -137,6 +127,9 @@ class HaloApiAdaptor extends BaseBlogApi {
       throw e
     }
 
+    // 发布时间
+    params.post.spec.publishTime = post.dateCreated.toISOString()
+
     // 草稿
     const res = await this.haloRequest("/apis/api.console.halo.run/v1alpha1/posts", params, "POST")
     this.logger.debug("halo newPost res =>", res)
@@ -197,12 +190,19 @@ class HaloApiAdaptor extends BaseBlogApi {
         params.post.spec.tags = tagNames
       }
 
+      // 发布时间
+      params.post.spec.publishTime = post.dateCreated.toISOString()
+
       // 更新文章信息
       await this.haloRequest(`/apis/content.halo.run/v1alpha1/posts/${name}`, params.post, "PUT")
       await this.haloRequest(`/apis/api.console.halo.run/v1alpha1/posts/${name}/content`, params.content, "PUT")
 
       // 重新发布
-      await this.haloRequest(`/apis/api.console.halo.run/v1alpha1/posts/${params.post.metadata.name}/publish`, {}, "PUT")
+      await this.haloRequest(
+        `/apis/api.console.halo.run/v1alpha1/posts/${params.post.metadata.name}/publish`,
+        {},
+        "PUT"
+      )
       this.logger.debug("halo 文章发布完成")
     } catch (e) {
       this.logger.error("Halo文章更新失败", e)
