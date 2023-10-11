@@ -37,7 +37,7 @@ import { SiyuanDevice } from "zhi-device"
  * @version 0.9.0
  * @since 0.9.0
  */
-class CommonStorage implements StorageLikeAsync {
+class CommonStorageAsync implements StorageLikeAsync {
   private readonly logger
   private readonly storageViaSiyuanApi
   private readonly kernelApi
@@ -112,7 +112,7 @@ class CommonStorage implements StorageLikeAsync {
    * @returns 一个 Promise，在设置值后解析。
    */
   public async setItem(key: string, value: string): Promise<void> {
-    // this.logger.debug(`Setting value for '${key}' in CommonStorage to '${value}'.`)
+    // this.logger.debug(`Setting value for '${key}' in CommonStorageAsync to '${value}'.`)
     if (this.storageViaSiyuanApi) {
       // 如果当前运行在思源笔记中，则直接返回空字符串
       await this.kernelApi.saveTextData(key, value)
@@ -125,4 +125,4 @@ class CommonStorage implements StorageLikeAsync {
   }
 }
 
-export default CommonStorage
+export default CommonStorageAsync
