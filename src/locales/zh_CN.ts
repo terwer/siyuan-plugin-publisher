@@ -608,4 +608,5 @@ export default {
   "setting.blog.gitlab.previewUrl.tip": "文章预览地址，一般默认即可",
 
   "main.force.cancel": "强制删除",
+  "loading.cost":"操作耗时"
 }

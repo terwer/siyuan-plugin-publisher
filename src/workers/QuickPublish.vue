@@ -24,7 +24,7 @@
   -->
 
 <script setup lang="ts">
-import {onMounted, reactive, toRaw} from "vue"
+import { onMounted, reactive, ref, toRaw } from "vue"
 import { useRoute } from "vue-router"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { StrUtil } from "zhi-common"
@@ -32,6 +32,7 @@ import { usePublish } from "~/src/composables/usePublish.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
 import { pre } from "~/src/utils/import/pre.ts"
+import { useLoadingTimer } from "~/src/composables/useLoadingTimer.ts"
 
 const logger = createAppLogger("quick-publish-worker")
 
@@ -52,6 +53,10 @@ const id = params.id as string
 const formData = reactive({
   processResult: {} as any,
 })
+
+// 计时器
+const isTimerInit = ref(false)
+const { loadingTime } = useLoadingTimer(isTimerInit)
 
 onMounted(async () => {
   singleFormData.isPublishLoading = true
@@ -82,6 +87,8 @@ onMounted(async () => {
     formData.processResult = await doSinglePublish(key, id, publishCfg, siyuanPost)
     logger.info("单个快速发布结束")
     singleFormData.isPublishLoading = false
+
+    isTimerInit.value = true
   }, 200)
 })
 </script>
@@ -97,7 +104,7 @@ onMounted(async () => {
               d="M512 64a32 32 0 0 1 32 32v192a32 32 0 0 1-64 0V96a32 32 0 0 1 32-32zm0 640a32 32 0 0 1 32 32v192a32 32 0 1 1-64 0V736a32 32 0 0 1 32-32zm448-192a32 32 0 0 1-32 32H736a32 32 0 1 1 0-64h192a32 32 0 0 1 32 32zm-640 0a32 32 0 0 1-32 32H96a32 32 0 0 1 0-64h192a32 32 0 0 1 32 32zM195.2 195.2a32 32 0 0 1 45.248 0L376.32 331.008a32 32 0 0 1-45.248 45.248L195.2 240.448a32 32 0 0 1 0-45.248zm452.544 452.544a32 32 0 0 1 45.248 0L828.8 783.552a32 32 0 0 1-45.248 45.248L647.744 692.992a32 32 0 0 1 0-45.248zM828.8 195.264a32 32 0 0 1 0 45.184L692.992 376.32a32 32 0 0 1-45.248-45.248l135.808-135.808a32 32 0 0 1 45.248 0zm-452.544 452.48a32 32 0 0 1 0 45.248L240.448 828.8a32 32 0 0 1-45.248-45.248l135.808-135.808a32 32 0 0 1 45.248 0z"
             ></path></svg
         ></i>
-        发布中，请稍后...：
+        发布中，请稍后...
       </div>
       <div v-else-if="singleFormData.publishProcessStatus" class="success-tips">
         {{ singleFormData.isAdd ? "发布到" : "更新文章到" }}
@@ -105,11 +112,13 @@ onMounted(async () => {
         {{ StrUtil.isEmptyString(formData.processResult.name) ? "" : `[${formData.processResult.name}]` }}
         成功，
         <a :href="formData.processResult.previewUrl" target="_blank">查看文章</a>
+        <loading-timer :loading-time="loadingTime" style="padding: 0 10px 0 10px; display: inline-block" />
       </div>
       <div v-else class="fail-tips">
         {{ singleFormData.isAdd ? "发布到" : "更新文章到" }} [{{ formData.processResult.key }}]
         {{ StrUtil.isEmptyString(formData.processResult.name) ? "" : `[${formData.processResult.name}]` }}
         失败！
+        <loading-timer :loading-time="loadingTime" style="padding: 0 10px 0 10px; display: inline-block" />
       </div>
     </div>
   </div>

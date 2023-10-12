@@ -30,7 +30,6 @@ import { TagInfo } from "zhi-blog-api"
 import Adaptors from "~/src/adaptors"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import { computed } from "vue/dist/vue"
 
 const logger = createAppLogger("single-tag-slugs")
 const { t } = useVueI18n()

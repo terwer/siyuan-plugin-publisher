@@ -12,6 +12,7 @@ Support features such as fast publishing, image bed management, platform expansi
 
 **This is perhaps the most significant performance improvement to date. 😄**
 
+- Version `1.17.3` incorporates minor performance enhancements and introduces a timing mechanism to display the elapsed duration of key page operations.
 - Special thanks to [@cesaryuan](https://github.com/cesaryuan) for their contribution [#786](https://github.com/terwer/siyuan-plugin-publisher/issues/786), which resulted in a substantial enhancement in the performance of the release tool. Starting from version `1.17.2`, the initial screen loading time has been reduced from `1600ms` to `900ms`.
 - Key changes in version `1.17.0` include:
   - Optimized support for AI effects.

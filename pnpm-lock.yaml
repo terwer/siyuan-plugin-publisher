@@ -115,6 +115,9 @@ devDependencies:
   '@types/crypto-js':
     specifier: ^4.1.2
     version: 4.1.2
+  '@types/lodash':
+    specifier: ^4.14.199
+    version: 4.14.199
   '@types/node':
     specifier: ^18.18.4
     version: 18.18.4
@@ -1251,7 +1254,6 @@ packages:
 
   /@types/lodash@4.14.199:
     resolution: {integrity: sha512-Vrjz5N5Ia4SEzWWgIVwnHNEnb1UE1XMkvY5DGXrAeOGE9imk0hgTHh5GyDjLDJi9OTCn9oo9dXH1uToK1VRfrg==}
-    dev: false
 
   /@types/mdast@3.0.13:
     resolution: {integrity: sha512-HjiGiWedR0DVFkeNljpa6Lv4/IZU1+30VY5d747K7lBudFc3R0Ibr6yJ9lN3BE28VnZyDfLF/VB1Ql1ZIbKrmg==}

@@ -623,5 +623,6 @@ export default {
   "setting.blog.gitlab.apiurl.tip": "GitLab API address, usually the same as the homepage",
   "setting.blog.gitlab.previewUrl.tip": "Article preview address, usually the default",
 
-  "main.force.cancel": "Force delete"
+  "main.force.cancel": "Force delete",
+  "loading.cost":"Loading cost"
 }
