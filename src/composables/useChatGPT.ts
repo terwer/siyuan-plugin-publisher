@@ -25,7 +25,7 @@
 
 import { usePublishPreferenceSetting } from "~/src/stores/usePublishPreferenceSetting.ts"
 import { HtmlUtil, StrUtil } from "zhi-common"
-import { ChatGPTAPI, ChatGPTUnofficialProxyAPI, SendMessageOptions } from "chatgpt"
+import type { ChatGPTAPI, ChatGPTUnofficialProxyAPI, SendMessageOptions } from "chatgpt"
 import { Utils } from "~/src/utils/utils.ts"
 import { isDev } from "~/src/utils/constants.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
@@ -45,33 +45,37 @@ const useChatGPT = () => {
   const pref = getReadOnlyPublishPreferenceSetting()
 
   // 创建 ChatGPTAPI 实例
-  let api: ChatGPTAPI | ChatGPTUnofficialProxyAPI
-
-  try {
-    // 设置了代理地址创建代理实例，否则使用官方实例
-    if (!StrUtil.isEmptyString(pref.value.experimentalAIProxyUrl)) {
-      api = new ChatGPTUnofficialProxyAPI({
-        accessToken: Utils.emptyOrDefault(process.env.OPENAI_API_KEY, pref.value.experimentalAICode),
-        apiReverseProxyUrl: Utils.emptyOrDefault(process.env.OPENAI_PROXY_URL, pref.value.experimentalAIProxyUrl),
-        debug: isDev,
-        // workaround for https://github.com/transitive-bullshit/chatgpt-api/issues/592
-        fetch: self.fetch.bind(self),
-      })
-    } else {
-      api = new ChatGPTAPI({
-        apiKey: Utils.emptyOrDefault(process.env.OPENAI_ACCESS_TOKEN, pref.value.experimentalAICode),
-        apiBaseUrl: Utils.emptyOrDefault(process.env.OPENAI_BASE_URL, pref.value.experimentalAIBaseUrl),
-        debug: isDev,
-        // workaround for https://github.com/transitive-bullshit/chatgpt-api/issues/592
-        fetch: self.fetch.bind(self),
-      })
+  let api: ChatGPTAPI | ChatGPTUnofficialProxyAPI = undefined
+  const getAPI = async () => {
+    if (api === undefined) {
+      const { ChatGPTAPI, ChatGPTUnofficialProxyAPI } = await import("chatgpt")
+      try {
+        // 设置了代理地址创建代理实例，否则使用官方实例
+        if (!StrUtil.isEmptyString(pref.value.experimentalAIProxyUrl)) {
+          api = new ChatGPTUnofficialProxyAPI({
+            accessToken: Utils.emptyOrDefault(process.env.OPENAI_API_KEY, pref.value.experimentalAICode),
+            apiReverseProxyUrl: Utils.emptyOrDefault(process.env.OPENAI_PROXY_URL, pref.value.experimentalAIProxyUrl),
+            debug: isDev,
+            // workaround for https://github.com/transitive-bullshit/chatgpt-api/issues/592
+            fetch: self.fetch.bind(self),
+          })
+        } else {
+          api = new ChatGPTAPI({
+            apiKey: Utils.emptyOrDefault(process.env.OPENAI_ACCESS_TOKEN, pref.value.experimentalAICode),
+            apiBaseUrl: Utils.emptyOrDefault(process.env.OPENAI_BASE_URL, pref.value.experimentalAIBaseUrl),
+            debug: isDev,
+            // workaround for https://github.com/transitive-bullshit/chatgpt-api/issues/592
+            fetch: self.fetch.bind(self),
+          })
+        }
+      } catch (e) {
+        // 初始化 API 失败时，记录错误但继续执行
+        logger.error("Failed to initialize ChatGPT API:", e)
+        throw e
+      }
     }
-  } catch (e) {
-    // 初始化 API 失败时，记录错误但继续执行
-    logger.error("Failed to initialize ChatGPT API:", e)
-    throw e
+    return api
   }
-
   /**
    * 发送聊天查询到 ChatGPT 服务
    *
@@ -87,6 +91,7 @@ const useChatGPT = () => {
    */
   const chat = async (q: string, opts?: SendMessageOptions): Promise<string> => {
     try {
+      const api = await getAPI()
       // 使用 ChatGPTAPI 实例进行聊天操作
       logger.debug("chat q =>", { q, opts })
       const res = await api.sendMessage(q, opts)
