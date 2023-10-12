@@ -8,13 +8,18 @@ Publish articles from siyuan-note to platforms such as Yuque, Notion, Cnblogs, W
 
 Support features such as fast publishing, image bed management, platform expansion, smart labels, etc.
 
-> Latest New Features: 🎉 Release of Publish Tool New Version `1.15.0`
+> The latest release: 🎉 Publish Tool Version `1.17.3`
 
-  - `1.15.1` addresses minor bug fixes for the Juejin platform, resolving issues related to duplicate tags during article editing.
-  - This update introduces the Halo platform. After upgrading to `1.15.0+`, you can publish to the Halo2 site.
-  - It also fixes issues related to YAML parsing in certain scenarios, and errors when tags are empty on some platforms.
-  - Oh, in version `1.14.0` and beyond, the author quietly developed an import feature. You can use the `Settings` -> `Publish Settings` -> `Import Predefined Platforms` feature to quickly import builtin platforms 😄
+**This is perhaps the most significant performance improvement to date. 😄**
 
+- Version `1.17.3` incorporates minor performance enhancements and introduces a timing mechanism to display the elapsed duration of key page operations.
+- Special thanks to [@cesaryuan](https://github.com/cesaryuan) for their contribution [#786](https://github.com/terwer/siyuan-plugin-publisher/issues/786), which resulted in a substantial enhancement in the performance of the release tool. Starting from version `1.17.2`, the initial screen loading time has been reduced from `1600ms` to `900ms`.
+- Key changes in version `1.17.0` include:
+  - Optimized support for AI effects.
+  - Preferences are now persistent, eliminating concerns about preference settings becoming invalid due to restarts or other circumstances.
+  - Fixed the issue of Halo publication time not taking effect.
+  - Resolved the problem of articles not updating after being published by old widgets.
+- Ah, in addition, starting from version `1.14.0`, the author quietly developed an import feature. You can use the `Settings` -> `Publish Settings` -> `Import Predefined Platforms` function to quickly import built-in platforms. 😄
 
 > Platform Limitations:
   - **WeChat Official Accounts**: Publishing Tool now supports posting articles to the WeChat Official Accounts draft box in version `1.13.0` and beyond. However, due to limitations on the WeChat platform in Electron, normal login operations are not possible. Therefore, you will need to visit `https://mp.weixin.qq.com/` yourself, complete the login, copy the cookie, and then paste it into the configuration options.

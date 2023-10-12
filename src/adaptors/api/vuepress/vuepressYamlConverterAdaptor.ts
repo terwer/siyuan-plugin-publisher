@@ -81,14 +81,19 @@ class VuepressYamlConverterAdaptor extends YamlConvertAdaptor {
     }
 
     // author
-    let githubUrl = "https://github.com/terwer"
     const githubCfg = cfg as CommonGithubConfig
-    if (githubCfg.home) {
+    let githubUrl = githubCfg.site
+    if (StrUtil.isEmptyString(githubCfg.site)) {
       githubUrl = StrUtil.pathJoin(githubCfg.home, "/" + githubCfg.username)
     }
     yamlFormatObj.yamlObj.author = {
       name: githubCfg.author ?? "terwer",
       link: githubUrl,
+    }
+
+    // 日记
+    if (post.title.includes("[日记]")) {
+      yamlFormatObj.yamlObj.article = false
     }
 
     // formatter

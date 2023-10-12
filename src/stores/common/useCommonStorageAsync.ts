@@ -23,7 +23,7 @@
  * questions.
  */
 
-import CommonStorage from "~/src/stores/common/commonStorage.ts"
+import CommonStorageAsync from "~/src/stores/common/commonStorageAsync.ts"
 import { StorageSerializers, toValue } from "@vueuse/core"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { ObjectUtil } from "zhi-common"
@@ -39,7 +39,7 @@ export const useCommonStorageAsync = <T extends string | number | boolean | obje
   initialValue: T
 ) => {
   const logger = createAppLogger("common-storage-async")
-  const commonStorage = new CommonStorage(storageKey)
+  const commonStorage = new CommonStorageAsync(storageKey)
 
   // 获取 initialValue 类型对应的序列化器，如果不存在则使用默认序列化器
   const rawInit: T = toValue(initialValue)

@@ -48,6 +48,8 @@ import { DistributionPattern } from "~/src/models/distributionPattern.ts"
 import _ from "lodash"
 import PublishTitle from "~/src/components/publish/form/PublishTitle.vue"
 import { useChatGPT } from "~/src/composables/useChatGPT.ts"
+import { ref } from "vue"
+import { useLoadingTimer } from "~/src/composables/useLoadingTimer.ts"
 
 const logger = createAppLogger("publisher-index")
 
@@ -72,6 +74,8 @@ const sysKeys = pre.systemCfg.map((item) => {
 })
 const id = StrUtil.isEmptyString(props.id) ? process.env.VITE_DEV_PAGE_ID : props.id
 const formData = reactive({
+  isInit: false,
+
   // loading
   isPublishLoading: false,
   isDeleteLoading: false,
@@ -111,6 +115,8 @@ const formData = reactive({
 const handlePublish = async () => {
   try {
     formData.isPublishLoading = true
+    isTimerInit.value = false
+
     if (formData.dynList.length === 0) {
       throw new Error("必须选择一个分发平台")
     }
@@ -177,6 +183,7 @@ const handlePublish = async () => {
     })
   } finally {
     formData.isPublishLoading = false
+    isTimerInit.value = true
   }
 }
 
@@ -330,6 +337,10 @@ const checkChatGPTEnabled = () => {
   return flag
 }
 
+// 计时器
+const isTimerInit = ref(false)
+const { loadingTime } = useLoadingTimer(isTimerInit)
+
 onMounted(async () => {
   // ==================
   // 初始化开始
@@ -348,16 +359,24 @@ onMounted(async () => {
   // 这里可以控制一些功能开关
   formData.useAi = checkChatGPTEnabled()
   formData.editType = PageEditMode.EditMode_simple
+
+  formData.isInit = true
+  isTimerInit.value = true
 })
 </script>
 
 <template>
   <div id="batch-publish-index">
     <el-container>
-      <el-main>
+      <el-skeleton v-if="!formData.isInit" class="placeholder" :rows="12" animated style="padding: 40px 12px" />
+      <el-main v-else>
+        <!-- 显示加载计时器 -->
+        <loading-timer :loading-time="loadingTime" />
+
         <!-- 提示 -->
         <publish-tips />
 
+        <!-- 批处理结果 -->
         <div
           :class="formData.errCount > 0 ? 'batch-result fail-tips' : 'batch-result success-tips'"
           v-if="formData.showProcessResult"

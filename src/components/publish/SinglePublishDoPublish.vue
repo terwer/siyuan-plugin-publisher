@@ -24,7 +24,7 @@
   -->
 
 <script setup lang="ts">
-import { computed, markRaw, onMounted, reactive, toRaw } from "vue"
+import { computed, markRaw, onMounted, reactive, ref, toRaw } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import BackPage from "~/src/components/common/BackPage.vue"
 import { usePublish } from "~/src/composables/usePublish.ts"
@@ -50,6 +50,7 @@ import { SiyuanAttr } from "zhi-siyuan-api"
 import PublishTitle from "~/src/components/publish/form/PublishTitle.vue"
 import { useChatGPT } from "~/src/composables/useChatGPT.ts"
 import _ from "lodash"
+import { useLoadingTimer } from "~/src/composables/useLoadingTimer.ts"
 
 const logger = createAppLogger("single-publish-do-publish")
 
@@ -110,6 +111,7 @@ const handlePublish = async () => {
   try {
     formData.isPublishLoading = true
     formData.actionEnable = false
+    isTimerInit.value = false
 
     logger.info("保存到系统平台开始")
     for (const sysKey of sysKeys) {
@@ -143,6 +145,7 @@ const handlePublish = async () => {
     logger.error(t("main.opt.failure") + "=>", e)
   } finally {
     formData.isPublishLoading = false
+    isTimerInit.value = true
   }
 }
 
@@ -393,6 +396,10 @@ const checkChatGPTEnabled = () => {
   return flag
 }
 
+// 计时器
+const isTimerInit = ref(false)
+const { loadingTime } = useLoadingTimer(isTimerInit)
+
 onMounted(async () => {
   logger.info("获取到的ID为=>", id)
   // ==================
@@ -404,7 +411,6 @@ onMounted(async () => {
   await initPage()
   // 元数据初始化
   formData.mergedPost = await initPublishMethods.assignInitAttrs(formData.mergedPost, id, formData.publishCfg)
-  formData.isInit = true
 
   const cfg = formData.publishCfg.cfg as BlogConfig
   // 分类数据初始化
@@ -432,6 +438,9 @@ onMounted(async () => {
   // 这里可以控制一些功能开关
   formData.useAi = checkChatGPTEnabled()
   formData.editType = PageEditMode.EditMode_simple
+
+  formData.isInit = true
+  isTimerInit.value = true
 })
 </script>
 
@@ -439,6 +448,8 @@ onMounted(async () => {
   <back-page title="常规发布" :has-back-emit="true" @backEmit="onBack">
     <el-skeleton class="placeholder" v-if="!formData.isInit" :rows="5" animated />
     <div v-else id="batch-publish-index">
+      <!-- 显示加载计时器 -->
+      <loading-timer :loading-time="loadingTime" />
       <el-alert class="top-tip" :title="topTitle" type="info" :closable="false" />
       <el-alert
         v-if="formData.useAi"

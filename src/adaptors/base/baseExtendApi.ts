@@ -63,7 +63,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
   private readonly api: BaseBlogApi | BaseWebApi
   protected readonly picgoBridge: any
   private readonly isSiyuanOrSiyuanNewWin: boolean
-  private readonly kernelApi: SiyuanKernelApi
+  public readonly kernelApi: SiyuanKernelApi
 
   /**
    * 构造函数用于创建一个新的实例
@@ -136,7 +136,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
       let filename = cfg.mdFilenameRule.replace(/\.md/g, "")
       if (cfg.useMdFilename) {
         // 使用真实文件名作为MD文件名
-        filename = filename.replace(/\[filename\]/g, post.title)
+        filename = filename.replace(/\[filename\]/g, post.originalTitle)
       } else {
         // 使用别名作为MD文件名
         filename = filename.replace(/\[slug\]/g, post.wp_slug)
@@ -153,7 +153,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     const { getReadOnlyPublishPreferenceSetting } = usePublishPreferenceSetting()
     const pref = getReadOnlyPublishPreferenceSetting()
     if (pref.value.fixTitle) {
-      post.title = HtmlUtil.removeTitleNumber(post.title)
+      post.title = HtmlUtil.removeTitleNumber(post.title).replace(/\.md/g, "")
     }
 
     this.logger.debug("处理MD文件名完成，post", { post: toRaw(post) })

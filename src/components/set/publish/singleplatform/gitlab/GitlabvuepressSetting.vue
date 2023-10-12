@@ -50,17 +50,38 @@ vuepressCfg.placeholder = vuepressPlaceholder
 
 // 处理事件的方法
 const onHomeChange = (value: string, cfg: GitlabvuepressConfig) => {
+  // sync api
   if (StrUtil.isEmptyString(cfg.home)) {
     cfg.apiUrl = ""
   } else {
     cfg.apiUrl = cfg.home
     cfg.tokenSettingUrl = `${cfg.home}/-/profile/personal_access_tokens`
   }
+
+  // sync site
+  if (StrUtil.isEmptyString(cfg.home) || StrUtil.isEmptyString(cfg.username)) {
+    cfg.site = ""
+  } else {
+    cfg.site = StrUtil.pathJoin(cfg.home, "/" + cfg.username)
+  }
+}
+const onUsernameChange = (value: string, cfg: GitlabvuepressConfig) => {
+  // sync site
+  if (StrUtil.isEmptyString(cfg.home) || StrUtil.isEmptyString(cfg.username)) {
+    cfg.site = ""
+  } else {
+    cfg.site = StrUtil.pathJoin(cfg.home, "/" + cfg.username)
+  }
 }
 </script>
 
 <template>
-  <common-github-setting :api-type="props.apiType" :cfg="vuepressCfg" @onHomeChange="onHomeChange">
+  <common-github-setting
+    :api-type="props.apiType"
+    :cfg="vuepressCfg"
+    @onHomeChange="onHomeChange"
+    @onUsernameChange="onUsernameChange"
+  >
     <template #header="header"> </template>
     <template #main="main"> </template>
     <template #footer="footer"> </template>

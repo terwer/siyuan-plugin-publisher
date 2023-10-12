@@ -28,6 +28,7 @@ import { CommonGitlabApiAdaptor } from "~/src/adaptors/api/base/gitlab/commonGit
 import _ from "lodash"
 import { GitlabvuepressYamlConverterAdaptor } from "~/src/adaptors/api/gitlab-vuepress/gitlabvuepressYamlConverterAdaptor.ts"
 import { YamlUtil } from "zhi-common"
+import { SiyuanDevice } from "zhi-device"
 
 /**
  * Hexo API 适配器
@@ -65,6 +66,18 @@ class GitlabvuepressApiAdaptor extends CommonGitlabApiAdaptor {
     }
     // ======
 
+    // ======
+    // 自动推测保存路径
+    const selectedPath = updatedPost.cate_slugs?.[0] ?? cfg.blogid
+    if ("docs" === selectedPath) {
+      const doc = await this.baseExtendApi.kernelApi.getDoc(id)
+      const docPath = doc.path
+      const saveFile = await this.autoMapPublishDir(docPath)
+      updatedPost.cate_slugs = [saveFile]
+    }
+    // 自动生成一级目录
+    // ======
+
     updatedPost.markdown = `${yfm}\n${updatedMd}`
     this.logger.info("Gitlabvuepress 正文处理完毕")
     this.logger.debug("updatedMd =>", { yfm: yfm, updatedMd: updatedMd })
@@ -77,6 +90,40 @@ class GitlabvuepressApiAdaptor extends CommonGitlabApiAdaptor {
     }
 
     return updatedPost
+  }
+
+  // ================
+  // private methods
+  // ================
+  private async autoMapPublishDir(docPath: string) {
+    this.logger.info("start autoMapPublishDir, docPath =>", docPath)
+
+    const win = SiyuanDevice.siyuanWindow()
+    const path = win.require("path")
+    const paths = docPath
+      .replace(/\.sy/, "")
+      .split("/")
+      .filter((x: string) => x !== "")
+
+    let save_dir: string
+    let save_file: string
+    const dir_arr = []
+    for (const item of paths) {
+      const attrs = await this.baseExtendApi.kernelApi.getBlockAttrs(item)
+      dir_arr.push(attrs.title)
+    }
+    const toDir = path.join("docs", ...dir_arr)
+    const toFile = toDir + ".md"
+    save_dir = path.dirname(toFile)
+    save_file = toFile
+    this.logger.info("finished autoMapPublishDir, save_dir =>", save_dir)
+    this.logger.info("finished autoMapPublishDir, save_file =>", save_file)
+
+    // 生成一级目录
+    // 暂时不做
+
+    // 注意：这里不包括文件名
+    return save_dir
   }
 }
 
