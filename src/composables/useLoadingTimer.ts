@@ -30,7 +30,8 @@ import { onBeforeMount, ref, Ref, watch } from "vue"
  *
  * @param isTimerInit - 一个 ref，表示计时器是否初始启动
  * @returns loadingTime - 用于跟踪当前加载时间的 ref
- * @returns toggleTimer - 用于启动或停止计时器的函数
+ * @author terwer
+ * @since 1.17.3
  */
 export const useLoadingTimer = (isTimerInit: Ref<boolean>) => {
   const startTime = ref(0)
