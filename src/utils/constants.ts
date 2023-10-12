@@ -26,6 +26,9 @@
 export const isDev = process.env.DEV_MODE === "true"
 export const isDebugMode = process.env.DEBUG_MODE === "true"
 
+// 关于我页面
+export const aboutUrl = "https://blog.terwergreen.com/guestbook.html#respond"
+
 /**
  * 动态配置key，全系统唯一，请勿更改
  */
