@@ -91,6 +91,11 @@ class VuepressYamlConverterAdaptor extends YamlConvertAdaptor {
       link: githubUrl,
     }
 
+    // 日记
+    if (post.title.includes("[日记]")) {
+      yamlFormatObj.yamlObj.article = false
+    }
+
     // formatter
     let yaml = YamlUtil.obj2Yaml(yamlFormatObj.yamlObj)
     this.logger.debug("yaml=>", yaml)
