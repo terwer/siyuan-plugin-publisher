@@ -36,8 +36,8 @@ const isWindows = os.platform() === "win32"
 let baseDir
 if (isWatch || isServe) {
   // baseDir = "/Users/terwer/Documents/mydocs/SiYuanWorkspace/test/data/plugins/siyuan-plugin-publisher"
-  // baseDir = "/Users/zhangyue/Documents/terwer/SiyuanWorkspace/test/data/plugins/siyuan-plugin-publisher"
-  baseDir = "/Users/terwer/Documents/mydocs/SiYuanWorkspace/public/data/plugins/siyuan-plugin-publisher"
+  baseDir = "/Users/zhangyue/Documents/terwer/SiyuanWorkspace/test/data/plugins/siyuan-plugin-publisher"
+  // baseDir = "/Users/terwer/Documents/mydocs/SiYuanWorkspace/public/data/plugins/siyuan-plugin-publisher"
   if (isWindows) {
     baseDir = "C:\\Users\\terwer\\Documents\\mydocs\\SiyuanWorkspace\\test\\data\\plugins\\siyuan-plugin-publisher"
   }

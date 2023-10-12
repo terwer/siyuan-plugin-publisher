@@ -24,7 +24,7 @@
   -->
 
 <script setup lang="ts">
-import { onMounted, reactive } from "vue"
+import { onMounted, reactive, ref } from "vue"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useRouter } from "vue-router"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
@@ -32,6 +32,7 @@ import { DynamicConfig, DynamicJsonCfg, getDynPostidKey } from "~/src/platforms/
 import { HtmlUtil, JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
+import { useLoadingTimer } from "~/src/composables/useLoadingTimer.ts"
 
 const logger = createAppLogger("single-publish-select-platform")
 
@@ -50,6 +51,7 @@ const { getSetting } = useSettingStore()
 
 // datas
 const formData = reactive({
+  isInit: false,
   enabledConfigArray: [] as DynamicConfig[],
 
   postMeta: {} as any,
@@ -85,44 +87,55 @@ const initPage = async () => {
   formData.postMeta = ObjectUtil.getProperty(setting, props.id, {})
 }
 
+// 计时器
+const isTimerInit = ref(false)
+const { loadingTime } = useLoadingTimer(isTimerInit)
+
 onMounted(async () => {
   await initPage()
+
+  formData.isInit = true
+  isTimerInit.value = true
 })
 </script>
 
 <template>
-  <div class="platform-desc">
-    <p>
-      <el-alert class="desc-tip" type="warning" title="点击图标进入对应平台的发布页面"></el-alert>
-    </p>
+  <!-- 显示加载计时器 -->
+  <loading-timer :loading-time="loadingTime" style="padding: 0 10px 0 10px"/>
+  <el-skeleton v-if="!formData.isInit" class="placeholder" :rows="12" animated style="padding: 40px 12px" />
+  <div v-else>
+    <div class="platform-desc">
+      <p>
+        <el-alert class="desc-tip" type="warning" title="点击图标进入对应平台的发布页面"></el-alert>
+      </p>
+    </div>
+    <el-row :gutter="20" class="row-box">
+      <el-col
+        :span="8"
+        :title="cfg.platformName"
+        class="platform-select-card"
+        v-for="cfg in formData.enabledConfigArray"
+        @click="handleSingleDoPublish(cfg.platformKey)"
+      >
+        <el-card class="card-item">
+          <div class="icon-list">
+            <el-badge
+              :type="checkHasPublished(cfg.platformKey) ? 'success' : 'danger'"
+              :value="checkHasPublished(cfg.platformKey) ? '已发布' : '未发布'"
+              class="item"
+            >
+              <el-text class="define-item">
+                <i class="el-icon">
+                  <span v-html="cfg?.platformIcon"></span>
+                </i>
+                {{ StrUtil.upperFirst(HtmlUtil.parseHtml(cfg.platformName, 11)) }}
+              </el-text>
+            </el-badge>
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
   </div>
-
-  <el-row :gutter="20" class="row-box">
-    <el-col
-      :span="8"
-      :title="cfg.platformName"
-      class="platform-select-card"
-      v-for="cfg in formData.enabledConfigArray"
-      @click="handleSingleDoPublish(cfg.platformKey)"
-    >
-      <el-card class="card-item">
-        <div class="icon-list">
-          <el-badge
-            :type="checkHasPublished(cfg.platformKey) ? 'success' : 'danger'"
-            :value="checkHasPublished(cfg.platformKey) ? '已发布' : '未发布'"
-            class="item"
-          >
-            <el-text class="define-item">
-              <i class="el-icon">
-                <span v-html="cfg?.platformIcon"></span>
-              </i>
-              {{ StrUtil.upperFirst(HtmlUtil.parseHtml(cfg.platformName, 11)) }}
-            </el-text>
-          </el-badge>
-        </div>
-      </el-card>
-    </el-col>
-  </el-row>
 </template>
 
 <style scoped lang="stylus">

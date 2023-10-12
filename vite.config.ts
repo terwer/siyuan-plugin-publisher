@@ -63,8 +63,8 @@ const isWatch = args.watch || args.w || false
 const isDev = isServe || isWatch || debugMode
 const isWindows = process.platform === "win32"
 // let devDistDir = "/Users/terwer/Documents/mydocs/SiYuanWorkspace/test/data/plugins/siyuan-plugin-publisher"
-// let devDistDir = "/Users/zhangyue/Documents/terwer/SiyuanWorkspace/test/data/plugins/siyuan-plugin-publisher"
-let devDistDir = "/Users/terwer/Documents/mydocs/SiYuanWorkspace/public/data/plugins/siyuan-plugin-publisher"
+let devDistDir = "/Users/zhangyue/Documents/terwer/SiyuanWorkspace/test/data/plugins/siyuan-plugin-publisher"
+// let devDistDir = "/Users/terwer/Documents/mydocs/SiYuanWorkspace/public/data/plugins/siyuan-plugin-publisher"
 if (isWindows) {
   devDistDir = "C:\\Users\\terwer\\Documents\\mydocs\\SiyuanWorkspace\\test\\data\\plugins\\siyuan-plugin-publisher"
   // devDistDir = "C:\\Users\\terwer\\Documents\\mydocs\\SiyuanWorkspace\\public\plugins\siyuan-plugin-publisher"
@@ -153,20 +153,20 @@ export default defineConfig({
       },
     }),
 
-    {
-      name: "add-query-param",
-      transformIndexHtml(html) {
-        const timestamp = Date.now()
-        html = html.replace(/(<script.+src=")([^"]+\.js)"/g, `$1$2?v=${timestamp}"`)
-        html = html.replace(/(<link[^>]+href=")([^"]+(\.css|\.js))"/g, (match, p1, p2) => `${p1}${p2}?v=${timestamp}"`)
-        // html = html.replace(/(<link rel=")modulepreload(" crossorigin href=")([^"]+\.js)"/g, `$1preload$2$3?v=${timestamp}"`);
-        html = html.replace(/(<link rel=")modulepreload(" crossorigin href=")([^"]+\.js)"/g, `$1preload$2$3?v=${timestamp}" as="script"`);
-        html = html.replace(/(<link[^>]+href=")([^"]+(\.css))"/g, (match, p1, p2) => `${p1}${p2}?v=${timestamp}"`)
-        html = html.replace(/(<link[^>]+href=")([^"]+\.svg)"/g, `$1$2?v=${timestamp}"`)
-        html = html.replace(/(<img[^>]+src=")([^"]+\.(jpe?g|gif|webp|bmp|png))"/g, `$1$2?v=${timestamp}"`)
-        return html
-      },
-    },
+    // {
+    //   name: "add-query-param",
+    //   transformIndexHtml(html) {
+    //     const timestamp = Date.now()
+    //     html = html.replace(/(<script.+src=")([^"]+\.js)"/g, `$1$2?v=${timestamp}"`)
+    //     html = html.replace(/(<link[^>]+href=")([^"]+(\.css|\.js))"/g, (match, p1, p2) => `${p1}${p2}?v=${timestamp}"`)
+    //     // html = html.replace(/(<link rel=")modulepreload(" crossorigin href=")([^"]+\.js)"/g, `$1preload$2$3?v=${timestamp}"`);
+    //     html = html.replace(/(<link rel=")modulepreload(" crossorigin href=")([^"]+\.js)"/g, `$1preload$2$3?v=${timestamp}" as="script"`);
+    //     html = html.replace(/(<link[^>]+href=")([^"]+(\.css))"/g, (match, p1, p2) => `${p1}${p2}?v=${timestamp}"`)
+    //     html = html.replace(/(<link[^>]+href=")([^"]+\.svg)"/g, `$1$2?v=${timestamp}"`)
+    //     html = html.replace(/(<img[^>]+src=")([^"]+\.(jpe?g|gif|webp|bmp|png))"/g, `$1$2?v=${timestamp}"`)
+    //     return html
+    //   },
+    // },
 
     // 在浏览器中polyfill node
     // https://github.com/davidmyersdev/vite-plugin-node-polyfills/blob/main/test/src/main.ts
@@ -232,28 +232,28 @@ export default defineConfig({
       // make sure to externalize deps that shouldn't be bundled into your library
       external: [],
 
-      output: {
-        // add a query parameter to all JS and CSS file URLs
-        chunkFileNames: "chunks/chunk.[name].js",
-        entryFileNames: "entry.[name].js",
-        assetFileNames: "assets/[name].[ext]",
-        // manualChunks(id) {
-        //   if (id.includes("node_modules")) {
-        //     let arr = id.toString().split("node_modules/")[1].split("/")
-        //     // pnpm单独处理
-        //     if (id.includes(".pnpm")) {
-        //       arr = id.toString().split(".pnpm/")[1].split("/")
-        //     }
-        //     const dep = arr[0].split("@")[0].replace(/\./g, "-")
-        //     // console.log("id=>", id)
-        //     // console.log("dep=>", dep)
-        //     if (dep !== "") {
-        //       return "vendor_" + dep
-        //     }
-        //     return "vendor"
-        //   }
-        // },
-      },
+      // output: {
+      //   // add a query parameter to all JS and CSS file URLs
+      //   chunkFileNames: "chunks/chunk.[name].js",
+      //   entryFileNames: "entry.[name].js",
+      //   assetFileNames: "assets/[name].[ext]",
+      //   // manualChunks(id) {
+      //   //   if (id.includes("node_modules")) {
+      //   //     let arr = id.toString().split("node_modules/")[1].split("/")
+      //   //     // pnpm单独处理
+      //   //     if (id.includes(".pnpm")) {
+      //   //       arr = id.toString().split(".pnpm/")[1].split("/")
+      //   //     }
+      //   //     const dep = arr[0].split("@")[0].replace(/\./g, "-")
+      //   //     // console.log("id=>", id)
+      //   //     // console.log("dep=>", dep)
+      //   //     if (dep !== "") {
+      //   //       return "vendor_" + dep
+      //   //     }
+      //   //     return "vendor"
+      //   //   }
+      //   // },
+      // },
     },
   },
 
