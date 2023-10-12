@@ -8,7 +8,7 @@ Publish articles from siyuan-note to platforms such as Yuque, Notion, Cnblogs, W
 
 Support features such as fast publishing, image bed management, platform expansion, smart labels, etc.
 
-> The latest release: 🎉 Publish Tool Version `1.17.2`
+> The latest release: 🎉 Publish Tool Version `1.17.3`
 
 **This is perhaps the most significant performance improvement to date. 😄**
 

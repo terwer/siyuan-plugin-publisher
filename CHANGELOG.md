@@ -1,7 +1,11 @@
 # Changelog
 
-## [1.17.2](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.17.1...v1.17.2) (2023-10-12)
+## [1.17.3](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.17.2...v1.17.3) (2023-10-12)
 ### Bug Fixes
+* 不分割js代码，有缓存的情况下性能更好 ([fa499c1](https://github.com/terwer/siyuan-plugin-publisher/commit/fa499c1a78469c6e01696e17fe688a463bdd9c86))
+* 新增性能计时器 ([706ce2e](https://github.com/terwer/siyuan-plugin-publisher/commit/706ce2e7f13c4ed2ae2599e8f7ab73c439c857fe))
+* 部分文件改为异步加载，小幅度提升性能 ([19455b0](https://github.com/terwer/siyuan-plugin-publisher/commit/19455b04ec35613427b032aa27b04f5b11954e98))
+## [1.17.2](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.17.1...v1.17.2) (2023-10-12)
 * vuepress 支持发布为日记 ([3da0481](https://github.com/terwer/siyuan-plugin-publisher/commit/3da0481a9dbde59b207b2cb720c16f1b5f47b5d5))
 * 将index.html中 modulepreload 改为 preload ([a43b572](https://github.com/terwer/siyuan-plugin-publisher/commit/a43b572cae24fc7de380207773ca43d256859566))
 ### Miscellaneous
