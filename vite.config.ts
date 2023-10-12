@@ -114,6 +114,7 @@ export default defineConfig({
                 {
                   tag: "script",
                   attrs: {
+                    async: true,
                     src: "./libs/lute/lute-1.7.5-20230410.min.js",
                   },
                   injectTo: "head",
@@ -121,6 +122,7 @@ export default defineConfig({
                 {
                   tag: "script",
                   attrs: {
+                    async: true,
                     src: "./libs/alioss/aliyun-oss-sdk-6.16.0.min.js",
                   },
                   injectTo: "head",
@@ -130,6 +132,7 @@ export default defineConfig({
                 {
                   tag: "script",
                   attrs: {
+                    async: true,
                     src: "./libs/lute/lute-1.7.5-20230410.min.js",
                   },
                   injectTo: "head",
@@ -137,6 +140,7 @@ export default defineConfig({
                 {
                   tag: "script",
                   attrs: {
+                    async: true,
                     src: "./libs/alioss/aliyun-oss-sdk-6.16.0.min.js",
                   },
                   injectTo: "head",
@@ -154,8 +158,9 @@ export default defineConfig({
       transformIndexHtml(html) {
         const timestamp = Date.now()
         html = html.replace(/(<script.+src=")([^"]+\.js)"/g, `$1$2?v=${timestamp}"`)
-        // html = html.replace(/(<link[^>]+href=")([^"]+(\.css|\.js))"/g, (match, p1, p2) => `${p1}${p2}?v=${timestamp}"`)
-        html = html.replace(/(<link rel=")modulepreload(" crossorigin href=")([^"]+\.js)"/g, `$1preload$2$3?v=${timestamp}"`);
+        html = html.replace(/(<link[^>]+href=")([^"]+(\.css|\.js))"/g, (match, p1, p2) => `${p1}${p2}?v=${timestamp}"`)
+        // html = html.replace(/(<link rel=")modulepreload(" crossorigin href=")([^"]+\.js)"/g, `$1preload$2$3?v=${timestamp}"`);
+        html = html.replace(/(<link rel=")modulepreload(" crossorigin href=")([^"]+\.js)"/g, `$1preload$2$3?v=${timestamp}" as="script"`);
         html = html.replace(/(<link[^>]+href=")([^"]+(\.css))"/g, (match, p1, p2) => `${p1}${p2}?v=${timestamp}"`)
         html = html.replace(/(<link[^>]+href=")([^"]+\.svg)"/g, `$1$2?v=${timestamp}"`)
         html = html.replace(/(<img[^>]+src=")([^"]+\.(jpe?g|gif|webp|bmp|png))"/g, `$1$2?v=${timestamp}"`)
