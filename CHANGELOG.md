@@ -1,7 +1,12 @@
 # Changelog
 
-## [1.17.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.17.0...v1.17.1) (2023-10-11)
+## [1.17.2](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.17.1...v1.17.2) (2023-10-12)
 ### Bug Fixes
+* vuepress 支持发布为日记 ([3da0481](https://github.com/terwer/siyuan-plugin-publisher/commit/3da0481a9dbde59b207b2cb720c16f1b5f47b5d5))
+* 将index.html中 modulepreload 改为 preload ([a43b572](https://github.com/terwer/siyuan-plugin-publisher/commit/a43b572cae24fc7de380207773ca43d256859566))
+### Miscellaneous
+* dynamic import chatgpt [#786](https://github.com/terwer/siyuan-plugin-publisher/issues/786) ([8904c3a](https://github.com/terwer/siyuan-plugin-publisher/commit/8904c3a1fedf243b143e3e877bacddb806cbce6a))
+## [1.17.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.17.0...v1.17.1) (2023-10-11)
 * vuepress 支持自动推测发布目录 ([71e57d3](https://github.com/terwer/siyuan-plugin-publisher/commit/71e57d30b3a61571c282a8561761207ec1e9cac7))
 * 修复 vuepress 文件名不正确的问题 ([409d6c0](https://github.com/terwer/siyuan-plugin-publisher/commit/409d6c0c5ce67dba07e8de267be3fa5139648550))
 * 修复构建错误 ([32e8f61](https://github.com/terwer/siyuan-plugin-publisher/commit/32e8f61d193d0a979c4417653bc8b202b0be7b04))
@@ -14,7 +19,6 @@
 * AI-generated desc lose space and case info [#775](https://github.com/terwer/siyuan-plugin-publisher/issues/775) ([e4f07f7](https://github.com/terwer/siyuan-plugin-publisher/commit/e4f07f7dd37bc2a89e670275362c39d0b742c84c))
 * **deps:** bump siyuan from 0.8.4 to 0.8.5 ([f57609c](https://github.com/terwer/siyuan-plugin-publisher/commit/f57609c18eda3a7d5888709d1ba36bbfed3bb598))
 * 进一步优化 ai 效果 ([b2ccb55](https://github.com/terwer/siyuan-plugin-publisher/commit/b2ccb55abfcfd924968cac928bd2879041f95d3a))
-### Miscellaneous
 * **deps-dev:** bump @halo-dev/api-client from 2.9.0 to 2.10.0 ([bc92f28](https://github.com/terwer/siyuan-plugin-publisher/commit/bc92f28d0469096841faff1de81c6db506915246))
 * merge [#780](https://github.com/terwer/siyuan-plugin-publisher/issues/780) ([ad93890](https://github.com/terwer/siyuan-plugin-publisher/commit/ad93890359d4278664613d48df0576713fdf570d))
 ## [1.16.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.15.1...v1.16.0) (2023-10-10)
