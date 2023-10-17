@@ -87,8 +87,8 @@ dependencies:
     specifier: ^0.6.5
     version: 0.6.5
   zhi-github-middleware:
-    specifier: ^0.4.3
-    version: 0.4.3
+    specifier: ^0.4.4
+    version: 0.4.4
   zhi-gitlab-middleware:
     specifier: ^0.6.5
     version: 0.6.5
@@ -8004,6 +8004,16 @@ packages:
       zhi-lib-base: 0.5.0
     dev: false
 
+  /zhi-common@1.24.1:
+    resolution: {integrity: sha512-ttQOeoDHDtzCsuEWHlH2/CkasEA0C9fGuXagrYsoaT7hFajtoi7t9AauM3Rtb6CJnqZskpmLcph1vS6M3Cvb+w==}
+    dependencies:
+      js-yaml: 4.1.0
+      shorthash2: 1.0.3
+      transliteration: 2.3.5
+      vue: 3.3.4
+      zhi-lib-base: 0.6.0
+    dev: false
+
   /zhi-device@2.3.1:
     resolution: {integrity: sha512-HLNroA/bIHrEPQTaOC0gZyR42FpaxSJb/lc+LqWvtlazsxeOiYAc9HhFHBwJFdbikMqCogFWVFtGG7OMLYmaKg==}
     dev: false
@@ -8024,13 +8034,13 @@ packages:
       zhi-lib-base: 0.5.0
     dev: false
 
-  /zhi-github-middleware@0.4.3:
-    resolution: {integrity: sha512-vRszWdSmDJImDqt5jgp4wz6LFxJ374WZbTh3uS72vB7RHzdZBCkhVO8SC1yiCB3Yj4zt2nN8kTWubNV8P2USKg==}
+  /zhi-github-middleware@0.4.4:
+    resolution: {integrity: sha512-+P0dbic8yF4NaoUCdqciNru2zz1yd0mLeQe2W9QVsbCgVl+78QFofRu+61oYTPpLwGUn1kVx1ulneXSs7BDWkQ==}
     dependencies:
       '@octokit/core': 5.0.1
       js-base64: 3.7.5
-      zhi-common: 1.24.0
-      zhi-lib-base: 0.5.0
+      zhi-common: 1.24.1
+      zhi-lib-base: 0.6.0
     dev: false
 
   /zhi-gitlab-middleware@0.6.5:
@@ -8046,6 +8056,10 @@ packages:
 
   /zhi-lib-base@0.5.0:
     resolution: {integrity: sha512-56QfNhYA5HgmnTWRmOxD4UDpOplR0dcpmdq4ZxRFqBtr3eyHdEmm0qBITJt6kk7lzbPNPD2wgsuHq7pnz+9OQg==}
+    dev: false
+
+  /zhi-lib-base@0.6.0:
+    resolution: {integrity: sha512-rxBe1ubPbgFOTS+0bWL+kNH7LgL2lm4RFz4YYZJ9heofbNNeYm0gR/GtsVI54WLRWFOgnYwU2/FJPLKud5pa8w==}
     dev: false
 
   /zhi-notion-markdown@0.1.4:
