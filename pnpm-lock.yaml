@@ -99,8 +99,8 @@ dependencies:
     specifier: ^0.1.4
     version: 0.1.4
   zhi-siyuan-api:
-    specifier: ^2.11.0
-    version: 2.11.0
+    specifier: ^2.11.3
+    version: 2.11.3
   zhi-xmlrpc-middleware:
     specifier: ^0.5.12
     version: 0.5.12
@@ -6631,7 +6631,7 @@ packages:
       zhi-device: 2.3.1
       zhi-fetch-middleware: 0.2.29
       zhi-lib-base: 0.4.4
-      zhi-siyuan-api: 2.11.0
+      zhi-siyuan-api: 2.11.3
     transitivePeerDependencies:
       - '@vue/composition-api'
       - typescript
@@ -7984,6 +7984,13 @@ packages:
       zhi-lib-base: 0.5.0
     dev: false
 
+  /zhi-blog-api@1.46.3:
+    resolution: {integrity: sha512-aqIvhKVRWCR6ddGCdXIcq4ORNlKbid9IKheYqMP0eiebXCww+KdRS5N+wuKw/aFq6kJcJmrvMJgTVIYJ3zBUjA==}
+    dependencies:
+      zhi-common: 1.24.3
+      zhi-lib-base: 0.8.0
+    dev: false
+
   /zhi-common@1.18.0:
     resolution: {integrity: sha512-7m8uyV8+kZ0tJky0myjz8Nj1Ad0kNsMNsg4itixnoM0yIYo6VZ7uU+oMd3qmqyA9kcvszD2QXV4w8qlgIDBGfg==}
     dependencies:
@@ -8002,6 +8009,16 @@ packages:
       transliteration: 2.3.5
       vue: 3.3.4
       zhi-lib-base: 0.5.0
+    dev: false
+
+  /zhi-common@1.24.3:
+    resolution: {integrity: sha512-0FaigRo8E71fxUUPIgnPl6lDW+aoKwJBuH/G7QuUo2lEZOSP7LSpo+MCbjAcq/ASOHW3KxNmRgBxWpXOoTzlPw==}
+    dependencies:
+      js-yaml: 4.1.0
+      shorthash2: 1.0.3
+      transliteration: 2.3.5
+      vue: 3.3.4
+      zhi-lib-base: 0.8.0
     dev: false
 
   /zhi-device@2.3.1:
@@ -8048,6 +8065,10 @@ packages:
     resolution: {integrity: sha512-56QfNhYA5HgmnTWRmOxD4UDpOplR0dcpmdq4ZxRFqBtr3eyHdEmm0qBITJt6kk7lzbPNPD2wgsuHq7pnz+9OQg==}
     dev: false
 
+  /zhi-lib-base@0.8.0:
+    resolution: {integrity: sha512-3Ky5p6KvLWpXy2tlb/JIfSEKLSe5w43PBLM6g+hNcWwpL9S62emgcpUAHzGWBbC0vlLBLungt2LOsmwAfhrZ0w==}
+    dev: false
+
   /zhi-notion-markdown@0.1.4:
     resolution: {integrity: sha512-Ltoeb+NmQg/bi/d5OBI1PzlnX3hCE3x6nN94t50gegdhI53h3ZctY6dutd7GnDF7SpMNn++4m8kH625udYLrog==}
     dependencies:
@@ -8058,12 +8079,12 @@ packages:
       - supports-color
     dev: false
 
-  /zhi-siyuan-api@2.11.0:
-    resolution: {integrity: sha512-rVWtYST9ELaFJPRKepDBfQel4H4Opcu0dnN89DoYBuwE2cyDZf9kMOyIlYa/tpwKO78eNboAcn2Z0eXVs4SVzA==}
+  /zhi-siyuan-api@2.11.3:
+    resolution: {integrity: sha512-GKu7LOJFwQyj/9rCRgNIc5QNXtZEWIifA8BD705BsPXfNnXkfw3enqdYy7P0MIKy0lKqevAZT1FxorgG2fWM4w==}
     dependencies:
-      zhi-blog-api: 1.46.0
-      zhi-common: 1.24.0
-      zhi-lib-base: 0.5.0
+      zhi-blog-api: 1.46.3
+      zhi-common: 1.24.3
+      zhi-lib-base: 0.8.0
     dev: false
 
   /zhi-xmlrpc-middleware@0.5.12:
