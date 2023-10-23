@@ -77,7 +77,7 @@
     "vue-router": "^4.2.5",
     "xmlbuilder2": "^3.1.1",
     "zhi-blog-api": "^1.46.0",
-    "zhi-common": "^1.24.0",
+    "zhi-common": "^1.24.3",
     "zhi-device": "^2.3.1",
     "zhi-fetch-middleware": "^0.6.5",
     "zhi-github-middleware": "^0.4.3",
