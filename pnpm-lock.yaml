@@ -90,8 +90,8 @@ dependencies:
     specifier: ^0.4.3
     version: 0.4.3
   zhi-gitlab-middleware:
-    specifier: ^0.6.5
-    version: 0.6.5
+    specifier: ^0.6.15
+    version: 0.6.15
   zhi-lib-base:
     specifier: ^0.5.0
     version: 0.5.0
@@ -8004,8 +8004,22 @@ packages:
       zhi-lib-base: 0.5.0
     dev: false
 
+  /zhi-common@1.24.3:
+    resolution: {integrity: sha512-0FaigRo8E71fxUUPIgnPl6lDW+aoKwJBuH/G7QuUo2lEZOSP7LSpo+MCbjAcq/ASOHW3KxNmRgBxWpXOoTzlPw==}
+    dependencies:
+      js-yaml: 4.1.0
+      shorthash2: 1.0.3
+      transliteration: 2.3.5
+      vue: 3.3.4
+      zhi-lib-base: 0.8.0
+    dev: false
+
   /zhi-device@2.3.1:
     resolution: {integrity: sha512-HLNroA/bIHrEPQTaOC0gZyR42FpaxSJb/lc+LqWvtlazsxeOiYAc9HhFHBwJFdbikMqCogFWVFtGG7OMLYmaKg==}
+    dev: false
+
+  /zhi-device@2.9.0:
+    resolution: {integrity: sha512-kBGI1L5f6RzlqgJYuXVlbypCIkLlGtLF9uFm7nPqZVdSE8GfnAgu3gAfSjk9zspPPYKB4okwJfL/mN34xuDINw==}
     dev: false
 
   /zhi-fetch-middleware@0.2.29:
@@ -8024,6 +8038,14 @@ packages:
       zhi-lib-base: 0.5.0
     dev: false
 
+  /zhi-fetch-middleware@0.7.8:
+    resolution: {integrity: sha512-iDb+SOHFNPBBssr06wGWgoB2YyoKiuxkPT6HVr2b11vpsVRh9yTfYt7gHE7Imj0Ao706s3DsBBYFCmx1x5JaWQ==}
+    dependencies:
+      zhi-common: 1.24.3
+      zhi-device: 2.9.0
+      zhi-lib-base: 0.8.0
+    dev: false
+
   /zhi-github-middleware@0.4.3:
     resolution: {integrity: sha512-vRszWdSmDJImDqt5jgp4wz6LFxJ374WZbTh3uS72vB7RHzdZBCkhVO8SC1yiCB3Yj4zt2nN8kTWubNV8P2USKg==}
     dependencies:
@@ -8033,11 +8055,11 @@ packages:
       zhi-lib-base: 0.5.0
     dev: false
 
-  /zhi-gitlab-middleware@0.6.5:
-    resolution: {integrity: sha512-P/wfTKpzJNIfNN1tXvClhthbOrYY3+DCBEm2Fb5O64gzpHPVe59cisxLNGE736tpyA0jRT3Y2IJRnc/zTtBuLg==}
+  /zhi-gitlab-middleware@0.6.15:
+    resolution: {integrity: sha512-F5A3gC+LE9YKPX7ey0bv8+difVQMMGe64lGwkSrv0CE1eAv4jwNNbPh+HIOtS90lNJcEP2wUkUxqjX8oLM5x5A==}
     dependencies:
-      zhi-fetch-middleware: 0.6.5
-      zhi-lib-base: 0.5.0
+      zhi-fetch-middleware: 0.7.8
+      zhi-lib-base: 0.8.0
     dev: false
 
   /zhi-lib-base@0.4.4:
@@ -8046,6 +8068,10 @@ packages:
 
   /zhi-lib-base@0.5.0:
     resolution: {integrity: sha512-56QfNhYA5HgmnTWRmOxD4UDpOplR0dcpmdq4ZxRFqBtr3eyHdEmm0qBITJt6kk7lzbPNPD2wgsuHq7pnz+9OQg==}
+    dev: false
+
+  /zhi-lib-base@0.8.0:
+    resolution: {integrity: sha512-3Ky5p6KvLWpXy2tlb/JIfSEKLSe5w43PBLM6g+hNcWwpL9S62emgcpUAHzGWBbC0vlLBLungt2LOsmwAfhrZ0w==}
     dev: false
 
   /zhi-notion-markdown@0.1.4:
