@@ -102,8 +102,8 @@ dependencies:
     specifier: ^2.11.0
     version: 2.11.0
   zhi-xmlrpc-middleware:
-    specifier: ^0.5.12
-    version: 0.5.12
+    specifier: ^0.6.9
+    version: 0.6.9
 
 devDependencies:
   '@halo-dev/api-client':
@@ -8004,6 +8004,20 @@ packages:
       zhi-lib-base: 0.5.0
     dev: false
 
+  /zhi-common@1.24.3:
+    resolution: {integrity: sha512-0FaigRo8E71fxUUPIgnPl6lDW+aoKwJBuH/G7QuUo2lEZOSP7LSpo+MCbjAcq/ASOHW3KxNmRgBxWpXOoTzlPw==}
+    dependencies:
+      js-yaml: 4.1.0
+      shorthash2: 1.0.3
+      transliteration: 2.3.5
+      vue: 3.3.4
+      zhi-lib-base: 0.8.0
+    dev: false
+
+  /zhi-device@2.10.0:
+    resolution: {integrity: sha512-E6ODo/AGvlWJiMnDCCUSvceoAPCPiq0DocLp2lzOA/8DYIECRmeQMtzkmy/vgXzniR3+qUGDYJ8cT0/v0nOozA==}
+    dev: false
+
   /zhi-device@2.3.1:
     resolution: {integrity: sha512-HLNroA/bIHrEPQTaOC0gZyR42FpaxSJb/lc+LqWvtlazsxeOiYAc9HhFHBwJFdbikMqCogFWVFtGG7OMLYmaKg==}
     dev: false
@@ -8048,6 +8062,10 @@ packages:
     resolution: {integrity: sha512-56QfNhYA5HgmnTWRmOxD4UDpOplR0dcpmdq4ZxRFqBtr3eyHdEmm0qBITJt6kk7lzbPNPD2wgsuHq7pnz+9OQg==}
     dev: false
 
+  /zhi-lib-base@0.8.0:
+    resolution: {integrity: sha512-3Ky5p6KvLWpXy2tlb/JIfSEKLSe5w43PBLM6g+hNcWwpL9S62emgcpUAHzGWBbC0vlLBLungt2LOsmwAfhrZ0w==}
+    dev: false
+
   /zhi-notion-markdown@0.1.4:
     resolution: {integrity: sha512-Ltoeb+NmQg/bi/d5OBI1PzlnX3hCE3x6nN94t50gegdhI53h3ZctY6dutd7GnDF7SpMNn++4m8kH625udYLrog==}
     dependencies:
@@ -8066,12 +8084,12 @@ packages:
       zhi-lib-base: 0.5.0
     dev: false
 
-  /zhi-xmlrpc-middleware@0.5.12:
-    resolution: {integrity: sha512-oVpFVmZ2FohYv8IOOS/V9juZ6StCvAyPaN6HS90OILZ0ydnfh/cMFfrDkSJyfZ0gxEQvWBnZDlPq0CJSTOlCvg==}
+  /zhi-xmlrpc-middleware@0.6.9:
+    resolution: {integrity: sha512-RngRGbGh59/ZG/2iJHNL+Ttf2QiLgSwWQ5EDUESf2xvnWv6MEaaQLqieNNnXxzxFSOSBJZnuLmezfFe+caB87A==}
     dependencies:
-      zhi-common: 1.24.0
-      zhi-device: 2.3.1
-      zhi-lib-base: 0.5.0
+      zhi-common: 1.24.3
+      zhi-device: 2.10.0
+      zhi-lib-base: 0.8.0
     dev: false
 
   /zwitch@1.0.5:
