@@ -69,7 +69,7 @@
     "pinia": "^2.1.7",
     "shorthash2": "^1.0.3",
     "simple-xmlrpc": "^1.4.2",
-    "siyuan": "^0.8.5",
+    "siyuan": "^0.8.7",
     "siyuan-plugin-picgo": "^1.4.4",
     "uuid": "^9.0.1",
     "vue": "^3.3.4",
