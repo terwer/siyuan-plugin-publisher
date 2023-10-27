@@ -36,7 +36,6 @@ import {
   deletePlatformByKey,
   DynamicConfig,
   DynamicJsonCfg,
-  getDynCfgByKey,
   isDynamicKeyExists,
   PlatformType,
   replacePlatformByKey,
@@ -64,7 +63,7 @@ const logger = createAppLogger("publish-setting")
 const { t } = useVueI18n()
 const router = useRouter()
 const { getSetting, updateSetting, deleteKey } = useSettingStore()
-const { platformTypeList } = usePlatformDefine()
+const { platformTypeList, getPrePlatformList } = usePlatformDefine()
 const { isInSiyuanWidget, isInChromeExtension } = useSiyuanDevice()
 
 // datas
@@ -466,7 +465,12 @@ onMounted(async () => {
                   <el-card class="platform-right-card">
                     <img :src="p.img" class="image" alt="" />
                     <div class="right-card-text">
-                      <span>{{ p.title }}</span>
+                      <el-tooltip placement="bottom">
+                        <template #content>
+                          <span v-for="item in getPrePlatformList(p.type)"> {{ item.platformName }}<br /> </span>
+                        </template>
+                        <span class="platform-title">{{ p.title }}</span>
+                      </el-tooltip>
                       <div>
                         <div class="text-desc">{{ p.description }}</div>
                         <div class="add-btn">
@@ -833,6 +837,10 @@ html[class="dark"]
     vertical-align top
     line-height 32px
     width calc(100% - 180px)
+
+    .platform-title
+      cursor pointer
+      color var(--el-color-primary)
 
     .text-desc
       font-size 12px
