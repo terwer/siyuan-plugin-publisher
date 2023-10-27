@@ -34,6 +34,7 @@ import { PluginInvoke } from "./invoke/pluginInvoke"
 import { ObjectUtil } from "zhi-common"
 import { DYNAMIC_CONFIG_KEY } from "./Constants"
 import { ConfigManager } from "~/siyuan/store/config.ts"
+import CrossPageUtils from "~/cross/crossPageUtils.ts"
 
 /**
  * 顶部按钮
@@ -93,11 +94,9 @@ export class Topbar {
         icon = `<span class="img-icon">${icon}</span>`
       }
       if (config.isEnabled === true) {
-        // http://127.0.0.1:6806/plugins/siyuan-plugin-publisher/i
-
         const submenu = {
           iconHTML: `${icon}`,
-          label: config.platformName,
+          label: CrossPageUtils.longPlatformName(config.platformName, 11),
           disabled: !config.isAuth,
           click: async () => {
             const key = config.platformKey

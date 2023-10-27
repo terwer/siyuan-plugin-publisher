@@ -30,7 +30,7 @@ import { Delete, Lock, Tools, WarningFilled } from "@element-plus/icons-vue"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { SypConfig } from "~/syp.config.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { JsonUtil } from "zhi-common"
+import { DateUtil, JsonUtil } from "zhi-common"
 import {
   AuthMode,
   deletePlatformByKey,
@@ -56,6 +56,7 @@ import CookieSetting from "~/src/components/set/publish/singleplatform/base/Cook
 import { CommonWebConfig } from "~/src/adaptors/web/base/commonWebConfig.ts"
 import { pre } from "~/src/utils/import/pre.ts"
 import _ from "lodash"
+import CrossPageUtils from "~/cross/crossPageUtils.ts"
 
 const logger = createAppLogger("publish-setting")
 
@@ -63,7 +64,7 @@ const logger = createAppLogger("publish-setting")
 const { t } = useVueI18n()
 const router = useRouter()
 const { getSetting, updateSetting, deleteKey } = useSettingStore()
-const { platformTypeList, getPrePlatformList } = usePlatformDefine()
+const { getPrePlatformKeys, platformTypeList, getPrePlatformList } = usePlatformDefine()
 const { isInSiyuanWidget, isInChromeExtension } = useSiyuanDevice()
 
 // datas
@@ -76,6 +77,8 @@ const formData = reactive({
   dynamicConfigArray: [] as DynamicConfig[],
 
   webAuthLoadingMap: {} as any,
+
+  hasNewPlatform: false,
   isImportLoading: false,
   showLogMessage: false,
   logMessage: "",
@@ -371,44 +374,66 @@ const handleHideCookieDlg = () => {
   formData.cookieSettingFormVisible = false
 }
 
+const logAction = (pkey: string, action: string) => {
+  const timestamp = DateUtil.formatIsoToZh(new Date().toISOString(), true)
+  formData.logMessage += `[${timestamp}] ${pkey} ${action}\n`
+}
+
 // 单个大类导入
 const basicImport = (importCfgs: DynamicConfig[]) => {
+  let importCount = 0
   for (const importCfg of importCfgs) {
     const pkey = importCfg.platformKey
-    const pkeyExist = isDynamicKeyExists(formData.dynamicConfigArray, pkey)
-    if (pkeyExist) {
-      formData.logMessage += `${pkey} 已经存在，忽略导入\n`
+    if (isDynamicKeyExists(formData.dynamicConfigArray, pkey)) {
+      // logAction(pkey, "已经存在，忽略导入")
       continue
     }
 
     const newCfg = _.cloneDeep(importCfg)
     formData.dynamicConfigArray.push(newCfg)
-    formData.logMessage += `${pkey} 已加入导入列表\n`
+    logAction(pkey, "已加入导入列表")
 
     // 初始化一个空配置
-    formData.setting[newCfg.platformKey] = {}
-    formData.logMessage += `${pkey} 初始化\n`
+    formData.setting[pkey] = {}
+    logAction(pkey, "初始化")
+
+    importCount++
   }
+
+  return importCount
 }
 
 const handleImportPre = async () => {
   formData.showLogMessage = true
   formData.isImportLoading = true
+  // 清空日志
+  formData.logMessage = ""
 
+  let totalImportCount = 0
   // 大类导入
-  basicImport(pre.commonCfg)
-  basicImport(pre.githubCfg)
-  basicImport(pre.gitlabCfg)
-  basicImport(pre.metaweblogCfg)
-  basicImport(pre.wordpressCfg)
-  basicImport(pre.customCfg)
+  totalImportCount += basicImport(pre.commonCfg)
+  totalImportCount += basicImport(pre.githubCfg)
+  totalImportCount += basicImport(pre.gitlabCfg)
+  totalImportCount += basicImport(pre.metaweblogCfg)
+  totalImportCount += basicImport(pre.wordpressCfg)
+  totalImportCount += basicImport(pre.customCfg)
 
-  // 转换格式并保存
-  const dynJsonCfg = setDynamicJsonCfg(formData.dynamicConfigArray)
-  formData.setting[DYNAMIC_CONFIG_KEY] = dynJsonCfg
-  await updateSetting(formData.setting)
   formData.isImportLoading = false
-  formData.logMessage += `全部导入成功并保存\n`
+
+  if (totalImportCount > 0) {
+    // 转换格式并保存
+    const dynJsonCfg = setDynamicJsonCfg(formData.dynamicConfigArray)
+    formData.setting[DYNAMIC_CONFIG_KEY] = dynJsonCfg
+    await updateSetting(formData.setting)
+    // 刷新数据
+    await initPage()
+
+    formData.logMessage += `全部导入成功并保存`
+    ElMessage.success("全部导入成功并保存")
+  } else {
+    formData.logMessage += `未发现新平台，忽略导入`
+    ElMessage.warning("未发现新平台，忽略导入")
+  }
 }
 
 const initPage = async () => {
@@ -419,6 +444,11 @@ const initPage = async () => {
   // 默认展示通用平台
   formData.dynamicConfigArray = dynJsonCfg?.totalCfg || []
   logger.debug("dynamic init page=>", formData.dynamicConfigArray)
+
+  // 检测是否有新平台
+  const preKeys = getPrePlatformKeys()
+  const dynKeys = formData.dynamicConfigArray.map((p) => p.platformKey)
+  formData.hasNewPlatform = !preKeys.every((preKey) => dynKeys.includes(preKey))
 }
 
 // lifecycles
@@ -467,7 +497,9 @@ onMounted(async () => {
                     <div class="right-card-text">
                       <el-tooltip placement="bottom">
                         <template #content>
-                          <span v-for="item in getPrePlatformList(p.type)"> {{ item.platformName }}<br /> </span>
+                          <span v-for="item in getPrePlatformList(p.type)">
+                            {{ CrossPageUtils.longPlatformName(item.platformName, 11) }}<br />
+                          </span>
                         </template>
                         <span class="platform-title">{{ p.title }}</span>
                       </el-tooltip>
@@ -507,7 +539,9 @@ onMounted(async () => {
                             class="badge-item"
                             :type="platform.isAuth ? 'success' : 'danger'"
                           >
-                            <span>{{ platform.platformName }}</span>
+                            <span :title="platform.platformName">
+                              {{ CrossPageUtils.longPlatformName(platform.platformName, 11) }}
+                            </span>
                             <span class="name-edit" @click="handleChangePlatformDefine(platform)">
                               <el-icon> <span v-html="svgIcons.iconIFEdit"></span> </el-icon>
                             </span>
@@ -597,9 +631,28 @@ onMounted(async () => {
               <el-row>
                 <el-col>
                   <div class="import-pre-action">
-                    <el-button size="small" type="primary" :loading="formData.isImportLoading" @click="handleImportPre"
-                      >导入预定义平台</el-button
-                    >
+                    <div v-if="formData.hasNewPlatform">
+                      <el-badge value="new" class="badge-item" type="danger">
+                        <el-button
+                          size="small"
+                          type="primary"
+                          :loading="formData.isImportLoading"
+                          @click="handleImportPre"
+                        >
+                          导入预定义平台
+                        </el-button>
+                      </el-badge>
+                    </div>
+                    <div v-else>
+                      <el-button
+                        size="small"
+                        type="primary"
+                        :loading="formData.isImportLoading"
+                        @click="handleImportPre"
+                      >
+                        导入预定义平台
+                      </el-button>
+                    </div>
                   </div>
                   <div class="log-message-box">
                     <el-input

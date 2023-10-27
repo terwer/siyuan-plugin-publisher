@@ -30,6 +30,7 @@ import BackPage from "~/src/components/common/BackPage.vue"
 import { reactive } from "vue"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { usePlatformDefine } from "~/src/composables/usePlatformDefine.ts"
+import CrossPageUtils from "~/cross/crossPageUtils.ts"
 
 // uses
 const { t } = useVueI18n()
@@ -79,14 +80,19 @@ initPage()
         </p>
       </div>
       <div class="icon-list">
-        <el-space direction="horizontal" class="platform-box">
-          <el-text class="define-item" v-for="preItem in formData.pre" @click="handleAddPlatform(preItem)">
+        <div class="platform-box">
+          <el-text
+            class="define-item"
+            v-for="preItem in formData.pre"
+            @click="handleAddPlatform(preItem)"
+            :title="preItem.platformName"
+          >
             <i class="el-icon">
               <span v-html="preItem?.platformIcon"></span>
             </i>
-            {{ preItem.platformName }}
+            {{ CrossPageUtils.shortPlatformName(preItem.platformName, 11) }}
           </el-text>
-        </el-space>
+        </div>
       </div>
       <div class="add-action">
         <el-button type="primary" size="large" @click="handleAddPlatform(undefined)">
@@ -113,12 +119,23 @@ $icon_size = 32px
     .desc-tip
       padding-left 0
   .icon-list
-    text-align center
+    // text-align center
     margin 10px 0
     margin-bottom 24px
     min-height 180px
-    gap 10px
+
+    .platform-box
+      // 子元素水平排列
+      display flex
+      // 开头对齐
+      justify-content flex-start
+      // 垂直居中对齐
+      align-items center
+      flex-wrap wrap
+
     .define-item
+      // 让每个子元素占据24%的宽度，减去间距
+      width calc(24% - 10px)
       color var(--el-color-primary)
       //color var(--el-button-bg-color)
       cursor pointer
