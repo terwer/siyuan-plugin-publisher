@@ -61,8 +61,6 @@ class Gitlabvuepress2Config extends Vuepress2Config {
     this.allowKnowledgeSpaceChange = false
     this.placeholder.knowledgeSpaceReadonlyModeTip = "Gitlabvuepress2 平台暂不支持修改发布目录，如需修改，请删除之后重新发布"
     this.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Tree_Single
-    this.useMdFilename = false
-    this.usePathCategory = false
   }
 }
 

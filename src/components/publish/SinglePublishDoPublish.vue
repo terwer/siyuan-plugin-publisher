@@ -51,6 +51,7 @@ import PublishTitle from "~/src/components/publish/form/PublishTitle.vue"
 import { useChatGPT } from "~/src/composables/useChatGPT.ts"
 import _ from "lodash"
 import { useLoadingTimer } from "~/src/composables/useLoadingTimer.ts"
+import CrossPageUtils from "~/cross/crossPageUtils.ts"
 
 const logger = createAppLogger("single-publish-do-publish")
 
@@ -272,20 +273,14 @@ const topTitle = computed(() => {
   const blogName = getBlogName()
 
   let title = "当前操作的平台为 - "
-  title += platformName ? platformName : key
+  const platName = platformName ? platformName : key
+  title += CrossPageUtils.longPlatformName(platName, 11)
   if (blogName) {
     title += " - " + blogName
   }
 
   return title
 })
-
-const showChangeTip = (v1: string, v2: string) => {
-  if (StrUtil.isEmptyString(v2)) {
-    return ""
-  }
-  return `系统标题为 [${v1}] ， 已在远程平台被修改为 [${v2}]`
-}
 
 const syncEditMode = async (val: PageEditMode) => {
   formData.editType = val

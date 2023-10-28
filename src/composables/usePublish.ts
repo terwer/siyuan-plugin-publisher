@@ -413,11 +413,6 @@ const usePublish = () => {
         }
       }
 
-      // 文件名
-      if (cfg.useMdFilename && post?.mdFilename.includes(".md")) {
-        post.title = post.mdFilename
-      }
-
       return post
     },
 

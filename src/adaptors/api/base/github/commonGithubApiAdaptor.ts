@@ -204,53 +204,6 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
 
     return previewUrl
   }
-
-  // ================
-  // private methods
-  // ================
-  // 在 baseExtendApi 里面处理了
-  // private processFilename(post: Post, cfg: CommonGitlabConfig) {
-  //   // 处理文件规则
-  //   const created = DateUtil.formatIsoToZhDate(post.dateCreated.toISOString(), true)
-  //   const datearr = created.split(" ")[0]
-  //   const numarr = datearr.split("-")
-  //   const y = numarr[0]
-  //   const m = numarr[1]
-  //   const d = numarr[2]
-  //   this.logger.debug("created numarr=>", numarr)
-  //   let filename = cfg.mdFilenameRule.replace(/\.md/g, "")
-  //   if (cfg.useMdFilename) {
-  //     // 使用真实文件名作为MD文件名
-  //     filename = filename.replace(/\[filename\]/g, post.title)
-  //   } else {
-  //     // 使用别名作为MD文件名
-  //     filename = filename.replace(/\[slug\]/g, post.wp_slug)
-  //   }
-  //   // 年月日
-  //   filename = filename
-  //     .replace(/\[yyyy\]/g, y)
-  //     .replace(/\[MM\]/g, m)
-  //     .replace(/\[mm\]/g, m)
-  //     .replace(/\[dd\]/g, d)
-  //
-  //   return filename
-  // }
-  //
-  // private processPathCategory(savePath: string, cfg: CommonGitlabConfig) {
-  //   let categories = []
-  //   if (cfg.usePathCategory) {
-  //     this.logger.debug("savePath=>", savePath)
-  //     const docPathArray = savePath.split("/")
-  //     if (docPathArray.length > 1) {
-  //       for (let i = 1; i < docPathArray.length - 1; i++) {
-  //         const docCate = HtmlUtil.removeTitleNumber(docPathArray[i])
-  //         categories.push(docCate)
-  //       }
-  //     }
-  //   }
-  //
-  //   return categories
-  // }
 }
 
 export { CommonGithubApiAdaptor }

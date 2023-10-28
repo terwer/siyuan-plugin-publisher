@@ -79,8 +79,6 @@ const useVuepressApi = async (key: string, newCfg?: VuepressConfig) => {
 
   // 文件规则，占位符
   cfg.mdFilenameRule = "[filename].md"
-  cfg.useMdFilename = true
-  cfg.usePathCategory = true
   // 标签
   cfg.tagEnabled = true
   // 分类

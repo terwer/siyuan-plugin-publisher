@@ -45,7 +45,7 @@ export default {
   "main.publish.github": "发布页面",
   "main.publish.github.tip": "自动将文章的markdown文本发布到Vuepress对应的Github仓库（需要先进行相关配置）",
   "main.publish.github.no.tip": "您未开启Github pages发布，请切换源码模式复制YAML以及Markdown文本",
-  "main.publish.github.choose.path": "选择目录",
+  "main.publish.github.choose.path": "发布目录",
   "main.publish.github.published.path": "发布路径",
   "main.publish.github.choose.path.use.default": "默认目录",
   "main.publish.github.choose.path.use.default.tip":
@@ -142,7 +142,7 @@ export default {
   "setting.blog.type.github.default.branch.tip": "默认分支（旧版仓库为master，新版仓库默认为main），例如：main",
   "setting.blog.type.github.default.path": "存储目录",
   "setting.blog.type.github.default.path.tip":
-    "存储目录（相对于仓库根目录的相对路径，默认所有文章都发布在这里），例如：docs/_posts",
+    "存储目录例如：docs，部分平台可使用[auto]作为特殊占位符，代表自动映射层级目录，例如：docs/[auto]",
   "setting.blog.type.github.msg": "提交信息",
   "setting.blog.type.github.msg.tip": "提交信息，例如：auto published by siyuan-publish-publisher",
   "setting.blog.type.github.author": "作者",
@@ -592,7 +592,8 @@ export default {
   "main.auto.fetch.title": "自动提取标题",
   "main.auto.fetch.cate": "自动提取分类",
   "category.ai.hand": "由于各平台分类体系不一致，分类需要手动进行校准，不会自动保存",
-  "category.ai.enabled": "检测到您已经配置AI，可请前往详细模式进行操作。小贴士：由于网络或者其他问题，如果第一次失败生成，多试几次或许就能出结果哟~😄",
+  "category.ai.enabled":
+    "检测到您已经配置AI，可请前往详细模式进行操作。小贴士：由于网络或者其他问题，如果第一次失败生成，多试几次或许就能出结果哟~😄",
   "sys.config.ai": "AI设置",
   "config.ai.use.siyuan": "思源笔记内部，直接使用思源笔记配置，无需配置",
   "setting.blog.yamlLinkEnabled": "YAML永久链接",
@@ -608,5 +609,5 @@ export default {
   "setting.blog.gitlab.previewUrl.tip": "文章预览地址，一般默认即可",
 
   "main.force.cancel": "强制删除",
-  "loading.cost":"操作耗时"
+  "loading.cost": "操作耗时",
 }

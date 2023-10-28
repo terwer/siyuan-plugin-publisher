@@ -78,7 +78,7 @@ const formData = reactive({
 
   webAuthLoadingMap: {} as any,
 
-  hasNewPlatform: false,
+  newPlatformCount: 0,
   isImportLoading: false,
   showLogMessage: false,
   logMessage: "",
@@ -395,7 +395,7 @@ const basicImport = (importCfgs: DynamicConfig[]) => {
 
     // 初始化一个空配置
     formData.setting[pkey] = {}
-    logAction(pkey, "初始化")
+    logAction(pkey, "已导入并初始化成功")
 
     importCount++
   }
@@ -448,7 +448,12 @@ const initPage = async () => {
   // 检测是否有新平台
   const preKeys = getPrePlatformKeys()
   const dynKeys = formData.dynamicConfigArray.map((p) => p.platformKey)
-  formData.hasNewPlatform = !preKeys.every((preKey) => dynKeys.includes(preKey))
+  formData.newPlatformCount = 0
+  for (const preKey of preKeys) {
+    if (!dynKeys.includes(preKey)) {
+      formData.newPlatformCount++
+    }
+  }
 }
 
 // lifecycles
@@ -631,8 +636,8 @@ onMounted(async () => {
               <el-row>
                 <el-col>
                   <div class="import-pre-action">
-                    <div v-if="formData.hasNewPlatform">
-                      <el-badge value="new" class="badge-item" type="danger">
+                    <div v-if="formData.newPlatformCount > 0">
+                      <el-badge :value="formData.newPlatformCount" class="badge-item" type="danger">
                         <el-button
                           size="small"
                           type="primary"

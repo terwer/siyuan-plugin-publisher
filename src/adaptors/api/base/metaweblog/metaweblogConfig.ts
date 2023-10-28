@@ -112,7 +112,5 @@ export class MetaweblogConfig extends CommonBlogConfig {
     this.categoryType = CategoryTypeEnum.CategoryType_Multi
     this.allowCateChange = true
     this.knowledgeSpaceEnabled = false
-    this.useMdFilename = false
-    this.usePathCategory = false
   }
 }

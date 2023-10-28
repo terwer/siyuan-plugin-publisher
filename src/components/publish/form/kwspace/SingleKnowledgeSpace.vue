@@ -30,6 +30,7 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { CategoryInfo } from "zhi-blog-api"
 import Adaptors from "~/src/adaptors"
+import { CATE_AUTO_NAME } from "~/src/utils/constants.ts"
 
 const logger = createAppLogger("single-knowledge-space")
 const { t } = useVueI18n()
@@ -127,6 +128,11 @@ onMounted(async () => {
   try {
     formData.isCateLoading = true
     await initPage(true)
+    // 自动映射分类模式只读
+    if (formData.cate.categorySelected.includes(CATE_AUTO_NAME)) {
+      formData.knowledgeSpaceConfig.readonlyMode = true
+      formData.knowledgeSpaceConfig.readonlyModeTip = "当前为自动映射目录模式，将根据笔记层级自动生成目录😄"
+    }
   } catch (e) {
     logger.error("知识空间加载失败", e)
   } finally {
@@ -174,7 +180,7 @@ onMounted(async () => {
     <el-form-item v-if="formData.knowledgeSpaceConfig.readonlyMode">
       <el-alert
         :closable="false"
-        :title="props.knowledgeSpaceConfig.readonlyModeTip"
+        :title="formData.knowledgeSpaceConfig.readonlyModeTip"
         class="form-item-tip"
         type="warning"
       />

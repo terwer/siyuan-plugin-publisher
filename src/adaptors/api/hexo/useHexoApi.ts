@@ -84,8 +84,6 @@ const useHexoApi = async (key: string, newCfg?: HexoConfig) => {
   // [mm] 月
   // [dd] 日
   cfg.mdFilenameRule = "[slug].md"
-  cfg.useMdFilename = false
-  cfg.usePathCategory = false
   // 标签
   cfg.tagEnabled = true
   // 分类

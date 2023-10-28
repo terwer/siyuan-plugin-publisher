@@ -43,3 +43,8 @@ export const MUST_USE_OWN_PLATFORM = ["custom_Zhihu", "custom_Csdn", "custom_Wec
  * 必须使用图床的平台
  */
 export const MUST_USE_PICBED_PLATFORM = ["common_Yuque", "common_Notion", "common_Hexo", "gitlab_Gitlabhexo"]
+
+/**
+ * 自动映射分类占位符
+ */
+export const CATE_AUTO_NAME = "[auto]"
