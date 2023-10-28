@@ -95,6 +95,14 @@ const syncDefaultPath = (cfg: any) => {
           :placeholder="t('setting.blog.type.github.default.path.tip')"
         />
       </el-form-item>
+      <!-- 文件规则 -->
+      <el-form-item :label="t('setting.blog.mdFilenameRule')">
+        <el-input v-model="(main.cfg as any).mdFilenameRule" :placeholder="t('setting.blog.mdFilenameRule.tip')" />
+      </el-form-item>
+      <!-- 文章预览规则 -->
+      <el-form-item :label="t('setting.blog.previewPostUrl')">
+        <el-input v-model="(main.cfg as any).previewPostUrl" :placeholder="t('setting.blog.previewPostUrl.tip')" />
+      </el-form-item>
       <el-form-item>
         <a href="javascript:;" @click="toggleAdvance">{{ formData.advanceBtnText }}</a>
       </el-form-item>
@@ -114,18 +122,6 @@ const syncDefaultPath = (cfg: any) => {
         <!-- 作者主页 -->
         <el-form-item :label="t('setting.blog.type.github.site')">
           <el-input v-model="(main.cfg as any).site" :placeholder="t('setting.blog.type.github.site.tip')" />
-        </el-form-item>
-        <!-- 文件规则 -->
-        <el-form-item :label="t('setting.blog.mdFilenameRule')">
-          <el-input
-            v-model="(main.cfg as any).mdFilenameRule"
-            :placeholder="t('setting.blog.mdFilenameRule.tip')"
-            :disabled="true"
-          />
-        </el-form-item>
-        <!-- 文章预览规则 -->
-        <el-form-item :label="t('setting.blog.previewPostUrl')">
-          <el-input v-model="(main.cfg as any).previewPostUrl" :placeholder="t('setting.blog.previewPostUrl.tip')" />
         </el-form-item>
       </div>
       <slot name="main" :cfg="main.cfg" />

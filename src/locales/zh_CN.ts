@@ -165,7 +165,7 @@ export default {
     "如果不明白原理，请勿修改此选项。MD文件预览规则（占位符：[user] [repo] [branch] [docpath]），通常是：/[user]/[repo]/blob/[branch]/[docpath]",
   "setting.blog.mdFilenameRule": "文件规则",
   "setting.blog.mdFilenameRule.tip":
-    "Markdown文件名规则（占位符：[yyyy] [MM] [dd] [slug] [filename] ），例如：[filename].md 或者 [yyyy]-[mm]-[dd]-[slug].md",
+    "Markdown文件名规则(占位符：[yyyy] [MM] [dd] [slug] [filename])，例如：[filename].md、[slug].md、[yyyy]-[mm]-[dd]-[slug].md",
   "setting.blog.pageType": "发布格式",
   "setting.blog.validate": "验证",
   "setting.blog.save": "保存",

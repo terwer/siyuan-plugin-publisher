@@ -76,15 +76,15 @@
     "vue-i18n": "^9.6.1",
     "vue-router": "^4.2.5",
     "xmlbuilder2": "^3.1.1",
-    "zhi-blog-api": "^1.46.4",
-    "zhi-common": "^1.24.4",
+    "zhi-blog-api": "^1.46.5",
+    "zhi-common": "^1.25.0",
     "zhi-device": "^2.10.0",
-    "zhi-fetch-middleware": "^0.7.10",
-    "zhi-github-middleware": "^0.4.7",
-    "zhi-gitlab-middleware": "^0.6.17",
+    "zhi-fetch-middleware": "^0.7.11",
+    "zhi-github-middleware": "^0.4.8",
+    "zhi-gitlab-middleware": "^0.6.18",
     "zhi-lib-base": "^0.8.0",
     "zhi-notion-markdown": "^0.1.4",
-    "zhi-siyuan-api": "^2.11.4",
-    "zhi-xmlrpc-middleware": "^0.6.10"
+    "zhi-siyuan-api": "^2.11.5",
+    "zhi-xmlrpc-middleware": "^0.6.11"
   }
 }
