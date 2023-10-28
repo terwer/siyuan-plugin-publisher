@@ -101,10 +101,14 @@ const useProxy = (middlewareUrl?: string) => {
       if (!(fetchResult.status >= 200 && fetchResult.status < 300)) {
         // 兼容 CSDN 错误提示
         const bodyJson = JsonUtil.safeParse<any>(fetchResult?.body, {})
-        if (bodyJson?.msg) {
+        if (!StrUtil.isEmptyString(bodyJson?.msg)) {
           throw new Error(bodyJson?.msg)
         }
-        throw new Error(StrUtil.decodeUnicodeToChinese(fetchResult?.body))
+        throw new Error(
+          StrUtil.decodeUnicodeToChinese(
+            StrUtil.isEmptyString(fetchResult?.body) ? `请求异常：${fetchResult.status}` : fetchResult?.body
+          )
+        )
       }
 
       if (contentType === "application/json") {

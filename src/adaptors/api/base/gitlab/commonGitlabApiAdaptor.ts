@@ -64,6 +64,23 @@ class CommonGitlabApiAdaptor extends BaseBlogApi {
     )
   }
 
+  public async checkAuth(): Promise<boolean> {
+    let flag: boolean
+    try {
+      const testFilePath = `test.md`
+      await this.safeDeletePost(testFilePath)
+      const res = await this.gitlabClient.createRepositoryFile(testFilePath, "Hello, World!")
+      await this.safeDeletePost(testFilePath)
+      flag = !StrUtil.isEmptyString(res?.file_path)
+    } catch (e) {
+      this.logger.info(`checkAuth error =>`, e)
+      flag = false
+    }
+
+    this.logger.info(`checkAuth finished => ${flag}`)
+    return flag
+  }
+
   public async getUsersBlogs(): Promise<UserBlog[]> {
     const result: UserBlog[] = []
 
@@ -210,6 +227,17 @@ class CommonGitlabApiAdaptor extends BaseBlogApi {
     previewUrl = StrUtil.pathJoin(StrUtil.pathJoin(this.cfg.home, this.cfg.username), previewUrl)
 
     return previewUrl
+  }
+
+  // ================
+  // private methods
+  // ================
+  private async safeDeletePost(postid: string): Promise<boolean> {
+    try {
+      await this.gitlabClient.deleteRepositoryFile(postid)
+    } catch (e) {}
+
+    return true
   }
 }
 

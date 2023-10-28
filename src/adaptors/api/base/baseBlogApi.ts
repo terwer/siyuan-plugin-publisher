@@ -62,6 +62,10 @@ export class BaseBlogApi extends BlogApi {
     this.proxyFetch = proxyFetch
   }
 
+  public async checkAuth(): Promise<boolean> {
+    return true
+  }
+
   public getYamlAdaptor(): YamlConvertAdaptor {
     return null
   }

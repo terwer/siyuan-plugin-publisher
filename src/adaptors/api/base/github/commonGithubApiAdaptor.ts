@@ -62,6 +62,23 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
     this.githubClient = new CommonGithubClient(githubConfig)
   }
 
+  public async checkAuth(): Promise<boolean> {
+    let flag: boolean
+    try {
+      const testFilePath = `test.md`
+      await this.safeDeletePost(testFilePath)
+      const res = await this.githubClient.publishGithubPage(testFilePath, "Hello, World!")
+      await this.safeDeletePost(testFilePath)
+      flag = !StrUtil.isEmptyString(res?.content?.path)
+    } catch (e) {
+      this.logger.info(`checkAuth error =>`, e)
+      flag = false
+    }
+
+    this.logger.info(`checkAuth finished => ${flag}`)
+    return flag
+  }
+
   public async getUsersBlogs(): Promise<UserBlog[]> {
     const result: UserBlog[] = []
 
@@ -203,6 +220,17 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
     previewUrl = StrUtil.pathJoin(StrUtil.pathJoin(this.cfg.home, this.cfg.username), previewUrl)
 
     return previewUrl
+  }
+
+  // ================
+  // private methods
+  // ================
+  public async safeDeletePost(postid: string): Promise<boolean> {
+    try {
+      await this.githubClient.deleteGithubPage(postid)
+    } catch (e) {}
+
+    return true
   }
 }
 

@@ -50,6 +50,65 @@ class LuteUtil {
     this.logger.info("found Lute =>", Lute)
     this.logger.info("使用Lute渲染Markdown")
     const lute = Lute.New()
+    // 自定义渲染器
+    const renderers = {
+      // renderInlineMath: (node: any, entering: any) => {
+      //   if (entering) {
+      //     return [`$${node.Text()}$`, Lute.WalkContinue]
+      //   }
+      //   return ["", Lute.WalkContinue]
+      // },
+      // 行内公式块
+      renderInlineMathCloseMarker: (node: any, entering: any) => {
+        if (entering) {
+          return ["$", Lute.WalkContinue]
+        }
+        return ["", Lute.WalkContinue]
+      },
+      renderInlineMathContent: (node: any, entering: any) => {
+        if (entering) {
+          return [node.TokensStr(), Lute.WalkContinue]
+        }
+        return ["", Lute.WalkContinue]
+      },
+      renderInlineMathOpenMarker: (node: any, entering: any) => {
+        if (entering) {
+          return ["$", Lute.WalkContinue]
+        }
+        return ["", Lute.WalkContinue]
+      },
+      renderInlineMath: (node: any, entering: any) => {
+        return ["", Lute.WalkContinue]
+      },
+      // 公式块
+      renderMathBlockCloseMarker: (node: any, entering: any) => {
+        if (entering) {
+          return ["$$", Lute.WalkContinue]
+        }
+        return ["", Lute.WalkContinue]
+      },
+      renderMathBlockContent: (node: any, entering: any) => {
+        if (entering) {
+          return [node.TokensStr(), Lute.WalkContinue]
+        }
+        return ["", Lute.WalkContinue]
+      },
+      renderMathBlockOpenMarker: (node: any, entering: any) => {
+        if (entering) {
+          return ["$$", Lute.WalkContinue]
+        }
+        return ["", Lute.WalkContinue]
+      },
+      renderMathBlock: (node: any, entering: any) => {
+        return ["", Lute.WalkContinue]
+      },
+    }
+    lute.SetJSRenderers({
+      renderers: {
+        Md2HTML: renderers,
+      },
+    })
+    // 开始渲染
     const html = lute.MarkdownStr("", md)
     this.logger.debug("md to html =>", { html })
     return html
