@@ -62,7 +62,6 @@ class BaseWebApi extends WebApi {
   }
 
   // web 适配器专有
-
   public updateCfg(cfg: WebConfig) {
     this.cfg = cfg
   }

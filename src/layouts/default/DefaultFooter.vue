@@ -70,7 +70,7 @@ import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { DateUtil } from "zhi-common"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import { useRouter } from "vue-router"
-import { isDev } from "~/src/utils/constants.ts"
+import { aboutUrl, isDev } from "~/src/utils/constants.ts"
 
 const logger = createAppLogger("default-footer")
 const { t } = useVueI18n()
@@ -90,7 +90,7 @@ const goGithub = () => {
 }
 
 const goAbout = async () => {
-  // window.open("https://blog.terwer.space/about")
+  // window.open("https://blog.terwergreen.com/guestbook.html")
   await router.push({
     path: "/about",
     query: { showBack: "true" },

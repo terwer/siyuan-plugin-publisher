@@ -386,9 +386,6 @@ class CsdnWebAdaptor extends BaseWebApi {
     this.logger.debug("csdn url =>", url)
     this.logger.debug("csdn requestOptions =>", requestOptions)
     const res = await this.webProxyFetch(url, [mergedHeaders], params, method, contentType)
-    if (res?.code !== 200) {
-      throw new Error(res?.body?.message)
-    }
     return res
   }
 

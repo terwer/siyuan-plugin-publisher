@@ -160,7 +160,7 @@ export default {
     "MD file preview rules (place occupied: [user] [repo] [Branch] [docpath]), for example:/[user]/[repo]/blob/[branch]/[docpath]",
   "setting.blog.mdFilenameRule": "File rule",
   "setting.blog.mdFilenameRule.tip":
-    "Markdown File Name Rules (Plasma: [yyyy] [MM] [dd] [slug] [filename]), for example: [filename].md or [yyyy]-[MM]-[dd]-[slug].md",
+    "Markdown File Name Rules (Plasma: [yyyy] [MM] [dd] [slug] [filename]), for example: [filename].md or [slug].md or [yyyy]-[MM]-[dd]-[slug].md",
   "setting.blog.username": "Username",
   "setting.blog.password": "Password",
   "setting.blog.apiurl": "API Url",

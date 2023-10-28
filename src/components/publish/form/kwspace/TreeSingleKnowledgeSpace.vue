@@ -30,6 +30,7 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { ElMessage } from "element-plus"
 import Adaptors from "~/src/adaptors"
+import { CATE_AUTO_NAME } from "~/src/utils/constants.ts"
 
 const logger = createAppLogger("tree-single-cateslugs")
 const { t } = useVueI18n()
@@ -108,6 +109,12 @@ const onSelectChange = (val: any) => {
 onMounted(() => {
   const defaultPath = (formData.cateSlugs?.[0] ?? formData.knowledgeSpaceConfig?.cfg?.blogid) as string
   formData.path.customPath = defaultPath
+  // 自动映射分类模式只读
+  if (formData.path.customPath.includes(CATE_AUTO_NAME)) {
+    formData.knowledgeSpaceConfig.readonlyMode = true
+    formData.knowledgeSpaceConfig.cfg.placeholder.knowledgeSpaceReadonlyModeTip =
+      "当前为自动映射目录模式，将根据笔记层级自动生成目录😄"
+  }
   logger.debug("init tree data, cateSlugs =>", { cateSlugs: toRaw(formData.cateSlugs) })
 })
 </script>

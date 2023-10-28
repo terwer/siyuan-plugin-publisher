@@ -119,8 +119,6 @@ class CommonGithubConfig extends CommonBlogConfig {
     this.email = "youweics@163.com"
     this.site = StrUtil.pathJoin(this.home, "/" + this.username)
     this.mdFilenameRule = "[filename].md"
-    this.useMdFilename = false
-    this.usePathCategory = false
 
     this.middlewareUrl = middlewareUrl
   }

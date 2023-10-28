@@ -46,7 +46,7 @@ class VuepressApiAdaptor extends CommonGithubApiAdaptor {
     // 公共的属性预处理
     const doc = await super.preEditPost(post, id, publishCfg)
 
-    // HEXO 自带的处理
+    // Vuepress 自带的处理
     const cfg: BlogConfig = publishCfg?.cfg
     const updatedPost = _.cloneDeep(doc) as Post
 
@@ -66,18 +66,6 @@ class VuepressApiAdaptor extends CommonGithubApiAdaptor {
     }
     // ======
 
-    // ======
-    // 自动推测保存路径
-    const selectedPath = updatedPost.cate_slugs?.[0] ?? cfg.blogid
-    if ("docs" === selectedPath) {
-      const doc = await this.baseExtendApi.kernelApi.getDoc(id)
-      const docPath = doc.path
-      const saveFile = await this.autoMapPublishDir(docPath)
-      updatedPost.cate_slugs = [saveFile]
-    }
-    // 自动生成一级目录
-    // ======
-
     updatedPost.markdown = `${yfm}\n${updatedMd}`
     this.logger.info("Vuepress 正文处理完毕")
     this.logger.debug("updatedMd =>", { yfm: yfm, updatedMd: updatedMd })
@@ -90,40 +78,6 @@ class VuepressApiAdaptor extends CommonGithubApiAdaptor {
     }
 
     return updatedPost
-  }
-
-  // ================
-  // private methods
-  // ================
-  private async autoMapPublishDir(docPath: string) {
-    this.logger.info("start autoMapPublishDir, docPath =>", docPath)
-
-    const win = SiyuanDevice.siyuanWindow()
-    const path = win.require("path")
-    const paths = docPath
-      .replace(/\.sy/, "")
-      .split("/")
-      .filter((x: string) => x !== "")
-
-    let save_dir: string
-    let save_file: string
-    const dir_arr = []
-    for (const item of paths) {
-      const attrs = await this.baseExtendApi.kernelApi.getBlockAttrs(item)
-      dir_arr.push(attrs.title)
-    }
-    const toDir = path.join("docs", ...dir_arr)
-    const toFile = toDir + ".md"
-    save_dir = path.dirname(toFile)
-    save_file = toFile
-    this.logger.info("finished autoMapPublishDir, save_dir =>", save_dir)
-    this.logger.info("finished autoMapPublishDir, save_file =>", save_file)
-
-    // 生成一级目录
-    // 暂时不做
-
-    // 注意：这里不包括文件名
-    return save_dir
   }
 }
 

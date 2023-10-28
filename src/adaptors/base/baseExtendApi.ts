@@ -47,10 +47,11 @@ import { isFileExists } from "~/src/utils/siyuanUtils.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { SiyuanKernelApi } from "zhi-siyuan-api"
 import { DynamicConfig } from "~/src/platforms/dynamicConfig.ts"
-import { MUST_USE_OWN_PLATFORM, MUST_USE_PICBED_PLATFORM } from "~/src/utils/constants.ts"
+import { CATE_AUTO_NAME, MUST_USE_OWN_PLATFORM, MUST_USE_PICBED_PLATFORM } from "~/src/utils/constants.ts"
 import { toRaw } from "vue"
 import _ from "lodash"
 import { usePublishPreferenceSetting } from "~/src/stores/usePublishPreferenceSetting.ts"
+import { SiyuanDevice } from "zhi-device"
 
 /**
  * 各种模式共享的扩展基类
@@ -124,6 +125,9 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     const post = _.cloneDeep(doc) as Post
 
     if (cfg?.mdFilenameRule) {
+      if (cfg?.mdFilenameRule.includes("[filename]")) {
+        cfg.useMdFilename = true
+      }
       // 处理文件规则
       const created = DateUtil.formatIsoToZhDate(post.dateCreated.toISOString(), true)
       const datearr = created.split(" ")[0]
@@ -133,20 +137,20 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
       const d = numarr[2]
       this.logger.debug("created numarr=>", numarr)
 
-      let filename = cfg.mdFilenameRule.replace(/\.md/g, "")
+      let filename = cfg.mdFilenameRule
       if (cfg.useMdFilename) {
         // 使用真实文件名作为MD文件名
-        filename = filename.replace(/\[filename\]/g, post.originalTitle)
+        filename = filename.replace(/\[filename]/g, post.originalTitle)
       } else {
         // 使用别名作为MD文件名
-        filename = filename.replace(/\[slug\]/g, post.wp_slug)
+        filename = filename.replace(/\[slug]/g, post.wp_slug)
       }
       // 年月日
       filename = filename
-        .replace(/\[yyyy\]/g, y)
-        .replace(/\[MM\]/g, m)
-        .replace(/\[mm\]/g, m)
-        .replace(/\[dd\]/g, d)
+        .replace(/\[yyyy]/g, y)
+        .replace(/\[MM]/g, m)
+        .replace(/\[mm]/g, m)
+        .replace(/\[dd]/g, d)
       post.mdFilename = filename
     }
 
@@ -192,13 +196,27 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
 
     const savePath = post.cate_slugs?.[0] ?? cfg.blogid
     const pathCates = []
+
+    // 笔记层级作为文件路径
+    if (savePath.includes(CATE_AUTO_NAME)) {
+      cfg.usePathCategory = true
+    }
+    // 获取笔记层级
+    const win = SiyuanDevice.siyuanWindow()
+    const path = win.require("path")
+    const save_dir = path.dirname(post.link)
+    // 你急层级作为文件保存路径
     if (cfg.usePathCategory) {
-      const docPathArray = savePath.split("/")
-      if (docPathArray.length > 1) {
-        for (let i = 1; i < docPathArray.length; i++) {
-          const docCate = HtmlUtil.removeTitleNumber(docPathArray[i])
-          pathCates.push(docCate)
-        }
+      // 自动映射分类
+      const autoDir = path.join(savePath.replace(CATE_AUTO_NAME, ""), save_dir)
+      post.cate_slugs = [autoDir]
+    }
+    // 笔记层级作为分类
+    const docPathArray = save_dir.split("/")
+    if (docPathArray.length > 1) {
+      for (let i = 1; i < docPathArray.length; i++) {
+        const docCate = HtmlUtil.removeTitleNumber(docPathArray[i])
+        pathCates.push(docCate)
       }
     }
 

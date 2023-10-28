@@ -27,6 +27,7 @@
 import { reactive } from "vue"
 import { dependencies, version } from "../../package.json"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { aboutUrl } from "~/src/utils/constants.ts"
 
 const { t } = useVueI18n()
 
@@ -49,7 +50,7 @@ const formData = reactive({
           <span>{{ t("slogan.make.written.fun") }}</span>
         </div>
         <div class="space"></div>
-        <div class="param">Created by <a href="https://terwer.space/about.html" target="_blank">terwer</a></div>
+        <div class="param">Created by <a :href="aboutUrl" target="_blank">terwer</a></div>
 
         <div class="space"></div>
         <div class="third-libs">

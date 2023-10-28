@@ -27,12 +27,13 @@
 import { onMounted, reactive, ref, toRaw } from "vue"
 import { useRoute } from "vue-router"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { StrUtil } from "zhi-common"
+import { HtmlUtil, StrUtil } from "zhi-common"
 import { usePublish } from "~/src/composables/usePublish.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
 import { pre } from "~/src/utils/import/pre.ts"
 import { useLoadingTimer } from "~/src/composables/useLoadingTimer.ts"
+import CrossPageUtils from "~/cross/crossPageUtils.ts"
 
 const logger = createAppLogger("quick-publish-worker")
 
@@ -108,15 +109,20 @@ onMounted(async () => {
       </div>
       <div v-else-if="singleFormData.publishProcessStatus" class="success-tips">
         {{ singleFormData.isAdd ? "发布到" : "更新文章到" }}
-        [{{ formData.processResult.key }}]
-        {{ StrUtil.isEmptyString(formData.processResult.name) ? "" : `[${formData.processResult.name}]` }}
+        <span :title="formData.processResult.key">[{{ HtmlUtil.parseHtml(formData.processResult.key, 8) }}]</span>
+        <span :title="formData.processResult.name" v-if="!StrUtil.isEmptyString(formData.processResult.name)">
+          {{ `[${HtmlUtil.parseHtml(formData.processResult.name, 6)}]` }}
+        </span>
         成功，
         <a :href="formData.processResult.previewUrl" target="_blank">查看文章</a>
         <loading-timer :loading-time="loadingTime" style="padding: 0 10px 0 10px; display: inline-block" />
       </div>
       <div v-else class="fail-tips">
-        {{ singleFormData.isAdd ? "发布到" : "更新文章到" }} [{{ formData.processResult.key }}]
-        {{ StrUtil.isEmptyString(formData.processResult.name) ? "" : `[${formData.processResult.name}]` }}
+        {{ singleFormData.isAdd ? "发布到" : "更新文章到" }}
+        <span :title="formData.processResult.key">[{{ HtmlUtil.parseHtml(formData.processResult.key, 8) }}]</span>
+        <span :title="formData.processResult.name" v-if="!StrUtil.isEmptyString(formData.processResult.name)">
+          {{ `[${HtmlUtil.parseHtml(formData.processResult.name, 6)}]` }}
+        </span>
         失败！
         <loading-timer :loading-time="loadingTime" style="padding: 0 10px 0 10px; display: inline-block" />
       </div>

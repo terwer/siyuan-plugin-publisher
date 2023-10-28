@@ -79,8 +79,6 @@ const useVitepressApi = async (key: string, newCfg?: VitepressConfig) => {
 
   // 文件规则，占位符
   cfg.mdFilenameRule = "[slug].md"
-  cfg.useMdFilename = false
-  cfg.usePathCategory = false
   // 标签
   cfg.tagEnabled = true
   // 分类

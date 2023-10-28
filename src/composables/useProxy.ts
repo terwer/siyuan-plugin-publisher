@@ -99,7 +99,12 @@ const useProxy = (middlewareUrl?: string) => {
       logger.debug("proxyFetch result =>", fetchResult)
 
       if (!(fetchResult.status >= 200 && fetchResult.status < 300)) {
-        throw new Error(fetchResult?.body)
+        // 兼容 CSDN 错误提示
+        const bodyJson = JsonUtil.safeParse<any>(fetchResult?.body, {})
+        if (bodyJson?.msg) {
+          throw new Error(bodyJson?.msg)
+        }
+        throw new Error(StrUtil.decodeUnicodeToChinese(fetchResult?.body))
       }
 
       if (contentType === "application/json") {

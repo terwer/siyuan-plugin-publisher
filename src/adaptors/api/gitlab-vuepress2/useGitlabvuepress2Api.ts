@@ -79,8 +79,6 @@ const useGitlabvuepress2Api = async (key: string, newCfg?: Gitlabvuepress2Config
 
   // 文件规则
   cfg.mdFilenameRule = "[slug].md"
-  cfg.useMdFilename = false
-  cfg.usePathCategory = false
   // 标签
   cfg.tagEnabled = true
   // 分类

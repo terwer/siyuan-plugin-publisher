@@ -34,7 +34,7 @@ import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { CategoryTypeEnum } from "zhi-blog-api"
 
 /**
- * 用于获取ZhihuWeb的API的自定义Hook
+ * 用于获取Zhihu的API的自定义Hook
  */
 const useZhihuWeb = async (key?: string, newCfg?: ZhihuConfig) => {
   // 创建应用日志记录器

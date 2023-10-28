@@ -79,12 +79,8 @@ const useGitlabhugoApi = async (key: string, newCfg?: GitlabhugoConfig) => {
 
   // 文件规则
   cfg.mdFilenameRule = "[slug].md"
-  cfg.useMdFilename = false
-  cfg.usePathCategory = false
   // 标签
   cfg.tagEnabled = true
-  cfg.useMdFilename = false
-  cfg.usePathCategory = false
   // 分类
   cfg.cateEnabled = true
   cfg.allowCateChange = true

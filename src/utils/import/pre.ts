@@ -95,7 +95,7 @@ export const pre = {
       platformName: "Hugo",
       platformIcon: svgIcons.iconIFHugo,
       authMode: AuthMode.API,
-      isEnabled: false
+      isEnabled: false,
     },
     {
       platformType: PlatformType.Github,
@@ -104,7 +104,7 @@ export const pre = {
       platformName: "Jekyll",
       platformIcon: svgIcons.iconIFJekyll,
       authMode: AuthMode.API,
-      isEnabled: false
+      isEnabled: false,
     },
     {
       platformType: PlatformType.Github,
@@ -113,7 +113,7 @@ export const pre = {
       platformName: "Vuepress",
       platformIcon: svgIcons.iconIFVuepress,
       authMode: AuthMode.API,
-      isEnabled: false
+      isEnabled: false,
     },
     {
       platformType: PlatformType.Github,
@@ -122,7 +122,7 @@ export const pre = {
       platformName: "Vuepress2",
       platformIcon: svgIcons.iconIFVuepress2,
       authMode: AuthMode.API,
-      isEnabled: false
+      isEnabled: false,
     },
     {
       platformType: PlatformType.Github,
@@ -131,7 +131,7 @@ export const pre = {
       platformName: "Vitepress",
       platformIcon: svgIcons.iconIFVue,
       authMode: AuthMode.API,
-      isEnabled: false
+      isEnabled: false,
     },
   ],
   gitlabCfg: <DynamicConfig[]>[
@@ -151,7 +151,7 @@ export const pre = {
       platformName: "Gitlabhugo",
       platformIcon: svgIcons.iconIFHugo,
       authMode: AuthMode.API,
-      isEnabled: false
+      isEnabled: false,
     },
     {
       platformType: PlatformType.Gitlab,
@@ -160,7 +160,7 @@ export const pre = {
       platformName: "Gitlabjekyll",
       platformIcon: svgIcons.iconIFJekyll,
       authMode: AuthMode.API,
-      isEnabled: false
+      isEnabled: false,
     },
     {
       platformType: PlatformType.Gitlab,
@@ -169,7 +169,7 @@ export const pre = {
       platformName: "Gitlabvuepress",
       platformIcon: svgIcons.iconIFVuepress,
       authMode: AuthMode.API,
-      isEnabled: false
+      isEnabled: false,
     },
     {
       platformType: PlatformType.Gitlab,
@@ -178,7 +178,7 @@ export const pre = {
       platformName: "Gitlabvuepress2",
       platformIcon: svgIcons.iconIFVuepress2,
       authMode: AuthMode.API,
-      isEnabled: false
+      isEnabled: false,
     },
     {
       platformType: PlatformType.Gitlab,
@@ -187,7 +187,7 @@ export const pre = {
       platformName: "Gitlabvitepress",
       platformIcon: svgIcons.iconIFVue,
       authMode: AuthMode.API,
-      isEnabled: false
+      isEnabled: false,
     },
   ],
   metaweblogCfg: <DynamicConfig[]>[
@@ -276,6 +276,17 @@ export const pre = {
       authMode: AuthMode.WEBSITE,
       authUrl: "https://juejin.cn/login",
       domain: "juejin.cn",
+      isEnabled: false,
+    },
+    {
+      platformType: PlatformType.Custom,
+      subPlatformType: SubPlatformType.Custom_Flowus,
+      platformKey: "custom_Flowus",
+      platformName: "Flowus 息流",
+      platformIcon: svgIcons.iconIFFlowus,
+      authMode: AuthMode.WEBSITE,
+      authUrl: "https://flowus.cn/login",
+      domain: "flowus.cn",
       isEnabled: false,
     },
   ],

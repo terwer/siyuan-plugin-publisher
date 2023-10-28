@@ -29,7 +29,7 @@ import { CategoryTypeEnum, PageTypeEnum, PasswordType } from "zhi-blog-api"
 /**
  * 知乎配置
  */
-export class ZhihuConfig extends CommonWebConfig {
+class ZhihuConfig extends CommonWebConfig {
   constructor(username: string, password: string, middlewareUrl?: string) {
     super("https://zhuanlan.zhihu.com", "https://zhuanlan.zhihu.com/api", username, password, middlewareUrl)
     this.previewUrl = "/p/[postid]"
@@ -46,3 +46,5 @@ export class ZhihuConfig extends CommonWebConfig {
       "由于知乎平台的限制，暂时不支持编辑所属专栏。如果您想移动文档，请先点击取消删除该文档，然后重新选择新的专栏发布"
   }
 }
+
+export { ZhihuConfig }

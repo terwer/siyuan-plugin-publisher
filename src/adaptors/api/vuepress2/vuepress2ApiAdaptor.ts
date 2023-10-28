@@ -45,7 +45,7 @@ class Vuepress2ApiAdaptor extends CommonGithubApiAdaptor {
     // 公共的属性预处理
     const doc = await super.preEditPost(post, id, publishCfg)
 
-    // HEXO 自带的处理
+    // Vuepress2 自带的处理
     const cfg: BlogConfig = publishCfg?.cfg
     const updatedPost = _.cloneDeep(doc) as Post
 

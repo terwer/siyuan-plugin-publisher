@@ -29,10 +29,11 @@ import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useRouter } from "vue-router"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { DynamicConfig, DynamicJsonCfg, getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
-import { HtmlUtil, JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
+import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
 import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 import { useLoadingTimer } from "~/src/composables/useLoadingTimer.ts"
+import CrossPageUtils from "~/cross/crossPageUtils.ts"
 
 const logger = createAppLogger("single-publish-select-platform")
 
@@ -101,7 +102,7 @@ onMounted(async () => {
 
 <template>
   <!-- 显示加载计时器 -->
-  <loading-timer :loading-time="loadingTime" style="padding: 0 10px 0 10px"/>
+  <loading-timer :loading-time="loadingTime" style="padding: 0 10px 0 10px" />
   <el-skeleton v-if="!formData.isInit" class="placeholder" :rows="12" animated style="padding: 40px 12px" />
   <div v-else>
     <div class="platform-desc">
@@ -128,7 +129,7 @@ onMounted(async () => {
                 <i class="el-icon">
                   <span v-html="cfg?.platformIcon"></span>
                 </i>
-                {{ StrUtil.upperFirst(HtmlUtil.parseHtml(cfg.platformName, 11)) }}
+                {{ CrossPageUtils.longPlatformName(cfg?.platformName, 11) }}
               </el-text>
             </el-badge>
           </div>

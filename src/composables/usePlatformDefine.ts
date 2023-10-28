@@ -68,7 +68,17 @@ export const usePlatformDefine = () => {
     return prePlatformList.find((platform) => platform.platformKey === key)
   }
 
+  /**
+   * 根据所有预定义平台 key 集合
+   */
+  const getPrePlatformKeys = (): string[] => {
+    return prePlatformList.map((platform) => {
+      return platform.platformKey
+    })
+  }
+
   return {
+    getPrePlatformKeys,
     platformTypeList,
     getPlatformType,
     getPrePlatformList,

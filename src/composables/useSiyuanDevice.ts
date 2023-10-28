@@ -61,7 +61,7 @@ export const useSiyuanDevice = () => {
     // 三种情况，主窗口、挂件、新窗口
     const isSiyuanOrSiyuanNewWin =
       deviceType === DeviceTypeEnum.DeviceType_Siyuan_MainWin ||
-      deviceType === DeviceTypeEnum.DeviceType_Siyuan_NewWin ||
+      deviceType === DeviceTypeEnum.DeviceType_Siyuan_RendererWin ||
       deviceType === DeviceTypeEnum.DeviceType_Siyuan_Widget
     logger.debug("deviceType=>", deviceType)
     logger.debug("isSiyuanOrSiyuanNewWin=>", String(isSiyuanOrSiyuanNewWin))

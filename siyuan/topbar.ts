@@ -34,6 +34,7 @@ import { PluginInvoke } from "./invoke/pluginInvoke"
 import { ObjectUtil } from "zhi-common"
 import { DYNAMIC_CONFIG_KEY } from "./Constants"
 import { ConfigManager } from "~/siyuan/store/config.ts"
+import CrossPageUtils from "~/cross/crossPageUtils.ts"
 
 /**
  * 顶部按钮
@@ -85,7 +86,7 @@ export class Topbar {
     dynJsonCfg.totalCfg?.forEach((config: any) => {
       let icon = `<span class="iconfont-icon">${config.platformIcon}</span>`
       // 修复图片不展示问题
-      if (/^\<img/.test(config.platformIcon) && config.platformIcon.indexOf("./images") > -1) {
+      if (/^<img/.test(config.platformIcon) && config.platformIcon.indexOf("./images") > -1) {
         icon = config.platformIcon.replace(
           /\.\/images/g,
           `${window.location.origin}/plugins/siyuan-plugin-publisher/images`
@@ -93,11 +94,9 @@ export class Topbar {
         icon = `<span class="img-icon">${icon}</span>`
       }
       if (config.isEnabled === true) {
-        // http://127.0.0.1:6806/plugins/siyuan-plugin-publisher/i
-
         const submenu = {
           iconHTML: `${icon}`,
-          label: config.platformName,
+          label: CrossPageUtils.longPlatformName(config.platformName, 11),
           disabled: !config.isAuth,
           click: async () => {
             const key = config.platformKey
@@ -116,9 +115,7 @@ export class Topbar {
 
   private async getExtendMenus() {
     const isBlogInstalled = await this.pluginInvoke.preCheckBlogPlugin()
-    const isPicgoInstalled = await this.pluginInvoke.preCheckPicgoPlugin()
     this.logger.info(`isBlogInstalled=>${isBlogInstalled}`)
-    this.logger.info(`isPicgoInstalled=>${isPicgoInstalled}`)
 
     const extmenus = <IMenuItemOption[]>[]
     if (isBlogInstalled) {
@@ -132,33 +129,30 @@ export class Topbar {
       }
       extmenus.push(extPreviewMenu)
     }
-    if (isPicgoInstalled) {
-      // 图床
-      const extPicBedMenu = {
-        iconHTML: icons.iconPicture,
-        label: this.pluginInstance.i18n.picbed,
-        click: async () => {
-          await this.pluginInvoke.showPicbedDialog()
-        },
-      }
-      extmenus.push(extPicBedMenu)
 
-      const extPicBedSettingMenu = {
-        iconHTML: icons.iconPicbed,
-        label: this.pluginInstance.i18n.settingPicbed,
-        click: async () => {
-          await this.pluginInvoke.showPicbedSettingDialog()
-        },
-      }
-      extmenus.push(extPicBedSettingMenu)
+    // 当前文档ID
+    const pageId = PageUtil.getPageId()
+    const docIdMenu = {
+      iconHTML: icons.iconOl,
+      label: this.pluginInstance.i18n.copyPageId,
+      click: async () => {
+        await HtmlUtils.copyToClipboard(pageId)
+        this.pluginInstance.kernelApi.pushMsg({
+          msg: `当前文档ID已复制=>${pageId}`,
+          timeout: 3000,
+        })
+        this.logger.info("当前文档ID已复制", pageId)
+      },
     }
+    extmenus.push(docIdMenu)
+
     if (extmenus.length == 0) {
       return undefined
     }
     return extmenus
   }
 
-  private addMenu(rect: DOMRect, quickMenus: IMenuItemOption[], extendMenus: IMenuItemOption[]) {
+  private async addMenu(rect: DOMRect, quickMenus: IMenuItemOption[], extendMenus: IMenuItemOption[]) {
     const menu = new Menu("publisherMenu")
 
     // 一键发布
@@ -193,24 +187,55 @@ export class Topbar {
       },
     })
 
-    // AI聊天
-    menu.addSeparator()
-    menu.addItem({
-      iconHTML: `<svg class="b3-menu__icon" style=""><use xlink:href="#iconUsers"></use></svg>`,
-      label: this.pluginInstance.i18n.aiChat,
-      click: () => {
-        this.widgetInvoke.showPublisherAiChatDialog()
-      },
-    })
+    // 图床管理
+    const isPicgoInstalled = await this.pluginInvoke.preCheckPicgoPlugin()
+    this.logger.info(`isPicgoInstalled=>${isPicgoInstalled}`)
+    if (isPicgoInstalled) {
+      menu.addSeparator()
+      // 图床
+      menu.addItem({
+        iconHTML: icons.iconPicbed,
+        label: this.pluginInstance.i18n.picmanage,
+        submenu: [
+          {
+            iconHTML: icons.iconPicture,
+            label: this.pluginInstance.i18n.picbed,
+            click: async () => {
+              await this.pluginInvoke.showPicbedDialog()
+            },
+          },
+          {
+            iconHTML: icons.iconPicbed,
+            label: this.pluginInstance.i18n.settingPicbed,
+            click: async () => {
+              await this.pluginInvoke.showPicbedSettingDialog()
+            },
+          },
+        ],
+      })
+    }
 
-    // AI聊天Tab版
+    // AI工具
     menu.addSeparator()
     menu.addItem({
-      iconHTML: `<svg class="b3-menu__icon" style=""><use xlink:href="#iconAccount"></use></svg>`,
-      label: this.pluginInstance.i18n.aiChatTab,
-      click: () => {
-        this.widgetInvoke.showPublisherAiChatTab()
-      },
+      iconHTML: icons.iconPicbed,
+      label: this.pluginInstance.i18n.aitool,
+      submenu: [
+        {
+          iconHTML: `<svg class="b3-menu__icon" style=""><use xlink:href="#iconUsers"></use></svg>`,
+          label: this.pluginInstance.i18n.aiChat,
+          click: () => {
+            this.widgetInvoke.showPublisherAiChatDialog()
+          },
+        },
+        {
+          iconHTML: `<svg class="b3-menu__icon" style=""><use xlink:href="#iconAccount"></use></svg>`,
+          label: this.pluginInstance.i18n.aiChatTab,
+          click: () => {
+            this.widgetInvoke.showPublisherAiChatTab()
+          },
+        },
+      ],
     })
 
     // 扩展功能
@@ -230,7 +255,7 @@ export class Topbar {
       },
     })
 
-    // 设置
+    // 通用设置
     menu.addSeparator()
     menu.addItem({
       icon: "iconSettings",
@@ -254,23 +279,7 @@ export class Topbar {
       ],
     })
 
-    // 当前文档ID
-    const pageId = PageUtil.getPageId()
-    menu.addSeparator()
-    menu.addItem({
-      iconHTML: icons.iconOl,
-      label: this.pluginInstance.i18n.copyPageId,
-      click: async () => {
-        await HtmlUtils.copyToClipboard(pageId)
-        this.pluginInstance.kernelApi.pushMsg({
-          msg: `当前文档ID已复制=>${pageId}`,
-          timeout: 3000,
-        })
-        this.logger.info("当前文档ID已复制", pageId)
-      },
-    })
-
-    // slogan
+    // 关于作者
     menu.addSeparator()
     menu.addItem({
       icon: "iconSparkles",
