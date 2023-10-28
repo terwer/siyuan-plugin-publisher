@@ -61,6 +61,10 @@ class BaseWebApi extends WebApi {
     this.proxyFetch = proxyFetch
   }
 
+  public async checkAuth(): Promise<boolean> {
+    return true
+  }
+
   // web 适配器专有
   public updateCfg(cfg: WebConfig) {
     this.cfg = cfg

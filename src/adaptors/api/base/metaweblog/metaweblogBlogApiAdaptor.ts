@@ -57,6 +57,10 @@ class MetaweblogBlogApiAdaptor extends BaseBlogApi {
     this.proxyXmlrpc = proxyXmlrpc
   }
 
+  public async checkAuth(): Promise<boolean> {
+    return true
+  }
+
   public override async getUsersBlogs(): Promise<Array<UserBlog>> {
     let result: UserBlog[] = []
     result = await this.metaweblogCall(MetaweblogConstants.METHOD_GET_USERS_BLOGS, [

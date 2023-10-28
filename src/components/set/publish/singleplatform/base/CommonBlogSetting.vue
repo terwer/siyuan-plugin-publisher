@@ -34,7 +34,7 @@ import { SypConfig } from "~/syp.config.ts"
 import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
-import { PageTypeEnum, PasswordType } from "zhi-blog-api"
+import { BlogAdaptor, PageTypeEnum, PasswordType } from "zhi-blog-api"
 import Adaptors from "~/src/adaptors"
 import { Utils } from "~/src/utils/utils.ts"
 import { ElMessage } from "element-plus"
@@ -121,45 +121,45 @@ const valiConf = async () => {
   isLoading.value = true
 
   let errMsg: any
+  const commonblogApiAdaptor = await Adaptors.getAdaptor(props.apiType, formData.cfg as any)
+  const api = Utils.blogApi(appInstance, commonblogApiAdaptor) as BlogAdaptor
   try {
-    const commonblogApiAdaptor = await Adaptors.getAdaptor(props.apiType, formData.cfg as any)
-    logger.debug("commonblogApiAdaptor=>", commonblogApiAdaptor)
-    const api = Utils.blogApi(appInstance, commonblogApiAdaptor)
-    const usersBlogs = await api.getUsersBlogs(formData.ksKeyword)
-    if (usersBlogs && usersBlogs.length > 0) {
-      // 首次未保存验证的时候才去更新
-      if (StrUtil.isEmptyString(formData.cfg?.blogid)) {
-        // 首次验证需要初始化下拉选择
-        if (formData.kwSpaces.length == 0) {
-          usersBlogs.forEach((item) => {
-            const kwItem = {
-              label: item.blogName,
-              value: item.blogid,
-            }
-            formData.kwSpaces.push(kwItem)
-          })
+    await api.checkAuth()
+    try {
+      await afterValid(api)
+      formData.cfg.apiStatus = true
+    } catch (e2) {
+      formData.cfg.apiStatus = false
+      errMsg = e2.toString()
+    }
+    logger.info("======校验正常结束======")
+  } catch (e) {
+    if (typeof e === "boolean") {
+      if (e === true) {
+        try {
+          await afterValid(api)
+          formData.cfg.apiStatus = true
+        } catch (e2) {
+          formData.cfg.apiStatus = false
+          errMsg = e2.toString()
         }
-
-        // 初始化选中
-        const userBlog = usersBlogs[0]
-        formData.cfg.blogid = userBlog.blogid
-        formData.cfg.blogName = userBlog.blogName
+      } else {
+        formData.cfg.apiStatus = false
+        errMsg = "校验失败，请检查平台配置"
       }
 
-      formData.cfg.apiStatus = true
+      logger.info("======校验修正结束======")
     } else {
-      errMsg = "接口返回信息不完整，请检查接口适配器"
       formData.cfg.apiStatus = false
+      errMsg = e.toString()
+      logger.error(t("main.opt.failure") + "=>", e)
     }
-  } catch (e) {
-    formData.cfg.apiStatus = false
-    errMsg = e
-    logger.error(t("main.opt.failure") + "=>", e)
   }
 
   if (!formData.cfg.apiStatus) {
-    logger.error(errMsg.toString())
-    ElMessage.error(t("setting.blog.vali.error") + "=>" + errMsg)
+    const errMsg2 = t("setting.blog.vali.error") + `=>${errMsg.toString()}`
+    logger.error(errMsg2)
+    ElMessage.error(errMsg2)
   } else {
     ElMessage.success(t("main.opt.success"))
   }
@@ -171,6 +171,31 @@ const valiConf = async () => {
 
   isLoading.value = false
   logger.debug("Commonblog通用Setting验证完毕")
+}
+
+const afterValid = async (api) => {
+  // 验证成功就去初始化知识空间
+  const usersBlogs = await api.getUsersBlogs(formData.ksKeyword)
+  if (usersBlogs && usersBlogs.length > 0) {
+    // 首次未保存验证的时候才去更新
+    if (StrUtil.isEmptyString(formData.cfg?.blogid)) {
+      // 首次验证需要初始化下拉选择
+      if (formData.kwSpaces.length == 0) {
+        usersBlogs.forEach((item) => {
+          const kwItem = {
+            label: item.blogName,
+            value: item.blogid,
+          }
+          formData.kwSpaces.push(kwItem)
+        })
+      }
+
+      // 初始化选中
+      const userBlog = usersBlogs[0]
+      formData.cfg.blogid = userBlog.blogid
+      formData.cfg.blogName = userBlog.blogName
+    }
+  }
 }
 
 const saveConf = async (hideTip?: any) => {
