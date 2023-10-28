@@ -39,6 +39,9 @@ class CrossPageUtils {
    * @param length
    */
   public static shortPlatformName(platformName: string, length?: number) {
+    if (StrUtil.isEmptyString(platformName)) {
+      return ""
+    }
     return StrUtil.upperFirst(HtmlUtil.parseHtml(platformName.replace("Gitlab", ""), length ?? 9))
   }
 
@@ -49,6 +52,9 @@ class CrossPageUtils {
    * @param length
    */
   public static longPlatformName(platformName: string, length?: number) {
+    if (StrUtil.isEmptyString(platformName)) {
+      return ""
+    }
     const shortName = StrUtil.upperFirst(HtmlUtil.parseHtml(platformName.replace("Gitlab", ""), length ?? 9))
     if (platformName.includes("Gitlab")) {
       return `Gitlab-${shortName}`

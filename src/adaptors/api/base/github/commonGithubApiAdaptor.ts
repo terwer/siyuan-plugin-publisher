@@ -88,8 +88,8 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
 
     // 路径处理
     const savePath = post.cate_slugs?.[0] ?? cfg.blogid
-    const filename = post.mdFilename ?? "auto-" + sypIdUtil.newID()
-    const docPath = `${savePath}/${filename}.md`
+    const filename = post.mdFilename ?? "auto-" + sypIdUtil.newID() + ".md"
+    const docPath = `${savePath}/${filename}`
     this.logger.info("将要最终发送到以下目录 =>", docPath)
 
     // 开始发布
