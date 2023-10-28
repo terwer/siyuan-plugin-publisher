@@ -109,24 +109,20 @@ onMounted(async () => {
       </div>
       <div v-else-if="singleFormData.publishProcessStatus" class="success-tips">
         {{ singleFormData.isAdd ? "发布到" : "更新文章到" }}
-        [{{ CrossPageUtils.longPlatformName(formData.processResult.key, 11) }}]
-        {{
-          StrUtil.isEmptyString(formData.processResult.name)
-            ? ""
-            : `[${HtmlUtil.parseHtml(formData.processResult.name, 6)}]`
-        }}
+        <span :title="formData.processResult.key">[{{ HtmlUtil.parseHtml(formData.processResult.key, 8) }}]</span>
+        <span :title="formData.processResult.name" v-if="!StrUtil.isEmptyString(formData.processResult.name)">
+          {{ `[${HtmlUtil.parseHtml(formData.processResult.name, 6)}]` }}
+        </span>
         成功，
         <a :href="formData.processResult.previewUrl" target="_blank">查看文章</a>
         <loading-timer :loading-time="loadingTime" style="padding: 0 10px 0 10px; display: inline-block" />
       </div>
       <div v-else class="fail-tips">
         {{ singleFormData.isAdd ? "发布到" : "更新文章到" }}
-        [{{ CrossPageUtils.longPlatformName(formData.processResult.key, 11) }}]
-        {{
-          StrUtil.isEmptyString(formData.processResult.name)
-            ? ""
-            : `[${HtmlUtil.parseHtml(formData.processResult.name, 6)}]`
-        }}
+        <span :title="formData.processResult.key">[{{ HtmlUtil.parseHtml(formData.processResult.key, 8) }}]</span>
+        <span :title="formData.processResult.name" v-if="!StrUtil.isEmptyString(formData.processResult.name)">
+          {{ `[${HtmlUtil.parseHtml(formData.processResult.name, 6)}]` }}
+        </span>
         失败！
         <loading-timer :loading-time="loadingTime" style="padding: 0 10px 0 10px; display: inline-block" />
       </div>
