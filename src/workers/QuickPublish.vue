@@ -111,7 +111,7 @@ onMounted(async () => {
         {{ singleFormData.isAdd ? "发布到" : "更新文章到" }}
         <span :title="formData.processResult.key">[{{ HtmlUtil.parseHtml(formData.processResult.key, 8) }}]</span>
         <span :title="formData.processResult.name" v-if="!StrUtil.isEmptyString(formData.processResult.name)">
-          {{ `[${HtmlUtil.parseHtml(formData.processResult.name, 6)}]` }}
+          {{ `[${HtmlUtil.parseHtml(formData.processResult.name, 8)}]` }}
         </span>
         成功，
         <a :href="formData.processResult.previewUrl" target="_blank">查看文章</a>
@@ -121,7 +121,7 @@ onMounted(async () => {
         {{ singleFormData.isAdd ? "发布到" : "更新文章到" }}
         <span :title="formData.processResult.key">[{{ HtmlUtil.parseHtml(formData.processResult.key, 8) }}]</span>
         <span :title="formData.processResult.name" v-if="!StrUtil.isEmptyString(formData.processResult.name)">
-          {{ `[${HtmlUtil.parseHtml(formData.processResult.name, 6)}]` }}
+          {{ `[${HtmlUtil.parseHtml(formData.processResult.name, 8)}]` }}
         </span>
         失败！
         <loading-timer :loading-time="loadingTime" style="padding: 0 10px 0 10px; display: inline-block" />

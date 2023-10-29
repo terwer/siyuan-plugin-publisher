@@ -222,9 +222,9 @@ class CommonGitlabApiAdaptor extends BaseBlogApi {
   public async getPostPreviewUrl(postid: string): Promise<string> {
     let previewUrl: string
     const newPostid = postid.substring(postid.lastIndexOf("/") + 1).replace(".md", "")
-    previewUrl = this.cfg.previewUrl.replace("[postid]", newPostid)
+    previewUrl = this.cfg.previewPostUrl.replace("[postid]", newPostid)
     // 路径组合
-    previewUrl = StrUtil.pathJoin(StrUtil.pathJoin(this.cfg.home, this.cfg.username), previewUrl)
+    // previewUrl = StrUtil.pathJoin(this.cfg.postHome, previewUrl)
 
     return previewUrl
   }

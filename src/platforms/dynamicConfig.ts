@@ -458,3 +458,22 @@ export function getDynPostidKey(platformKey: string): string {
 export function getDynYamlKey(platformKey: string): string {
   return "custom-" + platformKey.replace(/_/g, "-") + "-yaml"
 }
+
+/**
+ * 获取元数据 key
+ *
+ * @param postidKey 文章 key
+ */
+// export function getDynYamlKeyFromPostidKey(postidKey: string): string {
+//   // 匹配postidKey的正则表达式
+//   const regex = /^custom-(.+?)-post-id$/
+//   const match = postidKey.match(regex)
+//   if (match && match[1]) {
+//     // 提取platformKey
+//     const platformKey = match[1]
+//     const yamlKey = getDynYamlKey(platformKey)
+//     return yamlKey
+//   } else {
+//     throw new Error("Invalid postidKey format")
+//   }
+// }

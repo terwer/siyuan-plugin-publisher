@@ -41,17 +41,18 @@ import { createAppLogger, ILogger } from "~/src/utils/appLogger.ts"
 import { LuteUtil } from "~/src/utils/luteUtil.ts"
 import { usePicgoBridge } from "~/src/composables/usePicgoBridge.ts"
 import { base64ToBuffer, remoteImageToBase64Info, toBase64Info } from "~/src/utils/polyfillUtils.ts"
-import { DateUtil, HtmlUtil, StrUtil, YamlUtil } from "zhi-common"
+import { DateUtil, HtmlUtil, ObjectUtil, StrUtil, YamlUtil } from "zhi-common"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import { isFileExists } from "~/src/utils/siyuanUtils.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
-import { SiyuanKernelApi } from "zhi-siyuan-api"
+import { SiyuanAttr, SiyuanKernelApi } from "zhi-siyuan-api"
 import { DynamicConfig } from "~/src/platforms/dynamicConfig.ts"
 import { CATE_AUTO_NAME, MUST_USE_OWN_PLATFORM, MUST_USE_PICBED_PLATFORM } from "~/src/utils/constants.ts"
 import { toRaw } from "vue"
 import _ from "lodash"
 import { usePublishPreferenceSetting } from "~/src/stores/usePublishPreferenceSetting.ts"
 import { SiyuanDevice } from "zhi-device"
+import { SypConfig } from "~/syp.config.ts"
 
 /**
  * 各种模式共享的扩展基类
@@ -241,6 +242,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
    */
   private async handleMd(doc: Post, id?: string, publishCfg?: any) {
     const cfg: BlogConfig = publishCfg?.cfg
+    const setting: typeof SypConfig = publishCfg?.setting
     const post = _.cloneDeep(doc) as Post
 
     // 处理MD
@@ -260,9 +262,16 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     // md = md.replace(/\*\*(.*?)\*\*/g, '<span style="font-weight: bold;" data-type="strong">$1</span>')
     md = md.replace(/\*\*(.*?)\*\*/g, '<span style="font-weight: bold;" data-type="strong">$1</span>')
 
+    // 处理外链
+    const { getReadOnlyPublishPreferenceSetting } = usePublishPreferenceSetting()
+    const pref = getReadOnlyPublishPreferenceSetting()
+    const outerLinkRegex = /\[(.+?)]\(siyuan:\/\/blocks\/(\d+-\w+)\)/g
+    md = await this.replaceOuterLinks(md, outerLinkRegex, { pref, cfg, setting })
+
     // 汇总结果
     post.markdown = md
     this.logger.debug("markdown处理完毕，post", { post: toRaw(post) })
+
     return post
   }
 
@@ -496,6 +505,68 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
 
     this.logger.debug("readFileToBase64 proxyFetch base64Info =>", { base64Info })
     return base64Info
+  }
+
+  /**
+   * 替换链接
+   *
+   * @param text 文本
+   * @param regex 正则
+   * @param options 选项
+   * @private
+   */
+  private async replaceOuterLinks(
+    text: string,
+    regex: RegExp,
+    options: { pref: any; cfg: any; setting: typeof SypConfig }
+  ) {
+    const { pref, cfg, setting } = options
+    const that = this
+    const win = SiyuanDevice.siyuanWindow()
+    const path = win.require("path")
+
+    const matches = Array.from(text.matchAll(regex))
+
+    let replacedText = text
+    for (const match of matches) {
+      const [fullMatch, title, id] = match
+
+      // processedTitle
+      let processedTitle = title
+      if (pref.value.fixTitle) {
+        processedTitle = HtmlUtil.removeTitleNumber(processedTitle)
+      }
+
+      // outerLink
+      let outerLink: string
+      // 获取预览链接
+      // 如果已发布替换成别名
+      const postMeta = ObjectUtil.getProperty(setting, id, {})
+      const posidKey = cfg.posidKey
+      if (!postMeta.hasOwnProperty(posidKey)) {
+        outerLink = `siyuan://blocks/${id}`
+        this.logger.warn("引用的文档尚未发布，取消外链 =>", id)
+      } else {
+        let previewUrl: string
+        const postid = postMeta[posidKey]
+        previewUrl = await that.api.getPostPreviewUrl(postid)
+        if (cfg?.mdFilenameRule?.includes("[filename]")) {
+          const slug = postMeta[SiyuanAttr.Custom_slug]
+          const filename = path.basename(postid).replace(/\.md/g, "")
+          previewUrl = previewUrl.replace(filename, slug)
+        }
+        previewUrl = previewUrl.replace(cfg.home, "")
+        // 使用绝对路径
+        if (!previewUrl.startsWith("/")) {
+          previewUrl = `/${previewUrl}`
+        }
+        outerLink = previewUrl
+      }
+
+      replacedText = replacedText.replace(fullMatch, `[${processedTitle}](${outerLink})`)
+    }
+
+    return replacedText
   }
 }
 
