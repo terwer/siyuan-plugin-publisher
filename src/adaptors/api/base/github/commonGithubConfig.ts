@@ -74,7 +74,7 @@ class CommonGithubConfig extends CommonBlogConfig {
   /**
    * 预览规则（占位符：[yyyy] [MM] [dd] [postid]）
    */
-  public previewPostUrl: string
+  public override previewPostUrl: string = ""
 
   /**
    * MD文件预览规则（占位符：[user] [repo] [branch] [docpath]）

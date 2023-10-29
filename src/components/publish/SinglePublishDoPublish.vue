@@ -78,6 +78,7 @@ const formData = reactive({
   method: query.method as MethodEnum,
   isPublishLoading: false,
   isDeleteLoading: false,
+  errMsg: "",
 
   // 单个平台信息
   siyuanPost: {} as Post,
@@ -91,7 +92,6 @@ const formData = reactive({
   knowledgeSpaceConfig: {} as ICategoryConfig,
 
   postPreviewUrl: "",
-  changeTips: { title: "" },
 
   // =========================
   // extra sync attrs start
@@ -113,6 +113,7 @@ const handlePublish = async () => {
     formData.isPublishLoading = true
     formData.actionEnable = false
     isTimerInit.value = false
+    formData.errMsg = ""
 
     logger.info("保存到系统平台开始")
     for (const sysKey of sysKeys) {
@@ -138,12 +139,14 @@ const handlePublish = async () => {
       }
     } else {
       formData.actionEnable = true
-      ElMessage.error(processResult.errMsg)
       logger.error(processResult.errMsg)
+      formData.errMsg = processResult.errMsg
+      ElMessage.error(processResult.errMsg)
     }
   } catch (e) {
-    ElMessage.error(e.message)
     logger.error(t("main.opt.failure") + "=>", e)
+    formData.errMsg = e.toString()
+    ElMessage.error(e.toString())
   } finally {
     formData.isPublishLoading = false
     isTimerInit.value = true
@@ -173,6 +176,7 @@ const doDelete = async () => {
   try {
     formData.isDeleteLoading = true
     formData.actionEnable = false
+    formData.errMsg = ""
 
     const processResult = await doSingleDelete(key, id, formData.publishCfg as IPublishCfg)
     if (processResult.status) {
@@ -190,12 +194,14 @@ const doDelete = async () => {
       }, 200)
     } else {
       formData.actionEnable = true
-      ElMessage.error(processResult.errMsg)
       logger.error(processResult.errMsg)
+      formData.errMsg = processResult.errMsg
+      ElMessage.error(processResult.errMsg)
     }
   } catch (e) {
-    ElMessage.error(e.message)
     logger.error(t("main.opt.failure") + "=>", e)
+    formData.errMsg = e.toString()
+    ElMessage.error(e.toString())
   } finally {
     formData.isDeleteLoading = false
   }
@@ -203,6 +209,8 @@ const doDelete = async () => {
 
 const handleForceDelete = async () => {
   try {
+    formData.errMsg = ""
+
     await doForceSingleDelete(key, id, formData.publishCfg as IPublishCfg)
     const platformName = getPlatformName()
     const blogName = getBlogName()
@@ -216,6 +224,7 @@ const handleForceDelete = async () => {
       window.location.reload()
     }, 200)
   } catch (error) {
+    formData.errMsg = error.message
     ElMessage.error(error.message)
   } finally {
     formData.isDeleteLoading = false
@@ -451,7 +460,14 @@ onMounted(async () => {
         class="top-tip"
         :title="t('category.ai.enabled')"
         type="success"
-        :closable="false"
+        :closable="true"
+      />
+      <el-alert
+        v-if="!StrUtil.isEmptyString(formData.errMsg)"
+        class="top-tip"
+        :title="formData.errMsg"
+        type="error"
+        :closable="true"
       />
       <el-container>
         <el-main>

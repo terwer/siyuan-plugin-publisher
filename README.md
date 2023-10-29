@@ -8,33 +8,22 @@ Publish articles from siyuan-note to platforms such as Yuque, Notion, Cnblogs, W
 
 Support features such as fast publishing, image bed management, platform expansion, smart labels, etc.
 
-> The latest release: 🎉 Publish Tool Version `1.17.3`
+> Recent Update: 🎉 Publish Tool new version `1.18.0` released.
 
-**This is perhaps the most significant performance improvement to date. 😄**
-
-- Version `1.17.3` incorporates minor performance enhancements and introduces a timing mechanism to display the elapsed duration of key page operations.
-- Special thanks to [@cesaryuan](https://github.com/cesaryuan) for their contribution [#786](https://github.com/terwer/siyuan-plugin-publisher/issues/786), which resulted in a substantial enhancement in the performance of the release tool. Starting from version `1.17.2`, the initial screen loading time has been reduced from `1600ms` to `900ms`.
-- Key changes in version `1.17.0` include:
-  - Optimized support for AI effects.
-  - Preferences are now persistent, eliminating concerns about preference settings becoming invalid due to restarts or other circumstances.
-  - Fixed the issue of Halo publication time not taking effect.
-  - Resolved the problem of articles not updating after being published by old widgets.
-- Ah, in addition, starting from version `1.14.0`, the author quietly developed an import feature. You can use the `Settings` -> `Publish Settings` -> `Import Predefined Platforms` function to quickly import built-in platforms. 😄
+- `1.18.0` brings compatibility with multiple platforms and overall enhanced user experience.
+- Key changes in `1.18.0` include:
+  - A clever workaround has been introduced to support document updates in Notion.
+- Ahem, in addition, the author secretly developed an import feature after version `1.14.0`. You can easily import predefined platforms through the `Settings` -> `Publish Settings` -> `Import Predefined Platforms` function 😄
 
 > Platform Limitations:
-  - **WeChat Official Accounts**: Publishing Tool now supports posting articles to the WeChat Official Accounts draft box in version `1.13.0` and beyond. However, due to limitations on the WeChat platform in Electron, normal login operations are not possible. Therefore, you will need to visit `https://mp.weixin.qq.com/` yourself, complete the login, copy the cookie, and then paste it into the configuration options.
-  - **Notion**: Since Notion is block-based, not a whole document, it is constrained by technology and does not support updates. To update, you can only delete and then repost it.
-  - **Juejin**: Due to the mandatory requirements of the Jujin platform, tags and classifications must be filled in, if you do not select publishing, a backend classification and programmer label will be added by default, otherwise you will not be able to publish.
-  - **Juejin**: **Juejin need to review every time they publish an article**, so the preview may be 404 immediately after publishing the article, at which point you can modify the link '/post' to '/spost' for temporary viewing, or wait patiently for the review to pass.
-  - **CSDN**: CSDN requires setting tags, which is a requirement of the CSDN platform, and tags cannot be empty.
-    ![](https://img1.terwer.space/api/public/202309211113950.png)
-    If not provided, CSDN will generate an error:
-      ```json
-      {
-        "code": 400,
-        "msg": "Please set article tags"
-      }
-      ```
+
+- All Platforms: The Publish Tool retrieves and overwrites the latest edited content from Simplenote with each release. Remember, it overwrites the content every time. Thus, please refrain from modifying the content manually on the platforms.
+- **WeChat Official Account**: The Publish Tool now supports publishing articles to the WeChat Official Account draft folder, starting from `1.13.0+`. However, due to limitations imposed by the WeChat platform on Electron, the login operation is not supported. Hence, you can manually visit `https://mp.weixin.qq.com/`, login, copy the cookie, and paste it into the configuration options.
+- **Notion**: As Notion operates on a block-based system rather than whole documents, it is technically limited to perform regular updates. Starting from `1.18.0`, updates are supported by first deleting and then publishing the content. Please note that this process may take longer than usual.
+- **Juejin**: Juejin platform requires mandatory tags and categories for publication. If not selected, a default backend category and programmer tag will be applied; otherwise, the article cannot be published.
+- **Juejin**: **Each article published on Juejin needs to go through the approval process**. Therefore, immediately after publishing, previewing the article may result in a 404 error. In such cases, you can temporarily modify the link from `/post` to `/spost` for a preview, or patiently wait for the approval process to complete.
+- **CSDN**: CSDN requires setting tags, as dictated by the platform's rules. Tags cannot be left empty.
+
 > [Click here](https://blog.terwer.space/s/20230810132040-nn4q7vs) to view the latest help documentation.
 
 ## Update history

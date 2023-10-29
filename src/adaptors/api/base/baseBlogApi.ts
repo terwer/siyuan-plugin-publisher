@@ -70,6 +70,10 @@ export class BaseBlogApi extends BlogApi {
     return null
   }
 
+  public getPostPreviewUrl(postid: string): Promise<string> {
+    return this.getPreviewUrl(postid)
+  }
+
   public async preEditPost(post: Post, id?: string, publishCfg?: any): Promise<Post> {
     return await this.baseExtendApi.preEditPost(post, id, publishCfg)
   }

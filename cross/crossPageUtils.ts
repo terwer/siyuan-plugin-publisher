@@ -38,6 +38,22 @@ class CrossPageUtils {
    * @param platformName
    * @param length
    */
+  public static subPlatformName(platformName: string, length?: number) {
+    if (StrUtil.isEmptyString(platformName)) {
+      return ""
+    }
+    if (!platformName.includes("_")) {
+      return this.shortPlatformName(platformName, length ?? 9)
+    }
+    return StrUtil.upperFirst(HtmlUtil.parseHtml(platformName.split("_")[1], length ?? 9))
+  }
+
+  /**
+   * 缩略展示平台名称
+   *
+   * @param platformName
+   * @param length
+   */
   public static shortPlatformName(platformName: string, length?: number) {
     if (StrUtil.isEmptyString(platformName)) {
       return ""

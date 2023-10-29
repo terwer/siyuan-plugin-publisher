@@ -411,7 +411,7 @@ onMounted(async () => {
               class="top-tip"
               :title="t('category.ai.enabled')"
               type="success"
-              :closable="false"
+              :closable="true"
             />
             <!-- 编辑模式选择 -->
             <edit-mode-select v-model:edit-type="formData.editType" @emitSyncEditMode="syncEditMode" />

@@ -183,7 +183,7 @@ const usePublish = () => {
       logger.info("文章属性处理完成")
 
       // 更新预览链接
-      postPreviewUrl = await getPostPreviewUrl(api, postid, cfg)
+      postPreviewUrl = await getPostPreviewUrl(api, id, cfg)
 
       singleFormData.publishProcessStatus = true
     } catch (e) {
@@ -324,10 +324,15 @@ const usePublish = () => {
     }
   }
 
-  const getPostPreviewUrl = async (api: BlogAdaptor, postid: string, cfg: BlogConfig) => {
-    const previewUrl = await api.getPreviewUrl(postid)
-    const isAbsoluteUrl = /^http/.test(previewUrl)
-    return isAbsoluteUrl ? previewUrl : `${cfg?.home ?? ""}${previewUrl}`
+  const getPostPreviewUrl = async (api: BlogAdaptor, id: string, cfg: BlogConfig) => {
+    // 获取最新id，兼容某些平台自定义行为
+    const { getSetting } = useSettingStore()
+    const setting = await getSetting()
+    const posidKey = cfg.posidKey
+    const postMeta = ObjectUtil.getProperty(setting, id, {})
+    const newPostid = postMeta[posidKey]
+    const previewUrl = await api.getPreviewUrl(newPostid)
+    return StrUtil.pathJoin(cfg?.home ?? "", previewUrl)
   }
 
   /**
@@ -462,6 +467,9 @@ const usePublish = () => {
         mergedPost = _.cloneDeep(platformPost) as Post
         logger.debug("get init platformPost ok =>", mergedPost)
         mergedPost.title = platformPost.title
+        // 链接需要使用思源笔记的
+        mergedPost.originalId = siyuanPost.originalId
+        mergedPost.link = siyuanPost.link
         // 正文需要使用思源笔记的
         mergedPost.markdown = siyuanPost.markdown
         mergedPost.html = siyuanPost.html
@@ -470,7 +478,7 @@ const usePublish = () => {
         mergedPost = initPublishMethods.doMergeBatchPost(siyuanPost, mergedPost)
 
         // 更新预览链接
-        postPreviewUrl = await getPostPreviewUrl(api, postid, cfg)
+        postPreviewUrl = await getPostPreviewUrl(api, id, cfg)
       }
 
       logger.debug("doInitPage finished mergedPost =>", toRaw(mergedPost))
@@ -486,7 +494,10 @@ const usePublish = () => {
       const mergedPost = _.cloneDeep(newPost) as Post
 
       mergedPost.title = post.title
+      mergedPost.originalId = post.originalId
+      mergedPost.link = post.link
       mergedPost.shortDesc = post.shortDesc
+      mergedPost.mt_excerpt = post.mt_excerpt
       mergedPost.mt_keywords = post.mt_keywords
       mergedPost.categories = post.categories
 
@@ -496,6 +507,10 @@ const usePublish = () => {
     doMergeBatchPost: (post: Post, newPost: Post): Post => {
       // 复制原始 newPost 对象以避免直接修改它
       const mergedPost = _.cloneDeep(newPost) as Post
+
+      // 这两个属性需要保持
+      mergedPost.originalId = post.originalId
+      mergedPost.link = post.link
 
       // 摘要
       if (StrUtil.isEmptyString(mergedPost.shortDesc)) {
@@ -509,10 +524,7 @@ const usePublish = () => {
       const newPostKeywords = newPost?.mt_keywords?.split(",") ?? []
       // 合并并去重关键词
       const mergedKeywords = [
-        ...new Set([
-          ...postKeywords.map((tag) => tag.trim()),
-          ...newPostKeywords.map((tag) => tag.trim()),
-        ]),
+        ...new Set([...postKeywords.map((tag) => tag.trim()), ...newPostKeywords.map((tag) => tag.trim())]),
       ].filter((tag) => tag.trim() !== "")
       mergedPost.mt_keywords = mergedKeywords.join(",")
 

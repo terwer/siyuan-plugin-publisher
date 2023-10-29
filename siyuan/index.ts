@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { App, getFrontend, IModel, IObject, Plugin } from "siyuan"
+import { App, getFrontend, IModel, IObject, Plugin, confirm } from "siyuan"
 import { SiyuanConfig, SiyuanKernelApi } from "zhi-siyuan-api"
 import { createSiyuanAppLogger } from "./appLogger"
 import { WidgetInvoke } from "./invoke/widgetInvoke"
@@ -31,6 +31,12 @@ import { Topbar } from "./topbar"
 
 import "./index.styl"
 
+/**
+ * 发布工具插件入口
+ *
+ * @author terwer
+ * @since 0.1.0
+ */
 export default class PublisherPlugin extends Plugin {
   private logger: any
   private topbar: Topbar
@@ -65,8 +71,13 @@ export default class PublisherPlugin extends Plugin {
     this.topbar.initTopbar()
     // 初始化自定义Tab
     this.initCustomTab()
+    // mountFn
+    this.mountFn()
   }
 
+  // ================
+  // private methods
+  // ================
   private initCustomTab() {
     const that = this
     this.customTabObject = this.addTab({
@@ -79,5 +90,15 @@ export default class PublisherPlugin extends Plugin {
         that.logger.info("publisher custopm tab destroyed")
       },
     })
+  }
+
+  private mountFn() {
+    const elAlertBox = (msg: string) => {
+      confirm("⚠️错误提示", msg, () => {})
+    }
+
+    const win = window as any
+    win.syp = win.syp ?? {}
+    win.syp.alert = elAlertBox
   }
 }

@@ -65,6 +65,10 @@ class BaseWebApi extends WebApi {
     return true
   }
 
+  public getPostPreviewUrl(postid: string): Promise<string> {
+    return this.getPreviewUrl(postid)
+  }
+
   // web 适配器专有
   public updateCfg(cfg: WebConfig) {
     this.cfg = cfg
