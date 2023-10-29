@@ -206,7 +206,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     const win = SiyuanDevice.siyuanWindow()
     const path = win.require("path")
     const save_dir = path.dirname(post.link)
-    // 你急层级作为文件保存路径
+    // 使用层级作为文件保存路径
     if (cfg.usePathCategory) {
       // 自动映射分类
       const autoDir = path.join(savePath.replace(CATE_AUTO_NAME, ""), save_dir)
@@ -545,7 +545,8 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
       const posidKey = cfg.posidKey
       if (!postMeta.hasOwnProperty(posidKey)) {
         outerLink = `siyuan://blocks/${id}`
-        this.logger.warn("引用的文档尚未发布，取消外链 =>", id)
+        this.logger.error("引用的文档尚未发布，您可以删除此外链再发布，或者先发布外链文章 =>", id)
+        throw  new Error(`引用的文档 ${id} 尚未发布，您可以删除此外链再发布，或者先发布外链文章`, )
       } else {
         let previewUrl: string
         const postid = postMeta[posidKey]
@@ -555,9 +556,8 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
           const filename = path.basename(postid).replace(/\.md/g, "")
           previewUrl = previewUrl.replace(filename, slug)
         }
-        previewUrl = previewUrl.replace(cfg.home, "")
-        // 使用绝对路径
-        if (!previewUrl.startsWith("/")) {
+        // 路径保持原样
+        if (!previewUrl.startsWith("http") && !previewUrl.startsWith("/")) {
           previewUrl = `/${previewUrl}`
         }
         outerLink = previewUrl

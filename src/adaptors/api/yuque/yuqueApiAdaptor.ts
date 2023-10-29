@@ -124,7 +124,7 @@ class YuqueApiAdaptor extends BaseBlogApi {
     const docId = yuquePostidKey.docId
     const repo = yuquePostidKey.docRepo ?? this.cfg.blogid ?? ""
     const postUrl = purl.replace("[postid]", docId).replace("[notebook]", repo)
-    return StrUtil.pathJoin(this.cfg.home ?? "", postUrl)
+    return postUrl
   }
 
   // ================

@@ -34,6 +34,7 @@ import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
 import { pre } from "~/src/utils/import/pre.ts"
 import { useLoadingTimer } from "~/src/composables/useLoadingTimer.ts"
 import CrossPageUtils from "~/cross/crossPageUtils.ts"
+import { SiyuanDevice } from "zhi-device"
 
 const logger = createAppLogger("quick-publish-worker")
 
@@ -58,6 +59,12 @@ const formData = reactive({
 // 计时器
 const isTimerInit = ref(false)
 const { loadingTime } = useLoadingTimer(isTimerInit)
+
+// 错误详情
+const showDetailError = (errrMsg: string) => {
+  const win = SiyuanDevice.siyuanWindow()
+  win.syp.alert(errrMsg)
+}
 
 onMounted(async () => {
   singleFormData.isPublishLoading = true
@@ -109,7 +116,9 @@ onMounted(async () => {
       </div>
       <div v-else-if="singleFormData.publishProcessStatus" class="success-tips">
         {{ singleFormData.isAdd ? "发布到" : "更新文章到" }}
-        <span :title="formData.processResult.key">[{{ HtmlUtil.parseHtml(formData.processResult.key, 8) }}]</span>
+        <span :title="formData.processResult.key">
+          [{{ CrossPageUtils.subPlatformName(formData.processResult.key, 6) }}]
+        </span>
         <span :title="formData.processResult.name" v-if="!StrUtil.isEmptyString(formData.processResult.name)">
           {{ `[${HtmlUtil.parseHtml(formData.processResult.name, 8)}]` }}
         </span>
@@ -119,11 +128,14 @@ onMounted(async () => {
       </div>
       <div v-else class="fail-tips">
         {{ singleFormData.isAdd ? "发布到" : "更新文章到" }}
-        <span :title="formData.processResult.key">[{{ HtmlUtil.parseHtml(formData.processResult.key, 8) }}]</span>
+        <span :title="formData.processResult.key">
+          [{{ CrossPageUtils.subPlatformName(formData.processResult.key, 6) }}]
+        </span>
         <span :title="formData.processResult.name" v-if="!StrUtil.isEmptyString(formData.processResult.name)">
           {{ `[${HtmlUtil.parseHtml(formData.processResult.name, 8)}]` }}
         </span>
         失败！
+        <a href="javascript:;" @click="showDetailError(formData.processResult.errMsg)">详细错误</a>
         <loading-timer :loading-time="loadingTime" style="padding: 0 10px 0 10px; display: inline-block" />
       </div>
     </div>

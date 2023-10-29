@@ -327,7 +327,7 @@ const usePublish = () => {
   const getPostPreviewUrl = async (api: BlogAdaptor, postid: string, cfg: BlogConfig) => {
     const previewUrl = await api.getPreviewUrl(postid)
     const isAbsoluteUrl = /^http/.test(previewUrl)
-    return isAbsoluteUrl ? previewUrl : `${cfg?.home ?? ""}${previewUrl}`
+    return isAbsoluteUrl ? previewUrl : StrUtil.pathJoin(cfg?.home ?? "", previewUrl)
   }
 
   /**
@@ -462,6 +462,8 @@ const usePublish = () => {
         mergedPost = _.cloneDeep(platformPost) as Post
         logger.debug("get init platformPost ok =>", mergedPost)
         mergedPost.title = platformPost.title
+        // 链接需要使用思源笔记的
+        mergedPost.link = siyuanPost.link
         // 正文需要使用思源笔记的
         mergedPost.markdown = siyuanPost.markdown
         mergedPost.html = siyuanPost.html
@@ -509,10 +511,7 @@ const usePublish = () => {
       const newPostKeywords = newPost?.mt_keywords?.split(",") ?? []
       // 合并并去重关键词
       const mergedKeywords = [
-        ...new Set([
-          ...postKeywords.map((tag) => tag.trim()),
-          ...newPostKeywords.map((tag) => tag.trim()),
-        ]),
+        ...new Set([...postKeywords.map((tag) => tag.trim()), ...newPostKeywords.map((tag) => tag.trim())]),
       ].filter((tag) => tag.trim() !== "")
       mergedPost.mt_keywords = mergedKeywords.join(",")
 

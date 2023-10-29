@@ -103,16 +103,20 @@ onMounted(async () => {
 
 <template>
   <div>
-    <p>请选择要发布的平台：</p>
+    <p>请选择要发布的平台2：</p>
     <div class="syp-distri-platform-container">
       <a v-for="cfg in formData.dynamicConfigArray" class="distri-item" @click="handleCheck(cfg.platformKey)">
-        <el-tooltip :content="CrossPageUtils.longPlatformName(cfg.platformName, 11)" placement="bottom">
+        <el-tooltip :content="CrossPageUtils.longPlatformName(cfg.platformName, 20)" placement="bottom">
           <el-icon class="platform-icon">
             <span v-html="cfg.platformIcon"></span>
           </el-icon>
-          <span v-if="formData.selectedKeys.includes(cfg.platformKey)" v-html="svgIcons.iconOTYes"></span>
-          <span v-else class="icon-no" v-html="svgIcons.iconOTNo"></span>
         </el-tooltip>
+        <span
+          v-if="formData.selectedKeys.includes(cfg.platformKey)"
+          class="icon-yes"
+          v-html="svgIcons.iconOTYes"
+        ></span>
+        <span v-else class="icon-no" v-html="svgIcons.iconOTNo"></span>
       </a>
     </div>
   </div>

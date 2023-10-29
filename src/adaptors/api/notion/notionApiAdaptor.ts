@@ -116,7 +116,7 @@ class NotionApiAdaptor extends BaseBlogApi {
     // const pageId = notionPostKey.pageId
     const endUrl = notionPostKey.endUrl
     const postUrl = purl.replace("[postid]", endUrl)
-    return StrUtil.pathJoin(this.cfg.home ?? "", postUrl)
+    return postUrl
   }
 
   // ================
