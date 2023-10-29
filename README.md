@@ -11,8 +11,18 @@ Support features such as fast publishing, image bed management, platform expansi
 > Recent Update: 🎉 Publish Tool new version `1.18.0` released.
 
 - `1.18.0` brings compatibility with multiple platforms and overall enhanced user experience.
-- Key changes in `1.18.0` include:
-  - A clever workaround has been introduced to support document updates in Notion.
+- `1.18.0` introduces the following important changes:
+  - Added a clever workaround to support document updates in Notion.
+  - Added support for external link conversion.
+  - Added the ability to manually set file rules in the publishing configuration.
+  - Integrated menu enhancements to focus on core functionality.
+  - Enabled automatic mapping of document paths to categories.
+  - Enhanced the platform list with hover tooltips, improved display of platform names, and added new platform prompts.
+  - Strengthened validation for GitHub and Gitlab platforms.
+  - Fixed compatibility issues with CSDN error prompts, reducing unnecessary disruptions.
+  - Fixed the problem of AI tab not being openable.
+  - Resolved formatting issues when publishing HTML content.
+  - Fixed the issue of formulas not displaying correctly in HTML publishing.
 - Ahem, in addition, the author secretly developed an import feature after version `1.14.0`. You can easily import predefined platforms through the `Settings` -> `Publish Settings` -> `Import Predefined Platforms` function 😄
 
 > Platform Limitations:
