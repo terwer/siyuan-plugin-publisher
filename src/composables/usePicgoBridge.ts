@@ -63,14 +63,15 @@ const usePicgoBridge = () => {
         md = siyuanPost.markdown
       }
 
-      const picgoImageTip = `使用 PicGO 自动上传图片，若图片较多可能会较慢请耐心等待`
-      await kernelApi.pushMsg({
-        msg: picgoImageTip,
-        timeout: 3000,
-      })
+
       const picgoPostResult = await picgoPostApi.uploadPostImagesToBed(siyuanData.pageId, siyuanData.meta, md)
       // 有图片才上传
       if (picgoPostResult.hasImages) {
+        // const picgoImageTip = `检测到图片，将使用 PicGO 自动上传图片，若图片较多可能会较慢请耐心等待`
+        // await kernelApi.pushMsg({
+        //   msg: picgoImageTip,
+        //   timeout: 3000,
+        // })
         if (picgoPostResult.flag) {
           md = picgoPostResult.mdContent
         } else {
