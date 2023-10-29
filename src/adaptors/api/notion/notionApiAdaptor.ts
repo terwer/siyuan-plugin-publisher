@@ -27,8 +27,9 @@ import { CategoryInfo, Post, UserBlog } from "zhi-blog-api"
 import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
 import { NotionConfig } from "~/src/adaptors/api/notion/notionConfig.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { ObjectUtil, StrUtil } from "zhi-common"
+import { ObjectUtil } from "zhi-common"
 import { NotionMarkdownConverter } from "zhi-notion-markdown"
+import { useSettingStore } from "~/src/stores/useSettingStore.ts"
 
 /**
  * Notion API 适配器
@@ -62,8 +63,25 @@ class NotionApiAdaptor extends BaseBlogApi {
     return await this.createPage(post.title, post.description, pageId)
   }
 
-  public async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
-    return await this.updatePage(postid, post.title, post.description)
+  public async editPost(oldPostid: string, post: Post, publish?: boolean): Promise<boolean> {
+    await this.deletePost(oldPostid)
+    const newPostid = await this.newPost(post)
+    // ================================
+    // 下面这一段是更新postid，需要注意适配
+    // 写入属性到配置
+    const { getSetting, updateSetting } = useSettingStore()
+    const setting = await getSetting()
+    const posidKey = this.cfg.posidKey
+    const id = post.originalId
+    const postMeta = ObjectUtil.getProperty(setting, id, {})
+    postMeta[posidKey] = newPostid
+    setting[id] = postMeta
+    await updateSetting(setting)
+    // ==============================
+    return true
+
+    // Notion的原生更新不支持
+    // return await this.updatePage(postid, post.title, post.description)
   }
 
   public async deletePost(postid: string): Promise<boolean> {
