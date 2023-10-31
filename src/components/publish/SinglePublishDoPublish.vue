@@ -52,6 +52,7 @@ import { useChatGPT } from "~/src/composables/useChatGPT.ts"
 import _ from "lodash"
 import { useLoadingTimer } from "~/src/composables/useLoadingTimer.ts"
 import CrossPageUtils from "~/cross/crossPageUtils.ts"
+import { ITagConfig } from "~/src/types/ITagConfig.ts"
 
 const logger = createAppLogger("single-publish-do-publish")
 
@@ -86,6 +87,8 @@ const formData = reactive({
   mergedPost: {} as Post,
   publishCfg: {} as IPublishCfg,
 
+  // 标签配置
+  tagConfig: {} as ITagConfig,
   // 分类配置
   categoryConfig: {} as ICategoryConfig,
   // 知识空间配置
@@ -417,6 +420,11 @@ onMounted(async () => {
   formData.mergedPost = await initPublishMethods.assignInitAttrs(formData.mergedPost, id, formData.publishCfg)
 
   const cfg = formData.publishCfg.cfg as BlogConfig
+  // 标签数据初始化
+  formData.tagConfig = {
+    apiType: key,
+    cfg: cfg,
+  }
   // 分类数据初始化
   formData.categoryConfig = {
     cateEnabled: cfg.cateEnabled,
@@ -551,6 +559,7 @@ onMounted(async () => {
                     v-model:tags="formData.mergedPost.mt_keywords"
                     v-model:md="formData.mergedPost.markdown"
                     v-model:html="formData.mergedPost.html"
+                    v-model:tag-config="formData.tagConfig"
                     @emitSyncTags="syncTags"
                   />
 
