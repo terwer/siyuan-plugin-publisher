@@ -9,7 +9,7 @@ import { computed, ref } from "vue"
  * https://pinia.vuejs.org/ssr/nuxt.html
  * 从0.9.0+ 开始，配置文件变更为 /data/storage/syp/sy-p-plus-cfg.json ，旧数据会自动迁移
  */
-export const useSettingStore = defineStore("setting", () => {
+export const usePublishSettingStore = defineStore("setting", () => {
   const logger = createAppLogger("use-setting-store")
   const storageKey = "/data/storage/syp/sy-p-plus-cfg.json"
   const initialValue = SypConfig

@@ -28,7 +28,7 @@ import { onMounted, reactive } from "vue"
 import { JsonUtil, StrUtil } from "zhi-common"
 import { DynamicConfig, DynamicJsonCfg, getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
-import { useSettingStore } from "~/src/stores/useSettingStore.ts"
+import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { svgIcons } from "../../../utils/svgIcons.ts"
 import { pre } from "~/src/utils/import/pre.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
@@ -44,7 +44,7 @@ const props = defineProps({
 })
 
 // uses
-const { getSetting } = useSettingStore()
+const { getSetting } = usePublishSettingStore()
 
 // datas
 const sysKeys = pre.systemCfg.map((item) => {

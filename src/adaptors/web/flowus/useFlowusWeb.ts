@@ -27,7 +27,7 @@ import { FlowusWebAdaptor } from "~/src/adaptors/web/flowus/flowusWebAdaptor.ts"
 import { FlowusConfig } from "~/src/adaptors/web/flowus/flowusConfig.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
-import { useSettingStore } from "~/src/stores/useSettingStore.ts"
+import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { Utils } from "~/src/utils/utils.ts"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
@@ -51,7 +51,7 @@ const useFlowusWeb = async (key?: string, newCfg?: FlowusConfig) => {
     cfg = newCfg
   } else {
     // 从配置中获取数据
-    const { getSetting } = useSettingStore()
+    const { getSetting } = usePublishSettingStore()
     const setting = await getSetting()
     cfg = JsonUtil.safeParse<FlowusConfig>(setting[key], {} as FlowusConfig)
     // 如果配置为空，则使用默认的环境变量值，并记录日志

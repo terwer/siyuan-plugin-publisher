@@ -28,7 +28,7 @@ import { reactive, ref, watch } from "vue"
 import { ElMessage, FormRules } from "element-plus"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { useSettingStore } from "~/src/stores/useSettingStore.ts"
+import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { StrUtil } from "zhi-common"
 
 const logger = createAppLogger("cookie-setting")
@@ -44,7 +44,7 @@ const emit = defineEmits(["emitHideDlg"])
 
 // uses
 const { t } = useVueI18n()
-const { updateSetting } = useSettingStore()
+const { updateSetting } = usePublishSettingStore()
 
 // datas
 const formRef = ref()

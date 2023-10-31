@@ -44,7 +44,7 @@ import { svgIcons } from "~/src/utils/svgIcons.ts"
 import { usePlatformDefine } from "~/src/composables/usePlatformDefine.ts"
 import { JsonUtil, StrUtil } from "zhi-common"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
-import { useSettingStore } from "~/src/stores/useSettingStore.ts"
+import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { ElMessage, FormRules } from "element-plus"
 import { SypConfig } from "~/syp.config.ts"
 
@@ -56,7 +56,7 @@ const router = useRouter()
 const route = useRoute()
 const { query } = useRoute()
 const { getPlatformType, getPrePlatform } = usePlatformDefine()
-const { getSetting, updateSetting, checkKeyExists } = useSettingStore()
+const { getSetting, updateSetting, checkKeyExists } = usePublishSettingStore()
 
 // datas
 const params = reactive(route.params)

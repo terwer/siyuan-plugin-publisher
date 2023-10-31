@@ -27,7 +27,7 @@
 import { markRaw, onMounted, reactive } from "vue"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { Delete, Lock, Tools, WarningFilled } from "@element-plus/icons-vue"
-import { useSettingStore } from "~/src/stores/useSettingStore.ts"
+import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { SypConfig } from "~/syp.config.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { DateUtil, JsonUtil } from "zhi-common"
@@ -63,7 +63,7 @@ const logger = createAppLogger("publish-setting")
 // uses
 const { t } = useVueI18n()
 const router = useRouter()
-const { getSetting, updateSetting, deleteKey } = useSettingStore()
+const { getSetting, updateSetting, deleteKey } = usePublishSettingStore()
 const { getPrePlatformKeys, platformTypeList, getPrePlatformList } = usePlatformDefine()
 const { isInSiyuanWidget, isInChromeExtension } = useSiyuanDevice()
 

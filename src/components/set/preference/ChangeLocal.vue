@@ -26,11 +26,11 @@
 <script setup lang="ts">
 import { onBeforeMount } from "vue"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import { useSettingStore } from "~/src/stores/useSettingStore.ts"
+import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 
 const logger = createAppLogger("change-local")
-const { getSetting, updateSetting } = useSettingStore()
+const { getSetting, updateSetting } = usePublishSettingStore()
 const { t, locale } = useVueI18n()
 const langs = [
   {

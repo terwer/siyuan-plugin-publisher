@@ -32,7 +32,7 @@ import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { ObjectUtil, StrUtil } from "zhi-common"
 import { useRoute } from "vue-router"
 import { getWidgetId } from "~/src/utils/widgetUtils.ts"
-import { useSettingStore } from "~/src/stores/useSettingStore.ts"
+import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 
 const logger = createAppLogger("post-bind")
@@ -41,7 +41,7 @@ const logger = createAppLogger("post-bind")
 const { t } = useVueI18n()
 const { query } = useRoute()
 const { getPublishCfg } = usePublishConfig()
-const { updateSetting } = useSettingStore()
+const { updateSetting } = usePublishSettingStore()
 
 // datas
 const id = (query.id ?? getWidgetId()) as string

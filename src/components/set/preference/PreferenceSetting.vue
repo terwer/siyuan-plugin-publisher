@@ -25,10 +25,10 @@
 
 <script setup lang="ts">
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import { usePublishPreferenceSetting } from "~/src/stores/usePublishPreferenceSetting.ts"
+import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
 
 const { t } = useVueI18n()
-const { getPublishPreferenceSetting } = usePublishPreferenceSetting()
+const { getPublishPreferenceSetting } = usePreferenceSettingStore()
 
 const publishPreferenceSettingForm = getPublishPreferenceSetting()
 </script>

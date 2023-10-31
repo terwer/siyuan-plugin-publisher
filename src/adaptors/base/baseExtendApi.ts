@@ -50,7 +50,7 @@ import { DynamicConfig } from "~/src/platforms/dynamicConfig.ts"
 import { CATE_AUTO_NAME, MUST_USE_OWN_PLATFORM, MUST_USE_PICBED_PLATFORM } from "~/src/utils/constants.ts"
 import { toRaw } from "vue"
 import _ from "lodash"
-import { usePublishPreferenceSetting } from "~/src/stores/usePublishPreferenceSetting.ts"
+import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
 import { SiyuanDevice } from "zhi-device"
 import { SypConfig } from "~/syp.config.ts"
 
@@ -155,7 +155,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
       post.mdFilename = filename
     }
 
-    const { getReadOnlyPublishPreferenceSetting } = usePublishPreferenceSetting()
+    const { getReadOnlyPublishPreferenceSetting } = usePreferenceSettingStore()
     const pref = getReadOnlyPublishPreferenceSetting()
     if (pref.value.fixTitle) {
       post.title = HtmlUtil.removeTitleNumber(post.title).replace(/\.md/g, "")
@@ -263,7 +263,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     md = md.replace(/\*\*(.*?)\*\*/g, '<span style="font-weight: bold;" data-type="strong">$1</span>')
 
     // 处理外链
-    const { getReadOnlyPublishPreferenceSetting } = usePublishPreferenceSetting()
+    const { getReadOnlyPublishPreferenceSetting } = usePreferenceSettingStore()
     const pref = getReadOnlyPublishPreferenceSetting()
     const outerLinkRegex = /\[(.+?)]\(siyuan:\/\/blocks\/(\d+-\w+)\)/g
     md = await this.replaceOuterLinks(md, outerLinkRegex, { pref, cfg, setting })

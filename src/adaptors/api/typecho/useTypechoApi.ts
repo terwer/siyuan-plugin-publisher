@@ -26,7 +26,7 @@
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { Utils } from "~/src/utils/utils.ts"
-import { useSettingStore } from "~/src/stores/useSettingStore.ts"
+import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { TypechoConfig } from "~/src/adaptors/api/typecho/typechoConfig.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
@@ -58,7 +58,7 @@ export const useTypechoApi = async (key?: string, newCfg?: TypechoConfig) => {
     cfg = newCfg
   } else {
     // 从配置中获取数据
-    const { getSetting } = useSettingStore()
+    const { getSetting } = usePublishSettingStore()
     const setting = await getSetting()
     cfg = JsonUtil.safeParse<TypechoConfig>(setting[key], {} as TypechoConfig)
     // 如果配置为空，则使用默认的环境变量值，并记录日志

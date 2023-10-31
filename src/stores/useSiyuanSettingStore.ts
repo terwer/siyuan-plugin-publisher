@@ -37,7 +37,7 @@ import useCommonLocalStorage from "~/src/stores/common/useCommonLocalStorage.ts"
  * @version 1.8.0
  * @since 1.8.0
  */
-const useSiyuanSetting = () => {
+const useSiyuanSettingStore = () => {
   const filePath = "storage/syp/siyuan-cfg.json"
   const storageKey = "siyuan-cfg"
   const { isInSiyuanOrSiyuanNewWin } = useSiyuanDevice()
@@ -49,9 +49,9 @@ const useSiyuanSetting = () => {
    * @since 0.6.0
    */
   const getSiyuanSetting = (): RemovableRef<SiyuanConfig> => {
-    let baseUrl = "http://127.0.0.1:6806"
-    let token = ""
-    let middlewareUrl = "https://api.terwer.space/api/middleware"
+    const baseUrl = "http://127.0.0.1:6806"
+    const token = ""
+    const middlewareUrl = "https://api.terwer.space/api/middleware"
     // PC客户端多个工作空间情况下，自动读取思源地址
     let origin: string
     if (isInSiyuanOrSiyuanNewWin()) {
@@ -88,4 +88,4 @@ const useSiyuanSetting = () => {
   return { getSiyuanSetting, getReadOnlySiyuanSetting }
 }
 
-export { useSiyuanSetting }
+export { useSiyuanSettingStore }

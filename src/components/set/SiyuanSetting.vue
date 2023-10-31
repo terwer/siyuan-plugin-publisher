@@ -25,10 +25,10 @@
 
 <script lang="ts" setup>
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import { useSiyuanSetting } from "~/src/stores/useSiyuanSetting.ts"
+import { useSiyuanSettingStore } from "~/src/stores/useSiyuanSettingStore.ts"
 
 const { t } = useVueI18n()
-const { getSiyuanSetting } = useSiyuanSetting()
+const { getSiyuanSetting } = useSiyuanSettingStore()
 
 const siyuanSettingForm = getSiyuanSetting()
 </script>

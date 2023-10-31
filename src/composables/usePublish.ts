@@ -37,7 +37,7 @@ import {
   YamlFormatObj,
 } from "zhi-blog-api"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import { useSettingStore } from "~/src/stores/useSettingStore.ts"
+import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { pre } from "~/src/utils/import/pre.ts"
 import { MethodEnum } from "~/src/models/methodEnum.ts"
@@ -61,7 +61,7 @@ const usePublish = () => {
 
   // uses
   const { t } = useVueI18n()
-  const { updateSetting } = useSettingStore()
+  const { updateSetting } = usePublishSettingStore()
   const { kernelApi, blogApi } = useSiyuanApi()
   const { getPublishApi } = usePublishConfig()
 
@@ -326,7 +326,7 @@ const usePublish = () => {
 
   const getPostPreviewUrl = async (api: BlogAdaptor, id: string, cfg: BlogConfig) => {
     // 获取最新id，兼容某些平台自定义行为
-    const { getSetting } = useSettingStore()
+    const { getSetting } = usePublishSettingStore()
     const setting = await getSetting()
     const posidKey = cfg.posidKey
     const postMeta = ObjectUtil.getProperty(setting, id, {})

@@ -29,7 +29,7 @@ import { NotionConfig } from "~/src/adaptors/api/notion/notionConfig.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { ObjectUtil } from "zhi-common"
 import { NotionMarkdownConverter } from "zhi-notion-markdown"
-import { useSettingStore } from "~/src/stores/useSettingStore.ts"
+import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 
 /**
  * Notion API 适配器
@@ -69,7 +69,7 @@ class NotionApiAdaptor extends BaseBlogApi {
     // ================================
     // 下面这一段是更新postid，需要注意适配
     // 写入属性到配置
-    const { getSetting, updateSetting } = useSettingStore()
+    const { getSetting, updateSetting } = usePublishSettingStore()
     const setting = await getSetting()
     const posidKey = this.cfg.posidKey
     const id = post.originalId

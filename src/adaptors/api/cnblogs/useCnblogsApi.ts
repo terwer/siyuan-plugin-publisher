@@ -28,7 +28,7 @@ import { Utils } from "~/src/utils/utils.ts"
 import { CnblogsConfig } from "~/src/adaptors/api/cnblogs/cnblogsConfig.ts"
 import { CnblogsApiAdaptor } from "~/src/adaptors/api/cnblogs/cnblogsApiAdaptor.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
-import { useSettingStore } from "~/src/stores/useSettingStore.ts"
+import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { CategoryTypeEnum } from "zhi-blog-api"
@@ -58,7 +58,7 @@ export const useCnblogsApi = async (key?: string, newCfg?: CnblogsConfig) => {
     cfg = newCfg
   } else {
     // 从配置中获取数据
-    const { getSetting } = useSettingStore()
+    const { getSetting } = usePublishSettingStore()
     const setting = await getSetting()
     cfg = JsonUtil.safeParse<CnblogsConfig>(setting[key], {} as CnblogsConfig)
     // 如果配置为空，则使用默认的环境变量值，并记录日志
