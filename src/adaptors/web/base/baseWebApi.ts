@@ -22,7 +22,17 @@
  * or visit www.terwer.space if you need additional information or have any
  * questions.
  */
-import { Attachment, ElectronCookie, MediaObject, Post, WebApi, WebConfig, YamlConvertAdaptor } from "zhi-blog-api"
+import {
+  Attachment,
+  CategoryInfo,
+  ElectronCookie,
+  MediaObject,
+  Post,
+  TagInfo,
+  WebApi,
+  WebConfig,
+  YamlConvertAdaptor,
+} from "zhi-blog-api"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { createAppLogger, ILogger } from "~/src/utils/appLogger.ts"
 import { useProxy } from "~/src/composables/useProxy.ts"
@@ -55,7 +65,7 @@ class BaseWebApi extends WebApi {
     this.appInstance = appInstance
     this.cfg = cfg
     this.logger = createAppLogger("base-web-api")
-    this.baseExtendApi = new BaseExtendApi(this)
+    this.baseExtendApi = new BaseExtendApi(this, cfg)
 
     const { proxyFetch } = useProxy(cfg.middlewareUrl)
     this.proxyFetch = proxyFetch
@@ -67,6 +77,14 @@ class BaseWebApi extends WebApi {
 
   public getPostPreviewUrl(postid: string): Promise<string> {
     return this.getPreviewUrl(postid)
+  }
+
+  public async getCategories(keyword?: string): Promise<CategoryInfo[]> {
+    return this.baseExtendApi.getCategories(keyword)
+  }
+
+  public async getTags(): Promise<TagInfo[]> {
+    return this.baseExtendApi.getTags()
   }
 
   // web 适配器专有
