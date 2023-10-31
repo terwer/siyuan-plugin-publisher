@@ -460,6 +460,11 @@ export default {
   "setting.halo.apiUrl.tip": "Halo blog API address, typically the same as the Halo homepage",
   "setting.halo.previewUrl.tip": "Halo blog article preview rule, default /archives/{slug}, with placeholders {slug} {name} {year} {month} {day}, can be set in [halo-home-url]/console/settings?tab=routeRules",
 
+  "setting.flowus.home.tip": "Flowus homepage address, usually fixed",
+  "setting.flowus.password.tip": "Flowus cookie, do not modify",
+  "setting.flowus.apiUrl.tip": "Usually fixed, do not modify",
+  "setting.flowus.previewUrl.tip": "Flowus platform article preview rules",
+
   "setting.picgo.refer.to": "For details, please refer to:",
   "setting.picgo.refer.to.online.doc": "Picgo configuration online documentation",
   "setting.picgo.picbed": "Picbed setting",

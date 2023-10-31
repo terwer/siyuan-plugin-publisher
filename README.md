@@ -10,7 +10,7 @@ Support features such as fast publishing, image bed management, platform expansi
 
 > Recent Update: 🎉 Publish Tool new version `1.18.0` released.
 
-- `1.18.0` brings compatibility with multiple platforms and overall enhanced user experience.
+- `1.18.0` brings new features and enhanced user experience.
 - `1.18.0` introduces the following important changes:
   - Added a clever workaround to support document updates in Notion.
   - Added support for external link conversion.
@@ -49,7 +49,7 @@ Names not listed in order
 - [X] Yuque
 - [X] Notion
 - [X] Halo
-- [ ] Evernote
+- [ ] Evernote - TODO
 - [X] Github
   - [X] Hexo
   - [X] Hugo
@@ -57,8 +57,8 @@ Names not listed in order
   - [X] Vuepress
   - [X] Vuepress2
   - [X] Vitepress
-  - [ ] Antora
-  - [ ] Docsify
+  - [ ] Antora - TODO
+  - [ ] Docsify - TODO
 - [X] Gitlab
   - [X] Gitlabhexo
   - [X] Gitlabhugo
@@ -66,8 +66,8 @@ Names not listed in order
   - [X] Gitlabvuepress
   - [X] Gitlabvuepress2
   - [X] Gitlabvitepress
-  - [ ] Gitlabantora
-  - [ ] Gitlabdocsify
+  - [ ] Gitlabantora - TODO
+  - [ ] Gitlabdocsify - TODO
 - [X] Metaweblog
 - [X] CnBlogs
 - [X] Typecho
@@ -77,13 +77,13 @@ Names not listed in order
 - [X] WeChat Official Account
 - [X] Jianshu
 - [X] Juejin
-- [ ] 52pojie
-- [ ] Bilibili
-- [ ] Xiaohongshu
-- [ ] Douban
-- [ ] Xlog
-- [ ] Mdnice
-- [ ] Flowus
+- [ ] 52pojie - TODO
+- [ ] Bilibili - TODO
+- [ ] Xiaohongshu - TODO
+- [ ] Douban - TODO
+- [ ] Xlog - TODO
+- [ ] Mdnice - TODO
+- [ ] Flowus - TODO
 
 ## Core Features
 

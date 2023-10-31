@@ -455,6 +455,11 @@ export default {
   "setting.halo.previewUrl.tip":
     "Halo博客文章预览规则，默认 /archives/{slug}，占位符有 {slug} {name} {year} {month} {day}，可在 [halo-home-url]/console/settings?tab=routeRules设置",
 
+  "setting.flowus.home.tip": "Flowus首页地址，通常固定",
+  "setting.flowus.password.tip": "Flowus的Cookie，请勿修改",
+  "setting.flowus.apiUrl.tip": "通常固定，请勿修改",
+  "setting.flowus.previewUrl.tip": "Flowus平台文章预览规则",
+
   "setting.picgo.refer.to": "详情请参考：",
   "setting.picgo.refer.to.online.doc": "PicGO配置在线文档",
   "setting.picgo.picbed": "图床设置",

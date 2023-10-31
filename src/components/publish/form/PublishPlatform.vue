@@ -30,7 +30,7 @@ import { DynamicConfig, DynamicJsonCfg, getDynPostidKey } from "~/src/platforms/
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { svgIcons } from "../../../utils/svgIcons.ts"
-import { pre } from "~/src/utils/import/pre.ts"
+import { pre } from "~/src/platforms/pre.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import CrossPageUtils from "~/cross/crossPageUtils.ts"
 

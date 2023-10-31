@@ -35,7 +35,7 @@ class FlowusConfig extends CommonWebConfig {
     this.previewUrl = "/p/[postid]"
     this.pageType = PageTypeEnum.Markdown
     this.passwordType = PasswordType.PasswordType_Cookie
-    this.usernameEnabled = true
+    this.usernameEnabled = false
     this.tagEnabled = false
     this.cateEnabled = false
     this.knowledgeSpaceEnabled = true

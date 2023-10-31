@@ -1,71 +1,14 @@
+### 根页面
+GET https://flowus.cn/api/users/11f07e46-d413-4374-894c-e795b5a6721b/root
+cookie: {{cookie}}
+
 ### 子文档
 GET https://flowus.cn/api/docs/9ad61d99-6ce2-4bac-8ac7-63e8f3634e64
-authority: flowus.cn
-accept: application/json, text/plain, */*
-accept-language: zh-CN,zh;q=0.9,en;q=0.8
-app_version_name: 1.69.0
-cache-control: no-cache
-cookie:
-pragma: no-cache
-referer: https://flowus.cn/
-sec-ch-ua: "Google Chrome";v="117", "Not;A=Brand";v="8", "Chromium";v="117"
-sec-ch-ua-mobile: ?0
-sec-ch-ua-platform: "macOS"
-sec-fetch-dest: empty
-sec-fetch-mode: cors
-sec-fetch-site: same-origin
-user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36
-x-platform: web-cookie
-x-product: flowus
-x-sender-id: fa75e5c1-92ee-4067-b434-c3fbcb2bd743
-
-###
+cookie: {{cookie}}
 
 ### 子页面
 GET https://flowus.cn/api/spaces/349c2e72-44e2-4c19-a690-2a6be7815481/root
-authority: flowus.cn
-accept: application/json, text/plain, */*
-accept-language: zh-CN,zh;q=0.9,en;q=0.8
-app_version_name: 1.69.0
-cache-control: no-cache
-cookie:
-pragma: no-cache
-referer: https://flowus.cn/
-sec-ch-ua: "Google Chrome";v="117", "Not;A=Brand";v="8", "Chromium";v="117"
-sec-ch-ua-mobile: ?0
-sec-ch-ua-platform: "macOS"
-sec-fetch-dest: empty
-sec-fetch-mode: cors
-sec-fetch-site: same-origin
-user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36
-x-platform: web-cookie
-x-product: flowus
-x-sender-id: fa75e5c1-92ee-4067-b434-c3fbcb2bd743
-
-###
-
-### 根页面
-GET https://flowus.cn/api/users/11f07e46-d413-4374-894c-e795b5a6721b/root
-authority: flowus.cn
-accept: application/json, text/plain, */*
-accept-language: zh-CN,zh;q=0.9,en;q=0.8
-app_version_name: 1.69.0
-cache-control: no-cache
-cookie:
-pragma: no-cache
-referer: https://flowus.cn/
-sec-ch-ua: "Google Chrome";v="117", "Not;A=Brand";v="8", "Chromium";v="117"
-sec-ch-ua-mobile: ?0
-sec-ch-ua-platform: "macOS"
-sec-fetch-dest: empty
-sec-fetch-mode: cors
-sec-fetch-site: same-origin
-user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36
-x-platform: web-cookie
-x-product: flowus
-x-sender-id: fa75e5c1-92ee-4067-b434-c3fbcb2bd743
-
-###
+cookie: {{cookie}}
 
 ### 查询个人信息
 GET https://flowus.cn/api/users/me

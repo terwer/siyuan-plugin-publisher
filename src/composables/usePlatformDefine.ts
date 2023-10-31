@@ -25,7 +25,7 @@
 
 import { DynamicConfig, PlatformType } from "~/src/platforms/dynamicConfig.ts"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import { mainPre, pre } from "~/src/utils/import/pre.ts"
+import { mainPre, pre } from "~/src/platforms/pre.ts"
 
 /**
  * 通用平台定义。包含平台类型列表、getPlatformType函数和getPrePlatform函数的对象。

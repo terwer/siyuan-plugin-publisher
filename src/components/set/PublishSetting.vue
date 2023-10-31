@@ -54,7 +54,7 @@ import { ElectronCookie, WebConfig } from "zhi-blog-api"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import CookieSetting from "~/src/components/set/publish/singleplatform/base/CookieSetting.vue"
 import { CommonWebConfig } from "~/src/adaptors/web/base/commonWebConfig.ts"
-import { pre } from "~/src/utils/import/pre.ts"
+import { pre } from "~/src/platforms/pre.ts"
 import _ from "lodash"
 import CrossPageUtils from "~/cross/crossPageUtils.ts"
 

@@ -24,6 +24,7 @@
  */
 
 import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
+import { CategoryInfo } from "zhi-blog-api"
 
 /**
  * Flowus网页授权适配器
@@ -51,6 +52,17 @@ class FlowusWebAdaptor extends BaseWebApi {
       icon: "https://cdn.allflow.cn/assets/favicon.png",
     }
   }
+
+  // public async getCategories(keyword?: string): Promise<CategoryInfo[]> {
+  //   const cats = [] as CategoryInfo[]
+  //
+  //   // const pages: any[] = await this.getPages(keyword)
+  // }
+
+
+  // ================
+  // private methods
+  // ================
 }
 
 export { FlowusWebAdaptor }

@@ -27,7 +27,7 @@
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { nextTick, reactive, ref, watch } from "vue"
-import { CategoryAIResult, prompt } from "~/src/utils/ai/prompt.ts"
+import { CategoryAIResult, prompt } from "~/src/ai/prompt.ts"
 import { useChatGPT } from "~/src/composables/useChatGPT.ts"
 import { JsonUtil, StrUtil } from "zhi-common"
 import { ElMessage } from "element-plus"
