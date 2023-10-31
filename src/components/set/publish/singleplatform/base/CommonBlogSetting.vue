@@ -27,7 +27,7 @@
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import { useSettingStore } from "~/src/stores/useSettingStore.ts"
+import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { onMounted, reactive, ref, toRaw, watch } from "vue"
 import { DynamicConfig, DynamicJsonCfg, getDynCfgByKey, setDynamicJsonCfg } from "~/src/platforms/dynamicConfig.ts"
 import { SypConfig } from "~/syp.config.ts"
@@ -45,7 +45,7 @@ const appInstance = new PublisherAppInstance()
 
 // uses
 const { t } = useVueI18n()
-const { getSetting, updateSetting } = useSettingStore()
+const { getSetting, updateSetting } = usePublishSettingStore()
 
 const props = defineProps({
   apiType: {

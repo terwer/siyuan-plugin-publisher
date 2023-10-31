@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { BlogApi, BlogConfig, Post, YamlConvertAdaptor } from "zhi-blog-api"
+import { BlogApi, BlogConfig, CategoryInfo, Post, TagInfo, YamlConvertAdaptor } from "zhi-blog-api"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { createAppLogger, ILogger } from "~/src/utils/appLogger.ts"
 import { useProxy } from "~/src/composables/useProxy.ts"
@@ -56,7 +56,7 @@ export class BaseBlogApi extends BlogApi {
     this.appInstance = appInstance
     this.cfg = cfg
     this.logger = createAppLogger("base-blog-api")
-    this.baseExtendApi = new BaseExtendApi(this)
+    this.baseExtendApi = new BaseExtendApi(this, cfg)
 
     const { proxyFetch } = useProxy(cfg.middlewareUrl)
     this.proxyFetch = proxyFetch
@@ -76,6 +76,14 @@ export class BaseBlogApi extends BlogApi {
 
   public async preEditPost(post: Post, id?: string, publishCfg?: any): Promise<Post> {
     return await this.baseExtendApi.preEditPost(post, id, publishCfg)
+  }
+
+  public async getCategories(keyword?: string): Promise<CategoryInfo[]> {
+    return this.baseExtendApi.getCategories(keyword)
+  }
+
+  public async getTags(): Promise<TagInfo[]> {
+    return this.baseExtendApi.getTags()
   }
 
   public async apiFormFetch(url: string, headers: any[], formData: FormData) {

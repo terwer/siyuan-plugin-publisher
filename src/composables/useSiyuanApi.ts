@@ -26,17 +26,17 @@
 import { SiYuanApiAdaptor, SiyuanConfig, SiyuanKernelApi } from "zhi-siyuan-api"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
-import { useSiyuanSetting } from "~/src/stores/useSiyuanSetting"
+import { useSiyuanSettingStore } from "~/src/stores/useSiyuanSettingStore.ts"
 import { Utils } from "~/src/utils/utils.ts"
-import { usePublishPreferenceSetting } from "~/src/stores/usePublishPreferenceSetting.ts"
+import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
 
 /**
  * 通用 Siyuan API 封装
  */
 export const useSiyuanApi = () => {
   const logger = createAppLogger("use-siyuan-api")
-  const { getReadOnlySiyuanSetting } = useSiyuanSetting()
-  const { getReadOnlyPublishPreferenceSetting } = usePublishPreferenceSetting()
+  const { getReadOnlySiyuanSetting } = useSiyuanSettingStore()
+  const { getReadOnlyPublishPreferenceSetting } = usePreferenceSettingStore()
 
   const envSiyuanApiUrl = Utils.emptyOrDefault(process.env.VITE_SIYUAN_API_URL, "")
   const envSiyuanAuthToken = Utils.emptyOrDefault(process.env.VITE_SIYUAN_AUTH_TOKEN, "")

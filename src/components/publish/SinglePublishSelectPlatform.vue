@@ -31,7 +31,7 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { DynamicConfig, DynamicJsonCfg, getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
-import { useSettingStore } from "~/src/stores/useSettingStore.ts"
+import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { useLoadingTimer } from "~/src/composables/useLoadingTimer.ts"
 import CrossPageUtils from "~/cross/crossPageUtils.ts"
 
@@ -48,7 +48,7 @@ const props = defineProps({
 // uses
 const { t } = useVueI18n()
 const router = useRouter()
-const { getSetting } = useSettingStore()
+const { getSetting } = usePublishSettingStore()
 
 // datas
 const formData = reactive({

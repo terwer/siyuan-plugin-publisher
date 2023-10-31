@@ -33,7 +33,7 @@ import useCommonLocalStorage from "~/src/stores/common/useCommonLocalStorage.ts"
 /**
  * 使用发布偏好设置的自定义钩子
  */
-const usePublishPreferenceSetting = () => {
+const usePreferenceSettingStore = () => {
   // 存储键
   const filePath = "storage/syp/publish-preference-cfg.json"
   const storageKey = "publish-preference-cfg"
@@ -91,4 +91,4 @@ const usePublishPreferenceSetting = () => {
   }
 }
 
-export { usePublishPreferenceSetting }
+export { usePreferenceSettingStore }

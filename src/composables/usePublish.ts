@@ -37,7 +37,7 @@ import {
   YamlFormatObj,
 } from "zhi-blog-api"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import { useSettingStore } from "~/src/stores/useSettingStore.ts"
+import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { pre } from "~/src/utils/import/pre.ts"
 import { MethodEnum } from "~/src/models/methodEnum.ts"
@@ -48,6 +48,7 @@ import { ElMessage } from "element-plus"
 import { SiyuanAttr } from "zhi-siyuan-api"
 import _ from "lodash"
 import Adaptors from "~/src/adaptors"
+import { usePlatformMetadataStore } from "~/src/stores/usePlatformMetadataStore.ts"
 
 /**
  * 通用发布组件
@@ -61,9 +62,10 @@ const usePublish = () => {
 
   // uses
   const { t } = useVueI18n()
-  const { updateSetting } = useSettingStore()
+  const { updateSetting } = usePublishSettingStore()
   const { kernelApi, blogApi } = useSiyuanApi()
   const { getPublishApi } = usePublishConfig()
+  const { updatePlatformMetadata } = usePlatformMetadataStore()
 
   // datas
   const singleFormData = reactive({
@@ -158,6 +160,7 @@ const usePublish = () => {
         // 写入属性到配置
         // 这里更新 slug 的原因是历史文章有可能没有生成过别名
         const postMeta = ObjectUtil.getProperty(setting, id, {})
+        // eslint-disable-next-line no-prototype-builtins
         if (!postMeta.hasOwnProperty(SiyuanAttr.Custom_slug)) {
           logger.info("检测到未生成过别名，准备更新别名")
           postMeta[SiyuanAttr.Custom_slug] = finalPost.wp_slug
@@ -172,13 +175,21 @@ const usePublish = () => {
         logger.info("文章更新成功")
       }
 
-      logger.info("发布完成，准备处理文章属性")
+      logger.info("发布完成，准备处理文章属性、元数据")
       // 保存属性用于初始化
       if (isSys) {
         logger.info("内置平台，忽略保存属性")
       } else {
+        // 保存属性
         const yamlKey = getDynYamlKey(key)
         await kernelApi.setSingleBlockAttr(id, yamlKey, finalPost.yaml)
+
+        // 保存元数据
+        const metadataPost = _.cloneDeep(finalPost) as Post
+        const tags = metadataPost.mt_keywords.split(",")
+        const cates = metadataPost.categories
+        const templates = []
+        updatePlatformMetadata(key, tags, cates, templates)
       }
       logger.info("文章属性处理完成")
 
@@ -326,7 +337,7 @@ const usePublish = () => {
 
   const getPostPreviewUrl = async (api: BlogAdaptor, id: string, cfg: BlogConfig) => {
     // 获取最新id，兼容某些平台自定义行为
-    const { getSetting } = useSettingStore()
+    const { getSetting } = usePublishSettingStore()
     const setting = await getSetting()
     const posidKey = cfg.posidKey
     const postMeta = ObjectUtil.getProperty(setting, id, {})

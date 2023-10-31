@@ -29,11 +29,14 @@ import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
 import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
 import {
   BlogConfig,
+  CategoryInfo,
   MediaObject,
   PageTypeEnum,
   Post,
   PostUtil,
+  TagInfo,
   WebApi,
+  WebConfig,
   YamlConvertAdaptor,
   YamlFormatObj,
 } from "zhi-blog-api"
@@ -46,13 +49,14 @@ import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import { isFileExists } from "~/src/utils/siyuanUtils.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { SiyuanAttr, SiyuanKernelApi } from "zhi-siyuan-api"
-import { DynamicConfig } from "~/src/platforms/dynamicConfig.ts"
+import { DynamicConfig, getDynPlatformKeyFromPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { CATE_AUTO_NAME, MUST_USE_OWN_PLATFORM, MUST_USE_PICBED_PLATFORM } from "~/src/utils/constants.ts"
 import { toRaw } from "vue"
 import _ from "lodash"
-import { usePublishPreferenceSetting } from "~/src/stores/usePublishPreferenceSetting.ts"
+import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
 import { SiyuanDevice } from "zhi-device"
 import { SypConfig } from "~/syp.config.ts"
+import { usePlatformMetadataStore } from "~/src/stores/usePlatformMetadataStore.ts"
 
 /**
  * 各种模式共享的扩展基类
@@ -63,6 +67,7 @@ import { SypConfig } from "~/syp.config.ts"
 class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
   private readonly logger: ILogger
   private readonly api: BaseBlogApi | BaseWebApi
+  private readonly cfg: BlogConfig | WebConfig
   protected readonly picgoBridge: any
   private readonly isSiyuanOrSiyuanNewWin: boolean
   public readonly kernelApi: SiyuanKernelApi
@@ -71,11 +76,13 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
    * 构造函数用于创建一个新的实例
    *
    * @param api - 一个 BaseBlogApi 或 BaseWebApi 实例，用于与 API 进行通信
+   * @param cfg - 一个 BlogConfig 或 WebConfig 实例，用于配置
    */
-  constructor(api: BaseBlogApi | BaseWebApi) {
+  constructor(api: BaseBlogApi | BaseWebApi, cfg: BlogConfig | WebConfig) {
     super()
     this.logger = createAppLogger("base-extend-api")
     this.api = api
+    this.cfg = cfg
 
     this.picgoBridge = usePicgoBridge()
     const { isInSiyuanOrSiyuanNewWin } = useSiyuanDevice()
@@ -108,6 +115,37 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     // 处理其他
     post = await this.handleOther(post, id, publishCfg)
     return post
+  }
+
+  public async getCategories(keyword?: string): Promise<CategoryInfo[]> {
+    const cats = [] as CategoryInfo[]
+    const { getPlatformMetadata } = usePlatformMetadataStore()
+    const platformKey = getDynPlatformKeyFromPostidKey(this.cfg.posidKey)
+    const { categories } = getPlatformMetadata(platformKey)
+
+    categories.forEach((item: any) => {
+      const cat = new CategoryInfo()
+      cat.categoryId = item
+      cat.categoryName = item
+      cats.push(cat)
+    })
+    return cats
+  }
+
+  public async getTags(): Promise<TagInfo[]> {
+    const tagInfos = [] as TagInfo[]
+    const { getPlatformMetadata } = usePlatformMetadataStore()
+    const platformKey = getDynPlatformKeyFromPostidKey(this.cfg.posidKey)
+    const { tags } = getPlatformMetadata(platformKey)
+
+    tags.forEach((item: any) => {
+      const tag = new TagInfo()
+      tag.tagId = item
+      tag.tagName = item
+      tagInfos.push(tag)
+    })
+
+    return tagInfos
   }
 
   // ================
@@ -155,7 +193,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
       post.mdFilename = filename
     }
 
-    const { getReadOnlyPublishPreferenceSetting } = usePublishPreferenceSetting()
+    const { getReadOnlyPublishPreferenceSetting } = usePreferenceSettingStore()
     const pref = getReadOnlyPublishPreferenceSetting()
     if (pref.value.fixTitle) {
       post.title = HtmlUtil.removeTitleNumber(post.title).replace(/\.md/g, "")
@@ -263,7 +301,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     md = md.replace(/\*\*(.*?)\*\*/g, '<span style="font-weight: bold;" data-type="strong">$1</span>')
 
     // 处理外链
-    const { getReadOnlyPublishPreferenceSetting } = usePublishPreferenceSetting()
+    const { getReadOnlyPublishPreferenceSetting } = usePreferenceSettingStore()
     const pref = getReadOnlyPublishPreferenceSetting()
     const outerLinkRegex = /\[(.+?)]\(siyuan:\/\/blocks\/(\d+-\w+)\)/g
     md = await this.replaceOuterLinks(md, outerLinkRegex, { pref, cfg, setting })
@@ -371,8 +409,8 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
       this.logger.warn("未安装 PicGO 插件，将使用平台上传图片")
     }
 
-    let mustUseOwn: boolean = false
-    let mustUsePicbed: boolean = false
+    let mustUseOwn = false
+    let mustUsePicbed = false
     if (dynCfg?.platformKey) {
       // 注意如果 platformKey=custom_Zhihu 或者 custom_Zhihu-xxx custom_Notion-xxx 也算 可以参考 /custom_Zhihu-\w+/
       mustUseOwn = mustUseOwnPlatform.some((platform) => {
@@ -543,10 +581,11 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
       // 如果已发布替换成别名
       const postMeta = ObjectUtil.getProperty(setting, id, {})
       const posidKey = cfg.posidKey
+      // eslint-disable-next-line no-prototype-builtins
       if (!postMeta.hasOwnProperty(posidKey)) {
         outerLink = `siyuan://blocks/${id}`
         this.logger.error("引用的文档尚未发布，您可以删除此外链再发布，或者先发布外链文章 =>", id)
-        throw  new Error(`引用的文档 ${id} 尚未发布，您可以删除此外链再发布，或者先发布外链文章`, )
+        throw new Error(`引用的文档 ${id} 尚未发布，您可以删除此外链再发布，或者先发布外链文章`)
       } else {
         let previewUrl: string
         const postid = postMeta[posidKey]

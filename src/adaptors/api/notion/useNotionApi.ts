@@ -27,7 +27,7 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { Utils } from "~/src/utils/utils.ts"
 import { NotionConfig } from "~/src/adaptors/api/notion/notionConfig.ts"
-import { useSettingStore } from "~/src/stores/useSettingStore.ts"
+import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { NotionApiAdaptor } from "~/src/adaptors/api/notion/notionApiAdaptor.ts"
@@ -49,7 +49,7 @@ const useNotionApi = async (key: string, newCfg?: NotionConfig) => {
     cfg = newCfg
   } else {
     // 从配置中获取数据
-    const { getSetting } = useSettingStore()
+    const { getSetting } = usePublishSettingStore()
     const setting = await getSetting()
     cfg = JsonUtil.safeParse<NotionConfig>(setting[key], {} as NotionConfig)
 

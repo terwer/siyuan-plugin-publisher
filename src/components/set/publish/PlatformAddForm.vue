@@ -44,7 +44,7 @@ import { svgIcons } from "~/src/utils/svgIcons.ts"
 import { usePlatformDefine } from "~/src/composables/usePlatformDefine.ts"
 import { JsonUtil, StrUtil } from "zhi-common"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
-import { useSettingStore } from "~/src/stores/useSettingStore.ts"
+import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { ElMessage, FormRules } from "element-plus"
 import { SypConfig } from "~/syp.config.ts"
 
@@ -56,7 +56,7 @@ const router = useRouter()
 const route = useRoute()
 const { query } = useRoute()
 const { getPlatformType, getPrePlatform } = usePlatformDefine()
-const { getSetting, updateSetting, checkKeyExists } = useSettingStore()
+const { getSetting, updateSetting, checkKeyExists } = usePublishSettingStore()
 
 // datas
 const params = reactive(route.params)
@@ -256,7 +256,7 @@ initPage()
       <!-- 授权方式 -->
       <el-form-item label="授权方式" prop="authMode">
         <span v-if="formData.isPre">{{ formData.dynCfg.authMode === AuthMode.API ? "API授权" : "网页授权" }}</span>
-        <el-select v-else v-model="formData.dynCfg.authMode" placeholder="请选择">
+        <el-select v-else v-model="formData.dynCfg.authMode" placeholder="请选择" :disabled="true">
           <el-option :value="AuthMode.API" label="API授权" />
           <el-option :value="AuthMode.WEBSITE" label="网页授权" />
         </el-select>

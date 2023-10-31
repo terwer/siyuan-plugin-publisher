@@ -104,6 +104,9 @@ export class DynamicConfig {
     this.isAuth = false
     this.isEnabled = false
     this.authMode = AuthMode.API
+    if (platformKey.toLowerCase().includes(PlatformType.Custom.toString().toLowerCase())) {
+      this.authMode = AuthMode.WEBSITE
+    }
     this.cookieLimit = false
     this.isSys = false
 
@@ -464,16 +467,15 @@ export function getDynYamlKey(platformKey: string): string {
  *
  * @param postidKey 文章 key
  */
-// export function getDynYamlKeyFromPostidKey(postidKey: string): string {
-//   // 匹配postidKey的正则表达式
-//   const regex = /^custom-(.+?)-post-id$/
-//   const match = postidKey.match(regex)
-//   if (match && match[1]) {
-//     // 提取platformKey
-//     const platformKey = match[1]
-//     const yamlKey = getDynYamlKey(platformKey)
-//     return yamlKey
-//   } else {
-//     throw new Error("Invalid postidKey format")
-//   }
-// }
+export function getDynPlatformKeyFromPostidKey(postidKey: string): string {
+  // 匹配postidKey的正则表达式
+  const regex = /^custom-(.+?)-post-id$/
+  const match = postidKey.match(regex)
+  if (match && match[1]) {
+    // 提取platformKey
+    const platformKey = match[1]
+    return platformKey
+  } else {
+    throw new Error("Invalid postidKey format")
+  }
+}

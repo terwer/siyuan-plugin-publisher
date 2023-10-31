@@ -28,7 +28,7 @@ import { JsonUtil } from "zhi-common"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import Adaptors from "~/src/adaptors"
 import { Utils } from "~/src/utils/utils.ts"
-import { useSettingStore } from "~/src/stores/useSettingStore.ts"
+import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { DynamicJsonCfg, getDynCfgByKey } from "~/src/platforms/dynamicConfig.ts"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
 import { BlogAdaptor, BlogConfig, WebAdaptor } from "zhi-blog-api"
@@ -40,7 +40,7 @@ import { BlogAdaptor, BlogConfig, WebAdaptor } from "zhi-blog-api"
  * @since 1.3.2
  */
 const usePublishConfig = () => {
-  const { getSetting } = useSettingStore()
+  const { getSetting } = usePublishSettingStore()
   const appInstance = new PublisherAppInstance()
 
   /**

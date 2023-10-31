@@ -41,7 +41,7 @@ import {
 import { JsonUtil } from "zhi-common"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
 import { SypConfig } from "~/syp.config.ts"
-import { useSettingStore } from "~/src/stores/useSettingStore.ts"
+import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { ElMessage, FormRules } from "element-plus"
 
@@ -51,7 +51,7 @@ const logger = createAppLogger("platform-update-form")
 const { t } = useVueI18n()
 const router = useRouter()
 const route = useRoute()
-const { getSetting, updateSetting } = useSettingStore()
+const { getSetting, updateSetting } = usePublishSettingStore()
 
 // datas
 const params = reactive(route.params)

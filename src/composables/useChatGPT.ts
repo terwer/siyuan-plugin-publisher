@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { usePublishPreferenceSetting } from "~/src/stores/usePublishPreferenceSetting.ts"
+import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
 import { HtmlUtil, StrUtil } from "zhi-common"
 import type { ChatGPTAPI, ChatGPTUnofficialProxyAPI, SendMessageOptions } from "chatgpt"
 import { Utils } from "~/src/utils/utils.ts"
@@ -41,7 +41,7 @@ import { AiConstants } from "~/src/utils/ai/AiConstants.ts"
  */
 const useChatGPT = () => {
   const logger = createAppLogger("use-chatgpt")
-  const { getReadOnlyPublishPreferenceSetting } = usePublishPreferenceSetting()
+  const { getReadOnlyPublishPreferenceSetting } = usePreferenceSettingStore()
   const pref = getReadOnlyPublishPreferenceSetting()
 
   // 创建 ChatGPTAPI 实例
