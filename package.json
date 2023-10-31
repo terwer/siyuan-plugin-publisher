@@ -73,7 +73,7 @@
     "siyuan-plugin-picgo": "^1.4.4",
     "uuid": "^9.0.1",
     "vue": "^3.3.7",
-    "vue-i18n": "^9.6.1",
+    "vue-i18n": "^9.6.2",
     "vue-router": "^4.2.5",
     "xmlbuilder2": "^3.1.1",
     "zhi-blog-api": "^1.50.0",
