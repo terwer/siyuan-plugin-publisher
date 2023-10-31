@@ -25,12 +25,15 @@
 
 <script setup lang="ts">
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import { nextTick, reactive, ref, watch } from "vue"
+import { nextTick, onMounted, reactive, ref, watch } from "vue"
 import { ElMessage } from "element-plus"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { JsonUtil, StrUtil } from "zhi-common"
 import { prompt, TagAIResult } from "~/src/utils/ai/prompt.ts"
 import { useChatGPT } from "~/src/composables/useChatGPT.ts"
+import Adaptors from "~/src/adaptors"
+import { ITagConfig } from "~/src/types/ITagConfig.ts"
+import { TagInfo } from "zhi-blog-api"
 
 const logger = createAppLogger("publish-tags")
 const { t } = useVueI18n()
@@ -48,6 +51,10 @@ const props = defineProps({
     type: String,
     default: "",
   },
+  tagConfig: {
+    type: Object as () => ITagConfig,
+    default: {} as ITagConfig,
+  },
   md: {
     type: String,
     default: "",
@@ -64,10 +71,13 @@ const formData = reactive({
   isTagLoading: false,
   useAi: props.useAi,
   pageId: props.pageId,
+  tagConfig: props.tagConfig,
   tag: {
     inputValue: "",
     dynamicTags: <string[]>(StrUtil.isEmptyString(props.tags) ? [] : props.tags.split(",")),
+    platformTags: [],
     inputVisible: false,
+    selectVisible: true,
   },
   md: props.md,
   html: props.html,
@@ -100,6 +110,9 @@ const tagMethods = {
     nextTick(() => {
       tagRefInput.value!.input!.focus()
     })
+  },
+  tagShowSelect: () => {
+    formData.tag.selectVisible = !formData.tag.selectVisible
   },
   handleTagInputConfirm: () => {
     if (formData.tag.inputValue) {
@@ -154,6 +167,26 @@ const tagMethods = {
     }
   },
 }
+
+const initPage = async () => {
+  if (formData?.tagConfig?.cfg && formData?.tagConfig?.apiType) {
+    const cfg = formData?.tagConfig?.cfg
+    const api = await Adaptors.getAdaptor(formData?.tagConfig?.apiType, cfg)
+    const tagInfoList = await api.getTags()
+    // 映射数据
+    formData.tag.platformTags = tagInfoList.map((item: TagInfo) => ({
+      value: item.tagName,
+      label: item.tagName,
+    }))
+    logger.debug("getTags for platforms", formData.tag.platformTags)
+  } else {
+    logger.warn("tagConfig not found, ignore tags")
+  }
+}
+
+onMounted(async () => {
+  await initPage()
+})
 </script>
 
 <template>
@@ -181,6 +214,29 @@ const tagMethods = {
       <el-button v-else class="button-new-tag ml-1 el-tag" size="small" @click="tagMethods.tagShowInput">
         {{ t("main.tag.new") }}
       </el-button>
+      <el-button
+        v-if="formData.tag.platformTags.length > 0"
+        class="button-new-tag ml-1 el-tag"
+        size="small"
+        @click="tagMethods.tagShowSelect"
+      >
+        {{ formData.tag.selectVisible ? t("main.tag.close") : t("main.tag.select") }}
+      </el-button>
+    </el-form-item>
+    <el-form-item v-if="formData.tag.platformTags.length > 0 && formData.tag.selectVisible">
+      <el-tree-select
+        v-model="formData.tag.dynamicTags"
+        style="width: 100%"
+        :data="formData.tag.platformTags"
+        multiple
+        :check-on-click-node="true"
+        :render-after-expand="false"
+        show-checkbox
+        :placeholder="t('main.tag.select')"
+        :empty-text="t('main.tag.empty')"
+        :no-data-text="t('main.tag.empty')"
+      >
+      </el-tree-select>
     </el-form-item>
     <el-form-item v-if="formData.useAi">
       <el-button size="small" :loading="formData.isTagLoading" type="primary" @click="tagMethods.fetchTag">

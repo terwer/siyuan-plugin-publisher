@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { HtmlUtil, StrUtil } from "zhi-common"
+import { StrUtil } from "zhi-common"
 
 /**
  * 页面辅助函数
@@ -45,7 +45,7 @@ class CrossPageUtils {
     if (!platformName.includes("_")) {
       return this.shortPlatformName(platformName, length ?? 9)
     }
-    return StrUtil.upperFirst(HtmlUtil.parseHtml(platformName.split("_")[1], length ?? 9))
+    return StrUtil.upperFirst(StrUtil.getByLength(platformName.split("_")[1], length ?? 9))
   }
 
   /**
@@ -58,7 +58,7 @@ class CrossPageUtils {
     if (StrUtil.isEmptyString(platformName)) {
       return ""
     }
-    return StrUtil.upperFirst(HtmlUtil.parseHtml(platformName.replace("Gitlab", ""), length ?? 9))
+    return StrUtil.upperFirst(StrUtil.getByLength(platformName.replace("Gitlab", ""), length ?? 9))
   }
 
   /**
@@ -71,7 +71,7 @@ class CrossPageUtils {
     if (StrUtil.isEmptyString(platformName)) {
       return ""
     }
-    const shortName = StrUtil.upperFirst(HtmlUtil.parseHtml(platformName.replace("Gitlab", ""), length ?? 9))
+    const shortName = StrUtil.upperFirst(StrUtil.getByLength(platformName.replace("Gitlab", ""), length ?? 9))
     if (platformName.includes("Gitlab")) {
       return `Gitlab-${shortName}`
     }

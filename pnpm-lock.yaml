@@ -54,8 +54,8 @@ dependencies:
     specifier: ^1.4.2
     version: 1.4.2
   siyuan:
-    specifier: ^0.8.7
-    version: 0.8.7
+    specifier: ^0.8.8
+    version: 0.8.8
   siyuan-plugin-picgo:
     specifier: ^1.4.4
     version: 1.4.4(typescript@5.2.2)
@@ -75,23 +75,23 @@ dependencies:
     specifier: ^3.1.1
     version: 3.1.1
   zhi-blog-api:
-    specifier: ^1.50.0
-    version: 1.50.0(typescript@5.2.2)
+    specifier: ^1.50.2
+    version: 1.50.2(typescript@5.2.2)
   zhi-common:
-    specifier: ^1.25.0
-    version: 1.25.0(typescript@5.2.2)
+    specifier: ^1.26.1
+    version: 1.26.1(typescript@5.2.2)
   zhi-device:
     specifier: ^2.10.0
     version: 2.10.0
   zhi-fetch-middleware:
-    specifier: ^0.7.11
-    version: 0.7.11(typescript@5.2.2)
+    specifier: ^0.7.13
+    version: 0.7.13(typescript@5.2.2)
   zhi-github-middleware:
-    specifier: ^0.4.8
-    version: 0.4.8(typescript@5.2.2)
+    specifier: ^0.4.10
+    version: 0.4.10(typescript@5.2.2)
   zhi-gitlab-middleware:
-    specifier: ^0.6.18
-    version: 0.6.18(typescript@5.2.2)
+    specifier: ^0.6.20
+    version: 0.6.20(typescript@5.2.2)
   zhi-lib-base:
     specifier: ^0.8.0
     version: 0.8.0
@@ -99,11 +99,11 @@ dependencies:
     specifier: ^0.1.4
     version: 0.1.4
   zhi-siyuan-api:
-    specifier: ^2.12.0
-    version: 2.12.0(typescript@5.2.2)
+    specifier: ^2.12.2
+    version: 2.12.2(typescript@5.2.2)
   zhi-xmlrpc-middleware:
-    specifier: ^0.6.11
-    version: 0.6.11(typescript@5.2.2)
+    specifier: ^0.6.13
+    version: 0.6.13(typescript@5.2.2)
 
 devDependencies:
   '@halo-dev/api-client':
@@ -119,8 +119,8 @@ devDependencies:
     specifier: ^4.14.200
     version: 4.14.200
   '@types/node':
-    specifier: ^18.18.7
-    version: 18.18.7
+    specifier: ^18.18.8
+    version: 18.18.8
   '@vitejs/plugin-vue':
     specifier: ^4.4.0
     version: 4.4.0(vite@4.5.0)(vue@3.3.7)
@@ -165,7 +165,7 @@ devDependencies:
     version: 32.5.0
   vite:
     specifier: ^4.5.0
-    version: 4.5.0(@types/node@18.18.7)(stylus@0.59.0)
+    version: 4.5.0(@types/node@18.18.8)(stylus@0.59.0)
   vite-plugin-html:
     specifier: ^3.2.0
     version: 3.2.0(vite@4.5.0)
@@ -922,7 +922,7 @@ packages:
     resolution: {integrity: sha512-m7zZ5l3RUktayf1lRBV1XMb8HSKsmWTv/LZPqP7UGC1NMzOlc+bbTOPNQ4CP/c1P4cP61VWLb/zBq7a3c0nMaw==}
     engines: {node: '>=12'}
     dependencies:
-      '@types/node-fetch': 2.6.7
+      '@types/node-fetch': 2.6.8
       node-fetch: 2.7.0
     transitivePeerDependencies:
       - encoding
@@ -1091,7 +1091,7 @@ packages:
       rollup:
         optional: true
     dependencies:
-      '@types/estree': 1.0.3
+      '@types/estree': 1.0.4
       estree-walker: 2.0.2
       picomatch: 2.3.1
     dev: true
@@ -1231,8 +1231,8 @@ packages:
     resolution: {integrity: sha512-YP1sYYayLe7Eg5oXyLLvOLfxBfZ5Fgpz6sVWkpB18wDMywCLPWmqzRz+9gyuOoLF0fzDTTFwlyNbx7koONUwqA==}
     dev: true
 
-  /@types/estree@1.0.3:
-    resolution: {integrity: sha512-CS2rOaoQ/eAgAfcTfq6amKG7bsN+EMcgGY4FAFQdvSj2y1ixvOZTUA9mOtCai7E1SYu283XNw7urKK30nP3wkQ==}
+  /@types/estree@1.0.4:
+    resolution: {integrity: sha512-2JwWnHK9H+wUZNorf2Zr6ves96WHoWDJIftkcxPKsS7Djta6Zu519LarhRNljPXkpsZR2ZMwNCPeW7omW07BJw==}
     dev: true
 
   /@types/istanbul-lib-coverage@2.0.5:
@@ -1265,10 +1265,10 @@ packages:
     resolution: {integrity: sha512-Kfe/D3hxHTusnPNRbycJE1N77WHDsdS4AjUYIzlDzhDrS47NrwuL3YW4VITxwR7KCVpzwgy4Rbj829KSSQmwXQ==}
     dev: false
 
-  /@types/node-fetch@2.6.7:
-    resolution: {integrity: sha512-lX17GZVpJ/fuCjguZ5b3TjEbSENxmEk1B2z02yoXSK9WMEWRivhdSY73wWMn6bpcCDAOh6qAdktpKHIlkDk2lg==}
+  /@types/node-fetch@2.6.8:
+    resolution: {integrity: sha512-nnH5lV9QCMPsbEVdTb5Y+F3GQxLSw1xQgIydrb2gSfEavRPs50FnMr+KUaa+LoPSqibm2N+ZZxH7lavZlAT4GA==}
     dependencies:
-      '@types/node': 18.18.7
+      '@types/node': 18.18.8
       form-data: 4.0.0
     dev: false
 
@@ -1276,8 +1276,8 @@ packages:
     resolution: {integrity: sha512-qelS/Ra6sacc4loe/3MSjXNL1dNQ/GjxNHVzuChwMfmk7HuycRLVQN2qNY3XahK+fZc5E2szqQSKUyAF0E+2bg==}
     dev: true
 
-  /@types/node@18.18.7:
-    resolution: {integrity: sha512-bw+lEsxis6eqJYW8Ql6+yTqkE6RuFtsQPSe5JxXbqYRFQEER5aJA9a5UH9igqDWm3X4iLHIKOHlnAXLM4mi7uQ==}
+  /@types/node@18.18.8:
+    resolution: {integrity: sha512-OLGBaaK5V3VRBS1bAkMVP2/W9B+H8meUfl866OrMNQqt7wDgdpWPp5o6gmIc9pB+lIQHSq4ZL8ypeH1vPxcPaQ==}
     dependencies:
       undici-types: 5.26.5
 
@@ -1298,7 +1298,7 @@ packages:
   /@types/stylus@0.48.41:
     resolution: {integrity: sha512-u0BzfnIgn/0I1YpAJGhkj9lUTLeiuiDXYOagXwe2aAsX8OKDFEWP6vqMMPxy4leQeX45LNDdCEjDJkuRxPCv7A==}
     dependencies:
-      '@types/node': 18.18.7
+      '@types/node': 18.18.8
 
   /@types/unist@2.0.9:
     resolution: {integrity: sha512-zC0iXxAv1C1ERURduJueYzkzZ2zaGyc+P2c95hgkikHPr3z8EdUZOlgEQ5X0DRmwDZn+hekycQnoeiiRVrmilQ==}
@@ -1740,7 +1740,7 @@ packages:
       vite: ^4.0.0
       vue: ^3.2.25
     dependencies:
-      vite: 4.5.0(@types/node@18.18.7)(stylus@0.59.0)
+      vite: 4.5.0(@types/node@18.18.8)(stylus@0.59.0)
       vue: 3.3.7(typescript@5.2.2)
     dev: true
 
@@ -1803,22 +1803,22 @@ packages:
       pretty-format: 29.7.0
     dev: true
 
-  /@volar/language-core@1.10.7:
-    resolution: {integrity: sha512-6+WI7HGqWCsKJ/bms4V45WP7eDeoGxDtLjYPrHB7QkIWVkRLIeGPzzBoonZz9kERM+Kld3W89Y+IlICejVAKhA==}
+  /@volar/language-core@1.10.9:
+    resolution: {integrity: sha512-QXHMX7CeXLqXwvC7nbr6iZ3zrqgKdJ9f6g1B211eZBnvaBki2ds0+Kz8cprUiulVuMQEPJNhDfuh8Vym1gxHRQ==}
     dependencies:
-      '@volar/source-map': 1.10.7
+      '@volar/source-map': 1.10.9
     dev: true
 
-  /@volar/source-map@1.10.7:
-    resolution: {integrity: sha512-anA254XO0lmmeu0p/kvgPOCkrVpqNIHWMvEkPX70PSk4ntg0iBzN/f0Kip6deXvibl6v14Q3Z8RihWrZwdZEEQ==}
+  /@volar/source-map@1.10.9:
+    resolution: {integrity: sha512-ul8yGO9nCxy6UedVuo0VsfKMLZzr39N1rgbtnYTGP5C554EDcUix6K/HDurhVdPHEDIw1yhXltLZZQKi3NrTvA==}
     dependencies:
       muggle-string: 0.3.1
     dev: true
 
-  /@volar/typescript@1.10.7:
-    resolution: {integrity: sha512-2hvA3vjXVUn1vOpsP/nWLnE5DUmY6YKQhvDRoZVfBrnWwIo0ySxdTUP4XieXGGgSk43xJaeU1zqQS/3Wfm7QgA==}
+  /@volar/typescript@1.10.9:
+    resolution: {integrity: sha512-5jLB46mCQLJqLII/qDLgfyHSq1cesjwuJQIa2GNWd7LPLSpX5vzo3jfQLWc/gyo3up2fQFrlRJK2kgY5REtwuQ==}
     dependencies:
-      '@volar/language-core': 1.10.7
+      '@volar/language-core': 1.10.9
       path-browserify: 1.0.1
     dev: true
 
@@ -1868,8 +1868,8 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@volar/language-core': 1.10.7
-      '@volar/source-map': 1.10.7
+      '@volar/language-core': 1.10.9
+      '@volar/source-map': 1.10.9
       '@vue/compiler-dom': 3.3.7
       '@vue/shared': 3.3.7
       computeds: 0.0.1
@@ -2624,7 +2624,7 @@ packages:
     resolution: {integrity: sha512-7qJWqItLA8/VPVlKJlFXU+NBlo/qyfs39aJcuMT/2ere32ZqvF5OSxgdM5xOfJJ7O429gg2HM47y8v9P+9wrNw==}
     dependencies:
       '@jridgewell/sourcemap-codec': 1.4.15
-      '@types/estree': 1.0.3
+      '@types/estree': 1.0.4
       acorn: 8.11.2
       estree-walker: 3.0.3
       periscopic: 3.1.0
@@ -4002,7 +4002,7 @@ packages:
   /estree-walker@3.0.3:
     resolution: {integrity: sha512-7RUKfXgSMMkzt6ZuXmqapOurLGPPfgj6l9uRZ7lRGolvk0y2yocc35LdcxKC5PQZdn2DMqioAQ2NoWcrTKmm6g==}
     dependencies:
-      '@types/estree': 1.0.3
+      '@types/estree': 1.0.4
     dev: true
 
   /esutils@2.0.3:
@@ -4529,7 +4529,7 @@ packages:
       he: 1.2.0
       param-case: 3.0.4
       relateurl: 0.2.7
-      terser: 5.22.0
+      terser: 5.23.0
     dev: true
 
   /htmlparser2@8.0.2:
@@ -4794,7 +4794,7 @@ packages:
   /is-reference@3.0.2:
     resolution: {integrity: sha512-v3rht/LgVcsdZa3O2Nqs+NMowLOxeOm7Ay9+/ARQ2F+qEoANRcqrjAZKGN0v8ymUetZGgkp26LTnGT7H0Qo9Pg==}
     dependencies:
-      '@types/estree': 1.0.3
+      '@types/estree': 1.0.4
     dev: true
 
   /is-stream@2.0.1:
@@ -6014,7 +6014,7 @@ packages:
   /periscopic@3.1.0:
     resolution: {integrity: sha512-vKiQ8RRtkl9P+r/+oefh25C3fhybptkHKCZSPlcXiJux2tJF55GnEj3BVn4A5gKfq9NWWXXrxkHBwVPUfH0opw==}
     dependencies:
-      '@types/estree': 1.0.3
+      '@types/estree': 1.0.4
       estree-walker: 3.0.3
       is-reference: 3.0.2
     dev: true
@@ -6256,8 +6256,8 @@ packages:
     resolution: {integrity: sha512-jmYNElW7yvO7TV33CjSmvSiE2yco3bV2czu/OzDKdMNVZQWfxCblURLhf+47syQRBntjfLdd/H0egrzIG+oaFQ==}
     dev: true
 
-  /punycode@2.3.0:
-    resolution: {integrity: sha512-rRV+zQD8tVFys26lAGR9WUuS4iUAngJScM+ZRSKtvl5tKeZ2t5bvdNFdNHBW9FWR4guGHlgmsZ1G7BSm2wTbuA==}
+  /punycode@2.3.1:
+    resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
     engines: {node: '>=6'}
 
   /qs@6.11.2:
@@ -6644,11 +6644,11 @@ packages:
       vue: 3.3.7(typescript@5.2.2)
       vue-i18n: 9.6.2(vue@3.3.7)
       vue-router: 4.2.5(vue@3.3.7)
-      zhi-common: 1.25.0(typescript@5.2.2)
+      zhi-common: 1.26.1(typescript@5.2.2)
       zhi-device: 2.10.0
       zhi-fetch-middleware: 0.2.29(typescript@5.2.2)
       zhi-lib-base: 0.4.4
-      zhi-siyuan-api: 2.12.0(typescript@5.2.2)
+      zhi-siyuan-api: 2.12.2(typescript@5.2.2)
     transitivePeerDependencies:
       - '@vue/composition-api'
       - typescript
@@ -6658,8 +6658,8 @@ packages:
     resolution: {integrity: sha512-X5olBQhfkgyPRF+d8agpcbAaFnCSvSkN3LWX7XU9jApmCfpJ/4PAmK7mKPfR1YGBpjFLRa/xTrv11BQ3hxN15Q==}
     dev: false
 
-  /siyuan@0.8.7:
-    resolution: {integrity: sha512-ioObwMYO2dPAos5stWAC/b7hJ07RHJW9T44OqYa/Iuv14ri1kZDaxj2QJiV/X1eZTR3f4BaRCmt9kBxIPR0eYQ==}
+  /siyuan@0.8.8:
+    resolution: {integrity: sha512-hWADf2RsEhDVIZhGMVq1CdvI4r1gKOdoI8nSvNszF9ztK/cwKQo90EWDwz/V7uSyWoTgt2xVDZXsIk3ZAS3cvA==}
     dev: false
 
   /slash@3.0.0:
@@ -6954,8 +6954,8 @@ packages:
       yallist: 4.0.0
     dev: true
 
-  /terser@5.22.0:
-    resolution: {integrity: sha512-hHZVLgRA2z4NWcN6aS5rQDc+7Dcy58HOf2zbYwmFcQ+ua3h6eEFf5lIDKTzbWwlazPyOZsFQO8V80/IjVNExEw==}
+  /terser@5.23.0:
+    resolution: {integrity: sha512-Iyy83LN0uX9ZZLCX4Qbu5JiHiWjOCTwrmM9InWOzVeM++KNWEsqV4YgN9U9E8AlohQ6Gs42ztczlWOG/lwDAMA==}
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
@@ -7051,7 +7051,7 @@ packages:
     engines: {node: '>=6'}
     dependencies:
       psl: 1.9.0
-      punycode: 2.3.0
+      punycode: 2.3.1
       universalify: 0.2.0
       url-parse: 1.5.10
     dev: true
@@ -7062,14 +7062,14 @@ packages:
   /tr46@1.0.1:
     resolution: {integrity: sha512-dTpowEjclQ7Kgx5SdBkqRzVhERQXov8/l9Ft9dVM9fmg0W0KQSVaXX9T4i6twCPNtYiZM53lpSSUAwJbFPOHxA==}
     dependencies:
-      punycode: 2.3.0
+      punycode: 2.3.1
     dev: false
 
   /tr46@4.1.1:
     resolution: {integrity: sha512-2lv/66T7e5yNyhAAC4NaKe5nVavzuGJQVVtRYLyQ2OI8tsJ61PMLlelehb0wi2Hx6+hT/OJUWZcw8MjlSRnxvw==}
     engines: {node: '>=14'}
     dependencies:
-      punycode: 2.3.0
+      punycode: 2.3.1
     dev: true
 
   /transliteration@2.3.5:
@@ -7393,7 +7393,7 @@ packages:
   /uri-js@4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
     dependencies:
-      punycode: 2.3.0
+      punycode: 2.3.1
 
   /url-parse@1.5.10:
     resolution: {integrity: sha512-WypcfiRhfeUP9vvF0j6rw0J3hrWrw6iZv3+22h6iRMJ/8z1Tj6XfLP4DsUix5MhMPnXpiHDoKyoZ/bdCkwBCiQ==}
@@ -7493,7 +7493,7 @@ packages:
       vfile-message: 2.0.4
     dev: false
 
-  /vite-node@0.34.6(@types/node@18.18.7)(stylus@0.59.0):
+  /vite-node@0.34.6(@types/node@18.18.8)(stylus@0.59.0):
     resolution: {integrity: sha512-nlBMJ9x6n7/Amaz6F3zJ97EBwR2FkzhBRxF5e+jE6LA3yi6Wtc2lyTij1OnDMIr34v5g/tVQtsVAzhT0jc5ygA==}
     engines: {node: '>=v14.18.0'}
     hasBin: true
@@ -7503,7 +7503,7 @@ packages:
       mlly: 1.4.2
       pathe: 1.1.1
       picocolors: 1.0.0
-      vite: 4.5.0(@types/node@18.18.7)(stylus@0.59.0)
+      vite: 4.5.0(@types/node@18.18.8)(stylus@0.59.0)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -7532,7 +7532,7 @@ packages:
       html-minifier-terser: 6.1.0
       node-html-parser: 5.4.2
       pathe: 0.2.0
-      vite: 4.5.0(@types/node@18.18.7)(stylus@0.59.0)
+      vite: 4.5.0(@types/node@18.18.8)(stylus@0.59.0)
     dev: true
 
   /vite-plugin-node-polyfills@0.15.0(vite@4.5.0):
@@ -7544,12 +7544,12 @@ packages:
       buffer-polyfill: /buffer@6.0.3
       node-stdlib-browser: 1.2.0
       process: 0.11.10
-      vite: 4.5.0(@types/node@18.18.7)(stylus@0.59.0)
+      vite: 4.5.0(@types/node@18.18.8)(stylus@0.59.0)
     transitivePeerDependencies:
       - rollup
     dev: true
 
-  /vite@4.5.0(@types/node@18.18.7)(stylus@0.59.0):
+  /vite@4.5.0(@types/node@18.18.8)(stylus@0.59.0):
     resolution: {integrity: sha512-ulr8rNLA6rkyFAlVWw2q5YJ91v098AFQ2R0PRFwPzREXOUJQPtFUG0t+/ZikhaOCDqFoDhN6/v8Sq0o4araFAw==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
@@ -7577,7 +7577,7 @@ packages:
       terser:
         optional: true
     dependencies:
-      '@types/node': 18.18.7
+      '@types/node': 18.18.8
       esbuild: 0.18.20
       postcss: 8.4.31
       rollup: 3.29.4
@@ -7619,7 +7619,7 @@ packages:
     dependencies:
       '@types/chai': 4.3.9
       '@types/chai-subset': 1.3.4
-      '@types/node': 18.18.7
+      '@types/node': 18.18.8
       '@vitest/expect': 0.34.6
       '@vitest/runner': 0.34.6
       '@vitest/snapshot': 0.34.6
@@ -7639,8 +7639,8 @@ packages:
       strip-literal: 1.3.0
       tinybench: 2.5.1
       tinypool: 0.7.0
-      vite: 4.5.0(@types/node@18.18.7)(stylus@0.59.0)
-      vite-node: 0.34.6(@types/node@18.18.7)(stylus@0.59.0)
+      vite: 4.5.0(@types/node@18.18.8)(stylus@0.59.0)
+      vite-node: 0.34.6(@types/node@18.18.8)(stylus@0.59.0)
       why-is-node-running: 2.2.2
     transitivePeerDependencies:
       - less
@@ -7726,7 +7726,7 @@ packages:
     peerDependencies:
       typescript: '*'
     dependencies:
-      '@volar/typescript': 1.10.7
+      '@volar/typescript': 1.10.9
       '@vue/language-core': 1.8.22(typescript@5.2.2)
       semver: 7.5.4
       typescript: 5.2.2
@@ -8003,10 +8003,10 @@ packages:
     resolution: {integrity: sha512-9bnSc/HEW2uRy67wc+T8UwauLuPJVn28jb+GtJY16iiKWyvmYJRXVT4UamsAEGQfPohgr2q4Tq0sQbQlxTfi1g==}
     engines: {node: '>=12.20'}
 
-  /zhi-blog-api@1.50.0(typescript@5.2.2):
-    resolution: {integrity: sha512-emzAvC+L/K+i9JaN8U34lHFTiU7ekBJwWsFIIEVqsc3v7iQZqHCyXboSYUeLD8NpPfrVtb+et+VBI3WhjDTt+A==}
+  /zhi-blog-api@1.50.2(typescript@5.2.2):
+    resolution: {integrity: sha512-HadNa5s0YWF2Iyyxk4k+6j1ixbr5OKk5CdWo+N63JZJbQ16kXahD+3yofZy18+ozlC+k4qD8QndXDfibn1GSGQ==}
     dependencies:
-      zhi-common: 1.25.0(typescript@5.2.2)
+      zhi-common: 1.26.1(typescript@5.2.2)
       zhi-lib-base: 0.8.0
     transitivePeerDependencies:
       - typescript
@@ -8024,8 +8024,8 @@ packages:
       - typescript
     dev: false
 
-  /zhi-common@1.25.0(typescript@5.2.2):
-    resolution: {integrity: sha512-ydNkyFEgxL45hSeR7qf8z9A+WL88DIYoTLZ46ogMySKqrnkdt3Py/Kju6mROTJ6dDWvgKoV0OcjBE0pQHKD9XQ==}
+  /zhi-common@1.26.1(typescript@5.2.2):
+    resolution: {integrity: sha512-gfHt4SXxSWnQwdlT0aVvAwEJA7V8XjTDfeIj+smO4Ef3f9KmMQPHuXvW+1J/6LU0Hyt6P9HCV5/tcb5CADky7A==}
     dependencies:
       js-yaml: 4.1.0
       shorthash2: 1.0.3
@@ -8054,31 +8054,31 @@ packages:
       - typescript
     dev: false
 
-  /zhi-fetch-middleware@0.7.11(typescript@5.2.2):
-    resolution: {integrity: sha512-8e+ygmLjBgGgGln6cMLY7OIV/n+mHQfN3E6lkkybb4mZBEWxrfJ8Oo9Rg59R6kEKWGP71X5ggSr9PyKsrZxXnA==}
+  /zhi-fetch-middleware@0.7.13(typescript@5.2.2):
+    resolution: {integrity: sha512-Lz0Zmi9X9s2u7SUxLyD3cOsiyYxpBQyanWczQiCY7rrx03/EXnfpZrz3UXr79PvxsvDwD16VvHy0owMrhrpUuA==}
     dependencies:
-      zhi-common: 1.25.0(typescript@5.2.2)
+      zhi-common: 1.26.1(typescript@5.2.2)
       zhi-device: 2.10.0
       zhi-lib-base: 0.8.0
     transitivePeerDependencies:
       - typescript
     dev: false
 
-  /zhi-github-middleware@0.4.8(typescript@5.2.2):
-    resolution: {integrity: sha512-CBjxs2bP/zjlpuU0xSspGA4x9UN6uM6EahqCvZN8ZErFYK8GlodbsYlLn1/pVMKMzRtVMxly+blqZStW+M12cA==}
+  /zhi-github-middleware@0.4.10(typescript@5.2.2):
+    resolution: {integrity: sha512-1QfZe/6fP6XO+Puhy3hmltthfZsNEweHMdvq9cA3ks7DpG8+QRHy0ixCFTDb7ZHEcC+tnB7hz5nPzylHONFC9g==}
     dependencies:
       '@octokit/core': 5.0.1
       js-base64: 3.7.5
-      zhi-common: 1.25.0(typescript@5.2.2)
+      zhi-common: 1.26.1(typescript@5.2.2)
       zhi-lib-base: 0.8.0
     transitivePeerDependencies:
       - typescript
     dev: false
 
-  /zhi-gitlab-middleware@0.6.18(typescript@5.2.2):
-    resolution: {integrity: sha512-038ozRcS/0VQazenDv0G38SwK1eOX6PN4Cm3PmX0VDsP8r03c96EmHt/tLoUJXkyoOz+SlQQjtJDm51B6JjSGw==}
+  /zhi-gitlab-middleware@0.6.20(typescript@5.2.2):
+    resolution: {integrity: sha512-O/gUTkurPSUAHRVmTE91XJxGQidsM+VUUSZg6BlYF6dfE9bTnNj3FcL15Zx9/2AmGktm+oEPmz5nolIdHJHyww==}
     dependencies:
-      zhi-fetch-middleware: 0.7.11(typescript@5.2.2)
+      zhi-fetch-middleware: 0.7.13(typescript@5.2.2)
       zhi-lib-base: 0.8.0
     transitivePeerDependencies:
       - typescript
@@ -8102,20 +8102,20 @@ packages:
       - supports-color
     dev: false
 
-  /zhi-siyuan-api@2.12.0(typescript@5.2.2):
-    resolution: {integrity: sha512-eJw2WG7IassTFNQcUrEj9e8AFgI7mmbw2H+at6B5+GalRBwgD7/V+0t6bp7mNbbZR37GLiu5pBFrOgzk3/+PHA==}
+  /zhi-siyuan-api@2.12.2(typescript@5.2.2):
+    resolution: {integrity: sha512-011VqKxBm6GoWoty+xjruq35l99WXkSdAyoeLtWiOlJ4HXXGXXKNzj7eKW/d8ZJNggkuoahnPQDeqaSYEnzVPA==}
     dependencies:
-      zhi-blog-api: 1.50.0(typescript@5.2.2)
-      zhi-common: 1.25.0(typescript@5.2.2)
+      zhi-blog-api: 1.50.2(typescript@5.2.2)
+      zhi-common: 1.26.1(typescript@5.2.2)
       zhi-lib-base: 0.8.0
     transitivePeerDependencies:
       - typescript
     dev: false
 
-  /zhi-xmlrpc-middleware@0.6.11(typescript@5.2.2):
-    resolution: {integrity: sha512-xR9XdLTBYShieLHjADPIy4N/0Qde8uJYRahueqQMgxylrjFcAY3O/CuFQuWfrO5FYjyNDD9AfMnaQ3omW65Oaw==}
+  /zhi-xmlrpc-middleware@0.6.13(typescript@5.2.2):
+    resolution: {integrity: sha512-zxN/ielIWDYo1+P7vNDNo/9Cmc5E3+UzJTQvzA9tDsmdTCA35f67bRubqBdKETJr7I9nKQytRWGj5BI3c+z19w==}
     dependencies:
-      zhi-common: 1.25.0(typescript@5.2.2)
+      zhi-common: 1.26.1(typescript@5.2.2)
       zhi-device: 2.10.0
       zhi-lib-base: 0.8.0
     transitivePeerDependencies:

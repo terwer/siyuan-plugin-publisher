@@ -27,7 +27,7 @@
 import { onMounted, reactive, ref, toRaw } from "vue"
 import { useRoute } from "vue-router"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { HtmlUtil, StrUtil } from "zhi-common"
+import { StrUtil } from "zhi-common"
 import { usePublish } from "~/src/composables/usePublish.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
@@ -120,7 +120,7 @@ onMounted(async () => {
           [{{ CrossPageUtils.subPlatformName(formData.processResult.key, 6) }}]
         </span>
         <span :title="formData.processResult.name" v-if="!StrUtil.isEmptyString(formData.processResult.name)">
-          {{ `[${HtmlUtil.parseHtml(formData.processResult.name, 8)}]` }}
+          {{ `[${StrUtil.getByLength(formData.processResult.name, 8)}]` }}
         </span>
         成功，
         <a :href="formData.processResult.previewUrl" target="_blank">查看文章</a>
@@ -132,7 +132,7 @@ onMounted(async () => {
           [{{ CrossPageUtils.subPlatformName(formData.processResult.key, 6) }}]
         </span>
         <span :title="formData.processResult.name" v-if="!StrUtil.isEmptyString(formData.processResult.name)">
-          {{ `[${HtmlUtil.parseHtml(formData.processResult.name, 8)}]` }}
+          {{ `[${StrUtil.getByLength(formData.processResult.name, 8)}]` }}
         </span>
         失败！
         <a href="javascript:;" @click="showDetailError(formData.processResult.errMsg)">详细错误</a>
