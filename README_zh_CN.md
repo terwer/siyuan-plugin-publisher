@@ -49,6 +49,7 @@
 - [x] 语雀
 - [x] Notion
 - [x] Halo
+- [ ] 印象笔记
 - [x] Github
   - [x] Hexo
   - [x] Hugo
@@ -56,6 +57,8 @@
   - [x] Vuepress
   - [x] Vuepress2
   - [x] Vitepress
+  - [ ] Antora
+  - [ ] Docsify
 - [x] Gitlab
   - [x] Gitlabhexo
   - [x] Gitlabhugo
@@ -63,6 +66,8 @@
   - [x] Gitlabvuepress
   - [x] Gitlabvuepress2
   - [x] Gitlabvitepress
+  - [ ] Gitlabantora
+  - [ ] Gitlabdocsify
 - [x] Metaweblog
 - [x] 博客园
 - [x] Typecho
@@ -72,6 +77,13 @@
 - [x] 微信公众号
 - [x] 简书
 - [x] 掘金
+- [ ] 吾爱破解
+- [ ] 哔哩哔哩专栏
+- [ ] 小红书
+- [ ] 豆瓣
+- [ ] Xlog
+- [ ] 墨滴
+- [ ] Flowus 息流
 
 ## 核心特色
 
