@@ -223,7 +223,7 @@ onMounted(async () => {
         {{ formData.tag.selectVisible ? t("main.tag.close") : t("main.tag.select") }}
       </el-button>
     </el-form-item>
-    <el-form-item v-if="formData.tag.selectVisible">
+    <el-form-item v-if="formData.tag.platformTags.length > 0 && formData.tag.selectVisible">
       <el-tree-select
         v-model="formData.tag.dynamicTags"
         style="width: 100%"

@@ -584,7 +584,7 @@ export default {
   "yuque.edit.cate.no.change":
     "由于语雀平台的限制，暂时不支持编辑所属知识库。如果您想移动文档，请先点击取消删除该文档，然后重新选择新的知识库发布",
   "main.commonn.cate.title": "公共分类",
-  "main.cate.new": "新增分类",
+  "main.cate.new": "新分类",
   "pref.setting.aicode": "ChatGPT请求key",
   "pref.setting.aicode.tip": "ChatGPT请求key或者第三方代理key，如果是代理key，请设置请求地址",
   "pref.setting.ai.baseurl": "ChatGPT请求地址",
