@@ -1,52 +1,32 @@
 # Changelog
 
 ## [1.18.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.17.3...v1.18.0) (2023-10-31)
-
-
 ### Features
-
-* [#790](https://github.com/terwer/siyuan-plugin-publisher/issues/790) 支持外链转换 ([85d01ed](https://github.com/terwer/siyuan-plugin-publisher/commit/85d01ed361077376a534815e9efec584abfafc93))
 * [#790](https://github.com/terwer/siyuan-plugin-publisher/issues/790) 支持外链转换 ([7fc9cfe](https://github.com/terwer/siyuan-plugin-publisher/commit/7fc9cfeaf619902ff0f30a90d194a672efc315ab))
-* [#800](https://github.com/terwer/siyuan-plugin-publisher/issues/800) 发布配置中的文件规则支持手动设置 ([6a8d291](https://github.com/terwer/siyuan-plugin-publisher/commit/6a8d291ec86fd33c15b4d55e155155cebe71c71c))
 * [#800](https://github.com/terwer/siyuan-plugin-publisher/issues/800) 发布配置中的文件规则支持手动设置 ([69c527f](https://github.com/terwer/siyuan-plugin-publisher/commit/69c527f88298b4a951d00e0e646c174120320d3c))
 * [#801](https://github.com/terwer/siyuan-plugin-publisher/issues/801) 强化GitHub平台和Gitlab平台的校验 ([3cbfcd6](https://github.com/terwer/siyuan-plugin-publisher/commit/3cbfcd6645cae459a8505031b592d46c5e542222))
 * [#822](https://github.com/terwer/siyuan-plugin-publisher/issues/822) html发布时公式无法显示 ([bc311e1](https://github.com/terwer/siyuan-plugin-publisher/commit/bc311e10ff85a672f9ad0f80493d91a6dce97d1f))
-* Notion 支持文档更新 ([5976607](https://github.com/terwer/siyuan-plugin-publisher/commit/5976607eb90c7d14bc72266b7bc2e7fdd996c7e7))
-* Notion 支持文档更新 ([23f331f](https://github.com/terwer/siyuan-plugin-publisher/commit/23f331faf7421d6654edfbd49c47ebe38721e509))
+* notion 支持文档更新 ([23f331f](https://github.com/terwer/siyuan-plugin-publisher/commit/23f331faf7421d6654edfbd49c47ebe38721e509))
 * 优化列表平台名称展示、新增新平台提示 ([f5d0db7](https://github.com/terwer/siyuan-plugin-publisher/commit/f5d0db7f938441f61fecf260ce8e5c8e1f6299c1))
 * 平台列表新增 hover 提示 ([e700b0d](https://github.com/terwer/siyuan-plugin-publisher/commit/e700b0d8af9ed00b82fb50f1e79237fce47ab656))
-* 支持文档路径自动映射为分类 ([63f90e7](https://github.com/terwer/siyuan-plugin-publisher/commit/63f90e794dbb1f205a444cc6ef41af673b32f603))
-* 支持文档路径自动映射为分类 ([ee7a8ec](https://github.com/terwer/siyuan-plugin-publisher/commit/ee7a8ec632750e0910bae0d5da9f0d18f42f90cf))
 * 支持文档路径自动映射为分类 ([3787ed1](https://github.com/terwer/siyuan-plugin-publisher/commit/3787ed1436ee445e440e62b7f90b488134d7ed0c))
 * 整合菜单，专注核心功能 ([72e525e](https://github.com/terwer/siyuan-plugin-publisher/commit/72e525eb714a67acfd4e3c15c9a74e4971c41478))
-* 适配 Flowus 息流 ([acd5502](https://github.com/terwer/siyuan-plugin-publisher/commit/acd5502da3b59592e8f6a7c4b32b8ecdd6cedf27))
-
-
+* 适配 flowus 息流 ([acd5502](https://github.com/terwer/siyuan-plugin-publisher/commit/acd5502da3b59592e8f6a7c4b32b8ecdd6cedf27))
 ### Bug Fixes
-
-* [#388](https://github.com/terwer/siyuan-plugin-publisher/issues/388) 保存各个平台的标签和分类 ([426800e](https://github.com/terwer/siyuan-plugin-publisher/commit/426800e61cef774598fbd986cd5db03ba1bde903))
 * [#388](https://github.com/terwer/siyuan-plugin-publisher/issues/388) 保存各个平台的标签和分类 ([ca9d183](https://github.com/terwer/siyuan-plugin-publisher/commit/ca9d183197ea7d880fbbcf765263ebf4c4728b40))
 * [#821](https://github.com/terwer/siyuan-plugin-publisher/issues/821) html发布的时候会出现有些格式没有转化 ([4c44dbf](https://github.com/terwer/siyuan-plugin-publisher/commit/4c44dbf6e48d3e8d331580d16b9be2a4fe44610f))
-* [#838](https://github.com/terwer/siyuan-plugin-publisher/issues/838) 保存各个平台的标签和分类 ([efb3e84](https://github.com/terwer/siyuan-plugin-publisher/commit/efb3e84fef5931844c794cac218045a9f3831545))
-* [#838](https://github.com/terwer/siyuan-plugin-publisher/issues/838) 保存各个平台的标签和分类 ([3735b62](https://github.com/terwer/siyuan-plugin-publisher/commit/3735b62ff275bd6dc4f20f0c5dcedefdb8abddd3))
-* [#838](https://github.com/terwer/siyuan-plugin-publisher/issues/838) 保存各个平台的标签和分类 ([5a0cdb3](https://github.com/terwer/siyuan-plugin-publisher/commit/5a0cdb3abe92497ca761aa7341a91cd3c0366f21))
-* [#838](https://github.com/terwer/siyuan-plugin-publisher/issues/838) 保存各个平台的标签和分类 ([b39c513](https://github.com/terwer/siyuan-plugin-publisher/commit/b39c5134ea0f92ad4f9b4ff2f2aae2e12bc57a9e))
-* [#838](https://github.com/terwer/siyuan-plugin-publisher/issues/838) 保存各个平台的标签和分类 ([e5562e8](https://github.com/terwer/siyuan-plugin-publisher/commit/e5562e84e0d4ab05640d85f9cd7bed2c02e3a201))
 * [#838](https://github.com/terwer/siyuan-plugin-publisher/issues/838) 保存各个平台的标签和分类 ([6b663ff](https://github.com/terwer/siyuan-plugin-publisher/commit/6b663ffed090d02118be3e01ea1e20e9f5b0e356))
 * [#843](https://github.com/terwer/siyuan-plugin-publisher/issues/843) 授权方式改为只读，防止引起误解或者误配置 ([ec6b7ac](https://github.com/terwer/siyuan-plugin-publisher/commit/ec6b7ac5c7718335d0d481c5aa433f1e63301dce))
 * **deps:** bump actions/setup-node from 3 to 4 ([99247dd](https://github.com/terwer/siyuan-plugin-publisher/commit/99247ddbe2d7657c6bed4df583dc51ebfabbef1d))
 * **deps:** bump element-plus from 2.3.14 to 2.4.0 ([c017e20](https://github.com/terwer/siyuan-plugin-publisher/commit/c017e204c7555a3b0e617edf5155960e2ab219a3))
 * **deps:** bump pinia from 2.1.6 to 2.1.7 ([874c7a8](https://github.com/terwer/siyuan-plugin-publisher/commit/874c7a800f4c6ada35662e37b683882408eccd47))
 * **deps:** bump vue-i18n from 9.6.1 to 9.6.2 ([d1c008a](https://github.com/terwer/siyuan-plugin-publisher/commit/d1c008ab42a5849be96eb5ab9b890aa18e5b47bd))
-* 修复 AI 标签无法打开的问题 ([9689c55](https://github.com/terwer/siyuan-plugin-publisher/commit/9689c55aa61b07e8e1c54c80da8d40fe1000ddc3))
-* 修复平台名称被截断的问题 ([d252985](https://github.com/terwer/siyuan-plugin-publisher/commit/d252985e5e37a146bf1c1330c538e5f6f250f42f))
+* 修复 ai 标签无法打开的问题 ([9689c55](https://github.com/terwer/siyuan-plugin-publisher/commit/9689c55aa61b07e8e1c54c80da8d40fe1000ddc3))
 * 修复平台名称被截断的问题 ([76136e5](https://github.com/terwer/siyuan-plugin-publisher/commit/76136e5f2d217e05edbd3cfb67f738d7ed8d1e8f))
-* 兼容 CSDN 错误提示 ([0706aea](https://github.com/terwer/siyuan-plugin-publisher/commit/0706aea3f99387c3c33258ac0278d58ad3da4594))
+* 兼容 csdn 错误提示 ([0706aea](https://github.com/terwer/siyuan-plugin-publisher/commit/0706aea3f99387c3c33258ac0278d58ad3da4594))
 * 减少上传提示打扰 ([2fc4d25](https://github.com/terwer/siyuan-plugin-publisher/commit/2fc4d25a6f772ee3107c09dc8de81f8cab6d44be))
 * 重构存储 ([c1b646a](https://github.com/terwer/siyuan-plugin-publisher/commit/c1b646a440b9a12b737d1fddd553c01c4a47c968))
-
 ## [1.17.3](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.17.2...v1.17.3) (2023-10-12)
-### Bug Fixes
 * 不分割js代码，有缓存的情况下性能更好 ([fa499c1](https://github.com/terwer/siyuan-plugin-publisher/commit/fa499c1a78469c6e01696e17fe688a463bdd9c86))
 * 新增性能计时器 ([706ce2e](https://github.com/terwer/siyuan-plugin-publisher/commit/706ce2e7f13c4ed2ae2599e8f7ab73c439c857fe))
 * 部分文件改为异步加载，小幅度提升性能 ([19455b0](https://github.com/terwer/siyuan-plugin-publisher/commit/19455b04ec35613427b032aa27b04f5b11954e98))
@@ -60,7 +40,6 @@
 * 修复 vuepress 文件名不正确的问题 ([409d6c0](https://github.com/terwer/siyuan-plugin-publisher/commit/409d6c0c5ce67dba07e8de267be3fa5139648550))
 * 修复构建错误 ([32e8f61](https://github.com/terwer/siyuan-plugin-publisher/commit/32e8f61d193d0a979c4417653bc8b202b0be7b04))
 ## [1.17.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.16.0...v1.17.0) (2023-10-11)
-### Features
 * [#773](https://github.com/terwer/siyuan-plugin-publisher/issues/773) 偏好设置数据持久化 ([1b2608d](https://github.com/terwer/siyuan-plugin-publisher/commit/1b2608da28cb6bb0bc27e6dd242ee42b06c65cfe))
 * [#754](https://github.com/terwer/siyuan-plugin-publisher/issues/754) 修复旧挂件发布过的文章无法更新的问题 ([3b12563](https://github.com/terwer/siyuan-plugin-publisher/commit/3b12563c37caa2a0c54e6ca6b0cef2c0283a8ec4))
 * [#765](https://github.com/terwer/siyuan-plugin-publisher/issues/765) 修复Halo 平台无法设置发布时间的问题 ([acc6dc9](https://github.com/terwer/siyuan-plugin-publisher/commit/acc6dc91ff3c3dfdc6ce6b04c0c9b52f0ac9de7d))
