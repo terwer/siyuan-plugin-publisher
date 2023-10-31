@@ -256,7 +256,7 @@ initPage()
       <!-- 授权方式 -->
       <el-form-item label="授权方式" prop="authMode">
         <span v-if="formData.isPre">{{ formData.dynCfg.authMode === AuthMode.API ? "API授权" : "网页授权" }}</span>
-        <el-select v-else v-model="formData.dynCfg.authMode" placeholder="请选择">
+        <el-select v-else v-model="formData.dynCfg.authMode" placeholder="请选择" :disabled="true">
           <el-option :value="AuthMode.API" label="API授权" />
           <el-option :value="AuthMode.WEBSITE" label="网页授权" />
         </el-select>

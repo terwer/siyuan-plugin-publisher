@@ -104,6 +104,9 @@ export class DynamicConfig {
     this.isAuth = false
     this.isEnabled = false
     this.authMode = AuthMode.API
+    if (platformKey.toLowerCase().includes(PlatformType.Custom.toString().toLowerCase())) {
+      this.authMode = AuthMode.WEBSITE
+    }
     this.cookieLimit = false
     this.isSys = false
 
