@@ -23,6 +23,8 @@ Support features such as fast publishing, image bed management, platform expansi
   - Fixed the problem of AI tab not being openable.
   - Resolved formatting issues when publishing HTML content.
   - Fixed the issue of formulas not displaying correctly in HTML publishing.
+  - Modify the authorization mode to read-only, in order to prevent misinterpretation or misconfiguration.
+  - Preserve labels and classifications for each platform.
 - Ahem, in addition, the author secretly developed an import feature after version `1.14.0`. You can easily import predefined platforms through the `Settings` -> `Publish Settings` -> `Import Predefined Platforms` function 😄
 
 > Platform Limitations:
