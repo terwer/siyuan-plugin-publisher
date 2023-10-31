@@ -189,10 +189,6 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
     return true
   }
 
-  public async getCategories(): Promise<CategoryInfo[]> {
-    return Promise.resolve([])
-  }
-
   public async getCategoryTreeNodes(docPath: string): Promise<any[]> {
     const res = await this.githubClient.getGithubPageTreeNode(docPath)
     return res
