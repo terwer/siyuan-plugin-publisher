@@ -66,7 +66,9 @@ const subtype = getSubPlatformTypeByKey(apiType)
     <wechat-setting v-else-if="subtype === SubPlatformType.Custom_Wechat" :api-type="apiType" />
     <jianshu-setting v-else-if="subtype === SubPlatformType.Custom_Jianshu" :api-type="apiType" />
     <juejin-setting v-else-if="subtype === SubPlatformType.Custom_Juejin" :api-type="apiType" />
+    <!--
     <flowus-setting v-else-if="subtype === SubPlatformType.Custom_Flowus" :api-type="apiType" />
+    -->
     <span v-else>
       <el-alert :closable="false" :title="t('setting.entry.not.supported')" class="top-tip" type="error" />
     </span>

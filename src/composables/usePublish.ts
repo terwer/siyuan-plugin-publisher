@@ -39,7 +39,7 @@ import {
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
-import { pre } from "~/src/utils/import/pre.ts"
+import { pre } from "~/src/platforms/pre.ts"
 import { MethodEnum } from "~/src/models/methodEnum.ts"
 import { DynamicConfig, getDynYamlKey } from "~/src/platforms/dynamicConfig.ts"
 import { IPublishCfg } from "~/src/types/IPublishCfg.ts"

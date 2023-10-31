@@ -31,7 +31,7 @@ import { toRaw } from "vue"
 import _ from "lodash"
 import { SiyuanDevice } from "zhi-device"
 import { fileToBuffer } from "~/src/utils/polyfillUtils.ts"
-import { CategoryAIResult } from "~/src/utils/ai/prompt.ts"
+import { CategoryAIResult } from "~/src/ai/prompt.ts"
 
 /**
  * 微信公众号网页授权适配器

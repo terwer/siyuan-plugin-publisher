@@ -29,7 +29,7 @@ import { reactive, watch } from "vue"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { ElMessage } from "element-plus"
 import { JsonUtil, StrUtil } from "zhi-common"
-import { prompt, ShortDescAIResult } from "~/src/utils/ai/prompt.ts"
+import { prompt, ShortDescAIResult } from "~/src/ai/prompt.ts"
 import { useChatGPT } from "~/src/composables/useChatGPT.ts"
 
 const logger = createAppLogger("publish-description")

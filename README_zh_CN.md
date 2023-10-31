@@ -8,7 +8,7 @@
 
 > 最近的新版本：🎉 发布工具新版本 `1.18.0` 发布
 
-- `1.18.0` 新适配多个平台，全方位优化体验。
+- `1.18.0` 新增多个特性，全方位优化体验。
 - `1.18.0` 主要有以下重要变更：
   - 新增 曲线救国，支持 Notion 更新文档
   - 新增 支持外链转换
@@ -49,7 +49,7 @@
 - [x] 语雀
 - [x] Notion
 - [x] Halo
-- [ ] 印象笔记
+- [ ] 印象笔记 - TODO
 - [x] Github
   - [x] Hexo
   - [x] Hugo
@@ -57,8 +57,8 @@
   - [x] Vuepress
   - [x] Vuepress2
   - [x] Vitepress
-  - [ ] Antora
-  - [ ] Docsify
+  - [ ] Antora - TODO
+  - [ ] Docsify - TODO
 - [x] Gitlab
   - [x] Gitlabhexo
   - [x] Gitlabhugo
@@ -66,8 +66,8 @@
   - [x] Gitlabvuepress
   - [x] Gitlabvuepress2
   - [x] Gitlabvitepress
-  - [ ] Gitlabantora
-  - [ ] Gitlabdocsify
+  - [ ] Gitlabantora - TODO
+  - [ ] Gitlabdocsify - TODO
 - [x] Metaweblog
 - [x] 博客园
 - [x] Typecho
@@ -77,13 +77,13 @@
 - [x] 微信公众号
 - [x] 简书
 - [x] 掘金
-- [ ] 吾爱破解
-- [ ] 哔哩哔哩专栏
-- [ ] 小红书
-- [ ] 豆瓣
-- [ ] Xlog
-- [ ] 墨滴
-- [ ] Flowus 息流
+- [ ] 吾爱破解 - TODO
+- [ ] 哔哩哔哩专栏 - TODO
+- [ ] 小红书 - TODO
+- [ ] 豆瓣 - TODO
+- [ ] Xlog - TODO
+- [ ] 墨滴 - TODO
+- [ ] Flowus 息流 - TODO
 
 ## 核心特色
 

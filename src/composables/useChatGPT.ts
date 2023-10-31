@@ -29,7 +29,7 @@ import type { ChatGPTAPI, ChatGPTUnofficialProxyAPI, SendMessageOptions } from "
 import { Utils } from "~/src/utils/utils.ts"
 import { isDev } from "~/src/utils/constants.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { AiConstants } from "~/src/utils/ai/AiConstants.ts"
+import { AiConstants } from "~/src/ai/AiConstants.ts"
 
 /**
  * 创建一个用于与 ChatGPT 服务进行交互的钩子

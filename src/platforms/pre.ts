@@ -278,17 +278,17 @@ export const pre = {
       domain: "juejin.cn",
       isEnabled: false,
     },
-    {
-      platformType: PlatformType.Custom,
-      subPlatformType: SubPlatformType.Custom_Flowus,
-      platformKey: "custom_Flowus",
-      platformName: "Flowus 息流",
-      platformIcon: svgIcons.iconIFFlowus,
-      authMode: AuthMode.WEBSITE,
-      authUrl: "https://flowus.cn/login",
-      domain: "flowus.cn",
-      isEnabled: false,
-    },
+    // {
+    //   platformType: PlatformType.Custom,
+    //   subPlatformType: SubPlatformType.Custom_Flowus,
+    //   platformKey: "custom_Flowus",
+    //   platformName: "Flowus 息流",
+    //   platformIcon: svgIcons.iconIFFlowus,
+    //   authMode: AuthMode.WEBSITE,
+    //   authUrl: "https://flowus.cn/login",
+    //   domain: "flowus.cn",
+    //   isEnabled: false,
+    // },
   ],
   systemCfg: <DynamicConfig[]>[
     {

@@ -193,11 +193,11 @@ class Adaptors {
         conf = cfg
         break
       }
-      case SubPlatformType.Custom_Flowus: {
-        const { cfg } = await useFlowusWeb(key)
-        conf = cfg
-        break
-      }
+      // case SubPlatformType.Custom_Flowus: {
+      //   const { cfg } = await useFlowusWeb(key)
+      //   conf = cfg
+      //   break
+      // }
       case SubPlatformType.System_Siyuan: {
         const { siyuanConfig } = useSiyuanApi()
         conf = siyuanConfig
@@ -343,11 +343,11 @@ class Adaptors {
         blogAdaptor = webApi
         break
       }
-      case SubPlatformType.Custom_Flowus: {
-        const { webApi } = await useFlowusWeb(key, newCfg)
-        blogAdaptor = webApi
-        break
-      }
+      // case SubPlatformType.Custom_Flowus: {
+      //   const { webApi } = await useFlowusWeb(key, newCfg)
+      //   blogAdaptor = webApi
+      //   break
+      // }
       case SubPlatformType.System_Siyuan: {
         const { blogApi } = useSiyuanApi()
         blogAdaptor = blogApi

@@ -30,7 +30,7 @@ import { JsonUtil, StrUtil } from "zhi-common"
 import { ElMessage } from "element-plus"
 import { useChatGPT } from "~/src/composables/useChatGPT.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { prompt, TitleAIResult } from "~/src/utils/ai/prompt.ts"
+import { prompt, TitleAIResult } from "~/src/ai/prompt.ts"
 
 const logger = createAppLogger("publish-title")
 const { t } = useVueI18n()
