@@ -180,7 +180,8 @@ class JuejinWebAdaptor extends BaseWebApi {
     const juejinPostKey = this.getJuejinPostidKey(postid)
     const pageId = juejinPostKey.pageId
     const postUrl = this.cfg.previewUrl.replace("[postid]", pageId)
-    return StrUtil.pathJoin(this.cfg.home ?? "", postUrl)
+    return postUrl
+    // return StrUtil.pathJoin(this.cfg.home ?? "", postUrl)
   }
 
   public async deletePost(postid: string): Promise<boolean> {

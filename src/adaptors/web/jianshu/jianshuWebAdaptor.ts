@@ -134,7 +134,8 @@ class JianshuWebAdaptor extends BaseWebApi {
     // const pageId = jianshuPostKey.pageId
     const endUrl = jianshuPostKey.endUrl
     const postUrl = purl.replace("[postid]", endUrl)
-    return StrUtil.pathJoin(this.cfg.home ?? "", postUrl)
+    return postUrl
+    // return StrUtil.pathJoin(this.cfg.home ?? "", postUrl)
   }
 
   public async deletePost(postid: string): Promise<boolean> {

@@ -249,15 +249,17 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
       // 自动映射分类
       const autoDir = path.join(savePath.replace(CATE_AUTO_NAME, ""), save_dir)
       post.cate_slugs = [autoDir]
-    }
-    // 笔记层级作为分类
-    const docPathArray = save_dir.split("/")
-    if (docPathArray.length > 1) {
-      for (let i = 1; i < docPathArray.length; i++) {
-        const docCate = HtmlUtil.removeTitleNumber(docPathArray[i])
-        pathCates.push(docCate)
+
+      // 笔记层级作为分类
+      const docPathArray = save_dir.split("/")
+      if (docPathArray.length > 1) {
+        for (let i = 1; i < docPathArray.length; i++) {
+          const docCate = HtmlUtil.removeTitleNumber(docPathArray[i])
+          pathCates.push(docCate)
+        }
       }
     }
+
 
     // 目录分类
     this.logger.info("目录路径转换的分类 =>", pathCates)

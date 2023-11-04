@@ -393,7 +393,8 @@ class CsdnWebAdaptor extends BaseWebApi {
     const token = this.cfg.password
     const userid = WebUtils.readCookie("UserName", token)
     const previewUrl = this.cfg.previewUrl.replace(/\[userid\]/g, userid).replace(/\[postid\]/g, postid)
-    return StrUtil.pathJoin(this.cfg.home ?? "", previewUrl)
+    return previewUrl
+    // return StrUtil.pathJoin(this.cfg.home ?? "", previewUrl)
   }
 }
 
