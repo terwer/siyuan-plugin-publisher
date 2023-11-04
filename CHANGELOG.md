@@ -1,15 +1,11 @@
 # Changelog
 
 ## [1.18.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.18.0...v1.18.1) (2023-11-04)
-
-
 ### Bug Fixes
-
 * [#855](https://github.com/terwer/siyuan-plugin-publisher/issues/855) 自动映射分类时才添加路径为分类 ([cc2bb44](https://github.com/terwer/siyuan-plugin-publisher/commit/cc2bb44e0a86f92a492869d2650990a695fbc23e))
 * [#857](https://github.com/terwer/siyuan-plugin-publisher/issues/857) 修复查看最新文章路径错误 ([c5dda53](https://github.com/terwer/siyuan-plugin-publisher/commit/c5dda53db2426de95f1df957a6d8f0791c4970a3))
 * **deps:** bump vue-i18n from 9.6.2 to 9.6.4 ([9f96acb](https://github.com/terwer/siyuan-plugin-publisher/commit/9f96acbb80ea75f9c2c0cd63b7131b6e93cc22a3))
 * **deps:** bump zhi-siyuan-api from 2.12.2 to 2.12.3 ([0e480a6](https://github.com/terwer/siyuan-plugin-publisher/commit/0e480a6ec6f0551f2bf12ffddfc41b74da492bd9))
-
 ## [1.18.0](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.17.3...v1.18.0) (2023-10-31)
 ### Features
 * [#790](https://github.com/terwer/siyuan-plugin-publisher/issues/790) 支持外链转换 ([7fc9cfe](https://github.com/terwer/siyuan-plugin-publisher/commit/7fc9cfeaf619902ff0f30a90d194a672efc315ab))
@@ -22,7 +18,6 @@
 * 支持文档路径自动映射为分类 ([3787ed1](https://github.com/terwer/siyuan-plugin-publisher/commit/3787ed1436ee445e440e62b7f90b488134d7ed0c))
 * 整合菜单，专注核心功能 ([72e525e](https://github.com/terwer/siyuan-plugin-publisher/commit/72e525eb714a67acfd4e3c15c9a74e4971c41478))
 * 适配 flowus 息流 ([acd5502](https://github.com/terwer/siyuan-plugin-publisher/commit/acd5502da3b59592e8f6a7c4b32b8ecdd6cedf27))
-### Bug Fixes
 * [#388](https://github.com/terwer/siyuan-plugin-publisher/issues/388) 保存各个平台的标签和分类 ([ca9d183](https://github.com/terwer/siyuan-plugin-publisher/commit/ca9d183197ea7d880fbbcf765263ebf4c4728b40))
 * [#821](https://github.com/terwer/siyuan-plugin-publisher/issues/821) html发布的时候会出现有些格式没有转化 ([4c44dbf](https://github.com/terwer/siyuan-plugin-publisher/commit/4c44dbf6e48d3e8d331580d16b9be2a4fe44610f))
 * [#838](https://github.com/terwer/siyuan-plugin-publisher/issues/838) 保存各个平台的标签和分类 ([6b663ff](https://github.com/terwer/siyuan-plugin-publisher/commit/6b663ffed090d02118be3e01ea1e20e9f5b0e356))
