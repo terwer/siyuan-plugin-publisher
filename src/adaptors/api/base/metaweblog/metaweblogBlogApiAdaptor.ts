@@ -187,7 +187,8 @@ class MetaweblogBlogApiAdaptor extends BaseBlogApi {
 
   public async getPreviewUrl(postid: string): Promise<string> {
     const previewUrl = this.cfg.previewUrl.replace(/\[postid\]/g, postid)
-    return StrUtil.pathJoin(this.cfg.home ?? "", previewUrl)
+    // return StrUtil.pathJoin(this.cfg.home ?? "", previewUrl)
+    return previewUrl
   }
 
   public async getCategories(): Promise<CategoryInfo[]> {

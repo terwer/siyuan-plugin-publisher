@@ -238,7 +238,8 @@ class HaloApiAdaptor extends BaseBlogApi {
       .replace("{year}", haloPostKey.year)
       .replace("{month}", haloPostKey.month)
       .replace("{day}", haloPostKey.day)
-    return StrUtil.pathJoin(this.cfg.home ?? "", postUrl)
+    return postUrl
+    // return StrUtil.pathJoin(this.cfg.home ?? "", postUrl)
   }
 
   public async deletePost(postid: string): Promise<boolean> {

@@ -203,7 +203,7 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
       .replace("[branch]", cfg.githubBranch)
       .replace("[docpath]", postid)
     // 路径组合
-    previewUrl = StrUtil.pathJoin(this.cfg.home, previewUrl)
+    // previewUrl = StrUtil.pathJoin(this.cfg.home, previewUrl)
     return previewUrl
   }
 
