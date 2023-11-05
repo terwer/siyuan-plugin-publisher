@@ -1,7 +1,9 @@
 # Changelog
 
-## [1.18.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.18.0...v1.18.1) (2023-11-04)
+## [1.18.2](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.18.1...v1.18.2) (2023-11-05)
 ### Bug Fixes
+* 修复博客园无法上传图片问题 ([103c18d](https://github.com/terwer/siyuan-plugin-publisher/commit/103c18dc344adb4179d0b139b447a28fe54e33d0))
+## [1.18.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.18.0...v1.18.1) (2023-11-04)
 * [#855](https://github.com/terwer/siyuan-plugin-publisher/issues/855) 自动映射分类时才添加路径为分类 ([cc2bb44](https://github.com/terwer/siyuan-plugin-publisher/commit/cc2bb44e0a86f92a492869d2650990a695fbc23e))
 * [#857](https://github.com/terwer/siyuan-plugin-publisher/issues/857) 修复查看最新文章路径错误 ([c5dda53](https://github.com/terwer/siyuan-plugin-publisher/commit/c5dda53db2426de95f1df957a6d8f0791c4970a3))
 * **deps:** bump vue-i18n from 9.6.2 to 9.6.4 ([9f96acb](https://github.com/terwer/siyuan-plugin-publisher/commit/9f96acbb80ea75f9c2c0cd63b7131b6e93cc22a3))
