@@ -11,6 +11,8 @@ Support features such as fast publishing, image bed management, platform expansi
 > Recent Update: 🎉 Publish Tool new version `1.18.0` released.
 
 - `1.18.0` brings new features and enhanced user experience.
+- The `1.18.3` version primarily addresses the following defects:
+  - Resolved the issue where automatic classification paths could be empty.
 - The `1.18.2` version primarily addresses the following bug fixes:
   - Resolved the issue with uploading images on Blog Park.
 - The `1.18.1` version primarily addresses the following bug fixes:
