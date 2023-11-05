@@ -254,7 +254,11 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
       const docPathArray = save_dir.split("/")
       if (docPathArray.length > 1) {
         for (let i = 1; i < docPathArray.length; i++) {
-          const docCate = HtmlUtil.removeTitleNumber(docPathArray[i])
+          const docPath = docPathArray[i]
+          if(StrUtil.isEmptyString(docPath)){
+            continue
+          }
+          const docCate = HtmlUtil.removeTitleNumber(docPath)
           pathCates.push(docCate)
         }
       }
