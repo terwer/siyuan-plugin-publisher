@@ -335,14 +335,14 @@ const usePublish = () => {
     }
   }
 
-  const getPostPreviewUrl = async (api: BlogAdaptor, id: string, cfg: BlogConfig) => {
+  const getPostPreviewUrl = async (api: any, id: string, cfg: BlogConfig) => {
     // 获取最新id，兼容某些平台自定义行为
     const { getSetting } = usePublishSettingStore()
     const setting = await getSetting()
     const posidKey = cfg.posidKey
     const postMeta = ObjectUtil.getProperty(setting, id, {})
     const newPostid = postMeta[posidKey]
-    const previewUrl = await api.getPreviewUrl(newPostid)
+    let previewUrl = await api.getPreviewUrl(newPostid)
     const isAbsoluteUrl = /^http/.test(previewUrl)
     return isAbsoluteUrl ? previewUrl : `${cfg?.home ?? ""}${previewUrl}`
   }

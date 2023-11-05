@@ -62,6 +62,8 @@ const isServe = process.env.IS_SERVE
 const isWatch = args.watch || args.w || false
 const isDev = isServe || isWatch || debugMode
 const isWindows = process.platform === "win32"
+// Mac public
+let devDistDir = "/Users/terwer/Documents/mydocs/SiYuanWorkspace/public/data/plugins/siyuan-plugin-publisher"
 // Mac
 let devDistDir = "/Users/terwer/Documents/mydocs/SiYuanWorkspace/test/data/plugins/siyuan-plugin-publisher"
 // Zhangyue

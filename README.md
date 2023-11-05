@@ -11,9 +11,11 @@ Support features such as fast publishing, image bed management, platform expansi
 > Recent Update: 🎉 Publish Tool new version `1.18.0` released.
 
 - `1.18.0` brings new features and enhanced user experience.
-- Version `1.18.1` primarily consists of the following defect corrections:
-  - The path is now properly added as a category only when automatically mapping classifications.
-  - The path error for viewing the latest articles has been resolved.
+- The `1.18.2` version primarily addresses the following bug fixes:
+  - Resolved the issue with uploading images on Blog Park.
+- The `1.18.1` version primarily addresses the following bug fixes:
+  - Only add the path as a category when automatically mapping categories.
+  - Fixed the incorrect path for viewing the latest articles.
 - `1.18.0` introduces the following important changes:
   - Added a clever workaround to support document updates in Notion.
   - Added support for external link conversion.

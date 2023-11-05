@@ -35,6 +35,8 @@ const isWindows = os.platform() === "win32"
 
 let baseDir
 if (isWatch || isServe) {
+  // Mac public
+  baseDir = "/Users/terwer/Documents/mydocs/SiYuanWorkspace/public/data/plugins/siyuan-plugin-publisher"
   // Mac
   baseDir = "/Users/terwer/Documents/mydocs/SiYuanWorkspace/test/data/plugins/siyuan-plugin-publisher"
   // Zhangyue

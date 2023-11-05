@@ -1,6 +1,6 @@
 {
   "name": "siyuan-plugin-publisher",
-  "version": "1.18.1",
+  "version": "1.18.2",
   "description": "Publish articles from Siyuan Notes to platforms such as Yuque, Notion, Cnblogs, WordPress, Typecho, Hexo, Zhihu and more",
   "repository": "terwer/siyuan-plugin-publisher",
   "homepage": "https://github.com/terwer/siyuan-plugin-publisher",
@@ -61,7 +61,7 @@
     "cheerio": "1.0.0-rc.12",
     "cross-fetch": "^3.1.8",
     "crypto-js": "^4.2.0",
-    "element-plus": "^2.4.1",
+    "element-plus": "^2.4.2",
     "gray-matter": "^4.0.3",
     "js-base64": "^3.7.5",
     "js-yaml": "^4.1.0",
@@ -73,18 +73,18 @@
     "siyuan-plugin-picgo": "^1.4.4",
     "uuid": "^9.0.1",
     "vue": "^3.3.7",
-    "vue-i18n": "^9.6.4",
+    "vue-i18n": "^9.6.5",
     "vue-router": "^4.2.5",
     "xmlbuilder2": "^3.1.1",
-    "zhi-blog-api": "^1.50.2",
-    "zhi-common": "^1.26.1",
+    "zhi-blog-api": "^1.50.3",
+    "zhi-common": "^1.27.0",
     "zhi-device": "^2.10.0",
-    "zhi-fetch-middleware": "^0.7.13",
-    "zhi-github-middleware": "^0.4.10",
-    "zhi-gitlab-middleware": "^0.6.20",
+    "zhi-fetch-middleware": "^0.7.14",
+    "zhi-github-middleware": "^0.4.11",
+    "zhi-gitlab-middleware": "^0.6.21",
     "zhi-lib-base": "^0.8.0",
     "zhi-notion-markdown": "^0.1.4",
-    "zhi-siyuan-api": "^2.12.3",
-    "zhi-xmlrpc-middleware": "^0.6.13"
+    "zhi-siyuan-api": "^2.12.4",
+    "zhi-xmlrpc-middleware": "^0.6.14"
   }
 }
