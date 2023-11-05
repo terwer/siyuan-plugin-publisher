@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.18.2](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.18.1...v1.18.2) (2023-11-05)
+
+
+### Bug Fixes
+
+* 修复博客园无法上传图片问题 ([771a33e](https://github.com/terwer/siyuan-plugin-publisher/commit/771a33e8f246ea6521616d0a30408df48ed26f78))
+* 修复博客园无法上传图片问题 ([103c18d](https://github.com/terwer/siyuan-plugin-publisher/commit/103c18dc344adb4179d0b139b447a28fe54e33d0))
+
 ## [1.18.1](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.18.0...v1.18.1) (2023-11-04)
 ### Bug Fixes
 * [#855](https://github.com/terwer/siyuan-plugin-publisher/issues/855) 自动映射分类时才添加路径为分类 ([cc2bb44](https://github.com/terwer/siyuan-plugin-publisher/commit/cc2bb44e0a86f92a492869d2650990a695fbc23e))
