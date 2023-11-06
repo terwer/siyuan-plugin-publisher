@@ -12,9 +12,9 @@ Support features such as fast publishing, image bed management, platform expansi
 
 - `1.18.0` brings new features and enhanced user experience.
 - The `1.18.4` version primarily addresses the following issues:
-  - Fixed the problem of YAML modifications not taking effect (c3180b9)
-  - Fixed an issue where not setting tag categories could lead to errors (4645104)
-  - Automatically saves attributes and removes unnecessary prompts (9f9926d)
+  - Fixed the problem of YAML modifications not taking effect
+  - Fixed an issue where not setting tag categories could lead to errors
+  - Automatically saves attributes and removes unnecessary prompts
 - The `1.18.3` version primarily addresses the following defects:
   - Resolved the issue where automatic classification paths could be empty.
   - Rectify the potential path error issue that may arise when publishing documents in the root directory.
