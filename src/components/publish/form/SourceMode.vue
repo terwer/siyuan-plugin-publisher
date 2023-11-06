@@ -354,7 +354,6 @@ await initPage()
           :title="t('main.read.mode.tip3')"
           type="error"
         />
-        -->
         <el-alert
           v-if="!formData.readonlyMode"
           class="top-yaml-tip"
@@ -362,6 +361,7 @@ await initPage()
           :title="t('main.read.mode.tip4')"
           type="error"
         />
+        -->
       </el-form-item>
     </div>
   </div>
