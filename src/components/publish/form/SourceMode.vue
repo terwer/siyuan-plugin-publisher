@@ -86,7 +86,7 @@ const formData = reactive({
   isSaved: true,
 })
 
-const emit = defineEmits(["emitSyncPost"])
+const emit = defineEmits(["emitSyncPost", "edmtSyncToSiyuan"])
 
 // methods
 const onYamlShowTypeChange = (val: SourceContentShowType) => {
@@ -157,6 +157,7 @@ const doSaveContentChange = () => {
       post: toRaw(formData.siyuanPost),
     })
     emit("emitSyncPost", formData.siyuanPost)
+    emit("edmtSyncToSiyuan")
     formData.syncStatus = "success"
     formData.syncMessage = "YAML已解析成功并同步。同步时间 =>" + DateUtil.formatIsoToZh(new Date().toISOString(), true)
     formData.isSaved = true
