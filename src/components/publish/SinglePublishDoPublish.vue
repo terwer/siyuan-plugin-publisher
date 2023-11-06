@@ -497,6 +497,7 @@ onMounted(async () => {
                 :page-id="id"
                 :cfg="formData.publishCfg.cfg"
                 @emitSyncPost="syncPost"
+                @edmtSyncToSiyuan="handleSyncToSiyuan"
               />
               <div v-else class="normal-mode">
                 <!-- 文章标题 -->
@@ -616,7 +617,11 @@ onMounted(async () => {
                 >
                   {{ t("main.force.cancel") }}
                 </el-button>
-                <el-button type="warning" @click="handleSyncToSiyuan" :disabled="!formData.actionEnable">
+                <el-button
+                  type="warning"
+                  @click="handleSyncToSiyuan"
+                  :disabled="!formData.actionEnable && formData.editType !== PageEditMode.EditMode_source"
+                >
                   同步修改到思源笔记
                 </el-button>
               </el-form-item>

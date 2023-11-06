@@ -255,7 +255,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
       if (docPathArray.length > 1) {
         for (let i = 1; i < docPathArray.length; i++) {
           const docPath = docPathArray[i]
-          if(StrUtil.isEmptyString(docPath)){
+          if (StrUtil.isEmptyString(docPath)) {
             continue
           }
           const docCate = HtmlUtil.removeTitleNumber(docPath)
@@ -263,7 +263,6 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
         }
       }
     }
-
 
     // 目录分类
     this.logger.info("目录路径转换的分类 =>", pathCates)
@@ -359,13 +358,23 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     // 前面改过属性，需要再生成一次
     const yamlAdaptor: YamlConvertAdaptor = this.api.getYamlAdaptor()
     if (null !== yamlAdaptor) {
-      // 先生成对应平台的yaml
-      const yamlObj: YamlFormatObj = yamlAdaptor.convertToYaml(post, cfg)
-      // 同步发布内容
-      post.yaml = yamlObj.formatter
-      post.markdown = yamlObj.mdFullContent
-      post.html = yamlObj.htmlContent
-      this.logger.info("rehandled yaml using YamlConverterAdaptor")
+      let yamlObj: YamlFormatObj
+      const defaultYaml = PostUtil.toYamlObj(post)
+      if (defaultYaml?.slug?.indexOf("siyuan://") > -1) {
+        // 先生成对应平台的yaml
+        yamlObj = yamlAdaptor.convertToYaml(post, cfg)
+        // 同步发布内容
+        post.yaml = yamlObj.formatter
+        post.markdown = yamlObj.mdFullContent
+        post.html = yamlObj.htmlContent
+        this.logger.info("rehandled yaml using YamlConverterAdaptor")
+      } else {
+        const md = YamlUtil.extractMarkdown(post.markdown)
+        // post.yaml 始终保持最新
+        post.markdown = YamlUtil.addYamlToMd(post.yaml, md)
+        post.html = LuteUtil.mdToHtml(md)
+        this.logger.info("assign latest custom yaml to md")
+      }
     } else {
       // 同步发布内容
       const yamlObj = PostUtil.toYamlObj(post)
@@ -376,16 +385,6 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
       post.html = LuteUtil.mdToHtml(md)
       this.logger.info("yaml adaptor not found, using default")
     }
-
-    // YAML与MD的处理，旧的逻辑，不考虑属性变更的情况
-    // if (null !== yamlAdaptor) {
-    //   const md = YamlUtil.extractMarkdown(post.markdown)
-    //   const yaml = post.yaml
-    //   post.markdown = YamlUtil.addYamlToMd(yaml, md)
-    //   this.logger.info("检测到该平台已开启YAML适配器，已附加YAML到Markdown正文")
-    // } else {
-    //   this.logger.info("未找到YAML适配器，不作处理")
-    // }
 
     this.logger.debug("yaml处理之后，post", { post: toRaw(post) })
     return post
