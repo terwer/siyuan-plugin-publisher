@@ -186,8 +186,8 @@ const usePublish = () => {
 
         // 保存元数据
         const metadataPost = _.cloneDeep(finalPost) as Post
-        const tags = metadataPost.mt_keywords.split(",")
-        const cates = metadataPost.categories
+        const tags = metadataPost.mt_keywords?.split(",") ?? []
+        const cates = metadataPost?.categories ?? []
         const templates = []
         updatePlatformMetadata(key, tags, cates, templates)
       }
