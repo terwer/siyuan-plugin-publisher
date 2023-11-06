@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.18.4](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.18.3...v1.18.4) (2023-11-06)
+
+
+### Bug Fixes
+
+* 修复 Yaml 修改未生效问题 ([c3180b9](https://github.com/terwer/siyuan-plugin-publisher/commit/c3180b93ab2964b2ad81a5ba3b7f8bd54781765b))
+* 修复未设置标签分类可能报错的问题 ([4645104](https://github.com/terwer/siyuan-plugin-publisher/commit/46451042d600c7221ce59ef06edb8d7e58a2a1cf))
+* 修复自动分类路径可能为空的问题 ([131bc71](https://github.com/terwer/siyuan-plugin-publisher/commit/131bc713b681353823839d7f75127f5a7a7faaba))
+* 修复自动分类路径可能为空的问题 ([d676c3a](https://github.com/terwer/siyuan-plugin-publisher/commit/d676c3a61d72da40bb10e649fdc2b8502e28ff9b))
+* 修复自动分类路径可能为空的问题 ([461a946](https://github.com/terwer/siyuan-plugin-publisher/commit/461a94638872d9e65f4192e377a2a83dbfe0b127))
+* 自动保存属性，取消不必要的提示 ([9f9926d](https://github.com/terwer/siyuan-plugin-publisher/commit/9f9926d39771d8870ea57652e203223bdcfd6940))
+
+
+### Miscellaneous
+
+* **deps-dev:** bump esbuild-style-plugin from 1.6.2 to 1.6.3 ([a53ee10](https://github.com/terwer/siyuan-plugin-publisher/commit/a53ee10beab9ca0f1ecdd67eb03f460b3c3094dc))
+* **deps-dev:** bump vite-plugin-node-polyfills from 0.15.0 to 0.16.0 ([5e4411f](https://github.com/terwer/siyuan-plugin-publisher/commit/5e4411f0b7ef5984411a75383961746910455d29))
+
 ## [1.18.3](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.18.2...v1.18.3) (2023-11-05)
 ### Bug Fixes
 * 修复自动分类路径可能为空的问题 ([b31cbd0](https://github.com/terwer/siyuan-plugin-publisher/commit/b31cbd0f19e99a905fe7088de1751ab59e2e9d39))
