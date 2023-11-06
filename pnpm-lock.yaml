@@ -10,7 +10,7 @@ dependencies:
     version: 2.1.0(vue@3.3.7)
   '@terwer/esbuild-config-custom':
     specifier: ^2.0.0
-    version: 2.0.0(@types/minimist@1.2.4)(dotenv@16.3.1)(esbuild-plugin-copy@2.1.1)(esbuild-plugin-d.ts@1.1.0)(esbuild-plugin-ifdef@1.0.1)(esbuild-plugin-inline-image@0.0.9)(esbuild-plugin-vue3@0.3.2)(esbuild-style-plugin@1.6.2)(esbuild@0.17.19)(minimist@1.2.8)(rimraf@4.4.1)(stylus@0.59.0)
+    version: 2.0.0(@types/minimist@1.2.4)(dotenv@16.3.1)(esbuild-plugin-copy@2.1.1)(esbuild-plugin-d.ts@1.1.0)(esbuild-plugin-ifdef@1.0.1)(esbuild-plugin-inline-image@0.0.9)(esbuild-plugin-vue3@0.3.2)(esbuild-style-plugin@1.6.3)(esbuild@0.17.19)(minimist@1.2.8)(rimraf@4.4.1)(stylus@0.59.0)
   '@vueuse/components':
     specifier: ^10.5.0
     version: 10.5.0(vue@3.3.7)
@@ -134,8 +134,8 @@ devDependencies:
     specifier: ^2.1.1
     version: 2.1.1(esbuild@0.17.19)
   esbuild-style-plugin:
-    specifier: ^1.6.2
-    version: 1.6.2
+    specifier: ^1.6.3
+    version: 1.6.3
   fast-glob:
     specifier: ^3.3.1
     version: 3.3.1
@@ -1112,7 +1112,7 @@ packages:
     resolution: {integrity: sha512-Ccy0NlLkzr0Ex2FKvh2X+OyERHXJ88XJ1MXtsI9y9fGexlaXaVTPzBCRBwIxFkORuOb+uBqeu+RqnpgYTEZRUQ==}
     dev: false
 
-  /@terwer/esbuild-config-custom@2.0.0(@types/minimist@1.2.4)(dotenv@16.3.1)(esbuild-plugin-copy@2.1.1)(esbuild-plugin-d.ts@1.1.0)(esbuild-plugin-ifdef@1.0.1)(esbuild-plugin-inline-image@0.0.9)(esbuild-plugin-vue3@0.3.2)(esbuild-style-plugin@1.6.2)(esbuild@0.17.19)(minimist@1.2.8)(rimraf@4.4.1)(stylus@0.59.0):
+  /@terwer/esbuild-config-custom@2.0.0(@types/minimist@1.2.4)(dotenv@16.3.1)(esbuild-plugin-copy@2.1.1)(esbuild-plugin-d.ts@1.1.0)(esbuild-plugin-ifdef@1.0.1)(esbuild-plugin-inline-image@0.0.9)(esbuild-plugin-vue3@0.3.2)(esbuild-style-plugin@1.6.3)(esbuild@0.17.19)(minimist@1.2.8)(rimraf@4.4.1)(stylus@0.59.0):
     resolution: {integrity: sha512-Uyt/ccoxlnjtxQAL3poCvZVfRr4Img49Y+DDOHFO4qd9zmcYC2WH9f/kBobqxPBAdslHm3n++U85/or4gAZO4w==}
     hasBin: true
     peerDependencies:
@@ -1137,7 +1137,7 @@ packages:
       esbuild-plugin-ifdef: 1.0.1
       esbuild-plugin-inline-image: 0.0.9
       esbuild-plugin-vue3: 0.3.2(cheerio@1.0.0-rc.12)
-      esbuild-style-plugin: 1.6.2
+      esbuild-style-plugin: 1.6.3
       minimist: 1.2.8
       rimraf: 4.4.1
       stylus: 0.59.0
@@ -3578,8 +3578,8 @@ packages:
       typescript: 4.9.5
     dev: false
 
-  /esbuild-style-plugin@1.6.2:
-    resolution: {integrity: sha512-aSzuIUwQTEVVy9gcE4xtXq8Cbq9RNDfJYZ3mYzWg6RJ8HoMydLT+LbGXYwL0DmgOt4eEg/4JrnNMMb02gXFutA==}
+  /esbuild-style-plugin@1.6.3:
+    resolution: {integrity: sha512-XPEKf4FjLjEVLv/dJH4UxDzXCrFHYpD93DBO8B+izdZARW5b7nNKQbnKv3J+7VDWJbgCU+hzfgIh2AuIZzlmXQ==}
     dependencies:
       '@types/less': 3.0.5
       '@types/sass': 1.45.0
