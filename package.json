@@ -7,6 +7,7 @@
   "author": "terwer",
   "license": "MIT",
   "scripts": {
+    "makeLink": "python scripts/make_dev_link.py",
     "serve": "python scripts/serve.py",
     "dev": "python scripts/dev.py",
     "test": "vitest",
