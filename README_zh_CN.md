@@ -4,7 +4,9 @@
 
 ![](./icon.png)
 
-将思源笔记的文章发布到语雀、Notion、Cnblogs、WordPress、Typecho、Hexo、知乎 等平台，支持极速发布、图床管理、平台扩展、智能标签等特色功能。
+将思源笔记的文章发布到语雀等平台，`开源`、`免费` 。
+
+如果您对 [增值功能](https://github.com/terwer/siyuan-plugin-publisher/issues/846) 感兴趣，请移步收费专业版 => [发布工具专业版](https://github.com/terwer/siyuan-plugin-publisher-pro)
 
 > 最近的新版本：🎉 发布工具新版本 `1.18.5` 发布
 
@@ -12,6 +14,7 @@
 - `1.18.5` 主要修复以下缺陷：
   - 修复某些平台 yaml 生成可能发生错误的问题
   - 使用软链接构建项目，提升效率
+  - 专业版预告
 - `1.18.4` 主要修复以下缺陷：
   - 修复 yaml 修改未生效问题
   - 修复未设置标签分类可能报错的问题
