@@ -61,24 +61,12 @@ const debugMode = process.env.DEBUG_MODE === "true"
 const isServe = process.env.IS_SERVE
 const isWatch = args.watch || args.w || false
 const isDev = isServe || isWatch || debugMode
-const isWindows = process.platform === "win32"
-// Mac public
-// let devDistDir = "/Users/terwer/Documents/mydocs/SiYuanWorkspace/public/data/plugins/siyuan-plugin-publisher"
-// Mac
-let devDistDir = "/Users/terwer/Documents/mydocs/SiYuanWorkspace/test/data/plugins/siyuan-plugin-publisher"
-// Zhangyue
-// let devDistDir = "/Users/zhangyue/Documents/terwer/SiyuanWorkspace/test/data/plugins/siyuan-plugin-publisher"
-if (isWindows) {
-  // Home
-  // devDistDir = "C:\\Users\\terwer\\Documents\\mydocs\\SiyuanWorkspace\\test\\data\\plugins\\siyuan-plugin-publisher"
-  // Bootcamp
-  devDistDir = "C:\\Users\\Terwer\\Documents\\mydocs\\SiyuanWorkspace\\test\\data\\plugins\\\\siyuan-plugin-publisher"
-}
+
 const isSiyuanBuild = process.env.BUILD_TYPE === "siyuan"
 const isWidgetBuild = process.env.BUILD_TYPE === "widget"
 const isStaticBuild = process.env.BUILD_TYPE === "static"
 // const isChromeBuild = process.env.BUILD_TYPE === "chrome"
-const distDir = isWatch ? devDistDir : isWidgetBuild ? "widget" : "./dist"
+const distDir = isWidgetBuild ? "widget" : "./dist"
 const appBase = getAppBase(isSiyuanBuild, isWidgetBuild, isStaticBuild)
 
 console.log("isWatch=>", isWatch)
@@ -219,7 +207,7 @@ export default defineConfig({
       plugins: [
         ...(isWatch
           ? [
-              livereload(devDistDir),
+              livereload(distDir),
               {
                 //监听静态资源文件
                 name: "watch-external",

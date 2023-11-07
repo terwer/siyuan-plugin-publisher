@@ -359,8 +359,10 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     const yamlAdaptor: YamlConvertAdaptor = this.api.getYamlAdaptor()
     if (null !== yamlAdaptor) {
       let yamlObj: YamlFormatObj
-      const defaultYaml = PostUtil.toYamlObj(post)
-      if (defaultYaml?.slug?.indexOf("siyuan://") > -1) {
+      const defaultYaml = await YamlUtil.yaml2ObjAsync(post.yaml)
+      // if (defaultYaml?.slug?.indexOf("siyuan://") > -1) {
+      // 不确定那个字段才代表，所以全部检测一遍
+      if (this.checkPropertiesStartsWith(defaultYaml, "siyuan://")) {
         // 先生成对应平台的yaml
         yamlObj = yamlAdaptor.convertToYaml(post, cfg)
         // 同步发布内容
@@ -611,6 +613,28 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     }
 
     return replacedText
+  }
+
+  /**
+   * 检测属性是否包含某个字符串
+   *
+   * @param obj object
+   * @param prefix 前缀
+   * @private
+   */
+  private checkPropertiesStartsWith(obj: any, prefix: string) {
+    if (ObjectUtil.isEmptyObject(obj)) {
+      return false
+    }
+
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key) && !StrUtil.isEmptyString(obj[key])) {
+        if (obj[key].startsWith(prefix)) {
+          return true
+        }
+      }
+    }
+    return false
   }
 }
 
