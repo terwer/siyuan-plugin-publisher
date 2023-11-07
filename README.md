@@ -4,13 +4,17 @@
 
 ![](./icon.png)
 
-Publish articles from siyuan-note to platforms such as Yuque, Notion, Cnblogs, WordPress, Typecho, Hexo, Zhihu and more.
+Publish articles from siyuan-note to platforms like Yuque etc. `Free` and `open source`. 
 
-Support features such as fast publishing, image bed management, platform expansion, smart labels, etc.
+If you're interested in the paid professional version, please check here => [Publishing Tool Professional Edition](https://github.com/terwer/siyuan-plugin-publisher-pro)
 
-> Recent Update: 🎉 Publish Tool new version `1.18.4` released.
+> Recent Update: 🎉 Publish Tool new version `1.18.5` released.
 
 - `1.18.0` brings new features and enhanced user experience.
+- The `1.18.5` version primarily addresses the following issues:
+  - Resolved a bug that could cause erroneous YAML generation on certain platforms.
+  - Enhanced project building efficiency by utilizing symbolic links.
+  - Preview of the Professional Edition
 - The `1.18.4` version primarily addresses the following issues:
   - Fixed the problem of YAML modifications not taking effect
   - Fixed an issue where not setting tag categories could lead to errors
