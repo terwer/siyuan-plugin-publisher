@@ -1,27 +1,18 @@
 # Changelog
 
 ## [1.18.5](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.18.4...v1.18.5) (2023-11-07)
-
-
 ### Bug Fixes
-
 * **deps:** bump vue from 3.3.7 to 3.3.8 ([96b7753](https://github.com/terwer/siyuan-plugin-publisher/commit/96b7753d85722642681af51ee3ec85869ee41feb))
-* 修复某些平台 YAML 生成可能发生错误的问题 ([7f99a1b](https://github.com/terwer/siyuan-plugin-publisher/commit/7f99a1b15ea85597828d80534c98559b37d446ff))
-
-
+* 修复某些平台 yaml 生成可能发生错误的问题 ([7f99a1b](https://github.com/terwer/siyuan-plugin-publisher/commit/7f99a1b15ea85597828d80534c98559b37d446ff))
 ### Miscellaneous
-
 * **deps-dev:** bump @types/crypto-js from 4.1.3 to 4.2.0 ([2042f17](https://github.com/terwer/siyuan-plugin-publisher/commit/2042f1720f416208107375a0918b94b6887b8515))
 * **deps-dev:** bump fast-glob from 3.3.1 to 3.3.2 ([647c993](https://github.com/terwer/siyuan-plugin-publisher/commit/647c9932155ee31e3bbd8f106a56f8e1bcb9da6b))
 * 使用软链接构建项目，提升效率 ([c51abe8](https://github.com/terwer/siyuan-plugin-publisher/commit/c51abe8912a989f531b5c4b57a62ae32c2db63c4))
-
 ## [1.18.4](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.18.3...v1.18.4) (2023-11-06)
-### Bug Fixes
 * 修复 yaml 修改未生效问题 ([c3180b9](https://github.com/terwer/siyuan-plugin-publisher/commit/c3180b93ab2964b2ad81a5ba3b7f8bd54781765b))
 * 修复未设置标签分类可能报错的问题 ([4645104](https://github.com/terwer/siyuan-plugin-publisher/commit/46451042d600c7221ce59ef06edb8d7e58a2a1cf))
 * 修复自动分类路径可能为空的问题 ([b31cbd0](https://github.com/terwer/siyuan-plugin-publisher/commit/b31cbd0f19e99a905fe7088de1751ab59e2e9d39))
 * 自动保存属性，取消不必要的提示 ([9f9926d](https://github.com/terwer/siyuan-plugin-publisher/commit/9f9926d39771d8870ea57652e203223bdcfd6940))
-### Miscellaneous
 * **deps-dev:** bump esbuild-style-plugin from 1.6.2 to 1.6.3 ([a53ee10](https://github.com/terwer/siyuan-plugin-publisher/commit/a53ee10beab9ca0f1ecdd67eb03f460b3c3094dc))
 ## [1.18.3](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.18.2...v1.18.3) (2023-11-05)
 ## [1.18.2](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.18.1...v1.18.2) (2023-11-05)
