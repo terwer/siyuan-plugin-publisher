@@ -137,8 +137,8 @@ devDependencies:
     specifier: ^1.6.3
     version: 1.6.3
   fast-glob:
-    specifier: ^3.3.1
-    version: 3.3.1
+    specifier: ^3.3.2
+    version: 3.3.2
   jsdom:
     specifier: ^22.1.0
     version: 22.1.0
@@ -1195,7 +1195,7 @@ packages:
   /@ts-morph/common@0.11.1:
     resolution: {integrity: sha512-7hWZS0NRpEsNV8vWJzg7FEz6V8MaLNeJOmwmghqUXTpzk16V1LLZhdo+4QvE/+zv4cVci0OviuJFnqhEfoV3+g==}
     dependencies:
-      fast-glob: 3.3.1
+      fast-glob: 3.3.2
       minimatch: 3.1.2
       mkdirp: 1.0.4
       path-browserify: 1.0.1
@@ -1829,6 +1829,7 @@ packages:
       '@vue/shared': 3.3.7
       estree-walker: 2.0.2
       source-map-js: 1.0.2
+    dev: true
 
   /@vue/compiler-core@3.3.8:
     resolution: {integrity: sha512-hN/NNBUECw8SusQvDSqqcVv6gWq8L6iAktUR0UF3vGu2OhzRqcOiAno0FmBJWwxhYEXRlQJT5XnoKsVq1WZx4g==}
@@ -1843,27 +1844,13 @@ packages:
     dependencies:
       '@vue/compiler-core': 3.3.7
       '@vue/shared': 3.3.7
+    dev: true
 
   /@vue/compiler-dom@3.3.8:
     resolution: {integrity: sha512-+PPtv+p/nWDd0AvJu3w8HS0RIm/C6VGBIRe24b9hSyNWOAPEUosFZ5diwawwP8ip5sJ8n0Pe87TNNNHnvjs0FQ==}
     dependencies:
       '@vue/compiler-core': 3.3.8
       '@vue/shared': 3.3.8
-
-  /@vue/compiler-sfc@3.3.7:
-    resolution: {integrity: sha512-7pfldWy/J75U/ZyYIXRVqvLRw3vmfxDo2YLMwVtWVNew8Sm8d6wodM+OYFq4ll/UxfqVr0XKiVwti32PCrruAw==}
-    dependencies:
-      '@babel/parser': 7.23.0
-      '@vue/compiler-core': 3.3.7
-      '@vue/compiler-dom': 3.3.7
-      '@vue/compiler-ssr': 3.3.7
-      '@vue/reactivity-transform': 3.3.7
-      '@vue/shared': 3.3.7
-      estree-walker: 2.0.2
-      magic-string: 0.30.5
-      postcss: 8.4.31
-      source-map-js: 1.0.2
-    dev: false
 
   /@vue/compiler-sfc@3.3.8:
     resolution: {integrity: sha512-WMzbUrlTjfYF8joyT84HfwwXo+8WPALuPxhy+BZ6R4Aafls+jDBnSz8PDz60uFhuqFbl3HxRfxvDzrUf3THwpA==}
@@ -1878,13 +1865,6 @@ packages:
       magic-string: 0.30.5
       postcss: 8.4.31
       source-map-js: 1.0.2
-
-  /@vue/compiler-ssr@3.3.7:
-    resolution: {integrity: sha512-TxOfNVVeH3zgBc82kcUv+emNHo+vKnlRrkv8YvQU5+Y5LJGJwSNzcmLUoxD/dNzv0bhQ/F0s+InlgV0NrApJZg==}
-    dependencies:
-      '@vue/compiler-dom': 3.3.7
-      '@vue/shared': 3.3.7
-    dev: false
 
   /@vue/compiler-ssr@3.3.8:
     resolution: {integrity: sha512-hXCqQL/15kMVDBuoBYpUnSYT8doDNwsjvm3jTefnXr+ytn294ySnT8NlsFHmTgKNjwpuFy7XVV8yTeLtNl/P6w==}
@@ -1914,16 +1894,6 @@ packages:
       typescript: 5.2.2
       vue-template-compiler: 2.7.15
     dev: true
-
-  /@vue/reactivity-transform@3.3.7:
-    resolution: {integrity: sha512-APhRmLVbgE1VPGtoLQoWBJEaQk4V8JUsqrQihImVqKT+8U6Qi3t5ATcg4Y9wGAPb3kIhetpufyZ1RhwbZCIdDA==}
-    dependencies:
-      '@babel/parser': 7.23.0
-      '@vue/compiler-core': 3.3.7
-      '@vue/shared': 3.3.7
-      estree-walker: 2.0.2
-      magic-string: 0.30.5
-    dev: false
 
   /@vue/reactivity-transform@3.3.8:
     resolution: {integrity: sha512-49CvBzmZNtcHua0XJ7GdGifM8GOXoUMOX4dD40Y5DxI3R8OUhMlvf2nvgUAcPxaXiV5MQQ1Nwy09ADpnLQUqRw==}
@@ -1963,6 +1933,7 @@ packages:
 
   /@vue/shared@3.3.7:
     resolution: {integrity: sha512-N/tbkINRUDExgcPTBvxNkvHGu504k8lzlNQRITVnm6YjOjwa4r0nnbd4Jb01sNpur5hAllyRJzSK5PvB9PPwRg==}
+    dev: true
 
   /@vue/shared@3.3.8:
     resolution: {integrity: sha512-8PGwybFwM4x8pcfgqEQFy70NaQxASvOC5DJwLQfpArw1UDfUXrJkdxD3BhVTMS+0Lef/TU7YO0Jvr0jJY8T+mw==}
@@ -3620,8 +3591,8 @@ packages:
       sass:
         optional: true
     dependencies:
-      '@vue/compiler-core': 3.3.7
-      '@vue/compiler-sfc': 3.3.7
+      '@vue/compiler-core': 3.3.8
+      '@vue/compiler-sfc': 3.3.8
       cheerio: 1.0.0-rc.12
       esbuild: 0.14.54
       typescript: 4.9.5
@@ -4162,6 +4133,17 @@ packages:
       glob-parent: 5.1.2
       merge2: 1.4.1
       micromatch: 4.0.5
+    dev: true
+
+  /fast-glob@3.3.2:
+    resolution: {integrity: sha512-oX2ruAFQwf/Orj8m737Y5adxDQO0LAB7/S5MnxCdTNDd4p6BsyIVsv9JQsATbTSq8KHRpLwIHbVlUNatxd+1Ow==}
+    engines: {node: '>=8.6.0'}
+    dependencies:
+      '@nodelib/fs.stat': 2.0.5
+      '@nodelib/fs.walk': 1.2.8
+      glob-parent: 5.1.2
+      merge2: 1.4.1
+      micromatch: 4.0.5
 
   /fast-json-stable-stringify@2.1.0:
     resolution: {integrity: sha512-lhd/wF+Lk98HZoTCtlVraHtfh5XYijIjalXck7saUtuanSDyLMxnHhSXEDJqHxD7msR8D0uCmqlkwjCV8xvwHw==}
@@ -4450,7 +4432,7 @@ packages:
     dependencies:
       array-union: 2.1.0
       dir-glob: 3.0.1
-      fast-glob: 3.3.1
+      fast-glob: 3.3.2
       ignore: 5.2.4
       merge2: 1.4.1
       slash: 3.0.0
@@ -7318,7 +7300,7 @@ packages:
     dependencies:
       '@rollup/pluginutils': 5.0.5
       escape-string-regexp: 5.0.0
-      fast-glob: 3.3.1
+      fast-glob: 3.3.2
       local-pkg: 0.4.3
       magic-string: 0.30.5
       mlly: 1.4.2
@@ -7386,7 +7368,7 @@ packages:
       '@antfu/utils': 0.7.6
       '@rollup/pluginutils': 5.0.5
       '@vueuse/core': 10.5.0(vue@3.3.8)
-      fast-glob: 3.3.1
+      fast-glob: 3.3.2
       local-pkg: 0.5.0
       magic-string: 0.30.5
       minimatch: 9.0.3
@@ -7413,7 +7395,7 @@ packages:
       '@rollup/pluginutils': 5.0.5
       chokidar: 3.5.3
       debug: 4.3.4
-      fast-glob: 3.3.1
+      fast-glob: 3.3.2
       local-pkg: 0.4.3
       magic-string: 0.30.5
       minimatch: 9.0.3
@@ -7576,7 +7558,7 @@ packages:
       dotenv: 16.3.1
       dotenv-expand: 8.0.3
       ejs: 3.1.9
-      fast-glob: 3.3.1
+      fast-glob: 3.3.2
       fs-extra: 10.1.0
       html-minifier-terser: 6.1.0
       node-html-parser: 5.4.2
