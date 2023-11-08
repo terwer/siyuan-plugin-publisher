@@ -38,17 +38,18 @@ export const useSiyuanApi = () => {
   const { getReadOnlySiyuanSetting } = useSiyuanSettingStore()
   const { getReadOnlyPublishPreferenceSetting } = usePreferenceSettingStore()
 
+  // 环境变量
   const envSiyuanApiUrl = Utils.emptyOrDefault(process.env.VITE_SIYUAN_API_URL, "")
   const envSiyuanAuthToken = Utils.emptyOrDefault(process.env.VITE_SIYUAN_AUTH_TOKEN, "")
   const envSiyuanCookie = Utils.emptyOrDefault(process.env.VITE_SIYUAN_COOKIE, "")
-
+  // 获取配置
   const pref = getReadOnlyPublishPreferenceSetting()
   const siyuanSetting = getReadOnlySiyuanSetting()
-
-  const siyuanApiUrl = siyuanSetting.value.apiUrl ?? envSiyuanApiUrl
-  const siyuanAuthToken = siyuanSetting.value.password ?? envSiyuanAuthToken
+  // 设置
+  const siyuanApiUrl = Utils.emptyOrDefault(siyuanSetting.value.apiUrl, envSiyuanApiUrl)
+  const siyuanAuthToken = Utils.emptyOrDefault(siyuanSetting.value.password, envSiyuanAuthToken)
   const siyuanConfig = new SiyuanConfig(siyuanApiUrl, siyuanAuthToken)
-  siyuanConfig.cookie = siyuanSetting.value.cookie ?? envSiyuanCookie
+  siyuanConfig.cookie = Utils.emptyOrDefault(siyuanSetting.value.cookie, envSiyuanCookie)
   siyuanConfig.preferenceConfig.fixTitle = pref.value.fixTitle
   siyuanConfig.preferenceConfig.keepTitle = pref.value.keepTitle
   siyuanConfig.preferenceConfig.removeFirstH1 = pref.value.removeFirstH1

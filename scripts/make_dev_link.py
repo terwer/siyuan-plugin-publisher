@@ -17,11 +17,14 @@ targetDir = ''
 devOutDir = 'dist'
 # ******************************************************************************************
 
+with open('cookie.txt', 'r', encoding='utf-8') as cookie_file, open('token.txt', 'r', encoding='utf-8') as token_file:
+    cookie = cookie_file.read().strip()
+    token = token_file.read().strip()
 POST_HEADER = {
-    "Authorization": f"Token ",
+    "Authorization": f"Token {token}",
+    "Cookie": cookie,
     "Content-Type": "application/json",
 }
-
 
 def get_siyuan_dir():
     url = 'http://127.0.0.1:6806/api/system/getWorkspaces'

@@ -32,7 +32,7 @@ import { CategoryTypeEnum, PageTypeEnum, PasswordType } from "zhi-blog-api"
 export class CsdnConfig extends CommonWebConfig {
   constructor(username: string, password: string, middlewareUrl?: string) {
     super("https://blog.csdn.net", "https://bizapi.csdn.net", username, password, middlewareUrl)
-    this.previewUrl = "[userid]/article/details/[postid]"
+    this.previewUrl = "/[userid]/article/details/[postid]"
     this.pageType = PageTypeEnum.Markdown
     this.usernameEnabled = false
     this.passwordType = PasswordType.PasswordType_Cookie

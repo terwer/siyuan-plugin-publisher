@@ -25,6 +25,7 @@
 
 import { Buffer } from "node:buffer"
 import { Base64 } from "js-base64"
+import path from "node:path"
 
 /**
  * 将 file 对象转换为 Buffer
@@ -133,3 +134,8 @@ export const arrayToBuffer = (ab: ArrayBuffer): Buffer => {
   const uint8Array = new Uint8Array(ab)
   return Buffer.from(uint8Array)
 }
+
+/**
+ * polyfuill node 的 path
+ */
+export { path }

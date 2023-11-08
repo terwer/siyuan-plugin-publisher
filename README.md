@@ -43,16 +43,9 @@ If you're interested in the paid professional version, please check here => [Pub
   - Preserve labels and classifications for each platform.
 - Ahem, in addition, the author secretly developed an import feature after version `1.14.0`. You can easily import predefined platforms through the `Settings` -> `Publish Settings` -> `Import Predefined Platforms` function 😄
 
-> Platform Limitations:
+> [Click here](https://blog.terwer.space/s/20230810132040-nn4q7vs) to access the latest documentation.
 
-- All Platforms: The Publish Tool retrieves and overwrites the latest edited content from Simplenote with each release. Remember, it overwrites the content every time. Thus, please refrain from modifying the content manually on the platforms.
-- **WeChat Official Account**: The Publish Tool now supports publishing articles to the WeChat Official Account draft folder, starting from `1.13.0+`. However, due to limitations imposed by the WeChat platform on Electron, the login operation is not supported. Hence, you can manually visit `https://mp.weixin.qq.com/`, login, copy the cookie, and paste it into the configuration options.
-- **Notion**: As Notion operates on a block-based system rather than whole documents, it is technically limited to perform regular updates. Starting from `1.18.0`, updates are supported by first deleting and then publishing the content. Please note that this process may take longer than usual.
-- **Juejin**: Juejin platform requires mandatory tags and categories for publication. If not selected, a default backend category and programmer tag will be applied; otherwise, the article cannot be published.
-- **Juejin**: **Each article published on Juejin needs to go through the approval process**. Therefore, immediately after publishing, previewing the article may result in a 404 error. In such cases, you can temporarily modify the link from `/post` to `/spost` for a preview, or patiently wait for the approval process to complete.
-- **CSDN**: CSDN requires setting tags, as dictated by the platform's rules. Tags cannot be left empty.
-
-> [Click here](https://blog.terwer.space/s/20230810132040-nn4q7vs) to view the latest help documentation.
+**For any further inquiries or suggestions, please join QQ Group `895063267` for discussion**
 
 ## Update history
 

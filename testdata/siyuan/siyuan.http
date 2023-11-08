@@ -1,0 +1,3 @@
+### 鉴权码
+GET http://127.0.0.1:6806/stage/build/desktop
+Cookie: {{cookie}}

@@ -54,9 +54,9 @@ import { CATE_AUTO_NAME, MUST_USE_OWN_PLATFORM, MUST_USE_PICBED_PLATFORM } from 
 import { toRaw } from "vue"
 import _ from "lodash"
 import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
-import { SiyuanDevice } from "zhi-device"
 import { SypConfig } from "~/syp.config.ts"
 import { usePlatformMetadataStore } from "~/src/stores/usePlatformMetadataStore.ts"
+import { path } from "~/src/utils/polyfillUtils.ts"
 
 /**
  * 各种模式共享的扩展基类
@@ -241,8 +241,6 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
       cfg.usePathCategory = true
     }
     // 获取笔记层级
-    const win = SiyuanDevice.siyuanWindow()
-    const path = win.require("path")
     const save_dir = path.dirname(post.link)
     // 使用层级作为文件保存路径
     if (cfg.usePathCategory) {
@@ -567,9 +565,6 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
   ) {
     const { pref, cfg, setting } = options
     const that = this
-    const win = SiyuanDevice.siyuanWindow()
-    const path = win.require("path")
-
     const matches = Array.from(text.matchAll(regex))
 
     let replacedText = text
