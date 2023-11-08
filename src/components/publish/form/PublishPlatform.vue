@@ -103,7 +103,7 @@ onMounted(async () => {
 
 <template>
   <div>
-    <p>请选择要发布的平台2：</p>
+    <p>请选择要发布的平台：</p>
     <div class="syp-distri-platform-container">
       <a v-for="cfg in formData.dynamicConfigArray" class="distri-item" @click="handleCheck(cfg.platformKey)">
         <el-tooltip :content="CrossPageUtils.longPlatformName(cfg.platformName, 20)" placement="bottom">

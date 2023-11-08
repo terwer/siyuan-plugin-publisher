@@ -343,8 +343,8 @@ const usePublish = () => {
     const postMeta = ObjectUtil.getProperty(setting, id, {})
     const newPostid = postMeta[posidKey]
     let previewUrl = await api.getPreviewUrl(newPostid)
-    const isAbsoluteUrl = /^http/.test(previewUrl)
-    return isAbsoluteUrl ? previewUrl : `${cfg?.home ?? ""}${previewUrl}`
+    const isAbsoluteUrl = /^[a-z]+:\/\//.test(previewUrl)
+    return isAbsoluteUrl ? previewUrl : StrUtil.pathJoin(cfg?.home ?? "", previewUrl)
   }
 
   /**
