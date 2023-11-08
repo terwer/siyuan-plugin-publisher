@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.18.6](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.18.5...v1.18.6) (2023-11-08)
+
+
+### Bug Fixes
+
+* 修复主页末尾有斜杠预览错误的问题 ([b58f5c3](https://github.com/terwer/siyuan-plugin-publisher/commit/b58f5c344589cad707dadd828831c8408e0648d3))
+* 修复博客园可能出现的预览错误问题 ([a4ba0ed](https://github.com/terwer/siyuan-plugin-publisher/commit/a4ba0edb582ac28bf27551639797bc8caa1b3686))
+* 修复无法通过伺服进行调试的问题 ([3c9e9a1](https://github.com/terwer/siyuan-plugin-publisher/commit/3c9e9a1bcc88de4282a1145fcc507a0344b628f3))
+* 修复简书发布报错问题 ([fbad5ee](https://github.com/terwer/siyuan-plugin-publisher/commit/fbad5ee0a7fe744848c2a8b7767187b3f34cd55e))
+* 兼容CSDN公式 ([f954feb](https://github.com/terwer/siyuan-plugin-publisher/commit/f954febf246d16933fed6b8fc5ce7896c19ab92e))
+* 兼容知乎公式 ([78688cd](https://github.com/terwer/siyuan-plugin-publisher/commit/78688cd7ca4584a83e45f1d208a8e98d62c3b216))
+* 掘金平台摘要控制在50-100 ([db620b7](https://github.com/terwer/siyuan-plugin-publisher/commit/db620b7cb33f362a4d2cc54e5529d8c8239654dc))
+* 部分场景适配网页版 ([8ad9b31](https://github.com/terwer/siyuan-plugin-publisher/commit/8ad9b31ea2211b33a8474cec68744fc8d5b8220b))
+* 部分场景适配网页版 ([b0ee607](https://github.com/terwer/siyuan-plugin-publisher/commit/b0ee60726112d4744e111d774369a380b6d930f2))
+* 部分场景适配网页版 ([b7478cd](https://github.com/terwer/siyuan-plugin-publisher/commit/b7478cd5fdf6336087b9971055e59a440ee7004e))
+* 部分场景适配网页版 ([3eaf1d2](https://github.com/terwer/siyuan-plugin-publisher/commit/3eaf1d2bcd62fad5fd18b953d5d9c58831734865))
+
+
+### Miscellaneous
+
+* **deps-dev:** bump vercel from 32.5.0 to 32.5.2 ([93d2934](https://github.com/terwer/siyuan-plugin-publisher/commit/93d29346dce39aed8626353dd32894f3fcbcbdb4))
+
 ## [1.18.5](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.18.4...v1.18.5) (2023-11-07)
 ### Bug Fixes
 * **deps:** bump vue from 3.3.7 to 3.3.8 ([96b7753](https://github.com/terwer/siyuan-plugin-publisher/commit/96b7753d85722642681af51ee3ec85869ee41feb))
