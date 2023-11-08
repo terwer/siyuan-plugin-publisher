@@ -1,10 +1,20 @@
 # Changelog
 
-## [1.18.5](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.18.4...v1.18.5) (2023-11-07)
+## [1.18.6](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.18.5...v1.18.6) (2023-11-08)
 ### Bug Fixes
+* 修复主页末尾有斜杠预览错误的问题 ([b58f5c3](https://github.com/terwer/siyuan-plugin-publisher/commit/b58f5c344589cad707dadd828831c8408e0648d3))
+* 修复博客园可能出现的预览错误问题 ([a4ba0ed](https://github.com/terwer/siyuan-plugin-publisher/commit/a4ba0edb582ac28bf27551639797bc8caa1b3686))
+* 修复无法通过伺服进行调试的问题 ([3c9e9a1](https://github.com/terwer/siyuan-plugin-publisher/commit/3c9e9a1bcc88de4282a1145fcc507a0344b628f3))
+* 修复简书发布报错问题 ([fbad5ee](https://github.com/terwer/siyuan-plugin-publisher/commit/fbad5ee0a7fe744848c2a8b7767187b3f34cd55e))
+* 兼容csdn公式 ([f954feb](https://github.com/terwer/siyuan-plugin-publisher/commit/f954febf246d16933fed6b8fc5ce7896c19ab92e))
+* 兼容知乎公式 ([78688cd](https://github.com/terwer/siyuan-plugin-publisher/commit/78688cd7ca4584a83e45f1d208a8e98d62c3b216))
+* 掘金平台摘要控制在50-100 ([db620b7](https://github.com/terwer/siyuan-plugin-publisher/commit/db620b7cb33f362a4d2cc54e5529d8c8239654dc))
+* 部分场景适配网页版 ([3eaf1d2](https://github.com/terwer/siyuan-plugin-publisher/commit/3eaf1d2bcd62fad5fd18b953d5d9c58831734865))
+### Miscellaneous
+* **deps-dev:** bump vercel from 32.5.0 to 32.5.2 ([93d2934](https://github.com/terwer/siyuan-plugin-publisher/commit/93d29346dce39aed8626353dd32894f3fcbcbdb4))
+## [1.18.5](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.18.4...v1.18.5) (2023-11-07)
 * **deps:** bump vue from 3.3.7 to 3.3.8 ([96b7753](https://github.com/terwer/siyuan-plugin-publisher/commit/96b7753d85722642681af51ee3ec85869ee41feb))
 * 修复某些平台 yaml 生成可能发生错误的问题 ([7f99a1b](https://github.com/terwer/siyuan-plugin-publisher/commit/7f99a1b15ea85597828d80534c98559b37d446ff))
-### Miscellaneous
 * **deps-dev:** bump @types/crypto-js from 4.1.3 to 4.2.0 ([2042f17](https://github.com/terwer/siyuan-plugin-publisher/commit/2042f1720f416208107375a0918b94b6887b8515))
 * **deps-dev:** bump fast-glob from 3.3.1 to 3.3.2 ([647c993](https://github.com/terwer/siyuan-plugin-publisher/commit/647c9932155ee31e3bbd8f106a56f8e1bcb9da6b))
 * 使用软链接构建项目，提升效率 ([c51abe8](https://github.com/terwer/siyuan-plugin-publisher/commit/c51abe8912a989f531b5c4b57a62ae32c2db63c4))
