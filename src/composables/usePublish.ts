@@ -391,7 +391,6 @@ const usePublish = () => {
 
       // 其他属性初始化
       let post = _.cloneDeep(slugedPost) as Post
-      const title = post.title
       if (!isSys) {
         // 平台相关自定义属性（摘要、标签、分类）
         const yamlKey = getDynYamlKey(key)
