@@ -8,9 +8,18 @@ Publish articles from siyuan-note to platforms like Yuque etc. `Free` and `open 
 
 If you're interested in the paid professional version, please check here => [Publishing Tool Professional Edition](https://github.com/terwer/siyuan-plugin-publisher-pro)
 
-> Recent Update: 🎉 Publish Tool new version `1.18.5` released.
+> Recent Update: 🎉 Publish Tool new version `1.18.6` released.
 
 - `1.18.0` brings new features and enhanced user experience.
+- The `1.18.6` version primarily addresses the following issues:
+  - Rectified the issue of misaligned previews at the end of the homepage.
+  - Addressed potential preview errors that may arise on Cnblogs.
+  - Resolved the debugging issue that prevented troubleshooting via the server.
+  - Corrected error messages during publishing on Jianshu.
+  - Ensured compatibility with formulas on CSDN.
+  - Extended compatibility to accommodate formulas on Zhihu.
+  - Imposed constraints on the abstract length within the range of 50 to 100 characters on the Juejin platform.
+  - Tailored certain scenarios to adapt to the docker browser version<sup>beta</sup>.
 - The `1.18.5` version primarily addresses the following issues:
   - Resolved a bug that could cause erroneous YAML generation on certain platforms.
   - Enhanced project building efficiency by utilizing symbolic links.
