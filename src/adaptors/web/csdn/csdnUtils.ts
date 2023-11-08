@@ -26,6 +26,8 @@
 import Utf8 from "crypto-js/enc-utf8"
 import CryptoJS from "crypto-js"
 import Base64 from "crypto-js/enc-base64"
+import * as cheerio from "cheerio"
+import KatexUtils from "~/src/utils/KatexUtils.ts"
 
 /**
  * CSDN工具类，用于生成UUID和签名
@@ -81,6 +83,36 @@ class CsdnUtils {
     // console.log(uuid)
     // console.log(sign)
     return sign
+  }
+
+  public static processCsdnMath(html: string): string {
+    // 使用Cheerio加载HTML
+    const $ = cheerio.load(html)
+
+    // 处理两个$符号包裹的公式
+    const doubleDollarRegex = /\$\$([^$]+)\$\$/g
+    $("*").each((index, element) => {
+      const content = $(element).html()
+      const newContent = content.replace(doubleDollarRegex, (match, mathContent) => {
+        const mathHtml = KatexUtils.renderToString(mathContent)
+        return `<span class="katex--display">${mathHtml}</span>`
+      })
+      $(element).html(newContent)
+    })
+
+    // 处理一个$符号包裹的公式
+    const singleDollarRegex = /\$([^$]+)\$/g
+    $("*").each((index, element) => {
+      const content = $(element).html()
+      const newContent = content.replace(singleDollarRegex, (match, mathContent) => {
+        const mathHtml = KatexUtils.renderToString(mathContent)
+        return `<span class="katex--inline">${mathHtml}</span>`
+      })
+      $(element).html(newContent)
+    })
+
+    // 输出修改后的HTML
+    return $.html()
   }
 }
 
