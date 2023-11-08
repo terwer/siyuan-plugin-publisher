@@ -64,32 +64,31 @@ class ZhihuUtils {
     // 使用Cheerio加载HTML
     const $ = cheerio.load(html)
 
-    // 选择所有带有类名"language-math"的<span>元素
-    debugger
-    $("span.language-math").each((index, element) => {
-      // 获取元素的文本内容
-      const mathContent = $(element).text()
-
-      // 创建替代的<img>标签
-      const imgTag = `<img eeimg="1" src="//www.zhihu.com/equation?tex=${encodeURIComponent(mathContent)}" 
-        alt="${mathContent}" />`
-
-      // 用新的<img>标签替换原始元素
-      $(element).replaceWith(imgTag)
-    })
-
-    // 选择所有带有类名"language-math"的<div>元素
-    $("div.language-math").each((index, element) => {
-      // 获取元素的文本内容
-      const mathContent = $(element).text()
-
-      // 创建替代的<img>标签
-      const imgTag = `<p><img eeimg="1" src="//www.zhihu.com/equation?tex=${encodeURIComponent(mathContent)}" 
-        alt="${mathContent}"/></p>`
-
-      // 用新的<img>标签替换原始元素
-      $(element).replaceWith(imgTag)
-    })
+    // // 选择所有带有类名"language-math"的<span>元素
+    // $("span.language-math").each((index, element) => {
+    //   // 获取元素的文本内容
+    //   const mathContent = $(element).text()
+    //
+    //   // 创建替代的<img>标签
+    //   const imgTag = `<img eeimg="1" src="//www.zhihu.com/equation?tex=${encodeURIComponent(mathContent)}"
+    //     alt="${mathContent}" />`
+    //
+    //   // 用新的<img>标签替换原始元素
+    //   $(element).replaceWith(imgTag)
+    // })
+    //
+    // // 选择所有带有类名"language-math"的<div>元素
+    // $("div.language-math").each((index, element) => {
+    //   // 获取元素的文本内容
+    //   const mathContent = $(element).text()
+    //
+    //   // 创建替代的<img>标签
+    //   const imgTag = `<p><img eeimg="1" src="//www.zhihu.com/equation?tex=${encodeURIComponent(mathContent)}"
+    //     alt="${mathContent}"/></p>`
+    //
+    //   // 用新的<img>标签替换原始元素
+    //   $(element).replaceWith(imgTag)
+    // })
 
     // 处理两个$符号包裹的公式
     const doubleDollarRegex = /\$\$([^$]+)\$\$/g
