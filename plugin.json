@@ -7,8 +7,7 @@
   "backends": [
     "windows",
     "linux",
-    "darwin",
-    "docker"
+    "darwin"
   ],
   "frontends": [
     "desktop",

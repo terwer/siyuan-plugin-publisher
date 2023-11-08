@@ -1,0 +1,24 @@
+### 代理
+POST http://127.0.0.1:6806/api/network/forwardProxy
+Cookie: {{cookie}}
+Content-Type: application/json
+
+{
+  "url": "http://127.0.0.1:6806/api/file/putFile",
+  "headers": [
+    {
+      "Authorization": "Token {{token}}",
+      "Cookie": "{{cookie}}"
+    }
+  ],
+  "payload": {},
+  "method": "POST"
+}
+
+
+### 鉴权码
+GET http://127.0.0.1:6806/stage/build/desktop
+Cookie: {{cookie}}
+Authorization: "Token {{token}}",
+
+
