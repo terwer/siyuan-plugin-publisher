@@ -164,7 +164,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     const post = _.cloneDeep(doc) as Post
 
     if (cfg?.mdFilenameRule) {
-      if (cfg?.mdFilenameRule.includes("[filename]")) {
+      if (cfg?.mdFilenameRule?.includes("[filename]")) {
         cfg.useMdFilename = true
       }
       // 处理文件规则
@@ -237,7 +237,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     const pathCates = []
 
     // 笔记层级作为文件路径
-    if (savePath.includes(CATE_AUTO_NAME)) {
+    if (savePath?.toString().includes(CATE_AUTO_NAME)) {
       cfg.usePathCategory = true
     }
     // 获取笔记层级

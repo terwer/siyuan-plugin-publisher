@@ -92,7 +92,7 @@ class VuepressYamlConverterAdaptor extends YamlConvertAdaptor {
     }
 
     // 日记
-    if (post.title.includes("[日记]")) {
+    if (post?.title?.includes("[日记]")) {
       yamlFormatObj.yamlObj.article = false
     }
 
