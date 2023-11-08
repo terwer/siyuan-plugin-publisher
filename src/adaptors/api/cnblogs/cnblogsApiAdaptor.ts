@@ -124,6 +124,16 @@ class CnblogsApiAdaptor extends MetaweblogBlogApiAdaptor {
     return result
   }
 
+  public async getPreviewUrl(postid: string): Promise<string> {
+    const userid = this.cfg.apiUrl ? this.cfg.apiUrl.match(/[^/]+$/)?.[0] ?? "" : ""
+    const previewUrl = this.cfg.previewUrl.replace(/\[userid]/g, userid).replace(/\[postid]/g, postid)
+    // return StrUtil.pathJoin(this.cfg.home ?? "", previewUrl)
+    return previewUrl
+  }
+
+  // ================
+  // private methods
+  // ================
   private assignMdCategory(post: Post) {
     const cates = post.categories ?? []
     if (!cates.some((cate) => cate.toLowerCase() === this.MD_CATEGORY.toLowerCase())) {
