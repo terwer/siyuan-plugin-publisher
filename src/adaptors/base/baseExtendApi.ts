@@ -56,7 +56,7 @@ import _ from "lodash"
 import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
 import { SypConfig } from "~/syp.config.ts"
 import { usePlatformMetadataStore } from "~/src/stores/usePlatformMetadataStore.ts"
-import path from "node:path"
+import { path } from "~/src/utils/polyfillUtils.ts"
 
 /**
  * 各种模式共享的扩展基类
