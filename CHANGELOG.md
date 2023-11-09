@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.18.7](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.18.6...v1.18.7) (2023-11-09)
+
+
+### Bug Fixes
+
+* 新增菜单开关 ([8589364](https://github.com/terwer/siyuan-plugin-publisher/commit/8589364edb9b3c31f45d5a99296de9f86d7dfd66))
+
+
+### Miscellaneous
+
+* **deps-dev:** bump @vitejs/plugin-vue from 4.4.0 to 4.4.1 ([938511b](https://github.com/terwer/siyuan-plugin-publisher/commit/938511b3e1e1f2abe36220048be5ac3fd77f8459))
+* **deps-dev:** bump vercel from 32.5.2 to 32.5.3 ([d55392c](https://github.com/terwer/siyuan-plugin-publisher/commit/d55392c8fd2980b9d730123fd5ed80ef19447242))
+
 ## [1.18.6](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.18.5...v1.18.6) (2023-11-08)
 ### Bug Fixes
 * 修复主页末尾有斜杠预览错误的问题 ([b58f5c3](https://github.com/terwer/siyuan-plugin-publisher/commit/b58f5c344589cad707dadd828831c8408e0648d3))
