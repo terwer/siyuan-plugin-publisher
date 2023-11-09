@@ -23,67 +23,29 @@
  * questions.
  */
 
-import { PreferenceConfig } from "zhi-blog-api"
+import PublisherPlugin from "../index"
+import { JsonUtil } from "zhi-common"
 
 /**
- * 发布偏好设置
- *
- * @author terwer
- * @since 1.9.1
- * @version 1.9.1
+ * 配置管理类
+ * 提供配置的加载、保存和删除功能
  */
-class PublishPreferenceCfg extends PreferenceConfig {
-  /**
-   * AI 体验码
-   */
-  public experimentalUseSiyuanNoteAIConfig: boolean
+export class PreferenceConfigManager {
+  private static storageKey = "/data/storage/syp/publish-preference-cfg.json"
+  private static cfgKey="publish-preference-cfg"
 
   /**
-   * AI 体验码
+   * 加载配置
+   *
+   * @param pluginInstance PublisherPlugin的实例
+   * @returns 返回配置对象
    */
-  public experimentalAIEnabled: boolean
-
-  /**
-   * AI 体验码
-   */
-  public experimentalAICode: string
-
-  /**
-   * AI 基础地址
-   */
-  public experimentalAIBaseUrl?: string
-
-  /**
-   * AI 代理地址
-   */
-  public experimentalAIProxyUrl?: string
-
-  // 文档菜单
-  /**
-   * 是否展示文档快捷菜单
-   */
-  public showDocQuickMenu?: boolean
-
-  // 顶栏菜单
-  public showQuickMenu?: boolean
-  public showSingleMenu?: boolean
-  public showBatchMenu?: boolean
-  public showAIMenu?: boolean
-  public showExtendMenu?: boolean
-
-  constructor() {
-    super()
-    this.experimentalUseSiyuanNoteAIConfig = true
-    this.experimentalAIEnabled = false
-
-    this.showDocQuickMenu = true
-
-    this.showQuickMenu = true
-    this.showSingleMenu = true
-    this.showBatchMenu = true
-    this.showAIMenu = true
-    this.showExtendMenu = true
+  public static async loadConfig(pluginInstance: PublisherPlugin): Promise<any> {
+    const configStr = await pluginInstance.kernelApi.getFile(this.storageKey, "text")
+    const config= JsonUtil.safeParse<any>(configStr, {} as any)
+    if(!config[this.cfgKey]){
+      return {}
+    }
+    return JsonUtil.safeParse<any>(config[this.cfgKey],{} as any)
   }
 }
-
-export { PublishPreferenceCfg }

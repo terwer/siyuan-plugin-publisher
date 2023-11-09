@@ -26,7 +26,7 @@
 import PublisherPlugin from "./index"
 import { icons } from "./utils/svg"
 import { IMenuItemOption, Menu, showMessage } from "siyuan"
-import PageUtil from "./utils/pageUtil"
+import PageUtils from "./utils/pageUtils.ts"
 import HtmlUtils from "./utils/htmlUtils"
 import { createSiyuanAppLogger } from "./appLogger"
 import { WidgetInvoke } from "./invoke/widgetInvoke"
@@ -35,6 +35,8 @@ import { ObjectUtil } from "zhi-common"
 import { DYNAMIC_CONFIG_KEY } from "./Constants"
 import { ConfigManager } from "~/siyuan/store/config.ts"
 import CrossPageUtils from "~/cross/crossPageUtils.ts"
+import MenuUtils from "~/siyuan/utils/menuUtils.ts"
+import { PreferenceConfigManager } from "~/siyuan/store/preferenceConfigManager.ts"
 
 /**
  * 顶部按钮
@@ -63,200 +65,147 @@ export class Topbar {
     topBarElement.addEventListener("click", async () => {
       // 预加载数据
       const setting = await ConfigManager.loadConfig(self.pluginInstance)
+      const prefSetting = await PreferenceConfigManager.loadConfig(self.pluginInstance)
+
       // 快速发布
-      const quickMenus = self.getQuickMenus(setting)
+      const quickMenus =
+        prefSetting.showQuickMenu === false
+          ? []
+          : MenuUtils.getQuickMenus(this.pluginInstance, this.widgetInvoke, setting)
       // 扩展菜单
-      const extendMenus = await self.getExtendMenus()
+      const extendMenus =
+        prefSetting.showExtendMenu === false
+          ? []
+          : await MenuUtils.getExtendMenus(this.pluginInstance, this.pluginInvoke)
       // 初始化菜单
-      this.addMenu(topBarElement.getBoundingClientRect(), quickMenus, extendMenus)
+      await this.addMenu(topBarElement.getBoundingClientRect(), quickMenus, extendMenus, prefSetting)
       self.logger.info("publisher menu loaded")
     })
   }
 
-  private getQuickMenus(setting: any) {
-    const submenus = <IMenuItemOption[]>[]
-    // 读取配置
-    if (ObjectUtil.isEmptyObject(setting)) {
-      // 配置错误，直接返回空
-      return submenus
-    }
-    const dynJsonCfg = setting[DYNAMIC_CONFIG_KEY] as any
-    this.logger.info("dynJsonCfg =>", dynJsonCfg.totalCfg)
-    // 构造发布菜单
-    dynJsonCfg.totalCfg?.forEach((config: any) => {
-      let icon = `<span class="iconfont-icon">${config.platformIcon}</span>`
-      // 修复图片不展示问题
-      if (/^<img/.test(config.platformIcon) && config.platformIcon.indexOf("./images") > -1) {
-        icon = config.platformIcon.replace(
-          /\.\/images/g,
-          `${window.location.origin}/plugins/siyuan-plugin-publisher/images`
-        )
-        icon = `<span class="img-icon">${icon}</span>`
-      }
-      if (config.isEnabled === true) {
-        const submenu = {
-          iconHTML: `${icon}`,
-          label: CrossPageUtils.longPlatformName(config.platformName, 11),
-          disabled: !config.isAuth,
-          click: async () => {
-            const key = config.platformKey
-            await this.widgetInvoke.showPublisherQuickPublishDialog(key)
-          },
-        }
-        submenus.push(submenu)
-      }
-    })
-
-    if (submenus.length == 0) {
-      return undefined
-    }
-    return submenus
-  }
-
-  private async getExtendMenus() {
-    const isBlogInstalled = await this.pluginInvoke.preCheckBlogPlugin()
-    this.logger.info(`isBlogInstalled=>${isBlogInstalled}`)
-
-    const extmenus = <IMenuItemOption[]>[]
-    if (isBlogInstalled) {
-      // 发布预览
-      const extPreviewMenu = {
-        iconHTML: icons.iconEye,
-        label: this.pluginInstance.i18n.preview,
-        click: () => {
-          this.pluginInvoke.showBlogDialog()
-        },
-      }
-      extmenus.push(extPreviewMenu)
-    }
-
-    // 当前文档ID
-    const pageId = PageUtil.getPageId()
-    const docIdMenu = {
-      iconHTML: icons.iconOl,
-      label: this.pluginInstance.i18n.copyPageId,
-      click: async () => {
-        await HtmlUtils.copyToClipboard(pageId)
-        this.pluginInstance.kernelApi.pushMsg({
-          msg: `当前文档ID已复制=>${pageId}`,
-          timeout: 3000,
-        })
-        this.logger.info("当前文档ID已复制", pageId)
-      },
-    }
-    extmenus.push(docIdMenu)
-
-    if (extmenus.length == 0) {
-      return undefined
-    }
-    return extmenus
-  }
-
-  private async addMenu(rect: DOMRect, quickMenus: IMenuItemOption[], extendMenus: IMenuItemOption[]) {
+  private async addMenu(
+    rect: DOMRect,
+    quickMenus: IMenuItemOption[],
+    extendMenus: IMenuItemOption[],
+    prefSetting: any
+  ) {
     const menu = new Menu("publisherMenu")
 
     // 一键发布
-    menu.addItem({
-      icon: `iconRiffCard`,
-      label: this.pluginInstance.i18n.publishTo,
-      submenu: quickMenus,
-      click: () => {
-        if (!quickMenus) {
-          showMessage("请先在 设置->发布设置配置平台并启用", 7000, "error")
-        }
-      },
-    })
+    if (prefSetting.showQuickMenu !== false) {
+      menu.addItem({
+        icon: `iconRiffCard`,
+        label: this.pluginInstance.i18n.publishTo,
+        submenu: quickMenus,
+        click: () => {
+          if (!quickMenus) {
+            showMessage("请先在 设置->发布设置配置平台并启用", 7000, "error")
+          }
+        },
+      })
+
+      menu.addSeparator()
+    }
 
     // 常规发布
-    menu.addSeparator()
-    menu.addItem({
-      iconHTML: icons.iconPen,
-      label: this.pluginInstance.i18n.publishNormal,
-      click: () => {
-        this.widgetInvoke.showPublisherSinglePublishDialog()
-      },
-    })
+    if (prefSetting.showSingleMenu !== false) {
+      menu.addItem({
+        iconHTML: icons.iconPen,
+        label: this.pluginInstance.i18n.publishNormal,
+        click: () => {
+          this.widgetInvoke.showPublisherSinglePublishDialog()
+        },
+      })
+      menu.addSeparator()
+    }
 
     // 批量分发
-    menu.addSeparator()
-    menu.addItem({
-      iconHTML: `<svg class="b3-menu__icon" style=""><use xlink:href="#iconMove"></use></svg>`,
-      label: this.pluginInstance.i18n.batchSync,
-      click: () => {
-        this.widgetInvoke.showPublisherBatchPublishDialog()
-      },
-    })
+    if (prefSetting.showBatchMenu !== false) {
+      menu.addItem({
+        iconHTML: `<svg class="b3-menu__icon" style=""><use xlink:href="#iconMove"></use></svg>`,
+        label: this.pluginInstance.i18n.batchSync,
+        click: () => {
+          this.widgetInvoke.showPublisherBatchPublishDialog()
+        },
+      })
+      menu.addSeparator()
+    }
 
     // 图床管理
-    const isPicgoInstalled = await this.pluginInvoke.preCheckPicgoPlugin()
-    this.logger.info(`isPicgoInstalled=>${isPicgoInstalled}`)
-    if (isPicgoInstalled) {
-      menu.addSeparator()
-      // 图床
+    if (prefSetting.showExtendMenu !== false) {
+      const isPicgoInstalled = await this.pluginInvoke.preCheckPicgoPlugin()
+      this.logger.info(`isPicgoInstalled=>${isPicgoInstalled}`)
+      if (isPicgoInstalled) {
+        // 图床
+        menu.addItem({
+          iconHTML: icons.iconPicbed,
+          label: this.pluginInstance.i18n.picmanage,
+          submenu: [
+            {
+              iconHTML: icons.iconPicture,
+              label: this.pluginInstance.i18n.picbed,
+              click: async () => {
+                await this.pluginInvoke.showPicbedDialog()
+              },
+            },
+            {
+              iconHTML: icons.iconPicbed,
+              label: this.pluginInstance.i18n.settingPicbed,
+              click: async () => {
+                await this.pluginInvoke.showPicbedSettingDialog()
+              },
+            },
+          ],
+        })
+        menu.addSeparator()
+      }
+    }
+
+    // AI工具
+    if (prefSetting.showAIMenu !== false) {
       menu.addItem({
         iconHTML: icons.iconPicbed,
-        label: this.pluginInstance.i18n.picmanage,
+        label: this.pluginInstance.i18n.aitool,
         submenu: [
           {
-            iconHTML: icons.iconPicture,
-            label: this.pluginInstance.i18n.picbed,
-            click: async () => {
-              await this.pluginInvoke.showPicbedDialog()
+            iconHTML: `<svg class="b3-menu__icon" style=""><use xlink:href="#iconUsers"></use></svg>`,
+            label: this.pluginInstance.i18n.aiChat,
+            click: () => {
+              this.widgetInvoke.showPublisherAiChatDialog()
             },
           },
           {
-            iconHTML: icons.iconPicbed,
-            label: this.pluginInstance.i18n.settingPicbed,
-            click: async () => {
-              await this.pluginInvoke.showPicbedSettingDialog()
+            iconHTML: `<svg class="b3-menu__icon" style=""><use xlink:href="#iconAccount"></use></svg>`,
+            label: this.pluginInstance.i18n.aiChatTab,
+            click: () => {
+              this.widgetInvoke.showPublisherAiChatTab()
             },
           },
         ],
       })
+      menu.addSeparator()
     }
 
-    // AI工具
-    menu.addSeparator()
-    menu.addItem({
-      iconHTML: icons.iconPicbed,
-      label: this.pluginInstance.i18n.aitool,
-      submenu: [
-        {
-          iconHTML: `<svg class="b3-menu__icon" style=""><use xlink:href="#iconUsers"></use></svg>`,
-          label: this.pluginInstance.i18n.aiChat,
-          click: () => {
-            this.widgetInvoke.showPublisherAiChatDialog()
-          },
-        },
-        {
-          iconHTML: `<svg class="b3-menu__icon" style=""><use xlink:href="#iconAccount"></use></svg>`,
-          label: this.pluginInstance.i18n.aiChatTab,
-          click: () => {
-            this.widgetInvoke.showPublisherAiChatTab()
-          },
-        },
-      ],
-    })
-
     // 扩展功能
-    menu.addSeparator()
-    menu.addItem({
-      icon: `iconBazaar`,
-      label: this.pluginInstance.i18n.extendFunction,
-      submenu: extendMenus,
-      click: () => {
-        if (!extendMenus) {
-          showMessage(
-            "扩展功能需配合其他插件使用，目前支持在线分享、PicGo插件。请先下载在并启用扩展插件。",
-            7000,
-            "error"
-          )
-        }
-      },
-    })
+    if (prefSetting.showExtendMenu !== false) {
+      menu.addItem({
+        icon: `iconBazaar`,
+        label: this.pluginInstance.i18n.extendFunction,
+        submenu: extendMenus,
+        click: () => {
+          if (!extendMenus) {
+            showMessage(
+              "扩展功能需配合其他插件使用，目前支持在线分享、PicGo插件。请先下载在并启用扩展插件。",
+              7000,
+              "error"
+            )
+          }
+        },
+      })
+      menu.addSeparator()
+    }
 
     // 通用设置
-    menu.addSeparator()
     menu.addItem({
       icon: "iconSettings",
       label: this.pluginInstance.i18n.setting,

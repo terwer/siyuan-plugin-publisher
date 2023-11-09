@@ -632,5 +632,12 @@ export default {
   "setting.blog.gitlab.previewUrl.tip": "Article preview address, usually the default",
 
   "main.force.cancel": "Force delete",
-  "loading.cost":"Loading cost"
+  "loading.cost":"Loading cost",
+
+  "preference.setting.showDocQuickMenu": "Show doc menu",
+  "preference.setting.showQuickMenu": "Show quick publish",
+  "preference.setting.showSingleMenu": "Show normal publish",
+  "preference.setting.showBatchMenu": "Show batch publish",
+  "preference.setting.showAIMenu": "Show AI menu",
+  "preference.setting.showExtendMenu": "Show extend menu",
 }
