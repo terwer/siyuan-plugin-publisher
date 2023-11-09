@@ -1,20 +1,12 @@
 # Changelog
 
 ## [1.18.7](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.18.6...v1.18.7) (2023-11-09)
-
-
 ### Bug Fixes
-
 * 新增菜单开关 ([8589364](https://github.com/terwer/siyuan-plugin-publisher/commit/8589364edb9b3c31f45d5a99296de9f86d7dfd66))
-
-
 ### Miscellaneous
-
 * **deps-dev:** bump @vitejs/plugin-vue from 4.4.0 to 4.4.1 ([938511b](https://github.com/terwer/siyuan-plugin-publisher/commit/938511b3e1e1f2abe36220048be5ac3fd77f8459))
 * **deps-dev:** bump vercel from 32.5.2 to 32.5.3 ([d55392c](https://github.com/terwer/siyuan-plugin-publisher/commit/d55392c8fd2980b9d730123fd5ed80ef19447242))
-
 ## [1.18.6](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.18.5...v1.18.6) (2023-11-08)
-### Bug Fixes
 * 修复主页末尾有斜杠预览错误的问题 ([b58f5c3](https://github.com/terwer/siyuan-plugin-publisher/commit/b58f5c344589cad707dadd828831c8408e0648d3))
 * 修复博客园可能出现的预览错误问题 ([a4ba0ed](https://github.com/terwer/siyuan-plugin-publisher/commit/a4ba0edb582ac28bf27551639797bc8caa1b3686))
 * 修复无法通过伺服进行调试的问题 ([3c9e9a1](https://github.com/terwer/siyuan-plugin-publisher/commit/3c9e9a1bcc88de4282a1145fcc507a0344b628f3))
@@ -23,7 +15,6 @@
 * 兼容知乎公式 ([78688cd](https://github.com/terwer/siyuan-plugin-publisher/commit/78688cd7ca4584a83e45f1d208a8e98d62c3b216))
 * 掘金平台摘要控制在50-100 ([db620b7](https://github.com/terwer/siyuan-plugin-publisher/commit/db620b7cb33f362a4d2cc54e5529d8c8239654dc))
 * 部分场景适配网页版 ([3eaf1d2](https://github.com/terwer/siyuan-plugin-publisher/commit/3eaf1d2bcd62fad5fd18b953d5d9c58831734865))
-### Miscellaneous
 * **deps-dev:** bump vercel from 32.5.0 to 32.5.2 ([93d2934](https://github.com/terwer/siyuan-plugin-publisher/commit/93d29346dce39aed8626353dd32894f3fcbcbdb4))
 ## [1.18.5](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.18.4...v1.18.5) (2023-11-07)
 * **deps:** bump vue from 3.3.7 to 3.3.8 ([96b7753](https://github.com/terwer/siyuan-plugin-publisher/commit/96b7753d85722642681af51ee3ec85869ee41feb))

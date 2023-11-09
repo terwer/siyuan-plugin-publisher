@@ -8,9 +8,12 @@ Publish articles from siyuan-note to platforms like Yuque etc. `Free` and `open 
 
 If you're interested in the paid professional version, please check here => [Publishing Tool Professional Edition](https://github.com/terwer/siyuan-plugin-publisher-pro)
 
-> Recent Update: 🎉 Publish Tool new version `1.18.6` released.
+> Recent Update: 🎉 Publish Tool new version `1.18.7` released.
 
 - `1.18.0` brings new features and enhanced user experience.
+- The `1.18.7` version brings the following features:
+  - Added menu configuration
+  - Added document menu
 - The `1.18.6` version primarily addresses the following issues:
   - Rectified the issue of misaligned previews at the end of the homepage.
   - Addressed potential preview errors that may arise on Cnblogs.
