@@ -29,6 +29,7 @@ import { readonly } from "vue"
 import { SiyuanDevice } from "zhi-device"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import useCommonLocalStorage from "~/src/stores/common/useCommonLocalStorage.ts"
+import { Utils } from "~/src/utils/utils.ts"
 
 /**
  * 使用发布偏好设置的自定义钩子
@@ -68,6 +69,13 @@ const usePreferenceSettingStore = () => {
       logger.info("use custom ai config")
     }
 
+    // 初始化默认配置
+    prefConfig.value.showDocQuickMenu = Utils.emptyBooleanOrDefault(prefConfig.value.showDocQuickMenu, true)
+    prefConfig.value.showQuickMenu = Utils.emptyBooleanOrDefault(prefConfig.value.showQuickMenu, true)
+    prefConfig.value.showSingleMenu = Utils.emptyBooleanOrDefault(prefConfig.value.showSingleMenu, true)
+    prefConfig.value.showBatchMenu = Utils.emptyBooleanOrDefault(prefConfig.value.showBatchMenu, true)
+    prefConfig.value.showAIMenu = Utils.emptyBooleanOrDefault(prefConfig.value.showAIMenu, true)
+    prefConfig.value.showExtendMenu = Utils.emptyBooleanOrDefault(prefConfig.value.showExtendMenu, true)
     return prefConfig
   }
 

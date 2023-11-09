@@ -25,7 +25,7 @@
 
 import { DeviceDetection, DeviceTypeEnum } from "zhi-device"
 import { createSiyuanAppLogger } from "../appLogger"
-import PageUtil from "../utils/pageUtil"
+import PageUtils from "../utils/pageUtils.ts"
 import { showIframeDialog } from "../iframeDialog"
 import PublisherPlugin from "../index"
 import { StrUtil } from "zhi-common"
@@ -44,7 +44,7 @@ export class WidgetInvoke {
   }
 
   public async showPublisherBatchPublishDialog() {
-    let pageId: string | undefined = PageUtil.getPageId()
+    let pageId: string | undefined = PageUtils.getPageId()
     if (pageId == "") {
       pageId = undefined
     }
@@ -57,7 +57,7 @@ export class WidgetInvoke {
   }
 
   public async showPublisherAiChatDialog() {
-    let pageId: string | undefined = PageUtil.getPageId()
+    let pageId: string | undefined = PageUtils.getPageId()
     if (pageId == "") {
       pageId = undefined
     }
@@ -65,7 +65,7 @@ export class WidgetInvoke {
   }
 
   public async showPublisherAiChatTab() {
-    let pageId: string | undefined = PageUtil.getPageId()
+    let pageId: string | undefined = PageUtils.getPageId()
     if (pageId == "") {
       pageId = undefined
     }
@@ -73,7 +73,7 @@ export class WidgetInvoke {
   }
 
   public async showPublisherSinglePublishDialog() {
-    let pageId: string | undefined = PageUtil.getPageId()
+    let pageId: string | undefined = PageUtils.getPageId()
     if (pageId == "") {
       pageId = undefined
     }
@@ -85,11 +85,7 @@ export class WidgetInvoke {
     await this.showPage(`/publish/singlePublish?id=${pageId}`)
   }
 
-  public async showPublisherQuickPublishDialog(key: string) {
-    let pageId: string | undefined = PageUtil.getPageId()
-    if (pageId == "") {
-      pageId = undefined
-    }
+  public async showPublisherQuickPublishDialog(key: string, pageId?: string) {
     this.logger.debug("pageId=>", pageId)
     if (StrUtil.isEmptyString(key) || StrUtil.isEmptyString(pageId)) {
       showMessage(`平台key和文档ID不能为空，注意：您必须打开当前文档才能进行发布操作`, 2000, "error")
@@ -103,7 +99,7 @@ export class WidgetInvoke {
   }
 
   public async showPublisherGeneralSettingDialog() {
-    let pageId: string | undefined = PageUtil.getPageId()
+    let pageId: string | undefined = PageUtils.getPageId()
     if (pageId == "") {
       pageId = undefined
     }
@@ -112,7 +108,7 @@ export class WidgetInvoke {
   }
 
   public async showPublisherAboutDialog() {
-    let pageId: string | undefined = PageUtil.getPageId()
+    let pageId: string | undefined = PageUtils.getPageId()
     if (pageId == "") {
       pageId = undefined
     }

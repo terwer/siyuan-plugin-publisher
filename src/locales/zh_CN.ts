@@ -618,4 +618,11 @@ export default {
 
   "main.force.cancel": "强制删除",
   "loading.cost": "操作耗时",
+
+  "preference.setting.showDocQuickMenu": "显示文档菜单",
+  "preference.setting.showQuickMenu": "显示极速发布",
+  "preference.setting.showSingleMenu": "显示常规发布",
+  "preference.setting.showBatchMenu": "显示批量分发",
+  "preference.setting.showAIMenu": "显示AI菜单",
+  "preference.setting.showExtendMenu": "显示扩展菜单",
 }

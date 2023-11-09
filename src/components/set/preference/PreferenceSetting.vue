@@ -47,5 +47,35 @@ const publishPreferenceSettingForm = getPublishPreferenceSetting()
     <el-form-item :label="t('preference.setting.removeWidgetTag')">
       <el-switch v-model="publishPreferenceSettingForm.removeMdWidgetTag"></el-switch>
     </el-form-item>
+
+    <el-divider border-style="dashed" class="psd"/>
+
+    <el-form-item :label="t('preference.setting.showDocQuickMenu')">
+      <el-switch v-model="publishPreferenceSettingForm.showDocQuickMenu"></el-switch>
+    </el-form-item>
+
+    <el-divider border-style="dashed" class="psd"/>
+
+    <el-form-item :label="t('preference.setting.showQuickMenu')">
+      <el-switch v-model="publishPreferenceSettingForm.showQuickMenu"></el-switch>
+    </el-form-item>
+    <el-form-item :label="t('preference.setting.showSingleMenu')">
+      <el-switch v-model="publishPreferenceSettingForm.showSingleMenu"></el-switch>
+    </el-form-item>
+    <el-form-item :label="t('preference.setting.showBatchMenu')">
+      <el-switch v-model="publishPreferenceSettingForm.showBatchMenu"></el-switch>
+    </el-form-item>
+    <el-form-item :label="t('preference.setting.showAIMenu')">
+      <el-switch v-model="publishPreferenceSettingForm.showAIMenu"></el-switch>
+    </el-form-item>
+    <el-form-item :label="t('preference.setting.showExtendMenu')">
+      <el-switch v-model="publishPreferenceSettingForm.showExtendMenu"></el-switch>
+    </el-form-item>
   </el-form>
 </template>
+
+<style scoped lang="stylus">
+.psd
+  margin-bottom 10px
+  margin-top 0
+</style>
