@@ -57,7 +57,7 @@
   "dependencies": {
     "@element-plus/icons-vue": "^2.1.0",
     "@terwer/esbuild-config-custom": "^2.0.0",
-    "@vueuse/components": "^10.5.0",
+    "@vueuse/components": "^10.6.0",
     "@vueuse/core": "^10.5.0",
     "chatgpt": "^5.2.5",
     "cheerio": "1.0.0-rc.12",
