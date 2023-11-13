@@ -486,7 +486,8 @@ const usePublish = () => {
         mergedPost.html = siyuanPost.html
         mergedPost.description = siyuanPost.description
         // 标签分类需要合并
-        mergedPost = initPublishMethods.doMergeBatchPost(siyuanPost, mergedPost)
+        // fix: 不合并，以平台为准
+        // mergedPost = initPublishMethods.doMergeBatchPost(siyuanPost, mergedPost)
 
         // 更新预览链接
         postPreviewUrl = await getPostPreviewUrl(api, id, cfg)
