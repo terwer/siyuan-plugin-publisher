@@ -39,9 +39,12 @@ import {CommonGithubConfig} from "~/src/adaptors/api/base/github/commonGithubCon
 class JekyllYamlConverterAdaptor extends YamlConvertAdaptor {
   private readonly logger = createAppLogger("hexo-yaml-converter-adaptor")
 
-  public convertToYaml(post: Post, cfg?: BlogConfig): YamlFormatObj {
+  public convertToYaml(post: Post, yamlFormatObj?: YamlFormatObj, cfg?: BlogConfig): YamlFormatObj {
     this.logger.debug("您正在使用 Jekyll Yaml Converter", { post: toRaw(post) })
-    let yamlFormatObj: YamlFormatObj = new YamlFormatObj()
+    // 没有的情况默认初始化一个
+    if (!yamlFormatObj) {
+      yamlFormatObj = new YamlFormatObj()
+    }
 
     // layout
     yamlFormatObj.yamlObj.layout = "post"

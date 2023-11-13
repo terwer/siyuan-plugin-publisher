@@ -42,12 +42,17 @@ class Vuepress2YamlConverterAdaptor extends YamlConvertAdaptor {
    * 将文章转换为YAML格式对象
    *
    * @param post - 要转换的文章对象
+   * @param yamlFormatObj （可选）
    * @param cfg - 博客配置（可选）
    * @returns 返回YAML格式对象
    */
-  public convertToYaml(post: Post, cfg?: BlogConfig): YamlFormatObj {
+  public convertToYaml(post: Post, yamlFormatObj?: YamlFormatObj, cfg?: BlogConfig): YamlFormatObj {
     this.logger.debug("您正在使用 Vuepress2 Yaml Converter", { post: toRaw(post) })
-    let yamlFormatObj: YamlFormatObj = new YamlFormatObj()
+    // 没有的情况默认初始化一个
+    if (!yamlFormatObj) {
+      yamlFormatObj = new YamlFormatObj()
+    }
+
     // title
     yamlFormatObj.yamlObj.title = post.title
 

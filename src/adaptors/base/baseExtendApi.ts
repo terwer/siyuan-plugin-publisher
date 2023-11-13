@@ -40,6 +40,7 @@ import {
   WebConfig,
   YamlConvertAdaptor,
   YamlFormatObj,
+  YamlStrategy,
 } from "zhi-blog-api"
 import { createAppLogger, ILogger } from "~/src/utils/appLogger.ts"
 import { LuteUtil } from "~/src/utils/luteUtil.ts"
@@ -353,42 +354,91 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
 
     this.logger.debug("开始处理yaml，post", { post: toRaw(post) })
 
-    // 前面改过属性，需要再生成一次
     const yamlAdaptor: YamlConvertAdaptor = this.api.getYamlAdaptor()
-    if (null !== yamlAdaptor) {
-      let yamlObj: YamlFormatObj
-      const defaultYaml = await YamlUtil.yaml2ObjAsync(post.yaml)
-      // 不确定那个字段才代表，所以全部检测一遍
-      // 非源码模式还是需要转换的
-      if (
-        this.checkPropertiesStartsWith(defaultYaml, "siyuan://") ||
-        post.editMode === PageEditMode.EditMode_simple ||
-        post.editMode === PageEditMode.EditMode_complex
-      ) {
+    switch (post.yamlType) {
+      case YamlStrategy.Yaml_custom_auto: {
         // 先生成对应平台的yaml
-        yamlObj = yamlAdaptor.convertToYaml(post, cfg)
+        const yfmObj = yamlAdaptor.convertToYaml(post, undefined, cfg)
         // 同步发布内容
-        post.yaml = yamlObj.formatter
-        post.markdown = yamlObj.mdFullContent
-        post.html = yamlObj.htmlContent
+        post.yaml = yfmObj.formatter
+        post.markdown = yfmObj.mdFullContent
+        post.html = yfmObj.htmlContent
         this.logger.info("rehandled yaml using YamlConverterAdaptor")
-      } else {
-        const md = YamlUtil.extractMarkdown(post.markdown)
-        // post.yaml 始终保持最新
-        post.markdown = YamlUtil.addYamlToMd(post.yaml, md)
-        post.html = LuteUtil.mdToHtml(md)
-        this.logger.info("assign latest custom yaml to md")
+        break
       }
-    } else {
-      // 同步发布内容
-      const yamlObj = PostUtil.toYamlObj(post)
-      const yaml = YamlUtil.obj2Yaml(yamlObj)
-      const md = YamlUtil.extractMarkdown(post.markdown)
-      post.yaml = yaml
-      post.markdown = md
-      post.html = LuteUtil.mdToHtml(md)
-      this.logger.info("yaml adaptor not found, using default")
+      case YamlStrategy.Yaml_custom_hand: {
+        const defaultYaml = post.yaml
+        if (
+          this.checkPropertiesStartsWith(defaultYaml, "siyuan://") ||
+          post.editMode !== PageEditMode.EditMode_source
+        ) {
+          // 属性合并
+          const newYfmObj = new YamlFormatObj()
+          const newYamlObj = await YamlUtil.yaml2ObjAsync(post.yaml)
+          newYfmObj.yamlObj = newYamlObj
+          const yfmObj = yamlAdaptor.convertToYaml(post, newYfmObj, cfg)
+          // 同步发布内容
+          post.yaml = yfmObj.formatter
+          post.markdown = yfmObj.mdFullContent
+          post.html = yfmObj.htmlContent
+          this.logger.info("assign latest custom yaml to md")
+        } else {
+          this.logger.info("assert yaml is saved by source mode, ignore")
+        }
+        break
+      }
+      default: {
+        // 1、批量分发，此时 apiType 为空
+        // 2、某些平台没有适配器
+        // 这些情况生成默认的
+        // 最新发布内容
+        const yamlObj = PostUtil.toYamlObj(post)
+        const yaml = YamlUtil.obj2Yaml(yamlObj)
+        const md = YamlUtil.extractMarkdown(post.markdown)
+        post.yaml = yaml
+        post.markdown = md
+        post.html = LuteUtil.mdToHtml(md)
+        this.logger.info("yaml adaptor not found, using default")
+        break
+      }
     }
+
+    // // 前面改过属性，需要再生成一次
+    // const yamlAdaptor: YamlConvertAdaptor = this.api.getYamlAdaptor()
+    // if (null !== yamlAdaptor) {
+    //   let yamlObj: YamlFormatObj
+    //   const defaultYaml = await YamlUtil.yaml2ObjAsync(post.yaml)
+    //   // 不确定那个字段才代表，所以全部检测一遍
+    //   // 非源码模式还是需要转换的
+    //   if (
+    //     this.checkPropertiesStartsWith(defaultYaml, "siyuan://") ||
+    //     post.editMode === PageEditMode.EditMode_simple ||
+    //     post.editMode === PageEditMode.EditMode_complex
+    //   ) {
+    //     // 先生成对应平台的yaml
+    //     yamlObj = yamlAdaptor.convertToYaml(post,undefined, cfg)
+    //     // 同步发布内容
+    //     post.yaml = yamlObj.formatter
+    //     post.markdown = yamlObj.mdFullContent
+    //     post.html = yamlObj.htmlContent
+    //     this.logger.info("rehandled yaml using YamlConverterAdaptor")
+    //   } else {
+    //     const md = YamlUtil.extractMarkdown(post.markdown)
+    //     // post.yaml 始终保持最新
+    //     post.markdown = YamlUtil.addYamlToMd(post.yaml, md)
+    //     post.html = LuteUtil.mdToHtml(md)
+    //     this.logger.info("assign latest custom yaml to md")
+    //   }
+    // } else {
+    //   // 同步发布内容
+    //   const yamlObj = PostUtil.toYamlObj(post)
+    //   const yaml = YamlUtil.obj2Yaml(yamlObj)
+    //   const md = YamlUtil.extractMarkdown(post.markdown)
+    //   post.yaml = yaml
+    //   post.markdown = md
+    //   post.html = LuteUtil.mdToHtml(md)
+    //   this.logger.info("yaml adaptor not found, using default")
+    // }
 
     this.logger.debug("yaml处理之后，post", { post: toRaw(post) })
     return post
