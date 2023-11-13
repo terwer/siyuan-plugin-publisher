@@ -102,6 +102,18 @@ const emit = defineEmits(["emitSyncTags"])
 const tagMethods = {
   handleTagClose: (tag: any) => {
     formData.tag.dynamicTags.splice(formData.tag.dynamicTags.indexOf(tag), 1)
+    // 这里不需要，平台列表是个全集
+    // // 检查平台标签数组中是否包含输入值，如果不包含则删除对应的项
+    // if (!formData.tag.platformTags.some((item) => item.value === formData.tag.inputValue)) {
+    //   // 构造要删除的项
+    //   const itemToRemove = {
+    //     value: formData.tag.inputValue,
+    //     label: formData.tag.inputValue,
+    //   }
+    //
+    //   // 通过过滤不等于要删除项的方式，更新平台标签数组
+    //   formData.tag.platformTags = formData.tag.platformTags.filter((item) => item.value !== itemToRemove.value)
+    // }
 
     emit("emitSyncTags", formData.tag.dynamicTags)
   },
