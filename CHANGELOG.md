@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.18.10](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.18.9...v1.18.10) (2023-11-13)
+
+
+### Bug Fixes
+
+* 一键预览新增确认 ([1d6997b](https://github.com/terwer/siyuan-plugin-publisher/commit/1d6997b12290cbdc23f9470eecf4d982d04d67d0))
+* 修复 vuepress 转换错误问题 ([0f8e5a2](https://github.com/terwer/siyuan-plugin-publisher/commit/0f8e5a2256cecafbe21bbffdba76f455e04143a6))
+
 ## [1.18.9](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.18.8...v1.18.9) (2023-11-13)
 ### Bug Fixes
 * [#899](https://github.com/terwer/siyuan-plugin-publisher/issues/899) 重构 YAML 部分逻辑 ([55e52e8](https://github.com/terwer/siyuan-plugin-publisher/commit/55e52e88afb0cdda596beb40b71f9df96240031a))
