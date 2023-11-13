@@ -28,13 +28,13 @@ import { reactive, toRaw } from "vue"
 import { SypConfig } from "~/syp.config.ts"
 import { AliasTranslator, ObjectUtil, StrUtil, YamlUtil } from "zhi-common"
 import {
-  BlogAdaptor,
   BlogConfig,
   Post,
   PostStatusEnum,
   PostUtil,
   YamlConvertAdaptor,
   YamlFormatObj,
+  YamlStrategy,
 } from "zhi-blog-api"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
@@ -401,30 +401,31 @@ const usePublish = () => {
         const yamlAdaptor: YamlConvertAdaptor = await Adaptors.getYamlAdaptor(key, cfg)
         if (null !== yamlAdaptor) {
           // 有适配器
-          let yamlFormatObj: YamlFormatObj
           if (StrUtil.isEmptyString(checkYaml)) {
-            yamlFormatObj = yamlAdaptor.convertToYaml(post, cfg)
+            const yamlFormatObj = yamlAdaptor.convertToYaml(post, undefined , cfg)
             logger.info("YAML未保存，使用适配器生成默认的yamlFormatObj", { yamlFormatObj: toRaw(yamlFormatObj) })
-            post.yaml = yaml
             post = yamlAdaptor.convertToAttr(post, yamlFormatObj, cfg)
+            post.yamlType = YamlStrategy.Yaml_custom_auto
             logger.debug("使用适配器初始化转换yamlObj到post完成 =>", { post: toRaw(post) })
           } else {
-            // yamlFormatObj = new YamlFormatObj()
-            // const yamlObj = await YamlUtil.yaml2ObjAsync(yaml)
-            // yamlFormatObj.yamlObj = yamlFormatObj
-            // getPost以已经处理过了
-            logger.info("有适配器且YAML已保存，无需处理")
+            const yamlFormatObj = new YamlFormatObj()
+            const yamlObj = await YamlUtil.yaml2ObjAsync(yaml)
+            yamlFormatObj.yamlObj = yamlObj
+            post = yamlAdaptor.convertToAttr(post, yamlFormatObj, cfg)
+            post.yamlType = YamlStrategy.Yaml_custom_hand
+            logger.info("有适配器且YAML已保存，始终保持最新的 YAML", { post: toRaw(post) })
           }
         } else {
+          post.yamlType = YamlStrategy.YAML_default
           // 无适配器
           if (!StrUtil.isEmptyString(checkYaml)) {
             const yamlObj = await YamlUtil.yaml2ObjAsync(yaml)
             post.yaml = yaml
             PostUtil.fromYaml(post, yamlObj)
-            logger.info("读取已经存在的YAML，无适配器，使用fromYaml生成默认的yamlObj")
+            logger.info("读取已经存在的YAML，无适配器，使用fromYaml生成默认的yamlObj", { post: toRaw(post) })
           } else {
             // 未保存过，默认不处理
-            logger.info("未保存过YAML，未找到适配器，默认不处理")
+            logger.info("未保存过YAML，未找到适配器，默认不处理", { post: toRaw(post) })
           }
         }
       }
@@ -485,9 +486,6 @@ const usePublish = () => {
         mergedPost.markdown = siyuanPost.markdown
         mergedPost.html = siyuanPost.html
         mergedPost.description = siyuanPost.description
-        // 标签分类需要合并
-        // fix: 不合并，以平台为准
-        // mergedPost = initPublishMethods.doMergeBatchPost(siyuanPost, mergedPost)
 
         // 更新预览链接
         postPreviewUrl = await getPostPreviewUrl(api, id, cfg)
@@ -559,7 +557,7 @@ const usePublish = () => {
     doSingleDelete,
     doForceSingleDelete,
     initPublishMethods,
-    getPostPreviewUrl
+    getPostPreviewUrl,
   }
 }
 

@@ -12,11 +12,11 @@ dependencies:
     specifier: ^2.0.0
     version: 2.0.0(@types/minimist@1.2.5)(dotenv@16.3.1)(esbuild-plugin-copy@2.1.1)(esbuild-plugin-d.ts@1.1.0)(esbuild-plugin-ifdef@1.0.1)(esbuild-plugin-inline-image@0.0.9)(esbuild-plugin-vue3@0.3.2)(esbuild-style-plugin@1.6.3)(esbuild@0.17.19)(minimist@1.2.8)(rimraf@4.4.1)(stylus@0.59.0)
   '@vueuse/components':
-    specifier: ^10.6.0
-    version: 10.6.0(vue@3.3.8)
+    specifier: ^10.6.1
+    version: 10.6.1(vue@3.3.8)
   '@vueuse/core':
-    specifier: ^10.6.0
-    version: 10.6.0(vue@3.3.8)
+    specifier: ^10.6.1
+    version: 10.6.1(vue@3.3.8)
   chatgpt:
     specifier: ^5.2.5
     version: 5.2.5
@@ -78,8 +78,8 @@ dependencies:
     specifier: ^3.1.1
     version: 3.1.1
   zhi-blog-api:
-    specifier: ^1.51.2
-    version: 1.51.2(typescript@5.2.2)
+    specifier: ^1.53.0
+    version: 1.53.0(typescript@5.2.2)
   zhi-common:
     specifier: ^1.28.0
     version: 1.28.0(typescript@5.2.2)
@@ -102,8 +102,8 @@ dependencies:
     specifier: ^0.1.4
     version: 0.1.4
   zhi-siyuan-api:
-    specifier: ^2.14.3
-    version: 2.14.3(typescript@5.2.2)
+    specifier: ^2.14.5
+    version: 2.14.5(typescript@5.2.2)
   zhi-xmlrpc-middleware:
     specifier: ^0.6.15
     version: 0.6.15(typescript@5.2.2)
@@ -162,7 +162,7 @@ devDependencies:
     version: 5.2.2
   unplugin-auto-import:
     specifier: ^0.16.7
-    version: 0.16.7(@vueuse/core@10.6.0)
+    version: 0.16.7(@vueuse/core@10.6.1)
   unplugin-vue-components:
     specifier: ^0.25.2
     version: 0.25.2(vue@3.3.8)
@@ -1952,23 +1952,23 @@ packages:
       vue-component-type-helpers: 1.8.4
     dev: true
 
-  /@vueuse/components@10.6.0(vue@3.3.8):
-    resolution: {integrity: sha512-vc9cmt3fd+wpMjhlq/wuXvEafSRY1XWlgzrxaExfVCRpWyLeqZ57hQ7rmcxbLkIbeaYqOO6Swc1OiT700hyR+A==}
+  /@vueuse/components@10.6.1(vue@3.3.8):
+    resolution: {integrity: sha512-Yx7h201xJG3V4+rY1wRAYy8EI9Q1r+gpwCJzgyZ0CWPyDWyZCxPXNjPhBJsXcSzJ1h1ph9tE5cVqEXHtEs6bjg==}
     dependencies:
-      '@vueuse/core': 10.6.0(vue@3.3.8)
-      '@vueuse/shared': 10.6.0(vue@3.3.8)
+      '@vueuse/core': 10.6.1(vue@3.3.8)
+      '@vueuse/shared': 10.6.1(vue@3.3.8)
       vue-demi: 0.14.6(vue@3.3.8)
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
     dev: false
 
-  /@vueuse/core@10.6.0(vue@3.3.8):
-    resolution: {integrity: sha512-+Yee+g9+9BEbvkyGdn4Bf4yZx9EfocAytpV2ZlrlP7xcz+qznLmZIDqDroTvc5vtMkWZicisgEv8dt3+jL+HQg==}
+  /@vueuse/core@10.6.1(vue@3.3.8):
+    resolution: {integrity: sha512-Pc26IJbqgC9VG1u6VY/xrXXfxD33hnvxBnKrLlA2LJlyHII+BSrRoTPJgGYq7qZOu61itITFUnm6QbacwZ4H8Q==}
     dependencies:
       '@types/web-bluetooth': 0.0.20
-      '@vueuse/metadata': 10.6.0
-      '@vueuse/shared': 10.6.0(vue@3.3.8)
+      '@vueuse/metadata': 10.6.1
+      '@vueuse/shared': 10.6.1(vue@3.3.8)
       vue-demi: 0.14.6(vue@3.3.8)
     transitivePeerDependencies:
       - '@vue/composition-api'
@@ -1986,15 +1986,15 @@ packages:
       - vue
     dev: false
 
-  /@vueuse/metadata@10.6.0:
-    resolution: {integrity: sha512-mzKHkHoiK6xVz01VzQjM2l6ofUanEaofgEGPgDHcAzlvOTccPRTIdEuzneOUTYxgfm1vkDikS6rtrEw/NYlaTQ==}
+  /@vueuse/metadata@10.6.1:
+    resolution: {integrity: sha512-qhdwPI65Bgcj23e5lpGfQsxcy0bMjCAsUGoXkJ7DsoeDUdasbZ2DBa4dinFCOER3lF4gwUv+UD2AlA11zdzMFw==}
 
   /@vueuse/metadata@9.13.0:
     resolution: {integrity: sha512-gdU7TKNAUVlXXLbaF+ZCfte8BjRJQWPCa2J55+7/h+yDtzw3vOoGQDRXzI6pyKyo6bXFT5/QoPE4hAknExjRLQ==}
     dev: false
 
-  /@vueuse/shared@10.6.0(vue@3.3.8):
-    resolution: {integrity: sha512-0t4MVE18sO+/4Gh0jfeOXBTjKeV4606N9kIrDOLPjFl8Rwnlodn+QC5A4LfJuysK7aOsTMjF3KnzNeueaI0xlQ==}
+  /@vueuse/shared@10.6.1(vue@3.3.8):
+    resolution: {integrity: sha512-TECVDTIedFlL0NUfHWncf3zF9Gc4VfdxfQc8JFwoVZQmxpONhLxFrlm0eHQeidHj4rdTPL3KXJa0TZCk1wnc5Q==}
     dependencies:
       vue-demi: 0.14.6(vue@3.3.8)
     transitivePeerDependencies:
@@ -6658,7 +6658,7 @@ packages:
       '@fortawesome/free-brands-svg-icons': 6.4.2
       '@fortawesome/free-solid-svg-icons': 6.4.2
       '@fortawesome/vue-fontawesome': 3.0.5(@fortawesome/fontawesome-svg-core@6.4.2)(vue@3.3.8)
-      '@vueuse/core': 10.6.0(vue@3.3.8)
+      '@vueuse/core': 10.6.1(vue@3.3.8)
       blueimp-md5-es6: 2.7.4
       browser-fs-access: 0.34.1
       element-plus: 2.4.2(vue@3.3.8)
@@ -6674,7 +6674,7 @@ packages:
       zhi-device: 2.10.0
       zhi-fetch-middleware: 0.2.29(typescript@5.2.2)
       zhi-lib-base: 0.4.4
-      zhi-siyuan-api: 2.14.3(typescript@5.2.2)
+      zhi-siyuan-api: 2.14.5(typescript@5.2.2)
     transitivePeerDependencies:
       - '@vue/composition-api'
       - typescript
@@ -7343,7 +7343,7 @@ packages:
     engines: {node: '>= 0.8'}
     dev: true
 
-  /unplugin-auto-import@0.16.7(@vueuse/core@10.6.0):
+  /unplugin-auto-import@0.16.7(@vueuse/core@10.6.1):
     resolution: {integrity: sha512-w7XmnRlchq6YUFJVFGSvG1T/6j8GrdYN6Em9Wf0Ye+HXgD/22kont+WnuCAA0UaUoxtuvRR1u/mXKy63g/hfqQ==}
     engines: {node: '>=14'}
     peerDependencies:
@@ -7357,7 +7357,7 @@ packages:
     dependencies:
       '@antfu/utils': 0.7.6
       '@rollup/pluginutils': 5.0.5
-      '@vueuse/core': 10.6.0(vue@3.3.8)
+      '@vueuse/core': 10.6.1(vue@3.3.8)
       fast-glob: 3.3.2
       local-pkg: 0.5.0
       magic-string: 0.30.5
@@ -8024,8 +8024,8 @@ packages:
     resolution: {integrity: sha512-9bnSc/HEW2uRy67wc+T8UwauLuPJVn28jb+GtJY16iiKWyvmYJRXVT4UamsAEGQfPohgr2q4Tq0sQbQlxTfi1g==}
     engines: {node: '>=12.20'}
 
-  /zhi-blog-api@1.51.2(typescript@5.2.2):
-    resolution: {integrity: sha512-WpquXDg7Fg6ZemNcV0GIWGUjYOk2SIok2A4OLZp//slARcgfHO8zfazGUhclBt5gEZJMI4l0BO+POXqo5HgAiw==}
+  /zhi-blog-api@1.53.0(typescript@5.2.2):
+    resolution: {integrity: sha512-N5MFv0hPAsWRrT3AFXkZdu1vq33j1m1FM4N8SjPIweqK5rxSchJ7yO6vvdT2Litz7REC5xKFReAyF5IF8XngaA==}
     dependencies:
       zhi-common: 1.28.0(typescript@5.2.2)
       zhi-lib-base: 0.8.0
@@ -8123,10 +8123,10 @@ packages:
       - supports-color
     dev: false
 
-  /zhi-siyuan-api@2.14.3(typescript@5.2.2):
-    resolution: {integrity: sha512-qSaS0zqONsLiHuvRDawdF6zzPbt7eAO0cl1S3XEvOrS4Sj9S5phUpiE4Vpf5I0xWMfW5xdIqjkaqo9h+hWED4Q==}
+  /zhi-siyuan-api@2.14.5(typescript@5.2.2):
+    resolution: {integrity: sha512-m2UBLHxSaqzHMMEZNuMmrd9Ssf38H3Ij4yPcO47dhx00g2G6XOacbE0AK/xZyurWDo/M+7IVAHz/D9e26GJmiw==}
     dependencies:
-      zhi-blog-api: 1.51.2(typescript@5.2.2)
+      zhi-blog-api: 1.53.0(typescript@5.2.2)
       zhi-common: 1.28.0(typescript@5.2.2)
       zhi-lib-base: 0.8.0
     transitivePeerDependencies:

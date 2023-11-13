@@ -39,9 +39,13 @@ import { toRaw } from "vue"
 class HexoYamlConverterAdaptor extends YamlConvertAdaptor {
   private readonly logger = createAppLogger("hexo-yaml-converter-adaptor")
 
-  public convertToYaml(post: Post, cfg?: BlogConfig): YamlFormatObj {
+  public convertToYaml(post: Post, yamlFormatObj?: YamlFormatObj, cfg?: BlogConfig): YamlFormatObj {
     this.logger.debug("您正在使用 Hexo Yaml Converter", { post: toRaw(post) })
-    let yamlFormatObj: YamlFormatObj = new YamlFormatObj()
+    // 没有的情况默认初始化一个
+    if (!yamlFormatObj) {
+      yamlFormatObj = new YamlFormatObj()
+    }
+
     // title
     yamlFormatObj.yamlObj.title = post.title
 
