@@ -558,6 +558,7 @@ const usePublish = () => {
     doSingleDelete,
     doForceSingleDelete,
     initPublishMethods,
+    getPostPreviewUrl
   }
 }
 

@@ -34,8 +34,15 @@ import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { useLoadingTimer } from "~/src/composables/useLoadingTimer.ts"
 import CrossPageUtils from "~/cross/crossPageUtils.ts"
+import Adaptors from "~/src/adaptors"
+import { Utils } from "~/src/utils/utils.ts"
+import { usePublish } from "~/src/composables/usePublish.ts"
+import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 
 const logger = createAppLogger("single-publish-select-platform")
+// appInstance
+const appInstance = new PublisherAppInstance()
+const { getPostPreviewUrl } = usePublish()
 
 // props
 const props = defineProps({
@@ -59,7 +66,10 @@ const formData = reactive({
 })
 
 // methods
-const handleSingleDoPublish = (key: string) => {
+const handleSingleDoPublish = (event: any, key: string) => {
+  // 阻止事件冒泡
+  event.stopPropagation()
+
   const method = checkHasPublished(key) ? "edit" : "add"
   const path = `/publish/singlePublish/doPublish/${key}/${props.id}`
   logger.info("will go to =>", path)
@@ -78,6 +88,28 @@ const checkHasPublished = (key: string) => {
   const postMetaValue = ObjectUtil.getProperty(formData.postMeta, postidKey)
 
   return !StrUtil.isEmptyString(postMetaValue)
+}
+
+const handlePreview = async (event: any, key: string) => {
+  // 阻止事件冒泡
+  event.stopPropagation()
+
+  const isPublish = checkHasPublished(key)
+  if (!isPublish) {
+    return
+  }
+
+  const cfg = await Adaptors.getCfg(key)
+  const apiAdaptor = await Adaptors.getAdaptor(key, cfg)
+  const api = Utils.blogApi(appInstance, apiAdaptor)
+  const previewUrl = await getPostPreviewUrl(api, props.id, cfg)
+  window.open(previewUrl)
+}
+
+const handlePreviewAll = async (event: any) => {
+  for (const enabledCfg of formData.enabledConfigArray) {
+    await handlePreview(event, enabledCfg.platformKey)
+  }
 }
 
 const initPage = async () => {
@@ -107,8 +139,15 @@ onMounted(async () => {
   <div v-else>
     <div class="platform-desc">
       <p>
-        <el-alert class="desc-tip" type="warning" title="点击图标进入对应平台的发布页面"></el-alert>
+        <el-alert
+          class="desc-tip"
+          type="warning"
+          title="点击图标进入对应平台的发布页面，如果文章已发布，可点击 [预览] 直接在浏览器打开预览页面。"
+        ></el-alert>
       </p>
+    </div>
+    <div class="one-key-preview">
+      <el-button type="primary" size="small" @click="handlePreviewAll">一键预览</el-button>
     </div>
     <el-row :gutter="20" class="row-box">
       <el-col
@@ -116,16 +155,16 @@ onMounted(async () => {
         :title="cfg.platformName"
         class="platform-select-card"
         v-for="cfg in formData.enabledConfigArray"
-        @click="handleSingleDoPublish(cfg.platformKey)"
       >
         <el-card class="card-item">
           <div class="icon-list">
             <el-badge
               :type="checkHasPublished(cfg.platformKey) ? 'success' : 'danger'"
-              :value="checkHasPublished(cfg.platformKey) ? '已发布' : '未发布'"
-              class="item"
+              :value="checkHasPublished(cfg.platformKey) ? '预览' : '未发布'"
+              @click.stop="handlePreview($event, cfg.platformKey)"
+              :class="checkHasPublished(cfg.platformKey) ? 'item published-item' : 'item'"
             >
-              <el-text class="define-item">
+              <el-text class="define-item" @click.stop="handleSingleDoPublish($event, cfg.platformKey)">
                 <i class="el-icon">
                   <span v-html="cfg?.platformIcon"></span>
                 </i>
@@ -148,6 +187,10 @@ $icon_size = 32px
   .desc-tip
     padding-left 0
 
+.one-key-preview
+  margin-left 10px
+  margin-bottom 16px
+
 .card-item
   padding 0
 
@@ -155,7 +198,6 @@ $icon_size = 32px
   margin-top 10px
 
 .row-box
-  cursor pointer
   margin 0 !important
   padding 0
   .platform-select-card
@@ -184,4 +226,7 @@ $icon_size = 32px
         :deep(.el-icon svg)
           width $icon_size
           height $icon_size
+
+.published-item
+  cursor pointer
 </style>
