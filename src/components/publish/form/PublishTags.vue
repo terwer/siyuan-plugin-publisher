@@ -116,7 +116,15 @@ const tagMethods = {
   },
   handleTagInputConfirm: () => {
     if (formData.tag.inputValue) {
-      formData.tag.dynamicTags.push(formData.tag.inputValue)
+      if (!formData.tag.dynamicTags.includes(formData.tag.inputValue)) {
+        formData.tag.dynamicTags.push(formData.tag.inputValue)
+      }
+      if (!formData.tag.platformTags.includes(formData.tag.inputValue)) {
+        formData.tag.platformTags.push({
+          value: formData.tag.inputValue,
+          label: formData.tag.inputValue,
+        })
+      }
 
       emit("emitSyncTags", formData.tag.dynamicTags)
     }
