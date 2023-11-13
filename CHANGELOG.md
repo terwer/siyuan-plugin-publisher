@@ -1,7 +1,11 @@
 # Changelog
 
-## [1.18.8](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.18.7...v1.18.8) (2023-11-13)
+## [1.18.9](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.18.8...v1.18.9) (2023-11-13)
 ### Bug Fixes
+* [#899](https://github.com/terwer/siyuan-plugin-publisher/issues/899) 重构 YAML 部分逻辑 ([55e52e8](https://github.com/terwer/siyuan-plugin-publisher/commit/55e52e88afb0cdda596beb40b71f9df96240031a))
+* 修复删除标签，然后点击选择标签，标签仍然存在的问题 ([3219fd2](https://github.com/terwer/siyuan-plugin-publisher/commit/3219fd2b8183fd1c1e3ba68b9dfbf1b438c38cac))
+* 修复添加新标签，然后点击选择标签，新标签消失的问题 ([cd8e61d](https://github.com/terwer/siyuan-plugin-publisher/commit/cd8e61db261c9f5f617f4253a5686d9e90119b88))
+## [1.18.8](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.18.7...v1.18.8) (2023-11-13)
 * [#892](https://github.com/terwer/siyuan-plugin-publisher/issues/892) 支持常规发布模式下的单个预览和一键预览 ([e804b16](https://github.com/terwer/siyuan-plugin-publisher/commit/e804b16a3f51b4fc62cd716049c6ddca6ce67b20))
 * [#893](https://github.com/terwer/siyuan-plugin-publisher/issues/893) 非源码模式修改的文章属性无法保存 ([a40fc5e](https://github.com/terwer/siyuan-plugin-publisher/commit/a40fc5e6a76cff18cbc4e3e287a83a3e3f337da2))
 * 控制默认展示方式，如果有适配器，优先展示 yaml ([c155c42](https://github.com/terwer/siyuan-plugin-publisher/commit/c155c42757174391ef71fce26b8582ca1ad5c8ea))
