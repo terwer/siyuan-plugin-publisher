@@ -24,7 +24,7 @@
   -->
 
 <script setup lang="ts">
-import { PageEditMode } from "~/src/models/pageEditMode.ts"
+import { PageEditMode } from "zhi-blog-api"
 import { reactive, watch } from "vue"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 

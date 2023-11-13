@@ -29,7 +29,7 @@ import { useRoute, useRouter } from "vue-router"
 import BackPage from "~/src/components/common/BackPage.vue"
 import { usePublish } from "~/src/composables/usePublish.ts"
 import { MethodEnum } from "~/src/models/methodEnum.ts"
-import { BlogConfig, Post } from "zhi-blog-api"
+import { BlogConfig, PageEditMode, Post } from "zhi-blog-api"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { DynamicConfig, getDynYamlKey } from "~/src/platforms/dynamicConfig.ts"
@@ -40,7 +40,6 @@ import { BrowserUtil } from "zhi-device"
 import { StrUtil } from "zhi-common"
 import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
 import { IPublishCfg } from "~/src/types/IPublishCfg.ts"
-import { PageEditMode } from "~/src/models/pageEditMode.ts"
 import EditModeSelect from "~/src/components/publish/form/EditModeSelect.vue"
 import PublishTime from "~/src/components/publish/form/PublishTime.vue"
 import { pre } from "~/src/platforms/pre.ts"
@@ -127,7 +126,7 @@ const handlePublish = async () => {
     logger.info("保存到系统平台结束")
 
     logger.info("单个常规发布开始")
-    await handleSyncPlatformAttrToSiyuan()
+    formData.mergedPost.editMode = formData.editType
     const processResult = await doSinglePublish(key, id, formData.publishCfg as IPublishCfg, formData.mergedPost)
     logger.info("normal publish processResult =>", processResult)
     logger.info("单个常规发布结束")
@@ -235,16 +234,16 @@ const handleForceDelete = async () => {
 }
 
 const handleSyncToSiyuan = async () => {
-  await handleSyncSiyuaAttrnToSiyuan()
+  await handleSyncSiyuanAttrToSiyuan()
   await handleSyncPlatformAttrToSiyuan()
   ElMessage.success("属性已经成功同步到思源")
 }
 
-const handleSyncSiyuaAttrnToSiyuan = async () => {
+const handleSyncSiyuanAttrToSiyuan = async () => {
   const newAttrs = {
     [SiyuanAttr.Sys_memo]: formData.mergedPost.shortDesc,
     [SiyuanAttr.Sys_tags]: formData.mergedPost.mt_keywords,
-    [SiyuanAttr.Custom_categories]: formData.mergedPost.categories.join(","),
+    [SiyuanAttr.Custom_categories]: formData.mergedPost?.categories?.join(",") ?? [],
   }
   await kernelApi.setBlockAttrs(id, newAttrs)
   logger.debug("保存内置平台属性", newAttrs)

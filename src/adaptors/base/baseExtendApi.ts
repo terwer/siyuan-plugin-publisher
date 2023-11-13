@@ -31,6 +31,7 @@ import {
   BlogConfig,
   CategoryInfo,
   MediaObject,
+  PageEditMode,
   PageTypeEnum,
   Post,
   PostUtil,
@@ -43,7 +44,7 @@ import {
 import { createAppLogger, ILogger } from "~/src/utils/appLogger.ts"
 import { LuteUtil } from "~/src/utils/luteUtil.ts"
 import { usePicgoBridge } from "~/src/composables/usePicgoBridge.ts"
-import { base64ToBuffer, remoteImageToBase64Info, toBase64Info } from "~/src/utils/polyfillUtils.ts"
+import { base64ToBuffer, path, remoteImageToBase64Info, toBase64Info } from "~/src/utils/polyfillUtils.ts"
 import { DateUtil, HtmlUtil, ObjectUtil, StrUtil, YamlUtil } from "zhi-common"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import { isFileExists } from "~/src/utils/siyuanUtils.ts"
@@ -56,7 +57,6 @@ import _ from "lodash"
 import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
 import { SypConfig } from "~/syp.config.ts"
 import { usePlatformMetadataStore } from "~/src/stores/usePlatformMetadataStore.ts"
-import { path } from "~/src/utils/polyfillUtils.ts"
 
 /**
  * 各种模式共享的扩展基类
@@ -358,9 +358,13 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     if (null !== yamlAdaptor) {
       let yamlObj: YamlFormatObj
       const defaultYaml = await YamlUtil.yaml2ObjAsync(post.yaml)
-      // if (defaultYaml?.slug?.indexOf("siyuan://") > -1) {
       // 不确定那个字段才代表，所以全部检测一遍
-      if (this.checkPropertiesStartsWith(defaultYaml, "siyuan://")) {
+      // 非源码模式还是需要转换的
+      if (
+        this.checkPropertiesStartsWith(defaultYaml, "siyuan://") ||
+        post.editMode === PageEditMode.EditMode_simple ||
+        post.editMode === PageEditMode.EditMode_complex
+      ) {
         // 先生成对应平台的yaml
         yamlObj = yamlAdaptor.convertToYaml(post, cfg)
         // 同步发布内容

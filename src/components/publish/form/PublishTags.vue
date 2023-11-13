@@ -166,6 +166,12 @@ const tagMethods = {
       formData.isTagLoading = false
     }
   },
+  onPlatformTagChange: (val: string) => {
+    const value = val
+    logger.debug("选中项已改变 =>", value)
+
+    emit("emitSyncTags", formData.tag.dynamicTags)
+  },
 }
 
 const initPage = async () => {
@@ -235,6 +241,9 @@ onMounted(async () => {
         :placeholder="t('main.tag.select')"
         :empty-text="t('main.tag.empty')"
         :no-data-text="t('main.tag.empty')"
+        @node-click="tagMethods.onPlatformTagChange"
+        @check="tagMethods.onPlatformTagChange"
+        @change="tagMethods.onPlatformTagChange"
       >
       </el-tree-select>
     </el-form-item>

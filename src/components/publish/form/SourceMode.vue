@@ -25,7 +25,7 @@
 
 <script setup lang="ts">
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import { reactive, toRaw } from "vue"
+import {reactive, toRaw, watch} from "vue"
 import { SourceContentShowType } from "~/src/models/sourceContentShowType.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { Post, PostUtil, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
@@ -180,45 +180,58 @@ const initYaml = async (yaml: string) => {
   formData.yamlContent = yaml
 }
 
+/**
+ * 处理编辑模式到源码模式数据转换
+ */
+const handlePostToHoHtml = async () => {
+  let yfmObj: YamlFormatObj = new YamlFormatObj()
+  const post = formData.siyuanPost
+
+  // 没有平台 Key，不展示 YAML
+  formData.yamlAdaptor = formData.readonlyMode ? null : await Adaptors.getYamlAdaptor(formData.apiType, formData.cfg)
+  // 如果传了 key ，但是没有 YAML 适配器，还是不能展示
+  formData.readonlyMode = formData.yamlAdaptor === null
+
+  // 控制默认展示方式，如果有适配器，优先展示 YAML
+  if (!formData.readonlyMode) {
+    formData.stype = SourceContentShowType.YAML
+  }
+
+  // 1、批量分发，此时 apiType 为空
+  // 2、某些平台没有适配器
+  // 这些情况生成默认的
+  if (formData.readonlyMode) {
+    const yamlObj = PostUtil.toYamlObj(formData.siyuanPost)
+    yfmObj.formatter = YamlUtil.obj2Yaml(yamlObj)
+    yfmObj.mdContent = post.markdown
+    yfmObj.mdFullContent = YamlUtil.addYamlToMd(yfmObj.formatter, yfmObj.mdContent)
+    yfmObj.htmlContent = post.html
+    logger.debug("未找到YAML适配器，将生成公共的YAML")
+  } else {
+    const key = formData.apiType
+    yfmObj = formData.yamlAdaptor.convertToYaml(post, formData.cfg)
+    logger.debug("常规发布，生成对应平台的YAML, =>", key)
+  }
+
+  // 初始化
+  formData.yamlFormatObj = yfmObj
+  onYamlShowTypeChange(formData.stype)
+  logger.info("编辑模式到 YAML 的同步已完成")
+}
+
 const initPage = async () => {
   formData.isLoading = true
   try {
-    let yfmObj: YamlFormatObj = new YamlFormatObj()
     const post = formData.siyuanPost
-    // 没有平台 Key，不展示 YAML
-    formData.yamlAdaptor = formData.readonlyMode ? null : await Adaptors.getYamlAdaptor(formData.apiType, formData.cfg)
-    // 如果传了 key ，但是没有 YAML 适配器，还是不能展示
-    formData.readonlyMode = formData.yamlAdaptor === null
-
-    // 控制默认展示方式，如果有适配器，优先展示 YAML
-    if (formData.readonlyMode) {
-      formData.stype = SourceContentShowType.YAML
-    }
 
     // 处理正文
     const id = formData.pageId
     const md = await handlePicgo(id, post.markdown)
     post.markdown = md
 
-    // 1、批量分发，此时 apiType 为空
-    // 2、某些平台没有适配器
-    // 这些情况生成默认的
-    if (formData.readonlyMode) {
-      const yamlObj = PostUtil.toYamlObj(formData.siyuanPost)
-      yfmObj.formatter = YamlUtil.obj2Yaml(yamlObj)
-      yfmObj.mdContent = post.markdown
-      yfmObj.mdFullContent = YamlUtil.addYamlToMd(yfmObj.formatter, yfmObj.mdContent)
-      yfmObj.htmlContent = post.html
-      logger.debug("未找到YAML适配器，将生成公共的YAML")
-    } else {
-      const key = formData.apiType
-      yfmObj = formData.yamlAdaptor.convertToYaml(post, formData.cfg)
-      logger.debug("常规发布，生成对应平台的YAML, =>", key)
-    }
+    // 处理编辑模式到源码模式数据转换
+    await handlePostToHoHtml()
 
-    // 初始化
-    formData.yamlFormatObj = yfmObj
-    onYamlShowTypeChange(formData.stype)
     logger.debug(`init Page in source mode, readonlyMode: ${formData.readonlyMode} =>`, {
       siyuanPost: toRaw(formData.siyuanPost),
     })
