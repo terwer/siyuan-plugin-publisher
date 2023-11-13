@@ -65,6 +65,7 @@ const formData = reactive({
   enabledConfigArray: [] as DynamicConfig[],
 
   postMeta: {} as any,
+  unpublishCount: 0,
 })
 
 // methods
@@ -98,6 +99,7 @@ const handlePreview = async (event: any, key: string) => {
 
   const isPublish = checkHasPublished(key)
   if (!isPublish) {
+    formData.unpublishCount++
     return
   }
 
@@ -109,24 +111,21 @@ const handlePreview = async (event: any, key: string) => {
 }
 
 const handlePreviewAll = async (event: any) => {
-  if (formData.enabledConfigArray.length == 0) {
-    ElMessage.error("文章未发布过，请至少发布到一个平台！")
-    return
-  }
-
-  ElMessageBox.confirm(
-    `将在默认浏览器打开所有已发布平台的文章预览页面，是否继续？`,
-    "温馨提示",
-    {
-      type: "error",
-      icon: markRaw(Warning),
-      confirmButtonText: t("main.opt.ok"),
-      cancelButtonText: t("main.opt.cancel"),
-    }
-  )
+  ElMessageBox.confirm(`将在默认浏览器打开所有已发布平台的文章预览页面，是否继续？`, "温馨提示", {
+    type: "error",
+    icon: markRaw(Warning),
+    confirmButtonText: t("main.opt.ok"),
+    cancelButtonText: t("main.opt.cancel"),
+  })
     .then(async () => {
       for (const enabledCfg of formData.enabledConfigArray) {
         await handlePreview(event, enabledCfg.platformKey)
+      }
+
+      if (formData.enabledConfigArray.length === 0 || formData.unpublishCount === formData.enabledConfigArray.length) {
+        // 重置，准备下一次点击
+        formData.unpublishCount = 0
+        ElMessage.error("文章未发布过，请至少发布到一个平台！")
       }
     })
     .catch(() => {})
