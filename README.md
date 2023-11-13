@@ -8,9 +8,13 @@ Publish articles from siyuan-note to platforms like Yuque etc. `Free` and `open 
 
 If you're interested in the paid professional version, please check here => [Publishing Tool Professional Edition](https://github.com/terwer/siyuan-plugin-publisher-pro)
 
-> Recent Update: 🎉 Publish Tool new version `1.18.7` released.
+> Recent Update: 🎉 Publish Tool new version `1.18.8` released.
 
 - `1.18.0` brings new features and enhanced user experience.
+- The `1.18.8` version primarily introduces the following enhancements and addresses certain defects:
+  - Facilitation of singular preview and one-click preview in standard release mode
+  - Rectification of the issue where alterations to article properties, made outside of source code mode, were not persisting
+  - Imposition of control over the default display method, with a preference for showcasing in `yaml` in source code mode if adapters are present
 - The `1.18.7` version brings the following features:
   - Added menu configuration
   - Added document menu

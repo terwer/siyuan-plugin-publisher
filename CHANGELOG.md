@@ -1,16 +1,11 @@
 # Changelog
 
 ## [1.18.8](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.18.7...v1.18.8) (2023-11-13)
-
-
 ### Bug Fixes
-
 * [#892](https://github.com/terwer/siyuan-plugin-publisher/issues/892) 支持常规发布模式下的单个预览和一键预览 ([e804b16](https://github.com/terwer/siyuan-plugin-publisher/commit/e804b16a3f51b4fc62cd716049c6ddca6ce67b20))
 * [#893](https://github.com/terwer/siyuan-plugin-publisher/issues/893) 非源码模式修改的文章属性无法保存 ([a40fc5e](https://github.com/terwer/siyuan-plugin-publisher/commit/a40fc5e6a76cff18cbc4e3e287a83a3e3f337da2))
-* 控制默认展示方式，如果有适配器，优先展示 YAML ([c155c42](https://github.com/terwer/siyuan-plugin-publisher/commit/c155c42757174391ef71fce26b8582ca1ad5c8ea))
-
+* 控制默认展示方式，如果有适配器，优先展示 yaml ([c155c42](https://github.com/terwer/siyuan-plugin-publisher/commit/c155c42757174391ef71fce26b8582ca1ad5c8ea))
 ## [1.18.7](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.18.6...v1.18.7) (2023-11-09)
-### Bug Fixes
 * 新增菜单开关 ([8589364](https://github.com/terwer/siyuan-plugin-publisher/commit/8589364edb9b3c31f45d5a99296de9f86d7dfd66))
 ### Miscellaneous
 * **deps-dev:** bump @vitejs/plugin-vue from 4.4.0 to 4.4.1 ([938511b](https://github.com/terwer/siyuan-plugin-publisher/commit/938511b3e1e1f2abe36220048be5ac3fd77f8459))
