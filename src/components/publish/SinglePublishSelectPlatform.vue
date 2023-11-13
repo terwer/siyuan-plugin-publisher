@@ -24,7 +24,7 @@
   -->
 
 <script setup lang="ts">
-import { onMounted, reactive, ref } from "vue"
+import { markRaw, onMounted, reactive, ref } from "vue"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useRouter } from "vue-router"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
@@ -38,6 +38,8 @@ import Adaptors from "~/src/adaptors"
 import { Utils } from "~/src/utils/utils.ts"
 import { usePublish } from "~/src/composables/usePublish.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
+import { ElMessage, ElMessageBox } from "element-plus"
+import { Warning } from "@element-plus/icons-vue"
 
 const logger = createAppLogger("single-publish-select-platform")
 // appInstance
@@ -107,9 +109,27 @@ const handlePreview = async (event: any, key: string) => {
 }
 
 const handlePreviewAll = async (event: any) => {
-  for (const enabledCfg of formData.enabledConfigArray) {
-    await handlePreview(event, enabledCfg.platformKey)
+  if (formData.enabledConfigArray.length == 0) {
+    ElMessage.error("文章未发布过，请至少发布到一个平台！")
+    return
   }
+
+  ElMessageBox.confirm(
+    `将在默认浏览器打开所有已发布平台的文章预览页面，是否继续？`,
+    "温馨提示",
+    {
+      type: "error",
+      icon: markRaw(Warning),
+      confirmButtonText: t("main.opt.ok"),
+      cancelButtonText: t("main.opt.cancel"),
+    }
+  )
+    .then(async () => {
+      for (const enabledCfg of formData.enabledConfigArray) {
+        await handlePreview(event, enabledCfg.platformKey)
+      }
+    })
+    .catch(() => {})
 }
 
 const initPage = async () => {
