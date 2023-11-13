@@ -39,7 +39,7 @@ import { toRaw } from "vue"
 class VuepressYamlConverterAdaptor extends YamlConvertAdaptor {
   private readonly logger = createAppLogger("vuepress-yaml-converter-adaptor")
 
-  public (post: Post, yamlFormatObj?: YamlFormatObj, cfg?: BlogConfig): YamlFormatObj {
+  public convertToYaml(post: Post, yamlFormatObj?: YamlFormatObj, cfg?: BlogConfig): YamlFormatObj {
     this.logger.debug("您正在使用 Vuepress Yaml Converter", { post: toRaw(post) })
     // 没有的情况默认初始化一个
     if (!yamlFormatObj) {
