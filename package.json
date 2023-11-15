@@ -36,7 +36,7 @@
     "@types/node": "^18.18.9",
     "@vitejs/plugin-vue": "^4.4.1",
     "@vitest/coverage-v8": "^0.34.6",
-    "@vue/test-utils": "^2.4.1",
+    "@vue/test-utils": "^2.4.2",
     "esbuild-plugin-copy": "^2.1.1",
     "esbuild-style-plugin": "^1.6.3",
     "fast-glob": "^3.3.2",
