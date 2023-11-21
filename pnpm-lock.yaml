@@ -119,8 +119,8 @@ devDependencies:
     specifier: ^4.2.1
     version: 4.2.1
   '@types/katex':
-    specifier: ^0.16.6
-    version: 0.16.6
+    specifier: ^0.16.7
+    version: 0.16.7
   '@types/lodash':
     specifier: ^4.14.201
     version: 4.14.201
@@ -1259,8 +1259,8 @@ packages:
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
     dev: true
 
-  /@types/katex@0.16.6:
-    resolution: {integrity: sha512-rZYO1HInM99rAFYNwGqbYPxHZHxu2IwZYKj4bJ4oh6edVrm1UId8mmbHIZLBtG253qU6y3piag0XYe/joNnwzQ==}
+  /@types/katex@0.16.7:
+    resolution: {integrity: sha512-HMwFiRujE5PjrgwHQ25+bsLJgowjGjm5Z8FVSf0N6PwgJrwxH0QxzHYDcKsTfV3wva0vzrpqMTJS2jXPr5BMEQ==}
     dev: true
 
   /@types/less@3.0.6:
