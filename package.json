@@ -44,7 +44,7 @@
     "minimist": "^1.2.8",
     "rollup-plugin-livereload": "^2.0.5",
     "stylus": "^0.59.0",
-    "typescript": "^5.2.2",
+    "typescript": "^5.3.2",
     "unplugin-auto-import": "^0.16.7",
     "unplugin-vue-components": "^0.25.2",
     "vercel": "^32.5.3",
