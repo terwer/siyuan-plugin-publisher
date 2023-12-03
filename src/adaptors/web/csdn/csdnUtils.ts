@@ -87,11 +87,11 @@ class CsdnUtils {
 
   public static processCsdnMath(html: string): string {
     // 使用Cheerio加载HTML
-    const $ = cheerio.load(html)
+    const $ = cheerio.load(html, { xmlMode: true })
 
     // 处理两个$符号包裹的公式
     const doubleDollarRegex = /\$\$([^$]+)\$\$/g
-    $("*").each((index, element) => {
+    $("*:not(pre)").each((index, element) => {
       const content = $(element).html()
       const newContent = content.replace(doubleDollarRegex, (match, mathContent) => {
         const mathHtml = KatexUtils.renderToString(mathContent)
@@ -102,7 +102,7 @@ class CsdnUtils {
 
     // 处理一个$符号包裹的公式
     const singleDollarRegex = /\$([^$]+)\$/g
-    $("*").each((index, element) => {
+    $("*:not(pre)").each((index, element) => {
       const content = $(element).html()
       const newContent = content.replace(singleDollarRegex, (match, mathContent) => {
         const mathHtml = KatexUtils.renderToString(mathContent)

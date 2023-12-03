@@ -62,7 +62,7 @@ class ZhihuUtils {
 
   public static processZHMath(html: string): string {
     // 使用Cheerio加载HTML
-    const $ = cheerio.load(html)
+    const $ = cheerio.load(html, { xmlMode: true })
 
     // // 选择所有带有类名"language-math"的<span>元素
     // $("span.language-math").each((index, element) => {
@@ -92,7 +92,7 @@ class ZhihuUtils {
 
     // 处理两个$符号包裹的公式
     const doubleDollarRegex = /\$\$([^$]+)\$\$/g
-    $("*").each((index, element) => {
+    $("*:not(pre)").each((index, element) => {
       const content = $(element).html()
       const newContent = content.replace(doubleDollarRegex, (match, mathContent) => {
         return `<img eeimg="1" src="//www.zhihu.com/equation?tex=${encodeURIComponent(mathContent)}" 
@@ -103,7 +103,7 @@ class ZhihuUtils {
 
     // 处理一个$符号包裹的公式
     const singleDollarRegex = /\$([^$]+)\$/g
-    $("*").each((index, element) => {
+    $("*:not(pre)").each((index, element) => {
       const content = $(element).html()
       const newContent = content.replace(singleDollarRegex, (match, mathContent) => {
         return `<img eeimg="1" src="//www.zhihu.com/equation?tex=${encodeURIComponent(mathContent)}" 
