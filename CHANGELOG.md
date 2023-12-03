@@ -1,21 +1,13 @@
 # Changelog
 
 ## [1.18.11](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.18.10...v1.18.11) (2023-12-03)
-
-
 ### Bug Fixes
-
 * [#927](https://github.com/terwer/siyuan-plugin-publisher/issues/927) 修复 CSDN 和知乎公式解析不正常的问题 ([aee7081](https://github.com/terwer/siyuan-plugin-publisher/commit/aee70815cbbbbe80596e98b136fd45ba7d4d2de5))
 * 优化文章未发布时的提示 ([abc9095](https://github.com/terwer/siyuan-plugin-publisher/commit/abc90957ffc258a3c7ea9bb3f5d225499329443b))
-
-
 ### Miscellaneous
-
 * **deps-dev:** bump unplugin-auto-import from 0.16.7 to 0.17.2 ([b8fc1f7](https://github.com/terwer/siyuan-plugin-publisher/commit/b8fc1f7704e67d9d51b5648a4e1be26578acb510))
 * 升级依赖 ([8ea2970](https://github.com/terwer/siyuan-plugin-publisher/commit/8ea2970ee4c6e1f71ec2d3a3c5614a507eb53aad))
-
 ## [1.18.10](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.18.9...v1.18.10) (2023-11-13)
-### Bug Fixes
 * 一键预览新增确认 ([1d6997b](https://github.com/terwer/siyuan-plugin-publisher/commit/1d6997b12290cbdc23f9470eecf4d982d04d67d0))
 * 修复 vuepress 转换错误问题 ([0f8e5a2](https://github.com/terwer/siyuan-plugin-publisher/commit/0f8e5a2256cecafbe21bbffdba76f455e04143a6))
 ## [1.18.9](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.18.8...v1.18.9) (2023-11-13)
@@ -28,7 +20,6 @@
 * 控制默认展示方式，如果有适配器，优先展示 yaml ([c155c42](https://github.com/terwer/siyuan-plugin-publisher/commit/c155c42757174391ef71fce26b8582ca1ad5c8ea))
 ## [1.18.7](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.18.6...v1.18.7) (2023-11-09)
 * 新增菜单开关 ([8589364](https://github.com/terwer/siyuan-plugin-publisher/commit/8589364edb9b3c31f45d5a99296de9f86d7dfd66))
-### Miscellaneous
 * **deps-dev:** bump @vitejs/plugin-vue from 4.4.0 to 4.4.1 ([938511b](https://github.com/terwer/siyuan-plugin-publisher/commit/938511b3e1e1f2abe36220048be5ac3fd77f8459))
 * **deps-dev:** bump vercel from 32.5.2 to 32.5.3 ([d55392c](https://github.com/terwer/siyuan-plugin-publisher/commit/d55392c8fd2980b9d730123fd5ed80ef19447242))
 ## [1.18.6](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.18.5...v1.18.6) (2023-11-08)

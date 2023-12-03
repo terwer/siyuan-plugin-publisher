@@ -6,11 +6,14 @@
 
 Publish articles from siyuan-note to platforms like Yuque etc. `Free` and `open source`. 
 
-If you're interested in the paid professional version, please check here => [Publishing Tool Professional Edition](https://github.com/terwer/siyuan-plugin-publisher-pro)
+If you're interested in the paid professional version, please check the paied ➡️ [Publishing Tool Professional Edition](https://github.com/terwer/siyuan-plugin-publisher-pro)
 
-> Recent Update: 🎉 Publish Tool new version `1.18.10` released.
+> Recent Update: 🎉 Publish Tool new version `1.18.11` released.
 
 - `1.18.0` brings new features and enhanced user experience.
+- The `1.18.11` Version primarily includes the following minor optimizations and bug fixes:
+  - Improved prompts for unpublished articles. 
+  - Fixed abnormal formula parsing issues on CSDN and Zhihu.
 - The `1.18.10` version, the primary rectifications encompass:
   - Introduction of a streamlined confirmation for the one-click preview.
   - Resolution of conversion errors in VuePress.

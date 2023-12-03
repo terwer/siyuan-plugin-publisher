@@ -6,11 +6,14 @@
 
 将思源笔记的文章发布到语雀等平台，`开源`、`免费` 。
 
-如果您对 [增值功能](https://github.com/terwer/siyuan-plugin-publisher/issues/846) 感兴趣，请移步收费专业版 => [发布工具专业版](https://github.com/terwer/siyuan-plugin-publisher-pro)
+如果您对 [增值功能](https://github.com/terwer/siyuan-plugin-publisher/issues/846) 感兴趣，请移步 ➡️ 收费的 [发布工具专业版](https://github.com/terwer/siyuan-plugin-publisher-pro)
 
-> 最近的新版本：🎉 发布工具新版本 `1.18.10` 发布
+> 最近的新版本：🎉 发布工具新版本 `1.18.11` 发布
 
 - `1.18.0` 新增多个特性，全方位优化体验。
+- `1.18.11` 主要做了以下小幅度优化和缺陷修复：
+  - 优化文章未发布时的提示
+  - 修复 CSDN 和知乎公式解析不正常的问题
 - `1.18.10` 主要修复以下缺陷：
   - 一键预览新增确认
   - 修复 vuepress 转换错误问题
