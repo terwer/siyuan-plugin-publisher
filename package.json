@@ -33,7 +33,7 @@
     "@types/crypto-js": "^4.2.1",
     "@types/katex": "^0.16.7",
     "@types/lodash": "^4.14.202",
-    "@types/node": "^18.19.1",
+    "@types/node": "^20.10.5",
     "@vitejs/plugin-vue": "^4.5.1",
     "@vitest/coverage-v8": "^0.34.6",
     "@vue/test-utils": "^2.4.3",
