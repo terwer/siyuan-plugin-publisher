@@ -75,7 +75,7 @@
     "siyuan": "^0.8.9",
     "siyuan-plugin-picgo": "^1.4.4",
     "uuid": "^9.0.1",
-    "vue": "^3.3.9",
+    "vue": "^3.4.3",
     "vue-i18n": "^9.8.0",
     "vue-router": "^4.2.5",
     "xmlbuilder2": "^3.1.1",
