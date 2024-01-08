@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.18.12](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.18.11...v1.18.12) (2024-01-08)
+
+
+### Bug Fixes
+
+* [#964](https://github.com/terwer/siyuan-plugin-publisher/issues/964) 修复转义文本导致的知乎依旧公式解析错误问题 ([988b46d](https://github.com/terwer/siyuan-plugin-publisher/commit/988b46d380eb4fbbfc9e82c4edce6378aefab36d))
+* **deps:** bump @vueuse/components from 10.6.1 to 10.7.1 ([c2a3513](https://github.com/terwer/siyuan-plugin-publisher/commit/c2a351371790f47357336c29d91dcccfc1529f61))
+* **deps:** bump @vueuse/core from 10.6.1 to 10.7.1 ([1b3f182](https://github.com/terwer/siyuan-plugin-publisher/commit/1b3f1828d09d5294282e2dc2fd5f95147e3547ae))
+* **deps:** bump google-github-actions/release-please-action from 3 to 4 ([696b383](https://github.com/terwer/siyuan-plugin-publisher/commit/696b38304e74e553387a2dbe7f852e28f87a4782))
+* **deps:** bump siyuan from 0.8.9 to 0.9.1 ([258bfe2](https://github.com/terwer/siyuan-plugin-publisher/commit/258bfe209e811079e9834302e66c85295f064d10))
+* **deps:** bump vue from 3.3.9 to 3.4.5 ([f86c533](https://github.com/terwer/siyuan-plugin-publisher/commit/f86c53329f8a27465ac60d69cf0da8beb7897730))
+
 ## [1.18.11](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.18.10...v1.18.11) (2023-12-03)
 ### Bug Fixes
 * [#927](https://github.com/terwer/siyuan-plugin-publisher/issues/927) 修复 CSDN 和知乎公式解析不正常的问题 ([aee7081](https://github.com/terwer/siyuan-plugin-publisher/commit/aee70815cbbbbe80596e98b136fd45ba7d4d2de5))
