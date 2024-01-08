@@ -87,7 +87,7 @@ class CsdnUtils {
 
   public static processCsdnMath(html: string): string {
     // 使用Cheerio加载HTML
-    const $ = cheerio.load(html, { xmlMode: true })
+    const $ = cheerio.load(html, { xmlMode: true, decodeEntities: false })
 
     // 处理两个$符号包裹的公式
     const doubleDollarRegex = /\$\$([^$]+)\$\$/g
