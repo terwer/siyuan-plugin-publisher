@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.18.12](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.18.11...v1.18.12) (2024-01-08)
+
+
+### Bug Fixes
+
+* [#964](https://github.com/terwer/siyuan-plugin-publisher/issues/964) 修复转义文本导致的知乎依旧公式解析错误问题 ([988b46d](https://github.com/terwer/siyuan-plugin-publisher/commit/988b46d380eb4fbbfc9e82c4edce6378aefab36d))
+
 ## [1.18.11](https://github.com/terwer/siyuan-plugin-publisher/compare/v1.18.10...v1.18.11) (2023-12-03)
 ### Bug Fixes
 * [#927](https://github.com/terwer/siyuan-plugin-publisher/issues/927) 修复 CSDN 和知乎公式解析不正常的问题 ([aee7081](https://github.com/terwer/siyuan-plugin-publisher/commit/aee70815cbbbbe80596e98b136fd45ba7d4d2de5))
