@@ -63,7 +63,7 @@
     "cheerio": "1.0.0-rc.12",
     "cross-fetch": "^3.1.8",
     "crypto-js": "^4.2.0",
-    "element-plus": "^2.4.4",
+    "element-plus": "^2.5.0",
     "gray-matter": "^4.0.3",
     "js-base64": "^3.7.5",
     "js-yaml": "^4.1.0",
