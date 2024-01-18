@@ -54,7 +54,7 @@ jobs:
       # Setup pnpm cache
       - name: Setup pnpm cache
         if: ${{ steps.release.outputs.release_created }}
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
