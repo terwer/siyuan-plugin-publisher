@@ -119,7 +119,7 @@ function readFileToBase64(url: string): Promise<string> {
         const reader = new FileReader()
         reader.readAsDataURL(body)
         reader.onloadend = function () {
-          var base64data = reader.result as string
+          const base64data = reader.result as string
           resolve(base64data)
         }
         reader.onerror = function (e) {

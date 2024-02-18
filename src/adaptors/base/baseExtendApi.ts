@@ -295,14 +295,15 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
 
     // 处理标记
     // #691 闪卡标记渲染成Markdown之后去除==
-    md = md.replace(/==([^=]+)==/g, '<span style="font-weight: bold;" class="mark">$1</span>')
+    // md = md.replace(/==([^=]+)==/g, '<span style="font-weight: bold;" class="mark">$1</span>')
+    md = this.replaceMarks(md)
 
     // 处理加粗
     // #821 html发布的时候会出现有些格式没有转化
     // **这里是加粗**
-    // <p id="2<span data-type="strong">这里是加粗</span>
+    // <span data-type="strong">这里是加粗</span>
     // md = md.replace(/\*\*(.*?)\*\*/g, '<span style="font-weight: bold;" data-type="strong">$1</span>')
-    md = md.replace(/\*\*(.*?)\*\*/g, '<span style="font-weight: bold;" data-type="strong">$1</span>')
+    md = this.replaceBold(md)
 
     // 处理外链
     const { getReadOnlyPublishPreferenceSetting } = usePreferenceSettingStore()
@@ -315,6 +316,98 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     this.logger.debug("markdown处理完毕，post", { post: toRaw(post) })
 
     return post
+  }
+
+  /**
+   * 替换标记
+   *
+   * @param md
+   * @protected
+   */
+  private replaceMarks(md: string) {
+    // 匹配代码块
+    let codeBlockRegex = /```[\s\S]*?```/g
+
+    // 将代码块替换为占位符，避免在后续处理中受到影响
+    let placeholders = []
+    md = md.replace(codeBlockRegex, function (match) {
+      let placeholder = `CODE_BLOCK_${placeholders.length}`
+      placeholders.push(match)
+      return placeholder
+    })
+
+    // 匹配行内代码块
+    let inlineCodeRegex = /`[^`]*`/g
+    let inlineCodePlaceholders = []
+    md = md.replace(inlineCodeRegex, function (match) {
+      let placeholder = `INLINE_CODE_${inlineCodePlaceholders.length}`
+      inlineCodePlaceholders.push(match)
+      return placeholder
+    })
+
+    // 正则表达式，匹配严格符合 == 开始和结束的部分，但不在代码块和行内代码块内
+    let regex = /(?<!`|```)==([^=]+)==(?!.*(?:`|```))(?!.*INLINE_CODE_\d+)/g
+
+    // 替换非代码块和行内代码块内的 == 部分
+    md = md.replace(regex, '<span style="font-weight: bold;" class="mark">$1</span>')
+
+    // 将代码块恢复回去
+    for (let i = 0; i < placeholders.length; i++) {
+      md = md.replace(`CODE_BLOCK_${i}`, placeholders[i])
+    }
+
+    // 将行内代码块恢复回去
+    for (let i = 0; i < inlineCodePlaceholders.length; i++) {
+      md = md.replace(`INLINE_CODE_${i}`, inlineCodePlaceholders[i])
+    }
+
+    return md
+  }
+
+  /**
+   * 处理加粗
+   *
+   * @param md
+   * @private
+   */
+  private replaceBold(md: string) {
+    // 匹配代码块
+    let codeBlockRegex = /```[\s\S]*?```/g
+
+    // 将代码块替换为占位符，避免在后续处理中受到影响
+    let placeholders = []
+    md = md.replace(codeBlockRegex, function (match) {
+      let placeholder = `CODE_BLOCK_${placeholders.length}`
+      placeholders.push(match)
+      return placeholder
+    })
+
+    // 匹配行内代码块
+    let inlineCodeRegex = /`[^`]*`/g
+    let inlineCodePlaceholders = []
+    md = md.replace(inlineCodeRegex, function (match) {
+      let placeholder = `INLINE_CODE_${inlineCodePlaceholders.length}`
+      inlineCodePlaceholders.push(match)
+      return placeholder
+    })
+
+    // 正则表达式，匹配严格符合 ** 开始和结束的部分，但不在代码块和行内代码块内
+    let regex = /(?<!`|```)\*\*([^*]+)\*\*(?!.*(?:`|```))(?!.*INLINE_CODE_\d+)/g
+
+    // 替换非代码块和行内代码块内的 ** 部分
+    md = md.replace(regex, '<span style="font-weight: bold;" class="bold">$1</span>')
+
+    // 将代码块恢复回去
+    for (let i = 0; i < placeholders.length; i++) {
+      md = md.replace(`CODE_BLOCK_${i}`, placeholders[i])
+    }
+
+    // 将行内代码块恢复回去
+    for (let i = 0; i < inlineCodePlaceholders.length; i++) {
+      md = md.replace(`INLINE_CODE_${i}`, inlineCodePlaceholders[i])
+    }
+
+    return md
   }
 
   /**
