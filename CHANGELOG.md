@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.19.2](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.19.1...siyuan-plugin-publisher-v1.19.2) (2024-02-18)
+
+
+### Bug Fixes
+
+* [#1035](https://github.com/terwer/siyuan-plugin-publisher/issues/1035) 代码块里面的文本不应该被错误转义 ([6e9bb3c](https://github.com/terwer/siyuan-plugin-publisher/commit/6e9bb3c9a1b13a32b5ff5e26f6d0ebc13c03197b))
+
 ## [1.19.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.19.0...siyuan-plugin-publisher-v1.19.1) (2024-02-18)
 ### Bug Fixes
 * [#1035](https://github.com/terwer/siyuan-plugin-publisher/issues/1035) 代码块里面的文本不应该被错误转义 ([8fc148f](https://github.com/terwer/siyuan-plugin-publisher/commit/8fc148f308c593af0888861f453c1f8c964bf55e))
