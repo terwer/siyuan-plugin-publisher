@@ -47,7 +47,7 @@
     "typescript": "^5.3.3",
     "unplugin-auto-import": "^0.17.3",
     "unplugin-vue-components": "^0.26.0",
-    "vercel": "^33.0.2",
+    "vercel": "^33.5.1",
     "vite": "^5.0.11",
     "vite-plugin-html": "^3.2.1",
     "vite-plugin-node-polyfills": "^0.19.0",
