@@ -1,10 +1,7 @@
 # Changelog
 
 ## [1.19.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.19.0...siyuan-plugin-publisher-v1.19.1) (2024-02-18)
-
-
 ### Bug Fixes
-
 * [#1035](https://github.com/terwer/siyuan-plugin-publisher/issues/1035) 代码块里面的文本不应该被错误转义 ([8fc148f](https://github.com/terwer/siyuan-plugin-publisher/commit/8fc148f308c593af0888861f453c1f8c964bf55e))
 * **deps:** bump @vueuse/core from 10.7.1 to 10.7.2 ([30047db](https://github.com/terwer/siyuan-plugin-publisher/commit/30047db126444b147734213f9ebc610e966cd40e))
 * **deps:** bump actions/cache from 3 to 4 ([c7591e3](https://github.com/terwer/siyuan-plugin-publisher/commit/c7591e3fbff096199e7864f92d4d59971d0d9754))
@@ -12,15 +9,11 @@
 * **deps:** bump pnpm/action-setup from 2 to 3 ([4a8c07a](https://github.com/terwer/siyuan-plugin-publisher/commit/4a8c07a0355c5685035364182de044e5db88153d))
 * **deps:** bump siyuan from 0.9.1 to 0.9.3 ([7a2d36a](https://github.com/terwer/siyuan-plugin-publisher/commit/7a2d36afd9277250b0606852e9d8d8486b444e12))
 * **deps:** bump vue from 3.4.5 to 3.4.19 ([0c74d35](https://github.com/terwer/siyuan-plugin-publisher/commit/0c74d35df4cdf58b46b78f381d4ff7ea41ea14d8))
-
-
 ### Miscellaneous
-
 * **deps-dev:** bump @vitejs/plugin-vue from 5.0.2 to 5.0.4 ([2994019](https://github.com/terwer/siyuan-plugin-publisher/commit/2994019bc5dc6b3e92855577dcc51ce66a58829a))
 * **deps-dev:** bump @vitest/coverage-v8 from 1.1.3 to 1.2.2 ([e41c57d](https://github.com/terwer/siyuan-plugin-publisher/commit/e41c57dcce1b39abf14c38e4cfc27756994233fe))
 * **deps-dev:** bump vercel from 33.0.2 to 33.5.1 ([8277d01](https://github.com/terwer/siyuan-plugin-publisher/commit/8277d015a5c9e1e240d680f95e117feb7fa318e2))
 * **deps-dev:** bump vitest from 1.1.3 to 1.2.2 ([3ba33bc](https://github.com/terwer/siyuan-plugin-publisher/commit/3ba33bce3446099f95eb2c3461e5a4ea3f20f9f8))
-
 ## [1.19.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.18.11...siyuan-plugin-publisher-v1.19.0) (2024-01-08)
 ### Features
 * [#130](https://github.com/terwer/siyuan-plugin-publisher/issues/130) 支持发布到CSDN ([5566040](https://github.com/terwer/siyuan-plugin-publisher/commit/5566040934eddcc22d5d1480beab70294e994a28))
@@ -64,7 +57,6 @@
 * 支持选择知识空间 ([ab1a648](https://github.com/terwer/siyuan-plugin-publisher/commit/ab1a648bbf9b56341861774f24b9e7a8164e9ac5))
 * 整合菜单，专注核心功能 ([72e525e](https://github.com/terwer/siyuan-plugin-publisher/commit/72e525eb714a67acfd4e3c15c9a74e4971c41478))
 * 适配 flowus 息流 ([acd5502](https://github.com/terwer/siyuan-plugin-publisher/commit/acd5502da3b59592e8f6a7c4b32b8ecdd6cedf27))
-### Bug Fixes
 * [#388](https://github.com/terwer/siyuan-plugin-publisher/issues/388) 保存各个平台的标签和分类 ([ca9d183](https://github.com/terwer/siyuan-plugin-publisher/commit/ca9d183197ea7d880fbbcf765263ebf4c4728b40))
 * [#435](https://github.com/terwer/siyuan-plugin-publisher/issues/435) 过滤掉思源剪藏插件的引用摘要 ([617be1d](https://github.com/terwer/siyuan-plugin-publisher/commit/617be1de671f2dc424784d6dab49b8152177bf60))
 * [#680](https://github.com/terwer/siyuan-plugin-publisher/issues/680) PC客户端多个工作空间情况下，自动读取思源地址 ([cd8a375](https://github.com/terwer/siyuan-plugin-publisher/commit/cd8a375d4abffc22ee5fe15f78fa43270be3b332))
@@ -184,7 +176,6 @@
 * 重构存储 ([c1b646a](https://github.com/terwer/siyuan-plugin-publisher/commit/c1b646a440b9a12b737d1fddd553c01c4a47c968))
 ### Code Refactoring
 * 重构项目结构 ([9629fbc](https://github.com/terwer/siyuan-plugin-publisher/commit/9629fbc2eab90cc613f7ade523045d6cd8cff7ea))
-### Miscellaneous
 * **deps-dev:** bump @halo-dev/api-client from 2.9.0 to 2.10.0 ([bc92f28](https://github.com/terwer/siyuan-plugin-publisher/commit/bc92f28d0469096841faff1de81c6db506915246))
 * **deps-dev:** bump @types/crypto-js from 4.1.3 to 4.2.0 ([2042f17](https://github.com/terwer/siyuan-plugin-publisher/commit/2042f1720f416208107375a0918b94b6887b8515))
 * **deps-dev:** bump @vitejs/plugin-vue from 4.3.4 to 4.4.0 ([eea41e0](https://github.com/terwer/siyuan-plugin-publisher/commit/eea41e0a388900bad8eb80f14721c9494e10f902))
