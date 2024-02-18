@@ -10,7 +10,12 @@ If you're interested in the paid professional version, please check the paied âž
 
 > Recent update: ðŸŽ‰ Introducing Publisher Version `1.19.0`
 
-- Version `1.19.0` addresses defects, upgrades underlying libraries, and prepares for compatibility with new platforms.
+- Version `1.19.1` mainly fixes the following issues:
+  - Text inside code blocks should not be incorrectly escaped.
+- Version `1.19.1` primarily includes the following underlying changes:
+  - Upgrade element-plus to 2.5.5+.
+  - Upgrade vue to 3.4.19+.
+  - Upgrade siyuan sdk to 0.9.3.
 - Version `1.19.0` primarily resolves the following issues:
   - Rectifies the parsing error in Zhihu's formula rendering caused by escaped text.
 - Version `1.19.0` includes significant underlying changes:
