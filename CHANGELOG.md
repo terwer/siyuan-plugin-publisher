@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.19.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.19.0...siyuan-plugin-publisher-v1.19.1) (2024-02-18)
+
+
+### Bug Fixes
+
+* [#1035](https://github.com/terwer/siyuan-plugin-publisher/issues/1035) 代码块里面的文本不应该被错误转义 ([8fc148f](https://github.com/terwer/siyuan-plugin-publisher/commit/8fc148f308c593af0888861f453c1f8c964bf55e))
+* **deps:** bump @vueuse/core from 10.7.1 to 10.7.2 ([30047db](https://github.com/terwer/siyuan-plugin-publisher/commit/30047db126444b147734213f9ebc610e966cd40e))
+* **deps:** bump actions/cache from 3 to 4 ([c7591e3](https://github.com/terwer/siyuan-plugin-publisher/commit/c7591e3fbff096199e7864f92d4d59971d0d9754))
+* **deps:** bump siyuan from 0.9.1 to 0.9.3 ([7a2d36a](https://github.com/terwer/siyuan-plugin-publisher/commit/7a2d36afd9277250b0606852e9d8d8486b444e12))
+
 ## [1.19.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.18.11...siyuan-plugin-publisher-v1.19.0) (2024-01-08)
 ### Features
 * [#130](https://github.com/terwer/siyuan-plugin-publisher/issues/130) 支持发布到CSDN ([5566040](https://github.com/terwer/siyuan-plugin-publisher/commit/5566040934eddcc22d5d1480beab70294e994a28))
