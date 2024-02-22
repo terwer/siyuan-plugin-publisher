@@ -36,8 +36,8 @@ dependencies:
     specifier: ^4.0.3
     version: 4.0.3
   js-base64:
-    specifier: ^3.7.6
-    version: 3.7.6
+    specifier: ^3.7.7
+    version: 3.7.7
   js-yaml:
     specifier: ^4.1.0
     version: 4.1.0
@@ -4908,8 +4908,8 @@ packages:
       minimatch: 3.1.2
     dev: true
 
-  /js-base64@3.7.6:
-    resolution: {integrity: sha512-NPrWuHFxFUknr1KqJRDgUQPexQF0uIJWjeT+2KjEePhitQxQEx5EJBG1lVn5/hc8aLycTpXrDOgPQ6Zq+EDiTA==}
+  /js-base64@3.7.7:
+    resolution: {integrity: sha512-7rCnleh0z2CkXhH67J8K1Ytz0b2Y+yxTPL+/KOJoa20hfnVQ/3/T6W/KflYI4bRHRagNeXeU2bkNGI3v1oS/lw==}
     dev: false
 
   /js-beautify@1.15.1:
@@ -7973,7 +7973,7 @@ packages:
     resolution: {integrity: sha512-thTIZse+jAgWZYWFueWWKU4ssIq40HcH4QGJXc8I+XJrmYsRQMZvya3YdLtLFzFSxBoLAzL0EWwJ4KU+fPB5Sw==}
     dependencies:
       '@octokit/core': 5.1.0
-      js-base64: 3.7.6
+      js-base64: 3.7.7
       zhi-common: 1.28.0(typescript@5.3.3)
       zhi-lib-base: 0.8.0
     transitivePeerDependencies:
