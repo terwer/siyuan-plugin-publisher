@@ -290,6 +290,7 @@ class JuejinWebAdaptor extends BaseWebApi {
 
     return tags
   }
+
   // ================
   // private methods
   // ================
@@ -328,7 +329,7 @@ class JuejinWebAdaptor extends BaseWebApi {
     const res = await this.webProxyFetch(url, [], params, "POST")
     this.logger.debug("juejin publish post res =>", res)
     if (res.err_no !== 0) {
-      throw new Error("掘金文章发布失败 =>" + res?.err_msg ?? res)
+      throw new Error("掘金文章发布失败 =>" + (res?.err_msg ?? res))
     }
 
     return res.data.article_id.toString()

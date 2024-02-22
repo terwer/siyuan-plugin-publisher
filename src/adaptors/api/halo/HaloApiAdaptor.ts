@@ -309,9 +309,9 @@ class HaloApiAdaptor extends BaseBlogApi {
       this.logger.error("Error uploading image to halo:", e)
     }
 
-    const siteImgId = res?.spec?.displayName ?? ""
-    const siteArticleId = res?.metadata?.name ?? ""
-    const siteImgUrl = this.cfg.home + res?.metadata?.annotations["storage.halo.run/uri"] ?? ""
+    const siteImgId = res?.spec?.displayName
+    const siteArticleId = res?.metadata?.name
+    const siteImgUrl = this.cfg.home + (res?.metadata?.annotations["storage.halo.run/uri"] ?? "")
     return {
       attachment_id: siteImgId,
       date_created_gmt: new Date(),
