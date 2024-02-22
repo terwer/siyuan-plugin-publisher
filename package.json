@@ -77,7 +77,7 @@
     "uuid": "^9.0.1",
     "vue": "^3.4.19",
     "vue-i18n": "^9.9.1",
-    "vue-router": "^4.2.5",
+    "vue-router": "^4.3.0",
     "xmlbuilder2": "^3.1.1",
     "zhi-blog-api": "^1.53.0",
     "zhi-common": "^1.28.0",
