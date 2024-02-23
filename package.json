@@ -13,7 +13,6 @@
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "build": "python scripts/build.py",
-    "pluginDev": "python scripts/plugin_dev.py",
     "pluginBuild": "python scripts/plugin_build.py",
     "siyuanBuild": "python scripts/siyuan_build.py",
     "vercelBuild": "python3 scripts/vercel_build.py",
@@ -24,7 +23,7 @@
     "syncVersion": "python scripts/version.py",
     "parseChangelog": "python scripts/parse_changelog.py",
     "prepareRelease": "pnpm syncVersion && pnpm parseChangelog",
-    "package": "pnpm build && pnpm widgetBuild && pnpm extBuild && pnpm extBuild -t firefox",
+    "package": "pnpm build && pnpm widgetBuild && pnpm extBuild && pnpm extBuild -t firefox && pnpm nginxBuild",
     "syncWidgetRepo": "python scripts/sync_widget_repo.py"
   },
   "devDependencies": {

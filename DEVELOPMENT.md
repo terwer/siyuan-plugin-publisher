@@ -17,12 +17,19 @@ pnpm serve
 dev
 
 ```bash
+# siyuan plugin
 pnpm makeLink -p siyuan
 pnpm dev -p siyuan
 
+# siyuan plugin 
 # pnpm makeLink -p widget
 # pnpm dev -p widget -t 
 
+# chrome extension
+
+# firefox extension
+
+# nginx
 pnpm dev -p nginx -d nginx
 ```
 
