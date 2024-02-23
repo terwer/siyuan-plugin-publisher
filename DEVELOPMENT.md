@@ -52,6 +52,8 @@ artifacts structure
   └── sy-post-publisher-widget-1.19.1.zip
 ```
 
+Note: vercel is also supported via `pnpm vercelBuild`
+
 ## Sync to legacy widget repo
 
 ```bash

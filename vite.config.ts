@@ -11,13 +11,11 @@ import { ElementPlusResolver } from "unplugin-vue-components/resolvers"
 import { nodePolyfills } from "vite-plugin-node-polyfills"
 
 // methods start
-const getAppBase = (isSiyuanBuild: boolean, isWidgetBuild: boolean, isStaticBuild: boolean): string => {
+const getAppBase = (isSiyuanBuild: boolean, isWidgetBuild: boolean): string => {
   if (isSiyuanBuild) {
     return "/plugins/siyuan-plugin-publisher/"
   } else if (isWidgetBuild) {
     return "/widgets/sy-post-publisher/"
-  } else if (isStaticBuild) {
-    return "/dist/"
   } else {
     return "/"
   }
@@ -65,17 +63,15 @@ const outDir = args.o || args.outDir
 
 const isSiyuanBuild = process.env.BUILD_TYPE === "siyuan"
 const isWidgetBuild = process.env.BUILD_TYPE === "widget"
-const isStaticBuild = process.env.BUILD_TYPE === "static"
 // const isChromeBuild = process.env.BUILD_TYPE === "chrome"
 const distDir = outDir || (isWidgetBuild ? "widget" : "./dist")
-const appBase = getAppBase(isSiyuanBuild, isWidgetBuild, isStaticBuild)
+const appBase = getAppBase(isSiyuanBuild, isWidgetBuild)
 
 console.log("isWatch=>", isWatch)
 console.log("debugMode=>", debugMode)
 console.log("isDev=>", isDev)
 console.log("distDir=>", distDir)
 console.log("isSiyuanBuild=>", isSiyuanBuild)
-console.log("isStaticBuild=>", isStaticBuild)
 
 // https://github.com/vuejs/vue-cli/issues/1198
 // https://vitejs.dev/config/
