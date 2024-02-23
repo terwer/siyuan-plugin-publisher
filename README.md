@@ -34,7 +34,7 @@ Please check [CHANGELOG](./CHANGELOG.MD)
 
 ## Development
 
-Please refer to [DEVELOPMENT.md](./DEVELOPMENT.md)
+Please refer to [DEVELOPMENT](./DEVELOPMENT.md)
 
 ## Platform List
 

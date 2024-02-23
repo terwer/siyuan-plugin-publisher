@@ -35,7 +35,7 @@
 
 ## 开发
 
-请参考 [DEVELOPMENT.md](./DEVELOPMENT.md)
+请参考 [DEVELOPMENT](./DEVELOPMENT.md)
 
 ## 平台列表
 
