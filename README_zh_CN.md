@@ -33,6 +33,10 @@
 
 请直接查看 [CHANGELOG](./CHANGELOG.md)
 
+## 开发
+
+请参考 [DEVELOPMENT.md](./DEVELOPMENT.md)
+
 ## 平台列表
 
 排名不分先后

@@ -45,5 +45,6 @@ if __name__ == "__main__":
     os.environ['VITE_SIYUAN_API_URL'] = URL
     os.environ['VITE_SIYUAN_AUTH_TOKEN'] = TOKEN
     os.environ['VITE_SIYUAN_COOKIE'] = COOKIE
+    # os.environ['VITE_CJS_TRACE'] = 'true'
 
     os.system("vite")

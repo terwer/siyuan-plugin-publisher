@@ -20,6 +20,7 @@
 #  Please contact Terwer, Shenzhen, Guangdong, China, youweics@163.com
 #  or visit www.terwer.space if you need additional information or have any
 #  questions.
+import argparse
 import os
 
 import scriptutils
@@ -31,8 +32,21 @@ if __name__ == "__main__":
     # Get the current working directory.
     cwd = scriptutils.get_workdir()
 
+    # Parse arguments.
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-d", "--dist", required=False, help="the dist for building files")
+    parser.add_argument("-v", "--verbose", action="store_true", help="Enable verbose output.")
+    parser.add_argument("-p", "--platform", help="Build for different platforms, like siyuan, widget, static.")
+    parser.add_argument("-t", "--type", help="Build browser extension for publishing, like chrome, edge, firefox.")
+    args = parser.parse_args()
+
+    if args.verbose:
+        print("Verbose mode enabled.")
+
     # 设置环境变量
-    os.environ['BUILD_TYPE'] = 'siyuan'
+    if not args.platform:
+        args.platform = 'siyuan'
+    os.environ['BUILD_TYPE'] = args.platform
 
     os.system("zhi-build --serve --production")
     os.system("vue-tsc --noEmit && vite build --watch")
