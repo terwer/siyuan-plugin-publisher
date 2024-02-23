@@ -34,10 +34,10 @@ if __name__ == "__main__":
 
     # Parse arguments.
     parser = argparse.ArgumentParser()
-    parser.add_argument("-d", "--dist", required=False, help="the dist for building files")
     parser.add_argument("-v", "--verbose", action="store_true", help="Enable verbose output.")
     parser.add_argument("-p", "--platform", help="Build for different platforms, like siyuan, widget, static.")
     parser.add_argument("-t", "--type", help="Build browser extension for publishing, like chrome, edge, firefox.")
+    parser.add_argument("-d", "--dist", required=False, help="the dist for building files")
     args = parser.parse_args()
 
     if args.verbose:
@@ -48,5 +48,12 @@ if __name__ == "__main__":
         args.platform = 'siyuan'
     os.environ['BUILD_TYPE'] = args.platform
 
-    os.system("zhi-build --serve --production")
-    os.system("vue-tsc --noEmit && vite build --watch")
+    # zhi-build
+    zhi_build_cmd = "zhi-build --serve --production -d " + args.dist
+    print(zhi_build_cmd)
+    os.system(zhi_build_cmd)
+
+    # vite-build
+    vite_cmd = "vue-tsc --noEmit && vite build --watch --outDir " + args.dist
+    print(vite_cmd)
+    os.system(vite_cmd)

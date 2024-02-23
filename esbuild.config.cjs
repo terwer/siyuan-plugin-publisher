@@ -29,7 +29,7 @@ const { copy } = require("esbuild-plugin-copy")
 
 const args = minimist(process.argv.slice(2))
 const isWatch = args.watch || args.w || false
-const distDir = "./dist"
+const distDir = args.dist || args.d || "./dist"
 
 module.exports = {
   esbuildConfig: {

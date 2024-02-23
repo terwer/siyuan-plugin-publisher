@@ -1,6 +1,6 @@
 #  Copyright (c) 2022-2023, terwer . All rights reserved.
 #  @author terwer on 2023/11/6
-
+import argparse
 import json
 import os
 import sys
@@ -25,6 +25,7 @@ POST_HEADER = {
     "Cookie": cookie,
     "Content-Type": "application/json",
 }
+
 
 def get_siyuan_dir():
     url = 'http://127.0.0.1:6806/api/system/getWorkspaces'
@@ -77,12 +78,15 @@ def get_plugin_name():
 
 def make_link(target_dir, plugin_name):
     # dev 目录
-    dev_dir = f'{os.getcwd()}/{devOutDir}'
+    dev_dir = os.path.join(os.getcwd(), devOutDir)
     # 如果不存在则创建
     if not os.path.exists(dev_dir):
         os.makedirs(dev_dir)
 
-    target_path = f'{target_dir}/{plugin_name}'
+    target_path = target_dir
+    if plugin_name.strip() != '':
+        target_path = os.path.join(target_dir, plugin_name)
+
     # 如果已存在，则退出
     if os.path.exists(target_path):
         is_symbol = os.path.islink(target_path)
@@ -159,6 +163,30 @@ if __name__ == "__main__":
     # 获取当前路径
     cwd = scriptutils.get_workdir()
 
+    # Parse arguments.
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-d", "--dist", required=False, help="the dist for building files")
+    parser.add_argument("-f", "--forder", required=False, help="the targetDir for building files")
+    parser.add_argument("-v", "--verbose", action="store_true", help="Enable verbose output.")
+    parser.add_argument("-p", "--platform", help="Build for different platforms, like siyuan, widget, static.")
+    args = parser.parse_args()
+
+    if args.verbose:
+        print("Verbose mode enabled.")
+    # 设置环境变量
+    if not args.platform:
+        args.platform = 'siyuan'
+    if not args.dist:
+        args.dist = 'dist'
+    devOutDir = args.dist
+    if args.forder:
+        targetDir = args.forder
+        name = ''
+    else:
+        # 获取插件名称
+        name = get_plugin_name()
+        _log(f'>>> 成功获取到插件名称: {name}')
+
     # 获取插件目录
     _log('>>> 尝试访问 make_dev_link.js 中的常量 "targetDir"...')
     if targetDir == '':
@@ -182,10 +210,6 @@ if __name__ == "__main__":
         _error(f'失败！插件目录不存在: "{targetDir}"')
         _error('请在 scripts/make_dev_link.py 中设置插件目录')
         sys.exit(1)
-
-    # 获取插件名称
-    name = get_plugin_name()
-    _log(f'>>> 成功获取到插件名称: {name}')
 
     # 生成软连接
     make_link(targetDir, name)

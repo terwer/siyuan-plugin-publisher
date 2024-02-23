@@ -17,9 +17,13 @@ pnpm serve
 dev
 
 ```bash
+pnpm makeLink -p siyuan
 pnpm dev -p siyuan
+
+# pnpm makeLink -p widget
 # pnpm dev -p widget -t 
-# pnpm dev -p static
+
+pnpm dev -p nginx -d nginx
 ```
 
 ## Build
