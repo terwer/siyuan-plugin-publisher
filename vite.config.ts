@@ -9,6 +9,7 @@ import AutoImport from "unplugin-auto-import/vite"
 import Components from "unplugin-vue-components/vite"
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers"
 import { nodePolyfills } from "vite-plugin-node-polyfills"
+import Icons from "unplugin-icons/vite"
 
 // methods start
 const getAppBase = (isSiyuanBuild: boolean, isWidgetBuild: boolean, isNginxBuild): string => {
@@ -18,7 +19,7 @@ const getAppBase = (isSiyuanBuild: boolean, isWidgetBuild: boolean, isNginxBuild
     return "/widgets/sy-post-publisher/"
   } else if (isNginxBuild) {
     return "/"
-  }else {
+  } else {
     return "/"
   }
 }
@@ -63,7 +64,7 @@ const isWatch = args.watch || args.w || false
 const isDev = isServe || isWatch || debugMode
 const outDir = args.o || args.outDir
 
-const buildType =process.env.BUILD_TYPE
+const buildType = process.env.BUILD_TYPE
 const isSiyuanBuild = process.env.BUILD_TYPE === "siyuan"
 const isWidgetBuild = process.env.BUILD_TYPE === "widget"
 const isNginxBuild = process.env.BUILD_TYPE === "nginx"
@@ -82,6 +83,10 @@ console.log("buildType=>", buildType)
 export default defineConfig({
   plugins: [
     vue(),
+
+    Icons({
+      autoInstall: true,
+    }),
 
     AutoImport({
       resolvers: [ElementPlusResolver()],

@@ -48,6 +48,14 @@ export const useSiyuanDevice = () => {
     return isSiyuanWidget
   }
 
+  const isInSiyuanBrowser = () => {
+    const deviceType = DeviceDetection.getDevice()
+    const isSiyuanWidget = deviceType === DeviceTypeEnum.DeviceType_Siyuan_Browser
+    logger.debug("deviceType=>", deviceType)
+    logger.debug("isInSiyuanBrowser=>", String(isSiyuanWidget))
+    return isSiyuanWidget
+  }
+
   const isInChromeExtension = () => {
     const deviceType = DeviceDetection.getDevice()
     const isChromeExtension = deviceType === DeviceTypeEnum.DeviceType_Chrome_Extension
@@ -68,5 +76,5 @@ export const useSiyuanDevice = () => {
     return isSiyuanOrSiyuanNewWin
   }
 
-  return { isInSiyuanMainWin, isInSiyuanWidget, isInChromeExtension, isInSiyuanOrSiyuanNewWin }
+  return { isInSiyuanMainWin, isInSiyuanWidget, isInSiyuanBrowser, isInChromeExtension, isInSiyuanOrSiyuanNewWin }
 }

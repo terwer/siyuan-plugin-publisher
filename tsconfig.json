@@ -25,7 +25,10 @@
 
     "paths": {
       "~/*": ["./*"]
-    }
+    },
+    "types": [
+      "unplugin-icons/types/vue"
+    ]
   },
   "include": ["*.ts", "*.vue", "*.d.ts", "**/**/*.ts", "**/**/*.d.ts", "**/**/*.vue", "custom.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
