@@ -11,26 +11,59 @@ page_id=0
 POST https://edit.telegra.ph/save
 origin: https://telegra.ph
 referer: https://telegra.ph/
-Content-Type: multipart/form-data; boundary=WebAppBoundary
+Content-Type: multipart/form-data; boundary=TelegraPhBoundary21
 
---WebAppBoundary
+--TelegraPhBoundary21
 Content-Disposition: form-data; name="Data"; filename="content.html"
 
 < /Users/terwer/Documents/mydocs/siyuan-plugins/siyuan-plugin-publisher/testdata/telegra-ph/content.html
---WebAppBoundary
+--TelegraPhBoundary21
 Content-Disposition: form-data; name="title"
 
 测试标题
---WebAppBoundary
+--TelegraPhBoundary21
 Content-Disposition: form-data; name="author"
 
 
---WebAppBoundary
+--TelegraPhBoundary21
 Content-Disposition: form-data; name="save_hash"
 
 6c462dc644189dbf6784b3af552d68729439
---WebAppBoundary
+--TelegraPhBoundary21
 Content-Disposition: form-data; name="page_id"
 
 0
---WebAppBoundary
+--TelegraPhBoundary21
+
+### updateArticle
+POST https://edit.telegra.ph/save
+origin: https://telegra.ph
+referer: https://telegra.ph/
+Content-Type: multipart/form-data; boundary=TelegraPhBoundary21
+
+--TelegraPhBoundary21
+Content-Disposition: form-data; name="Data"; filename="content.html"
+
+< /Users/terwer/Documents/mydocs/siyuan-plugins/siyuan-plugin-publisher/testdata/telegra-ph/content.html
+--TelegraPhBoundary21
+Content-Disposition: form-data; name="title"
+
+测试标题
+--TelegraPhBoundary21
+Content-Disposition: form-data; name="author"
+
+
+--TelegraPhBoundary21
+Content-Disposition: form-data; name="save_hash"
+
+6c462dc644189dbf6784b3af552d68729439
+--TelegraPhBoundary21
+Content-Disposition: form-data; name="page_id"
+
+5006cff8aec42108f5306
+--TelegraPhBoundary21
+
+## Thanks
+
+[telegraph.md](https://github.com/telegraf/telegraph.md)
+[telegraph-uploader](https://github.com/loskir/telegraph-uploader)
