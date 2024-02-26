@@ -47,27 +47,27 @@ def get_siyuan_dir():
     return conf['data']
 
 
-def choose_target(workspaces):
+def choose_target(workspaces, plugin_type="plugin"):
     count = len(workspaces)
     _log(f'>>> Got {count} SiYuan {"workspaces" if count > 1 else "workspace"}')
     for i, workspace in enumerate(workspaces):
         _log(f'\t[{i}] {workspace["path"]}')
 
     if count == 1:
-        return f'{workspaces[0]["path"]}/data/plugins'
+        return f'{workspaces[0]["path"]}/data/{plugin_type}s'
     else:
         index = input(f'\tPlease select a workspace[0-{count - 1}]: ')
-        return f'{workspaces[int(index)]["path"]}/data/plugins'
+        return f'{workspaces[int(index)]["path"]}/data/{plugin_type}s'
 
 
-def get_plugin_name():
+def get_plugin_name(plugin_type="plugin"):
     # 检查 plugin.json 是否存在
-    if not os.path.exists('./plugin.json'):
-        _error('失败！找不到 plugin.json')
+    if not os.path.exists(f'./{plugin_type}.json'):
+        _error('失败！找不到 {plugin_type}.json')
         sys.exit(1)
     # 获取插件名称
-    # 加载 plugin.json
-    with open('./plugin.json', 'r') as file:
+    # 加载 plugin.json or widget.json
+    with open(f'./{plugin_type}.json', 'r') as file:
         plugin = json.load(file)
     plugin_name = plugin.get('name')
     if not plugin_name or plugin_name == '':
@@ -169,6 +169,7 @@ if __name__ == "__main__":
     parser.add_argument("-f", "--forder", required=False, help="the targetDir for building files")
     parser.add_argument("-v", "--verbose", action="store_true", help="Enable verbose output.")
     parser.add_argument("-p", "--platform", help="Build for different platforms, like siyuan, widget, static.")
+    parser.add_argument("-t", "--type", help="Build plugin type, like plugins, widgets.")
     args = parser.parse_args()
 
     if args.verbose:
@@ -180,11 +181,12 @@ if __name__ == "__main__":
         args.dist = 'dist'
     devOutDir = args.dist
     if args.forder:
+        # 用于其他模式
         targetDir = args.forder
         name = ''
     else:
-        # 获取插件名称
-        name = get_plugin_name()
+        # 获取插件名称，用于思源笔记插件、挂件
+        name = get_plugin_name(args.type)
         _log(f'>>> 成功获取到插件名称: {name}')
 
     # 获取插件目录
@@ -203,7 +205,7 @@ if __name__ == "__main__":
                 _error('\t无法从环境变量 "SIYUAN_PLUGIN_DIR" 获取 SiYuan 目录，失败！')
                 sys.exit(1)
         else:
-            targetDir = choose_target(res)
+            targetDir = choose_target(res, args.type)
         _log(f'>>> 成功获取到目标目录: {targetDir}')
     # 检查目录是否存在
     if not os.path.exists(targetDir):

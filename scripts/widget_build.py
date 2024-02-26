@@ -38,7 +38,6 @@ if __name__ == "__main__":
     parser.add_argument("-d", "--dist", required=False, help="the dist for building files")
     parser.add_argument("-v", "--verbose", action="store_true", help="enable verbose output")
     parser.add_argument("-nb", "--nobuild", action="store_true", help="ignore build")
-    parser.add_argument("-t", "--test", action="store_true", help="copy files to public workspace for local testing")
     args = parser.parse_args()
 
     if args.verbose:
@@ -49,6 +48,8 @@ if __name__ == "__main__":
     if args.dist is not None and args.dist != "":
         dist_name = str(args.dist)
     dist_folder = "./" + dist_name + "/"
+    if not os.path.exists(dist_folder):
+        os.makedirs(dist_folder)
     print("dist_name:" + dist_name)
     print("dist_folder:" + dist_folder)
 
@@ -57,9 +58,6 @@ if __name__ == "__main__":
     else:
         # 在 node 里面可以通过 process.env.BUILD_TYPE 读取
         os.environ["BUILD_TYPE"] = "widget"
-        build_cmd = "vue-tsc --noEmit && vite build --outDir " + dist_name
-        print("构建命令:" + build_cmd)
-        os.system(build_cmd)
 
         # 复制挂件需要的其他文件
         scriptutils.cp_file("./LICENSE", dist_folder)
@@ -70,6 +68,10 @@ if __name__ == "__main__":
         scriptutils.cp_file("./src/assets/preview.png", dist_folder)
         scriptutils.cp_file("./policy.md", dist_folder)
         print("复制挂件需要的其他文件.")
+
+        build_cmd = "vue-tsc --noEmit && vite build --outDir " + dist_name
+        print("构建命令:" + build_cmd)
+        os.system(build_cmd)
         print("项目构建完成.")
 
     # 挂件打包
@@ -84,13 +86,8 @@ if __name__ == "__main__":
 
     # 压缩dist为zip
     scriptutils.zip_folder(src_folder, tmp_folder_name, build_zip_path, build_zip_name)
-    scriptutils.cp_file(os.path.join(build_zip_path, build_zip_name), os.path.join(build_zip_path, "package-widget.zip"))
+    scriptutils.cp_file(os.path.join(build_zip_path, build_zip_name),
+                        os.path.join(build_zip_path, "package-widget.zip"))
     print("将dist文件打包成zip，用于挂件版本发布.")
-
-    if args.test:
-        # scriptutils.cp_folder(dist_folder, "/Users/terwer/Documents/mydocs/SiYuanWorkspace/public/data/widgets/sy-post-publisher/")
-        # print("拷贝文件到本地 public 工作空间测试.")
-        scriptutils.cp_folder(dist_folder, "/Users/terwer/Documents/mydocs/SiYuanWorkspace/test/data/widgets/sy-post-publisher/")
-        print("拷贝文件到本地 test 工作空间测试.")
 
     print("发布完毕.")

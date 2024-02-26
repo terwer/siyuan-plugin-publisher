@@ -18,7 +18,6 @@
     "vercelBuild": "python3 scripts/vercel_build.py",
     "nginxBuild": "python scripts/nginx_build.py",
     "widgetBuild": "python scripts/widget_build.py",
-    "widgetTest": "python scripts/widget_build.py -t",
     "extBuild": "python scripts/ext_build.py",
     "syncVersion": "python scripts/version.py",
     "parseChangelog": "python scripts/parse_changelog.py",

@@ -11,12 +11,14 @@ import { ElementPlusResolver } from "unplugin-vue-components/resolvers"
 import { nodePolyfills } from "vite-plugin-node-polyfills"
 
 // methods start
-const getAppBase = (isSiyuanBuild: boolean, isWidgetBuild: boolean): string => {
+const getAppBase = (isSiyuanBuild: boolean, isWidgetBuild: boolean, isNginxBuild): string => {
   if (isSiyuanBuild) {
     return "/plugins/siyuan-plugin-publisher/"
   } else if (isWidgetBuild) {
     return "/widgets/sy-post-publisher/"
-  } else {
+  } else if (isNginxBuild) {
+    return "/"
+  }else {
     return "/"
   }
 }
@@ -61,17 +63,18 @@ const isWatch = args.watch || args.w || false
 const isDev = isServe || isWatch || debugMode
 const outDir = args.o || args.outDir
 
+const buildType =process.env.BUILD_TYPE
 const isSiyuanBuild = process.env.BUILD_TYPE === "siyuan"
 const isWidgetBuild = process.env.BUILD_TYPE === "widget"
-// const isChromeBuild = process.env.BUILD_TYPE === "chrome"
+const isNginxBuild = process.env.BUILD_TYPE === "nginx"
 const distDir = outDir || (isWidgetBuild ? "widget" : "./dist")
-const appBase = getAppBase(isSiyuanBuild, isWidgetBuild)
+const appBase = getAppBase(isSiyuanBuild, isWidgetBuild, isNginxBuild)
 
 console.log("isWatch=>", isWatch)
 console.log("debugMode=>", debugMode)
 console.log("isDev=>", isDev)
 console.log("distDir=>", distDir)
-console.log("isSiyuanBuild=>", isSiyuanBuild)
+console.log("buildType=>", buildType)
 
 // https://github.com/vuejs/vue-cli/issues/1198
 // https://vitejs.dev/config/

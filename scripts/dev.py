@@ -36,7 +36,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-v", "--verbose", action="store_true", help="Enable verbose output.")
     parser.add_argument("-p", "--platform", help="Build for different platforms, like siyuan, widget, static.")
-    parser.add_argument("-t", "--type", help="Build browser extension for publishing, like chrome, edge, firefox.")
     parser.add_argument("-d", "--dist", required=False, help="the dist for building files")
     args = parser.parse_args()
 
@@ -44,16 +43,65 @@ if __name__ == "__main__":
         print("Verbose mode enabled.")
 
     # 设置环境变量
-    if not args.platform:
+    if not args.platform or args.platform == '':
         args.platform = 'siyuan'
+    if not args.dist or args.dist == '':
+        args.dist = args.platform
+    dist_name = args.dist
     os.environ['BUILD_TYPE'] = args.platform
 
-    # zhi-build
-    zhi_build_cmd = "zhi-build --serve --production -d " + args.dist
-    print(zhi_build_cmd)
-    os.system(zhi_build_cmd)
+    if args.platform == 'plugin':
+        # zhi-build
+        zhi_build_cmd = "zhi-build --serve --production -d " + args.dist
+        print(zhi_build_cmd)
+        os.system(zhi_build_cmd)
+    elif args.platform == 'widget':
+        # 复制挂件需要的其他文件
+        dist_folder = f"./{args.dist}/"
+        if not os.path.exists(dist_folder):
+            os.makedirs(dist_folder)
+        scriptutils.cp_file("./LICENSE", dist_folder)
+        scriptutils.cp_file("./src/assets/README.md", dist_folder)
+        scriptutils.cp_file("./src/assets/README_zh_CN.md", dist_folder)
+        scriptutils.cp_file("./widget.json", dist_folder)
+        scriptutils.cp_file("./src/assets/icon.png", dist_folder)
+        scriptutils.cp_file("./src/assets/preview.png", dist_folder)
+        scriptutils.cp_file("./policy.md", dist_folder)
+        print("复制挂件需要的其他文件.")
+    elif args.platform == 'chrome' or args.platform == 'edge' or args.platform == 'firefox':
+        if not args.dist or args.dist == '':
+            args.dist = args.platform
+        dist_name = f"extension/{args.dist}"
+        dist_folder = "./" + dist_name + "/"
+        print("Building folder for " + dist_name)
+        print("Building folder path: " + dist_folder)
+
+        # Copy necessary files.
+        scriptutils.cp_folder("./src/extensions", dist_folder)
+        scriptutils.cp_file("./LICENSE", dist_folder)
+        # scriptutils.cp_file("./src/assets/key.pem", dist_folder)
+        print("Copied required extension files.")
+
+        # Make some adaptors
+        if args.platform == 'chrome' or args.platform == 'edge':
+            # Delete Firefox configuration.
+            scriptutils.rm_folder(dist_folder + "mv2")
+            print("Deleted Firefox configuration.")
+        elif args.platform == 'firefox':
+            scriptutils.mv_file(dist_folder + "mv2/manifest-v2-for-firefox.json", dist_folder + "manifest.json")
+            scriptutils.mv_file(dist_folder + "mv2/background-v2-for-firefox.js", dist_folder + "background.js")
+            scriptutils.rm_folder(dist_folder + "mv2")
+            print("Deleted Chrome configuration.")
+        else:
+            raise Exception("Not supported platform: " + args.platform)
+
+        os.environ["VITE_SIYUAN_API_URL"] = "http://127.0.0.1:6806"
+    elif args.platform == 'nginx':
+        pass
+    else:
+        pass
 
     # vite-build
-    vite_cmd = "vue-tsc --noEmit && vite build --watch --outDir " + args.dist
+    vite_cmd = "vue-tsc --noEmit && vite build --watch --outDir " + dist_name
     print(vite_cmd)
     os.system(vite_cmd)

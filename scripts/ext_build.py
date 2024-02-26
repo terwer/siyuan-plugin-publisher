@@ -37,10 +37,6 @@ def do_chrome_package(source_folder, is_chrome):
     scriptutils.rm_folder(source_folder + "mv2")
     print("Deleted Firefox configuration.")
 
-    # Copy the files to the chrome folder.
-    scriptutils.mkdir("./extension/chrome")
-    scriptutils.cp_folder(source_folder, "./extension/chrome")
-
     # Package Chrome extension.
     data = scriptutils.read_json_file(cwd + "package.json")
     version = data["version"]
@@ -75,13 +71,7 @@ def do_firefox_package(source_folder):
     scriptutils.mv_file(source_folder + "mv2/manifest-v2-for-firefox.json", source_folder + "manifest.json")
     scriptutils.mv_file(source_folder + "mv2/background-v2-for-firefox.js", source_folder + "background.js")
     scriptutils.rm_folder(source_folder + "mv2")
-
     print("Deleted Chrome configuration.")
-
-    # Copy the files to the firefox folder.
-    scriptutils.mkdir("./extension/firefox")
-    scriptutils.cp_folder(source_folder, "./extension/firefox")
-    print("Published Firefox V2 extension.")
 
     # Package Firefox extension.
     data = scriptutils.read_json_file(cwd + "package.json")
@@ -115,7 +105,9 @@ if __name__ == "__main__":
         print("Verbose mode enabled.")
 
     # Build the project.
-    dist_name = "extension/dist"
+    if not args.type:
+        args.type = "chrome"
+    dist_name = f"extension/{args.type}"
     if args.dist is not None and args.dist != "":
         dist_name = str(args.dist)
     dist_folder = "./" + dist_name + "/"
@@ -131,10 +123,10 @@ if __name__ == "__main__":
         # scriptutils.cp_file("./src/assets/key.pem", dist_folder)
         print("Copied required extension files.")
 
-        # Set the BUILD_TYPE environment variable in node.
-        os.environ["BUILD_TYPE"] = "chrome"
+        # Set the BUILD_TYPE environment variable in node
+        os.environ["BUILD_TYPE"] = args.type
         os.environ["VITE_SIYUAN_API_URL"] = "http://127.0.0.1:6806"
-        print(f"BUILD_TYPE=>chrome")
+        print(f"BUILD_TYPE=>{args.type}")
         build_cmd = "vue-tsc --noEmit && vite build --outDir " + dist_name
         print("Build command: " + build_cmd)
         os.system(build_cmd)
