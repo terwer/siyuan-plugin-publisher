@@ -1,0 +1,16 @@
+### 根页面
+GET https://flowus.cn/api/users/11f07e46-d413-4374-894c-e795b5a6721b/root
+cookie: {{cookie}}
+
+### 子文档
+GET https://flowus.cn/api/docs/9ad61d99-6ce2-4bac-8ac7-63e8f3634e64
+cookie: {{cookie}}
+
+### 子页面
+GET https://flowus.cn/api/spaces/349c2e72-44e2-4c19-a690-2a6be7815481/root
+cookie: {{cookie}}
+
+### 查询个人信息
+GET https://flowus.cn/api/users/me
+cookie: {{cookie}}
+

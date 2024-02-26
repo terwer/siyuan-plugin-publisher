@@ -1,0 +1,114 @@
+### 获取专栏列表
+POST https://api.juejin.cn/content_api/v1/column/author_center_list
+cookie: {{cookie}}
+Content-Type: application/json
+
+{
+  "audit_status": null,
+  "page_no": 1,
+  "page_size": 10
+}
+
+### 获取文章详情
+POST https://api.juejin.cn/content_api/v1/article/detail
+Cookie: {{cookie}}
+Content-Type: application/json
+
+{
+  "article_id": "7275943600780935209"
+}
+
+### 保存文章草稿
+POST https://api.juejin.cn/content_api/v1/article_draft/create
+Cookie: {{cookie}}
+Content-Type: application/json
+
+{
+  "category_id": "6809637769959178254",
+  "tag_ids": [
+    "6809640407484334093"
+  ],
+  "link_url": "",
+  "cover_image": "",
+  "title": "cesssss3",
+  "brief_content": "dfgdfgggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg",
+  "edit_type": 10,
+  "html_content": "deprecated",
+  "mark_content": "",
+  "theme_ids": []
+}
+
+### 更新草稿
+POST https://api.juejin.cn/content_api/v1/article_draft/update?aid=2608&uuid=7267424099298854436
+Cookie: {{cookie}}
+Content-Type: application/json
+
+{
+  "id": "7275934458133545001",
+  "category_id": "6809637769959178254",
+  "tag_ids": [
+    "6809640407484334093"
+  ],
+  "link_url": "",
+  "cover_image": "",
+  "title": "cesssss3",
+  "brief_content": "dfgdfgggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg",
+  "edit_type": 10,
+  "html_content": "deprecated",
+  "mark_content": "dfgfdgdfgdfgdfgdfgfddfgdf7f",
+  "theme_ids": []
+}
+
+### 发布草稿
+POST https://api.juejin.cn/content_api/v1/article/publish
+Cookie: {{cookie}}
+Content-Type: application/json
+
+{
+  "draft_id": "7275945995623792679",
+  "sync_to_org": false,
+  "column_ids": [],
+  "theme_ids": []
+}
+
+### 删除文章
+POST https://api.juejin.cn/content_api/v1/article/delete
+cookie: {{cookie}}
+Content-Type: application/json
+
+{
+  "article_id": "7275943600781164585"
+}
+
+### 获取分类
+POST https://api.juejin.cn/tag_api/v1/query_category_list
+cookie: {{cookie}}
+Content-Type: application/json
+
+{}
+
+### 获取标签列表
+POST https://api.juejin.cn/tag_api/v1/query_tag_list
+cookie: {{cookie}}
+Content-Type: application/json
+
+{
+  "cursor": "0",
+  "key_word": "",
+  "limit": 10,
+  "sort_type": 1
+}
+
+### 图片上传-1-getToken
+GET https://api.juejin.cn/imagex/gen_token?client=web
+cookie: {{cookie}}
+Content-Type: application/json
+
+### 图片上传-2-ApplyImageUpload-不可用
+GET https://imagex.bytedanceapi.com/?Action=ApplyImageUpload
+
+### 图片上传-3-CommitImageUpload-不可用
+POST https://imagex.bytedanceapi.com/?Action=CommitImageUpload
+
+### 图片上传-4-获取图片链接-不可用
+GET https://api.juejin.cn/imagex/get_img_url

@@ -1,0 +1,10 @@
+PATCH https://zhuanlan.zhihu.com/api/articles/660599054/draft
+cookie: {{cookie}}
+Content-Type: application/json
+
+{
+  "content": "<p><br></p><table data-draft-node=\"block\" data-draft-type=\"table\" data-size=\"normal\"><tbody><tr><th>f</th><th>dfd</th><th>df</th><th>df</th><th>df</th></tr><tr><td>df</td><td>df</td><td>df</td><td>d</td><td></td></tr><tr><td>df</td><td>d</td><td></td><td></td><td></td></tr><tr><td>df</td><td>d</td><td></td><td></td><td></td></tr></tbody></table><p><br></p>",
+  "table_of_contents": false,
+  "delta_time": 10
+}
+
