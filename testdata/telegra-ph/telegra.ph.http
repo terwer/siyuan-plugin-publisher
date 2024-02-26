@@ -1,0 +1,36 @@
+# telegra.ph
+
+### getCfg
+POST https://edit.telegra.ph/check
+origin: https://telegra.ph
+referer: https://telegra.ph/
+
+page_id=0
+
+### newArticle
+POST https://edit.telegra.ph/save
+origin: https://telegra.ph
+referer: https://telegra.ph/
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="Data"; filename="content.html"
+
+< /Users/terwer/Documents/mydocs/siyuan-plugins/siyuan-plugin-publisher/testdata/telegra-ph/content.html
+--WebAppBoundary
+Content-Disposition: form-data; name="title"
+
+测试标题
+--WebAppBoundary
+Content-Disposition: form-data; name="author"
+
+
+--WebAppBoundary
+Content-Disposition: form-data; name="save_hash"
+
+6c462dc644189dbf6784b3af552d68729439
+--WebAppBoundary
+Content-Disposition: form-data; name="page_id"
+
+0
+--WebAppBoundary
