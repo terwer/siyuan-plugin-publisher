@@ -255,8 +255,8 @@ const reloadTableData = async () => {
         yamlAttrs[newKey] = pageAttrs[key]
         dynCfgs[newKey] = getDynCfgByKey(dynamicConfigArray.value, newKey)
       }
-      logger.debug("yamlAttrs=>", yamlAttrs)
-      logger.debug("dynCfgs=>", dynCfgs)
+      // logger.debug("yamlAttrs=>", yamlAttrs)
+      // logger.debug("dynCfgs=>", dynCfgs)
 
       const tableRow = {
         postid: item.postid,

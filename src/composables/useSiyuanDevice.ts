@@ -35,32 +35,32 @@ export const useSiyuanDevice = () => {
   const isInSiyuanMainWin = () => {
     const deviceType = DeviceDetection.getDevice()
     const isSiyuanMainWin = deviceType === DeviceTypeEnum.DeviceType_Siyuan_MainWin
-    logger.debug("deviceType=>", deviceType)
-    logger.debug("isSiyuanMainWin=>", String(isSiyuanMainWin))
+    // logger.debug("deviceType=>", deviceType)
+    // logger.debug("isSiyuanMainWin=>", String(isSiyuanMainWin))
     return isSiyuanMainWin
   }
 
   const isInSiyuanWidget = () => {
     const deviceType = DeviceDetection.getDevice()
     const isSiyuanWidget = deviceType === DeviceTypeEnum.DeviceType_Siyuan_Widget
-    logger.debug("deviceType=>", deviceType)
-    logger.debug("isSiyuanWidget=>", String(isSiyuanWidget))
+    // logger.debug("deviceType=>", deviceType)
+    // logger.debug("isSiyuanWidget=>", String(isSiyuanWidget))
     return isSiyuanWidget
   }
 
   const isInSiyuanBrowser = () => {
     const deviceType = DeviceDetection.getDevice()
     const isSiyuanWidget = deviceType === DeviceTypeEnum.DeviceType_Siyuan_Browser
-    logger.debug("deviceType=>", deviceType)
-    logger.debug("isInSiyuanBrowser=>", String(isSiyuanWidget))
+    // logger.debug("deviceType=>", deviceType)
+    // logger.debug("isInSiyuanBrowser=>", String(isSiyuanWidget))
     return isSiyuanWidget
   }
 
   const isInChromeExtension = () => {
     const deviceType = DeviceDetection.getDevice()
     const isChromeExtension = deviceType === DeviceTypeEnum.DeviceType_Chrome_Extension
-    logger.debug("deviceType=>", deviceType)
-    logger.debug("isChromeExtension=>", String(isChromeExtension))
+    // logger.debug("deviceType=>", deviceType)
+    // logger.debug("isChromeExtension=>", String(isChromeExtension))
     return isChromeExtension
   }
 
@@ -71,8 +71,8 @@ export const useSiyuanDevice = () => {
       deviceType === DeviceTypeEnum.DeviceType_Siyuan_MainWin ||
       deviceType === DeviceTypeEnum.DeviceType_Siyuan_RendererWin ||
       deviceType === DeviceTypeEnum.DeviceType_Siyuan_Widget
-    logger.debug("deviceType=>", deviceType)
-    logger.debug("isSiyuanOrSiyuanNewWin=>", String(isSiyuanOrSiyuanNewWin))
+    // logger.debug("deviceType=>", deviceType)
+    // logger.debug("isSiyuanOrSiyuanNewWin=>", String(isSiyuanOrSiyuanNewWin))
     return isSiyuanOrSiyuanNewWin
   }
 
