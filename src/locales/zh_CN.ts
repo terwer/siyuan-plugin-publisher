@@ -29,6 +29,7 @@ export default {
   "theme.mode.choose": "切换模式",
   "theme.mode.dark": "暗黑模式",
   "theme.mode.light": "浅色模式",
+  "service.tab.manage": "文章管理",
   "service.tab.publish.service": "发布服务",
   "service.tab.publish.setting": "发布配置",
   "service.tab.platform.setting": "平台配置",

@@ -34,7 +34,7 @@ import { getSiyuanPageId } from "~/src/utils/siyuanUtils.ts"
 import { DateUtil, HtmlUtil, JsonUtil, StrUtil } from "zhi-common"
 import { LuteUtil } from "~/src/utils/luteUtil.ts"
 import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
-import { MAX_TITLE_LENGTH } from "~/src/utils/constants.ts"
+import { DYNAMIC_CONFIG_KEY, MAX_TITLE_LENGTH } from "~/src/utils/constants.ts"
 import MaterialSymbolsDriveFolderUpload from "~icons/material-symbols/drive-folder-upload"
 import Fa6SolidBookOpenReader from "~icons/fa6-solid/book-open-reader"
 import MaterialSymbolsAddPhotoAlternateOutline from "~icons/material-symbols/add-photo-alternate-outline"
@@ -42,6 +42,8 @@ import { Utils } from "~/src/utils/utils.ts"
 import { useRouter } from "vue-router"
 import { PluginUtils } from "~/src/utils/pluginUtils.ts"
 import { useSiyuanSettingStore } from "~/src/stores/useSiyuanSettingStore.ts"
+import { DynamicJsonCfg, getDynCfgByKey } from "~/src/platforms/dynamicConfig.ts"
+import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 
 // uses
 const { t } = useVueI18n()
@@ -50,6 +52,7 @@ const { isInSiyuanWidget } = useSiyuanDevice()
 const router = useRouter()
 const { getReadOnlyPublishPreferenceSetting } = usePreferenceSettingStore()
 const { getReadOnlySiyuanSetting } = useSiyuanSettingStore()
+const { getSetting } = usePublishSettingStore()
 
 // vars
 const logger = createAppLogger("admin")
@@ -67,6 +70,7 @@ const currentPage = ref(1)
 
 const isPicgoInstalled = ref(false)
 const isBlogInstalled = ref(false)
+const dynamicConfigArray = ref([])
 const siyuanSetting = getReadOnlySiyuanSetting()
 
 // methods
@@ -151,9 +155,24 @@ const handleNewWinPicgo = (index: number, row: any) => {
   win.event.stopPropagation()
 }
 
+const goToSingleEdit = async (key: string, row: any) => {
+  // /#/publish/singlePublish/doPublish/wordpress_Wordpress/20230815225853-a2ybito?showBack=true&method=edit
+  await router.push({
+    path: `/publish/singlePublish/doPublish/${key}/${row.postid}`,
+    query: {
+      showBack: "true",
+      method: "edit",
+    },
+  })
+}
+
 const initPage = async () => {
   isPicgoInstalled.value = await PluginUtils.preCheckPicgoPlugin()
   isBlogInstalled.value = await PluginUtils.preCheckBlogPlugin()
+
+  const setting = await getSetting()
+  const dynJsonCfg = JsonUtil.safeParse<DynamicJsonCfg>(setting[DYNAMIC_CONFIG_KEY], {} as DynamicJsonCfg)
+  dynamicConfigArray.value = dynJsonCfg?.totalCfg || []
 
   await reloadTableData()
   logger.debug("Post init page=>", tableData)
@@ -222,6 +241,22 @@ const reloadTableData = async () => {
       const attrs = JsonUtil.safeParse(item.attrs, {})
       const isPublished = attrs["custom-publish-status"] === "publish"
       const isExpired = attrs["custom-expires"] && attrs["custom-expires"] - Date.now() < 0
+      const pageAttrs = await kernelApi.getBlockAttrs(item.postid)
+      const yamlAttrs = {}
+      const dynCfgs = {}
+      for (let key in pageAttrs) {
+        if (!key.startsWith("custom-")) {
+          continue
+        }
+        if (!key.endsWith("-yaml")) {
+          continue
+        }
+        const newKey = key.replace("-yaml", "").replace("custom-", "").replace("-", "_")
+        yamlAttrs[newKey] = pageAttrs[key]
+        dynCfgs[newKey] = getDynCfgByKey(dynamicConfigArray.value, newKey)
+      }
+      logger.debug("yamlAttrs=>", yamlAttrs)
+      logger.debug("dynCfgs=>", dynCfgs)
 
       const tableRow = {
         postid: item.postid,
@@ -232,6 +267,9 @@ const reloadTableData = async () => {
         description: Utils.emptyOrDefault(content, "暂无内容"),
         shortDesc: Utils.emptyOrDefault(shortDesc, "暂无内容"),
         isShared: isPublished && !isExpired,
+        yamlCount: Object.keys(yamlAttrs).length,
+        yamlAttrs: yamlAttrs,
+        dynCfgs: dynCfgs,
       }
       tableData.push(tableRow)
     }
@@ -291,7 +329,7 @@ onBeforeMount(async () => {
         >
           <el-table-column type="expand">
             <template #default="props">
-              <div m="4" style="padding-left: 10px">
+              <div m="4" style="padding-left: 10px" class="tb-extend">
                 <p m="t-0 b-2">ID: {{ props.row.postid }}</p>
                 <p m="t-0 b-2">发布时间: {{ props.row.dateCreated }}</p>
                 <p m="t-0 b-2">标题: {{ props.row.title }}</p>
@@ -300,10 +338,44 @@ onBeforeMount(async () => {
                   {{ props.row.mt_keywords === "" ? "暂无标签" : props.row.mt_keywords }}
                 </p>
                 <p m="t-0 b-2">摘要: {{ props.row.shortDesc }}</p>
+                <p m="t-0 b-2">
+                  平台:
+                  <span v-if="props.row.yamlCount > 0">
+                    <span v-for="(value, key) in props.row.yamlAttrs" :key="key" class="box-item">
+                      <a @click="goToSingleEdit(key.toString(), props.row)">
+                        <el-text>
+                          <i class="el-icon">
+                            <span v-html="props.row.dynCfgs[key]?.platformIcon"></span>
+                          </i>
+                          {{ props.row.dynCfgs[key].platformName }}
+                        </el-text>
+                      </a>
+                    </span>
+                  </span>
+                  <span v-else>暂无平台</span>
+                </p>
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop="title" label="标题" />
+          <el-table-column prop="title">
+            <template #header>
+              <div style="text-align: center">标题</div>
+            </template>
+            <template #default="scope">
+              <el-tooltip
+                :content="
+                  scope.row.yamlCount > 0 ? '文章已发布到：' + Object.keys(scope.row.yamlAttrs).toString() : '尚未发布'
+                "
+                class="box-item"
+                effect="light"
+                placement="right"
+                popper-class="publish-menu-tooltip"
+              >
+                <span>{{ scope.row.title }}</span>
+              </el-tooltip>
+              <sup class="yaml-count-sign" v-if="scope.row.yamlCount > 0">{{ scope.row.yamlCount }}</sup>
+            </template>
+          </el-table-column>
           <el-table-column align="center" width="350">
             <template #header>
               <div style="text-align: center">操作</div>
@@ -427,4 +499,17 @@ onBeforeMount(async () => {
 
 .data-empty-box
   margin: 16px 0
+
+.tb-extend
+  .box-item
+    margin-right: 10px
+
+    a
+      cursor: pointer
+      color: var(--el-color-primary)
+
+.yaml-count-sign
+  color red
+  font-size 12px
+  padding-left 2px
 </style>

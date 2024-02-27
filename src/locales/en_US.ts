@@ -29,6 +29,7 @@ export default {
   "theme.mode.choose": "Mode",
   "theme.mode.dark": "Dark mode",
   "theme.mode.light": "Light mode",
+  "service.tab.manage": "Post manage",
   "service.tab.publish.service": "Publish service",
   "service.tab.publish.setting": "Publish setting",
   "service.tab.platform.setting": "Platform setting",
