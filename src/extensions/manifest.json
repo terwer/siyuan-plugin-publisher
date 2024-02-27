@@ -36,6 +36,6 @@
     "default_popup": "index.html"
   },
   "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'"
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval';font-src 'self' https://static-rs-terwer.oss-cn-beijing.aliyuncs.com;"
   }
 }

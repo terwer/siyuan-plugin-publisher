@@ -71,6 +71,9 @@ class PublishPreferenceCfg extends PreferenceConfig {
   public showAIMenu?: boolean
   public showExtendMenu?: boolean
 
+  // 文章管理
+  public showArticleManageMenu?: boolean
+
   constructor() {
     super()
     this.experimentalUseSiyuanNoteAIConfig = true
@@ -83,6 +86,8 @@ class PublishPreferenceCfg extends PreferenceConfig {
     this.showBatchMenu = true
     this.showAIMenu = true
     this.showExtendMenu = true
+
+    this.showArticleManageMenu = true
   }
 }
 

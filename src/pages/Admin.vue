@@ -60,7 +60,7 @@ const state = ref("")
 const links = ref([])
 
 const tableData = []
-const MAX_PAGE_SIZE = 5
+const MAX_PAGE_SIZE = 8
 const num = ref(0)
 const total = ref(0)
 const currentPage = ref(1)
@@ -197,7 +197,7 @@ const reloadTableData = async () => {
     } else {
       postCount = await blogApi.getRecentPostsCount(state.value)
       postList = await blogApi.getRecentPosts(MAX_PAGE_SIZE, currentPage.value - 1, state.value)
-      logger.warn("无法获取页面ID，可能是浏览器环境或者浏览器插件展示文档列表")
+      logger.info("无法获取页面ID，可能是浏览器环境或者浏览器插件展示文档列表")
     }
     logger.debug("postList=>", postList)
 
@@ -375,16 +375,6 @@ onBeforeMount(async () => {
           @next-click="handleNextPage"
           :current-page="currentPage"
           @current-change="handleCurrentPage"
-        />
-      </div>
-
-      <!-- 操作指南 -->
-      <div class="blog-tip">
-        <el-alert
-          class="top-data-tip"
-          :title="isInSiyuanWidget() ? t('blog.top-data-tip.siyuan') : t('blog.top-data-tip')"
-          type="info"
-          :closable="false"
         />
       </div>
     </div>

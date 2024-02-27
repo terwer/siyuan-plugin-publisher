@@ -71,6 +71,9 @@ const publishPreferenceSettingForm = getPublishPreferenceSetting()
     <el-form-item :label="t('preference.setting.showExtendMenu')">
       <el-switch v-model="publishPreferenceSettingForm.showExtendMenu"></el-switch>
     </el-form-item>
+    <el-form-item :label="t('preference.setting.showArticleManageMenu')">
+      <el-switch v-model="publishPreferenceSettingForm.showArticleManageMenu"></el-switch>
+    </el-form-item>
   </el-form>
 </template>
 
