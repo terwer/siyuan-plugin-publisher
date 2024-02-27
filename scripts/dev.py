@@ -47,12 +47,11 @@ if __name__ == "__main__":
         args.platform = 'siyuan'
     if not args.dist or args.dist == '':
         args.dist = args.platform
-    if args.dist == 'siyuan':
-        args.dist == 'dist'
     dist_name = args.dist
     os.environ['BUILD_TYPE'] = args.platform
 
-    if args.platform == 'plugin':
+    if args.platform == 'siyuan':
+        dist_name = 'dist'
         # zhi-build
         zhi_build_cmd = "zhi-build --serve --production -d " + args.dist
         print(zhi_build_cmd)
