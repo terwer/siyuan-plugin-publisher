@@ -77,6 +77,15 @@ export const pre = {
       authMode: AuthMode.API,
       isEnabled: false,
     },
+    {
+      platformType: PlatformType.Common,
+      subPlatformType: SubPlatformType.Common_Telegraph,
+      platformKey: "common_Telegraph",
+      platformName: "Telegraph",
+      platformIcon: svgIcons.iconTelegraph,
+      authMode: AuthMode.API,
+      isEnabled: false,
+    },
   ],
   githubCfg: <DynamicConfig[]>[
     {

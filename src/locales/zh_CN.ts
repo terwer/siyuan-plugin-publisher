@@ -628,5 +628,11 @@ export default {
   "preference.setting.showExtendMenu": "显示扩展菜单",
   "preference.setting.showArticleManageMenu": "显示文章管理菜单",
 
-  "message.publish.notShared": "文章尚未分享，无法在外部查看。请分享文章或者在PC 客户端内部通过插件菜单进行预览。"
+  "message.publish.notShared": "文章尚未分享，无法在外部查看。请分享文章或者在PC 客户端内部通过插件菜单进行预览。",
+
+  "setting.telegraph.home.tip": "telegra.ph平台首页，通常固定是：https://telegra.ph/",
+  "setting.telegraph.username.tip": "作者，会显示在文章详情，可自行设置，默认为空",
+  "setting.telegraph.password.tip": "设备hash，会自动获取，无需填写",
+  "setting.telegraph.apiurl.tip": "telegra.ph的API地址，通常固定是：https://telegra.ph/",
+  "setting.telegraph.previewUrl.tip": "telegra.ph的文章预览规则，通常是：/[notebook]/[postid]",
 }
