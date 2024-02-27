@@ -189,6 +189,11 @@ onBeforeMount(async () => {
       <el-row :gutter="20" class="row-box">
         <el-col
           :span="8"
+          :sm="12"
+          :xs="12"
+          :md="12"
+          :lg="8"
+          :xl="8"
           :title="cfg.platformName"
           class="platform-select-card"
           v-for="cfg in formData.enabledConfigArray"
