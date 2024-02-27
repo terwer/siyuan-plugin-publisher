@@ -24,12 +24,12 @@
   -->
 
 <script setup lang="ts">
-import { markRaw, onMounted, reactive, ref } from "vue"
+import { markRaw, onBeforeMount, reactive, ref } from "vue"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useRouter } from "vue-router"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { DynamicConfig, DynamicJsonCfg, getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
-import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
+import { HtmlUtil, JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { useLoadingTimer } from "~/src/composables/useLoadingTimer.ts"
@@ -40,11 +40,15 @@ import { usePublish } from "~/src/composables/usePublish.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { ElMessage, ElMessageBox } from "element-plus"
 import { Warning } from "@element-plus/icons-vue"
+import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
+import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
 
 const logger = createAppLogger("single-publish-select-platform")
 // appInstance
 const appInstance = new PublisherAppInstance()
 const { getPostPreviewUrl } = usePublish()
+const { kernelApi } = useSiyuanApi()
+const { getReadOnlyPublishPreferenceSetting } = usePreferenceSettingStore()
 
 // props
 const props = defineProps({
@@ -64,9 +68,11 @@ const formData = reactive({
   isInit: false,
   enabledConfigArray: [] as DynamicConfig[],
 
+  postInfo: {} as any,
   postMeta: {} as any,
   unpublishCount: 0,
 })
+const pageTitle = ref("")
 
 // methods
 const handleSingleDoPublish = (event: any, key: string) => {
@@ -137,13 +143,21 @@ const initPage = async () => {
   const dynamicConfigArray = dynJsonCfg?.totalCfg || []
   formData.enabledConfigArray = dynamicConfigArray.filter((item) => item.isEnabled && item.isAuth)
   formData.postMeta = ObjectUtil.getProperty(setting, props.id, {})
+  formData.postInfo = await kernelApi.getBlockByID(props.id)
+  const pref = getReadOnlyPublishPreferenceSetting()
+  if (pref.value.fixTitle) {
+    const docTitle = HtmlUtil.removeTitleNumber(formData.postInfo.content).replace(/\.md/g, "")
+    pageTitle.value = docTitle
+  } else {
+    pageTitle.value = formData.postInfo.content
+  }
 }
 
 // 计时器
 const isTimerInit = ref(false)
 const { loadingTime } = useLoadingTimer(isTimerInit)
 
-onMounted(async () => {
+onBeforeMount(async () => {
   await initPage()
 
   formData.isInit = true
@@ -154,9 +168,12 @@ onMounted(async () => {
 <template>
   <!-- 显示加载计时器 -->
   <loading-timer :loading-time="loadingTime" style="padding: 0 24px" />
-  <el-skeleton v-if="!formData.isInit" class="placeholder" :rows="12" animated style="padding: 40px 12px" />
+  <el-skeleton v-if="!formData.isInit" class="placeholder platform-skt" :rows="12" animated />
   <div v-else>
     <back-page title="单个文章发布">
+      <div class="platform-title">
+        {{ pageTitle }}
+      </div>
       <div class="platform-desc">
         <p>
           <el-alert
@@ -201,6 +218,13 @@ onMounted(async () => {
 
 <style scoped lang="stylus">
 $icon_size = 32px
+
+.platform-skt
+  padding: 40px 12px
+
+.platform-title
+  padding: 10px 0 4px 0
+  font-weight: 900
 
 .platform-desc
   font-size 14px

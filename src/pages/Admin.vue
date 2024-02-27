@@ -46,6 +46,7 @@ const { t } = useVueI18n()
 const { kernelApi, blogApi } = useSiyuanApi()
 const { isInSiyuanWidget } = useSiyuanDevice()
 const router = useRouter()
+const { getReadOnlyPublishPreferenceSetting } = usePreferenceSettingStore()
 
 // vars
 const logger = createAppLogger("admin")
@@ -152,7 +153,7 @@ const reloadTableData = async () => {
     if (isInSiyuanWidget() && !StrUtil.isEmptyString(pageId)) {
       // 检测子文档
       postCount = await kernelApi.getSubdocCount(pageId)
-      if (postCount > 0) {
+      if (postCount > 1) {
         hasSubdoc = true
       }
 
@@ -164,13 +165,20 @@ const reloadTableData = async () => {
           const post = await blogApi.getPost(postId)
           postList.push(post)
         }
+        logger.info("挂件模式，有子文档，展示子文档")
+      } else {
+        logger.info("挂件模式，没有子文档，直接显示发布页面")
+        await router.push({
+          path: "/publish/singlePublish",
+          query: {
+            id: pageId,
+          },
+        })
       }
-      logger.warn("思源笔记内部展示子文档")
     } else {
       postCount = await blogApi.getRecentPostsCount(state.value)
       postList = await blogApi.getRecentPosts(MAX_PAGE_SIZE, currentPage.value - 1, state.value)
       logger.warn("无法获取页面ID，可能是浏览器环境或者浏览器插件展示文档列表")
-      logger.debug("postList=>", postList)
     }
 
     // =======================================================================
@@ -184,7 +192,6 @@ const reloadTableData = async () => {
       const item = postList[i]
 
       let title = item.title
-      const { getReadOnlyPublishPreferenceSetting } = usePreferenceSettingStore()
       const pref = getReadOnlyPublishPreferenceSetting()
       if (pref.value.fixTitle) {
         title = HtmlUtil.removeTitleNumber(title).replace(/\.md/g, "")
