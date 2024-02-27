@@ -63,7 +63,7 @@ def choose_target(workspaces, plugin_type="plugin"):
 def get_plugin_name(plugin_type="plugin"):
     # 检查 plugin.json 是否存在
     if not os.path.exists(f'./{plugin_type}.json'):
-        _error('失败！找不到 {plugin_type}.json')
+        _error(f'失败！找不到 {plugin_type}.json')
         sys.exit(1)
     # 获取插件名称
     # 加载 plugin.json or widget.json
@@ -165,10 +165,10 @@ if __name__ == "__main__":
 
     # Parse arguments.
     parser = argparse.ArgumentParser()
-    parser.add_argument("-d", "--dist", required=False, help="the dist for building files")
     parser.add_argument("-f", "--forder", required=False, help="the targetDir for building files")
     parser.add_argument("-v", "--verbose", action="store_true", help="Enable verbose output.")
     parser.add_argument("-p", "--platform", help="Build for different platforms, like siyuan, widget, static.")
+    parser.add_argument("-d", "--dist", required=False, help="the dist for building files")
     parser.add_argument("-t", "--type", help="Build plugin type, like plugins, widgets.")
     args = parser.parse_args()
 
@@ -179,6 +179,8 @@ if __name__ == "__main__":
         args.platform = 'siyuan'
     if not args.dist:
         args.dist = 'dist'
+    if not args.type:
+        args.type = 'plugin'
     devOutDir = args.dist
     if args.forder:
         # 用于其他模式

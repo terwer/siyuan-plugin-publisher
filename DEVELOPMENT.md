@@ -20,7 +20,7 @@ dev
 pnpm dev -p siyuan
 # siyuan plugin
 # -d 默认 dist
-# -t 默认 dist
+# -t 默认 plugin
 pnpm makeLink -p siyuan
 
 # -d 默认 widget
