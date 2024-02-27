@@ -34,7 +34,7 @@ const distDir = "./dist"
 module.exports = {
   esbuildConfig: {
     entryPoints: ["siyuan/index.ts"],
-    outfile: path.join(distDir, "index.js"),
+    outfile: "dist/index.js",
     bundle: true,
     format: "cjs",
     external: ["siyuan"],

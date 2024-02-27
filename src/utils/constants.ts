@@ -48,3 +48,8 @@ export const MUST_USE_PICBED_PLATFORM = ["common_Yuque", "common_Notion", "commo
  * 自动映射分类占位符
  */
 export const CATE_AUTO_NAME = "[auto]"
+
+/**
+ * 标题最大长度
+ */
+export const MAX_TITLE_LENGTH = 10

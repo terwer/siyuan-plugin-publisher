@@ -35,6 +35,11 @@
         <span class="text s-dark" @click="goAbout()">{{ t("syp.about") }}</span>
 
         <span class="text">.</span>
+        <span class="text s-dark" @click="handleGoHome">
+          {{ t("service.tab.manage") }}
+        </span>
+
+        <span class="text">.</span>
         <span class="text s-dark" @click="toggleDark()">{{
           isDark ? t("theme.mode.light") : t("theme.mode.dark")
         }}</span>
@@ -70,7 +75,7 @@ import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { DateUtil } from "zhi-common"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import { useRouter } from "vue-router"
-import { aboutUrl, isDev } from "~/src/utils/constants.ts"
+import { isDev } from "~/src/utils/constants.ts"
 
 const logger = createAppLogger("default-footer")
 const { t } = useVueI18n()
@@ -89,6 +94,11 @@ const goGithub = () => {
   window.open("https://github.com/terwer/siyuan-plugin-publisher")
 }
 
+const handleGoHome = async () => {
+  await router.push({
+    path: "/",
+  })
+}
 const goAbout = async () => {
   // window.open("https://blog.terwergreen.com/guestbook.html")
   await router.push({

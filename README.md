@@ -32,6 +32,10 @@ If you're interested in the paid professional version, please check the paied âž
 
 Please check [CHANGELOG](./CHANGELOG.MD)
 
+## Development
+
+Please refer to [DEVELOPMENT](./DEVELOPMENT.md)
+
 ## Platform List
 
 Names not listed in order

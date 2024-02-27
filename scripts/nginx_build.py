@@ -38,4 +38,22 @@ if __name__ == "__main__":
     # 设置环境变量
     os.environ['BUILD_TYPE'] = 'nginx'
 
-    os.system("vue-tsc --noEmit && vite build")
+    os.system("vue-tsc --noEmit && vite build --outDir nginx")
+
+    # 打包
+    dist_folder = "./nginx"
+    data = scriptutils.read_json_file(cwd + "package.json")
+    v = data["version"]
+
+    src_folder = dist_folder
+    tmp_folder_name = "./siyuan-publisher-nginx"
+    build_zip_path = "./build"
+    build_zip_name = "siyuan-publisher-nginx-" + v + ".zip"
+
+    try:
+        # 压缩dist为zip
+        scriptutils.zip_folder(src_folder, tmp_folder_name, build_zip_path, build_zip_name)
+        scriptutils.cp_file(os.path.join(build_zip_path, build_zip_name), os.path.join(build_zip_path, "package.zip"))
+    except Exception as e:
+        print(f"打包错误,{str(e)}")
+    print("nginx打包完毕.")

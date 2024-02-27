@@ -29,6 +29,7 @@ export default {
   "theme.mode.choose": "Mode",
   "theme.mode.dark": "Dark mode",
   "theme.mode.light": "Light mode",
+  "service.tab.manage": "Post manage",
   "service.tab.publish.service": "Publish service",
   "service.tab.publish.setting": "Publish setting",
   "service.tab.platform.setting": "Platform setting",
@@ -640,4 +641,7 @@ export default {
   "preference.setting.showBatchMenu": "Show batch publish",
   "preference.setting.showAIMenu": "Show AI menu",
   "preference.setting.showExtendMenu": "Show extend menu",
+  "preference.setting.showArticleManageMenu": "Show artile manage menu",
+
+  "message.publish.notShared": "The article has not been shared and therefore cannot be viewed externally. Kindly share the article or preview it within the PC client through the plugin menu."
 }

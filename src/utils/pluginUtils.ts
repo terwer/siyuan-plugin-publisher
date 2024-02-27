@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023-2024, Terwer . All rights reserved.
+ * Copyright (c) 2024, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -23,12 +23,24 @@
  * questions.
  */
 
-import { createRouter, createWebHashHistory, Router } from "vue-router"
-import { routeConfig } from "~/src/routes/routeConfig.ts"
+import { isFileExists } from "~/src/utils/siyuanUtils.ts"
+import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 
-export const useVueRouter = (): Router => {
-  return createRouter({
-    history: createWebHashHistory(),
-    routes: routeConfig,
-  })
+/**
+ * 插件工具类
+ *
+ * @since 1.20.0
+ * @author Terwer
+ */
+export class PluginUtils {
+  public static async preCheckPicgoPlugin() {
+    const { kernelApi } = useSiyuanApi()
+    // 检测是否安装 picgo 插件
+    return await isFileExists(kernelApi, "/data/plugins/siyuan-plugin-picgo/plugin.json", "text")
+  }
+
+  public static async preCheckBlogPlugin() {
+    const { kernelApi } = useSiyuanApi()
+    return await isFileExists(kernelApi, "/data/plugins/siyuan-blog/plugin.json", "text")
+  }
 }

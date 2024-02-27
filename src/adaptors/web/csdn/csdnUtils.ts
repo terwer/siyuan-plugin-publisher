@@ -27,7 +27,7 @@ import Utf8 from "crypto-js/enc-utf8"
 import CryptoJS from "crypto-js"
 import Base64 from "crypto-js/enc-base64"
 import * as cheerio from "cheerio"
-import KatexUtils from "~/src/utils/KatexUtils.ts"
+import KatexUtils from "~/src/utils/katexUtils.ts"
 
 /**
  * CSDN工具类，用于生成UUID和签名

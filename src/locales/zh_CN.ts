@@ -29,6 +29,7 @@ export default {
   "theme.mode.choose": "切换模式",
   "theme.mode.dark": "暗黑模式",
   "theme.mode.light": "浅色模式",
+  "service.tab.manage": "文章管理",
   "service.tab.publish.service": "发布服务",
   "service.tab.publish.setting": "发布配置",
   "service.tab.platform.setting": "平台配置",
@@ -266,7 +267,7 @@ export default {
   "config.platform.none": "没有启用的发布平台，请前往服务开关开启",
   "post.delete.by.platform": "文章已被平台自行删除，请点击取消强制解除关联",
   "blog.top-data-tip":
-    "温馨提示：1. 0.1.0+ 以后，可通过【偏好设置->思源地址】来修改默认伺服配置，支持本地和远程；如果是远程还需要设置token，如果使用浏览器插件或者挂件之外的访问方式还需要设置跨域请求代理。 2、升级新版之前强烈建议导出配置，防止配置丢失。 3、如果出现新版本不兼容的异常情况，建议清空配置。此操作不可恢复，请谨慎操作！",
+    "温馨提示：1. 0.1.0+ 以后，可通过【偏好设置->思源设置】来修改默认伺服配置，支持本地和远程；如果是远程还需要设置token，如果使用浏览器插件或者挂件之外的访问方式还需要设置跨域请求代理。 2、升级新版之前强烈建议导出配置，防止配置丢失。 3、如果出现新版本不兼容的异常情况，建议清空配置。此操作不可恢复，请谨慎操作！",
   "blog.top-data-tip.siyuan":
     "温馨提示：1、当前处于挂件模式，从 0.1.0 版本开始，无需在所有页面引用挂件了，只需要在父级页面引用一个挂件即可。具体规则如下：(1). 如果检测到没有子文档，会兼容 0.0.3 版本以前的方式，展示当前文档的发布页面。 (2). 如果检测到有子文档，会以列表加分页的方式展示所有子文档列表。可单独选择某个子文档进行发布操作。 2、升级新版之前强烈建议导出配置，防止配置丢失。 3、如果出现新版本不兼容的异常情况，建议清空配置。此操作不可恢复，请谨慎操作！",
   "blog.newwin.open": "页签模式",
@@ -625,4 +626,7 @@ export default {
   "preference.setting.showBatchMenu": "显示批量分发",
   "preference.setting.showAIMenu": "显示AI菜单",
   "preference.setting.showExtendMenu": "显示扩展菜单",
+  "preference.setting.showArticleManageMenu": "显示文章管理菜单",
+
+  "message.publish.notShared": "文章尚未分享，无法在外部查看。请分享文章或者在PC 客户端内部通过插件菜单进行预览。"
 }

@@ -9,15 +9,16 @@ import AutoImport from "unplugin-auto-import/vite"
 import Components from "unplugin-vue-components/vite"
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers"
 import { nodePolyfills } from "vite-plugin-node-polyfills"
+import Icons from "unplugin-icons/vite"
 
 // methods start
-const getAppBase = (isSiyuanBuild: boolean, isWidgetBuild: boolean, isStaticBuild: boolean): string => {
+const getAppBase = (isSiyuanBuild: boolean, isWidgetBuild: boolean, isNginxBuild): string => {
   if (isSiyuanBuild) {
     return "/plugins/siyuan-plugin-publisher/"
   } else if (isWidgetBuild) {
     return "/widgets/sy-post-publisher/"
-  } else if (isStaticBuild) {
-    return "/dist/"
+  } else if (isNginxBuild) {
+    return "/"
   } else {
     return "/"
   }
@@ -61,20 +62,20 @@ const debugMode = process.env.DEBUG_MODE === "true"
 const isServe = process.env.IS_SERVE
 const isWatch = args.watch || args.w || false
 const isDev = isServe || isWatch || debugMode
+const outDir = args.o || args.outDir
 
+const buildType = process.env.BUILD_TYPE
 const isSiyuanBuild = process.env.BUILD_TYPE === "siyuan"
 const isWidgetBuild = process.env.BUILD_TYPE === "widget"
-const isStaticBuild = process.env.BUILD_TYPE === "static"
-// const isChromeBuild = process.env.BUILD_TYPE === "chrome"
-const distDir = isWidgetBuild ? "widget" : "./dist"
-const appBase = getAppBase(isSiyuanBuild, isWidgetBuild, isStaticBuild)
+const isNginxBuild = process.env.BUILD_TYPE === "nginx"
+const distDir = outDir || (isWidgetBuild ? "widget" : "./dist")
+const appBase = getAppBase(isSiyuanBuild, isWidgetBuild, isNginxBuild)
 
 console.log("isWatch=>", isWatch)
 console.log("debugMode=>", debugMode)
 console.log("isDev=>", isDev)
 console.log("distDir=>", distDir)
-console.log("isSiyuanBuild=>", isSiyuanBuild)
-console.log("isStaticBuild=>", isStaticBuild)
+console.log("buildType=>", buildType)
 
 // https://github.com/vuejs/vue-cli/issues/1198
 // https://vitejs.dev/config/
@@ -82,6 +83,10 @@ console.log("isStaticBuild=>", isStaticBuild)
 export default defineConfig({
   plugins: [
     vue(),
+
+    Icons({
+      autoInstall: true,
+    }),
 
     AutoImport({
       resolvers: [ElementPlusResolver()],

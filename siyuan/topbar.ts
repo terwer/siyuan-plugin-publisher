@@ -26,15 +26,10 @@
 import PublisherPlugin from "./index"
 import { icons } from "./utils/svg"
 import { IMenuItemOption, Menu, showMessage } from "siyuan"
-import PageUtils from "./utils/pageUtils.ts"
-import HtmlUtils from "./utils/htmlUtils"
 import { createSiyuanAppLogger } from "./appLogger"
 import { WidgetInvoke } from "./invoke/widgetInvoke"
 import { PluginInvoke } from "./invoke/pluginInvoke"
-import { ObjectUtil } from "zhi-common"
-import { DYNAMIC_CONFIG_KEY } from "./Constants"
 import { ConfigManager } from "~/siyuan/store/config.ts"
-import CrossPageUtils from "~/cross/crossPageUtils.ts"
 import MenuUtils from "~/siyuan/utils/menuUtils.ts"
 import { PreferenceConfigManager } from "~/siyuan/store/preferenceConfigManager.ts"
 
@@ -227,6 +222,18 @@ export class Topbar {
         },
       ],
     })
+
+    // 文章管理
+    if (prefSetting.showArticleManageMenu !== false) {
+      menu.addItem({
+        icon: `iconPaste`,
+        label: this.pluginInstance.i18n.articleManage,
+        click: () => {
+          this.widgetInvoke.showPublisherArticleManegeDialog()
+        },
+      })
+      menu.addSeparator()
+    }
 
     // 关于作者
     menu.addSeparator()

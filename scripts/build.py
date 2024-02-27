@@ -36,6 +36,8 @@ if __name__ == "__main__":
     print(os.getcwd())
 
     os.system("pnpm pluginBuild && pnpm siyuanBuild")
+
+    # 打包
     dist_folder = "./dist"
     data = scriptutils.read_json_file(cwd + "package.json")
     v = data["version"]
