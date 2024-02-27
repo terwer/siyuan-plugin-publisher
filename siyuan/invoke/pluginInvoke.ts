@@ -60,6 +60,7 @@ export class PluginInvoke {
       this.logger.info("The document is not shared, will temporarily turn on preview permissions")
     }
 
+    this.logger.info(`Will open page => ${pageUrl}`)
     showIframeDialog(this.pluginInstance, pageUrl, undefined, undefined, undefined, async (options?: IObject) => {
       // 回收预览权限
       if (!isShared) {
@@ -76,12 +77,14 @@ export class PluginInvoke {
   public async showPicbedDialog() {
     const pageId: string | undefined = PageUtils.getPageId()
     const pageUrl = `${this.picgoPluginBase}/?pageId=${pageId}`
+    this.logger.info(`Will open page => ${pageUrl}`)
     showIframeDialog(this.pluginInstance, pageUrl)
   }
 
   public async showPicbedSettingDialog() {
     const pageId: string | undefined = PageUtils.getPageId()
     const pageUrl = `${this.picgoPluginBase}/setting?pageId=${pageId}`
+    this.logger.info(`Will open page => ${pageUrl}`)
     showIframeDialog(this.pluginInstance, pageUrl)
   }
 

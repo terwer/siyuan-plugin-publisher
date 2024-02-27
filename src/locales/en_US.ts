@@ -640,4 +640,6 @@ export default {
   "preference.setting.showBatchMenu": "Show batch publish",
   "preference.setting.showAIMenu": "Show AI menu",
   "preference.setting.showExtendMenu": "Show extend menu",
+
+  "message.publish.notShared": "The article has not been shared and therefore cannot be viewed externally. Kindly share the article or preview it within the PC client through the plugin menu."
 }

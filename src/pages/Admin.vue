@@ -31,7 +31,7 @@ import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import { getSiyuanPageId } from "~/src/utils/siyuanUtils.ts"
-import { DateUtil, HtmlUtil, StrUtil } from "zhi-common"
+import { DateUtil, HtmlUtil, JsonUtil, StrUtil } from "zhi-common"
 import { LuteUtil } from "~/src/utils/luteUtil.ts"
 import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
 import { MAX_TITLE_LENGTH } from "~/src/utils/constants.ts"
@@ -41,6 +41,7 @@ import MaterialSymbolsAddPhotoAlternateOutline from "~icons/material-symbols/add
 import { Utils } from "~/src/utils/utils.ts"
 import { useRouter } from "vue-router"
 import { PluginUtils } from "~/src/utils/pluginUtils.ts"
+import { useSiyuanSettingStore } from "~/src/stores/useSiyuanSettingStore.ts"
 
 // uses
 const { t } = useVueI18n()
@@ -48,6 +49,7 @@ const { kernelApi, blogApi } = useSiyuanApi()
 const { isInSiyuanWidget } = useSiyuanDevice()
 const router = useRouter()
 const { getReadOnlyPublishPreferenceSetting } = usePreferenceSettingStore()
+const { getReadOnlySiyuanSetting } = useSiyuanSettingStore()
 
 // vars
 const logger = createAppLogger("admin")
@@ -65,6 +67,7 @@ const currentPage = ref(1)
 
 const isPicgoInstalled = ref(false)
 const isBlogInstalled = ref(false)
+const siyuanSetting = getReadOnlySiyuanSetting()
 
 // methods
 const querySearch = (queryString: string, cb: any) => {
@@ -101,10 +104,19 @@ const handleView = (index: number, row: any) => {
 }
 
 const handleNewWinView = async (index: number, row: any) => {
-  alert("blog plugin is not installed")
-
   // 阻止事件冒泡
   const win = window as any
+
+  const pageId = row.postid
+  let isShared = row.isShared
+  if (!isShared) {
+    ElMessage.warning(t("message.publish.notShared"))
+    win.event.stopPropagation()
+    return
+  }
+
+  const viewUrl = `${siyuanSetting.value.apiUrl}/plugins/siyuan-blog/#/post/${pageId}`
+  win.open(viewUrl)
   win.event.stopPropagation()
 }
 
@@ -123,7 +135,7 @@ const handleNewWinEdit = async (index: number, row: any) => {
 }
 
 const handleRowClick = async (row: any, column: any, event: any) => {
-  handleEdit(column.index, row)
+  // handleEdit(column.index, row)
   // console.log("handleRowClick", row)
 }
 
@@ -132,10 +144,10 @@ const handlePicgo = (index: number, row: any) => {
 }
 
 const handleNewWinPicgo = (index: number, row: any) => {
-  alert("picgo is not installed")
-
   // 阻止事件冒泡
   const win = window as any
+  const picgoUrl = `${siyuanSetting.value.apiUrl}/plugins/siyuan-plugin-picgo/?pageId=${row.postid}`
+  win.open(picgoUrl)
   win.event.stopPropagation()
 }
 
@@ -187,6 +199,7 @@ const reloadTableData = async () => {
       postList = await blogApi.getRecentPosts(MAX_PAGE_SIZE, currentPage.value - 1, state.value)
       logger.warn("无法获取页面ID，可能是浏览器环境或者浏览器插件展示文档列表")
     }
+    logger.debug("postList=>", postList)
 
     // =======================================================================
 
@@ -206,6 +219,9 @@ const reloadTableData = async () => {
       const shortTitle = StrUtil.getByLength(title, MAX_TITLE_LENGTH, false)
       const content = LuteUtil.mdToHtml(item.description)
       const shortDesc = item?.shortDesc
+      const attrs = JsonUtil.safeParse(item.attrs, {})
+      const isPublished = attrs["custom-publish-status"] === "publish"
+      const isExpired = attrs["custom-expires"] && attrs["custom-expires"] - Date.now() < 0
 
       const tableRow = {
         postid: item.postid,
@@ -215,6 +231,7 @@ const reloadTableData = async () => {
         mt_keywords: item.mt_keywords,
         description: Utils.emptyOrDefault(content, "暂无内容"),
         shortDesc: Utils.emptyOrDefault(shortDesc, "暂无内容"),
+        isShared: isPublished && !isExpired,
       }
       tableData.push(tableRow)
     }
@@ -319,9 +336,13 @@ onBeforeMount(async () => {
               >
                </el-tooltip>
                -->
-              <el-button size="small" @click="handleView(scope.$index, scope.row)" v-if="isBlogInstalled">
+              <el-button
+                size="small"
+                @click="handleView(scope.$index, scope.row)"
+                v-if="isBlogInstalled && scope.row.isShared"
+              >
                 <Fa6SolidBookOpenReader />
-                &nbsp;详情
+                &nbsp;查看
               </el-button>
 
               <!-- picgo -->
