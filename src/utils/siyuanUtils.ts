@@ -29,6 +29,7 @@ import { useRoute } from "vue-router"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import { BrowserUtil } from "zhi-device"
+import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 
 const route = useRoute()
 const logger = createAppLogger("siyuan-util")
@@ -56,7 +57,7 @@ export const isFileExists = async (kernelApi: SiyuanKernelApi, p: string, type: 
 /**
  * 获取挂件所在的块ID
  */
-export const getSiyuanWidgetId = () => {
+const getSiyuanWidgetId = () => {
   if (
     window.frameElement == null ||
     window.frameElement.parentElement == null ||
@@ -79,7 +80,7 @@ export const getSiyuanWidgetId = () => {
 }
 
 // 如果是思源新窗口
-export const getSiyuanNewWinPageId = () => {
+const getSiyuanNewWinPageId = () => {
   let pageId: string
   const win = window as any
   if (win && win.terwer && win.terwer.pageId) {
@@ -101,7 +102,10 @@ export const getSiyuanPageId = async (pageId?: string, force?: boolean) => {
     // 尝试读取挂件的ID
     const widgetPageId = getSiyuanWidgetId()
     if (!StrUtil.isEmptyString(widgetPageId)) {
-      return widgetPageId
+      const { kernelApi } = useSiyuanApi()
+      const widgetAttrs = await kernelApi.getBlockByID(widgetPageId)
+      const docPageId = widgetAttrs.root_id
+      return docPageId
     }
   }
 
