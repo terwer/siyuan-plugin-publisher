@@ -47,8 +47,8 @@ if __name__ == "__main__":
         args.platform = 'siyuan'
     if not args.dist or args.dist == '':
         args.dist = args.platform
-        if args.dist == 'siyuan':
-            args.dist == 'dist'
+    if args.dist == 'siyuan':
+        args.dist == 'dist'
     dist_name = args.dist
     os.environ['BUILD_TYPE'] = args.platform
 
