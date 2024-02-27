@@ -40,6 +40,7 @@ import Fa6SolidBookOpenReader from "~icons/fa6-solid/book-open-reader"
 import MaterialSymbolsAddPhotoAlternateOutline from "~icons/material-symbols/add-photo-alternate-outline"
 import { Utils } from "~/src/utils/utils.ts"
 import { useRouter } from "vue-router"
+import { PluginUtils } from "~/src/utils/pluginUtils.ts"
 
 // uses
 const { t } = useVueI18n()
@@ -61,6 +62,9 @@ const MAX_PAGE_SIZE = 5
 const num = ref(0)
 const total = ref(0)
 const currentPage = ref(1)
+
+const isPicgoInstalled = ref(false)
+const isBlogInstalled = ref(false)
 
 // methods
 const querySearch = (queryString: string, cb: any) => {
@@ -136,6 +140,9 @@ const handleNewWinPicgo = (index: number, row: any) => {
 }
 
 const initPage = async () => {
+  isPicgoInstalled.value = await PluginUtils.preCheckPicgoPlugin()
+  isBlogInstalled.value = await PluginUtils.preCheckBlogPlugin()
+
   await reloadTableData()
   logger.debug("Post init page=>", tableData)
 }
@@ -312,7 +319,7 @@ onBeforeMount(async () => {
               >
                </el-tooltip>
                -->
-              <el-button size="small" @click="handleView(scope.$index, scope.row)">
+              <el-button size="small" @click="handleView(scope.$index, scope.row)" v-if="isBlogInstalled">
                 <Fa6SolidBookOpenReader />
                 &nbsp;详情
               </el-button>
@@ -328,7 +335,7 @@ onBeforeMount(async () => {
               >
               </el-tooltip>
               -->
-              <el-button size="small" @click="handlePicgo(scope.$index, scope.row)">
+              <el-button size="small" @click="handlePicgo(scope.$index, scope.row)" v-if="isPicgoInstalled">
                 <MaterialSymbolsAddPhotoAlternateOutline />
                 &nbsp;图床
               </el-button>
