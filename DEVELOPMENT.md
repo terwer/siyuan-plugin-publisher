@@ -17,16 +17,16 @@ pnpm serve
 dev
 
 ```bash
+pnpm dev -p siyuan
 # siyuan plugin
 # -d 默认 dist
 # -t 默认 dist
 pnpm makeLink -p siyuan
-pnpm dev -p siyuan
 
-# siyuan widget 
-pnpm makeLink -p widget -d widget -t widget
 # -d 默认 widget
 pnpm dev -p widget
+# siyuan widget 
+pnpm makeLink -p widget -d widget -t widget
 
 # chrome extension
 # -d 默认 chrome，实际地址是：extension/extension

@@ -37,29 +37,20 @@ import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStor
 import { MAX_TITLE_LENGTH } from "~/src/utils/constants.ts"
 import MaterialSymbolsDriveFolderUpload from "~icons/material-symbols/drive-folder-upload"
 import Fa6SolidBookOpenReader from "~icons/fa6-solid/book-open-reader"
-import MaterialSymbolsCreditCard from "~icons/material-symbols/credit-card"
 import MaterialSymbolsAddPhotoAlternateOutline from "~icons/material-symbols/add-photo-alternate-outline"
+import { Utils } from "~/src/utils/utils.ts"
+import { useRouter } from "vue-router"
 
 // uses
 const { t } = useVueI18n()
 const { kernelApi, blogApi } = useSiyuanApi()
 const { isInSiyuanWidget } = useSiyuanDevice()
+const router = useRouter()
 
 // vars
 const logger = createAppLogger("admin")
 const isDataBoxLoading = ref(false)
 const dataLayout = ref("prev,pager,next")
-
-const showHome = ref(true)
-const showDetail = ref(false)
-const showPublish = ref(false)
-const showAnki = ref(false)
-const showPicgo = ref(false)
-
-const postDetail = ref()
-const publishData = ref()
-const isInSiyuanEnv = ref(false)
-const isNewWin = ref(true)
 
 const state = ref("")
 const links = ref([])
@@ -71,12 +62,79 @@ const total = ref(0)
 const currentPage = ref(1)
 
 // methods
-const initPage = async () => {
-  // isInSiyuanEnv.value = isInSiyuanWidget()
-  //
-  // const publishCfg = getPublishCfg()
-  // isNewWin.value = parseBoolean(publishCfg.newWin)
+const querySearch = (queryString: string, cb: any) => {
+  const results = queryString ? links.value.filter(createFilter(queryString)) : links.value
+  cb(results)
+}
+const createFilter = (queryString: string) => {
+  return (value: any) => {
+    return value.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
+  }
+}
 
+const handleSelect = (item: any) => {}
+
+const handleBtnSearch = () => {
+  reloadTableData()
+}
+
+const handlePrevPage = async (curPage: number) => {
+  currentPage.value = curPage
+  await reloadTableData()
+}
+const handleNextPage = async (curPage: number) => {
+  currentPage.value = curPage
+  await reloadTableData()
+}
+const handleCurrentPage = async (curPage: number) => {
+  currentPage.value = curPage
+  await reloadTableData()
+}
+
+const handleView = (index: number, row: any) => {
+  handleNewWinView(index, row)
+}
+
+const handleNewWinView = async (index: number, row: any) => {
+  alert("blog plugin is not installed")
+
+  // 阻止事件冒泡
+  const win = window as any
+  win.event.stopPropagation()
+}
+
+const handleEdit = (index: number, row: any) => {
+  handleNewWinEdit(index, row)
+}
+
+const handleNewWinEdit = async (index: number, row: any) => {
+  await router.push({
+    path: "/publish/singlePublish",
+    query: {
+      id: row.postid,
+      showBack: "true",
+    },
+  })
+}
+
+const handleRowClick = async (row: any, column: any, event: any) => {
+  handleEdit(column.index, row)
+  // console.log("handleRowClick", row)
+}
+
+const handlePicgo = (index: number, row: any) => {
+  handleNewWinPicgo(index, row)
+}
+
+const handleNewWinPicgo = (index: number, row: any) => {
+  alert("picgo is not installed")
+
+  // 阻止事件冒泡
+  const win = window as any
+  win.event.stopPropagation()
+}
+
+const initPage = async () => {
   await reloadTableData()
   logger.debug("Post init page=>", tableData)
 }
@@ -90,12 +148,8 @@ const reloadTableData = async () => {
 
   try {
     const pageId = await getSiyuanPageId()
-    if (StrUtil.isEmptyString(pageId)) {
-      postCount = await blogApi.getRecentPostsCount(state.value)
-      postList = await blogApi.getRecentPosts(MAX_PAGE_SIZE, currentPage.value - 1, state.value)
-      logger.warn("无法获取页面ID，可能是浏览器环境或者浏览器插件展示文档列表")
-      logger.debug("postList=>", postList)
-    } else {
+    // 挂件里面才展示子文档
+    if (!StrUtil.isEmptyString(pageId) && isInSiyuanWidget()) {
       // 检测子文档
       postCount = await kernelApi.getSubdocCount(pageId)
       if (postCount > 0) {
@@ -112,6 +166,11 @@ const reloadTableData = async () => {
         }
       }
       logger.warn("思源笔记内部展示子文档")
+    } else {
+      postCount = await blogApi.getRecentPostsCount(state.value)
+      postList = await blogApi.getRecentPosts(MAX_PAGE_SIZE, currentPage.value - 1, state.value)
+      logger.warn("无法获取页面ID，可能是浏览器环境或者浏览器插件展示文档列表")
+      logger.debug("postList=>", postList)
     }
 
     // =======================================================================
@@ -132,6 +191,7 @@ const reloadTableData = async () => {
       }
       const shortTitle = StrUtil.getByLength(title, MAX_TITLE_LENGTH, false)
       const content = LuteUtil.mdToHtml(item.description)
+      const shortDesc = item?.shortDesc
 
       const tableRow = {
         postid: item.postid,
@@ -139,7 +199,8 @@ const reloadTableData = async () => {
         shortTitle,
         dateCreated: DateUtil.formatIsoToZhDate(item.dateCreated.toISOString(), true),
         mt_keywords: item.mt_keywords,
-        description: content.trim() === "" ? "暂无内容" : content,
+        description: Utils.emptyOrDefault(content, "暂无内容"),
+        shortDesc: Utils.emptyOrDefault(shortDesc, "暂无内容"),
       }
       tableData.push(tableRow)
     }
@@ -162,7 +223,7 @@ onBeforeMount(async () => {
 <template>
   <div class="admin-box">
     <!-- 文章列表 -->
-    <div id="post-list" v-if="showHome">
+    <div id="post-list">
       <!-- 搜索 -->
       <div class="search-btn">
         <el-autocomplete
@@ -207,6 +268,7 @@ onBeforeMount(async () => {
                   标签:
                   {{ props.row.mt_keywords === "" ? "暂无标签" : props.row.mt_keywords }}
                 </p>
+                <p m="t-0 b-2">摘要: {{ props.row.shortDesc }}</p>
               </div>
             </template>
           </el-table-column>
@@ -217,46 +279,52 @@ onBeforeMount(async () => {
             </template>
             <template #default="scope">
               <!-- 发布 -->
+              <!--
               <el-tooltip
-                :content="$t('siyuan.browser.menu.publish.btn')"
+                :content="t('siyuan.browser.menu.publish.btn')"
                 class="box-item"
                 effect="light"
                 placement="right"
                 popper-class="publish-menu-tooltip"
               >
-                <el-button size="small" @click="handleEdit(scope.$index, scope.row)">
-                  <MaterialSymbolsDriveFolderUpload />
-                  &nbsp;发布
-                </el-button>
               </el-tooltip>
+              -->
+              <el-button size="small" @click="handleEdit(scope.$index, scope.row)">
+                <MaterialSymbolsDriveFolderUpload />
+                &nbsp;发布
+              </el-button>
 
               <!-- 预览 -->
+              <!--
               <el-tooltip
-                :content="$t('siyuan.browser.menu.preview.btn')"
+                :content="t('siyuan.browser.menu.preview.btn')"
                 class="box-item"
                 effect="light"
                 placement="right"
                 popper-class="publish-menu-tooltip"
               >
-                <el-button size="small" @click="handleView(scope.$index, scope.row)">
-                  <Fa6SolidBookOpenReader />
-                  &nbsp;预览
-                </el-button>
-              </el-tooltip>
+               </el-tooltip>
+               -->
+              <el-button size="small" @click="handleView(scope.$index, scope.row)">
+                <Fa6SolidBookOpenReader />
+                &nbsp;详情
+              </el-button>
 
               <!-- picgo -->
+              <!--
               <el-tooltip
-                :content="$t('siyuan.browser.menu.picture.btn')"
+                :content="t('siyuan.browser.menu.picture.btn')"
                 class="box-item"
                 effect="light"
                 placement="right"
                 popper-class="publish-menu-tooltip"
               >
-                <el-button size="small" @click="handlePicgo(scope.$index, scope.row)">
-                  <MaterialSymbolsAddPhotoAlternateOutline />
-                  &nbsp;图床
-                </el-button>
               </el-tooltip>
+              -->
+              <el-button size="small" @click="handlePicgo(scope.$index, scope.row)">
+                <MaterialSymbolsAddPhotoAlternateOutline />
+                &nbsp;图床
+              </el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -279,31 +347,11 @@ onBeforeMount(async () => {
       <div class="blog-tip">
         <el-alert
           class="top-data-tip"
-          :title="isInSiyuanEnv ? $t('blog.top-data-tip.siyuan') : $t('blog.top-data-tip')"
+          :title="isInSiyuanWidget() ? t('blog.top-data-tip.siyuan') : t('blog.top-data-tip')"
           type="info"
           :closable="false"
         />
       </div>
-    </div>
-
-    <!-- 文章详情 -->
-    <div id="post-detail" v-if="showDetail">
-      <single-blog-detail :post="postDetail" @on-change="emitBackFn" @on-publish-change="emitPublishPageFn" />
-    </div>
-
-    <!-- 文章发布 -->
-    <div id="post-publisher" v-if="showPublish">
-      <single-publish :publish-data="publishData" @on-change="emitBackFn" />
-    </div>
-
-    <!-- Anki -->
-    <div class="post-anki" v-if="showAnki">
-      <single-anki :post="postDetail" @on-change="emitBackFn" />
-    </div>
-
-    <!-- Picgo -->
-    <div class="post-picgo" v-if="showPicgo">
-      <single-picgo :post="postDetail" @on-change="emitBackFn" />
     </div>
   </div>
 </template>

@@ -50,6 +50,7 @@ import GeneralSetting from "~/src/components/set/GeneralSetting.vue"
 import SiyuanSetting from "~/src/components/set/SiyuanSetting.vue"
 import About from "~/src/pages/About.vue"
 import Admin from "~/src/pages/Admin.vue"
+import Detail from "~/src/pages/Detail.vue"
 
 /**
  * 路由配置
@@ -62,7 +63,7 @@ export const routeConfig: RouteRecordRaw[] = [
   { path: "/publish/singlePublish", component: SinglePublish },
   { path: "/publish/singlePublish/doPublish/:key/:id", component: SinglePublishDoPublish },
   // 文章管理
-  // /h?id=<id>
+  // /?id=<id>
   { path: "/", component: Admin },
   // 批量分发
   // /publish/batchPublish?id=<id>

@@ -153,47 +153,49 @@ onMounted(async () => {
 
 <template>
   <!-- 显示加载计时器 -->
-  <loading-timer :loading-time="loadingTime" style="padding: 0 10px 0 10px" />
+  <loading-timer :loading-time="loadingTime" style="padding: 0 24px" />
   <el-skeleton v-if="!formData.isInit" class="placeholder" :rows="12" animated style="padding: 40px 12px" />
   <div v-else>
-    <div class="platform-desc">
-      <p>
-        <el-alert
-          class="desc-tip"
-          type="warning"
-          title="点击图标进入对应平台的发布页面，如果文章已发布，可点击 [预览] 直接在浏览器打开预览页面。"
-        ></el-alert>
-      </p>
-    </div>
-    <div class="one-key-preview">
-      <el-button type="primary" size="small" @click="handlePreviewAll">一键预览</el-button>
-    </div>
-    <el-row :gutter="20" class="row-box">
-      <el-col
-        :span="8"
-        :title="cfg.platformName"
-        class="platform-select-card"
-        v-for="cfg in formData.enabledConfigArray"
-      >
-        <el-card class="card-item">
-          <div class="icon-list">
-            <el-badge
-              :type="checkHasPublished(cfg.platformKey) ? 'success' : 'danger'"
-              :value="checkHasPublished(cfg.platformKey) ? '预览' : '未发布'"
-              @click.stop="handlePreview($event, cfg.platformKey)"
-              :class="checkHasPublished(cfg.platformKey) ? 'item published-item' : 'item'"
-            >
-              <el-text class="define-item" @click.stop="handleSingleDoPublish($event, cfg.platformKey)">
-                <i class="el-icon">
-                  <span v-html="cfg?.platformIcon"></span>
-                </i>
-                {{ CrossPageUtils.longPlatformName(cfg?.platformName, 11) }}
-              </el-text>
-            </el-badge>
-          </div>
-        </el-card>
-      </el-col>
-    </el-row>
+    <back-page title="单个文章发布">
+      <div class="platform-desc">
+        <p>
+          <el-alert
+            class="desc-tip"
+            type="warning"
+            title="点击图标进入对应平台的发布页面，如果文章已发布，可点击 [预览] 直接在浏览器打开预览页面。"
+          ></el-alert>
+        </p>
+      </div>
+      <div class="one-key-preview">
+        <el-button type="primary" size="small" @click="handlePreviewAll">一键预览</el-button>
+      </div>
+      <el-row :gutter="20" class="row-box">
+        <el-col
+          :span="8"
+          :title="cfg.platformName"
+          class="platform-select-card"
+          v-for="cfg in formData.enabledConfigArray"
+        >
+          <el-card class="card-item">
+            <div class="icon-list">
+              <el-badge
+                :type="checkHasPublished(cfg.platformKey) ? 'success' : 'danger'"
+                :value="checkHasPublished(cfg.platformKey) ? '预览' : '未发布'"
+                @click.stop="handlePreview($event, cfg.platformKey)"
+                :class="checkHasPublished(cfg.platformKey) ? 'item published-item' : 'item'"
+              >
+                <el-text class="define-item" @click.stop="handleSingleDoPublish($event, cfg.platformKey)">
+                  <i class="el-icon">
+                    <span v-html="cfg?.platformIcon"></span>
+                  </i>
+                  {{ CrossPageUtils.longPlatformName(cfg?.platformName, 11) }}
+                </el-text>
+              </el-badge>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+    </back-page>
   </div>
 </template>
 
@@ -203,6 +205,7 @@ $icon_size = 32px
 .platform-desc
   font-size 14px
   margin 0 10px
+
   .desc-tip
     padding-left 0
 
@@ -219,29 +222,36 @@ $icon_size = 32px
 .row-box
   margin 0 !important
   padding 0
+
   .platform-select-card
     margin-bottom 10px
     height 100%
+
     .platform-title
       font-size 24px
       font-weight 600
       margin-bottom 12px
+
     .icon-list
       text-align left
       gap 10px
+
       .define-item
         color var(--el-color-primary)
         //color var(--el-button-bg-color)
         cursor pointer
         font-size $icon_size
+
         &:hover
           color var(--el-color-primary-light-3)
+
         :deep(.el-icon)
           //color var(--el-color-primary)
           width $icon_size
           height $icon_size
           margin-right -4px
           vertical-align middle
+
         :deep(.el-icon svg)
           width $icon_size
           height $icon_size

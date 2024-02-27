@@ -93,6 +93,9 @@ export class Utils {
   }
 
   public static emptyOrDefault(value: any, defaultValue: any) {
+    if (typeof value === "string") {
+      value = value.trim()
+    }
     return StrUtil.isEmptyString(value) ? defaultValue : value
   }
 
