@@ -228,7 +228,7 @@ $icon_size = 32px
   padding: 40px 12px
 
 .platform-title
-  padding: 10px 0 4px 0
+  padding: 10px 0 0 4px
   font-weight: 900
 
 .platform-desc
