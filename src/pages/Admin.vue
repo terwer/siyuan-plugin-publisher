@@ -149,7 +149,7 @@ const reloadTableData = async () => {
   try {
     const pageId = await getSiyuanPageId()
     // 挂件里面才展示子文档
-    if (!StrUtil.isEmptyString(pageId) && isInSiyuanWidget()) {
+    if (isInSiyuanWidget() && !StrUtil.isEmptyString(pageId)) {
       // 检测子文档
       postCount = await kernelApi.getSubdocCount(pageId)
       if (postCount > 0) {
