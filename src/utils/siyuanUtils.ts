@@ -57,7 +57,7 @@ export const isFileExists = async (kernelApi: SiyuanKernelApi, p: string, type: 
 /**
  * 获取挂件所在的块ID
  */
-const getSiyuanWidgetId = () => {
+export const getSiyuanWidgetId = () => {
   if (
     window.frameElement == null ||
     window.frameElement.parentElement == null ||
