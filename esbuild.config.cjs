@@ -29,12 +29,12 @@ const { copy } = require("esbuild-plugin-copy")
 
 const args = minimist(process.argv.slice(2))
 const isWatch = args.watch || args.w || false
-const distDir = args.dist || args.d || "./dist"
+const distDir = "./dist"
 
 module.exports = {
   esbuildConfig: {
     entryPoints: ["siyuan/index.ts"],
-    outfile: path.join(distDir, "index.js"),
+    outfile: "dist/index.js",
     bundle: true,
     format: "cjs",
     external: ["siyuan"],

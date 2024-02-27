@@ -53,12 +53,12 @@ if __name__ == "__main__":
     if args.platform == 'siyuan':
         dist_name = 'dist'
         # zhi-build
-        zhi_build_cmd = "zhi-build --serve --production -d " + args.dist
+        zhi_build_cmd = "zhi-build --production -d " + dist_name
         print(zhi_build_cmd)
         os.system(zhi_build_cmd)
     elif args.platform == 'widget':
         # 复制挂件需要的其他文件
-        dist_folder = f"./{args.dist}/"
+        dist_folder = f"./{dist_name}/"
         if not os.path.exists(dist_folder):
             os.makedirs(dist_folder)
         scriptutils.cp_file("./LICENSE", dist_folder)
@@ -70,9 +70,7 @@ if __name__ == "__main__":
         scriptutils.cp_file("./policy.md", dist_folder)
         print("复制挂件需要的其他文件.")
     elif args.platform == 'chrome' or args.platform == 'edge' or args.platform == 'firefox':
-        if not args.dist or args.dist == '':
-            args.dist = args.platform
-        dist_name = f"extension/{args.dist}"
+        dist_name = f"extension/{dist_name}"
         dist_folder = "./" + dist_name + "/"
         print("Building folder for " + dist_name)
         print("Building folder path: " + dist_folder)
