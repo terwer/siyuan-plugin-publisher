@@ -34,7 +34,7 @@ import { getSiyuanPageId } from "~/src/utils/siyuanUtils.ts"
 import { DateUtil, HtmlUtil, JsonUtil, StrUtil } from "zhi-common"
 import { LuteUtil } from "~/src/utils/luteUtil.ts"
 import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
-import { DYNAMIC_CONFIG_KEY, MAX_TITLE_LENGTH } from "~/src/utils/constants.ts"
+import { appBase, DYNAMIC_CONFIG_KEY, MAX_TITLE_LENGTH } from "~/src/utils/constants.ts"
 import MaterialSymbolsDriveFolderUpload from "~icons/material-symbols/drive-folder-upload"
 import Fa6SolidBookOpenReader from "~icons/fa6-solid/book-open-reader"
 import MaterialSymbolsAddPhotoAlternateOutline from "~icons/material-symbols/add-photo-alternate-outline"
@@ -51,7 +51,7 @@ import DrawerBoxBridge from "~/src/components/admin/DrawerBoxBridge.vue"
 // uses
 const { t } = useVueI18n()
 const { kernelApi, blogApi } = useSiyuanApi()
-const { isInSiyuanWidget } = useSiyuanDevice()
+const { isInSiyuanWidget, isInSiyuanOrSiyuanNewWin } = useSiyuanDevice()
 const router = useRouter()
 const { getReadOnlyPublishPreferenceSetting } = usePreferenceSettingStore()
 const { getReadOnlySiyuanSetting } = useSiyuanSettingStore()
@@ -131,7 +131,7 @@ const goToDrawer = (title: string, url: string) => {
  */
 const goToPublisherDrawer = (title: string, pageUrl: string) => {
   const win = window as any
-  const url = `${win.origin}/#${pageUrl}`
+  const url = `${win.origin}${appBase}#${pageUrl}`
   logger.debug(`Publisher will go to ${url}`)
 
   goToDrawer(title, url)
@@ -162,11 +162,18 @@ const goToPicgoDrawer = (title: string, pageUrl: string) => {
 
   goToDrawer(title, url)
 }
+const goToPicgoNewWin = (pageUrl: string) => {
+  const url = `${siyuanSetting.value.apiUrl}/plugins/siyuan-plugin-picgo/#${pageUrl}`
+  logger.debug(`Picgo will go to ${url}`)
+
+  const win = window as any
+  win.open(url)
+}
 // =====================================================================================================================
 // 单个平台选择平台，然后极速发布
 const handleQuick = (_index: number, row: any) => {
   const pageId = row.postid
-  goToPublisherDrawer("极速发布", `/publish/quickSelect/${pageId}`)
+  goToPublisherDrawer("极速发布", `/publish/quickSelect?id=${pageId}`)
 }
 
 // 单个平台选择平台，然后常规发布
@@ -177,7 +184,6 @@ const handleEdit = (index: number, row: any) => {
 
 // 单个平台常规发布
 const goToSingleEdit = async (key: string, row: any) => {
-  // /#/publish/singlePublish/doPublish/wordpress_Wordpress/20230815225853-a2ybito?showBack=true&method=edit
   const pageId = row.postid
   goToPublisherDrawer("常规发布", `/publish/singlePublish/doPublish/${key}/${pageId}?method=edit`)
 }
@@ -205,7 +211,19 @@ const handleView = (_index: number, row: any) => {
 // Picgo- 图床
 const handlePicgo = (index: number, row: any) => {
   const pageId = row.postid
-  goToPicgoDrawer("图床", `/?pageId=${pageId}`)
+  if (isInSiyuanOrSiyuanNewWin()) {
+    goToPicgoDrawer("图床", `/?pageId=${pageId}`)
+  } else {
+    goToPicgoNewWin(`/?pageId=${pageId}`)
+  }
+}
+
+const handleNewWinPicgo = (index: number, row: any) => {
+  // 阻止事件冒泡
+  const win = window as any
+  const picgoUrl = `${siyuanSetting.value.apiUrl}/plugins/siyuan-plugin-picgo/#/?pageId=${row.postid}`
+  win.open(picgoUrl)
+  win.event.stopPropagation()
 }
 
 const handleRowClick = async (row: any, column: any, event: any) => {

@@ -35,8 +35,9 @@ import { pre } from "~/src/platforms/pre.ts"
 import { useLoadingTimer } from "~/src/composables/useLoadingTimer.ts"
 import CrossPageUtils from "~/cross/crossPageUtils.ts"
 import { SiyuanDevice } from "zhi-device"
-import { ElMessage } from "element-plus"
+import { ElMessage, ElMessageBox } from "element-plus"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import BackPage from "~/src/components/common/BackPage.vue"
 
 const logger = createAppLogger("quick-publish-worker")
 
@@ -66,7 +67,12 @@ const { loadingTime } = useLoadingTimer(isTimerInit)
 // 错误详情
 const showDetailError = (errrMsg: string) => {
   const win = SiyuanDevice.siyuanWindow()
-  win.syp.alert(errrMsg)
+  if (win?.syp?.alert) {
+    win.syp.alert(errrMsg)
+  } else {
+    // ElMessage.error(errrMsg)
+    ElMessageBox.alert(errrMsg)
+  }
 }
 
 onMounted(async () => {
@@ -111,45 +117,47 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div id="quick-publish-box">
-    <div class="publish-tips">
-      <div v-if="singleFormData.isPublishLoading" class="is-loading info-tips">
-        <i class="el-icon is-loading">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
-            <path
-              fill="currentColor"
-              d="M512 64a32 32 0 0 1 32 32v192a32 32 0 0 1-64 0V96a32 32 0 0 1 32-32zm0 640a32 32 0 0 1 32 32v192a32 32 0 1 1-64 0V736a32 32 0 0 1 32-32zm448-192a32 32 0 0 1-32 32H736a32 32 0 1 1 0-64h192a32 32 0 0 1 32 32zm-640 0a32 32 0 0 1-32 32H96a32 32 0 0 1 0-64h192a32 32 0 0 1 32 32zM195.2 195.2a32 32 0 0 1 45.248 0L376.32 331.008a32 32 0 0 1-45.248 45.248L195.2 240.448a32 32 0 0 1 0-45.248zm452.544 452.544a32 32 0 0 1 45.248 0L828.8 783.552a32 32 0 0 1-45.248 45.248L647.744 692.992a32 32 0 0 1 0-45.248zM828.8 195.264a32 32 0 0 1 0 45.184L692.992 376.32a32 32 0 0 1-45.248-45.248l135.808-135.808a32 32 0 0 1 45.248 0zm-452.544 452.48a32 32 0 0 1 0 45.248L240.448 828.8a32 32 0 0 1-45.248-45.248l135.808-135.808a32 32 0 0 1 45.248 0z"
-            ></path>
-          </svg>
-        </i>
-        发布中，请稍后...
-      </div>
-      <div v-else-if="singleFormData.publishProcessStatus" class="success-tips">
-        {{ singleFormData.isAdd ? "发布到" : "更新文章到" }}
-        <span :title="formData.processResult.key">
-          [{{ CrossPageUtils.subPlatformName(formData.processResult.key, 6) }}]
-        </span>
-        <span :title="formData.processResult.name" v-if="!StrUtil.isEmptyString(formData.processResult.name)">
-          {{ `[${StrUtil.getByLength(formData.processResult.name, 8)}]` }}
-        </span>
-        成功，
-        <a :href="formData.processResult.previewUrl" target="_blank">查看文章</a>
-        <loading-timer :loading-time="loadingTime" style="padding: 0 10px 0 10px; display: inline-block" />
-      </div>
-      <div v-else class="fail-tips">
-        {{ singleFormData.isAdd ? "发布到" : "更新文章到" }}
-        <span :title="formData.processResult.key">
-          [{{ CrossPageUtils.subPlatformName(formData.processResult.key, 6) }}]
-        </span>
-        <span :title="formData.processResult.name" v-if="!StrUtil.isEmptyString(formData.processResult.name)">
-          {{ `[${StrUtil.getByLength(formData.processResult.name, 8)}]` }}
-        </span>
-        失败！
-        <a href="javascript:;" @click="showDetailError(formData.processResult.errMsg)">详细错误</a>
-        <loading-timer :loading-time="loadingTime" style="padding: 0 10px 0 10px; display: inline-block" />
+  <back-page :title="'极速发布 - ' + key">
+    <div id="quick-publish-box">
+      <div class="publish-tips">
+        <div v-if="singleFormData.isPublishLoading" class="is-loading info-tips">
+          <i class="el-icon is-loading">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+              <path
+                fill="currentColor"
+                d="M512 64a32 32 0 0 1 32 32v192a32 32 0 0 1-64 0V96a32 32 0 0 1 32-32zm0 640a32 32 0 0 1 32 32v192a32 32 0 1 1-64 0V736a32 32 0 0 1 32-32zm448-192a32 32 0 0 1-32 32H736a32 32 0 1 1 0-64h192a32 32 0 0 1 32 32zm-640 0a32 32 0 0 1-32 32H96a32 32 0 0 1 0-64h192a32 32 0 0 1 32 32zM195.2 195.2a32 32 0 0 1 45.248 0L376.32 331.008a32 32 0 0 1-45.248 45.248L195.2 240.448a32 32 0 0 1 0-45.248zm452.544 452.544a32 32 0 0 1 45.248 0L828.8 783.552a32 32 0 0 1-45.248 45.248L647.744 692.992a32 32 0 0 1 0-45.248zM828.8 195.264a32 32 0 0 1 0 45.184L692.992 376.32a32 32 0 0 1-45.248-45.248l135.808-135.808a32 32 0 0 1 45.248 0zm-452.544 452.48a32 32 0 0 1 0 45.248L240.448 828.8a32 32 0 0 1-45.248-45.248l135.808-135.808a32 32 0 0 1 45.248 0z"
+              ></path>
+            </svg>
+          </i>
+          发布中，请稍后...
+        </div>
+        <div v-else-if="singleFormData.publishProcessStatus" class="success-tips">
+          {{ singleFormData.isAdd ? "发布到" : "更新文章到" }}
+          <span :title="formData.processResult.key">
+            [{{ CrossPageUtils.subPlatformName(formData.processResult.key, 6) }}]
+          </span>
+          <span :title="formData.processResult.name" v-if="!StrUtil.isEmptyString(formData.processResult.name)">
+            {{ `[${StrUtil.getByLength(formData.processResult.name, 8)}]` }}
+          </span>
+          成功，
+          <a :href="formData.processResult.previewUrl" target="_blank">查看文章</a>
+          <loading-timer :loading-time="loadingTime" style="padding: 0 10px 0 10px; display: inline-block" />
+        </div>
+        <div v-else class="fail-tips">
+          {{ singleFormData.isAdd ? "发布到" : "更新文章到" }}
+          <span :title="formData.processResult.key">
+            [{{ CrossPageUtils.subPlatformName(formData.processResult.key, 6) }}]
+          </span>
+          <span :title="formData.processResult.name" v-if="!StrUtil.isEmptyString(formData.processResult.name)">
+            {{ `[${StrUtil.getByLength(formData.processResult.name, 8)}]` }}
+          </span>
+          失败！
+          <a href="javascript:;" @click="showDetailError(formData.processResult.errMsg)">详细错误</a>
+          <loading-timer :loading-time="loadingTime" style="padding: 0 10px 0 10px; display: inline-block" />
+        </div>
       </div>
     </div>
-  </div>
+  </back-page>
 </template>
 
 <style scoped lang="stylus">
