@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023, Terwer . All rights reserved.
+ * Copyright (c) 2024, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -23,43 +23,6 @@
  * questions.
  */
 
-import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { DeviceDetection, SiyuanDevice } from "zhi-device"
-import { Deserializer, Serializer, SimpleXmlRpcClient, XmlrpcUtil } from "simple-xmlrpc"
-import fetch from "cross-fetch"
-import { create } from "xmlbuilder2"
-import { appBase } from "~/src/utils/constants.ts"
+export const goTo = () => {
 
-/**
- * 应用实例
- */
-export class PublisherAppInstance {
-  public logger: any
-  public deviceType: any
-
-  public win: any
-  public moduleBase: string
-
-  public fetch: any
-  public xmlbuilder2: any
-  public simpleXmlrpc: any
-
-  constructor() {
-    this.logger = createAppLogger("app-instance")
-    this.deviceType = DeviceDetection.getDevice()
-
-    this.fetch = fetch
-    this.xmlbuilder2 = {
-      create,
-    }
-    this.simpleXmlrpc = {
-      SimpleXmlRpcClient: SimpleXmlRpcClient,
-      Serializer: Serializer,
-      Deserializer: Deserializer,
-      XmlrpcUtil: XmlrpcUtil,
-    }
-
-    this.win = SiyuanDevice.siyuanWindow()
-    this.moduleBase = `${this.win?.siyuan?.config?.system?.workspaceDir}/data${appBase}`
-  }
 }

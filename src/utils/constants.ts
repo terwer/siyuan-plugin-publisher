@@ -25,6 +25,7 @@
 
 export const isDev = process.env.DEV_MODE === "true"
 export const isDebugMode = process.env.DEBUG_MODE === "true"
+export const appBase = process.env.APP_BASE
 
 // 关于我页面
 export const aboutUrl = "https://blog.terwergreen.com/guestbook.html#respond"

@@ -23,29 +23,10 @@
   - questions.
   -->
 
-<!--suppress ALL -->
-<script setup lang="ts">
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-
-const props = defineProps({
-  src: {
-    type: String,
-    default: "",
-  },
-})
-
-const { t } = useVueI18n()
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <div>
-    <iframe
-      v-resize="{
-        loadText: t('page.loading'),
-      }"
-      width="100%"
-      :src="src"
-      frameborder="0"
-    ></iframe>
-  </div>
+  <div>quick select</div>
 </template>
+
+<style scoped lang="stylus"></style>
