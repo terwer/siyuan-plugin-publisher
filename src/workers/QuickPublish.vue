@@ -35,6 +35,8 @@ import { pre } from "~/src/platforms/pre.ts"
 import { useLoadingTimer } from "~/src/composables/useLoadingTimer.ts"
 import CrossPageUtils from "~/cross/crossPageUtils.ts"
 import { SiyuanDevice } from "zhi-device"
+import { ElMessage } from "element-plus"
+import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 
 const logger = createAppLogger("quick-publish-worker")
 
@@ -43,6 +45,7 @@ const route = useRoute()
 const { singleFormData, doSinglePublish, initPublishMethods } = usePublish()
 const { blogApi } = useSiyuanApi()
 const { getPublishCfg } = usePublishConfig()
+const { t } = useVueI18n()
 
 // datas
 const sysKeys = pre.systemCfg.map((item) => {
@@ -69,34 +72,40 @@ const showDetailError = (errrMsg: string) => {
 onMounted(async () => {
   singleFormData.isPublishLoading = true
   setTimeout(async () => {
-    // ==================
-    // 初始化开始
-    // ==================
-    // 初始化属性
-    const publishCfg = await getPublishCfg(key)
-    // 思源笔记原始文章数据
-    let siyuanPost = await blogApi.getPost(id)
-    // 元数据初始化
-    siyuanPost = await initPublishMethods.assignInitAttrs(siyuanPost, id, publishCfg)
-    logger.debug("quick publish inited siyuanPost =>", toRaw(siyuanPost))
-    // ==================
-    // 初始化结束
-    // ==================
+    try {
+      // ==================
+      // 初始化开始
+      // ==================
+      // 初始化属性
+      const publishCfg = await getPublishCfg(key)
+      // 思源笔记原始文章数据
+      let siyuanPost = await blogApi.getPost(id)
+      // 元数据初始化
+      siyuanPost = await initPublishMethods.assignInitAttrs(siyuanPost, id, publishCfg)
+      logger.debug("quick publish inited siyuanPost =>", toRaw(siyuanPost))
+      // ==================
+      // 初始化结束
+      // ==================
 
-    // 开始发布
-    logger.info("保存到系统平台开始")
-    for (const sysKey of sysKeys) {
-      const sysPublishCfg = await getPublishCfg(sysKey)
-      await doSinglePublish(sysKey, id, sysPublishCfg, siyuanPost)
+      // 开始发布
+      logger.info("保存到系统平台开始")
+      for (const sysKey of sysKeys) {
+        const sysPublishCfg = await getPublishCfg(sysKey)
+        await doSinglePublish(sysKey, id, sysPublishCfg, siyuanPost)
+      }
+      logger.info("保存到系统平台结束")
+
+      logger.info("单个快速发布开始")
+      formData.processResult = await doSinglePublish(key, id, publishCfg, siyuanPost)
+      logger.info("单个快速发布结束")
+
+      isTimerInit.value = true
+    } catch (e) {
+      logger.error(t("main.opt.failure") + "=>", e)
+      ElMessage.error(t("main.opt.failure") + "=>" + e)
+    } finally {
+      singleFormData.isPublishLoading = false
     }
-    logger.info("保存到系统平台结束")
-
-    logger.info("单个快速发布开始")
-    formData.processResult = await doSinglePublish(key, id, publishCfg, siyuanPost)
-    logger.info("单个快速发布结束")
-    singleFormData.isPublishLoading = false
-
-    isTimerInit.value = true
   }, 200)
 })
 </script>
@@ -105,13 +114,14 @@ onMounted(async () => {
   <div id="quick-publish-box">
     <div class="publish-tips">
       <div v-if="singleFormData.isPublishLoading" class="is-loading info-tips">
-        <i class="el-icon is-loading"
-          ><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+        <i class="el-icon is-loading">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
             <path
               fill="currentColor"
               d="M512 64a32 32 0 0 1 32 32v192a32 32 0 0 1-64 0V96a32 32 0 0 1 32-32zm0 640a32 32 0 0 1 32 32v192a32 32 0 1 1-64 0V736a32 32 0 0 1 32-32zm448-192a32 32 0 0 1-32 32H736a32 32 0 1 1 0-64h192a32 32 0 0 1 32 32zm-640 0a32 32 0 0 1-32 32H96a32 32 0 0 1 0-64h192a32 32 0 0 1 32 32zM195.2 195.2a32 32 0 0 1 45.248 0L376.32 331.008a32 32 0 0 1-45.248 45.248L195.2 240.448a32 32 0 0 1 0-45.248zm452.544 452.544a32 32 0 0 1 45.248 0L828.8 783.552a32 32 0 0 1-45.248 45.248L647.744 692.992a32 32 0 0 1 0-45.248zM828.8 195.264a32 32 0 0 1 0 45.184L692.992 376.32a32 32 0 0 1-45.248-45.248l135.808-135.808a32 32 0 0 1 45.248 0zm-452.544 452.48a32 32 0 0 1 0 45.248L240.448 828.8a32 32 0 0 1-45.248-45.248l135.808-135.808a32 32 0 0 1 45.248 0z"
-            ></path></svg
-        ></i>
+            ></path>
+          </svg>
+        </i>
         发布中，请稍后...
       </div>
       <div v-else-if="singleFormData.publishProcessStatus" class="success-tips">
@@ -146,18 +156,23 @@ onMounted(async () => {
 .top-tip
   margin 10px 0
   padding-left 0
+
 #quick-publish-box
   .publish-tips
     margin 10px
     margin-top 8px
     font-size 14px
+
     .info-tips
       color var(--el-color-info)
+
       .is-loading
         vertical-align middle
         margin-top -4px
+
     .success-tips
       color var(--el-color-success)
+
     .fail-tips
       color var(--el-color-error)
 </style>

@@ -152,7 +152,8 @@ export default {
   "setting.blog.type.github.email": "Email",
   "setting.blog.type.github.email.tip": "Email",
   "setting.blog.type.github.site": "Author's Page",
-  "setting.blog.type.github.site.tip": "Author's page, defaults to: [GitHub URL]/[Username] if left empty. Please do not change the key, translate the value to English.",
+  "setting.blog.type.github.site.tip":
+    "Author's page, defaults to: [GitHub URL]/[Username] if left empty. Please do not change the key, translate the value to English.",
   "setting.blog.url": "Blog addr",
   "setting.blog.github.url.tip": "Github homepage address",
   "setting.blog.github.apiurl.tip": "Github's REST API address, typically: https://api.github.com",
@@ -274,6 +275,13 @@ export default {
   "blog.newwin.open": "Open in a new window",
   "blog.change.siyuan.api": "Modify Siyuan API address",
   "setting.blog.siyuan.current.apiurl": "Current apiUrl=>",
+  "setting.blog.middlewareUrl.tip":
+    "In certain scenarios, a necessity might arise (as seen in self-hosting environments, Nginx server setups, Vite development environments, etc.), while other situations could warrant overlooking this requirement.",
+  "setting.blog.middlewareUrl.my.tip":
+    "In most cases, it is unnecessary, yet in specific contexts within 'browser environments,' 'docker environments,' 'Nginx server' setups, and the like, it might become essential. If a proxy deployment is absent, one can utilize my shared address: https://api.terwer.space/api/middleware. For performance considerations, I recommend self-deployment; kindly employ https://github.com/terwer/node-metaweblog-api-adaptor for deployment.",
+  "setting.blog.middlewareUrl.my.fee.tip":
+    "🤝Due to substantial costs associated with shared proxies or potential unforeseeable circumstances that may lead to its discontinuation, for the sake of service continuity, deploying one's instance is advised. Alternatively, consider inviting the author for a coffee to support ongoing sharing endeavors🌹.",
+  "setting.blog.middlewareUrl.my.coffee": "Sponsor a coffee☕️",
   "setting.conf.export": "Export config",
   "setting.conf.import": "Import config",
   "setting.conf.transport": "Transport",
@@ -455,11 +463,13 @@ export default {
   "setting.juejin.apiUrl.tip": "Usually fixed, do not modify",
   "setting.juejin.previewUrl.tip": "Juejin platform article preview rules",
 
-  "setting.halo.home.tip": "Halo homepage address, should include the domain and port, for example: http://localhost:8090",
+  "setting.halo.home.tip":
+    "Halo homepage address, should include the domain and port, for example: http://localhost:8090",
   "setting.halo.username.tip": "Halo blog login name",
   "setting.halo.password.tip": "Halo blog login password",
   "setting.halo.apiUrl.tip": "Halo blog API address, typically the same as the Halo homepage",
-  "setting.halo.previewUrl.tip": "Halo blog article preview rule, default /archives/{slug}, with placeholders {slug} {name} {year} {month} {day}, can be set in [halo-home-url]/console/settings?tab=routeRules",
+  "setting.halo.previewUrl.tip":
+    "Halo blog article preview rule, default /archives/{slug}, with placeholders {slug} {name} {year} {month} {day}, can be set in [halo-home-url]/console/settings?tab=routeRules",
 
   "setting.flowus.home.tip": "Flowus homepage address, usually fixed",
   "setting.flowus.password.tip": "Flowus cookie, do not modify",
@@ -620,20 +630,23 @@ export default {
     "Due to inconsistent classification systems across platforms, classifications need to be calibrated manually and are not automatically saved",
   "category.ai.enabled": "AI is available, please go to the detailed mode to operate",
   "sys.config.ai": "AI configuration",
-  "config.ai.use.siyuan": "Inside Siyuan notes, you can directly use Siyuan notes to configure, no configuration is required",
+  "config.ai.use.siyuan":
+    "Inside Siyuan notes, you can directly use Siyuan notes to configure, no configuration is required",
   "setting.blog.yamlLinkEnabled": "YAML permalink",
   "distri.type.overide.warn": "Note: Please use caution when overwriting the selected platform with the current data.",
-  "distri.type.merge.warn": "Note: In merge mode, the title and abstract changes are not valid, and the labels and categories are merged with the selected platform data.",
+  "distri.type.merge.warn":
+    "Note: In merge mode, the title and abstract changes are not valid, and the labels and categories are merged with the selected platform data.",
   "preference.setting.keepTitle": "Do not update the original title",
 
   "setting.blog.gitlab.url.tip": "GitLab homepage, e.g., http://localhost:8002",
   "setting.blog.type.gitlab.user.tip": "Username for GitLab",
-  "setting.blog.type.gitlab.token.tip": "Token for GitLab, please refer to the link below for setup and ensure API permissions are granted",
+  "setting.blog.type.gitlab.token.tip":
+    "Token for GitLab, please refer to the link below for setup and ensure API permissions are granted",
   "setting.blog.gitlab.apiurl.tip": "GitLab API address, usually the same as the homepage",
   "setting.blog.gitlab.previewUrl.tip": "Article preview address, usually the default",
 
   "main.force.cancel": "Force delete",
-  "loading.cost":"Loading cost",
+  "loading.cost": "Loading cost",
 
   "preference.setting.showDocQuickMenu": "Show doc menu",
   "preference.setting.showQuickMenu": "Show quick publish",
@@ -643,5 +656,8 @@ export default {
   "preference.setting.showExtendMenu": "Show extend menu",
   "preference.setting.showArticleManageMenu": "Show artile manage menu",
 
-  "message.publish.notShared": "The article has not been shared and therefore cannot be viewed externally. Kindly share the article or preview it within the PC client through the plugin menu."
+  "message.publish.notShared":
+    "The article has not been shared and therefore cannot be viewed externally. Kindly share the article or preview it within the PC client through the plugin menu.",
+
+  "page.loading": "Page is loading..."
 }

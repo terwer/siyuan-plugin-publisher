@@ -34,7 +34,7 @@ import { SypConfig } from "~/syp.config.ts"
 import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
-import { BlogAdaptor, PageTypeEnum, PasswordType } from "zhi-blog-api"
+import { BlogAdaptor, PageTypeEnum, PasswordType, UserBlog } from "zhi-blog-api"
 import Adaptors from "~/src/adaptors"
 import { Utils } from "~/src/utils/utils.ts"
 import { ElMessage } from "element-plus"
@@ -173,7 +173,7 @@ const valiConf = async () => {
   logger.debug("Commonblog通用Setting验证完毕")
 }
 
-const afterValid = async (api) => {
+const afterValid = async (api: any) => {
   // 验证成功就去初始化知识空间
   const usersBlogs = await api.getUsersBlogs(formData.ksKeyword)
   if (usersBlogs && usersBlogs.length > 0) {
@@ -181,7 +181,7 @@ const afterValid = async (api) => {
     if (StrUtil.isEmptyString(formData.cfg?.blogid)) {
       // 首次验证需要初始化下拉选择
       if (formData.kwSpaces.length == 0) {
-        usersBlogs.forEach((item) => {
+        usersBlogs.forEach((item: any) => {
           const kwItem = {
             label: item.blogName,
             value: item.blogid,
@@ -191,9 +191,16 @@ const afterValid = async (api) => {
       }
 
       // 初始化选中
-      const userBlog = usersBlogs[0]
+      const userBlog = usersBlogs[0] as UserBlog
       formData.cfg.blogid = userBlog.blogid
       formData.cfg.blogName = userBlog.blogName
+      // 元数据映射
+      // @since 1.20.0
+      for (const key in userBlog.metadataMap) {
+        if (ObjectUtil.hasKey(formData.cfg, key)) {
+          formData.cfg[key] = userBlog.metadataMap[key]
+        }
+      }
     }
   }
 }
@@ -421,6 +428,15 @@ onMounted(async () => {
         class="top-tip"
         type="info"
       ></el-alert>
+      <el-alert
+        :closable="false"
+        :title="t('setting.blog.middlewareUrl.my.fee.tip')"
+        class="top-tip"
+        type="error"
+      ></el-alert>
+      <a target="_blank" href="https://gitee.com/terwer/siyuan-plugin-publisher#%E6%8D%90%E8%B5%A0">
+        {{ t("setting.blog.middlewareUrl.my.coffee") }}
+      </a>
     </el-form-item>
     <!-- 校验 -->
     <el-form-item>
@@ -452,9 +468,11 @@ onMounted(async () => {
 <style lang="stylus" scoped>
 .placeholder
   margin-top 10px
+
 .top-tip
   margin 10px 0
   padding-left 0
+
 .inline-tip
   margin 0
   padding-left 0

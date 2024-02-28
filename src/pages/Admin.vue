@@ -38,12 +38,15 @@ import { DYNAMIC_CONFIG_KEY, MAX_TITLE_LENGTH } from "~/src/utils/constants.ts"
 import MaterialSymbolsDriveFolderUpload from "~icons/material-symbols/drive-folder-upload"
 import Fa6SolidBookOpenReader from "~icons/fa6-solid/book-open-reader"
 import MaterialSymbolsAddPhotoAlternateOutline from "~icons/material-symbols/add-photo-alternate-outline"
+import MaterialSymbolsRocketLaunch from "~icons/material-symbols/rocket-launch"
+import MdiMinusBoxMultipleOutline from "~icons/mdi/minus-box-multiple-outline"
 import { Utils } from "~/src/utils/utils.ts"
 import { useRouter } from "vue-router"
 import { PluginUtils } from "~/src/utils/pluginUtils.ts"
 import { useSiyuanSettingStore } from "~/src/stores/useSiyuanSettingStore.ts"
 import { DynamicJsonCfg, getDynCfgByKey } from "~/src/platforms/dynamicConfig.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
+import DrawerBoxBridge from "~/src/components/admin/DrawerBoxBridge.vue"
 
 // uses
 const { t } = useVueI18n()
@@ -72,6 +75,9 @@ const isPicgoInstalled = ref(false)
 const isBlogInstalled = ref(false)
 const dynamicConfigArray = ref([])
 const siyuanSetting = getReadOnlySiyuanSetting()
+
+const showDrawer = ref(false)
+const drawerSrc = ref("")
 
 // methods
 const querySearch = (queryString: string, cb: any) => {
@@ -136,6 +142,17 @@ const handleNewWinEdit = async (index: number, row: any) => {
       showBack: "true",
     },
   })
+}
+
+const handleQuick = (index: number, row: any) => {
+  const pageId = row.postid
+  // const win = window as any
+  drawerSrc.value = `/#/publish/singlePublish/?id=${pageId}`
+  showDrawer.value = true
+}
+
+const handleBatch = (index: number, row: any) => {
+  alert("批发")
 }
 
 const handleRowClick = async (row: any, column: any, event: any) => {
@@ -376,12 +393,17 @@ onBeforeMount(async () => {
               <sup class="yaml-count-sign" v-if="scope.row.yamlCount > 0">{{ scope.row.yamlCount }}</sup>
             </template>
           </el-table-column>
-          <el-table-column align="center" width="350">
+          <el-table-column align="center" width="420">
             <template #header>
               <div style="text-align: center">操作</div>
             </template>
             <template #default="scope">
               <!-- 发布 -->
+              <el-button size="small" @click="handleQuick(scope.$index, scope.row)">
+                <MaterialSymbolsRocketLaunch />
+                &nbsp;闪发
+              </el-button>
+
               <!--
               <el-tooltip
                 :content="t('siyuan.browser.menu.publish.btn')"
@@ -394,7 +416,11 @@ onBeforeMount(async () => {
               -->
               <el-button size="small" @click="handleEdit(scope.$index, scope.row)">
                 <MaterialSymbolsDriveFolderUpload />
-                &nbsp;发布
+                &nbsp;单发
+              </el-button>
+              <el-button size="small" @click="handleBatch(scope.$index, scope.row)">
+                <MdiMinusBoxMultipleOutline />
+                &nbsp;批发
               </el-button>
 
               <!-- 预览 -->
@@ -450,6 +476,11 @@ onBeforeMount(async () => {
         />
       </div>
     </div>
+
+    <!-- 抽屉占位 -->
+    <el-drawer v-model="showDrawer" size="85%" direction="rtl" :destroy-on-close="true">
+      <DrawerBoxBridge :src="drawerSrc" />
+    </el-drawer>
   </div>
 </template>
 

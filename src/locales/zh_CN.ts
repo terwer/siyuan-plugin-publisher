@@ -276,7 +276,10 @@ export default {
   "setting.blog.middlewareUrl": "跨域请求代理",
   "setting.blog.middlewareUrl.tip": "某些场景下需要（例如自部署模式，Nginx伺服等、vite开发环境伺服等），其他情况可忽略",
   "setting.blog.middlewareUrl.my.tip":
-    "大部分情况下不需要，部分场景在浏览器环境下可能需要。如果没有部署代理，可以使用我的共享地址：https://api.terwer.space/api/middleware 。出于性能考虑，建议自己部署一份，请使用 https://github.com/terwer/node-metaweblog-api-adaptor 进行部署。",
+    "大部分情况下不需要，部分场景在「浏览器环境」、「docker环境」、「Nginx 伺服」等环境下可能需要。如果没有部署代理，可以使用我的共享地址：https://api.terwer.space/api/middleware 。出于性能考虑，建议自己部署一份，请使用 https://github.com/terwer/node-metaweblog-api-adaptor 进行部署。",
+  "setting.blog.middlewareUrl.my.fee.tip":
+    "🤝由于共享代理占用巨大的成本，或者因为不可抗力原因可能会取消共享，为了保证服务可用性，建议自己部署一份，或者请作者喝一杯咖啡，鼓励我们持续共享🌹。",
+  "setting.blog.middlewareUrl.my.coffee": "赞助咖啡☕️",
   "setting.conf.export": "导出配置",
   "setting.conf.import": "导入配置",
   "setting.conf.transport": "导入导出",
@@ -635,4 +638,6 @@ export default {
   "setting.telegraph.password.tip": "设备hash，会自动获取，无需填写",
   "setting.telegraph.apiurl.tip": "telegra.ph的API地址，通常固定是：https://telegra.ph/",
   "setting.telegraph.previewUrl.tip": "telegra.ph的文章预览规则，通常是：/[notebook]/[postid]",
+
+  "page.loading": "页面加载中..."
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023, Terwer . All rights reserved.
+ * Copyright (c) 2023-2024, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -24,11 +24,12 @@
  */
 
 import { createApp } from "vue"
-import App from "~/src/App.vue"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { useVueRouter } from "~/src/composables/useVueRouter.ts"
-import i18n from "~/src/locales"
+import App from "./App.vue"
+import { createAppLogger } from "./utils/appLogger.ts"
+import { useVueRouter } from "./composables/useVueRouter.ts"
+import i18n from "./locales"
 import { createPinia } from "pinia"
+import iframeResize from "./utils/directives/iframeResize.ts";
 
 /**
  * Vue 入口
@@ -57,6 +58,9 @@ const createVueApp = async (isMount?: boolean) => {
   // ElementPlus 包太大，需要改成按需引入
   // https://element-plus.org/zh-CN/guide/quickstart.html#%E6%8C%89%E9%9C%80%E5%AF%BC%E5%85%A5
   // app.use(ElementPlus)
+
+  // ifreme resizere
+  app.directive('resize', iframeResize)
 
   return { i18n, router, app }
 }

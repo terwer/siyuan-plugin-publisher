@@ -190,6 +190,10 @@ more useful tools~
 <img src="https://static-rs-terwer.oss-cn-beijing.aliyuncs.com/donate/alipay.jpg" alt="alipay" style="width:280px;height:375px;" />
 </div>
 
+### Afdian
+
+https://afdian.net/a/terwer
+
 # Thanks
 
 - Thanks to the third-party framework for supporting the bottom layer of this project

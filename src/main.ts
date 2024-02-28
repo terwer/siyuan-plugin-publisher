@@ -23,19 +23,15 @@
  * questions.
  */
 
-import { createVueApp } from "./utils/vueUtils"
-import { createAppLogger } from "./utils/appLogger"
+import { createVueApp } from "./bootstrap"
 
 import "element-plus/dist/index.css"
 import "element-plus/theme-chalk/dark/css-vars.css"
 
 ;(async () => {
-  const logger = createAppLogger("main")
-
   const instance = await createVueApp()
   const app = instance.app
 
   // 挂载 vue app
   app.mount("#app")
-  logger.info("vue app created")
 })()

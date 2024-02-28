@@ -184,6 +184,10 @@
 <img src="https://static-rs-terwer.oss-cn-beijing.aliyuncs.com/donate/alipay.jpg" alt="alipay" style="width:280px;height:375px;" />
 </div>
 
+### 爱发电
+
+https://afdian.net/a/terwer
+
 # 感谢
 
 感谢第三方框架对本项目底层的支持
