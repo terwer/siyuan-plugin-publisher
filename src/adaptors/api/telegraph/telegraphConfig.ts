@@ -23,18 +23,19 @@
  * questions.
  */
 
-import {CommonBlogConfig} from "~/src/adaptors/api/base/commonBlogConfig.ts"
-import {PasswordType} from "zhi-blog-api";
+import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
+import { PasswordType } from "zhi-blog-api"
 
 /**
  * Telegraph 配置
  */
 class TelegraphConfig extends CommonBlogConfig {
-  constructor(telegraphUrl: string, middlewareUrl?: string) {
-    super(telegraphUrl, telegraphUrl, "", "", middlewareUrl)
+  constructor(telegraphUrl: string, telegraphToken: string, middlewareUrl?: string) {
+    super(telegraphUrl, "https://edit.telegra.ph", "", telegraphToken, middlewareUrl)
 
     this.passwordType = PasswordType.PasswordType_Token
     this.previewUrl = "/[postid]"
+    this.allowPreviewUrlChange = false
   }
 }
 

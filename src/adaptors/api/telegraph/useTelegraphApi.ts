@@ -23,14 +23,14 @@
  * questions.
  */
 
-import {TelegraphConfig} from "~/src/adaptors/api/telegraph/telegraphConfig.ts"
-import {createAppLogger} from "~/src/utils/appLogger.ts"
-import {PublisherAppInstance} from "~/src/publisherAppInstance.ts"
-import {usePublishSettingStore} from "~/src/stores/usePublishSettingStore.ts";
-import {JsonUtil, ObjectUtil, StrUtil} from "zhi-common";
-import {Utils} from "~/src/utils/utils.ts";
-import {getDynPostidKey} from "~/src/platforms/dynamicConfig.ts";
-import {TelegraphApiAdaptor} from "~/src/adaptors/api/telegraph/telegraphApiAdaptor.ts";
+import { TelegraphConfig } from "~/src/adaptors/api/telegraph/telegraphConfig.ts"
+import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
+import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
+import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
+import { Utils } from "~/src/utils/utils.ts"
+import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
+import { TelegraphApiAdaptor } from "~/src/adaptors/api/telegraph/telegraphApiAdaptor.ts"
 
 const useTelegraphApi = async (key: string, newCfg?: TelegraphConfig) => {
   const logger = createAppLogger("use-telegraph-api")
@@ -49,7 +49,12 @@ const useTelegraphApi = async (key: string, newCfg?: TelegraphConfig) => {
 
     if (ObjectUtil.isEmptyObject(cfg)) {
       const telegraphUrl = Utils.emptyOrDefault(process.env.VITE_TELEGRAPH_URL, "https://telegra.ph")
-      cfg = new TelegraphConfig(telegraphUrl)
+      const middlewareUrl = Utils.emptyOrDefault(
+        process.env.VITE_MIDDLEWARE_URL,
+        "https://api.terwer.space/api/middleware"
+      )
+      const telegraphToken = Utils.emptyOrDefault(process.env.VITE_TELEGRAPH_TOKEN, "")
+      cfg = new TelegraphConfig(telegraphUrl, telegraphToken, middlewareUrl)
       logger.info("Configuration is empty, using default environment variables.")
     } else {
       logger.info("Using configuration from settings...")
