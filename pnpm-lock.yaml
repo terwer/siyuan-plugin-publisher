@@ -18,8 +18,8 @@ dependencies:
     specifier: ^10.8.0
     version: 10.8.0(vue@3.4.20)
   '@vueuse/core':
-    specifier: ^10.8.0
-    version: 10.8.0(vue@3.4.20)
+    specifier: ^10.9.0
+    version: 10.9.0(vue@3.4.20)
   chatgpt:
     specifier: ^5.2.5
     version: 5.2.5
@@ -168,7 +168,7 @@ devDependencies:
     version: 5.3.3
   unplugin-auto-import:
     specifier: ^0.17.5
-    version: 0.17.5(@vueuse/core@10.8.0)
+    version: 0.17.5(@vueuse/core@10.9.0)
   unplugin-vue-components:
     specifier: ^0.26.0
     version: 0.26.0(vue@3.4.20)
@@ -2104,6 +2104,18 @@ packages:
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
+    dev: false
+
+  /@vueuse/core@10.9.0(vue@3.4.20):
+    resolution: {integrity: sha512-/1vjTol8SXnx6xewDEKfS0Ra//ncg4Hb0DaZiwKf7drgfMsKFExQ+FnnENcN6efPen+1kIzhLQoGSy0eDUVOMg==}
+    dependencies:
+      '@types/web-bluetooth': 0.0.20
+      '@vueuse/metadata': 10.9.0
+      '@vueuse/shared': 10.9.0(vue@3.4.20)
+      vue-demi: 0.14.7(vue@3.4.20)
+    transitivePeerDependencies:
+      - '@vue/composition-api'
+      - vue
 
   /@vueuse/core@9.13.0(vue@3.4.20):
     resolution: {integrity: sha512-pujnclbeHWxxPRqXWmdkKV5OX4Wk4YeK7wusHqRwU0Q7EFusHoqNA/aPhB6KCh9hEqJkLAJo7bb0Lh9b+OIVzw==}
@@ -2119,6 +2131,10 @@ packages:
 
   /@vueuse/metadata@10.8.0:
     resolution: {integrity: sha512-Nim/Vle5OgXcXhAvGOgkJQXB1Yb+Kq/fMbLuv3YYDYbiQrwr39ljuD4k9fPeq4yUyokYRo2RaNQmbbIMWB/9+w==}
+    dev: false
+
+  /@vueuse/metadata@10.9.0:
+    resolution: {integrity: sha512-iddNbg3yZM0X7qFY2sAotomgdHK7YJ6sKUvQqbvwnf7TmaVPxS4EJydcNsVejNdS8iWCtDk+fYXr7E32nyTnGA==}
 
   /@vueuse/metadata@9.13.0:
     resolution: {integrity: sha512-gdU7TKNAUVlXXLbaF+ZCfte8BjRJQWPCa2J55+7/h+yDtzw3vOoGQDRXzI6pyKyo6bXFT5/QoPE4hAknExjRLQ==}
@@ -2126,6 +2142,15 @@ packages:
 
   /@vueuse/shared@10.8.0(vue@3.4.20):
     resolution: {integrity: sha512-dUdy6zwHhULGxmr9YUg8e+EnB39gcM4Fe2oKBSrh3cOsV30JcMPtsyuspgFCUo5xxFNaeMf/W2yyKfST7Bg8oQ==}
+    dependencies:
+      vue-demi: 0.14.7(vue@3.4.20)
+    transitivePeerDependencies:
+      - '@vue/composition-api'
+      - vue
+    dev: false
+
+  /@vueuse/shared@10.9.0(vue@3.4.20):
+    resolution: {integrity: sha512-Uud2IWncmAfJvRaFYzv5OHDli+FbOzxiVEQdLCKQKLyhz94PIyFC3CHcH7EDMwIn8NPtD06+PNbC/PiO0LGLtw==}
     dependencies:
       vue-demi: 0.14.7(vue@3.4.20)
     transitivePeerDependencies:
@@ -6691,7 +6716,7 @@ packages:
       '@fortawesome/free-brands-svg-icons': 6.5.1
       '@fortawesome/free-solid-svg-icons': 6.5.1
       '@fortawesome/vue-fontawesome': 3.0.6(@fortawesome/fontawesome-svg-core@6.5.1)(vue@3.4.20)
-      '@vueuse/core': 10.8.0(vue@3.4.20)
+      '@vueuse/core': 10.9.0(vue@3.4.20)
       blueimp-md5-es6: 2.7.4
       browser-fs-access: 0.34.1
       element-plus: 2.5.6(vue@3.4.20)
@@ -7292,7 +7317,7 @@ packages:
     engines: {node: '>= 0.8'}
     dev: true
 
-  /unplugin-auto-import@0.17.5(@vueuse/core@10.8.0):
+  /unplugin-auto-import@0.17.5(@vueuse/core@10.9.0):
     resolution: {integrity: sha512-fHNDkDSxv3PGagX1wmKBYBkgaM4AKAgZmdJw/bxjhNljx9KSXSgHpGfX0MwUrq9qw6q1bhHIZVWyOwoY2koo4w==}
     engines: {node: '>=14'}
     peerDependencies:
@@ -7306,7 +7331,7 @@ packages:
     dependencies:
       '@antfu/utils': 0.7.7
       '@rollup/pluginutils': 5.1.0
-      '@vueuse/core': 10.8.0(vue@3.4.20)
+      '@vueuse/core': 10.9.0(vue@3.4.20)
       fast-glob: 3.3.2
       local-pkg: 0.5.0
       magic-string: 0.30.7
