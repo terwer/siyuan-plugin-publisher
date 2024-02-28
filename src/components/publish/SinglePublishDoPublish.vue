@@ -264,7 +264,7 @@ const getPlatformName = () => {
 const getBlogName = () => {
   const cfg = formData.publishCfg?.cfg as BlogConfig
   let blogName = cfg?.blogName || ""
-  if (cfg.knowledgeSpaceEnabled) {
+  if (cfg?.knowledgeSpaceEnabled) {
     if (formData.mergedPost?.cate_slugs?.length > 0) {
       let cateName: string
       if (formData.mergedPost?.categories?.length > 0) {
@@ -408,50 +408,59 @@ const { loadingTime } = useLoadingTimer(isTimerInit)
 
 onMounted(async () => {
   logger.info("获取到的ID为=>", id)
-  // ==================
-  // 初始化开始
-  // ==================
-  // 初始化属性
-  formData.publishCfg = await getPublishCfg(key)
-  // 单篇文章初始化
-  await initPage()
-  // 元数据初始化
-  formData.mergedPost = await initPublishMethods.assignInitAttrs(formData.mergedPost, id, formData.publishCfg)
+  try {
+    // ==================
+    // 初始化开始
+    // ==================
+    // 初始化属性
+    formData.publishCfg = await getPublishCfg(key)
+    // 单篇文章初始化
+    await initPage()
+    // 元数据初始化
+    formData.mergedPost = await initPublishMethods.assignInitAttrs(formData.mergedPost, id, formData.publishCfg)
 
-  const cfg = formData.publishCfg.cfg as BlogConfig
-  // 标签数据初始化
-  formData.tagConfig = {
-    apiType: key,
-    cfg: cfg,
+    const cfg = formData.publishCfg.cfg as BlogConfig
+    // 标签数据初始化
+    formData.tagConfig = {
+      apiType: key,
+      cfg: cfg,
+    }
+    // 分类数据初始化
+    formData.categoryConfig = {
+      cateEnabled: cfg.cateEnabled,
+      readonlyMode: formData.method === MethodEnum.METHOD_EDIT && !cfg.allowCateChange,
+      readonlyModeTip: cfg?.placeholder?.cateReadonlyModeTip,
+      apiType: key,
+      cfg: cfg,
+    }
+    // 知识空间
+    formData.knowledgeSpaceConfig = {
+      cateEnabled: cfg.knowledgeSpaceEnabled,
+      readonlyMode: formData.method === MethodEnum.METHOD_EDIT && !cfg.allowKnowledgeSpaceChange,
+      readonlyModeTip: cfg?.placeholder?.knowledgeSpaceReadonlyModeTip,
+      apiType: key,
+      cfg: cfg,
+    }
+
+    logger.debug("single publish inited mergedPost =>", toRaw(formData.mergedPost))
+    // ==================
+    // 初始化结束
+    // ==================
+
+    // 这里可以控制一些功能开关
+    formData.useAi = checkChatGPTEnabled()
+    formData.editType = PageEditMode.EditMode_simple
+  } catch (e) {
+    const errMsg = t("main.opt.failure") + "=>" + e
+    logger.error(t("main.opt.failure") + "=>", e)
+    await kernelApi.pushErrMsg({
+      msg: errMsg,
+      timeout: 7000,
+    })
+  } finally {
+    formData.isInit = true
+    isTimerInit.value = true
   }
-  // 分类数据初始化
-  formData.categoryConfig = {
-    cateEnabled: cfg.cateEnabled,
-    readonlyMode: formData.method === MethodEnum.METHOD_EDIT && !cfg.allowCateChange,
-    readonlyModeTip: cfg?.placeholder?.cateReadonlyModeTip,
-    apiType: key,
-    cfg: cfg,
-  }
-  // 知识空间
-  formData.knowledgeSpaceConfig = {
-    cateEnabled: cfg.knowledgeSpaceEnabled,
-    readonlyMode: formData.method === MethodEnum.METHOD_EDIT && !cfg.allowKnowledgeSpaceChange,
-    readonlyModeTip: cfg?.placeholder?.knowledgeSpaceReadonlyModeTip,
-    apiType: key,
-    cfg: cfg,
-  }
-
-  logger.debug("single publish inited mergedPost =>", toRaw(formData.mergedPost))
-  // ==================
-  // 初始化结束
-  // ==================
-
-  // 这里可以控制一些功能开关
-  formData.useAi = checkChatGPTEnabled()
-  formData.editType = PageEditMode.EditMode_simple
-
-  formData.isInit = true
-  isTimerInit.value = true
 })
 </script>
 
@@ -510,7 +519,7 @@ onMounted(async () => {
 
                 <!-- 知识空间 -->
                 <publish-knowledge-space
-                  v-if="formData.publishCfg.cfg.knowledgeSpaceEnabled"
+                  v-if="formData.publishCfg.cfg?.knowledgeSpaceEnabled"
                   v-model:knowledge-space-type="formData.publishCfg.cfg.knowledgeSpaceType"
                   v-model:knowledge-space-config="formData.knowledgeSpaceConfig"
                   v-model:cate-slugs="formData.mergedPost.cate_slugs"
@@ -519,7 +528,7 @@ onMounted(async () => {
 
                 <!-- 标签别名 -->
                 <single-tag-slug
-                  v-if="formData.publishCfg.cfg.tagSlugEnabled"
+                  v-if="formData.publishCfg.cfg?.tagSlugEnabled"
                   v-model:cfg="formData.publishCfg.cfg"
                   v-model:api-type="key"
                   v-model:tag-slugs="formData.mergedPost.tags_slugs"
@@ -653,9 +662,11 @@ onMounted(async () => {
 <style scoped lang="stylus">
 .placeholder
   margin-top 10px
+
 .top-tip
   margin-top 10px
   padding-left 0
+
 .form-item-tip
   padding 2px 4px
   margin 0 10px 0 0

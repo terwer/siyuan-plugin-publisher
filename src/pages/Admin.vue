@@ -47,6 +47,7 @@ import { useSiyuanSettingStore } from "~/src/stores/useSiyuanSettingStore.ts"
 import { DynamicJsonCfg, getDynCfgByKey } from "~/src/platforms/dynamicConfig.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import DrawerBoxBridge from "~/src/components/admin/DrawerBoxBridge.vue"
+import { svgIcons } from "~/src/utils/svgIcons.ts"
 
 // uses
 const { t } = useVueI18n()
@@ -64,6 +65,7 @@ const dataLayout = ref("prev,pager,next")
 
 const state = ref("")
 const links = ref([])
+const showPublished = ref(false)
 
 const tableData = []
 const MAX_PAGE_SIZE = 8
@@ -94,6 +96,10 @@ const createFilter = (queryString: string) => {
 const handleSelect = (item: any) => {}
 
 const handleBtnSearch = () => {
+  reloadTableData()
+}
+
+const onIsPublishedChange = (val: boolean) => {
   reloadTableData()
 }
 
@@ -218,14 +224,6 @@ const handlePicgo = (index: number, row: any) => {
   }
 }
 
-const handleNewWinPicgo = (index: number, row: any) => {
-  // 阻止事件冒泡
-  const win = window as any
-  const picgoUrl = `${siyuanSetting.value.apiUrl}/plugins/siyuan-plugin-picgo/#/?pageId=${row.postid}`
-  win.open(picgoUrl)
-  win.event.stopPropagation()
-}
-
 const handleRowClick = async (row: any, column: any, event: any) => {
   // handleEdit(column.index, row)
 }
@@ -242,13 +240,19 @@ const reloadTableData = async () => {
     // 挂件里面才展示子文档
     if (isInSiyuanWidget() && !StrUtil.isEmptyString(pageId)) {
       // 检测子文档
-      postCount = await kernelApi.getSubdocCount(pageId)
+      postCount = await kernelApi.getSubdocCount(pageId, showPublished.value)
       if (postCount > 1) {
         hasSubdoc = true
       }
 
       if (hasSubdoc) {
-        const subdocInfoList = await kernelApi.getSubdocs(pageId, currentPage.value - 1, MAX_PAGE_SIZE, state.value)
+        const subdocInfoList = await kernelApi.getSubdocs(
+          pageId,
+          currentPage.value - 1,
+          MAX_PAGE_SIZE,
+          state.value,
+          showPublished.value
+        )
         for (let i = 0; i < subdocInfoList.length; i++) {
           const subdocInfo = subdocInfoList[i]
           const postId = subdocInfo.root_id
@@ -266,8 +270,8 @@ const reloadTableData = async () => {
         })
       }
     } else {
-      postCount = await blogApi.getRecentPostsCount(state.value)
-      postList = await blogApi.getRecentPosts(MAX_PAGE_SIZE, currentPage.value - 1, state.value)
+      postCount = await blogApi.getRecentPostsCount(state.value, showPublished.value)
+      postList = await blogApi.getRecentPosts(MAX_PAGE_SIZE, currentPage.value - 1, state.value, showPublished.value)
       logger.info("无法获取页面ID，可能是浏览器环境或者浏览器插件展示文档列表")
     }
     logger.debug("postList=>", postList)
@@ -374,6 +378,13 @@ onBeforeMount(async () => {
           </template>
         </el-autocomplete>
         <el-button class="s-btn" type="primary" @click="handleBtnSearch">搜索</el-button>
+        <el-checkbox
+          class="s-filter-item s-filter-published"
+          size="large"
+          v-model="showPublished"
+          @change="onIsPublishedChange"
+          >已发布
+        </el-checkbox>
       </div>
 
       <!-- 表格数据展示 -->
@@ -410,9 +421,9 @@ onBeforeMount(async () => {
                       <a @click="goToSingleEdit(key.toString(), props.row)">
                         <el-text>
                           <i class="el-icon">
-                            <span v-html="props.row.dynCfgs[key]?.platformIcon"></span>
+                            <span v-html="props.row.dynCfgs[key]?.platformIcon ?? svgIcons.iconOTRemove"></span>
                           </i>
-                          {{ props.row.dynCfgs[key].platformName }}
+                          {{ props.row.dynCfgs[key]?.platformName ?? "[已删除]" }}
                         </el-text>
                       </a>
                     </span>
@@ -566,6 +577,11 @@ onBeforeMount(async () => {
 
 .s-btn
   margin-left: 20px
+
+.s-filter-item
+  padding-left 10px
+
+//.s-filter-published
 
 /* table */
 .tb-data
