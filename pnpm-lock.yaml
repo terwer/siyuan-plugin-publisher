@@ -96,8 +96,8 @@ dependencies:
     specifier: ^0.7.17
     version: 0.7.17(typescript@5.3.3)
   zhi-github-middleware:
-    specifier: ^0.4.14
-    version: 0.4.14(typescript@5.3.3)
+    specifier: ^0.4.15
+    version: 0.4.15(typescript@5.3.3)
   zhi-gitlab-middleware:
     specifier: ^0.6.24
     version: 0.6.24(typescript@5.3.3)
@@ -8010,6 +8010,18 @@ packages:
       - typescript
     dev: false
 
+  /zhi-common@1.31.0(typescript@5.3.3):
+    resolution: {integrity: sha512-s9x5e3dLhFmh514yvT1JtP7xriWMVxQ11AyIjOgx5Xo2cKcDv5b6nKDaLj2Jkvms9iwZRSinDY8y/FK3jrfbrg==}
+    dependencies:
+      js-yaml: 4.1.0
+      shorthash2: 1.0.3
+      transliteration: 2.3.5
+      vue: 3.4.20(typescript@5.3.3)
+      zhi-lib-base: 0.8.0
+    transitivePeerDependencies:
+      - typescript
+    dev: false
+
   /zhi-device@2.10.0:
     resolution: {integrity: sha512-E6ODo/AGvlWJiMnDCCUSvceoAPCPiq0DocLp2lzOA/8DYIECRmeQMtzkmy/vgXzniR3+qUGDYJ8cT0/v0nOozA==}
     dev: false
@@ -8038,12 +8050,12 @@ packages:
       - typescript
     dev: false
 
-  /zhi-github-middleware@0.4.14(typescript@5.3.3):
-    resolution: {integrity: sha512-bvX7faEmxVH5jZmnBuTfEsrZz4vcIRAYHnu+0tPJ5WCZeK84CGvqsTnSwyz1UHtJebykn0ot+cShr3OdAFRBIg==}
+  /zhi-github-middleware@0.4.15(typescript@5.3.3):
+    resolution: {integrity: sha512-D5bKdOwTHMUTZptR49Yt7l3NJstc7cp+Za7HwJknIqnPT11Xu2wOL3kj5fTuBHohY/zQLW5GV40a+Bo3pQYP7Q==}
     dependencies:
       '@octokit/core': 5.1.0
       js-base64: 3.7.7
-      zhi-common: 1.30.0(typescript@5.3.3)
+      zhi-common: 1.31.0(typescript@5.3.3)
       zhi-lib-base: 0.8.0
     transitivePeerDependencies:
       - typescript
