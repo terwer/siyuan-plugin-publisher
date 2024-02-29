@@ -643,5 +643,5 @@ export default {
   "setting.blog.middlewareUrl.new": "新代理(推荐)",
   "setting.blog.corsAnywhereUrl.tip": "1.20.0+ 全新CORS全局代理，优先级高，设置之后会忽略上面旧的代理地址。设置之后可彻底解决浏览器跨域、科学上网问题",
   "setting.blog.middlewareUrl.my.new.tip":
-    "1.20.0+ 新版CORS代理，彻底解决「科学上网」、「CORS 跨域」两大问题，支持全局跨域请求（支持绕过 header、但是目前请求体暂时不支持 FormData）。受限于 CORS 策略，「Docker 版本」必须设置 CORS 代理，否则大部分场景将无法使用。技术细节可参考 MDN：https://developer.mozilla.org/zh-CN/docs/Web/HTTP/CORS 以及 https://developer.mozilla.org/zh-CN/docs/Glossary/CORS。可私发邮件到 youweics@163.com 提供捐赠截图获取部署方案或通用共享代理地址。之前捐助过的也可以私发截图给我，免费提供指导与方案🤝。",
+    "1.20.0+ 新版CORS代理，彻底解决「科学上网」、「CORS 跨域」两大问题，支持全局跨域请求（支持绕过 header、请求体支持 FormData）。受限于 CORS 策略，「Docker 版本」必须设置 CORS 代理，否则大部分场景将无法使用。技术细节可参考 MDN：https://developer.mozilla.org/zh-CN/docs/Web/HTTP/CORS 以及 https://developer.mozilla.org/zh-CN/docs/Glossary/CORS。可私发邮件到 youweics@163.com 提供捐赠截图获取部署方案或通用共享代理地址。之前捐助过的也可以私发截图给我，免费提供指导与方案🤝。",
 }
