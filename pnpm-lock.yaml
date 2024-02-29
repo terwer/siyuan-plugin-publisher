@@ -111,8 +111,8 @@ dependencies:
     specifier: ^2.16.0
     version: 2.16.0(typescript@5.3.3)
   zhi-xmlrpc-middleware:
-    specifier: ^0.6.17
-    version: 0.6.17(typescript@5.3.3)
+    specifier: ^0.6.18
+    version: 0.6.18(typescript@5.3.3)
 
 devDependencies:
   '@halo-dev/api-client':
@@ -8010,6 +8010,18 @@ packages:
       - typescript
     dev: false
 
+  /zhi-common@1.31.0(typescript@5.3.3):
+    resolution: {integrity: sha512-s9x5e3dLhFmh514yvT1JtP7xriWMVxQ11AyIjOgx5Xo2cKcDv5b6nKDaLj2Jkvms9iwZRSinDY8y/FK3jrfbrg==}
+    dependencies:
+      js-yaml: 4.1.0
+      shorthash2: 1.0.3
+      transliteration: 2.3.5
+      vue: 3.4.20(typescript@5.3.3)
+      zhi-lib-base: 0.8.0
+    transitivePeerDependencies:
+      - typescript
+    dev: false
+
   /zhi-device@2.10.0:
     resolution: {integrity: sha512-E6ODo/AGvlWJiMnDCCUSvceoAPCPiq0DocLp2lzOA/8DYIECRmeQMtzkmy/vgXzniR3+qUGDYJ8cT0/v0nOozA==}
     dev: false
@@ -8086,10 +8098,10 @@ packages:
       - typescript
     dev: false
 
-  /zhi-xmlrpc-middleware@0.6.17(typescript@5.3.3):
-    resolution: {integrity: sha512-rcNzqLDhgXYyoPfYqyNaMwjSIPDLvXUERTMcdugLn946HBB/s8hSk6ZVWDGYfD1xemVltjUwbd9s5L75CPvWuA==}
+  /zhi-xmlrpc-middleware@0.6.18(typescript@5.3.3):
+    resolution: {integrity: sha512-UV5XUTYGk44R35Q71qEh1aS3bMHexJPQL15VbU4pycp7ELAxrkmAz8B5cbz7g9yYgvPIO5VWInyxLTvNQzrvkg==}
     dependencies:
-      zhi-common: 1.30.0(typescript@5.3.3)
+      zhi-common: 1.31.0(typescript@5.3.3)
       zhi-device: 2.10.0
       zhi-lib-base: 0.8.0
     transitivePeerDependencies:
