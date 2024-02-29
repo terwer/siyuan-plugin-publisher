@@ -24,7 +24,7 @@
  */
 
 import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
-import { UserBlog } from "zhi-blog-api"
+import { Post, UserBlog } from "zhi-blog-api"
 import { TelegraphConfig } from "~/src/adaptors/api/telegraph/telegraphConfig.ts"
 
 /**
@@ -38,7 +38,7 @@ class TelegraphApiAdaptor extends BaseBlogApi {
 
     const checkJson = await this.telegraphRequest("/check", "page_id=0", "POST")
     if (checkJson.error) {
-      throw new Error("telegraph request error =>" + checkJson.error)
+      throw new Error("telegra.ph request error =>" + checkJson.error)
     }
     this.logger.debug("checkJson =>", checkJson)
 
@@ -57,6 +57,27 @@ class TelegraphApiAdaptor extends BaseBlogApi {
     this.logger.debug("get telegraph cfg =>", result)
 
     return result
+  }
+
+  public async newPost(post: Post, publish?: boolean): Promise<string> {
+    const formData = new FormData()
+    formData.append("title", "测试标题")
+    formData.append("author", this.cfg.username)
+    formData.append("save_hash", this.cfg.password)
+    formData.append("page_id", "0")
+    const blobData = new File(["content"], "content.html", { type: "text/plain" })
+    formData.append("Data", blobData)
+
+    const res = await this.telegraphFormFetch("/save", formData)
+    if (res.error) {
+      throw new Error(
+        "telegra.ph 发布错误，注意：切换设备（包括从PC到浏览器环境）需要重新验证，并且获取新token。详细错误 =>" +
+          res.error
+      )
+    }
+    this.logger.debug("telegraph newPost resJson =>", res)
+
+    throw new Error("开发中...")
   }
 
   // ================
@@ -90,6 +111,23 @@ class TelegraphApiAdaptor extends BaseBlogApi {
     this.logger.debug("向 Telegraph 请求数据，resJson =>", resJson)
 
     return resJson ?? null
+  }
+
+  /**
+   * 向 Telegraph 发送表单数据
+   *
+   * @param url 请求地址
+   * @param formData 表单数据
+   */
+  private async telegraphFormFetch(url: string, formData: FormData) {
+    const apiUrl = `${this.cfg.apiUrl}${url}`
+    const header = {
+      origin: "https://telegra.ph",
+      referer: "https://telegra.ph/",
+    }
+
+    const resJson = await this.apiFormFetch(apiUrl, [header], formData)
+    return resJson
   }
 }
 

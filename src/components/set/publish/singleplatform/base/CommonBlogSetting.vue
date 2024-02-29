@@ -428,6 +428,18 @@ onMounted(async () => {
         class="top-tip"
         type="info"
       ></el-alert>
+    </el-form-item>
+    <!-- 新 CORS 代理 -->
+    <el-form-item :label="t('setting.blog.middlewareUrl.new')">
+      <el-input v-model="formData.cfg.corsAnywhereUrl" :placeholder="t('setting.blog.corsAnywhereUrl.tip')" />
+      <el-alert
+        :closable="false"
+        :title="t('setting.blog.middlewareUrl.my.new.tip')"
+        class="top-tip"
+        type="warning"
+      ></el-alert>
+    </el-form-item>
+    <el-form-item>
       <el-alert
         :closable="false"
         :title="t('setting.blog.middlewareUrl.my.fee.tip')"

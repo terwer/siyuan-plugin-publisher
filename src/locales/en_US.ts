@@ -659,5 +659,11 @@ export default {
   "message.publish.notShared":
     "The article has not been shared and therefore cannot be viewed externally. Kindly share the article or preview it within the PC client through the plugin menu.",
 
-  "page.loading": "Page is loading..."
+  "page.loading": "Page is loading...",
+
+  "setting.blog.middlewareUrl.new": "Fresh Proxy (Recommended)",
+  "setting.blog.corsAnywhereUrl.tip":
+    "CORS Global Proxy, once configured, helps alleviate browser cross-origin issues.",
+  "setting.blog.middlewareUrl.my.new.tip":
+    "Enhanced CORS proxy, enabling comprehensive cross-origin requests. It is advisable to deploy independently. For deployment guidance, kindly refer to https://github.com/Zibri/cloudflare-cors-anywhere.",
 }

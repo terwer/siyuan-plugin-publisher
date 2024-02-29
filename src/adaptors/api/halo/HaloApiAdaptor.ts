@@ -495,6 +495,13 @@ class HaloApiAdaptor extends BaseBlogApi {
     return resJson ?? null
   }
 
+  /**
+   * 向 Halo 发送表单数据
+   *
+   * @param url 请求地址
+   * @param formData 表单数据
+   * @private
+   */
   private async haloFormFetch(url: string, formData: FormData) {
     const basicAuth = "Basic " + Base64.btoa(this.cfg.username + ":" + this.cfg.password)
     const header = {
