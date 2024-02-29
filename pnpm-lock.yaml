@@ -87,8 +87,8 @@ dependencies:
     specifier: ^1.53.2
     version: 1.53.2(typescript@5.3.3)
   zhi-common:
-    specifier: ^1.30.0
-    version: 1.30.0(typescript@5.3.3)
+    specifier: ^1.31.0
+    version: 1.31.0(typescript@5.3.3)
   zhi-device:
     specifier: ^2.10.0
     version: 2.10.0
@@ -6703,7 +6703,7 @@ packages:
       vue: 3.4.20(typescript@5.3.3)
       vue-i18n: 9.9.1(vue@3.4.20)
       vue-router: 4.3.0(vue@3.4.20)
-      zhi-common: 1.30.0(typescript@5.3.3)
+      zhi-common: 1.31.0(typescript@5.3.3)
       zhi-device: 2.10.0
       zhi-fetch-middleware: 0.2.29(typescript@5.3.3)
       zhi-lib-base: 0.4.4
@@ -8000,6 +8000,18 @@ packages:
 
   /zhi-common@1.30.0(typescript@5.3.3):
     resolution: {integrity: sha512-57bYMr920Lq7m1TLP8jheO4GkWJQ3xqFbB4XHfd24+YhpTvSyaue6i/+WPOT+x9cbc6jWF3n5oBeGsPhwN7zNQ==}
+    dependencies:
+      js-yaml: 4.1.0
+      shorthash2: 1.0.3
+      transliteration: 2.3.5
+      vue: 3.4.20(typescript@5.3.3)
+      zhi-lib-base: 0.8.0
+    transitivePeerDependencies:
+      - typescript
+    dev: false
+
+  /zhi-common@1.31.0(typescript@5.3.3):
+    resolution: {integrity: sha512-s9x5e3dLhFmh514yvT1JtP7xriWMVxQ11AyIjOgx5Xo2cKcDv5b6nKDaLj2Jkvms9iwZRSinDY8y/FK3jrfbrg==}
     dependencies:
       js-yaml: 4.1.0
       shorthash2: 1.0.3
