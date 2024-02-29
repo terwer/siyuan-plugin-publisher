@@ -84,8 +84,8 @@ dependencies:
     specifier: ^3.1.1
     version: 3.1.1
   zhi-blog-api:
-    specifier: ^1.53.2
-    version: 1.53.2(typescript@5.3.3)
+    specifier: ^1.55.0
+    version: 1.55.0(typescript@5.3.3)
   zhi-common:
     specifier: ^1.30.0
     version: 1.30.0(typescript@5.3.3)
@@ -7986,6 +7986,15 @@ packages:
       - typescript
     dev: false
 
+  /zhi-blog-api@1.55.0(typescript@5.3.3):
+    resolution: {integrity: sha512-eWXz2fV6aB1BybwnRKJmQOWPecNEYXA10q+pBUmCzgmERghJOw9l0deQTjltPN6RrD6QFgXGF4Ufyet6ohi/OQ==}
+    dependencies:
+      zhi-common: 1.31.0(typescript@5.3.3)
+      zhi-lib-base: 0.8.0
+    transitivePeerDependencies:
+      - typescript
+    dev: false
+
   /zhi-common@1.18.0(typescript@5.3.3):
     resolution: {integrity: sha512-7m8uyV8+kZ0tJky0myjz8Nj1Ad0kNsMNsg4itixnoM0yIYo6VZ7uU+oMd3qmqyA9kcvszD2QXV4w8qlgIDBGfg==}
     dependencies:
@@ -8000,6 +8009,18 @@ packages:
 
   /zhi-common@1.30.0(typescript@5.3.3):
     resolution: {integrity: sha512-57bYMr920Lq7m1TLP8jheO4GkWJQ3xqFbB4XHfd24+YhpTvSyaue6i/+WPOT+x9cbc6jWF3n5oBeGsPhwN7zNQ==}
+    dependencies:
+      js-yaml: 4.1.0
+      shorthash2: 1.0.3
+      transliteration: 2.3.5
+      vue: 3.4.20(typescript@5.3.3)
+      zhi-lib-base: 0.8.0
+    transitivePeerDependencies:
+      - typescript
+    dev: false
+
+  /zhi-common@1.31.0(typescript@5.3.3):
+    resolution: {integrity: sha512-s9x5e3dLhFmh514yvT1JtP7xriWMVxQ11AyIjOgx5Xo2cKcDv5b6nKDaLj2Jkvms9iwZRSinDY8y/FK3jrfbrg==}
     dependencies:
       js-yaml: 4.1.0
       shorthash2: 1.0.3
