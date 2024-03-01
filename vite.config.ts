@@ -26,12 +26,13 @@ const getAppBase = (isSiyuanBuild: boolean, isWidgetBuild: boolean, isNginxBuild
 
 const getDefineEnv = (isDevMode: boolean, debugMode: boolean) => {
   const mode = process.env.NODE_ENV
+  const isTest = mode === "test"
   console.log("isServe=>", isServe)
   console.log("mode=>", mode)
 
   const defaultEnv = {
-    DEV_MODE: `${isDevMode}`,
-    DEBUG_MODE: `${debugMode}`,
+    DEV_MODE: `${isDevMode || isTest}`,
+    DEBUG_MODE: `${debugMode || isTest}`,
     APP_BASE: `${appBase}`,
     NODE_ENV: "development",
     VITE_DEFAULT_TYPE: `siyuan`,

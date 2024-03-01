@@ -33,6 +33,7 @@ import { Vuepress2Config } from "~/src/adaptors/api/vuepress2/vuepress2Config.ts
 import { Vuepress2ApiAdaptor } from "~/src/adaptors/api/vuepress2/vuepress2ApiAdaptor.ts"
 import { Vuepress2YamlConverterAdaptor } from "~/src/adaptors/api/vuepress2/vuepress2YamlConverterAdaptor.ts"
 import { CategoryTypeEnum } from "zhi-blog-api"
+import { LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
 
 const useVuepress2Api = async (key: string, newCfg?: Vuepress2Config) => {
   // 创建应用日志记录器
@@ -61,10 +62,7 @@ const useVuepress2Api = async (key: string, newCfg?: Vuepress2Config) => {
       const githubAuthToken = Utils.emptyOrDefault(process.env.VITE_GITHUB_AUTH_TOKEN, "")
       const githubRepo = Utils.emptyOrDefault(process.env.VITE_GITHUB_REPO, "")
       const githubBranch = Utils.emptyOrDefault(process.env.VITE_GITHUB_BRANCH, "main")
-      const middlewareUrl = Utils.emptyOrDefault(
-        process.env.VITE_MIDDLEWARE_URL,
-        "https://api.terwer.space/api/middleware"
-      )
+      const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, LEGENCY_SHARED_PROXT_MIDDLEWARE)
       cfg = new Vuepress2Config(githubUsername, githubAuthToken, githubRepo, githubBranch, middlewareUrl)
       logger.info("Configuration is empty, using default environment variables.")
     } else {

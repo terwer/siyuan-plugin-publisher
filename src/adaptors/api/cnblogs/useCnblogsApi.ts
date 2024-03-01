@@ -32,6 +32,7 @@ import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { CategoryTypeEnum } from "zhi-blog-api"
+import { LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
 
 /**
  * 使用Cnblogs API的自定义hook
@@ -70,10 +71,7 @@ export const useCnblogsApi = async (key?: string, newCfg?: CnblogsConfig) => {
       )
       const cnblogsUsername = Utils.emptyOrDefault(process.env.VITE_CNBLOGS_USERNAME, "")
       const cnblogsAuthToken = Utils.emptyOrDefault(process.env.VITE_CNBLOGS_AUTH_TOKEN, "")
-      const middlewareUrl = Utils.emptyOrDefault(
-        process.env.VITE_MIDDLEWARE_URL,
-        "https://api.terwer.space/api/middleware"
-      )
+      const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, LEGENCY_SHARED_PROXT_MIDDLEWARE)
 
       cfg = new CnblogsConfig(cnblogsApiUrl, cnblogsUsername, cnblogsAuthToken, middlewareUrl)
       logger.debug("Configuration is empty, using default environment variables.")

@@ -52,7 +52,12 @@ import { isFileExists } from "~/src/utils/siyuanUtils.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { SiyuanAttr, SiyuanKernelApi } from "zhi-siyuan-api"
 import { DynamicConfig, getDynPlatformKeyFromPostidKey } from "~/src/platforms/dynamicConfig.ts"
-import { CATE_AUTO_NAME, MUST_USE_OWN_PLATFORM, MUST_USE_PICBED_PLATFORM } from "~/src/utils/constants.ts"
+import {
+  CATE_AUTO_NAME,
+  LEGENCY_SHARED_PROXT_MIDDLEWARE,
+  MUST_USE_OWN_PLATFORM,
+  MUST_USE_PICBED_PLATFORM,
+} from "~/src/utils/constants.ts"
 import { toRaw } from "vue"
 import _ from "lodash"
 import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
@@ -685,7 +690,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
       base64Info = await remoteImageToBase64Info(url)
     } else {
       this.logger.info("Outside the browser, use an image proxy")
-      const proxyUrl = StrUtil.isEmptyString(middlewareUrl) ? "https://api.terwer.space/api/middleware" : middlewareUrl
+      const proxyUrl = StrUtil.isEmptyString(middlewareUrl) ? LEGENCY_SHARED_PROXT_MIDDLEWARE : middlewareUrl
       const response = await this.api.proxyFetch(`${proxyUrl}/image`, [], { url: url }, "POST")
       this.logger.debug("readFileToBase64 proxyFetch response =>", response)
       const resBody = response.body

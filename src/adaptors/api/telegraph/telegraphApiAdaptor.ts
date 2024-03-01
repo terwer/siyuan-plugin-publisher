@@ -26,6 +26,8 @@
 import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
 import { Post, UserBlog } from "zhi-blog-api"
 import { TelegraphConfig } from "~/src/adaptors/api/telegraph/telegraphConfig.ts"
+import { JsonUtil, StrUtil } from "zhi-common"
+import CookieUtils from "~/src/utils/cookieUtils.ts"
 
 /**
  * Telegraph API 适配器
@@ -40,6 +42,8 @@ class TelegraphApiAdaptor extends BaseBlogApi {
     if (checkJson.error) {
       throw new Error("telegra.ph request error =>" + checkJson.error)
     }
+    const corsHeaders = JsonUtil.safeParse<any>(checkJson["cors-received-headers"], {})
+    const cookies = corsHeaders["Set-Cookie-Array"]
     this.logger.debug("checkJson =>", checkJson)
 
     // 数据适配
@@ -52,6 +56,7 @@ class TelegraphApiAdaptor extends BaseBlogApi {
     // @since 1.20.0
     userblog.metadataMap = {
       password: checkJson.save_hash,
+      corsCookieArray: CookieUtils.addCookieArray(this.cfg?.corsCookieArray ?? [], cookies),
     }
     result.push(userblog)
     this.logger.debug("get telegraph cfg =>", result)
@@ -93,21 +98,28 @@ class TelegraphApiAdaptor extends BaseBlogApi {
     header: Record<any, any> = {}
   ) {
     const contentType = "text/plain"
+    const TPH_UUID_KEY = "tph_uuid"
+    const tphUuidObj = CookieUtils.getCookieObject(this.cfg.corsCookieArray, TPH_UUID_KEY)
+    this.logger.debug("tphUuidObj =>", tphUuidObj)
+    if (!StrUtil.isEmptyString(tphUuidObj[TPH_UUID_KEY])) {
+      header["Cookie"] = `${TPH_UUID_KEY}=${tphUuidObj[TPH_UUID_KEY]}`
+    }
     const headers = {
       "Content-Type": contentType,
       origin: "https://telegra.ph",
       referer: "https://telegra.ph/",
       ...header,
     }
+    const body = params
 
     // 输出日志
     const apiUrl = `${this.cfg.apiUrl}${url}`
     this.logger.debug("向 Telegraph 请求数据，apiUrl =>", apiUrl)
-    this.logger.debug("向 Telegraph 请求数据，content =>", params)
-
     // 使用兼容的fetch调用并返回统一的JSON数据
-    const body = params
-    const resJson = await this.proxyFetch(apiUrl, [headers], body, method, contentType)
+    this.logger.debug("向 Telegraph 请求数据，headers =>", headers)
+    this.logger.debug("向 Telegraph 请求数据，body =>", body)
+
+    const resJson = await this.proxyFetch(apiUrl, [headers], body, method, contentType, true)
     this.logger.debug("向 Telegraph 请求数据，resJson =>", resJson)
 
     return resJson ?? null

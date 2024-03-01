@@ -31,6 +31,27 @@ import { BaseExtendApi } from "~/src/adaptors/base/baseExtendApi.ts"
 import { JsonUtil } from "zhi-common"
 
 /**
+ * 执行代理 fetch 请求
+ *
+ * @param url - 请求的 URL
+ * @param headers - 请求的头部信息
+ * @param params - 请求的参数
+ * @param method - 请求的 HTTP 方法
+ * @param contentType - 请求的内容类型
+ * @param forceProxy - 是否强制使用代理
+ *
+ * @returns 返回一个 Promise，解析为响应结果
+ */
+export type ProxyFetchType = (
+  url: string,
+  headers?: any[],
+  params?: any,
+  method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH",
+  contentType?: string,
+  forceProxy?: boolean
+) => Promise<any>
+
+/**
  * API授权统一封装基类
  *
  * @author terwer
@@ -41,7 +62,7 @@ export class BaseBlogApi extends BlogApi {
   protected appInstance: PublisherAppInstance
   protected logger: ILogger
   protected cfg: BlogConfig
-  public readonly proxyFetch: any
+  public readonly proxyFetch: ProxyFetchType
   protected readonly baseExtendApi: BaseExtendApi
 
   /**

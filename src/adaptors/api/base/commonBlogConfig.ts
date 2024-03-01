@@ -27,7 +27,6 @@ import { BlogConfig, PageTypeEnum } from "zhi-blog-api"
 import { CommonBlogPlaceholder } from "~/src/adaptors/api/base/commonBlogPlaceholder.ts"
 
 export class CommonBlogConfig extends BlogConfig {
-
   /**
    * 操作提示
    */
@@ -46,6 +45,8 @@ export class CommonBlogConfig extends BlogConfig {
     this.previewUrl = ""
     this.pageType = PageTypeEnum.Markdown
     this.middlewareUrl = middlewareUrl
+    // this.corsAnywhereUrl = ""
+    // this.corsCookieArray = []
     this.usernameEnabled = false
     this.allowPreviewUrlChange = true
     this.showTokenTip = false

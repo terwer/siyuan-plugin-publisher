@@ -54,3 +54,11 @@ export const CATE_AUTO_NAME = "[auto]"
  * 标题最大长度
  */
 export const MAX_TITLE_LENGTH = 10
+
+/**
+ * 旧的通用 HTTP 代理
+ *
+ * @since 1.0.0
+ * @version 1.20.0
+ */
+export const LEGENCY_SHARED_PROXT_MIDDLEWARE = "https://api.terwer.space/api/middleware"

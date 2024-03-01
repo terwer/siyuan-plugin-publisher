@@ -33,6 +33,7 @@ import { CategoryTypeEnum } from "zhi-blog-api"
 import { GitlabvitepressConfig } from "~/src/adaptors/api/gitlab-vitepress/gitlabvitepressConfig.ts"
 import { GitlabvitepressYamlConverterAdaptor } from "~/src/adaptors/api/gitlab-vitepress/gitlabvitepressYamlConverterAdaptor.ts"
 import { GitlabvitepressApiAdaptor } from "~/src/adaptors/api/gitlab-vitepress/gitlabvitepressApiAdaptor.ts"
+import { LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
 
 const useGitlabvitepressApi = async (key: string, newCfg?: GitlabvitepressConfig) => {
   // 创建应用日志记录器
@@ -61,10 +62,7 @@ const useGitlabvitepressApi = async (key: string, newCfg?: GitlabvitepressConfig
       const githubAuthToken = Utils.emptyOrDefault(process.env.VITE_GITLAB_AUTH_TOKEN, "")
       const githubRepo = Utils.emptyOrDefault(process.env.VITE_GITLAB_REPO, "")
       const githubBranch = Utils.emptyOrDefault(process.env.VITE_GITLAB_BRANCH, "main")
-      const middlewareUrl = Utils.emptyOrDefault(
-        process.env.VITE_MIDDLEWARE_URL,
-        "https://api.terwer.space/api/middleware"
-      )
+      const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, LEGENCY_SHARED_PROXT_MIDDLEWARE)
       cfg = new GitlabvitepressConfig(githubUsername, githubAuthToken, githubRepo, githubBranch, middlewareUrl)
       logger.info("Configuration is empty, using default environment variables.")
     } else {

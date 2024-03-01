@@ -26,7 +26,7 @@
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { CommonFetchClient } from "zhi-fetch-middleware"
-import { isDev } from "~/src/utils/constants.ts"
+import { isDev, LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { Deserializer, Serializer, XmlrpcUtil } from "simple-xmlrpc"
@@ -48,7 +48,7 @@ const useProxy = (middlewareUrl?: string) => {
    */
   const appInstance = new PublisherAppInstance()
   const apiUrl = ""
-  middlewareUrl = middlewareUrl ?? "https://api.terwer.space/api/middleware"
+  middlewareUrl = middlewareUrl ?? LEGENCY_SHARED_PROXT_MIDDLEWARE
   const commonFetchClient = new CommonFetchClient(appInstance, apiUrl, middlewareUrl, isDev)
   const serializer = new Serializer(appInstance)
 
@@ -60,6 +60,8 @@ const useProxy = (middlewareUrl?: string) => {
    * @param params - 请求的参数
    * @param method - 请求的 HTTP 方法
    * @param contentType - 请求的内容类型
+   * @param forceProxy - 是否强制使用代理
+   *
    * @returns 返回一个 Promise，解析为响应结果
    */
   const proxyFetch = async (
@@ -67,10 +69,11 @@ const useProxy = (middlewareUrl?: string) => {
     headers: any[] = [],
     params: any = {},
     method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" = "GET",
-    contentType: string = "application/json"
+    contentType: string = "application/json",
+    forceProxy: boolean = false
   ) => {
     const siyuanSupported = ["application/json", "text/html", "text/xml", ""]
-    if (isUseSiyuanProxy && siyuanSupported.includes(contentType)) {
+    if (!forceProxy && isUseSiyuanProxy && siyuanSupported.includes(contentType)) {
       logger.info("Using Siyuan forwardProxy, contentType=>", contentType)
       let body: any
       if (typeof params === "string" && !StrUtil.isEmptyString(params)) {
@@ -137,7 +140,7 @@ const useProxy = (middlewareUrl?: string) => {
       }
       logger.info("commonFetchClient url in proxyFetch =>", url)
       logger.info("commonFetchClient fetchOptions in proxyFetch =>", fetchOptions)
-      const res = await commonFetchClient.fetchCall(url, fetchOptions)
+      const res = await commonFetchClient.fetchCall(url, fetchOptions, forceProxy)
       logger.debug("Result of proxyFetch in commonFetchClient =>", res)
       return res
     }

@@ -29,6 +29,7 @@ import { readonly } from "vue"
 import { SiyuanDevice } from "zhi-device"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import useCommonLocalStorage from "~/src/stores/common/useCommonLocalStorage.ts"
+import { LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
 
 /**
  * 思源笔记设置
@@ -51,7 +52,7 @@ const useSiyuanSettingStore = () => {
   const getSiyuanSetting = (): RemovableRef<SiyuanConfig> => {
     const baseUrl = "http://127.0.0.1:6806"
     const token = ""
-    const middlewareUrl = "https://api.terwer.space/api/middleware"
+    const middlewareUrl = LEGENCY_SHARED_PROXT_MIDDLEWARE
     // PC客户端多个工作空间情况下，自动读取思源地址
     let origin: string
     if (isInSiyuanOrSiyuanNewWin()) {
