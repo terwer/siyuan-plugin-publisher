@@ -35,6 +35,8 @@ import CookieUtils from "~/src/utils/cookieUtils.ts"
  * @see https://telegra.ph/ telegra.ph
  */
 class TelegraphApiAdaptor extends BaseBlogApi {
+  private TPH_UUID_KEY = "tph_uuid"
+
   public async getUsersBlogs(): Promise<UserBlog[]> {
     const result: UserBlog[] = []
 
@@ -98,11 +100,9 @@ class TelegraphApiAdaptor extends BaseBlogApi {
     header: Record<any, any> = {}
   ) {
     const contentType = "text/plain"
-    const TPH_UUID_KEY = "tph_uuid"
-    const tphUuidObj = CookieUtils.getCookieObject(this.cfg.corsCookieArray, TPH_UUID_KEY)
-    this.logger.debug("tphUuidObj =>", tphUuidObj)
-    if (!StrUtil.isEmptyString(tphUuidObj[TPH_UUID_KEY])) {
-      header["Cookie"] = `${TPH_UUID_KEY}=${tphUuidObj[TPH_UUID_KEY]}`
+    const tphUuidObj = CookieUtils.getCookieObject(this.cfg.corsCookieArray, this.TPH_UUID_KEY)
+    if (!StrUtil.isEmptyString(tphUuidObj[this.TPH_UUID_KEY])) {
+      header["Cookie"] = `${this.TPH_UUID_KEY}=${tphUuidObj[this.TPH_UUID_KEY]}`
     }
     const headers = {
       "Content-Type": contentType,
@@ -133,12 +133,36 @@ class TelegraphApiAdaptor extends BaseBlogApi {
    */
   private async telegraphFormFetch(url: string, formData: FormData) {
     const apiUrl = `${this.cfg.apiUrl}${url}`
-    const header = {
+    const tphUuidObj = CookieUtils.getCookieObject(this.cfg.corsCookieArray, this.TPH_UUID_KEY)
+    let header: Record<any, any> = {}
+    if (!StrUtil.isEmptyString(tphUuidObj[this.TPH_UUID_KEY])) {
+      header["Cookie"] = `${this.TPH_UUID_KEY}=${tphUuidObj[this.TPH_UUID_KEY]}`
+    }
+    const headers = {
       origin: "https://telegra.ph",
       referer: "https://telegra.ph/",
+      ...header,
     }
+    const options: RequestInit = {
+      method: "POST",
+      headers: headers,
+      body: formData,
+    }
+    this.logger.debug("向 Telegraph 发送表单数据，apiUrl =>", apiUrl)
+    this.logger.debug("向 Telegraph 发送表单数据，options =>", options)
+    const res = await fetch(apiUrl, options)
+    const resText = await res.text()
+    this.logger.debug("向 Telegraph 发送表单数据，resText =>", resText)
+    const resJson = JsonUtil.safeParse<any>(resText, {})
+    if (resJson.error) {
+      throw new Error(
+        "telegra.ph 发布错误，注意：切换设备（包括从PC到浏览器环境）需要重新验证，并且获取新token。详细错误 =>" +
+          resJson.error
+      )
+    }
+    this.logger.debug("向 Telegraph 发送表单数据，resJson =>", resJson)
 
-    const resJson = await this.apiFormFetch(apiUrl, [header], formData)
+    // const resJson = await this.apiFormFetch(apiUrl, [headers], formData)
     return resJson
   }
 }

@@ -107,6 +107,8 @@ export class BaseBlogApi extends BlogApi {
     return this.baseExtendApi.getTags()
   }
 
+  // ===================================================================================================================
+
   public async apiFormFetch(url: string, headers: any[], formData: FormData) {
     const win = this.appInstance.win
     const doFetch = win.require(`${this.appInstance.moduleBase}libs/zhi-formdata-fetch/index.cjs`)

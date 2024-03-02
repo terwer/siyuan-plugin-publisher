@@ -165,7 +165,9 @@ const valiConf = async () => {
   }
 
   // isAuth和apiStatus同步
-  formData.dynCfg.isAuth = formData.cfg.apiStatus
+  if (formData.dynCfg) {
+    formData.dynCfg.isAuth = formData.cfg.apiStatus
+  }
   // 刷新状态
   await saveConf(true)
 

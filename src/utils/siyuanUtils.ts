@@ -31,7 +31,6 @@ import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import { BrowserUtil } from "zhi-device"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 
-const route = useRoute()
 const logger = createAppLogger("siyuan-util")
 const { isInSiyuanWidget, isInSiyuanBrowser } = useSiyuanDevice()
 
@@ -120,6 +119,7 @@ export const getSiyuanPageId = async (pageId?: string, force?: boolean) => {
   //  3、开发模式模拟传递一个ID
   if (BrowserUtil.isInBrowser) {
     // 尝试从url参数解析ID
+    const route = useRoute()
     const paramsPageId = route?.params?.id as string
     if (!StrUtil.isEmptyString(paramsPageId)) {
       return paramsPageId

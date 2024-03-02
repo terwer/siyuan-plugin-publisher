@@ -95,7 +95,7 @@ class CookieUtils {
       cookies = cookie.parse(value)
       this.logger.debug("cookieObj", cookies)
     } catch (e) {
-      this.logger.error("Failed to parse cookie =>" + e)
+      this.logger.warn("Failed to parse cookie =>" + e)
     }
 
     return cookies
