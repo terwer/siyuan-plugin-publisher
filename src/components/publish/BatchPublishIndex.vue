@@ -81,8 +81,8 @@ const formData = reactive({
   // process
   showProcessResult: false,
   errCount: 0,
-  successBatchResults: <any[]>[],
-  failBatchResults: <any[]>[],
+  successBatchResults: [] as any[],
+  failBatchResults: [] as any[],
 
   // 单个平台信息
   siyuanPost: {} as Post,
@@ -556,6 +556,7 @@ onMounted(async () => {
 .batch-result
   margin 16px 0
   font-size 14px
+
   .platform
     color var(--el-color-info)
 
@@ -570,6 +571,7 @@ onMounted(async () => {
 
 .success-tips
   color var(--el-color-success)
+
 .fail-tips
   color var(--el-color-error)
 
@@ -579,10 +581,13 @@ onMounted(async () => {
 .distri-type
   :deep(.el-form-item)
     margin-bottom -16px
+
 .distri-type-check
   margin-top -3px
+
 .distri-tip
   margin-top 10px
+
   .distri-tip-alert
     margin 10px 0
     padding: 2px 0
