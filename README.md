@@ -8,25 +8,74 @@ Publish articles from siyuan-note to platforms like Yuque etc. `Free` and `open 
 
 If you're interested in the paid professional version, please check the paied ➡️ [Publishing Tool Professional Edition](https://github.com/terwer/siyuan-plugin-publisher-pro)
 
-> Recent update: 🎉 Introducing Publisher Version `1.19.0`
+> The latest Publish Tool version `1.20.0` is released🎉, potentially one of the most revolutionary iterations since the inception of first releases👀.
 
-- Version `1.19.1` mainly fixes the following issues:
-  - Text inside code blocks should not be incorrectly escaped.
-- Version `1.19.1` primarily includes the following underlying changes:
-  - Upgrade element-plus to 2.5.5+.
-  - Upgrade vue to 3.4.19+.
-  - Upgrade siyuan sdk to 0.9.3.
-- Version `1.19.0` primarily resolves the following issues:
-  - Rectifies the parsing error in Zhihu's formula rendering caused by escaped text.
-- Version `1.19.0` includes significant underlying changes:
-  - Upgrades Vite to Vite5+
-  - Upgrades Release-please to version 4+
-  - Upgrades Vue to version 3.4.5+
-- Ahem, in addition, the author secretly developed an import feature after version `1.14.0`. You can easily import predefined platforms through the `Settings` -> `Publish Settings` -> `Import Predefined Platforms` function 😄
+- Notable inclusions within version `1.20.0` comprise the introduction of additional publishing platforms, an initial foray into supporting the docker version, along with enhancements tailored to optimize user interactions.
 
-> [Click here](https://blog.terwer.space/s/20230810132040-nn4q7vs) to access the latest documentation.
+  - The prominent features integrated into `1.20.0` encompass:
 
-**For any further inquiries or suggestions, please join QQ Group `895063267` for discussion**
+    - #958 #1009 Experimental support for the docker edition of siyuan-note, marking a preliminary step towards its implementation. Should anomalies surface during deployment, the extension welcomes the addition of GitHub issues for resolution.
+      - Progress in Docker compatibility:
+        - [X] telegra.ph
+    - #1053 Introduction of the publishing platform telegra.ph
+      - **Please note: Unavailability of CORS proxy configuration will render the functionality inactive!!! Furthermore, accessing article previews mandates circumventing restrictions via appropriate means.**
+      - For discussions on CORS proxy complications or other inquiries, feel free to engage in group discussions or reach out to the author at youweics@163.com
+    - #1054 Addition of article management capabilities
+      - Renamed article management as Dashboard. Feedback regarding nomenclature adjustments can be deliberated via issues, facilitating responsive modifications by the author.
+      - Facilitation of displaying all platform publication icons
+      - Provision for exhibiting the count of publishing platforms
+      - Integration of filters for curated published articles
+
+  - `1.20.0` predominantly refines the following areas of focus:
+  
+    - Incorporation of development documentation alongside a preview of forthcoming version agendas
+    - Enhanced Plugin Store experience
+    - Streamlined import processes, now accommodating customized imports
+    - Exquisitely refined iteration of `sy-post-publisher widget
+
+  - Furthermore, post the `1.14.0` version, the author discretely developed an import function. Users can swiftly import built-in platforms through `Settings` -> `Publish Settings` -> `Import Predefined Platforms` feature 😄
+
+> For further details, kindly [click here](https://blog.terwer.space/s/20230810132040-nn4q7vs) to peruse the latest help documentation.
+
+**Should you encounter any issues or wish to submit suggestions, feel free to join QQ group `895063267` for discussions.**
+
+## Version Preview
+
+### 1.20.1-preview – As of Q1 2024
+
+- Expansion of telegra.ph support for image uploads
+  - Reference: https://www.npmjs.com/package/telegraph-uploader
+- Rectification of scenarios entailing repetitive image uploads across select platforms
+- Resolution of formatting discrepancies within WeChat public accounts
+- #990 Rectification of irregular display issues while posting to Jian Shu
+- #989 Failure in posting certain articles to Notion
+- Rectifying error scenarios during posting to WeChat public accounts in certain contexts
+- #948 #905 Corrections addressing halo platform-related concerns
+- Addressing vuepress2 related issues
+
+### 1.21.0-preview – As of Q1 2024
+
+- Inclusion of support for BiliBili and Xiaohongshu platforms
+
+### 1.22.0-preview – As of Q2 2024
+
+- Embracing compatibility for Evernote and Antora (including GitHub and GitLab)
+
+### 1.23.0-preview – As of Q2 2024
+
+- Enabling support for Docsify (inclusive of GitHub and GitLab) and Douban
+
+### 1.24.0-preview – As of Q2 2024
+
+- Integration with flowus platform
+
+### 1.25.0-preview – As of Q2 2024
+
+- Extending support to Xlog, mdnice, and zola platforms
+
+### 1.26.0-preview – As of Q3 2024
+
+- Collaborative interactions with #956 and OceanPress
 
 ## Update history
 
@@ -78,6 +127,7 @@ Names not listed in order
 - [ ] Xlog - TODO
 - [ ] Mdnice - TODO
 - [ ] Flowus - TODO
+- [X] telegra.ph
 
 ## Core Features
 

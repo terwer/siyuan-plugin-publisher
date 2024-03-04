@@ -28,6 +28,7 @@ import { Post, UserBlog } from "zhi-blog-api"
 import { TelegraphConfig } from "~/src/adaptors/api/telegraph/telegraphConfig.ts"
 import { JsonUtil, StrUtil } from "zhi-common"
 import CookieUtils from "~/src/utils/cookieUtils.ts"
+import md from "telegraph.md"
 
 /**
  * Telegraph API 适配器
@@ -68,10 +69,10 @@ class TelegraphApiAdaptor extends BaseBlogApi {
 
   public async newPost(post: Post, _publish?: boolean): Promise<string> {
     const formData = new FormData()
-    const content = [{ tag: "p", attrs: { dir: "auto" }, children: ["测试正文"] }]
+    const content = md(post.description)
     const blobData = new Blob([JSON.stringify(content)], { type: "text/plain" })
     formData.append("Data", blobData, "content.html")
-    formData.append("title", "测试标题")
+    formData.append("title", post.title)
     formData.append("author", this.cfg.username)
     formData.append("save_hash", this.cfg.password)
     formData.append("page_id", "0")
@@ -97,10 +98,10 @@ class TelegraphApiAdaptor extends BaseBlogApi {
     const postMeta = JsonUtil.safeParse<any>(postid, {})
 
     const formData = new FormData()
-    const content = [{ tag: "p", attrs: { dir: "auto" }, children: ["测试正文3"] }]
+    const content = md(post.description)
     const blobData = new Blob([JSON.stringify(content)], { type: "text/plain" })
     formData.append("Data", blobData, "content.html")
-    formData.append("title", "测试标题3")
+    formData.append("title", post.title)
     formData.append("author", this.cfg.username)
     formData.append("save_hash", this.cfg.password)
     formData.append("page_id", postMeta.page_id)
