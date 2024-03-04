@@ -443,6 +443,12 @@ onMounted(async () => {
     <el-form-item>
       <el-alert
         :closable="false"
+        :title="t('setting.blog.middlewareUrl.my.warn.tip')"
+        class="top-tip"
+        type="error"
+      ></el-alert>
+      <el-alert
+        :closable="false"
         :title="t('setting.blog.middlewareUrl.my.fee.tip')"
         class="top-tip"
         type="error"

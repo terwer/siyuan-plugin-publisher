@@ -40,7 +40,7 @@ class TelegraphApiAdaptor extends BaseBlogApi {
   public async getUsersBlogs(): Promise<UserBlog[]> {
     const result: UserBlog[] = []
 
-    const checkJson = await this.telegraphRequest("/check", "page_id=0", "POST")
+    const checkJson = await this.telegraphFetch("/check", "page_id=0", "POST")
     if (checkJson.error) {
       throw new Error("telegra.ph request error =>" + checkJson.error)
     }
@@ -66,14 +66,15 @@ class TelegraphApiAdaptor extends BaseBlogApi {
     return result
   }
 
-  public async newPost(post: Post, publish?: boolean): Promise<string> {
+  public async newPost(post: Post, _publish?: boolean): Promise<string> {
     const formData = new FormData()
+    const content = [{ tag: "p", attrs: { dir: "auto" }, children: ["测试正文"] }]
+    const blobData = new Blob([JSON.stringify(content)], { type: "text/plain" })
+    formData.append("Data", blobData, "content.html")
     formData.append("title", "测试标题")
     formData.append("author", this.cfg.username)
     formData.append("save_hash", this.cfg.password)
     formData.append("page_id", "0")
-    const blobData = new File(["content"], "content.html", { type: "text/plain" })
-    formData.append("Data", blobData)
 
     const res = await this.telegraphFormFetch("/save", formData)
     if (res.error) {
@@ -84,7 +85,53 @@ class TelegraphApiAdaptor extends BaseBlogApi {
     }
     this.logger.debug("telegraph newPost resJson =>", res)
 
-    throw new Error("开发中...")
+    const postMeta = {
+      page_id: res.page_id,
+      path: res.path,
+    }
+    const postid = JSON.stringify(postMeta)
+    return postid
+  }
+
+  public async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
+    const postMeta = JsonUtil.safeParse<any>(postid, {})
+
+    const formData = new FormData()
+    const content = [{ tag: "p", attrs: { dir: "auto" }, children: ["测试正文3"] }]
+    const blobData = new Blob([JSON.stringify(content)], { type: "text/plain" })
+    formData.append("Data", blobData, "content.html")
+    formData.append("title", "测试标题3")
+    formData.append("author", this.cfg.username)
+    formData.append("save_hash", this.cfg.password)
+    formData.append("page_id", postMeta.page_id)
+
+    const res = await this.telegraphFormFetch("/save", formData)
+    if (res.error) {
+      throw new Error(
+        "telegra.ph 更新失败，注意：切换设备（包括从PC到浏览器环境）需要重新验证，并且获取新token。详细错误 =>" +
+          res.error
+      )
+    }
+    this.logger.debug("telegraph editPost resJson =>", res)
+
+    return true
+  }
+
+  public async deletePost(postid: string): Promise<boolean> {
+    throw new Error("telegra.ph 暂不支持删除文章功能")
+  }
+
+  public async getPost(postid: string, useSlug?: boolean): Promise<Post> {
+    const commonPost = new Post()
+    commonPost.postid = postid
+    return commonPost
+  }
+
+  public async getPreviewUrl(postid: string): Promise<string> {
+    const postMeta = JsonUtil.safeParse<any>(postid, {})
+    const purl = this.cfg.previewUrl ?? ""
+    const postUrl = purl.replace("[postid]", postMeta?.path ?? "")
+    return postUrl
   }
 
   // ================
@@ -93,10 +140,10 @@ class TelegraphApiAdaptor extends BaseBlogApi {
   /**
    * 向 Telegraph 请求数据
    */
-  private async telegraphRequest(
+  private async telegraphFetch(
     url: string,
     params?: any,
-    method: "GET" | "POST" | "PUT" | "DELETE" = "POST",
+    method: "GET" | "POST" | "PUT" | "DELETE" = "GET",
     header: Record<any, any> = {}
   ) {
     const contentType = "text/plain"
@@ -119,7 +166,7 @@ class TelegraphApiAdaptor extends BaseBlogApi {
     this.logger.debug("向 Telegraph 请求数据，headers =>", headers)
     this.logger.debug("向 Telegraph 请求数据，body =>", body)
 
-    const resJson = await this.proxyFetch(apiUrl, [headers], body, method, contentType, true)
+    const resJson = await this.apiProxyFetch(apiUrl, [headers], body, method, contentType, true)
     this.logger.debug("向 Telegraph 请求数据，resJson =>", resJson)
 
     return resJson ?? null
@@ -129,31 +176,35 @@ class TelegraphApiAdaptor extends BaseBlogApi {
    * 向 Telegraph 发送表单数据
    *
    * @param url 请求地址
-   * @param formData 表单数据
+   * @param formData 表单数据，默认为undefined，支持 ReadableStream、Blob | BufferSource | FormData | URLSearchParams | string。这里只需要 FormData
    */
   private async telegraphFormFetch(url: string, formData: FormData) {
     const apiUrl = `${this.cfg.apiUrl}${url}`
+    let xCorsHeaders: Record<any, any> = {}
+
+    // header
+
+    // x-cors-headers
     const tphUuidObj = CookieUtils.getCookieObject(this.cfg.corsCookieArray, this.TPH_UUID_KEY)
-    let header: Record<any, any> = {}
     if (!StrUtil.isEmptyString(tphUuidObj[this.TPH_UUID_KEY])) {
-      header["Cookie"] = `${this.TPH_UUID_KEY}=${tphUuidObj[this.TPH_UUID_KEY]}`
+      xCorsHeaders["Cookie"] = `${this.TPH_UUID_KEY}=${tphUuidObj[this.TPH_UUID_KEY]}`
     }
+    xCorsHeaders["origin"] = "https://telegra.ph"
+    xCorsHeaders["referer"] = "https://telegra.ph/"
+
     const headers = {
-      origin: "https://telegra.ph",
-      referer: "https://telegra.ph/",
-      ...header,
+      "x-cors-headers": JSON.stringify(xCorsHeaders),
     }
     const options: RequestInit = {
       method: "POST",
       headers: headers,
       body: formData,
     }
+
     this.logger.debug("向 Telegraph 发送表单数据，apiUrl =>", apiUrl)
     this.logger.debug("向 Telegraph 发送表单数据，options =>", options)
-    const res = await fetch(apiUrl, options)
-    const resText = await res.text()
-    this.logger.debug("向 Telegraph 发送表单数据，resText =>", resText)
-    const resJson = JsonUtil.safeParse<any>(resText, {})
+
+    const resJson = await this.apiFormFetch(apiUrl, [headers], formData)
     if (resJson.error) {
       throw new Error(
         "telegra.ph 发布错误，注意：切换设备（包括从PC到浏览器环境）需要重新验证，并且获取新token。详细错误 =>" +
@@ -162,7 +213,6 @@ class TelegraphApiAdaptor extends BaseBlogApi {
     }
     this.logger.debug("向 Telegraph 发送表单数据，resJson =>", resJson)
 
-    // const resJson = await this.apiFormFetch(apiUrl, [headers], formData)
     return resJson
   }
 }
