@@ -63,6 +63,11 @@ const useTelegraphApi = async (key: string, newCfg?: TelegraphConfig) => {
       // 默认值
       cfg.posidKey = getDynPostidKey(key)
     }
+    // 初始化corsAnywhereUrl
+    if (StrUtil.isEmptyString(cfg.corsAnywhereUrl)) {
+      // 默认值
+      cfg.corsAnywhereUrl = Utils.emptyOrDefault(process.env.VITE_CORS_ANYWHERE_URL, CORS_PROXT_URL)
+    }
   }
 
   cfg.usernameEnabled = true

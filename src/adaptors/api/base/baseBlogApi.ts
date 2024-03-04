@@ -29,27 +29,7 @@ import { createAppLogger, ILogger } from "~/src/utils/appLogger.ts"
 import { useProxy } from "~/src/composables/useProxy.ts"
 import { BaseExtendApi } from "~/src/adaptors/base/baseExtendApi.ts"
 import { JsonUtil, StrUtil } from "zhi-common"
-
-/**
- * 执行代理 fetch 请求
- *
- * @param url - 请求的 URL
- * @param headers - 请求的头部信息
- * @param params - 请求的参数
- * @param method - 请求的 HTTP 方法
- * @param contentType - 请求的内容类型
- * @param forceProxy - 是否强制使用代理
- *
- * @returns 返回一个 Promise，解析为响应结果
- */
-export type ProxyFetchType = (
-  url: string,
-  headers?: any[],
-  params?: any,
-  method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH",
-  contentType?: string,
-  forceProxy?: boolean
-) => Promise<any>
+import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 
 /**
  * API授权统一封装基类
@@ -63,7 +43,8 @@ export class BaseBlogApi extends BlogApi {
   protected logger: ILogger
   protected cfg: BlogConfig
   protected readonly baseExtendApi: BaseExtendApi
-  private readonly proxyFetch: ProxyFetchType
+  private readonly proxyFetch: any
+  private readonly corsFetch: any
 
   /**
    * 初始化API授权适配器
@@ -79,8 +60,9 @@ export class BaseBlogApi extends BlogApi {
     this.logger = createAppLogger("base-blog-api")
     this.baseExtendApi = new BaseExtendApi(this, cfg)
 
-    const { proxyFetch } = useProxy(cfg.middlewareUrl)
+    const { proxyFetch, corsFetch } = useProxy(cfg.middlewareUrl, cfg.corsAnywhereUrl)
     this.proxyFetch = proxyFetch
+    this.corsFetch = corsFetch
   }
 
   public async checkAuth(): Promise<boolean> {
@@ -130,9 +112,25 @@ export class BaseBlogApi extends BlogApi {
     // 如果没有可用的 CORS 代理或者没有强制使用代理，使用默认的自动检测机制
     if (!isCorsProxyAvailable || !forceProxy) {
       this.logger.info("Using legency api fetch")
+      //  const proxyFetch = async (
+      //     url: string,
+      //     headers: any[] = [],
+      //     params: any = {},
+      //     method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" = "GET",
+      //     contentType: string = "application/json",
+      //     forceProxy: boolean = false
+      //   ) => {
+      this.logger.info("Using legency api fetch")
       return this.proxyFetch(url, headers, params, method, contentType, forceProxy)
     } else {
-      throw new Error("using cors proxy api")
+      //   const corsFetch = async (
+      //     url: string,
+      //     headers: any[] = [],
+      //     params: BodyInit = undefined,
+      //     method: "GET" | "POST" | "PUT" | "DELETE" = "GET"
+      //   )
+      this.logger.info("Using cors api fetch")
+      return this.corsFetch(url, headers, params, method)
     }
   }
 
@@ -149,6 +147,12 @@ export class BaseBlogApi extends BlogApi {
     // 如果没有可用的 CORS 代理或者没有强制使用代理，使用默认的自动检测机制
     if (!isCorsProxyAvailable || !forceProxy) {
       this.logger.info("Using legency api formFetch")
+      const { isInSiyuanOrSiyuanNewWin } = useSiyuanDevice()
+      if (!isInSiyuanOrSiyuanNewWin()) {
+        throw new Error(
+          "检测到当前为非 electron 环境并且未设置 cors 代理，此功能将不可用！请设置 cors 代理或者使用PC 客户端"
+        )
+      }
       const win = this.appInstance.win
       const doFetch = win.require(`${this.appInstance.moduleBase}libs/zhi-formdata-fetch/index.cjs`)
 
@@ -164,7 +168,8 @@ export class BaseBlogApi extends BlogApi {
 
       return resJson
     } else {
-      throw new Error("using cors proxy api formFetch")
+      this.logger.info("Using cors-anywhere api formFetch")
+      return this.corsFetch(url, headers, formData, "POST")
     }
   }
 
