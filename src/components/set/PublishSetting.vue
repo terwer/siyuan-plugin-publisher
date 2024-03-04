@@ -57,6 +57,9 @@ import { CommonWebConfig } from "~/src/adaptors/web/base/commonWebConfig.ts"
 import { pre } from "~/src/platforms/pre.ts"
 import _ from "lodash"
 import CrossPageUtils from "~/cross/crossPageUtils.ts"
+import MaterialSymbolsFormatListBulleted from "~icons/material-symbols/format-list-bulleted"
+import MdiImport from "~icons/mdi/import"
+import MaterialSymbolsLightStorefront from "~icons/material-symbols-light/storefront"
 
 const logger = createAppLogger("publish-setting")
 
@@ -403,7 +406,11 @@ const basicImport = (importCfgs: DynamicConfig[]) => {
   return importCount
 }
 
-const handleImportPre = async () => {
+const handleImportPlatform = async () => {
+
+}
+
+const handleImportAll = async () => {
   formData.showLogMessage = true
   formData.isImportLoading = true
   // 清空日志
@@ -466,14 +473,26 @@ onMounted(async () => {
   <back-page :title="t('service.tab.publish.setting')">
     <div class="publish-setting-body">
       <el-row :gutter="20" class="row-item">
-        <el-col :span="2" class="col-item">
+        <el-col :span="4" class="col-item">
           <el-menu class="publish-setting-left-menu">
             <el-menu-item
               :class="formData.showAdd ? 'left-menu-item' : 'left-menu-item menu-item-selected'"
               @click="handleHidePlatform"
             >
               <template #title>
-                <span> {{ t("service.tab.publish.setting") }} </span>
+                <span>
+                  <i class="el-icon"><MaterialSymbolsFormatListBulleted /></i> {{ t("service.tab.publish.setting") }}
+                </span>
+              </template>
+            </el-menu-item>
+            <el-menu-item
+              :class="!formData.showAdd ? 'left-menu-item' : 'left-menu-item menu-item-selected'"
+              @click="handleImportPlatform"
+            >
+              <template #title>
+                <span>
+                  <i class="el-icon"> <MdiImport /></i> {{ t("setting.platform.import") }}
+                </span>
               </template>
             </el-menu-item>
             <el-menu-item
@@ -481,12 +500,14 @@ onMounted(async () => {
               @click="handleShowPlatform"
             >
               <template #title>
-                <span> + {{ t("setting.platform.add") }} </span>
+                <span>
+                  <i class="el-icon"> <MaterialSymbolsLightStorefront /></i> {{ t("setting.platform.store") }}
+                </span>
               </template>
             </el-menu-item>
           </el-menu>
         </el-col>
-        <el-col :span="22" class="col-item">
+        <el-col :span="20" class="col-item">
           <div class="publish-setting-right-content">
             <div v-if="formData.showAdd">
               <el-row :gutter="20" class="row-item">
@@ -642,7 +663,7 @@ onMounted(async () => {
                           size="small"
                           type="primary"
                           :loading="formData.isImportLoading"
-                          @click="handleImportPre"
+                          @click="handleImportAll"
                         >
                           导入预定义平台
                         </el-button>
@@ -653,7 +674,7 @@ onMounted(async () => {
                         size="small"
                         type="primary"
                         :loading="formData.isImportLoading"
-                        @click="handleImportPre"
+                        @click="handleImportAll"
                       >
                         导入预定义平台
                       </el-button>
@@ -754,10 +775,12 @@ $icon_size = 32px
 
 .publish-setting-left-menu
   text-align center
+  height 100%
 
   .left-menu-item
     justify-content center
     height 36px
+    padding 10px
 
   .menu-item-selected
     color var(--el-fill-color-blank)
@@ -844,6 +867,7 @@ html[class="dark"]
             .action-setting
               font-size 12px
               cursor pointer
+
               &:hover
                 color var(--el-color-primary)
 
@@ -851,6 +875,7 @@ html[class="dark"]
               font-size 12px
               cursor pointer
               color var(--el-color-warning)
+
               &:hover
                 color var(--el-color-primary)
 
@@ -858,6 +883,7 @@ html[class="dark"]
               font-size 12px
               cursor pointer
               color var(--el-color-error)
+
               &:hover
                 color var(--el-color-primary)
 

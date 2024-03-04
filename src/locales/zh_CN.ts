@@ -539,6 +539,8 @@ export default {
   "setting.main.background": "挂件背景",
   "setting.main.background.tip": "支持16进制和rgb，例如：#000000，未设置或者留空不变。如果新窗口设置，请重新刷新文档。",
   "setting.picgo.manage": "图床管理",
+  "setting.platform.import": "平台导入",
+  "setting.platform.store": "插件商店",
   "setting.platform.add": "新增平台",
   "setting.platform.add.this": "新增此平台",
   "setting.platform.universal": "通用平台",

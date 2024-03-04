@@ -560,6 +560,8 @@ export default {
   "setting.platform.gitlab.desc":
     "Gitlab is basically similar to Github, except that Gitlab supports its own on-premises or cloud server deployment",
   "setting.picgo.manage": "Picture manage",
+  "setting.platform.import": "Platform import",
+  "setting.platform.store": "Plugin store",
   "setting.platform.add": "Add platform",
   "setting.platform.add.this": "Add this platform",
   "setting.platform.universal": "Universal platform",
