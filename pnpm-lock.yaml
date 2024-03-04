@@ -108,8 +108,8 @@ dependencies:
     specifier: ^0.1.4
     version: 0.1.4
   zhi-siyuan-api:
-    specifier: ^2.16.0
-    version: 2.16.0(typescript@5.3.3)
+    specifier: ^2.18.4
+    version: 2.18.4(typescript@5.3.3)
   zhi-xmlrpc-middleware:
     specifier: ^0.6.17
     version: 0.6.17(typescript@5.3.3)
@@ -6707,7 +6707,7 @@ packages:
       zhi-device: 2.10.0
       zhi-fetch-middleware: 0.2.29(typescript@5.3.3)
       zhi-lib-base: 0.4.4
-      zhi-siyuan-api: 2.16.0(typescript@5.3.3)
+      zhi-siyuan-api: 2.18.4(typescript@5.3.3)
     transitivePeerDependencies:
       - '@vue/composition-api'
       - typescript
@@ -7986,6 +7986,15 @@ packages:
       - typescript
     dev: false
 
+  /zhi-blog-api@1.56.1(typescript@5.3.3):
+    resolution: {integrity: sha512-iYih0gcINT6C8UWZP7v7EoE6hmfD44ecaen4Gb6GU/SuR9CdUM/YSe3DbehbKOTu0ArpTcFpMPC9lS/XI0sW6A==}
+    dependencies:
+      zhi-common: 1.31.0(typescript@5.3.3)
+      zhi-lib-base: 0.8.0
+    transitivePeerDependencies:
+      - typescript
+    dev: false
+
   /zhi-common@1.18.0(typescript@5.3.3):
     resolution: {integrity: sha512-7m8uyV8+kZ0tJky0myjz8Nj1Ad0kNsMNsg4itixnoM0yIYo6VZ7uU+oMd3qmqyA9kcvszD2QXV4w8qlgIDBGfg==}
     dependencies:
@@ -8000,6 +8009,18 @@ packages:
 
   /zhi-common@1.30.0(typescript@5.3.3):
     resolution: {integrity: sha512-57bYMr920Lq7m1TLP8jheO4GkWJQ3xqFbB4XHfd24+YhpTvSyaue6i/+WPOT+x9cbc6jWF3n5oBeGsPhwN7zNQ==}
+    dependencies:
+      js-yaml: 4.1.0
+      shorthash2: 1.0.3
+      transliteration: 2.3.5
+      vue: 3.4.20(typescript@5.3.3)
+      zhi-lib-base: 0.8.0
+    transitivePeerDependencies:
+      - typescript
+    dev: false
+
+  /zhi-common@1.31.0(typescript@5.3.3):
+    resolution: {integrity: sha512-s9x5e3dLhFmh514yvT1JtP7xriWMVxQ11AyIjOgx5Xo2cKcDv5b6nKDaLj2Jkvms9iwZRSinDY8y/FK3jrfbrg==}
     dependencies:
       js-yaml: 4.1.0
       shorthash2: 1.0.3
@@ -8076,11 +8097,11 @@ packages:
       - supports-color
     dev: false
 
-  /zhi-siyuan-api@2.16.0(typescript@5.3.3):
-    resolution: {integrity: sha512-/PQF9Fg60dlbumwr07w/VausjASToFECKD+7E3OscR+KmbCsfAJUjjgHKcaitCugm6nM+IMc3atG3AGj/dt/Lw==}
+  /zhi-siyuan-api@2.18.4(typescript@5.3.3):
+    resolution: {integrity: sha512-dYtYBS6QWpZoQkvH3zDZfA33tXHU86XjpCz081AMd94E3VxPvdBoca35ICoFLQqJINwIEFvFfHG32N8eQ/Km7w==}
     dependencies:
-      zhi-blog-api: 1.53.2(typescript@5.3.3)
-      zhi-common: 1.30.0(typescript@5.3.3)
+      zhi-blog-api: 1.56.1(typescript@5.3.3)
+      zhi-common: 1.31.0(typescript@5.3.3)
       zhi-lib-base: 0.8.0
     transitivePeerDependencies:
       - typescript
