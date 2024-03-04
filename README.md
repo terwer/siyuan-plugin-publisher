@@ -29,6 +29,7 @@ If you're interested in the paid professional version, please check the paied â
     - Incorporation of development documentation alongside a preview of forthcoming version agendas
     - Enhanced Plugin Store experience
     - Streamlined import processes, now accommodating customized imports
+    - Exquisitely refined iteration of `sy-post-publisher widget
 
   - Furthermore, post the `1.14.0` version, the author discretely developed an import function. Users can swiftly import built-in platforms through `Settings` -> `Publish Settings` -> `Import Predefined Platforms` feature ğŸ˜„
 
