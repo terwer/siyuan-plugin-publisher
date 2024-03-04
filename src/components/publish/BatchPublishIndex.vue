@@ -438,8 +438,8 @@ onMounted(async () => {
               <div class="distri-type">
                 <el-form-item label="分发模式">
                   <el-radio-group v-model="formData.distriPattern" class="ml-4 distri-type-check">
-                    <el-radio :label="DistributionPattern.Override" size="large">覆盖</el-radio>
-                    <el-radio :label="DistributionPattern.Merge" size="large">合并</el-radio>
+                    <el-radio :value="DistributionPattern.Override" size="large">覆盖</el-radio>
+                    <el-radio :value="DistributionPattern.Merge" size="large">合并</el-radio>
                   </el-radio-group>
                 </el-form-item>
                 <el-form-item class="distri-tip">
