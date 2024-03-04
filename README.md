@@ -15,6 +15,7 @@ If you're interested in the paid professional version, please check the paied âž
   - The prominent features integrated into `1.20.0` encompass:
 
     - #958 #1009 Experimental support for the docker edition of siyuan-note, marking a preliminary step towards its implementation. Should anomalies surface during deployment, the extension welcomes the addition of GitHub issues for resolution.
+      - **Please note: Unavailability of CORS proxy configuration will render the functionality inactive!!!**
       - Progress in Docker compatibility:
         - [X] telegra.ph
     - #1053 Introduction of the publishing platform telegra.ph
