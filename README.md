@@ -124,6 +124,7 @@ Names not listed in order
 - [ ] Xlog - TODO
 - [ ] Mdnice - TODO
 - [ ] Flowus - TODO
+- [X] telegra.ph
 
 ## Core Features
 
