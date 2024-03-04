@@ -53,7 +53,7 @@ export interface ILogger {
  * @since 0.9.0
  */
 export const createAppLogger = (name: string): ILogger => {
-  return simpleLogger(name, "publisher-widget", isDev)
+  return simpleLogger(name, "publisher", isDev)
 }
 
 /**

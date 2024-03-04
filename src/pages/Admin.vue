@@ -34,21 +34,25 @@ import { getSiyuanPageId } from "~/src/utils/siyuanUtils.ts"
 import { DateUtil, HtmlUtil, JsonUtil, StrUtil } from "zhi-common"
 import { LuteUtil } from "~/src/utils/luteUtil.ts"
 import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
-import { DYNAMIC_CONFIG_KEY, MAX_TITLE_LENGTH } from "~/src/utils/constants.ts"
+import { appBase, DYNAMIC_CONFIG_KEY, MAX_TITLE_LENGTH } from "~/src/utils/constants.ts"
 import MaterialSymbolsDriveFolderUpload from "~icons/material-symbols/drive-folder-upload"
 import Fa6SolidBookOpenReader from "~icons/fa6-solid/book-open-reader"
 import MaterialSymbolsAddPhotoAlternateOutline from "~icons/material-symbols/add-photo-alternate-outline"
+import MaterialSymbolsRocketLaunch from "~icons/material-symbols/rocket-launch"
+import MdiMinusBoxMultipleOutline from "~icons/mdi/minus-box-multiple-outline"
 import { Utils } from "~/src/utils/utils.ts"
 import { useRouter } from "vue-router"
 import { PluginUtils } from "~/src/utils/pluginUtils.ts"
 import { useSiyuanSettingStore } from "~/src/stores/useSiyuanSettingStore.ts"
 import { DynamicJsonCfg, getDynCfgByKey } from "~/src/platforms/dynamicConfig.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
+import DrawerBoxBridge from "~/src/components/admin/DrawerBoxBridge.vue"
+import { svgIcons } from "~/src/utils/svgIcons.ts"
 
 // uses
 const { t } = useVueI18n()
 const { kernelApi, blogApi } = useSiyuanApi()
-const { isInSiyuanWidget } = useSiyuanDevice()
+const { isInSiyuanWidget, isInSiyuanOrSiyuanNewWin } = useSiyuanDevice()
 const router = useRouter()
 const { getReadOnlyPublishPreferenceSetting } = usePreferenceSettingStore()
 const { getReadOnlySiyuanSetting } = useSiyuanSettingStore()
@@ -61,6 +65,7 @@ const dataLayout = ref("prev,pager,next")
 
 const state = ref("")
 const links = ref([])
+const showPublished = ref(false)
 
 const tableData = []
 const MAX_PAGE_SIZE = 8
@@ -72,6 +77,10 @@ const isPicgoInstalled = ref(false)
 const isBlogInstalled = ref(false)
 const dynamicConfigArray = ref([])
 const siyuanSetting = getReadOnlySiyuanSetting()
+
+const showDrawer = ref(false)
+const drawerTitle = ref("")
+const drawerSrc = ref("")
 
 // methods
 const querySearch = (queryString: string, cb: any) => {
@@ -90,6 +99,10 @@ const handleBtnSearch = () => {
   reloadTableData()
 }
 
+const onIsPublishedChange = (val: boolean) => {
+  reloadTableData()
+}
+
 const handlePrevPage = async (curPage: number) => {
   currentPage.value = curPage
   await reloadTableData()
@@ -103,12 +116,92 @@ const handleCurrentPage = async (curPage: number) => {
   await reloadTableData()
 }
 
-const handleView = (index: number, row: any) => {
-  handleNewWinView(index, row)
+// =====================================================================================================================
+/**
+ * 打开抽屉 - 通用
+ *
+ * @param title 标题
+ * @param url 地址
+ */
+const goToDrawer = (title: string, url: string) => {
+  drawerTitle.value = title
+  drawerSrc.value = url
+  showDrawer.value = true
 }
 
-const handleNewWinView = async (index: number, row: any) => {
-  // 阻止事件冒泡
+/**
+ * 打开抽屉 - 发布工具内部
+ *
+ * @param title 标题
+ * @param pageUrl 内部地址，包括参数
+ */
+const goToPublisherDrawer = (title: string, pageUrl: string) => {
+  const win = window as any
+  const url = `${win.origin}${appBase}#${pageUrl}`
+  logger.debug(`Publisher will go to ${url}`)
+
+  goToDrawer(title, url)
+}
+
+/**
+ * 打开抽屉 - 在线分享内部
+ *
+ * @param title 标题
+ * @param pageUrl 内部地址，包括参数
+ */
+const goToBlogDrawer = (title: string, pageUrl: string) => {
+  const url = `${siyuanSetting.value.apiUrl}/plugins/siyuan-blog/#${pageUrl}`
+  logger.debug(`Blog will go to ${url}`)
+
+  goToDrawer(title, url)
+}
+
+/**
+ * 打开抽屉 - Picgo 内部
+ *
+ * @param title 标题
+ * @param pageUrl 内部地址，包括参数
+ */
+const goToPicgoDrawer = (title: string, pageUrl: string) => {
+  const url = `${siyuanSetting.value.apiUrl}/plugins/siyuan-plugin-picgo/#${pageUrl}`
+  logger.debug(`Picgo will go to ${url}`)
+
+  goToDrawer(title, url)
+}
+const goToPicgoNewWin = (pageUrl: string) => {
+  const url = `${siyuanSetting.value.apiUrl}/plugins/siyuan-plugin-picgo/#${pageUrl}`
+  logger.debug(`Picgo will go to ${url}`)
+
+  const win = window as any
+  win.open(url)
+}
+// =====================================================================================================================
+// 单个平台选择平台，然后极速发布
+const handleQuick = (_index: number, row: any) => {
+  const pageId = row.postid
+  goToPublisherDrawer("极速发布", `/publish/quickSelect?id=${pageId}`)
+}
+
+// 单个平台选择平台，然后常规发布
+const handleEdit = (index: number, row: any) => {
+  const pageId = row.postid
+  goToPublisherDrawer("单个发布", `/publish/singlePublish?id=${pageId}`)
+}
+
+// 单个平台常规发布
+const goToSingleEdit = async (key: string, row: any) => {
+  const pageId = row.postid
+  goToPublisherDrawer("常规发布", `/publish/singlePublish/doPublish/${key}/${pageId}?method=edit`)
+}
+
+// 批量发布
+const handleBatch = (_index: number, row: any) => {
+  const pageId = row.postid
+  goToPublisherDrawer("批量发布", `/publish/batchPublish?id=${pageId}`)
+}
+
+// 文章预览 - 在线分享
+const handleView = (_index: number, row: any) => {
   const win = window as any
 
   const pageId = row.postid
@@ -118,66 +211,23 @@ const handleNewWinView = async (index: number, row: any) => {
     win.event.stopPropagation()
     return
   }
-
-  const viewUrl = `${siyuanSetting.value.apiUrl}/plugins/siyuan-blog/#/post/${pageId}`
-  win.open(viewUrl)
-  win.event.stopPropagation()
+  goToBlogDrawer("文章预览", `/post/${pageId}`)
 }
 
-const handleEdit = (index: number, row: any) => {
-  handleNewWinEdit(index, row)
-}
-
-const handleNewWinEdit = async (index: number, row: any) => {
-  await router.push({
-    path: "/publish/singlePublish",
-    query: {
-      id: row.postid,
-      showBack: "true",
-    },
-  })
+// Picgo- 图床
+const handlePicgo = (index: number, row: any) => {
+  const pageId = row.postid
+  if (isInSiyuanOrSiyuanNewWin()) {
+    goToPicgoDrawer("图床", `/?pageId=${pageId}`)
+  } else {
+    goToPicgoNewWin(`/?pageId=${pageId}`)
+  }
 }
 
 const handleRowClick = async (row: any, column: any, event: any) => {
   // handleEdit(column.index, row)
-  // console.log("handleRowClick", row)
 }
-
-const handlePicgo = (index: number, row: any) => {
-  handleNewWinPicgo(index, row)
-}
-
-const handleNewWinPicgo = (index: number, row: any) => {
-  // 阻止事件冒泡
-  const win = window as any
-  const picgoUrl = `${siyuanSetting.value.apiUrl}/plugins/siyuan-plugin-picgo/?pageId=${row.postid}`
-  win.open(picgoUrl)
-  win.event.stopPropagation()
-}
-
-const goToSingleEdit = async (key: string, row: any) => {
-  // /#/publish/singlePublish/doPublish/wordpress_Wordpress/20230815225853-a2ybito?showBack=true&method=edit
-  await router.push({
-    path: `/publish/singlePublish/doPublish/${key}/${row.postid}`,
-    query: {
-      showBack: "true",
-      method: "edit",
-    },
-  })
-}
-
-const initPage = async () => {
-  isPicgoInstalled.value = await PluginUtils.preCheckPicgoPlugin()
-  isBlogInstalled.value = await PluginUtils.preCheckBlogPlugin()
-
-  const setting = await getSetting()
-  const dynJsonCfg = JsonUtil.safeParse<DynamicJsonCfg>(setting[DYNAMIC_CONFIG_KEY], {} as DynamicJsonCfg)
-  dynamicConfigArray.value = dynJsonCfg?.totalCfg || []
-
-  await reloadTableData()
-  logger.debug("Post init page=>", tableData)
-}
-
+// =====================================================================================================================
 const reloadTableData = async () => {
   isDataBoxLoading.value = true
 
@@ -190,13 +240,19 @@ const reloadTableData = async () => {
     // 挂件里面才展示子文档
     if (isInSiyuanWidget() && !StrUtil.isEmptyString(pageId)) {
       // 检测子文档
-      postCount = await kernelApi.getSubdocCount(pageId)
+      postCount = await kernelApi.getSubdocCount(pageId, showPublished.value)
       if (postCount > 1) {
         hasSubdoc = true
       }
 
       if (hasSubdoc) {
-        const subdocInfoList = await kernelApi.getSubdocs(pageId, currentPage.value - 1, MAX_PAGE_SIZE, state.value)
+        const subdocInfoList = await kernelApi.getSubdocs(
+          pageId,
+          currentPage.value - 1,
+          MAX_PAGE_SIZE,
+          state.value,
+          showPublished.value
+        )
         for (let i = 0; i < subdocInfoList.length; i++) {
           const subdocInfo = subdocInfoList[i]
           const postId = subdocInfo.root_id
@@ -214,8 +270,8 @@ const reloadTableData = async () => {
         })
       }
     } else {
-      postCount = await blogApi.getRecentPostsCount(state.value)
-      postList = await blogApi.getRecentPosts(MAX_PAGE_SIZE, currentPage.value - 1, state.value)
+      postCount = await blogApi.getRecentPostsCount(state.value, showPublished.value)
+      postList = await blogApi.getRecentPosts(MAX_PAGE_SIZE, currentPage.value - 1, state.value, showPublished.value)
       logger.info("无法获取页面ID，可能是浏览器环境或者浏览器插件展示文档列表")
     }
     logger.debug("postList=>", postList)
@@ -283,6 +339,19 @@ const reloadTableData = async () => {
   // table的key改变才会刷新
   num.value++
 }
+// =====================================================================================================================
+
+const initPage = async () => {
+  isPicgoInstalled.value = await PluginUtils.preCheckPicgoPlugin()
+  isBlogInstalled.value = await PluginUtils.preCheckBlogPlugin()
+
+  const setting = await getSetting()
+  const dynJsonCfg = JsonUtil.safeParse<DynamicJsonCfg>(setting[DYNAMIC_CONFIG_KEY], {} as DynamicJsonCfg)
+  dynamicConfigArray.value = dynJsonCfg?.totalCfg || []
+
+  await reloadTableData()
+  logger.debug("Post init page=>", tableData)
+}
 
 onBeforeMount(async () => {
   await initPage()
@@ -309,6 +378,13 @@ onBeforeMount(async () => {
           </template>
         </el-autocomplete>
         <el-button class="s-btn" type="primary" @click="handleBtnSearch">搜索</el-button>
+        <el-checkbox
+          class="s-filter-item s-filter-published"
+          size="large"
+          v-model="showPublished"
+          @change="onIsPublishedChange"
+          >已发布
+        </el-checkbox>
       </div>
 
       <!-- 表格数据展示 -->
@@ -345,9 +421,9 @@ onBeforeMount(async () => {
                       <a @click="goToSingleEdit(key.toString(), props.row)">
                         <el-text>
                           <i class="el-icon">
-                            <span v-html="props.row.dynCfgs[key]?.platformIcon"></span>
+                            <span v-html="props.row.dynCfgs[key]?.platformIcon ?? svgIcons.iconOTRemove"></span>
                           </i>
-                          {{ props.row.dynCfgs[key].platformName }}
+                          {{ props.row.dynCfgs[key]?.platformName ?? "[已删除]" }}
                         </el-text>
                       </a>
                     </span>
@@ -376,12 +452,17 @@ onBeforeMount(async () => {
               <sup class="yaml-count-sign" v-if="scope.row.yamlCount > 0">{{ scope.row.yamlCount }}</sup>
             </template>
           </el-table-column>
-          <el-table-column align="center" width="350">
+          <el-table-column align="center" width="420">
             <template #header>
               <div style="text-align: center">操作</div>
             </template>
             <template #default="scope">
               <!-- 发布 -->
+              <el-button size="small" @click="handleQuick(scope.$index, scope.row)">
+                <MaterialSymbolsRocketLaunch />
+                &nbsp;闪发
+              </el-button>
+
               <!--
               <el-tooltip
                 :content="t('siyuan.browser.menu.publish.btn')"
@@ -394,7 +475,11 @@ onBeforeMount(async () => {
               -->
               <el-button size="small" @click="handleEdit(scope.$index, scope.row)">
                 <MaterialSymbolsDriveFolderUpload />
-                &nbsp;发布
+                &nbsp;单发
+              </el-button>
+              <el-button size="small" @click="handleBatch(scope.$index, scope.row)">
+                <MdiMinusBoxMultipleOutline />
+                &nbsp;批发
               </el-button>
 
               <!-- 预览 -->
@@ -450,6 +535,11 @@ onBeforeMount(async () => {
         />
       </div>
     </div>
+
+    <!-- 抽屉占位 -->
+    <el-drawer v-model="showDrawer" size="85%" :title="drawerTitle" direction="rtl" :destroy-on-close="true">
+      <DrawerBoxBridge :src="drawerSrc" />
+    </el-drawer>
   </div>
 </template>
 
@@ -488,6 +578,11 @@ onBeforeMount(async () => {
 .s-btn
   margin-left: 20px
 
+.s-filter-item
+  padding-left 10px
+
+//.s-filter-published
+
 /* table */
 .tb-data
   margin-top: 10px
@@ -512,4 +607,11 @@ onBeforeMount(async () => {
   color red
   font-size 12px
   padding-left 2px
+
+:deep(.el-drawer)
+  --el-drawer-padding-primary: var(--el-dialog-padding-primary, 0);
+
+:deep(.el-drawer__header)
+  padding: 20px;
+  margin-bottom 0
 </style>

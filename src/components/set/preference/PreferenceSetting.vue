@@ -26,11 +26,16 @@
 <script setup lang="ts">
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
+import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
+import { StrUtil } from "zhi-common"
+import { getSiyuanWidgetId } from "~/src/utils/siyuanUtils.ts"
 
 const { t } = useVueI18n()
 const { getPublishPreferenceSetting } = usePreferenceSettingStore()
+const { isInSiyuanPlugin, isInSiyuanWidget } = useSiyuanDevice()
 
 const publishPreferenceSettingForm = getPublishPreferenceSetting()
+const isSiyuanPlugin = isInSiyuanPlugin() || (isInSiyuanWidget() && StrUtil.isEmptyString(getSiyuanWidgetId()))
 </script>
 
 <template>
@@ -48,32 +53,34 @@ const publishPreferenceSettingForm = getPublishPreferenceSetting()
       <el-switch v-model="publishPreferenceSettingForm.removeMdWidgetTag"></el-switch>
     </el-form-item>
 
-    <el-divider border-style="dashed" class="psd"/>
+    <div v-if="isSiyuanPlugin">
+      <el-divider border-style="dashed" class="psd" />
 
-    <el-form-item :label="t('preference.setting.showDocQuickMenu')">
-      <el-switch v-model="publishPreferenceSettingForm.showDocQuickMenu"></el-switch>
-    </el-form-item>
+      <el-form-item :label="t('preference.setting.showDocQuickMenu')">
+        <el-switch v-model="publishPreferenceSettingForm.showDocQuickMenu"></el-switch>
+      </el-form-item>
 
-    <el-divider border-style="dashed" class="psd"/>
+      <el-divider border-style="dashed" class="psd" />
 
-    <el-form-item :label="t('preference.setting.showQuickMenu')">
-      <el-switch v-model="publishPreferenceSettingForm.showQuickMenu"></el-switch>
-    </el-form-item>
-    <el-form-item :label="t('preference.setting.showSingleMenu')">
-      <el-switch v-model="publishPreferenceSettingForm.showSingleMenu"></el-switch>
-    </el-form-item>
-    <el-form-item :label="t('preference.setting.showBatchMenu')">
-      <el-switch v-model="publishPreferenceSettingForm.showBatchMenu"></el-switch>
-    </el-form-item>
-    <el-form-item :label="t('preference.setting.showAIMenu')">
-      <el-switch v-model="publishPreferenceSettingForm.showAIMenu"></el-switch>
-    </el-form-item>
-    <el-form-item :label="t('preference.setting.showExtendMenu')">
-      <el-switch v-model="publishPreferenceSettingForm.showExtendMenu"></el-switch>
-    </el-form-item>
-    <el-form-item :label="t('preference.setting.showArticleManageMenu')">
-      <el-switch v-model="publishPreferenceSettingForm.showArticleManageMenu"></el-switch>
-    </el-form-item>
+      <el-form-item :label="t('preference.setting.showQuickMenu')">
+        <el-switch v-model="publishPreferenceSettingForm.showQuickMenu"></el-switch>
+      </el-form-item>
+      <el-form-item :label="t('preference.setting.showSingleMenu')">
+        <el-switch v-model="publishPreferenceSettingForm.showSingleMenu"></el-switch>
+      </el-form-item>
+      <el-form-item :label="t('preference.setting.showBatchMenu')">
+        <el-switch v-model="publishPreferenceSettingForm.showBatchMenu"></el-switch>
+      </el-form-item>
+      <el-form-item :label="t('preference.setting.showAIMenu')">
+        <el-switch v-model="publishPreferenceSettingForm.showAIMenu"></el-switch>
+      </el-form-item>
+      <el-form-item :label="t('preference.setting.showExtendMenu')">
+        <el-switch v-model="publishPreferenceSettingForm.showExtendMenu"></el-switch>
+      </el-form-item>
+      <el-form-item :label="t('preference.setting.showArticleManageMenu')">
+        <el-switch v-model="publishPreferenceSettingForm.showArticleManageMenu"></el-switch>
+      </el-form-item>
+    </div>
   </el-form>
 </template>
 

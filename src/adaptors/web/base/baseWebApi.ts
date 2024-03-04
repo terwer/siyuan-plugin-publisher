@@ -37,7 +37,8 @@ import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { createAppLogger, ILogger } from "~/src/utils/appLogger.ts"
 import { useProxy } from "~/src/composables/useProxy.ts"
 import { BaseExtendApi } from "~/src/adaptors/base/baseExtendApi.ts"
-import { JsonUtil } from "zhi-common"
+import { JsonUtil, StrUtil } from "zhi-common"
+import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 
 /**
  * 网页授权统一封装基类
@@ -51,7 +52,8 @@ class BaseWebApi extends WebApi {
   protected logger: ILogger
   protected cfg: WebConfig
   protected readonly baseExtendApi: BaseExtendApi
-  public readonly proxyFetch: any
+  private readonly proxyFetch: any
+  private readonly corsFetch: any
 
   /**
    * 初始化网页授权 API 适配器
@@ -67,8 +69,9 @@ class BaseWebApi extends WebApi {
     this.logger = createAppLogger("base-web-api")
     this.baseExtendApi = new BaseExtendApi(this, cfg)
 
-    const { proxyFetch } = useProxy(cfg.middlewareUrl)
+    const { proxyFetch, corsFetch } = useProxy(cfg.middlewareUrl, cfg.corsAnywhereUrl)
     this.proxyFetch = proxyFetch
+    this.corsFetch = corsFetch
   }
 
   public async checkAuth(): Promise<boolean> {
@@ -145,9 +148,7 @@ class BaseWebApi extends WebApi {
     }
   }
 
-  // ================
-  // private methods
-  // ================
+  // ===================================================================================================================
   /**
    * 默认添加 Cookie 的网页授权代理
    *
@@ -156,6 +157,7 @@ class BaseWebApi extends WebApi {
    * @param params - 请求的参数
    * @param method - 请求的 HTTP 方法
    * @param contentType - 请求的内容类型
+   * @param forceProxy - 是否强制使用代理
    * @returns 返回一个 Promise，解析为响应结果
    */
   public async webProxyFetch(
@@ -163,7 +165,8 @@ class BaseWebApi extends WebApi {
     headers: any[] = [],
     params: any = {},
     method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" = "GET",
-    contentType: string = "application/json"
+    contentType: string = "application/json",
+    forceProxy: boolean = false
   ) {
     const header = headers.length > 0 ? headers[0] : {}
     const webHeaders = [
@@ -172,25 +175,62 @@ class BaseWebApi extends WebApi {
         Cookie: this.cfg.password,
       },
     ]
-    return await this.proxyFetch(url, webHeaders, params, method, contentType)
+
+    const isCorsProxyAvailable = !StrUtil.isEmptyString(this.cfg.corsAnywhereUrl)
+    // 如果没有可用的 CORS 代理或者没有强制使用代理，使用默认的自动检测机制
+    if (!isCorsProxyAvailable || !forceProxy) {
+      this.logger.info("Using legency web fetch")
+      return await this.proxyFetch(url, webHeaders, params, method, contentType, forceProxy)
+    } else {
+      this.logger.info("Using cors web fetch")
+      return this.corsFetch(url, headers, params, method)
+    }
   }
 
-  public async webFormFetch(url: string, headers: any[], formData: FormData) {
-    const win = this.appInstance.win
-    const doFetch = win.require(`${this.appInstance.moduleBase}libs/zhi-formdata-fetch/index.cjs`)
+  /**
+   * 默认添加 Cookie 的网页授权代理
+   *
+   * @param url - 请求的 URL
+   * @param headers - 请求的头部信息
+   * @param formData - 表单数据
+   * @param forceProxy - 是否强制使用代理
+   * @returns 返回一个 Promise，解析为响应结果
+   */
+  public async webFormFetch(url: string, headers: any[], formData: FormData, forceProxy: boolean = false) {
+    const isCorsProxyAvailable = !StrUtil.isEmptyString(this.cfg.corsAnywhereUrl)
+    // 如果没有可用的 CORS 代理或者没有强制使用代理，使用默认的自动检测机制
+    if (!isCorsProxyAvailable || !forceProxy) {
+      this.logger.info("Using legency web formFetch")
+      const { isInSiyuanOrSiyuanNewWin } = useSiyuanDevice()
+      if (!isInSiyuanOrSiyuanNewWin()) {
+        throw new Error(
+          "检测到当前为非 electron 环境并且未设置 cors 代理，此功能将不可用！请设置 cors 代理或者使用PC 客户端"
+        )
+      }
 
-    // headers
-    const header = headers.length > 0 ? headers[0] : {}
-    this.logger.debug("before zhi-formdata-fetch, headers =>", headers)
-    this.logger.debug("before zhi-formdata-fetch, url =>", url)
+      const win = this.appInstance.win
+      const doFetch = win.require(`${this.appInstance.moduleBase}libs/zhi-formdata-fetch/index.cjs`)
 
-    const resText = await doFetch(this.appInstance.moduleBase, url, header, formData)
-    this.logger.debug("webForm doFetch success, resText =>", resText)
-    const resJson = JsonUtil.safeParse<any>(resText, {} as any)
-    this.logger.debug("webForm doFetch success, resJson=>", resJson)
+      // headers
+      const header = headers.length > 0 ? headers[0] : {}
+      this.logger.debug("before zhi-formdata-fetch, headers =>", headers)
+      this.logger.debug("before zhi-formdata-fetch, url =>", url)
 
-    return resJson
+      const resText = await doFetch(this.appInstance.moduleBase, url, header, formData)
+      this.logger.debug("webForm doFetch success, resText =>", resText)
+      const resJson = JsonUtil.safeParse<any>(resText, {} as any)
+      this.logger.debug("webForm doFetch success, resJson=>", resJson)
+
+      return resJson
+    } else {
+      this.logger.info("Using cors-anywhere web formFetch")
+      return this.corsFetch(url, headers, formData, "POST")
+    }
   }
+
+  // ================
+  // private methods
+  // ================
 }
 
 export { BaseWebApi }

@@ -4,6 +4,7 @@
 POST https://edit.telegra.ph/check
 origin: https://telegra.ph
 referer: https://telegra.ph/
+Content-Type: text/plain
 
 page_id=0
 

@@ -38,6 +38,7 @@ if __name__ == "__main__":
     URL = 'http://127.0.0.1:6806'
     COOKIE = open('cookie.txt').read().strip()
     TOKEN = open('token.txt').read().strip()
+    DEV_PAGE_ID = open('pageId.txt').read().strip()
 
     # 设置环境变量
     os.environ['IS_SERVE'] = 'true'
@@ -45,7 +46,7 @@ if __name__ == "__main__":
     os.environ['VITE_SIYUAN_API_URL'] = URL
     os.environ['VITE_SIYUAN_AUTH_TOKEN'] = TOKEN
     os.environ['VITE_SIYUAN_COOKIE'] = COOKIE
-    os.environ['VITE_SIYUAN_DEV_PAGE_ID'] = "20230815225853-a2ybito"
+    os.environ['VITE_SIYUAN_DEV_PAGE_ID'] = DEV_PAGE_ID
     # os.environ['VITE_CJS_TRACE'] = 'true'
     os.environ['VITE_CJS_IGNORE_WARNING'] = 'true'
 

@@ -33,6 +33,7 @@ import { CategoryTypeEnum } from "zhi-blog-api"
 import { GitlabjekyllConfig } from "~/src/adaptors/api/gitlab-jekyll/gitlabjekyllConfig.ts"
 import { GitlabjekyllYamlConverterAdaptor } from "~/src/adaptors/api/gitlab-jekyll/gitlabjekyllYamlConverterAdaptor.ts"
 import { GitlabjekyllApiAdaptor } from "~/src/adaptors/api/gitlab-jekyll/gitlabjekyllApiAdaptor.ts"
+import { LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
 
 const useGitlabjekyllApi = async (key: string, newCfg?: GitlabjekyllConfig) => {
   // 创建应用日志记录器
@@ -61,10 +62,7 @@ const useGitlabjekyllApi = async (key: string, newCfg?: GitlabjekyllConfig) => {
       const githubAuthToken = Utils.emptyOrDefault(process.env.VITE_GITLAB_AUTH_TOKEN, "")
       const githubRepo = Utils.emptyOrDefault(process.env.VITE_GITLAB_REPO, "")
       const githubBranch = Utils.emptyOrDefault(process.env.VITE_GITLAB_BRANCH, "main")
-      const middlewareUrl = Utils.emptyOrDefault(
-        process.env.VITE_MIDDLEWARE_URL,
-        "https://api.terwer.space/api/middleware"
-      )
+      const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, LEGENCY_SHARED_PROXT_MIDDLEWARE)
       cfg = new GitlabjekyllConfig(githubUsername, githubAuthToken, githubRepo, githubBranch, middlewareUrl)
       logger.info("Configuration is empty, using default environment variables.")
     } else {

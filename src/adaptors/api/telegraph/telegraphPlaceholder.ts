@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023, Terwer . All rights reserved.
+ * Copyright (c) 2024, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -23,20 +23,11 @@
  * questions.
  */
 
-// 图标
-// 建议使用 iconfont ，可以调色，可以调整大小
-// https://fontawesome.com/search?q=yuque&o=r&m=free
-// https://www.iconfont.cn/search/index?searchType=icon&q=cnblogs&page=1&tag=&fromCollection=1&fills=
-.iconfont-icon
-  width 12px
-  height 12px
-  margin-right 10px
-  margin-top 2.5px
+import { CommonBlogPlaceholder } from "~/src/adaptors/api/base/commonBlogPlaceholder.ts"
 
-.img-icon img
-  width 16px !important
-  height 16px !important
-  margin-right 8px
+/**
+ * Telegraph 配置提示
+ */
+class TelegraphPlaceholder extends CommonBlogPlaceholder {}
 
-.red
-  color red
+export { TelegraphPlaceholder }

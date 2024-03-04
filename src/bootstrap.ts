@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023, Terwer . All rights reserved.
+ * Copyright (c) 2023-2024, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -23,20 +23,46 @@
  * questions.
  */
 
-// 图标
-// 建议使用 iconfont ，可以调色，可以调整大小
-// https://fontawesome.com/search?q=yuque&o=r&m=free
-// https://www.iconfont.cn/search/index?searchType=icon&q=cnblogs&page=1&tag=&fromCollection=1&fills=
-.iconfont-icon
-  width 12px
-  height 12px
-  margin-right 10px
-  margin-top 2.5px
+import { createApp } from "vue"
+import App from "./App.vue"
+import { createAppLogger } from "./utils/appLogger.ts"
+import { useVueRouter } from "./composables/useVueRouter.ts"
+import i18n from "./locales"
+import { createPinia } from "pinia"
+import iframeResize from "./utils/directives/iframeResize.ts";
 
-.img-icon img
-  width 16px !important
-  height 16px !important
-  margin-right 8px
+/**
+ * Vue 入口
+ *
+ * @author terwer
+ * @version 0.9.0
+ * @since 0.0.1
+ */
+const createVueApp = async (isMount?: boolean) => {
+  const logger = createAppLogger("vue-main-entry")
 
-.red
-  color red
+  // https://stackoverflow.com/a/62383325/4037224
+  const app = createApp(App)
+
+  // 国际化
+  app.use(i18n)
+
+  // pinia
+  const pinia = createPinia()
+  app.use(pinia)
+
+  // router
+  const router = useVueRouter()
+  app.use(router)
+
+  // ElementPlus 包太大，需要改成按需引入
+  // https://element-plus.org/zh-CN/guide/quickstart.html#%E6%8C%89%E9%9C%80%E5%AF%BC%E5%85%A5
+  // app.use(ElementPlus)
+
+  // ifreme resizere
+  app.directive('resize', iframeResize)
+
+  return { i18n, router, app }
+}
+
+export { createVueApp }

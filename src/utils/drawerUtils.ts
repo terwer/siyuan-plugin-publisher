@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023, Terwer . All rights reserved.
+ * Copyright (c) 2024, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -23,42 +23,6 @@
  * questions.
  */
 
-import { createApp } from "vue"
-import App from "~/src/App.vue"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { useVueRouter } from "~/src/composables/useVueRouter.ts"
-import i18n from "~/src/locales"
-import { createPinia } from "pinia"
+export const goTo = () => {
 
-/**
- * Vue 入口
- *
- * @author terwer
- * @version 0.9.0
- * @since 0.0.1
- */
-const createVueApp = async (isMount?: boolean) => {
-  const logger = createAppLogger("vue-main-entry")
-
-  // https://stackoverflow.com/a/62383325/4037224
-  const app = createApp(App)
-
-  // 国际化
-  app.use(i18n)
-
-  // pinia
-  const pinia = createPinia()
-  app.use(pinia)
-
-  // router
-  const router = useVueRouter()
-  app.use(router)
-
-  // ElementPlus 包太大，需要改成按需引入
-  // https://element-plus.org/zh-CN/guide/quickstart.html#%E6%8C%89%E9%9C%80%E5%AF%BC%E5%85%A5
-  // app.use(ElementPlus)
-
-  return { i18n, router, app }
 }
-
-export { createVueApp }

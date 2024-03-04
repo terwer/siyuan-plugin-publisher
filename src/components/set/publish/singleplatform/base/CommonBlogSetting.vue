@@ -32,9 +32,9 @@ import { onMounted, reactive, ref, toRaw, watch } from "vue"
 import { DynamicConfig, DynamicJsonCfg, getDynCfgByKey, setDynamicJsonCfg } from "~/src/platforms/dynamicConfig.ts"
 import { SypConfig } from "~/syp.config.ts"
 import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
-import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
+import { JsonUtil, ObjectUtil } from "zhi-common"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
-import { BlogAdaptor, PageTypeEnum, PasswordType } from "zhi-blog-api"
+import { BlogAdaptor, PageTypeEnum, PasswordType, UserBlog } from "zhi-blog-api"
 import Adaptors from "~/src/adaptors"
 import { Utils } from "~/src/utils/utils.ts"
 import { ElMessage } from "element-plus"
@@ -165,7 +165,9 @@ const valiConf = async () => {
   }
 
   // isAuth和apiStatus同步
-  formData.dynCfg.isAuth = formData.cfg.apiStatus
+  if (formData.dynCfg) {
+    formData.dynCfg.isAuth = formData.cfg.apiStatus
+  }
   // 刷新状态
   await saveConf(true)
 
@@ -173,27 +175,33 @@ const valiConf = async () => {
   logger.debug("Commonblog通用Setting验证完毕")
 }
 
-const afterValid = async (api) => {
+const afterValid = async (api: any) => {
   // 验证成功就去初始化知识空间
   const usersBlogs = await api.getUsersBlogs(formData.ksKeyword)
   if (usersBlogs && usersBlogs.length > 0) {
-    // 首次未保存验证的时候才去更新
-    if (StrUtil.isEmptyString(formData.cfg?.blogid)) {
-      // 首次验证需要初始化下拉选择
-      if (formData.kwSpaces.length == 0) {
-        usersBlogs.forEach((item) => {
-          const kwItem = {
-            label: item.blogName,
-            value: item.blogid,
-          }
-          formData.kwSpaces.push(kwItem)
-        })
-      }
+    // 更新知识空间
+    if (formData.kwSpaces.length == 0) {
+      usersBlogs.forEach((item: any) => {
+        const kwItem = {
+          label: item.blogName,
+          value: item.blogid,
+        }
+        formData.kwSpaces.push(kwItem)
+      })
+    }
 
-      // 初始化选中
-      const userBlog = usersBlogs[0]
-      formData.cfg.blogid = userBlog.blogid
-      formData.cfg.blogName = userBlog.blogName
+    // 更新博客信息
+    const userBlog = usersBlogs[0] as UserBlog
+    formData.cfg.blogid = userBlog.blogid
+    formData.cfg.blogName = userBlog.blogName
+
+    // 元数据映射，字词验证需更新
+    // @since 1.20.0
+    for (const key in userBlog.metadataMap) {
+      // 这里不用校验，因为可能是继承的属性
+      // if (ObjectUtil.hasKey(formData.cfg, key)) {
+      formData.cfg[key] = userBlog.metadataMap[key]
+      // }
     }
   }
 }
@@ -387,8 +395,8 @@ onMounted(async () => {
     </el-form-item>
     <el-form-item :label="t('setting.blog.pageType')">
       <el-radio-group v-model="formData.cfg.pageType" class="ml-4">
-        <el-radio :label="PageTypeEnum.Markdown" size="large">Markdown</el-radio>
-        <el-radio :label="PageTypeEnum.Html" size="large">HTML</el-radio>
+        <el-radio :value="PageTypeEnum.Markdown" size="large">Markdown</el-radio>
+        <el-radio :value="PageTypeEnum.Html" size="large">HTML</el-radio>
       </el-radio-group>
     </el-form-item>
     <!-- 知识空间 -->
@@ -422,6 +430,33 @@ onMounted(async () => {
         type="info"
       ></el-alert>
     </el-form-item>
+    <!-- 新 CORS 代理 -->
+    <el-form-item :label="t('setting.blog.middlewareUrl.new')">
+      <el-input v-model="formData.cfg.corsAnywhereUrl" :placeholder="t('setting.blog.corsAnywhereUrl.tip')" />
+      <el-alert
+        :closable="false"
+        :title="t('setting.blog.middlewareUrl.my.new.tip')"
+        class="top-tip"
+        type="warning"
+      ></el-alert>
+    </el-form-item>
+    <el-form-item>
+      <el-alert
+        :closable="false"
+        :title="t('setting.blog.middlewareUrl.my.warn.tip')"
+        class="top-tip"
+        type="error"
+      ></el-alert>
+      <el-alert
+        :closable="false"
+        :title="t('setting.blog.middlewareUrl.my.fee.tip')"
+        class="top-tip"
+        type="error"
+      ></el-alert>
+      <a target="_blank" href="https://gitee.com/terwer/siyuan-plugin-publisher#%E6%8D%90%E8%B5%A0">
+        {{ t("setting.blog.middlewareUrl.my.coffee") }}
+      </a>
+    </el-form-item>
     <!-- 校验 -->
     <el-form-item>
       <el-button type="primary" :loading="isLoading" @click="valiConf">
@@ -452,9 +487,11 @@ onMounted(async () => {
 <style lang="stylus" scoped>
 .placeholder
   margin-top 10px
+
 .top-tip
   margin 10px 0
   padding-left 0
+
 .inline-tip
   margin 0
   padding-left 0

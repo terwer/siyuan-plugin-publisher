@@ -27,7 +27,7 @@ import { beforeEach, describe, it } from "vitest"
 import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
 import { config, mount } from "@vue/test-utils"
 import App from "~/src/App.vue"
-import { createVueApp } from "~/src/utils/vueUtils.ts"
+import { createVueApp } from "~/src/bootstrap.ts"
 
 describe("test usePublishConfig", async () => {
   const instance = await createVueApp()

@@ -51,7 +51,7 @@ import { useVitepressApi } from "~/src/adaptors/api/vitepress/useVitepressApi.ts
 import { useGitlabvuepress2Api } from "~/src/adaptors/api/gitlab-vuepress2/useGitlabvuepress2Api.ts"
 import { useGitlabvitepressApi } from "~/src/adaptors/api/gitlab-vitepress/useGitlabvitepressApi.ts"
 import { useHaloApi } from "~/src/adaptors/api/halo/useHaloApi.ts"
-import { useFlowusWeb } from "~/src/adaptors/web/flowus/useFlowusWeb.ts"
+import { useTelegraphApi } from "~/src/adaptors/api/telegraph/useTelegraphApi.ts"
 
 /**
  * 适配器统一入口
@@ -85,6 +85,11 @@ class Adaptors {
       }
       case SubPlatformType.Common_Halo: {
         const { cfg } = await useHaloApi(key, newCfg)
+        conf = cfg
+        break
+      }
+      case SubPlatformType.Common_Telegraph: {
+        const { cfg } = await useTelegraphApi(key, newCfg)
         conf = cfg
         break
       }
@@ -235,6 +240,11 @@ class Adaptors {
       }
       case SubPlatformType.Common_Halo: {
         const { blogApi } = await useHaloApi(key, newCfg)
+        blogAdaptor = blogApi
+        break
+      }
+      case SubPlatformType.Common_Telegraph: {
+        const { blogApi } = await useTelegraphApi(key, newCfg)
         blogAdaptor = blogApi
         break
       }

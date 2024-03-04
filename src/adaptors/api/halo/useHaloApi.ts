@@ -32,6 +32,7 @@ import { Utils } from "~/src/utils/utils.ts"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { CategoryTypeEnum } from "zhi-blog-api"
 import { HaloApiAdaptor } from "~/src/adaptors/api/halo/HaloApiAdaptor.ts"
+import { LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
 
 const useHaloApi = async (key: string, newCfg?: HaloConfig) => {
   // 创建应用日志记录器
@@ -58,10 +59,7 @@ const useHaloApi = async (key: string, newCfg?: HaloConfig) => {
       // 从环境变量获取 Halo API 的 URL、认证令牌和其他配置信息
       const haloUsername = Utils.emptyOrDefault(process.env.VITE_YUQUE_USERNAME, "")
       const haloAuthToken = Utils.emptyOrDefault(process.env.VITE_YUQUE_AUTH_TOKEN, "")
-      const middlewareUrl = Utils.emptyOrDefault(
-        process.env.VITE_MIDDLEWARE_URL,
-        "https://api.terwer.space/api/middleware"
-      )
+      const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, LEGENCY_SHARED_PROXT_MIDDLEWARE)
       cfg = new HaloConfig(haloUsername, haloAuthToken, middlewareUrl)
       logger.info("Configuration is empty, using default environment variables.")
     } else {

@@ -23,15 +23,16 @@
  * questions.
  */
 
-import { MetaweblogConfig } from "~/src/adaptors/api/base/metaweblog/metaweblogConfig.ts"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
-import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
-import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
-import { Utils } from "~/src/utils/utils.ts"
-import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
-import { MetaweblogBlogApiAdaptor } from "~/src/adaptors/api/base/metaweblog/metaweblogBlogApiAdaptor.ts"
-import { CategoryTypeEnum } from "zhi-blog-api"
+import {MetaweblogConfig} from "~/src/adaptors/api/base/metaweblog/metaweblogConfig.ts"
+import {createAppLogger} from "~/src/utils/appLogger.ts"
+import {PublisherAppInstance} from "~/src/publisherAppInstance.ts"
+import {usePublishSettingStore} from "~/src/stores/usePublishSettingStore.ts"
+import {JsonUtil, ObjectUtil, StrUtil} from "zhi-common"
+import {Utils} from "~/src/utils/utils.ts"
+import {getDynPostidKey} from "~/src/platforms/dynamicConfig.ts"
+import {MetaweblogBlogApiAdaptor} from "~/src/adaptors/api/base/metaweblog/metaweblogBlogApiAdaptor.ts"
+import {CategoryTypeEnum} from "zhi-blog-api"
+import {LEGENCY_SHARED_PROXT_MIDDLEWARE} from "~/src/utils/constants.ts";
 
 /**
  * 使用Metaweblog API的自定义hook
@@ -67,10 +68,7 @@ export const useMetaweblogApi = async (key?: string, newCfg?: MetaweblogConfig) 
       const metaweblogApiUrl = ""
       const metaweblogUsername = ""
       const metaweblogAuthToken = ""
-      const middlewareUrl = Utils.emptyOrDefault(
-        process.env.VITE_MIDDLEWARE_URL,
-        "https://api.terwer.space/api/middleware"
-      )
+      const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, LEGENCY_SHARED_PROXT_MIDDLEWARE)
 
       cfg = new MetaweblogConfig("", metaweblogApiUrl, metaweblogUsername, metaweblogAuthToken, middlewareUrl)
       logger.debug("Configuration is empty, using default environment variables.")

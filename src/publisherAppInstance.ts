@@ -28,6 +28,7 @@ import { DeviceDetection, SiyuanDevice } from "zhi-device"
 import { Deserializer, Serializer, SimpleXmlRpcClient, XmlrpcUtil } from "simple-xmlrpc"
 import fetch from "cross-fetch"
 import { create } from "xmlbuilder2"
+import { appBase } from "~/src/utils/constants.ts"
 
 /**
  * 应用实例
@@ -59,6 +60,6 @@ export class PublisherAppInstance {
     }
 
     this.win = SiyuanDevice.siyuanWindow()
-    this.moduleBase = `${this.win?.siyuan?.config?.system?.workspaceDir}/data${process.env.APP_BASE}`
+    this.moduleBase = `${this.win?.siyuan?.config?.system?.workspaceDir}/data${appBase}`
   }
 }

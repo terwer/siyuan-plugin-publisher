@@ -57,16 +57,11 @@ export class WidgetInvoke {
   }
 
   public async showPublisherArticleManegeDialog() {
-    let pageId: string | undefined = PageUtils.getPageId()
-    if (pageId == "") {
-      pageId = undefined
-    }
-    this.logger.debug("pageId=>", pageId)
-    if (StrUtil.isEmptyString(pageId)) {
-      showMessage(`文档ID不能为空，注意：您必须打开当前文档才能进行发布操作`, 2000, "error")
-      return
-    }
     await this.showPage(`/`)
+  }
+
+  public async showPublisherArticleManegeTab() {
+    await this.showTab(`/`, this.pluginInstance.i18n.articleManage)
   }
 
   public async showPublisherAiChatDialog() {
@@ -82,7 +77,7 @@ export class WidgetInvoke {
     if (pageId == "") {
       pageId = undefined
     }
-    this.showTab(`/ai/chat?id=${pageId}`)
+    this.showTab(`/ai/chat?id=${pageId}`, this.pluginInstance.i18n.aiChatTab)
   }
 
   public async showPublisherSinglePublishDialog() {
@@ -146,14 +141,14 @@ export class WidgetInvoke {
     }
   }
 
-  private async showTab(pageUrl: string, noscroll?: boolean) {
+  private async showTab(pageUrl: string, title: string, noscroll?: boolean) {
     // 自定义tab
     this.pluginInstance.tabInstance = openTab({
       app: this.pluginInstance.app,
       custom: {
         id: "publisher-ai-tab",
         icon: "iconAccount",
-        title: this.pluginInstance.i18n.aiChatTab,
+        title: title,
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         fn: this.pluginInstance.customTabObject,

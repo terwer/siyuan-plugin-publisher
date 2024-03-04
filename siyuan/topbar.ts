@@ -86,6 +86,19 @@ export class Topbar {
   ) {
     const menu = new Menu("publisherMenu")
 
+    // 仪表盘
+    if (prefSetting.showArticleManageMenu !== false) {
+      menu.addItem({
+        icon: `iconPaste`,
+        label: this.pluginInstance.i18n.articleManage + "<sup class='red'>new</sup>",
+        click: () => {
+          // this.widgetInvoke.showPublisherArticleManegeDialog()
+          this.widgetInvoke.showPublisherArticleManegeTab()
+        },
+      })
+      menu.addSeparator()
+    }
+
     // 一键发布
     if (prefSetting.showQuickMenu !== false) {
       menu.addItem({
@@ -162,16 +175,16 @@ export class Topbar {
         iconHTML: icons.iconPicbed,
         label: this.pluginInstance.i18n.aitool,
         submenu: [
-          {
-            iconHTML: `<svg class="b3-menu__icon" style=""><use xlink:href="#iconUsers"></use></svg>`,
-            label: this.pluginInstance.i18n.aiChat,
-            click: () => {
-              this.widgetInvoke.showPublisherAiChatDialog()
-            },
-          },
+          // {
+          //   iconHTML: `<svg class="b3-menu__icon" style=""><use xlink:href="#iconUsers"></use></svg>`,
+          //   label: this.pluginInstance.i18n.aiChat,
+          //   click: () => {
+          //     this.widgetInvoke.showPublisherAiChatDialog()
+          //   },
+          // },
           {
             iconHTML: `<svg class="b3-menu__icon" style=""><use xlink:href="#iconAccount"></use></svg>`,
-            label: this.pluginInstance.i18n.aiChatTab,
+            label: this.pluginInstance.i18n.aiChat,
             click: () => {
               this.widgetInvoke.showPublisherAiChatTab()
             },
@@ -222,18 +235,6 @@ export class Topbar {
         },
       ],
     })
-
-    // 文章管理
-    if (prefSetting.showArticleManageMenu !== false) {
-      menu.addItem({
-        icon: `iconPaste`,
-        label: this.pluginInstance.i18n.articleManage,
-        click: () => {
-          this.widgetInvoke.showPublisherArticleManegeDialog()
-        },
-      })
-      menu.addSeparator()
-    }
 
     // 关于作者
     menu.addSeparator()

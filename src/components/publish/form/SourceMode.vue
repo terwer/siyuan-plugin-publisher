@@ -35,7 +35,6 @@ import { DateUtil, StrUtil, YamlUtil } from "zhi-common"
 import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
 import Adaptors from "~/src/adaptors"
 import { usePicgoBridge } from "~/src/composables/usePicgoBridge.ts"
-import _ from "lodash"
 
 const logger = createAppLogger("source-mode")
 const { t } = useVueI18n()

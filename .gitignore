@@ -23,6 +23,7 @@ venv
 __pycache__
 cookie.txt
 token.txt
+pageId.txt
 
 # ext
 extension

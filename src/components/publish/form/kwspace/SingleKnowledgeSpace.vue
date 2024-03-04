@@ -65,7 +65,7 @@ const emit = defineEmits(["emitSyncSingleCateSlugs"])
 
 // computes
 const cateTitle = computed(() => {
-  const cateTitle = formData?.knowledgeSpaceConfig?.cfg.knowledgeSpaceTitle ?? t("main.cat")
+  const cateTitle = formData?.knowledgeSpaceConfig?.cfg?.knowledgeSpaceTitle ?? t("main.cat")
   return cateTitle
 })
 

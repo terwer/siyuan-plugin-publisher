@@ -50,13 +50,14 @@ import GeneralSetting from "~/src/components/set/GeneralSetting.vue"
 import SiyuanSetting from "~/src/components/set/SiyuanSetting.vue"
 import About from "~/src/pages/About.vue"
 import Admin from "~/src/pages/Admin.vue"
-import Detail from "~/src/pages/Detail.vue"
+import QuickPublishSelectPlatform from "~/src/components/publish/QuickPublishSelectPlatform.vue"
 
 /**
  * 路由配置
  */
 export const routeConfig: RouteRecordRaw[] = [
   // 极速发布
+  { path: "/publish/quickSelect", component: QuickPublishSelectPlatform },
   { path: "/workers/quickPublish/:key/:id", component: QuickPublish },
   // 常规发布
   // ?id=<id>
