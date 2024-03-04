@@ -131,7 +131,7 @@ class HaloApiAdaptor extends BaseBlogApi {
     params.post.spec.publishTime = post.dateCreated.toISOString()
 
     // 草稿
-    const res = await this.haloRequest("/apis/api.console.halo.run/v1alpha1/posts", params, "POST")
+    const res = await this.haloFetch("/apis/api.console.halo.run/v1alpha1/posts", params, "POST")
     this.logger.debug("halo newPost res =>", res)
     if (!res?.metadata?.name) {
       throw new Error("Halo 文章发布失败")
@@ -139,7 +139,7 @@ class HaloApiAdaptor extends BaseBlogApi {
     this.logger.debug("halo 文章草稿完成")
 
     // 发布
-    await this.haloRequest(`/apis/api.console.halo.run/v1alpha1/posts/${params.post.metadata.name}/publish`, {}, "PUT")
+    await this.haloFetch(`/apis/api.console.halo.run/v1alpha1/posts/${params.post.metadata.name}/publish`, {}, "PUT")
     this.logger.debug("halo 文章发布完成")
 
     // 生成文章ID
@@ -194,11 +194,11 @@ class HaloApiAdaptor extends BaseBlogApi {
       params.post.spec.publishTime = post.dateCreated.toISOString()
 
       // 更新文章信息
-      await this.haloRequest(`/apis/content.halo.run/v1alpha1/posts/${name}`, params.post, "PUT")
-      await this.haloRequest(`/apis/api.console.halo.run/v1alpha1/posts/${name}/content`, params.content, "PUT")
+      await this.haloFetch(`/apis/content.halo.run/v1alpha1/posts/${name}`, params.post, "PUT")
+      await this.haloFetch(`/apis/api.console.halo.run/v1alpha1/posts/${name}/content`, params.content, "PUT")
 
       // 重新发布
-      await this.haloRequest(
+      await this.haloFetch(
         `/apis/api.console.halo.run/v1alpha1/posts/${params.post.metadata.name}/publish`,
         {},
         "PUT"
@@ -246,7 +246,7 @@ class HaloApiAdaptor extends BaseBlogApi {
     const haloPostKey = this.getHaloPostidKey(postid)
     // const unPublishUrl = `/apis/api.console.halo.run/v1alpha1/posts/${haloPostKey.name}/unpublish`
     const recycleUrl = `/apis/api.console.halo.run/v1alpha1/posts/${haloPostKey.name}/recycle`
-    const res = await this.haloRequest(recycleUrl, {}, "PUT")
+    const res = await this.haloFetch(recycleUrl, {}, "PUT")
     this.logger.debug("halo deletePost res =>", res)
 
     if (!res?.metadata?.name) {
@@ -351,9 +351,9 @@ class HaloApiAdaptor extends BaseBlogApi {
 
   private async getHaloPost(name: string): Promise<PostRequest | undefined> {
     try {
-      const post = await this.haloRequest(`/apis/content.halo.run/v1alpha1/posts/${name}`, {}, "GET")
+      const post = await this.haloFetch(`/apis/content.halo.run/v1alpha1/posts/${name}`, {}, "GET")
 
-      const content = await this.haloRequest(
+      const content = await this.haloFetch(
         `/apis/api.console.halo.run/v1alpha1/posts/${name}/head-content`,
         {},
         "GET"
@@ -378,7 +378,7 @@ class HaloApiAdaptor extends BaseBlogApi {
     const newCategories = await Promise.all(
       notExistDisplayNames.map(async (name, index) => {
         const slug = await AliasTranslator.getPageSlug(name, true)
-        const category = await this.haloRequest(
+        const category = await this.haloFetch(
           "/apis/content.halo.run/v1alpha1/categories",
           {
             spec: {
@@ -412,7 +412,7 @@ class HaloApiAdaptor extends BaseBlogApi {
   }
 
   private async getHaloCategories() {
-    const categories = await this.haloRequest("/apis/content.halo.run/v1alpha1/categories", {}, "GET")
+    const categories = await this.haloFetch("/apis/content.halo.run/v1alpha1/categories", {}, "GET")
     return Promise.resolve(categories.items)
   }
 
@@ -424,7 +424,7 @@ class HaloApiAdaptor extends BaseBlogApi {
     const newTags = await Promise.all(
       notExistDisplayNames.map(async (name) => {
         const slug = await AliasTranslator.getPageSlug(name, true)
-        const tag = await this.haloRequest(
+        const tag = await this.haloFetch(
           "/apis/content.halo.run/v1alpha1/tags",
           {
             spec: {
@@ -455,7 +455,7 @@ class HaloApiAdaptor extends BaseBlogApi {
   }
 
   private async getHaloTags() {
-    const categories = await this.haloRequest("/apis/content.halo.run/v1alpha1/tags", {}, "GET")
+    const categories = await this.haloFetch("/apis/content.halo.run/v1alpha1/tags", {}, "GET")
     return Promise.resolve(categories.items)
   }
 
@@ -468,7 +468,7 @@ class HaloApiAdaptor extends BaseBlogApi {
    * @param header 请求头
    * @private
    */
-  private async haloRequest(
+  private async haloFetch(
     url: string,
     params?: any,
     method: "GET" | "POST" | "PUT" | "DELETE" = "POST",
@@ -489,7 +489,7 @@ class HaloApiAdaptor extends BaseBlogApi {
 
     // 使用兼容的fetch调用并返回统一的JSON数据
     const body = ObjectUtil.isEmptyObject(params) ? "" : JSON.stringify(params)
-    const resJson = await this.proxyFetch(apiUrl, [headers], body, method, contentType)
+    const resJson = await this.apiProxyFetch(apiUrl, [headers], body, method, contentType)
     this.logger.debug("向 Halo 请求数据，resJson =>", resJson)
 
     return resJson ?? null

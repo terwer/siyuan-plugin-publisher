@@ -38,6 +38,7 @@ export class CommonBlogConfig extends BlogConfig {
     this.apiUrl = apiUrl
     this.username = username
     this.password = password
+    this.tokenSettingUrl = undefined
     this.apiStatus = false
     this.blogid = ""
     this.blogName = ""

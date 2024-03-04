@@ -62,3 +62,11 @@ export const MAX_TITLE_LENGTH = 10
  * @version 1.20.0
  */
 export const LEGENCY_SHARED_PROXT_MIDDLEWARE = "https://api.terwer.space/api/middleware"
+
+/**
+ * 新版通用 HTTP 代理
+ *
+ * @since 1.20.0
+ * @version 1.20.0
+ */
+export const CORS_PROXT_URL = "https://cors.terwer.space"

@@ -31,7 +31,7 @@ import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { Utils } from "~/src/utils/utils.ts"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { TelegraphApiAdaptor } from "~/src/adaptors/api/telegraph/telegraphApiAdaptor.ts"
-import { LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
+import { CORS_PROXT_URL, LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
 
 const useTelegraphApi = async (key: string, newCfg?: TelegraphConfig) => {
   const logger = createAppLogger("use-telegraph-api")
@@ -51,7 +51,7 @@ const useTelegraphApi = async (key: string, newCfg?: TelegraphConfig) => {
     if (ObjectUtil.isEmptyObject(cfg)) {
       const telegraphUrl = Utils.emptyOrDefault(process.env.VITE_TELEGRAPH_URL, "https://telegra.ph")
       const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, LEGENCY_SHARED_PROXT_MIDDLEWARE)
-      const telegraphToken = Utils.emptyOrDefault(process.env.VITE_TELEGRAPH_TOKEN, "")
+      const telegraphToken = Utils.emptyOrDefault(process.env.VITE_TELEGRAPH_TOKEN, CORS_PROXT_URL)
       cfg = new TelegraphConfig(telegraphUrl, telegraphToken, middlewareUrl)
       logger.info("Configuration is empty, using default environment variables.")
     } else {
