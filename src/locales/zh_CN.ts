@@ -563,7 +563,7 @@ export default {
     "目前支持自定义HTTP协议的平台有：知乎等，采用网页授权。自定义HTTP协议通过类似 WeChatSync 的方式实现。",
   "setting.platform.right.tips0": "特别提示：",
   "setting.platform.right.tips1": "1、在这里可以进行发布配置，直接点击 [设置图标] 即可进行配置。",
-  "setting.platform.right.tips2": "2、如需新增平台，直接点击左侧 + 按钮即可。",
+  "setting.platform.right.tips2": "2、如需新增平台，直接点击「平台导入」或者「插件商店」进行添加。",
   "setting.platform.right.tips3":
     "3、目前支持 网页授权 和 API 授权两种方式，API授权 复杂点但是相对稳定，网页授权简单但是可能会失效。网页授权模式实现思路类似 wechatsync 。",
   "setting.platform.right.tips4": "4、如需兼容其他平台，请联系我：youweics@163.com 或者填写下面的表单。",

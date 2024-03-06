@@ -49,7 +49,7 @@
     "unplugin-auto-import": "^0.17.5",
     "unplugin-vue-components": "^0.26.0",
     "vercel": "^33.5.3",
-    "vite": "^5.1.4",
+    "vite": "^5.1.5",
     "vite-plugin-html": "^3.2.2",
     "vite-plugin-node-polyfills": "^0.21.0",
     "vitest": "^1.3.1",
@@ -57,7 +57,7 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
-    "@iconify/json": "^2.2.188",
+    "@iconify/json": "^2.2.189",
     "@vueuse/components": "^10.9.0",
     "@vueuse/core": "^10.9.0",
     "chatgpt": "^5.2.5",
@@ -75,7 +75,7 @@
     "pinia": "^2.1.7",
     "shorthash2": "^1.0.3",
     "simple-xmlrpc": "^1.4.2",
-    "siyuan": "^0.9.4",
+    "siyuan": "^0.9.5",
     "siyuan-plugin-picgo": "^1.4.4",
     "telegraph.md": "^0.0.1",
     "unplugin-icons": "^0.18.5",
@@ -92,7 +92,7 @@
     "zhi-gitlab-middleware": "^0.6.26",
     "zhi-lib-base": "^0.8.0",
     "zhi-notion-markdown": "^0.1.4",
-    "zhi-siyuan-api": "^2.18.4",
+    "zhi-siyuan-api": "^2.18.5",
     "zhi-xmlrpc-middleware": "^0.6.19"
   }
 }
