@@ -26,7 +26,7 @@
 import { CommonGithubApiAdaptor } from "~/src/adaptors/api/base/github/commonGithubApiAdaptor.ts"
 import { BlogConfig, PageTypeEnum, Post, YamlConvertAdaptor } from "zhi-blog-api"
 import { HexoYamlConverterAdaptor } from "~/src/adaptors/api/hexo/hexoYamlConverterAdaptor.ts"
-import _ from "lodash"
+import _ from "lodash-es"
 import { YamlUtil } from "zhi-common"
 
 /**

@@ -28,7 +28,7 @@ import CsdnUtils from "~/src/adaptors/web/csdn/csdnUtils.ts"
 import { BlogConfig, CategoryInfo, PageTypeEnum, Post, UserBlog } from "zhi-blog-api"
 import { JsonUtil } from "zhi-common"
 import WebUtils from "~/src/adaptors/web/base/webUtils.ts"
-import _ from "lodash"
+import _ from "lodash-es"
 
 /**
  * CSDN网页授权适配器

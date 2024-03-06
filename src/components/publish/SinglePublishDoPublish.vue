@@ -48,7 +48,7 @@ import PublishKnowledgeSpace from "~/src/components/publish/form/PublishKnowledg
 import { SiyuanAttr } from "zhi-siyuan-api"
 import PublishTitle from "~/src/components/publish/form/PublishTitle.vue"
 import { useChatGPT } from "~/src/composables/useChatGPT.ts"
-import _ from "lodash"
+import _ from "lodash-es"
 import { useLoadingTimer } from "~/src/composables/useLoadingTimer.ts"
 import CrossPageUtils from "~/cross/crossPageUtils.ts"
 import { ITagConfig } from "~/src/types/ITagConfig.ts"

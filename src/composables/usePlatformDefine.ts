@@ -77,10 +77,20 @@ export const usePlatformDefine = () => {
     })
   }
 
+  /**
+   * 获取所有平台
+   *
+   * @since 1.20.0
+   */
+  const getAllPrePlatformList = (): DynamicConfig[] => {
+    return prePlatformList
+  }
+
   return {
     getPrePlatformKeys,
     platformTypeList,
     getPlatformType,
+    getAllPrePlatformList,
     getPrePlatformList,
     getPrePlatform,
   }

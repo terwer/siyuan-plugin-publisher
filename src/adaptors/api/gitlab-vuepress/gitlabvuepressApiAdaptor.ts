@@ -25,11 +25,9 @@
 
 import { BlogConfig, PageTypeEnum, Post, YamlConvertAdaptor } from "zhi-blog-api"
 import { CommonGitlabApiAdaptor } from "~/src/adaptors/api/base/gitlab/commonGitlabApiAdaptor.ts"
-import _ from "lodash"
+import _ from "lodash-es"
 import { GitlabvuepressYamlConverterAdaptor } from "~/src/adaptors/api/gitlab-vuepress/gitlabvuepressYamlConverterAdaptor.ts"
 import { YamlUtil } from "zhi-common"
-import { SiyuanDevice } from "zhi-device"
-import { CATE_AUTO_NAME } from "~/src/utils/constants.ts"
 
 /**
  * Hexo API 适配器

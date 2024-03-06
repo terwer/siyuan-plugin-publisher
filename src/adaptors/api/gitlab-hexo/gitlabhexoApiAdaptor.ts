@@ -26,8 +26,8 @@
 import { BlogConfig, PageTypeEnum, Post, YamlConvertAdaptor } from "zhi-blog-api"
 import { GitlabhexoYamlConverterAdaptor } from "~/src/adaptors/api/gitlab-hexo/gitlabhexoYamlConverterAdaptor.ts"
 import { CommonGitlabApiAdaptor } from "~/src/adaptors/api/base/gitlab/commonGitlabApiAdaptor.ts"
-import _ from "lodash"
-import {YamlUtil} from "zhi-common";
+import _ from "lodash-es"
+import { YamlUtil } from "zhi-common"
 
 /**
  * Gitlabhexo API 适配器

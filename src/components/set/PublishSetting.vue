@@ -41,7 +41,7 @@ const activeMenu = ref("publish")
 <template>
   <back-page :title="t('service.tab.publish.setting')">
     <div class="publish-setting-body">
-      <el-tabs v-model="activeMenu" class="setting-tabs">
+      <el-tabs v-model="activeMenu" class="setting-tabs" :key="activeMenu">
         <el-tab-pane name="publish">
           <template #label>
             <span>
