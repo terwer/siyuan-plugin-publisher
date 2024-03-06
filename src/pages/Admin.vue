@@ -46,7 +46,7 @@ import { PluginUtils } from "~/src/utils/pluginUtils.ts"
 import { useSiyuanSettingStore } from "~/src/stores/useSiyuanSettingStore.ts"
 import { DynamicJsonCfg, getDynCfgByKey } from "~/src/platforms/dynamicConfig.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
-import DrawerBoxBridge from "~/src/components/admin/DrawerBoxBridge.vue"
+import DrawerBoxBridge from "~/src/components/common/DrawerBoxBridge.vue"
 import { svgIcons } from "~/src/utils/svgIcons.ts"
 
 // uses

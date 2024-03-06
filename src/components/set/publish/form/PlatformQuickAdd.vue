@@ -30,6 +30,11 @@ import { onMounted, reactive, ref, watch } from "vue"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { usePlatformDefine } from "~/src/composables/usePlatformDefine.ts"
 import CrossPageUtils from "../../../../../cross/crossPageUtils.ts"
+import DrawerBoxBridge from "~/src/components/common/DrawerBoxBridge.vue"
+import { appBase } from "~/src/utils/constants.ts"
+import { createAppLogger } from "~/src/utils/appLogger.ts"
+
+const logger = createAppLogger("platform-quick-add")
 
 const props = defineProps({
   apiType: {
@@ -48,6 +53,10 @@ const { getPlatformType, getPrePlatformList, getAllPrePlatformList } = usePlatfo
 const params = reactive(route.params)
 const type = ref((props.apiType ?? params.type) as PlatformType | "all")
 
+const showDrawer = ref(false)
+const drawerTitle = ref("")
+const drawerSrc = ref("")
+
 watch(
   () => props.apiType,
   (val: any) => {
@@ -64,17 +73,46 @@ const formData = reactive({
 })
 
 // methods
-const handleAddPlatform = (cfg?: DynamicConfig) => {
-  const query = {
-    path: `/setting/platform/add/${cfg?.platformType}`,
-    query: {
-      showBack: "true",
-      key: cfg?.platformKey,
-      sub: cfg?.subPlatformType,
-    },
-  }
+/**
+ * 打开抽屉 - 通用
+ *
+ * @param title 标题
+ * @param url 地址
+ */
+const goToDrawer = (title: string, url: string) => {
+  drawerTitle.value = title
+  drawerSrc.value = url
+  showDrawer.value = true
+}
 
-  router.push(query)
+/**
+ * 打开抽屉 - 发布工具内部
+ *
+ * @param title 标题
+ * @param pageUrl 内部地址，包括参数
+ */
+const goToPublisherDrawer = (title: string, pageUrl: string) => {
+  const win = window as any
+  const url = `${win.origin}${appBase}#${pageUrl}`
+  logger.debug(`Publisher will go to ${url}`)
+
+  goToDrawer(title, url)
+}
+
+const handleAddPlatform = (cfg?: DynamicConfig) => {
+  // const query = {
+  //   path: `/setting/platform/add/${cfg?.platformType}`,
+  //   query: {
+  //     showBack: "true",
+  //     key: cfg?.platformKey,
+  //     sub: cfg?.subPlatformType,
+  //   },
+  // }
+  //
+  // router.push(query)
+
+  const url = `/setting/platform/add/${cfg?.platformType}?showBack=trye&key=${cfg?.platformKey}&sub=${cfg?.subPlatformType}`
+  goToPublisherDrawer(`添加 ${cfg?.platformName ?? cfg?.platformType} 平台`, url)
 }
 
 const initPage = () => {
@@ -119,11 +157,16 @@ onMounted(() => {
         </div>
       </div>
       <div class="add-action" v-if="type !== 'all'">
-        <el-button type="primary" size="large" @click="handleAddPlatform(undefined)">
+        <el-button type="primary" size="large" @click="handleAddPlatform({ platformType: type} as any)">
           添加自定义 {{ formData.platformGroup?.title ?? type }} 对接
         </el-button>
       </div>
     </el-card>
+
+    <!-- 抽屉占位 -->
+    <el-drawer v-model="showDrawer" size="85%" :title="drawerTitle" direction="rtl" :destroy-on-close="true">
+      <DrawerBoxBridge :src="drawerSrc" />
+    </el-drawer>
   </div>
 </template>
 
@@ -190,4 +233,11 @@ $icon_size = 32px
 
   .add-action
     text-align center
+
+:deep(.el-drawer)
+  --el-drawer-padding-primary: var(--el-dialog-padding-primary, 0);
+
+:deep(.el-drawer__header)
+  padding: 20px;
+  margin-bottom 0
 </style>
