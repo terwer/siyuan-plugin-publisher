@@ -81,8 +81,8 @@ const { t } = useVueI18n()
 <style scoped lang="stylus">
 .right-setting-tips
   text-align left
-  padding-left 10px
-  padding-right 10px
+  //padding-left 10px
+  //padding-right 10px
 
   .setting-help
     font-size 12px

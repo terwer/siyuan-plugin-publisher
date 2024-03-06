@@ -23,12 +23,23 @@
   - questions.
   -->
 
-<script setup lang="ts">
 
+<script setup lang="ts">
+// vars
+import { ref } from "vue"
+
+const selectPlatformGroup = ref("publish")
 </script>
 
 <template>
-<div>PublishPlatformStore</div>
+  <div>
+    <el-radio-group v-model="selectPlatformGroup" style="margin-bottom: 30px">
+      <el-radio-button value="top">top</el-radio-button>
+      <el-radio-button value="right">right</el-radio-button>
+      <el-radio-button value="bottom">bottom</el-radio-button>
+      <el-radio-button value="left">left</el-radio-button>
+    </el-radio-group>
+  </div>
 </template>
 
 <style scoped lang="stylus">

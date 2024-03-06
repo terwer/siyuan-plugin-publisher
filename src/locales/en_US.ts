@@ -670,4 +670,7 @@ export default {
     "Enhanced CORS proxy, enabling comprehensive cross-origin requests. It is advisable to deploy independently. For deployment guidance, kindly refer to https://github.com/Zibri/cloudflare-cors-anywhere.",
   "reminder.blog.middlewareUrl.my.warning":
     "A special note: Request limits are set at '100,000 times/day' and '1,000 times/10 minutes'. For the benefit of all, kindly refrain from malicious requests; otherwise, we reserve the right to terminate this proxy service.",
+
+  "platform.new.platform":
+    "It has been observed that there are still [count] internal platforms [platform] awaiting importation. You may utilize the platform importation tool for a bulk import, or alternatively, manually add them from the plugin store.",
 }
