@@ -25,7 +25,6 @@
 
 import { SiyuanKernelApi } from "zhi-siyuan-api"
 import { StrUtil } from "zhi-common"
-import { useRoute } from "vue-router"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import { BrowserUtil } from "zhi-device"
@@ -119,8 +118,7 @@ export const getSiyuanPageId = async (pageId?: string, force?: boolean) => {
   //  3、开发模式模拟传递一个ID
   if (BrowserUtil.isInBrowser) {
     // 尝试从url参数解析ID
-    const route = useRoute()
-    const paramsPageId = route?.params?.id as string
+    const paramsPageId = BrowserUtil.getQueryParam("id")
     if (!StrUtil.isEmptyString(paramsPageId)) {
       return paramsPageId
     }
