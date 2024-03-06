@@ -67,9 +67,11 @@ const activeMenu = ref("publish")
           <publish-platform-store />
         </el-tab-pane>
       </el-tabs>
+
       <!--
       -----------------------------------------------------------------------------
       -->
+
       <publish-setting-tips />
     </div>
   </back-page>
