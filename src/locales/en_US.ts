@@ -24,7 +24,7 @@
  */
 
 export default {
-  "lang.choose": "Choose lang",
+  "lang.choose": "Language",
   "lang.choose.placeholder": "Please select language",
   "theme.mode.choose": "Mode",
   "theme.mode.dark": "Dark mode",
@@ -225,8 +225,9 @@ export default {
   "post.bind.yuque.postid": "Yuque ID",
   "post.bind.kms.postid": "KMS ID",
   "post.bind.conf.save": "Save",
-  "post.bind.conf.v081": "检测 v0.8.1 元数据并导入",
-  "post.bind.auto.":"未检测到ID，请手动输入文档根 ID ，然后再进行修复",
+  "post.bind.conf.v081": "Examine the v0.8.1 metadata and import it",
+  "post.bind.auto.error": "No ID detected, kindly input the document root ID manually, before proceeding with the repair.",
+  "post.bind.auto.empty": "This document has never been published, hence no repair is necessary",
   "post.bind.conf.cancel": "Cancel",
   "form.validate.name.required": "Please input name",
   "form.validate.name.length": "Length should be 0 to 1",
@@ -607,7 +608,7 @@ export default {
   "post.bind.auto.tips":
     "The ID here is automatically saved by the publishing tool, if you are not clear about the principle, please do not modify it",
   "siyuan.config.setting": "Source settings",
-  "setting.blog.siyuan.apiurl": "Siyuan API address",
+  "setting.blog.siyuan.apiurl": "Siyuan API",
   "setting.blog.siyuan.apiurl.tip":
     "The API address of Siyuan Note, including ports, The default address of Siyuan API is: http://127.0.0.1;6806",
   "setting.blog.siyuan.password": "Siyuan Token",

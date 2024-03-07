@@ -34,7 +34,7 @@ import { useRoute } from "vue-router"
 import { getWidgetId } from "~/src/utils/widgetUtils.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { getSiyuanWidgetId } from "~/src/utils/siyuanUtils.ts"
+import { getSiyuanPageId } from "~/src/utils/siyuanUtils.ts"
 import { Utils } from "~/src/utils/utils.ts"
 
 const logger = createAppLogger("post-bind")
@@ -46,19 +46,18 @@ const { getPublishCfg } = usePublishConfig()
 const { updateSetting } = usePublishSettingStore()
 
 // datas
-const id = Utils.emptyOrDefault(query.id ?? getWidgetId(), getSiyuanWidgetId()) as string
 const ruleFormRef = ref()
 const ruleForm = reactive({})
 const rules = reactive<FormRules>({})
 const formData = reactive({
-  pageId: id,
+  pageId: "",
   dynamicConfigArray: [] as DynamicConfig[],
   postIdMap: {} as any,
 })
 
 // methods
 const submitForm = async (formEl: any) => {
-  if (StrUtil.isEmptyString(id)) {
+  if (StrUtil.isEmptyString(formData.pageId)) {
     ElMessage.error("")
     return
   }
@@ -66,18 +65,18 @@ const submitForm = async (formEl: any) => {
   try {
     const publishCfg = await getPublishCfg()
     const setting = publishCfg.setting
-    const postMeta = ObjectUtil.getProperty(setting, id, {})
+    const postMeta = ObjectUtil.getProperty(setting, formData.pageId, {})
 
     formData.dynamicConfigArray = formData.dynamicConfigArray.map((item: DynamicConfig) => {
       const postid = formData.postIdMap[item.platformKey]
       const cfg = ObjectUtil.getProperty(setting, item.platformKey, {})
       const posidKey = cfg?.posidKey
-      if (!StrUtil.isEmptyString(posidKey) && !StrUtil.isEmptyString(id)) {
+      if (!StrUtil.isEmptyString(posidKey) && !StrUtil.isEmptyString(formData.pageId)) {
         postMeta[posidKey] = postid
       }
       return item
     })
-    setting[id] = postMeta
+    setting[formData.pageId] = postMeta
     logger.debug("prepare to save setting =>", { setting: toRaw(setting) })
     await updateSetting(setting)
     ElMessage.success(t("main.opt.success"))
@@ -89,6 +88,10 @@ const submitForm = async (formEl: any) => {
 
 // lifecycles
 onMounted(async () => {
+  const id = Utils.emptyOrDefault(query.id as string, getWidgetId())
+  const siyuanPageId = await getSiyuanPageId(id)
+  formData.pageId = siyuanPageId
+
   const publishCfg = await getPublishCfg()
   const setting = publishCfg.setting
   formData.dynamicConfigArray = publishCfg.dynamicConfigArray
@@ -110,7 +113,7 @@ onMounted(async () => {
   <div>
     <el-alert class="top-tip" :title="t('post.bind.auto.tips')" type="error" :closable="false" />
     <el-form-item>
-      <el-input v-model="formData.pageId" placeholder="请输入需要修复的文档根 ID"/>
+      <el-input v-model="formData.pageId" placeholder="请输入需要修复的文档根 ID" />
     </el-form-item>
     <el-divider border-style="dashed" />
 
@@ -133,14 +136,19 @@ onMounted(async () => {
         :closable="false"
       />
       <!-- 动态配置 -->
-      <el-form-item
-        v-for="(cfg, index) in formData.dynamicConfigArray"
-        :key="index"
-        :label="cfg.platformName"
-        v-show="cfg.isEnabled && cfg.isEnabled"
-      >
-        <el-input v-model="formData.postIdMap[cfg.platformKey]" />
-      </el-form-item>
+      <div v-if="formData.dynamicConfigArray.length > 0">
+        <el-form-item
+          v-for="(cfg, index) in formData.dynamicConfigArray"
+          :key="index"
+          :label="cfg.platformName"
+          v-show="cfg.isEnabled && cfg.isEnabled"
+        >
+          <el-input v-model="formData.postIdMap[cfg.platformKey]" />
+        </el-form-item>
+      </div>
+      <div v-else>
+        <el-alert class="top-tip" :title="t('post.bind.auto.empty')" type="info" :closable="false" />
+      </div>
 
       <el-form-item>
         <el-button type="primary" @click="submitForm(ruleFormRef)">{{ t("post.bind.conf.save") }}</el-button>
