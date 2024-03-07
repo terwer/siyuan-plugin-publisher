@@ -80,5 +80,4 @@ const subtype = getSubPlatformTypeByKey(apiType)
 <style lang="stylus" scoped>
 .top-tip
   margin 10px 0
-  padding-left 0
 </style>

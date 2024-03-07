@@ -190,9 +190,6 @@ $icon_size = 32px
     margin-bottom 12px
     min-height 60px
 
-    .desc-tip
-      padding-left 0
-
   .icon-list
     // text-align center
     margin 10px 0

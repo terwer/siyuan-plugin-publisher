@@ -665,7 +665,6 @@ onMounted(async () => {
 
 .top-tip
   margin-top 10px
-  padding-left 0
 
 .form-item-tip
   padding 2px 4px
