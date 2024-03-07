@@ -34,6 +34,8 @@ import { useRoute } from "vue-router"
 import { getWidgetId } from "~/src/utils/widgetUtils.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { getSiyuanWidgetId } from "~/src/utils/siyuanUtils.ts"
+import { Utils } from "~/src/utils/utils.ts"
 
 const logger = createAppLogger("post-bind")
 
@@ -44,11 +46,12 @@ const { getPublishCfg } = usePublishConfig()
 const { updateSetting } = usePublishSettingStore()
 
 // datas
-const id = (query.id ?? getWidgetId()) as string
+const id = Utils.emptyOrDefault(query.id ?? getWidgetId(), getSiyuanWidgetId()) as string
 const ruleFormRef = ref()
 const ruleForm = reactive({})
 const rules = reactive<FormRules>({})
 const formData = reactive({
+  pageId: id,
   dynamicConfigArray: [] as DynamicConfig[],
   postIdMap: {} as any,
 })
@@ -89,13 +92,13 @@ onMounted(async () => {
   const publishCfg = await getPublishCfg()
   const setting = publishCfg.setting
   formData.dynamicConfigArray = publishCfg.dynamicConfigArray
-  const postMeta = ObjectUtil.getProperty(setting, id, {})
+  const postMeta = ObjectUtil.getProperty(setting, formData.pageId, {})
 
   formData.dynamicConfigArray.forEach((item: DynamicConfig) => {
     let postid = ""
     const cfg = ObjectUtil.getProperty(setting, item.platformKey, {})
     const posidKey = cfg?.posidKey
-    if (!StrUtil.isEmptyString(posidKey) && !StrUtil.isEmptyString(id)) {
+    if (!StrUtil.isEmptyString(posidKey) && !StrUtil.isEmptyString(formData.pageId)) {
       postid = ObjectUtil.getProperty(postMeta, posidKey)
     }
     formData.postIdMap[item.platformKey] = postid
@@ -104,22 +107,47 @@ onMounted(async () => {
 </script>
 
 <template>
-  <el-form label-width="85px" class="post-bind-form" ref="ruleFormRef" :model="ruleForm" :rules="rules" status-icon>
+  <div>
     <el-alert class="top-tip" :title="t('post.bind.auto.tips')" type="error" :closable="false" />
-    <!-- 动态配置 -->
-    <el-form-item
-      v-for="(cfg, index) in formData.dynamicConfigArray"
-      :key="index"
-      :label="cfg.platformName"
-      v-show="cfg.isEnabled && cfg.isEnabled"
-    >
-      <el-input v-model="formData.postIdMap[cfg.platformKey]" />
-    </el-form-item>
-
     <el-form-item>
-      <el-button type="primary" @click="submitForm(ruleFormRef)">{{ t("post.bind.conf.save") }} </el-button>
+      <el-input v-model="formData.pageId" placeholder="请输入需要修复的文档根 ID"/>
     </el-form-item>
-  </el-form>
+    <el-divider border-style="dashed" />
+
+    <div v-if="StrUtil.isEmptyString(formData.pageId)">
+      <el-alert class="top-tip" :title="t('post.bind.auto.error')" type="warning" :closable="false" />
+    </div>
+    <el-form
+      v-else
+      label-width="85px"
+      class="post-bind-form"
+      ref="ruleFormRef"
+      :model="ruleForm"
+      :rules="rules"
+      status-icon
+    >
+      <el-alert
+        class="top-tip"
+        :title="'将为文章「' + formData.pageId + '」进行修复'"
+        type="warning"
+        :closable="false"
+      />
+      <!-- 动态配置 -->
+      <el-form-item
+        v-for="(cfg, index) in formData.dynamicConfigArray"
+        :key="index"
+        :label="cfg.platformName"
+        v-show="cfg.isEnabled && cfg.isEnabled"
+      >
+        <el-input v-model="formData.postIdMap[cfg.platformKey]" />
+      </el-form-item>
+
+      <el-form-item>
+        <el-button type="primary" @click="submitForm(ruleFormRef)">{{ t("post.bind.conf.save") }}</el-button>
+        <el-button type="warning">{{ t("post.bind.conf.v081") }}</el-button>
+      </el-form-item>
+    </el-form>
+  </div>
 </template>
 
 <style scoped lang="stylus">

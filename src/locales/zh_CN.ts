@@ -225,6 +225,8 @@ export default {
   "post.bind.yuque.postid": "语雀的ID",
   "post.bind.kms.postid": "KMS的ID",
   "post.bind.conf.save": "保存",
+  "post.bind.conf.v081": "Examine the v0.8.1 metadata and import it",
+  "post.bind.auto.error": "未检测到ID，请手动输入文档根 ID ，然后再进行修复",
   "post.bind.conf.cancel": "取消",
   "form.validate.name.required": "请输入名称",
   "form.validate.name.length": "长度必须在0到1之间",
@@ -655,5 +657,6 @@ export default {
   "setting.blog.middlewareUrl.my.warn.tip":
     "⚠️特别提醒：请求限制为 「10万次/天」、「1000次/10分钟」，频次为「所有人共享」，因此资源十分珍贵。为了大家的利益，请勿恶意请求，否则，我们会关闭此共享代理。",
 
-  "platform.new.platform": "检测到还有 [count] 个内置平台 [platform] 尚未导入，您可以使用平台导入批量导入，或者去插件商店自行添加。",
+  "platform.new.platform":
+    "检测到还有 [count] 个内置平台 [platform] 尚未导入，您可以使用平台导入批量导入，或者去插件商店自行添加。",
 }

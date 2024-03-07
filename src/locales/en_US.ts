@@ -225,6 +225,8 @@ export default {
   "post.bind.yuque.postid": "Yuque ID",
   "post.bind.kms.postid": "KMS ID",
   "post.bind.conf.save": "Save",
+  "post.bind.conf.v081": "检测 v0.8.1 元数据并导入",
+  "post.bind.auto.":"未检测到ID，请手动输入文档根 ID ，然后再进行修复",
   "post.bind.conf.cancel": "Cancel",
   "form.validate.name.required": "Please input name",
   "form.validate.name.length": "Length should be 0 to 1",
