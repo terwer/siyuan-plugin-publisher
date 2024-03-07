@@ -165,7 +165,10 @@ const initForm = async (ptype: PlatformType, subtype: SubPlatformType) => {
     ? svgIcons.iconEPPlus
     : `<img src="${platform.img}" alt="platform-icon" class="img-platform-icon" style="width: 32px;height: 32px;"/>`
 
-  if (pkey && subtype) {
+  const pkeyAvailable = !StrUtil.isEmptyString(pkey)
+  const subtypeAvailable = !StrUtil.isEmptyString(subtype)
+
+  if (pkeyAvailable && subtypeAvailable) {
     formData.subtype = subtype
 
     // 如果pkey对应的配置存在，初始化新的
@@ -187,7 +190,7 @@ const initForm = async (ptype: PlatformType, subtype: SubPlatformType) => {
       formData.isPre = true
       logger.debug("Initialized via pkey")
     }
-  } else if (subtype) {
+  } else if (subtypeAvailable) {
     // 子类型初始化
     formData.subtype = subtype
     const newKey = getNewPlatformKey(ptype, subtype)
@@ -275,7 +278,7 @@ initPage()
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="submitForm(formRef)">{{ t("dynamic.platform.opt.add") }} </el-button>
+        <el-button type="primary" @click="submitForm(formRef)">{{ t("dynamic.platform.opt.add") }}</el-button>
       </el-form-item>
     </el-form>
   </back-page>
@@ -296,6 +299,7 @@ $icon_size = 32px
       height $icon_size
       margin-right -4px
       vertical-align middle
+
     :deep(.el-icon svg)
       width $icon_size
       height $icon_size

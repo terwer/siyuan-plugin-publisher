@@ -111,8 +111,12 @@ const handleAddPlatform = (cfg?: DynamicConfig) => {
   //
   // router.push(query)
 
-  const url = `/setting/platform/add/${cfg?.platformType}?showBack=trye&key=${cfg?.platformKey}&sub=${cfg?.subPlatformType}`
-  goToPublisherDrawer(`添加 ${cfg?.platformName ?? cfg?.platformType} 平台`, url)
+  const platformGroup = cfg?.platformType ?? ""
+  const platformKey = cfg?.platformKey ?? ""
+  const subPlatformType = cfg?.subPlatformType ?? ""
+  const url = `/setting/platform/add/${platformGroup}?showBack=trye&key=${platformKey}&sub=${subPlatformType}`
+  const title = CrossPageUtils.longPlatformName(cfg?.platformName ?? cfg?.platformType ?? "")
+  goToPublisherDrawer(`添加 ${title} 平台`, url)
 }
 
 const initPage = () => {
@@ -157,7 +161,7 @@ onMounted(() => {
         </div>
       </div>
       <div class="add-action" v-if="type !== 'all'">
-        <el-button type="primary" size="large" @click="handleAddPlatform({ platformType: type} as any)">
+        <el-button type="primary" size="large" @click="handleAddPlatform({ platformType: type } as any)">
           添加自定义 {{ formData.platformGroup?.title ?? type }} 对接
         </el-button>
       </div>
