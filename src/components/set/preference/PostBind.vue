@@ -36,6 +36,7 @@ import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { getSiyuanPageId } from "~/src/utils/siyuanUtils.ts"
 import { Utils } from "~/src/utils/utils.ts"
+import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 
 const logger = createAppLogger("post-bind")
 
@@ -44,6 +45,7 @@ const { t } = useVueI18n()
 const { query } = useRoute()
 const { getPublishCfg } = usePublishConfig()
 const { updateSetting } = usePublishSettingStore()
+const { kernelApi } = useSiyuanApi()
 
 // datas
 const ruleFormRef = ref()
@@ -51,9 +53,11 @@ const ruleForm = reactive({})
 const rules = reactive<FormRules>({})
 const formData = reactive({
   pageId: "",
+  siyuanPost: {} as any,
   dynamicConfigArray: [] as DynamicConfig[],
   postIdMap: {} as any,
 })
+const alertTitle = ref(`将对文章「${formData.pageId}」进行修复`)
 
 // methods
 const submitForm = async (formEl: any) => {
@@ -91,6 +95,11 @@ onMounted(async () => {
   const id = Utils.emptyOrDefault(query.id as string, getWidgetId())
   const siyuanPageId = await getSiyuanPageId(id)
   formData.pageId = siyuanPageId
+  if (!StrUtil.isEmptyString(formData.pageId)) {
+    formData.siyuanPost = await kernelApi.getBlockByID(formData.pageId)
+    const title = Utils.emptyOrDefault(formData.siyuanPost?.content, formData.pageId)
+    alertTitle.value = `将对文章「${title}」(${formData.pageId}) 进行修复`
+  }
 
   const publishCfg = await getPublishCfg()
   const setting = publishCfg.setting
@@ -129,12 +138,7 @@ onMounted(async () => {
       :rules="rules"
       status-icon
     >
-      <el-alert
-        class="top-tip"
-        :title="'将为文章「' + formData.pageId + '」进行修复'"
-        type="warning"
-        :closable="false"
-      />
+      <el-alert class="top-tip" :title="alertTitle" type="warning" :closable="false" />
       <!-- 动态配置 -->
       <div v-if="formData.dynamicConfigArray.length > 0">
         <el-form-item
