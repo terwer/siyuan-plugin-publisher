@@ -24,7 +24,7 @@
   -->
 
 <script setup lang="ts">
-import { onMounted, reactive, ref, toRaw } from "vue"
+import {onMounted, reactive, ref, toRaw, watch} from "vue"
 import { ElMessage, FormRules } from "element-plus"
 import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
 import { DynamicConfig } from "~/src/platforms/dynamicConfig.ts"
@@ -58,6 +58,13 @@ const formData = reactive({
   postIdMap: {} as any,
 })
 const alertTitle = ref(`将对文章「${formData.pageId}」进行修复`)
+
+watch(
+    () => formData.pageId,
+    (newValue) => {
+      alertTitle.value = `将对文章「${newValue}」进行修复`
+    }
+)
 
 // methods
 const submitForm = async (formEl: any) => {
@@ -98,7 +105,7 @@ onMounted(async () => {
   if (!StrUtil.isEmptyString(formData.pageId)) {
     formData.siyuanPost = await kernelApi.getBlockByID(formData.pageId)
     const title = Utils.emptyOrDefault(formData.siyuanPost?.content, formData.pageId)
-    alertTitle.value = `将对文章「${title}」(${formData.pageId}) 进行修复`
+    alertTitle.value = `将对文章「${title}」进行修复`
   }
 
   const publishCfg = await getPublishCfg()
