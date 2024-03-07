@@ -57,12 +57,12 @@ const formData = reactive({
   dynamicConfigArray: [] as DynamicConfig[],
   postIdMap: {} as any,
 })
-const alertTitle = ref(`将对文章「${formData.pageId}」进行修复`)
+const alertTitle = ref(`将对文档「${formData.pageId}」进行修复`)
 
 watch(
     () => formData.pageId,
     (newValue) => {
-      alertTitle.value = `将对文章「${newValue}」进行修复`
+      alertTitle.value = `将对文档「${newValue}」进行修复`
     }
 )
 
@@ -105,7 +105,7 @@ onMounted(async () => {
   if (!StrUtil.isEmptyString(formData.pageId)) {
     formData.siyuanPost = await kernelApi.getBlockByID(formData.pageId)
     const title = Utils.emptyOrDefault(formData.siyuanPost?.content, formData.pageId)
-    alertTitle.value = `将对文章「${title}」进行修复`
+    alertTitle.value = `将对文档「${title}」进行修复`
   }
 
   const publishCfg = await getPublishCfg()
