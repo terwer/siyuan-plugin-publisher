@@ -609,9 +609,9 @@ onBeforeMount(async () => {
   padding-left 2px
 
 :deep(.el-drawer)
-  --el-drawer-padding-primary: var(--el-dialog-padding-primary, 0);
+  --el-drawer-padding-primary var(--el-dialog-padding-primary, 0)
 
 :deep(.el-drawer__header)
-  padding: 20px;
+  padding: 20px
   margin-bottom 0
 </style>

@@ -31,15 +31,13 @@ import { onMounted, reactive, ref } from "vue"
 import { SypConfig } from "~/syp.config.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { usePlatformDefine } from "~/src/composables/usePlatformDefine.ts"
 
 const logger = createAppLogger("publish-platform-import")
 
 // uses
-const { t } = useVueI18n()
-const { getSetting, updateSetting, deleteKey } = usePublishSettingStore()
-const { getPrePlatformKeys, platformTypeList, getPrePlatformList } = usePlatformDefine()
+const { getSetting } = usePublishSettingStore()
+const { platformTypeList } = usePlatformDefine()
 
 // datas
 const selectPlatformGroup = ref("all")

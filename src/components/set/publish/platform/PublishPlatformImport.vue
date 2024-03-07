@@ -27,7 +27,7 @@
 import { DynamicConfig, DynamicJsonCfg, isDynamicKeyExists, setDynamicJsonCfg } from "~/src/platforms/dynamicConfig.ts"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
 import { DateUtil, JsonUtil } from "zhi-common"
-import { markRaw, onMounted, reactive } from "vue"
+import { markRaw, onMounted, reactive, ref } from "vue"
 import { SypConfig } from "~/syp.config.ts"
 import _ from "lodash-es"
 import { pre } from "~/src/platforms/pre.ts"
@@ -42,6 +42,13 @@ const logger = createAppLogger("publish-platform-import")
 // uses
 const { t } = useVueI18n()
 const { getSetting, updateSetting, deleteKey } = usePublishSettingStore()
+
+// 自定义导入
+const showCustomImportDrawer = ref(false)
+const customImportDrawerTitle = ref("")
+// 挂件 v0.8.1 导入
+const showWidgetImportDrawer = ref(false)
+const widgetImportDrawerTitle = ref("")
 
 // datas
 const formData = reactive({
@@ -130,6 +137,16 @@ const doImportAll = async () => {
   }
 }
 
+const handleImportCustom = () => {
+  showCustomImportDrawer.value = true
+  customImportDrawerTitle.value = "自定义导入"
+}
+
+const handleImportLegencySypWidget = () => {
+  showWidgetImportDrawer.value = true
+  widgetImportDrawerTitle.value = "从「挂件版」 v0.8.1 导入"
+}
+
 // init
 const initPage = async () => {
   formData.setting = await getSetting()
@@ -150,8 +167,14 @@ onMounted(async () => {
 <template>
   <div class="flex flex-wrap gap-4 import-select">
     <el-card shadow="always" class="select-item" @click="handleImportAll"> 一键全部导入</el-card>
-    <el-card shadow="hover" class="select-item">自定义导入</el-card>
-    <el-card shadow="hover" class="select-item">从旧版 v0.8.1 版本「思源笔记挂件」导入</el-card>
+    <el-card shadow="hover" class="select-item" @click="handleImportCustom">自定义导入</el-card>
+    <el-card shadow="hover" class="select-item" @click="handleImportLegencySypWidget">
+      从旧版 v0.8.1 版本「思源笔记挂件」导入
+    </el-card>
+
+    <!--
+    -----------------------------------------------------------------------------
+    -->
 
     <div class="log-message-box">
       <el-input
@@ -162,6 +185,35 @@ onMounted(async () => {
         placeholder="日志信息"
       ></el-input>
     </div>
+
+    <!--
+    -----------------------------------------------------------------------------
+    -->
+
+    <!-- 抽屉占位 -->
+    <el-drawer
+      v-model="showCustomImportDrawer"
+      size="85%"
+      :title="customImportDrawerTitle"
+      direction="rtl"
+      :destroy-on-close="true"
+    >
+      <div class="import-panel">
+        <el-button>aaaaa</el-button>
+      </div>
+    </el-drawer>
+
+    <el-drawer
+      v-model="showWidgetImportDrawer"
+      size="85%"
+      :title="widgetImportDrawerTitle"
+      direction="rtl"
+      :destroy-on-close="true"
+    >
+      <div class="import-panel">
+        <el-button>bbbb</el-button>
+      </div>
+    </el-drawer>
   </div>
 </template>
 
@@ -174,4 +226,14 @@ onMounted(async () => {
 
   .log-message-box
     margin 10px 20px
+
+:deep(.el-drawer)
+  --el-drawer-padding-primary var(--el-dialog-padding-primary, 0)
+
+:deep(.el-drawer__header)
+  padding: 20px
+  margin-bottom 0
+
+.import-panel
+  padding 0 16px
 </style>
