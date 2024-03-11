@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023, Terwer . All rights reserved.
+ * Copyright (c) 2024, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -26,8 +26,8 @@
 import { MetaweblogPlaceholder } from "~/src/adaptors/api/base/metaweblog/metaweblogPlaceholder.ts"
 
 /**
- * Typecho 操作提示
+ * Jvue 操作提示
  */
-class TypechoPlaceholder extends MetaweblogPlaceholder {}
+class JvuePlaceHolder extends MetaweblogPlaceholder {}
 
-export { TypechoPlaceholder }
+export { JvuePlaceHolder }

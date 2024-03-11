@@ -235,9 +235,6 @@ $icon_size = 32px
   font-size 14px
   margin 0 10px
 
-  .desc-tip
-    padding-left 0
-
 .one-key-preview
   margin-left 10px
   margin-bottom 16px

@@ -52,6 +52,7 @@ import { useGitlabvuepress2Api } from "~/src/adaptors/api/gitlab-vuepress2/useGi
 import { useGitlabvitepressApi } from "~/src/adaptors/api/gitlab-vitepress/useGitlabvitepressApi.ts"
 import { useHaloApi } from "~/src/adaptors/api/halo/useHaloApi.ts"
 import { useTelegraphApi } from "~/src/adaptors/api/telegraph/useTelegraphApi.ts"
+import { useJvueApi } from "~/src/adaptors/api/jvue/useJvueApi.ts"
 
 /**
  * 适配器统一入口
@@ -165,6 +166,11 @@ class Adaptors {
       }
       case SubPlatformType.Metaweblog_Typecho: {
         const { cfg } = await useTypechoApi(key, newCfg)
+        conf = cfg
+        break
+      }
+      case SubPlatformType.Metaweblog_Jvue: {
+        const { cfg } = await useJvueApi(key, newCfg)
         conf = cfg
         break
       }
@@ -320,6 +326,11 @@ class Adaptors {
       }
       case SubPlatformType.Metaweblog_Typecho: {
         const { blogApi } = await useTypechoApi(key, newCfg)
+        blogAdaptor = blogApi
+        break
+      }
+      case SubPlatformType.Metaweblog_Jvue: {
+        const { blogApi } = await useJvueApi(key, newCfg)
         blogAdaptor = blogApi
         break
       }

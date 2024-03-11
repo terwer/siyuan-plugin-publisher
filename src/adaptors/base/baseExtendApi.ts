@@ -59,7 +59,7 @@ import {
   MUST_USE_PICBED_PLATFORM,
 } from "~/src/utils/constants.ts"
 import { toRaw } from "vue"
-import _ from "lodash"
+import _ from "lodash-es"
 import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
 import { SypConfig } from "~/syp.config.ts"
 import { usePlatformMetadataStore } from "~/src/stores/usePlatformMetadataStore.ts"

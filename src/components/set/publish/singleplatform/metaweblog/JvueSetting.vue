@@ -1,5 +1,5 @@
 <!--
-  - Copyright (c) 2023, Terwer . All rights reserved.
+  - Copyright (c) 2022-2023, Terwer . All rights reserved.
   - DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
   -
   - This code is free software; you can redistribute it and/or modify it
@@ -23,18 +23,32 @@
   - questions.
   -->
 
-<template>
-  <div class="publish-tips">
-    <el-alert
-      :closable="false"
-      title="多平台文章分发。其中思源笔记为内置平台，这里的修改发布后，也会同步更新思源笔记"
-      class="top-tip"
-      type="info"
-    />
-  </div>
-</template>
+<script lang="ts" setup>
+import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import MetaweblogSetting from "~/src/components/set/publish/singleplatform/base/impl/MetaweblogSetting.vue"
+import { JvueConfig } from "~/src/adaptors/api/jvue/jvueConfig.ts"
+import { useJvueApi } from "~/src/adaptors/api/jvue/useJvueApi.ts"
+import { JvuePlaceHolder } from "~/src/adaptors/api/jvue/jvuePlaceHolder.ts"
 
-<style scoped lang="stylus">
-.top-tip
-  margin 10px 0
-</style>
+const props = defineProps({
+  apiType: {
+    type: String,
+    default: "",
+  },
+})
+
+const { t } = useVueI18n()
+const { cfg } = await useJvueApi(props.apiType)
+const tcCfg = cfg as JvueConfig
+const tcPlaceholder = new JvuePlaceHolder()
+tcPlaceholder.homePlaceholder = t("setting.jvue.home.tip")
+tcPlaceholder.usernamePlaceholder = t("setting.jvue.username.tip")
+tcPlaceholder.passwordPlaceholder = t("setting.jvue.password.tip")
+tcPlaceholder.apiUrlPlaceholder = t("setting.jvue.apiUrl.tip")
+tcPlaceholder.previewUrlPlaceholder = t("setting.jvue.previewUrl.tip")
+tcCfg.placeholder = tcPlaceholder
+</script>
+
+<template>
+  <metaweblog-setting :api-type="props.apiType" :cfg="tcCfg" />
+</template>

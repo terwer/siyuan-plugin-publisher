@@ -196,6 +196,7 @@ export enum SubPlatformType {
   Metaweblog_Metaweblog = "Metaweblog",
   Metaweblog_Cnblogs = "Cnblogs",
   Metaweblog_Typecho = "Typecho",
+  Metaweblog_Jvue = "Jvue",
 
   // WordPress
   Wordpress_Wordpress = "Wordpress",
@@ -261,6 +262,7 @@ export function getSubtypeList(ptype: PlatformType): SubPlatformType[] {
       subtypeList.push(SubPlatformType.Metaweblog_Metaweblog)
       subtypeList.push(SubPlatformType.Metaweblog_Cnblogs)
       subtypeList.push(SubPlatformType.Metaweblog_Typecho)
+      subtypeList.push(SubPlatformType.Metaweblog_Jvue)
       break
     case PlatformType.Wordpress:
       subtypeList.push(SubPlatformType.Wordpress_Wordpress)

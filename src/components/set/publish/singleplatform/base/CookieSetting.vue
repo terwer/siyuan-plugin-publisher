@@ -136,5 +136,4 @@ const submitForm = async (formEl) => {
 <style scoped lang="stylus">
 .top-tip
   margin 10px 0
-  padding-left 0
 </style>

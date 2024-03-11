@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023, Terwer . All rights reserved.
+ * Copyright (c) 2024, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -23,11 +23,30 @@
  * questions.
  */
 
-import { MetaweblogPlaceholder } from "~/src/adaptors/api/base/metaweblog/metaweblogPlaceholder.ts"
+import { MetaweblogBlogApiAdaptor } from "~/src/adaptors/api/base/metaweblog/metaweblogBlogApiAdaptor.ts"
+import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
+import { JvueConfig } from "~/src/adaptors/api/jvue/jvueConfig.ts"
+import { createAppLogger } from "~/src/utils/appLogger.ts"
 
 /**
- * Typecho 操作提示
+ * Typecho API 适配器
+ *
+ * @author terwer
+ * @version 0.9.0
+ * @since 0.9.0
  */
-class TypechoPlaceholder extends MetaweblogPlaceholder {}
+class JvueApiAdaptor extends MetaweblogBlogApiAdaptor {
+  /**
+   * 初始化 Typecho API 适配器
+   *
+   * @param appInstance 应用实例
+   * @param cfg 配置项
+   */
+  constructor(appInstance: PublisherAppInstance, cfg: JvueConfig) {
+    super(appInstance, cfg)
+    this.logger = createAppLogger("typecho-api-adaptor")
+    this.cfg.blogid = "jvue"
+  }
+}
 
-export { TypechoPlaceholder }
+export { JvueApiAdaptor }

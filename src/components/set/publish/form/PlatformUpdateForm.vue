@@ -209,7 +209,6 @@ $icon_size = 32px
 
 .top-tip
   margin 10px 0
-  padding-left 0
 
 .update-form
   .cfg-icon

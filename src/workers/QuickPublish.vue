@@ -163,7 +163,6 @@ onMounted(async () => {
 <style scoped lang="stylus">
 .top-tip
   margin 10px 0
-  padding-left 0
 
 #quick-publish-box
   .publish-tips

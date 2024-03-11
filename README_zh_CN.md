@@ -14,6 +14,7 @@
 - `1.20.0` 主要新增以下特性：
   - #958 #1009 支持 docker 版本的思源笔记<sup>实验性</sup>
     - 此版本初步支持了 docker 版本的思源笔记，如果某些情况下发布异常，欢迎GitHub 新增 issue 反馈。
+      - **注意：如果未配置 CORS 代理，功能将不可用！！！**
       - docker 版本适配进度
         - [X] telegra.ph
   - #1053 新增发布平台 telegra.ph
@@ -110,6 +111,7 @@
 - [x] Metaweblog
 - [x] 博客园
 - [x] Typecho
+- [x] Jvue
 - [x] WordPress
 - [x] 知乎
 - [x] CSDN

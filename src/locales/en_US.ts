@@ -24,7 +24,7 @@
  */
 
 export default {
-  "lang.choose": "Choose lang",
+  "lang.choose": "Language",
   "lang.choose.placeholder": "Please select language",
   "theme.mode.choose": "Mode",
   "theme.mode.dark": "Dark mode",
@@ -225,6 +225,9 @@ export default {
   "post.bind.yuque.postid": "Yuque ID",
   "post.bind.kms.postid": "KMS ID",
   "post.bind.conf.save": "Save",
+  "post.bind.conf.v081": "Examine the v0.8.1 metadata and import it",
+  "post.bind.auto.error": "No ID detected, kindly input the document root ID manually, before proceeding with the repair.",
+  "post.bind.auto.empty": "This document has never been published, hence no repair is necessary",
   "post.bind.conf.cancel": "Cancel",
   "form.validate.name.required": "Please input name",
   "form.validate.name.length": "Length should be 0 to 1",
@@ -427,7 +430,7 @@ export default {
   "setting.jvue.username.tip": "Jvue platform login name",
   "setting.jvue.password.tip": "Jvue platform password",
   "setting.jvue.apiUrl.tip":
-    "The XMLRPC remote release address of the JVUE platform is usually fixed: https: // <platform address>/xmlrpc",
+    "The XMLRPC remote release address of the Jvue platform is usually fixed: https: // <platform address>/xmlrpc",
   "setting.jvue.previewUrl.tip": "The preview rules of the Jvue platform are usually:/post/[postid] .html",
 
   "setting.conf.home.tip":
@@ -560,6 +563,8 @@ export default {
   "setting.platform.gitlab.desc":
     "Gitlab is basically similar to Github, except that Gitlab supports its own on-premises or cloud server deployment",
   "setting.picgo.manage": "Picture manage",
+  "setting.platform.import": "Platform import",
+  "setting.platform.store": "Plugin store",
   "setting.platform.add": "Add platform",
   "setting.platform.add.this": "Add this platform",
   "setting.platform.universal": "Universal platform",
@@ -603,7 +608,7 @@ export default {
   "post.bind.auto.tips":
     "The ID here is automatically saved by the publishing tool, if you are not clear about the principle, please do not modify it",
   "siyuan.config.setting": "Source settings",
-  "setting.blog.siyuan.apiurl": "Siyuan API address",
+  "setting.blog.siyuan.apiurl": "Siyuan API",
   "setting.blog.siyuan.apiurl.tip":
     "The API address of Siyuan Note, including ports, The default address of Siyuan API is: http://127.0.0.1;6806",
   "setting.blog.siyuan.password": "Siyuan Token",
@@ -668,4 +673,9 @@ export default {
     "Enhanced CORS proxy, enabling comprehensive cross-origin requests. It is advisable to deploy independently. For deployment guidance, kindly refer to https://github.com/Zibri/cloudflare-cors-anywhere.",
   "reminder.blog.middlewareUrl.my.warning":
     "A special note: Request limits are set at '100,000 times/day' and '1,000 times/10 minutes'. For the benefit of all, kindly refrain from malicious requests; otherwise, we reserve the right to terminate this proxy service.",
+
+  "platform.new.platform":
+    "It has been observed that there are still [count] internal platforms [platform] awaiting importation. You may utilize the platform importation tool for a bulk import, or alternatively, manually add them from the plugin store.",
+
+  "import.v081.warn": "Given that v0.8.1 is considered a significantly antiquated iteration, this feature may no longer be pertinent. Should you find yourself in need of this functionality, please direct your feedback to youweics@qq.com, and we shall deliberate on its implementation based on demand."
 }

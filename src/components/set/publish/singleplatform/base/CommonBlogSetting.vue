@@ -490,7 +490,6 @@ onMounted(async () => {
 
 .top-tip
   margin 10px 0
-  padding-left 0
 
 .inline-tip
   margin 0

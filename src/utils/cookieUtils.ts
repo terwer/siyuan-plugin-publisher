@@ -23,7 +23,7 @@
  * questions.
  */
 
-import _ from "lodash"
+import _ from "lodash-es"
 import { StrUtil } from "zhi-common"
 import cookie from "cookie-parse"
 import { createAppLogger } from "~/src/utils/appLogger.ts"

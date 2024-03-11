@@ -46,7 +46,7 @@ import { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
 import { ElMessage } from "element-plus"
 import { SiyuanAttr } from "zhi-siyuan-api"
-import _ from "lodash"
+import _ from "lodash-es"
 import Adaptors from "~/src/adaptors"
 import { usePlatformMetadataStore } from "~/src/stores/usePlatformMetadataStore.ts"
 
