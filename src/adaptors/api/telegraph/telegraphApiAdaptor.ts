@@ -132,6 +132,11 @@ class TelegraphApiAdaptor extends BaseBlogApi {
     const postMeta = JsonUtil.safeParse<any>(postid, {})
     const purl = this.cfg.previewUrl ?? ""
     const postUrl = purl.replace("[postid]", postMeta?.path ?? "")
+    const useProxyPreview = true
+    if (useProxyPreview && !StrUtil.isEmptyString(this.cfg.corsAnywhereUrl)) {
+      const proxyHome = StrUtil.pathJoin(this.cfg.corsAnywhereUrl, this.cfg.home ?? "")
+      return StrUtil.pathJoin(`${proxyHome}`, postUrl)
+    }
     return postUrl
   }
 
