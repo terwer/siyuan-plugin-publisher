@@ -21,12 +21,15 @@ If you're interested in the paid professional version, please check the paied
           implementation. Should anomalies surface during deployment, the extension welcomes the addition of GitHub
           issues for resolution.
             - **Please note: Unavailability of CORS proxy configuration will render the functionality inactive!!!**
+            - The image feature of the Picgo plugin is currently unavailable in the Docker version; support will be
+              introduced in 1.20.1.
         - #1053 Introduction of the publishing platform telegra.ph
             - **Please note: Unavailability of CORS proxy configuration will render the functionality inactive!!!
               Furthermore, accessing article previews mandates circumventing restrictions via appropriate means.**
             - For discussions on CORS proxy complications or other inquiries, feel free to engage in group discussions
               or reach out to the author at youweics@163.com
-            - At present, only anonymous posting and updates are supported; login functionality will be incorporated in version 1.20.1.
+            - At present, only anonymous posting and updates are supported; login functionality will be incorporated in
+              version 1.20.1.
         - #1054 Addition of article management capabilities
             - Renamed article management as Dashboard. Feedback regarding nomenclature adjustments can be deliberated
               via issues, facilitating responsive modifications by the author.
@@ -47,12 +50,14 @@ If you're interested in the paid professional version, please check the paied
 > For further details, kindly [click here](https://blog.terwer.space/s/20230810132040-nn4q7vs) to peruse the latest help
 > documentation.
 
-**Should you encounter any issues or wish to submit suggestions, feel free to join QQ group `895063267` for discussions.**
+**Should you encounter any issues or wish to submit suggestions, feel free to join QQ group `895063267` for discussions.
+**
 
 ## Version Preview
 
 ### 1.20.1-preview – As of Q1 2024
 
+- Support picture upload form picgo via docker
 - Expansion of telegra.ph support for image uploads
     - Reference: https://www.npmjs.com/package/telegraph-uploader
 - Support login for telegra.ph
@@ -100,48 +105,48 @@ Please refer to [DEVELOPMENT](./DEVELOPMENT.md)
 
 Names not listed in order
 
-|         Type          |        Platform         | Status | PC Client  |     Docker     |
-|:---------------------:|:-----------------------:|:------:|:----------:|:--------------:|
-|        General        |          Yuque          |   ✔    | Compatible | Not compatible |
-|        General        |         Notion          |   ✔    | Compatible | Not compatible |
-|        General        |          Halo           |   ✔    | Compatible | Not compatible |
-|        General        |        Evernote         |  TODO  | Compatible | Not compatible |
-|        General        |         Github          |   ✔    | Compatible | Not compatible |
-| Static Site Generator |          Hexo           |   ✔    | Compatible | Not compatible |
-| Static Site Generator |          Hugo           |   ✔    | Compatible | Not compatible |
-| Static Site Generator |         Jekyll          |   ✔    | Compatible | Not compatible |
-| Static Site Generator |        Vuepress         |   ✔    | Compatible | Not compatible |
-| Static Site Generator |        Vuepress2        |   ✔    | Compatible | Not compatible |
-| Static Site Generator |        Vitepress        |   ✔    | Compatible | Not compatible |
-| Static Site Generator |         Antora          |  TODO  | Compatible | Not compatible |
-| Static Site Generator |         Docsify         |  TODO  | Compatible | Not compatible |
-|      Git Hosting      |         Gitlab          |   ✔    | Compatible | Not compatible |
-|      Git Hosting      |       Gitlabhexo        |   ✔    | Compatible | Not compatible |
-|      Git Hosting      |       Gitlabhugo        |   ✔    | Compatible | Not compatible |
-|      Git Hosting      |      Gitlabjekyll       |   ✔    | Compatible | Not compatible |
-|      Git Hosting      |     Gitlabvuepress      |   ✔    | Compatible | Not compatible |
-|      Git Hosting      |     Gitlabvuepress2     |   ✔    | Compatible | Not compatible |
-|      Git Hosting      |     Gitlabvitepress     |   ✔    | Compatible | Not compatible |
-|      Git Hosting      |      Gitlabantora       |  TODO  | Compatible | Not compatible |
-|      Git Hosting      |      Gitlabdocsify      |  TODO  | Compatible | Not compatible |
-|         Blog          |       Metaweblog        |   ✔    | Compatible | Not compatible |
-|         Blog          |         CnBlogs         |   ✔    | Compatible | Not compatible |
-|         Blog          |         Typecho         |   ✔    | Compatible | Not compatible |
-|         Blog          |          Jvue           |   ✔    | Compatible | Not compatible |
-|         Blog          |        WordPress        |   ✔    | Compatible | Not compatible |
-|     Social Media      |          Zhihu          |   ✔    | Compatible | Not compatible |
-|     Social Media      |          CSDN           |   ✔    | Compatible | Not compatible |
-|     Social Media      | WeChat Official Account |   ✔    | Compatible | Not compatible |
-|     Social Media      |         Jianshu         |   ✔    | Compatible | Not compatible |
-|     Social Media      |         Juejin          |   ✔    | Compatible | Not compatible |
-|       Community       |         52pojie         |  TODO  | Compatible | Not compatible |
-|       Community       |        Bilibili         |  TODO  | Compatible | Not compatible |
-|       Community       |       Xiaohongshu       |  TODO  | Compatible | Not compatible |
-|       Community       |         Douban          |  TODO  | Compatible | Not compatible |
-|        Others         |          Xlog           |  TODO  | Compatible | Not compatible |
-|        Others         |         Mdnice          |  TODO  | Compatible | Not compatible |
-|        Others         |         Flowus          |  TODO  | Compatible | Not compatible |
-|        Others         |       telegra.ph        |   ✔    | Compatible |   Compatible   |
+|         Type          |        Platform         | Status |      PC Client       | PC Image Upload |                         Docker                         | Docker Image Upload |                            Note                            |
+|:---------------------:|:-----------------------:|:------:|:--------------------:|:---------------:|:------------------------------------------------------:|:-------------------:|:----------------------------------------------------------:|
+|        Generic        |          Yuque          |   ✔    |   Fully Compatible   |        ✔        |                  Partially Compatible                  |          ❌          |           [Official Website](https://yuque.com)            |
+|        Generic        |         Notion          |   ✔    |   Fully Compatible   |        ✔        |                  Partially Compatible                  |          ❌          |         [Official Website](https://www.notion.so)          |
+|        Generic        |          Halo           |   ✔    |   Fully Compatible   |        ✔        |                  Partially Compatible                  |          ❌          |            [Official Website](https://halo.run)            |
+|        Generic        |        Evernote         |  TODO  |         TODO         |      TODO       |                          TODO                          |        TODO         |        [Official Website](https://www.evernote.com)        |
+|        Generic        |         Github          |   ✔    |   Fully Compatible   |        ✔        |                  Partially Compatible                  |          ❌          |           [Official Website](https://github.com)           |
+| Static Site Generator |          Hexo           |   ✔    |   Fully Compatible   |        ✔        |                  Partially Compatible                  |          ❌          |         [Official Website](https://hexo.io/zh-cn/)         |
+| Static Site Generator |          Hugo           |   ✔    |   Fully Compatible   |        ✔        |                  Partially Compatible                  |          ❌          |           [Official Website](https://gohugo.io/)           |
+| Static Site Generator |         Jekyll          |   ✔    |   Fully Compatible   |        ✔        |                  Partially Compatible                  |          ❌          |         [Official Website](https://jekyllrb.com/)          |
+| Static Site Generator |        Vuepress         |   ✔    |   Fully Compatible   |        ✔        |                  Partially Compatible                  |          ❌          |      [Official Website](https://vuepress.vuejs.org/)       |
+| Static Site Generator |        Vuepress2        |   ✔    |   Fully Compatible   |        ✔        |                  Partially Compatible                  |          ❌          |     [Official Website](https://v2.vuepress.vuejs.org/)     |
+| Static Site Generator |        Vitepress        |   ✔    |   Fully Compatible   |        ✔        |                  Partially Compatible                  |          ❌          |      [Official Website](https://vitepress.vuejs.org/)      |
+| Static Site Generator |         Antora          |  TODO  |         TODO         |      TODO       |                          TODO                          |        TODO         |          [Official Website](https://antora.org/)           |
+| Static Site Generator |         Docsify         |  TODO  |         TODO         |      TODO       |                          TODO                          |        TODO         |        [Official Website](https://docsify.js.org/)         |
+|      Git Hosting      |         Gitlab          |   ✔    |   Fully Compatible   |        ✔        |                  Partially Compatible                  |          ❌          |          [Official Website](https://gitlab.com/)           |
+|      Git Hosting      |       Gitlabhexo        |   ✔    |   Fully Compatible   |        ✔        |                  Partially Compatible                  |          ❌          |          [Official Website](https://gitlab.com/)           |
+|      Git Hosting      |       Gitlabhugo        |   ✔    |   Fully Compatible   |        ✔        |                  Partially Compatible                  |          ❌          |          [Official Website](https://gitlab.com/)           |
+|      Git Hosting      |      Gitlabjekyll       |   ✔    |   Fully Compatible   |        ✔        |                  Partially Compatible                  |          ❌          |          [Official Website](https://gitlab.com/)           |
+|      Git Hosting      |     Gitlabvuepress      |   ✔    |   Fully Compatible   |        ✔        |                  Partially Compatible                  |          ❌          |          [Official Website](https://gitlab.com/)           |
+|      Git Hosting      |     Gitlabvuepress2     |   ✔    |   Fully Compatible   |        ✔        |                  Partially Compatible                  |          ❌          |          [Official Website](https://gitlab.com/)           |
+|      Git Hosting      |     Gitlabvitepress     |   ✔    |   Fully Compatible   |        ✔        |                  Partially Compatible                  |          ❌          |          [Official Website](https://gitlab.com/)           |
+|      Git Hosting      |      Gitlabantora       |  TODO  |         TODO         |      TODO       |                          TODO                          |        TODO         |          [Official Website](https://gitlab.com/)           |
+|      Git Hosting      |      Gitlabdocsify      |  TODO  |         TODO         |      TODO       |                          TODO                          |        TODO         |          [Official Website](https://gitlab.com/)           |
+|         Blog          |       Metaweblog        |   ✔    |   Fully Compatible   |        ✔        |                  Partially Compatible                  |          ❌          | [Official Website](http://xmlrpc.scripting.com/metaWeblog) |
+|         Blog          |         CnBlogs         |   ✔    |   Fully Compatible   |        ✔        |                  Partially Compatible                  |          ❌          |          [Official Website](https://cnblogs.com)           |
+|         Blog          |         Typecho         |   ✔    |   Fully Compatible   |        ✔        |                  Partially Compatible                  |          ❌          |          [Official Website](https://typecho.org/)          |
+|         Blog          |          Jvue           |   ✔    |   Fully Compatible   |        ✔        |                  Partially Compatible                  |          ❌          |     [Official Website](https://github.com/terwer/jvue)     |
+|         Blog          |        WordPress        |   ✔    |   Fully Compatible   |        ✔        |                  Partially Compatible                  |          ❌          |         [Official Website](https://wordpress.org/)         |
+|     Social Media      |          Zhihu          |   ✔    |   Fully Compatible   |        ✔        | Partially Compatible, Requires PC Account Verification |          ❌          |         [Official Website](https://www.zhihu.com/)         |
+|     Social Media      |          CSDN           |   ✔    |   Fully Compatible   |        ✔        | Partially Compatible, Requires PC Account Verification |          ❌          |         [Official Website](https://www.csdn.net/)          |
+|     Social Media      | WeChat Official Account |   ✔    |   Fully Compatible   |        ✔        | Partially Compatible, Requires PC Account Verification |          ❌          |       [Official Website](https://mp.weixin.qq.com/)        |
+|     Social Media      |         Jianshu         |   ✔    |   Fully Compatible   |        ✔        | Partially Compatible, Requires PC Account Verification |          ❌          |        [Official Website](https://www.jianshu.com/)        |
+|     Social Media      |         Juejin          |   ✔    |   Fully Compatible   |        ✔        | Partially Compatible, Requires PC Account Verification |          ❌          |           [Official Website](https://juejin.cn/)           |
+|       Community       |         52pojie         |  TODO  |         TODO         |      TODO       |                          TODO                          |        TODO         |        [Official Website](https://www.52pojie.cn/)         |
+|       Community       |        Bilibili         |  TODO  |         TODO         |      TODO       |                          TODO                          |        TODO         |       [Official Website](https://www.bilibili.com/)        |
+|       Community       |       Xiaohongshu       |  TODO  |         TODO         |      TODO       |                          TODO                          |        TODO         |      [Official Website](https://www.xiaohongshu.com/)      |
+|       Community       |         Douban          |  TODO  |         TODO         |      TODO       |                          TODO                          |        TODO         |        [Official Website](https://www.douban.com/)         |
+|        Others         |          Xlog           |  TODO  |         TODO         |      TODO       |                          TODO                          |        TODO         |            [Official Website](https://xlog.cn/)            |
+|        Others         |         Mdnice          |  TODO  |         TODO         |      TODO       |                          TODO                          |        TODO         |          [Official Website](https://mdnice.com/)           |
+|        Others         |         Flowus          |  TODO  |         TODO         |      TODO       |                          TODO                          |        TODO         |        [Official Website](https://www.flowus.com/)         |
+|        Others         |       telegra.ph        |   ✔    | Partially Compatible |        ❌        |                  Partially Compatible                  |          ❌          |           [Official Website](https://telegra.ph)           |
 
 ## Core Features
 
@@ -169,7 +174,8 @@ charged, and the closed beta stage is completely free. If you want to support de
 please [feel free to support](https://github.com/terwer/siyuan-plugin-publisher/blob/main/README_zh_CN.md#Donate) here.
 
 > 🌹 Tips: This plugin is an upgraded version of the original 'Siyuan Note Publishing Tool' widget, which includes all
-> the functions provided by the original widget, provides a convenient menu operation entry, and has carried out a series
+> the functions provided by the original widget, provides a convenient menu operation entry, and has carried out a
+> series
 > of problem fixes and experience optimizations.
 >
 > In addition to [Extended Functions], **Other functions do not require any dependencies** , and there is no need to
@@ -255,6 +261,7 @@ to [Latest Adaptation](https://terwergreen.feishu.cn/share/base/view/shrcnWT2IGI
 
 * Q6：What should I do if the platform I need to publish is not provided by the publishing tool?
 *
+
 A6：Reference: [Platform Adaptation Plan](https://github.com/terwer/siyuan-plugin-publisher/blob/main/README_zh_CN.md#platform-adaptation-plan "Platform Adaptation Plan")
 
 ## Donate
@@ -285,7 +292,7 @@ https://afdian.net/a/terwer
   Names not listed in order
 
   |    Name     | version |vendor|
-    |:-----------:|:-------:| :---------: |
+      |:-----------:|:-------:| :---------: |
   |    turbo    |  1.9+   |Vercel| 
   |     Vue     | 3.3.4+  |Evan You|
   |    Vite     |  4.2+   |Evan You|
