@@ -29,7 +29,7 @@ import { reactive } from "vue"
 import { useRoute } from "vue-router"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { getSubPlatformTypeByKey, SubPlatformType } from "~/src/platforms/dynamicConfig.ts"
-import TelegraphSetting from "~/src/components/set/publish/singleplatform/commonblog/TelegraphSetting.vue";
+import TelegraphSetting from "~/src/components/set/publish/singleplatform/commonblog/TelegraphSetting.vue"
 
 // uses
 const { t } = useVueI18n()
@@ -62,6 +62,7 @@ const subtype = getSubPlatformTypeByKey(apiType)
     <othermeta-setting v-else-if="subtype === SubPlatformType.Metaweblog_Metaweblog" :api-type="apiType" />
     <cnblogs-setting v-else-if="subtype === SubPlatformType.Metaweblog_Cnblogs" :api-type="apiType" />
     <typecho-setting v-else-if="subtype === SubPlatformType.Metaweblog_Typecho" :api-type="apiType" />
+    <jvue-setting v-else-if="subtype === SubPlatformType.Metaweblog_Jvue" :api-type="apiType" />
     <wordpress-setting v-else-if="subtype === SubPlatformType.Wordpress_Wordpress" :api-type="apiType" />
     <zhihu-setting v-else-if="subtype === SubPlatformType.Custom_Zhihu" :api-type="apiType" />
     <csdn-setting v-else-if="subtype === SubPlatformType.Custom_CSDN" :api-type="apiType" />

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023, Terwer . All rights reserved.
+ * Copyright (c) 2024, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -23,11 +23,40 @@
  * questions.
  */
 
-import { MetaweblogPlaceholder } from "~/src/adaptors/api/base/metaweblog/metaweblogPlaceholder.ts"
+import { MetaweblogConfig } from "~/src/adaptors/api/base/metaweblog/metaweblogConfig.ts"
+import {CategoryTypeEnum, PageTypeEnum} from "zhi-blog-api";
 
 /**
- * Typecho 操作提示
+ * Jvue 配置
+ *
+ * @author terwer
+ * @since 1.20.0
  */
-class TypechoPlaceholder extends MetaweblogPlaceholder {}
+class JvueConfig extends MetaweblogConfig {
+  /**
+   * Jvue 配置项
+   *
+   * @param homeAddr 博客地址
+   * @param apiUrl 博客api地址
+   * @param username 用户名
+   * @param password 密码
+   * @param middlewareUrl 中间件地址
+   */
+  constructor(homeAddr: string, apiUrl: string, username: string, password: string, middlewareUrl?: string) {
+    super(homeAddr, apiUrl, username, password, middlewareUrl)
 
-export { TypechoPlaceholder }
+    this.home = homeAddr
+    this.apiUrl = apiUrl
+    this.previewUrl = "/post/[postid].html"
+    this.pageType = PageTypeEnum.Markdown
+    this.showTokenTip = false
+    this.allowPreviewUrlChange = false
+    this.tagEnabled = true
+    this.cateEnabled = true
+    this.categoryType = CategoryTypeEnum.CategoryType_Multi
+    this.allowCateChange = true
+    this.knowledgeSpaceEnabled = false
+  }
+}
+
+export { JvueConfig }

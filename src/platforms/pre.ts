@@ -218,6 +218,15 @@ export const pre = {
       authMode: AuthMode.API,
       isEnabled: false,
     },
+    {
+      platformType: PlatformType.Metaweblog,
+      subPlatformType: SubPlatformType.Metaweblog_Jvue,
+      platformKey: "metaweblog_Jvue",
+      platformName: "Jvue",
+      platformIcon: svgIcons.iconOTJVue,
+      authMode: AuthMode.API,
+      isEnabled: false,
+    },
   ],
   wordpressCfg: <DynamicConfig[]>[
     {

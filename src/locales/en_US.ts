@@ -430,7 +430,7 @@ export default {
   "setting.jvue.username.tip": "Jvue platform login name",
   "setting.jvue.password.tip": "Jvue platform password",
   "setting.jvue.apiUrl.tip":
-    "The XMLRPC remote release address of the JVUE platform is usually fixed: https: // <platform address>/xmlrpc",
+    "The XMLRPC remote release address of the Jvue platform is usually fixed: https: // <platform address>/xmlrpc",
   "setting.jvue.previewUrl.tip": "The preview rules of the Jvue platform are usually:/post/[postid] .html",
 
   "setting.conf.home.tip":

@@ -416,11 +416,11 @@ export default {
   "setting.metaweblog.apiUrl.tip": "Metaweblog平台的xmlrpc远程发布地址",
   "setting.metaweblog.previewUrl.tip": "Metaweblog平台的文章预览规则，[postid]可作文文章ID占位符",
 
-  "setting.jvue.home.tip": "JVue平台的首页",
-  "setting.jvue.username.tip": "JVue平台登录名",
-  "setting.jvue.password.tip": "JVue平台密码",
-  "setting.jvue.apiUrl.tip": "JVue平台的xmlrpc远程发布地址，通常固定是：https://<平台地址>/xmlrpc",
-  "setting.jvue.previewUrl.tip": "JVue平台的文章预览规则，通常是：/post/[postid].html",
+  "setting.jvue.home.tip": "Jvue平台的首页，例如：http://localhost:3000",
+  "setting.jvue.username.tip": "Jvue平台登录名",
+  "setting.jvue.password.tip": "Jvue平台密码",
+  "setting.jvue.apiUrl.tip": "Jvue平台的xmlrpc远程发布地址，通常固定是：https://<平台地址>/xmlrpc，例如：http://localhost:8008/xmlrpc",
+  "setting.jvue.previewUrl.tip": "Jvue平台的文章预览规则，通常是：/post/[postid].html",
 
   "setting.conf.home.tip": "Confluence Cloud，首页，通常是：https://<您的用户名>.atlassian.net/wiki/spaces/<空间名>",
   "setting.conf.username.tip": "Confluence登录名，可前往您的atlassian账户获取",
@@ -611,7 +611,7 @@ export default {
   "category.ai.hand": "由于各平台分类体系不一致，分类需要手动进行校准，不会自动保存",
   "category.ai.enabled":
     "检测到您已经配置AI，可请前往详细模式进行操作。小贴士：由于网络或者其他问题，如果第一次失败生成，多试几次或许就能出结果哟~😄",
-  "sys.config.ai": "AI集成设置",
+  "sys.config.ai": "AI 设置",
   "config.ai.use.siyuan": "思源笔记内部，直接使用思源笔记配置，无需配置",
   "setting.blog.yamlLinkEnabled": "YAML永久链接",
   "distri.type.overide.warn": "注意：覆盖模式下会用当前数据覆盖所有选择的平台，请谨慎操作。",
