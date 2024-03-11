@@ -46,8 +46,7 @@ If you're interested in the paid professional version, please check the paied
 > For further details, kindly [click here](https://blog.terwer.space/s/20230810132040-nn4q7vs) to peruse the latest help
 > documentation.
 
-**Should you encounter any issues or wish to submit suggestions, feel free to join QQ group `895063267` for discussions.
-**
+**Should you encounter any issues or wish to submit suggestions, feel free to join QQ group `895063267` for discussions.**
 
 ## Version Preview
 
