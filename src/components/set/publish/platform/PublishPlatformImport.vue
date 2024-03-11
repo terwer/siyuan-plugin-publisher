@@ -24,9 +24,15 @@
   -->
 
 <script setup lang="ts">
-import { DynamicConfig, DynamicJsonCfg, isDynamicKeyExists, setDynamicJsonCfg } from "~/src/platforms/dynamicConfig.ts"
+import {
+  DynamicConfig,
+  DynamicJsonCfg,
+  isDynamicKeyExists,
+  PlatformType,
+  setDynamicJsonCfg,
+} from "~/src/platforms/dynamicConfig.ts"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
-import { DateUtil, JsonUtil } from "zhi-common"
+import { DateUtil, JsonUtil, StrUtil } from "zhi-common"
 import { markRaw, onMounted, reactive, ref } from "vue"
 import { SypConfig } from "~/syp.config.ts"
 import _ from "lodash-es"
@@ -36,12 +42,14 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { ElMessageBox } from "element-plus"
 import { Delete } from "@element-plus/icons-vue"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { usePlatformDefine } from "~/src/composables/usePlatformDefine.ts"
 
 const logger = createAppLogger("publish-platform-import")
 
 // uses
 const { t } = useVueI18n()
 const { getSetting, updateSetting, deleteKey } = usePublishSettingStore()
+const { platformTypeList, getPrePlatformList, getAllPrePlatformList } = usePlatformDefine()
 
 // 自定义导入
 const showCustomImportDrawer = ref(false)
@@ -60,6 +68,12 @@ const formData = reactive({
   isImportLoading: false,
   showLogMessage: false,
   logMessage: "",
+
+  // custom import
+  customImport: {
+    path: [],
+    datas: [],
+  },
 })
 
 // methods
@@ -73,7 +87,7 @@ const basicImport = (importCfgs: DynamicConfig[]) => {
   for (const importCfg of importCfgs) {
     const pkey = importCfg.platformKey
     if (isDynamicKeyExists(formData.dynamicConfigArray, pkey)) {
-      // logAction(pkey, "已经存在，忽略导入")
+      logAction(pkey, `${pkey} 已经存在，忽略导入`)
       continue
     }
 
@@ -147,6 +161,102 @@ const handleImportLegencySypWidget = () => {
   widgetImportDrawerTitle.value = "从「挂件版」 v0.8.1 导入"
 }
 
+const customLoad = async (node: any, resolve: any) => {
+  if (node.isLeaf) return resolve([])
+
+  let docPath: string
+  let parentDocPath = node.data.value || ""
+  // 第一次加载并且保存过目录
+  if (parentDocPath === "" && formData.customImport.path.length == 0) {
+    docPath = ""
+  } else {
+    // 非首次加载或者首次加载但是没保存过目录
+    if (parentDocPath === "") {
+      parentDocPath = ""
+    }
+    // 子目录加载
+    docPath = parentDocPath
+  }
+
+  // 组装树形数据
+  if (StrUtil.isEmptyString(docPath)) {
+    // 处理父级
+    const typeTreeNode = [] as any[]
+    platformTypeList.forEach((item: { type: string; title: string; img: string; description: string }) => {
+      const node = {
+        value: item.type,
+        label: item.title,
+        isLeaf: false,
+      }
+      typeTreeNode.push(node)
+    })
+    resolve(typeTreeNode)
+  } else {
+    // 处理子级
+    const treeNode = [] as any[]
+    const platformList = getPrePlatformList(docPath as PlatformType)
+    platformList.forEach((item: DynamicConfig) => {
+      // 当前分类下的子分类
+      if (item.platformType === docPath) {
+        const node = {
+          value: item.platformKey,
+          label: item.platformName,
+          isLeaf: true,
+        }
+        treeNode.push(node)
+      }
+
+      // 选中
+      if (formData.dynamicConfigArray.some((x) => x.platformKey === item.platformKey)) {
+        formData.customImport.path.push(item.platformKey)
+      }
+    })
+    resolve(treeNode)
+  }
+}
+
+const doImportCustom = async () => {
+  const paths = formData.customImport.path
+  if (paths.length === 0) {
+    formData.logMessage += `未选择平台，忽略导入`
+    ElMessage.warning("未选择平台，忽略导入")
+    return
+  }
+  const cfgs = []
+  const allCfgs = getAllPrePlatformList()
+  allCfgs.forEach((item: DynamicConfig) => {
+    if (paths.includes(item.platformKey)) {
+      cfgs.push(item)
+    }
+  })
+
+  formData.showLogMessage = true
+  formData.isImportLoading = true
+  // 清空日志
+  formData.logMessage = ""
+
+  let totalImportCount = 0
+  // 大类导入
+  totalImportCount += basicImport(cfgs)
+
+  formData.isImportLoading = false
+
+  if (totalImportCount > 0) {
+    // 转换格式并保存
+    const dynJsonCfg = setDynamicJsonCfg(formData.dynamicConfigArray)
+    formData.setting[DYNAMIC_CONFIG_KEY] = dynJsonCfg
+    await updateSetting(formData.setting)
+    // 刷新数据
+    await initPage()
+
+    formData.logMessage += `选择的自定义平台已成功导入并保存`
+    ElMessage.success("选择的自定义平台已成功导入并保存")
+  } else {
+    formData.logMessage += `未发现新平台，忽略导入`
+    ElMessage.warning("未发现新平台，忽略导入")
+  }
+}
+
 // init
 const initPage = async () => {
   formData.setting = await getSetting()
@@ -199,7 +309,25 @@ onMounted(async () => {
       :destroy-on-close="true"
     >
       <div class="import-panel">
-        <el-button>aaaaa</el-button>
+        <el-form>
+          <el-form-item>
+            <el-tree-select
+              v-model="formData.customImport.path"
+              show-checkbox
+              lazy
+              multiple
+              check-on-click-node
+              default-expand-all
+              :load="customLoad"
+              :empty-text="t('main.data.empty')"
+              :no-data-text="t('main.data.empty')"
+              :placeholder="t('main.opt.select')"
+            />
+          </el-form-item>
+          <el-form-item>
+            <el-button @click="doImportCustom" type="primary">开始导入</el-button>
+          </el-form-item>
+        </el-form>
       </div>
     </el-drawer>
 
