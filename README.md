@@ -26,6 +26,7 @@ If you're interested in the paid professional version, please check the paied
               Furthermore, accessing article previews mandates circumventing restrictions via appropriate means.**
             - For discussions on CORS proxy complications or other inquiries, feel free to engage in group discussions
               or reach out to the author at youweics@163.com
+            - At present, only anonymous posting and updates are supported; login functionality will be incorporated in version 1.20.1.
         - #1054 Addition of article management capabilities
             - Renamed article management as Dashboard. Feedback regarding nomenclature adjustments can be deliberated
               via issues, facilitating responsive modifications by the author.
@@ -54,6 +55,7 @@ If you're interested in the paid professional version, please check the paied
 
 - Expansion of telegra.ph support for image uploads
     - Reference: https://www.npmjs.com/package/telegraph-uploader
+- Support login for telegra.ph
 - Rectification of scenarios entailing repetitive image uploads across select platforms
 - Resolution of formatting discrepancies within WeChat public accounts
 - #990 Rectification of irregular display issues while posting to Jian Shu
