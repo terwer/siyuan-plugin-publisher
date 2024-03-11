@@ -419,7 +419,8 @@ export default {
   "setting.jvue.home.tip": "Jvue平台的首页，例如：http://localhost:3000",
   "setting.jvue.username.tip": "Jvue平台登录名",
   "setting.jvue.password.tip": "Jvue平台密码",
-  "setting.jvue.apiUrl.tip": "Jvue平台的xmlrpc远程发布地址，通常固定是：https://<平台地址>/xmlrpc，例如：http://localhost:8008/xmlrpc",
+  "setting.jvue.apiUrl.tip":
+    "Jvue平台的xmlrpc远程发布地址，通常固定是：https://<平台地址>/xmlrpc，例如：http://localhost:8008/xmlrpc",
   "setting.jvue.previewUrl.tip": "Jvue平台的文章预览规则，通常是：/post/[postid].html",
 
   "setting.conf.home.tip": "Confluence Cloud，首页，通常是：https://<您的用户名>.atlassian.net/wiki/spaces/<空间名>",
@@ -660,4 +661,7 @@ export default {
 
   "platform.new.platform":
     "检测到还有 [count] 个内置平台 [platform] 尚未导入，您可以使用平台导入批量导入，或者去插件商店自行添加。",
+
+  "import.v081.warn":
+    "考虑到 v0.8.1 已经是很早的版本了，此功能可能不再需要。图个您需要此功能，可反馈至 youweics@163.com ，我们会根据需求决定是否实现此功能。",
 }

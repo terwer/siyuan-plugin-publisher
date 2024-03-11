@@ -676,4 +676,6 @@ export default {
 
   "platform.new.platform":
     "It has been observed that there are still [count] internal platforms [platform] awaiting importation. You may utilize the platform importation tool for a bulk import, or alternatively, manually add them from the plugin store.",
+
+  "import.v081.warn": "Given that v0.8.1 is considered a significantly antiquated iteration, this feature may no longer be pertinent. Should you find yourself in need of this functionality, please direct your feedback to youweics@qq.com, and we shall deliberate on its implementation based on demand."
 }

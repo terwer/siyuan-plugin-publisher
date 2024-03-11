@@ -339,7 +339,7 @@ onMounted(async () => {
       :destroy-on-close="true"
     >
       <div class="import-panel">
-        <el-button>bbbb</el-button>
+        <el-alert :closable="false" :title="t('import.v081.warn')" class="form-item-tip" type="warning" />
       </div>
     </el-drawer>
   </div>
