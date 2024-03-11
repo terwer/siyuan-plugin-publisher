@@ -41,7 +41,7 @@ If you're interested in the paid professional version, please check the paied
         - Exquisitely refined iteration of `sy-post-publisher widget
 
     - Furthermore, post the `1.14.0` version, the author discretely developed an import function. Users can swiftly
-      import built-in platforms through `Settings` -> `Publish Settings` -> `Import Predefined Platforms` feature 😄
+      import built-in platforms through `Settings` -> `Publish Settings` -> `Import Platforms` feature 😄
 
 > For further details, kindly [click here](https://blog.terwer.space/s/20230810132040-nn4q7vs) to peruse the latest help
 > documentation.
