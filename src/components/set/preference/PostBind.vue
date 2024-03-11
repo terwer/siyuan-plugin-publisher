@@ -24,7 +24,7 @@
   -->
 
 <script setup lang="ts">
-import {onMounted, reactive, ref, toRaw, watch} from "vue"
+import { onMounted, reactive, ref, toRaw, watch } from "vue"
 import { ElMessage, FormRules } from "element-plus"
 import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
 import { DynamicConfig } from "~/src/platforms/dynamicConfig.ts"
@@ -60,10 +60,10 @@ const formData = reactive({
 const alertTitle = ref(`将对文档「${formData.pageId}」进行修复`)
 
 watch(
-    () => formData.pageId,
-    (newValue) => {
-      alertTitle.value = `将对文档「${newValue}」进行修复`
-    }
+  () => formData.pageId,
+  (newValue) => {
+    alertTitle.value = `将对文档「${newValue}」进行修复`
+  }
 )
 
 // methods
@@ -95,6 +95,10 @@ const submitForm = async (formEl: any) => {
     logger.error(t("main.opt.failure") + "=>", e)
     ElMessage.error(t("main.opt.failure") + "=>" + e)
   }
+}
+
+const handleV081 = () => {
+  ElMessage.warning(t("import.v081.warn"))
 }
 
 // lifecycles
@@ -163,7 +167,7 @@ onMounted(async () => {
 
       <el-form-item>
         <el-button type="primary" @click="submitForm(ruleFormRef)">{{ t("post.bind.conf.save") }}</el-button>
-        <el-button type="warning">{{ t("post.bind.conf.v081") }}</el-button>
+        <el-button type="warning" @click="handleV081">{{ t("post.bind.conf.v081") }}</el-button>
       </el-form-item>
     </el-form>
   </div>
