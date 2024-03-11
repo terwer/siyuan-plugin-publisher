@@ -126,7 +126,7 @@ devDependencies:
     version: 2.13.0
   '@terwer/esbuild-config-custom':
     specifier: 2.0.0
-    version: 2.0.0(@types/minimist@1.2.5)(dotenv@16.4.5)(esbuild-plugin-copy@2.1.1)(esbuild-plugin-d.ts@1.2.3)(esbuild-plugin-ifdef@1.0.1)(esbuild-plugin-inline-image@0.0.9)(esbuild-plugin-vue3@0.3.2)(esbuild-style-plugin@1.6.3)(esbuild@0.17.19)(minimist@1.2.8)(rimraf@4.4.1)(stylus@0.62.0)
+    version: 2.0.0(@types/minimist@1.2.5)(dotenv@16.4.5)(esbuild-plugin-copy@2.1.1)(esbuild-plugin-d.ts@1.2.3)(esbuild-plugin-ifdef@1.0.1)(esbuild-plugin-inline-image@0.0.9)(esbuild-plugin-vue3@0.3.2)(esbuild-style-plugin@1.6.3)(esbuild@0.17.19)(minimist@1.2.8)(rimraf@4.4.1)(stylus@0.63.0)
   '@terwer/eslint-config-custom':
     specifier: ^1.3.6
     version: 1.3.6(@nuxt/eslint-config@0.1.1)(@typescript-eslint/eslint-plugin@5.62.0)(astro-eslint-parser@0.13.3)(eslint-config-prettier@8.10.0)(eslint-config-turbo@1.12.5)(eslint-plugin-prettier@4.2.1)(eslint-plugin-svelte@2.35.1)(eslint-plugin-vue@9.22.0)(eslint@8.57.0)(prettier-plugin-svelte@2.10.1)(prettier@2.8.8)(typescript@5.4.2)
@@ -173,8 +173,8 @@ devDependencies:
     specifier: ^2.0.5
     version: 2.0.5
   stylus:
-    specifier: ^0.62.0
-    version: 0.62.0
+    specifier: ^0.63.0
+    version: 0.63.0
   typescript:
     specifier: ^5.4.2
     version: 5.4.2
@@ -189,7 +189,7 @@ devDependencies:
     version: 33.5.5
   vite:
     specifier: ^5.1.5
-    version: 5.1.5(@types/node@18.19.22)(stylus@0.62.0)
+    version: 5.1.5(@types/node@18.19.22)(stylus@0.63.0)
   vite-plugin-html:
     specifier: ^3.2.2
     version: 3.2.2(vite@5.1.5)
@@ -198,7 +198,7 @@ devDependencies:
     version: 0.21.0(vite@5.1.5)
   vitest:
     specifier: ^1.3.1
-    version: 1.3.1(@types/node@18.19.22)(jsdom@24.0.0)(stylus@0.62.0)
+    version: 1.3.1(@types/node@18.19.22)(jsdom@24.0.0)(stylus@0.63.0)
   vue-tsc:
     specifier: ^1.8.27
     version: 1.8.27(typescript@5.4.2)
@@ -1312,7 +1312,7 @@ packages:
     resolution: {integrity: sha512-Ccy0NlLkzr0Ex2FKvh2X+OyERHXJ88XJ1MXtsI9y9fGexlaXaVTPzBCRBwIxFkORuOb+uBqeu+RqnpgYTEZRUQ==}
     dev: false
 
-  /@terwer/esbuild-config-custom@2.0.0(@types/minimist@1.2.5)(dotenv@16.4.5)(esbuild-plugin-copy@2.1.1)(esbuild-plugin-d.ts@1.2.3)(esbuild-plugin-ifdef@1.0.1)(esbuild-plugin-inline-image@0.0.9)(esbuild-plugin-vue3@0.3.2)(esbuild-style-plugin@1.6.3)(esbuild@0.17.19)(minimist@1.2.8)(rimraf@4.4.1)(stylus@0.62.0):
+  /@terwer/esbuild-config-custom@2.0.0(@types/minimist@1.2.5)(dotenv@16.4.5)(esbuild-plugin-copy@2.1.1)(esbuild-plugin-d.ts@1.2.3)(esbuild-plugin-ifdef@1.0.1)(esbuild-plugin-inline-image@0.0.9)(esbuild-plugin-vue3@0.3.2)(esbuild-style-plugin@1.6.3)(esbuild@0.17.19)(minimist@1.2.8)(rimraf@4.4.1)(stylus@0.63.0):
     resolution: {integrity: sha512-Uyt/ccoxlnjtxQAL3poCvZVfRr4Img49Y+DDOHFO4qd9zmcYC2WH9f/kBobqxPBAdslHm3n++U85/or4gAZO4w==}
     hasBin: true
     peerDependencies:
@@ -1340,7 +1340,7 @@ packages:
       esbuild-style-plugin: 1.6.3
       minimist: 1.2.8
       rimraf: 4.4.1
-      stylus: 0.62.0
+      stylus: 0.63.0
     dev: true
 
   /@terwer/eslint-config-custom@1.3.6(@nuxt/eslint-config@0.1.1)(@typescript-eslint/eslint-plugin@5.62.0)(astro-eslint-parser@0.13.3)(eslint-config-prettier@8.10.0)(eslint-config-turbo@1.12.5)(eslint-plugin-prettier@4.2.1)(eslint-plugin-svelte@2.35.1)(eslint-plugin-vue@9.22.0)(eslint@8.57.0)(prettier-plugin-svelte@2.10.1)(prettier@2.8.8)(typescript@5.4.2):
@@ -1945,7 +1945,7 @@ packages:
       vite: ^5.0.0
       vue: ^3.2.25
     dependencies:
-      vite: 5.1.5(@types/node@18.19.22)(stylus@0.62.0)
+      vite: 5.1.5(@types/node@18.19.22)(stylus@0.63.0)
       vue: 3.4.21(typescript@5.4.2)
     dev: true
 
@@ -1967,7 +1967,7 @@ packages:
       std-env: 3.7.0
       test-exclude: 6.0.0
       v8-to-istanbul: 9.2.0
-      vitest: 1.3.1(@types/node@18.19.22)(jsdom@24.0.0)(stylus@0.62.0)
+      vitest: 1.3.1(@types/node@18.19.22)(jsdom@24.0.0)(stylus@0.63.0)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -7068,8 +7068,8 @@ packages:
     resolution: {integrity: sha512-H2N9c26eXjzL/S/K+i/RHHcFanE74dptvvjM8iwzwbVcWY/zjBbgRqF3K0DY4+OD+uTTASTBvDoxPDaPN02D7g==}
     dev: false
 
-  /stylus@0.62.0:
-    resolution: {integrity: sha512-v3YCf31atbwJQIMtPNX8hcQ+okD4NQaTuKGUWfII8eaqn+3otrbttGL1zSMZAAtiPsBztQnujVBugg/cXFUpyg==}
+  /stylus@0.63.0:
+    resolution: {integrity: sha512-OMlgrTCPzE/ibtRMoeLVhOY0RcNuNWh0rhAVqeKnk/QwcuUKQbnqhZ1kg2vzD8VU/6h3FoPTq4RJPHgLBvX6Bw==}
     hasBin: true
     dependencies:
       '@adobe/css-tools': 4.3.3
@@ -7679,7 +7679,7 @@ packages:
       vfile-message: 2.0.4
     dev: false
 
-  /vite-node@1.3.1(@types/node@18.19.22)(stylus@0.62.0):
+  /vite-node@1.3.1(@types/node@18.19.22)(stylus@0.63.0):
     resolution: {integrity: sha512-azbRrqRxlWTJEVbzInZCTchx0X69M/XPTCz4H+TLvlTcR/xH/3hkRqhOakT41fMJCMzXTu4UvegkZiEoJAWvng==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
@@ -7688,7 +7688,7 @@ packages:
       debug: 4.3.4
       pathe: 1.1.2
       picocolors: 1.0.0
-      vite: 5.1.5(@types/node@18.19.22)(stylus@0.62.0)
+      vite: 5.1.5(@types/node@18.19.22)(stylus@0.63.0)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -7717,7 +7717,7 @@ packages:
       html-minifier-terser: 6.1.0
       node-html-parser: 5.4.2
       pathe: 0.2.0
-      vite: 5.1.5(@types/node@18.19.22)(stylus@0.62.0)
+      vite: 5.1.5(@types/node@18.19.22)(stylus@0.63.0)
     dev: true
 
   /vite-plugin-node-polyfills@0.21.0(vite@5.1.5):
@@ -7727,12 +7727,12 @@ packages:
     dependencies:
       '@rollup/plugin-inject': 5.0.5
       node-stdlib-browser: 1.2.0
-      vite: 5.1.5(@types/node@18.19.22)(stylus@0.62.0)
+      vite: 5.1.5(@types/node@18.19.22)(stylus@0.63.0)
     transitivePeerDependencies:
       - rollup
     dev: true
 
-  /vite@5.1.5(@types/node@18.19.22)(stylus@0.62.0):
+  /vite@5.1.5(@types/node@18.19.22)(stylus@0.63.0):
     resolution: {integrity: sha512-BdN1xh0Of/oQafhU+FvopafUp6WaYenLU/NFoL5WyJL++GxkNfieKzBhM24H3HVsPQrlAqB7iJYTHabzaRed5Q==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
@@ -7764,12 +7764,12 @@ packages:
       esbuild: 0.19.12
       postcss: 8.4.35
       rollup: 4.12.1
-      stylus: 0.62.0
+      stylus: 0.63.0
     optionalDependencies:
       fsevents: 2.3.3
     dev: true
 
-  /vitest@1.3.1(@types/node@18.19.22)(jsdom@24.0.0)(stylus@0.62.0):
+  /vitest@1.3.1(@types/node@18.19.22)(jsdom@24.0.0)(stylus@0.63.0):
     resolution: {integrity: sha512-/1QJqXs8YbCrfv/GPQ05wAZf2eakUPLPa18vkJAKE7RXOKfVHqMZZ1WlTjiwl6Gcn65M5vpNUB6EFLnEdRdEXQ==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
@@ -7813,8 +7813,8 @@ packages:
       strip-literal: 2.0.0
       tinybench: 2.6.0
       tinypool: 0.8.2
-      vite: 5.1.5(@types/node@18.19.22)(stylus@0.62.0)
-      vite-node: 1.3.1(@types/node@18.19.22)(stylus@0.62.0)
+      vite: 5.1.5(@types/node@18.19.22)(stylus@0.63.0)
+      vite-node: 1.3.1(@types/node@18.19.22)(stylus@0.63.0)
       why-is-node-running: 2.2.2
     transitivePeerDependencies:
       - less
