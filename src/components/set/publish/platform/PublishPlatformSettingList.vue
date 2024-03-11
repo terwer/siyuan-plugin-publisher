@@ -25,7 +25,6 @@
 
 <script setup lang="ts">
 import { markRaw, onMounted, reactive } from "vue"
-import CrossPageUtils from "~/cross/crossPageUtils.ts"
 import { SypConfig } from "~/syp.config.ts"
 import { usePlatformDefine } from "~/src/composables/usePlatformDefine.ts"
 import {
@@ -52,6 +51,7 @@ import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { CommonWebConfig } from "~/src/adaptors/web/base/commonWebConfig.ts"
 import { Utils } from "~/src/utils/utils.ts"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
+import CrossPageUtils from "../../../../../cross/crossPageUtils.ts"
 
 const logger = createAppLogger("publish-platform-setting-list")
 
@@ -59,7 +59,7 @@ const logger = createAppLogger("publish-platform-setting-list")
 const { t } = useVueI18n()
 const router = useRouter()
 const { getSetting, updateSetting, deleteKey } = usePublishSettingStore()
-const { platformTypeList, getPrePlatformList, getPrePlatformKeys } = usePlatformDefine()
+const { getPrePlatformKeys } = usePlatformDefine()
 const { isInSiyuanWidget, isInChromeExtension } = useSiyuanDevice()
 
 // datas
@@ -68,7 +68,7 @@ const formData = reactive({
 
   dynamicConfigArray: [] as DynamicConfig[],
   newPlatformCount: 0,
-  newPlatformTip: 0,
+  newPlatformTip: "",
 
   // web auth
   webAuthLoadingMap: {} as any,
