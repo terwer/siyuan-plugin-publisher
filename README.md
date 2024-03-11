@@ -115,6 +115,7 @@ Names not listed in order
 - [X] Metaweblog
 - [X] CnBlogs
 - [X] Typecho
+- [X] Jvue
 - [X] WordPress
 - [X] Zhihu
 - [X] CSDN

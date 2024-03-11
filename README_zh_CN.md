@@ -111,6 +111,7 @@
 - [x] Metaweblog
 - [x] 博客园
 - [x] Typecho
+- [x] Jvue
 - [x] WordPress
 - [x] 知乎
 - [x] CSDN
