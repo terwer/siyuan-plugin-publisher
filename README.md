@@ -304,6 +304,7 @@ https://afdian.net/a/terwer
 
 * Thanks to the enthusiastic support of the following users, I will continue to update and maintain the project!
 
+    - 2024-03-12 *ruler Donate to [Publish Tool]
     - 2024-03-04 *azar Donate to [Publish Tool]
     - 2023-09-04 *Xia Donate to [Publish Tool]
     - 2023-08-31 *Cheng Donate to [Publishing Tool] Thanks for providing the note posting tool, reminder change
