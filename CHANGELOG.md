@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.20.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.20.0...siyuan-plugin-publisher-v1.20.1) (2024-03-12)
+### Bug Fixes
+* rectifying packaging errors ([e13bf42](https://github.com/terwer/siyuan-plugin-publisher/commit/e13bf4223943ce4c8dbe10be03463446abe10242))
+### Miscellaneous
+* **deps-dev:** bump vite from 5.1.5 to 5.1.6 ([cac7cc6](https://github.com/terwer/siyuan-plugin-publisher/commit/cac7cc622a832b21d7d3c9496dba6229624c3e34))
 ## [1.20.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.19.1...siyuan-plugin-publisher-v1.20.0) (2024-03-11)
 ### Features
 * [#058](https://github.com/terwer/siyuan-plugin-publisher/issues/058) [#1009](https://github.com/terwer/siyuan-plugin-publisher/issues/1009) 全面适配 docker（实验性） ([901e24f](https://github.com/terwer/siyuan-plugin-publisher/commit/901e24f64abe118a9df2dde15501a088257525e0))
@@ -12,7 +17,6 @@
 * [#958](https://github.com/terwer/siyuan-plugin-publisher/issues/958) [#1009](https://github.com/terwer/siyuan-plugin-publisher/issues/1009) 全面适配 docker（实验性）- 兼容 telegra.ph ([01e41ac](https://github.com/terwer/siyuan-plugin-publisher/commit/01e41acee8c879173cdabb52c54af3907a2bcf1f))
 * default to use proxy preview at telegra.ph ([7ed8222](https://github.com/terwer/siyuan-plugin-publisher/commit/7ed822200c5e15bbe30377c15d0b34baea1974ea))
 * 深度优化挂件版本 ([128a07b](https://github.com/terwer/siyuan-plugin-publisher/commit/128a07b46b87e617409c8150e4fa8eb716f359ab))
-### Bug Fixes
 * [#1035](https://github.com/terwer/siyuan-plugin-publisher/issues/1035) 代码块里面的文本不应该被错误转义 ([8fc148f](https://github.com/terwer/siyuan-plugin-publisher/commit/8fc148f308c593af0888861f453c1f8c964bf55e))
 * **deps:** bump @iconify/json from 2.2.190 to 2.2.191 ([e8d2499](https://github.com/terwer/siyuan-plugin-publisher/commit/e8d24993dce88ad92df4482f1f1716d3c3f94eff))
 * **deps:** bump @vueuse/core from 10.7.2 to 10.8.0 ([2c14767](https://github.com/terwer/siyuan-plugin-publisher/commit/2c1476720c12845370dede552b8f14ad8e583648))
@@ -28,7 +32,6 @@
 * 完善开发文档 - 支持 serve、思源笔记插件、nginx 部署开发调试 ([532d8ed](https://github.com/terwer/siyuan-plugin-publisher/commit/532d8ed9816def408efcfce1c74f740ab140d08b))
 * 完善开发文档 - 支持 serve、思源笔记插件、nginx、vercel 部署开发调试 ([7b216b8](https://github.com/terwer/siyuan-plugin-publisher/commit/7b216b8de9eff63edfb542a187b6da59c47961aa))
 * 完善开发文档 - 支持全平台部署开发调试 ([c06abff](https://github.com/terwer/siyuan-plugin-publisher/commit/c06abff85f5af82b8073cebf41c11bc1f39d1d3d))
-### Miscellaneous
 * **deps-dev:** bump jsdom from 23.2.0 to 24.0.0 ([5f10543](https://github.com/terwer/siyuan-plugin-publisher/commit/5f105435a962e6599dd686263e694b046539be15))
 * **deps-dev:** bump stylus from 0.62.0 to 0.63.0 ([7335885](https://github.com/terwer/siyuan-plugin-publisher/commit/733588554ed3e6d432cd63aa3a7d9665c31f6aa6))
 * **deps-dev:** bump vercel from 33.5.1 to 33.5.2 ([48b789b](https://github.com/terwer/siyuan-plugin-publisher/commit/48b789bed83003b49b46d702a9e79171a9d29686))
