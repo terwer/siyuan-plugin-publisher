@@ -53,7 +53,6 @@ if __name__ == "__main__":
     try:
         # 压缩dist为zip
         scriptutils.zip_folder(src_folder, tmp_folder_name, build_zip_path, build_zip_name)
-        scriptutils.cp_file(os.path.join(build_zip_path, build_zip_name), os.path.join(build_zip_path, "package.zip"))
     except Exception as e:
         print(f"打包错误,{str(e)}")
     print("nginx打包完毕.")
