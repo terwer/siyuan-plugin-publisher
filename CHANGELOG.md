@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.20.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.20.0...siyuan-plugin-publisher-v1.20.1) (2024-03-12)
+
+
+### Bug Fixes
+
+* rectifying packaging errors ([e13bf42](https://github.com/terwer/siyuan-plugin-publisher/commit/e13bf4223943ce4c8dbe10be03463446abe10242))
+
+
+### Miscellaneous
+
+* **deps-dev:** bump vite from 5.1.5 to 5.1.6 ([cac7cc6](https://github.com/terwer/siyuan-plugin-publisher/commit/cac7cc622a832b21d7d3c9496dba6229624c3e34))
+
 ## [1.20.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.19.1...siyuan-plugin-publisher-v1.20.0) (2024-03-11)
 ### Features
 * [#058](https://github.com/terwer/siyuan-plugin-publisher/issues/058) [#1009](https://github.com/terwer/siyuan-plugin-publisher/issues/1009) 全面适配 docker（实验性） ([901e24f](https://github.com/terwer/siyuan-plugin-publisher/commit/901e24f64abe118a9df2dde15501a088257525e0))
