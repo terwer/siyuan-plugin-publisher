@@ -13,7 +13,7 @@ If you're interested in the paid professional version, please check the paied
 > inception of first releases👀.
 
 - Version `1.20.1` predominantly addresses the following issues:
-  - Rectification of packaging errors.
+    - Rectification of packaging errors.
 - Version `1.20.0` comprise the introduction of additional publishing platforms, an initial
   foray into supporting the docker version, along with enhancements tailored to optimize user interactions.
 
@@ -262,9 +262,8 @@ to [Latest Adaptation](https://terwergreen.feishu.cn/share/base/view/shrcnWT2IGI
 
 
 * Q6：What should I do if the platform I need to publish is not provided by the publishing tool?
-*
 
-A6：Reference: [Platform Adaptation Plan](https://github.com/terwer/siyuan-plugin-publisher/blob/main/README_zh_CN.md#platform-adaptation-plan "Platform Adaptation Plan")
+  A6：Reference: [Platform Adaptation Plan](https://github.com/terwer/siyuan-plugin-publisher/blob/main/README_zh_CN.md#platform-adaptation-plan "Platform Adaptation Plan")
 
 ## Donate
 
@@ -294,7 +293,7 @@ https://afdian.net/a/terwer
   Names not listed in order
 
   |    Name     | version |vendor|
-      |:-----------:|:-------:| :---------: |
+  |:-----------:|:-------:| :---------: |
   |    turbo    |  1.9+   |Vercel| 
   |     Vue     | 3.3.4+  |Evan You|
   |    Vite     |  4.2+   |Evan You|
@@ -305,6 +304,7 @@ https://afdian.net/a/terwer
 
 * Thanks to the enthusiastic support of the following users, I will continue to update and maintain the project!
 
+    - 2024-03-04 *azar Donate to [Publish Tool]
     - 2023-09-04 *Xia Donate to [Publish Tool]
     - 2023-08-31 *Cheng Donate to [Publishing Tool] Thanks for providing the note posting tool, reminder change
     - 2023-08-31 *? Donated to [Publish Tool] Thanks for providing the siyuan-note Publish Tool.
