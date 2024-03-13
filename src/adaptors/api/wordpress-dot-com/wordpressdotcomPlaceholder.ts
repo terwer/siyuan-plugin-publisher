@@ -23,30 +23,11 @@
  * questions.
  */
 
-import { WordpressConfig } from "~/src/adaptors/api/wordpress/wordpressConfig.ts"
-import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { MetaweblogBlogApiAdaptor } from "~/src/adaptors/api/base/metaweblog/metaweblogBlogApiAdaptor.ts"
+import { MetaweblogPlaceholder } from "~/src/adaptors/api/base/metaweblog/metaweblogPlaceholder.ts"
 
 /**
- * WordPress API 适配器
- *
- * @author terwer
- * @version 0.9.0
- * @since 0.9.0
+ * WordPress 操作提示
  */
-class WordpressApiAdaptor extends MetaweblogBlogApiAdaptor {
-  /**
-   * 初始化 WordPress API 适配器
-   *
-   * @param appInstance 应用实例
-   * @param cfg 配置项
-   */
-  constructor(appInstance: PublisherAppInstance, cfg: WordpressConfig) {
-    super(appInstance, cfg)
-    this.logger = createAppLogger("wordpress-api-adaptor")
-    this.cfg.blogid = "wordpress"
-  }
-}
+class WordpressdotcomPlaceholder extends MetaweblogPlaceholder {}
 
-export { WordpressApiAdaptor }
+export { WordpressdotcomPlaceholder }

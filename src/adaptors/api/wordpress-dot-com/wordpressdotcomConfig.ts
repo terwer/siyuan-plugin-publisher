@@ -23,30 +23,42 @@
  * questions.
  */
 
-import { WordpressConfig } from "~/src/adaptors/api/wordpress/wordpressConfig.ts"
-import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { MetaweblogBlogApiAdaptor } from "~/src/adaptors/api/base/metaweblog/metaweblogBlogApiAdaptor.ts"
+import { MetaweblogConfig } from "~/src/adaptors/api/base/metaweblog/metaweblogConfig.ts"
+import { CategoryTypeEnum, PageTypeEnum } from "zhi-blog-api"
+import WordpressUtils from "~/src/adaptors/api/wordpress/wordpressUtils.ts"
 
 /**
- * WordPress API 适配器
+ * WordPress.com 配置
  *
  * @author terwer
- * @version 0.9.0
- * @since 0.9.0
+ * @since 1.20.0
  */
-class WordpressApiAdaptor extends MetaweblogBlogApiAdaptor {
+class WordpressdotcomConfig extends MetaweblogConfig {
   /**
-   * 初始化 WordPress API 适配器
+   * WordPress.com 配置项
    *
-   * @param appInstance 应用实例
-   * @param cfg 配置项
+   * @param homeAddr WordPress.com 主页
+   * @param username 用户名
+   * @param password 密码
+   * @param middlewareUrl 代理地址
    */
-  constructor(appInstance: PublisherAppInstance, cfg: WordpressConfig) {
-    super(appInstance, cfg)
-    this.logger = createAppLogger("wordpress-api-adaptor")
-    this.cfg.blogid = "wordpress"
+  constructor(homeAddr: string, username: string, password: string, middlewareUrl?: string) {
+    super(homeAddr, "", username, password, middlewareUrl)
+
+    const { home, apiUrl } = WordpressUtils.parseHomeAndUrl(homeAddr)
+    this.home = home
+    this.apiUrl = apiUrl
+    this.previewUrl = "/?p=[postid]"
+    this.pageType = PageTypeEnum.Html
+    this.usernameEnabled = true
+    this.showTokenTip = false
+    this.allowPreviewUrlChange = true
+    this.tagEnabled = true
+    this.cateEnabled = true
+    this.categoryType = CategoryTypeEnum.CategoryType_Multi
+    this.allowCateChange = true
+    this.knowledgeSpaceEnabled = false
   }
 }
 
-export { WordpressApiAdaptor }
+export { WordpressdotcomConfig }

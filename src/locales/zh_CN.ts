@@ -397,6 +397,12 @@ export default {
   "setting.wordpress.apiUrl.tip": "WordPress的xmlrpc远程发布地址，通常是：https://<WordPress博客地址>/xmlrpc.php",
   "setting.wordpress.previewUrl.tip": "WordPress平台的文章预览规则，通常是：?p=[postid]",
 
+  "setting.wordpressdotcom.home.tip": "WordPress.com 首页",
+  "setting.wordpressdotcom.username.tip": "WordPress.com 登录名，注意：是登录名或者邮箱，不是用户昵称哦(*^▽^*)",
+  "setting.wordpressdotcom.password.tip": "WordPress.com 登录密码",
+  "setting.wordpressdotcom.apiUrl.tip": "WordPress.com 的xmlrpc远程发布地址，通常是：https://<WordPress登录名>.wordpress.com/xmlrpc.php",
+  "setting.wordpressdotcom.previewUrl.tip": "WordPress.com 平台的文章预览规则，通常是：?p=[postid]",
+
   "setting.oschina.home.tip": "开源中国首页，通常是：https://my.oschina.net/<您的用户名>",
   "setting.oschina.username.tip": "开源中国登录名，可以输入登录邮箱",
   "setting.oschina.password.tip": "开源中国登录密码",

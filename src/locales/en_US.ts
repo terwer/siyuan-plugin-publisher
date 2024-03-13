@@ -404,6 +404,13 @@ export default {
     "WordPress's XMLRPC remote release address, usually: https:// <WordPress blog address> /xmlrpc.php",
   "setting.wordpress.previewUrl.tip": "The preview rules of the WordPress platform are usually :? P = [Postid]",
 
+  "setting.wordpressdotcom.home.tip": "Wordpress homepage",
+  "setting.wordpressdotcom.username.tip": "WordPress login name, note: it is login name, not a user nickname (*^▽^*)",
+  "setting.wordpressdotcom.password.tip": "Wordpress login password",
+  "setting.wordpressdotcom.apiUrl.tip":
+    "WordPress's XMLRPC remote release address, usually: https:// <WordPress login name>.wordpress.com/xmlrpc.php",
+  "setting.wordpressdotcom.previewUrl.tip": "The preview rules of the WordPress platform are usually :? P = [Postid]",
+
   "setting.oschina.home.tip": "Homepage of open source China, usually: https://my.oschina.net/ <Your username>",
   "setting.oschina.username.tip": "Open source China login name, you can enter the login mailbox",
   "setting.oschina.password.tip": "Open source China login password",

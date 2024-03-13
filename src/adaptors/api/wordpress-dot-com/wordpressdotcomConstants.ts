@@ -23,30 +23,18 @@
  * questions.
  */
 
-import { WordpressConfig } from "~/src/adaptors/api/wordpress/wordpressConfig.ts"
-import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { MetaweblogBlogApiAdaptor } from "~/src/adaptors/api/base/metaweblog/metaweblogBlogApiAdaptor.ts"
-
 /**
- * WordPress API 适配器
+ * 预定义 WordPress 变量
  *
  * @author terwer
  * @version 0.9.0
  * @since 0.9.0
  */
-class WordpressApiAdaptor extends MetaweblogBlogApiAdaptor {
-  /**
-   * 初始化 WordPress API 适配器
-   *
-   * @param appInstance 应用实例
-   * @param cfg 配置项
-   */
-  constructor(appInstance: PublisherAppInstance, cfg: WordpressConfig) {
-    super(appInstance, cfg)
-    this.logger = createAppLogger("wordpress-api-adaptor")
-    this.cfg.blogid = "wordpress"
-  }
+class WordpressdotcomConstants {
+    // wordpress.com 不支持 metaWeblog.getUsersBlogs 只支持 blogger.getUsersBlogs
+    public static METHOD_GET_USERS_BLOGS = "blogger.getUsersBlogs"
+    // wordpress.com 不支持 metaWeblog.deletePost 只支持 blogger.deletePost
+    public static METHOD_DELETE_POST = "blogger.deletePost"
 }
 
-export { WordpressApiAdaptor }
+export { WordpressdotcomConstants }

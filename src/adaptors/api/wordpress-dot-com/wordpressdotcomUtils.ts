@@ -23,30 +23,34 @@
  * questions.
  */
 
-import { WordpressConfig } from "~/src/adaptors/api/wordpress/wordpressConfig.ts"
-import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { MetaweblogBlogApiAdaptor } from "~/src/adaptors/api/base/metaweblog/metaweblogBlogApiAdaptor.ts"
 
 /**
- * WordPress API 适配器
- *
- * @author terwer
- * @version 0.9.0
- * @since 0.9.0
+ * 用于处理 WordPress.com 相关操作的实用工具类
  */
-class WordpressApiAdaptor extends MetaweblogBlogApiAdaptor {
+class WordpressdotcomUtils {
+  private static logger = createAppLogger("wordpress-dot-com-utils")
+
   /**
-   * 初始化 WordPress API 适配器
+   * 解析给定的主页地址并生成相应的apiUrl地址
    *
-   * @param appInstance 应用实例
-   * @param cfg 配置项
+   * @param home - 主页地址
    */
-  constructor(appInstance: PublisherAppInstance, cfg: WordpressConfig) {
-    super(appInstance, cfg)
-    this.logger = createAppLogger("wordpress-api-adaptor")
-    this.cfg.blogid = "wordpress"
+  public static parseHomeAndUrl(home: string): { home: string; apiUrl: string } {
+    this.logger.debug(`Parsing Home address: ${home}`)
+    // 解析主页地址
+    let apiUrl = ""
+    if (home.endsWith("/xmlrpc.php")) {
+      apiUrl = home
+      home = home.replace("/xmlrpc.php", "")
+    } else {
+      home = home.replace(/\/$/, "")
+      apiUrl = `${home}/xmlrpc.php`
+    }
+
+    this.logger.debug(`Parse result: home=${home}, apiUrl=${apiUrl}`)
+    return { home, apiUrl }
   }
 }
 
-export { WordpressApiAdaptor }
+export default WordpressdotcomUtils
