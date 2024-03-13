@@ -156,7 +156,7 @@ onMounted(() => {
             <i class="el-icon">
               <span v-html="preItem?.platformIcon"></span>
             </i>
-            {{ CrossPageUtils.shortPlatformName(preItem.platformName, 11) }}
+            {{ CrossPageUtils.shortPlatformName(preItem.platformName, 6) }}
           </el-text>
         </div>
       </div>
