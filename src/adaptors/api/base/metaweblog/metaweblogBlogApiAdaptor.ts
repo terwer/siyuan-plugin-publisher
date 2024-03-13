@@ -40,7 +40,7 @@ import { useProxy } from "~/src/composables/useProxy.ts"
  * @since 0.9.0
  */
 class MetaweblogBlogApiAdaptor extends BaseBlogApi {
-  private readonly proxyXmlrpc: any
+  protected readonly proxyXmlrpc: any
 
   /**
    * 初始化 metaweblog API 适配器

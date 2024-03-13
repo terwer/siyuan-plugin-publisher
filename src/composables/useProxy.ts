@@ -74,8 +74,24 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
     contentType: string = "application/json",
     forceProxy: boolean = false
   ) => {
-    const siyuanSupported = ["application/json", "text/html", "text/xml", ""]
-    if (!forceProxy && isUseSiyuanProxy && siyuanSupported.includes(contentType)) {
+    const siyuanSupported = ["application/json", "text/html", "text/xml"]
+    if (forceProxy || !isUseSiyuanProxy || !siyuanSupported.includes(contentType)) {
+      logger.info("Using middleware proxy")
+      const header = headers.length > 0 ? headers[0] : {}
+      const fetchOptions = {
+        method: method,
+        headers: {
+          "Content-Type": contentType,
+          ...header,
+        },
+        body: params,
+      }
+      logger.info("commonFetchClient url in proxyFetch =>", url)
+      logger.info("commonFetchClient fetchOptions in proxyFetch =>", fetchOptions)
+      const res = await commonFetchClient.fetchCall(url, fetchOptions, forceProxy)
+      logger.debug("Result of proxyFetch in commonFetchClient =>", res)
+      return res
+    } else {
       logger.info("Using Siyuan forwardProxy, contentType=>", contentType)
       let body: any
       if (typeof params === "string" && !StrUtil.isEmptyString(params)) {
@@ -130,21 +146,6 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
         logger.info("SiYuan proxy directly response fetchResult for content type:", contentType)
         return fetchResult
       }
-    } else {
-      logger.info("Using middleware proxy")
-      const header = headers.length > 0 ? headers[0] : {}
-      const fetchOptions = {
-        method: method,
-        headers: {
-          "Content-Type": contentType,
-          ...header,
-        },
-      }
-      logger.info("commonFetchClient url in proxyFetch =>", url)
-      logger.info("commonFetchClient fetchOptions in proxyFetch =>", fetchOptions)
-      const res = await commonFetchClient.fetchCall(url, fetchOptions, forceProxy)
-      logger.debug("Result of proxyFetch in commonFetchClient =>", res)
-      return res
     }
   }
 
@@ -154,11 +155,17 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
    * @param url - xmlrpc 端点地址
    * @param reqMethod - 请求的方法名
    * @param reqParams - 请求的参数
+   * @param forceProxy - 是否强制使用代理
    */
-  const proxyXmlrpc = async (url: string, reqMethod: string, reqParams: any[]) => {
+  const proxyXmlrpc = async (url: string, reqMethod: string, reqParams: any[], forceProxy: boolean = false) => {
     const body = serializer.serializeMethodCall(reqMethod, reqParams)
-    const res = await proxyFetch(url, [], body, "POST", "text/xml")
-    let resText = res
+    let resText: string
+    if (forceProxy) {
+      const res = await proxyFetch(url, [], body, "POST", "text/xml", forceProxy)
+      resText = await res?.body["xml-body"]
+    } else {
+      resText = await proxyFetch(url, [], body, "POST", "text/xml", forceProxy)
+    }
     resText = XmlrpcUtil.removeXmlHeader(resText)
     const deserializer = new Deserializer()
     const resJson = await deserializer.deserializeMethodResponse(resText)

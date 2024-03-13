@@ -36,6 +36,8 @@ import { MetaweblogBlogApiAdaptor } from "~/src/adaptors/api/base/metaweblog/met
  * @since 0.9.0
  */
 class WordpressApiAdaptor extends MetaweblogBlogApiAdaptor {
+  private NEED_PROXY_BLOGS = ["wordpress.com"]
+
   /**
    * 初始化 WordPress API 适配器
    *
@@ -47,5 +49,22 @@ class WordpressApiAdaptor extends MetaweblogBlogApiAdaptor {
     this.logger = createAppLogger("wordpress-api-adaptor")
     this.cfg.blogid = "wordpress"
   }
+
+  /**
+   * WordPress API 调用
+   *
+   * @param method 方法名
+   * @param params 参数
+   * @returns 返回值
+   */
+  protected override async metaweblogCall(method: string, params: any[]) {
+    const url = new URL(this.cfg.apiUrl)
+    const mainDomain = url.hostname.match(/[^.]+\.[^.]+$/)[0]
+    if (this.NEED_PROXY_BLOGS.includes(mainDomain)) {
+      return await this.proxyXmlrpc(this.cfg.apiUrl, method, params, true)
+    }
+    return await this.proxyXmlrpc(this.cfg.apiUrl, method, params)
+  }
 }
+
 export { WordpressApiAdaptor }
