@@ -105,8 +105,8 @@ dependencies:
     specifier: ^0.4.15
     version: 0.4.15(typescript@5.4.2)
   zhi-gitlab-middleware:
-    specifier: ^0.6.26
-    version: 0.6.26(typescript@5.4.2)
+    specifier: ^0.6.28
+    version: 0.6.28(typescript@5.4.2)
   zhi-lib-base:
     specifier: ^0.8.0
     version: 0.8.0
@@ -8228,6 +8228,16 @@ packages:
       - typescript
     dev: false
 
+  /zhi-fetch-middleware@0.8.2(typescript@5.4.2):
+    resolution: {integrity: sha512-W7hkvQqDTwqnfHLTIdtUgG2SnUqbiQNQdLf7K3psz+N6ngFS0t6F2jQk3jEn6CkS5WrjVkWbT5CpsK2ffaZuGw==}
+    dependencies:
+      zhi-common: 1.31.0(typescript@5.4.2)
+      zhi-device: 2.11.0
+      zhi-lib-base: 0.8.0
+    transitivePeerDependencies:
+      - typescript
+    dev: false
+
   /zhi-github-middleware@0.4.15(typescript@5.4.2):
     resolution: {integrity: sha512-D5bKdOwTHMUTZptR49Yt7l3NJstc7cp+Za7HwJknIqnPT11Xu2wOL3kj5fTuBHohY/zQLW5GV40a+Bo3pQYP7Q==}
     dependencies:
@@ -8239,10 +8249,10 @@ packages:
       - typescript
     dev: false
 
-  /zhi-gitlab-middleware@0.6.26(typescript@5.4.2):
-    resolution: {integrity: sha512-uBsYtJKVWZ7Gml+MnsNfbgLbhLe1r02VKhKZxcHX1MRCejq5+RVQipzshb2KrvVViKl4yrqJEdmqYGxkjKoYkQ==}
+  /zhi-gitlab-middleware@0.6.28(typescript@5.4.2):
+    resolution: {integrity: sha512-abb/OaL6AoZGLCE9A2DkfnKtOe76UKL3KpGyg0NK5PviaMktcYVVQhRLXpo7PHbf/iaDUivBzHf2YIgUOcWW4w==}
     dependencies:
-      zhi-fetch-middleware: 0.8.0(typescript@5.4.2)
+      zhi-fetch-middleware: 0.8.2(typescript@5.4.2)
       zhi-lib-base: 0.8.0
     transitivePeerDependencies:
       - typescript
