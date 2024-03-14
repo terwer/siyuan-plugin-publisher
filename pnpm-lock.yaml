@@ -99,8 +99,8 @@ dependencies:
     specifier: ^2.11.0
     version: 2.11.0
   zhi-fetch-middleware:
-    specifier: ^0.8.0
-    version: 0.8.0(typescript@5.4.2)
+    specifier: ^0.8.2
+    version: 0.8.2(typescript@5.4.2)
   zhi-github-middleware:
     specifier: ^0.4.15
     version: 0.4.15(typescript@5.4.2)
@@ -8220,6 +8220,16 @@ packages:
 
   /zhi-fetch-middleware@0.8.0(typescript@5.4.2):
     resolution: {integrity: sha512-peaAG0hSXNvld3dd5RNKYXhuoGcBsOMyFlExGeS98k7ikDVY4JF3S6vTw3Xg0Feu61Jik84q7z4AYEGOVuV5Og==}
+    dependencies:
+      zhi-common: 1.31.0(typescript@5.4.2)
+      zhi-device: 2.11.0
+      zhi-lib-base: 0.8.0
+    transitivePeerDependencies:
+      - typescript
+    dev: false
+
+  /zhi-fetch-middleware@0.8.2(typescript@5.4.2):
+    resolution: {integrity: sha512-W7hkvQqDTwqnfHLTIdtUgG2SnUqbiQNQdLf7K3psz+N6ngFS0t6F2jQk3jEn6CkS5WrjVkWbT5CpsK2ffaZuGw==}
     dependencies:
       zhi-common: 1.31.0(typescript@5.4.2)
       zhi-device: 2.11.0
