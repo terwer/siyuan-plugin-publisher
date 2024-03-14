@@ -50,7 +50,7 @@ import PublishTitle from "~/src/components/publish/form/PublishTitle.vue"
 import { useChatGPT } from "~/src/composables/useChatGPT.ts"
 import _ from "lodash-es"
 import { useLoadingTimer } from "~/src/composables/useLoadingTimer.ts"
-import CrossPageUtils from "~/cross/crossPageUtils.ts"
+import PageUtils from "~/common/pageUtils.ts"
 import { ITagConfig } from "~/src/types/ITagConfig.ts"
 
 const logger = createAppLogger("single-publish-do-publish")
@@ -285,7 +285,7 @@ const topTitle = computed(() => {
 
   let title = "当前操作的平台为 - "
   const platName = platformName ? platformName : key
-  title += CrossPageUtils.longPlatformName(platName, 11)
+  title += PageUtils.longPlatformName(platName, 11)
   if (blogName) {
     title += " - " + blogName
   }

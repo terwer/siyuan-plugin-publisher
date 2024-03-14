@@ -5019,11 +5019,11 @@ var ReferrerPolicy = new Set([
   "same-origin",
   "origin",
   "strict-origin",
-  "origin-when-cross-origin",
-  "strict-origin-when-cross-origin",
+  "origin-when-common-origin",
+  "strict-origin-when-common-origin",
   "unsafe-url"
 ]);
-var DEFAULT_REFERRER_POLICY = "strict-origin-when-cross-origin";
+var DEFAULT_REFERRER_POLICY = "strict-origin-when-common-origin";
 function validateReferrerPolicy(referrerPolicy) {
   if (!ReferrerPolicy.has(referrerPolicy)) {
     throw new TypeError(`Invalid referrerPolicy: ${referrerPolicy}`);
@@ -5095,7 +5095,7 @@ function determineRequestsReferrer(request, { referrerURLCallback, referrerOrigi
         return "no-referrer";
       }
       return referrerOrigin.toString();
-    case "strict-origin-when-cross-origin":
+    case "strict-origin-when-common-origin":
       if (referrerURL.origin === currentURL.origin) {
         return referrerURL;
       }
@@ -5108,7 +5108,7 @@ function determineRequestsReferrer(request, { referrerURLCallback, referrerOrigi
         return referrerURL;
       }
       return "no-referrer";
-    case "origin-when-cross-origin":
+    case "origin-when-common-origin":
       if (referrerURL.origin === currentURL.origin) {
         return referrerURL;
       }

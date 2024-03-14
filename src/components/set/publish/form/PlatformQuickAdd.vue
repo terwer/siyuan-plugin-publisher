@@ -29,7 +29,7 @@ import { useRoute, useRouter } from "vue-router"
 import { onMounted, reactive, ref, watch } from "vue"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { usePlatformDefine } from "~/src/composables/usePlatformDefine.ts"
-import CrossPageUtils from "../../../../../cross/crossPageUtils.ts"
+import PageUtils from "~/common/pageUtils.ts"
 import DrawerBoxBridge from "~/src/components/common/DrawerBoxBridge.vue"
 import { appBase } from "~/src/utils/constants.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
@@ -115,7 +115,7 @@ const handleAddPlatform = (cfg?: DynamicConfig) => {
   const platformKey = cfg?.platformKey ?? ""
   const subPlatformType = cfg?.subPlatformType ?? ""
   const url = `/setting/platform/add/${platformGroup}?showBack=trye&key=${platformKey}&sub=${subPlatformType}`
-  const title = CrossPageUtils.longPlatformName(cfg?.platformName ?? cfg?.platformType ?? "")
+  const title = PageUtils.longPlatformName(cfg?.platformName ?? cfg?.platformType ?? "")
   goToPublisherDrawer(`添加 ${title} 平台`, url)
 }
 
@@ -156,7 +156,7 @@ onMounted(() => {
             <i class="el-icon">
               <span v-html="preItem?.platformIcon"></span>
             </i>
-            {{ CrossPageUtils.shortPlatformName(preItem.platformName, 6) }}
+            {{ PageUtils.shortPlatformName(preItem.platformName, 6) }}
           </el-text>
         </div>
       </div>

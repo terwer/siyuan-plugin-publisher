@@ -33,7 +33,7 @@ import { HtmlUtil, JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { useLoadingTimer } from "~/src/composables/useLoadingTimer.ts"
-import CrossPageUtils from "~/cross/crossPageUtils.ts"
+import PageUtils from "~/common/pageUtils.ts"
 import Adaptors from "~/src/adaptors"
 import { Utils } from "~/src/utils/utils.ts"
 import { usePublish } from "~/src/composables/usePublish.ts"
@@ -206,7 +206,7 @@ onBeforeMount(async () => {
                   <i class="el-icon">
                     <span v-html="cfg?.platformIcon"></span>
                   </i>
-                  {{ CrossPageUtils.longPlatformName(cfg?.platformName, 11) }}
+                  {{ PageUtils.longPlatformName(cfg?.platformName, 11) }}
                 </el-text>
               </el-badge>
             </div>

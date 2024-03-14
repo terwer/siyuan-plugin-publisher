@@ -24,11 +24,11 @@
  */
 
 import { describe, it } from "vitest"
-import CrossPageUtils from "./crossPageUtils"
+import PageUtils from "./pageUtils"
 
 describe("test crossPageUtils", () => {
   it("test subPlatformName", () => {
-    const result = CrossPageUtils.subPlatformName("Gitlabvuepress2", 11)
+    const result = PageUtils.subPlatformName("Gitlabvuepress2", 11)
     console.log(result)
   })
 })

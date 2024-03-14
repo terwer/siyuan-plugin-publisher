@@ -51,7 +51,7 @@ import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { CommonWebConfig } from "~/src/adaptors/web/base/commonWebConfig.ts"
 import { Utils } from "~/src/utils/utils.ts"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
-import CrossPageUtils from "../../../../../cross/crossPageUtils.ts"
+import PageUtils from "~/common/pageUtils.ts"
 
 const logger = createAppLogger("publish-platform-setting-list")
 
@@ -415,7 +415,7 @@ onMounted(async () => {
                     :type="platform.isAuth ? 'success' : 'danger'"
                   >
                     <span :title="platform.platformName">
-                      {{ CrossPageUtils.longPlatformName(platform.platformName, 11) }}
+                      {{ PageUtils.longPlatformName(platform.platformName, 11) }}
                     </span>
                     <span class="name-edit" @click="handleChangePlatformDefine(platform)">
                       <el-icon> <span v-html="svgIcons.iconIFEdit"></span> </el-icon>

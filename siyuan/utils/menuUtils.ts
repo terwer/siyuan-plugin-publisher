@@ -26,13 +26,13 @@
 import { IMenuItemOption } from "siyuan"
 import { ObjectUtil } from "zhi-common"
 import { DYNAMIC_CONFIG_KEY } from "../Constants.ts"
-import CrossPageUtils from "../../cross/crossPageUtils.ts"
+import PageUtils from "~/common/pageUtils.ts"
 import { icons } from "./svg.ts"
 import HtmlUtils from "./htmlUtils.ts"
 import { WidgetInvoke } from "../invoke/widgetInvoke.ts"
 import PublisherPlugin from "../index.ts"
 import { PluginInvoke } from "../invoke/pluginInvoke.ts"
-import PageUtils from "./pageUtils.ts"
+import WidgetPageUtils from "./widgetPageUtils.ts"
 
 class MenuUtils {
   public static getQuickMenus(
@@ -42,7 +42,7 @@ class MenuUtils {
     pageId?: string
   ) {
     if (!pageId) {
-      pageId = PageUtils.getPageId()
+      pageId = WidgetPageUtils.getPageId()
       if (pageId == "") {
         pageId = undefined
       }
@@ -69,7 +69,7 @@ class MenuUtils {
       if (config.isEnabled === true) {
         const submenu = {
           iconHTML: `${icon}`,
-          label: CrossPageUtils.longPlatformName(config.platformName, 11),
+          label: PageUtils.longPlatformName(config.platformName, 11),
           disabled: !config.isAuth,
           click: async () => {
             const key = config.platformKey
@@ -88,7 +88,7 @@ class MenuUtils {
 
   public static async getExtendMenus(pluginInstance: PublisherPlugin, pluginInvoke: PluginInvoke, pageId?: string) {
     if (!pageId) {
-      pageId = PageUtils.getPageId()
+      pageId = WidgetPageUtils.getPageId()
       if (pageId == "") {
         pageId = undefined
       }

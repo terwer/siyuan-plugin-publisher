@@ -25,7 +25,7 @@
 
 import { DeviceDetection, DeviceTypeEnum } from "zhi-device"
 import { createSiyuanAppLogger } from "../appLogger"
-import PageUtils from "../utils/pageUtils.ts"
+import WidgetPageUtils from "../utils/widgetPageUtils.ts"
 import { showIframeDialog } from "../iframeDialog"
 import PublisherPlugin from "../index"
 import { StrUtil } from "zhi-common"
@@ -44,7 +44,7 @@ export class WidgetInvoke {
   }
 
   public async showPublisherBatchPublishDialog() {
-    let pageId: string | undefined = PageUtils.getPageId()
+    let pageId: string | undefined = WidgetPageUtils.getPageId()
     if (pageId == "") {
       pageId = undefined
     }
@@ -65,7 +65,7 @@ export class WidgetInvoke {
   }
 
   public async showPublisherAiChatDialog() {
-    let pageId: string | undefined = PageUtils.getPageId()
+    let pageId: string | undefined = WidgetPageUtils.getPageId()
     if (pageId == "") {
       pageId = undefined
     }
@@ -73,7 +73,7 @@ export class WidgetInvoke {
   }
 
   public async showPublisherAiChatTab() {
-    let pageId: string | undefined = PageUtils.getPageId()
+    let pageId: string | undefined = WidgetPageUtils.getPageId()
     if (pageId == "") {
       pageId = undefined
     }
@@ -81,7 +81,7 @@ export class WidgetInvoke {
   }
 
   public async showPublisherSinglePublishDialog() {
-    let pageId: string | undefined = PageUtils.getPageId()
+    let pageId: string | undefined = WidgetPageUtils.getPageId()
     if (pageId == "") {
       pageId = undefined
     }
@@ -107,7 +107,7 @@ export class WidgetInvoke {
   }
 
   public async showPublisherGeneralSettingDialog() {
-    let pageId: string | undefined = PageUtils.getPageId()
+    let pageId: string | undefined = WidgetPageUtils.getPageId()
     if (pageId == "") {
       pageId = undefined
     }
@@ -116,7 +116,7 @@ export class WidgetInvoke {
   }
 
   public async showPublisherAboutDialog() {
-    let pageId: string | undefined = PageUtils.getPageId()
+    let pageId: string | undefined = WidgetPageUtils.getPageId()
     if (pageId == "") {
       pageId = undefined
     }

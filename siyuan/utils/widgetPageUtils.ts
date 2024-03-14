@@ -26,7 +26,7 @@
 /**
  * 文档工具类
  */
-class PageUtils {
+class WidgetPageUtils {
   public static getPageId() {
     // 查找包含 protyle 类但不包含 fn__none 的 div 元素
     const protyleElement = document.querySelector("div.protyle:not(.fn__none)")
@@ -37,4 +37,4 @@ class PageUtils {
   }
 }
 
-export default PageUtils
+export default WidgetPageUtils

@@ -31,7 +31,7 @@ import { StrUtil } from "zhi-common"
  * @author terwer
  * @since 1.18.0
  */
-class CrossPageUtils {
+class PageUtils {
   /**
    * 缩略展示平台名称
    *
@@ -79,4 +79,4 @@ class CrossPageUtils {
   }
 }
 
-export default CrossPageUtils
+export default PageUtils

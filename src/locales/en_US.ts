@@ -675,9 +675,9 @@ export default {
 
   "setting.blog.middlewareUrl.new": "Fresh Proxy (Recommended)",
   "setting.blog.corsAnywhereUrl.tip":
-    "CORS Global Proxy, once configured, helps alleviate browser cross-origin issues.",
+    "CORS Global Proxy, once configured, helps alleviate browser common-origin issues.",
   "setting.blog.middlewareUrl.my.new.tip":
-    "Enhanced CORS proxy, enabling comprehensive cross-origin requests. It is advisable to deploy independently. For deployment guidance, kindly refer to https://github.com/Zibri/cloudflare-cors-anywhere.",
+    "Enhanced CORS proxy, enabling comprehensive common-origin requests. It is advisable to deploy independently. For deployment guidance, kindly refer to https://github.com/Zibri/cloudflare-cors-anywhere.",
   "reminder.blog.middlewareUrl.my.warning":
     "A special note: Request limits are set at '100,000 times/day' and '1,000 times/10 minutes'. For the benefit of all, kindly refrain from malicious requests; otherwise, we reserve the right to terminate this proxy service.",
 
