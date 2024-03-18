@@ -80,7 +80,7 @@
     "unplugin-icons": "^0.18.5",
     "uuid": "^9.0.1",
     "vue": "^3.4.21",
-    "vue-i18n": "^9.10.1",
+    "vue-i18n": "^9.10.2",
     "vue-router": "^4.3.0",
     "xmlbuilder2": "^3.1.1",
     "zhi-blog-api": "^1.56.2",
