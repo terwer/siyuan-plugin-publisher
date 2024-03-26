@@ -9,12 +9,14 @@ Publish articles from siyuan-note to platforms like Yuque etc. `Free` and `open 
 If you're interested in the paid professional version, please check the paied
 ➡️ [Publishing Tool Professional Edition](https://github.com/terwer/siyuan-plugin-publisher-pro)
 
-> The latest Publish Tool version `1.20.1` is released🎉, potentially one of the most revolutionary iterations since the
+> The latest Publish Tool version `1.20.2` is released🎉, potentially one of the most revolutionary iterations since the
 > inception of first releases👀.
 
 - Version `1.20.2` predominantly addresses the following issues:
     - Support picture upload form picgo via docker
     - Support custom selection of image storage between "PicGO plugin" or "platform storage"
+    - Mainly address the following concerns:
+      - Rectify potential initialization errors in certain scenarios
 - Version `1.20.1` predominantly addresses the following issues:
     - Rectification of packaging errors.
 - Version `1.20.0` comprise the introduction of additional publishing platforms, an initial
