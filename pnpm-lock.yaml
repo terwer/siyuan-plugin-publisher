@@ -99,8 +99,8 @@ dependencies:
     specifier: ^2.11.0
     version: 2.11.0
   zhi-fetch-middleware:
-    specifier: ^0.8.0
-    version: 0.8.0(typescript@5.4.2)
+    specifier: ^0.9.1
+    version: 0.9.1(typescript@5.4.2)
   zhi-github-middleware:
     specifier: ^0.4.15
     version: 0.4.15(typescript@5.4.2)
@@ -8200,6 +8200,18 @@ packages:
       - typescript
     dev: false
 
+  /zhi-common@1.33.0(typescript@5.4.2):
+    resolution: {integrity: sha512-ggHVmZ/zkVIOLfAWv4vqJBZY9BZnlnBUhlOmtYoVHV35UdxI5zcvvakBRgDZxjyknikHOLot7MtYfccCCOdyKw==}
+    dependencies:
+      js-yaml: 4.1.0
+      shorthash2: 1.0.3
+      transliteration: 2.3.5
+      vue: 3.4.21(typescript@5.4.2)
+      zhi-lib-base: 0.8.0
+    transitivePeerDependencies:
+      - typescript
+    dev: false
+
   /zhi-device@2.11.0:
     resolution: {integrity: sha512-HKcEHVULUcGboePoSBWJ6vDHYqXEiZS/xetzTRV8DRPkRTmeWzJWs5Xu3BTz21Iz3DGy43hFahpm2Yz2+MFUcA==}
     dev: false
@@ -8222,6 +8234,16 @@ packages:
     resolution: {integrity: sha512-peaAG0hSXNvld3dd5RNKYXhuoGcBsOMyFlExGeS98k7ikDVY4JF3S6vTw3Xg0Feu61Jik84q7z4AYEGOVuV5Og==}
     dependencies:
       zhi-common: 1.31.0(typescript@5.4.2)
+      zhi-device: 2.11.0
+      zhi-lib-base: 0.8.0
+    transitivePeerDependencies:
+      - typescript
+    dev: false
+
+  /zhi-fetch-middleware@0.9.1(typescript@5.4.2):
+    resolution: {integrity: sha512-TNjoi9rT73NJ701LM2VNyARyj+nwM3iVayF/rLvC6NS23WnKAwd5GuZYNnekO2KGqlk0WDs4iSDdNKvDbdnM2A==}
+    dependencies:
+      zhi-common: 1.33.0(typescript@5.4.2)
       zhi-device: 2.11.0
       zhi-lib-base: 0.8.0
     transitivePeerDependencies:
