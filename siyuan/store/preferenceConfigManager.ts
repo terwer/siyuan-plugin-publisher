@@ -32,7 +32,7 @@ import { JsonUtil } from "zhi-common"
  */
 export class PreferenceConfigManager {
   private static storageKey = "/data/storage/syp/publish-preference-cfg.json"
-  private static cfgKey="publish-preference-cfg"
+  private static cfgKey = "publish-preference-cfg"
 
   /**
    * 加载配置
@@ -42,10 +42,10 @@ export class PreferenceConfigManager {
    */
   public static async loadConfig(pluginInstance: PublisherPlugin): Promise<any> {
     const configStr = await pluginInstance.kernelApi.getFile(this.storageKey, "text")
-    const config= JsonUtil.safeParse<any>(configStr, {} as any)
-    if(!config[this.cfgKey]){
+    const config = JsonUtil.safeParse<any>(configStr, {} as any)
+    if (!config || !config[this.cfgKey]) {
       return {}
     }
-    return JsonUtil.safeParse<any>(config[this.cfgKey],{} as any)
+    return JsonUtil.safeParse<any>(config[this.cfgKey], {} as any)
   }
 }
