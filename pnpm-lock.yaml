@@ -105,8 +105,8 @@ dependencies:
     specifier: ^0.4.15
     version: 0.4.15(typescript@5.4.2)
   zhi-gitlab-middleware:
-    specifier: ^0.6.26
-    version: 0.6.26(typescript@5.4.2)
+    specifier: ^0.7.1
+    version: 0.7.1(typescript@5.4.2)
   zhi-lib-base:
     specifier: ^0.8.0
     version: 0.8.0
@@ -8200,6 +8200,18 @@ packages:
       - typescript
     dev: false
 
+  /zhi-common@1.33.0(typescript@5.4.2):
+    resolution: {integrity: sha512-ggHVmZ/zkVIOLfAWv4vqJBZY9BZnlnBUhlOmtYoVHV35UdxI5zcvvakBRgDZxjyknikHOLot7MtYfccCCOdyKw==}
+    dependencies:
+      js-yaml: 4.1.0
+      shorthash2: 1.0.3
+      transliteration: 2.3.5
+      vue: 3.4.21(typescript@5.4.2)
+      zhi-lib-base: 0.8.0
+    transitivePeerDependencies:
+      - typescript
+    dev: false
+
   /zhi-device@2.11.0:
     resolution: {integrity: sha512-HKcEHVULUcGboePoSBWJ6vDHYqXEiZS/xetzTRV8DRPkRTmeWzJWs5Xu3BTz21Iz3DGy43hFahpm2Yz2+MFUcA==}
     dev: false
@@ -8228,6 +8240,16 @@ packages:
       - typescript
     dev: false
 
+  /zhi-fetch-middleware@0.9.1(typescript@5.4.2):
+    resolution: {integrity: sha512-TNjoi9rT73NJ701LM2VNyARyj+nwM3iVayF/rLvC6NS23WnKAwd5GuZYNnekO2KGqlk0WDs4iSDdNKvDbdnM2A==}
+    dependencies:
+      zhi-common: 1.33.0(typescript@5.4.2)
+      zhi-device: 2.11.0
+      zhi-lib-base: 0.8.0
+    transitivePeerDependencies:
+      - typescript
+    dev: false
+
   /zhi-github-middleware@0.4.15(typescript@5.4.2):
     resolution: {integrity: sha512-D5bKdOwTHMUTZptR49Yt7l3NJstc7cp+Za7HwJknIqnPT11Xu2wOL3kj5fTuBHohY/zQLW5GV40a+Bo3pQYP7Q==}
     dependencies:
@@ -8239,10 +8261,10 @@ packages:
       - typescript
     dev: false
 
-  /zhi-gitlab-middleware@0.6.26(typescript@5.4.2):
-    resolution: {integrity: sha512-uBsYtJKVWZ7Gml+MnsNfbgLbhLe1r02VKhKZxcHX1MRCejq5+RVQipzshb2KrvVViKl4yrqJEdmqYGxkjKoYkQ==}
+  /zhi-gitlab-middleware@0.7.1(typescript@5.4.2):
+    resolution: {integrity: sha512-2VUUJqFLfnTEDLoD+CCXxa9khgzcq40Izfly56I5n5JjxM4RsJ3BeeI5ukhJz4j35azuCmlQNfhkeBr39+jTOw==}
     dependencies:
-      zhi-fetch-middleware: 0.8.0(typescript@5.4.2)
+      zhi-fetch-middleware: 0.9.1(typescript@5.4.2)
       zhi-lib-base: 0.8.0
     transitivePeerDependencies:
       - typescript
