@@ -22,18 +22,15 @@
  * or visit www.terwer.space if you need additional information or have any
  * questions.
  */
-
-import { isDebugMode, isDev } from "~/src/utils/constants.ts"
+import { isDev } from "~/src/utils/constants.ts"
 import { simpleLogger } from "zhi-lib-base"
+
+const win = window as any
 
 /**
  * 使用 eruda 更好的控制日志
  */
-if (typeof window === "undefined") {
-  global.console = console
-} else {
-  window.console = isDev && isDebugMode ? (window as any).eruda.get("console") : window.console
-}
+window.console = isDev ? win?.eruda?.get("console") : window.console
 
 /**
  * 简单的日志接口
@@ -49,17 +46,16 @@ export interface ILogger {
  * 一个简单轻量级的日志记录器
  *
  * @author terwer
- * @version 0.9.0
- * @since 0.9.0
+ * @version 1.0.0
+ * @since 1.0.0
  */
 export const createAppLogger = (name: string): ILogger => {
-  return simpleLogger(name, "publisher", isDev)
+  return simpleLogger(name, "picgo-plugin-app", isDev)
 }
 
 /**
  * 销毁日志
  */
 // export const destroyLogger = (): void => {
-//   const win = window as any
 //   win.eruda.destroy()
 // }

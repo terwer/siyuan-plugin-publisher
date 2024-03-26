@@ -12,6 +12,9 @@ If you're interested in the paid professional version, please check the paied
 > The latest Publish Tool version `1.20.1` is released🎉, potentially one of the most revolutionary iterations since the
 > inception of first releases👀.
 
+- Version `1.20.2` predominantly addresses the following issues:
+    - Support picture upload form picgo via docker
+    - Support custom selection of image storage between "PicGO plugin" or "platform storage"
 - Version `1.20.1` predominantly addresses the following issues:
     - Rectification of packaging errors.
 - Version `1.20.0` comprise the introduction of additional publishing platforms, an initial
@@ -57,9 +60,8 @@ If you're interested in the paid professional version, please check the paied
 
 ## Version Preview
 
-### 1.20.2-preview – As of Q1 2024
+### 1.20.3-preview – As of Q1 2024
 
-- Support picture upload form picgo via docker
 - Expansion of telegra.ph support for image uploads
     - Reference: https://www.npmjs.com/package/telegraph-uploader
 - Support login for telegra.ph

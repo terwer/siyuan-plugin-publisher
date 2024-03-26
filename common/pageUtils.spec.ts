@@ -26,7 +26,7 @@
 import { describe, it } from "vitest"
 import PageUtils from "./pageUtils"
 
-describe("test crossPageUtils", () => {
+describe("test pageUtils", () => {
   it("test subPlatformName", () => {
     const result = PageUtils.subPlatformName("Gitlabvuepress2", 11)
     console.log(result)
