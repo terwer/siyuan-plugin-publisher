@@ -464,7 +464,7 @@ class WechatWebAdaptor extends BaseWebApi {
 
       // 获取图片二进制数据
       // const fs = win.require("fs")
-      // const fileData = fs.readFileSync("/Users/terwer/Documents/pictures/3259282.jpeg")
+      // const fileData = fs.readFileSync("/Users/terwer/Documents/pictures/photo.jpeg")
       // const blob = new Blob([fileData], { type: "image/jpeg" })
       const bits = await fileToBuffer(file)
       const blob = new Blob([bits], { type: file.type })

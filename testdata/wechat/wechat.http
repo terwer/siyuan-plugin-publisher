@@ -27,8 +27,8 @@ Content-Disposition: form-data; name="size"
 
 93791
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
-Content-Disposition: form-data; name="file"; filename="3259282.jpeg"
+Content-Disposition: form-data; name="file"; filename="photo.jpeg"
 Content-Type: image/jpeg
 
-< ../assets/3259282.jpeg
+< ../assets/photo.jpeg
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
