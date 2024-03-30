@@ -79,7 +79,7 @@ jobs:
         run: pnpm package
         if: ${{ steps.release.outputs.release_created }}
 
-      # Upload package to release
+      # Upload package for release
       # https://github.com/philips-labs/terraform-aws-github-runner/blob/main/.github/workflows/release.yml#L46
       - name: Upload package.zip to the release
         env:
