@@ -660,8 +660,7 @@ export default {
     "1.20.0+ 新版CORS代理，彻底解决「科学上网」、「CORS 跨域」两大问题，" +
     "支持全局跨域请求（支持绕过 header、请求体支持 FormData）。受限于 CORS 策略，「Docker 版本」必须设置 CORS 代理，" +
     "否则大部分场景将无法使用。技术细节可参考 MDN：https://developer.mozilla.org/zh-CN/docs/Web/HTTP/CORS " +
-    "以及 https://developer.mozilla.org/zh-CN/docs/Glossary/CORS。可私发邮件到 youweics@163.com 提供捐赠截图获取部署方案。" +
-    "之前捐助过的也可以私发截图给我，免费提供部署指导🤝。",
+    "以及 https://developer.mozilla.org/zh-CN/docs/Glossary/CORS。可私发邮件到 youweics@163.com 付费咨询🤝。",
   "setting.blog.middlewareUrl.my.warn.tip":
     "⚠️特别提醒：请求限制为 「10万次/天」、「1000次/10分钟」，频次为「所有人共享」，因此资源十分珍贵。为了大家的利益，请勿恶意请求，否则，我们会关闭此共享代理。",
 

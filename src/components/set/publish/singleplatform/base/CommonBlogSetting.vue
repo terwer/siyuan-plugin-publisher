@@ -32,12 +32,13 @@ import { onMounted, reactive, ref, toRaw, watch } from "vue"
 import { DynamicConfig, DynamicJsonCfg, getDynCfgByKey, setDynamicJsonCfg } from "~/src/platforms/dynamicConfig.ts"
 import { SypConfig } from "~/syp.config.ts"
 import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
-import { JsonUtil, ObjectUtil } from "zhi-common"
+import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
 import { BlogAdaptor, PageTypeEnum, PasswordType, UserBlog } from "zhi-blog-api"
 import Adaptors from "~/src/adaptors"
 import { Utils } from "~/src/utils/utils.ts"
 import { ElMessage } from "element-plus"
+import { useProxy } from "~/src/composables/useProxy.ts"
 
 const logger = createAppLogger("commonblog-setting")
 // appInstance
@@ -87,6 +88,13 @@ const formData = reactive({
   dynamicConfigArray: [] as DynamicConfig[],
 
   isInit: false,
+
+  // proxy
+  proxy: {
+    useMiddleware: false,
+    useCorsAnywhere: false,
+    useSiyuanProxy: false,
+  },
 })
 
 // watch
@@ -301,6 +309,13 @@ const initConf = async () => {
 onMounted(async () => {
   // 初始化
   await initConf()
+
+  // set proxy
+  const { isUseSiyuanProxy } = useProxy(formData.cfg.middlewareUrl, formData.cfg.corsAnywhereUrl)
+  formData.proxy.useSiyuanProxy = isUseSiyuanProxy
+  formData.proxy.useCorsAnywhere = !StrUtil.isEmptyString(formData.cfg.corsAnywhereUrl)
+  formData.proxy.useMiddleware = !StrUtil.isEmptyString(formData.cfg.middlewareUrl)
+
   formData.isInit = true
 })
 </script>
@@ -421,7 +436,10 @@ onMounted(async () => {
       </el-select>
     </el-form-item>
     <!-- 跨域代理地址 -->
-    <el-form-item :label="t('setting.blog.middlewareUrl')">
+    <el-form-item
+      v-if="!formData.proxy.useSiyuanProxy && !formData.proxy.useCorsAnywhere"
+      :label="t('setting.blog.middlewareUrl')"
+    >
       <el-input v-model="formData.cfg.middlewareUrl" :placeholder="t('setting.blog.middlewareUrl.tip')" />
       <el-alert
         :closable="false"
@@ -431,7 +449,7 @@ onMounted(async () => {
       ></el-alert>
     </el-form-item>
     <!-- 新 CORS 代理 -->
-    <el-form-item :label="t('setting.blog.middlewareUrl.new')">
+    <el-form-item v-if="!formData.proxy.useSiyuanProxy" :label="t('setting.blog.middlewareUrl.new')">
       <el-input v-model="formData.cfg.corsAnywhereUrl" :placeholder="t('setting.blog.corsAnywhereUrl.tip')" />
       <el-alert
         :closable="false"
@@ -440,7 +458,7 @@ onMounted(async () => {
         type="warning"
       ></el-alert>
     </el-form-item>
-    <el-form-item>
+    <el-form-item v-if="!formData.proxy.useSiyuanProxy">
       <el-alert
         :closable="false"
         :title="t('setting.blog.middlewareUrl.my.warn.tip')"
