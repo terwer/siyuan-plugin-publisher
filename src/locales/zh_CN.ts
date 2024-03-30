@@ -400,7 +400,8 @@ export default {
   "setting.wordpressdotcom.home.tip": "WordPress.com 首页",
   "setting.wordpressdotcom.username.tip": "WordPress.com 登录名，注意：是登录名或者邮箱，不是用户昵称哦(*^▽^*)",
   "setting.wordpressdotcom.password.tip": "WordPress.com 登录密码",
-  "setting.wordpressdotcom.apiUrl.tip": "WordPress.com 的xmlrpc远程发布地址，通常是：https://<WordPress登录名>.wordpress.com/xmlrpc.php",
+  "setting.wordpressdotcom.apiUrl.tip":
+    "WordPress.com 的xmlrpc远程发布地址，通常是：https://<WordPress登录名>.wordpress.com/xmlrpc.php",
   "setting.wordpressdotcom.previewUrl.tip": "WordPress.com 平台的文章预览规则，通常是：?p=[postid]",
 
   "setting.oschina.home.tip": "开源中国首页，通常是：https://my.oschina.net/<您的用户名>",
@@ -669,4 +670,11 @@ export default {
 
   "import.v081.warn":
     "考虑到 v0.8.1 已经是很早的版本了，此功能可能不再需要。如果您需要此功能，可反馈至 youweics@163.com ，我们会根据需求决定是否实现此功能。",
+
+  "publisher.picbed.service": "图床服务",
+  "publisher.picbed.none": "不使用",
+  "publisher.picbed.picgo": "PicGO 插件",
+  "publisher.picbed.bundled": "当前平台",
+  "publisher.picbed.recom1": "强烈推荐",
+  "publisher.picbed.recom2": "推荐",
 }

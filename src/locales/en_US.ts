@@ -226,7 +226,8 @@ export default {
   "post.bind.kms.postid": "KMS ID",
   "post.bind.conf.save": "Save",
   "post.bind.conf.v081": "Examine the v0.8.1 metadata and import it",
-  "post.bind.auto.error": "No ID detected, kindly input the document root ID manually, before proceeding with the repair.",
+  "post.bind.auto.error":
+    "No ID detected, kindly input the document root ID manually, before proceeding with the repair.",
   "post.bind.auto.empty": "This document has never been published, hence no repair is necessary",
   "post.bind.conf.cancel": "Cancel",
   "form.validate.name.required": "Please input name",
@@ -684,5 +685,13 @@ export default {
   "platform.new.platform":
     "It has been observed that there are still [count] internal platforms [platform] awaiting importation. You may utilize the platform importation tool for a bulk import, or alternatively, manually add them from the plugin store.",
 
-  "import.v081.warn": "Given that v0.8.1 is considered a significantly antiquated iteration, this feature may no longer be pertinent. Should you find yourself in need of this functionality, please direct your feedback to youweics@qq.com, and we shall deliberate on its implementation based on demand."
+  "import.v081.warn":
+    "Given that v0.8.1 is considered a significantly antiquated iteration, this feature may no longer be pertinent. Should you find yourself in need of this functionality, please direct your feedback to youweics@qq.com, and we shall deliberate on its implementation based on demand.",
+
+  "publisher.picbed.service": "Image Hosting Service",
+  "publisher.picbed.none": "Not in use",
+  "publisher.picbed.picgo": "PicGO Plugin",
+  "publisher.picbed.bundled": "Current Platform",
+  "publisher.picbed.recom1": "Strongly Recommended",
+  "publisher.picbed.recom2": "Recommended",
 }

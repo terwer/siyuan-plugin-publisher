@@ -33,6 +33,7 @@ import {
   MediaObject,
   PageEditMode,
   PageTypeEnum,
+  PicbedServiceTypeEnum,
   Post,
   PostUtil,
   TagInfo,
@@ -48,16 +49,10 @@ import { usePicgoBridge } from "~/src/composables/usePicgoBridge.ts"
 import { base64ToBuffer, path, remoteImageToBase64Info, toBase64Info } from "~/src/utils/polyfillUtils.ts"
 import { DateUtil, HtmlUtil, ObjectUtil, StrUtil, YamlUtil } from "zhi-common"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
-import { isFileExists } from "~/src/utils/siyuanUtils.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { SiyuanAttr, SiyuanKernelApi } from "zhi-siyuan-api"
 import { DynamicConfig, getDynPlatformKeyFromPostidKey } from "~/src/platforms/dynamicConfig.ts"
-import {
-  CATE_AUTO_NAME,
-  LEGENCY_SHARED_PROXT_MIDDLEWARE,
-  MUST_USE_OWN_PLATFORM,
-  MUST_USE_PICBED_PLATFORM,
-} from "~/src/utils/constants.ts"
+import { CATE_AUTO_NAME, LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
 import { toRaw } from "vue"
 import _ from "lodash-es"
 import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
@@ -558,52 +553,21 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     const post = _.cloneDeep(doc) as Post
     this.logger.debug("图片处理之前, post =>", { post: toRaw(post) })
 
-    // 判断key包含 custom_Zhihu 或者 /custom_Zhihu-\w+/
-    const mustUseOwnPlatform: string[] = MUST_USE_OWN_PLATFORM
-    const mustUsePicbedPlatform: string[] = MUST_USE_PICBED_PLATFORM
-    // const isPicgoInstalled: boolean = await this.checkPicgoInstalled()
-    // if (!isPicgoInstalled) {
-    //   this.logger.warn("未安装 PicGO 插件，将使用平台上传图片")
-    // }
-
-    let mustUseOwn = false
-    let mustUsePicbed = false
-    if (dynCfg?.platformKey) {
-      // 注意如果 platformKey=custom_Zhihu 或者 custom_Zhihu-xxx custom_Notion-xxx 也算 可以参考 /custom_Zhihu-\w+/
-      mustUseOwn = mustUseOwnPlatform.some((platform) => {
-        const regex = new RegExp(`${platform}(-\\w+)?`)
-        return regex.test(dynCfg.platformKey)
-      })
-      mustUsePicbed = mustUsePicbedPlatform.some((platform) => {
-        const regex = new RegExp(`${platform}(-\\w+)?`)
-        return regex.test(dynCfg.platformKey)
-      })
-    }
-
-    if (mustUseOwn) {
-      this.logger.warn("该平台不支持 Picgo 插件，将使用平台上传图片")
-    }
-    // const usePicgo: boolean = isPicgoInstalled && !mustUseOwn
-    const usePicgo: boolean = !mustUseOwn
-
-    if (usePicgo) {
-      // ==========================
-      // 使用 PicGO上传图片
-      // ==========================
-      // 图片替换
-      this.logger.info("使用 PicGO上传图片")
-      this.logger.debug("开始图片处理, post =>", { post: toRaw(post) })
-      post.markdown = await this.picgoBridge.handlePicgo(id, post.markdown)
-      this.logger.debug("图片处理完毕, post.markdown =>", { md: post.markdown })
-    } else {
-      if (mustUsePicbed) {
-        const errMsg = "检测到您未安装Picgo插件，该平台的图片将无法处理，如需使用图床功能，请在集市下载并配置Picgo插件"
-        this.logger.error(errMsg)
-        await this.kernelApi.pushMsg({
-          msg: errMsg,
-          timeout: 7000,
-        })
-      } else {
+    // 获取图床服务
+    const picbedService = cfg.picbedService
+    switch (picbedService) {
+      case PicbedServiceTypeEnum.PicGo: {
+        // ==========================
+        // 使用 PicGO上传图片
+        // ==========================
+        // 图片替换
+        this.logger.info("使用 PicGO上传图片")
+        this.logger.debug("开始图片处理, post =>", { post: toRaw(post) })
+        post.markdown = await this.picgoBridge.handlePicgo(id, post.markdown)
+        this.logger.debug("图片处理完毕, post.markdown =>", { md: post.markdown })
+        break
+      }
+      case PicbedServiceTypeEnum.Bundled: {
         // ==========================
         // 使用平台上传图片
         // ==========================
@@ -656,6 +620,15 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
           return urlMap[match] || match
         }
         post.markdown = post.markdown.replace(pictureReplacePattern, replaceUrl)
+        break
+      }
+      default: {
+        await this.kernelApi.pushMsg({
+          msg: "未指定上传图片服务，不处理图片",
+          timeout: 7000,
+        })
+        this.logger.warn("未指定上传图片服务，不处理图片")
+        break
       }
     }
 
@@ -665,16 +638,6 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     this.logger.info("图片预处理全部完成")
     this.logger.debug("图片处理之后，post", { post: toRaw(post) })
     return post
-  }
-
-  /**
-   * 检查 Picgo 是否已安装
-   *
-   * @returns 一个 Promise，解析为布尔值，表示是否已安装 Picgo
-   */
-  private async checkPicgoInstalled() {
-    // 检测是否安装 picgo 插件
-    return await isFileExists(this.kernelApi, "/data/plugins/siyuan-plugin-picgo/plugin.json", "text")
   }
 
   /**

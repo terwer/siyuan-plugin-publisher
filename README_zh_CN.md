@@ -27,48 +27,48 @@
 
 注意：图片上传可用指的是安装 [PicGo 图床<sup>1.9.0+</sup>](https://github.com/terwer/siyuan-plugin-picgo) 并正确配置的前提下。
 
-|      类型      |      平台       | 状态 | PC 客户端 | PC 图片上传 |  Docker  | Docker 图片上传 | Docker 代理 | PC 端代理 | 备注                                           |
-| :------------: | :-------------: | :--: | :-------: | :---------: | :------: | :-------------: | ----------- | --------- | :--------------------------------------------- |
-|      通用      |      语雀       |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        | 内置代理    | 不需要    | [官网](https://yuque.com)                      |
-|      通用      |     Notion      |  ✔   | 完全兼容  |      ✔      | 部分兼容 |        ✖        |             |           | [官网](https://www.notion.so)                  |
-|      通用      |      Halo       |  ✔   | 完全兼容  |      ✔      | 部分兼容 |        ✖        |             |           | [官网](https://halo.run)                       |
-|      通用      |    印象笔记     | TODO |   TODO    |    TODO     |   TODO   |      TODO       |             |           | [官网](https://www.yinxiang.com)               |
-|      通用      |     Github      |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        | 不需要      | 不需要    | [官网](https://github.com)                     |
-| 静态网站生成器 |      Hexo       |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        | 不需要      | 不需要    | [官网](https://hexo.io/zh-cn/)                 |
-| 静态网站生成器 |      Hugo       |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        | 不需要      | 不需要    | [官网](https://gohugo.io/)                     |
-| 静态网站生成器 |     Jekyll      |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        | 不需要      | 不需要    | [官网](https://jekyllrb.com/)                  |
-| 静态网站生成器 |    Vuepress     |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        | 不需要      | 不需要    | [官网](https://vuepress.vuejs.org/)            |
-| 静态网站生成器 |    Vuepress2    |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        | 不需要      | 不需要    | [官网](https://v2.vuepress.vuejs.org/)         |
-| 静态网站生成器 |    Vitepress    |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        | 不需要      | 不需要    | [官网](https://vitepress.vuejs.org/)           |
-| 静态网站生成器 |     Antora      | TODO |   TODO    |    TODO     |   TODO   |      TODO       | TODO        | TODO      | [官网](https://antora.org/)                    |
-| 静态网站生成器 |     Docsify     | TODO |   TODO    |    TODO     |   TODO   |      TODO       | TODO        | TODO      | [官网](https://docsify.js.org/)                |
-|    Git 托管    |     Gitlab      |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        | 不需要      | 不需要    | [官网](https://gitlab.com/)                    |
-|    Git 托管    |   Gitlabhexo    |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        | 不需要      | 不需要    | [官网](https://gitlab.com/)                    |
-|    Git 托管    |   Gitlabhugo    |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        | 不需要      | 不需要    | [官网](https://gitlab.com/)                    |
-|    Git 托管    |  Gitlabjekyll   |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        | 不需要      | 不需要    | [官网](https://gitlab.com/)                    |
-|    Git 托管    | Gitlabvuepress  |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        | 不需要      | 不需要    | [官网](https://gitlab.com/)                    |
-|    Git 托管    | Gitlabvuepress2 |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        | 不需要      | 不需要    | [官网](https://gitlab.com/)                    |
-|    Git 托管    | Gitlabvitepress |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        | 不需要      | 不需要    | [官网](https://gitlab.com/)                    |
-|    Git 托管    |  Gitlabantora   | TODO |   TODO    |    TODO     |   TODO   |      TODO       | TODO        | TODO      | [官网](https://gitlab.com/)                    |
-|    Git 托管    |  Gitlabdocsify  | TODO |   TODO    |    TODO     |   TODO   |      TODO       | TODO        | TODO      | [官网](https://gitlab.com/)                    |
-|      博客      |   Metaweblog    |  ✔   | 完全兼容  |      ✔      | 部分兼容 |        ✖        |             |           | [官网](http://xmlrpc.scripting.com/metaWeblog) |
-|      博客      |     CnBlogs     |  ✔   | 完全兼容  |      ✔      | 部分兼容 |        ✖        |             |           | [官网](https://cnblogs.com)                    |
-|      博客      |     Typecho     |  ✔   | 完全兼容  |      ✔      | 部分兼容 |        ✖        |             |           | [官网](https://typecho.org/)                   |
-|      博客      |      Jvue       |  ✔   | 完全兼容  |      ✔      | 部分兼容 |        ✖        |             |           | [官网](https://github.com/terwer/jvue)         |
-|      博客      |    WordPress    |  ✔   | 完全兼容  |      ✔      | 部分兼容 |        ✖        |             |           | [官网](https://wordpress.org/)                 |
-|    社交媒体    |      知乎       |  ✔   | 完全兼容  |      ✔      | PC 验证  |        ✖        |             |           | [官网](https://www.zhihu.com/)                 |
-|    社交媒体    |      CSDN       |  ✔   | 完全兼容  |      ✔      | PC 验证  |        ✖        |             |           | [官网](https://www.csdn.net/)                  |
-|    社交媒体    |   微信公众号    |  ✔   | 完全兼容  |      ✔      | PC 验证  |        ✖        |             |           | [官网](https://mp.weixin.qq.com/)              |
-|    社交媒体    |      简书       |  ✔   | 完全兼容  |      ✔      | PC 验证  |        ✖        |             |           | [官网](https://www.jianshu.com/)               |
-|    社交媒体    |      掘金       |  ✔   | 完全兼容  |      ✔      | PC 验证  |        ✖        |             |           | [官网](https://juejin.cn/)                     |
-|      社区      |     52破解      | TODO |   TODO    |    TODO     |   TODO   |      TODO       |             |           | [官网](https://www.52pojie.cn/)                |
-|      社区      |    Bilibili     | TODO |   TODO    |    TODO     |   TODO   |      TODO       |             |           | [官网](https://www.bilibili.com/)              |
-|      社区      |     小红书      | TODO |   TODO    |    TODO     |   TODO   |      TODO       |             |           | [官网](https://www.xiaohongshu.com/)           |
-|      社区      |      豆瓣       | TODO |   TODO    |    TODO     |   TODO   |      TODO       |             |           | [官网](https://www.douban.com/)                |
-|      其他      |      Xlog       | TODO |   TODO    |    TODO     |   TODO   |      TODO       |             |           | [官网](https://xlog.cn/)                       |
-|      其他      |     Mdnice      | TODO |   TODO    |    TODO     |   TODO   |      TODO       |             |           | [官网](https://mdnice.com/)                    |
-|      其他      |     Flowus      | TODO |   TODO    |    TODO     |   TODO   |      TODO       |             |           | [官网](https://www.flowus.com/)                |
-|      其他      |   telegra.ph    |  ✔   | 部分兼容  |      ✖      | 部分兼容 |        ✖        |             |           | [官网](https://telegra.ph)                     |
+|      类型      |      平台       | 状态 | PC 客户端 | PC 图片上传 |  Docker  | Docker 图片上传 | 平台图片上传 | Docker 代理 | PC 端代理 | 备注                                           |
+| :------------: | :-------------: | :--: | :-------: | :---------: | :------: | :-------------: | ------------ | ----------- | --------- | :--------------------------------------------- |
+|      通用      |      语雀       |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        | 不支持       | 内置代理    | 不需要    | [官网](https://yuque.com)                      |
+|      通用      |     Notion      |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        |              |             |           | [官网](https://www.notion.so)                  |
+|      通用      |      Halo       |  ✔   | 完全兼容  |      ✔      | 部分兼容 |        ✖        |              |             |           | [官网](https://halo.run)                       |
+|      通用      |    印象笔记     | TODO |   TODO    |    TODO     |   TODO   |      TODO       |              |             |           | [官网](https://www.yinxiang.com)               |
+|      通用      |     Github      |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        |              | 不需要      | 不需要    | [官网](https://github.com)                     |
+| 静态网站生成器 |      Hexo       |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        |              | 不需要      | 不需要    | [官网](https://hexo.io/zh-cn/)                 |
+| 静态网站生成器 |      Hugo       |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        |              | 不需要      | 不需要    | [官网](https://gohugo.io/)                     |
+| 静态网站生成器 |     Jekyll      |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        |              | 不需要      | 不需要    | [官网](https://jekyllrb.com/)                  |
+| 静态网站生成器 |    Vuepress     |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        |              | 不需要      | 不需要    | [官网](https://vuepress.vuejs.org/)            |
+| 静态网站生成器 |    Vuepress2    |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        |              | 不需要      | 不需要    | [官网](https://v2.vuepress.vuejs.org/)         |
+| 静态网站生成器 |    Vitepress    |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        |              | 不需要      | 不需要    | [官网](https://vitepress.vuejs.org/)           |
+| 静态网站生成器 |     Antora      | TODO |   TODO    |    TODO     |   TODO   |      TODO       |              | TODO        | TODO      | [官网](https://antora.org/)                    |
+| 静态网站生成器 |     Docsify     | TODO |   TODO    |    TODO     |   TODO   |      TODO       |              | TODO        | TODO      | [官网](https://docsify.js.org/)                |
+|    Git 托管    |     Gitlab      |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        |              | 不需要      | 不需要    | [官网](https://gitlab.com/)                    |
+|    Git 托管    |   Gitlabhexo    |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        |              | 不需要      | 不需要    | [官网](https://gitlab.com/)                    |
+|    Git 托管    |   Gitlabhugo    |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        |              | 不需要      | 不需要    | [官网](https://gitlab.com/)                    |
+|    Git 托管    |  Gitlabjekyll   |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        |              | 不需要      | 不需要    | [官网](https://gitlab.com/)                    |
+|    Git 托管    | Gitlabvuepress  |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        |              | 不需要      | 不需要    | [官网](https://gitlab.com/)                    |
+|    Git 托管    | Gitlabvuepress2 |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        |              | 不需要      | 不需要    | [官网](https://gitlab.com/)                    |
+|    Git 托管    | Gitlabvitepress |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        |              | 不需要      | 不需要    | [官网](https://gitlab.com/)                    |
+|    Git 托管    |  Gitlabantora   | TODO |   TODO    |    TODO     |   TODO   |      TODO       |              | TODO        | TODO      | [官网](https://gitlab.com/)                    |
+|    Git 托管    |  Gitlabdocsify  | TODO |   TODO    |    TODO     |   TODO   |      TODO       |              | TODO        | TODO      | [官网](https://gitlab.com/)                    |
+|      博客      |   Metaweblog    |  ✔   | 完全兼容  |      ✔      | 部分兼容 |        ✖        |              |             |           | [官网](http://xmlrpc.scripting.com/metaWeblog) |
+|      博客      |     CnBlogs     |  ✔   | 完全兼容  |      ✔      | 部分兼容 |        ✖        |              |             |           | [官网](https://cnblogs.com)                    |
+|      博客      |     Typecho     |  ✔   | 完全兼容  |      ✔      | 部分兼容 |        ✖        |              |             |           | [官网](https://typecho.org/)                   |
+|      博客      |      Jvue       |  ✔   | 完全兼容  |      ✔      | 部分兼容 |        ✖        |              |             |           | [官网](https://github.com/terwer/jvue)         |
+|      博客      |    WordPress    |  ✔   | 完全兼容  |      ✔      | 部分兼容 |        ✖        |              |             |           | [官网](https://wordpress.org/)                 |
+|    社交媒体    |      知乎       |  ✔   | 完全兼容  |      ✔      | PC 验证  |        ✖        |              |             |           | [官网](https://www.zhihu.com/)                 |
+|    社交媒体    |      CSDN       |  ✔   | 完全兼容  |      ✔      | PC 验证  |        ✖        |              |             |           | [官网](https://www.csdn.net/)                  |
+|    社交媒体    |   微信公众号    |  ✔   | 完全兼容  |      ✔      | PC 验证  |        ✖        |              |             |           | [官网](https://mp.weixin.qq.com/)              |
+|    社交媒体    |      简书       |  ✔   | 完全兼容  |      ✔      | PC 验证  |        ✖        |              |             |           | [官网](https://www.jianshu.com/)               |
+|    社交媒体    |      掘金       |  ✔   | 完全兼容  |      ✔      | PC 验证  |        ✖        |              |             |           | [官网](https://juejin.cn/)                     |
+|      社区      |     52破解      | TODO |   TODO    |    TODO     |   TODO   |      TODO       |              |             |           | [官网](https://www.52pojie.cn/)                |
+|      社区      |    Bilibili     | TODO |   TODO    |    TODO     |   TODO   |      TODO       |              |             |           | [官网](https://www.bilibili.com/)              |
+|      社区      |     小红书      | TODO |   TODO    |    TODO     |   TODO   |      TODO       |              |             |           | [官网](https://www.xiaohongshu.com/)           |
+|      社区      |      豆瓣       | TODO |   TODO    |    TODO     |   TODO   |      TODO       |              |             |           | [官网](https://www.douban.com/)                |
+|      其他      |      Xlog       | TODO |   TODO    |    TODO     |   TODO   |      TODO       |              |             |           | [官网](https://xlog.cn/)                       |
+|      其他      |     Mdnice      | TODO |   TODO    |    TODO     |   TODO   |      TODO       |              |             |           | [官网](https://mdnice.com/)                    |
+|      其他      |     Flowus      | TODO |   TODO    |    TODO     |   TODO   |      TODO       |              |             |           | [官网](https://www.flowus.com/)                |
+|      其他      |   telegra.ph    |  ✔   | 部分兼容  |      ✖      | 部分兼容 |        ✖        |              |             |           | [官网](https://telegra.ph)                     |
 
 ## 核心特色
 

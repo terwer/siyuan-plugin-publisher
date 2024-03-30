@@ -34,11 +34,12 @@ import { SypConfig } from "~/syp.config.ts"
 import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
-import { BlogAdaptor, PageTypeEnum, PasswordType, UserBlog } from "zhi-blog-api"
+import { BlogAdaptor, PageTypeEnum, PasswordType, PicbedServiceTypeEnum, UserBlog } from "zhi-blog-api"
 import Adaptors from "~/src/adaptors"
 import { Utils } from "~/src/utils/utils.ts"
 import { ElMessage } from "element-plus"
 import { useProxy } from "~/src/composables/useProxy.ts"
+import { usePicgoBridge } from "~/src/composables/usePicgoBridge.ts"
 
 const logger = createAppLogger("commonblog-setting")
 // appInstance
@@ -47,6 +48,7 @@ const appInstance = new PublisherAppInstance()
 // uses
 const { t } = useVueI18n()
 const { getSetting, updateSetting } = usePublishSettingStore()
+const { getPicbedServiceType } = usePicgoBridge()
 
 const props = defineProps({
   apiType: {
@@ -316,6 +318,9 @@ onMounted(async () => {
   formData.proxy.useCorsAnywhere = !StrUtil.isEmptyString(formData.cfg.corsAnywhereUrl)
   formData.proxy.useMiddleware = !StrUtil.isEmptyString(formData.cfg.middlewareUrl)
 
+  // set picbed service
+  formData.cfg.picbedService = await getPicbedServiceType(formData.cfg)
+
   formData.isInit = true
 })
 </script>
@@ -434,6 +439,19 @@ onMounted(async () => {
       >
         <el-option v-for="item in formData.kwSpaces" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
+    </el-form-item>
+    <el-form-item :label="t('publisher.picbed.service')">
+      <el-radio-group v-model="formData.cfg.picbedService" class="ml-4">
+        <el-radio :value="PicbedServiceTypeEnum.None" size="large">{{ t("publisher.picbed.none") }}</el-radio>
+        <el-radio v-if="formData.cfg.picgoPicbedSupported" :value="PicbedServiceTypeEnum.PicGo" size="large">
+          {{ t("publisher.picbed.picgo") }}
+          <sup>{{ t("publisher.picbed.recom1") }}</sup>
+        </el-radio>
+        <el-radio v-if="formData.cfg.bundledPicbedSupported" :value="PicbedServiceTypeEnum.Bundled" size="large">
+          {{ t("publisher.picbed.bundled") }}
+          <sup>{{ t("publisher.picbed.recom2") }}</sup>
+        </el-radio>
+      </el-radio-group>
     </el-form-item>
     <!-- 跨域代理地址 -->
     <el-form-item

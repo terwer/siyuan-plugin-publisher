@@ -34,15 +34,6 @@ export const aboutUrl = "https://terwer.space/about"
  */
 export const DYNAMIC_CONFIG_KEY = "dynamic-config"
 
-/**
- * 必须使用平台自带的图片上传的平台
- */
-export const MUST_USE_OWN_PLATFORM = ["custom_Zhihu", "custom_Csdn", "custom_Wechat", "custom_Jianshu"]
-
-/**
- * 必须使用图床的平台
- */
-export const MUST_USE_PICBED_PLATFORM = ["common_Yuque", "common_Notion", "common_Hexo", "gitlab_Gitlabhexo"]
 
 /**
  * 自动映射分类占位符

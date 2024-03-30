@@ -30,6 +30,8 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { StrUtil } from "zhi-common"
 import { isDev } from "~/src/utils/constants.ts"
 import { SiyuanKernelApi } from "zhi-siyuan-api"
+import { BlogConfig, PicbedServiceTypeEnum } from "zhi-blog-api"
+import { isFileExists } from "~/src/utils/siyuanUtils.ts"
 
 let needUpdate = false
 const checkConfig = async (siyuanApi: SiyuanKernelApi, picgo: SiyuanPicgoPostApi) => {
@@ -141,9 +143,50 @@ const usePicgoBridge = () => {
     return imageItemArray
   }
 
+  /**
+   * 获取当前图床服务
+   *
+   * @param cfg
+   */
+  const getPicbedServiceType = async (cfg: BlogConfig): Promise<PicbedServiceTypeEnum> => {
+    let s: PicbedServiceTypeEnum = PicbedServiceTypeEnum.None
+    // 如果没有选择，使用默认的
+    if (StrUtil.isEmptyString(cfg.picbedService)) {
+      // 如果安装了 PicGo 插件，优先使用 PicGo 插件
+      const isPicgoInstalled: boolean = await checkPicgoInstalled()
+      if (isPicgoInstalled && cfg.picgoPicbedSupported) {
+        s = PicbedServiceTypeEnum.PicGo
+      } else if (cfg.bundledPicbedSupported) {
+        // 如果支持自有的，使用自有的
+        s = PicbedServiceTypeEnum.Bundled
+      } else {
+        // 其他情况，不使用图床
+        s = PicbedServiceTypeEnum.None
+      }
+      logger.info("使用默认的图床服务")
+    } else {
+      s = cfg.picbedService
+      logger.info("使用自定义图床服务")
+    }
+
+    return s
+  }
+
+  /**
+   * 检查 Picgo 是否已安装
+   *
+   * @returns 一个 Promise，解析为布尔值，表示是否已安装 Picgo
+   */
+  const checkPicgoInstalled = async () => {
+    const { kernelApi } = useSiyuanApi()
+    // 检测是否安装 picgo 插件
+    return await isFileExists(kernelApi, "/data/plugins/siyuan-plugin-picgo/plugin.json", "text")
+  }
+
   return {
     handlePicgo,
     getImageItemsFromMd,
+    getPicbedServiceType,
   }
 }
 
