@@ -30,6 +30,7 @@ import { BlogConfig, PageTypeEnum, Post, UserBlog } from "zhi-blog-api"
 import { toRaw } from "vue"
 import _ from "lodash-es"
 import { fileToBuffer } from "~/src/utils/polyfillUtils.ts"
+import FormDataUtils from "~/src/utils/FormDataUtils.ts"
 
 /**
  * 微信公众号网页授权适配器
@@ -449,7 +450,7 @@ class WechatWebAdaptor extends BaseWebApi {
       if (!win.require) {
         throw new Error("非常抱歉，目前仅思源笔记PC客户端支持上传图片")
       }
-      const { FormData, Blob } = win.require(`${this.appInstance.moduleBase}libs/node-fetch-cjs/dist/index.js`)
+      const { FormData, Blob } = FormDataUtils.getFormData(this.appInstance)
 
       // uploadUrl
       const ticket_id = this.cfg.metadata.commonData.data.user_name

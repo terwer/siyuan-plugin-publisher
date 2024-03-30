@@ -32,7 +32,7 @@
 |      通用      |      语雀       |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        | 不支持       | 内置代理    | 不需要    | [官网](https://yuque.com)                      |
 |      通用      |     Notion      |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        | 不支持       | 内置代理    | 不需要    | [官网](https://www.notion.so)                  |
 |      通用      |      Halo       |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        | 支持         | 内置代理    | 不需要    | [官网](https://halo.run)                       |
-|      通用      |    印象笔记     | TODO |   TODO    |    TODO     |   TODO   |      TODO       |              |             |           | [官网](https://www.yinxiang.com)               |
+|      通用      |    印象笔记     | TODO |   TODO    |    TODO     |   TODO   |      TODO       | TODO         | TODO        | TODO      | [官网](https://www.yinxiang.com)               |
 |      通用      |     Github      |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        |              | 不需要      | 不需要    | [官网](https://github.com)                     |
 | 静态网站生成器 |      Hexo       |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        |              | 不需要      | 不需要    | [官网](https://hexo.io/zh-cn/)                 |
 | 静态网站生成器 |      Hugo       |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        |              | 不需要      | 不需要    | [官网](https://gohugo.io/)                     |
