@@ -15,6 +15,7 @@ module.exports = {
 
   plugins: ["@typescript-eslint", "vue", "prettier"],
 
+  // custom rules
   rules: {
     // Note: you must disable the base rule as it can report incorrect errors
     semi: "off",
