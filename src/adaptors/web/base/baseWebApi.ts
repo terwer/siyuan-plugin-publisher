@@ -160,7 +160,8 @@ class BaseWebApi extends WebApi {
    * @param method - 请求的 HTTP 方法
    * @param contentType - 请求的内容类型
    * @param forceProxy - 是否强制使用代理
-   * @returns 返回一个 Promise，解析为响应结果
+   * @param payloadEncoding - 请求体的编码方式，默认为 text
+   * @param responseEncoding - 响应体的编码方式，默认为 text
    */
   public async webProxyFetch(
     url: string,
@@ -168,7 +169,25 @@ class BaseWebApi extends WebApi {
     params: any = {},
     method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" = "GET",
     contentType: string = "application/json",
-    forceProxy: boolean = false
+    forceProxy: boolean = false,
+    payloadEncoding:
+      | "text"
+      | "base64"
+      | "base64-std"
+      | "base64-url"
+      | "base32"
+      | "base32-std"
+      | "base32-hex"
+      | "hex" = "text",
+    responseEncoding:
+      | "text"
+      | "base64"
+      | "base64-std"
+      | "base64-url"
+      | "base32"
+      | "base32-std"
+      | "base32-hex"
+      | "hex" = "text"
   ) {
     const header = headers.length > 0 ? headers[0] : {}
     const webHeaders = [
@@ -182,7 +201,16 @@ class BaseWebApi extends WebApi {
     // 如果没有可用的 CORS 代理或者没有强制使用代理，使用默认的自动检测机制
     if (this.isUseSiyuanProxy || !isCorsProxyAvailable) {
       this.logger.info("Using legency web fetch")
-      return await this.proxyFetch(url, webHeaders, params, method, contentType, forceProxy)
+      return await this.proxyFetch(
+        url,
+        webHeaders,
+        params,
+        method,
+        contentType,
+        forceProxy,
+        payloadEncoding,
+        responseEncoding
+      )
     } else {
       this.logger.info("Using cors web fetch")
       return this.corsFetch(url, headers, params, method)
@@ -196,9 +224,33 @@ class BaseWebApi extends WebApi {
    * @param headers - 请求的头部信息
    * @param formData - 表单数据
    * @param forceProxy - 是否强制使用代理
-   * @returns 返回一个 Promise，解析为响应结果
-   */
-  public async webFormFetch(url: string, headers: any[], formData: FormData, forceProxy: boolean = false) {
+   * @param payloadEncoding - 请求体的编码方式，默认为 text
+   * @param responseEncoding - 响应体的编码方式，默认为 text
+   * */
+  public async webFormFetch(
+    url: string,
+    headers: any[],
+    formData: FormData,
+    forceProxy: boolean = false,
+    payloadEncoding:
+      | "text"
+      | "base64"
+      | "base64-std"
+      | "base64-url"
+      | "base32"
+      | "base32-std"
+      | "base32-hex"
+      | "hex" = "text",
+    responseEncoding:
+      | "text"
+      | "base64"
+      | "base64-std"
+      | "base64-url"
+      | "base32"
+      | "base32-std"
+      | "base32-hex"
+      | "hex" = "text"
+  ) {
     const isCorsProxyAvailable = !StrUtil.isEmptyString(this.cfg.corsAnywhereUrl)
     // 如果没有可用的 CORS 代理或者没有强制使用代理，使用默认的自动检测机制
     if (this.isUseSiyuanProxy || !isCorsProxyAvailable) {

@@ -101,6 +101,8 @@ export class BaseBlogApi extends BlogApi {
    * @param method - 请求的 HTTP 方法，默认为 GET
    * @param contentType - 请求的内容类型，默认为 application/json
    * @param forceProxy - 是否强制使用代理，默认为 false
+   * @param payloadEncoding - 请求体的编码方式，默认为 text
+   * @param responseEncoding - 响应体的编码方式，默认为 text
    */
   public async apiProxyFetch(
     url: string,
@@ -108,7 +110,25 @@ export class BaseBlogApi extends BlogApi {
     params: any = undefined,
     method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" = "GET",
     contentType: string = "application/json",
-    forceProxy: boolean = false
+    forceProxy: boolean = false,
+    payloadEncoding:
+      | "text"
+      | "base64"
+      | "base64-std"
+      | "base64-url"
+      | "base32"
+      | "base32-std"
+      | "base32-hex"
+      | "hex" = "text",
+    responseEncoding:
+      | "text"
+      | "base64"
+      | "base64-std"
+      | "base64-url"
+      | "base32"
+      | "base32-std"
+      | "base32-hex"
+      | "hex" = "text"
   ) {
     const isCorsProxyAvailable = !StrUtil.isEmptyString(this.cfg.corsAnywhereUrl)
     // 如果没有可用的 CORS 代理或者没有强制使用代理，使用默认的自动检测机制
@@ -123,7 +143,7 @@ export class BaseBlogApi extends BlogApi {
       //     forceProxy: boolean = false
       //   ) => {
       this.logger.info("Using legency api fetch")
-      return this.proxyFetch(url, headers, params, method, contentType, forceProxy)
+      return this.proxyFetch(url, headers, params, method, contentType, forceProxy, payloadEncoding, responseEncoding)
     } else {
       //   const corsFetch = async (
       //     url: string,
@@ -143,8 +163,33 @@ export class BaseBlogApi extends BlogApi {
    * @param headers - 请求的头部信息，默认为空数组
    * @param formData - 表单数据
    * @param forceProxy - 是否强制使用代理，默认为 false
+   * @param payloadEncoding - 请求体的编码方式，默认为 text
+   * @param responseEncoding - 响应体的编码方式，默认为 text
    */
-  public async apiFormFetch(url: string, headers: any[], formData: FormData, forceProxy: boolean = false) {
+  public async apiFormFetch(
+    url: string,
+    headers: any[],
+    formData: FormData,
+    forceProxy: boolean = false,
+    payloadEncoding:
+      | "text"
+      | "base64"
+      | "base64-std"
+      | "base64-url"
+      | "base32"
+      | "base32-std"
+      | "base32-hex"
+      | "hex" = "text",
+    responseEncoding:
+      | "text"
+      | "base64"
+      | "base64-std"
+      | "base64-url"
+      | "base32"
+      | "base32-std"
+      | "base32-hex"
+      | "hex" = "text"
+  ) {
     const isCorsProxyAvailable = !StrUtil.isEmptyString(this.cfg.corsAnywhereUrl)
     // 如果没有可用的 CORS 代理或者没有强制使用代理，使用默认的自动检测机制
     if (this.isUseSiyuanProxy || !isCorsProxyAvailable) {

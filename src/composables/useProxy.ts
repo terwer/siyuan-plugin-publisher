@@ -63,8 +63,8 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
    * @param method - 请求的 HTTP 方法
    * @param contentType - 请求的内容类型
    * @param forceProxy - 是否强制使用代理
-   *
-   * @returns 返回一个 Promise，解析为响应结果
+   * @param payloadEncoding - 请求体的编码方式，默认为 text
+   * @param responseEncoding - 响应体的编码方式，默认为 text
    */
   const proxyFetch = async (
     url: string,
@@ -72,11 +72,38 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
     params: any = {},
     method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" = "GET",
     contentType: string = "application/json",
-    forceProxy: boolean = false
+    forceProxy: boolean = false,
+    payloadEncoding:
+      | "text"
+      | "base64"
+      | "base64-std"
+      | "base64-url"
+      | "base32"
+      | "base32-std"
+      | "base32-hex"
+      | "hex" = "text",
+    responseEncoding:
+      | "text"
+      | "base64"
+      | "base64-std"
+      | "base64-url"
+      | "base32"
+      | "base32-std"
+      | "base32-hex"
+      | "hex" = "text"
   ) => {
     if (isUseSiyuanProxy) {
       logger.info("Using Siyuan forwardProxy")
-      return await siyuanProxyFetch(url, headers, params, method, contentType, forceProxy)
+      return await siyuanProxyFetch(
+        url,
+        headers,
+        params,
+        method,
+        contentType,
+        forceProxy,
+        payloadEncoding,
+        responseEncoding
+      )
     } else {
       logger.info("Using middleware proxy")
       const header = headers.length > 0 ? headers[0] : {}
@@ -202,8 +229,8 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
    * @param method - 请求的 HTTP 方法
    * @param contentType - 请求的内容类型
    * @param forceProxy - 是否强制使用代理
-   *
-   * @returns 返回一个 Promise，解析为响应结果
+   * @param payloadEncoding - 请求体的编码方式，默认为 text
+   * @param responseEncoding - 响应体的编码方式，默认为 text
    */
   const siyuanProxyFetch = async (
     url: string,
@@ -211,7 +238,25 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
     params: any = {},
     method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" = "GET",
     contentType: string = "application/json",
-    forceProxy: boolean = false
+    forceProxy: boolean = false,
+    payloadEncoding:
+      | "text"
+      | "base64"
+      | "base64-std"
+      | "base64-url"
+      | "base32"
+      | "base32-std"
+      | "base32-hex"
+      | "hex" = "text",
+    responseEncoding:
+      | "text"
+      | "base64"
+      | "base64-std"
+      | "base64-url"
+      | "base32"
+      | "base32-std"
+      | "base32-hex"
+      | "hex" = "text"
   ) => {
     let body: any
     if (typeof params === "string" && !StrUtil.isEmptyString(params)) {
@@ -233,8 +278,8 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
       body,
       method,
       contentType,
-      undefined,
-      undefined,
+      payloadEncoding,
+      responseEncoding,
       30000
     )
     logger.debug("proxyFetch result =>", fetchResult)

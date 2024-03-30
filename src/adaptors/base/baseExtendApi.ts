@@ -654,14 +654,13 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
       base64Info = await remoteImageToBase64Info(url)
     } else {
       this.logger.info("Outside the browser, use an image proxy")
-      const proxyUrl = StrUtil.isEmptyString(middlewareUrl) ? LEGENCY_SHARED_PROXT_MIDDLEWARE : middlewareUrl
       let response: any
-      if (response instanceof BaseBlogApi) {
+      if (this.api instanceof BaseBlogApi) {
         const blogApi = this.api as BaseBlogApi
-        response = await blogApi.apiProxyFetch(`${proxyUrl}/image`, [], { url: url }, "POST")
-      } else if (response instanceof BaseWebApi) {
+        response = await blogApi.apiProxyFetch(url, [], undefined, "GET")
+      } else if (this.api instanceof BaseWebApi) {
         const webApi = this.api as BaseWebApi
-        response = await webApi.webProxyFetch(`${proxyUrl}/image`, [], { url: url }, "POST")
+        response = await webApi.webProxyFetch(url, [], undefined, "GET")
       } else {
         throw new Error("proxyFetch is not valid")
       }
