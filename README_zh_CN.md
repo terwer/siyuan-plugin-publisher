@@ -42,15 +42,15 @@
 | 静态网站生成器 |    Vitepress    |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        | 不需要      | 不需要    | [官网](https://vitepress.vuejs.org/)           |
 | 静态网站生成器 |     Antora      | TODO |   TODO    |    TODO     |   TODO   |      TODO       | TODO        | TODO      | [官网](https://antora.org/)                    |
 | 静态网站生成器 |     Docsify     | TODO |   TODO    |    TODO     |   TODO   |      TODO       | TODO        | TODO      | [官网](https://docsify.js.org/)                |
-|    Git 托管    |     Gitlab      |  ✔   | 完全兼容  |      ✔      | 部分兼容 |        ✖        |             |           | [官网](https://gitlab.com/)                    |
-|    Git 托管    |   Gitlabhexo    |  ✔   | 完全兼容  |      ✔      | 部分兼容 |        ✖        |             |           | [官网](https://gitlab.com/)                    |
-|    Git 托管    |   Gitlabhugo    |  ✔   | 完全兼容  |      ✔      | 部分兼容 |        ✖        |             |           | [官网](https://gitlab.com/)                    |
-|    Git 托管    |  Gitlabjekyll   |  ✔   | 完全兼容  |      ✔      | 部分兼容 |        ✖        |             |           | [官网](https://gitlab.com/)                    |
-|    Git 托管    | Gitlabvuepress  |  ✔   | 完全兼容  |      ✔      | 部分兼容 |        ✖        |             |           | [官网](https://gitlab.com/)                    |
-|    Git 托管    | Gitlabvuepress2 |  ✔   | 完全兼容  |      ✔      | 部分兼容 |        ✖        |             |           | [官网](https://gitlab.com/)                    |
-|    Git 托管    | Gitlabvitepress |  ✔   | 完全兼容  |      ✔      | 部分兼容 |        ✖        |             |           | [官网](https://gitlab.com/)                    |
-|    Git 托管    |  Gitlabantora   | TODO |   TODO    |    TODO     |   TODO   |      TODO       |             |           | [官网](https://gitlab.com/)                    |
-|    Git 托管    |  Gitlabdocsify  | TODO |   TODO    |    TODO     |   TODO   |      TODO       |             |           | [官网](https://gitlab.com/)                    |
+|    Git 托管    |     Gitlab      |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        | 不需要      | 不需要    | [官网](https://gitlab.com/)                    |
+|    Git 托管    |   Gitlabhexo    |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        | 不需要      | 不需要    | [官网](https://gitlab.com/)                    |
+|    Git 托管    |   Gitlabhugo    |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        | 不需要      | 不需要    | [官网](https://gitlab.com/)                    |
+|    Git 托管    |  Gitlabjekyll   |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        | 不需要      | 不需要    | [官网](https://gitlab.com/)                    |
+|    Git 托管    | Gitlabvuepress  |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        | 不需要      | 不需要    | [官网](https://gitlab.com/)                    |
+|    Git 托管    | Gitlabvuepress2 |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        | 不需要      | 不需要    | [官网](https://gitlab.com/)                    |
+|    Git 托管    | Gitlabvitepress |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        | 不需要      | 不需要    | [官网](https://gitlab.com/)                    |
+|    Git 托管    |  Gitlabantora   | TODO |   TODO    |    TODO     |   TODO   |      TODO       | TODO        | TODO      | [官网](https://gitlab.com/)                    |
+|    Git 托管    |  Gitlabdocsify  | TODO |   TODO    |    TODO     |   TODO   |      TODO       | TODO        | TODO      | [官网](https://gitlab.com/)                    |
 |      博客      |   Metaweblog    |  ✔   | 完全兼容  |      ✔      | 部分兼容 |        ✖        |             |           | [官网](http://xmlrpc.scripting.com/metaWeblog) |
 |      博客      |     CnBlogs     |  ✔   | 完全兼容  |      ✔      | 部分兼容 |        ✖        |             |           | [官网](https://cnblogs.com)                    |
 |      博客      |     Typecho     |  ✔   | 完全兼容  |      ✔      | 部分兼容 |        ✖        |             |           | [官网](https://typecho.org/)                   |

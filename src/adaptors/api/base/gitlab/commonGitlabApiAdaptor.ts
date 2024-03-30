@@ -34,6 +34,7 @@ import { toRaw } from "vue"
 import { Base64 } from "js-base64"
 import { isDev } from "~/src/utils/constants.ts"
 import sypIdUtil from "~/src/utils/sypIdUtil.ts"
+import { GitlabFetchClientProxyAdaptor } from "~/src/adaptors/api/base/gitlab/gitlabFetchClientProxyAdaptor.ts"
 
 /**
  * Gitlab API 适配器
@@ -48,6 +49,7 @@ class CommonGitlabApiAdaptor extends BaseBlogApi {
   constructor(appInstance: PublisherAppInstance, cfg: CommonGitlabConfig) {
     super(appInstance, cfg)
     this.logger = createAppLogger("common-gitlab-api-adaptor")
+    const commonFetchClient = new GitlabFetchClientProxyAdaptor(appInstance, cfg)
 
     this.gitlabClient = new CommonGitlabClient(
       appInstance,
@@ -59,6 +61,7 @@ class CommonGitlabApiAdaptor extends BaseBlogApi {
       cfg.defaultMsg,
       cfg.email,
       cfg.author,
+      commonFetchClient,
       cfg.middlewareUrl,
       isDev
     )

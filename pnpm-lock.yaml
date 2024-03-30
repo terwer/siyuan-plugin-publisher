@@ -96,14 +96,14 @@ dependencies:
     specifier: ^2.11.0
     version: 2.11.0
   zhi-fetch-middleware:
-    specifier: ^0.8.2
-    version: 0.8.2(typescript@5.4.3)
+    specifier: ^0.10.0
+    version: 0.10.0(typescript@5.4.3)
   zhi-github-middleware:
     specifier: ^0.4.17
     version: 0.4.17(typescript@5.4.3)
   zhi-gitlab-middleware:
-    specifier: ^0.6.28
-    version: 0.6.28(typescript@5.4.3)
+    specifier: ^0.8.0
+    version: 0.8.0(typescript@5.4.3)
   zhi-lib-base:
     specifier: ^0.8.0
     version: 0.8.0
@@ -143,8 +143,8 @@ devDependencies:
     specifier: ^1.2.5
     version: 1.2.5
   '@types/node':
-    specifier: ^18.19.26
-    version: 18.19.26
+    specifier: ^18.19.28
+    version: 18.19.28
   '@vitejs/plugin-vue':
     specifier: ^5.0.4
     version: 5.0.4(vite@5.2.7)(vue@3.4.21)
@@ -189,7 +189,7 @@ devDependencies:
     version: 33.6.2
   vite:
     specifier: ^5.2.7
-    version: 5.2.7(@types/node@18.19.26)(stylus@0.63.0)
+    version: 5.2.7(@types/node@18.19.28)(stylus@0.63.0)
   vite-plugin-html:
     specifier: ^3.2.2
     version: 3.2.2(vite@5.2.7)
@@ -198,7 +198,7 @@ devDependencies:
     version: 0.21.0(vite@5.2.7)
   vitest:
     specifier: ^1.4.0
-    version: 1.4.0(@types/node@18.19.26)(jsdom@24.0.0)(stylus@0.63.0)
+    version: 1.4.0(@types/node@18.19.28)(jsdom@24.0.0)(stylus@0.63.0)
   vue-tsc:
     specifier: ^2.0.7
     version: 2.0.7(typescript@5.4.3)
@@ -1464,7 +1464,7 @@ packages:
   /@types/node-fetch@2.6.11:
     resolution: {integrity: sha512-24xFj9R5+rfQJLRyM56qh+wnVSYhyXC2tkoBndtY0U+vubqNsYXGjufB2nn8Q6gt0LrARwL6UBtMCSVCwl4B1g==}
     dependencies:
-      '@types/node': 18.19.26
+      '@types/node': 18.19.28
       form-data: 4.0.0
     dev: false
 
@@ -1472,8 +1472,8 @@ packages:
     resolution: {integrity: sha512-qelS/Ra6sacc4loe/3MSjXNL1dNQ/GjxNHVzuChwMfmk7HuycRLVQN2qNY3XahK+fZc5E2szqQSKUyAF0E+2bg==}
     dev: true
 
-  /@types/node@18.19.26:
-    resolution: {integrity: sha512-+wiMJsIwLOYCvUqSdKTrfkS8mpTp+MPINe6+Np4TAGFWWRWiBQ5kSq9nZGCSPkzx9mvT+uEukzpX4MOSCydcvw==}
+  /@types/node@18.19.28:
+    resolution: {integrity: sha512-J5cOGD9n4x3YGgVuaND6khm5x07MMdAKkRyXnjVR6KFhLMNh2yONGiP7Z+4+tBOt5mK+GvDTiacTOVGGpqiecw==}
     dependencies:
       undici-types: 5.26.5
 
@@ -1495,7 +1495,7 @@ packages:
   /@types/stylus@0.48.42:
     resolution: {integrity: sha512-CPGlr5teL4sqdap+EOowMifLuNGeIoLwc0VQ7u/BPxo+ocqiNa5jeVt0H0IVBblEh6ZwX1sGpIQIFnSSr8NBQA==}
     dependencies:
-      '@types/node': 18.19.26
+      '@types/node': 18.19.28
     dev: true
 
   /@types/unist@2.0.10:
@@ -1941,7 +1941,7 @@ packages:
       vite: ^5.0.0
       vue: ^3.2.25
     dependencies:
-      vite: 5.2.7(@types/node@18.19.26)(stylus@0.63.0)
+      vite: 5.2.7(@types/node@18.19.28)(stylus@0.63.0)
       vue: 3.4.21(typescript@5.4.3)
     dev: true
 
@@ -1964,7 +1964,7 @@ packages:
       strip-literal: 2.1.0
       test-exclude: 6.0.0
       v8-to-istanbul: 9.2.0
-      vitest: 1.4.0(@types/node@18.19.26)(jsdom@24.0.0)(stylus@0.63.0)
+      vitest: 1.4.0(@types/node@18.19.28)(jsdom@24.0.0)(stylus@0.63.0)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -7970,7 +7970,7 @@ packages:
       vfile-message: 2.0.4
     dev: false
 
-  /vite-node@1.4.0(@types/node@18.19.26)(stylus@0.63.0):
+  /vite-node@1.4.0(@types/node@18.19.28)(stylus@0.63.0):
     resolution: {integrity: sha512-VZDAseqjrHgNd4Kh8icYHWzTKSCZMhia7GyHfhtzLW33fZlG9SwsB6CEhgyVOWkJfJ2pFLrp/Gj1FSfAiqH9Lw==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
@@ -7979,7 +7979,7 @@ packages:
       debug: 4.3.4
       pathe: 1.1.2
       picocolors: 1.0.0
-      vite: 5.2.7(@types/node@18.19.26)(stylus@0.63.0)
+      vite: 5.2.7(@types/node@18.19.28)(stylus@0.63.0)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -8008,7 +8008,7 @@ packages:
       html-minifier-terser: 6.1.0
       node-html-parser: 5.4.2
       pathe: 0.2.0
-      vite: 5.2.7(@types/node@18.19.26)(stylus@0.63.0)
+      vite: 5.2.7(@types/node@18.19.28)(stylus@0.63.0)
     dev: true
 
   /vite-plugin-node-polyfills@0.21.0(vite@5.2.7):
@@ -8018,12 +8018,12 @@ packages:
     dependencies:
       '@rollup/plugin-inject': 5.0.5
       node-stdlib-browser: 1.2.0
-      vite: 5.2.7(@types/node@18.19.26)(stylus@0.63.0)
+      vite: 5.2.7(@types/node@18.19.28)(stylus@0.63.0)
     transitivePeerDependencies:
       - rollup
     dev: true
 
-  /vite@5.2.7(@types/node@18.19.26)(stylus@0.63.0):
+  /vite@5.2.7(@types/node@18.19.28)(stylus@0.63.0):
     resolution: {integrity: sha512-k14PWOKLI6pMaSzAuGtT+Cf0YmIx12z9YGon39onaJNy8DLBfBJrzg9FQEmkAM5lpHBZs9wksWAsyF/HkpEwJA==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
@@ -8051,7 +8051,7 @@ packages:
       terser:
         optional: true
     dependencies:
-      '@types/node': 18.19.26
+      '@types/node': 18.19.28
       esbuild: 0.20.2
       postcss: 8.4.38
       rollup: 4.13.2
@@ -8060,7 +8060,7 @@ packages:
       fsevents: 2.3.3
     dev: true
 
-  /vitest@1.4.0(@types/node@18.19.26)(jsdom@24.0.0)(stylus@0.63.0):
+  /vitest@1.4.0(@types/node@18.19.28)(jsdom@24.0.0)(stylus@0.63.0):
     resolution: {integrity: sha512-gujzn0g7fmwf83/WzrDTnncZt2UiXP41mHuFYFrdwaLRVQ6JYQEiME2IfEjU3vcFL3VKa75XhI3lFgn+hfVsQw==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
@@ -8085,7 +8085,7 @@ packages:
       jsdom:
         optional: true
     dependencies:
-      '@types/node': 18.19.26
+      '@types/node': 18.19.28
       '@vitest/expect': 1.4.0
       '@vitest/runner': 1.4.0
       '@vitest/snapshot': 1.4.0
@@ -8104,8 +8104,8 @@ packages:
       strip-literal: 2.1.0
       tinybench: 2.6.0
       tinypool: 0.8.3
-      vite: 5.2.7(@types/node@18.19.26)(stylus@0.63.0)
-      vite-node: 1.4.0(@types/node@18.19.26)(stylus@0.63.0)
+      vite: 5.2.7(@types/node@18.19.28)(stylus@0.63.0)
+      vite-node: 1.4.0(@types/node@18.19.28)(stylus@0.63.0)
       why-is-node-running: 2.2.2
     transitivePeerDependencies:
       - less
@@ -8488,18 +8488,6 @@ packages:
       - typescript
     dev: false
 
-  /zhi-common@1.31.0(typescript@5.4.3):
-    resolution: {integrity: sha512-s9x5e3dLhFmh514yvT1JtP7xriWMVxQ11AyIjOgx5Xo2cKcDv5b6nKDaLj2Jkvms9iwZRSinDY8y/FK3jrfbrg==}
-    dependencies:
-      js-yaml: 4.1.0
-      shorthash2: 1.0.3
-      transliteration: 2.3.5
-      vue: 3.4.21(typescript@5.4.3)
-      zhi-lib-base: 0.8.0
-    transitivePeerDependencies:
-      - typescript
-    dev: false
-
   /zhi-common@1.33.0(typescript@5.4.3):
     resolution: {integrity: sha512-ggHVmZ/zkVIOLfAWv4vqJBZY9BZnlnBUhlOmtYoVHV35UdxI5zcvvakBRgDZxjyknikHOLot7MtYfccCCOdyKw==}
     dependencies:
@@ -8516,10 +8504,10 @@ packages:
     resolution: {integrity: sha512-HKcEHVULUcGboePoSBWJ6vDHYqXEiZS/xetzTRV8DRPkRTmeWzJWs5Xu3BTz21Iz3DGy43hFahpm2Yz2+MFUcA==}
     dev: false
 
-  /zhi-fetch-middleware@0.8.2(typescript@5.4.3):
-    resolution: {integrity: sha512-W7hkvQqDTwqnfHLTIdtUgG2SnUqbiQNQdLf7K3psz+N6ngFS0t6F2jQk3jEn6CkS5WrjVkWbT5CpsK2ffaZuGw==}
+  /zhi-fetch-middleware@0.10.0(typescript@5.4.3):
+    resolution: {integrity: sha512-lL+OiPVeQ4YLF99/SHCtnx09hgDpOFeLtRNNE7yV5zWdVNswuOKp7H2Lo+j3e8p/9wA/UMGGLtMrTcqodInY6g==}
     dependencies:
-      zhi-common: 1.31.0(typescript@5.4.3)
+      zhi-common: 1.33.0(typescript@5.4.3)
       zhi-device: 2.11.0
       zhi-lib-base: 0.8.0
     transitivePeerDependencies:
@@ -8537,10 +8525,10 @@ packages:
       - typescript
     dev: false
 
-  /zhi-gitlab-middleware@0.6.28(typescript@5.4.3):
-    resolution: {integrity: sha512-abb/OaL6AoZGLCE9A2DkfnKtOe76UKL3KpGyg0NK5PviaMktcYVVQhRLXpo7PHbf/iaDUivBzHf2YIgUOcWW4w==}
+  /zhi-gitlab-middleware@0.8.0(typescript@5.4.3):
+    resolution: {integrity: sha512-+y8BerkvPj5JF69Lrj9mj4vSncClhx22hWx7heKY3hySXS4BS+bfCMa0gg6tXAHL9aXeTlT4+VKcrUxFnM8yhg==}
     dependencies:
-      zhi-fetch-middleware: 0.8.2(typescript@5.4.3)
+      zhi-fetch-middleware: 0.10.0(typescript@5.4.3)
       zhi-lib-base: 0.8.0
     transitivePeerDependencies:
       - typescript
