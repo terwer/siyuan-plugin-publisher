@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023, Terwer . All rights reserved.
+ * Copyright (c) 2023-2024, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -22,15 +22,16 @@
  * or visit www.terwer.space if you need additional information or have any
  * questions.
  */
+
 import { isDev } from "~/src/utils/constants.ts"
 import { simpleLogger } from "zhi-lib-base"
 
-const win = window as any
+// const win = window as any
 
 /**
  * 使用 eruda 更好的控制日志
  */
-window.console = isDev ? win?.eruda?.get("console") : window.console
+// window.console = isDev ? win?.eruda?.get("console") : window.console
 
 /**
  * 简单的日志接口

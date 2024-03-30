@@ -99,13 +99,13 @@ export default defineConfig(() => ({
         // 在 body 标签底部插入指定的 JavaScript 文件
         tags: isDev
           ? [
-              {
-                tag: "script",
-                attrs: {
-                  src: "./libs/eruda/eruda.js",
-                },
-                injectTo: "head-prepend",
-              },
+              // {
+              //   tag: "script",
+              //   attrs: {
+              //     src: "./libs/eruda/eruda.js",
+              //   },
+              //   injectTo: "head-prepend",
+              // },
               {
                 tag: "script",
                 attrs: {
@@ -141,10 +141,10 @@ export default defineConfig(() => ({
                 injectTo: "head",
               },
             ],
-        data: {
-          title: "eruda",
-          injectScript: isDev ? `<script>eruda.init();</script>` : "",
-        },
+        // data: {
+        //   title: "eruda",
+        //   injectScript: isDev ? `<script>eruda.init();</script>` : "",
+        // },
       },
     }),
 

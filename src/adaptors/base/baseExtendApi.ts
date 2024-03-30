@@ -561,10 +561,10 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     // 判断key包含 custom_Zhihu 或者 /custom_Zhihu-\w+/
     const mustUseOwnPlatform: string[] = MUST_USE_OWN_PLATFORM
     const mustUsePicbedPlatform: string[] = MUST_USE_PICBED_PLATFORM
-    const isPicgoInstalled: boolean = await this.checkPicgoInstalled()
-    if (!isPicgoInstalled) {
-      this.logger.warn("未安装 PicGO 插件，将使用平台上传图片")
-    }
+    // const isPicgoInstalled: boolean = await this.checkPicgoInstalled()
+    // if (!isPicgoInstalled) {
+    //   this.logger.warn("未安装 PicGO 插件，将使用平台上传图片")
+    // }
 
     let mustUseOwn = false
     let mustUsePicbed = false
@@ -583,7 +583,8 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     if (mustUseOwn) {
       this.logger.warn("该平台不支持 Picgo 插件，将使用平台上传图片")
     }
-    const usePicgo: boolean = isPicgoInstalled && !mustUseOwn
+    // const usePicgo: boolean = isPicgoInstalled && !mustUseOwn
+    const usePicgo: boolean = !mustUseOwn
 
     if (usePicgo) {
       // ==========================
@@ -635,7 +636,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
             })
           }
         } catch (e) {
-          const errMsg2 = "文章可能已经发布成功，但是平台图片上传失败"
+          const errMsg2 = "文章可能已经发布成功，但是平台图片上传失败。请安装「PicGo 图床」进行配置"
           this.logger.error(errMsg2, e)
           await this.kernelApi.pushMsg({
             msg: errMsg2,
