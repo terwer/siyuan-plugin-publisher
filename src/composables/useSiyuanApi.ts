@@ -73,13 +73,13 @@ export const useSiyuanApi = () => {
     return storeViaSiyuanApi
   }
 
-  const isUseSiyuanProxy = () => {
+  const isUseSiyuanProxy = (() => {
     if (isInChromeExtension()) {
       return false
     }
 
     return isStorageViaSiyuanApi()
-  }
+  })()
 
   return {
     blogApi,

@@ -74,8 +74,10 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
     contentType: string = "application/json",
     forceProxy: boolean = false
   ) => {
-    const siyuanSupported = ["application/json", "text/html", "text/xml"]
-    if (forceProxy || !isUseSiyuanProxy || !siyuanSupported.includes(contentType)) {
+    if (isUseSiyuanProxy) {
+      logger.info("Using Siyuan forwardProxy")
+      return await siyuanProxyFetch(url, headers, params, method, contentType, forceProxy)
+    } else {
       logger.info("Using middleware proxy")
       const header = headers.length > 0 ? headers[0] : {}
       const fetchOptions = {
@@ -91,61 +93,6 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
       const res = await commonFetchClient.fetchCall(url, fetchOptions, forceProxy)
       logger.debug("Result of proxyFetch in commonFetchClient =>", res)
       return res
-    } else {
-      logger.info("Using Siyuan forwardProxy, contentType=>", contentType)
-      let body: any
-      if (typeof params === "string" && !StrUtil.isEmptyString(params)) {
-        body = params
-      } else if (typeof params === "object" && !ObjectUtil.isEmptyObject(params)) {
-        body = params
-      }
-      const reqUrl = `${apiUrl}${url}`
-      logger.info("siyuan forwardProxy url =>", reqUrl)
-      logger.info("siyuan forwardProxy fetchOptions =>", {
-        headers,
-        body,
-        method,
-        contentType,
-      })
-      const fetchResult = await kernelApi.forwardProxy(
-        reqUrl,
-        headers,
-        body,
-        method,
-        contentType,
-        undefined,
-        undefined,
-        30000
-      )
-      logger.debug("proxyFetch result =>", fetchResult)
-
-      if (!(fetchResult.status >= 200 && fetchResult.status < 300)) {
-        // 兼容 CSDN 错误提示
-        const bodyJson = JsonUtil.safeParse<any>(fetchResult?.body, {})
-        if (!StrUtil.isEmptyString(bodyJson?.msg)) {
-          throw new Error(bodyJson?.msg)
-        }
-        throw new Error(
-          StrUtil.decodeUnicodeToChinese(
-            StrUtil.isEmptyString(fetchResult?.body) ? `请求异常：${fetchResult.status}` : fetchResult?.body
-          )
-        )
-      }
-
-      if (contentType === "application/json") {
-        const resText = fetchResult?.body
-        const resJson = JsonUtil.safeParse<any>(resText, {} as any)
-        return resJson
-      } else if (contentType === "text/html") {
-        const resText = fetchResult?.body
-        return resText
-      } else if (contentType === "text/xml") {
-        const resText = fetchResult?.body
-        return resText
-      } else {
-        logger.info("SiYuan proxy directly response fetchResult for content type:", contentType)
-        return fetchResult
-      }
     }
   }
 
@@ -173,8 +120,10 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
     return resJson
   }
 
+  // ===================================================================================================================
+
   /**
-   * 向 Telegraph 发送表单数据
+   * 向 CORS 发送表单数据
    *
    * @param url 请求地址
    * @param headers 请求头，默认为{}
@@ -242,7 +191,84 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
     return resJson
   }
 
-  return { proxyFetch, proxyXmlrpc, corsFetch }
+  // ===================================================================================================================
+
+  /**
+   * 执行代理 siyuan-note fetch 请求
+   *
+   * @param url - 请求的 URL
+   * @param headers - 请求的头部信息
+   * @param params - 请求的参数
+   * @param method - 请求的 HTTP 方法
+   * @param contentType - 请求的内容类型
+   * @param forceProxy - 是否强制使用代理
+   *
+   * @returns 返回一个 Promise，解析为响应结果
+   */
+  const siyuanProxyFetch = async (
+    url: string,
+    headers: any[] = [],
+    params: any = {},
+    method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" = "GET",
+    contentType: string = "application/json",
+    forceProxy: boolean = false
+  ) => {
+    let body: any
+    if (typeof params === "string" && !StrUtil.isEmptyString(params)) {
+      body = params
+    } else if (typeof params === "object" && !ObjectUtil.isEmptyObject(params)) {
+      body = params
+    }
+    const reqUrl = `${apiUrl}${url}`
+    logger.info("siyuan forwardProxy url =>", reqUrl)
+    logger.info("siyuan forwardProxy fetchOptions =>", {
+      headers,
+      body,
+      method,
+      contentType,
+    })
+    const fetchResult = await kernelApi.forwardProxy(
+      reqUrl,
+      headers,
+      body,
+      method,
+      contentType,
+      undefined,
+      undefined,
+      30000
+    )
+    logger.debug("proxyFetch result =>", fetchResult)
+
+    if (!(fetchResult.status >= 200 && fetchResult.status < 300)) {
+      // 兼容 CSDN 错误提示
+      const bodyJson = JsonUtil.safeParse<any>(fetchResult?.body, {})
+      if (!StrUtil.isEmptyString(bodyJson?.msg)) {
+        throw new Error(bodyJson?.msg)
+      }
+      throw new Error(
+        StrUtil.decodeUnicodeToChinese(
+          StrUtil.isEmptyString(fetchResult?.body) ? `请求异常：${fetchResult.status}` : fetchResult?.body
+        )
+      )
+    }
+
+    if (contentType === "application/json") {
+      const resText = fetchResult?.body
+      const resJson = JsonUtil.safeParse<any>(resText, {} as any)
+      return resJson
+    } else if (contentType === "text/html") {
+      const resText = fetchResult?.body
+      return resText
+    } else if (contentType === "text/xml") {
+      const resText = fetchResult?.body
+      return resText
+    } else {
+      logger.info("SiYuan proxy directly response fetchResult for content type:", contentType)
+      return fetchResult
+    }
+  }
+
+  return { isUseSiyuanProxy, proxyFetch, proxyXmlrpc, corsFetch }
 }
 
 export { useProxy }

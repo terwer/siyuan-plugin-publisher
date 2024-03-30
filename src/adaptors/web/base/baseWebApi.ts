@@ -52,6 +52,7 @@ class BaseWebApi extends WebApi {
   protected logger: ILogger
   protected cfg: WebConfig
   protected readonly baseExtendApi: BaseExtendApi
+  private readonly isUseSiyuanProxy: boolean
   private readonly proxyFetch: any
   private readonly corsFetch: any
 
@@ -69,7 +70,8 @@ class BaseWebApi extends WebApi {
     this.logger = createAppLogger("base-web-api")
     this.baseExtendApi = new BaseExtendApi(this, cfg)
 
-    const { proxyFetch, corsFetch } = useProxy(cfg.middlewareUrl, cfg.corsAnywhereUrl)
+    const { isUseSiyuanProxy, proxyFetch, corsFetch } = useProxy(cfg.middlewareUrl, cfg.corsAnywhereUrl)
+    this.isUseSiyuanProxy = isUseSiyuanProxy
     this.proxyFetch = proxyFetch
     this.corsFetch = corsFetch
   }
@@ -178,7 +180,7 @@ class BaseWebApi extends WebApi {
 
     const isCorsProxyAvailable = !StrUtil.isEmptyString(this.cfg.corsAnywhereUrl)
     // 如果没有可用的 CORS 代理或者没有强制使用代理，使用默认的自动检测机制
-    if (!isCorsProxyAvailable || !forceProxy) {
+    if (this.isUseSiyuanProxy || !isCorsProxyAvailable) {
       this.logger.info("Using legency web fetch")
       return await this.proxyFetch(url, webHeaders, params, method, contentType, forceProxy)
     } else {
@@ -199,7 +201,7 @@ class BaseWebApi extends WebApi {
   public async webFormFetch(url: string, headers: any[], formData: FormData, forceProxy: boolean = false) {
     const isCorsProxyAvailable = !StrUtil.isEmptyString(this.cfg.corsAnywhereUrl)
     // 如果没有可用的 CORS 代理或者没有强制使用代理，使用默认的自动检测机制
-    if (!isCorsProxyAvailable || !forceProxy) {
+    if (this.isUseSiyuanProxy || !isCorsProxyAvailable) {
       this.logger.info("Using legency web formFetch")
       const { isInSiyuanOrSiyuanNewWin } = useSiyuanDevice()
       if (!isInSiyuanOrSiyuanNewWin()) {

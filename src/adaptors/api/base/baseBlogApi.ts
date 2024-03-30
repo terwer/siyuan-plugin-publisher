@@ -43,6 +43,7 @@ export class BaseBlogApi extends BlogApi {
   protected logger: ILogger
   protected cfg: BlogConfig
   protected readonly baseExtendApi: BaseExtendApi
+  private readonly isUseSiyuanProxy: boolean
   private readonly proxyFetch: any
   private readonly corsFetch: any
 
@@ -60,7 +61,8 @@ export class BaseBlogApi extends BlogApi {
     this.logger = createAppLogger("base-blog-api")
     this.baseExtendApi = new BaseExtendApi(this, cfg)
 
-    const { proxyFetch, corsFetch } = useProxy(cfg.middlewareUrl, cfg.corsAnywhereUrl)
+    const { isUseSiyuanProxy, proxyFetch, corsFetch } = useProxy(cfg.middlewareUrl, cfg.corsAnywhereUrl)
+    this.isUseSiyuanProxy = isUseSiyuanProxy
     this.proxyFetch = proxyFetch
     this.corsFetch = corsFetch
   }
@@ -110,7 +112,7 @@ export class BaseBlogApi extends BlogApi {
   ) {
     const isCorsProxyAvailable = !StrUtil.isEmptyString(this.cfg.corsAnywhereUrl)
     // 如果没有可用的 CORS 代理或者没有强制使用代理，使用默认的自动检测机制
-    if (!isCorsProxyAvailable || !forceProxy) {
+    if (this.isUseSiyuanProxy || !isCorsProxyAvailable) {
       this.logger.info("Using legency api fetch")
       //  const proxyFetch = async (
       //     url: string,
@@ -145,7 +147,7 @@ export class BaseBlogApi extends BlogApi {
   public async apiFormFetch(url: string, headers: any[], formData: FormData, forceProxy: boolean = false) {
     const isCorsProxyAvailable = !StrUtil.isEmptyString(this.cfg.corsAnywhereUrl)
     // 如果没有可用的 CORS 代理或者没有强制使用代理，使用默认的自动检测机制
-    if (!isCorsProxyAvailable || !forceProxy) {
+    if (this.isUseSiyuanProxy || !isCorsProxyAvailable) {
       this.logger.info("Using legency api formFetch")
       const { isInSiyuanOrSiyuanNewWin } = useSiyuanDevice()
       if (!isInSiyuanOrSiyuanNewWin()) {
