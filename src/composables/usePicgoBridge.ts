@@ -187,6 +187,7 @@ const usePicgoBridge = () => {
     handlePicgo,
     getImageItemsFromMd,
     getPicbedServiceType,
+    checkPicgoInstalled
   }
 }
 

@@ -674,6 +674,7 @@ export default {
   "publisher.picbed.service": "图床服务",
   "publisher.picbed.none": "不使用",
   "publisher.picbed.picgo": "PicGO 插件",
+  "publisher.picbed.picgo.not.install": "此功能需要「PicGO 图床」插件 1.9.0+ 支持，请先从集市安装",
   "publisher.picbed.bundled": "当前平台",
   "publisher.picbed.recom1": "强烈推荐",
   "publisher.picbed.recom2": "推荐",

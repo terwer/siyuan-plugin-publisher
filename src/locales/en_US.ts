@@ -691,6 +691,7 @@ export default {
   "publisher.picbed.service": "Image Hosting Service",
   "publisher.picbed.none": "Not in use",
   "publisher.picbed.picgo": "PicGO Plugin",
+  "publisher.picbed.picgo.not.install": "PicGO plugin not detected. You may proceed to the plugin store for installation before enabling it.",
   "publisher.picbed.bundled": "Current Platform",
   "publisher.picbed.recom1": "Strongly Recommended",
   "publisher.picbed.recom2": "Recommended",

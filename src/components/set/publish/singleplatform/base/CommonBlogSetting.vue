@@ -48,7 +48,7 @@ const appInstance = new PublisherAppInstance()
 // uses
 const { t } = useVueI18n()
 const { getSetting, updateSetting } = usePublishSettingStore()
-const { getPicbedServiceType } = usePicgoBridge()
+const { getPicbedServiceType, checkPicgoInstalled } = usePicgoBridge()
 
 const props = defineProps({
   apiType: {
@@ -280,6 +280,14 @@ const handleCateSearch = async () => {
   }
 }
 
+const handleSelectPicGoService = async () => {
+  const picgoInstalled = await checkPicgoInstalled()
+  if (!picgoInstalled) {
+    ElMessage.error(t("publisher.picbed.picgo.not.install"))
+    formData.cfg.picbedService = PicbedServiceTypeEnum.None
+  }
+}
+
 const initConf = async () => {
   formData.setting = await getSetting()
   const dynJsonCfg = JsonUtil.safeParse<DynamicJsonCfg>(formData.setting[DYNAMIC_CONFIG_KEY], {} as DynamicJsonCfg)
@@ -443,7 +451,12 @@ onMounted(async () => {
     <el-form-item :label="t('publisher.picbed.service')">
       <el-radio-group v-model="formData.cfg.picbedService" class="ml-4">
         <el-radio :value="PicbedServiceTypeEnum.None" size="large">{{ t("publisher.picbed.none") }}</el-radio>
-        <el-radio v-if="formData.cfg.picgoPicbedSupported" :value="PicbedServiceTypeEnum.PicGo" size="large">
+        <el-radio
+          v-if="formData.cfg.picgoPicbedSupported"
+          :value="PicbedServiceTypeEnum.PicGo"
+          size="large"
+          @click="handleSelectPicGoService"
+        >
           {{ t("publisher.picbed.picgo") }}
           <sup>{{ t("publisher.picbed.recom1") }}</sup>
         </el-radio>
