@@ -2,7 +2,7 @@
 
 # 发布工具
 
-![](./icon.png)
+<img alt="logo" width="160" height="160" src="./icon.png"/>
 
 将思源笔记的文章发布到语雀等平台，`开源`、`免费` 。
 

@@ -2,7 +2,7 @@
 
 # Publisher
 
-![](./icon.png)
+<img alt="logo" width="160" height="160" src="./icon.png"/>
 
 Publish articles from siyuan-note to platforms like Yuque etc. `Free` and `open source`.
 
