@@ -40,6 +40,7 @@ import { Utils } from "~/src/utils/utils.ts"
 import { ElMessage } from "element-plus"
 import { useProxy } from "~/src/composables/useProxy.ts"
 import { usePicgoBridge } from "~/src/composables/usePicgoBridge.ts"
+import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 
 const logger = createAppLogger("commonblog-setting")
 // appInstance
@@ -49,6 +50,7 @@ const appInstance = new PublisherAppInstance()
 const { t } = useVueI18n()
 const { getSetting, updateSetting } = usePublishSettingStore()
 const { getPicbedServiceType, checkPicgoInstalled } = usePicgoBridge()
+const { isInSiyuanOrSiyuanNewWin } = useSiyuanDevice()
 
 const props = defineProps({
   apiType: {
@@ -468,7 +470,7 @@ onMounted(async () => {
     </el-form-item>
     <!-- 跨域代理地址 -->
     <el-form-item
-      v-if="!formData.proxy.useSiyuanProxy && !formData.proxy.useCorsAnywhere"
+      v-if="!formData.proxy.useSiyuanProxy && !formData.proxy.useCorsAnywhere && !isInSiyuanOrSiyuanNewWin()"
       :label="t('setting.blog.middlewareUrl')"
     >
       <el-input v-model="formData.cfg.middlewareUrl" :placeholder="t('setting.blog.middlewareUrl.tip')" />
@@ -480,7 +482,10 @@ onMounted(async () => {
       ></el-alert>
     </el-form-item>
     <!-- 新 CORS 代理 -->
-    <el-form-item v-if="!formData.proxy.useSiyuanProxy" :label="t('setting.blog.middlewareUrl.new')">
+    <el-form-item
+      v-if="formData.cfg.forceProxy || (!formData.proxy.useSiyuanProxy && !isInSiyuanOrSiyuanNewWin())"
+      :label="t('setting.blog.middlewareUrl.new')"
+    >
       <el-input v-model="formData.cfg.corsAnywhereUrl" :placeholder="t('setting.blog.corsAnywhereUrl.tip')" />
       <el-alert
         :closable="false"
@@ -489,7 +494,7 @@ onMounted(async () => {
         type="warning"
       ></el-alert>
     </el-form-item>
-    <el-form-item v-if="!formData.proxy.useSiyuanProxy">
+    <el-form-item v-if="!formData.proxy.useSiyuanProxy && !isInSiyuanOrSiyuanNewWin()">
       <el-alert
         :closable="false"
         :title="t('setting.blog.middlewareUrl.my.warn.tip')"

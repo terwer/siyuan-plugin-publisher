@@ -87,8 +87,8 @@ dependencies:
     specifier: ^3.1.1
     version: 3.1.1
   zhi-blog-api:
-    specifier: ^1.59.0
-    version: 1.59.0(typescript@5.4.3)
+    specifier: ^1.61.0
+    version: 1.61.0(typescript@5.4.3)
   zhi-common:
     specifier: ^1.33.0
     version: 1.33.0(typescript@5.4.3)
@@ -111,8 +111,8 @@ dependencies:
     specifier: ^0.1.4
     version: 0.1.4
   zhi-siyuan-api:
-    specifier: ^2.20.3
-    version: 2.20.3(typescript@5.4.3)
+    specifier: ^2.20.5
+    version: 2.20.5(typescript@5.4.3)
   zhi-siyuan-picgo:
     specifier: 1.9.0
     version: 1.9.0(typescript@5.4.3)
@@ -8479,8 +8479,8 @@ packages:
     resolution: {integrity: sha512-9bnSc/HEW2uRy67wc+T8UwauLuPJVn28jb+GtJY16iiKWyvmYJRXVT4UamsAEGQfPohgr2q4Tq0sQbQlxTfi1g==}
     engines: {node: '>=12.20'}
 
-  /zhi-blog-api@1.59.0(typescript@5.4.3):
-    resolution: {integrity: sha512-uTxsn+YY49As4xuyoXsInXJf8BjdcZT/JDnJG4ujThK6+e7Tj+ZdJhfhDbpSytKytRSWwDTE11b1oU8bz/bqHw==}
+  /zhi-blog-api@1.61.0(typescript@5.4.3):
+    resolution: {integrity: sha512-ElyjFHPWl/ORE4dAOvFEAwI96m8s51NFT2+MhhocIHns6BhnANdoP4PSlhVZcdvR4rIIca9TM7/Oi1CRnkXKRw==}
     dependencies:
       zhi-common: 1.33.0(typescript@5.4.3)
       zhi-lib-base: 0.8.0
@@ -8548,10 +8548,10 @@ packages:
       - supports-color
     dev: false
 
-  /zhi-siyuan-api@2.20.3(typescript@5.4.3):
-    resolution: {integrity: sha512-jPfqYsJE4uc8ND43+CpvLgW2ZvGj6A7Eas+QUJorIcRyS2J4c3NlU6gQ2NHOIAmAvcPx8YU13hrLHovD/gwfMA==}
+  /zhi-siyuan-api@2.20.5(typescript@5.4.3):
+    resolution: {integrity: sha512-zOL0hAiU5jdUP+P5B1WX90QObVGcgOb09XWixnc6SpXw8Dt9glO6oy7PHNbKQafLA1ArDFsid1iaz6yTeoDbvA==}
     dependencies:
-      zhi-blog-api: 1.59.0(typescript@5.4.3)
+      zhi-blog-api: 1.61.0(typescript@5.4.3)
       zhi-common: 1.33.0(typescript@5.4.3)
       zhi-lib-base: 0.8.0
     transitivePeerDependencies:
@@ -8567,7 +8567,7 @@ packages:
       zhi-common: 1.33.0(typescript@5.4.3)
       zhi-device: 2.11.0
       zhi-lib-base: 0.8.0
-      zhi-siyuan-api: 2.20.3(typescript@5.4.3)
+      zhi-siyuan-api: 2.20.5(typescript@5.4.3)
     transitivePeerDependencies:
       - debug
       - proxy-agent

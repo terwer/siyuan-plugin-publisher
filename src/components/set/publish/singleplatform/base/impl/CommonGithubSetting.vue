@@ -28,6 +28,7 @@
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { reactive, toRaw } from "vue"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { PicbedServiceTypeEnum } from "zhi-blog-api"
 
 const logger = createAppLogger("common-blog-setting")
 
@@ -93,6 +94,16 @@ const syncDefaultPath = (cfg: any) => {
           v-model="(main.cfg as any).defaultPath"
           @input="syncDefaultPath(main.cfg)"
           :placeholder="t('setting.blog.type.github.default.path.tip')"
+        />
+      </el-form-item>
+      <!-- 图片存储路径 -->
+      <el-form-item
+        v-if="(main.cfg as any).picbedService === PicbedServiceTypeEnum.Bundled"
+        :label="t('setting.blog.type.github.images.path')"
+      >
+        <el-input
+          v-model="(main.cfg as any).imageStorePath"
+          :placeholder="t('setting.blog.type.github.images.path.tip')"
         />
       </el-form-item>
       <!-- 文件规则 -->

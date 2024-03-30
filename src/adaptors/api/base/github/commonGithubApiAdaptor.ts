@@ -25,7 +25,7 @@
 
 import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { CategoryInfo, Post, UserBlog, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
+import { Attachment, CategoryInfo, MediaObject, Post, UserBlog, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
 import { CommonGithubClient, GithubConfig } from "zhi-github-middleware"
 import { CommonGithubConfig } from "~/src/adaptors/api/base/github/commonGithubConfig.ts"
 import { StrUtil, YamlUtil } from "zhi-common"
@@ -215,6 +215,10 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
     // previewUrl = StrUtil.pathJoin(this.cfg.postHome, previewUrl)
 
     return previewUrl
+  }
+
+  public async newMediaObject(mediaObject: MediaObject): Promise<Attachment> {
+    throw new Error("Github newMediaObject not implemented")
   }
 
   // ================

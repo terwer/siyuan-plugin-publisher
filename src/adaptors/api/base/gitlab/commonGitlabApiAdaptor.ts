@@ -28,7 +28,7 @@ import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { CommonGitlabConfig } from "~/src/adaptors/api/base/gitlab/commonGitlabConfig.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { CommonGitlabClient } from "zhi-gitlab-middleware"
-import { CategoryInfo, Post, UserBlog, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
+import { Attachment, CategoryInfo, MediaObject, Post, UserBlog, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
 import { StrUtil, YamlUtil } from "zhi-common"
 import { toRaw } from "vue"
 import { Base64 } from "js-base64"
@@ -226,6 +226,10 @@ class CommonGitlabApiAdaptor extends BaseBlogApi {
     // previewUrl = StrUtil.pathJoin(this.cfg.postHome, previewUrl)
 
     return previewUrl
+  }
+
+  public async newMediaObject(mediaObject: MediaObject): Promise<Attachment> {
+    throw new Error("Gitlab newMediaObject not implemented")
   }
 
   // ================

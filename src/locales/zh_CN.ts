@@ -147,6 +147,8 @@ export default {
   "setting.blog.type.github.default.path": "存储目录",
   "setting.blog.type.github.default.path.tip":
     "存储目录例如：docs，部分平台可使用[auto]作为特殊占位符，代表自动映射层级目录，例如：docs/[auto]",
+  "setting.blog.type.github.images.path": "图片存储目录",
+  "setting.blog.type.github.images.path.tip": "图片存储目录，相对于仓库根目录，留空则使用相对于根目录的 images 目录",
   "setting.blog.type.github.msg": "提交信息",
   "setting.blog.type.github.msg.tip": "提交信息，例如：auto published by siyuan-publish-publisher",
   "setting.blog.type.github.author": "作者",
