@@ -46,13 +46,13 @@ import {
 import { createAppLogger, ILogger } from "~/src/utils/appLogger.ts"
 import { LuteUtil } from "~/src/utils/luteUtil.ts"
 import { usePicgoBridge } from "~/src/composables/usePicgoBridge.ts"
-import { base64ToBuffer, path, remoteImageToBase64Info, toBase64Info } from "~/src/utils/polyfillUtils.ts"
+import { base64ToBuffer, path, remoteImageToBase64Info } from "~/src/utils/polyfillUtils.ts"
 import { DateUtil, HtmlUtil, ObjectUtil, StrUtil, YamlUtil } from "zhi-common"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { SiyuanAttr, SiyuanKernelApi } from "zhi-siyuan-api"
 import { DynamicConfig, getDynPlatformKeyFromPostidKey } from "~/src/platforms/dynamicConfig.ts"
-import { CATE_AUTO_NAME, LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
+import { CATE_AUTO_NAME } from "~/src/utils/constants.ts"
 import { toRaw } from "vue"
 import _ from "lodash-es"
 import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
@@ -548,7 +548,6 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
   private async handlePictures(doc: Post, id: string, publishCfg?: any): Promise<Post> {
     const cfg: BlogConfig = publishCfg?.cfg
     const dynCfg: DynamicConfig = publishCfg?.dynCfg
-    const middlewareUrl = cfg?.middlewareUrl
 
     const post = _.cloneDeep(doc) as Post
     this.logger.debug("图片处理之前, post =>", { post: toRaw(post) })
@@ -584,7 +583,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
         try {
           for (const image of images) {
             const imageUrl = image.url
-            const base64Info = await this.readFileToBase64(imageUrl, middlewareUrl)
+            const base64Info = await this.readFileToBase64(imageUrl)
             const bits = base64ToBuffer(base64Info.imageBase64)
             const mediaObject = new MediaObject(image.name, base64Info.mimeType, bits)
             this.logger.debug("before upload, mediaObject =>", mediaObject)
@@ -644,10 +643,8 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
    * 读取文件并将其转换为 Base64 编码
    *
    * @param url - 要读取的文件的 URL
-   * @param middlewareUrl - 代理地址
-   * @returns 一个 Promise，解析为文件的 Base64 编码字符串
    */
-  private async readFileToBase64(url: string, middlewareUrl?: string): Promise<any> {
+  private async readFileToBase64(url: string): Promise<any> {
     let base64Info: any
     if (this.isSiyuanOrSiyuanNewWin) {
       this.logger.info("Inside Siyuan notes, use the built-in request to obtain base64")
@@ -657,17 +654,20 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
       let response: any
       if (this.api instanceof BaseBlogApi) {
         const blogApi = this.api as BaseBlogApi
-        response = await blogApi.apiProxyFetch(url, [], undefined, "GET")
+        response = await blogApi.apiProxyFetch(url, [], undefined, "GET", undefined, true, "base64", "base64")
       } else if (this.api instanceof BaseWebApi) {
         const webApi = this.api as BaseWebApi
-        response = await webApi.webProxyFetch(url, [], undefined, "GET")
+        response = await webApi.webProxyFetch(url, [], undefined, "GET", undefined, true, "base64", "base64")
       } else {
         throw new Error("proxyFetch is not valid")
       }
       this.logger.debug("readFileToBase64 proxyFetch response =>", response)
-      const resBody = response.body
-      const base64String = resBody.base64
-      base64Info = toBase64Info(url, base64String)
+      const base64String = response.body
+      base64Info = {
+        imageName: url.substring(url.lastIndexOf("/") + 1),
+        mimeType: response.contentType,
+        imageBase64: base64String,
+      }
     }
 
     this.logger.debug("readFileToBase64 proxyFetch base64Info =>", { base64Info })

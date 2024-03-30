@@ -57,7 +57,7 @@ export const useSiyuanApi = () => {
 
   const blogApi = new SiYuanApiAdaptor(siyuanConfig)
   const kernelApi = new SiyuanKernelApi(siyuanConfig)
-  const { isInChromeExtension } = useSiyuanDevice()
+  const { isInChromeExtension, isInSiyuanOrSiyuanNewWin } = useSiyuanDevice()
   const isStorageViaSiyuanApi = () => {
     // docker - 在 .env.docker 配置 VITE_DEFAULT_TYPE=siyuan
     // vercel - 在环境变量配置 VITE_DEFAULT_TYPE=siyuan
@@ -78,7 +78,7 @@ export const useSiyuanApi = () => {
       return false
     }
 
-    return isStorageViaSiyuanApi()
+    return isStorageViaSiyuanApi() && !isInSiyuanOrSiyuanNewWin()
   })()
 
   return {

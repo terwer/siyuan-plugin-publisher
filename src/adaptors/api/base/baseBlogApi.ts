@@ -30,6 +30,8 @@ import { useProxy } from "~/src/composables/useProxy.ts"
 import { BaseExtendApi } from "~/src/adaptors/base/baseExtendApi.ts"
 import { JsonUtil, StrUtil } from "zhi-common"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
+import { Base64 } from "js-base64"
+import FormDataUtils from "~/src/utils/FormDataUtils.ts"
 
 /**
  * API授权统一封装基类
@@ -163,57 +165,43 @@ export class BaseBlogApi extends BlogApi {
    * @param headers - 请求的头部信息，默认为空数组
    * @param formData - 表单数据
    * @param forceProxy - 是否强制使用代理，默认为 false
-   * @param payloadEncoding - 请求体的编码方式，默认为 text
-   * @param responseEncoding - 响应体的编码方式，默认为 text
    */
-  public async apiFormFetch(
-    url: string,
-    headers: any[],
-    formData: FormData,
-    forceProxy: boolean = false,
-    payloadEncoding:
-      | "text"
-      | "base64"
-      | "base64-std"
-      | "base64-url"
-      | "base32"
-      | "base32-std"
-      | "base32-hex"
-      | "hex" = "text",
-    responseEncoding:
-      | "text"
-      | "base64"
-      | "base64-std"
-      | "base64-url"
-      | "base32"
-      | "base32-std"
-      | "base32-hex"
-      | "hex" = "text"
-  ) {
+  public async apiProxyFormFetch(url: string, headers: any[], formData: FormData, forceProxy: boolean = false) {
     const isCorsProxyAvailable = !StrUtil.isEmptyString(this.cfg.corsAnywhereUrl)
     // 如果没有可用的 CORS 代理或者没有强制使用代理，使用默认的自动检测机制
     if (this.isUseSiyuanProxy || !isCorsProxyAvailable) {
       this.logger.info("Using legency api formFetch")
       const { isInSiyuanOrSiyuanNewWin } = useSiyuanDevice()
+
       if (!isInSiyuanOrSiyuanNewWin()) {
-        throw new Error(
-          "检测到当前为非 electron 环境并且未设置 cors 代理，此功能将不可用！请设置 cors 代理或者使用PC 客户端"
+        const fetchResult = await this.apiProxyFetch(
+          url,
+          headers,
+          formData,
+          "POST",
+          undefined,
+          forceProxy,
+          "base64",
+          "base64"
         )
+        const resText = Base64.fromBase64(fetchResult.body)
+        const resJson = JsonUtil.safeParse<any>(resText, {} as any)
+        this.logger.debug("apiForm doFetch success, resJson=>", resJson)
+        return resJson
+      } else {
+        // get formata fetch
+        const doFetch = FormDataUtils.getFormDataFetch(this.appInstance)
+
+        // headers
+        const header = headers.length > 0 ? headers[0] : {}
+        this.logger.debug("before zhi-formdata-fetch, headers =>", headers)
+        this.logger.debug("before zhi-formdata-fetch, url =>", url)
+
+        const resText = await doFetch(this.appInstance.moduleBase, url, header, formData)
+        this.logger.debug("apiForm doFetch success, resText =>", resText)
+        const resJson = JsonUtil.safeParse<any>(resText, {} as any)
+        return resJson
       }
-      const win = this.appInstance.win
-      const doFetch = win.require(`${this.appInstance.moduleBase}libs/zhi-formdata-fetch/index.cjs`)
-
-      // headers
-      const header = headers.length > 0 ? headers[0] : {}
-      this.logger.debug("before zhi-formdata-fetch, headers =>", headers)
-      this.logger.debug("before zhi-formdata-fetch, url =>", url)
-
-      const resText = await doFetch(this.appInstance.moduleBase, url, header, formData)
-      this.logger.debug("apiForm doFetch success, resText =>", resText)
-      const resJson = JsonUtil.safeParse<any>(resText, {} as any)
-      this.logger.debug("apiForm doFetch success, resJson=>", resJson)
-
-      return resJson
     } else {
       this.logger.info("Using cors-anywhere api formFetch")
       return this.corsFetch(url, headers, formData, "POST")

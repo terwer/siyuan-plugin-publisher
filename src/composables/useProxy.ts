@@ -30,6 +30,7 @@ import { CORS_PROXT_URL, isDev, LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/ut
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { Deserializer, Serializer, XmlrpcUtil } from "simple-xmlrpc"
+import { Base64 } from "js-base64"
 
 /**
  * 用于处理代理请求的自定义 hook
@@ -265,19 +266,54 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
       body = params
     }
     const reqUrl = `${apiUrl}${url}`
-    logger.info("siyuan forwardProxy url =>", reqUrl)
-    logger.info("siyuan forwardProxy fetchOptions =>", {
+    const header = headers.length > 0 ? headers[0] : {}
+
+    // contentType
+    let proxyContentType = contentType
+
+    // payload
+    let payload: any
+    let payloadBuf = new ArrayBuffer(0)
+    // GET or HEAD cannot have request body
+    if (method !== "GET") {
+      const myRequest = new Request("", { method: method, body: body })
+      console.log("generate temp myRequest =>", myRequest)
+      payloadBuf = await myRequest.arrayBuffer()
+
+      // contentType 需要自动设置
+      const myContentType = myRequest.headers.get("Content-Type") ?? contentType
+      if (myContentType.includes("multipart/form-data")) {
+        proxyContentType = myRequest.headers.get("Content-Type")
+      }
+    }
+    // encode
+    if (payloadEncoding === "text") {
+      const buffer = Buffer.from(payloadBuf)
+      payload = buffer.toString("utf8")
+    } else if (payloadEncoding === "base64") {
+      const buffer = Buffer.from(payloadBuf)
+      payload = buffer.toString("base64")
+    } else if (payloadEncoding === "hex") {
+      const buffer = Buffer.from(payloadBuf)
+      payload = buffer.toString("hex")
+    } else {
+      payload = payloadBuf
+    }
+
+    const proxyHeaders = [header]
+    logger.debug("siyuan forwardProxy url =>", reqUrl)
+    logger.debug("siyuan forwardProxy fetchOptions =>", {
       headers,
-      body,
+      payload,
       method,
       contentType,
     })
     const fetchResult = await kernelApi.forwardProxy(
       reqUrl,
-      headers,
-      body,
+      proxyHeaders,
+      payload,
       method,
-      contentType,
+      proxyContentType,
       payloadEncoding,
       responseEncoding,
       30000
@@ -297,18 +333,22 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
       )
     }
 
-    if (contentType === "application/json") {
-      const resText = fetchResult?.body
-      const resJson = JsonUtil.safeParse<any>(resText, {} as any)
-      return resJson
-    } else if (contentType === "text/html") {
-      const resText = fetchResult?.body
-      return resText
-    } else if (contentType === "text/xml") {
-      const resText = fetchResult?.body
-      return resText
+    if (responseEncoding === "text") {
+      if (contentType === "application/json") {
+        const resText = fetchResult?.body
+        const resJson = JsonUtil.safeParse<any>(resText, {} as any)
+        return resJson
+      } else if (contentType === "text/html") {
+        const resText = fetchResult?.body
+        return resText
+      } else if (contentType === "text/xml") {
+        const resText = fetchResult?.body
+        return resText
+      } else {
+        logger.info("SiYuan proxy directly response fetchResult for content type:", contentType)
+        return fetchResult
+      }
     } else {
-      logger.info("SiYuan proxy directly response fetchResult for content type:", contentType)
       return fetchResult
     }
   }
