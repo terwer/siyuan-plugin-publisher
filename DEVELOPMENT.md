@@ -49,6 +49,12 @@ serve -l 9000 -C
 ## Build
 
 ```bash
+pnpm build
+```
+
+## Package
+
+```bash
 pnpm package
 ```
 
