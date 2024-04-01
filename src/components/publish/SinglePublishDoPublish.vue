@@ -32,7 +32,7 @@ import { MethodEnum } from "~/src/models/methodEnum.ts"
 import { BlogConfig, PageEditMode, Post, PostStatusEnum } from "zhi-blog-api"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import { DynamicConfig, getDynYamlKey } from "~/src/platforms/dynamicConfig.ts"
+import { DynamicConfig, getDynYamlKey, PlatformType } from "~/src/platforms/dynamicConfig.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { ElMessage, ElMessageBox } from "element-plus"
 import { Delete } from "@element-plus/icons-vue"
@@ -590,11 +590,25 @@ onMounted(async () => {
                     @emitSyncCates="syncCates"
                   />
 
-                  <!-- 发布时间 -->
-                  <publish-time v-model="formData.mergedPost" @emitSyncPublishTime="syncPublishTime" />
-
                   <!-- 发布状态 -->
-                  <publish-status v-model="formData.mergedPost" @emitSyncPublishStatus="syncPublishStatus" />
+                  <publish-status
+                    v-if="
+                      formData.publishCfg.dynCfg.platformType === PlatformType.Metaweblog ||
+                      formData.publishCfg.dynCfg.platformType === PlatformType.Wordpress
+                    "
+                    v-model="formData.mergedPost"
+                    @emitSyncPublishStatus="syncPublishStatus"
+                  />
+
+                  <!-- 发布时间 -->
+                  <publish-time
+                    v-if="
+                      formData.publishCfg.dynCfg.platformType !== PlatformType.Metaweblog &&
+                      formData.publishCfg.dynCfg.platformType !== PlatformType.Wordpress
+                    "
+                    v-model="formData.mergedPost"
+                    @emitSyncPublishTime="syncPublishTime"
+                  />
 
                   <el-divider border-style="dashed" />
                 </div>
