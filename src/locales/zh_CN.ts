@@ -680,4 +680,12 @@ export default {
   "publisher.picbed.bundled": "当前平台",
   "publisher.picbed.recom1": "强烈推荐",
   "publisher.picbed.recom2": "推荐",
+  "publisher.post.status": "文章状态",
+  "publisher.post.status.pubish": "发布",
+  "publisher.post.status.draft": "草稿",
+  "publisher.post.status.private": "私密",
+  "publisher.post.status.future": "定时",
+  "publisher.post.password": "密码保护",
+  "publisher.post.password.tip": "请输入文章密码，留空则不设置",
+  "publisher.post.future": "定时发布",
 }

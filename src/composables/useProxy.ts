@@ -106,13 +106,13 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
         responseEncoding
       )
     } else {
-      logger.info("Using middleware proxy")
+      logger.info("Using middleware proxy fetch")
       const header = headers.length > 0 ? headers[0] : {}
       const fetchOptions = {
         method: method,
         headers: {
-          "Content-Type": contentType,
           ...header,
+          "Content-Type": contentType,
         },
         body: params,
       }

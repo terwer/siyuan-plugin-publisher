@@ -697,4 +697,12 @@ export default {
   "publisher.picbed.bundled": "Current Platform",
   "publisher.picbed.recom1": "Strongly Recommended",
   "publisher.picbed.recom2": "Recommended",
+  "publisher.post.status": "Article Status",
+  "publisher.post.status.publish": "Published",
+  "publisher.post.status.draft": "Draft",
+  "publisher.post.status.private": "Private",
+  "publisher.post.status.future": "Scheduled",
+  "publisher.post.password": "Password Protection",
+  "publisher.post.password.tip": "Please enter the password for the article; leave blank if not setting one",
+  "publisher.post.future": "Scheduled Publishing",
 }

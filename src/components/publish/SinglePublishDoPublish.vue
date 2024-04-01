@@ -29,7 +29,7 @@ import { useRoute, useRouter } from "vue-router"
 import BackPage from "~/src/components/common/BackPage.vue"
 import { usePublish } from "~/src/composables/usePublish.ts"
 import { MethodEnum } from "~/src/models/methodEnum.ts"
-import { BlogConfig, PageEditMode, Post } from "zhi-blog-api"
+import { BlogConfig, PageEditMode, Post, PostStatusEnum } from "zhi-blog-api"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { DynamicConfig, getDynYamlKey } from "~/src/platforms/dynamicConfig.ts"
@@ -341,6 +341,12 @@ const syncPublishTime = (val1: Date, val2: Date) => {
   logger.debug("syncPublishTime in single publish")
 }
 
+const syncPublishStatus = (val1: PostStatusEnum, val2: string) => {
+  formData.mergedPost.post_status = val1
+  formData.mergedPost.wp_password = val2
+  logger.debug("syncPublishStatus in single publish")
+}
+
 const syncPost = (post: Post) => {
   formData.mergedPost = post
   logger.debug("syncPost in single publish")
@@ -586,6 +592,9 @@ onMounted(async () => {
 
                   <!-- 发布时间 -->
                   <publish-time v-model="formData.mergedPost" @emitSyncPublishTime="syncPublishTime" />
+
+                  <!-- 发布状态 -->
+                  <publish-status v-model="formData.mergedPost" @emitSyncPublishStatus="syncPublishStatus" />
 
                   <el-divider border-style="dashed" />
                 </div>
