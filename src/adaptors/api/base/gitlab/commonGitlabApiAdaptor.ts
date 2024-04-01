@@ -45,10 +45,13 @@ import { GitlabFetchClientProxyAdaptor } from "~/src/adaptors/api/base/gitlab/gi
  */
 class CommonGitlabApiAdaptor extends BaseBlogApi {
   private gitlabClient: CommonGitlabClient
+  private readonly gitlabCfg: CommonGitlabConfig
 
   constructor(appInstance: PublisherAppInstance, cfg: CommonGitlabConfig) {
     super(appInstance, cfg)
     this.logger = createAppLogger("common-gitlab-api-adaptor")
+
+    this.gitlabCfg = cfg
     const commonFetchClient = new GitlabFetchClientProxyAdaptor(appInstance, cfg)
 
     this.gitlabClient = new CommonGitlabClient(
@@ -229,7 +232,50 @@ class CommonGitlabApiAdaptor extends BaseBlogApi {
   }
 
   public async newMediaObject(mediaObject: MediaObject): Promise<Attachment> {
-    throw new Error("Gitlab newMediaObject not implemented")
+    try {
+      const bits = mediaObject.bits
+      const base64 = Base64.fromUint8Array(bits)
+      const imageFullPath = StrUtil.pathJoin(this.cfg.imageStorePath ?? "images", mediaObject.name)
+      const res = await this.gitlabClient.createRepositoryFile(imageFullPath, base64, "base64")
+      this.logger.debug("gitlab createRepositoryFile res =>", res)
+      if (StrUtil.isEmptyString(res.file_path)) {
+        throw new Error("Gitlab 调用API异常")
+      }
+
+      const siteImgId = mediaObject.name
+      const siteArticleId = mediaObject.name
+      // http://localhost:8002/terwer/terwer-github-io/-/raw/test/images/image-20240331110420-v181nvl.png
+      let part = StrUtil.pathJoin(this.cfg.home, this.cfg.username)
+      part = StrUtil.pathJoin(part, this.gitlabCfg.githubRepo)
+      part = StrUtil.pathJoin(part, "-/raw")
+      part = StrUtil.pathJoin(part, res.branch)
+      part = StrUtil.pathJoin(part, res.file_path)
+      const siteImgUrl = part
+      return {
+        attachment_id: siteImgId,
+        date_created_gmt: new Date(),
+        parent: 0,
+        link: siteImgUrl,
+        title: mediaObject.name,
+        caption: "",
+        description: "",
+        metadata: {
+          width: 0,
+          height: 0,
+          file: "",
+          filesize: 0,
+          sizes: [],
+        },
+        type: mediaObject.type,
+        thumbnail: "",
+        id: siteArticleId,
+        file: mediaObject.name,
+        url: siteImgUrl,
+      }
+    } catch (e) {
+      this.logger.error("Error uploading image to gitlab:", e)
+      throw e
+    }
   }
 
   // ================

@@ -301,6 +301,7 @@ class HaloApiAdaptor extends BaseBlogApi {
       }
     } catch (e) {
       this.logger.error("Error uploading image to halo:", e)
+      throw new Error("Error uploading image to halo:" + e.toString())
     }
 
     const siteImgId = res?.spec?.displayName
