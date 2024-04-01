@@ -256,8 +256,8 @@ https://afdian.net/a/terwer
   Names not listed in order
 
   |    Name     | version |vendor|
-            |:-----------:|:-------:| :---------: |
-  |    turbo    |  1.9+   |Vercel| 
+  |:-----------:|:-------:| :---------: |
+  |    turbo    |  1.9+   |Vercel|
   |     Vue     | 3.3.4+  |Evan You|
   |    Vite     |  4.2+   |Evan You|
   | TypeScript  |  5.0+   |Microsoft|

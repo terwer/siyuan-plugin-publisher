@@ -232,7 +232,7 @@ https://afdian.net/a/terwer
 排名不分先后
 
 |    Name     | version |  vendor   |
-|:-----------:|:-------:|:---------:|
+| :---------: | :-----: | :-------: |
 |    turbo    |  1.9+   |  Vercel   |
 |     Vue     | 3.3.4+  | Evan You  |
 |    Vite     |  4.2+   | Evan You  |
