@@ -134,13 +134,7 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
    */
   const proxyXmlrpc = async (url: string, reqMethod: string, reqParams: any[], forceProxy: boolean = false) => {
     const body = serializer.serializeMethodCall(reqMethod, reqParams)
-    let resText: string
-    if (forceProxy) {
-      const res = await proxyFetch(url, [], body, "POST", "text/xml", forceProxy, "base64")
-      resText = await res?.body["xml-body"]
-    } else {
-      resText = await proxyFetch(url, [], body, "POST", "text/xml", forceProxy, "base64")
-    }
+    let resText: string = await proxyFetch(url, [], body, "POST", "text/xml", forceProxy, "base64")
     resText = XmlrpcUtil.removeXmlHeader(resText)
     const deserializer = new Deserializer()
     const resJson = await deserializer.deserializeMethodResponse(resText)
