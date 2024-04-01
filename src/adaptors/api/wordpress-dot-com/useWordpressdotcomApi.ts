@@ -92,6 +92,9 @@ export const useWordpressdotcomApi = async (key?: string, newCfg?: Wordpressdotc
   cfg.categoryType = CategoryTypeEnum.CategoryType_Multi
   cfg.allowCateChange = true
   cfg.knowledgeSpaceEnabled = false
+  // picbed service
+  cfg.picgoPicbedSupported = true
+  cfg.bundledPicbedSupported = true
 
   // 创建 Wordpress.com API 适配器
   const blogApi = new WordpressdotcomApiAdaptor(appInstance, cfg)

@@ -325,7 +325,7 @@ export default {
   "anki.siyuan.tag": "标签",
   "anki.siyuan.tag.new": "新标签",
   "picgo.chrome.tip":
-    "您当前使用的是浏览器插件，需要从这里下载配置 PicGO 客户端：https://github.com/Molunerfinn/PicGo/releases",
+    "您当前使用的是浏览器插件，需要从这里下载配置 PicGo 客户端：https://github.com/Molunerfinn/PicGo/releases",
   "picgo.siyuan.tip": "您当前使用的是思源笔记挂件，PicGO已内置，只需配置即可",
   "post.detail.button.copy.id": "复制本文ID",
   "post.detail.button.share.link": "复制分享链接",
@@ -344,7 +344,7 @@ export default {
   "picgo.pic.preview": "图片预览",
   "picgo.pic.setting": "图床设置",
   "picgo.pic.setting.no.tip":
-    "由于您当前使用的是浏览器插件，无法直接集成 PicGO ，只能通过 HTTP 请求间接调用本地 PicGO 客户端上图片，请直接在本地 PicGO 客户端进行设置。如需体验更加完整的功能，请通过思源笔记挂件版挂载菜单打开新窗口的方式使用。详情请参考：https://docs.publish.terwer.space/post/the-pendant-mode-is-used-in-the-method-of-mounting-menu-169wrw.html",
+    "由于您当前使用的是浏览器插件，无法直接集成 PicGo ，只能通过 HTTP 请求间接调用本地 PicGo 客户端上图片，请直接在本地 PicGo 客户端进行设置。如需体验更加完整的功能，请通过思源笔记挂件版挂载菜单打开新窗口的方式使用。详情请参考：https://docs.publish.terwer.space/post/the-pendant-mode-is-used-in-the-method-of-mounting-menu-169wrw.html",
   "github.use.permalink": "永久链接",
   "github.use.permalink.no.warn":
     "您已关闭永久链接，formatter将不会生成标记，这在某些特殊场景下可能有用，大部分情况下需要开启此选项，注意：目前仅仅在HUGO平台生效，主要是适配Docsy",
@@ -675,8 +675,8 @@ export default {
 
   "publisher.picbed.service": "图床服务",
   "publisher.picbed.none": "不使用",
-  "publisher.picbed.picgo": "PicGO 插件",
-  "publisher.picbed.picgo.not.install": "此功能需要「PicGO 图床」插件 1.9.0+ 支持，请先从集市安装",
+  "publisher.picbed.picgo": "PicGo 插件",
+  "publisher.picbed.picgo.not.install": "此功能需要「PicGo 图床」插件 1.9.0+ 支持，请先从集市安装",
   "publisher.picbed.bundled": "当前平台",
   "publisher.picbed.recom1": "强烈推荐",
   "publisher.picbed.recom2": "推荐",

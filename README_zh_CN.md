@@ -51,11 +51,12 @@
 |    Git 托管    | Gitlabvitepress |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        | 支持         | 不需要      | 不需要    | [官网](https://gitlab.com/)                    |
 |    Git 托管    |  Gitlabantora   | TODO |   TODO    |    TODO     |   TODO   |      TODO       | TODO         | TODO        | TODO      | [官网](https://gitlab.com/)                    |
 |    Git 托管    |  Gitlabdocsify  | TODO |   TODO    |    TODO     |   TODO   |      TODO       | TODO         | TODO        | TODO      | [官网](https://gitlab.com/)                    |
-|      博客      |   Metaweblog    |  ✔   | 完全兼容  |      ✔      | 部分兼容 |        ✔        |              |             |           | [官网](http://xmlrpc.scripting.com/metaWeblog) |
-|      博客      |     CnBlogs     |  ✔   | 完全兼容  |      ✔      | 部分兼容 |        ✔        |              |             |           | [官网](https://cnblogs.com)                    |
-|      博客      |     Typecho     |  ✔   | 完全兼容  |      ✔      | 部分兼容 |        ✔        |              |             |           | [官网](https://typecho.org/)                   |
-|      博客      |      Jvue       |  ✔   | 完全兼容  |      ✔      | 部分兼容 |        ✔        |              |             |           | [官网](https://github.com/terwer/jvue)         |
-|      博客      |    WordPress    |  ✔   | 完全兼容  |      ✔      | 部分兼容 |        ✔        |              |             |           | [官网](https://wordpress.org/)                 |
+|      博客      |   Metaweblog    |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        | 支持         | 内置代理    | 不需要    | [官网](http://xmlrpc.scripting.com/metaWeblog) |
+|      博客      |     CnBlogs     |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        | 支持         | 内置代理    | 不需要    | [官网](https://cnblogs.com)                    |
+|      博客      |     Typecho     |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        | 支持         | 内置代理    | 不需要    | [官网](https://typecho.org/)                   |
+|      博客      |      Jvue       |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        | 支持         | 内置代理    | 不需要    | [官网](https://github.com/terwer/jvue)         |
+|      博客      |    WordPress    |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        | 支持         | 内置代理    | 不需要    | [官网](https://wordpress.org/)                 |
+|      博客      |  WordPress.com  |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        | 支持         | 内置代理    | 不需要    | [官网](https://wordpress.com)                  |
 |    社交媒体    |      知乎       |  ✔   | 完全兼容  |      ✔      | PC 验证  |        ✖        |              |             |           | [官网](https://www.zhihu.com/)                 |
 |    社交媒体    |      CSDN       |  ✔   | 完全兼容  |      ✔      | PC 验证  |        ✖        |              |             |           | [官网](https://www.csdn.net/)                  |
 |    社交媒体    |   微信公众号    |  ✔   | 完全兼容  |      ✔      | PC 验证  |        ✖        |              |             |           | [官网](https://mp.weixin.qq.com/)              |

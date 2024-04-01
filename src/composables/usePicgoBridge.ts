@@ -47,10 +47,10 @@ const checkConfig = async (siyuanApi: SiyuanKernelApi, picgo: SiyuanPicgoPostApi
     } else {
       if (needUpdate) {
         siyuanApi.pushMsg({
-          msg: "PicGO 图床历史配置迁移完成",
+          msg: "PicGo 图床历史配置迁移完成",
           timeout: 7000,
         })
-        console.log("PicGO 图床历史配置迁移完成")
+        console.log("PicGo 图床历史配置迁移完成")
         needUpdate = false
       }
       console.log("picgo instance is ready")
@@ -99,7 +99,7 @@ const usePicgoBridge = () => {
       const picgoPostResult = await picgoPostApi.uploadPostImagesToBed(siyuanData.pageId, siyuanData.meta, md)
       // 有图片才上传
       if (picgoPostResult.hasImages) {
-        // const picgoImageTip = `检测到图片，将使用 PicGO 自动上传图片，若图片较多可能会较慢请耐心等待`
+        // const picgoImageTip = `检测到图片，将使用 PicGo 自动上传图片，若图片较多可能会较慢请耐心等待`
         // await kernelApi.pushMsg({
         //   msg: picgoImageTip,
         //   timeout: 3000,

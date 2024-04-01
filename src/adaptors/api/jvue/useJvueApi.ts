@@ -89,6 +89,9 @@ export const useJvueApi = async (key?: string, newCfg?: JvueConfig) => {
   cfg.categoryType = CategoryTypeEnum.CategoryType_Multi
   cfg.allowCateChange = true
   cfg.knowledgeSpaceEnabled = false
+  // picbed service
+  cfg.picgoPicbedSupported = true
+  cfg.bundledPicbedSupported = true
 
   // 创建Jvue API适配器
   const blogApi = new JvueApiAdaptor(appInstance, cfg)
