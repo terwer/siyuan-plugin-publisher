@@ -26,11 +26,10 @@
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { CommonFetchClient } from "zhi-fetch-middleware"
-import { CORS_PROXT_URL, isDev, LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
+import { isDev, LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { Deserializer, Serializer, XmlrpcUtil } from "simple-xmlrpc"
-import { Base64 } from "js-base64"
 
 /**
  * 用于处理代理请求的自定义 hook
@@ -51,7 +50,7 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
   const appInstance = new PublisherAppInstance()
   const apiUrl = ""
   middlewareUrl = middlewareUrl ?? LEGENCY_SHARED_PROXT_MIDDLEWARE
-  corsProxyUrl = corsProxyUrl ?? CORS_PROXT_URL
+  corsProxyUrl = corsProxyUrl ?? ""
   const commonFetchClient = new CommonFetchClient(appInstance, apiUrl, middlewareUrl, isDev)
   const serializer = new Serializer(appInstance)
 
@@ -93,18 +92,9 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
       | "base32-hex"
       | "hex" = "text"
   ) => {
-    if (isUseSiyuanProxy) {
+    if (isUseSiyuanProxy || (!isUseSiyuanProxy && forceProxy)) {
       logger.info("Using Siyuan forwardProxy")
-      return await siyuanProxyFetch(
-        url,
-        headers,
-        params,
-        method,
-        contentType,
-        forceProxy,
-        payloadEncoding,
-        responseEncoding
-      )
+      return await siyuanProxyFetch(url, headers, params, method, contentType, payloadEncoding, responseEncoding)
     } else {
       logger.info("Using middleware proxy fetch")
       const header = headers.length > 0 ? headers[0] : {}
@@ -223,7 +213,6 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
    * @param params - 请求的参数
    * @param method - 请求的 HTTP 方法
    * @param contentType - 请求的内容类型
-   * @param forceProxy - 是否强制使用代理
    * @param payloadEncoding - 请求体的编码方式，默认为 text
    * @param responseEncoding - 响应体的编码方式，默认为 text
    */
@@ -233,7 +222,6 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
     params: any = {},
     method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" = "GET",
     contentType: string = "application/json",
-    forceProxy: boolean = false,
     payloadEncoding:
       | "text"
       | "base64"

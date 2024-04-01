@@ -1,6 +1,7 @@
 # telegra.ph
 
 ### getCfg
+# @no-cookie-jar
 POST https://edit.telegra.ph/check
 origin: https://telegra.ph
 referer: https://telegra.ph/
@@ -9,9 +10,12 @@ Content-Type: text/plain
 page_id=0
 
 ### newArticle
+# @no-cookie-jar
 POST https://edit.telegra.ph/save
 origin: https://telegra.ph
 referer: https://telegra.ph/
+Cookie: tph_uuid=E8eRGiWLjdx4Qbs0csRuQz2tBniMZQ1DYguCwroNET
+#Cookie: tph_uuid=OA4kiCWNRETS7Laf9JLG5m5yDG7IQh2CP4W8GQTvvM
 Content-Type: multipart/form-data; boundary=TelegraPhBoundary21
 
 --TelegraPhBoundary21

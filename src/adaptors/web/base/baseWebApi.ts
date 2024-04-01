@@ -192,17 +192,17 @@ class BaseWebApi extends WebApi {
       | "hex" = "text"
   ) {
     const header = headers.length > 0 ? headers[0] : {}
-    const webHeaders = [
-      {
-        ...header,
-        Cookie: this.cfg.password,
-      },
-    ]
-
-    const isCorsProxyAvailable = !StrUtil.isEmptyString(this.cfg.corsAnywhereUrl)
     // 如果没有可用的 CORS 代理或者没有强制使用代理，使用默认的自动检测机制
-    if (this.isUseSiyuanProxy || !isCorsProxyAvailable) {
+    if (this.isUseSiyuanProxy || (!this.isUseSiyuanProxy && forceProxy)) {
       this.logger.info("Using legency web fetch")
+      // remove cors fetch header
+      delete header["x-cors-headers"]
+      const webHeaders = [
+        {
+          ...header,
+          Cookie: this.cfg.password,
+        },
+      ]
       return await this.proxyFetch(
         url,
         webHeaders,
@@ -215,7 +215,13 @@ class BaseWebApi extends WebApi {
       )
     } else {
       this.logger.info("Using cors web fetch")
-      return this.corsFetch(url, headers, params, method)
+      const webHeaders = [
+        {
+          ...header,
+          Cookie: this.cfg.password,
+        },
+      ]
+      return this.corsFetch(url, webHeaders, params, method)
     }
   }
 
@@ -253,13 +259,12 @@ class BaseWebApi extends WebApi {
       | "base32-hex"
       | "hex" = "text"
   ) {
-    const isCorsProxyAvailable = !StrUtil.isEmptyString(this.cfg.corsAnywhereUrl)
     // 如果没有可用的 CORS 代理或者没有强制使用代理，使用默认的自动检测机制
-    if (this.isUseSiyuanProxy || !isCorsProxyAvailable) {
+    if (this.isUseSiyuanProxy || (!this.isUseSiyuanProxy && forceProxy)) {
       this.logger.info("Using legency web formFetch")
 
       const { isInSiyuanOrSiyuanNewWin } = useSiyuanDevice()
-      if (!isInSiyuanOrSiyuanNewWin()) {
+      if (!isInSiyuanOrSiyuanNewWin() || forceProxy) {
         const fetchResult = await this.webProxyFetch(
           url,
           headers,

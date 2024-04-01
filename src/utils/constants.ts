@@ -34,7 +34,6 @@ export const aboutUrl = "https://terwer.space/about"
  */
 export const DYNAMIC_CONFIG_KEY = "dynamic-config"
 
-
 /**
  * 自动映射分类占位符
  */
@@ -54,9 +53,9 @@ export const MAX_TITLE_LENGTH = 10
 export const LEGENCY_SHARED_PROXT_MIDDLEWARE = "https://api.terwer.space/api/middleware"
 
 /**
- * 新版通用 HTTP 代理
+ * 新版通用 HTTP 代理，不再免费提供
  *
- * @since 1.20.0
- * @version 1.20.0
+ * @since 1.20.2
+ * @version 1.20.2
  */
-export const CORS_PROXT_URL = "https://cors.terwer.space"
+// export const CORS_PROXT_URL = ""

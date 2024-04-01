@@ -470,7 +470,7 @@ onMounted(async () => {
     </el-form-item>
     <!-- 跨域代理地址 -->
     <el-form-item
-      v-if="!formData.proxy.useSiyuanProxy && !formData.proxy.useCorsAnywhere && !isInSiyuanOrSiyuanNewWin()"
+      v-if="!formData.proxy.useSiyuanProxy && !isInSiyuanOrSiyuanNewWin() && !formData.proxy.useCorsAnywhere"
       :label="t('setting.blog.middlewareUrl')"
     >
       <el-input v-model="formData.cfg.middlewareUrl" :placeholder="t('setting.blog.middlewareUrl.tip')" />
@@ -483,7 +483,7 @@ onMounted(async () => {
     </el-form-item>
     <!-- 新 CORS 代理 -->
     <el-form-item
-      v-if="formData.cfg.forceProxy || (!formData.proxy.useSiyuanProxy && !isInSiyuanOrSiyuanNewWin())"
+      v-if="!formData.proxy.useSiyuanProxy && !isInSiyuanOrSiyuanNewWin()"
       :label="t('setting.blog.middlewareUrl.new')"
     >
       <el-input v-model="formData.cfg.corsAnywhereUrl" :placeholder="t('setting.blog.corsAnywhereUrl.tip')" />

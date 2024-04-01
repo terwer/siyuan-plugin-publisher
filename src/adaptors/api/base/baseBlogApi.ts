@@ -28,7 +28,7 @@ import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { createAppLogger, ILogger } from "~/src/utils/appLogger.ts"
 import { useProxy } from "~/src/composables/useProxy.ts"
 import { BaseExtendApi } from "~/src/adaptors/base/baseExtendApi.ts"
-import { JsonUtil, StrUtil } from "zhi-common"
+import { JsonUtil } from "zhi-common"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import { Base64 } from "js-base64"
 import FormDataUtils from "~/src/utils/FormDataUtils.ts"
@@ -132,29 +132,36 @@ export class BaseBlogApi extends BlogApi {
       | "base32-hex"
       | "hex" = "text"
   ) {
-    const isCorsProxyAvailable = !StrUtil.isEmptyString(this.cfg.corsAnywhereUrl)
+    const header = headers.length > 0 ? headers[0] : {}
+
     // 如果没有可用的 CORS 代理或者没有强制使用代理，使用默认的自动检测机制
-    if (this.isUseSiyuanProxy || !isCorsProxyAvailable) {
+    if (this.isUseSiyuanProxy || (!this.isUseSiyuanProxy && forceProxy)) {
       this.logger.info("Using legency api fetch")
-      //  const proxyFetch = async (
-      //     url: string,
-      //     headers: any[] = [],
-      //     params: any = {},
-      //     method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" = "GET",
-      //     contentType: string = "application/json",
-      //     forceProxy: boolean = false
-      //   ) => {
-      this.logger.info("Using legency api fetch")
-      return this.proxyFetch(url, headers, params, method, contentType, forceProxy, payloadEncoding, responseEncoding)
+      // remove cors fetch header
+      delete header["x-cors-headers"]
+      const blogHeaders = [
+        {
+          ...header,
+        },
+      ]
+      return this.proxyFetch(
+        url,
+        blogHeaders,
+        params,
+        method,
+        contentType,
+        forceProxy,
+        payloadEncoding,
+        responseEncoding
+      )
     } else {
-      //   const corsFetch = async (
-      //     url: string,
-      //     headers: any[] = [],
-      //     params: BodyInit = undefined,
-      //     method: "GET" | "POST" | "PUT" | "DELETE" = "GET"
-      //   )
       this.logger.info("Using cors api fetch")
-      return this.corsFetch(url, headers, params, method)
+      const blogHeaders = [
+        {
+          ...header,
+        },
+      ]
+      return this.corsFetch(url, blogHeaders, params, method)
     }
   }
 
@@ -167,13 +174,12 @@ export class BaseBlogApi extends BlogApi {
    * @param forceProxy - 是否强制使用代理，默认为 false
    */
   public async apiProxyFormFetch(url: string, headers: any[], formData: FormData, forceProxy: boolean = false) {
-    const isCorsProxyAvailable = !StrUtil.isEmptyString(this.cfg.corsAnywhereUrl)
     // 如果没有可用的 CORS 代理或者没有强制使用代理，使用默认的自动检测机制
-    if (this.isUseSiyuanProxy || !isCorsProxyAvailable) {
+    if (this.isUseSiyuanProxy || (!this.isUseSiyuanProxy && forceProxy)) {
       this.logger.info("Using legency api formFetch")
       const { isInSiyuanOrSiyuanNewWin } = useSiyuanDevice()
 
-      if (!isInSiyuanOrSiyuanNewWin()) {
+      if (!isInSiyuanOrSiyuanNewWin() || forceProxy) {
         const fetchResult = await this.apiProxyFetch(
           url,
           headers,

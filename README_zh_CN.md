@@ -57,11 +57,11 @@
 |      博客      |      Jvue       |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        | 支持         | 内置代理    | 不需要    | [官网](https://github.com/terwer/jvue)         |
 |      博客      |    WordPress    |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        | 支持         | 内置代理    | 不需要    | [官网](https://wordpress.org/)                 |
 |      博客      |  WordPress.com  |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        | 支持         | 内置代理    | 不需要    | [官网](https://wordpress.com)                  |
-|    社交媒体    |      知乎       |  ✔   | 完全兼容  |      ✔      | PC 验证  |        ✖        |              |             |           | [官网](https://www.zhihu.com/)                 |
-|    社交媒体    |      CSDN       |  ✔   | 完全兼容  |      ✔      | PC 验证  |        ✖        |              |             |           | [官网](https://www.csdn.net/)                  |
-|    社交媒体    |   微信公众号    |  ✔   | 完全兼容  |      ✔      | PC 验证  |        ✖        |              |             |           | [官网](https://mp.weixin.qq.com/)              |
-|    社交媒体    |      简书       |  ✔   | 完全兼容  |      ✔      | PC 验证  |        ✖        |              |             |           | [官网](https://www.jianshu.com/)               |
-|    社交媒体    |      掘金       |  ✔   | 完全兼容  |      ✔      | PC 验证  |        ✔        |              |             |           | [官网](https://juejin.cn/)                     |
+|    社交媒体    |      知乎       |  ✔   | 完全兼容  |      ✔      | PC 验证  |        ✖        | 支持         | 内置代理    | 不需要    | [官网](https://www.zhihu.com/)                 |
+|    社交媒体    |      CSDN       |  ✔   | 完全兼容  |      ✔      | PC 验证  |        ✖        | 支持         | 内置代理    | 不需要    | [官网](https://www.csdn.net/)                  |
+|    社交媒体    |   微信公众号    |  ✔   | 完全兼容  |      ✔      | PC 验证  |        ✖        | 支持         | 内置代理    | 不需要    | [官网](https://mp.weixin.qq.com/)              |
+|    社交媒体    |      简书       |  ✔   | 完全兼容  |      ✔      | PC 验证  |        ✖        | 支持         | 内置代理    | 不需要    | [官网](https://www.jianshu.com/)               |
+|    社交媒体    |      掘金       |  ✔   | 完全兼容  |      ✔      | PC 验证  |        ✔        | 不支持       | 内置代理    | 不需要    | [官网](https://juejin.cn/)                     |
 |      社区      |     52破解      | TODO |   TODO    |    TODO     |   TODO   |      TODO       | TODO         | TODO        | TODO      | [官网](https://www.52pojie.cn/)                |
 |      社区      |    Bilibili     | TODO |   TODO    |    TODO     |   TODO   |      TODO       | TODO         | TODO        | TODO      | [官网](https://www.bilibili.com/)              |
 |      社区      |     小红书      | TODO |   TODO    |    TODO     |   TODO   |      TODO       | TODO         | TODO        | TODO      | [官网](https://www.xiaohongshu.com/)           |
@@ -69,7 +69,7 @@
 |      其他      |      Xlog       | TODO |   TODO    |    TODO     |   TODO   |      TODO       | TODO         | TODO        | TODO      | [官网](https://xlog.cn/)                       |
 |      其他      |     Mdnice      | TODO |   TODO    |    TODO     |   TODO   |      TODO       | TODO         | TODO        | TODO      | [官网](https://mdnice.com/)                    |
 |      其他      |     Flowus      | TODO |   TODO    |    TODO     |   TODO   |      TODO       | TODO         | TODO        | TODO      | [官网](https://www.flowus.com/)                |
-|      其他      |   telegra.ph    |  ✔   | 部分兼容  |      ✖      | 部分兼容 |        ✖        |              |             |           | [官网](https://telegra.ph)                     |
+|      其他      |   telegra.ph    |  ✔   | 部分兼容  |      ✖      | 部分兼容 |        ✖        | 不支持       | 自建代理    | 自建代理  | [官网](https://telegra.ph)                     |
 
 ## 核心特色
 

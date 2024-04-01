@@ -29,6 +29,7 @@ import { BlogConfig, CategoryInfo, PageTypeEnum, Post, UserBlog } from "zhi-blog
 import { JsonUtil } from "zhi-common"
 import WebUtils from "~/src/adaptors/web/base/webUtils.ts"
 import _ from "lodash-es"
+import FormDataUtils from "~/src/utils/FormDataUtils.ts";
 
 /**
  * CSDN网页授权适配器
@@ -303,6 +304,8 @@ class CsdnWebAdaptor extends BaseWebApi {
   }
 
   public async uploadFile(file: File | Blob, filename?: string): Promise<any> {
+    const { FormData, Blob } = FormDataUtils.getFormData(this.appInstance)
+
     this.logger.debug(`csdn start uploadFile ${filename}=>`, file)
     if (file instanceof Blob) {
       const uploadData = await this.requestUpload(filename)

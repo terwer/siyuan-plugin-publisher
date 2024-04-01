@@ -443,6 +443,9 @@ class WechatWebAdaptor extends BaseWebApi {
   }
 
   public async uploadFile(file: File | Blob, filename?: string): Promise<any> {
+    // get formData and Blob
+    const { FormData, Blob } = FormDataUtils.getFormData(this.appInstance)
+
     this.logger.debug(`wechat start uploadFile ${filename}=>`, file)
     if (file instanceof Blob) {
       // import
@@ -450,7 +453,6 @@ class WechatWebAdaptor extends BaseWebApi {
       if (!win.require) {
         throw new Error("非常抱歉，目前仅思源笔记PC客户端支持上传图片")
       }
-      const { FormData, Blob } = FormDataUtils.getFormData(this.appInstance)
 
       // uploadUrl
       const ticket_id = this.cfg.metadata.commonData.data.user_name
@@ -535,6 +537,8 @@ class WechatWebAdaptor extends BaseWebApi {
    */
   private async wechatFetch(url: string, params: Record<string, any>) {
     this.logger.debug("before getFormdataFetch, params =>", params)
+    // get formData and Blob
+    const { FormData } = FormDataUtils.getFormData(this.appInstance)
 
     // formData
     const formData: any = new FormData()
