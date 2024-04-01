@@ -89,6 +89,9 @@ const useVuepress2Api = async (key: string, newCfg?: Vuepress2Config) => {
   cfg.allowKnowledgeSpaceChange = false
   cfg.placeholder.knowledgeSpaceReadonlyModeTip = "Vuepress2 平台暂不支持修改发布目录，如需修改，请删除之后重新发布"
   cfg.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Tree_Single
+  // picbed service
+  cfg.picgoPicbedSupported = true
+  cfg.bundledPicbedSupported = true
 
   // 创建 Vuepress2 的 yamlAdaptor
   const yamlAdaptor = new Vuepress2YamlConverterAdaptor()

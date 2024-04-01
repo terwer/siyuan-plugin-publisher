@@ -89,6 +89,9 @@ const useJekyllApi = async (key: string, newCfg?: JekyllConfig) => {
   cfg.allowKnowledgeSpaceChange = false
   cfg.placeholder.knowledgeSpaceReadonlyModeTip = "Jekyll 平台暂不支持修改发布目录，如需修改，请删除之后重新发布"
   cfg.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Tree_Single
+  // picbed service
+  cfg.picgoPicbedSupported = true
+  cfg.bundledPicbedSupported = true
 
   // 创建 Jekyll 的 yamlAdaptor
   const yamlAdaptor = new JekyllYamlConverterAdaptor()
