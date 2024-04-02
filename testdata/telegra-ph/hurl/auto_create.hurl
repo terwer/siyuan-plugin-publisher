@@ -1,3 +1,4 @@
+# 获取新token并新增文章
 # getCfg
 POST https://edit.telegra.ph/check
 origin: https://telegra.ph
@@ -18,8 +19,8 @@ referer: https://telegra.ph/
 Cookie: tph_uuid={{tph_uuid}}
 [MultipartFormData]
 Data: file,content.html;text/plain
-title: "测试标题"
-author: ""
+title: 测试标题
+author: terwer
 save_hash: {{save_hash}}
 page_id: 0
 HTTP 200
@@ -27,5 +28,3 @@ HTTP 200
 save_resp_body: body
 save_page_id: jsonpath "$['page_id']"
 save_path: jsonpath "$['path']"
-
-
