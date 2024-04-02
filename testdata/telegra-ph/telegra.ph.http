@@ -14,8 +14,7 @@ page_id=0
 POST https://edit.telegra.ph/save
 origin: https://telegra.ph
 referer: https://telegra.ph/
-Cookie: tph_uuid=E8eRGiWLjdx4Qbs0csRuQz2tBniMZQ1DYguCwroNET
-#Cookie: tph_uuid=OA4kiCWNRETS7Laf9JLG5m5yDG7IQh2CP4W8GQTvvM
+Cookie: tph_uuid=OA4kiCWNRETS7Laf9JLG5m5yDG7IQh2CP4W8GQTvvM
 Content-Type: multipart/form-data; boundary=TelegraPhBoundary21
 
 --TelegraPhBoundary21
@@ -41,9 +40,11 @@ Content-Disposition: form-data; name="page_id"
 --TelegraPhBoundary21
 
 ### updateArticle
+# @no-cookie-jar
 POST https://edit.telegra.ph/save
 origin: https://telegra.ph
 referer: https://telegra.ph/
+Cookie: tph_uuid=OA4kiCWNRETS7Laf9JLG5m5yDG7IQh2CP4W8GQTvvM
 Content-Type: multipart/form-data; boundary=TelegraPhBoundary21
 
 --TelegraPhBoundary21
@@ -65,7 +66,7 @@ Content-Disposition: form-data; name="save_hash"
 --TelegraPhBoundary21
 Content-Disposition: form-data; name="page_id"
 
-5006cff8aec42108f5306
+95b855b7da05c53198fd3
 --TelegraPhBoundary21
 
 ## Thanks
