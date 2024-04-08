@@ -130,7 +130,6 @@
 
 - telegra.ph 支持上传图片
     - 参考 https://www.npmjs.com/package/telegraph-uploader
-- 支持 telegra.ph 登录
 - 解决部分平台在某些场景下重复上传图片的问题
 - 修复微信公众号排版问题
 - #990 修复发布到简书时部分格式显示不正常的问题

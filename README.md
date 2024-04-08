@@ -142,7 +142,6 @@ to [Latest Adaptation](https://terwergreen.feishu.cn/share/base/view/shrcnWT2IGI
 
 - Expansion of telegra.ph support for image uploads
     - Reference: https://www.npmjs.com/package/telegraph-uploader
-- Support login for telegra.ph
 - Rectification of scenarios entailing repetitive image uploads across select platforms
 - Resolution of formatting discrepancies within WeChat public accounts
 - #990 Rectification of irregular display issues while posting to Jian Shu

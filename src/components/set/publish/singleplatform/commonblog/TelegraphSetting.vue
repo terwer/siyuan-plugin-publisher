@@ -29,6 +29,7 @@ import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useTelegraphApi } from "~/src/adaptors/api/telegraph/useTelegraphApi.ts"
 import { TelegraphConfig, TelegraphPostType } from "~/src/adaptors/api/telegraph/telegraphConfig.ts"
 import { TelegraphPlaceholder } from "~/src/adaptors/api/telegraph/telegraphPlaceholder.ts"
+import { UnwrapRef } from "vue"
 
 const props = defineProps({
   apiType: {
@@ -66,7 +67,7 @@ const handlePostTypeChange = (val: UnwrapRef<TelegraphConfig>) => {
           class="ml-4"
           @change="
             () => {
-              handlePostTypeChange(header.cfg)
+              handlePostTypeChange(header.cfg as any)
             }
           "
         >
