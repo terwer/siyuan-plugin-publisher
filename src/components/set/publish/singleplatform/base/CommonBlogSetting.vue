@@ -211,9 +211,7 @@ const afterValid = async (api: any) => {
     // @since 1.20.0
     for (const key in userBlog.metadataMap) {
       // 这里不用校验，因为可能是继承的属性
-      // if (ObjectUtil.hasKey(formData.cfg, key)) {
       formData.cfg[key] = userBlog.metadataMap[key]
-      // }
     }
   }
 }
@@ -360,7 +358,7 @@ onMounted(async () => {
       <el-input v-model="formData.cfg.apiUrl" :placeholder="props.cfg?.placeholder.apiUrlPlaceholder" />
     </el-form-item>
     <!-- 登录名 -->
-    <el-form-item :label="t('setting.common.username')" v-if="props.cfg.usernameEnabled">
+    <el-form-item :label="formData.cfg.usernameLabel ?? t('setting.common.username')" v-if="props.cfg.usernameEnabled">
       <el-input
         v-model="formData.cfg.username"
         :placeholder="props.cfg?.placeholder.usernamePlaceholder"
@@ -369,8 +367,9 @@ onMounted(async () => {
     </el-form-item>
     <!-- 密码 -->
     <el-form-item
-      :label="t('setting.common.password')"
+      :label="formData.cfg.passwordLabel ?? t('setting.common.password')"
       v-if="formData.cfg.passwordType === PasswordType.PasswordType_Password"
+      required
     >
       <el-input
         type="password"
@@ -385,7 +384,8 @@ onMounted(async () => {
     <!-- token -->
     <el-form-item
       v-else-if="formData.cfg.passwordType === PasswordType.PasswordType_Token"
-      :label="t('setting.common.token')"
+      :label="formData.cfg.passwordLabel ?? t('setting.common.token')"
+      required
     >
       <el-input
         type="password"
@@ -398,7 +398,7 @@ onMounted(async () => {
       >
     </el-form-item>
     <!-- 平台cookie -->
-    <el-form-item v-else label="平台Cookie">
+    <el-form-item v-else :label="formData.cfg.passwordLabel ?? '平台Cookie'" required>
       <el-input
         v-model="formData.cfg.password"
         style="width: 75%; margin-right: 16px"

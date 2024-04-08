@@ -648,11 +648,19 @@ export default {
 
   "message.publish.notShared": "文章尚未分享，无法在外部查看。请分享文章或者在PC 客户端内部通过插件菜单进行预览。",
 
+  "setting.telegraph.username.label": "作者",
+  "setting.telegraph.password.label": "Uuid",
   "setting.telegraph.home.tip": "telegra.ph平台首页，通常固定是：https://telegra.ph/",
   "setting.telegraph.username.tip": "作者，会显示在文章详情，可自行设置，默认为空",
-  "setting.telegraph.password.tip": "设备hash，会自动获取，无需填写",
+  "setting.telegraph.password.tip":
+    "匿名模式无需填写，点击验证之后可自动获取，登录模式请从请从 TG 客户端授权之后跳转的浏览器里面找到 Cookie tph_uuid 填到这里",
   "setting.telegraph.apiurl.tip": "telegra.ph的API地址，通常固定是：https://telegra.ph/",
   "setting.telegraph.previewUrl.tip": "telegra.ph的文章预览规则，通常是：/[notebook]/[postid]",
+  "setting.telegraph.accessToken.tip": "匿名模式无需填写，登录模式请从请从 TG 客户端授权之后跳转的浏览器找到 Cookie tph_token 填到这里",
+  "setting.telegraph.saveHash.tip": "匿名模式无需填写，点击验证之后可自动获取，登录模式请从 TG 客户端授权之后跳转的浏览器里面找到 https://edit.telegra.ph/check 返回的 save_hash 填到这里",
+  "setting.telegraph.forceReAuth.tip": "授权信息生效之后可勾选此项，然后会重新授权",
+  "setting.telegraph.login.anonymous": "匿名发布",
+  "setting.telegraph.login.user": "登录发布",
 
   "page.loading": "页面加载中...",
 

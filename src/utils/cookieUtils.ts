@@ -50,17 +50,17 @@ class CookieUtils {
       // 检查是否存在相同 key 的 cookie，并比较有效期
       const existingIndex = originCookieArray.findIndex((item) => item.startsWith(`${key}=`))
       if (existingIndex !== -1) {
-        // const existingCookie = this.parseCookie(originCookieArray[existingIndex])
-        // // 若新 cookie 的有效期大于旧的，则更新
-        // if (
-        //   (!StrUtil.isEmptyString(newCookieObj.expires) &&
-        //     !StrUtil.isEmptyString(existingCookie.expires) &&
-        //     new Date(newCookieObj.expires).getTime() > new Date(existingCookie.expires).getTime()) ||
-        //   isForce
-        // ) {
-        // originCookieArray[existingIndex] = newItem
-        isUpdated = false
-        // }
+        const existingCookie = this.parseCookie(originCookieArray[existingIndex])
+        // 若新 cookie 的有效期大于旧的，则更新
+        if (
+          (!StrUtil.isEmptyString(newCookieObj.expires) &&
+            !StrUtil.isEmptyString(existingCookie.expires) &&
+            new Date(newCookieObj.expires).getTime() > new Date(existingCookie.expires).getTime()) ||
+          isForce
+        ) {
+          originCookieArray[existingIndex] = newItem
+          isUpdated = true
+        }
       } else {
         originCookieArray.push(newItem)
         isUpdated = true

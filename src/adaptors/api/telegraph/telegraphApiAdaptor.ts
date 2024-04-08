@@ -25,11 +25,10 @@
 
 import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
 import { Post, UserBlog } from "zhi-blog-api"
-import { TelegraphConfig } from "~/src/adaptors/api/telegraph/telegraphConfig.ts"
+import { TelegraphConfig, TelegraphPostType } from "~/src/adaptors/api/telegraph/telegraphConfig.ts"
 import { JsonUtil, StrUtil } from "zhi-common"
 import CookieUtils from "~/src/utils/cookieUtils.ts"
 import md from "telegraph.md"
-import FormDataUtils from "~/src/utils/FormDataUtils.ts"
 
 /**
  * Telegraph API 适配器
@@ -37,89 +36,127 @@ import FormDataUtils from "~/src/utils/FormDataUtils.ts"
  * @see https://telegra.ph/ telegra.ph
  */
 class TelegraphApiAdaptor extends BaseBlogApi {
+  private TPH_TOKEN_KEY = "tph_token"
   private TPH_UUID_KEY = "tph_uuid"
 
   public async getUsersBlogs(): Promise<UserBlog[]> {
+    const tgCfg = this.cfg as TelegraphConfig
     const result: UserBlog[] = []
 
-    const contentType = "text/plain"
-    let xCorsHeaders: Record<any, any> = {}
-
-    // x-cors-headers
-    xCorsHeaders["origin"] = "https://telegra.ph"
-    xCorsHeaders["referer"] = "https://telegra.ph/"
-    xCorsHeaders["Content-Type"] = contentType
-
-    const headers = {
-      // for cors proxy
-      // siyuan proxy should ignore this header
-      "x-cors-headers": JSON.stringify(xCorsHeaders),
-    }
-    for (const [xkey, xvalue] of Object.entries(xCorsHeaders)) {
-      headers[xkey] = xvalue
-    }
-
-    let cookies: any
-    let checkJson = await this.telegraphFetch("/check", "page_id=0", "POST", headers, contentType)
-    this.logger.debug("checkJson =>", checkJson)
-
-    if (checkJson["cors-received-headers"]) {
-      // use cors proxy
-      if (checkJson.error) {
-        throw new Error("telegra.ph request error =>" + checkJson.error)
+    if (tgCfg.postType === TelegraphPostType.LOGIN_USER) {
+      if (
+        StrUtil.isEmptyString(tgCfg.password) ||
+        StrUtil.isEmptyString(tgCfg.accessToken) ||
+        StrUtil.isEmptyString(tgCfg.saveHash)
+      ) {
+        throw new Error("登录模式必须手动填写 uuid 、 Access Token 和 save hash，请从浏览器开发者工具获取")
       }
-      const corsHeaders = JsonUtil.safeParse<any>(checkJson["cors-received-headers"], {})
-      cookies = corsHeaders["Set-Cookie-Array"]
+
+      // 数据适配
+      const userblog: UserBlog = new UserBlog()
+      userblog.blogid = tgCfg.saveHash
+      userblog.blogName = "telegra.ph"
+      userblog.url = tgCfg.apiUrl
     } else {
-      // use siyuan proxy
-      if (checkJson.status == 200) {
-        cookies = checkJson.headers["Set-Cookie"]
-        const body = JsonUtil.safeParse(checkJson.body, {})
-        checkJson = {
-          ...checkJson,
-          ...body,
+      const contentType = "text/plain"
+      let xCorsHeaders: Record<any, any> = {}
+
+      // x-cors-headers
+      xCorsHeaders["origin"] = "https://telegra.ph"
+      xCorsHeaders["referer"] = "https://telegra.ph/"
+      xCorsHeaders["Content-Type"] = contentType
+
+      const headers = {
+        // for cors proxy
+        // siyuan proxy should ignore this header
+        "x-cors-headers": JSON.stringify(xCorsHeaders),
+      }
+      for (const [xkey, xvalue] of Object.entries(xCorsHeaders)) {
+        headers[xkey] = xvalue
+      }
+
+      let cookies: any
+      let checkJson = await this.telegraphFetch("/check", "page_id=0", "POST", headers, contentType)
+      this.logger.debug("checkJson =>", checkJson)
+
+      if (checkJson["cors-received-headers"]) {
+        // use cors proxy
+        if (checkJson.error) {
+          throw new Error("telegra.ph request error =>" + checkJson.error)
+        }
+        const corsHeaders = JsonUtil.safeParse<any>(checkJson["cors-received-headers"], {})
+        cookies = corsHeaders["Set-Cookie-Array"]
+      } else {
+        // use siyuan proxy
+        if (checkJson.status == 200) {
+          cookies = checkJson.headers["Set-Cookie"]
+          const body = JsonUtil.safeParse(checkJson.body, {})
+          checkJson = {
+            ...checkJson,
+            ...body,
+          }
+        } else {
+          throw new Error(`telegra.ph request error ${checkJson.status}=>` + checkJson.body)
+        }
+      }
+
+      // 数据适配
+      const userblog: UserBlog = new UserBlog()
+      userblog.blogid = checkJson.save_hash
+      userblog.blogName = "telegra.ph"
+      userblog.url = tgCfg.apiUrl
+
+      // 元数据映射
+      // @since 1.20.0
+      const { isUpdated, cookieArray } = CookieUtils.addCookieArray(
+        tgCfg?.corsCookieArray ?? [],
+        cookies,
+        tgCfg.forceReAuth
+      )
+      this.logger.info(`是否需要刷新：${isUpdated}，是否强制刷新：${tgCfg.forceReAuth}`)
+      if (isUpdated) {
+        // cookies 每一次都是最新的
+        const tphUuidObj = CookieUtils.getCookieObject(cookies, this.TPH_UUID_KEY)
+        userblog.metadataMap = {
+          username: checkJson.author_name,
+          password: tphUuidObj[this.TPH_UUID_KEY],
+          saveHash: checkJson.save_hash,
+          corsCookieArray: cookieArray,
         }
       } else {
-        throw new Error(`telegra.ph request error ${checkJson.status}=>` + checkJson.body)
+        this.logger.warn("Cookie 还在有效期，可等待 Cookie 过期之后再进行操作", cookieArray)
       }
+
+      result.push(userblog)
     }
 
-    // 数据适配
-    const userblog: UserBlog = new UserBlog()
-    const cfg = this.cfg as TelegraphConfig
-    userblog.blogid = checkJson.save_hash
-    userblog.blogName = "telegra.ph"
-    userblog.url = cfg.apiUrl
-    // 元数据映射
-    // @since 1.20.0
-    const { isUpdated, cookieArray } = CookieUtils.addCookieArray(this.cfg?.corsCookieArray ?? [], cookies)
-    // save_hash 必须和 Cookie 的有效期同时有效
-    if (isUpdated) {
-      userblog.metadataMap = {
-        password: checkJson.save_hash,
-        corsCookieArray: cookieArray,
-      }
-    } else {
-      this.logger.warn("Cookie 还在有效期，可等待 Cookie 过期之后再进行操作", cookieArray)
-    }
-
-    result.push(userblog)
     this.logger.debug("get telegraph cfg =>", result)
 
     return result
   }
 
   public async newPost(post: Post, _publish?: boolean): Promise<string> {
+    const tgCfg = this.cfg as TelegraphConfig
+
     let xCorsHeaders: Record<any, any> = {}
 
     // x-cors-headers
-    const tphUuidObj = CookieUtils.getCookieObject(this.cfg.corsCookieArray, this.TPH_UUID_KEY)
-    if (StrUtil.isEmptyString(tphUuidObj[this.TPH_UUID_KEY])) {
-      throw new Error("Cookie 获取失败，无法新建文章")
+    let requestCookie: string
+    const uuidCookie = `${this.TPH_UUID_KEY}=${tgCfg.password}`
+    if (tgCfg.postType == TelegraphPostType.ANONYMOUS) {
+      if (StrUtil.isEmptyString(tgCfg.password)) {
+        throw new Error(`Cookie ${this.TPH_UUID_KEY} 获取失败，无法新建文章`)
+      }
+      requestCookie = uuidCookie
+      this.logger.warn("当前为匿名发布")
+    } else {
+      if (StrUtil.isEmptyString(tgCfg.password) || StrUtil.isEmptyString(tgCfg.accessToken)) {
+        throw new Error(`Cookie ${this.TPH_UUID_KEY},${this.TPH_TOKEN_KEY} 获取失败，无法新建文章`)
+      }
+      const tokenCookie = `${this.TPH_TOKEN_KEY}=${tgCfg.accessToken}`
+      requestCookie = [uuidCookie, tokenCookie].join(";")
     }
-
-    const requestCookie = `${this.TPH_UUID_KEY}=${tphUuidObj[this.TPH_UUID_KEY]}`
-    xCorsHeaders["Cookie"] = requestCookie
+    xCorsHeaders["Cookie"] = requestCookie ?? ""
     xCorsHeaders["origin"] = "https://telegra.ph"
     xCorsHeaders["referer"] = "https://telegra.ph/"
 
@@ -140,8 +177,8 @@ class TelegraphApiAdaptor extends BaseBlogApi {
     const blobData = new Blob([JSON.stringify(content)], { type: "text/plain" })
     formData.append("Data", blobData, "content.html")
     formData.append("title", post.title)
-    formData.append("author", this.cfg.username)
-    formData.append("save_hash", this.cfg.password)
+    formData.append("author", tgCfg.username)
+    formData.append("save_hash", tgCfg.saveHash)
     formData.append("page_id", "0")
 
     const res = await this.telegraphFormFetch("/save", formData, headers)
@@ -157,12 +194,14 @@ class TelegraphApiAdaptor extends BaseBlogApi {
       update_cookie: requestCookie,
       page_id: res.page_id,
       path: res.path,
+      save_hash: tgCfg.saveHash,
     }
     const postid = JSON.stringify(postMeta)
     return postid
   }
 
   public async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
+    const tgCfg = this.cfg as TelegraphConfig
     const postMeta = JsonUtil.safeParse<any>(postid, {})
 
     let xCorsHeaders: Record<any, any> = {}
@@ -193,8 +232,8 @@ class TelegraphApiAdaptor extends BaseBlogApi {
     const blobData = new Blob([JSON.stringify(content)], { type: "text/plain" })
     formData.append("Data", blobData, "content.html")
     formData.append("title", post.title)
-    formData.append("author", this.cfg.username)
-    formData.append("save_hash", this.cfg.password)
+    formData.append("author", tgCfg.username)
+    formData.append("save_hash", postMeta.save_hash)
     formData.append("page_id", postMeta.page_id)
 
     const res = await this.telegraphFormFetch("/save", formData, headers)

@@ -674,6 +674,19 @@ export default {
   "message.publish.notShared":
     "The article has not been shared and therefore cannot be viewed externally. Kindly share the article or preview it within the PC client through the plugin menu.",
 
+  "setting.telegraph.username.label": "Author",
+  "setting.telegraph.password.label": "Uuid",
+  "setting.telegraph.home.tip": "The primary landing page of the telegra.ph platform typically remains constant at: https://telegra.ph/",
+  "setting.telegraph.username.tip": "The individual credited as the author, a detail showcased in the article's specifics, is customizable at will, with the default setting being empty.",
+  "setting.telegraph.password.tip": "The uuid pertinent to the current environment. Please note: 1. Anonymous mode automatically retrieves this detail, requiring no manual input; 2. Logging in as a user necessitates the entry of the Cookie's thp_uuid.",
+  "setting.telegraph.apiurl.tip": "The designated API endpoint for telegra.ph, routinely established as: https://telegra.ph/",
+  "setting.telegraph.previewUrl.tip": "The prescribed pattern for previewing telegra.ph articles commonly follows this structure: /[notebook]/[postid]",
+  "setting.telegraph.accessToken.tip": "This item is unnecessary in anonymous mode. For authenticated sessions, please procure the tph_token from the browser post authorization via the TG client. To ensure the sanctity of your privacy, exercise caution against sharing this token with any third party.",
+  "setting.telegraph.saveHash.tip": "No need to fill out; automatic retrieval after clicking validation.",
+  "setting.telegraph.forceReAuth.tip": "After the authorization information takes effect, uncheck this option, and then reauthorize. Note: Old articles may become uneditable as a result.",
+  "setting.telegraph.login.anonymous": "Anonymous",
+  "setting.telegraph.login.user": "User",
+
   "page.loading": "Page is loading...",
 
   "setting.blog.middlewareUrl.new": "Fresh Proxy (Recommended)",

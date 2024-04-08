@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { TelegraphConfig } from "~/src/adaptors/api/telegraph/telegraphConfig.ts"
+import { TelegraphConfig, TelegraphPostType } from "~/src/adaptors/api/telegraph/telegraphConfig.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
@@ -68,6 +68,7 @@ const useTelegraphApi = async (key: string, newCfg?: TelegraphConfig) => {
   cfg.usernameEnabled = true
   cfg.cateEnabled = false
   cfg.tagEnabled = false
+  cfg.postType = cfg.postType ?? TelegraphPostType.ANONYMOUS
 
   const blogApi = new TelegraphApiAdaptor(appInstance, cfg)
   logger.info("Telegraph API created successfully.", cfg)
