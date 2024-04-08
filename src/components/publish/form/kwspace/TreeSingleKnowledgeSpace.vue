@@ -138,7 +138,7 @@ onMounted(() => {
     <el-form-item v-if="formData.knowledgeSpaceConfig.readonlyMode">
       <el-alert
         :closable="false"
-        :title="formData.knowledgeSpaceConfig.cfg.placeholder.knowledgeSpaceReadonlyModeTip"
+        :title="formData.knowledgeSpaceConfig.cfg?.placeholder?.knowledgeSpaceReadonlyModeTip"
         class="form-item-tip"
         type="warning"
       />

@@ -193,7 +193,7 @@ class BaseWebApi extends WebApi {
   ) {
     const header = headers.length > 0 ? headers[0] : {}
     // 如果没有可用的 CORS 代理或者没有强制使用代理，使用默认的自动检测机制
-    if (this.isUseSiyuanProxy || (!this.isUseSiyuanProxy && forceProxy)) {
+    if (this.isUseSiyuanProxy || (!this.isUseSiyuanProxy && forceProxy) || !forceProxy) {
       this.logger.info("Using legency web fetch")
       // remove cors fetch header
       delete header["x-cors-headers"]
@@ -260,7 +260,7 @@ class BaseWebApi extends WebApi {
       | "hex" = "text"
   ) {
     // 如果没有可用的 CORS 代理或者没有强制使用代理，使用默认的自动检测机制
-    if (this.isUseSiyuanProxy || (!this.isUseSiyuanProxy && forceProxy)) {
+    if (this.isUseSiyuanProxy || (!this.isUseSiyuanProxy && forceProxy) || !forceProxy) {
       this.logger.info("Using legency web formFetch")
 
       const { isInSiyuanOrSiyuanNewWin } = useSiyuanDevice()
