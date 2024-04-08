@@ -56,7 +56,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
   // }
 
   public async getMetaData(): Promise<any> {
-    const res = await this.webProxyFetch(
+    const res = await this.zhihuFetch(
       "https://www.zhihu.com/api/v4/me?include=account_status%2Cis_bind_phone%2Cis_force_renamed%2Cemail%2Crenamed_fullname"
     )
     const flag = !!res.uid
@@ -78,7 +78,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
     let result: UserBlog[] = []
 
     const url = `https://www.zhihu.com/people/${this.cfg.username}/columns`
-    const res = await this.webProxyFetch(url, [], {}, "GET", "text/html")
+    const res = await this.zhihuFetch(url, [], "GET", {}, "text/html")
     this.logger.debug("get zhihu columns dom =>", { res })
     const $ = cheerio.load(res)
     const scriptContent = $("#js-initialData").html()
@@ -137,7 +137,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
       title: post.title,
       content: post.description,
     })
-    const res = await this.webProxyFetch("https://zhuanlan.zhihu.com/api/articles/drafts", [], params, "POST")
+    const res = await this.zhihuFetch("https://zhuanlan.zhihu.com/api/articles/drafts", params, "POST")
     this.logger.debug("save zhihu draft res=>", res)
 
     if (!res.id) {
@@ -155,12 +155,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
       commercial_report_info: { commercial_types: [] },
       commercial_zhitask_bind_info: null,
     })
-    const pubRes = await this.webProxyFetch(
-      `https://zhuanlan.zhihu.com/api/articles/${res.id}/publish`,
-      [],
-      pubParams,
-      "PUT"
-    )
+    const pubRes = await this.zhihuFetch(`https://zhuanlan.zhihu.com/api/articles/${res.id}/publish`, pubParams, "PUT")
     this.logger.debug("publish zhihu article pubRes=>", pubRes)
 
     // 收录文章到专栏
@@ -182,12 +177,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
       delta_time: 10,
     })
 
-    const draftRes = await this.webProxyFetch(
-      `https://zhuanlan.zhihu.com/api/articles/${postid}/draft`,
-      [],
-      params,
-      "PATCH"
-    )
+    const draftRes = await this.zhihuFetch(`https://zhuanlan.zhihu.com/api/articles/${postid}/draft`, params, "PATCH")
     this.logger.debug("updated zhihu draft =>", draftRes)
     if (draftRes?.error?.message) {
       throw new Error(`知乎文章更新失败：[${draftRes.error.name}] ` + draftRes.error.message)
@@ -201,12 +191,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
       commercial_report_info: { commercial_types: [] },
       commercial_zhitask_bind_info: null,
     })
-    const pubRes = await this.webProxyFetch(
-      `https://zhuanlan.zhihu.com/api/articles/${postid}/publish`,
-      [],
-      pubParams,
-      "PUT"
-    )
+    const pubRes = await this.zhihuFetch(`https://zhuanlan.zhihu.com/api/articles/${postid}/publish`, pubParams, "PUT")
 
     // 收录文章到专栏
     // const column = post.cate_slugs?.[0] ?? this.cfg.blogid
@@ -223,7 +208,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
   public async deletePost(postid: string): Promise<boolean> {
     let flag = false
     try {
-      const res = await this.webProxyFetch(`https://www.zhihu.com/api/v4/articles/${postid}`, [], {}, "DELETE")
+      const res = await this.zhihuFetch(`https://www.zhihu.com/api/v4/articles/${postid}`, {}, "DELETE")
       this.logger.debug("delete zhihu article res=>", res)
       if (res.success) {
         flag = true
@@ -242,7 +227,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
     const cats = [] as CategoryInfo[]
 
     const url = `https://www.zhihu.com/people/${this.cfg.username}/columns`
-    const res = await this.webProxyFetch(url, [], {}, "GET", "text/html")
+    const res = await this.zhihuFetch(url, {}, "GET", {}, "text/html")
     this.logger.debug("get zhihu columns dom =>", { res })
     const $ = cheerio.load(res)
     const scriptContent = $("#js-initialData").html()
@@ -278,7 +263,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
         source: "article",
       })
       this.logger.debug("zhihu uploadFile, params =>", params)
-      const fileResp = await this.webProxyFetch("https://api.zhihu.com/images", [], params, "POST")
+      const fileResp = await this.zhihuFetch("https://api.zhihu.com/images", params, "POST")
       this.logger.debug("zhihu uploadFile, fileResp =>", fileResp)
 
       // 2. 开始上传
@@ -318,6 +303,33 @@ class ZhihuWebAdaptor extends BaseWebApi {
   // ================
   // private methods
   // ================
+
+  /**
+   * 向 Zhihu 请求数据
+   */
+  private async zhihuFetch(
+    url: string,
+    params?: any,
+    method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" = "GET",
+    headers: Record<any, any> = {},
+    contentType: string = "application/json"
+  ) {
+    const body = params
+
+    // 输出日志
+    // const apiUrl = `${this.cfg.apiUrl ?? ""}${url}`
+    const apiUrl = url
+    this.logger.debug("向 Zhihu 请求数据，apiUrl =>", apiUrl)
+    // 使用兼容的fetch调用并返回统一的JSON数据
+    this.logger.debug("向 Zhihu 请求数据，headers =>", headers)
+    this.logger.debug("向 Zhihu 请求数据，body =>", body)
+
+    const resJson = await this.webProxyFetch(apiUrl, [headers], body, method, contentType, true, "base64")
+    this.logger.debug("向 Zhihu 请求数据，resJson =>", resJson)
+
+    return resJson ?? null
+  }
+
   /**
    * 收录文章到专栏
    *
@@ -333,7 +345,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
 
     try {
       const params = { type: "article", id: articleId }
-      await this.webProxyFetch(`https://www.zhihu.com/api/v4/columns/${columnId}/items`, [], params, "POST")
+      await this.zhihuFetch(`https://www.zhihu.com/api/v4/columns/${columnId}/items`, params, "POST")
     } catch (e) {
       this.logger.error("文章收录到专栏失败", e)
     }
@@ -346,7 +358,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
       function waitToNext() {
         that.logger.debug("untilImageDone start processing...", image_id)
         ;(async () => {
-          const imgDetail = await that.webProxyFetch(`https://api.zhihu.com/images/${image_id}`, [], {}, "GET")
+          const imgDetail = await that.zhihuFetch(`https://api.zhihu.com/images/${image_id}`, {}, "GET")
           that.logger.debug("imgDetail", imgDetail)
           if (imgDetail.status != "processing") {
             that.logger.info("image upload all done")

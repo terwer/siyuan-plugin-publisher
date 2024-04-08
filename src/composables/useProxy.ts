@@ -92,6 +92,11 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
       | "base32-hex"
       | "hex" = "text"
   ) => {
+    // 修复参数，GET/HEAD 等方法不允许 body
+    if (params === "" || (typeof params === "object" && Object.keys(params).length === 0)) {
+      params = undefined
+    }
+
     if (isUseSiyuanProxy || (!isUseSiyuanProxy && forceProxy)) {
       logger.info("Using Siyuan forwardProxy")
       return await siyuanProxyFetch(url, headers, params, method, contentType, payloadEncoding, responseEncoding)

@@ -31,7 +31,7 @@ import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { Utils } from "~/src/utils/utils.ts"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
-import { CategoryTypeEnum } from "zhi-blog-api"
+import { CategoryTypeEnum, PicbedServiceTypeEnum } from "zhi-blog-api"
 import { LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
 import { ZhihuPlaceholder } from "~/src/adaptors/web/zhihu/zhihuPlaceholder.ts"
 
@@ -90,6 +90,11 @@ const useZhihuWeb = async (key?: string, newCfg?: ZhihuConfig) => {
   }
   cfg.placeholder.knowledgeSpaceReadonlyModeTip =
     "由于知乎平台的限制，暂时不支持编辑所属专栏。如果您想移动文档，请先点击取消删除该文档，然后重新选择新的专栏发布"
+  // 退出登录
+  cfg.logoutUrl = "https://www.zhihu.com/logout"
+  // picbed service
+  cfg.picgoPicbedSupported = false
+  cfg.bundledPicbedSupported = true
 
   const webApi = new ZhihuWebAdaptor(appInstance, cfg)
   return {

@@ -38,7 +38,10 @@ import { StrUtil } from "zhi-common"
 class JuejinWebAdaptor extends BaseWebApi {
   public async getMetaData(): Promise<any> {
     const res = await this.webProxyFetch("https://api.juejin.cn/user_api/v1/user/get")
-    const flag = !!res.data.user_id
+    const flag = !!res.data?.user_id
+    if (!flag) {
+      throw new Error(`掘金平台校验失败，详细错误：code: ${res?.err_no}，msg: ${res?.err_msg}`)
+    }
     this.logger.info(`get juejin metadata finished, flag => ${flag}`)
     return {
       flag: flag,

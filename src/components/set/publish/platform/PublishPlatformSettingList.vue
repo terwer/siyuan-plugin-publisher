@@ -37,13 +37,13 @@ import {
 } from "~/src/platforms/dynamicConfig.ts"
 import { svgIcons } from "~/src/utils/svgIcons.ts"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import { JsonUtil } from "zhi-common"
+import { JsonUtil, StrUtil } from "zhi-common"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useRouter } from "vue-router"
 import { ElMessage, ElMessageBox } from "element-plus"
-import { Delete, Lock, Tools, WarningFilled } from "@element-plus/icons-vue"
+import { Delete, Lock, Tools, Warning, WarningFilled } from "@element-plus/icons-vue"
 import { openBrowserWindow } from "~/src/utils/widgetUtils.ts"
 import Adaptors from "~/src/adaptors"
 import { ElectronCookie, WebConfig } from "zhi-blog-api"
@@ -60,7 +60,7 @@ const { t } = useVueI18n()
 const router = useRouter()
 const { getSetting, updateSetting, deleteKey } = usePublishSettingStore()
 const { getPrePlatformKeys } = usePlatformDefine()
-const { isInSiyuanWidget, isInChromeExtension } = useSiyuanDevice()
+const { isInSiyuanOrSiyuanNewWin, isInChromeExtension } = useSiyuanDevice()
 
 // datas
 const formData = reactive({
@@ -135,7 +135,7 @@ const handleSinglePlatformDelete = (cfg: DynamicConfig) => {
 
 const handleSinglePlatformWebAuth = async (cfg: DynamicConfig) => {
   if (!cfg.cookieLimit) {
-    if (isInSiyuanWidget()) {
+    if (isInSiyuanOrSiyuanNewWin()) {
       await _handleOpenBrowserAuth(cfg)
     } else if (isInChromeExtension()) {
       _handleChromeExtensionAuth(cfg)
@@ -231,7 +231,7 @@ const _handleSetCookieAuth = async (cfg: DynamicConfig) => {
 
 const handleValidateWebAuth = async (cfg: DynamicConfig) => {
   if (!cfg.cookieLimit) {
-    if (isInSiyuanWidget()) {
+    if (isInSiyuanOrSiyuanNewWin()) {
       _handleValidateOpenBrowserAuth(cfg)
     } else if (isInChromeExtension()) {
       await _handleValidateChromeExtensionAuth(cfg)
@@ -250,12 +250,12 @@ const _handleValidateOpenBrowserAuth = (dynCfg: DynamicConfig) => {
     logger.debug("get cookie result=>", cookies)
     formData.webAuthLoadingMap[dynCfg.platformKey] = true
 
-    try {
-      const appInstance = new PublisherAppInstance()
-      const cfg = (await Adaptors.getCfg(dynCfg.platformKey)) as CommonWebConfig
-      const apiAdaptor = await Adaptors.getAdaptor(dynCfg.platformKey, cfg)
-      const api = Utils.webApi(appInstance, apiAdaptor)
+    const appInstance = new PublisherAppInstance()
+    const cfg = (await Adaptors.getCfg(dynCfg.platformKey)) as CommonWebConfig
+    const apiAdaptor = await Adaptors.getAdaptor(dynCfg.platformKey, cfg)
+    const api = Utils.webApi(appInstance, apiAdaptor)
 
+    try {
       // 构造对应平台的cookie
       const cookieStr = await api.buildCookie(cookies)
       // 更新cookie
@@ -285,8 +285,16 @@ const _handleValidateOpenBrowserAuth = (dynCfg: DynamicConfig) => {
       }
     } catch (e) {
       dynCfg.isAuth = false
-      ElMessage.error(t("main.opt.failure") + "=>" + e)
+      const errMsg = t("main.opt.failure") + "=>" + e
       logger.error(t("main.opt.failure") + "=>", e)
+      // 过期之后，提醒用户是否需要重新认证
+      const logoutUrl = dynCfg.logoutUrl ?? cfg.logoutUrl
+      if (!StrUtil.isEmptyString(logoutUrl)) {
+        const confurmMsg = errMsg + "，是否需要退出登录？注意：！！！本窗口只负责退出，登录信息填写无效！！！，需要稍后重新点击授权操作登录？"
+        _handleClearAuthConfirm(confurmMsg, logoutUrl)
+      } else {
+        ElMessage.error(errMsg)
+      }
     }
 
     formData.dynamicConfigArray = replacePlatformByKey(formData.dynamicConfigArray, dynCfg.platformKey, dynCfg)
@@ -299,6 +307,19 @@ const _handleValidateOpenBrowserAuth = (dynCfg: DynamicConfig) => {
   }
 
   openBrowserWindow(dynCfg.authUrl, dynCfg, cookieCb)
+}
+
+const _handleClearAuthConfirm = (msg, url: string) => {
+  ElMessageBox.confirm(msg, "温馨提示", {
+    type: "error",
+    icon: markRaw(Warning),
+    confirmButtonText: t("main.opt.ok"),
+    cancelButtonText: t("main.opt.cancel"),
+  })
+    .then(async () => {
+      openBrowserWindow(url)
+    })
+    .catch(() => {})
 }
 
 const _handleValidateChromeExtensionAuth = async (dynCfg: DynamicConfig) => {
