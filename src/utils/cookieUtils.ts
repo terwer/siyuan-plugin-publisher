@@ -39,8 +39,10 @@ class CookieUtils {
    *
    * @param originCookieArray
    * @param newCookieArray
+   * @param isForce
    */
-  public static addCookieArray(originCookieArray: string[], newCookieArray: string[]) {
+  public static addCookieArray(originCookieArray: string[], newCookieArray: string[], isForce: boolean = false) {
+    let isUpdated = false
     newCookieArray.forEach((newItem) => {
       const [key] = newItem.split("=")
       const newCookieObj = this.parseCookie(newItem)
@@ -51,18 +53,24 @@ class CookieUtils {
         const existingCookie = this.parseCookie(originCookieArray[existingIndex])
         // 若新 cookie 的有效期大于旧的，则更新
         if (
-          !StrUtil.isEmptyString(newCookieObj.expires) &&
-          !StrUtil.isEmptyString(existingCookie.expires) &&
-          new Date(newCookieObj.expires).getTime() > new Date(existingCookie.expires).getTime()
+          (!StrUtil.isEmptyString(newCookieObj.expires) &&
+            !StrUtil.isEmptyString(existingCookie.expires) &&
+            new Date(newCookieObj.expires).getTime() > new Date(existingCookie.expires).getTime()) ||
+          isForce
         ) {
           originCookieArray[existingIndex] = newItem
+          isUpdated = true
         }
       } else {
         originCookieArray.push(newItem)
+        isUpdated = true
       }
     })
 
-    return _.uniq(originCookieArray)
+    return {
+      isUpdated,
+      cookieArray: _.uniq(originCookieArray),
+    }
   }
 
   /**

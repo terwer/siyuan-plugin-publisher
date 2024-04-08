@@ -69,7 +69,7 @@
 <script lang="ts" setup>
 import { useDark, useToggle } from "@vueuse/core"
 import { ref } from "vue"
-import { version } from "../../../package.json"
+import { pkg } from "~/src/utils/utils.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { DateUtil } from "zhi-common"
@@ -86,7 +86,7 @@ const toggleDark = useToggle(isDark)
 const { isInChromeExtension } = useSiyuanDevice()
 const isChromeExtension = isInChromeExtension()
 
-const v = ref(version)
+const v = ref(pkg.version)
 const nowYear = DateUtil.nowYear()
 const router = useRouter()
 

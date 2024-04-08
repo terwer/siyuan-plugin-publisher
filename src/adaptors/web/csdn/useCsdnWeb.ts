@@ -83,6 +83,9 @@ const useCsdnWeb = async (key?: string, newCfg?: CsdnConfig) => {
   cfg.categoryType = CategoryTypeEnum.CategoryType_Multi
   cfg.allowCateChange = true
   cfg.knowledgeSpaceEnabled = false
+  // picbed service
+  cfg.picgoPicbedSupported = false
+  cfg.bundledPicbedSupported = true
 
   const webApi = new CsdnWebAdaptor(appInstance, cfg)
   return {

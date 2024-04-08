@@ -25,7 +25,7 @@
 
 import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
 import { Post, UserBlog } from "zhi-blog-api"
-import { TelegraphConfig } from "~/src/adaptors/api/telegraph/telegraphConfig.ts"
+import { TelegraphConfig, TelegraphPostType } from "~/src/adaptors/api/telegraph/telegraphConfig.ts"
 import { JsonUtil, StrUtil } from "zhi-common"
 import CookieUtils from "~/src/utils/cookieUtils.ts"
 import md from "telegraph.md"
@@ -36,48 +36,152 @@ import md from "telegraph.md"
  * @see https://telegra.ph/ telegra.ph
  */
 class TelegraphApiAdaptor extends BaseBlogApi {
+  private TPH_TOKEN_KEY = "tph_token"
   private TPH_UUID_KEY = "tph_uuid"
 
   public async getUsersBlogs(): Promise<UserBlog[]> {
+    const tgCfg = this.cfg as TelegraphConfig
     const result: UserBlog[] = []
 
-    const checkJson = await this.telegraphFetch("/check", "page_id=0", "POST")
-    if (checkJson.error) {
-      throw new Error("telegra.ph request error =>" + checkJson.error)
-    }
-    const corsHeaders = JsonUtil.safeParse<any>(checkJson["cors-received-headers"], {})
-    const cookies = corsHeaders["Set-Cookie-Array"]
-    this.logger.debug("checkJson =>", checkJson)
+    if (tgCfg.postType === TelegraphPostType.LOGIN_USER) {
+      if (
+        StrUtil.isEmptyString(tgCfg.password) ||
+        StrUtil.isEmptyString(tgCfg.accessToken) ||
+        StrUtil.isEmptyString(tgCfg.saveHash)
+      ) {
+        throw new Error("登录模式必须手动填写 uuid 、 Access Token 和 save hash，请从浏览器开发者工具获取")
+      }
 
-    // 数据适配
-    const userblog: UserBlog = new UserBlog()
-    const cfg = this.cfg as TelegraphConfig
-    userblog.blogid = checkJson.save_hash
-    userblog.blogName = "telegra.ph"
-    userblog.url = cfg.apiUrl
-    // 元数据映射
-    // @since 1.20.0
-    userblog.metadataMap = {
-      password: checkJson.save_hash,
-      corsCookieArray: CookieUtils.addCookieArray(this.cfg?.corsCookieArray ?? [], cookies),
+      // 数据适配
+      const userblog: UserBlog = new UserBlog()
+      userblog.blogid = tgCfg.saveHash
+      userblog.blogName = "telegra.ph"
+      userblog.url = tgCfg.apiUrl
+    } else {
+      const contentType = "text/plain"
+      let xCorsHeaders: Record<any, any> = {}
+
+      // x-cors-headers
+      xCorsHeaders["origin"] = "https://telegra.ph"
+      xCorsHeaders["referer"] = "https://telegra.ph/"
+      xCorsHeaders["Content-Type"] = contentType
+
+      const headers = {
+        // for cors proxy
+        // siyuan proxy should ignore this header
+        "x-cors-headers": JSON.stringify(xCorsHeaders),
+      }
+      for (const [xkey, xvalue] of Object.entries(xCorsHeaders)) {
+        headers[xkey] = xvalue
+      }
+
+      let cookies: any
+      let checkJson = await this.telegraphFetch("/check", "page_id=0", "POST", headers, contentType)
+      this.logger.debug("checkJson =>", checkJson)
+
+      if (checkJson["cors-received-headers"]) {
+        // use cors proxy
+        if (checkJson.error) {
+          throw new Error("telegra.ph request error =>" + checkJson.error)
+        }
+        const corsHeaders = JsonUtil.safeParse<any>(checkJson["cors-received-headers"], {})
+        cookies = corsHeaders["Set-Cookie-Array"]
+      } else {
+        // use siyuan proxy
+        if (checkJson.status == 200) {
+          cookies = checkJson.headers["Set-Cookie"]
+          const body = JsonUtil.safeParse(checkJson.body, {})
+          checkJson = {
+            ...checkJson,
+            ...body,
+          }
+        } else {
+          throw new Error(`telegra.ph request error ${checkJson.status}=>` + checkJson.body)
+        }
+      }
+
+      // 数据适配
+      const userblog: UserBlog = new UserBlog()
+      userblog.blogid = checkJson.save_hash
+      userblog.blogName = "telegra.ph"
+      userblog.url = tgCfg.apiUrl
+
+      // 元数据映射
+      // @since 1.20.0
+      const { isUpdated, cookieArray } = CookieUtils.addCookieArray(
+        tgCfg?.corsCookieArray ?? [],
+        cookies,
+        tgCfg.forceReAuth
+      )
+      this.logger.info(`是否需要刷新：${isUpdated}，是否强制刷新：${tgCfg.forceReAuth}`)
+      if (isUpdated) {
+        // cookies 每一次都是最新的
+        const tphUuidObj = CookieUtils.getCookieObject(cookies, this.TPH_UUID_KEY)
+        userblog.metadataMap = {
+          username: checkJson.author_name,
+          password: tphUuidObj[this.TPH_UUID_KEY],
+          saveHash: checkJson.save_hash,
+          corsCookieArray: cookieArray,
+        }
+      } else {
+        this.logger.warn("Cookie 还在有效期，可等待 Cookie 过期之后再进行操作", cookieArray)
+      }
+
+      result.push(userblog)
     }
-    result.push(userblog)
+
     this.logger.debug("get telegraph cfg =>", result)
 
     return result
   }
 
   public async newPost(post: Post, _publish?: boolean): Promise<string> {
+    const tgCfg = this.cfg as TelegraphConfig
+
+    let xCorsHeaders: Record<any, any> = {}
+
+    // x-cors-headers
+    let requestCookie: string
+    const uuidCookie = `${this.TPH_UUID_KEY}=${tgCfg.password}`
+    if (tgCfg.postType == TelegraphPostType.ANONYMOUS) {
+      if (StrUtil.isEmptyString(tgCfg.password)) {
+        throw new Error(`Cookie ${this.TPH_UUID_KEY} 获取失败，无法新建文章`)
+      }
+      requestCookie = uuidCookie
+      this.logger.warn("当前为匿名发布")
+    } else {
+      if (StrUtil.isEmptyString(tgCfg.password) || StrUtil.isEmptyString(tgCfg.accessToken)) {
+        throw new Error(`Cookie ${this.TPH_UUID_KEY},${this.TPH_TOKEN_KEY} 获取失败，无法新建文章`)
+      }
+      const tokenCookie = `${this.TPH_TOKEN_KEY}=${tgCfg.accessToken}`
+      requestCookie = [uuidCookie, tokenCookie].join(";")
+    }
+    xCorsHeaders["Cookie"] = requestCookie ?? ""
+    xCorsHeaders["origin"] = "https://telegra.ph"
+    xCorsHeaders["referer"] = "https://telegra.ph/"
+
+    const headers = {
+      // for cors proxy
+      // siyuan proxy should ignore this header
+      "x-cors-headers": JSON.stringify(xCorsHeaders),
+    }
+    for (const [xkey, xvalue] of Object.entries(xCorsHeaders)) {
+      headers[xkey] = xvalue
+    }
+
+    // 这里不用这个，因为 telegraph 必须强制代理
+    // const { FormData, Blob } = FormDataUtils.getFormData(this.appInstance)
+
     const formData = new FormData()
     const content = md(post.description)
     const blobData = new Blob([JSON.stringify(content)], { type: "text/plain" })
     formData.append("Data", blobData, "content.html")
     formData.append("title", post.title)
-    formData.append("author", this.cfg.username)
-    formData.append("save_hash", this.cfg.password)
+    formData.append("author", tgCfg.username)
+    formData.append("save_hash", tgCfg.saveHash)
     formData.append("page_id", "0")
 
-    const res = await this.telegraphFormFetch("/save", formData)
+    const res = await this.telegraphFormFetch("/save", formData, headers)
     if (res.error) {
       throw new Error(
         "telegra.ph 发布错误，注意：切换设备（包括从PC到浏览器环境）需要重新验证，并且获取新token。详细错误 =>" +
@@ -87,26 +191,52 @@ class TelegraphApiAdaptor extends BaseBlogApi {
     this.logger.debug("telegraph newPost resJson =>", res)
 
     const postMeta = {
+      update_cookie: requestCookie,
       page_id: res.page_id,
       path: res.path,
+      save_hash: tgCfg.saveHash,
     }
     const postid = JSON.stringify(postMeta)
     return postid
   }
 
   public async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
+    const tgCfg = this.cfg as TelegraphConfig
     const postMeta = JsonUtil.safeParse<any>(postid, {})
+
+    let xCorsHeaders: Record<any, any> = {}
+
+    // x-cors-headers
+    if (StrUtil.isEmptyString(postMeta.update_cookie)) {
+      throw new Error("Cookie 获取失败，无法更新文章")
+    }
+
+    xCorsHeaders["Cookie"] = postMeta.update_cookie
+    xCorsHeaders["origin"] = "https://telegra.ph"
+    xCorsHeaders["referer"] = "https://telegra.ph/"
+
+    const headers = {
+      // for cors proxy
+      // siyuan proxy should ignore this header
+      "x-cors-headers": JSON.stringify(xCorsHeaders),
+    }
+    for (const [xkey, xvalue] of Object.entries(xCorsHeaders)) {
+      headers[xkey] = xvalue
+    }
+
+    // 这里不用这个，因为 telegraph 必须强制代理
+    // const { FormData, Blob } = FormDataUtils.getFormData(this.appInstance)
 
     const formData = new FormData()
     const content = md(post.description)
     const blobData = new Blob([JSON.stringify(content)], { type: "text/plain" })
     formData.append("Data", blobData, "content.html")
     formData.append("title", post.title)
-    formData.append("author", this.cfg.username)
-    formData.append("save_hash", this.cfg.password)
+    formData.append("author", tgCfg.username)
+    formData.append("save_hash", postMeta.save_hash)
     formData.append("page_id", postMeta.page_id)
 
-    const res = await this.telegraphFormFetch("/save", formData)
+    const res = await this.telegraphFormFetch("/save", formData, headers)
     if (res.error) {
       throw new Error(
         "telegra.ph 更新失败，注意：切换设备（包括从PC到浏览器环境）需要重新验证，并且获取新token。详细错误 =>" +
@@ -150,19 +280,9 @@ class TelegraphApiAdaptor extends BaseBlogApi {
     url: string,
     params?: any,
     method: "GET" | "POST" | "PUT" | "DELETE" = "GET",
-    header: Record<any, any> = {}
+    headers: Record<any, any> = {},
+    contentType: string = "application/json"
   ) {
-    const contentType = "text/plain"
-    const tphUuidObj = CookieUtils.getCookieObject(this.cfg.corsCookieArray, this.TPH_UUID_KEY)
-    if (!StrUtil.isEmptyString(tphUuidObj[this.TPH_UUID_KEY])) {
-      header["Cookie"] = `${this.TPH_UUID_KEY}=${tphUuidObj[this.TPH_UUID_KEY]}`
-    }
-    const headers = {
-      "Content-Type": contentType,
-      origin: "https://telegra.ph",
-      referer: "https://telegra.ph/",
-      ...header,
-    }
     const body = params
 
     // 输出日志
@@ -183,24 +303,11 @@ class TelegraphApiAdaptor extends BaseBlogApi {
    *
    * @param url 请求地址
    * @param formData 表单数据，默认为undefined，支持 ReadableStream、Blob | BufferSource | FormData | URLSearchParams | string。这里只需要 FormData
+   * @param headers
    */
-  private async telegraphFormFetch(url: string, formData: FormData) {
+  private async telegraphFormFetch(url: string, formData: FormData, headers: Record<any, any> = {}) {
     const apiUrl = `${this.cfg.apiUrl}${url}`
-    let xCorsHeaders: Record<any, any> = {}
 
-    // header
-
-    // x-cors-headers
-    const tphUuidObj = CookieUtils.getCookieObject(this.cfg.corsCookieArray, this.TPH_UUID_KEY)
-    if (!StrUtil.isEmptyString(tphUuidObj[this.TPH_UUID_KEY])) {
-      xCorsHeaders["Cookie"] = `${this.TPH_UUID_KEY}=${tphUuidObj[this.TPH_UUID_KEY]}`
-    }
-    xCorsHeaders["origin"] = "https://telegra.ph"
-    xCorsHeaders["referer"] = "https://telegra.ph/"
-
-    const headers = {
-      "x-cors-headers": JSON.stringify(xCorsHeaders),
-    }
     const options: RequestInit = {
       method: "POST",
       headers: headers,
@@ -210,7 +317,7 @@ class TelegraphApiAdaptor extends BaseBlogApi {
     this.logger.debug("向 Telegraph 发送表单数据，apiUrl =>", apiUrl)
     this.logger.debug("向 Telegraph 发送表单数据，options =>", options)
 
-    const resJson = await this.apiFormFetch(apiUrl, [headers], formData, true)
+    const resJson = await this.apiProxyFormFetch(apiUrl, [headers], formData, true)
     if (resJson.error) {
       throw new Error(
         "telegra.ph 发布错误，注意：切换设备（包括从PC到浏览器环境）需要重新验证，并且获取新token。详细错误 =>" +

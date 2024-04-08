@@ -76,7 +76,7 @@ export const useSiyuanDevice = () => {
     return isSiyuanOrSiyuanNewWin
   }
 
-  const isInSiyuanPlugin = () => {
+  const isInSiyuanWin = () => {
     const deviceType = DeviceDetection.getDevice()
     // 三种情况，主窗口、挂件、新窗口
     const isSiyuanOrSiyuanNewWin =
@@ -93,6 +93,6 @@ export const useSiyuanDevice = () => {
     isInSiyuanBrowser,
     isInChromeExtension,
     isInSiyuanOrSiyuanNewWin,
-    isInSiyuanPlugin,
+    isInSiyuanWin,
   }
 }

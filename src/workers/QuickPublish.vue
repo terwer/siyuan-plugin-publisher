@@ -33,7 +33,7 @@ import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
 import { pre } from "~/src/platforms/pre.ts"
 import { useLoadingTimer } from "~/src/composables/useLoadingTimer.ts"
-import CrossPageUtils from "~/cross/crossPageUtils.ts"
+import PageUtils from "~/common/pageUtils.ts"
 import { SiyuanDevice } from "zhi-device"
 import { ElMessage, ElMessageBox } from "element-plus"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
@@ -134,7 +134,7 @@ onMounted(async () => {
         <div v-else-if="singleFormData.publishProcessStatus" class="success-tips">
           {{ singleFormData.isAdd ? "发布到" : "更新文章到" }}
           <span :title="formData.processResult.key">
-            [{{ CrossPageUtils.subPlatformName(formData.processResult.key, 6) }}]
+            [{{ PageUtils.subPlatformName(formData.processResult.key, 6) }}]
           </span>
           <span :title="formData.processResult.name" v-if="!StrUtil.isEmptyString(formData.processResult.name)">
             {{ `[${StrUtil.getByLength(formData.processResult.name, 8)}]` }}
@@ -146,7 +146,7 @@ onMounted(async () => {
         <div v-else class="fail-tips">
           {{ singleFormData.isAdd ? "发布到" : "更新文章到" }}
           <span :title="formData.processResult.key">
-            [{{ CrossPageUtils.subPlatformName(formData.processResult.key, 6) }}]
+            [{{ PageUtils.subPlatformName(formData.processResult.key, 6) }}]
           </span>
           <span :title="formData.processResult.name" v-if="!StrUtil.isEmptyString(formData.processResult.name)">
             {{ `[${StrUtil.getByLength(formData.processResult.name, 8)}]` }}

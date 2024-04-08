@@ -29,10 +29,10 @@ import { simpleLogger } from "zhi-lib-base"
 /**
  * 使用 eruda 更好的控制日志
  */
-if (typeof window !== "undefined") {
-  const econole = (window as any)?.eruda?.get("console")
-  window.console = isSiyuanDev && econole ? econole : window.console
-}
+// if (typeof window !== "undefined") {
+//   const econole = (window as any)?.eruda?.get("console")
+//   window.console = isSiyuanDev && econole ? econole : window.console
+// }
 
 /**
  * 简单的日志接口

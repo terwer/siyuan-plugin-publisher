@@ -24,7 +24,7 @@ const getAppBase = (isSiyuanBuild: boolean, isWidgetBuild: boolean, isNginxBuild
   }
 }
 
-const getDefineEnv = (isDevMode: boolean, debugMode: boolean) => {
+const getDefineEnv = (isDevMode: boolean) => {
   const mode = process.env.NODE_ENV
   const isTest = mode === "test"
   console.log("isServe=>", isServe)
@@ -32,7 +32,6 @@ const getDefineEnv = (isDevMode: boolean, debugMode: boolean) => {
 
   const defaultEnv = {
     DEV_MODE: `${isDevMode || isTest}`,
-    DEBUG_MODE: `${debugMode || isTest}`,
     APP_BASE: `${appBase}`,
     NODE_ENV: "development",
     VITE_DEFAULT_TYPE: `siyuan`,
@@ -59,10 +58,9 @@ const getDefineEnv = (isDevMode: boolean, debugMode: boolean) => {
 // config
 const args = minimist(process.argv.slice(2))
 // 开启之后可以同eruda接管日志
-const debugMode = process.env.DEBUG_MODE === "true"
 const isServe = process.env.IS_SERVE
 const isWatch = args.watch || args.w || false
-const isDev = isServe || isWatch || debugMode
+const isDev = isServe || isWatch
 const outDir = args.o || args.outDir
 
 const buildType = process.env.BUILD_TYPE
@@ -73,7 +71,6 @@ const distDir = outDir || (isWidgetBuild ? "widget" : "./dist")
 const appBase = getAppBase(isSiyuanBuild, isWidgetBuild, isNginxBuild)
 
 console.log("isWatch=>", isWatch)
-console.log("debugMode=>", debugMode)
 console.log("isDev=>", isDev)
 console.log("distDir=>", distDir)
 console.log("buildType=>", buildType)
@@ -81,7 +78,7 @@ console.log("buildType=>", buildType)
 // https://github.com/vuejs/vue-cli/issues/1198
 // https://vitejs.dev/config/
 // https://github.com/intlify/vue-i18n-next/issues/543
-export default defineConfig({
+export default defineConfig(() => ({
   plugins: [
     vue(),
 
@@ -100,55 +97,54 @@ export default defineConfig({
       minify: !isDev,
       inject: {
         // 在 body 标签底部插入指定的 JavaScript 文件
-        tags:
-          isDev && debugMode
-            ? [
-                {
-                  tag: "script",
-                  attrs: {
-                    src: "./libs/eruda/eruda.js",
-                  },
-                  injectTo: "head-prepend",
+        tags: isDev
+          ? [
+              // {
+              //   tag: "script",
+              //   attrs: {
+              //     src: "./libs/eruda/eruda.js",
+              //   },
+              //   injectTo: "head-prepend",
+              // },
+              {
+                tag: "script",
+                attrs: {
+                  async: true,
+                  src: "./libs/lute/lute-1.7.5-20230410.min.js",
                 },
-                {
-                  tag: "script",
-                  attrs: {
-                    async: true,
-                    src: "./libs/lute/lute-1.7.5-20230410.min.js",
-                  },
-                  injectTo: "head",
+                injectTo: "head",
+              },
+              {
+                tag: "script",
+                attrs: {
+                  async: true,
+                  src: "./libs/alioss/aliyun-oss-sdk-6.16.0.min.js",
                 },
-                {
-                  tag: "script",
-                  attrs: {
-                    async: true,
-                    src: "./libs/alioss/aliyun-oss-sdk-6.16.0.min.js",
-                  },
-                  injectTo: "head",
+                injectTo: "head",
+              },
+            ]
+          : [
+              {
+                tag: "script",
+                attrs: {
+                  async: true,
+                  src: "./libs/lute/lute-1.7.5-20230410.min.js",
                 },
-              ]
-            : [
-                {
-                  tag: "script",
-                  attrs: {
-                    async: true,
-                    src: "./libs/lute/lute-1.7.5-20230410.min.js",
-                  },
-                  injectTo: "head",
+                injectTo: "head",
+              },
+              {
+                tag: "script",
+                attrs: {
+                  async: true,
+                  src: "./libs/alioss/aliyun-oss-sdk-6.16.0.min.js",
                 },
-                {
-                  tag: "script",
-                  attrs: {
-                    async: true,
-                    src: "./libs/alioss/aliyun-oss-sdk-6.16.0.min.js",
-                  },
-                  injectTo: "head",
-                },
-              ],
-        data: {
-          title: "eruda",
-          injectScript: isDev && debugMode ? `<script>eruda.init();</script>` : "",
-        },
+                injectTo: "head",
+              },
+            ],
+        // data: {
+        //   title: "eruda",
+        //   injectScript: isDev ? `<script>eruda.init();</script>` : "",
+        // },
       },
     }),
 
@@ -187,7 +183,7 @@ export default defineConfig({
   // https://vitejs.dev/guide/env-and-mode.html#env-files
   // https://github.com/vitejs/vite/discussions/3058#discussioncomment-2115319
   // 在这里自定义变量
-  define: getDefineEnv(isDev, debugMode),
+  define: getDefineEnv(isDev),
 
   resolve: {
     alias: {
@@ -264,7 +260,7 @@ export default defineConfig({
     setupFiles: ["./src/setup.ts"],
     include: [
       "src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}",
-      "cross/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}",
+      "common/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}",
     ],
     server: {
       deps: {
@@ -272,4 +268,4 @@ export default defineConfig({
       },
     },
   },
-} as any)
+}))

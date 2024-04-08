@@ -32,10 +32,10 @@ import { getSiyuanWidgetId } from "~/src/utils/siyuanUtils.ts"
 
 const { t } = useVueI18n()
 const { getPublishPreferenceSetting } = usePreferenceSettingStore()
-const { isInSiyuanPlugin, isInSiyuanWidget } = useSiyuanDevice()
+const { isInSiyuanWin, isInSiyuanWidget } = useSiyuanDevice()
 
 const publishPreferenceSettingForm = getPublishPreferenceSetting()
-const isSiyuanPlugin = isInSiyuanPlugin() || (isInSiyuanWidget() && StrUtil.isEmptyString(getSiyuanWidgetId()))
+const isSiyuanPlugin = isInSiyuanWin() || (isInSiyuanWidget() && StrUtil.isEmptyString(getSiyuanWidgetId()))
 </script>
 
 <template>

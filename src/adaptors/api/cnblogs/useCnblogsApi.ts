@@ -91,6 +91,9 @@ export const useCnblogsApi = async (key?: string, newCfg?: CnblogsConfig) => {
   cfg.categoryType = CategoryTypeEnum.CategoryType_Multi
   cfg.allowCateChange = true
   cfg.knowledgeSpaceEnabled = false
+  // picbed service
+  cfg.picgoPicbedSupported = true
+  cfg.bundledPicbedSupported = true
 
   // 创建Cnblogs API适配器
   const blogApi = new CnblogsApiAdaptor(appInstance, cfg)

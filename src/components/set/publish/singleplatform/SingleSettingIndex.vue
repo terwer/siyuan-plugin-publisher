@@ -30,6 +30,7 @@ import { useRoute } from "vue-router"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { getSubPlatformTypeByKey, SubPlatformType } from "~/src/platforms/dynamicConfig.ts"
 import TelegraphSetting from "~/src/components/set/publish/singleplatform/commonblog/TelegraphSetting.vue"
+import WordpressdotcomSetting from "~/src/components/set/publish/singleplatform/metaweblog/WordpressdotcomSetting.vue"
 
 // uses
 const { t } = useVueI18n()
@@ -64,6 +65,7 @@ const subtype = getSubPlatformTypeByKey(apiType)
     <typecho-setting v-else-if="subtype === SubPlatformType.Metaweblog_Typecho" :api-type="apiType" />
     <jvue-setting v-else-if="subtype === SubPlatformType.Metaweblog_Jvue" :api-type="apiType" />
     <wordpress-setting v-else-if="subtype === SubPlatformType.Wordpress_Wordpress" :api-type="apiType" />
+    <wordpressdotcom-setting v-else-if="subtype === SubPlatformType.Wordpress_Wordpressdotcom" :api-type="apiType" />
     <zhihu-setting v-else-if="subtype === SubPlatformType.Custom_Zhihu" :api-type="apiType" />
     <csdn-setting v-else-if="subtype === SubPlatformType.Custom_CSDN" :api-type="apiType" />
     <wechat-setting v-else-if="subtype === SubPlatformType.Custom_Wechat" :api-type="apiType" />

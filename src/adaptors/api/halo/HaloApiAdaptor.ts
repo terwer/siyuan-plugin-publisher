@@ -32,6 +32,7 @@ import { Base64 } from "js-base64"
 import sypIdUtil from "~/src/utils/sypIdUtil.ts"
 import { PostRequest } from "@halo-dev/api-client"
 import { HaloPostMeta } from "~/src/adaptors/api/halo/HaloPostMeta.ts"
+import FormDataUtils from "~/src/utils/FormDataUtils.ts"
 
 /**
  * Halo API 适配器
@@ -198,11 +199,7 @@ class HaloApiAdaptor extends BaseBlogApi {
       await this.haloFetch(`/apis/api.console.halo.run/v1alpha1/posts/${name}/content`, params.content, "PUT")
 
       // 重新发布
-      await this.haloFetch(
-        `/apis/api.console.halo.run/v1alpha1/posts/${params.post.metadata.name}/publish`,
-        {},
-        "PUT"
-      )
+      await this.haloFetch(`/apis/api.console.halo.run/v1alpha1/posts/${params.post.metadata.name}/publish`, {}, "PUT")
       this.logger.debug("halo 文章发布完成")
     } catch (e) {
       this.logger.error("Halo文章更新失败", e)
@@ -281,18 +278,14 @@ class HaloApiAdaptor extends BaseBlogApi {
       const bits = mediaObject.bits
       this.logger.debug("newMediaObject on halo =>", mediaObject)
 
-      // import
-      const win = this.appInstance.win
-      if (!win.require) {
-        throw new Error("非常抱歉，目前仅思源笔记PC客户端支持上传图片")
-      }
-      const { FormData, Blob } = win.require(`${this.appInstance.moduleBase}libs/node-fetch-cjs/dist/index.js`)
-      const blob = new Blob([bits], { type: mediaObject.type })
+      // get formData and Blob
+      const { FormData, Blob } = FormDataUtils.getFormData(this.appInstance)
 
       // uploadUrl
       const uploadUrl = `${this.cfg.apiUrl}/apis/api.console.halo.run/v1alpha1/attachments/upload`
 
       // formData
+      const blob = new Blob([bits], { type: mediaObject.type })
       const formData = new FormData()
       formData.append("file", blob, mediaObject.name)
       formData.append("policyName", "default-policy")
@@ -301,12 +294,14 @@ class HaloApiAdaptor extends BaseBlogApi {
 
       // 发送请求
       res = await this.haloFormFetch(uploadUrl, formData)
+
       this.logger.debug("halo upload success, res =>", res)
       if (!res.metadata) {
         throw new Error("Halo图片上传失败 =>" + mediaObject.name)
       }
     } catch (e) {
       this.logger.error("Error uploading image to halo:", e)
+      throw new Error("Error uploading image to halo:" + e.toString())
     }
 
     const siteImgId = res?.spec?.displayName
@@ -353,11 +348,7 @@ class HaloApiAdaptor extends BaseBlogApi {
     try {
       const post = await this.haloFetch(`/apis/content.halo.run/v1alpha1/posts/${name}`, {}, "GET")
 
-      const content = await this.haloFetch(
-        `/apis/api.console.halo.run/v1alpha1/posts/${name}/head-content`,
-        {},
-        "GET"
-      )
+      const content = await this.haloFetch(`/apis/api.console.halo.run/v1alpha1/posts/${name}/head-content`, {}, "GET")
 
       return Promise.resolve({
         post: post,
@@ -485,11 +476,11 @@ class HaloApiAdaptor extends BaseBlogApi {
     // 打印日志
     const apiUrl = `${this.cfg.apiUrl}${url}`
     this.logger.debug("向 Halo 请求数据，apiUrl =>", apiUrl)
-    this.logger.debug("向 Halo 请求数据，params =>", params)
 
     // 使用兼容的fetch调用并返回统一的JSON数据
     const body = ObjectUtil.isEmptyObject(params) ? "" : JSON.stringify(params)
-    const resJson = await this.apiProxyFetch(apiUrl, [headers], body, method, contentType)
+    this.logger.debug("向 Halo 请求数据，body =>", body)
+    const resJson = await this.apiProxyFetch(apiUrl, [headers], body, method, contentType, false, "base64", "text")
     this.logger.debug("向 Halo 请求数据，resJson =>", resJson)
 
     return resJson ?? null
@@ -508,7 +499,7 @@ class HaloApiAdaptor extends BaseBlogApi {
       Authorization: basicAuth,
     }
 
-    const resJson = await this.apiFormFetch(url, [header], formData)
+    const resJson = await this.apiProxyFormFetch(url, [header], formData)
     return resJson
   }
 }

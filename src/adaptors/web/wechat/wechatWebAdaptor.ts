@@ -30,6 +30,7 @@ import { BlogConfig, PageTypeEnum, Post, UserBlog } from "zhi-blog-api"
 import { toRaw } from "vue"
 import _ from "lodash-es"
 import { fileToBuffer } from "~/src/utils/polyfillUtils.ts"
+import FormDataUtils from "~/src/utils/FormDataUtils.ts"
 
 /**
  * 微信公众号网页授权适配器
@@ -442,6 +443,9 @@ class WechatWebAdaptor extends BaseWebApi {
   }
 
   public async uploadFile(file: File | Blob, filename?: string): Promise<any> {
+    // get formData and Blob
+    const { FormData, Blob } = FormDataUtils.getFormData(this.appInstance)
+
     this.logger.debug(`wechat start uploadFile ${filename}=>`, file)
     if (file instanceof Blob) {
       // import
@@ -449,7 +453,6 @@ class WechatWebAdaptor extends BaseWebApi {
       if (!win.require) {
         throw new Error("非常抱歉，目前仅思源笔记PC客户端支持上传图片")
       }
-      const { FormData, Blob } = win.require(`${this.appInstance.moduleBase}libs/node-fetch-cjs/dist/index.js`)
 
       // uploadUrl
       const ticket_id = this.cfg.metadata.commonData.data.user_name
@@ -464,7 +467,7 @@ class WechatWebAdaptor extends BaseWebApi {
 
       // 获取图片二进制数据
       // const fs = win.require("fs")
-      // const fileData = fs.readFileSync("/Users/terwer/Documents/pictures/3259282.jpeg")
+      // const fileData = fs.readFileSync("/Users/terwer/Documents/pictures/photo.jpeg")
       // const blob = new Blob([fileData], { type: "image/jpeg" })
       const bits = await fileToBuffer(file)
       const blob = new Blob([bits], { type: file.type })
@@ -534,6 +537,8 @@ class WechatWebAdaptor extends BaseWebApi {
    */
   private async wechatFetch(url: string, params: Record<string, any>) {
     this.logger.debug("before getFormdataFetch, params =>", params)
+    // get formData and Blob
+    const { FormData } = FormDataUtils.getFormData(this.appInstance)
 
     // formData
     const formData: any = new FormData()

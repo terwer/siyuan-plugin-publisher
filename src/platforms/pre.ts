@@ -238,6 +238,15 @@ export const pre = {
       authMode: AuthMode.API,
       isEnabled: false,
     },
+    {
+      platformType: PlatformType.Wordpress,
+      subPlatformType: SubPlatformType.Wordpress_Wordpressdotcom,
+      platformKey: "wordpress_Wordpressdotcom",
+      platformName: "Wordpress.com",
+      platformIcon: svgIcons.iconOTWordpressdotcom,
+      authMode: AuthMode.API,
+      isEnabled: false,
+    },
   ],
   customCfg: <DynamicConfig[]>[
     {

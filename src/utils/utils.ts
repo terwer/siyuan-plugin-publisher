@@ -27,6 +27,7 @@ import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { BlogAdaptor, WebAdaptor } from "zhi-blog-api"
 import { StrUtil } from "zhi-common"
+import pkg from "../../package.json"
 
 /**
  * 通用工具类
@@ -35,7 +36,7 @@ import { StrUtil } from "zhi-common"
  * @version 0.9.0
  * @since 0.9.0
  */
-export class Utils {
+class Utils {
   private static logger = createAppLogger("publisher-widget-utils")
 
   public static blogApi(appInstance: PublisherAppInstance, apiAdaptor: any) {
@@ -106,3 +107,6 @@ export class Utils {
     return value
   }
 }
+
+export { Utils }
+export { pkg }

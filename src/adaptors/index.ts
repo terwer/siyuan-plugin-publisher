@@ -53,6 +53,7 @@ import { useGitlabvitepressApi } from "~/src/adaptors/api/gitlab-vitepress/useGi
 import { useHaloApi } from "~/src/adaptors/api/halo/useHaloApi.ts"
 import { useTelegraphApi } from "~/src/adaptors/api/telegraph/useTelegraphApi.ts"
 import { useJvueApi } from "~/src/adaptors/api/jvue/useJvueApi.ts"
+import { useWordpressdotcomApi } from "~/src/adaptors/api/wordpress-dot-com/useWordpressdotcomApi.ts"
 
 /**
  * 适配器统一入口
@@ -176,6 +177,11 @@ class Adaptors {
       }
       case SubPlatformType.Wordpress_Wordpress: {
         const { cfg } = await useWordpressApi(key, newCfg)
+        conf = cfg
+        break
+      }
+      case SubPlatformType.Wordpress_Wordpressdotcom: {
+        const { cfg } = await useWordpressdotcomApi(key, newCfg)
         conf = cfg
         break
       }
@@ -336,6 +342,11 @@ class Adaptors {
       }
       case SubPlatformType.Wordpress_Wordpress: {
         const { blogApi } = await useWordpressApi(key, newCfg)
+        blogAdaptor = blogApi
+        break
+      }
+      case SubPlatformType.Wordpress_Wordpressdotcom: {
+        const { blogApi } = await useWordpressdotcomApi(key, newCfg)
         blogAdaptor = blogApi
         break
       }

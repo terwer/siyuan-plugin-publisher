@@ -25,7 +25,7 @@
 
 import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { CategoryInfo, Post, UserBlog, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
+import { Attachment, MediaObject, Post, UserBlog, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
 import { CommonGithubClient, GithubConfig } from "zhi-github-middleware"
 import { CommonGithubConfig } from "~/src/adaptors/api/base/github/commonGithubConfig.ts"
 import { StrUtil, YamlUtil } from "zhi-common"
@@ -215,6 +215,55 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
     // previewUrl = StrUtil.pathJoin(this.cfg.postHome, previewUrl)
 
     return previewUrl
+  }
+
+  public async newMediaObject(mediaObject: MediaObject): Promise<Attachment> {
+    let res: any
+    const cfg = this.cfg as CommonGithubConfig
+
+    try {
+      const bits = mediaObject.bits
+      const base64 = Base64.fromUint8Array(bits)
+      const savePath = this.cfg.imageStorePath ?? "images"
+      const imageFullPath = StrUtil.pathJoin(savePath, mediaObject.name)
+      const res = await this.githubClient.publishGithubPage(imageFullPath, base64, "nase64")
+
+      const siteImgId = mediaObject.name
+      const siteArticleId = mediaObject.name
+      // https://raw.githubusercontent.com/terwer/hexo-blog/test/images/image-20240401103158-bnwme8a.png
+      let part = StrUtil.pathJoin("https://raw.githubusercontent.com", this.cfg.username)
+      part = StrUtil.pathJoin(part, cfg.githubRepo)
+      part = StrUtil.pathJoin(part, cfg.githubBranch)
+      part = StrUtil.pathJoin(part, encodeURI(savePath))
+      part = StrUtil.pathJoin(part, encodeURIComponent(mediaObject.name))
+      const siteImgUrl = part
+      this.logger.debug("github publishGithubPage res =>", res)
+
+      return {
+        attachment_id: siteImgId,
+        date_created_gmt: new Date(),
+        parent: 0,
+        link: siteImgUrl,
+        title: mediaObject.name,
+        caption: "",
+        description: "",
+        metadata: {
+          width: 0,
+          height: 0,
+          file: "",
+          filesize: 0,
+          sizes: [],
+        },
+        type: mediaObject.type,
+        thumbnail: "",
+        id: siteArticleId,
+        file: mediaObject.name,
+        url: siteImgUrl,
+      }
+    } catch (e) {
+      this.logger.error("Error uploading image to gitlab:", e)
+      throw e
+    }
   }
 
   // ================

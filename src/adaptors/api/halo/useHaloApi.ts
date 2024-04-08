@@ -80,6 +80,9 @@ const useHaloApi = async (key: string, newCfg?: HaloConfig) => {
   cfg.categoryType = CategoryTypeEnum.CategoryType_Multi
   cfg.allowCateChange = true
   cfg.knowledgeSpaceEnabled = false
+  // picbed service
+  cfg.picgoPicbedSupported = true
+  cfg.bundledPicbedSupported = true
 
   // 创建 Halo API 适配器
   const blogApi = new HaloApiAdaptor(appInstance, cfg)

@@ -24,17 +24,17 @@
  */
 
 /**
- * 文档工具类
+ * 预定义 WordPress 变量
+ *
+ * @author terwer
+ * @version 0.9.0
+ * @since 0.9.0
  */
-class PageUtils {
-  public static getPageId() {
-    // 查找包含 protyle 类但不包含 fn__none 的 div 元素
-    const protyleElement = document.querySelector("div.protyle:not(.fn__none)")
-    // 在该 div 元素下查找包含 protyle-title 类的 div 元素，并查找 data-node-id 属性
-    const protyleTitleElement = protyleElement?.querySelector("div.protyle-title")
-    // 如果该元素存在 data-node-id 属性，则获取其值并返回，否则返回空字符串
-    return protyleTitleElement?.hasAttribute("data-node-id") ? protyleTitleElement.getAttribute("data-node-id") : ""
-  }
+class WordpressdotcomConstants {
+    // wordpress.com 不支持 metaWeblog.getUsersBlogs 只支持 blogger.getUsersBlogs
+    public static METHOD_GET_USERS_BLOGS = "blogger.getUsersBlogs"
+    // wordpress.com 不支持 metaWeblog.deletePost 只支持 blogger.deletePost
+    public static METHOD_DELETE_POST = "blogger.deletePost"
 }
 
-export default PageUtils
+export { WordpressdotcomConstants }

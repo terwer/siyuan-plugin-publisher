@@ -28,12 +28,13 @@ import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { CommonGitlabConfig } from "~/src/adaptors/api/base/gitlab/commonGitlabConfig.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { CommonGitlabClient } from "zhi-gitlab-middleware"
-import { CategoryInfo, Post, UserBlog, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
+import { Attachment, CategoryInfo, MediaObject, Post, UserBlog, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
 import { StrUtil, YamlUtil } from "zhi-common"
 import { toRaw } from "vue"
 import { Base64 } from "js-base64"
 import { isDev } from "~/src/utils/constants.ts"
 import sypIdUtil from "~/src/utils/sypIdUtil.ts"
+import { GitlabFetchClientProxyAdaptor } from "~/src/adaptors/api/base/gitlab/gitlabFetchClientProxyAdaptor.ts"
 
 /**
  * Gitlab API 适配器
@@ -44,10 +45,14 @@ import sypIdUtil from "~/src/utils/sypIdUtil.ts"
  */
 class CommonGitlabApiAdaptor extends BaseBlogApi {
   private gitlabClient: CommonGitlabClient
+  private readonly gitlabCfg: CommonGitlabConfig
 
   constructor(appInstance: PublisherAppInstance, cfg: CommonGitlabConfig) {
     super(appInstance, cfg)
     this.logger = createAppLogger("common-gitlab-api-adaptor")
+
+    this.gitlabCfg = cfg
+    const commonFetchClient = new GitlabFetchClientProxyAdaptor(appInstance, cfg)
 
     this.gitlabClient = new CommonGitlabClient(
       appInstance,
@@ -59,6 +64,7 @@ class CommonGitlabApiAdaptor extends BaseBlogApi {
       cfg.defaultMsg,
       cfg.email,
       cfg.author,
+      commonFetchClient,
       cfg.middlewareUrl,
       isDev
     )
@@ -223,6 +229,53 @@ class CommonGitlabApiAdaptor extends BaseBlogApi {
     // previewUrl = StrUtil.pathJoin(this.cfg.postHome, previewUrl)
 
     return previewUrl
+  }
+
+  public async newMediaObject(mediaObject: MediaObject): Promise<Attachment> {
+    try {
+      const bits = mediaObject.bits
+      const base64 = Base64.fromUint8Array(bits)
+      const imageFullPath = StrUtil.pathJoin(this.cfg.imageStorePath ?? "images", mediaObject.name)
+      const res = await this.gitlabClient.createRepositoryFile(imageFullPath, base64, "base64")
+      this.logger.debug("gitlab createRepositoryFile res =>", res)
+      if (StrUtil.isEmptyString(res.file_path)) {
+        throw new Error("Gitlab 调用API异常")
+      }
+
+      const siteImgId = mediaObject.name
+      const siteArticleId = mediaObject.name
+      // http://localhost:8002/terwer/terwer-github-io/-/raw/test/images/image-20240331110420-v181nvl.png
+      let part = StrUtil.pathJoin(this.cfg.home, this.cfg.username)
+      part = StrUtil.pathJoin(part, this.gitlabCfg.githubRepo)
+      part = StrUtil.pathJoin(part, "-/raw")
+      part = StrUtil.pathJoin(part, res.branch)
+      part = StrUtil.pathJoin(part, res.file_path)
+      const siteImgUrl = part
+      return {
+        attachment_id: siteImgId,
+        date_created_gmt: new Date(),
+        parent: 0,
+        link: siteImgUrl,
+        title: mediaObject.name,
+        caption: "",
+        description: "",
+        metadata: {
+          width: 0,
+          height: 0,
+          file: "",
+          filesize: 0,
+          sizes: [],
+        },
+        type: mediaObject.type,
+        thumbnail: "",
+        id: siteArticleId,
+        file: mediaObject.name,
+        url: siteImgUrl,
+      }
+    } catch (e) {
+      this.logger.error("Error uploading image to gitlab:", e)
+      throw e
+    }
   }
 
   // ================

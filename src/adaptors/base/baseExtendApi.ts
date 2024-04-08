@@ -33,6 +33,7 @@ import {
   MediaObject,
   PageEditMode,
   PageTypeEnum,
+  PicbedServiceTypeEnum,
   Post,
   PostUtil,
   TagInfo,
@@ -45,19 +46,13 @@ import {
 import { createAppLogger, ILogger } from "~/src/utils/appLogger.ts"
 import { LuteUtil } from "~/src/utils/luteUtil.ts"
 import { usePicgoBridge } from "~/src/composables/usePicgoBridge.ts"
-import { base64ToBuffer, path, remoteImageToBase64Info, toBase64Info } from "~/src/utils/polyfillUtils.ts"
+import { base64ToBuffer, path, remoteImageToBase64Info } from "~/src/utils/polyfillUtils.ts"
 import { DateUtil, HtmlUtil, ObjectUtil, StrUtil, YamlUtil } from "zhi-common"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
-import { isFileExists } from "~/src/utils/siyuanUtils.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { SiyuanAttr, SiyuanKernelApi } from "zhi-siyuan-api"
 import { DynamicConfig, getDynPlatformKeyFromPostidKey } from "~/src/platforms/dynamicConfig.ts"
-import {
-  CATE_AUTO_NAME,
-  LEGENCY_SHARED_PROXT_MIDDLEWARE,
-  MUST_USE_OWN_PLATFORM,
-  MUST_USE_PICBED_PLATFORM,
-} from "~/src/utils/constants.ts"
+import { CATE_AUTO_NAME } from "~/src/utils/constants.ts"
 import { toRaw } from "vue"
 import _ from "lodash-es"
 import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
@@ -553,56 +548,25 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
   private async handlePictures(doc: Post, id: string, publishCfg?: any): Promise<Post> {
     const cfg: BlogConfig = publishCfg?.cfg
     const dynCfg: DynamicConfig = publishCfg?.dynCfg
-    const middlewareUrl = cfg?.middlewareUrl
 
     const post = _.cloneDeep(doc) as Post
     this.logger.debug("图片处理之前, post =>", { post: toRaw(post) })
 
-    // 判断key包含 custom_Zhihu 或者 /custom_Zhihu-\w+/
-    const mustUseOwnPlatform: string[] = MUST_USE_OWN_PLATFORM
-    const mustUsePicbedPlatform: string[] = MUST_USE_PICBED_PLATFORM
-    const isPicgoInstalled: boolean = await this.checkPicgoInstalled()
-    if (!isPicgoInstalled) {
-      this.logger.warn("未安装 PicGO 插件，将使用平台上传图片")
-    }
-
-    let mustUseOwn = false
-    let mustUsePicbed = false
-    if (dynCfg?.platformKey) {
-      // 注意如果 platformKey=custom_Zhihu 或者 custom_Zhihu-xxx custom_Notion-xxx 也算 可以参考 /custom_Zhihu-\w+/
-      mustUseOwn = mustUseOwnPlatform.some((platform) => {
-        const regex = new RegExp(`${platform}(-\\w+)?`)
-        return regex.test(dynCfg.platformKey)
-      })
-      mustUsePicbed = mustUsePicbedPlatform.some((platform) => {
-        const regex = new RegExp(`${platform}(-\\w+)?`)
-        return regex.test(dynCfg.platformKey)
-      })
-    }
-
-    if (mustUseOwn) {
-      this.logger.warn("该平台不支持 Picgo 插件，将使用平台上传图片")
-    }
-    const usePicgo: boolean = isPicgoInstalled && !mustUseOwn
-
-    if (usePicgo) {
-      // ==========================
-      // 使用 PicGO上传图片
-      // ==========================
-      // 图片替换
-      this.logger.info("使用 PicGO上传图片")
-      this.logger.debug("开始图片处理, post =>", { post: toRaw(post) })
-      post.markdown = await this.picgoBridge.handlePicgo(id, post.markdown)
-      this.logger.debug("图片处理完毕, post.markdown =>", { md: post.markdown })
-    } else {
-      if (mustUsePicbed) {
-        const errMsg = "检测到您未安装Picgo插件，该平台的图片将无法处理，如需使用图床功能，请在集市下载并配置Picgo插件"
-        this.logger.error(errMsg)
-        await this.kernelApi.pushMsg({
-          msg: errMsg,
-          timeout: 7000,
-        })
-      } else {
+    // 获取图床服务
+    const picbedService = cfg.picbedService
+    switch (picbedService) {
+      case PicbedServiceTypeEnum.PicGo: {
+        // ==========================
+        // 使用 PicGO上传图片
+        // ==========================
+        // 图片替换
+        this.logger.info("使用 PicGO上传图片")
+        this.logger.debug("开始图片处理, post =>", { post: toRaw(post) })
+        post.markdown = await this.picgoBridge.handlePicgo(id, post.markdown)
+        this.logger.debug("图片处理完毕, post.markdown =>", { md: post.markdown })
+        break
+      }
+      case PicbedServiceTypeEnum.Bundled: {
         // ==========================
         // 使用平台上传图片
         // ==========================
@@ -619,7 +583,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
         try {
           for (const image of images) {
             const imageUrl = image.url
-            const base64Info = await this.readFileToBase64(imageUrl, middlewareUrl)
+            const base64Info = await this.readFileToBase64(imageUrl)
             const bits = base64ToBuffer(base64Info.imageBase64)
             const mediaObject = new MediaObject(image.name, base64Info.mimeType, bits)
             this.logger.debug("before upload, mediaObject =>", mediaObject)
@@ -635,7 +599,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
             })
           }
         } catch (e) {
-          const errMsg2 = "文章可能已经发布成功，但是平台图片上传失败"
+          const errMsg2 = "文章可能已经发布成功，但是平台图片上传失败。请安装「PicGo 图床」并进行配置"
           this.logger.error(errMsg2, e)
           await this.kernelApi.pushMsg({
             msg: errMsg2,
@@ -655,6 +619,15 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
           return urlMap[match] || match
         }
         post.markdown = post.markdown.replace(pictureReplacePattern, replaceUrl)
+        break
+      }
+      default: {
+        await this.kernelApi.pushMsg({
+          msg: "未指定上传图片服务，不处理图片",
+          timeout: 7000,
+        })
+        this.logger.warn("未指定上传图片服务，不处理图片")
+        break
       }
     }
 
@@ -667,44 +640,34 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
   }
 
   /**
-   * 检查 Picgo 是否已安装
-   *
-   * @returns 一个 Promise，解析为布尔值，表示是否已安装 Picgo
-   */
-  private async checkPicgoInstalled() {
-    // 检测是否安装 picgo 插件
-    return await isFileExists(this.kernelApi, "/data/plugins/siyuan-plugin-picgo/plugin.json", "text")
-  }
-
-  /**
    * 读取文件并将其转换为 Base64 编码
    *
    * @param url - 要读取的文件的 URL
-   * @param middlewareUrl - 代理地址
-   * @returns 一个 Promise，解析为文件的 Base64 编码字符串
    */
-  private async readFileToBase64(url: string, middlewareUrl?: string): Promise<any> {
+  private async readFileToBase64(url: string): Promise<any> {
     let base64Info: any
     if (this.isSiyuanOrSiyuanNewWin) {
       this.logger.info("Inside Siyuan notes, use the built-in request to obtain base64")
       base64Info = await remoteImageToBase64Info(url)
     } else {
       this.logger.info("Outside the browser, use an image proxy")
-      const proxyUrl = StrUtil.isEmptyString(middlewareUrl) ? LEGENCY_SHARED_PROXT_MIDDLEWARE : middlewareUrl
       let response: any
-      if (response instanceof BaseBlogApi) {
+      if (this.api instanceof BaseBlogApi) {
         const blogApi = this.api as BaseBlogApi
-        response = await blogApi.apiProxyFetch(`${proxyUrl}/image`, [], { url: url }, "POST")
-      } else if (response instanceof BaseWebApi) {
+        response = await blogApi.apiProxyFetch(url, [], undefined, "GET", undefined, true, "base64", "base64")
+      } else if (this.api instanceof BaseWebApi) {
         const webApi = this.api as BaseWebApi
-        response = await webApi.webProxyFetch(`${proxyUrl}/image`, [], { url: url }, "POST")
+        response = await webApi.webProxyFetch(url, [], undefined, "GET", undefined, true, "base64", "base64")
       } else {
         throw new Error("proxyFetch is not valid")
       }
       this.logger.debug("readFileToBase64 proxyFetch response =>", response)
-      const resBody = response.body
-      const base64String = resBody.base64
-      base64Info = toBase64Info(url, base64String)
+      const base64String = response.body
+      base64Info = {
+        imageName: url.substring(url.lastIndexOf("/") + 1),
+        mimeType: response.contentType,
+        imageBase64: base64String,
+      }
     }
 
     this.logger.debug("readFileToBase64 proxyFetch base64Info =>", { base64Info })

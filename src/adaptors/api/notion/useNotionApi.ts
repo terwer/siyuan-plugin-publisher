@@ -81,6 +81,9 @@ const useNotionApi = async (key: string, newCfg?: NotionConfig) => {
   cfg.placeholder.knowledgeSpaceReadonlyModeTip =
     "由于Notion平台的限制，暂时不支持编辑所属父页面。如果您想移动文档，请先点击取消删除该文档，然后重新选择新的根页面发布"
   cfg.cateSearchEnabled = true
+  // picbed service
+  cfg.picgoPicbedSupported = true
+  cfg.bundledPicbedSupported = false
 
   // 创建 Notion API 适配器
   const blogApi = new NotionApiAdaptor(appInstance, cfg)

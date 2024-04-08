@@ -1,6 +1,6 @@
 **Privacy Policy**
 
-terwer built the 思源笔记发布辅助工具 app as an Open Source app. This SERVICE is provided by terwer at no cost and is intended for use as is.
+terwer built the siyuan-plugin-publisher app as an Open Source app. This SERVICE is provided by terwer at no cost and is intended for use as is.
 
 This page is used to inform visitors regarding my policies with the collection, use, and disclosure of Personal Information if anyone decided to use my Service.
 

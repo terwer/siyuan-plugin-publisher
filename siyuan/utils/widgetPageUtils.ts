@@ -23,12 +23,18 @@
  * questions.
  */
 
-import { describe, it } from "vitest"
-import CrossPageUtils from "./crossPageUtils"
+/**
+ * 文档工具类
+ */
+class WidgetPageUtils {
+  public static getPageId() {
+    // 查找包含 protyle 类但不包含 fn__none 的 div 元素
+    const protyleElement = document.querySelector("div.protyle:not(.fn__none)")
+    // 在该 div 元素下查找包含 protyle-title 类的 div 元素，并查找 data-node-id 属性
+    const protyleTitleElement = protyleElement?.querySelector("div.protyle-title")
+    // 如果该元素存在 data-node-id 属性，则获取其值并返回，否则返回空字符串
+    return protyleTitleElement?.hasAttribute("data-node-id") ? protyleTitleElement.getAttribute("data-node-id") : ""
+  }
+}
 
-describe("test crossPageUtils", () => {
-  it("test subPlatformName", () => {
-    const result = CrossPageUtils.subPlatformName("Gitlabvuepress2", 11)
-    console.log(result)
-  })
-})
+export default WidgetPageUtils

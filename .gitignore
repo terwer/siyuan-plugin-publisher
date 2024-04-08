@@ -1,6 +1,7 @@
 # idea
 .idea
 .DS_Store
+.turbo
 
 # build
 dist

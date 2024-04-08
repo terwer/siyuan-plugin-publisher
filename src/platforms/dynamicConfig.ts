@@ -200,6 +200,7 @@ export enum SubPlatformType {
 
   // WordPress
   Wordpress_Wordpress = "Wordpress",
+  Wordpress_Wordpressdotcom = "Wordpressdotcom",
 
   // Custom
   Custom_Zhihu = "Zhihu",
@@ -266,6 +267,7 @@ export function getSubtypeList(ptype: PlatformType): SubPlatformType[] {
       break
     case PlatformType.Wordpress:
       subtypeList.push(SubPlatformType.Wordpress_Wordpress)
+      subtypeList.push(SubPlatformType.Wordpress_Wordpressdotcom)
       break
     case PlatformType.Custom:
       subtypeList.push(SubPlatformType.Custom_Zhihu)

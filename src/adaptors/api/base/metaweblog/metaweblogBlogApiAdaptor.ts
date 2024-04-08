@@ -40,7 +40,7 @@ import { useProxy } from "~/src/composables/useProxy.ts"
  * @since 0.9.0
  */
 class MetaweblogBlogApiAdaptor extends BaseBlogApi {
-  private readonly proxyXmlrpc: any
+  protected readonly proxyXmlrpc: any
 
   /**
    * 初始化 metaweblog API 适配器
@@ -128,7 +128,12 @@ class MetaweblogBlogApiAdaptor extends BaseBlogApi {
     publish = publish ?? true
 
     // 不传递默认是发布，传递false才是草稿
+    const postStatus = post.post_status
     post.post_status = publish === false ? PostStatusEnum.PostStatusEnum_Draft : PostStatusEnum.PostStatusEnum_Publish
+    // 以设置的状态为准
+    if (postStatus !== post.post_status) {
+      post.post_status = postStatus
+    }
 
     const postStruct = this.createPostStruct(post)
     this.logger.debug("postStruct=>", postStruct)
@@ -157,7 +162,12 @@ class MetaweblogBlogApiAdaptor extends BaseBlogApi {
     publish = publish ?? true
 
     // 不传递默认是发布，传递false才是草稿
+    const postStatus = post.post_status
     post.post_status = publish === false ? PostStatusEnum.PostStatusEnum_Draft : PostStatusEnum.PostStatusEnum_Publish
+    // 以设置的状态为准
+    if (postStatus !== post.post_status) {
+      post.post_status = postStatus
+    }
 
     const postStruct = this.createPostStruct(post)
     this.logger.debug("postStruct=>", postStruct)
@@ -286,15 +296,20 @@ class MetaweblogBlogApiAdaptor extends BaseBlogApi {
       })
     }
 
-    // 浏览器端的date转换有问题
-    if (!BrowserUtil.isInBrowser) {
-      Object.assign(postObj, {
-        // 这里要注意时间格式
-        // http://www.ab-weblog.com/en/create-new-posts-with-publishing-date-in-wordpress-using-xml-rpc-and-php/
-        // dateCreated: post.dateCreated.toISOString() || new Date().toISOString()
-        dateCreated: post.dateCreated || new Date(),
-      })
-    }
+    // // 浏览器端的date转换有问题，先关闭这个功能
+    // Object.assign(postObj, {
+    //   // 这里要注意时间格式
+    //   // http://www.ab-weblog.com/en/create-new-posts-with-publishing-date-in-wordpress-using-xml-rpc-and-php/
+    //   // dateCreated: post.dateCreated.toISOString() || new Date().toISOString()
+    //   dateCreated: post.dateCreated || new Date(),
+    // })
+    //
+    // Object.assign(postObj, {
+    //   // 这里要注意时间格式
+    //   // http://www.ab-weblog.com/en/create-new-posts-with-publishing-date-in-wordpress-using-xml-rpc-and-php/
+    //   // dateCreated: post.dateCreated.toISOString() || new Date().toISOString()
+    //   dateUpdated: post.dateUpdated || new Date(),
+    // })
 
     Object.assign(postObj, {
       categories: post.categories || [],

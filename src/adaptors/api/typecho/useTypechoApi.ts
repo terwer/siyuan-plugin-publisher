@@ -88,6 +88,9 @@ export const useTypechoApi = async (key?: string, newCfg?: TypechoConfig) => {
   cfg.categoryType = CategoryTypeEnum.CategoryType_Multi
   cfg.allowCateChange = true
   cfg.knowledgeSpaceEnabled = false
+  // picbed service
+  cfg.picgoPicbedSupported = true
+  cfg.bundledPicbedSupported = true
 
   // 创建Typecho API适配器
   const blogApi = new TypechoApiAdaptor(appInstance, cfg)

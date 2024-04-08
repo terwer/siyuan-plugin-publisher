@@ -145,6 +145,8 @@ export default {
   "setting.blog.type.github.token.gen": "Generate Github Personal Token",
   "setting.blog.type.github.default.path": "Doc path",
   "setting.blog.type.github.default.path.tip": "Doc path, eg:docs/_posts",
+  "setting.blog.type.github.images.path": "Image store path",
+  "setting.blog.type.github.images.path.tip": "Image store path, eg:images",
   "setting.blog.type.github.msg": "Commit msg",
   "setting.blog.type.github.msg.tip": "Commit msg, eg:auto published by sy-post-publisher",
   "setting.blog.type.github.author": "Author",
@@ -226,7 +228,8 @@ export default {
   "post.bind.kms.postid": "KMS ID",
   "post.bind.conf.save": "Save",
   "post.bind.conf.v081": "Examine the v0.8.1 metadata and import it",
-  "post.bind.auto.error": "No ID detected, kindly input the document root ID manually, before proceeding with the repair.",
+  "post.bind.auto.error":
+    "No ID detected, kindly input the document root ID manually, before proceeding with the repair.",
   "post.bind.auto.empty": "This document has never been published, hence no repair is necessary",
   "post.bind.conf.cancel": "Cancel",
   "form.validate.name.required": "Please input name",
@@ -316,7 +319,7 @@ export default {
   "siyuan.browser.menu.preview.btn": "Preview",
   "siyuan.browser.menu.manage.btn": "Manage",
   "siyuan.browser.menu.anki.btn": "Anki",
-  "siyuan.browser.menu.picture.btn": "PicGO",
+  "siyuan.browser.menu.picture.btn": "PicGo",
   "siyuan.browser.menu.setting.btn": "Setting",
   "anki.siyuan.deck": "Deck",
   "anki.siyuan.deck.new": "New deck",
@@ -404,6 +407,13 @@ export default {
     "WordPress's XMLRPC remote release address, usually: https:// <WordPress blog address> /xmlrpc.php",
   "setting.wordpress.previewUrl.tip": "The preview rules of the WordPress platform are usually :? P = [Postid]",
 
+  "setting.wordpressdotcom.home.tip": "Wordpress homepage",
+  "setting.wordpressdotcom.username.tip": "WordPress login name, note: it is login name, not a user nickname (*^▽^*)",
+  "setting.wordpressdotcom.password.tip": "Wordpress login password",
+  "setting.wordpressdotcom.apiUrl.tip":
+    "WordPress's XMLRPC remote release address, usually: https:// <WordPress login name>.wordpress.com/xmlrpc.php",
+  "setting.wordpressdotcom.previewUrl.tip": "The preview rules of the WordPress platform are usually :? P = [Postid]",
+
   "setting.oschina.home.tip": "Homepage of open source China, usually: https://my.oschina.net/ <Your username>",
   "setting.oschina.username.tip": "Open source China login name, you can enter the login mailbox",
   "setting.oschina.password.tip": "Open source China login password",
@@ -482,7 +492,7 @@ export default {
   "setting.picgo.refer.to": "For details, please refer to:",
   "setting.picgo.refer.to.online.doc": "Picgo configuration online documentation",
   "setting.picgo.picbed": "Picbed setting",
-  "setting.picgo.picgo": "PicGO setting",
+  "setting.picgo.picgo": "PicGo setting",
   "main.opt.edit": "Edit",
   "main.opt.delete": "Delete",
   "setting.picgo.picgo.open.config.file": "Open config file",
@@ -664,18 +674,48 @@ export default {
   "message.publish.notShared":
     "The article has not been shared and therefore cannot be viewed externally. Kindly share the article or preview it within the PC client through the plugin menu.",
 
+  "setting.telegraph.username.label": "Author",
+  "setting.telegraph.password.label": "Uuid",
+  "setting.telegraph.home.tip": "The primary landing page of the telegra.ph platform typically remains constant at: https://telegra.ph/",
+  "setting.telegraph.username.tip": "The individual credited as the author, a detail showcased in the article's specifics, is customizable at will, with the default setting being empty.",
+  "setting.telegraph.password.tip": "The uuid pertinent to the current environment. Please note: 1. Anonymous mode automatically retrieves this detail, requiring no manual input; 2. Logging in as a user necessitates the entry of the Cookie's thp_uuid.",
+  "setting.telegraph.apiurl.tip": "The designated API endpoint for telegra.ph, routinely established as: https://telegra.ph/",
+  "setting.telegraph.previewUrl.tip": "The prescribed pattern for previewing telegra.ph articles commonly follows this structure: /[notebook]/[postid]",
+  "setting.telegraph.accessToken.tip": "This item is unnecessary in anonymous mode. For authenticated sessions, please procure the tph_token from the browser post authorization via the TG client. To ensure the sanctity of your privacy, exercise caution against sharing this token with any third party.",
+  "setting.telegraph.saveHash.tip": "No need to fill out; automatic retrieval after clicking validation.",
+  "setting.telegraph.forceReAuth.tip": "After the authorization information takes effect, uncheck this option, and then reauthorize. Note: Old articles may become uneditable as a result.",
+  "setting.telegraph.login.anonymous": "Anonymous",
+  "setting.telegraph.login.user": "User",
+
   "page.loading": "Page is loading...",
 
   "setting.blog.middlewareUrl.new": "Fresh Proxy (Recommended)",
   "setting.blog.corsAnywhereUrl.tip":
-    "CORS Global Proxy, once configured, helps alleviate browser cross-origin issues.",
+    "CORS Global Proxy, once configured, helps alleviate browser common-origin issues.",
   "setting.blog.middlewareUrl.my.new.tip":
-    "Enhanced CORS proxy, enabling comprehensive cross-origin requests. It is advisable to deploy independently. For deployment guidance, kindly refer to https://github.com/Zibri/cloudflare-cors-anywhere.",
+    "Enhanced CORS proxy, enabling comprehensive common-origin requests. It is advisable to deploy independently. For deployment guidance, kindly refer to https://github.com/Zibri/cloudflare-cors-anywhere.",
   "reminder.blog.middlewareUrl.my.warning":
     "A special note: Request limits are set at '100,000 times/day' and '1,000 times/10 minutes'. For the benefit of all, kindly refrain from malicious requests; otherwise, we reserve the right to terminate this proxy service.",
 
   "platform.new.platform":
     "It has been observed that there are still [count] internal platforms [platform] awaiting importation. You may utilize the platform importation tool for a bulk import, or alternatively, manually add them from the plugin store.",
 
-  "import.v081.warn": "Given that v0.8.1 is considered a significantly antiquated iteration, this feature may no longer be pertinent. Should you find yourself in need of this functionality, please direct your feedback to youweics@qq.com, and we shall deliberate on its implementation based on demand."
+  "import.v081.warn":
+    "Given that v0.8.1 is considered a significantly antiquated iteration, this feature may no longer be pertinent. Should you find yourself in need of this functionality, please direct your feedback to youweics@qq.com, and we shall deliberate on its implementation based on demand.",
+
+  "publisher.picbed.service": "Image Hosting Service",
+  "publisher.picbed.none": "Not in use",
+  "publisher.picbed.picgo": "PicGo Plugin",
+  "publisher.picbed.picgo.not.install": "PicGo plugin not detected. You may proceed to the plugin store for installation before enabling it.",
+  "publisher.picbed.bundled": "Current Platform",
+  "publisher.picbed.recom1": "Strongly Recommended",
+  "publisher.picbed.recom2": "Recommended",
+  "publisher.post.status": "Article Status",
+  "publisher.post.status.publish": "Published",
+  "publisher.post.status.draft": "Draft",
+  "publisher.post.status.private": "Private",
+  "publisher.post.status.future": "Scheduled",
+  "publisher.post.password": "Password Protection",
+  "publisher.post.password.tip": "Please enter the password for the article; leave blank if not setting one",
+  "publisher.post.future": "Scheduled Publishing",
 }

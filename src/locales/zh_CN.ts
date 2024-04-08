@@ -147,6 +147,8 @@ export default {
   "setting.blog.type.github.default.path": "存储目录",
   "setting.blog.type.github.default.path.tip":
     "存储目录例如：docs，部分平台可使用[auto]作为特殊占位符，代表自动映射层级目录，例如：docs/[auto]",
+  "setting.blog.type.github.images.path": "图片存储目录",
+  "setting.blog.type.github.images.path.tip": "图片存储目录，相对于仓库根目录，留空则使用相对于根目录的 images 目录",
   "setting.blog.type.github.msg": "提交信息",
   "setting.blog.type.github.msg.tip": "提交信息，例如：auto published by siyuan-publish-publisher",
   "setting.blog.type.github.author": "作者",
@@ -323,7 +325,7 @@ export default {
   "anki.siyuan.tag": "标签",
   "anki.siyuan.tag.new": "新标签",
   "picgo.chrome.tip":
-    "您当前使用的是浏览器插件，需要从这里下载配置 PicGO 客户端：https://github.com/Molunerfinn/PicGo/releases",
+    "您当前使用的是浏览器插件，需要从这里下载配置 PicGo 客户端：https://github.com/Molunerfinn/PicGo/releases",
   "picgo.siyuan.tip": "您当前使用的是思源笔记挂件，PicGO已内置，只需配置即可",
   "post.detail.button.copy.id": "复制本文ID",
   "post.detail.button.share.link": "复制分享链接",
@@ -342,7 +344,7 @@ export default {
   "picgo.pic.preview": "图片预览",
   "picgo.pic.setting": "图床设置",
   "picgo.pic.setting.no.tip":
-    "由于您当前使用的是浏览器插件，无法直接集成 PicGO ，只能通过 HTTP 请求间接调用本地 PicGO 客户端上图片，请直接在本地 PicGO 客户端进行设置。如需体验更加完整的功能，请通过思源笔记挂件版挂载菜单打开新窗口的方式使用。详情请参考：https://docs.publish.terwer.space/post/the-pendant-mode-is-used-in-the-method-of-mounting-menu-169wrw.html",
+    "由于您当前使用的是浏览器插件，无法直接集成 PicGo ，只能通过 HTTP 请求间接调用本地 PicGo 客户端上图片，请直接在本地 PicGo 客户端进行设置。如需体验更加完整的功能，请通过思源笔记挂件版挂载菜单打开新窗口的方式使用。详情请参考：https://docs.publish.terwer.space/post/the-pendant-mode-is-used-in-the-method-of-mounting-menu-169wrw.html",
   "github.use.permalink": "永久链接",
   "github.use.permalink.no.warn":
     "您已关闭永久链接，formatter将不会生成标记，这在某些特殊场景下可能有用，大部分情况下需要开启此选项，注意：目前仅仅在HUGO平台生效，主要是适配Docsy",
@@ -396,6 +398,13 @@ export default {
   "setting.wordpress.password.tip": "WordPress登录密码",
   "setting.wordpress.apiUrl.tip": "WordPress的xmlrpc远程发布地址，通常是：https://<WordPress博客地址>/xmlrpc.php",
   "setting.wordpress.previewUrl.tip": "WordPress平台的文章预览规则，通常是：?p=[postid]",
+
+  "setting.wordpressdotcom.home.tip": "WordPress.com 首页",
+  "setting.wordpressdotcom.username.tip": "WordPress.com 登录名，注意：是登录名或者邮箱，不是用户昵称哦(*^▽^*)",
+  "setting.wordpressdotcom.password.tip": "WordPress.com 登录密码",
+  "setting.wordpressdotcom.apiUrl.tip":
+    "WordPress.com 的xmlrpc远程发布地址，通常是：https://<WordPress登录名>.wordpress.com/xmlrpc.php",
+  "setting.wordpressdotcom.previewUrl.tip": "WordPress.com 平台的文章预览规则，通常是：?p=[postid]",
 
   "setting.oschina.home.tip": "开源中国首页，通常是：https://my.oschina.net/<您的用户名>",
   "setting.oschina.username.tip": "开源中国登录名，可以输入登录邮箱",
@@ -639,11 +648,19 @@ export default {
 
   "message.publish.notShared": "文章尚未分享，无法在外部查看。请分享文章或者在PC 客户端内部通过插件菜单进行预览。",
 
+  "setting.telegraph.username.label": "作者",
+  "setting.telegraph.password.label": "Uuid",
   "setting.telegraph.home.tip": "telegra.ph平台首页，通常固定是：https://telegra.ph/",
   "setting.telegraph.username.tip": "作者，会显示在文章详情，可自行设置，默认为空",
-  "setting.telegraph.password.tip": "设备hash，会自动获取，无需填写",
+  "setting.telegraph.password.tip":
+    "匿名模式无需填写，点击验证之后可自动获取，登录模式请从请从 TG 客户端授权之后跳转的浏览器里面找到 Cookie tph_uuid 填到这里",
   "setting.telegraph.apiurl.tip": "telegra.ph的API地址，通常固定是：https://telegra.ph/",
   "setting.telegraph.previewUrl.tip": "telegra.ph的文章预览规则，通常是：/[notebook]/[postid]",
+  "setting.telegraph.accessToken.tip": "匿名模式无需填写，登录模式请从请从 TG 客户端授权之后跳转的浏览器找到 Cookie tph_token 填到这里",
+  "setting.telegraph.saveHash.tip": "匿名模式无需填写，点击验证之后可自动获取，登录模式请从 TG 客户端授权之后跳转的浏览器里面找到 https://edit.telegra.ph/check 返回的 save_hash 填到这里",
+  "setting.telegraph.forceReAuth.tip": "授权信息生效之后可勾选此项，然后会重新授权",
+  "setting.telegraph.login.anonymous": "匿名发布",
+  "setting.telegraph.login.user": "登录发布",
 
   "page.loading": "页面加载中...",
 
@@ -654,8 +671,7 @@ export default {
     "1.20.0+ 新版CORS代理，彻底解决「科学上网」、「CORS 跨域」两大问题，" +
     "支持全局跨域请求（支持绕过 header、请求体支持 FormData）。受限于 CORS 策略，「Docker 版本」必须设置 CORS 代理，" +
     "否则大部分场景将无法使用。技术细节可参考 MDN：https://developer.mozilla.org/zh-CN/docs/Web/HTTP/CORS " +
-    "以及 https://developer.mozilla.org/zh-CN/docs/Glossary/CORS。可私发邮件到 youweics@163.com 提供捐赠截图获取部署方案。" +
-    "之前捐助过的也可以私发截图给我，免费提供部署指导🤝。",
+    "以及 https://developer.mozilla.org/zh-CN/docs/Glossary/CORS。可私发邮件到 youweics@163.com 付费咨询🤝。",
   "setting.blog.middlewareUrl.my.warn.tip":
     "⚠️特别提醒：请求限制为 「10万次/天」、「1000次/10分钟」，频次为「所有人共享」，因此资源十分珍贵。为了大家的利益，请勿恶意请求，否则，我们会关闭此共享代理。",
 
@@ -664,4 +680,20 @@ export default {
 
   "import.v081.warn":
     "考虑到 v0.8.1 已经是很早的版本了，此功能可能不再需要。如果您需要此功能，可反馈至 youweics@163.com ，我们会根据需求决定是否实现此功能。",
+
+  "publisher.picbed.service": "图床服务",
+  "publisher.picbed.none": "不使用",
+  "publisher.picbed.picgo": "PicGo 插件",
+  "publisher.picbed.picgo.not.install": "此功能需要「PicGo 图床」插件 1.9.0+ 支持，请先从集市安装",
+  "publisher.picbed.bundled": "当前平台",
+  "publisher.picbed.recom1": "强烈推荐",
+  "publisher.picbed.recom2": "推荐",
+  "publisher.post.status": "文章状态",
+  "publisher.post.status.pubish": "发布",
+  "publisher.post.status.draft": "草稿",
+  "publisher.post.status.private": "私密",
+  "publisher.post.status.future": "定时",
+  "publisher.post.password": "密码保护",
+  "publisher.post.password.tip": "请输入文章密码，留空则不设置",
+  "publisher.post.future": "定时发布",
 }

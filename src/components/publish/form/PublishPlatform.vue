@@ -32,7 +32,7 @@ import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { svgIcons } from "../../../utils/svgIcons.ts"
 import { pre } from "~/src/platforms/pre.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import CrossPageUtils from "~/cross/crossPageUtils.ts"
+import PageUtils from "~/common/pageUtils.ts"
 
 const logger = createAppLogger("publish-platform")
 
@@ -106,7 +106,7 @@ onMounted(async () => {
     <p>请选择要发布的平台：</p>
     <div class="syp-distri-platform-container">
       <a v-for="cfg in formData.dynamicConfigArray" class="distri-item" @click="handleCheck(cfg.platformKey)">
-        <el-tooltip :content="CrossPageUtils.longPlatformName(cfg.platformName, 20)" placement="bottom">
+        <el-tooltip :content="PageUtils.longPlatformName(cfg.platformName, 20)" placement="bottom">
           <el-icon class="platform-icon">
             <span v-html="cfg.platformIcon"></span>
           </el-icon>

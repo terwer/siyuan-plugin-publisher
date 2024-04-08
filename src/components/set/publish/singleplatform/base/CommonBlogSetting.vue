@@ -32,12 +32,15 @@ import { onMounted, reactive, ref, toRaw, watch } from "vue"
 import { DynamicConfig, DynamicJsonCfg, getDynCfgByKey, setDynamicJsonCfg } from "~/src/platforms/dynamicConfig.ts"
 import { SypConfig } from "~/syp.config.ts"
 import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
-import { JsonUtil, ObjectUtil } from "zhi-common"
+import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
-import { BlogAdaptor, PageTypeEnum, PasswordType, UserBlog } from "zhi-blog-api"
+import { BlogAdaptor, PageTypeEnum, PasswordType, PicbedServiceTypeEnum, UserBlog } from "zhi-blog-api"
 import Adaptors from "~/src/adaptors"
 import { Utils } from "~/src/utils/utils.ts"
 import { ElMessage } from "element-plus"
+import { useProxy } from "~/src/composables/useProxy.ts"
+import { usePicgoBridge } from "~/src/composables/usePicgoBridge.ts"
+import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 
 const logger = createAppLogger("commonblog-setting")
 // appInstance
@@ -46,6 +49,8 @@ const appInstance = new PublisherAppInstance()
 // uses
 const { t } = useVueI18n()
 const { getSetting, updateSetting } = usePublishSettingStore()
+const { getPicbedServiceType, checkPicgoInstalled } = usePicgoBridge()
+const { isInSiyuanOrSiyuanNewWin } = useSiyuanDevice()
 
 const props = defineProps({
   apiType: {
@@ -87,6 +92,13 @@ const formData = reactive({
   dynamicConfigArray: [] as DynamicConfig[],
 
   isInit: false,
+
+  // proxy
+  proxy: {
+    useMiddleware: false,
+    useCorsAnywhere: false,
+    useSiyuanProxy: false,
+  },
 })
 
 // watch
@@ -199,9 +211,7 @@ const afterValid = async (api: any) => {
     // @since 1.20.0
     for (const key in userBlog.metadataMap) {
       // 这里不用校验，因为可能是继承的属性
-      // if (ObjectUtil.hasKey(formData.cfg, key)) {
       formData.cfg[key] = userBlog.metadataMap[key]
-      // }
     }
   }
 }
@@ -270,6 +280,14 @@ const handleCateSearch = async () => {
   }
 }
 
+const handleSelectPicGoService = async () => {
+  const picgoInstalled = await checkPicgoInstalled()
+  if (!picgoInstalled) {
+    ElMessage.error(t("publisher.picbed.picgo.not.install"))
+    formData.cfg.picbedService = PicbedServiceTypeEnum.None
+  }
+}
+
 const initConf = async () => {
   formData.setting = await getSetting()
   const dynJsonCfg = JsonUtil.safeParse<DynamicJsonCfg>(formData.setting[DYNAMIC_CONFIG_KEY], {} as DynamicJsonCfg)
@@ -301,6 +319,16 @@ const initConf = async () => {
 onMounted(async () => {
   // 初始化
   await initConf()
+
+  // set proxy
+  const { isUseSiyuanProxy } = useProxy(formData.cfg.middlewareUrl, formData.cfg.corsAnywhereUrl)
+  formData.proxy.useSiyuanProxy = isUseSiyuanProxy
+  formData.proxy.useCorsAnywhere = !StrUtil.isEmptyString(formData.cfg.corsAnywhereUrl)
+  formData.proxy.useMiddleware = !StrUtil.isEmptyString(formData.cfg.middlewareUrl)
+
+  // set picbed service
+  formData.cfg.picbedService = await getPicbedServiceType(formData.cfg)
+
   formData.isInit = true
 })
 </script>
@@ -330,7 +358,7 @@ onMounted(async () => {
       <el-input v-model="formData.cfg.apiUrl" :placeholder="props.cfg?.placeholder.apiUrlPlaceholder" />
     </el-form-item>
     <!-- 登录名 -->
-    <el-form-item :label="t('setting.common.username')" v-if="props.cfg.usernameEnabled">
+    <el-form-item :label="formData.cfg.usernameLabel ?? t('setting.common.username')" v-if="props.cfg.usernameEnabled">
       <el-input
         v-model="formData.cfg.username"
         :placeholder="props.cfg?.placeholder.usernamePlaceholder"
@@ -339,8 +367,9 @@ onMounted(async () => {
     </el-form-item>
     <!-- 密码 -->
     <el-form-item
-      :label="t('setting.common.password')"
+      :label="formData.cfg.passwordLabel ?? t('setting.common.password')"
       v-if="formData.cfg.passwordType === PasswordType.PasswordType_Password"
+      required
     >
       <el-input
         type="password"
@@ -355,7 +384,8 @@ onMounted(async () => {
     <!-- token -->
     <el-form-item
       v-else-if="formData.cfg.passwordType === PasswordType.PasswordType_Token"
-      :label="t('setting.common.token')"
+      :label="formData.cfg.passwordLabel ?? t('setting.common.token')"
+      required
     >
       <el-input
         type="password"
@@ -368,7 +398,7 @@ onMounted(async () => {
       >
     </el-form-item>
     <!-- 平台cookie -->
-    <el-form-item v-else label="平台Cookie">
+    <el-form-item v-else :label="formData.cfg.passwordLabel ?? '平台Cookie'" required>
       <el-input
         v-model="formData.cfg.password"
         style="width: 75%; margin-right: 16px"
@@ -420,8 +450,29 @@ onMounted(async () => {
         <el-option v-for="item in formData.kwSpaces" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
     </el-form-item>
+    <el-form-item :label="t('publisher.picbed.service')">
+      <el-radio-group v-model="formData.cfg.picbedService" class="ml-4">
+        <el-radio :value="PicbedServiceTypeEnum.None" size="large">{{ t("publisher.picbed.none") }}</el-radio>
+        <el-radio
+          v-if="formData.cfg.picgoPicbedSupported"
+          :value="PicbedServiceTypeEnum.PicGo"
+          size="large"
+          @click="handleSelectPicGoService"
+        >
+          {{ t("publisher.picbed.picgo") }}
+          <sup>{{ t("publisher.picbed.recom1") }}</sup>
+        </el-radio>
+        <el-radio v-if="formData.cfg.bundledPicbedSupported" :value="PicbedServiceTypeEnum.Bundled" size="large">
+          {{ t("publisher.picbed.bundled") }}
+          <sup>{{ t("publisher.picbed.recom2") }}</sup>
+        </el-radio>
+      </el-radio-group>
+    </el-form-item>
     <!-- 跨域代理地址 -->
-    <el-form-item :label="t('setting.blog.middlewareUrl')">
+    <el-form-item
+      v-if="!formData.proxy.useSiyuanProxy && !isInSiyuanOrSiyuanNewWin() && !formData.proxy.useCorsAnywhere"
+      :label="t('setting.blog.middlewareUrl')"
+    >
       <el-input v-model="formData.cfg.middlewareUrl" :placeholder="t('setting.blog.middlewareUrl.tip')" />
       <el-alert
         :closable="false"
@@ -431,7 +482,10 @@ onMounted(async () => {
       ></el-alert>
     </el-form-item>
     <!-- 新 CORS 代理 -->
-    <el-form-item :label="t('setting.blog.middlewareUrl.new')">
+    <el-form-item
+      v-if="!formData.proxy.useSiyuanProxy && !isInSiyuanOrSiyuanNewWin()"
+      :label="t('setting.blog.middlewareUrl.new')"
+    >
       <el-input v-model="formData.cfg.corsAnywhereUrl" :placeholder="t('setting.blog.corsAnywhereUrl.tip')" />
       <el-alert
         :closable="false"
@@ -440,7 +494,7 @@ onMounted(async () => {
         type="warning"
       ></el-alert>
     </el-form-item>
-    <el-form-item>
+    <el-form-item v-if="!formData.proxy.useSiyuanProxy && !isInSiyuanOrSiyuanNewWin()">
       <el-alert
         :closable="false"
         :title="t('setting.blog.middlewareUrl.my.warn.tip')"

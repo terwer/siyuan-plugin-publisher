@@ -3,6 +3,7 @@
 # Ignore artifacts:
 dist
 node_modules
+temp
 
 # Ignore all dts files:
 *.d.ts

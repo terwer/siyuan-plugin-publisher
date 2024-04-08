@@ -29,10 +29,10 @@ import { useRoute, useRouter } from "vue-router"
 import BackPage from "~/src/components/common/BackPage.vue"
 import { usePublish } from "~/src/composables/usePublish.ts"
 import { MethodEnum } from "~/src/models/methodEnum.ts"
-import { BlogConfig, PageEditMode, Post } from "zhi-blog-api"
+import { BlogConfig, PageEditMode, Post, PostStatusEnum } from "zhi-blog-api"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import { DynamicConfig, getDynYamlKey } from "~/src/platforms/dynamicConfig.ts"
+import { DynamicConfig, getDynYamlKey, PlatformType } from "~/src/platforms/dynamicConfig.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { ElMessage, ElMessageBox } from "element-plus"
 import { Delete } from "@element-plus/icons-vue"
@@ -50,7 +50,7 @@ import PublishTitle from "~/src/components/publish/form/PublishTitle.vue"
 import { useChatGPT } from "~/src/composables/useChatGPT.ts"
 import _ from "lodash-es"
 import { useLoadingTimer } from "~/src/composables/useLoadingTimer.ts"
-import CrossPageUtils from "~/cross/crossPageUtils.ts"
+import PageUtils from "~/common/pageUtils.ts"
 import { ITagConfig } from "~/src/types/ITagConfig.ts"
 
 const logger = createAppLogger("single-publish-do-publish")
@@ -285,7 +285,7 @@ const topTitle = computed(() => {
 
   let title = "当前操作的平台为 - "
   const platName = platformName ? platformName : key
-  title += CrossPageUtils.longPlatformName(platName, 11)
+  title += PageUtils.longPlatformName(platName, 11)
   if (blogName) {
     title += " - " + blogName
   }
@@ -339,6 +339,12 @@ const syncPublishTime = (val1: Date, val2: Date) => {
   formData.mergedPost.dateCreated = val1
   formData.mergedPost.dateUpdated = val2
   logger.debug("syncPublishTime in single publish")
+}
+
+const syncPublishStatus = (val1: PostStatusEnum, val2: string) => {
+  formData.mergedPost.post_status = val1
+  formData.mergedPost.wp_password = val2
+  logger.debug("syncPublishStatus in single publish")
 }
 
 const syncPost = (post: Post) => {
@@ -584,8 +590,25 @@ onMounted(async () => {
                     @emitSyncCates="syncCates"
                   />
 
+                  <!-- 发布状态 -->
+                  <publish-status
+                    v-if="
+                      formData.publishCfg.dynCfg.platformType === PlatformType.Metaweblog ||
+                      formData.publishCfg.dynCfg.platformType === PlatformType.Wordpress
+                    "
+                    v-model="formData.mergedPost"
+                    @emitSyncPublishStatus="syncPublishStatus"
+                  />
+
                   <!-- 发布时间 -->
-                  <publish-time v-model="formData.mergedPost" @emitSyncPublishTime="syncPublishTime" />
+                  <publish-time
+                    v-if="
+                      formData.publishCfg.dynCfg.platformType !== PlatformType.Metaweblog &&
+                      formData.publishCfg.dynCfg.platformType !== PlatformType.Wordpress
+                    "
+                    v-model="formData.mergedPost"
+                    @emitSyncPublishTime="syncPublishTime"
+                  />
 
                   <el-divider border-style="dashed" />
                 </div>

@@ -48,4 +48,5 @@ class WordpressApiAdaptor extends MetaweblogBlogApiAdaptor {
     this.cfg.blogid = "wordpress"
   }
 }
+
 export { WordpressApiAdaptor }

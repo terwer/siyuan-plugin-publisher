@@ -88,6 +88,9 @@ export const useMetaweblogApi = async (key?: string, newCfg?: MetaweblogConfig) 
   cfg.categoryType = CategoryTypeEnum.CategoryType_Multi
   cfg.allowCateChange = true
   cfg.knowledgeSpaceEnabled = false
+  // picbed service
+  cfg.picgoPicbedSupported = true
+  cfg.bundledPicbedSupported = true
 
   // 创建Metaweblog API适配器
   const blogApi = new MetaweblogBlogApiAdaptor(appInstance, cfg)
