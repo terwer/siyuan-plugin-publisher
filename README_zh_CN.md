@@ -69,7 +69,7 @@
 |      其他      |      Xlog       | TODO |   TODO    |    TODO     |   TODO   |      TODO       | TODO         | TODO        | TODO      | [官网](https://xlog.cn/)                       |
 |      其他      |     Mdnice      | TODO |   TODO    |    TODO     |   TODO   |      TODO       | TODO         | TODO        | TODO      | [官网](https://mdnice.com/)                    |
 |      其他      |     Flowus      | TODO |   TODO    |    TODO     |   TODO   |      TODO       | TODO         | TODO        | TODO      | [官网](https://www.flowus.com/)                |
-|      其他      |   telegra.ph    |  ✔   | 部分兼容  |      ✖      | 部分兼容 |        ✖        | 不支持       | 自建代理    | 自建代理  | [官网](https://telegra.ph)                     |
+|      其他      |   telegra.ph    |  ✔   | 完全兼容  |      ✔      | 完全兼容 |        ✔        | 不支持       | 自建代理    | 自建代理  | [官网](https://telegra.ph)                     |
 
 ## 核心特色
 

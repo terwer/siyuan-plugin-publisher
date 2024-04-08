@@ -69,6 +69,9 @@ const useTelegraphApi = async (key: string, newCfg?: TelegraphConfig) => {
   cfg.cateEnabled = false
   cfg.tagEnabled = false
   cfg.postType = cfg.postType ?? TelegraphPostType.ANONYMOUS
+  // picbed service
+  cfg.picgoPicbedSupported = true
+  cfg.bundledPicbedSupported = false
 
   const blogApi = new TelegraphApiAdaptor(appInstance, cfg)
   logger.info("Telegraph API created successfully.", cfg)
