@@ -185,8 +185,9 @@ class Adaptors {
         conf = cfg
         break
       }
+      // 注意：web 相关平台不传第二个参数
       case SubPlatformType.Custom_Zhihu: {
-        const { cfg } = await useZhihuWeb(key, newCfg)
+        const { cfg } = await useZhihuWeb(key)
         conf = cfg
         break
       }

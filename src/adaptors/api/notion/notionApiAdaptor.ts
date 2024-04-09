@@ -275,7 +275,7 @@ class NotionApiAdaptor extends BaseBlogApi {
 
     // 使用兼容的fetch调用并返回统一的JSON数据
     const body = ObjectUtil.isEmptyObject(params) ? {} : params
-    const resJson = await this.apiProxyFetch(apiUrl, [headers], body, method, contentType)
+    const resJson = await this.apiFetch(apiUrl, [headers], body, method, contentType)
     this.logger.debug("向Notion请求数据，resJson =>", resJson)
 
     if (resJson?.status === 400 || resJson?.status === 401 || resJson?.status === 404 || resJson?.status === 429) {

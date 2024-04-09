@@ -79,6 +79,9 @@ const useWechatWeb = async (key?: string, newCfg?: WechatConfig) => {
   cfg.tagEnabled = false
   cfg.cateEnabled = false
   cfg.knowledgeSpaceEnabled = false
+  // picbed service
+  cfg.picgoPicbedSupported = false
+  cfg.bundledPicbedSupported = true
 
   const webApi = new WechatWebAdaptor(appInstance, cfg)
   return {

@@ -30,9 +30,12 @@ import { CategoryTypeEnum, PageTypeEnum, PasswordType } from "zhi-blog-api"
  * 简书配置
  */
 class JianshuConfig extends CommonWebConfig {
+  public logoutUrl: string
+
   constructor(username: string, password: string, middlewareUrl?: string) {
     super("https://www.jianshu.com", "https://www.jianshu.com", username, password, middlewareUrl)
 
+    this.logoutUrl = "https://www.jianshu.com/shakespeare/sign_out"
     this.previewUrl = "/p/[postid]"
     this.pageType = PageTypeEnum.Markdown
     this.passwordType = PasswordType.PasswordType_Cookie

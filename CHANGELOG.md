@@ -1,12 +1,35 @@
 # Changelog
 
-## [1.20.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.20.0...siyuan-plugin-publisher-v1.20.1) (2024-03-12)
+## [1.21.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.20.1...siyuan-plugin-publisher-v1.21.0) (2024-04-08)
+### Features
+* [#1108](https://github.com/terwer/siyuan-plugin-publisher/issues/1108) support wordpress.com ([7ba8a57](https://github.com/terwer/siyuan-plugin-publisher/commit/7ba8a5716de0b15bac5bbde00d5d69eb508e6bb2))
 ### Bug Fixes
-* rectifying packaging errors ([e13bf42](https://github.com/terwer/siyuan-plugin-publisher/commit/e13bf4223943ce4c8dbe10be03463446abe10242))
+* [#1109](https://github.com/terwer/siyuan-plugin-publisher/issues/1109) support telegra.ph use picgo ([252d927](https://github.com/terwer/siyuan-plugin-publisher/commit/252d92761bc22d56b4e95470b6a76b023a4b6052))
+* adapt new picgo plugin ([4ec72a2](https://github.com/terwer/siyuan-plugin-publisher/commit/4ec72a268881148dd0aeac361a847a9493baba31))
+* allow custom set picbed service ([e13720c](https://github.com/terwer/siyuan-plugin-publisher/commit/e13720c91f64522b9a2df7fca4022ff18c0f7f85))
+* allow custom set picbed service - csdn, zhihu, jianshu, yuque ([d61c832](https://github.com/terwer/siyuan-plugin-publisher/commit/d61c832154c2b1814f602fbdec635fafd9af3ef8))
+* fix an error crash while init ([d013385](https://github.com/terwer/siyuan-plugin-publisher/commit/d0133855f507e35b8c99a159c3b85e122fbb734d))
+* fix an error when first use ([e266ed0](https://github.com/terwer/siyuan-plugin-publisher/commit/e266ed014c26bf5d41bb2aeb948b997bdf9e107f))
+* restructure files ([d8c4723](https://github.com/terwer/siyuan-plugin-publisher/commit/d8c4723b60ec0edc96a907d18551d0346f94edca))
+* support bundled form data proxy ([c005214](https://github.com/terwer/siyuan-plugin-publisher/commit/c005214f25c86ae5557e05b82a8cbf639a70814a))
+* support siyuan proxy for common cases ([3fc76ea](https://github.com/terwer/siyuan-plugin-publisher/commit/3fc76eaa6af96742c0b7585468d4928009cfca64))
+* support siyuan proxy for gitlab ([77e328b](https://github.com/terwer/siyuan-plugin-publisher/commit/77e328bc028f0a2be21f7a13dba90a726b3301f0))
+* support siyuan proxy for yuque ([2d791fb](https://github.com/terwer/siyuan-plugin-publisher/commit/2d791fb8c8cfe43721134be06ae5b69f920e5850))
+* support siyuan proxy when available ([0615802](https://github.com/terwer/siyuan-plugin-publisher/commit/061580201935a570832c5a66d83a2342adbc90d0))
+* support upload images for github and gitlab ([4702357](https://github.com/terwer/siyuan-plugin-publisher/commit/4702357f5070e2e67205206b74e71d7ae9ccf4a9))
+* support upload images for metaweblog platforms ([dbd2d62](https://github.com/terwer/siyuan-plugin-publisher/commit/dbd2d622ec74167a7f5e00c37ccc8b0d0514b7f2))
+* support upload images for wordpress dot com ([36d6fb6](https://github.com/terwer/siyuan-plugin-publisher/commit/36d6fb69a79fa5eb3e4951fe3012623b21bebf45))
 ### Miscellaneous
+* add 1.20.2 release notes ([644c595](https://github.com/terwer/siyuan-plugin-publisher/commit/644c595aaf17e15c4444d686dc150e046f459bf5))
+* update ci ([a429bfd](https://github.com/terwer/siyuan-plugin-publisher/commit/a429bfdff34d433e5ac22ef1e049e45cf0e01936))
+* update deps ([9e0e0c9](https://github.com/terwer/siyuan-plugin-publisher/commit/9e0e0c90d4f2cc201485d0222f17b0ef92610e90))
+* update docs ([df4c220](https://github.com/terwer/siyuan-plugin-publisher/commit/df4c2201d24136aa535ff9174ad733cb3e2ecf50))
+* update fmt ([b8584a8](https://github.com/terwer/siyuan-plugin-publisher/commit/b8584a8ecfaed1e6cd534f6c0fcf67a55c32daf2))
+* update icon and preview ([b0acc6d](https://github.com/terwer/siyuan-plugin-publisher/commit/b0acc6dcfb2c749e695338b3151695c851718620))
+## [1.20.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.20.0...siyuan-plugin-publisher-v1.20.1) (2024-03-12)
+* rectifying packaging errors ([e13bf42](https://github.com/terwer/siyuan-plugin-publisher/commit/e13bf4223943ce4c8dbe10be03463446abe10242))
 * **deps-dev:** bump vite from 5.1.5 to 5.1.6 ([cac7cc6](https://github.com/terwer/siyuan-plugin-publisher/commit/cac7cc622a832b21d7d3c9496dba6229624c3e34))
 ## [1.20.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.19.1...siyuan-plugin-publisher-v1.20.0) (2024-03-11)
-### Features
 * [#058](https://github.com/terwer/siyuan-plugin-publisher/issues/058) [#1009](https://github.com/terwer/siyuan-plugin-publisher/issues/1009) 全面适配 docker（实验性） ([901e24f](https://github.com/terwer/siyuan-plugin-publisher/commit/901e24f64abe118a9df2dde15501a088257525e0))
 * [#1009](https://github.com/terwer/siyuan-plugin-publisher/issues/1009) resolve compatibility issues with Docker ([cbef25e](https://github.com/terwer/siyuan-plugin-publisher/commit/cbef25ef042f58104592806e4b126c5266b16c16))
 * [#1053](https://github.com/terwer/siyuan-plugin-publisher/issues/1053) 新增发布平台 telegra.ph - cookie 验证 ([da6e5c7](https://github.com/terwer/siyuan-plugin-publisher/commit/da6e5c75cec3c2e896eaa3193fce069f6156b279))

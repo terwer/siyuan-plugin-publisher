@@ -13,12 +13,13 @@ const doFetch = async (moduleBase, url, headers, formData) => {
   }
 
   const nodeFetch = window.require(`${moduleBase}libs/node-fetch-cjs/dist/index.js`).default
-  const { FormData, Headers } = window.require(`${moduleBase}libs/node-fetch-cjs/dist/index.js`)
+  const { Headers } = window.require(`${moduleBase}libs/node-fetch-cjs/dist/index.js`)
 
   // headers
   const myHeaders = new Headers()
   for (const key in headers) {
     if (headers.hasOwnProperty(key)) {
+      // console.log(`nodeFetch add header ${key}=>${headers[key]}`)
       myHeaders.append(key, headers[key])
     }
   }
@@ -26,9 +27,11 @@ const doFetch = async (moduleBase, url, headers, formData) => {
   // options
   const requestOptions = {
     method: "POST",
-    headers: myHeaders,
+    headers: headers,
     body: formData,
   }
+  console.log("nodeFetch url=>", url)
+  console.log("nodeFetch requestOptions=>", requestOptions)
 
   const response = await nodeFetch(url, requestOptions)
   const resText = await response.text()

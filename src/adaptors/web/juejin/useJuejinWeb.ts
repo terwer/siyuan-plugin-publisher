@@ -90,6 +90,11 @@ const useJuejinWeb = async (key?: string, newCfg?: JuejinConfig) => {
   cfg.knowledgeSpaceTitle = "分类"
   cfg.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Single
   cfg.allowKnowledgeSpaceChange = true
+  // 退出登录
+  cfg.logoutUrl = "https://juejin.cn/passport/web/logout"
+  // picbed service
+  cfg.picgoPicbedSupported = true
+  cfg.bundledPicbedSupported = false
 
   const webApi = new JuejinWebAdaptor(appInstance, cfg)
   return {

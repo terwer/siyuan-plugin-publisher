@@ -36,7 +36,7 @@ import { CategoryInfo } from "zhi-blog-api"
  */
 class FlowusWebAdaptor extends BaseWebApi {
   public async getMetaData(): Promise<any> {
-    const res = await this.webProxyFetch("https://flowus.cn/api/users/me")
+    const res = await this.webFetch("https://flowus.cn/api/users/me")
     const flag = res?.code === 200
     this.logger.info(`get flowus metadata finished, flag => ${flag}`)
     return {

@@ -125,10 +125,8 @@ class BaseWebApi extends WebApi {
   }
 
   public async newMediaObject(mediaObject: MediaObject, customHandler?: any): Promise<Attachment> {
-    const bits = mediaObject.bits
     this.logger.debug("newMediaObject on baseWebApi =>", mediaObject)
-    const blob = new Blob([bits], { type: mediaObject.type })
-    const res = await this.uploadFile(blob as File, mediaObject.name)
+    const res = await this.uploadFile(mediaObject)
     return {
       attachment_id: res?.id,
       date_created_gmt: new Date(),
@@ -165,7 +163,7 @@ class BaseWebApi extends WebApi {
    * @param payloadEncoding - 请求体的编码方式，默认为 text
    * @param responseEncoding - 响应体的编码方式，默认为 text
    */
-  public async webProxyFetch(
+  public async webFetch(
     url: string,
     headers: any[] = [],
     params: any = {},
@@ -193,16 +191,11 @@ class BaseWebApi extends WebApi {
   ) {
     const header = headers.length > 0 ? headers[0] : {}
     // 如果没有可用的 CORS 代理或者没有强制使用代理，使用默认的自动检测机制
-    if (this.isUseSiyuanProxy || (!this.isUseSiyuanProxy && forceProxy)) {
+    if (this.isUseSiyuanProxy || (!this.isUseSiyuanProxy && forceProxy) || !forceProxy) {
       this.logger.info("Using legency web fetch")
       // remove cors fetch header
       delete header["x-cors-headers"]
-      const webHeaders = [
-        {
-          ...header,
-          Cookie: this.cfg.password,
-        },
-      ]
+      const webHeaders = [header]
       return await this.proxyFetch(
         url,
         webHeaders,
@@ -215,12 +208,7 @@ class BaseWebApi extends WebApi {
       )
     } else {
       this.logger.info("Using cors web fetch")
-      const webHeaders = [
-        {
-          ...header,
-          Cookie: this.cfg.password,
-        },
-      ]
+      const webHeaders = [header]
       return this.corsFetch(url, webHeaders, params, method)
     }
   }
@@ -232,40 +220,15 @@ class BaseWebApi extends WebApi {
    * @param headers - 请求的头部信息
    * @param formData - 表单数据
    * @param forceProxy - 是否强制使用代理
-   * @param payloadEncoding - 请求体的编码方式，默认为 text
-   * @param responseEncoding - 响应体的编码方式，默认为 text
    * */
-  public async webFormFetch(
-    url: string,
-    headers: any[],
-    formData: FormData,
-    forceProxy: boolean = false,
-    payloadEncoding:
-      | "text"
-      | "base64"
-      | "base64-std"
-      | "base64-url"
-      | "base32"
-      | "base32-std"
-      | "base32-hex"
-      | "hex" = "text",
-    responseEncoding:
-      | "text"
-      | "base64"
-      | "base64-std"
-      | "base64-url"
-      | "base32"
-      | "base32-std"
-      | "base32-hex"
-      | "hex" = "text"
-  ) {
+  public async webFormFetch(url: string, headers: any[], formData: BodyInit, forceProxy: boolean = false) {
     // 如果没有可用的 CORS 代理或者没有强制使用代理，使用默认的自动检测机制
-    if (this.isUseSiyuanProxy || (!this.isUseSiyuanProxy && forceProxy)) {
+    if (this.isUseSiyuanProxy || (!this.isUseSiyuanProxy && forceProxy) || !forceProxy) {
       this.logger.info("Using legency web formFetch")
 
       const { isInSiyuanOrSiyuanNewWin } = useSiyuanDevice()
       if (!isInSiyuanOrSiyuanNewWin() || forceProxy) {
-        const fetchResult = await this.webProxyFetch(
+        const fetchResult = await this.webFetch(
           url,
           headers,
           formData,
@@ -285,7 +248,7 @@ class BaseWebApi extends WebApi {
 
         // headers
         const header = headers.length > 0 ? headers[0] : {}
-        this.logger.debug("before zhi-formdata-fetch, headers =>", headers)
+        this.logger.debug("before zhi-formdata-fetch, header =>", header)
         this.logger.debug("before zhi-formdata-fetch, url =>", url)
 
         const resText = await doFetch(this.appInstance.moduleBase, url, header, formData)

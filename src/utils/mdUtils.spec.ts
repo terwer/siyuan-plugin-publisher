@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023, Terwer . All rights reserved.
+ * Copyright (c) 2024, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -23,27 +23,31 @@
  * questions.
  */
 
-import { CommonWebConfig } from "~/src/adaptors/web/base/commonWebConfig.ts"
-import { CategoryTypeEnum, PageTypeEnum, PasswordType } from "zhi-blog-api"
+import { describe, it } from "vitest"
+import { MdUtils } from "~/src/utils/mdUtils.ts"
 
-/**
- * CSDN配置
- */
-export class CsdnConfig extends CommonWebConfig {
-  public logoutUrl: string
+describe("test mdUtils", () => {
+  it("test replaceSign", () => {
+    const text = `# 测试 23
 
-  constructor(username: string, password: string, middlewareUrl?: string) {
-    super("https://blog.csdn.net", "https://bizapi.csdn.net", username, password, middlewareUrl)
+csdn测试2
 
-    this.logoutUrl = "https://passport.csdn.net/account/logout"
-    this.previewUrl = "/[userid]/article/details/[postid]"
-    this.pageType = PageTypeEnum.Markdown
-    this.usernameEnabled = false
-    this.passwordType = PasswordType.PasswordType_Cookie
-    this.tagEnabled = true
-    this.cateEnabled = true
-    this.categoryType = CategoryTypeEnum.CategoryType_Multi
-    this.allowCateChange = true
-    this.knowledgeSpaceEnabled = false
-  }
-}
+‍
+
+‍
+
+‍
+
+‍
+
+​![image](https://pic4.zhimg.com/v2-23281fd6a2541c5e37024d691911da18)​
+
+==这里再看==看**加粗**能用不
+
+啊啊啊啊啊
+`
+
+    const replacedText = MdUtils.replaceSign(text, "=", "mark", "color: red;")
+    console.log(replacedText)
+  })
+})

@@ -69,7 +69,7 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
   const proxyFetch = async (
     url: string,
     headers: any[] = [],
-    params: any = {},
+    params: any = undefined,
     method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" = "GET",
     contentType: string = "application/json",
     forceProxy: boolean = false,
@@ -219,7 +219,7 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
   const siyuanProxyFetch = async (
     url: string,
     headers: any[] = [],
-    params: any = {},
+    params: any = undefined,
     method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" = "GET",
     contentType: string = "application/json",
     payloadEncoding:
@@ -241,12 +241,7 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
       | "base32-hex"
       | "hex" = "text"
   ) => {
-    let body: any
-    if (typeof params === "string" && !StrUtil.isEmptyString(params)) {
-      body = params
-    } else if (typeof params === "object" && !ObjectUtil.isEmptyObject(params)) {
-      body = params
-    }
+    let body = params
     const reqUrl = `${apiUrl}${url}`
     const header = headers.length > 0 ? headers[0] : {}
 

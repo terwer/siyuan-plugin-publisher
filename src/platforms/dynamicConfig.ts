@@ -77,6 +77,11 @@ export class DynamicConfig {
   authUrl?: string
 
   /**
+   *  取消登录地址，网页授权需要
+   */
+  logoutUrl?: string
+
+  /**
    * 域名
    */
   domain?: string

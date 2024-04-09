@@ -37,13 +37,13 @@ import {
 } from "~/src/platforms/dynamicConfig.ts"
 import { svgIcons } from "~/src/utils/svgIcons.ts"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import { JsonUtil } from "zhi-common"
+import { JsonUtil, StrUtil } from "zhi-common"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useRouter } from "vue-router"
 import { ElMessage, ElMessageBox } from "element-plus"
-import { Delete, Lock, Tools, WarningFilled } from "@element-plus/icons-vue"
+import { Delete, Lock, Tools, Warning, WarningFilled } from "@element-plus/icons-vue"
 import { openBrowserWindow } from "~/src/utils/widgetUtils.ts"
 import Adaptors from "~/src/adaptors"
 import { ElectronCookie, WebConfig } from "zhi-blog-api"
@@ -60,7 +60,7 @@ const { t } = useVueI18n()
 const router = useRouter()
 const { getSetting, updateSetting, deleteKey } = usePublishSettingStore()
 const { getPrePlatformKeys } = usePlatformDefine()
-const { isInSiyuanWidget, isInChromeExtension } = useSiyuanDevice()
+const { isInSiyuanOrSiyuanNewWin, isInChromeExtension } = useSiyuanDevice()
 
 // datas
 const formData = reactive({
@@ -135,7 +135,7 @@ const handleSinglePlatformDelete = (cfg: DynamicConfig) => {
 
 const handleSinglePlatformWebAuth = async (cfg: DynamicConfig) => {
   if (!cfg.cookieLimit) {
-    if (isInSiyuanWidget()) {
+    if (isInSiyuanOrSiyuanNewWin()) {
       await _handleOpenBrowserAuth(cfg)
     } else if (isInChromeExtension()) {
       _handleChromeExtensionAuth(cfg)
@@ -206,6 +206,60 @@ const _handleChromeExtensionAuth = (cfg: DynamicConfig) => {
 }
 
 const _handleSetCookieAuth = async (cfg: DynamicConfig) => {
+  // ElMessageBox.confirm(
+  //   "检测到当前环境可使用内置代理自动获取 Cookie，是否使用？点击「确定」可自动设置，点击「取消」在弹出框手动填写？",
+  //   "温馨提示",
+  //   {
+  //     type: "error",
+  //     icon: markRaw(Warning),
+  //     confirmButtonText: t("main.opt.ok"),
+  //     cancelButtonText: t("main.opt.cancel"),
+  //   }
+  // )
+  //   .then(async () => {
+  //     await _handleProxyAutoSetCookieAuth(cfg)
+  //   })
+  //   .catch(async () => {
+  await _handleCustomSetCookieAuth(cfg)
+  // })
+}
+
+// const _handleProxyAutoSetCookieAuth = async (dynCfg: DynamicConfig) => {
+//   formData.webAuthLoadingMap[dynCfg.platformKey] = true
+//
+//   try {
+//     if (dynCfg.isAuth) {
+//       dynCfg.isAuth = false
+//       formData.dynamicConfigArray = replacePlatformByKey(formData.dynamicConfigArray, dynCfg.platformKey, dynCfg)
+//       // 替换删除后的平台配置
+//       const dynJsonCfg = setDynamicJsonCfg(formData.dynamicConfigArray)
+//       formData.setting[DYNAMIC_CONFIG_KEY] = dynJsonCfg
+//       // 更新状态
+//       await updateSetting(formData.setting)
+//       logger.info("已授权，将清空状态，并重新进行授权，授权完成需要重新验证")
+//
+//       // 授权流程
+//       // const appInstance = new PublisherAppInstance()
+//       // const cfg = (await Adaptors.getCfg(dynCfg.platformKey)) as CommonWebConfig
+//       // const apiAdaptor = await Adaptors.getAdaptor(dynCfg.platformKey, cfg)
+//       // const api = Utils.webApi(appInstance, apiAdaptor)
+//
+//       // 更新 cookie
+//       // 登录流程复杂，暂时不做
+//     } else {
+//       logger.info("未授权，准备开始授权")
+//     }
+//   } catch (e) {
+//     dynCfg.isAuth = false
+//     const errMsg = t("main.opt.failure") + "=>" + e
+//     logger.error(t("main.opt.failure") + "=>", e)
+//     ElMessage.error(errMsg)
+//   } finally {
+//     formData.webAuthLoadingMap[dynCfg.platformKey] = false
+//   }
+// }
+
+const _handleCustomSetCookieAuth = async (cfg: DynamicConfig) => {
   if (cfg.isAuth) {
     cfg.isAuth = false
     formData.dynamicConfigArray = replacePlatformByKey(formData.dynamicConfigArray, cfg.platformKey, cfg)
@@ -231,7 +285,7 @@ const _handleSetCookieAuth = async (cfg: DynamicConfig) => {
 
 const handleValidateWebAuth = async (cfg: DynamicConfig) => {
   if (!cfg.cookieLimit) {
-    if (isInSiyuanWidget()) {
+    if (isInSiyuanOrSiyuanNewWin()) {
       _handleValidateOpenBrowserAuth(cfg)
     } else if (isInChromeExtension()) {
       await _handleValidateChromeExtensionAuth(cfg)
@@ -250,12 +304,12 @@ const _handleValidateOpenBrowserAuth = (dynCfg: DynamicConfig) => {
     logger.debug("get cookie result=>", cookies)
     formData.webAuthLoadingMap[dynCfg.platformKey] = true
 
-    try {
-      const appInstance = new PublisherAppInstance()
-      const cfg = (await Adaptors.getCfg(dynCfg.platformKey)) as CommonWebConfig
-      const apiAdaptor = await Adaptors.getAdaptor(dynCfg.platformKey, cfg)
-      const api = Utils.webApi(appInstance, apiAdaptor)
+    const appInstance = new PublisherAppInstance()
+    const cfg = (await Adaptors.getCfg(dynCfg.platformKey)) as CommonWebConfig
+    const apiAdaptor = await Adaptors.getAdaptor(dynCfg.platformKey, cfg)
+    const api = Utils.webApi(appInstance, apiAdaptor)
 
+    try {
       // 构造对应平台的cookie
       const cookieStr = await api.buildCookie(cookies)
       // 更新cookie
@@ -285,8 +339,18 @@ const _handleValidateOpenBrowserAuth = (dynCfg: DynamicConfig) => {
       }
     } catch (e) {
       dynCfg.isAuth = false
-      ElMessage.error(t("main.opt.failure") + "=>" + e)
+      const errMsg = t("main.opt.failure") + "=>" + e
       logger.error(t("main.opt.failure") + "=>", e)
+      // 过期之后，提醒用户是否需要重新认证
+      const logoutUrl = dynCfg.logoutUrl ?? (cfg as any).logoutUrl
+      if (!StrUtil.isEmptyString(logoutUrl)) {
+        const confurmMsg =
+          errMsg +
+          "，是否需要退出登录？注意：！！！本窗口只负责退出，登录信息填写无效！！！，需要稍后重新点击授权操作登录？"
+        _handleClearAuthConfirm(confurmMsg, logoutUrl)
+      } else {
+        ElMessage.error(errMsg)
+      }
     }
 
     formData.dynamicConfigArray = replacePlatformByKey(formData.dynamicConfigArray, dynCfg.platformKey, dynCfg)
@@ -299,6 +363,19 @@ const _handleValidateOpenBrowserAuth = (dynCfg: DynamicConfig) => {
   }
 
   openBrowserWindow(dynCfg.authUrl, dynCfg, cookieCb)
+}
+
+const _handleClearAuthConfirm = (msg, url: string) => {
+  ElMessageBox.confirm(msg, "温馨提示", {
+    type: "error",
+    icon: markRaw(Warning),
+    confirmButtonText: t("main.opt.ok"),
+    cancelButtonText: t("main.opt.cancel"),
+  })
+    .then(async () => {
+      openBrowserWindow(url)
+    })
+    .catch(() => {})
 }
 
 const _handleValidateChromeExtensionAuth = async (dynCfg: DynamicConfig) => {
@@ -328,7 +405,7 @@ const _handleValidateChromeExtensionAuth = async (dynCfg: DynamicConfig) => {
     }
   } catch (e) {
     dynCfg.isAuth = false
-    ElMessage.error(t("main.opt.failure") + "=>" + e)
+    ElMessage.error(t("main.opt.failure") + "=>" + e+"，如果是登录过期，请在左侧点击「授权」修改新的 cookie 或者参考 https://blog.terwer.space/s/20230810132040-nn4q7vs FAQ4 解决")
     logger.error(t("main.opt.failure") + "=>", e)
   }
 
@@ -500,6 +577,21 @@ onMounted(async () => {
           <el-alert type="error" :title="formData.newPlatformTip"></el-alert>
         </el-row>
       </div>
+
+      <!--
+       -----------------------------------------------------------------------------
+       -->
+      <!-- cookie设置弹窗 -->
+
+      <!-- 通用设置弹窗 -->
+      <el-dialog v-model="formData.cookieSettingFormVisible" :title="formData.dlgCookieTitle">
+        <cookie-setting
+          v-model:api-type="formData.dlgKey"
+          v-model:setting="formData.setting"
+          v-model:setting-cfg="formData.dlgSettingCfg"
+          @emitHideDlg="handleHideCookieDlg"
+        />
+      </el-dialog>
     </div>
   </div>
 </template>

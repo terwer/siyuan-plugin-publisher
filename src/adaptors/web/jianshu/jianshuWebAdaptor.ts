@@ -24,7 +24,7 @@
  */
 
 import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
-import { CategoryInfo, Post, UserBlog } from "zhi-blog-api"
+import { CategoryInfo, MediaObject, Post, UserBlog } from "zhi-blog-api"
 import { ElMessage } from "element-plus"
 import { fileToBuffer } from "~/src/utils/polyfillUtils.ts"
 import FormDataUtils from "~/src/utils/FormDataUtils.ts"
@@ -39,7 +39,7 @@ import FormDataUtils from "~/src/utils/FormDataUtils.ts"
  */
 class JianshuWebAdaptor extends BaseWebApi {
   public async getMetaData(): Promise<any> {
-    const res = await this.webProxyFetch("https://www.jianshu.com/settings/basic.json")
+    const res = await this.jianshuFetch("https://www.jianshu.com/settings/basic.json")
     const avatar = res.data.avatar
     const uid = avatar.substring(avatar.lastIndexOf("/") + 1, avatar.lastIndexOf("."))
     const flag = !!uid
@@ -62,7 +62,7 @@ class JianshuWebAdaptor extends BaseWebApi {
     const header = {
       accept: "application/json",
     }
-    const notebooks = await this.webProxyFetch("https://www.jianshu.com/author/notebooks", [header])
+    const notebooks = await this.jianshuFetch("https://www.jianshu.com/author/notebooks", undefined, "GET", header)
     this.logger.info(`get jianshu notebooks`, notebooks)
 
     if (notebooks && notebooks.length > 0) {
@@ -85,7 +85,7 @@ class JianshuWebAdaptor extends BaseWebApi {
     const header = {
       accept: "application/json",
     }
-    const notebooks = await this.webProxyFetch("https://www.jianshu.com/author/notebooks", [header])
+    const notebooks = await this.jianshuFetch("https://www.jianshu.com/author/notebooks", undefined, "GET", header)
     this.logger.info(`get jianshu notebooks`, notebooks)
 
     if (notebooks && notebooks.length > 0) {
@@ -108,12 +108,12 @@ class JianshuWebAdaptor extends BaseWebApi {
     const initHeader = {
       accept: "application/json",
     }
-    const initParams = {
+    const initParams = JSON.stringify({
       notebook_id: notebookId,
       title: post.title,
       at_bottom: false,
-    }
-    const initRes = await this.webProxyFetch("https://www.jianshu.com/author/notes", [initHeader], initParams, "POST")
+    })
+    const initRes = await this.jianshuFetch("https://www.jianshu.com/author/notes", initParams, "POST", initHeader)
     this.logger.debug("jianshu addPost initRes =>", initRes)
     const pageId = initRes.id
     const endUrl = initRes.slug
@@ -145,11 +145,11 @@ class JianshuWebAdaptor extends BaseWebApi {
     const header = {
       accept: "application/json",
     }
-    const res = await this.webProxyFetch(
+    const res = await this.jianshuFetch(
       `https://www.jianshu.com/author/notes/${pageId}/soft_destroy`,
-      [header],
-      undefined,
-      "POST"
+      JSON.stringify({}),
+      "POST",
+      header
     )
     this.logger.debug("jianshu delete post res =>", res)
 
@@ -166,7 +166,12 @@ class JianshuWebAdaptor extends BaseWebApi {
       const header = {
         accept: "application/json",
       }
-      const res = await this.webProxyFetch(`https://www.jianshu.com/author/notes/${pageId}/note_logs`, [header])
+      const res = await this.jianshuFetch(
+        `https://www.jianshu.com/author/notes/${pageId}/note_logs`,
+        undefined,
+        "GET",
+        header
+      )
       this.logger.debug("jianshu get post version res =>", res)
 
       // 文章更新并发布
@@ -181,17 +186,12 @@ class JianshuWebAdaptor extends BaseWebApi {
     return flag
   }
 
-  public async uploadFile(file: File | Blob, filename?: string): Promise<any> {
-    const { FormData, Blob } = FormDataUtils.getFormData(this.appInstance)
+  public async uploadFile(mediaObject: MediaObject): Promise<any> {
+    const file = new Blob([mediaObject.bits], { type: mediaObject.type })
+    const filename = mediaObject.name
 
     this.logger.debug(`jianshu start uploadFile ${filename}=>`, file)
     if (file instanceof Blob) {
-      // import
-      const win = this.appInstance.win
-      if (!win.require) {
-        throw new Error("非常抱歉，目前仅思源笔记PC客户端支持上传图片")
-      }
-
       // uploadUrl
       const uploadUrl = "https://upload.qiniup.com/"
 
@@ -200,7 +200,7 @@ class JianshuWebAdaptor extends BaseWebApi {
       const blob = new Blob([bits], { type: file.type })
 
       // formData
-      const tokenReq = await this.webProxyFetch("https://www.jianshu.com/upload_images/token.json?filename=" + filename)
+      const tokenReq = await this.jianshuFetch("https://www.jianshu.com/upload_images/token.json?filename=" + filename)
       this.logger.debug("jianshu get picture token res =>", tokenReq)
       const formData = new FormData()
       formData.append("token", tokenReq.token)
@@ -268,17 +268,17 @@ class JianshuWebAdaptor extends BaseWebApi {
     const saveHeader = {
       accept: "application/json",
     }
-    const saveParams = {
+    const saveParams = JSON.stringify({
       id: pageId,
       autosave_control: autosave_control,
       title: title,
       content: conetnt,
-    }
-    const saveRes = await this.webProxyFetch(
+    })
+    const saveRes = await this.jianshuFetch(
       `https://www.jianshu.com/author/notes/${pageId}`,
-      [saveHeader],
       saveParams,
-      "PUT"
+      "PUT",
+      saveHeader
     )
     this.logger.debug("jianshu savePost saveRes =>", saveRes)
 
@@ -287,11 +287,12 @@ class JianshuWebAdaptor extends BaseWebApi {
       const publishHeader = {
         accept: "application/json",
       }
-      const pubRes = await this.webProxyFetch(
+      const publishParams = JSON.stringify({})
+      const pubRes = await this.jianshuFetch(
         `https://www.jianshu.com/author/notes/${pageId}/publicize`,
-        [publishHeader],
-        {},
-        "POST"
+        publishParams,
+        "POST",
+        publishHeader
       )
       this.logger.debug("jianshu publishPost pubRes =>", pubRes)
     } catch (e) {
@@ -300,11 +301,46 @@ class JianshuWebAdaptor extends BaseWebApi {
     }
   }
 
+  // ================
+  // private methods
+  // ================
+  /**
+   * 向简书网站请求数据
+   */
+  private async jianshuFetch(
+    url: string,
+    params?: any,
+    method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" = "GET",
+    headers: Record<any, any> = {},
+    contentType: string = "application/json"
+  ) {
+    const reqHeaderMap = new Map<string, string>()
+    reqHeaderMap.set("Cookie", this.cfg.password)
+
+    const mergedHeaders = {
+      ...Object.fromEntries(reqHeaderMap),
+      ...headers,
+    }
+
+    const body = params
+
+    // 输出日志
+    const apiUrl = url
+    this.logger.debug("向简书网站请求数据，apiUrl =>", apiUrl)
+    this.logger.debug("向简书网站请求数据，headers =>", headers)
+    this.logger.debug("向简书网站请求数据，body =>", body)
+
+    const resJson = await this.webFetch(apiUrl, [mergedHeaders], body, method, contentType, true, "base64")
+    this.logger.debug("向简书网站请求数据，resJson =>", resJson)
+
+    return resJson ?? null
+  }
+
   private async jianshuFormFetch(url: string, formData: FormData) {
     // header
     const header = {}
 
-    const resJson = await this.webFormFetch(url, [header], formData)
+    const resJson = await this.webFormFetch(url, [header], formData, true)
     return resJson
   }
 }

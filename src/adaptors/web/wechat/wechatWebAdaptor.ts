@@ -26,7 +26,7 @@
 import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
 import * as cheerio from "cheerio"
 import { HtmlUtil, JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
-import { BlogConfig, PageTypeEnum, Post, UserBlog } from "zhi-blog-api"
+import { BlogConfig, MediaObject, PageTypeEnum, Post, UserBlog } from "zhi-blog-api"
 import { toRaw } from "vue"
 import _ from "lodash-es"
 import { fileToBuffer } from "~/src/utils/polyfillUtils.ts"
@@ -44,7 +44,7 @@ import FormDataUtils from "~/src/utils/FormDataUtils.ts"
  */
 class WechatWebAdaptor extends BaseWebApi {
   public async getMetaData(): Promise<any> {
-    const res = await this.webProxyFetch("https://mp.weixin.qq.com/", [], {}, "GET", "text/html")
+    const res = await this.weChatFetch("https://mp.weixin.qq.com/", undefined, "GET", {}, "text/html")
     this.logger.debug("WechatWebAdaptor res=>", { res: res })
     const $ = cheerio.load(res)
     const scriptElement = $("script")[0]
@@ -81,7 +81,7 @@ class WechatWebAdaptor extends BaseWebApi {
   public async getUsersBlogs(): Promise<Array<UserBlog>> {
     let result: UserBlog[] = []
 
-    const res = await this.webProxyFetch("https://mp.weixin.qq.com/", [], {}, "GET", "text/html")
+    const res = await this.weChatFetch("https://mp.weixin.qq.com/", undefined, "GET", {}, "text/html")
     this.logger.debug("WechatWebAdaptor res=>", { res: res })
     const $ = cheerio.load(res)
     const scriptElement = $("script")[0]
@@ -231,7 +231,14 @@ class WechatWebAdaptor extends BaseWebApi {
       save_type: "1",
       isneedsave: "0",
     }
-    const resJson = await this.wechatFetch(url, params)
+    // get formData and Blob
+    const { FormData } = FormDataUtils.getFormData(this.appInstance)
+    // formData
+    const formData: any = new FormData()
+    for (const key in params) {
+      formData.append(key, params[key] ?? "")
+    }
+    const resJson = await this.wechatFormFetch(url, formData)
 
     if (!resJson.appMsgId) {
       const err = resJson.base_resp
@@ -366,7 +373,14 @@ class WechatWebAdaptor extends BaseWebApi {
       save_type: "1",
       isneedsave: "0",
     }
-    const resJson = await this.wechatFetch(url, params)
+    // get formData and Blob
+    const { FormData } = FormDataUtils.getFormData(this.appInstance)
+    // formData
+    const formData: any = new FormData()
+    for (const key in params) {
+      formData.append(key, params[key] ?? "")
+    }
+    const resJson = await this.wechatFormFetch(url, formData)
 
     if (!resJson.appMsgId) {
       const err = resJson.base_resp
@@ -380,7 +394,7 @@ class WechatWebAdaptor extends BaseWebApi {
   public async getPost(postid: string): Promise<Post> {
     const token = this.cfg.metadata.token
     const url = `https://mp.weixin.qq.com/cgi-bin/appmsg?t=media/appmsg_edit&action=edit&type=77&appmsgid=${postid}&token=${token}&lang=zh_CN`
-    const res = await this.webProxyFetch(url, [], {}, "GET", "text/html")
+    const res = await this.webFetch(url, [], {}, "GET", "text/html")
     this.logger.debug("get wechat post finished, res=>", res)
 
     const post = new Post()
@@ -425,7 +439,14 @@ class WechatWebAdaptor extends BaseWebApi {
       ajax: "1",
       AppMsgId: postid,
     }
-    const resJson = await this.wechatFetch(url, params)
+    // get formData and Blob
+    const { FormData } = FormDataUtils.getFormData(this.appInstance)
+    // formData
+    const formData: any = new FormData()
+    for (const key in params) {
+      formData.append(key, params[key] ?? "")
+    }
+    const resJson = await this.wechatFormFetch(url, formData)
 
     if (!resJson.appMsgId) {
       const err = resJson.base_resp
@@ -442,18 +463,12 @@ class WechatWebAdaptor extends BaseWebApi {
     return `https://mp.weixin.qq.com/cgi-bin/appmsg?t=media/appmsg_edit&action=edit&type=77&appmsgid=${postid}&token=${token}&lang=zh_CN`
   }
 
-  public async uploadFile(file: File | Blob, filename?: string): Promise<any> {
-    // get formData and Blob
-    const { FormData, Blob } = FormDataUtils.getFormData(this.appInstance)
+  public async uploadFile(mediaObject: MediaObject): Promise<any> {
+    const file = new Blob([mediaObject.bits], { type: mediaObject.type })
+    const filename = mediaObject.name
 
     this.logger.debug(`wechat start uploadFile ${filename}=>`, file)
     if (file instanceof Blob) {
-      // import
-      const win = this.appInstance.win
-      if (!win.require) {
-        throw new Error("非常抱歉，目前仅思源笔记PC客户端支持上传图片")
-      }
-
       // uploadUrl
       const ticket_id = this.cfg.metadata.commonData.data.user_name
       const ticket = this.cfg.metadata.commonData.data.ticket
@@ -529,24 +544,35 @@ class WechatWebAdaptor extends BaseWebApi {
   // private methods
   // ================
   /**
-   * 以异步方式从微信获取数据
-   *
-   * @param url - 请求的URL
-   * @param params - 请求参数
-   * @returns 返回包含微信数据的Promise
+   * 向微信公众号请求数据
    */
-  private async wechatFetch(url: string, params: Record<string, any>) {
-    this.logger.debug("before getFormdataFetch, params =>", params)
-    // get formData and Blob
-    const { FormData } = FormDataUtils.getFormData(this.appInstance)
+  private async weChatFetch(
+    url: string,
+    params?: any,
+    method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" = "GET",
+    headers: Record<any, any> = {},
+    contentType: string = "application/json"
+  ) {
+    const reqHeaderMap = new Map<string, string>()
+    reqHeaderMap.set("Cookie", this.cfg.password)
 
-    // formData
-    const formData: any = new FormData()
-    for (const key in params) {
-      formData.append(key, params[key] ?? "")
+    const mergedHeaders = {
+      ...Object.fromEntries(reqHeaderMap),
+      ...headers,
     }
 
-    return this.wechatFormFetch(url, formData)
+    const body = params
+
+    // 输出日志
+    const apiUrl = url
+    this.logger.debug("向微信公众号请求数据，apiUrl =>", apiUrl)
+    this.logger.debug("向微信公众号请求数据，headers =>", headers)
+    this.logger.debug("向微信公众号请求数据，body =>", body)
+
+    const resJson = await this.webFetch(apiUrl, [mergedHeaders], body, method, contentType, true, "base64")
+    this.logger.debug("向微信公众号请求数据，resJson =>", resJson)
+
+    return resJson ?? null
   }
 
   private async wechatFormFetch(url: string, formData: FormData) {
@@ -556,7 +582,7 @@ class WechatWebAdaptor extends BaseWebApi {
       Referer: "https://mp.weixin.qq.com/cgi-bin/appmsg",
     }
 
-    const resJson = await this.webFormFetch(url, [header], formData)
+    const resJson = await this.webFormFetch(url, [header], formData, true)
     return resJson
   }
 }

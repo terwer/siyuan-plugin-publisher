@@ -30,9 +30,13 @@ import { CategoryTypeEnum, PageTypeEnum, PasswordType } from "zhi-blog-api"
  * 掘金配置
  */
 export class JuejinConfig extends CommonWebConfig {
+  public logoutUrl: string
+
+
   constructor(username: string, password: string, middlewareUrl?: string) {
     super("https://juejin.cn", "https://api.juejin.cn", username, password, middlewareUrl)
 
+    this.logoutUrl = "https://juejin.cn/passport/web/logout"
     this.previewUrl = "/post/[postid]"
     this.pageType = PageTypeEnum.Markdown
     this.passwordType = PasswordType.PasswordType_Cookie

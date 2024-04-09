@@ -292,7 +292,7 @@ class TelegraphApiAdaptor extends BaseBlogApi {
     this.logger.debug("向 Telegraph 请求数据，headers =>", headers)
     this.logger.debug("向 Telegraph 请求数据，body =>", body)
 
-    const resJson = await this.apiProxyFetch(apiUrl, [headers], body, method, contentType, true)
+    const resJson = await this.apiFetch(apiUrl, [headers], body, method, contentType, true)
     this.logger.debug("向 Telegraph 请求数据，resJson =>", resJson)
 
     return resJson ?? null
@@ -317,7 +317,7 @@ class TelegraphApiAdaptor extends BaseBlogApi {
     this.logger.debug("向 Telegraph 发送表单数据，apiUrl =>", apiUrl)
     this.logger.debug("向 Telegraph 发送表单数据，options =>", options)
 
-    const resJson = await this.apiProxyFormFetch(apiUrl, [headers], formData, true)
+    const resJson = await this.apiFormFetch(apiUrl, [headers], formData, true)
     if (resJson.error) {
       throw new Error(
         "telegra.ph 发布错误，注意：切换设备（包括从PC到浏览器环境）需要重新验证，并且获取新token。详细错误 =>" +

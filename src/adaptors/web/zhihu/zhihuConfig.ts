@@ -30,8 +30,12 @@ import { CategoryTypeEnum, PageTypeEnum, PasswordType } from "zhi-blog-api"
  * 知乎配置
  */
 class ZhihuConfig extends CommonWebConfig {
+  public logoutUrl: string
+
   constructor(username: string, password: string, middlewareUrl?: string) {
     super("https://zhuanlan.zhihu.com", "https://zhuanlan.zhihu.com/api", username, password, middlewareUrl)
+
+    this.logoutUrl = "https://www.zhihu.com/logout"
     this.previewUrl = "/p/[postid]"
     this.pageType = PageTypeEnum.Html
     this.passwordType = PasswordType.PasswordType_Cookie
