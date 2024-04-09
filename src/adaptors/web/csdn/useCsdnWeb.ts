@@ -88,6 +88,9 @@ const useCsdnWeb = async (key?: string, newCfg?: CsdnConfig) => {
   cfg.bundledPicbedSupported = true
   // 退出登录
   cfg.logoutUrl = "https://passport.csdn.net/account/logout"
+  // picbed service
+  cfg.picgoPicbedSupported = false
+  cfg.bundledPicbedSupported = true
 
   const webApi = new CsdnWebAdaptor(appInstance, cfg)
   return {

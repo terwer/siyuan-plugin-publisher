@@ -480,7 +480,7 @@ class HaloApiAdaptor extends BaseBlogApi {
     // 使用兼容的fetch调用并返回统一的JSON数据
     const body = ObjectUtil.isEmptyObject(params) ? "" : JSON.stringify(params)
     this.logger.debug("向 Halo 请求数据，body =>", body)
-    const resJson = await this.apiProxyFetch(apiUrl, [headers], body, method, contentType, false, "base64", "text")
+    const resJson = await this.apiFetch(apiUrl, [headers], body, method, contentType, false, "base64", "text")
     this.logger.debug("向 Halo 请求数据，resJson =>", resJson)
 
     return resJson ?? null
@@ -499,7 +499,7 @@ class HaloApiAdaptor extends BaseBlogApi {
       Authorization: basicAuth,
     }
 
-    const resJson = await this.apiProxyFormFetch(url, [header], formData)
+    const resJson = await this.apiFormFetch(url, [header], formData)
     return resJson
   }
 }

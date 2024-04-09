@@ -37,7 +37,7 @@ import { StrUtil } from "zhi-common"
  */
 class JuejinWebAdaptor extends BaseWebApi {
   public async getMetaData(): Promise<any> {
-    const res = await this.webProxyFetch("https://api.juejin.cn/user_api/v1/user/get")
+    const res = await this.webFetch("https://api.juejin.cn/user_api/v1/user/get")
     const flag = !!res.data?.user_id
     if (!flag) {
       throw new Error(`掘金平台校验失败，详细错误：code: ${res?.err_no}，msg: ${res?.err_msg}`)
@@ -63,7 +63,7 @@ class JuejinWebAdaptor extends BaseWebApi {
     const header = {
       accept: "application/json",
     }
-    const res = await this.webProxyFetch("https://api.juejin.cn/tag_api/v1/query_category_list", [header], {}, "POST")
+    const res = await this.webFetch("https://api.juejin.cn/tag_api/v1/query_category_list", [header], {}, "POST")
     this.logger.info(`get juejin categories`, res.data)
 
     if (res.data && res.data.length > 0) {
@@ -130,7 +130,7 @@ class JuejinWebAdaptor extends BaseWebApi {
       mark_content: post.description,
       theme_ids: [],
     }
-    const draftRes = await this.webProxyFetch(draftUrl, [], draftParams, "POST")
+    const draftRes = await this.webFetch(draftUrl, [], draftParams, "POST")
     this.logger.debug("juejin add post =>", draftRes)
     if (draftRes.err_no !== 0) {
       throw new Error("掘金文章草稿保存错误 =>" + draftRes.err_msg)
@@ -177,7 +177,7 @@ class JuejinWebAdaptor extends BaseWebApi {
       theme_ids: [],
     }
     // 更新草稿
-    const draftRes = await this.webProxyFetch(draftUpdateUrl, [], draftParams, "POST")
+    const draftRes = await this.webFetch(draftUpdateUrl, [], draftParams, "POST")
     this.logger.debug("juejin update post =>", draftRes)
     if (draftRes.err_no !== 0) {
       throw new Error("掘金文章更新错误 =>" + draftRes.err_msg)
@@ -204,7 +204,7 @@ class JuejinWebAdaptor extends BaseWebApi {
     const params = {
       article_id: pageId,
     }
-    const res = await this.webProxyFetch(url, [], params, "POST")
+    const res = await this.webFetch(url, [], params, "POST")
     this.logger.debug("juejin delete post res =>", res)
     if (res.err_no !== 0) {
       throw new Error("掘金文章删除失败 =>" + res.err_msg)
@@ -221,7 +221,7 @@ class JuejinWebAdaptor extends BaseWebApi {
     const params = {
       article_id: pageId,
     }
-    const res = await this.webProxyFetch(url, [], params, "POST")
+    const res = await this.webFetch(url, [], params, "POST")
     this.logger.debug("juejin get post res =>", res)
     if (res.err_no !== 0) {
       throw new Error("掘金文章获取失败 =>" + res.err_msg)
@@ -252,7 +252,7 @@ class JuejinWebAdaptor extends BaseWebApi {
     const header = {
       accept: "application/json",
     }
-    const res = await this.webProxyFetch("https://api.juejin.cn/tag_api/v1/query_category_list", [header], {}, "POST")
+    const res = await this.webFetch("https://api.juejin.cn/tag_api/v1/query_category_list", [header], {}, "POST")
     this.logger.info(`get juejin categories`, res.data)
 
     if (res.data && res.data.length > 0) {
@@ -279,7 +279,7 @@ class JuejinWebAdaptor extends BaseWebApi {
       limit: 10,
       sort_type: 1,
     }
-    const res = await this.webProxyFetch("https://api.juejin.cn/tag_api/v1/query_tag_list", [header], params, "POST")
+    const res = await this.webFetch("https://api.juejin.cn/tag_api/v1/query_tag_list", [header], params, "POST")
     this.logger.info(`get juejin categories`, res.data)
 
     if (res.data && res.data.length > 0) {
@@ -329,7 +329,7 @@ class JuejinWebAdaptor extends BaseWebApi {
       column_ids: [],
       theme_ids: [],
     }
-    const res = await this.webProxyFetch(url, [], params, "POST")
+    const res = await this.webFetch(url, [], params, "POST")
     this.logger.debug("juejin publish post res =>", res)
     if (res.err_no !== 0) {
       throw new Error("掘金文章发布失败 =>" + (res?.err_msg ?? res))

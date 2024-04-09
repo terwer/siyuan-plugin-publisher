@@ -29,7 +29,7 @@ import { BlogConfig, CategoryInfo, PageTypeEnum, Post, UserBlog } from "zhi-blog
 import { JsonUtil } from "zhi-common"
 import WebUtils from "~/src/adaptors/web/base/webUtils.ts"
 import _ from "lodash-es"
-import FormDataUtils from "~/src/utils/FormDataUtils.ts";
+import FormDataUtils from "~/src/utils/FormDataUtils.ts"
 
 /**
  * CSDN网页授权适配器
@@ -303,6 +303,14 @@ class CsdnWebAdaptor extends BaseWebApi {
     return flag
   }
 
+  public async getPreviewUrl(postid: string): Promise<string> {
+    const token = this.cfg.password
+    const userid = WebUtils.readCookie("UserName", token)
+    const previewUrl = this.cfg.previewUrl.replace(/\[userid\]/g, userid).replace(/\[postid\]/g, postid)
+    return previewUrl
+    // return StrUtil.pathJoin(this.cfg.home ?? "", previewUrl)
+  }
+
   public async uploadFile(file: File | Blob, filename?: string): Promise<any> {
     const { FormData, Blob } = FormDataUtils.getFormData(this.appInstance)
 
@@ -325,13 +333,16 @@ class CsdnWebAdaptor extends BaseWebApi {
       formData.append("file", file)
 
       this.logger.debug("csdn image upload strat...")
-      const response = await fetch(uploadUrl, {
-        method: "POST",
-        body: formData,
-      })
-      const resText = await response.text()
-      this.logger.debug("csdn image upload success, resText=>", resText)
-      const resJson = JsonUtil.safeParse<any>(resText, {} as any)
+      // const response = await fetch(uploadUrl, {
+      //   method: "POST",
+      //   body: formData,
+      // })
+      // const resText = await response.text()
+      // this.logger.debug("csdn image upload success, resText=>", resText)
+      // const resJson = JsonUtil.safeParse<any>(resText, {} as any)
+      const headers = {}
+      const resJson = await this.csdnFormFetch(uploadUrl, formData, headers)
+      debugger
       if (resJson.code !== 200) {
         throw new Error("CSDN图片上传失败 =>" + filename)
       }
@@ -403,6 +414,7 @@ class CsdnWebAdaptor extends BaseWebApi {
     reqHeaderMap.set("x-ca-nonce", xCaNonce)
     reqHeaderMap.set("x-ca-signature", xCaSignature)
     reqHeaderMap.set("x-ca-signature-headers", "x-ca-key,x-ca-nonce")
+    reqHeaderMap.set("Cookie", this.cfg.password)
 
     const mergedHeaders = {
       ...Object.fromEntries(reqHeaderMap),
@@ -419,16 +431,37 @@ class CsdnWebAdaptor extends BaseWebApi {
     // 发送请求并返回响应
     this.logger.debug("csdn url =>", url)
     this.logger.debug("csdn requestOptions =>", requestOptions)
-    const res = await this.webProxyFetch(url, [mergedHeaders], params, method, contentType)
+    const res = await this.webFetch(url, [mergedHeaders], params, method, contentType, true, "base64")
     return res
   }
 
-  public async getPreviewUrl(postid: string): Promise<string> {
-    const token = this.cfg.password
-    const userid = WebUtils.readCookie("UserName", token)
-    const previewUrl = this.cfg.previewUrl.replace(/\[userid\]/g, userid).replace(/\[postid\]/g, postid)
-    return previewUrl
-    // return StrUtil.pathJoin(this.cfg.home ?? "", previewUrl)
+  /**
+   * 向 CSDN 发送表单数据
+   *
+   * @param url 请求地址
+   * @param formData 表单数据，默认为undefined，支持 ReadableStream、Blob | BufferSource | FormData | URLSearchParams | string。这里只需要 FormData
+   * @param headers 请求头
+   */
+  private async csdnFormFetch(url: string, formData: FormData, headers: Record<any, any> = {}) {
+    const apiUrl = url
+
+    const options: RequestInit = {
+      method: "POST",
+      headers: headers,
+      body: formData,
+    }
+
+    this.logger.debug("向 CSDN 发送表单数据，apiUrl =>", apiUrl)
+    this.logger.debug("向 CSDN 发送表单数据，options =>", options)
+
+    debugger
+    const resJson = await this.webFormFetch(apiUrl, [headers], formData, true)
+    if (resJson.error) {
+      throw new Error("CSDN 表单提交错误。详细错误 =>" + resJson.error)
+    }
+    this.logger.debug("向 CSDN 发送表单数据，resJson =>", resJson)
+
+    return resJson
   }
 }
 

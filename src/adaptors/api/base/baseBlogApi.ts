@@ -106,7 +106,7 @@ export class BaseBlogApi extends BlogApi {
    * @param payloadEncoding - 请求体的编码方式，默认为 text
    * @param responseEncoding - 响应体的编码方式，默认为 text
    */
-  public async apiProxyFetch(
+  public async apiFetch(
     url: string,
     headers: any[] = [],
     params: any = undefined,
@@ -173,14 +173,14 @@ export class BaseBlogApi extends BlogApi {
    * @param formData - 表单数据
    * @param forceProxy - 是否强制使用代理，默认为 false
    */
-  public async apiProxyFormFetch(url: string, headers: any[], formData: FormData, forceProxy: boolean = false) {
+  public async apiFormFetch(url: string, headers: any[], formData: FormData, forceProxy: boolean = false) {
     // 如果没有可用的 CORS 代理或者没有强制使用代理，使用默认的自动检测机制
     if (this.isUseSiyuanProxy || (!this.isUseSiyuanProxy && forceProxy) || !forceProxy) {
       this.logger.info("Using legency api formFetch")
       const { isInSiyuanOrSiyuanNewWin } = useSiyuanDevice()
 
       if (!isInSiyuanOrSiyuanNewWin() || forceProxy) {
-        const fetchResult = await this.apiProxyFetch(
+        const fetchResult = await this.apiFetch(
           url,
           headers,
           formData,

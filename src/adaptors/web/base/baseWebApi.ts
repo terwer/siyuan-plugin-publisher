@@ -125,6 +125,7 @@ class BaseWebApi extends WebApi {
   }
 
   public async newMediaObject(mediaObject: MediaObject, customHandler?: any): Promise<Attachment> {
+    const { Blob } = FormDataUtils.getFormData(this.appInstance)
     const bits = mediaObject.bits
     this.logger.debug("newMediaObject on baseWebApi =>", mediaObject)
     const blob = new Blob([bits], { type: mediaObject.type })
@@ -165,7 +166,7 @@ class BaseWebApi extends WebApi {
    * @param payloadEncoding - 请求体的编码方式，默认为 text
    * @param responseEncoding - 响应体的编码方式，默认为 text
    */
-  public async webProxyFetch(
+  public async webFetch(
     url: string,
     headers: any[] = [],
     params: any = {},
@@ -197,12 +198,7 @@ class BaseWebApi extends WebApi {
       this.logger.info("Using legency web fetch")
       // remove cors fetch header
       delete header["x-cors-headers"]
-      const webHeaders = [
-        {
-          ...header,
-          Cookie: this.cfg.password,
-        },
-      ]
+      const webHeaders = [header]
       return await this.proxyFetch(
         url,
         webHeaders,
@@ -215,12 +211,7 @@ class BaseWebApi extends WebApi {
       )
     } else {
       this.logger.info("Using cors web fetch")
-      const webHeaders = [
-        {
-          ...header,
-          Cookie: this.cfg.password,
-        },
-      ]
+      const webHeaders = [header]
       return this.corsFetch(url, webHeaders, params, method)
     }
   }
@@ -265,15 +256,15 @@ class BaseWebApi extends WebApi {
 
       const { isInSiyuanOrSiyuanNewWin } = useSiyuanDevice()
       if (!isInSiyuanOrSiyuanNewWin() || forceProxy) {
-        const fetchResult = await this.webProxyFetch(
+        const fetchResult = await this.webFetch(
           url,
           headers,
           formData,
           "POST",
           undefined,
           forceProxy,
-          "base64",
-          "base64"
+          payloadEncoding ?? "base64",
+          responseEncoding ?? "base64"
         )
         const resText = Base64.fromBase64(fetchResult.body)
         const resJson = JsonUtil.safeParse<any>(resText, {} as any)

@@ -44,7 +44,7 @@ import FormDataUtils from "~/src/utils/FormDataUtils.ts"
  */
 class WechatWebAdaptor extends BaseWebApi {
   public async getMetaData(): Promise<any> {
-    const res = await this.webProxyFetch("https://mp.weixin.qq.com/", [], {}, "GET", "text/html")
+    const res = await this.webFetch("https://mp.weixin.qq.com/", [], {}, "GET", "text/html")
     this.logger.debug("WechatWebAdaptor res=>", { res: res })
     const $ = cheerio.load(res)
     const scriptElement = $("script")[0]
@@ -81,7 +81,7 @@ class WechatWebAdaptor extends BaseWebApi {
   public async getUsersBlogs(): Promise<Array<UserBlog>> {
     let result: UserBlog[] = []
 
-    const res = await this.webProxyFetch("https://mp.weixin.qq.com/", [], {}, "GET", "text/html")
+    const res = await this.webFetch("https://mp.weixin.qq.com/", [], {}, "GET", "text/html")
     this.logger.debug("WechatWebAdaptor res=>", { res: res })
     const $ = cheerio.load(res)
     const scriptElement = $("script")[0]
@@ -380,7 +380,7 @@ class WechatWebAdaptor extends BaseWebApi {
   public async getPost(postid: string): Promise<Post> {
     const token = this.cfg.metadata.token
     const url = `https://mp.weixin.qq.com/cgi-bin/appmsg?t=media/appmsg_edit&action=edit&type=77&appmsgid=${postid}&token=${token}&lang=zh_CN`
-    const res = await this.webProxyFetch(url, [], {}, "GET", "text/html")
+    const res = await this.webFetch(url, [], {}, "GET", "text/html")
     this.logger.debug("get wechat post finished, res=>", res)
 
     const post = new Post()

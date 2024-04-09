@@ -405,7 +405,7 @@ const _handleValidateChromeExtensionAuth = async (dynCfg: DynamicConfig) => {
     }
   } catch (e) {
     dynCfg.isAuth = false
-    ElMessage.error(t("main.opt.failure") + "=>" + e)
+    ElMessage.error(t("main.opt.failure") + "=>" + e+"，如果是登录过期，请在左侧点击「授权」修改新的 cookie 或者参考 https://blog.terwer.space/s/20230810132040-nn4q7vs FAQ4 解决")
     logger.error(t("main.opt.failure") + "=>", e)
   }
 

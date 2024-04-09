@@ -324,7 +324,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
     this.logger.debug("向 Zhihu 请求数据，headers =>", headers)
     this.logger.debug("向 Zhihu 请求数据，body =>", body)
 
-    const resJson = await this.webProxyFetch(apiUrl, [headers], body, method, contentType, true, "base64")
+    const resJson = await this.webFetch(apiUrl, [headers], body, method, contentType, true, "base64")
     this.logger.debug("向 Zhihu 请求数据，resJson =>", resJson)
 
     return resJson ?? null

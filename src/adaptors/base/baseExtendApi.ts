@@ -654,10 +654,10 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
       let response: any
       if (this.api instanceof BaseBlogApi) {
         const blogApi = this.api as BaseBlogApi
-        response = await blogApi.apiProxyFetch(url, [], undefined, "GET", undefined, true, "base64", "base64")
+        response = await blogApi.apiFetch(url, [], undefined, "GET", undefined, true, "base64", "base64")
       } else if (this.api instanceof BaseWebApi) {
         const webApi = this.api as BaseWebApi
-        response = await webApi.webProxyFetch(url, [], undefined, "GET", undefined, true, "base64", "base64")
+        response = await webApi.webFetch(url, [], undefined, "GET", undefined, true, "base64", "base64")
       } else {
         throw new Error("proxyFetch is not valid")
       }

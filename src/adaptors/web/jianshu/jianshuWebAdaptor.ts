@@ -39,7 +39,7 @@ import FormDataUtils from "~/src/utils/FormDataUtils.ts"
  */
 class JianshuWebAdaptor extends BaseWebApi {
   public async getMetaData(): Promise<any> {
-    const res = await this.webProxyFetch("https://www.jianshu.com/settings/basic.json")
+    const res = await this.webFetch("https://www.jianshu.com/settings/basic.json")
     const avatar = res.data.avatar
     const uid = avatar.substring(avatar.lastIndexOf("/") + 1, avatar.lastIndexOf("."))
     const flag = !!uid
@@ -62,7 +62,7 @@ class JianshuWebAdaptor extends BaseWebApi {
     const header = {
       accept: "application/json",
     }
-    const notebooks = await this.webProxyFetch("https://www.jianshu.com/author/notebooks", [header])
+    const notebooks = await this.webFetch("https://www.jianshu.com/author/notebooks", [header])
     this.logger.info(`get jianshu notebooks`, notebooks)
 
     if (notebooks && notebooks.length > 0) {
@@ -85,7 +85,7 @@ class JianshuWebAdaptor extends BaseWebApi {
     const header = {
       accept: "application/json",
     }
-    const notebooks = await this.webProxyFetch("https://www.jianshu.com/author/notebooks", [header])
+    const notebooks = await this.webFetch("https://www.jianshu.com/author/notebooks", [header])
     this.logger.info(`get jianshu notebooks`, notebooks)
 
     if (notebooks && notebooks.length > 0) {
@@ -113,7 +113,7 @@ class JianshuWebAdaptor extends BaseWebApi {
       title: post.title,
       at_bottom: false,
     }
-    const initRes = await this.webProxyFetch("https://www.jianshu.com/author/notes", [initHeader], initParams, "POST")
+    const initRes = await this.webFetch("https://www.jianshu.com/author/notes", [initHeader], initParams, "POST")
     this.logger.debug("jianshu addPost initRes =>", initRes)
     const pageId = initRes.id
     const endUrl = initRes.slug
@@ -145,7 +145,7 @@ class JianshuWebAdaptor extends BaseWebApi {
     const header = {
       accept: "application/json",
     }
-    const res = await this.webProxyFetch(
+    const res = await this.webFetch(
       `https://www.jianshu.com/author/notes/${pageId}/soft_destroy`,
       [header],
       undefined,
@@ -166,7 +166,7 @@ class JianshuWebAdaptor extends BaseWebApi {
       const header = {
         accept: "application/json",
       }
-      const res = await this.webProxyFetch(`https://www.jianshu.com/author/notes/${pageId}/note_logs`, [header])
+      const res = await this.webFetch(`https://www.jianshu.com/author/notes/${pageId}/note_logs`, [header])
       this.logger.debug("jianshu get post version res =>", res)
 
       // 文章更新并发布
@@ -200,7 +200,7 @@ class JianshuWebAdaptor extends BaseWebApi {
       const blob = new Blob([bits], { type: file.type })
 
       // formData
-      const tokenReq = await this.webProxyFetch("https://www.jianshu.com/upload_images/token.json?filename=" + filename)
+      const tokenReq = await this.webFetch("https://www.jianshu.com/upload_images/token.json?filename=" + filename)
       this.logger.debug("jianshu get picture token res =>", tokenReq)
       const formData = new FormData()
       formData.append("token", tokenReq.token)
@@ -274,7 +274,7 @@ class JianshuWebAdaptor extends BaseWebApi {
       title: title,
       content: conetnt,
     }
-    const saveRes = await this.webProxyFetch(
+    const saveRes = await this.webFetch(
       `https://www.jianshu.com/author/notes/${pageId}`,
       [saveHeader],
       saveParams,
@@ -287,7 +287,7 @@ class JianshuWebAdaptor extends BaseWebApi {
       const publishHeader = {
         accept: "application/json",
       }
-      const pubRes = await this.webProxyFetch(
+      const pubRes = await this.webFetch(
         `https://www.jianshu.com/author/notes/${pageId}/publicize`,
         [publishHeader],
         {},
