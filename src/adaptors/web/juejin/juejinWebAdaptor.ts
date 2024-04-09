@@ -37,7 +37,7 @@ import { StrUtil } from "zhi-common"
  */
 class JuejinWebAdaptor extends BaseWebApi {
   public async getMetaData(): Promise<any> {
-    const res = await this.webFetch("https://api.juejin.cn/user_api/v1/user/get")
+    const res = await this.juejinFetch("https://api.juejin.cn/user_api/v1/user/get", undefined, "GET")
     const flag = !!res.data?.user_id
     if (!flag) {
       throw new Error(`掘金平台校验失败，详细错误：code: ${res?.err_no}，msg: ${res?.err_msg}`)
@@ -63,7 +63,12 @@ class JuejinWebAdaptor extends BaseWebApi {
     const header = {
       accept: "application/json",
     }
-    const res = await this.webFetch("https://api.juejin.cn/tag_api/v1/query_category_list", [header], {}, "POST")
+    const res = await this.juejinFetch(
+      "https://api.juejin.cn/tag_api/v1/query_category_list",
+      undefined,
+      "POST",
+      header
+    )
     this.logger.info(`get juejin categories`, res.data)
 
     if (res.data && res.data.length > 0) {
@@ -118,7 +123,7 @@ class JuejinWebAdaptor extends BaseWebApi {
 
     // 保存草稿
     const draftUrl = "https://api.juejin.cn/content_api/v1/article_draft/create"
-    const draftParams = {
+    const draftParams = JSON.stringify({
       category_id: cate_slug,
       tag_ids: tag_slug.split(","),
       link_url: "",
@@ -129,8 +134,8 @@ class JuejinWebAdaptor extends BaseWebApi {
       html_content: "deprecated",
       mark_content: post.description,
       theme_ids: [],
-    }
-    const draftRes = await this.webFetch(draftUrl, [], draftParams, "POST")
+    })
+    const draftRes = await this.juejinFetch(draftUrl, draftParams, "POST", {})
     this.logger.debug("juejin add post =>", draftRes)
     if (draftRes.err_no !== 0) {
       throw new Error("掘金文章草稿保存错误 =>" + draftRes.err_msg)
@@ -163,7 +168,7 @@ class JuejinWebAdaptor extends BaseWebApi {
 
     // 更新文章
     const draftUpdateUrl = "https://api.juejin.cn/content_api/v1/article_draft/update"
-    const draftParams = {
+    const draftParams = JSON.stringify({
       id: draftId,
       category_id: cate_slug,
       tag_ids: tag_slug.split(","),
@@ -175,9 +180,9 @@ class JuejinWebAdaptor extends BaseWebApi {
       html_content: "deprecated",
       mark_content: post.markdown,
       theme_ids: [],
-    }
+    })
     // 更新草稿
-    const draftRes = await this.webFetch(draftUpdateUrl, [], draftParams, "POST")
+    const draftRes = await this.juejinFetch(draftUpdateUrl, draftParams, "POST", {})
     this.logger.debug("juejin update post =>", draftRes)
     if (draftRes.err_no !== 0) {
       throw new Error("掘金文章更新错误 =>" + draftRes.err_msg)
@@ -201,10 +206,10 @@ class JuejinWebAdaptor extends BaseWebApi {
     const url = "https://api.juejin.cn/content_api/v1/article/delete"
     const juejinPostKey = this.getJuejinPostidKey(postid)
     const pageId = juejinPostKey.pageId
-    const params = {
+    const params = JSON.stringify({
       article_id: pageId,
-    }
-    const res = await this.webFetch(url, [], params, "POST")
+    })
+    const res = await this.juejinFetch(url, params, "POST", {})
     this.logger.debug("juejin delete post res =>", res)
     if (res.err_no !== 0) {
       throw new Error("掘金文章删除失败 =>" + res.err_msg)
@@ -218,10 +223,10 @@ class JuejinWebAdaptor extends BaseWebApi {
     const pageId = juejinPostKey.pageId
 
     const url = "https://api.juejin.cn/content_api/v1/article/detail"
-    const params = {
+    const params = JSON.stringify({
       article_id: pageId,
-    }
-    const res = await this.webFetch(url, [], params, "POST")
+    })
+    const res = await this.juejinFetch(url, params, "POST", {})
     this.logger.debug("juejin get post res =>", res)
     if (res.err_no !== 0) {
       throw new Error("掘金文章获取失败 =>" + res.err_msg)
@@ -252,7 +257,12 @@ class JuejinWebAdaptor extends BaseWebApi {
     const header = {
       accept: "application/json",
     }
-    const res = await this.webFetch("https://api.juejin.cn/tag_api/v1/query_category_list", [header], {}, "POST")
+    const res = await this.juejinFetch(
+      "https://api.juejin.cn/tag_api/v1/query_category_list",
+      undefined,
+      "POST",
+      header
+    )
     this.logger.info(`get juejin categories`, res.data)
 
     if (res.data && res.data.length > 0) {
@@ -273,13 +283,13 @@ class JuejinWebAdaptor extends BaseWebApi {
     const header = {
       accept: "application/json",
     }
-    const params = {
+    const params = JSON.stringify({
       cursor: "0",
       key_word: "",
       limit: 10,
       sort_type: 1,
-    }
-    const res = await this.webFetch("https://api.juejin.cn/tag_api/v1/query_tag_list", [header], params, "POST")
+    })
+    const res = await this.juejinFetch("https://api.juejin.cn/tag_api/v1/query_tag_list", params, "POST", header)
     this.logger.info(`get juejin categories`, res.data)
 
     if (res.data && res.data.length > 0) {
@@ -323,19 +333,51 @@ class JuejinWebAdaptor extends BaseWebApi {
   private async publishPost(draftId: string) {
     // 发布文章
     const url = "https://api.juejin.cn/content_api/v1/article/publish"
-    const params = {
+    const params = JSON.stringify({
       draft_id: draftId,
       sync_to_org: false,
       column_ids: [],
       theme_ids: [],
-    }
-    const res = await this.webFetch(url, [], params, "POST")
+    })
+    const res = await this.juejinFetch(url, params, "POST", {})
     this.logger.debug("juejin publish post res =>", res)
     if (res.err_no !== 0) {
       throw new Error("掘金文章发布失败 =>" + (res?.err_msg ?? res))
     }
 
     return res.data.article_id.toString()
+  }
+
+  /**
+   * 向掘金请求数据
+   */
+  private async juejinFetch(
+    url: string,
+    params?: any,
+    method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" = "GET",
+    headers: Record<any, any> = {},
+    contentType: string = "application/json"
+  ) {
+    const reqHeaderMap = new Map<string, string>()
+    reqHeaderMap.set("Cookie", this.cfg.password)
+
+    const mergedHeaders = {
+      ...Object.fromEntries(reqHeaderMap),
+      ...headers,
+    }
+
+    const body = params
+
+    // 输出日志
+    const apiUrl = url
+    this.logger.debug("向掘金请求数据，apiUrl =>", apiUrl)
+    this.logger.debug("向掘金请求数据，headers =>", headers)
+    this.logger.debug("向掘金请求数据，body =>", body)
+
+    const resJson = await this.webFetch(apiUrl, [mergedHeaders], body, method, contentType, true, "base64")
+    this.logger.debug("向掘金请求数据，resJson =>", resJson)
+
+    return resJson ?? null
   }
 }
 

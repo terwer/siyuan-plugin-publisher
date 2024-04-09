@@ -59,7 +59,7 @@
 |      博客      |  WordPress.com  |  ✔   | 完全兼容  |      ✔      |        完全兼容        |        ✔        | 支持         | 自建代理    | 自建代理  | [官网](https://wordpress.com)                  |
 |    社交媒体    |      知乎       |  ✔   | 完全兼容  |      ✔      | PC 验证或者填写 Cookie |        ✔        | 支持         | 内置代理    | 不需要    | [官网](https://www.zhihu.com/)                 |
 |    社交媒体    |      CSDN       |  ✔   | 完全兼容  |      ✔      | PC 验证或者填写 Cookie |        ✔        | 支持         | 内置代理    | 不需要    | [官网](https://www.csdn.net/)                  |
-|    社交媒体    |   微信公众号    |  ✔   | 完全兼容  |      ✔      |      填写 Cookie       |        ✖        | 支持         | 内置代理    | 不需要    | [官网](https://mp.weixin.qq.com/)              |
+|    社交媒体    |   微信公众号    |  ✔   | 完全兼容  |      ✔      |      填写 Cookie       |        ✔        | 支持         | 内置代理    | 不需要    | [官网](https://mp.weixin.qq.com/)              |
 |    社交媒体    |      简书       |  ✔   | 完全兼容  |      ✔      | PC 验证或者填写 Cookie |        ✔        | 支持         | 内置代理    | 不需要    | [官网](https://www.jianshu.com/)               |
 |    社交媒体    |      掘金       |  ✔   | 完全兼容  |      ✔      | PC 验证或者填写 Cookie |        ✔        | 不支持       | 内置代理    | 不需要    | [官网](https://juejin.cn/)                     |
 |      社区      |     52破解      | TODO |   TODO    |    TODO     |          TODO          |      TODO       | TODO         | TODO        | TODO      | [官网](https://www.52pojie.cn/)                |
