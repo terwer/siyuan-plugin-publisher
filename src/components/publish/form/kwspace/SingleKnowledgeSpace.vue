@@ -129,7 +129,7 @@ onMounted(async () => {
     formData.isCateLoading = true
     await initPage(true)
     // 自动映射分类模式只读
-    if (formData.cate.categorySelected.includes(CATE_AUTO_NAME)) {
+    if (formData?.cate?.categorySelected?.toString().includes(CATE_AUTO_NAME)) {
       formData.knowledgeSpaceConfig.readonlyMode = true
       formData.knowledgeSpaceConfig.readonlyModeTip = "当前为自动映射目录模式，将根据笔记层级自动生成目录😄"
     }

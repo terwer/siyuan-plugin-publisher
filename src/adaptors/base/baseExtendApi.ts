@@ -297,14 +297,15 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     // 处理标记
     // #691 闪卡标记渲染成Markdown之后去除==
     // md = md.replace(/==([^=]+)==/g, '<span style="font-weight: bold;" class="mark">$1</span>')
-    md = MdUtils.replaceSign(md, "=", "mark", "color: red;")
+    // md = MdUtils.replaceSign(md, "=", "mark", "color: red;")
+    md = MdUtils.replaceSignToAnother(md, "=", "*", "*")
 
     // 处理加粗
     // #821 html发布的时候会出现有些格式没有转化
     // **这里是加粗**
     // <span data-type="strong">这里是加粗</span>
     // md = md.replace(/\*\*(.*?)\*\*/g, '<span style="font-weight: bold;" data-type="strong">$1</span>')
-    md = MdUtils.replaceSign(md, "\\\*", "bold", "font-weight: bold;")
+    md = MdUtils.replaceSign(md, "\\*", "bold", "font-weight: bold;")
 
     // 处理外链
     const { getReadOnlyPublishPreferenceSetting } = usePreferenceSettingStore()

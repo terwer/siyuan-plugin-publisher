@@ -36,6 +36,33 @@ class MdUtils {
    *
    * @param text 文本
    * @param sign 标记符号，例如：=、\*
+   * @param open 起始字符
+   * @param close 结束字符
+   */
+  public static replaceSignToAnother(text: string, sign: string, open: string, close: string): string {
+    const regex = new RegExp("``[^`]*``|" + sign + "[^" + sign + "]*?" + sign + "|`[^`]*`", "g")
+    let inCodeBlock = false
+    let result = ""
+    let lastIndex = 0
+
+    text.replace(regex, ((match: string, index: number) => {
+      if (match.startsWith("``")) {
+        inCodeBlock = !inCodeBlock
+      } else if (!inCodeBlock && (match.startsWith(sign) || match.startsWith("`"))) {
+        result += text.slice(lastIndex, index) + `${open}${match.slice(1, -1)}${close}`
+        lastIndex = index + match.length
+      }
+    }) as any)
+
+    result += text.slice(lastIndex)
+    return result
+  }
+
+  /**
+   * 替换标记
+   *
+   * @param text 文本
+   * @param sign 标记符号，例如：=、\*
    * @param className 类名
    * @param style css 样式
    */

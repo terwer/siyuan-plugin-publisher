@@ -32,7 +32,6 @@ import { arrayToBuffer } from "~/src/utils/polyfillUtils.ts"
 import { getAliOssClient } from "~/src/vendors/alioss/s3oss.ts"
 import _ from "lodash-es"
 import ZhihuUtils from "~/src/adaptors/web/zhihu/zhihuUtils.ts"
-import FormDataUtils from "~/src/utils/FormDataUtils.ts"
 
 /**
  * 知乎网页授权适配器
@@ -405,7 +404,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
       function waitToNext() {
         that.logger.debug("untilImageDone start processing...", image_id)
         ;(async () => {
-          const imgDetail = await that.zhihuFetch(`https://api.zhihu.com/images/${image_id}`, {}, "GET")
+          const imgDetail = await that.zhihuFetch(`https://api.zhihu.com/images/${image_id}`, undefined, "GET")
           that.logger.debug("imgDetail", imgDetail)
           if (imgDetail.status != "processing") {
             that.logger.info("image upload all done")

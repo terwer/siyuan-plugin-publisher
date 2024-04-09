@@ -84,6 +84,8 @@ const useJianshuWeb = async (key?: string, newCfg?: JianshuConfig) => {
   cfg.allowKnowledgeSpaceChange = false
   cfg.placeholder.knowledgeSpaceReadonlyModeTip =
     "由于简书平台的限制，暂时不支持编辑所属笔记本。如果您想移动文档，请先点击取消删除该文档，然后重新选择新的笔记本发布"
+  // 退出登录
+  cfg.logoutUrl = "https://www.jianshu.com/shakespeare/sign_out"
   // picbed service
   cfg.picgoPicbedSupported = false
   cfg.bundledPicbedSupported = true

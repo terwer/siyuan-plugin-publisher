@@ -450,12 +450,6 @@ class WechatWebAdaptor extends BaseWebApi {
 
     this.logger.debug(`wechat start uploadFile ${filename}=>`, file)
     if (file instanceof Blob) {
-      // import
-      const win = this.appInstance.win
-      if (!win.require) {
-        throw new Error("非常抱歉，目前仅思源笔记PC客户端支持上传图片")
-      }
-
       // uploadUrl
       const ticket_id = this.cfg.metadata.commonData.data.user_name
       const ticket = this.cfg.metadata.commonData.data.ticket
