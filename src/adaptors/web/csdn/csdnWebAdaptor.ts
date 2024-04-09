@@ -342,7 +342,6 @@ class CsdnWebAdaptor extends BaseWebApi {
       // const resJson = JsonUtil.safeParse<any>(resText, {} as any)
       const headers = {}
       const resJson = await this.csdnFormFetch(uploadUrl, formData, headers)
-      debugger
       if (resJson.code !== 200) {
         throw new Error("CSDN图片上传失败 =>" + filename)
       }
@@ -454,7 +453,7 @@ class CsdnWebAdaptor extends BaseWebApi {
     this.logger.debug("向 CSDN 发送表单数据，apiUrl =>", apiUrl)
     this.logger.debug("向 CSDN 发送表单数据，options =>", options)
 
-    const resJson = await this.webFormFetch(apiUrl, [headers], formData, true)
+    const resJson = await this.webFormFetch(apiUrl, [headers], formData, false)
     if (resJson.error) {
       throw new Error("CSDN 表单提交错误。详细错误 =>" + resJson.error)
     }

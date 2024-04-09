@@ -342,7 +342,7 @@ const _handleValidateOpenBrowserAuth = (dynCfg: DynamicConfig) => {
       const errMsg = t("main.opt.failure") + "=>" + e
       logger.error(t("main.opt.failure") + "=>", e)
       // 过期之后，提醒用户是否需要重新认证
-      const logoutUrl = dynCfg.logoutUrl ?? cfg.logoutUrl
+      const logoutUrl = dynCfg.logoutUrl ?? (cfg as any).logoutUrl
       if (!StrUtil.isEmptyString(logoutUrl)) {
         const confurmMsg =
           errMsg +
