@@ -147,7 +147,7 @@ class JianshuWebAdaptor extends BaseWebApi {
     }
     const res = await this.jianshuFetch(
       `https://www.jianshu.com/author/notes/${pageId}/soft_destroy`,
-      undefined,
+      JSON.stringify({}),
       "POST",
       header
     )
