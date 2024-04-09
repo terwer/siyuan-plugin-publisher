@@ -223,33 +223,8 @@ class BaseWebApi extends WebApi {
    * @param headers - 请求的头部信息
    * @param formData - 表单数据
    * @param forceProxy - 是否强制使用代理
-   * @param payloadEncoding - 请求体的编码方式，默认为 text
-   * @param responseEncoding - 响应体的编码方式，默认为 text
    * */
-  public async webFormFetch(
-    url: string,
-    headers: any[],
-    formData: FormData,
-    forceProxy: boolean = false,
-    payloadEncoding:
-      | "text"
-      | "base64"
-      | "base64-std"
-      | "base64-url"
-      | "base32"
-      | "base32-std"
-      | "base32-hex"
-      | "hex" = "text",
-    responseEncoding:
-      | "text"
-      | "base64"
-      | "base64-std"
-      | "base64-url"
-      | "base32"
-      | "base32-std"
-      | "base32-hex"
-      | "hex" = "text"
-  ) {
+  public async webFormFetch(url: string, headers: any[], formData: FormData, forceProxy: boolean = false) {
     // 如果没有可用的 CORS 代理或者没有强制使用代理，使用默认的自动检测机制
     if (this.isUseSiyuanProxy || (!this.isUseSiyuanProxy && forceProxy) || !forceProxy) {
       this.logger.info("Using legency web formFetch")
@@ -263,8 +238,8 @@ class BaseWebApi extends WebApi {
           "POST",
           undefined,
           forceProxy,
-          payloadEncoding ?? "base64",
-          responseEncoding ?? "base64"
+          "base64",
+          "base64"
         )
         const resText = Base64.fromBase64(fetchResult.body)
         const resJson = JsonUtil.safeParse<any>(resText, {} as any)

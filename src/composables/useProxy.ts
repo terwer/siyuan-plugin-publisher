@@ -92,11 +92,6 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
       | "base32-hex"
       | "hex" = "text"
   ) => {
-    // 修复参数，GET/HEAD 等方法不允许 body
-    if (params === "" || (typeof params === "object" && Object.keys(params).length === 0)) {
-      params = undefined
-    }
-
     if (isUseSiyuanProxy || (!isUseSiyuanProxy && forceProxy)) {
       logger.info("Using Siyuan forwardProxy")
       return await siyuanProxyFetch(url, headers, params, method, contentType, payloadEncoding, responseEncoding)
@@ -258,6 +253,7 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
     let payloadBuf = new ArrayBuffer(0)
     // GET or HEAD cannot have request body
     if (method !== "GET") {
+      debugger
       const myRequest = new Request("", { method: method, body: body })
       console.log("generate temp myRequest =>", myRequest)
       payloadBuf = await myRequest.arrayBuffer()
