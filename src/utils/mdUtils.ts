@@ -35,22 +35,22 @@ class MdUtils {
    * 替换标记
    *
    * @param text 文本
-   * @param sign 标记符号，例如：-、*
+   * @param sign 标记符号，例如：=、\*
    * @param className 类名
    * @param style css 样式
    */
-  public static replaceSign(text: string, sign: string, className = "", style = "") {
+  public static replaceSign(text: string, sign: string, className: string, style: string): string {
     const regex = new RegExp("``[^`]*``|" + sign + "[^" + sign + "]*?" + sign + "|`[^`]*`", "g")
     let inCodeBlock = false
     let result = ""
     let lastIndex = 0
 
-    text.replace(regex, ((match: any, index: any) => {
+    text.replace(regex, ((match: string, index: number) => {
       if (match.startsWith("``")) {
         inCodeBlock = !inCodeBlock
       } else if (!inCodeBlock && (match.startsWith(sign) || match.startsWith("`"))) {
         result +=
-          text.slice(lastIndex, index) + `<span class="${className}" style="${style}">${match.slice(2, -2)}</span>`
+          text.slice(lastIndex, index) + `<span class="${className}" style="${style}">${match.slice(1, -1)}</span>`
         lastIndex = index + match.length
       }
     }) as any)

@@ -28,20 +28,23 @@ import { MdUtils } from "~/src/utils/mdUtils.ts"
 
 describe("test mdUtils", () => {
   it("test replaceSign", () => {
-    const text = `
-这是一个==忽略代码块==。里面有==另一个==忽略代码块==。==最里面的==忽略代码块==。
-这个是\`\`\`代码块==不应该被匹配==。
+    const text = `# 测试 23
 
-\`哈哈哈哈==这个是单行代码不需要匹配==对对对\`
+csdn测试2
 
-这是一个包含代码块的段落：
-\`\`\`
-function test() {
-    console.log("这个是代码块内容");
-} 
-==这也也不应该匹配==
-\`\`\`
-这个是一个包含==内联代码==的例子。
+‍
+
+‍
+
+‍
+
+‍
+
+​![image](https://pic4.zhimg.com/v2-23281fd6a2541c5e37024d691911da18)​
+
+==这里再看==看**加粗**能用不
+
+啊啊啊啊啊
 `
 
     const replacedText = MdUtils.replaceSign(text, "=", "mark", "color: red;")

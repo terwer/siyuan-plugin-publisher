@@ -304,7 +304,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     // **这里是加粗**
     // <span data-type="strong">这里是加粗</span>
     // md = md.replace(/\*\*(.*?)\*\*/g, '<span style="font-weight: bold;" data-type="strong">$1</span>')
-    md = MdUtils.replaceSign(md, "*", "bold", "font-weight: bold;")
+    md = MdUtils.replaceSign(md, "\\\*", "bold", "font-weight: bold;")
 
     // 处理外链
     const { getReadOnlyPublishPreferenceSetting } = usePreferenceSettingStore()
