@@ -333,13 +333,6 @@ class CsdnWebAdaptor extends BaseWebApi {
       formData.append("file", file)
 
       this.logger.debug("csdn image upload strat...")
-      // const response = await fetch(uploadUrl, {
-      //   method: "POST",
-      //   body: formData,
-      // })
-      // const resText = await response.text()
-      // this.logger.debug("csdn image upload success, resText=>", resText)
-      // const resJson = JsonUtil.safeParse<any>(resText, {} as any)
       const headers = {}
       const resJson = await this.csdnFormFetch(uploadUrl, formData, headers)
       if (resJson.code !== 200) {
@@ -350,10 +343,6 @@ class CsdnWebAdaptor extends BaseWebApi {
         object_key: resJson.data.targetObjectKeyy,
         url: resJson.data.imageUrl,
       }
-
-      // 其他方式，待研究。上面的仅PC客户端可用
-      // var res = await this.csdnFetch(uploadUrl, [], params, "POST", "multipart/form-data")
-      // this.logger.debug("csdn image upload success, res=>", res)
     }
 
     return {}

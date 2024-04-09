@@ -78,7 +78,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
     let result: UserBlog[] = []
 
     const url = `https://www.zhihu.com/people/${this.cfg.username}/columns`
-    const res = await this.zhihuFetch(url, [], "GET", {}, "text/html")
+    const res = await this.zhihuFetch(url, undefined, "GET", {}, "text/html")
     this.logger.debug("get zhihu columns dom =>", { res })
     const $ = cheerio.load(res)
     const scriptContent = $("#js-initialData").html()
@@ -208,7 +208,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
   public async deletePost(postid: string): Promise<boolean> {
     let flag = false
     try {
-      const res = await this.zhihuFetch(`https://www.zhihu.com/api/v4/articles/${postid}`, {}, "DELETE")
+      const res = await this.zhihuFetch(`https://www.zhihu.com/api/v4/articles/${postid}`, undefined, "DELETE")
       this.logger.debug("delete zhihu article res=>", res)
       if (res.success) {
         flag = true
@@ -227,7 +227,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
     const cats = [] as CategoryInfo[]
 
     const url = `https://www.zhihu.com/people/${this.cfg.username}/columns`
-    const res = await this.zhihuFetch(url, {}, "GET", {}, "text/html")
+    const res = await this.zhihuFetch(url, undefined, "GET", {}, "text/html")
     this.logger.debug("get zhihu columns dom =>", { res })
     const $ = cheerio.load(res)
     const scriptContent = $("#js-initialData").html()
@@ -250,6 +250,9 @@ class ZhihuWebAdaptor extends BaseWebApi {
   }
 
   public async uploadFile(file: File | Blob, filename?: string): Promise<any> {
+    const win = this.appInstance.win
+    const Blob = win.Blob
+
     this.logger.debug(`zhihu start uploadFile ${filename}=>`, file)
     if (file instanceof Blob) {
       // 1. 获取图片hash
@@ -314,17 +317,24 @@ class ZhihuWebAdaptor extends BaseWebApi {
     headers: Record<any, any> = {},
     contentType: string = "application/json"
   ) {
+    const reqHeaderMap = new Map<string, string>()
+    reqHeaderMap.set("Cookie", this.cfg.password)
+
+    const mergedHeaders = {
+      ...Object.fromEntries(reqHeaderMap),
+      ...headers,
+    }
+
     const body = params
 
     // 输出日志
-    // const apiUrl = `${this.cfg.apiUrl ?? ""}${url}`
     const apiUrl = url
     this.logger.debug("向 Zhihu 请求数据，apiUrl =>", apiUrl)
     // 使用兼容的fetch调用并返回统一的JSON数据
     this.logger.debug("向 Zhihu 请求数据，headers =>", headers)
     this.logger.debug("向 Zhihu 请求数据，body =>", body)
 
-    const resJson = await this.webFetch(apiUrl, [headers], body, method, contentType, true, "base64")
+    const resJson = await this.webFetch(apiUrl, [mergedHeaders], body, method, contentType, true, "base64")
     this.logger.debug("向 Zhihu 请求数据，resJson =>", resJson)
 
     return resJson ?? null
@@ -369,6 +379,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
           }
         })()
       }
+
       waitToNext()
     })
   }
