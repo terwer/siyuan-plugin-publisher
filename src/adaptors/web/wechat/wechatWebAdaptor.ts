@@ -464,8 +464,6 @@ class WechatWebAdaptor extends BaseWebApi {
   }
 
   public async uploadFile(mediaObject: MediaObject): Promise<any> {
-    // get formData and Blob
-    const { FormData, Blob } = FormDataUtils.getFormData(this.appInstance)
     const file = new Blob([mediaObject.bits], { type: mediaObject.type })
     const filename = mediaObject.name
 
@@ -584,7 +582,7 @@ class WechatWebAdaptor extends BaseWebApi {
       Referer: "https://mp.weixin.qq.com/cgi-bin/appmsg",
     }
 
-    const resJson = await this.webFormFetch(url, [header], formData)
+    const resJson = await this.webFormFetch(url, [header], formData, true)
     return resJson
   }
 }
