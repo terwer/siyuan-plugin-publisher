@@ -24,7 +24,7 @@
  */
 
 import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
-import { CategoryInfo, Post, UserBlog } from "zhi-blog-api"
+import {CategoryInfo, MediaObject, Post, UserBlog} from "zhi-blog-api"
 import { ElMessage } from "element-plus"
 import { fileToBuffer } from "~/src/utils/polyfillUtils.ts"
 import FormDataUtils from "~/src/utils/FormDataUtils.ts"
@@ -181,8 +181,10 @@ class JianshuWebAdaptor extends BaseWebApi {
     return flag
   }
 
-  public async uploadFile(file: File | Blob, filename?: string): Promise<any> {
+  public async uploadFile(mediaObject: MediaObject): Promise<any> {
     const { FormData, Blob } = FormDataUtils.getFormData(this.appInstance)
+    const file = new Blob([mediaObject.bits], { type: mediaObject.type })
+    const filename = mediaObject.name
 
     this.logger.debug(`jianshu start uploadFile ${filename}=>`, file)
     if (file instanceof Blob) {

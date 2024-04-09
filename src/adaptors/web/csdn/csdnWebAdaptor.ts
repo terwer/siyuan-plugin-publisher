@@ -25,7 +25,7 @@
 
 import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
 import CsdnUtils from "~/src/adaptors/web/csdn/csdnUtils.ts"
-import { BlogConfig, CategoryInfo, PageTypeEnum, Post, UserBlog } from "zhi-blog-api"
+import {BlogConfig, CategoryInfo, MediaObject, PageTypeEnum, Post, UserBlog} from "zhi-blog-api"
 import { JsonUtil } from "zhi-common"
 import WebUtils from "~/src/adaptors/web/base/webUtils.ts"
 import _ from "lodash-es"
@@ -311,8 +311,10 @@ class CsdnWebAdaptor extends BaseWebApi {
     // return StrUtil.pathJoin(this.cfg.home ?? "", previewUrl)
   }
 
-  public async uploadFile(file: File | Blob, filename?: string): Promise<any> {
+  public async uploadFile(mediaObject: MediaObject): Promise<any> {
     const { FormData, Blob } = FormDataUtils.getFormData(this.appInstance)
+    const file = new Blob([mediaObject.bits], { type: mediaObject.type })
+    const filename = mediaObject.name
 
     this.logger.debug(`csdn start uploadFile ${filename}=>`, file)
     if (file instanceof Blob) {

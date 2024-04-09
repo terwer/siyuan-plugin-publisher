@@ -24,7 +24,7 @@
  */
 
 import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
-import { BlogConfig, CategoryInfo, PageTypeEnum, Post, UserBlog } from "zhi-blog-api"
+import { BlogConfig, CategoryInfo, MediaObject, PageTypeEnum, Post, UserBlog } from "zhi-blog-api"
 import * as cheerio from "cheerio"
 import { JsonUtil, StrUtil } from "zhi-common"
 import CryptoJS from "crypto-js"
@@ -250,8 +250,9 @@ class ZhihuWebAdaptor extends BaseWebApi {
     return cats
   }
 
-  public async uploadFile(file: File | Blob, filename?: string): Promise<any> {
-    const { Blob } = FormDataUtils.getFormData(this.appInstance)
+  public async uploadFile(mediaObject: MediaObject): Promise<any> {
+    const file = new Blob([mediaObject.bits], { type: mediaObject.type })
+    const filename = mediaObject.name
 
     this.logger.debug(`zhihu start uploadFile ${filename}=>`, file)
     if (file instanceof Blob) {
@@ -367,7 +368,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
     this.logger.debug("向知乎发送表单数据，apiUrl =>", apiUrl)
     this.logger.debug("向知乎发送表单数据，options =>", options)
 
-    const resJson = await this.webFormFetch(apiUrl, [mergedHeaders], formData, false)
+    const resJson = await this.webFormFetch(apiUrl, [mergedHeaders], formData, true)
     if (resJson.error) {
       throw new Error("知乎表单提交错误。详细错误 =>" + resJson.error)
     }

@@ -26,7 +26,7 @@
 import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
 import * as cheerio from "cheerio"
 import { HtmlUtil, JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
-import { BlogConfig, PageTypeEnum, Post, UserBlog } from "zhi-blog-api"
+import {BlogConfig, MediaObject, PageTypeEnum, Post, UserBlog} from "zhi-blog-api"
 import { toRaw } from "vue"
 import _ from "lodash-es"
 import { fileToBuffer } from "~/src/utils/polyfillUtils.ts"
@@ -442,9 +442,11 @@ class WechatWebAdaptor extends BaseWebApi {
     return `https://mp.weixin.qq.com/cgi-bin/appmsg?t=media/appmsg_edit&action=edit&type=77&appmsgid=${postid}&token=${token}&lang=zh_CN`
   }
 
-  public async uploadFile(file: File | Blob, filename?: string): Promise<any> {
+  public async uploadFile(mediaObject: MediaObject): Promise<any> {
     // get formData and Blob
     const { FormData, Blob } = FormDataUtils.getFormData(this.appInstance)
+    const file = new Blob([mediaObject.bits], { type: mediaObject.type })
+    const filename = mediaObject.name
 
     this.logger.debug(`wechat start uploadFile ${filename}=>`, file)
     if (file instanceof Blob) {

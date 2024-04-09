@@ -125,11 +125,8 @@ class BaseWebApi extends WebApi {
   }
 
   public async newMediaObject(mediaObject: MediaObject, customHandler?: any): Promise<Attachment> {
-    const { Blob } = FormDataUtils.getFormData(this.appInstance)
-    const bits = mediaObject.bits
     this.logger.debug("newMediaObject on baseWebApi =>", mediaObject)
-    const blob = new Blob([bits], { type: mediaObject.type })
-    const res = await this.uploadFile(blob as File, mediaObject.name)
+    const res = await this.uploadFile(mediaObject)
     return {
       attachment_id: res?.id,
       date_created_gmt: new Date(),
@@ -251,7 +248,7 @@ class BaseWebApi extends WebApi {
 
         // headers
         const header = headers.length > 0 ? headers[0] : {}
-        this.logger.debug("before zhi-formdata-fetch, headers =>", headers)
+        this.logger.debug("before zhi-formdata-fetch, header =>", header)
         this.logger.debug("before zhi-formdata-fetch, url =>", url)
 
         const resText = await doFetch(this.appInstance.moduleBase, url, header, formData)
