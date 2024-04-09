@@ -253,7 +253,6 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
     let payloadBuf = new ArrayBuffer(0)
     // GET or HEAD cannot have request body
     if (method !== "GET") {
-      debugger
       const myRequest = new Request("", { method: method, body: body })
       console.log("generate temp myRequest =>", myRequest)
       payloadBuf = await myRequest.arrayBuffer()

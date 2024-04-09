@@ -454,7 +454,6 @@ class CsdnWebAdaptor extends BaseWebApi {
     this.logger.debug("向 CSDN 发送表单数据，apiUrl =>", apiUrl)
     this.logger.debug("向 CSDN 发送表单数据，options =>", options)
 
-    debugger
     const resJson = await this.webFormFetch(apiUrl, [headers], formData, true)
     if (resJson.error) {
       throw new Error("CSDN 表单提交错误。详细错误 =>" + resJson.error)
