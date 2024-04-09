@@ -173,7 +173,7 @@ export class BaseBlogApi extends BlogApi {
    * @param formData - 表单数据
    * @param forceProxy - 是否强制使用代理，默认为 false
    */
-  public async apiFormFetch(url: string, headers: any[], formData: FormData, forceProxy: boolean = false) {
+  public async apiFormFetch(url: string, headers: any[], formData: BodyInit, forceProxy: boolean = false) {
     // 如果没有可用的 CORS 代理或者没有强制使用代理，使用默认的自动检测机制
     if (this.isUseSiyuanProxy || (!this.isUseSiyuanProxy && forceProxy) || !forceProxy) {
       this.logger.info("Using legency api formFetch")

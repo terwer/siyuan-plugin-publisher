@@ -32,6 +32,7 @@ import { arrayToBuffer } from "~/src/utils/polyfillUtils.ts"
 import { getAliOssClient } from "~/src/vendors/alioss/s3oss.ts"
 import _ from "lodash-es"
 import ZhihuUtils from "~/src/adaptors/web/zhihu/zhihuUtils.ts"
+import FormDataUtils from "~/src/utils/FormDataUtils.ts"
 
 /**
  * 知乎网页授权适配器
@@ -250,8 +251,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
   }
 
   public async uploadFile(file: File | Blob, filename?: string): Promise<any> {
-    const win = this.appInstance.win
-    const Blob = win.Blob
+    const { Blob } = FormDataUtils.getFormData(this.appInstance)
 
     this.logger.debug(`zhihu start uploadFile ${filename}=>`, file)
     if (file instanceof Blob) {
@@ -266,7 +266,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
         source: "article",
       })
       this.logger.debug("zhihu uploadFile, params =>", params)
-      const fileResp = await this.zhihuFetch("https://api.zhihu.com/images", params, "POST")
+      const fileResp = await this.zhihuFormFetch("https://api.zhihu.com/images", params, {})
       this.logger.debug("zhihu uploadFile, fileResp =>", fileResp)
 
       // 2. 开始上传
@@ -338,6 +338,42 @@ class ZhihuWebAdaptor extends BaseWebApi {
     this.logger.debug("向 Zhihu 请求数据，resJson =>", resJson)
 
     return resJson ?? null
+  }
+
+  /**
+   * 向知乎发送表单数据
+   *
+   * @param url 请求地址
+   * @param formData 表单数据，默认为undefined，支持 ReadableStream、Blob | BufferSource | FormData | URLSearchParams | string。这里只需要 FormData
+   * @param headers 请求头
+   */
+  private async zhihuFormFetch(url: string, formData: BodyInit, headers: Record<any, any> = {}) {
+    const apiUrl = url
+
+    const reqHeaderMap = new Map<string, string>()
+    reqHeaderMap.set("Cookie", this.cfg.password)
+
+    const mergedHeaders = {
+      ...Object.fromEntries(reqHeaderMap),
+      ...headers,
+    }
+
+    const options: RequestInit = {
+      method: "POST",
+      headers: mergedHeaders,
+      body: formData,
+    }
+
+    this.logger.debug("向知乎发送表单数据，apiUrl =>", apiUrl)
+    this.logger.debug("向知乎发送表单数据，options =>", options)
+
+    const resJson = await this.webFormFetch(apiUrl, [mergedHeaders], formData, false)
+    if (resJson.error) {
+      throw new Error("知乎表单提交错误。详细错误 =>" + resJson.error)
+    }
+    this.logger.debug("向知乎发送表单数据，resJson =>", resJson)
+
+    return resJson
   }
 
   /**
