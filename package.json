@@ -79,7 +79,7 @@
     "unplugin-icons": "^0.18.5",
     "uuid": "^9.0.1",
     "vue": "^3.4.21",
-    "vue-i18n": "^9.11.0",
+    "vue-i18n": "^9.11.1",
     "vue-router": "^4.3.0",
     "xmlbuilder2": "^3.1.1",
     "zhi-blog-api": "^1.66.0",
@@ -90,7 +90,7 @@
     "zhi-gitlab-middleware": "^0.10.0",
     "zhi-lib-base": "^0.8.0",
     "zhi-notion-markdown": "^0.1.4",
-    "zhi-siyuan-api": "^2.20.10",
+    "zhi-siyuan-api": "^2.21.0",
     "zhi-siyuan-picgo": "1.9.0",
     "zhi-xmlrpc-middleware": "^0.6.21"
   }
