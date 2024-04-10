@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.21.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.21.0...siyuan-plugin-publisher-v1.21.1) (2024-04-10)
+
+
+### Bug Fixes
+
+* cfg file mod time error ([10b37c1](https://github.com/terwer/siyuan-plugin-publisher/commit/10b37c1104fc0d54ed779dafe48b2df543f0e9fa))
+* marks and bold replacements errors ([fdeb2e0](https://github.com/terwer/siyuan-plugin-publisher/commit/fdeb2e068896bd2280562200a63882fcb2642a84))
+* marks and bold replacements errors ([27d43dd](https://github.com/terwer/siyuan-plugin-publisher/commit/27d43dd2a58cc4ae623551f9c020c4e7aa29c717))
+
+
+### Miscellaneous
+
+* prepare for 1.21.1 ([0910615](https://github.com/terwer/siyuan-plugin-publisher/commit/09106153194e687c5733e817be10ee5519a37173))
+
 ## [1.21.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.20.1...siyuan-plugin-publisher-v1.21.0) (2024-04-08)
 ### Features
 * [#1108](https://github.com/terwer/siyuan-plugin-publisher/issues/1108) support wordpress.com ([7ba8a57](https://github.com/terwer/siyuan-plugin-publisher/commit/7ba8a5716de0b15bac5bbde00d5d69eb508e6bb2))
