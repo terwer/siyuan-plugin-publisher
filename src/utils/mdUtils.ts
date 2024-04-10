@@ -66,17 +66,82 @@ class MdUtils {
    * @returns {string} 处理后的文本
    */
   public static replaceSignToAnother(text: string, sign: string, open: string, close: string): string {
-    // 对于 * 字符进行转义处理
+    // // 对于 * 字符进行转义处理
+    // const escapedSign = sign.replace(/\*/g, "\\*")
+    //
+    // const regex = new RegExp(
+    //   `(?<!\`)(?<!\`\`\`[\s\S])(?<!\$[\s\S])${escapedSign}(.*?[^${escapedSign}])${escapedSign}(?![\s\S]*?\`)(?![\s\S]*?\`\`\`)(?![\s\S]*?\$)(?![\s\S]*?\$\$)`,
+    //   "g"
+    // )
+    //
+    // return text.replace(regex, (match, group) => {
+    //   return `${open}${group}${close}`
+    // })
+
     const escapedSign = sign.replace(/\*/g, "\\*")
 
+    const codeBlocks = []
+    const inlineCodes = []
+    const formulas = []
+    const inlineFormulas = []
+
+    // 提取代码块、行内代码、公式和行内公式
+    const extractedText = text.replace(
+      new RegExp("```[\\s\\S]*?```|`.*?`|\\$\\$[\\s\\S]*?\\$\\$|\\$.*?\\$", "g"),
+      (match) => {
+        if (match.startsWith("```")) {
+          codeBlocks.push(match)
+          return `__PUBLISHER_PLACEHOLDER_CODEBLOCK${codeBlocks.length - 1}`
+        } else if (match.startsWith("`")) {
+          inlineCodes.push(match)
+          return `__PUBLISHER_PLACEHOLDER_INLINECODE${inlineCodes.length - 1}`
+        } else if (match.startsWith("$$")) {
+          formulas.push(match)
+          return `__PUBLISHER_PLACEHOLDER_FORMULA${formulas.length - 1}`
+        } else if (match.startsWith("$")) {
+          inlineFormulas.push(match)
+          return `__PUBLISHER_PLACEHOLDER_INLINEFORMULA${inlineFormulas.length - 1}`
+        }
+      }
+    )
+
     const regex = new RegExp(
-      `(?<!\`)(?<!\`\`\`[\s\S])(?<!\$[\s\S])${escapedSign}(.*?[^${escapedSign}])${escapedSign}(?![\s\S]*?\`)(?![\s\S]*?\`\`\`)(?![\s\S]*?\$)(?![\s\S]*?\$\$)`,
+      `(?<!\`)(?<!\`\`\`[\\s\\S])(?<!\\$[\\s\\S])(?<!\\$\$[\\s\\S])${escapedSign}(.*?[^${escapedSign}])${escapedSign}(?![\\s\\S]*?\`)(?![\\s\\S]*?\`\`\`)(?![\\s\\S]*?\\$)(?![\\s\\S]*?\\$\$)`,
       "g"
     )
 
-    return text.replace(regex, (match, group) => {
+    // 在提取后的文本中进行替换操作
+    const replacedText = extractedText.replace(regex, (match, group) => {
       return `${open}${group}${close}`
     })
+
+    // 还原代码块、行内代码、公式和行内公式
+    const finalText = replacedText.replace(
+      /(__PUBLISHER_PLACEHOLDER_CODEBLOCK(\d+))|(__PUBLISHER_PLACEHOLDER_INLINECODE(\d+))|(__PUBLISHER_PLACEHOLDER_FORMULA(\d+))|(__PUBLISHER_PLACEHOLDER_INLINEFORMULA(\d+))/g,
+      (
+        match,
+        codeBlockRef,
+        codeBlockIndex,
+        inlineCodeRef,
+        inlineCodeIndex,
+        formulaRef,
+        formulaIndex,
+        inlineFormulaRef,
+        inlineFormulaIndex
+      ) => {
+        if (codeBlockRef) {
+          return codeBlocks[parseInt(codeBlockIndex, 10)]
+        } else if (inlineCodeRef) {
+          return inlineCodes[parseInt(inlineCodeIndex, 10)]
+        } else if (formulaRef) {
+          return formulas[parseInt(formulaIndex, 10)]
+        } else if (inlineFormulaRef) {
+          return inlineFormulas[parseInt(inlineFormulaIndex, 10)]
+        }
+      }
+    )
+
+    return finalText
   }
 }
 
