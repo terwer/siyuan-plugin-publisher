@@ -1,23 +1,14 @@
 # Changelog
 
 ## [1.21.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.21.0...siyuan-plugin-publisher-v1.21.1) (2024-04-10)
-
-
 ### Bug Fixes
-
 * cfg file mod time error ([10b37c1](https://github.com/terwer/siyuan-plugin-publisher/commit/10b37c1104fc0d54ed779dafe48b2df543f0e9fa))
-* marks and bold replacements errors ([fdeb2e0](https://github.com/terwer/siyuan-plugin-publisher/commit/fdeb2e068896bd2280562200a63882fcb2642a84))
 * marks and bold replacements errors ([27d43dd](https://github.com/terwer/siyuan-plugin-publisher/commit/27d43dd2a58cc4ae623551f9c020c4e7aa29c717))
-
-
 ### Miscellaneous
-
 * prepare for 1.21.1 ([0910615](https://github.com/terwer/siyuan-plugin-publisher/commit/09106153194e687c5733e817be10ee5519a37173))
-
 ## [1.21.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.20.1...siyuan-plugin-publisher-v1.21.0) (2024-04-08)
 ### Features
 * [#1108](https://github.com/terwer/siyuan-plugin-publisher/issues/1108) support wordpress.com ([7ba8a57](https://github.com/terwer/siyuan-plugin-publisher/commit/7ba8a5716de0b15bac5bbde00d5d69eb508e6bb2))
-### Bug Fixes
 * [#1109](https://github.com/terwer/siyuan-plugin-publisher/issues/1109) support telegra.ph use picgo ([252d927](https://github.com/terwer/siyuan-plugin-publisher/commit/252d92761bc22d56b4e95470b6a76b023a4b6052))
 * adapt new picgo plugin ([4ec72a2](https://github.com/terwer/siyuan-plugin-publisher/commit/4ec72a268881148dd0aeac361a847a9493baba31))
 * allow custom set picbed service ([e13720c](https://github.com/terwer/siyuan-plugin-publisher/commit/e13720c91f64522b9a2df7fca4022ff18c0f7f85))
@@ -33,7 +24,6 @@
 * support upload images for github and gitlab ([4702357](https://github.com/terwer/siyuan-plugin-publisher/commit/4702357f5070e2e67205206b74e71d7ae9ccf4a9))
 * support upload images for metaweblog platforms ([dbd2d62](https://github.com/terwer/siyuan-plugin-publisher/commit/dbd2d622ec74167a7f5e00c37ccc8b0d0514b7f2))
 * support upload images for wordpress dot com ([36d6fb6](https://github.com/terwer/siyuan-plugin-publisher/commit/36d6fb69a79fa5eb3e4951fe3012623b21bebf45))
-### Miscellaneous
 * add 1.20.2 release notes ([644c595](https://github.com/terwer/siyuan-plugin-publisher/commit/644c595aaf17e15c4444d686dc150e046f459bf5))
 * update ci ([a429bfd](https://github.com/terwer/siyuan-plugin-publisher/commit/a429bfdff34d433e5ac22ef1e049e45cf0e01936))
 * update deps ([9e0e0c9](https://github.com/terwer/siyuan-plugin-publisher/commit/9e0e0c90d4f2cc201485d0222f17b0ef92610e90))
