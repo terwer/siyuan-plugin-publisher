@@ -1,26 +1,17 @@
 # Changelog
 
 ## [1.21.2](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.21.1...siyuan-plugin-publisher-v1.21.2) (2024-04-13)
-
-
 ### Bug Fixes
-
 * notion publish error ([cfc974e](https://github.com/terwer/siyuan-plugin-publisher/commit/cfc974e8b4beb56795d4b6442ff467870a7efe2f))
 * wechat publish error ([e080cff](https://github.com/terwer/siyuan-plugin-publisher/commit/e080cff78a3122cb1cf58631d04a9115044a9817))
-
-
 ### Miscellaneous
-
 * **deps-dev:** bump typescript from 5.4.4 to 5.4.5 ([1e63afd](https://github.com/terwer/siyuan-plugin-publisher/commit/1e63afdc0307613b570df6a558a17e4299be4378))
 * **deps-dev:** bump vercel from 33.7.0 to 34.0.0 ([a2e7ba3](https://github.com/terwer/siyuan-plugin-publisher/commit/a2e7ba3e3d50cfb142ace515013c2ebb8b6abee4))
 * **deps-dev:** bump vitest and @vitest/coverage-v8 ([d20da5f](https://github.com/terwer/siyuan-plugin-publisher/commit/d20da5f63fa54100cbd50264efa3bc383dd76c6e))
 * **deps-dev:** bump vue-tsc from 2.0.11 to 2.0.12 ([d78d55f](https://github.com/terwer/siyuan-plugin-publisher/commit/d78d55f1f823035b5146a5daa0afc56b1a0a9643))
-
 ## [1.21.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.21.0...siyuan-plugin-publisher-v1.21.1) (2024-04-10)
-### Bug Fixes
 * cfg file mod time error ([10b37c1](https://github.com/terwer/siyuan-plugin-publisher/commit/10b37c1104fc0d54ed779dafe48b2df543f0e9fa))
 * marks and bold replacements errors ([27d43dd](https://github.com/terwer/siyuan-plugin-publisher/commit/27d43dd2a58cc4ae623551f9c020c4e7aa29c717))
-### Miscellaneous
 * prepare for 1.21.1 ([0910615](https://github.com/terwer/siyuan-plugin-publisher/commit/09106153194e687c5733e817be10ee5519a37173))
 ## [1.21.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.20.1...siyuan-plugin-publisher-v1.21.0) (2024-04-08)
 ### Features
