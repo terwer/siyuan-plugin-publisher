@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.21.2](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.21.1...siyuan-plugin-publisher-v1.21.2) (2024-04-13)
+
+
+### Bug Fixes
+
+* notion publish error ([cfc974e](https://github.com/terwer/siyuan-plugin-publisher/commit/cfc974e8b4beb56795d4b6442ff467870a7efe2f))
+* wechat publish error ([e080cff](https://github.com/terwer/siyuan-plugin-publisher/commit/e080cff78a3122cb1cf58631d04a9115044a9817))
+
 ## [1.21.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.21.0...siyuan-plugin-publisher-v1.21.1) (2024-04-10)
 ### Bug Fixes
 * cfg file mod time error ([10b37c1](https://github.com/terwer/siyuan-plugin-publisher/commit/10b37c1104fc0d54ed779dafe48b2df543f0e9fa))
