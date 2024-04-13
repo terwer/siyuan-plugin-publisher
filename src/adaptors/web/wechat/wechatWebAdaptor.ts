@@ -30,7 +30,6 @@ import { BlogConfig, MediaObject, PageTypeEnum, Post, UserBlog } from "zhi-blog-
 import { toRaw } from "vue"
 import _ from "lodash-es"
 import { fileToBuffer } from "~/src/utils/polyfillUtils.ts"
-import FormDataUtils from "~/src/utils/FormDataUtils.ts"
 
 /**
  * 微信公众号网页授权适配器
@@ -231,8 +230,6 @@ class WechatWebAdaptor extends BaseWebApi {
       save_type: "1",
       isneedsave: "0",
     }
-    // get formData and Blob
-    const { FormData } = FormDataUtils.getFormData(this.appInstance)
     // formData
     const formData: any = new FormData()
     for (const key in params) {
@@ -373,8 +370,6 @@ class WechatWebAdaptor extends BaseWebApi {
       save_type: "1",
       isneedsave: "0",
     }
-    // get formData and Blob
-    const { FormData } = FormDataUtils.getFormData(this.appInstance)
     // formData
     const formData: any = new FormData()
     for (const key in params) {
@@ -439,8 +434,6 @@ class WechatWebAdaptor extends BaseWebApi {
       ajax: "1",
       AppMsgId: postid,
     }
-    // get formData and Blob
-    const { FormData } = FormDataUtils.getFormData(this.appInstance)
     // formData
     const formData: any = new FormData()
     for (const key in params) {
@@ -569,7 +562,7 @@ class WechatWebAdaptor extends BaseWebApi {
     this.logger.debug("向微信公众号请求数据，headers =>", headers)
     this.logger.debug("向微信公众号请求数据，body =>", body)
 
-    const resJson = await this.webFetch(apiUrl, [mergedHeaders], body, method, contentType, true, "base64")
+    const resJson = await this.webFetch(apiUrl, [mergedHeaders], body, method, contentType, true, "base64", "text")
     this.logger.debug("向微信公众号请求数据，resJson =>", resJson)
 
     return resJson ?? null
