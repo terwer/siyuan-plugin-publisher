@@ -510,7 +510,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
             })
           }
         } catch (e) {
-          const errMsg2 = "文章可能已经发布成功，但是平台图片上传失败。请安装「PicGo 图床」并进行配置"
+          const errMsg2 = "文章可能已经发布成功，但是平台图片上传失败。请打开「开发者工具」查看错误日志"
           this.logger.error(errMsg2, e)
           await this.kernelApi.pushMsg({
             msg: errMsg2,
