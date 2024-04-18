@@ -80,7 +80,7 @@
     "uuid": "^9.0.1",
     "vue": "^3.4.21",
     "vue-i18n": "^9.11.1",
-    "vue-router": "^4.3.0",
+    "vue-router": "^4.3.1",
     "xmlbuilder2": "^3.1.1",
     "zhi-blog-api": "^1.66.0",
     "zhi-common": "^1.33.0",
