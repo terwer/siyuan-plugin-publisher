@@ -39,8 +39,8 @@ dependencies:
     specifier: ^4.0.3
     version: 4.0.3
   iframe-resizer:
-    specifier: ^4.3.9
-    version: 4.3.9
+    specifier: ^4.3.10
+    version: 4.3.10
   js-base64:
     specifier: ^3.7.7
     version: 3.7.7
@@ -4947,8 +4947,8 @@ packages:
     resolution: {integrity: sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==}
     dev: true
 
-  /iframe-resizer@4.3.9:
-    resolution: {integrity: sha512-MCt+V/THB4a9OcAdrWo5NsI2CRpeMM4ijhTfiLtsdgDJXWYXf62Ve8yO8rKGmYNs991zty/EolYOxActlkfU+A==}
+  /iframe-resizer@4.3.10:
+    resolution: {integrity: sha512-hv1E1twrVzxdbWcNU4iTnRp/vo/XB8S4s4FwiT0nYk7Q1oCbS5tWtTU/b/TjgEE0LSAX1VhaZGYCvz1jTP/mPA==}
     engines: {node: '>=0.8.0'}
     dev: false
 
