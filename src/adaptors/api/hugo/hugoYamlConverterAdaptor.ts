@@ -57,13 +57,21 @@ class HugoYamlConverterAdaptor extends YamlConvertAdaptor {
     }
 
     // date
-    yamlFormatObj.yamlObj.date = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true)
+    let tzstr = "+00:00"
+    const tz = new Date().getTimezoneOffset() / -60
+    const sign = tz > 0 ? "+" : "-"
+    if (tz.toString().length < 2) {
+      tzstr = `${sign}0${tz}:00`
+    } else {
+      tzstr = `${sign}${tz}:00`
+    }
+    yamlFormatObj.yamlObj.date = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true) + tzstr
 
     // lastmod
     if (!post.dateUpdated) {
       post.dateUpdated = new Date()
     }
-    yamlFormatObj.yamlObj.lastmod = DateUtil.formatIsoToZh(post.dateUpdated.toISOString(), true)
+    yamlFormatObj.yamlObj.lastmod = DateUtil.formatIsoToZh(post.dateUpdated.toISOString(), true) + tzstr
 
     // toc
     yamlFormatObj.yamlObj.toc = true

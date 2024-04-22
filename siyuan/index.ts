@@ -156,7 +156,7 @@ export default class PublisherPlugin extends Plugin {
       this.logger.error("获取发布菜单失败")
       return
     }
-    this.logger.info("当前上下文 =>", context)
+    this.logger.debug("当前上下文 =>", context)
 
     const pageId = detail?.protyle?.block.rootID
     if (!pageId) {
