@@ -1,25 +1,14 @@
 # Changelog
 
 ## [1.21.3](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.21.2...siyuan-plugin-publisher-v1.21.3) (2024-04-22)
-
-
 ### Bug Fixes
-
 * [#1176](https://github.com/terwer/siyuan-plugin-publisher/issues/1176) time zone error for hugo ([2ab1f07](https://github.com/terwer/siyuan-plugin-publisher/commit/2ab1f07a3dea3c47604d622a79e59471116c1799))
 * dev link fail on first run ([fcf60f4](https://github.com/terwer/siyuan-plugin-publisher/commit/fcf60f4e6e52adc8613ef65b5fb53c8e404edd8a))
-
-
 ### Miscellaneous
-
-* add auto-import type define ([11ad8e3](https://github.com/terwer/siyuan-plugin-publisher/commit/11ad8e3d4a767b6cc2e75b9022535e502f0274df))
 * add auto-import type define ([aa343d0](https://github.com/terwer/siyuan-plugin-publisher/commit/aa343d084cce390c76c6b29ce1ab26d91fa5c034))
-
 ## [1.21.2](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.21.1...siyuan-plugin-publisher-v1.21.2) (2024-04-13)
-### Bug Fixes
-
 * notion publish error ([cfc974e](https://github.com/terwer/siyuan-plugin-publisher/commit/cfc974e8b4beb56795d4b6442ff467870a7efe2f))
 * wechat publish error ([e080cff](https://github.com/terwer/siyuan-plugin-publisher/commit/e080cff78a3122cb1cf58631d04a9115044a9817))
-### Miscellaneous
 * **deps-dev:** bump typescript from 5.4.4 to 5.4.5 ([1e63afd](https://github.com/terwer/siyuan-plugin-publisher/commit/1e63afdc0307613b570df6a558a17e4299be4378))
 * **deps-dev:** bump vercel from 33.7.0 to 34.0.0 ([a2e7ba3](https://github.com/terwer/siyuan-plugin-publisher/commit/a2e7ba3e3d50cfb142ace515013c2ebb8b6abee4))
 * **deps-dev:** bump vitest and @vitest/coverage-v8 ([d20da5f](https://github.com/terwer/siyuan-plugin-publisher/commit/d20da5f63fa54100cbd50264efa3bc383dd76c6e))
