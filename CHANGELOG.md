@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.21.3](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.21.2...siyuan-plugin-publisher-v1.21.3) (2024-04-22)
+
+
+### Bug Fixes
+
+* [#1176](https://github.com/terwer/siyuan-plugin-publisher/issues/1176) time zone error for hugo ([2ab1f07](https://github.com/terwer/siyuan-plugin-publisher/commit/2ab1f07a3dea3c47604d622a79e59471116c1799))
+* dev link fail on first run ([fcf60f4](https://github.com/terwer/siyuan-plugin-publisher/commit/fcf60f4e6e52adc8613ef65b5fb53c8e404edd8a))
+
+
+### Miscellaneous
+
+* add auto-import type define ([11ad8e3](https://github.com/terwer/siyuan-plugin-publisher/commit/11ad8e3d4a767b6cc2e75b9022535e502f0274df))
+* add auto-import type define ([aa343d0](https://github.com/terwer/siyuan-plugin-publisher/commit/aa343d084cce390c76c6b29ce1ab26d91fa5c034))
+
 ## [1.21.2](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.21.1...siyuan-plugin-publisher-v1.21.2) (2024-04-13)
 ### Bug Fixes
 
