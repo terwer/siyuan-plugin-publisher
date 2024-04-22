@@ -17,6 +17,17 @@ targetDir = ''
 devOutDir = 'dist'
 # ******************************************************************************************
 
+
+# 如果不存在cookie.txt创建一个空的 cookie.txt
+# 检查并创建空的 cookie.txt 和 token.txt
+if not os.path.exists('cookie.txt'):
+    with open('cookie.txt', 'w', encoding='utf-8'):
+        pass
+# 如果不存在token.txt创建一个空的 如果不存在token.txt
+if not os.path.exists('token.txt'):
+    with open('token.txt', 'w', encoding='utf-8'):
+        pass
+
 with open('cookie.txt', 'r', encoding='utf-8') as cookie_file, open('token.txt', 'r', encoding='utf-8') as token_file:
     cookie = cookie_file.read().strip()
     token = token_file.read().strip()
