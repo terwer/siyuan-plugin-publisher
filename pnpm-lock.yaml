@@ -33,8 +33,8 @@ dependencies:
     specifier: ^4.2.0
     version: 4.2.0
   element-plus:
-    specifier: ^2.6.3
-    version: 2.6.3(vue@3.4.21)
+    specifier: ^2.7.1
+    version: 2.7.1(vue@3.4.21)
   gray-matter:
     specifier: ^4.0.3
     version: 4.0.3
@@ -3412,8 +3412,8 @@ packages:
       jake: 10.8.7
     dev: true
 
-  /element-plus@2.6.3(vue@3.4.21):
-    resolution: {integrity: sha512-U4L/mr+1r+EmAUYUHrs0V/8hHMdBGP07rPymSC72LZCN4jK1UwygQYICegTQ5us4mxeqBvW6wfoEfo003fwCqw==}
+  /element-plus@2.7.1(vue@3.4.21):
+    resolution: {integrity: sha512-yk/vXFwJp0flMrd2kfcR0XlumhwtPjB19HJvwcf0n3DvRE7UK8LeSK14LVghSzk0TzPsFFElweMnZEEv7+MYuQ==}
     peerDependencies:
       vue: ^3.2.0
     dependencies:
