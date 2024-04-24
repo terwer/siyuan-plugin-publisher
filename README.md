@@ -138,7 +138,7 @@ to [Latest Adaptation](https://terwergreen.feishu.cn/share/base/view/shrcnWT2IGI
 
 ## Version Preview
 
-### 1.21.4-preview – As of Q1 2024
+### 1.21.5-preview – As of Q1 2024
 
 - Expansion of telegra.ph support for image uploads
     - Reference: https://www.npmjs.com/package/telegraph-uploader
@@ -150,7 +150,7 @@ to [Latest Adaptation](https://terwergreen.feishu.cn/share/base/view/shrcnWT2IGI
 - #948 #905 Corrections addressing halo platform-related concerns
 - Addressing vuepress2 related issues
 
-### 1.21.5-preview – As of Q1 2024
+### 1.21.6-preview – As of Q1 2024
 
 - Inclusion of support for BiliBili and Xiaohongshu platforms
 

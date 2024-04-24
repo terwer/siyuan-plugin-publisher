@@ -1,10 +1,17 @@
 # Changelog
 
-## [1.21.3](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.21.2...siyuan-plugin-publisher-v1.21.3) (2024-04-22)
+## [1.21.4](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.21.3...siyuan-plugin-publisher-v1.21.4) (2024-04-24)
 ### Bug Fixes
+* [#1191](https://github.com/terwer/siyuan-plugin-publisher/issues/1191) markdown render error with multi list ([bde0e15](https://github.com/terwer/siyuan-plugin-publisher/commit/bde0e15555fa9cdc8f4f02051f55966692d22b2f))
+* **deps:** bump @iconify/json from 2.2.199 to 2.2.203 ([a474a6d](https://github.com/terwer/siyuan-plugin-publisher/commit/a474a6dc175aa3b278fad528cf77a90ada5b12e5))
+* **deps:** bump iframe-resizer from 4.3.9 to 4.3.11 ([aeb99fe](https://github.com/terwer/siyuan-plugin-publisher/commit/aeb99fef0a64230b817feb0ad066e002b3d39a98))
+* **deps:** bump vue from 3.4.21 to 3.4.24 ([a71a479](https://github.com/terwer/siyuan-plugin-publisher/commit/a71a479307f3a9b50d34229521f22144f5ef47b4))
+* **deps:** bump zhi-siyuan-picgo from 1.9.0 to 1.10.2 ([7d0da92](https://github.com/terwer/siyuan-plugin-publisher/commit/7d0da9228a0d0340e715f4f9a5c62b0bb1fd40fa))
+### Miscellaneous
+* **deps-dev:** bump vue-tsc from 2.0.12 to 2.0.14 ([72d2de4](https://github.com/terwer/siyuan-plugin-publisher/commit/72d2de41c50765bd8c6cd3f5fac3de0ae901e53e))
+## [1.21.3](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.21.2...siyuan-plugin-publisher-v1.21.3) (2024-04-22)
 * [#1176](https://github.com/terwer/siyuan-plugin-publisher/issues/1176) time zone error for hugo ([2ab1f07](https://github.com/terwer/siyuan-plugin-publisher/commit/2ab1f07a3dea3c47604d622a79e59471116c1799))
 * dev link fail on first run ([fcf60f4](https://github.com/terwer/siyuan-plugin-publisher/commit/fcf60f4e6e52adc8613ef65b5fb53c8e404edd8a))
-### Miscellaneous
 * add auto-import type define ([aa343d0](https://github.com/terwer/siyuan-plugin-publisher/commit/aa343d084cce390c76c6b29ce1ab26d91fa5c034))
 ## [1.21.2](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.21.1...siyuan-plugin-publisher-v1.21.2) (2024-04-13)
 * notion publish error ([cfc974e](https://github.com/terwer/siyuan-plugin-publisher/commit/cfc974e8b4beb56795d4b6442ff467870a7efe2f))
