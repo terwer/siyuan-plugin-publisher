@@ -126,7 +126,7 @@
 
 ## 版本预告
 
-### 1.21.4-preview - 截止到 2024 年 Q1
+### 1.21.5-preview - 截止到 2024 年 Q1
 
 - telegra.ph 支持上传图片
     - 参考 https://www.npmjs.com/package/telegraph-uploader
@@ -138,7 +138,7 @@
 - #948 #905 halo 平台相关问题修复
 - vuepress2 相关问题
 
-### 1.21.5-preview - 截止到 2024 年 Q1
+### 1.21.6-preview - 截止到 2024 年 Q1
 
 - 支持 B 站、小红书
 
