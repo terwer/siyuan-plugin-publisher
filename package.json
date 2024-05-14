@@ -64,7 +64,7 @@
     "cookie-parse": "^0.4.0",
     "cross-fetch": "^3.1.8",
     "crypto-js": "^4.2.0",
-    "element-plus": "^2.6.3",
+    "element-plus": "^2.7.3",
     "gray-matter": "^4.0.3",
     "iframe-resizer": "^4.3.11",
     "js-base64": "^3.7.7",
