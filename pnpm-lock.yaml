@@ -63,8 +63,8 @@ dependencies:
     specifier: ^1.4.2
     version: 1.4.2
   siyuan:
-    specifier: ^0.9.7
-    version: 0.9.9
+    specifier: ^1.0.2
+    version: 1.0.2
   telegraph.md:
     specifier: ^0.0.1
     version: 0.0.1
@@ -8320,8 +8320,8 @@ packages:
       sax: 1.4.1
     dev: false
 
-  /siyuan@0.9.9:
-    resolution: {integrity: sha512-QI6rKfsk8wAWadP25V4UuEhDZJzjtfBsV5C7v1nVxsJV/9o1Yu9EUFxFmyEBsKarSpymSkG9WWH9AQiI9iHuBA==}
+  /siyuan@1.0.2:
+    resolution: {integrity: sha512-78qonqi/X+VC5HBtqmkm6HZho6GVcXTBYvdWfu3uB3WkWzYeu3PqKw2514PZn2uZpydljjZ4DP5aSV9w9IlBbA==}
     dev: false
 
   /slash@3.0.0:
