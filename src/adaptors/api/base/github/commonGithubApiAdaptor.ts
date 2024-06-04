@@ -226,7 +226,7 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
       const base64 = Base64.fromUint8Array(bits)
       const savePath = this.cfg.imageStorePath ?? "images"
       const imageFullPath = StrUtil.pathJoin(savePath, mediaObject.name)
-      const res = await this.githubClient.publishGithubPage(imageFullPath, base64, "nase64")
+      const res = await this.githubClient.publishGithubPage(imageFullPath, base64, "base64")
 
       const siteImgId = mediaObject.name
       const siteArticleId = mediaObject.name
@@ -261,7 +261,7 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
         url: siteImgUrl,
       }
     } catch (e) {
-      this.logger.error("Error uploading image to gitlab:", e)
+      this.logger.error("Error uploading image to github:", e)
       throw e
     }
   }
