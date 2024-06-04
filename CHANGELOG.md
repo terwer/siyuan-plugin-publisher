@@ -1,28 +1,19 @@
 # Changelog
 
 ## [1.21.5](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.21.4...siyuan-plugin-publisher-v1.21.5) (2024-06-04)
-
-
 ### Bug Fixes
-
 * add lsky picbed support ([d2824ec](https://github.com/terwer/siyuan-plugin-publisher/commit/d2824ec87458d26dc344ec4318c73395185a3718))
 * **deps:** bump @iconify/json from 2.2.203 to 2.2.216 ([89bdaba](https://github.com/terwer/siyuan-plugin-publisher/commit/89bdaba38a4cc090b663702e10d47f04e5b455eb))
 * **deps:** bump pnpm/action-setup from 3 to 4 ([2e8b9f1](https://github.com/terwer/siyuan-plugin-publisher/commit/2e8b9f1a16b38b7657f53062cb83f3f29c733d6d))
 * encode error ([85b0f6f](https://github.com/terwer/siyuan-plugin-publisher/commit/85b0f6f635edde56e369c2cdfcda309e0da4f010))
-
-
 ### Miscellaneous
-
-* update deps ([9880e3a](https://github.com/terwer/siyuan-plugin-publisher/commit/9880e3a29dab91adb319dab3135684184e602d62))
-
+* update deps ([9e0e0c9](https://github.com/terwer/siyuan-plugin-publisher/commit/9e0e0c90d4f2cc201485d0222f17b0ef92610e90))
 ## [1.21.4](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.21.3...siyuan-plugin-publisher-v1.21.4) (2024-04-24)
-### Bug Fixes
 * [#1191](https://github.com/terwer/siyuan-plugin-publisher/issues/1191) markdown render error with multi list ([bde0e15](https://github.com/terwer/siyuan-plugin-publisher/commit/bde0e15555fa9cdc8f4f02051f55966692d22b2f))
 * **deps:** bump @iconify/json from 2.2.199 to 2.2.203 ([a474a6d](https://github.com/terwer/siyuan-plugin-publisher/commit/a474a6dc175aa3b278fad528cf77a90ada5b12e5))
 * **deps:** bump iframe-resizer from 4.3.9 to 4.3.11 ([aeb99fe](https://github.com/terwer/siyuan-plugin-publisher/commit/aeb99fef0a64230b817feb0ad066e002b3d39a98))
 * **deps:** bump vue from 3.4.21 to 3.4.24 ([a71a479](https://github.com/terwer/siyuan-plugin-publisher/commit/a71a479307f3a9b50d34229521f22144f5ef47b4))
 * **deps:** bump zhi-siyuan-picgo from 1.9.0 to 1.10.2 ([7d0da92](https://github.com/terwer/siyuan-plugin-publisher/commit/7d0da9228a0d0340e715f4f9a5c62b0bb1fd40fa))
-### Miscellaneous
 * **deps-dev:** bump vue-tsc from 2.0.12 to 2.0.14 ([72d2de4](https://github.com/terwer/siyuan-plugin-publisher/commit/72d2de41c50765bd8c6cd3f5fac3de0ae901e53e))
 ## [1.21.3](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.21.2...siyuan-plugin-publisher-v1.21.3) (2024-04-22)
 * [#1176](https://github.com/terwer/siyuan-plugin-publisher/issues/1176) time zone error for hugo ([2ab1f07](https://github.com/terwer/siyuan-plugin-publisher/commit/2ab1f07a3dea3c47604d622a79e59471116c1799))
@@ -59,7 +50,6 @@
 * support upload images for wordpress dot com ([36d6fb6](https://github.com/terwer/siyuan-plugin-publisher/commit/36d6fb69a79fa5eb3e4951fe3012623b21bebf45))
 * add 1.20.2 release notes ([644c595](https://github.com/terwer/siyuan-plugin-publisher/commit/644c595aaf17e15c4444d686dc150e046f459bf5))
 * update ci ([a429bfd](https://github.com/terwer/siyuan-plugin-publisher/commit/a429bfdff34d433e5ac22ef1e049e45cf0e01936))
-* update deps ([9e0e0c9](https://github.com/terwer/siyuan-plugin-publisher/commit/9e0e0c90d4f2cc201485d0222f17b0ef92610e90))
 * update docs ([df4c220](https://github.com/terwer/siyuan-plugin-publisher/commit/df4c2201d24136aa535ff9174ad733cb3e2ecf50))
 * update fmt ([b8584a8](https://github.com/terwer/siyuan-plugin-publisher/commit/b8584a8ecfaed1e6cd534f6c0fcf67a55c32daf2))
 * update icon and preview ([b0acc6d](https://github.com/terwer/siyuan-plugin-publisher/commit/b0acc6dcfb2c749e695338b3151695c851718620))
