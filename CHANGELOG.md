@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.21.5](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.21.4...siyuan-plugin-publisher-v1.21.5) (2024-06-04)
+
+
+### Bug Fixes
+
+* add lsky picbed support ([d2824ec](https://github.com/terwer/siyuan-plugin-publisher/commit/d2824ec87458d26dc344ec4318c73395185a3718))
+* **deps:** bump @iconify/json from 2.2.203 to 2.2.216 ([89bdaba](https://github.com/terwer/siyuan-plugin-publisher/commit/89bdaba38a4cc090b663702e10d47f04e5b455eb))
+* **deps:** bump pnpm/action-setup from 3 to 4 ([2e8b9f1](https://github.com/terwer/siyuan-plugin-publisher/commit/2e8b9f1a16b38b7657f53062cb83f3f29c733d6d))
+* encode error ([85b0f6f](https://github.com/terwer/siyuan-plugin-publisher/commit/85b0f6f635edde56e369c2cdfcda309e0da4f010))
+
+
+### Miscellaneous
+
+* update deps ([9880e3a](https://github.com/terwer/siyuan-plugin-publisher/commit/9880e3a29dab91adb319dab3135684184e602d62))
+
 ## [1.21.4](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.21.3...siyuan-plugin-publisher-v1.21.4) (2024-04-24)
 ### Bug Fixes
 * [#1191](https://github.com/terwer/siyuan-plugin-publisher/issues/1191) markdown render error with multi list ([bde0e15](https://github.com/terwer/siyuan-plugin-publisher/commit/bde0e15555fa9cdc8f4f02051f55966692d22b2f))
