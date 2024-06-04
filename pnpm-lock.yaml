@@ -66,14 +66,14 @@ importers:
         specifier: ^1.4.2
         version: 1.4.2
       siyuan:
-        specifier: ^0.9.9
-        version: 0.9.9
+        specifier: ^1.0.2
+        version: 1.0.2
       telegraph.md:
         specifier: ^0.0.1
         version: 0.0.1
       unplugin-icons:
-        specifier: ^0.18.5
-        version: 0.18.5(@vue/compiler-sfc@3.4.27)(vue-template-compiler@2.7.16)
+        specifier: ^0.19.0
+        version: 0.19.0(@vue/compiler-sfc@3.4.27)(vue-template-compiler@2.7.16)
       uuid:
         specifier: ^9.0.1
         version: 9.0.1
@@ -184,8 +184,8 @@ importers:
         specifier: ^0.17.6
         version: 0.17.6(@vueuse/core@10.10.0(vue@3.4.27(typescript@5.4.5)))(rollup@4.18.0)
       unplugin-vue-components:
-        specifier: ^0.26.0
-        version: 0.26.0(@babel/parser@7.24.6)(rollup@4.18.0)(vue@3.4.27(typescript@5.4.5))
+        specifier: ^0.27.0
+        version: 0.27.0(@babel/parser@7.24.6)(rollup@4.18.0)(vue@3.4.27(typescript@5.4.5))
       vercel:
         specifier: ^34.2.4
         version: 34.2.4
@@ -3257,10 +3257,6 @@ packages:
     resolution: {integrity: sha512-vjJi4vQDasD8t0kMpxe+9URAcgbSuASqoj/Wuk3MawTk97LYa2KfdHreAkd1G/pmPLMvzZEw7/OsydADNemerQ==}
     engines: {node: '>= 12.13.0'}
 
-  local-pkg@0.4.3:
-    resolution: {integrity: sha512-SFppqq5p42fe2qcZQqqEOiVRXl+WCP1MdT6k7BDEW1j++sp5fIY+/fdRQitvKgB5BrBcmrs5m/L0v2FrU5MY1g==}
-    engines: {node: '>=14'}
-
   local-pkg@0.5.0:
     resolution: {integrity: sha512-ok6z3qlYyCDS4ZEU27HaU6x/xZa9Whf8jD4ptH5UZTQYZVYeb9bnZ3ojVhiJNLiXK1Hfc0GNbLXcmZ5plLDDBg==}
     engines: {node: '>=14'}
@@ -4217,8 +4213,8 @@ packages:
   simple-xmlrpc@1.4.2:
     resolution: {integrity: sha512-2gFNsEjudzyAqCYQ1XmsETHbmG2vp9jrIeqb+Mxnb/xgnESWfMlXrSEHh10lYIb1hXeco+vSWAAuk2NLl26yFw==}
 
-  siyuan@0.9.9:
-    resolution: {integrity: sha512-QI6rKfsk8wAWadP25V4UuEhDZJzjtfBsV5C7v1nVxsJV/9o1Yu9EUFxFmyEBsKarSpymSkG9WWH9AQiI9iHuBA==}
+  siyuan@1.0.2:
+    resolution: {integrity: sha512-78qonqi/X+VC5HBtqmkm6HZho6GVcXTBYvdWfu3uB3WkWzYeu3PqKw2514PZn2uZpydljjZ4DP5aSV9w9IlBbA==}
 
   slash@3.0.0:
     resolution: {integrity: sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==}
@@ -4611,8 +4607,8 @@ packages:
       '@vueuse/core':
         optional: true
 
-  unplugin-icons@0.18.5:
-    resolution: {integrity: sha512-KVNAohXbZ7tVcG1C3p6QaC7wU9Qrj7etv4XvsMMJAxr5LccQZ+Iuv5LOIv/7GtqXaGN1BuFCqRO1ErsHEgEXdQ==}
+  unplugin-icons@0.19.0:
+    resolution: {integrity: sha512-u5g/gIZPZEj1wUGEQxe9nzftOSqmblhusc+sL3cawIRoIt/xWpE6XYcPOfAeFTYNjSbRrX/3QiX89PFiazgU1w==}
     peerDependencies:
       '@svgr/core': '>=7.0.0'
       '@svgx/core': ^1.0.1
@@ -4631,8 +4627,8 @@ packages:
       vue-template-es2015-compiler:
         optional: true
 
-  unplugin-vue-components@0.26.0:
-    resolution: {integrity: sha512-s7IdPDlnOvPamjunVxw8kNgKNK8A5KM1YpK5j/p97jEKTjlPNrA0nZBiSfAKKlK1gWZuyWXlKL5dk3EDw874LQ==}
+  unplugin-vue-components@0.27.0:
+    resolution: {integrity: sha512-77eTEy23sQ0UpzGWnZ9I2mY3cnmXwklz4ITcn3JfxjCoX643ghImkiZ4nFm58sxbdVcc4Fo/o4LIoFnlqEqsSg==}
     engines: {node: '>=14'}
     peerDependencies:
       '@babel/parser': ^7.15.8
@@ -8866,8 +8862,6 @@ snapshots:
 
   loader-utils@3.2.2: {}
 
-  local-pkg@0.4.3: {}
-
   local-pkg@0.5.0:
     dependencies:
       mlly: 1.7.0
@@ -9881,7 +9875,7 @@ snapshots:
       byte-base64: 1.1.0
       sax: 1.4.1
 
-  siyuan@0.9.9: {}
+  siyuan@1.0.2: {}
 
   slash@3.0.0: {}
 
@@ -10346,7 +10340,7 @@ snapshots:
     transitivePeerDependencies:
       - rollup
 
-  unplugin-icons@0.18.5(@vue/compiler-sfc@3.4.27)(vue-template-compiler@2.7.16):
+  unplugin-icons@0.19.0(@vue/compiler-sfc@3.4.27)(vue-template-compiler@2.7.16):
     dependencies:
       '@antfu/install-pkg': 0.3.3
       '@antfu/utils': 0.7.8
@@ -10361,14 +10355,14 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  unplugin-vue-components@0.26.0(@babel/parser@7.24.6)(rollup@4.18.0)(vue@3.4.27(typescript@5.4.5)):
+  unplugin-vue-components@0.27.0(@babel/parser@7.24.6)(rollup@4.18.0)(vue@3.4.27(typescript@5.4.5)):
     dependencies:
       '@antfu/utils': 0.7.8
       '@rollup/pluginutils': 5.1.0(rollup@4.18.0)
       chokidar: 3.6.0
       debug: 4.3.5
       fast-glob: 3.3.2
-      local-pkg: 0.4.3
+      local-pkg: 0.5.0
       magic-string: 0.30.10
       minimatch: 9.0.4
       resolve: 1.22.8
