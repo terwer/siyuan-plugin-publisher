@@ -28,6 +28,8 @@ import CryptoJS from "crypto-js"
 import Base64 from "crypto-js/enc-base64"
 import * as cheerio from "cheerio"
 import KatexUtils from "~/src/utils/katexUtils.ts"
+import { LEGENCY_SHARED_API } from "~/src/utils/constants.ts"
+import { CsdnWebAdaptor } from "~/src/adaptors/web/csdn/csdnWebAdaptor.ts"
 
 /**
  * CSDN工具类，用于生成UUID和签名
@@ -113,6 +115,27 @@ class CsdnUtils {
 
     // 输出修改后的HTML
     return $.html()
+  }
+
+  /**
+   * 处理代码高亮
+   * @param adaptorInstance
+   * @param html
+   */
+  public static async processPrismjs(adaptorInstance: CsdnWebAdaptor, html: string): Promise<string> {
+    const apiUrl = `${LEGENCY_SHARED_API}/prismjs`
+    // const apiUrl = `http://localhost:3000/api/prismjs`
+    const contentType = "application/json"
+    const headers = {
+      "Content-Type": contentType,
+    }
+    const params = JSON.stringify({
+      html: html,
+    })
+    const res = await adaptorInstance.webFetch(apiUrl, [headers], params, "POST", contentType, false)
+    console.log("processPrismjs res=>", res)
+
+    return res.html
   }
 }
 

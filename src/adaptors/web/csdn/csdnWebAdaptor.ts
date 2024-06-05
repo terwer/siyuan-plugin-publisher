@@ -25,8 +25,7 @@
 
 import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
 import CsdnUtils from "~/src/adaptors/web/csdn/csdnUtils.ts"
-import {BlogConfig, CategoryInfo, MediaObject, PageTypeEnum, Post, UserBlog} from "zhi-blog-api"
-import { JsonUtil } from "zhi-common"
+import { BlogConfig, CategoryInfo, MediaObject, PageTypeEnum, Post, UserBlog } from "zhi-blog-api"
 import WebUtils from "~/src/adaptors/web/base/webUtils.ts"
 import _ from "lodash-es"
 import FormDataUtils from "~/src/utils/FormDataUtils.ts"
@@ -172,11 +171,15 @@ class CsdnWebAdaptor extends BaseWebApi {
   }
 
   public async addPost(post: Post) {
+    let csdnHtml = post.html
+    // 如果开启高亮，就使用高亮
+    csdnHtml = await CsdnUtils.processPrismjs(this, csdnHtml)
+
     // 仅支持MD
     const params = JSON.stringify({
       title: post.title,
       markdowncontent: post.markdown,
-      content: post.html,
+      content: csdnHtml,
       readType: "public",
       level: 0,
       tags: post.mt_keywords,
@@ -217,12 +220,16 @@ class CsdnWebAdaptor extends BaseWebApi {
   }
 
   public async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
+    let csdnHtml = post.html
+    // 如果开启高亮，就使用高亮
+    csdnHtml = await CsdnUtils.processPrismjs(this, csdnHtml)
+
     // 仅支持MD
     const params = JSON.stringify({
       id: postid,
       title: post.title,
       markdowncontent: post.markdown,
-      content: post.html,
+      content: csdnHtml,
       readType: "public",
       level: "1",
       tags: post.mt_keywords,

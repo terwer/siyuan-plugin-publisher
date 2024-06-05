@@ -45,6 +45,14 @@ export const CATE_AUTO_NAME = "[auto]"
 export const MAX_TITLE_LENGTH = 10
 
 /**
+ * 旧的通用接口
+ *
+ * @since 1.21.6
+ * @version 1.21.6
+ */
+export const LEGENCY_SHARED_API = "https://api.terwer.space/api"
+
+/**
  * 旧的通用 HTTP 代理
  *
  * @since 1.0.0
