@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.21.6](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.21.5...siyuan-plugin-publisher-v1.21.6) (2024-06-05)
+
+
+### Bug Fixes
+
+* [#1245](https://github.com/terwer/siyuan-plugin-publisher/issues/1245) 发布csdn的时候, 代码块儿语言不显示 ([b2abe6c](https://github.com/terwer/siyuan-plugin-publisher/commit/b2abe6c3a9aa0e397283b50358360dda3125cc0c))
+
+
+### Miscellaneous
+
+* **deps-dev:** bump vercel from 34.2.4 to 34.2.5 ([171cf9e](https://github.com/terwer/siyuan-plugin-publisher/commit/171cf9ef166cdf8ab9133813ae8a50ebcbd60a7c))
+
 ## [1.21.5](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.21.4...siyuan-plugin-publisher-v1.21.5) (2024-06-04)
 ### Bug Fixes
 * add lsky picbed support ([d2824ec](https://github.com/terwer/siyuan-plugin-publisher/commit/d2824ec87458d26dc344ec4318c73395185a3718))
