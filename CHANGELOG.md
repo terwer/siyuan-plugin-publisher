@@ -1,12 +1,15 @@
 # Changelog
 
-## [1.21.5](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.21.4...siyuan-plugin-publisher-v1.21.5) (2024-06-04)
+## [1.21.6](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.21.5...siyuan-plugin-publisher-v1.21.6) (2024-06-05)
 ### Bug Fixes
+* [#1245](https://github.com/terwer/siyuan-plugin-publisher/issues/1245) 发布csdn的时候, 代码块儿语言不显示 ([b2abe6c](https://github.com/terwer/siyuan-plugin-publisher/commit/b2abe6c3a9aa0e397283b50358360dda3125cc0c))
+### Miscellaneous
+* **deps-dev:** bump vercel from 34.2.4 to 34.2.5 ([171cf9e](https://github.com/terwer/siyuan-plugin-publisher/commit/171cf9ef166cdf8ab9133813ae8a50ebcbd60a7c))
+## [1.21.5](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.21.4...siyuan-plugin-publisher-v1.21.5) (2024-06-04)
 * add lsky picbed support ([d2824ec](https://github.com/terwer/siyuan-plugin-publisher/commit/d2824ec87458d26dc344ec4318c73395185a3718))
 * **deps:** bump @iconify/json from 2.2.203 to 2.2.216 ([89bdaba](https://github.com/terwer/siyuan-plugin-publisher/commit/89bdaba38a4cc090b663702e10d47f04e5b455eb))
 * **deps:** bump pnpm/action-setup from 3 to 4 ([2e8b9f1](https://github.com/terwer/siyuan-plugin-publisher/commit/2e8b9f1a16b38b7657f53062cb83f3f29c733d6d))
 * encode error ([85b0f6f](https://github.com/terwer/siyuan-plugin-publisher/commit/85b0f6f635edde56e369c2cdfcda309e0da4f010))
-### Miscellaneous
 * update deps ([9e0e0c9](https://github.com/terwer/siyuan-plugin-publisher/commit/9e0e0c90d4f2cc201485d0222f17b0ef92610e90))
 ## [1.21.4](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.21.3...siyuan-plugin-publisher-v1.21.4) (2024-04-24)
 * [#1191](https://github.com/terwer/siyuan-plugin-publisher/issues/1191) markdown render error with multi list ([bde0e15](https://github.com/terwer/siyuan-plugin-publisher/commit/bde0e15555fa9cdc8f4f02051f55966692d22b2f))

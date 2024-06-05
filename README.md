@@ -16,11 +16,11 @@ If you're interested in the paid professional version, please check the paied
 
 ## Update history
 
-Please check [CHANGELOG](./CHANGELOG.MD)
+Please check [CHANGELOG](https://github.com/terwer/siyuan-plugin-publisher/blob/main/CHANGELOG.md)
 
 ## Development
 
-Please refer to [DEVELOPMENT](./DEVELOPMENT.md)
+Please refer to [DEVELOPMENT](https://github.com/terwer/siyuan-plugin-publisher/blob/main/DEVELOPMENT.md)
 
 ## Platform List
 
