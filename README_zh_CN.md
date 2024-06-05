@@ -15,11 +15,11 @@
 
 ## 更新历史
 
-请直接查看 [CHANGELOG](./CHANGELOG.md)
+请直接查看 [CHANGELOG](https://github.com/terwer/siyuan-plugin-publisher/blob/main/CHANGELOG.md)
 
 ## 开发
 
-请参考 [DEVELOPMENT](./DEVELOPMENT.md)
+请参考 [DEVELOPMENT](https://github.com/terwer/siyuan-plugin-publisher/blob/main/DEVELOPMENT.md)
 
 ## 平台列表
 
