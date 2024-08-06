@@ -3,6 +3,12 @@
 ## Prerequisites
 
 ```bash
+brew install n
+sudo n 18
+brew install corepack
+corepack enable pnpm
+corepack use pnpm@latest
+
 pnpm install
 ```
 
@@ -11,6 +17,7 @@ pnpm install
 serve
 
 ```bash
+pip install --upgrade setuptools
 pnpm serve
 ```
 
