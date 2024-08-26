@@ -11,6 +11,8 @@ Publish articles from siyuan-note to platforms like Yuque etc. `Free` and `open 
 
 **Should you encounter any issues or wish to submit suggestions, feel free to join QQ group `895063267` for discussions.**
 
+As of 2024/08/26, the group is full. If you have any issues, please create a new issue directly at: https://github.com/terwer/siyuan-plugin-publisher/issues/new
+
 If you're interested in the paid professional version, please check the paied
 ➡️ [Publishing Tool Professional Edition](https://github.com/terwer/siyuan-plugin-publisher-pro)
 
