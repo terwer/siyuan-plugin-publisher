@@ -10,6 +10,8 @@
 
 **遇到其他问题或者需求建议？请加 QQ 群 `895063267` 讨论。**
 
+截止到 2024/08/26，群成员已满，有问题请直接新建 issue: https://github.com/terwer/siyuan-plugin-publisher/issues/new
+
 如果您对 [增值功能](https://github.com/terwer/siyuan-plugin-publisher/issues/846) 感兴趣，请移步 ➡️
 收费的 [发布工具专业版](https://github.com/terwer/siyuan-plugin-publisher-pro)
 
