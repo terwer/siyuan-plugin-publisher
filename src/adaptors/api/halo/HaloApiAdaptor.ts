@@ -26,13 +26,14 @@
 import { HaloConfig } from "~/src/adaptors/api/halo/HaloConfig.ts"
 import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { Attachment, CategoryInfo, MediaObject, Post, UserBlog } from "zhi-blog-api"
+import { Attachment, CategoryInfo, MediaObject, PageType, Post, UserBlog } from "zhi-blog-api";
 import { AliasTranslator, JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { Base64 } from "js-base64"
 import sypIdUtil from "~/src/utils/sypIdUtil.ts"
 import { PostRequest } from "@halo-dev/api-client"
 import { HaloPostMeta } from "~/src/adaptors/api/halo/HaloPostMeta.ts"
 import FormDataUtils from "~/src/utils/FormDataUtils.ts"
+import { result } from "lodash-es";
 
 /**
  * Halo API 适配器
@@ -95,12 +96,17 @@ class HaloApiAdaptor extends BaseBlogApi {
       content: {
         raw: "",
         content: "",
-        rawType: "HTML",
+        rawType: this.cfg.pageType,
       },
     }
 
-    params.content.raw = post.html
-    params.content.content = post.description
+    // 根据发布类型确定 raw 的数据
+    if (this.cfg.pageType === "markdown") {
+      params.content.raw = post.markdown
+    } else {
+      params.content.raw = post.html
+    }
+    params.content.content = post.html
 
     if (StrUtil.isEmptyString(post.shortDesc)) {
       params.post.spec.excerpt.autoGenerate = true
@@ -166,8 +172,14 @@ class HaloApiAdaptor extends BaseBlogApi {
         throw new Error("获取文章信息失败，如果文章删除，请强制删除解除关联")
       }
 
-      params.content.raw = post.html
-      params.content.content = post.description
+      // 根据已发布类型确定 raw 的数据
+      if (params.content.rawType === "markdown") {
+        params.content.raw = post.markdown
+      } else {
+        params.content.raw = post.html
+      }
+      params.content.content = post.html
+
 
       if (StrUtil.isEmptyString(post.shortDesc)) {
         params.post.spec.excerpt.autoGenerate = true
