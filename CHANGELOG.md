@@ -1,16 +1,27 @@
 # Changelog
 
-## [1.21.6](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.21.5...siyuan-plugin-publisher-v1.21.6) (2024-06-05)
+## [1.22.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.21.6...siyuan-plugin-publisher-v1.22.0) (2024-11-07)
+### Features
+* add halo v29 warning ([e84cdc9](https://github.com/terwer/siyuan-plugin-publisher/commit/e84cdc9c70cfe11c14733836b74b8bffd0264c55))
+* change qq group ([13babdc](https://github.com/terwer/siyuan-plugin-publisher/commit/13babdc4827d7e7093b842af7d8a147273755bfd))
+* support read halo tags ([4afd364](https://github.com/terwer/siyuan-plugin-publisher/commit/4afd3648baf0644f78a4f5ffc6efb43836524b51))
 ### Bug Fixes
-* [#1245](https://github.com/terwer/siyuan-plugin-publisher/issues/1245) 发布csdn的时候, 代码块儿语言不显示 ([b2abe6c](https://github.com/terwer/siyuan-plugin-publisher/commit/b2abe6c3a9aa0e397283b50358360dda3125cc0c))
+* [#1394](https://github.com/terwer/siyuan-plugin-publisher/issues/1394) add halo web ([bf843ad](https://github.com/terwer/siyuan-plugin-publisher/commit/bf843ada053d17a48af922d07fe7672ed60b21cc))
+* **deps:** bump uuid from 9.0.1 to 10.0.0 ([9c27920](https://github.com/terwer/siyuan-plugin-publisher/commit/9c27920558acaba60a9770374ced4492ff61461d))
+* pnpm version error ([b8a99c1](https://github.com/terwer/siyuan-plugin-publisher/commit/b8a99c13110f2efab06a9695a5a28ce46fdb9cb6))
+* 修复 halo2 发布结果为 markdown显示问题。 ([0e836e7](https://github.com/terwer/siyuan-plugin-publisher/commit/0e836e7755d62fa74292cabb2583a3f8305c25c2))
 ### Miscellaneous
+* fix dev tools ([b2eb808](https://github.com/terwer/siyuan-plugin-publisher/commit/b2eb808e1a87fee8d96dccd9cfcbc3751eeca039))
+* update deps ([9e0e0c9](https://github.com/terwer/siyuan-plugin-publisher/commit/9e0e0c90d4f2cc201485d0222f17b0ef92610e90))
+* update docs ([df4c220](https://github.com/terwer/siyuan-plugin-publisher/commit/df4c2201d24136aa535ff9174ad733cb3e2ecf50))
+## [1.21.6](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.21.5...siyuan-plugin-publisher-v1.21.6) (2024-06-05)
+* [#1245](https://github.com/terwer/siyuan-plugin-publisher/issues/1245) 发布csdn的时候, 代码块儿语言不显示 ([b2abe6c](https://github.com/terwer/siyuan-plugin-publisher/commit/b2abe6c3a9aa0e397283b50358360dda3125cc0c))
 * **deps-dev:** bump vercel from 34.2.4 to 34.2.5 ([171cf9e](https://github.com/terwer/siyuan-plugin-publisher/commit/171cf9ef166cdf8ab9133813ae8a50ebcbd60a7c))
 ## [1.21.5](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.21.4...siyuan-plugin-publisher-v1.21.5) (2024-06-04)
 * add lsky picbed support ([d2824ec](https://github.com/terwer/siyuan-plugin-publisher/commit/d2824ec87458d26dc344ec4318c73395185a3718))
 * **deps:** bump @iconify/json from 2.2.203 to 2.2.216 ([89bdaba](https://github.com/terwer/siyuan-plugin-publisher/commit/89bdaba38a4cc090b663702e10d47f04e5b455eb))
 * **deps:** bump pnpm/action-setup from 3 to 4 ([2e8b9f1](https://github.com/terwer/siyuan-plugin-publisher/commit/2e8b9f1a16b38b7657f53062cb83f3f29c733d6d))
 * encode error ([85b0f6f](https://github.com/terwer/siyuan-plugin-publisher/commit/85b0f6f635edde56e369c2cdfcda309e0da4f010))
-* update deps ([9e0e0c9](https://github.com/terwer/siyuan-plugin-publisher/commit/9e0e0c90d4f2cc201485d0222f17b0ef92610e90))
 ## [1.21.4](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.21.3...siyuan-plugin-publisher-v1.21.4) (2024-04-24)
 * [#1191](https://github.com/terwer/siyuan-plugin-publisher/issues/1191) markdown render error with multi list ([bde0e15](https://github.com/terwer/siyuan-plugin-publisher/commit/bde0e15555fa9cdc8f4f02051f55966692d22b2f))
 * **deps:** bump @iconify/json from 2.2.199 to 2.2.203 ([a474a6d](https://github.com/terwer/siyuan-plugin-publisher/commit/a474a6dc175aa3b278fad528cf77a90ada5b12e5))
@@ -34,7 +45,6 @@
 * marks and bold replacements errors ([27d43dd](https://github.com/terwer/siyuan-plugin-publisher/commit/27d43dd2a58cc4ae623551f9c020c4e7aa29c717))
 * prepare for 1.21.1 ([0910615](https://github.com/terwer/siyuan-plugin-publisher/commit/09106153194e687c5733e817be10ee5519a37173))
 ## [1.21.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.20.1...siyuan-plugin-publisher-v1.21.0) (2024-04-08)
-### Features
 * [#1108](https://github.com/terwer/siyuan-plugin-publisher/issues/1108) support wordpress.com ([7ba8a57](https://github.com/terwer/siyuan-plugin-publisher/commit/7ba8a5716de0b15bac5bbde00d5d69eb508e6bb2))
 * [#1109](https://github.com/terwer/siyuan-plugin-publisher/issues/1109) support telegra.ph use picgo ([252d927](https://github.com/terwer/siyuan-plugin-publisher/commit/252d92761bc22d56b4e95470b6a76b023a4b6052))
 * adapt new picgo plugin ([4ec72a2](https://github.com/terwer/siyuan-plugin-publisher/commit/4ec72a268881148dd0aeac361a847a9493baba31))
@@ -53,7 +63,6 @@
 * support upload images for wordpress dot com ([36d6fb6](https://github.com/terwer/siyuan-plugin-publisher/commit/36d6fb69a79fa5eb3e4951fe3012623b21bebf45))
 * add 1.20.2 release notes ([644c595](https://github.com/terwer/siyuan-plugin-publisher/commit/644c595aaf17e15c4444d686dc150e046f459bf5))
 * update ci ([a429bfd](https://github.com/terwer/siyuan-plugin-publisher/commit/a429bfdff34d433e5ac22ef1e049e45cf0e01936))
-* update docs ([df4c220](https://github.com/terwer/siyuan-plugin-publisher/commit/df4c2201d24136aa535ff9174ad733cb3e2ecf50))
 * update fmt ([b8584a8](https://github.com/terwer/siyuan-plugin-publisher/commit/b8584a8ecfaed1e6cd534f6c0fcf67a55c32daf2))
 * update icon and preview ([b0acc6d](https://github.com/terwer/siyuan-plugin-publisher/commit/b0acc6dcfb2c749e695338b3151695c851718620))
 ## [1.20.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.20.0...siyuan-plugin-publisher-v1.20.1) (2024-03-12)
