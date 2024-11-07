@@ -34,7 +34,7 @@ import { DYNAMIC_CONFIG_KEY, LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils
 import { DynamicJsonCfg, getDynCfgByKey, getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { PRE_COMTANTS } from "~/src/platforms/PreConstants.ts"
 import { ISypConfig } from "~/syp.config"
-import { CategoryTypeEnum } from "zhi-blog-api"
+import { CategoryTypeEnum, PicbedServiceTypeEnum } from "zhi-blog-api"
 
 const getHaloDynCfg = (setting: ISypConfig) => {
   const dynJsonCfg = JsonUtil.safeParse<DynamicJsonCfg>(setting[DYNAMIC_CONFIG_KEY], {} as DynamicJsonCfg)
@@ -95,6 +95,7 @@ const useHalowebWeb = async (key?: string, newCfg?: HalowebConfig) => {
   // picbed service
   cfg.picgoPicbedSupported = true
   cfg.bundledPicbedSupported = true
+  cfg.picbedService = PicbedServiceTypeEnum.Bundled
   const webApi = new HalowebWebAdaptor(appInstance, cfg)
 
   return {

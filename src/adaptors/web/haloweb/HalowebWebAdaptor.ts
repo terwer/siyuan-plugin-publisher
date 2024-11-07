@@ -24,10 +24,11 @@
  */
 
 import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
-import { CategoryInfo, Post, TagInfo, UserBlog } from "zhi-blog-api"
+import { Attachment, CategoryInfo, MediaObject, Post, TagInfo, UserBlog } from "zhi-blog-api"
 import { AliasTranslator, JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { HalowebPostMeta } from "~/src/adaptors/web/haloweb/HalowebPostMeta.ts"
 import sypIdUtil from "~/src/utils/sypIdUtil"
+import FormDataUtils from "~/src/utils/FormDataUtils.ts"
 
 /**
  * Halo 网页授权适配器
@@ -303,6 +304,64 @@ class HalowebWebAdaptor extends BaseWebApi {
     })
   }
 
+  public async newMediaObject(mediaObject: MediaObject, customHandler?: any): Promise<Attachment> {
+    let res: any
+    try {
+      const bits = mediaObject.bits
+      this.logger.debug("newMediaObject on halo =>", mediaObject)
+
+      // get formData and Blob
+      const { FormData, Blob } = FormDataUtils.getFormData(this.appInstance)
+
+      // uploadUrl
+      const uploadUrl = `/apis/api.console.halo.run/v1alpha1/attachments/upload`
+
+      // formData
+      const blob = new Blob([bits], { type: mediaObject.type })
+      const formData = new FormData()
+      formData.append("file", blob, mediaObject.name)
+      formData.append("policyName", "default-policy")
+      formData.append("groupName", "")
+      formData.append("file", blob, mediaObject.name)
+
+      // 发送请求
+      res = await this.halowebFormFetch(uploadUrl, formData)
+
+      this.logger.debug("halo upload success, res =>", res)
+      if (!res.metadata) {
+        throw new Error("Halo图片上传失败 =>" + mediaObject.name)
+      }
+    } catch (e) {
+      this.logger.error("Error uploading image to halo:", e)
+      throw new Error("Error uploading image to halo:" + e.toString())
+    }
+
+    const siteImgId = res?.spec?.displayName
+    const siteArticleId = res?.metadata?.name
+    const siteImgUrl = this.cfg.home + (res?.metadata?.annotations["storage.halo.run/uri"] ?? "")
+    return {
+      attachment_id: siteImgId,
+      date_created_gmt: new Date(),
+      parent: 0,
+      link: siteImgUrl,
+      title: mediaObject.name,
+      caption: "",
+      description: "",
+      metadata: {
+        width: 0,
+        height: 0,
+        file: "",
+        filesize: 0,
+        sizes: [],
+      },
+      type: mediaObject.type,
+      thumbnail: "",
+      id: siteArticleId,
+      file: mediaObject.name,
+      url: siteImgUrl,
+    }
+  }
+
   // ================
   // private methods
   // ================
@@ -490,7 +549,7 @@ class HalowebWebAdaptor extends BaseWebApi {
     this.logger.debug("向Halo网页版发送表单数据，apiUrl =>", apiUrl)
     this.logger.debug("向Halo网页版发送表单数据，options =>", options)
 
-    const resJson = await this.webFormFetch(apiUrl, [mergedHeaders], formData, true)
+    const resJson = await this.webFormFetch(apiUrl, [mergedHeaders], formData)
     if (resJson.error) {
       throw new Error("Halo网页版表单提交错误。详细错误 =>" + resJson.error)
     }
