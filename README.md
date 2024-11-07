@@ -9,11 +9,11 @@ Publish articles from siyuan-note to platforms like Yuque etc. `Free` and `open 
 > Please [click here to see the latest docs](https://blog.terwer.space/s/20240330142711-bc3gjg0), it updates in real
 > time.
 
-**Should you encounter any issues or wish to submit suggestions, feel free to join QQ group `895063267` for discussions.**
+**Encountered other issues or have suggestions? Group 1 is full, please join QQ Group 2 for discussion.**
 
-If you're interested in the paid professional version, please check the paied
-➡️ [Publishing Tool Professional Edition](https://github.com/terwer/siyuan-plugin-publisher-pro)
+[![](https://img.shields.io/badge/QQ%20Group-722632752-blue)](https://qm.qq.com/cgi-bin/qm/qr?k=Knb4_xp6bbPnTpMztzqIZI7v59Gblqoh&jump_from=webapi&authKey=IhivNiJsNHq0I0Z+3jyBfOQPxsvMu9Y5jY5FuVTwjtQ5qtjW0m+hpSMsBCu5A8EE)
 
+The paid plugin [Share Pro](https://github.com/terwer/siyuan-plugin-share-pro), also written by me, is now available. Share your notes with one click, welcome to follow.
 ## Update history
 
 Please check [CHANGELOG](https://github.com/terwer/siyuan-plugin-publisher/blob/main/CHANGELOG.md)
