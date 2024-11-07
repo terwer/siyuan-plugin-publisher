@@ -728,5 +728,5 @@ export default {
   "publisher.post.future": "Scheduled Publishing",
 
   "setting.platform.halo.v29.only":
-    "Note: Due to changes in the API policy in Halo 2.20+, the original method for this platform is no longer usable. Please import and use the new platform 'Halo Web Version'. If you still need to use this platform, please downgrade your server to Halo 2.9.",
+    "Note: Due to changes in the API policy in Halo 2.20+, the original method for this platform is no longer usable. Please import and use the new platform 'Halo web'. If you still need to use this platform, please downgrade your server to Halo 2.9.",
 }

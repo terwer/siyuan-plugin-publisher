@@ -700,5 +700,5 @@ export default {
   "publisher.post.future": "定时发布",
 
   "setting.platform.halo.v29.only":
-    "注意：由于 Halo 2.20+ 修改了 API 策略，此平台原有方式已经无法使用，请导入并使用使用新平台 「Halo网页版」。如仍需使用此平台，请降级服务器到 Halo 2.9。",
+    "注意：由于 Halo 2.20+ 修改了 API 策略，V2.20+ 此平台已经无法使用，请导入并使用新平台 「Halo网页版」。如仍需使用此平台，请降级 Halo 2.9。",
 }
