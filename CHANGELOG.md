@@ -1,5 +1,34 @@
 # Changelog
 
+## [1.22.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.21.6...siyuan-plugin-publisher-v1.22.0) (2024-11-07)
+
+
+### Features
+
+* add halo v29 warning ([20ad98d](https://github.com/terwer/siyuan-plugin-publisher/commit/20ad98d95f066afae0947eb196f929d69104761b))
+* add halo v29 warning ([e84cdc9](https://github.com/terwer/siyuan-plugin-publisher/commit/e84cdc9c70cfe11c14733836b74b8bffd0264c55))
+* change QQ group ([13babdc](https://github.com/terwer/siyuan-plugin-publisher/commit/13babdc4827d7e7093b842af7d8a147273755bfd))
+* support read halo tags ([4afd364](https://github.com/terwer/siyuan-plugin-publisher/commit/4afd3648baf0644f78a4f5ffc6efb43836524b51))
+
+
+### Bug Fixes
+
+* [#1394](https://github.com/terwer/siyuan-plugin-publisher/issues/1394) add halo web ([deaf333](https://github.com/terwer/siyuan-plugin-publisher/commit/deaf3335ffe72889fb404f17e61995c67956d820))
+* [#1394](https://github.com/terwer/siyuan-plugin-publisher/issues/1394) add halo web ([0ca7e7f](https://github.com/terwer/siyuan-plugin-publisher/commit/0ca7e7f1c2cc7c124c8cf5e09a38ba7d426af5ae))
+* [#1394](https://github.com/terwer/siyuan-plugin-publisher/issues/1394) add halo web ([1bb6d25](https://github.com/terwer/siyuan-plugin-publisher/commit/1bb6d2525d65aea733a263e6dc27d541a5c06968))
+* [#1394](https://github.com/terwer/siyuan-plugin-publisher/issues/1394) add halo web ([0710295](https://github.com/terwer/siyuan-plugin-publisher/commit/0710295f3da5471b696647816ac161bc0c8215e8))
+* [#1394](https://github.com/terwer/siyuan-plugin-publisher/issues/1394) add halo web ([bf843ad](https://github.com/terwer/siyuan-plugin-publisher/commit/bf843ada053d17a48af922d07fe7672ed60b21cc))
+* **deps:** bump uuid from 9.0.1 to 10.0.0 ([9c27920](https://github.com/terwer/siyuan-plugin-publisher/commit/9c27920558acaba60a9770374ced4492ff61461d))
+* pnpm version error ([b8a99c1](https://github.com/terwer/siyuan-plugin-publisher/commit/b8a99c13110f2efab06a9695a5a28ce46fdb9cb6))
+* 修复 halo2 发布结果为 markdown显示问题。 ([0e836e7](https://github.com/terwer/siyuan-plugin-publisher/commit/0e836e7755d62fa74292cabb2583a3f8305c25c2))
+
+
+### Miscellaneous
+
+* fix dev tools ([b2eb808](https://github.com/terwer/siyuan-plugin-publisher/commit/b2eb808e1a87fee8d96dccd9cfcbc3751eeca039))
+* update deps ([9afbdbc](https://github.com/terwer/siyuan-plugin-publisher/commit/9afbdbcd227d7029b4c32c2ec7b433a76681aeab))
+* update docs ([bddc12d](https://github.com/terwer/siyuan-plugin-publisher/commit/bddc12d0abb145c0e9ee5c2348ed49e5d9455008))
+
 ## [1.21.6](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.21.5...siyuan-plugin-publisher-v1.21.6) (2024-06-05)
 ### Bug Fixes
 * [#1245](https://github.com/terwer/siyuan-plugin-publisher/issues/1245) 发布csdn的时候, 代码块儿语言不显示 ([b2abe6c](https://github.com/terwer/siyuan-plugin-publisher/commit/b2abe6c3a9aa0e397283b50358360dda3125cc0c))
