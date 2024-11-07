@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023-2024, Terwer . All rights reserved.
+ * Copyright (c) 2024, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -23,29 +23,8 @@
  * questions.
  */
 
-import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
-
-interface ISypConfig {
-  // version?: ""
-  lang?: "zh_CN" | "en_US"
-  // 平台总的集合
-  [DYNAMIC_CONFIG_KEY]?: any
-
-  // [平台key1]: {平台配置1}
-  // [平台key2]: {平台配置2}
-
-  // [siyuan文档ID]: {
-  //  [custom-slug]: 初始化生成，初始化可读取siyuan属性，但是之后不能再修改
-  //  [动态平台1postid的key]: 对应平台的文章ID
-  //  [动态平台2postid的key]: 对应平台的文章ID
-  // }
-
-  [key: string]: any
+const PRE_COMTANTS = {
+  PRE_CUSTOM_HALOWEB: "custom_Haloweb",
 }
 
-export const SypConfig: ISypConfig = {
-  lang: "zh_CN",
-  [DYNAMIC_CONFIG_KEY]: "{}",
-}
-
-export { type ISypConfig }
+export { PRE_COMTANTS }

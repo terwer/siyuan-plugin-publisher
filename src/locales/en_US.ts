@@ -676,14 +676,21 @@ export default {
 
   "setting.telegraph.username.label": "Author",
   "setting.telegraph.password.label": "Uuid",
-  "setting.telegraph.home.tip": "The primary landing page of the telegra.ph platform typically remains constant at: https://telegra.ph/",
-  "setting.telegraph.username.tip": "The individual credited as the author, a detail showcased in the article's specifics, is customizable at will, with the default setting being empty.",
-  "setting.telegraph.password.tip": "The uuid pertinent to the current environment. Please note: 1. Anonymous mode automatically retrieves this detail, requiring no manual input; 2. Logging in as a user necessitates the entry of the Cookie's thp_uuid.",
-  "setting.telegraph.apiurl.tip": "The designated API endpoint for telegra.ph, routinely established as: https://telegra.ph/",
-  "setting.telegraph.previewUrl.tip": "The prescribed pattern for previewing telegra.ph articles commonly follows this structure: /[notebook]/[postid]",
-  "setting.telegraph.accessToken.tip": "This item is unnecessary in anonymous mode. For authenticated sessions, please procure the tph_token from the browser post authorization via the TG client. To ensure the sanctity of your privacy, exercise caution against sharing this token with any third party.",
+  "setting.telegraph.home.tip":
+    "The primary landing page of the telegra.ph platform typically remains constant at: https://telegra.ph/",
+  "setting.telegraph.username.tip":
+    "The individual credited as the author, a detail showcased in the article's specifics, is customizable at will, with the default setting being empty.",
+  "setting.telegraph.password.tip":
+    "The uuid pertinent to the current environment. Please note: 1. Anonymous mode automatically retrieves this detail, requiring no manual input; 2. Logging in as a user necessitates the entry of the Cookie's thp_uuid.",
+  "setting.telegraph.apiurl.tip":
+    "The designated API endpoint for telegra.ph, routinely established as: https://telegra.ph/",
+  "setting.telegraph.previewUrl.tip":
+    "The prescribed pattern for previewing telegra.ph articles commonly follows this structure: /[notebook]/[postid]",
+  "setting.telegraph.accessToken.tip":
+    "This item is unnecessary in anonymous mode. For authenticated sessions, please procure the tph_token from the browser post authorization via the TG client. To ensure the sanctity of your privacy, exercise caution against sharing this token with any third party.",
   "setting.telegraph.saveHash.tip": "No need to fill out; automatic retrieval after clicking validation.",
-  "setting.telegraph.forceReAuth.tip": "After the authorization information takes effect, uncheck this option, and then reauthorize. Note: Old articles may become uneditable as a result.",
+  "setting.telegraph.forceReAuth.tip":
+    "After the authorization information takes effect, uncheck this option, and then reauthorize. Note: Old articles may become uneditable as a result.",
   "setting.telegraph.login.anonymous": "Anonymous",
   "setting.telegraph.login.user": "User",
 
@@ -706,7 +713,8 @@ export default {
   "publisher.picbed.service": "Image Hosting Service",
   "publisher.picbed.none": "Not in use",
   "publisher.picbed.picgo": "PicGo Plugin",
-  "publisher.picbed.picgo.not.install": "PicGo plugin not detected. You may proceed to the plugin store for installation before enabling it.",
+  "publisher.picbed.picgo.not.install":
+    "PicGo plugin not detected. You may proceed to the plugin store for installation before enabling it.",
   "publisher.picbed.bundled": "Current Platform",
   "publisher.picbed.recom1": "Strongly Recommended",
   "publisher.picbed.recom2": "Recommended",
@@ -718,4 +726,12 @@ export default {
   "publisher.post.password": "Password Protection",
   "publisher.post.password.tip": "Please enter the password for the article; leave blank if not setting one",
   "publisher.post.future": "Scheduled Publishing",
+
+  "setting.platform.halo.v29.only":
+    "Note: Due to changes in the API policy in Halo 2.20+, the original method for this platform is no longer usable. Please import and use the new platform 'Halo web'. If you still need to use this platform, please downgrade your server to Halo 2.9.",
+
+  "setting.haloweb.home.tip": "The URL of your Halo 2.20+ blog homepage",
+  "setting.haloweb.password.tip": "Halo's Cookie, do not modify",
+  "setting.haloweb.apiUrl.tip": "Usually the same as the URL of your Halo 2.20+ blog homepage",
+  "setting.haloweb.previewUrl.tip": "Article preview rule for the Halo web platform",
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023-2024, Terwer . All rights reserved.
+ * Copyright (c) 2024, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -23,29 +23,30 @@
  * questions.
  */
 
-import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
+import { CommonWebConfig } from "../base/commonWebConfig"
+import { CategoryTypeEnum, PageTypeEnum, PasswordType } from "zhi-blog-api"
 
-interface ISypConfig {
-  // version?: ""
-  lang?: "zh_CN" | "en_US"
-  // 平台总的集合
-  [DYNAMIC_CONFIG_KEY]?: any
+/**
+ * Halo 网页版配置
+ */
+class HalowebConfig extends CommonWebConfig {
+  public logoutUrl: string
 
-  // [平台key1]: {平台配置1}
-  // [平台key2]: {平台配置2}
+  constructor(home: string, middlewareUrl?: string) {
+    super(home, home, "", "", middlewareUrl)
 
-  // [siyuan文档ID]: {
-  //  [custom-slug]: 初始化生成，初始化可读取siyuan属性，但是之后不能再修改
-  //  [动态平台1postid的key]: 对应平台的文章ID
-  //  [动态平台2postid的key]: 对应平台的文章ID
-  // }
-
-  [key: string]: any
+    this.logoutUrl = `${home}/logout`
+    this.previewUrl = "/archives/{slug}"
+    this.pageType = PageTypeEnum.Html
+    this.usernameEnabled = false
+    this.showTokenTip = false
+    this.allowPreviewUrlChange = true
+    this.tagEnabled = true
+    this.cateEnabled = true
+    this.categoryType = CategoryTypeEnum.CategoryType_Multi
+    this.allowCateChange = true
+    this.knowledgeSpaceEnabled = false
+  }
 }
 
-export const SypConfig: ISypConfig = {
-  lang: "zh_CN",
-  [DYNAMIC_CONFIG_KEY]: "{}",
-}
-
-export { type ISypConfig }
+export { HalowebConfig }

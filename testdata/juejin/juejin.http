@@ -1,6 +1,6 @@
 ### 获取专栏列表
 POST https://api.juejin.cn/content_api/v1/column/author_center_list
-cookie: {{cookie}}
+Cookie: {{cookie}}
 Content-Type: application/json
 
 {
@@ -73,7 +73,7 @@ Content-Type: application/json
 
 ### 删除文章
 POST https://api.juejin.cn/content_api/v1/article/delete
-cookie: {{cookie}}
+Cookie: {{cookie}}
 Content-Type: application/json
 
 {
@@ -82,14 +82,14 @@ Content-Type: application/json
 
 ### 获取分类
 POST https://api.juejin.cn/tag_api/v1/query_category_list
-cookie: {{cookie}}
+Cookie: {{cookie}}
 Content-Type: application/json
 
 {}
 
 ### 获取标签列表
 POST https://api.juejin.cn/tag_api/v1/query_tag_list
-cookie: {{cookie}}
+Cookie: {{cookie}}
 Content-Type: application/json
 
 {
@@ -100,15 +100,29 @@ Content-Type: application/json
 }
 
 ### 图片上传-1-getToken
-GET https://api.juejin.cn/imagex/gen_token?client=web
-cookie: {{cookie}}
+GET https://api.juejin.cn/imagex/gen_token?aid=2608&uuid=7143177997595051557&client=web
+Cookie: {{cookie}}
 Content-Type: application/json
 
 ### 图片上传-2-ApplyImageUpload-不可用
-GET https://imagex.bytedanceapi.com/?Action=ApplyImageUpload
+GET https://imagex.bytedanceapi.com/?Action=ApplyImageUpload&Version=2018-08-01&ServiceId=k3u1fbpfcp
+Authorization: AWS4-HMAC-SHA256 Credential=AKTPYjQzMjgxODhhMzczNDRjY2I2NjQyMjliNDEzMDA0ZTI/20240621/cn-north-1/imagex/aws4_request, SignedHeaders=x-amz-date;x-amz-security-token, Signature=f49be4ae5efd00a99eb76e8e30594eb4622dd8413f3f95077b61de17f0b99d20
+x-amz-date: 20240621T074234Z
+x-amz-security-token: STS2eyJMVEFjY2Vzc0tleUlkIjoiQUtMVFltSXdNRGRpWWpRNE1qQmxOR00xTXprMllUVTBabVl3TmpFd1pEWTNPR0UiLCJBY2Nlc3NLZXlJZCI6IkFLVFBZalF6TWpneE9EaGhNemN6TkRSalkySTJOalF5TWpsaU5ERXpNREEwWlRJIiwiU2lnbmVkU2VjcmV0QWNjZXNzS2V5IjoiZGxTRGdyR1g2QlNSNS93SFFjc3M2QjZNQjU1citTZ3I2Z0NZVjYrenBvdEprNXNCMC9uWUVYRjFCMGs4djFSNGdmVDJBSS9maE9lWmlDcXlzdXNwRkZQTHQ2bzVUMldrc1ZFc0ZkNWNVQzA9IiwiRXhwaXJlZFRpbWUiOjE3MTg5NjI5NTQsIlBvbGljeVN0cmluZyI6IntcIlN0YXRlbWVudFwiOlt7XCJFZmZlY3RcIjpcIkFsbG93XCIsXCJBY3Rpb25cIjpbXCJJbWFnZVg6QXBwbHlJbWFnZVVwbG9hZFwiLFwiSW1hZ2VYOkNvbW1pdEltYWdlVXBsb2FkXCJdLFwiUmVzb3VyY2VcIjpbXCJ0cm46SW1hZ2VYOio6KjpTZXJ2aWNlSWQvazN1MWZicGZjcFwiXX1dfSIsIlNpZ25hdHVyZSI6ImRlYTExYTU1MjljOTFhYTYwMzc5MGQ0ZDlhZTE5OTkxZDgyZWJmM2Q2NTE2NzRmZTNmMzA0MDQ5ZDc0MzBjMjMifQ==
 
 ### 图片上传-3-CommitImageUpload-不可用
 POST https://imagex.bytedanceapi.com/?Action=CommitImageUpload
 
 ### 图片上传-4-获取图片链接-不可用
 GET https://api.juejin.cn/imagex/get_img_url
+
+
+## 签名算法
+
+https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-auth-using-authorization-header.html
+https://docs.aws.amazon.com/AmazonS3/latest/API/sig-v4-header-based-auth.html
+https://docs.aws.amazon.com/AmazonS3/latest/API/sig-v4-header-based-auth.html#example-signature-calculations
+
+https://github.com/junkurihara/js-aws-signature-v4
+https://github.com/danieljoos/aws-sign-web
+https://github.com/mhart/aws4fetch

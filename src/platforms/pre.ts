@@ -1,5 +1,6 @@
 import { AuthMode, DynamicConfig, PlatformType, SubPlatformType } from "~/src/platforms/dynamicConfig.ts"
 import { svgIcons } from "~/src/utils/svgIcons.ts"
+import { PRE_COMTANTS } from "~/src/platforms/PreConstants.ts"
 
 /**
  * 通用平台定义
@@ -72,7 +73,7 @@ export const pre = {
       platformType: PlatformType.Common,
       subPlatformType: SubPlatformType.Common_Halo,
       platformKey: "common_Halo",
-      platformName: "Halo",
+      platformName: "Halo29",
       platformIcon: svgIcons.iconIFHalo,
       authMode: AuthMode.API,
       isEnabled: false,
@@ -316,6 +317,17 @@ export const pre = {
     //   domain: "flowus.cn",
     //   isEnabled: false,
     // },
+    {
+      platformType: PlatformType.Custom,
+      subPlatformType: SubPlatformType.Custom_Haloweb,
+      platformKey: PRE_COMTANTS.PRE_CUSTOM_HALOWEB,
+      platformName: "Halo网页版",
+      platformIcon: svgIcons.iconIFHaloweb,
+      authMode: AuthMode.WEBSITE,
+      authUrl: "/login",
+      domain: "",
+      isEnabled: false,
+    },
   ],
   systemCfg: <DynamicConfig[]>[
     {

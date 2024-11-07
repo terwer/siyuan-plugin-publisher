@@ -54,6 +54,7 @@ import { useHaloApi } from "~/src/adaptors/api/halo/useHaloApi.ts"
 import { useTelegraphApi } from "~/src/adaptors/api/telegraph/useTelegraphApi.ts"
 import { useJvueApi } from "~/src/adaptors/api/jvue/useJvueApi.ts"
 import { useWordpressdotcomApi } from "~/src/adaptors/api/wordpress-dot-com/useWordpressdotcomApi.ts"
+import { useHalowebWeb } from "~/src/adaptors/web/haloweb/useHalowebWeb.ts"
 
 /**
  * 适配器统一入口
@@ -216,6 +217,11 @@ class Adaptors {
       //   conf = cfg
       //   break
       // }
+      case SubPlatformType.Custom_Haloweb: {
+        const { cfg } = await useHalowebWeb(key)
+        conf = cfg
+        break
+      }
       case SubPlatformType.System_Siyuan: {
         const { siyuanConfig } = useSiyuanApi()
         conf = siyuanConfig
@@ -381,6 +387,11 @@ class Adaptors {
       //   blogAdaptor = webApi
       //   break
       // }
+      case SubPlatformType.Custom_Haloweb: {
+        const { webApi } = await useHalowebWeb(key, newCfg)
+        blogAdaptor = webApi
+        break
+      }
       case SubPlatformType.System_Siyuan: {
         const { blogApi } = useSiyuanApi()
         blogAdaptor = blogApi

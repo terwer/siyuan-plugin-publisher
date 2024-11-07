@@ -119,6 +119,8 @@ class CsdnUtils {
 
   /**
    * 处理代码高亮
+   * https://spencersnyder.io/blog/prism-js-with-next-js
+   * 
    * @param adaptorInstance
    * @param html
    */

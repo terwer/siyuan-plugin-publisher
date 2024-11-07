@@ -8,12 +8,11 @@
 
 > [猛击这里](https://blog.terwer.space/s/20230810132040-nn4q7vs)，查看最新帮助文档。
 
-**遇到其他问题或者需求建议？请加 QQ 群 `895063267` 讨论。**
+**遇到其他问题或者需求建议？1群已满，请加QQ2群讨论。**
 
-截止到 2024/08/26，群成员已满，有问题请直接新建 issue: https://github.com/terwer/siyuan-plugin-publisher/issues/new
+[![](https://img.shields.io/badge/QQ群-722632752-blue)](https://qm.qq.com/cgi-bin/qm/qr?k=Knb4_xp6bbPnTpMztzqIZI7v59Gblqoh&jump_from=webapi&authKey=IhivNiJsNHq0I0Z+3jyBfOQPxsvMu9Y5jY5FuVTwjtQ5qtjW0m+hpSMsBCu5A8EE)
 
-如果您对 [增值功能](https://github.com/terwer/siyuan-plugin-publisher/issues/846) 感兴趣，请移步 ➡️
-收费的 [发布工具专业版](https://github.com/terwer/siyuan-plugin-publisher-pro)
+收费的 [在线分享专业版](https://github.com/terwer/siyuan-plugin-share-pro) 已上线，一键分享你的呢思源笔记，欢迎关注。
 
 ## 更新历史
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023, Terwer . All rights reserved.
+ * Copyright (c) 2024, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -23,26 +23,32 @@
  * questions.
  */
 
-import { HaloConfig } from "~/src/adaptors/api/halo/HaloConfig.ts"
-import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
 import { Attachment, CategoryInfo, MediaObject, Post, TagInfo, UserBlog } from "zhi-blog-api"
 import { AliasTranslator, JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
-import { Base64 } from "js-base64"
-import sypIdUtil from "~/src/utils/sypIdUtil.ts"
-import { PostRequest } from "@halo-dev/api-client"
-import { HaloPostMeta } from "~/src/adaptors/api/halo/HaloPostMeta.ts"
+import { HalowebPostMeta } from "~/src/adaptors/web/haloweb/HalowebPostMeta.ts"
+import sypIdUtil from "~/src/utils/sypIdUtil"
 import FormDataUtils from "~/src/utils/FormDataUtils.ts"
 
 /**
- * Halo API 适配器 V2.9.0
- * @see [Halo API](https://github.com/halo-sigs/vscode-extension-halo/blob/main/src/service/index.ts)
- * @see [Halo docs](https://docs.halo.run/getting-started/install/docker-compose/)
+ * Halo 网页授权适配器
  */
-class HaloApiAdaptor extends BaseBlogApi {
-  constructor(appInstance: any, cfg: HaloConfig) {
-    super(appInstance, cfg)
-    this.logger = createAppLogger("halo-api-adaptor-v29")
+class HalowebWebAdaptor extends BaseWebApi {
+  public async getMetaData(): Promise<any> {
+    const res = await this.halowebFetch("/actuator/globalinfo")
+    const flag = !!res.externalUrl
+    this.logger.info(`get haloweb metadata finished, flag => ${flag}`)
+    return {
+      flag: flag,
+      uid: "",
+      title: "",
+      avatar: "",
+      type: "haloweb",
+      displayName: "Halo网页版",
+      supportTypes: ["markdown", "html"],
+      home: res.externalUrl,
+      icon: "https://g.csdnimg.cn/static/logo/favicon32.ico",
+    }
   }
 
   public async getUsersBlogs(): Promise<UserBlog[]> {
@@ -62,8 +68,27 @@ class HaloApiAdaptor extends BaseBlogApi {
     return result
   }
 
+  public async getPost(postid: string, useSlug?: boolean): Promise<Post> {
+    const haloPostKey = this.getHaloPostidKey(postid)
+    const name = haloPostKey.name
+
+    // 加载最新
+    const haloPost = await this.getHaloPost(name)
+    this.logger.debug("getPost haloPost =>", { name: name, haloPost: haloPost })
+
+    const commonPost = new Post()
+    commonPost.title = haloPost.post.spec.title
+    commonPost.wp_slug = haloPost.post.spec.slug
+    commonPost.shortDesc = haloPost.post.spec.excerpt.raw
+
+    commonPost.tags_slugs = haloPost.post.spec.tags.join(",")
+    commonPost.cate_slugs = haloPost.post.spec.categories
+
+    return commonPost
+  }
+
   public async newPost(post: Post, publish?: boolean): Promise<string> {
-    const params: PostRequest = {
+    const params: any = {
       post: {
         spec: {
           title: "",
@@ -137,7 +162,7 @@ class HaloApiAdaptor extends BaseBlogApi {
     params.post.spec.publishTime = post.dateCreated.toISOString()
 
     // 草稿
-    const res = await this.haloFetch("/apis/api.console.halo.run/v1alpha1/posts", params, "POST")
+    const res = await this.halowebFetch("/apis/api.console.halo.run/v1alpha1/posts", params, "POST")
     this.logger.debug("halo newPost res =>", res)
     if (!res?.metadata?.name) {
       throw new Error("Halo 文章发布失败")
@@ -145,11 +170,11 @@ class HaloApiAdaptor extends BaseBlogApi {
     this.logger.debug("halo 文章草稿完成")
 
     // 发布
-    await this.haloFetch(`/apis/api.console.halo.run/v1alpha1/posts/${params.post.metadata.name}/publish`, {}, "PUT")
+    await this.halowebFetch(`/apis/api.console.halo.run/v1alpha1/posts/${params.post.metadata.name}/publish`, {}, "PUT")
     this.logger.debug("halo 文章发布完成")
 
     // 生成文章ID
-    const postidMeta = new HaloPostMeta(res.spec.slug, res.metadata.name, post.dateCreated)
+    const postidMeta = new HalowebPostMeta(res.spec.slug, res.metadata.name, post.dateCreated)
     this.logger.debug("postidMeta =>", postidMeta)
 
     // 需要更新一次，否则
@@ -164,7 +189,7 @@ class HaloApiAdaptor extends BaseBlogApi {
       const name = haloPostKey.name
 
       // 加载最新
-      let params: PostRequest = await this.getHaloPost(name)
+      let params = await this.getHaloPost(name)
       this.logger.debug("get latest halo post =>", { name: name, haloPost: params })
 
       if (!params.post) {
@@ -205,36 +230,21 @@ class HaloApiAdaptor extends BaseBlogApi {
       params.post.spec.publishTime = post.dateCreated.toISOString()
 
       // 更新文章信息
-      await this.haloFetch(`/apis/content.halo.run/v1alpha1/posts/${name}`, params.post, "PUT")
-      await this.haloFetch(`/apis/api.console.halo.run/v1alpha1/posts/${name}/content`, params.content, "PUT")
+      await this.halowebFetch(`/apis/content.halo.run/v1alpha1/posts/${name}`, params.post, "PUT")
+      await this.halowebFetch(`/apis/api.console.halo.run/v1alpha1/posts/${name}/content`, params.content, "PUT")
 
       // 重新发布
-      await this.haloFetch(`/apis/api.console.halo.run/v1alpha1/posts/${params.post.metadata.name}/publish`, {}, "PUT")
+      await this.halowebFetch(
+        `/apis/api.console.halo.run/v1alpha1/posts/${params.post.metadata.name}/publish`,
+        {},
+        "PUT"
+      )
       this.logger.debug("halo 文章发布完成")
     } catch (e) {
       this.logger.error("Halo文章更新失败", e)
     }
 
     return flag
-  }
-
-  public async getPost(postid: string, useSlug?: boolean): Promise<Post> {
-    const haloPostKey = this.getHaloPostidKey(postid)
-    const name = haloPostKey.name
-
-    // 加载最新
-    const haloPost = await this.getHaloPost(name)
-    this.logger.debug("getPost haloPost =>", { name: name, haloPost: haloPost })
-
-    const commonPost = new Post()
-    commonPost.title = haloPost.post.spec.title
-    commonPost.wp_slug = haloPost.post.spec.slug
-    commonPost.shortDesc = haloPost.post.spec.excerpt.raw
-
-    commonPost.tags_slugs = haloPost.post.spec.tags.join(",")
-    commonPost.cate_slugs = haloPost.post.spec.categories
-
-    return commonPost
   }
 
   public async getPreviewUrl(postid: string): Promise<string> {
@@ -253,7 +263,7 @@ class HaloApiAdaptor extends BaseBlogApi {
     const haloPostKey = this.getHaloPostidKey(postid)
     // const unPublishUrl = `/apis/api.console.halo.run/v1alpha1/posts/${haloPostKey.name}/unpublish`
     const recycleUrl = `/apis/api.console.halo.run/v1alpha1/posts/${haloPostKey.name}/recycle`
-    const res = await this.haloFetch(recycleUrl, {}, "PUT")
+    const res = await this.halowebFetch(recycleUrl, {}, "PUT")
     this.logger.debug("halo deletePost res =>", res)
 
     if (!res?.metadata?.name) {
@@ -265,10 +275,11 @@ class HaloApiAdaptor extends BaseBlogApi {
   public async getCategories(): Promise<CategoryInfo[]> {
     const cats = [] as CategoryInfo[]
 
-    const hcs: any[] = await this.getHaloCategories()
-    if (hcs && hcs.length > 0) {
+    const allCates = await this.getHaloCategories()
+
+    if (allCates && allCates.length > 0) {
       // 数据适配
-      hcs.forEach((item: any) => {
+      allCates.forEach((item: any) => {
         const cat = new CategoryInfo()
         cat.categoryId = item.spec.slug
         cat.categoryName = item.spec.displayName
@@ -284,7 +295,6 @@ class HaloApiAdaptor extends BaseBlogApi {
 
   public async getTags(): Promise<TagInfo[]> {
     const allTags = await this.getHaloTags()
-
     return allTags.map((tag: any) => {
       const tagInfo = new TagInfo()
       tagInfo.tagId = tag.spec.slug
@@ -304,7 +314,7 @@ class HaloApiAdaptor extends BaseBlogApi {
       const { FormData, Blob } = FormDataUtils.getFormData(this.appInstance)
 
       // uploadUrl
-      const uploadUrl = `${this.cfg.apiUrl}/apis/api.console.halo.run/v1alpha1/attachments/upload`
+      const uploadUrl = `/apis/api.console.halo.run/v1alpha1/attachments/upload`
 
       // formData
       const blob = new Blob([bits], { type: mediaObject.type })
@@ -315,7 +325,7 @@ class HaloApiAdaptor extends BaseBlogApi {
       formData.append("file", blob, mediaObject.name)
 
       // 发送请求
-      res = await this.haloFormFetch(uploadUrl, formData)
+      res = await this.halowebFormFetch(uploadUrl, formData)
 
       this.logger.debug("halo upload success, res =>", res)
       if (!res.metadata) {
@@ -361,24 +371,9 @@ class HaloApiAdaptor extends BaseBlogApi {
    * @param postid
    * @private postid
    */
-  private getHaloPostidKey(postid: string): HaloPostMeta {
-    const postidJson = JsonUtil.safeParse<HaloPostMeta>(postid, {} as HaloPostMeta)
+  private getHaloPostidKey(postid: string): HalowebPostMeta {
+    const postidJson = JsonUtil.safeParse<HalowebPostMeta>(postid, {} as HalowebPostMeta)
     return postidJson
-  }
-
-  private async getHaloPost(name: string): Promise<PostRequest | undefined> {
-    try {
-      const post = await this.haloFetch(`/apis/content.halo.run/v1alpha1/posts/${name}`, {}, "GET")
-
-      const content = await this.haloFetch(`/apis/api.console.halo.run/v1alpha1/posts/${name}/head-content`, {}, "GET")
-
-      return Promise.resolve({
-        post: post,
-        content: content,
-      })
-    } catch (error) {
-      return Promise.resolve(undefined)
-    }
   }
 
   public async getCategoryNames(displayNames: string[]): Promise<string[]> {
@@ -391,7 +386,7 @@ class HaloApiAdaptor extends BaseBlogApi {
     const newCategories = await Promise.all(
       notExistDisplayNames.map(async (name, index) => {
         const slug = await AliasTranslator.getPageSlug(name, true)
-        const category = await this.haloFetch(
+        const category = await this.halowebFetch(
           "/apis/content.halo.run/v1alpha1/categories",
           {
             spec: {
@@ -424,11 +419,6 @@ class HaloApiAdaptor extends BaseBlogApi {
     return [...existNames, ...newCategories.map((item) => item.metadata.name)]
   }
 
-  private async getHaloCategories() {
-    const categories = await this.haloFetch("/apis/content.halo.run/v1alpha1/categories", {}, "GET")
-    return Promise.resolve(categories.items)
-  }
-
   public async getTagNames(displayNames: string[]): Promise<string[]> {
     const allTags = await this.getHaloTags()
 
@@ -437,7 +427,7 @@ class HaloApiAdaptor extends BaseBlogApi {
     const newTags = await Promise.all(
       notExistDisplayNames.map(async (name) => {
         const slug = await AliasTranslator.getPageSlug(name, true)
-        const tag = await this.haloFetch(
+        const tag = await this.halowebFetch(
           "/apis/content.halo.run/v1alpha1/tags",
           {
             spec: {
@@ -467,32 +457,52 @@ class HaloApiAdaptor extends BaseBlogApi {
     return [...existNames, ...newTags.map((item) => item.metadata.name)]
   }
 
+  private async getHaloCategories(): Promise<any[]> {
+    const hcs = await this.halowebFetch("/apis/content.halo.run/v1alpha1/categories", {}, "GET")
+    return hcs.items
+  }
+
+  private async getHaloPost(name: string): Promise<any> {
+    try {
+      const post = await this.halowebFetch(`/apis/content.halo.run/v1alpha1/posts/${name}`, {}, "GET")
+
+      const content = await this.halowebFetch(
+        `/apis/api.console.halo.run/v1alpha1/posts/${name}/head-content`,
+        {},
+        "GET"
+      )
+
+      return Promise.resolve({
+        post: post,
+        content: content,
+      })
+    } catch (error) {
+      return Promise.resolve(undefined)
+    }
+  }
+
   private async getHaloTags() {
-    const tags = await this.haloFetch("/apis/content.halo.run/v1alpha1/tags", {}, "GET")
-    return Promise.resolve(tags.items)
+    const tags = await this.halowebFetch("/apis/content.halo.run/v1alpha1/tags", {}, "GET")
+    const allTags = tags.items
+    return allTags
   }
 
   /**
-   * 向 Halo 请求数据
-   *
-   * @param url 请求地址
-   * @param params 数据
-   * @param method 请求方法 GET | POST | PUT | DELETE
-   * @param header 请求头
-   * @private
+   * 向Halo网页版请求数据
    */
-  private async haloFetch(
+  private async halowebFetch(
     url: string,
     params?: any,
-    method: "GET" | "POST" | "PUT" | "DELETE" = "POST",
-    header: Record<any, any> = {}
-  ): Promise<any> {
-    const contentType = "application/json"
-    const basicAuth = "Basic " + Base64.btoa(this.cfg.username + ":" + this.cfg.password)
-    const headers = {
-      "Content-Type": contentType,
-      Authorization: basicAuth,
-      ...header,
+    method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" = "GET",
+    headers: Record<any, any> = {},
+    contentType: string = "application/json"
+  ) {
+    const reqHeaderMap = new Map<string, string>()
+    reqHeaderMap.set("Cookie", this.cfg.password)
+
+    const mergedHeaders = {
+      ...Object.fromEntries(reqHeaderMap),
+      ...headers,
     }
 
     // 打印日志
@@ -501,29 +511,52 @@ class HaloApiAdaptor extends BaseBlogApi {
 
     // 使用兼容的fetch调用并返回统一的JSON数据
     const body = ObjectUtil.isEmptyObject(params) ? "" : JSON.stringify(params)
-    this.logger.debug("向 Halo 请求数据，body =>", body)
-    const resJson = await this.apiFetch(apiUrl, [headers], body, method, contentType, false, "base64", "text")
-    this.logger.debug("向 Halo 请求数据，resJson =>", resJson)
+    this.logger.debug("向Halo网页版请求数据，apiUrl =>", apiUrl)
+    // 使用兼容的fetch调用并返回统一的JSON数据
+    this.logger.debug("向Halo网页版请求数据，headers =>", headers)
+    this.logger.debug("向Halo网页版请求数据，body =>", body)
+
+    const resJson = await this.webFetch(apiUrl, [mergedHeaders], body, method, contentType, true, "base64")
+    this.logger.debug("向Halo网页版请求数据，resJson =>", resJson)
 
     return resJson ?? null
   }
 
   /**
-   * 向 Halo 发送表单数据
+   * 向Halo网页版发送表单数据
    *
    * @param url 请求地址
-   * @param formData 表单数据
-   * @private
+   * @param formData 表单数据，默认为undefined，支持 ReadableStream、Blob | BufferSource | FormData | URLSearchParams | string。这里只需要 FormData
+   * @param headers 请求头
    */
-  private async haloFormFetch(url: string, formData: FormData) {
-    const basicAuth = "Basic " + Base64.btoa(this.cfg.username + ":" + this.cfg.password)
-    const header = {
-      Authorization: basicAuth,
+  private async halowebFormFetch(url: string, formData: BodyInit, headers: Record<any, any> = {}) {
+    const apiUrl = `${this.cfg.apiUrl}${url}`
+
+    const reqHeaderMap = new Map<string, string>()
+    reqHeaderMap.set("Cookie", this.cfg.password)
+
+    const mergedHeaders = {
+      ...Object.fromEntries(reqHeaderMap),
+      ...headers,
     }
 
-    const resJson = await this.apiFormFetch(url, [header], formData)
+    const options: RequestInit = {
+      method: "POST",
+      headers: mergedHeaders,
+      body: formData,
+    }
+
+    this.logger.debug("向Halo网页版发送表单数据，apiUrl =>", apiUrl)
+    this.logger.debug("向Halo网页版发送表单数据，options =>", options)
+
+    const resJson = await this.webFormFetch(apiUrl, [mergedHeaders], formData)
+    if (resJson.error) {
+      throw new Error("Halo网页版表单提交错误。详细错误 =>" + resJson.error)
+    }
+    this.logger.debug("向Halo网页版发送表单数据，resJson =>", resJson)
+
     return resJson
   }
 }
 
-export { HaloApiAdaptor }
+export { HalowebWebAdaptor }
