@@ -316,6 +316,17 @@ export const pre = {
     //   domain: "flowus.cn",
     //   isEnabled: false,
     // },
+    {
+      platformType: PlatformType.Custom,
+      subPlatformType: SubPlatformType.Custom_Haloweb,
+      platformKey: "custom_Haloweb",
+      platformName: "Halo网页版",
+      platformIcon: svgIcons.iconIFFlowus,
+      authMode: AuthMode.WEBSITE,
+      authUrl: "/login",
+      domain: "",
+      isEnabled: false,
+    },
   ],
   systemCfg: <DynamicConfig[]>[
     {

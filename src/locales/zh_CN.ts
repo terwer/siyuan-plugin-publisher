@@ -701,4 +701,9 @@ export default {
 
   "setting.platform.halo.v29.only":
     "注意：由于 Halo 2.20+ 修改了 API 策略，V2.20+ 此平台已经无法使用，请导入并使用新平台 「Halo网页版」。如仍需使用此平台，请降级到 Halo 2.9。",
+
+  "setting.haloweb.home.tip": "您的Halo2.20+博客首页地址",
+  "setting.haloweb.password.tip": "Halo的Cookie，请勿修改",
+  "setting.haloweb.apiUrl.tip": "通常和您的Halo2.20+博客首页地址相同",
+  "setting.haloweb.previewUrl.tip": "Halo网页版平台文章预览规则",
 }

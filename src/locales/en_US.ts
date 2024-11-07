@@ -729,4 +729,9 @@ export default {
 
   "setting.platform.halo.v29.only":
     "Note: Due to changes in the API policy in Halo 2.20+, the original method for this platform is no longer usable. Please import and use the new platform 'Halo web'. If you still need to use this platform, please downgrade your server to Halo 2.9.",
+
+  "setting.haloweb.home.tip": "The URL of your Halo 2.20+ blog homepage",
+  "setting.haloweb.password.tip": "Halo's Cookie, do not modify",
+  "setting.haloweb.apiUrl.tip": "Usually the same as the URL of your Halo 2.20+ blog homepage",
+  "setting.haloweb.previewUrl.tip": "Article preview rule for the Halo web platform",
 }
