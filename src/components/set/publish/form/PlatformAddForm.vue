@@ -265,11 +265,11 @@ initPage()
         </el-select>
       </el-form-item>
       <!-- 登录地址 -->
-      <el-form-item v-if="formData.dynCfg.authMode === AuthMode.WEBSITE" label="登录地址" prop="authUrl">
+      <el-form-item v-if="formData.dynCfg.authMode === AuthMode.WEBSITE" label="登录地址" prop="authUrl" required>
         <el-input v-model="formData.dynCfg.authUrl" placeholder="请输入该平台的网页登录地址" />
       </el-form-item>
       <!-- 主域名 -->
-      <el-form-item v-if="formData.dynCfg.authMode === AuthMode.WEBSITE" label="主域名" prop="domain">
+      <el-form-item v-if="formData.dynCfg.authMode === AuthMode.WEBSITE" label="主域名" prop="domain" required>
         <el-input v-model="formData.dynCfg.domain" placeholder="请输入该平台的主域名" />
       </el-form-item>
       <!-- 是否启用 -->

@@ -468,8 +468,8 @@ class HaloApiAdaptor extends BaseBlogApi {
   }
 
   private async getHaloTags() {
-    const categories = await this.haloFetch("/apis/content.halo.run/v1alpha1/tags", {}, "GET")
-    return Promise.resolve(categories.items)
+    const tags = await this.haloFetch("/apis/content.halo.run/v1alpha1/tags", {}, "GET")
+    return Promise.resolve(tags.items)
   }
 
   /**

@@ -1,5 +1,6 @@
 import { AuthMode, DynamicConfig, PlatformType, SubPlatformType } from "~/src/platforms/dynamicConfig.ts"
 import { svgIcons } from "~/src/utils/svgIcons.ts"
+import { PRE_COMTANTS } from "~/src/platforms/PreConstants.ts"
 
 /**
  * 通用平台定义
@@ -319,9 +320,9 @@ export const pre = {
     {
       platformType: PlatformType.Custom,
       subPlatformType: SubPlatformType.Custom_Haloweb,
-      platformKey: "custom_Haloweb",
+      platformKey: PRE_COMTANTS.PRE_CUSTOM_HALOWEB,
       platformName: "Halo网页版",
-      platformIcon: svgIcons.iconIFFlowus,
+      platformIcon: svgIcons.iconIFHaloweb,
       authMode: AuthMode.WEBSITE,
       authUrl: "/login",
       domain: "",

@@ -47,3 +47,5 @@ export const SypConfig: ISypConfig = {
   lang: "zh_CN",
   [DYNAMIC_CONFIG_KEY]: "{}",
 }
+
+export { type ISypConfig }
