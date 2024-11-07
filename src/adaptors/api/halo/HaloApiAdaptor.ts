@@ -26,24 +26,23 @@
 import { HaloConfig } from "~/src/adaptors/api/halo/HaloConfig.ts"
 import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { Attachment, CategoryInfo, MediaObject, PageType, Post, UserBlog } from "zhi-blog-api";
+import { Attachment, CategoryInfo, MediaObject, Post, TagInfo, UserBlog } from "zhi-blog-api"
 import { AliasTranslator, JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { Base64 } from "js-base64"
 import sypIdUtil from "~/src/utils/sypIdUtil.ts"
 import { PostRequest } from "@halo-dev/api-client"
 import { HaloPostMeta } from "~/src/adaptors/api/halo/HaloPostMeta.ts"
 import FormDataUtils from "~/src/utils/FormDataUtils.ts"
-import { result } from "lodash-es";
 
 /**
- * Halo API 适配器
+ * Halo API 适配器 V2.9.0
  * @see [Halo API](https://github.com/halo-sigs/vscode-extension-halo/blob/main/src/service/index.ts)
  * @see [Halo docs](https://docs.halo.run/getting-started/install/docker-compose/)
  */
 class HaloApiAdaptor extends BaseBlogApi {
   constructor(appInstance: any, cfg: HaloConfig) {
     super(appInstance, cfg)
-    this.logger = createAppLogger("halo-api-adaptor")
+    this.logger = createAppLogger("halo-api-adaptor-v29")
   }
 
   public async getUsersBlogs(): Promise<UserBlog[]> {
@@ -180,7 +179,6 @@ class HaloApiAdaptor extends BaseBlogApi {
       }
       params.content.content = post.html
 
-
       if (StrUtil.isEmptyString(post.shortDesc)) {
         params.post.spec.excerpt.autoGenerate = true
       } else {
@@ -282,6 +280,18 @@ class HaloApiAdaptor extends BaseBlogApi {
     }
 
     return cats
+  }
+
+  public async getTags(): Promise<TagInfo[]> {
+    const allTags = await this.getHaloTags()
+
+    return allTags.map((tag: any) => {
+      const tagInfo = new TagInfo()
+      tagInfo.tagId = tag.spec.slug
+      tagInfo.tagName = tag.spec.displayName
+      tagInfo.description = tag.spec.displayName
+      return tagInfo
+    })
   }
 
   public async newMediaObject(mediaObject: MediaObject, customHandler?: any): Promise<Attachment> {
