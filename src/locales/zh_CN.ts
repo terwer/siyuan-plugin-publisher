@@ -656,8 +656,10 @@ export default {
     "匿名模式无需填写，点击验证之后可自动获取，登录模式请从请从 TG 客户端授权之后跳转的浏览器里面找到 Cookie tph_uuid 填到这里",
   "setting.telegraph.apiurl.tip": "telegra.ph的API地址，通常固定是：https://telegra.ph/",
   "setting.telegraph.previewUrl.tip": "telegra.ph的文章预览规则，通常是：/[notebook]/[postid]",
-  "setting.telegraph.accessToken.tip": "匿名模式无需填写，登录模式请从请从 TG 客户端授权之后跳转的浏览器找到 Cookie tph_token 填到这里",
-  "setting.telegraph.saveHash.tip": "匿名模式无需填写，点击验证之后可自动获取，登录模式请从 TG 客户端授权之后跳转的浏览器里面找到 https://edit.telegra.ph/check 返回的 save_hash 填到这里",
+  "setting.telegraph.accessToken.tip":
+    "匿名模式无需填写，登录模式请从请从 TG 客户端授权之后跳转的浏览器找到 Cookie tph_token 填到这里",
+  "setting.telegraph.saveHash.tip":
+    "匿名模式无需填写，点击验证之后可自动获取，登录模式请从 TG 客户端授权之后跳转的浏览器里面找到 https://edit.telegra.ph/check 返回的 save_hash 填到这里",
   "setting.telegraph.forceReAuth.tip": "授权信息生效之后可勾选此项，然后会重新授权",
   "setting.telegraph.login.anonymous": "匿名发布",
   "setting.telegraph.login.user": "登录发布",
@@ -696,4 +698,7 @@ export default {
   "publisher.post.password": "密码保护",
   "publisher.post.password.tip": "请输入文章密码，留空则不设置",
   "publisher.post.future": "定时发布",
+
+  "setting.platform.halo.v29.only":
+    "注意：由于 Halo 2.20+ 修改了 API 策略，此平台原有方式已经无法使用，请导入并使用使用新平台 「Halo网页版」。如仍需使用此平台，请降级服务器到 Halo 2.9。",
 }

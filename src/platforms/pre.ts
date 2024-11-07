@@ -72,7 +72,7 @@ export const pre = {
       platformType: PlatformType.Common,
       subPlatformType: SubPlatformType.Common_Halo,
       platformKey: "common_Halo",
-      platformName: "Halo",
+      platformName: "Halo29",
       platformIcon: svgIcons.iconIFHalo,
       authMode: AuthMode.API,
       isEnabled: false,

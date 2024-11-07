@@ -60,5 +60,9 @@ const onHomeChange = (value: string, cfg: HaloConfig) => {
 </script>
 
 <template>
-  <common-blog-setting :api-type="props.apiType" :cfg="haloCfg" @onHomeChange="onHomeChange" />
+  <common-blog-setting :api-type="props.apiType" :cfg="haloCfg" @onHomeChange="onHomeChange">
+    <template #header="header">
+      <el-alert :title="t('setting.platform.halo.v29.only')" type="error" :closable="false" />
+    </template>
+  </common-blog-setting>
 </template>
