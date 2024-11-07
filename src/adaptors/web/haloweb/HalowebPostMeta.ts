@@ -23,6 +23,8 @@
  * questions.
  */
 
+import { HaloPostMeta } from "~/src/adaptors/api/halo/HaloPostMeta.ts"
+
 /**
  * Haloweb 平台的一些元数据
  *
@@ -30,6 +32,6 @@
  * @version 1.15.0
  * @since 1.15.0
  */
-class HalowebPostMeta {}
+class HalowebPostMeta extends HaloPostMeta {}
 
-export {HalowebPostMeta}
+export { HalowebPostMeta }
