@@ -41,7 +41,7 @@ jobs:
         run: pnpm install
 
       - name: Lint for TypeScript errors
-        run: vue-tsc --noEmit
+        run: pnpm i vue-tsc -D && vue-tsc --noEmit
 
       - name: Build for production
         run: pnpm build
