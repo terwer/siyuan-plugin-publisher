@@ -94,27 +94,45 @@ const emit = defineEmits(["emitSyncDesc"])
 
 const handleMakeDesc = async () => {
   formData.isDescLoading = true
+  const isStream = true
   try {
-    // if (formData.useAi) {
-    const inputWord = prompt.shortDescPrompt.content
-    const { chat, getChatInput } = useChatGPT()
-    const chatText = await chat(inputWord, {
-      name: "desc",
-      systemMessage: getChatInput(formData?.md, formData.html),
-    })
-    if (StrUtil.isEmptyString(chatText)) {
-      ElMessage.error("请求错误，请在偏好设置配置请求地址和ChatGPT key！")
-      return
+    if (isStream) {
+      const inputWord = prompt.shortDescPromptStream.content
+      const { chat, getChatInput } = useChatGPT()
+      formData.desc = ""
+      const chatResp = await chat(inputWord, {
+        name: "desc",
+        systemMessage: getChatInput(formData?.md, formData.html),
+        stream: true,
+        onProgress: (partialResponse) => {
+          formData.desc = partialResponse.text
+          logger.debug("partialResponse=>", partialResponse.text)
+        },
+        timeoutMs: 2 * 60 * 1000,
+      })
+      logger.debug("chatResp=>", chatResp)
+      // formData.desc = chatResp.text
+    } else {
+      const inputWord = prompt.shortDescPrompt.content
+      const { chat, getChatInput } = useChatGPT()
+      const chatText = await chat(inputWord, {
+        name: "desc",
+        systemMessage: getChatInput(formData?.md, formData.html),
+      })
+      if (StrUtil.isEmptyString(chatText)) {
+        ElMessage.error("请求错误，请在偏好设置配置请求地址和ChatGPT key！")
+        return
+      }
+      const resJson = JsonUtil.safeParse<ShortDescAIResult>(chatText, {} as ShortDescAIResult)
+      if (StrUtil.isEmptyString(resJson?.desc)) {
+        throw new Error("文档信息量太少，未能抽取有效信息")
+      }
+      formData.desc = resJson.desc
+      logger.info("使用AI智能生成的摘要结果 =>", {
+        inputWord: inputWord,
+        chatText: chatText,
+      })
     }
-    const resJson = JsonUtil.safeParse<ShortDescAIResult>(chatText, {} as ShortDescAIResult)
-    if (StrUtil.isEmptyString(resJson?.desc)) {
-      throw new Error("文档信息量太少，未能抽取有效信息")
-    }
-    formData.desc = resJson.desc
-    logger.info("使用AI智能生成的摘要结果 =>", {
-      inputWord: inputWord,
-      chatText: chatText,
-    })
 
     // 自部署无监督摘要
     // if (StrUtil.isEmptyString(formData.html)) {
