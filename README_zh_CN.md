@@ -12,7 +12,7 @@
 
 [![](https://img.shields.io/badge/QQ群-722632752-blue)](https://qm.qq.com/cgi-bin/qm/qr?k=Knb4_xp6bbPnTpMztzqIZI7v59Gblqoh&jump_from=webapi&authKey=IhivNiJsNHq0I0Z+3jyBfOQPxsvMu9Y5jY5FuVTwjtQ5qtjW0m+hpSMsBCu5A8EE)
 
-收费的 [在线分享专业版](https://github.com/terwer/siyuan-plugin-share-pro) 已上线，一键分享你的呢思源笔记，欢迎关注。
+收费的 [在线分享专业版](https://github.com/terwerinc/siyuan-plugin-share-pro) 已上线，一键分享你的呢思源笔记，欢迎关注。
 
 ## 更新历史
 
