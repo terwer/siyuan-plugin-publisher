@@ -58,6 +58,21 @@ class PublishPreferenceCfg extends PreferenceConfig {
    */
   public experimentalAIProxyUrl?: string
 
+  /**
+   * AI 模型
+   */
+  public experimentalAIApiModel?: string
+
+  /**
+   * AI token 数目
+   */
+  public experimentalAIApiMaxTokens?: number
+
+  /**
+   * AI 温度
+   */
+  public experimentalAIApiTemperature?: number
+
   // 文档菜单
   /**
    * 是否展示文档快捷菜单

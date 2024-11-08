@@ -55,9 +55,19 @@ const shortDescPrompt = <AiPrompt>{
   key: "desc",
   content:
     "请为这篇文章生成简明扼要的摘要，只处理文本，尽量返回中文摘要。" +
-    "摘要长度不超过255个中文字符或512个英文字符。" +
+    "摘要长度不超过1024个中文字符或2048个英文字符。" +
     "输出为 JSON 格式，键名为 desc，结果需放在 {} 内。" +
     "完整结果必须是合法JSON，不得包含非法 JSON 字符。",
+}
+const shortDescPromptStream = <AiPrompt>{
+  title: "自动提取摘要",
+  description: "从文章内容生成文章摘要",
+  key: "desc",
+  content:
+    "请为这篇文章生成简明扼要的摘要，只处理文本，尽量返回中文摘要。" +
+    "摘要长度不超过1024个中文字符或2048个英文字符。" +
+    "输出为文本格式，内容为语义化的摘要。" +
+    "完整结果必须是文本摘要，不得包含非法字符。",
 }
 export type ShortDescAIResult = {
   desc: string
@@ -106,6 +116,7 @@ export type CategoryAIResult = {
 const prompt = {
   titlePrompt,
   shortDescPrompt,
+  shortDescPromptStream,
   tagPrompt,
   categoryPrompt,
 }

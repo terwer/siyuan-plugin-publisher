@@ -66,6 +66,11 @@ const useChatGPT = () => {
             debug: isDev,
             // workaround for https://github.com/transitive-bullshit/chatgpt-api/issues/592
             fetch: self.fetch.bind(self),
+            completionParams: {
+              model: pref.value.experimentalAIApiModel,
+              max_tokens: pref.value.experimentalAIApiMaxTokens,
+              temperature: pref.value.experimentalAIApiTemperature,
+            },
           })
         }
       } catch (e) {
@@ -89,16 +94,28 @@ const useChatGPT = () => {
    * const chatResponse = await chat('你好，ChatGPT！');
    * console.log(chatResponse); // ChatGPT 生成的响应
    */
-  const chat = async (q: string, opts?: SendMessageOptions): Promise<string> => {
+  const chat = async (q: string, opts?: SendMessageOptions): Promise<string | any> => {
     try {
       const api = await getAPI()
       // 使用 ChatGPTAPI 实例进行聊天操作
+      opts.completionParams = {
+        ...opts.completionParams,
+        model: pref.value.experimentalAIApiModel,
+        max_tokens: pref.value.experimentalAIApiMaxTokens,
+        temperature: pref.value.experimentalAIApiTemperature,
+      }
+
       logger.debug("chat q =>", { q, opts })
       const res = await api.sendMessage(q, opts)
       logger.debug("chat res =>", res)
-      return res.text
+      if (opts.stream) {
+        return res
+      } else {
+        return res.text
+      }
     } catch (e) {
       logger.error("Chat encountered an error:", e)
+      ElMessage.error("Chat encountered an error:" + e)
     }
   }
 

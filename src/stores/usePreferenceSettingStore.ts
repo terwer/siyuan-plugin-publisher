@@ -63,6 +63,9 @@ const usePreferenceSettingStore = () => {
       prefConfig.value.experimentalAIProxyUrl = snAiCfg.apiProxy
       prefConfig.value.experimentalAICode = snAiCfg.apiKey
       prefConfig.value.experimentalAIBaseUrl = snAiCfg.apiBaseURL
+      prefConfig.value.experimentalAIApiModel = snAiCfg.apiModel
+      prefConfig.value.experimentalAIApiMaxTokens = snAiCfg.apiMaxTokens
+      prefConfig.value.experimentalAIApiTemperature = snAiCfg.apiTemperature
       logger.info("use siyuan-note ai config")
     } else {
       prefConfig.value.experimentalUseSiyuanNoteAIConfig = false
