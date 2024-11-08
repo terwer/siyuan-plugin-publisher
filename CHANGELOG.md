@@ -1,17 +1,10 @@
 # Changelog
 
 ## [1.23.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.22.1...siyuan-plugin-publisher-v1.23.0) (2024-11-08)
-
-
 ### Features
-
 * support stream for short desc ([b70e350](https://github.com/terwer/siyuan-plugin-publisher/commit/b70e3502f911ad80527544482d5abed53179a561))
-
-
 ### Miscellaneous
-
-* update docs ([00ea21d](https://github.com/terwer/siyuan-plugin-publisher/commit/00ea21d2d5aca7d23c037dd188bda268a4420d74))
-
+* update docs ([df4c220](https://github.com/terwer/siyuan-plugin-publisher/commit/df4c2201d24136aa535ff9174ad733cb3e2ecf50))
 ## [1.22.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.22.0...siyuan-plugin-publisher-v1.22.1) (2024-11-08)
 ### Bug Fixes
 * add ts lint check ([dbaa227](https://github.com/terwer/siyuan-plugin-publisher/commit/dbaa22786c6b0aa8c37a72b6667abce596cdb215))
@@ -21,12 +14,10 @@
 * **deps:** bump uuid from 10.0.0 to 11.0.2 ([351acf8](https://github.com/terwer/siyuan-plugin-publisher/commit/351acf8399993ab783e96fe3ef9818be56e73de4))
 * **deps:** bump vue-i18n from 9.14.1 to 10.0.4 ([786b97c](https://github.com/terwer/siyuan-plugin-publisher/commit/786b97c0e8170a2e78129254e7c8c8cff5b70a94))
 * lint errors ([b5b395a](https://github.com/terwer/siyuan-plugin-publisher/commit/b5b395a8d3b05a4010e05943fd9bf017cf60e65e))
-### Miscellaneous
 * **deps-dev:** bump jsdom from 24.1.3 to 25.0.1 ([f389ba7](https://github.com/terwer/siyuan-plugin-publisher/commit/f389ba7454840f8dcfdb5de61006bb4de84fb87c))
 * **deps-dev:** bump stylus from 0.63.0 to 0.64.0 ([bc670f6](https://github.com/terwer/siyuan-plugin-publisher/commit/bc670f61eda456a70c8e4c7b7af9a5aad33d10a8))
 * **deps-dev:** bump unplugin-auto-import from 0.17.8 to 0.18.3 ([9cb7a22](https://github.com/terwer/siyuan-plugin-publisher/commit/9cb7a22db83ae175aaa69b03efed372dcdb6565d))
 ## [1.22.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.21.6...siyuan-plugin-publisher-v1.22.0) (2024-11-07)
-### Features
 * add halo v29 warning ([e84cdc9](https://github.com/terwer/siyuan-plugin-publisher/commit/e84cdc9c70cfe11c14733836b74b8bffd0264c55))
 * change qq group ([13babdc](https://github.com/terwer/siyuan-plugin-publisher/commit/13babdc4827d7e7093b842af7d8a147273755bfd))
 * support read halo tags ([4afd364](https://github.com/terwer/siyuan-plugin-publisher/commit/4afd3648baf0644f78a4f5ffc6efb43836524b51))
@@ -36,7 +27,6 @@
 * 修复 halo2 发布结果为 markdown显示问题。 ([0e836e7](https://github.com/terwer/siyuan-plugin-publisher/commit/0e836e7755d62fa74292cabb2583a3f8305c25c2))
 * fix dev tools ([b2eb808](https://github.com/terwer/siyuan-plugin-publisher/commit/b2eb808e1a87fee8d96dccd9cfcbc3751eeca039))
 * update deps ([9e0e0c9](https://github.com/terwer/siyuan-plugin-publisher/commit/9e0e0c90d4f2cc201485d0222f17b0ef92610e90))
-* update docs ([df4c220](https://github.com/terwer/siyuan-plugin-publisher/commit/df4c2201d24136aa535ff9174ad733cb3e2ecf50))
 ## [1.21.6](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.21.5...siyuan-plugin-publisher-v1.21.6) (2024-06-05)
 * [#1245](https://github.com/terwer/siyuan-plugin-publisher/issues/1245) 发布csdn的时候, 代码块儿语言不显示 ([b2abe6c](https://github.com/terwer/siyuan-plugin-publisher/commit/b2abe6c3a9aa0e397283b50358360dda3125cc0c))
 * **deps-dev:** bump vercel from 34.2.4 to 34.2.5 ([171cf9e](https://github.com/terwer/siyuan-plugin-publisher/commit/171cf9ef166cdf8ab9133813ae8a50ebcbd60a7c))
