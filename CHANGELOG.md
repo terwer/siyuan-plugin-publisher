@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.23.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.22.1...siyuan-plugin-publisher-v1.23.0) (2024-11-08)
+
+
+### Features
+
+* support stream for short desc ([b70e350](https://github.com/terwer/siyuan-plugin-publisher/commit/b70e3502f911ad80527544482d5abed53179a561))
+
+
+### Miscellaneous
+
+* update docs ([00ea21d](https://github.com/terwer/siyuan-plugin-publisher/commit/00ea21d2d5aca7d23c037dd188bda268a4420d74))
+
 ## [1.22.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.22.0...siyuan-plugin-publisher-v1.22.1) (2024-11-08)
 ### Bug Fixes
 * add ts lint check ([dbaa227](https://github.com/terwer/siyuan-plugin-publisher/commit/dbaa22786c6b0aa8c37a72b6667abce596cdb215))
