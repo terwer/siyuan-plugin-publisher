@@ -23,7 +23,6 @@
  * questions.
  */
 
-import { IMenuItemOption } from "siyuan"
 import { ObjectUtil } from "zhi-common"
 import { DYNAMIC_CONFIG_KEY } from "../Constants.ts"
 import PageUtils from "~/common/pageUtils.ts"
@@ -48,7 +47,7 @@ class MenuUtils {
       }
     }
 
-    const submenus = <IMenuItemOption[]>[]
+    const submenus = <any[]>[]
     // 读取配置
     if (ObjectUtil.isEmptyObject(setting)) {
       // 配置错误，直接返回空
@@ -96,7 +95,7 @@ class MenuUtils {
 
     const isBlogInstalled = await pluginInvoke.preCheckBlogPlugin()
 
-    const extmenus = <IMenuItemOption[]>[]
+    const extmenus = <any[]>[]
     if (isBlogInstalled) {
       // 发布预览
       const extPreviewMenu = {

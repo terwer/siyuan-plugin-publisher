@@ -40,5 +40,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Lint for TypeScript errors
+        run: pnpm lint
+
       - name: Build for production
         run: pnpm build

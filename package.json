@@ -11,6 +11,7 @@
     "serve": "python scripts/serve.py",
     "dev": "python scripts/dev.py",
     "test": "vitest",
+    "lint": "vue-tsc --noEmit",
     "coverage": "vitest run --coverage",
     "build": "python scripts/build.py",
     "pluginBuild": "python scripts/plugin_build.py",
