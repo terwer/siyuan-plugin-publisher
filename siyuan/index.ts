@@ -23,7 +23,7 @@
  * questions.
  */
 
-import { App, confirm, getFrontend, IMenuItemOption, IModel, IObject, Menu, Plugin, showMessage } from "siyuan"
+import { App, confirm, getFrontend, Model, IObject, Plugin } from "siyuan"
 import { SiyuanConfig, SiyuanKernelApi } from "zhi-siyuan-api"
 import { createSiyuanAppLogger } from "./appLogger"
 import { WidgetInvoke } from "./invoke/widgetInvoke"
@@ -52,7 +52,7 @@ export default class PublisherPlugin extends Plugin {
   private widgetInvoke: WidgetInvoke
   private pluginInvoke: PluginInvoke
 
-  customTabObject: () => IModel
+  customTabObject: () => Model
   public tabInstance: any
 
   private publishSetting: any

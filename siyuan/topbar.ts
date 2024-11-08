@@ -25,7 +25,7 @@
 
 import PublisherPlugin from "./index"
 import { icons } from "./utils/svg"
-import { IMenuItemOption, Menu, showMessage } from "siyuan"
+import {  Menu, showMessage } from "siyuan"
 import { createSiyuanAppLogger } from "./appLogger"
 import { WidgetInvoke } from "./invoke/widgetInvoke"
 import { PluginInvoke } from "./invoke/pluginInvoke"
@@ -80,8 +80,8 @@ export class Topbar {
 
   private async addMenu(
     rect: DOMRect,
-    quickMenus: IMenuItemOption[],
-    extendMenus: IMenuItemOption[],
+    quickMenus: any[],
+    extendMenus: any[],
     prefSetting: any
   ) {
     const menu = new Menu("publisherMenu")
