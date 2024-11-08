@@ -60,7 +60,7 @@
     "@vueuse/components": "^11.2.0",
     "@vueuse/core": "^11.2.0",
     "chatgpt": "^5.2.5",
-    "cheerio": "1.0.0-rc.12",
+    "cheerio": "1.0.0",
     "cookie-parse": "^0.4.0",
     "cross-fetch": "^3.1.8",
     "crypto-js": "^4.2.0",
