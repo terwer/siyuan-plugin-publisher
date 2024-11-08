@@ -42,8 +42,8 @@ importers:
         specifier: ^4.0.3
         version: 4.0.3
       iframe-resizer:
-        specifier: ^4.4.5
-        version: 4.4.5
+        specifier: ^5.3.2
+        version: 5.3.2
       js-base64:
         specifier: ^3.7.7
         version: 3.7.7
@@ -660,6 +660,18 @@ packages:
 
   '@iconify/utils@2.1.33':
     resolution: {integrity: sha512-jP9h6v/g0BIZx0p7XGJJVtkVnydtbgTgt9mVNcGDYwaa7UhdHdI9dvoq+gKj9sijMSJKxUPEG2JyjsgXjxL7Kw==}
+
+  '@iframe-resizer/child@5.3.2':
+    resolution: {integrity: sha512-y4uX26NzdAU1XRURiFCQCNTuLI04WTGUFQNcG4hfNZGvWO/BnfQ3fiVokQwZjnaQH7mzbGE2SLJqYUb1JIqF1Q==}
+
+  '@iframe-resizer/core@5.3.2':
+    resolution: {integrity: sha512-is6VXW1m/9y7ZUwyjUuHu5101TPFa69Rv8jNY0HrT5svwb1ICPZKeaoVzDw0TTBBa5eE7XfEFcXCeiP6UR9W3w==}
+
+  '@iframe-resizer/jquery@5.3.2':
+    resolution: {integrity: sha512-j5fvlzR2+PCPyZ0nrZPkYfIvnRcrFdqvT8gOiB8b00rXzX/FwEjqHkDy2xK2TCF2PN63u+5gia93g7Idv6FTRA==}
+
+  '@iframe-resizer/parent@5.3.2':
+    resolution: {integrity: sha512-xjrQpRtsC9p1pBUKewYI9cmHoxomhGGSvspLq7Xgh4uYiifORaHqrqOnAgWKsV6Gl83s16g3RE1v1hRM7ZNOMQ==}
 
   '@intlify/core-base@9.14.1':
     resolution: {integrity: sha512-rG5/hlNW6Qfve41go37szEf0mVLcfhYuOu83JcY0jZKasnwsrcZYYWDzebCcuO5I/6Sy1JFWo9p+nvkQS1Dy+w==}
@@ -2645,6 +2657,7 @@ packages:
   eslint@8.57.0:
     resolution: {integrity: sha512-dZ6+mexnaTIbSBZWgou51U6OmzIhYM2VcNdtiTtI7qPNZm35Akpr0f6vtw3w1Kmn5PYo+tZVfh13WrhpS6oLqQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
 
   espree@9.6.1:
@@ -3024,9 +3037,8 @@ packages:
   ieee754@1.2.1:
     resolution: {integrity: sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==}
 
-  iframe-resizer@4.4.5:
-    resolution: {integrity: sha512-U8bCywf/Gh07O69RXo6dXAzTtODQrxaHGHRI7Nt4ipXsuq6EMxVsOP/jjaP43YtXz/ibESS0uSVDN3sOGCzSmw==}
-    engines: {node: '>=0.8.0'}
+  iframe-resizer@5.3.2:
+    resolution: {integrity: sha512-XMp1zUht+lrDbcysuY8bhUWNjUhpBQT46l3weDK2OVpTdhev/wuJEWJmh2MnbsVfBG7ev1coml8Ot1Yng0mV8g==}
 
   ignore@5.3.2:
     resolution: {integrity: sha512-hsBTNUqQTDwkWtcdYI2i06Y/nUBEsNEDJKjWdigLvegy8kDuJAS8uRlpkkcQpyEXL0Z/pjDy5HBmMjRCJ2gq+g==}
@@ -5836,6 +5848,18 @@ snapshots:
       mlly: 1.7.2
     transitivePeerDependencies:
       - supports-color
+
+  '@iframe-resizer/child@5.3.2': {}
+
+  '@iframe-resizer/core@5.3.2': {}
+
+  '@iframe-resizer/jquery@5.3.2':
+    dependencies:
+      '@iframe-resizer/core': 5.3.2
+
+  '@iframe-resizer/parent@5.3.2':
+    dependencies:
+      '@iframe-resizer/core': 5.3.2
 
   '@intlify/core-base@9.14.1':
     dependencies:
@@ -8697,7 +8721,11 @@ snapshots:
 
   ieee754@1.2.1: {}
 
-  iframe-resizer@4.4.5: {}
+  iframe-resizer@5.3.2:
+    dependencies:
+      '@iframe-resizer/child': 5.3.2
+      '@iframe-resizer/jquery': 5.3.2
+      '@iframe-resizer/parent': 5.3.2
 
   ignore@5.3.2: {}
 
