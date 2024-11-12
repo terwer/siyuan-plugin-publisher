@@ -90,8 +90,8 @@ importers:
         specifier: ^3.1.1
         version: 3.1.1
       zhi-blog-api:
-        specifier: ^1.66.0
-        version: 1.66.0(typescript@5.6.3)
+        specifier: ^1.67.0
+        version: 1.67.0(typescript@5.6.3)
       zhi-common:
         specifier: ^1.33.0
         version: 1.33.0(typescript@5.6.3)
@@ -2660,6 +2660,7 @@ packages:
   eslint@8.57.0:
     resolution: {integrity: sha512-dZ6+mexnaTIbSBZWgou51U6OmzIhYM2VcNdtiTtI7qPNZm35Akpr0f6vtw3w1Kmn5PYo+tZVfh13WrhpS6oLqQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
 
   espree@9.6.1:
@@ -5082,6 +5083,9 @@ packages:
 
   zhi-blog-api@1.66.0:
     resolution: {integrity: sha512-0FQmYhJUaMHlnAHXkS0r2OEy26EX4IEPxw5AKDLmI8yoafniZtJ1knpmyx+Ds9dGrvTZj1iELSRYOTkdhIe5YA==}
+
+  zhi-blog-api@1.67.0:
+    resolution: {integrity: sha512-AVytAFXe4bs/12Xnt0dbKvYMUMudt4JMYjaeI0RUtkKEEZRevO6BedrU9G5py2R0M9cRxBhO2TadlqIAV5qiUA==}
 
   zhi-common@1.33.0:
     resolution: {integrity: sha512-ggHVmZ/zkVIOLfAWv4vqJBZY9BZnlnBUhlOmtYoVHV35UdxI5zcvvakBRgDZxjyknikHOLot7MtYfccCCOdyKw==}
@@ -10924,6 +10928,13 @@ snapshots:
   yocto-queue@1.1.1: {}
 
   zhi-blog-api@1.66.0(typescript@5.6.3):
+    dependencies:
+      zhi-common: 1.33.0(typescript@5.6.3)
+      zhi-lib-base: 0.8.0
+    transitivePeerDependencies:
+      - typescript
+
+  zhi-blog-api@1.67.0(typescript@5.6.3):
     dependencies:
       zhi-common: 1.33.0(typescript@5.6.3)
       zhi-lib-base: 0.8.0
