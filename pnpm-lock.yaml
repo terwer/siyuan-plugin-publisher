@@ -187,8 +187,8 @@ importers:
         specifier: ^0.27.4
         version: 0.27.4(@babel/parser@7.26.2)(rollup@4.24.4)(vue@3.5.12(typescript@5.6.3))(webpack-sources@3.2.3)
       vercel:
-        specifier: ^37.14.0
-        version: 37.14.0
+        specifier: ^39.0.0
+        version: 39.0.0
       vite:
         specifier: ^5.4.10
         version: 5.4.10(@types/node@18.19.64)(sass@1.80.6)(stylus@0.64.0)(terser@5.36.0)
@@ -1421,8 +1421,8 @@ packages:
   '@vercel/hydrogen@1.0.9':
     resolution: {integrity: sha512-IPAVaALuGAzt2apvTtBs5tB+8zZRzn/yG3AGp8dFyCsw/v5YOuk0Q5s8Z3fayLvJbFpjrKtqRNDZzVJBBU3MrQ==}
 
-  '@vercel/next@4.3.18':
-    resolution: {integrity: sha512-ih6++AA7/NCcLkMpdsDhr/folMlAKsU1sYUoyOjq4rYE9sSapELtgxls0CArv4ehE2Tt4YwoxBISnKPZKK5SSA==}
+  '@vercel/next@4.3.19':
+    resolution: {integrity: sha512-3Pz8zaLD/9QKE5HrXoZ6B8O1jBvIzm6HqFQseQ3biWCijf0s/rHi8MVdzLBaNR8R7j76B08ItEsXEtil2Apvdw==}
 
   '@vercel/nft@0.27.3':
     resolution: {integrity: sha512-oySTdDSzUAFDXpsSLk9Q943o+/Yu/+TCFxnehpFQEf/3khi2stMpTHPVNwFdvZq/Z4Ky93lE+MGHpXCRpMkSCA==}
@@ -1432,8 +1432,8 @@ packages:
   '@vercel/node@3.2.24':
     resolution: {integrity: sha512-KEm50YBmcfRNOw5NfdcqMI4BkP4+5TD9kRwAByHHlIZXLj1NTTknvMF+69sHBYzwpK/SUZIkeo7jTrtcl4g+RQ==}
 
-  '@vercel/python@4.3.1':
-    resolution: {integrity: sha512-pWRApBwUsAQJS8oZ7eKMiaBGbYJO71qw2CZqDFvkTj34FNBZtNIUcWSmqGfJJY5m2pU/9wt8z1CnKIyT9dstog==}
+  '@vercel/python@4.4.0':
+    resolution: {integrity: sha512-wL6OCDk0NIgSLsoTTqbzmRXGtdu3Ilyc5WxMTt24cAK5IhLMebdZ9BgP5eD45YDIkAv79SaENcqnC9gORtlk/g==}
 
   '@vercel/redwood@2.1.8':
     resolution: {integrity: sha512-qBUBqIDxPEYnxRh3tsvTaPMtBkyK/D2tt9tBugNPe0OeYnMCMXVj9SJYbxiDI2GzAEFUZn4Poh63CZtXMDb9Tg==}
@@ -2660,6 +2660,7 @@ packages:
   eslint@8.57.0:
     resolution: {integrity: sha512-dZ6+mexnaTIbSBZWgou51U6OmzIhYM2VcNdtiTtI7qPNZm35Akpr0f6vtw3w1Kmn5PYo+tZVfh13WrhpS6oLqQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
 
   espree@9.6.1:
@@ -4765,8 +4766,8 @@ packages:
   validate-npm-package-license@3.0.4:
     resolution: {integrity: sha512-DpKm2Ui/xN7/HQKCtpZxoRWBhZ9Z0kqtygG8XCgNQ8ZlDnxuQmWhj566j8fN4Cu3/JmbhsDo7fcAJq4s9h27Ew==}
 
-  vercel@37.14.0:
-    resolution: {integrity: sha512-ZSEvhARyJBn4YnEVZULsvti8/OHd5txRCgJqEhNIyo/XXSvBJSvlCjA+SE1zraqn0rqyEOG3+56N3kh1Enk8Tg==}
+  vercel@39.0.0:
+    resolution: {integrity: sha512-V1TB0mk8eA+cVneTJYaV5KJobzuQFlet923ixgrT660NReWaxc0pk2RVwmoLfGqv2JXDJBSpZhLq0YeYt4VPmA==}
     engines: {node: '>= 16'}
     hasBin: true
 
@@ -5922,7 +5923,7 @@ snapshots:
       detect-libc: 2.0.3
       https-proxy-agent: 5.0.1
       make-dir: 3.1.0
-      node-fetch: 2.6.9
+      node-fetch: 2.7.0
       nopt: 5.0.0
       npmlog: 5.0.1
       rimraf: 3.0.2
@@ -6825,7 +6826,7 @@ snapshots:
       '@vercel/static-config': 3.0.0
       ts-morph: 12.0.0
 
-  '@vercel/next@4.3.18':
+  '@vercel/next@4.3.19':
     dependencies:
       '@vercel/nft': 0.27.3
     transitivePeerDependencies:
@@ -6878,7 +6879,7 @@ snapshots:
       - encoding
       - supports-color
 
-  '@vercel/python@4.3.1': {}
+  '@vercel/python@4.4.0': {}
 
   '@vercel/redwood@2.1.8':
     dependencies:
@@ -7737,7 +7738,7 @@ snapshots:
 
   debug@4.1.1:
     dependencies:
-      ms: 2.1.1
+      ms: 2.1.3
 
   debug@4.3.7:
     dependencies:
@@ -10595,15 +10596,15 @@ snapshots:
       spdx-correct: 3.2.0
       spdx-expression-parse: 3.0.1
 
-  vercel@37.14.0:
+  vercel@39.0.0:
     dependencies:
       '@vercel/build-utils': 8.4.12
       '@vercel/fun': 1.1.0
       '@vercel/go': 3.2.0
       '@vercel/hydrogen': 1.0.9
-      '@vercel/next': 4.3.18
+      '@vercel/next': 4.3.19
       '@vercel/node': 3.2.24
-      '@vercel/python': 4.3.1
+      '@vercel/python': 4.4.0
       '@vercel/redwood': 2.1.8
       '@vercel/remix-builder': 2.2.13
       '@vercel/ruby': 2.1.0
