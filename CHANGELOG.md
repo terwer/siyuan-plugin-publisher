@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.23.3](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.23.2...siyuan-plugin-publisher-v1.23.3) (2024-11-16)
+
+
+### Bug Fixes
+
+* pic upload error in some cases ([4f0782d](https://github.com/terwer/siyuan-plugin-publisher/commit/4f0782dfbfdfbb3cd0ec89897e3145c24a0636d9))
+
 ## [1.23.2](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.23.1...siyuan-plugin-publisher-v1.23.2) (2024-11-16)
 ### Bug Fixes
 * pic upload error in some cases ([79351cc](https://github.com/terwer/siyuan-plugin-publisher/commit/79351cc5178b5a17429eff135b159ca139a20268))
