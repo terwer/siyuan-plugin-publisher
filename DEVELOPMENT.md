@@ -71,11 +71,11 @@ artifacts structure
 ├── build
   ├── package.zip
   ├── package-widget.zip
-  ├── siyuan-plugin-publisher-1.19.1.zip
-  ├── siyuan-publisher-nginx-1.19.1
-  ├── sy-post-publisher-chrome-1.19.1.zip
-  ├── sy-post-publisher-firefox-1.19.1.zip
-  └── sy-post-publisher-widget-1.19.1.zip
+  ├── siyuan-plugin-publisher-1.23.5.zip
+  ├── siyuan-publisher-nginx-1.23.5
+  ├── sy-post-publisher-chrome-1.23.5.zip
+  ├── sy-post-publisher-firefox-1.23.5.zip
+  └── sy-post-publisher-widget-1.23.5.zip
 ```
 
 Note: vercel is also supported via `pnpm vercelBuild`
