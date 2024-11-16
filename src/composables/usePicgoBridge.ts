@@ -148,6 +148,7 @@ const usePicgoBridge = () => {
   /**
    * 检查 Picgo 是否已安装
    *
+   *
    * @returns 一个 Promise，解析为布尔值，表示是否已安装 Picgo
    */
   const checkPicgoInstalled = async () => {
