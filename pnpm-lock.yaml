@@ -90,8 +90,8 @@ importers:
         specifier: ^3.1.1
         version: 3.1.1
       zhi-blog-api:
-        specifier: ^1.66.0
-        version: 1.66.0(typescript@5.6.3)
+        specifier: ^1.67.0
+        version: 1.67.0(typescript@5.6.3)
       zhi-common:
         specifier: ^1.33.0
         version: 1.33.0(typescript@5.6.3)
@@ -114,8 +114,8 @@ importers:
         specifier: ^0.1.4
         version: 0.1.4
       zhi-siyuan-api:
-        specifier: ^2.22.0
-        version: 2.22.0(typescript@5.6.3)
+        specifier: ^2.23.0
+        version: 2.23.0(typescript@5.6.3)
       zhi-siyuan-picgo:
         specifier: 1.11.3
         version: 1.11.3(typescript@5.6.3)
@@ -5081,8 +5081,8 @@ packages:
     resolution: {integrity: sha512-b4JR1PFR10y1mKjhHY9LaGo6tmrgjit7hxVIeAmyMw3jegXR4dhYqLaQF5zMXZxY7tLpMyJeLjr1C4rLmkVe8g==}
     engines: {node: '>=12.20'}
 
-  zhi-blog-api@1.66.0:
-    resolution: {integrity: sha512-0FQmYhJUaMHlnAHXkS0r2OEy26EX4IEPxw5AKDLmI8yoafniZtJ1knpmyx+Ds9dGrvTZj1iELSRYOTkdhIe5YA==}
+  zhi-blog-api@1.67.0:
+    resolution: {integrity: sha512-AVytAFXe4bs/12Xnt0dbKvYMUMudt4JMYjaeI0RUtkKEEZRevO6BedrU9G5py2R0M9cRxBhO2TadlqIAV5qiUA==}
 
   zhi-common@1.33.0:
     resolution: {integrity: sha512-ggHVmZ/zkVIOLfAWv4vqJBZY9BZnlnBUhlOmtYoVHV35UdxI5zcvvakBRgDZxjyknikHOLot7MtYfccCCOdyKw==}
@@ -5105,8 +5105,8 @@ packages:
   zhi-notion-markdown@0.1.4:
     resolution: {integrity: sha512-Ltoeb+NmQg/bi/d5OBI1PzlnX3hCE3x6nN94t50gegdhI53h3ZctY6dutd7GnDF7SpMNn++4m8kH625udYLrog==}
 
-  zhi-siyuan-api@2.22.0:
-    resolution: {integrity: sha512-a4z3+aGDfWSkiTRQW2Rvjw8q174ueE1aEWrdBZlaTiRbaKs8/jU8kdITJM1IozEcTt3Db7o+ibC7mkgARFQ5wA==}
+  zhi-siyuan-api@2.23.0:
+    resolution: {integrity: sha512-T4DSd5wR3lsBCdCrKefuoleMfeOjF5yOJOXMCeXlw7EQduz4n4IkP8dHixP/GkSSQdEJHc1Ia0jbUlu9nQka1w==}
 
   zhi-siyuan-picgo@1.11.3:
     resolution: {integrity: sha512-4/FIcwUzrhRjwDyRbnd/CQ9w+iX0iRHCuCfTxHbG6sl+lvFYKDusfJD3Jb1JENXybA60vflW+w6B7Qbe6pwJCw==}
@@ -10924,7 +10924,7 @@ snapshots:
 
   yocto-queue@1.1.1: {}
 
-  zhi-blog-api@1.66.0(typescript@5.6.3):
+  zhi-blog-api@1.67.0(typescript@5.6.3):
     dependencies:
       zhi-common: 1.33.0(typescript@5.6.3)
       zhi-lib-base: 0.8.0
@@ -10977,9 +10977,9 @@ snapshots:
       - encoding
       - supports-color
 
-  zhi-siyuan-api@2.22.0(typescript@5.6.3):
+  zhi-siyuan-api@2.23.0(typescript@5.6.3):
     dependencies:
-      zhi-blog-api: 1.66.0(typescript@5.6.3)
+      zhi-blog-api: 1.67.0(typescript@5.6.3)
       zhi-common: 1.33.0(typescript@5.6.3)
       zhi-lib-base: 0.8.0
     transitivePeerDependencies:
@@ -10993,7 +10993,7 @@ snapshots:
       zhi-common: 1.33.0(typescript@5.6.3)
       zhi-device: 2.11.0
       zhi-lib-base: 0.8.0
-      zhi-siyuan-api: 2.22.0(typescript@5.6.3)
+      zhi-siyuan-api: 2.23.0(typescript@5.6.3)
     transitivePeerDependencies:
       - aws-crt
       - debug
