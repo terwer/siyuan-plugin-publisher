@@ -12,7 +12,7 @@ importers:
         specifier: ^2.3.1
         version: 2.3.1(vue@3.5.13(typescript@5.6.3))
       '@iconify/json':
-        specifier: ^2.2.273
+        specifier: ^2.2.269
         version: 2.2.273
       '@vueuse/components':
         specifier: ^11.2.0
@@ -36,7 +36,7 @@ importers:
         specifier: ^4.2.0
         version: 4.2.0
       element-plus:
-        specifier: ^2.8.8
+        specifier: ^2.8.7
         version: 2.8.8(vue@3.5.13(typescript@5.6.3))
       gray-matter:
         specifier: ^4.0.3
@@ -75,10 +75,10 @@ importers:
         specifier: ^0.20.1
         version: 0.20.1(@vue/compiler-sfc@3.5.13)(svelte@4.2.18)(vue-template-compiler@2.7.16)
       uuid:
-        specifier: ^11.0.3
+        specifier: ^11.0.2
         version: 11.0.3
       vue:
-        specifier: ^3.5.13
+        specifier: ^3.5.12
         version: 3.5.13(typescript@5.6.3)
       vue-i18n:
         specifier: ^10.0.4
@@ -148,7 +148,7 @@ importers:
         specifier: ^18.19.64
         version: 18.19.64
       '@vitejs/plugin-vue':
-        specifier: ^5.2.0
+        specifier: ^5.1.4
         version: 5.2.0(vite@5.4.11(@types/node@18.19.64)(sass@1.81.0)(stylus@0.64.0)(terser@5.36.0))(vue@3.5.13(typescript@5.6.3))
       '@vitest/coverage-v8':
         specifier: ^1.6.0
@@ -181,16 +181,16 @@ importers:
         specifier: ^5.6.3
         version: 5.6.3
       unplugin-auto-import:
-        specifier: ^0.18.4
+        specifier: ^0.18.3
         version: 0.18.4(@vueuse/core@11.2.0(vue@3.5.13(typescript@5.6.3)))(rollup@4.27.2)
       unplugin-vue-components:
         specifier: ^0.27.4
         version: 0.27.4(@babel/parser@7.26.2)(rollup@4.27.2)(vue@3.5.13(typescript@5.6.3))
       vercel:
-        specifier: ^39.0.2
-        version: 39.0.2
+        specifier: ^37.14.0
+        version: 37.14.0
       vite:
-        specifier: ^5.4.11
+        specifier: ^5.4.10
         version: 5.4.11(@types/node@18.19.64)(sass@1.81.0)(stylus@0.64.0)(terser@5.36.0)
       vite-plugin-html:
         specifier: ^3.2.2
@@ -1421,8 +1421,8 @@ packages:
   '@vercel/hydrogen@1.0.9':
     resolution: {integrity: sha512-IPAVaALuGAzt2apvTtBs5tB+8zZRzn/yG3AGp8dFyCsw/v5YOuk0Q5s8Z3fayLvJbFpjrKtqRNDZzVJBBU3MrQ==}
 
-  '@vercel/next@4.3.19':
-    resolution: {integrity: sha512-3Pz8zaLD/9QKE5HrXoZ6B8O1jBvIzm6HqFQseQ3biWCijf0s/rHi8MVdzLBaNR8R7j76B08ItEsXEtil2Apvdw==}
+  '@vercel/next@4.3.18':
+    resolution: {integrity: sha512-ih6++AA7/NCcLkMpdsDhr/folMlAKsU1sYUoyOjq4rYE9sSapELtgxls0CArv4ehE2Tt4YwoxBISnKPZKK5SSA==}
 
   '@vercel/nft@0.27.3':
     resolution: {integrity: sha512-oySTdDSzUAFDXpsSLk9Q943o+/Yu/+TCFxnehpFQEf/3khi2stMpTHPVNwFdvZq/Z4Ky93lE+MGHpXCRpMkSCA==}
@@ -1432,8 +1432,8 @@ packages:
   '@vercel/node@3.2.24':
     resolution: {integrity: sha512-KEm50YBmcfRNOw5NfdcqMI4BkP4+5TD9kRwAByHHlIZXLj1NTTknvMF+69sHBYzwpK/SUZIkeo7jTrtcl4g+RQ==}
 
-  '@vercel/python@4.4.1':
-    resolution: {integrity: sha512-q319z8xUoEujGGFSCpmXPBOQqgWTNy0Wlk6sa2NPtuwiWM1CO5uW8EXtNMLVfMEKsvzQCRhKTix5Hvtx1JJ4pw==}
+  '@vercel/python@4.3.1':
+    resolution: {integrity: sha512-pWRApBwUsAQJS8oZ7eKMiaBGbYJO71qw2CZqDFvkTj34FNBZtNIUcWSmqGfJJY5m2pU/9wt8z1CnKIyT9dstog==}
 
   '@vercel/redwood@2.1.8':
     resolution: {integrity: sha512-qBUBqIDxPEYnxRh3tsvTaPMtBkyK/D2tt9tBugNPe0OeYnMCMXVj9SJYbxiDI2GzAEFUZn4Poh63CZtXMDb9Tg==}
@@ -4765,8 +4765,8 @@ packages:
   validate-npm-package-license@3.0.4:
     resolution: {integrity: sha512-DpKm2Ui/xN7/HQKCtpZxoRWBhZ9Z0kqtygG8XCgNQ8ZlDnxuQmWhj566j8fN4Cu3/JmbhsDo7fcAJq4s9h27Ew==}
 
-  vercel@39.0.2:
-    resolution: {integrity: sha512-nXDg7sZtP9rYhCNnoOoD7QtX7Cvt5Ez67z4G2ThF82QZFzBdJgJiDKDjH3Nj6jyOOi0Ek0TF5AA7XsmirOIXLQ==}
+  vercel@37.14.0:
+    resolution: {integrity: sha512-ZSEvhARyJBn4YnEVZULsvti8/OHd5txRCgJqEhNIyo/XXSvBJSvlCjA+SE1zraqn0rqyEOG3+56N3kh1Enk8Tg==}
     engines: {node: '>= 16'}
     hasBin: true
 
@@ -6822,7 +6822,7 @@ snapshots:
       '@vercel/static-config': 3.0.0
       ts-morph: 12.0.0
 
-  '@vercel/next@4.3.19':
+  '@vercel/next@4.3.18':
     dependencies:
       '@vercel/nft': 0.27.3
     transitivePeerDependencies:
@@ -6875,7 +6875,7 @@ snapshots:
       - encoding
       - supports-color
 
-  '@vercel/python@4.4.1': {}
+  '@vercel/python@4.3.1': {}
 
   '@vercel/redwood@2.1.8':
     dependencies:
@@ -10591,15 +10591,15 @@ snapshots:
       spdx-correct: 3.2.0
       spdx-expression-parse: 3.0.1
 
-  vercel@39.0.2:
+  vercel@37.14.0:
     dependencies:
       '@vercel/build-utils': 8.4.12
       '@vercel/fun': 1.1.0
       '@vercel/go': 3.2.0
       '@vercel/hydrogen': 1.0.9
-      '@vercel/next': 4.3.19
+      '@vercel/next': 4.3.18
       '@vercel/node': 3.2.24
-      '@vercel/python': 4.4.1
+      '@vercel/python': 4.3.1
       '@vercel/redwood': 2.1.8
       '@vercel/remix-builder': 2.2.13
       '@vercel/ruby': 2.1.0
