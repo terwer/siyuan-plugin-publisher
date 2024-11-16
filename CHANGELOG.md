@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.23.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.23.0...siyuan-plugin-publisher-v1.23.1) (2024-11-16)
+
+
+### Bug Fixes
+
+* pic upload error in some cases ([79351cc](https://github.com/terwer/siyuan-plugin-publisher/commit/79351cc5178b5a17429eff135b159ca139a20268))
+
+
+### Miscellaneous
+
+* **deps-dev:** bump vercel from 37.14.0 to 39.0.2 ([2f3955b](https://github.com/terwer/siyuan-plugin-publisher/commit/2f3955bb6677f03caf6f688ed87fd5f78fbe6cc3))
+
 ## [1.23.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.22.1...siyuan-plugin-publisher-v1.23.0) (2024-11-08)
 ### Features
 * support stream for short desc ([b70e350](https://github.com/terwer/siyuan-plugin-publisher/commit/b70e3502f911ad80527544482d5abed53179a561))
