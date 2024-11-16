@@ -23,41 +23,14 @@
  * questions.
  */
 
-import { ImageItem, ImageParser, ParsedImage, SiyuanPicgoPostApi } from "zhi-siyuan-picgo"
+import { ImageItem, ImageParser, ParsedImage, SiyuanPicGo } from "zhi-siyuan-picgo"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { ElMessage } from "element-plus"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { StrUtil } from "zhi-common"
 import { isDev } from "~/src/utils/constants.ts"
-import { SiyuanKernelApi } from "zhi-siyuan-api"
 import { BlogConfig, PicbedServiceTypeEnum } from "zhi-blog-api"
 import { isFileExists } from "~/src/utils/siyuanUtils.ts"
-
-let needUpdate = false
-const checkConfig = async (siyuanApi: SiyuanKernelApi, picgo: SiyuanPicgoPostApi) => {
-  return new Promise((resolve, _reject) => {
-    if (picgo.cfgUpdating) {
-      needUpdate = true
-      siyuanApi.pushMsg({
-        msg: "检测到旧配置，正在迁移配置，请勿进行任何操作...",
-        timeout: 1000,
-      })
-      console.warn("检测到旧配置，正在迁移配置，请勿进行任何操作...")
-      setTimeout(checkConfig, 1000)
-    } else {
-      if (needUpdate) {
-        siyuanApi.pushMsg({
-          msg: "PicGo 图床历史配置迁移完成",
-          timeout: 7000,
-        })
-        console.log("PicGo 图床历史配置迁移完成")
-        needUpdate = false
-      }
-      console.log("picgo instance is ready")
-      resolve(picgo)
-    }
-  })
-}
 
 /**
  * Picgo 桥接 API，用于上传并替换图片链接
@@ -68,7 +41,6 @@ const checkConfig = async (siyuanApi: SiyuanKernelApi, picgo: SiyuanPicgoPostApi
 const usePicgoBridge = () => {
   const logger = createAppLogger("use-picgo-bridge")
   const { siyuanConfig, kernelApi, blogApi } = useSiyuanApi()
-  const picgoPostApi = new SiyuanPicgoPostApi(siyuanConfig as any, isDev)
 
   /**
    * 处理图片上传与替换
@@ -77,9 +49,6 @@ const usePicgoBridge = () => {
    * @param mdContent - 正文，如果为空，会用 pageId 去获取最新
    */
   const handlePicgo = async (pageId: string, mdContent?: string) => {
-    // 检测配置迁移
-    await checkConfig(kernelApi, picgoPostApi)
-
     let md: string = mdContent
     const picgoErrMsg = "文档可能已经成功发布，但是图片上传失败或者当前场景不支持图片上传，详细信息=>"
 
@@ -96,6 +65,8 @@ const usePicgoBridge = () => {
         md = siyuanPost.markdown
       }
 
+      // 通用方法获取，保证单例
+      const picgoPostApi = await SiyuanPicGo.getInstance(siyuanConfig, isDev)
       const picgoPostResult = await picgoPostApi.uploadPostImagesToBed(siyuanData.pageId, siyuanData.meta, md)
       // 有图片才上传
       if (picgoPostResult.hasImages) {
@@ -138,6 +109,8 @@ const usePicgoBridge = () => {
 
     const attrs = await kernelApi.getBlockAttrs(pageId)
     const baseUrl = siyuanConfig.apiUrl ?? ""
+    // 通用方法获取，保证单例
+    const picgoPostApi = await SiyuanPicGo.getInstance(siyuanConfig, isDev)
     const imageItemArray = await picgoPostApi.doConvertImagesToImagesItemArray(attrs, retImgs, baseUrl)
     logger.debug("imageItemArray=>", imageItemArray)
     return imageItemArray
@@ -187,7 +160,7 @@ const usePicgoBridge = () => {
     handlePicgo,
     getImageItemsFromMd,
     getPicbedServiceType,
-    checkPicgoInstalled
+    checkPicgoInstalled,
   }
 }
 
