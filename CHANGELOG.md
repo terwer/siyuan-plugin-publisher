@@ -1,5 +1,8 @@
 # Changelog
 
+## [1.24.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.24.0...siyuan-plugin-publisher-v1.24.1) (2024-11-17)
+### Bug Fixes
+* copy file error in some cases ([d0ddb15](https://github.com/terwer/siyuan-plugin-publisher/commit/d0ddb15f39a44c087227c34b06fcb8de3c05df32))
 ## [1.24.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.23.1...siyuan-plugin-publisher-v1.24.0) (2024-11-16)
 ### Features
 * [#058](https://github.com/terwer/siyuan-plugin-publisher/issues/058) [#1009](https://github.com/terwer/siyuan-plugin-publisher/issues/1009) 全面适配 docker（实验性） ([901e24f](https://github.com/terwer/siyuan-plugin-publisher/commit/901e24f64abe118a9df2dde15501a088257525e0))
@@ -18,7 +21,6 @@
 * support read halo tags ([4afd364](https://github.com/terwer/siyuan-plugin-publisher/commit/4afd3648baf0644f78a4f5ffc6efb43836524b51))
 * support stream for short desc ([b70e350](https://github.com/terwer/siyuan-plugin-publisher/commit/b70e3502f911ad80527544482d5abed53179a561))
 * 深度优化挂件版本 ([128a07b](https://github.com/terwer/siyuan-plugin-publisher/commit/128a07b46b87e617409c8150e4fa8eb716f359ab))
-### Bug Fixes
 * [#1035](https://github.com/terwer/siyuan-plugin-publisher/issues/1035) 代码块里面的文本不应该被错误转义 ([8fc148f](https://github.com/terwer/siyuan-plugin-publisher/commit/8fc148f308c593af0888861f453c1f8c964bf55e))
 * [#1109](https://github.com/terwer/siyuan-plugin-publisher/issues/1109) support telegra.ph use picgo ([252d927](https://github.com/terwer/siyuan-plugin-publisher/commit/252d92761bc22d56b4e95470b6a76b023a4b6052))
 * [#1144](https://github.com/terwer/siyuan-plugin-publisher/issues/1144) the publication vanished upon being bolded on zhihu. ([74b6750](https://github.com/terwer/siyuan-plugin-publisher/commit/74b6750ba633711d5c468deb899c50eb30d4a7dd))
