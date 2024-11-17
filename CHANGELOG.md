@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.24.2](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.24.1...siyuan-plugin-publisher-v1.24.2) (2024-11-17)
+
+
+### Bug Fixes
+
+* copy file error in some cases ([8f9b45b](https://github.com/terwer/siyuan-plugin-publisher/commit/8f9b45b6fb7d3b044e172f276389319ff02e4f26))
+
 ## [1.24.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.24.0...siyuan-plugin-publisher-v1.24.1) (2024-11-17)
 ### Bug Fixes
 * copy file error in some cases ([d0ddb15](https://github.com/terwer/siyuan-plugin-publisher/commit/d0ddb15f39a44c087227c34b06fcb8de3c05df32))
