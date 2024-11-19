@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.25.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.24.2...siyuan-plugin-publisher-v1.25.0) (2024-11-19)
+
+
+### Features
+
+* support outline for halo ([954be84](https://github.com/terwer/siyuan-plugin-publisher/commit/954be8420482e0b56abe7577f4678d172bf03054))
+
 ## [1.24.2](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.24.1...siyuan-plugin-publisher-v1.24.2) (2024-11-17)
 ### Bug Fixes
 * copy file error in some cases ([d0ddb15](https://github.com/terwer/siyuan-plugin-publisher/commit/d0ddb15f39a44c087227c34b06fcb8de3c05df32))
