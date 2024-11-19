@@ -1,18 +1,13 @@
 # Changelog
 
 ## [1.25.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.24.2...siyuan-plugin-publisher-v1.25.0) (2024-11-19)
-
-
 ### Features
-
 * support outline for halo ([954be84](https://github.com/terwer/siyuan-plugin-publisher/commit/954be8420482e0b56abe7577f4678d172bf03054))
-
 ## [1.24.2](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.24.1...siyuan-plugin-publisher-v1.24.2) (2024-11-17)
 ### Bug Fixes
 * copy file error in some cases ([d0ddb15](https://github.com/terwer/siyuan-plugin-publisher/commit/d0ddb15f39a44c087227c34b06fcb8de3c05df32))
 ## [1.24.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.24.0...siyuan-plugin-publisher-v1.24.1) (2024-11-17)
 ## [1.24.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.23.1...siyuan-plugin-publisher-v1.24.0) (2024-11-16)
-### Features
 * [#058](https://github.com/terwer/siyuan-plugin-publisher/issues/058) [#1009](https://github.com/terwer/siyuan-plugin-publisher/issues/1009) 全面适配 docker（实验性） ([901e24f](https://github.com/terwer/siyuan-plugin-publisher/commit/901e24f64abe118a9df2dde15501a088257525e0))
 * [#1009](https://github.com/terwer/siyuan-plugin-publisher/issues/1009) resolve compatibility issues with Docker ([cbef25e](https://github.com/terwer/siyuan-plugin-publisher/commit/cbef25ef042f58104592806e4b126c5266b16c16))
 * [#1053](https://github.com/terwer/siyuan-plugin-publisher/issues/1053) 新增发布平台 telegra.ph - cookie 验证 ([da6e5c7](https://github.com/terwer/siyuan-plugin-publisher/commit/da6e5c75cec3c2e896eaa3193fce069f6156b279))
