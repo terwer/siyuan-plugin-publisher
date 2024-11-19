@@ -33,6 +33,7 @@ import sypIdUtil from "~/src/utils/sypIdUtil.ts"
 import { PostRequest } from "@halo-dev/api-client"
 import { HaloPostMeta } from "~/src/adaptors/api/halo/HaloPostMeta.ts"
 import FormDataUtils from "~/src/utils/FormDataUtils.ts"
+import HaloUtils from "~/src/adaptors/api/halo/haloUtils.ts"
 
 /**
  * Halo API 适配器 V2.9.0
@@ -103,9 +104,9 @@ class HaloApiAdaptor extends BaseBlogApi {
     if (this.cfg.pageType === "markdown") {
       params.content.raw = post.markdown
     } else {
-      params.content.raw = post.html
+      params.content.raw = HaloUtils.addIdToH1_H6(post.html)
     }
-    params.content.content = post.html
+    params.content.content = HaloUtils.addIdToH1_H6(post.html)
 
     if (StrUtil.isEmptyString(post.shortDesc)) {
       params.post.spec.excerpt.autoGenerate = true
@@ -175,9 +176,9 @@ class HaloApiAdaptor extends BaseBlogApi {
       if (params.content.rawType === "markdown") {
         params.content.raw = post.markdown
       } else {
-        params.content.raw = post.html
+        params.content.raw = HaloUtils.addIdToH1_H6(post.html)
       }
-      params.content.content = post.html
+      params.content.content = HaloUtils.addIdToH1_H6(post.html)
 
       if (StrUtil.isEmptyString(post.shortDesc)) {
         params.post.spec.excerpt.autoGenerate = true
