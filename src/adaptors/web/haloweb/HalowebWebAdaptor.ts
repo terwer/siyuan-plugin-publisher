@@ -29,6 +29,7 @@ import { AliasTranslator, JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { HalowebPostMeta } from "~/src/adaptors/web/haloweb/HalowebPostMeta.ts"
 import sypIdUtil from "~/src/utils/sypIdUtil"
 import FormDataUtils from "~/src/utils/FormDataUtils.ts"
+import HaloUtils from "~/src/adaptors/api/halo/haloUtils.ts"
 
 /**
  * Halo 网页授权适配器
@@ -128,9 +129,9 @@ class HalowebWebAdaptor extends BaseWebApi {
     if (this.cfg.pageType === "markdown") {
       params.content.raw = post.markdown
     } else {
-      params.content.raw = post.html
+      params.content.raw = HaloUtils.addIdToH1_H6(post.html)
     }
-    params.content.content = post.html
+    params.content.content = HaloUtils.addIdToH1_H6(post.html)
 
     if (StrUtil.isEmptyString(post.shortDesc)) {
       params.post.spec.excerpt.autoGenerate = true
@@ -200,9 +201,9 @@ class HalowebWebAdaptor extends BaseWebApi {
       if (params.content.rawType === "markdown") {
         params.content.raw = post.markdown
       } else {
-        params.content.raw = post.html
+        params.content.raw = HaloUtils.addIdToH1_H6(post.html)
       }
-      params.content.content = post.html
+      params.content.content = HaloUtils.addIdToH1_H6(post.html)
 
       if (StrUtil.isEmptyString(post.shortDesc)) {
         params.post.spec.excerpt.autoGenerate = true
