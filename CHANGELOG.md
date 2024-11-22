@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.25.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.25.0...siyuan-plugin-publisher-v1.25.1) (2024-11-22)
+
+
+### Bug Fixes
+
+* #[#1461](https://github.com/terwer/siyuan-plugin-publisher/issues/1461) support picgo for halo2 ([79965f7](https://github.com/terwer/siyuan-plugin-publisher/commit/79965f7a6c45fc6166f862ff2ae35116e2ca117b))
+
+
+### Miscellaneous
+
+* update docs ([d691326](https://github.com/terwer/siyuan-plugin-publisher/commit/d6913260779396a23bae16c58d228d8714d11726))
+
 ## [1.25.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.24.2...siyuan-plugin-publisher-v1.25.0) (2024-11-19)
 ### Features
 * support outline for halo ([954be84](https://github.com/terwer/siyuan-plugin-publisher/commit/954be8420482e0b56abe7577f4678d172bf03054))
