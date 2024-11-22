@@ -49,10 +49,10 @@ const { t } = useVueI18n()
       不会配置，或者配置遇到问题？ 请加QQ群
       <span style="font-weight: bold; color: red">
         <a
-          href="https://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=1Q1-wOLkBaG-iD0MBnNhNL25tbLSCwZx&authKey=tBdJDGuWuXK%2B77hHlwwT6y8UAp9AGZTwQq6RzUa%2ByX81HCSHu4XVGqY0gbsBUcW0&noverify=0&group_code=895063267"
+          href="https://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=1Q1-wOLkBaG-iD0MBnNhNL25tbLSCwZx&authKey=tBdJDGuWuXK%2B77hHlwwT6y8UAp9AGZTwQq6RzUa%2ByX81HCSHu4XVGqY0gbsBUcW0&noverify=0&group_code=722632752"
           target="_blank"
         >
-          895063267
+          722632752
         </a>
       </span>
       讨论。
@@ -60,7 +60,7 @@ const { t } = useVueI18n()
 
     <div class="setting-help">
       需要详细的配置指导？请查看在线文档
-      <a href="https://blog.terwer.space/s/20230810132040-nn4q7vs" target="_blank">平台配置指南</a>
+      <a href="https://siyuan.wiki/s/20230810132040-nn4q7vs" target="_blank">平台配置指南</a>
     </div>
 
     <div class="tips-form">
