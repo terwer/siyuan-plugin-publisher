@@ -60,8 +60,8 @@ importers:
         specifier: ^1.4.2
         version: 1.4.2
       siyuan:
-        specifier: ^1.0.5
-        version: 1.0.5
+        specifier: ^1.0.6
+        version: 1.0.6
       telegraph.md:
         specifier: ^0.0.1
         version: 0.0.1
@@ -2654,6 +2654,7 @@ packages:
   eslint@8.57.0:
     resolution: {integrity: sha512-dZ6+mexnaTIbSBZWgou51U6OmzIhYM2VcNdtiTtI7qPNZm35Akpr0f6vtw3w1Kmn5PYo+tZVfh13WrhpS6oLqQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
 
   espree@9.6.1:
@@ -4264,8 +4265,8 @@ packages:
   simple-xmlrpc@1.4.2:
     resolution: {integrity: sha512-2gFNsEjudzyAqCYQ1XmsETHbmG2vp9jrIeqb+Mxnb/xgnESWfMlXrSEHh10lYIb1hXeco+vSWAAuk2NLl26yFw==}
 
-  siyuan@1.0.5:
-    resolution: {integrity: sha512-cTE2WETYSehfm+FoXeAg7lGoGCPkMMCezwUloGS+P5nIEA/IGLUTJXyhML3yTkW92r7qV3oCsm0Ozr13UV94jQ==}
+  siyuan@1.0.6:
+    resolution: {integrity: sha512-ogCCzhz0CBr56uIWdd//an58FFw+lJQXsrdOZlR2EMnVGjjvfGTEjNX7+ok49p4+D1ytxSq9oTtlfHCIpGUw7w==}
 
   slash@3.0.0:
     resolution: {integrity: sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==}
@@ -9996,7 +9997,7 @@ snapshots:
       byte-base64: 1.1.0
       sax: 1.4.1
 
-  siyuan@1.0.5: {}
+  siyuan@1.0.6: {}
 
   slash@3.0.0: {}
 
