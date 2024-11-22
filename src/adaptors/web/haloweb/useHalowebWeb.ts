@@ -70,10 +70,12 @@ const useHalowebWeb = async (key?: string, newCfg?: HalowebConfig) => {
       const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, LEGENCY_SHARED_PROXT_MIDDLEWARE)
       const url = new URL(dynCfg.authUrl)
       cfg = new HalowebConfig(url.origin, middlewareUrl)
+      cfg.picbedService = PicbedServiceTypeEnum.Bundled
       logger.debug("Configuration is empty, using default environment variables.")
     } else {
       logger.info("Using configuration from settings...")
     }
+    // 下面是强制设置的配置
     const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, LEGENCY_SHARED_PROXT_MIDDLEWARE)
     if (StrUtil.isEmptyString(cfg.middlewareUrl)) {
       cfg.middlewareUrl = middlewareUrl
@@ -95,7 +97,6 @@ const useHalowebWeb = async (key?: string, newCfg?: HalowebConfig) => {
   // picbed service
   cfg.picgoPicbedSupported = true
   cfg.bundledPicbedSupported = true
-  cfg.picbedService = PicbedServiceTypeEnum.Bundled
   const webApi = new HalowebWebAdaptor(appInstance, cfg)
 
   return {

@@ -38,18 +38,12 @@ importers:
       element-plus:
         specifier: ^2.8.7
         version: 2.8.7(vue@3.5.12(typescript@5.6.3))
-      gray-matter:
-        specifier: ^4.0.3
-        version: 4.0.3
       iframe-resizer:
         specifier: ^5.3.2
         version: 5.3.2
       js-base64:
         specifier: ^3.7.7
         version: 3.7.7
-      js-yaml:
-        specifier: ^4.1.0
-        version: 4.1.0
       katex:
         specifier: ^0.16.11
         version: 0.16.11
@@ -117,8 +111,8 @@ importers:
         specifier: ^2.23.0
         version: 2.23.0(typescript@5.6.3)
       zhi-siyuan-picgo:
-        specifier: 1.11.5
-        version: 1.11.5(typescript@5.6.3)
+        specifier: 1.11.6
+        version: 1.11.6(typescript@5.6.3)
       zhi-xmlrpc-middleware:
         specifier: ^0.6.21
         version: 0.6.21(typescript@5.6.3)
@@ -2660,7 +2654,6 @@ packages:
   eslint@8.57.0:
     resolution: {integrity: sha512-dZ6+mexnaTIbSBZWgou51U6OmzIhYM2VcNdtiTtI7qPNZm35Akpr0f6vtw3w1Kmn5PYo+tZVfh13WrhpS6oLqQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
-    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
 
   espree@9.6.1:
@@ -2921,10 +2914,6 @@ packages:
 
   graphemer@1.4.0:
     resolution: {integrity: sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==}
-
-  gray-matter@4.0.3:
-    resolution: {integrity: sha512-5v6yZd4JK3eMI3FqqCouswVqwugaA9r4dNZB1wwcmrD02QkV5H0y7XBQW8QwQqEaZY1pM9aqORSORhJRdNK44Q==}
-    engines: {node: '>=6.0'}
 
   has-flag@4.0.0:
     resolution: {integrity: sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==}
@@ -3290,10 +3279,6 @@ packages:
 
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
-
-  kind-of@6.0.3:
-    resolution: {integrity: sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==}
-    engines: {node: '>=0.10.0'}
 
   known-css-properties@0.31.0:
     resolution: {integrity: sha512-sBPIUGTNF0czz0mwGGUoKKJC8Q7On1GPbCSFPfyEsfHb2DyBG0Y4QtV+EVWpINSaiGKZblDNuF5AezxSgOhesQ==}
@@ -4212,10 +4197,6 @@ packages:
   sdk-base@2.0.1:
     resolution: {integrity: sha512-eeG26wRwhtwYuKGCDM3LixCaxY27Pa/5lK4rLKhQa7HBjJ3U3Y+f81MMZQRsDw/8SC2Dao/83yJTXJ8aULuN8Q==}
 
-  section-matter@1.0.0:
-    resolution: {integrity: sha512-vfD3pmTzGpufjScBh50YHKzEu2lxBWhVEHsNGoEXmCmn2hKGfeNLYMzCJpe8cD7gqX7TJluOVpBkAequ6dgMmA==}
-    engines: {node: '>=4'}
-
   semver@5.7.2:
     resolution: {integrity: sha512-cBznnQ9KjJqU67B52RMC65CMarK2600WFnbkcaiwWq3xy/5haFJlshgnpjovMVJ+Hff49d8GEn0b87C5pDQ10g==}
     hasBin: true
@@ -4379,10 +4360,6 @@ packages:
   strip-ansi@7.1.0:
     resolution: {integrity: sha512-iq6eVVI64nQQTRYq2KtEg2d2uU7LElhTJwsH4YzIHZshxlgZms/wIc4VoDQTlG/IvVIrBKG06CrZnp0qv7hkcQ==}
     engines: {node: '>=12'}
-
-  strip-bom-string@1.0.0:
-    resolution: {integrity: sha512-uCC2VHvQRYu+lMh4My/sFNmF2klFymLX1wHJeXnbEJERpV/ZsVuonzerjfrGpIGF7LBVa1O7i9kjiWvJiFck8g==}
-    engines: {node: '>=0.10.0'}
 
   strip-final-newline@2.0.0:
     resolution: {integrity: sha512-BrpvfNAE3dcvq7ll3xVumzjKjZQ5tI1sEUIKr3Uoks0XUl45St3FlatVqef9prk4jRDzhW6WZg+3bk93y6pLjA==}
@@ -4643,11 +4620,11 @@ packages:
   unist-util-visit-parents@3.1.1:
     resolution: {integrity: sha512-1KROIZWo6bcMrZEwiH2UrXDyalAa0uqzWCxCJj6lPOvTve2WkfgCytoDTPaMnodXh1WrXOq0haVYHj99ynJlsg==}
 
-  universal-picgo-store@1.11.5:
-    resolution: {integrity: sha512-q1awRIc+fwQky8dYHa68Owt4p0vOipW6qs1MpGqxcufMAcQzalguos7QQ4vGbnQERvsSpKUoSnCLx6TAkMMGgA==}
+  universal-picgo-store@1.11.6:
+    resolution: {integrity: sha512-ih2wYjTvqExrTLzJAjSBv//M+aahQH9Z3tQ/X1sc3brbyi6Q4dN/+UpvuzX/J834hmjWtK8Z4UGsDwLHOQADqA==}
 
-  universal-picgo@1.11.5:
-    resolution: {integrity: sha512-u/gIOC3Aw6W5/0ZOJlBIN/KY7qD2kdCxZm1CjoYlSu2nq6YDS+AZVnU+T3ZLBWCI8dDLxzJOsQOdR/fIw7voCA==}
+  universal-picgo@1.11.6:
+    resolution: {integrity: sha512-FepSqBNYCdPUegSSv+nvfSCP7ZNP+osPuKUP9b61uXRVgITuEKPy+lM2HMYIuyfHvDmRIzdQp2YOUCljSIYmCg==}
 
   universal-user-agent@6.0.1:
     resolution: {integrity: sha512-yCzhz6FN2wU1NiiQRogkTQszlQSlpWaw8SvVegAc+bDxbzHgh1vX8uIe8OYyMH6DwH+sdTJsgMl36+mSMdRJIQ==}
@@ -5108,8 +5085,8 @@ packages:
   zhi-siyuan-api@2.23.0:
     resolution: {integrity: sha512-T4DSd5wR3lsBCdCrKefuoleMfeOjF5yOJOXMCeXlw7EQduz4n4IkP8dHixP/GkSSQdEJHc1Ia0jbUlu9nQka1w==}
 
-  zhi-siyuan-picgo@1.11.5:
-    resolution: {integrity: sha512-3wYP9ukypOzjBZFoqQLMGkcXcpOpYI2Rj6NZifDSmKkwmW/FRRNA1fegnjyllX50pZm6SPxcntZ2ggiyQznGzA==}
+  zhi-siyuan-picgo@1.11.6:
+    resolution: {integrity: sha512-i6m9Ybs3pGS08DAkhrEDKxjrKZld6CgGseQ3cSeT4XsrnAneSNtezq5eO2R8JKW56yW7a9PFmFWJajZoG5pQEA==}
 
   zhi-xmlrpc-middleware@0.6.21:
     resolution: {integrity: sha512-PIAYQUaRmu+qUK4ZnqefyhPz3CkEkELmCWoyHIorfLrcZ6nyRIFFvyraCslQQtaMlk9asKr9QDg9WaNicU20Bg==}
@@ -8601,13 +8578,6 @@ snapshots:
 
   graphemer@1.4.0: {}
 
-  gray-matter@4.0.3:
-    dependencies:
-      js-yaml: 3.14.1
-      kind-of: 6.0.3
-      section-matter: 1.0.0
-      strip-bom-string: 1.0.0
-
   has-flag@4.0.0: {}
 
   has-own-prop@2.0.0: {}
@@ -8983,8 +8953,6 @@ snapshots:
   keyv@4.5.4:
     dependencies:
       json-buffer: 3.0.1
-
-  kind-of@6.0.3: {}
 
   known-css-properties@0.31.0: {}
 
@@ -9970,11 +9938,6 @@ snapshots:
     dependencies:
       get-ready: 1.0.0
 
-  section-matter@1.0.0:
-    dependencies:
-      extend-shallow: 2.0.1
-      kind-of: 6.0.3
-
   semver@5.7.2: {}
 
   semver@6.3.1: {}
@@ -10135,8 +10098,6 @@ snapshots:
   strip-ansi@7.1.0:
     dependencies:
       ansi-regex: 6.1.0
-
-  strip-bom-string@1.0.0: {}
 
   strip-final-newline@2.0.0: {}
 
@@ -10440,7 +10401,7 @@ snapshots:
       '@types/unist': 2.0.11
       unist-util-is: 4.1.0
 
-  universal-picgo-store@1.11.5:
+  universal-picgo-store@1.11.6:
     dependencies:
       '@commonify/lowdb': 3.0.0
       comment-json: 4.2.5
@@ -10448,7 +10409,7 @@ snapshots:
       ts-localstorage: 3.1.0
       zhi-lib-base: 0.8.0
 
-  universal-picgo@1.11.5:
+  universal-picgo@1.11.6:
     dependencies:
       '@aws-sdk/client-s3': 3.687.0
       '@aws-sdk/s3-request-presigner': 3.687.0
@@ -10465,7 +10426,7 @@ snapshots:
       mime: 4.0.4
       mime-types: 2.1.35
       queue: 7.0.0
-      universal-picgo-store: 1.11.5
+      universal-picgo-store: 1.11.6
       zhi-lib-base: 0.8.0
     transitivePeerDependencies:
       - aws-crt
@@ -10985,10 +10946,10 @@ snapshots:
     transitivePeerDependencies:
       - typescript
 
-  zhi-siyuan-picgo@1.11.5(typescript@5.6.3):
+  zhi-siyuan-picgo@1.11.6(typescript@5.6.3):
     dependencies:
       js-md5: 0.8.3
-      universal-picgo: 1.11.5
+      universal-picgo: 1.11.6
       uuid: 9.0.1
       zhi-common: 1.33.0(typescript@5.6.3)
       zhi-device: 2.11.0
