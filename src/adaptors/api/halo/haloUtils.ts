@@ -23,9 +23,6 @@
  * questions.
  */
 
-import * as yaml from "js-yaml"
-import * as matter from "gray-matter"
-
 /**
  * Halo 平台工具类
  *
@@ -34,27 +31,6 @@ import * as matter from "gray-matter"
  * @since 1.15.0
  */
 class HaloUtils {
-  private static options = {
-    engines: {
-      yaml: {
-        parse: (input: string) => yaml.load(input) as object,
-        stringify: (data: object) => {
-          return yaml.dump(data, {
-            styles: { "!!null": "empty" },
-          })
-        },
-      },
-    },
-  }
-
-  public static readMatter(content: string) {
-    return matter(content, this.options)
-  }
-
-  public static mergeMatter(content: string, data: object) {
-    return matter.stringify(content, data, this.options)
-  }
-
   /**
    * 将正文 h1-h6的标签加上 id，例如 <h1 xxx>标题1</h1> 转换成 <h1 id="标题1">标题1</h1>
    *
