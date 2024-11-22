@@ -1,10 +1,14 @@
 # Changelog
 
+## [1.25.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.25.0...siyuan-plugin-publisher-v1.25.1) (2024-11-22)
+### Bug Fixes
+* #[#1461](https://github.com/terwer/siyuan-plugin-publisher/issues/1461) support picgo for halo2 ([79965f7](https://github.com/terwer/siyuan-plugin-publisher/commit/79965f7a6c45fc6166f862ff2ae35116e2ca117b))
+### Miscellaneous
+* update docs ([df4c220](https://github.com/terwer/siyuan-plugin-publisher/commit/df4c2201d24136aa535ff9174ad733cb3e2ecf50))
 ## [1.25.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.24.2...siyuan-plugin-publisher-v1.25.0) (2024-11-19)
 ### Features
 * support outline for halo ([954be84](https://github.com/terwer/siyuan-plugin-publisher/commit/954be8420482e0b56abe7577f4678d172bf03054))
 ## [1.24.2](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.24.1...siyuan-plugin-publisher-v1.24.2) (2024-11-17)
-### Bug Fixes
 * copy file error in some cases ([d0ddb15](https://github.com/terwer/siyuan-plugin-publisher/commit/d0ddb15f39a44c087227c34b06fcb8de3c05df32))
 ## [1.24.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.24.0...siyuan-plugin-publisher-v1.24.1) (2024-11-17)
 ## [1.24.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.23.1...siyuan-plugin-publisher-v1.24.0) (2024-11-16)
@@ -125,7 +129,6 @@
 * 新增菜单开关 ([8589364](https://github.com/terwer/siyuan-plugin-publisher/commit/8589364edb9b3c31f45d5a99296de9f86d7dfd66))
 * 自动保存属性，取消不必要的提示 ([9f9926d](https://github.com/terwer/siyuan-plugin-publisher/commit/9f9926d39771d8870ea57652e203223bdcfd6940))
 * 部分场景适配网页版 ([3eaf1d2](https://github.com/terwer/siyuan-plugin-publisher/commit/3eaf1d2bcd62fad5fd18b953d5d9c58831734865))
-### Miscellaneous
 * add 1.20.2 release notes ([644c595](https://github.com/terwer/siyuan-plugin-publisher/commit/644c595aaf17e15c4444d686dc150e046f459bf5))
 * add auto-import type define ([aa343d0](https://github.com/terwer/siyuan-plugin-publisher/commit/aa343d084cce390c76c6b29ce1ab26d91fa5c034))
 * **deps-dev:** bump @types/crypto-js from 4.1.3 to 4.2.0 ([2042f17](https://github.com/terwer/siyuan-plugin-publisher/commit/2042f1720f416208107375a0918b94b6887b8515))
@@ -192,7 +195,6 @@
 * release 1.23.1 ([57ae65b](https://github.com/terwer/siyuan-plugin-publisher/commit/57ae65bf3bfe0b8cba7f69b712abe280814b7f45))
 * update ci ([a429bfd](https://github.com/terwer/siyuan-plugin-publisher/commit/a429bfdff34d433e5ac22ef1e049e45cf0e01936))
 * update deps ([9e0e0c9](https://github.com/terwer/siyuan-plugin-publisher/commit/9e0e0c90d4f2cc201485d0222f17b0ef92610e90))
-* update docs ([df4c220](https://github.com/terwer/siyuan-plugin-publisher/commit/df4c2201d24136aa535ff9174ad733cb3e2ecf50))
 * update fmt ([b8584a8](https://github.com/terwer/siyuan-plugin-publisher/commit/b8584a8ecfaed1e6cd534f6c0fcf67a55c32daf2))
 * update icon and preview ([b0acc6d](https://github.com/terwer/siyuan-plugin-publisher/commit/b0acc6dcfb2c749e695338b3151695c851718620))
 * 使用软链接构建项目，提升效率 ([c51abe8](https://github.com/terwer/siyuan-plugin-publisher/commit/c51abe8912a989f531b5c4b57a62ae32c2db63c4))
