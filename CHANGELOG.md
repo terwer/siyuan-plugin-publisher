@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.27.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.26.0...siyuan-plugin-publisher-v1.27.0) (2024-11-26)
+
+
+### Features
+
+* dynamic yaml cfg support hexo ([d4d054e](https://github.com/terwer/siyuan-plugin-publisher/commit/d4d054eb51145e7e0cd17d52969726a1c44afa8e))
+* dynamic yaml cfg support hugo ([808b9ec](https://github.com/terwer/siyuan-plugin-publisher/commit/808b9eca73287e926b67741147cd0dbd622b8d06))
+* dynamic yaml cfg support jekyll ([47092dc](https://github.com/terwer/siyuan-plugin-publisher/commit/47092dc26545835e1e58574096540ba99fd04095))
+* dynamic yaml cfg support vuepress2 ([e51e9aa](https://github.com/terwer/siyuan-plugin-publisher/commit/e51e9aaff359a0491783878da7cf76c88e72b74a))
+* fix zhihu columns ([e88b9d0](https://github.com/terwer/siyuan-plugin-publisher/commit/e88b9d0f79e6705aae2f61d2deb87c47966f0dba))
+* zhihu is ok now ([c144e9e](https://github.com/terwer/siyuan-plugin-publisher/commit/c144e9e7664e601116df476a40060e8c429b4115))
+
+
+### Miscellaneous
+
+* **deps-dev:** bump vercel from 37.14.0 to 39.1.1 ([27f1a42](https://github.com/terwer/siyuan-plugin-publisher/commit/27f1a42e6edce1bc10d2a72a63f6d0af2420036a))
+
 ## [1.26.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.25.1...siyuan-plugin-publisher-v1.26.0) (2024-11-26)
 ### Features
 * support dynamic yaml cfg ([c7c300e](https://github.com/terwer/siyuan-plugin-publisher/commit/c7c300e6914dc1fbbf55b299595d312a97dab149))
