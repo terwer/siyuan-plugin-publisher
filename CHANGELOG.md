@@ -1,12 +1,16 @@
 # Changelog
 
+## [1.26.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.25.1...siyuan-plugin-publisher-v1.26.0) (2024-11-26)
+### Features
+* support dynamic yaml cfg ([c7c300e](https://github.com/terwer/siyuan-plugin-publisher/commit/c7c300e6914dc1fbbf55b299595d312a97dab149))
+* support formatter cfg ([ca96c09](https://github.com/terwer/siyuan-plugin-publisher/commit/ca96c09281b6934edd63d2f690b64ee88f72c048))
+* try to fix zhihu ([b49ca19](https://github.com/terwer/siyuan-plugin-publisher/commit/b49ca19ccecf913e06d4f558d95090a481fdec08))
+### Miscellaneous
+* update docs ([df4c220](https://github.com/terwer/siyuan-plugin-publisher/commit/df4c2201d24136aa535ff9174ad733cb3e2ecf50))
 ## [1.25.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.25.0...siyuan-plugin-publisher-v1.25.1) (2024-11-22)
 ### Bug Fixes
 * #[#1461](https://github.com/terwer/siyuan-plugin-publisher/issues/1461) support picgo for halo2 ([79965f7](https://github.com/terwer/siyuan-plugin-publisher/commit/79965f7a6c45fc6166f862ff2ae35116e2ca117b))
-### Miscellaneous
-* update docs ([df4c220](https://github.com/terwer/siyuan-plugin-publisher/commit/df4c2201d24136aa535ff9174ad733cb3e2ecf50))
 ## [1.25.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.24.2...siyuan-plugin-publisher-v1.25.0) (2024-11-19)
-### Features
 * support outline for halo ([954be84](https://github.com/terwer/siyuan-plugin-publisher/commit/954be8420482e0b56abe7577f4678d172bf03054))
 ## [1.24.2](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.24.1...siyuan-plugin-publisher-v1.24.2) (2024-11-17)
 * copy file error in some cases ([d0ddb15](https://github.com/terwer/siyuan-plugin-publisher/commit/d0ddb15f39a44c087227c34b06fcb8de3c05df32))
