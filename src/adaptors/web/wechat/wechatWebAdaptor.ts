@@ -30,6 +30,7 @@ import { BlogConfig, MediaObject, PageTypeEnum, Post, UserBlog } from "zhi-blog-
 import { toRaw } from "vue"
 import _ from "lodash-es"
 import { fileToBuffer } from "~/src/utils/polyfillUtils.ts"
+import {MockBrowser} from "~/src/utils/MockBrowser.ts";
 
 /**
  * 微信公众号网页授权适配器
@@ -551,6 +552,7 @@ class WechatWebAdaptor extends BaseWebApi {
 
     const mergedHeaders = {
       ...Object.fromEntries(reqHeaderMap),
+      "User-Agent": MockBrowser.HEADERS.MACOS_CHROME["User-Agent"],
       ...headers,
     }
 
@@ -573,6 +575,7 @@ class WechatWebAdaptor extends BaseWebApi {
     const header = {
       Cookie: this.cfg.password,
       Referer: "https://mp.weixin.qq.com/cgi-bin/appmsg",
+      "User-Agent": MockBrowser.HEADERS.MACOS_CHROME["User-Agent"],
     }
 
     const resJson = await this.webFormFetch(url, [header], formData, true)

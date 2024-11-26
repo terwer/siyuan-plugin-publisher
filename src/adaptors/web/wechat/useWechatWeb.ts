@@ -32,6 +32,7 @@ import { Utils } from "~/src/utils/utils.ts"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { WechatWebAdaptor } from "~/src/adaptors/web/wechat/wechatWebAdaptor.ts"
 import { LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
+import { PicbedServiceTypeEnum } from "zhi-blog-api"
 
 /**
  * 用于获取WechatWeb的API的自定义Hook
@@ -60,6 +61,7 @@ const useWechatWeb = async (key?: string, newCfg?: WechatConfig) => {
       // 从环境变量获取Wechat的cookie
       const wechatCookie = Utils.emptyOrDefault(process.env.VITE_WECHAT_AUTH_TOKEN, "")
       cfg = new WechatConfig("", wechatCookie, middlewareUrl)
+      cfg.picbedService = PicbedServiceTypeEnum.Bundled
       logger.debug("Configuration is empty, using default environment variables.")
     } else {
       logger.info("Using configuration from settings...")
