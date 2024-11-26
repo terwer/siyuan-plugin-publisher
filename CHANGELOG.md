@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.28.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.27.0...siyuan-plugin-publisher-v1.28.0) (2024-11-26)
+
+
+### Features
+
+* add post to zhihu column error ([5f3eeeb](https://github.com/terwer/siyuan-plugin-publisher/commit/5f3eeebe1d8f2f0e9ce86569ddd496840ba4f6dd))
+* wechat support scan login ([b3b8575](https://github.com/terwer/siyuan-plugin-publisher/commit/b3b8575ac20df2bd4e49f4f2ae361c9fbe813df7))
+
+
+### Bug Fixes
+
+* default pic service for wechat and zhihu ([8a22835](https://github.com/terwer/siyuan-plugin-publisher/commit/8a228355f4da6896dc584d5a48fd27fbb3544a9c))
+
 ## [1.27.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.26.0...siyuan-plugin-publisher-v1.27.0) (2024-11-26)
 ### Features
 * dynamic yaml cfg support hexo ([d4d054e](https://github.com/terwer/siyuan-plugin-publisher/commit/d4d054eb51145e7e0cd17d52969726a1c44afa8e))
