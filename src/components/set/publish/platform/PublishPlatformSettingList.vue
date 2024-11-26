@@ -38,7 +38,7 @@ import {
 import { svgIcons } from "~/src/utils/svgIcons.ts"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { JsonUtil, StrUtil } from "zhi-common"
-import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
+import { DYNAMIC_CONFIG_KEY, isDev } from "~/src/utils/constants.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useRouter } from "vue-router"
@@ -438,7 +438,11 @@ const handleHideCookieDlg = () => {
 // hande extra data ====================================================================================================
 const handleExtraData = async (dynamicConfigArray: DynamicConfig[]) => {
   for (const cfg of dynamicConfigArray) {
-    // cookie限制
+    // cookie白名单
+    if (extraPreCfg.cookieWhiteList.includes(cfg.subPlatformType.toString())) {
+      cfg.cookieLimit = false
+    }
+    // cookie黑名单
     if (extraPreCfg.cookieLimit.includes(cfg.subPlatformType.toString())) {
       cfg.cookieLimit = true
     }
