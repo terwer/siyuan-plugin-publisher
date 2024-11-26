@@ -43,7 +43,6 @@ class VitepressYamlConverterAdaptor extends YamlConvertAdaptor {
     // 没有的情况默认初始化一个
     if (!yamlFormatObj) {
       yamlFormatObj = new YamlFormatObj()
-      const dynYamlCfg = JsonUtil.safeParse<any>(cfg?.dynYamlCfg ?? "{}", {})
 
       // title
       yamlFormatObj.yamlObj.title = post.title
@@ -87,7 +86,7 @@ class VitepressYamlConverterAdaptor extends YamlConvertAdaptor {
       // yamlFormatObj.yamlObj.date = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true)
 
       // 上面是固定配置。下面是个性配置
-
+      const dynYamlCfg = JsonUtil.safeParse<any>(cfg?.dynYamlCfg ?? "{}", {})
       if (ObjectUtil.isEmptyObject(dynYamlCfg)) {
         // outline
         yamlFormatObj.yamlObj.outline = "deep"
@@ -113,7 +112,7 @@ class VitepressYamlConverterAdaptor extends YamlConvertAdaptor {
         })
       }
     } else {
-      this.logger.info("yaml 已保存，不是使用预设", { post: toRaw(post) })
+      this.logger.info("yaml 已保存，不使用预设", { post: toRaw(post) })
     }
 
     // formatter
