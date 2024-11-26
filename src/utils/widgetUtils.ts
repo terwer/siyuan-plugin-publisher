@@ -28,17 +28,18 @@ import { BrowserUtil, SiyuanDevice } from "zhi-device"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { DynamicConfig } from "~/src/platforms/dynamicConfig.ts"
 import { MockBrowser } from "~/src/utils/MockBrowser.ts"
+import { extraPreCfg } from "~/src/platforms/pre.ts"
 
 const logger = createAppLogger("widget-utils")
 
 /**
  * 打开网页弹窗
  */
-export const openBrowserWindow = (url: string, dynCfg?: DynamicConfig, cookieCb?: any) => {
+export const openBrowserWindow = (url: string, dynCfg?: DynamicConfig, cookieCb?: any, isDevMode?: boolean) => {
   const { isInSiyuanWidget } = useSiyuanDevice()
 
   if (isInSiyuanWidget()) {
-    const isDev = false
+    const isDev = isDevMode ?? false
     const isModel = false
     const isShow = !cookieCb
     doOpenBrowserWindow(url, undefined, undefined, isDev, isModel, isShow, dynCfg, cookieCb)
@@ -131,10 +132,16 @@ const doOpenBrowserWindow = (
     })
 
     // newWindow.webContents.userAgent = `SiYuan/${app.getVersion()} https://b3log.org/siyuan Electron`
-    newWindow.webContents.userAgent = MockBrowser.HEADERS.MACOS["User-Agent"]
-    // Object.keys(MockBrowser.MACOS_EDGE_HEADERS).forEach((key) => {
-    //   newWindow.webContents[key] = MockBrowser.MACOS_EDGE_HEADERS[key]
-    // })
+    // newWindow.webContents.userAgent = MockBrowser.HEADERS.MACOS_CHROME["User-Agent"]
+
+    // 设置 session
+    const session = newWindow.webContents.session
+    session.webRequest.onBeforeSendHeaders({ urls: extraPreCfg.uaWhiteList }, (details: any, callback: any) => {
+      const reqUrl = new URL(url)
+      console.warn("UA 已修改适配，当前请求为", reqUrl)
+      details.requestHeaders["User-Agent"] = MockBrowser.HEADERS.MACOS_CHROME["User-Agent"]
+      callback({ cancel: false, requestHeaders: details.requestHeaders })
+    })
 
     // 允许
     remote.enable(newWindow.webContents)

@@ -372,7 +372,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
 
     const mergedHeaders = {
       ...Object.fromEntries(reqHeaderMap),
-      ...MockBrowser.HEADERS.MACOS,
+      ...MockBrowser.HEADERS.MACOS_CHROME,
       ...headers,
     }
 
@@ -406,7 +406,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
 
     const mergedHeaders = {
       ...Object.fromEntries(reqHeaderMap),
-      ...MockBrowser.HEADERS.MACOS,
+      ...MockBrowser.HEADERS.MACOS_CHROME,
       ...headers,
     }
 
