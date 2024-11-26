@@ -52,6 +52,7 @@ import { CommonWebConfig } from "~/src/adaptors/web/base/commonWebConfig.ts"
 import { Utils } from "~/src/utils/utils.ts"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import PageUtils from "~/common/pageUtils.ts"
+import { extraPreCfg } from "~/src/platforms/pre.ts"
 
 const logger = createAppLogger("publish-platform-setting-list")
 
@@ -75,6 +76,7 @@ const formData = reactive({
   cookieSettingFormVisible: false,
   dlgCookieTitle: "",
   dlgKey: "",
+  dlgDynCfg: {} as DynamicConfig,
   dlgSettingCfg: {} as WebConfig,
 })
 
@@ -278,6 +280,7 @@ const _handleCustomSetCookieAuth = async (cfg: DynamicConfig) => {
   const settingCfg = (await Adaptors.getCfg(cfg.platformKey, storedCfg)) as WebConfig
 
   formData.dlgKey = cfg.platformKey
+  formData.dlgDynCfg = cfg
   formData.dlgSettingCfg = settingCfg
   formData.dlgCookieTitle = `${cfg.platformName} Cookie 设置`
   formData.cookieSettingFormVisible = true
@@ -405,7 +408,12 @@ const _handleValidateChromeExtensionAuth = async (dynCfg: DynamicConfig) => {
     }
   } catch (e) {
     dynCfg.isAuth = false
-    ElMessage.error(t("main.opt.failure") + "=>" + e+"，如果是登录过期，请在左侧点击「授权」修改新的 cookie 或者参考 https://blog.terwer.space/s/20230810132040-nn4q7vs FAQ4 解决")
+    ElMessage.error(
+      t("main.opt.failure") +
+        "=>" +
+        e +
+        "，如果是登录过期，请在左侧点击「授权」修改新的 cookie 或者参考 https://blog.terwer.space/s/20230810132040-nn4q7vs FAQ4 解决"
+    )
     logger.error(t("main.opt.failure") + "=>", e)
   }
 
@@ -427,6 +435,18 @@ const handleHideCookieDlg = () => {
 }
 // auth ================================================================================================================
 
+// hande extra data ====================================================================================================
+const handleExtraData = async (dynamicConfigArray: DynamicConfig[]) => {
+  for (const cfg of dynamicConfigArray) {
+    // cookie限制
+    if (extraPreCfg.cookieLimit.includes(cfg.subPlatformType.toString())) {
+      cfg.cookieLimit = true
+    }
+  }
+  return dynamicConfigArray
+}
+// hande extra data ====================================================================================================
+
 // init
 const initPage = async () => {
   formData.setting = await getSetting()
@@ -435,6 +455,8 @@ const initPage = async () => {
   const dynJsonCfg = JsonUtil.safeParse<DynamicJsonCfg>(formData.setting[DYNAMIC_CONFIG_KEY], {} as DynamicJsonCfg)
   // 默认展示通用平台
   formData.dynamicConfigArray = dynJsonCfg?.totalCfg || []
+  // 处理额外数据
+  formData.dynamicConfigArray = await handleExtraData(formData.dynamicConfigArray)
   logger.debug("dynamic init page=>", formData.dynamicConfigArray)
 
   // 检测是否有新平台
@@ -589,6 +611,7 @@ onMounted(async () => {
           v-model:api-type="formData.dlgKey"
           v-model:setting="formData.setting"
           v-model:setting-cfg="formData.dlgSettingCfg"
+          v-model:dyn-cfg="formData.dlgDynCfg"
           @emitHideDlg="handleHideCookieDlg"
         />
       </el-dialog>
