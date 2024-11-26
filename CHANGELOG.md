@@ -1,7 +1,12 @@
 # Changelog
 
-## [1.27.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.26.0...siyuan-plugin-publisher-v1.27.0) (2024-11-26)
+## [1.28.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.27.0...siyuan-plugin-publisher-v1.28.0) (2024-11-26)
 ### Features
+* add post to zhihu column error ([5f3eeeb](https://github.com/terwer/siyuan-plugin-publisher/commit/5f3eeebe1d8f2f0e9ce86569ddd496840ba4f6dd))
+* wechat support scan login ([b3b8575](https://github.com/terwer/siyuan-plugin-publisher/commit/b3b8575ac20df2bd4e49f4f2ae361c9fbe813df7))
+### Bug Fixes
+* default pic service for wechat and zhihu ([8a22835](https://github.com/terwer/siyuan-plugin-publisher/commit/8a228355f4da6896dc584d5a48fd27fbb3544a9c))
+## [1.27.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.26.0...siyuan-plugin-publisher-v1.27.0) (2024-11-26)
 * dynamic yaml cfg support hexo ([d4d054e](https://github.com/terwer/siyuan-plugin-publisher/commit/d4d054eb51145e7e0cd17d52969726a1c44afa8e))
 * dynamic yaml cfg support hugo ([808b9ec](https://github.com/terwer/siyuan-plugin-publisher/commit/808b9eca73287e926b67741147cd0dbd622b8d06))
 * dynamic yaml cfg support jekyll ([47092dc](https://github.com/terwer/siyuan-plugin-publisher/commit/47092dc26545835e1e58574096540ba99fd04095))
@@ -16,7 +21,6 @@
 * try to fix zhihu ([b49ca19](https://github.com/terwer/siyuan-plugin-publisher/commit/b49ca19ccecf913e06d4f558d95090a481fdec08))
 * update docs ([df4c220](https://github.com/terwer/siyuan-plugin-publisher/commit/df4c2201d24136aa535ff9174ad733cb3e2ecf50))
 ## [1.25.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.25.0...siyuan-plugin-publisher-v1.25.1) (2024-11-22)
-### Bug Fixes
 * #[#1461](https://github.com/terwer/siyuan-plugin-publisher/issues/1461) support picgo for halo2 ([79965f7](https://github.com/terwer/siyuan-plugin-publisher/commit/79965f7a6c45fc6166f862ff2ae35116e2ca117b))
 ## [1.25.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.24.2...siyuan-plugin-publisher-v1.25.0) (2024-11-19)
 * support outline for halo ([954be84](https://github.com/terwer/siyuan-plugin-publisher/commit/954be8420482e0b56abe7577f4678d172bf03054))
