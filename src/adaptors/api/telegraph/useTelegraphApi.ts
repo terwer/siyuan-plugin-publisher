@@ -71,6 +71,7 @@ const useTelegraphApi = async (key: string, newCfg?: TelegraphConfig) => {
   cfg.postType = cfg.postType ?? TelegraphPostType.ANONYMOUS
   // picbed service
   cfg.picgoPicbedSupported = true
+  // 已失效。无法实现
   cfg.bundledPicbedSupported = false
 
   const blogApi = new TelegraphApiAdaptor(appInstance, cfg)

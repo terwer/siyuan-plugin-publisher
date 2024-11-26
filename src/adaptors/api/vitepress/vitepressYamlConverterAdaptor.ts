@@ -25,7 +25,7 @@
 
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { BlogConfig, Post, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
-import { DateUtil, StrUtil, YamlUtil } from "zhi-common"
+import { DateUtil, JsonUtil, ObjectUtil, StrUtil, YamlUtil } from "zhi-common"
 import { toRaw } from "vue"
 
 /**
@@ -43,67 +43,78 @@ class VitepressYamlConverterAdaptor extends YamlConvertAdaptor {
     // 没有的情况默认初始化一个
     if (!yamlFormatObj) {
       yamlFormatObj = new YamlFormatObj()
+      const dynYamlCfg = JsonUtil.safeParse<any>(cfg?.dynYamlCfg ?? "{}", {})
+
+      // title
+      yamlFormatObj.yamlObj.title = post.title
+
+      // titleTemplate
+      // yamlFormatObj.yamlObj.titleTemplate = post.title
+
+      // description
+      if (!StrUtil.isEmptyString(post.shortDesc)) {
+        yamlFormatObj.yamlObj.description = post.shortDesc
+      }
+
+      // date
+      yamlFormatObj.yamlObj.date = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true)
+
+      // head
+      yamlFormatObj.yamlObj.head = []
+      if (!StrUtil.isEmptyString(post.mt_keywords)) {
+        yamlFormatObj.yamlObj.head.push({
+          name: "keywords",
+          content: post.mt_keywords.split(",").join(" "),
+        })
+      }
+      if (!StrUtil.isEmptyString(post.shortDesc)) {
+        yamlFormatObj.yamlObj.head.push({
+          name: "description",
+          content: post.shortDesc,
+        })
+      }
+
+      // categories
+      if (post.categories?.length > 0) {
+        yamlFormatObj.yamlObj.categories = post.categories
+      }
+
+      // layout
+      // https://vitepress.dev/reference/frontmatter-config#layout
+      // yamlFormatObj.yamlObj.layout = "doc"
+
+      // // date
+      // yamlFormatObj.yamlObj.date = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true)
+
+      // 上面是固定配置。下面是个性配置
+
+      if (ObjectUtil.isEmptyObject(dynYamlCfg)) {
+        // outline
+        yamlFormatObj.yamlObj.outline = "deep"
+
+        // navbar
+        // yamlFormatObj.yamlObj.navbar = true
+
+        // sidebar
+        yamlFormatObj.yamlObj.sidebar = false
+
+        // prev && next
+        yamlFormatObj.yamlObj.prev = false
+        yamlFormatObj.yamlObj.next = false
+
+        // lastUpdated
+        // yamlFormatObj.yamlObj.lastUpdated= true
+
+        // editLink
+        // yamlFormatObj.yamlObj.editLink = true
+      } else {
+        Object.keys(dynYamlCfg).forEach((key) => {
+          yamlFormatObj.yamlObj[key] = dynYamlCfg[key]
+        })
+      }
+    } else {
+      this.logger.info("yaml 已保存，不是使用预设", { post: toRaw(post) })
     }
-
-    // title
-    yamlFormatObj.yamlObj.title = post.title
-
-    // titleTemplate
-    // yamlFormatObj.yamlObj.titleTemplate = post.title
-
-    // description
-    if (!StrUtil.isEmptyString(post.shortDesc)) {
-      yamlFormatObj.yamlObj.description = post.shortDesc
-    }
-
-    // date
-    yamlFormatObj.yamlObj.date = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true)
-
-    // head
-    yamlFormatObj.yamlObj.head = []
-    if (!StrUtil.isEmptyString(post.mt_keywords)) {
-      yamlFormatObj.yamlObj.head.push({
-        name: "keywords",
-        content: post.mt_keywords.split(",").join(" "),
-      })
-    }
-    if (!StrUtil.isEmptyString(post.shortDesc)) {
-      yamlFormatObj.yamlObj.head.push({
-        name: "description",
-        content: post.shortDesc,
-      })
-    }
-
-    // categories
-    if (post.categories?.length > 0) {
-      yamlFormatObj.yamlObj.categories = post.categories
-    }
-
-    // layout
-    // https://vitepress.dev/reference/frontmatter-config#layout
-    // yamlFormatObj.yamlObj.layout = "doc"
-
-    // // date
-    // yamlFormatObj.yamlObj.date = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true)
-
-    // outline
-    yamlFormatObj.yamlObj.outline = "deep"
-
-    // navbar
-    // yamlFormatObj.yamlObj.navbar = true
-
-    // sidebar
-    yamlFormatObj.yamlObj.sidebar = false
-
-    // prev && next
-    yamlFormatObj.yamlObj.prev = false
-    yamlFormatObj.yamlObj.next = false
-
-    // lastUpdated
-    // yamlFormatObj.yamlObj.lastUpdated= true
-
-    // editLink
-    // yamlFormatObj.yamlObj.editLink = true
 
     // formatter
     let yaml = YamlUtil.obj2Yaml(yamlFormatObj.yamlObj)

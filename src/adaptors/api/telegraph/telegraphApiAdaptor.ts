@@ -24,7 +24,7 @@
  */
 
 import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
-import { Post, UserBlog } from "zhi-blog-api"
+import { Attachment, MediaObject, Post, UserBlog } from "zhi-blog-api"
 import { TelegraphConfig, TelegraphPostType } from "~/src/adaptors/api/telegraph/telegraphConfig.ts"
 import { JsonUtil, StrUtil } from "zhi-common"
 import CookieUtils from "~/src/utils/cookieUtils.ts"
@@ -258,11 +258,54 @@ class TelegraphApiAdaptor extends BaseBlogApi {
     return commonPost
   }
 
+  // 已失效，上传功能无法实现
+  // public async newMediaObject(mediaObject: MediaObject, customHandler?: any): Promise<Attachment> {
+  //   const tgCfg = this.cfg as TelegraphConfig
+  //
+  //   let xCorsHeaders: Record<any, any> = {}
+  //
+  //   // x-cors-headers
+  //   let requestCookie: string
+  //   const uuidCookie = `${this.TPH_UUID_KEY}=${tgCfg.password}`
+  //   if (tgCfg.postType == TelegraphPostType.ANONYMOUS) {
+  //     if (StrUtil.isEmptyString(tgCfg.password)) {
+  //       throw new Error(`Cookie ${this.TPH_UUID_KEY} 获取失败，无法上传附件`)
+  //     }
+  //     requestCookie = uuidCookie
+  //     this.logger.warn("当前为匿名发布")
+  //   } else {
+  //     if (StrUtil.isEmptyString(tgCfg.password) || StrUtil.isEmptyString(tgCfg.accessToken)) {
+  //       throw new Error(`Cookie ${this.TPH_UUID_KEY},${this.TPH_TOKEN_KEY} 获取失败，无法上传附件`)
+  //     }
+  //     const tokenCookie = `${this.TPH_TOKEN_KEY}=${tgCfg.accessToken}`
+  //     requestCookie = [uuidCookie, tokenCookie].join(";")
+  //   }
+  //   xCorsHeaders["Cookie"] = requestCookie ?? ""
+  //   xCorsHeaders["origin"] = "https://telegra.ph"
+  //   xCorsHeaders["referer"] = "https://telegra.ph/"
+  //
+  //   const headers = {
+  //     // for cors proxy
+  //     // siyuan proxy should ignore this header
+  //     "x-cors-headers": JSON.stringify(xCorsHeaders),
+  //   }
+  //   for (const [xkey, xvalue] of Object.entries(xCorsHeaders)) {
+  //     headers[xkey] = xvalue
+  //   }
+  //
+  //   const bits = mediaObject.bits
+  //   const formData = new FormData()
+  //   const blob = new Blob([bits], { type: mediaObject.type })
+  //   formData.append("file", blob, mediaObject.name)
+  //   const res = await this.telegraphFormFetch("/upload", formData)
+  //   this.logger.debug("telegraph upload success, res =>", res)
+  // }
+
   public async getPreviewUrl(postid: string): Promise<string> {
     const postMeta = JsonUtil.safeParse<any>(postid, {})
     const purl = this.cfg.previewUrl ?? ""
     const postUrl = purl.replace("[postid]", postMeta?.path ?? "")
-    const useProxyPreview = true
+    const useProxyPreview = false
     if (useProxyPreview && !StrUtil.isEmptyString(this.cfg.corsAnywhereUrl)) {
       const proxyHome = StrUtil.pathJoin(this.cfg.corsAnywhereUrl, this.cfg.home ?? "")
       return StrUtil.pathJoin(`${proxyHome}`, postUrl)

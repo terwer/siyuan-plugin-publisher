@@ -153,6 +153,8 @@ const doSaveContentChange = () => {
     logger.debug("准备emit =>", {
       post: toRaw(formData.siyuanPost),
     })
+    // 修改过需要设置为手动，不再自动生成
+    formData.siyuanPost.yamlType = YamlStrategy.Yaml_custom_hand
     emit("emitSyncPost", formData.siyuanPost)
     emit("edmtSyncToSiyuan")
     formData.syncStatus = "success"

@@ -259,6 +259,7 @@ export const pre = {
       authMode: AuthMode.WEBSITE,
       authUrl: "https://www.zhihu.com/signin",
       domain: "zhihu.com",
+      cookieLimit: true,
       isEnabled: false,
     },
     {

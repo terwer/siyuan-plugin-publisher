@@ -49,7 +49,7 @@ const { t } = useVueI18n()
       不会配置，或者配置遇到问题？ 请加QQ群
       <span style="font-weight: bold; color: red">
         <a
-          href="https://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=1Q1-wOLkBaG-iD0MBnNhNL25tbLSCwZx&authKey=tBdJDGuWuXK%2B77hHlwwT6y8UAp9AGZTwQq6RzUa%2ByX81HCSHu4XVGqY0gbsBUcW0&noverify=0&group_code=722632752"
+          href="https://qm.qq.com/cgi-bin/qm/qr?k=fYrA79XDvtr4JuEgez-dmj1h3tOef8pg&jump_from=webapi&authKey=DC+XcjkoTH762jxvkSgpt7V97QFETnaLVTZIWhd8PdZoX+MNSr+LsprWFYYELXu8"
           target="_blank"
         >
           722632752

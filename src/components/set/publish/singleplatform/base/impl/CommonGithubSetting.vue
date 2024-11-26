@@ -135,6 +135,15 @@ const syncDefaultPath = (cfg: any) => {
           <el-input v-model="(main.cfg as any).site" :placeholder="t('setting.blog.type.github.site.tip')" />
         </el-form-item>
       </div>
+      <!-- YAML预设配置 -->
+      <el-form-item :label="t('setting.blog.type.github.dyn.yaml')">
+        <el-input
+          :autosize="{ minRows: 4, maxRows: 16 }"
+          type="textarea"
+          v-model="(main.cfg as any).dynYamlCfg"
+          :placeholder="t('setting.blog.type.github.dyn.yaml.tip')"
+        />
+      </el-form-item>
       <slot name="main" :cfg="main.cfg" />
     </template>
 

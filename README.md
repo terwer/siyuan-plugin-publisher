@@ -11,7 +11,7 @@ Publish articles from siyuan-note to platforms like Yuque etc. `Free` and `open 
 
 **Encountered other issues or have suggestions? Group 1 is full, please join QQ Group 2 for discussion.**
 
-[![](https://img.shields.io/badge/QQ%20Group-722632752-blue)](https://qm.qq.com/cgi-bin/qm/qr?k=Knb4_xp6bbPnTpMztzqIZI7v59Gblqoh&jump_from=webapi&authKey=IhivNiJsNHq0I0Z+3jyBfOQPxsvMu9Y5jY5FuVTwjtQ5qtjW0m+hpSMsBCu5A8EE)
+[![](https://img.shields.io/badge/QQ%20Group-722632752-blue)](<a target="_blank" href="https://qm.qq.com/cgi-bin/qm/qr?k=fYrA79XDvtr4JuEgez-dmj1h3tOef8pg&jump_from=webapi&authKey=DC+XcjkoTH762jxvkSgpt7V97QFETnaLVTZIWhd8PdZoX+MNSr+LsprWFYYELXu8"><img border="0" src="//pub.idqqimg.com/wpa/images/group.png" alt="发布工具2群" title="发布工具2群"></a>)
 
 The paid plugin [Share Pro](https://siyuan.wiki/s/20241115132719-3ivxe1y), also written by me, is now available. Share your notes with one click, welcome to follow.
 ## Update history
@@ -138,10 +138,8 @@ to [Latest Adaptation](https://terwergreen.feishu.cn/share/base/view/shrcnWT2IGI
 
 ## Version Preview
 
-### 1.21.5-preview – As of Q1 2024
+### 1.26.2-preview – As of Q1 2025
 
-- Expansion of telegra.ph support for image uploads
-    - Reference: https://www.npmjs.com/package/telegraph-uploader
 - Rectification of scenarios entailing repetitive image uploads across select platforms
 - Resolution of formatting discrepancies within WeChat public accounts
 - #990 Rectification of irregular display issues while posting to Jian Shu
@@ -150,27 +148,27 @@ to [Latest Adaptation](https://terwergreen.feishu.cn/share/base/view/shrcnWT2IGI
 - #948 #905 Corrections addressing halo platform-related concerns
 - Addressing vuepress2 related issues
 
-### 1.21.6-preview – As of Q1 2024
+### 1.26.3-preview – As of Q1 2025
 
 - Inclusion of support for BiliBili and Xiaohongshu platforms
 
-### 1.22.0-preview – As of Q2 2024
+### 1.27.0-preview – As of Q2 2025
 
 - Embracing compatibility for Evernote and Antora (including GitHub and GitLab)
 
-### 1.23.0-preview – As of Q2 2024
+### 1.28.0-preview – As of Q2 2025
 
 - Enabling support for Docsify (inclusive of GitHub and GitLab) and Douban
 
-### 1.24.0-preview – As of Q2 2024
+### 1.29.0-preview – As of Q2 2025
 
 - Integration with flowus platform
 
-### 1.25.0-preview – As of Q2 2024
+### 1.30.0-preview – As of Q2 2025
 
 - Extending support to Xlog, mdnice, and zola platforms
 
-### 1.26.0-preview – As of Q3 2024
+### 1.31.0-preview – As of Q3 2025
 
 - Collaborative interactions with #956 and OceanPress
 

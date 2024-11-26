@@ -10,7 +10,7 @@
 
 **遇到其他问题或者需求建议？1群已满，请加QQ2群讨论。**
 
-[![](https://img.shields.io/badge/QQ群-722632752-blue)](https://qm.qq.com/cgi-bin/qm/qr?k=Knb4_xp6bbPnTpMztzqIZI7v59Gblqoh&jump_from=webapi&authKey=IhivNiJsNHq0I0Z+3jyBfOQPxsvMu9Y5jY5FuVTwjtQ5qtjW0m+hpSMsBCu5A8EE)
+[![](https://img.shields.io/badge/QQ群-722632752-blue)](https://qm.qq.com/cgi-bin/qm/qr?k=fYrA79XDvtr4JuEgez-dmj1h3tOef8pg&jump_from=webapi&authKey=DC+XcjkoTH762jxvkSgpt7V97QFETnaLVTZIWhd8PdZoX+MNSr+LsprWFYYELXu8)
 
 收费的 [在线分享专业版](https://siyuan.wiki) 已上线，一键分享你的呢思源笔记，欢迎关注。
 
@@ -127,10 +127,8 @@
 
 ## 版本预告
 
-### 1.21.5-preview - 截止到 2024 年 Q1
+### 1.26.2-preview - 截止到 2025 年 Q1
 
-- telegra.ph 支持上传图片
-    - 参考 https://www.npmjs.com/package/telegraph-uploader
 - 解决部分平台在某些场景下重复上传图片的问题
 - 修复微信公众号排版问题
 - #990 修复发布到简书时部分格式显示不正常的问题
@@ -139,27 +137,27 @@
 - #948 #905 halo 平台相关问题修复
 - vuepress2 相关问题
 
-### 1.21.6-preview - 截止到 2024 年 Q1
+### 1.26.3-preview - 截止到 2025 年 Q1
 
 - 支持 B 站、小红书
 
-### 1.22.0-preview - 截止到 2024 年 Q2
+### 1.27.0-preview - 截止到 2025 年 Q2
 
 - 支持 Evernote、Antora（包括 GitHub 和 gitlab）
 
-### 1.23.0-preview - 截止到 2024 年 Q2
+### 1.28.0-preview - 截止到 2025 年 Q2
 
 - 支持 Docsify（包括 GitHub 和 gitlab）、Douban
 
-### 1.24.0-preview - 截止到 2024 年 Q2
+### 1.29.0-preview - 截止到 2025 年 Q2
 
 - 支持 flowus
 
-### 1.25.0-preview - 截止到 2024 年 Q2
+### 1.30.0-preview - 截止到 2025 年 Q2
 
 - 支持 Xlog、mdnice、zola
 
-### 1.26.0-preview - 截止到 2024 年 Q3
+### 1.31.0-preview - 截止到 2025 年 Q3
 
 - #956 和 OceanPress 联动
 

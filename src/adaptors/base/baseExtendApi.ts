@@ -387,6 +387,8 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
           post.html = yfmObj.htmlContent
           this.logger.info("assign latest custom yaml to md")
         } else {
+          // 修复 formatter 未生效
+          post.markdown = YamlUtil.addYamlToMd(post.yaml, post.markdown)
           this.logger.info("assert yaml is saved by source mode, ignore")
         }
         break
