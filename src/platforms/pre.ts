@@ -9,7 +9,7 @@ export const extraPreCfg = {
   // 白名单
   cookieWhiteList: [SubPlatformType.Custom_Wechat.toString(), SubPlatformType.Custom_Zhihu.toString()],
   // UA白名单
-  uaWhiteList: ["https://*.qq.com/*", "https://*.zhihu.com/*"],
+  uaWhiteList: ["https://*.qq.com/*"],
   // 黑名单
   cookieLimit: [
     // SubPlatformType.Custom_Wechat.toString()
