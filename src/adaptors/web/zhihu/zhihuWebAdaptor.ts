@@ -342,13 +342,10 @@ class ZhihuWebAdaptor extends BaseWebApi {
   private async getColumns(): Promise<any[]> {
     let res: any
     try {
-      const headers = MockBrowser.MACOS_EDGE_HEADERS
       res = await this.zhihuFetch(
         `https://www.zhihu.com/api/v4/members/${this.cfg.username}/column-contributions?include=data%5B*%5D.column.intro%2Cfollowers%2Carticles_count%2Cvoteup_count%2Citems_count&offset=0&limit=20`,
         undefined,
-        "GET",
-        headers,
-        "application/json"
+        "GET"
       )
     } catch (e) {
       this.logger.error("zhihu get columns error", e)
@@ -375,6 +372,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
 
     const mergedHeaders = {
       ...Object.fromEntries(reqHeaderMap),
+      ...MockBrowser.HEADERS.MACOS,
       ...headers,
     }
 
@@ -408,6 +406,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
 
     const mergedHeaders = {
       ...Object.fromEntries(reqHeaderMap),
+      ...MockBrowser.HEADERS.MACOS,
       ...headers,
     }
 
