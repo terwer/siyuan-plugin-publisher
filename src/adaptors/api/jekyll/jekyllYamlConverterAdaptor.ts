@@ -25,9 +25,9 @@
 
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { BlogConfig, Post, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
-import { DateUtil, StrUtil, YamlUtil } from "zhi-common"
+import { DateUtil, JsonUtil, ObjectUtil, StrUtil, YamlUtil } from "zhi-common"
 import { toRaw } from "vue"
-import {CommonGithubConfig} from "~/src/adaptors/api/base/github/commonGithubConfig.ts";
+import { CommonGithubConfig } from "~/src/adaptors/api/base/github/commonGithubConfig.ts"
 
 /**
  * Jekyll平台的YAML解析器
@@ -44,62 +44,71 @@ class JekyllYamlConverterAdaptor extends YamlConvertAdaptor {
     // 没有的情况默认初始化一个
     if (!yamlFormatObj) {
       yamlFormatObj = new YamlFormatObj()
+
+      // title
+      yamlFormatObj.yamlObj.title = post.title
+
+      // date
+      yamlFormatObj.yamlObj.date = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true)
+
+      // permalink
+      let link = "/post/" + post.wp_slug + ".html"
+      const githubCfg = cfg as CommonGithubConfig
+      if (githubCfg.yamlLinkEnabled && !StrUtil.isEmptyString(githubCfg.previewPostUrl)) {
+        link = githubCfg.previewPostUrl.replace("[postid]", post.wp_slug)
+
+        // const created = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true)
+        // const datearr = created.split(" ")[0]
+        // const numarr = datearr.split("-")
+        // this.logger.debug("created numarr=>", numarr)
+        // const y = numarr[0]
+        // const m = numarr[1]
+        // const d = numarr[2]
+        // link = link.replace(/\[yyyy]/g, y)
+        // link = link.replace(/\[MM]/g, m)
+        // link = link.replace(/\[mm]/g, m)
+        // link = link.replace(/\[dd]/g, d)
+        //
+        // if (yamlFormatObj.yamlObj?.categories?.length > 0) {
+        //   link = link.replace(/\[cats]/, yamlFormatObj.yamlObj.categories.join("/"))
+        // } else {
+        //   link = link.replace(/\/\[cats]/, "")
+        // }
+      }
+      this.logger.debug("link=>", link)
+      yamlFormatObj.yamlObj.permalink = link
+
+      // tagline
+      if (!StrUtil.isEmptyString(post.shortDesc)) {
+        yamlFormatObj.yamlObj.tagline = post.shortDesc
+      }
+
+      // tags
+      if (!StrUtil.isEmptyString(post.mt_keywords)) {
+        const tags = post.mt_keywords.split(",")
+        yamlFormatObj.yamlObj.tags = tags
+      }
+
+      // categories
+      if (post.categories?.length > 0) {
+        yamlFormatObj.yamlObj.categories = post.categories
+      }
+
+      // 上面是固定配置。下面是个性配置
+      const dynYamlCfg = JsonUtil.safeParse<any>(cfg?.dynYamlCfg ?? "{}", {})
+      if (ObjectUtil.isEmptyObject(dynYamlCfg)) {
+        // layout
+        yamlFormatObj.yamlObj.layout = "post"
+        // published
+        yamlFormatObj.yamlObj.published = true
+      } else {
+        Object.keys(dynYamlCfg).forEach((key) => {
+          yamlFormatObj.yamlObj[key] = dynYamlCfg[key]
+        })
+      }
+    } else {
+      this.logger.info("yaml 已保存，不使用预设", { post: toRaw(post) })
     }
-
-    // layout
-    yamlFormatObj.yamlObj.layout = "post"
-
-    // title
-    yamlFormatObj.yamlObj.title = post.title
-
-    // date
-    yamlFormatObj.yamlObj.date = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true)
-
-    // permalink
-    let link = "/post/" + post.wp_slug + ".html"
-    const githubCfg = cfg as CommonGithubConfig
-    if (githubCfg.yamlLinkEnabled && !StrUtil.isEmptyString(githubCfg.previewPostUrl)) {
-      link = githubCfg.previewPostUrl.replace("[postid]", post.wp_slug)
-
-      // const created = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true)
-      // const datearr = created.split(" ")[0]
-      // const numarr = datearr.split("-")
-      // this.logger.debug("created numarr=>", numarr)
-      // const y = numarr[0]
-      // const m = numarr[1]
-      // const d = numarr[2]
-      // link = link.replace(/\[yyyy]/g, y)
-      // link = link.replace(/\[MM]/g, m)
-      // link = link.replace(/\[mm]/g, m)
-      // link = link.replace(/\[dd]/g, d)
-      //
-      // if (yamlFormatObj.yamlObj?.categories?.length > 0) {
-      //   link = link.replace(/\[cats]/, yamlFormatObj.yamlObj.categories.join("/"))
-      // } else {
-      //   link = link.replace(/\/\[cats]/, "")
-      // }
-    }
-    this.logger.debug("link=>", link)
-    yamlFormatObj.yamlObj.permalink = link
-
-    // tagline
-    if (!StrUtil.isEmptyString(post.shortDesc)) {
-      yamlFormatObj.yamlObj.tagline = post.shortDesc
-    }
-
-    // tags
-    if (!StrUtil.isEmptyString(post.mt_keywords)) {
-      const tags = post.mt_keywords.split(",")
-      yamlFormatObj.yamlObj.tags = tags
-    }
-
-    // categories
-    if (post.categories?.length > 0) {
-      yamlFormatObj.yamlObj.categories = post.categories
-    }
-
-    // published
-    yamlFormatObj.yamlObj.published = true
 
     // formatter
     let yaml = YamlUtil.obj2Yaml(yamlFormatObj.yamlObj)
