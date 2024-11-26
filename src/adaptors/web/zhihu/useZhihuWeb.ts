@@ -62,6 +62,7 @@ const useZhihuWeb = async (key?: string, newCfg?: ZhihuConfig) => {
       // 从环境变量获取Zhihu的cookie
       const zhihuCookie = Utils.emptyOrDefault(process.env.VITE_ZHIHU_AUTH_TOKEN, "")
       cfg = new ZhihuConfig("", zhihuCookie, middlewareUrl)
+      cfg.picbedService = PicbedServiceTypeEnum.Bundled
       logger.debug("Configuration is empty, using default environment variables.")
     } else {
       logger.info("Using configuration from settings...")

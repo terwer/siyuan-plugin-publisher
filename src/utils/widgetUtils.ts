@@ -134,6 +134,7 @@ const doOpenBrowserWindow = (
     // newWindow.webContents.userAgent = `SiYuan/${app.getVersion()} https://b3log.org/siyuan Electron`
     // newWindow.webContents.userAgent = MockBrowser.HEADERS.MACOS_CHROME["User-Agent"]
 
+    // ！！！ ⚠️警告，这里的拦截权限非常高，非西药不要设置， 过滤器的范围应该尽量小
     // 设置 session
     const session = newWindow.webContents.session
     session.webRequest.onBeforeSendHeaders({ urls: extraPreCfg.uaWhiteList }, (details: any, callback: any) => {
@@ -142,6 +143,7 @@ const doOpenBrowserWindow = (
       details.requestHeaders["User-Agent"] = MockBrowser.HEADERS.MACOS_CHROME["User-Agent"]
       callback({ cancel: false, requestHeaders: details.requestHeaders })
     })
+    // ！！！ ⚠️警告，这里的拦截权限非常高，非西药不要设置， 过滤器的范围应该尽量小
 
     // 允许
     remote.enable(newWindow.webContents)

@@ -372,7 +372,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
 
     const mergedHeaders = {
       ...Object.fromEntries(reqHeaderMap),
-      ...MockBrowser.HEADERS.MACOS_CHROME,
+      "User-Agent": MockBrowser.HEADERS.MACOS_CHROME["User-Agent"],
       ...headers,
     }
 
@@ -406,7 +406,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
 
     const mergedHeaders = {
       ...Object.fromEntries(reqHeaderMap),
-      ...MockBrowser.HEADERS.MACOS_CHROME,
+      "User-Agent": MockBrowser.HEADERS.MACOS_CHROME["User-Agent"],
       ...headers,
     }
 
@@ -442,7 +442,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
     }
 
     try {
-      const params = { type: "article", id: articleId }
+      const params = JSON.stringify({ type: "article", id: articleId })
       await this.zhihuFetch(`https://www.zhihu.com/api/v4/columns/${columnId}/items`, params, "POST")
     } catch (e) {
       this.logger.error("文章收录到专栏失败", e)

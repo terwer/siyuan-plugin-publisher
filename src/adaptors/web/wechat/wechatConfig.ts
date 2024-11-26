@@ -30,9 +30,12 @@ import { PageTypeEnum, PasswordType } from "zhi-blog-api"
  * 微信公众号配置
  */
 export class WechatConfig extends CommonWebConfig {
+  public logoutUrl: string
+
   constructor(username: string, password: string, middlewareUrl?: string) {
     super("https://mp.weixin.qq.com", "https://mp.weixin.qq.com/cgi-bin/appmsg", username, password, middlewareUrl)
 
+    this.logoutUrl = "https://mp.weixin.qq.com/cgi-bin/logout"
     this.previewUrl =
       "/cgi-bin/appmsg?t=media/appmsg_edit&action=edit&type=77&appmsgid=[postid]&token=[token]&lang=zh_CN"
     this.pageType = PageTypeEnum.Html
