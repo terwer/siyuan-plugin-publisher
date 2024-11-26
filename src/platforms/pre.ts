@@ -3,6 +3,28 @@ import { svgIcons } from "~/src/utils/svgIcons.ts"
 import { PRE_COMTANTS } from "~/src/platforms/PreConstants.ts"
 
 /**
+ * 一些因为政策原因必须要特殊处理的平台
+ */
+export const extraPreCfg = {
+  // cookieLimit
+  cookieLimit: [
+    SubPlatformType.Custom_Wechat.toString(),
+    // 知乎可以扫码登录了
+    // SubPlatformType.Custom_Zhihu.toString(),
+  ],
+  cookieLimitTipsAuth: {
+    [SubPlatformType.Custom_Wechat.toString()]: "https://mp.weixin.qq.com",
+    // 知乎可以扫码登录了
+    // [SubPlatformType.Custom_Zhihu.toString()]: "https://www.zhihu.com/people/terwer",
+  },
+  cookieLimitTipsImg: {
+    [SubPlatformType.Custom_Wechat.toString()]: "https://img1.terwer.space/api/public/202309051734289.png",
+    // 知乎可以扫码登录了
+    // [SubPlatformType.Custom_Zhihu.toString()]: "https://img1.siyuan.wiki/api/vip/open/media/aHR0cHM6Ly9jZG4uc2EubmV0LzIwMjQvMTEvMjYvdFpmSWp6VjE2U3U4djRXLnBuZw==",
+  },
+}
+
+/**
  * 通用平台定义
  */
 export const mainPre = (t: any) => {
@@ -259,7 +281,6 @@ export const pre = {
       authMode: AuthMode.WEBSITE,
       authUrl: "https://www.zhihu.com/signin",
       domain: "zhihu.com",
-      cookieLimit: true,
       isEnabled: false,
     },
     {

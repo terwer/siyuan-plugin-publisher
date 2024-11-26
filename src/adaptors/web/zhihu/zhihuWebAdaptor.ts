@@ -26,12 +26,13 @@
 import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
 import { BlogConfig, CategoryInfo, MediaObject, PageTypeEnum, Post, UserBlog } from "zhi-blog-api"
 import * as cheerio from "cheerio"
-import { JsonUtil, StrUtil } from "zhi-common"
+import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import CryptoJS from "crypto-js"
 import { arrayToBuffer } from "~/src/utils/polyfillUtils.ts"
 import { getAliOssClient } from "~/src/vendors/alioss/s3oss.ts"
 import _ from "lodash-es"
 import ZhihuUtils from "~/src/adaptors/web/zhihu/zhihuUtils.ts"
+import { MockBrowser } from "~/src/utils/MockBrowser.ts"
 
 /**
  * 知乎网页授权适配器
@@ -77,19 +78,30 @@ class ZhihuWebAdaptor extends BaseWebApi {
   public async getUsersBlogs(): Promise<Array<UserBlog>> {
     let result: UserBlog[] = []
 
-    const url = `https://www.zhihu.com/people/${this.cfg.username}/columns`
-    const res = await this.zhihuFetch(url, undefined, "GET", {}, "text/html")
-    this.logger.debug("get zhihu columns dom =>", { res })
-    const $ = cheerio.load(res)
-    const scriptContent = $("#js-initialData").html()
-    const initJson = JsonUtil.safeParse<any>(scriptContent, {})
-    this.logger.debug("get column initJson=>", initJson)
-    const columns = initJson?.initialState?.entities?.columns ?? {}
+    // const url = `https://www.zhihu.com/people/${this.cfg.username}/columns`
+    // const res = await this.zhihuFetch(url, undefined, "GET", {}, "text/html")
+    // this.logger.debug("get zhihu columns dom =>", { res })
+    // const $ = cheerio.load(res)
+    // const scriptContent = $("#js-initialData").html()
+    // const initJson = JsonUtil.safeParse<any>(scriptContent, {})
+    // this.logger.debug("get column initJson=>", initJson)
+    // const columns = initJson?.initialState?.entities?.columns ?? {}
+    // this.logger.debug("get columns=>", columns)
+    //
+    // Object.keys(columns).map((key) => {
+    //   const useBlog = new UserBlog()
+    //   const item = columns[key]
+    //   useBlog.blogid = item.id
+    //   useBlog.blogName = item.title
+    //   useBlog.url = item.url
+    //   result.push(useBlog)
+    // })
+    const columns = await this.getColumns()
     this.logger.debug("get columns=>", columns)
 
-    Object.keys(columns).map((key) => {
+    columns.forEach((column: any) => {
       const useBlog = new UserBlog()
-      const item = columns[key]
+      const item = column.column
       useBlog.blogid = item.id
       useBlog.blogName = item.title
       useBlog.url = item.url
@@ -226,19 +238,41 @@ class ZhihuWebAdaptor extends BaseWebApi {
   public async getCategories(): Promise<CategoryInfo[]> {
     const cats = [] as CategoryInfo[]
 
-    const url = `https://www.zhihu.com/people/${this.cfg.username}/columns`
-    const res = await this.zhihuFetch(url, undefined, "GET", {}, "text/html")
-    this.logger.debug("get zhihu columns dom =>", { res })
-    const $ = cheerio.load(res)
-    const scriptContent = $("#js-initialData").html()
-    const initJson = JsonUtil.safeParse<any>(scriptContent, {})
-    this.logger.debug("get column initJson=>", initJson)
-    const columns = initJson?.initialState?.entities?.columns ?? {}
+    // const url = `https://www.zhihu.com/people/${this.cfg.username}/columns`
+    // const res = await this.zhihuFetch(url, undefined, "GET", {}, "text/html")
+    // this.logger.debug("get zhihu columns dom =>", { res })
+    // const $ = cheerio.load(res)
+    //
+    // const scriptContent = $("#js-initialData").html()
+    // const initJson = JsonUtil.safeParse<any>(scriptContent, {})
+    // this.logger.debug("get column initJson=>", initJson)
+    // const columns = initJson?.initialState?.entities?.columns ?? {}
+    // if (ObjectUtil.isEmptyObject(columns) || columns.length == 0) {
+    //   debugger
+    //   $(".List-item a.ColumnLink").each((index, element) => {
+    //     // 在这里处理每个匹配的 a 标签
+    //     const $a = $(element)
+    //     // 找到 a 标签内的 div
+    //     const $div = $a.find("div")
+    //     // 获取 a 标签的 href 属性
+    //     const href = $a.attr("href")
+    //     // 获取 div 内的文本
+    //     const text = $div.text()
+    //     debugger
+    //     const cat = new CategoryInfo()
+    //     cat.categoryId = href.split("/").pop()
+    //     cat.categoryName = text
+    //     cat.description = text
+    //     cat.categoryDescription = href
+    //     cats.push(cat)
+    //   })
+    // }
+    const columns = await this.getColumns()
     this.logger.debug("get columns=>", columns)
 
-    Object.keys(columns).map((key) => {
+    columns.forEach((column: any) => {
       const cat = new CategoryInfo()
-      const item = columns[key]
+      const item = column.column
       cat.categoryId = item.id
       cat.categoryName = item.title
       cat.description = item.url
@@ -303,6 +337,22 @@ class ZhihuWebAdaptor extends BaseWebApi {
     return {}
   }
 
+  // ===================================================================================================================
+  // 知乎 API
+  private async getColumns(): Promise<any[]> {
+    let res: any
+    try {
+      res = await this.zhihuFetch(
+        `https://www.zhihu.com/api/v4/members/${this.cfg.username}/column-contributions?include=data%5B*%5D.column.intro%2Cfollowers%2Carticles_count%2Cvoteup_count%2Citems_count&offset=0&limit=20`,
+        undefined,
+        "GET"
+      )
+    } catch (e) {
+      this.logger.error("zhihu get columns error", e)
+    }
+    return res?.data ?? []
+  }
+
   // ================
   // private methods
   // ================
@@ -322,6 +372,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
 
     const mergedHeaders = {
       ...Object.fromEntries(reqHeaderMap),
+      ...MockBrowser.HEADERS.MACOS,
       ...headers,
     }
 
@@ -355,6 +406,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
 
     const mergedHeaders = {
       ...Object.fromEntries(reqHeaderMap),
+      ...MockBrowser.HEADERS.MACOS,
       ...headers,
     }
 

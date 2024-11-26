@@ -30,12 +30,14 @@ import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { StrUtil } from "zhi-common"
+import { extraPreCfg } from "~/src/platforms/pre.ts"
 
 const logger = createAppLogger("cookie-setting")
 
 const props = defineProps({
   apiType: "" as any,
   setting: {} as any,
+  dynCfg: {} as any,
   settingCfg: {} as any,
 })
 
@@ -51,6 +53,7 @@ const formRef = ref()
 const formData = reactive({
   key: props.apiType,
   settingData: props.setting,
+  dynCfgData: props.dynCfg,
   settingCfgData: props.settingCfg,
 })
 
@@ -111,9 +114,11 @@ const submitForm = async (formEl) => {
       <!-- 设置提示 -->
       <el-form-item>
         特别提示：受平台限制，当前无法自动获取cookie，请在Chrome浏览器手动打开 &nbsp;
-        <a :href="formData.settingCfgData.home" target="_blank">{{ formData.settingCfgData.home }}</a>
+        <a :href="extraPreCfg.cookieLimitTipsAuth[formData.dynCfgData.subPlatformType]" target="_blank">
+          {{ extraPreCfg.cookieLimitTipsAuth[formData.dynCfgData.subPlatformType] }}
+        </a>
         &nbsp;并登录，然后使用开发者工具找到cookie，最后复制粘贴到下方文本框，可参考
-        <a href="https://img1.terwer.space/api/public/202309051734289.png" target="_blank">此图片</a>
+        <a :href="extraPreCfg.cookieLimitTipsImg[formData.dynCfgData.subPlatformType]" target="_blank">此图片</a>
         的指引。
       </el-form-item>
       <!-- 平台cookie -->

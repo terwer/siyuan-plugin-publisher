@@ -27,6 +27,7 @@ import { StrUtil } from "zhi-common"
 import { BrowserUtil, SiyuanDevice } from "zhi-device"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { DynamicConfig } from "~/src/platforms/dynamicConfig.ts"
+import { MockBrowser } from "~/src/utils/MockBrowser.ts"
 
 const logger = createAppLogger("widget-utils")
 
@@ -129,7 +130,12 @@ const doOpenBrowserWindow = (
       },
     })
 
-    newWindow.webContents.userAgent = `SiYuan/${app.getVersion()} https://b3log.org/siyuan Electron`
+    // newWindow.webContents.userAgent = `SiYuan/${app.getVersion()} https://b3log.org/siyuan Electron`
+    newWindow.webContents.userAgent = MockBrowser.HEADERS.MACOS["User-Agent"]
+    // Object.keys(MockBrowser.MACOS_EDGE_HEADERS).forEach((key) => {
+    //   newWindow.webContents[key] = MockBrowser.MACOS_EDGE_HEADERS[key]
+    // })
+
     // 允许
     remote.enable(newWindow.webContents)
     if (isDev) {

@@ -25,7 +25,7 @@
 
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { BlogConfig, Post, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
-import { StrUtil, YamlUtil } from "zhi-common"
+import { JsonUtil, ObjectUtil, StrUtil, YamlUtil } from "zhi-common"
 import { toRaw } from "vue"
 
 /**
@@ -51,41 +51,50 @@ class Vuepress2YamlConverterAdaptor extends YamlConvertAdaptor {
     // 没有的情况默认初始化一个
     if (!yamlFormatObj) {
       yamlFormatObj = new YamlFormatObj()
+      // title
+      yamlFormatObj.yamlObj.title = post.title
+
+      // short_title
+      yamlFormatObj.yamlObj.short_title = ""
+
+      // date
+      yamlFormatObj.yamlObj.date = post.dateCreated
+
+      // description
+      if (!StrUtil.isEmptyString(post.shortDesc)) {
+        yamlFormatObj.yamlObj.description = post.shortDesc
+      }
+
+      // tag
+      if (!StrUtil.isEmptyString(post.mt_keywords)) {
+        const tag = post.mt_keywords.split(",")
+        yamlFormatObj.yamlObj.tag = tag
+      }
+
+      // category
+      if (post.categories?.length > 0) {
+        yamlFormatObj.yamlObj.category = post.categories
+      }
+
+      // 上面是固定配置。下面是个性配置
+      const dynYamlCfg = JsonUtil.safeParse<any>(cfg?.dynYamlCfg ?? "{}", {})
+      if (ObjectUtil.isEmptyObject(dynYamlCfg)) {
+        // article
+        yamlFormatObj.yamlObj.article = true
+
+        // timeline
+        yamlFormatObj.yamlObj.timeline = false
+
+        // isOriginal
+        yamlFormatObj.yamlObj.isOriginal = true
+      } else {
+        Object.keys(dynYamlCfg).forEach((key) => {
+          yamlFormatObj.yamlObj[key] = dynYamlCfg[key]
+        })
+      }
+    } else {
+      this.logger.info("yaml 已保存，不使用预设", { post: toRaw(post) })
     }
-
-    // title
-    yamlFormatObj.yamlObj.title = post.title
-
-    // short_title
-    yamlFormatObj.yamlObj.short_title = ""
-
-    // date
-    yamlFormatObj.yamlObj.date = post.dateCreated
-
-    // description
-    if (!StrUtil.isEmptyString(post.shortDesc)) {
-      yamlFormatObj.yamlObj.description = post.shortDesc
-    }
-
-    // tag
-    if (!StrUtil.isEmptyString(post.mt_keywords)) {
-      const tag = post.mt_keywords.split(",")
-      yamlFormatObj.yamlObj.tag = tag
-    }
-
-    // category
-    if (post.categories?.length > 0) {
-      yamlFormatObj.yamlObj.category = post.categories
-    }
-
-    // article
-    yamlFormatObj.yamlObj.article = true
-
-    // timeline
-    yamlFormatObj.yamlObj.timeline = false
-
-    // isOriginal
-    yamlFormatObj.yamlObj.isOriginal = true
 
     // formatter
     const yaml = YamlUtil.obj2Yaml(yamlFormatObj.yamlObj)
