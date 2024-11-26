@@ -25,7 +25,7 @@
 
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { BlogConfig, Post, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
-import { DateUtil, StrUtil, YamlUtil } from "zhi-common"
+import { DateUtil, JsonUtil, ObjectUtil, StrUtil, YamlUtil } from "zhi-common"
 import { toRaw } from "vue"
 
 /**
@@ -43,78 +43,87 @@ class HugoYamlConverterAdaptor extends YamlConvertAdaptor {
     // 没有的情况默认初始化一个
     if (!yamlFormatObj) {
       yamlFormatObj = new YamlFormatObj()
-    }
+      // title
+      yamlFormatObj.yamlObj.title = post.title
 
-    // title
-    yamlFormatObj.yamlObj.title = post.title
+      // slug
+      yamlFormatObj.yamlObj.slug = post.wp_slug
 
-    // slug
-    yamlFormatObj.yamlObj.slug = post.wp_slug
+      // url
+      if (cfg.yamlLinkEnabled) {
+        yamlFormatObj.yamlObj.url = "/post/" + post.wp_slug + ".html"
+      }
 
-    // url
-    if (cfg.yamlLinkEnabled) {
-      yamlFormatObj.yamlObj.url = "/post/" + post.wp_slug + ".html"
-    }
+      // date
+      let tzstr = "+00:00"
+      const tz = new Date().getTimezoneOffset() / -60
+      const sign = tz > 0 ? "+" : "-"
+      if (tz.toString().length < 2) {
+        tzstr = `${sign}0${tz}:00`
+      } else {
+        tzstr = `${sign}${tz}:00`
+      }
+      yamlFormatObj.yamlObj.date = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true) + tzstr
 
-    // date
-    let tzstr = "+00:00"
-    const tz = new Date().getTimezoneOffset() / -60
-    const sign = tz > 0 ? "+" : "-"
-    if (tz.toString().length < 2) {
-      tzstr = `${sign}0${tz}:00`
+      // lastmod
+      if (!post.dateUpdated) {
+        post.dateUpdated = new Date()
+      }
+      yamlFormatObj.yamlObj.lastmod = DateUtil.formatIsoToZh(post.dateUpdated.toISOString(), true) + tzstr
+
+      // tags
+      if (!StrUtil.isEmptyString(post.mt_keywords)) {
+        const tags = post.mt_keywords.split(",")
+        yamlFormatObj.yamlObj.tags = tags
+      }
+
+      // categories
+      if (post.categories?.length > 0) {
+        yamlFormatObj.yamlObj.categories = post.categories
+      }
+
+      // seo
+      if (!StrUtil.isEmptyString(post.mt_keywords)) {
+        yamlFormatObj.yamlObj.keywords = post.mt_keywords
+      }
+      if (!StrUtil.isEmptyString(post.shortDesc)) {
+        yamlFormatObj.yamlObj.description = post.shortDesc
+      }
+
+      // // linkTitle
+      // const linkTitle = post.linkTitle
+      // // weight
+      // const weight = parseInt(post.weight.toString())
+      // if (weight > 0) {
+      //   yamlFormatObj.yamlObj.weight = weight
+      // }
+      // if (!StrUtil.isEmptyString(linkTitle)) {
+      //   yamlFormatObj.yamlObj.linkTitle = linkTitle
+      //   if (weight > 0) {
+      //     yamlFormatObj.yamlObj.menu = {
+      //       main: {
+      //         weight: weight,
+      //       },
+      //     }
+      //   }
+      // }
+
+      // 上面是固定配置。下面是个性配置
+      const dynYamlCfg = JsonUtil.safeParse<any>(cfg?.dynYamlCfg ?? "{}", {})
+      if (ObjectUtil.isEmptyObject(dynYamlCfg)) {
+        // toc
+        yamlFormatObj.yamlObj.toc = true
+
+        // isCJKLanguage
+        yamlFormatObj.yamlObj.isCJKLanguage = true
+      } else {
+        Object.keys(dynYamlCfg).forEach((key) => {
+          yamlFormatObj.yamlObj[key] = dynYamlCfg[key]
+        })
+      }
     } else {
-      tzstr = `${sign}${tz}:00`
+      this.logger.info("yaml 已保存，不使用预设", { post: toRaw(post) })
     }
-    yamlFormatObj.yamlObj.date = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true) + tzstr
-
-    // lastmod
-    if (!post.dateUpdated) {
-      post.dateUpdated = new Date()
-    }
-    yamlFormatObj.yamlObj.lastmod = DateUtil.formatIsoToZh(post.dateUpdated.toISOString(), true) + tzstr
-
-    // toc
-    yamlFormatObj.yamlObj.toc = true
-
-    // tags
-    if (!StrUtil.isEmptyString(post.mt_keywords)) {
-      const tags = post.mt_keywords.split(",")
-      yamlFormatObj.yamlObj.tags = tags
-    }
-
-    // categories
-    if (post.categories?.length > 0) {
-      yamlFormatObj.yamlObj.categories = post.categories
-    }
-
-    // seo
-    if (!StrUtil.isEmptyString(post.mt_keywords)) {
-      yamlFormatObj.yamlObj.keywords = post.mt_keywords
-    }
-    if (!StrUtil.isEmptyString(post.shortDesc)) {
-      yamlFormatObj.yamlObj.description = post.shortDesc
-    }
-
-    // isCJKLanguage
-    yamlFormatObj.yamlObj.isCJKLanguage = true
-
-    // // linkTitle
-    // const linkTitle = post.linkTitle
-    // // weight
-    // const weight = parseInt(post.weight.toString())
-    // if (weight > 0) {
-    //   yamlFormatObj.yamlObj.weight = weight
-    // }
-    // if (!StrUtil.isEmptyString(linkTitle)) {
-    //   yamlFormatObj.yamlObj.linkTitle = linkTitle
-    //   if (weight > 0) {
-    //     yamlFormatObj.yamlObj.menu = {
-    //       main: {
-    //         weight: weight,
-    //       },
-    //     }
-    //   }
-    // }
 
     // formatter
     let yaml = YamlUtil.obj2Yaml(yamlFormatObj.yamlObj)
