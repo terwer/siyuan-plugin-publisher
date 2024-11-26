@@ -156,6 +156,8 @@ export default {
   "setting.blog.type.github.site": "Author's Page",
   "setting.blog.type.github.site.tip":
     "Author's page, defaults to: [GitHub URL]/[Username] if left empty. Please do not change the key, translate the value to English.",
+  "setting.blog.type.github.dyn.yaml": "YAML Preset Configuration",
+  "setting.blog.type.github.dyn.yaml.tip": "YAML Preset Configuration, if you do not understand what it is for, please do not configure. JSON format, for example: {\"sidebar\": false}",
   "setting.blog.url": "Blog addr",
   "setting.blog.github.url.tip": "Github homepage address",
   "setting.blog.github.apiurl.tip": "Github's REST API address, typically: https://api.github.com",

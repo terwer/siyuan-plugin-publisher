@@ -157,6 +157,8 @@ export default {
   "setting.blog.type.github.email.tip": "邮箱",
   "setting.blog.type.github.site": "作者主页",
   "setting.blog.type.github.site.tip": "作者主页，如果为空默认为：[GitHub地址]/[用户名]",
+  "setting.blog.type.github.dyn.yaml": "YAML预设配置",
+  "setting.blog.type.github.dyn.yaml.tip": "YAML预设配置，如果您不了解是干什么的请不要配置，JSON格式，例如：{\"sidebar\": false}。这个配置会覆盖当前平台的默认配置。如果需要使用默认的就留空即可。",
   "setting.blog.url": "博客网址",
   "setting.blog.github.url.tip": "Github首页地址",
   "setting.blog.username": "账号",
