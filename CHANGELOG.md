@@ -1,29 +1,15 @@
 # Changelog
 
 ## [1.29.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.28.0...siyuan-plugin-publisher-v1.29.0) (2024-11-27)
-
-
 ### Features
-
-* [#1231](https://github.com/terwer/siyuan-plugin-publisher/issues/1231) support filename.md as hexo md filename ([2795949](https://github.com/terwer/siyuan-plugin-publisher/commit/27959494c82d8fa62f0ce573b2252f25ce9b2222))
-
-
-### Bug Fixes
-
-* [#1231](https://github.com/terwer/siyuan-plugin-publisher/issues/1231) hexo not force use slug ([bde70bc](https://github.com/terwer/siyuan-plugin-publisher/commit/bde70bc4072460a9961d5dacdd06ea4382d73091))
 * [#1231](https://github.com/terwer/siyuan-plugin-publisher/issues/1231) hexo slug error ([3fdfeea](https://github.com/terwer/siyuan-plugin-publisher/commit/3fdfeea12872b17ee9314421c4056ddd0886c58b))
+### Bug Fixes
 * auto read siyuan api url via docker ([1d755bd](https://github.com/terwer/siyuan-plugin-publisher/commit/1d755bd554658dc4459bd6cbbd251ce0ad1e01c0))
-
-
 ### Miscellaneous
-
-* update docs ([c9db35e](https://github.com/terwer/siyuan-plugin-publisher/commit/c9db35e7f71ddd36d4340ccbe9ff89c66f4edae5))
-
+* update docs ([df4c220](https://github.com/terwer/siyuan-plugin-publisher/commit/df4c2201d24136aa535ff9174ad733cb3e2ecf50))
 ## [1.28.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.27.0...siyuan-plugin-publisher-v1.28.0) (2024-11-26)
-### Features
 * add post to zhihu column error ([5f3eeeb](https://github.com/terwer/siyuan-plugin-publisher/commit/5f3eeebe1d8f2f0e9ce86569ddd496840ba4f6dd))
 * wechat support scan login ([b3b8575](https://github.com/terwer/siyuan-plugin-publisher/commit/b3b8575ac20df2bd4e49f4f2ae361c9fbe813df7))
-### Bug Fixes
 * default pic service for wechat and zhihu ([8a22835](https://github.com/terwer/siyuan-plugin-publisher/commit/8a228355f4da6896dc584d5a48fd27fbb3544a9c))
 ## [1.27.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.26.0...siyuan-plugin-publisher-v1.27.0) (2024-11-26)
 * dynamic yaml cfg support hexo ([d4d054e](https://github.com/terwer/siyuan-plugin-publisher/commit/d4d054eb51145e7e0cd17d52969726a1c44afa8e))
@@ -32,13 +18,11 @@
 * dynamic yaml cfg support vuepress2 ([e51e9aa](https://github.com/terwer/siyuan-plugin-publisher/commit/e51e9aaff359a0491783878da7cf76c88e72b74a))
 * fix zhihu columns ([e88b9d0](https://github.com/terwer/siyuan-plugin-publisher/commit/e88b9d0f79e6705aae2f61d2deb87c47966f0dba))
 * zhihu is ok now ([c144e9e](https://github.com/terwer/siyuan-plugin-publisher/commit/c144e9e7664e601116df476a40060e8c429b4115))
-### Miscellaneous
 * **deps-dev:** bump vercel from 37.14.0 to 39.1.1 ([27f1a42](https://github.com/terwer/siyuan-plugin-publisher/commit/27f1a42e6edce1bc10d2a72a63f6d0af2420036a))
 ## [1.26.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.25.1...siyuan-plugin-publisher-v1.26.0) (2024-11-26)
 * support dynamic yaml cfg ([c7c300e](https://github.com/terwer/siyuan-plugin-publisher/commit/c7c300e6914dc1fbbf55b299595d312a97dab149))
 * support formatter cfg ([ca96c09](https://github.com/terwer/siyuan-plugin-publisher/commit/ca96c09281b6934edd63d2f690b64ee88f72c048))
 * try to fix zhihu ([b49ca19](https://github.com/terwer/siyuan-plugin-publisher/commit/b49ca19ccecf913e06d4f558d95090a481fdec08))
-* update docs ([df4c220](https://github.com/terwer/siyuan-plugin-publisher/commit/df4c2201d24136aa535ff9174ad733cb3e2ecf50))
 ## [1.25.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.25.0...siyuan-plugin-publisher-v1.25.1) (2024-11-22)
 * #[#1461](https://github.com/terwer/siyuan-plugin-publisher/issues/1461) support picgo for halo2 ([79965f7](https://github.com/terwer/siyuan-plugin-publisher/commit/79965f7a6c45fc6166f862ff2ae35116e2ca117b))
 ## [1.25.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.24.2...siyuan-plugin-publisher-v1.25.0) (2024-11-19)
