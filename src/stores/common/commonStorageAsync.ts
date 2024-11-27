@@ -66,14 +66,14 @@ class CommonStorageAsync implements StorageLikeAsync {
    */
   public async getItem(key: string): Promise<string | null> {
     this.logger.info(`Retrieving value for '${key}' from CommonStorage.`)
-    let ret
+    let ret: any
     if (this.storageViaSiyuanApi) {
       // 如果当前运行在思源笔记中
       try {
         ret = (await this.kernelApi.getFile(key, "text")) ?? ""
         // this.logger.debug(`Use SiYuan Api LocalStorageAdaptor to getItem - Retrieving '${key}', Value: ${ret}`)
-      } catch (error) {
-        this.logger.error(`Failed to get value for key '${key}' from SiYuan Api LocalStorageAdaptor. Error:`, error)
+      } catch (e1) {
+        this.logger.error(`Failed to get value for key '${key}' from SiYuan Api LocalStorageAdaptor. Error:`, e1)
       }
     } else {
       try {
@@ -81,8 +81,8 @@ class CommonStorageAsync implements StorageLikeAsync {
         const value = win.localStorage.getItem(key)
         ret = value ?? ""
         // this.logger.debug(`Use Browser LocalStorageAdaptor to getItem - Retrieving '${key}', Value: ${ret}`)
-      } catch (error) {
-        this.logger.error(`Failed to get value for key '${key}' from Browser LocalStorageAdaptor. Error:`, error)
+      } catch (e2) {
+        this.logger.error(`Failed to get value for key '${key}' from Browser LocalStorageAdaptor. Error:`, e2)
       }
     }
 
@@ -115,8 +115,12 @@ class CommonStorageAsync implements StorageLikeAsync {
     // this.logger.debug(`Setting value for '${key}' in CommonStorageAsync to '${value}'.`)
     if (this.storageViaSiyuanApi) {
       // 如果当前运行在思源笔记中，则直接返回空字符串
-      await this.kernelApi.saveTextData(key, value)
-      this.logger.debug(`Use SiYuan Api LocalStorageAdaptor to setItem - Key '${key}'`)
+      try {
+        const res = await this.kernelApi.saveTextData(key, value)
+        this.logger.debug(`Use SiYuan Api LocalStorageAdaptor to setItem - Key '${key}'`, res)
+      } catch (e) {
+        this.logger.errot(`Failed to set value for key '${key}' from SiYuan Api LocalStorageAdaptor. Error:`, e)
+      }
     } else {
       const win = SiyuanDevice.siyuanWindow()
       win.localStorage.setItem(key, value)
