@@ -248,7 +248,6 @@ class ZhihuWebAdaptor extends BaseWebApi {
     // this.logger.debug("get column initJson=>", initJson)
     // const columns = initJson?.initialState?.entities?.columns ?? {}
     // if (ObjectUtil.isEmptyObject(columns) || columns.length == 0) {
-    //   debugger
     //   $(".List-item a.ColumnLink").each((index, element) => {
     //     // 在这里处理每个匹配的 a 标签
     //     const $a = $(element)
@@ -258,7 +257,6 @@ class ZhihuWebAdaptor extends BaseWebApi {
     //     const href = $a.attr("href")
     //     // 获取 div 内的文本
     //     const text = $div.text()
-    //     debugger
     //     const cat = new CategoryInfo()
     //     cat.categoryId = href.split("/").pop()
     //     cat.categoryName = text

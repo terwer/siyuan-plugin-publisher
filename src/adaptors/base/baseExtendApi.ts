@@ -182,6 +182,8 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
       if (cfg.useMdFilename) {
         // 使用真实文件名作为MD文件名
         filename = filename.replace(/\[filename]/g, post.originalTitle)
+        // 这里需要去除空格等 url 里面参数不允许的非法字符
+        filename = MdUtils.getHumanFilename(filename)
       } else {
         // 使用别名作为MD文件名
         filename = filename.replace(/\[slug]/g, post.wp_slug)

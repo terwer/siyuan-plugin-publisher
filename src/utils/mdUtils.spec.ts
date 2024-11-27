@@ -86,4 +86,19 @@ $$
     const processedText = MdUtils.replaceSignToAnother(text, "**", " **", "** ")
     console.log(processedText)
   })
+
+  it("test getHumanFilename", () => {
+    const result = MdUtils.getHumanFilename("zh二哥有问题 123 !@#$%^&*()")
+    console.log(result)
+  })
+
+  it("test getHumanFilename2", () => {
+    const result = MdUtils.getHumanFilename("文件名字2024测试---!")
+    console.log(result)
+  })
+
+  it("test getHumanFilename3", () => {
+    const result = MdUtils.getHumanFilename("测试123abc中文")
+    console.log(result)
+  })
 })

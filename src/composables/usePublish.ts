@@ -363,7 +363,6 @@ const usePublish = () => {
       const post = _.cloneDeep(doc) as Post
       // 别名
       const slug = ObjectUtil.getProperty(postMeta, SiyuanAttr.Custom_slug, post.wp_slug)
-      debugger
       if (!StrUtil.isEmptyString(slug)) {
         post.wp_slug = slug
         logger.info("Using existing siyuan note slug")
