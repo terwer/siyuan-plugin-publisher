@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.29.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.28.0...siyuan-plugin-publisher-v1.29.0) (2024-11-27)
+
+
+### Features
+
+* [#1231](https://github.com/terwer/siyuan-plugin-publisher/issues/1231) support filename.md as hexo md filename ([2795949](https://github.com/terwer/siyuan-plugin-publisher/commit/27959494c82d8fa62f0ce573b2252f25ce9b2222))
+
+
+### Bug Fixes
+
+* [#1231](https://github.com/terwer/siyuan-plugin-publisher/issues/1231) hexo not force use slug ([bde70bc](https://github.com/terwer/siyuan-plugin-publisher/commit/bde70bc4072460a9961d5dacdd06ea4382d73091))
+* [#1231](https://github.com/terwer/siyuan-plugin-publisher/issues/1231) hexo slug error ([3fdfeea](https://github.com/terwer/siyuan-plugin-publisher/commit/3fdfeea12872b17ee9314421c4056ddd0886c58b))
+* auto read siyuan api url via docker ([1d755bd](https://github.com/terwer/siyuan-plugin-publisher/commit/1d755bd554658dc4459bd6cbbd251ce0ad1e01c0))
+
+
+### Miscellaneous
+
+* update docs ([c9db35e](https://github.com/terwer/siyuan-plugin-publisher/commit/c9db35e7f71ddd36d4340ccbe9ff89c66f4edae5))
+
 ## [1.28.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.27.0...siyuan-plugin-publisher-v1.28.0) (2024-11-26)
 ### Features
 * add post to zhihu column error ([5f3eeeb](https://github.com/terwer/siyuan-plugin-publisher/commit/5f3eeebe1d8f2f0e9ce86569ddd496840ba4f6dd))
