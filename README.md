@@ -11,7 +11,7 @@ Publish articles from siyuan-note to platforms like Yuque etc. `Free` and `open 
 
 **Encountered other issues or have suggestions? Group 1 is full, please join QQ Group 2 for discussion.**
 
-[![](https://img.shields.io/badge/QQ%20Group-722632752-blue)](<a target="_blank" href="https://qm.qq.com/cgi-bin/qm/qr?k=fYrA79XDvtr4JuEgez-dmj1h3tOef8pg&jump_from=webapi&authKey=DC+XcjkoTH762jxvkSgpt7V97QFETnaLVTZIWhd8PdZoX+MNSr+LsprWFYYELXu8"><img border="0" src="//pub.idqqimg.com/wpa/images/group.png" alt="发布工具2群" title="发布工具2群"></a>)
+[![](https://img.shields.io/badge/QQ-722632752-blue)](https://qm.qq.com/cgi-bin/qm/qr?k=fYrA79XDvtr4JuEgez-dmj1h3tOef8pg&jump_from=webapi&authKey=DC+XcjkoTH762jxvkSgpt7V97QFETnaLVTZIWhd8PdZoX+MNSr+LsprWFYYELXu8)
 
 The paid plugin [Share Pro](https://siyuan.wiki/s/20241115132719-3ivxe1y), also written by me, is now available. Share your notes with one click, welcome to follow.
 ## Update history
