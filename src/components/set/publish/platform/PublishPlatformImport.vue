@@ -111,7 +111,7 @@ const handleImportAll = () => {
     icon: markRaw(Delete),
     confirmButtonText: t("main.opt.ok"),
     cancelButtonText: t("main.opt.cancel"),
-  })
+  } as any)
     .then(async () => {
       await doImportAll()
     })

@@ -41,7 +41,6 @@ import { LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
 const useSiyuanSettingStore = () => {
   const filePath = "storage/syp/siyuan-cfg.json"
   const storageKey = "siyuan-cfg"
-  const { isInSiyuanOrSiyuanNewWin } = useSiyuanDevice()
 
   /**
    * 获取思源笔记配置
@@ -53,12 +52,10 @@ const useSiyuanSettingStore = () => {
     const baseUrl = "http://127.0.0.1:6806"
     const token = ""
     const middlewareUrl = LEGENCY_SHARED_PROXT_MIDDLEWARE
-    // PC客户端多个工作空间情况下，自动读取思源地址
+    // 统一自动读取思源地址
     let origin: string
-    if (isInSiyuanOrSiyuanNewWin()) {
-      const win = SiyuanDevice.siyuanWindow()
-      origin = win?.location.origin
-    }
+    const win = SiyuanDevice.siyuanWindow()
+    origin = win?.location.origin
 
     const initialValue = new SiyuanConfig(origin ?? baseUrl, token)
     initialValue.middlewareUrl = middlewareUrl
