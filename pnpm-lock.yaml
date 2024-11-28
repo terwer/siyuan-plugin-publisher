@@ -66,8 +66,8 @@ importers:
         specifier: ^0.0.1
         version: 0.0.1
       unplugin-icons:
-        specifier: ^0.20.1
-        version: 0.20.1(@vue/compiler-sfc@3.5.13)(svelte@4.2.18)(vue-template-compiler@2.7.16)
+        specifier: ^0.20.2
+        version: 0.20.2(@vue/compiler-sfc@3.5.13)(svelte@4.2.18)(vue-template-compiler@2.7.16)
       uuid:
         specifier: ^11.0.3
         version: 11.0.3
@@ -210,6 +210,9 @@ packages:
 
   '@antfu/install-pkg@0.4.1':
     resolution: {integrity: sha512-T7yB5QNG29afhWVkVq7XeIMBa5U/vs9mX69YqayXypPRmYzUmzwnYltplHmPtZ4HPCn+sQKeXW8I47wCbuBOjw==}
+
+  '@antfu/install-pkg@0.5.0':
+    resolution: {integrity: sha512-dKnk2xlAyC7rvTkpkHmu+Qy/2Zc3Vm/l8PtNyIOGDBtXPY3kThfU4ORNEp3V7SXw5XSOb+tOJaUYpfquPzL/Tg==}
 
   '@antfu/utils@0.7.10':
     resolution: {integrity: sha512-+562v9k4aI80m1+VuMHehNJWLOFjBnXn3tdOitzD0il5b7smkSBal4+a3oKiQTbrwMmN/TBUMDvbdoWDehgOww==}
@@ -4650,8 +4653,8 @@ packages:
       '@vueuse/core':
         optional: true
 
-  unplugin-icons@0.20.1:
-    resolution: {integrity: sha512-0z5sYGx07Q69ZrJB4kjmx7a5LYLNSWwyq95Ox9OuSG2y/sbhJaHUapRPOJcKmKhOAyToDVRdy9P7gxJ05lYipw==}
+  unplugin-icons@0.20.2:
+    resolution: {integrity: sha512-Ak6TKAiO812aIUrCelrBSTQbYC4FiqawnFrAusP/hjmB8f9cAug9jr381ItvLl+Asi4IVcjoOiPbpy9CfFGKvQ==}
     peerDependencies:
       '@svgr/core': '>=7.0.0'
       '@svgx/core': ^1.0.1
@@ -5092,6 +5095,11 @@ snapshots:
       '@jridgewell/trace-mapping': 0.3.25
 
   '@antfu/install-pkg@0.4.1':
+    dependencies:
+      package-manager-detector: 0.2.5
+      tinyexec: 0.3.1
+
+  '@antfu/install-pkg@0.5.0':
     dependencies:
       package-manager-detector: 0.2.5
       tinyexec: 0.3.1
@@ -10435,9 +10443,9 @@ snapshots:
     transitivePeerDependencies:
       - rollup
 
-  unplugin-icons@0.20.1(@vue/compiler-sfc@3.5.13)(svelte@4.2.18)(vue-template-compiler@2.7.16):
+  unplugin-icons@0.20.2(@vue/compiler-sfc@3.5.13)(svelte@4.2.18)(vue-template-compiler@2.7.16):
     dependencies:
-      '@antfu/install-pkg': 0.4.1
+      '@antfu/install-pkg': 0.5.0
       '@antfu/utils': 0.7.10
       '@iconify/utils': 2.1.33
       debug: 4.3.7
