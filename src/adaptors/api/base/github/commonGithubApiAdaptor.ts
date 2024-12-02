@@ -105,8 +105,14 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
     // 路径处理
     const savePath = post.cate_slugs?.[0] ?? cfg.blogid
     const filename = post.mdFilename ?? "auto-" + sypIdUtil.newID() + ".md"
-    const docPath = StrUtil.pathJoin(savePath, filename)
-    this.logger.info("将要最终发送到以下目录 =>", docPath)
+    let docPath = StrUtil.pathJoin(savePath, filename)
+    if (docPath.startsWith("/")) {
+      docPath = docPath.substring(1)
+    }
+    if (docPath.startsWith("./")) {
+      docPath = docPath.substring(2)
+    }
+    this.logger.info("Github文章将要最终发送到以下目录 =>", docPath)
 
     // 开始发布
     let finalRes: any
@@ -225,18 +231,26 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
       const bits = mediaObject.bits
       const base64 = Base64.fromUint8Array(bits)
       const savePath = this.cfg.imageStorePath ?? "images"
-      const imageFullPath = StrUtil.pathJoin(savePath, mediaObject.name)
+      let imageFullPath = StrUtil.pathJoin(savePath, mediaObject.name)
+      if (imageFullPath.startsWith("/")) {
+        imageFullPath = imageFullPath.substring(1)
+      }
+      if (imageFullPath.startsWith("./")) {
+        imageFullPath = imageFullPath.substring(2)
+      }
+      this.logger.info("Github 图片将要最终发送到以下目录 =>", imageFullPath)
       const res = await this.githubClient.publishGithubPage(imageFullPath, base64, "base64")
 
       const siteImgId = mediaObject.name
       const siteArticleId = mediaObject.name
       // https://raw.githubusercontent.com/terwer/hexo-blog/test/images/image-20240401103158-bnwme8a.png
-      let part = StrUtil.pathJoin("https://raw.githubusercontent.com", this.cfg.username)
-      part = StrUtil.pathJoin(part, cfg.githubRepo)
-      part = StrUtil.pathJoin(part, cfg.githubBranch)
-      part = StrUtil.pathJoin(part, encodeURI(savePath))
-      part = StrUtil.pathJoin(part, encodeURIComponent(mediaObject.name))
-      const siteImgUrl = part
+      let toImagePath = StrUtil.pathJoin("https://raw.githubusercontent.com", this.cfg.username)
+      toImagePath = StrUtil.pathJoin(toImagePath, cfg.githubRepo)
+      toImagePath = StrUtil.pathJoin(toImagePath, cfg.githubBranch)
+      toImagePath = StrUtil.pathJoin(toImagePath, encodeURI(savePath))
+      toImagePath = StrUtil.pathJoin(toImagePath, encodeURIComponent(mediaObject.name))
+      const siteImgUrl = toImagePath
+      this.logger.info("Github 图片上传成功", siteImgUrl)
       this.logger.debug("github publishGithubPage res =>", res)
 
       return {
