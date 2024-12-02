@@ -64,6 +64,7 @@ const useVuepress2Api = async (key: string, newCfg?: Vuepress2Config) => {
       const githubBranch = Utils.emptyOrDefault(process.env.VITE_GITHUB_BRANCH, "main")
       const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, LEGENCY_SHARED_PROXT_MIDDLEWARE)
       cfg = new Vuepress2Config(githubUsername, githubAuthToken, githubRepo, githubBranch, middlewareUrl)
+      cfg.mdFilenameRule = "[slug].md"
       logger.info("Configuration is empty, using default environment variables.")
     } else {
       logger.info("Using configuration from settings...")
@@ -76,7 +77,8 @@ const useVuepress2Api = async (key: string, newCfg?: Vuepress2Config) => {
   }
 
   // 文件规则，占位符
-  cfg.mdFilenameRule = "[slug].md"
+  // 推荐别名。但是不强制使用
+  // cfg.mdFilenameRule = "[slug].md"
   // 标签
   cfg.tagEnabled = true
   // 分类
