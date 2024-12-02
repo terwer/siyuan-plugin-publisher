@@ -1,9 +1,11 @@
 # Changelog
 
+## [1.29.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.29.0...siyuan-plugin-publisher-v1.29.1) (2024-12-02)
+### Bug Fixes
+* [#1495](https://github.com/terwer/siyuan-plugin-publisher/issues/1495) support more path link ([0163276](https://github.com/terwer/siyuan-plugin-publisher/commit/0163276efb64f8e837733a3a2ae8b7fe8d86bd16))
 ## [1.29.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.28.0...siyuan-plugin-publisher-v1.29.0) (2024-11-27)
 ### Features
 * [#1231](https://github.com/terwer/siyuan-plugin-publisher/issues/1231) hexo slug error ([3fdfeea](https://github.com/terwer/siyuan-plugin-publisher/commit/3fdfeea12872b17ee9314421c4056ddd0886c58b))
-### Bug Fixes
 * auto read siyuan api url via docker ([1d755bd](https://github.com/terwer/siyuan-plugin-publisher/commit/1d755bd554658dc4459bd6cbbd251ce0ad1e01c0))
 ### Miscellaneous
 * update docs ([df4c220](https://github.com/terwer/siyuan-plugin-publisher/commit/df4c2201d24136aa535ff9174ad733cb3e2ecf50))
