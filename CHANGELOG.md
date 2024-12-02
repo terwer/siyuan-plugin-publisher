@@ -1,28 +1,16 @@
 # Changelog
 
 ## [1.29.2](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.29.1...siyuan-plugin-publisher-v1.29.2) (2024-12-02)
-
-
-### Bug Fixes
-
-* [#1495](https://github.com/terwer/siyuan-plugin-publisher/issues/1495) markdown file name support all github and git lab platforms ([2df312a](https://github.com/terwer/siyuan-plugin-publisher/commit/2df312aacc7a2e15aab5dba8f63b26742ef0f5b8))
-* [#1495](https://github.com/terwer/siyuan-plugin-publisher/issues/1495) markdown file name support category and tag ([139e218](https://github.com/terwer/siyuan-plugin-publisher/commit/139e218bf55cec1249d479682b5afe2fcb5023e8))
-* gitlab image exist case ([3f81f0c](https://github.com/terwer/siyuan-plugin-publisher/commit/3f81f0c51f38597ffad426e04b9c4016ebcc05af))
-
-
-### Miscellaneous
-
-* update docs ([5f3c47d](https://github.com/terwer/siyuan-plugin-publisher/commit/5f3c47ddcda1c964edf901442661e67961607ced))
-
-## [1.29.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.29.0...siyuan-plugin-publisher-v1.29.1) (2024-12-02)
 ### Bug Fixes
 * [#1495](https://github.com/terwer/siyuan-plugin-publisher/issues/1495) support more path link ([0163276](https://github.com/terwer/siyuan-plugin-publisher/commit/0163276efb64f8e837733a3a2ae8b7fe8d86bd16))
+* gitlab image exist case ([3f81f0c](https://github.com/terwer/siyuan-plugin-publisher/commit/3f81f0c51f38597ffad426e04b9c4016ebcc05af))
+### Miscellaneous
+* update docs ([df4c220](https://github.com/terwer/siyuan-plugin-publisher/commit/df4c2201d24136aa535ff9174ad733cb3e2ecf50))
+## [1.29.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.29.0...siyuan-plugin-publisher-v1.29.1) (2024-12-02)
 ## [1.29.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.28.0...siyuan-plugin-publisher-v1.29.0) (2024-11-27)
 ### Features
 * [#1231](https://github.com/terwer/siyuan-plugin-publisher/issues/1231) hexo slug error ([3fdfeea](https://github.com/terwer/siyuan-plugin-publisher/commit/3fdfeea12872b17ee9314421c4056ddd0886c58b))
 * auto read siyuan api url via docker ([1d755bd](https://github.com/terwer/siyuan-plugin-publisher/commit/1d755bd554658dc4459bd6cbbd251ce0ad1e01c0))
-### Miscellaneous
-* update docs ([df4c220](https://github.com/terwer/siyuan-plugin-publisher/commit/df4c2201d24136aa535ff9174ad733cb3e2ecf50))
 ## [1.28.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.27.0...siyuan-plugin-publisher-v1.28.0) (2024-11-26)
 * add post to zhihu column error ([5f3eeeb](https://github.com/terwer/siyuan-plugin-publisher/commit/5f3eeebe1d8f2f0e9ce86569ddd496840ba4f6dd))
 * wechat support scan login ([b3b8575](https://github.com/terwer/siyuan-plugin-publisher/commit/b3b8575ac20df2bd4e49f4f2ae361c9fbe813df7))
