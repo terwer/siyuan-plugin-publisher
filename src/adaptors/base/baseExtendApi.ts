@@ -179,6 +179,12 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
       this.logger.debug("created numarr=>", numarr)
 
       let filename = cfg.mdFilenameRule
+      // 年月日
+      filename = filename
+        .replace(/\[yyyy]/g, y)
+        .replace(/\[MM]/g, m)
+        .replace(/\[mm]/g, m)
+        .replace(/\[dd]/g, d)
       if (cfg.useMdFilename) {
         // 使用真实文件名作为MD文件名
         filename = filename.replace(/\[filename]/g, post.originalTitle)
@@ -188,12 +194,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
         // 使用别名作为MD文件名
         filename = filename.replace(/\[slug]/g, post.wp_slug)
       }
-      // 年月日
-      filename = filename
-        .replace(/\[yyyy]/g, y)
-        .replace(/\[MM]/g, m)
-        .replace(/\[mm]/g, m)
-        .replace(/\[dd]/g, d)
+
       post.mdFilename = filename
     }
 
