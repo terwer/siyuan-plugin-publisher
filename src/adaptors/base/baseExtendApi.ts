@@ -185,6 +185,24 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
         .replace(/\[MM]/g, m)
         .replace(/\[mm]/g, m)
         .replace(/\[dd]/g, d)
+      // 分类
+      if (cfg?.mdFilenameRule?.includes("category")) {
+        const cat = post?.categories?.[0] ?? ""
+        filename = filename.replace("[category]", cat)
+      }
+      if (cfg?.mdFilenameRule?.includes("cats")) {
+        const cat = post?.categories?.join("/") ?? ""
+        filename = filename.replace(/\[cats]/, cat)
+      }
+      // 标签
+      if (cfg?.mdFilenameRule?.includes("tag")) {
+        const tag = post?.mt_keywords?.split(",")?.[0] ?? ""
+        filename = filename.replace(/\[tag]/, tag)
+      }
+      if (cfg?.mdFilenameRule?.includes("tags")) {
+        const tag = post?.mt_keywords?.split(",")?.join("/") ?? ""
+        filename = filename.replace(/\[tags]/, tag)
+      }
       if (cfg.useMdFilename) {
         // 使用真实文件名作为MD文件名
         filename = filename.replace(/\[filename]/g, post.originalTitle)

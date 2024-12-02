@@ -114,8 +114,14 @@ class CommonGitlabApiAdaptor extends BaseBlogApi {
     // 路径处理
     const savePath = post.cate_slugs?.[0] ?? cfg.blogid
     const filename = post.mdFilename ?? "auto-" + sypIdUtil.newID() + ".md"
-    const docPath = StrUtil.pathJoin(savePath, filename)
-    this.logger.info("将要最终发送到以下目录 =>", docPath)
+    let docPath = StrUtil.pathJoin(savePath, filename)
+    if (docPath.startsWith("/")) {
+      docPath = docPath.substring(1)
+    }
+    if (docPath.startsWith("./")) {
+      docPath = docPath.substring(2)
+    }
+    this.logger.info("Gitlab文章将要最终发送到以下目录 =>", docPath)
 
     // 开始发布
     let finalRes: any
@@ -235,22 +241,35 @@ class CommonGitlabApiAdaptor extends BaseBlogApi {
     try {
       const bits = mediaObject.bits
       const base64 = Base64.fromUint8Array(bits)
-      const imageFullPath = StrUtil.pathJoin(this.cfg.imageStorePath ?? "images", mediaObject.name)
+      let imageFullPath = StrUtil.pathJoin(this.cfg.imageStorePath ?? "images", mediaObject.name)
+      if (imageFullPath.startsWith("/")) {
+        imageFullPath = imageFullPath.substring(1)
+      }
+      if (imageFullPath.startsWith("./")) {
+        imageFullPath = imageFullPath.substring(2)
+      }
+      this.logger.info("Gitlab图片将要最终发送到以下目录 =>", imageFullPath)
       const res = await this.gitlabClient.createRepositoryFile(imageFullPath, base64, "base64")
       this.logger.debug("gitlab createRepositoryFile res =>", res)
-      if (StrUtil.isEmptyString(res.file_path)) {
-        throw new Error("Gitlab 调用API异常")
-      }
 
       const siteImgId = mediaObject.name
       const siteArticleId = mediaObject.name
       // http://localhost:8002/terwer/terwer-github-io/-/raw/test/images/image-20240331110420-v181nvl.png
-      let part = StrUtil.pathJoin(this.cfg.home, this.cfg.username)
-      part = StrUtil.pathJoin(part, this.gitlabCfg.githubRepo)
-      part = StrUtil.pathJoin(part, "-/raw")
-      part = StrUtil.pathJoin(part, res.branch)
-      part = StrUtil.pathJoin(part, res.file_path)
-      const siteImgUrl = part
+      let toImagePath = StrUtil.pathJoin(this.cfg.home, this.cfg.username)
+      toImagePath = StrUtil.pathJoin(toImagePath, this.gitlabCfg.githubRepo)
+      toImagePath = StrUtil.pathJoin(toImagePath, "-/raw")
+      toImagePath = StrUtil.pathJoin(toImagePath, this.gitlabCfg.githubBranch)
+      if (res?.exist) {
+        this.logger.warn("图片已存在，直接返回")
+        toImagePath = StrUtil.pathJoin(toImagePath, imageFullPath)
+      } else {
+        if (StrUtil.isEmptyString(res.file_path)) {
+          throw new Error("Gitlab 调用API异常")
+        }
+        toImagePath = StrUtil.pathJoin(toImagePath, res.file_path)
+      }
+      const siteImgUrl = toImagePath
+      this.logger.info("Gitlab 图片上传成功", siteImgUrl)
       return {
         attachment_id: siteImgId,
         date_created_gmt: new Date(),

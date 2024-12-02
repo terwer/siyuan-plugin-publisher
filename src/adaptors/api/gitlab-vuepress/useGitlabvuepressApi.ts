@@ -64,6 +64,7 @@ const useGitlabvuepressApi = async (key: string, newCfg?: GitlabvuepressConfig) 
       const githubBranch = Utils.emptyOrDefault(process.env.VITE_GITLAB_BRANCH, "main")
       const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, LEGENCY_SHARED_PROXT_MIDDLEWARE)
       cfg = new GitlabvuepressConfig(githubUsername, githubAuthToken, githubRepo, githubBranch, middlewareUrl)
+      cfg.mdFilenameRule = "[filename].md"
       logger.info("Configuration is empty, using default environment variables.")
     } else {
       logger.info("Using configuration from settings...")
@@ -76,7 +77,8 @@ const useGitlabvuepressApi = async (key: string, newCfg?: GitlabvuepressConfig) 
   }
 
   // 文件规则
-  cfg.mdFilenameRule = "[filename].md"
+  // 推荐别名。但是不强制使用
+  // cfg.mdFilenameRule = "[filename].md"
   // 标签
   cfg.tagEnabled = true
   // 分类

@@ -68,7 +68,16 @@ class GitlabFetchClientProxyAdaptor implements ICommonFetchClient {
       if (resp.ok) {
         return this.safeParseBodyJson(resp)
       } else {
-        throw `gitlab fetch adaptor 请求错误，code ${resp.status}, detail => ${resp.statusText}`
+        const respText = await resp.text()
+        if (resp.status === 400 && respText.includes("already exists")) {
+          return {
+            exist: true,
+          }
+        }
+        throw `gitlab fetch adaptor 请求错误，code ${resp.status}, detail => ${JSON.stringify({
+          statusText: resp.statusText,
+          msg: respText,
+        })}`
       }
     } catch (e: any) {
       this.logger.error(e)

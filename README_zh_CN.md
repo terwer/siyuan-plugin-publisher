@@ -12,7 +12,7 @@
 
 [![](https://img.shields.io/badge/QQ群-722632752-blue)](https://qm.qq.com/cgi-bin/qm/qr?k=fYrA79XDvtr4JuEgez-dmj1h3tOef8pg&jump_from=webapi&authKey=DC+XcjkoTH762jxvkSgpt7V97QFETnaLVTZIWhd8PdZoX+MNSr+LsprWFYYELXu8)
 
-收费的 [在线分享专业版](https://siyuan.wiki) 已上线，一键分享你的呢思源笔记，欢迎关注。
+收费的 [在线分享专业版](https://siyuan.wiki) 已上线，一键分享您的思源笔记，欢迎关注。
 
 ## 更新历史
 
