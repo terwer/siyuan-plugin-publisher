@@ -1,14 +1,9 @@
 # Changelog
 
 ## [1.29.3](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.29.2...siyuan-plugin-publisher-v1.29.3) (2024-12-03)
-
-
 ### Bug Fixes
-
 * [#1502](https://github.com/terwer/siyuan-plugin-publisher/issues/1502) image replace error in some cases ([fdf0d9e](https://github.com/terwer/siyuan-plugin-publisher/commit/fdf0d9e56d485fe4dcca200cdeefe8bc5ac174da))
-
 ## [1.29.2](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.29.1...siyuan-plugin-publisher-v1.29.2) (2024-12-02)
-### Bug Fixes
 * [#1495](https://github.com/terwer/siyuan-plugin-publisher/issues/1495) support more path link ([0163276](https://github.com/terwer/siyuan-plugin-publisher/commit/0163276efb64f8e837733a3a2ae8b7fe8d86bd16))
 * gitlab image exist case ([3f81f0c](https://github.com/terwer/siyuan-plugin-publisher/commit/3f81f0c51f38597ffad426e04b9c4016ebcc05af))
 ### Miscellaneous
