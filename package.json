@@ -70,7 +70,7 @@
     "js-base64": "^3.7.7",
     "katex": "^0.16.11",
     "lodash-es": "^4.17.21",
-    "pinia": "^2.2.8",
+    "pinia": "^2.3.0",
     "shorthash2": "^1.0.5",
     "simple-xmlrpc": "^1.4.2",
     "siyuan": "^1.0.6",

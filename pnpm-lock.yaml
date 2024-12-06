@@ -51,8 +51,8 @@ importers:
         specifier: ^4.17.21
         version: 4.17.21
       pinia:
-        specifier: ^2.2.8
-        version: 2.2.8(typescript@5.6.2)(vue@3.5.13(typescript@5.6.2))
+        specifier: ^2.3.0
+        version: 2.3.0(typescript@5.6.2)(vue@3.5.13(typescript@5.6.2))
       shorthash2:
         specifier: ^1.0.5
         version: 1.0.5
@@ -3902,15 +3902,12 @@ packages:
     resolution: {integrity: sha512-M7BAV6Rlcy5u+m6oPhAPFgJTzAioX/6B0DxyvDlo9l8+T3nLKbrczg2WLUyzd45L8RqfUMyGPzekbMvX2Ldkwg==}
     engines: {node: '>=12'}
 
-  pinia@2.2.8:
-    resolution: {integrity: sha512-NRTYy2g+kju5tBRe0oNlriZIbMNvma8ZJrpHsp3qudyiMEA8jMmPPKQ2QMHg0Oc4BkUyQYWagACabrwriCK9HQ==}
+  pinia@2.3.0:
+    resolution: {integrity: sha512-ohZj3jla0LL0OH5PlLTDMzqKiVw2XARmC1XYLdLWIPBMdhDW/123ZWr4zVAhtJm+aoSkFa13pYXskAvAscIkhQ==}
     peerDependencies:
-      '@vue/composition-api': ^1.4.0
       typescript: '>=4.4.4'
-      vue: ^2.6.14 || ^3.5.11
+      vue: ^2.7.0 || ^3.5.11
     peerDependenciesMeta:
-      '@vue/composition-api':
-        optional: true
       typescript:
         optional: true
 
@@ -9619,13 +9616,15 @@ snapshots:
 
   picomatch@4.0.2: {}
 
-  pinia@2.2.8(typescript@5.6.2)(vue@3.5.13(typescript@5.6.2)):
+  pinia@2.3.0(typescript@5.6.2)(vue@3.5.13(typescript@5.6.2)):
     dependencies:
       '@vue/devtools-api': 6.6.4
       vue: 3.5.13(typescript@5.6.2)
       vue-demi: 0.14.10(vue@3.5.13(typescript@5.6.2))
     optionalDependencies:
       typescript: 5.6.2
+    transitivePeerDependencies:
+      - '@vue/composition-api'
 
   pkg-dir@5.0.0:
     dependencies:
