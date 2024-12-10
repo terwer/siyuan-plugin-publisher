@@ -176,7 +176,7 @@ const formData = reactive({
   chatOutput: "",
   isLoading: false,
   showPage: !StrUtil.isEmptyString(id),
-  usePage: false,
+  usePage: !StrUtil.isEmptyString(id),
   siyuanPost: {} as Post,
 })
 
@@ -232,9 +232,10 @@ const insertPromptToChat = (prompt: string) => {
   if (!prompt) return
   if (prompt.includes(CURRENT_CONTEXT)) {
     formData.usePage = true
+  } else {
+    formData.usePage = false
   }
-  formData.inputText = ""
-  formData.inputText = `${formData.inputText.trim()}\n${prompt}`.trim()
+  formData.inputText = prompt
   // ElMessage.info(`已插入 Prompt：${prompt}`)
 }
 
