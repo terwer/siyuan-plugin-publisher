@@ -1,29 +1,20 @@
 # Changelog
 
 ## [1.30.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.29.3...siyuan-plugin-publisher-v1.30.0) (2024-12-10)
-
-
 ### Features
-
 * add prompt manage for ai && fix ai bugs ([ff884e0](https://github.com/terwer/siyuan-plugin-publisher/commit/ff884e0fd8189bb1cae7666b304ffad07baa888f))
 * fix ai bugs ([41bd058](https://github.com/terwer/siyuan-plugin-publisher/commit/41bd058d63353644e0a77d3b9e24ce88960210ed))
-
-
 ### Miscellaneous
-
 * fix types ([61637b2](https://github.com/terwer/siyuan-plugin-publisher/commit/61637b2f00cef0383c46057a0a1d8783c6141dfd))
-
 ## [1.29.3](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.29.2...siyuan-plugin-publisher-v1.29.3) (2024-12-03)
 ### Bug Fixes
 * [#1502](https://github.com/terwer/siyuan-plugin-publisher/issues/1502) image replace error in some cases ([fdf0d9e](https://github.com/terwer/siyuan-plugin-publisher/commit/fdf0d9e56d485fe4dcca200cdeefe8bc5ac174da))
 ## [1.29.2](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.29.1...siyuan-plugin-publisher-v1.29.2) (2024-12-02)
 * [#1495](https://github.com/terwer/siyuan-plugin-publisher/issues/1495) support more path link ([0163276](https://github.com/terwer/siyuan-plugin-publisher/commit/0163276efb64f8e837733a3a2ae8b7fe8d86bd16))
 * gitlab image exist case ([3f81f0c](https://github.com/terwer/siyuan-plugin-publisher/commit/3f81f0c51f38597ffad426e04b9c4016ebcc05af))
-### Miscellaneous
 * update docs ([df4c220](https://github.com/terwer/siyuan-plugin-publisher/commit/df4c2201d24136aa535ff9174ad733cb3e2ecf50))
 ## [1.29.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.29.0...siyuan-plugin-publisher-v1.29.1) (2024-12-02)
 ## [1.29.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.28.0...siyuan-plugin-publisher-v1.29.0) (2024-11-27)
-### Features
 * [#1231](https://github.com/terwer/siyuan-plugin-publisher/issues/1231) hexo slug error ([3fdfeea](https://github.com/terwer/siyuan-plugin-publisher/commit/3fdfeea12872b17ee9314421c4056ddd0886c58b))
 * auto read siyuan api url via docker ([1d755bd](https://github.com/terwer/siyuan-plugin-publisher/commit/1d755bd554658dc4459bd6cbbd251ce0ad1e01c0))
 ## [1.28.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.27.0...siyuan-plugin-publisher-v1.28.0) (2024-11-26)
