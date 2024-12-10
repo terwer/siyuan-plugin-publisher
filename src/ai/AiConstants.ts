@@ -36,16 +36,6 @@ enum AiConstants {
    * 最大输入长度
    */
   MAX_INPUT_TOKEN_LENGTH = 3000,
-
-  /**
-   * 最大指令长度
-   */
-  // MAX_PROMPT_LENGTH = 96,
-
-  /**
-   * 标题返回字符限制
-   */
-  // MAX_RESP_TITLE_LENGTH = 255,
 }
 
 export { AiConstants }
