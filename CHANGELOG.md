@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.30.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.29.3...siyuan-plugin-publisher-v1.30.0) (2024-12-10)
+
+
+### Features
+
+* add prompt manage for ai && fix ai bugs ([ff884e0](https://github.com/terwer/siyuan-plugin-publisher/commit/ff884e0fd8189bb1cae7666b304ffad07baa888f))
+* fix ai bugs ([41bd058](https://github.com/terwer/siyuan-plugin-publisher/commit/41bd058d63353644e0a77d3b9e24ce88960210ed))
+
+
+### Miscellaneous
+
+* fix types ([61637b2](https://github.com/terwer/siyuan-plugin-publisher/commit/61637b2f00cef0383c46057a0a1d8783c6141dfd))
+
 ## [1.29.3](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.29.2...siyuan-plugin-publisher-v1.29.3) (2024-12-03)
 ### Bug Fixes
 * [#1502](https://github.com/terwer/siyuan-plugin-publisher/issues/1502) image replace error in some cases ([fdf0d9e](https://github.com/terwer/siyuan-plugin-publisher/commit/fdf0d9e56d485fe4dcca200cdeefe8bc5ac174da))
