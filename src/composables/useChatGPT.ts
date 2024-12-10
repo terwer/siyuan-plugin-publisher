@@ -98,10 +98,15 @@ const useChatGPT = () => {
     try {
       const api = await getAPI()
       // 使用 ChatGPTAPI 实例进行聊天操作
+      opts = opts || {}
+      const completionParams = opts?.completionParams ?? {}
       opts.completionParams = {
-        ...opts.completionParams,
+        ...completionParams,
         model: pref.value.experimentalAIApiModel,
-        max_tokens: pref.value.experimentalAIApiMaxTokens,
+        max_tokens:
+          pref.value.experimentalAIApiMaxTokens > 0
+            ? pref.value.experimentalAIApiMaxTokens
+            : AiConstants.MAX_INPUT_TOKEN_LENGTH,
         temperature: pref.value.experimentalAIApiTemperature,
       }
 
