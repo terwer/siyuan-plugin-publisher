@@ -176,7 +176,7 @@ const formData = reactive({
   chatOutput: "",
   isLoading: false,
   showPage: !StrUtil.isEmptyString(id),
-  usePage: false,
+  usePage: !StrUtil.isEmptyString(id),
   siyuanPost: {} as Post,
 })
 

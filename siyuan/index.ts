@@ -23,19 +23,19 @@
  * questions.
  */
 
-import { App, confirm, getFrontend, Model, IObject, Plugin } from "siyuan"
+import { App, confirm, getFrontend, IObject, Model, Plugin } from "siyuan"
 import { SiyuanConfig, SiyuanKernelApi } from "zhi-siyuan-api"
 import { createSiyuanAppLogger } from "./appLogger"
 import { WidgetInvoke } from "./invoke/widgetInvoke"
 import { Topbar } from "./topbar"
 import { ILogger } from "zhi-lib-base"
-
-import "./index.styl"
 import { ConfigManager } from "~/siyuan/store/config.ts"
 import MenuUtils from "~/siyuan/utils/menuUtils.ts"
 import { PluginInvoke } from "~/siyuan/invoke/pluginInvoke.ts"
 import { icons } from "~/siyuan/utils/svg.ts"
 import { PreferenceConfigManager } from "~/siyuan/store/preferenceConfigManager.ts"
+
+import "./index.styl"
 
 /**
  * 发布工具插件入口
@@ -176,6 +176,14 @@ export default class PublisherPlugin extends Plugin {
       iconHTML: `<span class="iconfont-icon">${icons.iconPlane}</span>`,
       label: this.i18n.publishToQuick,
       submenu: quickMenus,
+    })
+    // AI聊天
+    context.push({
+      iconHTML: `<span class="iconfont-icon">${icons.iconEye}</span>`,
+      label: this.i18n.aiChat,
+      click: async () => {
+        await this.widgetInvoke.showPublisherAiChatDialog(pageId)
+      },
     })
   }
 }

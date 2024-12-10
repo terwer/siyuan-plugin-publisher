@@ -64,8 +64,8 @@ export class WidgetInvoke {
     await this.showTab(`/`, this.pluginInstance.i18n.articleManage)
   }
 
-  public async showPublisherAiChatDialog() {
-    let pageId: string | undefined = WidgetPageUtils.getPageId()
+  public async showPublisherAiChatDialog(pageId?: string) {
+    pageId = pageId ?? WidgetPageUtils.getPageId()
     if (pageId == "") {
       pageId = undefined
     }
