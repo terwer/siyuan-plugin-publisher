@@ -119,6 +119,7 @@ import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useRoute } from "vue-router"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { getWidgetId } from "~/src/utils/widgetUtils.ts"
+import { Post } from "zhi-blog-api"
 
 const logger = createAppLogger("chatgpt-ai")
 
