@@ -62,6 +62,14 @@
     </el-card>
 
     <!-- 聊天功能 -->
+    <el-alert
+      v-if="formData.usePage && formData.showPage && !StrUtil.isEmptyString(formData.siyuanPost.markdown)"
+      :closable="false"
+      :title="`当前为上下文模式，文档上下文为《${formData.siyuanPost.title}》`"
+      class="top-tip"
+      type="success"
+    />
+    <el-alert v-else :closable="false" :title="`当前为自由聊天模式`" class="top-tip" type="info" />
     <el-form class="chatgpt-form">
       <el-form-item>
         <el-input
@@ -225,6 +233,7 @@ const insertPromptToChat = (prompt: string) => {
   if (prompt.includes(CURRENT_CONTEXT)) {
     formData.usePage = true
   }
+  formData.inputText = ""
   formData.inputText = `${formData.inputText.trim()}\n${prompt}`.trim()
   // ElMessage.info(`已插入 Prompt：${prompt}`)
 }
@@ -239,20 +248,25 @@ const sendMessage = async () => {
   formData.isLoading = true
 
   try {
-    const { chat } = useChatGPT()
-    const inputWord =
-      formData.usePage && formData.siyuanPost.markdown
-        ? `${formData.siyuanPost.markdown}\n${formData.inputText}`
-        : formData.inputText
+    const { chat, getChatInput } = useChatGPT()
+    const inputWord = formData.inputText
 
-    const chatText = await chat(inputWord)
+    let chatText = ""
+    if (formData.usePage) {
+      chatText = await chat(inputWord, {
+        name: "system",
+        systemMessage: getChatInput(formData.siyuanPost.markdown, formData.siyuanPost.html),
+      })
+    } else {
+      chatText = await chat(inputWord)
+    }
+
     if (StrUtil.isEmptyString(chatText)) {
       ElMessage.error("请求错误，请在偏好设置配置请求地址和 ChatGPT key！")
       return
     }
 
-    formData.chatOutput += `> ${formData.inputText}\n${chatText}\n\n`
-    formData.inputText = ""
+    formData.chatOutput = `> ${formData.inputText}\n${chatText}\n\n` + formData.chatOutput
   } catch (e) {
     logger.error("发送消息失败", e)
     ElMessage.error("发送消息失败：" + e)
