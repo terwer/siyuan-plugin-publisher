@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.30.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.30.0...siyuan-plugin-publisher-v1.30.1) (2024-12-13)
+
+
+### Bug Fixes
+
+* [#1202](https://github.com/terwer/siyuan-plugin-publisher/issues/1202) add option for outer link ([d8e3366](https://github.com/terwer/siyuan-plugin-publisher/commit/d8e336666306450981f2e4bdc04d0ff245cb770d))
+
 ## [1.30.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.29.3...siyuan-plugin-publisher-v1.30.0) (2024-12-10)
 ### Features
 * add prompt manage for ai && fix ai bugs ([ff884e0](https://github.com/terwer/siyuan-plugin-publisher/commit/ff884e0fd8189bb1cae7666b304ffad07baa888f))
