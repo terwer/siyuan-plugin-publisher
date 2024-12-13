@@ -66,8 +66,8 @@ importers:
         specifier: ^0.0.1
         version: 0.0.1
       unplugin-icons:
-        specifier: ^0.20.2
-        version: 0.20.2(@vue/compiler-sfc@3.5.13)(svelte@4.2.18)(vue-template-compiler@2.7.16)
+        specifier: ^0.21.0
+        version: 0.21.0(@vue/compiler-sfc@3.5.13)(svelte@4.2.18)(vue-template-compiler@2.7.16)
       uuid:
         specifier: ^11.0.3
         version: 11.0.3
@@ -4688,8 +4688,8 @@ packages:
       '@vueuse/core':
         optional: true
 
-  unplugin-icons@0.20.2:
-    resolution: {integrity: sha512-Ak6TKAiO812aIUrCelrBSTQbYC4FiqawnFrAusP/hjmB8f9cAug9jr381ItvLl+Asi4IVcjoOiPbpy9CfFGKvQ==}
+  unplugin-icons@0.21.0:
+    resolution: {integrity: sha512-sRic+yj7cCbpDFwrRj+m55ogOZi6PQRDc/WUEmjHLAnc90v0g5UVxE0cVAZgBOsAPCieizZJui/sgrCYrVx8mQ==}
     peerDependencies:
       '@svgr/core': '>=7.0.0'
       '@svgx/core': ^1.0.1
@@ -10525,7 +10525,7 @@ snapshots:
     transitivePeerDependencies:
       - rollup
 
-  unplugin-icons@0.20.2(@vue/compiler-sfc@3.5.13)(svelte@4.2.18)(vue-template-compiler@2.7.16):
+  unplugin-icons@0.21.0(@vue/compiler-sfc@3.5.13)(svelte@4.2.18)(vue-template-compiler@2.7.16):
     dependencies:
       '@antfu/install-pkg': 0.5.0
       '@antfu/utils': 0.7.10
