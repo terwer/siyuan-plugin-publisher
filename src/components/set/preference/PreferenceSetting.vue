@@ -80,6 +80,9 @@ const isSiyuanPlugin = isInSiyuanWin() || (isInSiyuanWidget() && StrUtil.isEmpty
       <el-form-item :label="t('preference.setting.showArticleManageMenu')">
         <el-switch v-model="publishPreferenceSettingForm.showArticleManageMenu"></el-switch>
       </el-form-item>
+      <el-form-item :label="t('preference.setting.ignoreBlockRef')">
+        <el-switch v-model="publishPreferenceSettingForm.ignoreBlockRef"></el-switch>
+      </el-form-item>
     </div>
   </el-form>
 </template>

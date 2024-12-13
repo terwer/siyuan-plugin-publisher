@@ -654,6 +654,7 @@ export default {
   "distri.type.merge.warn":
     "Note: In merge mode, the title and abstract changes are not valid, and the labels and categories are merged with the selected platform data.",
   "preference.setting.keepTitle": "Do not update the original title",
+  "preference.setting.ignoreBlockRef": "Ignore block ref",
 
   "setting.blog.gitlab.url.tip": "GitLab homepage, e.g., http://localhost:8002",
   "setting.blog.type.gitlab.user.tip": "Username for GitLab",
