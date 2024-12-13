@@ -7,7 +7,7 @@ brew install n
 sudo n 18
 brew install corepack
 corepack enable pnpm
-corepack use pnpm@9.13.2
+corepack use pnpm@9.15.0
 
 pnpm install
 ```
