@@ -89,6 +89,9 @@ class PublishPreferenceCfg extends PreferenceConfig {
   // 文章管理
   public showArticleManageMenu?: boolean
 
+  // 是否忽略块引用
+  public ignoreBlockRef?: boolean
+
   constructor() {
     super()
     this.experimentalUseSiyuanNoteAIConfig = true
@@ -103,6 +106,7 @@ class PublishPreferenceCfg extends PreferenceConfig {
     this.showExtendMenu = true
 
     this.showArticleManageMenu = true
+    this.ignoreBlockRef = false
   }
 }
 

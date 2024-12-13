@@ -644,8 +644,11 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
       // eslint-disable-next-line no-prototype-builtins
       if (!postMeta.hasOwnProperty(posidKey)) {
         outerLink = `siyuan://blocks/${id}`
-        this.logger.error("引用的文档尚未发布，您可以删除此外链再发布，或者先发布外链文章 =>", id)
-        throw new Error(`引用的文档 ${id} 尚未发布，您可以删除此外链再发布，或者先发布外链文章`)
+        // 包括未配置和未勾选
+        if (pref.value.ignoreBlockRef !== true) {
+          this.logger.error("引用的文档尚未发布，您可以删除此外链再发布，或者先发布外链文章 =>", id)
+          throw new Error(`引用的文档 ${id} 尚未发布，您可以删除此外链再发布，或者先发布外链文章`)
+        }
       } else {
         let previewUrl: string
         const postid = postMeta[posidKey]

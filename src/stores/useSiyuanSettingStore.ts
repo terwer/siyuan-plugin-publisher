@@ -27,9 +27,10 @@ import { SiyuanConfig } from "zhi-siyuan-api"
 import { RemovableRef, StorageSerializers } from "@vueuse/core"
 import { readonly } from "vue"
 import { SiyuanDevice } from "zhi-device"
-import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import useCommonLocalStorage from "~/src/stores/common/useCommonLocalStorage.ts"
 import { LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
+import { Utils } from "~/src/utils/utils.ts"
+import { StrUtil } from "zhi-common"
 
 /**
  * 思源笔记设置
@@ -57,15 +58,21 @@ const useSiyuanSettingStore = () => {
     const win = SiyuanDevice.siyuanWindow()
     origin = win?.location.origin
 
-    const initialValue = new SiyuanConfig(origin ?? baseUrl, token)
+    // 顺序
+    // 1、环境变量
+    // 2、origin
+    // 3、默认值
+    const envSiyuanApiUrl = Utils.emptyOrDefault(process.env.VITE_SIYUAN_API_URL, origin)
+    const siyuanApiUrl = Utils.emptyOrDefault(envSiyuanApiUrl, baseUrl)
+    const initialValue = new SiyuanConfig(siyuanApiUrl, token)
     initialValue.middlewareUrl = middlewareUrl
     const siyuanConfig = useCommonLocalStorage<SiyuanConfig>(filePath, storageKey, initialValue, {
       serializer: StorageSerializers.object,
     })
 
-    // 更新apiUrl
-    if (origin) {
-      siyuanConfig.value.apiUrl = origin
+    // 更新apiUrl，兼容旧数据的情况
+    if (!StrUtil.isEmptyString(siyuanApiUrl)) {
+      siyuanConfig.value.apiUrl = siyuanApiUrl
     }
     return siyuanConfig
   }

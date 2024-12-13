@@ -647,6 +647,7 @@ export default {
   "preference.setting.showAIMenu": "显示AI菜单",
   "preference.setting.showExtendMenu": "显示扩展菜单",
   "preference.setting.showArticleManageMenu": "显示文章管理菜单",
+  "preference.setting.ignoreBlockRef": "忽略块引用",
 
   "message.publish.notShared": "文章尚未分享，无法在外部查看。请分享文章或者在PC 客户端内部通过插件菜单进行预览。",
 
