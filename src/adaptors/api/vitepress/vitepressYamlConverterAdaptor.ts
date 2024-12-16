@@ -152,7 +152,7 @@ class VitepressYamlConverterAdaptor extends YamlConvertAdaptor {
       for (let i = 0; i < head.length; i++) {
         const m = head[i]
         if (m?.name === "keywords" && !StrUtil.isEmptyString(m.content)) {
-          post.mt_keywords = m.content?.split(" ")
+          post.mt_keywords = m.content?.split(" ").join(",")
           break
         }
       }
