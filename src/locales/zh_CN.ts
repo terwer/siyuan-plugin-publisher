@@ -158,7 +158,8 @@ export default {
   "setting.blog.type.github.site": "作者主页",
   "setting.blog.type.github.site.tip": "作者主页，如果为空默认为：[GitHub地址]/[用户名]",
   "setting.blog.type.github.dyn.yaml": "YAML预设配置",
-  "setting.blog.type.github.dyn.yaml.tip": "YAML预设配置，如果您不了解是干什么的请不要配置，JSON格式，例如：{\"sidebar\": false}。这个配置会覆盖当前平台的默认配置。如果需要使用默认的就留空即可。",
+  "setting.blog.type.github.dyn.yaml.tip":
+    'YAML预设配置，如果您不了解是干什么的请不要配置，JSON格式，例如：{"sidebar": false}。这个配置会覆盖当前平台的默认配置。如果需要使用默认的就留空即可。',
   "setting.blog.url": "博客网址",
   "setting.blog.github.url.tip": "Github首页地址",
   "setting.blog.username": "账号",
@@ -648,6 +649,9 @@ export default {
   "preference.setting.showExtendMenu": "显示扩展菜单",
   "preference.setting.showArticleManageMenu": "显示文章管理菜单",
   "preference.setting.ignoreBlockRef": "忽略块引用",
+  "preference.setting.allowChangeSlug": "允许修改别名",
+  "preference.setting.allowChangeSlug.tips":
+    "警告，别名是文章的唯一标记，如果允许修改，请自行保证唯一性，否则文章会发布失败。如果你不清楚此功能，请使用默认的自动生成的别名",
 
   "message.publish.notShared": "文章尚未分享，无法在外部查看。请分享文章或者在PC 客户端内部通过插件菜单进行预览。",
 

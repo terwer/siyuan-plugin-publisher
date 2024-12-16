@@ -30,7 +30,7 @@ import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import CryptoJS from "crypto-js"
 import { arrayToBuffer } from "~/src/utils/polyfillUtils.ts"
 import { getAliOssClient } from "~/src/vendors/alioss/s3oss.ts"
-import _ from "lodash-es"
+import * as _ from "lodash-es"
 import ZhihuUtils from "~/src/adaptors/web/zhihu/zhihuUtils.ts"
 import { MockBrowser } from "~/src/utils/MockBrowser.ts"
 

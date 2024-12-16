@@ -26,7 +26,7 @@
 import { Directive, DirectiveBinding, nextTick } from "vue"
 import iframeResize from "iframe-resizer/js/iframeResizer"
 import { isDev } from "~/src/utils/constants.ts"
-import _ from "lodash-es"
+import * as _ from "lodash-es"
 import { ElLoading } from "element-plus"
 
 interface ResizableHTMLElement extends HTMLElement {

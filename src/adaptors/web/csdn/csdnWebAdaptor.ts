@@ -27,7 +27,7 @@ import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
 import CsdnUtils from "~/src/adaptors/web/csdn/csdnUtils.ts"
 import { BlogConfig, CategoryInfo, MediaObject, PageTypeEnum, Post, UserBlog } from "zhi-blog-api"
 import WebUtils from "~/src/adaptors/web/base/webUtils.ts"
-import _ from "lodash-es"
+import * as _ from "lodash-es"
 import FormDataUtils from "~/src/utils/FormDataUtils.ts"
 
 /**

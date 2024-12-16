@@ -91,6 +91,8 @@ class PublishPreferenceCfg extends PreferenceConfig {
 
   // 是否忽略块引用
   public ignoreBlockRef?: boolean
+  // 是否允许修改别名
+  public allowChangeSlug?: boolean
 
   constructor() {
     super()
@@ -107,6 +109,7 @@ class PublishPreferenceCfg extends PreferenceConfig {
 
     this.showArticleManageMenu = true
     this.ignoreBlockRef = false
+    this.allowChangeSlug = false
   }
 }
 

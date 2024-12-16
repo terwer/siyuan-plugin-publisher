@@ -54,7 +54,7 @@ import { SiyuanAttr, SiyuanKernelApi } from "zhi-siyuan-api"
 import { DynamicConfig, getDynPlatformKeyFromPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { CATE_AUTO_NAME } from "~/src/utils/constants.ts"
 import { toRaw } from "vue"
-import _ from "lodash-es"
+import * as _ from "lodash-es"
 import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
 import { SypConfig } from "~/syp.config.ts"
 import { usePlatformMetadataStore } from "~/src/stores/usePlatformMetadataStore.ts"
@@ -166,9 +166,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     const post = _.cloneDeep(doc) as Post
 
     if (cfg?.mdFilenameRule) {
-      if (cfg?.mdFilenameRule?.includes("[filename]")) {
-        cfg.useMdFilename = true
-      }
+      cfg.useMdFilename = !!cfg?.mdFilenameRule?.includes("[filename]")
       // 处理文件规则
       const created = DateUtil.formatIsoToZhDate(post.dateCreated.toISOString(), true)
       const datearr = created.split(" ")[0]
@@ -203,15 +201,18 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
         const tag = post?.mt_keywords?.split(",")?.join("/") ?? ""
         filename = filename.replace(/\[tags]/, tag)
       }
+      debugger
       if (cfg.useMdFilename) {
         // 使用真实文件名作为MD文件名
         filename = filename.replace(/\[filename]/g, post.originalTitle)
-        // 这里需要去除空格等 url 里面参数不允许的非法字符
-        filename = MdUtils.getHumanFilename(filename)
       } else {
         // 使用别名作为MD文件名
         filename = filename.replace(/\[slug]/g, post.wp_slug)
       }
+      debugger
+      // 这里需要去除空格等 url 里面参数不允许的非法字符
+      filename = MdUtils.getHumanFilename(filename)
+      debugger
 
       post.mdFilename = filename
     }
@@ -643,12 +644,15 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
       const posidKey = cfg.posidKey
       // eslint-disable-next-line no-prototype-builtins
       if (!postMeta.hasOwnProperty(posidKey)) {
-        outerLink = `siyuan://blocks/${id}`
         // 包括未配置和未勾选
         if (pref.value.ignoreBlockRef !== true) {
           this.logger.error("引用的文档尚未发布，您可以删除此外链再发布，或者先发布外链文章 =>", id)
           throw new Error(`引用的文档 ${id} 尚未发布，您可以删除此外链再发布，或者先发布外链文章`)
         }
+        // 配置了忽略块链接的直接用纯文本
+        // https://github.com/terwer/siyuan-plugin-publisher/issues/1202#issuecomment-2542653498
+        // outerLink = `siyuan://blocks/${id}`
+        replacedText = replacedText.replace(fullMatch, processedTitle)
       } else {
         let previewUrl: string
         const postid = postMeta[posidKey]
@@ -663,9 +667,8 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
           previewUrl = `/${previewUrl}`
         }
         outerLink = previewUrl
+        replacedText = replacedText.replace(fullMatch, `[${processedTitle}](${outerLink})`)
       }
-
-      replacedText = replacedText.replace(fullMatch, `[${processedTitle}](${outerLink})`)
     }
 
     return replacedText

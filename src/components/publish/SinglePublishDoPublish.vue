@@ -48,10 +48,11 @@ import PublishKnowledgeSpace from "~/src/components/publish/form/PublishKnowledg
 import { SiyuanAttr } from "zhi-siyuan-api"
 import PublishTitle from "~/src/components/publish/form/PublishTitle.vue"
 import { useChatGPT } from "~/src/composables/useChatGPT.ts"
-import _ from "lodash-es"
+import * as _ from "lodash-es"
 import { useLoadingTimer } from "~/src/composables/useLoadingTimer.ts"
 import PageUtils from "~/common/pageUtils.ts"
 import { ITagConfig } from "~/src/types/ITagConfig.ts"
+import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
 
 const logger = createAppLogger("single-publish-do-publish")
 
@@ -63,6 +64,7 @@ const { kernelApi } = useSiyuanApi()
 const { doSinglePublish, doSingleDelete, initPublishMethods, doForceSingleDelete } = usePublish()
 const router = useRouter()
 const { getPublishCfg } = usePublishConfig()
+const { getReadOnlyPublishPreferenceSetting } = usePreferenceSettingStore()
 
 // datas
 const sysKeys = pre.systemCfg.map((item) => {
@@ -106,6 +108,11 @@ const formData = reactive({
   // =========================
   // sync attrs end
   // =========================
+
+  // 系统偏好设置-全局配置，非篇文章独有
+  // 单篇文章配置是publishCfg的cfg
+  // 单个平台配置是publishCfg的dynCfg
+  pref: getReadOnlyPublishPreferenceSetting(),
 
   actionEnable: true,
 })
@@ -553,7 +560,10 @@ onMounted(async () => {
 
                   <!-- 别名字段 -->
                   <el-form-item :label="t('main.slug')">
-                    <el-input v-model="formData.mergedPost.wp_slug" :disabled="true" />
+                    <el-input
+                      v-model="formData.mergedPost.wp_slug"
+                      :disabled="formData.pref?.allowChangeSlug !== true"
+                    />
                   </el-form-item>
 
                   <!-- 摘要 -->

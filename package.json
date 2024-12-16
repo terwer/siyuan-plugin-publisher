@@ -33,6 +33,7 @@
     "@types/crypto-js": "^4.2.2",
     "@types/iframe-resizer": "^3.5.13",
     "@types/katex": "^0.16.7",
+    "@types/lodash-es": "^4.17.12",
     "@types/minimist": "^1.2.5",
     "@types/node": "^18.19.68",
     "@vitejs/plugin-vue": "^5.2.1",
@@ -58,8 +59,8 @@
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
     "@iconify/json": "^2.2.282",
-    "@vueuse/components": "^11.3.0",
-    "@vueuse/core": "^11.3.0",
+    "@vueuse/components": "^12.0.0",
+    "@vueuse/core": "^12.0.0",
     "chatgpt": "^5.2.5",
     "cheerio": "1.0.0",
     "cookie-parse": "^0.4.0",
@@ -75,7 +76,7 @@
     "simple-xmlrpc": "^1.4.2",
     "siyuan": "^1.0.7",
     "telegraph.md": "^0.0.1",
-    "unplugin-icons": "^0.20.2",
+    "unplugin-icons": "^0.21.0",
     "uuid": "^11.0.3",
     "vue": "^3.5.13",
     "vue-i18n": "^10.0.5",
@@ -93,5 +94,5 @@
     "zhi-siyuan-picgo": "^1.12.1",
     "zhi-xmlrpc-middleware": "^0.6.21"
   },
-  "packageManager": "pnpm@9.13.2"
+  "packageManager": "pnpm@9.15.0"
 }

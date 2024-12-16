@@ -28,7 +28,7 @@ import * as cheerio from "cheerio"
 import { HtmlUtil, JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { BlogConfig, MediaObject, PageTypeEnum, Post, UserBlog } from "zhi-blog-api"
 import { toRaw } from "vue"
-import _ from "lodash-es"
+import * as _ from "lodash-es"
 import { fileToBuffer } from "~/src/utils/polyfillUtils.ts"
 import {MockBrowser} from "~/src/utils/MockBrowser.ts";
 

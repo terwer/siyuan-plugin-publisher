@@ -25,7 +25,7 @@
 
 import { CommonGithubApiAdaptor } from "~/src/adaptors/api/base/github/commonGithubApiAdaptor.ts"
 import { BlogConfig, PageTypeEnum, Post, YamlConvertAdaptor } from "zhi-blog-api"
-import _ from "lodash-es"
+import * as _ from "lodash-es"
 import { VuepressYamlConverterAdaptor } from "~/src/adaptors/api/vuepress/vuepressYamlConverterAdaptor.ts"
 import { YamlUtil } from "zhi-common"
 

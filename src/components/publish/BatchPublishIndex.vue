@@ -44,10 +44,11 @@ import PublishTime from "~/src/components/publish/form/PublishTime.vue"
 import { ICategoryConfig } from "~/src/types/ICategoryConfig.ts"
 import { SiyuanAttr } from "zhi-siyuan-api"
 import { DistributionPattern } from "~/src/models/distributionPattern.ts"
-import _ from "lodash-es"
+import * as _ from "lodash-es"
 import PublishTitle from "~/src/components/publish/form/PublishTitle.vue"
 import { useChatGPT } from "~/src/composables/useChatGPT.ts"
 import { useLoadingTimer } from "~/src/composables/useLoadingTimer.ts"
+import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
 
 const logger = createAppLogger("publisher-index")
 
@@ -65,6 +66,7 @@ const { doSinglePublish, doSingleDelete, doForceSingleDelete, initPublishMethods
 const { blogApi } = useSiyuanApi()
 const { getPublishCfg } = usePublishConfig()
 const { kernelApi } = useSiyuanApi()
+const { getReadOnlyPublishPreferenceSetting } = usePreferenceSettingStore()
 
 // datas
 const sysKeys = pre.systemCfg.map((item) => {
@@ -105,6 +107,11 @@ const formData = reactive({
   // =========================
   // sync attrs end
   // =========================
+
+  // 系统偏好设置-全局配置，非篇文章独有
+  // 单篇文章配置是publishCfg的cfg
+  // 单个平台配置是publishCfg的dynCfg
+  pref: getReadOnlyPublishPreferenceSetting(),
 
   distriPattern: DistributionPattern.Merge,
   actionEnable: true,
@@ -196,7 +203,7 @@ const handleDelete = async () => {
       icon: markRaw(Delete),
       confirmButtonText: t("main.opt.ok"),
       cancelButtonText: t("main.opt.cancel"),
-    }
+    } as any
   )
     .then(async () => {
       await doDelete()
@@ -469,7 +476,7 @@ onMounted(async () => {
 
                 <!-- 别名 -->
                 <el-form-item :label="t('main.slug')">
-                  <el-input v-model="formData.siyuanPost.wp_slug" :disabled="true" />
+                  <el-input v-model="formData.siyuanPost.wp_slug" :disabled="formData.pref?.allowChangeSlug !== true" />
                 </el-form-item>
 
                 <!-- 摘要 -->

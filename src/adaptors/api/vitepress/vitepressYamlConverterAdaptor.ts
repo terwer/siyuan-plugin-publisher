@@ -148,11 +148,11 @@ class VitepressYamlConverterAdaptor extends YamlConvertAdaptor {
 
     // 标签
     const head = yamlFormatObj.yamlObj?.head
-    if (head && head.length == 4) {
+    if (head && head.length > 0) {
       for (let i = 0; i < head.length; i++) {
         const m = head[i]
         if (m?.name === "keywords" && !StrUtil.isEmptyString(m.content)) {
-          post.mt_keywords = m.content?.split(" ")
+          post.mt_keywords = m.content?.split(" ").join(",")
           break
         }
       }
