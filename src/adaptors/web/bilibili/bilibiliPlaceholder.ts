@@ -23,9 +23,8 @@
  * questions.
  */
 
-const PRE_COMTANTS = {
-  PRE_CUSTOM_HALOWEB: "custom_Haloweb",
-  PRE_CUSTOM_BILIBILI: "custom_Bilibili",
-}
+import { CommonWebPlaceholder } from "~/src/adaptors/web/base/commonWebPlaceholder.ts"
 
-export { PRE_COMTANTS }
+class BilibiliPlaceholder extends CommonWebPlaceholder {}
+
+export { BilibiliPlaceholder }

@@ -158,7 +158,7 @@ const _handleOpenBrowserAuth = async (cfg: DynamicConfig) => {
       icon: markRaw(WarningFilled),
       confirmButtonText: t("main.opt.ok"),
       cancelButtonText: t("main.opt.cancel"),
-    }
+    } as any
   )
     .then(async () => {
       if (cfg.isAuth) {
@@ -187,7 +187,7 @@ const _handleChromeExtensionAuth = (cfg: DynamicConfig) => {
       icon: markRaw(WarningFilled),
       confirmButtonText: t("main.opt.ok"),
       cancelButtonText: t("main.opt.cancel"),
-    }
+    } as any
   )
     .then(async () => {
       if (cfg.isAuth) {
@@ -314,7 +314,7 @@ const _handleValidateOpenBrowserAuth = (dynCfg: DynamicConfig) => {
 
     try {
       // 构造对应平台的cookie
-      const cookieStr = await api.buildCookie(cookies)
+      const cookieStr = cookies ? await api.buildCookie(cookies) : ""
       // 更新cookie
       const newSettingCfg = cfg
       newSettingCfg.password = cookieStr
@@ -374,7 +374,7 @@ const _handleClearAuthConfirm = (msg, url: string) => {
     icon: markRaw(Warning),
     confirmButtonText: t("main.opt.ok"),
     cancelButtonText: t("main.opt.cancel"),
-  })
+  } as any)
     .then(async () => {
       openBrowserWindow(url)
     })
@@ -412,7 +412,7 @@ const _handleValidateChromeExtensionAuth = async (dynCfg: DynamicConfig) => {
       t("main.opt.failure") +
         "=>" +
         e +
-        "，如果是登录过期，请在左侧点击「授权」修改新的 cookie 或者参考 https://blog.terwer.space/s/20230810132040-nn4q7vs FAQ4 解决"
+        "，如果是登录过期，请在左侧点击「授权」修改新的 cookie 或者参考 https://siyuan.wiki/s/20230810132040-nn4q7vs FAQ4 解决"
     )
     logger.error(t("main.opt.failure") + "=>", e)
   }
@@ -454,7 +454,7 @@ const handleExtraData = async (dynamicConfigArray: DynamicConfig[]) => {
 // init
 const initPage = async () => {
   formData.setting = await getSetting()
-  logger.info("get setting from platform setting", formData.setting)
+  logger.debug("get setting from platform setting", formData.setting)
 
   const dynJsonCfg = JsonUtil.safeParse<DynamicJsonCfg>(formData.setting[DYNAMIC_CONFIG_KEY], {} as DynamicJsonCfg)
   // 默认展示通用平台

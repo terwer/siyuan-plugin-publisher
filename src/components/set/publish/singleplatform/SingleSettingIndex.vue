@@ -32,6 +32,7 @@ import { getSubPlatformTypeByKey, SubPlatformType } from "~/src/platforms/dynami
 import TelegraphSetting from "~/src/components/set/publish/singleplatform/commonblog/TelegraphSetting.vue"
 import WordpressdotcomSetting from "~/src/components/set/publish/singleplatform/metaweblog/WordpressdotcomSetting.vue"
 import HalowebSetting from "~/src/components/set/publish/singleplatform/web/HalowebSetting.vue"
+import BilibiliSetting from "~/src/components/set/publish/singleplatform/web/BilibiliSetting.vue"
 
 // uses
 const { t } = useVueI18n()
@@ -75,6 +76,7 @@ const subtype = getSubPlatformTypeByKey(apiType)
     <!--
     <flowus-setting v-else-if="subtype === SubPlatformType.Custom_Flowus" :api-type="apiType" />
     -->
+    <bilibili-setting v-else-if="subtype === SubPlatformType.Custom_Bilibili" :api-type="apiType" />
     <haloweb-setting v-else-if="subtype === SubPlatformType.Custom_Haloweb" :api-type="apiType" />
     <span v-else>
       <el-alert :closable="false" :title="t('setting.entry.not.supported')" class="top-tip" type="error" />

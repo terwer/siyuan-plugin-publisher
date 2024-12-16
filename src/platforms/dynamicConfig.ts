@@ -215,6 +215,7 @@ export enum SubPlatformType {
   Custom_Juejin = "Juejin",
   // Custom_Flowus = "Flowus",
   Custom_Haloweb = "Haloweb",
+  Custom_Bilibili = "Bilibili",
 
   // System
   System_Siyuan = "Siyuan",
@@ -283,6 +284,7 @@ export function getSubtypeList(ptype: PlatformType): SubPlatformType[] {
       subtypeList.push(SubPlatformType.Custom_Juejin)
       // subtypeList.push(SubPlatformType.Custom_Flowus)
       subtypeList.push(SubPlatformType.Custom_Haloweb)
+      subtypeList.push(SubPlatformType.Custom_Bilibili)
       break
     case PlatformType.System:
       subtypeList.push(SubPlatformType.System_Siyuan)

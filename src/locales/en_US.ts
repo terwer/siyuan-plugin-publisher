@@ -157,7 +157,8 @@ export default {
   "setting.blog.type.github.site.tip":
     "Author's page, defaults to: [GitHub URL]/[Username] if left empty. Please do not change the key, translate the value to English.",
   "setting.blog.type.github.dyn.yaml": "YAML Preset Configuration",
-  "setting.blog.type.github.dyn.yaml.tip": "YAML Preset Configuration, if you do not understand what it is for, please do not configure. JSON format, for example: {\"sidebar\": false}",
+  "setting.blog.type.github.dyn.yaml.tip":
+    'YAML Preset Configuration, if you do not understand what it is for, please do not configure. JSON format, for example: {"sidebar": false}',
   "setting.blog.url": "Blog addr",
   "setting.blog.github.url.tip": "Github homepage address",
   "setting.blog.github.apiurl.tip": "Github's REST API address, typically: https://api.github.com",
@@ -491,6 +492,11 @@ export default {
   "setting.flowus.apiUrl.tip": "Usually fixed, do not modify",
   "setting.flowus.previewUrl.tip": "Flowus platform article preview rules",
 
+  "setting.bilibili.home.tip": "Bilibili column address, usually fixed",
+  "setting.bilibili.password.tip": "Bilibili Cookie, do not modify",
+  "setting.bilibili.apiUrl.tip": "Usually fixed, do not modify",
+  "setting.bilibili.previewUrl.tip": "Bilibili column article preview rules",
+
   "setting.picgo.refer.to": "For details, please refer to:",
   "setting.picgo.refer.to.online.doc": "Picgo configuration online documentation",
   "setting.picgo.picbed": "Picbed setting",
@@ -656,7 +662,8 @@ export default {
   "preference.setting.keepTitle": "Do not update the original title",
   "preference.setting.ignoreBlockRef": "Ignore block ref",
   "preference.setting.allowChangeSlug": "Allow changing slug",
-  "preference.setting.allowChangeSlug.tips": "Warning, the slug is the unique identifier for publishing articles across platforms. If you allow changes, please ensure its uniqueness to avoid publication failure. If you are unsure about this feature, use the default auto-generated slug",
+  "preference.setting.allowChangeSlug.tips":
+    "Warning, the slug is the unique identifier for publishing articles across platforms. If you allow changes, please ensure its uniqueness to avoid publication failure. If you are unsure about this feature, use the default auto-generated slug",
 
   "setting.blog.gitlab.url.tip": "GitLab homepage, e.g., http://localhost:8002",
   "setting.blog.type.gitlab.user.tip": "Username for GitLab",

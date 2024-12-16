@@ -55,6 +55,7 @@ import { useTelegraphApi } from "~/src/adaptors/api/telegraph/useTelegraphApi.ts
 import { useJvueApi } from "~/src/adaptors/api/jvue/useJvueApi.ts"
 import { useWordpressdotcomApi } from "~/src/adaptors/api/wordpress-dot-com/useWordpressdotcomApi.ts"
 import { useHalowebWeb } from "~/src/adaptors/web/haloweb/useHalowebWeb.ts"
+import { useBilibiliWeb } from "~/src/adaptors/web/bilibili/useBilibiliWeb.ts"
 
 /**
  * 适配器统一入口
@@ -219,6 +220,11 @@ class Adaptors {
       // }
       case SubPlatformType.Custom_Haloweb: {
         const { cfg } = await useHalowebWeb(key)
+        conf = cfg
+        break
+      }
+      case SubPlatformType.Custom_Bilibili: {
+        const { cfg } = await useBilibiliWeb(key)
         conf = cfg
         break
       }
@@ -389,6 +395,11 @@ class Adaptors {
       // }
       case SubPlatformType.Custom_Haloweb: {
         const { webApi } = await useHalowebWeb(key, newCfg)
+        blogAdaptor = webApi
+        break
+      }
+      case SubPlatformType.Custom_Bilibili: {
+        const { webApi } = await useBilibiliWeb(key, newCfg)
         blogAdaptor = webApi
         break
       }

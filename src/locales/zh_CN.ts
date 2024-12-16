@@ -480,6 +480,11 @@ export default {
   "setting.flowus.apiUrl.tip": "通常固定，请勿修改",
   "setting.flowus.previewUrl.tip": "Flowus平台文章预览规则",
 
+  "setting.bilibili.home.tip": "哔哩哔哩专栏地址，通常固定",
+  "setting.bilibili.password.tip": "哔哩哔哩的Cookie，请勿修改",
+  "setting.bilibili.apiUrl.tip": "通常固定，请勿修改",
+  "setting.bilibili.previewUrl.tip": "哔哩哔哩专栏文章预览规则",
+
   "setting.picgo.refer.to": "详情请参考：",
   "setting.picgo.refer.to.online.doc": "PicGO配置在线文档",
   "setting.picgo.picbed": "图床设置",

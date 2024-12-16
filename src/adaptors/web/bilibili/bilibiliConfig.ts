@@ -24,35 +24,25 @@
  */
 
 import { CommonWebConfig } from "~/src/adaptors/web/base/commonWebConfig.ts"
-import { PageTypeEnum, PasswordType } from "zhi-blog-api"
+import { PageTypeEnum, PasswordType, PicbedServiceTypeEnum } from "zhi-blog-api"
 
 /**
  * B站配置
  */
 class BilibiliConfig extends CommonWebConfig {
-  constructor(username: string, password: string, middlewareUrl?: string) {
-    super(
-      "https://member.bilibili.com/platform/upload/text/edit",
-      "https://member.bilibili.com/platform/upload/text/edit",
-      username,
-      password,
-      middlewareUrl
-    )
+  public logoutUrl: string
 
-    // 设置B站的预览URL，使用博客ID作为博客预览的URL参数
+  constructor(password: string, middlewareUrl?: string) {
+    super("https://www.bilibili.com/opus", "https://api.bilibili.com", "", password, middlewareUrl)
+
     this.previewUrl = "/[postid]"
-    // 设置页面类型为Markdown或其他适用的类型
     this.pageType = PageTypeEnum.Markdown
-    // 设置密码类型，使用Cookie来管理密码
     this.passwordType = PasswordType.PasswordType_Cookie
-    // 是否启用用户名
-    this.usernameEnabled = true
-    // 是否启用标签
+    this.usernameEnabled = false
     this.tagEnabled = false
-    // 是否启用分类
     this.cateEnabled = true
-    // 是否启用知识空间
     this.knowledgeSpaceEnabled = false
+    this.picbedService = PicbedServiceTypeEnum.Bundled
   }
 }
 

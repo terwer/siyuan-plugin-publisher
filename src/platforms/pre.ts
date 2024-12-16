@@ -6,10 +6,10 @@ import { PRE_COMTANTS } from "~/src/platforms/PreConstants.ts"
  * 一些因为政策原因必须要特殊处理的平台
  */
 export const extraPreCfg = {
-  // 白名单
+  // 白名单（作用是以前限制了，但是后来可用的情况，以前就能用的和新平台不必加）
   cookieWhiteList: [SubPlatformType.Custom_Wechat.toString(), SubPlatformType.Custom_Zhihu.toString()],
-  // UA白名单
-  uaWhiteList: ["https://*.qq.com/*"],
+  // UA白名单（有 UA 限制的必须加，而且是慎之又慎）
+  uaWhiteList: ["https://*.qq.com/*", "https://*.bilibili.com/*"],
   // 黑名单
   cookieLimit: [
     // SubPlatformType.Custom_Wechat.toString()
@@ -348,6 +348,17 @@ export const pre = {
       authMode: AuthMode.WEBSITE,
       authUrl: "/login",
       domain: "",
+      isEnabled: false,
+    },
+    {
+      platformType: PlatformType.Custom,
+      subPlatformType: SubPlatformType.Custom_Bilibili,
+      platformKey: PRE_COMTANTS.PRE_CUSTOM_BILIBILI,
+      platformName: "哔哩哔哩",
+      platformIcon: svgIcons.iconIFBilibili,
+      authMode: AuthMode.WEBSITE,
+      authUrl: "https://passport.bilibili.com/login",
+      domain: "bilibili.com",
       isEnabled: false,
     },
   ],
