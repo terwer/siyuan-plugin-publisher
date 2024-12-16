@@ -36,8 +36,8 @@ importers:
         specifier: ^4.2.0
         version: 4.2.0
       element-plus:
-        specifier: ^2.9.0
-        version: 2.9.0(vue@3.5.13(typescript@5.6.2))
+        specifier: ^2.9.1
+        version: 2.9.1(vue@3.5.13(typescript@5.6.2))
       iframe-resizer:
         specifier: ^5.3.2
         version: 5.3.2
@@ -2252,8 +2252,8 @@ packages:
     engines: {node: '>=0.10.0'}
     hasBin: true
 
-  element-plus@2.9.0:
-    resolution: {integrity: sha512-ccOFXKsauo2dtokAr4OX7gZsb7TuAoVxA2zGRZo5o2yyDDBLBaZxOoFQPoxITSLcHbBfQuNDGK5Iag5hnyKkZA==}
+  element-plus@2.9.1:
+    resolution: {integrity: sha512-9Agqf/jt4Ugk7EZ6C5LME71sgkvauPCsnvJN12Xid2XVobjufxMGpRE4L7pS4luJMOmFAH3J0NgYEGZT5r+NDg==}
     peerDependencies:
       vue: ^3.2.0
 
@@ -7902,7 +7902,7 @@ snapshots:
     dependencies:
       jake: 10.9.2
 
-  element-plus@2.9.0(vue@3.5.13(typescript@5.6.2)):
+  element-plus@2.9.1(vue@3.5.13(typescript@5.6.2)):
     dependencies:
       '@ctrl/tinycolor': 3.6.1
       '@element-plus/icons-vue': 2.3.1(vue@3.5.13(typescript@5.6.2))
