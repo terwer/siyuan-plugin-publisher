@@ -55,7 +55,6 @@ const doBeforeChange = async (): Promise<boolean> => {
     cancelButtonText: t("main.opt.cancel"),
   } as any)
   logger.debug("confirm result=>", result)
-  debugger
   return result === "confirm"
 }
 </script>

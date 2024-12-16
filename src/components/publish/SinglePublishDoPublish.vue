@@ -427,7 +427,6 @@ onMounted(async () => {
     // ==================
     // 初始化属性
     formData.publishCfg = await getPublishCfg(key)
-    debugger
     // 单篇文章初始化
     await initPage()
     // 元数据初始化
