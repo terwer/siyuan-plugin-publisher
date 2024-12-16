@@ -101,8 +101,8 @@ const onCatChange = (val: string) => {
   const value = val
   logger.debug("选中项已改变 =>", value)
 
-  const cates = value
-  emit("emitSyncMultiCates", cates)
+  // const cates = value
+  emit("emitSyncMultiCates", formData.cate.categorySelected)
 }
 
 const initPage = async () => {
