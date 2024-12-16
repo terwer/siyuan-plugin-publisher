@@ -43,19 +43,24 @@ const { isInSiyuanWin, isInSiyuanWidget } = useSiyuanDevice()
 const publishPreferenceSettingForm = getPublishPreferenceSetting()
 const isSiyuanPlugin = isInSiyuanWin() || (isInSiyuanWidget() && StrUtil.isEmptyString(getSiyuanWidgetId()))
 
-const onBeforeChange = (): boolean | Promise<boolean> => {
-  return doBeforeChange()
+const onBeforeChangeForAllowChangeSlug = (): boolean | Promise<boolean> => {
+  return doBeforeChangeForAllowChangeSlug()
 }
 
-const doBeforeChange = async (): Promise<boolean> => {
-  const result = await ElMessageBox.confirm(t("preference.setting.allowChangeSlug.tips"), {
-    type: "error",
-    icon: markRaw(WarnTriangleFilled),
-    confirmButtonText: t("main.opt.ok"),
-    cancelButtonText: t("main.opt.cancel"),
-  } as any)
-  logger.debug("confirm result=>", result)
-  return result === "confirm"
+const doBeforeChangeForAllowChangeSlug = async (): Promise<boolean> => {
+  const val = publishPreferenceSettingForm.value
+  logger.debug(`val=>${val.allowChangeSlug}`)
+  if (val.allowChangeSlug !== true) {
+    const result = await ElMessageBox.confirm(t("preference.setting.allowChangeSlug.tips"), {
+      type: "error",
+      icon: markRaw(WarnTriangleFilled),
+      confirmButtonText: t("main.opt.ok"),
+      cancelButtonText: t("main.opt.cancel"),
+    } as any)
+    logger.debug("confirm result=>", result)
+    return result === "confirm"
+  }
+  return true
 }
 </script>
 
@@ -108,7 +113,10 @@ const doBeforeChange = async (): Promise<boolean> => {
       <el-divider border-style="dashed" class="psd" />
 
       <el-form-item :label="t('preference.setting.allowChangeSlug')">
-        <el-switch v-model="publishPreferenceSettingForm.allowChangeSlug" :before-change="onBeforeChange"></el-switch>
+        <el-switch
+          v-model="publishPreferenceSettingForm.allowChangeSlug"
+          :before-change="onBeforeChangeForAllowChangeSlug"
+        ></el-switch>
       </el-form-item>
     </div>
   </el-form>

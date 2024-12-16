@@ -166,9 +166,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     const post = _.cloneDeep(doc) as Post
 
     if (cfg?.mdFilenameRule) {
-      if (cfg?.mdFilenameRule?.includes("[filename]")) {
-        cfg.useMdFilename = true
-      }
+      cfg.useMdFilename = !!cfg?.mdFilenameRule?.includes("[filename]")
       // 处理文件规则
       const created = DateUtil.formatIsoToZhDate(post.dateCreated.toISOString(), true)
       const datearr = created.split(" ")[0]
@@ -203,15 +201,18 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
         const tag = post?.mt_keywords?.split(",")?.join("/") ?? ""
         filename = filename.replace(/\[tags]/, tag)
       }
+      debugger
       if (cfg.useMdFilename) {
         // 使用真实文件名作为MD文件名
         filename = filename.replace(/\[filename]/g, post.originalTitle)
-        // 这里需要去除空格等 url 里面参数不允许的非法字符
-        filename = MdUtils.getHumanFilename(filename)
       } else {
         // 使用别名作为MD文件名
         filename = filename.replace(/\[slug]/g, post.wp_slug)
       }
+      debugger
+      // 这里需要去除空格等 url 里面参数不允许的非法字符
+      filename = MdUtils.getHumanFilename(filename)
+      debugger
 
       post.mdFilename = filename
     }
