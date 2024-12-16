@@ -23,19 +23,41 @@
   - questions.
   -->
 
+<!--suppress ALL -->
 <script setup lang="ts">
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import { StrUtil } from "zhi-common"
 import { getSiyuanWidgetId } from "~/src/utils/siyuanUtils.ts"
+import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { ElMessageBox, type MessageBoxData } from "element-plus"
+import { markRaw } from "vue"
+import { WarnTriangleFilled } from "@element-plus/icons-vue"
 
+const logger = createAppLogger("preference-setting")
 const { t } = useVueI18n()
 const { getPublishPreferenceSetting } = usePreferenceSettingStore()
 const { isInSiyuanWin, isInSiyuanWidget } = useSiyuanDevice()
 
 const publishPreferenceSettingForm = getPublishPreferenceSetting()
 const isSiyuanPlugin = isInSiyuanWin() || (isInSiyuanWidget() && StrUtil.isEmptyString(getSiyuanWidgetId()))
+
+const onBeforeChange = (): boolean | Promise<boolean> => {
+  return doBeforeChange()
+}
+
+const doBeforeChange = async (): Promise<boolean> => {
+  const result = await ElMessageBox.confirm(t("preference.setting.allowChangeSlug.tips"), {
+    type: "error",
+    icon: markRaw(WarnTriangleFilled),
+    confirmButtonText: t("main.opt.ok"),
+    cancelButtonText: t("main.opt.cancel"),
+  } as any)
+  logger.debug("confirm result=>", result)
+  debugger
+  return result === "confirm"
+}
 </script>
 
 <template>
@@ -59,9 +81,6 @@ const isSiyuanPlugin = isInSiyuanWin() || (isInSiyuanWidget() && StrUtil.isEmpty
       <el-form-item :label="t('preference.setting.showDocQuickMenu')">
         <el-switch v-model="publishPreferenceSettingForm.showDocQuickMenu"></el-switch>
       </el-form-item>
-
-      <el-divider border-style="dashed" class="psd" />
-
       <el-form-item :label="t('preference.setting.showQuickMenu')">
         <el-switch v-model="publishPreferenceSettingForm.showQuickMenu"></el-switch>
       </el-form-item>
@@ -71,6 +90,9 @@ const isSiyuanPlugin = isInSiyuanWin() || (isInSiyuanWidget() && StrUtil.isEmpty
       <el-form-item :label="t('preference.setting.showBatchMenu')">
         <el-switch v-model="publishPreferenceSettingForm.showBatchMenu"></el-switch>
       </el-form-item>
+
+      <el-divider border-style="dashed" class="psd" />
+
       <el-form-item :label="t('preference.setting.showAIMenu')">
         <el-switch v-model="publishPreferenceSettingForm.showAIMenu"></el-switch>
       </el-form-item>
@@ -82,6 +104,12 @@ const isSiyuanPlugin = isInSiyuanWin() || (isInSiyuanWidget() && StrUtil.isEmpty
       </el-form-item>
       <el-form-item :label="t('preference.setting.ignoreBlockRef')">
         <el-switch v-model="publishPreferenceSettingForm.ignoreBlockRef"></el-switch>
+      </el-form-item>
+
+      <el-divider border-style="dashed" class="psd" />
+
+      <el-form-item :label="t('preference.setting.allowChangeSlug')">
+        <el-switch v-model="publishPreferenceSettingForm.allowChangeSlug" :before-change="onBeforeChange"></el-switch>
       </el-form-item>
     </div>
   </el-form>

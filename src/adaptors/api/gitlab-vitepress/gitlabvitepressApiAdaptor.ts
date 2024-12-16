@@ -26,7 +26,7 @@
 import { BlogConfig, PageTypeEnum, Post, YamlConvertAdaptor } from "zhi-blog-api"
 import { GitlabvitepressYamlConverterAdaptor } from "~/src/adaptors/api/gitlab-vitepress/gitlabvitepressYamlConverterAdaptor.ts"
 import { CommonGitlabApiAdaptor } from "~/src/adaptors/api/base/gitlab/commonGitlabApiAdaptor.ts"
-import _ from "lodash-es"
+import * as _ from "lodash-es"
 import { YamlUtil } from "zhi-common"
 
 /**

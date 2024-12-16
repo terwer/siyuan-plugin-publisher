@@ -135,6 +135,9 @@ importers:
       '@types/katex':
         specifier: ^0.16.7
         version: 0.16.7
+      '@types/lodash-es':
+        specifier: ^4.17.12
+        version: 4.17.12
       '@types/minimist':
         specifier: ^1.2.5
         version: 1.2.5

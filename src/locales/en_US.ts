@@ -655,6 +655,8 @@ export default {
     "Note: In merge mode, the title and abstract changes are not valid, and the labels and categories are merged with the selected platform data.",
   "preference.setting.keepTitle": "Do not update the original title",
   "preference.setting.ignoreBlockRef": "Ignore block ref",
+  "preference.setting.allowChangeSlug": "Allow changing slug",
+  "preference.setting.allowChangeSlug.tips": "Warning, the slug is the unique identifier for publishing articles across platforms. If you allow changes, please ensure its uniqueness to avoid publication failure. If you are unsure about this feature, use the default auto-generated slug",
 
   "setting.blog.gitlab.url.tip": "GitLab homepage, e.g., http://localhost:8002",
   "setting.blog.type.gitlab.user.tip": "Username for GitLab",
