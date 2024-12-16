@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.30.2](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.30.1...siyuan-plugin-publisher-v1.30.2) (2024-12-16)
+
+
+### Bug Fixes
+
+* [#1202](https://github.com/terwer/siyuan-plugin-publisher/issues/1202) ignore outer link when cfg is set ([2993d8c](https://github.com/terwer/siyuan-plugin-publisher/commit/2993d8c7f5deb876b16835c38d173934d9e7893b))
+* [#1202](https://github.com/terwer/siyuan-plugin-publisher/issues/1202) ignore outer link when cfg is set ([fe3a36b](https://github.com/terwer/siyuan-plugin-publisher/commit/fe3a36bd62c7e26d6ad4e123e4a29a537344da2a))
+* [#1529](https://github.com/terwer/siyuan-plugin-publisher/issues/1529) cate sync error ([0719c49](https://github.com/terwer/siyuan-plugin-publisher/commit/0719c497a6e95655dfba8606605ac9bd84284b08))
+* [#1530](https://github.com/terwer/siyuan-plugin-publisher/issues/1530) add option for slug change ([e7ba590](https://github.com/terwer/siyuan-plugin-publisher/commit/e7ba59072f0b75572c56b5bf07f2547e9fb5bae6))
+* [#1530](https://github.com/terwer/siyuan-plugin-publisher/issues/1530) add option for slug change ([16c0c16](https://github.com/terwer/siyuan-plugin-publisher/commit/16c0c168b5347a9af3d58a7893559ee320bae740))
+* filename handle error ([8240285](https://github.com/terwer/siyuan-plugin-publisher/commit/82402855fc182b3f8608dad149b8804204d81e22))
+* vitepress tag load error ([e246f27](https://github.com/terwer/siyuan-plugin-publisher/commit/e246f27b587be8f49d2af2013897c58d0f5fab69))
+* vitepress tag load error ([c9876e7](https://github.com/terwer/siyuan-plugin-publisher/commit/c9876e7110567ae634ff8e38f5ac06d1cbfc4440))
+
+
+### Miscellaneous
+
+* update deps ([48227ad](https://github.com/terwer/siyuan-plugin-publisher/commit/48227adad887f896fe44f26a67d8fed0fcf43b84))
+* update deps ([a0e543d](https://github.com/terwer/siyuan-plugin-publisher/commit/a0e543d994ea9d618f31e102ba912d6b4f5e5700))
+
 ## [1.30.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.30.0...siyuan-plugin-publisher-v1.30.1) (2024-12-13)
 ### Bug Fixes
 * [#1202](https://github.com/terwer/siyuan-plugin-publisher/issues/1202) add option for outer link ([d8e3366](https://github.com/terwer/siyuan-plugin-publisher/commit/d8e336666306450981f2e4bdc04d0ff245cb770d))
