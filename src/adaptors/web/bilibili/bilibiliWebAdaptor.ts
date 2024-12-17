@@ -72,7 +72,9 @@ class BilibiliWebAdaptor extends BaseWebApi {
     const parsedBilibiliContent = BilibiliUtils.parseMd(post.markdown)
     this.logger.debug("bilibili add post blibiliDatas=>", parsedBilibiliContent)
     const params = JSON.stringify({
-      raw_content: JSON.stringify(parsedBilibiliContent.ops),
+      raw_content: JSON.stringify({
+        ops: parsedBilibiliContent.ops,
+      }),
       opus_req: {
         // upload_id: "19450592_1734338507_5421",
         upload_id: upload_id,
