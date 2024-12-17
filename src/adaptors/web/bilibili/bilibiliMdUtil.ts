@@ -43,8 +43,8 @@ interface ContentNode {
     words: string
     font_size: number
     font_level: string
-    style: {
-      bold: boolean
+    style?: {
+      bold?: boolean
     }
   }
 }
@@ -121,7 +121,7 @@ class BilibiliMdUtil {
    * 处理标题节点
    */
   private static processHeadingNode(node: Node, ops: Op[], paragraphs: Paragraph[]): void {
-    const level = Math.min(node.HeadingLevel || 2, 2) // 确保最大级别为 2
+    const level = Math.min(node.HeadingLevel || 2, 2)
     const text = node.Children?.map((child) => (child.Type === "NodeText" ? child.Data || "" : "")).join("") || ""
 
     // 添加标题文本到 ops
@@ -130,15 +130,15 @@ class BilibiliMdUtil {
 
     // 将标题转换为 content
     const paragraph: Paragraph = {
-      para_type: 2, // 假设标题类型为 2
+      para_type: 1,
       text: {
         nodes: [
           {
-            node_type: 1, // 假设文本节点
+            node_type: 1,
             word: {
               words: text,
-              font_size: 22,
-              font_level: "xLarge",
+              font_size: level > 1 ? 22 : 24,
+              font_level: level > 1 ? "xLarge" : "xxLarge",
               style: { bold: true },
             },
           },
@@ -173,15 +173,15 @@ class BilibiliMdUtil {
 
     // 将列表项转换为 content
     const paragraph: Paragraph = {
-      para_type: 3, // 假设列表项类型为 3
+      para_type: 1,
       text: {
         nodes: [
           {
             node_type: 1,
             word: {
               words: text,
-              font_size: 22,
-              font_level: "xLarge",
+              font_size: 24,
+              font_level: "xxLarge",
               style: { bold: true },
             },
           },
@@ -200,16 +200,16 @@ class BilibiliMdUtil {
 
     // 将段落转换为 content
     const paragraph: Paragraph = {
-      para_type: 1, // 假设类型为 1
+      para_type: 1,
       text: {
         nodes: [
           {
             node_type: 1,
             word: {
               words: text,
-              font_size: 22,
-              font_level: "xLarge",
-              style: { bold: true },
+              font_size: 17,
+              font_level: "regular",
+              style: {},
             },
           },
         ],
@@ -227,16 +227,16 @@ class BilibiliMdUtil {
 
     // 处理文本内容转化为 content（如果有样式需要调整可修改）
     const paragraph: Paragraph = {
-      para_type: 1, // 假设类型为 1
+      para_type: 1,
       text: {
         nodes: [
           {
-            node_type: 1, // 假设文本节点
+            node_type: 1,
             word: {
               words: text,
-              font_size: 22,
-              font_level: "xLarge",
-              style: { bold: true }, // 可以根据需求调整
+              font_size: 17,
+              font_level: "regular",
+              style: {},
             },
           },
         ],
