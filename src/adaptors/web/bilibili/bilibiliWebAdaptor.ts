@@ -24,13 +24,14 @@
  */
 
 import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
-import { Post } from "zhi-blog-api"
+import { CategoryInfo, MediaObject, Post, UserBlog } from "zhi-blog-api"
 import { BrowserUtil } from "zhi-device"
 import CookieUtils from "~/src/utils/cookieUtils.ts"
 import { BilibiliUtils } from "~/src/adaptors/web/bilibili/bilibiliUtils.ts"
 import { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 import { JsonUtil, StrUtil } from "zhi-common"
 import { MockBrowser } from "~/src/utils/MockBrowser.ts"
+import { fileToBuffer } from "~/src/utils/polyfillUtils.ts"
 
 class BilibiliWebAdaptor extends BaseWebApi {
   private bilibiliMetaDataCfg = {} as any
@@ -50,6 +51,29 @@ class BilibiliWebAdaptor extends BaseWebApi {
       home: "https://member.bilibili.com/platform/home",
       icon: "https://static.hdslb.com/images/favicon.ico",
     }
+  }
+
+  public async getUsersBlogs(): Promise<Array<UserBlog>> {
+    let result: UserBlog[] = []
+
+    const res = await this.bilibiliFetch("/x/article/creative/list/all")
+    this.logger.debug("get bilibili all article res =>", res)
+    const columnList = res?.data?.lists
+
+    // 普通专栏
+    if (columnList && columnList.length > 0) {
+      columnList.forEach((item: any) => {
+        const userblog: UserBlog = new UserBlog()
+        userblog.blogid = item.id
+        userblog.blogName = item.name
+        // https://www.bilibili.com/read/readlist/rl898693
+        userblog.url = `https://www.bilibili.com/read/readlist/rl${item.id}`
+        result.push(userblog)
+      })
+    }
+
+    this.logger.debug("getUsersBlogs=>", result)
+    return result
   }
 
   // 发布预处理，可以在这里预设一些参数。会在实际新增和更新之前调用
@@ -252,6 +276,103 @@ class BilibiliWebAdaptor extends BaseWebApi {
     return true
   }
 
+  public async deletePost(postid: string): Promise<boolean> {
+    const postMeta = this.getPostMeta(postid)
+    const params = JSON.stringify({
+      dyn_id_str: postMeta.dyn_id_str,
+      dyn_type: postMeta.dyn_type,
+      rid_str: postMeta.dyn_rid.toString(),
+    })
+    const res = await this.bilibiliFetch(
+      "/x/dynamic/feed/operate/remove",
+      {},
+      params,
+      "POST",
+      "application/json",
+      false,
+      true
+    )
+    this.logger.debug("bilibili delete post res=>", res)
+    if (res?.code !== 0) {
+      throw new Error(`哔哩哔哩文章删除失败，可能原因：${res?.code} ${res?.message}`)
+    }
+    return true
+  }
+
+  public async getPreviewUrl(postid: string): Promise<string> {
+    const dynId = this.getDynId(postid)
+    const previewUrl = this.cfg.previewUrl.replace(/\[postid]/g, dynId)
+    return previewUrl
+  }
+
+  public async getCategories(): Promise<CategoryInfo[]> {
+    const cats = [] as CategoryInfo[]
+    const res = await this.bilibiliFetch("/x/article/creative/list/all")
+    this.logger.debug("get bilibili lists =>", res)
+    if (res?.code === 0) {
+      const lists = res.data.lists
+      if (lists && lists.length > 0) {
+        lists.forEach((item: any) => {
+          const cat = new CategoryInfo()
+          cat.categoryId = item.id.toString()
+          cat.categoryName = item.name
+          cat.description = item.summary
+          cat.categoryDescription = item.summary
+          cats.push(cat)
+        })
+      }
+    }
+
+    return cats
+  }
+
+  public async uploadFile(mediaObject: MediaObject): Promise<any> {
+    const file = new Blob([mediaObject.bits], { type: mediaObject.type })
+    const filename = mediaObject.name
+    this.logger.debug(`bilibili start uploadFile ${filename}=>`, file)
+    if (file instanceof Blob) {
+      // uploadUrl
+      const uploadUrl = "/x/article/creative/article/upcover"
+
+      // 获取图片二进制数据
+      const bits = await fileToBuffer(file)
+      const blob = new Blob([bits], { type: file.type })
+
+      // formData
+      const formData: any = new FormData()
+      formData.append("binary", blob, filename)
+      formData.append("filename", filename)
+
+      // 发送请求
+      const res = await this.bilibiliFormFetch(uploadUrl, formData)
+      this.logger.debug("bilibili uploadFile res=>", res)
+      if (res?.code != 0) {
+        this.logger.error(`哔哩哔哩图片上传失败，可能原因：${res?.code} ${res?.message}`)
+        throw new Error(`哔哩哔哩图片上传失败，可能原因：${res?.code} ${res?.message}`)
+      }
+      const url = res.data.url
+      return {
+        id: url,
+        object_key: url,
+        url: url,
+      }
+    }
+
+    return {}
+  }
+
+  // ================
+  // private methods
+  // ================
+  private getDynId(postid: string) {
+    const postMeta = this.getPostMeta(postid)
+    return postMeta?.dyn_id_str
+  }
+
+  private getPostMeta(postid: string) {
+    return JsonUtil.safeParse<any>(postid, {} as any)
+  }
+
   private async addDraft(post: Post) {
     // 适配 B 站专门格式
     this.logger.debug("bilibili before parse, md=>", post.markdown)
@@ -290,46 +411,9 @@ class BilibiliWebAdaptor extends BaseWebApi {
     this.logger.debug("bilibili add draft res=>", res)
   }
 
-  public async deletePost(postid: string): Promise<boolean> {
-    const postMeta = this.getPostMeta(postid)
-    const params = JSON.stringify({
-      dyn_id_str: postMeta.dyn_id_str,
-      dyn_type: postMeta.dyn_type,
-      rid_str: postMeta.dyn_rid.toString(),
-    })
-    const res = await this.bilibiliFetch(
-      "/x/dynamic/feed/operate/remove",
-      {},
-      params,
-      "POST",
-      "application/json",
-      false,
-      true
-    )
-    this.logger.debug("bilibili delete post res=>", res)
-    if (res?.code !== 0) {
-      throw new Error(`哔哩哔哩文章删除失败，可能原因：${res?.code} ${res?.message}`)
-    }
-    return true
-  }
-
-  public async getPreviewUrl(postid: string): Promise<string> {
-    const dynId = this.getDynId(postid)
-    const previewUrl = this.cfg.previewUrl.replace(/\[postid]/g, dynId)
-    return previewUrl
-  }
-
   // ================
   // private methods
   // ================
-  private getDynId(postid: string) {
-    const postMeta = this.getPostMeta(postid)
-    return postMeta?.dyn_id_str
-  }
-
-  private getPostMeta(postid: string) {
-    return JsonUtil.safeParse<any>(postid, {} as any)
-  }
 
   private async bilibiliFetch(
     url: string,

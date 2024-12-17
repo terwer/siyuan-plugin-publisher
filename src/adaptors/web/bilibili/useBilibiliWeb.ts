@@ -32,7 +32,6 @@ import { LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { BilibiliWebAdaptor } from "~/src/adaptors/web/bilibili/bilibiliWebAdaptor.ts"
 import { Utils } from "~/src/utils/utils.ts"
-import {PicbedServiceTypeEnum} from "zhi-blog-api";
 
 /**
  * 用于获取BilibiliWeb的API的自定义Hook
@@ -79,14 +78,7 @@ const useBilibiliWeb = async (key?: string, newCfg?: BilibiliConfig) => {
     }
   }
 
-  // 标签
-  cfg.tagEnabled = true
-  // Bilibili使用单选分类作为分区
-  cfg.cateEnabled = true
-  cfg.allowCateChange = true
-  // picbed service
-  cfg.picgoPicbedSupported = false
-  cfg.bundledPicbedSupported = true
+  // 新平台，暂时不需要强制指定配置
 
   const webApi = new BilibiliWebAdaptor(appInstance, cfg)
   return {

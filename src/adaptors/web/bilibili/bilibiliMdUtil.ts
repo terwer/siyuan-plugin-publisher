@@ -32,8 +32,12 @@ interface Op {
 
 interface Paragraph {
   para_type: number
-  text: {
+  text?: {
     nodes: ContentNode[]
+  }
+  pic?: {
+    style?: number
+    pics?: any[]
   }
 }
 
@@ -110,6 +114,9 @@ class BilibiliMdUtil {
         break
       case "NodeStrong":
         this.processStrongNode(node, ops, paragraphs) // 处理加粗
+        break
+      case "NodeImage":
+        this.processImageNode(node, ops, paragraphs) // 处理图片
         break
       default:
         Children.forEach((child) => this.processNode(child, ops, paragraphs))
@@ -214,10 +221,21 @@ class BilibiliMdUtil {
       text: {
         nodes: [],
       },
+      pic: {
+        pics: [],
+        style: 1,
+      },
     }
     // 将 `paragraphChildNodes` 中的所有节点推送到 `nodes` 中
     paragraphChildNodes.forEach((node) => {
-      paragraph.text.nodes.push(...node.text.nodes)
+      if (node.pic) {
+        paragraph.pic.style = node.pic.style
+        paragraph.pic.pics.push(...node.pic.pics)
+      } else if (node.text) {
+        paragraph.text.nodes.push(...node.text.nodes)
+      } else {
+        this.logger.warn("unknown node type", node)
+      }
     })
 
     paragraphs.push(paragraph)
@@ -279,6 +297,46 @@ class BilibiliMdUtil {
               font_level: "regular",
               style: { bold: true },
             },
+          },
+        ],
+      },
+    }
+    paragraphs.push(paragraph)
+  }
+
+  /**
+   * 处理图片节点
+   */
+  private static processImageNode(node: Node, ops: Op[], paragraphs: Paragraph[]): void {
+    const imageUrl = node.Children?.find((child) => child.Type === "NodeLinkDest")?.Data || ""
+    const altText = node.Children?.find((child) => child.Type === "NodeLinkText")?.Data || "image"
+
+    // 添加图片到 ops
+    ops.push({
+      insert: "\n",
+      attributes: {
+        "native-image": {
+          alt: altText,
+          url: imageUrl,
+          width: 500,
+          height: 500,
+          size: 55183,
+          status: "loaded",
+        },
+      },
+    })
+
+    // 将图片转换为 content
+    const paragraph: Paragraph = {
+      para_type: 2,
+      pic: {
+        style: 1,
+        pics: [
+          {
+            url: imageUrl,
+            width: 500,
+            height: 500,
+            size: 53.8896484375,
           },
         ],
       },
