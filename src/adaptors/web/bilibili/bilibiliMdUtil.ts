@@ -201,20 +201,24 @@ class BilibiliMdUtil {
    * 处理段落节点
    */
   private static processParagraphNode(node: Node, ops: Op[], paragraphs: Paragraph[]): void {
-    const paragraphTextNodes: any[] = []
+    const paragraphChildNodes: Paragraph[] = []
 
     // 递归处理段落中的所有子节点
     node.Children?.forEach((child) => {
-      this.processNode(child, ops, paragraphTextNodes)
+      this.processNode(child, ops, paragraphChildNodes)
     })
 
     // 将处理后的段落数据加入 content 格式
     const paragraph: Paragraph = {
       para_type: 1,
       text: {
-        nodes: paragraphTextNodes,
+        nodes: [],
       },
     }
+    // 将 `paragraphChildNodes` 中的所有节点推送到 `nodes` 中
+    paragraphChildNodes.forEach((node) => {
+      paragraph.text.nodes.push(...node.text.nodes)
+    })
 
     paragraphs.push(paragraph)
   }

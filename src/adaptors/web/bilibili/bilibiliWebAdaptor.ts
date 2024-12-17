@@ -31,7 +31,6 @@ import { BilibiliUtils } from "~/src/adaptors/web/bilibili/bilibiliUtils.ts"
 import { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 import { JsonUtil, StrUtil } from "zhi-common"
 import { MockBrowser } from "~/src/utils/MockBrowser.ts"
-import WebUtils from "~/src/adaptors/web/base/webUtils.ts"
 
 class BilibiliWebAdaptor extends BaseWebApi {
   private bilibiliMetaDataCfg = {} as any
@@ -241,9 +240,54 @@ class BilibiliWebAdaptor extends BaseWebApi {
     )
     this.logger.debug("bilibili edit post res=>", res)
     if (res?.code !== 0) {
+      // 代表编辑次数用完，用 EL 的警告提示，然后改成保存草稿
+      if (res?.code === 37419) {
+        await this.addDraft(post)
+        this.logger.warn("B站文章编辑次数用尽，已自动保存为草稿，明天可继续提交")
+        ElMessage.warning("B站文章编辑次数用尽，已自动保存为草稿，明天可继续提交")
+        return true
+      }
       throw new Error(`哔哩哔哩文章更新失败，可能原因：${res?.code} ${res?.message}`)
     }
     return true
+  }
+
+  private async addDraft(post: Post) {
+    // 适配 B 站专门格式
+    this.logger.debug("bilibili before parse, md=>", post.markdown)
+    const parsedBilibiliContent = BilibiliUtils.parseMd(post.markdown)
+    this.logger.debug("bilibili add post blibiliDatas=>", parsedBilibiliContent)
+    const params = {
+      type: 3,
+      title: post.title,
+      banner_url: "",
+      content: JSON.stringify({
+        ops: parsedBilibiliContent.ops,
+      }),
+      summary: "",
+      words: 3,
+      category: 15,
+      list_id: 0,
+      tid: 3,
+      reprint: 0,
+      tags: [],
+      image_urls: [],
+      origin_image_urls: [],
+      media_id: "",
+      spoiler: "",
+      original: 0,
+      top_video_bvid: "",
+      up_reply_closed: 0,
+      comment_selected: 0,
+      private_pub: 2,
+    }
+    // formData
+    const formData: any = new FormData()
+    for (const key in params) {
+      formData.append(key, params[key] ?? "")
+    }
+    const res = await this.bilibiliFormFetch("/x/article/creative/draft/addupdate", formData)
+    this.logger.debug("bilibili add draft res=>", res)
   }
 
   public async deletePost(postid: string): Promise<boolean> {
@@ -321,6 +365,32 @@ class BilibiliWebAdaptor extends BaseWebApi {
     this.logger.debug("bilibili url =>", apiUrl)
     this.logger.debug("bilibili requestOptions =>", requestOptions)
     const res = await this.webFetch(apiUrl, [mergedHeaders], body, method, contentType, true, "base64", "text")
+    return res
+  }
+
+  private async bilibiliFormFetch(url: string, formData: FormData) {
+    const apiUrl = StrUtil.pathJoin(this.cfg.apiUrl, url)
+    const reqHeaderMap = new Map<string, string>()
+    reqHeaderMap.set("Cookie", this.cfg.password)
+
+    // header
+    const mergedHeaders = {
+      Cookie: this.cfg.password,
+      "User-Agent": MockBrowser.HEADERS.MACOS_CHROME["User-Agent"],
+    }
+
+    // formData
+    const csrf = CookieUtils.getCookieFromString("bili_jct", this.cfg.password)
+    formData.append("csrf", csrf)
+
+    const options: RequestInit = {
+      method: "POST",
+      headers: mergedHeaders,
+      body: formData,
+    }
+    this.logger.debug("bilibili form url =>", apiUrl)
+    this.logger.debug("bilibili form options =>", options)
+    const res = await this.webFormFetch(apiUrl, [mergedHeaders], formData, true)
     return res
   }
 }
