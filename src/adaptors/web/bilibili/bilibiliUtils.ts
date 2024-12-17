@@ -23,6 +23,8 @@
  * questions.
  */
 
+import { BilibiliMdUtil } from "~/src/adaptors/web/bilibili/bilibiliMdUtil.ts"
+
 /**
  * B站辅助工具类
  *
@@ -38,6 +40,15 @@ class BilibiliUtils {
     const randomNumber = Math.floor(Math.random() * 10000)
     // 返回生成的 ID
     return `${prefix}_${timestamp}_${randomNumber}`
+  }
+
+  /**
+   * 解析 markdown 为 bilbili 节点
+   *
+   * @param md
+   */
+  public static parseMd(md: string) {
+    return BilibiliMdUtil.md2bilbiliNodes(md)
   }
 }
 

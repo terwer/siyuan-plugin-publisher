@@ -23,6 +23,7 @@
  * questions.
  */
 import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { PublisherLuteInstance } from "~/src/publisherLuteInstance.ts"
 
 /**
  * Lute 工具类
@@ -36,20 +37,8 @@ class LuteUtil {
    * @param md
    */
   public static mdToHtml(md: string) {
-    if (typeof window === "undefined") {
-      this.logger.warn("不是浏览器环境，不渲染")
-      return md
-    }
+    const { lute, Lute } = PublisherLuteInstance.getInstance()
 
-    const Lute = (window as any).Lute
-    if (!Lute) {
-      this.logger.warn("未找到Lute，不渲染")
-      return md
-    }
-
-    this.logger.info("found Lute =>", Lute)
-    this.logger.info("使用Lute渲染Markdown")
-    const lute = Lute.New()
     // 自定义渲染器
     const renderers = {
       // renderInlineMath: (node: any, entering: any) => {
