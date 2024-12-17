@@ -49,10 +49,12 @@ class BilibiliConfig extends CommonWebConfig {
     this.passwordType = PasswordType.PasswordType_Cookie
     // 标签
     this.tagEnabled = false
-    // 分类
-    this.cateEnabled = true
-    this.categoryType = CategoryTypeEnum.CategoryType_Single
-    this.allowCateChange = true
+    // B站使用单选分类作为专栏(文集)
+    this.cateEnabled = false
+    this.knowledgeSpaceEnabled = true
+    this.knowledgeSpaceTitle = "文集"
+    this.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Single
+    this.allowKnowledgeSpaceChange = true
     // 关闭知识空间
     this.knowledgeSpaceEnabled = false
     // 图床配置

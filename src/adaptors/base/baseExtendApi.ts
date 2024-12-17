@@ -201,7 +201,6 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
         const tag = post?.mt_keywords?.split(",")?.join("/") ?? ""
         filename = filename.replace(/\[tags]/, tag)
       }
-      debugger
       if (cfg.useMdFilename) {
         // 使用真实文件名作为MD文件名
         filename = filename.replace(/\[filename]/g, post.originalTitle)
@@ -209,10 +208,8 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
         // 使用别名作为MD文件名
         filename = filename.replace(/\[slug]/g, post.wp_slug)
       }
-      debugger
       // 这里需要去除空格等 url 里面参数不允许的非法字符
       filename = MdUtils.getHumanFilename(filename)
-      debugger
 
       post.mdFilename = filename
     }

@@ -56,8 +56,16 @@ class BilibiliWebAdaptor extends BaseWebApi {
   public async getUsersBlogs(): Promise<Array<UserBlog>> {
     let result: UserBlog[] = []
 
-    const res = await this.bilibiliFetch("/x/article/creative/list/all")
-    this.logger.debug("get bilibili all article res =>", res)
+    const res = await this.bilibiliFetch(
+      "/x/article/creative/list/all",
+      undefined,
+      undefined,
+      "GET",
+      "application/json",
+      false,
+      true
+    )
+    this.logger.debug("get bilibili lists res =>", res)
     const columnList = res?.data?.lists
 
     // 普通专栏
@@ -299,6 +307,30 @@ class BilibiliWebAdaptor extends BaseWebApi {
     return true
   }
 
+  public async getPost(postid: string): Promise<Post> {
+    // /x/article/creative/article/view?aid=40120070
+    const dynReadId = this.getDynReadId(postid)
+    const res = await this.bilibiliFetch(
+      `/x/article/creative/article/view?aid=${dynReadId}`,
+      undefined,
+      undefined,
+      "GET",
+      "application/json",
+      false,
+      true
+    )
+    this.logger.debug("get bilibili post =>", res)
+    const post = new Post()
+    if (res?.code === 0) {
+      const bilibiliPost = res?.data
+      post.postid = postid
+      post.title = bilibiliPost.title
+      // post.mt_keywords = tags
+      post.categories = [bilibiliPost.list.name]
+    }
+    return post
+  }
+
   public async getPreviewUrl(postid: string): Promise<string> {
     const dynId = this.getDynId(postid)
     const previewUrl = this.cfg.previewUrl.replace(/\[postid]/g, dynId)
@@ -307,14 +339,22 @@ class BilibiliWebAdaptor extends BaseWebApi {
 
   public async getCategories(): Promise<CategoryInfo[]> {
     const cats = [] as CategoryInfo[]
-    const res = await this.bilibiliFetch("/x/article/creative/list/all")
+    const res = await this.bilibiliFetch(
+      "/x/article/creative/list/all",
+      undefined,
+      undefined,
+      "GET",
+      "application/json",
+      false,
+      true
+    )
     this.logger.debug("get bilibili lists =>", res)
     if (res?.code === 0) {
       const lists = res.data.lists
       if (lists && lists.length > 0) {
         lists.forEach((item: any) => {
           const cat = new CategoryInfo()
-          cat.categoryId = item.id.toString()
+          cat.categoryId = item.id
           cat.categoryName = item.name
           cat.description = item.summary
           cat.categoryDescription = item.summary
@@ -367,6 +407,10 @@ class BilibiliWebAdaptor extends BaseWebApi {
   private getDynId(postid: string) {
     const postMeta = this.getPostMeta(postid)
     return postMeta?.dyn_id_str
+  }
+  private getDynReadId(postid: string) {
+    const postMeta = this.getPostMeta(postid)
+    return postMeta?.dyn_rid
   }
 
   private getPostMeta(postid: string) {
