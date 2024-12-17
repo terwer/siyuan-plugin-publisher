@@ -63,7 +63,7 @@ class BilibiliMdUtil {
     this.logger.debug("lute instance=>", lute)
 
     const luteJson = JsonUtil.safeParse<Node>(lute.RenderJSON(md), {} as Node)
-    this.logger.info("lute json=>", luteJson)
+    this.logger.debug("lute json=>", JSON.stringify(luteJson))
 
     // 初始化 ops 和 content
     const ops: Op[] = []
@@ -87,23 +87,29 @@ class BilibiliMdUtil {
     const { Type, Children = [] } = node
 
     switch (Type) {
+      // 混合节点
       case "NodeDocument":
         this.processDocumentNode(node, ops, paragraphs)
         break
-      case "NodeHeading":
-        this.processHeadingNode(node, ops, paragraphs)
+      case "NodeParagraph":
+        this.processParagraphNode(node, ops, paragraphs)
         break
+      // 列表节点
       case "NodeList":
         this.processListNode(node, ops, paragraphs)
         break
       case "NodeListItem":
         this.processListItemNode(node, ops, paragraphs)
         break
-      case "NodeParagraph":
-        this.processParagraphNode(node, ops, paragraphs)
+      // 单一节点
+      case "NodeHeading":
+        this.processHeadingNode(node, ops, paragraphs)
         break
       case "NodeText":
         this.processTextNode(node, ops, paragraphs)
+        break
+      case "NodeStrong":
+        this.processStrongNode(node, ops, paragraphs) // 处理加粗
         break
       default:
         Children.forEach((child) => this.processNode(child, ops, paragraphs))
@@ -195,26 +201,21 @@ class BilibiliMdUtil {
    * 处理段落节点
    */
   private static processParagraphNode(node: Node, ops: Op[], paragraphs: Paragraph[]): void {
-    const text = node.Children?.map((child) => (child.Type === "NodeText" ? child.Data || "" : "")).join("") || ""
-    ops.push({ insert: `${text}\n` })
+    const paragraphTextNodes: any[] = []
 
-    // 将段落转换为 content
+    // 递归处理段落中的所有子节点
+    node.Children?.forEach((child) => {
+      this.processNode(child, ops, paragraphTextNodes)
+    })
+
+    // 将处理后的段落数据加入 content 格式
     const paragraph: Paragraph = {
       para_type: 1,
       text: {
-        nodes: [
-          {
-            node_type: 1,
-            word: {
-              words: text,
-              font_size: 17,
-              font_level: "regular",
-              style: {},
-            },
-          },
-        ],
+        nodes: paragraphTextNodes,
       },
     }
+
     paragraphs.push(paragraph)
   }
 
@@ -237,6 +238,42 @@ class BilibiliMdUtil {
               font_size: 17,
               font_level: "regular",
               style: {},
+            },
+          },
+        ],
+      },
+    }
+    paragraphs.push(paragraph)
+  }
+
+  /**
+   * 处理加粗节点（NodeStrong）
+   */
+  private static processStrongNode(node: Node, ops: Op[], paragraphs: Paragraph[]): void {
+    // 解析加粗的文本内容
+    const strongText =
+      node.Children?.map((child) => {
+        if (child.Type === "NodeText") {
+          return child.Data || ""
+        }
+        return ""
+      }).join("") || ""
+
+    // 加入加粗文本到 ops
+    ops.push({ insert: strongText, attributes: { bold: true } })
+
+    // 将加粗内容转换为 content
+    const paragraph: Paragraph = {
+      para_type: 1,
+      text: {
+        nodes: [
+          {
+            node_type: 1,
+            word: {
+              words: strongText,
+              font_size: 17,
+              font_level: "regular",
+              style: { bold: true },
             },
           },
         ],
