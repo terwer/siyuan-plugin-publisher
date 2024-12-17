@@ -70,34 +70,64 @@ class BilibiliWebAdaptor extends BaseWebApi {
     this.logger.debug("bilibili before parse, md=>", post.markdown)
     const parsedBilibiliContent = BilibiliUtils.parseMd(post.markdown)
     this.logger.debug("bilibili add post blibiliDatas=>", parsedBilibiliContent)
+    // const params = JSON.stringify({
+    //   raw_content: JSON.stringify(parsedBilibiliContent.ops),
+    //   opus_req: {
+    //     // upload_id: "19450592_1734338507_5421",
+    //     upload_id: upload_id,
+    //     opus: {
+    //       opus_source: 2,
+    //       title: post.title,
+    //       content: parsedBilibiliContent.content,
+    //       article: {
+    //         category_id: 15,
+    //         list_id: 0,
+    //         originality: 0,
+    //         reproduced: 0,
+    //         biz_tags: [],
+    //       },
+    //       pub_info: {},
+    //     },
+    //     scene: 12,
+    //     meta: {
+    //       app_meta: {
+    //         from: "create.article.web",
+    //         mobi_app: "web",
+    //       },
+    //     },
+    //     option: {
+    //       private_pub: 2,
+    //     },
+    //   },
+    // })
     const params = JSON.stringify({
-      raw_content: JSON.stringify(parsedBilibiliContent.ops),
+      raw_content: '{"ops":[{"insert":"测试5"},{"attributes":{"header":1},"insert":"\\n"}]}',
       opus_req: {
-        // upload_id: "19450592_1734338507_5421",
-        upload_id: upload_id,
+        upload_id: "19450592_1734423520_2057",
         opus: {
           opus_source: 2,
-          title: post.title,
-          content: parsedBilibiliContent.content,
-          article: {
-            category_id: 15,
-            list_id: 0,
-            originality: 0,
-            reproduced: 0,
-            biz_tags: [],
+          title: "测试文章5",
+          content: {
+            paragraphs: [
+              {
+                para_type: 1,
+                text: {
+                  nodes: [
+                    {
+                      node_type: 1,
+                      word: { words: "测试5", font_size: 24, font_level: "xxLarge", style: { bold: true } },
+                    },
+                  ],
+                },
+              },
+            ],
           },
+          article: { category_id: 15, list_id: 0, originality: 0, reproduced: 0, biz_tags: [] },
           pub_info: {},
         },
         scene: 12,
-        meta: {
-          app_meta: {
-            from: "create.article.web",
-            mobi_app: "web",
-          },
-        },
-        option: {
-          private_pub: 2,
-        },
+        meta: { app_meta: { from: "create.article.web", mobi_app: "web" } },
+        option: { private_pub: 2 },
       },
     })
     // const params = JSON.stringify({
@@ -155,10 +185,13 @@ class BilibiliWebAdaptor extends BaseWebApi {
     // }
     this.logger.debug("bilibili add post res=>", res)
     if (res?.code !== 0) {
-      throw new Error(`哔哩哔哩文章发布失败，可能原因：${res?.message}`)
+      throw new Error(`哔哩哔哩文章发布失败，可能原因：${res?.code} ${res?.message}`)
     }
     const postid = JSON.stringify(res.data)
-    return postid
+    return {
+      status: "success",
+      post_id: postid,
+    }
   }
 
   public async updatePost(post: Post) {
