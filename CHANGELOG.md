@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.31.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.30.2...siyuan-plugin-publisher-v1.31.0) (2024-12-17)
+
+
+### Features
+
+* add bilibili support ([091e76b](https://github.com/terwer/siyuan-plugin-publisher/commit/091e76b874645788048d07b93e6b8a03699eda92))
+* add bilibili support ([fec7e81](https://github.com/terwer/siyuan-plugin-publisher/commit/fec7e8183dd14b92bb6e08b56554ed054e12c54d))
+* add bilibili support ([4cd3600](https://github.com/terwer/siyuan-plugin-publisher/commit/4cd360033d1aaa0d403022c4fd74f3fcda244f82))
+* add bilibili support ([d14b9fa](https://github.com/terwer/siyuan-plugin-publisher/commit/d14b9fa85ec16f9322708089730f982cf74069ad))
+* add bilibili support ([f390e9a](https://github.com/terwer/siyuan-plugin-publisher/commit/f390e9a0115aedd550469b6c79092b7dac635791))
+* add bilibili support - bold ([68ed290](https://github.com/terwer/siyuan-plugin-publisher/commit/68ed290f6d1043ce0b280e73557bdeb4adb1411b))
+* add bilibili support - category ([01ce51c](https://github.com/terwer/siyuan-plugin-publisher/commit/01ce51c1a27de5cde0d6946f4ccc41a2e4300835))
+* add bilibili support - draft ([d0b68ed](https://github.com/terwer/siyuan-plugin-publisher/commit/d0b68edbb2add41e4a3d2895a39007ef1954b9c5))
+* add bilibili support - lists ([67706c0](https://github.com/terwer/siyuan-plugin-publisher/commit/67706c07067753bdde56b97d7453b9987edb97e7))
+
 ## [1.30.2](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.30.1...siyuan-plugin-publisher-v1.30.2) (2024-12-16)
 ### Bug Fixes
 * [#1202](https://github.com/terwer/siyuan-plugin-publisher/issues/1202) add option for outer link ([d8e3366](https://github.com/terwer/siyuan-plugin-publisher/commit/d8e336666306450981f2e4bdc04d0ff245cb770d))
