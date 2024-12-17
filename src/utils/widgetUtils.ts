@@ -169,8 +169,10 @@ const doOpenBrowserWindow = (
             logger.info(`读取cookie事件触发，准备读取 ${domain} 下的所有 Cookie`)
             await cookieCallback(dynCfg, cookies)
           })
-          .catch((error: any) => {
+          .catch(async (error: any) => {
             console.error(`读取 Cookie 失败：${error}`)
+            ElMessage.error(`读取 Cookie 失败：${error}`)
+            await cookieCallback(dynCfg, undefined)
           })
       }
       readCookies()
@@ -179,6 +181,7 @@ const doOpenBrowserWindow = (
     }
   } catch (e) {
     logger.error("Open browser window failed", e)
+    ElMessage.error(`Open browser window failed =>${e}`)
   }
 }
 

@@ -260,7 +260,7 @@ const doImportCustom = async () => {
 // init
 const initPage = async () => {
   formData.setting = await getSetting()
-  logger.info("get setting from platform setting", formData.setting)
+  logger.debug("get setting from platform setting", formData.setting)
 
   const dynJsonCfg = JsonUtil.safeParse<DynamicJsonCfg>(formData.setting[DYNAMIC_CONFIG_KEY], {} as DynamicJsonCfg)
   // 默认展示通用平台

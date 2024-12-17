@@ -73,7 +73,7 @@ const handleCatNodeSingleCheck = (val: any) => {
   const tagSlugs = []
   tagSlugs.push(value)
   formData.tagSlugs = tagSlugs
-  logger.debug("cateSlugs=>", formData.tagSlugs)
+  logger.debug("tagSlugs=>", formData.tagSlugs)
 
   emit("emitSyncTagSlugs", tagSlugs)
 }

@@ -24,35 +24,43 @@
  */
 
 import { CommonWebConfig } from "~/src/adaptors/web/base/commonWebConfig.ts"
-import { PageTypeEnum, PasswordType } from "zhi-blog-api"
+import { CategoryTypeEnum, PageTypeEnum, PasswordType, PicbedServiceTypeEnum } from "zhi-blog-api"
 
 /**
  * B站配置
+ *
+ * @author terwer
+ * @since 1.31.0
  */
 class BilibiliConfig extends CommonWebConfig {
-  constructor(username: string, password: string, middlewareUrl?: string) {
-    super(
-      "https://member.bilibili.com/platform/upload/text/edit",
-      "https://member.bilibili.com/platform/upload/text/edit",
-      username,
-      password,
-      middlewareUrl
-    )
+  public logoutUrl: string
 
-    // 设置B站的预览URL，使用博客ID作为博客预览的URL参数
+  constructor(password: string, middlewareUrl?: string) {
+    super("https://www.bilibili.com/opus", "https://api.bilibili.com", "", password, middlewareUrl)
+
+    // 方便过期之后退出
+    this.logoutUrl = "https://passport.bilibili.com/login"
+    // 预览地址
     this.previewUrl = "/[postid]"
-    // 设置页面类型为Markdown或其他适用的类型
+    // 使用 md 发布
     this.pageType = PageTypeEnum.Markdown
-    // 设置密码类型，使用Cookie来管理密码
+    // cookie 模式不启用用户名
+    this.usernameEnabled = false
     this.passwordType = PasswordType.PasswordType_Cookie
-    // 是否启用用户名
-    this.usernameEnabled = true
-    // 是否启用标签
+    // 标签
     this.tagEnabled = false
-    // 是否启用分类
-    this.cateEnabled = true
-    // 是否启用知识空间
+    // B站使用单选分类作为专栏(文集)
+    this.cateEnabled = false
+    this.knowledgeSpaceEnabled = true
+    this.knowledgeSpaceTitle = "文集"
+    this.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Single
+    this.allowKnowledgeSpaceChange = true
+    // 关闭知识空间
     this.knowledgeSpaceEnabled = false
+    // 图床配置
+    this.picgoPicbedSupported = false
+    this.bundledPicbedSupported = true
+    this.picbedService = PicbedServiceTypeEnum.Bundled
   }
 }
 

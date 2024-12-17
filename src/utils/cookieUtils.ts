@@ -84,6 +84,27 @@ class CookieUtils {
   }
 
   /**
+   * 从字符串中获取 cookie
+   *
+   * @param cookieName - cookie 的名称
+   * @param cookieString - cookie 字符串
+   */
+  public static getCookieFromString(cookieName: string, cookieString?: string): string {
+    if (typeof window === "undefined" && !cookieString) {
+      return ""
+    }
+    const cookies = (cookieString || document.cookie).split(";")
+    const cookiePattern = new RegExp(`^${cookieName}=`)
+    for (const cookie of cookies) {
+      const trimmedCookie = cookie.trim()
+      if (cookiePattern.test(trimmedCookie)) {
+        return trimmedCookie.split("=")[1]
+      }
+    }
+    return ""
+  }
+
+  /**
    * 根据 cookie 的 key，获取 cookie 对象
    *
    * @param cookieArray - cookie 数组

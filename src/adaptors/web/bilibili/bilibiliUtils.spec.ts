@@ -23,9 +23,23 @@
  * questions.
  */
 
-const PRE_COMTANTS = {
-  PRE_CUSTOM_HALOWEB: "custom_Haloweb",
-  PRE_CUSTOM_BILIBILI: "custom_Bilibili",
-}
+import { describe, it } from "vitest"
+import { BilibiliUtils } from "~/src/adaptors/web/bilibili/bilibiliUtils.ts"
+import path from "path";
 
-export { PRE_COMTANTS }
+describe("BilibiliUtils", () => {
+  it("genUploadId", () => {
+    const uploadId = BilibiliUtils.genUploadId()
+    console.log("uploadId=>", uploadId)
+  })
+
+  it("parseMd", () => {
+    const moduleBase = path.resolve(__dirname, "../../../..")
+    // lute
+    require(path.join(moduleBase, "public/libs/lute/lute-1.7.5-20230410.min.js"))
+
+    const md = "# 标题1"
+    const result = BilibiliUtils.parseMd(md)
+    console.log("result=>", result)
+  })
+})

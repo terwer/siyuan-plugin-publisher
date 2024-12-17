@@ -167,7 +167,7 @@ class BaseWebApi extends WebApi {
     url: string,
     headers: any[] = [],
     params: any = {},
-    method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" = "GET",
+    method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" | "HEAD" = "GET",
     contentType: string = "application/json",
     forceProxy: boolean = false,
     payloadEncoding:
@@ -190,6 +190,7 @@ class BaseWebApi extends WebApi {
       | "hex" = "text"
   ) {
     const header = headers.length > 0 ? headers[0] : {}
+    const body = method === "GET" || method === "HEAD" ? undefined : params
     // 如果没有可用的 CORS 代理或者没有强制使用代理，使用默认的自动检测机制
     if (this.isUseSiyuanProxy || (!this.isUseSiyuanProxy && forceProxy) || !forceProxy) {
       this.logger.info("Using legency web fetch")
@@ -199,7 +200,7 @@ class BaseWebApi extends WebApi {
       return await this.proxyFetch(
         url,
         webHeaders,
-        params,
+        body,
         method,
         contentType,
         forceProxy,
@@ -209,7 +210,7 @@ class BaseWebApi extends WebApi {
     } else {
       this.logger.info("Using cors web fetch")
       const webHeaders = [header]
-      return this.corsFetch(url, webHeaders, params, method)
+      return this.corsFetch(url, webHeaders, body, method)
     }
   }
 
