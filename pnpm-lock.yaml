@@ -108,8 +108,8 @@ importers:
         specifier: ^0.1.4
         version: 0.1.4
       zhi-siyuan-api:
-        specifier: ^2.24.1
-        version: 2.24.1(typescript@5.6.2)
+        specifier: ^2.25.0
+        version: 2.25.0(typescript@5.6.2)
       zhi-siyuan-picgo:
         specifier: ^1.12.1
         version: 1.12.1(typescript@5.6.2)
@@ -5111,8 +5111,8 @@ packages:
   zhi-notion-markdown@0.1.4:
     resolution: {integrity: sha512-Ltoeb+NmQg/bi/d5OBI1PzlnX3hCE3x6nN94t50gegdhI53h3ZctY6dutd7GnDF7SpMNn++4m8kH625udYLrog==}
 
-  zhi-siyuan-api@2.24.1:
-    resolution: {integrity: sha512-QKudDHWz+xJgPJ3PQh+Y/LHJlwbxuUwHixgD7FqwnseJ7Z5sWx0Uph51NK7u2vUUBzIozPMW53OIqWL5uOjgyQ==}
+  zhi-siyuan-api@2.25.0:
+    resolution: {integrity: sha512-GSzjp07YKcLZIkvfwrrjZ7AIXDvcz140JKn9ZyIYijbO7rSzCKEG2s3SlbX1zwOv7g1ZuTzbUBCLgyKQoHC/1A==}
 
   zhi-siyuan-picgo@1.12.1:
     resolution: {integrity: sha512-VuZrHMt3wszefPSUtUQoW+jCMLpt8W7EjbDoOwVBH8BQZErh9cg/iXOgU36KhW8ygQiRExKekJxDxTjp6kOVRg==}
@@ -10998,7 +10998,7 @@ snapshots:
       - encoding
       - supports-color
 
-  zhi-siyuan-api@2.24.1(typescript@5.6.2):
+  zhi-siyuan-api@2.25.0(typescript@5.6.2):
     dependencies:
       zhi-blog-api: 1.67.1(typescript@5.6.2)
       zhi-common: 1.33.0(typescript@5.6.2)
@@ -11014,7 +11014,7 @@ snapshots:
       zhi-common: 1.33.0(typescript@5.6.2)
       zhi-device: 2.11.0
       zhi-lib-base: 0.8.0
-      zhi-siyuan-api: 2.24.1(typescript@5.6.2)
+      zhi-siyuan-api: 2.25.0(typescript@5.6.2)
     transitivePeerDependencies:
       - aws-crt
       - debug
