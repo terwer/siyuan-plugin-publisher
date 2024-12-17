@@ -87,7 +87,7 @@
     "zhi-device": "^2.11.0",
     "zhi-fetch-middleware": "^0.12.0",
     "zhi-github-middleware": "^0.5.0",
-    "zhi-gitlab-middleware": "^0.10.0",
+    "zhi-gitlab-middleware": "^0.11.0",
     "zhi-lib-base": "^0.8.0",
     "zhi-notion-markdown": "^0.1.4",
     "zhi-siyuan-api": "^2.24.1",

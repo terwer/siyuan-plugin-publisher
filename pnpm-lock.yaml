@@ -99,8 +99,8 @@ importers:
         specifier: ^0.5.0
         version: 0.5.0(typescript@5.6.2)
       zhi-gitlab-middleware:
-        specifier: ^0.10.0
-        version: 0.10.0(typescript@5.6.2)
+        specifier: ^0.11.0
+        version: 0.11.0(typescript@5.6.2)
       zhi-lib-base:
         specifier: ^0.8.0
         version: 0.8.0
@@ -5099,11 +5099,14 @@ packages:
   zhi-fetch-middleware@0.12.0:
     resolution: {integrity: sha512-cVXCLFM6Dhzizqcz6/ukzQpBNFUTmkUPO3BmBYtNBKrtZlNGGzzYERfD97dX2ldfvA6C/FzAKNcMmhOxqrGp/A==}
 
+  zhi-fetch-middleware@0.13.0:
+    resolution: {integrity: sha512-1e2MWnFSe4FWS4Es03gNza0SY5xbbASvxf4jkvyHkD2sMdezS4oLLlvEpvwZ0bYkhAxNNXKcp2lQOBrX0A/QHg==}
+
   zhi-github-middleware@0.5.0:
     resolution: {integrity: sha512-D5IhY5JE0xe8+AUvakZOh/FQJUCU2rdOwG+kadonja/5I/fDf1WXfCFtVxdPjAyN/N/S84lAwkJxMsaz68i7eQ==}
 
-  zhi-gitlab-middleware@0.10.0:
-    resolution: {integrity: sha512-ib9XtQGsRz/wckGfyYm6bvxCBTwxouJ7Ra1liWmCYeMEFCneYBw7LFXnKeZ8+kExQY8lU5LgJ2BRmVDXkpehwQ==}
+  zhi-gitlab-middleware@0.11.0:
+    resolution: {integrity: sha512-NmdvWMj/pq+qsPaw+UDWAzWbP8nE3I2E9E6fRqlinithZG5qeKXACbWyJSzvz+ejWMwiow4x0PN4REYzdLEXPA==}
 
   zhi-lib-base@0.8.0:
     resolution: {integrity: sha512-3Ky5p6KvLWpXy2tlb/JIfSEKLSe5w43PBLM6g+hNcWwpL9S62emgcpUAHzGWBbC0vlLBLungt2LOsmwAfhrZ0w==}
@@ -10972,6 +10975,14 @@ snapshots:
     transitivePeerDependencies:
       - typescript
 
+  zhi-fetch-middleware@0.13.0(typescript@5.6.2):
+    dependencies:
+      zhi-common: 1.33.0(typescript@5.6.2)
+      zhi-device: 2.11.0
+      zhi-lib-base: 0.8.0
+    transitivePeerDependencies:
+      - typescript
+
   zhi-github-middleware@0.5.0(typescript@5.6.2):
     dependencies:
       '@octokit/core': 5.2.0
@@ -10981,9 +10992,9 @@ snapshots:
     transitivePeerDependencies:
       - typescript
 
-  zhi-gitlab-middleware@0.10.0(typescript@5.6.2):
+  zhi-gitlab-middleware@0.11.0(typescript@5.6.2):
     dependencies:
-      zhi-fetch-middleware: 0.12.0(typescript@5.6.2)
+      zhi-fetch-middleware: 0.13.0(typescript@5.6.2)
       zhi-lib-base: 0.8.0
     transitivePeerDependencies:
       - typescript
