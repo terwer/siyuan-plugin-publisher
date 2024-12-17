@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.31.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.30.2...siyuan-plugin-publisher-v1.31.0) (2024-12-17)
+### Features
+* add bilibili support ([f390e9a](https://github.com/terwer/siyuan-plugin-publisher/commit/f390e9a0115aedd550469b6c79092b7dac635791))
+* add bilibili support - bold ([68ed290](https://github.com/terwer/siyuan-plugin-publisher/commit/68ed290f6d1043ce0b280e73557bdeb4adb1411b))
+* add bilibili support - category ([01ce51c](https://github.com/terwer/siyuan-plugin-publisher/commit/01ce51c1a27de5cde0d6946f4ccc41a2e4300835))
+* add bilibili support - draft ([d0b68ed](https://github.com/terwer/siyuan-plugin-publisher/commit/d0b68edbb2add41e4a3d2895a39007ef1954b9c5))
+* add bilibili support - lists ([67706c0](https://github.com/terwer/siyuan-plugin-publisher/commit/67706c07067753bdde56b97d7453b9987edb97e7))
 ## [1.30.2](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.30.1...siyuan-plugin-publisher-v1.30.2) (2024-12-16)
 ### Bug Fixes
 * [#1202](https://github.com/terwer/siyuan-plugin-publisher/issues/1202) add option for outer link ([d8e3366](https://github.com/terwer/siyuan-plugin-publisher/commit/d8e336666306450981f2e4bdc04d0ff245cb770d))
@@ -11,7 +18,6 @@
 * update deps ([9e0e0c9](https://github.com/terwer/siyuan-plugin-publisher/commit/9e0e0c90d4f2cc201485d0222f17b0ef92610e90))
 ## [1.30.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.30.0...siyuan-plugin-publisher-v1.30.1) (2024-12-13)
 ## [1.30.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.29.3...siyuan-plugin-publisher-v1.30.0) (2024-12-10)
-### Features
 * add prompt manage for ai && fix ai bugs ([ff884e0](https://github.com/terwer/siyuan-plugin-publisher/commit/ff884e0fd8189bb1cae7666b304ffad07baa888f))
 * fix ai bugs ([41bd058](https://github.com/terwer/siyuan-plugin-publisher/commit/41bd058d63353644e0a77d3b9e24ce88960210ed))
 * fix types ([61637b2](https://github.com/terwer/siyuan-plugin-publisher/commit/61637b2f00cef0383c46057a0a1d8783c6141dfd))
