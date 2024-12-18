@@ -35,14 +35,20 @@ const logger = createAppLogger("widget-utils")
 /**
  * 打开网页弹窗
  */
-export const openBrowserWindow = (url: string, dynCfg?: DynamicConfig, cookieCb?: any, isDevMode?: boolean) => {
+export const openBrowserWindow = (
+  url: string,
+  dynCfg?: DynamicConfig,
+  cookieCb?: any,
+  extraScriptCb?: any,
+  isDevMode?: boolean
+) => {
   const { isInSiyuanWidget } = useSiyuanDevice()
 
   if (isInSiyuanWidget()) {
     const isDev = isDevMode ?? false
     const isModel = false
     const isShow = !cookieCb
-    doOpenBrowserWindow(url, undefined, undefined, isDev, isModel, isShow, dynCfg, cookieCb)
+    doOpenBrowserWindow(url, undefined, undefined, isDev, isModel, isShow, dynCfg, cookieCb, extraScriptCb)
   } else {
     window.open(url)
   }
@@ -70,6 +76,7 @@ export const openBrowserWindow = (url: string, dynCfg?: DynamicConfig, cookieCb?
  * @param isShow - 是否显示
  * @param dynCfg - 动态配置
  * @param cookieCallback - 窗口关闭回调
+ * @param extraScriptCallback - 额外执行的脚本回调
  */
 const doOpenBrowserWindow = (
   url: string,
@@ -79,7 +86,8 @@ const doOpenBrowserWindow = (
   modal = false,
   isShow = true,
   dynCfg?: DynamicConfig,
-  cookieCallback = undefined
+  cookieCallback = undefined,
+  extraScriptCallback = undefined
 ) => {
   try {
     if (StrUtil.isEmptyString(url)) {
@@ -147,9 +155,9 @@ const doOpenBrowserWindow = (
 
     // 允许
     remote.enable(newWindow.webContents)
-    if (isDev) {
-      newWindow.webContents.openDevTools()
-    }
+    // if (isDev) {
+    newWindow.webContents.openDevTools()
+    // }
 
     // 监听 close 事件
     newWindow.on("close", (evt: any) => {
@@ -163,6 +171,17 @@ const doOpenBrowserWindow = (
         // https://www.electronjs.org/zh/docs/latest/api/session
         const ses = newWindow.webContents.session
         const domain = dynCfg.domain
+        if (dynCfg.extraScript) {
+          newWindow.webContents
+            .executeJavaScript(dynCfg.extraScript)
+            .then((result: any) => {
+              extraScriptCallback(result)
+            })
+            .catch((error: any) => {
+              console.error(`执行额外脚本失败：${error}`)
+              ElMessage.error("执行额外脚本失败：${error}")
+            })
+        }
         ses.cookies
           .get({ domain })
           .then(async (cookies: any) => {

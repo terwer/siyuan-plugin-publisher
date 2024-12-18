@@ -365,7 +365,9 @@ const _handleValidateOpenBrowserAuth = (dynCfg: DynamicConfig) => {
     formData.webAuthLoadingMap[dynCfg.platformKey] = false
   }
 
-  openBrowserWindow(dynCfg.authUrl, dynCfg, cookieCb)
+  const extraScriptCb = () => {}
+
+  openBrowserWindow(dynCfg.authUrl, dynCfg, cookieCb, extraScriptCb)
 }
 
 const _handleClearAuthConfirm = (msg, url: string) => {

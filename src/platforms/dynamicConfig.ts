@@ -96,6 +96,14 @@ export class DynamicConfig {
    */
   isSys: boolean
 
+  /**
+   * 额外脚本，用于自定义平台，例如：小红书
+   *
+   * @author terwer
+   * @since 1.32.0
+   */
+  extraScript?: string
+
   constructor(
     platformType: PlatformType,
     platformKey: string,

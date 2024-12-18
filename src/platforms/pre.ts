@@ -1,6 +1,6 @@
-import {AuthMode, DynamicConfig, PlatformType, SubPlatformType} from "~/src/platforms/dynamicConfig.ts"
-import {svgIcons} from "~/src/utils/svgIcons.ts"
-import {PRE_COMTANTS} from "~/src/platforms/PreConstants.ts"
+import { AuthMode, DynamicConfig, PlatformType, SubPlatformType } from "~/src/platforms/dynamicConfig.ts"
+import { svgIcons } from "~/src/utils/svgIcons.ts"
+import { PRE_COMTANTS } from "~/src/platforms/PreConstants.ts"
 
 /**
  * 一些因为政策原因必须要特殊处理的平台
@@ -361,17 +361,18 @@ export const pre = {
       domain: "bilibili.com",
       isEnabled: false,
     },
-      {
-        platformType: PlatformType.Custom,
-        subPlatformType:SubPlatformType.Custom_Xiaohongshu,
-        platformKey: PRE_COMTANTS.PRE_CUSTOM_XIAOHONGSHU,
-        platformName: "小红书",
-        platformIcon: svgIcons.iconIFXiaohongshu,
-        authMode: AuthMode.WEBSITE,
-        authUrl: "https://www.xiaohongshu.com/login",
-        domain: "xiaohongshu.com",
-        isEnabled: false,
-      },
+    {
+      platformType: PlatformType.Custom,
+      subPlatformType: SubPlatformType.Custom_Xiaohongshu,
+      platformKey: PRE_COMTANTS.PRE_CUSTOM_XIAOHONGSHU,
+      platformName: "小红书",
+      platformIcon: svgIcons.iconIFXiaohongshu,
+      authMode: AuthMode.WEBSITE,
+      authUrl: "https://www.xiaohongshu.com/login",
+      domain: "xiaohongshu.com",
+      isEnabled: false,
+      extraScript: `(function() { console.log("xiaohongshu适配成功") })();`,
+    },
   ],
   systemCfg: <DynamicConfig[]>[
     {

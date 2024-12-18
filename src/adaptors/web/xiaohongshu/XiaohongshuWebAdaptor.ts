@@ -15,4 +15,10 @@ import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
  * @author terwer
  * @since 1.32.0
  */
-class XiaohongshuWebAdaptor extends BaseWebApi {}
+class XiaohongshuWebAdaptor extends BaseWebApi {
+  public async getMetaData(): Promise<any> {
+    // "/api/galaxy/user/info"
+    // "/api/galaxy/user/my-info"
+    return super.getMetaData()
+  }
+}
