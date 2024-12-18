@@ -26,6 +26,9 @@
 const PRE_COMTANTS = {
   PRE_CUSTOM_HALOWEB: "custom_Haloweb",
   PRE_CUSTOM_BILIBILI: "custom_Bilibili",
+  PRE_CUSTOM_XIAOHONGSHU: "custom_Xiaohongshu",
+  // PRE_CUSTOM_WEIBO: "custom_Weibo",
+  // PRE_CUSTOM_TOUTIAO: "custom_Toutiao",
 }
 
 export { PRE_COMTANTS }
