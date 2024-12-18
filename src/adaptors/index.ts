@@ -56,6 +56,7 @@ import { useJvueApi } from "~/src/adaptors/api/jvue/useJvueApi.ts"
 import { useWordpressdotcomApi } from "~/src/adaptors/api/wordpress-dot-com/useWordpressdotcomApi.ts"
 import { useHalowebWeb } from "~/src/adaptors/web/haloweb/useHalowebWeb.ts"
 import { useBilibiliWeb } from "~/src/adaptors/web/bilibili/useBilibiliWeb.ts"
+import { useXiaohongshuWeb } from "~/src/adaptors/web/xiaohongshu/useXiaohongshuWeb.ts"
 
 /**
  * 适配器统一入口
@@ -225,6 +226,11 @@ class Adaptors {
       }
       case SubPlatformType.Custom_Bilibili: {
         const { cfg } = await useBilibiliWeb(key)
+        conf = cfg
+        break
+      }
+      case SubPlatformType.Custom_Xiaohongshu: {
+        const { cfg } = await useXiaohongshuWeb(key)
         conf = cfg
         break
       }
@@ -400,6 +406,11 @@ class Adaptors {
       }
       case SubPlatformType.Custom_Bilibili: {
         const { webApi } = await useBilibiliWeb(key, newCfg)
+        blogAdaptor = webApi
+        break
+      }
+      case SubPlatformType.Custom_Xiaohongshu: {
+        const { webApi } = await useXiaohongshuWeb(key, newCfg)
         blogAdaptor = webApi
         break
       }

@@ -32,6 +32,18 @@ import { extraPreCfg } from "~/src/platforms/pre.ts"
 
 const logger = createAppLogger("widget-utils")
 
+const matchUrl = (url: string, pattern: string) => {
+  // 将字符串模式转换为正则表达式
+  const regexString = pattern
+    .replace("https://", "^https://") // 确保以 https:// 开头
+    .replace("*", ".*") // 将 * 替换为 .* 以匹配任意字符
+    .replace(".com/", "\\.com\\/.*$") // 处理 .com/ 以适应正则
+
+  const regex = new RegExp(regexString) // 动态创建正则表达式
+
+  return regex.test(url)
+}
+
 /**
  * 打开网页弹窗
  */
@@ -148,16 +160,27 @@ const doOpenBrowserWindow = (
     session.webRequest.onBeforeSendHeaders({ urls: extraPreCfg.uaWhiteList }, (details: any, callback: any) => {
       const reqUrl = new URL(url)
       console.warn("UA 已修改适配，当前请求为", reqUrl)
-      details.requestHeaders["User-Agent"] = MockBrowser.HEADERS.MACOS_CHROME["User-Agent"]
+      if (extraPreCfg.headersMap[reqUrl.href]) {
+        // headers自定义
+        const newHeaders = extraPreCfg.headersMap[reqUrl.href]
+        for (const key in newHeaders) {
+          details.requestHeaders[key] = newHeaders[key]
+        }
+        console.warn("使用自定义header")
+      } else {
+        // 使用统一 header
+        details.requestHeaders["User-Agent"] = MockBrowser.HEADERS.MACOS_CHROME["User-Agent"]
+        console.warn("使用默认header")
+      }
       callback({ cancel: false, requestHeaders: details.requestHeaders })
     })
     // ！！！ ⚠️警告，这里的拦截权限非常高，非必要不要设置， 过滤器的范围应该尽量小
 
     // 允许
     remote.enable(newWindow.webContents)
-    // if (isDev) {
-    newWindow.webContents.openDevTools()
-    // }
+    if (isDev) {
+      newWindow.webContents.openDevTools()
+    }
 
     // 监听 close 事件
     newWindow.on("close", (evt: any) => {
