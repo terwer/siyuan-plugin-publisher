@@ -1,5 +1,8 @@
 # Changelog
 
+## [1.32.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.32.0...siyuan-plugin-publisher-v1.32.1) (2024-12-21)
+### Bug Fixes
+* halo config change not work ([3ba3ae3](https://github.com/terwer/siyuan-plugin-publisher/commit/3ba3ae32a32edb296ea4eb3e44733adaaea6a0e6))
 ## [1.32.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.31.0...siyuan-plugin-publisher-v1.32.0) (2024-12-21)
 ### Features
 * add xiaohongshu support ([8e17b16](https://github.com/terwer/siyuan-plugin-publisher/commit/8e17b166af9bd9a702d0389111592c9566f0c66a))
@@ -13,7 +16,6 @@
 * add bilibili support - draft ([d0b68ed](https://github.com/terwer/siyuan-plugin-publisher/commit/d0b68edbb2add41e4a3d2895a39007ef1954b9c5))
 * add bilibili support - lists ([67706c0](https://github.com/terwer/siyuan-plugin-publisher/commit/67706c07067753bdde56b97d7453b9987edb97e7))
 ## [1.30.2](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.30.1...siyuan-plugin-publisher-v1.30.2) (2024-12-16)
-### Bug Fixes
 * [#1202](https://github.com/terwer/siyuan-plugin-publisher/issues/1202) add option for outer link ([d8e3366](https://github.com/terwer/siyuan-plugin-publisher/commit/d8e336666306450981f2e4bdc04d0ff245cb770d))
 * [#1529](https://github.com/terwer/siyuan-plugin-publisher/issues/1529) cate sync error ([0719c49](https://github.com/terwer/siyuan-plugin-publisher/commit/0719c497a6e95655dfba8606605ac9bd84284b08))
 * [#1530](https://github.com/terwer/siyuan-plugin-publisher/issues/1530) add option for slug change ([16c0c16](https://github.com/terwer/siyuan-plugin-publisher/commit/16c0c168b5347a9af3d58a7893559ee320bae740))
