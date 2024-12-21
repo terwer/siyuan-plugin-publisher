@@ -1,7 +1,12 @@
 # Changelog
 
-## [1.31.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.30.2...siyuan-plugin-publisher-v1.31.0) (2024-12-17)
+## [1.32.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.31.0...siyuan-plugin-publisher-v1.32.0) (2024-12-21)
 ### Features
+* add xiaohongshu support ([8e17b16](https://github.com/terwer/siyuan-plugin-publisher/commit/8e17b166af9bd9a702d0389111592c9566f0c66a))
+### Miscellaneous
+* fix halo auth error in some cases
+* remove sensitive data ([b1c28ea](https://github.com/terwer/siyuan-plugin-publisher/commit/b1c28ea84d8755ab60baf5a2dec048f659c3e39f))
+## [1.31.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.30.2...siyuan-plugin-publisher-v1.31.0) (2024-12-17)
 * add bilibili support ([f390e9a](https://github.com/terwer/siyuan-plugin-publisher/commit/f390e9a0115aedd550469b6c79092b7dac635791))
 * add bilibili support - bold ([68ed290](https://github.com/terwer/siyuan-plugin-publisher/commit/68ed290f6d1043ce0b280e73557bdeb4adb1411b))
 * add bilibili support - category ([01ce51c](https://github.com/terwer/siyuan-plugin-publisher/commit/01ce51c1a27de5cde0d6946f4ccc41a2e4300835))
@@ -14,7 +19,6 @@
 * [#1530](https://github.com/terwer/siyuan-plugin-publisher/issues/1530) add option for slug change ([16c0c16](https://github.com/terwer/siyuan-plugin-publisher/commit/16c0c168b5347a9af3d58a7893559ee320bae740))
 * filename handle error ([8240285](https://github.com/terwer/siyuan-plugin-publisher/commit/82402855fc182b3f8608dad149b8804204d81e22))
 * vitepress tag load error ([c9876e7](https://github.com/terwer/siyuan-plugin-publisher/commit/c9876e7110567ae634ff8e38f5ac06d1cbfc4440))
-### Miscellaneous
 * update deps ([9e0e0c9](https://github.com/terwer/siyuan-plugin-publisher/commit/9e0e0c90d4f2cc201485d0222f17b0ef92610e90))
 ## [1.30.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.30.0...siyuan-plugin-publisher-v1.30.1) (2024-12-13)
 ## [1.30.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.29.3...siyuan-plugin-publisher-v1.30.0) (2024-12-10)
