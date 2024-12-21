@@ -65,14 +65,20 @@ const useHalowebWeb = async (key?: string, newCfg?: HalowebConfig) => {
     const dynCfg = getHaloDynCfg(setting)
     cfg = JsonUtil.safeParse<HalowebConfig>(setting[key], {} as HalowebConfig)
     // 如果配置为空，则使用默认的环境变量值，并记录日志
+    const url = new URL(dynCfg.authUrl)
     if (ObjectUtil.isEmptyObject(cfg)) {
       // 从环境变量获取Csdn的cookie
       const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, LEGENCY_SHARED_PROXT_MIDDLEWARE)
-      const url = new URL(dynCfg.authUrl)
       cfg = new HalowebConfig(url.origin, middlewareUrl)
       cfg.picbedService = PicbedServiceTypeEnum.Bundled
       logger.debug("Configuration is empty, using default environment variables.")
     } else {
+      if (url.origin !== cfg.home || url.origin !== cfg.apiUrl) {
+        // 说明已经改变了
+        cfg.home = url.origin
+        cfg.apiUrl = url.origin
+        logger.info("authUrl has changed, update cfg.home and cfg.apiUrl")
+      }
       logger.info("Using configuration from settings...")
     }
     // 下面是强制设置的配置
