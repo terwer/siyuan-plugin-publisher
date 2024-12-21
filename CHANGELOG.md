@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.32.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.31.0...siyuan-plugin-publisher-v1.32.0) (2024-12-21)
+
+
+### Features
+
+* add xiaohongshu support ([6f05743](https://github.com/terwer/siyuan-plugin-publisher/commit/6f057439e5b8252d62bb44f20152b575902083ca))
+* add xiaohongshu support ([8e17b16](https://github.com/terwer/siyuan-plugin-publisher/commit/8e17b166af9bd9a702d0389111592c9566f0c66a))
+
+
+### Miscellaneous
+
+* remove sensitive data ([b1c28ea](https://github.com/terwer/siyuan-plugin-publisher/commit/b1c28ea84d8755ab60baf5a2dec048f659c3e39f))
+
 ## [1.31.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.30.2...siyuan-plugin-publisher-v1.31.0) (2024-12-17)
 ### Features
 * add bilibili support ([f390e9a](https://github.com/terwer/siyuan-plugin-publisher/commit/f390e9a0115aedd550469b6c79092b7dac635791))
