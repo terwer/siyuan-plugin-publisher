@@ -32,17 +32,35 @@ import { extraPreCfg } from "~/src/platforms/pre.ts"
 
 const logger = createAppLogger("widget-utils")
 
+const matchUrl = (url: string, pattern: string) => {
+  // 将字符串模式转换为正则表达式
+  const regexString = pattern
+    .replace("https://", "^https://") // 确保以 https:// 开头
+    .replace("*", ".*") // 将 * 替换为 .* 以匹配任意字符
+    .replace(".com/", "\\.com\\/.*$") // 处理 .com/ 以适应正则
+
+  const regex = new RegExp(regexString) // 动态创建正则表达式
+
+  return regex.test(url)
+}
+
 /**
  * 打开网页弹窗
  */
-export const openBrowserWindow = (url: string, dynCfg?: DynamicConfig, cookieCb?: any, isDevMode?: boolean) => {
+export const openBrowserWindow = (
+  url: string,
+  dynCfg?: DynamicConfig,
+  cookieCb?: any,
+  extraScriptCb?: any,
+  isDevMode?: boolean
+) => {
   const { isInSiyuanWidget } = useSiyuanDevice()
 
   if (isInSiyuanWidget()) {
     const isDev = isDevMode ?? false
     const isModel = false
     const isShow = !cookieCb
-    doOpenBrowserWindow(url, undefined, undefined, isDev, isModel, isShow, dynCfg, cookieCb)
+    doOpenBrowserWindow(url, undefined, undefined, isDev, isModel, isShow, dynCfg, cookieCb, extraScriptCb)
   } else {
     window.open(url)
   }
@@ -70,6 +88,7 @@ export const openBrowserWindow = (url: string, dynCfg?: DynamicConfig, cookieCb?
  * @param isShow - 是否显示
  * @param dynCfg - 动态配置
  * @param cookieCallback - 窗口关闭回调
+ * @param extraScriptCallback - 额外执行的脚本回调
  */
 const doOpenBrowserWindow = (
   url: string,
@@ -79,7 +98,8 @@ const doOpenBrowserWindow = (
   modal = false,
   isShow = true,
   dynCfg?: DynamicConfig,
-  cookieCallback = undefined
+  cookieCallback = undefined,
+  extraScriptCallback = undefined
 ) => {
   try {
     if (StrUtil.isEmptyString(url)) {
@@ -140,7 +160,18 @@ const doOpenBrowserWindow = (
     session.webRequest.onBeforeSendHeaders({ urls: extraPreCfg.uaWhiteList }, (details: any, callback: any) => {
       const reqUrl = new URL(url)
       console.warn("UA 已修改适配，当前请求为", reqUrl)
-      details.requestHeaders["User-Agent"] = MockBrowser.HEADERS.MACOS_CHROME["User-Agent"]
+      if (extraPreCfg.headersMap[reqUrl.href]) {
+        // headers自定义
+        const newHeaders = extraPreCfg.headersMap[reqUrl.href]
+        for (const key in newHeaders) {
+          details.requestHeaders[key] = newHeaders[key]
+        }
+        console.warn("使用自定义header")
+      } else {
+        // 使用统一 header
+        details.requestHeaders["User-Agent"] = MockBrowser.HEADERS.MACOS_CHROME["User-Agent"]
+        console.warn("使用默认header")
+      }
       callback({ cancel: false, requestHeaders: details.requestHeaders })
     })
     // ！！！ ⚠️警告，这里的拦截权限非常高，非必要不要设置， 过滤器的范围应该尽量小
@@ -163,6 +194,17 @@ const doOpenBrowserWindow = (
         // https://www.electronjs.org/zh/docs/latest/api/session
         const ses = newWindow.webContents.session
         const domain = dynCfg.domain
+        if (dynCfg.extraScript) {
+          newWindow.webContents
+            .executeJavaScript(dynCfg.extraScript)
+            .then((result: any) => {
+              extraScriptCallback(result)
+            })
+            .catch((error: any) => {
+              console.error(`执行额外脚本失败：${error}`)
+              ElMessage.error("执行额外脚本失败：${error}")
+            })
+        }
         ses.cookies
           .get({ domain })
           .then(async (cookies: any) => {

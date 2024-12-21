@@ -37,7 +37,7 @@ import HaloUtils from "~/src/adaptors/api/halo/haloUtils.ts"
 class HalowebWebAdaptor extends BaseWebApi {
   public async getMetaData(): Promise<any> {
     const res = await this.halowebFetch("/actuator/globalinfo")
-    const flag = !!res.externalUrl
+    const flag = !StrUtil.isEmptyString(res?.siteTitle)
     this.logger.info(`get haloweb metadata finished, flag => ${flag}`)
     return {
       flag: flag,

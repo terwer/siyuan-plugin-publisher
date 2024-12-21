@@ -1,6 +1,7 @@
 import { AuthMode, DynamicConfig, PlatformType, SubPlatformType } from "~/src/platforms/dynamicConfig.ts"
 import { svgIcons } from "~/src/utils/svgIcons.ts"
 import { PRE_COMTANTS } from "~/src/platforms/PreConstants.ts"
+import { MockBrowser } from "~/src/utils/MockBrowser.ts"
 
 /**
  * 一些因为政策原因必须要特殊处理的平台
@@ -9,7 +10,7 @@ export const extraPreCfg = {
   // 白名单（作用是以前限制了，但是后来可用的情况，以前就能用的和新平台不必加）
   cookieWhiteList: [SubPlatformType.Custom_Wechat.toString(), SubPlatformType.Custom_Zhihu.toString()],
   // UA白名单（有 UA 限制的必须加，而且是慎之又慎）
-  uaWhiteList: ["https://*.qq.com/*", "https://*.bilibili.com/*"],
+  uaWhiteList: ["https://*.qq.com/*", "https://*.bilibili.com/*", "https://*.xiaohongshu.com/*"],
   // 黑名单
   cookieLimit: [
     // SubPlatformType.Custom_Wechat.toString()
@@ -22,6 +23,13 @@ export const extraPreCfg = {
   cookieLimitTipsImg: {
     // [SubPlatformType.Custom_Wechat.toString()]: "https://img1.terwer.space/api/public/202309051734289.png",
     // [SubPlatformType.Custom_Zhihu.toString()]: "https://img1.siyuan.wiki/api/vip/open/media/aHR0cHM6Ly9jZG4uc2EubmV0LzIwMjQvMTEvMjYvdFpmSWp6VjE2U3U4djRXLnBuZw==",
+  },
+  // 这里需要全路径匹配，没有使用默认的，只增加 UA
+  headersMap: {
+    // "https://www.xiaohongshu.com/login": {
+    //   "User-Agent": MockBrowser.HEADERS.MACOS_CHROME["User-Agent"],
+    //   Referer: "https://creator.xiaohongshu.com/publish/publish?from=menu",
+    // },
   },
 }
 
@@ -361,6 +369,18 @@ export const pre = {
       domain: "bilibili.com",
       isEnabled: false,
     },
+    // {
+    //   platformType: PlatformType.Custom,
+    //   subPlatformType: SubPlatformType.Custom_Xiaohongshu,
+    //   platformKey: PRE_COMTANTS.PRE_CUSTOM_XIAOHONGSHU,
+    //   platformName: "小红书",
+    //   platformIcon: svgIcons.iconIFXiaohongshu,
+    //   authMode: AuthMode.WEBSITE,
+    //   authUrl: "https://www.xiaohongshu.com/login",
+    //   domain: "xiaohongshu.com",
+    //   isEnabled: false,
+    //   extraScript: `(function() { console.log("xiaohongshu适配成功") })();`,
+    // },
   ],
   systemCfg: <DynamicConfig[]>[
     {

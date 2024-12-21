@@ -33,6 +33,12 @@ import { JsonUtil, StrUtil } from "zhi-common"
 import { MockBrowser } from "~/src/utils/MockBrowser.ts"
 import { fileToBuffer } from "~/src/utils/polyfillUtils.ts"
 
+/**
+ * Bilibili 平台适配器
+ *
+ * @author terwer
+ * @since v1.31.0
+ */
 class BilibiliWebAdaptor extends BaseWebApi {
   private bilibiliMetaDataCfg = {} as any
 
