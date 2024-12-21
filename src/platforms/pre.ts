@@ -26,10 +26,10 @@ export const extraPreCfg = {
   },
   // 这里需要全路径匹配，没有使用默认的，只增加 UA
   headersMap: {
-    "https://www.xiaohongshu.com/login": {
-      "User-Agent": MockBrowser.HEADERS.MACOS_CHROME["User-Agent"],
-      Referer: "https://creator.xiaohongshu.com/publish/publish?from=menu",
-    },
+    // "https://www.xiaohongshu.com/login": {
+    //   "User-Agent": MockBrowser.HEADERS.MACOS_CHROME["User-Agent"],
+    //   Referer: "https://creator.xiaohongshu.com/publish/publish?from=menu",
+    // },
   },
 }
 
@@ -369,18 +369,18 @@ export const pre = {
       domain: "bilibili.com",
       isEnabled: false,
     },
-    {
-      platformType: PlatformType.Custom,
-      subPlatformType: SubPlatformType.Custom_Xiaohongshu,
-      platformKey: PRE_COMTANTS.PRE_CUSTOM_XIAOHONGSHU,
-      platformName: "小红书",
-      platformIcon: svgIcons.iconIFXiaohongshu,
-      authMode: AuthMode.WEBSITE,
-      authUrl: "https://www.xiaohongshu.com/login",
-      domain: "xiaohongshu.com",
-      isEnabled: false,
-      extraScript: `(function() { console.log("xiaohongshu适配成功") })();`,
-    },
+    // {
+    //   platformType: PlatformType.Custom,
+    //   subPlatformType: SubPlatformType.Custom_Xiaohongshu,
+    //   platformKey: PRE_COMTANTS.PRE_CUSTOM_XIAOHONGSHU,
+    //   platformName: "小红书",
+    //   platformIcon: svgIcons.iconIFXiaohongshu,
+    //   authMode: AuthMode.WEBSITE,
+    //   authUrl: "https://www.xiaohongshu.com/login",
+    //   domain: "xiaohongshu.com",
+    //   isEnabled: false,
+    //   extraScript: `(function() { console.log("xiaohongshu适配成功") })();`,
+    // },
   ],
   systemCfg: <DynamicConfig[]>[
     {
