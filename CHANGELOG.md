@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.32.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.32.0...siyuan-plugin-publisher-v1.32.1) (2024-12-21)
+
+
+### Bug Fixes
+
+* halo config change not work ([3ba3ae3](https://github.com/terwer/siyuan-plugin-publisher/commit/3ba3ae32a32edb296ea4eb3e44733adaaea6a0e6))
+
 ## [1.32.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.31.0...siyuan-plugin-publisher-v1.32.0) (2024-12-21)
 ### Features
 * add xiaohongshu support ([8e17b16](https://github.com/terwer/siyuan-plugin-publisher/commit/8e17b166af9bd9a702d0389111592c9566f0c66a))
