@@ -199,8 +199,8 @@ importers:
         specifier: ^1.6.0
         version: 1.6.0(@edge-runtime/vm@3.2.0)(@types/node@18.19.68)(jsdom@25.0.1)(sass@1.83.0)(stylus@0.64.0)(terser@5.37.0)
       vue-tsc:
-        specifier: 2.0.29
-        version: 2.0.29(typescript@5.6.2)
+        specifier: 2.2.0
+        version: 2.2.0(typescript@5.6.2)
 
 packages:
 
@@ -1512,8 +1512,8 @@ packages:
   '@vue/devtools-api@6.6.4':
     resolution: {integrity: sha512-sGhTPMuXqZ1rVOk32RylztWkfXTRhuS7vgAKv0zjqk8gbsHkJ7xfFf+jbySxt7tWObEJwyKaHMikV/WGDiQm8g==}
 
-  '@vue/language-core@2.0.29':
-    resolution: {integrity: sha512-o2qz9JPjhdoVj8D2+9bDXbaI4q2uZTHQA/dbyZT4Bj1FR9viZxDJnLcKVHfxdn6wsOzRgpqIzJEEmSSvgMvDTQ==}
+  '@vue/language-core@2.2.0':
+    resolution: {integrity: sha512-O1ZZFaaBGkKbsRfnVH1ifOK1/1BUkyK+3SQsfnh6PmMmD4qJcTU8godCeA96jjDRTL6zgnK7YzCHfaUlH2r0Mw==}
     peerDependencies:
       typescript: '*'
     peerDependenciesMeta:
@@ -1623,6 +1623,9 @@ packages:
   ali-oss@6.22.0:
     resolution: {integrity: sha512-X8CHo+wsjCBvDaEvuibFOi3SZxiCBZSRUURrXH0upoVwu3SuW3e+PTVK7xw+uN6EyTcAESqrngrQimhp8iBzsQ==}
     engines: {node: '>=8'}
+
+  alien-signals@0.4.10:
+    resolution: {integrity: sha512-7S60rz/mMjz0Djq1VI9rd4bGqKNgxTUGE6k7kwrRO6tF95qt1S3ohz1qaQisvUsfbGh7yXnm6DPRrOhOl1ho1A==}
 
   ansi-regex@5.0.1:
     resolution: {integrity: sha512-quJQXlTSUGL2LH9SUXo8VwsY4soanhgo6LNSm84E1LBcE8s3O0wpdiRzyR9z/ZZJMlMWv37qOOb9pdJlMUEKFQ==}
@@ -1964,9 +1967,6 @@ packages:
   commonmark@0.28.1:
     resolution: {integrity: sha512-PklsZ9pgrfFQ5hQH9BRzoWnqI9db2LeR9MhvkNk8iz97kfaTNmhTU+IE8jKDHTEfivZZXoFqzGqzddXdk14EJw==}
     hasBin: true
-
-  computeds@0.0.1:
-    resolution: {integrity: sha512-7CEBgcMjVmitjYo5q8JTJVra6X5mQ20uTThdK+0kR7UEaDrAWEQcRiBtWJzga4eRpP6afNwwLsX2SET2JhVB1Q==}
 
   concat-map@0.0.1:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
@@ -4898,8 +4898,8 @@ packages:
   vue-template-compiler@2.7.16:
     resolution: {integrity: sha512-AYbUWAJHLGGQM7+cNTELw+KsOG9nl2CnSv467WobS5Cv9uk3wFcnr1Etsz2sEIHEZvw1U+o9mRlEO6QbZvUPGQ==}
 
-  vue-tsc@2.0.29:
-    resolution: {integrity: sha512-MHhsfyxO3mYShZCGYNziSbc63x7cQ5g9kvijV7dRe1TTXBRLxXyL0FnXWpUF1xII2mJ86mwYpYsUmMwkmerq7Q==}
+  vue-tsc@2.2.0:
+    resolution: {integrity: sha512-gtmM1sUuJ8aSb0KoAFmK9yMxb8TxjewmxqTJ1aKphD5Cbu0rULFY6+UQT51zW7SpUcenfPUuflKyVwyx9Qdnxg==}
     hasBin: true
     peerDependencies:
       typescript: '>=5.0.0'
@@ -7041,13 +7041,13 @@ snapshots:
 
   '@vue/devtools-api@6.6.4': {}
 
-  '@vue/language-core@2.0.29(typescript@5.6.2)':
+  '@vue/language-core@2.2.0(typescript@5.6.2)':
     dependencies:
       '@volar/language-core': 2.4.11
       '@vue/compiler-dom': 3.5.13
       '@vue/compiler-vue2': 2.7.16
       '@vue/shared': 3.5.13
-      computeds: 0.0.1
+      alien-signals: 0.4.10
       minimatch: 9.0.5
       muggle-string: 0.4.1
       path-browserify: 1.0.1
@@ -7214,6 +7214,8 @@ snapshots:
     transitivePeerDependencies:
       - proxy-agent
       - supports-color
+
+  alien-signals@0.4.10: {}
 
   ansi-regex@5.0.1: {}
 
@@ -7602,8 +7604,6 @@ snapshots:
       mdurl: 1.0.1
       minimist: 1.2.8
       string.prototype.repeat: 0.2.0
-
-  computeds@0.0.1: {}
 
   concat-map@0.0.1: {}
 
@@ -10783,11 +10783,10 @@ snapshots:
       he: 1.2.0
     optional: true
 
-  vue-tsc@2.0.29(typescript@5.6.2):
+  vue-tsc@2.2.0(typescript@5.6.2):
     dependencies:
       '@volar/typescript': 2.4.11
-      '@vue/language-core': 2.0.29(typescript@5.6.2)
-      semver: 7.6.3
+      '@vue/language-core': 2.2.0(typescript@5.6.2)
       typescript: 5.6.2
 
   vue@3.5.13(typescript@5.6.2):
