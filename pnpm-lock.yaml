@@ -12,8 +12,8 @@ importers:
         specifier: ^2.3.1
         version: 2.3.1(vue@3.5.13(typescript@5.6.2))
       '@iconify/json':
-        specifier: ^2.2.283
-        version: 2.2.283
+        specifier: ^2.2.289
+        version: 2.2.289
       '@vueuse/components':
         specifier: ^12.0.0
         version: 12.0.0(typescript@5.6.2)
@@ -652,8 +652,8 @@ packages:
     resolution: {integrity: sha512-93zYdMES/c1D69yZiKDBj0V24vqNzB/koF26KPaagAfd3P/4gUlh3Dys5ogAK+Exi9QyzlD8x/08Zt7wIKcDcA==}
     deprecated: Use @eslint/object-schema instead
 
-  '@iconify/json@2.2.283':
-    resolution: {integrity: sha512-Je/7d+MeStySzSz4DhRYWREd4+kpf+JW+884In115s1uuZcnRNH14avaSdf5SU6u1VOUN4HvpcG8fUaVvhg97w==}
+  '@iconify/json@2.2.289':
+    resolution: {integrity: sha512-wNAkS6TZsOKh+L4n96PKAqxsAPOYubIfy6/uU0dT32zYPy4mqmp7fqQVIwkLM22bnSQubAl9ynN1q71oz4lZ/g==}
 
   '@iconify/types@2.0.0':
     resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
@@ -5845,7 +5845,7 @@ snapshots:
 
   '@humanwhocodes/object-schema@2.0.3': {}
 
-  '@iconify/json@2.2.283':
+  '@iconify/json@2.2.289':
     dependencies:
       '@iconify/types': 2.0.0
       pathe: 1.1.2
