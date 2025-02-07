@@ -30,7 +30,7 @@ importers:
         specifier: ^0.4.0
         version: 0.4.0
       cross-fetch:
-        specifier: ^3.1.8
+        specifier: 3.1.8
         version: 3.1.8
       crypto-js:
         specifier: ^4.2.0
@@ -99,8 +99,8 @@ importers:
         specifier: ^0.5.0
         version: 0.5.0(typescript@5.6.2)
       zhi-gitlab-middleware:
-        specifier: ^0.11.0
-        version: 0.11.0(typescript@5.6.2)
+        specifier: ^0.12.0
+        version: 0.12.0(typescript@5.6.2)
       zhi-lib-base:
         specifier: ^0.8.0
         version: 0.8.0
@@ -5120,17 +5120,23 @@ packages:
   zhi-common@1.33.0:
     resolution: {integrity: sha512-ggHVmZ/zkVIOLfAWv4vqJBZY9BZnlnBUhlOmtYoVHV35UdxI5zcvvakBRgDZxjyknikHOLot7MtYfccCCOdyKw==}
 
+  zhi-common@1.33.1:
+    resolution: {integrity: sha512-R+/9Ha2bF44I2a/vF9EDewvb4KK2AxnC03LOBXwCyAFQkge+EKvua5zYqeNMNMYn9aUBDJ6MEOyrd2CORe2QcA==}
+
   zhi-device@2.11.0:
     resolution: {integrity: sha512-HKcEHVULUcGboePoSBWJ6vDHYqXEiZS/xetzTRV8DRPkRTmeWzJWs5Xu3BTz21Iz3DGy43hFahpm2Yz2+MFUcA==}
 
   zhi-fetch-middleware@0.13.0:
     resolution: {integrity: sha512-1e2MWnFSe4FWS4Es03gNza0SY5xbbASvxf4jkvyHkD2sMdezS4oLLlvEpvwZ0bYkhAxNNXKcp2lQOBrX0A/QHg==}
 
+  zhi-fetch-middleware@0.13.1:
+    resolution: {integrity: sha512-vntskE73elQMXiHkvrxw4gNIrIilCl1FtRyWtT4ojDGb+f8M9NhjEisgOtyF7tR6iTnIBw34WoW29WmsivDMaw==}
+
   zhi-github-middleware@0.5.0:
     resolution: {integrity: sha512-D5IhY5JE0xe8+AUvakZOh/FQJUCU2rdOwG+kadonja/5I/fDf1WXfCFtVxdPjAyN/N/S84lAwkJxMsaz68i7eQ==}
 
-  zhi-gitlab-middleware@0.11.0:
-    resolution: {integrity: sha512-NmdvWMj/pq+qsPaw+UDWAzWbP8nE3I2E9E6fRqlinithZG5qeKXACbWyJSzvz+ejWMwiow4x0PN4REYzdLEXPA==}
+  zhi-gitlab-middleware@0.12.0:
+    resolution: {integrity: sha512-f0b4zwi7tgw5uAYbBAZ3yv6rfDfCTrx1W+U514+CW2LAIuZjdg1vU708PEpejMnhBiISrZ/Ya2fsYvyEWWYfdA==}
 
   zhi-lib-base@0.8.0:
     resolution: {integrity: sha512-3Ky5p6KvLWpXy2tlb/JIfSEKLSe5w43PBLM6g+hNcWwpL9S62emgcpUAHzGWBbC0vlLBLungt2LOsmwAfhrZ0w==}
@@ -11018,11 +11024,29 @@ snapshots:
     transitivePeerDependencies:
       - typescript
 
+  zhi-common@1.33.1(typescript@5.6.2):
+    dependencies:
+      js-yaml: 4.1.0
+      shorthash2: 1.0.5
+      transliteration: 2.3.5
+      vue: 3.5.13(typescript@5.6.2)
+      zhi-lib-base: 0.8.0
+    transitivePeerDependencies:
+      - typescript
+
   zhi-device@2.11.0: {}
 
   zhi-fetch-middleware@0.13.0(typescript@5.6.2):
     dependencies:
       zhi-common: 1.33.0(typescript@5.6.2)
+      zhi-device: 2.11.0
+      zhi-lib-base: 0.8.0
+    transitivePeerDependencies:
+      - typescript
+
+  zhi-fetch-middleware@0.13.1(typescript@5.6.2):
+    dependencies:
+      zhi-common: 1.33.1(typescript@5.6.2)
       zhi-device: 2.11.0
       zhi-lib-base: 0.8.0
     transitivePeerDependencies:
@@ -11037,9 +11061,9 @@ snapshots:
     transitivePeerDependencies:
       - typescript
 
-  zhi-gitlab-middleware@0.11.0(typescript@5.6.2):
+  zhi-gitlab-middleware@0.12.0(typescript@5.6.2):
     dependencies:
-      zhi-fetch-middleware: 0.13.0(typescript@5.6.2)
+      zhi-fetch-middleware: 0.13.1(typescript@5.6.2)
       zhi-lib-base: 0.8.0
     transitivePeerDependencies:
       - typescript
