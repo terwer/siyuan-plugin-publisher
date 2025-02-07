@@ -325,33 +325,8 @@ class CsdnWebAdaptor extends BaseWebApi {
 
     this.logger.debug(`csdn start uploadFile ${filename}=>`, file)
     if (file instanceof Blob) {
-      const uploadData = await this.requestUpload(filename)
-      this.logger.debug("csdn image uploadData =>", uploadData)
-      if (!uploadData) {
-        throw new Error("CSDN图片信息获取失败 =>" + filename)
-      }
-
-      const uploadUrl = uploadData.host
-      const formData = new FormData()
-      formData.append("key", uploadData.filePath)
-      formData.append("policy", uploadData.policy)
-      formData.append("OSSAccessKeyId", uploadData.accessId)
-      formData.append("success_action_status", "200")
-      formData.append("signature", uploadData.signature)
-      formData.append("callback", uploadData.callbackUrl)
-      formData.append("file", file)
-
-      this.logger.debug("csdn image upload strat...")
-      const headers = {}
-      const resJson = await this.csdnFormFetch(uploadUrl, formData, headers)
-      if (resJson.code !== 200) {
-        throw new Error("CSDN图片上传失败 =>" + filename)
-      }
-      return {
-        id: resJson.data.targetObjectKey,
-        object_key: resJson.data.targetObjectKeyy,
-        url: resJson.data.imageUrl,
-      }
+      // return await this.csdnUploadImage(file, filename)
+      return await this.csdnUploadImage2025(file, filename)
     }
 
     return {}
@@ -360,14 +335,75 @@ class CsdnWebAdaptor extends BaseWebApi {
   // ================
   // private methods
   // ================
-  private async requestUpload(filename: string) {
+  private async csdnUploadImage2025(file: any, filename: string) {
+    const signUrl = "https://bizapi.csdn.net/resource-api/v1/image/direct/upload/signature"
+    const fileExt = filename.split(".").pop()
+    if (!this.validateFileExt(fileExt)) {
+      return null
+    }
+    const res = await this.csdnMediaFetch(
+      signUrl,
+      {},
+      JSON.stringify({
+        imageTemplate: "standard",
+        appName: "direct_blog_markdown",
+        imageSuffix: fileExt,
+      }),
+      "POST"
+    )
+    if (res.code !== 200) {
+      this.logger.error("图片上传签名错误，信息如下", res)
+      return null
+    }
+    const uploadData = res.data
+    this.logger.debug("csdn image get sign info =>", uploadData)
+    if (!uploadData) {
+      throw new Error("CSDN图片签名信息获取失败 =>" + filename)
+    }
+
+    const uploadUrl = uploadData.host
+    const { FormData, Blob } = FormDataUtils.getFormData(this.appInstance)
+
+    const formData = new FormData()
+    formData.append("key", uploadData.filePath)
+    formData.append("policy", uploadData.policy)
+    formData.append("signature", uploadData.signature)
+    formData.append("callbackUrl", uploadData.callbackUrl)
+    formData.append("callbackBody", uploadData.callbackBody)
+    formData.append("callbackBodyType", uploadData.callbackBodyType)
+    formData.append("AccessKeyId", uploadData.accessId)
+    formData.append("file", file)
+    formData.append("x:rtype", "markdown")
+    formData.append("x:watermark", "%E7%81%AF%E5%A1%94%E4%B8%8B%E7%9A%84%E5%AE%88%E6%9C%9B%E8%80%85")
+    formData.append("x:templateName", "standard")
+    formData.append("x:filePath", uploadData.filePath)
+    formData.append("x:isAudit", "1")
+    formData.append("x:x-image-app", "direct_blog_markdown")
+    formData.append("x:type", "blog")
+    formData.append("x:x-image-suffix", fileExt)
+    formData.append("x:username", "youweics")
+    this.logger.debug("csdn image upload start...")
+    const headers = {}
+    const resJson = await this.csdnFormFetch(uploadUrl, formData, headers)
+    if (resJson.code !== 200) {
+      this.logger.error("CSDN图片上传失败，信息如下", resJson)
+      throw new Error("CSDN图片上传失败 =>" + filename)
+    }
+    return {
+      id: resJson.data.targetObjectKey,
+      object_key: resJson.data.targetObjectKeyy,
+      url: resJson.data.imageUrl,
+    }
+  }
+
+  private async csdnUploadImage(file: any, filename: string) {
     const api = "https://imgservice.csdn.net/direct/v1.0/image/upload?watermark=&type=blog&rtype=markdown"
     const fileExt = filename.split(".").pop()
     if (!this.validateFileExt(fileExt)) {
       return null
     }
 
-    var res = await this.csdnFetch(api, {
+    const res = await this.csdnFetch(api, {
       "x-image-app": "direct_blog",
       "x-image-suffix": fileExt,
       "x-image-dir": "direct",
@@ -376,7 +412,36 @@ class CsdnWebAdaptor extends BaseWebApi {
       this.logger.error("图片可能已经上传，信息如下", res)
       return null
     }
-    return res.data
+
+    const uploadData = res.data
+    this.logger.debug("csdn image uploadData =>", uploadData)
+    if (!uploadData) {
+      throw new Error("CSDN图片信息获取失败 =>" + filename)
+    }
+
+    const uploadUrl = uploadData.host
+    const { FormData, Blob } = FormDataUtils.getFormData(this.appInstance)
+
+    const formData = new FormData()
+    formData.append("key", uploadData.filePath)
+    formData.append("policy", uploadData.policy)
+    formData.append("OSSAccessKeyId", uploadData.accessId)
+    formData.append("success_action_status", "200")
+    formData.append("signature", uploadData.signature)
+    formData.append("callback", uploadData.callbackUrl)
+    formData.append("file", file)
+
+    this.logger.debug("csdn image upload strat...")
+    const headers = {}
+    const resJson = await this.csdnFormFetch(uploadUrl, formData, headers)
+    if (resJson.code !== 200) {
+      throw new Error("CSDN图片上传失败 =>" + filename)
+    }
+    return {
+      id: resJson.data.targetObjectKey,
+      object_key: resJson.data.targetObjectKeyy,
+      url: resJson.data.imageUrl,
+    }
   }
 
   private validateFileExt(ext: string): boolean {
@@ -411,6 +476,49 @@ class CsdnWebAdaptor extends BaseWebApi {
     reqHeaderMap.set("x-ca-nonce", xCaNonce)
     reqHeaderMap.set("x-ca-signature", xCaSignature)
     reqHeaderMap.set("x-ca-signature-headers", "x-ca-key,x-ca-nonce")
+    reqHeaderMap.set("Cookie", this.cfg.password)
+
+    const mergedHeaders = {
+      ...Object.fromEntries(reqHeaderMap),
+      ...headers,
+    }
+
+    // 构建请求选项
+    const requestOptions: RequestInit = {
+      method: method,
+      headers: mergedHeaders,
+      body: params,
+    }
+
+    // 发送请求并返回响应
+    this.logger.debug("csdn url =>", url)
+    this.logger.debug("csdn requestOptions =>", requestOptions)
+    const res = await this.webFetch(url, [mergedHeaders], params, method, contentType, true, "base64")
+    return res
+  }
+
+  private async csdnMediaFetch(
+    url: string,
+    headers: any = {},
+    params: any = undefined,
+    method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" = "GET",
+    contentType: string = "application/json"
+  ) {
+    // 设置请求头
+    const accept = "*/*"
+    const xcakey = CsdnUtils.X_CA_KEY_MEDIA
+    const xCaNonce = CsdnUtils.generateXCaNonce()
+    const timestamp = new Date().getTime().toString()
+    const xCaSignature = CsdnUtils.generateXCaSignatureForMedia(url, method, accept, xCaNonce, contentType, timestamp)
+
+    const reqHeaderMap = new Map<string, string>()
+    reqHeaderMap.set("accept", accept)
+    reqHeaderMap.set("content-type", contentType)
+    reqHeaderMap.set("x-ca-key", xcakey)
+    reqHeaderMap.set("x-ca-nonce", xCaNonce)
+    reqHeaderMap.set("x-ca-timestamp", timestamp)
+    reqHeaderMap.set("x-ca-signature", xCaSignature)
+    reqHeaderMap.set("x-ca-signature-headers", "x-ca-key,x-ca-nonce,x-ca-timestamp")
     reqHeaderMap.set("Cookie", this.cfg.password)
 
     const mergedHeaders = {
