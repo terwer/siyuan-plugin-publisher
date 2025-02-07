@@ -150,7 +150,7 @@ const goToPublisherDrawer = (title: string, pageUrl: string) => {
  * @param pageUrl 内部地址，包括参数
  */
 const goToBlogDrawer = (title: string, pageUrl: string) => {
-  const url = `${siyuanSetting.value.apiUrl}/plugins/siyuan-blog/#${pageUrl}`
+  const url = `${siyuanSetting.value.apiUrl}/plugins/siyuan-blog/app/#${pageUrl}`
   logger.debug(`Blog will go to ${url}`)
 
   goToDrawer(title, url)
