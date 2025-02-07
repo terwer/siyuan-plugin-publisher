@@ -37,7 +37,7 @@ export class PluginInvoke {
   private logger
   private readonly pluginInstance
   private picgoPluginBase = "/plugins/siyuan-plugin-picgo/#"
-  private blogPluginBase = "/plugins/siyuan-blog/#"
+  private blogPluginBase = "/plugins/siyuan-blog/app/#"
 
   constructor(pluginInstance: PublisherPlugin) {
     this.logger = createSiyuanAppLogger("plugin-invoke")
