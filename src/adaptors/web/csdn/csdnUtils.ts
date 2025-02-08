@@ -36,7 +36,9 @@ import { CsdnWebAdaptor } from "~/src/adaptors/web/csdn/csdnWebAdaptor.ts"
  */
 class CsdnUtils {
   public static X_CA_KEY = "203803574"
+  public static X_CA_KEY_MEDIA = "260196572"
   public static APP_SECRET = "9znpamsyl2c7cdrr9sas0le9vbc3r6ba"
+  public static APP_SECRET_MEDIA = "t5PaqxVQpWoHgLGt7XPIvd5ipJcwJTU7"
 
   /**
    * 生成UUID
@@ -79,6 +81,44 @@ class CsdnUtils {
     } else {
       const path = s.pathname
       toEnc = `POST\n${accept}\n\n${content_type}\n\nx-ca-key:${CsdnUtils.X_CA_KEY}\nx-ca-nonce:${uuid}\n${path}`
+    }
+    const hmac = CryptoJS.HmacSHA256(toEnc, ekey)
+    const sign = Base64.stringify(hmac)
+    // console.log(uuid)
+    // console.log(sign)
+    return sign
+  }
+
+  /**
+   * 获取签名
+   *
+   * @param url - 请求URL
+   * @param method - HTTP方法
+   * @param accept - Accept头
+   * @param uuid - UUID
+   * @param content_type - Content-Type
+   * @param timestamp - 时间戳
+   * @returns 返回签名
+   */
+  public static generateXCaSignatureForMedia(
+    url: string,
+    method: string,
+    accept: string,
+    uuid: string,
+    content_type: string,
+    timestamp: string
+  ): string {
+    // https://github.com/brix/crypto-js/issues/189
+    // https://www.npmjs.com/package/crypto-js
+    const s = new URL(url)
+    const ekey = Utf8.parse(CsdnUtils.APP_SECRET_MEDIA)
+    let toEnc: string
+    if (method === "GET") {
+      const path = s.pathname + s.search
+      toEnc = `GET\n${accept}\n\n${content_type}\n\nx-ca-key:${CsdnUtils.X_CA_KEY_MEDIA}\nx-ca-nonce:${uuid}\nx-ca-timestamp:${timestamp}\n${path}`
+    } else {
+      const path = s.pathname
+      toEnc = `POST\n${accept}\n\n${content_type}\n\nx-ca-key:${CsdnUtils.X_CA_KEY_MEDIA}\nx-ca-nonce:${uuid}\nx-ca-timestamp:${timestamp}\n${path}`
     }
     const hmac = CryptoJS.HmacSHA256(toEnc, ekey)
     const sign = Base64.stringify(hmac)
