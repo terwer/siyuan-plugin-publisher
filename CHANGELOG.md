@@ -1,5 +1,31 @@
 # Changelog
 
+## [1.33.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.32.1...siyuan-plugin-publisher-v1.33.0) (2025-02-08)
+
+
+### Features
+
+* [#1594](https://github.com/terwer/siyuan-plugin-publisher/issues/1594) support CSDN new image upload API ([c8ae0f1](https://github.com/terwer/siyuan-plugin-publisher/commit/c8ae0f146da647581404a985cfdb4480dabbc69c))
+
+
+### Bug Fixes
+
+* [#1582](https://github.com/terwer/siyuan-plugin-publisher/issues/1582) support gitlab v14 ([bee4458](https://github.com/terwer/siyuan-plugin-publisher/commit/bee4458e443bdaa5690be4a2dfc014dfc6183d33))
+* [#1594](https://github.com/terwer/siyuan-plugin-publisher/issues/1594) support CSDN new image upload API ([e9c7cfa](https://github.com/terwer/siyuan-plugin-publisher/commit/e9c7cfa13b9d175c85eb6f1d599163c1381b488a))
+* **deps:** bump @iconify/json from 2.2.283 to 2.2.303 ([9d1beae](https://github.com/terwer/siyuan-plugin-publisher/commit/9d1beae2f932f5b6b31b69dd4fda66379e6e5c36))
+* **deps:** bump @vueuse/components from 12.0.0 to 12.5.0 ([d657b1f](https://github.com/terwer/siyuan-plugin-publisher/commit/d657b1fea31c8268700982d9df51dc6620226d03))
+* **deps:** bump @vueuse/core from 12.0.0 to 12.5.0 ([f001179](https://github.com/terwer/siyuan-plugin-publisher/commit/f0011798e6bffb498000f392da6386aaa5a7ddd2))
+* **deps:** bump katex from 0.16.15 to 0.16.21 ([460f97e](https://github.com/terwer/siyuan-plugin-publisher/commit/460f97e65da18f524a4ced980e6dfa8628c91468))
+* **deps:** bump unplugin-icons from 0.21.0 to 22.0.0 ([16f5b2b](https://github.com/terwer/siyuan-plugin-publisher/commit/16f5b2bb5062d209aae64fc8c9e81573cf48906c))
+* post preview for new share plugin ([1db8f24](https://github.com/terwer/siyuan-plugin-publisher/commit/1db8f2462d8c235d073e743862ead3fc75063dea))
+
+
+### Miscellaneous
+
+* **deps-dev:** bump unplugin-auto-import from 0.18.6 to 19.0.0 ([cff2caa](https://github.com/terwer/siyuan-plugin-publisher/commit/cff2caa2160f86721bf3cb1fb16b6c98c88dac3c))
+* **deps-dev:** bump unplugin-vue-components from 0.27.5 to 28.0.0 ([be403b8](https://github.com/terwer/siyuan-plugin-publisher/commit/be403b812b1e0b3856f0ac45c5aa4a04b0c70388))
+* **deps-dev:** bump vue-tsc from 2.0.29 to 2.2.0 ([b03ec6e](https://github.com/terwer/siyuan-plugin-publisher/commit/b03ec6ef9994060c2b46917d8a1fcfd687fcb7ca))
+
 ## [1.32.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.32.0...siyuan-plugin-publisher-v1.32.1) (2024-12-21)
 ### Bug Fixes
 * halo config change not work ([3ba3ae3](https://github.com/terwer/siyuan-plugin-publisher/commit/3ba3ae32a32edb296ea4eb3e44733adaaea6a0e6))
