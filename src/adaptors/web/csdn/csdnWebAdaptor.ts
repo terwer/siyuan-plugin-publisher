@@ -368,20 +368,20 @@ class CsdnWebAdaptor extends BaseWebApi {
     formData.append("key", uploadData.filePath)
     formData.append("policy", uploadData.policy)
     formData.append("signature", uploadData.signature)
-    formData.append("callbackUrl", uploadData.callbackUrl)
     formData.append("callbackBody", uploadData.callbackBody)
     formData.append("callbackBodyType", uploadData.callbackBodyType)
+    formData.append("callbackUrl", uploadData.callbackUrl)
     formData.append("AccessKeyId", uploadData.accessId)
+    formData.append("x:rtype", uploadData.customParam.rtype)
+    formData.append("x:watermark", uploadData.customParam.watermark)
+    formData.append("x:templateName", uploadData.customParam.templateName)
+    formData.append("x:filePath", uploadData.customParam.filePath)
+    formData.append("x:isAudit", uploadData.customParam.isAudit)
+    formData.append("x:x-image-app", uploadData.customParam["x-image-app"])
+    formData.append("x:type", uploadData.customParam.type)
+    formData.append("x:x-image-suffix", uploadData.customParam["x-image-suffix"])
+    formData.append("x:username", uploadData.customParam.username)
     formData.append("file", file)
-    formData.append("x:rtype", "markdown")
-    formData.append("x:watermark", "%E7%81%AF%E5%A1%94%E4%B8%8B%E7%9A%84%E5%AE%88%E6%9C%9B%E8%80%85")
-    formData.append("x:templateName", "standard")
-    formData.append("x:filePath", uploadData.filePath)
-    formData.append("x:isAudit", "1")
-    formData.append("x:x-image-app", "direct_blog_markdown")
-    formData.append("x:type", "blog")
-    formData.append("x:x-image-suffix", fileExt)
-    formData.append("x:username", "youweics")
     this.logger.debug("csdn image upload start...")
     const headers = {}
     const resJson = await this.csdnFormFetch(uploadUrl, formData, headers)
@@ -546,8 +546,9 @@ class CsdnWebAdaptor extends BaseWebApi {
    * @param url 请求地址
    * @param formData 表单数据，默认为undefined，支持 ReadableStream、Blob | BufferSource | FormData | URLSearchParams | string。这里只需要 FormData
    * @param headers 请求头
+   * @param forceProxy 是否强制使用代理，默认为 false
    */
-  private async csdnFormFetch(url: string, formData: FormData, headers: Record<any, any> = {}) {
+  private async csdnFormFetch(url: string, formData: FormData, headers: Record<any, any> = {}, forceProxy = false) {
     const apiUrl = url
 
     const options: RequestInit = {
@@ -559,7 +560,7 @@ class CsdnWebAdaptor extends BaseWebApi {
     this.logger.debug("向 CSDN 发送表单数据，apiUrl =>", apiUrl)
     this.logger.debug("向 CSDN 发送表单数据，options =>", options)
 
-    const resJson = await this.webFormFetch(apiUrl, [headers], formData, false)
+    const resJson = await this.webFormFetch(apiUrl, [headers], formData, forceProxy)
     if (resJson.error) {
       throw new Error("CSDN 表单提交错误。详细错误 =>" + resJson.error)
     }
