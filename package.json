@@ -92,7 +92,7 @@
     "zhi-notion-markdown": "^0.1.4",
     "zhi-siyuan-api": "^2.25.0",
     "zhi-siyuan-picgo": "^1.12.1",
-    "zhi-xmlrpc-middleware": "^0.6.21"
+    "zhi-xmlrpc-middleware": "^0.6.22"
   },
   "packageManager": "pnpm@9.15.0"
 }
