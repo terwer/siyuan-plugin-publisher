@@ -60,8 +60,8 @@ importers:
         specifier: ^1.4.2
         version: 1.4.2
       siyuan:
-        specifier: ^1.0.7
-        version: 1.0.7
+        specifier: ^1.0.8
+        version: 1.0.8
       telegraph.md:
         specifier: ^0.0.1
         version: 0.0.1
@@ -4325,8 +4325,8 @@ packages:
   simple-xmlrpc@1.4.2:
     resolution: {integrity: sha512-2gFNsEjudzyAqCYQ1XmsETHbmG2vp9jrIeqb+Mxnb/xgnESWfMlXrSEHh10lYIb1hXeco+vSWAAuk2NLl26yFw==}
 
-  siyuan@1.0.7:
-    resolution: {integrity: sha512-DHJdf/y2Il6M1GrUMBq3tw6wv1MFvijwIX6ZnvQVLByI6l+SUXJau89kNnd2t0JIBawnX7ETMWnZIr09TUKiWg==}
+  siyuan@1.0.8:
+    resolution: {integrity: sha512-m6IVT70n8yoNnabjwNn6D0w0s+Dz63JO4fCiyso09JZSGbsreuTrxb1xM9IrVXIEqm5IT7tkU9O0ks1cdHR6Cw==}
 
   slash@3.0.0:
     resolution: {integrity: sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==}
@@ -10123,7 +10123,7 @@ snapshots:
       byte-base64: 1.1.0
       sax: 1.4.1
 
-  siyuan@1.0.7: {}
+  siyuan@1.0.8: {}
 
   slash@3.0.0: {}
 
