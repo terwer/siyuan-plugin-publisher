@@ -84,8 +84,8 @@ importers:
         specifier: ^3.1.1
         version: 3.1.1
       zhi-blog-api:
-        specifier: ^1.67.1
-        version: 1.67.1(typescript@5.6.2)
+        specifier: ^1.70.0
+        version: 1.70.0(typescript@5.6.2)
       zhi-common:
         specifier: ^1.33.0
         version: 1.33.0(typescript@5.6.2)
@@ -5116,6 +5116,9 @@ packages:
 
   zhi-blog-api@1.67.1:
     resolution: {integrity: sha512-r2i9JBYdIQSGp/X8HvZ2pEJZMJYQUfxu0TsoKk0boVMHCdSbYqgpYe2dyHA/96yBeN1nIQ5eir7d+GjBtK942A==}
+
+  zhi-blog-api@1.70.0:
+    resolution: {integrity: sha512-2zHydHFuk1/Y6GLSEWerNe7MYPHLZo+CKLlQrcAaQHQBQXu56gCv12ZOe0ygvvw/tV/cTuS3+QSUz2A8Bh43JA==}
 
   zhi-common@1.33.0:
     resolution: {integrity: sha512-ggHVmZ/zkVIOLfAWv4vqJBZY9BZnlnBUhlOmtYoVHV35UdxI5zcvvakBRgDZxjyknikHOLot7MtYfccCCOdyKw==}
@@ -11010,6 +11013,13 @@ snapshots:
   zhi-blog-api@1.67.1(typescript@5.6.2):
     dependencies:
       zhi-common: 1.33.0(typescript@5.6.2)
+      zhi-lib-base: 0.8.0
+    transitivePeerDependencies:
+      - typescript
+
+  zhi-blog-api@1.70.0(typescript@5.6.2):
+    dependencies:
+      zhi-common: 1.33.1(typescript@5.6.2)
       zhi-lib-base: 0.8.0
     transitivePeerDependencies:
       - typescript
