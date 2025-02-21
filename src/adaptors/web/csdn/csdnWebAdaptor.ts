@@ -391,7 +391,7 @@ class CsdnWebAdaptor extends BaseWebApi {
     }
     return {
       id: resJson.data.targetObjectKey,
-      object_key: resJson.data.targetObjectKeyy,
+      object_key: resJson.data.targetObjectKey,
       url: resJson.data.imageUrl,
     }
   }
@@ -439,7 +439,7 @@ class CsdnWebAdaptor extends BaseWebApi {
     }
     return {
       id: resJson.data.targetObjectKey,
-      object_key: resJson.data.targetObjectKeyy,
+      object_key: resJson.data.targetObjectKey,
       url: resJson.data.imageUrl,
     }
   }
