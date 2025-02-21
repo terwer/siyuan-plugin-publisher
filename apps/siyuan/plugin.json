@@ -1,0 +1,38 @@
+{
+  "name": "siyuan-blog",
+  "author": "terwer",
+  "url": "https://github.com/terwer/siyuan-plugin-blog",
+  "version": "5.3.1",
+  "minAppVersion": "2.9.0",
+  "backends": [
+    "windows",
+    "linux",
+    "darwin",
+    "docker"
+  ],
+  "frontends": [
+    "desktop",
+    "browser-desktop"
+  ],
+  "displayName": {
+    "default": "Share to web",
+    "zh_CN": "在线分享"
+  },
+  "description": {
+    "default": "The notion like sharing feature you've always dreamed of is here, too",
+    "zh_CN": "您的自部署 notion 替代品"
+  },
+  "readme": {
+    "default": "README.md",
+    "zh_CN": "README_zh_CN.md"
+  },
+  "i18n": [
+    "en_US",
+    "zh_CN"
+  ],
+  "funding": {
+    "custom": [
+      "https://afdian.com/a/terwer"
+    ]
+  }
+}

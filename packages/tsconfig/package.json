@@ -1,0 +1,15 @@
+{
+  "name": "tsconfig",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "clean": "rm -rf node_modules"
+  },
+  "devDependencies": {
+    "@vue/tsconfig": "^0.5.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

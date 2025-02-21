@@ -1,12 +1,13 @@
-# Development
+# 开发指南
 
-## Prerequisites
+## 准备工作
 
 ```bash
 pnpm install
 ```
 
-## Using aliyun private image repo
+
+## 使用阿里云私有镜像仓库
 
 ```bash
 docker pull node:18-alpine
@@ -16,20 +17,10 @@ docker login --username=terwer@aliyun.com registry.cn-shenzhen.aliyuncs.com
 docker push registry.cn-shenzhen.aliyuncs.com/terwer/dm:node-18-alpine
 ```
 
-## Development
 
-serve
+## 开发
 
-```bash
-pnpm dev -F siyuan-plugin-publisher
-# http://localhost:6808/plugins/siyuan-plugin-publisher/app/#/
-
-pnpm dev -F @terwer/publisher-app -- --host
-# http://localhost:3000
-# http://10.10.34.38:3000/?lang=en_US
-```
-
-dev
+### 启动开发服务器
 
 ```bash
 pnpm build -F @terwer/publisher-app -- --from siyuan
@@ -37,52 +28,65 @@ pnpm build -F siyuan-plugin-publisher
 pnpm makeLink
 pnpm build -F siyuan-plugin-publisher -- --watch
 
-# http://localhost:6806/plugins/siyuan-plugin-publisher/app/#/
-# http://localhost:6806/plugins/siyuan-plugin-publisher/app/#/?lang=en_US
+# http://localhost:6806/plugins/siyuan-blog/app/#/s/20241217142133-o580ytq
+# http://localhost:6806/plugins/siyuan-blog/app/#/s/20241217142133-o580ytq?lang=en_US
 ```
 
-## Build
+### 构建和链接
 
-### for siyuan-note
+```bash
+pnpm makeLink
+pnpm build -F @terwer/publisher-app -- --from siyuan
+pnpm build -F siyuan-plugin-publisher -- --watch
+```
+
+
+## 构建
+
+### 为思源笔记构建
 
 ```bash
 pnpm build -F @terwer/publisher-app -- --from siyuan
-pnpm build -F siyuan-plugin-publisher
 ```
 
-### for node
+
+### 为 Node.js 构建
 
 ```bash
 pnpm build -F @terwer/publisher-app -- --from node
-# for /
+# 对于根路径 /
 node ./dist/node/server/index.mjs
-# custom prefix, eg:/publisher
+# 自定义前缀，例如：/publisher
 NUXT_APP_BASE_URL=publisher node ./dist/node/server/index.mjs
 ```
 
-for vercel
+
+### 为 Vercel 构建
 
 ```bash
-# root：apps/app
-# build command
+# 根目录：apps/app
+# 构建命令
 pnpm vercelBuild
 ```
 
-for cloudflare
+
+### 为 Cloudflare 构建
 
 ```bash
-# root：apps/app
-# build command
+# 根目录：apps/app
+# 构建命令
 pnpm cloudflareBuild
 ```
 
-## Package
+
+## 打包
 
 ```bash
 pnpm package
 ```
 
-artifacts structure
+
+### 打包后的文件结构
 
 ```
 ├── build
