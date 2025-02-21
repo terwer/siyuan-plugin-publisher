@@ -1,8 +1,8 @@
 import {createApp} from "vue"
-import Share from "./share.vue"
+import Publish from "./pages/Publish/Index.vue"
 
 const createBootStrap = (container: string | HTMLElement) => {
-    createApp(Share).mount(container)
+    createApp(Publish).mount(container)
 }
 
 export {createBootStrap}

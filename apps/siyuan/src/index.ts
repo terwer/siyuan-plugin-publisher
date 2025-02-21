@@ -8,17 +8,19 @@
  */
 
 import {App, IObject, Plugin} from "siyuan"
+import {ILogger, simpleLogger} from "zhi-lib-base"
 import {Topbar} from "./topbar.ts"
 import {icons} from "./icons.ts"
+import {isDev} from "./Constants.ts"
 
 /**
- * SiyuanBlogPlugin 类是 siyuan-note 的插件入口
+ * SiyuanPublisherPlugin 类是 siyuan-note 的插件入口
  *
  * @author terwer
- * @since 5.4.0
+ * @since 2.0.0
  */
-export default class SiyuanBlogPlugin extends Plugin {
-  // public logger: ILogger = simpleLogger("index", "siyuan-blog", isDev)
+export default class SiyuanPublisherPlugin extends Plugin {
+  public logger: ILogger = simpleLogger("index", "siyuan-publisher", isDev)
   private topbar: Topbar = {} as Topbar
 
   constructor(options: { app: App; id: string; name: string; i18n: IObject }) {
@@ -29,9 +31,10 @@ export default class SiyuanBlogPlugin extends Plugin {
 
   async onload() {
     // 注册图标
-    this.addIcons(icons.iconShare)
+    this.addIcons(icons.iconPublish)
     // 初始化工具栏
     this.topbar.initTopbar()
+    this.logger.info("Publisher loaded")
   }
 
   onunload() {

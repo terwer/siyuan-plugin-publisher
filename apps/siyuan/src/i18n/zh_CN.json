@@ -1,8 +1,5 @@
 {
-  "siyuanBlog": "在线分享",
-  "showHome": "打开主页",
-  "home": "主页",
+  "publisher": "发布工具",
   "setting": "设置",
-  "shareOptions": "分享选项",
-  "browserOpen": "打开当前页"
+  "publishOptions": "发布选项"
 }

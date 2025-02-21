@@ -1,8 +1,5 @@
 {
-  "siyuanBlog": "Share to web",
-  "showHome": "Show home",
-  "home": "Home",
+  "publisher": "Publisher",
   "setting": "Setting",
-  "shareOptions": "Share options",
-  "browserOpen": "Open current page"
+  "publishOptions": "Publish options"
 }

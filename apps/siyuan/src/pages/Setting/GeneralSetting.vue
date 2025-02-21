@@ -1,10 +1,9 @@
-<script lang="ts" setup>
+<script setup lang="ts">
+
 </script>
 
 <template>
-<div>
-  share
-</div>
+<div>GeneralSetting</div>
 </template>
 
 <style scoped>

@@ -25,41 +25,41 @@
 
 import {Menu} from "siyuan"
 import {createBootStrap} from "./bootstrap.ts"
-import SiyuanBlogPlugin from "./index"
+import SiyuanPublisherPlugin from "./index"
 
 /**
  * 顶部按钮
  */
 export class Topbar {
-  private readonly pluginInstance: SiyuanBlogPlugin
+    private readonly pluginInstance: SiyuanPublisherPlugin
 
-  constructor(pluginInstance: SiyuanBlogPlugin) {
-    this.pluginInstance = pluginInstance
-  }
+    constructor(pluginInstance: SiyuanPublisherPlugin) {
+        this.pluginInstance = pluginInstance
+    }
 
-  public initTopbar() {
-    const topBarElement = this.pluginInstance.addTopBar({
-      icon: "iconShare",
-      title: this.pluginInstance.i18n.siyuanBlog,
-      position: "right",
-      callback: () => {
-      },
-    })
-    topBarElement.addEventListener("click", async () => {
-      const menu = new Menu("shareProMenu")
-      const el = menu.addItem({
-        iconHTML: "",
-        label: "",
-      })
-      // 挂载内容到菜单
-      createBootStrap(el)
-      // 显示菜单
-      const rect = topBarElement.getBoundingClientRect()
-      menu.open({
-        x: rect.right,
-        y: rect.bottom,
-        isLeft: true,
-      })
-    })
-  }
+    public initTopbar() {
+        const topBarElement = this.pluginInstance.addTopBar({
+            icon: "iconPublish",
+            title: this.pluginInstance.i18n.publisher,
+            position: "right",
+            callback: () => {
+            },
+        })
+        topBarElement.addEventListener("click", async () => {
+            const menu = new Menu("publisherMenu")
+            const el = menu.addItem({
+                iconHTML: "",
+                label: "",
+            })
+            // 挂载内容到菜单
+            createBootStrap(el)
+            // 显示菜单
+            const rect = topBarElement.getBoundingClientRect()
+            menu.open({
+                x: rect.right,
+                y: rect.bottom,
+                isLeft: true,
+            })
+        })
+    }
 }
