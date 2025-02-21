@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.34.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.33.0...siyuan-plugin-publisher-v1.34.0) (2025-02-21)
+
+
+### Features
+
+* [#1594](https://github.com/terwer/siyuan-plugin-publisher/issues/1594) support CSDN new image upload API ([ad178d7](https://github.com/terwer/siyuan-plugin-publisher/commit/ad178d7ae886a94e277d162f3ff487073320047c))
+
 ## [1.33.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.32.1...siyuan-plugin-publisher-v1.33.0) (2025-02-08)
 ### Features
 * [#1594](https://github.com/terwer/siyuan-plugin-publisher/issues/1594) support CSDN new image upload API ([e9c7cfa](https://github.com/terwer/siyuan-plugin-publisher/commit/e9c7cfa13b9d175c85eb6f1d599163c1381b488a))
