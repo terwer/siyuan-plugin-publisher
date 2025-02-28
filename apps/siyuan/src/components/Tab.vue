@@ -117,7 +117,7 @@ function handleTabClick(index: number) {
   color var(--b3-theme-on-background)
 
 .tab-content
-  padding 16px
+  //padding 16px
   background-color #fff
 
 .tabs.vertical .tab-content

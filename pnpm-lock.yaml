@@ -18,10 +18,10 @@ importers:
         specifier: ^3.15.4
         version: 3.15.4(@parcel/watcher@2.5.1)(@types/node@18.19.68)(db0@0.2.4)(eslint@8.57.1)(ioredis@5.5.0)(magicast@0.3.5)(optionator@0.9.3)(rollup@4.29.1)(stylus@0.64.0)(terser@5.26.0)(typescript@5.6.3)(vite@6.1.1(@types/node@18.19.68)(jiti@2.4.2)(stylus@0.64.0)(terser@5.26.0)(yaml@2.7.0))(yaml@2.7.0)
       vue:
-        specifier: latest
+        specifier: 3.5.13
         version: 3.5.13(typescript@5.6.3)
       vue-router:
-        specifier: latest
+        specifier: 4.5.0
         version: 4.5.0(vue@3.5.13(typescript@5.6.3))
     devDependencies:
       '@rushstack/eslint-patch':
@@ -30,6 +30,9 @@ importers:
 
   apps/siyuan:
     dependencies:
+      lucide-vue-next:
+        specifier: ^0.476.0
+        version: 0.476.0(vue@3.5.13(typescript@5.6.3))
       vue:
         specifier: ^3.5.13
         version: 3.5.13(typescript@5.6.3)
@@ -3420,6 +3423,11 @@ packages:
   lru-cache@6.0.0:
     resolution: {integrity: sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==}
     engines: {node: '>=10'}
+
+  lucide-vue-next@0.476.0:
+    resolution: {integrity: sha512-deFzs+/sAcGAEzEKFK+5dPHWg5lUl4eYrRbtdpzNYVxoBLIoGLB5yvx9VwbplJRiGWhPduYr4ZmLqAYgy8UY5A==}
+    peerDependencies:
+      vue: '>=3.0.1'
 
   magic-string-ast@0.7.0:
     resolution: {integrity: sha512-686fgAHaJY7wLTFEq7nnKqeQrhqmXB19d1HnqT35Ci7BN6hbAYLZUezTQ062uUHM7ggZEQlqJ94Ftls+KDXU8Q==}
@@ -9083,6 +9091,10 @@ snapshots:
   lru-cache@6.0.0:
     dependencies:
       yallist: 4.0.0
+
+  lucide-vue-next@0.476.0(vue@3.5.13(typescript@5.6.3)):
+    dependencies:
+      vue: 3.5.13(typescript@5.6.3)
 
   magic-string-ast@0.7.0:
     dependencies:

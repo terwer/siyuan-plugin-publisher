@@ -52,7 +52,10 @@ export class Topbar {
                 label: "",
             })
             // 挂载内容到菜单
-            createBootStrap(el)
+            const props = {
+                pluginInstance: this.pluginInstance
+            }
+            createBootStrap(props, el)
             // 显示菜单
             const rect = topBarElement.getBoundingClientRect()
             menu.open({

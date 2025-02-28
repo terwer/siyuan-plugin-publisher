@@ -21,7 +21,7 @@ docker push registry.cn-shenzhen.aliyuncs.com/terwer/dm:node-18-alpine
 serve
 
 ```bash
-pnpm dev -F siyuan-blog
+pnpm dev -F siyuan-plugin-publisher
 pnpm dev -F @terwer/share-pro-app
 
 # available links for serve test
@@ -35,7 +35,7 @@ dev
 
 ```bash
 pnpm makeLink
-pnpm build -F siyuan-blog -- --watch
+pnpm build -F siyuan-plugin-publisher -- --watch
 pnpm dev -F @terwer/share-pro-app
 ```
 

@@ -1,5 +1,17 @@
 {
   "publisher": "Publisher",
   "setting": "Setting",
-  "publishOptions": "Publish options"
+  "publishOptions": "Publish options",
+  "publish": {
+    "publish": "Document Publish"
+  },
+  "account": {
+    "account": "Account Settings"
+  },
+  "picbed": {
+    "picbed": "Image Bed Settings"
+  },
+  "preference": {
+    "preference": "Preference Settings"
+  }
 }

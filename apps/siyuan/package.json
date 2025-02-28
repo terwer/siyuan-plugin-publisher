@@ -11,6 +11,7 @@
     "clean": "rm -rf node_modules"
   },
   "dependencies": {
+    "lucide-vue-next": "^0.476.0",
     "vue": "^3.5.13",
     "zhi-lib-base": "^0.8.0"
   },

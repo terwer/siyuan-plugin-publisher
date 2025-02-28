@@ -10,32 +10,28 @@ const props = defineProps<{
 
 const tabs = [
   {
-    // label: props.pluginInstance.i18n["share.setting.basic"],
-    label: "文档发布",
+    label: props.pluginInstance.i18n.publish.publish,
     content: PublishPlatformSelect,
     props: {
       pluginInstance: props.pluginInstance,
     }
   },
   {
-    // label: props.pluginInstance.i18n["share.setting.basic"],
-    label: "账号设置",
+    label: props.pluginInstance.i18n.account.account,
     content: AccountSetting,
     props: {
       pluginInstance: props.pluginInstance,
     }
   },
   {
-    // label: props.pluginInstance.i18n["share.setting.basic"],
-    label: "图床设置",
+    label: props.pluginInstance.i18n.picbed.picbed,
     content: PublishPlatformSelect,
     props: {
       pluginInstance: props.pluginInstance,
     }
   },
   {
-    // label: props.pluginInstance.i18n["share.setting.basic"],
-    label: "偏好设置",
+    label: props.pluginInstance.i18n.preference.preference,
     content: GeneralSetting,
     props: {
       pluginInstance: props.pluginInstance,
