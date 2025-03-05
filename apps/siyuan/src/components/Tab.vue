@@ -8,19 +8,19 @@
   -->
 
 <script setup lang="ts">
-import {defineEmits, defineProps, ref} from "vue"
+import { defineEmits, defineProps, ref } from "vue"
 
 const props = withDefaults(
-    defineProps<{
-      tabs: { label: string; content: any; props?: Record<string, any> }[];
-      activeTab: number;
-      vertical: boolean;
-    }>(),
-    {
-      tabs: [] as any,
-      activeTab: 0,
-      vertical: false,
-    },
+  defineProps<{
+    tabs: { label: string; content: any; props?: Record<string, any> }[];
+    activeTab: number;
+    vertical: boolean;
+  }>(),
+  {
+    tabs: [] as any,
+    activeTab: 0,
+    vertical: false,
+  },
 )
 
 const emit = defineEmits<{
@@ -28,7 +28,7 @@ const emit = defineEmits<{
 }>()
 
 const activeIndex = ref(props.activeTab)
-const isCollapsed = ref(false)
+const isCollapsed = ref(true)
 
 function handleTabClick(index: number) {
   if (index !== activeIndex.value) {
@@ -47,19 +47,18 @@ const toggleCollapse = () => {
     <div class="tab-list-container">
       <div class="tab-list" :class="{ collapsed: isCollapsed }">
         <button
-            v-for="(tab, index) in tabs"
-            :key="index"
-            class="tab"
-            :class="{ active: index === activeIndex }"
-            @click="handleTabClick(index)"
+          v-for="(tab, index) in tabs"
+          :key="index"
+          class="tab"
+          :class="{ active: index === activeIndex }"
+          @click="handleTabClick(index)"
         >
           {{ tab.label }}
         </button>
       </div>
-
-      <!-- 折叠按钮集成在容器内部 -->
+      <!-- 将折叠按钮移动到这里 -->
       <button v-if="vertical" class="collapse-btn" @click="toggleCollapse">
-        {{ isCollapsed ? "◀" : "▶" }}
+        {{ isCollapsed ? "❯" : "❮" }}
       </button>
     </div>
 
@@ -67,12 +66,12 @@ const toggleCollapse = () => {
     <div class="tab-content">
       <template v-if="tabs[activeIndex]">
         <component
-            v-if="
+          v-if="
             typeof tabs[activeIndex].content === 'function' ||
             typeof tabs[activeIndex].content === 'object'
           "
-            :is="tabs[activeIndex].content"
-            v-bind="tabs[activeIndex].props"
+          :is="tabs[activeIndex].content"
+          v-bind="tabs[activeIndex].props"
         />
         <template v-else>
           {{ tabs[activeIndex].content }}
@@ -86,16 +85,15 @@ const toggleCollapse = () => {
 .tabs
   display flex
   flex-direction column
+  margin 0
   border-radius 8px
   overflow hidden
   background-color #fff
   box-shadow 0 1px 3px rgba(0, 0, 0, 0.1)
-  margin 10px
 
   &.vertical
     flex-direction row
 
-// 新增容器包装
 .tab-list-container
   position relative
   display flex
@@ -104,7 +102,7 @@ const toggleCollapse = () => {
 .tab-list
   display flex
   flex-direction column
-  width 200px
+  width 100px
   border-right 1px solid #e0e0e0
   transition width 0.3s ease
   overflow hidden
@@ -113,36 +111,38 @@ const toggleCollapse = () => {
     width 0
     border-right none
 
-// 修正后的折叠按钮样式
+    & + .collapse-btn  // 折叠状态下的按钮位置
+      left 0
+      margin-left 4px
+
 .collapse-btn
   position absolute
-  right 0
-  top 50%
-  transform translate(100%, -50%)
+  left calc(100% + 4px)  // 位于tab列表右侧
+  top 10px
   width 24px
   height 24px
   padding 0
   border none
   background var(--b3-theme-background)
-  border-radius 50%
+  border-radius 4px
   box-shadow 0 2px 4px rgba(0, 0, 0, 0.1)
   cursor pointer
-  z-index 1
+  z-index 99
   display flex
   align-items center
   justify-content center
+  font-size 16px
+  color var(--b3-theme-on-background)
+  transition left 0.3s ease  // 添加过渡效果
 
-  &:hover
-    background var(--b3-list-hover)
-
-// 保持原有tab样式
+// 保持其他样式不变...
 .tab
-  padding 12px 16px
+  padding 8px 12px
   border none
   background-color transparent
   cursor pointer
   position relative
-  font-size 14px
+  font-size 12px
   color #555
   transition background-color 0.2s ease
   white-space nowrap
@@ -159,6 +159,8 @@ const toggleCollapse = () => {
   flex 1
   background-color #fff
   min-width 0
+  position relative
+  padding-left 24px
 
 // 暗黑模式适配
 html[data-theme-mode="dark"]

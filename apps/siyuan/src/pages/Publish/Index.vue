@@ -3,6 +3,7 @@ import Tab from "../../components/Tab.vue"
 import AccountSetting from "../Setting/AccountSetting.vue"
 import GeneralSetting from "../Setting/GeneralSetting.vue"
 import PublishPlatformSelect from "./PublishPlatformSelect.vue"
+import DashBoard from "../Setting/DashBoard.vue";
 
 const props = defineProps<{
   pluginInstance: any,
@@ -33,6 +34,13 @@ const tabs = [
   {
     label: props.pluginInstance.i18n.preference.preference,
     content: GeneralSetting,
+    props: {
+      pluginInstance: props.pluginInstance,
+    }
+  },
+  {
+    label: props.pluginInstance.i18n.dashboard.dashboard,
+    content: DashBoard,
     props: {
       pluginInstance: props.pluginInstance,
     }

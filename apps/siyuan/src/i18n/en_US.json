@@ -13,5 +13,8 @@
   },
   "preference": {
     "preference": "Preference Settings"
+  },
+  "dashboard": {
+    "dashboard": "Dashboard"
   }
 }

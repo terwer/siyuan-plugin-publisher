@@ -13,5 +13,8 @@
   },
   "preference": {
     "preference": "偏好设置"
+  },
+  "dashboard": {
+    "dashboard": "仪表盘"
   }
 }

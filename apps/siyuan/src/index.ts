@@ -7,11 +7,13 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import {App, IObject, Plugin} from "siyuan"
-import {ILogger, simpleLogger} from "zhi-lib-base"
-import {Topbar} from "./topbar.ts"
-import {icons} from "./icons.ts"
-import {isDev} from "./Constants.ts"
+import { App, IObject, Plugin } from "siyuan"
+import { ILogger, simpleLogger } from "zhi-lib-base"
+import { Topbar } from "./topbar.ts"
+import { icons } from "./icons.ts"
+import { isDev } from "./Constants.ts"
+
+import "./index.styl"
 
 /**
  * SiyuanPublisherPlugin 类是 siyuan-note 的插件入口
@@ -37,8 +39,7 @@ export default class SiyuanPublisherPlugin extends Plugin {
     this.logger.info("Publisher loaded")
   }
 
-  onunload() {
-  }
+  onunload() {}
 
   // ==================
   // private methods
