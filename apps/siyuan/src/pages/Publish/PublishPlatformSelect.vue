@@ -61,12 +61,13 @@ const platforms: Platform[] = [
 
 <style lang="stylus" scoped>
 .platform-list
+  isolation: isolate
   padding 0.25rem
   min-width 400px
   max-width 800px
   margin 0 auto
   position relative  // 新增层级控制
-  z-index 1
+  z-index 66
 
   ul
     list-style none
@@ -85,7 +86,7 @@ const platforms: Platform[] = [
   transition background-color 0.2s
 
   &:hover
-    background-color #f8f9fa  // 新增悬停背景
+    background-color #edf2f7  // 新增悬停背景
 
 .platform-info
   display flex
@@ -135,9 +136,8 @@ const platforms: Platform[] = [
 
 .tooltip
   position absolute
-  bottom calc(100% + 8px)  // 固定在按钮上方8px
-  left 50%
-  transform translateX(-50%)
+  top: calc(100% + 6px) // 更精确的定位
+  margin-top: 0 // 移除额外间距
   z-index 9999
   background #4a5568
   color #f8fafc
@@ -148,26 +148,37 @@ const platforms: Platform[] = [
   opacity 0
   visibility hidden
   transition all 0.2s
-  box-shadow 0 2px 8px rgba(0, 0, 0, 0.1)
-
-  // 添加小三角指示器
+  box-shadow 0 2px 4px rgba(0, 0, 0, 0.1) // 减小阴影扩散
+  //  max-width: 200px
+  word-break: keep-all
   &::after
     content ""
     position absolute
-    top 100%
-    left 50%
-    margin-left -4px
-    border-width 4px
-    border-style solid
-    border-color #4a5568 transparent transparent transparent
+    top: -8px  // 统一三角位置
+    left: 50%
+    transform: translateX(-50%)
+    border-width: 4px
+    border-style: solid
+    border-color: transparent transparent #4a5568 transparent
+  // 自动调整左右位置
+  left: auto
+  right: 0
+  transform: translateX(-50%)
+
+  // 右侧越界保护
+  &[style*="left"]
+    right: auto
+    left: 0
+    transform: translateX(-20%)
 
 // 暗黑模式适配
 html[data-theme-mode="dark"]
   .platform-item
-    background var(--b3-theme-surface)
+    background-color #3a3a3a
 
     &:hover
-      background-color var(--b3-theme-surface-hover)
+      background var(--b3-theme-surface)
+
 
   .platform-info
     span
@@ -186,11 +197,16 @@ html[data-theme-mode="dark"]
       background var(--b3-theme-surface-hover)
       color var(--b3-theme-on-surface)
 
-      .tooltip
-        background var(--b3-theme-surface)
-        color var(--b3-theme-on-surface)
-        box-shadow 0 2px 8px rgba(0, 0, 0, 0.3)
+  .tooltip
+    background var(--b3-theme-surface)  // 使用主题背景色
+    color var(--b3-theme-on-surface)    // 使用主题文字色
+    box-shadow 0 2px 8px rgba(0, 0, 0, 0.3)
+    // 添加尺寸控制（与普通模式保持一致）
+    line-height 1.2
+    padding 6px 12px
+    font-size 0.7rem
 
-        &::after
-          border-color var(--b3-theme-surface) transparent transparent transparent
+    &::after
+      border-color var(--b3-theme-surface) transparent transparent transparent  // 三角颜色同步
+      top -8px  // 保持位置一致
 </style>

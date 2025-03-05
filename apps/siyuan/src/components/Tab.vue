@@ -160,7 +160,7 @@ const toggleCollapse = () => {
   background-color #fff
   min-width 0
   position relative
-  padding-left 24px
+  padding-left 32px
 
 // 暗黑模式适配
 html[data-theme-mode="dark"]
@@ -168,7 +168,7 @@ html[data-theme-mode="dark"]
     background-color var(--b3-theme-background)
 
     .tab-content
-      background-color var(--b3-theme-background)
+      background-color #2a2a2a
 
   .tab-list
     border-right-color var(--b3-theme-surface-lighter)
