@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import {Bird, Clock, Rss, Zap} from "lucide-vue-next"
+import { Bird, Clock, Rss, Zap, Inbox } from "lucide-vue-next"
 
 interface Platform {
-  name: string
-  icon: any
-  type: "blog" | "doc"
+  name: string;
+  icon: any;
+  type: "blog" | "doc";
   actions: {
-    icon: any
-    label: string
-    handler: () => void
-  }[]
+    icon: any;
+    label: string;
+    handler: () => void;
+  }[];
 }
 
 const platforms: Platform[] = [
@@ -18,39 +18,57 @@ const platforms: Platform[] = [
     icon: Rss,
     type: "blog",
     actions: [
-      {icon: Zap, label: "极速发布", handler: () => console.log("fast")},
-      {icon: Clock, label: "常规发布", handler: () => console.log("normal")}
-    ]
+      { icon: Zap, label: "极速发布", handler: () => console.log("fast") },
+      { icon: Clock, label: "常规发布", handler: () => console.log("normal") },
+    ],
   },
   {
     name: "语雀",
     icon: Bird,
     type: "doc",
     actions: [
-      {icon: Zap, label: "极速发布", handler: () => console.log("fast")},
-      {icon: Clock, label: "常规发布", handler: () => console.log("normal")}
-    ]
-  }
+      { icon: Zap, label: "极速发布", handler: () => console.log("fast") },
+      { icon: Clock, label: "常规发布", handler: () => console.log("normal") },
+    ],
+  },
 ]
+
+const gotoAccount = () => {
+  window.open("https://publisher.siyuan.build/account")
+}
 </script>
 
 <template>
   <div class="platform-list">
-    <ul>
-      <li v-for="platform in platforms" :key="platform.name" class="platform-item">
+    <div v-if="platforms.length === 0" class="empty-state">
+      <Inbox class="empty-icon" />
+      <div class="empty-text">
+        <p>暂时没有可用平台</p>
+        <p>
+          请先去<a class="account-link" @click="gotoAccount">账号管理</a
+          >添加账号吧
+        </p>
+      </div>
+    </div>
+    <ul v-else>
+      <li
+        v-for="platform in platforms"
+        :key="platform.name"
+        class="platform-item"
+      >
         <div class="platform-info">
-          <component :is="platform.icon" class="platform-icon"/>
+          <component :is="platform.icon" class="platform-icon" />
           <span>{{ platform.name }}</span>
         </div>
 
         <div class="action-buttons">
           <button
-              v-for="action in platform.actions"
-              :key="action.label"
-              @click="action.handler"
-              class="action-btn"
+            v-for="action in platform.actions"
+            :key="action.label"
+            @click="action.handler"
+            class="action-btn"
           >
-            <component :is="action.icon" class="btn-icon"/>
+            <component :is="action.icon" class="btn-icon" />
             <span class="tooltip">{{ action.label }}</span>
           </button>
         </div>
@@ -60,6 +78,37 @@ const platforms: Platform[] = [
 </template>
 
 <style lang="stylus" scoped>
+  .empty-state
+    display flex
+    flex-direction column
+    align-items center
+    padding 2rem
+    text-align center
+
+  .empty-icon
+    width 64px
+    height 64px
+    color #cbd5e0
+    margin-bottom 1rem
+
+  .empty-text
+    color #718096
+    font-size 0.9rem
+    line-height 1.6
+
+    p:first-child
+      font-weight 500
+      color #4a5568
+
+    .account-link
+      color #4299e1
+      cursor pointer
+      text-decoration underline
+      transition color 0.2s
+
+      &:hover
+        color #3182ce
+
 .platform-list
   isolation: isolate
   padding 0.25rem
@@ -173,6 +222,20 @@ const platforms: Platform[] = [
 
 // 暗黑模式适配
 html[data-theme-mode="dark"]
+  .empty-state
+    .empty-icon
+      color #4a5568
+
+    .empty-text
+      color #a0aec0
+      p:first-child
+        color #e2e8f0
+
+    .account-link
+      color #63b3ed
+      &:hover
+        color #4299e1
+
   .platform-item
     background-color #3a3a3a
 

@@ -170,8 +170,23 @@ html[data-theme-mode="dark"]
     .tab-content
       background-color #2a2a2a
 
+    // 垂直模式样式
+    &.vertical
+      .tab-list
+        border-right 1px solid var(--b3-theme-surface-lighter)
+
+      .tab:not(:last-child)
+        border-bottom 1px solid var(--b3-theme-surface-lighter)
+
+    // 非垂直模式样式
+    &:not(.vertical)
+      .tab:not(:last-child)
+        border-right 1px solid var(--b3-theme-surface-lighter)
+
   .tab-list
+    color #fff
     border-right-color var(--b3-theme-surface-lighter)
+    border-bottom 1px solid var(--b3-theme-surface-lighter)
 
   .collapse-btn
     background var(--b3-theme-surface)
