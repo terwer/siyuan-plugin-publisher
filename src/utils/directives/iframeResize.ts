@@ -47,8 +47,10 @@ const resize: Directive = {
       log: binding.value.log || isDev,
       checkOrigin: binding.value.checkOrigin || false,
       iframeResizerEnable: binding.value.iframeResizerEnable || true,
-      autoResize: binding.value.autoResize || false,
+      direction: binding.value.direction || "vertical",
+      // autoResize: binding.value.autoResize || false,
       warningTimeout: binding.value.warningTimeout || 30000,
+      license: "GPLv3",
     }
 
     el.addEventListener("load", () => {
