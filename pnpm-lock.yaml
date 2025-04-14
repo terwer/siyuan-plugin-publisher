@@ -130,8 +130,8 @@ importers:
         specifier: ^4.2.2
         version: 4.2.2
       '@types/iframe-resizer':
-        specifier: ^3.5.13
-        version: 3.5.13
+        specifier: ^4.0.0
+        version: 4.0.0
       '@types/katex':
         specifier: ^0.16.7
         version: 0.16.7
@@ -1355,8 +1355,8 @@ packages:
   '@types/estree@1.0.7':
     resolution: {integrity: sha512-w28IoSUCJpidD/TGviZwwMJckNESJZXFu7NBZ5YJ4mEUnNraUn9Pm8HSZm/jDF1pDWYKspWE7oVphigUPRakIQ==}
 
-  '@types/iframe-resizer@3.5.13':
-    resolution: {integrity: sha512-/Np2ntlOWd/NOHs23Mj7QlNEnZ6SL02AWWdYZLm4RQNukDdpqpagfMAdin5FvQDLngR8LWfh/qUnYxuDmR8BCg==}
+  '@types/iframe-resizer@4.0.0':
+    resolution: {integrity: sha512-RKrT4goNVtqZvf9WPkV0cUcphQWXzLVW1IE4yOIY21c1W+obJJbcHFD1lQu5ncNHm/6TeQSeedVf9bmkx2NaGQ==}
 
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
@@ -6677,7 +6677,7 @@ snapshots:
 
   '@types/estree@1.0.7': {}
 
-  '@types/iframe-resizer@3.5.13': {}
+  '@types/iframe-resizer@4.0.0': {}
 
   '@types/json-schema@7.0.15': {}
 
