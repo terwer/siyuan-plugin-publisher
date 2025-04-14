@@ -118,6 +118,9 @@ class BilibiliMdUtil {
       case "NodeImage":
         this.processImageNode(node, ops, paragraphs) // 处理图片
         break
+      case "NodeCodeBlock":
+        this.processCodeBlockNode(node, ops, paragraphs)
+        break
       default:
         Children.forEach((child) => this.processNode(child, ops, paragraphs))
     }
@@ -337,6 +340,40 @@ class BilibiliMdUtil {
             width: 500,
             height: 500,
             size: 53.8896484375,
+          },
+        ],
+      },
+    }
+    paragraphs.push(paragraph)
+  }
+
+  /**
+   * 处理代码块节点
+   */
+  private static processCodeBlockNode(node: Node, ops: Op[], paragraphs: Paragraph[]) {
+    const info = node.Children?.find((child) => child.Type === "NodeCodeBlockFenceInfoMarker")?.Data || ""
+    const code = node.Children?.find((child) => child.Type === "NodeCodeBlockCode")?.Data || ""
+    // 将代码块加入 ops
+    ops.push({
+      attributes: {
+        blockquote: true,
+      },
+      insert: info + "\n" + code + "\n",
+    })
+
+    // 将代码块转换为 content
+    const paragraph: Paragraph = {
+      para_type: 4,
+      text: {
+        nodes: [
+          {
+            node_type: 1,
+            word: {
+              words: code,
+              font_size: 17,
+              font_level: "regular",
+              style: {},
+            },
           },
         ],
       },
