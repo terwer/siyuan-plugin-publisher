@@ -2,12 +2,22 @@
 
 ## Prerequisites
 
+First install nodejs and pnpm
+
 ```bash
 brew install n
 sudo n 18
 brew install corepack
 corepack enable pnpm
-corepack use pnpm@9.15.0
+corepack use pnpm@10.8.0
+
+pnpm install
+```
+
+Update pnpm to latest
+
+```
+npm install --global corepack@latest
 
 pnpm install
 ```
