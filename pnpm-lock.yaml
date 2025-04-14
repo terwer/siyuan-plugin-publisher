@@ -108,8 +108,8 @@ importers:
         specifier: ^0.1.4
         version: 0.1.4
       zhi-siyuan-api:
-        specifier: ^2.26.3
-        version: 2.26.3(typescript@5.6.2)
+        specifier: ^2.27.0
+        version: 2.27.0(typescript@5.6.2)
       zhi-siyuan-picgo:
         specifier: ^1.12.1
         version: 1.12.1(typescript@5.6.2)
@@ -181,8 +181,8 @@ importers:
         specifier: ^19.1.2
         version: 19.1.2(@vueuse/core@12.8.2(typescript@5.6.2))
       unplugin-vue-components:
-        specifier: ^28.4.1
-        version: 28.4.1(@babel/parser@7.27.0)(vue@3.5.13(typescript@5.6.2))
+        specifier: ^28.5.0
+        version: 28.5.0(@babel/parser@7.27.0)(vue@3.5.13(typescript@5.6.2))
       vercel:
         specifier: ^41.6.0
         version: 41.6.0(rollup@4.40.0)
@@ -4773,8 +4773,8 @@ packages:
     resolution: {integrity: sha512-8U/MtpkPkkk3Atewj1+RcKIjb5WBimZ/WSLhhR3w6SsIj8XJuKTacSP8g+2JhfSGw0Cb125Y+2zA/IzJZDVbhA==}
     engines: {node: '>=18.12.0'}
 
-  unplugin-vue-components@28.4.1:
-    resolution: {integrity: sha512-niGSc0vJD9ueAnsqcfAldmtpkppZ09B6p2G1dL7X5S8KPdgbk1P+txPwaaDCe7N+eZh2VG1aAypLXkuJs3OSUg==}
+  unplugin-vue-components@28.5.0:
+    resolution: {integrity: sha512-o7fMKU/uI8NiP+E0W62zoduuguWqB0obTfHFtbr1AP2uo2lhUPnPttWUE92yesdiYfo9/0hxIrj38FMc1eaySg==}
     engines: {node: '>=14'}
     peerDependencies:
       '@babel/parser': ^7.15.8
@@ -5168,8 +5168,8 @@ packages:
   zhi-notion-markdown@0.1.4:
     resolution: {integrity: sha512-Ltoeb+NmQg/bi/d5OBI1PzlnX3hCE3x6nN94t50gegdhI53h3ZctY6dutd7GnDF7SpMNn++4m8kH625udYLrog==}
 
-  zhi-siyuan-api@2.26.3:
-    resolution: {integrity: sha512-Wt/pGBba3+Kx7FS6NnsiR33Hvn+7MuzVB4YjqizARIPi5seB1f3K0BunNkhTzBE6pCfYM1PiA1rkqazVMi5B+A==}
+  zhi-siyuan-api@2.27.0:
+    resolution: {integrity: sha512-ilgjKA/ee3Ifmsw5dAOfN0yFDYlQubZTKe8Mfx6U4QdSh9xKDxCTY6SUaKyUxD5H44KUEMb5mcMPq1BcpVdaFw==}
 
   zhi-siyuan-picgo@1.12.1:
     resolution: {integrity: sha512-VuZrHMt3wszefPSUtUQoW+jCMLpt8W7EjbDoOwVBH8BQZErh9cg/iXOgU36KhW8ygQiRExKekJxDxTjp6kOVRg==}
@@ -10604,7 +10604,7 @@ snapshots:
       pathe: 2.0.3
       picomatch: 4.0.2
 
-  unplugin-vue-components@28.4.1(@babel/parser@7.27.0)(vue@3.5.13(typescript@5.6.2)):
+  unplugin-vue-components@28.5.0(@babel/parser@7.27.0)(vue@3.5.13(typescript@5.6.2)):
     dependencies:
       chokidar: 3.6.0
       debug: 4.4.0
@@ -11058,7 +11058,7 @@ snapshots:
       - encoding
       - supports-color
 
-  zhi-siyuan-api@2.26.3(typescript@5.6.2):
+  zhi-siyuan-api@2.27.0(typescript@5.6.2):
     dependencies:
       zhi-blog-api: 1.70.0(typescript@5.6.2)
       zhi-common: 1.33.1(typescript@5.6.2)
@@ -11074,7 +11074,7 @@ snapshots:
       zhi-common: 1.33.1(typescript@5.6.2)
       zhi-device: 2.12.0
       zhi-lib-base: 0.8.0
-      zhi-siyuan-api: 2.26.3(typescript@5.6.2)
+      zhi-siyuan-api: 2.27.0(typescript@5.6.2)
     transitivePeerDependencies:
       - aws-crt
       - debug
