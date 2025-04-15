@@ -42,7 +42,7 @@
     "esbuild-plugin-copy": "^2.1.1",
     "esbuild-style-plugin": "^1.6.3",
     "fast-glob": "^3.3.3",
-    "jsdom": "^25.0.1",
+    "jsdom": "^26.1.0",
     "minimist": "^1.2.8",
     "rollup-plugin-livereload": "^2.0.5",
     "stylus": "^0.64.0",
