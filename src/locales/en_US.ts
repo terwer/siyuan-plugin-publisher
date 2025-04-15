@@ -147,6 +147,9 @@ export default {
   "setting.blog.type.github.default.path.tip": "Doc path, eg:docs/_posts",
   "setting.blog.type.github.images.path": "Image store path",
   "setting.blog.type.github.images.path.tip": "Image store path, eg:images",
+  "setting.blog.type.github.image.link.path": "Image URL path",
+  "setting.blog.type.github.mage.link.path.tip":
+    "Image URL path (platform-dependent, please refer to the platform's documentation)",
   "setting.blog.type.github.msg": "Commit msg",
   "setting.blog.type.github.msg.tip": "Commit msg, eg:auto published by sy-post-publisher",
   "setting.blog.type.github.author": "Author",

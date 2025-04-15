@@ -84,8 +84,8 @@ importers:
         specifier: ^3.1.1
         version: 3.1.1
       zhi-blog-api:
-        specifier: ^1.70.0
-        version: 1.70.0(typescript@5.6.2)
+        specifier: ^1.71.0
+        version: 1.71.0(typescript@5.6.2)
       zhi-common:
         specifier: ^1.33.1
         version: 1.33.1(typescript@5.6.2)
@@ -108,8 +108,8 @@ importers:
         specifier: ^0.1.4
         version: 0.1.4
       zhi-siyuan-api:
-        specifier: ^2.27.0
-        version: 2.27.0(typescript@5.6.2)
+        specifier: ^2.28.0
+        version: 2.28.0(typescript@5.6.2)
       zhi-siyuan-picgo:
         specifier: ^1.12.1
         version: 1.12.1(typescript@5.6.2)
@@ -217,8 +217,8 @@ packages:
   '@antfu/utils@8.1.1':
     resolution: {integrity: sha512-Mex9nXf9vR6AhcXmMrlz/HVgYYZpVGJ6YlPgwl7UnaFpnshXs6EK/oa5Gpf3CzENMjkvEx2tQtntGnb7UtSTOQ==}
 
-  '@asamuzakjp/css-color@3.1.1':
-    resolution: {integrity: sha512-hpRD68SV2OMcZCsrbdkccTw5FXjNDLo5OuqSHyHZfwweGsDWZwDJ2+gONyNAbazZclobMirACLw0lk8WVxIqxA==}
+  '@asamuzakjp/css-color@3.1.2':
+    resolution: {integrity: sha512-nwgc7jPn3LpZ4JWsoHtuwBsad1qSSLDDX634DdG0PBJofIuIEtSWk4KkRmuXyu178tjuHAbwiMNNzwqIyLYxZw==}
 
   '@astrojs/compiler@1.8.2':
     resolution: {integrity: sha512-o/ObKgtMzl8SlpIdzaxFnt7SATKPxu4oIP/1NL+HDJRzxfJcAkOTAb/ZKMRyULbz4q+1t2/DAebs2Z1QairkZw==}
@@ -5144,8 +5144,8 @@ packages:
     resolution: {integrity: sha512-AyeEbWOu/TAXdxlV9wmGcR0+yh2j3vYPGOECcIj2S7MkrLyC7ne+oye2BKTItt0ii2PHk4cDy+95+LshzbXnGg==}
     engines: {node: '>=12.20'}
 
-  zhi-blog-api@1.70.0:
-    resolution: {integrity: sha512-2zHydHFuk1/Y6GLSEWerNe7MYPHLZo+CKLlQrcAaQHQBQXu56gCv12ZOe0ygvvw/tV/cTuS3+QSUz2A8Bh43JA==}
+  zhi-blog-api@1.71.0:
+    resolution: {integrity: sha512-Qq88otlrYNynaelfIH3d3sxqNAzBAoq+d8v8JnEZu3VrSdipMQlLfAtI5Jm9SRJRW4XERUzOQdzsU5xjep0Rhw==}
 
   zhi-common@1.33.1:
     resolution: {integrity: sha512-R+/9Ha2bF44I2a/vF9EDewvb4KK2AxnC03LOBXwCyAFQkge+EKvua5zYqeNMNMYn9aUBDJ6MEOyrd2CORe2QcA==}
@@ -5168,8 +5168,8 @@ packages:
   zhi-notion-markdown@0.1.4:
     resolution: {integrity: sha512-Ltoeb+NmQg/bi/d5OBI1PzlnX3hCE3x6nN94t50gegdhI53h3ZctY6dutd7GnDF7SpMNn++4m8kH625udYLrog==}
 
-  zhi-siyuan-api@2.27.0:
-    resolution: {integrity: sha512-ilgjKA/ee3Ifmsw5dAOfN0yFDYlQubZTKe8Mfx6U4QdSh9xKDxCTY6SUaKyUxD5H44KUEMb5mcMPq1BcpVdaFw==}
+  zhi-siyuan-api@2.28.0:
+    resolution: {integrity: sha512-CSLzaJkdnXdGeWSZMHE2S+hGu12I1bUYJuzeDrccM2NczMR0qQ8oOfN9jKlDcutmYEgQBgOF4uQR0sBqNw4bEQ==}
 
   zhi-siyuan-picgo@1.12.1:
     resolution: {integrity: sha512-VuZrHMt3wszefPSUtUQoW+jCMLpt8W7EjbDoOwVBH8BQZErh9cg/iXOgU36KhW8ygQiRExKekJxDxTjp6kOVRg==}
@@ -5196,7 +5196,7 @@ snapshots:
 
   '@antfu/utils@8.1.1': {}
 
-  '@asamuzakjp/css-color@3.1.1':
+  '@asamuzakjp/css-color@3.1.2':
     dependencies:
       '@csstools/css-calc': 2.1.2(@csstools/css-parser-algorithms@3.0.4(@csstools/css-tokenizer@3.0.3))(@csstools/css-tokenizer@3.0.3)
       '@csstools/css-color-parser': 3.0.8(@csstools/css-parser-algorithms@3.0.4(@csstools/css-tokenizer@3.0.3))(@csstools/css-tokenizer@3.0.3)
@@ -5976,7 +5976,7 @@ snapshots:
       consola: 3.4.2
       detect-libc: 2.0.3
       https-proxy-agent: 7.0.6
-      node-fetch: 2.7.0
+      node-fetch: 2.6.9
       nopt: 8.1.0
       semver: 7.7.1
       tar: 7.4.3
@@ -7804,7 +7804,7 @@ snapshots:
 
   cssstyle@4.3.0:
     dependencies:
-      '@asamuzakjp/css-color': 3.1.1
+      '@asamuzakjp/css-color': 3.1.2
       rrweb-cssom: 0.8.0
 
   csstype@3.1.3: {}
@@ -11005,7 +11005,7 @@ snapshots:
 
   yocto-queue@1.2.1: {}
 
-  zhi-blog-api@1.70.0(typescript@5.6.2):
+  zhi-blog-api@1.71.0(typescript@5.6.2):
     dependencies:
       zhi-common: 1.33.1(typescript@5.6.2)
       zhi-lib-base: 0.8.0
@@ -11058,9 +11058,9 @@ snapshots:
       - encoding
       - supports-color
 
-  zhi-siyuan-api@2.27.0(typescript@5.6.2):
+  zhi-siyuan-api@2.28.0(typescript@5.6.2):
     dependencies:
-      zhi-blog-api: 1.70.0(typescript@5.6.2)
+      zhi-blog-api: 1.71.0(typescript@5.6.2)
       zhi-common: 1.33.1(typescript@5.6.2)
       zhi-lib-base: 0.8.0
     transitivePeerDependencies:
@@ -11074,7 +11074,7 @@ snapshots:
       zhi-common: 1.33.1(typescript@5.6.2)
       zhi-device: 2.12.0
       zhi-lib-base: 0.8.0
-      zhi-siyuan-api: 2.27.0(typescript@5.6.2)
+      zhi-siyuan-api: 2.28.0(typescript@5.6.2)
     transitivePeerDependencies:
       - aws-crt
       - debug

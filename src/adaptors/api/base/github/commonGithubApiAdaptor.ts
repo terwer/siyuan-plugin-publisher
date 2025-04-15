@@ -226,21 +226,14 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
   public async newMediaObject(mediaObject: MediaObject): Promise<Attachment> {
     let res: any
     const cfg = this.cfg as CommonGithubConfig
-
     try {
       const bits = mediaObject.bits
       const base64 = Base64.fromUint8Array(bits)
-      const savePath = this.cfg.imageStorePath ?? "images"
-      let imageFullPath = StrUtil.pathJoin(savePath, mediaObject.name)
-      if (imageFullPath.startsWith("/")) {
-        imageFullPath = imageFullPath.substring(1)
-      }
-      if (imageFullPath.startsWith("./")) {
-        imageFullPath = imageFullPath.substring(2)
-      }
-      this.logger.info("Github 图片将要最终发送到以下目录 =>", imageFullPath)
+      const imageSavePath = this.getImagePath(this.cfg.imageStorePath, mediaObject.name, "source/images")
+      const imageLinkPath = this.getImagePath(this.cfg.imageLinkPath, mediaObject.name, "images")
+      this.logger.info("Github 图片将要最终发送到以下目录 =>", imageSavePath)
       try {
-        const res = await this.githubClient.publishGithubPage(imageFullPath, base64, "base64")
+        const res = await this.githubClient.publishGithubPage(imageSavePath, base64, "base64")
         this.logger.debug("github publishGithubPage res =>", res)
       } catch (e) {
         this.logger.error("github publishGithubPage error =>", e)
@@ -254,7 +247,7 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
 
       const imageBasePath = "/"
       const siteImgId = mediaObject.name
-      const siteImgUrl = imageBasePath + imageFullPath
+      const siteImgUrl = imageBasePath + imageLinkPath
       const siteArticleId = mediaObject.name
       // // https://raw.githubusercontent.com/terwer/hexo-blog/test/images/image-20240401103158-bnwme8a.png
       // let toImagePath = StrUtil.pathJoin("https://raw.githubusercontent.com", this.cfg.username)
@@ -295,6 +288,18 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
   // ================
   // private methods
   // ================
+  private getImagePath(path: string, filename: string, defaultPath: string) {
+    const savePath = StrUtil.isEmptyString(path) ? defaultPath : path
+    let imageFullPath = StrUtil.pathJoin(savePath, filename)
+    if (imageFullPath.startsWith("/")) {
+      imageFullPath = imageFullPath.substring(1)
+    }
+    if (imageFullPath.startsWith("./")) {
+      imageFullPath = imageFullPath.substring(2)
+    }
+    return imageFullPath
+  }
+
   public async safeDeletePost(postid: string): Promise<boolean> {
     try {
       await this.githubClient.deleteGithubPage(postid)

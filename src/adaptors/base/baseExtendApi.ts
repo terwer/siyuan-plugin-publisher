@@ -516,8 +516,8 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
           for (const image of images) {
             const imageUrl = image.url
             // 忽略在线图片
-            if (imageUrl.startsWith("http")) {
-              this.logger.info(`忽略在线图片 ${imageUrl}`)
+            if (imageUrl.startsWith("http") && !imageUrl.startsWith(window.location.origin)) {
+              this.logger.warn(`忽略在线图片 ${imageUrl}`)
               continue
             }
             const base64Info = await this.readFileToBase64(imageUrl)
