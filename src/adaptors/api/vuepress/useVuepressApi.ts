@@ -79,6 +79,8 @@ const useVuepressApi = async (key: string, newCfg?: VuepressConfig) => {
   // 文件规则，占位符
   // 推荐别名。但是不强制使用
   // cfg.mdFilenameRule = "[filename].md"
+  // cfg.imageStorePath = "docs/.vuepress/public/image"
+  // cfg.imageLinkPath = "images"
   // 标签
   cfg.tagEnabled = true
   // 分类

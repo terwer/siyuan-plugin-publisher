@@ -26,7 +26,7 @@
 <script setup lang="ts">
 // props
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import { reactive, toRaw } from "vue"
+import { onBeforeMount, reactive, toRaw } from "vue"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { PicbedServiceTypeEnum } from "zhi-blog-api"
 
@@ -96,16 +96,7 @@ const syncDefaultPath = (cfg: any) => {
           :placeholder="t('setting.blog.type.github.default.path.tip')"
         />
       </el-form-item>
-      <!-- 图片存储路径 -->
-      <el-form-item
-        v-if="(main.cfg as any).picbedService === PicbedServiceTypeEnum.Bundled"
-        :label="t('setting.blog.type.github.images.path')"
-      >
-        <el-input
-          v-model="(main.cfg as any).imageStorePath"
-          :placeholder="t('setting.blog.type.github.images.path.tip')"
-        />
-      </el-form-item>
+
       <!-- 文件规则 -->
       <el-form-item :label="t('setting.blog.mdFilenameRule')">
         <el-input v-model="(main.cfg as any).mdFilenameRule" :placeholder="t('setting.blog.mdFilenameRule.tip')" />
@@ -142,6 +133,26 @@ const syncDefaultPath = (cfg: any) => {
           type="textarea"
           v-model="(main.cfg as any).dynYamlCfg"
           :placeholder="t('setting.blog.type.github.dyn.yaml.tip')"
+        />
+      </el-form-item>
+      <!-- 图片存储路径 -->
+      <el-form-item
+        v-if="(main.cfg as any).picbedService === PicbedServiceTypeEnum.Bundled"
+        :label="t('setting.blog.type.github.images.path')"
+      >
+        <el-input
+          v-model="(main.cfg as any).imageStorePath"
+          :placeholder="t('setting.blog.type.github.images.path.tip')"
+        />
+      </el-form-item>
+      <!-- 图片访问链接 -->
+      <el-form-item
+        v-if="(main.cfg as any).picbedService === PicbedServiceTypeEnum.Bundled"
+        :label="t('setting.blog.type.github.image.link.path')"
+      >
+        <el-input
+          v-model="(main.cfg as any).imageLinkPath"
+          :placeholder="t('setting.blog.type.github.mage.link.path.tip')"
         />
       </el-form-item>
       <slot name="main" :cfg="main.cfg" />

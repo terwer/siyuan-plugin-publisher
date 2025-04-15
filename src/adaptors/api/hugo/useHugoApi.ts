@@ -79,6 +79,8 @@ const useHugoApi = async (key: string, newCfg?: HugoConfig) => {
   // 文件规则
   // 推荐别名。但是不强制使用
   // cfg.mdFilenameRule = "[slug].md"
+  // cfg.imageStorePath = "static/images"
+  // cfg.imageLinkPath = "images"
   // 标签
   cfg.tagEnabled = true
   // 分类

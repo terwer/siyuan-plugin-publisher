@@ -224,34 +224,36 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
   }
 
   public async newMediaObject(mediaObject: MediaObject): Promise<Attachment> {
-    let res: any
-    const cfg = this.cfg as CommonGithubConfig
-
     try {
       const bits = mediaObject.bits
       const base64 = Base64.fromUint8Array(bits)
-      const savePath = this.cfg.imageStorePath ?? "images"
-      let imageFullPath = StrUtil.pathJoin(savePath, mediaObject.name)
-      if (imageFullPath.startsWith("/")) {
-        imageFullPath = imageFullPath.substring(1)
+      const imageSavePath = this.getImagePath(this.cfg.imageStorePath, mediaObject, "source/images", true)
+      const imageLinkPath = this.getImagePath(this.cfg.imageLinkPath, mediaObject, "images", false)
+      this.logger.info("Github 图片将要最终发送到以下目录 =>", imageSavePath)
+      try {
+        const res = await this.githubClient.publishGithubPage(imageSavePath, base64, "base64")
+        this.logger.debug("github publishGithubPage res =>", res)
+      } catch (e) {
+        this.logger.error("github publishGithubPage error =>", e)
+        // 422 代表图片已存在
+        if (e.status === 422) {
+          this.logger.warn("image already exists", e)
+        } else {
+          throw e
+        }
       }
-      if (imageFullPath.startsWith("./")) {
-        imageFullPath = imageFullPath.substring(2)
-      }
-      this.logger.info("Github 图片将要最终发送到以下目录 =>", imageFullPath)
-      const res = await this.githubClient.publishGithubPage(imageFullPath, base64, "base64")
 
       const siteImgId = mediaObject.name
+      const siteImgUrl = imageLinkPath
       const siteArticleId = mediaObject.name
-      // https://raw.githubusercontent.com/terwer/hexo-blog/test/images/image-20240401103158-bnwme8a.png
-      let toImagePath = StrUtil.pathJoin("https://raw.githubusercontent.com", this.cfg.username)
-      toImagePath = StrUtil.pathJoin(toImagePath, cfg.githubRepo)
-      toImagePath = StrUtil.pathJoin(toImagePath, cfg.githubBranch)
-      toImagePath = StrUtil.pathJoin(toImagePath, encodeURI(savePath))
-      toImagePath = StrUtil.pathJoin(toImagePath, encodeURIComponent(mediaObject.name))
-      const siteImgUrl = toImagePath
+      // // https://raw.githubusercontent.com/terwer/hexo-blog/test/images/image-20240401103158-bnwme8a.png
+      // let toImagePath = StrUtil.pathJoin("https://raw.githubusercontent.com", this.cfg.username)
+      // toImagePath = StrUtil.pathJoin(toImagePath, cfg.githubRepo)
+      // toImagePath = StrUtil.pathJoin(toImagePath, cfg.githubBranch)
+      // toImagePath = StrUtil.pathJoin(toImagePath, encodeURI(savePath))
+      // toImagePath = StrUtil.pathJoin(toImagePath, encodeURIComponent(mediaObject.name))
+      // siteImgUrl = toImagePath
       this.logger.info("Github 图片上传成功", siteImgUrl)
-      this.logger.debug("github publishGithubPage res =>", res)
 
       return {
         attachment_id: siteImgId,
@@ -283,6 +285,32 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
   // ================
   // private methods
   // ================
+  private getImagePath(path: string, mediaObject: MediaObject, defaultPath: string, removeStart = true) {
+    let imageFullPath: string
+    if (path.startsWith("[docpath]")) {
+      const post = mediaObject.post
+      const docPath = post.cate_slugs?.[0] ?? this.cfg.blogid
+      const savePath = StrUtil.pathJoin(docPath, path.replace("[docpath]", ""))
+      imageFullPath = StrUtil.pathJoin(savePath, mediaObject.name)
+    } else {
+      const savePath = StrUtil.isEmptyString(path) ? defaultPath : path
+      imageFullPath = StrUtil.pathJoin(savePath, mediaObject.name)
+      if (removeStart) {
+        if (imageFullPath.startsWith("./")) {
+          // 相对路径不管
+        } else {
+          if (imageFullPath.startsWith("/")) {
+            imageFullPath = imageFullPath.substring(1)
+          }
+          const imageBasePath = "/"
+          imageFullPath = StrUtil.pathJoin(imageBasePath, imageFullPath)
+        }
+      }
+    }
+
+    return imageFullPath
+  }
+
   public async safeDeletePost(postid: string): Promise<boolean> {
     try {
       await this.githubClient.deleteGithubPage(postid)

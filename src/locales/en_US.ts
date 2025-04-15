@@ -147,6 +147,9 @@ export default {
   "setting.blog.type.github.default.path.tip": "Doc path, eg:docs/_posts",
   "setting.blog.type.github.images.path": "Image store path",
   "setting.blog.type.github.images.path.tip": "Image store path, eg:images",
+  "setting.blog.type.github.image.link.path": "Image URL path",
+  "setting.blog.type.github.mage.link.path.tip":
+    "Image URL path (platform-dependent, please refer to the platform's documentation)",
   "setting.blog.type.github.msg": "Commit msg",
   "setting.blog.type.github.msg.tip": "Commit msg, eg:auto published by sy-post-publisher",
   "setting.blog.type.github.author": "Author",
@@ -738,12 +741,11 @@ export default {
   "publisher.post.password": "Password Protection",
   "publisher.post.password.tip": "Please enter the password for the article; leave blank if not setting one",
   "publisher.post.future": "Scheduled Publishing",
-
   "setting.platform.halo.v29.only":
     "Note: Due to changes in the API policy in Halo 2.20+, the original method for this platform is no longer usable. Please import and use the new platform 'Halo web'. If you still need to use this platform, please downgrade your server to Halo 2.9.",
-
   "setting.haloweb.home.tip": "The URL of your Halo 2.20+ blog homepage",
   "setting.haloweb.password.tip": "Halo's Cookie, do not modify",
   "setting.haloweb.apiUrl.tip": "Usually the same as the URL of your Halo 2.20+ blog homepage",
   "setting.haloweb.previewUrl.tip": "Article preview rule for the Halo web platform",
+  "common.help": "View help document",
 }

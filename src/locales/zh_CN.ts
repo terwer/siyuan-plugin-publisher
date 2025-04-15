@@ -149,6 +149,8 @@ export default {
     "存储目录例如：docs，部分平台可使用[auto]作为特殊占位符，代表自动映射层级目录，例如：docs/[auto]",
   "setting.blog.type.github.images.path": "图片存储目录",
   "setting.blog.type.github.images.path.tip": "图片存储目录，相对于仓库根目录，留空则使用相对于根目录的 images 目录",
+  "setting.blog.type.github.image.link.path": "图片访问链接",
+  "setting.blog.type.github.mage.link.path.tip": "图片访问链接，取决于对应平台，请参考对应平台的文档",
   "setting.blog.type.github.msg": "提交信息",
   "setting.blog.type.github.msg.tip": "提交信息，例如：auto published by siyuan-publish-publisher",
   "setting.blog.type.github.author": "作者",
@@ -710,12 +712,11 @@ export default {
   "publisher.post.password": "密码保护",
   "publisher.post.password.tip": "请输入文章密码，留空则不设置",
   "publisher.post.future": "定时发布",
-
   "setting.platform.halo.v29.only":
     "注意：由于 Halo 2.20+ 修改了 API 策略，V2.20+ 此平台已经无法使用，请导入并使用新平台 「Halo网页版」。如仍需使用此平台，请降级到 Halo 2.9。",
-
   "setting.haloweb.home.tip": "您的Halo2.20+博客首页地址",
   "setting.haloweb.password.tip": "Halo的Cookie，请勿修改",
   "setting.haloweb.apiUrl.tip": "通常和您的Halo2.20+博客首页地址相同",
   "setting.haloweb.previewUrl.tip": "Halo网页版平台文章预览规则",
+  "common.help": "查看帮助文档",
 }
