@@ -27,9 +27,10 @@
 // uses
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useRoute, useRouter } from "vue-router"
-import { ref } from "vue"
+import { ref, computed } from "vue"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { ArrowLeft } from "@element-plus/icons-vue"
+import { ArrowLeft, QuestionFilled } from "@element-plus/icons-vue"
+import { help } from "~/src/platforms/help.ts"
 
 const logger = createAppLogger("back-page")
 const { t } = useVueI18n()
@@ -46,6 +47,10 @@ const props = defineProps({
   hasBackEmit: {
     type: Boolean,
     default: false,
+  },
+  helpKey: {
+    type: String,
+    default: "",
   },
 })
 
@@ -64,15 +69,37 @@ const onBack = () => {
     router.back()
   }
 }
+
+const onHelp = () => {
+  const helpUrl = help[props.helpKey]
+  if (props.helpKey) {
+    window.open(helpUrl, "_blank")
+  }
+}
+
+const getTooltipContent = computed(() => {
+  return t("common.help")
+})
 </script>
 
 <template>
   <div id="page-body">
     <div v-if="showBack" class="page-head">
-      <el-page-header :icon="ArrowLeft" title="返回" @click="onBack">
+      <el-page-header :icon="ArrowLeft as any" title="返回" @click="onBack">
         <template #content>
           <div class="flex items-center">
             <span class="text-large font-600 mr-3">{{ props.title }}</span>
+            <el-tooltip v-if="helpKey" effect="light" :content="getTooltipContent" placement="top">
+              <el-button
+                v-if="helpKey"
+                :icon="QuestionFilled as any"
+                circle
+                size="small"
+                type="info"
+                class="ml-2 help-btn"
+                @click.stop="onHelp"
+              />
+            </el-tooltip>
           </div>
         </template>
       </el-page-header>
@@ -86,4 +113,13 @@ const onBack = () => {
 <style scoped lang="stylus">
 #page-body
   margin 10px 20px
+.help-btn
+  border none
+  color var(--el-color-info-light-3)
+  background-color transparent
+  transition: all 0.3s var(--el-transition-function-ease-in-out-bezier)
+  &:hover
+    color var(--el-color-primary)
+    background-color var(--el-color-primary-light-9)
+    transform: scale(1.1)
 </style>

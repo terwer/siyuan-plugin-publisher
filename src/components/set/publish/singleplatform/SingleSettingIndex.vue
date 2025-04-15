@@ -45,7 +45,7 @@ const subtype = getSubPlatformTypeByKey(apiType)
 </script>
 
 <template>
-  <back-page :title="t('setting.entry.title') + apiType">
+  <back-page :title="t('setting.entry.title') + apiType" :help-key="subtype">
     <yuque-setting v-if="subtype === SubPlatformType.Common_Yuque" :api-type="apiType" />
     <notion-setting v-else-if="subtype === SubPlatformType.Common_Notion" :api-type="apiType" />
     <halo-setting v-else-if="subtype === SubPlatformType.Common_Halo" :api-type="apiType" />
