@@ -229,8 +229,8 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
     try {
       const bits = mediaObject.bits
       const base64 = Base64.fromUint8Array(bits)
-      const imageSavePath = this.getImagePath(this.cfg.imageStorePath, mediaObject.name, "source/images")
-      const imageLinkPath = this.getImagePath(this.cfg.imageLinkPath, mediaObject.name, "images")
+      const imageSavePath = this.getImagePath(this.cfg.imageStorePath, mediaObject, "source/images", true)
+      const imageLinkPath = this.getImagePath(this.cfg.imageLinkPath, mediaObject, "images", false)
       this.logger.info("Github 图片将要最终发送到以下目录 =>", imageSavePath)
       try {
         const res = await this.githubClient.publishGithubPage(imageSavePath, base64, "base64")
@@ -245,9 +245,8 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
         }
       }
 
-      const imageBasePath = "/"
       const siteImgId = mediaObject.name
-      const siteImgUrl = imageBasePath + imageLinkPath
+      const siteImgUrl = imageLinkPath
       const siteArticleId = mediaObject.name
       // // https://raw.githubusercontent.com/terwer/hexo-blog/test/images/image-20240401103158-bnwme8a.png
       // let toImagePath = StrUtil.pathJoin("https://raw.githubusercontent.com", this.cfg.username)
@@ -288,15 +287,29 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
   // ================
   // private methods
   // ================
-  private getImagePath(path: string, filename: string, defaultPath: string) {
-    const savePath = StrUtil.isEmptyString(path) ? defaultPath : path
-    let imageFullPath = StrUtil.pathJoin(savePath, filename)
-    if (imageFullPath.startsWith("/")) {
-      imageFullPath = imageFullPath.substring(1)
+  private getImagePath(path: string, mediaObject: MediaObject, defaultPath: string, removeStart = true) {
+    let imageFullPath: string
+    if (path.startsWith("[docpath]")) {
+      const post = mediaObject.post
+      const docPath = post.cate_slugs?.[0] ?? this.cfg.blogid
+      const savePath = StrUtil.pathJoin(docPath, path.replace("[docpath]", ""))
+      imageFullPath = StrUtil.pathJoin(savePath, mediaObject.name)
+    } else {
+      const savePath = StrUtil.isEmptyString(path) ? defaultPath : path
+      imageFullPath = StrUtil.pathJoin(savePath, mediaObject.name)
+      if (removeStart) {
+        if (imageFullPath.startsWith("./")) {
+          // 相对路径不管
+        } else {
+          if (imageFullPath.startsWith("/")) {
+            imageFullPath = imageFullPath.substring(1)
+          }
+          const imageBasePath = "/"
+          imageFullPath = StrUtil.pathJoin(imageBasePath, imageFullPath)
+        }
+      }
     }
-    if (imageFullPath.startsWith("./")) {
-      imageFullPath = imageFullPath.substring(2)
-    }
+
     return imageFullPath
   }
 

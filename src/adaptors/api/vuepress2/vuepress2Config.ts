@@ -48,6 +48,8 @@ class Vuepress2Config extends CommonGithubConfig {
     this.previewUrl = "/[user]/[repo]/blob/[branch]/[docpath]"
     this.previewPostUrl = "/post/[postid].html"
     this.mdFilenameRule = "[slug].md"
+    this.imageStorePath = "[docpath]/images"
+    this.imageLinkPath = "images"
     this.pageType = PageTypeEnum.Markdown
     this.passwordType = PasswordType.PasswordType_Token
     this.allowPreviewUrlChange = false

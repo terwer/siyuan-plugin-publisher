@@ -523,6 +523,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
             const base64Info = await this.readFileToBase64(imageUrl)
             const bits = base64ToBuffer(base64Info.imageBase64)
             const mediaObject = new MediaObject(image.name, base64Info.mimeType, bits)
+            mediaObject.post = post
             this.logger.debug("before upload, mediaObject =>", mediaObject)
             const attachResult = await this.api.newMediaObject(mediaObject)
             this.logger.debug("attachResult =>", attachResult)
