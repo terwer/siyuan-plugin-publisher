@@ -1,24 +1,13 @@
 # Changelog
 
 ## [1.34.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.33.0...siyuan-plugin-publisher-v1.34.0) (2025-04-15)
-
-
 ### Features
-
-* [#1594](https://github.com/terwer/siyuan-plugin-publisher/issues/1594) support CSDN new image upload API ([ad178d7](https://github.com/terwer/siyuan-plugin-publisher/commit/ad178d7ae886a94e277d162f3ff487073320047c))
+* [#1594](https://github.com/terwer/siyuan-plugin-publisher/issues/1594) support CSDN new image upload API ([e9c7cfa](https://github.com/terwer/siyuan-plugin-publisher/commit/e9c7cfa13b9d175c85eb6f1d599163c1381b488a))
 * [#1675](https://github.com/terwer/siyuan-plugin-publisher/issues/1675) support code block for blilbili ([9afbf05](https://github.com/terwer/siyuan-plugin-publisher/commit/9afbf05156de57f8234c4f866447350e44e99536))
 * add help doc for platform setting ([7049ca8](https://github.com/terwer/siyuan-plugin-publisher/commit/7049ca81f8c43462b9d5e099ba9393799740570e))
 * hexo use [filename].md as default md file name ([93f1954](https://github.com/terwer/siyuan-plugin-publisher/commit/93f1954c43a36f1c411fb13784a2e2a4dac80602))
-* use platform image path for github ([b2cb06d](https://github.com/terwer/siyuan-plugin-publisher/commit/b2cb06d6e05bd45a56da483e453fe26579a88918))
-* use platform image path for github ([62af418](https://github.com/terwer/siyuan-plugin-publisher/commit/62af418d3f6e27797e993f617f85a23dc5c89ac8))
-* use platform image path for github ([7957a11](https://github.com/terwer/siyuan-plugin-publisher/commit/7957a11f0cb2fb9afcd57cf8c3787a1196e5663c))
-* use platform image path for github ([165a7d8](https://github.com/terwer/siyuan-plugin-publisher/commit/165a7d86bef13f9ce1720a3e9853519127f0806e))
-* use platform image path for github ([e495854](https://github.com/terwer/siyuan-plugin-publisher/commit/e495854273c990d95200eb6408b1e14b67d22aa9))
 * use platform image path for github ([37ae90b](https://github.com/terwer/siyuan-plugin-publisher/commit/37ae90bf9b6a6dc79b1deb82fb0cc115d6b50bb9))
-
-
 ### Bug Fixes
-
 * [#1624](https://github.com/terwer/siyuan-plugin-publisher/issues/1624) dashboard not show first page ([704f5c1](https://github.com/terwer/siyuan-plugin-publisher/commit/704f5c1d874cadf7d198505f7464e5b92b638e48))
 * [#1627](https://github.com/terwer/siyuan-plugin-publisher/issues/1627) ignore online picture ([cb75491](https://github.com/terwer/siyuan-plugin-publisher/commit/cb754911b8f40e5a15ff029b49d04ca78ecbd4a1))
 * **deps:** bump @vueuse/components from 12.8.2 to 13.1.0 ([1246d42](https://github.com/terwer/siyuan-plugin-publisher/commit/1246d424df5340dffc61d0db2a297edbd7d88f04))
@@ -26,10 +15,7 @@
 * **deps:** bump pinia from 2.3.1 to 3.0.2 ([2956f75](https://github.com/terwer/siyuan-plugin-publisher/commit/2956f75709189506dfa572a53be6d07543c978e2))
 * **deps:** bump vue-i18n from 10.0.5 to 11.1.3 ([240ab76](https://github.com/terwer/siyuan-plugin-publisher/commit/240ab76379a106c5beaab19faa82612c9f4bb00d))
 * update iframe resize license to gpl v3 ([ae130d2](https://github.com/terwer/siyuan-plugin-publisher/commit/ae130d26ddb29c062ffde343be53df810260df7b))
-
-
 ### Miscellaneous
-
 * **deps-dev:** bump @types/iframe-resizer from 3.5.13 to 4.0.0 ([dead367](https://github.com/terwer/siyuan-plugin-publisher/commit/dead3674e0230f55503483c4c1dc20201e8e6c2d))
 * **deps-dev:** bump @types/node from 18.19.68 to 22.14.1 ([33353ae](https://github.com/terwer/siyuan-plugin-publisher/commit/33353aeb554d339a5718598713942741004f5828))
 * **deps-dev:** bump jsdom from 25.0.1 to 26.1.0 ([9db0a41](https://github.com/terwer/siyuan-plugin-publisher/commit/9db0a413e03d739d43df46a681ebc9ea0cf4f19b))
@@ -37,14 +23,10 @@
 * **deps-dev:** bump vercel from 39.2.2 to 41.6.0 ([4026189](https://github.com/terwer/siyuan-plugin-publisher/commit/4026189e6c95ce9221d4948322ca34a611a15c00))
 * **deps-dev:** bump vite-plugin-node-polyfills from 0.22.0 to 0.23.0 ([50c0378](https://github.com/terwer/siyuan-plugin-publisher/commit/50c037800f5d43f11f2015d9e5157a839dd1365d))
 * **deps-dev:** bump vue-tsc from 2.2.0 to 2.2.8 ([302106f](https://github.com/terwer/siyuan-plugin-publisher/commit/302106f8d700a670d0abab9a66ca304f242d9691))
-* update deps ([2f2281b](https://github.com/terwer/siyuan-plugin-publisher/commit/2f2281b181621a56a905c0dac1ce0f01060ee0c3))
+* update deps ([9e0e0c9](https://github.com/terwer/siyuan-plugin-publisher/commit/9e0e0c90d4f2cc201485d0222f17b0ef92610e90))
 * update node to 22, ubuntu to 24.04 ([6e82a96](https://github.com/terwer/siyuan-plugin-publisher/commit/6e82a962bbd69a48db0e4497df412416f68dba61))
 * update pnpm to 10.8.0 ([9317169](https://github.com/terwer/siyuan-plugin-publisher/commit/9317169eef83cc30ecd20ab0c2ca7b1b50763702))
-
 ## [1.33.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.32.1...siyuan-plugin-publisher-v1.33.0) (2025-02-08)
-### Features
-* [#1594](https://github.com/terwer/siyuan-plugin-publisher/issues/1594) support CSDN new image upload API ([e9c7cfa](https://github.com/terwer/siyuan-plugin-publisher/commit/e9c7cfa13b9d175c85eb6f1d599163c1381b488a))
-### Bug Fixes
 * [#1582](https://github.com/terwer/siyuan-plugin-publisher/issues/1582) support gitlab v14 ([bee4458](https://github.com/terwer/siyuan-plugin-publisher/commit/bee4458e443bdaa5690be4a2dfc014dfc6183d33))
 * **deps:** bump @iconify/json from 2.2.283 to 2.2.303 ([9d1beae](https://github.com/terwer/siyuan-plugin-publisher/commit/9d1beae2f932f5b6b31b69dd4fda66379e6e5c36))
 * **deps:** bump @vueuse/components from 12.0.0 to 12.5.0 ([d657b1f](https://github.com/terwer/siyuan-plugin-publisher/commit/d657b1fea31c8268700982d9df51dc6620226d03))
@@ -52,7 +34,6 @@
 * **deps:** bump katex from 0.16.15 to 0.16.21 ([460f97e](https://github.com/terwer/siyuan-plugin-publisher/commit/460f97e65da18f524a4ced980e6dfa8628c91468))
 * **deps:** bump unplugin-icons from 0.21.0 to 22.0.0 ([16f5b2b](https://github.com/terwer/siyuan-plugin-publisher/commit/16f5b2bb5062d209aae64fc8c9e81573cf48906c))
 * post preview for new share plugin ([1db8f24](https://github.com/terwer/siyuan-plugin-publisher/commit/1db8f2462d8c235d073e743862ead3fc75063dea))
-### Miscellaneous
 * **deps-dev:** bump unplugin-auto-import from 0.18.6 to 19.0.0 ([cff2caa](https://github.com/terwer/siyuan-plugin-publisher/commit/cff2caa2160f86721bf3cb1fb16b6c98c88dac3c))
 * **deps-dev:** bump unplugin-vue-components from 0.27.5 to 28.0.0 ([be403b8](https://github.com/terwer/siyuan-plugin-publisher/commit/be403b812b1e0b3856f0ac45c5aa4a04b0c70388))
 * **deps-dev:** bump vue-tsc from 2.0.29 to 2.2.0 ([b03ec6e](https://github.com/terwer/siyuan-plugin-publisher/commit/b03ec6ef9994060c2b46917d8a1fcfd687fcb7ca))
@@ -74,7 +55,6 @@
 * [#1530](https://github.com/terwer/siyuan-plugin-publisher/issues/1530) add option for slug change ([16c0c16](https://github.com/terwer/siyuan-plugin-publisher/commit/16c0c168b5347a9af3d58a7893559ee320bae740))
 * filename handle error ([8240285](https://github.com/terwer/siyuan-plugin-publisher/commit/82402855fc182b3f8608dad149b8804204d81e22))
 * vitepress tag load error ([c9876e7](https://github.com/terwer/siyuan-plugin-publisher/commit/c9876e7110567ae634ff8e38f5ac06d1cbfc4440))
-* update deps ([9e0e0c9](https://github.com/terwer/siyuan-plugin-publisher/commit/9e0e0c90d4f2cc201485d0222f17b0ef92610e90))
 ## [1.30.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.30.0...siyuan-plugin-publisher-v1.30.1) (2024-12-13)
 ## [1.30.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.29.3...siyuan-plugin-publisher-v1.30.0) (2024-12-10)
 * add prompt manage for ai && fix ai bugs ([ff884e0](https://github.com/terwer/siyuan-plugin-publisher/commit/ff884e0fd8189bb1cae7666b304ffad07baa888f))
