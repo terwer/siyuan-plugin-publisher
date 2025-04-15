@@ -18,4 +18,6 @@ import { SubPlatformType } from "~/src/platforms/dynamicConfig.ts"
  */
 export const help = {
   [SubPlatformType.Github_Hexo]: "https://siyuan.wiki/s/20230908182140-8riar0r",
+  [SubPlatformType.Github_Hugo]: "https://siyuan.wiki/s/20230908182946-itm4luf",
+  [SubPlatformType.Github_Jekyll]: "https://siyuan.wiki/s/20230908183451-fjs2nr0",
 }

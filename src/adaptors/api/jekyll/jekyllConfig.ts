@@ -49,6 +49,8 @@ class JekyllConfig extends CommonGithubConfig {
     // this.previewPostUrl = "/[cats]/[yyyy]/[mm]/[dd]/[postid].html"
     this.previewPostUrl = "/post/[postid].html"
     this.mdFilenameRule = "[yyyy]-[mm]-[dd]-[slug].md"
+    this.imageStorePath = "assets/images"
+    this.imageLinkPath = "assets/images"
     this.pageType = PageTypeEnum.Markdown
     this.passwordType = PasswordType.PasswordType_Token
     this.allowPreviewUrlChange = false

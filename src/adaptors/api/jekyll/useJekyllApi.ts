@@ -79,6 +79,8 @@ const useJekyllApi = async (key: string, newCfg?: JekyllConfig) => {
   // 文件规则
   // 推荐别名。但是不强制使用
   // cfg.mdFilenameRule = "[yyyy]-[mm]-[dd]-[slug].md"
+  // cfg.imageStorePath = "assets/images"
+  // cfg.imageLinkPath = "assets/images"
   // 标签
   cfg.tagEnabled = true
   // 分类
