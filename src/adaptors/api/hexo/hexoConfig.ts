@@ -48,6 +48,7 @@ class HexoConfig extends CommonGithubConfig {
     this.previewUrl = "/[user]/[repo]/blob/[branch]/[docpath]"
     this.previewPostUrl = "/post/[postid].html"
     this.mdFilenameRule = "[filename].md"
+    this.imageStorePath = "source/images"
     this.pageType = PageTypeEnum.Markdown
     this.passwordType = PasswordType.PasswordType_Token
     this.allowPreviewUrlChange = false

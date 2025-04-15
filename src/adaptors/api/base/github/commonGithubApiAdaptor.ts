@@ -239,19 +239,31 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
         imageFullPath = imageFullPath.substring(2)
       }
       this.logger.info("Github 图片将要最终发送到以下目录 =>", imageFullPath)
-      const res = await this.githubClient.publishGithubPage(imageFullPath, base64, "base64")
+      try {
+        const res = await this.githubClient.publishGithubPage(imageFullPath, base64, "base64")
+        this.logger.debug("github publishGithubPage res =>", res)
+      } catch (e) {
+        this.logger.error("github publishGithubPage error =>", e)
+        // 422 代表图片已存在
+        if (e.status === 422) {
+          this.logger.warn("image already exists", e)
+        } else {
+          throw e
+        }
+      }
 
+      const imageBasePath = "/"
       const siteImgId = mediaObject.name
+      const siteImgUrl = imageBasePath + imageFullPath
       const siteArticleId = mediaObject.name
-      // https://raw.githubusercontent.com/terwer/hexo-blog/test/images/image-20240401103158-bnwme8a.png
-      let toImagePath = StrUtil.pathJoin("https://raw.githubusercontent.com", this.cfg.username)
-      toImagePath = StrUtil.pathJoin(toImagePath, cfg.githubRepo)
-      toImagePath = StrUtil.pathJoin(toImagePath, cfg.githubBranch)
-      toImagePath = StrUtil.pathJoin(toImagePath, encodeURI(savePath))
-      toImagePath = StrUtil.pathJoin(toImagePath, encodeURIComponent(mediaObject.name))
-      const siteImgUrl = toImagePath
+      // // https://raw.githubusercontent.com/terwer/hexo-blog/test/images/image-20240401103158-bnwme8a.png
+      // let toImagePath = StrUtil.pathJoin("https://raw.githubusercontent.com", this.cfg.username)
+      // toImagePath = StrUtil.pathJoin(toImagePath, cfg.githubRepo)
+      // toImagePath = StrUtil.pathJoin(toImagePath, cfg.githubBranch)
+      // toImagePath = StrUtil.pathJoin(toImagePath, encodeURI(savePath))
+      // toImagePath = StrUtil.pathJoin(toImagePath, encodeURIComponent(mediaObject.name))
+      // siteImgUrl = toImagePath
       this.logger.info("Github 图片上传成功", siteImgUrl)
-      this.logger.debug("github publishGithubPage res =>", res)
 
       return {
         attachment_id: siteImgId,
