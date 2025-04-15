@@ -224,8 +224,6 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
   }
 
   public async newMediaObject(mediaObject: MediaObject): Promise<Attachment> {
-    let res: any
-    const cfg = this.cfg as CommonGithubConfig
     try {
       const bits = mediaObject.bits
       const base64 = Base64.fromUint8Array(bits)
