@@ -1,5 +1,8 @@
 # Changelog
 
+## [1.34.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.34.0...siyuan-plugin-publisher-v1.34.1) (2025-04-16)
+### Bug Fixes
+* image upload error ([0de59ec](https://github.com/terwer/siyuan-plugin-publisher/commit/0de59ecba49e4962a620a2b328a6789a23cf73bb))
 ## [1.34.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.33.0...siyuan-plugin-publisher-v1.34.0) (2025-04-15)
 ### Features
 * [#1594](https://github.com/terwer/siyuan-plugin-publisher/issues/1594) support CSDN new image upload API ([e9c7cfa](https://github.com/terwer/siyuan-plugin-publisher/commit/e9c7cfa13b9d175c85eb6f1d599163c1381b488a))
@@ -7,7 +10,6 @@
 * add help doc for platform setting ([7049ca8](https://github.com/terwer/siyuan-plugin-publisher/commit/7049ca81f8c43462b9d5e099ba9393799740570e))
 * hexo use [filename].md as default md file name ([93f1954](https://github.com/terwer/siyuan-plugin-publisher/commit/93f1954c43a36f1c411fb13784a2e2a4dac80602))
 * use platform image path for github ([37ae90b](https://github.com/terwer/siyuan-plugin-publisher/commit/37ae90bf9b6a6dc79b1deb82fb0cc115d6b50bb9))
-### Bug Fixes
 * [#1624](https://github.com/terwer/siyuan-plugin-publisher/issues/1624) dashboard not show first page ([704f5c1](https://github.com/terwer/siyuan-plugin-publisher/commit/704f5c1d874cadf7d198505f7464e5b92b638e48))
 * [#1627](https://github.com/terwer/siyuan-plugin-publisher/issues/1627) ignore online picture ([cb75491](https://github.com/terwer/siyuan-plugin-publisher/commit/cb754911b8f40e5a15ff029b49d04ca78ecbd4a1))
 * **deps:** bump @vueuse/components from 12.8.2 to 13.1.0 ([1246d42](https://github.com/terwer/siyuan-plugin-publisher/commit/1246d424df5340dffc61d0db2a297edbd7d88f04))
