@@ -227,9 +227,10 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
     try {
       const bits = mediaObject.bits
       const base64 = Base64.fromUint8Array(bits)
-      const imageSavePath = this.getImagePath(this.cfg.imageStorePath, mediaObject, "source/images", true)
-      const imageLinkPath = this.getImagePath(this.cfg.imageLinkPath, mediaObject, "images", false)
+      const imageSavePath = this.getImagePath(this.cfg.imageStorePath, mediaObject, "source/images").imagePath
+      const imageLinkPath = this.getImagePath(this.cfg.imageLinkPath, mediaObject, "images").absImgPath
       this.logger.info("Github 图片将要最终发送到以下目录 =>", imageSavePath)
+      this.logger.info("图片可以使用下列链接访问", imageLinkPath)
       try {
         const res = await this.githubClient.publishGithubPage(imageSavePath, base64, "base64")
         this.logger.debug("github publishGithubPage res =>", res)
@@ -253,7 +254,7 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
       // toImagePath = StrUtil.pathJoin(toImagePath, encodeURI(savePath))
       // toImagePath = StrUtil.pathJoin(toImagePath, encodeURIComponent(mediaObject.name))
       // siteImgUrl = toImagePath
-      this.logger.info("Github 图片上传成功", siteImgUrl)
+      this.logger.info("Github 图片上传成功")
 
       return {
         attachment_id: siteImgId,
@@ -286,29 +287,31 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
   // private methods
   // ================
   private getImagePath(path: string, mediaObject: MediaObject, defaultPath: string, removeStart = true) {
-    let imageFullPath: string
+    let imagePath: string
+    let absImgPath: string
     if (path.startsWith("[docpath]")) {
       const post = mediaObject.post
       const docPath = post.cate_slugs?.[0] ?? this.cfg.blogid
       const savePath = StrUtil.pathJoin(docPath, path.replace("[docpath]", ""))
-      imageFullPath = StrUtil.pathJoin(savePath, mediaObject.name)
+      imagePath = StrUtil.pathJoin(savePath, mediaObject.name)
+    } else if (path.startsWith("./")) {
+      return {
+        imagePath: path,
+        absImgPath: path,
+      }
     } else {
       const savePath = StrUtil.isEmptyString(path) ? defaultPath : path
-      imageFullPath = StrUtil.pathJoin(savePath, mediaObject.name)
-      if (removeStart) {
-        if (imageFullPath.startsWith("./")) {
-          // 相对路径不管
-        } else {
-          if (imageFullPath.startsWith("/")) {
-            imageFullPath = imageFullPath.substring(1)
-          }
-          const imageBasePath = "/"
-          imageFullPath = StrUtil.pathJoin(imageBasePath, imageFullPath)
-        }
-      }
+      imagePath = StrUtil.pathJoin(savePath, mediaObject.name)
     }
-
-    return imageFullPath
+    // 处理相对路径
+    if (imagePath.startsWith("/")) {
+      imagePath = imagePath.substring(1)
+    }
+    absImgPath = StrUtil.pathJoin("/", imagePath)
+    return {
+      imagePath,
+      absImgPath,
+    }
   }
 
   public async safeDeletePost(postid: string): Promise<boolean> {
