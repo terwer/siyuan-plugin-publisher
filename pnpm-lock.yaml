@@ -39,8 +39,8 @@ importers:
         specifier: ^2.9.7
         version: 2.9.7(vue@3.5.13(typescript@5.8.3))
       iframe-resizer:
-        specifier: ^5.4.4
-        version: 5.4.4
+        specifier: ^5.4.5
+        version: 5.4.5
       js-base64:
         specifier: ^3.7.7
         version: 3.7.7
@@ -619,8 +619,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@eslint-community/eslint-utils@4.6.0':
-    resolution: {integrity: sha512-WhCn7Z7TauhBtmzhvKpoQs0Wwb/kBcy4CwpuI0/eEIr2Lx2auxmulAzLr91wVZJaz47iUZdkXOK7WlAfxGKCnA==}
+  '@eslint-community/eslint-utils@4.6.1':
+    resolution: {integrity: sha512-KTsJMmobmbrFLe3LDh0PC2FXpcSYJt/MLjlkh/9LEnmKYLSYmT/0EW9JWANjeoemiuZrmogti0tW5Ch+qNUYDw==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     peerDependencies:
       eslint: ^6.0.0 || ^7.0.0 || >=8.0.0
@@ -677,17 +677,17 @@ packages:
   '@iconify/utils@2.3.0':
     resolution: {integrity: sha512-GmQ78prtwYW6EtzXRU1rY+KwOKfz32PD7iJh6Iyqw68GiKuoZ2A6pRtzWONz5VQJbp50mEjXh/7NkumtrAgRKA==}
 
-  '@iframe-resizer/child@5.4.4':
-    resolution: {integrity: sha512-igBknJNJ8SQxBqRPCrot+fcVYiEsqAX2yJsHkJ0K2lgFUkxwmR0v6eNbwXim/8atYU/y9Sc+nFAHzRSkGbV4tQ==}
+  '@iframe-resizer/child@5.4.5':
+    resolution: {integrity: sha512-VgTq7YkfjHgv3Iqr4+Px3dp2NdBVM4AyS3qpaYGL5vThXCEEKDwq4k/XxxcyiyMrUfEOawQqfKLAfEWh3O9cwg==}
 
-  '@iframe-resizer/core@5.4.4':
-    resolution: {integrity: sha512-4gUll8twzfrGOKsCHRCZM45E+q/EmTaQqwXjKUdBPJZaQauN3OPZo217h36Q3L8bUV7K6iKSaHQxngjA5/mLmg==}
+  '@iframe-resizer/core@5.4.5':
+    resolution: {integrity: sha512-Z5euppksu94VgJ+kM15eE3H0LDHpYjEq9Hh64HpswL2N3dt9i0ryD4AKAq0AcqJMDAUls4tkRfS9bGd1ZC+t4w==}
 
-  '@iframe-resizer/jquery@5.4.4':
-    resolution: {integrity: sha512-ItO0F4aF74NaO5HJKMTGhXd8fzCh0jbE3vZq9LKqej77nNa6q4ZNgKeGPXlf1FFRxI6JShwL1lpe+/Jvv/F2fQ==}
+  '@iframe-resizer/jquery@5.4.5':
+    resolution: {integrity: sha512-ft/UG59WzudHApcfN8Xwhfg00e1S3Q6WX0r0KA1sIEM8u3QM7xONgPk2bWUOvv8cxpEIk9ilGPYlsTHptbP35Q==}
 
-  '@iframe-resizer/parent@5.4.4':
-    resolution: {integrity: sha512-1zpI0/RxISwWAiISSAJM8V8QNd1Eds+QCpU07o5Or1uNEU4BDExrp+Wf5aKJqECRnT8FmNsV7+1kpZXSWT+Z/g==}
+  '@iframe-resizer/parent@5.4.5':
+    resolution: {integrity: sha512-pyukh5DJILIylEiEvWTKdsN2bS9z75QAObkAGXxEbeXEwUvSsHC/CR06W3yW9J3WIYgdven6V4GlEVoAfnK/9g==}
 
   '@intlify/core-base@11.1.3':
     resolution: {integrity: sha512-cMuHunYO7LE80azTitcvEbs1KJmtd6g7I5pxlApV3Jo547zdO3h31/0uXpqHc+Y3RKt1wo2y68RGSx77Z1klyA==}
@@ -1802,8 +1802,8 @@ packages:
   atomically@2.0.3:
     resolution: {integrity: sha512-kU6FmrwZ3Lx7/7y3hPS5QnbJfaohcIul5fGqf7ok+4KklIEk9tJ0C2IQPdacSbVUWv6zVHXEBWoWd6NrVMT7Cw==}
 
-  auto-console-group@1.2.5:
-    resolution: {integrity: sha512-04gZ21WgVHlzfC/Kp+Zvel7tKGgSXX9KSm3pezrh1OU4KElxiEJCdRm2T8ntiOWkTHfFMIrX0/OhiTUO74K27Q==}
+  auto-console-group@1.2.9:
+    resolution: {integrity: sha512-YGJqZByv1SFIq8viTpKFmI0eNHIoa9hllKP3487VbIN4zjRcsKKoouu2TiQ189oscvwCSKTndfAe6wf6izbSMA==}
 
   available-typed-arrays@1.0.7:
     resolution: {integrity: sha512-wvUjBtSGN7+7SjNpq/9M2Tg350UZD3q62IFZLbRAR1bSMlCo1ZaeW+BJ+D090e4hIIZLBcTDWe4Mh4jvUDajzQ==}
@@ -3133,8 +3133,8 @@ packages:
   ieee754@1.2.1:
     resolution: {integrity: sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==}
 
-  iframe-resizer@5.4.4:
-    resolution: {integrity: sha512-qsZvDG5BfM+T6WTY2Mu+I+Kmf+x1QpQyyEae5aa+fHu6fx1eNHBF8fKl8vsWaPj01+UpsAHo42+/oN1sQlR37A==}
+  iframe-resizer@5.4.5:
+    resolution: {integrity: sha512-NsUBVET+K6mlj+6ikmSGrOBH2nwqcf1Twrn20mihT5/t1pK5apwNABikYY8vVI4WsUpQ+/kPYXyI5as4FQ5mJg==}
 
   ignore@5.3.2:
     resolution: {integrity: sha512-hsBTNUqQTDwkWtcdYI2i06Y/nUBEsNEDJKjWdigLvegy8kDuJAS8uRlpkkcQpyEXL0Z/pjDy5HBmMjRCJ2gq+g==}
@@ -5866,7 +5866,7 @@ snapshots:
   '@esbuild/win32-x64@0.21.5':
     optional: true
 
-  '@eslint-community/eslint-utils@4.6.0(eslint@8.57.0)':
+  '@eslint-community/eslint-utils@4.6.1(eslint@8.57.0)':
     dependencies:
       eslint: 8.57.0
       eslint-visitor-keys: 3.4.3
@@ -5939,22 +5939,22 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@iframe-resizer/child@5.4.4':
+  '@iframe-resizer/child@5.4.5':
     dependencies:
-      auto-console-group: 1.2.5
+      auto-console-group: 1.2.9
 
-  '@iframe-resizer/core@5.4.4':
+  '@iframe-resizer/core@5.4.5':
     dependencies:
-      auto-console-group: 1.2.5
+      auto-console-group: 1.2.9
 
-  '@iframe-resizer/jquery@5.4.4':
+  '@iframe-resizer/jquery@5.4.5':
     dependencies:
-      '@iframe-resizer/core': 5.4.4
+      '@iframe-resizer/core': 5.4.5
 
-  '@iframe-resizer/parent@5.4.4':
+  '@iframe-resizer/parent@5.4.5':
     dependencies:
-      '@iframe-resizer/core': 5.4.4
-      auto-console-group: 1.2.5
+      '@iframe-resizer/core': 5.4.5
+      auto-console-group: 1.2.9
 
   '@intlify/core-base@11.1.3':
     dependencies:
@@ -6880,7 +6880,7 @@ snapshots:
 
   '@typescript-eslint/utils@5.62.0(eslint@8.57.0)(typescript@4.9.5)':
     dependencies:
-      '@eslint-community/eslint-utils': 4.6.0(eslint@8.57.0)
+      '@eslint-community/eslint-utils': 4.6.1(eslint@8.57.0)
       '@types/json-schema': 7.0.15
       '@types/semver': 7.7.0
       '@typescript-eslint/scope-manager': 5.62.0
@@ -6895,7 +6895,7 @@ snapshots:
 
   '@typescript-eslint/utils@5.62.0(eslint@8.57.0)(typescript@5.8.3)':
     dependencies:
-      '@eslint-community/eslint-utils': 4.6.0(eslint@8.57.0)
+      '@eslint-community/eslint-utils': 4.6.1(eslint@8.57.0)
       '@types/json-schema': 7.0.15
       '@types/semver': 7.7.0
       '@typescript-eslint/scope-manager': 5.62.0
@@ -7437,7 +7437,7 @@ snapshots:
       stubborn-fs: 1.2.5
       when-exit: 2.1.4
 
-  auto-console-group@1.2.5: {}
+  auto-console-group@1.2.9: {}
 
   available-typed-arrays@1.0.7:
     dependencies:
@@ -8380,7 +8380,7 @@ snapshots:
 
   eslint-plugin-svelte@2.39.2(eslint@8.57.0)(svelte@4.2.18)(ts-node@10.9.1(@types/node@22.14.1)(typescript@5.8.3)):
     dependencies:
-      '@eslint-community/eslint-utils': 4.6.0(eslint@8.57.0)
+      '@eslint-community/eslint-utils': 4.6.1(eslint@8.57.0)
       '@jridgewell/sourcemap-codec': 1.5.0
       eslint: 8.57.0
       eslint-compat-utils: 0.5.1(eslint@8.57.0)
@@ -8404,7 +8404,7 @@ snapshots:
 
   eslint-plugin-vue@9.26.0(eslint@8.57.0):
     dependencies:
-      '@eslint-community/eslint-utils': 4.6.0(eslint@8.57.0)
+      '@eslint-community/eslint-utils': 4.6.1(eslint@8.57.0)
       eslint: 8.57.0
       globals: 13.24.0
       natural-compare: 1.4.0
@@ -8430,7 +8430,7 @@ snapshots:
 
   eslint@8.57.0:
     dependencies:
-      '@eslint-community/eslint-utils': 4.6.0(eslint@8.57.0)
+      '@eslint-community/eslint-utils': 4.6.1(eslint@8.57.0)
       '@eslint-community/regexpp': 4.12.1
       '@eslint/eslintrc': 2.1.4
       '@eslint/js': 8.57.0
@@ -8854,11 +8854,11 @@ snapshots:
 
   ieee754@1.2.1: {}
 
-  iframe-resizer@5.4.4:
+  iframe-resizer@5.4.5:
     dependencies:
-      '@iframe-resizer/child': 5.4.4
-      '@iframe-resizer/jquery': 5.4.4
-      '@iframe-resizer/parent': 5.4.4
+      '@iframe-resizer/child': 5.4.5
+      '@iframe-resizer/jquery': 5.4.5
+      '@iframe-resizer/parent': 5.4.5
 
   ignore@5.3.2: {}
 
