@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.34.2](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.34.1...siyuan-plugin-publisher-v1.34.2) (2025-04-22)
+
+
+### Bug Fixes
+
+* add default help doc ([9ae4d1e](https://github.com/terwer/siyuan-plugin-publisher/commit/9ae4d1e0af43b1215b90acb7fd2b21eb44685541))
+
 ## [1.34.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.34.0...siyuan-plugin-publisher-v1.34.1) (2025-04-16)
 ### Bug Fixes
 * image upload error ([0de59ec](https://github.com/terwer/siyuan-plugin-publisher/commit/0de59ecba49e4962a620a2b328a6789a23cf73bb))
