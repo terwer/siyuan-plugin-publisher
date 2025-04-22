@@ -17,6 +17,10 @@ pnpm install
 Update pnpm to latest
 
 ```
+sudo chown -R $USER /usr/local/lib/
+sudo chown -R $USER /usr/local/bin/
+sudo chown -R $USER /usr/local/share/
+
 npm install --global corepack@latest
 
 pnpm install
