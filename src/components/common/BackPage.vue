@@ -31,6 +31,7 @@ import { ref, computed } from "vue"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { ArrowLeft, QuestionFilled } from "@element-plus/icons-vue"
 import { help } from "~/src/platforms/help.ts"
+import { StrUtil } from "zhi-common"
 
 const logger = createAppLogger("back-page")
 const { t } = useVueI18n()
@@ -72,8 +73,11 @@ const onBack = () => {
 
 const onHelp = () => {
   const helpUrl = help[props.helpKey]
-  if (props.helpKey) {
+  if (!StrUtil.isEmptyString(helpUrl)) {
     window.open(helpUrl, "_blank")
+  } else {
+    const helpIndexUrl = "https://siyuan.wiki/s/20230810132040-nn4q7vs"
+    window.open(helpIndexUrl, "_blank")
   }
 }
 
