@@ -155,7 +155,7 @@ if (!name || name === "") {
 // dev directory
 // mkdir if not exists
 if (!fs.existsSync(devDir)) {
-    fs.mkdirSync(devDir);
+    fs.mkdirSync(devDir, { recursive: true });
 }
 
 function cmpPath(path1, path2) {
