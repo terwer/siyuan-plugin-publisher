@@ -87,7 +87,7 @@ async function chooseTarget(workspaces) {
             input: process.stdin,
             output: process.stdout,
         });
-        let index = await new Promise((resolve, reject) => {
+        let index = await new Promise((resolve, _reject) => {
             rl.question(`\tPlease select a workspace[0-${count - 1}]: `, (answer) => {
                 resolve(answer);
             });
