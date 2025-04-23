@@ -1,5 +1,12 @@
 <script setup lang="ts">
 import { Bird, Clock, Rss, Zap, Inbox } from "lucide-vue-next"
+import {TabEnum} from "../../constants/TabEnum.ts";
+
+const props = defineProps<{
+  pluginInstance: any
+  requestSwitchTab?: (component: any) => void
+}>()
+
 
 interface Platform {
   name: string;
@@ -13,29 +20,30 @@ interface Platform {
 }
 
 const platforms: Platform[] = [
-  {
-    name: "博客园",
-    icon: Rss,
-    type: "blog",
-    actions: [
-      { icon: Zap, label: "极速发布", handler: () => console.log("fast") },
-      { icon: Clock, label: "常规发布", handler: () => console.log("normal") },
-    ],
-  },
-  {
-    name: "语雀",
-    icon: Bird,
-    type: "doc",
-    actions: [
-      { icon: Zap, label: "极速发布", handler: () => console.log("fast") },
-      { icon: Clock, label: "常规发布", handler: () => console.log("normal") },
-    ],
-  },
+  // {
+  //   name: "博客园",
+  //   icon: Rss,
+  //   type: "blog",
+  //   actions: [
+  //     { icon: Zap, label: "极速发布", handler: () => console.log("fast") },
+  //     { icon: Clock, label: "常规发布", handler: () => console.log("normal") },
+  //   ],
+  // },
+  // {
+  //   name: "语雀",
+  //   icon: Bird,
+  //   type: "doc",
+  //   actions: [
+  //     { icon: Zap, label: "极速发布", handler: () => console.log("fast") },
+  //     { icon: Clock, label: "常规发布", handler: () => console.log("normal") },
+  //   ],
+  // },
 ]
 
-const gotoAccount = () => {
-  // 要想办法点击 tabs 里面AccountSetting那个
-  // 这里没有实现要帮忙。什么方案好
+const gotoAccount = (event: MouseEvent) => {
+  // 通过组件类型请求切换
+  props.requestSwitchTab?.(TabEnum.ACCOUNT)
+  event.stopPropagation()
 }
 </script>
 

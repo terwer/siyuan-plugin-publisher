@@ -6,10 +6,12 @@ const props = withDefaults(
       tabs: { label: string; content: any; props?: Record<string, any> }[]
       activeTab?: number
       vertical?: boolean
+      collapsed?: boolean
     }>(),
     {
       activeTab: 0,
-      vertical: false
+      vertical: false,
+      collapsed: false
     }
 )
 
@@ -18,7 +20,7 @@ const emit = defineEmits<{
 }>()
 
 const activeIndex = ref(props.activeTab)
-const isCollapsed = ref(true)
+const isCollapsed = ref(props.collapsed)
 
 watch(
     () => props.activeTab,
