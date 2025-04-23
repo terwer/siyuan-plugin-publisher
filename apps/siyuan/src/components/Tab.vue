@@ -1,39 +1,36 @@
-<!--
-  -            GNU GENERAL PUBLIC LICENSE
-  -               Version 3, 29 June 2007
-  -
-  -  Copyright (C) 2025 Terwer, Inc. <https://terwer.space/>
-  -  Everyone is permitted to copy and distribute verbatim copies
-  -  of this license document, but changing it is not allowed.
-  -->
-
 <script setup lang="ts">
-import { defineEmits, defineProps, ref } from "vue"
+import { ref, watch } from 'vue'
 
 const props = withDefaults(
-  defineProps<{
-    tabs: { label: string; content: any; props?: Record<string, any> }[];
-    activeTab: number;
-    vertical: boolean;
-  }>(),
-  {
-    tabs: [] as any,
-    activeTab: 0,
-    vertical: false,
-  },
+    defineProps<{
+      tabs: { label: string; content: any; props?: Record<string, any> }[]
+      activeTab?: number
+      vertical?: boolean
+    }>(),
+    {
+      activeTab: 0,
+      vertical: false
+    }
 )
 
 const emit = defineEmits<{
-  (event: "tabChange", index: number): void;
+  (e: 'tabChange', index: number): void
 }>()
 
 const activeIndex = ref(props.activeTab)
 const isCollapsed = ref(true)
 
-function handleTabClick(index: number) {
+watch(
+    () => props.activeTab,
+    (newVal) => {
+      activeIndex.value = newVal
+    }
+)
+
+const handleTabClick = (index: number) => {
   if (index !== activeIndex.value) {
     activeIndex.value = index
-    emit("tabChange", index)
+    emit('tabChange', index)
   }
 }
 
@@ -43,162 +40,168 @@ const toggleCollapse = () => {
 </script>
 
 <template>
-  <div :class="['tabs', { vertical }]">
-    <div class="tab-list-container">
-      <div class="tab-list" :class="{ collapsed: isCollapsed }">
+  <div :class="['tabs-container', { vertical }]">
+    <div class="tab-controls" :class="{ collapsed: isCollapsed }">
+      <div class="tab-list">
         <button
-          v-for="(tab, index) in tabs"
-          :key="index"
-          class="tab"
-          :class="{ active: index === activeIndex }"
-          @click="handleTabClick(index)"
+            v-for="(tab, index) in tabs"
+            :key="index"
+            class="tab-button"
+            :class="{ active: index === activeIndex }"
+            @click="handleTabClick(index)"
         >
           {{ tab.label }}
         </button>
       </div>
-      <!-- 折叠按钮 -->
-      <button v-if="vertical" class="collapse-btn" @click="toggleCollapse">
-        {{ isCollapsed ? "❯" : "❮" }}
-      </button>
     </div>
 
-    <!-- 内容区域 -->
-    <div class="tab-content">
-      <template v-if="tabs[activeIndex]">
-        <component
-          v-if="
-            typeof tabs[activeIndex].content === 'function' ||
-            typeof tabs[activeIndex].content === 'object'
-          "
+    <button class="collapse-handle" @click="toggleCollapse">
+      <svg class="collapse-icon" viewBox="0 0 24 24">
+        <path v-if="isCollapsed" d="M9.29 6.71a1 1 0 0 0 0 1.41L13.17 12l-3.88 3.88a1 1 0 1 0 1.41 1.41l4.59-4.59a1 1 0 0 0 0-1.41L10.7 6.7a1 1 0 0 0-1.41.01z"/>
+        <path v-else d="M14.71 6.71a1 1 0 0 0-1.41 0L8.71 11.3a1 1 0 0 0 0 1.41l4.59 4.59a1 1 0 1 0 1.41-1.41L10.83 12l3.88-3.88a1 1 0 0 0 0-1.41z"/>
+      </svg>
+    </button>
+
+    <div class="tab-content-wrapper">
+      <component
+          v-if="tabs[activeIndex]?.content"
           :is="tabs[activeIndex].content"
           v-bind="tabs[activeIndex].props"
-        />
-        <template v-else>
-          {{ tabs[activeIndex].content }}
-        </template>
-      </template>
+          class="tab-content"
+      />
     </div>
   </div>
 </template>
 
-<style lang="stylus" scoped>
-.tabs
+<style lang="stylus">
+// 设计变量
+$tab-width = 100px
+$control-size = 32px
+$transition-duration = 0.3s
+$border-radius = 8px
+
+.tabs-container
+  // 定义带前缀的 CSS 变量
+  --pt-tabs-bg: #fff
+  --pt-tabs-controls-bg: #f8f9fa
+  --pt-tabs-border: #e0e0e0
+  --pt-tabs-text: #495057
+  --pt-tabs-hover-bg: #f1f3f5
+  --pt-tabs-active-bg: #e9ecef
+  --pt-tabs-active-text: #212529
+  --pt-tabs-active-indicator: #1971c2
+  --pt-tabs-shadow: rgba(0,0,0,0.1)
+  --pt-tabs-shadow-hover: rgba(0,0,0,0.2)
+  --pt-tabs-control-icon: #6c757d
+  --pt-tabs-content-bg: #fff
+
+  // 暗黑模式变量覆盖
+  html[data-theme-mode="dark"] &
+    --pt-tabs-bg: #2d2d2d
+    --pt-tabs-controls-bg: #363636
+    --pt-tabs-border: rgba(255,255,255,0.1)
+    --pt-tabs-text: rgba(255,255,255,0.8)
+    --pt-tabs-hover-bg: rgba(255,255,255,0.05)
+    --pt-tabs-active-bg: rgba(255,255,255,0.1)
+    --pt-tabs-active-text: #fff
+    --pt-tabs-active-indicator: #2196f3
+    --pt-tabs-shadow: rgba(0,0,0,0.3)
+    --pt-tabs-shadow-hover: rgba(0,0,0,0.5)
+    --pt-tabs-control-icon: rgba(255,255,255,0.7)
+    --pt-tabs-content-bg: #1f1f1f
+
+  // 布局样式（无需修改）
   display flex
-  flex-direction column
-  margin 0
-  border-radius 8px
-  overflow hidden
-  background-color #fff
-  box-shadow 0 1px 3px rgba(0, 0, 0, 0.1)
+  height 100%
+  background var(--pt-tabs-bg)
+  border-radius $border-radius
+  box-shadow 0 2px 8px var(--pt-tabs-shadow)
+  position relative
 
   &.vertical
     flex-direction row
+    overflow visible
 
-.tab-list-container
+    .tab-controls
+      width $tab-width
+      transition width $transition-duration ease, border $transition-duration ease
+      border-right 1px solid var(--pt-tabs-border)
+      overflow hidden
+
+      &.collapsed
+        width 0
+        border-right-color transparent
+
+.tab-controls
   position relative
-  display flex
-  transition all 0.3s ease
+  background var(--pt-tabs-controls-bg)
+  flex-shrink 0
 
 .tab-list
+  width $tab-width
+  min-width $tab-width
+
+.tab-button
   display flex
-  flex-direction column
-  width 100px
-  border-right 1px solid #e0e0e0
-  transition width 0.3s ease
-  overflow hidden
-
-  &.collapsed
-    width 0
-    border-right none
-
-    & + .collapse-btn  // 折叠状态下的按钮位置
-      left 0
-      margin-left 4px
-
-.collapse-btn
-  position absolute
-  left calc(100% + 4px)  // 位于tab列表右侧
-  top 10px
-  width 24px
-  height 24px
-  padding 0
+  width 100%
+  padding 12px 20px
   border none
-  background var(--b3-theme-background)
-  border-radius 4px
-  box-shadow 0 2px 4px rgba(0, 0, 0, 0.1)
+  background none
+  color var(--pt-tabs-text)
+  font-size 14px
+  text-align left
   cursor pointer
-  z-index 99
-  display flex
-  align-items center
-  justify-content center
-  font-size 16px
-  color var(--b3-theme-on-background)
-  transition left 0.3s ease  // 添加过渡效果
-
-// 保持其他样式不变...
-.tab
-  padding 8px 12px
-  border none
-  background-color transparent
-  cursor pointer
+  transition all 0.2s ease
   position relative
-  font-size 12px
-  color #555
-  transition background-color 0.2s ease
-  white-space nowrap
-  border-bottom 1px solid #e0e0e0
 
   &:hover:not(.active)
-    background-color #f5f5f5
-
-  &:last-child
-    border-bottom none
+    background var(--pt-tabs-hover-bg)
 
   &.active
-    background-color var(--b3-list-hover)
-    color var(--b3-theme-on-background)
+    background var(--pt-tabs-active-bg)
+    color var(--pt-tabs-active-text)
+    &::after
+      content ''
+      position absolute
+      right 0
+      top 50%
+      transform translateY(-50%)
+      height 60%
+      width 3px
+      background var(--pt-tabs-active-indicator)
+      border-radius 2px
 
-.tab-content
+.collapse-handle
+  position absolute
+  left $tab-width
+  top 24px
+  width $control-size
+  height $control-size
+  padding 8px
+  background var(--pt-tabs-controls-bg)
+  border none
+  border-radius 50%
+  box-shadow 0 2px 8px var(--pt-tabs-shadow)
+  cursor pointer
+  transition all $transition-duration ease
+  z-index 10
+  transform translateX(-50%)
+
+  .tabs-container.vertical .collapsed + &
+    left 10px
+
+  &:hover
+    transform translateX(-50%) scale(1.1)
+    box-shadow 0 4px 12px var(--pt-tabs-shadow-hover)
+
+  .collapse-icon
+    width 100%
+    height 100%
+    fill var(--pt-tabs-control-icon)
+
+.tab-content-wrapper
   flex 1
-  background-color #fff
   min-width 0
-  position relative
-  padding-left 32px
-
-// 暗黑模式适配
-html[data-theme-mode="dark"]
-  .tabs
-    background-color var(--b3-theme-background)
-    .tab
-      color rgba(255, 255, 255, 0.7) // 使用半透明白色提升对比度
-      &:hover:not(.active)
-        background-color rgba(255,255,255,0.08)
-        color rgba(255,255,255,0.9)
-      &.active
-        color var(--b3-theme-primary)
-
-    .tab-content
-      background-color #2a2a2a
-
-    // 垂直模式样式
-    &.vertical
-      .tab-list
-        border-right 1px solid var(--b3-theme-surface-lighter)
-
-      .tab:not(:last-child)
-        border-bottom 1px solid var(--b3-theme-surface-lighter)
-
-    // 非垂直模式样式
-    &:not(.vertical)
-      .tab:not(:last-child)
-        border-right 1px solid var(--b3-theme-surface-lighter)
-
-  .tab-list
-    color #fff
-    border-right-color var(--b3-theme-surface-lighter)
-    border-bottom 1px solid var(--b3-theme-surface-lighter)
-
-  .collapse-btn
-    background var(--b3-theme-surface)
-    box-shadow 0 2px 4px rgba(0, 0, 0, 0.3)
+  background var(--pt-tabs-content-bg)
+  padding 24px
 </style>

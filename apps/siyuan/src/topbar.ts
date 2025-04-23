@@ -41,7 +41,7 @@ export class Topbar {
         const topBarElement = this.pluginInstance.addTopBar({
             icon: "iconPublish",
             title: this.pluginInstance.i18n.publisher,
-            position: "right",
+            position: "left",
             callback: () => {
             },
         })
