@@ -73,7 +73,7 @@ const toggleCollapse = () => {
   </div>
 </template>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
 // 设计变量
 $tab-width = 100px
 $control-size = 32px
@@ -81,7 +81,6 @@ $transition-duration = 0.3s
 $border-radius = 8px
 
 .tabs-container
-  // 定义带前缀的 CSS 变量
   --pt-tabs-bg: #fff
   --pt-tabs-controls-bg: #f8f9fa
   --pt-tabs-border: #e0e0e0
@@ -112,6 +111,7 @@ $border-radius = 8px
 
   // 布局样式（无需修改）
   display flex
+  width 100%
   height 100%
   background var(--pt-tabs-bg)
   border-radius $border-radius
@@ -120,7 +120,7 @@ $border-radius = 8px
 
   &.vertical
     flex-direction row
-    overflow visible
+    overflow hidden
 
     .tab-controls
       width $tab-width

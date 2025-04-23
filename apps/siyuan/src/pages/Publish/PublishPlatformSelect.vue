@@ -34,7 +34,8 @@ const platforms: Platform[] = [
 ]
 
 const gotoAccount = () => {
-  window.open("https://publisher.siyuan.build/account")
+  // 要想办法点击 tabs 里面AccountSetting那个
+  // 这里没有实现要帮忙。什么方案好
 }
 </script>
 
