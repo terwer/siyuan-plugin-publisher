@@ -56,7 +56,7 @@ const toggleCollapse = () => {
           {{ tab.label }}
         </button>
       </div>
-      <!-- 将折叠按钮移动到这里 -->
+      <!-- 折叠按钮 -->
       <button v-if="vertical" class="collapse-btn" @click="toggleCollapse">
         {{ isCollapsed ? "❯" : "❮" }}
       </button>
@@ -148,6 +148,9 @@ const toggleCollapse = () => {
   white-space nowrap
   border-bottom 1px solid #e0e0e0
 
+  &:hover:not(.active)
+    background-color #f5f5f5
+
   &:last-child
     border-bottom none
 
@@ -166,6 +169,13 @@ const toggleCollapse = () => {
 html[data-theme-mode="dark"]
   .tabs
     background-color var(--b3-theme-background)
+    .tab
+      color rgba(255, 255, 255, 0.7) // 使用半透明白色提升对比度
+      &:hover:not(.active)
+        background-color rgba(255,255,255,0.08)
+        color rgba(255,255,255,0.9)
+      &.active
+        color var(--b3-theme-primary)
 
     .tab-content
       background-color #2a2a2a
