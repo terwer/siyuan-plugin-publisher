@@ -4,11 +4,11 @@ import AccountSetting from "../Setting/AccountSetting.vue"
 import GeneralSetting from "../Setting/GeneralSetting.vue"
 import PublishPlatformSelect from "./PublishPlatformSelect.vue"
 import DashBoard from "../Setting/DashBoard.vue"
-import {ref} from "vue"
-import {   TabEnum} from "../../constants/TabEnum.ts"
+import { ref } from "vue"
+import { TabEnum } from "../../constants/TabEnum.ts"
 
 const props = defineProps<{
-  pluginInstance: any,
+  pluginInstance: any
 }>()
 
 const tabs = [
@@ -19,8 +19,9 @@ const tabs = [
     props: {
       pluginInstance: props.pluginInstance,
       // 注入动态切换方法
-      requestSwitchTab: (componentType: TabEnum) => switchTabByComponent(componentType)
-    }
+      requestSwitchTab: (componentType: TabEnum) =>
+        switchTabByComponent(componentType),
+    },
   },
   {
     key: TabEnum.ACCOUNT,
@@ -28,7 +29,7 @@ const tabs = [
     content: AccountSetting,
     props: {
       pluginInstance: props.pluginInstance,
-    }
+    },
   },
   {
     key: TabEnum.PICBED,
@@ -36,7 +37,7 @@ const tabs = [
     content: PublishPlatformSelect,
     props: {
       pluginInstance: props.pluginInstance,
-    }
+    },
   },
   {
     key: TabEnum.PREFERENCE,
@@ -44,7 +45,7 @@ const tabs = [
     content: GeneralSetting,
     props: {
       pluginInstance: props.pluginInstance,
-    }
+    },
   },
   {
     key: TabEnum.DASHBOARD,
@@ -52,20 +53,18 @@ const tabs = [
     content: DashBoard,
     props: {
       pluginInstance: props.pluginInstance,
-    }
-  }
+    },
+  },
 ]
 const activeTab = ref(0)
 const isCollapsed = ref(true)
 
 // 智能切换方法
 const switchTabByComponent = (curTab: TabEnum) => {
-  const targetIndex = tabs.findIndex(
-      tab => tab.key === curTab
-  )
+  const targetIndex = tabs.findIndex((tab) => tab.key === curTab)
 
   if (targetIndex === -1) {
-    console.error('目标标签页不存在')
+    console.error("目标标签页不存在")
     return
   }
 
@@ -73,17 +72,19 @@ const switchTabByComponent = (curTab: TabEnum) => {
   isCollapsed.value = false
 }
 
-const onTabChange = () => {
-
-}
-
+const onTabChange = () => {}
 </script>
 
 <template>
   <div id="publisher">
-    <Tab :tabs="tabs" :active-tab="activeTab" :vertical="true" :collapsed="isCollapsed" @tab-change="onTabChange"/>
+    <Tab
+      :tabs="tabs"
+      :active-tab="activeTab"
+      :vertical="true"
+      :collapsed="isCollapsed"
+      @tab-change="onTabChange"
+    />
   </div>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>
