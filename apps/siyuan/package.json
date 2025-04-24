@@ -1,37 +1,21 @@
 {
-  "name": "siyuan-plugin-publisher",
-  "version": "1.33.0",
+  "name": "siyuan",
+  "private": true,
+  "version": "0.0.0",
   "type": "module",
-  "homepage": "https://github.com/terwer/siyuan-plugin-publisher",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint .",
-    "preview": "vite preview",
-    "clean": "rm -rf node_modules"
+    "build": "vue-tsc -b && vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
-    "lucide-vue-next": "^0.476.0",
-    "vue": "^3.5.13",
-    "zhi-lib-base": "^0.8.0"
+    "vue": "^3.5.13"
   },
   "devDependencies": {
-    "@types/minimist": "^1.2.5",
-    "@types/node": "^22.14.1",
-    "@vitejs/plugin-vue": "^5.2.3",
-    "@vue/eslint-config-typescript": "^14.5.0",
-    "eslint": "^9.25.1",
-    "eslint-config-prettier": "^10.1.2",
-    "eslint-plugin-prettier": "^5.2.6",
-    "eslint-plugin-vue": "10.0.0",
-    "fast-glob": "^3.3.3",
-    "minimist": "^1.2.8",
-    "rollup-plugin-livereload": "^2.0.5",
-    "siyuan": "^1.1.1",
-    "stylus": "^0.64.0",
-    "tsconfig": "workspace:*",
-    "typescript": "5.8.3",
-    "vite": "6.3.3",
-    "vite-plugin-static-copy": "^2.3.1"
+    "@vitejs/plugin-vue": "^5.2.2",
+    "@vue/tsconfig": "^0.7.0",
+    "typescript": "~5.7.2",
+    "vite": "^6.3.1",
+    "vue-tsc": "^2.2.8"
   }
 }

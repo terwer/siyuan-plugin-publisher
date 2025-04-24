@@ -29,12 +29,24 @@ importers:
       lucide-vue-next:
         specifier: ^0.476.0
         version: 0.476.0(vue@3.5.13(typescript@5.8.3))
+      shorthash2:
+        specifier: ^1.0.5
+        version: 1.0.5
+      uuid:
+        specifier: ^11.1.0
+        version: 11.1.0
       vue:
         specifier: ^3.5.13
         version: 3.5.13(typescript@5.8.3)
+      zhi-common:
+        specifier: ^1.33.1
+        version: 1.33.1(typescript@5.8.3)
       zhi-lib-base:
         specifier: ^0.8.0
         version: 0.8.0
+      zhi-siyuan-api:
+        specifier: ^2.28.1
+        version: 2.28.1(typescript@5.8.3)
     devDependencies:
       '@types/minimist':
         specifier: ^1.2.5
@@ -3543,6 +3555,9 @@ packages:
     resolution: {integrity: sha512-AzqKpGKjrj7EM6rKVQEPpB288oCfnrEIuyoT9cyF4nmGa7V8Zk6f7RRqYisX8X9m+Q7bd632aZW4ky7EhbQztA==}
     engines: {node: '>= 0.4'}
 
+  shorthash2@1.0.5:
+    resolution: {integrity: sha512-OgKQtF1rIj79taV/coJyp0E6zfo6MmGNAsIepwjoWV2IYlpvWzhU2kFe9o8wSzJRysEhvmLlDHVOXe8/pWqK1Q==}
+
   side-channel-list@1.0.0:
     resolution: {integrity: sha512-FCLHtRD/gnpCiCHEiJLOwdmFP+wzCmDEkc9y7NsYxeF4u7Btsn1ZuwgwJGxImImHicJArLP4R0yX4c2KCrMrTA==}
     engines: {node: '>= 0.4'}
@@ -3783,6 +3798,11 @@ packages:
 
   tr46@0.0.3:
     resolution: {integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==}
+
+  transliteration@2.3.5:
+    resolution: {integrity: sha512-HAGI4Lq4Q9dZ3Utu2phaWgtm3vB6PkLUFqWAScg/UW+1eZ/Tg6Exo4oC0/3VUol/w4BlefLhUUSVBr/9/ZGQOw==}
+    engines: {node: '>=6.0.0'}
+    hasBin: true
 
   triple-beam@1.4.1:
     resolution: {integrity: sha512-aZbgViZrg1QNcG+LULa7nhZpJTZSLm/mXnHXnbAbjmN5aSa0y7V+wvv6+4WaBtpISJzThKy+PIPxc1Nq1EJ9mg==}
@@ -4289,8 +4309,17 @@ packages:
     resolution: {integrity: sha512-HUn0M24AUTMvjdkoMtH8fJz2FEd+k1xvtR9EoTrDUoVUi6o7xl5X+pST/vjk4T3GEQo2mJ9FlAvhWBm8dIdD4g==}
     engines: {node: '>=18'}
 
+  zhi-blog-api@1.72.0:
+    resolution: {integrity: sha512-Xs3sT+LIjLZV46BJ1ip8IEtx+y5YVRHN13asSkCBCN93iUJpCNmMI9vYDlg8YIXeQUIoOGROMZ3+7npOMR9yJg==}
+
+  zhi-common@1.33.1:
+    resolution: {integrity: sha512-R+/9Ha2bF44I2a/vF9EDewvb4KK2AxnC03LOBXwCyAFQkge+EKvua5zYqeNMNMYn9aUBDJ6MEOyrd2CORe2QcA==}
+
   zhi-lib-base@0.8.0:
     resolution: {integrity: sha512-3Ky5p6KvLWpXy2tlb/JIfSEKLSe5w43PBLM6g+hNcWwpL9S62emgcpUAHzGWBbC0vlLBLungt2LOsmwAfhrZ0w==}
+
+  zhi-siyuan-api@2.28.1:
+    resolution: {integrity: sha512-V2DFqhrnWFWo+VvjbvjFcfl5hJrHfFYuhSpg+kvj+EcfjAtdnE7/eU5xkdOJs0IdA+DeVhQweSRzNVpDHP1vsg==}
 
   zip-stream@6.0.1:
     resolution: {integrity: sha512-zK7YHHz4ZXpW89AHXUPbQVGKI7uvkd3hzusTdotCg1UxyaVtg0zFJSTfW/Dq5f7OBBVnq6cZIaC8Ti4hb6dtCA==}
@@ -8144,6 +8173,8 @@ snapshots:
 
   shell-quote@1.8.2: {}
 
+  shorthash2@1.0.5: {}
+
   side-channel-list@1.0.0:
     dependencies:
       es-errors: 1.3.0
@@ -8401,6 +8432,10 @@ snapshots:
   totalist@3.0.1: {}
 
   tr46@0.0.3: {}
+
+  transliteration@2.3.5:
+    dependencies:
+      yargs: 17.7.2
 
   triple-beam@1.4.1: {}
 
@@ -8883,7 +8918,32 @@ snapshots:
       cookie: 1.0.2
       youch-core: 0.3.2
 
+  zhi-blog-api@1.72.0(typescript@5.8.3):
+    dependencies:
+      zhi-common: 1.33.1(typescript@5.8.3)
+      zhi-lib-base: 0.8.0
+    transitivePeerDependencies:
+      - typescript
+
+  zhi-common@1.33.1(typescript@5.8.3):
+    dependencies:
+      js-yaml: 4.1.0
+      shorthash2: 1.0.5
+      transliteration: 2.3.5
+      vue: 3.5.13(typescript@5.8.3)
+      zhi-lib-base: 0.8.0
+    transitivePeerDependencies:
+      - typescript
+
   zhi-lib-base@0.8.0: {}
+
+  zhi-siyuan-api@2.28.1(typescript@5.8.3):
+    dependencies:
+      zhi-blog-api: 1.72.0(typescript@5.8.3)
+      zhi-common: 1.33.1(typescript@5.8.3)
+      zhi-lib-base: 0.8.0
+    transitivePeerDependencies:
+      - typescript
 
   zip-stream@6.0.1:
     dependencies:
