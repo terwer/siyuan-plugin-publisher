@@ -1,19 +1,13 @@
 <script setup lang="ts">
 import PublishPlatformSelect from "../../components/PublishPlatformSelect.vue"
-import {
-  Settings,
-  Trash2,
-  ToggleLeft,
-  ToggleRight,
-  Rss,
-  Zap,
-} from "lucide-vue-next"
+import { Settings, Trash2, Rss, Zap } from "lucide-vue-next"
+import { ref } from "vue"
 
 const props = defineProps<{
   pluginInstance: any
 }>()
 
-const platforms: Platform[] = [
+const platforms = ref<Platform[]>([
   {
     name: "博客园账号1",
     icon: Rss,
@@ -70,7 +64,7 @@ const platforms: Platform[] = [
       },
     ],
   },
-]
+])
 </script>
 
 <template>

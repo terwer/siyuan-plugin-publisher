@@ -1,14 +1,14 @@
 <!--
-  -            GNU GENERAL PUBLIC LICENSE
-  -               Version 3, 29 June 2007
-  -
-  -  Copyright (C) 2025 Terwer, Inc. <https://terwer.space/>
-  -  Everyone is permitted to copy and distribute verbatim copies
-  -  of this license document, but changing it is not allowed.
-  -->
+-            GNU GENERAL PUBLIC LICENSE
+-               Version 3, 29 June 2007
+-
+-  Copyright (C) 2025 Terwer, Inc. <https://terwer.space/>
+-  Everyone is permitted to copy and distribute verbatim copies
+-  of this license document, but changing it is not allowed.
+-->
 
 <script setup lang="ts">
-import { Inbox, ToggleLeft, ToggleRight } from "lucide-vue-next"
+import { Inbox } from "lucide-vue-next"
 import { TabEnum } from "../constants/TabEnum"
 
 const props = defineProps<{
@@ -18,7 +18,6 @@ const props = defineProps<{
 }>()
 
 const gotoAccount = (event: MouseEvent) => {
-  // 通过组件类型请求切换
   props.requestSwitchTab?.(TabEnum.ACCOUNT)
   event.stopPropagation()
 }
@@ -68,6 +67,7 @@ const gotoAccount = (event: MouseEvent) => {
             <button
               v-if="action.type === 'toggle'"
               class="toggle-btn"
+              :class="{ enabled: platform.enabled }"
               @click="
                 (event) => {
                   action.handler(platform)
@@ -75,7 +75,7 @@ const gotoAccount = (event: MouseEvent) => {
                 }
               "
             >
-              <div class="toggle-track" :class="{ enabled: platform.enabled }">
+              <div class="toggle-track">
                 <div class="toggle-thumb"></div>
               </div>
               <span class="tooltip">{{ action.label }}</span>
@@ -225,50 +225,44 @@ const gotoAccount = (event: MouseEvent) => {
       width: 14px
       height: 14px
 
-  // 优化后的开关按钮
+  // 开关按钮
   .toggle-btn
     position: relative
     padding: 0
     border: none
     background: transparent
     cursor: pointer
-    width: 32px  // 优化点击区域
+    width: 32px
     height: 24px
     display: flex
     align-items: center
     justify-content: center
 
-    .toggle-track
-      margin-top: 0
-      position: relative
-      width: 28px  // 调小轨道尺寸
-      height: 14px  // 降低轨道高度
-      border-radius: 7px  // 圆角匹配高度
-      background-color: var(--pt-platform-border)
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1)  // 添加弹性动画
-
-      &.enabled
+    &.enabled
+      .toggle-track
         background-color: var(--pt-platform-accent)
+      .toggle-thumb
+        transform: translate(16px, -50%) !important
+
+    .toggle-track
+      position: relative
+      width: 28px
+      height: 14px
+      border-radius: 7px
+      background-color: var(--pt-platform-border)
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1)
 
     .toggle-thumb
       position: absolute
       left: 2px
       top: 50%
       transform: translateY(-50%)
-      width: 10px  // 缩小滑块尺寸
+      width: 10px
       height: 10px
       background-color: #fff
       border-radius: 50%
-      box-shadow: 0 1px 2px var(--pt-platform-shadow)  // 更柔和的阴影
-      transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)  // 同步弹性动画
-
-      .enabled &
-        transform: translate(14px, -50%)  // 保持垂直居中同时水平移动
-
-    // 调整工具提示位置
-    .tooltip
-      top: calc(100% + 8px)
-      left: 50%
+      box-shadow: 0 1px 2px var(--pt-platform-shadow)
+      transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)
 
   // 工具提示
   .tooltip
