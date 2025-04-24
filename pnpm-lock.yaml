@@ -26,9 +26,15 @@ importers:
 
   apps/siyuan:
     dependencies:
+      siyuan:
+        specifier: ^1.1.1
+        version: 1.1.1
       vue:
         specifier: ^3.5.13
         version: 3.5.13(typescript@5.7.3)
+      zhi-lib-base:
+        specifier: ^0.8.0
+        version: 0.8.0
     devDependencies:
       '@vitejs/plugin-vue':
         specifier: ^5.2.2
@@ -3434,6 +3440,9 @@ packages:
   sisteransi@1.0.5:
     resolution: {integrity: sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==}
 
+  siyuan@1.1.1:
+    resolution: {integrity: sha512-M6fuwKxpqZU+sXooTdtuufM9N0zbCRCAuxeeg4WwiewFImEO9p8etN579lwb0CE9WiUvDFKXdvkgISTj61HoSw==}
+
   slash@3.0.0:
     resolution: {integrity: sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==}
     engines: {node: '>=8'}
@@ -4097,6 +4106,9 @@ packages:
   youch@4.1.0-beta.7:
     resolution: {integrity: sha512-HUn0M24AUTMvjdkoMtH8fJz2FEd+k1xvtR9EoTrDUoVUi6o7xl5X+pST/vjk4T3GEQo2mJ9FlAvhWBm8dIdD4g==}
     engines: {node: '>=18'}
+
+  zhi-lib-base@0.8.0:
+    resolution: {integrity: sha512-3Ky5p6KvLWpXy2tlb/JIfSEKLSe5w43PBLM6g+hNcWwpL9S62emgcpUAHzGWBbC0vlLBLungt2LOsmwAfhrZ0w==}
 
   zip-stream@6.0.1:
     resolution: {integrity: sha512-zK7YHHz4ZXpW89AHXUPbQVGKI7uvkd3hzusTdotCg1UxyaVtg0zFJSTfW/Dq5f7OBBVnq6cZIaC8Ti4hb6dtCA==}
@@ -7919,6 +7931,8 @@ snapshots:
 
   sisteransi@1.0.5: {}
 
+  siyuan@1.1.1: {}
+
   slash@3.0.0: {}
 
   slash@5.1.0: {}
@@ -8571,6 +8585,8 @@ snapshots:
       '@speed-highlight/core': 1.2.7
       cookie: 1.0.2
       youch-core: 0.3.2
+
+  zhi-lib-base@0.8.0: {}
 
   zip-stream@6.0.1:
     dependencies:
