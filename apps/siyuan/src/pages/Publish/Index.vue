@@ -9,9 +9,9 @@
 
 <script lang="ts" setup>
 import Tab from "../../components/Tab.vue"
+import DocPublish from "./DocPublish.vue"
 import AccountSetting from "../Setting/AccountSetting.vue"
 import GeneralSetting from "../Setting/GeneralSetting.vue"
-import PublishPlatformSelect from "./PublishPlatformSelect.vue"
 import DashBoard from "../Setting/DashBoard.vue"
 import { ref } from "vue"
 import { TabEnum } from "../../constants/TabEnum.ts"
@@ -24,7 +24,7 @@ const tabs = [
   {
     key: TabEnum.PUBLISH,
     label: props.pluginInstance.i18n.publish.publish,
-    content: PublishPlatformSelect,
+    content: DocPublish,
     props: {
       pluginInstance: props.pluginInstance,
       // 注入动态切换方法
@@ -40,14 +40,14 @@ const tabs = [
       pluginInstance: props.pluginInstance,
     },
   },
-  {
-    key: TabEnum.PICBED,
-    label: props.pluginInstance.i18n.picbed.picbed,
-    content: PublishPlatformSelect,
-    props: {
-      pluginInstance: props.pluginInstance,
-    },
-  },
+  // {
+  //   key: TabEnum.PICBED,
+  //   label: props.pluginInstance.i18n.picbed.picbed,
+  //   content: PicBedSetting,
+  //   props: {
+  //     pluginInstance: props.pluginInstance,
+  //   },
+  // },
   {
     key: TabEnum.PREFERENCE,
     label: props.pluginInstance.i18n.preference.preference,

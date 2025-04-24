@@ -8,45 +8,14 @@
   -->
 
 <script setup lang="ts">
-import { Bird, Clock, Rss, Zap, Inbox } from "lucide-vue-next"
-import { TabEnum } from "../../constants/TabEnum.ts"
+import { Inbox, ToggleLeft, ToggleRight } from "lucide-vue-next"
+import { TabEnum } from "../constants/TabEnum"
 
 const props = defineProps<{
   pluginInstance: any
+  platforms: Platform[]
   requestSwitchTab?: (component: any) => void
 }>()
-
-interface Platform {
-  name: string
-  icon: any
-  type: "blog" | "doc"
-  actions: {
-    icon: any
-    label: string
-    handler: () => void
-  }[]
-}
-
-const platforms: Platform[] = [
-  {
-    name: "博客园",
-    icon: Rss,
-    type: "blog",
-    actions: [
-      { icon: Zap, label: "极速发布", handler: () => console.log("fast") },
-      { icon: Clock, label: "常规发布", handler: () => console.log("normal") },
-    ],
-  },
-  {
-    name: "语雀",
-    icon: Bird,
-    type: "doc",
-    actions: [
-      { icon: Zap, label: "极速发布", handler: () => console.log("fast") },
-      { icon: Clock, label: "常规发布", handler: () => console.log("normal") },
-    ],
-  },
-]
 
 const gotoAccount = (event: MouseEvent) => {
   // 通过组件类型请求切换
@@ -79,15 +48,39 @@ const gotoAccount = (event: MouseEvent) => {
         </div>
 
         <div class="action-buttons">
-          <button
-            v-for="action in platform.actions"
-            :key="action.label"
-            @click="action.handler"
-            class="action-btn"
-          >
-            <component :is="action.icon" class="btn-icon" />
-            <span class="tooltip">{{ action.label }}</span>
-          </button>
+          <template v-for="(action, index) in platform.actions" :key="index">
+            <!-- 按钮类操作 -->
+            <button
+              v-if="action.type === 'button'"
+              @click="
+                (event: MouseEvent) => {
+                  action.handler(platform)
+                  event.stopPropagation()
+                }
+              "
+              class="action-btn"
+            >
+              <component :is="action.icon" class="btn-icon" />
+              <span class="tooltip">{{ action.label }}</span>
+            </button>
+
+            <!-- 切换类操作 -->
+            <button
+              v-if="action.type === 'toggle'"
+              class="toggle-btn"
+              @click="
+                (event) => {
+                  action.handler(platform)
+                  event.stopPropagation()
+                }
+              "
+            >
+              <div class="toggle-track" :class="{ enabled: platform.enabled }">
+                <div class="toggle-thumb"></div>
+              </div>
+              <span class="tooltip">{{ action.label }}</span>
+            </button>
+          </template>
         </div>
       </li>
     </ul>
@@ -231,6 +224,51 @@ const gotoAccount = (event: MouseEvent) => {
     .btn-icon
       width: 14px
       height: 14px
+
+  // 优化后的开关按钮
+  .toggle-btn
+    position: relative
+    padding: 0
+    border: none
+    background: transparent
+    cursor: pointer
+    width: 32px  // 优化点击区域
+    height: 24px
+    display: flex
+    align-items: center
+    justify-content: center
+
+    .toggle-track
+      margin-top: 0
+      position: relative
+      width: 28px  // 调小轨道尺寸
+      height: 14px  // 降低轨道高度
+      border-radius: 7px  // 圆角匹配高度
+      background-color: var(--pt-platform-border)
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1)  // 添加弹性动画
+
+      &.enabled
+        background-color: var(--pt-platform-accent)
+
+    .toggle-thumb
+      position: absolute
+      left: 2px
+      top: 50%
+      transform: translateY(-50%)
+      width: 10px  // 缩小滑块尺寸
+      height: 10px
+      background-color: #fff
+      border-radius: 50%
+      box-shadow: 0 1px 2px var(--pt-platform-shadow)  // 更柔和的阴影
+      transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)  // 同步弹性动画
+
+      .enabled &
+        transform: translate(14px, -50%)  // 保持垂直居中同时水平移动
+
+    // 调整工具提示位置
+    .tooltip
+      top: calc(100% + 8px)
+      left: 50%
 
   // 工具提示
   .tooltip
