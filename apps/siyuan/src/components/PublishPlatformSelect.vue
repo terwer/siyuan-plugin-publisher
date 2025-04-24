@@ -53,6 +53,10 @@ const gotoAccount = (event: MouseEvent) => {
               v-if="action.type === 'button'"
               @click="
                 (event: MouseEvent) => {
+                  if (!action.handler) {
+                    event.stopPropagation()
+                    return
+                  }
                   action.handler(platform)
                   event.stopPropagation()
                 }
@@ -70,6 +74,10 @@ const gotoAccount = (event: MouseEvent) => {
               :class="{ enabled: platform.enabled }"
               @click="
                 (event) => {
+                  if (!action.handler) {
+                    event.stopPropagation()
+                    return
+                  }
                   action.handler(platform)
                   event.stopPropagation()
                 }
