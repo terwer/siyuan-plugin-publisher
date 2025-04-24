@@ -14,6 +14,7 @@ module.exports = defineConfigWithVueTs(
       "vue/no-v-html": "off",
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-require-imports": "off",
+      "@typescript-eslint/ban-ts-comment": "off",
       // semi: ['error', 'never'],
       semi: "off",
       "prettier/prettier": [

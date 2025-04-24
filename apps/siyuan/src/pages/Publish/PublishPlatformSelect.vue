@@ -1,43 +1,51 @@
+<!--
+  -            GNU GENERAL PUBLIC LICENSE
+  -               Version 3, 29 June 2007
+  -
+  -  Copyright (C) 2025 Terwer, Inc. <https://terwer.space/>
+  -  Everyone is permitted to copy and distribute verbatim copies
+  -  of this license document, but changing it is not allowed.
+  -->
+
 <script setup lang="ts">
 import { Bird, Clock, Rss, Zap, Inbox } from "lucide-vue-next"
-import {TabEnum} from "../../constants/TabEnum.ts";
+import { TabEnum } from "../../constants/TabEnum.ts"
 
 const props = defineProps<{
   pluginInstance: any
   requestSwitchTab?: (component: any) => void
 }>()
 
-
 interface Platform {
-  name: string;
-  icon: any;
-  type: "blog" | "doc";
+  name: string
+  icon: any
+  type: "blog" | "doc"
   actions: {
-    icon: any;
-    label: string;
-    handler: () => void;
-  }[];
+    icon: any
+    label: string
+    handler: () => void
+  }[]
 }
 
 const platforms: Platform[] = [
-  // {
-  //   name: "博客园",
-  //   icon: Rss,
-  //   type: "blog",
-  //   actions: [
-  //     { icon: Zap, label: "极速发布", handler: () => console.log("fast") },
-  //     { icon: Clock, label: "常规发布", handler: () => console.log("normal") },
-  //   ],
-  // },
-  // {
-  //   name: "语雀",
-  //   icon: Bird,
-  //   type: "doc",
-  //   actions: [
-  //     { icon: Zap, label: "极速发布", handler: () => console.log("fast") },
-  //     { icon: Clock, label: "常规发布", handler: () => console.log("normal") },
-  //   ],
-  // },
+  {
+    name: "博客园",
+    icon: Rss,
+    type: "blog",
+    actions: [
+      { icon: Zap, label: "极速发布", handler: () => console.log("fast") },
+      { icon: Clock, label: "常规发布", handler: () => console.log("normal") },
+    ],
+  },
+  {
+    name: "语雀",
+    icon: Bird,
+    type: "doc",
+    actions: [
+      { icon: Zap, label: "极速发布", handler: () => console.log("fast") },
+      { icon: Clock, label: "常规发布", handler: () => console.log("normal") },
+    ],
+  },
 ]
 
 const gotoAccount = (event: MouseEvent) => {
