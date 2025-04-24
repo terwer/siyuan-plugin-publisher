@@ -9,15 +9,24 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "siyuan": "^1.1.1",
     "vue": "^3.5.13",
     "zhi-lib-base": "^0.8.0"
   },
   "devDependencies": {
+    "@types/minimist": "^1.2.5",
     "@vitejs/plugin-vue": "^5.2.2",
+    "@vue/eslint-config-typescript": "^14.5.0",
     "@vue/tsconfig": "^0.7.0",
+    "eslint": "^9.25.1",
+    "eslint-plugin-prettier": "^5.2.6",
+    "eslint-plugin-vue": "^10.0.0",
+    "fast-glob": "^3.3.3",
+    "minimist": "^1.2.8",
+    "rollup-plugin-livereload": "^2.0.5",
+    "siyuan": "^1.1.1",
     "typescript": "~5.7.2",
     "vite": "^6.3.1",
+    "vite-plugin-static-copy": "^2.3.1",
     "vue-tsc": "^2.2.8"
   }
 }

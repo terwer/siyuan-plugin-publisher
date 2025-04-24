@@ -7,4 +7,11 @@
  *  of this license document, but changing it is not allowed.
  */
 
-/// <reference types="vite/client" />
+import { createApp } from "vue"
+import Publish from "@pages/publish/Index.vue"
+
+const createBootStrap = (props: any, container: string | HTMLElement) => {
+  createApp(Publish, props).mount(container)
+}
+
+export { createBootStrap }

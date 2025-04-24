@@ -8,7 +8,7 @@
  */
 
 import { simpleLogger } from "zhi-lib-base"
-import { isDev} from "~/src/Constants.ts";
+import { isDev } from "@/Constants.ts"
 
 /**
  * 简单的日志接口

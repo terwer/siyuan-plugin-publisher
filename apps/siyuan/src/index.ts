@@ -7,10 +7,11 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { App, type IObject, Plugin } from "siyuan"
+import { App, IObject, Plugin } from "siyuan"
 import { type ILogger } from "zhi-lib-base"
 import { Topbar } from "./topbar.ts"
 import { icons } from "./icons.ts"
+import { createAppLogger } from "@utils/appLogger.ts"
 
 import "./index.styl"
 
