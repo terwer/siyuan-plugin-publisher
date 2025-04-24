@@ -11,7 +11,6 @@ import { App, type IObject, Plugin } from "siyuan"
 import { type ILogger } from "zhi-lib-base"
 import { Topbar } from "./topbar.ts"
 import { icons } from "./icons.ts"
-import { createAppLogger } from "./utils/appLogger"
 
 import "./index.styl"
 
