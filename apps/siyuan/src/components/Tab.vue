@@ -29,6 +29,13 @@ watch(
     }
 )
 
+watch(
+    () => props.collapsed,
+    (newVal) => {
+      isCollapsed.value = newVal
+    }
+)
+
 const handleTabClick = (index: number) => {
   if (index !== activeIndex.value) {
     activeIndex.value = index

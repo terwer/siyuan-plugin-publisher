@@ -3,9 +3,9 @@ import Tab from "../../components/Tab.vue"
 import AccountSetting from "../Setting/AccountSetting.vue"
 import GeneralSetting from "../Setting/GeneralSetting.vue"
 import PublishPlatformSelect from "./PublishPlatformSelect.vue"
-import DashBoard from "../Setting/DashBoard.vue";
-import {Component, ref, computed, reactive} from "vue";
-import {TabEnum} from "../../constants/TabEnum.ts";
+import DashBoard from "../Setting/DashBoard.vue"
+import {ref} from "vue"
+import {   TabEnum} from "../../constants/TabEnum.ts"
 
 const props = defineProps<{
   pluginInstance: any,
@@ -19,7 +19,7 @@ const tabs = [
     props: {
       pluginInstance: props.pluginInstance,
       // 注入动态切换方法
-      requestSwitchTab: (componentType:TabEnum) => switchTabByComponent(componentType)
+      requestSwitchTab: (componentType: TabEnum) => switchTabByComponent(componentType)
     }
   },
   {
@@ -56,10 +56,10 @@ const tabs = [
   }
 ]
 const activeTab = ref(0)
-const isCollapsed = ref(false)
+const isCollapsed = ref(true)
 
 // 智能切换方法
-const switchTabByComponent = (curTab:TabEnum) => {
+const switchTabByComponent = (curTab: TabEnum) => {
   const targetIndex = tabs.findIndex(
       tab => tab.key === curTab
   )
@@ -81,7 +81,7 @@ const onTabChange = () => {
 
 <template>
   <div id="publisher">
-    <Tab  :tabs="tabs" :active-tab="activeTab" :vertical="true" :collapsed="isCollapsed" @tab-change="onTabChange"/>
+    <Tab :tabs="tabs" :active-tab="activeTab" :vertical="true" :collapsed="isCollapsed" @tab-change="onTabChange"/>
   </div>
 </template>
 
