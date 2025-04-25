@@ -7,7 +7,7 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { ref, watch, readonly, type Ref, type DeepReadonly } from "vue"
+import { watch, readonly, type DeepReadonly, reactive } from "vue"
 import { StorageAdaptor } from "@stores/core/StorageAdaptor.ts"
 
 export interface StorageOptions {
@@ -35,14 +35,14 @@ export const useStorageAsync = <T extends object>(
     deepWatch: true,
   },
 ) => {
-  const internalState = ref<T>(initial) as Ref<T>
+  const internalState = reactive<T>({ ...initial })
   let isSyncing = false
 
   // 加载存储数据
   adaptor.load().then((loaded) => {
     if (loaded) {
       isSyncing = true
-      internalState.value = loaded
+      Object.assign(internalState, loaded)
       isSyncing = false
     }
   })
@@ -52,7 +52,7 @@ export const useStorageAsync = <T extends object>(
 
   // 状态监听
   watch(
-    () => internalState.value,
+    () => internalState,
     (newVal) => {
       if (!isSyncing) pushUpdate(key, newVal)
     },
@@ -62,15 +62,12 @@ export const useStorageAsync = <T extends object>(
   // 受控更新方法
   const update = (newValue: Partial<T>) => {
     isSyncing = true
-    internalState.value = {
-      ...internalState.value,
-      ...newValue,
-    } as T
+    Object.assign(internalState, newValue)
     isSyncing = false
   }
 
   return {
-    state: readonly(internalState) as DeepReadonly<Ref<T>>,
+    state: readonly(internalState) as DeepReadonly<T>,
     update,
     flush: () => flush(key),
   }

@@ -68,8 +68,8 @@ const tabs = [
     },
   },
 ]
-const activeTab = ref(0)
-const isCollapsed = ref(true)
+const activeTab = ref(2)
+const isCollapsed = ref(false)
 
 // 智能切换方法
 const switchTabByComponent = (curTab: TabEnum) => {

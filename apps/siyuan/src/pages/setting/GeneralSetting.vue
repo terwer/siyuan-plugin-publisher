@@ -8,7 +8,8 @@
   -->
 
 <script setup lang="ts">
-import PreferenceSetting from "@pages/setting/general/PreferenceSetting.vue"
+import SiyuanSetting from "@pages/setting/general/SiyuanSetting.vue"
+import UISetting from "@pages/setting/general/UISetting.vue"
 
 const props = defineProps<{
   pluginInstance: any
@@ -17,7 +18,8 @@ const props = defineProps<{
 
 <template>
   <div class="settings-wrapper">
-    <preference-setting :plugin-instance="props.pluginInstance" />
+    <u-i-setting :plugin-instance="props.pluginInstance" />
+    <siyuan-setting :plugin-instance="props.pluginInstance" />
   </div>
 </template>
 

@@ -41,20 +41,23 @@ export const useSiyuanSettingStore = () => {
   // }
 
   // 获取最新配置，api地址不受控
-  const newSiyuanCfg = computed(() => {
-    const baseCfg = state.value
-
-    return {
-      ...baseCfg,
-      home: DEFAULT_SIYUAN_API_URL,
-      apiUrl: DEFAULT_SIYUAN_API_URL,
-    }
-  })
-  logger.debug("Loaded siyuan-cfg", newSiyuanCfg.value)
+  // const newSiyuanCfg = computed({
+  //   get: () => ({
+  //     ...state.value,
+  //     home: DEFAULT_SIYUAN_API_URL,
+  //     apiUrl: DEFAULT_SIYUAN_API_URL,
+  //   }),
+  //   set: (value: SiyuanConfig) => {
+  //     // 保留默认值逻辑，只允许修改 token
+  //     // update({ token: value.token })
+  //     logger.debug("Update siyuan-cfg", value)
+  //   },
+  // })
+  // logger.debug("Loaded siyuan-cfg", newSiyuanCfg.value)
 
   return {
     // 只读状态
-    siyuanCfg: newSiyuanCfg,
+    siyuanCfg: state,
     // 唯一更新方法
     // setSiyuanCfg,
     // 立即刷新存储

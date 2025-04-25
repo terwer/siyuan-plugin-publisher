@@ -9,7 +9,6 @@
 
 <script setup lang="ts">
 defineProps<{
-  modelValue: string
   type?: "text" | "password" | "email" | "search"
   placeholder?: string
   disabled?: boolean
@@ -19,23 +18,20 @@ defineProps<{
   error?: boolean
 }>()
 
-const emit = defineEmits(["update:modelValue"])
+const modelValue = defineModel<string>({ required: true })
 </script>
 
 <template>
   <div class="input-container">
     <input
+      v-model="modelValue"
       class="custom-input"
       :class="{ 'error-state': error }"
       :type="type || 'text'"
-      :value="modelValue"
       :placeholder="placeholder"
       :disabled="disabled"
       :readonly="readonly"
       :maxlength="maxlength"
-      @input="
-        emit('update:modelValue', ($event.target as HTMLInputElement).value)
-      "
     />
 
     <div v-if="showCount && maxlength" class="count-indicator">

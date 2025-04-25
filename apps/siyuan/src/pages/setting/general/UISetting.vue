@@ -9,31 +9,27 @@
 
 <script setup lang="ts">
 import SettingItem from "@components/SettingItem.vue"
-// import { useSiyuanSettingStore } from "@stores/useSiyuanSettingStore.ts"
 
 const props = defineProps<{
   pluginInstance: any
 }>()
 
-// const { siyuanCfg } = useSiyuanSettingStore()
-
 const formGroup = {
-  title: "思源设置",
+  title: "界面选项",
   items: <SettingItem[]>[
     {
-      type: "input",
-      label: "API地址",
-      value: "http://localhost:6806",
-      placeholder: "请输入思源API地址",
-      // inputType: "url", // 使用HTML5 URL类型
-      readonly: true,
+      type: "switch",
+      label: "显示文档菜单",
+      value: true,
     },
     {
-      type: "input",
-      label: "思源Token",
-      value: "",
-      placeholder: "请输入授权Token",
-      inputType: "password", // 密码输入类型
+      type: "select",
+      label: "主题颜色",
+      value: "blue",
+      options: [
+        { label: "极光蓝", value: "blue" },
+        { label: "森林绿", value: "green" },
+      ],
     },
   ],
 }
