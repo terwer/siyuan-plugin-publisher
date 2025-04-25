@@ -5,6 +5,7 @@ import minimist from "minimist"
 import { viteStaticCopy } from "vite-plugin-static-copy"
 import livereload from "rollup-plugin-livereload"
 import fg from "fast-glob"
+import { nodePolyfills } from "vite-plugin-node-polyfills"
 
 const args = minimist(process.argv.slice(2))
 const isWatch = args.watch || args.w || false
@@ -44,6 +45,19 @@ export default defineConfig({
         },
       ],
     }),
+
+    // 在浏览器中polyfill node
+    // https://github.com/davidmyersdev/vite-plugin-node-polyfills/blob/main/test/src/main.ts
+    nodePolyfills({
+      exclude: [],
+      globals: {
+        // can also be 'build', 'dev', or false
+        Buffer: true,
+        global: true,
+        process: true,
+      },
+      protocolImports: true,
+    }),
   ],
 
   // https://github.com/vitejs/vite/issues/1930
@@ -64,6 +78,7 @@ export default defineConfig({
       "@composables": path.resolve(__dirname, "./src/composables"),
       "@pages": path.resolve(__dirname, "./src/pages"),
       "@assets": path.resolve(__dirname, "./src/assets"),
+      "@stores": path.resolve(__dirname, "./src/stores"),
       "@enums": path.resolve(__dirname, "./src/enums"),
       "@constants": path.resolve(__dirname, "./src/constants"),
       "@utils": path.resolve(__dirname, "./src/utils"),

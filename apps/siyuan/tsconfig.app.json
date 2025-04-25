@@ -17,6 +17,7 @@
       "@composables/*": ["./src/composables/*"],
       "@pages/*": ["./src/pages/*"],
       "@assets/*": ["./src/assets/*"],
+      "@stores/*": ["./src/stores/*"],
       "@enums/*": ["./src/enums/*"],
       "@constants/*": ["./src/constants/*"],
       "@utils/*": ["./src/utils/*"],

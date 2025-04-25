@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 import PublishPlatformSelect from "@components/PublishPlatformSelect.vue"
-import { Bird, Clock, Rss, Zap } from "lucide-vue-next"
+// import { Bird, Clock, Rss, Zap } from "lucide-vue-next"
 
 const props = defineProps<{
   pluginInstance: any

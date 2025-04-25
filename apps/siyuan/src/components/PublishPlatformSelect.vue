@@ -11,6 +11,7 @@
 import { Inbox } from "lucide-vue-next"
 import { TabEnum } from "@enums/TabEnum.ts"
 import { useI18n } from "@composables/useI18n.ts"
+import { useSiyuanSettingStore } from "@stores/useSiyuanSettingStore.ts"
 
 const props = defineProps<{
   pluginInstance: any
@@ -19,6 +20,7 @@ const props = defineProps<{
 }>()
 
 const { t } = useI18n(props.pluginInstance)
+const { siyuanCfg } = useSiyuanSettingStore()
 
 const gotoAccount = (event: MouseEvent) => {
   props.requestSwitchTab?.(TabEnum.ACCOUNT)
@@ -38,6 +40,7 @@ const gotoAccount = (event: MouseEvent) => {
             {{ t("account.account") }}
           </a>
           {{ t("platformSelect.noTip2") }}
+          test {{ siyuanCfg.apiUrl }}
         </p>
       </div>
     </div>

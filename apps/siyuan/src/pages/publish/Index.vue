@@ -15,10 +15,13 @@ import GeneralSetting from "@pages/setting/GeneralSetting.vue"
 import DashBoard from "@pages/setting/DashBoard.vue"
 import { TabEnum } from "@enums/TabEnum.ts"
 import { ref } from "vue"
+// import { createAppLogger } from "@utils/appLogger.ts"
 
 const props = defineProps<{
   pluginInstance: any
 }>()
+
+// const logger = createAppLogger("publish-index")
 
 const tabs = [
   {
@@ -73,7 +76,6 @@ const switchTabByComponent = (curTab: TabEnum) => {
   const targetIndex = tabs.findIndex((tab) => tab.key === curTab)
 
   if (targetIndex === -1) {
-    console.error("目标标签页不存在")
     return
   }
 
