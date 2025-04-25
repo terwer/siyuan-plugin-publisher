@@ -7,10 +7,23 @@
   -  of this license document, but changing it is not allowed.
   -->
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import PreferenceSetting from "@pages/setting/general/PreferenceSetting.vue"
+
+const props = defineProps<{
+  pluginInstance: any
+}>()
+</script>
 
 <template>
-  <div>GeneralSetting</div>
+  <div class="settings-wrapper">
+    <preference-setting :plugin-instance="props.pluginInstance" />
+  </div>
 </template>
 
-<style scoped></style>
+<style lang="stylus">
+.settings-wrapper
+  padding 24px
+  height 100%
+  overflow-y auto
+</style>

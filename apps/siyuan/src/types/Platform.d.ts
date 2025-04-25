@@ -7,5 +7,18 @@
  *  of this license document, but changing it is not allowed.
  */
 
-export * from "./FormProp"
-export * from "./Platform"
+interface PlatformAction {
+  type: "button" | "toggle"
+  icon?: any
+  label: string
+  handler?: (platform: Platform) => void
+  value?: boolean
+}
+
+interface Platform {
+  name: string
+  icon: any
+  type: "blog" | "doc"
+  enabled: boolean
+  actions: PlatformAction[]
+}
