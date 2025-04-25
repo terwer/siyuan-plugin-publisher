@@ -2,17 +2,22 @@
   "publisher": "Publisher",
   "setting": "Setting",
   "publishOptions": "Publish options",
+  "platformSelect": {
+    "no": "No available platforms at the moment",
+    "noTip1": "Please go to ",
+    "noTip2": "to add an account first."
+  },
   "publish": {
-    "publish": "Document Publish"
+    "publish": "Publish"
   },
   "account": {
-    "account": "Account Settings"
+    "account": "Account"
   },
   "picbed": {
-    "picbed": "Image Bed Settings"
+    "picbed": "Imagebed"
   },
   "preference": {
-    "preference": "Preference Settings"
+    "preference": "Preference"
   },
   "dashboard": {
     "dashboard": "Dashboard"

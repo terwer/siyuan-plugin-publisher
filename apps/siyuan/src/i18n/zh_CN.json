@@ -2,6 +2,11 @@
   "publisher": "发布工具",
   "setting": "设置",
   "publishOptions": "发布选项",
+  "platformSelect": {
+    "no": "暂时没有可用平台",
+    "noTip1": "请先去",
+    "noTip2": "添加账号吧"
+  },
   "publish": {
     "publish": "文档发布"
   },

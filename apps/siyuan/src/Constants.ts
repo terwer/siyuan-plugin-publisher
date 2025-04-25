@@ -7,7 +7,6 @@
  *  of this license document, but changing it is not allowed.
  */
 
-export const DEFAULT_SIYUAN_LANG = window?.siyuan?.config?.lang ?? "zh_CN"
 // @ts-ignore
 export const isDev =
   // @ts-ignore

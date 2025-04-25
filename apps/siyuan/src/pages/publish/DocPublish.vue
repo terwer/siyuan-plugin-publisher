@@ -16,46 +16,46 @@ const props = defineProps<{
 }>()
 
 const platforms: Platform[] = [
-  {
-    name: "博客园",
-    icon: Rss,
-    type: "blog",
-    enabled: true,
-    actions: [
-      {
-        type: "button",
-        icon: Zap,
-        label: "极速发布",
-        handler: () => console.log("fast"),
-      },
-      {
-        type: "button",
-        icon: Clock,
-        label: "常规发布",
-        handler: () => console.log("normal"),
-      },
-    ],
-  },
-  {
-    name: "语雀",
-    icon: Bird,
-    type: "doc",
-    enabled: true,
-    actions: [
-      {
-        type: "button",
-        icon: Zap,
-        label: "极速发布",
-        handler: () => console.log("fast"),
-      },
-      {
-        type: "button",
-        icon: Clock,
-        label: "常规发布",
-        handler: () => console.log("normal"),
-      },
-    ],
-  },
+  // {
+  //   name: "博客园",
+  //   icon: Rss,
+  //   type: "blog",
+  //   enabled: true,
+  //   actions: [
+  //     {
+  //       type: "button",
+  //       icon: Zap,
+  //       label: "极速发布",
+  //       handler: () => console.log("fast"),
+  //     },
+  //     {
+  //       type: "button",
+  //       icon: Clock,
+  //       label: "常规发布",
+  //       handler: () => console.log("normal"),
+  //     },
+  //   ],
+  // },
+  // {
+  //   name: "语雀",
+  //   icon: Bird,
+  //   type: "doc",
+  //   enabled: true,
+  //   actions: [
+  //     {
+  //       type: "button",
+  //       icon: Zap,
+  //       label: "极速发布",
+  //       handler: () => console.log("fast"),
+  //     },
+  //     {
+  //       type: "button",
+  //       icon: Clock,
+  //       label: "常规发布",
+  //       handler: () => console.log("normal"),
+  //     },
+  //   ],
+  // },
 ]
 </script>
 

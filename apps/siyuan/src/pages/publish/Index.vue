@@ -81,7 +81,9 @@ const switchTabByComponent = (curTab: TabEnum) => {
   isCollapsed.value = false
 }
 
-const onTabChange = () => {}
+const onTabChange = (index: number) => {
+  activeTab.value = index
+}
 </script>
 
 <template>

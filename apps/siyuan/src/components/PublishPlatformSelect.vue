@@ -10,12 +10,15 @@
 <script setup lang="ts">
 import { Inbox } from "lucide-vue-next"
 import { TabEnum } from "@enums/TabEnum.ts"
+import { useI18n } from "@composables/useI18n.ts"
 
 const props = defineProps<{
   pluginInstance: any
   platforms: Platform[]
   requestSwitchTab?: (component: any) => void
 }>()
+
+const { t } = useI18n(props.pluginInstance)
 
 const gotoAccount = (event: MouseEvent) => {
   props.requestSwitchTab?.(TabEnum.ACCOUNT)
@@ -28,10 +31,13 @@ const gotoAccount = (event: MouseEvent) => {
     <div v-if="platforms.length === 0" class="empty-state">
       <Inbox class="empty-icon" />
       <div class="empty-text">
-        <p>暂时没有可用平台</p>
+        <p>{{ t("platformSelect.no") }}</p>
         <p>
-          请先去<a class="account-link" @click="gotoAccount">账号管理</a
-          >添加账号吧
+          {{ t("platformSelect.noTip1") }}
+          <a class="account-link" @click="gotoAccount">
+            {{ t("account.account") }}
+          </a>
+          {{ t("platformSelect.noTip2") }}
         </p>
       </div>
     </div>
