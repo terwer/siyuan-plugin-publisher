@@ -8,7 +8,7 @@
   -->
 
 <script setup lang="ts">
-import { reactive, computed, onBeforeMount } from "vue"
+import { reactive, computed, onBeforeMount, toRaw } from "vue"
 import SettingItem from "@components/SettingItem.vue"
 import { useSiyuanSettingStore } from "@stores/useSiyuanSettingStore.ts"
 import { produce } from "immer"
@@ -36,16 +36,11 @@ const formGroup = reactive({
       placeholder: "请输入授权Token",
       value: computed({
         get: () => siyuanCfg.value.password,
-        // set: (v) =>
-        //   (siyuanCfg.value = {
-        //     ...siyuanCfg.value,
-        //     password: v,
-        //   }),
-        set: (v) => {
-          siyuanCfg.value = produce(siyuanCfg.value, (draft) => {
-            draft.password = v
-          })
-        },
+        set: (v) =>
+          (siyuanCfg.value = {
+            ...siyuanCfg.value,
+            password: v,
+          }),
       }),
     },
   ],

@@ -13,7 +13,6 @@ import { useStorageAsync } from "@stores/core/useStorageAsync.ts"
 import { DEFAULT_SIYUAN_API_URL } from "@/Constants.ts"
 import { SiyuanStorageAdaptor } from "@stores/vendor/SiyuanStorageAdaptor.ts"
 import { computed } from "vue"
-import { produce } from "immer"
 // import { createAppLogger } from "@utils/appLogger.ts"
 
 /**
@@ -69,14 +68,8 @@ export const useSiyuanSettingStore = () => {
     initSiyuanCfg: initialize,
     siyuanCfg: computed({
       get: () => formState.value,
-      // set: (value) => {
-      //   formState.value = { ...formState.value, ...value } as SiyuanConfig
-      // },
       set: (value) => {
-        formState.value = produce(formState.value, (draft) => {
-          // 自动合并新旧对象
-          Object.assign(draft, value)
-        }) as SiyuanConfig
+        formState.value = { ...formState.value, ...value }
       },
     }),
     // 唯一更新方法
