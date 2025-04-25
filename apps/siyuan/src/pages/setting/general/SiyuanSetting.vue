@@ -36,11 +36,12 @@ const formGroup = reactive({
       placeholder: "请输入授权Token",
       value: computed({
         get: () => siyuanCfg.value.password,
-        set: (v) =>
-          (siyuanCfg.value = {
+        set: (v) => {
+          siyuanCfg.value = {
             ...siyuanCfg.value,
             password: v,
-          }),
+          }
+        },
       }),
     },
   ],
