@@ -7,19 +7,31 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { watch, readonly, type DeepReadonly, reactive } from "vue"
-import { StorageAdaptor } from "@stores/core/StorageAdaptor.ts"
+import {
+  watch,
+  reactive,
+  readonly,
+  computed,
+  type DeepReadonly,
+  type WritableComputedRef,
+} from "vue"
+import type { StorageAdaptor } from "@stores/core/StorageAdaptor"
+import { merge, cloneDeep } from "lodash-es"
+import { createAppLogger } from "@utils/appLogger"
 
 export interface StorageOptions {
   debounce: number
   deepWatch: boolean
+  deepMerge: boolean
 }
+
+const logger = createAppLogger("use-storage-async")
 
 /**
  * 通用异步存储
  *
- * @param key 存储标识
- * @param initial 初始值
+ * @param storageKey 存储标识
+ * @param initialState 初始值
  * @param adaptor 适配器
  * @param options 选项
  *
@@ -27,79 +39,199 @@ export interface StorageOptions {
  * @since 2.0.0
  */
 export const useStorageAsync = <T extends object>(
-  key: string,
-  initial: T,
+  storageKey: string,
+  initialState: T,
   adaptor: StorageAdaptor<T>,
   options: StorageOptions = {
     debounce: 300,
     deepWatch: true,
-  },
+    deepMerge: true,
+  } as any,
 ) => {
-  const internalState = reactive<T>({ ...initial })
-  let isSyncing = false
+  // 合并默认选项
+  const mergedOptions: Required<StorageOptions> = {
+    ...options,
+  }
 
-  // 加载存储数据
-  adaptor.load().then((loaded) => {
-    if (loaded) {
-      isSyncing = true
-      Object.assign(internalState, loaded)
+  // 反应式状态
+  const state = reactive<T>(cloneDeep(initialState)) as T
+
+  // 控制状态
+  let isSyncing = false
+  let isInitialized = false
+  let initializationPromise: Promise<void> | null = null
+
+  // 状态差异记录器
+  const stateDiff = (prev: T, current: T) => {
+    const changes: Partial<T> = {}
+    ;(Object.keys(current) as Array<keyof T>).forEach((key) => {
+      if (!Object.is(prev[key], current[key])) {
+        changes[key] = current[key]
+      }
+    })
+    return changes
+  }
+
+  // 核心更新方法
+  const atomicUpdate = (
+    updater: (state: T) => void,
+    context: string = "anonymous",
+  ) => {
+    if (!isInitialized) {
+      logger.warn(
+        `[${storageKey}] Operation blocked: Not initialized | Context: ${context}`,
+      )
+      return
+    }
+
+    if (isSyncing) {
+      logger.debug(
+        `[${storageKey}] Concurrent modification detected | Context: ${context}`,
+      )
+      return
+    }
+
+    isSyncing = true
+    try {
+      const snapshot = cloneDeep(state)
+      logger.debug(`[${storageKey}] Atomic update start`, { context, snapshot })
+
+      updater(state)
+
+      const changes = stateDiff(snapshot, state)
+      if (Object.keys(changes).length > 0) {
+        logger.debug(`[${storageKey}] State changed`, {
+          context,
+          changes,
+          newState: cloneDeep(state),
+        })
+      } else {
+        logger.debug(`[${storageKey}] No state changes detected`)
+      }
+    } catch (error) {
+      logger.error(`[${storageKey}] Atomic update failed`, {
+        error,
+        context,
+        currentState: cloneDeep(state),
+      })
+      throw error
+    } finally {
       isSyncing = false
     }
-  })
+  }
 
-  // 持久化逻辑
-  const { pushUpdate, flush } = doPersist(adaptor, options.debounce)
+  // 持久化控制器
+  const persistenceEngine = (() => {
+    const pendingUpdates = new Map<string, any>()
+    const updateQueue = new Map<string, T>()
 
-  // 状态监听
+    const persistState = async (key: string) => {
+      try {
+        const currentState = updateQueue.get(key)
+        if (currentState) {
+          await adaptor.save(cloneDeep(currentState))
+          updateQueue.delete(key)
+          logger.debug(`[${key}] Persistence successful`)
+        }
+      } catch (error) {
+        logger.error(`[${key}] Persistence failed`, error)
+        updateQueue.delete(key)
+      }
+    }
+
+    return {
+      scheduleUpdate: (key: string, data: T) => {
+        updateQueue.set(key, data)
+        clearTimeout(pendingUpdates.get(key))
+        pendingUpdates.set(
+          key,
+          setTimeout(() => persistState(key), mergedOptions.debounce),
+        )
+      },
+      flush: async (key: string) => {
+        clearTimeout(pendingUpdates.get(key)!)
+        await persistState(key)
+      },
+      cleanup: () => {
+        pendingUpdates.forEach((timer) => clearTimeout(timer))
+        pendingUpdates.clear()
+        updateQueue.clear()
+      },
+    }
+  })()
+
+  // 初始化流程
+  const initializeStorage = async () => {
+    if (initializationPromise) return initializationPromise
+
+    initializationPromise = (async () => {
+      try {
+        logger.debug(`[${storageKey}] Initialization started`)
+
+        const loadedData = await adaptor.load()
+        if (loadedData) {
+          atomicUpdate(() => {
+            if (mergedOptions.deepMerge) {
+              merge(state, loadedData)
+            } else {
+              Object.assign(state, loadedData)
+            }
+          }, "initialization")
+        }
+
+        isInitialized = true
+        logger.debug(`[${storageKey}] Initialization completed`)
+      } catch (error) {
+        isInitialized = false
+        logger.error(`[${storageKey}] Initialization failed`, error)
+        throw error
+      }
+    })()
+
+    return initializationPromise
+  }
+
+  // 自动持久化监听
   watch(
-    () => internalState,
-    (newVal) => {
-      if (!isSyncing) pushUpdate(key, newVal)
+    () => cloneDeep(state),
+    (newState) => {
+      if (isInitialized && !isSyncing) {
+        persistenceEngine.scheduleUpdate(storageKey, newState)
+      }
     },
-    { deep: options.deepWatch },
+    { deep: mergedOptions.deepWatch },
   )
 
-  // 受控更新方法
-  const update = (newValue: Partial<T>) => {
-    isSyncing = true
-    Object.assign(internalState, newValue)
-    isSyncing = false
-  }
-
   return {
-    state: readonly(internalState) as DeepReadonly<T>,
-    update,
-    flush: () => flush(key),
-  }
-}
+    // 状态访问
+    state: readonly(state) as DeepReadonly<T>,
 
-const doPersist = <T>(persister: StorageAdaptor<T>, delayMs: number) => {
-  const activeTimers = new Map<string, any>()
-  const writeQueue = new Map<string, T>()
+    // 双向绑定支持
+    formState: computed({
+      get: () => state,
+      set: (value: T) =>
+        atomicUpdate(() => {
+          if (mergedOptions.deepMerge) {
+            merge(state, value)
+          } else {
+            Object.assign(state, value)
+          }
+        }, "formBinding"),
+    }) as WritableComputedRef<T>,
 
-  const persistData = async (key: string) => {
-    if (writeQueue.has(key)) {
-      await persister.save(writeQueue.get(key)!)
-      writeQueue.delete(key)
-    }
-  }
+    // 状态操作
+    update: (changes: Partial<T>) =>
+      atomicUpdate(() => {
+        if (mergedOptions.deepMerge) {
+          merge(state, changes)
+        } else {
+          Object.assign(state, changes)
+        }
+      }, "directUpdate"),
 
-  const queuePersistTask = (key: string, data: T) => {
-    writeQueue.set(key, data)
-    clearTimeout(activeTimers.get(key))
-    activeTimers.set(
-      key,
-      setTimeout(() => persistData(key), delayMs),
-    )
-  }
-
-  const triggerImmediatePersist = async (key: string) => {
-    clearTimeout(activeTimers.get(key)!)
-    await persistData(key)
-  }
-
-  return {
-    pushUpdate: queuePersistTask,
-    flush: triggerImmediatePersist,
+    // 生命周期管理
+    initialize: initializeStorage,
+    flush: () => persistenceEngine.flush(storageKey),
+    cleanup: persistenceEngine.cleanup,
   }
 }

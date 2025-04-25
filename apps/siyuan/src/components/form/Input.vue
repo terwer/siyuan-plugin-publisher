@@ -18,13 +18,13 @@ defineProps<{
   error?: boolean
 }>()
 
-const modelValue = defineModel<string>({ required: true })
+const model = defineModel<string>({ required: true })
 </script>
 
 <template>
   <div class="input-container">
     <input
-      v-model="modelValue"
+      v-model="model"
       class="custom-input"
       :class="{ 'error-state': error }"
       :type="type || 'text'"
@@ -35,7 +35,7 @@ const modelValue = defineModel<string>({ required: true })
     />
 
     <div v-if="showCount && maxlength" class="count-indicator">
-      {{ modelValue.length }} / {{ maxlength }}
+      {{ model.length }} / {{ maxlength }}
     </div>
   </div>
 </template>

@@ -8,44 +8,57 @@
   -->
 
 <script setup lang="ts">
+import { reactive, computed, onBeforeMount } from "vue"
 import SettingItem from "@components/SettingItem.vue"
 import { useSiyuanSettingStore } from "@stores/useSiyuanSettingStore.ts"
-import { reactive, ref } from "vue"
+import { produce } from "immer"
 
 const props = defineProps<{
   pluginInstance: any
 }>()
 
-const { siyuanCfg } = useSiyuanSettingStore()
-
-const aa = ref("123")
+const { initSiyuanCfg, siyuanCfg, readonlySiyuanCfg } = useSiyuanSettingStore()
 
 const formGroup = reactive({
   title: "思源设置",
   items: <SettingItem[]>[
     {
       type: "input",
-      label: "API地址",
-      value: siyuanCfg.apiUrl,
-      // value: aa,
+      label: "思源API地址",
       placeholder: "请输入思源API地址",
+      value: readonlySiyuanCfg.apiUrl,
+      readonly: true,
       // inputType: "url", // 使用HTML5 URL类型
-      // readonly: true,
     },
     {
       type: "input",
       label: "思源Token",
-      value: "",
       placeholder: "请输入授权Token",
-      inputType: "password", // 密码输入类型
+      value: computed({
+        get: () => siyuanCfg.value.password,
+        // set: (v) =>
+        //   (siyuanCfg.value = {
+        //     ...siyuanCfg.value,
+        //     password: v,
+        //   }),
+        set: (v) => {
+          siyuanCfg.value = produce(siyuanCfg.value, (draft) => {
+            draft.password = v
+          })
+        },
+      }),
     },
   ],
+})
+
+onBeforeMount(async () => {
+  // 延迟初始化，防止阻塞渲染
+  void initSiyuanCfg()
 })
 </script>
 
 <template>
   <div>
-    siyuanCfg.apiUrl: {{ siyuanCfg.apiUrl }}
     <SettingItem
       :plugin-instance="props.pluginInstance"
       :setting-group="formGroup"

@@ -7,12 +7,14 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { SiyuanStorageAdaptor } from "@stores/vendor/SiyuanStorageAdaptor.ts"
+// import { SiyuanStorageAdaptor } from "@stores/vendor/SiyuanStorageAdaptor.ts"
 import { SiyuanConfig } from "zhi-siyuan-api"
 import { useStorageAsync } from "@stores/core/useStorageAsync.ts"
 import { DEFAULT_SIYUAN_API_URL } from "@/Constants.ts"
+import { SiyuanStorageAdaptor } from "@stores/vendor/SiyuanStorageAdaptor.ts"
 import { computed } from "vue"
-import { createAppLogger } from "@utils/appLogger.ts"
+import { produce } from "immer"
+// import { createAppLogger } from "@utils/appLogger.ts"
 
 /**
  * 思源笔记设置
@@ -22,7 +24,7 @@ import { createAppLogger } from "@utils/appLogger.ts"
  * @since 1.8.0
  */
 export const useSiyuanSettingStore = () => {
-  const logger = createAppLogger("use-siyuan-setting-store")
+  // const logger = createAppLogger("use-siyuan-setting-store")
   const storageKey = "siyuan-setting-store"
   const adaptorKey = "siyuan-cfg"
   const filePath = "/data/storage/syp/siyuan-cfg.json"
@@ -33,7 +35,11 @@ export const useSiyuanSettingStore = () => {
 
   // 获取响应式存储
   // const { state, update, flush } = useStorageAsync(storageKey, initial, adaptor)
-  const { state, flush } = useStorageAsync(storageKey, initial, adaptor)
+  const { state, formState, initialize } = useStorageAsync(
+    storageKey,
+    initial,
+    adaptor,
+  )
 
   // 受控更新方法
   // const setSiyuanCfg = (cfg: SiyuanConfig) => {
@@ -57,10 +63,25 @@ export const useSiyuanSettingStore = () => {
 
   return {
     // 只读状态
-    siyuanCfg: state,
+    readonlySiyuanCfg: state,
+    // 表单
+    // initializeStorage
+    initSiyuanCfg: initialize,
+    siyuanCfg: computed({
+      get: () => formState.value,
+      // set: (value) => {
+      //   formState.value = { ...formState.value, ...value } as SiyuanConfig
+      // },
+      set: (value) => {
+        formState.value = produce(formState.value, (draft) => {
+          // 自动合并新旧对象
+          Object.assign(draft, value)
+        }) as SiyuanConfig
+      },
+    }),
     // 唯一更新方法
     // setSiyuanCfg,
     // 立即刷新存储
-    flushSiyuanCfg: flush,
+    // flushSiyuanCfg: flush,
   }
 }
