@@ -14,6 +14,7 @@
       // "~/*": ["./*"],
       "@/*": ["./src/*"],
       "@components/*": ["./src/components/*"],
+      "@composables/*": ["./src/composables/*"],
       "@pages/*": ["./src/pages/*"],
       "@assets/*": ["./src/assets/*"],
       "@enums/*": ["./src/enums/*"],

@@ -61,6 +61,7 @@ export default defineConfig({
       // '~/': path.resolve(__dirname, './'),
       "@": path.resolve(__dirname, "./src"),
       "@components": path.resolve(__dirname, "./src/components"),
+      "@composables": path.resolve(__dirname, "./src/composables"),
       "@pages": path.resolve(__dirname, "./src/pages"),
       "@assets": path.resolve(__dirname, "./src/assets"),
       "@enums": path.resolve(__dirname, "./src/enums"),
