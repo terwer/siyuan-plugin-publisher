@@ -7,6 +7,20 @@
  *  of this license document, but changing it is not allowed.
  */
 
-[data-name="publisherMenu"] .b3-menu__item {
-  padding: 0;
-}
+[data-name="publisherMenu"]
+  // 组件级盒模型设置
+  &, & *
+    box-sizing border-box
+
+    &::before
+    &::after
+      box-sizing border-box
+
+  // 菜单项特定样式
+  .b3-menu__item
+    padding 0
+
+    // 仅对flex子项生效
+    [data-flex-container] &
+      min-width 0
+      flex-shrink 0

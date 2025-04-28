@@ -24,11 +24,11 @@ const formGroup = {
     },
     {
       type: "select",
-      label: "主题颜色",
-      value: "blue",
+      label: "模型选择",
+      value: "deepseek-r1",
       options: [
-        { label: "极光蓝", value: "blue" },
-        { label: "森林绿", value: "green" },
+        { label: "deepseek-r1", value: "deepseek-r1" },
+        { label: "ChatGPT", value: "chatgpt" },
       ],
     },
   ],

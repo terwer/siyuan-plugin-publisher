@@ -24,7 +24,7 @@ const toggle = () => {
 
 <template>
   <button
-    class="switch"
+    class="pt-switch"
     :class="{
       'switch-on': modelValue,
       disabled: disabled,
@@ -36,51 +36,64 @@ const toggle = () => {
 </template>
 
 <style lang="stylus">
-.switch
-  --switch-width: 44px
-  --switch-height: 24px
-  --slider-size: 20px
+.pt-switch
+  --switch-width: 40px
+  --switch-height: 20px
+  --slider-size: 16px
   --switch-padding: 2px
-  --transition-duration: 0.3s
+  --transition-duration: 0.2s
 
-  position relative
-  width var(--switch-width)
-  height var(--switch-height)
-  border none
-  border-radius calc(var(--switch-height) / 2)
-  background var(--switch-off-bg)
-  cursor pointer
-  transition background var(--transition-duration)
+  position: relative
+  width: var(--switch-width)
+  height: var(--switch-height)
+  border: none
+  border-radius: calc(var(--switch-height) / 2)
+  background: var(--switch-off-bg)
+  cursor: pointer
+  transition: background var(--transition-duration)
 
   &.switch-on
-    background var(--switch-on-bg)
+    background: var(--switch-on-bg)
 
   .slider
-    position absolute
-    left var(--switch-padding)
-    top 50%
-    transform translateY(-50%)
-    width var(--slider-size)
-    height var(--slider-size)
-    background var(--slider-bg)
-    border-radius 50%
-    transition transform var(--transition-duration)
+    position: absolute
+    left: var(--switch-padding)
+    top: 50%
+    transform: translateY(-50%)
+    width: var(--slider-size)
+    height: var(--slider-size)
+    background: var(--slider-bg)
+    border-radius: 50%
+    box-shadow: var(--slider-shadow)
+    transition: transform var(--transition-duration) ease-in-out
 
   &.switch-on .slider
-    transform translate(calc(var(--switch-width) - var(--slider-size) - var(--switch-padding)*2), -50%)
+    transform: translate(calc(var(--switch-width) - var(--slider-size) - var(--switch-padding)*2), -50%)
 
   &.disabled
-    opacity 0.6
-    cursor not-allowed
+    cursor: not-allowed
+    background: var(--switch-disabled-off-bg)
+    &.switch-on
+      background: var(--switch-disabled-on-bg)
+    .slider
+      background: var(--slider-disabled-bg)
 
 // 主题变量
 :root
-  --switch-off-bg: #e0e0e0
-  --switch-on-bg: #1971c2
+  --switch-off-bg: #bfbfbf
+  --switch-on-bg: #1890ff
+  --switch-disabled-off-bg: #f5f5f5
+  --switch-disabled-on-bg: #bae0ff
   --slider-bg: #ffffff
+  --slider-shadow: 0 2px 4px rgba(0, 0, 0, 0.1)
+  --slider-disabled-bg: #ffffff
 
 [data-theme-mode="dark"]
-  --switch-off-bg: #4a4a4a
-  --switch-on-bg: #90caf9
-  --slider-bg: #2d2d2d
+  --switch-off-bg: #434343
+  --switch-on-bg: #177ddc
+  --switch-disabled-off-bg: rgba(255, 255, 255, 0.12)
+  --switch-disabled-on-bg: rgba(24, 144, 255, 0.3)
+  --slider-bg: #ffffff
+  --slider-shadow: 0 2px 4px rgba(0, 0, 0, 0.2)
+  --slider-disabled-bg: rgba(255, 255, 255, 0.3)
 </style>

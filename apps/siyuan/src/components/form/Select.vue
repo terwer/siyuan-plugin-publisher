@@ -19,7 +19,7 @@ const emit = defineEmits(["update:modelValue"])
 
 <template>
   <select
-    class="custom-select"
+    class="pt-select"
     :value="props.modelValue"
     @change="
       emit('update:modelValue', ($event.target as HTMLSelectElement).value)
@@ -37,9 +37,9 @@ const emit = defineEmits(["update:modelValue"])
 </template>
 
 <style lang="stylus">
-.custom-select
-  --select-height: 36px
-  --select-padding: 8px 32px 8px 12px
+.pt-select
+  --select-height: 32px
+  --select-padding: 4px 32px 4px 12px
   --select-bg: var(--select-bg-color)
   --select-border: var(--select-border-color)
   --select-radius: 8px

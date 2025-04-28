@@ -60,7 +60,7 @@ const computedType = computed(() => {
 
 .pt-input
   --input-height: 32px /* 调小高度 */
-  --input-padding: 4px 11px /* 紧凑的内边距 */
+  --input-padding: 4px 12px /* 紧凑的内边距 */
   --input-bg: var(--input-bg-color)
   --input-border: var(--input-border-color)
   --input-radius: 4px /* 圆角调整 */
