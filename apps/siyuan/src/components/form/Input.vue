@@ -8,8 +8,11 @@
   -->
 
 <script setup lang="ts">
-defineProps<{
-  type?: "text" | "password" | "email" | "search"
+import { computed } from "vue"
+
+const props = defineProps<{
+  type?: ControlType
+  inputType?: InputType
   placeholder?: string
   disabled?: boolean
   readonly?: boolean
@@ -19,15 +22,24 @@ defineProps<{
 }>()
 
 const model = defineModel<string>({ required: true })
+const computedType = computed(() => {
+  if (props.type === "number") {
+    return "number"
+  }
+  if (props.type === "input") {
+    return props.inputType || "text"
+  }
+  return "text"
+})
 </script>
 
 <template>
   <div class="input-container">
     <input
       v-model="model"
-      class="custom-input"
+      class="pt-input"
       :class="{ 'error-state': error }"
-      :type="type || 'text'"
+      :type="computedType"
       :placeholder="placeholder"
       :disabled="disabled"
       :readonly="readonly"
@@ -45,7 +57,7 @@ const model = defineModel<string>({ required: true })
   position relative
   width 100%
 
-.custom-input
+.pt-input
   --input-height: 36px
   --input-padding: 8px 12px
   --input-bg: var(--input-bg-color)

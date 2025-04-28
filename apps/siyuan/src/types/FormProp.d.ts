@@ -33,13 +33,18 @@ interface Option {
   value: any
 }
 
+type ControlType = "switch" | "input" | "select" | "number"
+type InputType = "text" | "password" | "number" | "url"
+
 interface SettingItem {
-  type: "switch" | "input" | "select" | "number"
+  type: ControlType
   label: string
   value: any
   options?: Option[]
   placeholder?: string
   readonly?: boolean
+  disabled?: boolean
+  inputType?: inputType
 }
 
 interface SettingGroup {

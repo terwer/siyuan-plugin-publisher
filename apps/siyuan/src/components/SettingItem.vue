@@ -45,6 +45,9 @@ const props = defineProps<{
             v-if="item.type === 'input'"
             v-model="item.value"
             :placeholder="item.placeholder"
+            :readonly="item.readonly"
+            :disabled="item.disabled"
+            :input-type="item.inputType"
           />
 
           <!-- Switch 类型 -->

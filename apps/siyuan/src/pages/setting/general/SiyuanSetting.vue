@@ -8,7 +8,7 @@
   -->
 
 <script setup lang="ts">
-import { reactive, onBeforeMount } from "vue"
+import { reactive } from "vue"
 import SettingItem from "@components/SettingItem.vue"
 import { useSiyuanSettingStore } from "@stores/useSiyuanSettingStore.ts"
 import { useComputedField } from "@composables/useComputedField.ts"
@@ -28,13 +28,14 @@ const formGroup = reactive({
       placeholder: "请输入思源API地址",
       value: readonlySiyuanCfg.apiUrl,
       readonly: true,
-      // inputType: "url", // 使用HTML5 URL类型
+      disabled: true,
+      inputType: "url",
     },
     {
       type: "input",
       label: "思源Token",
       placeholder: "请输入授权Token",
-      value: useComputedField(siyuanCfg, "placeholder.homePlaceholder"),
+      value: useComputedField(siyuanCfg, "password"),
     },
   ],
 })
