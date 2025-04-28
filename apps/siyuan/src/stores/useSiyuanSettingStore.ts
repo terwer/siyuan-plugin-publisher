@@ -27,23 +27,18 @@ export const useSiyuanSettingStore = () => {
   const storageKey = "siyuan-setting-store"
   const adaptorKey = "siyuan-cfg"
   const filePath = "/data/storage/syp/siyuan-cfg.json"
-  const initial: SiyuanConfig = new SiyuanConfig(DEFAULT_SIYUAN_API_URL, "")
+  const initValue: SiyuanConfig = new SiyuanConfig(DEFAULT_SIYUAN_API_URL, "")
 
   // 创建适配器实例
   const adaptor = new SiyuanStorageAdaptor<SiyuanConfig>(adaptorKey, filePath)
 
   // 获取响应式存储
   // const { state, update, flush } = useStorageAsync(storageKey, initial, adaptor)
-  const { state, formState, initialize } = useStorageAsync(
+  const { state, formState, init } = useStorageAsync(
     storageKey,
-    initial,
+    initValue,
     adaptor,
   )
-
-  // 受控更新方法
-  // const setSiyuanCfg = (cfg: SiyuanConfig) => {
-  //   update(cfg)
-  // }
 
   // 获取最新配置，api地址不受控
   // const newSiyuanCfg = computed({
@@ -63,12 +58,12 @@ export const useSiyuanSettingStore = () => {
   return {
     // 只读状态
     readonlySiyuanCfg: state,
-    // 表单
-    // initializeStorage
-    initSiyuanCfg: initialize,
+    // 响应式表单对象
     siyuanCfg: formState,
+    // 表单
+    initSiyuanCfg: init,
     // 唯一更新方法
-    // setSiyuanCfg,
+    // setSiyuanCfg: update,
     // 立即刷新存储
     // flushSiyuanCfg: flush,
   }

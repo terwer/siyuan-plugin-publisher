@@ -250,7 +250,7 @@ export const useStorageAsync = <T extends object>(
       }, "directUpdate"),
 
     // 生命周期管理
-    initialize: initializeStorage,
+    init: initializeStorage,
     flush: () => persistenceEngine.flush(storageKey),
     cleanup: persistenceEngine.cleanup,
   }
