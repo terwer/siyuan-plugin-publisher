@@ -227,5 +227,5 @@ $border-radius = 8px
   flex 1
   min-width 0
   background var(--pt-tabs-content-bg)
-  padding 24px
+  padding 8px 12px
 </style>

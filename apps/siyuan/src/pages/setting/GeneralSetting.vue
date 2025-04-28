@@ -25,7 +25,7 @@ const props = defineProps<{
 
 <style lang="stylus">
 .settings-wrapper
-  padding 24px
+  padding 0
   height 100%
   overflow-y auto
 </style>
