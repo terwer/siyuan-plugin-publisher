@@ -12,7 +12,7 @@ import { SiyuanConfig } from "zhi-siyuan-api"
 import { useStorageAsync } from "@stores/core/useStorageAsync.ts"
 import { DEFAULT_SIYUAN_API_URL } from "@/Constants.ts"
 import { SiyuanStorageAdaptor } from "@stores/vendor/SiyuanStorageAdaptor.ts"
-import { computed } from "vue"
+// import { computed } from "vue"
 // import { createAppLogger } from "@utils/appLogger.ts"
 
 /**
@@ -66,12 +66,7 @@ export const useSiyuanSettingStore = () => {
     // 表单
     // initializeStorage
     initSiyuanCfg: initialize,
-    siyuanCfg: computed({
-      get: () => formState.value,
-      set: (value) => {
-        formState.value = { ...formState.value, ...value }
-      },
-    }),
+    siyuanCfg: formState,
     // 唯一更新方法
     // setSiyuanCfg,
     // 立即刷新存储

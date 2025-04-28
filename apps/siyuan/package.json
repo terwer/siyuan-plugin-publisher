@@ -9,7 +9,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "immer": "^10.1.1",
     "lodash-es": "^4.17.21",
     "lucide-vue-next": "^0.503.0",
     "shorthash2": "^1.0.5",

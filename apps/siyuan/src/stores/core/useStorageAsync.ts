@@ -7,17 +7,11 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import {
-  watch,
-  reactive,
-  readonly,
-  computed,
-  type DeepReadonly,
-  type WritableComputedRef,
-} from "vue"
+import { watch, reactive, readonly, computed, type DeepReadonly } from "vue"
 import type { StorageAdaptor } from "@stores/core/StorageAdaptor"
 import { merge, cloneDeep } from "lodash-es"
 import { createAppLogger } from "@utils/appLogger"
+import { isDev } from "@/Constants.ts"
 
 export interface StorageOptions {
   debounce: number
@@ -54,7 +48,7 @@ export const useStorageAsync = <T extends object>(
   }
 
   // 反应式状态
-  const state = reactive<T>(cloneDeep(initialState)) as T
+  const _state = reactive<T>(cloneDeep(initialState)) as T
 
   // 控制状态
   let isSyncing = false
@@ -93,26 +87,39 @@ export const useStorageAsync = <T extends object>(
 
     isSyncing = true
     try {
-      const snapshot = cloneDeep(state)
-      logger.debug(`[${storageKey}] Atomic update start`, { context, snapshot })
-
-      updater(state)
-
-      const changes = stateDiff(snapshot, state)
-      if (Object.keys(changes).length > 0) {
-        logger.debug(`[${storageKey}] State changed`, {
+      // 提升生产环境性能
+      let snapshot = null as unknown as T
+      if (isDev) {
+        snapshot = cloneDeep(_state)
+        logger.debug(`[${storageKey}] Atomic update start`, {
           context,
-          changes,
-          newState: cloneDeep(state),
+          snapshot,
         })
-      } else {
-        logger.debug(`[${storageKey}] No state changes detected`)
+      }
+
+      updater(_state)
+
+      // 提升生产环境性能
+      if (isDev) {
+        if (!snapshot) {
+          return
+        }
+        const changes = stateDiff(snapshot, _state)
+        if (Object.keys(changes).length > 0) {
+          logger.debug(`[${storageKey}] State changed`, {
+            context,
+            changes,
+            newState: cloneDeep(_state),
+          })
+        } else {
+          logger.debug(`[${storageKey}] No state changes detected`)
+        }
       }
     } catch (error) {
       logger.error(`[${storageKey}] Atomic update failed`, {
         error,
         context,
-        currentState: cloneDeep(state),
+        currentState: cloneDeep(_state),
       })
       throw error
     } finally {
@@ -172,9 +179,9 @@ export const useStorageAsync = <T extends object>(
         if (loadedData) {
           atomicUpdate(() => {
             if (mergedOptions.deepMerge) {
-              merge(state, loadedData)
+              merge(_state, loadedData)
             } else {
-              Object.assign(state, loadedData)
+              Object.assign(_state, loadedData)
             }
           }, "initialization")
         }
@@ -193,7 +200,7 @@ export const useStorageAsync = <T extends object>(
 
   // 自动持久化监听
   watch(
-    () => cloneDeep(state),
+    () => cloneDeep(_state),
     (newState) => {
       if (isInitialized && !isSyncing) {
         persistenceEngine.scheduleUpdate(storageKey, newState)
@@ -203,29 +210,42 @@ export const useStorageAsync = <T extends object>(
   )
 
   return {
-    // 状态访问
-    state: readonly(state) as DeepReadonly<T>,
+    // 只读快照
+    state: readonly(_state) as DeepReadonly<T>,
+    // 受控写入接口
+    stateRef: computed<T>({
+      get: () => cloneDeep(_state),
+      set: (value: T) => {
+        atomicUpdate(() => {
+          if (options.deepMerge) {
+            merge(_state, value)
+          } else {
+            Object.assign(_state, value)
+          }
+        }, "computedSetter")
+      },
+    }),
 
     // 双向绑定支持
     formState: computed({
-      get: () => state,
+      get: () => _state,
       set: (value: T) =>
         atomicUpdate(() => {
           if (mergedOptions.deepMerge) {
-            merge(state, value)
+            merge(_state, value)
           } else {
-            Object.assign(state, value)
+            Object.assign(_state, value)
           }
         }, "formBinding"),
-    }) as WritableComputedRef<T>,
+    }),
 
     // 状态操作
     update: (changes: Partial<T>) =>
       atomicUpdate(() => {
         if (mergedOptions.deepMerge) {
-          merge(state, changes)
+          merge(_state, changes)
         } else {
-          Object.assign(state, changes)
+          Object.assign(_state, changes)
         }
       }, "directUpdate"),
 

@@ -8,10 +8,10 @@
   -->
 
 <script setup lang="ts">
-import { reactive, computed, onBeforeMount, toRaw } from "vue"
+import { reactive, onBeforeMount } from "vue"
 import SettingItem from "@components/SettingItem.vue"
 import { useSiyuanSettingStore } from "@stores/useSiyuanSettingStore.ts"
-import { produce } from "immer"
+import { useComputedField } from "@composables/useComputedField.ts"
 
 const props = defineProps<{
   pluginInstance: any
@@ -34,15 +34,7 @@ const formGroup = reactive({
       type: "input",
       label: "思源Token",
       placeholder: "请输入授权Token",
-      value: computed({
-        get: () => siyuanCfg.value.password,
-        set: (v) => {
-          siyuanCfg.value = {
-            ...siyuanCfg.value,
-            password: v,
-          }
-        },
-      }),
+      value: useComputedField(siyuanCfg, "password"),
     },
   ],
 })
