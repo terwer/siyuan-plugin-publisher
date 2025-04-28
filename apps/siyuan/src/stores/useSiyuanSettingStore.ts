@@ -12,8 +12,9 @@ import { SiyuanConfig } from "zhi-siyuan-api"
 import { useStorageAsync } from "@stores/core/useStorageAsync.ts"
 import { DEFAULT_SIYUAN_API_URL } from "@/Constants.ts"
 import { SiyuanStorageAdaptor } from "@stores/vendor/SiyuanStorageAdaptor.ts"
-// import { computed } from "vue"
-// import { createAppLogger } from "@utils/appLogger.ts"
+import { readonly } from "vue"
+import { useComputedObject } from "@composables/useComputedObject.ts"
+import { createAppLogger } from "@utils/appLogger.ts"
 
 /**
  * 思源笔记设置
@@ -23,7 +24,7 @@ import { SiyuanStorageAdaptor } from "@stores/vendor/SiyuanStorageAdaptor.ts"
  * @since 1.8.0
  */
 export const useSiyuanSettingStore = () => {
-  // const logger = createAppLogger("use-siyuan-setting-store")
+  const logger = createAppLogger("use-siyuan-setting-store")
   const storageKey = "siyuan-setting-store"
   const adaptorKey = "siyuan-cfg"
   const filePath = "/data/storage/syp/siyuan-cfg.json"
@@ -33,38 +34,18 @@ export const useSiyuanSettingStore = () => {
   const adaptor = new SiyuanStorageAdaptor<SiyuanConfig>(adaptorKey, filePath)
 
   // 获取响应式存储
-  // const { state, update, flush } = useStorageAsync(storageKey, initial, adaptor)
-  const { state, formState, init } = useStorageAsync(
-    storageKey,
-    initValue,
-    adaptor,
-  )
+  const { formState } = useStorageAsync(storageKey, initValue, adaptor)
 
-  // 获取最新配置，api地址不受控
-  // const newSiyuanCfg = computed({
-  //   get: () => ({
-  //     ...state.value,
-  //     home: DEFAULT_SIYUAN_API_URL,
-  //     apiUrl: DEFAULT_SIYUAN_API_URL,
-  //   }),
-  //   set: (value: SiyuanConfig) => {
-  //     // 保留默认值逻辑，只允许修改 token
-  //     // update({ token: value.token })
-  //     logger.debug("Update siyuan-cfg", value)
-  //   },
-  // })
-  // logger.debug("Loaded siyuan-cfg", newSiyuanCfg.value)
+  const newSiyuanCfg = useComputedObject(formState, {
+    home: DEFAULT_SIYUAN_API_URL,
+    apiUrl: DEFAULT_SIYUAN_API_URL,
+  })
+  logger.debug("Loaded siyuan-cfg", newSiyuanCfg.value)
 
   return {
     // 只读状态
-    readonlySiyuanCfg: state,
+    readonlySiyuanCfg: readonly(newSiyuanCfg.value),
     // 响应式表单对象
-    siyuanCfg: formState,
-    // 表单
-    initSiyuanCfg: init,
-    // 唯一更新方法
-    // setSiyuanCfg: update,
-    // 立即刷新存储
-    // flushSiyuanCfg: flush,
+    siyuanCfg: newSiyuanCfg,
   }
 }

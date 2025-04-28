@@ -70,18 +70,24 @@ type PathValue<T, P extends Path<T>> = P extends `${infer K}.${infer R}`
  *
  * @param source 响应式对象
  * @param path 字段路径（支持多级嵌套，形如 'a.b.c' 的字符串））
+ * @param defaultValue 默认值
  * @author terwer
  * @since 2.0.0
  */
-export function useComputedField<T, P extends Path<T>>(
+export const useComputedField = function <T, P extends Path<T>, D>(
   source: WritableComputedRef<T>,
   path: P,
-): WritableComputedRef<PathValue<T, P>> {
+  defaultValue?: Partial<T>,
+): WritableComputedRef<PathValue<T, P> | D> {
   const keys = path.split(".") as Array<keyof any>
+  // 检查是否传入了默认值参数
+  const hasDefault = defaultValue && arguments.length >= 3
 
   return computed({
-    // source.value?.a?.b?.c
-    get: () => keys.reduce((obj, key) => obj?.[key], source.value as any),
+    get: () => {
+      const value = keys.reduce((obj, key) => obj?.[key], source.value as any)
+      return hasDefault ? (value !== undefined ? value : defaultValue) : value
+    },
     set: (value) => {
       const newValue = { ...source.value }
       let current: any = newValue
@@ -95,5 +101,5 @@ export function useComputedField<T, P extends Path<T>>(
       current[keys[keys.length - 1]] = value
       source.value = newValue
     },
-  }) as any
+  })
 }

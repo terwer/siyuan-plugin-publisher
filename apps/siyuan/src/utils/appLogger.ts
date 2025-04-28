@@ -7,18 +7,8 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { simpleLogger } from "zhi-lib-base"
+import { ILogger, simpleLogger } from "zhi-lib-base"
 import { isDev } from "@/Constants.ts"
-
-/**
- * 简单的日志接口
- */
-export interface ILogger {
-  debug: (msg: string, obj?: any) => void
-  info: (msg: string, obj?: any) => void
-  warn: (msg: string, obj?: any) => void
-  error: (msg: string | Error, obj?: any) => void
-}
 
 /**
  * 一个简单轻量级的日志记录器

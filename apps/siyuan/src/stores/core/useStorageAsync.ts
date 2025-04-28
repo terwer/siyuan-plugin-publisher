@@ -11,7 +11,7 @@ import { watch, reactive, readonly, computed, type DeepReadonly } from "vue"
 import type { StorageAdaptor } from "@stores/core/StorageAdaptor"
 import { merge, cloneDeep } from "lodash-es"
 import { createAppLogger } from "@utils/appLogger"
-import { isDev } from "@/Constants.ts"
+// import { isDev } from "@/Constants.ts"
 
 export interface StorageOptions {
   debounce: number
@@ -48,27 +48,29 @@ export const useStorageAsync = <T extends object>(
   }
 
   // 反应式状态
-  const _state = reactive<T>(cloneDeep(initialState)) as T
+  const _state = reactive<T>({
+    ...initialState,
+    __loaded: false,
+  }) as T
 
   // 控制状态
   let isSyncing = false
   let isInitialized = false
-  let initializationPromise: Promise<void> | null = null
 
   // 状态差异记录器
-  const stateDiff = (prev: T, current: T) => {
-    const changes: Partial<T> = {}
-    ;(Object.keys(current) as Array<keyof T>).forEach((key) => {
-      if (!Object.is(prev[key], current[key])) {
-        changes[key] = current[key]
-      }
-    })
-    return changes
-  }
+  // const stateDiff = (prev: T, current: T) => {
+  //   const changes: Partial<T> = {}
+  //   ;(Object.keys(current) as Array<keyof T>).forEach((key) => {
+  //     if (!Object.is(prev[key], current[key])) {
+  //       changes[key] = current[key]
+  //     }
+  //   })
+  //   return changes
+  // }
 
   // 核心更新方法
   const atomicUpdate = (
-    updater: (state: T) => void,
+    partialState: Partial<T>,
     context: string = "anonymous",
   ) => {
     if (!isInitialized) {
@@ -88,33 +90,38 @@ export const useStorageAsync = <T extends object>(
     isSyncing = true
     try {
       // 提升生产环境性能
-      let snapshot = null as unknown as T
-      if (isDev) {
-        snapshot = cloneDeep(_state)
-        logger.debug(`[${storageKey}] Atomic update start`, {
-          context,
-          snapshot,
-        })
-      }
+      // let snapshot = null as unknown as T
+      // if (isDev) {
+      //   snapshot = cloneDeep(_state)
+      //   logger.debug(`[${storageKey}] Atomic update start`, {
+      //     context,
+      //     snapshot,
+      //   })
+      // }
 
-      updater(_state)
+      // 统一合并策略
+      if (mergedOptions.deepMerge) {
+        merge(_state, partialState)
+      } else {
+        Object.assign(_state, partialState)
+      }
 
       // 提升生产环境性能
-      if (isDev) {
-        if (!snapshot) {
-          return
-        }
-        const changes = stateDiff(snapshot, _state)
-        if (Object.keys(changes).length > 0) {
-          logger.debug(`[${storageKey}] State changed`, {
-            context,
-            changes,
-            newState: cloneDeep(_state),
-          })
-        } else {
-          logger.debug(`[${storageKey}] No state changes detected`)
-        }
-      }
+      // if (isDev) {
+      //   if (!snapshot) {
+      //     return
+      //   }
+      //   const changes = stateDiff(snapshot, _state)
+      //   if (Object.keys(changes).length > 0) {
+      //     logger.debug(`[${storageKey}] State changed`, {
+      //       context,
+      //       changes,
+      //       newState: cloneDeep(_state),
+      //     })
+      //   } else {
+      //     logger.debug(`[${storageKey}] No state changes detected`)
+      //   }
+      // }
     } catch (error) {
       logger.error(`[${storageKey}] Atomic update failed`, {
         error,
@@ -169,39 +176,39 @@ export const useStorageAsync = <T extends object>(
 
   // 初始化流程
   const initializeStorage = async () => {
-    if (initializationPromise) return initializationPromise
+    try {
+      logger.debug(`[${storageKey}] Initialization started`)
 
-    initializationPromise = (async () => {
-      try {
-        logger.debug(`[${storageKey}] Initialization started`)
-
-        const loadedData = await adaptor.load()
-        if (loadedData) {
-          atomicUpdate(() => {
-            if (mergedOptions.deepMerge) {
-              merge(_state, loadedData)
-            } else {
-              Object.assign(_state, loadedData)
-            }
-          }, "initialization")
+      const loadedData = await adaptor.load()
+      if (loadedData) {
+        // 仅需要更新本地不需要持久化，因为还没有修改
+        // 更新完自动触发watch
+        const loadedDataWithState = {
+          ...loadedData,
+          __loaded: true,
         }
-
-        isInitialized = true
-        logger.debug(`[${storageKey}] Initialization completed`)
-      } catch (error) {
-        isInitialized = false
-        logger.error(`[${storageKey}] Initialization failed`, error)
-        throw error
+        if (mergedOptions.deepMerge) {
+          merge(_state, loadedDataWithState)
+        } else {
+          Object.assign(_state, loadedDataWithState)
+        }
       }
-    })()
-
-    return initializationPromise
+    } catch (error) {
+      isInitialized = false
+      logger.error(`[${storageKey}] Initialization failed`, error)
+      throw error
+    }
   }
 
   // 自动持久化监听
   watch(
-    () => cloneDeep(_state),
-    (newState) => {
+    () => _state,
+    (newState: any) => {
+      if (!isInitialized && newState.__loaded) {
+        isInitialized = true
+        logger.debug(`[${storageKey}] Initialization completed`)
+        return
+      }
       if (isInitialized && !isSyncing) {
         persistenceEngine.scheduleUpdate(storageKey, newState)
       }
@@ -209,48 +216,22 @@ export const useStorageAsync = <T extends object>(
     { deep: mergedOptions.deepWatch },
   )
 
+  // ===================================================================================================================
+  // 延迟初始化，防止阻塞渲染
+  // ===================================================================================================================
+  void initializeStorage()
+
   return {
     // 只读快照
     state: readonly(_state) as DeepReadonly<T>,
-    // 受控写入接口
-    stateRef: computed<T>({
-      get: () => cloneDeep(_state),
-      set: (value: T) => {
-        atomicUpdate(() => {
-          if (options.deepMerge) {
-            merge(_state, value)
-          } else {
-            Object.assign(_state, value)
-          }
-        }, "computedSetter")
-      },
-    }),
-
-    // 双向绑定支持
+    // 表单双向绑定支持
     formState: computed({
       get: () => _state,
-      set: (value: T) =>
-        atomicUpdate(() => {
-          if (mergedOptions.deepMerge) {
-            merge(_state, value)
-          } else {
-            Object.assign(_state, value)
-          }
-        }, "formBinding"),
+      set: (value: T) => atomicUpdate(value, "formBinding"),
     }),
 
     // 状态操作
-    update: (changes: Partial<T>) =>
-      atomicUpdate(() => {
-        if (mergedOptions.deepMerge) {
-          merge(_state, changes)
-        } else {
-          Object.assign(_state, changes)
-        }
-      }, "directUpdate"),
-
-    // 生命周期管理
-    init: initializeStorage,
+    update: (changes: Partial<T>) => atomicUpdate(changes, "directUpdate"),
     flush: () => persistenceEngine.flush(storageKey),
     cleanup: persistenceEngine.cleanup,
   }

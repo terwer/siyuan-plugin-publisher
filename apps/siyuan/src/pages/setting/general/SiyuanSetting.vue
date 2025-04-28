@@ -17,7 +17,7 @@ const props = defineProps<{
   pluginInstance: any
 }>()
 
-const { initSiyuanCfg, siyuanCfg, readonlySiyuanCfg } = useSiyuanSettingStore()
+const { readonlySiyuanCfg, siyuanCfg } = useSiyuanSettingStore()
 
 const formGroup = reactive({
   title: "思源设置",
@@ -34,14 +34,9 @@ const formGroup = reactive({
       type: "input",
       label: "思源Token",
       placeholder: "请输入授权Token",
-      value: useComputedField(siyuanCfg, "password"),
+      value: useComputedField(siyuanCfg, "placeholder.homePlaceholder"),
     },
   ],
-})
-
-onBeforeMount(async () => {
-  // 延迟初始化，防止阻塞渲染
-  void initSiyuanCfg()
 })
 </script>
 
