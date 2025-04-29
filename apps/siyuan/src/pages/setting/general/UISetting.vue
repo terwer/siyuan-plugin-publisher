@@ -12,27 +12,8 @@ import SettingItem from "@components/SettingItem.vue"
 
 const props = defineProps<{
   pluginInstance: any
+  formGroup: any
 }>()
-
-const formGroup = {
-  title: "界面选项",
-  items: <SettingItem[]>[
-    {
-      type: "switch",
-      label: "显示文档菜单",
-      value: true,
-    },
-    {
-      type: "select",
-      label: "模型选择",
-      value: "deepseek-r1",
-      options: [
-        { label: "deepseek-r1", value: "deepseek-r1" },
-        { label: "ChatGPT", value: "chatgpt" },
-      ],
-    },
-  ],
-}
 </script>
 
 <template>

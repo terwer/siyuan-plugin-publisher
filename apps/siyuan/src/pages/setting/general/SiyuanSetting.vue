@@ -8,37 +8,12 @@
   -->
 
 <script setup lang="ts">
-import { reactive } from "vue"
 import SettingItem from "@components/SettingItem.vue"
-import { useSiyuanSettingStore } from "@stores/useSiyuanSettingStore.ts"
-import { useComputedField } from "@composables/useComputedField.ts"
 
 const props = defineProps<{
   pluginInstance: any
+  formGroup: any
 }>()
-
-const { readonlySiyuanCfg, siyuanCfg } = useSiyuanSettingStore()
-
-const formGroup = reactive({
-  title: "思源设置",
-  items: <SettingItem[]>[
-    {
-      type: "input",
-      label: "思源API地址",
-      placeholder: "请输入思源API地址",
-      value: readonlySiyuanCfg.apiUrl,
-      readonly: true,
-      disabled: true,
-      inputType: "url",
-    },
-    {
-      type: "input",
-      label: "思源Token",
-      placeholder: "请输入授权Token",
-      value: useComputedField(siyuanCfg, "password"),
-    },
-  ],
-})
 </script>
 
 <template>
