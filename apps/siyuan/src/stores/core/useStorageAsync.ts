@@ -177,7 +177,7 @@ export const useStorageAsync = <T extends object>(
   // 初始化流程
   const initializeStorage = async () => {
     try {
-      logger.debug(`[${storageKey}] Initialization started`)
+      logger.debug(` start init ${storageKey}] ...`)
 
       const loadedData = await adaptor.load()
       if (loadedData) {
@@ -192,11 +192,13 @@ export const useStorageAsync = <T extends object>(
         } else {
           Object.assign(_state, loadedDataWithState)
         }
+      } else {
+        logger.error(`${storageKey} init failed`)
       }
-    } catch (error) {
+    } catch (e) {
       isInitialized = false
-      logger.error(`[${storageKey}] Initialization failed`, error)
-      throw error
+      logger.error(`${storageKey} init failed`, e)
+      throw e
     }
   }
 
@@ -206,7 +208,7 @@ export const useStorageAsync = <T extends object>(
     (newState: any) => {
       if (!isInitialized && newState.__loaded) {
         isInitialized = true
-        logger.debug(`[${storageKey}] Initialization completed`)
+        logger.info(`${storageKey} init completed`, newState)
         return
       }
       if (isInitialized && !isSyncing) {

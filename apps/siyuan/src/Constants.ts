@@ -19,3 +19,11 @@ export const SH_BUILD_TIME =
     : // @ts-ignore
       process.env.PT_BUILD_TIME
 export const DEFAULT_SIYUAN_API_URL = window.location.origin
+/**
+ * 旧的通用 HTTP 代理
+ *
+ * @since 1.0.0
+ * @version 1.20.0
+ */
+export const LEGENCY_SHARED_PROXT_MIDDLEWARE =
+  "https://api.terwer.space/api/middleware"

@@ -37,12 +37,12 @@ export class SiyuanStorageAdaptor<T> implements StorageAdaptor<T> {
     try {
       if (this.path) {
         const originText = await this.kernelApi.getFile(this.path, "text")
-        const originData = JsonUtil.safeParse<Record<string, string>>(
+        const originData = JsonUtil.safeParse<Record<string, any>>(
           originText,
           {} as any,
         )
         const txt = originData[this.key]
-        if (StrUtil.isEmptyString(txt)) {
+        if (typeof txt === "string" && StrUtil.isEmptyString(txt)) {
           return null
         }
         const data = JsonUtil.safeParse<T>(txt, {} as any)
@@ -67,7 +67,24 @@ export class SiyuanStorageAdaptor<T> implements StorageAdaptor<T> {
   }
 
   async save(data: T): Promise<void> {
-    // await window.hostAPI.set(this.hostKey, JSON.stringify(data))
-    this.logger.debug("Saved data via siyuan-storage adapter", data)
+    const cfg = {
+      [this.key]: data,
+    }
+    if (this.path) {
+      await this.kernelApi.saveTextData(this.path, JSON.stringify(cfg))
+      this.logger.debug(
+        "Saved data via [siyuan-kernel-api by path] to " +
+          this.key +
+          ":" +
+          this.path,
+        data,
+      )
+    } else {
+      this.pluginInstance?.saveData(this.key, cfg)
+      this.logger.debug(
+        "Saved data via [siyuan plugin api] to " + this.key,
+        data,
+      )
+    }
   }
 }

@@ -10,7 +10,10 @@
 // import { SiyuanStorageAdaptor } from "@stores/vendor/SiyuanStorageAdaptor.ts"
 import { SiyuanConfig } from "zhi-siyuan-api"
 import { useStorageAsync } from "@stores/core/useStorageAsync.ts"
-import { DEFAULT_SIYUAN_API_URL } from "@/Constants.ts"
+import {
+  DEFAULT_SIYUAN_API_URL,
+  LEGENCY_SHARED_PROXT_MIDDLEWARE,
+} from "@/Constants.ts"
 import { SiyuanStorageAdaptor } from "@stores/vendor/SiyuanStorageAdaptor.ts"
 import { readonly } from "vue"
 import { useComputedObject } from "@composables/useComputedObject.ts"
@@ -25,7 +28,7 @@ import { createAppLogger } from "@utils/appLogger.ts"
  */
 export const useSiyuanSettingStore = () => {
   const logger = createAppLogger("use-siyuan-setting-store")
-  const storageKey = "siyuan-setting-store"
+  const storageKey = "siyuan-setting"
   const adaptorKey = "siyuan-cfg"
   const filePath = "/data/storage/syp/siyuan-cfg.json"
   const initValue: SiyuanConfig = new SiyuanConfig(DEFAULT_SIYUAN_API_URL, "")
@@ -39,8 +42,12 @@ export const useSiyuanSettingStore = () => {
   const newSiyuanCfg = useComputedObject(formState, {
     home: DEFAULT_SIYUAN_API_URL,
     apiUrl: DEFAULT_SIYUAN_API_URL,
+    middlewareUrl: LEGENCY_SHARED_PROXT_MIDDLEWARE,
   })
-  logger.debug("Loaded siyuan-cfg", newSiyuanCfg.value)
+  logger.debug(
+    "Loaded default  siyuan-cfg, may not the latest",
+    newSiyuanCfg.value,
+  )
 
   return {
     // 只读状态
