@@ -13,24 +13,34 @@ import UISetting from "@pages/setting/general/UISetting.vue"
 import { useSiyuanSettingStore } from "@stores/useSiyuanSettingStore.ts"
 import { reactive } from "vue"
 import { useComputedField } from "@composables/useComputedField.ts"
+import { useI18n } from "@composables/useI18n.ts"
+import ContentSetting from "@pages/setting/general/ContentSetting.vue"
+import DataBind from "@pages/setting/general/DataBind.vue"
+import AISetting from "@pages/setting/general/AISetting.vue"
 
 const props = defineProps<{
   pluginInstance: any
 }>()
 
+const { t } = useI18n(props.pluginInstance)
 const { readonlySiyuanCfg, siyuanCfg } = useSiyuanSettingStore()
 
 const uiSettingFormGroup = reactive({
-  title: "界面选项",
+  title: t("preference.ui.title"),
+  items: <SettingItem[]>[],
+})
+
+const contentSettingFormGroup = reactive({
+  title: t("preference.content.title"),
+  items: <SettingItem[]>[],
+})
+
+const aiSettingFormGroup = reactive({
+  title: t("preference.ai.title"),
   items: <SettingItem[]>[
     {
-      type: "switch",
-      label: "去除标题编号",
-      value: useComputedField(siyuanCfg, "preferenceConfig.fixTitle" as any),
-    },
-    {
       type: "select",
-      label: "模型选择",
+      label: t("preference.ai.model"),
       value: "deepseek-r1",
       options: [
         { label: "deepseek-r1", value: "deepseek-r1" },
@@ -41,12 +51,12 @@ const uiSettingFormGroup = reactive({
 })
 
 const siyuanSettingFormGroup = reactive({
-  title: "思源设置",
+  title: t("preference.siyuan.title"),
   items: <SettingItem[]>[
     {
       type: "input",
-      label: "思源API地址",
-      placeholder: "请输入思源API地址",
+      label: t("preference.siyuan.apiUrl"),
+      placeholder: t("preference.siyuan.apiUrlPlaceholder"),
       value: readonlySiyuanCfg.apiUrl,
       readonly: true,
       disabled: true,
@@ -54,11 +64,16 @@ const siyuanSettingFormGroup = reactive({
     },
     {
       type: "input",
-      label: "思源Token",
-      placeholder: "请输入授权Token",
+      label: t("preference.siyuan.password"),
+      placeholder: t("preference.siyuan.passwordPlaceholder"),
       value: useComputedField(siyuanCfg, "password"),
     },
   ],
+})
+
+const dataBindFormGroup = reactive({
+  title: t("preference.dataBind.title"),
+  items: <SettingItem[]>[],
 })
 </script>
 
@@ -68,9 +83,21 @@ const siyuanSettingFormGroup = reactive({
       :plugin-instance="props.pluginInstance"
       :form-group="uiSettingFormGroup"
     />
+    <content-setting
+      :plugin-instance="props.pluginInstance"
+      :form-group="contentSettingFormGroup"
+    />
+    <a-i-setting
+      :plugin-instance="props.pluginInstance"
+      :form-group="aiSettingFormGroup"
+    />
     <siyuan-setting
       :plugin-instance="props.pluginInstance"
       :form-group="siyuanSettingFormGroup"
+    />
+    <data-bind
+      :plugin-instance="props.pluginInstance"
+      :form-group="dataBindFormGroup"
     />
   </div>
 </template>

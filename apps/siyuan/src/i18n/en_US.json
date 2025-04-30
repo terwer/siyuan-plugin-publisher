@@ -16,10 +16,29 @@
   "picbed": {
     "picbed": "Imagebed"
   },
-  "preference": {
-    "preference": "Preference"
+  "preference": "Preferences",
+  "ui": {
+    "title": "Interface Options"
   },
-  "dashboard": {
-    "dashboard": "Dashboard"
-  }
+  "content": {
+    "title": "Content Settings"
+  },
+  "ai": {
+    "title": "AI Settings",
+    "model": "Select model"
+  },
+  "siyuan": {
+    "title": "Siyuan Settings",
+    "apiUrl": "Siyuan API URL",
+    "apiUrlPlaceholder": "Please enter the Siyuan API URL",
+    "password": "Token",
+    "passwordPlaceholder": "Please enter your token",
+    "preferenceConfig": {
+      "fixTitle": "Remove title numbering"
+    }
+  },
+  "dataBind": {
+    "title": "Article Binding"
+  },
+  "dashboard": "Dashboard"
 }

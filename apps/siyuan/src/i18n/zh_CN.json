@@ -17,7 +17,30 @@
     "picbed": "图床设置"
   },
   "preference": {
-    "preference": "偏好设置"
+    "preference": "偏好设置",
+    "ui": {
+      "title": "界面选项"
+    },
+    "content": {
+      "title": "内容设置"
+    },
+    "ai": {
+      "title": "AI设置",
+      "model": "模型选择"
+    },
+    "siyuan": {
+      "title": "思源设置",
+      "apiUrl": "思源API地址",
+      "apiUrlPlaceholder": "请输入思源API地址",
+      "password": "Token",
+      "passwordPlaceholder": "请输入token",
+      "preferenceConfig": {
+        "fixTitle": "去除标题序号"
+      }
+    },
+    "dataBind": {
+      "title": "文章绑定"
+    }
   },
   "dashboard": {
     "dashboard": "仪表盘"

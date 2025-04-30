@@ -87,7 +87,7 @@ const computedLabelStyle = computed(() => {
 
 <style scoped lang="stylus">
 .setting-group
-  margin-bottom 16px
+  margin-bottom 12px
   &:last-child
     margin-bottom 0
 
@@ -95,7 +95,7 @@ const computedLabelStyle = computed(() => {
   font-size 14px
   font-weight 500
   color var(--group-title-color)
-  margin 0 0 12px 6px
+  margin 0 0 0 6px
   padding-left 6px
   position relative
   line-height 1.3

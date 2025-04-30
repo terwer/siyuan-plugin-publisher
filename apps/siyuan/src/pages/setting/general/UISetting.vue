@@ -17,12 +17,10 @@ const props = defineProps<{
 </script>
 
 <template>
-  <div>
-    <SettingItem
-      :plugin-instance="props.pluginInstance"
-      :setting-group="formGroup"
-    />
-  </div>
+  <SettingItem
+    :plugin-instance="props.pluginInstance"
+    :setting-group="formGroup"
+  />
 </template>
 
 <style scoped lang="stylus"></style>
