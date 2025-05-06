@@ -42,7 +42,7 @@
       "apiUrl": "思源API地址",
       "apiUrlPlaceholder": "请输入思源API地址",
       "password": "Token",
-      "passwordPlaceholder": "请输入token"
+      "passwordPlaceholder": "请输入思源笔记token"
     },
     "dataBind": {
       "title": "文章绑定"

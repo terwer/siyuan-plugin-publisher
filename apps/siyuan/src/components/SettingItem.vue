@@ -12,6 +12,7 @@ import Input from "@components/form/Input.vue"
 import InputNumber from "@components/form/InputNumber.vue"
 import Select from "@components/form/Select.vue"
 import Switch from "@components/form/Switch.vue"
+import { IS_ENGLISH } from "@/Constants.ts"
 
 const props = defineProps<{
   pluginInstance: any
@@ -19,8 +20,11 @@ const props = defineProps<{
 }>()
 
 const getItemLabelStyle = (item: any) => {
-  // 优先使用item的labelWidth，其次使用组件默认值，最后回退到auto
-  const width = item.labelWidth ?? 100 ?? "auto"
+  // 优先使用item的labelWidth，其次使用组件默认值，也可设置auto
+  let width = item.labelWidth ?? 120
+  if (IS_ENGLISH) {
+    width = item.labelWidth ?? "auto"
+  }
   return {
     "--label-width":
       typeof width === "number"

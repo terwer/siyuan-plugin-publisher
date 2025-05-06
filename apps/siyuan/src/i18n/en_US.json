@@ -1,11 +1,11 @@
 {
   "publisher": "Publisher",
-  "setting": "Setting",
-  "publishOptions": "Publish options",
+  "setting": "Settings",
+  "publishOptions": "Publish Options",
   "platformSelect": {
-    "no": "No available platforms at the moment",
+    "no": "No available platforms",
     "noTip1": "Please go to ",
-    "noTip2": "to add an account first."
+    "noTip2": "add an account first."
   },
   "publish": {
     "publish": "Publish"
@@ -14,37 +14,41 @@
     "account": "Account"
   },
   "picbed": {
-    "picbed": "Imagebed"
+    "picbed": "Image"
   },
-  "preference": "Preferences",
-  "ui": {
-    "title": "Interface Options",
-    "showDocQuickMenu": "Show document quick menu"
+  "preference": {
+    "preference": "Preference",
+    "ui": {
+      "title": "UI Options",
+      "showDocQuickMenu": "Show document quick menu"
+    },
+    "content": {
+      "title": "Content Settings",
+      "fixTitle": "Remove title numbering",
+      "keepTitle": "Preserve original titles",
+      "removeFirstH1": "Remove main H1 tag",
+      "removeMdWidgetTag": "Remove widget HTML tags"
+    },
+    "ai": {
+      "title": "AI Configuration",
+      "code": "ChatGPT API key",
+      "codePlaceholder": "Enter ChatGPT/Proxy API key (include endpoint if using proxy)",
+      "baseUrl": "API endpoint",
+      "baseUrlPlaceholder": "Leave empty for official ChatGPT",
+      "model": "Model selection"
+    },
+    "siyuan": {
+      "title": "Siyuan Integration",
+      "apiUrl": "Siyuan API URL",
+      "apiUrlPlaceholder": "Enter Siyuan API endpoint",
+      "password": "Access Token",
+      "passwordPlaceholder": "Enter your siyuan-note token"
+    },
+    "dataBind": {
+      "title": "Content Binding"
+    }
   },
-  "content": {
-    "title": "Content Settings",
-    "fixTitle": "Remove title numbers",
-    "keepTitle": "Keep original title",
-    "removeFirstH1": "Remove body H1",
-    "removeMdWidgetTag": "Remove widget HTML"
-  },
-  "ai": {
-    "title": "AI Settings",
-    "code": "ChatGPT API key",
-    "codePlaceholder": "ChatGPT API key or third-party proxy key. If using a proxy key, set the request URL",
-    "baseUrl": "ChatGPT API endpoint",
-    "baseUrlPlaceholder": "ChatGPT API endpoint (leave empty for official ChatGPT)",
-    "model": "Select model"
-  },
-  "siyuan": {
-    "title": "Siyuan Settings",
-    "apiUrl": "Siyuan API URL",
-    "apiUrlPlaceholder": "Please enter the Siyuan API URL",
-    "password": "Token",
-    "passwordPlaceholder": "Please enter your token"
-  },
-  "dataBind": {
-    "title": "Article Binding"
-  },
-  "dashboard": "Dashboard"
+  "dashboard": {
+    "dashboard": "Dashboard"
+  }
 }

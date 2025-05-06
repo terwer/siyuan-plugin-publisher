@@ -71,7 +71,6 @@ const aiSettingFormGroup = reactive({
     {
       type: "input",
       label: t("preference.ai.baseUrl"),
-      labelWidth: 120,
       placeholder: t("preference.ai.baseUrlPlaceholder"),
       value: readonlyPreferenceCfg.experimentalAIBaseUrl,
       readonly: true,
@@ -81,7 +80,6 @@ const aiSettingFormGroup = reactive({
       type: "input",
       inputType: "password",
       label: t("preference.ai.code"),
-      labelWidth: 120,
       placeholder: t("preference.ai.codePlaceholder"),
       value: readonlyPreferenceCfg.experimentalAICode,
       readonly: true,
@@ -90,7 +88,6 @@ const aiSettingFormGroup = reactive({
     {
       type: "select",
       label: t("preference.ai.model"),
-      labelWidth: 120,
       value: readonlyPreferenceCfg.experimentalAIApiModel || "deepseek-r1",
       options: (() => {
         // 先创建基础选项

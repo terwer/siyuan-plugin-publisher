@@ -29,3 +29,6 @@ export const WINDOW_SIYUAN = window?.siyuan
  */
 export const LEGENCY_SHARED_PROXT_MIDDLEWARE =
   "https://api.terwer.space/api/middleware"
+export const DEFAULT_SIYUAN_LANG = window?.siyuan?.config?.lang ?? "zh_CN"
+// 是否英文版
+export const IS_ENGLISH = DEFAULT_SIYUAN_LANG === "en_US"
