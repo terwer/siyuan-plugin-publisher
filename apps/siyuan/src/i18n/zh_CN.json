@@ -19,7 +19,8 @@
   "preference": {
     "preference": "偏好设置",
     "ui": {
-      "title": "界面选项"
+      "title": "界面选项",
+      "showDocQuickMenu": "显示文档菜单"
     },
     "content": {
       "title": "内容设置",
@@ -30,6 +31,10 @@
     },
     "ai": {
       "title": "AI设置",
+      "code": "ChatGPT请求key",
+      "codePlaceholder": "ChatGPT请求key或者第三方代理key，如果是代理key，请设置请求地址",
+      "baseUrl": "ChatGPT请求地址",
+      "baseUrlPlaceholder": "ChatGPT请求地址，如果是ChatGPT官方，可留空",
       "model": "模型选择"
     },
     "siyuan": {

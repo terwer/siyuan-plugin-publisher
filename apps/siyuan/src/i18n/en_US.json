@@ -18,7 +18,8 @@
   },
   "preference": "Preferences",
   "ui": {
-    "title": "Interface Options"
+    "title": "Interface Options",
+    "showDocQuickMenu": "Show document quick menu"
   },
   "content": {
     "title": "Content Settings",
@@ -29,6 +30,10 @@
   },
   "ai": {
     "title": "AI Settings",
+    "code": "ChatGPT API key",
+    "codePlaceholder": "ChatGPT API key or third-party proxy key. If using a proxy key, set the request URL",
+    "baseUrl": "ChatGPT API endpoint",
+    "baseUrlPlaceholder": "ChatGPT API endpoint (leave empty for official ChatGPT)",
     "model": "Select model"
   },
   "siyuan": {

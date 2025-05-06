@@ -39,6 +39,7 @@ type InputType = "text" | "password" | "number" | "url"
 interface SettingItem {
   type: ControlType
   label: string
+  labelWidth?: number
   value: any
   options?: Option[]
   placeholder?: string

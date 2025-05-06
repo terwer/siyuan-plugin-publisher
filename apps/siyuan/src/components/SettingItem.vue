@@ -8,7 +8,6 @@
   -->
 
 <script setup lang="ts">
-import { ref, computed } from "vue"
 import Input from "@components/form/Input.vue"
 import InputNumber from "@components/form/InputNumber.vue"
 import Select from "@components/form/Select.vue"
@@ -19,15 +18,16 @@ const props = defineProps<{
   settingGroup: SettingGroup
 }>()
 
-// const labelWidth = ref<number | "auto">("auto")
-const labelWidth = ref<number | "auto">(100)
-
-const computedLabelStyle = computed(() => {
-  if (labelWidth.value === "auto") {
-    return {}
+const getItemLabelStyle = (item: any) => {
+  // 优先使用item的labelWidth，其次使用组件默认值，最后回退到auto
+  const width = item.labelWidth ?? 100 ?? "auto"
+  return {
+    "--label-width":
+      typeof width === "number"
+        ? `${Math.max(80, Math.min(200, width))}px` // 限制安全范围
+        : width,
   }
-  return { "--label-width": `${labelWidth.value}px` }
-})
+}
 </script>
 
 <template>
@@ -45,7 +45,7 @@ const computedLabelStyle = computed(() => {
         class="setting-item"
       >
         <!-- 标签区域 -->
-        <div class="item-label" :style="computedLabelStyle">
+        <div class="item-label" :style="getItemLabelStyle(item)">
           {{ item.label }}
         </div>
 
@@ -58,17 +58,23 @@ const computedLabelStyle = computed(() => {
             :placeholder="item.placeholder"
             :readonly="item.readonly"
             :disabled="item.disabled"
+            :type="item.type"
             :input-type="item.inputType"
           />
 
           <!-- Switch 类型 -->
-          <Switch v-if="item.type === 'switch'" v-model="item.value" />
+          <Switch
+            v-if="item.type === 'switch'"
+            v-model="item.value"
+            :disabled="item.disabled"
+          />
 
           <!-- Select 类型 -->
           <Select
             v-else-if="item.type === 'select'"
             v-model="item.value"
             :options="item.options"
+            :disabled="item.disabled"
           />
 
           <!-- Number 类型 -->
@@ -76,6 +82,7 @@ const computedLabelStyle = computed(() => {
             v-else-if="item.type === 'number'"
             v-model="item.value"
             :placeholder="item.placeholder"
+            :disabled="item.disabled"
           />
 
           <!-- 其他类型扩展 -->

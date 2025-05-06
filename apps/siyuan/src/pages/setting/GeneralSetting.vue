@@ -18,6 +18,7 @@ import { useI18n } from "@composables/useI18n.ts"
 import ContentSetting from "@pages/setting/general/ContentSetting.vue"
 import DataBind from "@pages/setting/general/DataBind.vue"
 import AISetting from "@pages/setting/general/AISetting.vue"
+import { StrUtil } from "zhi-common"
 
 const props = defineProps<{
   pluginInstance: any
@@ -29,7 +30,13 @@ const { readonlyPreferenceCfg, preferenceCfg } = usePreferenceSettingStore()
 
 const uiSettingFormGroup = reactive({
   title: t("preference.ui.title"),
-  items: <SettingItem[]>[],
+  items: <SettingItem[]>[
+    {
+      type: "switch",
+      label: t("preference.ui.showDocQuickMenu"),
+      value: useComputedField(preferenceCfg, "showDocQuickMenu"),
+    },
+  ],
 })
 
 const contentSettingFormGroup = reactive({
@@ -62,13 +69,52 @@ const aiSettingFormGroup = reactive({
   title: t("preference.ai.title"),
   items: <SettingItem[]>[
     {
+      type: "input",
+      label: t("preference.ai.baseUrl"),
+      labelWidth: 120,
+      placeholder: t("preference.ai.baseUrlPlaceholder"),
+      value: readonlyPreferenceCfg.experimentalAIBaseUrl,
+      readonly: true,
+      disabled: true,
+    },
+    {
+      type: "input",
+      inputType: "password",
+      label: t("preference.ai.code"),
+      labelWidth: 120,
+      placeholder: t("preference.ai.codePlaceholder"),
+      value: readonlyPreferenceCfg.experimentalAICode,
+      readonly: true,
+      disabled: true,
+    },
+    {
       type: "select",
       label: t("preference.ai.model"),
-      value: "deepseek-r1",
-      options: [
-        { label: "deepseek-r1", value: "deepseek-r1" },
-        { label: "ChatGPT", value: "chatgpt" },
-      ],
+      labelWidth: 120,
+      value: readonlyPreferenceCfg.experimentalAIApiModel || "deepseek-r1",
+      options: (() => {
+        // 先创建基础选项
+        const baseOptions = [
+          { label: "deepseek-r1", value: "deepseek-r1" },
+          { label: "ChatGPT", value: "chatgpt" },
+        ]
+
+        // 动态添加自定义选项
+        const customModel =
+          readonlyPreferenceCfg.experimentalAIApiModel || "deepseek-r1"
+        if (
+          !StrUtil.isEmptyString(customModel) &&
+          !baseOptions.some((option) => option.value === customModel)
+        ) {
+          baseOptions.push({
+            label: customModel,
+            value: customModel,
+          })
+        }
+
+        return baseOptions
+      })(),
+      disabled: true,
     },
   ],
 })
