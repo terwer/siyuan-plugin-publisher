@@ -1,11 +1,11 @@
-const pluginVue = require("eslint-plugin-vue")
-const eslintPluginPrettierRecommended = require("eslint-plugin-prettier/recommended")
-const {
+import pluginVue from "eslint-plugin-vue"
+import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended"
+import {
   defineConfigWithVueTs,
   vueTsConfigs,
-} = require("@vue/eslint-config-typescript")
+} from "@vue/eslint-config-typescript"
 
-module.exports = defineConfigWithVueTs(
+export default defineConfigWithVueTs(
   pluginVue.configs["flat/essential"],
   vueTsConfigs.recommended,
   {
@@ -16,7 +16,6 @@ module.exports = defineConfigWithVueTs(
       "@typescript-eslint/no-require-imports": "off",
       "@typescript-eslint/ban-ts-comment": "off",
       "@typescript-eslint/no-unused-vars": "off",
-      // semi: ['error', 'never'],
       semi: "off",
       "prettier/prettier": [
         "error",

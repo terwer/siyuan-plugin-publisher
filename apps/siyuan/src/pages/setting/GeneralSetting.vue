@@ -29,9 +29,7 @@ const { readonlyPreferenceCfg, preferenceCfg } = usePreferenceSettingStore()
 
 const uiSettingFormGroup = reactive({
   title: t("preference.ui.title"),
-  items: <SettingItem[]>[
-
-  ],
+  items: <SettingItem[]>[],
 })
 
 const contentSettingFormGroup = reactive({

@@ -16,7 +16,11 @@ import { WINDOW_SIYUAN } from "@/Constants.ts"
 import { WritableComputedRef, readonly } from "vue"
 
 /**
- * 使用发布偏好设置的自定义钩子
+ * 发布偏好设置
+ *
+ * @author terwer
+ * @since 1.0.0
+ * @version 2.0.0
  */
 export const usePreferenceSettingStore = () => {
   const logger = createAppLogger("use-preference-setting-store")
