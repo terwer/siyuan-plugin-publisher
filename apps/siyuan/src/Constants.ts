@@ -19,6 +19,8 @@ export const SH_BUILD_TIME =
     : // @ts-ignore
       process.env.PT_BUILD_TIME
 export const DEFAULT_SIYUAN_API_URL = window.location.origin
+// @ts-ignore
+export const WINDOW_SIYUAN = window?.siyuan
 /**
  * 旧的通用 HTTP 代理
  *

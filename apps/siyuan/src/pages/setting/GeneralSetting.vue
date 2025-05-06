@@ -11,6 +11,7 @@
 import SiyuanSetting from "@pages/setting/general/SiyuanSetting.vue"
 import UISetting from "@pages/setting/general/UISetting.vue"
 import { useSiyuanSettingStore } from "@stores/useSiyuanSettingStore.ts"
+import { usePreferenceSettingStore } from "@stores/usePreferenceSettingStore.ts"
 import { reactive } from "vue"
 import { useComputedField } from "@composables/useComputedField.ts"
 import { useI18n } from "@composables/useI18n.ts"
@@ -24,15 +25,39 @@ const props = defineProps<{
 
 const { t } = useI18n(props.pluginInstance)
 const { readonlySiyuanCfg, siyuanCfg } = useSiyuanSettingStore()
+const { readonlyPreferenceCfg, preferenceCfg } = usePreferenceSettingStore()
 
 const uiSettingFormGroup = reactive({
   title: t("preference.ui.title"),
-  items: <SettingItem[]>[],
+  items: <SettingItem[]>[
+
+  ],
 })
 
 const contentSettingFormGroup = reactive({
   title: t("preference.content.title"),
-  items: <SettingItem[]>[],
+  items: <SettingItem[]>[
+    {
+      type: "switch",
+      label: t("preference.content.fixTitle"),
+      value: useComputedField(preferenceCfg, "fixTitle"),
+    },
+    {
+      type: "switch",
+      label: t("preference.content.keepTitle"),
+      value: useComputedField(preferenceCfg, "keepTitle"),
+    },
+    {
+      type: "switch",
+      label: t("preference.content.removeFirstH1"),
+      value: useComputedField(preferenceCfg, "removeFirstH1"),
+    },
+    {
+      type: "switch",
+      label: t("preference.content.removeMdWidgetTag"),
+      value: useComputedField(preferenceCfg, "removeMdWidgetTag"),
+    },
+  ],
 })
 
 const aiSettingFormGroup = reactive({

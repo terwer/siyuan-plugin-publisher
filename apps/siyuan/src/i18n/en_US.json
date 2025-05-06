@@ -21,7 +21,11 @@
     "title": "Interface Options"
   },
   "content": {
-    "title": "Content Settings"
+    "title": "Content Settings",
+    "fixTitle": "Remove title numbers",
+    "keepTitle": "Keep original title",
+    "removeFirstH1": "Remove body H1",
+    "removeMdWidgetTag": "Remove widget HTML"
   },
   "ai": {
     "title": "AI Settings",
@@ -32,10 +36,7 @@
     "apiUrl": "Siyuan API URL",
     "apiUrlPlaceholder": "Please enter the Siyuan API URL",
     "password": "Token",
-    "passwordPlaceholder": "Please enter your token",
-    "preferenceConfig": {
-      "fixTitle": "Remove title numbering"
-    }
+    "passwordPlaceholder": "Please enter your token"
   },
   "dataBind": {
     "title": "Article Binding"

@@ -22,7 +22,11 @@
       "title": "界面选项"
     },
     "content": {
-      "title": "内容设置"
+      "title": "内容设置",
+      "fixTitle": "去除标题序号",
+      "keepTitle": "不更新原始标题",
+      "removeFirstH1": "去除正文H1",
+      "removeMdWidgetTag": "去除挂件HTML"
     },
     "ai": {
       "title": "AI设置",
@@ -33,10 +37,7 @@
       "apiUrl": "思源API地址",
       "apiUrlPlaceholder": "请输入思源API地址",
       "password": "Token",
-      "passwordPlaceholder": "请输入token",
-      "preferenceConfig": {
-        "fixTitle": "去除标题序号"
-      }
+      "passwordPlaceholder": "请输入token"
     },
     "dataBind": {
       "title": "文章绑定"

@@ -41,6 +41,9 @@ importers:
       vue:
         specifier: ^3.5.13
         version: 3.5.13(typescript@5.7.3)
+      zhi-blog-api:
+        specifier: ^1.72.0
+        version: 1.72.0(typescript@5.7.3)
       zhi-common:
         specifier: ^1.33.1
         version: 1.33.1(typescript@5.7.3)

@@ -23,7 +23,7 @@ import { createAppLogger } from "@utils/appLogger.ts"
  * 思源笔记设置
  *
  * @author terwer
- * @version 1.8.0
+ * @version 2.0.0
  * @since 1.8.0
  */
 export const useSiyuanSettingStore = () => {
@@ -31,7 +31,7 @@ export const useSiyuanSettingStore = () => {
   const storageKey = "siyuan-setting"
   const adaptorKey = "siyuan-cfg"
   const filePath = "/data/storage/syp/siyuan-cfg.json"
-  const initValue: SiyuanConfig = new SiyuanConfig(DEFAULT_SIYUAN_API_URL, "")
+  const initValue = new SiyuanConfig(DEFAULT_SIYUAN_API_URL, "")
 
   // 创建适配器实例
   const adaptor = new SiyuanStorageAdaptor<SiyuanConfig>(adaptorKey, filePath)
