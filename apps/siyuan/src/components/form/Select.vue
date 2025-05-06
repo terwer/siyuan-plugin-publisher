@@ -45,6 +45,7 @@ const emit = defineEmits(["update:modelValue"])
   --select-radius: 8px
 
   width 100%
+  min-width 250px
   height var(--select-height)
   padding var(--select-padding)
   background var(--select-bg)

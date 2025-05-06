@@ -57,6 +57,7 @@ const computedType = computed(() => {
   position relative
   width 100%
   max-width 400px /* 添加最大宽度限制 */
+  min-width 350px
 
 .pt-input
   --input-height: 32px /* 调小高度 */
