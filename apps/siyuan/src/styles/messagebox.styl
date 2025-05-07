@@ -1,0 +1,147 @@
+.pt-messagebox-mask
+  position: fixed
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
+  z-index: 1001
+  display: flex
+  align-items: center
+  justify-content: center
+  background: rgba(0,0,0,0.45)
+  pointer-events: auto
+
+.pt-messagebox
+  width: 520px
+  background: #fff
+  border-radius: 8px
+  box-shadow: 0 6px 16px 0 rgba(0,0,0,0.08), 0 3px 6px -4px rgba(0,0,0,0.12), 0 9px 28px 8px rgba(0,0,0,0.05)
+  padding: 24px
+  pointer-events: auto
+  position: relative
+
+  &__header
+    display: flex
+    align-items: center
+    margin-bottom: 16px
+
+  &__icon
+    margin-right: 16px
+    line-height: 0
+
+    &-svg
+      width: 24px
+      height: 24px
+
+  &__title
+    font-size: 16px
+    font-weight: 600
+    color: rgba(0,0,0,0.85)
+
+  &__content
+    font-size: 14px
+    color: rgba(0,0,0,0.65)
+    line-height: 1.5715
+    margin-bottom: 24px
+
+  &__footer
+    text-align: right
+
+  &__btn
+    margin-left: 12px
+    padding: 6px 16px
+    border: 1px solid transparent
+    border-radius: 6px
+    font-size: 14px
+    cursor: pointer
+    transition: all 0.2s
+    position: relative
+    overflow: hidden
+
+    &::after
+      content: ''
+      position: absolute
+      top: 0
+      left: 0
+      right: 0
+      bottom: 0
+      background: rgba(0,0,0,0.05)
+      opacity: 0
+      transition: opacity 0.2s
+
+    &:active::after
+      opacity: 1
+
+    &--default
+      background: #fff
+      border-color: #d9d9d9
+      color: rgba(0,0,0,0.85)
+      &:hover
+        color: #1677ff
+        border-color: #1677ff
+
+    &--primary
+      background: #1677ff
+      color: #fff
+      &:hover
+        background: #4096ff
+
+    &--danger
+      background: #ff4d4f
+      color: #fff
+      &:hover
+        background: #ff7875
+
+// 暗黑模式
+html[data-theme-mode="dark"]
+  .pt-messagebox
+    background: #1f1f1f
+    box-shadow: 0 6px 16px 0 rgba(0,0,0,0.48), 0 3px 6px -4px rgba(0,0,0,0.32), 0 9px 28px 8px rgba(0,0,0,0.2)
+
+    &__title
+      color: rgba(255,255,255,0.85)
+
+    &__content
+      color: rgba(255,255,255,0.65)
+
+    &__btn
+      &--default
+        background: #333
+        border-color: #434343
+        color: rgba(255,255,255,0.85)
+        &:hover
+          color: #1668dc
+          border-color: #1668dc
+
+      &--primary
+        background: #1668dc
+        &:hover
+          background: #1554ad
+
+      &--danger
+        background: #dc4446
+        &:hover
+          background: #d9363e
+
+  .pt-messagebox-mask
+    background: rgba(0,0,0,0.65)
+
+// 动画
+@keyframes pt-messagebox-fade-in
+  from
+    opacity: 0
+    transform: translateY(-20px)
+  to
+    opacity: 1
+    transform: translateY(0)
+
+@keyframes pt-messagebox-fade-out
+  to
+    opacity: 0
+    transform: translateY(-20px)
+
+.pt-messagebox-enter-active
+  animation: pt-messagebox-fade-in 0.3s
+
+.pt-messagebox-leave-active
+  animation: pt-messagebox-fade-out 0.3s forwards

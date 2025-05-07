@@ -1,87 +1,120 @@
-// alert.styl
 .pt-alert-container
   position: absolute
-  top: 20px
-  right: 20px
+  top: 24px
+  right: 24px
   z-index: 1000
-  max-width: 450px
+  max-width: 488px
+  width: 100%
 
 .pt-alert
   position: relative
-  padding: 12px 15px
+  padding: 12px 16px
   margin-bottom: 16px
-  border: 1px solid #d9d9d9
-  border-radius: 6px
+  border: 1px solid
+  border-radius: 8px
   box-shadow: 0 3px 6px -4px rgba(0,0,0,0.12), 0 6px 16px 0 rgba(0,0,0,0.08), 0 9px 28px 8px rgba(0,0,0,0.05)
-  background: #ffffff
   display: flex
   align-items: flex-start
   transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1)
+  background-clip: padding-box
 
-// 类型颜色
+  &__icon
+    display: flex
+    align-items: center
+    margin-right: 12px
+    font-size: 0
+
+    &-svg
+      width: 18px
+      height: 18px
+      flex-shrink: 0
+
+  &__content
+    flex: 1
+    min-width: 0
+    padding-right: 24px
+
+  &__title
+    font-size: 14px
+    line-height: 1.5715
+    font-weight: 500
+    margin-bottom: 2px
+
+  &__message
+    font-size: 14px
+    line-height: 1.5715
+
+  &__description
+    font-size: 13px
+    line-height: 1.5715
+    margin-top: 4px
+    opacity: 0.85
+
+  &__close
+    position: absolute
+    top: 16px
+    right: 16px
+    padding: 4px
+    border: none
+    background: transparent
+    cursor: pointer
+    color: inherit
+    opacity: 0.45
+    transition: opacity 0.2s
+
+    &:hover
+      opacity: 0.85
+
+    &-icon
+      display: block
+      width: 12px
+      height: 12px
+
+// 浅色模式
 .pt-alert--success
-  .pt-alert__icon
-    color: #52c41a
-
-.pt-alert--warning
-  .pt-alert__icon
-    color: #faad14
-
-.pt-alert--error
-  .pt-alert__icon
-    color: #ff4d4f
+  background: #f6ffed
+  border-color: #b7eb8f
+  color: #52c41a
 
 .pt-alert--info
-  .pt-alert__icon
-    color: rgba(0,0,0,0.65)
+  background: #e6f7ff
+  border-color: #91d5ff
+  color: #1890ff
 
-// 图标
-.pt-alert__icon
-  margin-right: 8px
-  font-size: 16px
-  line-height: 1
-  display: flex
-  align-items: center
-  height: 24px
+.pt-alert--warning
+  background: #fffbe6
+  border-color: #ffe58f
+  color: #faad14
 
-// 内容区域
-.pt-alert__content
-  flex: 1
-  min-width: 0
+.pt-alert--error
+  background: #fff2f0
+  border-color: #ffccc7
+  color: #ff4d4f
 
-.pt-alert__title
-  font-size: 14px
-  line-height: 1.5715
-  color: rgba(0,0,0,0.88)
-  font-weight: 500
-  margin-bottom: 2px
+// 暗黑模式
+html[data-theme-mode="dark"]
+  .pt-alert
+    box-shadow: 0 3px 6px -4px rgba(0,0,0,0.48), 0 6px 16px 0 rgba(0,0,0,0.38), 0 9px 28px 8px rgba(0,0,0,0.35)
 
-.pt-alert__message
-  font-size: 13px
-  line-height: 1.5715
-  color: rgba(0,0,0,0.65)
+  .pt-alert--success
+    background: #162312
+    border-color: #274916
+    color: #49aa19
 
-.pt-alert__description
-  font-size: 13px
-  color: rgba(0,0,0,0.65)
-  margin-top: 4px
-  opacity: 0.9
+  .pt-alert--info
+    background: #111b26
+    border-color: #153450
+    color: #177ddc
 
-// 关闭按钮
-.pt-alert__close
-  position: absolute
-  top: 10px
-  right: 12px
-  padding: 0
-  border: none
-  background: transparent
-  color: rgba(0,0,0,0.45)
-  font-size: 12px
-  cursor: pointer
-  transition: color 0.2s
+  .pt-alert--warning
+    background: #2b2111
+    border-color: #594214
+    color: #d89614
 
-  &:hover
-    color: rgba(0,0,0,0.88)
+  .pt-alert--error
+    background: #2a1215
+    border-color: #58181c
+    color: #dc4446
 
 // 动画
 @keyframes pt-alert-fade-in
@@ -102,42 +135,3 @@
 
 .pt-alert-leave-active
   animation: pt-alert-fade-out 0.3s forwards
-
-// 暗黑模式
-html[data-theme-mode="dark"]
-  .pt-alert
-    background: #141414
-    border-color: #424242
-    box-shadow: 0 3px 6px -4px rgba(0,0,0,0.48), 0 6px 16px 0 rgba(0,0,0,0.32), 0 9px 28px 8px rgba(0,0,0,0.2)
-
-  .pt-alert__title
-    color: rgba(255, 255, 255, 0.85)
-
-  .pt-alert__message,
-  .pt-alert__description
-    color: rgba(255, 255, 255, 0.65)
-
-  .pt-alert__close
-    color: rgba(255, 255, 255, 0.45)
-    &:hover
-      color: rgba(255, 255, 255, 0.85)
-
-  // 类型覆盖
-  .pt-alert--success
-    border-color: #274916
-    .pt-alert__icon
-      color: #49aa19
-
-  .pt-alert--warning
-    border-color: #594214
-    .pt-alert__icon
-      color: #d89614
-
-  .pt-alert--error
-    border-color: #58181c
-    .pt-alert__icon
-      color: #dc4446
-
-  .pt-alert--info
-    .pt-alert__icon
-      color: rgba(255, 255, 255, 0.65)

@@ -17,6 +17,7 @@ import { DynamicConfig } from "@/models/dynamicConfig.ts"
 import { useI18n } from "@composables/useI18n.ts"
 import SettingPlatformSelect from "@components/SettingPlatformSelect.vue"
 import { alert } from "@components/Alert"
+import { messageBox } from "@components/MessageBox.ts"
 
 const publishSettingStore = usePublishSettingStore()
 
@@ -56,11 +57,13 @@ const unregisterPublishSettingStore = publishSettingStore.registerOnInit(
               icon: Trash2,
               label: t("account.delete"),
               handler: (_event: MouseEvent, _platform: AbstractPlatform) => {
-                alert({
-                  title: "发布成功",
-                  message: "内容已同步到云端",
-                  type: "success",
-                  // duration: 3000,
+                // alert({
+                //   title: "发布成功",
+                //   message: "内容已同步到云端",
+                // })
+                messageBox.confirm({
+                  title: "确认删除",
+                  content: "确定要删除这个项目吗？",
                 })
               },
             },
@@ -82,7 +85,7 @@ const unregisterPublishSettingStore = publishSettingStore.registerOnInit(
 )
 
 onMounted(async () => {
-  await publishSettingStore.doInit(false)
+  await publishSettingStore.doInit()
   logger.debug("account setting init")
 })
 
