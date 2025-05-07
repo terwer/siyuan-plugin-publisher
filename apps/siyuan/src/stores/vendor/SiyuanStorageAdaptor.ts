@@ -25,7 +25,7 @@ export class SiyuanStorageAdaptor<T> implements StorageAdaptor<T> {
    * @param pluginInstance 插件实例，path和pluginInstance二选一，当path为空时使用pluginInstance调用插件 API 持久化
    */
   constructor(
-    private key: string,
+    private key?: string,
     private path?: string,
     private pluginInstance?: SiyuanPublisherPlugin,
   ) {
@@ -37,11 +37,16 @@ export class SiyuanStorageAdaptor<T> implements StorageAdaptor<T> {
     try {
       if (this.path) {
         const originText = await this.kernelApi.getFile(this.path, "text")
-        const originData = JsonUtil.safeParse<Record<string, any>>(
-          originText,
-          {} as any,
-        )
-        const txt = originData[this.key]
+        let txt: string | Record<string, any>
+        if (this.key) {
+          const originData = JsonUtil.safeParse<Record<string, any>>(
+            originText,
+            {} as any,
+          )
+          txt = originData[this.key]
+        } else {
+          txt = originText
+        }
         if (typeof txt === "string" && StrUtil.isEmptyString(txt)) {
           return null
         }
@@ -54,7 +59,8 @@ export class SiyuanStorageAdaptor<T> implements StorageAdaptor<T> {
         )
         return data as T
       } else {
-        const data = this.pluginInstance?.loadData(this.key) ?? null
+        const data =
+          this.pluginInstance?.loadData(this.key ?? "unknown") ?? null
         this.logger.debug(
           "Loaded data via [siyuan plugin api] from " + this.key,
         )
@@ -67,10 +73,15 @@ export class SiyuanStorageAdaptor<T> implements StorageAdaptor<T> {
   }
 
   async save(data: T): Promise<void> {
-    const cfg = {
-      [this.key]: data,
-    }
+    let cfg
     if (this.path) {
+      if (!this.key) {
+        cfg = data as Record<string, any>
+      } else {
+        cfg = {
+          [this.key]: data,
+        }
+      }
       await this.kernelApi.saveTextData(this.path, JSON.stringify(cfg))
       this.logger.debug(
         "Saved data via [siyuan-kernel-api by path] to " +
@@ -80,6 +91,10 @@ export class SiyuanStorageAdaptor<T> implements StorageAdaptor<T> {
         data,
       )
     } else {
+      if (!this.key) {
+        throw new Error("key is required for plugin storage")
+      }
+      cfg = data as Record<string, any>
       this.pluginInstance?.saveData(this.key, cfg)
       this.logger.debug(
         "Saved data via [siyuan plugin api] to " + this.key,

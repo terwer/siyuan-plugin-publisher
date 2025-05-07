@@ -9,7 +9,6 @@
 
 <script setup lang="ts">
 import { Inbox } from "lucide-vue-next"
-import { TabEnum } from "@enums/TabEnum.ts"
 import { useI18n } from "@composables/useI18n.ts"
 
 const props = defineProps<{
@@ -20,24 +19,24 @@ const props = defineProps<{
 
 const { t } = useI18n(props.pluginInstance)
 
-const gotoAccount = (event: MouseEvent) => {
-  props.requestSwitchTab?.(TabEnum.ACCOUNT)
+const addAccount = (event: MouseEvent) => {
+  // 跳转新增账号
   event.stopPropagation()
 }
 </script>
 
 <template>
   <div class="platform-list">
+    <button>{{ t("account.add") }}</button>
     <div v-if="platforms.length === 0" class="empty-state">
       <Inbox class="empty-icon" />
       <div class="empty-text">
         <p>{{ t("platformSelect.no") }}</p>
         <p>
-          {{ t("platformSelect.noTip1") }}
-          <a class="account-link" @click="gotoAccount">
-            {{ t("account.account") }}
+          {{ t("platformSelect.noTip3") }}
+          <a class="account-link" @click="addAccount">
+            {{ t("platformSelect.noTip4") }}
           </a>
-          {{ t("platformSelect.noTip2") }}
         </p>
       </div>
     </div>

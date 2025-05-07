@@ -48,9 +48,11 @@ export const useStorageAsync = <T extends object>(
   }
 
   // 反应式状态
+  // 防止多个实例混乱
+  const __loadedField = "__pt_loaded_" + new Date().getTime()
   const _state = reactive<T>({
     ...initialState,
-    __loaded: false,
+    [__loadedField]: false,
   }) as T
 
   // 控制状态
@@ -185,7 +187,7 @@ export const useStorageAsync = <T extends object>(
         // 更新完自动触发watch
         const loadedDataWithState = {
           ...loadedData,
-          __loaded: true,
+          [__loadedField]: true,
         }
         if (mergedOptions.deepMerge) {
           merge(_state, loadedDataWithState)
@@ -206,7 +208,7 @@ export const useStorageAsync = <T extends object>(
   watch(
     () => _state,
     (newState: any) => {
-      if (!isInitialized && newState.__loaded) {
+      if (!isInitialized && newState[__loadedField]) {
         isInitialized = true
         logger.info(`${storageKey} init completed`, newState)
         return

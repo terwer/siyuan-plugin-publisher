@@ -5,13 +5,19 @@
   "platformSelect": {
     "no": "No available platforms",
     "noTip1": "Please go to ",
-    "noTip2": "add an account first."
+    "noTip2": "add an account first.",
+    "noTip3": "Please ",
+    "noTip4": "Add account first."
   },
   "publish": {
     "publish": "Publish"
   },
   "account": {
-    "account": "Account"
+    "account": "Account",
+    "set": "Set",
+    "delete": "Delete",
+    "enable": "Enable",
+    "add": "Add"
   },
   "picbed": {
     "picbed": "Image"

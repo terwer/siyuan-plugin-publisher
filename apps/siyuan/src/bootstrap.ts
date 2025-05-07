@@ -9,9 +9,14 @@
 
 import { createApp } from "vue"
 import Publish from "@pages/publish/Index.vue"
+import { createPinia } from "pinia"
 
 const createBootStrap = (props: any, container: string | HTMLElement) => {
-  createApp(Publish, props).mount(container)
+  const app = createApp(Publish, props)
+  const pinia = createPinia()
+
+  app.use(pinia)
+  app.mount(container)
 }
 
 export { createBootStrap }

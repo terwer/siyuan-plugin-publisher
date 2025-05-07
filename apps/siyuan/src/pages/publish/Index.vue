@@ -22,7 +22,8 @@ const props = defineProps<{
 }>()
 
 // const logger = createAppLogger("publish-index")
-
+const activeTab = ref(0)
+const isCollapsed = ref(true)
 const tabs = [
   {
     key: TabEnum.PUBLISH,
@@ -68,8 +69,6 @@ const tabs = [
     },
   },
 ]
-const activeTab = ref(0)
-const isCollapsed = ref(true)
 
 // 智能切换方法
 const switchTabByComponent = (curTab: TabEnum) => {

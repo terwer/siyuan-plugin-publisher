@@ -7,6 +7,7 @@
  *  of this license document, but changing it is not allowed.
  */
 
+// 思源笔记相关
 // @ts-ignore
 export const isDev =
   // @ts-ignore
@@ -32,3 +33,9 @@ export const LEGENCY_SHARED_PROXT_MIDDLEWARE =
 export const DEFAULT_SIYUAN_LANG = window?.siyuan?.config?.lang ?? "zh_CN"
 // 是否英文版
 export const IS_ENGLISH = DEFAULT_SIYUAN_LANG === "en_US"
+
+// 发布相关
+/**
+ * 动态配置key，全系统唯一，请勿更改
+ */
+export const DYNAMIC_CONFIG_KEY = "dynamic-config"

@@ -5,13 +5,19 @@
   "platformSelect": {
     "no": "暂时没有可用平台",
     "noTip1": "请先去",
-    "noTip2": "添加账号吧"
+    "noTip2": "添加账号吧",
+    "noTip3": "请先",
+    "noTip4": "添加账号"
   },
   "publish": {
     "publish": "文档发布"
   },
   "account": {
-    "account": "账号设置"
+    "account": "账号设置",
+    "set": "设置",
+    "delete": "删除",
+    "enable": "启用",
+    "add": "添加账号"
   },
   "picbed": {
     "picbed": "图床设置"

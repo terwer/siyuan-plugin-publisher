@@ -7,18 +7,18 @@
  *  of this license document, but changing it is not allowed.
  */
 
-interface PlatformAction {
+interface AbstractPlatformAction {
   type: "button" | "toggle"
   icon?: any
   label: string
-  handler?: (platform: Platform) => void
+  handler?: (platform: AbstractPlatform) => void
   value?: boolean
 }
 
-interface Platform {
+interface AbstractPlatform {
   name: string
   icon: any
   type: "blog" | "doc"
   enabled: boolean
-  actions: PlatformAction[]
+  actions: AbstractPlatformAction[]
 }

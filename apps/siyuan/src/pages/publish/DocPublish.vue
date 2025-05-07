@@ -15,7 +15,7 @@ const props = defineProps<{
   pluginInstance: any
 }>()
 
-const platforms: Platform[] = [
+const platforms: AbstractPlatform[] = [
   // {
   //   name: "博客园",
   //   icon: Rss,
