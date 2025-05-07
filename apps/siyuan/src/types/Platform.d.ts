@@ -11,7 +11,7 @@ interface AbstractPlatformAction {
   type: "button" | "toggle"
   icon?: any
   label: string
-  handler?: (platform: AbstractPlatform) => void
+  handler?: (event: MouseEvent, platform: AbstractPlatform) => void
   value?: boolean
 }
 

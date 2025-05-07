@@ -62,7 +62,7 @@ const addAccount = (event: MouseEvent) => {
                     event.stopPropagation()
                     return
                   }
-                  action.handler(platform)
+                  action.handler(event, platform)
                   event.stopPropagation()
                 }
               "

@@ -16,7 +16,8 @@ import { createAppLogger } from "@utils/appLogger.ts"
 import { DynamicConfig } from "@/models/dynamicConfig.ts"
 import { useI18n } from "@composables/useI18n.ts"
 import SettingPlatformSelect from "@components/SettingPlatformSelect.vue"
-import { confirm } from "siyuan"
+import { alert } from "@components/Alert"
+
 const publishSettingStore = usePublishSettingStore()
 
 const props = defineProps<{
@@ -45,32 +46,32 @@ const unregisterPublishSettingStore = publishSettingStore.registerOnInit(
               type: "button",
               icon: Settings,
               label: t("account.set"),
-              handler: (platform: AbstractPlatform) =>
-                console.log("set", platform.name),
+              handler: (event: MouseEvent, platform: AbstractPlatform) => {
+                console.log("set", platform.name)
+                event.stopPropagation()
+              },
             },
             {
               type: "button",
               icon: Trash2,
               label: t("account.delete"),
-              handler: (platform: AbstractPlatform) => {
-                confirm(
-                  "aaa",
-                  "bbb",
-                  () => {
-                    alert(1)
-                    console.log("delete", platform.name)
-                  },
-                  (event: any) => {},
-                )
+              handler: (_event: MouseEvent, _platform: AbstractPlatform) => {
+                alert({
+                  title: "发布成功",
+                  message: "内容已同步到云端",
+                  type: "success",
+                  // duration: 3000,
+                })
               },
             },
             {
               type: "toggle",
               label: t("account.enable"),
               value: item.isEnabled,
-              handler: (platform: AbstractPlatform) => {
+              handler: (event: MouseEvent, platform: AbstractPlatform) => {
                 platform.enabled = !platform.enabled
                 item.isEnabled = platform.enabled
+                event.stopPropagation()
               },
             },
           ],

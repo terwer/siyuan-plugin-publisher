@@ -38,7 +38,8 @@ export class Topbar {
       const props = {
         pluginInstance: this.pluginInstance,
       }
-      createBootStrap(props, el)
+      // @ts-ignore
+      this.pluginInstance.vueApp = createBootStrap(props, el)
       // 显示菜单
       const rect = topBarElement.getBoundingClientRect()
       menu.open({

@@ -1,0 +1,143 @@
+// alert.styl
+.pt-alert-container
+  position: absolute
+  top: 20px
+  right: 20px
+  z-index: 1000
+  max-width: 450px
+
+.pt-alert
+  position: relative
+  padding: 12px 15px
+  margin-bottom: 16px
+  border: 1px solid #d9d9d9
+  border-radius: 6px
+  box-shadow: 0 3px 6px -4px rgba(0,0,0,0.12), 0 6px 16px 0 rgba(0,0,0,0.08), 0 9px 28px 8px rgba(0,0,0,0.05)
+  background: #ffffff
+  display: flex
+  align-items: flex-start
+  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1)
+
+// 类型颜色
+.pt-alert--success
+  .pt-alert__icon
+    color: #52c41a
+
+.pt-alert--warning
+  .pt-alert__icon
+    color: #faad14
+
+.pt-alert--error
+  .pt-alert__icon
+    color: #ff4d4f
+
+.pt-alert--info
+  .pt-alert__icon
+    color: rgba(0,0,0,0.65)
+
+// 图标
+.pt-alert__icon
+  margin-right: 8px
+  font-size: 16px
+  line-height: 1
+  display: flex
+  align-items: center
+  height: 24px
+
+// 内容区域
+.pt-alert__content
+  flex: 1
+  min-width: 0
+
+.pt-alert__title
+  font-size: 14px
+  line-height: 1.5715
+  color: rgba(0,0,0,0.88)
+  font-weight: 500
+  margin-bottom: 2px
+
+.pt-alert__message
+  font-size: 13px
+  line-height: 1.5715
+  color: rgba(0,0,0,0.65)
+
+.pt-alert__description
+  font-size: 13px
+  color: rgba(0,0,0,0.65)
+  margin-top: 4px
+  opacity: 0.9
+
+// 关闭按钮
+.pt-alert__close
+  position: absolute
+  top: 10px
+  right: 12px
+  padding: 0
+  border: none
+  background: transparent
+  color: rgba(0,0,0,0.45)
+  font-size: 12px
+  cursor: pointer
+  transition: color 0.2s
+
+  &:hover
+    color: rgba(0,0,0,0.88)
+
+// 动画
+@keyframes pt-alert-fade-in
+  from
+    opacity: 0
+    transform: translateY(-20px)
+  to
+    opacity: 1
+    transform: translateY(0)
+
+@keyframes pt-alert-fade-out
+  to
+    opacity: 0
+    transform: translateY(-20px)
+
+.pt-alert-enter-active
+  animation: pt-alert-fade-in 0.3s
+
+.pt-alert-leave-active
+  animation: pt-alert-fade-out 0.3s forwards
+
+// 暗黑模式
+html[data-theme-mode="dark"]
+  .pt-alert
+    background: #141414
+    border-color: #424242
+    box-shadow: 0 3px 6px -4px rgba(0,0,0,0.48), 0 6px 16px 0 rgba(0,0,0,0.32), 0 9px 28px 8px rgba(0,0,0,0.2)
+
+  .pt-alert__title
+    color: rgba(255, 255, 255, 0.85)
+
+  .pt-alert__message,
+  .pt-alert__description
+    color: rgba(255, 255, 255, 0.65)
+
+  .pt-alert__close
+    color: rgba(255, 255, 255, 0.45)
+    &:hover
+      color: rgba(255, 255, 255, 0.85)
+
+  // 类型覆盖
+  .pt-alert--success
+    border-color: #274916
+    .pt-alert__icon
+      color: #49aa19
+
+  .pt-alert--warning
+    border-color: #594214
+    .pt-alert__icon
+      color: #d89614
+
+  .pt-alert--error
+    border-color: #58181c
+    .pt-alert__icon
+      color: #dc4446
+
+  .pt-alert--info
+    .pt-alert__icon
+      color: rgba(255, 255, 255, 0.65)
