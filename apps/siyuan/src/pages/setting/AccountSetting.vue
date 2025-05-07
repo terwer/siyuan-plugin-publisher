@@ -16,7 +16,6 @@ import { createAppLogger } from "@utils/appLogger.ts"
 import { DynamicConfig } from "@/models/dynamicConfig.ts"
 import { useI18n } from "@composables/useI18n.ts"
 import SettingPlatformSelect from "@components/SettingPlatformSelect.vue"
-import { alert } from "@components/Alert"
 import { messageBox } from "@components/MessageBox.ts"
 
 const publishSettingStore = usePublishSettingStore()

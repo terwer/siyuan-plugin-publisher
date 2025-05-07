@@ -8,8 +8,9 @@
   -->
 
 <script setup lang="ts">
-import { Inbox } from "lucide-vue-next"
+import { Plus, Inbox } from "lucide-vue-next"
 import { useI18n } from "@composables/useI18n.ts"
+import Button from "@components/Button.vue"
 
 const props = defineProps<{
   pluginInstance: any
@@ -27,7 +28,15 @@ const addAccount = (event: MouseEvent) => {
 
 <template>
   <div class="platform-list">
-    <button>{{ t("account.add") }}</button>
+    <!-- 顶部操作栏 -->
+    <div class="pt-action-bar">
+      <Button size="sm" @click="addAccount">
+        <template #icon>
+          <Plus :size="16" />
+        </template>
+        {{ t("account.add") }}
+      </Button>
+    </div>
     <div v-if="platforms.length === 0" class="empty-state">
       <Inbox class="empty-icon" />
       <div class="empty-text">
@@ -83,7 +92,7 @@ const addAccount = (event: MouseEvent) => {
                     event.stopPropagation()
                     return
                   }
-                  action.handler(platform)
+                  action.handler(event, platform)
                   event.stopPropagation()
                 }
               "
@@ -138,6 +147,12 @@ const addAccount = (event: MouseEvent) => {
   margin: 0 auto
   position: relative
   z-index: 66
+
+  .pt-action-bar
+    display: flex
+    justify-content: flex-end
+    margin-bottom: 16px
+    gap: 8px
 
   // 空状态
   .empty-state
