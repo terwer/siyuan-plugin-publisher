@@ -37,7 +37,12 @@ const addAccount = (event: MouseEvent) => {
   <div class="platform-list">
     <!-- 顶部操作栏 -->
     <div class="pt-action-bar">
-      <Button size="sm" @click.stop="addAccount" :tooltip="t('account.addTip')" tooltip-placement="bottom">
+      <Button
+        size="sm"
+        @click.stop="addAccount"
+        :tooltip="t('account.addTip')"
+        tooltip-placement="bottom"
+      >
         <template #icon>
           <Plus :size="16" />
         </template>
@@ -57,7 +62,11 @@ const addAccount = (event: MouseEvent) => {
       </div>
     </div>
     <ul v-else>
-      <li v-for="platform in platforms" :key="platform.name" class="platform-item">
+      <li
+        v-for="platform in platforms"
+        :key="platform.name"
+        class="platform-item"
+      >
         <div class="platform-info">
           <component :is="platform.icon" class="platform-icon" />
           <span>{{ platform.name }}</span>
@@ -66,25 +75,36 @@ const addAccount = (event: MouseEvent) => {
         <div class="action-buttons">
           <template v-for="(action, index) in platform.actions" :key="index">
             <!-- 按钮类操作 -->
-            <button v-if="action.type === 'button'" @click.stop="
-              (event: MouseEvent) => {
-                if (!action.handler) {
+            <button
+              v-if="action.type === 'button'"
+              @click.stop="
+                (event: MouseEvent) => {
+                  if (!action.handler) {
+                    event.stopPropagation()
+                    return
+                  }
+                  action.handler(event, platform)
                   event.stopPropagation()
-                  return
                 }
-                action.handler(event, platform)
-                event.stopPropagation()
-              }
-            " class="action-btn">
+              "
+              class="action-btn"
+            >
               <component :is="action.icon" class="btn-icon" />
-              <span class="tooltip" :class="{
-                left: index === platform.actions.length - 1,
-                right: index === 0,
-              }">{{ action.label }}</span>
+              <span
+                class="tooltip"
+                :class="{
+                  left: index === platform.actions.length - 1,
+                  right: index === 0,
+                }"
+                >{{ action.label }}</span
+              >
             </button>
 
             <!-- 切换类操作 -->
-            <button v-if="action.type === 'toggle'" class="toggle-btn" :class="{ enabled: platform.enabled }"
+            <button
+              v-if="action.type === 'toggle'"
+              class="toggle-btn"
+              :class="{ enabled: platform.enabled }"
               @click.stop="
                 (event) => {
                   if (!action.handler) {
@@ -94,14 +114,19 @@ const addAccount = (event: MouseEvent) => {
                   action.handler(event, platform)
                   event.stopPropagation()
                 }
-              ">
+              "
+            >
               <div class="toggle-track">
                 <div class="toggle-thumb"></div>
               </div>
-              <span class="tooltip" :class="{
-                left: index === platform.actions.length - 1,
-                right: index === 0,
-              }">{{ action.label }}</span>
+              <span
+                class="tooltip"
+                :class="{
+                  left: index === platform.actions.length - 1,
+                  right: index === 0,
+                }"
+                >{{ action.label }}</span
+              >
             </button>
           </template>
         </div>
