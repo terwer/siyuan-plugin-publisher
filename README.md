@@ -1,6 +1,8 @@
 # SiYuan Publisher Plugin
 
 > 🚀 Easily publish your SiYuan notes to various platforms
+> 
+> ⚠️ Version 2.0.0+ is a revolutionary release, completely rewritten UI and optimized core logic, maintaining 99% compatibility. Version 1.x will be maintained at 1.34.2.
 
 ## ✨ Features
 
