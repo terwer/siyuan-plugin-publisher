@@ -61,8 +61,13 @@ const toggleCollapse = () => {
   <div :class="['tabs-container', { vertical }]">
     <div class="tab-controls" :class="{ collapsed: isCollapsed }">
       <div class="tab-list">
-        <button v-for="(tab, index) in tabs" :key="index" class="tab-button" :class="{ active: index === activeIndex }"
-          @click.stop="handleTabClick(index)">
+        <button
+          v-for="(tab, index) in tabs"
+          :key="index"
+          class="tab-button"
+          :class="{ active: index === activeIndex }"
+          @click.stop="handleTabClick(index)"
+        >
           {{ tab.label }}
         </button>
       </div>
@@ -70,16 +75,24 @@ const toggleCollapse = () => {
 
     <button class="collapse-handle" @click.stop="toggleCollapse">
       <svg class="collapse-icon" viewBox="0 0 24 24">
-        <path v-if="isCollapsed"
-          d="M9.29 6.71a1 1 0 0 0 0 1.41L13.17 12l-3.88 3.88a1 1 0 1 0 1.41 1.41l4.59-4.59a1 1 0 0 0 0-1.41L10.7 6.7a1 1 0 0 0-1.41.01z" />
-        <path v-else
-          d="M14.71 6.71a1 1 0 0 0-1.41 0L8.71 11.3a1 1 0 0 0 0 1.41l4.59 4.59a1 1 0 1 0 1.41-1.41L10.83 12l3.88-3.88a1 1 0 0 0 0-1.41z" />
+        <path
+          v-if="isCollapsed"
+          d="M9.29 6.71a1 1 0 0 0 0 1.41L13.17 12l-3.88 3.88a1 1 0 1 0 1.41 1.41l4.59-4.59a1 1 0 0 0 0-1.41L10.7 6.7a1 1 0 0 0-1.41.01z"
+        />
+        <path
+          v-else
+          d="M14.71 6.71a1 1 0 0 0-1.41 0L8.71 11.3a1 1 0 0 0 0 1.41l4.59 4.59a1 1 0 1 0 1.41-1.41L10.83 12l3.88-3.88a1 1 0 0 0 0-1.41z"
+        />
       </svg>
     </button>
 
     <div class="tab-content-wrapper">
-      <component v-if="tabs[activeIndex]?.content" :is="tabs[activeIndex].content" v-bind="tabs[activeIndex].props"
-        class="tab-content" />
+      <component
+        v-if="tabs[activeIndex]?.content"
+        :is="tabs[activeIndex].content"
+        v-bind="tabs[activeIndex].props"
+        class="tab-content"
+      />
     </div>
   </div>
 </template>
@@ -235,13 +248,17 @@ $border-radius = 8px
   min-width 0
   height 100%
   background var(--pt-tabs-content-bg)
-  padding 8px 12px
+  padding 2px 6px
   display flex
   flex-direction column
-  overflow-y auto
+  overflow hidden
 
   .tab-content
     flex 1
     display flex
     flex-direction column
+    gap 4px
+    // 注意：b3-menu__items是最外层已经设置了，这里不能设置
+    // 否则会出现双滚动条
+    //overflow-y auto
 </style>

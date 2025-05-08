@@ -145,26 +145,11 @@ const dataBindFormGroup = reactive({
 
 <template>
   <div class="settings-wrapper">
-    <u-i-setting
-      :plugin-instance="props.pluginInstance"
-      :form-group="uiSettingFormGroup"
-    />
-    <content-setting
-      :plugin-instance="props.pluginInstance"
-      :form-group="contentSettingFormGroup"
-    />
-    <a-i-setting
-      :plugin-instance="props.pluginInstance"
-      :form-group="aiSettingFormGroup"
-    />
-    <siyuan-setting
-      :plugin-instance="props.pluginInstance"
-      :form-group="siyuanSettingFormGroup"
-    />
-    <data-bind
-      :plugin-instance="props.pluginInstance"
-      :form-group="dataBindFormGroup"
-    />
+    <u-i-setting :plugin-instance="props.pluginInstance" :form-group="uiSettingFormGroup" />
+    <content-setting :plugin-instance="props.pluginInstance" :form-group="contentSettingFormGroup" />
+    <a-i-setting :plugin-instance="props.pluginInstance" :form-group="aiSettingFormGroup" />
+    <siyuan-setting :plugin-instance="props.pluginInstance" :form-group="siyuanSettingFormGroup" />
+    <data-bind :plugin-instance="props.pluginInstance" :form-group="dataBindFormGroup" />
   </div>
 </template>
 
@@ -172,5 +157,6 @@ const dataBindFormGroup = reactive({
 .settings-wrapper
   padding 0
   height 100%
-  overflow-y auto
+  display flex
+  flex-direction column
 </style>

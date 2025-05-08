@@ -350,7 +350,6 @@ watch(
     padding 16px
     background var(--pt-bg)
     flex 1 // 占据剩余空间
-    overflow-y auto // 内容区域可滚动
     min-height 600px // 设置最小高度
 
 .error-container
