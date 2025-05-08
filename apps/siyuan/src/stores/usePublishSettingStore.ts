@@ -33,7 +33,6 @@ export const usePublishSettingStore = defineStore("publishSetting", () => {
 
   const state = reactive<SypConfig>({
     lang: DEFAULT_SIYUAN_LANG as "zh_CN" | "en_US",
-    currentPlatform: null,
   })
 
   const readonlyState = computed(() => {
@@ -111,8 +110,5 @@ export const usePublishSettingStore = defineStore("publishSetting", () => {
     update,
     registerOnInit,
     doInit: initialize,
-    setCurrentPlatform: (platform: DynamicConfig) => {
-      state.currentPlatform = platform
-    },
   }
 })

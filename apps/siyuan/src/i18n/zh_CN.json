@@ -2,7 +2,32 @@
   "publisher": "发布工具",
   "common": {
     "back": "返回",
-    "help": "查看帮助文档"
+    "help": "查看帮助文档",
+    "copy": "复制",
+    "copied": "已复制",
+    "copyFailed": "复制失败",
+    "reportError": "报告错误",
+    "error": "错误",
+    "close": "关闭",
+    "opt": {
+      "ok": "操作成功",
+      "fail": "操作失败"
+    },
+    "reportEmailTitle": "发布工具错误报告",
+    "reportEmailError": "作者邮箱错误，请联系插件作者",
+    "emailBody": {
+      "errorTitle": "错误标题",
+      "errorInfo": "错误信息",
+      "errorTime": "错误时间",
+      "errorLocation": "错误位置",
+      "deviceInfo": "设备信息",
+      "isBrowserEnv": "是否是浏览器环境",
+      "isElectronEnv": "是否是Electron环境",
+      "isNodeEnv": "是否是Node环境",
+      "isBrowserPlugin": "是否是浏览器插件",
+      "isNodeEnvEnhanced": "是否是Node环境增强版"
+    },
+    "pluginVersion": "插件版本"
   },
   "setting": "设置",
   "publishOptions": "发布选项",
@@ -41,8 +66,12 @@
     },
     "single": {
       "save": "保存",
+      "saveTip":"保存当前平台实例的账号信息",
       "verify": "验证",
-      "goToPublish": "前往发布"
+      "verifyTip": "验证当前平台的可用性",
+      "goToPublish": "前往发布",
+      "goToPublishTip": "直接前往发布平台列表首页",
+      "setOk": "当前平台实例的账号信息已成功保存"
     }
   },
   "picbed": {

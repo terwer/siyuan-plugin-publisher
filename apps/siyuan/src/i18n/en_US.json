@@ -2,7 +2,32 @@
   "publisher": "Publisher",
   "common": {
     "back": "Back",
-    "help": "View help document"
+    "help": "View help document",
+    "copy": "Copy",
+    "copied": "Copied",
+    "copyFailed": "Copy failed",
+    "reportError": "Report error",
+    "error": "Error",
+    "close": "Close",
+    "opt": {
+      "ok": "Operation succeeded",
+      "fail": "Operation failed"
+    },
+    "reportEmailTitle": "Email report",
+    "reportEmailError": "Author email error, please contact the plugin author",
+    "emailBody": {
+      "errorTitle": "Error title",
+      "errorInfo": "Error info",
+      "errorTime": "Error time",
+      "errorLocation": "Error location",
+      "deviceInfo": "Device info",
+      "isBrowserEnv": "Is browser environment",
+      "isElectronEnv": "Is Electron environment",
+      "isNodeEnv": "Is Node environment",
+      "isBrowserPlugin": "Is browser plugin",
+      "isNodeEnvEnhanced": "Is Node environment enhanced"
+    },
+    "pluginVersion": "Plugin version"
   },
   "setting": "Settings",
   "publishOptions": "Publish Options",
@@ -41,8 +66,12 @@
     },
     "single": {
       "save": "Save",
+      "saveTip": "Save the configuration account information for the instance corresponding to a single platform",
       "verify": "Verify",
-      "goToPublish": "Go to Publish"
+      "verifyTip": "Verify the availability of the current platform",
+      "goToPublish": "Go to Publish",
+      "goToPublishTip": "Go directly to the homepage of the publishing platform list",
+      "setOk": "The account information for the current platform instance has been successfully saved"
     }
   },
   "picbed": {

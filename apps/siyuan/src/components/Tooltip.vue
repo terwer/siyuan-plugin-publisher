@@ -245,4 +245,4 @@ onUnmounted(() => {
 .pt-fade-enter-from,
 .pt-fade-leave-to
   opacity: 0
-</style> 
+</style>

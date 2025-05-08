@@ -39,7 +39,6 @@ interface DYNAMIC_CONFIG_TYPE {
 
 interface ISypConfig {
   lang?: "zh_CN" | "en_US"
-  currentPlatform?: DynamicConfig | null
 
   // 平台总的集合
   [DYNAMIC_CONFIG_KEY]?: DYNAMIC_CONFIG_TYPE

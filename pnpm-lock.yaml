@@ -53,6 +53,9 @@ importers:
       zhi-common:
         specifier: ^1.33.1
         version: 1.33.1(typescript@5.7.3)
+      zhi-device:
+        specifier: ^2.12.0
+        version: 2.12.0
       zhi-lib-base:
         specifier: ^0.8.0
         version: 0.8.0
@@ -4799,6 +4802,9 @@ packages:
 
   zhi-common@1.33.1:
     resolution: {integrity: sha512-R+/9Ha2bF44I2a/vF9EDewvb4KK2AxnC03LOBXwCyAFQkge+EKvua5zYqeNMNMYn9aUBDJ6MEOyrd2CORe2QcA==}
+
+  zhi-device@2.12.0:
+    resolution: {integrity: sha512-ib3XKc5/I19hHq3WSUBjHZ0BT6qSukT6fxgW2kobos9tOzqut5axK7HsuuUtBVeGczeq8gc0HvV6VjWeOPwh6g==}
 
   zhi-lib-base@0.8.0:
     resolution: {integrity: sha512-3Ky5p6KvLWpXy2tlb/JIfSEKLSe5w43PBLM6g+hNcWwpL9S62emgcpUAHzGWBbC0vlLBLungt2LOsmwAfhrZ0w==}
@@ -10069,6 +10075,8 @@ snapshots:
       zhi-lib-base: 0.8.0
     transitivePeerDependencies:
       - typescript
+
+  zhi-device@2.12.0: {}
 
   zhi-lib-base@0.8.0: {}
 

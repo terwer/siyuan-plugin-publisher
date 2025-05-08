@@ -15,6 +15,7 @@ import { useI18n } from "@composables/useI18n.ts"
 import { TabEnum } from "@enums/TabEnum.ts"
 import { computed, reactive, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
+import { alert } from "@components/Alert.ts"
 
 // Props
 const props = defineProps<{
@@ -47,11 +48,16 @@ const extra = computed(() => {
       props: {
         type: "primary",
         size: "sm",
-        tooltip: "Save",
+        tooltip: t("account.single.saveTip"),
         tooltipPlacement: "bottom",
       },
       onClick: () => {
-        console.log(t("account.single.save"))
+        alert({
+          title: t("common.opt.ok"),
+          message: t("account.single.setOk"),
+          type: "success",
+          duration: 3000,
+        })
       },
       text: t("account.single.save"),
     },
@@ -60,11 +66,11 @@ const extra = computed(() => {
       props: {
         type: "default",
         size: "sm",
-        tooltip: "Verify",
+        tooltip: t("account.single.verifyTip"),
         tooltipPlacement: "bottom",
       },
       onClick: () => {
-        console.log(t("account.single.verify"))
+        errorMsg.value = new Error("validate failed").toString()
       },
       text: t("account.single.verify"),
     },
@@ -73,7 +79,7 @@ const extra = computed(() => {
       props: {
         type: "link",
         size: "sm",
-        tooltip: "Go to publish",
+        tooltip: t("account.single.goToPublishTip"),
         tooltipPlacement: "bottom",
       },
       onClick: () => {
@@ -83,6 +89,7 @@ const extra = computed(() => {
     },
   ]
 })
+const errorMsg = ref("")
 </script>
 
 <template>
@@ -93,6 +100,7 @@ const extra = computed(() => {
     :help-key="subtype"
     @back-emit="handleBack"
     :extra="extra"
+    :error="errorMsg"
   >
     <div>single set index:{{ apiType }}=>{{ subtype }}</div>
   </back-page>
