@@ -42,6 +42,17 @@ const createBootStrap = (props: any, container: string | HTMLElement) => {
     routes,
   })
 
+  // 添加导航守卫，第一次访问时重定向到根路径
+  let isFirstVisit = true
+  router.beforeEach((_to, _from, next) => {
+    if (isFirstVisit) {
+      isFirstVisit = false
+      next("/")
+    } else {
+      next()
+    }
+  })
+
   app.use(pinia)
   app.use(router)
   app.mount(container)
