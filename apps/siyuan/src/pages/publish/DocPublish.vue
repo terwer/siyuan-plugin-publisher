@@ -50,7 +50,7 @@ const unregisterPublishSettingStore = publishSettingStore.registerOnInit(
               {
                 type: "button",
                 icon: Zap,
-                label: t("publish.publish"),
+                label: t("publish.quick"),
                 handler: (event: MouseEvent, _platform: AbstractPlatform) => {
                   event.stopPropagation()
                   console.log("fast")
