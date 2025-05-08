@@ -1,3 +1,5 @@
+[中文](README_zh_CN.md)
+
 # SiYuan Publisher Plugin
 
 > 🚀 Easily publish your SiYuan notes to various platforms
