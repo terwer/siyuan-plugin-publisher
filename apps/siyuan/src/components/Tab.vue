@@ -144,15 +144,18 @@ $border-radius = 8px
 
   &.vertical
     flex-direction row
-    overflow hidden
 
     .tab-controls
       width $tab-width
       transition width $transition-duration ease, border $transition-duration ease
       border-right 1px solid var(--pt-tabs-border)
-      overflow hidden
-      position relative
+      position absolute
+      left 0
+      top 0
+      bottom 0
       height 100%
+      flex-shrink 0
+      z-index 10
 
       &.collapsed
         width 0
@@ -162,10 +165,14 @@ $border-radius = 8px
         z-index -1
 
 .tab-controls
-  position relative
+  position absolute
+  left 0
+  top 0
+  bottom 0
   background var(--pt-tabs-controls-bg)
   flex-shrink 0
   height 100%
+  z-index 10
 
 .tab-list
   width $tab-width
@@ -252,6 +259,7 @@ $border-radius = 8px
   display flex
   flex-direction column
   overflow hidden
+  margin-left $tab-width
 
   .tab-content
     flex 1
