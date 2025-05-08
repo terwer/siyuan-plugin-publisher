@@ -39,7 +39,7 @@ const router = useRouter()
 const { query } = useRoute()
 
 // Emits
-const emit = defineEmits(["backEmit"])
+const emit = defineEmits(["backEmit", "clearError"])
 
 // Data
 const showBack = ref(query.showBack === "true")
@@ -55,6 +55,10 @@ const helpUrl = computed(() => {
     (help as any)[props.helpKey] ||
     "https://siyuan.wiki/s/20230810132040-nn4q7vs"
   )
+})
+
+const displayError = computed(() => {
+  return showError.value ? props.error : ""
 })
 
 // Methods
@@ -137,9 +141,9 @@ watch(
 
 <template>
   <div class="back-page">
-    <div v-if="error && showError" class="error-container">
+    <div v-if="displayError" class="error-container">
       <div class="error-content">
-        <div class="error-message">{{ error }}</div>
+        <div class="error-message">{{ displayError }}</div>
         <div class="error-actions">
           <button class="copy-btn" @click.stop="copyError">
             <Copy class="icon" />
@@ -167,12 +171,8 @@ watch(
 
         <div class="title-group">
           <h1 class="title">{{ props.title }}</h1>
-          <div
-            v-if="helpKey"
-            class="help-container"
-            @mouseenter="toggleHelpTooltip(true)"
-            @mouseleave="toggleHelpTooltip(false)"
-          >
+          <div v-if="helpKey" class="help-container" @mouseenter="toggleHelpTooltip(true)"
+            @mouseleave="toggleHelpTooltip(false)">
             <button class="help-btn" @click.stop="goToHelp(helpUrl)">
               <HelpCircle class="icon" />
             </button>
@@ -186,11 +186,7 @@ watch(
       <div v-if="extra && extra.length > 0" class="header-extra">
         <slot name="extra">
           <template v-for="(item, _index) in extra" :key="_index">
-            <component
-              :is="item.component"
-              v-bind="item.props || {}"
-              @click.stop="item.onClick"
-            >
+            <component :is="item.component" v-bind="item.props || {}" @click.stop="item.onClick">
               {{ item.text }}
             </component>
           </template>

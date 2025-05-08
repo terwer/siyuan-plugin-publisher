@@ -37,6 +37,12 @@ const pageTitle = computed(() =>
 const subtype = getSubPlatformTypeByKey(apiType)
 
 // methods
+const errorMsg = ref("")
+
+const setError = (msg: string) => {
+  errorMsg.value = `${msg} (${new Date().toLocaleString()})`
+}
+
 const handleBack = () => {
   router.push(`/?tab=${TabEnum.ACCOUNT}`)
 }
@@ -70,7 +76,7 @@ const extra = computed(() => {
         tooltipPlacement: "bottom",
       },
       onClick: () => {
-        errorMsg.value = new Error("validate failed").toString()
+        setError(new Error("validate failed").toString())
       },
       text: t("account.single.verify"),
     },
@@ -89,19 +95,11 @@ const extra = computed(() => {
     },
   ]
 })
-const errorMsg = ref("")
 </script>
 
 <template>
-  <back-page
-    :title="pageTitle"
-    :plugin-instance="props.pluginInstance"
-    :has-back-emit="true"
-    :help-key="subtype"
-    @back-emit="handleBack"
-    :extra="extra"
-    :error="errorMsg"
-  >
+  <back-page :title="pageTitle" :plugin-instance="props.pluginInstance" :has-back-emit="true" :help-key="subtype"
+    @back-emit="handleBack" :extra="extra" :error="errorMsg">
     <div>single set index:{{ apiType }}=>{{ subtype }}</div>
   </back-page>
 </template>
