@@ -102,13 +102,15 @@ onMounted(() => {
 </script>
 
 <template>
-  <Tab
-    :tabs="tabs"
-    :active-tab="activeTab"
-    :vertical="true"
-    :collapsed="isCollapsed"
-    @tab-change="onTabChange"
-  />
+  <div class="publish-container">
+    <Tab :tabs="tabs" :active-tab="activeTab" :vertical="true" :collapsed="isCollapsed" @tab-change="onTabChange" />
+  </div>
 </template>
 
-<style scoped></style>
+<style lang="stylus" scoped>
+.publish-container
+  width 100%
+  height 100%
+  display flex
+  flex-direction column
+</style>

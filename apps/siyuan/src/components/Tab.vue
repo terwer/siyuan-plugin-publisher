@@ -61,13 +61,8 @@ const toggleCollapse = () => {
   <div :class="['tabs-container', { vertical }]">
     <div class="tab-controls" :class="{ collapsed: isCollapsed }">
       <div class="tab-list">
-        <button
-          v-for="(tab, index) in tabs"
-          :key="index"
-          class="tab-button"
-          :class="{ active: index === activeIndex }"
-          @click.stop="handleTabClick(index)"
-        >
+        <button v-for="(tab, index) in tabs" :key="index" class="tab-button" :class="{ active: index === activeIndex }"
+          @click.stop="handleTabClick(index)">
           {{ tab.label }}
         </button>
       </div>
@@ -75,24 +70,16 @@ const toggleCollapse = () => {
 
     <button class="collapse-handle" @click.stop="toggleCollapse">
       <svg class="collapse-icon" viewBox="0 0 24 24">
-        <path
-          v-if="isCollapsed"
-          d="M9.29 6.71a1 1 0 0 0 0 1.41L13.17 12l-3.88 3.88a1 1 0 1 0 1.41 1.41l4.59-4.59a1 1 0 0 0 0-1.41L10.7 6.7a1 1 0 0 0-1.41.01z"
-        />
-        <path
-          v-else
-          d="M14.71 6.71a1 1 0 0 0-1.41 0L8.71 11.3a1 1 0 0 0 0 1.41l4.59 4.59a1 1 0 1 0 1.41-1.41L10.83 12l3.88-3.88a1 1 0 0 0 0-1.41z"
-        />
+        <path v-if="isCollapsed"
+          d="M9.29 6.71a1 1 0 0 0 0 1.41L13.17 12l-3.88 3.88a1 1 0 1 0 1.41 1.41l4.59-4.59a1 1 0 0 0 0-1.41L10.7 6.7a1 1 0 0 0-1.41.01z" />
+        <path v-else
+          d="M14.71 6.71a1 1 0 0 0-1.41 0L8.71 11.3a1 1 0 0 0 0 1.41l4.59 4.59a1 1 0 1 0 1.41-1.41L10.83 12l3.88-3.88a1 1 0 0 0 0-1.41z" />
       </svg>
     </button>
 
     <div class="tab-content-wrapper">
-      <component
-        v-if="tabs[activeIndex]?.content"
-        :is="tabs[activeIndex].content"
-        v-bind="tabs[activeIndex].props"
-        class="tab-content"
-      />
+      <component v-if="tabs[activeIndex]?.content" :is="tabs[activeIndex].content" v-bind="tabs[activeIndex].props"
+        class="tab-content" />
     </div>
   </div>
 </template>
@@ -152,21 +139,25 @@ $border-radius = 8px
       border-right 1px solid var(--pt-tabs-border)
       overflow hidden
       position relative
-      height auto
+      height 100%
 
       &.collapsed
         width 0
         border-right-color transparent
+        height 0
+        position absolute
+        z-index -1
 
 .tab-controls
   position relative
   background var(--pt-tabs-controls-bg)
   flex-shrink 0
-  height auto
+  height 100%
 
 .tab-list
   width $tab-width
   min-width $tab-width
+  height 100%
 
 .tab-button
   display flex
@@ -201,7 +192,7 @@ $border-radius = 8px
 .collapse-handle
   position absolute
   left $tab-width
-  top 96px
+  top 32px
   width $control-size
   height $control-size
   padding 6px
@@ -242,6 +233,15 @@ $border-radius = 8px
 .tab-content-wrapper
   flex 1
   min-width 0
+  height 100%
   background var(--pt-tabs-content-bg)
   padding 8px 12px
+  display flex
+  flex-direction column
+  overflow-y auto
+
+  .tab-content
+    flex 1
+    display flex
+    flex-direction column
 </style>
