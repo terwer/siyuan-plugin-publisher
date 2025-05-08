@@ -42,11 +42,7 @@ const gotoAccount = (event: MouseEvent) => {
       </div>
     </div>
     <ul v-else>
-      <li
-        v-for="platform in platforms"
-        :key="platform.name"
-        class="platform-item"
-      >
+      <li v-for="platform in platforms" :key="platform.name" class="platform-item">
         <div class="platform-info">
           <component :is="platform.icon" class="platform-icon" />
           <span>{{ platform.name }}</span>
@@ -55,36 +51,25 @@ const gotoAccount = (event: MouseEvent) => {
         <div class="action-buttons">
           <template v-for="(action, index) in platform.actions" :key="index">
             <!-- 按钮类操作 -->
-            <button
-              v-if="action.type === 'button'"
-              @click.stop="
-                (event: MouseEvent) => {
-                  if (!action.handler) {
-                    event.stopPropagation()
-                    return
-                  }
-                  action.handler(event, platform)
+            <button v-if="action.type === 'button'" @click.stop="
+              (event: MouseEvent) => {
+                if (!action.handler) {
                   event.stopPropagation()
+                  return
                 }
-              "
-              class="action-btn"
-            >
+                action.handler(event, platform)
+                event.stopPropagation()
+              }
+            " class="action-btn">
               <component :is="action.icon" class="btn-icon" />
-              <span
-                class="tooltip"
-                :class="{
-                  left: index === platform.actions.length - 1,
-                  right: index === 0,
-                }"
-                >{{ action.label }}</span
-              >
+              <span class="tooltip" :class="{
+                left: index === platform.actions.length - 1,
+                right: index === 0,
+              }">{{ action.label }}</span>
             </button>
 
             <!-- 切换类操作 -->
-            <button
-              v-if="action.type === 'toggle'"
-              class="toggle-btn"
-              :class="{ enabled: platform.enabled }"
+            <button v-if="action.type === 'toggle'" class="toggle-btn" :class="{ enabled: platform.enabled }"
               @click.stop="
                 (event) => {
                   if (!action.handler) {
@@ -94,19 +79,14 @@ const gotoAccount = (event: MouseEvent) => {
                   action.handler(event, platform)
                   event.stopPropagation()
                 }
-              "
-            >
+              ">
               <div class="toggle-track">
                 <div class="toggle-thumb"></div>
               </div>
-              <span
-                class="tooltip"
-                :class="{
-                  left: index === platform.actions.length - 1,
-                  right: index === 0,
-                }"
-                >{{ action.label }}</span
-              >
+              <span class="tooltip" :class="{
+                left: index === platform.actions.length - 1,
+                right: index === 0,
+              }">{{ action.label }}</span>
             </button>
           </template>
         </div>
@@ -228,34 +208,34 @@ const gotoAccount = (event: MouseEvent) => {
   // 工具提示
   .tooltip
     position: absolute
-    top: calc(100% + 6px)
+    top: -24px
     left: 50%
     transform: translateX(-50%)
-    z-index: 9999
+    z-index: 99999
     background: var(--pt-platform-tooltip-bg)
     color: var(--pt-platform-tooltip-text)
-    padding: 6px 12px
-    border-radius: 4px
+    padding: 4px 8px
+    border-radius: 3px
     font-size: 0.7rem
     white-space: nowrap
     opacity: 0
     visibility: hidden
     transition: opacity 0.2s ease, visibility 0.2s ease
     box-shadow: 0 2px 4px var(--pt-platform-shadow)
-    word-break: keep-all
     pointer-events: none
     will-change: opacity, visibility, transform
 
-    &::after
-      content: ""
+    .arrow
       position: absolute
-      top: -8px
+      bottom: -4px
       left: 50%
       transform: translateX(-50%)
-      border-width: 4px
-      border-style: solid
-      border-color: transparent transparent var(--pt-platform-tooltip-bg) transparent
-      transition: transform 0.2s ease
+      width: 0
+      height: 0
+      border-left: 4px solid transparent
+      border-right: 4px solid transparent
+      border-top: 4px solid var(--pt-platform-tooltip-bg)
+      margin-top: 2px
 
     // 左侧定位
     &.left
@@ -283,6 +263,7 @@ const gotoAccount = (event: MouseEvent) => {
     gap: 0.4rem
     margin-left: auto
     position: relative
+    overflow: visible
 
   .action-btn
     position: relative
@@ -293,6 +274,7 @@ const gotoAccount = (event: MouseEvent) => {
     color: var(--pt-platform-text-light)
     border-radius: 3px
     transition: all 0.15s
+    overflow: visible
 
     &:hover
       background: var(--pt-platform-surface)
