@@ -9,6 +9,14 @@
 
 // alert.ts
 import { h, render, type VNode } from "vue"
+import {
+  CheckCircle2,
+  AlertTriangle,
+  X,
+  Info,
+  X as CloseIcon,
+} from "lucide-vue-next"
+import { PUBLISHER_ROOT_ID } from "@/Constants.ts"
 
 type AlertType = "success" | "warning" | "error" | "info"
 
@@ -54,33 +62,15 @@ const AlertComponent = {
     const getIcon = (): VNode => {
       const baseProps = {
         class: "pt-alert__icon-svg",
-        viewBox: "0 0 1024 1024",
-        width: "1em",
-        height: "1em",
-        fill: "currentColor",
+        size: 18,
+        strokeWidth: 2,
       }
 
       const icons = {
-        success: h("svg", baseProps, [
-          h("path", {
-            d: "M512 64a448 448 0 1 1 0 896 448 448 0 0 1 0-896zm-55.808 382.464L370.432 475.52a38.4 38.4 0 0 0 0 54.272 38.4 38.4 0 0 0 54.272 0l85.76-85.76 181.248-181.248a38.4 38.4 0 0 0 0-54.272 38.4 38.4 0 0 0-54.272 0L456.192 446.464z",
-          }),
-        ]),
-        info: h("svg", baseProps, [
-          h("path", {
-            d: "M512 64a448 448 0 1 1 0 896 448 448 0 0 1 0-896zm32 672v-64h-64v64h64zm-32-448c-17.664 0-32 14.304-32 32v224c0 17.664 14.336 32 32 32s32-14.336 32-32V320c0-17.696-14.336-32-32-32z",
-          }),
-        ]),
-        warning: h("svg", baseProps, [
-          h("path", {
-            d: "M512 64a448 448 0 1 1 0 896 448 448 0 0 1 0-896zm-32 192v256h64V256h-64zm0 384v64h64v-64h-64z",
-          }),
-        ]),
-        error: h("svg", baseProps, [
-          h("path", {
-            d: "M512 64a448 448 0 1 1 0 896 448 448 0 0 1 0-896zm252.16 571.904L571.904 764.16a38.4 38.4 0 0 1-54.272 0L512 734.528 454.4 792.128a38.4 38.4 0 0 1-54.272 0l-54.272-54.272a38.4 38.4 0 0 1 0-54.272L457.6 579.584 400 522.016a38.4 38.4 0 0 1 0-54.272l54.272-54.272a38.4 38.4 0 0 1 54.272 0L512 457.6l57.6-57.6a38.4 38.4 0 0 1 54.272 0l54.272 54.272a38.4 38.4 0 0 1 0 54.272L566.4 579.584l57.6 57.6a38.4 38.4 0 0 1 0 54.272l-54.272 54.272a38.4 38.4 0 0 1-54.272 0z",
-          }),
-        ]),
+        success: h(CheckCircle2, baseProps),
+        info: h(Info, baseProps),
+        warning: h(AlertTriangle, baseProps),
+        error: h(X, baseProps),
       } as any
 
       return icons[props.type] || icons.info
@@ -112,21 +102,11 @@ const AlertComponent = {
                 class: "pt-alert__close",
                 onClick: handleClose,
               },
-              h(
-                "svg",
-                {
-                  class: "pt-alert__close-icon",
-                  viewBox: "0 0 1024 1024",
-                  width: "1em",
-                  height: "1em",
-                  fill: "currentColor",
-                },
-                [
-                  h("path", {
-                    d: "M512 64a448 448 0 1 1 0 896 448 448 0 0 1 0-896zm169.856 278.144a32 32 0 0 0-45.248-45.248L512 466.752 386.432 341.184a32 32 0 0 0-45.248 45.248L466.752 512 341.184 637.568a32 32 0 0 0 45.248 45.248L512 557.248l125.568 125.568a32 32 0 0 0 45.248-45.248L557.248 512l125.568-125.856z",
-                  }),
-                ],
-              ),
+              h(CloseIcon, {
+                class: "pt-alert__close-icon",
+                size: 12,
+                strokeWidth: 2,
+              }),
             ),
         ],
       )
@@ -139,7 +119,7 @@ const createContainer = () => {
   if (!alertContainer) {
     alertContainer = document.createElement("div")
     alertContainer.className = "pt-alert-container"
-    const parent = document.getElementById("publisher") || document.body
+    const parent = document.getElementById(PUBLISHER_ROOT_ID) || document.body
     parent.appendChild(alertContainer)
   }
 }

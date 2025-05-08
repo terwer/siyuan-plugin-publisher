@@ -39,3 +39,7 @@ export const IS_ENGLISH = DEFAULT_SIYUAN_LANG === "en_US"
  * 动态配置key，全系统唯一，请勿更改
  */
 export const DYNAMIC_CONFIG_KEY = "dynamic-config"
+/**
+ * 根节点id
+ */
+export const PUBLISHER_ROOT_ID = "publisher-root"

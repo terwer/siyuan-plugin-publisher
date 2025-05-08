@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div id="publisher-root" class="app-container">
     <router-view></router-view>
   </div>
 </template>

@@ -30,8 +30,7 @@
     line-height: 0
 
     &-svg
-      width: 24px
-      height: 24px
+      stroke: currentColor
 
   &__title
     font-size: 16px
@@ -96,7 +95,7 @@
 html[data-theme-mode="dark"]
   .pt-messagebox
     background: #1f1f1f
-    box-shadow: 0 6px 16px 0 rgba(0,0,0,0.48), 0 3px 6px -4px rgba(0,0,0,0.32), 0 9px 28px 8px rgba(0,0,0,0.2)
+    box-shadow: 0 6px 16px 0 rgba(0,0,0,0.48), 0 3px 6px -4px rgba(0,0,0,0.38), 0 9px 28px 8px rgba(0,0,0,0.35)
 
     &__title
       color: rgba(255,255,255,0.85)
@@ -106,22 +105,22 @@ html[data-theme-mode="dark"]
 
     &__btn
       &--default
-        background: #333
+        background: #1f1f1f
         border-color: #434343
         color: rgba(255,255,255,0.85)
         &:hover
-          color: #1668dc
-          border-color: #1668dc
+          color: #177ddc
+          border-color: #177ddc
 
       &--primary
-        background: #1668dc
+        background: #177ddc
         &:hover
-          background: #1554ad
+          background: #1890ff
 
       &--danger
-        background: #dc4446
+        background: #a61d24
         &:hover
-          background: #d9363e
+          background: #c1353d
 
   .pt-messagebox-mask
     background: rgba(0,0,0,0.65)

@@ -1,5 +1,13 @@
 // MessageBox.ts
 import { h, render, type VNode, type Component } from "vue"
+import {
+  CheckCircle2,
+  AlertTriangle,
+  X,
+  Info,
+  HelpCircle,
+} from "lucide-vue-next"
+import { PUBLISHER_ROOT_ID } from "@/Constants.ts"
 
 type MessageBoxType = "info" | "success" | "warning" | "error" | "confirm"
 type ButtonType = "primary" | "default" | "danger"
@@ -45,38 +53,16 @@ const MessageBoxComponent = {
     const getIcon = (): VNode => {
       const baseProps = {
         class: "pt-messagebox__icon-svg",
-        viewBox: "0 0 1024 1024",
-        width: "1.2em",
-        height: "1.2em",
-        fill: "currentColor",
+        size: 24,
+        strokeWidth: 2,
       }
 
       const icons = {
-        info: h("svg", baseProps, [
-          h("path", {
-            d: "M512 64a448 448 0 1 1 0 896 448 448 0 0 1 0-896zm32 672v-64h-64v64h64zm-32-448c-17.664 0-32 14.304-32 32v224c0 17.664 14.336 32 32 32s32-14.336 32-32V320c0-17.696-14.336-32-32-32z",
-          }),
-        ]),
-        success: h("svg", baseProps, [
-          h("path", {
-            d: "M512 64a448 448 0 1 1 0 896 448 448 0 0 1 0-896zm-55.808 382.464L370.432 475.52a38.4 38.4 0 0 0 0 54.272 38.4 38.4 0 0 0 54.272 0l85.76-85.76 181.248-181.248a38.4 38.4 0 0 0 0-54.272 38.4 38.4 0 0 0-54.272 0L456.192 446.464z",
-          }),
-        ]),
-        warning: h("svg", baseProps, [
-          h("path", {
-            d: "M512 64a448 448 0 1 1 0 896 448 448 0 0 1 0-896zm-32 192v256h64V256h-64zm0 384v64h64v-64h-64z",
-          }),
-        ]),
-        error: h("svg", baseProps, [
-          h("path", {
-            d: "M512 64a448 448 0 1 1 0 896 448 448 0 0 1 0-896zm252.16 571.904L571.904 764.16a38.4 38.4 0 0 1-54.272 0L512 734.528 454.4 792.128a38.4 38.4 0 0 1-54.272 0l-54.272-54.272a38.4 38.4 0 0 1 0-54.272L457.6 579.584 400 522.016a38.4 38.4 0 0 1 0-54.272l54.272-54.272a38.4 38.4 0 0 1 54.272 0L512 457.6l57.6-57.6a38.4 38.4 0 0 1 54.272 0l54.272 54.272a38.4 38.4 0 0 1 0 54.272L566.4 579.584l57.6 57.6a38.4 38.4 0 0 1 0 54.272l-54.272 54.272a38.4 38.4 0 0 1-54.272 0z",
-          }),
-        ]),
-        confirm: h("svg", baseProps, [
-          h("path", {
-            d: "M512 64a448 448 0 1 1 0 896 448 448 0 0 1 0-896zm0 672a48 48 0 1 0 0-96 48 48 0 0 0 0 96zm38.4-326.4H480V320h64v89.6zm0 172.8H480V576h64v-6.4z",
-          }),
-        ]),
+        info: h(Info, baseProps),
+        success: h(CheckCircle2, baseProps),
+        warning: h(AlertTriangle, baseProps),
+        error: h(X, baseProps),
+        confirm: h(HelpCircle, baseProps),
       } as any
 
       return icons[props.options.type || "confirm"]
@@ -183,7 +169,7 @@ const MessageBoxComponent = {
 
 const createContainer = () => {
   const container = document.createElement("div")
-  const parent = document.getElementById("publisher") || document.body
+  const parent = document.getElementById(PUBLISHER_ROOT_ID) || document.body
   parent.appendChild(container)
   return container
 }

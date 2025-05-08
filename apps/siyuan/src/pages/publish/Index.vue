@@ -102,15 +102,13 @@ onMounted(() => {
 </script>
 
 <template>
-  <div id="publisher">
-    <Tab
-      :tabs="tabs"
-      :active-tab="activeTab"
-      :vertical="true"
-      :collapsed="isCollapsed"
-      @tab-change="onTabChange"
-    />
-  </div>
+  <Tab
+    :tabs="tabs"
+    :active-tab="activeTab"
+    :vertical="true"
+    :collapsed="isCollapsed"
+    @tab-change="onTabChange"
+  />
 </template>
 
 <style scoped></style>
