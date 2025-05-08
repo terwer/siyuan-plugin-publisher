@@ -266,10 +266,11 @@ const addAccount = (event: MouseEvent) => {
     white-space: nowrap
     opacity: 0
     visibility: hidden
-    transition: all 0.2s
+    transition: opacity 0.2s ease, visibility 0.2s ease
     box-shadow: 0 2px 4px var(--pt-platform-shadow)
     word-break: keep-all
     pointer-events: none
+    will-change: opacity, visibility, transform
 
     &::after
       content: ""
@@ -280,12 +281,14 @@ const addAccount = (event: MouseEvent) => {
       border-width: 4px
       border-style: solid
       border-color: transparent transparent var(--pt-platform-tooltip-bg) transparent
+      transition: transform 0.2s ease
 
     // 左侧定位
     &.left
       left: auto
       right: 0
       transform: none
+      transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease
       &::after
         left: auto
         right: 10px
@@ -295,6 +298,7 @@ const addAccount = (event: MouseEvent) => {
     &.right
       left: 0
       transform: none
+      transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease
       &::after
         left: 10px
         transform: none
@@ -323,6 +327,7 @@ const addAccount = (event: MouseEvent) => {
       .tooltip
         opacity: 1
         visibility: visible
+        transition-delay: 0.1s
 
     .btn-icon
       width: 14px
@@ -345,6 +350,7 @@ const addAccount = (event: MouseEvent) => {
       .tooltip
         opacity: 1
         visibility: visible
+        transition-delay: 0.1s
 
     &.enabled
       .toggle-track
@@ -371,52 +377,4 @@ const addAccount = (event: MouseEvent) => {
       border-radius: 50%
       box-shadow: 0 1px 2px var(--pt-platform-shadow)
       transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)
-
-  // 工具提示
-  .tooltip
-    position: absolute
-    top: calc(100% + 6px)
-    left: 50%
-    transform: translateX(-50%)
-    z-index: 9999
-    background: var(--pt-platform-tooltip-bg)
-    color: var(--pt-platform-tooltip-text)
-    padding: 6px 12px
-    border-radius: 4px
-    font-size: 0.7rem
-    white-space: nowrap
-    opacity: 0
-    visibility: hidden
-    transition: all 0.2s
-    box-shadow: 0 2px 4px var(--pt-platform-shadow)
-    word-break: keep-all
-    pointer-events: none
-
-    &::after
-      content: ""
-      position: absolute
-      top: -8px
-      left: 50%
-      transform: translateX(-50%)
-      border-width: 4px
-      border-style: solid
-      border-color: transparent transparent var(--pt-platform-tooltip-bg) transparent
-
-    // 左侧定位
-    &.left
-      left: auto
-      right: 0
-      transform: none
-      &::after
-        left: auto
-        right: 10px
-        transform: none
-
-    // 右侧定位
-    &.right
-      left: 0
-      transform: none
-      &::after
-        left: 10px
-        transform: none
 </style>

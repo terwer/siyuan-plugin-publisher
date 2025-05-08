@@ -8,9 +8,9 @@
   -->
 
 <script setup lang="ts">
-import { useI18n } from "@composables/useI18n.ts";
-import { TabEnum } from "@enums/TabEnum.ts";
-import { Inbox } from "lucide-vue-next";
+import { useI18n } from "@composables/useI18n.ts"
+import { TabEnum } from "@enums/TabEnum.ts"
+import { Inbox } from "lucide-vue-next"
 
 const props = defineProps<{
   pluginInstance: any
@@ -42,7 +42,11 @@ const gotoAccount = (event: MouseEvent) => {
       </div>
     </div>
     <ul v-else>
-      <li v-for="platform in platforms" :key="platform.name" class="platform-item">
+      <li
+        v-for="platform in platforms"
+        :key="platform.name"
+        class="platform-item"
+      >
         <div class="platform-info">
           <component :is="platform.icon" class="platform-icon" />
           <span>{{ platform.name }}</span>
@@ -51,25 +55,36 @@ const gotoAccount = (event: MouseEvent) => {
         <div class="action-buttons">
           <template v-for="(action, index) in platform.actions" :key="index">
             <!-- 按钮类操作 -->
-            <button v-if="action.type === 'button'" @click.stop="
-              (event: MouseEvent) => {
-                if (!action.handler) {
+            <button
+              v-if="action.type === 'button'"
+              @click.stop="
+                (event: MouseEvent) => {
+                  if (!action.handler) {
+                    event.stopPropagation()
+                    return
+                  }
+                  action.handler(event, platform)
                   event.stopPropagation()
-                  return
                 }
-                action.handler(event, platform)
-                event.stopPropagation()
-              }
-            " class="action-btn">
+              "
+              class="action-btn"
+            >
               <component :is="action.icon" class="btn-icon" />
-              <span class="tooltip" :class="{
-                left: index === platform.actions.length - 1,
-                right: index === 0,
-              }">{{ action.label }}</span>
+              <span
+                class="tooltip"
+                :class="{
+                  left: index === platform.actions.length - 1,
+                  right: index === 0,
+                }"
+                >{{ action.label }}</span
+              >
             </button>
 
             <!-- 切换类操作 -->
-            <button v-if="action.type === 'toggle'" class="toggle-btn" :class="{ enabled: platform.enabled }"
+            <button
+              v-if="action.type === 'toggle'"
+              class="toggle-btn"
+              :class="{ enabled: platform.enabled }"
               @click.stop="
                 (event) => {
                   if (!action.handler) {
@@ -79,14 +94,19 @@ const gotoAccount = (event: MouseEvent) => {
                   action.handler(event, platform)
                   event.stopPropagation()
                 }
-              ">
+              "
+            >
               <div class="toggle-track">
                 <div class="toggle-thumb"></div>
               </div>
-              <span class="tooltip" :class="{
-                left: index === platform.actions.length - 1,
-                right: index === 0,
-              }">{{ action.label }}</span>
+              <span
+                class="tooltip"
+                :class="{
+                  left: index === platform.actions.length - 1,
+                  right: index === 0,
+                }"
+                >{{ action.label }}</span
+              >
             </button>
           </template>
         </div>
@@ -205,6 +225,58 @@ const gotoAccount = (event: MouseEvent) => {
       height: 16px
       color: var(--pt-platform-text-light)
 
+  // 工具提示
+  .tooltip
+    position: absolute
+    top: calc(100% + 6px)
+    left: 50%
+    transform: translateX(-50%)
+    z-index: 9999
+    background: var(--pt-platform-tooltip-bg)
+    color: var(--pt-platform-tooltip-text)
+    padding: 6px 12px
+    border-radius: 4px
+    font-size: 0.7rem
+    white-space: nowrap
+    opacity: 0
+    visibility: hidden
+    transition: opacity 0.2s ease, visibility 0.2s ease
+    box-shadow: 0 2px 4px var(--pt-platform-shadow)
+    word-break: keep-all
+    pointer-events: none
+    will-change: opacity, visibility, transform
+
+    &::after
+      content: ""
+      position: absolute
+      top: -8px
+      left: 50%
+      transform: translateX(-50%)
+      border-width: 4px
+      border-style: solid
+      border-color: transparent transparent var(--pt-platform-tooltip-bg) transparent
+      transition: transform 0.2s ease
+
+    // 左侧定位
+    &.left
+      left: auto
+      right: 0
+      transform: none
+      transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease
+      &::after
+        left: auto
+        right: 10px
+        transform: none
+
+    // 右侧定位
+    &.right
+      left: 0
+      transform: none
+      transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease
+      &::after
+        left: 10px
+        transform: none
+
   // 操作按钮
   .action-buttons
     display: flex
@@ -229,6 +301,7 @@ const gotoAccount = (event: MouseEvent) => {
       .tooltip
         opacity: 1
         visibility: visible
+        transition-delay: 0.1s
 
     .btn-icon
       width: 14px
@@ -251,6 +324,7 @@ const gotoAccount = (event: MouseEvent) => {
       .tooltip
         opacity: 1
         visibility: visible
+        transition-delay: 0.1s
 
     &.enabled
       .toggle-track
@@ -277,52 +351,4 @@ const gotoAccount = (event: MouseEvent) => {
       border-radius: 50%
       box-shadow: 0 1px 2px var(--pt-platform-shadow)
       transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)
-
-  // 工具提示
-  .tooltip
-    position: absolute
-    top: calc(100% + 6px)
-    left: 50%
-    transform: translateX(-50%)
-    z-index: 9999
-    background: var(--pt-platform-tooltip-bg)
-    color: var(--pt-platform-tooltip-text)
-    padding: 6px 12px
-    border-radius: 4px
-    font-size: 0.7rem
-    white-space: nowrap
-    opacity: 0
-    visibility: hidden
-    transition: all 0.2s
-    box-shadow: 0 2px 4px var(--pt-platform-shadow)
-    word-break: keep-all
-    pointer-events: none
-
-    &::after
-      content: ""
-      position: absolute
-      top: -8px
-      left: 50%
-      transform: translateX(-50%)
-      border-width: 4px
-      border-style: solid
-      border-color: transparent transparent var(--pt-platform-tooltip-bg) transparent
-
-    // 左侧定位
-    &.left
-      left: auto
-      right: 0
-      transform: none
-      &::after
-        left: auto
-        right: 10px
-        transform: none
-
-    // 右侧定位
-    &.right
-      left: 0
-      transform: none
-      &::after
-        left: 10px
-        transform: none
 </style>
