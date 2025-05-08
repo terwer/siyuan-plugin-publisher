@@ -133,7 +133,7 @@ $border-radius = 8px
     --pt-tabs-control-icon: rgba(255,255,255,0.7)
     --pt-tabs-content-bg: #1f1f1f
 
-  // 布局样式（无需修改）
+  // 布局样式
   display flex
   width 100%
   height 100%
@@ -151,6 +151,8 @@ $border-radius = 8px
       transition width $transition-duration ease, border $transition-duration ease
       border-right 1px solid var(--pt-tabs-border)
       overflow hidden
+      position relative
+      height auto
 
       &.collapsed
         width 0
@@ -160,6 +162,7 @@ $border-radius = 8px
   position relative
   background var(--pt-tabs-controls-bg)
   flex-shrink 0
+  height auto
 
 .tab-list
   width $tab-width
@@ -198,7 +201,7 @@ $border-radius = 8px
 .collapse-handle
   position absolute
   left $tab-width
-  top 50%
+  top 96px
   width $control-size
   height $control-size
   padding 6px
@@ -209,7 +212,7 @@ $border-radius = 8px
   cursor pointer
   transition all $transition-duration ease
   z-index 100
-  transform translate(-50%, -50%)
+  transform translateX(-50%)
   display flex
   align-items center
   justify-content center
@@ -223,7 +226,7 @@ $border-radius = 8px
     padding-right 4px
 
   &:hover
-    transform translate(-50%, -50%) scale(1.1)
+    transform translateX(-50%) scale(1.1)
     box-shadow 0 4px 12px var(--pt-tabs-shadow-hover)
     background var(--pt-tabs-hover-bg)
 
