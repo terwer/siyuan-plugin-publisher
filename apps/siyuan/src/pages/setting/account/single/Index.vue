@@ -8,9 +8,15 @@
   -->
 
 <script setup lang="ts">
+import { getSubPlatformTypeByKey } from "@/models/dynamicConfig.ts"
 import { reactive } from "vue"
 import { useRoute } from "vue-router"
-import { getSubPlatformTypeByKey } from "@/models/dynamicConfig.ts"
+import BackPage from "@components/BackPage.vue"
+
+// Props
+const props = defineProps<{
+  pluginInstance: any
+}>()
 
 const route = useRoute()
 
@@ -21,7 +27,14 @@ const subtype = getSubPlatformTypeByKey(apiType)
 </script>
 
 <template>
-  <div>single set index:{{ apiType }}=>{{ subtype }}</div>
+  <back-page
+    :title="apiType"
+    :plugin-instance="props.pluginInstance"
+    :has-back-emit="false"
+    :help-key="subtype"
+  >
+    <div>single set index:{{ apiType }}=>{{ subtype }}</div>
+  </back-page>
 </template>
 
 <style scoped lang="stylus"></style>

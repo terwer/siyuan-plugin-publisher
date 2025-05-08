@@ -49,7 +49,10 @@ const unregisterPublishSettingStore = publishSettingStore.registerOnInit(
               label: t("account.set"),
               handler: (event: MouseEvent, _platform: AbstractPlatform) => {
                 event.stopPropagation()
-                router.push(`/setting/account/single/${item.platformKey}`)
+                router.push({
+                  path: `/setting/account/single/${item.platformKey}`,
+                  query: { showBack: "true" },
+                })
               },
             },
             {

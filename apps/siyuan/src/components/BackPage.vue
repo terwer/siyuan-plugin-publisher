@@ -8,57 +8,62 @@
   -->
 
 <script setup lang="ts">
-// import { ref, computed } from "vue"
-// import { useRoute, useRouter } from "vue-router"
-// import { ArrowLeft, HelpCircle } from "lucide-vue-next"
-// import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-// import { help } from "~/src/platforms/help.ts"
-// import { createAppLogger } from "@/utils/appLogger"
-
-// const logger = createAppLogger("back-page")
-// const { t } = useVueI18n()
-// const router = useRouter()
-// const { query } = useRoute()
+import { help } from "@/presets/help.ts"
+import { createAppLogger } from "@/utils/appLogger"
+import { useI18n } from "@composables/useI18n.ts"
+import { ArrowLeft, HelpCircle } from "lucide-vue-next"
+import { computed, ref } from "vue"
+import { useRoute, useRouter } from "vue-router"
 
 // Props
-// const props = defineProps({
-//   title: { type: String, default: "" },
-//   hasBackEmit: { type: Boolean, default: false },
-//   helpKey: { type: String, default: "" },
-// })
+const props = defineProps<{
+  pluginInstance: any
+  title: string
+  hasBackEmit: boolean
+  helpKey: string
+}>()
+
+const logger = createAppLogger("back-page")
+const { t } = useI18n(props.pluginInstance)
+const router = useRouter()
+const { query } = useRoute()
 
 // Emits
-// const emit = defineEmits(["backEmit"])
+const emit = defineEmits(["backEmit"])
 
 // Data
-// const showBack = ref(query.showBack === "true")
-// const showHelpTooltip = ref(false)
+const showBack = ref(query.showBack === "true")
+const showHelpTooltip = ref(false)
 
 // Computed
-// const helpUrl = computed(() => {
-//   // help[props.helpKey] || "https://siyuan.wiki/s/20230810132040-nn4q7vs"
-//   return ""
-// })
+const helpUrl = computed(() => {
+  return (
+    (help as any)[props.helpKey] ||
+    "https://siyuan.wiki/s/20230810132040-nn4q7vs"
+  )
+})
 
 // Methods
-// const handleBack = () => {
-//   if (props.hasBackEmit) {
-//     logger.info("Triggering backEmit")
-//     emit("backEmit")
-//   } else {
-//     logger.info("Navigating back")
-//     router.back()
-//   }
-// }
-//
-// const toggleHelpTooltip = (state: boolean) => {
-//   showHelpTooltip.value = state
-// }
+const handleBack = () => {
+  if (props.hasBackEmit) {
+    logger.info("Triggering backEmit")
+    emit("backEmit")
+  } else {
+    logger.info("Navigating back")
+    router.back()
+  }
+}
+
+const goToHelp = (url: string) => {
+  window.open(url, "_blank")
+}
+
+const toggleHelpTooltip = (state: boolean) => {
+  showHelpTooltip.value = state
+}
 </script>
 
 <template>
-  <div>back page</div>
-  <!--
   <div class="back-page">
     <div v-if="showBack" class="page-header">
       <button class="back-btn" @click="handleBack">
@@ -74,7 +79,7 @@
           @mouseenter="toggleHelpTooltip(true)"
           @mouseleave="toggleHelpTooltip(false)"
         >
-          <button class="help-btn" @click="window.open(helpUrl, '_blank')">
+          <button class="help-btn" @click="goToHelp(helpUrl)">
             <HelpCircle class="icon" />
           </button>
           <div v-show="showHelpTooltip" class="help-tooltip">
@@ -88,7 +93,6 @@
       <slot />
     </div>
   </div>
-  -->
 </template>
 
 <style lang="stylus" scoped>
@@ -101,6 +105,8 @@
   --pt-border: #dee2e6
   --pt-accent: #1971c2
   --pt-shadow: rgba(0, 0, 0, 0.1)
+  width 100%
+  min-width 800px
 
   // 暗黑模式变量覆盖
   html[data-theme-mode="dark"] &
@@ -112,29 +118,103 @@
     --pt-accent: #4dabf7
     --pt-shadow: rgba(0, 0, 0, 0.3)
 
-.page-header
-  background var(--pt-bg)
-  border-bottom 1px solid var(--pt-border)
+  .page-header
+    display flex
+    align-items center
+    padding 12px 16px
+    background var(--pt-bg)
+    border-bottom 1px solid var(--pt-border)
+    box-shadow 0 1px 2px 0 var(--pt-shadow)
+    transition all 0.3s ease
 
-.back-btn
-  color var(--pt-text-light)
-  &:hover
-    background var(--pt-surface)
-    color var(--pt-accent)
+    .back-btn
+      display flex
+      align-items center
+      gap 6px
+      padding 4px 8px
+      border none
+      background transparent
+      border-radius 6px
+      cursor pointer
+      transition all 0.3s ease
+      color var(--pt-text-light)
+      font-size 14px
 
-.title
-  color var(--pt-text)
+      &:hover
+        background var(--pt-surface)
+        color var(--pt-accent)
 
-.help-btn
-  color var(--pt-text-light)
-  &:hover
-    color var(--pt-accent)
+      .icon
+        width 16px
+        height 16px
 
-.help-tooltip
-  background var(--pt-surface)
-  color var(--pt-text)
-  box-shadow 0 2px 8px var(--pt-shadow)
-  border 1px solid var(--pt-border)
-  &::before
-    border-color transparent transparent var(--pt-surface) transparent
+    .title-group
+      display flex
+      align-items center
+      gap 8px
+      margin-left 12px
+
+      .title
+        margin 0
+        font-size 18px
+        font-weight 500
+        color var(--pt-text)
+        line-height 1.4
+
+      .help-container
+        position relative
+
+        .help-btn
+          display flex
+          align-items center
+          justify-content center
+          width 28px
+          height 28px
+          padding 0
+          border none
+          background transparent
+          border-radius 6px
+          cursor pointer
+          transition all 0.3s ease
+          color var(--pt-text-light)
+
+          &:hover
+            background var(--pt-surface)
+            color var(--pt-accent)
+
+          .icon
+            width 16px
+            height 16px
+
+        .help-tooltip
+          position absolute
+          top 100%
+          left 50%
+          transform translateX(-50%)
+          margin-top 8px
+          padding 4px 8px
+          background var(--pt-surface)
+          color var(--pt-text)
+          font-size 12px
+          border-radius 4px
+          box-shadow 0 2px 8px var(--pt-shadow)
+          border 1px solid var(--pt-border)
+          white-space nowrap
+          z-index 1000
+          transition all 0.3s ease
+
+          &::before
+            content ''
+            position absolute
+            top -4px
+            left 50%
+            transform translateX(-50%)
+            border-width 0 4px 4px
+            border-style solid
+            border-color transparent transparent var(--pt-surface) transparent
+
+  .page-content
+    padding 16px
+    background var(--pt-bg)
+    min-height calc(100vh - 64px)
 </style>

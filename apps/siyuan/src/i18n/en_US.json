@@ -1,5 +1,9 @@
 {
   "publisher": "Publisher",
+  "common": {
+    "back": "Back",
+    "help": "Help"
+  },
   "setting": "Settings",
   "publishOptions": "Publish Options",
   "platformSelect": {
