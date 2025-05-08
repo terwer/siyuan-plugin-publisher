@@ -18,7 +18,7 @@ import { usePublishSettingStore } from "@stores/usePublishSettingStore.ts"
 import { createAppLogger } from "@utils/appLogger.ts"
 import { Rss, Settings, Trash2 } from "lucide-vue-next"
 import { onMounted, onUnmounted, ref } from "vue"
-
+import { useRouter } from "vue-router"
 const publishSettingStore = usePublishSettingStore()
 
 const props = defineProps<{
@@ -27,7 +27,7 @@ const props = defineProps<{
 
 const logger = createAppLogger("account-setting")
 const { t } = useI18n(props.pluginInstance)
-
+const router = useRouter()
 const platforms = ref<AbstractPlatform[]>([])
 
 // 注册初始化完成回调
@@ -47,9 +47,9 @@ const unregisterPublishSettingStore = publishSettingStore.registerOnInit(
               type: "button",
               icon: Settings,
               label: t("account.set"),
-              handler: (event: MouseEvent, platform: AbstractPlatform) => {
-                console.log("set", platform.name)
+              handler: (event: MouseEvent, _platform: AbstractPlatform) => {
                 event.stopPropagation()
+                router.push(`/setting/account/single/${item.platformKey}`)
               },
             },
             {

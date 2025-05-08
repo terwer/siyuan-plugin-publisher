@@ -9,11 +9,11 @@
 
 <script lang="ts" setup>
 import Tab from "@components/Tab.vue"
+import { TabEnum } from "@enums/TabEnum.ts"
 import DocPublish from "@pages/publish/DocPublish.vue"
 import AccountSetting from "@pages/setting/AccountSetting.vue"
-import GeneralSetting from "@pages/setting/GeneralSetting.vue"
 import DashBoard from "@pages/setting/DashBoard.vue"
-import { TabEnum } from "@enums/TabEnum.ts"
+import GeneralSetting from "@pages/setting/GeneralSetting.vue"
 import { ref } from "vue"
 // import { createAppLogger } from "@utils/appLogger.ts"
 

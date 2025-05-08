@@ -7,21 +7,45 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { createApp } from "vue"
+import AppIndex from "@pages/Index.vue"
 import Publish from "@pages/publish/Index.vue"
+import AccountSetting from "@pages/setting/AccountSetting.vue"
+import DashBoard from "@pages/setting/DashBoard.vue"
+import GeneralSetting from "@pages/setting/GeneralSetting.vue"
+import SinglePlatformSetting from "@pages/setting/account/single/Index.vue"
 import { createPinia } from "pinia"
+import { createApp } from "vue"
+import { createRouter, createWebHashHistory } from "vue-router"
 
-// export const APP_INJECT_KEY: InjectionKey<any> = Symbol("app")
+function createAppRoutes(props: any) {
+  // 定义路由
+  const routes = [
+    { path: "/", component: Publish, props: props },
+    { path: "/dashboard", component: DashBoard, props: props },
+    { path: "/setting/general", component: GeneralSetting, props: props },
+    { path: "/setting/account", component: AccountSetting, props: props },
+    {
+      path: "/setting/account/single/:key",
+      component: SinglePlatformSetting,
+      props: props,
+    },
+  ]
+  return routes
+}
 
 const createBootStrap = (props: any, container: string | HTMLElement) => {
-  const app = createApp(Publish, props)
+  const app = createApp(AppIndex, props)
   const pinia = createPinia()
+  const routes = createAppRoutes(props)
+  const router = createRouter({
+    history: createWebHashHistory(),
+    routes,
+  })
 
   app.use(pinia)
+  app.use(router)
   app.mount(container)
 
-  // 核心注入逻辑
-  // app.provide(APP_INJECT_KEY, app)
   return app
 }
 
