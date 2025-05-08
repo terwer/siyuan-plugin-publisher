@@ -8,7 +8,7 @@
   -->
 
 <script setup lang="ts">
-import { ref, watch } from "vue"
+import { ref, watch } from "vue";
 
 const props = withDefaults(
   defineProps<{
@@ -198,30 +198,43 @@ $border-radius = 8px
 .collapse-handle
   position absolute
   left $tab-width
-  top 24px
+  top 50%
   width $control-size
   height $control-size
-  padding 8px
+  padding 6px
   background var(--pt-tabs-controls-bg)
-  border none
+  border 1px solid var(--pt-tabs-border)
   border-radius 50%
   box-shadow 0 2px 8px var(--pt-tabs-shadow)
   cursor pointer
   transition all $transition-duration ease
-  z-index 10
-  transform translateX(-50%)
+  z-index 100
+  transform translate(-50%, -50%)
+  display flex
+  align-items center
+  justify-content center
 
   .tabs-container.vertical .collapsed + &
-    left 10px
+    left 4px
+    background var(--pt-tabs-bg)
+    border-color var(--pt-tabs-border)
+    box-shadow 2px 0 8px var(--pt-tabs-shadow)
+    padding-left 8px
+    padding-right 4px
 
   &:hover
-    transform translateX(-50%) scale(1.1)
+    transform translate(-50%, -50%) scale(1.1)
     box-shadow 0 4px 12px var(--pt-tabs-shadow-hover)
+    background var(--pt-tabs-hover-bg)
 
   .collapse-icon
-    width 100%
-    height 100%
+    width 16px
+    height 16px
     fill var(--pt-tabs-control-icon)
+    transition transform $transition-duration ease
+
+    .tabs-container.vertical .collapsed + .collapse-handle &
+      transform rotate(180deg)
 
 .tab-content-wrapper
   flex 1
