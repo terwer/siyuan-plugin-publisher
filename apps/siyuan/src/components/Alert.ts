@@ -19,6 +19,7 @@ import {
 import { PUBLISHER_ROOT_ID } from "@/Constants.ts"
 
 type AlertType = "success" | "warning" | "error" | "info"
+type AlertPosition = "top" | "topLeft" | "topRight" | "bottom" | "bottomLeft" | "bottomRight" | "center"
 
 interface AlertOptions {
   title?: string
@@ -27,6 +28,7 @@ interface AlertOptions {
   type?: AlertType
   duration?: number
   closable?: boolean
+  position?: AlertPosition
 }
 
 const AlertComponent = {
@@ -89,25 +91,25 @@ const AlertComponent = {
             props.title && h("div", { class: "pt-alert__title" }, props.title),
             h("div", { class: "pt-alert__body" }, [
               props.message &&
-                h("div", { class: "pt-alert__message" }, props.message),
+              h("div", { class: "pt-alert__message" }, props.message),
               props.description &&
-                h("div", { class: "pt-alert__description" }, props.description),
+              h("div", { class: "pt-alert__description" }, props.description),
             ]),
           ]),
 
           props.closable &&
-            h(
-              "button",
-              {
-                class: "pt-alert__close",
-                onClick: handleClose,
-              },
-              h(CloseIcon, {
-                class: "pt-alert__close-icon",
-                size: 12,
-                strokeWidth: 2,
-              }),
-            ),
+          h(
+            "button",
+            {
+              class: "pt-alert__close",
+              onClick: handleClose,
+            },
+            h(CloseIcon, {
+              class: "pt-alert__close-icon",
+              size: 12,
+              strokeWidth: 2,
+            }),
+          ),
         ],
       )
   },
@@ -115,12 +117,14 @@ const AlertComponent = {
 
 let alertContainer: HTMLElement | null = null
 
-const createContainer = () => {
+const createContainer = (position: AlertPosition = "top") => {
   if (!alertContainer) {
     alertContainer = document.createElement("div")
-    alertContainer.className = "pt-alert-container"
+    alertContainer.className = `pt-alert-container pt-alert-container--${position}`
     const parent = document.getElementById(PUBLISHER_ROOT_ID) || document.body
     parent.appendChild(alertContainer)
+  } else {
+    alertContainer.className = `pt-alert-container pt-alert-container--${position}`
   }
 }
 
@@ -139,8 +143,7 @@ const createContainer = () => {
  * @example 自动关闭
  * alert({
  *   type: "success",
- *   message: "上传完成",
- *   duration: 2000
+ *   message: "上传完成"
  * })
  *
  * @example 错误提示
@@ -156,10 +159,23 @@ const createContainer = () => {
  *   message: "重要提示",
  *   closable: false
  * })
+ *
+ * @example 自定义位置
+ * alert({
+ *   message: "操作成功",
+ *   position: "center"
+ * })
+ *
+ * @example 手动关闭
+ * alert({
+ *   message: "重要提示",
+ *   duration: 0
+ * })
  */
 const alert = (options: AlertOptions = {}): Promise<void> => {
   return new Promise((resolve) => {
-    createContainer()
+    const position = options.position || "top"
+    createContainer(position)
     const container = document.createElement("div")
     alertContainer?.appendChild(container)
 
@@ -181,7 +197,10 @@ const alert = (options: AlertOptions = {}): Promise<void> => {
       container,
     )
 
-    if (options.duration) setTimeout(destroy, options.duration)
+    // 如果 duration 为 0，则不自动关闭
+    if (options.duration !== 0) {
+      setTimeout(destroy, options.duration || 1000)
+    }
   })
 }
 

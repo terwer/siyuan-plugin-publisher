@@ -50,6 +50,7 @@
     "delete": "删除",
     "enable": "启用",
     "add": "添加账号",
+    "addTip": "添加账号后，可以在这里设置账号的配置信息",
     "confirm": {
       "delete": {
         "title": "确认删除",
@@ -66,7 +67,7 @@
     },
     "single": {
       "save": "保存",
-      "saveTip":"保存当前平台实例的账号信息",
+      "saveTip": "保存当前平台实例的账号信息",
       "verify": "验证",
       "verifyTip": "验证当前平台的可用性",
       "goToPublish": "前往发布",

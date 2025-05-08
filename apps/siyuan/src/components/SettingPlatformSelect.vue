@@ -8,9 +8,10 @@
   -->
 
 <script setup lang="ts">
-import Button from "@components/Button.vue";
-import { useI18n } from "@composables/useI18n.ts";
-import { Inbox, Plus } from "lucide-vue-next";
+import Button from "@components/Button.vue"
+import { useI18n } from "@composables/useI18n.ts"
+import { Inbox, Plus } from "lucide-vue-next"
+import { alert } from "@components/Alert.ts"
 
 const props = defineProps<{
   pluginInstance: any
@@ -23,6 +24,12 @@ const { t } = useI18n(props.pluginInstance)
 const addAccount = (event: MouseEvent) => {
   // 跳转新增账号
   event.stopPropagation()
+  alert({
+    title: t("account.add"),
+    message: t("account.addTip"),
+    type: "info",
+    position: "center",
+  })
 }
 </script>
 
@@ -30,7 +37,12 @@ const addAccount = (event: MouseEvent) => {
   <div class="platform-list">
     <!-- 顶部操作栏 -->
     <div class="pt-action-bar">
-      <Button size="sm" @click.stop="addAccount">
+      <Button
+        size="sm"
+        @click.stop="addAccount"
+        :tooltip="t('account.addTip')"
+        tooltip-placement="bottom"
+      >
         <template #icon>
           <Plus :size="16" />
         </template>

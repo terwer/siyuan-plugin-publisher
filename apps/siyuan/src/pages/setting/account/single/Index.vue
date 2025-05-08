@@ -62,7 +62,7 @@ const extra = computed(() => {
           title: t("common.opt.ok"),
           message: t("account.single.setOk"),
           type: "success",
-          duration: 1000,
+          position: "center",
         })
       },
       text: t("account.single.save"),

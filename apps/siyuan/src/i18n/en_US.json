@@ -50,6 +50,7 @@
     "delete": "Delete",
     "enable": "Enable",
     "add": "Add",
+    "addTip": "After adding an account, you can set the account configuration information here",
     "confirm": {
       "delete": {
         "title": "Confirm Delete",

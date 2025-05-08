@@ -1,23 +1,13 @@
 <template>
-  <div
-    class="pt-tooltip"
-    @mouseenter="handleMouseEnter"
-    @mouseleave="handleMouseLeave"
-  >
+  <div class="pt-tooltip" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
     <div ref="triggerRef" class="pt-tooltip__trigger">
       <slot></slot>
     </div>
     <Transition name="pt-fade">
-      <div
-        v-show="visible"
-        ref="tooltipRef"
-        class="pt-tooltip__content"
-        :class="[
-          `pt-tooltip__content--${placement}`,
-          { 'pt-tooltip__content--arrow': showArrow },
-        ]"
-        :style="tooltipStyle"
-      >
+      <div v-show="visible" ref="tooltipRef" class="pt-tooltip__content" :class="[
+        `pt-tooltip__content--${placement}`,
+        { 'pt-tooltip__content--arrow': showArrow },
+      ]" :style="tooltipStyle">
         <div class="pt-tooltip__inner">
           <slot name="title">{{ title }}</slot>
         </div>
@@ -156,7 +146,7 @@ onUnmounted(() => {
     color: #fff
     text-align: left
     text-decoration: none
-    word-wrap: break-word
+    white-space: normal
     background-color: rgba(0, 0, 0, 0.75)
     border-radius: 2px
     box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05)
@@ -237,6 +227,8 @@ onUnmounted(() => {
   &__inner
     font-size: 12px
     line-height: 1.5715
+    white-space: normal
+    word-break: break-word
 
 .pt-fade-enter-active,
 .pt-fade-leave-active
