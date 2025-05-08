@@ -44,7 +44,12 @@ const extra = computed(() => {
   return [
     {
       component: Button,
-      props: { type: "primary" },
+      props: {
+        type: "primary",
+        size: "sm",
+        tooltip: "Save",
+        tooltipPlacement: "bottom",
+      },
       onClick: () => {
         console.log(t("account.single.save"))
       },
@@ -52,7 +57,12 @@ const extra = computed(() => {
     },
     {
       component: Button,
-      props: { type: "default" },
+      props: {
+        type: "default",
+        size: "sm",
+        tooltip: "Verify",
+        tooltipPlacement: "bottom",
+      },
       onClick: () => {
         console.log(t("account.single.verify"))
       },
@@ -60,7 +70,12 @@ const extra = computed(() => {
     },
     {
       component: Button,
-      props: { type: "link" },
+      props: {
+        type: "link",
+        size: "sm",
+        tooltip: "Go to publish",
+        tooltipPlacement: "bottom",
+      },
       onClick: () => {
         router.push(`/`)
       },
