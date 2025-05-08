@@ -73,7 +73,7 @@ const toggleCollapse = () => {
       </div>
     </div>
 
-    <button class="collapse-handle" @click="toggleCollapse">
+    <button class="collapse-handle" @click.stop="toggleCollapse">
       <svg class="collapse-icon" viewBox="0 0 24 24">
         <path
           v-if="isCollapsed"

@@ -7,13 +7,13 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { defineStore } from "pinia"
-import { SiyuanStorageAdaptor } from "@/stores/vendor/SiyuanStorageAdaptor"
-import { SypConfig } from "@/models/SypConfig.ts"
-import { cloneDeep, debounce, merge } from "lodash-es"
-import { ref, computed, watch, reactive, readonly } from "vue"
 import { DEFAULT_SIYUAN_LANG } from "@/Constants.ts"
+import { SypConfig } from "@/models/SypConfig.ts"
+import { SiyuanStorageAdaptor } from "@/stores/vendor/SiyuanStorageAdaptor"
 import { createAppLogger } from "@utils/appLogger.ts"
+import { cloneDeep, debounce, merge } from "lodash-es"
+import { defineStore } from "pinia"
+import { computed, reactive, readonly, ref, watch } from "vue"
 
 // 定义深层只读类型工具
 type DeepReadonly<T> = {
@@ -33,6 +33,7 @@ export const usePublishSettingStore = defineStore("publishSetting", () => {
 
   const state = reactive<SypConfig>({
     lang: DEFAULT_SIYUAN_LANG as "zh_CN" | "en_US",
+    currentPlatform: null,
   })
 
   const readonlyState = computed(() => {
@@ -110,5 +111,8 @@ export const usePublishSettingStore = defineStore("publishSetting", () => {
     update,
     registerOnInit,
     doInit: initialize,
+    setCurrentPlatform: (platform: DynamicConfig) => {
+      state.currentPlatform = platform
+    },
   }
 })

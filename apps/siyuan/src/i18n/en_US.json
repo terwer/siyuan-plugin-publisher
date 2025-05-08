@@ -21,6 +21,7 @@
   "account": {
     "account": "Account",
     "set": "Set",
+    "setTitle": "[{platformName}] Settings",
     "delete": "Delete",
     "enable": "Enable",
     "add": "Add",

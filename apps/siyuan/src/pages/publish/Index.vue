@@ -14,7 +14,8 @@ import DocPublish from "@pages/publish/DocPublish.vue"
 import AccountSetting from "@pages/setting/AccountSetting.vue"
 import DashBoard from "@pages/setting/DashBoard.vue"
 import GeneralSetting from "@pages/setting/GeneralSetting.vue"
-import { ref } from "vue"
+import { onMounted, ref } from "vue"
+import { useRoute } from "vue-router"
 // import { createAppLogger } from "@utils/appLogger.ts"
 
 const props = defineProps<{
@@ -70,7 +71,9 @@ const tabs = [
   },
 ]
 
-// 智能切换方法
+const route = useRoute()
+
+// 暴露给外部调用的方法
 const switchTabByComponent = (curTab: TabEnum) => {
   const targetIndex = tabs.findIndex((tab) => tab.key === curTab)
 
@@ -85,6 +88,17 @@ const switchTabByComponent = (curTab: TabEnum) => {
 const onTabChange = (index: number) => {
   activeTab.value = index
 }
+
+// 处理路由参数
+onMounted(() => {
+  const tabParam = route.query.tab as string
+  if (tabParam) {
+    const targetTab = Object.values(TabEnum).find((tab) => tab === tabParam)
+    if (targetTab) {
+      switchTabByComponent(targetTab as TabEnum)
+    }
+  }
+})
 </script>
 
 <template>

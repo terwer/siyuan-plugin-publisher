@@ -66,7 +66,7 @@ const toggleHelpTooltip = (state: boolean) => {
 <template>
   <div class="back-page">
     <div v-if="showBack" class="page-header">
-      <button class="back-btn" @click="handleBack">
+      <button class="back-btn" @click.stop="handleBack">
         <ArrowLeft class="icon" />
         <span class="text">{{ t("common.back") }}</span>
       </button>

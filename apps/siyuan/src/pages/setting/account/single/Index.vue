@@ -9,29 +9,44 @@
 
 <script setup lang="ts">
 import { getSubPlatformTypeByKey } from "@/models/dynamicConfig.ts"
-import { reactive } from "vue"
-import { useRoute } from "vue-router"
 import BackPage from "@components/BackPage.vue"
+import { useI18n } from "@composables/useI18n.ts"
+import { computed, reactive, ref } from "vue"
+import { useRoute, useRouter } from "vue-router"
+import { TabEnum } from "@enums/TabEnum.ts"
 
 // Props
 const props = defineProps<{
   pluginInstance: any
 }>()
 
+const router = useRouter()
 const route = useRoute()
+const { query } = useRoute()
 
 // datas
 const params = reactive(route.params)
 const apiType = params.key as string
+const platformName = ref((query.platformName ?? "unknown") as string)
+const { t } = useI18n(props.pluginInstance)
+const pageTitle = computed(() =>
+  t("account.setTitle").replace("{platformName}", platformName.value),
+)
 const subtype = getSubPlatformTypeByKey(apiType)
+
+// methods
+const handleBack = () => {
+  router.push(`/?tab=${TabEnum.ACCOUNT}`)
+}
 </script>
 
 <template>
   <back-page
-    :title="apiType"
+    :title="pageTitle"
     :plugin-instance="props.pluginInstance"
-    :has-back-emit="false"
+    :has-back-emit="true"
     :help-key="subtype"
+    @back-emit="handleBack"
   >
     <div>single set index:{{ apiType }}=>{{ subtype }}</div>
   </back-page>

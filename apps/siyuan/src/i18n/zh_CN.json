@@ -21,6 +21,7 @@
   "account": {
     "account": "账号设置",
     "set": "设置",
+    "setTitle": "「{platformName}」设置",
     "delete": "删除",
     "enable": "启用",
     "add": "添加账号",
