@@ -8,9 +8,9 @@
   -->
 
 <script setup lang="ts">
-import { Inbox } from "lucide-vue-next"
-import { TabEnum } from "@enums/TabEnum.ts"
-import { useI18n } from "@composables/useI18n.ts"
+import { useI18n } from "@composables/useI18n.ts";
+import { TabEnum } from "@enums/TabEnum.ts";
+import { Inbox } from "lucide-vue-next";
 
 const props = defineProps<{
   pluginInstance: any
@@ -34,7 +34,7 @@ const gotoAccount = (event: MouseEvent) => {
         <p>{{ t("platformSelect.no") }}</p>
         <p>
           {{ t("platformSelect.noTip1") }}
-          <a class="account-link" @click="gotoAccount">
+          <a class="account-link" @click.stop="gotoAccount">
             {{ t("account.account") }}
           </a>
           {{ t("platformSelect.noTip2") }}
@@ -57,7 +57,7 @@ const gotoAccount = (event: MouseEvent) => {
             <!-- 按钮类操作 -->
             <button
               v-if="action.type === 'button'"
-              @click="
+              @click.stop="
                 (event: MouseEvent) => {
                   if (!action.handler) {
                     event.stopPropagation()
@@ -78,7 +78,7 @@ const gotoAccount = (event: MouseEvent) => {
               v-if="action.type === 'toggle'"
               class="toggle-btn"
               :class="{ enabled: platform.enabled }"
-              @click="
+              @click.stop="
                 (event) => {
                   if (!action.handler) {
                     event.stopPropagation()

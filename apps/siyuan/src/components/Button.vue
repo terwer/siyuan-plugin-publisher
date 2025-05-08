@@ -18,7 +18,7 @@
       },
     ]"
     :disabled="disabled || loading"
-    @click="handleClick"
+    @click.stop="handleClick"
   >
     <span v-if="loading" class="pt-btn__loading">
       <svg viewBox="0 0 1024 1024" class="pt-btn__spinner">
@@ -39,9 +39,11 @@
 <script setup lang="ts">
 import { computed, useSlots } from "vue"
 
+type ButtonType = "default" | "primary" | "dashed" | "text" | "link"
+
 const props = defineProps({
   type: {
-    type: String,
+    type: String as () => ButtonType,
     default: "default",
     validator: (v: string) =>
       ["default", "primary", "dashed", "text", "link"].includes(v),

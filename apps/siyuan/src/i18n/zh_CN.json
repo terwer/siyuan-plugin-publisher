@@ -38,6 +38,11 @@
         "title": "删除成功",
         "message": "平台「{platformName}」已删除"
       }
+    },
+    "single": {
+      "save": "保存",
+      "verify": "验证",
+      "goToPublish": "前往发布"
     }
   },
   "picbed": {

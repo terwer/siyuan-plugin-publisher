@@ -8,7 +8,7 @@
   -->
 
 <script setup lang="ts">
-import { ref, watch } from "vue"
+import { ref, watch } from "vue";
 
 const props = withDefaults(
   defineProps<{
@@ -66,7 +66,7 @@ const toggleCollapse = () => {
           :key="index"
           class="tab-button"
           :class="{ active: index === activeIndex }"
-          @click="handleTabClick(index)"
+          @click.stop="handleTabClick(index)"
         >
           {{ tab.label }}
         </button>

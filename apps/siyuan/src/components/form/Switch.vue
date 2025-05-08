@@ -29,7 +29,7 @@ const toggle = () => {
       'switch-on': modelValue,
       disabled: disabled,
     }"
-    @click="toggle"
+    @click.stop="toggle"
   >
     <span class="slider"></span>
   </button>

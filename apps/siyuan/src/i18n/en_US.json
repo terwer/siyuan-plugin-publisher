@@ -38,6 +38,11 @@
         "title": "Delete Success",
         "message": "Platform「{platformName}」deleted"
       }
+    },
+    "single": {
+      "save": "Save",
+      "verify": "Verify",
+      "goToPublish": "Go to Publish"
     }
   },
   "picbed": {

@@ -10,10 +10,11 @@
 <script setup lang="ts">
 import { getSubPlatformTypeByKey } from "@/models/dynamicConfig.ts"
 import BackPage from "@components/BackPage.vue"
+import Button from "@components/Button.vue"
 import { useI18n } from "@composables/useI18n.ts"
+import { TabEnum } from "@enums/TabEnum.ts"
 import { computed, reactive, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
-import { TabEnum } from "@enums/TabEnum.ts"
 
 // Props
 const props = defineProps<{
@@ -38,6 +39,35 @@ const subtype = getSubPlatformTypeByKey(apiType)
 const handleBack = () => {
   router.push(`/?tab=${TabEnum.ACCOUNT}`)
 }
+
+const extra = computed(() => {
+  return [
+    {
+      component: Button,
+      props: { type: "primary" },
+      onClick: () => {
+        console.log(t("account.single.save"))
+      },
+      text: t("account.single.save"),
+    },
+    {
+      component: Button,
+      props: { type: "default" },
+      onClick: () => {
+        console.log(t("account.single.verify"))
+      },
+      text: t("account.single.verify"),
+    },
+    {
+      component: Button,
+      props: { type: "link" },
+      onClick: () => {
+        router.push(`/`)
+      },
+      text: t("account.single.goToPublish"),
+    },
+  ]
+})
 </script>
 
 <template>
@@ -47,6 +77,7 @@ const handleBack = () => {
     :has-back-emit="true"
     :help-key="subtype"
     @back-emit="handleBack"
+    :extra="extra"
   >
     <div>single set index:{{ apiType }}=>{{ subtype }}</div>
   </back-page>

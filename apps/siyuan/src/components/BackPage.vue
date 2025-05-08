@@ -21,6 +21,12 @@ const props = defineProps<{
   title: string
   hasBackEmit: boolean
   helpKey: string
+  extra?: Array<{
+    component: any
+    props?: Record<string, any>
+    onClick?: () => void
+    text?: string
+  }>
 }>()
 
 const logger = createAppLogger("back-page")
@@ -66,26 +72,42 @@ const toggleHelpTooltip = (state: boolean) => {
 <template>
   <div class="back-page">
     <div v-if="showBack" class="page-header">
-      <button class="back-btn" @click.stop="handleBack">
-        <ArrowLeft class="icon" />
-        <span class="text">{{ t("common.back") }}</span>
-      </button>
+      <div class="header-left">
+        <button class="back-btn" @click.stop="handleBack">
+          <ArrowLeft class="icon" />
+          <span class="text">{{ t("common.back") }}</span>
+        </button>
 
-      <div class="title-group">
-        <h1 class="title">{{ props.title }}</h1>
-        <div
-          v-if="helpKey"
-          class="help-container"
-          @mouseenter="toggleHelpTooltip(true)"
-          @mouseleave="toggleHelpTooltip(false)"
-        >
-          <button class="help-btn" @click="goToHelp(helpUrl)">
-            <HelpCircle class="icon" />
-          </button>
-          <div v-show="showHelpTooltip" class="help-tooltip">
-            {{ t("common.help") }}
+        <div class="title-group">
+          <h1 class="title">{{ props.title }}</h1>
+          <div
+            v-if="helpKey"
+            class="help-container"
+            @mouseenter="toggleHelpTooltip(true)"
+            @mouseleave="toggleHelpTooltip(false)"
+          >
+            <button class="help-btn" @click.stop="goToHelp(helpUrl)">
+              <HelpCircle class="icon" />
+            </button>
+            <div v-show="showHelpTooltip" class="help-tooltip">
+              {{ t("common.help") }}
+            </div>
           </div>
         </div>
+      </div>
+
+      <div v-if="extra && extra.length > 0" class="header-extra">
+        <slot name="extra">
+          <template v-for="(item, _index) in extra" :key="_index">
+            <component
+              :is="item.component"
+              v-bind="item.props || {}"
+              @click.stop="item.onClick"
+            >
+              {{ item.text }}
+            </component>
+          </template>
+        </slot>
       </div>
     </div>
 
@@ -121,11 +143,21 @@ const toggleHelpTooltip = (state: boolean) => {
   .page-header
     display flex
     align-items center
+    justify-content space-between
     padding 12px 16px
     background var(--pt-bg)
     border-bottom 1px solid var(--pt-border)
     box-shadow 0 1px 2px 0 var(--pt-shadow)
     transition all 0.3s ease
+
+    .header-left
+      display flex
+      align-items center
+
+    .header-extra
+      display flex
+      align-items center
+      gap 8px
 
     .back-btn
       display flex

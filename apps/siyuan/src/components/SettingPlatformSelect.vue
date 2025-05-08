@@ -8,9 +8,9 @@
   -->
 
 <script setup lang="ts">
-import { Plus, Inbox } from "lucide-vue-next"
-import { useI18n } from "@composables/useI18n.ts"
-import Button from "@components/Button.vue"
+import Button from "@components/Button.vue";
+import { useI18n } from "@composables/useI18n.ts";
+import { Inbox, Plus } from "lucide-vue-next";
 
 const props = defineProps<{
   pluginInstance: any
@@ -30,7 +30,7 @@ const addAccount = (event: MouseEvent) => {
   <div class="platform-list">
     <!-- 顶部操作栏 -->
     <div class="pt-action-bar">
-      <Button size="sm" @click="addAccount">
+      <Button size="sm" @click.stop="addAccount">
         <template #icon>
           <Plus :size="16" />
         </template>
@@ -43,7 +43,7 @@ const addAccount = (event: MouseEvent) => {
         <p>{{ t("platformSelect.no") }}</p>
         <p>
           {{ t("platformSelect.noTip3") }}
-          <a class="account-link" @click="addAccount">
+          <a class="account-link" @click.stop="addAccount">
             {{ t("platformSelect.noTip4") }}
           </a>
         </p>
@@ -65,7 +65,7 @@ const addAccount = (event: MouseEvent) => {
             <!-- 按钮类操作 -->
             <button
               v-if="action.type === 'button'"
-              @click="
+              @click.stop="
                 (event: MouseEvent) => {
                   if (!action.handler) {
                     event.stopPropagation()
@@ -86,7 +86,7 @@ const addAccount = (event: MouseEvent) => {
               v-if="action.type === 'toggle'"
               class="toggle-btn"
               :class="{ enabled: platform.enabled }"
-              @click="
+              @click.stop="
                 (event) => {
                   if (!action.handler) {
                     event.stopPropagation()
