@@ -10,7 +10,9 @@
     "noTip4": "Add account first."
   },
   "publish": {
-    "publish": "Publish"
+    "publish": "Publish",
+    "quick": "Quick",
+    "normal": "Normal"
   },
   "account": {
     "account": "Account",
