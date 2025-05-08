@@ -19,7 +19,21 @@
     "set": "设置",
     "delete": "删除",
     "enable": "启用",
-    "add": "添加账号"
+    "add": "添加账号",
+    "confirm": {
+      "delete": {
+        "title": "确认删除",
+        "content": "确定要删除这个账号吗？",
+        "confirm": "确定",
+        "cancel": "取消"
+      }
+    },
+    "afterDelete": {
+      "success": {
+        "title": "删除成功",
+        "message": "平台「{platformName}」已删除"
+      }
+    }
   },
   "picbed": {
     "picbed": "图床设置"

@@ -19,7 +19,21 @@
     "set": "Set",
     "delete": "Delete",
     "enable": "Enable",
-    "add": "Add"
+    "add": "Add",
+    "confirm": {
+      "delete": {
+        "title": "Confirm Delete",
+        "content": "Are you sure you want to delete this account?",
+        "confirm": "Confirm",
+        "cancel": "Cancel"
+      }
+    },
+    "afterDelete": {
+      "success": {
+        "title": "Delete Success",
+        "message": "Platform「{platformName}」deleted"
+      }
+    }
   },
   "picbed": {
     "picbed": "Image"

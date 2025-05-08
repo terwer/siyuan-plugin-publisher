@@ -8,15 +8,16 @@
   -->
 
 <script setup lang="ts">
-import { Settings, Trash2, Rss } from "lucide-vue-next"
-import { onMounted, onUnmounted, ref } from "vue"
-import { usePublishSettingStore } from "@stores/usePublishSettingStore.ts"
 import { DYNAMIC_CONFIG_KEY } from "@/Constants.ts"
-import { createAppLogger } from "@utils/appLogger.ts"
 import { DynamicConfig } from "@/models/dynamicConfig.ts"
-import { useI18n } from "@composables/useI18n.ts"
-import SettingPlatformSelect from "@components/SettingPlatformSelect.vue"
+import { alert } from "@components/Alert.ts"
 import { messageBox } from "@components/MessageBox.ts"
+import SettingPlatformSelect from "@components/SettingPlatformSelect.vue"
+import { useI18n } from "@composables/useI18n.ts"
+import { usePublishSettingStore } from "@stores/usePublishSettingStore.ts"
+import { createAppLogger } from "@utils/appLogger.ts"
+import { Rss, Settings, Trash2 } from "lucide-vue-next"
+import { onMounted, onUnmounted, ref } from "vue"
 
 const publishSettingStore = usePublishSettingStore()
 
@@ -55,14 +56,37 @@ const unregisterPublishSettingStore = publishSettingStore.registerOnInit(
               type: "button",
               icon: Trash2,
               label: t("account.delete"),
-              handler: (_event: MouseEvent, _platform: AbstractPlatform) => {
-                // alert({
-                //   title: "发布成功",
-                //   message: "内容已同步到云端",
-                // })
+              handler: (event: MouseEvent, platform: AbstractPlatform) => {
+                event.stopPropagation()
                 messageBox.confirm({
-                  title: "确认删除",
-                  content: "确定要删除这个项目吗？",
+                  title: t("account.confirm.delete.title"),
+                  content: t("account.confirm.delete.content"),
+                  showConfirm: false,
+                  showCancel: false,
+                  buttons: [
+                    {
+                      text: t("account.confirm.delete.confirm"),
+                      type: "danger",
+                      handler: () => {
+                        alert({
+                          title: t("account.afterDelete.success.title"),
+                          message: t(
+                            "account.afterDelete.success.message",
+                          ).replace("{platformName}", platform.name),
+                          type: "success",
+                          duration: 1000,
+                        })
+                        return true
+                      },
+                    },
+                    {
+                      text: t("account.confirm.delete.cancel"),
+                      type: "default",
+                      handler: () => {
+                        return true
+                      },
+                    },
+                  ],
                 })
               },
             },
