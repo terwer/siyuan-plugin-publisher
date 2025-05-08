@@ -188,11 +188,10 @@ const toggleHelpTooltip = (state: boolean) => {
 
         .help-tooltip
           position absolute
-          top 100%
+          top calc(100% + 2px)
           left 50%
           transform translateX(-50%)
-          margin-top 8px
-          padding 4px 8px
+          padding 2px 12px
           background var(--pt-surface)
           color var(--pt-text)
           font-size 12px
@@ -202,11 +201,22 @@ const toggleHelpTooltip = (state: boolean) => {
           white-space nowrap
           z-index 1000
           transition all 0.3s ease
+          text-align center
 
           &::before
             content ''
             position absolute
             top -4px
+            left 50%
+            transform translateX(-50%)
+            border-width 0 4px 4px
+            border-style solid
+            border-color transparent transparent var(--pt-border) transparent
+
+          &::after
+            content ''
+            position absolute
+            top -3px
             left 50%
             transform translateX(-50%)
             border-width 0 4px 4px
