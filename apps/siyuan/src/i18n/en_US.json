@@ -112,5 +112,74 @@
   },
   "dashboard": {
     "dashboard": "Dashboard"
+  },
+  "platform": {
+    "config": {
+      "basic": {
+        "title": "Basic Information",
+        "name": "Platform Name",
+        "namePlaceholder": "Please enter platform name",
+        "domain": "Domain",
+        "domainPlaceholder": "Please enter domain address"
+      },
+      "auth": {
+        "title": "Authorization",
+        "mode": "Auth Mode",
+        "mode": {
+          "api": "API Auth",
+          "website": "Website Auth"
+        }
+      },
+      "api": {
+        "title": "API Configuration",
+        "url": "API URL",
+        "urlPlaceholder": "Please enter API URL",
+        "passwordType": "Password Type",
+        "passwordType": {
+          "password": "Password",
+          "token": "Token",
+          "cookie": "Cookie"
+        },
+        "password": "Password",
+        "passwordPlaceholder": "Please enter password"
+      },
+      "content": {
+        "title": "Content Configuration",
+        "pageType": "Page Type",
+        "pageType": {
+          "markdown": "Markdown Content",
+          "html": "HTML",
+          "formatter": "Formatter",
+          "markdownAndFormatter": "Markdown and Formatter",
+          "mdx": "MDX"
+        }
+      },
+      "custom": {
+        "title": "Custom Configuration",
+        "script": "Custom Script",
+        "scriptPlaceholder": "Please enter custom platform script code"
+      },
+      "specific": {
+        "title": "Platform Specific Configuration"
+      },
+      "metadata": {
+        "title": "Platform Metadata",
+        "tags": "Tags",
+        "categories": "Categories"
+      }
+    }
+  },
+  "validation": {
+    "platformName": {
+      "required": "Please enter platform name",
+      "length": "Platform name must be between 2-50 characters"
+    },
+    "domain": {
+      "required": "Please enter domain",
+      "format": "Please enter a valid domain address"
+    },
+    "extraScript": {
+      "required": "Please enter custom script"
+    }
   }
 }

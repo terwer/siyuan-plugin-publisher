@@ -1,10 +1,20 @@
+<!--
+  -            GNU GENERAL PUBLIC LICENSE
+  -               Version 3, 29 June 2007
+  -
+  -  Copyright (C) 2025 Terwer, Inc. <https://terwer.space/>
+  -  Everyone is permitted to copy and distribute verbatim copies
+  -  of this license document, but changing it is not allowed.
+  -->
+
 <script setup lang="ts">
-import { defineProps } from "vue"
+import { IS_ENGLISH } from "@/Constants.ts"
 import Input from "@components/form/Input.vue"
 import InputNumber from "@components/form/InputNumber.vue"
 import Select from "@components/form/Select.vue"
 import Switch from "@components/form/Switch.vue"
-import { IS_ENGLISH } from "@/Constants.ts"
+import TextArea from "@components/form/TextArea.vue"
+import { defineProps } from "vue"
 
 const props = defineProps<{
   pluginInstance: any
@@ -76,6 +86,17 @@ const getItemLabelStyle = (item: SettingItem) => {
             v-model="item.value"
             :placeholder="item.placeholder"
             :disabled="item.disabled"
+          />
+
+          <!-- Textarea 类型 -->
+          <TextArea
+            v-else-if="item.type === 'textarea'"
+            v-model="item.value"
+            :placeholder="item.placeholder"
+            :readonly="item.readonly"
+            :disabled="item.disabled"
+            :auto-resize="true"
+            :rows="4"
           />
 
           <!-- 其他类型扩展 -->
