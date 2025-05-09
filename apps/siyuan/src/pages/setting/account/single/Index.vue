@@ -9,13 +9,13 @@
 
 <script setup lang="ts">
 import { getSubPlatformTypeByKey } from "@/models/dynamicConfig.ts"
+import { alert } from "@components/Alert.ts"
 import BackPage from "@components/BackPage.vue"
 import Button from "@components/Button.vue"
 import { useI18n } from "@composables/useI18n.ts"
 import { TabEnum } from "@enums/TabEnum.ts"
 import { computed, reactive, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
-import { alert } from "@components/Alert.ts"
 
 // Props
 const props = defineProps<{
@@ -98,8 +98,15 @@ const extra = computed(() => {
 </script>
 
 <template>
-  <back-page :title="pageTitle" :plugin-instance="props.pluginInstance" :has-back-emit="true" :help-key="subtype"
-    @back-emit="handleBack" :extra="extra" :error="errorMsg">
+  <back-page
+    :title="pageTitle"
+    :plugin-instance="props.pluginInstance"
+    :has-back-emit="true"
+    :help-key="subtype"
+    @back-emit="handleBack"
+    :extra="extra"
+    :error="errorMsg"
+  >
     <div>single set index:{{ apiType }}=>{{ subtype }}</div>
   </back-page>
 </template>
