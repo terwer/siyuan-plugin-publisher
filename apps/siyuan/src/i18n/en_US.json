@@ -37,7 +37,11 @@
     "noTip1": "Please go to ",
     "noTip2": "add an account first.",
     "noTip3": "Please ",
-    "noTip4": "Add account first."
+    "noTip4": "Add account first.",
+    "authMode": {
+      "api": "API",
+      "web": "Web"
+    }
   },
   "publish": {
     "publish": "Publish",

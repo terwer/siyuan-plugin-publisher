@@ -17,6 +17,7 @@ import { createAppLogger } from "@utils/appLogger.ts"
 import { cloneDeep } from "lodash-es"
 import { Clock, Rss, Zap } from "lucide-vue-next"
 import { onMounted, onUnmounted, ref } from "vue"
+import { AbstractPlatform } from "@/types"
 
 const publishSettingStore = usePublishSettingStore()
 
@@ -68,7 +69,6 @@ const unregisterPublishSettingStore = publishSettingStore.registerOnInit(
             ],
           } as AbstractPlatform
         }) ?? []
-    logger.debug("使用实际数据初始化平台列表")
   },
 )
 

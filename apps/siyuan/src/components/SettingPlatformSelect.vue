@@ -8,6 +8,8 @@
   -->
 
 <script setup lang="ts">
+import { AuthMode } from "@/models/dynamicConfig.ts"
+import { AbstractPlatform } from "@/types"
 import { alert } from "@components/Alert.ts"
 import Button from "@components/Button.vue"
 import { useI18n } from "@composables/useI18n.ts"
@@ -71,6 +73,16 @@ const addAccount = (event: MouseEvent) => {
           <component :is="platform.icon" class="platform-icon" />
           <span :class="`status-${platform.status || 'default'}`">
             {{ platform.name }}
+          </span>
+          <span
+            v-if="platform.authMode"
+            :class="`auth-mode auth-mode-${platform.authMode.toLowerCase()}`"
+          >
+            {{
+              platform.authMode === AuthMode.API
+                ? t("platformSelect.authMode.api")
+                : t("platformSelect.authMode.web")
+            }}
           </span>
           <button v-if="platform.statusIcon" class="action-btn">
             <component
@@ -337,6 +349,28 @@ const addAccount = (event: MouseEvent) => {
         color: var(--pt-platform-text-light)
         &:hover
           color: var(--pt-platform-text)
+
+    .auth-mode
+      font-size: 0.6rem
+      padding: 2px 4px
+      border-radius: 2px
+      font-weight: 500
+      margin: 2px 0 2px 4px
+      line-height: 1.2
+      display: inline-block
+      vertical-align: middle
+      opacity: 0.9
+
+      &.auth-mode-api
+        background-color: #722ed1
+        color: #ffffff
+
+      &.auth-mode-web
+        background-color: #faad14
+        color: #ffffff
+
+      &:hover
+        opacity: 1
 
   // 操作按钮
   .action-buttons

@@ -37,7 +37,11 @@
     "noTip1": "请先去",
     "noTip2": "添加账号吧",
     "noTip3": "请先",
-    "noTip4": "添加账号"
+    "noTip4": "添加账号",
+    "authMode": {
+      "api": "API授权",
+      "web": "网页授权"
+    }
   },
   "publish": {
     "publish": "文档发布",

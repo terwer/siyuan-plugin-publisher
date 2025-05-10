@@ -126,22 +126,22 @@ const handleBack = () => {
 }
 
 const handleSave = async () => {
-  //   try {
-  //     // 更新平台配置
-  //     // TODO
-  //     // await publishSettingStore.updatePlatformConfig(
-  //     //   formState.platformConfig,
-  //     //   formState.blogConfig,
-  //     // )
-  //     alert({
-  //       title: t("common.opt.ok"),
-  //       message: t("account.single.setOk"),
-  //       type: "success",
-  //       position: "center",
-  //     })
-  //   } catch (e: any) {
-  //     setError(e.toString())
-  //   }
+  try {
+    //     // 更新平台配置
+    //     // TODO
+    //     // await publishSettingStore.updatePlatformConfig(
+    //     //   formState.platformConfig,
+    //     //   formState.blogConfig,
+    //     // )
+    alert({
+      title: t("common.opt.ok"),
+      message: t("account.single.setOk"),
+      type: "success",
+      position: "center",
+    })
+  } catch (e: any) {
+    setError(e.toString())
+  }
 }
 //
 const handleReset = () => {

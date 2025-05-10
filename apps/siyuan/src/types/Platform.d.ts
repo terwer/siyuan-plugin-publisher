@@ -7,6 +7,8 @@
  *  of this license document, but changing it is not allowed.
  */
 
+import { AuthMode } from "@/models/dynamicConfig.ts"
+
 interface AbstractPlatformAction {
   type: "button" | "toggle"
   icon?: any
@@ -19,6 +21,7 @@ interface AbstractPlatform {
   name: string
   icon: any
   type: "blog" | "doc"
+  authMode: AuthMode
   enabled: boolean
   actions: AbstractPlatformAction[]
   status?: "success" | "warning" | "error" | "default"

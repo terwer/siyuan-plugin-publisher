@@ -11,6 +11,7 @@
 import { useI18n } from "@composables/useI18n.ts"
 import { TabEnum } from "@enums/TabEnum.ts"
 import { Inbox } from "lucide-vue-next"
+import { AbstractPlatform } from "@/types"
 
 const props = defineProps<{
   pluginInstance: any

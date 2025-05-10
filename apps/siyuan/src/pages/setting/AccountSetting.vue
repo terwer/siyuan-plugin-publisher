@@ -26,6 +26,7 @@ import {
 } from "lucide-vue-next"
 import { onMounted, onUnmounted, ref } from "vue"
 import { useRouter } from "vue-router"
+import { AbstractPlatform } from "@/types"
 const publishSettingStore = usePublishSettingStore()
 
 const props = defineProps<{
@@ -149,6 +150,7 @@ const unregisterPublishSettingStore = publishSettingStore.registerOnInit(
           name: item.platformName,
           icon: Rss,
           type: "blog",
+          authMode: item.authMode,
           enabled: item.isEnabled,
           actions,
           // 根据授权状态设置平台状态图标
