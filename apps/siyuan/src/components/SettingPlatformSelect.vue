@@ -8,10 +8,10 @@
   -->
 
 <script setup lang="ts">
-import { alert } from "@components/Alert.ts";
-import Button from "@components/Button.vue";
-import { useI18n } from "@composables/useI18n.ts";
-import { Inbox, Plus } from "lucide-vue-next";
+import { alert } from "@components/Alert.ts"
+import Button from "@components/Button.vue"
+import { useI18n } from "@composables/useI18n.ts"
+import { Inbox, Plus } from "lucide-vue-next"
 
 const props = defineProps<{
   pluginInstance: any
@@ -269,24 +269,41 @@ const addAccount = (event: MouseEvent) => {
     > span
       color: var(--pt-platform-text)
       transition: color 0.2s
+      position: relative
 
       // 状态颜色
       &.status-success
         color: #10b981
         &:hover
           color: #059669
+          & + .action-btn .tooltip
+            opacity: 1
+            visibility: visible
+            transition-delay: 0.1s
       &.status-warning
         color: #f59e0b
         &:hover
           color: #d97706
+          & + .action-btn .tooltip
+            opacity: 1
+            visibility: visible
+            transition-delay: 0.1s
       &.status-error
         color: #ef4444
         &:hover
           color: #dc2626
+          & + .action-btn .tooltip
+            opacity: 1
+            visibility: visible
+            transition-delay: 0.1s
       &.status-default
         color: var(--pt-platform-text)
         &:hover
           color: var(--pt-platform-text-hover)
+          & + .action-btn .tooltip
+            opacity: 1
+            visibility: visible
+            transition-delay: 0.1s
 
     &:hover > span
       &.status-success
@@ -348,6 +365,11 @@ const addAccount = (event: MouseEvent) => {
     &:hover
       background: var(--pt-platform-surface)
 
+      .tooltip
+        opacity: 1
+        visibility: visible
+        transition-delay: 0.1s
+
       & ~ .platform-info > span
         &.status-success
           color: #059669
@@ -357,11 +379,6 @@ const addAccount = (event: MouseEvent) => {
           color: #dc2626
         &.status-default
           color: var(--pt-platform-text-hover)
-
-      .tooltip
-        opacity: 1
-        visibility: visible
-        transition-delay: 0.1s
 
     .btn-icon
       width: 14px
