@@ -8,8 +8,15 @@
   -->
 
 <script setup lang="ts">
-import { PlatformType, SubPlatformType } from "@/models/dynamicConfig.ts"
-import { mainPre, pre } from "@/presets/pre.ts"
+import {
+  DynamicConfig,
+  PlatformType,
+  SubPlatformType,
+} from "@/models/dynamicConfig.ts"
+import {
+  platformGroups,
+  platformTemplates,
+} from "@/presets/platformTemplates.ts"
 import BackPage from "@components/BackPage.vue"
 import Svg from "@components/Svg.vue"
 import { useI18n } from "@composables/useI18n.ts"
@@ -27,8 +34,10 @@ const errorMsg = ref("")
 const extra = ref([])
 
 // 平台模板列表
-const platformTemplatesList = ref(mainPre(t))
-const preConfig = pre(t) as any
+const platformTemplatesList = ref(platformGroups(t))
+const singleGroupPlatformTemplateList = platformTemplates(
+  t,
+) as unknown as Record<string, DynamicConfig>
 
 const handleBack = () => {
   router.push(`/?tab=${TabEnum.ACCOUNT}`)
@@ -41,6 +50,11 @@ const handleSelectTemplate = (templateKey: string) => {
       showBack: "true",
     },
   })
+}
+
+const getSingleGroupPlatformTemplateList = (groupType: any) => {
+  const groupKey = groupType.toLowerCase() + "Cfg"
+  return singleGroupPlatformTemplateList[groupKey] as unknown as DynamicConfig[]
 }
 </script>
 
@@ -63,13 +77,13 @@ const handleSelectTemplate = (templateKey: string) => {
         <h3 class="group-title">{{ group.title }}</h3>
         <div class="template-list">
           <div
-            v-for="template in preConfig[group.type.toLowerCase() + 'Cfg']"
+            v-for="template in getSingleGroupPlatformTemplateList(group.type)"
             :key="template.platformKey"
             class="template-card"
             @click.stop="handleSelectTemplate(template.platformKey)"
           >
             <div class="template-icon">
-              <Svg :svg="template.platformIcon" />
+              <Svg :svg="template.platformIcon ?? ''" />
             </div>
             <div class="template-info">
               <div class="template-name">{{ t(template.platformName) }}</div>

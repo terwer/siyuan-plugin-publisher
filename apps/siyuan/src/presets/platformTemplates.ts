@@ -4,14 +4,12 @@ import {
   PlatformType,
   SubPlatformType,
 } from "@/models/dynamicConfig.ts"
-import { PRE_COMTANTS } from "@/presets/PreConstants.ts"
 import { svgIcons } from "@utils/svgIcons.ts"
-// import { MockBrowser } from "@utils/MockBrowser.ts"
 
 /**
- * 一些因为政策原因必须要特殊处理的平台
+ * 平台特殊配置
  */
-export const extraPreCfg = {
+export const specialPlatformConfig = {
   // 白名单（作用是以前限制了，但是后来可用的情况，以前就能用的和新平台不必加）
   cookieWhiteList: [
     SubPlatformType.Custom_Wechat.toString(),
@@ -24,31 +22,16 @@ export const extraPreCfg = {
     "https://*.xiaohongshu.com/*",
   ],
   // 黑名单
-  cookieLimit: [
-    // SubPlatformType.Custom_Wechat.toString()
-    // SubPlatformType.Custom_Zhihu.toString(),
-  ],
-  cookieLimitTipsAuth: {
-    // [SubPlatformType.Custom_Wechat.toString()]: "https://mp.weixin.qq.com",
-    // [SubPlatformType.Custom_Zhihu.toString()]: "https://www.zhihu.com/people/terwer",
-  },
-  cookieLimitTipsImg: {
-    // [SubPlatformType.Custom_Wechat.toString()]: "https://img1.terwer.space/api/public/202309051734289.png",
-    // [SubPlatformType.Custom_Zhihu.toString()]: "https://img1.siyuan.wiki/api/vip/open/media/aHR0cHM6Ly9jZG4uc2EubmV0LzIwMjQvMTEvMjYvdFpmSWp6VjE2U3U4djRXLnBuZw==",
-  },
-  // 这里需要全路径匹配，没有使用默认的，只增加 UA
-  headersMap: {
-    // "https://www.xiaohongshu.com/login": {
-    //   "User-Agent": MockBrowser.HEADERS.MACOS_CHROME["User-Agent"],
-    //   Referer: "https://creator.xiaohongshu.com/publish/publish?from=menu",
-    // },
-  },
+  cookieLimit: [],
+  cookieLimitTipsAuth: {},
+  cookieLimitTipsImg: {},
+  headersMap: {},
 }
 
 /**
- * 通用平台定义
+ * 平台分组定义
  */
-export const mainPre = (t: any) => {
+export const platformGroups = (t: any) => {
   return [
     {
       type: PlatformType.Common,
@@ -90,9 +73,9 @@ export const mainPre = (t: any) => {
 }
 
 /**
- * 子平台预定义
+ * 单个平台模板配置
  */
-export const pre = (t: any) => {
+export const platformTemplates = (t: any) => {
   const config = {
     commonCfg: <DynamicConfig[]>[
       {
@@ -254,24 +237,6 @@ export const pre = (t: any) => {
         authMode: AuthMode.API,
         isEnabled: false,
       },
-      {
-        platformType: PlatformType.Metaweblog,
-        subPlatformType: SubPlatformType.Metaweblog_Typecho,
-        platformKey: "metaweblog_Typecho",
-        platformName: t("platform.metaweblog.typecho"),
-        platformIcon: svgIcons.iconIFTypecho,
-        authMode: AuthMode.API,
-        isEnabled: false,
-      },
-      {
-        platformType: PlatformType.Metaweblog,
-        subPlatformType: SubPlatformType.Metaweblog_Jvue,
-        platformKey: "metaweblog_Jvue",
-        platformName: t("platform.metaweblog.jvue"),
-        platformIcon: svgIcons.iconOTJVue,
-        authMode: AuthMode.API,
-        isEnabled: false,
-      },
     ],
     wordpressCfg: <DynamicConfig[]>[
       {
@@ -283,108 +248,57 @@ export const pre = (t: any) => {
         authMode: AuthMode.API,
         isEnabled: false,
       },
-      {
-        platformType: PlatformType.Wordpress,
-        subPlatformType: SubPlatformType.Wordpress_Wordpressdotcom,
-        platformKey: "wordpress_Wordpressdotcom",
-        platformName: t("platform.wordpress.wordpressdotcom"),
-        platformIcon: svgIcons.iconOTWordpressdotcom,
-        authMode: AuthMode.API,
-        isEnabled: false,
-      },
     ],
     customCfg: <DynamicConfig[]>[
-      {
-        platformType: PlatformType.Custom,
-        subPlatformType: SubPlatformType.Custom_Zhihu,
-        platformKey: "custom_Zhihu",
-        platformName: t("platform.custom.zhihu"),
-        platformIcon: svgIcons.iconIFZhihu,
-        authMode: AuthMode.WEBSITE,
-        authUrl: "https://www.zhihu.com/signin",
-        domain: "zhihu.com",
-        isEnabled: false,
-      },
-      {
-        platformType: PlatformType.Custom,
-        subPlatformType: SubPlatformType.Custom_CSDN,
-        platformKey: "custom_Csdn",
-        platformName: t("platform.custom.csdn"),
-        platformIcon: svgIcons.iconIFCSDN,
-        authMode: AuthMode.WEBSITE,
-        authUrl: "https://passport.csdn.net/login",
-        domain: "csdn.net",
-        isEnabled: false,
-      },
       {
         platformType: PlatformType.Custom,
         subPlatformType: SubPlatformType.Custom_Wechat,
         platformKey: "custom_Wechat",
         platformName: t("platform.custom.wechat"),
         platformIcon: svgIcons.iconIFWechat,
-        authMode: AuthMode.WEBSITE,
-        authUrl: "https://mp.weixin.qq.com/",
-        domain: "qq.com",
-        isEnabled: false,
-      },
-      {
-        platformType: PlatformType.Custom,
-        subPlatformType: SubPlatformType.Custom_Jianshu,
-        platformKey: "custom_Jianshu",
-        platformName: t("platform.custom.jianshu"),
-        platformIcon: svgIcons.iconIFJianshu,
-        authMode: AuthMode.WEBSITE,
-        authUrl: "https://www.jianshu.com/sign_in",
-        domain: "jianshu.com",
-        isEnabled: false,
-      },
-      {
-        platformType: PlatformType.Custom,
-        subPlatformType: SubPlatformType.Custom_Juejin,
-        platformKey: "custom_Juejin",
-        platformName: t("platform.custom.juejin"),
-        platformIcon: svgIcons.iconIFJuejin,
-        authMode: AuthMode.WEBSITE,
-        authUrl: "https://juejin.cn/login",
-        domain: "juejin.cn",
-        isEnabled: false,
-      },
-      {
-        platformType: PlatformType.Custom,
-        subPlatformType: SubPlatformType.Custom_Haloweb,
-        platformKey: PRE_COMTANTS.PRE_CUSTOM_HALOWEB,
-        platformName: t("platform.custom.haloweb"),
-        platformIcon: svgIcons.iconIFHaloweb,
-        authMode: AuthMode.WEBSITE,
-        authUrl: "/login",
-        domain: "",
-        isEnabled: false,
-      },
-      {
-        platformType: PlatformType.Custom,
-        subPlatformType: SubPlatformType.Custom_Bilibili,
-        platformKey: PRE_COMTANTS.PRE_CUSTOM_BILIBILI,
-        platformName: t("platform.custom.bilibili"),
-        platformIcon: svgIcons.iconIFBilibili,
-        authMode: AuthMode.WEBSITE,
-        authUrl: "https://passport.bilibili.com/login",
-        domain: "bilibili.com",
-        isEnabled: false,
-      },
-    ],
-    systemCfg: <DynamicConfig[]>[
-      {
-        platformType: PlatformType.System,
-        subPlatformType: SubPlatformType.System_Siyuan,
-        platformKey: "system_Siyuan",
-        platformName: t("platform.system.siyuan"),
-        platformIcon: svgIcons.iconIFSiyuan,
         authMode: AuthMode.API,
-        isEnabled: true,
-        isSys: true,
+        isEnabled: false,
+      },
+      {
+        platformType: PlatformType.Custom,
+        subPlatformType: SubPlatformType.Custom_Zhihu,
+        platformKey: "custom_Zhihu",
+        platformName: t("platform.custom.zhihu"),
+        platformIcon: svgIcons.iconIFZhihu,
+        authMode: AuthMode.API,
+        isEnabled: false,
+      },
+      {
+        platformType: PlatformType.Custom,
+        subPlatformType: SubPlatformType.Custom_Xiaohongshu,
+        platformKey: "custom_Xiaohongshu",
+        platformName: t("platform.custom.xiaohongshu"),
+        platformIcon: svgIcons.iconIFXiaohongshu,
+        authMode: AuthMode.API,
+        isEnabled: false,
       },
     ],
   }
-
   return config
+}
+
+/**
+ * 根据 platformKey 查找配置
+ * @param key platformKey
+ * @param config 配置对象
+ * @returns 找到的配置项，如果未找到则返回 undefined
+ */
+export const findConfigByKey = (
+  key: string,
+  config: ReturnType<typeof platformTemplates>,
+) => {
+  const allConfigs = [
+    ...config.commonCfg,
+    ...config.githubCfg,
+    ...config.gitlabCfg,
+    ...config.metaweblogCfg,
+    ...config.wordpressCfg,
+    ...config.customCfg,
+  ]
+  return allConfigs.find((item) => item.platformKey === key)
 }

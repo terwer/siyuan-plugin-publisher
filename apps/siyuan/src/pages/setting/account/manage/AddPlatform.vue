@@ -8,41 +8,88 @@
   -->
 
 <script setup lang="ts">
-import { AuthMode } from "@/models/dynamicConfig.ts"
-import { AbstractPlatform } from "@/types"
+import {
+  AuthMode,
+  DynamicConfig,
+  PlatformType,
+} from "@/models/dynamicConfig.ts"
+import {
+  findConfigByKey,
+  platformTemplates,
+} from "@/presets/platformTemplates.ts"
 import { alert } from "@components/Alert.ts"
 import BackPage from "@components/BackPage.vue"
 import Button from "@components/Button.vue"
+import FormGroup from "@components/FormGroup.vue"
 import { useI18n } from "@composables/useI18n.ts"
+import { createAppLogger } from "@utils/appLogger.ts"
 import { Check } from "lucide-vue-next"
-import { onMounted, ref } from "vue"
+import { onMounted, reactive, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
-import { TabEnum } from "@enums/TabEnum.ts"
 
 const props = defineProps<{
   pluginInstance: any
 }>()
 
+const logger = createAppLogger("add-platform")
 const { t } = useI18n(props.pluginInstance)
 const router = useRouter()
 const route = useRoute()
 
-const platform = ref<Partial<AbstractPlatform>>({
-  name: "",
-  type: "blog",
+const config = platformTemplates(t)
+const platform = ref<Partial<DynamicConfig>>({
+  platformName: "",
+  platformType: PlatformType.System,
   authMode: AuthMode.API,
-  enabled: true,
-  actions: [],
+  isEnabled: true,
 })
 
 const errorMsg = ref("")
 const extra = ref([])
 
+const platformSettingFormGroup = reactive({
+  title: t("platform.add"),
+  items: [
+    {
+      type: "input",
+      label: t("platform.name"),
+      value: platform.value.platformName,
+      placeholder: t("platform.namePlaceholder"),
+    },
+    {
+      type: "select",
+      label: t("platform.type"),
+      value: platform.value.platformType,
+      options: [
+        { label: t("platform.type.blog"), value: "blog" },
+        { label: t("platform.type.doc"), value: "doc" },
+      ],
+    },
+    {
+      type: "select",
+      label: t("platform.authMode"),
+      value: platform.value.authMode,
+      options: [
+        { label: t("platformSelect.authMode.api"), value: AuthMode.API },
+        { label: t("platformSelect.authMode.web"), value: AuthMode.WEB },
+      ],
+    },
+  ],
+})
+
+const formGroups = [platformSettingFormGroup]
+
 onMounted(() => {
   const templateKey = route.params.templateKey as string
   if (templateKey) {
-    // TODO: 根据模板信息初始化表单
-    console.log("Template key:", templateKey)
+    const templateConfig = findConfigByKey(templateKey, config)
+    if (templateConfig) {
+      platform.value = {
+        ...platform.value,
+        ...templateConfig,
+      }
+      logger.debug("get new Template:", platform.value)
+    }
   }
 })
 
@@ -56,7 +103,7 @@ const handleBack = () => {
 }
 
 const handleSave = () => {
-  if (!platform.value.name) {
+  if (!platform.value.platformName) {
     alert({
       title: t("common.error"),
       message: t("platform.nameRequired"),
@@ -66,7 +113,6 @@ const handleSave = () => {
     return
   }
 
-  // TODO: 处理保存平台的逻辑
   router.push({
     path: "/setting/account",
     query: {
@@ -86,44 +132,19 @@ const handleSave = () => {
     :error="errorMsg"
     @back-emit="handleBack"
   >
-    <div class="form-container">
-      <div class="form-group">
-        <label>{{ t("platform.name") }}</label>
-        <input
-          v-model="platform.name"
-          type="text"
-          :placeholder="t('platform.namePlaceholder')"
-        />
-      </div>
-
-      <div class="form-group">
-        <label>{{ t("platform.type") }}</label>
-        <select v-model="platform.type">
-          <option value="blog">{{ t("platform.type.blog") }}</option>
-          <option value="doc">{{ t("platform.type.doc") }}</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label>{{ t("platform.authMode") }}</label>
-        <select v-model="platform.authMode">
-          <option :value="AuthMode.API">
-            {{ t("platformSelect.authMode.api") }}
-          </option>
-          <option :value="AuthMode.WEB">
-            {{ t("platformSelect.authMode.web") }}
-          </option>
-        </select>
-      </div>
-
-      <div class="form-actions">
-        <Button size="md" @click="handleSave">
-          <template #icon>
-            <Check :size="16" />
-          </template>
-          {{ t("common.save") }}
-        </Button>
-      </div>
+    <form-group
+      v-for="(group, index) in formGroups"
+      :key="index"
+      :plugin-instance="pluginInstance"
+      :form-group="group"
+    />
+    <div class="form-actions">
+      <Button size="md" @click="handleSave">
+        <template #icon>
+          <Check :size="16" />
+        </template>
+        {{ t("common.save") }}
+      </Button>
     </div>
   </BackPage>
 </template>

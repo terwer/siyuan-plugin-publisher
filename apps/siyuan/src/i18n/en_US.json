@@ -258,7 +258,13 @@
     },
     "system": {
       "siyuan": "Siyuan Note"
-    }
+    },
+    "add": "Add Platform",
+    "name": "Platform Name",
+    "namePlaceholder": "Please enter platform name",
+    "nameRequired": "Please enter platform name",
+    "type": "Platform Type",
+    "authMode": "Auth Mode"
   },
   "validation": {
     "platformName": {

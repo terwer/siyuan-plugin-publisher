@@ -258,7 +258,13 @@
     },
     "system": {
       "siyuan": "思源笔记"
-    }
+    },
+    "add": "添加平台",
+    "name": "平台名称",
+    "namePlaceholder": "请输入平台名称",
+    "nameRequired": "请输入平台名称",
+    "type": "平台类型",
+    "authMode": "授权模式"
   },
   "validation": {
     "platformName": {
