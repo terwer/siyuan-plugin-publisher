@@ -75,6 +75,8 @@ const gotoAccount = (event: MouseEvent) => {
                 :class="{
                   left: index === platform.actions.length - 1,
                   right: index === 0,
+                  bottom: index === 0 || index === platform.actions.length - 1,
+                  top: index !== 0 && index !== platform.actions.length - 1,
                 }"
                 >{{ action.label }}</span
               >
@@ -104,6 +106,8 @@ const gotoAccount = (event: MouseEvent) => {
                 :class="{
                   left: index === platform.actions.length - 1,
                   right: index === 0,
+                  bottom: index === 0 || index === platform.actions.length - 1,
+                  top: index !== 0 && index !== platform.actions.length - 1,
                 }"
                 >{{ action.label }}</span
               >
@@ -127,8 +131,10 @@ const gotoAccount = (event: MouseEvent) => {
   --pt-platform-border: #cbd5e0
   --pt-platform-accent: #4299e1
   --pt-platform-accent-hover: #3182ce
-  --pt-platform-tooltip-bg: #4a5568
-  --pt-platform-tooltip-text: #f8fafc
+  --pt-platform-tooltip-bg: #1a202c
+  --pt-platform-tooltip-text: #ffffff
+  --pt-platform-tooltip-success-bg: #10b981
+  --pt-platform-tooltip-error-bg: #ef4444
   --pt-platform-shadow: rgba(0, 0, 0, 0.1)
 
   // 暗黑模式变量
@@ -141,8 +147,10 @@ const gotoAccount = (event: MouseEvent) => {
     --pt-platform-border: #4a5568
     --pt-platform-accent: #63b3ed
     --pt-platform-accent-hover: #4299e1
-    --pt-platform-tooltip-bg: #3a3a3a
-    --pt-platform-tooltip-text: #f8fafc
+    --pt-platform-tooltip-bg: #1a202c
+    --pt-platform-tooltip-text: #ffffff
+    --pt-platform-tooltip-success-bg: #059669
+    --pt-platform-tooltip-error-bg: #dc2626
     --pt-platform-shadow: rgba(0, 0, 0, 0.3)
 
   // 布局样式
@@ -228,13 +236,13 @@ const gotoAccount = (event: MouseEvent) => {
   // 工具提示
   .tooltip
     position: absolute
-    top: -24px
+    top: -28px
     left: 50%
     transform: translateX(-50%)
     z-index: 99999
     background: var(--pt-platform-tooltip-bg)
-    color: var(--pt-platform-tooltip-text)
-    padding: 4px 8px
+    color: var(--pt-platform-tooltip-text) !important
+    padding: 6px 8px
     border-radius: 3px
     font-size: 0.7rem
     white-space: nowrap
@@ -243,39 +251,39 @@ const gotoAccount = (event: MouseEvent) => {
     transition: opacity 0.2s ease, visibility 0.2s ease
     box-shadow: 0 2px 4px var(--pt-platform-shadow)
     pointer-events: none
-    will-change: opacity, visibility, transform
+    font-weight: 500
+    display: inline-block
+    line-height: 1
+    text-align: center
 
-    .arrow
-      position: absolute
-      bottom: -4px
-      left: 50%
-      transform: translateX(-50%)
-      width: 0
-      height: 0
-      border-left: 4px solid transparent
-      border-right: 4px solid transparent
-      border-top: 4px solid var(--pt-platform-tooltip-bg)
-      margin-top: 2px
+    // 添加不同状态下的样式
+    &.status-success
+      background: var(--pt-platform-tooltip-success-bg)
+      color: #ffffff !important
+    &.status-error
+      background: var(--pt-platform-tooltip-error-bg)
+      color: #ffffff !important
+    &.status-default
+      background: var(--pt-platform-tooltip-bg)
+      color: var(--pt-platform-tooltip-text) !important
 
-    // 左侧定位
     &.left
       left: auto
       right: 0
       transform: none
-      transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease
-      &::after
-        left: auto
-        right: 10px
-        transform: none
 
-    // 右侧定位
     &.right
       left: 0
       transform: none
-      transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease
-      &::after
-        left: 10px
-        transform: none
+
+    // 添加底部定位
+    &.bottom
+      top: auto
+      bottom: -28px
+
+    // 添加顶部定位
+    &.top
+      top: -28px
 
   // 操作按钮
   .action-buttons

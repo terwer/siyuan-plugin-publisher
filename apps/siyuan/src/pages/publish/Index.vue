@@ -103,7 +103,13 @@ onMounted(() => {
 
 <template>
   <div class="publish-container">
-    <Tab :tabs="tabs" :active-tab="activeTab" :vertical="true" :collapsed="isCollapsed" @tab-change="onTabChange" />
+    <Tab
+      :tabs="tabs"
+      :active-tab="activeTab"
+      :vertical="true"
+      :collapsed="isCollapsed"
+      @tab-change="onTabChange"
+    />
   </div>
 </template>
 

@@ -114,6 +114,8 @@ const addAccount = (event: MouseEvent) => {
                 :class="{
                   left: index === platform.actions.length - 1,
                   right: index === 0,
+                  bottom: index === 0 || index === platform.actions.length - 1,
+                  top: index !== 0 && index !== platform.actions.length - 1,
                 }"
                 >{{ action.label }}</span
               >
@@ -143,6 +145,8 @@ const addAccount = (event: MouseEvent) => {
                 :class="{
                   left: index === platform.actions.length - 1,
                   right: index === 0,
+                  bottom: index === 0 || index === platform.actions.length - 1,
+                  top: index !== 0 && index !== platform.actions.length - 1,
                 }"
                 >{{ action.label }}</span
               >
@@ -359,13 +363,13 @@ const addAccount = (event: MouseEvent) => {
   // 工具提示
   .tooltip
     position: absolute
-    top: -24px
+    top: -28px
     left: 50%
     transform: translateX(-50%)
     z-index: 99999
     background: var(--pt-platform-tooltip-bg)
     color: var(--pt-platform-tooltip-text) !important
-    padding: 4px 6px
+    padding: 6px 8px
     border-radius: 3px
     font-size: 0.7rem
     white-space: nowrap
@@ -398,6 +402,15 @@ const addAccount = (event: MouseEvent) => {
     &.right
       left: 0
       transform: none
+
+    // 添加底部定位
+    &.bottom
+      top: auto
+      bottom: -28px
+
+    // 添加顶部定位
+    &.top
+      top: -28px
 
   // 开关按钮
   .toggle-btn
