@@ -72,8 +72,8 @@ const formState = {
   blogConfig: useClonedForm(blogConfig.value),
 }
 const platformSettingFormGroup = reactive({
-  label: t("account.single.platformSetting"),
-  items: [
+  title: t("account.single.platformSetting"),
+  items: <SettingItem[]>[
     {
       type: "input",
       label: t("account.single.platform.platformName"),
@@ -91,8 +91,8 @@ const platformSettingFormGroup = reactive({
   ],
 })
 const blogSettingFormGroup = reactive({
-  label: t("account.single.blogSetting"),
-  items: [
+  title: t("account.single.blogSetting"),
+  items: <SettingItem[]>[
     {
       type: "input",
       label: t("account.single.blog.home"),

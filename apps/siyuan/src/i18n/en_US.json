@@ -74,7 +74,9 @@
       "goToPublish": "Go to Publish",
       "goToPublishTip": "Go directly to the homepage of the publishing platform list",
       "setOk": "The account information for the current platform instance has been successfully saved",
-      "resetTip": "Reset form controls to default values"
+      "resetTip": "Reset form controls to default values",
+      "platformSetting": "Platform Settings",
+      "blogSetting": "Blog Settings"
     }
   },
   "picbed": {
@@ -126,8 +128,8 @@
       },
       "auth": {
         "title": "Authorization",
-        "mode": "Auth Mode",
         "mode": {
+          "title": "Auth Mode",
           "api": "API Auth",
           "website": "Website Auth"
         }
@@ -136,8 +138,8 @@
         "title": "API Configuration",
         "url": "API URL",
         "urlPlaceholder": "Please enter API URL",
-        "passwordType": "Password Type",
         "passwordType": {
+          "title": "Password Type",
           "password": "Password",
           "token": "Token",
           "cookie": "Cookie"
@@ -147,8 +149,8 @@
       },
       "content": {
         "title": "Content Configuration",
-        "pageType": "Page Type",
         "pageType": {
+          "title": "Page Type",
           "markdown": "Markdown Content",
           "html": "HTML",
           "formatter": "Formatter",
