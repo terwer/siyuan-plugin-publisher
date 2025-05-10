@@ -8,10 +8,10 @@
   -->
 
 <script setup lang="ts">
-import { alert } from "@components/Alert.ts";
-import Button from "@components/Button.vue";
-import { useI18n } from "@composables/useI18n.ts";
-import { Inbox, Plus } from "lucide-vue-next";
+import { alert } from "@components/Alert.ts"
+import Button from "@components/Button.vue"
+import { useI18n } from "@composables/useI18n.ts"
+import { Inbox, Plus } from "lucide-vue-next"
 
 const props = defineProps<{
   pluginInstance: any
@@ -78,7 +78,10 @@ const addAccount = (event: MouseEvent) => {
               class="btn-icon"
               :class="`status-${platform.status || 'default'}`"
             />
-            <span class="tooltip">
+            <span
+              class="tooltip"
+              :class="`status-${platform.status || 'default'}`"
+            >
               {{
                 platform.status === "success"
                   ? t("account.authStatus.authorized")
@@ -165,6 +168,8 @@ const addAccount = (event: MouseEvent) => {
   --pt-platform-accent-hover: #3182ce
   --pt-platform-tooltip-bg: #1a202c
   --pt-platform-tooltip-text: #ffffff
+  --pt-platform-tooltip-success-bg: #10b981
+  --pt-platform-tooltip-error-bg: #ef4444
   --pt-platform-shadow: rgba(0, 0, 0, 0.1)
 
   // 暗黑模式变量
@@ -179,6 +184,8 @@ const addAccount = (event: MouseEvent) => {
     --pt-platform-accent-hover: #4299e1
     --pt-platform-tooltip-bg: #1a202c
     --pt-platform-tooltip-text: #ffffff
+    --pt-platform-tooltip-success-bg: #059669
+    --pt-platform-tooltip-error-bg: #dc2626
     --pt-platform-shadow: rgba(0, 0, 0, 0.3)
 
   // 布局样式
@@ -332,7 +339,7 @@ const addAccount = (event: MouseEvent) => {
     z-index: 99999
     background: var(--pt-platform-tooltip-bg)
     color: var(--pt-platform-tooltip-text) !important
-    padding: 4px 8px
+    padding: 4px 6px
     border-radius: 3px
     font-size: 0.7rem
     white-space: nowrap
@@ -342,18 +349,20 @@ const addAccount = (event: MouseEvent) => {
     box-shadow: 0 2px 4px var(--pt-platform-shadow)
     pointer-events: none
     font-weight: 500
+    display: inline-block
+    line-height: 1
+    text-align: center
 
-    &::after
-      content: ""
-      position: absolute
-      bottom: -4px
-      left: 50%
-      transform: translateX(-50%)
-      width: 0
-      height: 0
-      border-left: 4px solid transparent
-      border-right: 4px solid transparent
-      border-top: 4px solid var(--pt-platform-tooltip-bg)
+    // 添加不同状态下的样式
+    &.status-success
+      background: var(--pt-platform-tooltip-success-bg)
+      color: #ffffff !important
+    &.status-error
+      background: var(--pt-platform-tooltip-error-bg)
+      color: #ffffff !important
+    &.status-default
+      background: var(--pt-platform-tooltip-bg)
+      color: var(--pt-platform-tooltip-text) !important
 
     &.left
       left: auto
