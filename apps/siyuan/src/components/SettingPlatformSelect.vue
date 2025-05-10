@@ -8,10 +8,10 @@
   -->
 
 <script setup lang="ts">
-import { alert } from "@components/Alert.ts"
-import Button from "@components/Button.vue"
-import { useI18n } from "@composables/useI18n.ts"
-import { Inbox, Plus } from "lucide-vue-next"
+import { alert } from "@components/Alert.ts";
+import Button from "@components/Button.vue";
+import { useI18n } from "@composables/useI18n.ts";
+import { Inbox, Plus } from "lucide-vue-next";
 
 const props = defineProps<{
   pluginInstance: any
@@ -289,7 +289,14 @@ const addAccount = (event: MouseEvent) => {
           color: var(--pt-platform-text-hover)
 
     &:hover > span
-      color: var(--pt-platform-text-hover)
+      &.status-success
+        color: #059669
+      &.status-warning
+        color: #d97706
+      &.status-error
+        color: #dc2626
+      &.status-default
+        color: var(--pt-platform-text-hover)
 
     .platform-icon
       width: 16px
@@ -340,7 +347,16 @@ const addAccount = (event: MouseEvent) => {
 
     &:hover
       background: var(--pt-platform-surface)
-      color: var(--pt-platform-text)
+
+      & ~ .platform-info > span
+        &.status-success
+          color: #059669
+        &.status-warning
+          color: #d97706
+        &.status-error
+          color: #dc2626
+        &.status-default
+          color: var(--pt-platform-text-hover)
 
       .tooltip
         opacity: 1
@@ -350,6 +366,7 @@ const addAccount = (event: MouseEvent) => {
     .btn-icon
       width: 14px
       height: 14px
+      transition: color 0.2s
 
       &.status-success
         color: #10b981
