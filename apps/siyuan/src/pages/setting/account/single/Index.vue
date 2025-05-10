@@ -13,51 +13,103 @@ import {
   DynamicConfig,
   getSubPlatformTypeByKey,
 } from "@/models/dynamicConfig.ts"
-import { alert } from "@components/Alert.ts"
 import BackPage from "@components/BackPage.vue"
 import Button from "@components/Button.vue"
-import PlatformConfigForm from "@components/PlatformConfigForm.vue"
 import { useI18n } from "@composables/useI18n.ts"
 import { TabEnum } from "@enums/TabEnum.ts"
 import { usePublishSettingStore } from "@stores/usePublishSettingStore.ts"
-import { computed, reactive, ref } from "vue"
+import { createAppLogger } from "@utils/appLogger.ts"
+import { computed, onMounted, reactive, ref, toRaw, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { BlogConfig } from "zhi-blog-api"
+import FormGroup from "@components/FormGroup.vue"
+import * as _ from "lodash-es"
+import { useComputedField } from "@composables/useComputedField.ts"
+import { useClonedForm } from "@composables/useClonedForm.ts"
+import { StrUtil } from "zhi-common"
 
 // Props
 const props = defineProps<{
   pluginInstance: any
 }>()
 
+const logger = createAppLogger("single-platform-setting-index")
 const router = useRouter()
 const route = useRoute()
-const { query } = useRoute()
 const publishSettingStore = usePublishSettingStore()
 
 // datas
 const params = reactive(route.params)
 const apiType = params.key as string
-const platformName = ref((query.platformName ?? "unknown") as string)
 const { t } = useI18n(props.pluginInstance)
-const pageTitle = computed(() =>
-  t("account.setTitle").replace("{platformName}", platformName.value),
-)
 const subtype = getSubPlatformTypeByKey(apiType)
+const errorMsg = ref("")
 
-// 获取平台配置
+// computed
+// 获取平台配置只读版本
 const platformConfig = computed(() => {
   const totalCfg =
     publishSettingStore.readonlyState[DYNAMIC_CONFIG_KEY]?.totalCfg
-  return totalCfg?.find((item) => item.platformKey === apiType)
+  return totalCfg?.find((item) => item.platformKey === apiType) as DynamicConfig
 })
 const blogConfig = computed(() => {
   const publishSetting = publishSettingStore.readonlyState as any
   return publishSetting[apiType] as BlogConfig
 })
+// 设置标题
+const pageTitle = computed(() => {
+  let platformName = platformConfig.value.platformName
+  if (StrUtil.isEmptyString(platformName)) {
+    platformName = apiType
+  }
+  return t("account.setTitle").replace("{platformName}", platformName)
+})
+
+// form
+// 表单状态
+const formState = {
+  platformConfig: useClonedForm(platformConfig.value),
+  blogConfig: useClonedForm(blogConfig.value),
+}
+const platformSettingFormGroup = reactive({
+  label: t("account.single.platformSetting"),
+  items: [
+    {
+      type: "input",
+      label: t("account.single.platform.platformName"),
+      value: useComputedField(formState.platformConfig, "platformName"),
+      placeholder: t("account.single.platformNamePlaceholder"),
+    },
+    {
+      type: "input",
+      label: t("account.single.platform.platformKey"),
+      value: platformConfig.value.platformKey,
+      placeholder: t("account.single.platformKeyPlaceholder"),
+      readonly: true,
+      disabled: true,
+    },
+  ],
+})
+const blogSettingFormGroup = reactive({
+  label: t("account.single.blogSetting"),
+  items: [
+    {
+      type: "input",
+      label: t("account.single.blog.home"),
+      value: useComputedField(formState.blogConfig, "home"),
+      placeholder: t("account.single.homePlaceholder"),
+    },
+    {
+      type: "input",
+      label: t("account.single.blog.apiUrl"),
+      value: useComputedField(formState.blogConfig, "apiUrl"),
+      placeholder: t("account.single.blog.apiUrlPlaceholder"),
+    },
+  ],
+})
+const formGroups = [platformSettingFormGroup, blogSettingFormGroup]
 
 // methods
-const errorMsg = ref("")
-
 const setError = (msg: string) => {
   errorMsg.value = `${msg} (${new Date().toLocaleString()})`
 }
@@ -67,33 +119,45 @@ const handleBack = () => {
 }
 
 const handleSave = async () => {
-  try {
-    // 更新平台配置
-    await publishSettingStore.updatePlatformConfig(platformConfig, blogConfig)
-    alert({
-      title: t("common.opt.ok"),
-      message: t("account.single.setOk"),
-      type: "success",
-      position: "center",
-    })
-  } catch (e: any) {
-    setError(e.toString())
-  }
+  //   try {
+  //     // 更新平台配置
+  //     // TODO
+  //     // await publishSettingStore.updatePlatformConfig(
+  //     //   formState.platformConfig,
+  //     //   formState.blogConfig,
+  //     // )
+  //     alert({
+  //       title: t("common.opt.ok"),
+  //       message: t("account.single.setOk"),
+  //       type: "success",
+  //       position: "center",
+  //     })
+  //   } catch (e: any) {
+  //     setError(e.toString())
+  //   }
 }
-
+//
+const handleReset = () => {
+  //   // 重置基础配置
+  //   formState.platformConfig = {} as any
+  //   // 重置平台特定配置
+  //   formState.blogConfig = {} as any
+}
+//
 const handleVerify = async () => {
-  try {
-    // 验证平台配置
-    await publishSettingStore.verifyPlatformConfig(apiType)
-    alert({
-      title: t("common.opt.ok"),
-      message: t("account.single.verifyOk"),
-      type: "success",
-      position: "center",
-    })
-  } catch (e: any) {
-    setError(e.toString())
-  }
+  //   try {
+  //     // 验证平台配置
+  //     // TODO
+  //     // await publishSettingStore.verifyPlatformConfig(apiType)
+  //     alert({
+  //       title: t("common.opt.ok"),
+  //       message: t("account.single.verifyOk"),
+  //       type: "success",
+  //       position: "center",
+  //     })
+  //   } catch (e: any) {
+  //     setError(e.toString())
+  //   }
 }
 
 const extra = computed(() => {
@@ -127,6 +191,19 @@ const extra = computed(() => {
     {
       component: Button,
       props: {
+        type: "default",
+        size: "sm",
+        tooltip: t("account.single.resetTip"),
+        tooltipPlacement: "bottom",
+      },
+      onClick: () => {
+        handleReset()
+      },
+      text: t("common.reset"),
+    },
+    {
+      component: Button,
+      props: {
         type: "link",
         size: "sm",
         tooltip: t("account.single.goToPublishTip"),
@@ -138,6 +215,27 @@ const extra = computed(() => {
       text: t("account.single.goToPublish"),
     },
   ]
+})
+
+watch(
+  () => formState.platformConfig,
+  (newVal) => {
+    const changedRawPlatformConfig = toRaw(newVal.value)
+    logger.debug("platformConfig changed=>", changedRawPlatformConfig)
+  },
+  { deep: true },
+)
+
+watch(
+  () => formState.blogConfig,
+  (newVal) => {
+    const changedRawBlogConfig = toRaw(newVal.value)
+    logger.debug("blogConfig changed=>", changedRawBlogConfig)
+  },
+)
+
+onMounted(() => {
+  logger.debug("single account setting inited")
 })
 </script>
 
@@ -151,12 +249,11 @@ const extra = computed(() => {
     :extra="extra"
     :error="errorMsg"
   >
-    <platform-config-form
-      v-if="platformConfig"
+    <form-group
+      v-for="(group, index) in formGroups"
+      :key="index"
       :plugin-instance="props.pluginInstance"
-      :platform-config="platformConfig"
-      :blog-config="blogConfig"
-      @save="handleSave"
+      :form-group="group"
     />
   </back-page>
 </template>

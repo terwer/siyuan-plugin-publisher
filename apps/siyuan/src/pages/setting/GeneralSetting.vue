@@ -8,17 +8,13 @@
   -->
 
 <script setup lang="ts">
-import SiyuanSetting from "@pages/setting/general/SiyuanSetting.vue"
-import UISetting from "@pages/setting/general/UISetting.vue"
 import { useSiyuanSettingStore } from "@stores/useSiyuanSettingStore.ts"
 import { usePreferenceSettingStore } from "@stores/usePreferenceSettingStore.ts"
 import { reactive } from "vue"
 import { useComputedField } from "@composables/useComputedField.ts"
 import { useI18n } from "@composables/useI18n.ts"
-import ContentSetting from "@pages/setting/general/ContentSetting.vue"
-import DataBind from "@pages/setting/general/DataBind.vue"
-import AISetting from "@pages/setting/general/AISetting.vue"
 import { StrUtil } from "zhi-common"
+import FormGroup from "@components/FormGroup.vue"
 
 const props = defineProps<{
   pluginInstance: any
@@ -141,15 +137,24 @@ const dataBindFormGroup = reactive({
   title: t("preference.dataBind.title"),
   items: <SettingItem[]>[],
 })
+
+const formGroups = [
+  uiSettingFormGroup,
+  contentSettingFormGroup,
+  aiSettingFormGroup,
+  siyuanSettingFormGroup,
+  dataBindFormGroup,
+]
 </script>
 
 <template>
   <div class="settings-wrapper">
-    <u-i-setting :plugin-instance="props.pluginInstance" :form-group="uiSettingFormGroup" />
-    <content-setting :plugin-instance="props.pluginInstance" :form-group="contentSettingFormGroup" />
-    <a-i-setting :plugin-instance="props.pluginInstance" :form-group="aiSettingFormGroup" />
-    <siyuan-setting :plugin-instance="props.pluginInstance" :form-group="siyuanSettingFormGroup" />
-    <data-bind :plugin-instance="props.pluginInstance" :form-group="dataBindFormGroup" />
+    <form-group
+      v-for="(group, index) in formGroups"
+      :key="index"
+      :plugin-instance="props.pluginInstance"
+      :form-group="group"
+    />
   </div>
 </template>
 

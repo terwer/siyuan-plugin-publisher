@@ -9,6 +9,7 @@
     "reportError": "报告错误",
     "error": "错误",
     "close": "关闭",
+    "reset": "重置",
     "opt": {
       "ok": "操作成功",
       "fail": "操作失败"
@@ -72,7 +73,8 @@
       "verifyTip": "验证当前平台的可用性",
       "goToPublish": "前往发布",
       "goToPublishTip": "直接前往发布平台列表首页",
-      "setOk": "当前平台实例的账号信息已成功保存"
+      "setOk": "当前平台实例的账号信息已成功保存",
+      "resetTip": "重置表单控件为默认值"
     }
   },
   "picbed": {

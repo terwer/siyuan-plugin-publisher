@@ -53,7 +53,6 @@ const unregisterPublishSettingStore = publishSettingStore.registerOnInit(
                   path: `/setting/account/single/${item.platformKey}`,
                   query: {
                     showBack: "true",
-                    platformName: item.platformName,
                   },
                 })
               },

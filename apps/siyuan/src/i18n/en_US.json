@@ -9,6 +9,7 @@
     "reportError": "Report error",
     "error": "Error",
     "close": "Close",
+    "reset": "Reset",
     "opt": {
       "ok": "Operation succeeded",
       "fail": "Operation failed"
@@ -72,7 +73,8 @@
       "verifyTip": "Verify the availability of the current platform",
       "goToPublish": "Go to Publish",
       "goToPublishTip": "Go directly to the homepage of the publishing platform list",
-      "setOk": "The account information for the current platform instance has been successfully saved"
+      "setOk": "The account information for the current platform instance has been successfully saved",
+      "resetTip": "Reset form controls to default values"
     }
   },
   "picbed": {
