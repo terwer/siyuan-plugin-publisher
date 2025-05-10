@@ -8,10 +8,11 @@
   -->
 
 <script setup lang="ts">
+import { AbstractPlatform } from "@/types"
+import Svg from "@components/Svg.vue"
 import { useI18n } from "@composables/useI18n.ts"
 import { TabEnum } from "@enums/TabEnum.ts"
 import { Inbox } from "lucide-vue-next"
-import { AbstractPlatform } from "@/types"
 
 const props = defineProps<{
   pluginInstance: any
@@ -49,8 +50,14 @@ const gotoAccount = (event: MouseEvent) => {
         class="platform-item"
       >
         <div class="platform-info">
-          <component :is="platform.icon" class="platform-icon" />
-          <span>{{ platform.name }}</span>
+          <Svg
+            :svg="platform.icon"
+            class="platform-icon"
+            :class="`status-${platform.status || 'default'}`"
+          />
+          <span :class="`status-${platform.status || 'default'}`">
+            {{ platform.name }}
+          </span>
         </div>
 
         <div class="action-buttons">
@@ -225,14 +232,58 @@ const gotoAccount = (event: MouseEvent) => {
     span
       color: var(--pt-platform-text)
       transition: color 0.2s
+      position: relative
 
-    &:hover span
-      color: var(--pt-platform-text-hover)
+      // 状态颜色
+      &.status-success
+        color: #10b981
+        &:hover
+          color: #059669
+      &.status-warning
+        color: #f59e0b
+        &:hover
+          color: #d97706
+      &.status-error
+        color: #ef4444
+        &:hover
+          color: #dc2626
+      &.status-default
+        color: var(--pt-platform-text)
+        &:hover
+          color: var(--pt-platform-text-hover)
+
+    &:hover > span
+      &.status-success
+        color: #059669
+      &.status-warning
+        color: #d97706
+      &.status-error
+        color: #dc2626
+      &.status-default
+        color: var(--pt-platform-text-hover)
 
     .platform-icon
       width: 16px
       height: 16px
       color: var(--pt-platform-text-light)
+      transition: color 0.2s
+
+      &.status-success
+        color: #10b981
+        &:hover
+          color: #059669
+      &.status-warning
+        color: #f59e0b
+        &:hover
+          color: #d97706
+      &.status-error
+        color: #ef4444
+        &:hover
+          color: #dc2626
+      &.status-default
+        color: var(--pt-platform-text-light)
+        &:hover
+          color: var(--pt-platform-text)
 
   // 工具提示
   .tooltip
@@ -304,6 +355,9 @@ const gotoAccount = (event: MouseEvent) => {
     border-radius: 3px
     transition: all 0.15s
     overflow: visible
+
+    svg
+      fill none
 
     &:hover
       background: var(--pt-platform-surface)

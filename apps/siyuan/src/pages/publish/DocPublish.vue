@@ -10,14 +10,14 @@
 <script setup lang="ts">
 import { DYNAMIC_CONFIG_KEY } from "@/Constants.ts"
 import { DynamicConfig } from "@/models/dynamicConfig.ts"
+import { AbstractPlatform } from "@/types"
 import PublishPlatformSelect from "@components/PublishPlatformSelect.vue"
 import { useI18n } from "@composables/useI18n.ts"
 import { usePublishSettingStore } from "@stores/usePublishSettingStore.ts"
 import { createAppLogger } from "@utils/appLogger.ts"
 import { cloneDeep } from "lodash-es"
-import { Clock, Rss, Zap } from "lucide-vue-next"
+import { Clock, Zap } from "lucide-vue-next"
 import { onMounted, onUnmounted, ref } from "vue"
-import { AbstractPlatform } from "@/types"
 
 const publishSettingStore = usePublishSettingStore()
 
@@ -44,7 +44,7 @@ const unregisterPublishSettingStore = publishSettingStore.registerOnInit(
         ?.map((item: DynamicConfig) => {
           return {
             name: item.platformName,
-            icon: Rss,
+            icon: item.platformIcon,
             type: "blog",
             enabled: item.isEnabled,
             actions: [

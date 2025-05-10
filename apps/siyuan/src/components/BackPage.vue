@@ -171,8 +171,12 @@ watch(
 
         <div class="title-group">
           <h1 class="title">{{ props.title }}</h1>
-          <div v-if="helpKey" class="help-container" @mouseenter="toggleHelpTooltip(true)"
-            @mouseleave="toggleHelpTooltip(false)">
+          <div
+            v-if="helpKey"
+            class="help-container"
+            @mouseenter="toggleHelpTooltip(true)"
+            @mouseleave="toggleHelpTooltip(false)"
+          >
             <button class="help-btn" @click.stop="goToHelp(helpUrl)">
               <HelpCircle class="icon" />
             </button>
@@ -186,7 +190,11 @@ watch(
       <div v-if="extra && extra.length > 0" class="header-extra">
         <slot name="extra">
           <template v-for="(item, _index) in extra" :key="_index">
-            <component :is="item.component" v-bind="item.props || {}" @click.stop="item.onClick">
+            <component
+              :is="item.component"
+              v-bind="item.props || {}"
+              @click.stop="item.onClick"
+            >
               {{ item.text }}
             </component>
           </template>
@@ -216,6 +224,9 @@ watch(
   height 100%
   display flex
   flex-direction column
+
+  svg
+    fill none
 
   // 暗黑模式变量覆盖
   html[data-theme-mode="dark"] &

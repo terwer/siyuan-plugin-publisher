@@ -12,6 +12,7 @@ import { AuthMode } from "@/models/dynamicConfig.ts"
 import { AbstractPlatform } from "@/types"
 import { alert } from "@components/Alert.ts"
 import Button from "@components/Button.vue"
+import Svg from "@components/Svg.vue"
 import { useI18n } from "@composables/useI18n.ts"
 import { Inbox, Plus } from "lucide-vue-next"
 
@@ -70,7 +71,7 @@ const addAccount = (event: MouseEvent) => {
         class="platform-item"
       >
         <div class="platform-info">
-          <component :is="platform.icon" class="platform-icon" />
+          <Svg :svg="platform.icon" class="platform-icon" />
           <span :class="`status-${platform.status || 'default'}`">
             {{ platform.name }}
           </span>
@@ -395,6 +396,9 @@ const addAccount = (event: MouseEvent) => {
     justify-content: center
     width: 24px
     height: 24px
+
+    svg
+      fill none
 
     &:hover
       background: var(--pt-platform-surface)
