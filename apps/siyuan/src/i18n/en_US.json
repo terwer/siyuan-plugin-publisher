@@ -50,6 +50,9 @@
     "setTitle": "[{platformName}] Settings",
     "delete": "Delete",
     "enable": "Enable",
+    "auth": "Auth",
+    "reauth": "Re-auth",
+    "verify": "Verify",
     "add": "Add",
     "addTip": "After adding an account, you can set the account configuration information here",
     "confirm": {
@@ -75,8 +78,24 @@
       "goToPublishTip": "Go directly to the homepage of the publishing platform list",
       "setOk": "The account information for the current platform instance has been successfully saved",
       "resetTip": "Reset form controls to default values",
+      "blogSetting": "Account Settings",
       "platformSetting": "Platform Settings",
-      "blogSetting": "Blog Settings"
+      "blog": {
+        "home": "Blog Home",
+        "homePlaceholder": "Please enter the blog homepage address",
+        "apiUrl": "Blog API URL",
+        "apiUrlPlaceholder": "Please enter the blog API URL"
+      },
+      "platform": {
+        "platformName": "Platform Name",
+        "platformNamePlaceholder": "Please enter the platform name",
+        "platformKey": "Platform Key",
+        "platformKeyPlaceholder": "Please enter the platform key"
+      }
+    },
+    "authStatus": {
+      "authorized": "Authorized",
+      "unauthorized": "Unauthorized"
     }
   },
   "picbed": {

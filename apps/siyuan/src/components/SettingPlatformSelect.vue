@@ -8,10 +8,10 @@
   -->
 
 <script setup lang="ts">
-import Button from "@components/Button.vue"
-import { useI18n } from "@composables/useI18n.ts"
-import { Inbox, Plus } from "lucide-vue-next"
-import { alert } from "@components/Alert.ts"
+import { alert } from "@components/Alert.ts";
+import Button from "@components/Button.vue";
+import { useI18n } from "@composables/useI18n.ts";
+import { Inbox, Plus } from "lucide-vue-next";
 
 const props = defineProps<{
   pluginInstance: any
@@ -69,7 +69,23 @@ const addAccount = (event: MouseEvent) => {
       >
         <div class="platform-info">
           <component :is="platform.icon" class="platform-icon" />
-          <span>{{ platform.name }}</span>
+          <span :class="`status-${platform.status || 'default'}`">
+            {{ platform.name }}
+          </span>
+          <button v-if="platform.statusIcon" class="action-btn">
+            <component
+              :is="platform.statusIcon"
+              class="btn-icon"
+              :class="`status-${platform.status || 'default'}`"
+            />
+            <span class="tooltip">
+              {{
+                platform.status === "success"
+                  ? t("account.authStatus.authorized")
+                  : t("account.authStatus.unauthorized")
+              }}
+            </span>
+          </button>
         </div>
 
         <div class="action-buttons">
@@ -147,8 +163,8 @@ const addAccount = (event: MouseEvent) => {
   --pt-platform-border: #cbd5e0
   --pt-platform-accent: #4299e1
   --pt-platform-accent-hover: #3182ce
-  --pt-platform-tooltip-bg: #4a5568
-  --pt-platform-tooltip-text: #f8fafc
+  --pt-platform-tooltip-bg: #1a202c
+  --pt-platform-tooltip-text: #ffffff
   --pt-platform-shadow: rgba(0, 0, 0, 0.1)
 
   // 暗黑模式变量
@@ -161,8 +177,8 @@ const addAccount = (event: MouseEvent) => {
     --pt-platform-border: #4a5568
     --pt-platform-accent: #63b3ed
     --pt-platform-accent-hover: #4299e1
-    --pt-platform-tooltip-bg: #3a3a3a
-    --pt-platform-tooltip-text: #f8fafc
+    --pt-platform-tooltip-bg: #1a202c
+    --pt-platform-tooltip-text: #ffffff
     --pt-platform-shadow: rgba(0, 0, 0, 0.3)
 
   // 布局样式
@@ -239,69 +255,27 @@ const addAccount = (event: MouseEvent) => {
     font-size: 0.7rem
     font-weight: 500
 
-    span
+    > span
       color: var(--pt-platform-text)
       transition: color 0.2s
 
-    &:hover span
+      // 状态颜色
+      &.status-success
+        color: #10b981
+      &.status-warning
+        color: #f59e0b
+      &.status-error
+        color: #ef4444
+      &.status-default
+        color: var(--pt-platform-text)
+
+    &:hover > span
       color: var(--pt-platform-text-hover)
 
     .platform-icon
       width: 16px
       height: 16px
       color: var(--pt-platform-text-light)
-
-  // 工具提示
-  .tooltip
-    position: absolute
-    top: -24px
-    left: 50%
-    transform: translateX(-50%)
-    z-index: 99999
-    background: var(--pt-platform-tooltip-bg)
-    color: var(--pt-platform-tooltip-text)
-    padding: 4px 8px
-    border-radius: 3px
-    font-size: 0.7rem
-    white-space: nowrap
-    opacity: 0
-    visibility: hidden
-    transition: opacity 0.2s ease, visibility 0.2s ease
-    box-shadow: 0 2px 4px var(--pt-platform-shadow)
-    pointer-events: none
-    will-change: opacity, visibility, transform
-
-    .arrow
-      position: absolute
-      bottom: -4px
-      left: 50%
-      transform: translateX(-50%)
-      width: 0
-      height: 0
-      border-left: 4px solid transparent
-      border-right: 4px solid transparent
-      border-top: 4px solid var(--pt-platform-tooltip-bg)
-      margin-top: 2px
-
-    // 左侧定位
-    &.left
-      left: auto
-      right: 0
-      transform: none
-      transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease
-      &::after
-        left: auto
-        right: 10px
-        transform: none
-
-    // 右侧定位
-    &.right
-      left: 0
-      transform: none
-      transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease
-      &::after
-        left: 10px
-        transform: none
 
   // 操作按钮
   .action-buttons
@@ -321,6 +295,11 @@ const addAccount = (event: MouseEvent) => {
     border-radius: 3px
     transition: all 0.15s
     overflow: visible
+    display: inline-flex
+    align-items: center
+    justify-content: center
+    width: 24px
+    height: 24px
 
     &:hover
       background: var(--pt-platform-surface)
@@ -334,6 +313,56 @@ const addAccount = (event: MouseEvent) => {
     .btn-icon
       width: 14px
       height: 14px
+
+      &.status-success
+        color: #10b981
+      &.status-warning
+        color: #f59e0b
+      &.status-error
+        color: #ef4444
+      &.status-default
+        color: var(--pt-platform-text-light)
+
+  // 工具提示
+  .tooltip
+    position: absolute
+    top: -24px
+    left: 50%
+    transform: translateX(-50%)
+    z-index: 99999
+    background: var(--pt-platform-tooltip-bg)
+    color: var(--pt-platform-tooltip-text) !important
+    padding: 4px 8px
+    border-radius: 3px
+    font-size: 0.7rem
+    white-space: nowrap
+    opacity: 0
+    visibility: hidden
+    transition: opacity 0.2s ease, visibility 0.2s ease
+    box-shadow: 0 2px 4px var(--pt-platform-shadow)
+    pointer-events: none
+    font-weight: 500
+
+    &::after
+      content: ""
+      position: absolute
+      bottom: -4px
+      left: 50%
+      transform: translateX(-50%)
+      width: 0
+      height: 0
+      border-left: 4px solid transparent
+      border-right: 4px solid transparent
+      border-top: 4px solid var(--pt-platform-tooltip-bg)
+
+    &.left
+      left: auto
+      right: 0
+      transform: none
+
+    &.right
+      left: 0
+      transform: none
 
   // 开关按钮
   .toggle-btn

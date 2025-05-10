@@ -49,6 +49,9 @@
     "set": "设置",
     "setTitle": "「{platformName}」设置",
     "delete": "删除",
+    "auth": "授权",
+    "reauth": "重新授权",
+    "verify": "验证",
     "enable": "启用",
     "add": "添加账号",
     "addTip": "添加账号后，可以在这里设置账号的配置信息",
@@ -75,8 +78,24 @@
       "goToPublishTip": "直接前往发布平台列表首页",
       "setOk": "当前平台实例的账号信息已成功保存",
       "resetTip": "重置表单控件为默认值",
+      "blogSetting": "账号设置",
       "platformSetting": "平台设置",
-      "blogSetting": "博客设置"
+      "blog": {
+        "home": "博客首页",
+        "homePlaceholder": "请输入博客首页地址",
+        "apiUrl": "博客API地址",
+        "apiUrlPlaceholder": "请输入博客API地址"
+      },
+      "platform": {
+        "platformName": "平台名称",
+        "platformNamePlaceholder": "请输入平台名称",
+        "platformKey": "平台Key",
+        "platformKeyPlaceholder": "请输入平台Key"
+      }
+    },
+    "authStatus": {
+      "authorized": "已授权",
+      "unauthorized": "未授权"
     }
   },
   "picbed": {

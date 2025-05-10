@@ -15,6 +15,9 @@ import {
 } from "@/models/dynamicConfig.ts"
 import BackPage from "@components/BackPage.vue"
 import Button from "@components/Button.vue"
+import FormGroup from "@components/FormGroup.vue"
+import { useClonedForm } from "@composables/useClonedForm.ts"
+import { useComputedField } from "@composables/useComputedField.ts"
 import { useI18n } from "@composables/useI18n.ts"
 import { TabEnum } from "@enums/TabEnum.ts"
 import { usePublishSettingStore } from "@stores/usePublishSettingStore.ts"
@@ -22,10 +25,6 @@ import { createAppLogger } from "@utils/appLogger.ts"
 import { computed, onMounted, reactive, ref, toRaw, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { BlogConfig } from "zhi-blog-api"
-import FormGroup from "@components/FormGroup.vue"
-import * as _ from "lodash-es"
-import { useComputedField } from "@composables/useComputedField.ts"
-import { useClonedForm } from "@composables/useClonedForm.ts"
 import { StrUtil } from "zhi-common"
 
 // Props
@@ -57,13 +56,13 @@ const blogConfig = computed(() => {
   return publishSetting[apiType] as BlogConfig
 })
 // 设置标题
-const pageTitle = computed(() => {
-  let platformName = platformConfig.value.platformName
+const setPageTitle = (platformName: string) => {
   if (StrUtil.isEmptyString(platformName)) {
     platformName = apiType
   }
   return t("account.setTitle").replace("{platformName}", platformName)
-})
+}
+const pageTitle = ref(setPageTitle(platformConfig.value.platformName))
 
 // form
 // 表单状态
@@ -71,25 +70,14 @@ const formState = {
   platformConfig: useClonedForm(platformConfig.value),
   blogConfig: useClonedForm(blogConfig.value),
 }
-const platformSettingFormGroup = reactive({
-  title: t("account.single.platformSetting"),
-  items: <SettingItem[]>[
-    {
-      type: "input",
-      label: t("account.single.platform.platformName"),
-      value: useComputedField(formState.platformConfig, "platformName"),
-      placeholder: t("account.single.platformNamePlaceholder"),
-    },
-    {
-      type: "input",
-      label: t("account.single.platform.platformKey"),
-      value: platformConfig.value.platformKey,
-      placeholder: t("account.single.platformKeyPlaceholder"),
-      readonly: true,
-      disabled: true,
-    },
-  ],
-})
+
+watch(
+  () => formState.platformConfig.value.platformName,
+  (newPlatformName) => {
+    pageTitle.value = setPageTitle(newPlatformName)
+  },
+)
+
 const blogSettingFormGroup = reactive({
   title: t("account.single.blogSetting"),
   items: <SettingItem[]>[
@@ -107,7 +95,26 @@ const blogSettingFormGroup = reactive({
     },
   ],
 })
-const formGroups = [platformSettingFormGroup, blogSettingFormGroup]
+const platformSettingFormGroup = reactive({
+  title: t("account.single.platformSetting"),
+  items: <SettingItem[]>[
+    {
+      type: "input",
+      label: t("account.single.platform.platformKey"),
+      value: platformConfig.value.platformKey,
+      placeholder: t("account.single.platformKeyPlaceholder"),
+      readonly: true,
+      disabled: true,
+    },
+    {
+      type: "input",
+      label: t("account.single.platform.platformName"),
+      value: useComputedField(formState.platformConfig, "platformName"),
+      placeholder: t("account.single.platformNamePlaceholder"),
+    },
+  ],
+})
+const formGroups = [blogSettingFormGroup, platformSettingFormGroup]
 
 // methods
 const setError = (msg: string) => {
@@ -217,6 +224,7 @@ const extra = computed(() => {
   ]
 })
 
+// 监听表单变化
 watch(
   () => formState.platformConfig,
   (newVal) => {
@@ -232,6 +240,7 @@ watch(
     const changedRawBlogConfig = toRaw(newVal.value)
     logger.debug("blogConfig changed=>", changedRawBlogConfig)
   },
+  { deep: true },
 )
 
 onMounted(() => {

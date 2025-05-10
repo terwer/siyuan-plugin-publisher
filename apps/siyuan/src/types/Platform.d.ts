@@ -21,4 +21,6 @@ interface AbstractPlatform {
   type: "blog" | "doc"
   enabled: boolean
   actions: AbstractPlatformAction[]
+  status?: "success" | "warning" | "error" | "default"
+  statusIcon?: any
 }
