@@ -35,9 +35,11 @@
   "platformSelect": {
     "no": "暂时没有可用平台",
     "noTip1": "请先去",
-    "noTip2": "添加账号吧",
+    "noTip2": "添加账号并启用",
     "noTip3": "请先",
     "noTip4": "添加账号",
+    "addFromTopTitle": "啊哦，空空如也～",
+    "addFromTopAction": "请点击上面按钮添加账号",
     "authMode": {
       "api": "API授权",
       "web": "网页授权"

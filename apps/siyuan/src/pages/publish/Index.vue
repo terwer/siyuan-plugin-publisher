@@ -32,7 +32,6 @@ const tabs = [
     content: DocPublish,
     props: {
       pluginInstance: props.pluginInstance,
-      // 注入动态切换方法
       requestSwitchTab: (componentType: TabEnum) =>
         switchTabByComponent(componentType),
     },
@@ -43,6 +42,8 @@ const tabs = [
     content: AccountSetting,
     props: {
       pluginInstance: props.pluginInstance,
+      requestSwitchTab: (componentType: TabEnum) =>
+        switchTabByComponent(componentType),
     },
   },
   // {
@@ -59,6 +60,8 @@ const tabs = [
     content: GeneralSetting,
     props: {
       pluginInstance: props.pluginInstance,
+      requestSwitchTab: (componentType: TabEnum) =>
+        switchTabByComponent(componentType),
     },
   },
   {
@@ -67,6 +70,8 @@ const tabs = [
     content: DashBoard,
     props: {
       pluginInstance: props.pluginInstance,
+      requestSwitchTab: (componentType: TabEnum) =>
+        switchTabByComponent(componentType),
     },
   },
 ]

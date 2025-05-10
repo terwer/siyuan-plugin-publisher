@@ -9,7 +9,9 @@
 
 <script setup lang="ts">
 import { ref, watch } from "vue"
+import { createAppLogger } from "@utils/appLogger.ts"
 
+const logger = createAppLogger("tabs")
 const props = withDefaults(
   defineProps<{
     tabs: { label: string; content: any; props?: Record<string, any> }[]
@@ -49,6 +51,7 @@ const handleTabClick = (index: number) => {
   if (index !== activeIndex.value) {
     activeIndex.value = index
     emit("tabChange", index)
+    logger.debug(`Tab switched to index: ${index}`)
   }
 }
 

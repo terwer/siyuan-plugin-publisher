@@ -18,11 +18,13 @@ import { createAppLogger } from "@utils/appLogger.ts"
 import { cloneDeep } from "lodash-es"
 import { Clock, Zap } from "lucide-vue-next"
 import { onMounted, onUnmounted, ref } from "vue"
+import { TabEnum } from "@enums/TabEnum.ts"
 
 const publishSettingStore = usePublishSettingStore()
 
 const props = defineProps<{
   pluginInstance: any
+  requestSwitchTab?: (componentType: TabEnum) => void
 }>()
 
 const logger = createAppLogger("account-setting")
@@ -54,7 +56,6 @@ const unregisterPublishSettingStore = publishSettingStore.registerOnInit(
                 label: t("publish.quick"),
                 handler: (event: MouseEvent, _platform: AbstractPlatform) => {
                   event.stopPropagation()
-                  console.log("fast")
                 },
               },
               {
@@ -63,7 +64,6 @@ const unregisterPublishSettingStore = publishSettingStore.registerOnInit(
                 label: t("publish.normal"),
                 handler: (event: MouseEvent, _platform: AbstractPlatform) => {
                   event.stopPropagation()
-                  console.log("normal")
                 },
               },
             ],
@@ -88,6 +88,7 @@ onUnmounted(() => {
     <publish-platform-select
       :plugin-instance="props.pluginInstance"
       :platforms="platforms"
+      :request-switch-tab="props.requestSwitchTab"
     />
   </div>
 </template>

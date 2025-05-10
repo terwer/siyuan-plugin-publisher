@@ -38,6 +38,8 @@
     "noTip2": "add an account first.",
     "noTip3": "Please ",
     "noTip4": "Add account first.",
+    "addFromTopTitle": "Oops, it's empty here",
+    "addFromTopAction": "Please click the button above to add an account",
     "authMode": {
       "api": "API",
       "web": "Web"

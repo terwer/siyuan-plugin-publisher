@@ -23,7 +23,11 @@ const props = defineProps<{
 const { t } = useI18n(props.pluginInstance)
 
 const gotoAccount = (event: MouseEvent) => {
-  props.requestSwitchTab?.(TabEnum.ACCOUNT)
+  if (!props.requestSwitchTab) {
+    console.warn("requestSwitchTab is not provided")
+    return
+  }
+  props.requestSwitchTab(TabEnum.ACCOUNT)
   event.stopPropagation()
 }
 </script>

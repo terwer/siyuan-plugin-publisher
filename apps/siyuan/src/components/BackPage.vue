@@ -124,7 +124,7 @@ const reportError = () => {
     `mailto:${email}?subject=${encodeURIComponent(errTitle)}&body=${encodeURIComponent(errContent)}`,
     "_blank",
   )
-  console.log(t("common.reportError"))
+  logger.info(t("common.reportError"))
 }
 
 // 监听错误变化

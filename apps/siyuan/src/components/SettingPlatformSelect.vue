@@ -55,12 +55,9 @@ const addAccount = (event: MouseEvent) => {
     <div v-if="platforms.length === 0" class="empty-state">
       <Inbox class="empty-icon" />
       <div class="empty-text">
-        <p>{{ t("platformSelect.no") }}</p>
+        <p>{{ t("platformSelect.addFromTopTitle") }}</p>
         <p>
-          {{ t("platformSelect.noTip3") }}
-          <a class="account-link" @click.stop="addAccount">
-            {{ t("platformSelect.noTip4") }}
-          </a>
+          {{ t("platformSelect.addFromTopAction") }}
         </p>
       </div>
     </div>
