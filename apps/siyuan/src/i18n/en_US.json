@@ -143,6 +143,21 @@
     "dashboard": "Dashboard"
   },
   "platform": {
+    "selectTemplate": "Select Platform Template",
+    "group": {
+      "common": "Common Platforms",
+      "common.desc": "Support for Yuque, Notion, Halo, Telegraph and other common platforms",
+      "github": "GitHub Platforms",
+      "github.desc": "Support for Hexo, Hugo, Jekyll, Vuepress, Vitepress and other static blogs",
+      "gitlab": "GitLab Platforms",
+      "gitlab.desc": "Support for Hexo, Hugo, Jekyll, Vuepress, Vitepress and other static blogs on GitLab",
+      "metaweblog": "Metaweblog Platforms",
+      "metaweblog.desc": "Support for Cnblogs, Typecho, Jvue and other Metaweblog protocol blogs",
+      "wordpress": "WordPress Platforms",
+      "wordpress.desc": "Support for WordPress and WordPress.com blogs",
+      "custom": "Custom Platforms",
+      "custom.desc": "Support for Zhihu, CSDN, WeChat Official Account, Jianshu, Juejin, Bilibili and other custom platforms"
+    },
     "config": {
       "basic": {
         "title": "Basic Information",
@@ -196,6 +211,53 @@
         "tags": "Tags",
         "categories": "Categories"
       }
+    },
+    "type": {
+      "doc": "Document",
+      "blog": "Blog"
+    },
+    "common": {
+      "yuque": "Yuque",
+      "notion": "Notion",
+      "halo": "Halo",
+      "telegraph": "Telegraph"
+    },
+    "github": {
+      "hexo": "Hexo",
+      "hugo": "Hugo",
+      "jekyll": "Jekyll",
+      "vuepress": "Vuepress",
+      "vuepress2": "Vuepress2",
+      "vitepress": "Vitepress"
+    },
+    "gitlab": {
+      "hexo": "Gitlab Hexo",
+      "hugo": "Gitlab Hugo",
+      "jekyll": "Gitlab Jekyll",
+      "vuepress": "Gitlab Vuepress",
+      "vuepress2": "Gitlab Vuepress2",
+      "vitepress": "Gitlab Vitepress"
+    },
+    "metaweblog": {
+      "cnblogs": "Cnblogs",
+      "typecho": "Typecho",
+      "jvue": "Jvue"
+    },
+    "wordpress": {
+      "wordpress": "Wordpress",
+      "wordpressdotcom": "Wordpress.com"
+    },
+    "custom": {
+      "zhihu": "Zhihu",
+      "csdn": "CSDN",
+      "wechat": "WeChat Official Account",
+      "jianshu": "Jianshu",
+      "juejin": "Juejin",
+      "haloweb": "Halo Web",
+      "bilibili": "Bilibili"
+    },
+    "system": {
+      "siyuan": "Siyuan Note"
     }
   },
   "validation": {

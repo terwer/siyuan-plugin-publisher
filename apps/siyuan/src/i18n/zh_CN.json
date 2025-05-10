@@ -143,6 +143,21 @@
     "dashboard": "仪表盘"
   },
   "platform": {
+    "selectTemplate": "选择平台模板",
+    "group": {
+      "common": "通用平台",
+      "common.desc": "支持语雀、Notion、Halo、Telegraph 等通用平台",
+      "github": "GitHub 平台",
+      "github.desc": "支持 Hexo、Hugo、Jekyll、Vuepress、Vitepress 等静态博客",
+      "gitlab": "GitLab 平台",
+      "gitlab.desc": "支持 GitLab 上的 Hexo、Hugo、Jekyll、Vuepress、Vitepress 等静态博客",
+      "metaweblog": "Metaweblog 平台",
+      "metaweblog.desc": "支持博客园、Typecho、Jvue 等 Metaweblog 协议博客",
+      "wordpress": "WordPress 平台",
+      "wordpress.desc": "支持 WordPress 和 WordPress.com 博客",
+      "custom": "自定义平台",
+      "custom.desc": "支持知乎、CSDN、微信公众号、简书、掘金、哔哩哔哩等自定义平台"
+    },
     "config": {
       "basic": {
         "title": "基本信息",
@@ -196,6 +211,53 @@
         "tags": "标签",
         "categories": "分类"
       }
+    },
+    "type": {
+      "doc": "文档",
+      "blog": "博客"
+    },
+    "common": {
+      "yuque": "语雀",
+      "notion": "Notion",
+      "halo": "Halo",
+      "telegraph": "Telegraph"
+    },
+    "github": {
+      "hexo": "Hexo",
+      "hugo": "Hugo",
+      "jekyll": "Jekyll",
+      "vuepress": "Vuepress",
+      "vuepress2": "Vuepress2",
+      "vitepress": "Vitepress"
+    },
+    "gitlab": {
+      "hexo": "Gitlab Hexo",
+      "hugo": "Gitlab Hugo",
+      "jekyll": "Gitlab Jekyll",
+      "vuepress": "Gitlab Vuepress",
+      "vuepress2": "Gitlab Vuepress2",
+      "vitepress": "Gitlab Vitepress"
+    },
+    "metaweblog": {
+      "cnblogs": "博客园",
+      "typecho": "Typecho",
+      "jvue": "Jvue"
+    },
+    "wordpress": {
+      "wordpress": "Wordpress",
+      "wordpressdotcom": "Wordpress.com"
+    },
+    "custom": {
+      "zhihu": "知乎",
+      "csdn": "CSDN",
+      "wechat": "微信公众号",
+      "jianshu": "简书",
+      "juejin": "掘金",
+      "haloweb": "Halo网页版",
+      "bilibili": "哔哩哔哩"
+    },
+    "system": {
+      "siyuan": "思源笔记"
     }
   },
   "validation": {

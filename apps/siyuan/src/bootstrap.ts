@@ -13,6 +13,8 @@ import Publish from "@pages/publish/Index.vue"
 import AccountSetting from "@pages/setting/AccountSetting.vue"
 import DashBoard from "@pages/setting/DashBoard.vue"
 import GeneralSetting from "@pages/setting/GeneralSetting.vue"
+import AddPlatform from "@pages/setting/account/manage/AddPlatform.vue"
+import PlatformTemplateList from "@pages/setting/account/manage/PlatformTemplateList.vue"
 import SinglePlatformSetting from "@pages/setting/account/single/Index.vue"
 import { createPinia } from "pinia"
 import { createApp } from "vue"
@@ -63,6 +65,16 @@ const createAppRoutes = (props: any) => {
       component: SinglePlatformSetting,
       props: props,
     },
+    {
+      path: "/setting/account/templates",
+      component: PlatformTemplateList,
+      props: props,
+    },
+    {
+      path: "/setting/account/add/:templateKey",
+      component: AddPlatform,
+      props: props,
+    },
   ]
   return routes
 }
@@ -86,6 +98,18 @@ export const createBootStrap = (props: any, el: HTMLElement) => {
     history: createWebHashHistory(),
     routes,
   })
+
+  // 添加导航守卫，第一次访问时重定向到根路径
+  let isFirstVisit = true
+  router.beforeEach((_to, _from, next) => {
+    if (isFirstVisit) {
+      isFirstVisit = false
+      next("/")
+    } else {
+      next()
+    }
+  })
+
   tabSwitchRouter = router
   app.use(router)
 

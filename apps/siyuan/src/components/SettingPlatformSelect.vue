@@ -10,11 +10,11 @@
 <script setup lang="ts">
 import { AuthMode } from "@/models/dynamicConfig.ts"
 import { AbstractPlatform } from "@/types"
-import { alert } from "@components/Alert.ts"
 import Button from "@components/Button.vue"
 import Svg from "@components/Svg.vue"
 import { useI18n } from "@composables/useI18n.ts"
 import { Inbox, Plus } from "lucide-vue-next"
+import { useRouter } from "vue-router"
 
 const props = defineProps<{
   pluginInstance: any
@@ -24,14 +24,15 @@ const props = defineProps<{
 
 const { t } = useI18n(props.pluginInstance)
 
-const addAccount = (event: MouseEvent) => {
-  // 跳转新增账号
+const router = useRouter()
+
+const handleAddAccount = (event: MouseEvent) => {
   event.stopPropagation()
-  alert({
-    title: t("account.add"),
-    message: t("account.addTip"),
-    type: "info",
-    position: "center",
+  router.push({
+    path: `/setting/account/templates`,
+    query: {
+      showBack: "true",
+    },
   })
 }
 </script>
@@ -42,7 +43,7 @@ const addAccount = (event: MouseEvent) => {
     <div class="pt-action-bar">
       <Button
         size="sm"
-        @click.stop="addAccount"
+        @click.stop="handleAddAccount"
         :tooltip="t('account.addTip')"
         tooltip-placement="bottom"
       >
