@@ -269,12 +269,20 @@ const addAccount = (event: MouseEvent) => {
       // 状态颜色
       &.status-success
         color: #10b981
+        &:hover
+          color: #059669
       &.status-warning
         color: #f59e0b
+        &:hover
+          color: #d97706
       &.status-error
         color: #ef4444
+        &:hover
+          color: #dc2626
       &.status-default
         color: var(--pt-platform-text)
+        &:hover
+          color: var(--pt-platform-text-hover)
 
     &:hover > span
       color: var(--pt-platform-text-hover)
@@ -283,6 +291,24 @@ const addAccount = (event: MouseEvent) => {
       width: 16px
       height: 16px
       color: var(--pt-platform-text-light)
+      transition: color 0.2s
+
+      &.status-success
+        color: #10b981
+        &:hover
+          color: #059669
+      &.status-warning
+        color: #f59e0b
+        &:hover
+          color: #d97706
+      &.status-error
+        color: #ef4444
+        &:hover
+          color: #dc2626
+      &.status-default
+        color: var(--pt-platform-text-light)
+        &:hover
+          color: var(--pt-platform-text)
 
   // 操作按钮
   .action-buttons
