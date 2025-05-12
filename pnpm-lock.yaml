@@ -36,8 +36,8 @@ importers:
         specifier: ^4.2.0
         version: 4.2.0
       element-plus:
-        specifier: ^2.9.7
-        version: 2.9.7(vue@3.5.13(typescript@5.8.3))
+        specifier: ^2.9.10
+        version: 2.9.10(vue@3.5.13(typescript@5.8.3))
       iframe-resizer:
         specifier: ^5.4.4
         version: 5.4.4
@@ -619,8 +619,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@eslint-community/eslint-utils@4.6.0':
-    resolution: {integrity: sha512-WhCn7Z7TauhBtmzhvKpoQs0Wwb/kBcy4CwpuI0/eEIr2Lx2auxmulAzLr91wVZJaz47iUZdkXOK7WlAfxGKCnA==}
+  '@eslint-community/eslint-utils@4.7.0':
+    resolution: {integrity: sha512-dyybb3AcajC7uha6CvhdVRJqaKyn7w2YKqKyAN37NKYgZT36w+iRb0Dymmc5qEJ549c/S31cMMSFd75bteCpCw==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     peerDependencies:
       eslint: ^6.0.0 || ^7.0.0 || >=8.0.0
@@ -641,11 +641,11 @@ packages:
     resolution: {integrity: sha512-vBZP4NlzfOlerQTnba4aqZoMhE/a9HY7HRqoOPaETQcSQuWEIyZMHGfVu6w9wGtGK5fED5qRs2DteVCjOH60sA==}
     engines: {node: '>=14'}
 
-  '@floating-ui/core@1.6.9':
-    resolution: {integrity: sha512-uMXCuQ3BItDUbAMhIXw7UPXRfAlOAvZzdK9BWpE60MCn+Svt3aLn9jsPTi/WNGlRUu2uI0v5S7JiIUsbsvh3fw==}
+  '@floating-ui/core@1.7.0':
+    resolution: {integrity: sha512-FRdBLykrPPA6P76GGGqlex/e7fbe0F1ykgxHYNXQsH/iTEtjMj/f9bpY5oQqbjt5VgZvgz/uKXbGuROijh3VLA==}
 
-  '@floating-ui/dom@1.6.13':
-    resolution: {integrity: sha512-umqzocjDgNRGTuO7Q8CU32dkHkECqI8ZdMZ5Swb6QAM0t5rnlrN3lGo1hdpscRd3WS8T6DKYK4ephgIH9iRh3w==}
+  '@floating-ui/dom@1.7.0':
+    resolution: {integrity: sha512-lGTor4VlXcesUMh1cupTUTDoCxMb0V6bm3CnxHzQcw8Eaf1jQbgQX4i02fYgT0vJ82tb5MZ4CZk1LRGkktJCzg==}
 
   '@floating-ui/utils@0.2.9':
     resolution: {integrity: sha512-MDWhGtE+eHw5JW7lq4qhc5yRLS11ERl1c7Z6Xd0a58DozHES6EnNNwUWbMiG4J9Cgj053Bhk8zvlhFYKVhULwg==}
@@ -2335,8 +2335,8 @@ packages:
     engines: {node: '>=0.10.0'}
     hasBin: true
 
-  element-plus@2.9.7:
-    resolution: {integrity: sha512-6vjZh5SXBncLhUwJGTVKS5oDljfgGMh6J4zVTeAZK3YdMUN76FgpvHkwwFXocpJpMbii6rDYU3sgie64FyPerQ==}
+  element-plus@2.9.10:
+    resolution: {integrity: sha512-W2v9jWnm1kl/zm4bSvCh8aFCVlxvhG3fmqiDZwyd6WQiWGE595J/mpjcCggEr+49QDgIymhXrpPMOPPSARUbng==}
     peerDependencies:
       vue: ^3.2.0
 
@@ -5866,7 +5866,7 @@ snapshots:
   '@esbuild/win32-x64@0.21.5':
     optional: true
 
-  '@eslint-community/eslint-utils@4.6.0(eslint@8.57.0)':
+  '@eslint-community/eslint-utils@4.7.0(eslint@8.57.0)':
     dependencies:
       eslint: 8.57.0
       eslint-visitor-keys: 3.4.3
@@ -5891,13 +5891,13 @@ snapshots:
 
   '@fastify/busboy@2.1.1': {}
 
-  '@floating-ui/core@1.6.9':
+  '@floating-ui/core@1.7.0':
     dependencies:
       '@floating-ui/utils': 0.2.9
 
-  '@floating-ui/dom@1.6.13':
+  '@floating-ui/dom@1.7.0':
     dependencies:
-      '@floating-ui/core': 1.6.9
+      '@floating-ui/core': 1.7.0
       '@floating-ui/utils': 0.2.9
 
   '@floating-ui/utils@0.2.9': {}
@@ -6880,7 +6880,7 @@ snapshots:
 
   '@typescript-eslint/utils@5.62.0(eslint@8.57.0)(typescript@4.9.5)':
     dependencies:
-      '@eslint-community/eslint-utils': 4.6.0(eslint@8.57.0)
+      '@eslint-community/eslint-utils': 4.7.0(eslint@8.57.0)
       '@types/json-schema': 7.0.15
       '@types/semver': 7.7.0
       '@typescript-eslint/scope-manager': 5.62.0
@@ -6895,7 +6895,7 @@ snapshots:
 
   '@typescript-eslint/utils@5.62.0(eslint@8.57.0)(typescript@5.8.3)':
     dependencies:
-      '@eslint-community/eslint-utils': 4.6.0(eslint@8.57.0)
+      '@eslint-community/eslint-utils': 4.7.0(eslint@8.57.0)
       '@types/json-schema': 7.0.15
       '@types/semver': 7.7.0
       '@typescript-eslint/scope-manager': 5.62.0
@@ -8039,11 +8039,11 @@ snapshots:
     dependencies:
       jake: 10.9.2
 
-  element-plus@2.9.7(vue@3.5.13(typescript@5.8.3)):
+  element-plus@2.9.10(vue@3.5.13(typescript@5.8.3)):
     dependencies:
       '@ctrl/tinycolor': 3.6.1
       '@element-plus/icons-vue': 2.3.1(vue@3.5.13(typescript@5.8.3))
-      '@floating-ui/dom': 1.6.13
+      '@floating-ui/dom': 1.7.0
       '@popperjs/core': '@sxzz/popperjs-es@2.11.7'
       '@types/lodash': 4.17.16
       '@types/lodash-es': 4.17.12
@@ -8380,7 +8380,7 @@ snapshots:
 
   eslint-plugin-svelte@2.39.2(eslint@8.57.0)(svelte@4.2.18)(ts-node@10.9.1(@types/node@22.14.1)(typescript@5.8.3)):
     dependencies:
-      '@eslint-community/eslint-utils': 4.6.0(eslint@8.57.0)
+      '@eslint-community/eslint-utils': 4.7.0(eslint@8.57.0)
       '@jridgewell/sourcemap-codec': 1.5.0
       eslint: 8.57.0
       eslint-compat-utils: 0.5.1(eslint@8.57.0)
@@ -8404,7 +8404,7 @@ snapshots:
 
   eslint-plugin-vue@9.26.0(eslint@8.57.0):
     dependencies:
-      '@eslint-community/eslint-utils': 4.6.0(eslint@8.57.0)
+      '@eslint-community/eslint-utils': 4.7.0(eslint@8.57.0)
       eslint: 8.57.0
       globals: 13.24.0
       natural-compare: 1.4.0
@@ -8430,7 +8430,7 @@ snapshots:
 
   eslint@8.57.0:
     dependencies:
-      '@eslint-community/eslint-utils': 4.6.0(eslint@8.57.0)
+      '@eslint-community/eslint-utils': 4.7.0(eslint@8.57.0)
       '@eslint-community/regexpp': 4.12.1
       '@eslint/eslintrc': 2.1.4
       '@eslint/js': 8.57.0
