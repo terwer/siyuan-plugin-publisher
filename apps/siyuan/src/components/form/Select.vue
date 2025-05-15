@@ -8,22 +8,36 @@
   -->
 
 <script setup lang="ts">
+interface Option {
+  label: string
+  value: any
+}
+
 const props = defineProps<{
   modelValue: any
-  options?: Option[]
+  options: Option[]
   disabled?: boolean
+  onChange?: (value: any) => void
 }>()
 
-const emit = defineEmits(["update:modelValue"])
+const emit = defineEmits<{
+  (e: "update:modelValue", value: any): void
+}>()
+
+const handleChange = (event: Event) => {
+  const value = (event.target as HTMLSelectElement).value
+  emit("update:modelValue", value)
+  if (props.onChange) {
+    props.onChange(value)
+  }
+}
 </script>
 
 <template>
   <select
     class="pt-select"
-    :value="props.modelValue"
-    @change="
-      emit('update:modelValue', ($event.target as HTMLSelectElement).value)
-    "
+    :value="modelValue"
+    @change="handleChange"
     :disabled="disabled"
   >
     <option

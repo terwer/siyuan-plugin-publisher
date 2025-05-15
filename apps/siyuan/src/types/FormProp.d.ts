@@ -42,6 +42,7 @@ interface SettingItem {
   labelWidth?: "auto" | "full" | number
   value: any
   options?: Option[]
+  onChange?: (value: any) => void
   placeholder?: string
   readonly?: boolean
   disabled?: boolean

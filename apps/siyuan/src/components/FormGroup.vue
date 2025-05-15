@@ -8,18 +8,27 @@
   -->
 
 <script setup lang="ts">
-import SettingItem from "@components/SettingItem.vue"
+import SettingItem from "@components/SettingItem.vue";
 
 const props = defineProps<{
   pluginInstance: any
   formGroup: any
 }>()
+
+const emit = defineEmits<{
+  (e: "change", group: any, item: any, value: any): void
+}>()
+
+const handleChange = (item: any, value: any) => {
+  emit("change", props.formGroup, item, value)
+}
 </script>
 
 <template>
   <SettingItem
     :plugin-instance="props.pluginInstance"
     :setting-group="formGroup"
+    @change="handleChange"
   />
 </template>
 

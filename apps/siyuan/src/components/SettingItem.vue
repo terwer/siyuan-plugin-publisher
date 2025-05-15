@@ -76,8 +76,9 @@ const getItemLabelStyle = (item: SettingItem) => {
           <Select
             v-else-if="item.type === 'select'"
             v-model="item.value"
-            :options="item.options"
+            :options="item.options ?? []"
             :disabled="item.disabled"
+            :on-change="(value) => item.onChange?.(value)"
           />
 
           <!-- Number 类型 -->

@@ -25,7 +25,7 @@ import Button from "@components/Button.vue"
 import FormGroup from "@components/FormGroup.vue"
 import { useI18n } from "@composables/useI18n.ts"
 // import { createAppLogger } from "@utils/appLogger.ts"
-import { reactive, ref } from "vue"
+import { reactive, ref, watchEffect } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { StrUtil } from "zhi-common"
 
@@ -40,15 +40,44 @@ const route = useRoute()
 const errorMsg = ref("")
 const extra = ref([])
 
+// 预定义
+const templates = platformTemplates(t)
+const allTemplates = findAllTemplates(templates)
+// 当前平台
 const templateKey = route.params.templateKey as string
-const platformTemplatesList = platformGroups(t)
-const config = platformTemplates(t)
-const platformConfig = reactive<Partial<DynamicConfig>>({
+let platformConfig = reactive<Partial<DynamicConfig>>({
   platformName: "unknown",
   platformType: PlatformType.System,
   authMode: AuthMode.API,
   isEnabled: true,
-  ...findConfigByKey(templateKey, config),
+})
+const setCurrentConfigByKey = (key: string) => {
+  const config = findConfigByKey(key, templates)
+  platformConfig = {
+    platformConfig,
+    ...config,
+  }
+}
+setCurrentConfigByKey(templateKey)
+// 平台组
+const groups = platformGroups(t)
+// 组下面的平台列表
+const getPlatformOptionsByGroup = (group?: PlatformType) => {
+  return allTemplates
+    .filter((item) => item.platformType === group)
+    .map((item) => ({
+      label: item.platformName,
+      value: item.subPlatformType,
+    }))
+}
+const platformOptions = ref(
+  getPlatformOptionsByGroup(platformConfig.platformType),
+)
+
+// 调试日志
+watchEffect(() => {
+  console.log("platformType changed:", platformConfig.platformType)
+  console.log("currentSubPlatformType:", platformConfig.subPlatformType)
 })
 
 const platformSettingFormGroup = reactive({
@@ -64,43 +93,54 @@ const platformSettingFormGroup = reactive({
       type: "select",
       label: t("account.single.platform.platformType"),
       value: platformConfig.platformType,
-      options: platformTemplatesList.map((item) => {
-        return {
-          label: item.title,
-          value: item.type,
-        }
-      }),
+      options: groups.map((item) => ({
+        label: item.title,
+        value: item.type,
+      })),
+      onChange: (value?: PlatformType) => {
+        // 设置新的下拉
+        const newPlatformOptions = getPlatformOptionsByGroup(value)
+        platformOptions.value = newPlatformOptions
+        // 选中第一个
+        const newSubplatformType = newPlatformOptions[0].value?.toString() ?? ""
+        setCurrentConfigByKey(newSubplatformType)
+      },
     },
     {
       type: "select",
       label: t("account.single.platform.subPlatformType"),
       value: platformConfig.subPlatformType,
-      options: platformConfig.platformType
-        ? findAllTemplates(config)
-            .filter((item: DynamicConfig) => {
-              return item.platformType === platformConfig.platformType
-            })
-            .map((item: DynamicConfig) => {
-              return {
-                label: item.platformName,
-                value: item.subPlatformType,
-              }
-            })
-        : [],
+      options: platformOptions,
+      onChange: (value: string) => {
+        alert({
+          title: t("platform.add"),
+          message: value,
+        })
+      },
     },
     {
       type: "select",
       label: t("account.single.account.authMode"),
       value: platformConfig.authMode,
       options: [
-        { label: t("platformSelect.authMode.api"), value: AuthMode.API },
-        { label: t("platformSelect.authMode.web"), value: AuthMode.WEBSITE },
+        {
+          label: t("platformSelect.authMode.api"),
+          value: AuthMode.API,
+        },
+        {
+          label: t("platformSelect.authMode.web"),
+          value: AuthMode.WEBSITE,
+        },
       ],
+      onChange: (value: AuthMode) => {
+        platformConfig.authMode = value
+      },
       readonly: true,
       disabled: true,
     },
   ],
 })
+
 const accountSettingFormGroup = reactive({
   title: t("account.single.accountSetting"),
   items: [],
