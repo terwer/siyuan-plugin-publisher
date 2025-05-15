@@ -45,7 +45,7 @@ const templates = platformTemplates(t)
 const allTemplates = findAllTemplates(templates)
 // 当前平台
 const templateKey = route.params.templateKey as string
-let platformConfig = reactive<Partial<DynamicConfig>>({
+const platformConfig = reactive<Partial<DynamicConfig>>({
   platformName: "unknown",
   platformType: PlatformType.System,
   authMode: AuthMode.API,
@@ -53,25 +53,21 @@ let platformConfig = reactive<Partial<DynamicConfig>>({
 })
 const setCurrentConfigByKey = (key: string) => {
   const config = findConfigByKey(key, templates)
-  platformConfig = {
-    platformConfig,
-    ...config,
-  }
+  Object.assign(platformConfig, config)
+  console.log(platformConfig.subPlatformType)
 }
 setCurrentConfigByKey(templateKey)
 // 平台组
 const groups = platformGroups(t)
 // 组下面的平台列表
 const getPlatformOptionsByGroup = (group?: PlatformType) => {
-  return allTemplates
-    .filter((item) => item.platformType === group)
-    .map((item) => ({
-      label: item.platformName,
-      value: item.subPlatformType,
-    }))
+  return allTemplates.filter((item) => item.platformType === group)
 }
 const platformOptions = ref(
-  getPlatformOptionsByGroup(platformConfig.platformType),
+  getPlatformOptionsByGroup(platformConfig.platformType)?.map((item) => ({
+    label: item.platformName,
+    value: item.subPlatformType,
+  })) ?? [],
 )
 
 // 调试日志
@@ -100,10 +96,15 @@ const platformSettingFormGroup = reactive({
       onChange: (value?: PlatformType) => {
         // 设置新的下拉
         const newPlatformOptions = getPlatformOptionsByGroup(value)
-        platformOptions.value = newPlatformOptions
+        platformOptions.value =
+          newPlatformOptions?.map((item) => ({
+            label: item.platformName,
+            value: item.subPlatformType,
+          })) ?? []
         // 选中第一个
-        const newSubplatformType = newPlatformOptions[0].value?.toString() ?? ""
-        setCurrentConfigByKey(newSubplatformType)
+        const newPlatformType =
+          newPlatformOptions[0].platformKey?.toString() ?? ""
+        setCurrentConfigByKey(newPlatformType)
       },
     },
     {
@@ -112,10 +113,7 @@ const platformSettingFormGroup = reactive({
       value: platformConfig.subPlatformType,
       options: platformOptions,
       onChange: (value: string) => {
-        alert({
-          title: t("platform.add"),
-          message: value,
-        })
+        // setCurrentConfigByKey(value)
       },
     },
     {
@@ -157,7 +155,7 @@ const handleBack = () => {
   })
 }
 
-const handleSave = () => {
+const handleSave = async () => {
   if (StrUtil.isEmptyString(platformConfig.platformName)) {
     alert({
       title: t("common.error"),
@@ -168,12 +166,24 @@ const handleSave = () => {
     return
   }
 
-  router.push({
-    path: "/setting/account",
-    query: {
-      showBack: "true",
-    },
-  })
+  try {
+    // 保存平台配置
+    await props.pluginInstance.savePlatformConfig(platformConfig)
+
+    router.push({
+      path: "/setting/account",
+      query: {
+        showBack: "true",
+      },
+    })
+  } catch (error) {
+    alert({
+      title: t("common.error"),
+      message: error.message || t("common.saveFailed"),
+      type: "error",
+      position: "center",
+    })
+  }
 }
 </script>
 
