@@ -8,7 +8,7 @@
   -->
 
 <script setup lang="ts">
-import SettingItem from "@components/SettingItem.vue";
+import SettingItem from "@components/SettingItem.vue"
 
 const props = defineProps<{
   pluginInstance: any
