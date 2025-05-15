@@ -91,7 +91,8 @@
         "home": "博客首页",
         "homePlaceholder": "请输入博客首页地址",
         "apiUrl": "博客API地址",
-        "apiUrlPlaceholder": "请输入博客API地址"
+        "apiUrlPlaceholder": "请输入博客API地址",
+        "authMode": "授权模式"
       },
       "platform": {
         "platformName": "平台名称",

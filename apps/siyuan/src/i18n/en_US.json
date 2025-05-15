@@ -91,7 +91,8 @@
         "home": "Blog Home",
         "homePlaceholder": "Please enter the blog homepage address",
         "apiUrl": "Blog API URL",
-        "apiUrlPlaceholder": "Please enter the blog API URL"
+        "apiUrlPlaceholder": "Please enter the blog API URL",
+        "authMode": "Auth mode"
       },
       "platform": {
         "platformName": "Platform Name",

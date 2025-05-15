@@ -14,6 +14,7 @@ import {
   PlatformType,
 } from "@/models/dynamicConfig.ts"
 import {
+  findAllTemplates,
   findConfigByKey,
   platformGroups,
   platformTemplates,
@@ -24,7 +25,6 @@ import Button from "@components/Button.vue"
 import FormGroup from "@components/FormGroup.vue"
 import { useI18n } from "@composables/useI18n.ts"
 // import { createAppLogger } from "@utils/appLogger.ts"
-import { Check } from "lucide-vue-next"
 import { reactive, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { StrUtil } from "zhi-common"
@@ -72,9 +72,21 @@ const platformSettingFormGroup = reactive({
       }),
     },
     {
-      type: "input",
+      type: "select",
       label: t("account.single.platform.subPlatformType"),
       value: platformConfig.subPlatformType,
+      options: platformConfig.platformType
+        ? findAllTemplates(config)
+            .filter((item: DynamicConfig) => {
+              return item.platformType === platformConfig.platformType
+            })
+            .map((item: DynamicConfig) => {
+              return {
+                label: item.platformName,
+                value: item.subPlatformType,
+              }
+            })
+        : [],
     },
     {
       type: "select",

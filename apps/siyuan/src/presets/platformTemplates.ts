@@ -282,6 +282,19 @@ export const platformTemplates = (t: any) => {
   return config
 }
 
+export const findAllTemplates = (
+  config: ReturnType<typeof platformTemplates>,
+) => {
+  return [
+    ...config.commonCfg,
+    ...config.githubCfg,
+    ...config.gitlabCfg,
+    ...config.metaweblogCfg,
+    ...config.wordpressCfg,
+    ...config.customCfg,
+  ]
+}
+
 /**
  * 根据 platformKey 查找配置
  * @param key platformKey
