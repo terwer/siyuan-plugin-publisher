@@ -25,8 +25,11 @@ import Button from "@components/Button.vue"
 import FormGroup from "@components/FormGroup.vue"
 import { useI18n } from "@composables/useI18n.ts"
 // import { createAppLogger } from "@utils/appLogger.ts"
-import { reactive, ref, watchEffect } from "vue"
+import { useClonedForm } from "@composables/useClonedForm.ts"
+import { useComputedField } from "@composables/useComputedField.ts"
+import { computed, reactive, ref, watch, watchEffect } from "vue"
 import { useRoute, useRouter } from "vue-router"
+import { BlogConfig } from "zhi-blog-api"
 import { StrUtil } from "zhi-common"
 
 const props = defineProps<{
@@ -44,36 +47,67 @@ const extra = ref([])
 const templates = platformTemplates(t)
 const allTemplates = findAllTemplates(templates)
 // 当前平台
-const templateKey = route.params.templateKey as string
-const platformConfig = reactive<Partial<DynamicConfig>>({
-  platformName: "unknown",
-  platformType: PlatformType.System,
-  authMode: AuthMode.API,
-  isEnabled: true,
+const templateKey = ref(route.params.templateKey as string)
+// computed
+// 获取平台配置只读版本
+const platformConfig = computed(() => {
+  const config = findConfigByKey(templateKey.value, templates) as DynamicConfig
+  debugger
+  if (!config) {
+    console.warn(`No config found for templateKey: ${templateKey.value}`)
+    return {} as DynamicConfig
+  }
+  return config
 })
-const setCurrentConfigByKey = (key: string) => {
-  const config = findConfigByKey(key, templates)
-  Object.assign(platformConfig, config)
-  console.log(platformConfig.subPlatformType)
+
+// 创建一个响应式的克隆对象
+const clonedPlatformConfig = reactive({ ...platformConfig.value })
+const clonedBlogConfig = reactive({} as BlogConfig)
+
+// 监听 platformConfig 的变化
+watch(
+  platformConfig,
+  (newConfig) => {
+    Object.assign(clonedPlatformConfig, newConfig)
+  },
+  { deep: true },
+)
+
+const formState = {
+  platformConfig: useClonedForm(clonedPlatformConfig),
+  blogConfig: useClonedForm(clonedBlogConfig),
 }
-setCurrentConfigByKey(templateKey)
+
 // 平台组
 const groups = platformGroups(t)
 // 组下面的平台列表
 const getPlatformOptionsByGroup = (group?: PlatformType) => {
   return allTemplates.filter((item) => item.platformType === group)
 }
-const platformOptions = ref(
-  getPlatformOptionsByGroup(platformConfig.platformType)?.map((item) => ({
-    label: item.platformName,
-    value: item.subPlatformType,
-  })) ?? [],
-)
+
+const platformOptions = computed(() => {
+  return (
+    getPlatformOptionsByGroup(formState.platformConfig.value.platformType)?.map(
+      (item) => ({
+        label: item.platformName,
+        value: item.subPlatformType,
+      }),
+    ) ?? []
+  )
+})
 
 // 调试日志
 watchEffect(() => {
-  console.log("platformType changed:", platformConfig.platformType)
-  console.log("currentSubPlatformType:", platformConfig.subPlatformType)
+  console.log(
+    "platformType changed:",
+    formState.platformConfig.value.platformType,
+  )
+  console.log(
+    "currentSubPlatformType:",
+    formState.platformConfig.value.subPlatformType,
+  )
+  console.log("templateKey changed:", templateKey.value)
+  console.log("platformConfig changed:", platformConfig.value)
 })
 
 const platformSettingFormGroup = reactive({
@@ -82,13 +116,13 @@ const platformSettingFormGroup = reactive({
     {
       type: "input",
       label: t("account.single.platform.platformName"),
-      value: platformConfig.platformName,
+      value: computed(() => formState.platformConfig.value.platformName),
       placeholder: t("account.single.platform.platformNamePlaceholder"),
     },
     {
       type: "select",
       label: t("account.single.platform.platformType"),
-      value: platformConfig.platformType,
+      value: computed(() => formState.platformConfig.value.platformType),
       options: groups.map((item) => ({
         label: item.title,
         value: item.type,
@@ -96,21 +130,16 @@ const platformSettingFormGroup = reactive({
       onChange: (value?: PlatformType) => {
         // 设置新的下拉
         const newPlatformOptions = getPlatformOptionsByGroup(value)
-        platformOptions.value =
-          newPlatformOptions?.map((item) => ({
-            label: item.platformName,
-            value: item.subPlatformType,
-          })) ?? []
-        // 选中第一个
-        const newPlatformType =
-          newPlatformOptions[0].platformKey?.toString() ?? ""
-        setCurrentConfigByKey(newPlatformType)
+        if (newPlatformOptions.length > 0) {
+          templateKey.value =
+            newPlatformOptions[0].platformKey?.toString() ?? ""
+        }
       },
     },
     {
       type: "select",
       label: t("account.single.platform.subPlatformType"),
-      value: platformConfig.subPlatformType,
+      value: computed(() => formState.platformConfig.value.subPlatformType),
       options: platformOptions,
       onChange: (value: string) => {
         // setCurrentConfigByKey(value)
@@ -119,7 +148,7 @@ const platformSettingFormGroup = reactive({
     {
       type: "select",
       label: t("account.single.account.authMode"),
-      value: platformConfig.authMode,
+      value: computed(() => platformConfig.value.authMode),
       options: [
         {
           label: t("platformSelect.authMode.api"),
@@ -131,7 +160,7 @@ const platformSettingFormGroup = reactive({
         },
       ],
       onChange: (value: AuthMode) => {
-        platformConfig.authMode = value
+        platformConfig.value.authMode = value
       },
       readonly: true,
       disabled: true,
@@ -156,7 +185,7 @@ const handleBack = () => {
 }
 
 const handleSave = async () => {
-  if (StrUtil.isEmptyString(platformConfig.platformName)) {
+  if (StrUtil.isEmptyString(platformConfig.value.platformName)) {
     alert({
       title: t("common.error"),
       message: t("platform.nameRequired"),
