@@ -260,7 +260,8 @@
     "system": {
       "siyuan": "思源笔记"
     },
-    "add": "添加平台"
+    "add": "添加平台",
+    "addOk": "平台添加成功"
   },
   "validation": {
     "platformName": {

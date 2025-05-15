@@ -8,11 +8,14 @@
   -->
 
 <script setup lang="ts">
+import { DYNAMIC_CONFIG_KEY } from "@/Constants.ts"
 import {
   AuthMode,
   DynamicConfig,
+  getNewPlatformKey,
   PlatformType,
 } from "@/models/dynamicConfig.ts"
+import { DYNAMIC_CONFIG_TYPE, SypConfig } from "@/models/SypConfig.ts"
 import {
   findAllTemplates,
   findConfigByKey,
@@ -23,25 +26,35 @@ import { alert } from "@components/Alert.ts"
 import BackPage from "@components/BackPage.vue"
 import Button from "@components/Button.vue"
 import FormGroup from "@components/FormGroup.vue"
-import { useI18n } from "@composables/useI18n.ts"
-// import { createAppLogger } from "@utils/appLogger.ts"
 import { useClonedForm } from "@composables/useClonedForm.ts"
-import { useComputedField } from "@composables/useComputedField.ts"
-import { computed, reactive, ref, watch, watchEffect } from "vue"
+import { useI18n } from "@composables/useI18n.ts"
+import { TabEnum } from "@enums/TabEnum.ts"
+import { usePublishSettingStore } from "@stores/usePublishSettingStore.ts"
+import { createAppLogger } from "@utils/appLogger.ts"
+import * as _ from "lodash-es"
+import {
+  computed,
+  onMounted,
+  onUnmounted,
+  reactive,
+  ref,
+  toRaw,
+  watch,
+} from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { BlogConfig } from "zhi-blog-api"
-import { StrUtil } from "zhi-common"
 
 const props = defineProps<{
   pluginInstance: any
 }>()
 
-// const logger = createAppLogger("add-platform")
+const logger = createAppLogger("add-platform")
 const { t } = useI18n(props.pluginInstance)
 const router = useRouter()
 const route = useRoute()
 const errorMsg = ref("")
 const extra = ref([])
+const publishSettingStore = usePublishSettingStore()
 
 // 预定义
 const templates = platformTemplates(t)
@@ -52,7 +65,6 @@ const templateKey = ref(route.params.templateKey as string)
 // 获取平台配置只读版本
 const platformConfig = computed(() => {
   const config = findConfigByKey(templateKey.value, templates) as DynamicConfig
-  debugger
   if (!config) {
     console.warn(`No config found for templateKey: ${templateKey.value}`)
     return {} as DynamicConfig
@@ -64,19 +76,38 @@ const platformConfig = computed(() => {
 const clonedPlatformConfig = reactive({ ...platformConfig.value })
 const clonedBlogConfig = reactive({} as BlogConfig)
 
-// 监听 platformConfig 的变化
-watch(
-  platformConfig,
-  (newConfig) => {
-    Object.assign(clonedPlatformConfig, newConfig)
-  },
-  { deep: true },
-)
-
 const formState = {
   platformConfig: useClonedForm(clonedPlatformConfig),
   blogConfig: useClonedForm(clonedBlogConfig),
 }
+
+// 监听 platformConfig 的变化
+watch(
+  platformConfig,
+  (newConfig) => {
+    // 更新克隆对象
+    Object.assign(clonedPlatformConfig, newConfig)
+    // 强制更新表单状态
+    formState.platformConfig.value = { ...newConfig }
+  },
+  { deep: true, immediate: true },
+)
+
+// 监听 templateKey 的变化
+watch(
+  templateKey,
+  (newKey) => {
+    logger.info("templateKey changed to:", newKey)
+    const config = findConfigByKey(newKey, templates) as DynamicConfig
+    if (config) {
+      // 更新克隆对象
+      Object.assign(clonedPlatformConfig, config)
+      // 强制更新表单状态
+      formState.platformConfig.value = { ...config }
+    }
+  },
+  { immediate: true },
+)
 
 // 平台组
 const groups = platformGroups(t)
@@ -94,20 +125,6 @@ const platformOptions = computed(() => {
       }),
     ) ?? []
   )
-})
-
-// 调试日志
-watchEffect(() => {
-  console.log(
-    "platformType changed:",
-    formState.platformConfig.value.platformType,
-  )
-  console.log(
-    "currentSubPlatformType:",
-    formState.platformConfig.value.subPlatformType,
-  )
-  console.log("templateKey changed:", templateKey.value)
-  console.log("platformConfig changed:", platformConfig.value)
 })
 
 const platformSettingFormGroup = reactive({
@@ -141,7 +158,7 @@ const platformSettingFormGroup = reactive({
       label: t("account.single.platform.subPlatformType"),
       value: computed(() => formState.platformConfig.value.subPlatformType),
       options: platformOptions,
-      onChange: (value: string) => {
+      onChange: (_value: string) => {
         // setCurrentConfigByKey(value)
       },
     },
@@ -185,35 +202,107 @@ const handleBack = () => {
 }
 
 const handleSave = async () => {
-  if (StrUtil.isEmptyString(platformConfig.value.platformName)) {
-    alert({
-      title: t("common.error"),
-      message: t("platform.nameRequired"),
-      type: "error",
-      position: "center",
-    })
-    return
-  }
-
   try {
-    // 保存平台配置
-    await props.pluginInstance.savePlatformConfig(platformConfig)
+    const newConfig = toRaw(_.cloneDeep(formState.platformConfig.value))
+    const dbConfig = publishSettingStore.readonlyState[DYNAMIC_CONFIG_KEY]
+    if (
+      dbConfig?.totalCfg.find(
+        (item) => item.platformKey === newConfig.platformKey,
+      )
+    ) {
+      newConfig.platformName = newConfig.platformName + count
+      newConfig.platformKey = getNewPlatformKey(
+        newConfig.platformType,
+        newConfig.subPlatformType,
+      )
+    }
 
-    router.push({
-      path: "/setting/account",
-      query: {
-        showBack: "true",
-      },
+    // 保存平台配置
+    const dynCfg = {
+      totalCfg: [...(dbConfig?.totalCfg || [])],
+      commonCfg: [...(dbConfig?.commonCfg || [])],
+      githubCfg: [...(dbConfig?.githubCfg || [])],
+      gitlabCfg: [...(dbConfig?.gitlabCfg || [])],
+      metaweblogCfg: [...(dbConfig?.metaweblogCfg || [])],
+      wordpressCfg: [...(dbConfig?.wordpressCfg || [])],
+      customCfg: [...(dbConfig?.customCfg || [])],
+      systemCfg: [...(dbConfig?.systemCfg || [])],
+    } as DYNAMIC_CONFIG_TYPE
+
+    // 根据平台类型添加到对应配置中
+    switch (platformConfig.value.platformType) {
+      case PlatformType.Common:
+        // 通用平台
+        dynCfg.totalCfg.push(newConfig)
+        dynCfg.commonCfg.push(newConfig)
+        break
+      case PlatformType.Github:
+        // Github
+        dynCfg.totalCfg.push(newConfig)
+        dynCfg.githubCfg.push(newConfig)
+        break
+      case PlatformType.Gitlab:
+        // Gitlab
+        dynCfg.totalCfg.push(newConfig)
+        dynCfg.gitlabCfg.push(newConfig)
+        break
+      case PlatformType.Metaweblog:
+        // Metaweblog
+        dynCfg.totalCfg.push(newConfig)
+        dynCfg.metaweblogCfg.push(newConfig)
+        break
+      case PlatformType.Wordpress:
+        // WordPress
+        dynCfg.totalCfg.push(newConfig)
+        dynCfg.wordpressCfg.push(newConfig)
+        break
+      case PlatformType.Custom:
+        // 自定义平台
+        dynCfg.totalCfg.push(newConfig)
+        dynCfg.customCfg.push(newConfig)
+        break
+      case PlatformType.System:
+        // 系统平台
+        break
+      default:
+    }
+    const toUpdateConfig: Partial<SypConfig> = {
+      [DYNAMIC_CONFIG_KEY]: dynCfg,
+    }
+    const ret = await publishSettingStore.updateAsync(toUpdateConfig)
+    if (!ret.success) {
+      throw new Error(ret.error)
+    }
+
+    void router.push(`/?tab=${TabEnum.ACCOUNT}`)
+    void alert({
+      title: t("common.opt.ok"),
+      message: t("platform.addOk"),
+      type: "success",
     })
-  } catch (error) {
-    alert({
+  } catch (e) {
+    void alert({
       title: t("common.error"),
-      message: error.message || t("common.saveFailed"),
+      message: e || t("common.saveFailed"),
       type: "error",
       position: "center",
     })
   }
 }
+
+const unregisterPublishSettingStore = publishSettingStore.registerOnInit(
+  async () => {},
+)
+
+onMounted(async () => {
+  await publishSettingStore.doInit()
+  logger.debug("publish setting init")
+})
+
+// 组件卸载时注销回调
+onUnmounted(() => {
+  unregisterPublishSettingStore()
+})
 </script>
 
 <template>

@@ -30,6 +30,8 @@ export const usePublishSettingStore = defineStore("publishSetting", () => {
   const isInitializing = ref(false)
   // 防止多个实例混乱
   const __timestampField = "__pt_timestamp_" + new Date().getTime()
+  // 标记是否正在手动更新
+  const isManualUpdating = ref(false)
 
   const state = reactive<SypConfig>({
     lang: DEFAULT_SIYUAN_LANG as "zh_CN" | "en_US",
@@ -78,6 +80,24 @@ export const usePublishSettingStore = defineStore("publishSetting", () => {
     merge(state, changes)
   }
 
+  // 异步更新方法，返回更新结果
+  const updateAsync = async (
+    changes: Partial<SypConfig>,
+  ): Promise<{ success: boolean; error?: string }> => {
+    try {
+      isManualUpdating.value = true
+      merge(state, changes)
+      await save()
+      return { success: true }
+    } catch (e) {
+      const errorMsg = e instanceof Error ? e.message : String(e)
+      logger.error(`Update failed: ${errorMsg}`)
+      return { success: false, error: errorMsg }
+    } finally {
+      isManualUpdating.value = false
+    }
+  }
+
   // 防抖函数初始化（外置定义）
   const saveDebounced = debounce(async () => {
     await save()
@@ -99,6 +119,10 @@ export const usePublishSettingStore = defineStore("publishSetting", () => {
         logger.debug(`Initializing publish settings, skip save`)
         return
       }
+      // 如果是手动更新，跳过自动保存
+      if (isManualUpdating.value) {
+        return
+      }
       void saveDebounced()
     },
     { deep: true },
@@ -108,6 +132,7 @@ export const usePublishSettingStore = defineStore("publishSetting", () => {
     state,
     readonlyState,
     update,
+    updateAsync,
     registerOnInit,
     doInit: initialize,
   }

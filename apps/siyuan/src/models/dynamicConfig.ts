@@ -44,7 +44,7 @@ export class DynamicConfig {
    *
    * @since 0.1.0+
    */
-  subPlatformType?: SubPlatformType
+  subPlatformType: SubPlatformType
 
   /**
    * 平台Key
@@ -115,7 +115,7 @@ export class DynamicConfig {
     platformType: PlatformType,
     platformKey: string,
     platformName: string,
-    subPlatformType?: SubPlatformType,
+    subPlatformType: SubPlatformType,
     platformIcon?: string,
   ) {
     this.platformType = platformType

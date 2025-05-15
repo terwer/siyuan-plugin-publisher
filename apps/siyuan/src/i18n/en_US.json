@@ -260,7 +260,8 @@
     "system": {
       "siyuan": "Siyuan Note"
     },
-    "add": "Add Platform"
+    "add": "Add Platform",
+    "addOk": "Platform added successfully"
   },
   "validation": {
     "platformName": {
