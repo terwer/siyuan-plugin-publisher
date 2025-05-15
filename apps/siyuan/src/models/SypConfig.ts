@@ -10,7 +10,7 @@
 import { DEFAULT_SIYUAN_LANG, DYNAMIC_CONFIG_KEY } from "@/Constants.ts"
 import { DynamicConfig } from "@/models/dynamicConfig.ts"
 
-interface DYNAMIC_CONFIG_TYPE {
+export interface DYNAMIC_CONFIG_TYPE {
   totalCfg: DynamicConfig[]
   commonCfg: DynamicConfig[]
   metaweblogCfg: DynamicConfig[]
