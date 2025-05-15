@@ -1,13 +1,32 @@
+<!--
+  -            GNU GENERAL PUBLIC LICENSE
+  -               Version 3, 29 June 2007
+  -
+  -  Copyright (C) 2025 Terwer, Inc. <https://terwer.space/>
+  -  Everyone is permitted to copy and distribute verbatim copies
+  -  of this license document, but changing it is not allowed.
+  -->
+
 <template>
-  <div class="pt-tooltip" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
+  <div
+    class="pt-tooltip"
+    @mouseenter="handleMouseEnter"
+    @mouseleave="handleMouseLeave"
+  >
     <div ref="triggerRef" class="pt-tooltip__trigger">
       <slot></slot>
     </div>
     <Transition name="pt-fade">
-      <div v-show="visible" ref="tooltipRef" class="pt-tooltip__content" :class="[
-        `pt-tooltip__content--${placement}`,
-        { 'pt-tooltip__content--arrow': showArrow },
-      ]" :style="tooltipStyle">
+      <div
+        v-show="visible"
+        ref="tooltipRef"
+        class="pt-tooltip__content"
+        :class="[
+          `pt-tooltip__content--${placement}`,
+          { 'pt-tooltip__content--arrow': showArrow },
+        ]"
+        :style="tooltipStyle"
+      >
         <div class="pt-tooltip__inner">
           <slot name="title">{{ title }}</slot>
         </div>

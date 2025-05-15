@@ -1,26 +1,10 @@
 /*
- * Copyright (c) 2023, Terwer . All rights reserved.
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *            GNU GENERAL PUBLIC LICENSE
+ *               Version 3, 29 June 2007
  *
- * This code is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License version 2 only, as
- * published by the Free Software Foundation.  Terwer designates this
- * particular file as subject to the "Classpath" exception as provided
- * by Terwer in the LICENSE file that accompanied this code.
- *
- * This code is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
- * version 2 for more details (a copy is included in the LICENSE file that
- * accompanied this code).
- *
- * You should have received a copy of the GNU General Public License version
- * 2 along with this work; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- *
- * Please contact Terwer, Shenzhen, Guangdong, China, youweics@163.com
- * or visit www.terwer.space if you need additional information or have any
- * questions.
+ *  Copyright (C) 2025 Terwer, Inc. <https://terwer.space/>
+ *  Everyone is permitted to copy and distribute verbatim copies
+ *  of this license document, but changing it is not allowed.
  */
 
 import sypIdUtil from "@utils/sypIdUtil.ts"
@@ -531,4 +515,24 @@ export function getDynPlatformKeyFromPostidKey(postidKey: string): string {
   } else {
     throw new Error("Invalid postidKey format")
   }
+}
+
+/**
+ * 生成唯一的平台名称
+ *
+ * @param baseName 基础平台名称
+ * @param existingConfigs 现有的平台配置数组
+ * @returns 唯一的平台名称
+ */
+export function generateUniquePlatformName(
+  baseName: string,
+  existingConfigs: DynamicConfig[],
+): string {
+  let count = 1
+  let newName = baseName
+  while (existingConfigs.some((config) => config.platformName === newName)) {
+    newName = `${baseName}${count}`
+    count++
+  }
+  return newName
 }

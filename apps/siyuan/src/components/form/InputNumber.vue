@@ -43,7 +43,9 @@ const updateValue = (newValue: number) => {
 
 <template>
   <div class="number-input">
-    <button class="step-btn" @click.stop="decrement" :disabled="disabled">-</button>
+    <button class="step-btn" @click.stop="decrement" :disabled="disabled">
+      -
+    </button>
     <input
       type="number"
       :value="modelValue"
@@ -53,7 +55,9 @@ const updateValue = (newValue: number) => {
       :step="step"
       :disabled="disabled"
     />
-    <button class="step-btn" @click.stop="increment" :disabled="disabled">+</button>
+    <button class="step-btn" @click.stop="increment" :disabled="disabled">
+      +
+    </button>
   </div>
 </template>
 

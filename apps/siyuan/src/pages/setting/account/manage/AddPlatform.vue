@@ -12,6 +12,7 @@ import { DYNAMIC_CONFIG_KEY } from "@/Constants.ts"
 import {
   AuthMode,
   DynamicConfig,
+  generateUniquePlatformName,
   getNewPlatformKey,
   PlatformType,
 } from "@/models/dynamicConfig.ts"
@@ -210,7 +211,10 @@ const handleSave = async () => {
         (item) => item.platformKey === newConfig.platformKey,
       )
     ) {
-      newConfig.platformName = newConfig.platformName + count
+      newConfig.platformName = generateUniquePlatformName(
+        newConfig.platformName,
+        dbConfig.totalCfg,
+      )
       newConfig.platformKey = getNewPlatformKey(
         newConfig.platformType,
         newConfig.subPlatformType,

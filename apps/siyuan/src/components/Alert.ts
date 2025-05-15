@@ -19,7 +19,14 @@ import {
 import { PUBLISHER_ROOT_ID } from "@/Constants.ts"
 
 type AlertType = "success" | "warning" | "error" | "info"
-type AlertPosition = "top" | "topLeft" | "topRight" | "bottom" | "bottomLeft" | "bottomRight" | "center"
+type AlertPosition =
+  | "top"
+  | "topLeft"
+  | "topRight"
+  | "bottom"
+  | "bottomLeft"
+  | "bottomRight"
+  | "center"
 
 interface AlertOptions {
   title?: string
@@ -91,25 +98,25 @@ const AlertComponent = {
             props.title && h("div", { class: "pt-alert__title" }, props.title),
             h("div", { class: "pt-alert__body" }, [
               props.message &&
-              h("div", { class: "pt-alert__message" }, props.message),
+                h("div", { class: "pt-alert__message" }, props.message),
               props.description &&
-              h("div", { class: "pt-alert__description" }, props.description),
+                h("div", { class: "pt-alert__description" }, props.description),
             ]),
           ]),
 
           props.closable &&
-          h(
-            "button",
-            {
-              class: "pt-alert__close",
-              onClick: handleClose,
-            },
-            h(CloseIcon, {
-              class: "pt-alert__close-icon",
-              size: 12,
-              strokeWidth: 2,
-            }),
-          ),
+            h(
+              "button",
+              {
+                class: "pt-alert__close",
+                onClick: handleClose,
+              },
+              h(CloseIcon, {
+                class: "pt-alert__close-icon",
+                size: 12,
+                strokeWidth: 2,
+              }),
+            ),
         ],
       )
   },
