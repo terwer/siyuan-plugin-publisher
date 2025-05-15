@@ -15,6 +15,7 @@ import {
 } from "@/models/dynamicConfig.ts"
 import {
   findConfigByKey,
+  platformGroups,
   platformTemplates,
 } from "@/presets/platformTemplates.ts"
 import { alert } from "@components/Alert.ts"
@@ -22,76 +23,78 @@ import BackPage from "@components/BackPage.vue"
 import Button from "@components/Button.vue"
 import FormGroup from "@components/FormGroup.vue"
 import { useI18n } from "@composables/useI18n.ts"
-import { createAppLogger } from "@utils/appLogger.ts"
+// import { createAppLogger } from "@utils/appLogger.ts"
 import { Check } from "lucide-vue-next"
-import { onMounted, reactive, ref } from "vue"
+import { reactive, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
+import { StrUtil } from "zhi-common"
 
 const props = defineProps<{
   pluginInstance: any
 }>()
 
-const logger = createAppLogger("add-platform")
+// const logger = createAppLogger("add-platform")
 const { t } = useI18n(props.pluginInstance)
 const router = useRouter()
 const route = useRoute()
-
-const config = platformTemplates(t)
-const platform = ref<Partial<DynamicConfig>>({
-  platformName: "",
-  platformType: PlatformType.System,
-  authMode: AuthMode.API,
-  isEnabled: true,
-})
-
 const errorMsg = ref("")
 const extra = ref([])
 
+const templateKey = route.params.templateKey as string
+const platformTemplatesList = platformGroups(t)
+const config = platformTemplates(t)
+const platformConfig = reactive<Partial<DynamicConfig>>({
+  platformName: "unknown",
+  platformType: PlatformType.System,
+  authMode: AuthMode.API,
+  isEnabled: true,
+  ...findConfigByKey(templateKey, config),
+})
+
 const platformSettingFormGroup = reactive({
-  title: t("platform.add"),
+  title: t("account.single.platformSetting"),
   items: [
     {
       type: "input",
-      label: t("platform.name"),
-      value: platform.value.platformName,
-      placeholder: t("platform.namePlaceholder"),
+      label: t("account.single.platform.platformName"),
+      value: platformConfig.platformName,
+      placeholder: t("account.single.platform.platformNamePlaceholder"),
     },
     {
       type: "select",
-      label: t("platform.type"),
-      value: platform.value.platformType,
-      options: [
-        { label: t("platform.type.blog"), value: "blog" },
-        { label: t("platform.type.doc"), value: "doc" },
-      ],
+      label: t("account.single.platform.platformType"),
+      value: platformConfig.platformType,
+      options: platformTemplatesList.map((item) => {
+        return {
+          label: item.title,
+          value: item.type,
+        }
+      }),
+    },
+    {
+      type: "input",
+      label: t("account.single.platform.subPlatformType"),
+      value: platformConfig.subPlatformType,
     },
     {
       type: "select",
-      label: t("platform.authMode"),
-      value: platform.value.authMode,
+      label: t("account.single.account.authMode"),
+      value: platformConfig.authMode,
       options: [
         { label: t("platformSelect.authMode.api"), value: AuthMode.API },
-        { label: t("platformSelect.authMode.web"), value: AuthMode.WEB },
+        { label: t("platformSelect.authMode.web"), value: AuthMode.WEBSITE },
       ],
+      readonly: true,
+      disabled: true,
     },
   ],
 })
-
-const formGroups = [platformSettingFormGroup]
-
-onMounted(() => {
-  const templateKey = route.params.templateKey as string
-  if (templateKey) {
-    const templateConfig = findConfigByKey(templateKey, config)
-    if (templateConfig) {
-      platform.value = {
-        ...platform.value,
-        ...templateConfig,
-      }
-      logger.debug("get new Template:", platform.value)
-    }
-  }
+const accountSettingFormGroup = reactive({
+  title: t("account.single.accountSetting"),
+  items: [],
 })
+
+const formGroups = [platformSettingFormGroup, accountSettingFormGroup]
 
 const handleBack = () => {
   router.push({
@@ -103,7 +106,7 @@ const handleBack = () => {
 }
 
 const handleSave = () => {
-  if (!platform.value.platformName) {
+  if (StrUtil.isEmptyString(platformConfig.platformName)) {
     alert({
       title: t("common.error"),
       message: t("platform.nameRequired"),
@@ -140,9 +143,6 @@ const handleSave = () => {
     />
     <div class="form-actions">
       <Button size="md" @click="handleSave">
-        <template #icon>
-          <Check :size="16" />
-        </template>
         {{ t("common.save") }}
       </Button>
     </div>

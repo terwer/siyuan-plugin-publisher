@@ -149,7 +149,8 @@ const unregisterPublishSettingStore = publishSettingStore.registerOnInit(
         return {
           name: item.platformName,
           icon: item.platformIcon,
-          type: "blog",
+          platformType: item.platformType,
+          subPlatformType: item.subPlatformType,
           authMode: item.authMode,
           enabled: item.isEnabled,
           actions,

@@ -7,7 +7,11 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { AuthMode } from "@/models/dynamicConfig.ts"
+import {
+  AuthMode,
+  PlatformType,
+  SubPlatformType,
+} from "@/models/dynamicConfig.ts"
 
 interface AbstractPlatformAction {
   type: "button" | "toggle"
@@ -20,7 +24,8 @@ interface AbstractPlatformAction {
 interface AbstractPlatform {
   name: string
   icon: any
-  type: "blog" | "doc"
+  platformType: PlatformType
+  subPlatformType: SubPlatformType
   authMode: AuthMode
   enabled: boolean
   actions: AbstractPlatformAction[]

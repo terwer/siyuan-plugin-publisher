@@ -9,6 +9,7 @@
     "reportError": "Report error",
     "error": "Error",
     "close": "Close",
+    "save": "Save",
     "reset": "Reset",
     "opt": {
       "ok": "Operation succeeded",
@@ -84,9 +85,9 @@
       "goToPublishTip": "Go directly to the homepage of the publishing platform list",
       "setOk": "The account information for the current platform instance has been successfully saved",
       "resetTip": "Reset form controls to default values",
-      "blogSetting": "Account Settings",
+      "accountSetting": "Account Settings",
       "platformSetting": "Platform Settings",
-      "blog": {
+      "account": {
         "home": "Blog Home",
         "homePlaceholder": "Please enter the blog homepage address",
         "apiUrl": "Blog API URL",
@@ -96,7 +97,9 @@
         "platformName": "Platform Name",
         "platformNamePlaceholder": "Please enter the platform name",
         "platformKey": "Platform Key",
-        "platformKeyPlaceholder": "Please enter the platform key"
+        "platformKeyPlaceholder": "Please enter the platform key",
+        "platformType": "Platform group",
+        "subPlatformType": "Platform type"
       }
     },
     "authStatus": {
@@ -212,10 +215,6 @@
         "categories": "Categories"
       }
     },
-    "type": {
-      "doc": "Document",
-      "blog": "Blog"
-    },
     "common": {
       "yuque": "Yuque",
       "notion": "Notion",
@@ -259,12 +258,7 @@
     "system": {
       "siyuan": "Siyuan Note"
     },
-    "add": "Add Platform",
-    "name": "Platform Name",
-    "namePlaceholder": "Please enter platform name",
-    "nameRequired": "Please enter platform name",
-    "type": "Platform Type",
-    "authMode": "Auth Mode"
+    "add": "Add Platform"
   },
   "validation": {
     "platformName": {

@@ -78,20 +78,20 @@ watch(
   },
 )
 
-const blogSettingFormGroup = reactive({
-  title: t("account.single.blogSetting"),
+const accountSettingFormGroup = reactive({
+  title: t("account.single.accountSetting"),
   items: <SettingItem[]>[
     {
       type: "input",
-      label: t("account.single.blog.home"),
+      label: t("account.single.account.home"),
       value: useComputedField(formState.blogConfig, "home"),
-      placeholder: t("account.single.homePlaceholder"),
+      placeholder: t("account.single.account.homePlaceholder"),
     },
     {
       type: "input",
-      label: t("account.single.blog.apiUrl"),
+      label: t("account.single.account.apiUrl"),
       value: useComputedField(formState.blogConfig, "apiUrl"),
-      placeholder: t("account.single.blog.apiUrlPlaceholder"),
+      placeholder: t("account.single.account.apiUrlPlaceholder"),
     },
   ],
 })
@@ -114,7 +114,7 @@ const platformSettingFormGroup = reactive({
     },
   ],
 })
-const formGroups = [blogSettingFormGroup, platformSettingFormGroup]
+const formGroups = [accountSettingFormGroup, platformSettingFormGroup]
 
 // methods
 const setError = (msg: string) => {
