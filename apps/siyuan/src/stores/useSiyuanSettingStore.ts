@@ -14,10 +14,10 @@ import {
   DEFAULT_SIYUAN_API_URL,
   LEGENCY_SHARED_PROXT_MIDDLEWARE,
 } from "@/Constants.ts"
-import { SiyuanStorageAdaptor } from "@stores/vendor/SiyuanStorageAdaptor.ts"
 import { readonly } from "vue"
 import { useComputedObject } from "@composables/useComputedObject.ts"
 import { createAppLogger } from "@utils/appLogger.ts"
+import { AsyncSiyuanStorageAdaptor } from "@stores/impl/AsyncSiyuanStorageAdaptor.ts"
 
 /**
  * 思源笔记设置
@@ -34,7 +34,10 @@ export const useSiyuanSettingStore = () => {
   const initValue = new SiyuanConfig(DEFAULT_SIYUAN_API_URL, "")
 
   // 创建适配器实例
-  const adaptor = new SiyuanStorageAdaptor<SiyuanConfig>(adaptorKey, filePath)
+  const adaptor = new AsyncSiyuanStorageAdaptor<SiyuanConfig>(
+    adaptorKey,
+    filePath,
+  )
 
   // 获取响应式存储
   const { formState } = useStorageAsync(storageKey, initValue, adaptor)

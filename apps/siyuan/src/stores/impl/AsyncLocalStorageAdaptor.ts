@@ -7,8 +7,8 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { StorageAdaptor } from "@stores/core/StorageAdaptor.ts"
 import { createAppLogger, ILogger } from "@utils/appLogger.ts"
+import { AsyncStorageAdaptor } from "@stores/adaptor/StorageAdaptor.ts"
 
 /**
  * 本地存储适配器 (LocalStorage)
@@ -22,7 +22,7 @@ import { createAppLogger, ILogger } from "@utils/appLogger.ts"
  * @author terwer
  * @since 2.0.0
  */
-export class LocalStorageAdaptor<T> implements StorageAdaptor<T> {
+export class LocalStorageAdaptor<T> implements AsyncStorageAdaptor<T> {
   private logger: ILogger = createAppLogger("local-storage-adaptor")
 
   /**

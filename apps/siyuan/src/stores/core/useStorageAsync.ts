@@ -7,10 +7,10 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { watch, reactive, readonly, computed, type DeepReadonly } from "vue"
-import type { StorageAdaptor } from "@stores/core/StorageAdaptor"
-import { merge, cloneDeep } from "lodash-es"
+import type { StorageAdaptor } from "@stores/adaptor/StorageAdaptor"
 import { createAppLogger } from "@utils/appLogger"
+import { cloneDeep, merge } from "lodash-es"
+import { computed, reactive, readonly, watch, type DeepReadonly } from "vue"
 // import { isDev } from "@/Constants.ts"
 
 export interface StorageOptions {
@@ -47,13 +47,15 @@ export const useStorageAsync = <T extends object>(
     ...options,
   }
 
-  // 反应式状态
-  // 防止多个实例混乱
+  // 内部字段
   const __loadedField = "__pt_loaded_" + new Date().getTime()
+  const internalFields = [__loadedField]
+
+  // 反应式状态
   const _state = reactive<T>({
     ...initialState,
     [__loadedField]: false,
-  }) as T
+  } as T)
 
   // 控制状态
   let isSyncing = false
@@ -145,7 +147,12 @@ export const useStorageAsync = <T extends object>(
       try {
         const currentState = updateQueue.get(key)
         if (currentState) {
-          await adaptor.save(cloneDeep(currentState))
+          const stateToSave = cloneDeep(currentState)
+          // 移除所有内部字段
+          internalFields.forEach((field) => {
+            delete (stateToSave as any)[field]
+          })
+          await adaptor.save(stateToSave)
           updateQueue.delete(key)
           logger.debug(`[${key}] Persistence successful`)
         }
@@ -179,12 +186,10 @@ export const useStorageAsync = <T extends object>(
   // 初始化流程
   const initializeStorage = async () => {
     try {
-      logger.debug(` start init ${storageKey}] ...`)
+      logger.debug(`[${storageKey}] Initializing...`)
 
       const loadedData = await adaptor.load()
       if (loadedData) {
-        // 仅需要更新本地不需要持久化，因为还没有修改
-        // 更新完自动触发watch
         const loadedDataWithState = {
           ...loadedData,
           [__loadedField]: true,
@@ -195,11 +200,11 @@ export const useStorageAsync = <T extends object>(
           Object.assign(_state, loadedDataWithState)
         }
       } else {
-        logger.error(`${storageKey} init failed`)
+        logger.error(`[${storageKey}] Initialization failed`)
       }
     } catch (e) {
       isInitialized = false
-      logger.error(`${storageKey} init failed`, e)
+      logger.error(`[${storageKey}] Initialization failed`, e)
       throw e
     }
   }
@@ -210,7 +215,7 @@ export const useStorageAsync = <T extends object>(
     (newState: any) => {
       if (!isInitialized && newState[__loadedField]) {
         isInitialized = true
-        logger.info(`${storageKey} init completed`, newState)
+        logger.info(`[${storageKey}] Initialization completed`, newState)
         return
       }
       if (isInitialized && !isSyncing) {

@@ -7,22 +7,22 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { StorageAdaptor } from "@stores/core/StorageAdaptor.ts"
+import { SyncStorageAdaptor } from "@stores/adaptor/StorageAdaptor.ts"
 
 /**
- * 内存缓存
+ * 同步内存缓存
  *
  * @author terwer
  * @since 2.0.0
  */
-export class MemoryStorageAdaptor<T> implements StorageAdaptor<T> {
+export class SyncMemoryStorageAdaptor<T> implements SyncStorageAdaptor<T> {
   private cache = new Map<string, T>()
 
-  async load(): Promise<T | null> {
+  load(): T | null {
     return this.cache.get("default") || null
   }
 
-  async save(data: T): Promise<void> {
+  save(data: T): void {
     this.cache.set("default", data)
   }
 }

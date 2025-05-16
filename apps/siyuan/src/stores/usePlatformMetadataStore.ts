@@ -10,8 +10,15 @@
 import { createAppLogger } from "@utils/appLogger.ts"
 import { MetadataItem, PlatformMetadata } from "@/models/platformMetadata.ts"
 import { useStorageAsync } from "@stores/core/useStorageAsync.ts"
-import { SiyuanStorageAdaptor } from "@stores/vendor/SiyuanStorageAdaptor.ts"
+import { AsyncSiyuanStorageAdaptor } from "@stores/impl/AsyncSiyuanStorageAdaptor.ts"
 
+/**
+ * 平台元数据存储
+ *
+ * @author terwer
+ * @version 2.0.0
+ * @since 2.0.0
+ */
 export const usePlatformMetadataStore = () => {
   const logger = createAppLogger("use-platform-metadata-store")
   const storageKey = "platform-metadata"
@@ -20,7 +27,7 @@ export const usePlatformMetadataStore = () => {
   const initValue = new PlatformMetadata()
 
   // 创建适配器实例
-  const adaptor = new SiyuanStorageAdaptor<PlatformMetadata>(
+  const adaptor = new AsyncSiyuanStorageAdaptor<PlatformMetadata>(
     adaptorKey,
     filePath,
   )

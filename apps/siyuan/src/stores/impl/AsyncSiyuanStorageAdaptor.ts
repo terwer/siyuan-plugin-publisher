@@ -7,13 +7,13 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { StorageAdaptor } from "@stores/core/StorageAdaptor.ts"
 import { createAppLogger, ILogger } from "@utils/appLogger.ts"
 import { SiyuanConfig, SiyuanKernelApi } from "zhi-siyuan-api"
 import SiyuanPublisherPlugin from "@/index.ts"
 import { JsonUtil, StrUtil } from "zhi-common"
+import { AsyncStorageAdaptor } from "@stores/adaptor/StorageAdaptor.ts"
 
-export class SiyuanStorageAdaptor<T> implements StorageAdaptor<T> {
+export class AsyncSiyuanStorageAdaptor<T> implements AsyncStorageAdaptor<T> {
   private logger: ILogger = createAppLogger("siyuan-storage-adaptor")
   private kernelApi: SiyuanKernelApi
 

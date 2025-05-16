@@ -8,12 +8,12 @@
  */
 
 import { createAppLogger } from "@utils/appLogger.ts"
-import { SiyuanStorageAdaptor } from "@stores/vendor/SiyuanStorageAdaptor.ts"
 import { PublishPreferenceCfg } from "@/models/publishPreferenceCfg.ts"
 import { useStorageAsync } from "@stores/core/useStorageAsync.ts"
 import { useComputedObject } from "@composables/useComputedObject.ts"
 import { WINDOW_SIYUAN } from "@/Constants.ts"
 import { WritableComputedRef, readonly } from "vue"
+import { AsyncSiyuanStorageAdaptor } from "@stores/impl/AsyncSiyuanStorageAdaptor.ts"
 
 /**
  * 发布偏好设置
@@ -30,7 +30,7 @@ export const usePreferenceSettingStore = () => {
   const initValue = new PublishPreferenceCfg()
 
   // 创建适配器实例
-  const adaptor = new SiyuanStorageAdaptor<PublishPreferenceCfg>(
+  const adaptor = new AsyncSiyuanStorageAdaptor<PublishPreferenceCfg>(
     adaptorKey,
     filePath,
   )
