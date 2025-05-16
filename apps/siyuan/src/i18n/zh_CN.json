@@ -168,7 +168,10 @@
         "name": "平台名称",
         "namePlaceholder": "请输入平台名称",
         "domain": "域名",
-        "domainPlaceholder": "请输入域名地址"
+        "domainPlaceholder": "请输入域名地址",
+        "icon": "平台图标",
+        "iconPlaceholder": "请输入平台图标（SVG/Base64）",
+        "enabled": "是否启用"
       },
       "auth": {
         "title": "授权信息",

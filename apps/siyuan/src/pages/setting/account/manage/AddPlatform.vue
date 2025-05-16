@@ -192,7 +192,18 @@ const platformSettingFormGroup = reactive({
         }
       },
     },
-    createFormItem("account.single.platform.platformName", "platformName"),
+    {
+      type: "input",
+      label: t("account.single.platform.platformName"),
+      value: computed(() => formState.platformConfig.value.platformName),
+      placeholder: t("account.single.platform.platformNamePlaceholder"),
+    },
+    {
+      type: "textarea",
+      label: t("platform.config.basic.icon"),
+      value: computed(() => formState.platformConfig.value.platformIcon),
+      placeholder: t("platform.config.basic.iconPlaceholder"),
+    },
     {
       type: "select",
       label: t("account.single.account.authMode"),
@@ -206,6 +217,14 @@ const platformSettingFormGroup = reactive({
       },
       readonly: true,
       disabled: true,
+    },
+    {
+      type: "switch",
+      label: t("platform.config.basic.enabled"),
+      value: computed(() => formState.platformConfig.value.isEnabled),
+      onChange: (value: boolean) => {
+        formState.platformConfig.value.isEnabled = value
+      },
     },
   ],
 })

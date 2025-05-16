@@ -62,6 +62,7 @@ watch(() => props.modelValue, resize)
 .textarea-container
   position relative
   width 100%
+  min-width 350px
 
 .custom-textarea
   --textarea-bg: var(--input-bg-color)

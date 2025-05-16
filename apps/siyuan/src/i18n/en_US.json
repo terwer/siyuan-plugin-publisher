@@ -168,7 +168,10 @@
         "name": "Platform Name",
         "namePlaceholder": "Please enter platform name",
         "domain": "Domain",
-        "domainPlaceholder": "Please enter domain address"
+        "domainPlaceholder": "Please enter domain address",
+        "icon": "Platform Icon",
+        "iconPlaceholder": "Please enter platform icon (SVG/Base64)",
+        "enabled": "Enable"
       },
       "auth": {
         "title": "Authorization",
