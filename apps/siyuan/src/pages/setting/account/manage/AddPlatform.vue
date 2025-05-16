@@ -161,20 +161,6 @@ const platformOptions = computed(
     ) ?? [],
 )
 
-// 构建表单项工厂函数
-function createFormItem(
-  labelKey: string,
-  field: keyof DynamicConfig,
-  type: string = "input",
-) {
-  return {
-    type,
-    label: t(labelKey),
-    value: computed(() => formState.platformConfig.value[field]),
-    placeholder: t(`${labelKey}Placeholder`),
-  }
-}
-
 // 平台设置表单组
 const platformSettingFormGroup = reactive({
   title: t("account.single.platformSetting"),
@@ -318,7 +304,7 @@ const handleSave = async () => {
 
     const ret = await publishSettingStore.updateAsync(toUpdateConfig)
     if (!ret.success) {
-      errorMsg.value = ret.error
+      errorMsg.value = ret.error as string
       throw new Error(ret.error)
     }
 
@@ -333,10 +319,10 @@ const handleSave = async () => {
       duration: 3000,
     })
   } catch (e) {
-    errorMsg.value = e?.toString() || t("common.saveFailed")
+    errorMsg.value = (e?.toString() || t("common.saveFailed")) as string
     void alert({
       title: t("common.error"),
-      message: e?.toString() || t("common.saveFailed"),
+      message: (e?.toString() || t("common.saveFailed")) as string,
       type: "error",
       position: "center",
     })
