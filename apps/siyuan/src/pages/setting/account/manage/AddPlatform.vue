@@ -350,6 +350,16 @@ const unregisterPublishSettingStore = publishSettingStore.registerOnInit(
 onMounted(async () => {
   await publishSettingStore.doInit()
   logger.debug("publish setting init")
+  // 找到发布工具的菜单容器并滚动到顶部
+  const menuItems = document.querySelector(
+    '[data-name="publisherMenu"] .b3-menu__items',
+  )
+  if (menuItems) {
+    menuItems.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    })
+  }
 })
 
 // 组件卸载时注销回调
