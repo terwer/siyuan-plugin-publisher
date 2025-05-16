@@ -268,7 +268,7 @@ const handleSave = async () => {
     const toUpdateConfig: Partial<SypConfig> = {
       [DYNAMIC_CONFIG_KEY]: dynCfg,
       // 初始化一个空配置
-      [newConfig.platformType]: newBlogCfg,
+      [newConfig.platformKey]: newBlogCfg,
     }
 
     const ret = await publishSettingStore.updateAsync(toUpdateConfig)
