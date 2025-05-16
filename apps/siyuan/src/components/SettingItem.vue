@@ -14,8 +14,8 @@ import InputNumber from "@components/form/InputNumber.vue"
 import Select from "@components/form/Select.vue"
 import Switch from "@components/form/Switch.vue"
 import TextArea from "@components/form/TextArea.vue"
-import { defineProps } from "vue"
 import { useI18n } from "@composables/useI18n.ts"
+import { defineProps } from "vue"
 
 const props = defineProps<{
   pluginInstance: any
