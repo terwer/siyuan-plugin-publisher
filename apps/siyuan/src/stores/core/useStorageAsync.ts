@@ -7,10 +7,10 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import type { StorageAdaptor } from "@stores/adaptor/StorageAdaptor"
 import { createAppLogger } from "@utils/appLogger"
 import { cloneDeep, merge } from "lodash-es"
 import { computed, reactive, readonly, watch, type DeepReadonly } from "vue"
+import { AsyncStorageAdaptor } from "@stores/adaptor/StorageAdaptor.ts"
 // import { isDev } from "@/Constants.ts"
 
 export interface StorageOptions {
@@ -35,7 +35,7 @@ const logger = createAppLogger("use-storage-async")
 export const useStorageAsync = <T extends object>(
   storageKey: string,
   initialState: T,
-  adaptor: StorageAdaptor<T>,
+  adaptor: AsyncStorageAdaptor<T>,
   options: StorageOptions = {
     debounce: 300,
     deepWatch: true,

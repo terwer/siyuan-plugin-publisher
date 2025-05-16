@@ -7,17 +7,10 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import type { StorageAdaptor } from "@stores/adaptor/StorageAdaptor"
 import { createAppLogger } from "@utils/appLogger"
 import { cloneDeep, debounce, merge } from "lodash-es"
-import {
-  computed,
-  reactive,
-  readonly,
-  ref,
-  watch,
-  type DeepReadonly,
-} from "vue"
+import { computed, reactive, readonly, ref, watch } from "vue"
+import { AsyncStorageAdaptor } from "@stores/adaptor/StorageAdaptor.ts"
 
 const logger = createAppLogger("use-manual-storage-async")
 
@@ -43,7 +36,7 @@ export interface ManualStorageOptions {
 export const useManualStorageAsync = <T extends object>(
   storageKey: string,
   initialState: T,
-  adaptor: StorageAdaptor<T>,
+  adaptor: AsyncStorageAdaptor<T>,
   options: ManualStorageOptions = {
     debounce: 300,
     deepWatch: true,
@@ -94,7 +87,7 @@ export const useManualStorageAsync = <T extends object>(
       internalFields.forEach((field) => {
         delete (stateToSave as any)[field]
       })
-      await adaptor.save(stateToSave)
+      await adaptor.save(stateToSave as T)
       logger.debug(`[${storageKey}] Saved state successfully`)
     } catch (e) {
       logger.error(`[${storageKey}] Save failed: ${e}`)
@@ -159,7 +152,7 @@ export const useManualStorageAsync = <T extends object>(
 
   // 自动保存监听
   watch(
-    () => state,
+    () => state as any,
     (_newState: T) => {
       if (isInitializing.value) {
         // 执行所有注册的回调

@@ -27,7 +27,7 @@ export function useStorageSync<T extends object>(
   } = {},
 ) {
   const logger: ILogger = createAppLogger(`use-storage-sync-${storeName}`)
-  const { deepWatch = true, deepMerge = true } = options
+  const { deepWatch = true } = options
 
   // 创建响应式状态
   const state = reactive<T>({ ...initialState })
@@ -48,7 +48,7 @@ export function useStorageSync<T extends object>(
   // 保存数据
   const save = () => {
     try {
-      adaptor.save(state)
+      adaptor.save(state as T)
     } catch (error) {
       logger.error("Failed to save data:", error)
     }
