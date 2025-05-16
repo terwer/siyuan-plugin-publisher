@@ -8,8 +8,8 @@
   -->
 
 <script setup lang="ts">
-import { ref, watch } from "vue"
 import { createAppLogger } from "@utils/appLogger.ts"
+import { ref, watch } from "vue"
 
 const logger = createAppLogger("tabs")
 const props = withDefaults(
@@ -166,6 +166,9 @@ $border-radius = 8px
         visibility hidden
         border-right-color transparent
 
+      &:not(.collapsed) + .collapse-handle + .tab-content-wrapper
+        min-height 175px
+
 .tab-controls
   position absolute
   left 0
@@ -215,7 +218,7 @@ $border-radius = 8px
 .collapse-handle
   position absolute
   left $tab-width
-  top 32px
+  top 22px
   width $control-size
   height $control-size
   padding 6px

@@ -433,13 +433,13 @@ const handleAddAccount = (event: MouseEvent) => {
   // 工具提示
   .tooltip
     position: absolute
-    top: -28px
+    top: -20px
     left: 50%
     transform: translateX(-50%)
     z-index: 99999
     background: var(--pt-platform-tooltip-bg)
     color: var(--pt-platform-tooltip-text) !important
-    padding: 6px 8px
+    padding: 4px
     border-radius: 3px
     font-size: 0.7rem
     white-space: nowrap
@@ -476,11 +476,11 @@ const handleAddAccount = (event: MouseEvent) => {
     // 添加底部定位
     &.bottom
       top: auto
-      bottom: -28px
+      bottom: -20px
 
     // 添加顶部定位
     &.top
-      top: -28px
+      top: -20px
 
   // 开关按钮
   .toggle-btn

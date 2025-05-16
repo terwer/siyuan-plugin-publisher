@@ -96,7 +96,7 @@ onUnmounted(() => {
 
 <style lang="stylus" scoped>
 .publish-container
-  padding 16px
+  padding 16px 16px 6px 16px
   height 100%
   display flex
   flex-direction column
