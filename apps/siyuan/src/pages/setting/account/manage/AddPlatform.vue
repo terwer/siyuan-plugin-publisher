@@ -210,6 +210,14 @@ const platformSettingFormGroup = reactive({
     },
     {
       type: "input",
+      label: t("account.single.platform.platformKey"),
+      value: computed(() => formState.platformConfig.value.platformKey),
+      placeholder: t("account.single.platform.platformKeyPlaceholder"),
+      readonly: true,
+      disabled: true,
+    },
+    {
+      type: "input",
       label: t("account.single.platform.platformName"),
       value: computed(() => formState.platformConfig.value.platformName),
       placeholder: t("account.single.platform.platformNamePlaceholder"),
@@ -245,12 +253,13 @@ const platformSettingFormGroup = reactive({
   ],
 })
 
-const accountSettingFormGroup = reactive({
-  title: t("account.single.accountSetting"),
-  items: [],
-})
+// const accountSettingFormGroup = reactive({
+//   title: t("account.single.accountSetting"),
+//   items: [],
+// })
 
-const formGroups = [platformSettingFormGroup, accountSettingFormGroup]
+// const formGroups = [platformSettingFormGroup, accountSettingFormGroup]
+const formGroups = [platformSettingFormGroup]
 
 // 返回上一页
 const handleBack = () => {

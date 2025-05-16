@@ -31,7 +31,9 @@
     },
     "pluginVersion": "插件版本"
   },
-  "setting": "设置",
+  "setting": {
+    "empty": "暂无配置项"
+  },
   "publishOptions": "发布选项",
   "platformSelect": {
     "no": "暂时没有可用平台",

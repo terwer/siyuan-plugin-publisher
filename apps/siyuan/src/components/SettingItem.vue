@@ -15,6 +15,7 @@ import Select from "@components/form/Select.vue"
 import Switch from "@components/form/Switch.vue"
 import TextArea from "@components/form/TextArea.vue"
 import { defineProps } from "vue"
+import { useI18n } from "@composables/useI18n.ts"
 
 const props = defineProps<{
   pluginInstance: any
@@ -23,6 +24,8 @@ const props = defineProps<{
     items: SettingItem[]
   }
 }>()
+
+const { t } = useI18n(props.pluginInstance)
 
 const getItemLabelStyle = (item: SettingItem) => {
   const width = item.labelWidth ?? (IS_ENGLISH ? 120 : "full")
@@ -42,7 +45,11 @@ const getItemLabelStyle = (item: SettingItem) => {
 
     <!-- 配置项列表 -->
     <div class="group-items">
+      <div v-if="props.settingGroup.items.length === 0" class="empty-state">
+        <span class="empty-text">{{ t("setting.empty") }}</span>
+      </div>
       <div
+        v-else
         v-for="(item, index) in props.settingGroup.items"
         :key="index"
         class="setting-item"
@@ -199,4 +206,18 @@ const getItemLabelStyle = (item: SettingItem) => {
   --text-primary rgba(255, 255, 255, 0.85)
   --primary-color #1668dc
   --item-hover-bg rgba(255, 255, 255, 0.03)
+
+.empty-state
+  display flex
+  justify-content center
+  align-items center
+  min-height 100px
+  color var(--text-secondary)
+  font-size 14px
+
+.empty-text
+  color var(--text-secondary)
+
+[data-theme-mode="dark"]
+  --text-secondary rgba(255, 255, 255, 0.45)
 </style>

@@ -31,7 +31,9 @@
     },
     "pluginVersion": "Plugin version"
   },
-  "setting": "Settings",
+  "setting": {
+    "empty": "No settings available"
+  },
   "publishOptions": "Publish Options",
   "platformSelect": {
     "no": "No available platforms",
