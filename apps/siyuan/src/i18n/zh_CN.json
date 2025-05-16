@@ -244,7 +244,8 @@
     "metaweblog": {
       "cnblogs": "博客园",
       "typecho": "Typecho",
-      "jvue": "Jvue"
+      "jvue": "Jvue",
+      "metaweblog": "Metaweblog"
     },
     "wordpress": {
       "wordpress": "Wordpress",
@@ -258,13 +259,14 @@
       "juejin": "掘金",
       "haloweb": "Halo网页版",
       "bilibili": "哔哩哔哩",
-      "xiaohongshu": "小红书"
+      "xiaohongshu": "小红书",
+      "flowus": "Flowus 息流"
     },
     "system": {
       "siyuan": "思源笔记"
     },
     "add": "添加平台",
-    "addOk": "平台添加成功",
+    "addOk": "「{platformName}」添加成功",
     "failed": {
       "notSupportedGroup": "不支持的平台分组"
     }

@@ -45,7 +45,23 @@ const { t } = useI18n(props.pluginInstance)
 const router = useRouter()
 const route = useRoute()
 const errorMsg = ref("")
-const extra = ref([])
+const extra = computed(() => {
+  return [
+    {
+      component: Button,
+      props: {
+        type: "primary",
+        size: "sm",
+        tooltip: t("account.single.saveTip"),
+        tooltipPlacement: "bottom",
+      },
+      onClick: () => {
+        handleSave()
+      },
+      text: t("common.save"),
+    },
+  ]
+})
 const publishSettingStore = usePublishSettingStore()
 
 // 预定义
@@ -279,6 +295,7 @@ const handleSave = async () => {
     const configKey = platformTypeToConfigKeyMap[platformType]
 
     if (!configKey) {
+      errorMsg.value = t("platform.failed.notSupportedGroup")
       throw new Error(t("platform.failed.notSupportedGroup"))
     }
     dynCfg.totalCfg.push(newConfig)
@@ -291,18 +308,25 @@ const handleSave = async () => {
     }
 
     const ret = await publishSettingStore.updateAsync(toUpdateConfig)
-    if (!ret.success) throw new Error(ret.error)
+    if (!ret.success) {
+      errorMsg.value = ret.error
+      throw new Error(ret.error)
+    }
 
     void router.push(`/?tab=${TabEnum.ACCOUNT}`)
     void alert({
       title: t("common.opt.ok"),
-      message: t("platform.addOk"),
+      message: t("platform.addOk").replace(
+        "{platformName}",
+        formState.platformConfig.value.platformName,
+      ),
       type: "success",
     })
   } catch (e) {
+    errorMsg.value = e?.toString() || t("common.saveFailed")
     void alert({
       title: t("common.error"),
-      message: e || t("common.saveFailed"),
+      message: e?.toString() || t("common.saveFailed"),
       type: "error",
       position: "center",
     })
@@ -349,11 +373,6 @@ onUnmounted(() => {
       :plugin-instance="pluginInstance"
       :form-group="group"
     />
-    <div class="form-actions">
-      <Button size="md" @click="handleSave">
-        {{ t("common.save") }}
-      </Button>
-    </div>
   </BackPage>
 </template>
 
@@ -385,9 +404,4 @@ onUnmounted(() => {
         outline: none
         border-color: var(--pt-platform-accent)
         box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.2)
-
-.form-actions
-  display: flex
-  justify-content: flex-end
-  margin-top: 2rem
 </style>
