@@ -7,11 +7,11 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { createAppLogger, ILogger } from "@utils/appLogger.ts"
-import { SiyuanConfig, SiyuanKernelApi } from "zhi-siyuan-api"
 import SiyuanPublisherPlugin from "@/index.ts"
-import { JsonUtil, StrUtil } from "zhi-common"
 import { AsyncStorageAdaptor } from "@stores/adaptor/StorageAdaptor.ts"
+import { createAppLogger, ILogger } from "@utils/appLogger.ts"
+import { JsonUtil, StrUtil } from "zhi-common"
+import { SiyuanConfig, SiyuanKernelApi } from "zhi-siyuan-api"
 
 export class AsyncSiyuanStorageAdaptor<T> implements AsyncStorageAdaptor<T> {
   private logger: ILogger = createAppLogger("siyuan-storage-adaptor")
@@ -43,12 +43,12 @@ export class AsyncSiyuanStorageAdaptor<T> implements AsyncStorageAdaptor<T> {
             originText,
             {} as any,
           )
-          txt = originData[this.key]
+          txt = originData?.[this.key] ?? ""
         } else {
           txt = originText
         }
         if (typeof txt === "string" && StrUtil.isEmptyString(txt)) {
-          return null
+          return {} as T
         }
         const data = JsonUtil.safeParse<T>(txt, {} as any)
         this.logger.debug(
