@@ -322,5 +322,5 @@ export const findConfigByKey = (
     ...config.wordpressCfg,
     ...config.customCfg,
   ]
-  return allConfigs.find((item) => item.platformKey === key)
+  return allConfigs.find((item) => item.platformKey === key) as DynamicConfig
 }

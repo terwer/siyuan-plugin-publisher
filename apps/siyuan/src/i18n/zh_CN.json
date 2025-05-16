@@ -261,7 +261,10 @@
       "siyuan": "思源笔记"
     },
     "add": "添加平台",
-    "addOk": "平台添加成功"
+    "addOk": "平台添加成功",
+    "failed": {
+      "notSupportedGroup": "不支持的平台分组"
+    }
   },
   "validation": {
     "platformName": {

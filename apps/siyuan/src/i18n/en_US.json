@@ -261,7 +261,10 @@
       "siyuan": "Siyuan Note"
     },
     "add": "Add Platform",
-    "addOk": "Platform added successfully"
+    "addOk": "Platform added successfully",
+    "failed": {
+      "notSupportedGroup": "Unsupported platform group"
+    }
   },
   "validation": {
     "platformName": {

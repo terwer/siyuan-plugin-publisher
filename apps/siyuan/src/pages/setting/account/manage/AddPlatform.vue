@@ -104,6 +104,7 @@ watch(
     const config = toRaw(_.cloneDeep(newConfig))
     handleEnsureUniqueness(config)
     updateClonedPlatformConfig(config)
+    logger.info("platformConfig changed to:", config)
   },
   { deep: true, immediate: true },
 )
@@ -258,13 +259,16 @@ const handleSave = async () => {
     const platformType = platformConfig.value.platformType
     const configKey = platformTypeToConfigKeyMap[platformType]
 
-    if (configKey) {
-      dynCfg.totalCfg.push(newConfig)
-      dynCfg[configKey].push(newConfig)
+    if (!configKey) {
+      throw new Error(t("platform.failed.notSupportedGroup"))
     }
+    dynCfg.totalCfg.push(newConfig)
 
+    const newBlogCfg = toRaw(_.cloneDeep(formState.blogConfig.value))
     const toUpdateConfig: Partial<SypConfig> = {
       [DYNAMIC_CONFIG_KEY]: dynCfg,
+      // 初始化一个空配置
+      [newConfig.platformType]: newBlogCfg,
     }
 
     const ret = await publishSettingStore.updateAsync(toUpdateConfig)
