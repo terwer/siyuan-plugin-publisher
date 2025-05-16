@@ -163,7 +163,6 @@ function createFormItem(
 const platformSettingFormGroup = reactive({
   title: t("account.single.platformSetting"),
   items: [
-    createFormItem("account.single.platform.platformName", "platformName"),
     {
       type: "select",
       label: t("account.single.platform.platformType"),
@@ -193,6 +192,7 @@ const platformSettingFormGroup = reactive({
         }
       },
     },
+    createFormItem("account.single.platform.platformName", "platformName"),
     {
       type: "select",
       label: t("account.single.account.authMode"),

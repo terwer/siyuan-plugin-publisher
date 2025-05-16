@@ -246,6 +246,24 @@ export const platformTemplates = (t: any) => {
         authMode: AuthMode.API,
         isEnabled: false,
       },
+      {
+        platformType: PlatformType.Metaweblog,
+        subPlatformType: SubPlatformType.Metaweblog_Typecho,
+        platformKey: "metaweblog_Typecho",
+        platformName: "Typecho",
+        platformIcon: svgIcons.iconIFTypecho,
+        authMode: AuthMode.API,
+        isEnabled: false,
+      },
+      {
+        platformType: PlatformType.Metaweblog,
+        subPlatformType: SubPlatformType.Metaweblog_Metaweblog,
+        platformKey: "metaweblog_Metaweblog",
+        platformName: "Metaweblog",
+        platformIcon: svgIcons.iconIFMetaweblog,
+        authMode: AuthMode.API,
+        isEnabled: false,
+      },
     ],
     wordpressCfg: <DynamicConfig[]>[
       {
