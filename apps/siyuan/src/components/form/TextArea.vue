@@ -8,7 +8,7 @@
   -->
 
 <script setup lang="ts">
-import { ref, onMounted, watch } from "vue"
+import { onMounted, ref, watch } from "vue"
 
 const props = defineProps<{
   modelValue: string
@@ -24,10 +24,24 @@ const props = defineProps<{
 const emit = defineEmits(["update:modelValue"])
 const textareaRef = ref<HTMLTextAreaElement | null>(null)
 
+// 默认行数
+const DEFAULT_ROWS = 4
+
 const resize = () => {
   if (textareaRef.value && props.autoResize) {
+    const lineHeight = parseInt(getComputedStyle(textareaRef.value).lineHeight)
+    const maxRows = props.rows || DEFAULT_ROWS
+    const maxHeight = lineHeight * maxRows
     textareaRef.value.style.height = "auto"
-    textareaRef.value.style.height = `${textareaRef.value.scrollHeight}px`
+    const scrollHeight = textareaRef.value.scrollHeight
+
+    if (scrollHeight > maxHeight) {
+      textareaRef.value.style.height = `${maxHeight}px`
+      textareaRef.value.style.overflowY = "auto"
+    } else {
+      textareaRef.value.style.height = `${scrollHeight}px`
+      textareaRef.value.style.overflowY = "hidden"
+    }
   }
 }
 
@@ -46,7 +60,7 @@ watch(() => props.modelValue, resize)
       :disabled="disabled"
       :readonly="readonly"
       :maxlength="maxlength"
-      :rows="rows || 3"
+      :rows="rows || DEFAULT_ROWS"
       @input="
         emit('update:modelValue', ($event.target as HTMLTextAreaElement).value)
       "
@@ -67,17 +81,38 @@ watch(() => props.modelValue, resize)
 .custom-textarea
   --textarea-bg: var(--input-bg-color)
   --textarea-border: var(--input-border-color)
+  --scrollbar-thumb: var(--scrollbar-thumb-color)
 
   width 100%
-  min-height 100px
   padding 8px 12px
   background var(--textarea-bg)
   border 1px solid var(--textarea-border)
   border-radius 8px
   transition all 0.2s ease
-  resize vertical
   font-size 14px
   line-height 1.5
+  word-wrap break-word
+  white-space pre-wrap
+  resize none
+
+  // 自定义滚动条样式
+  &::-webkit-scrollbar
+    width 4px
+    height 4px
+
+  &::-webkit-scrollbar-track
+    background transparent
+
+  &::-webkit-scrollbar-thumb
+    background var(--scrollbar-thumb)
+    border-radius 2px
+
+    &:hover
+      background var(--scrollbar-thumb-hover)
+
+  // 移除默认的拖拽手柄
+  &::-webkit-resizer
+    display none
 
   &:focus
     outline none
@@ -108,6 +143,8 @@ watch(() => props.modelValue, resize)
   --error-color: #dc3545
   --error-focus-ring: rgba(220, 53, 69, 0.2)
   --text-secondary: #666666
+  --scrollbar-thumb-color: #c1c1c1
+  --scrollbar-thumb-hover: #a8a8a8
 
 [data-theme-mode="dark"]
   --input-bg-color: #2d2d2d
@@ -116,4 +153,6 @@ watch(() => props.modelValue, resize)
   --error-color: #ff6b6b
   --error-focus-ring: rgba(255, 107, 107, 0.2)
   --text-secondary: rgba(255,255,255,0.6)
+  --scrollbar-thumb-color: #4a4a4a
+  --scrollbar-thumb-hover: #5a5a5a
 </style>
