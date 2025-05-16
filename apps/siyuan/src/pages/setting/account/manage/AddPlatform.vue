@@ -321,6 +321,7 @@ const handleSave = async () => {
         formState.platformConfig.value.platformName,
       ),
       type: "success",
+      duration: 3000,
     })
   } catch (e) {
     errorMsg.value = e?.toString() || t("common.saveFailed")
