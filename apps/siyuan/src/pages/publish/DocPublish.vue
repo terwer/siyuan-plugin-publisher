@@ -19,9 +19,9 @@ import { cloneDeep } from "lodash-es"
 import { Clock, Zap } from "lucide-vue-next"
 import { onMounted, onUnmounted, ref } from "vue"
 import { TabEnum } from "@enums/TabEnum.ts"
-import { HookManager } from "@/plugin/hooks/manager"
-import { HookStage } from "@/plugin/hooks/types"
-import { Post } from "zhi-blog-api"
+// import { HookManager } from "@/plugin/hooks/manager"
+// import { HookStage } from "@/plugin/hooks/types"
+// import { Post } from "zhi-blog-api"
 
 const publishSettingStore = usePublishSettingStore()
 // const { loadPlugin, getPlugin } = usePlugin()
