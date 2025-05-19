@@ -19,9 +19,12 @@ export const SH_BUILD_TIME =
     ? new Date().getTime()
     : // @ts-ignore
       process.env.PT_BUILD_TIME
-export const DEFAULT_SIYUAN_API_URL = window.location.origin
+export const DEFAULT_SIYUAN_API_URL =
+  typeof window === "undefined"
+    ? "http://127.0.0.1:6806"
+    : (window?.location?.origin ?? "http://127.0.0.1:6806")
 // @ts-ignore
-export const WINDOW_SIYUAN = window?.siyuan
+export const WINDOW_SIYUAN = typeof window === "undefined" ? {} : window?.siyuan
 /**
  * 旧的通用 HTTP 代理
  *
@@ -30,7 +33,10 @@ export const WINDOW_SIYUAN = window?.siyuan
  */
 export const LEGENCY_SHARED_PROXT_MIDDLEWARE =
   "https://api.terwer.space/api/middleware"
-export const DEFAULT_SIYUAN_LANG = window?.siyuan?.config?.lang ?? "zh_CN"
+export const DEFAULT_SIYUAN_LANG =
+  typeof window === "undefined"
+    ? "zh_CN"
+    : (window?.siyuan?.config?.lang ?? "zh_CN")
 // 是否英文版
 export const IS_ENGLISH = DEFAULT_SIYUAN_LANG === "en_US"
 
@@ -43,3 +49,8 @@ export const DYNAMIC_CONFIG_KEY = "dynamic-config"
  * 根节点id
  */
 export const PUBLISHER_ROOT_ID = "publisher-root"
+
+/**
+ * 插件基础路径
+ */
+export const PLUGIN_BASE_PATH = "/plugins/siyuan-plugin-publisher"
