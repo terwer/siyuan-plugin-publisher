@@ -125,6 +125,7 @@ export class DynamicConfig {
 export enum AuthMode {
   API = "api",
   WEBSITE = "web",
+  NONE = "none",
 }
 
 /**

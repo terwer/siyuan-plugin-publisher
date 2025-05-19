@@ -70,10 +70,15 @@ export interface PlatformStatus {
 
 export interface IPlugin {
   // 插件基本信息
-  readonly id: string
-  readonly name: string
-  readonly version: string
+
+  // 平台唯一标识
   readonly platform: string
+  // 平台名称
+  readonly name?: string
+  // 平台分组
+  readonly group?: string
+  // 版本号
+  readonly version?: string
   readonly description?: string
   readonly author?: string
 
@@ -82,10 +87,10 @@ export interface IPlugin {
   readonly defaultConfig?: Record<string, any>
 
   // 智能扩展
-  readonly capabilities: PlatformCapabilities
-  readonly logger: PluginLogger
-  getStatus(): Promise<PlatformStatus>
-  checkConnection(): Promise<boolean>
+  readonly capabilities?: PlatformCapabilities
+  readonly logger?: PluginLogger
+  getStatus?(): Promise<PlatformStatus>
+  checkConnection?(): Promise<boolean>
 
   // 插件方法
   init?(config: any): Promise<void>
