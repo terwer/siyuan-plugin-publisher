@@ -9,24 +9,11 @@
 
 // alert.ts
 import { h, render, type VNode } from "vue"
-import {
-  CheckCircle2,
-  AlertTriangle,
-  X,
-  Info,
-  X as CloseIcon,
-} from "lucide-vue-next"
+import { CheckCircle2, AlertTriangle, X, Info, X as CloseIcon } from "lucide-vue-next"
 import { PUBLISHER_ROOT_ID } from "@/Constants.ts"
 
 type AlertType = "success" | "warning" | "error" | "info"
-type AlertPosition =
-  | "top"
-  | "topLeft"
-  | "topRight"
-  | "bottom"
-  | "bottomLeft"
-  | "bottomRight"
-  | "center"
+type AlertPosition = "top" | "topLeft" | "topRight" | "bottom" | "bottomLeft" | "bottomRight" | "center"
 
 interface AlertOptions {
   title?: string
@@ -97,10 +84,8 @@ const AlertComponent = {
           h("div", { class: "pt-alert__content" }, [
             props.title && h("div", { class: "pt-alert__title" }, props.title),
             h("div", { class: "pt-alert__body" }, [
-              props.message &&
-                h("div", { class: "pt-alert__message" }, props.message),
-              props.description &&
-                h("div", { class: "pt-alert__description" }, props.description),
+              props.message && h("div", { class: "pt-alert__message" }, props.message),
+              props.description && h("div", { class: "pt-alert__description" }, props.description),
             ]),
           ]),
 

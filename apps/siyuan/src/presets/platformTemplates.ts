@@ -7,12 +7,7 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import {
-  AuthMode,
-  DynamicConfig,
-  PlatformType,
-  SubPlatformType,
-} from "@/models/dynamicConfig.ts"
+import { AuthMode, DynamicConfig, PlatformType, SubPlatformType } from "@/models/dynamicConfig.ts"
 import { svgIcons } from "@utils/svgIcons.ts"
 import { PLATFORM_CONSTANTS } from "@/presets/platformConstants.ts"
 
@@ -21,16 +16,9 @@ import { PLATFORM_CONSTANTS } from "@/presets/platformConstants.ts"
  */
 export const specialPlatformConfig = {
   // 白名单（作用是以前限制了，但是后来可用的情况，以前就能用的和新平台不必加）
-  cookieWhiteList: [
-    SubPlatformType.Custom_Wechat.toString(),
-    SubPlatformType.Custom_Zhihu.toString(),
-  ],
+  cookieWhiteList: [SubPlatformType.Custom_Wechat.toString(), SubPlatformType.Custom_Zhihu.toString()],
   // UA白名单（有 UA 限制的必须加，而且是慎之又慎）
-  uaWhiteList: [
-    "https://*.qq.com/*",
-    "https://*.bilibili.com/*",
-    "https://*.xiaohongshu.com/*",
-  ],
+  uaWhiteList: ["https://*.qq.com/*", "https://*.bilibili.com/*", "https://*.xiaohongshu.com/*"],
   // 黑名单
   cookieLimit: [],
   cookieLimitTipsAuth: {},
@@ -404,9 +392,7 @@ export const platformTemplates = (t: any) => {
   return config
 }
 
-export const findAllTemplates = (
-  config: ReturnType<typeof platformTemplates>,
-) => {
+export const findAllTemplates = (config: ReturnType<typeof platformTemplates>) => {
   return [
     ...config.commonCfg,
     ...config.githubCfg,
@@ -423,10 +409,7 @@ export const findAllTemplates = (
  * @param config 配置对象
  * @returns 找到的配置项，如果未找到则返回 undefined
  */
-export const findConfigByKey = (
-  key: string,
-  config: ReturnType<typeof platformTemplates>,
-) => {
+export const findConfigByKey = (key: string, config: ReturnType<typeof platformTemplates>) => {
   const allConfigs = [
     ...config.commonCfg,
     ...config.githubCfg,

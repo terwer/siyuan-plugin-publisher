@@ -48,17 +48,9 @@ const gotoAccount = (event: MouseEvent) => {
       </div>
     </div>
     <ul v-else>
-      <li
-        v-for="platform in platforms"
-        :key="platform.name"
-        class="platform-item"
-      >
+      <li v-for="platform in platforms" :key="platform.name" class="platform-item">
         <div class="platform-info">
-          <Svg
-            :svg="platform.icon"
-            class="platform-icon"
-            :class="`status-${platform.status || 'default'}`"
-          />
+          <Svg :svg="platform.icon" class="platform-icon" :class="`status-${platform.status || 'default'}`" />
           <span :class="`status-${platform.status || 'default'}`">
             {{ platform.name }}
           </span>

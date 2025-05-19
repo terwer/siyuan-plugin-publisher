@@ -93,12 +93,8 @@ const aiSettingFormGroup = reactive({
         ]
 
         // 动态添加自定义选项
-        const customModel =
-          readonlyPreferenceCfg.experimentalAIApiModel || "deepseek-r1"
-        if (
-          !StrUtil.isEmptyString(customModel) &&
-          !baseOptions.some((option) => option.value === customModel)
-        ) {
+        const customModel = readonlyPreferenceCfg.experimentalAIApiModel || "deepseek-r1"
+        if (!StrUtil.isEmptyString(customModel) && !baseOptions.some((option) => option.value === customModel)) {
           baseOptions.push({
             label: customModel,
             value: customModel,

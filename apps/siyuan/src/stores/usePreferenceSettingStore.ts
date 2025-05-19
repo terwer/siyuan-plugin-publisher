@@ -30,20 +30,14 @@ export const usePreferenceSettingStore = () => {
   const initValue = new PublishPreferenceCfg()
 
   // 创建适配器实例
-  const adaptor = new AsyncSiyuanStorageAdaptor<PublishPreferenceCfg>(
-    adaptorKey,
-    filePath,
-  )
+  const adaptor = new AsyncSiyuanStorageAdaptor<PublishPreferenceCfg>(adaptorKey, filePath)
 
   // 获取响应式存储
   const { formState } = useStorageAsync(storageKey, initValue, adaptor)
 
   const syAiCfg = WINDOW_SIYUAN?.config?.ai?.openAI
   logger.info("try load ai cfg from window.siyuan.config =>", syAiCfg)
-  let newPreferenceCfg: WritableComputedRef<
-    PublishPreferenceCfg,
-    PublishPreferenceCfg
-  >
+  let newPreferenceCfg: WritableComputedRef<PublishPreferenceCfg, PublishPreferenceCfg>
   if (syAiCfg) {
     newPreferenceCfg = useComputedObject(formState, {
       experimentalUseSiyuanNoteAIConfig: true,
@@ -61,10 +55,7 @@ export const usePreferenceSettingStore = () => {
     })
     logger.info("use custom ai config")
   }
-  logger.debug(
-    "Loaded default preference-cfg, may not the latest",
-    newPreferenceCfg.value,
-  )
+  logger.debug("Loaded default preference-cfg, may not the latest", newPreferenceCfg.value)
 
   return {
     // 只读状态

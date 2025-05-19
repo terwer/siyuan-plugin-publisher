@@ -1,9 +1,6 @@
 import pluginVue from "eslint-plugin-vue"
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended"
-import {
-  defineConfigWithVueTs,
-  vueTsConfigs,
-} from "@vue/eslint-config-typescript"
+import { defineConfigWithVueTs, vueTsConfigs } from "@vue/eslint-config-typescript"
 
 export default defineConfigWithVueTs(
   pluginVue.configs["flat/essential"],
@@ -23,6 +20,8 @@ export default defineConfigWithVueTs(
         {
           singleQuote: false,
           semi: false,
+          printWidth: 120,
+          tabWidth: 2,
         },
       ],
     },

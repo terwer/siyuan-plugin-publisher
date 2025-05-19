@@ -8,15 +8,8 @@
   -->
 
 <script setup lang="ts">
-import {
-  DynamicConfig,
-  PlatformType,
-  SubPlatformType,
-} from "@/models/dynamicConfig.ts"
-import {
-  platformGroups,
-  platformTemplates,
-} from "@/presets/platformTemplates.ts"
+import { DynamicConfig, PlatformType, SubPlatformType } from "@/models/dynamicConfig.ts"
+import { platformGroups, platformTemplates } from "@/presets/platformTemplates.ts"
 import BackPage from "@components/BackPage.vue"
 import Svg from "@components/Svg.vue"
 import { useI18n } from "@composables/useI18n.ts"
@@ -35,9 +28,7 @@ const extra = ref([])
 
 // 平台模板列表
 const platformTemplatesList = ref(platformGroups(t))
-const singleGroupPlatformTemplateList = platformTemplates(
-  t,
-) as unknown as Record<string, DynamicConfig>
+const singleGroupPlatformTemplateList = platformTemplates(t) as unknown as Record<string, DynamicConfig>
 
 const handleBack = () => {
   router.push(`/?tab=${TabEnum.ACCOUNT}`)
@@ -69,11 +60,7 @@ const getSingleGroupPlatformTemplateList = (groupType: any) => {
     :error="errorMsg"
   >
     <div class="template-groups">
-      <div
-        v-for="group in platformTemplatesList"
-        :key="group.type"
-        class="template-group"
-      >
+      <div v-for="group in platformTemplatesList" :key="group.type" class="template-group">
         <h3 class="group-title">{{ group.title }}</h3>
         <div class="template-list">
           <div
@@ -88,13 +75,7 @@ const getSingleGroupPlatformTemplateList = (groupType: any) => {
             <div class="template-info">
               <div class="template-name">{{ t(template.platformName) }}</div>
               <div class="template-type">
-                {{
-                  t(
-                    template.platformType === PlatformType.Common
-                      ? "platform.type.doc"
-                      : "platform.type.blog",
-                  )
-                }}
+                {{ t(template.platformType === PlatformType.Common ? "platform.type.doc" : "platform.type.blog") }}
               </div>
             </div>
             <div class="template-arrow">&#8594;</div>

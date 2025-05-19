@@ -73,9 +73,7 @@ export const useManualStorageAsync = <T extends object>(
   const registerOnInit = (callback: () => void) => {
     onInitializedCallbacks.value.push(callback)
     return () => {
-      onInitializedCallbacks.value = onInitializedCallbacks.value.filter(
-        (cb) => cb !== callback,
-      )
+      onInitializedCallbacks.value = onInitializedCallbacks.value.filter((cb) => cb !== callback)
     }
   }
 
@@ -105,9 +103,7 @@ export const useManualStorageAsync = <T extends object>(
   }
 
   // 异步更新方法
-  const updateAsync = async (
-    changes: Partial<T>,
-  ): Promise<{ success: boolean; error?: string }> => {
+  const updateAsync = async (changes: Partial<T>): Promise<{ success: boolean; error?: string }> => {
     try {
       isManualUpdating.value = true
       update(changes)
@@ -160,9 +156,7 @@ export const useManualStorageAsync = <T extends object>(
           try {
             cb()
           } catch (e) {
-            logger.error(
-              `[${storageKey}] Error in initialization callback: ${e}`,
-            )
+            logger.error(`[${storageKey}] Error in initialization callback: ${e}`)
           }
         })
         isInitializing.value = false

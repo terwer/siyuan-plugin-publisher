@@ -51,10 +51,7 @@ const copySuccess = ref(false)
 
 // Computed
 const helpUrl = computed(() => {
-  return (
-    (help as any)[props.helpKey] ||
-    "https://siyuan.wiki/s/20230810132040-nn4q7vs"
-  )
+  return (help as any)[props.helpKey] || "https://siyuan.wiki/s/20230810132040-nn4q7vs"
 })
 
 const displayError = computed(() => {
@@ -190,11 +187,7 @@ watch(
       <div v-if="extra && extra.length > 0" class="header-extra">
         <slot name="extra">
           <template v-for="(item, _index) in extra" :key="_index">
-            <component
-              :is="item.component"
-              v-bind="item.props || {}"
-              @click.stop="item.onClick"
-            >
+            <component :is="item.component" v-bind="item.props || {}" @click.stop="item.onClick">
               {{ item.text }}
             </component>
           </template>

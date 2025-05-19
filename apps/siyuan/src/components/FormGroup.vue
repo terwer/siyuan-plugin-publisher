@@ -25,11 +25,7 @@ const handleChange = (item: any, value: any) => {
 </script>
 
 <template>
-  <SettingItem
-    :plugin-instance="props.pluginInstance"
-    :setting-group="formGroup"
-    @change="handleChange"
-  />
+  <SettingItem :plugin-instance="props.pluginInstance" :setting-group="formGroup" @change="handleChange" />
 </template>
 
 <style scoped lang="stylus"></style>

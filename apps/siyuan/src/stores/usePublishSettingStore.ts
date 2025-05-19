@@ -8,7 +8,7 @@
  */
 
 import { DEFAULT_SIYUAN_LANG } from "@/Constants.ts"
-import { SypConfig } from "@/models/SypConfig.ts"
+import { SypConfig } from "@/models/sypConfig.ts"
 import { useManualStorageAsync } from "@stores/core/useManualStorageAsync"
 // import { createAppLogger } from "@utils/appLogger.ts"
 import { defineStore } from "pinia"

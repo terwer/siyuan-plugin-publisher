@@ -9,10 +9,7 @@
 
 <script setup lang="ts">
 import { DYNAMIC_CONFIG_KEY } from "@/Constants.ts"
-import {
-  DynamicConfig,
-  getSubPlatformTypeByKey,
-} from "@/models/dynamicConfig.ts"
+import { DynamicConfig, getSubPlatformTypeByKey } from "@/models/dynamicConfig.ts"
 import BackPage from "@components/BackPage.vue"
 import Button from "@components/Button.vue"
 import FormGroup from "@components/FormGroup.vue"
@@ -47,8 +44,7 @@ const errorMsg = ref("")
 // computed
 // 获取平台配置只读版本
 const platformConfig = computed(() => {
-  const totalCfg =
-    publishSettingStore.readonlyState[DYNAMIC_CONFIG_KEY]?.totalCfg
+  const totalCfg = publishSettingStore.readonlyState[DYNAMIC_CONFIG_KEY]?.totalCfg
   return totalCfg?.find((item) => item.platformKey === apiType) as DynamicConfig
 })
 const blogConfig = computed(() => {

@@ -20,25 +20,17 @@ export const SH_BUILD_TIME =
     : // @ts-ignore
       process.env.PT_BUILD_TIME
 export const DEFAULT_SIYUAN_API_URL =
-  typeof window === "undefined"
-    ? "http://127.0.0.1:6806"
-    : (window?.location?.origin ?? "http://127.0.0.1:6806")
+  typeof window === "undefined" ? "http://127.0.0.1:6806" : (window?.location?.origin ?? "http://127.0.0.1:6806")
 // @ts-ignore
-export const WINDOW_SIYUAN = (
-  typeof window === "undefined" ? {} : window?.siyuan
-) as any
+export const WINDOW_SIYUAN = (typeof window === "undefined" ? {} : window?.siyuan) as any
 /**
  * 旧的通用 HTTP 代理
  *
  * @since 1.0.0
  * @version 1.20.0
  */
-export const LEGENCY_SHARED_PROXT_MIDDLEWARE =
-  "https://api.terwer.space/api/middleware"
-export const DEFAULT_SIYUAN_LANG =
-  typeof window === "undefined"
-    ? "zh_CN"
-    : (window?.siyuan?.config?.lang ?? "zh_CN")
+export const LEGENCY_SHARED_PROXT_MIDDLEWARE = "https://api.terwer.space/api/middleware"
+export const DEFAULT_SIYUAN_LANG = typeof window === "undefined" ? "zh_CN" : (window?.siyuan?.config?.lang ?? "zh_CN")
 // 是否英文版
 export const IS_ENGLISH = DEFAULT_SIYUAN_LANG === "en_US"
 

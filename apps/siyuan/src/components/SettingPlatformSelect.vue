@@ -41,12 +41,7 @@ const handleAddAccount = (event: MouseEvent) => {
   <div class="platform-list">
     <!-- 顶部操作栏 -->
     <div class="pt-action-bar">
-      <Button
-        size="sm"
-        @click.stop="handleAddAccount"
-        :tooltip="t('account.addTip')"
-        tooltip-placement="bottom"
-      >
+      <Button size="sm" @click.stop="handleAddAccount" :tooltip="t('account.addTip')" tooltip-placement="bottom">
         <template #icon>
           <Plus :size="16" />
         </template>
@@ -63,36 +58,20 @@ const handleAddAccount = (event: MouseEvent) => {
       </div>
     </div>
     <ul v-else>
-      <li
-        v-for="platform in platforms"
-        :key="platform.name"
-        class="platform-item"
-      >
+      <li v-for="platform in platforms" :key="platform.name" class="platform-item">
         <div class="platform-info">
           <Svg :svg="platform.icon" class="platform-icon" />
           <span :class="`status-${platform.status || 'default'}`">
             {{ platform.name }}
           </span>
-          <span
-            v-if="platform.authMode"
-            :class="`auth-mode auth-mode-${platform.authMode.toLowerCase()}`"
-          >
+          <span v-if="platform.authMode" :class="`auth-mode auth-mode-${platform.authMode.toLowerCase()}`">
             {{
-              platform.authMode === AuthMode.API
-                ? t("platformSelect.authMode.api")
-                : t("platformSelect.authMode.web")
+              platform.authMode === AuthMode.API ? t("platformSelect.authMode.api") : t("platformSelect.authMode.web")
             }}
           </span>
           <button v-if="platform.statusIcon" class="action-btn">
-            <component
-              :is="platform.statusIcon"
-              class="btn-icon"
-              :class="`status-${platform.status || 'default'}`"
-            />
-            <span
-              class="tooltip"
-              :class="`status-${platform.status || 'default'}`"
-            >
+            <component :is="platform.statusIcon" class="btn-icon" :class="`status-${platform.status || 'default'}`" />
+            <span class="tooltip" :class="`status-${platform.status || 'default'}`">
               {{
                 platform.status === "success"
                   ? t("account.authStatus.authorized")

@@ -108,11 +108,7 @@ export class DynamicConfig {
     this.isAuth = false
     this.isEnabled = false
     this.authMode = AuthMode.API
-    if (
-      platformKey
-        .toLowerCase()
-        .includes(PlatformType.Custom.toString().toLowerCase())
-    ) {
+    if (platformKey.toLowerCase().includes(PlatformType.Custom.toString().toLowerCase())) {
       this.authMode = AuthMode.WEBSITE
     }
     this.cookieLimit = false
@@ -306,9 +302,7 @@ export function getSubtypeList(ptype: PlatformType): SubPlatformType[] {
  *
  * @param dynamicConfigArray
  */
-export function setDynamicJsonCfg(
-  dynamicConfigArray: DynamicConfig[],
-): DynamicJsonCfg {
+export function setDynamicJsonCfg(dynamicConfigArray: DynamicConfig[]): DynamicJsonCfg {
   const totalCfg: DynamicConfig[] = dynamicConfigArray
   const commonCfg: DynamicConfig[] = []
   const githubCfg: DynamicConfig[] = []
@@ -370,17 +364,14 @@ export function getSubPlatformTypeByKey(key: string): SubPlatformType {
 
   if (keyParts.length > 0) {
     const subPlatformParts = keyParts[0].split("_")
-    subtype =
-      subPlatformParts.length > 1 ? subPlatformParts[1] : subPlatformParts[0]
+    subtype = subPlatformParts.length > 1 ? subPlatformParts[1] : subPlatformParts[0]
   } else {
     throw new Error("Invalid platform key")
   }
 
   const enumValues = Object.values(SubPlatformType)
   const foundType = enumValues.find(
-    (value) =>
-      typeof value === "string" &&
-      value.toLowerCase() === subtype.toLowerCase(),
+    (value) => typeof value === "string" && value.toLowerCase() === subtype.toLowerCase(),
   )
 
   if (foundType) {
@@ -398,10 +389,7 @@ export function getSubPlatformTypeByKey(key: string): SubPlatformType {
  * @param ptype 平台类型
  * @param subtype 子平台类型
  */
-export function getNewPlatformKey(
-  ptype: PlatformType,
-  subtype: SubPlatformType,
-): string {
+export function getNewPlatformKey(ptype: PlatformType, subtype: SubPlatformType): string {
   let ret: any
   const newId = sypIdUtil.newID()
   ret = ptype.toLowerCase()
@@ -415,10 +403,7 @@ export function getNewPlatformKey(
 /**
  * 检测动态平台key是否重复
  */
-export function isDynamicKeyExists(
-  dynamicConfigArray: DynamicConfig[],
-  key: string,
-): boolean {
+export function isDynamicKeyExists(dynamicConfigArray: DynamicConfig[], key: string): boolean {
   let flag = false
   for (let i = 0; i < dynamicConfigArray.length; i++) {
     if (dynamicConfigArray[i].platformKey === key) {
@@ -432,10 +417,7 @@ export function isDynamicKeyExists(
 /**
  * 通过平台key查询平台
  */
-export function getDynCfgByKey(
-  dynamicConfigArray: DynamicConfig[],
-  key: string,
-): DynamicConfig {
+export function getDynCfgByKey(dynamicConfigArray: DynamicConfig[], key: string): DynamicConfig {
   for (let i = 0; i < dynamicConfigArray.length; i++) {
     if (dynamicConfigArray[i].platformKey === key) {
       return dynamicConfigArray[i]
@@ -474,10 +456,7 @@ export function replacePlatformByKey(
  * @param key - 要匹配的键
  * @returns 删除元素后的新数组
  */
-export function deletePlatformByKey(
-  dynamicConfigArray: any[],
-  key: string,
-): any[] {
+export function deletePlatformByKey(dynamicConfigArray: any[], key: string): any[] {
   return dynamicConfigArray.filter((item) => item.platformKey !== key)
 }
 
@@ -524,10 +503,7 @@ export function getDynPlatformKeyFromPostidKey(postidKey: string): string {
  * @param existingConfigs 现有的平台配置数组
  * @returns 唯一的平台名称
  */
-export function generateUniquePlatformName(
-  baseName: string,
-  existingConfigs: DynamicConfig[],
-): string {
+export function generateUniquePlatformName(baseName: string, existingConfigs: DynamicConfig[]): string {
   let count = 1
   let newName = baseName
   while (existingConfigs.some((config) => config.platformName === newName)) {

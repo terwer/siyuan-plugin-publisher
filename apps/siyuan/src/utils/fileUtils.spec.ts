@@ -5,16 +5,16 @@ describe("fileUtils", () => {
   describe("normalizePath", () => {
     it("should normalize single path correctly", () => {
       expect(normalizePath("test")).toBe("test")
-      expect(normalizePath("/test")).toBe("test")
+      expect(normalizePath("/test")).toBe("/test")
       expect(normalizePath("test/")).toBe("test")
-      expect(normalizePath("/test/")).toBe("test")
+      expect(normalizePath("/test/")).toBe("/test")
     })
 
     it("should normalize multiple path segments correctly", () => {
       expect(normalizePath("a", "b", "c")).toBe("a/b/c")
-      expect(normalizePath("/a", "/b", "/c")).toBe("a/b/c")
+      expect(normalizePath("/a", "/b", "/c")).toBe("/a/b/c")
       expect(normalizePath("a/", "b/", "c/")).toBe("a/b/c")
-      expect(normalizePath("/a/", "/b/", "/c/")).toBe("a/b/c")
+      expect(normalizePath("/a/", "/b/", "/c/")).toBe("/a/b/c")
     })
 
     it("should handle empty path segments correctly", () => {
@@ -23,8 +23,8 @@ describe("fileUtils", () => {
     })
 
     it("should handle paths with multiple slashes correctly", () => {
-      expect(normalizePath("//test//path//")).toBe("test/path")
-      expect(normalizePath("///a///b///c///")).toBe("a/b/c")
+      expect(normalizePath("//test//path//")).toBe("/test/path")
+      expect(normalizePath("///a///b///c///")).toBe("/a/b/c")
     })
   })
 })

@@ -46,9 +46,7 @@ const computedType = computed(() => {
       :maxlength="maxlength"
     />
 
-    <div v-if="showCount && maxlength" class="count-indicator">
-      {{ model.length }} / {{ maxlength }}
-    </div>
+    <div v-if="showCount && maxlength" class="count-indicator">{{ model.length }} / {{ maxlength }}</div>
   </div>
 </template>
 

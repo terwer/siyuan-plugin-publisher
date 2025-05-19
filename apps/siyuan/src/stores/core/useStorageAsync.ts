@@ -73,21 +73,14 @@ export const useStorageAsync = <T extends object>(
   // }
 
   // 核心更新方法
-  const atomicUpdate = (
-    partialState: Partial<T>,
-    context: string = "anonymous",
-  ) => {
+  const atomicUpdate = (partialState: Partial<T>, context: string = "anonymous") => {
     if (!isInitialized) {
-      logger.warn(
-        `[${storageKey}] Operation blocked: Not initialized | Context: ${context}`,
-      )
+      logger.warn(`[${storageKey}] Operation blocked: Not initialized | Context: ${context}`)
       return
     }
 
     if (isSyncing) {
-      logger.debug(
-        `[${storageKey}] Concurrent modification detected | Context: ${context}`,
-      )
+      logger.debug(`[${storageKey}] Concurrent modification detected | Context: ${context}`)
       return
     }
 

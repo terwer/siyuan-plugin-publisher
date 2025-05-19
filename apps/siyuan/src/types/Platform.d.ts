@@ -7,11 +7,7 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import {
-  AuthMode,
-  PlatformType,
-  SubPlatformType,
-} from "@/models/dynamicConfig.ts"
+import { AuthMode, PlatformType, SubPlatformType } from "@/models/dynamicConfig.ts"
 
 interface AbstractPlatformAction {
   type: "button" | "toggle"

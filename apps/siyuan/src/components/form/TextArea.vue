@@ -61,14 +61,10 @@ watch(() => props.modelValue, resize)
       :readonly="readonly"
       :maxlength="maxlength"
       :rows="rows || DEFAULT_ROWS"
-      @input="
-        emit('update:modelValue', ($event.target as HTMLTextAreaElement).value)
-      "
+      @input="emit('update:modelValue', ($event.target as HTMLTextAreaElement).value)"
     ></textarea>
 
-    <div v-if="maxlength" class="count-indicator">
-      {{ modelValue.length }} / {{ maxlength }}
-    </div>
+    <div v-if="maxlength" class="count-indicator">{{ modelValue.length }} / {{ maxlength }}</div>
   </div>
 </template>
 

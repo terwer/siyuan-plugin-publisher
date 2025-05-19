@@ -94,8 +94,7 @@ const props = defineProps({
   type: {
     type: String as () => ButtonType,
     default: "default",
-    validator: (v: string) =>
-      ["default", "primary", "dashed", "text", "link"].includes(v),
+    validator: (v: string) => ["default", "primary", "dashed", "text", "link"].includes(v),
   },
   size: {
     type: String,
@@ -121,9 +120,7 @@ const slots = useSlots()
 const emit = defineEmits(["click"])
 
 const tagName = computed(() => (props.href ? "a" : "button"))
-const shapeClass = computed(() =>
-  props.shape ? `pt-btn--shape-${props.shape}` : "",
-)
+const shapeClass = computed(() => (props.shape ? `pt-btn--shape-${props.shape}` : ""))
 const hasTwoChineseChars = computed(() => {
   const text = slots.default?.()?.[0]?.children?.toString() || ""
   return text.length === 2 && /^[\u4e00-\u9fa5]{2}$/.test(text)

@@ -34,17 +34,8 @@ const handleChange = (event: Event) => {
 </script>
 
 <template>
-  <select
-    class="pt-select"
-    :value="modelValue"
-    @change="handleChange"
-    :disabled="disabled"
-  >
-    <option
-      v-for="(option, index) in options"
-      :key="index"
-      :value="option.value"
-    >
+  <select class="pt-select" :value="modelValue" @change="handleChange" :disabled="disabled">
+    <option v-for="(option, index) in options" :key="index" :value="option.value">
       {{ option.label }}
     </option>
   </select>

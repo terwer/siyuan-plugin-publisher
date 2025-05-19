@@ -32,8 +32,7 @@ const tabs = [
     content: DocPublish,
     props: {
       pluginInstance: props.pluginInstance,
-      requestSwitchTab: (componentType: TabEnum) =>
-        switchTabByComponent(componentType),
+      requestSwitchTab: (componentType: TabEnum) => switchTabByComponent(componentType),
     },
   },
   {
@@ -42,8 +41,7 @@ const tabs = [
     content: AccountSetting,
     props: {
       pluginInstance: props.pluginInstance,
-      requestSwitchTab: (componentType: TabEnum) =>
-        switchTabByComponent(componentType),
+      requestSwitchTab: (componentType: TabEnum) => switchTabByComponent(componentType),
     },
   },
   // {
@@ -60,8 +58,7 @@ const tabs = [
     content: GeneralSetting,
     props: {
       pluginInstance: props.pluginInstance,
-      requestSwitchTab: (componentType: TabEnum) =>
-        switchTabByComponent(componentType),
+      requestSwitchTab: (componentType: TabEnum) => switchTabByComponent(componentType),
     },
   },
   {
@@ -70,8 +67,7 @@ const tabs = [
     content: DashBoard,
     props: {
       pluginInstance: props.pluginInstance,
-      requestSwitchTab: (componentType: TabEnum) =>
-        switchTabByComponent(componentType),
+      requestSwitchTab: (componentType: TabEnum) => switchTabByComponent(componentType),
     },
   },
 ]
@@ -108,13 +104,7 @@ onMounted(() => {
 
 <template>
   <div class="publish-container">
-    <Tab
-      :tabs="tabs"
-      :active-tab="activeTab"
-      :vertical="true"
-      :collapsed="isCollapsed"
-      @tab-change="onTabChange"
-    />
+    <Tab :tabs="tabs" :active-tab="activeTab" :vertical="true" :collapsed="isCollapsed" @tab-change="onTabChange" />
   </div>
 </template>
 

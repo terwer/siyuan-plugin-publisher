@@ -27,12 +27,12 @@ export const usePlatformMetadataStore = () => {
   const initValue = new PlatformMetadata()
 
   // 创建适配器实例
-  const adaptor = new AsyncSiyuanStorageAdaptor<PlatformMetadata>(
-    adaptorKey,
-    filePath,
+  const adaptor = new AsyncSiyuanStorageAdaptor<PlatformMetadata>(adaptorKey, filePath)
+  const { state: allPlatformMetadata, formState: metadataRef } = useStorageAsync<PlatformMetadata>(
+    storageKey,
+    initValue,
+    adaptor,
   )
-  const { state: allPlatformMetadata, formState: metadataRef } =
-    useStorageAsync<PlatformMetadata>(storageKey, initValue, adaptor)
 
   /**
    * 获取某个平台元数据
@@ -69,17 +69,8 @@ export const usePlatformMetadataStore = () => {
    * @param categories 新的分类数组
    * @param templates 新的模板数组
    */
-  const updatePlatformMetadata = (
-    platformKey: string,
-    tags: string[],
-    categories: string[],
-    templates: string[],
-  ) => {
-    if (
-      tags.length === 0 &&
-      categories.length === 0 &&
-      templates.length === 0
-    ) {
+  const updatePlatformMetadata = (platformKey: string, tags: string[], categories: string[], templates: string[]) => {
+    if (tags.length === 0 && categories.length === 0 && templates.length === 0) {
       // 如果所有数组都是空数组，不需要进行任何操作
       return
     }
@@ -93,34 +84,22 @@ export const usePlatformMetadataStore = () => {
     const datas = metadata.metadata[platformKey]
     // 去除 datas 中的空字符串并进行 trim 操作
     datas.tags = datas.tags.filter((tag) => tag.trim() !== "")
-    datas.categories = datas.categories.filter(
-      (category) => category.trim() !== "",
-    )
-    datas.templates = datas.templates.filter(
-      (template) => template.trim() !== "",
-    )
+    datas.categories = datas.categories.filter((category) => category.trim() !== "")
+    datas.templates = datas.templates.filter((template) => template.trim() !== "")
     // 合并新的标签数组并去重
     if (tags.length > 0) {
-      datas.tags = Array.from(
-        new Set([...datas.tags, ...tags.filter((tag) => tag.trim() !== "")]),
-      )
+      datas.tags = Array.from(new Set([...datas.tags, ...tags.filter((tag) => tag.trim() !== "")]))
     }
     // 合并新的分类数组并去重
     if (categories.length > 0) {
       datas.categories = Array.from(
-        new Set([
-          ...datas.categories,
-          ...categories.filter((category) => category.trim() !== ""),
-        ]),
+        new Set([...datas.categories, ...categories.filter((category) => category.trim() !== "")]),
       )
     }
     // 合并新的模板数组并去重
     if (templates.length > 0) {
       datas.templates = Array.from(
-        new Set([
-          ...datas.templates,
-          ...templates.filter((template) => template.trim() !== ""),
-        ]),
+        new Set([...datas.templates, ...templates.filter((template) => template.trim() !== "")]),
       )
     }
     metadata.metadata[platformKey] = datas
@@ -129,10 +108,7 @@ export const usePlatformMetadataStore = () => {
     metadataRef.value = metadata
   }
 
-  logger.debug(
-    "Loaded default platform-metadata, may not the latest",
-    allPlatformMetadata,
-  )
+  logger.debug("Loaded default platform-metadata, may not the latest", allPlatformMetadata)
 
   return { getPlatformMetadata, updatePlatformMetadata }
 }

@@ -16,13 +16,8 @@ import {
   getNewPlatformKey,
   PlatformType,
 } from "@/models/dynamicConfig.ts"
-import { DYNAMIC_CONFIG_TYPE, SypConfig } from "@/models/SypConfig.ts"
-import {
-  findAllTemplates,
-  findConfigByKey,
-  platformGroups,
-  platformTemplates,
-} from "@/presets/platformTemplates.ts"
+import { DYNAMIC_CONFIG_TYPE, SypConfig } from "@/models/sypConfig.ts"
+import { findAllTemplates, findConfigByKey, platformGroups, platformTemplates } from "@/presets/platformTemplates.ts"
 import { alert } from "@components/Alert.ts"
 import BackPage from "@components/BackPage.vue"
 import Button from "@components/Button.vue"
@@ -33,15 +28,7 @@ import { TabEnum } from "@enums/TabEnum.ts"
 import { usePublishSettingStore } from "@stores/usePublishSettingStore.ts"
 import { createAppLogger } from "@utils/appLogger.ts"
 import * as _ from "lodash-es"
-import {
-  computed,
-  onMounted,
-  onUnmounted,
-  reactive,
-  ref,
-  toRaw,
-  watch,
-} from "vue"
+import { computed, onMounted, onUnmounted, reactive, ref, toRaw, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { BlogConfig } from "zhi-blog-api"
 
@@ -107,18 +94,9 @@ const updateClonedPlatformConfig = (config: DynamicConfig) => {
 // 处理唯一性逻辑
 const handleEnsureUniqueness = (config: DynamicConfig) => {
   const dbConfig = publishSettingStore.readonlyState[DYNAMIC_CONFIG_KEY]
-  if (
-    dbConfig &&
-    dbConfig.totalCfg.some((item) => item.platformKey === config.platformKey)
-  ) {
-    config.platformName = generateUniquePlatformName(
-      config.platformName,
-      dbConfig.totalCfg,
-    )
-    config.platformKey = getNewPlatformKey(
-      config.platformType,
-      config.subPlatformType,
-    )
+  if (dbConfig && dbConfig.totalCfg.some((item) => item.platformKey === config.platformKey)) {
+    config.platformName = generateUniquePlatformName(config.platformName, dbConfig.totalCfg)
+    config.platformKey = getNewPlatformKey(config.platformType, config.subPlatformType)
   }
 }
 
@@ -151,23 +129,18 @@ watch(
 
 // 平台组 & 子平台选项
 const groups = platformGroups(t)
-const getPlatformOptionsByGroup = (group?: PlatformType) =>
-  allTemplates.filter((item) => item.platformType === group)
+const getPlatformOptionsByGroup = (group?: PlatformType) => allTemplates.filter((item) => item.platformType === group)
 
 const platformOptions = computed(
   () =>
-    getPlatformOptionsByGroup(formState.platformConfig.value.platformType)?.map(
-      (item) => {
-        // 使用原始模板中的 platformName，而不是引用对象上的
-        const originalTemplate = allTemplates.find(
-          (t) => t.subPlatformType === item.subPlatformType,
-        )
-        return {
-          label: originalTemplate?.platformName ?? item.platformName,
-          value: item.subPlatformType,
-        }
-      },
-    ) ?? [],
+    getPlatformOptionsByGroup(formState.platformConfig.value.platformType)?.map((item) => {
+      // 使用原始模板中的 platformName，而不是引用对象上的
+      const originalTemplate = allTemplates.find((t) => t.subPlatformType === item.subPlatformType)
+      return {
+        label: originalTemplate?.platformName ?? item.platformName,
+        value: item.subPlatformType,
+      }
+    }) ?? [],
 )
 
 // 平台设置表单组
@@ -182,8 +155,7 @@ const platformSettingFormGroup = reactive({
       onChange: (value?: PlatformType) => {
         const newPlatformOptions = getPlatformOptionsByGroup(value)
         if (newPlatformOptions.length > 0) {
-          templateKey.value =
-            newPlatformOptions[0].platformKey?.toString() ?? ""
+          templateKey.value = newPlatformOptions[0].platformKey?.toString() ?? ""
         }
       },
     },
@@ -193,9 +165,7 @@ const platformSettingFormGroup = reactive({
       value: computed(() => formState.platformConfig.value.subPlatformType),
       options: platformOptions,
       onChange: (value: string) => {
-        const config = allTemplates.find(
-          (item) => item.subPlatformType === value,
-        )
+        const config = allTemplates.find((item) => item.subPlatformType === value)
         if (config) {
           const newConfig = _.cloneDeep(config)
           handleEnsureUniqueness(newConfig)
@@ -265,10 +235,7 @@ const handleBack = () => {
 }
 
 // 平台类型到配置字段映射
-const platformTypeToConfigKeyMap: Record<
-  PlatformType,
-  keyof DYNAMIC_CONFIG_TYPE
-> = {
+const platformTypeToConfigKeyMap: Record<PlatformType, keyof DYNAMIC_CONFIG_TYPE> = {
   [PlatformType.Common]: "commonCfg",
   [PlatformType.Github]: "githubCfg",
   [PlatformType.Gitlab]: "gitlabCfg",
@@ -320,10 +287,7 @@ const handleSave = async () => {
     void router.push(`/?tab=${TabEnum.ACCOUNT}`)
     void alert({
       title: t("common.opt.ok"),
-      message: t("platform.addOk").replace(
-        "{platformName}",
-        formState.platformConfig.value.platformName,
-      ),
+      message: t("platform.addOk").replace("{platformName}", formState.platformConfig.value.platformName),
       type: "success",
       duration: 3000,
     })
@@ -339,25 +303,21 @@ const handleSave = async () => {
 }
 
 // 初始化处理唯一性
-const unregisterPublishSettingStore = publishSettingStore.registerOnInit(
-  async () => {
-    const dbConfig = publishSettingStore.readonlyState[DYNAMIC_CONFIG_KEY]
-    if (dbConfig) {
-      const templateConfig = findConfigByKey(templateKey.value, templates)
-      const newConfig = _.cloneDeep(templateConfig)
-      handleEnsureUniqueness(newConfig)
-      updateClonedPlatformConfig(newConfig)
-    }
-  },
-)
+const unregisterPublishSettingStore = publishSettingStore.registerOnInit(async () => {
+  const dbConfig = publishSettingStore.readonlyState[DYNAMIC_CONFIG_KEY]
+  if (dbConfig) {
+    const templateConfig = findConfigByKey(templateKey.value, templates)
+    const newConfig = _.cloneDeep(templateConfig)
+    handleEnsureUniqueness(newConfig)
+    updateClonedPlatformConfig(newConfig)
+  }
+})
 
 onMounted(async () => {
   await publishSettingStore.doInit()
   logger.debug("publish setting init")
   // 找到发布工具的菜单容器并滚动到顶部
-  const menuItems = document.querySelector(
-    '[data-name="publisherMenu"] .b3-menu__items',
-  )
+  const menuItems = document.querySelector('[data-name="publisherMenu"] .b3-menu__items')
   if (menuItems) {
     menuItems.scrollTo({
       top: 0,

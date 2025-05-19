@@ -30,10 +30,7 @@ const { t } = useI18n(props.pluginInstance)
 const getItemLabelStyle = (item: SettingItem) => {
   const width = item.labelWidth ?? (IS_ENGLISH ? 120 : "full")
   return {
-    "--label-width":
-      typeof width === "number"
-        ? `${Math.max(80, Math.min(200, width))}px`
-        : width,
+    "--label-width": typeof width === "number" ? `${Math.max(80, Math.min(200, width))}px` : width,
   }
 }
 </script>
@@ -48,12 +45,7 @@ const getItemLabelStyle = (item: SettingItem) => {
       <div v-if="props.settingGroup.items.length === 0" class="empty-state">
         <span class="empty-text">{{ t("setting.empty") }}</span>
       </div>
-      <div
-        v-else
-        v-for="(item, index) in props.settingGroup.items"
-        :key="index"
-        class="setting-item"
-      >
+      <div v-else v-for="(item, index) in props.settingGroup.items" :key="index" class="setting-item">
         <!-- 标签区域 -->
         <div class="item-label" :style="getItemLabelStyle(item)">
           {{ item.label }}
@@ -73,11 +65,7 @@ const getItemLabelStyle = (item: SettingItem) => {
           />
 
           <!-- Switch 类型 -->
-          <Switch
-            v-if="item.type === 'switch'"
-            v-model="item.value"
-            :disabled="item.disabled"
-          />
+          <Switch v-if="item.type === 'switch'" v-model="item.value" :disabled="item.disabled" />
 
           <!-- Select 类型 -->
           <Select

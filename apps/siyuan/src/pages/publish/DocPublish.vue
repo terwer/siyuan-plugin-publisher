@@ -40,119 +40,109 @@ const platforms = ref<AbstractPlatform[]>([])
 // const hookManager = HookManager.getInstance()
 
 // 注册初始化完成回调
-const unregisterPublishSettingStore = publishSettingStore.registerOnInit(
-  async () => {
-    const totalCfg = cloneDeep(
-      publishSettingStore.readonlyState[DYNAMIC_CONFIG_KEY]?.totalCfg,
-    )
-    platforms.value =
-      totalCfg
-        ?.filter((item: DynamicConfig) => {
-          return item.isEnabled
-        })
-        ?.map((item: DynamicConfig) => {
-          return {
-            name: item.platformName,
-            icon: item.platformIcon,
-            platformType: item.platformType,
-            subPlatformType: item.subPlatformType,
-            authMode: AuthMode.API,
-            enabled: item.isEnabled,
-            actions: [
-              {
-                type: "button",
-                icon: Zap,
-                label: t("publish.quick"),
-                handler: async (
-                  event: MouseEvent,
-                  platform: AbstractPlatform,
-                ) => {
-                  event.stopPropagation()
-                  //   try {
-                  //     const plugin = getPlugin(platform.platformType)
-                  //     if (!plugin) {
-                  //       throw new Error(
-                  //         `Plugin not found: ${platform.platformType}`,
-                  //       )
-                  //     }
-                  //
-                  //     // 1. 调用内容预处理 Hook
-                  //     const processResult = await hookManager.executeHooks(
-                  //       HookStage.BEFORE_PROCESS,
-                  //       {
-                  //         post: { title: "Test post", description: "" } as Post,
-                  //         config: plugin.defaultConfig,
-                  //         platform: platform.platformType,
-                  //         metadata: {},
-                  //       },
-                  //     )
-                  //     if (!processResult.success) {
-                  //       const errorMsg = `Content processing failed: ${processResult.error?.message}`
-                  //       logger.error(errorMsg)
-                  //       throw new Error(errorMsg)
-                  //     }
-                  //
-                  //     // 2. 调用发布前 Hook
-                  //     const publishResult = await hookManager.executeHooks(
-                  //       HookStage.BEFORE_PUBLISH,
-                  //       {
-                  //         post: processResult.data.post,
-                  //         config: plugin.defaultConfig,
-                  //         platform: platform.platformType,
-                  //         metadata: {},
-                  //       },
-                  //     )
-                  //     if (!publishResult.success) {
-                  //       const errorMsg = `Pre-publish processing failed: ${publishResult.error?.message}`
-                  //       logger.error(errorMsg)
-                  //       throw new Error(errorMsg)
-                  //     }
-                  //
-                  //     // 3. 执行发布
-                  //     try {
-                  //       const postId = await plugin.publish(
-                  //         publishResult.data.post,
-                  //       )
-                  //       logger.info(
-                  //         `Post published successfully with ID: ${postId}`,
-                  //       )
-                  //     } catch (publishError: any) {
-                  //       const errorMsg = `Failed to publish post: ${publishError}`
-                  //       logger.error(errorMsg)
-                  //       throw new Error(errorMsg)
-                  //     }
-                  //   } catch (e: any) {
-                  //     logger.error(`Quick publish failed: ${e}`)
-                  //   }
-                },
+const unregisterPublishSettingStore = publishSettingStore.registerOnInit(async () => {
+  const totalCfg = cloneDeep(publishSettingStore.readonlyState[DYNAMIC_CONFIG_KEY]?.totalCfg)
+  platforms.value =
+    totalCfg
+      ?.filter((item: DynamicConfig) => {
+        return item.isEnabled
+      })
+      ?.map((item: DynamicConfig) => {
+        return {
+          name: item.platformName,
+          icon: item.platformIcon,
+          platformType: item.platformType,
+          subPlatformType: item.subPlatformType,
+          authMode: AuthMode.API,
+          enabled: item.isEnabled,
+          actions: [
+            {
+              type: "button",
+              icon: Zap,
+              label: t("publish.quick"),
+              handler: async (event: MouseEvent, platform: AbstractPlatform) => {
+                event.stopPropagation()
+                //   try {
+                //     const plugin = getPlugin(platform.platformType)
+                //     if (!plugin) {
+                //       throw new Error(
+                //         `Plugin not found: ${platform.platformType}`,
+                //       )
+                //     }
+                //
+                //     // 1. 调用内容预处理 Hook
+                //     const processResult = await hookManager.executeHooks(
+                //       HookStage.BEFORE_PROCESS,
+                //       {
+                //         post: { title: "Test post", description: "" } as Post,
+                //         config: plugin.defaultConfig,
+                //         platform: platform.platformType,
+                //         metadata: {},
+                //       },
+                //     )
+                //     if (!processResult.success) {
+                //       const errorMsg = `Content processing failed: ${processResult.error?.message}`
+                //       logger.error(errorMsg)
+                //       throw new Error(errorMsg)
+                //     }
+                //
+                //     // 2. 调用发布前 Hook
+                //     const publishResult = await hookManager.executeHooks(
+                //       HookStage.BEFORE_PUBLISH,
+                //       {
+                //         post: processResult.data.post,
+                //         config: plugin.defaultConfig,
+                //         platform: platform.platformType,
+                //         metadata: {},
+                //       },
+                //     )
+                //     if (!publishResult.success) {
+                //       const errorMsg = `Pre-publish processing failed: ${publishResult.error?.message}`
+                //       logger.error(errorMsg)
+                //       throw new Error(errorMsg)
+                //     }
+                //
+                //     // 3. 执行发布
+                //     try {
+                //       const postId = await plugin.publish(
+                //         publishResult.data.post,
+                //       )
+                //       logger.info(
+                //         `Post published successfully with ID: ${postId}`,
+                //       )
+                //     } catch (publishError: any) {
+                //       const errorMsg = `Failed to publish post: ${publishError}`
+                //       logger.error(errorMsg)
+                //       throw new Error(errorMsg)
+                //     }
+                //   } catch (e: any) {
+                //     logger.error(`Quick publish failed: ${e}`)
+                //   }
               },
-              {
-                type: "button",
-                icon: Clock,
-                label: t("publish.normal"),
-                handler: async (
-                  event: MouseEvent,
-                  platform: AbstractPlatform,
-                ) => {
-                  event.stopPropagation()
-                  // try {
-                  //   const plugin = getPlugin(platform.platformType)
-                  //   if (!plugin) {
-                  //     throw new Error(
-                  //       `Plugin not found: ${platform.platformType}`,
-                  //     )
-                  //   }
-                  //   // TODO: 实现普通发布逻辑
-                  // } catch (e: any) {
-                  //   logger.error(`Normal publish failed: ${e}`)
-                  // }
-                },
+            },
+            {
+              type: "button",
+              icon: Clock,
+              label: t("publish.normal"),
+              handler: async (event: MouseEvent, platform: AbstractPlatform) => {
+                event.stopPropagation()
+                // try {
+                //   const plugin = getPlugin(platform.platformType)
+                //   if (!plugin) {
+                //     throw new Error(
+                //       `Plugin not found: ${platform.platformType}`,
+                //     )
+                //   }
+                //   // TODO: 实现普通发布逻辑
+                // } catch (e: any) {
+                //   logger.error(`Normal publish failed: ${e}`)
+                // }
               },
-            ],
-          } as AbstractPlatform
-        }) ?? []
-  },
-)
+            },
+          ],
+        } as AbstractPlatform
+      }) ?? []
+})
 
 onMounted(async () => {
   await publishSettingStore.doInit()

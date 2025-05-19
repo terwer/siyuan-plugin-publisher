@@ -8,11 +8,7 @@
   -->
 
 <template>
-  <div
-    class="pt-tooltip"
-    @mouseenter="handleMouseEnter"
-    @mouseleave="handleMouseLeave"
-  >
+  <div class="pt-tooltip" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
     <div ref="triggerRef" class="pt-tooltip__trigger">
       <slot></slot>
     </div>
@@ -21,10 +17,7 @@
         v-show="visible"
         ref="tooltipRef"
         class="pt-tooltip__content"
-        :class="[
-          `pt-tooltip__content--${placement}`,
-          { 'pt-tooltip__content--arrow': showArrow },
-        ]"
+        :class="[`pt-tooltip__content--${placement}`, { 'pt-tooltip__content--arrow': showArrow }]"
         :style="tooltipStyle"
       >
         <div class="pt-tooltip__inner">

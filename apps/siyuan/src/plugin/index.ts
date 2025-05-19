@@ -7,15 +7,14 @@
  *  of this license document, but changing it is not allowed.
  */
 
-/**
- * 规范化路径
- *
- * @param paths 路径片段
- * @returns 规范化后的路径
- */
-export function normalizePath(...paths: string[]): string {
-  return paths
-    .map((path) => path.replace(/^\/+|\/+$/g, "").replace(/\/+/g, "/"))
-    .filter(Boolean)
-    .join("/")
-}
+// Hook 相关导出
+export * from "./hooks/types"
+export * from "./hooks/manager"
+export * from "./hooks/global"
+
+// 插件加载器相关导出
+// export * from "./loader/types"
+// export * from "./loader/manager"
+
+// 插件类型定义
+export * from "./types/plugin"

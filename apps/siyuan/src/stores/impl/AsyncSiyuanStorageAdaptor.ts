@@ -39,10 +39,7 @@ export class AsyncSiyuanStorageAdaptor<T> implements AsyncStorageAdaptor<T> {
         const originText = await this.kernelApi.getFile(this.path, "text")
         let txt: string | Record<string, any>
         if (this.key) {
-          const originData = JsonUtil.safeParse<Record<string, any>>(
-            originText,
-            {} as any,
-          )
+          const originData = JsonUtil.safeParse<Record<string, any>>(originText, {} as any)
           txt = originData?.[this.key] ?? ""
         } else {
           txt = originText
@@ -51,19 +48,11 @@ export class AsyncSiyuanStorageAdaptor<T> implements AsyncStorageAdaptor<T> {
           return {} as T
         }
         const data = JsonUtil.safeParse<T>(txt, {} as any)
-        this.logger.debug(
-          "Loaded data via [siyuan-kernel-api by path] from " +
-            this.key +
-            ":" +
-            this.path,
-        )
+        this.logger.debug("Loaded data via [siyuan-kernel-api by path] from " + this.key + ":" + this.path)
         return data as T
       } else {
-        const data =
-          this.pluginInstance?.loadData(this.key ?? "unknown") ?? null
-        this.logger.debug(
-          "Loaded data via [siyuan plugin api] from " + this.key,
-        )
+        const data = this.pluginInstance?.loadData(this.key ?? "unknown") ?? null
+        this.logger.debug("Loaded data via [siyuan plugin api] from " + this.key)
         return data as T
       }
     } catch (e) {
@@ -83,23 +72,14 @@ export class AsyncSiyuanStorageAdaptor<T> implements AsyncStorageAdaptor<T> {
         }
       }
       await this.kernelApi.saveTextData(this.path, JSON.stringify(cfg))
-      this.logger.debug(
-        "Saved data via [siyuan-kernel-api by path] to " +
-          this.key +
-          ":" +
-          this.path,
-        data,
-      )
+      this.logger.debug("Saved data via [siyuan-kernel-api by path] to " + this.key + ":" + this.path, data)
     } else {
       if (!this.key) {
         throw new Error("key is required for plugin storage")
       }
       cfg = data as Record<string, any>
       this.pluginInstance?.saveData(this.key, cfg)
-      this.logger.debug(
-        "Saved data via [siyuan plugin api] to " + this.key,
-        data,
-      )
+      this.logger.debug("Saved data via [siyuan plugin api] to " + this.key, data)
     }
   }
 }

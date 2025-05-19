@@ -9,13 +9,7 @@
 
 // MessageBox.ts
 import { h, render, type VNode, type Component } from "vue"
-import {
-  CheckCircle2,
-  AlertTriangle,
-  X,
-  Info,
-  HelpCircle,
-} from "lucide-vue-next"
+import { CheckCircle2, AlertTriangle, X, Info, HelpCircle } from "lucide-vue-next"
 import { PUBLISHER_ROOT_ID } from "@/Constants.ts"
 
 type MessageBoxType = "info" | "success" | "warning" | "error" | "confirm"
@@ -101,19 +95,10 @@ const MessageBoxComponent = {
             [
               h("div", { class: "pt-messagebox__header" }, [
                 h("div", { class: "pt-messagebox__icon" }, getIcon()),
-                h(
-                  "div",
-                  { class: "pt-messagebox__title" },
-                  props.options.title,
-                ),
+                h("div", { class: "pt-messagebox__title" }, props.options.title),
               ]),
 
-              props.options.content &&
-                h(
-                  "div",
-                  { class: "pt-messagebox__content" },
-                  props.options.content,
-                ),
+              props.options.content && h("div", { class: "pt-messagebox__content" }, props.options.content),
 
               props.options.customContent && h(props.options.customContent),
 
@@ -122,10 +107,7 @@ const MessageBoxComponent = {
                   h(
                     "button",
                     {
-                      class: [
-                        "pt-messagebox__btn",
-                        `pt-messagebox__btn--${btn.type || "default"}`,
-                      ],
+                      class: ["pt-messagebox__btn", `pt-messagebox__btn--${btn.type || "default"}`],
                       onClick: (e) => {
                         e.stopPropagation()
                         handleAction(btn.handler, e)
@@ -140,8 +122,7 @@ const MessageBoxComponent = {
                       h(
                         "button",
                         {
-                          class:
-                            "pt-messagebox__btn pt-messagebox__btn--default",
+                          class: "pt-messagebox__btn pt-messagebox__btn--default",
                           onClick: (e) => {
                             e.stopPropagation()
                             handleAction(undefined, e)
@@ -157,8 +138,7 @@ const MessageBoxComponent = {
                       h(
                         "button",
                         {
-                          class:
-                            "pt-messagebox__btn pt-messagebox__btn--primary",
+                          class: "pt-messagebox__btn pt-messagebox__btn--primary",
                           onClick: (e) => {
                             e.stopPropagation()
                             handleAction(undefined, e)
@@ -249,15 +229,10 @@ const showMessageBox = (options: MessageBoxOptions): Promise<boolean> => {
  * @since 2.0.0
  */
 export const messageBox = {
-  confirm: (options: MessageBoxOptions) =>
-    showMessageBox({ type: "confirm", ...options }),
-  info: (options: MessageBoxOptions) =>
-    showMessageBox({ type: "info", ...options }),
-  success: (options: MessageBoxOptions) =>
-    showMessageBox({ type: "success", ...options }),
-  warning: (options: MessageBoxOptions) =>
-    showMessageBox({ type: "warning", ...options }),
-  error: (options: MessageBoxOptions) =>
-    showMessageBox({ type: "error", ...options }),
+  confirm: (options: MessageBoxOptions) => showMessageBox({ type: "confirm", ...options }),
+  info: (options: MessageBoxOptions) => showMessageBox({ type: "info", ...options }),
+  success: (options: MessageBoxOptions) => showMessageBox({ type: "success", ...options }),
+  warning: (options: MessageBoxOptions) => showMessageBox({ type: "warning", ...options }),
+  error: (options: MessageBoxOptions) => showMessageBox({ type: "error", ...options }),
   custom: (options: MessageBoxOptions) => showMessageBox(options),
 }
