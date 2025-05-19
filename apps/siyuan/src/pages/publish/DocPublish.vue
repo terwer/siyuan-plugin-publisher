@@ -37,7 +37,7 @@ const { t } = useI18n(props.pluginInstance)
 
 const platforms = ref<AbstractPlatform[]>([])
 
-const hookManager = HookManager.getInstance()
+// const hookManager = HookManager.getInstance()
 
 // 注册初始化完成回调
 const unregisterPublishSettingStore = publishSettingStore.registerOnInit(
