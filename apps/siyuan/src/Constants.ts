@@ -24,7 +24,9 @@ export const DEFAULT_SIYUAN_API_URL =
     ? "http://127.0.0.1:6806"
     : (window?.location?.origin ?? "http://127.0.0.1:6806")
 // @ts-ignore
-export const WINDOW_SIYUAN = typeof window === "undefined" ? {} : window?.siyuan
+export const WINDOW_SIYUAN = (
+  typeof window === "undefined" ? {} : window?.siyuan
+) as any
 /**
  * 旧的通用 HTTP 代理
  *
