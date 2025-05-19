@@ -43,22 +43,22 @@ export class PluginLoaderManager implements PluginLoader {
   }
 
   registerPlugin(plugin: IPlugin): void {
-    if (this.plugins.has(plugin.platform)) {
-      logger.warn(`Plugin already registered for platform: ${plugin.platform}`)
+    if (this.plugins.has(plugin.id)) {
+      logger.warn(`Plugin already registered for platform: ${plugin.id}`)
       return
     }
-    this.plugins.set(plugin.platform, plugin)
-    logger.info(`Plugin registered: ${plugin.name} (${plugin.platform})`)
+    this.plugins.set(plugin.id, plugin)
+    logger.info(`Plugin registered: ${plugin.name} (${plugin.id})`)
   }
 
-  getPlugin(platform: string): IPlugin | undefined {
-    return this.plugins.get(platform)
+  getPlugin(id: string): IPlugin | undefined {
+    return this.plugins.get(id)
   }
 
-  async unloadPlugin(platform: string): Promise<{ success: boolean; error?: Error }> {
-    const plugin = this.plugins.get(platform)
+  async unloadPlugin(id: string): Promise<{ success: boolean; error?: Error }> {
+    const plugin = this.plugins.get(id)
     if (!plugin) {
-      const error = new Error(`Plugin not found for platform: ${platform}`)
+      const error = new Error(`Plugin not found for platform: ${id}`)
       logger.error(error.message)
       return { success: false, error }
     }
@@ -71,8 +71,8 @@ export class PluginLoaderManager implements PluginLoader {
       }
 
       // 从 Map 中移除插件
-      this.plugins.delete(platform)
-      logger.info(`Plugin unloaded: ${plugin.name} (${platform})`)
+      this.plugins.delete(id)
+      logger.info(`Plugin unloaded: ${plugin.name} (${id})`)
       return { success: true }
     } catch (e: any) {
       logger.error(`Failed to unload plugin ${plugin.name}: ${e.message}`)
@@ -127,7 +127,7 @@ export class PluginLoaderManager implements PluginLoader {
   }
 
   private validatePlugin(plugin: any): plugin is IPlugin {
-    const requiredFields = ["id", "name", "version", "platform"]
+    const requiredFields = ["id", "name", "version"]
     const missingFields = requiredFields.filter((field) => !plugin[field])
 
     if (missingFields.length > 0) {

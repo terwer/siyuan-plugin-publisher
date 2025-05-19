@@ -16,7 +16,7 @@ export interface PluginLoaderOptions {
 
 export interface PluginLoader {
   registerPlugin(plugin: IPlugin): void
-  getPlugin(platform: string): IPlugin | undefined
+  getPlugin(id: string): IPlugin | undefined
   getAllPlugins(): IPlugin[]
   loadPlugin(pluginPath: string): Promise<{ success: boolean; error?: Error }>
 }

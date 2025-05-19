@@ -55,8 +55,8 @@ export const usePlugin = () => {
     }
   }
 
-  const getPlugin = (platform: string) => {
-    return loader.getPlugin(platform)
+  const getPlugin = (id: string) => {
+    return loader.getPlugin(id)
   }
 
   const getAllPlugins = () => {

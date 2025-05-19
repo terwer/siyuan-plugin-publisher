@@ -50,24 +50,24 @@ export class HookManager {
   }
 
   // 注册插件 Hook
-  registerPluginHook(platform: string, stage: HookStage, hook: PluginHook): void {
+  registerPluginHook(id: string, stage: HookStage, hook: PluginHook): void {
     // 验证 stage 是否合法
     if (!Object.values(HookStage).includes(stage)) {
       throw new Error(`Invalid hook stage: ${stage}`)
     }
-    if (!this.pluginHooks.has(platform)) {
-      this.pluginHooks.set(platform, new Map())
+    if (!this.pluginHooks.has(id)) {
+      this.pluginHooks.set(id, new Map())
     }
-    const platformHooks = this.pluginHooks.get(platform)!
+    const platformHooks = this.pluginHooks.get(id)!
     const hooks = platformHooks.get(stage) || []
     // 检查是否已经存在相同的 hook
     if (hooks.includes(hook)) {
-      logger.warn(`Hook already registered for platform: ${platform}, stage: ${stage}`)
+      logger.warn(`Hook already registered for platform: ${id}, stage: ${stage}`)
       return
     }
     hooks.push(hook)
     platformHooks.set(stage, hooks)
-    logger.info(`Registered plugin hook for platform: ${platform}, stage: ${stage}`)
+    logger.info(`Registered plugin hook for platform: ${id}, stage: ${stage}`)
   }
 
   // 取消注册
@@ -100,19 +100,19 @@ export class HookManager {
   /**
    * 取消注册一个插件 Hook
    *
-   * @param platform 平台标识
+   * @param id 平台标识
    * @param stage 阶段
    * @param hook 要移除的 Hook 函数
    */
-  unregisterPluginHook(platform: string, stage: HookStage, hook: PluginHook): void {
+  unregisterPluginHook(id: string, stage: HookStage, hook: PluginHook): void {
     // 验证 stage 是否合法
     if (!Object.values(HookStage).includes(stage)) {
       throw new Error(`Invalid hook stage: ${stage}`)
     }
 
-    const platformHooks = this.pluginHooks.get(platform)
+    const platformHooks = this.pluginHooks.get(id)
     if (!platformHooks || platformHooks.size === 0) {
-      logger.warn(`No plugin hooks found for platform: ${platform}`)
+      logger.warn(`No plugin hooks found for platform: ${id}`)
       return
     }
 
@@ -121,14 +121,14 @@ export class HookManager {
       const index = hooks.indexOf(hook)
       if (index !== -1) {
         hooks.splice(index, 1)
-        logger.info(`Unregistered plugin hook for platform: ${platform}, stage: ${stage}`)
+        logger.info(`Unregistered plugin hook for platform: ${id}, stage: ${stage}`)
       }
     }
   }
 
   // 执行 Hook 链
   async executeHooks(stage: HookStage, context: HookContext): Promise<HookResult> {
-    logger.info(`Executing hooks for stage: ${stage}, platform: ${context.platform}`)
+    logger.info(`Executing hooks for stage: ${stage}, platform: ${context.id}`)
 
     const errorMessages: string[] = []
     const mutableContext = _.cloneDeep(context) // 深拷贝上下文
@@ -155,7 +155,7 @@ export class HookManager {
     }
 
     // 执行插件特定 Hook
-    const platformHooks = this.pluginHooks.get(context.platform)
+    const platformHooks = this.pluginHooks.get(context.id)
     if (platformHooks) {
       const hooks = platformHooks.get(stage) || []
       for (const hook of hooks) {
@@ -203,11 +203,11 @@ export class HookManager {
   /**
    * 获取指定平台和阶段的插件 Hook
    *
-   * @param platform
+   * @param id
    * @param stage
    */
-  getPluginHooks(platform: string, stage: HookStage): PluginHook[] | undefined {
-    const platformHooks = this.pluginHooks.get(platform)
+  getPluginHooks(id: string, stage: HookStage): PluginHook[] | undefined {
+    const platformHooks = this.pluginHooks.get(id)
     return platformHooks ? platformHooks.get(stage) : undefined
   }
 
@@ -220,10 +220,10 @@ export class HookManager {
   }
 
   // 清除特定平台的插件 Hooks
-  clearPluginHooks(platform: string): void {
-    if (this.pluginHooks.has(platform)) {
-      this.pluginHooks.delete(platform)
-      logger.info(`Cleared all plugin hooks for platform: ${platform}`)
+  clearPluginHooks(id: string): void {
+    if (this.pluginHooks.has(id)) {
+      this.pluginHooks.delete(id)
+      logger.info(`Cleared all plugin hooks for platform: ${id}`)
     }
   }
 

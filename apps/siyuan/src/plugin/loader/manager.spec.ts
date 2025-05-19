@@ -34,7 +34,7 @@ describe("PluginLoader", () => {
     //   }
     //   expect(result.success).toBe(true)
     //   expect(result.error).toBeUndefined()
-    //   expect(pluginLoader.getPlugin("wordpress_Wordpress")).toBeDefined()
+    //   expect(pluginLoader.getPlugin("wordpress")).toBeDefined()
     // })
     //
     // it("should not load invalid plugins", async () => {
@@ -56,7 +56,7 @@ describe("PluginLoader", () => {
     // it("should validate plugin configuration during loading", async () => {
     //   const pluginPath = "wordpress/index.js"
     //   await pluginLoader.loadPlugin(pluginPath)
-    //   const mockPlugin = pluginLoader.getPlugin("wordpress_Wordpress")
+    //   const mockPlugin = pluginLoader.getPlugin("wordpress")
     //   if (!mockPlugin) {
     //     return
     //   }
@@ -67,7 +67,7 @@ describe("PluginLoader", () => {
     // it("should be able to retrieve loaded plugins", async () => {
     //   const pluginPath = "wordpress/index.js"
     //   await pluginLoader.loadPlugin(pluginPath)
-    //   const plugin = pluginLoader.getPlugin("wordpress_Wordpress")
+    //   const plugin = pluginLoader.getPlugin("wordpress")
     //   expect(plugin).toBeDefined()
     //   expect(plugin?.name).toBe("WordPress")
     // })
@@ -75,9 +75,9 @@ describe("PluginLoader", () => {
     // it("should be able to unload plugins", async () => {
     //   const pluginPath = "wordpress/index.js"
     //   await pluginLoader.loadPlugin(pluginPath)
-    //   const result = await pluginLoader.unloadPlugin("wordpress_Wordpress")
+    //   const result = await pluginLoader.unloadPlugin("wordpress")
     //   expect(result.success).toBe(true)
-    //   expect(pluginLoader.getPlugin("wordpress_Wordpress")).toBeUndefined()
+    //   expect(pluginLoader.getPlugin("wordpress")).toBeUndefined()
     // })
     //
     // it("should return false when unloading non-existent plugin", async () => {
@@ -90,7 +90,7 @@ describe("PluginLoader", () => {
     //   await pluginLoader.loadPlugin(pluginPath)
     //
     //   pluginLoader.clearAllPlugins()
-    //   expect(pluginLoader.getPlugin("wordpress_Wordpress")).toBeUndefined()
+    //   expect(pluginLoader.getPlugin("wordpress")).toBeUndefined()
     // })
   })
 
@@ -104,7 +104,7 @@ describe("PluginLoader", () => {
     //   const pluginPath = "wordpress/index.js"
     //   await pluginLoader.loadPlugin(pluginPath)
     //
-    //   const mockPlugin = pluginLoader.getPlugin("wordpress_Wordpress")
+    //   const mockPlugin = pluginLoader.getPlugin("wordpress")
     //   if (!mockPlugin) {
     //     return
     //   }
@@ -122,7 +122,7 @@ describe("PluginLoader", () => {
     //   const pluginPath = "wordpress/index.js"
     //   await pluginLoader.loadPlugin(pluginPath)
     //
-    //   const mockPlugin = pluginLoader.getPlugin("wordpress_Wordpress")
+    //   const mockPlugin = pluginLoader.getPlugin("wordpress")
     //   if (!mockPlugin) {
     //     return
     //   }

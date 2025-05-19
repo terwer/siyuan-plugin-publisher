@@ -72,7 +72,7 @@ export interface IPlugin {
   // 插件基本信息
 
   // 平台唯一标识
-  readonly platform: string
+  readonly id: string
   // 平台名称
   readonly name?: string
   // 平台分组

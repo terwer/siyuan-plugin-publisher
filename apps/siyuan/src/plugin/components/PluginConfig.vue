@@ -14,7 +14,7 @@ import { usePluginStore } from "../stores/usePluginStore"
 import FormGroup from "@components/FormGroup.vue"
 
 const props = defineProps<{
-  platform: string
+  id: string
   modelValue: any
   pluginInstance: any
 }>()
@@ -24,7 +24,7 @@ const emit = defineEmits(["update:modelValue"])
 const { getPlugin } = usePlugin()
 const pluginStore = usePluginStore()
 
-const plugin = getPlugin(props.platform)
+const plugin = getPlugin(props.id)
 const schema = ref(plugin?.configSchema)
 const config = ref(props.modelValue)
 
@@ -55,7 +55,7 @@ watch(
   config,
   (newVal) => {
     emit("update:modelValue", newVal)
-    pluginStore.updatePluginConfig(props.platform, newVal)
+    pluginStore.updatePluginConfig(props.id, newVal)
   },
   { deep: true },
 )

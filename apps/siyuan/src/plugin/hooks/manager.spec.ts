@@ -112,7 +112,7 @@ describe("HookManager", () => {
     //   hookManager.registerGlobalHook(HookStage.BEFORE_PROCESS, hook1)
     //   hookManager.registerGlobalHook(HookStage.BEFORE_PROCESS, hook2)
     //
-    //   const context: HookContext = { platform: "test", config: new PublishConfig(), post: new Post(), data: {} }
+    //   const context: HookContext = { id: "test", config: new PublishConfig(), post: new Post(), data: {} }
     //   await hookManager.executeHooks(HookStage.BEFORE_PROCESS, context)
     //   expect(executionOrder).toEqual([1, 2])
     // })
@@ -132,7 +132,7 @@ describe("HookManager", () => {
     //   hookManager.registerGlobalHook(HookStage.BEFORE_PROCESS, failingHook2)
     //   hookManager.registerGlobalHook(HookStage.BEFORE_PROCESS, successfulHook)
     //
-    //   const context: HookContext = { platform: "test", config: new PublishConfig(), post: new Post(), data: {} }
+    //   const context: HookContext = { id: "test", config: new PublishConfig(), post: new Post(), data: {} }
     //   const result = await hookManager.executeHooks(HookStage.BEFORE_PROCESS, context)
     //
     //   expect(result.success).toBe(false)
@@ -148,7 +148,7 @@ describe("HookManager", () => {
     //
     //   hookManager.registerGlobalHook(HookStage.BEFORE_PROCESS, timeoutHook)
     //
-    //   const context: HookContext = { platform: "test", config: new PublishConfig(), post: new Post(), data: {} }
+    //   const context: HookContext = { id: "test", config: new PublishConfig(), post: new Post(), data: {} }
     //   const result = await hookManager.executeHooks(HookStage.BEFORE_PROCESS, context)
     //   expect(result.success).toBe(true)
     //   expect(result.error).toBeUndefined()
@@ -170,7 +170,7 @@ describe("HookManager", () => {
     //   hookManager.registerGlobalHook(HookStage.BEFORE_PROCESS, hook1)
     //   hookManager.registerGlobalHook(HookStage.BEFORE_PROCESS, hook2)
     //
-    //   const context: HookContext = { platform: "test", config: new PublishConfig(), post: new Post(), data: {} }
+    //   const context: HookContext = { id: "test", config: new PublishConfig(), post: new Post(), data: {} }
     //   await hookManager.executeHooks(HookStage.BEFORE_PROCESS, context)
     // })
   })

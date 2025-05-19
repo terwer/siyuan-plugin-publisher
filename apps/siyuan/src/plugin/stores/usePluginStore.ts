@@ -22,12 +22,12 @@ export const usePluginStore = defineStore("plugin", {
       this.plugins.push(plugin)
     },
 
-    setActivePlugin(platform: string) {
-      this.activePlugin = platform
+    setActivePlugin(id: string) {
+      this.activePlugin = id
     },
 
-    updatePluginConfig(platform: string, config: any) {
-      this.pluginConfigs[platform] = config
+    updatePluginConfig(id: string, config: any) {
+      this.pluginConfigs[id] = config
     },
   },
 })

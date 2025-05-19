@@ -11,7 +11,7 @@ import { Post } from "zhi-blog-api"
 import { PublishConfig } from "@/models/publishConfig.ts"
 
 export interface HookContext {
-  platform: string
+  id: string
   config: PublishConfig
   post: Post
   data: any
