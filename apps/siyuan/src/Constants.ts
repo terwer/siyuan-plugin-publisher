@@ -51,8 +51,3 @@ export const DYNAMIC_CONFIG_KEY = "dynamic-config"
  * 根节点id
  */
 export const PUBLISHER_ROOT_ID = "publisher-root"
-
-/**
- * 插件基础路径
- */
-export const PLUGIN_BASE_PATH = "/plugins/siyuan-plugin-publisher"

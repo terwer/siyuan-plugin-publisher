@@ -27,7 +27,6 @@ pnpm dev -F siyuan-plugin-publisher
 pnpm dev -F @terwer/share-pro-app
 ```
 
-
 #### 可用的测试链接
 
 - [http://localhost:4000/share?id=20240408194841-jmgbco2&origin=http://192.168.3.3:6806&isSsr=false](http://localhost:4000/share?id=20240408194841-jmgbco2&origin=http://192.168.3.3:6806&isSsr=false)
@@ -42,6 +41,11 @@ pnpm build -F siyuan-plugin-publisher -- --watch
 pnpm dev -F @terwer/share-pro-app
 ```
 
+## 单元测试
+
+```bash
+pnpm test -F siyuan-plugin-publisher
+```
 
 ## 构建
 

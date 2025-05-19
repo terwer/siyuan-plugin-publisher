@@ -39,6 +39,12 @@ pnpm build -F siyuan-plugin-publisher -- --watch
 pnpm dev -F @terwer/share-pro-app
 ```
 
+## Test
+
+```bash
+pnpm test -F siyuan-plugin-publisher
+```
+
 ## Build
 
 ```bash
