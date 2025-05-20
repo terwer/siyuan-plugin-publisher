@@ -31,11 +31,7 @@ class PublishConfig {
         SubPlatformType.NONE,
       )
 
-    this.blogConfig = blogConfig ?? this.createDefaultBlogConfig()
-  }
-
-  private createDefaultBlogConfig(): BlogConfig {
-    return {} as BlogConfig
+    this.blogConfig = (blogConfig ?? {}) as BlogConfig
   }
 }
 

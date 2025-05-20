@@ -19,13 +19,11 @@ import { cloneDeep } from "lodash-es"
 import { Clock, Zap } from "lucide-vue-next"
 import { onMounted, onUnmounted, ref } from "vue"
 import { TabEnum } from "@enums/TabEnum.ts"
-// import { HookManager } from "@/plugin/hooks/manager"
-// import { HookStage } from "@/plugin/hooks/types"
-// import { Post } from "zhi-blog-api"
+import { usePlugin } from "@/plugin/composables/usePlugin.ts"
+import { BlogConfig, Post } from "zhi-blog-api"
 
 const publishSettingStore = usePublishSettingStore()
-// const { loadPlugin, getPlugin } = usePlugin()
-// const pluginStore = usePluginStore()
+const { loadPlugin, getPlugin } = usePlugin()
 
 const props = defineProps<{
   pluginInstance: any
@@ -62,62 +60,42 @@ const unregisterPublishSettingStore = publishSettingStore.registerOnInit(async (
               label: t("publish.quick"),
               handler: async (event: MouseEvent, platform: AbstractPlatform) => {
                 event.stopPropagation()
-                //   try {
-                //     const plugin = getPlugin(platform.platformType)
-                //     if (!plugin) {
-                //       throw new Error(
-                //         `Plugin not found: ${platform.platformType}`,
-                //       )
-                //     }
-                //
-                //     // 1. 调用内容预处理 Hook
-                //     const processResult = await hookManager.executeHooks(
-                //       HookStage.BEFORE_PROCESS,
-                //       {
-                //         post: { title: "Test post", description: "" } as Post,
-                //         config: plugin.defaultConfig,
-                //         platform: platform.platformType,
-                //         metadata: {},
-                //       },
-                //     )
-                //     if (!processResult.success) {
-                //       const errorMsg = `Content processing failed: ${processResult.error?.message}`
-                //       logger.error(errorMsg)
-                //       throw new Error(errorMsg)
-                //     }
-                //
-                //     // 2. 调用发布前 Hook
-                //     const publishResult = await hookManager.executeHooks(
-                //       HookStage.BEFORE_PUBLISH,
-                //       {
-                //         post: processResult.data.post,
-                //         config: plugin.defaultConfig,
-                //         platform: platform.platformType,
-                //         metadata: {},
-                //       },
-                //     )
-                //     if (!publishResult.success) {
-                //       const errorMsg = `Pre-publish processing failed: ${publishResult.error?.message}`
-                //       logger.error(errorMsg)
-                //       throw new Error(errorMsg)
-                //     }
-                //
-                //     // 3. 执行发布
-                //     try {
-                //       const postId = await plugin.publish(
-                //         publishResult.data.post,
-                //       )
-                //       logger.info(
-                //         `Post published successfully with ID: ${postId}`,
-                //       )
-                //     } catch (publishError: any) {
-                //       const errorMsg = `Failed to publish post: ${publishError}`
-                //       logger.error(errorMsg)
-                //       throw new Error(errorMsg)
-                //     }
-                //   } catch (e: any) {
-                //     logger.error(`Quick publish failed: ${e}`)
-                //   }
+                try {
+                  // 加载插件
+                  const pluginPath = "wordpress/index.js"
+                  const result = await loadPlugin(pluginPath)
+                  if (result.error) {
+                    throw new Error(`Failed to load plugin from ${pluginPath}: ${result.error}`)
+                  }
+
+                  // 读取插件元数据
+                  const plugin = getPlugin(item.platformKey)
+                  if (!plugin) {
+                    throw new Error(`Plugin not found: ${item.platformKey}`)
+                  }
+
+                  // 执行发布
+                  const post = {
+                    title: "Test post",
+                    description: "This a test post",
+                  } as Post
+                  const postRes = await plugin.publish(post, {
+                    publishConfig: {
+                      platformConfig: item,
+                      blogConfig: {} as BlogConfig,
+                    },
+                  })
+                  if (!postRes.success) {
+                    const errorMsg = `Failed to publish post: ${postRes.error?.message}`
+                    logger.error(errorMsg)
+                    throw new Error(errorMsg)
+                  }
+                  const postId = postRes.data
+                  logger.info(`Post published successfully with ID: ${postId}`)
+                } catch (e: any) {
+                  logger.error(`Quick publish failed: ${e}`)
+                  throw new Error(`Quick publish failed: ${e}`)
+                }
               },
             },
             {
@@ -126,17 +104,24 @@ const unregisterPublishSettingStore = publishSettingStore.registerOnInit(async (
               label: t("publish.normal"),
               handler: async (event: MouseEvent, platform: AbstractPlatform) => {
                 event.stopPropagation()
-                // try {
-                //   const plugin = getPlugin(platform.platformType)
-                //   if (!plugin) {
-                //     throw new Error(
-                //       `Plugin not found: ${platform.platformType}`,
-                //     )
-                //   }
-                //   // TODO: 实现普通发布逻辑
-                // } catch (e: any) {
-                //   logger.error(`Normal publish failed: ${e}`)
-                // }
+                try {
+                  // 加载插件
+                  const pluginPath = "wordpress/index.js"
+                  const result = await loadPlugin(pluginPath)
+                  if (result.error) {
+                    throw new Error(`Failed to load plugin from ${pluginPath}: ${result.error}`)
+                  }
+
+                  // 读取插件元数据
+                  const plugin = getPlugin(item.platformKey)
+                  if (!plugin) {
+                    throw new Error(`Plugin not found: ${item.platformKey}`)
+                  }
+
+                  // TODO: 实现普通发布逻辑
+                } catch (e: any) {
+                  logger.error(`Normal publish failed: ${e}`)
+                }
               },
             },
           ],
@@ -147,14 +132,6 @@ const unregisterPublishSettingStore = publishSettingStore.registerOnInit(async (
 onMounted(async () => {
   await publishSettingStore.doInit()
   logger.debug("publish setting init")
-
-  // 加载插件
-  // try {
-  //   await loadPlugin("/plugins/wordpress/index.js")
-  //   logger.info("WordPress plugin loaded")
-  // } catch (e: any) {
-  //   logger.error(`Failed to load WordPress plugin: ${e}`)
-  // }
 })
 
 // 组件卸载时注销回调

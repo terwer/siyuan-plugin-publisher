@@ -21,7 +21,6 @@ export const usePlugin = () => {
   const loader = PluginLoaderManager.getInstance()
   const hookManager = HookManager.getInstance()
   const loading = ref(false)
-  const error = ref<string | null>(null)
 
   // 初始化全局 Hook
   const initGlobalHooks = () => {
@@ -30,6 +29,7 @@ export const usePlugin = () => {
   }
 
   const loadAllPlugins = async (pluginPaths: string) => {
+    loading.value = true
     for (const path of pluginPaths) {
       try {
         await loadPlugin(path)
@@ -37,22 +37,15 @@ export const usePlugin = () => {
         logger.error(`Error loading plugin ${path}:`, e)
       }
     }
+    loading.value = false
   }
 
   const loadPlugin = async (pluginPath: string) => {
     loading.value = true
-    error.value = null
-
-    try {
-      await loader.loadPlugin(pluginPath)
-      logger.info(`Plugin loaded successfully: ${pluginPath}`)
-    } catch (e: any) {
-      error.value = e.message
-      logger.error(`Failed to load plugin: ${e.message}`)
-      throw e
-    } finally {
-      loading.value = false
-    }
+    const result = await loader.loadPlugin(pluginPath)
+    logger.info(`Plugin loaded successfully: ${pluginPath}`)
+    loading.value = false
+    return result
   }
 
   const getPlugin = (id: string) => {
@@ -68,7 +61,6 @@ export const usePlugin = () => {
 
   return {
     loading,
-    error,
     loadPlugin,
     getPlugin,
     loadAllPlugins,

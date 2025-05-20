@@ -10,5 +10,5 @@
 /**
  * 插件基础路径
  */
-export const PLUGIN_BASE_PATH = "/plugins/siyuan-plugin-publisher"
+export const PLUGIN_BASE_PATH = "/plugins/siyuan-plugin-publisher/plugins"
 export const TAG_SPLIT = ","

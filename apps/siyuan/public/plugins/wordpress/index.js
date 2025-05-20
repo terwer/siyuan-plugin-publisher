@@ -14,10 +14,10 @@ const logger = {
 }
 
 export default {
-  id: "wordpress-publisher",
+  id: "wordpress_Wordpress",
   name: "WordPress",
+  group: "WordPress",
   version: "1.0.0",
-  platform: "wordpress_Wordpress",
   description: "100% 兼容 Metaweblog API 协议，支持 Metaweblog 及 WordPress 平台的发布、更新、删除、获取等全部操作。",
   author: "Terwer",
 
@@ -54,10 +54,10 @@ export default {
   },
 
   async init(config) {
-    logger.info("Initializing Metaweblog/WordPress plugin")
+    logger.info("Initializing WordPress plugin")
     logger.debug(`Config received: ${JSON.stringify(config)}`)
     this.config = config
-    logger.info("Metaweblog/WordPress plugin initialized")
+    logger.info("WordPress plugin initialized")
   },
 
   async publish(post) {

@@ -89,7 +89,7 @@ export class PluginLoaderManager implements PluginLoader {
     logger.info("All plugins cleared")
   }
 
-  async loadPlugin(pluginPath: string): Promise<{ success: boolean; error?: Error }> {
+  async loadPlugin(pluginPath: string): Promise<{ success: boolean; instance?: IPlugin; error?: Error }> {
     try {
       const fullPath = normalizePath(this.options.basePath!, pluginPath)
       logger.info(`Loading plugin from: ${fullPath}`)
@@ -119,7 +119,7 @@ export class PluginLoaderManager implements PluginLoader {
       // 4. 注册插件
       this.registerPlugin(plugin)
       logger.info(`Plugin loaded successfully: ${plugin.name}`)
-      return { success: true }
+      return { success: true, instance: plugin }
     } catch (e: any) {
       logger.error(`Failed to load plugin: ${JSON.stringify(e)}`)
       return { success: false, error: e }
