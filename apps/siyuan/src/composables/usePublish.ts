@@ -14,6 +14,8 @@ import { DynamicConfig } from "@/models/dynamicConfig.ts"
 import { DeepReadonly } from "vue"
 import { SypConfig } from "@/models/sypConfig.ts"
 import { PublishResult } from "@/plugin"
+import { HookStage } from "@/plugin"
+import { HookManager } from "@/plugin"
 
 /**
  * 发布相关的组合式函数
@@ -25,6 +27,7 @@ import { PublishResult } from "@/plugin"
 export const usePublish = () => {
   const logger = createAppLogger("use-publish")
   const { getPluginPath, loadPlugin, getPlugin } = usePlugin()
+  const hookManager = HookManager.getInstance()
 
   /**
    * 快速发布文章
@@ -40,7 +43,6 @@ export const usePublish = () => {
   ): Promise<PublishResult> => {
     try {
       // 加载插件
-      // const pluginPath = "wordpress/index.js"
       const pluginPath = getPluginPath(platformConfig)
       const result = await loadPlugin(pluginPath)
       if (result.error) {
@@ -53,9 +55,51 @@ export const usePublish = () => {
         throw new Error(`Plugin not found: ${platformConfig.platformKey}`)
       }
 
+      // 执行发布前的钩子
+      const beforeProcessResult = await hookManager.executeHooks(HookStage.BEFORE_PROCESS, {
+        id: platformConfig.platformKey,
+        config: {
+          platformConfig,
+          blogConfig: (publishSetting as Record<string, BlogConfig>)[platformConfig.platformKey] ?? {},
+        },
+        post,
+        data: {},
+      })
+      if (!beforeProcessResult.success) {
+        throw new Error(`Before process hook failed: ${beforeProcessResult.error?.message}`)
+      }
+
+      // 执行内容处理后的钩子
+      const afterProcessResult = await hookManager.executeHooks(HookStage.AFTER_PROCESS, {
+        id: platformConfig.platformKey,
+        config: {
+          platformConfig,
+          blogConfig: (publishSetting as Record<string, BlogConfig>)[platformConfig.platformKey] ?? {},
+        },
+        post: beforeProcessResult.data.post,
+        data: beforeProcessResult.data.data,
+      })
+      if (!afterProcessResult.success) {
+        throw new Error(`After process hook failed: ${afterProcessResult.error?.message}`)
+      }
+
+      // 执行发布前的钩子
+      const beforePublishResult = await hookManager.executeHooks(HookStage.BEFORE_PUBLISH, {
+        id: platformConfig.platformKey,
+        config: {
+          platformConfig,
+          blogConfig: (publishSetting as Record<string, BlogConfig>)[platformConfig.platformKey] ?? {},
+        },
+        post: afterProcessResult.data.post,
+        data: afterProcessResult.data.data,
+      })
+      if (!beforePublishResult.success) {
+        throw new Error(`Before publish hook failed: ${beforePublishResult.error?.message}`)
+      }
+
       // 执行发布
       const blogConfig = (publishSetting as Record<string, BlogConfig>)[platformConfig.platformKey] ?? {}
-      const postRes = await plugin.publish(post, {
+      const postRes = await plugin.publish(beforePublishResult.data.post, {
         publishConfig: {
           platformConfig,
           blogConfig: blogConfig,
@@ -66,6 +110,24 @@ export const usePublish = () => {
         logger.error(errorMsg)
         throw new Error(errorMsg)
       }
+
+      // 执行发布后的钩子
+      const afterPublishResult = await hookManager.executeHooks(HookStage.AFTER_PUBLISH, {
+        id: platformConfig.platformKey,
+        config: {
+          platformConfig,
+          blogConfig: (publishSetting as Record<string, BlogConfig>)[platformConfig.platformKey] ?? {},
+        },
+        post: beforePublishResult.data.post,
+        data: {
+          postId: postRes.data,
+          ...beforePublishResult.data.data,
+        },
+      })
+      if (!afterPublishResult.success) {
+        logger.warn(`After publish hook failed: ${afterPublishResult.error?.message}`)
+      }
+
       const postId = postRes.data
       logger.info(`Post published successfully with ID: ${postId}`)
       return postRes

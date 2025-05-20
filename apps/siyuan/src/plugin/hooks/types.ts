@@ -8,7 +8,7 @@
  */
 
 import { Post } from "zhi-blog-api"
-import { PublishConfig } from "@/models/publishConfig.ts"
+import { PublishConfig } from "@/models/publishConfig"
 
 export interface HookContext {
   id: string

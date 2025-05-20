@@ -13,7 +13,7 @@ import { IPlugin } from "@/plugin"
 import { createAppLogger } from "@utils/appLogger.ts"
 import { HookManager } from "@/plugin"
 import { HookStage } from "@/plugin"
-import { beforeProcessHook, beforePublishHook } from "@/plugin"
+import { beforeProcessHook, beforePublishHook, afterProcessHook } from "@/plugin"
 import { StrUtil } from "zhi-common"
 import { legencyPlatformMap } from "@/presets/platformTemplates.ts"
 import { DynamicConfig } from "@/models/dynamicConfig.ts"
@@ -28,6 +28,7 @@ export const usePlugin = () => {
   // 初始化全局 Hook
   const initGlobalHooks = () => {
     hookManager.registerGlobalHook(HookStage.BEFORE_PROCESS, beforeProcessHook)
+    hookManager.registerGlobalHook(HookStage.AFTER_PROCESS, afterProcessHook)
     hookManager.registerGlobalHook(HookStage.BEFORE_PUBLISH, beforePublishHook)
   }
 
