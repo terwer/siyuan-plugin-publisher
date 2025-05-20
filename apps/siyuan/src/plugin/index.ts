@@ -13,8 +13,8 @@ export * from "./hooks/manager"
 export * from "./hooks/global"
 
 // 插件加载器相关导出
-// export * from "./loader/types"
-// export * from "./loader/manager"
+export * from "./loader/types"
+export * from "./loader/manager"
 
 // 插件类型定义
 export * from "./types/plugin"
