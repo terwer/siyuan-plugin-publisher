@@ -1,0 +1,23 @@
+{
+  "name": "siyuan-plugin-publisher-wordpress",
+  "version": "0.0.1",
+  "description": "WordPress publishing plugin for SiYuan",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "tsup --watch",
+    "build": "tsup",
+    "clean": "rimraf dist"
+  },
+  "dependencies": {
+    "siyuan-plugin-publisher-types": "workspace:*",
+    "zhi-blog-api": "^1.72.0"
+  },
+  "devDependencies": {
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3",
+    "rimraf": "^6.0.1"
+  }
+} 
