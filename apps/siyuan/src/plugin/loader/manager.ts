@@ -11,6 +11,8 @@ import { createAppLogger } from "@utils/appLogger.ts"
 import { IPlugin, PluginLoader, PluginLoaderOptions } from "siyuan-plugin-publisher-types"
 import { normalizePath } from "@utils/fileUtils.ts"
 import { PLUGIN_BASE_PATH } from "@/plugin/constants/PluginConstants.ts"
+import { SiyuanConfig, SiyuanKernelApi } from "zhi-siyuan-api"
+import { useSiyuanSettingStore } from "@stores/useSiyuanSettingStore.ts"
 
 const logger = createAppLogger("plugin-loader")
 
@@ -22,6 +24,7 @@ const logger = createAppLogger("plugin-loader")
  * @version 2.0.0
  */
 export class PluginLoaderManager implements PluginLoader {
+  private kernelApi: SiyuanKernelApi
   private static instance: PluginLoaderManager
   private plugins: Map<string, IPlugin> = new Map()
   private options: PluginLoaderOptions
@@ -32,6 +35,8 @@ export class PluginLoaderManager implements PluginLoader {
       autoLoad: false,
       ...options,
     }
+    const { readonlySiyuanCfg } = useSiyuanSettingStore()
+    this.kernelApi = new SiyuanKernelApi(readonlySiyuanCfg as SiyuanConfig)
   }
 
   static getInstance(options?: PluginLoaderOptions): PluginLoaderManager {
@@ -90,12 +95,31 @@ export class PluginLoaderManager implements PluginLoader {
 
   async loadPlugin(pluginPath: string): Promise<{ success: boolean; instance?: IPlugin; error?: Error }> {
     try {
+      // 1. 加载插件模块
       const fullPath = normalizePath(this.options.basePath!, pluginPath)
       logger.info(`Loading plugin from: ${fullPath}`)
 
-      // 1. 加载插件模块
-      const module = await import(fullPath)
-      const plugin = module.default
+      // 获取插件所在目录
+      let pluginDir = fullPath.substring(0, fullPath.lastIndexOf("/"))
+      if (pluginDir === "") {
+        pluginDir = "."
+      }
+
+      // 读取 package.json
+      const pkgPath = normalizePath("/data", pluginDir, "package.json")
+      const pkg = await this.kernelApi.getFile(pkgPath, "json")
+      logger.info(`Read plugin package.json:`, pkg)
+
+      // 动态加载插件文件
+      await import(fullPath)
+
+      // 新增：等待 window.pt[pkg.id] 出现，最多等待 5 秒
+      const plugin = await this.waitForPluginToLoad(pkg.id, 5000)
+      if (!plugin) {
+        const error = new Error(`Plugin did not load into window.pt within timeout: ${pkg.id}`)
+        logger.error(error.message)
+        return { success: false, error }
+      }
 
       // 2. 验证插件
       if (!this.validatePlugin(plugin)) {
@@ -135,5 +159,25 @@ export class PluginLoaderManager implements PluginLoader {
     }
 
     return true
+  }
+
+  private waitForPluginToLoad(id: string, timeout: number = 3000): Promise<IPlugin | null> {
+    return new Promise((resolve) => {
+      const startTime = Date.now()
+      const checkInterval = setInterval(() => {
+        const win = window as any
+        logger.debug("try get widnow.pt", win.pt)
+        if (win.pt === undefined) {
+          return
+        }
+        if (win.pt[id]) {
+          clearInterval(checkInterval)
+          resolve(win.pt[id])
+        } else if (Date.now() - startTime > timeout) {
+          clearInterval(checkInterval)
+          resolve(null)
+        }
+      }, 1000)
+    })
   }
 }

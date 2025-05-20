@@ -1,14 +1,15 @@
 import { IPlugin, PlatformCapabilities, PublishOptions, PublishResult } from "siyuan-plugin-publisher-types"
 import { Post } from "zhi-blog-api"
 import { AuthMode, PlatformType, SubPlatformType } from "siyuan-plugin-publisher-types"
+import * as pkg from "../package.json"
 
 export class WordPressPlugin implements IPlugin {
-  readonly id = "wordpress"
-  readonly name = "WordPress"
-  readonly group = "blog"
-  readonly version = "0.0.1"
-  readonly description = "WordPress publishing platform"
-  readonly author = "Terwer"
+  readonly id = pkg.id
+  readonly name = pkg.displayName || pkg.name
+  readonly group = pkg.group || "unknown"
+  readonly version = pkg.version
+  readonly description = pkg.description
+  readonly author = pkg.author
 
   readonly capabilities: PlatformCapabilities = {
     supportsCategories: true,
@@ -107,4 +108,7 @@ export class WordPressPlugin implements IPlugin {
   }
 }
 
-export default WordPressPlugin 
+// 创建插件实例并挂载到 window.pt 对象
+const plugin = new WordPressPlugin()
+window.pt = window.pt || {}
+window.pt[plugin.id] = plugin 
