@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "target": "ES5",
+    "target": "ES2024",
     "module": "ESNext",
-    "lib": ["ES5", "DOM"],
+    "lib": ["ES2024", "DOM"],
     "moduleResolution": "node",
     "esModuleInterop": true,
     "strict": true,

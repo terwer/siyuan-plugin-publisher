@@ -161,6 +161,9 @@ importers:
       '@swc/core':
         specifier: ^1.11.24
         version: 1.11.24
+      '@types/node':
+        specifier: ^20.17.48
+        version: 20.17.48
       rimraf:
         specifier: ^6.0.1
         version: 6.0.1

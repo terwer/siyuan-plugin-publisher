@@ -20,6 +20,7 @@
     "zhi-blog-api": "^1.72.0"
   },
   "devDependencies": {
+    "@types/node": "^20.17.48",
     "@swc/core": "^1.11.24",
     "rimraf": "^6.0.1",
     "tsup": "^8.5.0",

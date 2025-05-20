@@ -33,10 +33,10 @@ export default defineConfig({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || "production")
     }
   },
-  onSuccess: (options) => {
+  onSuccess: ((options) => {
     // 复制 package.json 到 dist 目录
     const sourcePath = resolve(__dirname, "package.json")
     const targetPath = resolve(outDir, "package.json")
     copyFileSync(sourcePath, targetPath)
-  }
+  }) as any
 }) 
