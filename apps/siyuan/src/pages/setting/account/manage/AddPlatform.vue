@@ -9,13 +9,8 @@
 
 <script setup lang="ts">
 import { DYNAMIC_CONFIG_KEY } from "@/Constants.ts"
-import {
-  AuthMode,
-  DynamicConfig,
-  generateUniquePlatformName,
-  getNewPlatformKey,
-  PlatformType,
-} from "@/models/dynamicConfig.ts"
+import { DynamicConfig, generateUniquePlatformName, getNewPlatformKey } from "@/models/dynamicConfig.ts"
+import { AuthMode, PlatformType } from "siyuan-plugin-publisher-types"
 import { DYNAMIC_CONFIG_TYPE, SypConfig } from "@/models/sypConfig.ts"
 import { findAllTemplates, findConfigByKey, platformGroups, platformTemplates } from "@/presets/platformTemplates.ts"
 import { alert } from "@components/Alert.ts"

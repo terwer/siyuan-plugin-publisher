@@ -13,9 +13,9 @@ import { BlogConfig, Post } from "zhi-blog-api"
 import { DynamicConfig } from "@/models/dynamicConfig.ts"
 import { DeepReadonly } from "vue"
 import { SypConfig } from "@/models/sypConfig.ts"
-import { PublishResult } from "@/plugin"
-import { HookStage } from "@/plugin"
-import { HookManager } from "@/plugin"
+import { HookStage, PublishResult } from "@/plugin"
+import { HookManager } from "@/plugin/hooks/manager.ts"
+import { PluginLoaderManager } from "@/plugin/loader/manager"
 
 /**
  * 发布相关的组合式函数
@@ -28,6 +28,7 @@ export const usePublish = () => {
   const logger = createAppLogger("use-publish")
   const { getPluginPath, loadPlugin, getPlugin } = usePlugin()
   const hookManager = HookManager.getInstance()
+  const pluginLoader = PluginLoaderManager.getInstance()
 
   /**
    * 快速发布文章
@@ -44,13 +45,13 @@ export const usePublish = () => {
     try {
       // 加载插件
       const pluginPath = getPluginPath(platformConfig)
-      const result = await loadPlugin(pluginPath)
-      if (result.error) {
+      const result = await pluginLoader.loadPlugin(pluginPath)
+      if (!result.success) {
         throw new Error(`Failed to load plugin from ${pluginPath}: ${result.error}`)
       }
 
-      // 读取插件元数据
-      const plugin = getPlugin(platformConfig.platformKey)
+      // 获取插件实例
+      const plugin = pluginLoader.getPlugin(platformConfig.platformKey)
       if (!plugin) {
         throw new Error(`Plugin not found: ${platformConfig.platformKey}`)
       }
@@ -98,11 +99,10 @@ export const usePublish = () => {
       }
 
       // 执行发布
-      const blogConfig = (publishSetting as Record<string, BlogConfig>)[platformConfig.platformKey] ?? {}
       const postRes = await plugin.publish(beforePublishResult.data.post, {
         publishConfig: {
           platformConfig,
-          blogConfig: blogConfig,
+          blogConfig: (publishSetting as Record<string, BlogConfig>)[platformConfig.platformKey] ?? {},
         },
       })
       if (!postRes.success) {

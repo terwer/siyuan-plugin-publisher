@@ -7,9 +7,10 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { AuthMode, DynamicConfig, PlatformType, SubPlatformType } from "@/models/dynamicConfig.ts"
+import { DynamicConfig } from "@/models/dynamicConfig.ts"
 import { svgIcons } from "@utils/svgIcons.ts"
 import { PLATFORM_CONSTANTS } from "@/presets/platformConstants.ts"
+import { AuthMode, PlatformType, SubPlatformType } from "siyuan-plugin-publisher-types"
 
 /**
  * 平台特殊配置

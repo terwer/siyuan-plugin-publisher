@@ -8,7 +8,8 @@
   -->
 
 <script setup lang="ts">
-import { DynamicConfig, PlatformType, SubPlatformType } from "@/models/dynamicConfig.ts"
+import { DynamicConfig } from "@/models/dynamicConfig.ts"
+import { PlatformType, SubPlatformType } from "siyuan-plugin-publisher-types"
 import { platformGroups, platformTemplates } from "@/presets/platformTemplates.ts"
 import BackPage from "@components/BackPage.vue"
 import Svg from "@components/Svg.vue"

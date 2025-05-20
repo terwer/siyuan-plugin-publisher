@@ -8,13 +8,13 @@
  */
 
 import { defineStore } from "pinia"
-import { IPlugin } from "@/plugin"
+import { IPlugin, IPluginConfig } from "siyuan-plugin-publisher-types"
 
 export const usePluginStore = defineStore("plugin", {
   state: () => ({
     plugins: [] as IPlugin[],
     activePlugin: null as string | null,
-    pluginConfigs: {} as Record<string, any>,
+    pluginConfigs: {} as Record<string, IPluginConfig>,
   }),
 
   actions: {
@@ -26,7 +26,7 @@ export const usePluginStore = defineStore("plugin", {
       this.activePlugin = id
     },
 
-    updatePluginConfig(id: string, config: any) {
+    updatePluginConfig(id: string, config: IPluginConfig) {
       this.pluginConfigs[id] = config
     },
   },

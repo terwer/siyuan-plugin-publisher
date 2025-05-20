@@ -5,7 +5,8 @@
   "type": "module",
   "author": "youweics@163.com",
   "scripts": {
-    "dev": "vite",
+    "serve": "vite",
+    "dev": "NODE_OPTIONS=--max-old-space-size=8192 vue-tsc -b && vite build --watch",
     "build": "NODE_OPTIONS=--max-old-space-size=8192 vue-tsc -b && vite build",
     "preview": "vite preview",
     "test": "vitest",
@@ -17,6 +18,7 @@
     "lucide-vue-next": "^0.503.0",
     "pinia": "^3.0.2",
     "shorthash2": "^1.0.5",
+    "siyuan-plugin-publisher-types": "workspace:*",
     "uuid": "^11.1.0",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0",

@@ -9,7 +9,8 @@
 
 <script setup lang="ts">
 import { DYNAMIC_CONFIG_KEY } from "@/Constants.ts"
-import { AuthMode, DynamicConfig } from "@/models/dynamicConfig.ts"
+import { DynamicConfig } from "@/models/dynamicConfig.ts"
+import { AuthMode } from "siyuan-plugin-publisher-types"
 import { AbstractPlatform } from "@/types"
 import PublishPlatformSelect from "@components/PublishPlatformSelect.vue"
 import { useI18n } from "@composables/useI18n.ts"

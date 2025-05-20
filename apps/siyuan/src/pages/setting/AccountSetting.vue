@@ -9,7 +9,8 @@
 
 <script setup lang="ts">
 import { DYNAMIC_CONFIG_KEY } from "@/Constants.ts"
-import { AuthMode, DynamicConfig } from "@/models/dynamicConfig.ts"
+import { DynamicConfig } from "@/models/dynamicConfig.ts"
+import { AuthMode } from "siyuan-plugin-publisher-types"
 import { alert } from "@components/Alert.ts"
 import { messageBox } from "@components/MessageBox.ts"
 import SettingPlatformSelect from "@components/SettingPlatformSelect.vue"

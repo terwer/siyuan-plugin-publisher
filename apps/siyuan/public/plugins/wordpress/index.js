@@ -1,71 +1,101 @@
-/*
- *            GNU GENERAL PUBLIC LICENSE
- *               Version 3, 29 June 2007
- *
- *  Copyright (C) 2025 Terwer, Inc. <https://terwer.space/>
- *  Everyone is permitted to copy and distribute verbatim copies
- *  of this license document, but changing it is not allowed.
- */
-
-const logger = {
-  info: (msg) => console.log(`[WordPress Plugin] INFO: ${msg}`),
-  error: (msg) => console.error(`[WordPress Plugin] ERROR: ${msg}`),
-  debug: (msg) => console.debug(`[WordPress Plugin] DEBUG: ${msg}`),
-}
-
-export default {
-  id: "wordpress_Wordpress",
-  name: "WordPress",
-  group: "WordPress",
-  version: "1.0.0",
-  description: "100% 兼容 Metaweblog API 协议，支持 Metaweblog 及 WordPress 平台的发布、更新、删除、获取等全部操作。",
-  author: "Terwer",
-
-  configSchema: {
-    type: "object",
-    properties: {
-      apiUrl: {
-        type: "string",
-        title: "API URL",
-        description: "Metaweblog/WordPress XML-RPC API URL",
+// src/index.ts
+import { AuthMode, PlatformType, SubPlatformType } from "siyuan-plugin-publisher-types";
+var WordPressPlugin = class {
+  constructor() {
+    this.id = "wordpress";
+    this.name = "WordPress";
+    this.group = "blog";
+    this.version = "0.0.1";
+    this.description = "WordPress publishing platform";
+    this.author = "Terwer";
+    this.capabilities = {
+      supportsCategories: true,
+      supportsTags: true,
+      supportsCustomFields: true,
+      supportsMediaUpload: true,
+      supportsDraft: true,
+      supportsScheduledPublish: true,
+      supportsCustomTemplates: true,
+      supportsCustomDomain: true,
+      supportsCustomCSS: true,
+      supportsCustomJS: true
+    };
+    this.configSchema = {
+      type: "object",
+      properties: {
+        endpoint: {
+          type: "string",
+          title: "WordPress REST API Endpoint",
+          description: "Your WordPress site's REST API endpoint (e.g., https://your-site.com/wp-json/wp/v2)"
+        },
+        username: {
+          type: "string",
+          title: "Username",
+          description: "WordPress username"
+        },
+        password: {
+          type: "string",
+          title: "Application Password",
+          description: "WordPress application password",
+          format: "password"
+        }
       },
-      username: {
-        type: "string",
-        title: "Username",
-        description: "Metaweblog/WordPress 用户名",
-      },
-      password: {
-        type: "string",
-        title: "Password",
-        format: "password",
-        description: "Metaweblog/WordPress 密码",
-      },
-    },
-  },
-
-  config: null,
-
-  validateConfig: (config) => {
-    // 验证配置
-    return {
-      valid: true,
-      error: null,
-    }
-  },
-
+      required: ["endpoint", "username", "password"]
+    };
+    this.defaultConfig = {
+      endpoint: "",
+      username: "",
+      password: ""
+    };
+    this.config = {};
+  }
   async init(config) {
-    logger.info("Initializing WordPress plugin")
-    logger.debug(`Config received: ${JSON.stringify(config)}`)
-    this.config = config
-    logger.info("WordPress plugin initialized")
-  },
-
-  async publish(post) {
-    logger.info("Publishing post to WordPress")
-    return {
-      success: true,
-      data: "test-post-id",
-      error: null,
+    this.config = { ...this.defaultConfig, ...config };
+  }
+  async destroy() {
+    this.config = {};
+  }
+  async publish(post, options) {
+    try {
+      return {
+        success: true,
+        data: "Post published successfully"
+      };
+    } catch (error) {
+      return {
+        success: false,
+        data: "Failed to publish to WordPress",
+        error: {
+          name: "WordPressPublishError",
+          code: "PUBLISH_ERROR",
+          message: error instanceof Error ? error.message : "Unknown error occurred"
+        }
+      };
     }
-  },
-}
+  }
+  getPlatformType() {
+    return PlatformType.Wordpress;
+  }
+  getSubPlatformType() {
+    return SubPlatformType.Wordpress_Wordpress;
+  }
+  getAuthMode() {
+    return AuthMode.API;
+  }
+  validateConfig(config) {
+    try {
+      return { valid: true };
+    } catch (error) {
+      return {
+        valid: false,
+        error: error instanceof Error ? error.message : "Invalid configuration"
+      };
+    }
+  }
+};
+var index_default = WordPressPlugin;
+export {
+  WordPressPlugin,
+  index_default as default
+};
+//# sourceMappingURL=index.js.map

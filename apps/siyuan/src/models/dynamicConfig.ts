@@ -9,6 +9,7 @@
 
 import sypIdUtil from "@utils/sypIdUtil.ts"
 import { StrUtil } from "zhi-common"
+import { IDynamicConfig, PlatformType, SubPlatformType, AuthMode } from "siyuan-plugin-publisher-types"
 
 /**
  * 通用平台类型
@@ -17,7 +18,7 @@ import { StrUtil } from "zhi-common"
  * @version 2.0.0
  * @since 0.1.0+
  */
-export class DynamicConfig {
+export class DynamicConfig implements IDynamicConfig {
   /**
    * 平台插件路径，2.0.0+
    *
@@ -127,111 +128,6 @@ export class DynamicConfig {
     this.subPlatformType = subPlatformType
     this.platformIcon = platformIcon
   }
-}
-
-/**
- * 授权模式
- */
-export enum AuthMode {
-  API = "api",
-  WEBSITE = "web",
-  NONE = "none",
-}
-
-/**
- * 动态平台类型枚举
- */
-export enum PlatformType {
-  /**
-   * 通用平台(Yuque)
-   */
-  Common = "Common",
-
-  /**
-   * Metaweblog
-   */
-  Metaweblog = "Metaweblog",
-
-  /**
-   * WordPress
-   */
-  Wordpress = "Wordpress",
-
-  /**
-   * GitHub(Hugo、Hexo、Jekyll、Vuepress、Vitepress、Nuxt content、Next.js)
-   */
-  Github = "Github",
-
-  /**
-   * Gitlab
-   */
-  Gitlab = "Gitlab",
-
-  /**
-   * 自定义(zhihu)
-   */
-  Custom = "Custom",
-
-  /**
-   * 内置平台，仅内部使用，用户不能使用也不能更改(Siyuan)
-   */
-  System = "System",
-}
-
-/**
- * 平台子类型
- *
- * @since 0.1.0+
- * @author terwer
- */
-export enum SubPlatformType {
-  // Common
-  Common_Yuque = "Yuque",
-  Common_Notion = "Notion",
-  Common_Halo = "Halo",
-  Common_Telegraph = "Telegraph",
-
-  // Github 子平台
-  Github_Hexo = "Hexo",
-  Github_Hugo = "Hugo",
-  Github_Jekyll = "Jekyll",
-  Github_Vuepress = "Vuepress",
-  Github_Vuepress2 = "Vuepress2",
-  Github_Vitepress = "Vitepress",
-
-  // Gitlab 子平台
-  Gitlab_Hexo = "Gitlabhexo",
-  Gitlab_Hugo = "Gitlabhugo",
-  Gitlab_Jekyll = "Gitlabjekyll",
-  Gitlab_Vuepress = "Gitlabvuepress",
-  Gitlab_Vuepress2 = "Gitlabvuepress2",
-  Gitlab_Vitepress = "Gitlabvitepress",
-
-  // Metaweblog
-  Metaweblog_Metaweblog = "Metaweblog",
-  Metaweblog_Cnblogs = "Cnblogs",
-  Metaweblog_Typecho = "Typecho",
-  Metaweblog_Jvue = "Jvue",
-
-  // WordPress
-  Wordpress_Wordpress = "Wordpress",
-  Wordpress_Wordpressdotcom = "Wordpressdotcom",
-
-  // Custom
-  Custom_Zhihu = "Zhihu",
-  Custom_CSDN = "Csdn",
-  Custom_Wechat = "Wechat",
-  Custom_Jianshu = "Jianshu",
-  Custom_Juejin = "Juejin",
-  // Custom_Flowus = "Flowus",
-  Custom_Haloweb = "Haloweb",
-  Custom_Bilibili = "Bilibili",
-  Custom_Xiaohongshu = "Xiaohongshu",
-
-  // System
-  System_Siyuan = "Siyuan",
-
-  NONE = "none",
 }
 
 /**

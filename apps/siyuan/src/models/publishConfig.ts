@@ -8,7 +8,8 @@
  */
 
 import { BlogConfig } from "zhi-blog-api"
-import { DynamicConfig, PlatformType, SubPlatformType } from "@/models/dynamicConfig.ts"
+import { DynamicConfig } from "@/models/dynamicConfig.ts"
+import { PlatformType, SubPlatformType } from "siyuan-plugin-publisher-types"
 
 /**
  * 发布配置

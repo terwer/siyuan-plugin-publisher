@@ -7,7 +7,7 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { SubPlatformType } from "@/models/dynamicConfig.ts"
+import { SubPlatformType } from "siyuan-plugin-publisher-types"
 
 /**
  * 帮助文档

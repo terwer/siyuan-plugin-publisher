@@ -8,7 +8,7 @@
  */
 
 import { createAppLogger } from "@utils/appLogger.ts"
-import { GlobalHook, HookContext, HookResult, HookStage, PluginHook } from "./types"
+import { GlobalHook, HookContext, HookResult, HookStage, PluginHook } from "siyuan-plugin-publisher-types"
 import * as _ from "lodash-es"
 
 const logger = createAppLogger("hook-manager")

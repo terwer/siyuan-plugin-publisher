@@ -1,8 +1,5 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest"
-import { HookManager } from "@/plugin"
-import { HookStage, HookResult, HookContext } from "./types"
-import { Post } from "zhi-blog-api"
-import { PublishConfig } from "@/models/publishConfig.ts"
+import { HookManager } from "@/plugin/hooks/manager.ts"
 
 describe("HookManager", () => {
   let hookManager: HookManager

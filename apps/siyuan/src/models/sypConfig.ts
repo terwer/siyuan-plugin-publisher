@@ -61,7 +61,19 @@ class SypConfig implements ISypConfig {
   lang?: "zh_CN" | "en_US";
 
   // 动态配置
-  [DYNAMIC_CONFIG_KEY]?: DYNAMIC_CONFIG_TYPE
+  [DYNAMIC_CONFIG_KEY]?: DYNAMIC_CONFIG_TYPE;
+
+  [key: string]:
+    | BlogConfig
+    | DYNAMIC_CONFIG_TYPE
+    | "zh_CN"
+    | "en_US"
+    | string
+    | number
+    | boolean
+    | Record<string, unknown>
+    | null
+    | undefined
 
   constructor() {
     this.lang = DEFAULT_SIYUAN_LANG as "zh_CN" | "en_US"

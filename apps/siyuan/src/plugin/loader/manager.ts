@@ -8,8 +8,7 @@
  */
 
 import { createAppLogger } from "@utils/appLogger.ts"
-import { IPlugin } from "@/plugin"
-import { PluginLoader, PluginLoaderOptions } from "./types"
+import { IPlugin, PluginLoader, PluginLoaderOptions } from "siyuan-plugin-publisher-types"
 import { normalizePath } from "@utils/fileUtils.ts"
 import { PLUGIN_BASE_PATH } from "@/plugin/constants/PluginConstants.ts"
 

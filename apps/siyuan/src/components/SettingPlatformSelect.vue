@@ -8,7 +8,7 @@
   -->
 
 <script setup lang="ts">
-import { AuthMode } from "@/models/dynamicConfig.ts"
+import { AuthMode } from "siyuan-plugin-publisher-types"
 import { AbstractPlatform } from "@/types"
 import Button from "@components/Button.vue"
 import Svg from "@components/Svg.vue"

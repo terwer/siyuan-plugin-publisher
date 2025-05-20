@@ -8,7 +8,7 @@
  */
 
 import { createAppLogger } from "@utils/appLogger.ts"
-import { HookContext, HookResult } from "./types"
+import { HookContext, HookResult } from "siyuan-plugin-publisher-types"
 import { TAG_SPLIT } from "@/plugin/constants/PluginConstants.ts"
 import { Post } from "zhi-blog-api"
 

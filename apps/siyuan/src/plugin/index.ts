@@ -7,14 +7,8 @@
  *  of this license document, but changing it is not allowed.
  */
 
-// Hook 相关导出
-export * from "./hooks/types"
-export * from "./hooks/manager"
-export * from "./hooks/global"
+// 从 siyuan-plugin-publisher-types 导入所有类型
+export * from "siyuan-plugin-publisher-types"
 
-// 插件加载器相关导出
-export * from "./loader/types"
+// 导出插件加载器
 export * from "./loader/manager"
-
-// 插件类型定义
-export * from "./types/plugin"
