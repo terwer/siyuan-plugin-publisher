@@ -26,6 +26,12 @@ export const specialPlatformConfig = {
   headersMap: {},
 }
 
+// 这里要兼容旧的代码支持新的插件体系
+const legencyPlatformMap = new Map<SubPlatformType, string>()
+legencyPlatformMap.set(SubPlatformType.Wordpress_Wordpress, "wordpress/index.js")
+legencyPlatformMap.set(SubPlatformType.Wordpress_Wordpressdotcom, "wordpress-dot-com/index.js")
+export { legencyPlatformMap }
+
 /**
  * 平台分组定义
  */

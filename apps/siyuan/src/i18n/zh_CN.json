@@ -51,7 +51,9 @@
   "publish": {
     "publish": "文档发布",
     "quick": "极速发布",
-    "normal": "常规发布"
+    "normal": "常规发布",
+    "quickSuccess": "发布成功",
+    "quickFailed": "发布失败："
   },
   "account": {
     "account": "账号设置",

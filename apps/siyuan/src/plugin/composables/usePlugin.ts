@@ -14,6 +14,9 @@ import { createAppLogger } from "@utils/appLogger.ts"
 import { HookManager } from "@/plugin"
 import { HookStage } from "@/plugin"
 import { beforeProcessHook, beforePublishHook } from "@/plugin"
+import { StrUtil } from "zhi-common"
+import { legencyPlatformMap } from "@/presets/platformTemplates.ts"
+import { DynamicConfig } from "@/models/dynamicConfig.ts"
 
 const logger = createAppLogger("use-plugin")
 
@@ -40,6 +43,13 @@ export const usePlugin = () => {
     loading.value = false
   }
 
+  const getPluginPath = (platformConfig: DynamicConfig): string => {
+    const pluginPath = StrUtil.isEmptyString(platformConfig.pluginPath)
+      ? (legencyPlatformMap.get(platformConfig.subPlatformType) as string)
+      : platformConfig.pluginPath
+    return pluginPath ?? "unknown"
+  }
+
   const loadPlugin = async (pluginPath: string) => {
     loading.value = true
     const result = await loader.loadPlugin(pluginPath)
@@ -61,6 +71,7 @@ export const usePlugin = () => {
 
   return {
     loading,
+    getPluginPath,
     loadPlugin,
     getPlugin,
     loadAllPlugins,

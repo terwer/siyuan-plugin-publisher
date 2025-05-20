@@ -17,13 +17,15 @@ import { usePublishSettingStore } from "@stores/usePublishSettingStore.ts"
 import { createAppLogger } from "@utils/appLogger.ts"
 import { cloneDeep } from "lodash-es"
 import { Clock, Zap } from "lucide-vue-next"
-import { onMounted, onUnmounted, ref } from "vue"
+import { DeepReadonly, onMounted, onUnmounted, ref } from "vue"
 import { TabEnum } from "@enums/TabEnum.ts"
-import { usePlugin } from "@/plugin/composables/usePlugin.ts"
-import { BlogConfig, Post } from "zhi-blog-api"
+import { Post } from "zhi-blog-api"
+import { usePublish } from "@composables/usePublish.ts"
+import { SypConfig } from "@/models/sypConfig.ts"
+import { alert } from "@components/Alert.ts"
 
 const publishSettingStore = usePublishSettingStore()
-const { loadPlugin, getPlugin } = usePlugin()
+const { quickPublish, normalPublish } = usePublish()
 
 const props = defineProps<{
   pluginInstance: any
@@ -35,11 +37,10 @@ const { t } = useI18n(props.pluginInstance)
 
 const platforms = ref<AbstractPlatform[]>([])
 
-// const hookManager = HookManager.getInstance()
-
 // 注册初始化完成回调
 const unregisterPublishSettingStore = publishSettingStore.registerOnInit(async () => {
-  const totalCfg = cloneDeep(publishSettingStore.readonlyState[DYNAMIC_CONFIG_KEY]?.totalCfg)
+  const publishSetting = cloneDeep(publishSettingStore.readonlyState) as DeepReadonly<SypConfig>
+  const totalCfg = publishSetting[DYNAMIC_CONFIG_KEY]?.totalCfg
   platforms.value =
     totalCfg
       ?.filter((item: DynamicConfig) => {
@@ -61,40 +62,25 @@ const unregisterPublishSettingStore = publishSettingStore.registerOnInit(async (
               handler: async (event: MouseEvent, platform: AbstractPlatform) => {
                 event.stopPropagation()
                 try {
-                  // 加载插件
-                  const pluginPath = "wordpress/index.js"
-                  const result = await loadPlugin(pluginPath)
-                  if (result.error) {
-                    throw new Error(`Failed to load plugin from ${pluginPath}: ${result.error}`)
-                  }
-
-                  // 读取插件元数据
-                  const plugin = getPlugin(item.platformKey)
-                  if (!plugin) {
-                    throw new Error(`Plugin not found: ${item.platformKey}`)
-                  }
-
-                  // 执行发布
                   const post = {
                     title: "Test post",
                     description: "This a test post",
                   } as Post
-                  const postRes = await plugin.publish(post, {
-                    publishConfig: {
-                      platformConfig: item,
-                      blogConfig: {} as BlogConfig,
-                    },
+                  await quickPublish(post, item, publishSetting)
+                  void alert({
+                    title: t("publish.quick"),
+                    message: t("publish.quickSuccess"),
+                    type: "success",
+                    duration: 0,
                   })
-                  if (!postRes.success) {
-                    const errorMsg = `Failed to publish post: ${postRes.error?.message}`
-                    logger.error(errorMsg)
-                    throw new Error(errorMsg)
-                  }
-                  const postId = postRes.data
-                  logger.info(`Post published successfully with ID: ${postId}`)
                 } catch (e: any) {
                   logger.error(`Quick publish failed: ${e}`)
-                  throw new Error(`Quick publish failed: ${e}`)
+                  void alert({
+                    title: t("publish.quick"),
+                    message: t("publish.quickFailed") + e,
+                    type: "error",
+                    duration: 0,
+                  })
                 }
               },
             },
@@ -105,20 +91,11 @@ const unregisterPublishSettingStore = publishSettingStore.registerOnInit(async (
               handler: async (event: MouseEvent, platform: AbstractPlatform) => {
                 event.stopPropagation()
                 try {
-                  // 加载插件
-                  const pluginPath = "wordpress/index.js"
-                  const result = await loadPlugin(pluginPath)
-                  if (result.error) {
-                    throw new Error(`Failed to load plugin from ${pluginPath}: ${result.error}`)
-                  }
-
-                  // 读取插件元数据
-                  const plugin = getPlugin(item.platformKey)
-                  if (!plugin) {
-                    throw new Error(`Plugin not found: ${item.platformKey}`)
-                  }
-
-                  // TODO: 实现普通发布逻辑
+                  const post = {
+                    title: "Test post",
+                    description: "This a test post",
+                  } as Post
+                  await normalPublish(post, item, publishSetting)
                 } catch (e: any) {
                   logger.error(`Normal publish failed: ${e}`)
                 }

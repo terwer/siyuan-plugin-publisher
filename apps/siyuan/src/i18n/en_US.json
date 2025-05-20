@@ -51,7 +51,9 @@
   "publish": {
     "publish": "Publish",
     "quick": "Quick",
-    "normal": "Normal"
+    "normal": "Normal",
+    "quickSuccess": "Published successfully",
+    "quickFailed": "Publish failed: "
   },
   "account": {
     "account": "Account",

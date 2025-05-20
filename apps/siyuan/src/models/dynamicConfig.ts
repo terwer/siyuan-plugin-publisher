@@ -19,6 +19,15 @@ import { StrUtil } from "zhi-common"
  */
 export class DynamicConfig {
   /**
+   * 平台插件路径，2.0.0+
+   *
+   * @author terwer
+   * @version 2.0.0
+   * @since 2.0.0
+   */
+  pluginPath: string
+
+  /**
    * 动态平台类型(通用类型)
    */
   platformType: PlatformType
@@ -102,6 +111,7 @@ export class DynamicConfig {
     subPlatformType: SubPlatformType,
     platformIcon?: string,
   ) {
+    this.pluginPath = "unknown"
     this.platformType = platformType
     this.platformKey = platformKey
     this.platformName = platformName

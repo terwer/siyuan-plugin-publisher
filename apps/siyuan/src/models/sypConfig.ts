@@ -9,6 +9,7 @@
 
 import { DEFAULT_SIYUAN_LANG, DYNAMIC_CONFIG_KEY } from "@/Constants.ts"
 import { DynamicConfig } from "@/models/dynamicConfig.ts"
+import { BlogConfig } from "zhi-blog-api"
 
 export interface DYNAMIC_CONFIG_TYPE {
   totalCfg: DynamicConfig[]
@@ -36,7 +37,17 @@ interface ISypConfig {
   //  [动态平台2postid的key]: 对应平台的文章ID
   // }
 
-  [key: string]: any
+  [key: string]:
+    | BlogConfig
+    | DYNAMIC_CONFIG_TYPE
+    | "zh_CN"
+    | "en_US"
+    | string
+    | number
+    | boolean
+    | null
+    | undefined
+    | Record<string, unknown>
 }
 
 /**
@@ -54,7 +65,16 @@ class SypConfig implements ISypConfig {
 
   constructor() {
     this.lang = DEFAULT_SIYUAN_LANG as "zh_CN" | "en_US"
-    this[DYNAMIC_CONFIG_KEY] = {} as any
+    this[DYNAMIC_CONFIG_KEY] = {
+      totalCfg: [],
+      commonCfg: [],
+      metaweblogCfg: [],
+      wordpressCfg: [],
+      githubCfg: [],
+      gitlabCfg: [],
+      customCfg: [],
+      systemCfg: [],
+    }
   }
 }
 
