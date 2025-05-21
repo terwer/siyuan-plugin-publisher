@@ -17,6 +17,7 @@ import * as _ from "lodash-es"
 import { WINDOW_SIYUAN } from "@/Constants.ts"
 import { useProxyFetch } from "@composables/useProxyFetch.ts"
 import { getTemplatePlatformKey } from "@/models/dynamicConfig.ts"
+import { StrUtil } from "zhi-common"
 
 const logger = createAppLogger("plugin-loader")
 
@@ -209,5 +210,6 @@ export class PluginLoaderManager implements PluginLoader {
     })
     mountPtAttr("api.util.fetch", this.proxyFetch)
     mountPtAttr("api.util.Lodash", _)
+    mountPtAttr("api.util.StrUtil", StrUtil)
   }
 }

@@ -25,7 +25,6 @@ export interface PtApiLogger {
 
 export interface PtApiUtil {
     initLogger(moduleName: string): PtApiLogger;
-    Lodash: typeof _;
     fetch: (
         url: string,
         options?: {
@@ -37,6 +36,9 @@ export interface PtApiUtil {
             responseEncoding?: "text" | "base64" | "base64-std" | "base64-url" | "base32" | "base32-std" | "base32-hex" | "hex";
         }
     ) => Promise<Response>;
+    Lodash: typeof _;
+    // node_modules/.pnpm/zhi-common@1.33.1_typescript@5.7.3/node_modules/zhi-common/dist/lib/strUtil.d.ts
+    StrUtil: any
 }
 
 export interface SiyuanApi{
@@ -56,6 +58,7 @@ export interface PluginApi {
     util: {
         fetch: typeof window.pt.api.util.fetch
         Lodash: typeof window.pt.api.util.Lodash
+        StrUtil: any
     }
 }
 

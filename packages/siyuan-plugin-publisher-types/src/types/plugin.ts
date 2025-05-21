@@ -7,7 +7,7 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { Post } from "zhi-blog-api"
+import {BlogConfig, Post} from "zhi-blog-api"
 import { HookStage, PluginHook } from "./hooks"
 import { AuthMode, PlatformType, SubPlatformType} from "./platform";
 import {IPublishConfig} from "./config";
@@ -121,4 +121,5 @@ export interface IPlugin {
   getPlatformType(): PlatformType
   getSubPlatformType(): SubPlatformType
   getAuthMode(): AuthMode
+  migrateConfig(legencyBlogConfig: BlogConfig, blogConfig: Record<string, any>): void;
 }

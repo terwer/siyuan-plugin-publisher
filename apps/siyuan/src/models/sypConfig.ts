@@ -7,7 +7,7 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { DEFAULT_SIYUAN_LANG, DYNAMIC_CONFIG_KEY } from "@/Constants.ts"
+import { BLOG_CONFIG_KEY, DEFAULT_SIYUAN_LANG, DYNAMIC_CONFIG_KEY } from "@/Constants.ts"
 import { DynamicConfig } from "@/models/dynamicConfig.ts"
 import { BlogConfig } from "zhi-blog-api"
 
@@ -22,15 +22,23 @@ export interface DYNAMIC_CONFIG_TYPE {
   systemCfg: DynamicConfig[]
 }
 
+export interface BLOG_CONFIG_TYPE {
+  [key: string]: Record<string, any>
+}
+
 interface ISypConfig {
   lang?: "zh_CN" | "en_US"
 
-  // 平台总的集合
+  // 平台配置集合
   [DYNAMIC_CONFIG_KEY]?: DYNAMIC_CONFIG_TYPE
 
+  // 博客配置集合
+  // @deprecated since 2.0.0
   // [平台key1]: {平台配置1}
   // [平台key2]: {平台配置2}
+  [BLOG_CONFIG_KEY]?: BLOG_CONFIG_TYPE
 
+  // 文档信息集合
   // [siyuan文档ID]: {
   //  [custom-slug]: 初始化生成，初始化可读取siyuan属性，但是之后不能再修改
   //  [动态平台1postid的key]: 对应平台的文章ID
@@ -40,6 +48,7 @@ interface ISypConfig {
   [key: string]:
     | BlogConfig
     | DYNAMIC_CONFIG_TYPE
+    | BLOG_CONFIG_TYPE
     | "zh_CN"
     | "en_US"
     | string
@@ -62,6 +71,8 @@ class SypConfig implements ISypConfig {
 
   // 动态配置
   [DYNAMIC_CONFIG_KEY]?: DYNAMIC_CONFIG_TYPE;
+  // 博客配置
+  [BLOG_CONFIG_KEY]?: BLOG_CONFIG_TYPE;
 
   [key: string]:
     | BlogConfig

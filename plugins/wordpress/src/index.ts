@@ -1,5 +1,12 @@
-import { AuthMode, BasePlugin, PlatformType, PublishOptions, PublishResult, SubPlatformType } from "siyuan-plugin-publisher-types"
-import { Post } from "zhi-blog-api"
+import {
+  AuthMode,
+  BasePlugin,
+  PlatformType,
+  PublishOptions,
+  PublishResult,
+  SubPlatformType,
+} from "siyuan-plugin-publisher-types"
+import { BlogConfig, Post } from "zhi-blog-api"
 import * as pkg from "../package.json"
 
 export class WordPressPlugin extends BasePlugin {
@@ -57,37 +64,38 @@ export class WordPressPlugin extends BasePlugin {
 
   async publish(post: Post, options?: PublishOptions): Promise<PublishResult> {
     try {
-      this.logger.info("Publishing post:", post.title)
-      this.logger.debug("ull post content:", post)
-      // TODO: 实现发布逻辑
+      const util = this.api.util
 
-      this.logger.info("test siyuan api",this.api.siyuan)
-      this.api.siyuan.kernelApi.pushMsg(
-          {
-            "msg": "test",
-            "timeout": 7000
-          }
-      )
+      const blogCfg = options!.publishConfig.blogConfig! as typeof this.defaultConfig
+      this.logger.info("blogCfg", blogCfg)
 
-      // === Lodash 测试开始 ===
-      const numbers = [1, 2, 3, 4, 5];
-      const doubled = this.api.util.Lodash.map(numbers, n => n * 2);
-      this.logger.info("Lodash test - Doubled numbers:", doubled);
-      // === Lodash 测试结束 ===
+      // this.logger.info("test siyuan api",this.api.siyuan)
+      // this.api.siyuan.kernelApi.pushMsg(
+      //     {
+      //       "msg": "test",
+      //       "timeout": 7000
+      //     }
+      // )
 
-      // === fetch 测试开始 ===
-      const res = await this.api.util.fetch("https://www.baidu.com", { contentType: "text/html" })
-      this.logger.info("fetch test", res)
-      // 读取 body
-      const resText =  res.body
-      this.logger.info("fetch test text", resText)
-      // 读取 headers
-      const headers = res.headers
-      Object.entries(headers).forEach(([key, value]) => {
-        this.logger.info(`${key}: ${value}`)
-      })
-      this.logger.info("res.headers", res.headers)
-      // === fetch 测试结束 ===
+      // // === Lodash 测试开始 ===
+      // const numbers = [1, 2, 3, 4, 5];
+      // const doubled = this.api.util.Lodash.map(numbers, n => n * 2);
+      // this.logger.info("Lodash test - Doubled numbers:", doubled);
+      // // === Lodash 测试结束 ===
+      //
+      // // === fetch 测试开始 ===
+      // const res = await this.api.util.fetch("https://www.baidu.com", { contentType: "text/html" })
+      // this.logger.info("fetch test", res)
+      // // 读取 body
+      // const resText =  res.body
+      // this.logger.info("fetch test text", resText)
+      // // 读取 headers
+      // const headers = res.headers
+      // Object.entries(headers).forEach(([key, value]) => {
+      //   this.logger.info(`${key}: ${value}`)
+      // })
+      // this.logger.info("res.headers", res.headers)
+      // // === fetch 测试结束 ===
 
       return {
         success: true,
@@ -104,6 +112,12 @@ export class WordPressPlugin extends BasePlugin {
         },
       }
     }
+  }
+
+  public migrateConfig(legencyBlogConfig: BlogConfig, blogConfig: typeof this.defaultConfig) {
+    this.migrateField(blogConfig, legencyBlogConfig, "endpoint", "apiUrl")
+    this.migrateField(blogConfig, legencyBlogConfig, "username", "username")
+    this.migrateField(blogConfig, legencyBlogConfig, "password", "password")
   }
 }
 

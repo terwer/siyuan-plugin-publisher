@@ -1,4 +1,4 @@
-import { Post } from "zhi-blog-api"
+import { BlogConfig, Post } from "zhi-blog-api"
 import {
   IPlugin,
   PlatformCapabilities,
@@ -9,20 +9,20 @@ import {
 } from "./types/plugin"
 import { AuthMode, PlatformType, SubPlatformType } from "./types/platform"
 import { HookStage, PluginHook } from "./types/hooks"
-import {ModuleLogger} from "./logger";
-import {mountPtAttr} from "./util";
-import {PluginApi, SiyuanApi} from "./types/global";
+import { ModuleLogger } from "./logger"
+import { mountPtAttr } from "./util"
+import { PluginApi, SiyuanApi } from "./types/global"
 
 export abstract class BasePlugin implements IPlugin {
-  readonly id: string =  this.constructor.name
+  readonly id: string = this.constructor.name
   readonly name: string = this.constructor.name
   readonly group: string = "unknown"
   readonly version: string = "unknown"
   readonly description: string = "unknown"
   readonly author: string = "unknown"
-  readonly platformType: PlatformType  =  PlatformType.Common
+  readonly platformType: PlatformType = PlatformType.Common
   readonly subPlatformType: SubPlatformType = SubPlatformType.NONE
-  readonly authMode: AuthMode =  AuthMode.NONE
+  readonly authMode: AuthMode = AuthMode.NONE
 
   protected config: Record<string, any> = {}
   public readonly capabilities: PlatformCapabilities = {
@@ -35,7 +35,7 @@ export abstract class BasePlugin implements IPlugin {
     supportsCustomTemplates: false,
     supportsCustomDomain: false,
     supportsCustomCSS: false,
-    supportsCustomJS: false
+    supportsCustomJS: false,
   }
   public readonly configSchema: Record<string, any> = {}
   public readonly defaultConfig: Record<string, any> = {}
@@ -50,7 +50,7 @@ export abstract class BasePlugin implements IPlugin {
       throw new Error("Plugin id is required.")
     }
     // 自动注册插件
-    mountPtAttr(`plugins.${pluginId}`, this);
+    mountPtAttr(`plugins.${pluginId}`, this)
     // 初始化日志
     this.logger = new ModuleLogger(pluginId)
     this.api = {
@@ -58,7 +58,8 @@ export abstract class BasePlugin implements IPlugin {
       util: {
         fetch: window.pt.api.util.fetch,
         Lodash: window.pt.api.util.Lodash,
-      }
+        StrUtil: window.pt.api.util.StrUtil,
+      },
     }
   }
 
@@ -123,6 +124,23 @@ export abstract class BasePlugin implements IPlugin {
         valid: false,
         error: error instanceof Error ? error.message : "Invalid configuration",
       }
+    }
+  }
+
+  migrateConfig(legencyBlogConfig: BlogConfig, blogConfig: Record<string, any>): void {}
+
+  protected migrateField<T extends keyof typeof BlogConfig>(
+      blogConfig: any,
+      legencyBlogConfig: BlogConfig,
+      field: string,
+      legacyFieldKey: keyof BlogConfig
+  ): void {
+    const util = this.api.util
+    if (
+        util.StrUtil.isEmptyString(blogConfig[field]) &&
+        !util.StrUtil.isEmptyString(legencyBlogConfig[legacyFieldKey])
+    ) {
+      blogConfig[field] = legencyBlogConfig[legacyFieldKey] as any
     }
   }
 }

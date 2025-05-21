@@ -16,6 +16,8 @@ import { SypConfig } from "@/models/sypConfig.ts"
 import { HookStage, PublishResult } from "@/plugin"
 import { HookManager } from "@/plugin/hooks/manager.ts"
 import { PluginLoaderManager } from "@/plugin/loader/manager"
+import { BLOG_CONFIG_KEY } from "@/Constants.ts"
+import * as _ from "lodash-es"
 
 /**
  * 发布相关的组合式函数
@@ -29,6 +31,22 @@ export const usePublish = () => {
   const { getPluginPath, loadPlugin, getPlugin } = usePlugin()
   const hookManager = HookManager.getInstance()
   const pluginLoader = PluginLoaderManager.getInstance()
+
+  const getBlogConfig = <T>(setting: DeepReadonly<SypConfig>, platformKey: string, legency: boolean): T => {
+    if (legency) {
+      const configMap = (setting as any)[platformKey]
+      if (!configMap || typeof configMap !== "object") {
+        return {} as T
+      }
+      return configMap as T
+    } else {
+      const configMap = (setting as any)[BLOG_CONFIG_KEY]
+      if (!configMap || typeof configMap !== "object") {
+        return {} as T
+      }
+      return ((configMap as Record<string, T>)[platformKey] ?? {}) as T
+    }
+  }
 
   /**
    * 快速发布文章
@@ -56,12 +74,21 @@ export const usePublish = () => {
         throw new Error(`Plugin not found: ${platformConfig.platformKey}`)
       }
 
+      // 解析相关配置
+      const legencyBlogConfig = getBlogConfig<BlogConfig>(publishSetting, platformConfig.platformKey, true)
+      const blogConfig = {} as Record<string, any>
+      const dbBlogConfig = getBlogConfig<Record<string, any>>(publishSetting, platformConfig.platformKey, false)
+      _.merge(blogConfig, plugin.defaultConfig, dbBlogConfig || {})
+      plugin.migrateConfig(legencyBlogConfig as BlogConfig, blogConfig)
+      logger.info("Migrate blog config for", plugin.id)
+
       // 执行发布前的钩子
       const beforeProcessResult = await hookManager.executeHooks(HookStage.BEFORE_PROCESS, {
         id: platformConfig.platformKey,
         config: {
           platformConfig,
-          blogConfig: (publishSetting as Record<string, BlogConfig>)[platformConfig.platformKey] ?? {},
+          legencyBlogConfig,
+          blogConfig,
         },
         post,
         data: {},
@@ -75,7 +102,8 @@ export const usePublish = () => {
         id: platformConfig.platformKey,
         config: {
           platformConfig,
-          blogConfig: (publishSetting as Record<string, BlogConfig>)[platformConfig.platformKey] ?? {},
+          legencyBlogConfig,
+          blogConfig,
         },
         post: beforeProcessResult.data.post,
         data: beforeProcessResult.data.data,
@@ -89,7 +117,8 @@ export const usePublish = () => {
         id: platformConfig.platformKey,
         config: {
           platformConfig,
-          blogConfig: (publishSetting as Record<string, BlogConfig>)[platformConfig.platformKey] ?? {},
+          legencyBlogConfig,
+          blogConfig,
         },
         post: afterProcessResult.data.post,
         data: afterProcessResult.data.data,
@@ -102,7 +131,8 @@ export const usePublish = () => {
       const postRes = await plugin.publish(beforePublishResult.data.post, {
         publishConfig: {
           platformConfig,
-          blogConfig: (publishSetting as Record<string, BlogConfig>)[platformConfig.platformKey] ?? {},
+          legencyBlogConfig,
+          blogConfig,
         },
       })
       if (!postRes.success) {
@@ -116,7 +146,8 @@ export const usePublish = () => {
         id: platformConfig.platformKey,
         config: {
           platformConfig,
-          blogConfig: (publishSetting as Record<string, BlogConfig>)[platformConfig.platformKey] ?? {},
+          legencyBlogConfig,
+          blogConfig,
         },
         post: beforePublishResult.data.post,
         data: {
@@ -147,21 +178,7 @@ export const usePublish = () => {
    */
   const normalPublish = async (post: Post, platformConfig: DynamicConfig, publishSetting: DeepReadonly<SypConfig>) => {
     try {
-      // 加载插件
-      const pluginPath = getPluginPath(platformConfig)
-      const result = await loadPlugin(pluginPath)
-      if (result.error) {
-        throw new Error(`Failed to load plugin from ${pluginPath}: ${result.error}`)
-      }
-
-      // 读取插件元数据
-      const plugin = getPlugin(platformConfig.platformKey)
-      if (!plugin) {
-        throw new Error(`Plugin not found: ${platformConfig.platformKey}`)
-      }
-
-      // TODO: 实现普通发布逻辑
-      return null
+      return quickPublish(post, platformConfig, publishSetting)
     } catch (e: any) {
       logger.error(`Normal publish failed: ${e}`)
       throw new Error(`Normal publish failed: ${e}`)

@@ -23,8 +23,14 @@ export interface IPublishConfig {
 
   /**
    * 博客配置
+   * @deprecated 2.0.0 使用动态配置，不统一，仅用于迁移
    */
-  readonly blogConfig: BlogConfig
+  readonly legencyBlogConfig: BlogConfig
+
+  /**
+   * 博客配置
+   */
+  readonly blogConfig: Record<string, any>
 }
 
 /**

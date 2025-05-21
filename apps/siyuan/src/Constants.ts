@@ -37,8 +37,14 @@ export const IS_ENGLISH = DEFAULT_SIYUAN_LANG === "en_US"
 // 发布相关
 /**
  * 动态配置key，全系统唯一，请勿更改
+ *
+ * 2.0.0 新增BLOG_CONFIG_KEY，动态存储，之前保留
  */
 export const DYNAMIC_CONFIG_KEY = "dynamic-config"
+/**
+ * 平台配置key，全系统唯一，请勿更改
+ */
+export const BLOG_CONFIG_KEY = "blog-config"
 /**
  * 根节点id
  */
