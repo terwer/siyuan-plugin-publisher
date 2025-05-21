@@ -111,53 +111,7 @@ export const useProxyFetch = () => {
       30000,
     )
     logger.debug("proxyFetch result =>", siyuanFetchResult)
-
-    if (!(siyuanFetchResult.status >= 200 && siyuanFetchResult.status < 300)) {
-      // 兼容 CSDN 错误提示
-      const bodyJson = JsonUtil.safeParse<any>(siyuanFetchResult?.body, {})
-      if (!StrUtil.isEmptyString(bodyJson?.msg)) {
-        throw new Error(bodyJson?.msg)
-      }
-      throw new Error(
-        StrUtil.decodeUnicodeToChinese(
-          StrUtil.isEmptyString(siyuanFetchResult?.body)
-            ? `Request error：${siyuanFetchResult.status}`
-            : siyuanFetchResult?.body,
-        ),
-      )
-    }
-
-    if (responseEncoding === "text") {
-      if (contentType === "application/json") {
-        const resText = siyuanFetchResult?.body
-        const resJson = JsonUtil.safeParse<any>(resText, {} as any)
-        logger.info("SiYuan proxy response json for content type:", contentType)
-        return new Response(JSON.stringify(resJson), {
-          headers: {
-            ...siyuanFetchResult.headers,
-            "Content-Type": "application/json",
-          },
-          status: siyuanFetchResult.status,
-          statusText: siyuanFetchResult.statusText,
-        })
-      } else if (contentType === "text/html" || contentType === "text/xml") {
-        const resText = siyuanFetchResult?.body
-        logger.info("SiYuan proxy response text for content type:", contentType)
-        return new Response(resText, {
-          headers: {
-            ...siyuanFetchResult.headers,
-            "Content-Type": contentType,
-          },
-          status: siyuanFetchResult.status,
-          statusText: siyuanFetchResult.statusText,
-        })
-      } else {
-        logger.info("SiYuan proxy directly response for content type:", contentType)
-        return siyuanFetchResult
-      }
-    } else {
-      return siyuanFetchResult
-    }
+    return siyuanFetchResult
   }
 
   return {
