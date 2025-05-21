@@ -26,6 +26,17 @@ export interface PtApiLogger {
 export interface PtApiUtil {
     initLogger(moduleName: string): PtApiLogger;
     Lodash: typeof _;
+    fetch: (
+        url: string,
+        options?: {
+            headers?: any[];
+            params?: any;
+            method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
+            contentType?: string;
+            payloadEncoding?: "text" | "base64" | "base64-std" | "base64-url" | "base32" | "base32-std" | "base32-hex" | "hex";
+            responseEncoding?: "text" | "base64" | "base64-std" | "base64-url" | "base32" | "base32-std" | "base32-hex" | "hex";
+        }
+    ) => Promise<Response>;
 }
 
 export interface SiyuanApi{
@@ -43,6 +54,7 @@ export interface PtApi {
 export interface PluginApi {
     siyuan: SiyuanApi,
     util: {
+        fetch: typeof window.pt.api.util.fetch
         Lodash: typeof window.pt.api.util.Lodash
     }
 }

@@ -75,6 +75,14 @@ export class WordPressPlugin extends BasePlugin {
       this.logger.info("Lodash test - Doubled numbers:", doubled);
       // === Lodash 测试结束 ===
 
+      const res = await this.api.util.fetch("https://www.baidu.com", { contentType: "text/html" })
+      this.logger.info("fetch test", res)
+      const resText = await res.text()
+      this.logger.info("fetch test text", resText)
+      res.headers.forEach((value, key) => {
+        this.logger.info(`${key}: ${value}`)
+      })
+
       return {
         success: true,
         data: "Post published successfully",

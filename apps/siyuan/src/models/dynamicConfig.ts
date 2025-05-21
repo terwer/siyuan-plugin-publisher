@@ -265,6 +265,10 @@ export function setDynamicJsonCfg(dynamicConfigArray: DynamicConfig[]): DynamicJ
 // =====================
 // 动态平台key规则
 // =====================
+export function getTemplatePlatformKey(key: string): string {
+  return key.split("-")[0]
+}
+
 export function getSubPlatformTypeByKey(key: string): SubPlatformType {
   const keyParts = key.split("-")
   let subtype = ""

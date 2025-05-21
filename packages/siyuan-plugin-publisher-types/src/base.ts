@@ -56,6 +56,7 @@ export abstract class BasePlugin implements IPlugin {
     this.api = {
       siyuan: window.pt.api.siyuan,
       util: {
+        fetch: window.pt.api.util.fetch,
         Lodash: window.pt.api.util.Lodash,
       }
     }

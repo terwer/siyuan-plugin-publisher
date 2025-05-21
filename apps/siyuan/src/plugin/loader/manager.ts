@@ -15,6 +15,8 @@ import { SiyuanConfig, SiyuanKernelApi } from "zhi-siyuan-api"
 import { useSiyuanSettingStore } from "@stores/useSiyuanSettingStore.ts"
 import * as _ from "lodash-es"
 import { WINDOW_SIYUAN } from "@/Constants.ts"
+import { useProxyFetch } from "@composables/useProxyFetch.ts"
+import { getTemplatePlatformKey } from "@/models/dynamicConfig.ts"
 
 const logger = createAppLogger("plugin-loader")
 
@@ -26,7 +28,8 @@ const logger = createAppLogger("plugin-loader")
  * @version 2.0.0
  */
 export class PluginLoaderManager implements PluginLoader {
-  private kernelApi: SiyuanKernelApi
+  private readonly kernelApi: SiyuanKernelApi
+  private readonly proxyFetch: any
   private static instance: PluginLoaderManager
   private plugins: Map<string, IPlugin> = new Map()
   private options: PluginLoaderOptions
@@ -39,6 +42,8 @@ export class PluginLoaderManager implements PluginLoader {
     }
     const { readonlySiyuanCfg } = useSiyuanSettingStore()
     this.kernelApi = new SiyuanKernelApi(readonlySiyuanCfg as SiyuanConfig)
+    const { proxyFetch } = useProxyFetch()
+    this.proxyFetch = proxyFetch
     // 挂载 API 给插件使用
     this.mountApi()
   }
@@ -60,7 +65,8 @@ export class PluginLoaderManager implements PluginLoader {
   }
 
   getPlugin(id: string): IPlugin | undefined {
-    return this.plugins.get(id)
+    const platform = this.getPlatform(id)
+    return this.plugins.get(platform)
   }
 
   async unloadPlugin(id: string): Promise<{ success: boolean; error?: Error }> {
@@ -166,6 +172,7 @@ export class PluginLoaderManager implements PluginLoader {
   }
 
   private waitForPluginToLoad(id: string, timeout: number = 3000): Promise<IPlugin | null> {
+    const platform = this.getPlatform(id)
     return new Promise((resolve) => {
       const startTime = Date.now()
       const checkInterval = setInterval(() => {
@@ -175,9 +182,9 @@ export class PluginLoaderManager implements PluginLoader {
           return
         }
         const ptPlugins = ptWin.plugins
-        if (ptPlugins[id]) {
+        if (ptPlugins && ptPlugins[platform]) {
           clearInterval(checkInterval)
-          resolve(ptPlugins[id])
+          resolve(ptPlugins[platform])
         } else if (Date.now() - startTime > timeout) {
           clearInterval(checkInterval)
           resolve(null)
@@ -186,12 +193,21 @@ export class PluginLoaderManager implements PluginLoader {
     })
   }
 
+  private getPlatform(id: string) {
+    const platform = getTemplatePlatformKey(id)
+    if (platform !== id) {
+      logger.info(`use new instance for platform template: ${platform}, original id: ${id}`)
+    }
+    return platform
+  }
+
   private mountApi() {
     // 挂载 API 给插件使用
     mountPtAttr("api.siyuan", {
       config: WINDOW_SIYUAN.config,
       kernelApi: this.kernelApi,
     })
+    mountPtAttr("api.util.fetch", this.proxyFetch)
     mountPtAttr("api.util.Lodash", _)
   }
 }
