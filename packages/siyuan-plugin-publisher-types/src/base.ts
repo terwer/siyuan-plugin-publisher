@@ -107,10 +107,12 @@ export abstract class BasePlugin implements IPlugin {
 
   validateConfig(config: Record<string, any>): { valid: boolean; error?: string } {
     try {
+      const util = this.api.util
       const required = this.configSchema.required || []
 
       for (const field of required) {
-        if (!config[field]) {
+        const value = config[field]
+        if(util.StrUtil.isEmptyString(value)) {
           return {
             valid: false,
             error: `Missing required field: ${field}`,

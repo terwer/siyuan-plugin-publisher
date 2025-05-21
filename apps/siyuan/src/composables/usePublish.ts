@@ -82,6 +82,20 @@ export const usePublish = () => {
       plugin.migrateConfig(legencyBlogConfig as BlogConfig, blogConfig)
       logger.info("Migrate blog config for", plugin.id)
 
+      // 执行配置校验
+      const validRes = plugin.validateConfig!(blogConfig)
+      if (!validRes.valid) {
+        logger.error(`Plugin ${plugin.id} config is invalid:`, validRes.error)
+        return {
+          success: false,
+          error: {
+            name: plugin.id,
+            code: "INVALID_CONFIG",
+            message: validRes.error!,
+          },
+        }
+      }
+
       // 执行发布前的钩子
       const beforeProcessResult = await hookManager.executeHooks(HookStage.BEFORE_PROCESS, {
         id: platformConfig.platformKey,
@@ -174,7 +188,6 @@ export const usePublish = () => {
    * @param platformConfig 平台配置
    * @param post 文章内容
    * @param publishSetting 发布配置
-   * @returns 发布结果
    */
   const normalPublish = async (post: Post, platformConfig: DynamicConfig, publishSetting: DeepReadonly<SypConfig>) => {
     try {

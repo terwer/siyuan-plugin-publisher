@@ -67,12 +67,21 @@ const unregisterPublishSettingStore = publishSettingStore.registerOnInit(async (
                     title: "Test post",
                     description: "This a test post",
                   } as Post
-                  await quickPublish(post, item, publishSetting)
+                  const res = await quickPublish(post, item, publishSetting)
+                  if (!res.success) {
+                    void alert({
+                      title: t("publish.quickFailed"),
+                      message: res.error?.message || "unknown",
+                      type: "error",
+                      duration: 5000,
+                    })
+                    return
+                  }
                   void alert({
                     title: t("publish.quick"),
                     message: t("publish.quickSuccess"),
                     type: "success",
-                    duration: 0,
+                    duration: 3000,
                   })
                 } catch (e: any) {
                   logger.error(`Quick publish failed: ${e}`)
