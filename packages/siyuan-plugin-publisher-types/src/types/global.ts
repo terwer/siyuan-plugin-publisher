@@ -28,10 +28,23 @@ export interface PtApiUtil {
     Lodash: typeof _;
 }
 
+export interface SiyuanApi{
+    config: Record<string, any>
+    kernelApi: any
+}
+
 // 主 API 接口
 export interface PtApi {
     logger: PtApiLogger;
+    siyuan: SiyuanApi
     util: PtApiUtil;
+}
+
+export interface PluginApi {
+    siyuan: SiyuanApi,
+    util: {
+        Lodash: typeof window.pt.api.util.Lodash
+    }
 }
 
 // 全局 pt 命名空间接口

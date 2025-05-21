@@ -24,6 +24,7 @@
     "@types/lodash-es": "^4.17.12",
     "@types/node": "^20.17.48",
     "rimraf": "^6.0.1",
+    "siyuan": "^1.1.1",
     "typescript": "^5.8.3"
   }
 }

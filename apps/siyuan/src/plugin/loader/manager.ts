@@ -14,6 +14,7 @@ import { PLUGIN_BASE_PATH } from "@/plugin/constants/PluginConstants.ts"
 import { SiyuanConfig, SiyuanKernelApi } from "zhi-siyuan-api"
 import { useSiyuanSettingStore } from "@stores/useSiyuanSettingStore.ts"
 import * as _ from "lodash-es"
+import { WINDOW_SIYUAN } from "@/Constants.ts"
 
 const logger = createAppLogger("plugin-loader")
 
@@ -187,6 +188,10 @@ export class PluginLoaderManager implements PluginLoader {
 
   private mountApi() {
     // 挂载 API 给插件使用
+    mountPtAttr("api.siyuan", {
+      config: WINDOW_SIYUAN.config,
+      kernelApi: this.kernelApi,
+    })
     mountPtAttr("api.util.Lodash", _)
   }
 }

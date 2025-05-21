@@ -11,6 +11,7 @@ import { AuthMode, PlatformType, SubPlatformType } from "./types/platform"
 import { HookStage, PluginHook } from "./types/hooks"
 import {ModuleLogger} from "./logger";
 import {mountPtAttr} from "./util";
+import {PluginApi, SiyuanApi} from "./types/global";
 
 export abstract class BasePlugin implements IPlugin {
   readonly id: string =  this.constructor.name
@@ -41,11 +42,7 @@ export abstract class BasePlugin implements IPlugin {
 
   readonly logger: PluginLogger
   readonly hooks: Partial<Record<HookStage, PluginHook>> = {}
-  readonly api: {
-    util: {
-      Lodash: typeof window.pt.api.util.Lodash
-    }
-  }
+  readonly api: PluginApi
 
   constructor(id?: string) {
     const pluginId = id ?? this.id
@@ -57,6 +54,7 @@ export abstract class BasePlugin implements IPlugin {
     // 初始化日志
     this.logger = new ModuleLogger(pluginId)
     this.api = {
+      siyuan: window.pt.api.siyuan,
       util: {
         Lodash: window.pt.api.util.Lodash,
       }

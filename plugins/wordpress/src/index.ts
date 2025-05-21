@@ -57,14 +57,22 @@ export class WordPressPlugin extends BasePlugin {
 
   async publish(post: Post, options?: PublishOptions): Promise<PublishResult> {
     try {
-      this.logger.info('Publishing post:', post.title)
-      this.logger.debug('Full post content:', post)
+      this.logger.info("Publishing post:", post.title)
+      this.logger.debug("ull post content:", post)
       // TODO: 实现发布逻辑
+
+      this.logger.info("test siyuan api",this.api.siyuan)
+      this.api.siyuan.kernelApi.pushMsg(
+          {
+            "msg": "test",
+            "timeout": 7000
+          }
+      )
 
       // === Lodash 测试开始 ===
       const numbers = [1, 2, 3, 4, 5];
       const doubled = this.api.util.Lodash.map(numbers, n => n * 2);
-      this.logger.info('Lodash test - Doubled numbers:', doubled);
+      this.logger.info("Lodash test - Doubled numbers:", doubled);
       // === Lodash 测试结束 ===
 
       return {
