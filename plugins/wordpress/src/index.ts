@@ -1,17 +1,19 @@
-import { IPlugin, PlatformCapabilities, PublishOptions, PublishResult } from "siyuan-plugin-publisher-types"
+import { AuthMode, BasePlugin, PlatformType, PublishOptions, PublishResult, SubPlatformType } from "siyuan-plugin-publisher-types"
 import { Post } from "zhi-blog-api"
-import { AuthMode, PlatformType, SubPlatformType } from "siyuan-plugin-publisher-types"
 import * as pkg from "../package.json"
 
-export class WordPressPlugin implements IPlugin {
+export class WordPressPlugin extends BasePlugin {
   readonly id = pkg.id
   readonly name = pkg.displayName || pkg.name
   readonly group = pkg.group || "unknown"
   readonly version = pkg.version
   readonly description = pkg.description
   readonly author = pkg.author
+  readonly platformType = PlatformType.Wordpress
+  readonly subPlatformType = SubPlatformType.Wordpress_Wordpress
+  readonly authMode = AuthMode.API
 
-  readonly capabilities: PlatformCapabilities = {
+  public readonly capabilities = {
     supportsCategories: true,
     supportsTags: true,
     supportsCustomFields: true,
@@ -24,7 +26,7 @@ export class WordPressPlugin implements IPlugin {
     supportsCustomJS: true,
   }
 
-  readonly configSchema = {
+  public readonly configSchema = {
     type: "object",
     properties: {
       endpoint: {
@@ -47,25 +49,24 @@ export class WordPressPlugin implements IPlugin {
     required: ["endpoint", "username", "password"],
   }
 
-  readonly defaultConfig = {
+  public readonly defaultConfig = {
     endpoint: "",
     username: "",
     password: "",
   }
 
-  private config: Record<string, any> = {}
-
-  async init(config: Record<string, any>): Promise<void> {
-    this.config = { ...this.defaultConfig, ...config }
-  }
-
-  async destroy(): Promise<void> {
-    this.config = {}
-  }
-
   async publish(post: Post, options?: PublishOptions): Promise<PublishResult> {
     try {
+      this.logger.info('Publishing post:', post.title)
+      this.logger.debug('Full post content:', post)
       // TODO: 实现发布逻辑
+
+      // === Lodash 测试开始 ===
+      const numbers = [1, 2, 3, 4, 5];
+      const doubled = this.api.util.Lodash.map(numbers, n => n * 2);
+      this.logger.info('Lodash test - Doubled numbers:', doubled);
+      // === Lodash 测试结束 ===
+
       return {
         success: true,
         data: "Post published successfully",
@@ -82,33 +83,7 @@ export class WordPressPlugin implements IPlugin {
       }
     }
   }
-
-  getPlatformType(): PlatformType {
-    return PlatformType.Wordpress
-  }
-
-  getSubPlatformType(): SubPlatformType {
-    return SubPlatformType.Wordpress_Wordpress
-  }
-
-  getAuthMode(): AuthMode {
-    return AuthMode.API
-  }
-
-  validateConfig(config: Record<string, any>): { valid: boolean; error?: string } {
-    try {
-      // TODO: 实现配置验证逻辑
-      return { valid: true }
-    } catch (error) {
-      return {
-        valid: false,
-        error: error instanceof Error ? error.message : "Invalid configuration",
-      }
-    }
-  }
 }
 
-// 创建插件实例并挂载到 window.pt 对象
-const plugin = new WordPressPlugin()
-window.pt = window.pt || {}
-window.pt[plugin.id] = plugin 
+// 创建插件实例
+new WordPressPlugin(pkg.id)

@@ -8,11 +8,12 @@
  */
 
 import { createAppLogger } from "@utils/appLogger.ts"
-import { IPlugin, PluginLoader, PluginLoaderOptions } from "siyuan-plugin-publisher-types"
+import { IPlugin, mountPtAttr, PluginLoader, PluginLoaderOptions } from "siyuan-plugin-publisher-types"
 import { normalizePath } from "@utils/fileUtils.ts"
 import { PLUGIN_BASE_PATH } from "@/plugin/constants/PluginConstants.ts"
 import { SiyuanConfig, SiyuanKernelApi } from "zhi-siyuan-api"
 import { useSiyuanSettingStore } from "@stores/useSiyuanSettingStore.ts"
+import * as _ from "lodash-es"
 
 const logger = createAppLogger("plugin-loader")
 
@@ -37,6 +38,8 @@ export class PluginLoaderManager implements PluginLoader {
     }
     const { readonlySiyuanCfg } = useSiyuanSettingStore()
     this.kernelApi = new SiyuanKernelApi(readonlySiyuanCfg as SiyuanConfig)
+    // 挂载 API 给插件使用
+    this.mountApi()
   }
 
   static getInstance(options?: PluginLoaderOptions): PluginLoaderManager {
@@ -116,7 +119,7 @@ export class PluginLoaderManager implements PluginLoader {
       // 新增：等待 window.pt[pkg.id] 出现，最多等待 5 秒
       const plugin = await this.waitForPluginToLoad(pkg.id, 5000)
       if (!plugin) {
-        const error = new Error(`Plugin did not load into window.pt within timeout: ${pkg.id}`)
+        const error = new Error(`Plugin did not load into window.pt.plugins within timeout: ${pkg.id}`)
         logger.error(error.message)
         return { success: false, error }
       }
@@ -165,19 +168,25 @@ export class PluginLoaderManager implements PluginLoader {
     return new Promise((resolve) => {
       const startTime = Date.now()
       const checkInterval = setInterval(() => {
-        const win = window as any
-        logger.debug("try get widnow.pt", win.pt)
-        if (win.pt === undefined) {
+        const ptWin = window.pt
+        logger.debug("try get widnow.pt", ptWin)
+        if (ptWin === undefined) {
           return
         }
-        if (win.pt[id]) {
+        const ptPlugins = ptWin.plugins
+        if (ptPlugins[id]) {
           clearInterval(checkInterval)
-          resolve(win.pt[id])
+          resolve(ptPlugins[id])
         } else if (Date.now() - startTime > timeout) {
           clearInterval(checkInterval)
           resolve(null)
         }
       }, 1000)
     })
+  }
+
+  private mountApi() {
+    // 挂载 API 给插件使用
+    mountPtAttr("api.util.Lodash", _)
   }
 }

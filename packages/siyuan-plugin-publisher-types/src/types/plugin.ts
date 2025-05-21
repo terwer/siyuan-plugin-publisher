@@ -11,6 +11,7 @@ import { Post } from "zhi-blog-api"
 import { HookStage, PluginHook } from "./hooks"
 import { AuthMode, PlatformType, SubPlatformType} from "./platform";
 import {IPublishConfig} from "./config";
+import {BasePlugin} from "../base";
 
 export interface PlatformCapabilities {
   supportsCategories: boolean
@@ -120,4 +121,4 @@ export interface IPlugin {
   getPlatformType(): PlatformType
   getSubPlatformType(): SubPlatformType
   getAuthMode(): AuthMode
-} 
+}
