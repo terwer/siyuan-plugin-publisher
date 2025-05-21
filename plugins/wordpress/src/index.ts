@@ -8,10 +8,11 @@ import {
 } from "siyuan-plugin-publisher-types"
 import { BlogConfig, Post } from "zhi-blog-api"
 import * as pkg from "../package.json"
+import { t } from "./i18n"
 
 export class WordPressPlugin extends BasePlugin {
   readonly id = pkg.id
-  readonly name = pkg.displayName || pkg.name
+  readonly name = t('pluginName')
   readonly group = pkg.group || "unknown"
   readonly version = pkg.version
   readonly description = pkg.description
@@ -38,18 +39,18 @@ export class WordPressPlugin extends BasePlugin {
     properties: {
       endpoint: {
         type: "string",
-        title: "WordPress REST API Endpoint",
-        description: "Your WordPress site's REST API endpoint (e.g., https://your-site.com/wp-json/wp/v2)",
+        title: t('config.endpoint.title'),
+        description: t('config.endpoint.description'),
       },
       username: {
         type: "string",
-        title: "Username",
-        description: "WordPress username",
+        title: t('config.username.title'),
+        description: t('config.username.description'),
       },
       password: {
         type: "string",
-        title: "Application Password",
-        description: "WordPress application password",
+        title: t('config.password.title'),
+        description: t('config.password.description'),
         format: "password",
       },
     },
@@ -99,12 +100,12 @@ export class WordPressPlugin extends BasePlugin {
 
       return {
         success: true,
-        data: "Post published successfully",
+        data: t('messages.publishSuccess'),
       }
     } catch (error) {
       return {
         success: false,
-        data: "Failed to publish to WordPress",
+        data: t('messages.publishFailed'),
         error: {
           name: "WordPressPublishError",
           code: "PUBLISH_ERROR",

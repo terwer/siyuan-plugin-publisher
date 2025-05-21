@@ -20,7 +20,6 @@ const baseI18n = {
     author: "作者",
     version: "版本",
     errors: {
-      pluginIdRequired: "插件ID是必需的",
       notImplemented: "未实现",
       missingRequiredField: "缺少必填字段: {field}",
       invalidConfig: "无效的配置",
@@ -45,7 +44,6 @@ const baseI18n = {
     author: "Author",
     version: "Version",
     errors: {
-      pluginIdRequired: "Plugin ID is required",
       notImplemented: "Not implemented",
       missingRequiredField: "Missing required field: {field}",
       invalidConfig: "Invalid configuration",
@@ -97,19 +95,15 @@ export abstract class BasePlugin implements IPlugin {
   readonly hooks: Partial<Record<HookStage, PluginHook>> = {}
   readonly api: PluginApi
 
-  protected getI18n() {
-    const lang = this.api.siyuan.config.lang || "zh_CN"
+  private getI18n() {
+    const lang = window.pt.api.siyuan.config.lang || "zh_CN"
     this.logger.info(`get i18n lang from base plugin: ${lang}`)
     // @ts-ignore
     return baseI18n[lang] || baseI18n.zh_CN
   }
 
-  constructor(id?: string) {
+  constructor(id: string) {
     const pluginId = id ?? this.id
-    if (!pluginId) {
-      throw new Error(this.getI18n().errors.pluginIdRequired)
-    }
-    mountPtAttr(`plugins.${pluginId}`, this)
     this.logger = new ModuleLogger(pluginId)
     this.api = {
       siyuan: window.pt.api.siyuan,
@@ -119,38 +113,48 @@ export abstract class BasePlugin implements IPlugin {
         StrUtil: window.pt.api.util.StrUtil,
       },
     }
+    mountPtAttr(`plugins.${pluginId}`, this)
   }
 
   getStatus?(): Promise<PlatformStatus> {
-    throw new Error(this.getI18n().errors.getStatus)
+    const t = this.getI18n()
+    throw new Error(t.errors.getStatus)
   }
   checkConnection?(): Promise<boolean> {
-    throw new Error(this.getI18n().errors.checkConnection)
+    const t = this.getI18n()
+    throw new Error(t.errors.checkConnection)
   }
   update?(postId: string, post: Post, options?: PublishOptions): Promise<boolean> {
-    throw new Error(this.getI18n().errors.update)
+    const t = this.getI18n()
+    throw new Error(t.errors.update)
   }
   delete?(postId: string, options?: PublishOptions): Promise<boolean> {
-    throw new Error(this.getI18n().errors.delete)
+    const t = this.getI18n()
+    throw new Error(t.errors.delete)
   }
   getPreviewUrl?(postId: string, options?: PublishOptions): Promise<string> {
-    throw new Error(this.getI18n().errors.getPreviewUrl)
+    const t = this.getI18n()
+    throw new Error(t.errors.getPreviewUrl)
   }
   uploadMedia?(
       file: File,
       options?: { alt?: string; title?: string; description?: string; customFields?: Record<string, any> },
       publishOptions?: PublishOptions,
   ): Promise<{ url: string; id?: string; metadata?: Record<string, any> }> {
-    throw new Error(this.getI18n().errors.uploadMedia)
+    const t = this.getI18n()
+    throw new Error(t.errors.uploadMedia)
   }
   getPlatformType(): PlatformType {
-    throw new Error(this.getI18n().errors.getPlatformType)
+    const t = this.getI18n()
+    throw new Error(t.errors.getPlatformType)
   }
   getSubPlatformType(): SubPlatformType {
-    throw new Error(this.getI18n().errors.getSubPlatformType)
+    const t = this.getI18n()
+    throw new Error(t.errors.getSubPlatformType)
   }
   getAuthMode(): AuthMode {
-    throw new Error(this.getI18n().errors.getAuthMode)
+    const t = this.getI18n()
+    throw new Error(t.errors.getAuthMode)
   }
 
   async init(config: Record<string, any>): Promise<void> {
@@ -167,14 +171,15 @@ export abstract class BasePlugin implements IPlugin {
     try {
       const util = this.api.util
       const required = this.configSchema.required || []
-      const i18n = this.getI18n()
+      const t = this.getI18n()
 
       for (const field of required) {
         const value = config[field]
         if(util.StrUtil.isEmptyString(value)) {
+          const fieldDisplayName = this.configSchema?.properties?.[field]?.title ?? field
           return {
             valid: false,
-            error: i18n.errors.missingRequiredField.replace("{field}", field),
+            error: t.errors.missingRequiredField.replace("{field}", fieldDisplayName),
           }
         }
       }
