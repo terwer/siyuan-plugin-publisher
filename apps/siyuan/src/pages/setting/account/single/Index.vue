@@ -283,8 +283,7 @@ onMounted(() => {
   >
     <plugin-config
       :platform-config="platformConfig"
-      :model-value="formState.blogConfig.value"
-      @update:model-value="(val) => (formState.blogConfig.value = val)"
+      v-model="formState.blogConfig"
       :plugin-instance="props.pluginInstance"
     />
 

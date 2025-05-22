@@ -8,7 +8,7 @@
   -->
 
 <script setup lang="ts">
-import { ref, watch, onBeforeMount, computed } from "vue"
+import { computed, ComputedRef, onBeforeMount, ref, WritableComputedRef } from "vue"
 import { usePlugin } from "../composables/usePlugin"
 import { usePluginStore } from "../stores/usePluginStore"
 import FormGroup from "@components/FormGroup.vue"
@@ -17,25 +17,7 @@ import { PluginLoaderManager } from "@/plugin"
 import { useI18n } from "@composables/useI18n.ts"
 import { createAppLogger } from "@utils/appLogger.ts"
 import { alert } from "@components/Alert.ts"
-
-type InputType = "text" | "password" | "number" | "url"
-
-interface SchemaProperty {
-  type: string
-  title: string
-  description?: string
-  format?: string
-  readOnly?: boolean
-  maxLength?: number
-  minLength?: number
-  items?: {
-    enum?: any[]
-  }
-}
-
-interface Schema {
-  properties: Record<string, SchemaProperty>
-}
+import { useComputedField } from "@composables/useComputedField.ts"
 
 /**
  * 根据 JSON Schema 推断输入类型
@@ -85,15 +67,10 @@ const convertSchemaToFormField = (key: string, field: any, config: any): Setting
     type: inferControlType(field) as any,
     inputType: inferInputType(field),
     label: field.title,
-    value: computed({
-      get: () => config[key],
-      set: (val) => {
-        config[key] = val
-      },
-    }),
+    value: field.readOnly ? config.value[key] : useComputedField(config, key as never),
     placeholder: field.description,
     readonly: field.readOnly || false,
-    disabled: false,
+    disabled: field.readOnly || false,
   }
 }
 
