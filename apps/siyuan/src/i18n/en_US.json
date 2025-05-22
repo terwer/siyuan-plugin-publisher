@@ -291,6 +291,9 @@
   "plugin": {
     "config": {
       "title": "Plugin Configuration",
+      "loading": "Loading plugin configuration...",
+      "retry": "Retry",
+      "placeholder": "Please enter {field}",
       "error": {
         "title": "Error",
         "message": "Plugin initialization failed: {error}"

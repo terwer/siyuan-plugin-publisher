@@ -115,6 +115,7 @@ const getSingleGroupPlatformTemplateList = (groupType: any) => {
   flex-direction: column
   gap: 24px
   padding: 16px 0
+  min-width: 600px;
 
 .template-group
   .group-title

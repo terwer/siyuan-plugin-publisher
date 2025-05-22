@@ -291,6 +291,9 @@
   "plugin": {
     "config": {
       "title": "插件配置",
+      "loading": "正在加载插件配置...",
+      "retry": "重试",
+      "placeholder": "请输入{field}",
       "error": {
         "title": "错误",
         "message": "插件初始化失败：{error}"

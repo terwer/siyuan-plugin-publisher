@@ -132,7 +132,7 @@ const getItemLabelStyle = (item: SettingItem) => {
   box-shadow 0 1px 2px 0 var(--group-shadow)
 
 .setting-item
-  min-width 500px
+  min-width 400px
   max-width 800px
   display flex
   align-items center

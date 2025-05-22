@@ -332,18 +332,20 @@ onUnmounted(() => {
     :error="errorMsg"
     @back-emit="handleBack"
   >
-    <form-group
-      v-for="(group, index) in formGroups"
-      :key="index"
-      :plugin-instance="pluginInstance"
-      :form-group="group"
-    />
+    <div class="add-platform-container">
+      <form-group
+        v-for="(group, index) in formGroups"
+        :key="index"
+        :plugin-instance="pluginInstance"
+        :form-group="group"
+      />
+    </div>
   </BackPage>
 </template>
 
 <style lang="stylus" scoped>
-.form-container
-  max-width: 600px
+.add-platform-container
+  min-width: 600px
   margin: 0 auto
 
   .form-group

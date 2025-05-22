@@ -212,7 +212,8 @@ watch(
   --pt-accent: #1971c2
   --pt-shadow: rgba(0, 0, 0, 0.1)
   width 100%
-  min-width 800px
+  min-width 400px
+  max-width 800px
   position relative
   height 100%
   display flex
