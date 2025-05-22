@@ -154,5 +154,6 @@ export class WordPressPlugin extends BasePlugin {
   }
 }
 
-// 创建插件实例
-new WordPressPlugin(pkg.id)
+// 创建插件实例并导出
+const plugin = new WordPressPlugin(pkg.id)
+export default plugin
