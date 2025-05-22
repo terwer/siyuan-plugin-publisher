@@ -296,6 +296,7 @@
       "placeholder": "Please enter {field}",
       "error": {
         "title": "Error",
+        "description": "Plugin initialization failed",
         "message": "Plugin initialization failed: {error}"
       }
     }

@@ -62,6 +62,26 @@ export const usePlugin = () => {
     return loader.getPlugin(id)
   }
 
+  const initPluginForPlatform = async (platformConfig: DynamicConfig) => {
+    // 尝试获取已加载的插件
+    let loadedPlugin = getPlugin(platformConfig.platformKey)
+
+    // 如果插件未加载，则加载插件
+    if (!loadedPlugin) {
+      const pluginLoader = PluginLoaderManager.getInstance()
+      const pluginPath = getPluginPath(platformConfig)
+      const result = await pluginLoader.loadPlugin(pluginPath)
+      if (!result.success) {
+        throw new Error(`Failed to load plugin from ${pluginPath}: ${result.error}`)
+      }
+      loadedPlugin = result.instance
+      if (!loadedPlugin) {
+        throw new Error(`Plugin instance not found: ${pluginPath}`)
+      }
+    }
+    return loadedPlugin
+  }
+
   const getAllPlugins = () => {
     return loader.getAllPlugins()
   }
@@ -74,6 +94,7 @@ export const usePlugin = () => {
     getPluginPath,
     loadPlugin,
     getPlugin,
+    initPluginForPlatform,
     loadAllPlugins,
     getAllPlugins,
   }

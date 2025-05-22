@@ -28,7 +28,7 @@ import * as _ from "lodash-es"
  */
 export const usePublish = () => {
   const logger = createAppLogger("use-publish")
-  const { getPluginPath, loadPlugin, getPlugin } = usePlugin()
+  const { initPluginForPlatform } = usePlugin()
   const hookManager = HookManager.getInstance()
   const pluginLoader = PluginLoaderManager.getInstance()
 
@@ -61,15 +61,8 @@ export const usePublish = () => {
     publishSetting: DeepReadonly<SypConfig>,
   ): Promise<PublishResult> => {
     try {
-      // 加载插件
-      const pluginPath = getPluginPath(platformConfig)
-      const result = await pluginLoader.loadPlugin(pluginPath)
-      if (!result.success) {
-        throw new Error(`Failed to load plugin from ${pluginPath}: ${result.error}`)
-      }
-
-      // 获取插件实例
-      const plugin = pluginLoader.getPlugin(platformConfig.platformKey)
+      // 获取当前平台插件实例
+      const plugin = await initPluginForPlatform(platformConfig)
       if (!plugin) {
         throw new Error(`Plugin not found: ${platformConfig.platformKey}`)
       }

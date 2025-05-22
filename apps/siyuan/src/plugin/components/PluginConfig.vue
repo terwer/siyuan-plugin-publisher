@@ -12,7 +12,6 @@ import { onBeforeMount, ref } from "vue"
 import { usePlugin } from "../composables/usePlugin"
 import FormGroup from "@components/FormGroup.vue"
 import { DynamicConfig } from "@/models/dynamicConfig.ts"
-import { PluginLoaderManager } from "@/plugin"
 import { useI18n } from "@composables/useI18n.ts"
 import { createAppLogger } from "@utils/appLogger.ts"
 import { useComputedField } from "@composables/useComputedField.ts"
@@ -81,7 +80,7 @@ const props = defineProps<{
 
 const emit = defineEmits(["update:modelValue", "error"])
 
-const { getPlugin, getPluginPath } = usePlugin()
+const { initPluginForPlatform } = usePlugin()
 const { t } = useI18n(props.pluginInstance)
 const logger = createAppLogger("plugin-config-form")
 
@@ -108,6 +107,7 @@ const initFormGroups = () => {
           const item = convertSchemaToFormField(key, field, props.modelValue)
           // 添加默认占位符
           if (!item.placeholder) {
+            // @ts-ignore
             item.placeholder = t("plugin.config.placeholder", { field: field.title })
           }
           logger.debug(`Converting field ${key}:`, { field, value: props.modelValue[key], item })
@@ -124,21 +124,11 @@ const initPlugin = async () => {
   loading.value = true
   error.value = null
   try {
-    // 尝试获取已加载的插件
-    let loadedPlugin = getPlugin(props.platformConfig.platformKey)
-
-    // 如果插件未加载，则加载插件
+    // 获取当前平台插件实例
+    const loadedPlugin = await initPluginForPlatform(props.platformConfig)
     if (!loadedPlugin) {
-      const pluginLoader = PluginLoaderManager.getInstance()
-      const pluginPath = getPluginPath(props.platformConfig)
-      const result = await pluginLoader.loadPlugin(pluginPath)
-      if (!result.success) {
-        throw new Error(`Failed to load plugin from ${pluginPath}: ${result.error}`)
-      }
-      loadedPlugin = result.instance
-      if (!loadedPlugin) {
-        throw new Error(`Plugin instance not found: ${pluginPath}`)
-      }
+      setError(`Plugin not found: ${props.platformConfig.platformKey}`)
+      return
     }
 
     // 更新插件和schema
@@ -170,8 +160,10 @@ onBeforeMount(async () => {
 
     <!-- 错误状态 -->
     <div v-else-if="error" class="error-container">
-      <div class="error-icon">!</div>
-      <div class="error-message">{{ error }}</div>
+      <div class="error-content">
+        <div class="error-icon">!</div>
+        <div class="error-message">{{ t("plugin.config.error.description") }}</div>
+      </div>
       <Button type="primary" size="sm" @click.stop="initPlugin">
         {{ t("plugin.config.retry") }}
       </Button>
@@ -228,29 +220,36 @@ onBeforeMount(async () => {
   align-items center
   justify-content center
   padding 40px 0
-  text-align center
   width 100%
 
-  .error-icon
-    width 48px
-    height 48px
-    line-height 48px
+  .error-content
+    display flex
+    align-items center
+    justify-content center
+    margin-bottom 16px
+    gap 8px
+    max-width 80%
     text-align center
-    background var(--error-bg)
-    color var(--error-color)
-    border-radius 50%
-    font-size 24px
-    font-weight bold
-    margin-bottom 16px
 
-  .error-message
-    color var(--text-primary)
-    margin-bottom 16px
-    max-width 100%
-    padding 0 16px
-    word-wrap break-word
-    white-space normal
-    line-height 1.5
+    .error-icon
+      width 24px
+      height 24px
+      line-height 24px
+      text-align center
+      background var(--error-bg)
+      color var(--error-color)
+      border-radius 50%
+      font-size 16px
+      font-weight bold
+      flex-shrink 0
+
+    .error-message
+      color var(--error-color)
+      word-wrap break-word
+      white-space normal
+      line-height 1.5
+      font-size 14px
+      text-align center
 
   .retry-button
     padding 8px 16px
