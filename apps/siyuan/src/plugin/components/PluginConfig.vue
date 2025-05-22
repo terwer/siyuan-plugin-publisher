@@ -15,7 +15,6 @@ import { DynamicConfig } from "@/models/dynamicConfig.ts"
 import { PluginLoaderManager } from "@/plugin"
 import { useI18n } from "@composables/useI18n.ts"
 import { createAppLogger } from "@utils/appLogger.ts"
-import { alert } from "@components/Alert.ts"
 import { useComputedField } from "@composables/useComputedField.ts"
 
 /**
@@ -79,7 +78,7 @@ const props = defineProps<{
   pluginInstance: any
 }>()
 
-const emit = defineEmits(["update:modelValue"])
+const emit = defineEmits(["update:modelValue", "error"])
 
 const { getPlugin, getPluginPath } = usePlugin()
 const { t } = useI18n(props.pluginInstance)
@@ -88,6 +87,11 @@ const logger = createAppLogger("plugin-config-form")
 const plugin = ref<any>(null)
 const schema = ref<typeof props.modelValue.configSchema | null>(null)
 const formGroups = ref<SettingGroup[]>([])
+
+// 错误处理
+const setError = (error: string) => {
+  emit("error", error)
+}
 
 // 初始化表单
 const initFormGroups = () => {
@@ -136,12 +140,7 @@ const initPlugin = async () => {
     initFormGroups()
   } catch (e: any) {
     logger.error("Failed to initialize plugin:", e)
-    void alert({
-      title: t("plugin.config.error.title"),
-      message: t("plugin.config.error.message").replace("{error}", e),
-      type: "error",
-      duration: 2000,
-    })
+    setError(e.message || t("plugin.config.error.message").replace("{error}", e))
   }
 }
 

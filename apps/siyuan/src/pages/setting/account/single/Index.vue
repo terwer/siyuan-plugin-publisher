@@ -286,6 +286,7 @@ onMounted(() => {
       :platform-config="platformConfig"
       v-model="formState.blogConfig"
       :plugin-instance="props.pluginInstance"
+      @error="(msg) => (errorMsg = msg)"
     />
 
     <form-group
