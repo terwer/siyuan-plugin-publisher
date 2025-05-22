@@ -15,6 +15,84 @@ export const useProxyFetch = () => {
   const { readonlySiyuanCfg } = useSiyuanSettingStore()
   const kernelApi = new SiyuanKernelApi(readonlySiyuanCfg as SiyuanConfig)
 
+  // MDN 标准 fetch 结构
+  const proxyFetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
+    try {
+      // 将 input 转换为 URL 字符串
+      const url = input instanceof URL ? input.toString() : input.toString()
+
+      // 处理 headers
+      const headers = new Headers(init?.headers)
+      const contentType = headers.get("content-type") || "application/json"
+
+      // 处理 body
+      let payload: any
+      if (init?.body) {
+        if (typeof init.body === "string") {
+          payload = init.body
+        } else if (init.body instanceof FormData) {
+          payload = init.body
+          headers.set("content-type", "multipart/form-data")
+        } else if (init.body instanceof URLSearchParams) {
+          payload = init.body.toString()
+          headers.set("content-type", "application/x-www-form-urlencoded")
+        } else if (init.body instanceof Blob) {
+          payload = await init.body.arrayBuffer()
+        } else if (init.body instanceof ArrayBuffer) {
+          payload = init.body
+        } else {
+          payload = JSON.stringify(init.body)
+        }
+      }
+
+      // 构建 siyuanProxyFetch 的 options
+      const options: Parameters<typeof siyuanProxyFetch>[1] = {
+        headers: Array.from(headers.entries()),
+        params: payload,
+        method: (init?.method as "GET" | "POST" | "PUT" | "DELETE" | "PATCH") ?? "GET",
+        contentType,
+        payloadEncoding: "text" as const,
+        responseEncoding: "text" as const,
+      }
+
+      // 调用 siyuanProxyFetch
+      const rawResponse = await siyuanProxyFetch(url, options)
+
+      // 构建标准 Response 对象
+      const responseHeaders = new Headers()
+      if (rawResponse?.headers) {
+        Object.entries(rawResponse.headers).forEach(([key, value]) => {
+          if (value) {
+            responseHeaders.append(key, value as string)
+          }
+        })
+      }
+
+      // 处理响应体
+      let responseBody: BodyInit
+      if (rawResponse?.payload) {
+        if (typeof rawResponse.payload === "string") {
+          responseBody = rawResponse.payload
+        } else if (rawResponse.payload instanceof ArrayBuffer) {
+          responseBody = rawResponse.payload
+        } else {
+          responseBody = JSON.stringify(rawResponse.payload)
+        }
+      } else {
+        responseBody = ""
+      }
+
+      return new Response(responseBody, {
+        status: rawResponse?.statusCode || 200,
+        statusText: rawResponse?.statusText || "OK",
+        headers: responseHeaders,
+      })
+    } catch (error) {
+      logger.error("Proxy fetch error:", error)
+      throw error
+    }
+  }
+
   /**
    * 使用 siyuan-note 代理 fetch 请求
    *
@@ -45,7 +123,7 @@ export const useProxyFetch = () => {
         | "base32-hex"
         | "hex"
     },
-  ): Promise<Response> => {
+  ): Promise<any> => {
     // 解构参数并设置默认值
     const {
       headers = [],
@@ -115,6 +193,7 @@ export const useProxyFetch = () => {
   }
 
   return {
-    proxyFetch: siyuanProxyFetch,
+    proxyFetch,
+    siyuanProxyFetch,
   }
 }
