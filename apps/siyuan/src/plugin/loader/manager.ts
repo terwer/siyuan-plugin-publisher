@@ -18,6 +18,7 @@ import { WINDOW_SIYUAN } from "@/Constants.ts"
 import { useProxyFetch } from "@composables/useProxyFetch.ts"
 import { getTemplatePlatformKey } from "@/models/dynamicConfig.ts"
 import { StrUtil } from "zhi-common"
+import { BasePathTypeEnum, SiyuanDevice } from "zhi-device"
 
 const logger = createAppLogger("plugin-loader")
 
@@ -122,12 +123,14 @@ export class PluginLoaderManager implements PluginLoader {
       logger.info(`Read plugin package.json:`, pkg)
 
       // 动态加载插件文件
-      await import(fullPath)
+      const mod = await SiyuanDevice.importJs(fullPath, BasePathTypeEnum.BasePathType_Absolute)
+      // const mod = await import(fullPath)
+      logger.info(`Loaded plugin module:`, mod)
 
       // 新增：等待 window.pt[pkg.id] 出现，最多等待 5 秒
-      const plugin = await this.waitForPluginToLoad(pkg.id, 5000)
+      const plugin = await this.waitForPluginToLoad(pkg.id, mod, 5000)
       if (!plugin) {
-        const error = new Error(`Plugin did not load into window.pt.plugins within timeout: ${pkg.id}`)
+        const error = new Error(`Plugin loaded error: ${pkg.id}`)
         logger.error(error.message)
         return { success: false, error }
       }
@@ -172,7 +175,14 @@ export class PluginLoaderManager implements PluginLoader {
     return true
   }
 
-  private waitForPluginToLoad(id: string, timeout: number = 3000): Promise<IPlugin | null> {
+  private waitForPluginToLoad(id: string, mod: any, timeout: number = 3000): Promise<IPlugin | null> {
+    // 新增：如果加载到了直接返回，大幅度提升速度
+    if (mod.default) {
+      // 使用插件导出机制快速导出成功
+      logger.info(`🌹success use imported new instance for plugin: ${id}`)
+      return Promise.resolve(mod.default)
+    }
+    // 没加载到再去轮询
     const platform = this.getPlatform(id)
     return new Promise((resolve) => {
       const startTime = Date.now()
@@ -188,6 +198,7 @@ export class PluginLoaderManager implements PluginLoader {
           resolve(ptPlugins[platform])
         } else if (Date.now() - startTime > timeout) {
           clearInterval(checkInterval)
+          logger.error(`Plugin did not load into window.pt.plugins within timeout: ${id}`)
           resolve(null)
         }
       }, 1000)

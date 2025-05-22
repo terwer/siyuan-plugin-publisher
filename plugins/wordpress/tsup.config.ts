@@ -3,9 +3,7 @@ import { copyFileSync } from "fs"
 import { resolve } from "path"
 
 const isDev = process.env.NODE_ENV === "development"
-const outDir = isDev 
-  ? "../../dist/siyuan/plugins/wordpress"
-  : "../../apps/siyuan/public/plugins/wordpress"
+const outDir = isDev ? "../../dist/siyuan/plugins/wordpress" : "../../apps/siyuan/public/plugins/wordpress"
 
 export default defineConfig({
   entry: ["src/index.ts"],
@@ -14,8 +12,16 @@ export default defineConfig({
   splitting: false,
   sourcemap: false,
   clean: true,
-  minify: true,
-  globalName: "pt",
+  minify: "terser",
+  target: "esnext",
+  globalName: "ptInstance",
+  banner: {
+    js: `/* Terwer Inc. */`,
+  },
+  footer: {
+    // 显式返回导出对象
+    js: "export { ptInstance as default };",
+  },
   outDir: outDir,
   outExtension() {
     return {
@@ -23,14 +29,12 @@ export default defineConfig({
     }
   },
   noExternal: ["*"],
-  treeshake: true,
   bundle: true,
   platform: "browser",
-  target: "es5",
   injectStyle: false,
   esbuildOptions(options) {
     options.define = {
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || "production")
+      "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV || "production"),
     }
   },
   onSuccess: ((options) => {
@@ -38,5 +42,5 @@ export default defineConfig({
     const sourcePath = resolve(__dirname, "package.json")
     const targetPath = resolve(outDir, "package.json")
     copyFileSync(sourcePath, targetPath)
-  }) as any
-}) 
+  }) as any,
+})
