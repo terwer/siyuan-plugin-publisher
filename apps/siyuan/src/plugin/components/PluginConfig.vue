@@ -8,7 +8,7 @@
   -->
 
 <script setup lang="ts">
-import { ref, watch, onBeforeMount } from "vue"
+import { ref, watch, onBeforeMount, computed } from "vue"
 import { usePlugin } from "../composables/usePlugin"
 import { usePluginStore } from "../stores/usePluginStore"
 import FormGroup from "@components/FormGroup.vue"
@@ -85,7 +85,12 @@ const convertSchemaToFormField = (key: string, field: any, config: any): Setting
     type: inferControlType(field) as any,
     inputType: inferInputType(field),
     label: field.title,
-    value: config[key],
+    value: computed({
+      get: () => config[key],
+      set: (val) => {
+        config[key] = val
+      },
+    }),
     placeholder: field.description,
     readonly: field.readOnly || false,
     disabled: false,
@@ -107,23 +112,23 @@ const logger = createAppLogger("plugin-config-form")
 
 const plugin = ref<any>(null)
 const schema = ref<typeof props.modelValue.configSchema | null>(null)
-const config = ref(props.modelValue)
 const formGroups = ref<SettingGroup[]>([])
 
-// 监听配置变化
-watch(
-  config,
-  (newVal) => {
-    emit("update:modelValue", newVal)
-    pluginStore.updatePluginConfig(props.platformConfig.platformKey, newVal)
-  },
-  { deep: true },
-)
-
-const handleChange = (group: any, item: any, value: any) => {
-  const key = Object.keys(schema.value?.properties || {}).find((k) => schema.value?.properties[k].title === item.label)
-  if (key) {
-    config.value[key] = value
+// 初始化表单
+const initFormGroups = () => {
+  logger.debug("Initializing form groups with schema:", schema.value)
+  if (schema.value?.properties) {
+    formGroups.value = [
+      {
+        title: t("plugin.config.title"),
+        items: Object.entries(schema.value.properties).map(([key, field]) => {
+          const item = convertSchemaToFormField(key, field, props.modelValue)
+          logger.debug(`Converting field ${key}:`, { field, value: props.modelValue[key], item })
+          return item
+        }),
+      },
+    ]
+    logger.debug("Form groups initialized:", formGroups.value)
   }
 }
 
@@ -150,16 +155,9 @@ const initPlugin = async () => {
     // 更新插件和schema
     plugin.value = loadedPlugin
     schema.value = loadedPlugin.configSchema
-
-    // 更新表单组
-    formGroups.value = [
-      {
-        title: t("plugin.config.title"),
-        items: Object.entries(schema.value?.properties || {}).map(([key, field]) =>
-          convertSchemaToFormField(key, field, config.value),
-        ),
-      },
-    ]
+    logger.debug("Plugin initialized:", { plugin: plugin.value, schema: schema.value })
+    // 初始化表单
+    initFormGroups()
   } catch (e: any) {
     logger.error("Failed to initialize plugin:", e)
     void alert({
@@ -183,7 +181,6 @@ onBeforeMount(async () => {
       :key="index"
       :plugin-instance="pluginInstance"
       :form-group="group"
-      @change="handleChange"
     />
   </div>
 </template>
