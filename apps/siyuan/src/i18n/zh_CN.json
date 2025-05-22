@@ -287,5 +287,10 @@
     "extraScript": {
       "required": "请输入自定义脚本"
     }
+  },
+  "plugin": {
+    "config": {
+      "title": "插件配置"
+    }
   }
 }

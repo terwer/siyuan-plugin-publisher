@@ -287,5 +287,10 @@
     "extraScript": {
       "required": "Please enter custom script"
     }
+  },
+  "plugin": {
+    "config": {
+      "title": "Plugin Configuration"
+    }
   }
 }

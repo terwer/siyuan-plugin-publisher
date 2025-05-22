@@ -28,7 +28,7 @@ export class WordPressPlugin extends BasePlugin {
     if (!this.wordpressClient) {
       this.wordpressClient = new WordPressClient({
         options: {
-          endpoint: blogCfg.endpoint
+          endpoint: blogCfg.endpoint,
         },
         username: blogCfg.username,
         password: blogCfg.password,

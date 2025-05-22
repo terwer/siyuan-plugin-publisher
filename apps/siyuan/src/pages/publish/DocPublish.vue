@@ -73,7 +73,7 @@ const unregisterPublishSettingStore = publishSettingStore.registerOnInit(async (
                       title: t("publish.quickFailed"),
                       message: res.error?.message || "unknown",
                       type: "error",
-                      duration: 5000,
+                      duration: 2000,
                     })
                     return
                   }
@@ -81,7 +81,7 @@ const unregisterPublishSettingStore = publishSettingStore.registerOnInit(async (
                     title: t("publish.quick"),
                     message: t("publish.quickSuccess"),
                     type: "success",
-                    duration: 3000,
+                    duration: 1000,
                   })
                 } catch (e: any) {
                   logger.error(`Quick publish failed: ${e}`)

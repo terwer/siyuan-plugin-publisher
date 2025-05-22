@@ -23,6 +23,7 @@ import { computed, onMounted, reactive, ref, toRaw, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { BlogConfig } from "zhi-blog-api"
 import { StrUtil } from "zhi-common"
+import PluginConfig from "@/plugin/components/PluginConfig.vue"
 
 // Props
 const props = defineProps<{
@@ -254,6 +255,8 @@ onMounted(() => {
     :extra="extra"
     :error="errorMsg"
   >
+    <plugin-config :platform-config="platformConfig" :model-value="{}" :plugin-instance="props.pluginInstance" />
+
     <form-group
       v-for="(group, index) in formGroups"
       :key="index"
