@@ -20,9 +20,9 @@ import { PlatformType, SubPlatformType } from "siyuan-plugin-publisher-types"
  */
 class PublishConfig {
   public readonly platformConfig: DynamicConfig
-  public readonly blogConfig: BlogConfig
+  public readonly blogConfig: Record<string, any>
 
-  constructor(platformConfig?: DynamicConfig, blogConfig?: BlogConfig) {
+  constructor(platformConfig?: DynamicConfig, blogConfig?: Record<string, any>) {
     this.platformConfig =
       platformConfig ??
       new DynamicConfig(
@@ -32,7 +32,7 @@ class PublishConfig {
         SubPlatformType.NONE,
       )
 
-    this.blogConfig = (blogConfig ?? {}) as BlogConfig
+    this.blogConfig = (blogConfig ?? {}) as Record<string, any>
   }
 }
 

@@ -138,60 +138,62 @@ watch(
 
 <template>
   <div class="back-page">
-    <div v-if="displayError" class="error-container">
-      <div class="error-content">
-        <div class="error-message">{{ displayError }}</div>
-        <div class="error-actions">
-          <button class="copy-btn" @click.stop="copyError">
-            <Copy class="icon" />
-            <span>
-              {{ copySuccess ? t("common.copied") : t("common.copy") }}
-            </span>
-          </button>
-          <button class="report-btn" @click.stop="reportError">
-            <Mail class="icon" />
-            <span>{{ t("common.reportError") }}</span>
-          </button>
-          <button class="close-btn" @click.stop="closeError">
-            <X class="icon" />
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <div v-if="showBack" class="page-header">
-      <div class="header-left">
-        <button class="back-btn" @click.stop="handleBack">
-          <ArrowLeft class="icon" />
-          <span class="text">{{ t("common.back") }}</span>
-        </button>
-
-        <div class="title-group">
-          <h1 class="title">{{ props.title }}</h1>
-          <div
-            v-if="helpKey"
-            class="help-container"
-            @mouseenter="toggleHelpTooltip(true)"
-            @mouseleave="toggleHelpTooltip(false)"
-          >
-            <button class="help-btn" @click.stop="goToHelp(helpUrl)">
-              <HelpCircle class="icon" />
+    <div class="header-section">
+      <div v-if="displayError" class="error-container">
+        <div class="error-content">
+          <div class="error-message">{{ displayError }}</div>
+          <div class="error-actions">
+            <button class="copy-btn" @click.stop="copyError">
+              <Copy class="icon" />
+              <span>
+                {{ copySuccess ? t("common.copied") : t("common.copy") }}
+              </span>
             </button>
-            <div v-show="showHelpTooltip" class="help-tooltip">
-              {{ t("common.help") }}
-            </div>
+            <button class="report-btn" @click.stop="reportError">
+              <Mail class="icon" />
+              <span>{{ t("common.reportError") }}</span>
+            </button>
+            <button class="close-btn" @click.stop="closeError">
+              <X class="icon" />
+            </button>
           </div>
         </div>
       </div>
 
-      <div v-if="extra && extra.length > 0" class="header-extra">
-        <slot name="extra">
-          <template v-for="(item, _index) in extra" :key="_index">
-            <component :is="item.component" v-bind="item.props || {}" @click.stop="item.onClick">
-              {{ item.text }}
-            </component>
-          </template>
-        </slot>
+      <div v-if="showBack" class="page-header">
+        <div class="header-left">
+          <button class="back-btn" @click.stop="handleBack">
+            <ArrowLeft class="icon" />
+            <span class="text">{{ t("common.back") }}</span>
+          </button>
+
+          <div class="title-group">
+            <h1 class="title">{{ props.title }}</h1>
+            <div
+              v-if="helpKey"
+              class="help-container"
+              @mouseenter="toggleHelpTooltip(true)"
+              @mouseleave="toggleHelpTooltip(false)"
+            >
+              <button class="help-btn" @click.stop="goToHelp(helpUrl)">
+                <HelpCircle class="icon" />
+              </button>
+              <div v-show="showHelpTooltip" class="help-tooltip">
+                {{ t("common.help") }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div v-if="extra && extra.length > 0" class="header-extra">
+          <slot name="extra">
+            <template v-for="(item, _index) in extra" :key="_index">
+              <component :is="item.component" v-bind="item.props || {}" @click.stop="item.onClick">
+                {{ item.text }}
+              </component>
+            </template>
+          </slot>
+        </div>
       </div>
     </div>
 
@@ -232,135 +234,13 @@ watch(
     --pt-accent: #4dabf7
     --pt-shadow: rgba(0, 0, 0, 0.3)
 
-  .page-header
-    position sticky
-    top 0
-    z-index 1000
-    display flex
-    align-items center
-    justify-content space-between
-    padding 12px 16px
-    background var(--pt-bg)
-    border-bottom 1px solid var(--pt-border)
-    box-shadow 0 1px 2px 0 var(--pt-shadow)
-    transition all 0.3s ease
-    flex-shrink 0 // 防止头部被压缩
-
-    .header-left
-      display flex
-      align-items center
-
-    .header-extra
-      display flex
-      align-items center
-      gap 8px
-
-    .back-btn
-      display flex
-      align-items center
-      gap 6px
-      padding 4px 8px
-      border none
-      background transparent
-      border-radius 6px
-      cursor pointer
-      transition all 0.3s ease
-      color var(--pt-text-light)
-      font-size 14px
-
-      &:hover
-        background var(--pt-surface)
-        color var(--pt-accent)
-
-      .icon
-        width 16px
-        height 16px
-
-    .title-group
-      display flex
-      align-items center
-      gap 8px
-      margin-left 12px
-
-      .title
-        margin 0
-        font-size 18px
-        font-weight 500
-        color var(--pt-text)
-        line-height 1.4
-
-      .help-container
-        position relative
-
-        .help-btn
-          display flex
-          align-items center
-          justify-content center
-          width 28px
-          height 28px
-          padding 0
-          border none
-          background transparent
-          border-radius 6px
-          cursor pointer
-          transition all 0.3s ease
-          color var(--pt-text-light)
-
-          &:hover
-            background var(--pt-surface)
-            color var(--pt-accent)
-
-          .icon
-            width 16px
-            height 16px
-
-        .help-tooltip
-          position absolute
-          top calc(100% + 2px)
-          left 50%
-          transform translateX(-50%)
-          padding 2px 12px
-          background var(--pt-surface)
-          color var(--pt-text)
-          font-size 12px
-          border-radius 4px
-          box-shadow 0 2px 8px var(--pt-shadow)
-          border 1px solid var(--pt-border)
-          white-space nowrap
-          z-index 1000
-          transition all 0.3s ease
-          text-align center
-
-          &::before
-            content ''
-            position absolute
-            top -4px
-            left 50%
-            transform translateX(-50%)
-            border-width 0 4px 4px
-            border-style solid
-            border-color transparent transparent var(--pt-border) transparent
-
-          &::after
-            content ''
-            position absolute
-            top -3px
-            left 50%
-            transform translateX(-50%)
-            border-width 0 4px 4px
-            border-style solid
-            border-color transparent transparent var(--pt-surface) transparent
-
-  .page-content
-    padding 16px
-    background var(--pt-bg)
-    flex 1 // 占据剩余空间
-    min-height 600px // 设置最小高度
-
-.error-container
+.header-section
   position sticky
   top 0
-  z-index 1001
+  z-index 1000
+  background var(--pt-bg)
+
+.error-container
   background #fee2e2
   border-bottom 1px solid #fecaca
   padding 12px 16px
@@ -412,4 +292,133 @@ watch(
         .icon
           width 14px
           height 14px
+
+.page-header
+  display flex
+  align-items center
+  justify-content space-between
+  padding 12px 16px
+  background var(--pt-bg)
+  border-bottom 1px solid var(--pt-border)
+  box-shadow 0 1px 2px 0 var(--pt-shadow)
+  transition all 0.3s ease
+  flex-shrink 0 // 防止头部被压缩
+
+  .header-left
+    display flex
+    align-items center
+
+  .header-extra
+    display flex
+    align-items center
+    gap 8px
+
+  .back-btn
+    display flex
+    align-items center
+    gap 6px
+    padding 4px 8px
+    border none
+    background transparent
+    border-radius 6px
+    cursor pointer
+    transition all 0.3s ease
+    color var(--pt-text-light)
+
+    &:hover
+      background var(--pt-surface)
+      color var(--pt-accent)
+
+    .icon
+      width 16px
+      height 16px
+
+  .title-group
+    display flex
+    align-items center
+    gap 8px
+    margin-left 12px
+
+    .title
+      margin 0
+      font-size 18px
+      font-weight 500
+      color var(--pt-text)
+      line-height 1.4
+
+    .help-container
+      position relative
+
+      .help-btn
+        display flex
+        align-items center
+        justify-content center
+        width 28px
+        height 28px
+        padding 0
+        border none
+        background transparent
+        border-radius 6px
+        cursor pointer
+        transition all 0.3s ease
+        color var(--pt-text-light)
+
+        &:hover
+          background var(--pt-surface)
+          color var(--pt-accent)
+
+        .icon
+          width 16px
+          height 16px
+
+      .help-tooltip
+        position absolute
+        top calc(100% + 2px)
+        left 50%
+        transform translateX(-50%)
+        padding 2px 12px
+        background var(--pt-surface)
+        color var(--pt-text)
+        font-size 12px
+        border-radius 4px
+        box-shadow 0 2px 8px var(--pt-shadow)
+        border 1px solid var(--pt-border)
+        white-space nowrap
+        z-index 1000
+        transition all 0.3s ease
+        text-align center
+
+        &::before
+          content ''
+          position absolute
+          top -4px
+          left 50%
+          transform translateX(-50%)
+          border-width 0 4px 4px
+          border-style solid
+          border-color transparent transparent var(--pt-border) transparent
+
+        &::after
+          content ''
+          position absolute
+          top -3px
+          left 50%
+          transform translateX(-50%)
+          border-width 0 4px 4px
+          border-style solid
+          border-color transparent transparent var(--pt-surface) transparent
+
+.page-content
+  padding 16px
+  background var(--pt-bg)
+  flex 1 // 占据剩余空间
+  min-height 600px // 设置最小高度
+  margin-top calc(var(--header-height) + var(--error-height, 0px))
+
+:root
+  --header-height 56px
+  --error-height 0px
+
+.error-container
+  --error-height 60px
 </style>

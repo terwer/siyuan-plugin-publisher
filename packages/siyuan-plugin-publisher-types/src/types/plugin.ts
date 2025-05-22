@@ -90,6 +90,7 @@ export interface IPlugin {
 
   // 插件方法
   init?(config: any): Promise<void>
+  getMetaData(publishCfg: IPublishConfig): Promise<{flag: boolean; data: any; error?: string}>
   destroy?(): Promise<void>
   publish(post: Post, options?: PublishOptions): Promise<PublishResult>
   update?(postId: string, post: Post, options?: PublishOptions): Promise<boolean>

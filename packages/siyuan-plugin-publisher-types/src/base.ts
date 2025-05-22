@@ -12,6 +12,7 @@ import {
   PublishResult,
 } from "./types/plugin"
 import { mountPtAttr } from "./util"
+import { IPublishConfig } from "./types/config"
 
 const baseI18n = {
   zh_CN: {
@@ -159,6 +160,10 @@ export abstract class BasePlugin implements IPlugin {
 
   async init(config: Record<string, any>): Promise<void> {
     this.config = { ...this.defaultConfig, ...config }
+  }
+
+  async getMetaData(publishCfg: IPublishConfig): Promise<{ flag: boolean; data: any }> {
+    return { flag: true, data: {} }
   }
 
   async destroy(): Promise<void> {

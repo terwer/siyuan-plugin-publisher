@@ -27,6 +27,8 @@ import PluginConfig from "@/plugin/components/PluginConfig.vue"
 import { PageUtils } from "@utils/pageUtils.ts"
 import { usePlugin } from "@/plugin/composables/usePlugin.ts"
 import { alert } from "@components/Alert.ts"
+import { PublishConfig } from "@/models/publishConfig.ts"
+import { IPublishConfig } from "siyuan-plugin-publisher-types"
 
 // Props
 const props = defineProps<{
@@ -143,12 +145,13 @@ const handleBack = () => {
 
 const handleSave = async () => {
   try {
-    // // 更新平台配置
+    // 1、更新平台配置
     // await publishSettingStore.updatePlatformConfig(
     //   formState.platformConfig,
     //   formState.legencyBlogConfig,
     //   formState.blogConfig,
     // )
+    // 2、更新配置到插件
     void alert({
       title: t("common.opt.ok"),
       message: t("account.single.setOk"),
@@ -179,6 +182,7 @@ const handleReset = () => {
 const handleVerify = async () => {
   try {
     const plugin = getPlugin(apiType)!
+    //  1、输入配置校验
     if (plugin.validateConfig) {
       const config = toRaw(formState.blogConfig.value)
       const { valid, error } = plugin.validateConfig(config)
@@ -187,14 +191,28 @@ const handleVerify = async () => {
         return
       }
     }
+    //  2、可用性校验
+    if (plugin.getMetaData) {
+      const publishCfg = new PublishConfig(
+        toRaw(platformConfig.value),
+        toRaw(formState.blogConfig.value),
+      ) as IPublishConfig
+      const { flag, error } = await plugin.getMetaData(publishCfg)
+      if (!flag) {
+        setError(t("account.single.verifyFailed").replace("{error}", error))
+        return
+      }
+    }
     clearError()
-    void alert({
-      title: t("common.opt.ok"),
-      message: t("account.single.verifyOk"),
-      type: "success",
-      position: "center",
-      duration: 1000,
-    })
+    // void alert({
+    //   title: t("common.opt.ok"),
+    //   message: t("account.single.verifyOk"),
+    //   type: "success",
+    //   position: "center",
+    //   duration: 1000,
+    // })
+    // 验证成功直接保存一次
+    await handleSave()
   } catch (e: any) {
     setError(t("common.opt.fail").replace("{error}", e.toString()))
   }
