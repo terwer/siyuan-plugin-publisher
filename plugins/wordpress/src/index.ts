@@ -97,13 +97,12 @@ export class WordPressPlugin extends BasePlugin {
       const wordpressClient = this.getWordPressClient(blogCfg)
 
       // 尝试获取博客信息来验证平台是否可用
-      const blogInfo = await wordpressClient.getUsersBlogs()
+      const usersBlogs = await wordpressClient.getUsersBlogs()
+      this.logger.info("WordPress getUsersBlogs result:", usersBlogs)
 
       return {
         flag: true,
-        data: {
-          blogInfo,
-        },
+        data: usersBlogs,
         error: t("messages.platformAvailable"),
       }
     } catch (error) {

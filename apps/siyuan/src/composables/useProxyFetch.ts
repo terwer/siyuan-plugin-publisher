@@ -46,13 +46,18 @@ export const useProxyFetch = () => {
       }
 
       // 构建 siyuanProxyFetch 的 options
+      let siyuanResponseEncoding = "text"
+      // 图片、视频要使用 base64，用 content-type 判断
+      if (contentType.includes("image/") || contentType.includes("video/")) {
+        siyuanResponseEncoding = "base64"
+      }
       const options: Parameters<typeof siyuanProxyFetch>[1] = {
         headers: Array.from(headers.entries()).map(([key, value]) => ({ [key]: value })),
         params: payload,
         method: (init?.method as "GET" | "POST" | "PUT" | "DELETE" | "PATCH") ?? "GET",
         contentType,
-        payloadEncoding: "text" as const,
-        responseEncoding: "text" as const,
+        payloadEncoding: "base64",
+        responseEncoding: siyuanResponseEncoding as any,
       }
 
       // 调用 siyuanProxyFetch
@@ -70,17 +75,18 @@ export const useProxyFetch = () => {
 
       // 处理响应体
       let responseBody: BodyInit
-      if (rawResponse?.payload) {
-        if (typeof rawResponse.payload === "string") {
-          responseBody = rawResponse.payload
-        } else if (rawResponse.payload instanceof ArrayBuffer) {
-          responseBody = rawResponse.payload
+      if (rawResponse?.body) {
+        if (typeof rawResponse.body === "string") {
+          responseBody = rawResponse.body
+        } else if (rawResponse.body instanceof ArrayBuffer) {
+          responseBody = rawResponse.body
         } else {
-          responseBody = JSON.stringify(rawResponse.payload)
+          responseBody = JSON.stringify(rawResponse.body)
         }
       } else {
         responseBody = ""
       }
+      logger.debug("proxy fetch final body =>", responseBody)
 
       return new Response(responseBody, {
         status: rawResponse?.statusCode || 200,
