@@ -189,8 +189,8 @@ onBeforeMount(async () => {
 </template>
 
 <style lang="stylus" scoped>
-.plugin-config
-  padding 16px
-  background var(--b3-theme-background)
-  border-radius 4px
+//.plugin-config
+//  padding 16px
+//  background var(--b3-theme-background)
+//  border-radius 4px
 </style>

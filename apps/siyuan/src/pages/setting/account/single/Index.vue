@@ -24,6 +24,7 @@ import { useRoute, useRouter } from "vue-router"
 import { BlogConfig } from "zhi-blog-api"
 import { StrUtil } from "zhi-common"
 import PluginConfig from "@/plugin/components/PluginConfig.vue"
+import { PageUtils } from "@utils/pageUtils.ts"
 
 // Props
 const props = defineProps<{
@@ -241,6 +242,8 @@ watch(
 )
 
 onMounted(() => {
+  // 滚动到顶部
+  PageUtils.scrollTop()
   logger.debug("single account setting inited")
 })
 </script>

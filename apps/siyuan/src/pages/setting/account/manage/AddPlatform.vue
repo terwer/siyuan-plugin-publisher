@@ -26,6 +26,7 @@ import * as _ from "lodash-es"
 import { computed, onMounted, onUnmounted, reactive, ref, toRaw, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { BlogConfig } from "zhi-blog-api"
+import { PageUtils } from "@utils/pageUtils.ts"
 
 const props = defineProps<{
   pluginInstance: any
@@ -311,14 +312,8 @@ const unregisterPublishSettingStore = publishSettingStore.registerOnInit(async (
 onMounted(async () => {
   await publishSettingStore.doInit()
   logger.debug("publish setting init")
-  // 找到发布工具的菜单容器并滚动到顶部
-  const menuItems = document.querySelector('[data-name="publisherMenu"] .b3-menu__items')
-  if (menuItems) {
-    menuItems.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    })
-  }
+  // 滚动到顶部
+  PageUtils.scrollTop()
 })
 
 // 组件卸载时注销回调
