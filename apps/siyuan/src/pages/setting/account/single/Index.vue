@@ -163,11 +163,17 @@ const handleSave = async () => {
 
 const handleReset = () => {
   // 重置基础配置
-  formState.platformConfig = useClonedForm(platformConfig.value)
+  Object.assign(formState.platformConfig.value, platformConfig.value)
   // 重置平台特定配置
-  formState.legencyBlogConfig = useClonedForm(legencyBlogConfig.value)
-  // 重置新的博客配置
-  formState.blogConfig = useClonedForm(blogConfig.value)
+  Object.assign(formState.legencyBlogConfig.value, legencyBlogConfig.value)
+  // 重置新的博客配置 - 保持响应式连接
+  const newConfig = { ...blogConfig.value }
+  // 删除所有数据属性
+  Object.keys(formState.blogConfig.value).forEach((key) => {
+    delete formState.blogConfig.value[key]
+  })
+  // 再添加新属性
+  Object.assign(formState.blogConfig.value, newConfig)
 }
 
 const handleVerify = async () => {
