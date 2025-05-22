@@ -105,7 +105,9 @@
         "platformKeyPlaceholder": "请输入平台Key",
         "platformType": "平台分组",
         "subPlatformType": "平台类型"
-      }
+      },
+      "verifyOk": "验证成功",
+      "verifyFailed": "验证失败：{error}"
     },
     "authStatus": {
       "authorized": "已授权",

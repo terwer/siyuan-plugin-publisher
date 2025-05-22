@@ -105,7 +105,9 @@
         "platformKeyPlaceholder": "Please enter the platform key",
         "platformType": "Platform group",
         "subPlatformType": "Platform type"
-      }
+      },
+      "verifyOk": "Verification successful",
+      "verifyFailed": "Verification failed: {error}"
     },
     "authStatus": {
       "authorized": "Authorized",

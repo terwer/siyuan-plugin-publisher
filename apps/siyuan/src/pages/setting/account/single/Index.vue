@@ -177,7 +177,7 @@ const handleVerify = async () => {
       const config = toRaw(formState.blogConfig.value)
       const { valid, error } = plugin.validateConfig(config)
       if (!valid) {
-        setError(error!)
+        setError(t("account.single.verifyFailed").replace("{error}", error))
         return
       }
     }
@@ -190,7 +190,7 @@ const handleVerify = async () => {
       duration: 1000,
     })
   } catch (e: any) {
-    setError(e.toString())
+    setError(t("common.opt.fail").replace("{error}", e.toString()))
   }
 }
 
