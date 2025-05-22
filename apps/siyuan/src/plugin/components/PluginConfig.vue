@@ -95,7 +95,8 @@ const initFormGroups = () => {
   if (schema.value?.properties) {
     formGroups.value = [
       {
-        title: t("plugin.config.title"),
+        title: t("account.single.accountSetting"),
+        // title: t("plugin.config.title"),
         items: Object.entries(schema.value.properties).map(([key, field]) => {
           const item = convertSchemaToFormField(key, field, props.modelValue)
           logger.debug(`Converting field ${key}:`, { field, value: props.modelValue[key], item })

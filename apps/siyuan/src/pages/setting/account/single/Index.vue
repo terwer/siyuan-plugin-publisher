@@ -85,23 +85,23 @@ watch(
   },
 )
 
-const accountSettingFormGroup = reactive({
-  title: t("account.single.accountSetting"),
-  items: <SettingItem[]>[
-    {
-      type: "input",
-      label: t("account.single.account.home"),
-      value: useComputedField(formState.legencyBlogConfig, "home"),
-      placeholder: t("account.single.account.homePlaceholder"),
-    },
-    {
-      type: "input",
-      label: t("account.single.account.apiUrl"),
-      value: useComputedField(formState.legencyBlogConfig, "apiUrl"),
-      placeholder: t("account.single.account.apiUrlPlaceholder"),
-    },
-  ],
-})
+// const accountSettingFormGroup = reactive({
+//   title: t("account.single.accountSetting"),
+//   items: <SettingItem[]>[
+//     {
+//       type: "input",
+//       label: t("account.single.account.home"),
+//       value: useComputedField(formState.legencyBlogConfig, "home"),
+//       placeholder: t("account.single.account.homePlaceholder"),
+//     },
+//     {
+//       type: "input",
+//       label: t("account.single.account.apiUrl"),
+//       value: useComputedField(formState.legencyBlogConfig, "apiUrl"),
+//       placeholder: t("account.single.account.apiUrlPlaceholder"),
+//     },
+//   ],
+// })
 const platformSettingFormGroup = reactive({
   title: t("account.single.platformSetting"),
   items: <SettingItem[]>[
@@ -121,7 +121,8 @@ const platformSettingFormGroup = reactive({
     },
   ],
 })
-const formGroups = [accountSettingFormGroup, platformSettingFormGroup]
+// const formGroups = [accountSettingFormGroup, platformSettingFormGroup]
+const formGroups = [platformSettingFormGroup]
 
 // methods
 const setError = (msg: string) => {
@@ -246,14 +247,14 @@ watch(
   { deep: true },
 )
 
-watch(
-  () => formState.legencyBlogConfig,
-  (newVal) => {
-    const changedRawBlogConfig = toRaw(newVal.value)
-    logger.debug("legencyBlogConfig changed=>", changedRawBlogConfig)
-  },
-  { deep: true },
-)
+// watch(
+//   () => formState.legencyBlogConfig,
+//   (newVal) => {
+//     const changedRawBlogConfig = toRaw(newVal.value)
+//     logger.debug("legencyBlogConfig changed=>", changedRawBlogConfig)
+//   },
+//   { deep: true },
+// )
 
 watch(
   () => formState.blogConfig,
