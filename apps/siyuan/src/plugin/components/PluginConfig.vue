@@ -8,9 +8,8 @@
   -->
 
 <script setup lang="ts">
-import { computed, ComputedRef, onBeforeMount, ref, WritableComputedRef } from "vue"
+import { onBeforeMount, ref } from "vue"
 import { usePlugin } from "../composables/usePlugin"
-import { usePluginStore } from "../stores/usePluginStore"
 import FormGroup from "@components/FormGroup.vue"
 import { DynamicConfig } from "@/models/dynamicConfig.ts"
 import { PluginLoaderManager } from "@/plugin"
@@ -82,8 +81,7 @@ const props = defineProps<{
 
 const emit = defineEmits(["update:modelValue"])
 
-const { getPlugin, getPluginPath, loadPlugin } = usePlugin()
-const pluginStore = usePluginStore()
+const { getPlugin, getPluginPath } = usePlugin()
 const { t } = useI18n(props.pluginInstance)
 const logger = createAppLogger("plugin-config-form")
 
