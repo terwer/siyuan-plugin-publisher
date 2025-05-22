@@ -8,7 +8,7 @@
   -->
 
 <script setup lang="ts">
-import { DYNAMIC_CONFIG_KEY } from "@/Constants.ts"
+import { DYNAMIC_CONFIG_KEY, BLOG_CONFIG_KEY } from "@/Constants.ts"
 import { DynamicConfig, getSubPlatformTypeByKey } from "@/models/dynamicConfig.ts"
 import BackPage from "@components/BackPage.vue"
 import Button from "@components/Button.vue"
@@ -47,12 +47,20 @@ const errorMsg = ref("")
 // 获取平台配置只读版本
 const platformConfig = computed(() => {
   const totalCfg = publishSettingStore.readonlyState[DYNAMIC_CONFIG_KEY]?.totalCfg
-  return totalCfg?.find((item) => item.platformKey === apiType) as DynamicConfig
+  return (totalCfg?.find((item) => item.platformKey === apiType) ?? {}) as DynamicConfig
 })
+
+// 新的博客配置
 const blogConfig = computed(() => {
-  const publishSetting = publishSettingStore.readonlyState as any
-  return publishSetting[apiType] as BlogConfig
+  return publishSettingStore.readonlyState[BLOG_CONFIG_KEY]?.[apiType] ?? {}
 })
+
+// 旧的博客配置
+const legencyBlogConfig = computed(() => {
+  const publishSetting = publishSettingStore.readonlyState as any
+  return (publishSetting[apiType] ?? {}) as BlogConfig
+})
+
 // 设置标题
 const setPageTitle = (platformName: string) => {
   if (StrUtil.isEmptyString(platformName)) {
@@ -66,6 +74,7 @@ const pageTitle = ref(setPageTitle(platformConfig.value.platformName))
 // 表单状态
 const formState = {
   platformConfig: useClonedForm(platformConfig.value),
+  legencyBlogConfig: useClonedForm(legencyBlogConfig.value),
   blogConfig: useClonedForm(blogConfig.value),
 }
 
@@ -82,13 +91,13 @@ const accountSettingFormGroup = reactive({
     {
       type: "input",
       label: t("account.single.account.home"),
-      value: useComputedField(formState.blogConfig, "home"),
+      value: useComputedField(formState.legencyBlogConfig, "home"),
       placeholder: t("account.single.account.homePlaceholder"),
     },
     {
       type: "input",
       label: t("account.single.account.apiUrl"),
-      value: useComputedField(formState.blogConfig, "apiUrl"),
+      value: useComputedField(formState.legencyBlogConfig, "apiUrl"),
       placeholder: t("account.single.account.apiUrlPlaceholder"),
     },
   ],
@@ -125,12 +134,12 @@ const handleBack = () => {
 
 const handleSave = async () => {
   try {
-    //     // 更新平台配置
-    //     // TODO
-    //     // await publishSettingStore.updatePlatformConfig(
-    //     //   formState.platformConfig,
-    //     //   formState.blogConfig,
-    //     // )
+    // // 更新平台配置
+    // await publishSettingStore.updatePlatformConfig(
+    //   formState.platformConfig,
+    //   formState.legencyBlogConfig,
+    //   formState.blogConfig,
+    // )
     alert({
       title: t("common.opt.ok"),
       message: t("account.single.setOk"),
@@ -141,28 +150,33 @@ const handleSave = async () => {
     setError(e.toString())
   }
 }
-//
+
 const handleReset = () => {
-  //   // 重置基础配置
-  //   formState.platformConfig = {} as any
-  //   // 重置平台特定配置
-  //   formState.blogConfig = {} as any
+  // 重置基础配置
+  formState.platformConfig = useClonedForm(platformConfig.value)
+  // 重置平台特定配置
+  formState.legencyBlogConfig = useClonedForm(legencyBlogConfig.value)
+  // 重置新的博客配置
+  formState.blogConfig = useClonedForm(blogConfig.value)
 }
-//
+
 const handleVerify = async () => {
-  //   try {
-  //     // 验证平台配置
-  //     // TODO
-  //     // await publishSettingStore.verifyPlatformConfig(apiType)
-  //     alert({
-  //       title: t("common.opt.ok"),
-  //       message: t("account.single.verifyOk"),
-  //       type: "success",
-  //       position: "center",
-  //     })
-  //   } catch (e: any) {
-  //     setError(e.toString())
-  //   }
+  try {
+    // // 验证平台配置
+    // await publishSettingStore.verifyPlatformConfig(
+    //   formState.platformConfig,
+    //   formState.legencyBlogConfig,
+    //   formState.blogConfig,
+    // )
+    alert({
+      title: t("common.opt.ok"),
+      message: t("account.single.verifyOk"),
+      type: "success",
+      position: "center",
+    })
+  } catch (e: any) {
+    setError(e.toString())
+  }
 }
 
 const extra = computed(() => {
@@ -233,6 +247,15 @@ watch(
 )
 
 watch(
+  () => formState.legencyBlogConfig,
+  (newVal) => {
+    const changedRawBlogConfig = toRaw(newVal.value)
+    logger.debug("legencyBlogConfig changed=>", changedRawBlogConfig)
+  },
+  { deep: true },
+)
+
+watch(
   () => formState.blogConfig,
   (newVal) => {
     const changedRawBlogConfig = toRaw(newVal.value)
@@ -258,7 +281,11 @@ onMounted(() => {
     :extra="extra"
     :error="errorMsg"
   >
-    <plugin-config :platform-config="platformConfig" :model-value="{}" :plugin-instance="props.pluginInstance" />
+    <plugin-config
+      :platform-config="platformConfig"
+      :model-value="formState.blogConfig"
+      :plugin-instance="props.pluginInstance"
+    />
 
     <form-group
       v-for="(group, index) in formGroups"
