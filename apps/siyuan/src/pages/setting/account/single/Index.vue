@@ -196,6 +196,7 @@ const handleVerify = async () => {
         toRaw(platformConfig.value),
         toRaw(formState.blogConfig.value),
       ) as IPublishConfig
+      logger.debug("before get metadata, publishCfg =>", publishCfg)
       const { flag, error } = await plugin.getMetaData(publishCfg)
       if (!flag) {
         setError(t("account.single.verifyFailed").replace("{error}", error))

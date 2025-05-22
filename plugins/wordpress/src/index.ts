@@ -26,14 +26,24 @@ export class WordPressPlugin extends BasePlugin {
   private wordpressClient: WordPressClient | null = null
 
   private getWordPressClient(blogCfg: typeof this.defaultConfig): WordPressClient {
-    if (!this.wordpressClient) {
+    // 如果 WordPressClient 不存在，或者配置不一致，则创建新的 WordPressClient
+    const config = this.wordpressClient?.getConfig()
+    if (
+      !this.wordpressClient ||
+      config?.options?.endpoint !== blogCfg.endpoint ||
+      config?.username !== blogCfg.username ||
+      config?.password !== blogCfg.password
+    ) {
       this.wordpressClient = new WordPressClient({
         options: {
           endpoint: blogCfg.endpoint,
+          fetch: this.api.util.fetch as any,
         },
         username: blogCfg.username,
         password: blogCfg.password,
       })
+    } else {
+      this.logger.info("WordPressClient already exists, using the existing instance")
     }
     return this.wordpressClient
   }

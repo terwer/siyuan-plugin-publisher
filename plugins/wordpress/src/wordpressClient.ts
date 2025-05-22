@@ -16,11 +16,15 @@ export interface PostData {
 
 export class WordPressClient {
   private client: XMLRPCClient
-  private config: WordPressConfig
+  private readonly config: WordPressConfig
 
   constructor(config: WordPressConfig) {
     this.config = config
     this.client = new XMLRPCClient(config.options)
+  }
+
+  getConfig() {
+    return this.config
   }
 
   /**
