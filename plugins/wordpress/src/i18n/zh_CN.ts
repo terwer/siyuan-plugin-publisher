@@ -17,5 +17,7 @@ export default {
   messages: {
     publishSuccess: "文章发布成功",
     publishFailed: "发布到 WordPress 失败",
+    platformAvailable: "WordPress 平台连接成功",
+    platformUnavailable: "WordPress 平台连接失败",
   },
 }

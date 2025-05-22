@@ -104,7 +104,7 @@ export class WordPressClient {
       1, // blogId
       this.config.username,
       this.config.password,
-      postId
+      postId,
     )
   }
 
@@ -131,12 +131,7 @@ export class WordPressClient {
    * 上传媒体文件
    * @see https://codex.wordpress.org/XML-RPC_WordPress_API/Media
    */
-  async newMediaObject(
-    name: string,
-    type: string,
-    bits: Buffer | string,
-    overwrite: boolean = false
-  ): Promise<any> {
+  async newMediaObject(name: string, type: string, bits: Buffer | string, overwrite: boolean = false): Promise<any> {
     return this.client.methodCall(
       "wp.uploadFile",
       1, // blogId
@@ -146,8 +141,8 @@ export class WordPressClient {
         name,
         type,
         bits,
-        overwrite
-      }
+        overwrite,
+      },
     )
   }
 }

@@ -145,13 +145,12 @@ const handleBack = () => {
 
 const handleSave = async () => {
   try {
-    // 1、更新平台配置
+    // 更新平台配置
     // await publishSettingStore.updatePlatformConfig(
     //   formState.platformConfig,
     //   formState.legencyBlogConfig,
     //   formState.blogConfig,
     // )
-    // 2、更新配置到插件
     void alert({
       title: t("common.opt.ok"),
       message: t("account.single.setOk"),

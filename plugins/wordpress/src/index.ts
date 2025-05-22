@@ -1,6 +1,7 @@
 import {
   AuthMode,
   BasePlugin,
+  IPublishConfig,
   PlatformType,
   PublishOptions,
   PublishResult,
@@ -77,6 +78,31 @@ export class WordPressPlugin extends BasePlugin {
     endpoint: "",
     username: "",
     password: "",
+  }
+
+  async getMetaData(publishCfg: IPublishConfig): Promise<{ flag: boolean; data: any; error?: string }> {
+    try {
+      const blogCfg = publishCfg.blogConfig as typeof this.defaultConfig
+      const wordpressClient = this.getWordPressClient(blogCfg)
+
+      // 尝试获取用户信息来验证平台是否可用
+      const blogInfo = await wordpressClient.getBlogInfo()
+
+      return {
+        flag: true,
+        data: {
+          blogInfo,
+        },
+        error: t("messages.platformAvailable"),
+      }
+    } catch (error) {
+      this.logger.error("WordPress getMetaData error:", error)
+      return {
+        flag: false,
+        data: {},
+        error: error instanceof Error ? error.message : "Unknown error occurred",
+      }
+    }
   }
 
   async publish(post: Post, options?: PublishOptions): Promise<PublishResult> {

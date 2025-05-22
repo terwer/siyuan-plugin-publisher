@@ -17,5 +17,7 @@ export default {
   messages: {
     publishSuccess: "Post published successfully",
     publishFailed: "Failed to publish to WordPress",
+    platformAvailable: "WordPress platform connection successful",
+    platformUnavailable: "WordPress platform connection failed",
   },
 }

@@ -162,7 +162,7 @@ export abstract class BasePlugin implements IPlugin {
     this.config = { ...this.defaultConfig, ...config }
   }
 
-  async getMetaData(publishCfg: IPublishConfig): Promise<{ flag: boolean; data: any }> {
+  async getMetaData(publishCfg: IPublishConfig): Promise<{ flag: boolean; data: any, error?: string }> {
     return { flag: true, data: {} }
   }
 
