@@ -10,7 +10,8 @@ import {
 import { BlogConfig, Post } from "zhi-blog-api"
 import * as pkg from "../package.json"
 import { t } from "./i18n"
-import { PostData, WordPressClient } from "./wordpressClient"
+import { WordPressClient } from "./wordpressClient"
+import { PostData } from "@/types"
 
 export class WordPressPlugin extends BasePlugin {
   readonly id = pkg.id
@@ -95,8 +96,8 @@ export class WordPressPlugin extends BasePlugin {
       const blogCfg = publishCfg.blogConfig as typeof this.defaultConfig
       const wordpressClient = this.getWordPressClient(blogCfg)
 
-      // 尝试获取用户信息来验证平台是否可用
-      const blogInfo = await wordpressClient.getBlogInfo()
+      // 尝试获取博客信息来验证平台是否可用
+      const blogInfo = await wordpressClient.getUsersBlogs()
 
       return {
         flag: true,
@@ -134,14 +135,14 @@ export class WordPressPlugin extends BasePlugin {
       // 如果存在 postId，则更新文章，否则创建新文章
       let result
       if (post.postid) {
-        result = await wordpressClient.updatePost(post.postid, postData)
+        result = await wordpressClient.editPost(post.postid, postData)
       } else {
-        result = await wordpressClient.createPost(postData)
+        result = await wordpressClient.newPost(postData)
       }
 
       return {
         success: true,
-        data: result,
+        data: result as string,
       }
     } catch (error) {
       this.logger.error("WordPress publish error:", error)

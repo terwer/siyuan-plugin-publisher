@@ -7,6 +7,7 @@ export type XmlRpcValue =
   | Date
   | Buffer
   | null
+  | object
   | XmlRpcValue[]
   | { [key: string]: XmlRpcValue }
 
