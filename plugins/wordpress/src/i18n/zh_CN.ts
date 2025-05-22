@@ -3,7 +3,7 @@ export default {
   config: {
     endpoint: {
       title: "WordPress XMLRPC API 端点",
-      description: "您的 WordPress 站点的 REST API 端点（例如：https://your-site.com/xmlrpc.php）",
+      description: "您的 WordPress 站点的 XMLRPC API 端点（例如：https://your-site.com/xmlrpc.php）",
     },
     username: {
       title: "用户名",

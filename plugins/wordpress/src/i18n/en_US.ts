@@ -2,8 +2,8 @@ export default {
   pluginName: "WordPress Publisher",
   config: {
     endpoint: {
-      title: "WordPress REST API Endpoint",
-      description: "Your WordPress site's REST API endpoint (e.g., https://your-site.com/wp-json/wp/v2)",
+      title: "WordPress XMLRPC API Endpoint",
+      description: "Your WordPress site's XMLRPC API endpoint (e.g., https://your-site.com/xmlrpc.php)",
     },
     username: {
       title: "Username",

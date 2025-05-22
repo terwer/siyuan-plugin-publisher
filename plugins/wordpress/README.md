@@ -4,7 +4,7 @@
 
 ## 功能特性
 
-- 支持 WordPress REST API 发布
+- 支持 WordPress XMLRPC API 发布
 - 支持分类和标签
 - 支持自定义字段
 - 支持媒体上传
@@ -18,9 +18,9 @@
 
 ### 必需配置
 
-1. WordPress REST API Endpoint
-   - 格式：`https://your-site.com/wp-json/wp/v2`
-   - 说明：您的 WordPress 站点的 REST API 端点
+1. WordPress XMLRPC API Endpoint
+   - 格式：`https://your-site.com/xmlrpc.php`
+   - 说明：您的 WordPress 站点的 XMLRPC API 端点
 
 2. WordPress 用户名
    - 说明：用于 API 认证的 WordPress 用户名
@@ -72,14 +72,14 @@ pnpm dev
 
 ## 注意事项
 
-1. 确保 WordPress 站点已启用 REST API
+1. 确保 WordPress 站点已启用 XMLRPC API
 2. 建议使用 HTTPS 协议
 3. 应用密码请妥善保管，不要泄露
 4. 如遇到发布失败，请检查：
    - API 端点是否正确
    - 用户名和密码是否正确
    - WordPress 站点是否可访问
-   - REST API 是否被禁用
+   - XMLRPC API 是否被禁用
 
 ## 许可证
 
