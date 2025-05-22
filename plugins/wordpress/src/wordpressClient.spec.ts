@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
-import { WordPressUtils, WordPressConfig, PostData } from "./wordpressUtils"
+import { WordPressClient, WordPressConfig, PostData } from "./wordpressClient"
 import XMLRPCClient from "siyuan-plugin-publisher-common-xmlrpc"
 
 // Mock XMLRPCClient
@@ -11,18 +11,20 @@ vi.mock("siyuan-plugin-publisher-common-xmlrpc", () => {
   }
 })
 
-describe("WordPressUtils", () => {
-  let wordpressUtils: WordPressUtils
+describe("WordPressClient", () => {
+  let wordpressClient: WordPressClient
   let mockConfig: WordPressConfig
   let mockClient: any
 
   beforeEach(() => {
     mockConfig = {
-      endpoint: "http://test.wordpress.com/xmlrpc.php",
+      options: {
+        endpoint: "http://test.wordpress.com/xmlrpc.php"
+      },
       username: "testuser",
       password: "testpass",
     }
-    wordpressUtils = new WordPressUtils(mockConfig)
+    wordpressClient = new WordPressClient(mockConfig)
     mockClient = (XMLRPCClient as any).mock.results[0].value
   })
 
@@ -31,7 +33,7 @@ describe("WordPressUtils", () => {
       const mockResponse = { user_id: 1, username: "testuser" }
       mockClient.methodCall.mockResolvedValueOnce(mockResponse)
 
-      const result = await wordpressUtils.getBlogInfo()
+      const result = await wordpressClient.getBlogInfo()
 
       expect(mockClient.methodCall).toHaveBeenCalledWith("wp.getProfile", mockConfig.username, mockConfig.password)
       expect(result).toEqual(mockResponse)
@@ -51,7 +53,7 @@ describe("WordPressUtils", () => {
       const mockResponse = "123" // post ID
       mockClient.methodCall.mockResolvedValueOnce(mockResponse)
 
-      const result = await wordpressUtils.createPost(postData)
+      const result = await wordpressClient.createPost(postData)
 
       expect(mockClient.methodCall).toHaveBeenCalledWith(
         "metaWeblog.newPost",
@@ -85,7 +87,7 @@ describe("WordPressUtils", () => {
       const mockResponse = true
       mockClient.methodCall.mockResolvedValueOnce(mockResponse)
 
-      const result = await wordpressUtils.updatePost(postId, postData)
+      const result = await wordpressClient.updatePost(postId, postData)
 
       expect(mockClient.methodCall).toHaveBeenCalledWith(
         "metaWeblog.editPost",
@@ -113,7 +115,7 @@ describe("WordPressUtils", () => {
       ]
       mockClient.methodCall.mockResolvedValueOnce(mockResponse)
 
-      const result = await wordpressUtils.getPosts()
+      const result = await wordpressClient.getPosts()
 
       expect(mockClient.methodCall).toHaveBeenCalledWith(
         "metaWeblog.getRecentPosts",
@@ -129,7 +131,7 @@ describe("WordPressUtils", () => {
       const mockResponse = [{ postid: "1", title: "Post 1" }]
       mockClient.methodCall.mockResolvedValueOnce(mockResponse)
 
-      const result = await wordpressUtils.getPosts(1)
+      const result = await wordpressClient.getPosts(1)
 
       expect(mockClient.methodCall).toHaveBeenCalledWith(
         "metaWeblog.getRecentPosts",
@@ -148,7 +150,7 @@ describe("WordPressUtils", () => {
       const mockResponse = { postid: postId, title: "Test Post" }
       mockClient.methodCall.mockResolvedValueOnce(mockResponse)
 
-      const result = await wordpressUtils.getPost(postId)
+      const result = await wordpressClient.getPost(postId)
 
       expect(mockClient.methodCall).toHaveBeenCalledWith(
         "metaWeblog.getPost",
@@ -166,7 +168,7 @@ describe("WordPressUtils", () => {
       const mockResponse = true
       mockClient.methodCall.mockResolvedValueOnce(mockResponse)
 
-      const result = await wordpressUtils.deletePost(postId)
+      const result = await wordpressClient.deletePost(postId)
 
       expect(mockClient.methodCall).toHaveBeenCalledWith(
         "blogger.deletePost",
@@ -188,7 +190,7 @@ describe("WordPressUtils", () => {
       ]
       mockClient.methodCall.mockResolvedValueOnce(mockResponse)
 
-      const result = await wordpressUtils.getCategories()
+      const result = await wordpressClient.getCategories()
 
       expect(mockClient.methodCall).toHaveBeenCalledWith(
         "wp.getCategories",
@@ -208,7 +210,7 @@ describe("WordPressUtils", () => {
       ]
       mockClient.methodCall.mockResolvedValueOnce(mockResponse)
 
-      const result = await wordpressUtils.getTags()
+      const result = await wordpressClient.getTags()
 
       expect(mockClient.methodCall).toHaveBeenCalledWith("wp.getTags", 1, mockConfig.username, mockConfig.password)
       expect(result).toEqual(mockResponse)

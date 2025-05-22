@@ -96,15 +96,15 @@ export class WordPressClient {
 
   /**
    * 删除文章
+   * @see https://codex.wordpress.org/XML-RPC_WordPress_API/Posts
    */
   async deletePost(postId: string): Promise<any> {
     return this.client.methodCall(
-      "blogger.deletePost",
-      "", // appKey
-      postId,
+      "wp.deletePost",
+      1, // blogId
       this.config.username,
       this.config.password,
-      true, // publish
+      postId
     )
   }
 
@@ -124,11 +124,30 @@ export class WordPressClient {
    * 获取标签列表
    */
   async getTags(): Promise<any> {
+    return this.client.methodCall("wp.getTags", 1, this.config.username, this.config.password)
+  }
+
+  /**
+   * 上传媒体文件
+   * @see https://codex.wordpress.org/XML-RPC_WordPress_API/Media
+   */
+  async newMediaObject(
+    name: string,
+    type: string,
+    bits: Buffer | string,
+    overwrite: boolean = false
+  ): Promise<any> {
     return this.client.methodCall(
-      "wp.getTags",
+      "wp.uploadFile",
       1, // blogId
       this.config.username,
       this.config.password,
+      {
+        name,
+        type,
+        bits,
+        overwrite
+      }
     )
   }
 }
