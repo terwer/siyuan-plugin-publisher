@@ -25,6 +25,8 @@ import { BlogConfig } from "zhi-blog-api"
 import { StrUtil } from "zhi-common"
 import PluginConfig from "@/plugin/components/PluginConfig.vue"
 import { PageUtils } from "@utils/pageUtils.ts"
+import { usePlugin } from "@/plugin/composables/usePlugin.ts"
+import { alert } from "@components/Alert.ts"
 
 // Props
 const props = defineProps<{
@@ -42,6 +44,9 @@ const apiType = params.key as string
 const { t } = useI18n(props.pluginInstance)
 const subtype = getSubPlatformTypeByKey(apiType)
 const errorMsg = ref("")
+
+// composables
+const { getPlugin } = usePlugin()
 
 // computed
 // 获取平台配置只读版本
@@ -128,6 +133,9 @@ const formGroups = [platformSettingFormGroup]
 const setError = (msg: string) => {
   errorMsg.value = `${msg} (${new Date().toLocaleString()})`
 }
+const clearError = () => {
+  errorMsg.value = ""
+}
 
 const handleBack = () => {
   router.push(`/?tab=${TabEnum.ACCOUNT}`)
@@ -141,11 +149,12 @@ const handleSave = async () => {
     //   formState.legencyBlogConfig,
     //   formState.blogConfig,
     // )
-    alert({
+    void alert({
       title: t("common.opt.ok"),
       message: t("account.single.setOk"),
       type: "success",
       position: "center",
+      duration: 1000,
     })
   } catch (e: any) {
     setError(e.toString())
@@ -163,17 +172,22 @@ const handleReset = () => {
 
 const handleVerify = async () => {
   try {
-    // // 验证平台配置
-    // await publishSettingStore.verifyPlatformConfig(
-    //   formState.platformConfig,
-    //   formState.legencyBlogConfig,
-    //   formState.blogConfig,
-    // )
-    alert({
+    const plugin = getPlugin(apiType)!
+    if (plugin.validateConfig) {
+      const config = toRaw(formState.blogConfig.value)
+      const { valid, error } = plugin.validateConfig(config)
+      if (!valid) {
+        setError(error!)
+        return
+      }
+    }
+    clearError()
+    void alert({
       title: t("common.opt.ok"),
       message: t("account.single.verifyOk"),
       type: "success",
       position: "center",
+      duration: 1000,
     })
   } catch (e: any) {
     setError(e.toString())
