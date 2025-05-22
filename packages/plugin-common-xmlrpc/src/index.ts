@@ -157,40 +157,89 @@ export class XMLRPCClient {
   }
 
   private parseValue(valueElement: Element): XmlRpcValue {
-    const type = valueElement.firstElementChild?.tagName
-    const content = valueElement.firstElementChild?.textContent
+    const typeElement = valueElement.firstElementChild
+    const type = typeElement?.tagName
+    const content = typeElement?.textContent || ""
 
     switch (type) {
       case "string":
-        return content || ""
+        return content
       case "int":
       case "i4":
-        return parseInt(content || "0", 10)
+        return parseInt(content, 10)
       case "double":
-        return parseFloat(content || "0")
+        return parseFloat(content)
       case "boolean":
         return content === "1"
       case "dateTime.iso8601":
-        return new Date(content || "")
+        return new Date(content)
       case "base64":
-        return Buffer.from(content || "", "base64")
+        return Buffer.from(content, "base64")
       case "array":
-        const data = valueElement.getElementsByTagName("data")[0]
-        return Array.from(data.getElementsByTagName("value")).map((v) => this.parseValue(v))
-      case "struct":
-        const members = valueElement.getElementsByTagName("member")
-        const result: { [key: string]: XmlRpcValue } = {}
-        for (let i = 0; i < members.length; i++) {
-          const member = members[i]
-          const name = member.getElementsByTagName("name")[0].textContent || ""
-          const value = member.getElementsByTagName("value")[0]
-          result[name] = this.parseValue(value)
+        // 强化XPath解析路径并修复格式错误
+        const arrayElement = valueElement.ownerDocument.evaluate(
+          "./array/data",
+          valueElement,
+          null,
+          XPathResult.FIRST_ORDERED_NODE_TYPE,
+          null,
+        ).singleNodeValue as Element
+
+        if (!arrayElement) {
+          console.error("[XML Debug] Array data node not found")
+          return []
         }
+
+        const values: XmlRpcValue[] = []
+        const xpath = "./value"
+        const iterator = valueElement.ownerDocument.evaluate(xpath, arrayElement, null, XPathResult.ANY_TYPE, null)
+        let valueNode = iterator.iterateNext()
+
+        while (valueNode) {
+          values.push(this.parseValue(valueNode as Element))
+          valueNode = iterator.iterateNext()
+        }
+
+        return values
+      case "struct":
+        // 修复变量作用域问题 - 将valueElement重命名为paramElement避免冲突
+        const paramElement = valueElement
+        const members = paramElement.ownerDocument.evaluate(
+          "./struct/member",
+          paramElement,
+          null,
+          XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
+          null,
+        )
+
+        const result: { [key: string]: XmlRpcValue } = {}
+        for (let i = 0; i < members.snapshotLength; i++) {
+          const member = members.snapshotItem(i)!
+          const nameElement = paramElement.ownerDocument.evaluate(
+            "./name",
+            member,
+            null,
+            XPathResult.FIRST_ORDERED_NODE_TYPE,
+            null,
+          ).singleNodeValue
+
+          const valueElement = paramElement.ownerDocument.evaluate(
+            "./value",
+            member,
+            null,
+            XPathResult.FIRST_ORDERED_NODE_TYPE,
+            null,
+          ).singleNodeValue as Element
+
+          const name = nameElement?.textContent || ""
+          result[name] = this.parseValue(valueElement)
+        }
+
         return result
       case "nil":
         return null
       default:
-        return content || ""
+        return content
     }
   }
 }

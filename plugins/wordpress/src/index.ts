@@ -98,7 +98,8 @@ export class WordPressPlugin extends BasePlugin {
 
       // 尝试获取博客信息来验证平台是否可用
       const usersBlogs = await wordpressClient.getUsersBlogs()
-      this.logger.info("WordPress getUsersBlogs result:", usersBlogs)
+      // this.logger.info("WordPress getUsersBlogs result:", usersBlogs)
+      // this.logger.info("WordPress getUsersBlogs result str:", JSON.stringify(usersBlogs))
 
       return {
         flag: true,
