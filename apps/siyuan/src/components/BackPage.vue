@@ -358,6 +358,9 @@ watch(
     min-height 600px // 设置最小高度
 
 .error-container
+  position sticky
+  top 0
+  z-index 1001
   background #fee2e2
   border-bottom 1px solid #fecaca
   padding 12px 16px
