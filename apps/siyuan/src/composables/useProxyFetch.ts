@@ -47,7 +47,7 @@ export const useProxyFetch = () => {
 
       // 构建 siyuanProxyFetch 的 options
       const options: Parameters<typeof siyuanProxyFetch>[1] = {
-        headers: Array.from(headers.entries()),
+        headers: Array.from(headers.entries()).map(([key, value]) => ({ [key]: value })),
         params: payload,
         method: (init?.method as "GET" | "POST" | "PUT" | "DELETE" | "PATCH") ?? "GET",
         contentType,
