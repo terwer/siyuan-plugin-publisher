@@ -290,7 +290,11 @@
   },
   "plugin": {
     "config": {
-      "title": "Plugin Configuration"
+      "title": "Plugin Configuration",
+      "error": {
+        "title": "Error",
+        "message": "Plugin initialization failed: {error}"
+      }
     }
   }
 }

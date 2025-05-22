@@ -290,7 +290,11 @@
   },
   "plugin": {
     "config": {
-      "title": "插件配置"
+      "title": "插件配置",
+      "error": {
+        "title": "错误",
+        "message": "插件初始化失败：{error}"
+      }
     }
   }
 }
