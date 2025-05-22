@@ -1,6 +1,7 @@
 {
   "name": "siyuan-plugin-publisher",
   "version": "2.0.0",
+  "type": "module",
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
@@ -10,7 +11,9 @@
     "makeLink": "node ./scripts/make_dev_link.mjs"
   },
   "devDependencies": {
-    "turbo": "^2.5.3"
+    "turbo": "^2.5.3",
+    "vitest": "^1.3.1",
+    "@vitest/coverage-v8": "^1.3.1"
   },
   "packageManager": "pnpm@10.11.0"
 }

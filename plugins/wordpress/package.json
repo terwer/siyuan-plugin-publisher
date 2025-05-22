@@ -13,17 +13,25 @@
   "scripts": {
     "dev": "NODE_ENV=development tsup --watch --config tsup.config.ts",
     "build": "NODE_ENV=production tsup --config tsup.config.ts",
-    "clean": "rimraf dist"
+    "clean": "rimraf dist",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
+    "siyuan-plugin-publisher-common-xmlrpc": "workspace:*",
     "siyuan-plugin-publisher-types": "workspace:*",
     "zhi-blog-api": "^1.72.0"
   },
   "devDependencies": {
     "@types/node": "^20.17.48",
     "@swc/core": "^1.11.24",
+    "@vitest/coverage-v8": "^1.3.1",
+    "eslint": "^9.25.1",
+    "eslint-config-prettier": "^10.1.2",
+    "eslint-plugin-prettier": "^5.2.6",
     "rimraf": "^6.0.1",
     "tsup": "^8.5.0",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "vitest": "^1.3.1"
   }
 }

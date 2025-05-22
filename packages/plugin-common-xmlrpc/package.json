@@ -1,0 +1,26 @@
+{
+  "name": "siyuan-plugin-publisher-common-xmlrpc",
+  "version": "0.0.1",
+  "description": "Common XMLRPC utilities for SiYuan plugins",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc -w",
+    "clean": "rimraf dist",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage"
+  },
+  "devDependencies": {
+    "@types/jsdom": "^21.1.7",
+    "@types/node": "^20.11.24",
+    "@vitest/coverage-v8": "^1.3.1",
+    "eslint": "^9.25.1",
+    "eslint-config-prettier": "^10.1.2",
+    "eslint-plugin-prettier": "^5.2.6",
+    "rimraf": "^6.0.1",
+    "jsdom": "^26.1.0",
+    "typescript": "^5.3.3",
+    "vitest": "^1.3.1"
+  }
+}
