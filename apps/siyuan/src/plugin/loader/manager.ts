@@ -10,7 +10,7 @@
 import { createAppLogger } from "@utils/appLogger.ts"
 import { IPlugin, mountPtAttr, PluginLoader, PluginLoaderOptions } from "siyuan-plugin-publisher-types"
 import { normalizePath } from "@utils/fileUtils.ts"
-import { PLUGIN_BASE_PATH } from "@/plugin/constants/PluginConstants.ts"
+import { PLUGIN_BASE_PATH } from "@/plugin/constants/pluginConstants.ts"
 import { SiyuanConfig, SiyuanKernelApi } from "zhi-siyuan-api"
 import { useSiyuanSettingStore } from "@stores/useSiyuanSettingStore.ts"
 import * as _ from "lodash-es"

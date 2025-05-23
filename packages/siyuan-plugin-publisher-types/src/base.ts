@@ -68,7 +68,7 @@ const baseI18n = {
 export abstract class BasePlugin implements IPlugin {
   readonly id: string = this.constructor.name
   readonly name: string = this.constructor.name
-  readonly group: string = "unknown"
+  readonly entry: string = "unknown"
   readonly version: string = "unknown"
   readonly description: string = "unknown"
   readonly author: string = "unknown"
@@ -76,7 +76,7 @@ export abstract class BasePlugin implements IPlugin {
   readonly subPlatformType: SubPlatformType = SubPlatformType.NONE
   readonly authMode: AuthMode = AuthMode.NONE
 
-  protected config: Record<string, any> = {}
+  public config: Record<string, any> = {}
   public readonly capabilities: PlatformCapabilities = {
     supportsCategories: false,
     supportsTags: false,

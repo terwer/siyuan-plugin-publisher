@@ -78,12 +78,12 @@ export interface MetadataResult {
   error?: string
 }
 
-export interface IPlugin {
+export interface IPluginTemplate {
   // 插件基本信息
   readonly id: string
-  readonly name?: string
-  readonly group?: string
-  readonly version?: string
+  readonly name: string
+  readonly entry: string
+  readonly version: string
   readonly description?: string
   readonly author?: string
 
@@ -132,4 +132,9 @@ export interface IPlugin {
   getSubPlatformType(): SubPlatformType
   getAuthMode(): AuthMode
   migrateConfig(legencyBlogConfig: BlogConfig, blogConfig: Record<string, any>): void;
+}
+
+export interface IPlugin extends IPluginTemplate{
+  readonly templateId?: string
+  config?: Record<string, any>
 }

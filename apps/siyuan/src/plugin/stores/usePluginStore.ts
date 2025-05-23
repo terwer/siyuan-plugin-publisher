@@ -1,33 +1,118 @@
-/*
- *            GNU GENERAL PUBLIC LICENSE
- *               Version 3, 29 June 2007
- *
- *  Copyright (C) 2025 Terwer, Inc. <https://terwer.space/>
- *  Everyone is permitted to copy and distribute verbatim copies
- *  of this license document, but changing it is not allowed.
- */
-
 import { defineStore } from "pinia"
-import { IPlugin, IPluginConfig } from "siyuan-plugin-publisher-types"
+import { PluginLoader } from "@/plugin/utils/pluginLoader"
+import { PluginPathResolver } from "@/plugin/utils/pluginPathResolver.ts"
+import { createAppLogger } from "@utils/appLogger.ts"
+import { IPlugin, IPluginConfig, IPluginTemplate } from "siyuan-plugin-publisher-types"
+
+const logger = createAppLogger("plugin-store")
 
 export const usePluginStore = defineStore("plugin", {
   state: () => ({
-    plugins: [] as IPlugin[],
+    pluginTemplates: {} as Record<string, IPluginTemplate>,
+    plugins: {} as Record<string, IPlugin>,
     activePlugin: null as string | null,
-    pluginConfigs: {} as Record<string, IPluginConfig>,
+    pluginLoader: PluginLoader.getInstance(),
+    pathResolver: PluginPathResolver.getInstance(),
   }),
 
+  getters: {
+    getTemplate: (state) => (templateId: string) => {
+      return state.pluginTemplates[templateId]
+    },
+
+    getPlugin: (state) => (pluginId: string) => {
+      return state.plugins[pluginId]
+    },
+
+    getPlugins: (state) => (templateId: string) => {
+      return Object.values(state.plugins).filter((p) => p.templateId === templateId)
+    },
+
+    getPluginPath:
+      (state) =>
+      (pluginId: string, type: "root" | "package" | "entry" = "root") => {
+        return state.pathResolver.getTemplatePath(pluginId, type)
+      },
+  },
+
   actions: {
-    addPlugin(plugin: IPlugin) {
-      this.plugins.push(plugin)
+    async loadPluginTemplate(templateId: string) {
+      try {
+        const templatePath = this.pathResolver.getTemplatePath(templateId, "entry")
+        const template = await this.pluginLoader.loadTemplate(templatePath)
+        this.pluginTemplates[templateId] = template
+        return template
+      } catch (error) {
+        logger.error(`Failed to load plugin template ${templateId}:`, error)
+        throw error
+      }
     },
 
-    setActivePlugin(id: string) {
-      this.activePlugin = id
+    createPluginInstance(templateId: string, instanceId?: string, config: Partial<IPluginConfig> = {}) {
+      const template = this.pluginTemplates[templateId]
+      if (!template) {
+        throw new Error(`Template ${templateId} not found`)
+      }
+
+      const finalInstanceId = instanceId || `${templateId}_${Date.now()}`
+      const instance: IPlugin = {
+        id: finalInstanceId,
+        templateId,
+        name: `${template.name} Instance`,
+        config: {
+          ...template.defaultConfig,
+          ...config,
+        },
+      } as IPlugin
+
+      this.plugins[finalInstanceId] = instance
+      return instance
     },
 
-    updatePluginConfig(id: string, config: IPluginConfig) {
-      this.pluginConfigs[id] = config
+    updatePluginConfig(instanceId: string, config: Partial<IPluginConfig>) {
+      const instance = this.plugins[instanceId]
+      if (!instance) {
+        throw new Error(`Instance ${instanceId} not found`)
+      }
+
+      instance.config = {
+        ...instance.config,
+        ...config,
+      }
+    },
+
+    deletePlugin(instanceId: string) {
+      if (!this.plugins[instanceId]) {
+        throw new Error(`Instance ${instanceId} not found`)
+      }
+      delete this.plugins[instanceId]
+    },
+
+    setActiveInstance(instanceId: string) {
+      if (!this.plugins[instanceId]) {
+        throw new Error(`Instance ${instanceId} not found`)
+      }
+      this.activePlugin = instanceId
+    },
+
+    async scanAndLoadTemplates() {
+      const templateDirs = await this.scanPluginDirectories()
+      for (const dir of templateDirs) {
+        const templateId = this.pathResolver.resolvePluginId(dir)
+        if (templateId) {
+          try {
+            await this.loadPluginTemplate(templateId)
+          } catch (error) {
+            logger.error(`Failed to load template ${templateId}:`, error)
+          }
+        }
+      }
+    },
+
+    async scanPluginDirectories() {
+      // 实现扫描插件目录的逻辑
+      // 返回插件目录路径数组
+      return []
     },
   },
 })
