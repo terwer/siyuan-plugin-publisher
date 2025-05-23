@@ -1,7 +1,8 @@
 import { describe, it, beforeEach, expect, vi } from "vitest"
-import { PluginLoader } from "@/plugin/utils/pluginLoader"
+import { PluginLoader } from "@/utils/pluginLoader.ts"
 import { IPluginTemplate } from "siyuan-plugin-publisher-types"
 import path from "path"
+import logger from "./logger"
 
 // Mock logger
 vi.mock("@utils/appLogger.ts", () => ({
@@ -36,7 +37,7 @@ describe("PluginLoader", () => {
     it("should successfully load a test template", async () => {
       const templatePath = path.join(__dirname, "testdata/wordpress/index.js")
       const template = await loader.loadTemplate(templatePath)
-      console.log(template)
+      logger.debug("Loaded template", template)
     })
 
     it("should successfully load a valid template", async () => {

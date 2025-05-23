@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest"
-import { HookManager } from "@/plugin/hooks/manager.ts"
+import { HookManager } from "@/hooks/manager.ts"
 
 describe("HookManager", () => {
   let hookManager: HookManager
@@ -134,7 +134,7 @@ describe("HookManager", () => {
     //
     //   expect(result.success).toBe(false)
     //   expect(result.error?.message).toBe("Hook failed;\nHook failed2")
-    //   console.log("test ok")
+    //   logger.debug("test ok")
     // })
     //
     // it("should handle async timeout in hook execution", async () => {

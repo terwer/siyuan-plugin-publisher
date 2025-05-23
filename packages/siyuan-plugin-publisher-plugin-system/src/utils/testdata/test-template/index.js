@@ -7,8 +7,13 @@
  *  of this license document, but changing it is not allowed.
  */
 
-// 从 siyuan-plugin-publisher-types 导入所有类型
-export * from "siyuan-plugin-publisher-types"
+const template = {
+  id: "test-plugin",
+  name: "Test Plugin",
+  version: "1.0.0",
+  entry: "index.js",
+  author: "Test Author",
+  description: "Test Description",
+}
 
-// 导出插件唯一入口
-export * from "./composables/usePlugin"
+export default template

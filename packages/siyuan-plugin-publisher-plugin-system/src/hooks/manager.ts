@@ -7,11 +7,8 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { createAppLogger } from "@utils/appLogger.ts"
 import { GlobalHook, HookContext, HookResult, HookStage, PluginHook } from "siyuan-plugin-publisher-types"
-import * as _ from "lodash-es"
-
-const logger = createAppLogger("hook-manager")
+import logger from "@/utils/logger.ts"
 
 export class HookManager {
   private static instance: HookManager
@@ -131,7 +128,8 @@ export class HookManager {
     logger.info(`Executing hooks for stage: ${stage}, platform: ${context.id}`)
 
     const errorMessages: string[] = []
-    const mutableContext = _.cloneDeep(context) // 深拷贝上下文
+    // 深拷贝上下文
+    const mutableContext = structuredClone(context)
 
     // 执行全局 Hook
     const globalHooks = this.globalHooks.get(stage) || []

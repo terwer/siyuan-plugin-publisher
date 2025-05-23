@@ -7,11 +7,12 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { createAppLogger } from "@utils/appLogger.ts"
 import { IPlugin, IPluginTemplate } from "siyuan-plugin-publisher-types"
+import logger from "@/utils/logger.ts"
 
-const logger = createAppLogger("plugin-loader")
-
+/**
+ * 插件加载器
+ */
 export class PluginLoader {
   private static instance: PluginLoader
   private loadedTemplates: Map<string, IPlugin> = new Map()

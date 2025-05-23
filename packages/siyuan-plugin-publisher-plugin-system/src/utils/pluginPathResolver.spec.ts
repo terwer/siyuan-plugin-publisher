@@ -1,6 +1,6 @@
 import { describe, it, beforeEach, expect } from "vitest"
-import { PluginPathResolver } from "@/plugin/utils/pluginPathResolver"
-import { PLUGIN_BASE_PATH } from "@/plugin/constants/pluginConstants"
+import { PluginPathResolver } from "@/utils/pluginPathResolver"
+import { PLUGIN_BASE_PATH } from "@/constants/pluginConstants"
 
 describe("PluginPathResolver", () => {
   let resolver: PluginPathResolver

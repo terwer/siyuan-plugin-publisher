@@ -8,38 +8,17 @@
  */
 
 import { ref } from "vue"
-import { HookStage, IPluginConfig } from "@/plugin"
-import { createAppLogger } from "@utils/appLogger.ts"
-import { afterProcessHook, beforeProcessHook, beforePublishHook } from "@/plugin/hooks/global.ts"
-import { usePluginStore } from "@/plugin/stores/usePluginStore.ts"
+import { usePluginStore } from "@/stores/usePluginStore.ts"
+import { IPluginConfig } from "siyuan-plugin-publisher-types"
+import logger from "@/utils/logger.ts"
 
-const logger = createAppLogger("use-plugin")
-
-// 添加静态标志
-let isGlobalHooksInitialized = false
-
-// 初始化全局 Hook
-const initGlobalHooks = () => {
-  if (isGlobalHooksInitialized) {
-    return
-  }
-
-  const hookManager = usePluginStore().hookManager
-  hookManager.registerGlobalHook(HookStage.BEFORE_PROCESS, beforeProcessHook)
-  hookManager.registerGlobalHook(HookStage.AFTER_PROCESS, afterProcessHook)
-  hookManager.registerGlobalHook(HookStage.BEFORE_PUBLISH, beforePublishHook)
-
-  isGlobalHooksInitialized = true
-}
-
+/**
+ * 插件系统全局唯一入口
+ */
 export const usePlugin = () => {
   const pluginStore = usePluginStore()
 
-  const hookManager = pluginStore.hookManager
   const loading = ref(false)
-
-  // 初始化全局 Hook
-  initGlobalHooks()
 
   /**
    * 获取当前活动的插件（内部使用）

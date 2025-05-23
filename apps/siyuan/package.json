@@ -18,6 +18,7 @@
     "lucide-vue-next": "^0.503.0",
     "pinia": "^3.0.2",
     "shorthash2": "^1.0.5",
+    "siyuan-plugin-publisher-plugin-system": "workspace:*",
     "siyuan-plugin-publisher-types": "workspace:*",
     "uuid": "^11.1.0",
     "vue": "^3.5.14",

@@ -1,13 +1,13 @@
 import { defineStore } from "pinia"
-import { PluginLoader } from "@/plugin/utils/pluginLoader"
-import { PluginPathResolver } from "@/plugin/utils/pluginPathResolver.ts"
-import { createAppLogger } from "@utils/appLogger.ts"
-import { IPlugin, IPluginConfig, IPluginTemplate } from "siyuan-plugin-publisher-types"
-import { HookManager } from "@/plugin/hooks/manager.ts"
-import { HookStage } from "@/plugin"
+import { HookStage, IPlugin, IPluginConfig, IPluginTemplate } from "siyuan-plugin-publisher-types"
+import { PluginLoader } from "@/utils/pluginLoader"
+import { PluginPathResolver } from "@/utils/pluginPathResolver"
+import { HookManager } from "@/hooks/manager"
+import logger from "@/utils/logger.ts"
 
-const logger = createAppLogger("plugin-store")
-
+/**
+ * 插件状态管理
+ */
 export const usePluginStore = defineStore("plugin", {
   state: () => ({
     pluginTemplates: {} as Record<string, IPluginTemplate>,

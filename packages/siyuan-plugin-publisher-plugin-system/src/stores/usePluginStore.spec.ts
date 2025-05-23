@@ -1,8 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from "vitest"
 import { setActivePinia, createPinia } from "pinia"
 import { usePluginStore } from "./usePluginStore"
-import { PluginLoader } from "@/plugin/utils/pluginLoader"
-import { PluginPathResolver } from "@/plugin/utils/pluginPathResolver"
 import { IPlugin, IPluginConfig, IPluginTemplate } from "siyuan-plugin-publisher-types"
 
 // Mock dependencies

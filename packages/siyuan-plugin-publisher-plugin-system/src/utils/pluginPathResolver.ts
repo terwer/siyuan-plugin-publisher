@@ -7,8 +7,11 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { PLUGIN_BASE_PATH } from "@/plugin/constants/pluginConstants.ts"
+import { PLUGIN_BASE_PATH } from "@/constants/pluginConstants"
 
+/**
+ * 路径解析器
+ */
 export class PluginPathResolver {
   private static instance: PluginPathResolver
   private readonly pluginBasePath: string
