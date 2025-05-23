@@ -15,7 +15,8 @@
     "@siyuan-publisher/platform-adapters": "workspace:*",
     "@siyuan-publisher/plugin-system": "workspace:*",
     "@siyuan-publisher/ui": "workspace:*",
-    "vue": "^3.4.21"
+    "vue": "^3.4.21",
+    "vue-router": "^4.2.5"
   },
   "devDependencies": {
     "@types/node": "^22.15.21",
