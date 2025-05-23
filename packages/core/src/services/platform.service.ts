@@ -13,6 +13,12 @@ export class PlatformService {
     this.adapters.set(adapter.name, adapter)
   }
 
+  async registerAdapters(adapters: PlatformAdapter[]): Promise<void> {
+    for (const adapter of adapters) {
+      await this.registerAdapter(adapter)
+    }
+  }
+
   async unregisterAdapter(name: string): Promise<void> {
     const adapter = this.adapters.get(name)
     if (!adapter) {

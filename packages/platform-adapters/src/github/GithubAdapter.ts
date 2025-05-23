@@ -1,91 +1,72 @@
-import { PlatformAdapter, PlatformConfig, PublishOptions, PublishResult } from "@siyuan-publisher/core"
-import { GithubConfig, GithubPublishOptions, GithubPublishResult } from "../types"
-import { Octokit } from "@octokit/rest"
+import type { PlatformAdapter } from "../types"
+import type { PlatformConfig, Post, PublishOptions, PublishResult } from "@siyuan-publisher/core"
 
 export class GithubAdapter implements PlatformAdapter {
-  name = "github"
-  version = "1.0.0"
-  private config: GithubConfig | null = null
-  private octokit: Octokit | null = null
+  readonly name = "GitHub"
+  readonly version = "1.0.0"
+  readonly type = "github"
+
+  private config: PlatformConfig = { type: "github", config: {} }
+
+  async initialize() {}
+  async destroy() {}
+
+  getConfig(): PlatformConfig {
+    return this.config
+  }
+
+  async updateConfig(config: PlatformConfig) {
+    this.config = config
+  }
 
   async connect(config: PlatformConfig): Promise<void> {
-    const githubConfig = config as GithubConfig
-    if (!githubConfig.token || !githubConfig.owner || !githubConfig.repo) {
-      throw new Error("Missing required GitHub configuration")
-    }
-
-    this.config = githubConfig
-    this.octokit = new Octokit({
-      auth: githubConfig.token,
-    })
+    this.config = config
+    // 可扩展：测试 token 有效性
   }
 
   async disconnect(): Promise<void> {
-    this.config = null
-    this.octokit = null
+    // GitHub 无需显式断开
   }
 
-  async publish(content: string, options: PublishOptions): Promise<PublishResult> {
-    if (!this.octokit || !this.config) {
-      throw new Error("GitHub adapter is not connected")
-    }
-
-    const githubOptions = options as GithubPublishOptions
-    const branch = githubOptions.branch || this.config.branch || "main"
-    const path = githubOptions.path || this.config.path || "README.md"
-    const commitMessage = githubOptions.commitMessage || "Update content"
-
+  async testConnection(): Promise<{ success: boolean; error?: string }> {
     try {
-      // 获取当前文件内容（如果存在）
-      let currentSha: string | undefined
-      try {
-        const response = await this.octokit.repos.getContent({
-          owner: this.config.owner,
-          repo: this.config.repo,
-          path,
-          ref: branch,
-        })
-
-        // 处理返回的数据
-        if (Array.isArray(response.data)) {
-          // 如果是目录，找到匹配的文件
-          const file = response.data.find((item) => item.path === path)
-          if (file && "sha" in file) {
-            currentSha = file.sha
-          }
-        } else if ("sha" in response.data) {
-          // 如果是单个文件
-          currentSha = response.data.sha
-        }
-      } catch (error) {
-        // 文件不存在，继续创建
-      }
-
-      // 创建或更新文件
-      const response = await this.octokit.repos.createOrUpdateFileContents({
-        owner: this.config.owner,
-        repo: this.config.repo,
-        path,
-        message: commitMessage,
-        content: Buffer.from(content).toString("base64"),
-        branch,
-        ...(currentSha && { sha: currentSha }),
+      const { token, owner, repo } = this.config.config
+      const response = await fetch(`https://api.github.com/repos/${owner}/${repo}`, {
+        headers: { Authorization: `token ${token}` },
       })
-
-      const result: GithubPublishResult = {
-        success: true,
-        url: response.data.content?.html_url || "",
-        commitSha: response.data.commit.sha,
-        htmlUrl: response.data.content?.html_url,
-        rawUrl: response.data.content?.download_url,
-      }
-
-      return result
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+      return { success: true }
     } catch (error) {
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : "Unknown error",
+      return { success: false, error: error instanceof Error ? error.message : "连接测试失败" }
+    }
+  }
+
+  async publish(post: Post, options: PublishOptions): Promise<PublishResult> {
+    try {
+      const { token, owner, repo, path = "README.md", branch = "main" } = this.config.config
+      const content = btoa(unescape(encodeURIComponent(post.content)))
+      const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`
+      const body = {
+        message: options.commitMessage || `Publish: ${post.title}`,
+        content,
+        branch,
       }
+      const response = await fetch(url, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `token ${token}`,
+        },
+        body: JSON.stringify(body),
+      })
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.message || `HTTP error! status: ${response.status}`)
+      }
+      const data = await response.json()
+      return { success: true, url: data.content.html_url }
+    } catch (error) {
+      return { success: false, error: error instanceof Error ? error.message : "发布失败" }
     }
   }
 }

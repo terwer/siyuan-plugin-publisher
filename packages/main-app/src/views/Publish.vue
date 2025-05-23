@@ -43,7 +43,13 @@ import { usePluginSystem } from "../composables/usePluginSystem"
 import { usePublisher } from "../composables/usePublisher"
 import type { Post, PublishResult, PlatformConfig } from "@siyuan-publisher/core"
 
-const { plugins: availablePlatforms, loadPlugin } = usePluginSystem()
+const {
+  plugins: availablePlatforms,
+  loadPlugin,
+  platformAdapters,
+  connectPlatform,
+  publishWithPlatform,
+} = usePluginSystem()
 const { publish: publishService, isPublishing } = usePublisher()
 
 const selectedPlatform = ref("")
@@ -58,6 +64,7 @@ const post = ref<Post>({
 })
 
 const publishResult = ref<PublishResult | null>(null)
+const publishOptions = ref({})
 
 // 动态加载平台配置组件
 const platformConfigComponent = computed(() => {
@@ -68,36 +75,48 @@ const platformConfigComponent = computed(() => {
 // 测试平台连接
 const testConnection = async () => {
   try {
-    const result = await publishService.testConnection(selectedPlatform.value, platformConfig.value)
-    alert(result.success ? "连接成功！" : `连接失败：${result.error}`)
+    await connectPlatform(selectedPlatform.value, platformConfig.value)
+    showMessage("连接成功", "success")
   } catch (error) {
-    alert(`测试失败：${error instanceof Error ? error.message : "未知错误"}`)
+    showMessage(error instanceof Error ? error.message : "连接失败", "error")
   }
 }
 
 // 发布文章
 const publish = async () => {
-  if (!post.value.title || !post.value.content) {
-    alert("请填写文章标题和内容")
-    return
-  }
-
-  publishResult.value = null
-
   try {
-    publishResult.value = await publishService.publish({
-      platform: {
-        type: selectedPlatform.value,
-        config: platformConfig.value.config,
+    isPublishing.value = true
+    const result = await publishWithPlatform(
+      selectedPlatform.value,
+      {
+        title: post.value.title,
+        content: post.value.content,
+        metadata: post.value.metadata,
       },
-      post: post.value,
-    })
-  } catch (error) {
-    publishResult.value = {
-      success: false,
-      error: error instanceof Error ? error.message : "发布失败",
+      publishOptions.value,
+    )
+    if (result.success) {
+      showMessage("发布成功", "success")
+      publishResult.value = result
+    } else {
+      showMessage(result.error || "发布失败", "error")
     }
+  } catch (error) {
+    showMessage(error instanceof Error ? error.message : "发布失败", "error")
+  } finally {
+    isPublishing.value = false
   }
+}
+
+// 显示消息
+const showMessage = (message: string, type: "success" | "error") => {
+  const messageDiv = document.createElement("div")
+  messageDiv.className = `message ${type}`
+  messageDiv.textContent = message
+  document.body.appendChild(messageDiv)
+  setTimeout(() => {
+    messageDiv.remove()
+  }, 3000)
 }
 </script>
 
@@ -175,5 +194,47 @@ textarea {
   padding: 15px;
   border-radius: 4px;
   margin-bottom: 20px;
+}
+
+/* 消息提示样式 */
+.message {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 10px 20px;
+  border-radius: 4px;
+  z-index: 1000;
+  animation: fadeInOut 3s ease-in-out;
+}
+
+.message.success {
+  background-color: #e6ffe6;
+  color: #006600;
+  border: 1px solid #006600;
+}
+
+.message.error {
+  background-color: #ffe6e6;
+  color: #cc0000;
+  border: 1px solid #cc0000;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  90% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
 }
 </style>
