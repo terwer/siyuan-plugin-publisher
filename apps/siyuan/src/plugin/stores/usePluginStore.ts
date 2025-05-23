@@ -3,6 +3,8 @@ import { PluginLoader } from "@/plugin/utils/pluginLoader"
 import { PluginPathResolver } from "@/plugin/utils/pluginPathResolver.ts"
 import { createAppLogger } from "@utils/appLogger.ts"
 import { IPlugin, IPluginConfig, IPluginTemplate } from "siyuan-plugin-publisher-types"
+import { HookManager } from "@/plugin/hooks/manager.ts"
+import { HookStage } from "@/plugin"
 
 const logger = createAppLogger("plugin-store")
 
@@ -13,6 +15,7 @@ export const usePluginStore = defineStore("plugin", {
     activePlugin: null as string | null,
     pluginLoader: PluginLoader.getInstance(),
     pathResolver: PluginPathResolver.getInstance(),
+    hookManager: HookManager.getInstance(),
   }),
 
   getters: {
@@ -85,6 +88,7 @@ export const usePluginStore = defineStore("plugin", {
       if (!this.plugins[instanceId]) {
         throw new Error(`Instance ${instanceId} not found`)
       }
+      this.hookManager.clearPluginHooks(instanceId)
       delete this.plugins[instanceId]
     },
 
@@ -113,6 +117,18 @@ export const usePluginStore = defineStore("plugin", {
       // 实现扫描插件目录的逻辑
       // 返回插件目录路径数组
       return []
+    },
+
+    registerGlobalHook(stage: HookStage, hook: any) {
+      this.hookManager.registerGlobalHook(stage, hook)
+    },
+
+    registerPluginHook(pluginId: string, stage: HookStage, hook: any) {
+      this.hookManager.registerPluginHook(pluginId, stage, hook)
+    },
+
+    async executeHooks(stage: HookStage, context: any) {
+      return await this.hookManager.executeHooks(stage, context)
     },
   },
 })

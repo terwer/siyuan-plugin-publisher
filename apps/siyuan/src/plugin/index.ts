@@ -10,5 +10,5 @@
 // 从 siyuan-plugin-publisher-types 导入所有类型
 export * from "siyuan-plugin-publisher-types"
 
-// 导出插件加载器
-export * from "./loader/manager"
+// 导出插件唯一入口
+export * from "./composables/usePlugin"

@@ -8,94 +8,176 @@
  */
 
 import { ref } from "vue"
-import { PluginLoaderManager } from "@/plugin/loader/manager.ts"
-import { HookStage } from "@/plugin"
+import { HookStage, IPluginConfig } from "@/plugin"
 import { createAppLogger } from "@utils/appLogger.ts"
-import { HookManager } from "@/plugin/hooks/manager.ts"
 import { afterProcessHook, beforeProcessHook, beforePublishHook } from "@/plugin/hooks/global.ts"
-import { StrUtil } from "zhi-common"
-import { legencyPlatformMap } from "@/presets/platformTemplates.ts"
-import { DynamicConfig } from "@/models/dynamicConfig.ts"
+import { usePluginStore } from "@/plugin/stores/usePluginStore.ts"
 
 const logger = createAppLogger("use-plugin")
 
+// 添加静态标志
+let isGlobalHooksInitialized = false
+
+// 初始化全局 Hook
+const initGlobalHooks = () => {
+  if (isGlobalHooksInitialized) {
+    return
+  }
+
+  const hookManager = usePluginStore().hookManager
+  hookManager.registerGlobalHook(HookStage.BEFORE_PROCESS, beforeProcessHook)
+  hookManager.registerGlobalHook(HookStage.AFTER_PROCESS, afterProcessHook)
+  hookManager.registerGlobalHook(HookStage.BEFORE_PUBLISH, beforePublishHook)
+
+  isGlobalHooksInitialized = true
+}
+
 export const usePlugin = () => {
-  const loader = PluginLoaderManager.getInstance()
-  const hookManager = HookManager.getInstance()
+  const pluginStore = usePluginStore()
+
+  const hookManager = pluginStore.hookManager
   const loading = ref(false)
 
   // 初始化全局 Hook
-  const initGlobalHooks = () => {
-    hookManager.registerGlobalHook(HookStage.BEFORE_PROCESS, beforeProcessHook)
-    hookManager.registerGlobalHook(HookStage.AFTER_PROCESS, afterProcessHook)
-    hookManager.registerGlobalHook(HookStage.BEFORE_PUBLISH, beforePublishHook)
-  }
-
-  const loadAllPlugins = async (pluginPaths: string) => {
-    loading.value = true
-    for (const path of pluginPaths) {
-      try {
-        await loadPlugin(path)
-      } catch (e) {
-        logger.error(`Error loading plugin ${path}:`, e)
-      }
-    }
-    loading.value = false
-  }
-
-  const getPluginPath = (platformConfig: DynamicConfig): string => {
-    const pluginPath = StrUtil.isEmptyString(platformConfig.pluginPath)
-      ? (legencyPlatformMap.get(platformConfig.subPlatformType) as string)
-      : platformConfig.pluginPath
-    return pluginPath ?? "unknown"
-  }
-
-  const loadPlugin = async (pluginPath: string) => {
-    loading.value = true
-    const result = await loader.loadPlugin(pluginPath)
-    logger.info(`Plugin loaded successfully: ${pluginPath}`)
-    loading.value = false
-    return result
-  }
-
-  const getPlugin = (id: string) => {
-    return loader.getPlugin(id)
-  }
-
-  const initPluginForPlatform = async (platformConfig: DynamicConfig) => {
-    // 尝试获取已加载的插件
-    let loadedPlugin = getPlugin(platformConfig.platformKey)
-
-    // 如果插件未加载，则加载插件
-    if (!loadedPlugin) {
-      const pluginLoader = PluginLoaderManager.getInstance()
-      const pluginPath = getPluginPath(platformConfig)
-      const result = await pluginLoader.loadPlugin(pluginPath)
-      if (!result.success) {
-        throw new Error(`Failed to load plugin from ${pluginPath}: ${result.error}`)
-      }
-      loadedPlugin = result.instance
-      if (!loadedPlugin) {
-        throw new Error(`Plugin instance not found: ${pluginPath}`)
-      }
-    }
-    return loadedPlugin
-  }
-
-  const getAllPlugins = () => {
-    return loader.getAllPlugins()
-  }
-
-  // 初始化
   initGlobalHooks()
+
+  /**
+   * 获取当前活动的插件（内部使用）
+   */
+  const getActivePlugin = () => {
+    const activeId = pluginStore.activePlugin
+    return activeId ? pluginStore.getPlugin(activeId) : null
+  }
+
+  /**
+   * 设置活动插件（内部使用）
+   * @param pluginId 插件ID
+   */
+  const setActivePlugin = (pluginId: string) => {
+    pluginStore.setActiveInstance(pluginId)
+  }
+
+  /**
+   * 获取插件实例的唯一入口
+   *
+   * @param id 实例ID
+   * @param templateId 模板ID，对应的是插件文件夹名称
+   * @param config 插件配置
+   * @author terwer
+   * @version 2.0.0
+   * @since 2.0.0
+   */
+  const getPlugin = async (id: string, templateId?: string, config?: Partial<IPluginConfig>) => {
+    loading.value = true
+    try {
+      // 尝试获取已存在的插件
+      let plugin = pluginStore.getPlugin(id)
+
+      // 如果插件存在，直接返回
+      if (plugin) {
+        logger.info(`Plugin already exists: ${id}`)
+        // 如果插件存在，设置为活动插件
+        setActivePlugin(id)
+        return plugin
+      }
+
+      // 如果插件不存在，尝试创建新实例
+      // 检查模板是否存在
+      if (!templateId) {
+        throw new Error(`Template id is required for creating new plugin instance`)
+      }
+
+      let template = pluginStore.getTemplate(templateId)
+      if (!template) {
+        // 如果模板不存在，尝试加载模板
+        try {
+          template = await pluginStore.loadPluginTemplate(templateId)
+          logger.info(`Loaded new template: ${templateId}`)
+        } catch (error) {
+          logger.error(`Failed to load template: ${templateId}`, error)
+          throw new Error(`Template loading failed: ${templateId}`)
+        }
+      }
+
+      if (!template) {
+        throw new Error(`Template not found: ${templateId}`)
+      }
+
+      // 创建插件实例
+      try {
+        plugin = pluginStore.createPluginInstance(templateId, id, config)
+        logger.info(`Created new plugin instance: ${id}`)
+        // 新创建的插件设置为活动插件
+        setActivePlugin(id)
+      } catch (error) {
+        logger.error(`Failed to create plugin instance: ${id}`, error)
+        throw new Error(`Plugin instance creation failed: ${id}`)
+      }
+
+      return plugin
+    } finally {
+      loading.value = false
+    }
+  }
+
+  /**
+   * 获取所有插件模板
+   * 如果模板未加载，会自动扫描并加载所有模板
+   */
+  const getAllPluginTemplates = async () => {
+    loading.value = true
+    try {
+      // 如果模板为空，尝试扫描并加载所有模板
+      if (Object.keys(pluginStore.pluginTemplates).length === 0) {
+        await pluginStore.scanAndLoadTemplates()
+      }
+      return pluginStore.pluginTemplates
+    } finally {
+      loading.value = false
+    }
+  }
+
+  /**
+   * 获取所有插件实例
+   */
+  const getAllPlugins = () => {
+    return pluginStore.plugins
+  }
+
+  /**
+   * 更新插件配置
+   * @param pluginId 插件ID
+   * @param config 新的配置
+   */
+  const updatePluginConfig = (pluginId: string, config: Partial<IPluginConfig>) => {
+    // 确保要更新的插件是当前活动插件
+    const activePlugin = getActivePlugin()
+    if (activePlugin && activePlugin.id === pluginId) {
+      pluginStore.updatePluginConfig(pluginId, config)
+    } else {
+      logger.warn(`Cannot update config for non-active plugin: ${pluginId}`)
+    }
+  }
+
+  /**
+   * 删除插件实例
+   * @param pluginId 插件ID
+   */
+  const deletePlugin = (pluginId: string) => {
+    // 如果删除的是当前活动插件，需要清除活动状态
+    const activePlugin = getActivePlugin()
+    if (activePlugin && activePlugin.id === pluginId) {
+      pluginStore.setActiveInstance(null as any)
+    }
+    pluginStore.deletePlugin(pluginId)
+  }
 
   return {
     loading,
-    getPluginPath,
-    loadPlugin,
     getPlugin,
-    initPluginForPlatform,
-    loadAllPlugins,
     getAllPlugins,
+    getAllPluginTemplates,
+    updatePluginConfig,
+    deletePlugin,
   }
 }
