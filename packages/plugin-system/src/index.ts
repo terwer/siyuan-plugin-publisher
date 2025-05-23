@@ -1,3 +1,12 @@
-export * from './manager/PluginManager'
-export * from './loader/PluginLoader'
-export * from './types' 
+// 导出类型
+// export * from "./types"
+
+// 导出加载器
+// export { BrowserPluginLoader } from "./loader"
+// export { PluginLoader } from "./loader/PluginLoader"
+
+// 导出插件系统
+export { PluginManager as PluginSystem } from "./manager/PluginManager"
+
+// 导出工具函数
+// export * from "./utils"

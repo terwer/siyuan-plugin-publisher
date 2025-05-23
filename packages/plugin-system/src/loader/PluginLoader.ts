@@ -1,5 +1,6 @@
-import { Plugin } from '@siyuan-publisher/core'
-import { PluginLoadResult } from '../types'
+import { Plugin } from "@siyuan-publisher/core"
+import { PluginLoadResult, PluginManifest } from "../types"
+import { validateManifest, validatePluginType } from "../utils"
 
 export class PluginLoader {
   private static instance: PluginLoader
@@ -13,37 +14,62 @@ export class PluginLoader {
     return PluginLoader.instance
   }
 
-  async loadPlugin(pluginPath: string): Promise<PluginLoadResult> {
+  async loadPlugin(plugin: Plugin, manifest: PluginManifest): Promise<PluginLoadResult> {
     try {
-      const module = await import(pluginPath)
-      const plugin = module.default as Plugin
-
-      if (!this.validatePlugin(plugin)) {
+      if (!validateManifest(manifest)) {
         return {
           success: false,
-          error: new Error('Invalid plugin structure')
+          error: "Invalid plugin manifest",
         }
       }
 
+      if (!this.validatePlugin(plugin, manifest)) {
+        return {
+          success: false,
+          error: "Invalid plugin structure",
+        }
+      }
+
+      // 初始化插件
+      await plugin.initialize()
+
       return {
         success: true,
-        plugin
+        plugin,
       }
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error : new Error('Unknown error occurred')
+        error: error instanceof Error ? error.message : "Unknown error occurred",
       }
     }
   }
 
-  private validatePlugin(plugin: any): plugin is Plugin {
-    return (
-      typeof plugin === 'object' &&
-      plugin !== null &&
-      typeof plugin.name === 'string' &&
-      typeof plugin.init === 'function' &&
-      typeof plugin.destroy === 'function'
+  private validatePlugin(plugin: any, manifest: PluginManifest): plugin is Plugin {
+    if (typeof plugin !== "object" || plugin === null) {
+      return false
+    }
+
+    const requiredFields = ["id", "name", "version"]
+    const hasRequiredFields = requiredFields.every(
+      (field) => typeof plugin[field] === "string" && plugin[field].length > 0,
     )
+
+    if (!hasRequiredFields) {
+      return false
+    }
+
+    const hasRequiredMethods =
+      typeof plugin.initialize === "function" &&
+      typeof plugin.destroy === "function" &&
+      typeof plugin.getConfig === "function" &&
+      typeof plugin.updateConfig === "function"
+
+    if (!hasRequiredMethods) {
+      return false
+    }
+
+    // 验证插件类型特定的方法
+    return validatePluginType(plugin, manifest.type)
   }
-} 
+}

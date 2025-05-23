@@ -1,4 +1,4 @@
-import { PlatformConfig, PublishOptions, PublishResult } from '@siyuan-publisher/core'
+import { PlatformConfig, PublishOptions, PublishResult } from "@siyuan-publisher/core"
 
 export interface GithubConfig extends PlatformConfig {
   token: string
@@ -18,4 +18,4 @@ export interface GithubPublishResult extends PublishResult {
   commitSha?: string
   htmlUrl?: string
   rawUrl?: string
-} 
+}

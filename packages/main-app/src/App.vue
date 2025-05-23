@@ -42,7 +42,7 @@
 }
 
 .nav-item.router-link-active {
-  background-color: #007AFF;
+  background-color: #007aff;
   color: white;
 }
 

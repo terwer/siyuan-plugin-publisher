@@ -1,40 +1,45 @@
-import { Plugin } from '../types';
+import type { Plugin } from "../types"
+import { PublisherError } from "../types"
 
 export class PluginService {
-  private plugins: Map<string, Plugin> = new Map();
+  private plugins: Map<string, Plugin> = new Map()
 
   async registerPlugin(plugin: Plugin): Promise<void> {
-    if (this.plugins.has(plugin.name)) {
-      throw new Error(`Plugin ${plugin.name} is already registered`);
+    if (this.plugins.has(plugin.id)) {
+      throw new PublisherError("PLUGIN_LOAD_FAILED", `Plugin ${plugin.name} (${plugin.id}) is already registered`)
     }
 
     try {
-      await plugin.init();
-      this.plugins.set(plugin.name, plugin);
+      await plugin.initialize()
+      this.plugins.set(plugin.id, plugin)
     } catch (error) {
-      throw new Error(`Failed to initialize plugin ${plugin.name}: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new PublisherError("PLUGIN_INIT_FAILED", `Failed to initialize plugin ${plugin.name} (${plugin.id})`, {
+        originalError: error,
+      })
     }
   }
 
-  async unregisterPlugin(name: string): Promise<void> {
-    const plugin = this.plugins.get(name);
+  async unregisterPlugin(id: string): Promise<void> {
+    const plugin = this.plugins.get(id)
     if (!plugin) {
-      throw new Error(`Plugin ${name} is not registered`);
+      throw new PublisherError("PLUGIN_DESTROY_FAILED", `Plugin with id ${id} is not registered`)
     }
 
     try {
-      await plugin.destroy();
-      this.plugins.delete(name);
+      await plugin.destroy()
+      this.plugins.delete(id)
     } catch (error) {
-      throw new Error(`Failed to destroy plugin ${name}: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new PublisherError("PLUGIN_DESTROY_FAILED", `Failed to destroy plugin ${plugin.name} (${id})`, {
+        originalError: error,
+      })
     }
   }
 
-  getPlugin(name: string): Plugin | undefined {
-    return this.plugins.get(name);
+  getPlugin(id: string): Plugin | undefined {
+    return this.plugins.get(id)
   }
 
   getAllPlugins(): Plugin[] {
-    return Array.from(this.plugins.values());
+    return Array.from(this.plugins.values())
   }
-} 
+}

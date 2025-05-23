@@ -1,1 +1,1 @@
-export * from './github/GithubAdapter' 
+export * from "./github/GithubAdapter"
