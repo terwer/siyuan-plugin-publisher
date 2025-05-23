@@ -1,5 +1,5 @@
 import type { PlatformAdapter } from "../types"
-import type { PlatformConfig, Post, PublishOptions, PublishResult } from "@siyuan-publisher/core"
+import type { PlatformConfig, Post, PublishOptions, PublishResult } from "@siyuan-publisher/common"
 
 export class GithubAdapter implements PlatformAdapter {
   readonly name = "GitHub"

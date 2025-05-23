@@ -1,4 +1,4 @@
-import type { Plugin, PluginManifest, PluginLoadResult } from "../types"
+import type { Plugin, PluginManifest, PluginLoadResult } from "@siyuan-publisher/common"
 import { PluginLoader as CorePluginLoader } from "./PluginLoader"
 import { checkDependencies } from "../utils"
 

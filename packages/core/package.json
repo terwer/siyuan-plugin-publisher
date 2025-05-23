@@ -12,6 +12,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
+    "@siyuan-publisher/common": "workspace:*",
     "vue": "^3.4.21"
   },
   "devDependencies": {

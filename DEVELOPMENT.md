@@ -2,7 +2,59 @@
 
 ## Architecture Overview
 
-The SiYuan Publisher is built with a modular architecture that separates concerns and promotes maintainability. Here's a detailed breakdown of the system:
+SiYuan Publisher adopts a modular architecture and centralizes all shared type definitions in a dedicated `common` package. This design effectively avoids circular dependencies and improves maintainability.
+
+### Directory Structure
+
+```
+packages/
+  common/                # Shared type definitions (type/interface/enum only)
+  core/                  # Core business logic
+  plugin-system/         # Plugin management and loading
+  platform-adapters/     # Third-party platform adapters
+  main-app/              # Main application
+  ui/                    # Frontend UI components
+```
+
+### Type Dependency & Call Chain
+
+- **common**
+  - Only defines types, does not depend on any business package.
+  - All other packages depend on common for types.
+
+- **core/plugin-system/platform-adapters/main-app/ui**
+  - Only import types from `@siyuan-publisher/common`.
+  - No cross-package type imports.
+  - Business logic dependencies are flexible, but type dependencies always point to common.
+
+#### Dependency Tree
+
+```
+common
+  ↑   ↑   ↑   ↑   ↑
+  |   |   |   |   |
+core plugin-system platform-adapters main-app ui
+```
+
+- All shared types must be imported from common.
+- No direct type imports between business packages.
+
+### Coding Guidelines
+
+- Define and maintain all shared types in the `common` package.
+- Business packages only implement their own logic and import types from `@siyuan-publisher/common`.
+- Do not import types directly between business packages to prevent circular dependencies and type redundancy.
+
+### Example Call Chain
+
+- `main-app` loads plugins via `plugin-system`, all types (e.g., Plugin, PlatformAdapter) are imported from `common`.
+- `platform-adapters` implement adapters, all interfaces and config types are imported from `common`.
+- `ui` components import types (e.g., Post, PublishResult) only from `common`.
+
+### Summary
+
+- The unified type center (`common`) makes the architecture clearer and easier to maintain.
+- The dependency tree and call chain are easier to track and manage, greatly reducing the cost of future refactoring and extension.
 
 ### Core Components
 
@@ -198,32 +250,15 @@ graph TD
    ```
    Main App
    ├── User selects platform
-   ├── Loads platform configuration component
-   └── Displays platform-specific settings
+   └── Loads corresponding adapter
    ```
 
-3. **Connection Testing**
+3. **Publishing Process**
    ```
    Main App
-   ├── User configures platform settings
-   ├── Triggers connection test
-   ├── Publisher Service
-   │   └── Gets platform adapter
-   └── Platform Adapter
-       └── Tests connection with platform
-   ```
-
-4. **Publishing Process**
-   ```
-   Main App
-   ├── User prepares post content
-   ├── Triggers publish action
-   ├── Publisher Service
-   │   ├── Validates post data
-   │   └── Gets platform adapter
-   └── Platform Adapter
-       ├── Transforms post data
-       └── Publishes to platform
+   ├── Prepares content
+   ├── Calls adapter's publish method
+   └── Handles result
    ```
 
 ### Key Interfaces

@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "vue": "^3.4.21",
-    "@siyuan-publisher/core": "workspace:*"
+    "@siyuan-publisher/common": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^22.15.21",

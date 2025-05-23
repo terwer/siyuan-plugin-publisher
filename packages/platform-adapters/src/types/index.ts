@@ -1,22 +1,13 @@
-import type { PlatformConfig, PublishOptions, PublishResult, Post } from "@siyuan-publisher/core"
+import type { 
+  PlatformConfig, 
+  PublishOptions, 
+  PublishResult, 
+  Post,
+  PlatformAdapter 
+} from "@siyuan-publisher/common"
 
-// 平台适配器统一接口
-export interface PlatformAdapter {
-  readonly name: string
-  readonly version: string
-  readonly type: string
-
-  initialize(): Promise<void>
-  destroy(): Promise<void>
-
-  getConfig(): PlatformConfig
-  updateConfig(config: PlatformConfig): Promise<void>
-
-  connect(config: PlatformConfig): Promise<void>
-  disconnect(): Promise<void>
-  testConnection(): Promise<{ success: boolean; error?: string }>
-  publish(post: Post, options: PublishOptions): Promise<PublishResult>
-}
+// 导出基础接口
+export type { PlatformAdapter }
 
 // 平台适配器注册器接口
 export interface PlatformAdapterRegistry {
@@ -26,6 +17,7 @@ export interface PlatformAdapterRegistry {
   getAllAdapters(): PlatformAdapter[]
 }
 
+// GitHub 平台特定类型
 export interface GithubConfig extends PlatformConfig {
   token: string
   owner: string
@@ -44,4 +36,17 @@ export interface GithubPublishResult extends PublishResult {
   commitSha?: string
   htmlUrl?: string
   rawUrl?: string
+}
+
+// WordPress 平台特定类型
+export interface WordPressConfig extends PlatformConfig {
+  apiUrl: string
+  username: string
+  password: string
+}
+
+export interface WordPressPublishOptions extends PublishOptions {
+  status?: "draft" | "publish" | "private"
+  categories?: number[]
+  tags?: number[]
 }

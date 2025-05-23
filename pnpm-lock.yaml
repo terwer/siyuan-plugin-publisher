@@ -18,8 +18,23 @@ importers:
         specifier: ^5.8.3
         version: 5.8.3
 
+  packages/common:
+    devDependencies:
+      '@types/node':
+        specifier: ^22.15.21
+        version: 22.15.21
+      tsup:
+        specifier: ^8.5.0
+        version: 8.5.0(postcss@8.5.3)(typescript@5.8.3)
+      typescript:
+        specifier: ^5.8.3
+        version: 5.8.3
+
   packages/core:
     dependencies:
+      '@siyuan-publisher/common':
+        specifier: workspace:*
+        version: link:../common
       vue:
         specifier: ^3.4.21
         version: 3.5.14(typescript@5.8.3)
@@ -36,6 +51,9 @@ importers:
 
   packages/main-app:
     dependencies:
+      '@siyuan-publisher/common':
+        specifier: workspace:*
+        version: link:../common
       '@siyuan-publisher/core':
         specifier: workspace:*
         version: link:../core
@@ -97,6 +115,9 @@ importers:
       '@octokit/rest':
         specifier: ^20.0.2
         version: 20.1.2
+      '@siyuan-publisher/common':
+        specifier: workspace:*
+        version: link:../common
       '@siyuan-publisher/core':
         specifier: workspace:*
         version: link:../core
@@ -113,9 +134,9 @@ importers:
 
   packages/plugin-system:
     dependencies:
-      '@siyuan-publisher/core':
+      '@siyuan-publisher/common':
         specifier: workspace:*
-        version: link:../core
+        version: link:../common
     devDependencies:
       '@types/node':
         specifier: ^22.15.21
@@ -129,9 +150,9 @@ importers:
 
   packages/ui:
     dependencies:
-      '@siyuan-publisher/core':
+      '@siyuan-publisher/common':
         specifier: workspace:*
-        version: link:../core
+        version: link:../common
       vue:
         specifier: ^3.4.21
         version: 3.5.14(typescript@5.8.3)

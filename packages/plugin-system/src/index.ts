@@ -1,5 +1,5 @@
-// 导出类型
-export * from "./types"
+// 导出平台特定类型
+export type { PostProcessorPlugin, PlatformPlugin, PluginManagerOptions } from "./types"
 
 // 导出加载器
 export { BrowserPluginLoader } from "./loader"

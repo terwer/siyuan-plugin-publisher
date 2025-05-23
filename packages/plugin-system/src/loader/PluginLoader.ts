@@ -1,5 +1,5 @@
-import { Plugin } from "@siyuan-publisher/core"
-import { PluginLoadResult, PluginManifest } from "../types"
+import type { Plugin } from "@siyuan-publisher/common"
+import type { PluginLoadResult, PluginManifest } from "../types"
 import { validateManifest, validatePluginType } from "../utils"
 
 export class PluginLoader {

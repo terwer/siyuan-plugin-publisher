@@ -1,4 +1,4 @@
-import type { Plugin, PlatformAdapter, PlatformConfig } from "@siyuan-publisher/core"
+import type { Plugin, PlatformAdapter, PlatformConfig } from "@siyuan-publisher/common"
 import { PublisherError } from "@siyuan-publisher/core"
 import type { PluginLoadResult, PluginUnloadResult, PluginState } from "../types"
 

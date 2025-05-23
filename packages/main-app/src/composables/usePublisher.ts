@@ -1,6 +1,6 @@
 import { ref } from "vue"
 import { usePluginSystem } from "./usePluginSystem"
-import type { Post, PublishResult, PublishOptions, PlatformConfig, PlatformAdapter } from "@siyuan-publisher/core"
+import type { Post, PublishResult, PublishOptions, PlatformConfig, PlatformAdapter } from "@siyuan-publisher/common"
 
 interface PublisherService {
   publish: (options: PublishOptions) => Promise<PublishResult>

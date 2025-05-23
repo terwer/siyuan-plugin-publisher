@@ -2,7 +2,59 @@
 
 ## 架构概述
 
-SiYuan Publisher 采用模块化架构设计，实现了关注点分离并提高了可维护性。以下是系统的详细说明：
+SiYuan Publisher 采用模块化架构，并将所有共享类型定义集中在独立的 `common` 包中。该设计有效避免循环依赖，提升了可维护性。
+
+### 目录结构
+
+```
+packages/
+  common/                # 共享类型定义（仅 type/interface/enum）
+  core/                  # 核心业务逻辑
+  plugin-system/         # 插件管理与加载
+  platform-adapters/     # 第三方平台适配器
+  main-app/              # 主应用
+  ui/                    # 前端 UI 组件
+```
+
+### 类型依赖与调用链
+
+- **common**
+  - 只定义类型，不依赖任何业务包。
+  - 其他所有包都依赖 common 获取类型。
+
+- **core/plugin-system/platform-adapters/main-app/ui**
+  - 只从 `@siyuan-publisher/common` 导入类型。
+  - 不跨包导入类型。
+  - 业务逻辑依赖可灵活组合，但类型依赖始终指向 common。
+
+#### 依赖树示意
+
+```
+common
+  ↑   ↑   ↑   ↑   ↑
+  |   |   |   |   |
+core plugin-system platform-adapters main-app ui
+```
+
+- 所有共享类型必须从 common 导入。
+- 禁止业务包之间直接导入类型。
+
+### 代码编写规范
+
+- 新增/修改类型时，优先在 `common` 包中定义和维护。
+- 业务包只实现自身逻辑，类型全部通过 `@siyuan-publisher/common` 导入。
+- 禁止业务包之间直接导入类型，防止循环依赖和类型冗余。
+
+### 典型调用链举例
+
+- `main-app` 通过 `plugin-system` 加载插件，所有类型（如 Plugin、PlatformAdapter）均从 `common` 导入。
+- `platform-adapters` 实现各平台适配器，所有接口和配置类型均从 `common` 导入。
+- `ui` 组件如需类型（如 Post、PublishResult），也只从 `common` 导入。
+
+### 总结
+
+- 统一的类型中心（common）让架构更清晰，维护更高效。
+- 依赖树和调用链更易追踪和管理，极大降低未来重构和扩展的成本。
 
 ### 核心组件
 

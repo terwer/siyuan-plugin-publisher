@@ -1,6 +1,6 @@
 import { ref, onMounted, onUnmounted } from "vue"
 import { PluginSystem } from "@siyuan-publisher/plugin-system"
-import type { Plugin, PlatformAdapter, PluginLoader } from "@siyuan-publisher/core"
+import type { Plugin, PlatformAdapter, PluginLoader } from "@siyuan-publisher/common"
 import { WordPressAdapter } from "@siyuan-publisher/platform-adapters"
 import { GithubAdapter } from "@siyuan-publisher/platform-adapters"
 

@@ -1,5 +1,5 @@
 {
-  "name": "@siyuan-publisher/platform-adapters",
+  "name": "@siyuan-publisher/common",
   "version": "0.0.1",
   "private": true,
   "type": "module",
@@ -11,14 +11,9 @@
     "lint": "eslint src/",
     "clean": "rm -rf dist"
   },
-  "dependencies": {
-    "@octokit/rest": "^20.0.2",
-    "@siyuan-publisher/common": "workspace:*",
-    "@siyuan-publisher/core": "workspace:*"
-  },
   "devDependencies": {
     "@types/node": "^22.15.21",
-    "tsup": "^8.0.2",
+    "tsup": "^8.5.0",
     "typescript": "^5.8.3"
   }
 } 

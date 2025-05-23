@@ -1,5 +1,6 @@
-import type { PlatformAdapter } from "@siyuan-publisher/core"
-import type { PlatformConfig, Post, PublishOptions, PublishResult } from "@siyuan-publisher/core"
+import type { PlatformAdapter, Post } from "@siyuan-publisher/common"
+import type { PlatformConfig, PublishOptions, PublishResult } from "@siyuan-publisher/common"
+import type { WordPressConfig, WordPressPublishOptions } from "../types"
 
 export class WordPressAdapter implements PlatformAdapter {
   readonly id = "wordpress"
@@ -7,7 +8,7 @@ export class WordPressAdapter implements PlatformAdapter {
   readonly version = "1.0.0"
   readonly type = "wordpress"
 
-  private config: PlatformConfig = { type: "wordpress", config: {} }
+  private config: WordPressConfig = { type: "wordpress", config: {} }
 
   async initialize() {
     // 初始化逻辑
@@ -17,15 +18,15 @@ export class WordPressAdapter implements PlatformAdapter {
     // 清理逻辑
   }
 
-  getConfig(): PlatformConfig {
+  getConfig(): WordPressConfig {
     return this.config
   }
 
-  async updateConfig(config: PlatformConfig) {
+  async updateConfig(config: WordPressConfig) {
     this.config = config
   }
 
-  async connect(config: PlatformConfig): Promise<void> {
+  async connect(config: WordPressConfig): Promise<void> {
     this.config = config
     // 可扩展：测试连接有效性
   }
@@ -49,7 +50,7 @@ export class WordPressAdapter implements PlatformAdapter {
     }
   }
 
-  async publish(post: Post, options: PublishOptions): Promise<PublishResult> {
+  async publish(post: Post, options: WordPressPublishOptions): Promise<PublishResult> {
     try {
       const { apiUrl, username, password } = this.config.config
       const response = await fetch(`${apiUrl}/wp-json/wp/v2/posts`, {

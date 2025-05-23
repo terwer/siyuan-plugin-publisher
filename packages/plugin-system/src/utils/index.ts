@@ -1,4 +1,4 @@
-import type { Plugin, PluginManifest } from "../types"
+import type { Plugin, PluginManifest } from "@siyuan-publisher/common"
 
 /**
  * 验证插件清单
@@ -20,7 +20,7 @@ export function validateManifest(manifest: any): manifest is PluginManifest {
   }
 
   // 验证类型字段
-  if (!["post-processor", "platform"].includes(manifest.type)) {
+  if (!["adapter", "plugin"].includes(manifest.type)) {
     return false
   }
 
@@ -38,16 +38,16 @@ export function validateManifest(manifest: any): manifest is PluginManifest {
  * @param type 插件类型
  * @returns 是否匹配
  */
-export function validatePluginType(plugin: Plugin, type: "post-processor" | "platform"): boolean {
+export function validatePluginType(plugin: Plugin, type: "adapter" | "plugin"): boolean {
   if (!plugin || typeof plugin !== "object") {
     return false
   }
 
-  if (type === "post-processor") {
-    return typeof (plugin as any).processPost === "function"
-  }
-  if (type === "platform") {
+  if (type === "adapter") {
     return typeof (plugin as any).getPlatformAdapter === "function"
+  }
+  if (type === "plugin") {
+    return typeof (plugin as any).processPost === "function"
   }
   return false
 }
@@ -65,26 +65,20 @@ export function checkDependencies(plugin: Plugin, loadedPlugins: Map<string, Plu
   }
 
   // 检查所有依赖是否已加载
-  const allDependenciesLoaded = manifest.dependencies.every((depId) => loadedPlugins.has(depId))
+  const allDependenciesLoaded = Object.keys(manifest.dependencies).every((depId) => loadedPlugins.has(depId))
 
   if (!allDependenciesLoaded) {
     return false
   }
 
   // 检查依赖版本兼容性
-  return manifest.dependencies.every((depId) => {
+  return Object.entries(manifest.dependencies).every(([depId, requiredVersion]) => {
     const depPlugin = loadedPlugins.get(depId)
     if (!depPlugin) {
       return false
     }
 
     const depVersion = depPlugin.version
-    // @ts-ignore
-    const requiredVersion = manifest.dependencies?.[depId]
-    if (!requiredVersion) {
-      return true
-    }
-
     return isVersionCompatible(depVersion, requiredVersion)
   })
 }

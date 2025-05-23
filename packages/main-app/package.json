@@ -11,6 +11,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
+    "@siyuan-publisher/common": "workspace:*",
     "@siyuan-publisher/core": "workspace:*",
     "@siyuan-publisher/platform-adapters": "workspace:*",
     "@siyuan-publisher/plugin-system": "workspace:*",
