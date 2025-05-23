@@ -1,19 +1,18 @@
 {
-  "name": "siyuan-plugin-publisher",
-  "version": "2.0.0",
-  "type": "module",
+  "name": "siyuan-plugin-publisher-new-ui",
+  "version": "1.0.0",
+  "private": true,
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "test": "turbo run test",
-    "clean": "./scripts/clean.sh",
-    "makeLink": "node ./scripts/make_dev_link.mjs"
+    "clean": "turbo run clean && rm -rf node_modules"
   },
   "devDependencies": {
-    "@vitest/coverage-v8": "^1.6.1",
+    "@types/node": "^22.15.21",
     "turbo": "^2.5.3",
-    "vitest": "^1.6.1"
+    "typescript": "^5.8.3"
   },
-  "packageManager": "pnpm@10.11.0"
+  "packageManager": "pnpm@9.15.1"
 }

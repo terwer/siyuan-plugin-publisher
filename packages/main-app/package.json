@@ -1,0 +1,34 @@
+{
+  "name": "@siyuan-publisher/main-app",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "lint": "vue-tsc --noEmit && eslint src/",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@siyuan-publisher/core": "workspace:*",
+    "@siyuan-publisher/platform-adapters": "workspace:*",
+    "@siyuan-publisher/plugin-system": "workspace:*",
+    "@siyuan-publisher/ui": "workspace:*",
+    "vue": "^3.4.21"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.21",
+    "@vitejs/plugin-vue": "^5.0.4",
+    "@vue/eslint-config-typescript": "^14.5.0",
+    "@vue/tsconfig": "^0.7.0",
+    "eslint": "^9.27.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.4.0",
+    "eslint-plugin-vue": "^10.1.0",
+    "terser": "^5.39.2",
+    "typescript": "^5.8.3",
+    "vite": "^5.1.4",
+    "vue-tsc": "^2.2.10"
+  }
+}

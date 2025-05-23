@@ -1,7 +1,2 @@
 packages:
-  - apps/*
-  - plugins/*
-  - packages/*
-onlyBuiltDependencies:
-  - '@parcel/watcher'
-  - esbuild
+  - 'packages/*' 
