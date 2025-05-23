@@ -1,15 +1,15 @@
-import { BlogConfig, Post } from "zhi-blog-api"
+import { BlogConfig, Post, UserBlog } from "zhi-blog-api"
 import { ModuleLogger } from "./logger"
 import { PluginApi } from "./types/global"
 import { HookStage, PluginHook } from "./types/hooks"
 import { AuthMode, PlatformType, SubPlatformType } from "./types/platform"
 import {
-  IPlugin,
+  IPlugin, MetadataResult,
   PlatformCapabilities,
   PlatformStatus,
   PluginLogger,
   PublishOptions,
-  PublishResult,
+  PublishResult
 } from "./types/plugin"
 import { mountPtAttr } from "./util"
 import { IPublishConfig } from "./types/config"
@@ -103,15 +103,16 @@ export abstract class BasePlugin implements IPlugin {
     return baseI18n[lang] || baseI18n.zh_CN
   }
 
-  constructor(id: string) {
+  constructor(id: string, isDev?:boolean) {
     const pluginId = id ?? this.id
-    this.logger = new ModuleLogger(pluginId)
+    this.logger = new ModuleLogger(pluginId, isDev)
     this.api = {
       siyuan: window.pt.api.siyuan,
       util: {
         fetch: window.pt.api.util.fetch,
         Lodash: window.pt.api.util.Lodash,
         StrUtil: window.pt.api.util.StrUtil,
+        ArrayUtil: window.pt.api.util.ArrayUtil
       },
     }
     mountPtAttr(`plugins.${pluginId}`, this)
@@ -162,8 +163,8 @@ export abstract class BasePlugin implements IPlugin {
     this.config = { ...this.defaultConfig, ...config }
   }
 
-  async getMetaData(publishCfg: IPublishConfig): Promise<{ flag: boolean; data: any, error?: string }> {
-    return { flag: true, data: {} }
+  async getMetaData(publishCfg: IPublishConfig): Promise<MetadataResult> {
+    return { flag: true, data: { blogInfo: {} as UserBlog, metadata: {} } }
   }
 
   async destroy(): Promise<void> {

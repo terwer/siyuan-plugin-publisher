@@ -222,5 +222,6 @@ export class PluginLoaderManager implements PluginLoader {
     mountPtAttr("api.util.fetch", this.proxyFetch)
     mountPtAttr("api.util.Lodash", _)
     mountPtAttr("api.util.StrUtil", StrUtil)
+    mountPtAttr("api.util.ArrayUtil", ArrayUtil)
   }
 }

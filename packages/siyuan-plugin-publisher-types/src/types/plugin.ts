@@ -7,7 +7,7 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import {BlogConfig, Post} from "zhi-blog-api"
+import { BlogConfig, Post, UserBlog } from "zhi-blog-api"
 import { HookStage, PluginHook } from "./hooks"
 import { AuthMode, PlatformType, SubPlatformType} from "./platform";
 import {IPublishConfig} from "./config";
@@ -69,6 +69,15 @@ export interface PlatformStatus {
   }
 }
 
+export interface MetadataResult {
+  flag: boolean
+  data: {
+    blogInfo: UserBlog
+    metadata: any
+  }
+  error?: string
+}
+
 export interface IPlugin {
   // 插件基本信息
   readonly id: string
@@ -90,7 +99,7 @@ export interface IPlugin {
 
   // 插件方法
   init?(config: any): Promise<void>
-  getMetaData(publishCfg: IPublishConfig): Promise<{flag: boolean; data: any; error?: string}>
+  getMetaData(publishCfg: IPublishConfig): Promise<MetadataResult>
   destroy?(): Promise<void>
   publish(post: Post, options?: PublishOptions): Promise<PublishResult>
   update?(postId: string, post: Post, options?: PublishOptions): Promise<boolean>

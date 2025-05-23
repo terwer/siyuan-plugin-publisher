@@ -86,7 +86,7 @@ export const useProxyFetch = () => {
       } else {
         responseBody = ""
       }
-      logger.debug("proxy fetch final body =>", responseBody)
+      logger.debug("proxy fetch final body =>", { body: responseBody })
 
       return new Response(responseBody, {
         status: rawResponse?.statusCode || 200,

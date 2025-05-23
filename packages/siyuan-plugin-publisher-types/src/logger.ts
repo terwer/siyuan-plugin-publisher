@@ -7,7 +7,7 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { PtApiLogger } from "./types/global";
+import { PtApiLogger } from "./types/global"
 
 /**
  * 带模块名的日志实例
@@ -17,9 +17,11 @@ import { PtApiLogger } from "./types/global";
  */
 export class ModuleLogger implements PtApiLogger {
     private readonly prefix: string
+    private readonly isDev:boolean
 
-    constructor(moduleName: string) {
+    constructor(moduleName: string,isDev?:boolean) {
         this.prefix = `[PLUGIN:${moduleName}]`
+        this.isDev = isDev || false
     }
 
     info(message: string, ...args: any[]): void {
@@ -35,8 +37,8 @@ export class ModuleLogger implements PtApiLogger {
     }
 
     debug(message: string, ...args: any[]): void {
-        if (process.env.NODE_ENV !== 'production') {
-            console.debug(`${this.prefix} [DEBUG] ${message}`, ...args)
+        if (this.isDev || process.env.NODE_ENV !== "production") {
+            console.info(`${this.prefix} [DEBUG] ${message}`, ...args)
         }
     }
 }

@@ -12,7 +12,8 @@ export default defineConfig({
   splitting: false,
   sourcemap: false,
   clean: true,
-  minify: "terser",
+  // minify: "terser",
+  minify: false,
   target: "esnext",
   globalName: "ptInstance",
   banner: {

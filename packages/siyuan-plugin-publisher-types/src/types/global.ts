@@ -39,6 +39,7 @@ export interface PtApiUtil {
     Lodash: typeof _;
     // node_modules/.pnpm/zhi-common@1.33.1_typescript@5.7.3/node_modules/zhi-common/dist/lib/strUtil.d.ts
     StrUtil: any
+    ArrayUtil: any
 }
 
 export interface SiyuanApi{
@@ -59,6 +60,7 @@ export interface PluginApi {
         fetch: typeof window.pt.api.util.fetch
         Lodash: typeof window.pt.api.util.Lodash
         StrUtil: any
+        ArrayUtil: any
     }
 }
 

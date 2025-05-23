@@ -2,12 +2,13 @@ import {
   AuthMode,
   BasePlugin,
   IPublishConfig,
+  MetadataResult,
   PlatformType,
   PublishOptions,
   PublishResult,
   SubPlatformType,
 } from "siyuan-plugin-publisher-types"
-import { BlogConfig, Post } from "zhi-blog-api"
+import { BlogConfig, Post, UserBlog } from "zhi-blog-api"
 import * as pkg from "../package.json"
 import { t } from "./i18n"
 import { WordPressClient } from "./wordpressClient"
@@ -91,26 +92,47 @@ export class WordPressPlugin extends BasePlugin {
     password: "",
   }
 
-  async getMetaData(publishCfg: IPublishConfig): Promise<{ flag: boolean; data: any; error?: string }> {
+  async getMetaData(publishCfg: IPublishConfig): Promise<MetadataResult> {
     try {
       const blogCfg = publishCfg.blogConfig as typeof this.defaultConfig
       const wordpressClient = this.getWordPressClient(blogCfg)
 
       // 尝试获取博客信息来验证平台是否可用
       const usersBlogs = await wordpressClient.getUsersBlogs()
-      // this.logger.info("WordPress getUsersBlogs result:", usersBlogs)
-      // this.logger.info("WordPress getUsersBlogs result str:", JSON.stringify(usersBlogs))
+      this.logger.debug("WordPress getUsersBlogs result:", usersBlogs)
+
+      if (this.api.util.ArrayUtil.isEmptyArray(usersBlogs)) {
+        return {
+          flag: false,
+          data: {
+            blogInfo: {} as UserBlog,
+            metadata: {},
+          },
+          error: t("messages.platformUnavailable"),
+        }
+      }
 
       return {
         flag: true,
-        data: usersBlogs,
+        data: {
+          blogInfo: {
+            blogName: usersBlogs[0].blogName,
+            blogid: usersBlogs[0].blogid,
+            url: usersBlogs[0].url,
+            xmlrpc: usersBlogs[0].xmlrpc,
+          } as UserBlog,
+          metadata: usersBlogs,
+        },
         error: t("messages.platformAvailable"),
       }
     } catch (error) {
       this.logger.error("WordPress getMetaData error:", error)
       return {
         flag: false,
-        data: {},
+        data: {
+          blogInfo: {} as UserBlog,
+          metadata: {},
+        },
         error: error instanceof Error ? error.message : "Unknown error occurred",
       }
     }
@@ -166,5 +188,6 @@ export class WordPressPlugin extends BasePlugin {
 }
 
 // 创建插件实例并导出
-const plugin = new WordPressPlugin(pkg.id)
+const isDev = process.env.NODE_ENV === "development"
+const plugin = new WordPressPlugin(pkg.id, isDev)
 export default plugin
