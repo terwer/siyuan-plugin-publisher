@@ -1,47 +1,111 @@
-import { LogLevel, LoggerOptions, Logger } from "../types"
+import { LogLevel, LoggerConfig, Logger, LogEntry } from "@siyuan-publisher/common"
 
 export class LoggerImpl implements Logger {
-  private level: LogLevel
-  private prefix: string
-  private format: (level: LogLevel, message: string) => string
+  private config: LoggerConfig
+  private history: LogEntry[] = []
+  private readonly maxHistorySize = 1000
 
-  constructor(options: LoggerOptions = {}) {
-    this.level = options.level || "info"
-    this.prefix = options.prefix || "[Publisher]"
-    this.format = options.format || this.defaultFormat
+  constructor(config: Partial<LoggerConfig> = {}) {
+    this.config = {
+      level: config.level || "info",
+      console: config.console ?? true,
+      file: config.file ?? false,
+      filePath: config.filePath,
+      maxFileSize: config.maxFileSize || 5 * 1024 * 1024, // 5MB
+      maxFiles: config.maxFiles || 5,
+    }
   }
 
-  private defaultFormat(level: LogLevel, message: string): string {
-    return `${this.prefix} [${level.toUpperCase()}] ${message}`
+  getConfig(): LoggerConfig {
+    return { ...this.config }
+  }
+
+  updateConfig(config: Partial<LoggerConfig>): void {
+    this.config = {
+      ...this.config,
+      ...config,
+    }
   }
 
   private shouldLog(level: LogLevel): boolean {
     const levels: LogLevel[] = ["debug", "info", "warn", "error"]
-    return levels.indexOf(level) >= levels.indexOf(this.level)
+    return levels.indexOf(level) >= levels.indexOf(this.config.level)
   }
 
-  debug(message: string, ...args: any[]): void {
+  private formatMessage(level: LogLevel, message: string): string {
+    return `[${level.toUpperCase()}] ${message}`
+  }
+
+  private addToHistory(entry: LogEntry): void {
+    this.history.push(entry)
+    if (this.history.length > this.maxHistorySize) {
+      this.history.shift()
+    }
+  }
+
+  debug(message: string, metadata?: Record<string, any>): void {
     if (this.shouldLog("debug")) {
-      console.debug(this.format("debug", message), ...args)
+      const entry: LogEntry = {
+        timestamp: new Date(),
+        level: "debug",
+        message,
+        metadata,
+      }
+      this.addToHistory(entry)
+      if (this.config.console) {
+        console.debug(this.formatMessage("debug", message), metadata)
+      }
     }
   }
 
-  info(message: string, ...args: any[]): void {
+  info(message: string, metadata?: Record<string, any>): void {
     if (this.shouldLog("info")) {
-      console.info(this.format("info", message), ...args)
+      const entry: LogEntry = {
+        timestamp: new Date(),
+        level: "info",
+        message,
+        metadata,
+      }
+      this.addToHistory(entry)
+      if (this.config.console) {
+        console.info(this.formatMessage("info", message), metadata)
+      }
     }
   }
 
-  warn(message: string, ...args: any[]): void {
+  warn(message: string, metadata?: Record<string, any>): void {
     if (this.shouldLog("warn")) {
-      console.warn(this.format("warn", message), ...args)
+      const entry: LogEntry = {
+        timestamp: new Date(),
+        level: "warn",
+        message,
+        metadata,
+      }
+      this.addToHistory(entry)
+      if (this.config.console) {
+        console.warn(this.formatMessage("warn", message), metadata)
+      }
     }
   }
 
-  error(message: string, ...args: any[]): void {
+  error(message: string, error?: Error, metadata?: Record<string, any>): void {
     if (this.shouldLog("error")) {
-      console.error(this.format("error", message), ...args)
+      const entry: LogEntry = {
+        timestamp: new Date(),
+        level: "error",
+        message,
+        error,
+        metadata,
+      }
+      this.addToHistory(entry)
+      if (this.config.console) {
+        console.error(this.formatMessage("error", message), error, metadata)
+      }
     }
+  }
+
+  getHistory(): LogEntry[] {
+    return [...this.history]
   }
 }
 

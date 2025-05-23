@@ -9,11 +9,19 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "lint": "eslint src/",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "type-check": "tsc --noEmit"
   },
   "devDependencies": {
     "@types/node": "^22.15.21",
-    "tsup": "^8.5.0",
-    "typescript": "^5.8.3"
+    "@typescript-eslint/eslint-plugin": "^7.3.1",
+    "@typescript-eslint/parser": "^7.3.1",
+    "@vitest/coverage-v8": "^1.4.0",
+    "eslint": "^8.57.0",
+    "tsup": "^8.0.2",
+    "typescript": "^5.8.3",
+    "vitest": "^1.4.0"
   }
 } 
