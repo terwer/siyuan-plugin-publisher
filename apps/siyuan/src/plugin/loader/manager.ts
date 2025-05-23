@@ -17,7 +17,7 @@ import * as _ from "lodash-es"
 import { WINDOW_SIYUAN } from "@/Constants.ts"
 import { useProxyFetch } from "@composables/useProxyFetch.ts"
 import { getTemplatePlatformKey } from "@/models/dynamicConfig.ts"
-import { StrUtil } from "zhi-common"
+import { ArrayUtil, StrUtil } from "zhi-common"
 import { BasePathTypeEnum, SiyuanDevice } from "zhi-device"
 
 const logger = createAppLogger("plugin-loader")
