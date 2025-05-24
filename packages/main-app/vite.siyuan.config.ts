@@ -1,19 +1,22 @@
 import { defineConfig, type ConfigEnv, type UserConfig } from "vite"
 import vue from "@vitejs/plugin-vue"
-import { resolve } from "path"
+import path from "node:path"
 import minimist from "minimist"
 import { viteStaticCopy } from "vite-plugin-static-copy"
 import livereload from "rollup-plugin-livereload"
 import fg from "fast-glob"
-// import { nodePolyfills } from "vite-plugin-node-polyfills"
+import { nodePolyfills } from "vite-plugin-node-polyfills"
 
 const args = minimist(process.argv.slice(2))
 const isWatch = args.watch || args.w || false
+// const distDir = "./dist";
+const distDir = "../../dist/siyuan"
 
 export default defineConfig((env: ConfigEnv): UserConfig => {
   return {
     plugins: [
       vue(),
+
       viteStaticCopy({
         targets: [
           {
@@ -42,55 +45,86 @@ export default defineConfig((env: ConfigEnv): UserConfig => {
           },
         ],
       }),
-      // nodePolyfills({
-      //   exclude: [],
-      //   globals: {
-      //     Buffer: true,
-      //     global: true,
-      //     process: true,
-      //   },
-      //   protocolImports: true,
-      // }),
+
+      // 在浏览器中polyfill node
+      // https://github.com/davidmyersdev/vite-plugin-node-polyfills/blob/main/test/src/main.ts
+      nodePolyfills({
+        exclude: [],
+        globals: {
+          // can also be 'build', 'dev', or false
+          Buffer: true,
+          global: true,
+          process: true,
+        },
+        protocolImports: true,
+      }),
     ],
+
+    // https://github.com/vitejs/vite/issues/1930
+    // https://vitejs.dev/guide/env-and-mode.html#env-files
+    // https://github.com/vitejs/vite/discussions/3058#discussioncomment-2115319
+    // 在这里自定义变量
     define: {
       "process.env.NODE_ENV": isWatch ? '"development"' : '"production"',
       "process.env.DEV_MODE": `"${isWatch}"`,
       "process.env.SH_BUILD_TIME": new Date().getTime().toString(),
     },
+
     resolve: {
       alias: {
-        "@": resolve(__dirname, "./src"),
-        "@components": resolve(__dirname, "./src/components"),
-        "@composables": resolve(__dirname, "./src/composables"),
-        "@pages": resolve(__dirname, "./src/pages"),
-        "@assets": resolve(__dirname, "./src/assets"),
-        "@stores": resolve(__dirname, "./src/stores"),
-        "@enums": resolve(__dirname, "./src/enums"),
-        "@constants": resolve(__dirname, "./src/constants"),
-        "@utils": resolve(__dirname, "./src/utils"),
+        // '~/': path.resolve(__dirname, './'),
+        "@": path.resolve(__dirname, "./src"),
+        "@components": path.resolve(__dirname, "./src/components"),
+        "@composables": path.resolve(__dirname, "./src/composables"),
+        "@pages": path.resolve(__dirname, "./src/pages"),
+        "@assets": path.resolve(__dirname, "./src/assets"),
+        "@stores": path.resolve(__dirname, "./src/stores"),
+        "@enums": path.resolve(__dirname, "./src/enums"),
+        "@constants": path.resolve(__dirname, "./src/constants"),
+        "@utils": path.resolve(__dirname, "./src/utils"),
       },
-    },
+      external: ["siyuan"],
+    } as any,
+
     base: "",
+
     build: {
-      outDir: "../../dist/siyuan",
+      // 输出路径
+      outDir: distDir,
       emptyOutDir: false,
+
+      // 构建后是否生成 source map 文件
       sourcemap: isWatch ? "inline" : false,
+
+      // 设置为 false 可以禁用最小化混淆
+      // 或是用来指定是应用哪种混淆器
+      // boolean | 'terser' | 'esbuild'
+      // 不压缩，用于调试
       minify: !isWatch,
+
       lib: {
-        entry: resolve(__dirname, "src/index.ts"),
+        entry: path.resolve(__dirname, "src/index.ts"),
         fileName: "index",
         formats: ["cjs"],
       },
+
       rollupOptions: {
+        // make sure to externalize deps that shouldn't be bundled
+        // into your library
         external: ["siyuan"],
         plugins: [
           ...(isWatch
-            ? [
-                livereload("../../dist/siyuan"),
+              ? [
+                livereload(distDir),
                 {
+                  // 监听静态资源文件
                   name: "watch-external",
                   async buildStart() {
-                    const files = await fg(["src/i18n/*.json", "./README*.md", "./plugin.json"])
+                    const files = await fg([
+                      "src/i18n/*.json",
+                      "./README*.md",
+                      "./plugin.json",
+                    ])
                     for (const file of files) {
                       // @ts-ignore
                       this.addWatchFile(file)
@@ -98,7 +132,7 @@ export default defineConfig((env: ConfigEnv): UserConfig => {
                   },
                 },
               ]
-            : []),
+              : []),
         ],
         output: {
           entryFileNames: "[name].js",

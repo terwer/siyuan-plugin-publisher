@@ -134,7 +134,7 @@ importers:
         specifier: ^5.8.3
         version: 5.8.3
       vite:
-        specifier: ^5.1.4
+        specifier: ^5.4.19
         version: 5.4.19(@types/node@22.15.21)(terser@5.39.2)
       vite-plugin-node-polyfills:
         specifier: ^0.21.0
