@@ -97,6 +97,36 @@ async function chooseTarget(workspaces) {
     }
 }
 
+// Check and handle existing plugin directory
+async function checkAndHandleExistingPlugin(targetPath) {
+    if (fs.existsSync(targetPath)) {
+        const rl = readline.createInterface({
+            input: process.stdin,
+            output: process.stdout,
+        });
+        
+        return new Promise((resolve) => {
+            rl.question('Found existing plugin directory. Delete it? (y/N) ', (answer) => {
+                if (answer.toLowerCase() === 'y') {
+                    try {
+                        fs.rmSync(targetPath, { recursive: true, force: true });
+                        log('Existing plugin directory deleted');
+                        resolve(true);
+                    } catch (error) {
+                        error('Failed to delete plugin directory: ' + error.message);
+                        resolve(false);
+                    }
+                } else {
+                    error('Keeping existing plugin directory');
+                    resolve(false);
+                }
+                rl.close();
+            });
+        });
+    }
+    return true;
+}
+
 log('>>> Try to visit constant "targetDir" in make_dev_link.js...');
 
 if (targetDir === "") {
@@ -172,6 +202,14 @@ function cmpPath(path1, path2) {
 }
 
 const targetPath = `${targetDir}/${name}`;
+
+// Check and handle existing plugin directory
+const canProceed = await checkAndHandleExistingPlugin(targetPath);
+if (!canProceed) {
+    error('Operation cancelled');
+    process.exit(0);
+}
+
 //如果已经存在，就退出
 if (fs.existsSync(targetPath)) {
     let isSymbol = fs.lstatSync(targetPath).isSymbolicLink();

@@ -2,6 +2,7 @@
   "name": "siyuan-plugin-publisher-new-ui",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
@@ -10,7 +11,7 @@
     "lint": "turbo run lint",
     "test": "turbo run test",
     "clean": "./scripts/clean.sh",
-    "makeLink": "node ./scripts/make_dev_link.mjs"
+    "makeLink": "node scripts/make_dev_link.js"
   },
   "devDependencies": {
     "@types/node": "^22.15.21",
