@@ -1,22 +1,23 @@
-import { WordPressAdapter } from "./wordpress"
-import { GithubAdapter } from "./github"
 import type {
-  PlatformAdapter,
-  PlatformAdapterRegistry,
-  GithubConfig,
-  GithubPublishOptions,
-  GithubPublishResult,
-  WordPressConfig,
-  WordPressPublishOptions,
+    GithubConfig,
+    GithubPublishOptions,
+    GithubPublishResult,
+    PlatformAdapter,
+    WordPressConfig,
+    WordPressPublishOptions,
 } from "@siyuan-publisher/common"
+import { DefaultPlatformAdapterRegistry } from "./DefaultPlatformAdapterRegistry"
+import { GithubAdapter } from "./github"
+import { WordPressAdapter } from "./wordpress"
 
-export { WordPressAdapter, GithubAdapter }
+
+export { GithubAdapter, WordPressAdapter,DefaultPlatformAdapterRegistry }
 export type {
-  PlatformAdapter,
-  PlatformAdapterRegistry,
-  GithubConfig,
-  GithubPublishOptions,
-  GithubPublishResult,
-  WordPressConfig,
-  WordPressPublishOptions,
+    GithubConfig,
+    GithubPublishOptions,
+    GithubPublishResult,
+    PlatformAdapter,
+    WordPressConfig,
+    WordPressPublishOptions
 }
+

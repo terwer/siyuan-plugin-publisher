@@ -1,12 +1,12 @@
-import type { PlatformAdapter} from "@siyuan-publisher/platform-adapters";
-import { PlatformAdapterRegistry } from "@siyuan-publisher/platform-adapters"
+import { PlatformAdapterRegistry } from "@siyuan-publisher/common"
+import {DefaultPlatformAdapterRegistry, PlatformAdapter} from "@siyuan-publisher/platform-adapters"
 
 export class PlatformAdapterManager {
   private static instance: PlatformAdapterManager
   private registry: PlatformAdapterRegistry
 
   private constructor() {
-    this.registry = PlatformAdapterRegistry.getInstance()
+    this.registry = DefaultPlatformAdapterRegistry.getInstance()
   }
 
   static getInstance(): PlatformAdapterManager {
@@ -29,7 +29,7 @@ export class PlatformAdapterManager {
     if (!adapter) {
       throw new Error(`Platform adapter ${name} not found`)
     }
-    await adapter.connect(config)
+    await adapter.connect()
   }
 
   async disconnectAdapter(name: string): Promise<void> {

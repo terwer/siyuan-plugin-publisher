@@ -5,6 +5,7 @@ import {
   PluginState,
   PublisherError
 } from "@siyuan-publisher/common"
+import type {PluginType} from "@siyuan-publisher/common"
 
 export class PluginManager implements IPluginManager {
   private static instance: PluginManager
@@ -43,7 +44,7 @@ export class PluginManager implements IPluginManager {
 
       // 如果是平台适配器，额外注册
       if (this.isPlatformAdapter(plugin)) {
-        this.platformAdapters.set(plugin.type, plugin)
+        this.platformAdapters.set(plugin.type, plugin as any)
       }
     } catch (error: any) {
       throw new PublisherError("PLUGIN_INIT_FAILED", `Failed to initialize plugin ${plugin.id}`, {
@@ -74,13 +75,18 @@ export class PluginManager implements IPluginManager {
     }
   }
 
-  private isPlatformAdapter(plugin: Plugin): plugin is PlatformAdapter {
+  private isPlatformAdapter(plugin: Plugin): boolean {
     return (
-      plugin.type === "adapter" &&
-      "connect" in plugin &&
-      "publish" in plugin &&
+      plugin.type !=="plugin" &&
+      "config" in plugin &&
+      "getMetadata" in plugin &&
       "getCapabilities" in plugin &&
-      "getStatus" in plugin
+      "getStatus" in plugin &&
+      "connect" in plugin &&
+      "disconnect" in plugin &&
+      "publish" in plugin &&
+      "validateConfig" in plugin &&
+      typeof (plugin as any).validateConfig === "function"
     )
   }
 

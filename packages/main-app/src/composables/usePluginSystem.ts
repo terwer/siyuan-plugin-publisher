@@ -2,7 +2,7 @@ import { ref, onMounted, onUnmounted } from "vue"
 import { PluginSystem } from "@siyuan-publisher/plugin-system"
 import type { Plugin, PlatformAdapter, PluginManager } from "@siyuan-publisher/common"
 import { WordPressAdapter } from "@siyuan-publisher/platform-adapters"
-import { Index } from "@siyuan-publisher/platform-adapters"
+import { GithubAdapter } from "@siyuan-publisher/platform-adapters"
 
 export function usePluginSystem() {
   const pluginSystem = PluginSystem.getInstance() as PluginManager
@@ -13,7 +13,7 @@ export function usePluginSystem() {
 
   // 注册内置平台适配器
   const registerBuiltinAdapters = async () => {
-    const adapters = [new WordPressAdapter(), new Index()]
+    const adapters = [new WordPressAdapter(), new GithubAdapter()]
     for (const adapter of adapters) {
       await pluginSystem.registerPlugin(adapter)
     }

@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
 import { ref, watch } from "vue"
-import type { PlatformConfig } from "@siyuan-publisher/core"
+import type { PlatformConfig} from "@siyuan-publisher/common";
 
 const props = defineProps<{
   config: PlatformConfig
@@ -41,7 +41,7 @@ watch(
     emit("update:config", {
       type: "wordpress",
       config: newValue,
-    })
+    } as any)
   },
   { deep: true },
 )

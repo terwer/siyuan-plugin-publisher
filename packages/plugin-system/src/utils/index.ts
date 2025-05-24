@@ -1,4 +1,4 @@
-import type { Plugin, PluginManifest } from "@siyuan-publisher/common"
+import type { PlatformType, Plugin, PluginManifest, PluginType } from "@siyuan-publisher/common"
 
 /**
  * 验证插件清单
@@ -33,17 +33,24 @@ export function validateManifest(manifest: any): manifest is PluginManifest {
 }
 
 /**
+ * 类型守卫：检查是否为平台类型
+ */
+function isPlatformType(type: PluginType): type is PlatformType {
+  return type !== "plugin"
+}
+
+/**
  * 验证插件类型
  * @param plugin 插件实例
  * @param type 插件类型
  * @returns 是否匹配
  */
-export function validatePluginType(plugin: Plugin, type: "adapter" | "plugin"): boolean {
+export function validatePluginType(plugin: Plugin, type: PluginType): boolean {
   if (!plugin || typeof plugin !== "object") {
     return false
   }
 
-  if (type === "adapter") {
+  if (isPlatformType(type)) {
     return typeof (plugin as any).getPlatformAdapter === "function"
   }
   if (type === "plugin") {
