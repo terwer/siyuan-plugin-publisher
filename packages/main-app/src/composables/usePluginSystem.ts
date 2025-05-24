@@ -32,7 +32,7 @@ export function usePluginSystem() {
       
       // 注册内置适配器到插件系统
       for (const adapter of builtInAdapters) {
-        await pluginSystem.registerPlugin(adapter)
+        await pluginSystem.registerPlugin(adapter as any)
       }
 
       // 更新状态
