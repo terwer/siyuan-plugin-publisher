@@ -1,177 +1,239 @@
 #publisherApp
-  .pt-btn
-    // 基础样式
+  .pt-button
+    --pt-btn-height: $btn-height-base
+    --pt-btn-padding: $btn-padding-base
+    --pt-btn-font-size: $btn-font-size-base
+    --pt-btn-radius: $btn-radius-base
+    --pt-btn-transition: all $animation-duration-base $animation-timing-function-base
+
     position: relative
     display: inline-flex
     align-items: center
     justify-content: center
-    height: 32px
-    padding: 4px 12px
-    min-width: 80px
-    border-radius: $border-radius-base
-    border: 1px solid $border-color-base
-    background: #fff
-    color: $text-color
-    font-size: $font-size-base
-    line-height: 1.5715
+    height: var(--pt-btn-height)
+    padding: var(--pt-btn-padding)
+    font-size: var(--pt-btn-font-size)
+    border-radius: var(--pt-btn-radius)
+    border: 1px solid transparent
     cursor: pointer
-    transition: all $animation-duration-base $animation-timing-function-base
-    user-select: none
+    transition: var(--pt-btn-transition)
     white-space: nowrap
-    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.02)
+    user-select: none
+    outline: none
+    gap: 8px
+    text-decoration: none
+    box-sizing: border-box
 
-    &:hover:not(.pt-btn--disabled)
-      color: $primary-color
-      border-color: $primary-color
-      background: #fff
+    // 类型样式
+    &.button-default
+      background: $btn-default-bg
+      border-color: $btn-default-border
+      color: $btn-default-color
 
-    &:active:not(.pt-btn--disabled)
-      color: darken($primary-color, 8%)
-      border-color: darken($primary-color, 8%)
-      background: #fff
+      &:hover:not(.button-disabled)
+        background: $btn-default-hover-bg
+        border-color: $btn-default-hover-border
+        color: $btn-default-hover-color
 
-    // 尺寸
-    &--sm
-      height: 24px
-      padding: 0 7px
-      font-size: 12px
-      min-width: 64px
+      &:active:not(.button-disabled)
+        background: $btn-default-active-bg
+        border-color: $btn-default-active-border
+        color: $btn-default-active-color
 
-    &--lg
-      height: 40px
-      padding: 0 15px
-      font-size: 16px
-      min-width: 96px
+    &.button-primary
+      background: $btn-primary-bg
+      border-color: $btn-primary-border
+      color: $btn-primary-color
 
-    // 类型
-    &--primary
-      background: $primary-color
-      border-color: $primary-color
-      color: #fff
-      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045)
-      &:hover:not(.pt-btn--disabled)
-        background: lighten($primary-color, 8%)
-        border-color: lighten($primary-color, 8%)
-        color: #fff
-      &:active:not(.pt-btn--disabled)
-        background: darken($primary-color, 8%)
-        border-color: darken($primary-color, 8%)
-        color: #fff
+      &:hover:not(.button-disabled)
+        background: $btn-primary-hover-bg
+        border-color: $btn-primary-hover-border
+        color: $btn-primary-hover-color
 
-    &--dashed
-      color: $text-color
-      background-color: #fff
-      border-color: $border-color-base
+      &:active:not(.button-disabled)
+        background: $btn-primary-active-bg
+        border-color: $btn-primary-active-border
+        color: $btn-primary-active-color
+
+    &.button-dashed
+      background: $btn-default-bg
+      border-color: $btn-default-border
       border-style: dashed
-      &:hover:not(.pt-btn--disabled)
-        color: $primary-color
-        border-color: $primary-color
-        background: #fff
+      color: $btn-default-color
 
-    &--text
-      color: $text-color
-      background-color: transparent
+      &:hover:not(.button-disabled)
+        background: $btn-default-hover-bg
+        border-color: $btn-primary-border
+        color: $btn-primary-color
+
+      &:active:not(.button-disabled)
+        background: $btn-default-active-bg
+        border-color: $btn-primary-active-border
+        color: $btn-primary-active-color
+
+    &.button-text
+      background: transparent
       border-color: transparent
-      box-shadow: none
-      &:hover:not(.pt-btn--disabled)
-        color: $primary-color
-        background: rgba(0, 0, 0, 0.04)
+      color: $btn-default-color
+      padding: 0
 
-    &--link
-      color: $primary-color
-      background-color: transparent
+      &:hover:not(.button-disabled)
+        background: $btn-default-hover-bg
+        color: $btn-default-hover-color
+
+      &:active:not(.button-disabled)
+        background: $btn-default-active-bg
+        color: $btn-default-active-color
+
+    &.button-link
+      background: transparent
       border-color: transparent
-      box-shadow: none
-      text-decoration: underline
-      &:hover:not(.pt-btn--disabled)
-        color: lighten($primary-color, 8%)
+      color: $btn-primary-color
+      padding: 0
 
-    // 危险状态
-    &--danger
-      color: $error-color
-      border-color: $error-color
-      &:hover:not(.pt-btn--disabled)
-        color: lighten($error-color, 8%)
-        border-color: lighten($error-color, 8%)
-        background: #fff
-      &.pt-btn--primary
-        background: $error-color
-        border-color: $error-color
-        color: #fff
-        box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045)
-        &:hover:not(.pt-btn--disabled)
-          background: lighten($error-color, 8%)
-          border-color: lighten($error-color, 8%)
-          color: #fff
+      &:hover:not(.button-disabled)
+        color: $btn-primary-hover-color
 
-    // 幽灵模式
-    &--ghost
-      background: transparent !important
-      border-color: currentColor
-      color: inherit
-      box-shadow: none
-      &:hover:not(.pt-btn--disabled)
-        color: $primary-color
-        border-color: $primary-color
-        background: transparent !important
+      &:active:not(.button-disabled)
+        color: $btn-primary-active-color
+
+    // 尺寸样式
+    &.button-small
+      --pt-btn-height: $btn-height-sm
+      --pt-btn-padding: $btn-padding-sm
+      --pt-btn-font-size: $btn-font-size-sm
+      --pt-btn-radius: $btn-radius-sm
+
+    &.button-large
+      --pt-btn-height: $btn-height-lg
+      --pt-btn-padding: $btn-padding-lg
+      --pt-btn-font-size: $btn-font-size-lg
+      --pt-btn-radius: $btn-radius-lg
+
+    // 形状样式
+    &.button-circle
+      --pt-btn-radius: 50%
+      padding: 0
+      width: var(--pt-btn-height)
+
+    &.button-round
+      --pt-btn-radius: calc(var(--pt-btn-height) / 2)
 
     // 禁用状态
-    &--disabled
+    &.button-disabled
+      opacity: 0.6
       cursor: not-allowed
-      opacity: 0.65
-      pointer-events: none
 
     // 加载状态
-    &--loading
-      cursor: default
-      opacity: 0.85
-      pointer-events: none
+    &.button-loading
+      cursor: wait
+
+      .loading-icon
+        display: inline-block
+        width: 14px
+        height: 14px
+        margin-right: 8px
+        border: 2px solid currentColor
+        border-radius: 50%
+        border-top-color: transparent
+        animation: button-loading 0.8s linear infinite
+
+    // 危险按钮
+    &.button-danger
+      &.button-default
+        background: $btn-danger-bg
+        border-color: $btn-danger-border
+        color: $btn-danger-color
+
+        &:hover:not(.button-disabled)
+          background: $btn-danger-hover-bg
+          border-color: $btn-danger-hover-border
+
+        &:active:not(.button-disabled)
+          background: $btn-danger-active-bg
+          border-color: $btn-danger-active-border
+
+      &.button-primary
+        background: $btn-danger-bg
+        border-color: $btn-danger-border
+        color: $btn-danger-color
+
+        &:hover:not(.button-disabled)
+          background: $btn-danger-hover-bg
+          border-color: $btn-danger-hover-border
+
+        &:active:not(.button-disabled)
+          background: $btn-danger-active-bg
+          border-color: $btn-danger-active-border
+
+      &.button-text
+        color: $btn-danger-color
+
+        &:hover:not(.button-disabled)
+          background: $btn-danger-hover-bg
+          color: $btn-danger-hover-color
+
+        &:active:not(.button-disabled)
+          background: $btn-danger-active-bg
+          color: $btn-danger-active-color
+
+      &.button-link
+        color: $btn-danger-color
+
+        &:hover:not(.button-disabled)
+          color: $btn-danger-hover-color
+
+        &:active:not(.button-disabled)
+          color: $btn-danger-active-color
+
+    // 幽灵按钮
+    &.button-ghost
+      background: transparent
+
+      &.button-default
+        border-color: $btn-default-border
+        color: $btn-default-color
+
+        &:hover:not(.button-disabled)
+          border-color: $btn-default-hover-border
+          color: $btn-default-hover-color
+
+        &:active:not(.button-disabled)
+          border-color: $btn-default-active-border
+          color: $btn-default-active-color
+
+      &.button-primary
+        border-color: $btn-primary-border
+        color: $btn-primary-color
+
+        &:hover:not(.button-disabled)
+          border-color: $btn-primary-hover-border
+          color: $btn-primary-hover-color
+
+        &:active:not(.button-disabled)
+          border-color: $btn-primary-active-border
+          color: $btn-primary-active-color
 
     // 块级按钮
-    &--block
+    &.button-block
       width: 100%
 
     // 图标按钮
-    &--icon-only
+    &.button-icon-only
       padding: 0
-      min-width: 32px
-      width: 32px
-      height: 32px
+      width: var(--pt-btn-height)
 
-    // 图标
-    &__icon
-      margin-right: 8px
+      .button-icon
+        margin: 0
+
+    // 图标样式
+    .button-icon
+      display: inline-flex
+      align-items: center
       font-size: 14px
-      line-height: 1
 
-    // 加载动画
-    &__loading
-      margin-right: 8px
-      animation: pt-spin 1s linear infinite
-
-    &__spinner
-      width: 14px
-      height: 14px
-      animation: pt-spin 1s linear infinite
-
-@keyframes pt-spin
+@keyframes button-loading
   from
     transform: rotate(0deg)
   to
-    transform: rotate(360deg)
-
-#publisherApp
-  .pt-btn
-    &--shape-circle
-      min-width: @height
-      padding: 0
-      border-radius: 50%
-
-    &--shape-round
-      border-radius: 32px
-
-    &--two-chars
-      &::first-letter
-        letter-spacing: 0.34em
-      > *:not(.pt-btn__icon)
-        margin-right: -0.34em 
+    transform: rotate(360deg) 

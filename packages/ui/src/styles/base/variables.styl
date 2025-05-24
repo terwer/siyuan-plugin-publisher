@@ -46,4 +46,52 @@ $screen-sm = 576px
 $screen-md = 768px
 $screen-lg = 992px
 $screen-xl = 1200px
-$screen-xxl = 1600px 
+$screen-xxl = 1600px
+
+// 按钮变量
+// 基础尺寸
+$btn-height-base = 32px
+$btn-height-lg = 40px
+$btn-height-sm = 24px
+$btn-padding-base = 0 $spacing-md
+$btn-padding-lg = 0 $spacing-lg
+$btn-padding-sm = 0 $spacing-sm
+$btn-font-size-base = $font-size-base
+$btn-font-size-lg = $font-size-lg
+$btn-font-size-sm = $font-size-sm
+$btn-radius-base = $border-radius-base + 2px
+$btn-radius-lg = $border-radius-base + 4px
+$btn-radius-sm = $border-radius-base
+
+// 按钮颜色
+$btn-default-bg = #ffffff
+$btn-default-border = $border-color-base
+$btn-default-color = $heading-color
+$btn-default-hover-bg = lighten($border-color-base, 50%)
+$btn-default-hover-border = $border-color-base
+$btn-default-hover-color = $heading-color
+$btn-default-active-bg = darken($btn-default-hover-bg, 5%)
+$btn-default-active-border = $border-color-base
+$btn-default-active-color = $heading-color
+
+// 主要按钮
+$btn-primary-bg = $primary-color
+$btn-primary-border = $primary-color
+$btn-primary-color = #ffffff
+$btn-primary-hover-bg = lighten($primary-color, 10%)
+$btn-primary-hover-border = lighten($primary-color, 10%)
+$btn-primary-hover-color = #ffffff
+$btn-primary-active-bg = darken($primary-color, 10%)
+$btn-primary-active-border = darken($primary-color, 10%)
+$btn-primary-active-color = #ffffff
+
+// 危险按钮
+$btn-danger-bg = $error-color
+$btn-danger-border = $error-color
+$btn-danger-color = #ffffff
+$btn-danger-hover-bg = lighten($error-color, 10%)
+$btn-danger-hover-border = lighten($error-color, 10%)
+$btn-danger-hover-color = #ffffff
+$btn-danger-active-bg = darken($error-color, 10%)
+$btn-danger-active-border = darken($error-color, 10%)
+$btn-danger-active-color = #ffffff 
