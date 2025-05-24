@@ -22,19 +22,19 @@ packages/
 
 ```mermaid
 sequenceDiagram
-    actor App
-    actor PS
-    actor PAR
-    actor PM
-    actor PAM
+    actor A as App
+    actor B as PS
+    actor C as PAR
+    actor D as PM
+    actor E as PAM
 
-    App->>PS: Initialize Plugin System
-    PS->>PAR: Get Built-in Adapters
-    PAR->>PAR: Register Built-in Adapters
-    PAR-->>PS: Return Adapter List
-    PS->>PM: Register Plugins
-    PS->>PAM: Update Adapter List
-    PAM-->>App: Return Available Platforms
+    A->>B: Initialize Plugin System
+    B->>C: Get Built-in Adapters
+    C->>C: Register Built-in Adapters
+    C-->>B: Return Adapter List
+    B->>D: Register Plugins
+    B->>E: Update Adapter List
+    E-->>A: Return Available Platforms
 ```
 
 ### 2. Platform Adapter Registration Mechanism
@@ -53,29 +53,29 @@ graph TD
 
 ```mermaid
 sequenceDiagram
-    actor User
-    actor UI
-    actor PS
-    actor PA
-    actor Platform
+    actor A as User
+    actor B as UI
+    actor C as PS
+    actor D as PA
+    actor E as Platform
 
-    User->>UI: Select Platform
-    UI->>PS: Get Platform Config
-    PS-->>UI: Return Config Component
-    User->>UI: Fill Config
-    UI->>PS: Test Connection
-    PS->>PA: Validate Config
-    PA->>Platform: Test Connection
-    Platform-->>PA: Return Result
-    PA-->>PS: Return Result
-    PS-->>UI: Show Result
-    User->>UI: Publish Content
-    UI->>PS: Send Publish Request
-    PS->>PA: Process Publish
-    PA->>Platform: Publish Content
-    Platform-->>PA: Return Result
-    PA-->>PS: Return Result
-    PS-->>UI: Show Result
+    A->>B: Select Platform
+    B->>C: Get Platform Config
+    C-->>B: Return Config Component
+    A->>B: Fill Config
+    B->>C: Test Connection
+    C->>D: Validate Config
+    D->>E: Test Connection
+    E-->>D: Return Result
+    D-->>C: Return Result
+    C-->>B: Show Result
+    A->>B: Publish Content
+    B->>C: Send Publish Request
+    C->>D: Process Publish
+    D->>E: Publish Content
+    E-->>D: Return Result
+    D-->>C: Return Result
+    C-->>B: Show Result
 ```
 
 ## Detailed Component Description
@@ -216,17 +216,17 @@ enum ErrorType {
 
 ```mermaid
 sequenceDiagram
-    actor UI
-    actor PS
-    actor PA
-    actor Error
+    actor A as UI
+    actor B as PS
+    actor C as PA
+    actor D as Error
 
-    UI->>PS: Execute Operation
-    PS->>PA: Call Adapter
-    PA->>Error: Error Occurs
-    Error->>PA: Convert Error Type
-    PA-->>PS: Return Error
-    PS-->>UI: Show Error Message
+    A->>B: Execute Operation
+    B->>C: Call Adapter
+    C->>D: Error Occurs
+    D->>C: Convert Error Type
+    C-->>B: Return Error
+    B-->>A: Show Error Message
 ```
 
 ## Development Guidelines
@@ -435,16 +435,16 @@ sequenceDiagram
 
 ```mermaid
 sequenceDiagram
-    actor App
-    actor PS
-    actor EL
-    actor Plugin
+    actor A as App
+    actor B as PS
+    actor C as EL
+    actor D as Plugin
 
-    App->>PS: Initialize Plugin System
-    PS->>EL: Scan Plugin Directory
-    EL->>EL: Read Plugin Config
-    EL->>Plugin: Load Plugin Code
-    Plugin-->>EL: Return Plugin Instance
-    EL-->>PS: Register Plugin
-    PS-->>App: Update Available Plugins
+    A->>B: Initialize Plugin System
+    B->>C: Scan Plugin Directory
+    C->>C: Read Plugin Config
+    C->>D: Load Plugin Code
+    D-->>C: Return Plugin Instance
+    C-->>B: Register Plugin
+    B-->>A: Update Available Plugins
 ``` 

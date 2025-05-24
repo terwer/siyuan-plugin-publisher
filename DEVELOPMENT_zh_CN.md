@@ -22,19 +22,19 @@ packages/
 
 ```mermaid
 sequenceDiagram
-    actor App
-    actor PS
-    actor PAR
-    actor PM
-    actor PAM
+    actor A as App
+    actor B as PS
+    actor C as PAR
+    actor D as PM
+    actor E as PAM
 
-    App->>PS: 初始化插件系统
-    PS->>PAR: 获取内置适配器
-    PAR->>PAR: 注册内置适配器
-    PAR-->>PS: 返回适配器列表
-    PS->>PM: 注册插件
-    PS->>PAM: 更新适配器列表
-    PAM-->>App: 返回可用平台
+    A->>B: 初始化插件系统
+    B->>C: 获取内置适配器
+    C->>C: 注册内置适配器
+    C-->>B: 返回适配器列表
+    B->>D: 注册插件
+    B->>E: 更新适配器列表
+    E-->>A: 返回可用平台
 ```
 
 ### 2. 平台适配器注册机制
@@ -53,29 +53,29 @@ graph TD
 
 ```mermaid
 sequenceDiagram
-    actor User
-    actor UI
-    actor PS
-    actor PA
-    actor Platform
+    actor A as User
+    actor B as UI
+    actor C as PS
+    actor D as PA
+    actor E as Platform
 
-    User->>UI: 选择平台
-    UI->>PS: 获取平台配置
-    PS-->>UI: 返回配置组件
-    User->>UI: 填写配置
-    UI->>PS: 测试连接
-    PS->>PA: 验证配置
-    PA->>Platform: 测试连接
-    Platform-->>PA: 返回结果
-    PA-->>PS: 返回结果
-    PS-->>UI: 显示结果
-    User->>UI: 发布内容
-    UI->>PS: 发送发布请求
-    PS->>PA: 处理发布
-    PA->>Platform: 发布内容
-    Platform-->>PA: 返回结果
-    PA-->>PS: 返回结果
-    PS-->>UI: 显示结果
+    A->>B: 选择平台
+    B->>C: 获取平台配置
+    C-->>B: 返回配置组件
+    A->>B: 填写配置
+    B->>C: 测试连接
+    C->>D: 验证配置
+    D->>E: 测试连接
+    E-->>D: 返回结果
+    D-->>C: 返回结果
+    C-->>B: 显示结果
+    A->>B: 发布内容
+    B->>C: 发送发布请求
+    C->>D: 处理发布
+    D->>E: 发布内容
+    E-->>D: 返回结果
+    D-->>C: 返回结果
+    C-->>B: 显示结果
 ```
 
 ## 详细组件说明
@@ -216,17 +216,17 @@ enum ErrorType {
 
 ```mermaid
 sequenceDiagram
-    actor UI
-    actor PS
-    actor PA
-    actor Error
+    actor A as UI
+    actor B as PS
+    actor C as PA
+    actor D as Error
 
-    UI->>PS: 执行操作
-    PS->>PA: 调用适配器
-    PA->>Error: 发生错误
-    Error->>PA: 转换错误类型
-    PA-->>PS: 返回错误
-    PS-->>UI: 显示错误信息
+    A->>B: 执行操作
+    B->>C: 调用适配器
+    C->>D: 发生错误
+    D->>C: 转换错误类型
+    C-->>B: 返回错误
+    B-->>A: 显示错误信息
 ```
 
 ## 开发指南
@@ -435,16 +435,16 @@ sequenceDiagram
 
 ```mermaid
 sequenceDiagram
-    actor App
-    actor PS
-    actor EL
-    actor Plugin
+    actor A as App
+    actor B as PS
+    actor C as EL
+    actor D as Plugin
 
-    App->>PS: 初始化插件系统
-    PS->>EL: 扫描插件目录
-    EL->>EL: 读取插件配置
-    EL->>Plugin: 加载插件代码
-    Plugin-->>EL: 返回插件实例
-    EL-->>PS: 注册插件
-    PS-->>App: 更新可用插件列表
+    A->>B: 初始化插件系统
+    B->>C: 扫描插件目录
+    C->>C: 读取插件配置
+    C->>D: 加载插件代码
+    D-->>C: 返回插件实例
+    C-->>B: 注册插件
+    B-->>A: 更新可用插件列表
 ``` 
