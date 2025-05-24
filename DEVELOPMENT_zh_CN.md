@@ -132,6 +132,16 @@ sequenceDiagram
   }
   ```
 
+#### 外部适配器：
+
+外部平台适配器可以通过插件系统动态加载，支持从 NPM 安装或本地加载。详细开发指南和加载机制请参考[外部插件开发](#外部插件开发)章节。
+
+主要特点：
+- 支持动态加载和卸载
+- 可以独立开发和发布
+- 与内置适配器使用相同的接口
+- 可以扩展新的平台支持
+
 ### 3. 主应用 (Main App)
 
 主应用使用 Vue 3 构建，提供了用户界面和交互逻辑。
@@ -279,4 +289,162 @@ sequenceDiagram
 3. **发布失败**
    - 检查平台连接
    - 验证发布参数
-   - 查看平台错误信息 
+   - 查看平台错误信息
+
+## 插件系统架构
+
+### 插件类型
+
+1. **内置平台适配器**
+   - 随应用程序预装
+   - 在 `packages/platform-adapters` 中实现
+   - 启动时自动注册
+   - 示例：WordPress、GitHub 适配器
+
+2. **外部插件**
+   - 运行时动态加载
+   - 可以从 NPM 或本地文件安装
+   - 必须实现所需接口
+   - 可以扩展功能或添加新平台
+
+### 插件加载流程
+
+1. **内置适配器**
+   ```
+   应用启动
+   ├── 插件系统初始化
+   │   └── 注册内置适配器
+   │       ├── WordPress 适配器
+   │       └── GitHub 适配器
+   └── 初始化适配器
+       └── 更新 UI 状态
+   ```
+
+2. **外部插件**
+   ```
+   插件加载请求
+   ├── 验证插件类型
+   ├── 加载插件配置
+   ├── 初始化插件
+   │   ├── 检查依赖
+   │   └── 注册到系统
+   └── 更新 UI 状态
+   ```
+
+### 外部插件开发
+
+1. **插件结构**
+   ```
+   my-platform-plugin/
+   ├── package.json        # 插件配置
+   ├── src/
+   │   ├── index.ts       # 入口文件
+   │   ├── adapter.ts     # 平台适配器实现
+   │   └── config.vue     # 配置组件
+   └── dist/              # 构建输出
+   ```
+
+2. **插件配置**
+   ```json
+   {
+     "name": "my-platform-plugin",
+     "version": "1.0.0",
+     "main": "dist/index.js",
+     "siyuan-publisher": {
+       "type": "platform-adapter",
+       "platform": "my-platform",
+       "entry": "./dist/index.js"
+     }
+   }
+   ```
+
+3. **插件接口**
+   ```typescript
+   interface ExternalPlugin {
+     id: string;
+     name: string;
+     version: string;
+     type: "platform-adapter";
+     platform: string;
+     adapter: PlatformAdapter;
+     configComponent?: Component;
+   }
+   ```
+
+4. **插件加载器**
+   ```typescript
+   class ExternalPluginLoader {
+     async loadPlugin(path: string): Promise<ExternalPlugin> {
+       // 1. 加载插件配置
+       const manifest = await this.loadManifest(path);
+       
+       // 2. 验证插件类型
+       if (manifest.type !== "platform-adapter") {
+         throw new Error("不支持的插件类型");
+       }
+       
+       // 3. 加载插件代码
+       const plugin = await import(manifest.entry);
+       
+       // 4. 初始化插件
+       await plugin.initialize();
+       
+       return plugin;
+     }
+   }
+   ```
+
+### 插件打包和发布
+
+1. **打包配置**
+   ```typescript
+   // vite.config.ts
+   export default defineConfig({
+     build: {
+       lib: {
+         entry: "src/index.ts",
+         formats: ["es"],
+         fileName: "index"
+       },
+       rollupOptions: {
+         external: ["@siyuan-publisher/common"]
+       }
+     }
+   });
+   ```
+
+2. **发布到 NPM**
+   ```bash
+   # 1. 构建插件
+   npm run build
+   
+   # 2. 发布到 NPM
+   npm publish
+   ```
+
+3. **本地安装**
+   ```bash
+   # 1. 构建插件
+   npm run build
+   
+   # 2. 复制到插件目录
+   cp -r dist/ /path/to/plugins/my-platform-plugin/
+   ```
+
+### 插件加载机制
+
+```mermaid
+sequenceDiagram
+    participant App as 主应用
+    participant PS as 插件系统
+    participant EL as 外部加载器
+    participant Plugin as 外部插件
+
+    App->>PS: 初始化插件系统
+    PS->>EL: 扫描插件目录
+    EL->>EL: 读取插件配置
+    EL->>Plugin: 加载插件代码
+    Plugin-->>EL: 返回插件实例
+    EL-->>PS: 注册插件
+    PS-->>App: 更新可用插件列表
+``` 
