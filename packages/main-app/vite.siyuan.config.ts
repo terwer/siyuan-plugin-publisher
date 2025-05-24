@@ -133,10 +133,16 @@ export default defineConfig((env: ConfigEnv): UserConfig => {
         output: {
           entryFileNames: "[name].js",
           assetFileNames: (assetInfo) => {
-            if (assetInfo.type === "asset" && assetInfo.name === "style.css") {
-              return "index.css"
+            if (!assetInfo.names) {
+              return "[name][extname]"
             }
-            return "[name][extname]"
+            // noinspection LoopStatementThatDoesntLoopJS
+            for (const assetName of assetInfo.names) {
+              if (assetInfo.type === "asset" && assetName === "style.css") {
+                return "index.css"
+              }
+              return "[name][extname]"
+            }
           },
           banner: "/* Siyuan Publisher */",
           footer: "/* Copyright Terwer Inc. */",
