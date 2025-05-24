@@ -22,11 +22,11 @@ packages/
 
 ```mermaid
 sequenceDiagram
-    participant App as Main App
-    participant PS as Plugin System
-    participant PAR as Platform Adapter Registry
-    participant PM as Plugin Manager
-    participant PAM as Platform Adapter Manager
+    participant App
+    participant PS
+    participant PAR
+    participant PM
+    participant PAM
 
     App->>PS: Initialize Plugin System
     PS->>PAR: Get Built-in Adapters

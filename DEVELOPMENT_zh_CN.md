@@ -22,11 +22,11 @@ packages/
 
 ```mermaid
 sequenceDiagram
-    participant App as 主应用
-    participant PS as 插件系统
-    participant PAR as 平台适配器注册表
-    participant PM as 插件管理器
-    participant PAM as 平台适配器管理器
+    participant App
+    participant PS
+    participant PAR
+    participant PM
+    participant PAM
 
     App->>PS: 初始化插件系统
     PS->>PAR: 获取内置适配器
@@ -34,7 +34,7 @@ sequenceDiagram
     PAR-->>PS: 返回适配器列表
     PS->>PM: 注册插件
     PS->>PAM: 更新适配器列表
-    PAM-->>App: 返回可用平台列表
+    PAM-->>App: 返回可用平台
 ```
 
 ### 2. 平台适配器注册机制
