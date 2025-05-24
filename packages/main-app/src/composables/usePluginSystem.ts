@@ -1,22 +1,23 @@
 import { ref, onMounted, onUnmounted } from "vue"
 import { PluginSystem } from "@siyuan-publisher/plugin-system"
-import type { Plugin, PlatformAdapter, PluginManager } from "@siyuan-publisher/common"
-import { WordPressAdapter } from "@siyuan-publisher/platform-adapters"
-import { GithubAdapter } from "@siyuan-publisher/platform-adapters"
+import { PlatformAdapterManager } from "@siyuan-publisher/plugin-system"
+import type { Plugin, PlatformAdapter, PluginManager, PlatformConfig } from "@siyuan-publisher/common"
 
 export function usePluginSystem() {
   const pluginSystem = PluginSystem.getInstance() as PluginManager
+  const platformAdapterManager = PlatformAdapterManager.getInstance()
   const plugins = ref<Plugin[]>([])
   const platformAdapters = ref<PlatformAdapter[]>([])
   const isLoading = ref(false)
   const error = ref<string | null>(null)
 
-  // 注册内置平台适配器
-  const registerBuiltinAdapters = async () => {
-    const adapters = [new WordPressAdapter(), new GithubAdapter()]
-    for (const adapter of adapters) {
-      await pluginSystem.registerPlugin(adapter)
+  // 获取插件配置
+  const getPluginConfig = (pluginId: string): PlatformConfig | undefined => {
+    const plugin = plugins.value.find((p) => p.id === pluginId)
+    if (!plugin) {
+      return undefined
     }
+    return plugin.getConfig() as PlatformConfig
   }
 
   // 加载所有插件
@@ -24,11 +25,9 @@ export function usePluginSystem() {
     isLoading.value = true
     error.value = null
     try {
-      // 注册内置适配器
-      await registerBuiltinAdapters()
       // 更新状态
       plugins.value = pluginSystem.getAllPlugins()
-      platformAdapters.value = pluginSystem.getAllPlatformAdapters()
+      platformAdapters.value = platformAdapterManager.getAllAdapters()
     } catch (err) {
       error.value = err instanceof Error ? err.message : "加载插件失败"
     } finally {
@@ -42,7 +41,7 @@ export function usePluginSystem() {
       await pluginSystem.registerPlugin(plugin)
       plugins.value = pluginSystem.getAllPlugins()
       if ("connect" in plugin) {
-        platformAdapters.value = pluginSystem.getAllPlatformAdapters()
+        platformAdapters.value = platformAdapterManager.getAllAdapters()
       }
       return { success: true }
     } catch (err) {
@@ -52,7 +51,10 @@ export function usePluginSystem() {
   }
 
   onMounted(loadPlugins)
-  onUnmounted(() => pluginSystem.unloadAll())
+  onUnmounted(() => {
+    pluginSystem.unloadAll()
+    platformAdapterManager.unloadAll()
+  })
 
   return {
     plugins,
@@ -60,5 +62,6 @@ export function usePluginSystem() {
     isLoading,
     error,
     loadExternalPlugin,
+    getPluginConfig,
   }
 }

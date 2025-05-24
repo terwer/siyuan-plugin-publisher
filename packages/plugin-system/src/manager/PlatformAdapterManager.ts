@@ -47,4 +47,15 @@ export class PlatformAdapterManager {
     }
     return await adapter.publish(post, options)
   }
+
+  async unloadAll(): Promise<void> {
+    const adapters = this.getAllAdapters()
+    for (const adapter of adapters) {
+      try {
+        await this.disconnectAdapter(adapter.name)
+      } catch (error) {
+        console.error(`Failed to disconnect adapter ${adapter.name}:`, error)
+      }
+    }
+  }
 }

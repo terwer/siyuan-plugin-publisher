@@ -31,9 +31,8 @@ export function usePublisher() {
 
       // 更新平台配置
       await platform.updateConfig({
-        type: options.platform.type,
-        config: options.platform.config,
-      })
+        config: options.platform.config ,
+      } as any)
 
       // 确保平台实现了 PlatformAdapter 接口
       if (!isPlatformAdapter(platform)) {
@@ -75,7 +74,7 @@ export function usePublisher() {
       await platform.updateConfig(config)
 
       // 测试连接
-      await platform.connect(config)
+      await platform.connect()
       await platform.disconnect()
 
       return { success: true }
