@@ -1,5 +1,5 @@
-import { Plugin } from "siyuan"
-import { createBootStrap } from "./bootstrap"
+import { App, IObject, Plugin } from "siyuan"
+import { Topbar } from "@/topbar.ts"
 
 /**
  * 发布工具插件入口
@@ -9,42 +9,17 @@ import { createBootStrap } from "./bootstrap"
  */
 export default class PublisherPlugin extends Plugin {
   private vueApp: any = null
+  private topbar: Topbar = {} as Topbar
 
-  async onload() {
-    // 注册命令
-    this.addCommand({
-      langKey: "publisher",
-      hotkey: "⌘⇧P",
-      callback: () => {
-        this.openPublisher()
-      },
-    })
-
-    // 注册顶部图标
-    this.addTopBar({
-      icon: "iconPublish",
-      title: this.i18n.publisher,
-      callback: () => {
-        this.openPublisher()
-      },
-    })
-
-    console.log("publisher loaded")
+  constructor(options: { app: App; name: string; i18n: IObject }) {
+    super(options)
+    // topbar
+    this.topbar = new Topbar(this)
   }
 
-  private openPublisher() {
-    // 创建或获取挂载点
-    let mountEl = document.getElementById("publisher-app")
-    if (!mountEl) {
-      mountEl = document.createElement("div")
-      mountEl.id = "publisher-app"
-      document.body.appendChild(mountEl)
-    }
-
-    // 创建并挂载应用，传入真实的思源实例
-    if (!this.vueApp) {
-      this.vueApp = createBootStrap({ appInstance: this }, mountEl)
-    }
+  async onload() {
+    // 初始化工具栏
+    this.topbar.initTopbar()
   }
 
   async onunload() {
@@ -54,4 +29,8 @@ export default class PublisherPlugin extends Plugin {
       this.vueApp = null
     }
   }
+
+  // ==================
+  // private methods
+  // ==================
 }

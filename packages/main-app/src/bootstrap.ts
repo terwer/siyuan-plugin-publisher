@@ -1,7 +1,7 @@
 import { createApp, type App } from "vue"
 import AppComponent from "./App.vue"
 import router from "./router"
-import type { Plugin } from "siyuan"
+import { Plugin } from "siyuan"
 
 /**
  * 创建全局唯一的 Vue App 实例

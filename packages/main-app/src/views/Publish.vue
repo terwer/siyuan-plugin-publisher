@@ -76,7 +76,12 @@ import type {
   PostStatus,
   ErrorType,
 } from "@siyuan-publisher/common"
-import { defineAsyncComponent } from "vue"
+
+// 导入所有平台配置组件
+import WordPressConfig from "../components/platform-configs/wordpress.vue"
+// import HexoConfig from "../components/platform-configs/hexo.vue"
+// import NotionConfig from "../components/platform-configs/notion.vue"
+// ... 其他平台配置组件的导入
 
 const {
   plugins,
@@ -113,11 +118,16 @@ const publishOptions = ref<PublishOptions>({
 const publishResult = ref<PublishResult | null>(null)
 const tagsInput = ref("")
 
-// 动态加载平台配置组件
+// 获取平台配置组件
 const platformConfigComponent = computed(() => {
   if (!selectedPlatform.value) return null
-  const component = defineAsyncComponent(() => import(`../components/platform-configs/${selectedPlatform.value}.vue`))
-  return component
+  const componentMap = {
+    wordpress: WordPressConfig,
+    // hexo: HexoConfig,
+    // notion: NotionConfig,
+    // ... 其他平台的映射
+  }
+  return componentMap[selectedPlatform.value as keyof typeof componentMap] || null
 })
 
 // 监听插件加载状态，初始化平台

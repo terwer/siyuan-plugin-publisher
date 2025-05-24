@@ -1,11 +1,15 @@
 import { createRouter, createWebHashHistory } from "vue-router"
 import type { RouteRecordRaw } from "vue-router"
+import Home from "../views/Home.vue"
+import Settings from "../views/Settings.vue"
+import Publish from "../views/Publish.vue"
+import NotFound from "../views/NotFound.vue"
 
 const routes: RouteRecordRaw[] = [
   {
     path: "/",
     name: "Home",
-    component: () => import("../views/Home.vue"),
+    component: Home,
     meta: {
       title: "首页",
     },
@@ -13,7 +17,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: "/settings",
     name: "Settings",
-    component: () => import("../views/Settings.vue"),
+    component: Settings,
     meta: {
       title: "设置",
     },
@@ -21,7 +25,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: "/publish",
     name: "Publish",
-    component: () => import("../views/Publish.vue"),
+    component: Publish,
     meta: {
       title: "发布",
     },
@@ -29,7 +33,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: "/:pathMatch(.*)*",
     name: "NotFound",
-    component: () => import("../views/NotFound.vue"),
+    component: NotFound,
     meta: {
       title: "页面未找到",
     },

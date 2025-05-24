@@ -114,17 +114,13 @@ export default defineConfig((env: ConfigEnv): UserConfig => {
         external: ["siyuan"],
         plugins: [
           ...(isWatch
-              ? [
+            ? [
                 livereload(distDir),
                 {
                   // 监听静态资源文件
                   name: "watch-external",
                   async buildStart() {
-                    const files = await fg([
-                      "src/i18n/*.json",
-                      "./README*.md",
-                      "./plugin.json",
-                    ])
+                    const files = await fg(["src/i18n/*.json", "./README*.md", "./plugin.json"])
                     for (const file of files) {
                       // @ts-ignore
                       this.addWatchFile(file)
@@ -132,18 +128,16 @@ export default defineConfig((env: ConfigEnv): UserConfig => {
                   },
                 },
               ]
-              : []),
+            : []),
         ],
         output: {
           entryFileNames: "[name].js",
-          assetFileNames: (assetInfo) => {
-            for (const name of assetInfo.names) {
-              if (name === "style.css") {
-                return "index.styl"
-              }
-            }
-            return "[name][extname]"
-          },
+          // assetFileNames: (assetInfo) => {
+          //   if (assetInfo.name === "style.css") {
+          //     return "index.styl"
+          //   }
+          //   return "[name][extname]"
+          // },
           banner: "/* Siyuan Publisher */",
           footer: "/* Copyright Terwer Inc. */",
         },
