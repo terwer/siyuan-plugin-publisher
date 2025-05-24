@@ -1,12 +1,12 @@
 import type {
+  Logger,
   PlatformAdapter,
+  PlatformCapabilities,
   PlatformConfig,
   PlatformMetadata,
-  PlatformCapabilities,
   Post,
   PublishOptions,
   PublishResult,
-  Logger,
 } from "@siyuan-publisher/common"
 import { PublisherError } from "@siyuan-publisher/common"
 
@@ -78,7 +78,12 @@ export class PlatformService {
   async registerAdapter(adapter: PlatformAdapter): Promise<void> {
     try {
       if (this.adapters.has(adapter.name)) {
-        throw new PublisherError("PLATFORM_NOT_FOUND", `Platform adapter ${adapter.name} is already registered`)
+        this.logger.info(`Platform adapter ${adapter.name} is already registered, ignoring...`, {
+          module: "PlatformService",
+          action: "registerAdapter",
+          platform: adapter.name,
+        })
+        return
       }
 
       // 验证适配器配置
