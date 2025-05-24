@@ -172,9 +172,9 @@
     max-width: 1200px
     margin: 0 auto
 
-  .test-section
-    margin-bottom: 30px
-    padding: 20px
+  .button-test-container .test-section
+    margin-bottom: 40px !important
+    padding: 20px !important
     border: 1px solid #eee
     border-radius: 8px
 
