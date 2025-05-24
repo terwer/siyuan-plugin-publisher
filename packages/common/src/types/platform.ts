@@ -1,6 +1,7 @@
-import type { BaseConfig, BaseMetadata, Configurable, Lifecycle } from "./base"
-import type { Post, PostStatus, PublishOptions, PublishResult } from "./publish"
+import type { BaseConfig, BaseMetadata } from "./base"
 import type { ErrorType } from "./error"
+import type { Plugin } from "./plugin"
+import type { Post, PostStatus, PublishOptions, PublishResult } from "./publish"
 
 /**
  * 平台类型
@@ -166,21 +167,21 @@ export interface PlatformEvent {
 /**
  * 平台适配器接口
  */
-export interface PlatformAdapter extends Configurable<PlatformConfig>, Lifecycle {
-  /**
-   * 平台名称
-   */
-  readonly name: string
-
+export interface PlatformAdapter extends Omit<Plugin, 'type' | 'validateConfig'> {
   /**
    * 平台类型
    */
-  readonly type: string
+  readonly type: PlatformType
 
   /**
    * 平台配置
    */
   readonly config: PlatformConfig
+
+  /**
+   * 验证配置
+   */
+  validateConfig(config: PlatformConfig): Promise<boolean>
 
   /**
    * 获取平台元数据

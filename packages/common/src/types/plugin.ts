@@ -1,16 +1,21 @@
-import type { BaseConfig, BaseMetadata, Configurable, Lifecycle } from "./base"
-import type { PlatformAdapter } from "./platform"
 import type { Post } from "@/types/publish"
+import type { BaseConfig, BaseMetadata, Configurable, Lifecycle } from "./base"
+import type { PlatformAdapter, PlatformType } from "./platform"
 
 /**
  * 插件类型
  */
-export type PluginType = "adapter" | "plugin"
+export type PluginType = PlatformType | "plugin"
 
 /**
  * 插件接口
  */
-export interface Plugin extends BaseMetadata, Lifecycle, Configurable {}
+export interface Plugin extends BaseMetadata, Lifecycle, Configurable {
+  /**
+   * 插件类型
+   */
+  readonly type: PluginType
+}
 
 /**
  * 插件配置

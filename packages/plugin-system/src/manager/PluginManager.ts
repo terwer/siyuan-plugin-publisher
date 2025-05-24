@@ -1,4 +1,10 @@
-import type { PlatformAdapter, Plugin, PluginManager as IPluginManager, PluginState, PublisherError } from "@siyuan-publisher/common"
+import {
+  PluginManager as IPluginManager,
+  PlatformAdapter,
+  Plugin,
+  PluginState,
+  PublisherError
+} from "@siyuan-publisher/common"
 
 export class PluginManager implements IPluginManager {
   private static instance: PluginManager
@@ -21,7 +27,13 @@ export class PluginManager implements IPluginManager {
 
   async registerPlugin(plugin: Plugin): Promise<void> {
     if (this.plugins.has(plugin.id)) {
-      throw new PublisherError("PLUGIN_ALREADY_REGISTERED", `Plugin ${plugin.id} already registered`)
+      throw new PublisherError("PLUGIN_ALREADY_REGISTERED", `Plugin ${plugin.id} already registered`, {
+        metadata: {
+          pluginId: plugin.id,
+          pluginType: plugin.type,
+          existingPlugin: this.plugins.get(plugin.id),
+        },
+      })
     }
 
     try {
@@ -33,7 +45,7 @@ export class PluginManager implements IPluginManager {
       if (this.isPlatformAdapter(plugin)) {
         this.platformAdapters.set(plugin.type, plugin)
       }
-    } catch (error) {
+    } catch (error: any) {
       throw new PublisherError("PLUGIN_INIT_FAILED", `Failed to initialize plugin ${plugin.id}`, {
         originalError: error,
       })
@@ -55,7 +67,7 @@ export class PluginManager implements IPluginManager {
       if (this.isPlatformAdapter(plugin)) {
         this.platformAdapters.delete(plugin.type)
       }
-    } catch (error) {
+    } catch (error: any) {
       throw new PublisherError("PLUGIN_DESTROY_FAILED", `Failed to destroy plugin ${id}`, {
         originalError: error,
       })
@@ -63,7 +75,13 @@ export class PluginManager implements IPluginManager {
   }
 
   private isPlatformAdapter(plugin: Plugin): plugin is PlatformAdapter {
-    return "connect" in plugin && "publish" in plugin
+    return (
+      plugin.type === "adapter" &&
+      "connect" in plugin &&
+      "publish" in plugin &&
+      "getCapabilities" in plugin &&
+      "getStatus" in plugin
+    )
   }
 
   getPlugin(id: string): Plugin | undefined {
