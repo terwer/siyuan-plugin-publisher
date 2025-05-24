@@ -1,5 +1,4 @@
-import type { PlatformAdapter, Plugin, PluginManager as IPluginManager, PluginState } from "@siyuan-publisher/common"
-import { PublisherError } from "@siyuan-publisher/core"
+import type { PlatformAdapter, Plugin, PluginManager as IPluginManager, PluginState, PublisherError } from "@siyuan-publisher/common"
 
 export class PluginManager implements IPluginManager {
   private static instance: PluginManager

@@ -170,10 +170,10 @@ export class PlatformService {
    * 6. 记录操作日志
    *
    * @param name 平台名称
-   * @param config 平台配置
+   * @param config 平台配置（可选）
    * @throws PublisherError 当适配器不存在或配置无效时
    */
-  async connect(name: string, config: PlatformConfig): Promise<void> {
+  async connect(name: string, config?: PlatformConfig): Promise<void> {
     try {
       const adapter = this.adapters.get(name)
       if (!adapter) {
@@ -184,13 +184,18 @@ export class PlatformService {
         await this.disconnect()
       }
 
+      // 如果提供了新的配置，更新适配器配置
+      if (config) {
+        await adapter.updateConfig(config)
+      }
+
       // 验证配置
-      const isValid = await adapter.validateConfig(config)
+      const isValid = await adapter.validateConfig(adapter.config)
       if (!isValid) {
         throw new PublisherError("INVALID_CONFIG", `Invalid configuration for platform ${name}`)
       }
 
-      await adapter.connect(config)
+      await adapter.connect()
       this.activeAdapter = adapter
 
       this.logger.info(`Connected to platform: ${name}`, {

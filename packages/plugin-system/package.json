@@ -12,7 +12,9 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@siyuan-publisher/common": "workspace:*"
+    "@siyuan-publisher/common": "workspace:*",
+    "@siyuan-publisher/core": "workspace:*",
+    "@siyuan-publisher/platform-adapters": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^22.15.21",

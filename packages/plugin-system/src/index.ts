@@ -1,4 +1,4 @@
-import { PluginManager } from "./manager/PluginManager"
+import { PluginManager } from "./manager"
 import type { PostProcessorPlugin, PlatformPlugin, PluginManagerOptions } from "@siyuan-publisher/common"
 
 // 导出平台特定类型

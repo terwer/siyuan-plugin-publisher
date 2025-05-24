@@ -1,5 +1,5 @@
 import { WordPressAdapter } from "./wordpress"
-import { GithubAdapter } from "./github/GithubAdapter"
+import { GithubAdapter } from "./github"
 import type {
   PlatformAdapter,
   PlatformAdapterRegistry,

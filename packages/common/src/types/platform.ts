@@ -1,5 +1,6 @@
 import type { BaseConfig, BaseMetadata, Configurable, Lifecycle } from "./base"
 import type { Post, PostStatus, PublishOptions, PublishResult } from "./publish"
+import type { ErrorType } from "./error"
 
 /**
  * 平台类型
@@ -129,22 +130,10 @@ export interface PlatformStatus {
 }
 
 /**
- * 平台错误类型
- */
-export type PlatformErrorType =
-  | "CONNECTION_FAILED"
-  | "AUTHENTICATION_FAILED"
-  | "INVALID_CONFIG"
-  | "PUBLISH_FAILED"
-  | "DELETE_FAILED"
-  | "STATUS_CHECK_FAILED"
-  | "UNKNOWN_ERROR"
-
-/**
  * 平台错误
  */
 export interface PlatformError {
-  type: PlatformErrorType
+  type: ErrorType
   message: string
   details?: any
   originalError?: Error
@@ -177,27 +166,21 @@ export interface PlatformEvent {
 /**
  * 平台适配器接口
  */
-export interface PlatformAdapter extends BaseMetadata, Lifecycle, Configurable {
-  /**
-   * 平台类型
-   */
-  type: string
+export interface PlatformAdapter extends Configurable<PlatformConfig>, Lifecycle {
   /**
    * 平台名称
    */
-  name: string
+  readonly name: string
+
   /**
-   * 平台版本
+   * 平台类型
    */
-  version: string
-  /**
-   * 平台元数据
-   */
-  metadata?: PlatformMetadata
+  readonly type: string
+
   /**
    * 平台配置
    */
-  config: PlatformConfig
+  readonly config: PlatformConfig
 
   /**
    * 获取平台元数据
@@ -205,19 +188,20 @@ export interface PlatformAdapter extends BaseMetadata, Lifecycle, Configurable {
   getMetadata(): PlatformMetadata
 
   /**
-   * 获取平台配置
+   * 获取平台能力
    */
-  getConfig(): PlatformConfig
+  getCapabilities(): PlatformCapabilities
 
   /**
-   * 更新平台配置
+   * 获取平台状态
    */
-  updateConfig(config: Partial<PlatformConfig>): Promise<void>
+  getStatus(): Promise<PlatformStatus>
 
   /**
-   * 验证配置
+   * 获取文章状态
+   * @param postId 文章ID
    */
-  validateConfig(config: PlatformConfig): Promise<boolean>
+  getPostStatus(postId: string): Promise<PostStatus>
 
   /**
    * 连接平台
@@ -230,39 +214,17 @@ export interface PlatformAdapter extends BaseMetadata, Lifecycle, Configurable {
   disconnect(): Promise<void>
 
   /**
-   * 获取平台状态
-   */
-  getStatus(): Promise<PlatformStatus>
-
-  /**
-   * 获取平台能力
-   */
-  getCapabilities(): Promise<PlatformCapabilities>
-
-  /**
    * 发布文章
+   * @param post 文章数据
+   * @param options 发布选项
    */
-  publish(post: Post, options?: PublishOptions): Promise<PublishResult>
-
-  /**
-   * 更新文章
-   */
-  update(post: Post, options?: PublishOptions): Promise<PublishResult>
+  publish(post: Post, options: PublishOptions): Promise<PublishResult>
 
   /**
    * 删除文章
+   * @param postId 文章ID
    */
-  delete(postId: string): Promise<boolean>
-
-  /**
-   * 获取文章
-   */
-  getPost(postId: string): Promise<Post | null>
-
-  /**
-   * 获取文章列表
-   */
-  getPosts(options?: { page?: number; pageSize?: number }): Promise<Post[]>
+  deletePost(postId: string): Promise<void>
 }
 
 /**

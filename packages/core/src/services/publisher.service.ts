@@ -144,14 +144,35 @@ export class PublisherService {
         throw new PublisherError("PLATFORM_NOT_CONNECTED", "No active platform adapter")
       }
 
-      const status = await activeAdapter.getPostStatus(postId)
-      return status
+      const postStatus = await activeAdapter.getPostStatus(postId)
+      
+      // 将 PostStatus 转换为 PublishStatus
+      let status: "published" | "failed" | "pending"
+      switch (postStatus) {
+        case "published":
+        case "publish":
+          status = "published"
+          break
+        case "draft":
+          status = "pending"
+          break
+        default:
+          status = "failed"
+      }
+
+      return {
+        status,
+        url: postStatus === "published" || postStatus === "publish" ? postId : undefined,
+      }
     } catch (error: any) {
       this.logger.error(`Failed to get publish status for post: ${postId}`, error, {
         module: "PublisherService",
         action: "getPublishStatus",
       })
-      throw error
+      return {
+        status: "failed",
+        error: error instanceof Error ? error.message : "获取发布状态失败",
+      }
     }
   }
 

@@ -1,7 +1,6 @@
 import type { Plugin } from "@siyuan-publisher/common"
 import type { PluginLoadResult, PluginManifest } from "@siyuan-publisher/common"
 import { validateManifest, validatePluginType } from "../utils"
-import { PublisherError } from "@siyuan-publisher/common"
 
 export class PluginLoader {
   private static instance: PluginLoader

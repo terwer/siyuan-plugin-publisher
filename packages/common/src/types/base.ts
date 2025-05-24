@@ -31,7 +31,8 @@ export interface Lifecycle {
 /**
  * 基础配置管理接口
  */
-export interface Configurable {
-  getConfig: () => Record<string, any>
-  updateConfig: (config: Record<string, any>) => Promise<void>
+export interface Configurable<T extends BaseConfig = BaseConfig> {
+  getConfig: () => T
+  updateConfig: (config: Partial<T>) => Promise<void>
+  validateConfig: (config: T) => Promise<boolean>
 }

@@ -1,4 +1,4 @@
-import type { PlatformAdapter } from "@siyuan-publisher/core"
+import type { PlatformAdapter} from "@siyuan-publisher/platform-adapters";
 import { PlatformAdapterRegistry } from "@siyuan-publisher/platform-adapters"
 
 export class PlatformAdapterManager {
