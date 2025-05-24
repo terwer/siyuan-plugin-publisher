@@ -62,14 +62,14 @@
       color: $btn-default-color
 
       &:hover:not(.button-disabled)
-        background: $btn-primary-hover-bg
-        border-color: $btn-primary-hover-border
-        color: $btn-primary-hover-color
+        background: $btn-default-hover-bg
+        border-color: $btn-default-hover-border
+        color: $btn-default-hover-color
 
       &:active:not(.button-disabled)
-        background: $btn-primary-active-bg
-        border-color: $btn-primary-active-border
-        color: $btn-primary-active-color
+        background: $btn-default-active-bg
+        border-color: $btn-default-active-border
+        color: $btn-default-active-color
 
     &.button-text
       background: transparent
@@ -141,17 +141,19 @@
     // 危险按钮
     &.button-danger
       &.button-default
-        background: $btn-danger-bg
-        border-color: $btn-danger-border
-        color: $btn-danger-color
+        background: transparent
+        border-color: $btn-danger-default-border
+        color: $btn-danger-default-color
 
         &:hover:not(.button-disabled)
-          background: $btn-danger-hover-bg
-          border-color: $btn-danger-hover-border
+          background: $btn-danger-default-hover-bg
+          border-color: $btn-danger-default-hover-border
+          color: $btn-danger-default-hover-color
 
         &:active:not(.button-disabled)
-          background: $btn-danger-active-bg
-          border-color: $btn-danger-active-border
+          background: $btn-danger-default-active-bg
+          border-color: $btn-danger-default-active-border
+          color: $btn-danger-default-active-color
 
       &.button-primary
         background: $btn-danger-bg
@@ -161,30 +163,48 @@
         &:hover:not(.button-disabled)
           background: $btn-danger-hover-bg
           border-color: $btn-danger-hover-border
+          color: $btn-danger-hover-color
 
         &:active:not(.button-disabled)
           background: $btn-danger-active-bg
           border-color: $btn-danger-active-border
+          color: $btn-danger-active-color
 
       &.button-text
-        color: $btn-danger-color
+        color: $btn-danger-text-color
 
         &:hover:not(.button-disabled)
-          background: $btn-danger-hover-bg
-          color: $btn-danger-hover-color
+          background: $btn-danger-text-hover-bg
+          color: $btn-danger-text-hover-color
 
         &:active:not(.button-disabled)
-          background: $btn-danger-active-bg
-          color: $btn-danger-active-color
+          background: $btn-danger-text-active-bg
+          color: $btn-danger-text-active-color
 
       &.button-link
-        color: $btn-danger-color
+        color: $btn-danger-link-color
 
         &:hover:not(.button-disabled)
-          color: $btn-danger-hover-color
+          color: $btn-danger-link-hover-color
 
         &:active:not(.button-disabled)
-          color: $btn-danger-active-color
+          color: $btn-danger-link-active-color
+
+      &.button-dashed
+        background: transparent
+        border-color: $btn-danger-dashed-border
+        border-style: dashed
+        color: $btn-danger-dashed-color
+
+        &:hover:not(.button-disabled)
+          background: $btn-danger-dashed-hover-bg
+          border-color: $btn-danger-dashed-hover-border
+          color: $btn-danger-dashed-hover-color
+
+        &:active:not(.button-disabled)
+          background: $btn-danger-dashed-active-bg
+          border-color: $btn-danger-dashed-active-border
+          color: $btn-danger-dashed-active-color
 
     // 幽灵按钮
     &.button-ghost
