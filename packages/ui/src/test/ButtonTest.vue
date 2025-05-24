@@ -217,7 +217,7 @@
 
   .event-log
     background-color: #f5f5f5
-    padding: 15px
+    padding: 15px !important
     border-radius: 4px
     max-height: 200px
     overflow-y: auto
