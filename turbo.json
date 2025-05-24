@@ -6,10 +6,18 @@
       "dependsOn": ["^build"],
       "outputs": ["dist/**"]
     },
+    "build:siyuan": {
+      "dependsOn": ["^build"],
+      "outputs": ["../../dist/**"]
+    },
     "lint": {
       "outputs": []
     },
     "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "dev:siyuan": {
       "cache": false,
       "persistent": true
     },

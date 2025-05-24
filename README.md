@@ -23,8 +23,11 @@ pnpm install
 # Build dependencies (excluding main-app)
 pnpm build --filter=\!@siyuan-publisher/main-app
 
-# Start development server
+# Start development server (SPA mode)
 pnpm dev -F @siyuan-publisher/main-app
+
+# Start development server (SiYuan Plugin mode)
+pnpm dev:siyuan -F @siyuan-publisher/main-app
 ```
 
 ## Project Structure
@@ -67,9 +70,34 @@ pnpm build -F @siyuan-publisher/platform-adapters
 ```
 
 3. Start development server:
+
+#### SPA Mode
+For standalone web application development:
 ```bash
 pnpm dev -F @siyuan-publisher/main-app
 ```
+
+#### SiYuan Plugin Mode
+For SiYuan plugin development:
+```bash
+pnpm dev:siyuan -F @siyuan-publisher/main-app
+```
+
+### Build Modes
+
+The main application supports two build modes:
+
+#### SPA Mode (Default)
+- Standard web application build
+- Suitable for development and testing
+- Uses default Vite configuration
+- Build command: `pnpm build -F @siyuan-publisher/main-app`
+
+#### SiYuan Plugin Mode
+- Builds as a SiYuan plugin
+- Includes plugin-specific files and configurations
+- Uses separate Vite configuration (`vite.siyuan.config.ts`)
+- Build command: `pnpm build:siyuan -F @siyuan-publisher/main-app`
 
 ### Available Scripts
 
@@ -86,6 +114,9 @@ pnpm build -F @siyuan-publisher/ui
 pnpm build -F @siyuan-publisher/plugin-system
 pnpm build -F @siyuan-publisher/platform-adapters
 pnpm build -F @siyuan-publisher/main-app
+
+# Build main-app in SiYuan plugin mode
+pnpm build:siyuan -F @siyuan-publisher/main-app
 
 # Run tests
 pnpm test
