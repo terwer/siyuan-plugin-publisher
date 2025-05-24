@@ -22,11 +22,11 @@ packages/
 
 ```mermaid
 sequenceDiagram
-    participant App
-    participant PS
-    participant PAR
-    participant PM
-    participant PAM
+    actor App
+    actor PS
+    actor PAR
+    actor PM
+    actor PAM
 
     App->>PS: Initialize Plugin System
     PS->>PAR: Get Built-in Adapters
@@ -53,11 +53,11 @@ graph TD
 
 ```mermaid
 sequenceDiagram
-    participant User as User
-    participant UI as UI Component
-    participant PS as Plugin System
-    participant PA as Platform Adapter
-    participant Platform as Target Platform
+    actor User
+    actor UI
+    actor PS
+    actor PA
+    actor Platform
 
     User->>UI: Select Platform
     UI->>PS: Get Platform Config
@@ -216,10 +216,10 @@ enum ErrorType {
 
 ```mermaid
 sequenceDiagram
-    participant UI as UI Component
-    participant PS as Plugin System
-    participant PA as Platform Adapter
-    participant Error as Error Handler
+    actor UI
+    actor PS
+    actor PA
+    actor Error
 
     UI->>PS: Execute Operation
     PS->>PA: Call Adapter
@@ -435,10 +435,10 @@ sequenceDiagram
 
 ```mermaid
 sequenceDiagram
-    participant App as Main App
-    participant PS as Plugin System
-    participant EL as External Loader
-    participant Plugin as External Plugin
+    actor App
+    actor PS
+    actor EL
+    actor Plugin
 
     App->>PS: Initialize Plugin System
     PS->>EL: Scan Plugin Directory

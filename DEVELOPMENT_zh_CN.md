@@ -22,11 +22,11 @@ packages/
 
 ```mermaid
 sequenceDiagram
-    participant App
-    participant PS
-    participant PAR
-    participant PM
-    participant PAM
+    actor App
+    actor PS
+    actor PAR
+    actor PM
+    actor PAM
 
     App->>PS: 初始化插件系统
     PS->>PAR: 获取内置适配器
@@ -53,11 +53,11 @@ graph TD
 
 ```mermaid
 sequenceDiagram
-    participant User as 用户
-    participant UI as UI 组件
-    participant PS as 插件系统
-    participant PA as 平台适配器
-    participant Platform as 目标平台
+    actor User
+    actor UI
+    actor PS
+    actor PA
+    actor Platform
 
     User->>UI: 选择平台
     UI->>PS: 获取平台配置
@@ -216,10 +216,10 @@ enum ErrorType {
 
 ```mermaid
 sequenceDiagram
-    participant UI as UI 组件
-    participant PS as 插件系统
-    participant PA as 平台适配器
-    participant Error as 错误处理
+    actor UI
+    actor PS
+    actor PA
+    actor Error
 
     UI->>PS: 执行操作
     PS->>PA: 调用适配器
@@ -435,10 +435,10 @@ sequenceDiagram
 
 ```mermaid
 sequenceDiagram
-    participant App as 主应用
-    participant PS as 插件系统
-    participant EL as 外部加载器
-    participant Plugin as 外部插件
+    actor App
+    actor PS
+    actor EL
+    actor Plugin
 
     App->>PS: 初始化插件系统
     PS->>EL: 扫描插件目录
