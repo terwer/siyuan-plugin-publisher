@@ -12,8 +12,17 @@ export class DefaultPlatformAdapterRegistry implements IPlatformAdapterRegistry 
   private constructor() {
     this.adapters = new Map()
     // 注册内置适配器
-    this.register(new WordPressAdapter())
-    this.register(new GithubAdapter())
+    this.registerBuiltInAdapters()
+  }
+
+  private registerBuiltInAdapters() {
+    // 注册 WordPress 适配器
+    const wordpressAdapter = new WordPressAdapter()
+    this.register(wordpressAdapter)
+
+    // 注册 GitHub 适配器
+    const githubAdapter = new GithubAdapter()
+    this.register(githubAdapter)
   }
 
   static getInstance(): DefaultPlatformAdapterRegistry {
@@ -24,7 +33,10 @@ export class DefaultPlatformAdapterRegistry implements IPlatformAdapterRegistry 
   }
 
   register(adapter: PlatformAdapter): void {
-    this.adapters.set(adapter.type, adapter)
+    if (!adapter.id || !adapter.type) {
+      throw new Error("Invalid adapter: missing id or type")
+    }
+    this.adapters.set(adapter.id, adapter)
   }
 
   unregister(type: string): void {

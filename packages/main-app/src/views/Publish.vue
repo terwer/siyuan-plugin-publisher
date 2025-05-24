@@ -76,10 +76,11 @@ import type {
   PostStatus,
   ErrorType 
 } from "@siyuan-publisher/common"
+import { defineAsyncComponent } from "vue"
 
 const {
-  plugins: availablePlatforms,
-  platformAdapters,
+  plugins,
+  platformAdapters: availablePlatforms,
   isLoading,
   error: pluginError,
   getPluginConfig,
@@ -115,7 +116,10 @@ const tagsInput = ref("")
 // 动态加载平台配置组件
 const platformConfigComponent = computed(() => {
   if (!selectedPlatform.value) return null
-  return () => import(`../components/platform-configs/${selectedPlatform.value}.vue`)
+  const component = defineAsyncComponent(() => 
+    import(`../components/platform-configs/${selectedPlatform.value}.vue`)
+  )
+  return component
 })
 
 // 监听插件加载状态，初始化平台
