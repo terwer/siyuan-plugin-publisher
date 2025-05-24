@@ -245,12 +245,95 @@ sequenceDiagram
 3. Update configuration component
 4. Test adapter functionality
 
-### 3. Debugging Tips
+### 3. External Plugin Loading
 
-1. Use Vue DevTools to debug UI components
-2. Use browser console to check network requests
-3. Check plugin system logs
-4. Verify platform adapter configuration
+1. **Plugin Directory Structure**
+   ```
+   plugins/
+   ├── my-platform-plugin/
+   │   ├── package.json
+   │   ├── src/
+   │   │   ├── index.ts
+   │   │   ├── adapter.ts
+   │   │   └── config.vue
+   │   └── dist/
+   └── other-plugin/
+   ```
+
+2. **Plugin Loading Process**
+   ```typescript
+   class ExternalPluginLoader {
+     async loadPlugin(path: string): Promise<ExternalPlugin> {
+       // 1. Load plugin configuration
+       const manifest = await this.loadManifest(path);
+       
+       // 2. Validate plugin type
+       if (manifest.type !== "platform-adapter") {
+         throw new Error("Unsupported plugin type");
+       }
+       
+       // 3. Load plugin code
+       const plugin = await import(manifest.entry);
+       
+       // 4. Initialize plugin
+       await plugin.initialize();
+       
+       return plugin;
+     }
+   }
+   ```
+
+3. **Plugin Configuration Example**
+   ```json
+   {
+     "name": "my-platform-plugin",
+     "version": "1.0.0",
+     "main": "dist/index.js",
+     "siyuan-publisher": {
+       "type": "platform-adapter",
+       "platform": "my-platform",
+       "entry": "./dist/index.js",
+       "dependencies": {
+         "@siyuan-publisher/common": "^1.0.0"
+       }
+     }
+   }
+   ```
+
+4. **Plugin Interface Definition**
+   ```typescript
+   interface ExternalPlugin {
+     id: string;
+     name: string;
+     version: string;
+     type: "platform-adapter";
+     platform: string;
+     adapter: PlatformAdapter;
+     configComponent?: Component;
+     initialize(): Promise<void>;
+     unload(): Promise<void>;
+   }
+   ```
+
+5. **Plugin Loading Mechanism**
+   - Scan plugin directory on application startup
+   - Validate plugin configuration and dependencies
+   - Dynamically load plugin code
+   - Initialize plugin and register with system
+   - Update UI to show available plugins
+
+6. **Plugin Development Notes**
+   - Ensure correct plugin configuration
+   - Implement required interface methods
+   - Handle dependencies
+   - Provide error handling
+   - Support dynamic loading and unloading
+
+7. **Debugging Tips**
+   - Use Vue DevTools to debug UI components
+   - Use browser console to check network requests
+   - Check plugin system logs
+   - Verify platform adapter configuration
 
 ## Best Practices
 

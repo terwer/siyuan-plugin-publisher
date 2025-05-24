@@ -245,12 +245,95 @@ sequenceDiagram
 3. 更新配置组件
 4. 测试适配器功能
 
-### 3. 调试技巧
+### 3. 外部插件加载
 
-1. 使用 Vue DevTools 调试 UI 组件
-2. 使用浏览器控制台查看网络请求
-3. 检查插件系统日志
-4. 验证平台适配器配置
+1. **插件目录结构**
+   ```
+   plugins/
+   ├── my-platform-plugin/
+   │   ├── package.json
+   │   ├── src/
+   │   │   ├── index.ts
+   │   │   ├── adapter.ts
+   │   │   └── config.vue
+   │   └── dist/
+   └── other-plugin/
+   ```
+
+2. **插件加载流程**
+   ```typescript
+   class ExternalPluginLoader {
+     async loadPlugin(path: string): Promise<ExternalPlugin> {
+       // 1. 加载插件配置
+       const manifest = await this.loadManifest(path);
+       
+       // 2. 验证插件类型
+       if (manifest.type !== "platform-adapter") {
+         throw new Error("不支持的插件类型");
+       }
+       
+       // 3. 加载插件代码
+       const plugin = await import(manifest.entry);
+       
+       // 4. 初始化插件
+       await plugin.initialize();
+       
+       return plugin;
+     }
+   }
+   ```
+
+3. **插件配置示例**
+   ```json
+   {
+     "name": "my-platform-plugin",
+     "version": "1.0.0",
+     "main": "dist/index.js",
+     "siyuan-publisher": {
+       "type": "platform-adapter",
+       "platform": "my-platform",
+       "entry": "./dist/index.js",
+       "dependencies": {
+         "@siyuan-publisher/common": "^1.0.0"
+       }
+     }
+   }
+   ```
+
+4. **插件接口定义**
+   ```typescript
+   interface ExternalPlugin {
+     id: string;
+     name: string;
+     version: string;
+     type: "platform-adapter";
+     platform: string;
+     adapter: PlatformAdapter;
+     configComponent?: Component;
+     initialize(): Promise<void>;
+     unload(): Promise<void>;
+   }
+   ```
+
+5. **插件加载机制**
+   - 应用启动时扫描插件目录
+   - 验证插件配置和依赖
+   - 动态加载插件代码
+   - 初始化插件并注册到系统
+   - 更新 UI 显示可用插件
+
+6. **插件开发注意事项**
+   - 确保插件配置正确
+   - 实现必要的接口方法
+   - 处理依赖关系
+   - 提供错误处理
+   - 支持动态加载和卸载
+
+7. **调试技巧**
+   - 使用 Vue DevTools 调试 UI 组件
+   - 使用浏览器控制台查看网络请求
+   - 检查插件系统日志
+   - 验证平台适配器配置
 
 ## 最佳实践
 
