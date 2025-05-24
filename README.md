@@ -26,7 +26,11 @@ pnpm build --filter=\!@siyuan-publisher/main-app
 # Start development server (SPA mode)
 pnpm dev -F @siyuan-publisher/main-app
 
-# Start development server (SiYuan Plugin mode)
+# For SiYuan Plugin mode:
+# 1. Start SiYuan Note PC client
+# 2. Create symlinks for development (will prompt to remove existing plugin if found)
+pnpm makeLink
+# 3. Start development server
 pnpm dev:siyuan -F @siyuan-publisher/main-app
 ```
 
@@ -80,6 +84,11 @@ pnpm dev -F @siyuan-publisher/main-app
 #### SiYuan Plugin Mode
 For SiYuan plugin development:
 ```bash
+# 1. Start SiYuan Note PC client
+# 2. Create symlinks for development (will prompt to remove existing plugin if found)
+pnpm makeLink
+
+# 3. Start development server
 pnpm dev:siyuan -F @siyuan-publisher/main-app
 ```
 
@@ -97,6 +106,8 @@ The main application supports two build modes:
 - Builds as a SiYuan plugin
 - Includes plugin-specific files and configurations
 - Uses separate Vite configuration (`vite.siyuan.config.ts`)
+- Requires symlinks for development (`pnpm makeLink`)
+- Requires SiYuan Note PC client to be running
 - Build command: `pnpm build:siyuan -F @siyuan-publisher/main-app`
 
 ### Available Scripts
@@ -117,6 +128,10 @@ pnpm build -F @siyuan-publisher/main-app
 
 # Build main-app in SiYuan plugin mode
 pnpm build:siyuan -F @siyuan-publisher/main-app
+
+# Create symlinks for development (required for plugin mode)
+# Note: Will prompt to remove existing plugin if found
+pnpm makeLink
 
 # Run tests
 pnpm test

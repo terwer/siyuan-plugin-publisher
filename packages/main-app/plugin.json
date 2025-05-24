@@ -1,0 +1,43 @@
+{
+  "name": "siyuan-plugin-publisher",
+  "author": "terwer",
+  "url": "https://github.com/terwer/siyuan-plugin-publisher",
+  "version": "1.33.0",
+  "minAppVersion": "2.9.0",
+  "backends": [
+    "windows",
+    "linux",
+    "darwin",
+    "docker",
+    "android",
+    "ios"
+  ],
+  "frontends": [
+    "desktop",
+    "desktop-window",
+    "mobile",
+    "browser-desktop",
+    "browser-mobile"
+  ],
+  "displayName": {
+    "default": "Publisher",
+    "zh_CN": "发布工具"
+  },
+  "description": {
+    "default": "Publish articles from siyuan-note to platforms like Yuque etc. <code class='fn__code'>Free</code> and <code class='fn__code'>open source</code>.",
+    "zh_CN": "将思源笔记的文章发布到语雀等平台，<code class='fn__code'>开源</code>、<code class='fn__code'>免费</code> 。"
+  },
+  "readme": {
+    "default": "README.md",
+    "zh_CN": "README_zh_CN.md"
+  },
+  "i18n": [
+    "en_US",
+    "zh_CN"
+  ],
+  "funding": {
+    "custom": [
+      "https://afdian.com/a/terwer"
+    ]
+  }
+}

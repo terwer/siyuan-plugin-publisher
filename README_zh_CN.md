@@ -26,7 +26,11 @@ pnpm build --filter=\!@siyuan-publisher/main-app
 # 启动开发服务器（SPA 模式）
 pnpm dev -F @siyuan-publisher/main-app
 
-# 启动开发服务器（思源插件模式）
+# 思源插件模式：
+# 1. 启动思源笔记 PC 客户端
+# 2. 创建开发所需的符号链接（如果发现已存在的插件会提示是否删除）
+pnpm makeLink
+# 3. 启动开发服务器
 pnpm dev:siyuan -F @siyuan-publisher/main-app
 ```
 
@@ -80,6 +84,11 @@ pnpm dev -F @siyuan-publisher/main-app
 #### 思源插件模式
 用于思源插件开发：
 ```bash
+# 1. 启动思源笔记 PC 客户端
+# 2. 创建开发所需的符号链接（如果发现已存在的插件会提示是否删除）
+pnpm makeLink
+
+# 3. 启动开发服务器
 pnpm dev:siyuan -F @siyuan-publisher/main-app
 ```
 
@@ -97,6 +106,8 @@ pnpm dev:siyuan -F @siyuan-publisher/main-app
 - 构建为思源插件
 - 包含插件特定文件和配置
 - 使用单独的 Vite 配置（`vite.siyuan.config.ts`）
+- 需要创建开发符号链接（`pnpm makeLink`）
+- 需要思源笔记 PC 客户端正在运行
 - 构建命令：`pnpm build:siyuan -F @siyuan-publisher/main-app`
 
 ### 可用脚本
@@ -117,6 +128,10 @@ pnpm build -F @siyuan-publisher/main-app
 
 # 以思源插件模式构建 main-app
 pnpm build:siyuan -F @siyuan-publisher/main-app
+
+# 创建开发所需的符号链接（插件模式必需）
+# 注意：如果发现已存在的插件会提示是否删除
+pnpm makeLink
 
 # 运行测试
 pnpm test

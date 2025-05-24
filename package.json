@@ -9,7 +9,8 @@
     "build:siyuan": "turbo run build:siyuan",
     "lint": "turbo run lint",
     "test": "turbo run test",
-    "clean": "turbo run clean && rm -rf node_modules"
+    "clean": "./scripts/clean.sh",
+    "makeLink": "node ./scripts/make_dev_link.mjs"
   },
   "devDependencies": {
     "@types/node": "^22.15.21",
