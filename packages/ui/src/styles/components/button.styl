@@ -211,16 +211,18 @@
       background: transparent
 
       &.button-default
-        border-color: $btn-default-border
-        color: $btn-default-color
+        border-color: rgba(255, 255, 255, 0.2)
+        color: rgba(255, 255, 255, 0.85)
 
         &:hover:not(.button-disabled)
-          border-color: $btn-default-hover-border
-          color: $btn-default-hover-color
+          border-color: #fff
+          color: #fff
+          background: rgba(255, 255, 255, 0.1)
 
         &:active:not(.button-disabled)
-          border-color: $btn-default-active-border
-          color: $btn-default-active-color
+          border-color: #fff
+          color: #fff
+          background: rgba(255, 255, 255, 0.2)
 
       &.button-primary
         border-color: $btn-primary-border
@@ -228,10 +230,49 @@
 
         &:hover:not(.button-disabled)
           border-color: $btn-primary-hover-border
-          color: $btn-primary-hover-color
+          color: #fff
+          background: $btn-primary-hover-bg
 
         &:active:not(.button-disabled)
           border-color: $btn-primary-active-border
+          color: #fff
+          background: $btn-primary-active-bg
+
+      &.button-dashed
+        border-color: rgba(255, 255, 255, 0.2)
+        border-style: dashed
+        color: rgba(255, 255, 255, 0.85)
+
+        &:hover:not(.button-disabled)
+          border-color: #fff
+          color: #fff
+          background: rgba(255, 255, 255, 0.1)
+
+        &:active:not(.button-disabled)
+          border-color: #fff
+          color: #fff
+          background: rgba(255, 255, 255, 0.2)
+
+      &.button-text
+        border-color: transparent
+        color: rgba(255, 255, 255, 0.65)
+
+        &:hover:not(.button-disabled)
+          color: #fff
+          background: rgba(255, 255, 255, 0.1)
+
+        &:active:not(.button-disabled)
+          color: #fff
+          background: rgba(255, 255, 255, 0.2)
+
+      &.button-link
+        border-color: transparent
+        color: $btn-primary-color
+
+        &:hover:not(.button-disabled)
+          color: $btn-primary-hover-color
+
+        &:active:not(.button-disabled)
           color: $btn-primary-active-color
 
     // 块级按钮

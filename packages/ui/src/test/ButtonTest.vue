@@ -64,12 +64,17 @@
 
     <div class="test-section">
       <h3>幽灵按钮</h3>
-      <div class="button-group dark-bg">
-        <Button ghost @click="handleClick('ghost')">幽灵按钮</Button>
-        <Button type="primary" ghost @click="handleClick('ghost-primary')">幽灵主要按钮</Button>
-        <Button type="dashed" ghost @click="handleClick('ghost-dashed')">幽灵虚线按钮</Button>
-        <Button type="text" ghost @click="handleClick('ghost-text')">幽灵文本按钮</Button>
-        <Button type="link" ghost @click="handleClick('ghost-link')">幽灵链接按钮</Button>
+      <div class="ghost-demo">
+        <div class="ghost-content">
+          <p>在深色背景上，幽灵按钮可以保持界面简洁的同时提供良好的可点击性</p>
+          <div class="button-group">
+            <Button ghost @click="handleClick('ghost')">幽灵按钮</Button>
+            <Button type="primary" ghost @click="handleClick('ghost-primary')">幽灵主要按钮</Button>
+            <Button type="dashed" ghost @click="handleClick('ghost-dashed')">幽灵虚线按钮</Button>
+            <Button type="text" ghost @click="handleClick('ghost-text')">幽灵文本按钮</Button>
+            <Button type="link" ghost @click="handleClick('ghost-link')">幽灵链接按钮</Button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -177,6 +182,7 @@
     padding: 20px !important
     border: 1px solid #eee
     border-radius: 8px
+    background-color: #fff
 
     h3
       margin-bottom: 15px
@@ -189,10 +195,21 @@
     gap: 10px
     margin-bottom: 10px
 
-    &.dark-bg
-      background-color: #333
-      padding: 20px
-      border-radius: 4px
+  .ghost-demo
+    margin: 0
+    padding: 0
+    background-color: #001529
+    border-radius: 4px
+    color: #fff
+    overflow: hidden
+
+    .ghost-content
+      padding: 24px !important
+
+      p
+        margin: 0 0 16px
+        color: rgba(255, 255, 255, 0.65)
+        font-size: 14px
 
   .icon
     margin: 0 4px
