@@ -4,7 +4,7 @@
       <label for="token">GitHub Token</label>
       <input
         id="token"
-        v-model="localConfig.settings.token"
+        v-model="localConfig.settings!.token"
         type="password"
         placeholder="输入 GitHub Personal Access Token"
         @input="updateConfig"
@@ -15,7 +15,7 @@
       <label for="owner">仓库所有者</label>
       <input
         id="owner"
-        v-model="localConfig.settings.owner"
+        v-model="localConfig.settings!.owner"
         type="text"
         placeholder="输入 GitHub 用户名或组织名"
         @input="updateConfig"
@@ -26,7 +26,7 @@
       <label for="repo">仓库名称</label>
       <input
         id="repo"
-        v-model="localConfig.settings.repo"
+        v-model="localConfig.settings!.repo"
         type="text"
         placeholder="输入仓库名称"
         @input="updateConfig"
@@ -37,7 +37,7 @@
       <label for="branch">分支</label>
       <input
         id="branch"
-        v-model="localConfig.settings.branch"
+        v-model="localConfig.settings!.branch"
         type="text"
         placeholder="输入分支名称"
         @input="updateConfig"
@@ -48,7 +48,7 @@
       <label for="path">文件路径</label>
       <input
         id="path"
-        v-model="localConfig.settings.path"
+        v-model="localConfig.settings!.path"
         type="text"
         placeholder="输入文件路径"
         @input="updateConfig"
@@ -92,7 +92,7 @@ watch(
       localConfig.value = { ...newConfig }
     }
   },
-  { immediate: true }
+  { immediate: true },
 )
 
 // 更新配置
@@ -137,4 +137,4 @@ input {
 .test-btn:hover {
   background-color: #0056b3;
 }
-</style> 
+</style>

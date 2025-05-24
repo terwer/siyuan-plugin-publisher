@@ -12,11 +12,11 @@
       </div>
 
       <div v-if="selectedPlatform" class="platform-config">
-        <component 
-          :is="platformConfigComponent" 
-          v-model:config="platformConfig" 
+        <component
+          :is="platformConfigComponent"
+          v-model:config="platformConfig"
           @test="testConnection"
-          @update:config="handleConfigUpdate" 
+          @update:config="handleConfigUpdate"
         />
       </div>
 
@@ -68,13 +68,13 @@
 import { ref, computed, watch, onMounted } from "vue"
 import { usePluginSystem } from "../composables/usePluginSystem"
 import { usePublisher } from "../composables/usePublisher"
-import type { 
-  Post, 
-  PublishResult, 
-  PlatformConfig, 
+import type {
+  Post,
+  PublishResult,
+  PlatformConfig,
   PublishOptions,
   PostStatus,
-  ErrorType 
+  ErrorType,
 } from "@siyuan-publisher/common"
 import { defineAsyncComponent } from "vue"
 
@@ -90,7 +90,7 @@ const { publish: publishService, isPublishing, error: publishError } = usePublis
 
 const selectedPlatform = ref("")
 const platformConfig = ref<PlatformConfig>({
-  type: "" ,
+  type: "",
   config: {},
 } as any)
 
@@ -102,7 +102,7 @@ const post = ref<Post>({
   tags: [],
   categories: [],
   status: "draft",
-  metadata: {}
+  metadata: {},
 })
 
 const publishOptions = ref<PublishOptions>({
@@ -116,9 +116,7 @@ const tagsInput = ref("")
 // 动态加载平台配置组件
 const platformConfigComponent = computed(() => {
   if (!selectedPlatform.value) return null
-  const component = defineAsyncComponent(() => 
-    import(`../components/platform-configs/${selectedPlatform.value}.vue`)
-  )
+  const component = defineAsyncComponent(() => import(`../components/platform-configs/${selectedPlatform.value}.vue`))
   return component
 })
 
@@ -147,8 +145,8 @@ watch(selectedPlatform, async (newPlatformId) => {
 const handleTagsInput = () => {
   post.value.tags = tagsInput.value
     .split(",")
-    .map(tag => tag.trim())
-    .filter(tag => tag.length > 0)
+    .map((tag) => tag.trim())
+    .filter((tag) => tag.length > 0)
 }
 
 // 处理配置更新
@@ -200,7 +198,7 @@ const publish = async () => {
       },
       ...publishOptions.value,
     })
-    
+
     if (result.success) {
       showMessage("发布成功", "success")
       publishResult.value = result
