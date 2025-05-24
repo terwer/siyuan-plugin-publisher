@@ -2,64 +2,7 @@
   <div class="publish">
     <h1>发布文章</h1>
     <div class="content">
-      <div class="form-group">
-        <label for="platform">选择平台</label>
-        <select id="platform" v-model="selectedPlatform">
-          <option v-for="platform in availablePlatforms" :key="platform.id" :value="platform.id">
-            {{ platform.name }}
-          </option>
-        </select>
-      </div>
-
-      <div v-if="selectedPlatform" class="platform-config">
-        <component
-          :is="platformConfigComponent"
-          v-model:config="platformConfig"
-          @test="testConnection"
-          @update:config="handleConfigUpdate"
-        />
-      </div>
-
-      <div class="form-group">
-        <label for="title">文章标题</label>
-        <input id="title" v-model="post.title" type="text" placeholder="输入文章标题" />
-      </div>
-
-      <div class="form-group">
-        <label for="content">文章内容</label>
-        <textarea id="content" v-model="post.content" rows="10" placeholder="输入文章内容"></textarea>
-      </div>
-
-      <div class="form-group">
-        <label for="excerpt">文章摘要</label>
-        <textarea id="excerpt" v-model="post.excerpt" rows="3" placeholder="输入文章摘要"></textarea>
-      </div>
-
-      <div class="form-group">
-        <label for="tags">标签</label>
-        <input id="tags" v-model="tagsInput" type="text" placeholder="输入标签，用逗号分隔" @input="handleTagsInput" />
-      </div>
-
-      <div class="form-group">
-        <label for="status">发布状态</label>
-        <select id="status" v-model="publishOptions.status">
-          <option value="draft">草稿</option>
-          <option value="published">发布</option>
-          <option value="private">私密</option>
-        </select>
-      </div>
-
-      <button @click="publish" class="publish-btn" :disabled="isPublishing">
-        {{ isPublishing ? "发布中..." : "发布" }}
-      </button>
-
-      <div v-if="publishResult" class="result" :class="{ success: publishResult.success }">
-        <p v-if="publishResult.success">
-          发布成功！
-          <a :href="publishResult.url" target="_blank">查看文章</a>
-        </p>
-        <p v-else>发布失败：{{ publishResult.error }}</p>
-      </div>
+      <Tab :tabs="publishTabs" :active-tab="activeTabIndex" @tab-change="handleTabChange" />
     </div>
   </div>
 </template>
@@ -76,12 +19,10 @@ import type {
   PostStatus,
   ErrorType,
 } from "@siyuan-publisher/common"
-
-// 导入所有平台配置组件
+import { Tab } from "@siyuan-publisher/ui"
 import WordPressConfig from "../components/platform-configs/wordpress.vue"
-// import HexoConfig from "../components/platform-configs/hexo.vue"
-// import NotionConfig from "../components/platform-configs/notion.vue"
-// ... 其他平台配置组件的导入
+import PostInfo from "../components/PostInfo.vue"
+import PublishOptionsPanel from "../components/PublishOptionsPanel.vue"
 
 const {
   plugins,
@@ -117,51 +58,81 @@ const publishOptions = ref<PublishOptions>({
 
 const publishResult = ref<PublishResult | null>(null)
 const tagsInput = ref("")
+const activeTabIndex = ref(0)
 
-// 获取平台配置组件
-const platformConfigComponent = computed(() => {
-  if (!selectedPlatform.value) return null
-  const componentMap = {
-    wordpress: WordPressConfig,
-    // hexo: HexoConfig,
-    // notion: NotionConfig,
-    // ... 其他平台的映射
+// 定义发布流程的标签页
+const publishTabs = computed(() => [
+  {
+    label: "选择平台",
+    content: WordPressConfig,
+    props: {
+      platforms: availablePlatforms.value,
+      selectedPlatform: selectedPlatform.value,
+      platformConfig: platformConfig.value,
+      onPlatformSelect: handlePlatformSelect,
+      onConfigUpdate: handleConfigUpdate,
+      onTestConnection: testConnection,
+    },
+  },
+  {
+    label: "文章信息",
+    content: PostInfo,
+    props: {
+      post: post.value,
+      tagsInput: tagsInput.value,
+      onPostUpdate: handlePostUpdate,
+      onTagsInput: handleTagsInput,
+    },
+  },
+  {
+    label: "发布选项",
+    content: PublishOptionsPanel,
+    props: {
+      options: publishOptions.value,
+      isPublishing: isPublishing.value,
+      publishResult: publishResult.value,
+      onOptionsUpdate: handleOptionsUpdate,
+      onPublish: publish,
+    },
+  },
+])
+
+// 处理标签页切换
+const handleTabChange = (index: number) => {
+  activeTabIndex.value = index
+}
+
+// 处理平台选择
+const handlePlatformSelect = (platformId: string) => {
+  selectedPlatform.value = platformId
+  const config = getPluginConfig(platformId)
+  if (config) {
+    platformConfig.value = config
   }
-  return componentMap[selectedPlatform.value as keyof typeof componentMap] || null
-})
-
-// 监听插件加载状态，初始化平台
-watch(isLoading, (loading) => {
-  if (!loading && availablePlatforms.value.length > 0 && !selectedPlatform.value) {
-    selectedPlatform.value = availablePlatforms.value[0].id
-    const config = getPluginConfig(availablePlatforms.value[0].id)
-    if (config) {
-      platformConfig.value = config
-    }
-  }
-})
-
-// 监听平台选择变化
-watch(selectedPlatform, async (newPlatformId) => {
-  if (newPlatformId) {
-    const config = getPluginConfig(newPlatformId)
-    if (config) {
-      platformConfig.value = config
-    }
-  }
-})
-
-// 处理标签输入
-const handleTagsInput = () => {
-  post.value.tags = tagsInput.value
-    .split(",")
-    .map((tag) => tag.trim())
-    .filter((tag) => tag.length > 0)
 }
 
 // 处理配置更新
 const handleConfigUpdate = (newConfig: PlatformConfig) => {
   platformConfig.value = newConfig
+}
+
+// 处理文章信息更新
+const handlePostUpdate = (newPost: Post) => {
+  post.value = newPost
+}
+
+// 处理标签输入
+const handleTagsInput = (input: string) => {
+  tagsInput.value = input
+  post.value.tags = input
+    .split(",")
+    .map((tag) => tag.trim())
+    .filter((tag) => tag.length > 0)
+}
+
+// 处理发布选项更新
+const handleOptionsUpdate = (newOptions: PublishOptions) => {
+  publishOptions.value = newOptions
 }
 
 // 测试平台连接
@@ -188,9 +159,19 @@ const getErrorMessage = (errorType: ErrorType): string => {
     INVALID_CONFIG: "配置无效",
     PUBLISH_FAILED: "发布失败",
     UNKNOWN_ERROR: "未知错误",
-    // ... 其他错误类型
   } as any
   return errorMessages[errorType] || "操作失败"
+}
+
+// 显示消息
+const showMessage = (message: string, type: "success" | "error") => {
+  const messageDiv = document.createElement("div")
+  messageDiv.className = `message ${type}`
+  messageDiv.textContent = message
+  document.body.appendChild(messageDiv)
+  setTimeout(() => {
+    messageDiv.remove()
+  }, 3000)
 }
 
 // 发布文章
@@ -223,16 +204,16 @@ const publish = async () => {
   }
 }
 
-// 显示消息
-const showMessage = (message: string, type: "success" | "error") => {
-  const messageDiv = document.createElement("div")
-  messageDiv.className = `message ${type}`
-  messageDiv.textContent = message
-  document.body.appendChild(messageDiv)
-  setTimeout(() => {
-    messageDiv.remove()
-  }, 3000)
-}
+// 监听插件加载状态，初始化平台
+watch(isLoading, (loading) => {
+  if (!loading && availablePlatforms.value.length > 0 && !selectedPlatform.value) {
+    selectedPlatform.value = availablePlatforms.value[0].id
+    const config = getPluginConfig(availablePlatforms.value[0].id)
+    if (config) {
+      platformConfig.value = config
+    }
+  }
+})
 </script>
 
 <style scoped>
@@ -243,72 +224,6 @@ const showMessage = (message: string, type: "success" | "error") => {
 .content {
   max-width: 800px;
   margin: 0 auto;
-}
-
-.form-group {
-  margin-bottom: 20px;
-}
-
-label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-
-input,
-select,
-textarea {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
-}
-
-textarea {
-  resize: vertical;
-}
-
-.publish-btn {
-  padding: 10px 20px;
-  background-color: #007aff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.publish-btn:hover {
-  background-color: #0056b3;
-}
-
-.publish-btn:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-.result {
-  margin-top: 20px;
-  padding: 10px;
-  border-radius: 4px;
-}
-
-.result.success {
-  background-color: #e6ffe6;
-  color: #006600;
-}
-
-.result:not(.success) {
-  background-color: #ffe6e6;
-  color: #cc0000;
-}
-
-.platform-config {
-  background-color: #f5f5f5;
-  padding: 15px;
-  border-radius: 4px;
-  margin-bottom: 20px;
 }
 
 /* 消息提示样式 */
