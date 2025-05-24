@@ -1,4 +1,5 @@
-import type { BaseConfig, BaseMetadata } from "./base"
+import type { BaseConfig, BaseMetadata, Configurable, Lifecycle } from "./base"
+import type { Post, PostStatus, PublishOptions, PublishResult } from "./publish"
 
 /**
  * 平台类型
@@ -86,7 +87,7 @@ export interface PlatformCapabilities {
   /**
    * 支持的文章状态
    */
-  supportedPostStatus: string[]
+  supportedPostStatus: PostStatus[]
   /**
    * 支持的文章类型
    */
@@ -110,28 +111,6 @@ export interface PlatformCapabilities {
 }
 
 /**
- * 发布选项
- */
-export interface PublishOptions {
-  /**
-   * 是否发布为草稿
-   */
-  draft?: boolean
-  /**
-   * 发布时间
-   */
-  publishDate?: Date
-  /**
-   * 文章状态
-   */
-  status?: "draft" | "published"
-  /**
-   * 自定义选项
-   */
-  [key: string]: any
-}
-
-/**
  * 平台状态
  */
 export interface PlatformStatus {
@@ -150,9 +129,59 @@ export interface PlatformStatus {
 }
 
 /**
+ * 平台错误类型
+ */
+export type PlatformErrorType =
+  | "CONNECTION_FAILED"
+  | "AUTHENTICATION_FAILED"
+  | "INVALID_CONFIG"
+  | "PUBLISH_FAILED"
+  | "DELETE_FAILED"
+  | "STATUS_CHECK_FAILED"
+  | "UNKNOWN_ERROR"
+
+/**
+ * 平台错误
+ */
+export interface PlatformError {
+  type: PlatformErrorType
+  message: string
+  details?: any
+  originalError?: Error
+}
+
+/**
+ * 平台事件类型
+ */
+export type PlatformEventType =
+  | "connected"
+  | "disconnected"
+  | "publish_started"
+  | "publish_completed"
+  | "publish_failed"
+  | "delete_started"
+  | "delete_completed"
+  | "delete_failed"
+  | "status_changed"
+
+/**
+ * 平台事件
+ */
+export interface PlatformEvent {
+  type: PlatformEventType
+  platform: string
+  data?: any
+  timestamp: Date
+}
+
+/**
  * 平台适配器接口
  */
-export interface PlatformAdapter {
+export interface PlatformAdapter extends BaseMetadata, Lifecycle, Configurable {
+  /**
+   * 平台类型
+   */
+  type: string
   /**
    * 平台名称
    */
@@ -183,7 +212,7 @@ export interface PlatformAdapter {
   /**
    * 更新平台配置
    */
-  updateConfig(config: Partial<PlatformConfig>): void
+  updateConfig(config: Partial<PlatformConfig>): Promise<void>
 
   /**
    * 验证配置
@@ -193,7 +222,7 @@ export interface PlatformAdapter {
   /**
    * 连接平台
    */
-  connect(config: PlatformConfig): Promise<void>
+  connect(): Promise<void>
 
   /**
    * 断开连接
@@ -216,46 +245,147 @@ export interface PlatformAdapter {
   publish(post: Post, options?: PublishOptions): Promise<PublishResult>
 
   /**
-   * 获取已发布的文章
+   * 更新文章
    */
-  getPublishedPosts(): Promise<Post[]>
+  update(post: Post, options?: PublishOptions): Promise<PublishResult>
 
   /**
-   * 删除已发布的文章
+   * 删除文章
    */
-  deletePost(postId: string): Promise<void>
+  delete(postId: string): Promise<boolean>
 
   /**
-   * 获取文章状态
+   * 获取文章
    */
-  getPostStatus(postId: string): Promise<{
-    status: "published" | "failed" | "pending"
-    url?: string
-    error?: string
-  }>
+  getPost(postId: string): Promise<Post | null>
+
+  /**
+   * 获取文章列表
+   */
+  getPosts(options?: { page?: number; pageSize?: number }): Promise<Post[]>
 }
 
 /**
- * 文章接口
+ * 平台适配器工厂
  */
-export interface Post {
-  id: string
-  title: string
-  content: string
-  excerpt?: string
-  tags?: string[]
-  categories?: string[]
-  status?: "draft" | "published"
-  publishDate?: Date
-  [key: string]: any
+export interface PlatformAdapterFactory {
+  create(config: PlatformConfig): Promise<PlatformAdapter>
+  validateConfig(config: PlatformConfig): Promise<boolean>
+  getMetadata(): PlatformMetadata
 }
 
 /**
- * 发布结果
+ * 平台适配器注册表接口
  */
-export interface PublishResult {
-  success: boolean
-  postId?: string
-  url?: string
-  error?: string
+export interface PlatformAdapterRegistry {
+  /**
+   * 注册适配器
+   */
+  register(adapter: PlatformAdapter): void
+  /**
+   * 注销适配器
+   */
+  unregister(type: string): void
+  /**
+   * 获取适配器
+   */
+  getAdapter(type: string): PlatformAdapter | undefined
+  /**
+   * 获取所有适配器
+   */
+  getAllAdapters(): PlatformAdapter[]
+}
+
+/**
+ * GitHub 平台配置
+ */
+export interface GithubConfig extends PlatformConfig {
+  /**
+   * GitHub 访问令牌
+   */
+  token: string
+  /**
+   * 仓库所有者
+   */
+  owner: string
+  /**
+   * 仓库名称
+   */
+  repo: string
+  /**
+   * 分支名称
+   */
+  branch?: string
+  /**
+   * 文件路径
+   */
+  path?: string
+}
+
+/**
+ * GitHub 发布选项
+ */
+export interface GithubPublishOptions extends PublishOptions {
+  /**
+   * 提交信息
+   */
+  commitMessage?: string
+  /**
+   * 分支名称
+   */
+  branch?: string
+  /**
+   * 文件路径
+   */
+  path?: string
+}
+
+/**
+ * GitHub 发布结果
+ */
+export interface GithubPublishResult extends PublishResult {
+  /**
+   * 提交 SHA
+   */
+  commitSha?: string
+  /**
+   * HTML URL
+   */
+  htmlUrl?: string
+  /**
+   * 原始文件 URL
+   */
+  rawUrl?: string
+}
+
+/**
+ * WordPress 平台配置
+ */
+export interface WordPressConfig extends PlatformConfig {
+  /**
+   * API URL
+   */
+  apiUrl: string
+  /**
+   * 用户名
+   */
+  username: string
+  /**
+   * 密码
+   */
+  password: string
+}
+
+/**
+ * WordPress 发布选项
+ */
+export interface WordPressPublishOptions extends PublishOptions {
+  /**
+   * 分类 ID 列表
+   */
+  categories?: number[]
+  /**
+   * 标签 ID 列表
+   */
+  tags?: number[]
 }

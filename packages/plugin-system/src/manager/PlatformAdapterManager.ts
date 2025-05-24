@@ -47,4 +47,4 @@ export class PlatformAdapterManager {
     }
     return await adapter.publish(post, options)
   }
-} 
+}

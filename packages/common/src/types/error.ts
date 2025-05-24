@@ -61,3 +61,54 @@ export class PublisherError extends Error {
     this.metadata = options?.metadata
   }
 }
+
+/**
+ * 错误严重程度
+ */
+export type ErrorSeverity = "fatal" | "error" | "warning" | "info"
+
+/**
+ * 错误处理策略
+ */
+export type ErrorHandlingStrategy = "retry" | "fallback" | "ignore" | "abort"
+
+/**
+ * 错误处理选项
+ */
+export interface ErrorHandlingOptions {
+  severity: ErrorSeverity
+  strategy: ErrorHandlingStrategy
+  maxRetries?: number
+  retryDelay?: number
+  fallbackAction?: () => Promise<void>
+}
+
+/**
+ * 错误处理结果
+ */
+export interface ErrorHandlingResult {
+  handled: boolean
+  success: boolean
+  error?: Error
+  retryCount?: number
+  fallbackUsed?: boolean
+}
+
+/**
+ * 错误处理上下文
+ */
+export interface ErrorContext {
+  module: string
+  action: string
+  timestamp: Date
+  metadata?: Record<string, any>
+}
+
+/**
+ * 错误处理函数
+ */
+export type ErrorHandler = (
+  error: PublisherError,
+  context: ErrorContext,
+  options: ErrorHandlingOptions,
+) => Promise<ErrorHandlingResult>

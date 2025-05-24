@@ -1,8 +1,7 @@
-import type { Plugin, PlatformAdapter, PlatformConfig } from "@siyuan-publisher/common"
+import type { PlatformAdapter, Plugin, PluginManager as IPluginManager, PluginState } from "@siyuan-publisher/common"
 import { PublisherError } from "@siyuan-publisher/core"
-import type { PluginLoadResult, PluginUnloadResult, PluginState } from "../types"
 
-export class PluginManager {
+export class PluginManager implements IPluginManager {
   private static instance: PluginManager
   private plugins: Map<string, Plugin> = new Map()
   private platformAdapters: Map<string, PlatformAdapter> = new Map()
@@ -15,6 +14,10 @@ export class PluginManager {
       PluginManager.instance = new PluginManager()
     }
     return PluginManager.instance
+  }
+
+  static getPluginManager(): PluginManager {
+    return PluginManager.getInstance()
   }
 
   async registerPlugin(plugin: Plugin): Promise<void> {

@@ -1,11 +1,11 @@
 import { ref, onMounted, onUnmounted } from "vue"
 import { PluginSystem } from "@siyuan-publisher/plugin-system"
-import type { Plugin, PlatformAdapter, PluginLoader } from "@siyuan-publisher/common"
+import type { Plugin, PlatformAdapter, PluginManager } from "@siyuan-publisher/common"
 import { WordPressAdapter } from "@siyuan-publisher/platform-adapters"
 import { GithubAdapter } from "@siyuan-publisher/platform-adapters"
 
 export function usePluginSystem() {
-  const pluginSystem = PluginSystem.getInstance()
+  const pluginSystem = PluginSystem.getInstance() as PluginManager
   const plugins = ref<Plugin[]>([])
   const platformAdapters = ref<PlatformAdapter[]>([])
   const isLoading = ref(false)
@@ -19,12 +19,6 @@ export function usePluginSystem() {
     }
   }
 
-  // 注册外部插件加载器
-  const registerExternalLoaders = () => {
-    // 这里可以注册各种类型的插件加载器
-    // 例如：npm包加载器、本地文件加载器等
-  }
-
   // 加载所有插件
   const loadPlugins = async () => {
     isLoading.value = true
@@ -32,8 +26,6 @@ export function usePluginSystem() {
     try {
       // 注册内置适配器
       await registerBuiltinAdapters()
-      // 注册外部插件加载器
-      registerExternalLoaders()
       // 更新状态
       plugins.value = pluginSystem.getAllPlugins()
       platformAdapters.value = pluginSystem.getAllPlatformAdapters()
@@ -45,16 +37,14 @@ export function usePluginSystem() {
   }
 
   // 动态加载外部插件
-  const loadExternalPlugin = async (type: string, config: any) => {
+  const loadExternalPlugin = async (plugin: Plugin) => {
     try {
-      const result = await pluginSystem.loadPlugin(type, config)
-      if (result.success && result.plugin) {
-        plugins.value = pluginSystem.getAllPlugins()
-        if ("connect" in result.plugin) {
-          platformAdapters.value = pluginSystem.getAllPlatformAdapters()
-        }
+      await pluginSystem.registerPlugin(plugin)
+      plugins.value = pluginSystem.getAllPlugins()
+      if ("connect" in plugin) {
+        platformAdapters.value = pluginSystem.getAllPlatformAdapters()
       }
-      return result
+      return { success: true }
     } catch (err) {
       error.value = err instanceof Error ? err.message : "加载外部插件失败"
       return { success: false, error: error.value }
