@@ -8,273 +8,97 @@
   -->
 
 <script setup lang="ts">
-import { ref, watch } from "vue"
+  import { ref, watch } from "vue"
 
-const props = withDefaults(
-  defineProps<{
-    tabs: { label: string; content: any; props?: Record<string, any> }[]
-    activeTab?: number
-    vertical?: boolean
-    collapsed?: boolean
-  }>(),
-  {
-    activeTab: 0,
-    vertical: false,
-    collapsed: false,
-  },
-)
+  const props = withDefaults(
+    defineProps<{
+      tabs: { label: string; content: any; props?: Record<string, any> }[]
+      activeTab?: number
+      vertical?: boolean
+      collapsed?: boolean
+    }>(),
+    {
+      activeTab: 0,
+      vertical: false,
+      collapsed: false
+    }
+  )
 
-const emit = defineEmits<{
-  (e: "tabChange", index: number): void
-}>()
+  const emit = defineEmits<{
+    (e: "tabChange", index: number): void
+  }>()
 
-const activeIndex = ref(props.activeTab)
-const isCollapsed = ref(props.collapsed)
+  const activeIndex = ref(props.activeTab)
+  const isCollapsed = ref(props.collapsed)
 
-watch(
-  () => props.activeTab,
-  (newVal) => {
-    activeIndex.value = newVal
-  },
-)
+  watch(
+    () => props.activeTab,
+    newVal => {
+      activeIndex.value = newVal
+    }
+  )
 
-watch(
-  () => props.collapsed,
-  (newVal) => {
-    isCollapsed.value = newVal
-  },
-)
+  watch(
+    () => props.collapsed,
+    newVal => {
+      isCollapsed.value = newVal
+    }
+  )
 
-const handleTabClick = (index: number) => {
-  if (index !== activeIndex.value) {
-    activeIndex.value = index
-    emit("tabChange", index)
-    console.log(`Tab switched to index: ${index}`)
+  const handleTabClick = (index: number) => {
+    if (index !== activeIndex.value) {
+      activeIndex.value = index
+      emit("tabChange", index)
+    }
   }
-}
 
-const toggleCollapse = () => {
-  isCollapsed.value = !isCollapsed.value
-}
+  const toggleCollapse = () => {
+    isCollapsed.value = !isCollapsed.value
+  }
 </script>
 
 <template>
-  <div :class="['tabs-container', { vertical }]">
-    <div class="tab-controls" :class="{ collapsed: isCollapsed }">
-      <div class="tab-list">
-        <button
-          v-for="(tab, index) in tabs"
-          :key="index"
-          class="tab-button"
-          :class="{ active: index === activeIndex }"
-          @click.stop="handleTabClick(index)"
-        >
-          {{ tab.label }}
-        </button>
+  <div id="publisherApp">
+    <div :class="['pt-tabs', { vertical }]">
+      <div class="pt-tabs-nav" :class="{ 'pt-tabs-nav-collapsed': isCollapsed }">
+        <div class="pt-tabs-list">
+          <button
+            v-for="(tab, index) in tabs"
+            :key="index"
+            class="pt-tabs-item"
+            :class="{ 'pt-tabs-item-active': index === activeIndex }"
+            @click.stop="handleTabClick(index)"
+          >
+            {{ tab.label }}
+          </button>
+        </div>
       </div>
-    </div>
 
-    <button class="collapse-handle" @click.stop="toggleCollapse">
-      <svg class="collapse-icon" viewBox="0 0 24 24">
-        <path
-          v-if="isCollapsed"
-          d="M9.29 6.71a1 1 0 0 0 0 1.41L13.17 12l-3.88 3.88a1 1 0 1 0 1.41 1.41l4.59-4.59a1 1 0 0 0 0-1.41L10.7 6.7a1 1 0 0 0-1.41.01z"
-        />
-        <path
-          v-else
-          d="M14.71 6.71a1 1 0 0 0-1.41 0L8.71 11.3a1 1 0 0 0 0 1.41l4.59 4.59a1 1 0 1 0 1.41-1.41L10.83 12l3.88-3.88a1 1 0 0 0 0-1.41z"
-        />
-      </svg>
-    </button>
+      <button class="pt-tabs-handle" @click.stop="toggleCollapse">
+        <svg class="pt-tabs-icon" viewBox="0 0 24 24">
+          <path
+            v-if="isCollapsed"
+            d="M9.29 6.71a1 1 0 0 0 0 1.41L13.17 12l-3.88 3.88a1 1 0 1 0 1.41 1.41l4.59-4.59a1 1 0 0 0 0-1.41L10.7 6.7a1 1 0 0 0-1.41.01z"
+          />
+          <path
+            v-else
+            d="M14.71 6.71a1 1 0 0 0-1.41 0L8.71 11.3a1 1 0 0 0 0 1.41l4.59 4.59a1 1 0 1 0 1.41-1.41L10.83 12l3.88-3.88a1 1 0 0 0 0-1.41z"
+          />
+        </svg>
+      </button>
 
-    <div class="tab-content-wrapper">
-      <component
-        v-if="tabs[activeIndex]?.content"
-        :is="tabs[activeIndex].content"
-        v-bind="tabs[activeIndex].props"
-        class="tab-content"
-      />
+      <div class="pt-tabs-content">
+        <component
+          v-if="tabs[activeIndex]?.content"
+          :is="tabs[activeIndex].content"
+          v-bind="tabs[activeIndex].props"
+          class="pt-tabs-pane"
+        />
+      </div>
     </div>
   </div>
 </template>
 
-<style lang="stylus" scoped>
-// 设计变量
-$tab-width = 100px
-$control-size = 32px
-$transition-duration = 0.3s
-$border-radius = 8px
-
-.tabs-container
-  --pt-tabs-bg: #fff
-  --pt-tabs-controls-bg: #f8f9fa
-  --pt-tabs-border: #e0e0e0
-  --pt-tabs-text: #495057
-  --pt-tabs-hover-bg: #f1f3f5
-  --pt-tabs-active-bg: #e9ecef
-  --pt-tabs-active-text: #212529
-  --pt-tabs-active-indicator: #1971c2
-  --pt-tabs-shadow: rgba(0,0,0,0.1)
-  --pt-tabs-shadow-hover: rgba(0,0,0,0.2)
-  --pt-tabs-control-icon: #6c757d
-  --pt-tabs-content-bg: #fff
-
-  // 暗黑模式变量覆盖
-  html[data-theme-mode="dark"] &
-    --pt-tabs-bg: #2d2d2d
-    --pt-tabs-controls-bg: #363636
-    --pt-tabs-border: rgba(255,255,255,0.1)
-    --pt-tabs-text: rgba(255,255,255,0.8)
-    --pt-tabs-hover-bg: rgba(255,255,255,0.05)
-    --pt-tabs-active-bg: rgba(255,255,255,0.1)
-    --pt-tabs-active-text: #fff
-    --pt-tabs-active-indicator: #2196f3
-    --pt-tabs-shadow: rgba(0,0,0,0.3)
-    --pt-tabs-shadow-hover: rgba(0,0,0,0.5)
-    --pt-tabs-control-icon: rgba(255,255,255,0.7)
-    --pt-tabs-content-bg: #1f1f1f
-
-  // 布局样式
-  display flex
-  width 100%
-  height 100%
-  background var(--pt-tabs-bg)
-  border-radius $border-radius
-  box-shadow 0 2px 8px var(--pt-tabs-shadow)
-  position relative
-
-  &.vertical
-    flex-direction row
-
-    .tab-controls
-      width $tab-width
-      transition width $transition-duration ease, border $transition-duration ease, opacity $transition-duration ease
-      border-right 1px solid var(--pt-tabs-border)
-      position absolute
-      left 0
-      top 0
-      bottom 0
-      height 100%
-      flex-shrink 0
-      z-index 10
-
-      &.collapsed
-        width 0
-        opacity 0
-        visibility hidden
-        border-right-color transparent
-
-      &:not(.collapsed) + .collapse-handle + .tab-content-wrapper
-        min-height 175px
-
-.tab-controls
-  position absolute
-  left 0
-  top 0
-  bottom 0
-  background var(--pt-tabs-controls-bg)
-  flex-shrink 0
-  height 100%
-  z-index 10
-
-.tab-list
-  width $tab-width
-  min-width $tab-width
-  height 100%
-  transition width $transition-duration ease
-
-.tab-button
-  display flex
-  width 100%
-  padding 12px 20px
-  border none
-  background none
-  color var(--pt-tabs-text)
-  font-size 14px
-  text-align left
-  cursor pointer
-  transition all 0.2s ease
-  position relative
-
-  &:hover:not(.active)
-    background var(--pt-tabs-hover-bg)
-
-  &.active
-    background var(--pt-tabs-active-bg)
-    color var(--pt-tabs-active-text)
-    &::after
-      content ''
-      position absolute
-      right 0
-      top 50%
-      transform translateY(-50%)
-      height 60%
-      width 3px
-      background var(--pt-tabs-active-indicator)
-      border-radius 2px
-
-.collapse-handle
-  position absolute
-  left $tab-width
-  top 22px
-  width $control-size
-  height $control-size
-  padding 6px
-  background var(--pt-tabs-controls-bg)
-  border 1px solid var(--pt-tabs-border)
-  border-radius 50%
-  box-shadow 0 2px 8px var(--pt-tabs-shadow)
-  cursor pointer
-  transition all $transition-duration ease
-  z-index 100
-  transform translateX(-50%)
-  display flex
-  align-items center
-  justify-content center
-
-  .tabs-container.vertical .collapsed + &
-    left 4px
-    background var(--pt-tabs-bg)
-    border-color var(--pt-tabs-border)
-    box-shadow 2px 0 8px var(--pt-tabs-shadow)
-    padding-left 8px
-    padding-right 4px
-
-  &:hover
-    transform translateX(-50%) scale(1.1)
-    box-shadow 0 4px 12px var(--pt-tabs-shadow-hover)
-    background var(--pt-tabs-hover-bg)
-
-  .collapse-icon
-    width 16px
-    height 16px
-    fill var(--pt-tabs-control-icon)
-    transition transform $transition-duration ease
-
-    .tabs-container.vertical .collapsed + .collapse-handle &
-      transform rotate(180deg)
-
-.tab-content-wrapper
-  flex 1
-  min-width 0
-  height 100%
-  background var(--pt-tabs-content-bg)
-  padding 2px 6px
-  display flex
-  flex-direction column
-  overflow hidden
-  margin-left $tab-width
-  transition margin-left $transition-duration ease
-
-  .tabs-container.vertical .collapsed + .collapse-handle + &
-    margin-left 0
-
-  .tab-content
-    flex 1
-    display flex
-    flex-direction column
-    gap 4px
-    // 注意：b3-menu__items是最外层已经设置了，这里不能设置
-    // 否则会出现双滚动条
-    //overflow-y auto
+<style lang="stylus">
+  @import '../styles/components/tabs.styl'
 </style>

@@ -4,6 +4,7 @@
       <router-link to="/" class="nav-item">首页</router-link>
       <router-link to="/publish" class="nav-item">发布</router-link>
       <router-link to="/settings" class="nav-item">设置</router-link>
+      <router-link to="/ui-test" class="nav-item">UI测试</router-link>
     </nav>
     <main class="main">
       <router-view></router-view>

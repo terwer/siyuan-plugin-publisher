@@ -1,0 +1,152 @@
+#publisherApp
+  // 基础样式重置
+  *
+    margin: 0
+    padding: 0
+    box-sizing: border-box
+
+  // 基础样式
+  font-family: $font-family
+  font-size: $font-size-base
+  line-height: 1.5
+  color: $text-color
+  background-color: #fff
+
+  // 链接样式
+  a
+    color: $primary-color
+    text-decoration: none
+    transition-base()
+    &:hover
+      color: lighten($primary-color, 8%)
+
+  // 标题样式
+  h1, h2, h3, h4, h5, h6
+    color: $heading-color
+    font-weight: 500
+    line-height: 1.4
+
+  h1
+    font-size: 38px
+    margin-bottom: $spacing-lg
+
+  h2
+    font-size: 30px
+    margin-bottom: $spacing-md
+
+  h3
+    font-size: 24px
+    margin-bottom: $spacing-md
+
+  h4
+    font-size: 20px
+    margin-bottom: $spacing-sm
+
+  h5
+    font-size: 16px
+    margin-bottom: $spacing-sm
+
+  h6
+    font-size: 14px
+    margin-bottom: $spacing-sm
+
+  // 段落样式
+  p
+    margin-bottom: $spacing-md
+
+  // 列表样式
+  ul, ol
+    margin: 0
+    padding: 0
+    list-style: none
+
+  // 表格样式
+  table
+    width: 100%
+    border-collapse: collapse
+    border-spacing: 0
+
+  th, td
+    padding: $spacing-sm
+    border-bottom: 1px solid $border-color-split
+    text-align: left
+
+  th
+    font-weight: 500
+    background: #fafafa
+
+  // 代码样式
+  code
+    padding: 0.2em 0.4em
+    margin: 0
+    font-size: 85%
+    background-color: rgba(0, 0, 0, 0.04)
+    border-radius: $border-radius-base
+
+  pre
+    padding: $spacing-md
+    margin: $spacing-md 0
+    font-size: $font-size-sm
+    background-color: #f5f5f5
+    border-radius: $border-radius-base
+    overflow: auto
+
+  // 图片样式
+  img
+    max-width: 100%
+    height: auto
+    vertical-align: middle
+    border-style: none
+
+  // 表单样式
+  input, button, select, textarea
+    font-family: inherit
+    font-size: inherit
+    line-height: inherit
+    color: inherit
+    margin: 0
+
+  // 禁用状态
+  [disabled]
+    disabled()
+
+  // 响应式图片
+  .img-responsive
+    display: block
+    max-width: 100%
+    height: auto
+
+  // 清除浮动
+  .clearfix
+    clearfix()
+
+  // 文本溢出省略号
+  .ellipsis
+    ellipsis()
+
+  // 多行文本溢出省略号
+  .multi-ellipsis
+    multi-ellipsis()
+
+  // 响应式容器
+  .container
+    width: 100%
+    padding-right: $spacing-md
+    padding-left: $spacing-md
+    margin-right: auto
+    margin-left: auto
+
+    +responsive(sm)
+      max-width: 540px
+
+    +responsive(md)
+      max-width: 720px
+
+    +responsive(lg)
+      max-width: 960px
+
+    +responsive(xl)
+      max-width: 1140px
+
+    +responsive(xxl)
+      max-width: 1320px 

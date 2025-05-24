@@ -8,7 +8,7 @@
  */
 
 import { Menu } from "siyuan"
-import { createBootStrap } from "./bootstrap.ts"
+import { createSiYuanBootstrap } from "./bootstrap.ts"
 import PublisherPlugin from "./index"
 
 /**
@@ -34,12 +34,8 @@ export class Topbar {
         iconHTML: "",
         label: "",
       })
-      // 挂载内容到菜单
-      const props = {
-        pluginInstance: this.appInstance,
-      }
       // @ts-ignore
-      this.appInstance.vueApp = createBootStrap(props, el)
+      this.appInstance.vueApp = createSiYuanBootstrap(this, el)
       // 显示菜单
       const rect = topBarElement.getBoundingClientRect()
       menu.open({
@@ -47,6 +43,16 @@ export class Topbar {
         y: rect.bottom,
         isLeft: true,
       })
+    })
+
+    // 添加组件测试入口
+    this.appInstance.addTopBar({
+      icon: "iconCode",
+      title: "组件测试",
+      position: "right",
+      callback: () => {
+        window.location.hash = "#/components"
+      },
     })
   }
 }

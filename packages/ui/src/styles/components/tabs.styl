@@ -1,0 +1,141 @@
+#publisherApp
+  .pt-tabs
+    display flex
+    width 100%
+    height 100%
+    background var(--b3-theme-background)
+    border-radius var(--border-radius-base)
+    box-shadow var(--box-shadow-base)
+    position relative
+
+    &.vertical
+      flex-direction row
+
+      .pt-tabs-nav
+        width 100px
+        transition width 0.3s ease, border 0.3s ease, opacity 0.3s ease
+        border-right 1px solid var(--border-color-base)
+        position absolute
+        left 0
+        top 0
+        bottom 0
+        height 100%
+        flex-shrink 0
+        z-index 10
+
+        &.pt-tabs-nav-collapsed
+          width 0
+          opacity 0
+          visibility hidden
+          border-right-color transparent
+
+        &:not(.pt-tabs-nav-collapsed) + .pt-tabs-handle + .pt-tabs-content
+          min-height 175px
+
+  .pt-tabs-nav
+    position absolute
+    left 0
+    top 0
+    bottom 0
+    background var(--b3-theme-background)
+    flex-shrink 0
+    height 100%
+    z-index 10
+
+  .pt-tabs-list
+    width 100px
+    min-width 100px
+    height 100%
+    transition width 0.3s ease
+
+  .pt-tabs-item
+    display flex
+    width 100%
+    padding 12px 20px
+    border none
+    background none
+    color var(--text-color)
+    font-size 14px
+    text-align left
+    cursor pointer
+    transition all 0.2s ease
+    position relative
+
+    &:hover:not(.pt-tabs-item-active)
+      background var(--item-hover-bg)
+
+    &.pt-tabs-item-active
+      background var(--primary-color)
+      color var(--b3-theme-on-primary)
+      &::after
+        content ''
+        position absolute
+        right 0
+        top 50%
+        transform translateY(-50%)
+        height 60%
+        width 3px
+        background var(--primary-color)
+        border-radius 2px
+
+  .pt-tabs-handle
+    position absolute
+    left 100px
+    top 22px
+    width 32px
+    height 32px
+    padding 6px
+    background var(--b3-theme-background)
+    border 1px solid var(--border-color-base)
+    border-radius 50%
+    box-shadow var(--box-shadow-base)
+    cursor pointer
+    transition all 0.3s ease
+    z-index 100
+    transform translateX(-50%)
+    display flex
+    align-items center
+    justify-content center
+
+    .pt-tabs.vertical .pt-tabs-nav-collapsed + &
+      left 4px
+      background var(--b3-theme-background)
+      border-color var(--border-color-base)
+      box-shadow 2px 0 8px var(--box-shadow-base)
+      padding-left 8px
+      padding-right 4px
+
+    &:hover
+      transform translateX(-50%) scale(1.1)
+      box-shadow 0 4px 12px var(--box-shadow-base)
+      background var(--item-hover-bg)
+
+    .pt-tabs-icon
+      width 16px
+      height 16px
+      fill var(--text-color)
+      transition transform 0.3s ease
+
+      .pt-tabs.vertical .pt-tabs-nav-collapsed + .pt-tabs-handle &
+        transform rotate(180deg)
+
+  .pt-tabs-content
+    flex 1
+    min-width 0
+    height 100%
+    background var(--b3-theme-background)
+    padding 2px 6px
+    display flex
+    flex-direction column
+    overflow hidden
+    margin-left 100px
+    transition margin-left 0.3s ease
+
+    .pt-tabs.vertical .pt-tabs-nav-collapsed + .pt-tabs-handle + &
+      margin-left 0
+
+    .pt-tabs-pane
+      flex 1
+      display flex
+      flex-direction column
+      gap 4px 

@@ -1,27 +1,49 @@
-import { createApp, type App } from "vue"
-import AppComponent from "./App.vue"
+import { createApp } from "vue"
+import type { App as VueApp } from "vue"
+import App from "./App.vue"
 import router from "./router"
-import { Plugin } from "siyuan"
+import { useAppInstance } from "./composables/useAppInstance"
 
-/**
- * 创建全局唯一的 Vue App 实例
- *
- * @param props - 包含 appInstance 的属性对象
- * @param el - 挂载点元素
- * @returns Vue App 实例
- * @author terwer
- * @version 2.0.0
- * @since 0.0.1
- */
-export const createBootStrap = (props: { appInstance: Plugin | null }, el: HTMLElement): App => {
-  // 创建 Vue 应用实例
-  const app = createApp(AppComponent, props)
+interface BootstrapOptions {
+  siyuanApp?: any
+  mountElement?: HTMLElement
+}
+
+export const createBootstrap = (options: BootstrapOptions = {}) => {
+  const { siyuanApp, mountElement } = options
+  const vueApp = createApp(App)
+  const { setAppContext } = useAppInstance()
+
+  // 设置应用上下文
+  setAppContext({
+    vueApp,
+    router,
+    siyuanApp: siyuanApp || null,
+    isSiYuan: !!siyuanApp,
+  })
 
   // 使用路由
-  app.use(router)
+  vueApp.use(router)
 
-  // 挂载到指定元素
-  app.mount(el)
+  // 挂载应用
+  const mountTarget = mountElement || document.getElementById("app")
+  if (!mountTarget) {
+    throw new Error("Mount element not found")
+  }
+  vueApp.mount(mountTarget)
 
-  return app
+  return vueApp
+}
+
+// 思源插件入口
+export const createSiYuanBootstrap = (siyuanApp: any, mountElement: HTMLElement) => {
+  return createBootstrap({
+    siyuanApp,
+    mountElement,
+  })
+}
+
+// SPA 入口
+export const createSPABootstrap = () => {
+  return createBootstrap()
 }

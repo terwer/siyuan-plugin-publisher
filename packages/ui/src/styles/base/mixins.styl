@@ -1,0 +1,97 @@
+// 清除浮动
+clearfix()
+  &::after
+    content: ''
+    display: table
+    clear: both
+
+// 文本溢出省略号
+ellipsis()
+  overflow: hidden
+  white-space: nowrap
+  text-overflow: ellipsis
+
+// 多行文本溢出省略号
+multi-ellipsis($lines = 2)
+  display: -webkit-box
+  -webkit-box-orient: vertical
+  -webkit-line-clamp: $lines
+  overflow: hidden
+
+// 禁用状态
+disabled()
+  cursor: not-allowed
+  opacity: 0.65
+  pointer-events: none
+
+// 响应式
+responsive($breakpoint)
+  if $breakpoint == xs
+    @media (max-width: $screen-xs)
+      {block}
+  else if $breakpoint == sm
+    @media (min-width: $screen-sm)
+      {block}
+  else if $breakpoint == md
+    @media (min-width: $screen-md)
+      {block}
+  else if $breakpoint == lg
+    @media (min-width: $screen-lg)
+      {block}
+  else if $breakpoint == xl
+    @media (min-width: $screen-xl)
+      {block}
+  else if $breakpoint == xxl
+    @media (min-width: $screen-xxl)
+      {block}
+
+// 动画
+transition-base()
+  transition: all $animation-duration-base $animation-timing-function-base
+
+// 阴影
+box-shadow-base()
+  box-shadow: $box-shadow-base
+
+// 边框
+border-base()
+  border: 1px solid $border-color-base
+
+// 圆角
+border-radius-base()
+  border-radius: $border-radius-base
+
+// 居中
+center()
+  display: flex
+  align-items: center
+  justify-content: center
+
+// 垂直居中
+vertical-center()
+  display: flex
+  align-items: center
+
+// 水平居中
+horizontal-center()
+  display: flex
+  justify-content: center
+
+// 间距
+spacing($direction = all, $size = $spacing-unit)
+  if $direction == all
+    margin: $size
+  else if $direction == x
+    margin-left: $size
+    margin-right: $size
+  else if $direction == y
+    margin-top: $size
+    margin-bottom: $size
+  else if $direction == top
+    margin-top: $size
+  else if $direction == right
+    margin-right: $size
+  else if $direction == bottom
+    margin-bottom: $size
+  else if $direction == left
+    margin-left: $size 

@@ -1,8 +1,8 @@
-# 思源笔记发布工具开发指南
+# SiYuan Publisher 开发指南
 
 ## 架构概述
 
-思源笔记发布工具采用模块化架构，所有共享类型定义都集中在 `common` 包中。这种设计有效避免了循环依赖，提高了可维护性。
+SiYuan Publisher 采用模块化架构，并将所有共享类型定义集中在专门的 `common` 包中。这种设计有效避免了循环依赖，提高了可维护性。
 
 ### 目录结构
 
@@ -80,13 +80,13 @@ sequenceDiagram
 
 ## 详细组件说明
 
-### 1. 插件系统 (Plugin System)
+### 1. 插件系统
 
-插件系统是整个应用的核心，负责管理所有平台适配器和插件。
+插件系统是应用的核心，负责管理所有平台适配器和插件。
 
 #### 主要组件：
 
-- **插件管理器**: 管理插件的生命周期
+- **插件管理器**：管理插件生命周期
   ```typescript
   class PluginManager {
     registerPlugin(plugin: Plugin): Promise<void>
@@ -96,7 +96,7 @@ sequenceDiagram
   }
   ```
 
-- **平台适配器管理器**: 管理平台适配器
+- **平台适配器管理器**：管理平台适配器
   ```typescript
   class PlatformAdapterManager {
     getAdapter(id: string): PlatformAdapter | undefined
@@ -106,9 +106,9 @@ sequenceDiagram
   }
   ```
 
-### 2. 平台适配器 (Platform Adapters)
+### 2. 平台适配器
 
-平台适配器实现了与特定平台的集成。
+平台适配器实现与特定平台的集成。
 
 #### 内置适配器：
 
@@ -134,21 +134,21 @@ sequenceDiagram
 
 #### 外部适配器：
 
-外部平台适配器可以通过插件系统动态加载，支持从 NPM 安装或本地加载。详细开发指南和加载机制请参考[外部插件开发](#外部插件开发)章节。
+外部平台适配器可以通过插件系统动态加载，支持从 NPM 安装或本地加载。详细的开发指南和加载机制请参考[外部插件开发](#外部插件开发)部分。
 
 主要特点：
 - 支持动态加载和卸载
 - 可以独立开发和发布
-- 与内置适配器使用相同的接口
-- 可以扩展新的平台支持
+- 使用与内置适配器相同的接口
+- 可以扩展支持新平台
 
-### 3. 主应用 (Main App)
+### 3. 主应用
 
-主应用使用 Vue 3 构建，提供了用户界面和交互逻辑。
+主应用使用 Vue 3 构建，提供用户界面和交互逻辑。
 
 #### 主要组件：
 
-- **Publish.vue**: 发布页面
+- **Publish.vue**：发布页面
   ```vue
   <template>
     <div class="publish">
@@ -233,7 +233,7 @@ sequenceDiagram
 
 ### 1. 添加新平台适配器
 
-1. 在 `platform-adapters` 包中创建新的适配器类
+1. 在 `platform-adapters` 包中创建新适配器
 2. 实现 `PlatformAdapter` 接口
 3. 在 `DefaultPlatformAdapterRegistry` 中注册适配器
 4. 创建对应的配置组件
@@ -323,15 +323,15 @@ sequenceDiagram
    - 更新 UI 显示可用插件
 
 6. **插件开发注意事项**
-   - 确保插件配置正确
-   - 实现必要的接口方法
+   - 确保正确的插件配置
+   - 实现必需的接口方法
    - 处理依赖关系
    - 提供错误处理
    - 支持动态加载和卸载
 
 7. **调试技巧**
    - 使用 Vue DevTools 调试 UI 组件
-   - 使用浏览器控制台查看网络请求
+   - 使用浏览器控制台检查网络请求
    - 检查插件系统日志
    - 验证平台适配器配置
 
@@ -357,177 +357,175 @@ sequenceDiagram
    - 测试错误场景
    - 验证平台集成
 
+## UI 开发规范
+
+### 1. 样式系统
+
+#### 目录结构
+```
+src/
+├── styles/
+│   ├── base/              # 基础样式
+│   │   ├── variables.styl # 变量定义
+│   │   ├── mixins.styl    # 混入函数
+│   │   └── reset.styl     # 样式重置
+│   ├── components/        # 组件样式
+│   │   ├── button.styl
+│   │   └── ...
+│   └── global.styl        # 全局样式
+```
+
+#### 样式规则
+1. **顶层容器**
+   - 所有组件必须使用 `#publisherApp` 作为顶层容器
+   - 禁止直接使用 CSS 选择器
+
+2. **命名规范**
+   - 组件类名使用 `pt-` 前缀
+   - 遵循 BEM 命名规范
+   - 示例：`pt-btn`、`pt-btn--primary`、`pt-btn__icon`
+
+3. **样式实现**
+   - 使用 Stylus 简易语法
+   - 禁止使用其他 CSS 预处理器
+   - 禁止使用内联样式
+   - 禁止使用第三方 UI 组件库
+
+4. **变量使用**
+   - 所有颜色、尺寸、间距等必须使用变量
+   - 变量定义在 `variables.styl` 中
+   - 禁止使用硬编码值
+
+5. **组件开发**
+   - 严格遵循 Ant Design 设计规范
+   - 组件样式必须模块化
+   - 组件样式必须可配置
+   - 组件样式必须支持主题定制
+
+### 2. 组件开发
+
+#### 基本规则
+1. **组件结构**
+   ```vue
+   <template>
+     <div id="publisherApp">
+       <div class="pt-component">
+         <!-- 组件内容 -->
+       </div>
+     </div>
+   </template>
+   ```
+
+2. **样式导入**
+   ```vue
+   <style lang="stylus">
+   @import '../styles/components/component.styl'
+   </style>
+   ```
+
+3. **类型定义**
+   ```typescript
+   interface ComponentProps {
+     // 组件属性定义
+   }
+   ```
+
+#### 组件类型
+1. **基础组件**
+   - Button（按钮）
+   - Input（输入框）
+   - Select（选择器）
+   - Switch（开关）
+   - Checkbox（复选框）
+   - Radio（单选框）
+
+2. **布局组件**
+   - Grid（栅格）
+   - Layout（布局）
+   - Space（间距）
+   - Divider（分割线）
+
+3. **数据展示**
+   - Table（表格）
+   - List（列表）
+   - Card（卡片）
+   - Tree（树形控件）
+
+4. **反馈组件**
+   - Modal（对话框）
+   - Drawer（抽屉）
+   - Message（消息提示）
+   - Notification（通知提醒）
+
+### 3. 主题系统
+
+#### 主题变量
+```stylus
+// 主题色
+$primary-color = #1677ff
+$success-color = #52c41a
+$warning-color = #faad14
+$error-color = #ff4d4f
+
+// 文字颜色
+$heading-color = rgba(0, 0, 0, 0.88)
+$text-color = rgba(0, 0, 0, 0.65)
+$text-color-secondary = rgba(0, 0, 0, 0.45)
+$disabled-color = rgba(0, 0, 0, 0.25)
+
+// 边框和圆角
+$border-radius-base = 4px
+$border-color-base = #d9d9d9
+$border-color-split = #f0f0f0
+
+// 阴影
+$box-shadow-base = 0 2px 8px rgba(0, 0, 0, 0.15)
+```
+
+#### 主题定制
+1. **变量覆盖**
+   - 通过覆盖 `variables.styl` 中的变量实现主题定制
+   - 支持动态主题切换
+
+2. **暗色主题**
+   - 支持暗色主题
+   - 使用 CSS 变量实现主题切换
+
+### 4. 最佳实践
+
+1. **性能优化**
+   - 使用 CSS 变量实现动态样式
+   - 避免过度嵌套选择器
+   - 合理使用 CSS 选择器
+
+2. **可维护性**
+   - 保持样式文件结构清晰
+   - 使用有意义的变量名
+   - 添加必要的注释
+
+3. **可扩展性**
+   - 组件样式必须可配置
+   - 支持主题定制
+   - 支持样式覆盖
+
+4. **兼容性**
+   - 支持主流浏览器
+   - 使用 CSS 前缀
+   - 提供降级方案
+
 ## 常见问题
 
 1. **平台适配器未显示**
    - 检查适配器注册
    - 验证配置组件
-   - 查看控制台错误
+   - 检查控制台错误
 
 2. **配置保存失败**
    - 检查配置验证
    - 验证存储机制
-   - 查看错误日志
+   - 检查错误日志
 
 3. **发布失败**
    - 检查平台连接
    - 验证发布参数
-   - 查看平台错误信息
-
-## 插件系统架构
-
-### 插件类型
-
-1. **内置平台适配器**
-   - 随应用程序预装
-   - 在 `packages/platform-adapters` 中实现
-   - 启动时自动注册
-   - 示例：WordPress、GitHub 适配器
-
-2. **外部插件**
-   - 运行时动态加载
-   - 可以从 NPM 或本地文件安装
-   - 必须实现所需接口
-   - 可以扩展功能或添加新平台
-
-### 插件加载流程
-
-1. **内置适配器**
-   ```
-   应用启动
-   ├── 插件系统初始化
-   │   └── 注册内置适配器
-   │       ├── WordPress 适配器
-   │       └── GitHub 适配器
-   └── 初始化适配器
-       └── 更新 UI 状态
-   ```
-
-2. **外部插件**
-   ```
-   插件加载请求
-   ├── 验证插件类型
-   ├── 加载插件配置
-   ├── 初始化插件
-   │   ├── 检查依赖
-   │   └── 注册到系统
-   └── 更新 UI 状态
-   ```
-
-### 外部插件开发
-
-1. **插件结构**
-   ```
-   my-platform-plugin/
-   ├── package.json        # 插件配置
-   ├── src/
-   │   ├── index.ts       # 入口文件
-   │   ├── adapter.ts     # 平台适配器实现
-   │   └── config.vue     # 配置组件
-   └── dist/              # 构建输出
-   ```
-
-2. **插件配置**
-   ```json
-   {
-     "name": "my-platform-plugin",
-     "version": "1.0.0",
-     "main": "dist/index.js",
-     "siyuan-publisher": {
-       "type": "platform-adapter",
-       "platform": "my-platform",
-       "entry": "./dist/index.js"
-     }
-   }
-   ```
-
-3. **插件接口**
-   ```typescript
-   interface ExternalPlugin {
-     id: string;
-     name: string;
-     version: string;
-     type: "platform-adapter";
-     platform: string;
-     adapter: PlatformAdapter;
-     configComponent?: Component;
-   }
-   ```
-
-4. **插件加载器**
-   ```typescript
-   class ExternalPluginLoader {
-     async loadPlugin(path: string): Promise<ExternalPlugin> {
-       // 1. 加载插件配置
-       const manifest = await this.loadManifest(path);
-       
-       // 2. 验证插件类型
-       if (manifest.type !== "platform-adapter") {
-         throw new Error("不支持的插件类型");
-       }
-       
-       // 3. 加载插件代码
-       const plugin = await import(manifest.entry);
-       
-       // 4. 初始化插件
-       await plugin.initialize();
-       
-       return plugin;
-     }
-   }
-   ```
-
-### 插件打包和发布
-
-1. **打包配置**
-   ```typescript
-   // vite.config.ts
-   export default defineConfig({
-     build: {
-       lib: {
-         entry: "src/index.ts",
-         formats: ["es"],
-         fileName: "index"
-       },
-       rollupOptions: {
-         external: ["@siyuan-publisher/common"]
-       }
-     }
-   });
-   ```
-
-2. **发布到 NPM**
-   ```bash
-   # 1. 构建插件
-   npm run build
-   
-   # 2. 发布到 NPM
-   npm publish
-   ```
-
-3. **本地安装**
-   ```bash
-   # 1. 构建插件
-   npm run build
-   
-   # 2. 复制到插件目录
-   cp -r dist/ /path/to/plugins/my-platform-plugin/
-   ```
-
-### 插件加载机制
-
-```mermaid
-sequenceDiagram
-    actor A as App
-    actor B as PS
-    actor C as EL
-    actor D as Plugin
-
-    A->>B: 初始化插件系统
-    B->>C: 扫描插件目录
-    C->>C: 读取插件配置
-    C->>D: 加载插件代码
-    D-->>C: 返回插件实例
-    C-->>B: 注册插件
-    B-->>A: 更新可用插件列表
-``` 
+   - 检查平台错误信息 

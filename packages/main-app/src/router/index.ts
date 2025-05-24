@@ -4,6 +4,7 @@ import Home from "../views/Home.vue"
 import Settings from "../views/Settings.vue"
 import Publish from "../views/Publish.vue"
 import NotFound from "../views/NotFound.vue"
+import UITest from "../views/UITest.vue"
 
 const routes: RouteRecordRaw[] = [
   {
@@ -28,6 +29,14 @@ const routes: RouteRecordRaw[] = [
     component: Publish,
     meta: {
       title: "发布",
+    },
+  },
+  {
+    path: "/ui-test",
+    name: "UITest",
+    component: UITest,
+    meta: {
+      title: "UI 组件测试",
     },
   },
   {

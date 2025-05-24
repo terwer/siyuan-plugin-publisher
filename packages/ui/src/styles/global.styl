@@ -1,0 +1,119 @@
+// Base styles
+@import './base/variables'
+@import './base/mixins'
+@import './base/reset'
+
+// 全局样式变量
+$primary-color = #1890ff
+$success-color = #52c41a
+$warning-color = #faad14
+$error-color = #f5222d
+$font-size-base = 14px
+$heading-color = rgba(0, 0, 0, 0.85)
+$text-color = rgba(0, 0, 0, 0.65)
+$text-color-secondary = rgba(0, 0, 0, 0.45)
+$disabled-color = rgba(0, 0, 0, 0.25)
+$border-radius-base = 4px
+$border-color-base = #d9d9d9
+$box-shadow-base = 0 2px 8px rgba(0, 0, 0, 0.15)
+
+// 全局样式
+#publisherApp
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif
+  font-size: $font-size-base
+  line-height: 1.5
+  color: $text-color
+  background-color: #fff
+
+  // 按钮基础样式
+  .pt-btn
+    position: relative
+    display: inline-flex
+    align-items: center
+    justify-content: center
+    height: 32px
+    padding: 4px 12px
+    min-width: 80px
+    border-radius: $border-radius-base
+    border: 1px solid $border-color-base
+    background: #fff
+    color: $text-color
+    font-size: $font-size-base
+    line-height: 1.5715
+    cursor: pointer
+    transition: all $animation-duration-base $animation-timing-function-base
+    user-select: none
+    white-space: nowrap
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.02)
+
+    &:hover:not(.pt-btn--disabled)
+      color: $primary-color
+      border-color: $primary-color
+      background: #fff
+
+    &:active:not(.pt-btn--disabled)
+      color: darken($primary-color, 8%)
+      border-color: darken($primary-color, 8%)
+      background: #fff
+
+  // 表单基础样式
+  .pt-form
+    &-item
+      margin-bottom: $spacing-lg
+
+    &-label
+      display: inline-block
+      color: $heading-color
+      font-weight: 500
+
+  // 输入框基础样式
+  .pt-input
+    padding: 4px 11px
+    border: 1px solid $border-color-base
+    border-radius: $border-radius-base
+    transition: all $animation-duration-base
+
+    &:hover
+      border-color: $primary-color
+
+    &:focus
+      border-color: $primary-color
+      box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2)
+      outline: none
+
+  // 标签页基础样式
+  .pt-tabs
+    &-nav
+      margin-bottom: $spacing-md
+      border-bottom: 1px solid $border-color-base
+
+    &-tab
+      padding: $spacing-md
+      cursor: pointer
+      transition: all $animation-duration-base
+
+      &:hover
+        color: $primary-color
+
+      &-active
+        color: $primary-color
+        font-weight: 500
+
+  // 提示框基础样式
+  .pt-tooltip
+    position: absolute
+    z-index: 1070
+    display: block
+    visibility: visible
+    font-size: $font-size-base
+    opacity: 0.9
+
+    &-inner
+      padding: 6px 8px
+      color: #fff
+      text-align: left
+      text-decoration: none
+      word-wrap: break-word
+      background-color: rgba(0, 0, 0, 0.75)
+      border-radius: $border-radius-base
+      box-shadow: $box-shadow-base 
