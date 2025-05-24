@@ -63,5 +63,6 @@ export function usePluginSystem() {
     error,
     loadExternalPlugin,
     getPluginConfig,
+    loadPlugins,
   }
 }

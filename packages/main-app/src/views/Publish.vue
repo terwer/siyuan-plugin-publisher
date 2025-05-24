@@ -12,7 +12,12 @@
       </div>
 
       <div v-if="selectedPlatform" class="platform-config">
-        <component :is="platformConfigComponent" v-model:config="platformConfig" @test="testConnection" />
+        <component 
+          :is="platformConfigComponent" 
+          v-model:config="platformConfig" 
+          @test="testConnection"
+          @update:config="handleConfigUpdate" 
+        />
       </div>
 
       <div class="form-group">
@@ -25,12 +30,34 @@
         <textarea id="content" v-model="post.content" rows="10" placeholder="输入文章内容"></textarea>
       </div>
 
+      <div class="form-group">
+        <label for="excerpt">文章摘要</label>
+        <textarea id="excerpt" v-model="post.excerpt" rows="3" placeholder="输入文章摘要"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="tags">标签</label>
+        <input id="tags" v-model="tagsInput" type="text" placeholder="输入标签，用逗号分隔" @input="handleTagsInput" />
+      </div>
+
+      <div class="form-group">
+        <label for="status">发布状态</label>
+        <select id="status" v-model="publishOptions.status">
+          <option value="draft">草稿</option>
+          <option value="published">发布</option>
+          <option value="private">私密</option>
+        </select>
+      </div>
+
       <button @click="publish" class="publish-btn" :disabled="isPublishing">
         {{ isPublishing ? "发布中..." : "发布" }}
       </button>
 
       <div v-if="publishResult" class="result" :class="{ success: publishResult.success }">
-        <p v-if="publishResult.success">发布成功！<a :href="publishResult.url" target="_blank">查看文章</a></p>
+        <p v-if="publishResult.success">
+          发布成功！
+          <a :href="publishResult.url" target="_blank">查看文章</a>
+        </p>
         <p v-else>发布失败：{{ publishResult.error }}</p>
       </div>
     </div>
@@ -38,33 +65,52 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue"
+import { ref, computed, watch, onMounted } from "vue"
 import { usePluginSystem } from "../composables/usePluginSystem"
 import { usePublisher } from "../composables/usePublisher"
-import type { Post, PublishResult, PlatformConfig } from "@siyuan-publisher/core"
+import type { 
+  Post, 
+  PublishResult, 
+  PlatformConfig, 
+  PublishOptions,
+  PostStatus,
+  ErrorType 
+} from "@siyuan-publisher/common"
 
 const {
   plugins: availablePlatforms,
-  loadPlugin,
   platformAdapters,
-  connectPlatform,
-  publishWithPlatform,
+  isLoading,
+  error: pluginError,
+  getPluginConfig,
 } = usePluginSystem()
-const { publish: publishService, isPublishing } = usePublisher()
+
+const { publish: publishService, isPublishing, error: publishError } = usePublisher()
 
 const selectedPlatform = ref("")
 const platformConfig = ref<PlatformConfig>({
-  type: "",
+  type: "" ,
   config: {},
-})
+} as any)
 
 const post = ref<Post>({
+  id: "",
   title: "",
   content: "",
+  excerpt: "",
+  tags: [],
+  categories: [],
+  status: "draft",
+  metadata: {}
+})
+
+const publishOptions = ref<PublishOptions>({
+  status: "draft",
+  publishDate: new Date(),
 })
 
 const publishResult = ref<PublishResult | null>(null)
-const publishOptions = ref({})
+const tagsInput = ref("")
 
 // 动态加载平台配置组件
 const platformConfigComponent = computed(() => {
@@ -72,37 +118,94 @@ const platformConfigComponent = computed(() => {
   return () => import(`../components/platform-configs/${selectedPlatform.value}.vue`)
 })
 
+// 监听插件加载状态，初始化平台
+watch(isLoading, (loading) => {
+  if (!loading && availablePlatforms.value.length > 0 && !selectedPlatform.value) {
+    selectedPlatform.value = availablePlatforms.value[0].id
+    const config = getPluginConfig(availablePlatforms.value[0].id)
+    if (config) {
+      platformConfig.value = config
+    }
+  }
+})
+
+// 监听平台选择变化
+watch(selectedPlatform, async (newPlatformId) => {
+  if (newPlatformId) {
+    const config = getPluginConfig(newPlatformId)
+    if (config) {
+      platformConfig.value = config
+    }
+  }
+})
+
+// 处理标签输入
+const handleTagsInput = () => {
+  post.value.tags = tagsInput.value
+    .split(",")
+    .map(tag => tag.trim())
+    .filter(tag => tag.length > 0)
+}
+
+// 处理配置更新
+const handleConfigUpdate = (newConfig: PlatformConfig) => {
+  platformConfig.value = newConfig
+}
+
 // 测试平台连接
 const testConnection = async () => {
   try {
-    await connectPlatform(selectedPlatform.value, platformConfig.value)
-    showMessage("连接成功", "success")
+    const result = await publishService.testConnection(selectedPlatform.value, platformConfig.value)
+    if (result.success) {
+      showMessage("连接成功", "success")
+    } else {
+      showMessage(result.error || "连接失败", "error")
+    }
   } catch (error) {
-    showMessage(error instanceof Error ? error.message : "连接失败", "error")
+    const errorType = error instanceof Error ? (error.message as ErrorType) : "PLATFORM_CONNECTION_FAILED"
+    showMessage(getErrorMessage(errorType), "error")
   }
+}
+
+// 获取错误消息
+const getErrorMessage = (errorType: ErrorType): string => {
+  const errorMessages: Record<ErrorType, string> = {
+    PLATFORM_CONNECTION_FAILED: "平台连接失败",
+    PLATFORM_CONFIG_INVALID: "平台配置无效",
+    AUTHENTICATION_FAILED: "认证失败",
+    INVALID_CONFIG: "配置无效",
+    PUBLISH_FAILED: "发布失败",
+    UNKNOWN_ERROR: "未知错误",
+    // ... 其他错误类型
+  } as any
+  return errorMessages[errorType] || "操作失败"
 }
 
 // 发布文章
 const publish = async () => {
   try {
     isPublishing.value = true
-    const result = await publishWithPlatform(
-      selectedPlatform.value,
-      {
-        title: post.value.title,
-        content: post.value.content,
-        metadata: post.value.metadata,
+    const result = await publishService.publish({
+      platform: {
+        type: selectedPlatform.value,
+        config: platformConfig.value,
       },
-      publishOptions.value,
-    )
+      post: {
+        ...post.value,
+        status: publishOptions.value.status as PostStatus,
+      },
+      ...publishOptions.value,
+    })
+    
     if (result.success) {
       showMessage("发布成功", "success")
       publishResult.value = result
     } else {
-      showMessage(result.error || "发布失败", "error")
+      showMessage(result.error || getErrorMessage("PUBLISH_FAILED"), "error")
     }
   } catch (error) {
-    showMessage(error instanceof Error ? error.message : "发布失败", "error")
+    const errorType = error instanceof Error ? (error.message as ErrorType) : "PUBLISH_FAILED"
+    showMessage(getErrorMessage(errorType), "error")
   } finally {
     isPublishing.value = false
   }

@@ -35,7 +35,10 @@ export class PlatformAdapterManager {
   async disconnectAdapter(name: string): Promise<void> {
     const adapter = this.getAdapter(name)
     if (!adapter) {
-      throw new Error(`Platform adapter ${name} not found`)
+      // 这里应该静默
+      console.warn(`Platform adapter ${name} not found, ignore disconnect`)
+      return
+      // throw new Error(`Platform adapter ${name} not found`)
     }
     await adapter.disconnect()
   }
