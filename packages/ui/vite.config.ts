@@ -5,13 +5,6 @@ import { resolve } from "path"
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue()],
-  css: {
-    preprocessorOptions: {
-      stylus: {
-        imports: [resolve(__dirname, "src/styles/global.styl")]
-      }
-    }
-  },
   server: {
     port: 3000,
     open: true
