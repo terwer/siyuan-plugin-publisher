@@ -8,15 +8,47 @@
   -->
 
 <template>
-  <div class="pt-button-group">
+  <div class="publisher-button-group">
     <slot></slot>
   </div>
 </template>
 
 <script setup lang="ts">
-// 按钮组合组件
+// ButtonGroup 组件不需要额外的逻辑
 </script>
 
-<style lang="stylus">
-@import "../../styles/components/button-group.styl"
+<style lang="stylus" scoped>
+.publisher-button-group
+  display: inline-flex
+  align-items: center
+
+  :deep(.publisher-button)
+    position: relative
+    z-index: 1
+
+    &:not(:first-child)
+      margin-left: -1px
+
+    &:not(:first-child):not(:last-child)
+      border-radius: 0
+
+    &:first-child
+      border-top-right-radius: 0
+      border-bottom-right-radius: 0
+
+    &:last-child
+      border-top-left-radius: 0
+      border-bottom-left-radius: 0
+
+    &:hover
+      z-index: 2
+
+    &:focus
+      z-index: 2
+
+    &:active
+      z-index: 2
+
+    &[disabled]
+      z-index: 0
 </style> 

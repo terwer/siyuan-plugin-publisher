@@ -1,0 +1,83 @@
+#publisherApp
+  .pt-form
+    display: flex
+    flex-direction: column
+    gap: 24px
+
+    // 水平布局
+    &--horizontal
+      .pt-form-item
+        display: flex
+        align-items: flex-start
+
+        .pt-form-item__label
+          flex: none
+          text-align: right
+          padding-right: 12px
+
+        .pt-form-item__control
+          flex: 1
+          min-width: 0
+
+    // 垂直布局
+    &--vertical
+      .pt-form-item
+        display: flex
+        flex-direction: column
+        gap: 8px
+
+        .pt-form-item__label
+          text-align: left
+
+    // 行内布局
+    &--inline
+      flex-direction: row
+      flex-wrap: wrap
+      gap: 16px
+
+      .pt-form-item
+        display: inline-flex
+        align-items: center
+        margin-right: 16px
+        margin-bottom: 0
+
+        .pt-form-item__label
+          margin-right: 8px
+
+  .pt-form-item
+    margin-bottom: 24px
+
+    &:last-child
+      margin-bottom: 0
+
+    &__label
+      display: inline-block
+      color: var(--pt-text-color)
+      font-size: 14px
+      line-height: 1.5
+      white-space: nowrap
+
+      &--required::before
+        content: "*"
+        color: var(--pt-error-color)
+        margin-right: 4px
+
+    &__control
+      position: relative
+
+    &__message
+      position: absolute
+      left: 0
+      top: 100%
+      margin-top: 4px
+      color: var(--pt-error-color)
+      font-size: 12px
+      line-height: 1.5
+
+  .pt-form-control
+    width: 100%
+
+  .pt-form-message
+    color: var(--pt-text-color-secondary)
+    font-size: 12px
+    line-height: 1.5 

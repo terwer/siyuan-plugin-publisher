@@ -1,37 +1,42 @@
-import { createRouter, createWebHashHistory } from "vue-router"
+import { createRouter, createWebHistory } from 'vue-router'
+import TestIndex from '../test/index.vue'
+import ButtonTest from '../test/ButtonTest.vue'
+import FormTest from '../test/FormTest.vue'
+import TabTest from '../test/TabTest.vue'
+import SettingPanelTest from '../test/SettingPanelTest.vue'
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes: [
     {
-      path: "/",
-      redirect: "/test"
-    },
-    {
-      path: "/test",
-      component: () => import("../test/index.vue"),
+      path: '/test',
+      component: TestIndex,
       children: [
         {
-          path: "",
-          redirect: "/test/button"
+          path: 'button',
+          name: 'ButtonTest',
+          component: ButtonTest
         },
         {
-          path: "button",
-          component: () => import("../test/ButtonTest.vue")
+          path: 'form',
+          name: 'FormTest',
+          component: FormTest
         },
         {
-          path: "form",
-          component: () => import("../test/FormTest.vue")
+          path: 'tab',
+          name: 'TabTest',
+          component: TabTest
         },
         {
-          path: "tab",
-          component: () => import("../test/TabTest.vue")
-        },
-        {
-          path: "setting-panel",
-          component: () => import("../test/SettingPanelTest.vue")
+          path: 'setting-panel',
+          name: 'SettingPanelTest',
+          component: SettingPanelTest
         }
       ]
+    },
+    {
+      path: '/',
+      redirect: '/test/button'
     }
   ]
 })

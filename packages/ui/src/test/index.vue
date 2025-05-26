@@ -38,7 +38,8 @@
         <span class="nav-text">设置面板组件</span>
       </router-link>
     </nav>
-    <div id="publisherApp" class="test-content">
+
+    <div class="test-content">
       <router-view v-slot="{ Component }">
         <transition name="fade" mode="out-in">
           <component :is="Component" />
@@ -50,7 +51,6 @@
 
 <script lang="ts" setup>
   import { ref, onMounted } from "vue"
-  import Button from "../components/form/Button.vue"
   import "../styles/global.styl"
 
   const isDark = ref(false)

@@ -179,7 +179,8 @@
 
 <script setup lang="ts">
   import { ref } from "vue"
-  import { Button, ButtonGroup } from "../components/form"
+  import Button from "../components/form/Button.vue"
+  import ButtonGroup from "../components/form/ButtonGroup.vue"
 
   const loading = ref(false)
   const eventLogs = ref<string[]>([])

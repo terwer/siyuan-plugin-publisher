@@ -359,159 +359,80 @@ sequenceDiagram
 
 ## UI 开发规范
 
-### 1. 样式系统
+### 1. 组件目录结构
 
-#### 目录结构
 ```
-src/
-├── styles/
-│   ├── base/              # 基础样式
-│   │   ├── variables.styl # 变量定义
-│   │   ├── mixins.styl    # 混入函数
-│   │   └── reset.styl     # 样式重置
-│   ├── components/        # 组件样式
-│   │   ├── button.styl
-│   │   └── ...
-│   └── global.styl        # 全局样式
+packages/ui/src/
+├── components/          # 组件目录
+│   ├── form/           # 表单组件
+│   ├── navigation/     # 导航组件
+│   ├── data/          # 数据展示组件
+│   ├── layout/        # 布局组件
+│   ├── feedback/      # 反馈组件
+│   └── index.ts       # 组件统一导出
+├── composables/       # 组合式函数
+├── styles/           # 样式文件
+├── types/            # 类型定义
+└── index.ts          # 组件库入口文件
 ```
 
-#### 样式规则
-1. **顶层容器**
-   - 所有组件必须使用 `#publisherApp` 作为顶层容器
-   - 禁止直接使用 CSS 选择器
-
-2. **命名规范**
-   - 组件类名使用 `pt-` 前缀
-   - 遵循 BEM 命名规范
-   - 示例：`pt-btn`、`pt-btn--primary`、`pt-btn__icon`
-
-3. **样式实现**
-   - 使用 Stylus 简易语法
-   - 禁止使用其他 CSS 预处理器
-   - 禁止使用内联样式
-   - 禁止使用第三方 UI 组件库
-
-4. **变量使用**
-   - 所有颜色、尺寸、间距等必须使用变量
-   - 变量定义在 `variables.styl` 中
-   - 禁止使用硬编码值
-
-5. **组件开发**
-   - 严格遵循 Ant Design 设计规范
-   - 组件样式必须模块化
-   - 组件样式必须可配置
-   - 组件样式必须支持主题定制
-
-### 2. 组件开发
-
-#### 基本规则
-1. **组件结构**
-   ```vue
-   <template>
-     <div id="publisherApp">
-       <div class="pt-component">
-         <!-- 组件内容 -->
-       </div>
-     </div>
-   </template>
-   ```
-
-2. **样式导入**
-   ```vue
-   <style lang="stylus">
-   @import '../styles/components/component.styl'
-   </style>
-   ```
-
-3. **类型定义**
-   ```typescript
-   interface ComponentProps {
-     // 组件属性定义
-   }
-   ```
+### 2. 组件开发规范
 
 #### 组件类型
-1. **基础组件**
-   - Button（按钮）
-   - Input（输入框）
-   - Select（选择器）
-   - Switch（开关）
-   - Checkbox（复选框）
-   - Radio（单选框）
 
-2. **布局组件**
-   - Grid（栅格）
-   - Layout（布局）
-   - Space（间距）
-   - Divider（分割线）
+1. 表单组件 (form)
+   - 表单相关组件
 
-3. **数据展示**
-   - Table（表格）
-   - List（列表）
-   - Card（卡片）
-   - Tree（树形控件）
+2. 导航组件 (navigation)
+   - 导航相关组件
 
-4. **反馈组件**
-   - Modal（对话框）
-   - Drawer（抽屉）
-   - Message（消息提示）
-   - Notification（通知提醒）
+3. 数据展示组件 (data)
+   - 数据展示相关组件
 
-### 3. 主题系统
+4. 布局组件 (layout)
+   - 布局相关组件
 
-#### 主题变量
-```stylus
-// 主题色
-$primary-color = #1677ff
-$success-color = #52c41a
-$warning-color = #faad14
-$error-color = #ff4d4f
+5. 反馈组件 (feedback)
+   - 反馈相关组件
 
-// 文字颜色
-$heading-color = rgba(0, 0, 0, 0.88)
-$text-color = rgba(0, 0, 0, 0.65)
-$text-color-secondary = rgba(0, 0, 0, 0.45)
-$disabled-color = rgba(0, 0, 0, 0.25)
+#### 组件开发规则
 
-// 边框和圆角
-$border-radius-base = 4px
-$border-color-base = #d9d9d9
-$border-color-split = #f0f0f0
+1. **组件结构**
+   - 使用 Vue 3 Composition API
+   - 使用 TypeScript 进行类型定义
+   - 使用 Stylus 进行样式开发
 
-// 阴影
-$box-shadow-base = 0 2px 8px rgba(0, 0, 0, 0.15)
-```
+2. **命名规范**
+   - 组件文件名使用 PascalCase
+   - 组件名使用 PascalCase
+   - 组件目录使用 kebab-case
 
-#### 主题定制
-1. **变量覆盖**
-   - 通过覆盖 `variables.styl` 中的变量实现主题定制
-   - 支持动态主题切换
+3. **目录结构**
+   - 每个组件目录应包含组件文件和索引文件
+   - 组件文件使用 .vue 扩展名
+   - 索引文件用于导出组件
 
-2. **暗色主题**
-   - 支持暗色主题
-   - 使用 CSS 变量实现主题切换
+4. **代码风格**
+   - 使用 TypeScript 进行开发
+   - 为所有 props 和事件定义类型
+   - 使用 Stylus 预处理器
+   - 遵循 BEM 命名规范
 
-### 4. 最佳实践
+### 3. 测试规范
 
-1. **性能优化**
-   - 使用 CSS 变量实现动态样式
-   - 避免过度嵌套选择器
-   - 合理使用 CSS 选择器
+1. 使用 Vitest 进行测试
+2. 测试文件与组件文件同名
+3. 包含组件的基本功能测试
 
-2. **可维护性**
-   - 保持样式文件结构清晰
-   - 使用有意义的变量名
-   - 添加必要的注释
+### 4. 发布流程
 
-3. **可扩展性**
-   - 组件样式必须可配置
-   - 支持主题定制
-   - 支持样式覆盖
+1. 版本管理
+   - 遵循语义化版本
+   - 更新 package.json 版本号
 
-4. **兼容性**
-   - 支持主流浏览器
-   - 使用 CSS 前缀
-   - 提供降级方案
+2. 构建
+   - 运行测试
+   - 构建组件库
 
 ## 常见问题
 

@@ -24,8 +24,11 @@
 ```
 src/
 ├── components/     # UI 组件
-│   ├── form/      # 表单组件
-│   └── ...
+│   ├── form/      # 表单组件（包含基础组件）
+│   ├── navigation/# 导航组件
+│   ├── data/      # 数据展示组件
+│   ├── layout/    # 布局组件
+│   └── feedback/  # 反馈组件
 ├── styles/        # 全局样式和变量
 ├── types/         # TypeScript 类型定义
 ├── utils/         # 工具函数
@@ -99,7 +102,11 @@ const handleChange = (key: string) => {
 
 ## 组件
 
-### Button 按钮
+### 表单组件 (form)
+
+所有基础组件都位于 `form` 目录下，包括：
+
+#### Button 按钮
 
 ```vue
 <Button type="primary">主要按钮</Button>
@@ -109,7 +116,43 @@ const handleChange = (key: string) => {
 <Button type="link">链接按钮</Button>
 ```
 
-### Tab 标签页
+#### ButtonGroup 按钮组
+
+```vue
+<ButtonGroup>
+  <Button type="primary">按钮1</Button>
+  <Button>按钮2</Button>
+  <Button type="primary">按钮3</Button>
+</ButtonGroup>
+```
+
+#### Input 输入框
+
+```vue
+<Input v-model="value" placeholder="请输入" />
+```
+
+#### Select 选择器
+
+```vue
+<Select v-model="value" :options="options" />
+```
+
+#### Switch 开关
+
+```vue
+<Switch v-model="checked" />
+```
+
+#### TextArea 文本域
+
+```vue
+<TextArea v-model="value" placeholder="请输入" />
+```
+
+### 导航组件 (navigation)
+
+#### Tab 标签页
 
 ```vue
 <Tab
@@ -121,7 +164,9 @@ const handleChange = (key: string) => {
 />
 ```
 
-### Tooltip 文字提示
+### 反馈组件 (feedback)
+
+#### Tooltip 文字提示
 
 ```vue
 <Tooltip content="这是一个提示">
@@ -129,7 +174,9 @@ const handleChange = (key: string) => {
 </Tooltip>
 ```
 
-### SettingPanel 设置面板
+### 布局组件 (layout)
+
+#### SettingPanel 设置面板
 
 ```vue
 <template>
@@ -248,13 +295,9 @@ npm run build
 
 2. **组件开发**
    - 保持组件功能单一
-   - 使用 TypeScript 定义属性和事件
-   - 遵循 Vue 3 组合式 API 模式
-
-3. **测试**
-   - 为组件编写单元测试
-   - 测试边界情况和错误状态
-   - 保持良好的测试覆盖率
+   - 遵循组件目录结构规范
+   - 所有基础组件都放在 `form` 目录下
+   - 其他组件按功能分类放在对应目录下
 
 ## 贡献指南
 
