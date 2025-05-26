@@ -48,12 +48,19 @@
       <h2 class="pt-section-title">幽灵按钮</h2>
       <div class="pt-ghost-demo">
         <div class="pt-ghost-content">
+          <div class="pt-ghost-text">
+            <h3>深色背景上的幽灵按钮</h3>
+            <p>不同状态的幽灵按钮展示</p>
+          </div>
           <div class="pt-button-group">
-            <Button ghost>幽灵按钮</Button>
-            <Button type="primary" ghost>幽灵主要按钮</Button>
-            <Button type="success" ghost>幽灵成功按钮</Button>
-            <Button type="warning" ghost>幽灵警告按钮</Button>
-            <Button type="danger" ghost>幽灵危险按钮</Button>
+            <Button ghost>默认幽灵</Button>
+            <Button type="primary" ghost>主要幽灵</Button>
+            <Button type="success" ghost>成功幽灵</Button>
+            <Button type="warning" ghost>警告幽灵</Button>
+            <Button type="danger" ghost>危险幽灵</Button>
+          </div>
+          <div class="pt-ghost-text">
+            <p>幽灵按钮在深色背景上提供清晰的视觉层次</p>
           </div>
         </div>
       </div>
@@ -94,8 +101,7 @@
 
 <script setup lang="ts">
   import { ref } from "vue"
-  import Button from "../components/form/Button.vue"
-  import ButtonGroup from "../components/form/ButtonGroup.vue"
+  import { Button, ButtonGroup } from "../components/form"
 
   const loading = ref(false)
   const eventLogs = ref<string[]>([])
@@ -122,7 +128,7 @@
   h1
     margin-bottom 20px
     font-size 24px
-    color var(--b3-theme-on-background)
+    color #333
 
   .pt-test-section
     margin-bottom 30px
@@ -130,7 +136,7 @@
     h2
       margin-bottom 16px
       font-size 18px
-      color var(--b3-theme-on-background)
+      color #333
 
   .pt-button-group
     display flex
@@ -143,15 +149,33 @@
 
   .pt-ghost-demo
     padding 20px
-    background var(--b3-theme-background)
-    border 1px solid var(--b3-border-color)
+    background #333
+    border 1px solid #444
     border-radius 4px
 
     .pt-ghost-content
       display flex
+      flex-direction column
       justify-content center
       align-items center
       min-height 200px
+      background #333
+      border-radius 4px
+      gap 20px
+
+      .pt-ghost-text
+        text-align center
+        color #fff
+
+        h3
+          font-size 18px
+          margin-bottom 8px
+          color #fff
+
+        p
+          font-size 14px
+          color #ccc
+          margin 0
 
   .pt-icon
     margin-right 4px

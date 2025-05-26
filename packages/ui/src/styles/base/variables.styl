@@ -1,38 +1,123 @@
+// 主题模式变量
+$pt-theme-light = 'light'
+$pt-theme-dark = 'dark'
+
 // 品牌色
-$primary-color = #1677ff
-$success-color = #52c41a
-$warning-color = #faad14
-$error-color = #ff4d4f
-$info-color = #1677ff
+$pt-color-primary = #1677ff
+$pt-color-primary-hover = #40a9ff
+$pt-color-primary-active = #096dd9
+$pt-color-success = #52c41a
+$pt-color-warning = #faad14
+$pt-color-error = #ff4d4f
+$pt-color-info = #1677ff
 
-// 中性色
-$gray-1 = #ffffff
-$gray-2 = #fafafa
-$gray-3 = #f5f5f5
-$gray-4 = #f0f0f0
-$gray-5 = #d9d9d9
-$gray-6 = #bfbfbf
-$gray-7 = #8c8c8c
-$gray-8 = #595959
-$gray-9 = #434343
-$gray-10 = #262626
-$gray-11 = #1f1f1f
-$gray-12 = #141414
-$gray-13 = #000000
+// 中性色 - 亮色模式
+$pt-color-gray-1 = #ffffff
+$pt-color-gray-2 = #fafafa
+$pt-color-gray-3 = #f5f5f5
+$pt-color-gray-4 = #f0f0f0
+$pt-color-gray-5 = #d9d9d9
+$pt-color-gray-6 = #bfbfbf
+$pt-color-gray-7 = #8c8c8c
+$pt-color-gray-8 = #595959
+$pt-color-gray-9 = #434343
+$pt-color-gray-10 = #262626
+$pt-color-gray-11 = #1f1f1f
+$pt-color-gray-12 = #141414
+$pt-color-gray-13 = #000000
 
-// 文字颜色
-$text-color = rgba(0, 0, 0, 0.88)
-$text-color-secondary = rgba(0, 0, 0, 0.45)
-$text-color-disabled = rgba(0, 0, 0, 0.25)
-$heading-color = rgba(0, 0, 0, 0.88)
+// 中性色 - 暗色模式
+$pt-color-dark-gray-1 = #000000
+$pt-color-dark-gray-2 = #141414
+$pt-color-dark-gray-3 = #1f1f1f
+$pt-color-dark-gray-4 = #262626
+$pt-color-dark-gray-5 = #434343
+$pt-color-dark-gray-6 = #595959
+$pt-color-dark-gray-7 = #8c8c8c
+$pt-color-dark-gray-8 = #bfbfbf
+$pt-color-dark-gray-9 = #d9d9d9
+$pt-color-dark-gray-10 = #f0f0f0
+$pt-color-dark-gray-11 = #f5f5f5
+$pt-color-dark-gray-12 = #fafafa
+$pt-color-dark-gray-13 = #ffffff
 
-// 边框颜色
-$border-color = #d9d9d9
-$border-color-split = #f0f0f0
+// 文字颜色 - 亮色模式
+$pt-color-text = rgba(0, 0, 0, 0.88)
+$pt-color-text-secondary = rgba(0, 0, 0, 0.45)
+$pt-color-text-disabled = rgba(0, 0, 0, 0.25)
+$pt-color-heading = rgba(0, 0, 0, 0.88)
 
-// 背景色
-$bg-color = #ffffff
-$bg-color-light = #fafafa
+// 文字颜色 - 暗色模式
+$pt-color-dark-text = rgba(255, 255, 255, 0.88)
+$pt-color-dark-text-secondary = rgba(255, 255, 255, 0.45)
+$pt-color-dark-text-disabled = rgba(255, 255, 255, 0.25)
+$pt-color-dark-heading = rgba(255, 255, 255, 0.88)
+
+// 边框颜色 - 亮色模式
+$pt-color-border = #d9d9d9
+$pt-color-border-split = #f0f0f0
+
+// 边框颜色 - 暗色模式
+$pt-color-dark-border = #434343
+$pt-color-dark-border-split = #303030
+
+// 背景色 - 亮色模式
+$pt-color-bg = #ffffff
+$pt-color-bg-light = #fafafa
+
+// 背景色 - 暗色模式
+$pt-color-dark-bg = #141414
+$pt-color-dark-bg-light = #1f1f1f
+
+// 按钮相关变量
+$pt-button-height = 32px
+$pt-button-height-sm = 24px
+$pt-button-height-lg = 40px
+$pt-button-padding = 4px 15px
+$pt-button-padding-sm = 0 7px
+$pt-button-padding-lg = 6.4px 15px
+$pt-button-font-size = 14px
+$pt-button-font-size-sm = 14px
+$pt-button-font-size-lg = 16px
+$pt-button-border-radius = 2px
+
+// 按钮颜色 - 亮色模式
+$pt-button-default-bg = $pt-color-bg
+$pt-button-default-border = $pt-color-border
+$pt-button-default-color = $pt-color-text
+$pt-button-primary-color = #fff
+$pt-button-ghost-color = #fff
+$pt-button-ghost-border = #fff
+
+// 按钮颜色 - 暗色模式
+$pt-button-dark-default-bg = $pt-color-dark-bg
+$pt-button-dark-default-border = $pt-color-dark-border
+$pt-button-dark-default-color = $pt-color-dark-text
+$pt-button-dark-primary-color = #fff
+$pt-button-dark-ghost-color = #fff
+$pt-button-dark-ghost-border = #fff
+
+// 字体系统
+$pt-font-family = -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif
+$pt-font-size-base = 14px
+$pt-font-size-sm = 12px
+$pt-font-size-lg = 16px
+$pt-line-height-base = 1.5715
+$pt-line-height-sm = 1.5
+$pt-line-height-lg = 1.75
+
+// 间距系统
+$pt-spacing-xs = 4px
+$pt-spacing-sm = 8px
+$pt-spacing-md = 12px
+$pt-spacing-lg = 16px
+$pt-spacing-xl = 24px
+
+// 动画
+$pt-animation-duration-base = 0.2s
+$pt-animation-duration-slow = 0.3s
+$pt-animation-duration-fast = 0.1s
+$pt-animation-timing-function = cubic-bezier(0.645, 0.045, 0.355, 1)
 
 // 字体
 $font-family = -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif
@@ -42,6 +127,14 @@ $font-size-lg = 16px
 $line-height-base = 1.5715
 $line-height-sm = 1.5
 $line-height-lg = 1.75
+
+// 边框颜色
+$border-color = #d9d9d9
+$border-color-split = #f0f0f0
+
+// 背景色
+$bg-color = #ffffff
+$bg-color-light = #fafafa
 
 // 间距
 $spacing-xs = 4px

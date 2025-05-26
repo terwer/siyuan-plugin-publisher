@@ -67,6 +67,23 @@
 </script>
 
 <style lang="stylus">
+html[data-theme-mode="dark"]
+  body
+    background-color: #000
+    color: #fff
+
+  .pt-page-title
+    color: #fff
+
+  .pt-section-title
+    color: #fff
+
+  .pt-ghost-text
+    h3
+      color: #fff
+    p
+      color: #ccc
+
 // 主题变量
 $primary-color = #1890ff
 $border-color = #d9d9d9

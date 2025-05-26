@@ -1,90 +1,90 @@
-@import '../base'
+@import '../base/variables.styl'
+@import '../base/index.styl'
 
-#publisherApp
-  .pt-button-group
-    display: inline-flex
-    align-items: center
+.pt-button-group
+  display: inline-flex
+  align-items: center
 
-    .pt-button
-      position: relative
-      z-index: 1
+  .pt-button
+    position: relative
+    z-index: 1
 
+    &:not(:first-child)
+      margin-left: -1px
+
+    &:not(:first-child):not(:last-child)
+      border-radius: 0
+
+    &:first-child
+      border-top-right-radius: 0
+      border-bottom-right-radius: 0
+
+    &:last-child
+      border-top-left-radius: 0
+      border-bottom-left-radius: 0
+
+    &:hover
+      z-index: 2
+
+    &:focus
+      z-index: 2
+
+    &:active
+      z-index: 2
+
+    &[disabled]
+      z-index: 0
+
+    &.pt-button-primary
       &:not(:first-child)
-        margin-left: -1px
+        border-left-color: $pt-color-primary-hover
 
-      &:not(:first-child):not(:last-child)
-        border-radius: 0
+      &:not(:last-child)
+        border-right-color: $pt-color-primary-hover
 
-      &:first-child
-        border-top-right-radius: 0
-        border-bottom-right-radius: 0
+    &.pt-button-default
+      &:not(:first-child)
+        border-left-color: $pt-color-border-hover
 
-      &:last-child
-        border-top-left-radius: 0
-        border-bottom-left-radius: 0
+      &:not(:last-child)
+        border-right-color: $pt-color-border-hover
 
-      &:hover
-        z-index: 2
+    &.pt-button-dashed
+      &:not(:first-child)
+        border-left-color: $pt-color-border-hover
 
-      &:focus
-        z-index: 2
+      &:not(:last-child)
+        border-right-color: $pt-color-border-hover
 
-      &:active
-        z-index: 2
+    &.pt-button-text
+      &:not(:first-child)
+        border-left-color: transparent
 
-      &[disabled]
-        z-index: 0
+      &:not(:last-child)
+        border-right-color: transparent
 
-      &.button-primary
-        &:not(:first-child)
-          border-left-color: $primary-color-hover
+    &.pt-button-link
+      &:not(:first-child)
+        margin-left: $pt-spacing-sm
+        border-left: none
 
-        &:not(:last-child)
-          border-right-color: $primary-color-hover
+      &:not(:last-child)
+        border-right: none
 
-      &.button-default
-        &:not(:first-child)
-          border-left-color: $border-color-hover
+      color: $pt-color-primary
+      background: transparent
+      border: none
+      padding: 0 $pt-spacing-sm
 
-        &:not(:last-child)
-          border-right-color: $border-color-hover
+      &:hover:not(.pt-button-disabled)
+        color: $pt-color-primary-hover
+        text-decoration: underline
 
-      &.button-dashed
-        &:not(:first-child)
-          border-left-color: $border-color-hover
+      &:active:not(.pt-button-disabled)
+        color: $pt-color-primary-active
 
-        &:not(:last-child)
-          border-right-color: $border-color-hover
+    &.pt-button-disabled
+      z-index: 0
 
-      &.button-text
-        &:not(:first-child)
-          border-left-color: transparent
-
-        &:not(:last-child)
-          border-right-color: transparent
-
-      &.button-link
-        &:not(:first-child)
-          margin-left: $spacing-sm
-          border-left: none
-
-        &:not(:last-child)
-          border-right: none
-
-        color: $primary-color
-        background: transparent
-        border: none
-        padding: 0 $spacing-sm
-
-        &:hover:not(.button-disabled)
-          color: $primary-color-hover
-          text-decoration: underline
-
-        &:active:not(.button-disabled)
-          color: $primary-color-active
-
-      &.button-disabled
-        z-index: 0
-
-      &.button-loading
-        z-index: 0 
+    &.pt-button-loading
+      z-index: 0 

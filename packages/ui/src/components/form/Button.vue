@@ -92,7 +92,3 @@ const handleClick = (event: MouseEvent) => {
   }
 }
 </script>
-
-<style lang="stylus">
-@import '../../styles/components/button.styl'
-</style> 

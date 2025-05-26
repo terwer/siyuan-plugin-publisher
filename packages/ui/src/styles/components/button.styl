@@ -1,6 +1,206 @@
 @import '../base/variables.styl'
 @import '../base/index.styl'
 
+html[data-theme-mode="light"]
+  .pt-button
+    color: $pt-button-default-color
+    background: $pt-button-default-bg
+    border-color: $pt-button-default-border
+
+    &:hover
+      color: $pt-color-primary
+      background: $pt-button-default-bg
+      border-color: $pt-color-primary
+
+    &:active
+      color: $pt-color-primary-active
+      background: $pt-button-default-bg
+      border-color: $pt-color-primary-active
+
+    &-primary
+      color: $pt-button-primary-color
+      background: $pt-color-primary
+      border-color: $pt-color-primary
+
+      &:hover
+        background: $pt-color-primary-hover
+        border-color: $pt-color-primary-hover
+
+      &:active
+        background: $pt-color-primary-active
+        border-color: $pt-color-primary-active
+
+    &-ghost
+      color: $pt-button-ghost-color
+      background: transparent
+      border-color: $pt-button-ghost-border
+
+      &:hover
+        color: $pt-button-ghost-color
+        background: rgba(255, 255, 255, 0.1)
+        border-color: $pt-button-ghost-border
+
+      &:active
+        color: $pt-button-ghost-color
+        background: rgba(255, 255, 255, 0.2)
+        border-color: $pt-button-ghost-border
+
+      &.pt-button-primary
+        color: $pt-color-primary
+        border-color: $pt-color-primary
+
+        &:hover
+          color: $pt-color-primary-hover
+          border-color: $pt-color-primary-hover
+          background: rgba(24, 144, 255, 0.1)
+
+        &:active
+          color: $pt-color-primary-active
+          border-color: $pt-color-primary-active
+          background: rgba(24, 144, 255, 0.2)
+
+      &.pt-button-success
+        color: $pt-color-success
+        border-color: $pt-color-success
+
+        &:hover
+          color: #73d13d
+          border-color: #73d13d
+          background: rgba(82, 196, 26, 0.1)
+
+        &:active
+          color: #389e0d
+          border-color: #389e0d
+          background: rgba(82, 196, 26, 0.2)
+
+      &.pt-button-warning
+        color: $pt-color-warning
+        border-color: $pt-color-warning
+
+        &:hover
+          color: #ffc53d
+          border-color: #ffc53d
+          background: rgba(250, 173, 20, 0.1)
+
+        &:active
+          color: #d48806
+          border-color: #d48806
+          background: rgba(250, 173, 20, 0.2)
+
+      &.pt-button-danger
+        color: $pt-color-error
+        border-color: $pt-color-error
+
+        &:hover
+          color: #ff7875
+          border-color: #ff7875
+          background: rgba(255, 77, 79, 0.1)
+
+        &:active
+          color: #d9363e
+          border-color: #d9363e
+          background: rgba(255, 77, 79, 0.2)
+
+html[data-theme-mode="dark"]
+  .pt-button
+    color: $pt-button-dark-default-color
+    background: $pt-button-dark-default-bg
+    border-color: $pt-button-dark-default-border
+
+    &:hover
+      color: $pt-color-primary
+      background: $pt-button-dark-default-bg
+      border-color: $pt-color-primary
+
+    &:active
+      color: $pt-color-primary-active
+      background: $pt-button-dark-default-bg
+      border-color: $pt-color-primary-active
+
+    &-primary
+      color: $pt-button-dark-primary-color
+      background: $pt-color-primary
+      border-color: $pt-color-primary
+
+      &:hover
+        background: $pt-color-primary-hover
+        border-color: $pt-color-primary-hover
+
+      &:active
+        background: $pt-color-primary-active
+        border-color: $pt-color-primary-active
+
+    &-ghost
+      color: $pt-button-dark-ghost-color
+      background: transparent
+      border-color: $pt-button-dark-ghost-border
+
+      &:hover
+        color: $pt-button-dark-ghost-color
+        background: rgba(255, 255, 255, 0.1)
+        border-color: $pt-button-dark-ghost-border
+
+      &:active
+        color: $pt-button-dark-ghost-color
+        background: rgba(255, 255, 255, 0.2)
+        border-color: $pt-button-dark-ghost-border
+
+      &.pt-button-primary
+        color: $pt-color-primary
+        border-color: $pt-color-primary
+
+        &:hover
+          color: $pt-color-primary-hover
+          border-color: $pt-color-primary-hover
+          background: rgba(24, 144, 255, 0.1)
+
+        &:active
+          color: $pt-color-primary-active
+          border-color: $pt-color-primary-active
+          background: rgba(24, 144, 255, 0.2)
+
+      &.pt-button-success
+        color: $pt-color-success
+        border-color: $pt-color-success
+
+        &:hover
+          color: #73d13d
+          border-color: #73d13d
+          background: rgba(82, 196, 26, 0.1)
+
+        &:active
+          color: #389e0d
+          border-color: #389e0d
+          background: rgba(82, 196, 26, 0.2)
+
+      &.pt-button-warning
+        color: $pt-color-warning
+        border-color: $pt-color-warning
+
+        &:hover
+          color: #ffc53d
+          border-color: #ffc53d
+          background: rgba(250, 173, 20, 0.1)
+
+        &:active
+          color: #d48806
+          border-color: #d48806
+          background: rgba(250, 173, 20, 0.2)
+
+      &.pt-button-danger
+        color: $pt-color-error
+        border-color: $pt-color-error
+
+        &:hover
+          color: #ff7875
+          border-color: #ff7875
+          background: rgba(255, 77, 79, 0.1)
+
+        &:active
+          color: #d9363e
+          border-color: #d9363e
+          background: rgba(255, 77, 79, 0.2)
+
 .pt-button
   position: relative
   display: inline-flex
@@ -13,103 +213,26 @@
   border: 1px solid transparent
   box-shadow: 0 2px 0 rgba(0, 0, 0, 0.015)
   cursor: pointer
-  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1)
+  transition: all $pt-animation-duration-base $pt-animation-timing-function
   user-select: none
   touch-action: manipulation
   height: $pt-button-height
   padding: $pt-button-padding
-  font-size: $pt-font-size-base
-  border-radius: $pt-border-radius-base
-  color: $pt-text-color
-  background: $pt-button-default-bg
-  border-color: $pt-button-default-border
-
-  &:hover
-    color: $pt-primary-color
-    background: $pt-button-default-bg
-    border-color: $pt-primary-color
-
-  &:active
-    color: $pt-primary-color-active
-    background: $pt-button-default-bg
-    border-color: $pt-primary-color-active
-
-  &-primary
-    color: $pt-button-primary-color
-    background: $pt-primary-color
-    border-color: $pt-primary-color
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12)
-    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045)
-
-    &:hover
-      background: $pt-primary-color-hover
-      border-color: $pt-primary-color-hover
-      color: $pt-button-primary-color
-
-    &:active
-      background: $pt-primary-color-active
-      border-color: $pt-primary-color-active
-      color: $pt-button-primary-color
-
-  &-dashed
-    color: $pt-text-color
-    background: $pt-button-default-bg
-    border-color: $pt-button-default-border
-    border-style: dashed
-
-    &:hover
-      color: $pt-primary-color
-      background: $pt-button-default-bg
-      border-color: $pt-primary-color
-
-    &:active
-      color: $pt-primary-color-active
-      background: $pt-button-default-bg
-      border-color: $pt-primary-color-active
-
-  &-text
-    color: $pt-text-color
-    background: transparent
-    border-color: transparent
-    box-shadow: none
-
-    &:hover
-      color: $pt-text-color
-      background: rgba(0, 0, 0, 0.018)
-      border-color: transparent
-
-    &:active
-      color: $pt-text-color
-      background: rgba(0, 0, 0, 0.028)
-      border-color: transparent
-
-  &-link
-    color: $pt-primary-color
-    background: transparent
-    border-color: transparent
-    box-shadow: none
-
-    &:hover
-      color: $pt-primary-color-hover
-      background: transparent
-      border-color: transparent
-
-    &:active
-      color: $pt-primary-color-active
-      background: transparent
-      border-color: transparent
+  font-size: $pt-button-font-size
+  border-radius: $pt-button-border-radius
+  font-family: $pt-font-family
 
   &-small
     height: $pt-button-height-sm
     padding: $pt-button-padding-sm
-    font-size: $pt-font-size-sm
-    border-radius: $pt-border-radius-base
+    font-size: $pt-button-font-size-sm
+    border-radius: $pt-button-border-radius
 
   &-large
     height: $pt-button-height-lg
     padding: $pt-button-padding-lg
-    font-size: $pt-font-size-lg
-    border-radius: $pt-border-radius-base
+    font-size: $pt-button-font-size-lg
+    border-radius: $pt-button-border-radius
 
   &-loading
     position: relative
@@ -123,7 +246,7 @@
       left: -1px
       z-index: 1
       display: block
-      background: $pt-button-default-bg
+      background: inherit
       border-radius: inherit
       opacity: 0.35
       transition: opacity 0.2s
@@ -131,69 +254,10 @@
       pointer-events: none
 
   &-disabled
-    color: $pt-disabled-color
-    background: $pt-disabled-bg
-    border-color: $pt-disabled-border
-    text-shadow: none
-    box-shadow: none
     cursor: not-allowed
 
     &:hover
-      color: $pt-disabled-color
-      background: $pt-disabled-bg
-      border-color: $pt-disabled-border
-
-    &:active
-      color: $pt-disabled-color
-      background: $pt-disabled-bg
-      border-color: $pt-disabled-border
-
-  &-danger
-    color: $pt-error-color
-    background: $pt-button-default-bg
-    border-color: $pt-error-color
-
-    &:hover
-      color: $pt-error-color-hover
-      background: $pt-button-default-bg
-      border-color: $pt-error-color-hover
-
-    &:active
-      color: $pt-error-color-active
-      background: $pt-button-default-bg
-      border-color: $pt-error-color-active
-
-    &.pt-button-primary
-      color: $pt-button-primary-color
-      background: $pt-error-color
-      border-color: $pt-error-color
-      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12)
-      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045)
-
-      &:hover
-        background: $pt-error-color-hover
-        border-color: $pt-error-color-hover
-        color: $pt-button-primary-color
-
-      &:active
-        background: $pt-error-color-active
-        border-color: $pt-error-color-active
-        color: $pt-button-primary-color
-
-  &-ghost
-    color: $pt-button-ghost-color
-    background: transparent
-    border-color: $pt-button-ghost-border
-
-    &:hover
-      color: $pt-primary-color
-      background: transparent
-      border-color: $pt-primary-color
-
-    &:active
-      color: $pt-primary-color-active
-      background: transparent
-      border-color: $pt-primary-color-active
+      cursor: not-allowed
 
   &-block
     width: 100%
@@ -217,7 +281,7 @@
       display: inline-block
       width: $pt-font-size-base
       height: $pt-font-size-base
-      border: 2px solid $pt-button-primary-color
+      border: 2px solid currentColor
       border-radius: 50%
       border-top-color: transparent
       animation: button-loading-spin 1s infinite linear
