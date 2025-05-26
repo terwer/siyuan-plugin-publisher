@@ -1,181 +1,121 @@
-@import '../base'
+@import '../base/variables.styl'
+@import '../base/index.styl'
 
-.pt-btn
-  button-base()
+.pt-button
+  position: relative
+  display: inline-flex
+  align-items: center
+  justify-content: center
   font-weight: 400
+  white-space: nowrap
   text-align: center
   background-image: none
   border: 1px solid transparent
   box-shadow: 0 2px 0 rgba(0, 0, 0, 0.015)
-  color: $text-color
-  background: $bg-color
-  border-color: $border-color
+  cursor: pointer
+  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1)
+  user-select: none
+  touch-action: manipulation
+  height: $pt-button-height
+  padding: $pt-button-padding
+  font-size: $pt-font-size-base
+  border-radius: $pt-border-radius-base
+  color: $pt-text-color
+  background: $pt-button-default-bg
+  border-color: $pt-button-default-border
 
   &:hover
-    color: $primary-color
-    background: $bg-color-light
-    border-color: $primary-color
+    color: $pt-primary-color
+    background: $pt-button-default-bg
+    border-color: $pt-primary-color
 
   &:active
-    color: $primary-color
-    background: $bg-color-light
-    border-color: $primary-color
+    color: $pt-primary-color-active
+    background: $pt-button-default-bg
+    border-color: $pt-primary-color-active
 
-  &[disabled]
-    color: $text-color-disabled
-    background: $bg-color-light
-    border-color: $border-color
-    disabled()
-
-  // 尺寸变体
-  &-sm
-    height: $height-sm
-    padding: 0 $spacing-sm
-    font-size: $font-size-sm
-    border-radius: $border-radius-sm
-
-  &-lg
-    height: $height-lg
-    padding: 0 $spacing-lg
-    font-size: $font-size-lg
-    border-radius: $border-radius-lg
-
-  // 类型变体
   &-primary
-    color: $gray-1
-    background: $primary-color
-    border-color: $primary-color
+    color: $pt-button-primary-color
+    background: $pt-primary-color
+    border-color: $pt-primary-color
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12)
     box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045)
 
     &:hover
-      background: lighten($primary-color, 10%)
-      border-color: lighten($primary-color, 10%)
-      color: $gray-1
+      background: $pt-primary-color-hover
+      border-color: $pt-primary-color-hover
+      color: $pt-button-primary-color
 
     &:active
-      background: darken($primary-color, 10%)
-      border-color: darken($primary-color, 10%)
-      color: $gray-1
-
-    &[disabled]
-      color: rgba(255, 255, 255, 0.35)
-      background: $primary-color
-      border-color: $primary-color
+      background: $pt-primary-color-active
+      border-color: $pt-primary-color-active
+      color: $pt-button-primary-color
 
   &-dashed
-    color: $text-color
-    background: $bg-color
-    border-color: $border-color
+    color: $pt-text-color
+    background: $pt-button-default-bg
+    border-color: $pt-button-default-border
     border-style: dashed
 
     &:hover
-      color: $primary-color
-      background: $bg-color-light
-      border-color: $primary-color
+      color: $pt-primary-color
+      background: $pt-button-default-bg
+      border-color: $pt-primary-color
 
     &:active
-      color: $primary-color
-      background: $bg-color-light
-      border-color: $primary-color
-
-    &[disabled]
-      color: $text-color-disabled
-      background: $bg-color-light
-      border-color: $border-color
+      color: $pt-primary-color-active
+      background: $pt-button-default-bg
+      border-color: $pt-primary-color-active
 
   &-text
-    color: $text-color
+    color: $pt-text-color
     background: transparent
     border-color: transparent
     box-shadow: none
 
     &:hover
-      color: $primary-color
-      background: $bg-color-light
+      color: $pt-text-color
+      background: rgba(0, 0, 0, 0.018)
       border-color: transparent
 
     &:active
-      color: $primary-color
-      background: $bg-color-light
-      border-color: transparent
-
-    &[disabled]
-      color: $text-color-disabled
-      background: transparent
+      color: $pt-text-color
+      background: rgba(0, 0, 0, 0.028)
       border-color: transparent
 
   &-link
-    color: $primary-color
+    color: $pt-primary-color
     background: transparent
     border-color: transparent
     box-shadow: none
 
     &:hover
-      color: lighten($primary-color, 10%)
+      color: $pt-primary-color-hover
       background: transparent
       border-color: transparent
 
     &:active
-      color: darken($primary-color, 10%)
+      color: $pt-primary-color-active
       background: transparent
       border-color: transparent
 
-    &[disabled]
-      color: $text-color-disabled
-      background: transparent
-      border-color: transparent
+  &-small
+    height: $pt-button-height-sm
+    padding: $pt-button-padding-sm
+    font-size: $pt-font-size-sm
+    border-radius: $pt-border-radius-base
 
-  // 危险按钮
-  &-danger
-    color: $gray-1
-    background: $error-color
-    border-color: $error-color
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12)
-    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045)
+  &-large
+    height: $pt-button-height-lg
+    padding: $pt-button-padding-lg
+    font-size: $pt-font-size-lg
+    border-radius: $pt-border-radius-base
 
-    &:hover
-      background: lighten($error-color, 10%)
-      border-color: lighten($error-color, 10%)
-      color: $gray-1
-
-    &:active
-      background: darken($error-color, 10%)
-      border-color: darken($error-color, 10%)
-      color: $gray-1
-
-    &[disabled]
-      color: rgba(255, 255, 255, 0.35)
-      background: $error-color
-      border-color: $error-color
-
-  // 幽灵按钮
-  &-ghost
-    color: $text-color
-    background: transparent
-    border-color: $border-color
-
-    &:hover
-      color: $primary-color
-      background: transparent
-      border-color: $primary-color
-
-    &:active
-      color: $primary-color
-      background: transparent
-      border-color: $primary-color
-
-    &[disabled]
-      color: $text-color-disabled
-      background: transparent
-      border-color: $border-color
-
-  // 加载状态
   &-loading
     position: relative
     cursor: default
 
-    &::before
+    &:before
       position: absolute
       top: -1px
       right: -1px
@@ -183,47 +123,107 @@
       left: -1px
       z-index: 1
       display: block
-      background: $bg-color
+      background: $pt-button-default-bg
       border-radius: inherit
       opacity: 0.35
-      transition: opacity $animation-duration-base
+      transition: opacity 0.2s
       content: ''
       pointer-events: none
 
-  // 图标
-  &-icon
-    margin-right: $spacing-xs
-    font-size: $font-size-base
-    vertical-align: -0.125em
+  &-disabled
+    color: $pt-disabled-color
+    background: $pt-disabled-bg
+    border-color: $pt-disabled-border
+    text-shadow: none
+    box-shadow: none
+    cursor: not-allowed
 
-  // 按钮组
-  &-group
-    display: inline-flex
-    vertical-align: middle
+    &:hover
+      color: $pt-disabled-color
+      background: $pt-disabled-bg
+      border-color: $pt-disabled-border
 
-    .pt-btn
-      position: relative
-      z-index: 1
+    &:active
+      color: $pt-disabled-color
+      background: $pt-disabled-bg
+      border-color: $pt-disabled-border
 
-      &:not(:first-child)
-        margin-left: -1px
+  &-danger
+    color: $pt-error-color
+    background: $pt-button-default-bg
+    border-color: $pt-error-color
 
-      &:not(:first-child):not(:last-child)
-        border-radius: 0
+    &:hover
+      color: $pt-error-color-hover
+      background: $pt-button-default-bg
+      border-color: $pt-error-color-hover
 
-      &:first-child
-        border-top-right-radius: 0
-        border-bottom-right-radius: 0
+    &:active
+      color: $pt-error-color-active
+      background: $pt-button-default-bg
+      border-color: $pt-error-color-active
 
-      &:last-child
-        border-top-left-radius: 0
-        border-bottom-left-radius: 0
+    &.pt-button-primary
+      color: $pt-button-primary-color
+      background: $pt-error-color
+      border-color: $pt-error-color
+      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12)
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045)
 
       &:hover
-        z-index: 2
+        background: $pt-error-color-hover
+        border-color: $pt-error-color-hover
+        color: $pt-button-primary-color
 
       &:active
-        z-index: 3
+        background: $pt-error-color-active
+        border-color: $pt-error-color-active
+        color: $pt-button-primary-color
 
-      &[disabled]
-        z-index: 0 
+  &-ghost
+    color: $pt-button-ghost-color
+    background: transparent
+    border-color: $pt-button-ghost-border
+
+    &:hover
+      color: $pt-primary-color
+      background: transparent
+      border-color: $pt-primary-color
+
+    &:active
+      color: $pt-primary-color-active
+      background: transparent
+      border-color: $pt-primary-color-active
+
+  &-block
+    width: 100%
+
+  &-icon
+    margin-right: $pt-spacing-sm
+    font-size: $pt-font-size-base
+    line-height: 1
+
+  &-suffix-icon
+    margin-left: $pt-spacing-sm
+    font-size: $pt-font-size-base
+    line-height: 1
+
+  &-loading-icon
+    margin-right: $pt-spacing-sm
+    font-size: $pt-font-size-base
+    line-height: 1
+
+    .loading-spinner
+      display: inline-block
+      width: $pt-font-size-base
+      height: $pt-font-size-base
+      border: 2px solid $pt-button-primary-color
+      border-radius: 50%
+      border-top-color: transparent
+      animation: button-loading-spin 1s infinite linear
+
+@keyframes button-loading-spin
+  from
+    transform: rotate(0deg)
+  to
+    transform: rotate(360deg) 

@@ -8,7 +8,7 @@
   -->
 
 <template>
-  <div class="publisher-button-group">
+  <div class="pt-button-group">
     <slot></slot>
   </div>
 </template>
