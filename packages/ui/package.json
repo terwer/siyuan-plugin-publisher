@@ -21,7 +21,8 @@
   ],
   "scripts": {
     "dev": "vite",
-    "lint": "eslint src/"
+    "lint": "eslint src/",
+    "clean": "rm -rf dist"
   },
   "dependencies": {
     "@siyuan-publisher/common": "workspace:*",

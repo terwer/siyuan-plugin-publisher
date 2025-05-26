@@ -1,14 +1,24 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["**/.env.*local"],
+  "globalDependencies": [
+    "**/.env.*local"
+  ],
   "tasks": {
     "build": {
-      "dependsOn": ["^build"],
-      "outputs": ["dist/**"]
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        "dist/**"
+      ]
     },
     "build:siyuan": {
-      "dependsOn": ["^build"],
-      "outputs": ["../../dist/**"]
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        "../../dist/**"
+      ]
     },
     "lint": {
       "outputs": []
@@ -22,8 +32,18 @@
       "persistent": true
     },
     "test": {
-      "dependsOn": ["build"],
-      "outputs": ["coverage/**"]
+      "dependsOn": [
+        "build"
+      ],
+      "outputs": [
+        "coverage/**"
+      ]
+    },
+    "clean": {
+      "cache": false
+    },
+    "cache": {
+      "cache": false
     }
   }
-} 
+}
