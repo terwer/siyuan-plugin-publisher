@@ -67,6 +67,24 @@
 </script>
 
 <style lang="stylus">
+// 默认状态（light）
+body
+  background-color: #fff
+  color: #000
+
+.pt-page-title
+  color: #000
+
+.pt-section-title
+  color: #000
+
+.pt-ghost-text
+  h3
+    color: #000
+  p
+    color: #666
+
+// 暗黑模式
 html[data-theme-mode="dark"]
   body
     background-color: #000
