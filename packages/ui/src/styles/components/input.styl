@@ -1,0 +1,144 @@
+@import '../variables.styl'
+
+.pt-input
+  position relative
+  display inline-flex
+  width 100%
+  min-width 0
+  padding 4px 11px
+  color $pt-text-color
+  font-size $pt-font-size-base
+  line-height $pt-line-height-base
+  background-color $pt-bg-color
+  background-image none
+  border $pt-border-width $pt-border-style $pt-border-color
+  border-radius $pt-border-radius-base
+  transition all $pt-transition-duration $pt-transition-timing
+
+  &:hover
+    border-color $pt-primary-color
+
+  &:focus
+    border-color $pt-primary-color
+    box-shadow 0 0 0 2px rgba($pt-primary-color, 0.2)
+    outline 0
+
+  &[disabled]
+    color $pt-text-color-disabled
+    background-color $pt-bg-color-light
+    cursor not-allowed
+    opacity 1
+
+  // 尺寸变体
+  &-sm
+    padding 0 7px
+    font-size $pt-font-size-sm
+    height $pt-height-sm
+    line-height $pt-height-sm
+
+  &-lg
+    padding 0 11px
+    font-size $pt-font-size-lg
+    height $pt-height-lg
+    line-height $pt-height-lg
+
+  // 状态变体
+  &-error
+    border-color $pt-error-color
+
+    &:hover
+      border-color $pt-error-color
+
+    &:focus
+      border-color $pt-error-color
+      box-shadow 0 0 0 2px rgba($pt-error-color, 0.2)
+
+  &-warning
+    border-color $pt-warning-color
+
+    &:hover
+      border-color $pt-warning-color
+
+    &:focus
+      border-color $pt-warning-color
+      box-shadow 0 0 0 2px rgba($pt-warning-color, 0.2)
+
+  // 前缀和后缀
+  &-prefix
+    display flex
+    align-items center
+    margin-right 4px
+    color $pt-text-color-secondary
+
+  &-suffix
+    display flex
+    align-items center
+    margin-left 4px
+    color $pt-text-color-secondary
+
+  // 文本域
+  &-textarea
+    min-height 32px
+    max-width 100%
+    height auto
+    min-height 32px
+    line-height $pt-line-height-base
+    vertical-align bottom
+    transition all $pt-transition-duration $pt-transition-timing
+    resize vertical
+
+  // 搜索框
+  &-search
+    .pt-input
+      border-right 0
+
+    .pt-btn
+      border-top-left-radius 0
+      border-bottom-left-radius 0
+
+  // 密码框
+  &-password
+    .pt-input-suffix
+      cursor pointer
+
+  // 组合输入框
+  &-group
+    display inline-flex
+    width 100%
+
+    .pt-input
+      flex 1
+      min-width 0
+
+    .pt-input:not(:first-child)
+      border-top-left-radius 0
+      border-bottom-left-radius 0
+
+    .pt-input:not(:last-child)
+      border-top-right-radius 0
+      border-bottom-right-radius 0
+
+    .pt-btn
+      border-top-left-radius 0
+      border-bottom-left-radius 0
+
+  // 清除按钮
+  &-clear
+    position absolute
+    right 11px
+    top 50%
+    transform translateY(-50%)
+    color $pt-text-color-secondary
+    cursor pointer
+    transition color $pt-transition-duration $pt-transition-timing
+
+    &:hover
+      color $pt-text-color
+
+  // 字数统计
+  &-count
+    position absolute
+    right 11px
+    bottom -20px
+    color $pt-text-color-secondary
+    font-size $pt-font-size-sm 

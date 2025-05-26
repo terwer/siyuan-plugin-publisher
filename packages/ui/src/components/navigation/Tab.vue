@@ -45,7 +45,6 @@
 
 <script setup lang="ts">
 import { ref, provide } from "vue"
-import "../../styles/navigation/tab.styl"
 
 interface TabPane {
   name: string

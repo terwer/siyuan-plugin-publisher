@@ -8,170 +8,94 @@
   -->
 
 <template>
-  <div class="button-test-container">
-    <h2>按钮组件测试</h2>
+  <div class="pt-button-test-container">
+    <h1 class="pt-page-title">按钮测试</h1>
 
-    <div class="test-section">
-      <h3>基础按钮</h3>
-      <div class="button-group">
-        <Button @click="handleClick('default')">默认按钮</Button>
-        <Button type="primary" @click="handleClick('primary')">主要按钮</Button>
-        <Button type="dashed" @click="handleClick('dashed')">虚线按钮</Button>
-        <Button type="text" @click="handleClick('text')">文本按钮</Button>
-        <Button type="link" @click="handleClick('link')">链接按钮</Button>
+    <div class="pt-test-section">
+      <h2 class="pt-section-title">基础按钮</h2>
+      <div class="pt-button-group">
+        <Button>默认按钮</Button>
+        <Button type="primary">主要按钮</Button>
+        <Button type="success">成功按钮</Button>
+        <Button type="warning">警告按钮</Button>
+        <Button type="danger">危险按钮</Button>
       </div>
     </div>
 
-    <div class="test-section">
-      <h3>不同尺寸</h3>
-      <div class="button-group">
-        <Button size="small" @click="handleClick('small')">小型按钮</Button>
-        <Button @click="handleClick('default')">默认按钮</Button>
-        <Button size="large" @click="handleClick('large')">大型按钮</Button>
+    <div class="pt-test-section">
+      <h2 class="pt-section-title">不同尺寸</h2>
+      <div class="pt-button-group">
+        <Button size="small">小按钮</Button>
+        <Button>默认按钮</Button>
+        <Button size="large">大按钮</Button>
       </div>
     </div>
 
-    <div class="test-section">
-      <h3>禁用状态</h3>
-      <div class="button-group">
-        <Button disabled @click="handleClick('disabled')">禁用按钮</Button>
-        <Button type="primary" disabled @click="handleClick('disabled-primary')">禁用主要按钮</Button>
-        <Button type="dashed" disabled @click="handleClick('disabled-dashed')">禁用虚线按钮</Button>
-        <Button type="text" disabled @click="handleClick('disabled-text')">禁用文本按钮</Button>
-        <Button type="link" disabled @click="handleClick('disabled-link')">禁用链接按钮</Button>
+    <div class="pt-test-section">
+      <h2 class="pt-section-title">禁用状态</h2>
+      <div class="pt-button-group">
+        <Button disabled>禁用按钮</Button>
+        <Button type="primary" disabled>禁用主要按钮</Button>
+        <Button type="success" disabled>禁用成功按钮</Button>
+        <Button type="warning" disabled>禁用警告按钮</Button>
+        <Button type="danger" disabled>禁用危险按钮</Button>
       </div>
     </div>
 
-    <div class="test-section">
-      <h3>加载状态</h3>
-      <div class="button-group">
-        <Button :loading="loading" @click="handleAsyncClick">异步加载按钮</Button>
-        <Button type="primary" :loading="loading" @click="handleAsyncClick">异步主要按钮</Button>
-        <Button type="dashed" :loading="loading" @click="handleAsyncClick">异步虚线按钮</Button>
+    <div class="pt-test-section">
+      <h2 class="pt-section-title">加载状态</h2>
+      <div class="pt-button-group">
+        <Button loading>加载中</Button>
+        <Button type="primary" loading>加载中</Button>
+        <Button type="success" loading>加载中</Button>
+        <Button type="warning" loading>加载中</Button>
+        <Button type="danger" loading>加载中</Button>
       </div>
     </div>
 
-    <div class="test-section">
-      <h3>危险按钮</h3>
-      <div class="button-group">
-        <Button danger @click="handleClick('danger')">危险按钮</Button>
-        <Button type="primary" danger @click="handleClick('danger-primary')">危险主要按钮</Button>
-        <Button type="dashed" danger @click="handleClick('danger-dashed')">危险虚线按钮</Button>
-        <Button type="text" danger @click="handleClick('danger-text')">危险文本按钮</Button>
-        <Button type="link" danger @click="handleClick('danger-link')">危险链接按钮</Button>
-      </div>
-    </div>
-
-    <div class="test-section">
-      <h3>幽灵按钮</h3>
-      <div class="ghost-demo">
-        <div class="ghost-content">
-          <p>在深色背景上，幽灵按钮可以保持界面简洁的同时提供良好的可点击性</p>
-          <div class="button-group">
-            <Button ghost @click="handleClick('ghost')">幽灵按钮</Button>
-            <Button type="primary" ghost @click="handleClick('ghost-primary')">幽灵主要按钮</Button>
-            <Button type="dashed" ghost @click="handleClick('ghost-dashed')">幽灵虚线按钮</Button>
-            <Button type="text" ghost @click="handleClick('ghost-text')">幽灵文本按钮</Button>
-            <Button type="link" ghost @click="handleClick('ghost-link')">幽灵链接按钮</Button>
+    <div class="pt-test-section">
+      <h2 class="pt-section-title">幽灵按钮</h2>
+      <div class="pt-ghost-demo">
+        <div class="pt-ghost-content">
+          <div class="pt-button-group">
+            <Button ghost>幽灵按钮</Button>
+            <Button type="primary" ghost>幽灵主要按钮</Button>
+            <Button type="success" ghost>幽灵成功按钮</Button>
+            <Button type="warning" ghost>幽灵警告按钮</Button>
+            <Button type="danger" ghost>幽灵危险按钮</Button>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="test-section">
-      <h3>块级按钮</h3>
-      <div class="button-group">
-        <Button block @click="handleClick('block')">块级按钮</Button>
-        <Button type="primary" block @click="handleClick('block-primary')">块级主要按钮</Button>
-      </div>
-    </div>
-
-    <div class="test-section">
-      <h3>带图标的按钮</h3>
-      <div class="button-group">
-        <Button @click="handleClick('icon-left')">
-          <template #icon>
-            <span class="icon">📝</span>
-          </template>
+    <div class="pt-test-section">
+      <h2 class="pt-section-title">图标按钮</h2>
+      <div class="pt-button-group">
+        <Button>
+          <span class="pt-icon">📝</span>
           编辑
         </Button>
-        <Button type="primary" @click="handleClick('icon-right')">
-          新建
-          <template #suffixIcon>
-            <span class="icon">➕</span>
-          </template>
+        <Button type="primary">
+          <span class="pt-icon">➕</span>
+          添加
         </Button>
-        <Button type="dashed" @click="handleClick('icon-both')">
-          <template #icon>
-            <span class="icon">🗑️</span>
-          </template>
+        <Button type="danger">
+          <span class="pt-icon">🗑️</span>
           删除
-          <template #suffixIcon>
-            <span class="icon">⚠️</span>
-          </template>
+        </Button>
+        <Button type="warning">
+          <span class="pt-icon">⚠️</span>
+          警告
         </Button>
       </div>
     </div>
 
-    <div class="test-section">
-      <h3>带提示的按钮</h3>
-      <div class="button-group">
-        <Button tooltip="这是一个提示" @click="handleClick('tooltip')">带提示的按钮</Button>
-        <Button type="primary" tooltip="这是一个提示" tooltipPlacement="bottom" @click="handleClick('tooltip-bottom')"
-          >底部提示</Button
-        >
-        <Button type="dashed" tooltip="这是一个提示" tooltipPlacement="left" @click="handleClick('tooltip-left')"
-          >左侧提示</Button
-        >
-        <Button type="text" tooltip="这是一个提示" tooltipPlacement="right" @click="handleClick('tooltip-right')"
-          >右侧提示</Button
-        >
-      </div>
-    </div>
-
-    <div class="test-section">
-      <h3>按钮组合</h3>
-      <div class="button-group">
-        <ButtonGroup>
-          <Button type="primary" @click="handleClick('group-1')">按钮1</Button>
-          <Button @click="handleClick('group-2')">按钮2</Button>
-          <Button type="primary" @click="handleClick('group-3')">按钮3</Button>
-        </ButtonGroup>
-      </div>
-      <div class="button-group" style="margin-top: 16px;">
-        <ButtonGroup>
-          <Button type="primary" @click="handleClick('group-4')">按钮1</Button>
-          <Button type="primary" @click="handleClick('group-5')">按钮2</Button>
-          <Button type="primary" @click="handleClick('group-6')">按钮3</Button>
-        </ButtonGroup>
-      </div>
-      <div class="button-group" style="margin-top: 16px;">
-        <ButtonGroup>
-          <Button type="dashed" @click="handleClick('group-7')">按钮1</Button>
-          <Button type="dashed" @click="handleClick('group-8')">按钮2</Button>
-          <Button type="dashed" @click="handleClick('group-9')">按钮3</Button>
-        </ButtonGroup>
-      </div>
-      <div class="button-group" style="margin-top: 16px;">
-        <ButtonGroup>
-          <Button type="text" @click="handleClick('group-10')">按钮1</Button>
-          <Button type="text" @click="handleClick('group-11')">按钮2</Button>
-          <Button type="text" @click="handleClick('group-12')">按钮3</Button>
-        </ButtonGroup>
-      </div>
-      <div class="button-group" style="margin-top: 16px;">
-        <ButtonGroup>
-          <Button type="link" @click="handleClick('group-13')">按钮1</Button>
-          <Button type="link" @click="handleClick('group-14')">按钮2</Button>
-          <Button type="link" @click="handleClick('group-15')">按钮3</Button>
-        </ButtonGroup>
-      </div>
-    </div>
-
-    <div class="test-section">
-      <h3>事件测试结果</h3>
-      <div class="event-log">
-        <p v-for="(log, index) in eventLogs" :key="index">{{ log }}</p>
+    <div class="pt-test-section">
+      <h2 class="pt-section-title">按钮组</h2>
+      <div class="pt-button-group pt-button-group--vertical">
+        <Button>按钮1</Button>
+        <Button>按钮2</Button>
+        <Button>按钮3</Button>
       </div>
     </div>
   </div>
@@ -200,59 +124,44 @@
   }
 </script>
 
-<style lang="stylus" scoped>
-  .button-test-container
-    padding: 20px
-    max-width: 1200px
-    margin: 0 auto
+<style lang="stylus">
+.pt-button-test-container
+  padding 20px
 
-  .button-test-container .test-section
-    margin-bottom: 40px !important
-    padding: 20px !important
-    border: 1px solid #eee
-    border-radius: 8px
-    background-color: #fff
+  h1
+    margin-bottom 20px
+    font-size 24px
+    color var(--b3-theme-on-background)
 
-    h3
-      margin-bottom: 15px
-      color: #333
-      font-size: 18px
+  .pt-test-section
+    margin-bottom 30px
 
-  .button-group
-    display: flex
-    flex-wrap: wrap
-    gap: 10px
-    margin-bottom: 10px
+    h2
+      margin-bottom 16px
+      font-size 18px
+      color var(--b3-theme-on-background)
 
-  .ghost-demo
-    margin: 0
-    padding: 0
-    background-color: #001529
-    border-radius: 4px
-    color: #fff
-    overflow: hidden
+  .pt-button-group
+    display flex
+    gap 8px
+    margin-bottom 16px
 
-    .ghost-content
-      padding: 24px !important
+    &--vertical
+      flex-direction column
+      width 200px
 
-      p
-        margin: 0 0 16px
-        color: rgba(255, 255, 255, 0.65)
-        font-size: 14px
+  .pt-ghost-demo
+    padding 20px
+    background var(--b3-theme-background)
+    border 1px solid var(--b3-border-color)
+    border-radius 4px
 
-  .icon
-    margin: 0 4px
-    font-size: 16px
+    .pt-ghost-content
+      display flex
+      justify-content center
+      align-items center
+      min-height 200px
 
-  .event-log
-    background-color: #f5f5f5
-    padding: 15px !important
-    border-radius: 4px
-    max-height: 200px
-    overflow-y: auto
-
-    p
-      margin: 5px 0
-      color: #666
-      font-size: 14px
+  .pt-icon
+    margin-right 4px
 </style>

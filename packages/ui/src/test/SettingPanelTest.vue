@@ -12,8 +12,6 @@ import SettingPanel from "../components/navigation/SettingPanel.vue"
 import SettingGroup from "../components/navigation/SettingGroup.vue"
 import Button from "../components/form/Button.vue"
 import type { SettingItem } from "../types"
-import "../styles/navigation/setting-panel.styl"
-import "../styles/navigation/setting-group.styl"
 
 // 基础设置
 const basicSettings = ref<SettingItem[]>([
@@ -396,3 +394,45 @@ const handleCancel = () => {
     </section>
   </div>
 </template>
+
+<style lang="stylus">
+.pt-test-page
+  padding 20px
+
+  .pt-page-title
+    margin-bottom 20px
+    font-size 24px
+    color var(--b3-theme-on-background)
+
+  .pt-test-section
+    margin-bottom 30px
+
+    .pt-section-title
+      margin-bottom 16px
+      font-size 18px
+      color var(--b3-theme-on-background)
+
+  .pt-toggle-button
+    padding 8px 16px
+    background-color var(--b3-theme-background)
+    border 1px solid var(--b3-border-color)
+    border-radius 4px
+    color var(--b3-theme-on-background)
+    cursor pointer
+    transition all 0.3s ease
+
+    &:hover
+      background-color var(--b3-theme-hover)
+
+  .pt-settings-state
+    margin-top 16px
+    padding 16px
+    background-color var(--b3-theme-background)
+    border 1px solid var(--b3-border-color)
+    border-radius 4px
+    color var(--b3-theme-on-background)
+    font-family monospace
+    font-size 14px
+    line-height 1.5
+    overflow-x auto
+</style>

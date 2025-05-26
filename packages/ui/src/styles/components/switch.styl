@@ -1,0 +1,127 @@
+@import '../variables.styl'
+
+.pt-switch
+  position relative
+  display inline-block
+  min-width 44px
+  height 22px
+  line-height 22px
+  vertical-align middle
+  background-color $pt-text-color-disabled
+  border 0
+  border-radius 100px
+  cursor pointer
+  transition all $pt-transition-duration $pt-transition-timing
+  user-select none
+
+  &:hover:not(.pt-switch-disabled)
+    background-color $pt-text-color-secondary
+
+  // 开关内部
+  &-inner
+    display block
+    margin 0 7px 0 25px
+    color #fff
+    font-size $pt-font-size-sm
+    transition margin $pt-transition-duration $pt-transition-timing
+
+  // 开关按钮
+  &::after
+    position absolute
+    top 2px
+    left 2px
+    width 18px
+    height 18px
+    background-color #fff
+    border-radius 18px
+    content ''
+    cursor pointer
+    transition all $pt-transition-duration $pt-transition-timing
+
+  // 选中状态
+  &-checked
+    background-color $pt-primary-color
+
+    &:hover:not(.pt-switch-disabled)
+      background-color lighten($pt-primary-color, 10%)
+
+    .pt-switch-inner
+      margin 0 25px 0 7px
+
+    &::after
+      left calc(100% - 20px)
+
+  // 加载状态
+  &-loading
+    cursor default
+
+    &::after
+      background-color $pt-text-color-disabled
+
+  // 禁用状态
+  &-disabled
+    cursor not-allowed
+    opacity 0.4
+
+    &::after
+      background-color $pt-text-color-disabled
+      cursor not-allowed
+
+  // 尺寸变体
+  &-sm
+    min-width 28px
+    height 16px
+    line-height 16px
+
+    .pt-switch-inner
+      margin 0 5px 0 18px
+      font-size $pt-font-size-sm
+
+    &::after
+      width 12px
+      height 12px
+      border-radius 12px
+
+    &.pt-switch-checked
+      .pt-switch-inner
+        margin 0 18px 0 5px
+
+      &::after
+        left calc(100% - 14px)
+
+  &-lg
+    min-width 56px
+    height 28px
+    line-height 28px
+
+    .pt-switch-inner
+      margin 0 9px 0 32px
+      font-size $pt-font-size-lg
+
+    &::after
+      width 24px
+      height 24px
+      border-radius 24px
+
+    &.pt-switch-checked
+      .pt-switch-inner
+        margin 0 32px 0 9px
+
+      &::after
+        left calc(100% - 26px)
+
+  // 加载动画
+  &-loading-icon
+    position absolute
+    top 50%
+    left 50%
+    transform translate(-50%, -50%)
+    color #fff
+    font-size 12px
+    animation pt-spin 1s linear infinite
+
+@keyframes pt-spin
+  from
+    transform translate(-50%, -50%) rotate(0deg)
+  to
+    transform translate(-50%, -50%) rotate(360deg) 

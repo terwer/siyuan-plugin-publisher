@@ -8,12 +8,12 @@
   -->
 
 <template>
-  <div class="form-test-container">
+  <div class="pt-form-test-container">
     <h2>表单组件测试</h2>
 
-    <div class="test-section">
+    <div class="pt-test-section">
       <h3>基础输入框</h3>
-      <div class="form-group">
+      <div class="pt-form-group">
         <FormItem label="用户名">
           <Input v-model="formData.username" placeholder="请输入用户名" />
         </FormItem>
@@ -23,9 +23,9 @@
       </div>
     </div>
 
-    <div class="test-section">
+    <div class="pt-test-section">
       <h3>带验证的输入框</h3>
-      <div class="form-group">
+      <div class="pt-form-group">
         <FormItem label="邮箱" required>
           <Input v-model="formData.email" placeholder="请输入邮箱" :error="!!emailError" />
           <FormMessage v-if="emailError">{{ emailError }}</FormMessage>
@@ -37,9 +37,9 @@
       </div>
     </div>
 
-    <div class="test-section">
+    <div class="pt-test-section">
       <h3>数字输入框</h3>
-      <div class="form-group">
+      <div class="pt-form-group">
         <FormItem label="数量">
           <InputNumber v-model="formData.quantity" :min="0" :max="100" :step="1" />
         </FormItem>
@@ -49,9 +49,9 @@
       </div>
     </div>
 
-    <div class="test-section">
+    <div class="pt-test-section">
       <h3>文本域</h3>
-      <div class="form-group">
+      <div class="pt-form-group">
         <FormItem label="描述">
           <TextArea v-model="formData.description" placeholder="请输入描述" :rows="4" />
         </FormItem>
@@ -61,9 +61,9 @@
       </div>
     </div>
 
-    <div class="test-section">
+    <div class="pt-test-section">
       <h3>选择器</h3>
-      <div class="form-group">
+      <div class="pt-form-group">
         <FormItem label="城市">
           <Select v-model="formData.city" :options="cityOptions" placeholder="请选择城市" />
         </FormItem>
@@ -73,9 +73,9 @@
       </div>
     </div>
 
-    <div class="test-section">
+    <div class="pt-test-section">
       <h3>开关</h3>
-      <div class="form-group">
+      <div class="pt-form-group">
         <FormItem label="自动保存">
           <Switch v-model="formData.autoSave" />
         </FormItem>
@@ -85,9 +85,9 @@
       </div>
     </div>
 
-    <div class="test-section">
+    <div class="pt-test-section">
       <h3>表单布局</h3>
-      <div class="form-group">
+      <div class="pt-form-group">
         <Form layout="horizontal" :labelWidth="120">
           <FormItem label="用户名">
             <Input v-model="formData.username" placeholder="请输入用户名" />
@@ -97,7 +97,7 @@
           </FormItem>
         </Form>
       </div>
-      <div class="form-group">
+      <div class="pt-form-group">
         <Form layout="vertical">
           <FormItem label="用户名">
             <Input v-model="formData.username" placeholder="请输入用户名" />
@@ -107,7 +107,7 @@
           </FormItem>
         </Form>
       </div>
-      <div class="form-group">
+      <div class="pt-form-group">
         <Form layout="inline">
           <FormItem label="用户名">
             <Input v-model="formData.username" placeholder="请输入用户名" />
@@ -119,9 +119,9 @@
       </div>
     </div>
 
-    <div class="test-section">
+    <div class="pt-test-section">
       <h3>表单数据</h3>
-      <div class="form-data">
+      <div class="pt-form-data">
         <pre>{{ JSON.stringify(formData, null, 2) }}</pre>
       </div>
     </div>
@@ -185,39 +185,39 @@
   })
 </script>
 
-<style lang="stylus" scoped>
-  .form-test-container
-    padding: 20px
-    max-width: 1200px
-    margin: 0 auto
+<style lang="stylus">
+.pt-form-test-container
+  padding 20px
+  max-width 1200px
+  margin 0 auto
 
-  .test-section
-    margin-bottom: 40px
-    padding: 20px
-    border: 1px solid #eee
-    border-radius: 8px
-    background-color: #fff
+  .pt-test-section
+    margin-bottom 40px
+    padding 20px
+    border 1px solid var(--b3-border-color)
+    border-radius 8px
+    background-color var(--b3-theme-background)
 
     h3
-      margin-bottom: 15px
-      color: #333
-      font-size: 18px
+      margin-bottom 15px
+      color var(--b3-theme-on-background)
+      font-size 18px
 
-  .form-group
-    display: flex
-    flex-direction: column
-    gap: 20px
+  .pt-form-group
+    display flex
+    flex-direction column
+    gap 20px
 
-  .form-data
-    background-color: #f5f5f5
-    padding: 15px
-    border-radius: 4px
-    overflow-x: auto
+  .pt-form-data
+    background-color var(--b3-theme-background)
+    padding 15px
+    border-radius 4px
+    overflow-x auto
 
     pre
-      margin: 0
-      font-family: monospace
-      font-size: 14px
-      line-height: 1.5
-      color: #666
+      margin 0
+      font-family monospace
+      font-size 14px
+      line-height 1.5
+      color var(--b3-theme-on-background)
 </style>

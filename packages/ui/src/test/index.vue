@@ -8,40 +8,40 @@
   -->
 
 <template>
-  <div class="test-container">
-    <div class="test-header">
-      <div class="header-left">
+  <div class="pt-test-container">
+    <div class="pt-test-header">
+      <div class="pt-header-left">
         <h1>组件测试</h1>
-        <p class="subtitle">测试各种组件的展示效果和交互</p>
+        <p class="pt-subtitle">测试各种组件的展示效果和交互</p>
       </div>
-      <div class="theme-switch" @click="toggleTheme">
-        <span class="icon">{{ isDark ? '☀️' : '🌙' }}</span>
-        <span class="text">{{ isDark ? '浅色模式' : '暗色模式' }}</span>
+      <div class="pt-theme-switch" @click="toggleTheme">
+        <span class="pt-icon">{{ isDark ? '☀️' : '🌙' }}</span>
+        <span class="pt-text">{{ isDark ? '浅色模式' : '暗色模式' }}</span>
       </div>
     </div>
 
-    <nav class="test-nav">
-      <router-link to="/test/button" class="test-nav-item">
-        <span class="nav-icon">🔘</span>
-        <span class="nav-text">按钮组件</span>
+    <nav class="pt-test-nav">
+      <router-link to="/test/button" class="pt-test-nav-item">
+        <span class="pt-nav-icon">🔘</span>
+        <span class="pt-nav-text">按钮组件</span>
       </router-link>
-      <router-link to="/test/form" class="test-nav-item">
-        <span class="nav-icon">📝</span>
-        <span class="nav-text">表单组件</span>
+      <router-link to="/test/form" class="pt-test-nav-item">
+        <span class="pt-nav-icon">📝</span>
+        <span class="pt-nav-text">表单组件</span>
       </router-link>
-      <router-link to="/test/tab" class="test-nav-item">
-        <span class="nav-icon">📑</span>
-        <span class="nav-text">标签页组件</span>
+      <router-link to="/test/tab" class="pt-test-nav-item">
+        <span class="pt-nav-icon">📑</span>
+        <span class="pt-nav-text">标签页组件</span>
       </router-link>
-      <router-link to="/test/setting-panel" class="test-nav-item">
-        <span class="nav-icon">⚙️</span>
-        <span class="nav-text">设置面板组件</span>
+      <router-link to="/test/setting-panel" class="pt-test-nav-item">
+        <span class="pt-nav-icon">⚙️</span>
+        <span class="pt-nav-text">设置面板组件</span>
       </router-link>
     </nav>
 
-    <div class="test-content">
+    <div class="pt-test-content">
       <router-view v-slot="{ Component }">
-        <transition name="fade" mode="out-in">
+        <transition name="pt-fade" mode="out-in">
           <component :is="Component" />
         </transition>
       </router-view>
@@ -88,104 +88,104 @@
     $hover-color = #111b26
     $active-color = #177ddc
 
-  .test-container
+  .pt-test-container
     padding 24px
-    background-color $background-color
+    background-color var(--b3-theme-background)
     min-height 100vh
     transition all 0.3s ease
 
-  .test-header
+  .pt-test-header
     display flex
     justify-content space-between
     align-items center
     margin-bottom 24px
     padding-bottom 16px
-    border-bottom 1px solid $border-color
+    border-bottom 1px solid var(--b3-border-color)
 
-    .header-left
+    .pt-header-left
       h1
-        color $text-color
+        color var(--b3-theme-on-background)
         margin 0
         font-size 24px
         font-weight 500
 
-      .subtitle
-        color $text-color-secondary
+      .pt-subtitle
+        color var(--b3-theme-on-background-secondary)
         margin 8px 0 0
         font-size 14px
 
-  .theme-switch
+  .pt-theme-switch
     display flex
     align-items center
     gap 8px
     padding 4px 12px
     border-radius 4px
-    background-color $component-background
-    border 1px solid $border-color
-    color $text-color
+    background-color var(--b3-theme-background)
+    border 1px solid var(--b3-border-color)
+    color var(--b3-theme-on-background)
     cursor pointer
     transition all 0.3s ease
     user-select none
 
     &:hover
-      color $primary-color
-      border-color $primary-color
+      color var(--b3-theme-primary)
+      border-color var(--b3-theme-primary)
 
-    .icon
+    .pt-icon
       font-size 16px
 
-    .text
+    .pt-text
       font-size 14px
 
-  .test-nav
+  .pt-test-nav
     margin 0 0 24px
     display flex
     gap 8px
     padding 4px
-    background-color $component-background
+    background-color var(--b3-theme-background)
     border-radius 4px
-    border 1px solid $border-color
+    border 1px solid var(--b3-border-color)
 
-  .test-nav-item
+  .pt-test-nav-item
     padding 8px 16px
     border-radius 2px
     text-decoration none
-    color $text-color
+    color var(--b3-theme-on-background)
     transition all 0.3s ease
     display flex
     align-items center
     gap 8px
     cursor pointer
 
-    .nav-icon
+    .pt-nav-icon
       font-size 16px
 
-    .nav-text
+    .pt-nav-text
       font-size 14px
 
     &:hover
-      color $primary-color
-      background-color $hover-color
+      color var(--b3-theme-primary)
+      background-color var(--b3-theme-hover)
 
     &.router-link-active
-      color $primary-color
-      background-color $hover-color
+      color var(--b3-theme-primary)
+      background-color var(--b3-theme-hover)
       font-weight 500
 
-  .test-content
+  .pt-test-content
     padding 24px
-    background-color $component-background
+    background-color var(--b3-theme-background)
     border-radius 4px
-    border 1px solid $border-color
+    border 1px solid var(--b3-border-color)
     transition all 0.3s ease
     min-height 500px
 
   // 路由切换动画
-  .fade-enter-active,
-  .fade-leave-active
+  .pt-fade-enter-active,
+  .pt-fade-leave-active
     transition opacity 0.2s ease
 
-  .fade-enter-from,
-  .fade-leave-to
+  .pt-fade-enter-from,
+  .pt-fade-leave-to
     opacity 0
 </style>

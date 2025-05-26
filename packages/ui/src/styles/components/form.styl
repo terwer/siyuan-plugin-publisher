@@ -1,5 +1,9 @@
+@import '../variables.styl'
+
 #publisherApp
   .pt-form
+    position relative
+    width 100%
     display: flex
     flex-direction: column
     gap: 24px
@@ -7,72 +11,84 @@
     // 水平布局
     &--horizontal
       .pt-form-item
-        display: flex
-        align-items: flex-start
+        display flex
+        flex-wrap nowrap
 
         .pt-form-item__label
-          flex: none
-          text-align: right
-          padding-right: 12px
+          flex 0 0 auto
 
         .pt-form-item__control
-          flex: 1
-          min-width: 0
+          flex 1 1 auto
 
     // 垂直布局
     &--vertical
       .pt-form-item
-        display: flex
-        flex-direction: column
-        gap: 8px
-
-        .pt-form-item__label
-          text-align: left
+        display block
+        text-align left
+        margin-bottom 8px
 
     // 行内布局
     &--inline
-      flex-direction: row
-      flex-wrap: wrap
-      gap: 16px
+      display flex
+      flex-wrap wrap
+      align-items flex-start
 
       .pt-form-item
-        display: inline-flex
-        align-items: center
-        margin-right: 16px
-        margin-bottom: 0
+        display flex
+        flex-wrap nowrap
+        margin-right 16px
+        margin-bottom 0
 
-        .pt-form-item__label
-          margin-right: 8px
+        &:last-child
+          margin-right 0
 
   .pt-form-item
-    margin-bottom: 24px
+    position relative
+    margin-bottom 24px
+    vertical-align top
 
     &:last-child
       margin-bottom: 0
 
     &__label
-      display: inline-block
-      color: var(--pt-text-color)
-      font-size: 14px
-      line-height: 1.5
-      white-space: nowrap
+      display inline-block
+      flex-grow 0
+      overflow hidden
+      white-space nowrap
+      text-align right
+      vertical-align middle
 
-      &--required::before
-        content: "*"
-        color: var(--pt-error-color)
-        margin-right: 4px
+      &-left
+        text-align left
+
+      &-required
+        &::before
+          display inline-block
+          margin-right 4px
+          color $pt-error-color
+          font-size $pt-font-size-base
+          line-height 1
+          content '*'
+
+      &-colon
+        &::after
+          content ':'
+          margin 0 8px 0 2px
 
     &__control
-      position: relative
+      position relative
+      display flex
+      flex-direction column
+      flex-grow 1
 
     &__message
-      position: absolute
-      left: 0
-      top: 100%
-      margin-top: 4px
-      color: var(--pt-error-color)
-      font-size: 12px
-      line-height: 1.5
+      position absolute
+      top 100%
+      left 0
+      margin-top 4px
+      color $pt-text-color-secondary
+      font-size $pt-font-size-sm
+      line-height $pt-line-height-base
 
   .pt-form-control
     width: 100%
@@ -80,4 +96,55 @@
   .pt-form-message
     color: var(--pt-text-color-secondary)
     font-size: 12px
-    line-height: 1.5 
+    line-height: 1.5
+
+  // 表单尺寸
+  &-small
+    .pt-form-item
+      margin-bottom 16px
+
+    .pt-form-item__label
+      font-size $pt-font-size-sm
+
+    .pt-form-item__message
+      font-size $pt-font-size-sm
+
+  &-large
+    .pt-form-item
+      margin-bottom 32px
+
+    .pt-form-item__label
+      font-size $pt-font-size-lg
+
+    .pt-form-item__message
+      font-size $pt-font-size-lg
+
+  // 表单验证
+  &-validate-status
+    &-success
+      .pt-form-item__control-input
+        background-color $pt-success-color
+
+    &-warning
+      .pt-form-item__control-input
+        background-color $pt-warning-color
+
+    &-error
+      .pt-form-item__control-input
+        background-color $pt-error-color
+
+    &-validating
+      .pt-form-item__control-input
+        background-color $pt-info-color
+
+  // 表单操作
+  &-actions
+    display flex
+    justify-content flex-end
+    margin-top 24px
+
+    .pt-btn
+      margin-left 8px
+
+      &:first-child
+        margin-left 0 

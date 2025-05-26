@@ -1,107 +1,170 @@
-#publisherApp
-  .pt-tooltip
-    display: inline-block
-    position: relative
+@import '../variables.styl'
 
-    &__trigger
-      display: inline-block
-      position: relative
+.pt-tooltip
+  position absolute
+  z-index $pt-zindex-tooltip
+  display block
+  visibility visible
+  font-size $pt-font-size-base
+  line-height $pt-line-height-base
+  opacity 0
+  transition opacity $pt-transition-duration $pt-transition-timing
 
-    &__content
-      position: fixed
-      max-width: 200px
-      padding: 4px 8px
-      color: #fff
-      text-align: left
-      text-decoration: none
-      white-space: normal
-      background-color: rgba(0, 0, 0, 0.75)
-      border-radius: $border-radius-base
-      box-shadow: $box-shadow-base
-      z-index: 1000
+  &-visible
+    opacity 1
 
-      &--arrow
-        &::before
-          content: ""
-          position: absolute
-          width: 0
-          height: 0
-          border: 4px solid transparent
+  // 工具提示内容
+  &-content
+    position relative
+    max-width 250px
+    padding 6px 8px
+    color #fff
+    text-align left
+    text-decoration none
+    word-wrap break-word
+    background-color rgba(0, 0, 0, 0.75)
+    border-radius $pt-border-radius-base
+    box-shadow $pt-box-shadow
 
-        &--top::before
-          bottom: -8px
-          left: 50%
-          margin-left: -4px
-          border-top-color: rgba(0, 0, 0, 0.75)
+  // 工具提示箭头
+  &-arrow
+    position absolute
+    display block
+    width 8px
+    height 8px
+    background-color rgba(0, 0, 0, 0.75)
+    transform rotate(45deg)
 
-        &--topLeft::before
-          bottom: -8px
-          left: 12px
-          border-top-color: rgba(0, 0, 0, 0.75)
+    &-content
+      position absolute
+      top 0
+      right 0
+      bottom 0
+      left 0
+      display block
+      width 8px
+      height 8px
+      margin auto
+      background-color rgba(0, 0, 0, 0.75)
+      content ''
 
-        &--topRight::before
-          bottom: -8px
-          right: 12px
-          border-top-color: rgba(0, 0, 0, 0.75)
+  // 工具提示位置
+  &-placement
+    &-top
+      .pt-tooltip-arrow
+        bottom -4px
+        left 50%
+        transform translateX(-50%) rotate(45deg)
 
-        &--bottom::before
-          top: -8px
-          left: 50%
-          margin-left: -4px
-          border-bottom-color: rgba(0, 0, 0, 0.75)
+    &-topLeft
+      .pt-tooltip-arrow
+        bottom -4px
+        left 16px
+        transform rotate(45deg)
 
-        &--bottomLeft::before
-          top: -8px
-          left: 12px
-          border-bottom-color: rgba(0, 0, 0, 0.75)
+    &-topRight
+      .pt-tooltip-arrow
+        bottom -4px
+        right 16px
+        transform rotate(45deg)
 
-        &--bottomRight::before
-          top: -8px
-          right: 12px
-          border-bottom-color: rgba(0, 0, 0, 0.75)
+    &-right
+      .pt-tooltip-arrow
+        top 50%
+        left -4px
+        transform translateY(-50%) rotate(45deg)
 
-        &--left::before
-          right: -8px
-          top: 50%
-          margin-top: -4px
-          border-left-color: rgba(0, 0, 0, 0.75)
+    &-rightTop
+      .pt-tooltip-arrow
+        top 12px
+        left -4px
+        transform rotate(45deg)
 
-        &--leftTop::before
-          right: -8px
-          top: 12px
-          border-left-color: rgba(0, 0, 0, 0.75)
+    &-rightBottom
+      .pt-tooltip-arrow
+        bottom 12px
+        left -4px
+        transform rotate(45deg)
 
-        &--leftBottom::before
-          right: -8px
-          bottom: 12px
-          border-left-color: rgba(0, 0, 0, 0.75)
+    &-bottom
+      .pt-tooltip-arrow
+        top -4px
+        left 50%
+        transform translateX(-50%) rotate(45deg)
 
-        &--right::before
-          left: -8px
-          top: 50%
-          margin-top: -4px
-          border-right-color: rgba(0, 0, 0, 0.75)
+    &-bottomLeft
+      .pt-tooltip-arrow
+        top -4px
+        left 16px
+        transform rotate(45deg)
 
-        &--rightTop::before
-          left: -8px
-          top: 12px
-          border-right-color: rgba(0, 0, 0, 0.75)
+    &-bottomRight
+      .pt-tooltip-arrow
+        top -4px
+        right 16px
+        transform rotate(45deg)
 
-        &--rightBottom::before
-          left: -8px
-          bottom: 12px
-          border-right-color: rgba(0, 0, 0, 0.75)
+    &-left
+      .pt-tooltip-arrow
+        top 50%
+        right -4px
+        transform translateY(-50%) rotate(45deg)
 
-    &__inner
-      font-size: $font-size-base
-      line-height: 1.5715
-      white-space: normal
-      word-break: break-word
+    &-leftTop
+      .pt-tooltip-arrow
+        top 12px
+        right -4px
+        transform rotate(45deg)
 
-  .pt-fade-enter-active,
-  .pt-fade-leave-active
-    transition: opacity $animation-duration-base $animation-timing-function-base
+    &-leftBottom
+      .pt-tooltip-arrow
+        bottom 12px
+        right -4px
+        transform rotate(45deg)
 
-  .pt-fade-enter-from,
-  .pt-fade-leave-to
-    opacity: 0 
+  // 工具提示动画
+  &-fade-enter
+    opacity 0
+    transform scale(0.8)
+
+  &-fade-enter-active
+    opacity 1
+    transform scale(1)
+
+  &-fade-exit
+    opacity 1
+    transform scale(1)
+
+  &-fade-exit-active
+    opacity 0
+    transform scale(0.8)
+
+  // 工具提示触发元素
+  &-trigger
+    display inline-block
+    cursor pointer
+
+  // 工具提示主题
+  &-theme
+    &-light
+      .pt-tooltip-content
+        color $pt-text-color
+        background-color $pt-bg-color
+        box-shadow $pt-box-shadow
+
+      .pt-tooltip-arrow
+        background-color $pt-bg-color
+
+        &-content
+          background-color $pt-bg-color
+
+    &-dark
+      .pt-tooltip-content
+        color #fff
+        background-color rgba(0, 0, 0, 0.75)
+
+      .pt-tooltip-arrow
+        background-color rgba(0, 0, 0, 0.75)
+
+        &-content
+          background-color rgba(0, 0, 0, 0.75) 

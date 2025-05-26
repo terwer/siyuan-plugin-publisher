@@ -19,7 +19,6 @@
 
 <script setup lang="ts">
 import { inject, onMounted, onBeforeUnmount } from "vue"
-import "../../styles/navigation/tab-pane.styl"
 
 interface Props {
   name: string
