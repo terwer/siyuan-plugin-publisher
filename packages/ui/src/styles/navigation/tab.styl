@@ -1,0 +1,138 @@
+.pt-tab
+  display flex
+  width 100%
+  height 100%
+  background var(--b3-theme-background)
+  border-radius 8px
+  box-shadow 0 2px 8px var(--b3-theme-shadow)
+  position relative
+
+  &--vertical
+    flex-direction row
+
+    .pt-tab__header
+      width 100px
+      transition width 0.3s ease, border 0.3s ease, opacity 0.3s ease
+      border-right 1px solid var(--b3-border-color)
+      position absolute
+      left 0
+      top 0
+      bottom 0
+      height 100%
+      flex-shrink 0
+      z-index 10
+
+      &--collapsed
+        width 0
+        opacity 0
+        visibility hidden
+        border-right-color transparent
+
+  &__header
+    position absolute
+    left 0
+    top 0
+    bottom 0
+    background var(--b3-theme-background)
+    flex-shrink 0
+    height 100%
+    z-index 10
+
+  &__nav
+    width 100px
+    min-width 100px
+    height 100%
+    transition width 0.3s ease
+    list-style none
+    padding 0
+    margin 0
+
+  &__item
+    display flex
+    width 100%
+    padding 12px 20px
+    border none
+    background none
+    color var(--b3-theme-on-background)
+    font-size 14px
+    text-align left
+    cursor pointer
+    transition all 0.2s ease
+    position relative
+
+    &:hover:not(.pt-tab__item--active)
+      background var(--b3-theme-hover)
+
+    &--active
+      background var(--b3-theme-primary)
+      color var(--b3-theme-on-primary)
+      &::after
+        content ''
+        position absolute
+        right 0
+        top 50%
+        transform translateY(-50%)
+        height 60%
+        width 3px
+        background var(--b3-theme-primary)
+        border-radius 2px
+
+    &--disabled
+      cursor not-allowed
+      opacity 0.5
+
+  &__collapse-handle
+    position absolute
+    left 100px
+    top 22px
+    width 32px
+    height 32px
+    padding 6px
+    background var(--b3-theme-background)
+    border 1px solid var(--b3-border-color)
+    border-radius 50%
+    box-shadow 0 2px 8px var(--b3-theme-shadow)
+    cursor pointer
+    transition all 0.3s ease
+    z-index 100
+    transform translateX(-50%)
+    display flex
+    align-items center
+    justify-content center
+
+    .pt-tab--vertical .pt-tab__header--collapsed + &
+      left 4px
+      background var(--b3-theme-background)
+      border-color var(--b3-border-color)
+      box-shadow 2px 0 8px var(--b3-theme-shadow)
+      padding-left 8px
+      padding-right 4px
+
+    &:hover
+      transform translateX(-50%) scale(1.1)
+      box-shadow 0 4px 12px var(--b3-theme-shadow)
+      background var(--b3-theme-hover)
+
+  &__collapse-icon
+    width 16px
+    height 16px
+    fill var(--b3-theme-on-background)
+    transition transform 0.3s ease
+
+    .pt-tab--vertical .pt-tab__header--collapsed + .pt-tab__collapse-handle &
+      transform rotate(180deg)
+
+  &__content
+    flex 1
+    min-width 0
+    height 100%
+    background var(--b3-theme-background)
+    padding 2px 6px
+    display flex
+    flex-direction column
+    overflow hidden
+    margin-left 100px
+    transition margin-left 0.3s ease
+
+    &--collapsed
+      margin-left 0 

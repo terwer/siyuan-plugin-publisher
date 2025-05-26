@@ -1,7 +1,7 @@
 export interface SettingItem {
-  type: "input" | "switch" | "select" | "number" | "textarea"
+  type: "input" | "switch" | "select" | "number" | "textarea" | "group"
   label: string
-  value: any
+  value?: any
   placeholder?: string
   readonly?: boolean
   disabled?: boolean
@@ -12,4 +12,5 @@ export interface SettingItem {
     value: any
   }>
   onChange?: (value: any) => void
+  items?: SettingItem[]
 }

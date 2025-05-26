@@ -1,0 +1,90 @@
+#publisherApp
+  .pt-setting-panel
+    background var(--panel-bg)
+    border-radius 8px
+    box-shadow 0 1px 2px 0 var(--panel-shadow)
+    transition all 0.3s
+
+    &.pt-panel-bordered
+      border 1px solid var(--border-color)
+
+  .pt-panel-header
+    padding 16px 24px
+    border-bottom 1px solid var(--border-color)
+
+  .pt-panel-title
+    margin 0
+    color var(--text-primary)
+    font-weight 500
+    font-size 16px
+    line-height 1.4
+
+  .pt-panel-body
+    padding 24px
+    min-height 200px
+
+    &.pt-panel-loading
+      opacity 0.6
+      pointer-events none
+
+  .pt-panel-footer
+    padding 16px 24px
+    border-top 1px solid var(--border-color)
+    background var(--footer-bg)
+
+  .pt-footer-actions
+    display flex
+    justify-content flex-end
+    gap 8px
+
+  .pt-btn
+    padding 4px 15px
+    font-size 14px
+    border-radius 6px
+    border 1px solid transparent
+    cursor pointer
+    transition all 0.3s
+
+    &.pt-btn-default
+      background var(--btn-default-bg)
+      border-color var(--btn-default-border)
+      color var(--btn-default-color)
+
+      &:hover
+        background var(--btn-default-hover-bg)
+        border-color var(--btn-default-hover-border)
+        color var(--btn-default-hover-color)
+
+    &.pt-btn-primary
+      background var(--primary-color)
+      border-color var(--primary-color)
+      color #fff
+
+      &:hover
+        background var(--primary-hover-color)
+        border-color var(--primary-hover-color)
+
+/* 主题变量 */
+:root
+  --panel-bg #ffffff
+  --panel-shadow rgba(0, 0, 0, 0.06)
+  --border-color #f0f0f0
+  --footer-bg #fafafa
+  --btn-default-bg #ffffff
+  --btn-default-border #d9d9d9
+  --btn-default-color rgba(0, 0, 0, 0.88)
+  --btn-default-hover-bg #f5f5f5
+  --btn-default-hover-border #d9d9d9
+  --btn-default-hover-color var(--primary-color)
+
+[data-theme="dark"]
+  --panel-bg #1f1f1f
+  --panel-shadow rgba(0, 0, 0, 0.25)
+  --border-color rgba(255, 255, 255, 0.12)
+  --footer-bg #141414
+  --btn-default-bg #1f1f1f
+  --btn-default-border #434343
+  --btn-default-color rgba(255, 255, 255, 0.85)
+  --btn-default-hover-bg #303030
+  --btn-default-hover-border #434343
+  --btn-default-hover-color var(--primary-color) 
