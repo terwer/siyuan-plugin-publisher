@@ -132,11 +132,39 @@
     <div class="test-section">
       <h3>按钮组合</h3>
       <div class="button-group">
-        <Button.Group>
+        <ButtonGroup>
           <Button type="primary" @click="handleClick('group-1')">按钮1</Button>
           <Button @click="handleClick('group-2')">按钮2</Button>
           <Button type="primary" @click="handleClick('group-3')">按钮3</Button>
-        </Button.Group>
+        </ButtonGroup>
+      </div>
+      <div class="button-group" style="margin-top: 16px;">
+        <ButtonGroup>
+          <Button type="primary" @click="handleClick('group-4')">按钮1</Button>
+          <Button type="primary" @click="handleClick('group-5')">按钮2</Button>
+          <Button type="primary" @click="handleClick('group-6')">按钮3</Button>
+        </ButtonGroup>
+      </div>
+      <div class="button-group" style="margin-top: 16px;">
+        <ButtonGroup>
+          <Button type="dashed" @click="handleClick('group-7')">按钮1</Button>
+          <Button type="dashed" @click="handleClick('group-8')">按钮2</Button>
+          <Button type="dashed" @click="handleClick('group-9')">按钮3</Button>
+        </ButtonGroup>
+      </div>
+      <div class="button-group" style="margin-top: 16px;">
+        <ButtonGroup>
+          <Button type="text" @click="handleClick('group-10')">按钮1</Button>
+          <Button type="text" @click="handleClick('group-11')">按钮2</Button>
+          <Button type="text" @click="handleClick('group-12')">按钮3</Button>
+        </ButtonGroup>
+      </div>
+      <div class="button-group" style="margin-top: 16px;">
+        <ButtonGroup>
+          <Button type="link" @click="handleClick('group-13')">按钮1</Button>
+          <Button type="link" @click="handleClick('group-14')">按钮2</Button>
+          <Button type="link" @click="handleClick('group-15')">按钮3</Button>
+        </ButtonGroup>
       </div>
     </div>
 
@@ -151,7 +179,7 @@
 
 <script setup lang="ts">
   import { ref } from "vue"
-  import Button from "../components/form/Button.vue"
+  import { Button, ButtonGroup } from "../components/form"
 
   const loading = ref(false)
   const eventLogs = ref<string[]>([])

@@ -1,0 +1,83 @@
+#publisherApp
+  .pt-button-group
+    display: inline-flex
+    align-items: center
+
+    .pt-button
+      position: relative
+      z-index: 1
+      border-radius: 0
+
+      &:not(:first-child)
+        margin-left: -1px
+
+      &:first-child
+        border-top-left-radius: var(--pt-btn-radius)
+        border-bottom-left-radius: var(--pt-btn-radius)
+
+      &:last-child
+        border-top-right-radius: var(--pt-btn-radius)
+        border-bottom-right-radius: var(--pt-btn-radius)
+
+      &:hover
+        z-index: 2
+
+      &:focus
+        z-index: 2
+
+      &:active
+        z-index: 2
+
+      &.button-primary
+        &:not(:first-child)
+          border-left-color: $btn-primary-hover-border
+
+        &:not(:last-child)
+          border-right-color: $btn-primary-hover-border
+
+      &.button-default
+        &:not(:first-child)
+          border-left-color: $btn-default-hover-border
+
+        &:not(:last-child)
+          border-right-color: $btn-default-hover-border
+
+      &.button-dashed
+        &:not(:first-child)
+          border-left-color: $btn-default-hover-border
+
+        &:not(:last-child)
+          border-right-color: $btn-default-hover-border
+
+      &.button-text
+        &:not(:first-child)
+          border-left-color: transparent
+
+        &:not(:last-child)
+          border-right-color: transparent
+
+      &.button-link
+        &:not(:first-child)
+          margin-left: 8px
+          border-left: none
+
+        &:not(:last-child)
+          border-right: none
+
+        color: #1677ff
+        background: transparent
+        border: none
+        padding: 0 8px
+
+        &:hover:not(.button-disabled)
+          color: #4096ff
+          text-decoration: underline
+
+        &:active:not(.button-disabled)
+          color: #0958d9
+
+      &.button-disabled
+        z-index: 0
+
+      &.button-loading
+        z-index: 0 
