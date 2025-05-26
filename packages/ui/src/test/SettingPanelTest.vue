@@ -1,16 +1,7 @@
-<!--
- * @Author: 2nu
- * @Date: 2025-02-19 14:00:00
- * @LastEditors: 2nu
- * @LastEditTime: 2025-02-19 14:00:00
- * @Description: SettingPanel 组件测试
--->
-
 <script setup lang="ts">
 import { ref } from "vue"
 import SettingPanel from "../components/navigation/SettingPanel.vue"
 import SettingGroup from "../components/navigation/SettingGroup.vue"
-import Button from "../components/form/Button.vue"
 import type { SettingItem } from "../types"
 
 // 基础设置
@@ -395,7 +386,9 @@ const handleCancel = () => {
   </div>
 </template>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
+@import '../styles/global/index.styl'
+
 .pt-test-page
   padding 20px
 

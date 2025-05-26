@@ -94,6 +94,8 @@ const handleClick = (event: MouseEvent) => {
 </script>
 
 <style lang="stylus" scoped>
+@import '../../styles/global/index.styl'
+
 .publisher-button
   position: relative
   display: inline-flex

@@ -18,6 +18,8 @@
 </script>
 
 <style lang="stylus" scoped>
+@import '../../styles/global/index.styl'
+
 .publisher-button-group
   display: inline-flex
   align-items: center

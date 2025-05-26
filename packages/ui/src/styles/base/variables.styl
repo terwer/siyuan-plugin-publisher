@@ -1,38 +1,64 @@
-// 主题色
+// 品牌色
 $primary-color = #1677ff
 $success-color = #52c41a
 $warning-color = #faad14
 $error-color = #ff4d4f
+$info-color = #1677ff
+
+// 中性色
+$gray-1 = #ffffff
+$gray-2 = #fafafa
+$gray-3 = #f5f5f5
+$gray-4 = #f0f0f0
+$gray-5 = #d9d9d9
+$gray-6 = #bfbfbf
+$gray-7 = #8c8c8c
+$gray-8 = #595959
+$gray-9 = #434343
+$gray-10 = #262626
+$gray-11 = #1f1f1f
+$gray-12 = #141414
+$gray-13 = #000000
 
 // 文字颜色
-$heading-color = rgba(0, 0, 0, 0.88)
-$text-color = rgba(0, 0, 0, 0.65)
+$text-color = rgba(0, 0, 0, 0.88)
 $text-color-secondary = rgba(0, 0, 0, 0.45)
-$disabled-color = rgba(0, 0, 0, 0.25)
+$text-color-disabled = rgba(0, 0, 0, 0.25)
+$heading-color = rgba(0, 0, 0, 0.88)
 
-// 边框和圆角
-$border-radius-base = 4px
-$border-color-base = #d9d9d9
+// 边框颜色
+$border-color = #d9d9d9
 $border-color-split = #f0f0f0
+
+// 背景色
+$bg-color = #ffffff
+$bg-color-light = #fafafa
+
+// 字体
+$font-family = -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif
+$font-size-base = 14px
+$font-size-sm = 12px
+$font-size-lg = 16px
+$line-height-base = 1.5715
+$line-height-sm = 1.5
+$line-height-lg = 1.75
+
+// 间距
+$spacing-xs = 4px
+$spacing-sm = 8px
+$spacing-md = 12px
+$spacing-lg = 16px
+$spacing-xl = 24px
+
+// 圆角
+$border-radius-base = 2px
+$border-radius-sm = 2px
+$border-radius-lg = 4px
 
 // 阴影
 $box-shadow-base = 0 2px 8px rgba(0, 0, 0, 0.15)
-
-// 字体
-$font-size-base = 14px
-$font-size-lg = 16px
-$font-size-sm = 12px
-$font-family = -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
-  'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-  'Noto Color Emoji'
-
-// 间距
-$spacing-unit = 8px
-$spacing-xs = $spacing-unit
-$spacing-sm = $spacing-unit * 2
-$spacing-md = $spacing-unit * 3
-$spacing-lg = $spacing-unit * 4
-$spacing-xl = $spacing-unit * 5
+$box-shadow-sm = 0 2px 4px rgba(0, 0, 0, 0.1)
+$box-shadow-lg = 0 4px 12px rgba(0, 0, 0, 0.2)
 
 // 动画
 $animation-duration-base = 0.2s
@@ -40,90 +66,18 @@ $animation-duration-slow = 0.3s
 $animation-duration-fast = 0.1s
 $animation-timing-function-base = cubic-bezier(0.645, 0.045, 0.355, 1)
 
-// 响应式断点
-$screen-xs = 480px
-$screen-sm = 576px
-$screen-md = 768px
-$screen-lg = 992px
-$screen-xl = 1200px
-$screen-xxl = 1600px
+// 组件尺寸
+$height-base = 32px
+$height-sm = 24px
+$height-lg = 40px
 
-// 按钮变量
-// 基础尺寸
-$btn-height-base = 32px
-$btn-height-lg = 40px
-$btn-height-sm = 24px
-$btn-padding-base = 0 $spacing-md
-$btn-padding-lg = 0 $spacing-lg
-$btn-padding-sm = 0 $spacing-sm
-$btn-font-size-base = $font-size-base
-$btn-font-size-lg = $font-size-lg
-$btn-font-size-sm = $font-size-sm
-$btn-radius-base = $border-radius-base + 2px
-$btn-radius-lg = $border-radius-base + 4px
-$btn-radius-sm = $border-radius-base
-
-// 按钮颜色
-$btn-default-bg = #ffffff
-$btn-default-border = $border-color-base
-$btn-default-color = $heading-color
-$btn-default-hover-bg = rgba(0, 0, 0, 0.04)
-$btn-default-hover-border = $border-color-base
-$btn-default-hover-color = $heading-color
-$btn-default-active-bg = darken($btn-default-hover-bg, 5%)
-$btn-default-active-border = $border-color-base
-$btn-default-active-color = $heading-color
-
-// 主要按钮
-$btn-primary-bg = $primary-color
-$btn-primary-border = $primary-color
-$btn-primary-color = #ffffff
-$btn-primary-hover-bg = lighten($primary-color, 10%)
-$btn-primary-hover-border = lighten($primary-color, 10%)
-$btn-primary-hover-color = #ffffff
-$btn-primary-active-bg = darken($primary-color, 10%)
-$btn-primary-active-border = darken($primary-color, 10%)
-$btn-primary-active-color = #ffffff
-
-// 危险按钮
-$btn-danger-bg = $error-color
-$btn-danger-border = $error-color
-$btn-danger-color = #ffffff
-$btn-danger-hover-bg = #ff7875
-$btn-danger-hover-border = #ff7875
-$btn-danger-hover-color = #ffffff
-$btn-danger-active-bg = #d9363e
-$btn-danger-active-border = #d9363e
-$btn-danger-active-color = #ffffff
-
-// 危险默认按钮
-$btn-danger-default-color = $error-color
-$btn-danger-default-border = $error-color
-$btn-danger-default-hover-bg = rgba(255, 77, 79, 0.1)
-$btn-danger-default-hover-border = $error-color
-$btn-danger-default-hover-color = $error-color
-$btn-danger-default-active-bg = rgba(255, 77, 79, 0.2)
-$btn-danger-default-active-border = $error-color
-$btn-danger-default-active-color = $error-color
-
-// 危险虚线按钮
-$btn-danger-dashed-color = $error-color
-$btn-danger-dashed-border = $error-color
-$btn-danger-dashed-hover-bg = rgba(255, 77, 79, 0.1)
-$btn-danger-dashed-hover-border = $error-color
-$btn-danger-dashed-hover-color = $error-color
-$btn-danger-dashed-active-bg = rgba(255, 77, 79, 0.2)
-$btn-danger-dashed-active-border = $error-color
-$btn-danger-dashed-active-color = $error-color
-
-// 危险文本按钮
-$btn-danger-text-color = $error-color
-$btn-danger-text-hover-bg = rgba(255, 77, 79, 0.06)
-$btn-danger-text-hover-color = #d9363e
-$btn-danger-text-active-bg = rgba(255, 77, 79, 0.16)
-$btn-danger-text-active-color = #d9363e
-
-// 危险链接按钮
-$btn-danger-link-color = $error-color
-$btn-danger-link-hover-color = #d9363e
-$btn-danger-link-active-color = #a61d24 
+// 组件层级
+$zindex-popup-base = 1000
+$zindex-popup = 1050
+$zindex-modal = 1000
+$zindex-message = 1010
+$zindex-notification = 1010
+$zindex-popover = 1030
+$zindex-dropdown = 1050
+$zindex-picker = 1050
+$zindex-tooltip = 1070 

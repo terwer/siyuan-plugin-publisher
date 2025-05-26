@@ -45,7 +45,9 @@ const formContext = inject<FormContext>("formContext", {
 })
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
+@import '../../styles/global/index.styl'
+
 .pt-form-item
   margin-bottom: 24px
 

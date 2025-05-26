@@ -50,7 +50,9 @@ const computedType = computed(() => {
   </div>
 </template>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
+@import '../../styles/global/index.styl'
+
 .input-container
   position relative
   width 100%

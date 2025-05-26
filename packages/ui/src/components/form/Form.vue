@@ -62,6 +62,8 @@ const handleSubmit = () => {
 </script>
 
 <style lang="stylus">
+@import '../../styles/global/index.styl'
+
 .pt-form
   width: 100%
 

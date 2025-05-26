@@ -1,241 +1,229 @@
-@import '../variables.styl'
+@import '../base'
 
 .pt-btn
-  position relative
-  display inline-flex
-  align-items center
-  justify-content center
-  font-weight 400
-  white-space nowrap
-  text-align center
-  background-image none
-  border $pt-border-width $pt-border-style transparent
-  box-shadow 0 2px 0 rgba(0, 0, 0, 0.015)
-  cursor pointer
-  transition all $pt-transition-duration $pt-transition-timing
-  user-select none
-  touch-action manipulation
-  height $pt-height-base
-  padding 4px 15px
-  font-size $pt-font-size-base
-  border-radius $pt-border-radius-base
-  color $pt-text-color
-  background $pt-bg-color
-  border-color $pt-border-color
+  button-base()
+  font-weight: 400
+  text-align: center
+  background-image: none
+  border: 1px solid transparent
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.015)
+  color: $text-color
+  background: $bg-color
+  border-color: $border-color
 
   &:hover
-    color $pt-primary-color
-    background $pt-bg-color-light
-    border-color $pt-primary-color
+    color: $primary-color
+    background: $bg-color-light
+    border-color: $primary-color
 
   &:active
-    color $pt-primary-color
-    background $pt-bg-color-light
-    border-color $pt-primary-color
+    color: $primary-color
+    background: $bg-color-light
+    border-color: $primary-color
 
   &[disabled]
-    color $pt-text-color-disabled
-    background $pt-bg-color-light
-    border-color $pt-border-color
-    cursor not-allowed
+    color: $text-color-disabled
+    background: $bg-color-light
+    border-color: $border-color
+    disabled()
 
   // 尺寸变体
   &-sm
-    height $pt-height-sm
-    padding 0 7px
-    font-size $pt-font-size-sm
-    border-radius $pt-border-radius-sm
+    height: $height-sm
+    padding: 0 $spacing-sm
+    font-size: $font-size-sm
+    border-radius: $border-radius-sm
 
   &-lg
-    height $pt-height-lg
-    padding 0 15px
-    font-size $pt-font-size-lg
-    border-radius $pt-border-radius-lg
+    height: $height-lg
+    padding: 0 $spacing-lg
+    font-size: $font-size-lg
+    border-radius: $border-radius-lg
 
   // 类型变体
   &-primary
-    color #fff
-    background $pt-primary-color
-    border-color $pt-primary-color
-    text-shadow 0 -1px 0 rgba(0, 0, 0, 0.12)
-    box-shadow 0 2px 0 rgba(0, 0, 0, 0.045)
+    color: $gray-1
+    background: $primary-color
+    border-color: $primary-color
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12)
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045)
 
     &:hover
-      background lighten($pt-primary-color, 10%)
-      border-color lighten($pt-primary-color, 10%)
-      color #fff
+      background: lighten($primary-color, 10%)
+      border-color: lighten($primary-color, 10%)
+      color: $gray-1
 
     &:active
-      background darken($pt-primary-color, 10%)
-      border-color darken($pt-primary-color, 10%)
-      color #fff
+      background: darken($primary-color, 10%)
+      border-color: darken($primary-color, 10%)
+      color: $gray-1
 
     &[disabled]
-      color rgba(255, 255, 255, 0.35)
-      background $pt-primary-color
-      border-color $pt-primary-color
+      color: rgba(255, 255, 255, 0.35)
+      background: $primary-color
+      border-color: $primary-color
 
   &-dashed
-    color $pt-text-color
-    background $pt-bg-color
-    border-color $pt-border-color
-    border-style dashed
+    color: $text-color
+    background: $bg-color
+    border-color: $border-color
+    border-style: dashed
 
     &:hover
-      color $pt-primary-color
-      background $pt-bg-color-light
-      border-color $pt-primary-color
+      color: $primary-color
+      background: $bg-color-light
+      border-color: $primary-color
 
     &:active
-      color $pt-primary-color
-      background $pt-bg-color-light
-      border-color $pt-primary-color
+      color: $primary-color
+      background: $bg-color-light
+      border-color: $primary-color
 
     &[disabled]
-      color $pt-text-color-disabled
-      background $pt-bg-color-light
-      border-color $pt-border-color
+      color: $text-color-disabled
+      background: $bg-color-light
+      border-color: $border-color
 
   &-text
-    color $pt-text-color
-    background transparent
-    border-color transparent
-    box-shadow none
+    color: $text-color
+    background: transparent
+    border-color: transparent
+    box-shadow: none
 
     &:hover
-      color $pt-primary-color
-      background $pt-bg-color-light
-      border-color transparent
+      color: $primary-color
+      background: $bg-color-light
+      border-color: transparent
 
     &:active
-      color $pt-primary-color
-      background $pt-bg-color-light
-      border-color transparent
+      color: $primary-color
+      background: $bg-color-light
+      border-color: transparent
 
     &[disabled]
-      color $pt-text-color-disabled
-      background transparent
-      border-color transparent
+      color: $text-color-disabled
+      background: transparent
+      border-color: transparent
 
   &-link
-    color $pt-primary-color
-    background transparent
-    border-color transparent
-    box-shadow none
+    color: $primary-color
+    background: transparent
+    border-color: transparent
+    box-shadow: none
 
     &:hover
-      color lighten($pt-primary-color, 10%)
-      background transparent
-      border-color transparent
+      color: lighten($primary-color, 10%)
+      background: transparent
+      border-color: transparent
 
     &:active
-      color darken($pt-primary-color, 10%)
-      background transparent
-      border-color transparent
+      color: darken($primary-color, 10%)
+      background: transparent
+      border-color: transparent
 
     &[disabled]
-      color $pt-text-color-disabled
-      background transparent
-      border-color transparent
+      color: $text-color-disabled
+      background: transparent
+      border-color: transparent
 
   // 危险按钮
   &-danger
-    color #fff
-    background $pt-error-color
-    border-color $pt-error-color
-    text-shadow 0 -1px 0 rgba(0, 0, 0, 0.12)
-    box-shadow 0 2px 0 rgba(0, 0, 0, 0.045)
+    color: $gray-1
+    background: $error-color
+    border-color: $error-color
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12)
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045)
 
     &:hover
-      background lighten($pt-error-color, 10%)
-      border-color lighten($pt-error-color, 10%)
-      color #fff
+      background: lighten($error-color, 10%)
+      border-color: lighten($error-color, 10%)
+      color: $gray-1
 
     &:active
-      background darken($pt-error-color, 10%)
-      border-color darken($pt-error-color, 10%)
-      color #fff
+      background: darken($error-color, 10%)
+      border-color: darken($error-color, 10%)
+      color: $gray-1
 
     &[disabled]
-      color rgba(255, 255, 255, 0.35)
-      background $pt-error-color
-      border-color $pt-error-color
+      color: rgba(255, 255, 255, 0.35)
+      background: $error-color
+      border-color: $error-color
 
   // 幽灵按钮
   &-ghost
-    color $pt-text-color
-    background transparent
-    border-color $pt-border-color
+    color: $text-color
+    background: transparent
+    border-color: $border-color
 
     &:hover
-      color $pt-primary-color
-      background transparent
-      border-color $pt-primary-color
+      color: $primary-color
+      background: transparent
+      border-color: $primary-color
 
     &:active
-      color $pt-primary-color
-      background transparent
-      border-color $pt-primary-color
+      color: $primary-color
+      background: transparent
+      border-color: $primary-color
 
     &[disabled]
-      color $pt-text-color-disabled
-      background transparent
-      border-color $pt-border-color
+      color: $text-color-disabled
+      background: transparent
+      border-color: $border-color
 
   // 加载状态
   &-loading
-    position relative
-    cursor default
+    position: relative
+    cursor: default
 
     &::before
-      position absolute
-      top -1px
-      right -1px
-      bottom -1px
-      left -1px
-      z-index 1
-      display block
-      background $pt-bg-color
-      border-radius inherit
-      opacity 0.35
-      transition opacity $pt-transition-duration
-      content ''
-      pointer-events none
+      position: absolute
+      top: -1px
+      right: -1px
+      bottom: -1px
+      left: -1px
+      z-index: 1
+      display: block
+      background: $bg-color
+      border-radius: inherit
+      opacity: 0.35
+      transition: opacity $animation-duration-base
+      content: ''
+      pointer-events: none
 
   // 图标
   &-icon
-    margin-right $pt-margin-xs
-    font-size $pt-font-size-base
-    vertical-align -0.125em
+    margin-right: $spacing-xs
+    font-size: $font-size-base
+    vertical-align: -0.125em
 
   // 按钮组
   &-group
-    display inline-flex
-    vertical-align middle
+    display: inline-flex
+    vertical-align: middle
 
     .pt-btn
-      position relative
-      z-index 1
+      position: relative
+      z-index: 1
 
       &:not(:first-child)
-        margin-left -1px
+        margin-left: -1px
 
       &:not(:first-child):not(:last-child)
-        border-radius 0
+        border-radius: 0
 
       &:first-child
-        border-top-right-radius 0
-        border-bottom-right-radius 0
+        border-top-right-radius: 0
+        border-bottom-right-radius: 0
 
       &:last-child
-        border-top-left-radius 0
-        border-bottom-left-radius 0
+        border-top-left-radius: 0
+        border-bottom-left-radius: 0
 
       &:hover
-        z-index 2
+        z-index: 2
 
       &:active
-        z-index 3
+        z-index: 3
 
       &[disabled]
-        z-index 0 
+        z-index: 0 

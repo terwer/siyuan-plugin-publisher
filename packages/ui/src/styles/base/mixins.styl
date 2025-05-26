@@ -21,77 +21,106 @@ multi-ellipsis($lines = 2)
 // 禁用状态
 disabled()
   cursor: not-allowed
-  opacity: 0.65
+  opacity: 0.5
   pointer-events: none
 
-// 响应式
-responsive($breakpoint)
-  if $breakpoint == xs
-    @media (max-width: $screen-xs)
-      {block}
-  else if $breakpoint == sm
-    @media (min-width: $screen-sm)
-      {block}
-  else if $breakpoint == md
-    @media (min-width: $screen-md)
-      {block}
-  else if $breakpoint == lg
-    @media (min-width: $screen-lg)
-      {block}
-  else if $breakpoint == xl
-    @media (min-width: $screen-xl)
-      {block}
-  else if $breakpoint == xxl
-    @media (min-width: $screen-xxl)
-      {block}
-
-// 动画
+// 基础过渡动画
 transition-base()
   transition: all $animation-duration-base $animation-timing-function-base
 
-// 阴影
+// 基础阴影
 box-shadow-base()
   box-shadow: $box-shadow-base
 
-// 边框
+// 基础边框
 border-base()
-  border: 1px solid $border-color-base
+  border: 1px solid $border-color
 
-// 圆角
+// 基础圆角
 border-radius-base()
   border-radius: $border-radius-base
 
-// 居中
-center()
+// 基础按钮样式
+button-base()
+  position: relative
+  display: inline-flex
+  align-items: center
+  justify-content: center
+  height: $height-base
+  padding: 0 $spacing-md
+  font-size: $font-size-base
+  line-height: $line-height-base
+  border-radius: $border-radius-base
+  transition-base()
+  cursor: pointer
+  user-select: none
+  white-space: nowrap
+
+// 基础输入框样式
+input-base()
+  width: 100%
+  height: $height-base
+  padding: 0 $spacing-sm
+  font-size: $font-size-base
+  line-height: $line-height-base
+  border: 1px solid $border-color
+  border-radius: $border-radius-base
+  transition-base()
+  background-color: $bg-color
+
+  &:hover
+    border-color: $primary-color
+
+  &:focus
+    border-color: $primary-color
+    box-shadow: 0 0 0 2px rgba($primary-color, 0.2)
+    outline: none
+
+// 基础表单样式
+form-item-base()
+  margin-bottom: $spacing-lg
+
+  &-label
+    display: inline-block
+    color: $heading-color
+    font-weight: 500
+    margin-bottom: $spacing-xs
+
+// 基础模态框样式
+modal-base()
+  position: fixed
+  top: 0
+  right: 0
+  bottom: 0
+  left: 0
+  z-index: $zindex-modal
   display: flex
   align-items: center
   justify-content: center
+  background-color: rgba(0, 0, 0, 0.45)
 
-// 垂直居中
-vertical-center()
-  display: flex
-  align-items: center
+  &-content
+    position: relative
+    background-color: $bg-color
+    border-radius: $border-radius-base
+    box-shadow-base()
+    transition-base()
 
-// 水平居中
-horizontal-center()
-  display: flex
-  justify-content: center
+// 基础提示框样式
+tooltip-base()
+  position: absolute
+  z-index: $zindex-tooltip
+  display: block
+  visibility: visible
+  font-size: $font-size-base
+  opacity: 0.9
 
-// 间距
-spacing($direction = all, $size = $spacing-unit)
-  if $direction == all
-    margin: $size
-  else if $direction == x
-    margin-left: $size
-    margin-right: $size
-  else if $direction == y
-    margin-top: $size
-    margin-bottom: $size
-  else if $direction == top
-    margin-top: $size
-  else if $direction == right
-    margin-right: $size
-  else if $direction == bottom
-    margin-bottom: $size
-  else if $direction == left
-    margin-left: $size 
+  &-inner
+    padding: $spacing-xs $spacing-sm
+    color: $gray-1
+    text-align: left
+    text-decoration: none
+    word-wrap: break-word
+    background-color: rgba(0, 0, 0, 0.75)
+    border-radius: $border-radius-base
+    box-shadow-base() 

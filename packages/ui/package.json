@@ -12,8 +12,8 @@
       "import": "./src/index.ts",
       "require": "./src/index.ts"
     },
-    "./styles/global": {
-      "import": "./src/styles/global.styl"
+    "./styles": {
+      "import": "./src/styles/index.styl"
     }
   },
   "files": [

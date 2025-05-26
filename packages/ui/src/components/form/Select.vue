@@ -41,7 +41,9 @@ const handleChange = (event: Event) => {
   </select>
 </template>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
+@import '../../styles/global/index.styl'
+
 .pt-select
   --select-height: 32px
   --select-padding: 4px 32px 4px 12px

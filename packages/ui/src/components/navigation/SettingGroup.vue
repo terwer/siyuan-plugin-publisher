@@ -8,7 +8,6 @@
   -->
 
 <script setup lang="ts">
-import { computed } from "vue"
 import type { SettingItem } from "../../types"
 import Input from "../form/Input.vue"
 import InputNumber from "../form/InputNumber.vue"
@@ -98,7 +97,9 @@ const handleValueChange = (value: any, item: SettingItem) => {
   </div>
 </template>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
+@import '../../styles/global/index.styl'
+
 .pt-setting-group
   margin-bottom 16px
 

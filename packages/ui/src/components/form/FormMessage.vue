@@ -19,7 +19,9 @@ defineProps<{
 }>()
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
+@import '../../styles/global/index.styl'
+
 .pt-form-message
   margin-top: 4px
   font-size: 12px

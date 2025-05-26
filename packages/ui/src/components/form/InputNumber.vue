@@ -57,7 +57,9 @@ const updateValue = (newValue: number) => {
   </div>
 </template>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
+@import '../../styles/global/index.styl'
+
 .number-input
   display flex
   align-items center

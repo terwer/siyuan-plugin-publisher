@@ -1,156 +1,153 @@
-@import '../variables.styl'
+@import '../base'
 
 .pt-modal
-  position fixed
-  top 0
-  right 0
-  bottom 0
-  left 0
-  z-index $pt-zindex-modal
-  display flex
-  align-items center
-  justify-content center
-  width 100%
-  height 100%
-  overflow auto
-  background-color rgba(0, 0, 0, 0.45)
-  opacity 0
-  transition opacity $pt-transition-duration $pt-transition-timing
+  modal-base()
+  width: 100%
+  height: 100%
+  overflow: auto
+  opacity: 0
+  transition-base()
 
   &-visible
-    opacity 1
+    opacity: 1
 
   // 模态框内容
   &-content
-    position relative
-    display flex
-    flex-direction column
-    width 100%
-    max-width 520px
-    margin 0 auto
-    background-color $pt-bg-color
-    border-radius $pt-border-radius-base
-    box-shadow $pt-box-shadow
-    pointer-events auto
-    transform scale(0.5)
-    transition transform $pt-transition-duration $pt-transition-timing
+    position: relative
+    display: flex
+    flex-direction: column
+    width: 100%
+    max-width: 520px
+    margin: 0 auto
+    background-color: $bg-color
+    border-radius: $border-radius-base
+    box-shadow-base()
+    pointer-events: auto
+    transform: scale(0.5)
+    transition-base()
 
     .pt-modal-visible &
-      transform scale(1)
+      transform: scale(1)
 
   // 模态框头部
   &-header
-    display flex
-    align-items center
-    justify-content space-between
-    padding 16px 24px
-    color $pt-text-color
-    background $pt-bg-color
-    border-bottom $pt-border-width $pt-border-style $pt-border-color-split
-    border-radius $pt-border-radius-base $pt-border-radius-base 0 0
+    display: flex
+    align-items: center
+    justify-content: space-between
+    padding: $spacing-lg $spacing-xl
+    color: $text-color
+    background: $bg-color
+    border-bottom: 1px solid $border-color-split
+    border-radius: $border-radius-base $border-radius-base 0 0
 
   // 模态框标题
   &-title
-    margin 0
-    color $pt-text-color
-    font-weight 500
-    font-size $pt-font-size-lg
-    line-height $pt-line-height-lg
+    margin: 0
+    color: $text-color
+    font-weight: 500
+    font-size: $font-size-lg
+    line-height: $line-height-lg
 
   // 模态框关闭按钮
   &-close
-    position absolute
-    top 16px
-    right 16px
-    padding 0
-    color $pt-text-color-secondary
-    font-size $pt-font-size-lg
-    line-height 1
-    background transparent
-    border 0
-    outline none
-    cursor pointer
-    transition color $pt-transition-duration $pt-transition-timing
+    position: absolute
+    top: $spacing-lg
+    right: $spacing-lg
+    padding: 0
+    color: $text-color-secondary
+    font-size: $font-size-lg
+    line-height: 1
+    background: transparent
+    border: 0
+    outline: none
+    cursor: pointer
+    transition-base()
 
     &:hover
-      color $pt-text-color
+      color: $text-color
 
   // 模态框主体
   &-body
-    flex 1
-    padding 24px
-    font-size $pt-font-size-base
-    line-height $pt-line-height-base
-    word-wrap break-word
+    flex: 1
+    padding: $spacing-xl
+    font-size: $font-size-base
+    line-height: $line-height-base
+    word-wrap: break-word
 
   // 模态框底部
   &-footer
-    display flex
-    align-items center
-    justify-content flex-end
-    padding 10px 16px
-    text-align right
-    background $pt-bg-color
-    border-top $pt-border-width $pt-border-style $pt-border-color-split
-    border-radius 0 0 $pt-border-radius-base $pt-border-radius-base
+    display: flex
+    align-items: center
+    justify-content: flex-end
+    padding: $spacing-md $spacing-lg
+    text-align: right
+    background: $bg-color
+    border-top: 1px solid $border-color-split
+    border-radius: 0 0 $border-radius-base $border-radius-base
 
     .pt-btn
-      margin-left 8px
+      margin-left: $spacing-sm
 
       &:first-child
-        margin-left 0
+        margin-left: 0
 
   // 模态框尺寸
   &-sm
     .pt-modal-content
-      max-width 420px
+      max-width: 420px
 
   &-lg
     .pt-modal-content
-      max-width 720px
+      max-width: 720px
 
   &-xl
     .pt-modal-content
-      max-width 1024px
+      max-width: 1024px
 
   // 模态框类型
   &-info
     .pt-modal-icon
-      color $pt-info-color
+      color: $info-color
 
   &-success
     .pt-modal-icon
-      color $pt-success-color
+      color: $success-color
 
   &-warning
     .pt-modal-icon
-      color $pt-warning-color
+      color: $warning-color
 
   &-error
     .pt-modal-icon
-      color $pt-error-color
+      color: $error-color
 
   // 模态框图标
   &-icon
-    margin-right 16px
-    font-size 22px
-    line-height 1
+    margin-right: $spacing-lg
+    font-size: 22px
+    line-height: 1
 
   // 模态框动画
   &-fade-enter
-    opacity 0
+    opacity: 0
 
   &-fade-enter-active
-    opacity 1
+    opacity: 1
 
   &-fade-exit
-    opacity 1
+    opacity: 1
 
   &-fade-exit-active
-    opacity 0
+    opacity: 0
 
   // 模态框遮罩
   &-mask
+    position: fixed
+    top: 0
+    right: 0
+    bottom: 0
+    left: 0
+    z-index: $zindex-modal
     position fixed
     top 0
     right 0

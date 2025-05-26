@@ -35,7 +35,9 @@ const toggle = () => {
   </button>
 </template>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
+@import '../../styles/global/index.styl'
+
 .pt-switch
   --switch-width: 40px
   --switch-height: 20px

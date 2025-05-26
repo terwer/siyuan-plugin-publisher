@@ -68,7 +68,9 @@ watch(() => props.modelValue, resize)
   </div>
 </template>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
+@import '../../styles/global/index.styl'
+
 .textarea-container
   position relative
   width 100%

@@ -1,150 +1,150 @@
-@import '../variables.styl'
+@import '../base'
 
 #publisherApp
   .pt-form
-    position relative
-    width 100%
+    position: relative
+    width: 100%
     display: flex
     flex-direction: column
-    gap: 24px
+    gap: $spacing-xl
 
     // 水平布局
     &--horizontal
       .pt-form-item
-        display flex
-        flex-wrap nowrap
+        display: flex
+        flex-wrap: nowrap
 
         .pt-form-item__label
-          flex 0 0 auto
+          flex: 0 0 auto
 
         .pt-form-item__control
-          flex 1 1 auto
+          flex: 1 1 auto
 
     // 垂直布局
     &--vertical
       .pt-form-item
-        display block
-        text-align left
-        margin-bottom 8px
+        display: block
+        text-align: left
+        margin-bottom: $spacing-sm
 
     // 行内布局
     &--inline
-      display flex
-      flex-wrap wrap
-      align-items flex-start
+      display: flex
+      flex-wrap: wrap
+      align-items: flex-start
 
       .pt-form-item
-        display flex
-        flex-wrap nowrap
-        margin-right 16px
-        margin-bottom 0
+        display: flex
+        flex-wrap: nowrap
+        margin-right: $spacing-lg
+        margin-bottom: 0
 
         &:last-child
-          margin-right 0
+          margin-right: 0
 
   .pt-form-item
-    position relative
-    margin-bottom 24px
-    vertical-align top
+    position: relative
+    margin-bottom: $spacing-xl
+    vertical-align: top
 
     &:last-child
       margin-bottom: 0
 
     &__label
-      display inline-block
-      flex-grow 0
-      overflow hidden
-      white-space nowrap
-      text-align right
-      vertical-align middle
+      display: inline-block
+      flex-grow: 0
+      overflow: hidden
+      white-space: nowrap
+      text-align: right
+      vertical-align: middle
 
       &-left
-        text-align left
+        text-align: left
 
       &-required
         &::before
-          display inline-block
-          margin-right 4px
-          color $pt-error-color
-          font-size $pt-font-size-base
-          line-height 1
-          content '*'
+          display: inline-block
+          margin-right: $spacing-xs
+          color: $error-color
+          font-size: $font-size-base
+          line-height: 1
+          content: '*'
 
       &-colon
         &::after
-          content ':'
-          margin 0 8px 0 2px
+          content: ':'
+          margin: 0 $spacing-sm 0 $spacing-xs
 
     &__control
-      position relative
-      display flex
-      flex-direction column
-      flex-grow 1
+      position: relative
+      display: flex
+      flex-direction: column
+      flex-grow: 1
 
     &__message
-      position absolute
-      top 100%
-      left 0
-      margin-top 4px
-      color $pt-text-color-secondary
-      font-size $pt-font-size-sm
-      line-height $pt-line-height-base
+      position: absolute
+      top: 100%
+      left: 0
+      margin-top: $spacing-xs
+      color: $text-color-secondary
+      font-size: $font-size-sm
+      line-height: $line-height-base
 
   .pt-form-control
     width: 100%
 
   .pt-form-message
-    color: var(--pt-text-color-secondary)
-    font-size: 12px
-    line-height: 1.5
+    color: $text-color-secondary
+    font-size: $font-size-sm
+    line-height: $line-height-base
 
   // 表单尺寸
   &-small
     .pt-form-item
-      margin-bottom 16px
+      margin-bottom: $spacing-lg
 
     .pt-form-item__label
-      font-size $pt-font-size-sm
+      font-size: $font-size-sm
 
     .pt-form-item__message
-      font-size $pt-font-size-sm
+      font-size: $font-size-sm
 
   &-large
     .pt-form-item
-      margin-bottom 32px
+      margin-bottom: $spacing-xl * 2
 
     .pt-form-item__label
-      font-size $pt-font-size-lg
+      font-size: $font-size-lg
 
     .pt-form-item__message
-      font-size $pt-font-size-lg
+      font-size: $font-size-lg
 
   // 表单验证
   &-validate-status
     &-success
       .pt-form-item__control-input
-        background-color $pt-success-color
+        background-color: $success-color
 
     &-warning
       .pt-form-item__control-input
-        background-color $pt-warning-color
+        background-color: $warning-color
 
     &-error
       .pt-form-item__control-input
-        background-color $pt-error-color
+        background-color: $error-color
 
     &-validating
       .pt-form-item__control-input
-        background-color $pt-info-color
+        background-color: $info-color
 
   // 表单操作
   &-actions
-    display flex
-    justify-content flex-end
-    margin-top 24px
+    display: flex
+    justify-content: flex-end
+    margin-top: $spacing-xl
 
     .pt-btn
-      margin-left 8px
+      margin-left: $spacing-sm
 
       &:first-child
-        margin-left 0 
+        margin-left: 0 

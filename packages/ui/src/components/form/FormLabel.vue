@@ -10,7 +10,9 @@ defineProps<{
 }>()
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
+@import '../../styles/global/index.styl'
+
 .pt-form-label
   display inline-block
   margin-bottom 8px
