@@ -149,6 +149,15 @@ export const pre = {
     },
     {
       platformType: PlatformType.Github,
+      subPlatformType: SubPlatformType.Github_Quartz,
+      platformKey: "github_Quartz",
+      platformName: "Quartz",
+      platformIcon: svgIcons.iconIFJekyll,
+      authMode: AuthMode.API,
+      isEnabled: false,
+    },
+    {
+      platformType: PlatformType.Github,
       subPlatformType: SubPlatformType.Github_Vuepress,
       platformKey: "github_Vuepress",
       platformName: "Vuepress",

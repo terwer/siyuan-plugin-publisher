@@ -33,6 +33,7 @@ import TelegraphSetting from "~/src/components/set/publish/singleplatform/common
 import WordpressdotcomSetting from "~/src/components/set/publish/singleplatform/metaweblog/WordpressdotcomSetting.vue"
 import HalowebSetting from "~/src/components/set/publish/singleplatform/web/HalowebSetting.vue"
 import BilibiliSetting from "~/src/components/set/publish/singleplatform/web/BilibiliSetting.vue"
+import QuartzSetting from "~/src/components/set/publish/singleplatform/github/QuartzSetting.vue"
 
 // uses
 const { t } = useVueI18n()
@@ -53,6 +54,7 @@ const subtype = getSubPlatformTypeByKey(apiType)
     <hexo-setting v-else-if="subtype === SubPlatformType.Github_Hexo" :api-type="apiType" />
     <hugo-setting v-else-if="subtype === SubPlatformType.Github_Hugo" :api-type="apiType" />
     <jekyll-setting v-else-if="subtype === SubPlatformType.Github_Jekyll" :api-type="apiType" />
+    <quartz-setting v-else-if="subtype === SubPlatformType.Github_Quartz" :api-type="apiType" />
     <vuepress-setting v-else-if="subtype === SubPlatformType.Github_Vuepress" :api-type="apiType" />
     <vuepress2-setting v-else-if="subtype === SubPlatformType.Github_Vuepress2" :api-type="apiType" />
     <vitepress-setting v-else-if="subtype === SubPlatformType.Github_Vitepress" :api-type="apiType" />

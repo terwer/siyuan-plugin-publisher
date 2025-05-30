@@ -193,6 +193,7 @@ export enum SubPlatformType {
   Github_Hexo = "Hexo",
   Github_Hugo = "Hugo",
   Github_Jekyll = "Jekyll",
+  Github_Quartz = "Quartz",
   Github_Vuepress = "Vuepress",
   Github_Vuepress2 = "Vuepress2",
   Github_Vitepress = "Vitepress",
@@ -263,6 +264,7 @@ export function getSubtypeList(ptype: PlatformType): SubPlatformType[] {
       subtypeList.push(SubPlatformType.Github_Hexo)
       subtypeList.push(SubPlatformType.Github_Hugo)
       subtypeList.push(SubPlatformType.Github_Jekyll)
+      subtypeList.push(SubPlatformType.Github_Quartz)
       subtypeList.push(SubPlatformType.Github_Vuepress)
       subtypeList.push(SubPlatformType.Github_Vuepress2)
       subtypeList.push(SubPlatformType.Github_Vitepress)
