@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.35.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.34.2...siyuan-plugin-publisher-v1.35.0) (2025-06-03)
+
+
+### Features
+
+* add Quartz support ([4ab5b70](https://github.com/terwer/siyuan-plugin-publisher/commit/4ab5b70a393a71960890dc4c9760fccafc759d67))
+* 新增quartz平台适配 ([4997ba5](https://github.com/terwer/siyuan-plugin-publisher/commit/4997ba56ae324ca06889ce9e503da171ff18bd02))
+
 ## [1.34.2](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.34.1...siyuan-plugin-publisher-v1.34.2) (2025-04-22)
 ### Bug Fixes
 * add default help doc ([9ae4d1e](https://github.com/terwer/siyuan-plugin-publisher/commit/9ae4d1e0af43b1215b90acb7fd2b21eb44685541))
