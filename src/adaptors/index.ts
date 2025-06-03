@@ -44,6 +44,7 @@ import { useHugoApi } from "~/src/adaptors/api/hugo/useHugoApi.ts"
 import { useGitlabhugoApi } from "~/src/adaptors/api/gitlab-hugo/useGitlabhugoApi.ts"
 import { useJekyllApi } from "~/src/adaptors/api/jekyll/useJekyllApi.ts"
 import { useGitlabjekyllApi } from "~/src/adaptors/api/gitlab-jekyll/useGitlabjekyllApi.ts"
+import { useQuartzApi } from "~/src/adaptors/api/quartz/useQuartzApi.ts"
 import { useVuepressApi } from "~/src/adaptors/api/vuepress/useVuepressApi.ts"
 import { useGitlabvuepressApi } from "~/src/adaptors/api/gitlab-vuepress/useGitlabvuepressApi.ts"
 import { useVuepress2Api } from "~/src/adaptors/api/vuepress2/useVuepress2Api.ts"
@@ -110,6 +111,11 @@ class Adaptors {
       }
       case SubPlatformType.Github_Jekyll: {
         const { cfg } = await useJekyllApi(key, newCfg)
+        conf = cfg
+        break
+      }
+      case SubPlatformType.Github_Quartz: {
+        const { cfg } = await useQuartzApi(key, newCfg)
         conf = cfg
         break
       }
@@ -294,6 +300,11 @@ class Adaptors {
         blogAdaptor = blogApi
         break
       }
+      case SubPlatformType.Github_Quartz: {
+        const { blogApi } = await useQuartzApi(key, newCfg)
+        blogAdaptor = blogApi
+        break
+      }
       case SubPlatformType.Github_Vuepress: {
         const { blogApi } = await useVuepressApi(key, newCfg)
         blogAdaptor = blogApi
@@ -450,6 +461,11 @@ class Adaptors {
       }
       case SubPlatformType.Github_Jekyll: {
         const { yamlAdaptor } = await useJekyllApi(key, newCfg)
+        yamlAdp = yamlAdaptor
+        break
+      }
+      case SubPlatformType.Github_Quartz: {
+        const { yamlAdaptor } = await useQuartzApi(key, newCfg)
         yamlAdp = yamlAdaptor
         break
       }

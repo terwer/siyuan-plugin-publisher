@@ -20,6 +20,7 @@ export const help = {
   [SubPlatformType.Github_Hexo]: "https://siyuan.wiki/s/20230908182140-8riar0r",
   [SubPlatformType.Github_Hugo]: "https://siyuan.wiki/s/20230908182946-itm4luf",
   [SubPlatformType.Github_Jekyll]: "https://siyuan.wiki/s/20230908183451-fjs2nr0",
+  [SubPlatformType.Github_Quartz]: "https://siyuan.wiki/s/20230908182140-8riar0r",
   [SubPlatformType.Github_Vuepress]: "https://siyuan.wiki/s/20230908183534-29f49bz",
   [SubPlatformType.Github_Vuepress2]: "https://siyuan.wiki/s/20230908183739-2x156oj",
   [SubPlatformType.Github_Vitepress]: "https://siyuan.wiki/s/20230914173253-mx2gaxd",
