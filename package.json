@@ -66,7 +66,7 @@
     "cookie-parse": "^0.4.0",
     "cross-fetch": "3.1.8",
     "crypto-js": "^4.2.0",
-    "element-plus": "^2.9.7",
+    "element-plus": "^2.9.11",
     "iframe-resizer": "^5.4.4",
     "js-base64": "^3.7.7",
     "katex": "^0.16.22",
