@@ -28,12 +28,12 @@
 
 注意：图片上传可用指的是安装 [PicGo 图床<sup>1.9.0+</sup>](https://github.com/terwer/siyuan-plugin-picgo) 并正确配置的前提下。
 
-|      类型      |      平台       | 状态 | PC 客户端 | PC 图片上传 |         Docker         | Docker 图片上传 | 平台图片上传 | Docker 代理 | PC 端代理 | 备注                                           |
-| :------------: | :-------------: | :--: | :-------: | :---------: | :--------------------: | :-------------: | ------------ | ----------- | --------- | :--------------------------------------------- |
-|      通用      |      语雀       |  ✔   | 完全兼容  |      ✔      |        完全兼容        |        ✔        | 不支持       | 内置代理    | 不需要    | [官网](https://yuque.com)                      |
+|      类型      |       平台        | 状态 | PC 客户端 | PC 图片上传 |         Docker         | Docker 图片上传 | 平台图片上传 | Docker 代理 | PC 端代理 | 备注                                           |
+| :------------: |:---------------:| :--: | :-------: | :---------: | :--------------------: | :-------------: | ------------ | ----------- | --------- | :--------------------------------------------- |
+|      通用      |       语雀        |  ✔   | 完全兼容  |      ✔      |        完全兼容        |        ✔        | 不支持       | 内置代理    | 不需要    | [官网](https://yuque.com)                      |
 |      通用      |     Notion      |  ✔   | 完全兼容  |      ✔      |        完全兼容        |        ✔        | 不支持       | 内置代理    | 不需要    | [官网](https://www.notion.so)                  |
 |      通用      |      Halo       |  ✔   | 完全兼容  |      ✔      |        完全兼容        |        ✔        | 支持         | 内置代理    | 不需要    | [官网](https://halo.run)                       |
-|      通用      |    印象笔记     | TODO |   TODO    |    TODO     |          TODO          |      TODO       | TODO         | TODO        | TODO      | [官网](https://www.yinxiang.com)               |
+|      通用      |      印象笔记       | TODO |   TODO    |    TODO     |          TODO          |      TODO       | TODO         | TODO        | TODO      | [官网](https://www.yinxiang.com)               |
 |      通用      |     Github      |  ✔   | 完全兼容  |      ✔      |        完全兼容        |        ✔        | 支持         | 不需要      | 不需要    | [官网](https://github.com)                     |
 | 静态网站生成器 |      Hexo       |  ✔   | 完全兼容  |      ✔      |        完全兼容        |        ✔        | 支持         | 不需要      | 不需要    | [官网](https://hexo.io/zh-cn/)                 |
 | 静态网站生成器 |      Hugo       |  ✔   | 完全兼容  |      ✔      |        完全兼容        |        ✔        | 支持         | 不需要      | 不需要    | [官网](https://gohugo.io/)                     |
@@ -41,6 +41,7 @@
 | 静态网站生成器 |    Vuepress     |  ✔   | 完全兼容  |      ✔      |        完全兼容        |        ✔        | 支持         | 不需要      | 不需要    | [官网](https://vuepress.vuejs.org/)            |
 | 静态网站生成器 |    Vuepress2    |  ✔   | 完全兼容  |      ✔      |        完全兼容        |        ✔        | 支持         | 不需要      | 不需要    | [官网](https://v2.vuepress.vuejs.org/)         |
 | 静态网站生成器 |    Vitepress    |  ✔   | 完全兼容  |      ✔      |        完全兼容        |        ✔        | 支持         | 不需要      | 不需要    | [官网](https://vitepress.vuejs.org/)           |
+| 静态网站生成器 |     Quartz      |  ✔   | 完全兼容  |      ✔      |        完全兼容        |        ✔        | 支持         | 不需要      | 不需要    | [官网](https://quartz.jzhao.xyz/)           |
 | 静态网站生成器 |     Antora      | TODO |   TODO    |    TODO     |          TODO          |      TODO       | TODO         | TODO        | TODO      | [官网](https://antora.org/)                    |
 | 静态网站生成器 |     Docsify     | TODO |   TODO    |    TODO     |          TODO          |      TODO       | TODO         | TODO        | TODO      | [官网](https://docsify.js.org/)                |
 |    Git 托管    |     Gitlab      |  ✔   | 完全兼容  |      ✔      |        完全兼容        |        ✔        | 支持         | 不需要      | 不需要    | [官网](https://gitlab.com/)                    |
@@ -58,15 +59,15 @@
 |      博客      |      Jvue       |  ✔   | 完全兼容  |      ✔      |        完全兼容        |        ✔        | 支持         | 内置代理    | 不需要    | [官网](https://github.com/terwer/jvue)         |
 |      博客      |    WordPress    |  ✔   | 完全兼容  |      ✔      |        完全兼容        |        ✔        | 支持         | 内置代理    | 不需要    | [官网](https://wordpress.org/)                 |
 |      博客      |  WordPress.com  |  ✔   | 完全兼容  |      ✔      |        完全兼容        |        ✔        | 支持         | 自建代理    | 自建代理  | [官网](https://wordpress.com)                  |
-|    社交媒体    |      知乎       |  ✔   | 完全兼容  |      ✔      | PC 验证或者填写 Cookie |        ✔        | 支持         | 内置代理    | 不需要    | [官网](https://www.zhihu.com/)                 |
+|    社交媒体    |       知乎        |  ✔   | 完全兼容  |      ✔      | PC 验证或者填写 Cookie |        ✔        | 支持         | 内置代理    | 不需要    | [官网](https://www.zhihu.com/)                 |
 |    社交媒体    |      CSDN       |  ✔   | 完全兼容  |      ✔      | PC 验证或者填写 Cookie |        ✔        | 支持         | 内置代理    | 不需要    | [官网](https://www.csdn.net/)                  |
-|    社交媒体    |   微信公众号    |  ✔   | 完全兼容  |      ✔      |      填写 Cookie       |        ✔        | 支持         | 内置代理    | 不需要    | [官网](https://mp.weixin.qq.com/)              |
-|    社交媒体    |      简书       |  ✔   | 完全兼容  |      ✔      | PC 验证或者填写 Cookie |        ✔        | 支持         | 内置代理    | 不需要    | [官网](https://www.jianshu.com/)               |
-|    社交媒体    |      掘金       |  ✔   | 完全兼容  |      ✔      | PC 验证或者填写 Cookie |        ✔        | 不支持       | 内置代理    | 不需要    | [官网](https://juejin.cn/)                     |
-|      社区      |     52破解      | TODO |   TODO    |    TODO     |          TODO          |      TODO       | TODO         | TODO        | TODO      | [官网](https://www.52pojie.cn/)                |
+|    社交媒体    |      微信公众号      |  ✔   | 完全兼容  |      ✔      |      填写 Cookie       |        ✔        | 支持         | 内置代理    | 不需要    | [官网](https://mp.weixin.qq.com/)              |
+|    社交媒体    |       简书        |  ✔   | 完全兼容  |      ✔      | PC 验证或者填写 Cookie |        ✔        | 支持         | 内置代理    | 不需要    | [官网](https://www.jianshu.com/)               |
+|    社交媒体    |       掘金        |  ✔   | 完全兼容  |      ✔      | PC 验证或者填写 Cookie |        ✔        | 不支持       | 内置代理    | 不需要    | [官网](https://juejin.cn/)                     |
+|      社区      |      52破解       | TODO |   TODO    |    TODO     |          TODO          |      TODO       | TODO         | TODO        | TODO      | [官网](https://www.52pojie.cn/)                |
 |      社区      |    Bilibili     | TODO |   TODO    |    TODO     |          TODO          |      TODO       | TODO         | TODO        | TODO      | [官网](https://www.bilibili.com/)              |
-|      社区      |     小红书      | TODO |   TODO    |    TODO     |          TODO          |      TODO       | TODO         | TODO        | TODO      | [官网](https://www.xiaohongshu.com/)           |
-|      社区      |      豆瓣       | TODO |   TODO    |    TODO     |          TODO          |      TODO       | TODO         | TODO        | TODO      | [官网](https://www.douban.com/)                |
+|      社区      |       小红书       | TODO |   TODO    |    TODO     |          TODO          |      TODO       | TODO         | TODO        | TODO      | [官网](https://www.xiaohongshu.com/)           |
+|      社区      |       豆瓣        | TODO |   TODO    |    TODO     |          TODO          |      TODO       | TODO         | TODO        | TODO      | [官网](https://www.douban.com/)                |
 |      其他      |      Xlog       | TODO |   TODO    |    TODO     |          TODO          |      TODO       | TODO         | TODO        | TODO      | [官网](https://xlog.cn/)                       |
 |      其他      |     Mdnice      | TODO |   TODO    |    TODO     |          TODO          |      TODO       | TODO         | TODO        | TODO      | [官网](https://mdnice.com/)                    |
 |      其他      |     Flowus      | TODO |   TODO    |    TODO     |          TODO          |      TODO       | TODO         | TODO        | TODO      | [官网](https://www.flowus.com/)                |
