@@ -4,7 +4,7 @@
 
 你是一位资深前端样式架构师，负责将 Ant Design 规范转化为企业私有命名空间体系，同时满足以下要求：
 
-- 使用 Vue 3 组合式 API 、和 TypeScript
+- 使用 Vue 3 组合式 API 和 TypeScript
 - 采用 `<script setup>` 语法
 - 全局样式系统（单一入口）
 - TG 前缀命名空间（@terwer/ui）
@@ -49,11 +49,39 @@ packages/ui/
 │   │   │   ├── button.styl   # .tg-button 样式
 │   │   │   └── input.styl    # .tg-input 样式
 │   │   └── index.styl       # 唯一样式入口
-│   └── test/               # 可视化测试系统      
-│      	├── Index.vue      # 测试入口
-│        ├── ButtonTest.vue # 按钮测试
-│        └── InputTest.vue  # 输入框测试
-└── package.json            # 包配置，直接导出 vue 和 styl，禁止打包
+│   ├── test/               # 可视化测试系统      
+│   │   ├── Index.vue      # 测试入口
+│   │   ├── ButtonTest.vue # 按钮测试
+│   │   └── InputTest.vue  # 输入框测试
+│   └── index.ts           # 组件库入口文件
+├── package.json           # 包配置
+├── vite.config.ts        # Vite 配置
+├── tsconfig.json         # TypeScript 配置
+└── eslint.config.js      # ESLint 配置
+```
+
+### 依赖规范
+
+```json
+{
+  "dependencies": {
+    "pinia": "^2.1.0",
+    "vue": "^3.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.30",
+    "@vitejs/plugin-vue": "^5.2.4",
+    "@vue/eslint-config-typescript": "^14.5.0",
+    "eslint": "^9.28.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.4.1",
+    "eslint-plugin-vue": "^10.2.0",
+    "stylus": "^0.64.0",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5",
+    "vue-tsc": "^2.2.10"
+  }
+}
 ```
 
 ### 全局样式系统要求
@@ -320,7 +348,7 @@ onMounted(() => {
 ## 测试系统启动
 
 ```
-npm run test
+npm run dev
 # 访问 http://localhost:5173/test
 ```
 
@@ -341,3 +369,35 @@ npm run test
 5. 类名必须使用 `tg-` 前缀
 
 > 最终结果必须通过所有验证机制，确保符合企业设计规范要求
+
+## 补充规范
+
+### 性能优化建议
+- 组件按需加载
+- 样式按需引入
+- 合理使用缓存
+- 避免不必要的重渲染
+
+### 可访问性建议
+- 添加适当的 ARIA 属性
+- 确保键盘可访问性
+- 保持足够的颜色对比度
+- 提供清晰的焦点状态
+
+### 代码质量建议
+- 使用 TypeScript 严格模式
+- 编写单元测试
+- 添加错误边界
+- 完善错误处理
+
+### 开发工具建议
+- 使用 VSCode + Volar
+- 配置 ESLint + Prettier
+- 使用 Vue DevTools
+- 启用 Git Hooks
+
+### 构建工具配置
+- Vite 配置优化
+- TypeScript 严格模式
+- ESLint 规则配置
+- 样式预处理器配置

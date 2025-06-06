@@ -1,30 +1,28 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import ButtonTest from './ButtonTest.vue'
-import InputTest from './InputTest.vue'
+import { ref } from "vue"
+import ButtonTest from "./ButtonTest.vue"
+import InputTest from "./InputTest.vue"
 
-const activeTab = ref('button')
+const activeTab = ref("button")
 
 const tabs = [
-  { key: 'button', label: '按钮' },
-  { key: 'input', label: '输入框' }
+  { key: "button", label: "按钮" },
+  { key: "input", label: "输入框" },
 ]
 
 const toggleTheme = () => {
   const html = document.documentElement
-  const currentTheme = html.getAttribute('data-theme-mode')
-  const newTheme = currentTheme === 'dark' ? 'light' : 'dark'
-  html.setAttribute('data-theme-mode', newTheme)
+  const currentTheme = html.getAttribute("data-theme-mode")
+  const newTheme = currentTheme === "dark" ? "light" : "dark"
+  html.setAttribute("data-theme-mode", newTheme)
 }
 </script>
 
 <template>
-  <div class="tg-test">
+  <div id="publisherApp" class="tg-test">
     <header class="tg-test__header">
       <h1>Terwer UI 组件库测试</h1>
-      <button class="tg-button tg-button--primary" @click="toggleTheme">
-        切换主题
-      </button>
+      <button class="tg-button tg-button--primary" @click="toggleTheme">切换主题</button>
     </header>
 
     <nav class="tg-test__nav">
@@ -48,22 +46,22 @@ const toggleTheme = () => {
 
 <style lang="stylus">
 .tg-test
-  padding 20px
+  padding: $tg-spacing-lg
 
   &__header
-    display flex
-    justify-content space-between
-    align-items center
-    margin-bottom 20px
+    display: flex
+    justify-content: space-between
+    align-items: center
+    margin-bottom: $tg-spacing-lg
 
   &__nav
-    margin-bottom 20px
+    margin-bottom: $tg-spacing-lg
 
     .tg-button
-      margin-right 10px
+      margin-right: $tg-spacing-sm
 
   &__content
-    padding 20px
-    border 1px solid $tg-border-color
-    border-radius $tg-border-radius
-</style> 
+    padding: $tg-spacing-lg
+    border: 1px solid var(--tg-color-border)
+    border-radius: $tg-border-radius
+</style>

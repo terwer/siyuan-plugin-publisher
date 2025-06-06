@@ -1,57 +1,160 @@
 @import '../base/variables.styl'
 @import '../base/mixins.styl'
 
+// 按钮基础样式
 .tg-button
-  display inline-flex
-  align-items center
-  justify-content center
-  height $tg-height-base
-  padding 0 $tg-spacing-md
-  font-size $tg-font-size-base
-  border-radius $tg-border-radius
-  transition-base()
-  border-base()
-  background-color #fff
-  color $tg-text-color
-  cursor pointer
+  position: relative
+  display: inline-flex
+  align-items: center
+  justify-content: center
+  height: $tg-height-base
+  padding: 0 $tg-spacing-md
+  font-size: $tg-font-size-base
+  border-radius: $tg-border-radius
+  border: none
+  outline: none
+  cursor: pointer
+  transition: all 0.3s
+  user-select: none
+  white-space: nowrap
+  background: var(--tg-color-bg)
+  color: var(--tg-color-text)
+  border: 1px solid var(--tg-color-border)
 
   &:hover
-    color $tg-color-primary
-    border-color $tg-color-primary
+    color: var(--tg-color-primary)
+    border-color: var(--tg-color-primary)
 
   &:active
-    color darken($tg-color-primary, 10%)
-    border-color darken($tg-color-primary, 10%)
+    color: var(--tg-color-primary-active)
+    border-color: var(--tg-color-primary-active)
 
-  &--primary
-    background-color $tg-color-primary
-    border-color $tg-color-primary
-    color #fff
-
-    &:hover
-      background-color lighten($tg-color-primary, 10%)
-      border-color lighten($tg-color-primary, 10%)
-      color #fff
-
-    &:active
-      background-color darken($tg-color-primary, 10%)
-      border-color darken($tg-color-primary, 10%)
-      color #fff
-
-  &--text
-    border none
-    background none
-    padding 0
-
-  &--disabled
-    disabled()
-
+  // 尺寸变体
   &--large
-    height $tg-height-lg
-    font-size $tg-font-size-lg
-    padding 0 $tg-spacing-lg
+    height: $tg-height-lg
+    font-size: $tg-font-size-lg
+    padding: 0 $tg-spacing-lg
 
   &--small
-    height $tg-height-sm
-    font-size $tg-font-size-sm
-    padding 0 $tg-spacing-sm
+    height: $tg-height-sm
+    font-size: $tg-font-size-sm
+    padding: 0 $tg-spacing-sm
+
+  // 类型变体
+  &--primary
+    background: var(--tg-color-primary)
+    border-color: var(--tg-color-primary)
+    color: $tg-color-white
+
+    &:hover
+      background: var(--tg-color-primary-hover)
+      border-color: var(--tg-color-primary-hover)
+
+    &:active
+      background: var(--tg-color-primary-active)
+      border-color: var(--tg-color-primary-active)
+
+  &--danger
+    background: var(--tg-color-danger)
+    border-color: var(--tg-color-danger)
+    color: $tg-color-white
+
+    &:hover
+      background: var(--tg-color-danger-hover)
+      border-color: var(--tg-color-danger-hover)
+
+    &:active
+      background: var(--tg-color-danger-active)
+      border-color: var(--tg-color-danger-active)
+
+  &--success
+    background: var(--tg-color-success)
+    border-color: var(--tg-color-success)
+    color: $tg-color-white
+
+    &:hover
+      background: var(--tg-color-success-hover)
+      border-color: var(--tg-color-success-hover)
+
+    &:active
+      background: var(--tg-color-success-active)
+      border-color: var(--tg-color-success-active)
+
+  &--warning
+    background: var(--tg-color-warning)
+    border-color: var(--tg-color-warning)
+    color: $tg-color-white
+
+    &:hover
+      background: var(--tg-color-warning-hover)
+      border-color: var(--tg-color-warning-hover)
+
+    &:active
+      background: var(--tg-color-warning-active)
+      border-color: var(--tg-color-warning-active)
+
+  &--text
+    background: transparent
+    border-color: transparent
+    color: var(--tg-color-text)
+
+    &:hover
+      color: var(--tg-color-primary)
+      background: var(--tg-color-bg-hover)
+
+    &:active
+      color: var(--tg-color-primary-active)
+      background: var(--tg-color-bg-active)
+
+  // 形状变体
+  &--round
+    border-radius: $tg-border-radius-lg
+
+  &--circle
+    border-radius: 50%
+    padding: 0
+    width: $tg-height-base
+
+    &.tg-button--large
+      width: $tg-height-lg
+
+    &.tg-button--small
+      width: $tg-height-sm
+
+  // 状态变体
+  &--disabled
+    cursor: not-allowed
+    background: var(--tg-color-bg-disabled)
+    border-color: var(--tg-color-border-disabled)
+    color: var(--tg-color-text-disabled)
+
+    &:hover
+      background: var(--tg-color-bg-disabled)
+      border-color: var(--tg-color-border-disabled)
+      color: var(--tg-color-text-disabled)
+
+  &--loading
+    cursor: wait
+    opacity: 0.8
+
+  &--block
+    display: flex
+    width: 100%
+
+  // 图标样式
+  &__loading-icon
+    margin-right: $tg-spacing-sm
+    animation: tg-spin 1s infinite linear
+
+  &__icon
+    margin-right: $tg-spacing-sm
+
+  &__content
+    display: inline-flex
+    align-items: center
+
+@keyframes tg-spin
+  from
+    transform: rotate(0deg)
+  to
+    transform: rotate(360deg)
