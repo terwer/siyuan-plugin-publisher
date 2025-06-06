@@ -202,7 +202,55 @@ test/
 └── main.js             # 测试入口
 ```
 
-### 主页功能 (Home.vue)
+### 测试页面样式规范
+
+1. **样式作用域**
+   - 所有测试页面的样式必须使用 `scoped` 属性
+   - 禁止在全局样式文件中定义测试页面样式
+   - 测试页面样式只能在各自的测试组件中定义
+
+2. **命名规范**
+   - 测试页面类名使用 `tg-test-` 前缀
+   - 遵循 BEM 命名规范
+   - 示例：`tg-test-container`、`tg-test-section`、`tg-test-row`
+
+3. **样式实现**
+   - 使用 Stylus 语法
+   - 必须使用设计系统变量
+   - 禁止使用硬编码值
+   - 示例：
+     ```stylus
+     <style lang="stylus" scoped>
+     .tg-test-container
+       padding: $tg-spacing-lg
+
+     .tg-test-section
+       margin-bottom: $tg-spacing-xl
+
+       h3
+         margin-bottom: $tg-spacing-md
+         font-size: $tg-font-size-lg
+         color: var(--tg-color-text)
+
+     .tg-test-row
+       display: flex
+       gap: $tg-spacing-md
+       flex-wrap: wrap
+       align-items: center
+     </style>
+     ```
+
+4. **样式隔离**
+   - 测试页面样式不得影响其他组件
+   - 测试页面样式不得影响全局样式
+   - 测试页面样式不得被其他组件继承
+
+5. **变量使用**
+   - 所有尺寸必须使用 `$tg-spacing-*` 变量
+   - 所有字体大小必须使用 `$tg-font-size-*` 变量
+   - 所有颜色必须使用 `var(--tg-color-*)` 变量
+
+### 主页功能 (src/test/App.vue)
 
 - Tab 导航切换测试页面
 - 主题切换器

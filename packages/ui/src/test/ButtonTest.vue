@@ -83,21 +83,21 @@ const handleClick = () => {
   </div>
 </template>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
 .tg-test-container
-  padding: 24px
+  padding: $tg-spacing-lg
 
 .tg-test-section
-  margin-bottom: 32px
+  margin-bottom: $tg-spacing-xl
 
   h3
-    margin-bottom: 16px
-    font-size: 16px
+    margin-bottom: $tg-spacing-md
+    font-size: $tg-font-size-lg
     color: var(--tg-color-text)
 
 .tg-test-row
   display: flex
-  gap: 16px
+  gap: $tg-spacing-md
   flex-wrap: wrap
   align-items: center
 </style>
