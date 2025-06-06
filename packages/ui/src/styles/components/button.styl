@@ -1,0 +1,57 @@
+@import '../base/variables.styl'
+@import '../base/mixins.styl'
+
+.tg-button
+  display inline-flex
+  align-items center
+  justify-content center
+  height $tg-height-base
+  padding 0 $tg-spacing-md
+  font-size $tg-font-size-base
+  border-radius $tg-border-radius
+  transition-base()
+  border-base()
+  background-color #fff
+  color $tg-text-color
+  cursor pointer
+
+  &:hover
+    color $tg-color-primary
+    border-color $tg-color-primary
+
+  &:active
+    color darken($tg-color-primary, 10%)
+    border-color darken($tg-color-primary, 10%)
+
+  &--primary
+    background-color $tg-color-primary
+    border-color $tg-color-primary
+    color #fff
+
+    &:hover
+      background-color lighten($tg-color-primary, 10%)
+      border-color lighten($tg-color-primary, 10%)
+      color #fff
+
+    &:active
+      background-color darken($tg-color-primary, 10%)
+      border-color darken($tg-color-primary, 10%)
+      color #fff
+
+  &--text
+    border none
+    background none
+    padding 0
+
+  &--disabled
+    disabled()
+
+  &--large
+    height $tg-height-lg
+    font-size $tg-font-size-lg
+    padding 0 $tg-spacing-lg
+
+  &--small
+    height $tg-height-sm
+    font-size $tg-font-size-sm
+    padding 0 $tg-spacing-sm

@@ -68,7 +68,7 @@ pnpm build --filter=\!@siyuan-publisher/main-app
 
 # Or build specific dependencies
 pnpm build -F @siyuan-publisher/core
-pnpm build -F @siyuan-publisher/ui
+pnpm build -F @terwer/ui
 pnpm build -F @siyuan-publisher/plugin-system
 pnpm build -F @siyuan-publisher/platform-adapters
 ```
@@ -121,7 +121,7 @@ pnpm build --filter=\!@siyuan-publisher/main-app
 
 # Build specific packages
 pnpm build -F @siyuan-publisher/core
-pnpm build -F @siyuan-publisher/ui
+pnpm build -F @terwer/ui
 pnpm build -F @siyuan-publisher/plugin-system
 pnpm build -F @siyuan-publisher/platform-adapters
 pnpm build -F @siyuan-publisher/main-app

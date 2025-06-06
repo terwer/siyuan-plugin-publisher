@@ -1,0 +1,46 @@
+// 清除浮动
+clearfix()
+  &::after
+    content ''
+    display table
+    clear both
+
+// 文本溢出省略
+ellipsis()
+  overflow hidden
+  text-overflow ellipsis
+  white-space nowrap
+
+// 多行文本溢出省略
+multi-ellipsis($lines = 2)
+  display -webkit-box
+  -webkit-box-orient vertical
+  -webkit-line-clamp $lines
+  overflow hidden
+
+// 禁用状态
+disabled()
+  cursor not-allowed
+  opacity 0.5
+  pointer-events none
+
+// 基础过渡动画
+transition-base()
+  transition all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1)
+
+// 基础阴影
+box-shadow-base()
+  box-shadow 0 2px 8px rgba(0, 0, 0, 0.15)
+
+// 基础边框
+border-base()
+  border 1px solid $tg-border-color
+  border-radius $tg-border-radius
+
+// 基础内边距
+padding-base()
+  padding $tg-spacing-sm $tg-spacing-md
+
+// 基础外边距
+margin-base()
+  margin $tg-spacing-sm 0

@@ -17,7 +17,7 @@
     "@siyuan-publisher/core": "workspace:*",
     "@siyuan-publisher/platform-adapters": "workspace:*",
     "@siyuan-publisher/plugin-system": "workspace:*",
-    "@siyuan-publisher/ui": "workspace:*",
+    "@terwer/ui": "workspace:*",
     "vue": "^3.4.21",
     "vue-router": "^4.2.5"
   },
