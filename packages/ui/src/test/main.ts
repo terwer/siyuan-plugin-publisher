@@ -1,6 +1,6 @@
 import { createApp } from "vue"
 import App from "./App.vue"
-import "../styles/index.styl"
+import "@terwer/ui/styles/index.styl"
 
 const app = createApp(App)
 app.mount("#app")

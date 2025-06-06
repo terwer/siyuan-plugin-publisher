@@ -7,6 +7,8 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": resolve(__dirname, "src"),
+      "@terwer/ui": resolve(__dirname, "src"),
+      "@terwer/ui/styles": resolve(__dirname, "src/styles"),
     },
   },
   css: {

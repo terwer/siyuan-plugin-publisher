@@ -1,13 +1,40 @@
 {
   "name": "@terwer/ui",
-  "version": "1.0.0",
-  "description": "Terwer UI Component Library",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
   "main": "src/index.ts",
   "module": "src/index.ts",
   "types": "src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts"
+    },
+    "./styles": {
+      "import": "./src/styles/index.styl"
+    },
+    "./styles/base": {
+      "import": "./src/styles/base/index.styl"
+    },
+    "./styles/button": {
+      "import": "./src/styles/components/button.styl"
+    },
+    "./styles/input": {
+      "import": "./src/styles/components/input.styl"
+    },
+    "./button": {
+      "types": "./src/components/TgButton.vue",
+      "import": "./src/components/TgButton.vue"
+    },
+    "./input": {
+      "types": "./src/components/TgInput.vue",
+      "import": "./src/components/TgInput.vue"
+    }
+  },
   "scripts": {
     "dev": "vite",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
+    "preview": "vite preview"
   },
   "dependencies": {
     "pinia": "^2.1.0",

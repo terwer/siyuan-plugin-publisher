@@ -88,7 +88,7 @@ packages/ui/
 
 1. 所有样式通过 `styles/index.styl` 聚合
 2. 组件中禁止引用任何样式文件
-3. 全局样式通过 `@terwer/ui/src/styles/index.styl` 引入，可以设置别名 `@terwer/ui/styles` `@terwer/ui/styles/base` `@terwer/ui/styles/button`
+3. 全局样式通过 `@terwer/ui/styles/index.styl` 引入，可以设置别名 `@terwer/ui/styles`
 
 ### Monorepo 架构规范
 
@@ -96,9 +96,17 @@ packages/ui/
 2. 消费方式：
 
     ```
-    // 其他项目中引入
-    import { TgButton } from '@terwer/ui'
+    // 方式一：全量引入
+    import { TgButton, TgInput } from '@terwer/ui'
     import '@terwer/ui/styles'
+
+    // 方式二：按需引入
+    import TgButton from '@terwer/ui/button'
+    import TgInput from '@terwer/ui/input'
+    // 按需引入样式（需要先引入基础样式）
+    import '@terwer/ui/styles/base'
+    import '@terwer/ui/styles/button'
+    import '@terwer/ui/styles/input'
     ```
 3. 禁止业务包直接引用源码样式
 
@@ -108,6 +116,7 @@ packages/ui/
 - 充分使用 `ref`, `computed`, `reactive`
 - 大型状态管理使用 Pinia
 - 所有 DOM 元素使用 `tg-` 前缀类名
+- 组件导入使用解构方式：`import { TgButton } from '@terwer/ui'`
 
 ### 测试系统要求
 
@@ -274,7 +283,7 @@ npm install @terwer/ui
 ```
 import { createApp } from 'vue'
 import App from './App.vue'
-import '@terwer/ui/styles' // 全局样式 (唯一入口)
+import '@terwer/ui/styles/index.styl' // 全局样式 (唯一入口)
 ```
 
 ### 使用示例
