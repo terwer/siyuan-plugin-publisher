@@ -1,5 +1,0 @@
-export { default as Table } from "./Table.vue"
-export { default as List } from "./List.vue"
-export { default as Card } from "./Card.vue"
-export { default as Tree } from "./Tree.vue"
-export { default as TreeNode } from "./TreeNode.vue"
