@@ -146,18 +146,23 @@
       color: var(--tg-color-text-disabled)
 
   &--loading
-    cursor: wait
-    opacity: 0.8
+    cursor: progress
+    position: relative
+
+  &__loading-icon
+    margin-right: $tg-spacing-sm
+    display: inline-flex
+    align-items: center
+
+    i
+      animation: tg-spin 1s infinite linear
+      display: inline-block
 
   &--block
     display: flex
     width: 100%
 
   // 图标样式
-  &__loading-icon
-    margin-right: $tg-spacing-sm
-    animation: tg-spin 1s infinite linear
-
   &__icon
     margin-right: $tg-spacing-sm
 
