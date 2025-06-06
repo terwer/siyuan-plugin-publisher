@@ -9,7 +9,7 @@
 - 全局样式系统（单一入口）
 - TG 前缀命名空间（@terwer/ui）
 - 8px 基础设计系统
-- 支持暗黑模式（通过 `#publisherApp` 和 `html[data-theme-mode="dark"]`控制）
+- 支持暗黑模式（通过 `#tg-app` 和 `html[data-theme-mode="dark"]`控制）
 - 完整的可视化测试系统
 
 ## 核心规范要求
@@ -145,7 +145,7 @@ packages/ui/
 
 ### 作用域禁令
 
-- 组件文件中禁止出现 `#publisherApp` 选择器
+- 组件文件中禁止出现 `#tg-app` 选择器
 - 禁止在 `components` 目录外定义组件样式
 
 ## 验证与终止机制
@@ -169,23 +169,22 @@ const tgRegex = /\.tg-\w+/;
 
 ### 污染检测
 
-- 组件文件出现 `#publisherApp` → 终止并提示作用域污染错误
+- 组件文件出现 `#tg-app` → 终止并提示作用域污染错误
 
 ## 暗黑模式实现规范
 
 ```
-#publisherApp {
+#tg-app
   // 亮色主题变量
   --tg-color-primary: #1677ff;
   
-  html[data-theme-mode="dark"] {
+  html[data-theme-mode="dark"] &
     // 暗色主题变量
-    --tg-color-primary: #1668dc;
-  }
+    --tg-color-primary #1668dc
 }
 
 .tg-button {
-  background-color: var(--tg-color-primary);
+  background-color var(--tg-color-primary)
 }
 ```
 
@@ -196,10 +195,9 @@ const tgRegex = /\.tg-\w+/;
 ```
 test/
 ├── pages/
-│   ├── Home.vue        # 测试主页 (Tab 导航)
+│   ├── App.vue        # 测试入口 (Tab 导航)
 │   ├── ButtonTest.vue  # 按钮测试页
 │   └── InputTest.vue   # 输入框测试页
-└── main.js             # 测试入口
 ```
 
 ### 测试页面样式规范
@@ -218,27 +216,6 @@ test/
    - 使用 Stylus 语法
    - 必须使用设计系统变量
    - 禁止使用硬编码值
-   - 示例：
-     ```stylus
-     <style lang="stylus" scoped>
-     .tg-test-container
-       padding: $tg-spacing-lg
-
-     .tg-test-section
-       margin-bottom: $tg-spacing-xl
-
-       h3
-         margin-bottom: $tg-spacing-md
-         font-size: $tg-font-size-lg
-         color: var(--tg-color-text)
-
-     .tg-test-row
-       display: flex
-       gap: $tg-spacing-md
-       flex-wrap: wrap
-       align-items: center
-     </style>
-     ```
 
 4. **样式隔离**
    - 测试页面样式不得影响其他组件

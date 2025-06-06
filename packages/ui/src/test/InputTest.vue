@@ -12,6 +12,11 @@ const input7 = ref("")
 const input8 = ref("")
 const input9 = ref("")
 const input10 = ref("")
+const input11 = ref("")
+const input12 = ref("")
+const input13 = ref("")
+const input14 = ref("")
+const input15 = ref("")
 </script>
 
 <template>
@@ -55,23 +60,23 @@ const input10 = ref("")
     <section class="tg-test-section">
       <h3>验证状态</h3>
       <div class="tg-test-row">
-        <TgInput status="error" placeholder="错误状态" />
-        <TgInput status="warning" placeholder="警告状态" />
-        <TgInput status="success" placeholder="成功状态" />
+        <TgInput v-model="input11" status="error" placeholder="错误状态" />
+        <TgInput v-model="input12" status="warning" placeholder="警告状态" />
+        <TgInput v-model="input13" status="success" placeholder="成功状态" />
       </div>
     </section>
 
     <section class="tg-test-section">
       <h3>密码输入框</h3>
       <div class="tg-test-row">
-        <TgInput type="password" placeholder="请输入密码" />
+        <TgInput v-model="input14" type="password" placeholder="请输入密码" />
       </div>
     </section>
 
     <section class="tg-test-section">
       <h3>文本域</h3>
       <div class="tg-test-row">
-        <TgInput type="textarea" placeholder="请输入多行文本" />
+        <TgInput v-model="input15" type="textarea" placeholder="请输入多行文本" />
       </div>
     </section>
   </div>

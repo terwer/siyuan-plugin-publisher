@@ -19,7 +19,7 @@ const toggleTheme = () => {
 </script>
 
 <template>
-  <div id="publisherApp" class="tg-test">
+  <div id="tg-app">
     <header class="tg-test__header">
       <h1>Terwer UI 组件库测试</h1>
       <button class="tg-button tg-button--primary" @click="toggleTheme">切换主题</button>
@@ -45,6 +45,12 @@ const toggleTheme = () => {
 </template>
 
 <style lang="stylus">
+#tg-app
+  min-height: 100vh
+  background-color: var(--tg-color-bg)
+  color: var(--tg-color-text)
+  padding: $tg-spacing-lg
+
 .tg-test
   padding: $tg-spacing-lg
 
@@ -64,4 +70,15 @@ const toggleTheme = () => {
     padding: $tg-spacing-lg
     border: 1px solid var(--tg-color-border)
     border-radius: $tg-border-radius
+
+// 重置浏览器默认样式
+*
+  margin: 0
+  padding: 0
+  box-sizing: border-box
+
+html, body
+  margin: 0
+  padding: 0
+  height: 100%
 </style>
