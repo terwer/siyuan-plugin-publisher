@@ -17,6 +17,11 @@ const input12 = ref("")
 const input13 = ref("")
 const input14 = ref("")
 const input15 = ref("")
+const input16 = ref("")
+const input17 = ref("")
+const input18 = ref("")
+const input19 = ref("")
+const input20 = ref("")
 </script>
 
 <template>
@@ -76,7 +81,16 @@ const input15 = ref("")
     <section class="tg-test-section">
       <h3>文本域</h3>
       <div class="tg-test-row">
-        <TgInput v-model="input15" type="textarea" placeholder="请输入多行文本" />
+        <TgInput v-model="input15" type="textarea" placeholder="基础文本域" />
+      </div>
+      <div class="tg-test-row">
+        <TgInput v-model="input16" type="textarea" placeholder="禁用状态" disabled />
+        <TgInput v-model="input17" type="textarea" placeholder="只读状态" readonly />
+      </div>
+      <div class="tg-test-row">
+        <TgInput v-model="input18" type="textarea" placeholder="错误状态" status="error" />
+        <TgInput v-model="input19" type="textarea" placeholder="警告状态" status="warning" />
+        <TgInput v-model="input20" type="textarea" placeholder="成功状态" status="success" />
       </div>
     </section>
   </div>
@@ -99,6 +113,7 @@ const input15 = ref("")
   gap: $tg-spacing-md
   flex-wrap: wrap
   align-items: center
+  margin-bottom: $tg-spacing-md
 
   .tg-input
     width: 300px

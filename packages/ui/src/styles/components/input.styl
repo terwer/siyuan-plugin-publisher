@@ -70,6 +70,10 @@ $tg-input-success-border-color = var(--tg-color-success)
     background: var(--tg-color-bg-disabled)
     cursor: default
 
+  &--textarea
+    height: auto
+    padding: 0
+
   &--error
     border-color: var(--tg-color-danger)
 
@@ -120,6 +124,43 @@ $tg-input-success-border-color = var(--tg-color-success)
 
     &::placeholder
       color: var(--tg-color-text-placeholder)
+
+  &__textarea
+    width: 100%
+    min-height: $tg-height-base
+    padding: $tg-spacing-sm
+    font-size: $tg-font-size-base
+    line-height: 1.5
+    color: var(--tg-color-text)
+    background: var(--tg-color-bg)
+    border: 0.5px solid var(--tg-color-border)
+    border-radius: $tg-border-radius
+    outline: none
+    resize: vertical
+    transition: all 0.3s
+
+    &:hover
+      border-color: var(--tg-color-primary)
+
+    &:focus
+      border-color: var(--tg-color-primary)
+      box-shadow: 0 0 0 1px var(--tg-color-primary-light)
+
+    &::placeholder
+      color: var(--tg-color-text-placeholder)
+
+    &:disabled
+      cursor: not-allowed
+      background: var(--tg-color-bg-disabled)
+      border-color: var(--tg-color-border-disabled)
+      color: var(--tg-color-text-disabled)
+
+      &:hover
+        border-color: var(--tg-color-border-disabled)
+
+    &:read-only
+      background: var(--tg-color-bg-disabled)
+      cursor: default
 
   &__prefix
     margin-right: $tg-spacing-sm

@@ -8,13 +8,14 @@ interface Props {
   size?: "large" | "default" | "small"
   prefix?: string
   suffix?: string
-  type?: "text" | "password" | "number" | "email" | "tel" | "url"
+  type?: "text" | "password" | "number" | "email" | "tel" | "url" | "textarea"
   maxlength?: number
   minlength?: number
   clearable?: boolean
   showPassword?: boolean
   status?: "error" | "warning" | "success"
   readonly?: boolean
+  rows?: number
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -25,7 +26,8 @@ const props = withDefaults(defineProps<Props>(), {
   type: "text",
   clearable: false,
   showPassword: false,
-  readonly: false
+  readonly: false,
+  rows: 3,
 })
 
 const emit = defineEmits<{
@@ -46,6 +48,7 @@ const classes = computed(() => {
     props.disabled ? "tg-input--disabled" : "",
     props.status ? `tg-input--${props.status}` : "",
     props.readonly ? "tg-input--readonly" : "",
+    props.type === "textarea" ? "tg-input--textarea" : "",
   ].filter(Boolean)
 })
 
@@ -76,33 +79,51 @@ const handleBlur = (event: FocusEvent) => {
 
 <template>
   <div :class="classes">
-    <div class="tg-input__wrapper">
-      <span v-if="prefix" class="tg-input__prefix">
-        {{ prefix }}
-      </span>
-      <input
+    <template v-if="type === 'textarea'">
+      <textarea
         ref="inputRef"
-        class="tg-input__inner"
-        :type="type === 'password' && isPasswordVisible ? 'text' : type"
+        class="tg-input__textarea"
         :value="modelValue"
         :placeholder="placeholder"
         :disabled="disabled"
         :readonly="readonly"
         :maxlength="maxlength"
         :minlength="minlength"
+        :rows="rows"
         @input="handleInput"
         @focus="handleFocus"
         @blur="handleBlur"
-      />
-      <span v-if="suffix" class="tg-input__suffix">
-        {{ suffix }}
-      </span>
-      <span v-if="clearable && modelValue" class="tg-input__clear" @click="handleClear">
-        <i class="tg-icon-close"></i>
-      </span>
-      <span v-if="type === 'password'" class="tg-input__password-toggle" @click="togglePasswordVisibility">
-        <i :class="isPasswordVisible ? 'tg-icon-eye' : 'tg-icon-eye-close'"></i>
-      </span>
-    </div>
+      ></textarea>
+    </template>
+    <template v-else>
+      <div class="tg-input__wrapper">
+        <span v-if="prefix" class="tg-input__prefix">
+          {{ prefix }}
+        </span>
+        <input
+          ref="inputRef"
+          class="tg-input__inner"
+          :type="type === 'password' && isPasswordVisible ? 'text' : type"
+          :value="modelValue"
+          :placeholder="placeholder"
+          :disabled="disabled"
+          :readonly="readonly"
+          :maxlength="maxlength"
+          :minlength="minlength"
+          @input="handleInput"
+          @focus="handleFocus"
+          @blur="handleBlur"
+        />
+        <span v-if="suffix" class="tg-input__suffix">
+          {{ suffix }}
+        </span>
+        <span v-if="clearable && modelValue" class="tg-input__clear" @click="handleClear">
+          <i class="tg-icon-close"></i>
+        </span>
+        <span v-if="type === 'password'" class="tg-input__password-toggle" @click="togglePasswordVisibility">
+          <i :class="isPasswordVisible ? 'tg-icon-eye' : 'tg-icon-eye-close'"></i>
+        </span>
+      </div>
+    </template>
   </div>
 </template>

@@ -70,15 +70,4 @@ const toggleTheme = () => {
     padding: $tg-spacing-lg
     border: 1px solid var(--tg-color-border)
     border-radius: $tg-border-radius
-
-// 重置浏览器默认样式
-*
-  margin: 0
-  padding: 0
-  box-sizing: border-box
-
-html, body
-  margin: 0
-  padding: 0
-  height: 100%
 </style>
