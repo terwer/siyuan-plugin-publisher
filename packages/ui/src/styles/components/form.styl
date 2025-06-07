@@ -20,7 +20,7 @@
         padding-right $tg-spacing-md
         line-height $tg-line-height-base
         color var(--tg-color-text)
-        font-weight 500
+        font-weight $tg-font-weight-medium
 
       .tg-form-item-control
         flex 1
@@ -29,9 +29,7 @@
         min-width 0
 
         .tg-form-item-control-input
-          flex 1
-          max-width 100%
-
+          width var(--tg-form-control-width)
           .tg-form-item-control-input-content
             display flex
             justify-content flex-end
@@ -46,7 +44,7 @@
         margin-bottom $tg-spacing-xs
         line-height $tg-line-height-base
         color var(--tg-color-text)
-        font-weight 500
+        font-weight $tg-font-weight-medium
 
       .tg-form-item-control
         width 100%
@@ -60,14 +58,22 @@
       align-items center
 
       .tg-form-item-label
+        flex-shrink 0
         margin-right $tg-spacing-xs
         line-height $tg-line-height-base
         color var(--tg-color-text)
-        font-weight 500
+        font-weight $tg-font-weight-medium
 
       .tg-form-item-control
-        display inline-block
-        vertical-align middle
+        display inline-flex
+        align-items center
+        justify-content flex-end
+
+        .tg-form-item-control-input
+          width var(--tg-form-control-width)
+          .tg-form-item-control-input-content
+            display flex
+            justify-content flex-end
 
   // 表单组
   .tg-form-group
@@ -76,9 +82,9 @@
     .tg-form-group-title
       margin-bottom $tg-spacing-lg
       font-size $tg-font-size-lg
-      font-weight 500
+      font-weight $tg-font-weight-medium
       color var(--tg-color-text)
-      border-bottom 1px solid var(--tg-color-border)
+      border-bottom $tg-border-width-base solid var(--tg-color-border)
       padding-bottom $tg-spacing-xs
 
   // 错误状态
@@ -98,7 +104,7 @@
 
         &:focus
           border-color var(--tg-color-error-active)
-          box-shadow 0 0 0 2px var(--tg-color-error-bg)
+          box-shadow 0 0 0 $tg-shadow-error var(--tg-color-error-bg)
 
     .tg-form-item-explain
       color var(--tg-color-error)
@@ -110,7 +116,7 @@
     &::before
       content "*"
       color var(--tg-color-error)
-      margin-right 4px
+      margin-right $tg-spacing-xs
 
   // 响应式布局
   @media (max-width $tg-screen-sm)
@@ -130,3 +136,11 @@
       .tg-form-item
         display block
         margin-right 0
+        margin-bottom $tg-spacing-md
+
+        .tg-form-item-label
+          display block
+          margin-bottom $tg-spacing-xs
+
+        .tg-form-item-control
+          width 100%

@@ -154,7 +154,15 @@ const getItemStyle = (item: any) => {
     if (props.config.wrapperCol) {
       style["--tg-form-control-width"] = `${(props.config.wrapperCol.span / 24) * 100}%`
     }
+  } else if (props.config.layout === "inline" && props.config.labelWidth) {
+    style["--tg-form-label-width"] = typeof props.config.labelWidth === "number" 
+      ? `${props.config.labelWidth}px` 
+      : props.config.labelWidth
   }
+
+  // 设置控件宽度，优先使用控件级别的配置，如果没有则使用表单级别的默认配置
+  style["--tg-form-control-width"] = item.width || props.config.controlWidth || "200px"
+
   return style
 }
 

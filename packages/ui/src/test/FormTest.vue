@@ -85,6 +85,8 @@ const verticalFormConfig: FormConfig = {
 // 行内布局表单配置
 const inlineFormConfig: FormConfig = {
   layout: "inline",
+  labelWidth: 80,
+  controlWidth: "200px",
   groups: [
     {
       items: [
@@ -92,22 +94,30 @@ const inlineFormConfig: FormConfig = {
           name: "username",
           label: "用户名",
           type: "input",
+          width: "200px",
           placeholder: "请输入用户名",
         },
         {
           name: "email",
           label: "邮箱",
           type: "input",
+          width: "200px",
           placeholder: "请输入邮箱",
         },
         {
           name: "status",
           label: "状态",
           type: "select",
+          width: "120px",
           options: [
             { label: "启用", value: "active" },
             { label: "禁用", value: "inactive" },
           ],
+        },
+        {
+          name: "notify",
+          label: "通知",
+          type: "switch",
         },
       ],
     },
@@ -119,6 +129,7 @@ const complexFormConfig: FormConfig = {
   layout: "horizontal",
   labelCol: { span: 6 },
   wrapperCol: { span: 18 },
+  controlWidth: "200px",
   groups: [
     {
       title: "基础信息",
@@ -128,6 +139,7 @@ const complexFormConfig: FormConfig = {
           label: "用户名",
           type: "input",
           required: true,
+          width: "600px",
           placeholder: "请输入用户名",
         },
         {
@@ -135,12 +147,14 @@ const complexFormConfig: FormConfig = {
           label: "邮箱",
           type: "input",
           required: true,
+          width: "600px",
           placeholder: "请输入邮箱",
         },
         {
           name: "description",
           label: "描述",
           type: "textarea",
+          width: "600px",
           placeholder: "请输入描述",
         },
       ],
@@ -152,6 +166,7 @@ const complexFormConfig: FormConfig = {
           name: "status",
           label: "状态",
           type: "select",
+          width: "300px",
           options: [
             { label: "启用", value: "active" },
             { label: "禁用", value: "inactive" },
@@ -166,6 +181,7 @@ const complexFormConfig: FormConfig = {
           name: "type",
           label: "类型",
           type: "radio",
+          width: "200px",
           options: [
             { label: "类型A", value: "A" },
             { label: "类型B", value: "B" },
@@ -175,6 +191,7 @@ const complexFormConfig: FormConfig = {
           name: "tags",
           label: "标签",
           type: "checkbox",
+          width: "200px",
           options: [
             { label: "标签1", value: "tag1" },
             { label: "标签2", value: "tag2" },
@@ -185,6 +202,7 @@ const complexFormConfig: FormConfig = {
           name: "date",
           label: "日期",
           type: "datePicker",
+          width: "200px",
         },
       ],
     },

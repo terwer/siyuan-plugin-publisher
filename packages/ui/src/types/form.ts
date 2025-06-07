@@ -23,6 +23,7 @@ export interface FormItem {
   props?: Record<string, any>
   rules?: ValidationRule[]
   error?: string
+  width?: number | string
 }
 
 export interface FormGroup {
@@ -34,6 +35,8 @@ export interface FormConfig {
   layout: "horizontal" | "vertical" | "inline"
   labelCol?: { span: number }
   wrapperCol?: { span: number }
+  labelWidth?: number | string
+  controlWidth?: string
   groups: FormGroup[]
 }
 
