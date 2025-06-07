@@ -176,55 +176,63 @@
 // 暗黑模式适配
 html[data-theme-mode="dark"]
   .tg-tabs
+    &-nav
+      border-bottom-color var(--tg-color-border)
+
     &-tab
-      color var(--tg-color-text-secondary-dark)
+      color var(--tg-color-text-secondary)
 
       &:hover
-        color var(--tg-color-primary-dark)
+        color var(--tg-color-primary)
 
       &-active
-        color var(--tg-color-primary-dark)
+        color var(--tg-color-primary)
 
         &::after
-          background-color var(--tg-color-primary-dark)
+          background-color var(--tg-color-primary)
 
     &-card
       .tg-tabs-tab
-        border-color var(--tg-color-border-dark)
-        color var(--tg-color-text-primary-dark)
-        background var(--tg-color-bg-container-dark)
+        border-color var(--tg-color-border)
+        color var(--tg-color-text-primary)
+        background var(--tg-color-bg-container)
 
         &:hover
-          color var(--tg-color-primary-dark)
+          color var(--tg-color-primary)
 
         &-active
-          background-color var(--tg-color-primary-dark)
-          border-color var(--tg-color-primary-dark)
+          background-color var(--tg-color-primary)
+          border-color var(--tg-color-primary)
           color var(--tg-color-white)
 
           &:hover
             color var(--tg-color-white)
 
       .tg-tabs-content
-        background var(--tg-color-bg-container-dark)
+        background var(--tg-color-bg-container)
+        border-color var(--tg-color-border)
 
     &-button-group
       .tg-tabs-nav
-        border-color var(--tg-color-border-dark)
-        background var(--tg-color-bg-container-dark)
+        border-color var(--tg-color-border)
+        background var(--tg-color-bg-container)
 
       .tg-tabs-tab
-        color var(--tg-color-text-primary-dark)
+        color var(--tg-color-text-primary)
+
+        &:not(:last-child)::after
+          background-color var(--tg-color-border)
 
         &:hover
-          color var(--tg-color-primary-dark)
+          color var(--tg-color-primary)
 
         &-active
-          background-color var(--tg-color-primary-dark)
+          background-color var(--tg-color-primary)
           color var(--tg-color-white)
 
           &:hover
             color var(--tg-color-white)
 
       .tg-tabs-content
-        background var(--tg-color-bg-container-dark) 
+        background var(--tg-color-bg-container)
+        border-color var(--tg-color-border) 
