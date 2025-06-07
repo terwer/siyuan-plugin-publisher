@@ -3,14 +3,25 @@ import { ref, watch } from "vue"
 import type { FormConfig, FormInstance } from "@/types"
 import TgForm from "@/components/TgForm.vue"
 
-// 表单引用
-const formRef = ref<FormInstance>()
+// 水平布局表单
+const horizontalFormRef = ref<FormInstance>()
+const horizontalFormData = ref<Record<string, any>>({})
+const horizontalFormErrors = ref<Record<string, string[]>>({})
 
-// 基础表单数据
-const formData = ref<Record<string, any>>({})
+// 垂直布局表单
+const verticalFormRef = ref<FormInstance>()
+const verticalFormData = ref<Record<string, any>>({})
+const verticalFormErrors = ref<Record<string, string[]>>({})
 
-// 表单错误信息
-const formErrors = ref<Record<string, string[]>>({})
+// 行内布局表单
+const inlineFormRef = ref<FormInstance>()
+const inlineFormData = ref<Record<string, any>>({})
+const inlineFormErrors = ref<Record<string, string[]>>({})
+
+// 复杂表单
+const complexFormRef = ref<FormInstance>()
+const complexFormData = ref<Record<string, any>>({})
+const complexFormErrors = ref<Record<string, string[]>>({})
 
 // 水平布局表单配置
 const horizontalFormConfig: FormConfig = {
@@ -69,6 +80,12 @@ const verticalFormConfig: FormConfig = {
           type: "input",
           required: true,
           placeholder: "请输入用户名",
+          rules: [
+            {
+              required: true,
+              message: "请输入用户名",
+            },
+          ],
         },
         {
           name: "email",
@@ -76,6 +93,16 @@ const verticalFormConfig: FormConfig = {
           type: "input",
           required: true,
           placeholder: "请输入邮箱",
+          rules: [
+            {
+              required: true,
+              message: "请输入邮箱",
+            },
+            {
+              type: "email",
+              message: "请输入正确的邮箱格式",
+            },
+          ],
         },
       ],
     },
@@ -141,6 +168,12 @@ const complexFormConfig: FormConfig = {
           required: true,
           width: "600px",
           placeholder: "请输入用户名",
+          rules: [
+            {
+              required: true,
+              message: "请输入用户名",
+            },
+          ],
         },
         {
           name: "email",
@@ -149,6 +182,16 @@ const complexFormConfig: FormConfig = {
           required: true,
           width: "600px",
           placeholder: "请输入邮箱",
+          rules: [
+            {
+              required: true,
+              message: "请输入邮箱",
+            },
+            {
+              type: "email",
+              message: "请输入正确的邮箱格式",
+            },
+          ],
         },
         {
           name: "description",
@@ -156,6 +199,12 @@ const complexFormConfig: FormConfig = {
           type: "textarea",
           width: "600px",
           placeholder: "请输入描述",
+          rules: [
+            {
+              required: true,
+              message: "请输入描述",
+            },
+          ],
         },
       ],
     },
@@ -167,24 +216,45 @@ const complexFormConfig: FormConfig = {
           label: "状态",
           type: "select",
           width: "300px",
+          required: true,
           options: [
             { label: "启用", value: "active" },
             { label: "禁用", value: "inactive" },
+          ],
+          rules: [
+            {
+              required: true,
+              message: "请选择状态",
+            },
           ],
         },
         {
           name: "notify",
           label: "通知",
           type: "switch",
+          required: true,
+          rules: [
+            {
+              required: true,
+              message: "请选择是否开启通知",
+            },
+          ],
         },
         {
           name: "type",
           label: "类型",
           type: "radio",
           width: "200px",
+          required: true,
           options: [
             { label: "类型A", value: "A" },
             { label: "类型B", value: "B" },
+          ],
+          rules: [
+            {
+              required: true,
+              message: "请选择类型",
+            },
           ],
         },
         {
@@ -192,10 +262,17 @@ const complexFormConfig: FormConfig = {
           label: "标签",
           type: "checkbox",
           width: "200px",
+          required: true,
           options: [
             { label: "标签1", value: "tag1" },
             { label: "标签2", value: "tag2" },
             { label: "标签3", value: "tag3" },
+          ],
+          rules: [
+            {
+              required: true,
+              message: "请选择至少一个标签",
+            },
           ],
         },
         {
@@ -203,6 +280,13 @@ const complexFormConfig: FormConfig = {
           label: "日期",
           type: "datePicker",
           width: "200px",
+          required: true,
+          rules: [
+            {
+              required: true,
+              message: "请选择日期",
+            },
+          ],
         },
       ],
     },
@@ -211,32 +295,44 @@ const complexFormConfig: FormConfig = {
 
 // 表单提交
 const handleSubmit = async () => {
-  if (!formRef.value) return
-
   try {
-    const isValid = await formRef.value.validate()
-    if (isValid) {
-      console.log("表单数据：", formData.value)
-      // 这里可以添加提交成功的处理逻辑
+    const horizontalValid = await horizontalFormRef.value?.validate()
+    const verticalValid = await verticalFormRef.value?.validate()
+    const inlineValid = await inlineFormRef.value?.validate()
+    const complexValid = await complexFormRef.value?.validate()
+
+    if (horizontalValid && verticalValid && inlineValid && complexValid) {
+      console.log("水平布局表单数据：", horizontalFormData.value)
+      console.log("垂直布局表单数据：", verticalFormData.value)
+      console.log("行内布局表单数据：", inlineFormData.value)
+      console.log("复杂表单数据：", complexFormData.value)
     }
   } catch (error) {
     console.error("表单验证失败：", error)
-    formErrors.value = error as Record<string, string[]>
   }
 }
 
 // 表单重置
 const handleReset = () => {
-  if (!formRef.value) return
-  formRef.value.resetFields()
-  formErrors.value = {}
+  horizontalFormRef.value?.resetFields()
+  verticalFormRef.value?.resetFields()
+  inlineFormRef.value?.resetFields()
+  complexFormRef.value?.resetFields()
+
+  horizontalFormErrors.value = {}
+  verticalFormErrors.value = {}
+  inlineFormErrors.value = {}
+  complexFormErrors.value = {}
 }
 
 // 监听表单数据变化
 watch(
-  formData,
-  (newVal) => {
-    console.log("表单数据变化：", newVal)
+  [horizontalFormData, verticalFormData, inlineFormData, complexFormData],
+  ([horizontal, vertical, inline, complex]) => {
+    console.log("水平布局表单数据变化：", horizontal)
+    console.log("垂直布局表单数据变化：", vertical)
+    console.log("行内布局表单数据变化：", inline)
+    console.log("复杂表单数据变化：", complex)
   },
   { deep: true },
 )
@@ -247,20 +343,35 @@ watch(
     <div class="form-content">
       <h2>水平布局表单</h2>
       <TgForm
-        ref="formRef"
-        v-model="formData"
+        ref="horizontalFormRef"
+        v-model="horizontalFormData"
         :config="horizontalFormConfig"
-        @validate="(errors) => (formErrors = errors)"
+        @validate="(errors) => (horizontalFormErrors = errors)"
       />
 
       <h2>垂直布局表单</h2>
-      <TgForm v-model="formData" :config="verticalFormConfig" @validate="(errors) => (formErrors = errors)" />
+      <TgForm
+        ref="verticalFormRef"
+        v-model="verticalFormData"
+        :config="verticalFormConfig"
+        @validate="(errors) => (verticalFormErrors = errors)"
+      />
 
       <h2>行内布局表单</h2>
-      <TgForm v-model="formData" :config="inlineFormConfig" @validate="(errors) => (formErrors = errors)" />
+      <TgForm
+        ref="inlineFormRef"
+        v-model="inlineFormData"
+        :config="inlineFormConfig"
+        @validate="(errors) => (inlineFormErrors = errors)"
+      />
 
       <h2>复杂表单</h2>
-      <TgForm v-model="formData" :config="complexFormConfig" @validate="(errors) => (formErrors = errors)" />
+      <TgForm
+        ref="complexFormRef"
+        v-model="complexFormData"
+        :config="complexFormConfig"
+        @validate="(errors) => (complexFormErrors = errors)"
+      />
 
       <div class="form-actions">
         <button @click="handleSubmit">提交</button>
@@ -269,12 +380,42 @@ watch(
 
       <div class="form-data-preview">
         <h2>表单数据预览</h2>
-        <pre>{{ JSON.stringify(formData, null, 2) }}</pre>
+        <pre>{{
+          JSON.stringify(
+            {
+              horizontal: horizontalFormData,
+              vertical: verticalFormData,
+              inline: inlineFormData,
+              complex: complexFormData,
+            },
+            null,
+            2,
+          )
+        }}</pre>
       </div>
 
-      <div v-if="Object.keys(formErrors).length > 0" class="form-errors">
+      <div
+        v-if="
+          Object.keys(horizontalFormErrors).length > 0 ||
+          Object.keys(verticalFormErrors).length > 0 ||
+          Object.keys(inlineFormErrors).length > 0 ||
+          Object.keys(complexFormErrors).length > 0
+        "
+        class="form-errors"
+      >
         <h2>表单错误信息</h2>
-        <pre>{{ JSON.stringify(formErrors, null, 2) }}</pre>
+        <pre>{{
+          JSON.stringify(
+            {
+              horizontal: horizontalFormErrors,
+              vertical: verticalFormErrors,
+              inline: inlineFormErrors,
+              complex: complexFormErrors,
+            },
+            null,
+            2,
+          )
+        }}</pre>
       </div>
     </div>
   </div>
