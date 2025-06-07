@@ -3,42 +3,41 @@ export interface ValidationRule {
   message?: string
   min?: number
   max?: number
-  type?: "email" | "url" | "number"
   pattern?: RegExp
+  type?: string
   validator?: (value: any) => boolean | Promise<boolean>
+}
+
+export interface Option {
+  label: string
+  value: any
 }
 
 export interface FormItem {
   name: string
   label: string
-  type: "input" | "select" | "radio" | "checkbox" | "switch" | "textarea" | "datePicker"
+  type: "input" | "textarea" | "select" | "switch" | "radio" | "checkbox" | "datePicker"
   required?: boolean
-  rules?: ValidationRule[]
-  options?: Array<{
-    label: string
-    value: any
-  }>
   placeholder?: string
-  disabled?: boolean
-  defaultValue?: any
+  options?: Option[]
   props?: Record<string, any>
+  rules?: ValidationRule[]
+  error?: string
 }
 
 export interface FormGroup {
-  title: string
+  title?: string
   items: FormItem[]
 }
 
 export interface FormConfig {
-  groups: FormGroup[]
-  layout?: "horizontal" | "vertical" | "inline"
+  layout: "horizontal" | "vertical" | "inline"
   labelCol?: { span: number }
   wrapperCol?: { span: number }
+  groups: FormGroup[]
 }
 
 export interface FormInstance {
-  validate: () => Promise<any>
+  validate: () => Promise<Record<string, any>>
   resetFields: () => void
-  setFieldsValue: (values: Record<string, any>) => void
-  getFieldsValue: () => Record<string, any>
 }

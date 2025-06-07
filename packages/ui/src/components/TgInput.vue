@@ -78,7 +78,7 @@ const handleBlur = (event: FocusEvent) => {
 </script>
 
 <template>
-  <div :class="classes">
+  <div :class="['tg-input', type === 'textarea' ? 'tg-input--textarea' : '', size !== 'default' ? `tg-input--${size}` : '', disabled ? 'tg-input--disabled' : '', status ? `tg-input--${status}` : '', readonly ? 'tg-input--readonly' : '']">
     <template v-if="type === 'textarea'">
       <textarea
         ref="inputRef"
@@ -97,9 +97,7 @@ const handleBlur = (event: FocusEvent) => {
     </template>
     <template v-else>
       <div class="tg-input__wrapper">
-        <span v-if="prefix" class="tg-input__prefix">
-          {{ prefix }}
-        </span>
+        <span v-if="prefix" class="tg-input__prefix">{{ prefix }}</span>
         <input
           ref="inputRef"
           class="tg-input__inner"
@@ -114,9 +112,7 @@ const handleBlur = (event: FocusEvent) => {
           @focus="handleFocus"
           @blur="handleBlur"
         />
-        <span v-if="suffix" class="tg-input__suffix">
-          {{ suffix }}
-        </span>
+        <span v-if="suffix" class="tg-input__suffix">{{ suffix }}</span>
         <span v-if="clearable && modelValue" class="tg-input__clear" @click="handleClear">
           <i class="tg-icon-close"></i>
         </span>

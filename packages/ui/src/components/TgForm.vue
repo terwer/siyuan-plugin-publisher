@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { ref, watch } from "vue"
-import type { FormConfig, FormInstance } from "@/types"
+import { ref, computed, watch } from "vue"
+import type { FormConfig, FormInstance, ValidationRule } from "@/types"
 import TgInput from "./TgInput.vue"
 import TgSelect from "./TgSelect.vue"
+import TgSwitch from "./TgSwitch.vue"
 import TgRadio from "./TgRadio.vue"
 import TgCheckbox from "./TgCheckbox.vue"
-import TgSwitch from "./TgSwitch.vue"
 import TgDatePicker from "./TgDatePicker.vue"
 
 const props = defineProps<{
@@ -15,10 +15,16 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: "update:modelValue", value: Record<string, any>): void
+  (e: "validate", errors: Record<string, string[]>): void
 }>()
 
+const formRef = ref<FormInstance>()
+
+// 表单数据
 const formData = ref<Record<string, any>>({})
-const errors = ref<Record<string, string>>({})
+
+// 错误信息
+const errors = ref<Record<string, string[]>>({})
 
 // 监听表单数据变化
 watch(
@@ -26,74 +32,96 @@ watch(
   (newVal) => {
     formData.value = { ...newVal }
   },
-  { immediate: true, deep: true },
+  { immediate: true, deep: true }
 )
 
 // 监听内部数据变化
 watch(
   formData,
   (newVal) => {
-    emit("update:modelValue", { ...newVal })
+    emit("update:modelValue", newVal)
   },
-  { deep: true },
+  { deep: true }
 )
 
 // 验证单个字段
-const validateField = (name: string) => {
-  const item = props.config.groups.flatMap((group) => group.items).find((item) => item.name === name)
+const validateField = async (name: string, value: any, rules?: ValidationRule[]) => {
+  if (!rules || rules.length === 0) return true
 
-  if (!item?.rules) {
-    errors.value[name] = ""
-    return true
-  }
+  const fieldErrors: string[] = []
 
-  const value = formData.value[name]
-  for (const rule of item.rules) {
+  for (const rule of rules) {
     if (rule.required && !value) {
-      errors.value[name] = rule.message || "此字段为必填项"
-      return false
+      fieldErrors.push(rule.message || "此字段为必填项")
+      continue
     }
 
-    if (rule.min && value.length < rule.min) {
-      errors.value[name] = rule.message || `最小长度为 ${rule.min}`
-      return false
-    }
+    if (value) {
+      if (rule.type === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+        fieldErrors.push(rule.message || "请输入正确的邮箱格式")
+      }
 
-    if (rule.max && value.length > rule.max) {
-      errors.value[name] = rule.message || `最大长度为 ${rule.max}`
-      return false
-    }
+      if (rule.min !== undefined && value.length < rule.min) {
+        fieldErrors.push(rule.message || `长度不能小于 ${rule.min}`)
+      }
 
-    if (rule.pattern && !rule.pattern.test(value)) {
-      errors.value[name] = rule.message || "格式不正确"
-      return false
-    }
+      if (rule.max !== undefined && value.length > rule.max) {
+        fieldErrors.push(rule.message || `长度不能大于 ${rule.max}`)
+      }
 
-    if (rule.type === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-      errors.value[name] = rule.message || "请输入有效的邮箱地址"
-      return false
-    }
+      if (rule.pattern && !rule.pattern.test(value)) {
+        fieldErrors.push(rule.message || "格式不正确")
+      }
 
-    if (rule.type === "number" && isNaN(Number(value))) {
-      errors.value[name] = rule.message || "请输入数字"
-      return false
-    }
-
-    if (rule.validator && !rule.validator(value)) {
-      errors.value[name] = rule.message || "验证失败"
-      return false
+      if (rule.validator) {
+        try {
+          const result = await rule.validator(value)
+          if (!result) {
+            fieldErrors.push(rule.message || "验证失败")
+          }
+        } catch (error) {
+          fieldErrors.push(rule.message || "验证失败")
+        }
+      }
     }
   }
 
-  errors.value[name] = ""
+  if (fieldErrors.length > 0) {
+    errors.value[name] = fieldErrors
+    return false
+  }
+
+  delete errors.value[name]
   return true
 }
 
 // 验证整个表单
 const validate = async () => {
-  const items = props.config.groups.flatMap((group) => group.items)
-  const results = await Promise.all(items.map((item) => validateField(item.name)))
-  return results.every(Boolean) ? formData.value : Promise.reject(errors.value)
+  const validationPromises: Promise<boolean>[] = []
+  const newErrors: Record<string, string[]> = {}
+
+  props.config.groups.forEach((group) => {
+    group.items.forEach((item) => {
+      if (item.rules) {
+        validationPromises.push(
+          validateField(item.name, formData.value[item.name], item.rules).then((isValid) => {
+            if (!isValid) {
+              newErrors[item.name] = errors.value[item.name]
+            }
+            return isValid
+          })
+        )
+      }
+    })
+  })
+
+  const results = await Promise.all(validationPromises)
+  const isValid = results.every((result) => result)
+
+  errors.value = newErrors
+  emit("validate", newErrors)
+
+  return isValid
 }
 
 // 重置表单
@@ -102,114 +130,127 @@ const resetFields = () => {
   errors.value = {}
 }
 
-// 设置表单值
-const setFieldsValue = (values: Record<string, any>) => {
-  formData.value = { ...formData.value, ...values }
-}
-
-// 获取表单值
-const getFieldsValue = () => {
-  return { ...formData.value }
-}
-
 // 暴露方法
-defineExpose<FormInstance>({
+defineExpose({
   validate,
   resetFields,
-  setFieldsValue,
-  getFieldsValue,
 })
+
+// 计算表单类名
+const formClass = computed(() => {
+  return {
+    "tg-form": true,
+    [`tg-form-${props.config.layout}`]: true,
+  }
+})
+
+// 计算表单项样式
+const getItemStyle = (item: any) => {
+  const style: Record<string, string> = {}
+  if (props.config.layout === "horizontal") {
+    if (props.config.labelCol) {
+      style["--tg-form-label-width"] = `${(props.config.labelCol.span / 24) * 100}%`
+    }
+    if (props.config.wrapperCol) {
+      style["--tg-form-control-width"] = `${(props.config.wrapperCol.span / 24) * 100}%`
+    }
+  }
+  return style
+}
+
+// 获取表单项错误信息
+const getItemError = (name: string) => {
+  return errors.value[name]?.[0]
+}
 </script>
 
 <template>
-  <form class="tg-form" :class="config.layout">
-    <div v-for="group in config.groups" :key="group.title" class="tg-form-group">
+  <form ref="formRef" :class="formClass">
+    <div v-for="(group, groupIndex) in config.groups" :key="groupIndex" class="tg-form-group">
       <div v-if="group.title" class="tg-form-group-title">{{ group.title }}</div>
-      <div class="tg-form-group-content">
-        <div
-          v-for="item in group.items"
-          :key="item.name"
-          class="tg-form-item"
-          :class="{ 'tg-form-item--error': errors[item.name] }"
+      <div
+        v-for="(item, itemIndex) in group.items"
+        :key="itemIndex"
+        class="tg-form-item"
+        :class="{ 'tg-form-item-has-error': errors[item.name] }"
+        :style="getItemStyle(item)"
+      >
+        <label
+          v-if="item.label"
+          class="tg-form-item-label"
+          :class="{ 'tg-form-item-required': item.required }"
         >
-          <div
-            class="tg-form-item-label"
-            :style="{ width: config.labelCol?.span ? `${config.labelCol.span * 4}%` : '25%' }"
-          >
-            {{ item.label }}
-            <span v-if="item.required" class="tg-form-item-required">*</span>
-          </div>
-          <div
-            class="tg-form-item-control"
-            :style="{ width: config.wrapperCol?.span ? `${config.wrapperCol.span * 4}%` : '75%' }"
-          >
-            <!-- 输入框 -->
-            <TgInput
-              v-if="item.type === 'input'"
-              v-model="formData[item.name]"
-              :type="item.props?.type || 'text'"
-              :placeholder="item.placeholder"
-              :disabled="item.disabled"
-              :status="errors[item.name] ? 'error' : undefined"
-            />
+          {{ item.label }}
+        </label>
+        <div class="tg-form-item-control">
+          <div class="tg-form-item-control-input">
+            <div class="tg-form-item-control-input-content">
+              <!-- 输入框 -->
+              <TgInput
+                v-if="item.type === 'input'"
+                v-model="formData[item.name]"
+                v-bind="item.props || {}"
+                :placeholder="item.placeholder"
+                @blur="validateField(item.name, formData[item.name], item.rules)"
+              />
 
-            <!-- 下拉选择框 -->
-            <TgSelect
-              v-else-if="item.type === 'select'"
-              v-model="formData[item.name]"
-              :options="item.options || []"
-              :placeholder="item.placeholder"
-              :disabled="item.disabled"
-              :status="errors[item.name] ? 'error' : undefined"
-            />
+              <!-- 文本域 -->
+              <TgInput
+                v-else-if="item.type === 'textarea'"
+                v-model="formData[item.name]"
+                type="textarea"
+                v-bind="item.props || {}"
+                :placeholder="item.placeholder"
+                @blur="validateField(item.name, formData[item.name], item.rules)"
+              />
 
-            <!-- 单选框组 -->
-            <TgRadio
-              v-else-if="item.type === 'radio'"
-              v-model="formData[item.name]"
-              :options="item.options || []"
-              :disabled="item.disabled"
-            />
+              <!-- 选择器 -->
+              <TgSelect
+                v-else-if="item.type === 'select'"
+                v-model="formData[item.name]"
+                :options="item.options || []"
+                v-bind="item.props || {}"
+                :placeholder="item.placeholder"
+                @change="validateField(item.name, formData[item.name], item.rules)"
+              />
 
-            <!-- 复选框组 -->
-            <TgCheckbox
-              v-else-if="item.type === 'checkbox'"
-              v-model="formData[item.name]"
-              :options="item.options || []"
-              :disabled="item.disabled"
-            />
+              <!-- 开关 -->
+              <TgSwitch
+                v-else-if="item.type === 'switch'"
+                v-model="formData[item.name]"
+                v-bind="item.props || {}"
+                @change="validateField(item.name, formData[item.name], item.rules)"
+              />
 
-            <!-- 开关 -->
-            <TgSwitch
-              v-else-if="item.type === 'switch'"
-              v-model="formData[item.name]"
-              :disabled="item.disabled"
-            />
+              <!-- 单选框 -->
+              <TgRadio
+                v-else-if="item.type === 'radio'"
+                v-model="formData[item.name]"
+                :options="item.options || []"
+                v-bind="item.props || {}"
+                @change="validateField(item.name, formData[item.name], item.rules)"
+              />
 
-            <!-- 文本域 -->
-            <TgInput
-              v-else-if="item.type === 'textarea'"
-              v-model="formData[item.name]"
-              type="textarea"
-              :placeholder="item.placeholder"
-              :disabled="item.disabled"
-              :status="errors[item.name] ? 'error' : undefined"
-            />
+              <!-- 复选框 -->
+              <TgCheckbox
+                v-else-if="item.type === 'checkbox'"
+                v-model="formData[item.name]"
+                :options="item.options || []"
+                v-bind="item.props || {}"
+                @change="validateField(item.name, formData[item.name], item.rules)"
+              />
 
-            <!-- 日期选择器 -->
-            <TgDatePicker
-              v-else-if="item.type === 'datePicker'"
-              v-model="formData[item.name]"
-              :placeholder="item.placeholder"
-              :disabled="item.disabled"
-              :status="errors[item.name] ? 'error' : undefined"
-            />
-
-            <!-- 错误提示 -->
-            <div v-if="errors[item.name]" class="tg-form-item-error">
-              {{ errors[item.name] }}
+              <!-- 日期选择器 -->
+              <TgDatePicker
+                v-else-if="item.type === 'datePicker'"
+                v-model="formData[item.name]"
+                v-bind="item.props || {}"
+                :placeholder="item.placeholder"
+                @change="validateField(item.name, formData[item.name], item.rules)"
+              />
             </div>
           </div>
+          <div v-if="errors[item.name]" class="tg-form-item-explain">{{ getItemError(item.name) }}</div>
         </div>
       </div>
     </div>
