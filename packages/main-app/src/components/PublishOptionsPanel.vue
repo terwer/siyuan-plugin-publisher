@@ -11,12 +11,7 @@
 
     <div class="form-group">
       <label for="publishDate">发布时间</label>
-      <input
-        id="publishDate"
-        type="datetime-local"
-        v-model="localPublishDate"
-        @change="updateOptions"
-      />
+      <input id="publishDate" type="datetime-local" v-model="localPublishDate" @change="updateOptions" />
     </div>
 
     <button @click="publish" class="publish-btn" :disabled="isPublishing">
@@ -49,12 +44,18 @@ const emit = defineEmits<{
 }>()
 
 const localOptions = ref<PublishOptions>({ ...props.options })
-const localPublishDate = ref(props.options.publishDate.toISOString().slice(0, 16))
+const localPublishDate = ref(
+  props.options.publishDate?.toISOString().slice(0, 16) || new Date().toISOString().slice(0, 16),
+)
 
-watch(() => props.options, (newOptions) => {
-  localOptions.value = { ...newOptions }
-  localPublishDate.value = newOptions.publishDate.toISOString().slice(0, 16)
-}, { deep: true })
+watch(
+  () => props.options,
+  (newOptions) => {
+    localOptions.value = { ...newOptions }
+    localPublishDate.value = newOptions.publishDate?.toISOString().slice(0, 16) || new Date().toISOString().slice(0, 16)
+  },
+  { deep: true },
+)
 
 const updateOptions = () => {
   localOptions.value.publishDate = new Date(localPublishDate.value)
@@ -125,4 +126,4 @@ input {
   background-color: #ffe6e6;
   color: #cc0000;
 }
-</style> 
+</style>
