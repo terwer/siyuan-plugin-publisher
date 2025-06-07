@@ -1,15 +1,15 @@
 // 间距系统 (8px 倍数)
-$tg-spacing-xs = 4px
-$tg-spacing-sm = 8px
-$tg-spacing-md = 16px
-$tg-spacing-lg = 24px
-$tg-spacing-xl = 32px
+$tg-spacing-xs = 8px
+$tg-spacing-sm = 16px
+$tg-spacing-md = 24px
+$tg-spacing-lg = 32px
+$tg-spacing-xl = 40px
 
 // 字体系统
 $tg-font-size-sm = 12px
 $tg-font-size-base = 14px
 $tg-font-size-lg = 16px
-$tg-font-size-xl = 18px
+$tg-font-size-xl = 20px
 
 // 组件尺寸
 $tg-height-base = 32px
@@ -17,9 +17,9 @@ $tg-height-lg = 40px
 $tg-height-sm = 24px
 
 // 边框圆角
-$tg-border-radius = 4px
-$tg-border-radius-lg = 8px
+$tg-border-radius-base = 4px
 $tg-border-radius-sm = 2px
+$tg-border-radius-lg = 8px
 
 // 基础颜色
 $tg-color-white = #ffffff
@@ -132,3 +132,64 @@ $tg-color-bg-disabled = #f5f5f5
     --tg-color-bg-hover: #1f1f1f
     --tg-color-bg-active: #262626
     --tg-color-bg-disabled: #1f1f1f
+
+// 颜色系统
+$tg-color-success = #52c41a
+$tg-color-warning = #faad14
+$tg-color-error = #ff4d4f
+$tg-color-info = #1677ff
+
+// 文字颜色
+$tg-color-text-primary = #000000d9
+$tg-color-text-secondary = #00000073
+$tg-color-text-disabled = #00000040
+
+// 背景色
+$tg-color-bg = #ffffff
+$tg-color-bg-container = #ffffff
+$tg-color-bg-layout = #f5f5f5
+
+// 边框颜色
+$tg-color-border = #d9d9d9
+
+// 暗黑模式颜色
+$tg-color-primary-dark = #1668dc
+$tg-color-text-primary-dark = #ffffffd9
+$tg-color-text-secondary-dark = #ffffff73
+$tg-color-text-disabled-dark = #ffffff40
+$tg-color-bg-dark = #141414
+$tg-color-bg-container-dark = #1f1f1f
+$tg-color-bg-layout-dark = #000000
+$tg-color-border-dark = #434343
+
+// CSS 变量
+:root
+  --tg-color-primary $tg-color-primary
+  --tg-color-success $tg-color-success
+  --tg-color-warning $tg-color-warning
+  --tg-color-error $tg-color-error
+  --tg-color-info $tg-color-info
+  
+  --tg-color-text-primary $tg-color-text-primary
+  --tg-color-text-secondary $tg-color-text-secondary
+  --tg-color-text-disabled $tg-color-text-disabled
+  
+  --tg-color-bg $tg-color-bg
+  --tg-color-bg-container $tg-color-bg-container
+  --tg-color-bg-layout $tg-color-bg-layout
+  
+  --tg-color-border $tg-color-border
+  
+  --tg-color-white #ffffff
+  --tg-color-black #000000
+
+// 暗黑模式变量
+html[data-theme-mode="dark"]
+  --tg-color-primary $tg-color-primary-dark
+  --tg-color-text-primary $tg-color-text-primary-dark
+  --tg-color-text-secondary $tg-color-text-secondary-dark
+  --tg-color-text-disabled $tg-color-text-disabled-dark
+  --tg-color-bg $tg-color-bg-dark
+  --tg-color-bg-container $tg-color-bg-container-dark
+  --tg-color-bg-layout $tg-color-bg-layout-dark
+  --tg-color-border $tg-color-border-dark

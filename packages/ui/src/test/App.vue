@@ -2,12 +2,14 @@
 import { ref } from "vue"
 import ButtonTest from "./ButtonTest.vue"
 import InputTest from "./InputTest.vue"
+import TgTabs from "./TabsTest.vue"
 
 const activeTab = ref("button")
 
 const tabs = [
   { key: "button", label: "按钮" },
   { key: "input", label: "输入框" },
+  { key: "tabs", label: "Tabs 标签页" },
 ]
 
 const toggleTheme = () => {
@@ -40,6 +42,7 @@ const toggleTheme = () => {
     <main class="tg-test__content">
       <ButtonTest v-if="activeTab === 'button'" />
       <InputTest v-if="activeTab === 'input'" />
+      <TgTabs v-if="activeTab === 'tabs'" />
     </main>
   </div>
 </template>

@@ -17,7 +17,7 @@ const props = withDefaults(defineProps<Props>(), {
   disabled: false,
   loading: false,
   block: false,
-  shape: "default"
+  shape: "default",
 })
 
 const emit = defineEmits<{

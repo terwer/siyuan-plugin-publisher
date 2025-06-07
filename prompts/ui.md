@@ -41,6 +41,8 @@ packages/ui/
 ├── src/
 │   ├── components/         # Vue 组件 (TgButton.vue, TgInput.vue)
 │   ├── composables/        # 组合式函数 (useTheme.ts)
+│   ├── types/             # 类型定义文件
+│   │   └── index.ts       # 类型定义统一入口
 │   ├── styles/             # 全局样式系统
 │   │   ├── base/          
 │   │   │   ├── variables.styl # 设计变量 ($tg-color-primary)
@@ -435,3 +437,35 @@ npm run dev
 - TypeScript 严格模式
 - ESLint 规则配置
 - 样式预处理器配置
+
+### 类型定义规范
+
+1. **文件位置**
+   - 所有类型定义统一放在 `packages/ui/src/types/index.ts` 中
+   - 禁止在组件文件中直接定义类型
+   - 禁止在 `components` 目录下创建类型文件
+
+2. **命名规范**
+   - 接口名称使用 PascalCase
+   - 类型名称使用 PascalCase
+   - 类型名称应该具有描述性，例如：`TabItem`、`ButtonProps`
+
+3. **导出规范**
+   - 所有类型必须通过 `index.ts` 统一导出
+   - 禁止在组件中直接导出类型
+   - 类型导入统一使用 `import type` 语法
+
+4. **类型定义示例**
+   ```typescript
+   // ✅ 正确示例
+   export interface TabItem {
+     key: string | number
+     label: string
+     content?: string | number
+     disabled?: boolean
+   }
+
+   // ❌ 错误示例
+   // 在组件文件中定义类型
+   interface TabItem { ... }
+   ```
