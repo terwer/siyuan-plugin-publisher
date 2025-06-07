@@ -44,11 +44,11 @@ const isPasswordVisible = ref(false)
 const classes = computed(() => {
   return [
     "tg-input",
+    props.type === "textarea" ? "tg-input--textarea" : "",
     props.size !== "default" ? `tg-input--${props.size}` : "",
     props.disabled ? "tg-input--disabled" : "",
     props.status ? `tg-input--${props.status}` : "",
     props.readonly ? "tg-input--readonly" : "",
-    props.type === "textarea" ? "tg-input--textarea" : "",
   ].filter(Boolean)
 })
 
@@ -78,7 +78,7 @@ const handleBlur = (event: FocusEvent) => {
 </script>
 
 <template>
-  <div :class="['tg-input', type === 'textarea' ? 'tg-input--textarea' : '', size !== 'default' ? `tg-input--${size}` : '', disabled ? 'tg-input--disabled' : '', status ? `tg-input--${status}` : '', readonly ? 'tg-input--readonly' : '']">
+  <div :class="classes">
     <template v-if="type === 'textarea'">
       <textarea
         ref="inputRef"

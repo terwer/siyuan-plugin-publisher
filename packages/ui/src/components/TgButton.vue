@@ -2,7 +2,7 @@
 import { computed } from "vue"
 
 interface Props {
-  type?: "primary" | "secondary" | "text" | "danger" | "success" | "warning"
+  type?: "primary" | "secondary" | "text" | "danger" | "success" | "warning" | "default"
   size?: "large" | "default" | "small"
   disabled?: boolean
   loading?: boolean

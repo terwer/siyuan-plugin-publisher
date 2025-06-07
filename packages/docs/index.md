@@ -49,4 +49,4 @@
 
 ---
 
-> 本项目遵循 [MIT License](../LICENSE)
+> 本项目遵循 [MIT License](./LICENSE)
