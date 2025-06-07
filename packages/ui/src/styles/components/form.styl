@@ -20,19 +20,29 @@
         padding-right $tg-spacing-md
         line-height $tg-line-height-base
         color var(--tg-color-text)
-        font-weight $tg-font-weight-medium
+        font-weight $tg-font-weight-regular
+        position relative
 
       .tg-form-item-control
         flex 1
         display flex
-        justify-content flex-end
+        flex-direction column
         min-width 0
 
         .tg-form-item-control-input
           width var(--tg-form-control-width)
+          margin-left auto
           .tg-form-item-control-input-content
             display flex
             justify-content flex-end
+
+        .tg-form-item-explain
+          margin-top $tg-spacing-xs
+          color var(--tg-color-error)
+          font-size $tg-font-size-sm
+          text-align right
+          width var(--tg-form-control-width)
+          margin-left auto
 
   // 垂直布局
   &-vertical
@@ -44,7 +54,8 @@
         margin-bottom $tg-spacing-xs
         line-height $tg-line-height-base
         color var(--tg-color-text)
-        font-weight $tg-font-weight-medium
+        font-weight $tg-font-weight-regular
+        position relative
 
       .tg-form-item-control
         width 100%
@@ -59,10 +70,11 @@
 
       .tg-form-item-label
         flex-shrink 0
-        margin-right $tg-spacing-xs
+        margin-right $tg-spacing-md
         line-height $tg-line-height-base
         color var(--tg-color-text)
-        font-weight $tg-font-weight-medium
+        font-weight $tg-font-weight-regular
+        position relative
 
       .tg-form-item-control
         display inline-flex
@@ -81,11 +93,25 @@
 
     .tg-form-group-title
       margin-bottom $tg-spacing-lg
-      font-size $tg-font-size-lg
-      font-weight $tg-font-weight-medium
+      font-size $tg-font-size-base
+      font-weight $tg-font-weight-bold
       color var(--tg-color-text)
       border-bottom $tg-border-width-base solid var(--tg-color-border)
       padding-bottom $tg-spacing-xs
+      padding-left $tg-spacing-sm
+      position relative
+
+      &::before
+        content ""
+        position absolute
+        left 0
+        top -2px
+        bottom 0
+        margin auto
+        width 3px
+        height 16px
+        background-color var(--tg-color-primary)
+        border-radius 2px
 
   // 错误状态
   .tg-form-item-has-error
