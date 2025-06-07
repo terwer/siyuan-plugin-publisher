@@ -138,6 +138,15 @@ pnpm test
 
 # Run linting
 pnpm lint
+
+# Build documentation
+pnpm build -F @siyuan-publisher/docs
+
+# Start documentation development server
+pnpm dev -F @siyuan-publisher/docs
+
+# Preview built documentation
+pnpm preview -F @siyuan-publisher/docs
 ```
 
 ## License

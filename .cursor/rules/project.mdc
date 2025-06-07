@@ -1,24 +1,218 @@
-# SiYuan Publisher 开发指南
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Terwer Publisher Plugin - 项目规范
 
-## 架构概述
+## 项目架构
+
+### Monorepo 结构
+```
+siyuan-plugin-publisher-new-ui/
+├── packages/
+│   ├── ui/                # UI 组件库
+│   ├── core/             # 核心功能包
+│   ├── common/           # 公共工具包
+│   ├── main-app/         # 主应用
+│   ├── platform-adapters/# 平台适配器
+│   ├── plugin-system/    # 插件系统
+│   └── docs/             # 项目文档
+│
+├── scripts/              # 构建脚本
+├── prompts/             # 提示文档
+├── .cursor/             # Cursor 配置
+│   └── rules/           # 项目规范
+│
+├── package.json         # 根目录包配置
+├── pnpm-workspace.yaml  # 工作空间配置
+├── turbo.json          # Turborepo 配置
+├── .gitignore          # Git 忽略配置
+├── README.md           # 项目说明
+├── README_zh_CN.md     # 中文项目说明
+├── DEVELOPMENT.md      # 开发指南
+├── DEVELOPMENT_zh_CN.md# 中文开发指南
+└── policy.md           # 项目政策
+```
+
+### 包管理规范
+- 使用 pnpm 作为包管理器
+- 使用 Turborepo 进行构建优化
+- 所有包版本号统一管理
+- 共享依赖提升到根目录
+- 包之间依赖关系明确声明
+
+### 工作空间配置
+```yaml
+# pnpm-workspace.yaml
+packages:
+  - 'packages/*'
+```
+
+### 包依赖关系
+```
+main-app
+  ├── ui
+  ├── core
+  ├── common
+  └── platform-adapters
+
+ui
+  ├── core
+  └── common
+
+core
+  └── common
+
+platform-adapters
+  ├── core
+  └── common
+
+plugin-system
+  ├── core
+  └── common
+
+docs
+  └── common
+```
+
+## 开发规范
+
+### 通用规范
+- 使用 TypeScript 进行开发
+- 使用 ESLint + Prettier 进行代码格式化
+- 遵循 Git Flow 工作流
+- 提交信息遵循 Conventional Commits 规范
+
+### 分支管理
+- `main`: 主分支，保持稳定
+- `develop`: 开发分支，用于集成功能
+- `feature/*`: 功能分支，用于开发新功能
+- `bugfix/*`: 修复分支，用于修复问题
+- `release/*`: 发布分支，用于版本发布
+
+### 提交规范
+```
+<type>(<scope>): <subject>
+
+<body>
+
+<footer>
+```
+
+类型（type）：
+- `feat`: 新功能
+- `fix`: 修复
+- `docs`: 文档
+- `style`: 格式
+- `refactor`: 重构
+- `test`: 测试
+- `chore`: 构建
+
+## 构建规范
+
+### 构建工具
+- 使用 Vite 作为构建工具
+- 支持 TypeScript 编译
+- 支持 Stylus 预处理器
+- 支持环境变量配置
+
+### 构建流程
+1. 清理构建目录
+2. 类型检查
+3. 代码格式化
+4. 单元测试
+5. 构建打包
+6. 生成文档
+
+## 文档规范
+
+### 文档结构
+```
+packages/docs/
+├── .vitepress/        # VitePress 配置
+│   ├── theme/        # 主题配置
+│   └── config.ts     # 站点配置
+├── guide/            # 使用指南
+│   └── index.md      # 指南首页
+└── index.md          # 文档首页
+```
+
+### 文档要求
+- 使用 Markdown 格式
+- 使用 VitePress 作为文档框架
+- 支持中英文双语文档
+- 包含代码示例
+- 提供在线演示
+- 保持文档同步更新
+
+### 文档内容
+- 项目说明（README.md）
+- 开发指南（DEVELOPMENT.md）
+- 中文开发指南（DEVELOPMENT_zh_CN.md）
+- 项目政策（policy.md）
+- 使用指南（packages/docs/guide/）
+
+### 文档维护
+- 代码变更时同步更新相关文档
+- 重要功能必须提供使用说明
+- API 变更需要更新接口文档
+- 保持中英文文档的一致性
+
+## 发布规范
+
+### 版本管理
+- 遵循语义化版本（Semantic Versioning）
+- 主版本号：不兼容的 API 修改
+- 次版本号：向下兼容的功能性新增
+- 修订号：向下兼容的问题修正
+
+### 发布流程
+1. 更新版本号
+2. 更新更新日志
+3. 构建所有包
+4. 发布到 npm
+5. 创建 Git 标签
+
+## CI/CD 规范
+
+### GitHub Actions
+- 代码检查
+- 单元测试
+- 构建验证
+- 自动发布
+
+### 部署流程
+1. 代码提交触发 CI
+2. 运行测试和构建
+3. 生成发布包
+4. 自动发布到 npm
+
+## 贡献规范
+
+### 开发流程
+1. Fork 项目
+2. 创建功能分支
+3. 提交代码
+4. 创建 Pull Request
+5. 代码审查
+6. 合并代码
+
+### 代码审查
+- 至少需要一个审查者
+- 所有测试必须通过
+- 代码风格符合规范
+- 文档更新完整
+
+## 开发指南
+
+### 架构概述
 
 SiYuan Publisher 采用模块化架构，并将所有共享类型定义集中在专门的 `common` 包中。这种设计有效避免了循环依赖，提高了可维护性。
 
-### 目录结构
+### 核心组件和调用链
 
-```
-packages/
-  common/                # 共享类型定义（仅类型/接口/枚举）
-  core/                  # 核心业务逻辑
-  plugin-system/         # 插件管理和加载
-  platform-adapters/     # 第三方平台适配器
-  main-app/              # 主应用
-  ui/                    # 前端 UI 组件
-```
-
-## 核心组件和调用链
-
-### 1. 插件系统初始化流程
+#### 1. 插件系统初始化流程
 
 ```mermaid
 sequenceDiagram
@@ -37,7 +231,7 @@ sequenceDiagram
     E-->>A: 返回可用平台
 ```
 
-### 2. 平台适配器注册机制
+#### 2. 平台适配器注册机制
 
 ```mermaid
 graph TD
@@ -49,7 +243,7 @@ graph TD
     E --> F[UI 组件]
 ```
 
-### 3. 发布流程
+#### 3. 发布流程
 
 ```mermaid
 sequenceDiagram
@@ -78,13 +272,13 @@ sequenceDiagram
     C-->>B: 显示结果
 ```
 
-## 详细组件说明
+### 详细组件说明
 
-### 1. 插件系统
+#### 1. 插件系统
 
 插件系统是应用的核心，负责管理所有平台适配器和插件。
 
-#### 主要组件：
+##### 主要组件：
 
 - **插件管理器**：管理插件生命周期
   ```typescript
@@ -106,11 +300,11 @@ sequenceDiagram
   }
   ```
 
-### 2. 平台适配器
+#### 2. 平台适配器
 
 平台适配器实现与特定平台的集成。
 
-#### 内置适配器：
+##### 内置适配器：
 
 - **WordPress 适配器**
   ```typescript
@@ -132,9 +326,9 @@ sequenceDiagram
   }
   ```
 
-#### 外部适配器：
+##### 外部适配器：
 
-外部平台适配器可以通过插件系统动态加载，支持从 NPM 安装或本地加载。详细的开发指南和加载机制请参考[外部插件开发](#外部插件开发)部分。
+外部平台适配器可以通过插件系统动态加载，支持从 NPM 安装或本地加载。
 
 主要特点：
 - 支持动态加载和卸载
@@ -142,11 +336,11 @@ sequenceDiagram
 - 使用与内置适配器相同的接口
 - 可以扩展支持新平台
 
-### 3. 主应用
+#### 3. 主应用
 
 主应用使用 Vue 3 构建，提供用户界面和交互逻辑。
 
-#### 主要组件：
+##### 主要组件：
 
 - **Publish.vue**：发布页面
   ```vue
@@ -169,9 +363,9 @@ sequenceDiagram
   </template>
   ```
 
-## 配置流程
+### 配置流程
 
-### 1. 平台配置
+#### 1. 平台配置
 
 ```mermaid
 graph TD
@@ -184,7 +378,7 @@ graph TD
     G --> C
 ```
 
-### 2. 发布配置
+#### 2. 发布配置
 
 ```mermaid
 graph TD
@@ -197,9 +391,9 @@ graph TD
     G --> B
 ```
 
-## 错误处理
+### 错误处理
 
-### 错误类型
+#### 错误类型
 
 ```typescript
 enum ErrorType {
@@ -212,7 +406,7 @@ enum ErrorType {
 }
 ```
 
-### 错误处理流程
+#### 错误处理流程
 
 ```mermaid
 sequenceDiagram
@@ -229,23 +423,23 @@ sequenceDiagram
     B-->>A: 显示错误信息
 ```
 
-## 开发指南
+### 开发指南
 
-### 1. 添加新平台适配器
+#### 1. 添加新平台适配器
 
 1. 在 `platform-adapters` 包中创建新适配器
 2. 实现 `PlatformAdapter` 接口
 3. 在 `DefaultPlatformAdapterRegistry` 中注册适配器
 4. 创建对应的配置组件
 
-### 2. 修改现有适配器
+#### 2. 修改现有适配器
 
 1. 在 `platform-adapters` 包中找到目标适配器
 2. 修改适配器实现
 3. 更新配置组件
 4. 测试适配器功能
 
-### 3. 外部插件加载
+#### 3. 外部插件加载
 
 1. **插件目录结构**
    ```
@@ -335,7 +529,7 @@ sequenceDiagram
    - 检查插件系统日志
    - 验证平台适配器配置
 
-## 最佳实践
+### 最佳实践
 
 1. **类型安全**
    - 始终使用 TypeScript 类型
@@ -356,97 +550,3 @@ sequenceDiagram
    - 编写单元测试
    - 测试错误场景
    - 验证平台集成
-
-## UI 开发规范
-
-### 1. 组件目录结构
-
-```
-packages/ui/src/
-├── components/          # 组件目录
-│   ├── form/           # 表单组件
-│   ├── navigation/     # 导航组件
-│   ├── data/          # 数据展示组件
-│   ├── layout/        # 布局组件
-│   ├── feedback/      # 反馈组件
-│   └── index.ts       # 组件统一导出
-├── composables/       # 组合式函数
-├── styles/           # 样式文件
-├── types/            # 类型定义
-└── index.ts          # 组件库入口文件
-```
-
-### 2. 组件开发规范
-
-#### 组件类型
-
-1. 表单组件 (form)
-   - 表单相关组件
-
-2. 导航组件 (navigation)
-   - 导航相关组件
-
-3. 数据展示组件 (data)
-   - 数据展示相关组件
-
-4. 布局组件 (layout)
-   - 布局相关组件
-
-5. 反馈组件 (feedback)
-   - 反馈相关组件
-
-#### 组件开发规则
-
-1. **组件结构**
-   - 使用 Vue 3 Composition API
-   - 使用 TypeScript 进行类型定义
-   - 使用 Stylus 进行样式开发
-
-2. **命名规范**
-   - 组件文件名使用 PascalCase
-   - 组件名使用 PascalCase
-   - 组件目录使用 kebab-case
-
-3. **目录结构**
-   - 每个组件目录应包含组件文件和索引文件
-   - 组件文件使用 .vue 扩展名
-   - 索引文件用于导出组件
-
-4. **代码风格**
-   - 使用 TypeScript 进行开发
-   - 为所有 props 和事件定义类型
-   - 使用 Stylus 预处理器
-   - 遵循 BEM 命名规范
-
-### 3. 测试规范
-
-1. 使用 Vitest 进行测试
-2. 测试文件与组件文件同名
-3. 包含组件的基本功能测试
-
-### 4. 发布流程
-
-1. 版本管理
-   - 遵循语义化版本
-   - 更新 package.json 版本号
-
-2. 构建
-   - 运行测试
-   - 构建组件库
-
-## 常见问题
-
-1. **平台适配器未显示**
-   - 检查适配器注册
-   - 验证配置组件
-   - 检查控制台错误
-
-2. **配置保存失败**
-   - 检查配置验证
-   - 验证存储机制
-   - 检查错误日志
-
-3. **发布失败**
-   - 检查平台连接
-   - 验证发布参数
-   - 检查平台错误信息 

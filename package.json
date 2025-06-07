@@ -11,7 +11,10 @@
     "lint": "turbo run lint",
     "test": "turbo run test",
     "clean": "./scripts/clean.sh",
-    "makeLink": "node scripts/make_dev_link.js"
+    "makeLink": "node scripts/make_dev_link.js",
+    "docs:dev": "turbo run --filter=@siyuan-plugin-publisher/docs dev",
+    "docs:build": "turbo run --filter=@siyuan-plugin-publisher/docs build",
+    "docs:preview": "turbo run --filter=@siyuan-plugin-publisher/docs preview"
   },
   "devDependencies": {
     "@types/node": "^22.15.21",

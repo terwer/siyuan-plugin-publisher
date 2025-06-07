@@ -1,0 +1,17 @@
+:root {
+    --vp-c-brand: #3eaf7c;
+    --vp-c-brand-light: #4abf8a;
+    --vp-c-brand-lighter: #5ccf99;
+    --vp-c-brand-dark: #36a06d;
+    --vp-c-brand-darker: #2d8a5c;
+}
+
+/* 自定义样式 */
+.VPHome .main .text {
+    font-size: 1.2em;
+}
+
+.VPHome .main .tagline {
+    font-size: 1.1em;
+    margin: 1em 0;
+}

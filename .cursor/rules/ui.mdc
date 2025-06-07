@@ -1,0 +1,131 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Terwer UI 组件库规范
+
+## 命名规范
+
+### 类名命名
+- 所有类名必须使用 `tg-` 前缀
+- 禁止使用 `ant-*` 或其他非 `tg-` 前缀的类名
+- 禁止使用通用类名（如 `.button`, `.header`）
+
+### 文件命名
+- 组件文件使用 PascalCase（如 `TgButton.vue`）
+- 样式文件使用 kebab-case（如 `button.styl`）
+- 类型定义文件使用 camelCase（如 `types.ts`）
+
+## 代码规范
+
+### Vue 组件规范
+- 使用 Vue 3 组合式 API
+- 使用 `<script setup lang="ts">` 语法
+- 使用 TypeScript 进行类型定义
+- 组件导入使用解构方式：`import { TgButton } from '@terwer/ui'`
+
+### 样式规范
+- 使用 Stylus 预处理器
+- 禁止使用内联样式 `style=""`
+- 禁止在组件中使用 `@import` 导入样式
+- 所有样式必须通过 `styles/index.styl` 统一管理
+- 使用 8px 作为基础设计单位
+- 所有尺寸必须使用 `$tg-spacing-*` 变量
+- 所有字体大小必须使用 `$tg-font-size-*` 变量
+- 所有颜色必须使用 `var(--tg-color-*)` 变量
+
+### 暗黑模式规范
+- 通过 `#tg-app` 和 `html[data-theme-mode="dark"]` 控制
+- 使用 CSS 变量实现主题切换
+- 所有颜色必须支持暗黑模式
+
+## 项目结构规范
+
+### 目录结构
+```
+packages/ui/
+├── src/
+│   ├── components/         # Vue 组件
+│   ├── composables/        # 组合式函数
+│   ├── types/             # 类型定义
+│   ├── styles/            # 全局样式
+│   └── test/              # 测试系统
+```
+
+### 样式文件结构
+```
+styles/
+├── base/          
+│   ├── variables.styl    # 设计变量
+│   └── mixins.styl       # 公共混合
+├── components/     
+│   ├── button.styl      # 按钮样式
+│   └── input.styl       # 输入框样式
+└── index.styl           # 样式入口
+```
+
+## 依赖规范
+
+### 核心依赖
+- Vue 3.3.0+
+- TypeScript 5.8.3+
+- Vite 6.3.5+
+- Stylus 0.64.0+
+
+### 开发依赖
+- ESLint
+- Prettier
+- Vue ESLint 插件
+- TypeScript ESLint 插件
+
+## 测试规范
+
+### 测试系统要求
+- 唯一入口：`/test`
+- 支持 Tab 导航切换
+- 实时显示组件尺寸
+- 类名前缀扫描
+- 主题切换测试
+
+### 测试页面规范
+- 使用 `scoped` 样式
+- 类名使用 `tg-test-` 前缀
+- 遵循 BEM 命名规范
+- 样式隔离，不影响其他组件
+
+## 开发禁令
+
+### 语法禁令
+- 禁止使用 CSS 原生语法
+- 禁止使用内联样式
+- 禁止在组件中直接导入样式
+
+### 类名禁令
+- 禁止非 `tg-` 前缀的类名
+- 禁止通用类名
+
+### 数值禁令
+- 禁止硬编码数值
+- 必须使用设计系统变量
+
+### 作用域禁令
+- 组件文件中禁止出现 `#tg-app` 选择器
+- 禁止在 `components` 目录外定义组件样式
+
+## 验证机制
+
+### 类名验证
+- 使用正则 `/\.tg-\w+/` 校验类名
+- 发现非法类名立即终止并提示错误
+
+### 硬编码检测
+- 检测到硬编码值立即终止并提示错误
+
+### 文件结构验证
+- 样式文件必须存放在 `/styles` 目录
+- 入口文件必须唯一
+
+### 污染检测
+- 检测到 `#tg-app` 选择器立即终止
+- 提示作用域污染错误

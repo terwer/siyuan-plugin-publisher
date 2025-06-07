@@ -138,6 +138,16 @@ pnpm test
 
 # 运行代码检查
 pnpm lint
+
+
+# 启动文档开发服务器
+pnpm dev -F @siyuan-publisher/docs
+
+# 构建文档
+pnpm build -F @siyuan-publisher/docs
+
+# 预览构建后的文档
+pnpm preview -F @siyuan-publisher/docs
 ```
 
 ## 许可证
