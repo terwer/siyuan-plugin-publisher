@@ -33,11 +33,9 @@
     }
   },
   "scripts": {
-    "dev": "vite",
-    "preview": "vite preview"
+    "dev": "vite"
   },
   "dependencies": {
-    "pinia": "^2.1.0",
     "vue": "^3.3.0"
   },
   "devDependencies": {
