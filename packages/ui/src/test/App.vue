@@ -3,6 +3,7 @@ import { ref } from "vue"
 import ButtonTest from "./ButtonTest.vue"
 import InputTest from "./InputTest.vue"
 import TgTabs from "./TabsTest.vue"
+import FormTest from "./FormTest.vue"
 
 const activeTab = ref("button")
 
@@ -10,6 +11,7 @@ const tabs = [
   { key: "button", label: "按钮" },
   { key: "input", label: "输入框" },
   { key: "tabs", label: "Tabs 标签页" },
+  { key: "form", label: "表单" },
 ]
 
 const toggleTheme = () => {
@@ -43,6 +45,7 @@ const toggleTheme = () => {
       <ButtonTest v-if="activeTab === 'button'" />
       <InputTest v-if="activeTab === 'input'" />
       <TgTabs v-if="activeTab === 'tabs'" />
+      <FormTest v-if="activeTab === 'form'" />
     </main>
   </div>
 </template>

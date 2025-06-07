@@ -1,0 +1,96 @@
+.tg-switch
+  position relative
+  display inline-block
+  min-width 44px
+  height 22px
+  cursor pointer
+
+  &__input
+    position absolute
+    opacity 0
+    width 0
+    height 0
+
+  &__slider
+    position absolute
+    top 0
+    left 0
+    right 0
+    bottom 0
+    background-color var(--tg-color-bg)
+    border 1px solid var(--tg-color-border)
+    border-radius 11px
+    transition all $tg-transition-duration
+
+    &::before
+      content ""
+      position absolute
+      left 2px
+      top 2px
+      width 16px
+      height 16px
+      background-color var(--tg-color-text)
+      border-radius 50%
+      transition all $tg-transition-duration
+
+  &__loading
+    position absolute
+    left 50%
+    top 50%
+    transform translate(-50%, -50%)
+    color var(--tg-color-text)
+    font-size $tg-font-size-sm
+
+  &--checked
+    .tg-switch__slider
+      background-color var(--tg-color-primary)
+      border-color var(--tg-color-primary)
+
+      &::before
+        transform translateX(22px)
+        background-color var(--tg-color-bg)
+
+  &--disabled
+    cursor not-allowed
+
+    .tg-switch__slider
+      background-color var(--tg-color-bg-disabled)
+      border-color var(--tg-color-border)
+
+      &::before
+        background-color var(--tg-color-text-disabled)
+
+    &.tg-switch--checked
+      .tg-switch__slider
+        background-color var(--tg-color-primary-disabled)
+        border-color var(--tg-color-primary-disabled)
+
+  &--large
+    min-width 52px
+    height 26px
+
+    .tg-switch__slider
+      border-radius 13px
+
+      &::before
+        width 20px
+        height 20px
+
+    &.tg-switch--checked
+      .tg-switch__slider::before
+        transform translateX(26px)
+
+  &--small
+    min-width 36px
+    height 18px
+
+    .tg-switch__slider
+      border-radius 9px
+
+      &::before
+        width 12px
+        height 12px
+
+    &.tg-switch--checked
+      .tg-switch__slider::before
+        transform translateX(18px) 

@@ -1,7 +1,7 @@
 {
   "name": "@terwer/ui",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "main": "src/index.ts",
   "module": "src/index.ts",
@@ -23,6 +23,9 @@
     "./styles/input": {
       "import": "./src/styles/components/input.styl"
     },
+    "./styles/form": {
+      "import": "./src/styles/components/form.styl"
+    },
     "./button": {
       "types": "./src/components/TgButton.vue",
       "import": "./src/components/TgButton.vue"
@@ -30,12 +33,19 @@
     "./input": {
       "types": "./src/components/TgInput.vue",
       "import": "./src/components/TgInput.vue"
+    },
+    "./form": {
+      "types": "./src/components/TgForm.vue",
+      "import": "./src/components/TgForm.vue"
     }
   },
   "scripts": {
-    "dev": "vite"
+    "dev": "vite",
+    "build": "vue-tsc && vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
+    "pinia": "^2.1.0",
     "vue": "^3.3.0"
   },
   "devDependencies": {

@@ -1,0 +1,372 @@
+// 表单基础样式
+.tg-form
+  box-sizing border-box
+  margin 0
+  padding 0
+  color var(--tg-color-text)
+  font-size var(--tg-font-size-base)
+  line-height var(--tg-line-height-base)
+  list-style none
+
+  // 表单布局
+  &.horizontal
+    .tg-form-item
+      display flex
+      margin-bottom var(--tg-spacing-lg)
+
+  &.vertical
+    .tg-form-item
+      margin-bottom var(--tg-spacing-lg)
+
+  &.inline
+    .tg-form-item
+      display inline-flex
+      margin-right var(--tg-spacing-lg)
+      margin-bottom var(--tg-spacing-lg)
+
+  // 表单项
+  .tg-form-item
+    position relative
+    margin-bottom var(--tg-spacing-lg)
+
+    &.has-error
+      .tg-input,
+      .tg-select,
+      .tg-textarea
+        border-color var(--tg-color-error)
+        &:hover
+          border-color var(--tg-color-error-hover)
+        &:focus
+          border-color var(--tg-color-error-active)
+          box-shadow 0 0 0 2px var(--tg-color-error-bg)
+
+    // 标签
+    .tg-form-item-label
+      display inline-block
+      text-align right
+      vertical-align middle
+      padding-right var(--tg-spacing-md)
+      color var(--tg-color-text)
+      font-size var(--tg-font-size-base)
+      line-height var(--tg-line-height-base)
+
+      .required
+        display inline-block
+        margin-right 4px
+        color var(--tg-color-error)
+        font-family SimSun, sans-serif
+        line-height 1
+        &::before
+          content "*"
+
+    // 控件
+    .tg-form-item-control
+      position relative
+      display flex
+      flex-direction column
+      flex 1
+
+    // 错误提示
+    .error-message
+      position absolute
+      top 100%
+      left 0
+      margin-top 4px
+      color var(--tg-color-error)
+      font-size var(--tg-font-size-sm)
+      line-height var(--tg-line-height-sm)
+
+  // 表单分组
+  &-group
+    margin-bottom $tg-spacing-xl
+
+    &-title
+      font-size $tg-font-size-lg
+      font-weight 500
+      margin-bottom $tg-spacing-md
+      color var(--tg-color-text)
+
+    &-content
+      display flex
+      flex-wrap wrap
+      margin 0 -$tg-spacing-md
+
+  &-item
+    display flex
+    margin-bottom $tg-spacing-lg
+    padding 0 $tg-spacing-md
+
+    &-label
+      text-align right
+      padding-right $tg-spacing-lg
+      line-height 32px
+      color var(--tg-color-text)
+
+    &-required
+      color var(--tg-color-error)
+      margin-left $tg-spacing-xs
+
+    &-control
+      flex 1
+      min-width 0
+
+    &-error
+      color var(--tg-color-error)
+      font-size $tg-font-size-sm
+      margin-top $tg-spacing-xs
+
+    &--error
+      .tg-input,
+      .tg-select,
+      .tg-date-picker
+        border-color var(--tg-color-error)
+
+  &--vertical
+    .tg-form-item
+      flex-direction column
+
+      .tg-form-item-label
+        text-align left
+        padding-right 0
+        margin-bottom $tg-spacing-xs
+
+  &--inline
+    .tg-form-item
+      margin-right $tg-spacing-xl
+      margin-bottom $tg-spacing-md
+
+      &:last-child
+        margin-right 0
+
+// 输入框
+.tg-input
+  box-sizing border-box
+  margin 0
+  padding 4px 11px
+  color var(--tg-color-text)
+  font-size var(--tg-font-size-base)
+  line-height var(--tg-line-height-base)
+  background-color var(--tg-color-bg-container)
+  border 1px solid var(--tg-color-border)
+  border-radius var(--tg-border-radius-base)
+  transition all 0.3s
+  width 100%
+
+  &:hover
+    border-color var(--tg-color-primary-hover)
+
+  &:focus
+    border-color var(--tg-color-primary-active)
+    box-shadow 0 0 0 2px var(--tg-color-primary-bg)
+    outline none
+
+  &::placeholder
+    color var(--tg-color-text-placeholder)
+
+// 下拉选择框
+.tg-select
+  box-sizing border-box
+  margin 0
+  padding 4px 11px
+  color var(--tg-color-text)
+  font-size var(--tg-font-size-base)
+  line-height var(--tg-line-height-base)
+  background-color var(--tg-color-bg-container)
+  border 1px solid var(--tg-color-border)
+  border-radius var(--tg-border-radius-base)
+  transition all 0.3s
+  width 100%
+
+  &:hover
+    border-color var(--tg-color-primary-hover)
+
+  &:focus
+    border-color var(--tg-color-primary-active)
+    box-shadow 0 0 0 2px var(--tg-color-primary-bg)
+    outline none
+
+// 单选框组
+.tg-radio-group
+  display flex
+  flex-wrap wrap
+  gap var(--tg-spacing-md)
+
+  .tg-radio
+    display inline-flex
+    align-items center
+    cursor pointer
+
+    input[type="radio"]
+      position absolute
+      opacity 0
+      cursor pointer
+
+      & + span
+        position relative
+        padding-left 24px
+        color var(--tg-color-text)
+
+        &::before
+          content ""
+          position absolute
+          top 50%
+          left 0
+          transform translateY(-50%)
+          width 16px
+          height 16px
+          background-color var(--tg-color-bg-container)
+          border 1px solid var(--tg-color-border)
+          border-radius 50%
+          transition all 0.3s
+
+      &:checked + span::before
+        border-color var(--tg-color-primary)
+        background-color var(--tg-color-primary)
+
+      &:checked + span::after
+        content ""
+        position absolute
+        top 50%
+        left 4px
+        transform translateY(-50%)
+        width 8px
+        height 8px
+        background-color var(--tg-color-bg-container)
+        border-radius 50%
+
+// 复选框组
+.tg-checkbox-group
+  display flex
+  flex-wrap wrap
+  gap var(--tg-spacing-md)
+
+  .tg-checkbox
+    display inline-flex
+    align-items center
+    cursor pointer
+
+    input[type="checkbox"]
+      position absolute
+      opacity 0
+      cursor pointer
+
+      & + span
+        position relative
+        padding-left 24px
+        color var(--tg-color-text)
+
+        &::before
+          content ""
+          position absolute
+          top 50%
+          left 0
+          transform translateY(-50%)
+          width 16px
+          height 16px
+          background-color var(--tg-color-bg-container)
+          border 1px solid var(--tg-color-border)
+          border-radius var(--tg-border-radius-base)
+          transition all 0.3s
+
+      &:checked + span::before
+        border-color var(--tg-color-primary)
+        background-color var(--tg-color-primary)
+
+      &:checked + span::after
+        content "✓"
+        position absolute
+        top 50%
+        left 4px
+        transform translateY(-50%)
+        color var(--tg-color-bg-container)
+        font-size 12px
+        line-height 1
+
+// 开关
+.tg-switch
+  position relative
+  display inline-block
+  width 44px
+  height 22px
+  cursor pointer
+
+  input[type="checkbox"]
+    position absolute
+    opacity 0
+    cursor pointer
+
+    & + .slider
+      position absolute
+      top 0
+      left 0
+      right 0
+      bottom 0
+      background-color var(--tg-color-border)
+      border-radius 11px
+      transition all 0.3s
+
+      &::before
+        content ""
+        position absolute
+        top 2px
+        left 2px
+        width 18px
+        height 18px
+        background-color var(--tg-color-bg-container)
+        border-radius 50%
+        transition all 0.3s
+
+    &:checked + .slider
+      background-color var(--tg-color-primary)
+
+    &:checked + .slider::before
+      transform translateX(22px)
+
+// 文本域
+.tg-textarea
+  box-sizing border-box
+  margin 0
+  padding 4px 11px
+  color var(--tg-color-text)
+  font-size var(--tg-font-size-base)
+  line-height var(--tg-line-height-base)
+  background-color var(--tg-color-bg-container)
+  border 1px solid var(--tg-color-border)
+  border-radius var(--tg-border-radius-base)
+  transition all 0.3s
+  width 100%
+  min-height 80px
+  resize vertical
+
+  &:hover
+    border-color var(--tg-color-primary-hover)
+
+  &:focus
+    border-color var(--tg-color-primary-active)
+    box-shadow 0 0 0 2px var(--tg-color-primary-bg)
+    outline none
+
+  &::placeholder
+    color var(--tg-color-text-placeholder)
+
+// 日期选择器
+.tg-date-picker
+  box-sizing border-box
+  margin 0
+  padding 4px 11px
+  color var(--tg-color-text)
+  font-size var(--tg-font-size-base)
+  line-height var(--tg-line-height-base)
+  background-color var(--tg-color-bg-container)
+  border 1px solid var(--tg-color-border)
+  border-radius var(--tg-border-radius-base)
+  transition all 0.3s
+  width 100%
+
+  &:hover
+    border-color var(--tg-color-primary-hover)
+
+  &:focus
+    border-color var(--tg-color-primary-active)
+    box-shadow 0 0 0 2px var(--tg-color-primary-bg)
+    outline none 

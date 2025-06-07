@@ -1,0 +1,123 @@
+.tg-checkbox-group
+  display inline-flex
+  align-items center
+  flex-wrap wrap
+  gap $tg-spacing-md
+
+  &--button
+    .tg-checkbox
+      margin 0
+      padding 0 $tg-spacing-lg
+      height 32px
+      line-height 32px
+      border 1px solid var(--tg-color-border)
+      border-radius $tg-border-radius-base
+      transition all $tg-transition-duration
+
+      &:first-child
+        border-top-right-radius 0
+        border-bottom-right-radius 0
+
+      &:last-child
+        border-top-left-radius 0
+        border-bottom-left-radius 0
+
+      &:not(:first-child):not(:last-child)
+        border-radius 0
+
+      &--checked
+        color var(--tg-color-primary)
+        background-color var(--tg-color-primary-light)
+        border-color var(--tg-color-primary)
+
+      &--disabled
+        color var(--tg-color-text-disabled)
+        background-color var(--tg-color-bg-disabled)
+        border-color var(--tg-color-border)
+        cursor not-allowed
+
+  &--large
+    .tg-checkbox
+      font-size $tg-font-size-lg
+
+      &--button
+        height 40px
+        line-height 40px
+
+  &--small
+    .tg-checkbox
+      font-size $tg-font-size-sm
+
+      &--button
+        height 24px
+        line-height 24px
+        padding 0 $tg-spacing-md
+
+.tg-checkbox
+  position relative
+  display inline-flex
+  align-items center
+  margin-right $tg-spacing-lg
+  cursor pointer
+
+  &:last-child
+    margin-right 0
+
+  &__input
+    position absolute
+    opacity 0
+    width 0
+    height 0
+
+  &__label
+    position relative
+    padding-left $tg-spacing-xl
+    font-size $tg-font-size-base
+    line-height 1
+    color var(--tg-color-text)
+
+    &::before
+      content ""
+      position absolute
+      left 0
+      top 50%
+      transform translateY(-50%)
+      width 16px
+      height 16px
+      border 1px solid var(--tg-color-border)
+      border-radius $tg-border-radius-sm
+      transition all $tg-transition-duration
+
+    &::after
+      content ""
+      position absolute
+      left 4px
+      top 50%
+      transform translateY(-50%) scale(0)
+      width 8px
+      height 8px
+      background-color var(--tg-color-primary)
+      border-radius $tg-border-radius-xs
+      transition all $tg-transition-duration
+
+  &--checked
+    .tg-checkbox__label
+      &::before
+        border-color var(--tg-color-primary)
+        background-color var(--tg-color-primary)
+
+      &::after
+        transform translateY(-50%) scale(1)
+
+  &--disabled
+    cursor not-allowed
+
+    .tg-checkbox__label
+      color var(--tg-color-text-disabled)
+
+      &::before
+        background-color var(--tg-color-bg-disabled)
+        border-color var(--tg-color-border)
+
+      &::after
+        background-color var(--tg-color-text-disabled) 
