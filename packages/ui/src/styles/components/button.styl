@@ -20,6 +20,7 @@
   background: var(--tg-color-bg)
   color: var(--tg-color-text)
   border: 1px solid var(--tg-color-border)
+  text-align: center
 
   &:hover
     color: var(--tg-color-primary)
@@ -150,13 +151,9 @@
     position: relative
 
   &__loading-icon
-    margin-right: $tg-spacing-sm
     display: inline-flex
     align-items: center
-
-    i
-      animation: tg-spin 1s infinite linear
-      display: inline-block
+    flex-shrink: 0
 
   &--block
     display: flex
@@ -164,11 +161,17 @@
 
   // 图标样式
   &__icon
-    margin-right: $tg-spacing-sm
+    display: inline-flex
+    align-items: center
+    flex-shrink: 0
 
   &__content
     display: inline-flex
     align-items: center
+    justify-content: center
+    gap: $tg-spacing-xs
+    min-width: 0
+    flex: 1
 
 @keyframes tg-spin
   from
