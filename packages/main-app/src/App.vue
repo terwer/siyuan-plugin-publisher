@@ -35,7 +35,7 @@
   text-decoration: none;
   color: #333;
   padding: 0.5rem 1rem;
-  border-radius: 4px;
+  border-radius: 6px;
 }
 
 .nav-item:hover {

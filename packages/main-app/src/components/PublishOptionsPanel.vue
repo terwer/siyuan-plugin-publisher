@@ -86,7 +86,7 @@ input {
   width: 100%;
   padding: 8px;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 6px;
   font-size: 14px;
 }
 
@@ -95,7 +95,7 @@ input {
   background-color: #007aff;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
   width: 100%;
@@ -113,7 +113,7 @@ input {
 .result {
   margin-top: 20px;
   padding: 10px;
-  border-radius: 4px;
+  border-radius: 6px;
 }
 
 .result.success {
