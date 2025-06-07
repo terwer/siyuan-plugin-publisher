@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from "vue"
-import type { FormConfig, FormInstance } from "@/types"
-import TgForm from "@/components/TgForm.vue"
+import type { FormConfig, FormInstance } from "../types"
+import TgForm from "../components/TgForm.vue"
 
 // 水平布局表单
 const horizontalFormRef = ref<FormInstance>()

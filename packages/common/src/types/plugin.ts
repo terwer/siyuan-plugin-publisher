@@ -20,12 +20,12 @@ export interface Plugin extends BaseMetadata, Lifecycle, Configurable {
 /**
  * 插件配置
  */
-export interface PluginConfig extends BaseConfig {}
+export interface PluginConfig extends BaseConfig { }
 
 /**
  * 插件元数据
  */
-export interface PluginMetadata extends BaseMetadata {}
+export interface PluginMetadata extends BaseMetadata { }
 
 /**
  * 插件清单

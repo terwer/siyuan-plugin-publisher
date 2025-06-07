@@ -21,165 +21,267 @@
           <div class="pt-component-demo__item">
             <h4>基础按钮</h4>
             <div class="pt-component-demo__row">
-              <Button>默认按钮</Button>
-              <Button type="primary">主要按钮</Button>
-              <Button type="dashed">虚线按钮</Button>
-              <Button type="text">文本按钮</Button>
-              <Button type="link">链接按钮</Button>
+              <TgButton>默认按钮</TgButton>
+              <TgButton type="primary">主要按钮</TgButton>
+              <TgButton type="secondary">次要按钮</TgButton>
+              <TgButton type="text">文本按钮</TgButton>
             </div>
             <div class="pt-component-demo__code">
-              <pre><code>&lt;Button&gt;默认按钮&lt;/Button&gt;
-&lt;Button type="primary"&gt;主要按钮&lt;/Button&gt;
-&lt;Button type="dashed"&gt;虚线按钮&lt;/Button&gt;
-&lt;Button type="text"&gt;文本按钮&lt;/Button&gt;
-&lt;Button type="link"&gt;链接按钮&lt;/Button&gt;</code></pre>
+              <pre><code>&lt;TgButton&gt;默认按钮&lt;/TgButton&gt;
+&lt;TgButton type="primary"&gt;主要按钮&lt;/TgButton&gt;
+&lt;TgButton type="secondary"&gt;次要按钮&lt;/TgButton&gt;
+&lt;TgButton type="text"&gt;文本按钮&lt;/TgButton&gt;</code></pre>
             </div>
           </div>
 
           <div class="pt-component-demo__item">
             <h4>按钮尺寸</h4>
             <div class="pt-component-demo__row">
-              <Button size="small">小按钮</Button>
-              <Button size="middle">中按钮</Button>
-              <Button size="large">大按钮</Button>
+              <TgButton size="small">小按钮</TgButton>
+              <TgButton>中按钮</TgButton>
+              <TgButton size="large">大按钮</TgButton>
             </div>
             <div class="pt-component-demo__code">
-              <pre><code>&lt;Button size="small"&gt;小按钮&lt;/Button&gt;
-&lt;Button size="middle"&gt;中按钮&lt;/Button&gt;
-&lt;Button size="large"&gt;大按钮&lt;/Button&gt;</code></pre>
+              <pre><code>&lt;TgButton size="small"&gt;小按钮&lt;/TgButton&gt;
+&lt;TgButton&gt;中按钮&lt;/TgButton&gt;
+&lt;TgButton size="large"&gt;大按钮&lt;/TgButton&gt;</code></pre>
             </div>
           </div>
 
           <div class="pt-component-demo__item">
             <h4>按钮形状</h4>
             <div class="pt-component-demo__row">
-              <Button shape="default">默认形状</Button>
-              <Button shape="circle">圆形按钮</Button>
-              <Button shape="round">圆角按钮</Button>
+              <TgButton>默认形状</TgButton>
+              <TgButton shape="round">圆角按钮</TgButton>
+              <TgButton shape="circle" icon="tg-icon-plus"></TgButton>
             </div>
             <div class="pt-component-demo__code">
-              <pre><code>&lt;Button shape="default"&gt;默认形状&lt;/Button&gt;
-&lt;Button shape="circle"&gt;圆形按钮&lt;/Button&gt;
-&lt;Button shape="round"&gt;圆角按钮&lt;/Button&gt;</code></pre>
+              <pre><code>&lt;TgButton&gt;默认形状&lt;/TgButton&gt;
+&lt;TgButton shape="round"&gt;圆角按钮&lt;/TgButton&gt;
+&lt;TgButton shape="circle" icon="tg-icon-plus"&gt;&lt;/TgButton&gt;</code></pre>
             </div>
           </div>
 
           <div class="pt-component-demo__item">
             <h4>按钮状态</h4>
             <div class="pt-component-demo__row">
-              <Button disabled>禁用按钮</Button>
-              <Button loading>加载按钮</Button>
-              <Button danger>危险按钮</Button>
-              <Button ghost>幽灵按钮</Button>
-              <Button block>块级按钮</Button>
+              <TgButton disabled>禁用按钮</TgButton>
+              <TgButton :loading="loading" @click="handleLoading">加载按钮</TgButton>
+              <TgButton type="danger">危险按钮</TgButton>
+              <TgButton type="success">成功按钮</TgButton>
+              <TgButton type="warning">警告按钮</TgButton>
+              <TgButton block>块级按钮</TgButton>
             </div>
             <div class="pt-component-demo__code">
-              <pre><code>&lt;Button disabled&gt;禁用按钮&lt;/Button&gt;
-&lt;Button loading&gt;加载按钮&lt;/Button&gt;
-&lt;Button danger&gt;危险按钮&lt;/Button&gt;
-&lt;Button ghost&gt;幽灵按钮&lt;/Button&gt;
-&lt;Button block&gt;块级按钮&lt;/Button&gt;</code></pre>
+              <pre><code>&lt;TgButton disabled&gt;禁用按钮&lt;/TgButton&gt;
+&lt;TgButton :loading="loading" @click="handleLoading"&gt;加载按钮&lt;/TgButton&gt;
+&lt;TgButton type="danger"&gt;危险按钮&lt;/TgButton&gt;
+&lt;TgButton type="success"&gt;成功按钮&lt;/TgButton&gt;
+&lt;TgButton type="warning"&gt;警告按钮&lt;/TgButton&gt;
+&lt;TgButton block&gt;块级按钮&lt;/TgButton&gt;</code></pre>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Tooltip 测试 -->
+      <!-- 输入框测试 -->
       <div class="pt-component-demo">
-        <h3>Tooltip 文字提示</h3>
+        <h3>Input 输入框</h3>
         <div class="pt-component-demo__content">
           <div class="pt-component-demo__item">
             <h4>基础用法</h4>
             <div class="pt-component-demo__row">
-              <Tooltip title="这是一个提示">
-                <Button>悬停提示</Button>
-              </Tooltip>
+              <TgInput v-model="inputValue" placeholder="请输入内容" />
             </div>
             <div class="pt-component-demo__code">
-              <pre><code>&lt;Tooltip title="这是一个提示"&gt;
-  &lt;Button&gt;悬停提示&lt;/Button&gt;
-&lt;/Tooltip&gt;</code></pre>
+              <pre><code>&lt;TgInput v-model="inputValue" placeholder="请输入内容" /&gt;</code></pre>
+            </div>
+          </div>
+
+          <div class="pt-component-demo__item">
+            <h4>输入框尺寸</h4>
+            <div class="pt-component-demo__row">
+              <TgInput v-model="inputValue" size="small" placeholder="小尺寸" />
+              <TgInput v-model="inputValue" placeholder="默认尺寸" />
+              <TgInput v-model="inputValue" size="large" placeholder="大尺寸" />
+            </div>
+            <div class="pt-component-demo__code">
+              <pre><code>&lt;TgInput v-model="inputValue" size="small" placeholder="小尺寸" /&gt;
+&lt;TgInput v-model="inputValue" placeholder="默认尺寸" /&gt;
+&lt;TgInput v-model="inputValue" size="large" placeholder="大尺寸" /&gt;</code></pre>
+            </div>
+          </div>
+
+          <div class="pt-component-demo__item">
+            <h4>输入框状态</h4>
+            <div class="pt-component-demo__row">
+              <TgInput v-model="inputValue" disabled placeholder="禁用状态" />
+              <TgInput v-model="inputValue" readonly placeholder="只读状态" />
+              <TgInput v-model="inputValue" type="password" placeholder="密码输入" />
+            </div>
+            <div class="pt-component-demo__code">
+              <pre><code>&lt;TgInput v-model="inputValue" disabled placeholder="禁用状态" /&gt;
+&lt;TgInput v-model="inputValue" readonly placeholder="只读状态" /&gt;
+&lt;TgInput v-model="inputValue" type="password" placeholder="密码输入" /&gt;</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 开关测试 -->
+      <div class="pt-component-demo">
+        <h3>Switch 开关</h3>
+        <div class="pt-component-demo__content">
+          <div class="pt-component-demo__item">
+            <h4>基础用法</h4>
+            <div class="pt-component-demo__row">
+              <TgSwitch v-model="switchValue" />
+            </div>
+            <div class="pt-component-demo__code">
+              <pre><code>&lt;TgSwitch v-model="switchValue" /&gt;</code></pre>
+            </div>
+          </div>
+
+          <div class="pt-component-demo__item">
+            <h4>开关尺寸</h4>
+            <div class="pt-component-demo__row">
+              <TgSwitch v-model="switchValue" size="small" />
+              <TgSwitch v-model="switchValue" />
+              <TgSwitch v-model="switchValue" size="large" />
+            </div>
+            <div class="pt-component-demo__code">
+              <pre><code>&lt;TgSwitch v-model="switchValue" size="small" /&gt;
+&lt;TgSwitch v-model="switchValue" /&gt;
+&lt;TgSwitch v-model="switchValue" size="large" /&gt;</code></pre>
+            </div>
+          </div>
+
+          <div class="pt-component-demo__item">
+            <h4>开关状态</h4>
+            <div class="pt-component-demo__row">
+              <TgSwitch v-model="switchValue" disabled />
+              <TgSwitch v-model="switchValue" :loading="true" />
+            </div>
+            <div class="pt-component-demo__code">
+              <pre><code>&lt;TgSwitch v-model="switchValue" disabled /&gt;
+&lt;TgSwitch v-model="switchValue" :loading="true" /&gt;</code></pre>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 布局组件 -->
+    <!-- 表单组件 -->
     <section class="pt-component-section">
-      <h2>布局组件</h2>
+      <h2>表单组件</h2>
 
-      <!-- FormGroup 测试 -->
+      <!-- 单选框测试 -->
       <div class="pt-component-demo">
-        <h3>FormGroup 表单项组</h3>
+        <h3>Radio 单选框</h3>
         <div class="pt-component-demo__content">
           <div class="pt-component-demo__item">
             <h4>基础用法</h4>
             <div class="pt-component-demo__row">
-              <FormGroup label="用户名">
-                <input type="text" placeholder="请输入用户名" />
-              </FormGroup>
-            </div>
-            <div class="pt-component-demo__code">
-              <pre><code>&lt;FormGroup label="用户名"&gt;
-  &lt;input type="text" placeholder="请输入用户名" /&gt;
-&lt;/FormGroup&gt;</code></pre>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 数据展示组件 -->
-    <section class="pt-component-section">
-      <h2>数据展示组件</h2>
-
-      <!-- Tab 测试 -->
-      <div class="pt-component-demo">
-        <h3>Tab 标签页</h3>
-        <div class="pt-component-demo__content">
-          <div class="pt-component-demo__item">
-            <h4>基础用法</h4>
-            <div class="pt-component-demo__row">
-              <Tab
-                :tabs="[
-                  { key: '1', title: '标签页1' },
-                  { key: '2', title: '标签页2' },
-                  { key: '3', title: '标签页3' },
+              <TgRadio
+                v-model="radioValue"
+                :options="[
+                  { label: '选项1', value: '1' },
+                  { label: '选项2', value: '2' },
+                  { label: '选项3', value: '3' },
                 ]"
               />
             </div>
             <div class="pt-component-demo__code">
-              <pre><code>&lt;Tab
-  :tabs="[
-    { key: '1', title: '标签页1' },
-    { key: '2', title: '标签页2' },
-    { key: '3', title: '标签页3' },
+              <pre><code>&lt;TgRadio
+  v-model="radioValue"
+  :options="[
+    { label: '选项1', value: '1' },
+    { label: '选项2', value: '2' },
+    { label: '选项3', value: '3' },
   ]"
+/&gt;</code></pre>
+            </div>
+          </div>
+
+          <div class="pt-component-demo__item">
+            <h4>按钮样式</h4>
+            <div class="pt-component-demo__row">
+              <TgRadio
+                v-model="radioValue"
+                :options="[
+                  { label: '选项1', value: '1' },
+                  { label: '选项2', value: '2' },
+                  { label: '选项3', value: '3' },
+                ]"
+                button-style
+              />
+            </div>
+            <div class="pt-component-demo__code">
+              <pre><code>&lt;TgRadio
+  v-model="radioValue"
+  :options="[
+    { label: '选项1', value: '1' },
+    { label: '选项2', value: '2' },
+    { label: '选项3', value: '3' },
+  ]"
+  button-style
 /&gt;</code></pre>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- SettingItem 测试 -->
+      <!-- 复选框测试 -->
       <div class="pt-component-demo">
-        <h3>SettingItem 设置项</h3>
+        <h3>Checkbox 复选框</h3>
         <div class="pt-component-demo__content">
           <div class="pt-component-demo__item">
             <h4>基础用法</h4>
             <div class="pt-component-demo__row">
-              <SettingItem title="自动保存" description="开启后会自动保存编辑内容">
-                <input type="checkbox" />
-              </SettingItem>
+              <TgCheckbox
+                v-model="checkboxValue"
+                :options="[
+                  { label: '选项1', value: '1' },
+                  { label: '选项2', value: '2' },
+                  { label: '选项3', value: '3' },
+                ]"
+              />
             </div>
             <div class="pt-component-demo__code">
-              <pre><code>&lt;SettingItem
-  title="自动保存"
-  description="开启后会自动保存编辑内容"
-&gt;
-  &lt;input type="checkbox" /&gt;
-&lt;/SettingItem&gt;</code></pre>
+              <pre><code>&lt;TgCheckbox
+  v-model="checkboxValue"
+  :options="[
+    { label: '选项1', value: '1' },
+    { label: '选项2', value: '2' },
+    { label: '选项3', value: '3' },
+  ]"
+/&gt;</code></pre>
+            </div>
+          </div>
+
+          <div class="pt-component-demo__item">
+            <h4>按钮样式</h4>
+            <div class="pt-component-demo__row">
+              <TgCheckbox
+                v-model="checkboxValue"
+                :options="[
+                  { label: '选项1', value: '1' },
+                  { label: '选项2', value: '2' },
+                  { label: '选项3', value: '3' },
+                ]"
+                button-style
+              />
+            </div>
+            <div class="pt-component-demo__code">
+              <pre><code>&lt;TgCheckbox
+  v-model="checkboxValue"
+  :options="[
+    { label: '选项1', value: '1' },
+    { label: '选项2', value: '2' },
+    { label: '选项3', value: '3' },
+  ]"
+  button-style
+/&gt;</code></pre>
             </div>
           </div>
         </div>
@@ -189,74 +291,85 @@
 </template>
 
 <script setup lang="ts">
-import { Button, Tooltip, FormGroup, Tab, SettingItem } from "@siyuan-publisher/ui"
+import { ref } from "vue"
+import { TgButton, TgInput, TgSwitch, TgRadio, TgCheckbox } from "@siyuan-publisher/ui"
+
+const loading = ref(false)
+const inputValue = ref("")
+const switchValue = ref(false)
+const radioValue = ref("1")
+const checkboxValue = ref(["1"])
+
+const handleLoading = () => {
+  loading.value = true
+  setTimeout(() => {
+    loading.value = false
+  }, 2000)
+}
 </script>
 
 <style lang="stylus">
 .pt-component-test
-  padding: $spacing-lg
+  padding: $tg-spacing-lg
   background-color: #f5f5f5
   min-height: 100vh
 
   h1
-    margin-bottom: $spacing-xl
+    margin-bottom: $tg-spacing-xl
     text-align: center
 
   .pt-component-section
-    margin-bottom: $spacing-xl
+    margin-bottom: $tg-spacing-xl
     background: #fff
-    border-radius: $border-radius-base
-    box-shadow: $box-shadow-base
+    border-radius: $tg-border-radius-base
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15)
     overflow: hidden
 
     h2
       margin: 0
-      padding: $spacing-lg
-      border-bottom: 1px solid $border-color-split
+      padding: $tg-spacing-lg
+      border-bottom: 1px solid var(--tg-color-border)
       background: #fafafa
 
   .pt-component-demo
-    padding: $spacing-lg
+    padding: $tg-spacing-lg
 
     h3
-      margin-bottom: $spacing-lg
-      padding-bottom: $spacing-sm
-      border-bottom: 1px solid $border-color-split
-      color: $heading-color
+      margin-bottom: $tg-spacing-lg
+      padding-bottom: $tg-spacing-sm
+      border-bottom: 1px solid var(--tg-color-border)
+      color: var(--tg-color-text)
 
     &__content
-      padding: $spacing-lg
+      padding: $tg-spacing-lg
       background: #fff
-      border-radius: $border-radius-base
-      border: 1px solid $border-color-split
+      border-radius: $tg-border-radius-base
+      border: 1px solid var(--tg-color-border)
 
     &__item
-      margin-bottom: $spacing-xl
+      margin-bottom: $tg-spacing-xl
 
       &:last-child
         margin-bottom: 0
 
       h4
-        margin-bottom: $spacing-md
-        color: $text-color-secondary
-        font-size: $font-size-base
+        margin-bottom: $tg-spacing-md
+        color: var(--tg-color-text-secondary)
+        font-size: $tg-font-size-base
 
     &__row
       display: flex
       flex-wrap: wrap
-      gap: $spacing-md
+      gap: $tg-spacing-md
       align-items: center
 
-      .pt-btn
-        margin-bottom: $spacing-sm
-
     &__code
-      margin-top: $spacing-md
-      padding: $spacing-md
+      margin-top: $tg-spacing-md
+      padding: $tg-spacing-md
       background: #f5f5f5
-      border-radius: $border-radius-base
+      border-radius: $tg-border-radius-base
       font-family: monospace
-      font-size: $font-size-sm
+      font-size: $tg-font-size-sm
       line-height: 1.5
       overflow-x: auto
 
@@ -266,15 +379,9 @@ import { Button, Tooltip, FormGroup, Tab, SettingItem } from "@siyuan-publisher/
 
       code
         display: block
-        padding: $spacing-sm
+        padding: $tg-spacing-sm
         background: none
         border: none
         white-space: pre-wrap
         word-break: break-all
-
-    &__description
-      margin-top: $spacing-sm
-      color: $text-color-secondary
-      font-size: $font-size-sm
-      line-height: 1.5
 </style>

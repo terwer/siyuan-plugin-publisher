@@ -1,5 +1,5 @@
 <template>
-  <div class="app">
+  <div id="tg-app" class="app">
     <nav class="nav">
       <router-link to="/" class="nav-item">首页</router-link>
       <router-link to="/publish" class="nav-item">发布</router-link>
@@ -17,6 +17,8 @@
 </script>
 
 <style>
+@import "@terwer/ui/styles";
+
 .app {
   display: flex;
   flex-direction: column;

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, watch } from "vue"
-import type { FormConfig, FormInstance, ValidationRule } from "@/types"
+import type { FormConfig, FormInstance, ValidationRule } from "../types"
 import TgInput from "./TgInput.vue"
 import TgSelect from "./TgSelect.vue"
 import TgSwitch from "./TgSwitch.vue"

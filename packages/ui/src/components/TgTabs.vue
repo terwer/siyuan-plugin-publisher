@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue"
-import type { TabItem } from "@/types"
+import type { TabItem } from "../types"
 
 interface Props {
   items: TabItem[]

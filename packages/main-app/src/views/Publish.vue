@@ -2,7 +2,28 @@
   <div class="publish">
     <h1>发布文章</h1>
     <div class="content">
-      <Tab :tabs="publishTabs" :active-tab="activeTabIndex" @tab-change="handleTabChange" />
+      <TgTabs :items="publishTabs" v-model="activeTabIndex" @change="handleTabChange">
+        <template #platform>
+          <WordPressConfig :config="platformConfig" @update:config="handleConfigUpdate" @test="testConnection" />
+        </template>
+        <template #post>
+          <PostInfo
+            :post="post"
+            :tags-input="tagsInput"
+            @post-update="handlePostUpdate"
+            @tags-input="handleTagsInput"
+          />
+        </template>
+        <template #options>
+          <PublishOptionsPanel
+            :options="publishOptions"
+            :is-publishing="isPublishing"
+            :publish-result="publishResult"
+            @options-update="handleOptionsUpdate"
+            @publish="publish"
+          />
+        </template>
+      </TgTabs>
     </div>
   </div>
 </template>
@@ -19,7 +40,7 @@ import type {
   PostStatus,
   ErrorType,
 } from "@siyuan-publisher/common"
-import { Tab } from "@siyuan-publisher/ui"
+import { TgTabs } from "@terwer/ui"
 import WordPressConfig from "../components/platform-configs/wordpress.vue"
 import PostInfo from "../components/PostInfo.vue"
 import PublishOptionsPanel from "../components/PublishOptionsPanel.vue"
@@ -58,48 +79,27 @@ const publishOptions = ref<PublishOptions>({
 
 const publishResult = ref<PublishResult | null>(null)
 const tagsInput = ref("")
-const activeTabIndex = ref(0)
+const activeTabIndex = ref("platform")
 
 // 定义发布流程的标签页
 const publishTabs = computed(() => [
   {
+    key: "platform",
     label: "选择平台",
-    content: WordPressConfig,
-    props: {
-      platforms: availablePlatforms.value,
-      selectedPlatform: selectedPlatform.value,
-      platformConfig: platformConfig.value,
-      onPlatformSelect: handlePlatformSelect,
-      onConfigUpdate: handleConfigUpdate,
-      onTestConnection: testConnection,
-    },
   },
   {
+    key: "post",
     label: "文章信息",
-    content: PostInfo,
-    props: {
-      post: post.value,
-      tagsInput: tagsInput.value,
-      onPostUpdate: handlePostUpdate,
-      onTagsInput: handleTagsInput,
-    },
   },
   {
+    key: "options",
     label: "发布选项",
-    content: PublishOptionsPanel,
-    props: {
-      options: publishOptions.value,
-      isPublishing: isPublishing.value,
-      publishResult: publishResult.value,
-      onOptionsUpdate: handleOptionsUpdate,
-      onPublish: publish,
-    },
   },
 ])
 
 // 处理标签页切换
-const handleTabChange = (index: number) => {
-  activeTabIndex.value = index
+const handleTabChange = (key: string | number) => {
+  activeTabIndex.value = key as string
 }
 
 // 处理平台选择

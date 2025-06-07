@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue"
-import TgTabs from "@/components/TgTabs.vue"
-import type { TabItem } from "@/types"
+import TgTabs from "../components/TgTabs.vue"
+import type { TabItem } from "../types"
 
 const activeKey = ref("1")
 
