@@ -67,7 +67,7 @@ const handleChange = (key: string | number) => {
     <div class="tg-test-section">
       <h2 class="tg-test-title">按钮组样式</h2>
       <div class="tg-test-row">
-        <TgTabs v-model="activeKey" :items="buttonGroupTabs" type="button-group">
+        <TgTabs v-model="activeKey" size="small" :items="buttonGroupTabs" type="button-group">
           <template #1>
             <div class="tg-test-content">按钮组1的内容</div>
           </template>

@@ -75,9 +75,9 @@ const handleClick = () => {
     <section class="tg-test-section">
       <h3>图标按钮</h3>
       <div class="tg-test-row">
-        <TgButton size="large" icon="tg-icon-search">搜索</TgButton>
-        <TgButton type="primary" icon="tg-icon-download">下载</TgButton>
-        <TgButton type="danger" icon="tg-icon-delete">删除</TgButton>
+        <TgButton size="small" icon="tg-icon-search">搜索</TgButton>
+        <TgButton size="small" type="primary" icon="tg-icon-download">下载</TgButton>
+        <TgButton size="small" type="danger" icon="tg-icon-delete">删除</TgButton>
       </div>
     </section>
   </div>
