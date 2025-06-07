@@ -16,9 +16,9 @@
     font-size $tg-font-size-base
     color var(--tg-color-text-secondary)
     position relative
-    height 40px
-    line-height 40px
-    margin-right 32px
+    height $tg-height-base
+    line-height $tg-height-base
+    margin-right $tg-spacing-xl
     border 0
     background none
 
@@ -58,9 +58,9 @@
       border-radius $tg-border-radius-base
       margin-right 2px
       color var(--tg-color-text-primary)
-      height 40px
-      line-height 40px
-      padding 0 16px
+      height $tg-height-base
+      line-height $tg-height-base
+      padding 0 $tg-spacing-md
       background var(--tg-color-bg-container)
       display flex
       align-items center
@@ -104,9 +104,9 @@
       border none
       margin 0
       color var(--tg-color-text-primary)
-      height 32px
-      line-height 32px
-      padding 0 16px
+      height $tg-height-base
+      line-height $tg-height-base
+      padding 0 $tg-spacing-md
       background none
       display flex
       align-items center
@@ -161,15 +161,15 @@
   // 尺寸变体
   &-small
     .tg-tabs-tab
-      height 32px
-      line-height 32px
+      height $tg-height-sm
+      line-height $tg-height-sm
       font-size $tg-font-size-sm
-      padding 0 $tg-spacing-md
+      padding 0 $tg-spacing-sm
 
   &-large
     .tg-tabs-tab
-      height 48px
-      line-height 48px
+      height $tg-height-lg
+      line-height $tg-height-lg
       font-size $tg-font-size-lg
       padding 0 $tg-spacing-lg
 
