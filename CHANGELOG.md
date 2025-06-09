@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.35.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.35.0...siyuan-plugin-publisher-v1.35.1) (2025-06-09)
+
+
+### Code Refactoring
+
+* **adaptors/api/yuque:** adjust apiFetch call for better compatibility ([74bc9e6](https://github.com/terwer/siyuan-plugin-publisher/commit/74bc9e61af0828689f95b8e8631056ec3d008501))
+
 ## [1.35.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.34.2...siyuan-plugin-publisher-v1.35.0) (2025-06-03)
 ### Features
 * add quartz support ([4ab5b70](https://github.com/terwer/siyuan-plugin-publisher/commit/4ab5b70a393a71960890dc4c9760fccafc759d67))
