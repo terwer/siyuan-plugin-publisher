@@ -2,11 +2,25 @@
 
 ## Prerequisites
 
+Prepare permissions
+
+```
+sudo chown -R $USER /usr/local/lib/
+sudo chown -R $USER /usr/local/bin/
+sudo chown -R $USER /usr/local/share/
+```
+
+or
+
+```
+sudo chown -R $USER /usr/local
+```
+
 First install nodejs and pnpm
 
 ```bash
 brew install n
-sudo n 18
+n 22
 brew install corepack
 corepack enable pnpm
 corepack use pnpm@10.8.0
@@ -21,7 +35,7 @@ sudo chown -R $USER /usr/local/lib/
 sudo chown -R $USER /usr/local/bin/
 sudo chown -R $USER /usr/local/share/
 
-npm install --global corepack@latest
+npm install -g corepack@latest
 
 pnpm install
 ```
