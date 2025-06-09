@@ -1,5 +1,8 @@
 # Changelog
 
+## [1.35.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.35.0...siyuan-plugin-publisher-v1.35.1) (2025-06-09)
+### Code Refactoring
+* **adaptors/api/yuque:** adjust apifetch call for better compatibility ([74bc9e6](https://github.com/terwer/siyuan-plugin-publisher/commit/74bc9e61af0828689f95b8e8631056ec3d008501))
 ## [1.35.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.34.2...siyuan-plugin-publisher-v1.35.0) (2025-06-03)
 ### Features
 * add quartz support ([4ab5b70](https://github.com/terwer/siyuan-plugin-publisher/commit/4ab5b70a393a71960890dc4c9760fccafc759d67))
@@ -427,7 +430,6 @@
 * 进一步优化 ai 效果 ([b2ccb55](https://github.com/terwer/siyuan-plugin-publisher/commit/b2ccb55abfcfd924968cac928bd2879041f95d3a))
 * 部分文件改为异步加载，小幅度提升性能 ([19455b0](https://github.com/terwer/siyuan-plugin-publisher/commit/19455b04ec35613427b032aa27b04f5b11954e98))
 * 重构存储 ([c1b646a](https://github.com/terwer/siyuan-plugin-publisher/commit/c1b646a440b9a12b737d1fddd553c01c4a47c968))
-### Code Refactoring
 * 重构项目结构 ([9629fbc](https://github.com/terwer/siyuan-plugin-publisher/commit/9629fbc2eab90cc613f7ade523045d6cd8cff7ea))
 * **deps-dev:** bump @halo-dev/api-client from 2.9.0 to 2.10.0 ([bc92f28](https://github.com/terwer/siyuan-plugin-publisher/commit/bc92f28d0469096841faff1de81c6db506915246))
 * **deps-dev:** bump @vitejs/plugin-vue from 4.3.4 to 4.4.0 ([eea41e0](https://github.com/terwer/siyuan-plugin-publisher/commit/eea41e0a388900bad8eb80f14721c9494e10f902))
