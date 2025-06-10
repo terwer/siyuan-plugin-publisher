@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
 import { ref, watch } from "vue"
-import type { PlatformConfig} from "@siyuan-publisher/common";
+import type { PlatformConfig } from "@siyuan-publisher/common"
 
 const props = defineProps<{
   config: PlatformConfig

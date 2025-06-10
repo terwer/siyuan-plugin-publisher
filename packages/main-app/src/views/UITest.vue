@@ -309,79 +309,88 @@ const handleLoading = () => {
 </script>
 
 <style lang="stylus">
+@import "@terwer/ui/src/styles/base/index.styl"
+
 .pt-component-test
-  padding: $tg-spacing-lg
-  background-color: #f5f5f5
-  min-height: 100vh
+  padding $tg-spacing-lg
+  background-color var(--tg-color-bg)
+  min-height 100vh
 
   h1
-    margin-bottom: $tg-spacing-xl
-    text-align: center
+    margin-bottom $tg-spacing-xl
+    text-align center
+    color var(--tg-color-text-1)
 
   .pt-component-section
-    margin-bottom: $tg-spacing-xl
-    background: #fff
-    border-radius: $tg-border-radius-base
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15)
-    overflow: hidden
+    margin-bottom $tg-spacing-xl
+    background var(--tg-color-bg-2)
+    border-radius $tg-border-radius-base
+    box-shadow 0 2px 8px rgba(0, 0, 0, 0.08)
+    overflow hidden
 
     h2
-      margin: 0
-      padding: $tg-spacing-lg
-      border-bottom: 1px solid var(--tg-color-border)
-      background: #fafafa
+      margin 0
+      padding $tg-spacing-lg
+      border-bottom 1px solid var(--tg-color-border)
+      background var(--tg-color-bg)
+      color var(--tg-color-text-1)
 
   .pt-component-demo
-    padding: $tg-spacing-lg
+    padding $tg-spacing-lg
 
     h3
-      margin-bottom: $tg-spacing-lg
-      padding-bottom: $tg-spacing-sm
-      border-bottom: 1px solid var(--tg-color-border)
-      color: var(--tg-color-text)
+      margin-bottom $tg-spacing-lg
+      padding-bottom $tg-spacing-sm
+      border-bottom 1px solid var(--tg-color-border)
+      color var(--tg-color-text-1)
 
     &__content
-      padding: $tg-spacing-lg
-      background: #fff
-      border-radius: $tg-border-radius-base
-      border: 1px solid var(--tg-color-border)
+      padding $tg-spacing-lg
+      background var(--tg-color-bg)
+      border-radius $tg-border-radius-base
+      border 1px solid var(--tg-color-border)
 
     &__item
-      margin-bottom: $tg-spacing-xl
+      margin-bottom $tg-spacing-xl
 
       &:last-child
-        margin-bottom: 0
+        margin-bottom 0
 
       h4
-        margin-bottom: $tg-spacing-md
-        color: var(--tg-color-text-secondary)
-        font-size: $tg-font-size-base
+        margin-bottom $tg-spacing-md
+        color var(--tg-color-text-2)
+        font-size $tg-font-size-base
 
     &__row
-      display: flex
-      flex-wrap: wrap
-      gap: $tg-spacing-md
-      align-items: center
+      display flex
+      flex-wrap wrap
+      gap $tg-spacing-md
+      align-items center
+      margin-bottom $tg-spacing-md
 
     &__code
-      margin-top: $tg-spacing-md
-      padding: $tg-spacing-md
-      background: #f5f5f5
-      border-radius: $tg-border-radius-base
-      font-family: monospace
-      font-size: $tg-font-size-sm
-      line-height: 1.5
-      overflow-x: auto
+      margin-top $tg-spacing-md
+      padding $tg-spacing-md 0
+      background var(--tg-color-bg-2)
+      border-radius $tg-border-radius-base
+      font-family monospace
+      font-size $tg-font-size-sm
+      line-height 1.5
+      overflow-x auto
 
       pre
-        margin: 0
-        padding: 0
+        margin 0
+        padding $tg-spacing-sm
+        background var(--tg-color-bg)
+        border 1px solid var(--tg-color-border)
+        border-radius $tg-border-radius-base
 
       code
-        display: block
-        padding: $tg-spacing-sm
-        background: none
-        border: none
-        white-space: pre-wrap
-        word-break: break-all
+        display block
+        padding $tg-spacing-sm
+        background none
+        border none
+        white-space pre-wrap
+        word-break break-all
+        color var(--tg-color-text-1)
 </style>

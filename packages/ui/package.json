@@ -10,33 +10,6 @@
     ".": {
       "types": "./src/index.ts",
       "import": "./src/index.ts"
-    },
-    "./styles": {
-      "import": "./src/styles/index.styl"
-    },
-    "./styles/base": {
-      "import": "./src/styles/base/index.styl"
-    },
-    "./styles/button": {
-      "import": "./src/styles/components/button.styl"
-    },
-    "./styles/input": {
-      "import": "./src/styles/components/input.styl"
-    },
-    "./styles/form": {
-      "import": "./src/styles/components/form.styl"
-    },
-    "./button": {
-      "types": "./src/components/TgButton.vue",
-      "import": "./src/components/TgButton.vue"
-    },
-    "./input": {
-      "types": "./src/components/TgInput.vue",
-      "import": "./src/components/TgInput.vue"
-    },
-    "./form": {
-      "types": "./src/components/TgForm.vue",
-      "import": "./src/components/TgForm.vue"
     }
   },
   "scripts": {

@@ -29,7 +29,7 @@ export function usePluginSystem() {
     try {
       // 获取所有内置平台适配器
       const builtInAdapters = platformAdapterRegistry.getAllAdapters()
-      
+
       // 注册内置适配器到插件系统
       for (const adapter of builtInAdapters) {
         await pluginSystem.registerPlugin(adapter as any)

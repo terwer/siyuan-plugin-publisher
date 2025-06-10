@@ -1,0 +1,52 @@
+.tg-message
+  position fixed
+  top $tg-spacing-md
+  left 50%
+  transform translateX(-50%)
+  z-index 1000
+  padding $tg-spacing-xs $tg-spacing-md
+  border-radius $tg-border-radius-base
+  box-shadow 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05)
+  transition all 0.3s ease-in-out
+
+  &-content
+    display flex
+    align-items center
+    justify-content center
+
+  &-text
+    font-size $tg-font-size-base
+    line-height $tg-line-height-base
+
+  &-success
+    background-color var(--tg-color-success-bg)
+    border 1px solid var(--tg-color-success-border)
+    .tg-message-text
+      color var(--tg-color-success)
+
+  &-error
+    background-color var(--tg-color-error-bg)
+    border 1px solid var(--tg-color-error-border)
+    .tg-message-text
+      color var(--tg-color-error)
+
+  &-warning
+    background-color var(--tg-color-warning-bg)
+    border 1px solid var(--tg-color-warning-border)
+    .tg-message-text
+      color var(--tg-color-warning)
+
+  &-info
+    background-color var(--tg-color-info-bg)
+    border 1px solid var(--tg-color-info-border)
+    .tg-message-text
+      color var(--tg-color-info)
+
+.tg-fade-enter-active,
+.tg-fade-leave-active
+  transition all 0.3s ease-in-out
+
+.tg-fade-enter-from,
+.tg-fade-leave-to
+  opacity 0
+  transform translate(-50%, -$tg-spacing-md) 

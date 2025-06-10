@@ -25,12 +25,19 @@
         </template>
       </TgTabs>
     </div>
+    <TgMessage
+      v-if="message.visible"
+      :type="message.type"
+      :message="message.content"
+      :duration="3000"
+      @close="message.visible = false"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, watch } from "vue"
-import { TgTabs, TgForm, TgButton, TgInput } from "@terwer/ui"
+import { TgTabs, TgForm, TgButton, TgInput, TgMessage } from "@terwer/ui"
 import type { FormConfig, FormInstance } from "@terwer/ui"
 
 const tabItems = [
@@ -45,6 +52,22 @@ const formRef = ref<FormInstance>()
 
 // 提交状态
 const submitting = ref(false)
+
+// 消息提示
+const message = ref({
+  visible: false,
+  type: "info" as "success" | "error" | "warning" | "info",
+  content: "",
+})
+
+// 显示消息提示
+const showMessage = (type: "success" | "error" | "warning" | "info", content: string) => {
+  message.value = {
+    visible: true,
+    type,
+    content,
+  }
+}
 
 // 全局配置
 const globalConfig = ref({
@@ -83,19 +106,17 @@ const handleSubmit = async () => {
     // 验证表单
     const isValid = await formRef.value.validate()
     if (!isValid) {
-      console.log("表单验证失败，请检查输入")
+      showMessage("error", "表单验证失败，请检查输入")
       return
     }
 
     // 模拟提交
     await new Promise((resolve) => setTimeout(resolve, 1000))
     console.log("提交成功：", globalConfig.value)
-    // 这里可以处理提交成功后的逻辑
-    // 例如：显示成功提示、跳转页面等
+    showMessage("success", "设置保存成功")
   } catch (error) {
     console.error("提交失败：", error)
-    // 这里可以处理提交失败后的逻辑
-    // 例如：显示错误提示等
+    showMessage("error", "设置保存失败，请重试")
   } finally {
     submitting.value = false
   }

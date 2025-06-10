@@ -63,10 +63,15 @@ $tg-color-warning-hover = #ffc53d
 $tg-color-warning-active = #d48806
 $tg-color-warning-light = rgba(250, 173, 20, 0.2)
 
-$tg-color-danger = #ff4d4f
-$tg-color-danger-hover = #ff7875
-$tg-color-danger-active = #d9363e
-$tg-color-danger-light = rgba(255, 77, 79, 0.2)
+$tg-color-error = #ff4d4f
+$tg-color-error-hover = #ff7875
+$tg-color-error-active = #d9363e
+$tg-color-error-light = rgba(255, 77, 79, 0.2)
+
+$tg-color-info = #1677ff
+$tg-color-info-hover = #4096ff
+$tg-color-info-active = #0958d9
+$tg-color-info-light = rgba(22, 119, 255, 0.2)
 
 // 中性色
 $tg-color-text = rgba(0, 0, 0, 0.85)
@@ -82,29 +87,64 @@ $tg-color-bg-hover = #f5f5f5
 $tg-color-bg-active = #e6e6e6
 $tg-color-bg-disabled = #f5f5f5
 
+// 消息提示颜色
+$tg-color-success-bg = #f6ffed
+$tg-color-success-border = #b7eb8f
+$tg-color-error-bg = #fff2f0
+$tg-color-error-border = #ffccc7
+$tg-color-warning-bg = #fffbe6
+$tg-color-warning-border = #ffe58f
+$tg-color-info-bg = #e6f7ff
+$tg-color-info-border = #91d5ff
+
 // 暗色主题变量
-#tg-app
-  // 亮色主题变量
+$tg-color-success-bg-dark = #162312
+$tg-color-success-border-dark = #274916
+$tg-color-error-bg-dark = #2a1215
+$tg-color-error-border-dark = #58181c
+$tg-color-warning-bg-dark = #2b2111
+$tg-color-warning-border-dark = #594214
+$tg-color-info-bg-dark = #111b26
+$tg-color-info-border-dark = #112a45
+
+// CSS 变量
+:root
+  // 品牌色
   --tg-color-primary: $tg-color-primary
   --tg-color-primary-hover: $tg-color-primary-hover
   --tg-color-primary-active: $tg-color-primary-active
   --tg-color-primary-light: $tg-color-primary-light
 
+  // 功能色
   --tg-color-success: $tg-color-success
   --tg-color-success-hover: $tg-color-success-hover
   --tg-color-success-active: $tg-color-success-active
   --tg-color-success-light: $tg-color-success-light
+  --tg-color-success-bg: $tg-color-success-bg
+  --tg-color-success-border: $tg-color-success-border
 
   --tg-color-warning: $tg-color-warning
   --tg-color-warning-hover: $tg-color-warning-hover
   --tg-color-warning-active: $tg-color-warning-active
   --tg-color-warning-light: $tg-color-warning-light
+  --tg-color-warning-bg: $tg-color-warning-bg
+  --tg-color-warning-border: $tg-color-warning-border
 
-  --tg-color-danger: $tg-color-danger
-  --tg-color-danger-hover: $tg-color-danger-hover
-  --tg-color-danger-active: $tg-color-danger-active
-  --tg-color-danger-light: $tg-color-danger-light
+  --tg-color-error: $tg-color-error
+  --tg-color-error-hover: $tg-color-error-hover
+  --tg-color-error-active: $tg-color-error-active
+  --tg-color-error-light: $tg-color-error-light
+  --tg-color-error-bg: $tg-color-error-bg
+  --tg-color-error-border: $tg-color-error-border
 
+  --tg-color-info: $tg-color-info
+  --tg-color-info-hover: $tg-color-info-hover
+  --tg-color-info-active: $tg-color-info-active
+  --tg-color-info-light: $tg-color-info-light
+  --tg-color-info-bg: $tg-color-info-bg
+  --tg-color-info-border: $tg-color-info-border
+
+  // 中性色
   --tg-color-text: $tg-color-text
   --tg-color-text-secondary: $tg-color-text-secondary
   --tg-color-text-disabled: $tg-color-text-disabled
@@ -118,99 +158,28 @@ $tg-color-bg-disabled = #f5f5f5
   --tg-color-bg-active: $tg-color-bg-active
   --tg-color-bg-disabled: $tg-color-bg-disabled
 
-  // 暗色主题适配
-  html[data-theme-mode="dark"] &
-  // 暗色主题变量
-    --tg-color-primary: #1668dc
-    --tg-color-primary-hover: #1677ff
-    --tg-color-primary-active: #0958d9
-    --tg-color-primary-light: rgba(22, 104, 220, 0.2)
-
-    --tg-color-success: #49aa19
-    --tg-color-success-hover: #52c41a
-    --tg-color-success-active: #389e0d
-    --tg-color-success-light: rgba(73, 170, 25, 0.2)
-
-    --tg-color-warning: #d89614
-    --tg-color-warning-hover: #faad14
-    --tg-color-warning-active: #d48806
-    --tg-color-warning-light: rgba(216, 150, 20, 0.2)
-
-    --tg-color-danger: #dc4446
-    --tg-color-danger-hover: #ff4d4f
-    --tg-color-danger-active: #d9363e
-    --tg-color-danger-light: rgba(220, 68, 70, 0.2)
-
-    --tg-color-text: rgba(255, 255, 255, 0.85)
-    --tg-color-text-secondary: rgba(255, 255, 255, 0.45)
-    --tg-color-text-disabled: rgba(255, 255, 255, 0.25)
-    --tg-color-text-placeholder: rgba(255, 255, 255, 0.25)
-
-    --tg-color-border: #434343
-    --tg-color-border-disabled: #434343
-
-    --tg-color-bg: #141414
-    --tg-color-bg-hover: #1f1f1f
-    --tg-color-bg-active: #262626
-    --tg-color-bg-disabled: #1f1f1f
-
-// 颜色系统
-$tg-color-success = #52c41a
-$tg-color-warning = #faad14
-$tg-color-error = #ff4d4f
-$tg-color-info = #1677ff
-
-// 文字颜色
-$tg-color-text-primary = #000000d9
-$tg-color-text-secondary = #00000073
-$tg-color-text-disabled = #00000040
-
-// 背景色
-$tg-color-bg = #ffffff
-$tg-color-bg-container = #ffffff
-$tg-color-bg-layout = #f5f5f5
-
-// 边框颜色
-$tg-color-border = #d9d9d9
-
-// 暗黑模式颜色
-$tg-color-primary-dark = #1668dc
-$tg-color-text-primary-dark = #ffffffd9
-$tg-color-text-secondary-dark = #ffffff73
-$tg-color-text-disabled-dark = #ffffff40
-$tg-color-bg-dark = #141414
-$tg-color-bg-container-dark = #1f1f1f
-$tg-color-bg-layout-dark = #000000
-$tg-color-border-dark = #434343
-
-// CSS 变量
-:root
-  --tg-color-primary $tg-color-primary
-  --tg-color-success $tg-color-success
-  --tg-color-warning $tg-color-warning
-  --tg-color-error $tg-color-error
-  --tg-color-info $tg-color-info
-  
-  --tg-color-text-primary $tg-color-text-primary
-  --tg-color-text-secondary $tg-color-text-secondary
-  --tg-color-text-disabled $tg-color-text-disabled
-  
-  --tg-color-bg $tg-color-bg
-  --tg-color-bg-container $tg-color-bg-container
-  --tg-color-bg-layout $tg-color-bg-layout
-  
-  --tg-color-border $tg-color-border
-  
-  --tg-color-white #ffffff
-  --tg-color-black #000000
-
-// 暗黑模式变量
+// 暗黑模式
 html[data-theme-mode="dark"]
-  --tg-color-primary $tg-color-primary-dark
-  --tg-color-text-primary $tg-color-text-primary-dark
-  --tg-color-text-secondary $tg-color-text-secondary-dark
-  --tg-color-text-disabled $tg-color-text-disabled-dark
-  --tg-color-bg $tg-color-bg-dark
-  --tg-color-bg-container $tg-color-bg-container-dark
-  --tg-color-bg-layout $tg-color-bg-layout-dark
-  --tg-color-border $tg-color-border-dark
+  // 功能色
+  --tg-color-success-bg: $tg-color-success-bg-dark
+  --tg-color-success-border: $tg-color-success-border-dark
+  --tg-color-error-bg: $tg-color-error-bg-dark
+  --tg-color-error-border: $tg-color-error-border-dark
+  --tg-color-warning-bg: $tg-color-warning-bg-dark
+  --tg-color-warning-border: $tg-color-warning-border-dark
+  --tg-color-info-bg: $tg-color-info-bg-dark
+  --tg-color-info-border: $tg-color-info-border-dark
+
+  // 中性色
+  --tg-color-text: rgba(255, 255, 255, 0.85)
+  --tg-color-text-secondary: rgba(255, 255, 255, 0.45)
+  --tg-color-text-disabled: rgba(255, 255, 255, 0.25)
+  --tg-color-text-placeholder: rgba(255, 255, 255, 0.25)
+
+  --tg-color-border: #434343
+  --tg-color-border-disabled: #434343
+
+  --tg-color-bg: #141414
+  --tg-color-bg-hover: #1f1f1f
+  --tg-color-bg-active: #262626
+  --tg-color-bg-disabled: #1f1f1f

@@ -7,17 +7,35 @@
 
     <div class="form-group">
       <label for="content">文章内容</label>
-      <textarea id="content" v-model="localPost.content" rows="10" placeholder="输入文章内容" @input="updatePost"></textarea>
+      <textarea
+        id="content"
+        v-model="localPost.content"
+        rows="10"
+        placeholder="输入文章内容"
+        @input="updatePost"
+      ></textarea>
     </div>
 
     <div class="form-group">
       <label for="excerpt">文章摘要</label>
-      <textarea id="excerpt" v-model="localPost.excerpt" rows="3" placeholder="输入文章摘要" @input="updatePost"></textarea>
+      <textarea
+        id="excerpt"
+        v-model="localPost.excerpt"
+        rows="3"
+        placeholder="输入文章摘要"
+        @input="updatePost"
+      ></textarea>
     </div>
 
     <div class="form-group">
       <label for="tags">标签</label>
-      <input id="tags" v-model="localTagsInput" type="text" placeholder="输入标签，用逗号分隔" @input="handleTagsInput" />
+      <input
+        id="tags"
+        v-model="localTagsInput"
+        type="text"
+        placeholder="输入标签，用逗号分隔"
+        @input="handleTagsInput"
+      />
     </div>
   </div>
 </template>
@@ -39,13 +57,20 @@ const emit = defineEmits<{
 const localPost = ref<Post>({ ...props.post })
 const localTagsInput = ref(props.tagsInput)
 
-watch(() => props.post, (newPost) => {
-  localPost.value = { ...newPost }
-}, { deep: true })
+watch(
+  () => props.post,
+  (newPost) => {
+    localPost.value = { ...newPost }
+  },
+  { deep: true },
+)
 
-watch(() => props.tagsInput, (newInput) => {
-  localTagsInput.value = newInput
-})
+watch(
+  () => props.tagsInput,
+  (newInput) => {
+    localTagsInput.value = newInput
+  },
+)
 
 const updatePost = () => {
   emit("postUpdate", localPost.value)
@@ -83,4 +108,4 @@ textarea {
 textarea {
   resize: vertical;
 }
-</style> 
+</style>

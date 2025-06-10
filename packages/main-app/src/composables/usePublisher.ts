@@ -31,7 +31,7 @@ export function usePublisher() {
 
       // 更新平台配置
       await platform.updateConfig({
-        config: options.platform.config ,
+        config: options.platform.config,
       } as any)
 
       // 确保平台实现了 PlatformAdapter 接口

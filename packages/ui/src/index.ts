@@ -9,8 +9,17 @@ import TgDatePicker from "./components/TgDatePicker.vue"
 import TgTabs from "./components/TgTabs.vue"
 import TgForm from "./components/TgForm.vue"
 
+import TgMessage from "./components/TgMessage.vue"
+
+// 表单组件
 export { TgButton, TgInput, TgSelect, TgRadio, TgCheckbox, TgSwitch, TgDatePicker }
-export { TgTabs, TgForm }
+export { TgForm }
+
+// 导航组件
+export { TgTabs }
+
+// 反馈组件
+export { TgMessage }
 
 // types
 export * from "./types"
