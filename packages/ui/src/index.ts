@@ -5,6 +5,7 @@ import TgRadio from "./components/TgRadio.vue"
 import TgCheckbox from "./components/TgCheckbox.vue"
 import TgSwitch from "./components/TgSwitch.vue"
 import TgDatePicker from "./components/TgDatePicker.vue"
+import TgSpace from "./components/TgSpace.vue"
 
 import TgTabs from "./components/TgTabs.vue"
 import TgForm from "./components/TgForm.vue"
@@ -24,3 +25,5 @@ export { TgMessage }
 
 // types
 export * from "./types"
+
+export { TgSpace }

@@ -1,0 +1,40 @@
+.tg-space
+  display inline-flex
+  flex-wrap nowrap
+
+  &--horizontal
+    flex-direction row
+
+    & > *
+      margin-right $tg-spacing-md
+
+      &:last-child
+        margin-right 0
+
+  &--vertical
+    flex-direction column
+
+    & > *
+      margin-bottom $tg-spacing-md
+
+      &:last-child
+        margin-bottom 0
+
+  &--align-center
+    align-items center
+
+  &--align-start
+    align-items flex-start
+
+  &--align-end
+    align-items flex-end
+
+  &--align-baseline
+    align-items baseline
+
+  &--align-stretch
+    align-items stretch
+
+  &__item
+    display flex
+    flex-wrap nowrap 

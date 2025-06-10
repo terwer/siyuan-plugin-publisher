@@ -6,6 +6,8 @@ import InputTest from "./InputTest.vue"
 import FormTest from "./FormTest.vue"
 import TabsTest from "./TabsTest.vue"
 import CardTest from "./CardTest.vue"
+import SpaceTest from "./SpaceTest.vue"
+import MessageTest from "./MessageTest.vue"
 
 const tabItems = [
   { key: "button", label: "Button 按钮" },
@@ -13,6 +15,8 @@ const tabItems = [
   { key: "form", label: "Form 表单" },
   { key: "tabs", label: "Tabs 标签页" },
   { key: "card", label: "Card 卡片" },
+  { key: "space", label: "Space 间距" },
+  { key: "message", label: "Message 消息提示" },
 ]
 
 const activeTab = ref(tabItems[0].key)
@@ -32,18 +36,6 @@ const toggleTheme = () => {
       <button class="tg-button tg-button--primary" @click="toggleTheme">切换主题</button>
     </header>
 
-    <nav class="tg-test__nav">
-      <button
-        v-for="tab in tabItems"
-        :key="tab.key"
-        class="tg-button"
-        :class="{ 'tg-button--primary': activeTab === tab.key }"
-        @click="activeTab = tab.key"
-      >
-        {{ tab.label }}
-      </button>
-    </nav>
-
     <main class="tg-test__content">
       <TgTabs v-model="activeTab" :items="tabItems">
         <template #button>
@@ -60,6 +52,12 @@ const toggleTheme = () => {
         </template>
         <template #card>
           <CardTest />
+        </template>
+        <template #space>
+          <SpaceTest />
+        </template>
+        <template #message>
+          <MessageTest />
         </template>
       </TgTabs>
     </main>
@@ -82,14 +80,8 @@ const toggleTheme = () => {
     align-items: center
     margin-bottom: $tg-spacing-lg
 
-  &__nav
-    margin-bottom: $tg-spacing-lg
-
-    .tg-button
-      margin-right: $tg-spacing-sm
-
   &__content
     padding: $tg-spacing-lg
     border: 1px solid var(--tg-color-border)
-    border-radius: $tg-border-radius
+    border-radius: $tg-border-radius-base
 </style>
