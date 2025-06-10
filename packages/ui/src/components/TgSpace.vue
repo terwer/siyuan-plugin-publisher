@@ -11,12 +11,12 @@
   <div
     class="tg-space"
     :class="[
-      `tg-space--${direction}`,
-      { 'tg-space--align-center': align === 'center' },
-      { 'tg-space--align-start': align === 'start' },
-      { 'tg-space--align-end': align === 'end' },
-      { 'tg-space--align-baseline': align === 'baseline' },
-      { 'tg-space--align-stretch': align === 'stretch' },
+      `tg-space--${props.direction}`,
+      { 'tg-space--align-center': props.align === 'center' },
+      { 'tg-space--align-start': props.align === 'start' },
+      { 'tg-space--align-end': props.align === 'end' },
+      { 'tg-space--align-baseline': props.align === 'baseline' },
+      { 'tg-space--align-stretch': props.align === 'stretch' },
     ]"
   >
     <slot></slot>
@@ -41,4 +41,4 @@ const props = withDefaults(defineProps<Props>(), {
 
 <style lang="stylus">
 @import "../styles/components/space.styl"
-</style> 
+</style>

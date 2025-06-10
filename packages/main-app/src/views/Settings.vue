@@ -1,3 +1,12 @@
+<!--
+  -            GNU GENERAL PUBLIC LICENSE
+  -               Version 3, 29 June 2007
+  -
+  -  Copyright (C) 2025 Terwer, Inc. <https://terwer.space/>
+  -  Everyone is permitted to copy and distribute verbatim copies
+  -  of this license document, but changing it is not allowed.
+  -->
+
 <template>
   <div class="settings">
     <h1>设置</h1>
@@ -10,34 +19,37 @@
           <div>插件管理</div>
         </template>
         <template #global>
-          <TgForm ref="formRef" v-model="globalConfig" :config="globalFormConfig" @validate="handleValidate" />
-          <div class="form-values">
-            <h3>当前表单值：</h3>
-            <div class="form-values-content">
+          <TgSpace direction="vertical" size="large">
+            <TgCard title="表单设置">
+              <TgForm ref="formRef" v-model="globalConfig" :config="globalFormConfig" @validate="handleValidate" />
+            </TgCard>
+            <TgCard title="当前表单值">
               <TgInput type="textarea" :modelValue="JSON.stringify(globalConfig, null, 2)" readonly :rows="4" />
+            </TgCard>
+            <div class="form-actions">
+              <TgButton type="primary" @click="handleSubmit" :loading="submitting">
+                {{ submitting ? "提交中..." : "保存设置" }}
+              </TgButton>
             </div>
-          </div>
-          <div class="form-actions">
-            <TgButton type="primary" @click="handleSubmit" :loading="submitting">
-              {{ submitting ? "提交中..." : "保存设置" }}
-            </TgButton>
-          </div>
+          </TgSpace>
         </template>
       </TgTabs>
     </TgCard>
-    <TgMessage
-      v-if="message.visible"
-      :type="message.type"
-      :message="message.content"
-      :duration="3000"
-      @close="message.visible = false"
-    />
+    <Teleport to="body">
+      <TgMessage
+        v-if="message.visible"
+        :type="message.type"
+        :message="message.content"
+        :duration="3000"
+        :onClose="() => (message.visible = false)"
+      />
+    </Teleport>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, watch } from "vue"
-import { TgTabs, TgForm, TgButton, TgInput, TgMessage, TgCard } from "@terwer/ui"
+import { TgTabs, TgForm, TgButton, TgInput, TgMessage, TgCard, TgSpace } from "@terwer/ui"
 import type { FormConfig, FormInstance } from "@terwer/ui"
 
 const tabItems = [
@@ -164,25 +176,7 @@ const globalFormConfig: FormConfig = {
   .settings-card
     margin-top $tg-spacing-lg
 
-  .form-values
-    margin-top $tg-spacing-lg
-    padding $tg-spacing-lg
-    background-color var(--tg-color-bg-2)
-    border-radius $tg-border-radius-base
-
-    h3
-      margin 0 0 $tg-spacing-sm 0
-      font-size $tg-font-size-base
-      color var(--tg-color-text-2)
-
-    .form-values-content
-      :deep(.tg-input)
-        font-family monospace
-        font-size $tg-font-size-sm
-        color var(--tg-color-text-1)
-
   .form-actions
-    margin-top $tg-spacing-lg
     display flex
     justify-content flex-end
 
