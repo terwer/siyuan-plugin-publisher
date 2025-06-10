@@ -1,7 +1,7 @@
 <template>
   <div class="settings">
     <h1>设置</h1>
-    <div class="content">
+    <TgCard class="settings-card">
       <TgTabs v-model="activeTab" :items="tabItems">
         <template #platforms>
           <div>平台配置</div>
@@ -24,7 +24,7 @@
           </div>
         </template>
       </TgTabs>
-    </div>
+    </TgCard>
     <TgMessage
       v-if="message.visible"
       :type="message.type"
@@ -37,7 +37,7 @@
 
 <script setup lang="ts">
 import { ref, watch } from "vue"
-import { TgTabs, TgForm, TgButton, TgInput, TgMessage } from "@terwer/ui"
+import { TgTabs, TgForm, TgButton, TgInput, TgMessage, TgCard } from "@terwer/ui"
 import type { FormConfig, FormInstance } from "@terwer/ui"
 
 const tabItems = [
@@ -154,30 +154,35 @@ const globalFormConfig: FormConfig = {
 
 <style lang="stylus">
 .settings
-  padding 20px
+  padding $tg-spacing-lg
 
-  .content
-    margin-top 20px
+  h1
+    margin-bottom $tg-spacing-xl
+    text-align center
+    color var(--tg-color-text-1)
+
+  .settings-card
+    margin-top $tg-spacing-lg
 
   .form-values
-    margin-top 20px
-    padding 16px
+    margin-top $tg-spacing-lg
+    padding $tg-spacing-lg
     background-color var(--tg-color-bg-2)
-    border-radius 4px
+    border-radius $tg-border-radius-base
 
     h3
-      margin 0 0 8px 0
-      font-size 14px
+      margin 0 0 $tg-spacing-sm 0
+      font-size $tg-font-size-base
       color var(--tg-color-text-2)
 
     .form-values-content
       :deep(.tg-input)
         font-family monospace
-        font-size 12px
+        font-size $tg-font-size-sm
         color var(--tg-color-text-1)
 
   .form-actions
-    margin-top 20px
+    margin-top $tg-spacing-lg
     display flex
     justify-content flex-end
 

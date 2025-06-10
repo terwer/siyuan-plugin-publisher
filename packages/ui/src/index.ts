@@ -10,6 +10,7 @@ import TgTabs from "./components/TgTabs.vue"
 import TgForm from "./components/TgForm.vue"
 
 import TgMessage from "./components/TgMessage.vue"
+import TgCard from "./components/TgCard.vue"
 
 // 表单组件
 export { TgButton, TgInput, TgSelect, TgRadio, TgCheckbox, TgSwitch, TgDatePicker }

@@ -14,6 +14,91 @@
     <!-- 基础组件 -->
     <section class="pt-component-section">
       <h2>基础组件</h2>
+
+      <!-- 卡片测试 -->
+      <div class="pt-component-demo">
+        <h3>Card 卡片</h3>
+        <div class="pt-component-demo__content">
+          <div class="pt-component-demo__item">
+            <h4>基础卡片</h4>
+            <div class="pt-component-demo__row">
+              <TgCard title="基础卡片">
+                <p>这是一个基础卡片的内容。</p>
+              </TgCard>
+            </div>
+            <div class="pt-component-demo__code">
+              <pre><code>&lt;TgCard title="基础卡片"&gt;
+  &lt;p&gt;这是一个基础卡片的内容。&lt;/p&gt;
+&lt;/TgCard&gt;</code></pre>
+            </div>
+          </div>
+
+          <div class="pt-component-demo__item">
+            <h4>无边框卡片</h4>
+            <div class="pt-component-demo__row">
+              <TgCard title="无边框卡片" :bordered="false">
+                <p>这是一个无边框卡片的内容。</p>
+              </TgCard>
+            </div>
+            <div class="pt-component-demo__code">
+              <pre><code>&lt;TgCard title="无边框卡片" :bordered="false"&gt;
+  &lt;p&gt;这是一个无边框卡片的内容。&lt;/p&gt;
+&lt;/TgCard&gt;</code></pre>
+            </div>
+          </div>
+
+          <div class="pt-component-demo__item">
+            <h4>自定义头部</h4>
+            <div class="pt-component-demo__row">
+              <TgCard>
+                <template #header>
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span>自定义头部</span>
+                    <TgButton type="text" size="small">更多</TgButton>
+                  </div>
+                </template>
+                <p>这是一个带有自定义头部的卡片内容。</p>
+              </TgCard>
+            </div>
+            <div class="pt-component-demo__code">
+              <pre><code>&lt;TgCard&gt;
+  &lt;template #header&gt;
+    &lt;div style="display: flex; justify-content: space-between; align-items: center;"&gt;
+      &lt;span&gt;自定义头部&lt;/span&gt;
+      &lt;TgButton type="text" size="small"&gt;更多&lt;/TgButton&gt;
+    &lt;/div&gt;
+  &lt;/template&gt;
+  &lt;p&gt;这是一个带有自定义头部的卡片内容。&lt;/p&gt;
+&lt;/TgCard&gt;</code></pre>
+            </div>
+          </div>
+
+          <div class="pt-component-demo__item">
+            <h4>带底部卡片</h4>
+            <div class="pt-component-demo__row">
+              <TgCard title="带底部卡片">
+                <p>这是一个带底部的卡片内容。</p>
+                <template #footer>
+                  <div style="display: flex; justify-content: flex-end;">
+                    <TgButton type="primary" size="small">确定</TgButton>
+                  </div>
+                </template>
+              </TgCard>
+            </div>
+            <div class="pt-component-demo__code">
+              <pre><code>&lt;TgCard title="带底部卡片"&gt;
+  &lt;p&gt;这是一个带底部的卡片内容。&lt;/p&gt;
+  &lt;template #footer&gt;
+    &lt;div style="display: flex; justify-content: flex-end;"&gt;
+      &lt;TgButton type="primary" size="small"&gt;确定&lt;/TgButton&gt;
+    &lt;/div&gt;
+  &lt;/template&gt;
+&lt;/TgCard&gt;</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- 按钮测试 -->
       <div class="pt-component-demo">
         <h3>Button 按钮</h3>
@@ -292,7 +377,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-import { TgButton, TgInput, TgSwitch, TgRadio, TgCheckbox } from "@siyuan-publisher/ui"
+import { TgButton, TgInput, TgSwitch, TgRadio, TgCheckbox, TgCard } from "@siyuan-publisher/ui"
 
 const loading = ref(false)
 const inputValue = ref("")

@@ -1,0 +1,26 @@
+.tg-card
+  background var(--tg-color-bg)
+  border-radius $tg-border-radius-base
+  box-shadow 0 2px 8px rgba(0, 0, 0, 0.08)
+  transition all 0.3s ease-in-out
+
+  &--bordered
+    border 1px solid var(--tg-color-border)
+
+  &__header
+    padding $tg-spacing-lg
+    border-bottom 1px solid var(--tg-color-border)
+    background var(--tg-color-bg)
+
+  &__title
+    font-size $tg-font-size-lg
+    font-weight 500
+    color var(--tg-color-text-1)
+
+  &__body
+    padding $tg-spacing-lg
+
+  &__footer
+    padding $tg-spacing-lg
+    border-top 1px solid var(--tg-color-border)
+    background var(--tg-color-bg) 

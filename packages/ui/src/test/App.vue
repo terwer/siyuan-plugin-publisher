@@ -1,18 +1,21 @@
 <script setup lang="ts">
 import { ref } from "vue"
+import { TgTabs } from "../index"
 import ButtonTest from "./ButtonTest.vue"
 import InputTest from "./InputTest.vue"
-import TgTabs from "./TabsTest.vue"
 import FormTest from "./FormTest.vue"
+import TabsTest from "./TabsTest.vue"
+import CardTest from "./CardTest.vue"
 
-const activeTab = ref("button")
-
-const tabs = [
-  { key: "button", label: "按钮" },
-  { key: "input", label: "输入框" },
+const tabItems = [
+  { key: "button", label: "Button 按钮" },
+  { key: "input", label: "Input 输入框" },
+  { key: "form", label: "Form 表单" },
   { key: "tabs", label: "Tabs 标签页" },
-  { key: "form", label: "表单" },
+  { key: "card", label: "Card 卡片" },
 ]
+
+const activeTab = ref(tabItems[0].key)
 
 const toggleTheme = () => {
   const html = document.documentElement
@@ -31,7 +34,7 @@ const toggleTheme = () => {
 
     <nav class="tg-test__nav">
       <button
-        v-for="tab in tabs"
+        v-for="tab in tabItems"
         :key="tab.key"
         class="tg-button"
         :class="{ 'tg-button--primary': activeTab === tab.key }"
@@ -42,10 +45,23 @@ const toggleTheme = () => {
     </nav>
 
     <main class="tg-test__content">
-      <ButtonTest v-if="activeTab === 'button'" />
-      <InputTest v-if="activeTab === 'input'" />
-      <TgTabs v-if="activeTab === 'tabs'" />
-      <FormTest v-if="activeTab === 'form'" />
+      <TgTabs v-model="activeTab" :items="tabItems">
+        <template #button>
+          <ButtonTest />
+        </template>
+        <template #input>
+          <InputTest />
+        </template>
+        <template #form>
+          <FormTest />
+        </template>
+        <template #tabs>
+          <TabsTest />
+        </template>
+        <template #card>
+          <CardTest />
+        </template>
+      </TgTabs>
     </main>
   </div>
 </template>
