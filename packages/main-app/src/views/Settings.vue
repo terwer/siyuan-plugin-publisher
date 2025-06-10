@@ -10,21 +10,11 @@
           <div>插件管理</div>
         </template>
         <template #global>
-          <TgForm
-            ref="formRef"
-            v-model="globalConfig"
-            :config="globalFormConfig"
-            @validate="handleValidate"
-          />
+          <TgForm ref="formRef" v-model="globalConfig" :config="globalFormConfig" @validate="handleValidate" />
           <div class="form-values">
             <h3>当前表单值：</h3>
             <div class="form-values-content">
-              <TgInput
-                type="textarea"
-                :modelValue="JSON.stringify(globalConfig, null, 2)"
-                readonly
-                :rows="4"
-              />
+              <TgInput type="textarea" :modelValue="JSON.stringify(globalConfig, null, 2)" readonly :rows="4" />
             </div>
           </div>
           <div class="form-actions">
