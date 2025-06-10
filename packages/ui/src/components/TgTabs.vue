@@ -21,12 +21,17 @@ const emit = defineEmits<{
 }>()
 
 const activeKey = computed({
-  get: () => props.modelValue || props.items[0]?.key,
+  get: () => props.modelValue,
   set: (value) => {
     emit("update:modelValue", value)
     emit("change", value)
   },
 })
+
+// 初始化时设置默认值
+if (!props.modelValue && props.items.length > 0) {
+  emit("update:modelValue", props.items[0].key)
+}
 
 const handleTabClick = (key: string | number) => {
   activeKey.value = key

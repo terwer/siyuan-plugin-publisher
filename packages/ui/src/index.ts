@@ -11,3 +11,6 @@ import TgForm from "./components/TgForm.vue"
 
 export { TgButton, TgInput, TgSelect, TgRadio, TgCheckbox, TgSwitch, TgDatePicker }
 export { TgTabs, TgForm }
+
+// types
+export * from "./types"

@@ -38,9 +38,7 @@ const classes = computed(() => {
 
 const handleChange = (value: any, checked: boolean) => {
   if (!props.disabled) {
-    const newValue = checked
-      ? [...props.modelValue, value]
-      : props.modelValue.filter((v) => v !== value)
+    const newValue = checked ? [...props.modelValue, value] : props.modelValue.filter((v) => v !== value)
     emit("update:modelValue", newValue)
     emit("change", newValue)
   }
@@ -70,4 +68,4 @@ const handleChange = (value: any, checked: boolean) => {
       <span class="tg-checkbox__label">{{ option.label }}</span>
     </label>
   </div>
-</template> 
+</template>

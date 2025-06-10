@@ -56,19 +56,9 @@ const handleClear = () => {
 <template>
   <div :class="classes">
     <div class="tg-select__wrapper">
-      <select
-        class="tg-select__inner"
-        :value="modelValue"
-        :disabled="disabled"
-        @change="handleChange"
-      >
+      <select class="tg-select__inner" :value="modelValue" :disabled="disabled" @change="handleChange">
         <option value="" disabled>{{ placeholder }}</option>
-        <option
-          v-for="option in options"
-          :key="option.value"
-          :value="option.value"
-          :disabled="option.disabled"
-        >
+        <option v-for="option in options" :key="option.value" :value="option.value" :disabled="option.disabled">
           {{ option.label }}
         </option>
       </select>
@@ -80,4 +70,4 @@ const handleClear = () => {
       </span>
     </div>
   </div>
-</template> 
+</template>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch } from "vue"
+import { ref, computed } from "vue"
 import type { FormConfig, FormInstance, ValidationRule } from "../types"
 import TgInput from "./TgInput.vue"
 import TgSelect from "./TgSelect.vue"
@@ -20,29 +20,16 @@ const emit = defineEmits<{
 
 const formRef = ref<FormInstance>()
 
-// 表单数据
-const formData = ref<Record<string, any>>({})
-
 // 错误信息
 const errors = ref<Record<string, string[]>>({})
 
-// 监听表单数据变化
-watch(
-  () => props.modelValue,
-  (newVal) => {
-    formData.value = { ...newVal }
-  },
-  { immediate: true, deep: true }
-)
-
-// 监听内部数据变化
-watch(
-  formData,
-  (newVal) => {
-    emit("update:modelValue", newVal)
-  },
-  { deep: true }
-)
+// 处理值更新
+const handleValueUpdate = (name: string, value: any) => {
+  emit("update:modelValue", {
+    ...props.modelValue,
+    [name]: value,
+  })
+}
 
 // 验证单个字段
 const validateField = async (name: string, value: any, rules?: ValidationRule[]) => {
@@ -104,12 +91,12 @@ const validate = async () => {
     group.items.forEach((item) => {
       if (item.rules) {
         validationPromises.push(
-          validateField(item.name, formData.value[item.name], item.rules).then((isValid) => {
+          validateField(item.name, props.modelValue[item.name], item.rules).then((isValid) => {
             if (!isValid) {
               newErrors[item.name] = errors.value[item.name]
             }
             return isValid
-          })
+          }),
         )
       }
     })
@@ -126,7 +113,7 @@ const validate = async () => {
 
 // 重置表单
 const resetFields = () => {
-  formData.value = {}
+  emit("update:modelValue", {})
   errors.value = {}
 }
 
@@ -155,9 +142,8 @@ const getItemStyle = (item: any) => {
       style["--tg-form-control-width"] = `${(props.config.wrapperCol.span / 24) * 100}%`
     }
   } else if (props.config.layout === "inline" && props.config.labelWidth) {
-    style["--tg-form-label-width"] = typeof props.config.labelWidth === "number" 
-      ? `${props.config.labelWidth}px` 
-      : props.config.labelWidth
+    style["--tg-form-label-width"] =
+      typeof props.config.labelWidth === "number" ? `${props.config.labelWidth}px` : props.config.labelWidth
   }
 
   // 设置控件宽度，优先使用控件级别的配置，如果没有则使用表单级别的默认配置
@@ -183,11 +169,7 @@ const getItemError = (name: string) => {
         :class="{ 'tg-form-item-has-error': errors[item.name] }"
         :style="getItemStyle(item)"
       >
-        <label
-          v-if="item.label"
-          class="tg-form-item-label"
-          :class="{ 'tg-form-item-required': item.required }"
-        >
+        <label v-if="item.label" class="tg-form-item-label" :class="{ 'tg-form-item-required': item.required }">
           {{ item.label }}
         </label>
         <div class="tg-form-item-control">
@@ -196,65 +178,72 @@ const getItemError = (name: string) => {
               <!-- 输入框 -->
               <TgInput
                 v-if="item.type === 'input'"
-                v-model="formData[item.name]"
+                :modelValue="modelValue[item.name]"
+                @update:modelValue="(val) => handleValueUpdate(item.name, val)"
                 v-bind="item.props || {}"
                 :placeholder="item.placeholder"
-                @blur="validateField(item.name, formData[item.name], item.rules)"
+                @blur="validateField(item.name, modelValue[item.name], item.rules)"
               />
 
               <!-- 文本域 -->
               <TgInput
                 v-else-if="item.type === 'textarea'"
-                v-model="formData[item.name]"
+                :modelValue="modelValue[item.name]"
+                @update:modelValue="(val) => handleValueUpdate(item.name, val)"
                 type="textarea"
                 v-bind="item.props || {}"
                 :placeholder="item.placeholder"
-                @blur="validateField(item.name, formData[item.name], item.rules)"
+                @blur="validateField(item.name, modelValue[item.name], item.rules)"
               />
 
               <!-- 选择器 -->
               <TgSelect
                 v-else-if="item.type === 'select'"
-                v-model="formData[item.name]"
+                :modelValue="modelValue[item.name]"
+                @update:modelValue="(val) => handleValueUpdate(item.name, val)"
                 :options="item.options || []"
                 v-bind="item.props || {}"
                 :placeholder="item.placeholder"
-                @change="validateField(item.name, formData[item.name], item.rules)"
+                @change="validateField(item.name, modelValue[item.name], item.rules)"
               />
 
               <!-- 开关 -->
               <TgSwitch
                 v-else-if="item.type === 'switch'"
-                v-model="formData[item.name]"
+                :modelValue="modelValue[item.name]"
+                @update:modelValue="(val) => handleValueUpdate(item.name, val)"
                 v-bind="item.props || {}"
-                @change="validateField(item.name, formData[item.name], item.rules)"
+                @change="validateField(item.name, modelValue[item.name], item.rules)"
               />
 
               <!-- 单选框 -->
               <TgRadio
                 v-else-if="item.type === 'radio'"
-                v-model="formData[item.name]"
+                :modelValue="modelValue[item.name]"
+                @update:modelValue="(val) => handleValueUpdate(item.name, val)"
                 :options="item.options || []"
                 v-bind="item.props || {}"
-                @change="validateField(item.name, formData[item.name], item.rules)"
+                @change="validateField(item.name, modelValue[item.name], item.rules)"
               />
 
               <!-- 复选框 -->
               <TgCheckbox
                 v-else-if="item.type === 'checkbox'"
-                v-model="formData[item.name]"
+                :modelValue="modelValue[item.name]"
+                @update:modelValue="(val) => handleValueUpdate(item.name, val)"
                 :options="item.options || []"
                 v-bind="item.props || {}"
-                @change="validateField(item.name, formData[item.name], item.rules)"
+                @change="validateField(item.name, modelValue[item.name], item.rules)"
               />
 
               <!-- 日期选择器 -->
               <TgDatePicker
                 v-else-if="item.type === 'datePicker'"
-                v-model="formData[item.name]"
+                :modelValue="modelValue[item.name]"
+                @update:modelValue="(val) => handleValueUpdate(item.name, val)"
                 v-bind="item.props || {}"
                 :placeholder="item.placeholder"
-                @change="validateField(item.name, formData[item.name], item.rules)"
+                @change="validateField(item.name, modelValue[item.name], item.rules)"
               />
             </div>
           </div>

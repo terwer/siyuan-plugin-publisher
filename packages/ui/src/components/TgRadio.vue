@@ -67,4 +67,4 @@ const handleChange = (value: any) => {
       <span class="tg-radio__label">{{ option.label }}</span>
     </label>
   </div>
-</template> 
+</template>
