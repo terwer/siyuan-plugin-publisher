@@ -30,7 +30,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onMounted } from "vue"
-import { usePluginSystem } from "../composables/usePluginSystem"
+// import { usePluginSystem } from "../composables/usePluginSystem"
 import { usePublisher } from "../composables/usePublisher"
 import type {
   Post,
@@ -45,15 +45,15 @@ import WordPressConfig from "../components/platform-configs/wordpress.vue"
 import PostInfo from "../components/PostInfo.vue"
 import PublishOptionsPanel from "../components/PublishOptionsPanel.vue"
 
-const {
-  plugins,
-  platformAdapters: availablePlatforms,
-  isLoading,
-  error: pluginError,
-  getPluginConfig,
-} = usePluginSystem()
+// const {
+//   plugins,
+//   platformAdapters: availablePlatforms,
+//   isLoading,
+//   error: pluginError,
+//   getPluginConfig,
+// } = usePluginSystem()
 
-const { publish: publishService, isPublishing, error: publishError } = usePublisher()
+const { publish: publishService, isPublishing, error: publishError, platformAdapters } = usePublisher()
 
 const selectedPlatform = ref("")
 const platformConfig = ref<PlatformConfig>({
@@ -105,10 +105,10 @@ const handleTabChange = (key: string | number) => {
 // 处理平台选择
 const handlePlatformSelect = (platformId: string) => {
   selectedPlatform.value = platformId
-  const config = getPluginConfig(platformId)
-  if (config) {
-    platformConfig.value = config
-  }
+  // const config = getPluginConfig(platformId)
+  // if (config) {
+  //   platformConfig.value = config
+  // }
 }
 
 // 处理配置更新
@@ -138,7 +138,13 @@ const handleOptionsUpdate = (newOptions: PublishOptions) => {
 // 测试平台连接
 const testConnection = async () => {
   try {
-    const result = await publishService.testConnection(selectedPlatform.value, platformConfig.value)
+    const platform = platformAdapters.value.find((p) => p.id === selectedPlatform.value)
+    if (!platform) {
+      showMessage("未找到选中的平台", "error")
+      return
+    }
+
+    const result = await testConnection(platform, platformConfig.value)
     if (result.success) {
       showMessage("连接成功", "success")
     } else {
@@ -177,18 +183,21 @@ const showMessage = (message: string, type: "success" | "error") => {
 // 发布文章
 const publish = async () => {
   try {
+    const platform = platformAdapters.value.find((p) => p.id === selectedPlatform.value)
+    if (!platform) {
+      showMessage("未找到选中的平台", "error")
+      return
+    }
+
     isPublishing.value = true
-    const result = await publishService.publish({
-      platform: {
-        type: selectedPlatform.value,
-        config: platformConfig.value,
-      },
-      post: {
+    const result = await publish(
+      platform,
+      {
         ...post.value,
         status: publishOptions.value.status as PostStatus,
       },
-      ...publishOptions.value,
-    })
+      publishOptions.value,
+    )
 
     if (result.success) {
       showMessage("发布成功", "success")
@@ -205,15 +214,15 @@ const publish = async () => {
 }
 
 // 监听插件加载状态，初始化平台
-watch(isLoading, (loading) => {
-  if (!loading && availablePlatforms.value.length > 0 && !selectedPlatform.value) {
-    selectedPlatform.value = availablePlatforms.value[0].id
-    const config = getPluginConfig(availablePlatforms.value[0].id)
-    if (config) {
-      platformConfig.value = config
-    }
-  }
-})
+// watch(isLoading, (loading) => {
+//   if (!loading && availablePlatforms.value.length > 0 && !selectedPlatform.value) {
+//     selectedPlatform.value = availablePlatforms.value[0].id
+//     const config = getPluginConfig(availablePlatforms.value[0].id)
+//     if (config) {
+//       platformConfig.value = config
+//     }
+//   }
+// })
 </script>
 
 <style scoped>

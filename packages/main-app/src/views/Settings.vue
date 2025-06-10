@@ -62,16 +62,23 @@
 </template>
 
 <script setup lang="ts">
+// =============== 类型定义 ===============
+import type { FormConfig, FormInstance } from "@terwer/ui"
+import type { PlatformAdapter, PlatformConfig, Plugin } from "@siyuan-publisher/common"
+
+// =============== 组件引入 ===============
 import { ref, watch, computed } from "vue"
 import { TgTabs, TgForm, TgButton, TgInput, TgMessage, TgCard, TgSpace } from "@terwer/ui"
-import type { FormConfig, FormInstance } from "@terwer/ui"
+import PlatformList from "../components/PlatformList.vue"
+import PluginList from "../components/PluginList.vue"
+
+// =============== 组合式函数调用 ===============
 import { usePluginSystem } from "../composables/usePluginSystem"
 import { usePublisher } from "../composables/usePublisher"
 import { useConfig } from "../composables/useConfig"
-import PlatformList from "../components/PlatformList.vue"
-import PluginList from "../components/PluginList.vue"
-import type { PlatformAdapter, PlatformConfig, Plugin } from "@siyuan-publisher/common"
 
+// =============== 响应式数据 ===============
+// 标签页配置
 const tabItems = [
   { key: "platforms", label: "平台配置" },
   { key: "plugins", label: "插件管理" },
@@ -79,32 +86,9 @@ const tabItems = [
 ]
 const activeTab = ref(tabItems[0].key)
 
-// 表单引用
+// 表单相关
 const formRef = ref<FormInstance>()
-
-// 提交状态
 const submitting = ref(false)
-
-// 消息提示
-const message = ref({
-  visible: false,
-  type: "info" as "success" | "error" | "warning" | "info",
-  content: "",
-})
-
-// 显示消息提示
-const showMessage = (type: "success" | "error" | "warning" | "info", content: string) => {
-  message.value = {
-    visible: true,
-    type,
-    content,
-  }
-}
-
-// 配置管理
-const { config: globalConfig, exportConfig, importConfig } = useConfig()
-
-// 确保全局配置有默认值
 const formData = ref({
   name: "",
   theme: "light",
@@ -118,7 +102,23 @@ const formData = ref({
   },
 })
 
-// 监听 globalConfig 变化
+// 消息提示
+const message = ref({
+  visible: false,
+  type: "info" as "success" | "error" | "warning" | "info",
+  content: "",
+})
+
+// 导入文件输入引用
+const importInput = ref<HTMLInputElement | null>(null)
+
+// =============== 组合式函数 ===============
+const { plugins, platformAdapters, getPluginConfig, loadExternalPlugin } = usePluginSystem()
+const { publish: publishService, testConnection } = usePublisher()
+const { config: globalConfig, exportConfig, importConfig } = useConfig()
+
+// =============== 监听器 ===============
+// 监听全局配置变化
 watch(
   () => globalConfig.value,
   (newVal) => {
@@ -138,35 +138,37 @@ watch(
   { deep: true },
 )
 
-// 导入文件输入引用
-const importInput = ref<HTMLInputElement | null>(null)
+// =============== 方法 ===============
+// 消息提示方法
+const showMessage = (type: "success" | "error" | "warning" | "info", content: string) => {
+  message.value = {
+    visible: true,
+    type,
+    content,
+  }
+}
 
-// 处理表单验证结果
+// 表单验证处理
 const handleValidate = (errors: Record<string, string[]>) => {
   console.log("表单验证结果：", errors)
   if (Object.keys(errors).length === 0) {
     console.log("表单验证通过")
-    // 这里可以处理表单验证通过后的逻辑
   } else {
     console.log("表单验证失败")
-    // 这里可以处理表单验证失败后的逻辑
   }
 }
 
-// 处理表单提交
+// 表单提交处理
 const handleSubmit = async () => {
   if (!formRef.value) return
 
   try {
     submitting.value = true
-    // 验证表单
     const isValid = await formRef.value.validate()
     if (!isValid) {
       showMessage("error", "表单验证失败，请检查输入")
       return
     }
-
-    // 配置已经通过 watch 自动保存到 localStorage
     showMessage("success", "设置保存成功")
   } catch (error) {
     console.error("提交失败：", error)
@@ -176,18 +178,18 @@ const handleSubmit = async () => {
   }
 }
 
-// 处理导出配置
+// 配置导出处理
 const handleExportConfig = () => {
   exportConfig()
   showMessage("success", "配置导出成功")
 }
 
-// 处理导入配置
+// 配置导入处理
 const handleImportConfig = () => {
   importInput.value?.click()
 }
 
-// 处理文件选择
+// 文件选择处理
 const handleFileChange = (event: Event) => {
   const file = (event.target as HTMLInputElement).files?.[0]
   if (!file) return
@@ -204,7 +206,72 @@ const handleFileChange = (event: Event) => {
   reader.readAsText(file)
 }
 
-// 全局表单配置
+// 平台相关处理
+const handlePlatformToggle = async (platform: PlatformAdapter) => {
+  try {
+    if (platform.enabled) {
+      await platform.connect()
+    } else {
+      await platform.disconnect()
+    }
+    showMessage("success", `${platform.name} ${platform.enabled ? "已启用" : "已禁用"}`)
+  } catch (error) {
+    platform.enabled = !platform.enabled
+    showMessage("error", `${platform.name} ${platform.enabled ? "启用" : "禁用"}失败`)
+  }
+}
+
+const handleConfigUpdate = async (platform: PlatformAdapter, config: PlatformConfig) => {
+  try {
+    await platform.updateConfig(config)
+    showMessage("success", `${platform.name} 配置已更新`)
+  } catch (error) {
+    showMessage("error", `${platform.name} 配置更新失败`)
+  }
+}
+
+const handleTestConnection = async (platform: PlatformAdapter) => {
+  try {
+    const result = await testConnection(platform, platform.getConfig() as PlatformConfig)
+    if (result.success) {
+      showMessage("success", `${platform.name} 连接测试成功`)
+    } else {
+      showMessage("error", `${platform.name} 连接测试失败：${result.error}`)
+    }
+  } catch (error) {
+    showMessage("error", `${platform.name} 连接测试失败`)
+  }
+}
+
+// 插件相关处理
+const handlePluginToggle = async (plugin: Plugin) => {
+  try {
+    if (plugin.enabled) {
+      await plugin.enable()
+    } else {
+      await plugin.disable()
+    }
+    showMessage("success", `${plugin.name} ${plugin.enabled ? "已启用" : "已禁用"}`)
+  } catch (error) {
+    plugin.enabled = !plugin.enabled
+    showMessage("error", `${plugin.name} ${plugin.enabled ? "启用" : "禁用"}失败`)
+  }
+}
+
+const handlePluginConfigure = (plugin: Plugin) => {
+  showMessage("info", "插件配置功能开发中")
+}
+
+const handlePluginUninstall = async (plugin: Plugin) => {
+  try {
+    await plugin.uninstall()
+    showMessage("success", `${plugin.name} 已卸载`)
+  } catch (error) {
+    showMessage("error", `${plugin.name} 卸载失败`)
+  }
+}
+
+// =============== 表单配置 ===============
 const globalFormConfig: FormConfig = {
   layout: "vertical",
   groups: [
@@ -293,82 +360,6 @@ const globalFormConfig: FormConfig = {
       ],
     },
   ],
-}
-
-// 插件系统
-const { plugins, platformAdapters, getPluginConfig, loadExternalPlugin } = usePluginSystem()
-
-// 发布服务
-const { publish: publishService } = usePublisher()
-
-// 处理平台开关
-const handlePlatformToggle = async (platform: PlatformAdapter) => {
-  try {
-    if (platform.enabled) {
-      await platform.connect()
-    } else {
-      await platform.disconnect()
-    }
-    showMessage("success", `${platform.name} ${platform.enabled ? "已启用" : "已禁用"}`)
-  } catch (error) {
-    platform.enabled = !platform.enabled
-    showMessage("error", `${platform.name} ${platform.enabled ? "启用" : "禁用"}失败`)
-  }
-}
-
-// 处理配置更新
-const handleConfigUpdate = async (platform: PlatformAdapter, config: PlatformConfig) => {
-  try {
-    await platform.updateConfig(config)
-    showMessage("success", `${platform.name} 配置已更新`)
-  } catch (error) {
-    showMessage("error", `${platform.name} 配置更新失败`)
-  }
-}
-
-// 处理连接测试
-const handleTestConnection = async (platform: PlatformAdapter) => {
-  try {
-    const result = await publishService.testConnection(platform.id, platform.getConfig() as PlatformConfig)
-    if (result.success) {
-      showMessage("success", `${platform.name} 连接测试成功`)
-    } else {
-      showMessage("error", `${platform.name} 连接测试失败：${result.error}`)
-    }
-  } catch (error) {
-    showMessage("error", `${platform.name} 连接测试失败`)
-  }
-}
-
-// 处理插件开关
-const handlePluginToggle = async (plugin: Plugin) => {
-  try {
-    if (plugin.enabled) {
-      await plugin.enable()
-    } else {
-      await plugin.disable()
-    }
-    showMessage("success", `${plugin.name} ${plugin.enabled ? "已启用" : "已禁用"}`)
-  } catch (error) {
-    plugin.enabled = !plugin.enabled
-    showMessage("error", `${plugin.name} ${plugin.enabled ? "启用" : "禁用"}失败`)
-  }
-}
-
-// 处理插件配置
-const handlePluginConfigure = (plugin: Plugin) => {
-  // TODO: 实现插件配置界面
-  showMessage("info", "插件配置功能开发中")
-}
-
-// 处理插件卸载
-const handlePluginUninstall = async (plugin: Plugin) => {
-  try {
-    await plugin.uninstall()
-    showMessage("success", `${plugin.name} 已卸载`)
-  } catch (error) {
-    showMessage("error", `${plugin.name} 卸载失败`)
-  }
 }
 </script>
 

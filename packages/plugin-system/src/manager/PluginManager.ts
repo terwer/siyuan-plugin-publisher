@@ -5,7 +5,6 @@ import {
   PluginState,
   PublisherError
 } from "@siyuan-publisher/common"
-import type {PluginType} from "@siyuan-publisher/common"
 
 export class PluginManager implements IPluginManager {
   private static instance: PluginManager
@@ -20,10 +19,6 @@ export class PluginManager implements IPluginManager {
       PluginManager.instance = new PluginManager()
     }
     return PluginManager.instance
-  }
-
-  static getPluginManager(): PluginManager {
-    return PluginManager.getInstance()
   }
 
   async registerPlugin(plugin: Plugin): Promise<void> {
