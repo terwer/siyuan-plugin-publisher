@@ -10,76 +10,92 @@
 
   &__inner
     width 100%
-    height 32px
-    padding 0 $tg-spacing-lg
+    padding $tg-spacing-sm $tg-spacing-xl $tg-spacing-sm $tg-spacing-md
+    border $tg-border-width solid var(--tg-color-border)
+    border-radius $tg-border-radius
+    background-color var(--tg-color-bg-1)
+    color var(--tg-color-text-1)
     font-size $tg-font-size-base
-    line-height 32px
-    color var(--tg-color-text)
-    background-color var(--tg-color-bg)
-    border 1px solid var(--tg-color-border)
-    border-radius $tg-border-radius-base
+    line-height $tg-line-height-base
     transition all $tg-transition-duration
     appearance none
+    cursor pointer
 
     &:hover
-      border-color var(--tg-color-primary-hover)
+      border-color var(--tg-color-primary)
 
     &:focus
-      border-color var(--tg-color-primary)
       outline none
-      box-shadow 0 0 0 2px var(--tg-color-primary-light)
+      border-color var(--tg-color-primary)
+      box-shadow 0 0 0 $tg-shadow-spread var(--tg-color-primary-light)
 
     &:disabled
-      color var(--tg-color-text-disabled)
-      background-color var(--tg-color-bg-disabled)
+      background-color var(--tg-color-bg-2)
       cursor not-allowed
+      opacity $tg-disabled-opacity
 
   &__arrow
     position absolute
-    right $tg-spacing-lg
-    color var(--tg-color-text-secondary)
+    right $tg-spacing-md
+    top 50%
+    transform translateY(-50%)
+    color var(--tg-color-text-3)
     pointer-events none
 
   &__clear
     position absolute
     right $tg-spacing-xl
-    color var(--tg-color-text-secondary)
+    top 50%
+    transform translateY(-50%)
+    color var(--tg-color-text-3)
     cursor pointer
-    transition color $tg-transition-duration
+    padding $tg-spacing-xs
 
     &:hover
-      color var(--tg-color-text)
+      color var(--tg-color-text-1)
 
-  &--large
-    .tg-select__inner
-      height 40px
-      font-size $tg-font-size-lg
-      line-height 40px
+  &--large &__inner
+    padding $tg-spacing-md $tg-spacing-xl $tg-spacing-md $tg-spacing-lg
+    font-size $tg-font-size-lg
 
-  &--small
-    .tg-select__inner
-      height 24px
-      font-size $tg-font-size-sm
-      line-height 24px
-      padding 0 $tg-spacing-md
+  &--small &__inner
+    padding $tg-spacing-xs $tg-spacing-lg $tg-spacing-xs $tg-spacing-sm
+    font-size $tg-font-size-sm
 
   &--disabled
     cursor not-allowed
 
     .tg-select__inner
-      color var(--tg-color-text-disabled)
-      background-color var(--tg-color-bg-disabled)
+      background-color var(--tg-color-bg-2)
       cursor not-allowed
+      opacity $tg-disabled-opacity
 
-  &--error
-    .tg-select__inner
-      border-color var(--tg-color-error)
+  &--error &__inner
+    border-color var(--tg-color-error)
 
     &:hover
-      .tg-select__inner
-        border-color var(--tg-color-error)
+      border-color var(--tg-color-error)
 
     &:focus
-      .tg-select__inner
-        border-color var(--tg-color-error)
-        box-shadow 0 0 0 2px var(--tg-color-error-light) 
+      border-color var(--tg-color-error)
+      box-shadow 0 0 0 $tg-shadow-spread var(--tg-color-error-light)
+
+  &--warning &__inner
+    border-color var(--tg-color-warning)
+
+    &:hover
+      border-color var(--tg-color-warning)
+
+    &:focus
+      border-color var(--tg-color-warning)
+      box-shadow 0 0 0 $tg-shadow-spread var(--tg-color-warning-light)
+
+  &--success &__inner
+    border-color var(--tg-color-success)
+
+    &:hover
+      border-color var(--tg-color-success)
+
+    &:focus
+      border-color var(--tg-color-success)
+      box-shadow 0 0 0 $tg-shadow-spread var(--tg-color-success-light) 

@@ -2,15 +2,33 @@
   <div class="wordpress-config">
     <div class="form-group">
       <label for="apiUrl">API URL</label>
-      <input id="apiUrl" v-model="config.apiUrl" type="text" placeholder="https://your-wordpress-site.com" />
+      <input
+        id="apiUrl"
+        v-model="localConfig.settings!.apiUrl"
+        type="text"
+        placeholder="https://your-wordpress-site.com"
+        @input="updateConfig"
+      />
     </div>
     <div class="form-group">
       <label for="username">用户名</label>
-      <input id="username" v-model="config.username" type="text" placeholder="WordPress 用户名" />
+      <input
+        id="username"
+        v-model="localConfig.settings!.username"
+        type="text"
+        placeholder="WordPress 用户名"
+        @input="updateConfig"
+      />
     </div>
     <div class="form-group">
       <label for="password">密码</label>
-      <input id="password" v-model="config.password" type="password" placeholder="WordPress 密码" />
+      <input
+        id="password"
+        v-model="localConfig.settings!.password"
+        type="password"
+        placeholder="WordPress 密码"
+        @input="updateConfig"
+      />
     </div>
     <button @click="$emit('test')" class="test-btn">测试连接</button>
   </div>
@@ -25,26 +43,35 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (e: "update:config", value: PlatformConfig): void
-  (e: "test"): void
+  "update:config": [config: PlatformConfig]
+  test: []
 }>()
 
-const config = ref({
-  apiUrl: "",
-  username: "",
-  password: "",
+const localConfig = ref<PlatformConfig>({
+  type: "wordpress",
+  enabled: true,
+  settings: {
+    apiUrl: "",
+    username: "",
+    password: "",
+  },
 })
 
+// 监听外部配置变化
 watch(
-  config,
-  (newValue) => {
-    emit("update:config", {
-      type: "wordpress",
-      config: newValue,
-    } as any)
+  () => props.config,
+  (newConfig) => {
+    if (newConfig) {
+      localConfig.value = { ...newConfig }
+    }
   },
-  { deep: true },
+  { immediate: true },
 )
+
+// 更新配置
+const updateConfig = () => {
+  emit("update:config", localConfig.value)
+}
 </script>
 
 <style scoped>

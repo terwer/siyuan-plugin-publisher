@@ -11,6 +11,9 @@ export { PluginLoader } from "./loader/PluginLoader"
 // 导出插件系统
 export { PluginManager as PluginSystem }
 
+// 导出插件管理器
+export { PluginManager } from "./manager/PluginManager"
+
 // 导出平台适配器管理器
 export { PlatformAdapterManager } from "./manager/PlatformAdapterManager"
 

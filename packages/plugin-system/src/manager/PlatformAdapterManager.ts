@@ -24,6 +24,10 @@ export class PlatformAdapterManager {
     return this.registry.getAllAdapters()
   }
 
+  registerAdapter(adapter: PlatformAdapter): void {
+    this.registry.register(adapter)
+  }
+
   async connectAdapter(id: string, config: any): Promise<void> {
     const adapter = this.getAdapter(id)
     if (!adapter) {

@@ -9,7 +9,7 @@ interface Option {
 
 interface Props {
   modelValue: any
-  options: Option[]
+  options: Option[] | (() => Option[])
   placeholder?: string
   disabled?: boolean
   size?: "large" | "default" | "small"
@@ -51,18 +51,29 @@ const handleClear = () => {
   emit("update:modelValue", "")
   emit("clear")
 }
+
+// 确保 options 始终是数组
+const safeOptions = computed(() => {
+  const options = typeof props.options === "function" ? props.options() : props.options
+  return Array.isArray(options) ? options : []
+})
+
+// 确保 modelValue 有值
+const safeModelValue = computed(() => {
+  return props.modelValue ?? ""
+})
 </script>
 
 <template>
   <div :class="classes">
     <div class="tg-select__wrapper">
-      <select class="tg-select__inner" :value="modelValue" :disabled="disabled" @change="handleChange">
+      <select class="tg-select__inner" :value="safeModelValue" :disabled="disabled" @change="handleChange">
         <option value="" disabled>{{ placeholder }}</option>
-        <option v-for="option in options" :key="option.value" :value="option.value" :disabled="option.disabled">
+        <option v-for="option in safeOptions" :key="option.value" :value="option.value" :disabled="option.disabled">
           {{ option.label }}
         </option>
       </select>
-      <span v-if="clearable && modelValue" class="tg-select__clear" @click="handleClear">
+      <span v-if="clearable && safeModelValue" class="tg-select__clear" @click="handleClear">
         <i class="tg-icon-close"></i>
       </span>
       <span class="tg-select__arrow">

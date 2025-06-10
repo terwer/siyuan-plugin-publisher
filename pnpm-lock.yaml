@@ -93,6 +93,9 @@ importers:
       vue-router:
         specifier: ^4.2.5
         version: 4.5.1(vue@3.5.14(typescript@5.8.3))
+      zhi-lib-base:
+        specifier: ^0.8.0
+        version: 0.8.0
     devDependencies:
       '@types/minimist':
         specifier: ^1.2.5
@@ -3158,6 +3161,9 @@ packages:
   yocto-queue@1.2.1:
     resolution: {integrity: sha512-AyeEbWOu/TAXdxlV9wmGcR0+yh2j3vYPGOECcIj2S7MkrLyC7ne+oye2BKTItt0ii2PHk4cDy+95+LshzbXnGg==}
     engines: {node: '>=12.20'}
+
+  zhi-lib-base@0.8.0:
+    resolution: {integrity: sha512-3Ky5p6KvLWpXy2tlb/JIfSEKLSe5w43PBLM6g+hNcWwpL9S62emgcpUAHzGWBbC0vlLBLungt2LOsmwAfhrZ0w==}
 
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
@@ -6297,5 +6303,7 @@ snapshots:
   yocto-queue@0.1.0: {}
 
   yocto-queue@1.2.1: {}
+
+  zhi-lib-base@0.8.0: {}
 
   zwitch@2.0.4: {}
