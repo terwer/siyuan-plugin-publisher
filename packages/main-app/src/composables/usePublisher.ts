@@ -1,5 +1,6 @@
 import { ref } from "vue"
-import type { Post, PublishResult, PublishOptions, PlatformConfig, PlatformAdapter } from "@siyuan-publisher/common"
+import type { Post, PublishResult, PublishOptions, PlatformConfig, PlatformAdaptor } from "@siyuan-publisher/common"
+import { usePluginSystem } from "./usePluginSystem"
 
 /**
  * 发布功能的核心组合式函数
@@ -10,7 +11,7 @@ import type { Post, PublishResult, PublishOptions, PlatformConfig, PlatformAdapt
  * 3. 处理平台连接测试
  * 4. 错误处理
  */
-export function usePublisher() {
+export const usePublisher = () => {
   const isPublishing = ref(false)
   const error = ref<string | null>(null)
 
@@ -20,7 +21,7 @@ export function usePublisher() {
    * @param post 文章内容
    * @param options 发布选项
    */
-  const publish = async (platform: PlatformAdapter, post: Post, options: PublishOptions): Promise<PublishResult> => {
+  const publish = async (platform: PlatformAdaptor, post: Post, options: PublishOptions): Promise<PublishResult> => {
     isPublishing.value = true
     error.value = null
 
@@ -36,10 +37,7 @@ export function usePublisher() {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "发布失败"
       error.value = errorMessage
-      return {
-        success: false,
-        error: errorMessage,
-      }
+      throw err
     } finally {
       isPublishing.value = false
     }
@@ -51,7 +49,7 @@ export function usePublisher() {
    * @param config 平台配置
    */
   const testConnection = async (
-    platform: PlatformAdapter,
+    platform: PlatformAdaptor,
     config: PlatformConfig,
   ): Promise<{ success: boolean; error?: string }> => {
     try {

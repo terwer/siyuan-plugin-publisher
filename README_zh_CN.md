@@ -43,7 +43,7 @@ packages/
   ├── core/           # 核心功能和接口
   ├── ui/             # 共享 UI 组件
   ├── plugin-system/  # 插件系统实现
-  ├── platform-adapters/ # 平台特定适配器
+  ├── platform-adaptors/ # 平台特定适配器
   └── main-app/       # 主应用
 ```
 
@@ -70,7 +70,7 @@ pnpm build --filter=\!@siyuan-publisher/main-app
 pnpm build -F @siyuan-publisher/core
 pnpm build -F @terwer/ui
 pnpm build -F @siyuan-publisher/plugin-system
-pnpm build -F @siyuan-publisher/platform-adapters
+pnpm build -F @siyuan-publisher/platform-adaptors
 ```
 
 3. 启动开发服务器：
@@ -123,7 +123,7 @@ pnpm build --filter=\!@siyuan-publisher/main-app
 pnpm build -F @siyuan-publisher/core
 pnpm build -F @terwer/ui
 pnpm build -F @siyuan-publisher/plugin-system
-pnpm build -F @siyuan-publisher/platform-adapters
+pnpm build -F @siyuan-publisher/platform-adaptors
 pnpm build -F @siyuan-publisher/main-app
 
 # 以思源插件模式构建 main-app

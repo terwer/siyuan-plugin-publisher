@@ -20,7 +20,7 @@ export function validateManifest(manifest: any): manifest is PluginManifest {
   }
 
   // 验证类型字段
-  if (!["adapter", "plugin"].includes(manifest.type)) {
+  if (!["adaptor", "plugin"].includes(manifest.type)) {
     return false
   }
 
@@ -51,7 +51,7 @@ export function validatePluginType(plugin: Plugin, type: PluginType): boolean {
   }
 
   if (isPlatformType(type)) {
-    return typeof (plugin as any).getPlatformAdapter === "function"
+    return typeof (plugin as any).getPlatformAdaptor === "function"
   }
   if (type === "plugin") {
     return typeof (plugin as any).processPost === "function"

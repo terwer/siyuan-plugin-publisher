@@ -25,7 +25,7 @@
 - [开发文档](/development/)
   - [插件系统](/development/plugin-system/)
   - [UI 开发](/development/ui/)
-  - [平台适配器](/development/platform-adapters/)
+  - [平台适配器](/development/platform-adaptors/)
   - [贡献指南](/development/contributing)
 - [API 参考](/api/)
 - [常见问题](/faq/)

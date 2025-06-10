@@ -1,6 +1,6 @@
 import type {
   Logger,
-  PlatformAdapter,
+  PlatformAdaptor,
   PlatformCapabilities,
   PlatformConfig,
   PlatformMetadata,
@@ -45,13 +45,13 @@ export class PlatformService {
    * key: 平台名称
    * value: 平台适配器实例
    */
-  private adapters: Map<string, PlatformAdapter> = new Map()
+  private adaptors: Map<string, PlatformAdaptor> = new Map()
 
   /**
    * 当前活动的平台适配器
    * 用于执行发布等操作
    */
-  private activeAdapter?: PlatformAdapter
+  private activeAdaptor?: PlatformAdaptor
 
   /**
    * 日志记录器
@@ -72,37 +72,37 @@ export class PlatformService {
    * 3. 保存适配器实例
    * 4. 记录操作日志
    *
-   * @param adapter 平台适配器实例
+   * @param adaptor 平台适配器实例
    * @throws PublisherError 当适配器已注册或配置无效时
    */
-  async registerAdapter(adapter: PlatformAdapter): Promise<void> {
+  async registerAdaptor(adaptor: PlatformAdaptor): Promise<void> {
     try {
-      if (this.adapters.has(adapter.name)) {
-        this.logger.info(`Platform adapter ${adapter.name} is already registered, ignoring...`, {
+      if (this.adaptors.has(adaptor.name)) {
+        this.logger.info(`Platform adaptor ${adaptor.name} is already registered, ignoring...`, {
           module: "PlatformService",
-          action: "registerAdapter",
-          platform: adapter.name,
+          action: "registerAdaptor",
+          platform: adaptor.name,
         })
         return
       }
 
       // 验证适配器配置
-      const isValid = await adapter.validateConfig(adapter.config)
+      const isValid = await adaptor.validateConfig(adaptor.config)
       if (!isValid) {
-        throw new PublisherError("INVALID_CONFIG", `Invalid configuration for platform adapter ${adapter.name}`)
+        throw new PublisherError("INVALID_CONFIG", `Invalid configuration for platform adaptor ${adaptor.name}`)
       }
 
-      this.adapters.set(adapter.name, adapter)
-      this.logger.info(`Registered platform adapter: ${adapter.name}`, {
+      this.adaptors.set(adaptor.name, adaptor)
+      this.logger.info(`Registered platform adaptor: ${adaptor.name}`, {
         module: "PlatformService",
-        action: "registerAdapter",
-        platform: adapter.name,
+        action: "registerAdaptor",
+        platform: adaptor.name,
       })
     } catch (error: any) {
-      this.logger.error(`Failed to register platform adapter: ${adapter.name}`, error, {
+      this.logger.error(`Failed to register platform adaptor: ${adaptor.name}`, error, {
         module: "PlatformService",
-        action: "registerAdapter",
-        platform: adapter.name,
+        action: "registerAdaptor",
+        platform: adaptor.name,
       })
       throw error
     }
@@ -111,11 +111,11 @@ export class PlatformService {
   /**
    * 批量注册平台适配器
    *
-   * @param adapters 平台适配器实例数组
+   * @param adaptors 平台适配器实例数组
    */
-  async registerAdapters(adapters: PlatformAdapter[]): Promise<void> {
-    for (const adapter of adapters) {
-      await this.registerAdapter(adapter)
+  async registerAdaptors(adaptors: PlatformAdaptor[]): Promise<void> {
+    for (const adaptor of adaptors) {
+      await this.registerAdaptor(adaptor)
     }
   }
 
@@ -131,27 +131,27 @@ export class PlatformService {
    * @param name 平台名称
    * @throws PublisherError 当适配器不存在时
    */
-  async unregisterAdapter(name: string): Promise<void> {
+  async unregisterAdaptor(name: string): Promise<void> {
     try {
-      const adapter = this.adapters.get(name)
-      if (!adapter) {
-        throw new PublisherError("PLATFORM_NOT_FOUND", `Platform adapter ${name} is not registered`)
+      const adaptor = this.adaptors.get(name)
+      if (!adaptor) {
+        throw new PublisherError("PLATFORM_NOT_FOUND", `Platform adaptor ${name} is not registered`)
       }
 
-      if (this.activeAdapter === adapter) {
+      if (this.activeAdaptor === adaptor) {
         await this.disconnect()
       }
 
-      this.adapters.delete(name)
-      this.logger.info(`Unregistered platform adapter: ${name}`, {
+      this.adaptors.delete(name)
+      this.logger.info(`Unregistered platform adaptor: ${name}`, {
         module: "PlatformService",
-        action: "unregisterAdapter",
+        action: "unregisterAdaptor",
         platform: name,
       })
     } catch (error: any) {
-      this.logger.error(`Failed to unregister platform adapter: ${name}`, error, {
+      this.logger.error(`Failed to unregister platform adaptor: ${name}`, error, {
         module: "PlatformService",
-        action: "unregisterAdapter",
+        action: "unregisterAdaptor",
         platform: name,
       })
       throw error
@@ -175,28 +175,28 @@ export class PlatformService {
    */
   async connect(name: string, config?: PlatformConfig): Promise<void> {
     try {
-      const adapter = this.adapters.get(name)
-      if (!adapter) {
-        throw new PublisherError("PLATFORM_NOT_FOUND", `Platform adapter ${name} is not registered`)
+      const adaptor = this.adaptors.get(name)
+      if (!adaptor) {
+        throw new PublisherError("PLATFORM_NOT_FOUND", `Platform adaptor ${name} is not registered`)
       }
 
-      if (this.activeAdapter) {
+      if (this.activeAdaptor) {
         await this.disconnect()
       }
 
       // 如果提供了新的配置，更新适配器配置
       if (config) {
-        await adapter.updateConfig(config)
+        await adaptor.updateConfig(config)
       }
 
       // 验证配置
-      const isValid = await adapter.validateConfig(adapter.config)
+      const isValid = await adaptor.validateConfig(adaptor.config)
       if (!isValid) {
         throw new PublisherError("INVALID_CONFIG", `Invalid configuration for platform ${name}`)
       }
 
-      await adapter.connect()
-      this.activeAdapter = adapter
+      await adaptor.connect()
+      this.activeAdaptor = adaptor
 
       this.logger.info(`Connected to platform: ${name}`, {
         module: "PlatformService",
@@ -225,11 +225,11 @@ export class PlatformService {
    * 4. 记录操作日志
    */
   async disconnect(): Promise<void> {
-    if (this.activeAdapter) {
+    if (this.activeAdaptor) {
       try {
-        await this.activeAdapter.disconnect()
-        const name = this.activeAdapter.name
-        this.activeAdapter = undefined
+        await this.activeAdaptor.disconnect()
+        const name = this.activeAdaptor.name
+        this.activeAdaptor = undefined
 
         this.logger.info(`Disconnected from platform: ${name}`, {
           module: "PlatformService",
@@ -237,14 +237,14 @@ export class PlatformService {
           platform: name,
         })
       } catch (error: any) {
-        this.logger.error(`Failed to disconnect from platform: ${this.activeAdapter!.name}`, error, {
+        this.logger.error(`Failed to disconnect from platform: ${this.activeAdaptor!.name}`, error, {
           module: "PlatformService",
           action: "disconnect",
-          platform: this.activeAdapter!.name,
+          platform: this.activeAdaptor!.name,
         })
         throw new PublisherError(
           "PLATFORM_DISCONNECT_FAILED",
-          `Failed to disconnect from platform ${this.activeAdapter!.name}`,
+          `Failed to disconnect from platform ${this.activeAdaptor!.name}`,
           { originalError: error },
         )
       }
@@ -264,28 +264,28 @@ export class PlatformService {
    * @throws PublisherError 当没有活动适配器或发布失败时
    */
   async publish(post: Post, options: PublishOptions): Promise<PublishResult> {
-    if (!this.activeAdapter) {
-      throw new PublisherError("PLATFORM_NOT_CONNECTED", "No active platform adapter")
+    if (!this.activeAdaptor) {
+      throw new PublisherError("PLATFORM_NOT_CONNECTED", "No active platform adaptor")
     }
 
     try {
-      const result = await this.activeAdapter.publish(post, options)
+      const result = await this.activeAdaptor.publish(post, options)
 
-      this.logger.info(`Published post to platform: ${this.activeAdapter.name}`, {
+      this.logger.info(`Published post to platform: ${this.activeAdaptor.name}`, {
         module: "PlatformService",
         action: "publish",
-        platform: this.activeAdapter.name,
+        platform: this.activeAdaptor.name,
         postId: result.url,
       })
 
       return result
     } catch (error: any) {
-      this.logger.error(`Failed to publish to platform: ${this.activeAdapter.name}`, error, {
+      this.logger.error(`Failed to publish to platform: ${this.activeAdaptor.name}`, error, {
         module: "PlatformService",
         action: "publish",
-        platform: this.activeAdapter.name,
+        platform: this.activeAdaptor.name,
       })
-      throw new PublisherError("PUBLISH_FAILED", `Failed to publish to platform ${this.activeAdapter.name}`, {
+      throw new PublisherError("PUBLISH_FAILED", `Failed to publish to platform ${this.activeAdaptor.name}`, {
         originalError: error,
       })
     }
@@ -294,15 +294,15 @@ export class PlatformService {
   /**
    * 获取当前活动的适配器
    */
-  getActiveAdapter(): PlatformAdapter | undefined {
-    return this.activeAdapter
+  getActiveAdaptor(): PlatformAdaptor | undefined {
+    return this.activeAdaptor
   }
 
   /**
    * 获取所有已注册的适配器
    */
-  getAllAdapters(): PlatformAdapter[] {
-    return Array.from(this.adapters.values())
+  getAllAdaptors(): PlatformAdaptor[] {
+    return Array.from(this.adaptors.values())
   }
 
   /**
@@ -315,12 +315,12 @@ export class PlatformService {
    * @param name 平台名称
    */
   async getPlatformMetadata(name: string): Promise<PlatformMetadata | undefined> {
-    const adapter = this.adapters.get(name)
-    if (!adapter) {
+    const adaptor = this.adaptors.get(name)
+    if (!adaptor) {
       return undefined
     }
 
-    const metadata = adapter.getMetadata()
+    const metadata = adaptor.getMetadata()
     return {
       id: metadata.id,
       type: metadata.type,
@@ -340,12 +340,12 @@ export class PlatformService {
    * 获取平台能力
    */
   async getPlatformCapabilities(name: string): Promise<PlatformCapabilities | undefined> {
-    const adapter = this.adapters.get(name)
-    if (!adapter) {
+    const adaptor = this.adaptors.get(name)
+    if (!adaptor) {
       return undefined
     }
 
-    return adapter.getCapabilities()
+    return adaptor.getCapabilities()
   }
 
   /**
@@ -359,13 +359,13 @@ export class PlatformService {
    * @param name 平台名称
    */
   async checkConnection(name: string): Promise<boolean> {
-    const adapter = this.adapters.get(name)
-    if (!adapter) {
+    const adaptor = this.adaptors.get(name)
+    if (!adaptor) {
       return false
     }
 
     try {
-      const status = await adapter.getStatus()
+      const status = await adaptor.getStatus()
       return status.isConnected
     } catch (error: any) {
       this.logger.error(`Failed to check connection status for platform: ${name}`, error, {

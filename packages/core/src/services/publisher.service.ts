@@ -60,9 +60,9 @@ export class PublisherService {
       }
 
       // 获取当前活动的平台适配器
-      const activeAdapter = this.platformService.getActiveAdapter()
-      if (!activeAdapter) {
-        throw new PublisherError("PLATFORM_NOT_CONNECTED", "No active platform adapter")
+      const activeAdaptor = this.platformService.getActiveAdaptor()
+      if (!activeAdaptor) {
+        throw new PublisherError("PLATFORM_NOT_CONNECTED", "No active platform adaptor")
       }
 
       // 发布文章
@@ -71,7 +71,7 @@ export class PublisherService {
       this.logger.info(`Published post: ${post.title}`, {
         module: "PublisherService",
         action: "publish",
-        platform: activeAdapter.name,
+        platform: activeAdaptor.name,
         postId: result.url,
       })
 
@@ -139,12 +139,12 @@ export class PublisherService {
     error?: string
   }> {
     try {
-      const activeAdapter = this.platformService.getActiveAdapter()
-      if (!activeAdapter) {
-        throw new PublisherError("PLATFORM_NOT_CONNECTED", "No active platform adapter")
+      const activeAdaptor = this.platformService.getActiveAdaptor()
+      if (!activeAdaptor) {
+        throw new PublisherError("PLATFORM_NOT_CONNECTED", "No active platform adaptor")
       }
 
-      const postStatus = await activeAdapter.getPostStatus(postId)
+      const postStatus = await activeAdaptor.getPostStatus(postId)
       
       // 将 PostStatus 转换为 PublishStatus
       let status: "published" | "failed" | "pending"
@@ -189,17 +189,17 @@ export class PublisherService {
    */
   async deletePost(postId: string): Promise<void> {
     try {
-      const activeAdapter = this.platformService.getActiveAdapter()
-      if (!activeAdapter) {
-        throw new PublisherError("PLATFORM_NOT_CONNECTED", "No active platform adapter")
+      const activeAdaptor = this.platformService.getActiveAdaptor()
+      if (!activeAdaptor) {
+        throw new PublisherError("PLATFORM_NOT_CONNECTED", "No active platform adaptor")
       }
 
-      await activeAdapter.deletePost(postId)
+      await activeAdaptor.deletePost(postId)
 
       this.logger.info(`Deleted post: ${postId}`, {
         module: "PublisherService",
         action: "deletePost",
-        platform: activeAdapter.name,
+        platform: activeAdaptor.name,
       })
     } catch (error: any) {
       this.logger.error(`Failed to delete post: ${postId}`, error, {

@@ -14,7 +14,7 @@
       <TgTabs v-model="activeTab" :items="tabItems">
         <template #platforms>
           <PlatformList
-            :platforms="platformAdapters"
+            :platforms="platformAdaptors"
             @platform-toggle="handlePlatformToggle"
             @config-update="handleConfigUpdate"
             @test-connection="handleTestConnection"
@@ -63,8 +63,8 @@
 
 <script setup lang="ts">
 // =============== 类型定义 ===============
-import type { FormConfig, FormInstance } from "@terwer/ui"
-import type { PlatformAdapter, PlatformConfig, Plugin } from "@siyuan-publisher/common"
+import type { FormConfig, FormInstance, Option } from "@terwer/ui"
+import type { PlatformAdaptor, PlatformConfig, Plugin } from "@siyuan-publisher/common"
 
 // =============== 组件引入 ===============
 import { ref, watch, computed } from "vue"
@@ -113,7 +113,7 @@ const message = ref({
 const importInput = ref<HTMLInputElement | null>(null)
 
 // =============== 组合式函数 ===============
-const { plugins, platformAdapters, getPluginConfig, loadExternalPlugin } = usePluginSystem()
+const { plugins, platformAdaptors, getPluginConfig, loadExternalPlugin } = usePluginSystem()
 const { publish: publishService, testConnection } = usePublisher()
 const { config: globalConfig, exportConfig, importConfig } = useConfig()
 
@@ -133,7 +133,7 @@ watch(
 watch(
   () => formData.value,
   (newVal) => {
-    globalConfig.value = { ...newVal }
+    globalConfig.value = { ...newVal } as any
   },
   { deep: true },
 )
@@ -207,7 +207,7 @@ const handleFileChange = (event: Event) => {
 }
 
 // 平台相关处理
-const handlePlatformToggle = async (platform: PlatformAdapter) => {
+const handlePlatformToggle = async (platform: PlatformAdaptor) => {
   try {
     if (platform.enabled) {
       await platform.connect()
@@ -221,7 +221,7 @@ const handlePlatformToggle = async (platform: PlatformAdapter) => {
   }
 }
 
-const handleConfigUpdate = async (platform: PlatformAdapter, config: PlatformConfig) => {
+const handleConfigUpdate = async (platform: PlatformAdaptor, config: PlatformConfig) => {
   try {
     await platform.updateConfig(config)
     showMessage("success", `${platform.name} 配置已更新`)
@@ -230,7 +230,7 @@ const handleConfigUpdate = async (platform: PlatformAdapter, config: PlatformCon
   }
 }
 
-const handleTestConnection = async (platform: PlatformAdapter) => {
+const handleTestConnection = async (platform: PlatformAdaptor) => {
   try {
     const result = await testConnection(platform, platform.getConfig() as PlatformConfig)
     if (result.success) {
@@ -328,8 +328,8 @@ const globalFormConfig: FormConfig = {
           label: "默认发布平台",
           type: "select",
           options: () => {
-            const adapters = platformAdapters.value || []
-            return adapters.map((platform) => ({
+            const adaptors = platformAdaptors.value || []
+            return adaptors.map((platform) => ({
               label: platform.name,
               value: platform.id,
             }))

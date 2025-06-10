@@ -1,19 +1,18 @@
 // packages/main-app/src/composables/usePluginSystem.ts
 
-import { ref, onMounted, onUnmounted } from "vue"
-import { PluginSystem } from "@siyuan-publisher/plugin-system"
-import { PlatformAdapterManager } from "@siyuan-publisher/plugin-system"
-import { DefaultPlatformAdapterRegistry } from "@siyuan-publisher/platform-adapters"
+import { ref, onMounted, onUnmounted, computed } from "vue"
+import { PlatformAdaptorManager, PluginSystem } from "@siyuan-publisher/plugin-system"
+import { DefaultPlatformAdaptorRegistry } from "@siyuan-publisher/platform-adaptors"
 import { createAppLogger } from "@/utils/appLogger.ts"
 import {
   Plugin,
-  PlatformAdapter,
   PluginManager,
   PlatformConfig,
   PluginState,
   PluginLoadResult,
   PluginManifest,
-  PluginType,
+  PlatformAdaptor,
+  PluginConfig,
 } from "@siyuan-publisher/common"
 import { PublisherError } from "@siyuan-publisher/common"
 
@@ -26,31 +25,36 @@ import { PublisherError } from "@siyuan-publisher/common"
  * 3. 提供插件和适配器的访问接口
  *
  * 初始化顺序：
- * 1. DefaultPlatformAdapterRegistry - 内置适配器注册表
- * 2. PlatformAdapterManager - 平台适配器管理器
+ * 1. DefaultPlatformAdaptorRegistry - 内置适配器注册表
+ * 2. PlatformAdaptorManager - 平台适配器管理器
  * 3. PluginSystem - 插件系统核心
  */
 export const usePluginSystem = () => {
   // 核心管理器实例
-  const platformAdapterRegistry = DefaultPlatformAdapterRegistry.getInstance()
-  const platformAdapterManager = PlatformAdapterManager.getInstance()
+  const platformAdaptorRegistry = DefaultPlatformAdaptorRegistry.getInstance()
+  const platformAdaptorManager = PlatformAdaptorManager.getInstance()
   const pluginSystem = PluginSystem.getInstance() as PluginManager
   const logger = createAppLogger("use-plugin-system")
 
   // 响应式状态
   const plugins = ref<Plugin[]>([])
-  const platformAdapters = ref<PlatformAdapter[]>([])
+  const platformAdaptors = ref<PlatformAdaptor[]>([])
+  const pluginStates = ref<Record<string, PluginState>>({})
   const isLoading = ref(false)
   const error = ref<string | null>(null)
-  const pluginStates = ref<Record<string, PluginState>>({})
 
   /**
-   * 更新插件状态
+   * 更新插件系统状态
    * @param pluginId 插件ID
    * @param state 插件状态
    */
   const updatePluginState = (pluginId: string, state: PluginState) => {
     pluginStates.value[pluginId] = state
+    plugins.value = pluginSystem.getAllPlugins()
+    // 合并内置适配器和外部适配器
+    const builtinAdaptors = platformAdaptorManager.getAllAdaptors()
+    const externalAdaptors = pluginSystem.getAllPlatformAdaptors()
+    platformAdaptors.value = [...builtinAdaptors, ...externalAdaptors]
   }
 
   /**
@@ -110,13 +114,13 @@ export const usePluginSystem = () => {
    * @returns 插件路径列表
    */
   const scanPluginDirectory = async (pluginDir: string): Promise<string[]> => {
-    try {
-      // TODO: 实现目录扫描逻辑
-      return []
-    } catch (error) {
-      logger.error("扫描插件目录失败", { error, pluginDir })
-      return []
-    }
+    // Mock 数据，用于开发测试
+    return [
+      `${pluginDir}/github-adaptor`,
+      `${pluginDir}/wordpress-adaptor`,
+      `${pluginDir}/markdown-plugin`,
+      `${pluginDir}/image-plugin`,
+    ]
   }
 
   /**
@@ -128,6 +132,7 @@ export const usePluginSystem = () => {
     try {
       // 1. 加载插件清单
       const manifest = await loadManifest(path)
+      logger.info("加载插件清单", { manifest })
 
       // 2. 验证插件类型
       if (!manifest.type) {
@@ -136,13 +141,6 @@ export const usePluginSystem = () => {
           error: "插件清单缺少 type 字段",
         }
       }
-      // const type = manifest.type.toLowerCase()
-      // if (!type.includes("adapter") && !type.includes("plugin")) {
-      //   return {
-      //     success: false,
-      //     error: `插件类型 ${manifest.type} 无效，type 字段必须包含 adapter 或 plugin 关键字。例如：githubAdapter、wordpressAdapter、markdownPlugin、imagePlugin 等`,
-      //   }
-      // }
 
       // 3. 检查依赖
       if (!checkDependencies(manifest)) {
@@ -153,27 +151,32 @@ export const usePluginSystem = () => {
       }
 
       // 4. 加载插件代码
-      const plugin = await import(manifest.main)
+      const pluginPath = new URL(`/${path}/${manifest.main}`, window.location.origin).href
+      const module = await import(/* @vite-ignore */ pluginPath)
+      const plugin = module.default
 
-      // 5. 注册到插件系统
-      await pluginSystem.registerPlugin(plugin)
-
-      // 6. 更新状态
-      plugins.value = pluginSystem.getAllPlugins()
-      if (manifest.type != "plugin") {
-        platformAdapters.value = platformAdapterManager.getAllAdapters()
+      // 5. 验证插件
+      if (!plugin || !plugin.id) {
+        return {
+          success: false,
+          error: "插件格式错误：缺少 id 字段",
+        }
       }
 
-      // 7. 更新插件状态
+      // 6. 注册到插件系统
+      await pluginSystem.registerPlugin(plugin)
+
+      // 7. 更新状态
       updatePluginState(plugin.id, {
         status: "loaded",
         dependencies: manifest.dependencies,
       })
 
+      logger.info(`已加载外部插件: ${plugin.id}`, { type: manifest.type })
       return { success: true, plugin }
     } catch (err) {
       const errorResult = handlePluginError(err, path)
-      logger.error("加载外部插件失败", { error: err })
+      logger.error("加载外部插件失败", { error: err, path })
       return errorResult
     }
   }
@@ -206,22 +209,22 @@ export const usePluginSystem = () => {
     error.value = null
     try {
       // 获取所有内置平台适配器
-      const builtInAdapters = platformAdapterRegistry.getAllAdapters()
-      logger.info("内置平台适配器", { adapters: builtInAdapters })
+      const builtinAdaptors = platformAdaptorRegistry.getAllAdaptors()
+      logger.info("内置平台适配器", { adaptors: builtinAdaptors })
 
       // 注册内置适配器到插件系统
-      for (const adapter of builtInAdapters) {
+      for (const adaptor of builtinAdaptors) {
         try {
-          await pluginSystem.registerPlugin(adapter as any)
-          updatePluginState(adapter.id, { status: "loaded" })
+          await pluginSystem.registerPlugin(adaptor as any)
+          updatePluginState(adaptor.id, { status: "loaded" })
         } catch (err) {
-          logger.error(`注册适配器 ${adapter.id} 失败`, { error: err })
+          logger.error(`注册适配器 ${adaptor.id} 失败`, { error: err })
           throw err
         }
       }
 
       // 扫描并加载外部插件
-      const pluginDir = "plugins" // TODO: 从配置中获取
+      const pluginDir = "plugins"
       logger.info(`准备从 ${pluginDir} 加载外部插件...`)
       const pluginPaths = await scanPluginDirectory(pluginDir)
       logger.info("扫描到的外部插件路径", { pluginPaths })
@@ -238,11 +241,10 @@ export const usePluginSystem = () => {
         }
       }
 
-      // 更新状态
-      plugins.value = pluginSystem.getAllPlugins()
-      platformAdapters.value = platformAdapterManager.getAllAdapters()
+      // 更新所有状态
+      updatePluginState("", { status: "loaded" })
       logger.info("已加载的插件", { plugins: plugins.value })
-      logger.info("已加载的平台适配器", { adapters: platformAdapters.value })
+      logger.info("已加载的平台适配器", { adaptors: platformAdaptors.value })
     } catch (err) {
       logger.error("加载插件失败", { error: err })
       error.value = err instanceof Error ? err.message : "加载插件失败"
@@ -255,15 +257,16 @@ export const usePluginSystem = () => {
   onMounted(loadPlugins)
   onUnmounted(() => {
     pluginSystem.unloadAll()
-    platformAdapterManager.unloadAll()
+    platformAdaptorManager.unloadAll()
+    updatePluginState("", { status: "unloaded" })
   })
 
   return {
-    plugins,
-    platformAdapters,
+    plugins: computed(() => plugins.value),
+    platformAdaptors: computed(() => platformAdaptors.value),
     isLoading,
     error,
-    pluginStates,
+    pluginStates: computed(() => pluginStates.value),
     loadExternalPlugin,
     getPluginConfig,
     getPluginState: (pluginId: string) => pluginStates.value[pluginId],

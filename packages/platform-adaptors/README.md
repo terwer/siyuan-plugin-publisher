@@ -1,13 +1,13 @@
-# @siyuan-publisher/platform-adapters
+# @siyuan-publisher/platform-adaptors
 
-Platform adapters for SiYuan Publisher.
+Platform adaptors for SiYuan Publisher.
 
 [中文文档](./README_zh_CN.md)
 
 ## Features
 
 - Multiple platform support
-- Unified adapter interface
+- Unified adaptor interface
 - Easy to extend
 - Type-safe
 - Configurable
@@ -15,35 +15,35 @@ Platform adapters for SiYuan Publisher.
 ## Installation
 
 ```bash
-pnpm add @siyuan-publisher/platform-adapters
+pnpm add @siyuan-publisher/platform-adaptors
 ```
 
 ## Usage
 
 ```typescript
-import { GithubAdapter } from '@siyuan-publisher/platform-adapters'
+import { GithubAdaptor } from '@siyuan-publisher/platform-adaptors'
 
-const githubAdapter = new GithubAdapter()
+const githubAdaptor = new GithubAdaptor()
 
 // Connect to GitHub
-await githubAdapter.connect({
+await githubAdaptor.connect({
   apiKey: 'your-api-key',
   apiSecret: 'your-api-secret'
 })
 
 // Publish content
-const result = await githubAdapter.publish(content, {
+const result = await githubAdaptor.publish(content, {
   title: 'My Post',
   tags: ['blog', 'tech']
 })
 ```
 
-## Available Adapters
+## Available Adaptors
 
 ### GitHub
 
 ```typescript
-class GithubAdapter implements PlatformAdapter {
+class GithubAdaptor implements PlatformAdaptor {
   name = 'github'
   version = '1.0.0'
   
@@ -53,14 +53,14 @@ class GithubAdapter implements PlatformAdapter {
 }
 ```
 
-## Creating New Adapters
+## Creating New Adaptors
 
-To create a new platform adapter, implement the PlatformAdapter interface:
+To create a new platform adaptor, implement the PlatformAdaptor interface:
 
 ```typescript
-import { PlatformAdapter } from '@siyuan-publisher/core'
+import { PlatformAdaptor } from '@siyuan-publisher/core'
 
-class MyPlatformAdapter implements PlatformAdapter {
+class MyPlatformAdaptor implements PlatformAdaptor {
   name = 'my-platform'
   version = '1.0.0'
 

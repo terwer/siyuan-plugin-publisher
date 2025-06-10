@@ -15,7 +15,7 @@ siyuan-plugin-publisher-new-ui/
 │   ├── core/             # 核心功能包
 │   ├── common/           # 公共工具包
 │   ├── main-app/         # 主应用
-│   ├── platform-adapters/# 平台适配器
+│   ├── platform-adaptors/# 平台适配器
 │   ├── plugin-system/    # 插件系统
 │   └── docs/             # 项目文档
 │
@@ -55,7 +55,7 @@ main-app
   ├── ui
   ├── core
   ├── common
-  └── platform-adapters
+  └── platform-adaptors
 
 ui
   ├── core
@@ -64,7 +64,7 @@ ui
 core
   └── common
 
-platform-adapters
+platform-adaptors
   ├── core
   └── common
 
@@ -292,11 +292,11 @@ sequenceDiagram
 
 - **平台适配器管理器**：管理平台适配器
   ```typescript
-  class PlatformAdapterManager {
-    getAdapter(id: string): PlatformAdapter | undefined
-    getAllAdapters(): PlatformAdapter[]
-    connectAdapter(id: string, config: any): Promise<void>
-    disconnectAdapter(id: string): Promise<void>
+  class PlatformAdaptorManager {
+    getAdaptor(id: string): PlatformAdaptor | undefined
+    getAllAdaptors(): PlatformAdaptor[]
+    connectAdaptor(id: string, config: any): Promise<void>
+    disconnectAdaptor(id: string): Promise<void>
   }
   ```
 
@@ -308,7 +308,7 @@ sequenceDiagram
 
 - **WordPress 适配器**
   ```typescript
-  class WordPressAdapter implements PlatformAdapter {
+  class WordPressAdaptor implements PlatformAdaptor {
     id = "wordpress"
     type = "wordpress"
     async connect(config: WordPressConfig): Promise<void>
@@ -318,7 +318,7 @@ sequenceDiagram
 
 - **GitHub 适配器**
   ```typescript
-  class GitHubAdapter implements PlatformAdapter {
+  class GitHubAdaptor implements PlatformAdaptor {
     id = "github"
     type = "github"
     async connect(config: GitHubConfig): Promise<void>
@@ -427,14 +427,14 @@ sequenceDiagram
 
 #### 1. 添加新平台适配器
 
-1. 在 `platform-adapters` 包中创建新适配器
-2. 实现 `PlatformAdapter` 接口
-3. 在 `DefaultPlatformAdapterRegistry` 中注册适配器
+1. 在 `platform-adaptors` 包中创建新适配器
+2. 实现 `PlatformAdaptor` 接口
+3. 在 `DefaultPlatformAdaptorRegistry` 中注册适配器
 4. 创建对应的配置组件
 
 #### 2. 修改现有适配器
 
-1. 在 `platform-adapters` 包中找到目标适配器
+1. 在 `platform-adaptors` 包中找到目标适配器
 2. 修改适配器实现
 3. 更新配置组件
 4. 测试适配器功能
@@ -448,7 +448,7 @@ sequenceDiagram
    │   ├── package.json
    │   ├── src/
    │   │   ├── index.ts
-   │   │   ├── adapter.ts
+   │   │   ├── adaptor.ts
    │   │   └── config.vue
    │   └── dist/
    └── other-plugin/
@@ -462,7 +462,7 @@ sequenceDiagram
        const manifest = await this.loadManifest(path);
        
        // 2. 验证插件类型
-       if (manifest.type !== "platform-adapter") {
+       if (manifest.type !== "platform-adaptor") {
          throw new Error("不支持的插件类型");
        }
        
@@ -484,7 +484,7 @@ sequenceDiagram
      "version": "1.0.0",
      "main": "dist/index.js",
      "siyuan-publisher": {
-       "type": "platform-adapter",
+       "type": "platform-adaptor",
        "platform": "my-platform",
        "entry": "./dist/index.js",
        "dependencies": {
@@ -500,9 +500,9 @@ sequenceDiagram
      id: string;
      name: string;
      version: string;
-     type: "platform-adapter";
+     type: "platform-adaptor";
      platform: string;
-     adapter: PlatformAdapter;
+     adaptor: PlatformAdaptor;
      configComponent?: Component;
      initialize(): Promise<void>;
      unload(): Promise<void>;

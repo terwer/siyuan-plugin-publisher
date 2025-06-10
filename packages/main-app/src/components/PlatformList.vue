@@ -20,19 +20,22 @@
 <script setup lang="ts">
 import { ref, watch } from "vue"
 import { TgSpace, TgCard, TgSwitch } from "@terwer/ui"
-import type { PlatformAdapter, PlatformConfig } from "@siyuan-publisher/common"
+import type { PlatformAdaptor, PlatformConfig } from "@siyuan-publisher/common"
 import WordPressConfig from "./platform-configs/wordpress.vue"
 import GitHubConfig from "./platform-configs/github.vue"
 
-const props = defineProps<{
-  platforms: PlatformAdapter[]
-}>()
+interface Props {
+  platforms: PlatformAdaptor[]
+}
 
-const emit = defineEmits<{
-  (e: "platformToggle", platform: PlatformAdapter): void
-  (e: "configUpdate", platform: PlatformAdapter, config: PlatformConfig): void
-  (e: "testConnection", platform: PlatformAdapter): void
-}>()
+interface Emits {
+  (e: "platformToggle", platform: PlatformAdaptor): void
+  (e: "configUpdate", platform: PlatformAdaptor, config: PlatformConfig): void
+  (e: "testConnection", platform: PlatformAdaptor): void
+}
+
+const props = defineProps<Props>()
+const emit = defineEmits<Emits>()
 
 // 获取平台配置组件
 const getPlatformConfigComponent = (type: string) => {
@@ -47,17 +50,17 @@ const getPlatformConfigComponent = (type: string) => {
 }
 
 // 处理平台开关
-const handlePlatformToggle = (platform: PlatformAdapter) => {
+const handlePlatformToggle = (platform: PlatformAdaptor) => {
   emit("platformToggle", platform)
 }
 
 // 处理配置更新
-const handleConfigUpdate = (platform: PlatformAdapter, config: PlatformConfig) => {
+const handleConfigUpdate = (platform: PlatformAdaptor, config: PlatformConfig) => {
   emit("configUpdate", platform, config)
 }
 
 // 处理连接测试
-const handleTestConnection = (platform: PlatformAdapter) => {
+const handleTestConnection = (platform: PlatformAdaptor) => {
   emit("testConnection", platform)
 }
 </script>

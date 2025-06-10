@@ -14,7 +14,7 @@
   "dependencies": {
     "@siyuan-publisher/common": "workspace:*",
     "@siyuan-publisher/core": "workspace:*",
-    "@siyuan-publisher/platform-adapters": "workspace:*"
+    "@siyuan-publisher/platform-adaptors": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^22.15.21",

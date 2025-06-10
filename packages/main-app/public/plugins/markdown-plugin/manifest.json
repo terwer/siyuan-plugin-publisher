@@ -1,0 +1,12 @@
+{
+  "name": "Markdown Plugin",
+  "id": "markdown-plugin",
+  "version": "1.0.0",
+  "type": "plugin",
+  "main": "index.js",
+  "description": "Markdown 处理插件，用于处理 Markdown 内容",
+  "author": "SiYuan Publisher",
+  "dependencies": {
+    "@siyuan-publisher/common": "^1.0.0"
+  }
+} 

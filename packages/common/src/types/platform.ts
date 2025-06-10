@@ -6,7 +6,7 @@ import type { Post, PostStatus, PublishOptions, PublishResult } from "./publish"
 /**
  * 平台类型
  */
-export type PlatformType = "wordpress" | "github" | "custom"
+export type PlatformType = "wordpress" | "github" | "custom" | "adaptor"
 
 /**
  * 平台配置
@@ -167,7 +167,7 @@ export interface PlatformEvent {
 /**
  * 平台适配器接口
  */
-export interface PlatformAdapter extends Omit<Plugin, 'type' | 'validateConfig'> {
+export interface PlatformAdaptor extends Omit<Plugin, "type" | "validateConfig"> {
   /**
    * 平台类型
    */
@@ -231,8 +231,8 @@ export interface PlatformAdapter extends Omit<Plugin, 'type' | 'validateConfig'>
 /**
  * 平台适配器工厂
  */
-export interface PlatformAdapterFactory {
-  create(config: PlatformConfig): Promise<PlatformAdapter>
+export interface PlatformAdaptorFactory {
+  create(config: PlatformConfig): Promise<PlatformAdaptor>
   validateConfig(config: PlatformConfig): Promise<boolean>
   getMetadata(): PlatformMetadata
 }
@@ -240,23 +240,23 @@ export interface PlatformAdapterFactory {
 /**
  * 平台适配器注册表接口
  */
-export interface PlatformAdapterRegistry {
+export interface PlatformAdaptorRegistry {
   /**
    * 注册适配器
    */
-  register(adapter: PlatformAdapter): void
+  register(adaptor: PlatformAdaptor): void
   /**
    * 注销适配器
    */
-  unregister(type: string): void
+  unregister(id: string): void
   /**
    * 获取适配器
    */
-  getAdapter(type: string): PlatformAdapter | undefined
+  getAdaptor(id: string): PlatformAdaptor | undefined
   /**
    * 获取所有适配器
    */
-  getAllAdapters(): PlatformAdapter[]
+  getAllAdaptors(): PlatformAdaptor[]
 }
 
 /**
@@ -351,4 +351,14 @@ export interface WordPressPublishOptions extends PublishOptions {
    * 标签 ID 列表
    */
   tags?: number[]
+}
+
+export interface PlatformAdaptorManager {
+  getAdaptor(id: string): PlatformAdaptor | undefined
+  getAllAdaptors(): PlatformAdaptor[]
+  registerAdaptor(adaptor: PlatformAdaptor): void
+  connectAdaptor(id: string, config: PlatformConfig): Promise<void>
+  disconnectAdaptor(id: string): Promise<void>
+  publishWithAdaptor(id: string, post: Post, options: PublishOptions): Promise<PublishResult>
+  unloadAll(): Promise<void>
 }

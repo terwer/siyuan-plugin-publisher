@@ -43,7 +43,7 @@ packages/
   ├── core/           # Core functionality and interfaces
   ├── ui/             # Shared UI components
   ├── plugin-system/  # Plugin system implementation
-  ├── platform-adapters/ # Platform-specific adapters
+  ├── platform-adaptors/ # Platform-specific adaptors
   └── main-app/       # Main application
 ```
 
@@ -70,7 +70,7 @@ pnpm build --filter=\!@siyuan-publisher/main-app
 pnpm build -F @siyuan-publisher/core
 pnpm build -F @terwer/ui
 pnpm build -F @siyuan-publisher/plugin-system
-pnpm build -F @siyuan-publisher/platform-adapters
+pnpm build -F @siyuan-publisher/platform-adaptors
 ```
 
 3. Start development server:
@@ -123,7 +123,7 @@ pnpm build --filter=\!@siyuan-publisher/main-app
 pnpm build -F @siyuan-publisher/core
 pnpm build -F @terwer/ui
 pnpm build -F @siyuan-publisher/plugin-system
-pnpm build -F @siyuan-publisher/platform-adapters
+pnpm build -F @siyuan-publisher/platform-adaptors
 pnpm build -F @siyuan-publisher/main-app
 
 # Build main-app in SiYuan plugin mode

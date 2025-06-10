@@ -1,6 +1,6 @@
 import {
   PluginManager as IPluginManager,
-  PlatformAdapter,
+  PlatformAdaptor,
   Plugin,
   PluginState,
   PublisherError
@@ -9,7 +9,7 @@ import {
 export class PluginManager implements IPluginManager {
   private static instance: PluginManager
   private plugins: Map<string, Plugin> = new Map()
-  private platformAdapters: Map<string, PlatformAdapter> = new Map()
+  private platformAdaptors: Map<string, PlatformAdaptor> = new Map()
   private pluginStates: Map<string, PluginState> = new Map()
 
   private constructor() {}
@@ -33,13 +33,15 @@ export class PluginManager implements IPluginManager {
     }
 
     try {
-      await plugin.initialize()
       this.plugins.set(plugin.id, plugin)
-      this.pluginStates.set(plugin.id, { status: "loaded" })
+      this.pluginStates.set(plugin.id,  { status: "registered" } )
 
-      // 如果是平台适配器，额外注册
-      if (this.isPlatformAdapter(plugin)) {
-        this.platformAdapters.set(plugin.type, plugin as any)
+      if (this.isPlatformAdaptor(plugin)) {
+        this.platformAdaptors.set(plugin.id, plugin as any)
+      }
+
+      if (typeof plugin.initialize === "function") {
+        await plugin.initialize()
       }
     } catch (error: any) {
       throw new PublisherError("PLUGIN_INIT_FAILED", `Failed to initialize plugin ${plugin.id}`, {
@@ -55,13 +57,14 @@ export class PluginManager implements IPluginManager {
     }
 
     try {
-      await plugin.destroy()
+      if (typeof plugin.destroy === "function") {
+        await plugin.destroy()
+      }
       this.plugins.delete(id)
       this.pluginStates.delete(id)
 
-      // 如果是平台适配器，额外注销
-      if (this.isPlatformAdapter(plugin)) {
-        this.platformAdapters.delete(plugin.type)
+      if (this.isPlatformAdaptor(plugin)) {
+        this.platformAdaptors.delete(plugin.id)
       }
     } catch (error: any) {
       throw new PublisherError("PLUGIN_DESTROY_FAILED", `Failed to destroy plugin ${id}`, {
@@ -70,35 +73,24 @@ export class PluginManager implements IPluginManager {
     }
   }
 
-  private isPlatformAdapter(plugin: Plugin): boolean {
-    return (
-      plugin.type !=="plugin" &&
-      "config" in plugin &&
-      "getMetadata" in plugin &&
-      "getCapabilities" in plugin &&
-      "getStatus" in plugin &&
-      "connect" in plugin &&
-      "disconnect" in plugin &&
-      "publish" in plugin &&
-      "validateConfig" in plugin &&
-      typeof (plugin as any).validateConfig === "function"
-    )
+  private isPlatformAdaptor(plugin: Plugin): boolean {
+    return plugin.type === "adaptor"
   }
 
   getPlugin(id: string): Plugin | undefined {
     return this.plugins.get(id)
   }
 
-  getPlatformAdapter(type: string): PlatformAdapter | undefined {
-    return this.platformAdapters.get(type)
+  getPlatformAdaptor(type: string): PlatformAdaptor | undefined {
+    return this.platformAdaptors.get(type)
   }
 
   getAllPlugins(): Plugin[] {
     return Array.from(this.plugins.values())
   }
 
-  getAllPlatformAdapters(): PlatformAdapter[] {
-    return Array.from(this.platformAdapters.values())
+  getAllPlatformAdaptors(): PlatformAdaptor[] {
+    return Array.from(this.platformAdaptors.values())
   }
 
   getPluginState(id: string): PluginState | undefined {
@@ -108,7 +100,11 @@ export class PluginManager implements IPluginManager {
   async unloadAll(): Promise<void> {
     const plugins = this.getAllPlugins()
     for (const plugin of plugins) {
-      await this.unregisterPlugin(plugin.id)
+      try {
+        await this.unregisterPlugin(plugin.id)
+      } catch (error) {
+        console.error(`Failed to unload plugin ${plugin.id}:`, error)
+      }
     }
   }
 }

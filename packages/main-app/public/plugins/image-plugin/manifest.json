@@ -1,0 +1,12 @@
+{
+  "name": "Image Plugin",
+  "id": "image-plugin",
+  "version": "1.0.0",
+  "type": "plugin",
+  "main": "index.js",
+  "description": "图片处理插件，用于处理图片内容",
+  "author": "SiYuan Publisher",
+  "dependencies": {
+    "@siyuan-publisher/common": "^1.0.0"
+  }
+} 

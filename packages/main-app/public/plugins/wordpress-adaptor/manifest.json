@@ -1,0 +1,12 @@
+{
+  "name": "WordPress Adaptor",
+  "id": "wordpress-adaptor",
+  "version": "1.0.0",
+  "type": "adaptor",
+  "main": "index.js",
+  "description": "WordPress 平台适配器，用于发布内容到 WordPress",
+  "author": "SiYuan Publisher",
+  "dependencies": {
+    "@siyuan-publisher/common": "^1.0.0"
+  }
+} 

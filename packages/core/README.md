@@ -8,7 +8,7 @@ Core functionality package for SiYuan Publisher.
 
 - Core interfaces and types
 - Plugin system interfaces
-- Platform adapter interfaces
+- Platform adaptor interfaces
 - Utility functions
 - Type-safe API design
 
@@ -21,9 +21,9 @@ pnpm add @siyuan-publisher/core
 ## Usage
 
 ```typescript
-import { Publisher, Plugin, PlatformAdapter } from '@siyuan-publisher/core'
+import { Publisher, Plugin, PlatformAdaptor } from '@siyuan-publisher/core'
 
-// Use the interfaces to implement your own publishers, plugins, or platform adapters
+// Use the interfaces to implement your own publishers, plugins, or platform adaptors
 ```
 
 ## API Reference
@@ -61,10 +61,10 @@ interface Plugin {
 }
 ```
 
-### PlatformAdapter Interface
+### PlatformAdaptor Interface
 
 ```typescript
-interface PlatformAdapter {
+interface PlatformAdaptor {
   name: string;
   version: string;
   connect: (config: PlatformConfig) => Promise<void>;

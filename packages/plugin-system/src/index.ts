@@ -15,7 +15,7 @@ export { PluginManager as PluginSystem }
 export { PluginManager } from "./manager/PluginManager"
 
 // 导出平台适配器管理器
-export { PlatformAdapterManager } from "./manager/PlatformAdapterManager"
+export { PlatformAdaptorManager } from "./manager/PlatformAdaptorManager"
 
 // 导出工具函数
 export * from "./utils"

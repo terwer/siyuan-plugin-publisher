@@ -23,7 +23,7 @@
 ```typescript
 interface PluginSystem {
   plugins: Ref<Plugin[]>
-  platformAdapters: Ref<PlatformAdapter[]>
+  platformAdaptors: Ref<PlatformAdaptor[]>
   isLoading: Ref<boolean>
   error: Ref<string | null>
   getPluginConfig: (pluginId: string) => PlatformConfig | undefined
@@ -45,7 +45,7 @@ interface PluginSystem {
 ```typescript
 interface Publisher {
   publish: (options: PublishOptions) => Promise<PublishResult>
-  testConnection: (platform: PlatformAdapter, config: PlatformConfig) => Promise<{ success: boolean; error?: string }>
+  testConnection: (platform: PlatformAdaptor, config: PlatformConfig) => Promise<{ success: boolean; error?: string }>
   isPublishing: Ref<boolean>
   error: Ref<string | null>
 }
@@ -65,7 +65,7 @@ interface Publisher {
 #### 组合式函数使用
 ```typescript
 // 使用 usePluginSystem 管理插件和平台
-const { plugins, platformAdapters, getPluginConfig, loadExternalPlugin } = usePluginSystem()
+const { plugins, platformAdaptors, getPluginConfig, loadExternalPlugin } = usePluginSystem()
 
 // 使用 usePublisher 处理发布相关操作
 const { testConnection } = usePublisher()
@@ -83,7 +83,7 @@ const { testConnection } = usePublisher()
 #### 组合式函数使用
 ```typescript
 // 使用 usePluginSystem 获取平台适配器
-const { platformAdapters, getPluginConfig } = usePluginSystem()
+const { platformAdaptors, getPluginConfig } = usePluginSystem()
 
 // 使用 usePublisher 处理发布
 const { publish, isPublishing } = usePublisher()
@@ -102,7 +102,7 @@ const { publish, isPublishing } = usePublisher()
 
 3. 插件生命周期
    - 由 `usePluginSystem` 管理
-   - 组件通过 `plugins` 和 `platformAdapters` 访问
+   - 组件通过 `plugins` 和 `platformAdaptors` 访问
 
 ## 依赖关系
 
@@ -119,7 +119,7 @@ const { publish, isPublishing } = usePublisher()
 ### 平台配置更新
 ```typescript
 // 在 Settings.vue 中
-const handleConfigUpdate = async (platform: PlatformAdapter, config: PlatformConfig) => {
+const handleConfigUpdate = async (platform: PlatformAdaptor, config: PlatformConfig) => {
   await platform.updateConfig(config)
   // 测试连接
   await testConnection(platform, config)
@@ -130,7 +130,7 @@ const handleConfigUpdate = async (platform: PlatformAdapter, config: PlatformCon
 ```typescript
 // 在 Publish.vue 中
 const handlePublish = async () => {
-  const platform = platformAdapters.value.find(p => p.id === selectedPlatform.value)
+  const platform = platformAdaptors.value.find(p => p.id === selectedPlatform.value)
   if (!platform) return
   
   await publish({

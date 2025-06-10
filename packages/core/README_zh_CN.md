@@ -20,7 +20,7 @@ pnpm add @siyuan-publisher/core
 ## 使用方法
 
 ```typescript
-import { Publisher, Plugin, PlatformAdapter } from '@siyuan-publisher/core'
+import { Publisher, Plugin, PlatformAdaptor } from '@siyuan-publisher/core'
 
 // 使用这些接口来实现你自己的发布器、插件或平台适配器
 ```
@@ -48,10 +48,10 @@ interface Plugin {
 }
 ```
 
-### PlatformAdapter 接口
+### PlatformAdaptor 接口
 
 ```typescript
-interface PlatformAdapter {
+interface PlatformAdaptor {
   name: string;
   version: string;
   connect: (config: PlatformConfig) => Promise<void>;

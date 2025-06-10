@@ -96,7 +96,7 @@
 
 - `ui`: 用户界面组件库
 - `core`: 核心功能实现
-- `platform-adapters`: 平台适配器
+- `platform-adaptors`: 平台适配器
 - `plugin-system`: 插件系统
 - `common`: 公共工具和类型定义
 

@@ -1,4 +1,4 @@
-# @siyuan-publisher/platform-adapters
+# @siyuan-publisher/platform-adaptors
 
 思源笔记发布工具的平台适配器。
 
@@ -15,24 +15,24 @@
 ## 安装
 
 ```bash
-pnpm add @siyuan-publisher/platform-adapters
+pnpm add @siyuan-publisher/platform-adaptors
 ```
 
 ## 使用方法
 
 ```typescript
-import { GithubAdapter } from '@siyuan-publisher/platform-adapters'
+import { GithubAdaptor } from '@siyuan-publisher/platform-adaptors'
 
-const githubAdapter = new GithubAdapter()
+const githubAdaptor = new GithubAdaptor()
 
 // 连接到 GitHub
-await githubAdapter.connect({
+await githubAdaptor.connect({
   apiKey: 'your-api-key',
   apiSecret: 'your-api-secret'
 })
 
 // 发布内容
-const result = await githubAdapter.publish(content, {
+const result = await githubAdaptor.publish(content, {
   title: '我的文章',
   tags: ['博客', '技术']
 })
@@ -43,7 +43,7 @@ const result = await githubAdapter.publish(content, {
 ### GitHub
 
 ```typescript
-class GithubAdapter implements PlatformAdapter {
+class GithubAdaptor implements PlatformAdaptor {
   name = 'github'
   version = '1.0.0'
   
@@ -55,12 +55,12 @@ class GithubAdapter implements PlatformAdapter {
 
 ## 创建新的适配器
 
-要创建新的平台适配器，需要实现 PlatformAdapter 接口：
+要创建新的平台适配器，需要实现 PlatformAdaptor 接口：
 
 ```typescript
-import { PlatformAdapter } from '@siyuan-publisher/core'
+import { PlatformAdaptor } from '@siyuan-publisher/core'
 
-class MyPlatformAdapter implements PlatformAdapter {
+class MyPlatformAdaptor implements PlatformAdaptor {
   name = 'my-platform'
   version = '1.0.0'
 

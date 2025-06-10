@@ -1,11 +1,11 @@
 import type { Post } from "@/types/publish"
 import type { BaseConfig, BaseMetadata, Configurable, Lifecycle } from "./base"
-import type { PlatformAdapter, PlatformType } from "./platform"
+import type { PlatformAdaptor, PlatformType } from "./platform"
 
 /**
  * 插件类型
  */
-export type PluginType = PlatformType | "plugin"
+export type PluginType = "plugin" | "adaptor" | PlatformType
 
 /**
  * 插件接口
@@ -20,12 +20,12 @@ export interface Plugin extends BaseMetadata, Lifecycle, Configurable {
 /**
  * 插件配置
  */
-export interface PluginConfig extends BaseConfig { }
+export interface PluginConfig extends BaseConfig {}
 
 /**
  * 插件元数据
  */
-export interface PluginMetadata extends BaseMetadata { }
+export interface PluginMetadata extends BaseMetadata {}
 
 /**
  * 插件清单
@@ -65,7 +65,7 @@ export interface PluginUnloadResult {
  * 插件状态
  */
 export interface PluginState {
-  status: "loading" | "loaded" | "error" | "unloaded"
+  status: "loading" | "registered" | "loaded" | "error" | "unloaded"
   error?: Error
   dependencies?: Record<string, string>
 }
@@ -154,7 +154,7 @@ export interface PluginManager {
   /**
    * 获取平台适配器
    */
-  getPlatformAdapter(type: string): PlatformAdapter | undefined
+  getPlatformAdaptor(type: string): PlatformAdaptor | undefined
 
   /**
    * 获取所有插件
@@ -164,7 +164,7 @@ export interface PluginManager {
   /**
    * 获取所有平台适配器
    */
-  getAllPlatformAdapters(): PlatformAdapter[]
+  getAllPlatformAdaptors(): PlatformAdaptor[]
 
   /**
    * 获取插件状态
@@ -194,7 +194,7 @@ export interface PlatformPlugin extends Plugin {
   /**
    * 获取平台适配器
    */
-  getPlatformAdapter(): Promise<PlatformAdapter>
+  getPlatformAdaptor(): Promise<PlatformAdaptor>
 }
 
 /**
