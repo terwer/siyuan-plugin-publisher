@@ -7,7 +7,7 @@ export interface AppShellNavItem {
   /** 导航项路由 */
   route: string
   /** 导航项图标 */
-  icon: string
+  icon?: string
   /** 导航项是否禁用（可选） */
   disabled?: boolean
 }
@@ -38,4 +38,4 @@ export interface AppShellEmits {
   (e: "navChange", route: string): void
   /** 折叠状态变更事件 */
   (e: "collapseChange", collapsed: boolean): void
-} 
+}

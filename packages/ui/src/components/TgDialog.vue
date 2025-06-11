@@ -34,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, watch, onBeforeUnmount } from "vue"
+import { watch, onBeforeUnmount } from "vue"
 
 interface Props {
   modelValue: boolean
@@ -80,16 +80,16 @@ const emit = defineEmits<{
   (e: "closed"): void
 }>()
 
-const dialogStyle = computed(() => {
-  const style: Record<string, string> = {}
-  if (props.width) {
-    style.width = typeof props.width === "number" ? `${props.width}px` : props.width
-  }
-  if (props.top) {
-    style.marginTop = props.top
-  }
-  return style
-})
+// const dialogStyle = computed(() => {
+//   const style: Record<string, string> = {}
+//   if (props.width) {
+//     style.width = typeof props.width === "number" ? `${props.width}px` : props.width
+//   }
+//   if (props.top) {
+//     style.marginTop = props.top
+//   }
+//   return style
+// })
 
 const handleClose = () => {
   if (props.beforeClose) {

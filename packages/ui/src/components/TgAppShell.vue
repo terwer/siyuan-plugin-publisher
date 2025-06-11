@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 import { ref, watch } from "vue"
-import type { AppShellProps, AppShellEmits, AppShellNavItem } from "../types"
+import type { AppShellProps, AppShellEmits } from "../types"
 
 const props = withDefaults(defineProps<AppShellProps>(), {
   collapsed: false,
