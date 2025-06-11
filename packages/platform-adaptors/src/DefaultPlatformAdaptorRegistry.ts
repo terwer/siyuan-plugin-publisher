@@ -12,8 +12,16 @@ export class DefaultPlatformAdaptorRegistry {
 
   private constructor() {
     // 注册内置适配器
-    this.register(new GithubAdaptor())
-    this.register(new WordPressAdaptor())
+    try {
+      const githubAdaptor = new GithubAdaptor()
+      const wordpressAdaptor = new WordPressAdaptor()
+      
+      // 直接注册，不等待初始化
+      this.adaptors.set(githubAdaptor.id, githubAdaptor)
+      this.adaptors.set(wordpressAdaptor.id, wordpressAdaptor)
+    } catch (error) {
+      console.error("Failed to register built-in adaptors:", error)
+    }
   }
 
   /**
@@ -31,6 +39,10 @@ export class DefaultPlatformAdaptorRegistry {
    * @param adaptor 平台适配器
    */
   public register(adaptor: PlatformAdaptor): void {
+    if (this.adaptors.has(adaptor.id)) {
+      console.warn(`Platform adaptor ${adaptor.id} already registered, skipping...`)
+      return
+    }
     this.adaptors.set(adaptor.id, adaptor)
   }
 
@@ -39,6 +51,10 @@ export class DefaultPlatformAdaptorRegistry {
    * @param adaptorId 平台适配器ID
    */
   public unregister(adaptorId: string): void {
+    if (!this.adaptors.has(adaptorId)) {
+      console.warn(`Platform adaptor ${adaptorId} not found, skipping unregister...`)
+      return
+    }
     this.adaptors.delete(adaptorId)
   }
 
@@ -62,8 +78,17 @@ export class DefaultPlatformAdaptorRegistry {
    * @param adaptor 平台适配器
    */
   public async enableAdaptor(adaptor: PlatformAdaptor): Promise<void> {
-    if (adaptor.initialize) {
-      await adaptor.initialize()
+    if (!this.adaptors.has(adaptor.id)) {
+      throw new Error(`Platform adaptor ${adaptor.id} not registered`)
+    }
+
+    try {
+      if (adaptor.initialize) {
+        await adaptor.initialize()
+      }
+    } catch (error) {
+      console.error(`Failed to enable platform adaptor ${adaptor.id}:`, error)
+      throw error
     }
   }
 
@@ -72,8 +97,17 @@ export class DefaultPlatformAdaptorRegistry {
    * @param adaptor 平台适配器
    */
   public async disableAdaptor(adaptor: PlatformAdaptor): Promise<void> {
-    if (adaptor.destroy) {
-      await adaptor.destroy()
+    if (!this.adaptors.has(adaptor.id)) {
+      throw new Error(`Platform adaptor ${adaptor.id} not registered`)
+    }
+
+    try {
+      if (adaptor.destroy) {
+        await adaptor.destroy()
+      }
+    } catch (error) {
+      console.error(`Failed to disable platform adaptor ${adaptor.id}:`, error)
+      throw error
     }
   }
 
@@ -83,8 +117,17 @@ export class DefaultPlatformAdaptorRegistry {
    * @param config 配置
    */
   public async updateAdaptorConfig(adaptor: PlatformAdaptor, config: any): Promise<void> {
-    if (adaptor.updateConfig) {
-      await adaptor.updateConfig(config)
+    if (!this.adaptors.has(adaptor.id)) {
+      throw new Error(`Platform adaptor ${adaptor.id} not registered`)
+    }
+
+    try {
+      if (adaptor.updateConfig) {
+        await adaptor.updateConfig(config)
+      }
+    } catch (error) {
+      console.error(`Failed to update config for platform adaptor ${adaptor.id}:`, error)
+      throw error
     }
   }
 } 

@@ -4,7 +4,7 @@
       <label for="apiUrl">API URL</label>
       <input
         id="apiUrl"
-        v-model="localConfig.settings!.apiUrl"
+        v-model="localConfig.settings.apiUrl"
         type="text"
         placeholder="https://your-wordpress-site.com"
         @input="updateConfig"
@@ -14,7 +14,7 @@
       <label for="username">用户名</label>
       <input
         id="username"
-        v-model="localConfig.settings!.username"
+        v-model="localConfig.settings.username"
         type="text"
         placeholder="WordPress 用户名"
         @input="updateConfig"
@@ -24,7 +24,7 @@
       <label for="password">密码</label>
       <input
         id="password"
-        v-model="localConfig.settings!.password"
+        v-model="localConfig.settings.password"
         type="password"
         placeholder="WordPress 密码"
         @input="updateConfig"
@@ -62,7 +62,15 @@ watch(
   () => props.config,
   (newConfig) => {
     if (newConfig) {
-      localConfig.value = { ...newConfig }
+      localConfig.value = {
+        type: newConfig.type || "wordpress",
+        enabled: newConfig.enabled ?? true,
+        settings: {
+          apiUrl: newConfig.settings?.apiUrl || "",
+          username: newConfig.settings?.username || "",
+          password: newConfig.settings?.password || "",
+        },
+      }
     }
   },
   { immediate: true },

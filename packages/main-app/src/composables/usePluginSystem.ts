@@ -42,6 +42,7 @@ export const usePluginSystem = () => {
   const pluginStates = ref<Record<string, PluginState>>({})
   const isLoading = ref(false)
   const error = ref<string | null>(null)
+  const isInitialized = ref(false)
 
   /**
    * 更新插件系统状态
@@ -163,10 +164,16 @@ export const usePluginSystem = () => {
         }
       }
 
-      // 6. 注册到插件系统
+      // 6. 检查插件是否已注册
+      if (pluginSystem.getPlugin(plugin.id)) {
+        logger.info(`插件 ${plugin.id} 已注册，跳过注册`)
+        return { success: true, plugin }
+      }
+
+      // 7. 注册到插件系统
       await pluginSystem.registerPlugin(plugin)
 
-      // 7. 更新状态
+      // 8. 更新状态
       updatePluginState(plugin.id, {
         status: "loaded",
         dependencies: manifest.dependencies,
@@ -205,6 +212,11 @@ export const usePluginSystem = () => {
    * 加载所有插件
    */
   const loadPlugins = async () => {
+    if (isInitialized.value) {
+      logger.info("插件系统已初始化，跳过加载")
+      return
+    }
+
     isLoading.value = true
     error.value = null
     try {
@@ -215,6 +227,11 @@ export const usePluginSystem = () => {
       // 注册内置适配器到插件系统
       for (const adaptor of builtinAdaptors) {
         try {
+          // 检查适配器是否已注册
+          if (pluginSystem.getPlugin(adaptor.id)) {
+            logger.info(`适配器 ${adaptor.id} 已注册，跳过注册`)
+            continue
+          }
           await pluginSystem.registerPlugin(adaptor as any)
           updatePluginState(adaptor.id, { status: "loaded" })
         } catch (err) {
@@ -245,6 +262,9 @@ export const usePluginSystem = () => {
       updatePluginState("", { status: "loaded" })
       logger.info("已加载的插件", { plugins: plugins.value })
       logger.info("已加载的平台适配器", { adaptors: platformAdaptors.value })
+      
+      // 标记为已初始化
+      isInitialized.value = true
     } catch (err) {
       logger.error("加载插件失败", { error: err })
       error.value = err instanceof Error ? err.message : "加载插件失败"
@@ -259,6 +279,7 @@ export const usePluginSystem = () => {
     pluginSystem.unloadAll()
     platformAdaptorManager.unloadAll()
     updatePluginState("", { status: "unloaded" })
+    isInitialized.value = false
   })
 
   return {

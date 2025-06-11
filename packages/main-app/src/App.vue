@@ -28,7 +28,11 @@
           </TgSpace>
         </div>
       </template>
-      <router-view></router-view>
+      <div class="tg-app-shell__content">
+        <router-view v-slot="{ Component }">
+          <component :is="Component" />
+        </router-view>
+      </div>
     </TgAppShell>
   </div>
 </template>
@@ -69,7 +73,7 @@ watch(
   () => route.path,
   (newPath) => {
     currentRoute.value = newPath
-  }
+  },
 )
 
 // ================ 导航项配置 ================
@@ -110,4 +114,9 @@ const navItems: AppShellNavItem[] = [
   font-weight 500
   color var(--tg-color-text-1)
   border-bottom 1px solid var(--tg-color-border)
+
+.tg-app-shell__content
+  flex 1
+  overflow-y auto
+  padding $tg-spacing-lg
 </style>
