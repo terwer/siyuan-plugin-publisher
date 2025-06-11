@@ -1,0 +1,102 @@
+.tg-dialog-wrapper
+  position absolute
+  inset 0
+  display flex
+  align-items center
+  justify-content center
+  z-index 2000
+  background-color rgba(0,0,0,0.45)
+
+.tg-dialog
+  width $tg-dialog-width
+  min-width $tg-dialog-min-width
+  max-width $tg-dialog-max-width
+  max-height 80vh
+  border-radius $tg-border-radius-lg
+  box-shadow $tg-box-shadow-lg
+  background var(--tg-color-bg)
+  display flex
+  flex-direction column
+  overflow hidden
+  position relative
+
+.tg-dialog__header
+  min-height $tg-dialog-header-height
+  padding $tg-spacing-lg $tg-spacing-xl $tg-spacing-md $tg-spacing-xl
+  border-bottom 1px solid var(--tg-color-border)
+  display flex
+  align-items center
+  background var(--tg-color-bg)
+  position relative
+
+.tg-dialog__title
+  flex 1
+  font-size $tg-font-size-lg
+  font-weight 500
+  color var(--tg-color-text-1)
+  line-height $tg-line-height-base
+  overflow hidden
+  text-overflow ellipsis
+  white-space nowrap
+
+.tg-dialog__headerbtn
+  position absolute
+  top 50%
+  right $tg-spacing-lg
+  transform translateY(-50%)
+  width 32px
+  height 32px
+  display flex
+  align-items center
+  justify-content center
+  border-radius 50%
+  background transparent
+  border none
+  cursor pointer
+  transition background 0.2s, color 0.2s, box-shadow 0.2s
+  color var(--tg-color-text-3)
+  font-size $tg-font-size-xl
+
+  &:hover
+    background var(--tg-color-bg-hover)
+    color var(--tg-color-primary)
+    box-shadow 0 2px 8px rgba(0,0,0,0.08)
+
+  &:active
+    background var(--tg-color-bg-active)
+    color var(--tg-color-primary)
+
+.tg-dialog__close
+  font-size $tg-font-size-xl
+  line-height 1
+  color inherit
+  user-select none
+  pointer-events none
+
+.tg-dialog__body
+  flex 1
+  padding $tg-spacing-xl
+  overflow auto
+  color var(--tg-color-text-1)
+  font-size $tg-font-size-base
+  background var(--tg-color-bg)
+
+.tg-dialog__footer
+  min-height $tg-dialog-footer-height
+  padding $tg-spacing-md $tg-spacing-xl
+  border-top 1px solid var(--tg-color-border)
+  display flex
+  align-items center
+  justify-content flex-end
+  gap $tg-spacing-md
+  background var(--tg-color-bg)
+  border-bottom-left-radius $tg-border-radius-lg
+  border-bottom-right-radius $tg-border-radius-lg
+
+// 动画
+.tg-dialog-fade-enter-active,
+.tg-dialog-fade-leave-active
+  transition opacity 0.3s cubic-bezier(0.23, 1, 0.32, 1)
+.tg-dialog-fade-enter-from,
+.tg-dialog-fade-leave-to
+  opacity 0 

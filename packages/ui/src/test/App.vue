@@ -8,6 +8,8 @@ import TabsTest from "./TabsTest.vue"
 import CardTest from "./CardTest.vue"
 import SpaceTest from "./SpaceTest.vue"
 import MessageTest from "./MessageTest.vue"
+import AppShellTest from "./AppShellTest.vue"
+import DialogTest from "./DialogTest.vue"
 
 const tabItems = [
   { key: "button", label: "Button 按钮" },
@@ -17,6 +19,8 @@ const tabItems = [
   { key: "card", label: "Card 卡片" },
   { key: "space", label: "Space 间距" },
   { key: "message", label: "Message 消息提示" },
+  { key: "app-shell", label: "AppShell 应用外壳" },
+  { key: "dialog", label: "Dialog 对话框" }
 ]
 
 const activeTab = ref(tabItems[0].key)
@@ -58,6 +62,12 @@ const toggleTheme = () => {
         </template>
         <template #message>
           <MessageTest />
+        </template>
+        <template #app-shell>
+          <AppShellTest />
+        </template>
+        <template #dialog>
+          <DialogTest />
         </template>
       </TgTabs>
     </main>

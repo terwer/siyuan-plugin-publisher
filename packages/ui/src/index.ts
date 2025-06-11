@@ -11,6 +11,7 @@ import TgDatePicker from "./components/TgDatePicker.vue"
 
 // 布局组件
 import TgSpace from "./components/TgSpace.vue"
+import TgAppShell from "./components/TgAppShell.vue"
 
 // 导航组件
 import TgTabs from "./components/TgTabs.vue"
@@ -30,7 +31,7 @@ import TgCard from "./components/TgCard.vue"
 export { TgButton, TgInput, TgSelect, TgRadio, TgCheckbox, TgSwitch, TgDatePicker }
 
 // 布局组件
-export { TgSpace }
+export { TgSpace, TgAppShell }
 
 // 导航组件
 export { TgTabs }
@@ -46,3 +47,5 @@ export { TgCard }
 
 // 类型定义
 export * from "./types"
+
+export { default as TgDialog } from "./components/TgDialog.vue"
