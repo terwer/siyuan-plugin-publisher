@@ -32,7 +32,6 @@ watch(
 
 const handleNavClick = (route: string) => {
   emit("navChange", route)
-  console.log(`Navigation changed to route: ${route}`)
 }
 
 const toggleCollapse = () => {
@@ -48,7 +47,19 @@ const toggleCollapse = () => {
         <slot name="nav-header"></slot>
       </div>
       <div class="tg-app-shell__nav-content">
-        <slot name="nav-content"></slot>
+        <template v-if="navItems">
+          <div
+            v-for="item in navItems"
+            :key="item.route"
+            class="tg-app-shell__nav-item"
+            :class="{ 'tg-app-shell__nav-item--disabled': item.disabled }"
+            @click="!item.disabled && handleNavClick(item.route)"
+          >
+            <span class="tg-app-shell__nav-icon">{{ item.icon }}</span>
+            <span v-if="!isCollapsed" class="tg-app-shell__nav-text">{{ item.label }}</span>
+          </div>
+        </template>
+        <slot v-else name="nav-content"></slot>
       </div>
       <div class="tg-app-shell__collapse-handle" @click="toggleCollapse">
         <span>{{ isCollapsed ? "→" : "←" }}</span>

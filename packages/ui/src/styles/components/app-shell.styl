@@ -4,67 +4,90 @@
   height 100%
   background-color var(--tg-color-bg)
   border-radius $tg-border-radius-lg
-  box-shadow 0 2px 8px var(--tg-color-shadow)
-  position relative
-
-  &.fixed
-    position fixed
-    top 0
-    left 0
-    right 0
-    bottom 0
-    z-index 1000
+  box-shadow 0 2px 8px rgba(0, 0, 0, 0.15)
+  overflow hidden
 
   &__nav
-    transition width 0.3s ease, border 0.3s ease, opacity 0.3s ease
-    border-right 1px solid var(--tg-color-border)
-    position absolute
-    left 0
-    top 0
-    bottom 0
+    width 200px
     height 100%
-    flex-shrink 0
-    z-index 10
     background-color var(--tg-color-bg)
-
-    &.tg-app-shell__nav--collapsed
-      width 0 !important
-      opacity 0
-      visibility hidden
-      border-right-color transparent
-
-  &__nav-header
-    padding $tg-spacing-md $tg-spacing-lg
-
-  &__nav-content
-    height 100%
-    transition width 0.3s ease
-
-  &__nav-item
-    height 48px
-    padding 0 $tg-spacing-md
+    border-right 1px solid var(--tg-color-border)
+    transition all 0.3s ease-in-out
     display flex
-    align-items center
-    color var(--tg-color-text-2)
-    cursor pointer
-    transition all 0.3s ease
+    flex-direction column
+    position relative
+    z-index 1
 
-    &:hover
-      background-color var(--tg-color-bg-hover)
-      color var(--tg-color-text-1)
+    &--collapsed
+      width 0
+      border-right none
 
-    &--active
-      background-color var(--tg-color-bg-hover)
-      color var(--tg-color-primary)
+      .tg-app-shell__nav-header,
+      .tg-app-shell__nav-content
+        visibility hidden
+        opacity 0
 
-  &__nav-icon
-    font-size $tg-font-size-lg
-    margin-right $tg-spacing-md
+    &-header
+      height 64px
+      display flex
+      align-items center
+      padding 0 $tg-spacing-lg
+      border-bottom 1px solid var(--tg-color-border)
+      transition all 0.3s ease-in-out
+
+    &-content
+      flex 1
+      overflow-y auto
+      padding $tg-spacing-md
+      transition all 0.3s ease-in-out
+
+      &::-webkit-scrollbar
+        width 6px
+
+      &::-webkit-scrollbar-thumb
+        background-color var(--tg-color-border)
+        border-radius 3px
+
+      &::-webkit-scrollbar-track
+        background-color transparent
+
+    &-item
+      display flex
+      align-items center
+      padding $tg-spacing-sm $tg-spacing-md
+      margin-bottom $tg-spacing-xs
+      border-radius $tg-border-radius-base
+      cursor pointer
+      transition all 0.3s ease-in-out
+      color var(--tg-color-text-2)
+
+      &:hover
+        background-color var(--tg-color-bg-hover)
+        color var(--tg-color-text-1)
+
+      &--active
+        background-color var(--tg-color-bg-hover)
+        color var(--tg-color-primary)
+
+      &--disabled
+        cursor not-allowed
+        opacity 0.5
+        pointer-events none
+
+      &-icon
+        margin-right $tg-spacing-sm
+        font-size $tg-font-size-lg
+
+      &-text
+        flex 1
+        white-space nowrap
+        overflow hidden
+        text-overflow ellipsis
 
   &__collapse-handle
     position absolute
-    top 50%
     right -12px
+    top 50%
     transform translateY(-50%)
     width 24px
     height 24px
@@ -75,34 +98,44 @@
     align-items center
     justify-content center
     cursor pointer
-    z-index 1
-    transition all 0.3s ease
+    z-index 2
+    transition all 0.3s ease-in-out
 
     &:hover
       background-color var(--tg-color-bg-hover)
+      transform translateY(-50%) scale(1.1)
 
   &__main
     flex 1
     display flex
     flex-direction column
     overflow hidden
+    position relative
+    z-index 0
 
   &__header
-    padding $tg-spacing-md $tg-spacing-lg
+    height 64px
+    display flex
+    align-items center
+    padding 0 $tg-spacing-lg
+    border-bottom 1px solid var(--tg-color-border)
+    background-color var(--tg-color-bg)
 
   &__content
     flex 1
-    min-width 0
-    height 100%
+    overflow-y auto
+    padding $tg-spacing-lg
     background-color var(--tg-color-bg)
-    padding $tg-spacing-sm $tg-spacing-md
-    display flex
-    flex-direction column
-    overflow hidden
-    transition margin-left 0.3s ease
 
-    &--collapsed
-      margin-left 0
+    &::-webkit-scrollbar
+      width 6px
+
+    &::-webkit-scrollbar-thumb
+      background-color var(--tg-color-border)
+      border-radius 3px
+
+    &::-webkit-scrollbar-track
+      background-color transparent
 
   &__content-item
     flex 1
@@ -160,990 +193,4 @@
     color var(--tg-color-text-2)
 
   &__content-item-body-action-text-highlight
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-2
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-3
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-4
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-5
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-6
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-7
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-8
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-9
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-10
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-11
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-12
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-13
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-14
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-15
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-16
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-17
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-18
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-19
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-20
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-21
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-22
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-23
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-24
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-25
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-26
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-27
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-28
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-29
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-30
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-31
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-32
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-33
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-34
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-35
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-36
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-37
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-38
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-39
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-40
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-41
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-42
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-43
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-44
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-45
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-46
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-47
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-48
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-49
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-50
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-51
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-52
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-53
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-54
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-55
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-56
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-57
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-58
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-59
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-60
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-61
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-62
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-63
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-64
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-65
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-66
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-67
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-68
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-69
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-70
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-71
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-72
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-73
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-74
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-75
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-76
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-77
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-78
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-79
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-80
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-81
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-82
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-83
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-84
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-85
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-86
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-87
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-88
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-89
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-90
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-91
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-92
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-93
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-94
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-95
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-96
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-97
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-98
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-99
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-100
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-101
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-102
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-103
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-104
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-105
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-106
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-107
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-108
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-109
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-110
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-111
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-112
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-113
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-114
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-115
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-116
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-117
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-118
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-119
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-120
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-121
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-122
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-123
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-124
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-125
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-126
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-127
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-128
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-129
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-130
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-131
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-132
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-133
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-134
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-135
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-136
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-137
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-138
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-139
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-140
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-141
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-142
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-143
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-144
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-145
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-146
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-147
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-148
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-149
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-150
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-151
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-152
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-153
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-154
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-155
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-156
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-157
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-158
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-159
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-160
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-161
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-162
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-163
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-164
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-165
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-166
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-167
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-168
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-169
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-170
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-171
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-172
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-173
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-174
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-175
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-176
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-177
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-178
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-179
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-180
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-181
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-182
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-183
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-184
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-185
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-186
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-187
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-188
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-189
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-190
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-191
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-192
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-193
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-194
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-195
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-196
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-197
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-198
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-199
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-200
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-201
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-202
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-203
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-204
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-205
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-206
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-207
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-208
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-209
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-210
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-211
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-212
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-213
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-214
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-215
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-216
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-217
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-218
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-219
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-220
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-221
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-222
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-223
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-224
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-225
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-226
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-227
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-228
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-229
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-230
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-231
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-232
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-233
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-234
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-235
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-236
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-237
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-238
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-239
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-240
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-241
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-242
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-243
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-244
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-245
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-246
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-247
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-248
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-249
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-250
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-251
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-252
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-253
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-254
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-255
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-256
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-257
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-258
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-259
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-260
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-261
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-262
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-263
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-264
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-265
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-266
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-267
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-268
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-269
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-270
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-271
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-272
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-273
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-274
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-275
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-276
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-277
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-278
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-279
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-280
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-281
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-282
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-283
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-284
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-285
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-286
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-287
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-288
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-289
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-290
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-291
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-292
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-293
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-294
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-295
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-296
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-297
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-298
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-299
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-300
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-301
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-302
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-303
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-304
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-305
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-306
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-307
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-308
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-309
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-310
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-311
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-312
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-313
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-314
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-315
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-316
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-317
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-318
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-319
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-320
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-321
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-322
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-323
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-324
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-325
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-326
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-327
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-328
-    color var(--tg-color-primary)
-
-  &__content-item-body-action-text-highlight-329
-    color var(--tg-color-primary)
-
-    background-color var(--tg-color-bg) 
+    color var(--tg-color-primary) 

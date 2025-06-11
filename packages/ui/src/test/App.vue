@@ -20,7 +20,7 @@ const tabItems = [
   { key: "space", label: "Space 间距" },
   { key: "message", label: "Message 消息提示" },
   { key: "app-shell", label: "AppShell 应用外壳" },
-  { key: "dialog", label: "Dialog 对话框" }
+  { key: "dialog", label: "Dialog 对话框" },
 ]
 
 const activeTab = ref(tabItems[0].key)
@@ -89,9 +89,44 @@ const toggleTheme = () => {
     justify-content: space-between
     align-items: center
     margin-bottom: $tg-spacing-lg
+    padding: $tg-spacing-md
+    background: var(--tg-color-bg)
+    border-radius: $tg-border-radius-lg
+    box-shadow: $tg-box-shadow-base
+
+    h1
+      margin: 0
+      font-size: $tg-font-size-xl
+      color: var(--tg-color-text-1)
 
   &__content
     padding: $tg-spacing-lg
     border: 1px solid var(--tg-color-border)
-    border-radius: $tg-border-radius-base
+    border-radius: $tg-border-radius-lg
+    background: var(--tg-color-bg)
+
+    :deep(.tg-tabs)
+      &-nav
+        display: flex
+        flex-wrap: wrap
+        gap: $tg-spacing-xs
+        padding: $tg-spacing-xs
+        border-bottom: 1px solid var(--tg-color-border)
+
+      &-tab
+        padding: $tg-spacing-sm $tg-spacing-md
+        font-size: $tg-font-size-base
+        color: var(--tg-color-text-2)
+        transition: all 0.3s ease
+        border-radius: $tg-border-radius-base
+        cursor: pointer
+
+        &:hover
+          color: var(--tg-color-primary)
+          background: var(--tg-color-bg-hover)
+
+        &-active
+          color: var(--tg-color-primary)
+          background: var(--tg-color-bg-hover)
+          font-weight: 500
 </style>

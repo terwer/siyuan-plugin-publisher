@@ -52,6 +52,7 @@ interface Props {
   showHeader?: boolean
   center?: boolean
   size?: "small" | "default" | "large"
+  beforeClose?: (done: () => void) => void
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -91,8 +92,15 @@ const dialogStyle = computed(() => {
 })
 
 const handleClose = () => {
-  emit("update:modelValue", false)
-  emit("close")
+  if (props.beforeClose) {
+    props.beforeClose(() => {
+      emit("update:modelValue", false)
+      emit("close")
+    })
+  } else {
+    emit("update:modelValue", false)
+    emit("close")
+  }
 }
 
 const handleWrapperClick = () => {

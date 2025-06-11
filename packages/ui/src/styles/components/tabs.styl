@@ -5,9 +5,12 @@
 
   &-nav
     display flex
+    flex-wrap wrap
+    gap $tg-spacing-xs
     border-bottom 1px solid var(--tg-color-border)
     margin-bottom $tg-spacing-md
     position relative
+    padding $tg-spacing-xs 0
 
   &-tab
     padding 0 $tg-spacing-md
@@ -18,16 +21,18 @@
     position relative
     height $tg-height-base
     line-height $tg-height-base
-    margin-right $tg-spacing-xl
     border 0
     background none
+    border-radius $tg-border-radius-base
 
     &:hover
       color var(--tg-color-primary)
+      background var(--tg-color-bg-hover)
 
     &-active
       color var(--tg-color-primary)
       font-weight 500
+      background var(--tg-color-bg-hover)
 
       &::after
         content ''
@@ -56,7 +61,6 @@
     .tg-tabs-tab
       border 1px solid var(--tg-color-border)
       border-radius $tg-border-radius-base
-      margin-right 2px
       color var(--tg-color-text-primary)
       height $tg-height-base
       line-height $tg-height-base

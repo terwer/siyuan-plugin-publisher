@@ -10,10 +10,8 @@
         <TgDialog v-model="basicVisible" title="提示">
           <span>这是一段内容</span>
           <template #footer>
-            <span class="dialog-footer">
-              <TgButton @click="basicVisible = false">取消</TgButton>
-              <TgButton type="primary" @click="basicVisible = false">确定</TgButton>
-            </span>
+            <TgButton @click="basicVisible = false">取消</TgButton>
+            <TgButton type="primary" @click="basicVisible = false">确定</TgButton>
           </template>
         </TgDialog>
       </div>
@@ -34,10 +32,8 @@
             <p>这是自定义内容</p>
           </div>
           <template #footer>
-            <div class="custom-footer">
-              <TgButton @click="customVisible = false">取消</TgButton>
-              <TgButton type="primary" @click="customVisible = false">确定</TgButton>
-            </div>
+            <TgButton @click="customVisible = false">取消</TgButton>
+            <TgButton type="primary" @click="customVisible = false">确定</TgButton>
           </template>
         </TgDialog>
       </div>
@@ -83,11 +79,7 @@
       <h3>关闭前确认</h3>
       <div class="tg-test-content">
         <TgButton @click="confirmVisible = true">关闭前确认</TgButton>
-        <TgDialog
-          v-model="confirmVisible"
-          title="提示"
-          :before-close="handleClose"
-        >
+        <TgDialog v-model="confirmVisible" title="提示" :before-close="handleClose">
           <span>这是一段内容</span>
         </TgDialog>
       </div>
@@ -162,4 +154,4 @@ const handleClose = (done: () => void) => {
     display flex
     justify-content flex-end
     gap $tg-spacing-md
-</style> 
+</style>
