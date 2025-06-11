@@ -21,6 +21,7 @@ import TgForm from "./components/TgForm.vue"
 
 // 反馈组件
 import TgMessage from "./components/TgMessage.vue"
+import TgDialog from "./components/TgDialog.vue"
 
 // 数据展示组件
 import TgCard from "./components/TgCard.vue"
@@ -40,12 +41,10 @@ export { TgTabs }
 export { TgForm }
 
 // 反馈组件
-export { TgMessage }
+export { TgMessage, TgDialog }
 
 // 数据展示组件
 export { TgCard }
 
 // 类型定义
 export * from "./types"
-
-export { default as TgDialog } from "./components/TgDialog.vue"
