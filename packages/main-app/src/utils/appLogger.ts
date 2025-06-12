@@ -8,7 +8,7 @@
  */
 
 import { type ILogger, simpleLogger } from "zhi-lib-base"
-import { isDev } from "@/utils/Constants.ts"
+import { isDev } from "@/Constants.ts"
 
 /**
  * 一个简单轻量级的日志记录器
@@ -20,3 +20,5 @@ import { isDev } from "@/utils/Constants.ts"
 export const createAppLogger = (name: string): ILogger => {
   return simpleLogger(name, "siyuan-blog", isDev)
 }
+
+export { ILogger }

@@ -10,45 +10,42 @@
 <template>
   <div class="settings">
     <h1>设置</h1>
-    <TgCard class="settings-card">
-      <TgTabs v-model="activeTab" :items="tabItems">
-        <template #platforms>
-          <PlatformList
-            :platforms="platformAdaptors"
-            @platform-toggle="handlePlatformToggle"
-            @config-update="handleConfigUpdate"
-            @test-connection="handleTestConnection"
-          />
-        </template>
-        <template #plugins>
-          <PluginList
-            :plugins="plugins"
-            @plugin-toggle="handlePluginToggle"
-            @configure="handlePluginConfigure"
-            @uninstall="handlePluginUninstall"
-          />
-        </template>
-        <template #global>
-          <TgSpace direction="vertical" size="large">
-            <TgCard title="全局设置">
-              <TgForm ref="formRef" v-model="formData" :config="globalFormConfig" @validate="handleValidate" />
-            </TgCard>
-            <TgCard title="配置管理">
-              <TgSpace>
-                <TgButton @click="handleExportConfig">导出配置</TgButton>
-                <TgButton @click="handleImportConfig">导入配置</TgButton>
-                <input ref="importInput" type="file" accept=".json" style="display: none" @change="handleFileChange" />
-              </TgSpace>
-            </TgCard>
+    <TgTabs v-model="activeTab" :items="tabItems">
+      <template #platforms>
+        <PlatformList
+          :platforms="platformAdaptors"
+          @platform-toggle="handlePlatformToggle"
+          @config-update="handleConfigUpdate"
+          @test-connection="handleTestConnection"
+        />
+      </template>
+      <template #plugins>
+        <PluginList
+          :plugins="plugins"
+          @plugin-toggle="handlePluginToggle"
+          @configure="handlePluginConfigure"
+          @uninstall="handlePluginUninstall"
+        />
+      </template>
+      <template #global>
+        <div class="settings-content">
+          <TgForm ref="formRef" v-model="formData" :config="globalFormConfig" @validate="handleValidate" />
+          <TgForm ref="siyuanFormRef" v-model="siyuanCfg" :config="siyuanFormConfig" @validate="handleSiyuanValidate" />
+          <div class="settings-actions">
+            <TgSpace>
+              <TgButton @click="handleExportConfig">导出配置</TgButton>
+              <TgButton @click="handleImportConfig">导入配置</TgButton>
+              <input ref="importInput" type="file" accept=".json" style="display: none" @change="handleFileChange" />
+            </TgSpace>
             <div class="form-actions">
               <TgButton type="primary" @click="handleSubmit" :loading="submitting">
                 {{ submitting ? "提交中..." : "保存设置" }}
               </TgButton>
             </div>
-          </TgSpace>
-        </template>
-      </TgTabs>
-    </TgCard>
+          </div>
+        </div>
+      </template>
+    </TgTabs>
     <Teleport to="body">
       <TgMessage
         v-if="message.visible"
@@ -67,8 +64,8 @@ import type { FormConfig, FormInstance, Option } from "@terwer/ui"
 import type { PlatformAdaptor, PlatformConfig, Plugin } from "@siyuan-publisher/common"
 
 // =============== 组件引入 ===============
-import { ref, watch, computed } from "vue"
-import { TgTabs, TgForm, TgButton, TgInput, TgMessage, TgCard, TgSpace } from "@terwer/ui"
+import { ref, watch, computed, reactive } from "vue"
+import { TgTabs, TgForm, TgButton, TgInput, TgMessage, TgCard, TgSpace, TgFormItem } from "@terwer/ui"
 import PlatformList from "../components/PlatformList.vue"
 import PluginList from "../components/PluginList.vue"
 
@@ -76,6 +73,9 @@ import PluginList from "../components/PluginList.vue"
 import { usePluginSystem } from "../composables/usePluginSystem"
 import { usePublisher } from "../composables/usePublisher"
 import { useConfig } from "../composables/useConfig"
+import { useSiyuanSettingStore } from "../stores/useSiyuanSettingStore"
+import { DEFAULT_SIYUAN_API_URL, LEGENCY_SHARED_PROXY_MIDDLEWARE } from "../Constants"
+import { useComputedField } from "@/composables/useComputedField.ts"
 
 // =============== 响应式数据 ===============
 // 标签页配置
@@ -86,8 +86,12 @@ const tabItems = [
 ]
 const activeTab = ref(tabItems[0].key)
 
+// 思源设置 store
+const { readonlySiyuanCfg, siyuanCfg } = useSiyuanSettingStore()
+
 // 表单相关
 const formRef = ref<FormInstance>()
+const siyuanFormRef = ref<FormInstance>()
 const submitting = ref(false)
 const formData = ref({
   name: "",
@@ -100,6 +104,57 @@ const formData = ref({
     defaultCategories: "",
     defaultTags: "",
   },
+})
+
+// 思源设置表单配置
+const siyuanFormConfig = computed<FormConfig>(() => {
+  return {
+    layout: "horizontal",
+    labelWidth: 120,
+    groups: [
+      {
+        title: "思源设置",
+        items: [
+          {
+            name: "home",
+            label: "思源主页",
+            type: "input",
+            required: true,
+            rules: [
+              {
+                required: true,
+                message: "请输入思源笔记主页地址",
+              },
+            ],
+          },
+          {
+            name: "apiUrl",
+            label: "API 地址",
+            type: "input",
+            required: true,
+            rules: [
+              {
+                required: true,
+                message: "请输入思源笔记 API 地址",
+              },
+            ],
+          },
+          {
+            name: "middlewareUrl",
+            label: "中间件地址",
+            type: "input",
+            required: true,
+            rules: [
+              {
+                required: true,
+                message: "请输入中间件地址",
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  }
 })
 
 // 消息提示
@@ -116,27 +171,6 @@ const importInput = ref<HTMLInputElement | null>(null)
 const { plugins, platformAdaptors, getPluginConfig, loadExternalPlugin } = usePluginSystem()
 const { publish: publishService, testConnection } = usePublisher()
 const { config: globalConfig, exportConfig, importConfig } = useConfig()
-
-// =============== 监听器 ===============
-// 监听全局配置变化
-watch(
-  () => globalConfig.value,
-  (newVal) => {
-    if (newVal) {
-      formData.value = { ...newVal }
-    }
-  },
-  { immediate: true },
-)
-
-// 监听表单数据变化
-watch(
-  () => formData.value,
-  (newVal) => {
-    globalConfig.value = { ...newVal } as any
-  },
-  { deep: true },
-)
 
 // =============== 方法 ===============
 // 消息提示方法
@@ -273,7 +307,8 @@ const handlePluginUninstall = async (plugin: Plugin) => {
 
 // =============== 表单配置 ===============
 const globalFormConfig: FormConfig = {
-  layout: "vertical",
+  layout: "horizontal",
+  labelWidth: 120,
   groups: [
     {
       title: "基本设置",
@@ -361,6 +396,16 @@ const globalFormConfig: FormConfig = {
     },
   ],
 }
+
+// 思源表单验证处理
+const handleSiyuanValidate = (errors: Record<string, string[]>) => {
+  console.log("思源表单验证结果：", errors)
+  if (Object.keys(errors).length === 0) {
+    console.log("思源表单验证通过")
+  } else {
+    console.log("思源表单验证失败")
+  }
+}
 </script>
 
 <style lang="stylus">
@@ -372,13 +417,18 @@ const globalFormConfig: FormConfig = {
     text-align center
     color var(--tg-color-text-1)
 
-  .settings-card
+  .settings-content
+    display flex
+    flex-direction column
+    gap $tg-spacing-xl
+
+  .settings-actions
+    display flex
+    justify-content space-between
+    align-items center
     margin-top $tg-spacing-lg
 
   .form-actions
-    display flex
-    justify-content flex-end
-
     .tg-btn
       min-width 100px
 </style>

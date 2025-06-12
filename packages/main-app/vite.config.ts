@@ -7,11 +7,6 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": resolve(__dirname, "src"),
-      "@siyuan-publisher/common": resolve(__dirname, "../common/src"),
-      "@siyuan-publisher/core": resolve(__dirname, "../core/src"),
-      "@siyuan-publisher/platform-adaptors": resolve(__dirname, "../platform-adaptors/src"),
-      "@siyuan-publisher/plugin-system": resolve(__dirname, "../plugin-system/src"),
-      "@terwer/ui": resolve(__dirname, "../ui/src"),
     },
   },
   base: "",

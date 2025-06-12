@@ -262,7 +262,7 @@ export const usePluginSystem = () => {
       updatePluginState("", { status: "loaded" })
       logger.info("已加载的插件", { plugins: plugins.value })
       logger.info("已加载的平台适配器", { adaptors: platformAdaptors.value })
-      
+
       // 标记为已初始化
       isInitialized.value = true
     } catch (err) {
