@@ -52,7 +52,7 @@
             <div class="pt-component-demo__row">
               <TgCard>
                 <template #header>
-                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <div style="display: flex; justify-content: space-between; align-items: center">
                     <span>自定义头部</span>
                     <TgButton type="text" size="small">更多</TgButton>
                   </div>
@@ -79,7 +79,7 @@
               <TgCard title="带底部卡片">
                 <p>这是一个带底部的卡片内容。</p>
                 <template #footer>
-                  <div style="display: flex; justify-content: flex-end;">
+                  <div style="display: flex; justify-content: flex-end">
                     <TgButton type="primary" size="small">确定</TgButton>
                   </div>
                 </template>

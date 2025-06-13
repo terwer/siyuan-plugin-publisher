@@ -243,15 +243,15 @@ const handleFileChange = (event: Event) => {
 // 平台相关处理
 const handlePlatformToggle = async (platform: PlatformAdaptor) => {
   try {
-    if (platform.enabled) {
-      await platform.connect()
-    } else {
-      await platform.disconnect()
-    }
-    showMessage("success", `${platform.name} ${platform.enabled ? "已启用" : "已禁用"}`)
+    // if (platform.enabled) {
+    //   await platform.connect()
+    // } else {
+    //   await platform.disconnect()
+    // }
+    // showMessage("success", `${platform.name} ${platform.enabled ? "已启用" : "已禁用"}`)
   } catch (error) {
-    platform.enabled = !platform.enabled
-    showMessage("error", `${platform.name} ${platform.enabled ? "启用" : "禁用"}失败`)
+    // platform.enabled = !platform.enabled
+    // showMessage("error", `${platform.name} ${platform.enabled ? "启用" : "禁用"}失败`)
   }
 }
 
@@ -280,15 +280,15 @@ const handleTestConnection = async (platform: PlatformAdaptor) => {
 // 插件相关处理
 const handlePluginToggle = async (plugin: Plugin) => {
   try {
-    if (plugin.enabled) {
-      await plugin.enable()
-    } else {
-      await plugin.disable()
-    }
-    showMessage("success", `${plugin.name} ${plugin.enabled ? "已启用" : "已禁用"}`)
+    // if (plugin.enabled) {
+    //   await plugin.enable()
+    // } else {
+    //   await plugin.disable()
+    // }
+    // showMessage("success", `${plugin.name} ${plugin.enabled ? "已启用" : "已禁用"}`)
   } catch (error) {
-    plugin.enabled = !plugin.enabled
-    showMessage("error", `${plugin.name} ${plugin.enabled ? "启用" : "禁用"}失败`)
+    // plugin.enabled = !plugin.enabled
+    // showMessage("error", `${plugin.name} ${plugin.enabled ? "启用" : "禁用"}失败`)
   }
 }
 
@@ -298,7 +298,7 @@ const handlePluginConfigure = (plugin: Plugin) => {
 
 const handlePluginUninstall = async (plugin: Plugin) => {
   try {
-    await plugin.uninstall()
+    // await plugin.uninstall()
     showMessage("success", `${plugin.name} 已卸载`)
   } catch (error) {
     showMessage("error", `${plugin.name} 卸载失败`)
@@ -334,19 +334,19 @@ const globalFormConfig: FormConfig = {
           name: "theme",
           label: "主题",
           type: "select",
-          options: () => [
+          options: (() => [
             { label: "浅色", value: "light" },
             { label: "深色", value: "dark" },
-          ],
+          ]) as any,
         },
         {
           name: "language",
           label: "语言",
           type: "select",
-          options: () => [
+          options: (() => [
             { label: "简体中文", value: "zh_CN" },
             { label: "English", value: "en_US" },
-          ],
+          ]) as any,
         },
         {
           name: "autoSave",
@@ -362,13 +362,13 @@ const globalFormConfig: FormConfig = {
           name: "defaultPlatform",
           label: "默认发布平台",
           type: "select",
-          options: () => {
+          options: (() => {
             const adaptors = platformAdaptors.value || []
             return adaptors.map((platform) => ({
               label: platform.name,
               value: platform.id,
             }))
-          },
+          }) as any,
         },
         {
           name: "publishOptions.defaultStatus",

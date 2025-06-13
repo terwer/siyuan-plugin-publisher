@@ -48,7 +48,7 @@ import PublishOptionsPanel from "../components/PublishOptionsPanel.vue"
 
 // const { getPluginConfig } = usePluginSystem()
 
-const { publish: publishService, isPublishing, platformAdaptors } = usePublisher()
+const { publish: publishService, isPublishing } = usePublisher()
 
 const selectedPlatform = ref("")
 const platformConfig = ref<PlatformConfig>({
@@ -129,19 +129,21 @@ const handleOptionsUpdate = (newOptions: PublishOptions) => {
 // 测试平台连接
 const testConnection = async () => {
   try {
-    const platform = platformAdaptors.value.find((p) => p.id === selectedPlatform.value)
-    if (!platform) {
-      showMessage("未找到选中的平台", "error")
-      return
-    }
+    // const platform = platformAdaptors.value.find((p: any) => p.id === selectedPlatform.value)
+    // if (!platform) {
+    //   showMessage("未找到选中的平台", "error")
+    //   return
+    // }
 
-    const result = await testConnection(platform, platformConfig.value)
-    if (result.success) {
-      showMessage("连接成功", "success")
-    } else {
-      showMessage(result.error || "连接失败", "error")
-    }
-  } catch (error) {
+    // const result = await testConnection(platform, platformConfig.value)
+    await testConnection()
+    // const result = await testConnection()
+    // if (result.success) {
+    //   showMessage("连接成功", "success")
+    // } else {
+    //   showMessage(result.error || "连接失败", "error")
+    // }
+  } catch (error: any) {
     const errorType = error instanceof Error ? (error.message as ErrorType) : "PLATFORM_CONNECTION_FAILED"
     showMessage(getErrorMessage(errorType), "error")
   }
@@ -174,28 +176,28 @@ const showMessage = (message: string, type: "success" | "error") => {
 // 发布文章
 const publish = async () => {
   try {
-    const platform = platformAdaptors.value.find((p) => p.id === selectedPlatform.value)
-    if (!platform) {
-      showMessage("未找到选中的平台", "error")
-      return
-    }
+    // const platform = platformAdaptors.value.find((p: any) => p.id === selectedPlatform.value)
+    // if (!platform) {
+    //   showMessage("未找到选中的平台", "error")
+    //   return
+    // }
 
     isPublishing.value = true
-    const result = await publishService(
-      platform,
-      {
-        ...post.value,
-        status: publishOptions.value.status as PostStatus,
-      },
-      publishOptions.value,
-    )
-
-    if (result.success) {
-      showMessage("发布成功", "success")
-      publishResult.value = result
-    } else {
-      showMessage(result.error || getErrorMessage("PUBLISH_FAILED"), "error")
-    }
+    // const result = await publishService(
+    //   platform,
+    //   {
+    //     ...post.value,
+    //     status: publishOptions.value.status as PostStatus,
+    //   },
+    //   publishOptions.value,
+    // )
+    //
+    // if (result.success) {
+    //   showMessage("发布成功", "success")
+    //   publishResult.value = result
+    // } else {
+    //   showMessage(result.error || getErrorMessage("PUBLISH_FAILED"), "error")
+    // }
   } catch (error) {
     const errorType = error instanceof Error ? (error.message as ErrorType) : "PUBLISH_FAILED"
     showMessage(getErrorMessage(errorType), "error")

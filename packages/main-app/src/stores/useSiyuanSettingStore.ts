@@ -31,13 +31,13 @@ export const useSiyuanSettingStore = () => {
     home: DEFAULT_SIYUAN_API_URL,
     apiUrl: DEFAULT_SIYUAN_API_URL,
     middlewareUrl: LEGENCY_SHARED_PROXY_MIDDLEWARE,
-  }
+  } as SiyuanConfig
 
   // 创建适配器实例
   const adaptor = new AsyncSiyuanStorageAdaptor<SiyuanConfig>(adaptorKey, filePath)
 
   // 获取响应式存储
-  const { formState } = useStorageAsync(storageKey, initValue, adaptor)
+  const { formState } = useStorageAsync<SiyuanConfig>(storageKey, initValue, adaptor)
 
   const newSiyuanCfg = useComputedObject(formState, initValue)
   logger.info("Loaded default siyuan-cfg, may not the latest", newSiyuanCfg.value)
