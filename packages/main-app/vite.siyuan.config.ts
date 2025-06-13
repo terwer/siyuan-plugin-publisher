@@ -72,16 +72,7 @@ export default defineConfig((env: ConfigEnv): UserConfig => {
 
     resolve: {
       alias: {
-        // '~/': path.resolve(__dirname, './'),
         "@": path.resolve(__dirname, "./src"),
-        "@components": path.resolve(__dirname, "./src/components"),
-        "@composables": path.resolve(__dirname, "./src/composables"),
-        "@pages": path.resolve(__dirname, "./src/pages"),
-        "@assets": path.resolve(__dirname, "./src/assets"),
-        "@stores": path.resolve(__dirname, "./src/stores"),
-        "@enums": path.resolve(__dirname, "./src/enums"),
-        "@constants": path.resolve(__dirname, "./src/constants"),
-        "@utils": path.resolve(__dirname, "./src/utils"),
       },
       external: ["siyuan"],
     } as any,

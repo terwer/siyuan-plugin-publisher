@@ -30,7 +30,7 @@ const defaultConfig: GlobalConfig = {
 
 export function useConfig() {
   // 从 localStorage 获取配置，如果没有则使用默认配置
-  const config = ref<GlobalConfig>(() => {
+  const config = ref<any>(() => {
     const savedConfig = localStorage.getItem(CONFIG_KEY)
     return savedConfig ? JSON.parse(savedConfig) : defaultConfig
   })
@@ -81,4 +81,4 @@ export function useConfig() {
     exportConfig,
     importConfig,
   }
-} 
+}

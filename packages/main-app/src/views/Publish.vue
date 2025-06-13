@@ -46,9 +46,9 @@ import WordPressConfig from "../components/platform-configs/wordpress.vue"
 import PostInfo from "../components/PostInfo.vue"
 import PublishOptionsPanel from "../components/PublishOptionsPanel.vue"
 
-const { getPluginConfig } = usePluginSystem()
+// const { getPluginConfig } = usePluginSystem()
 
-const { publish: publishService, isPublishing, error: publishError, platformAdaptors } = usePublisher()
+const { publish: publishService, isPublishing, platformAdaptors } = usePublisher()
 
 const selectedPlatform = ref("")
 const platformConfig = ref<PlatformConfig>({

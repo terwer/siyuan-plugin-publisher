@@ -64,8 +64,8 @@ import type { FormConfig, FormInstance, Option } from "@terwer/ui"
 import type { PlatformAdaptor, PlatformConfig, Plugin } from "@siyuan-publisher/common"
 
 // =============== 组件引入 ===============
-import { ref, watch, computed, reactive } from "vue"
-import { TgTabs, TgForm, TgButton, TgInput, TgMessage, TgCard, TgSpace, TgFormItem } from "@terwer/ui"
+import { ref, computed } from "vue"
+import { TgTabs, TgForm, TgButton, TgMessage, TgSpace } from "@terwer/ui"
 import PlatformList from "../components/PlatformList.vue"
 import PluginList from "../components/PluginList.vue"
 

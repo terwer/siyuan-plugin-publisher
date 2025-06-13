@@ -27,9 +27,9 @@ export const usePublisher = () => {
 
     try {
       // 确保平台已连接
-      if (!platform.isConnected) {
-        await platform.connect()
-      }
+      // if (!platform.isConnected) {
+      await platform.connect()
+      // }
 
       // 发布文章
       const result = await platform.publish(post, options)

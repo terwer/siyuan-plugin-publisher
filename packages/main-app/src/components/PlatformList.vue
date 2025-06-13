@@ -9,7 +9,7 @@
           :is="getPlatformConfigComponent(platform.type)"
           v-if="platform.enabled"
           :config="platform.config"
-          @update:config="(config) => handleConfigUpdate(platform, config)"
+          @update:config="(config: any) => handleConfigUpdate(platform, config)"
           @test="() => handleTestConnection(platform)"
         />
       </TgCard>
@@ -24,8 +24,11 @@ import type { PlatformAdaptor, PlatformConfig } from "@siyuan-publisher/common"
 import WordPressConfig from "./platform-configs/wordpress.vue"
 import GitHubConfig from "./platform-configs/github.vue"
 
+// interface Props {
+//   platforms: PlatformAdaptor[]
+// }
 interface Props {
-  platforms: PlatformAdaptor[]
+  platforms: any[]
 }
 
 interface Emits {
@@ -69,4 +72,4 @@ const handleTestConnection = (platform: PlatformAdaptor) => {
 .platform-list
   .tg-card
     margin-bottom $tg-spacing-md
-</style> 
+</style>

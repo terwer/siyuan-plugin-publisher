@@ -11,12 +11,8 @@
           <p class="type">类型：{{ getPluginType(plugin) }}</p>
         </div>
         <div class="plugin-actions">
-          <TgButton type="primary" size="small" @click="handleConfigure(plugin)" v-if="plugin.enabled">
-            配置
-          </TgButton>
-          <TgButton type="danger" size="small" @click="handleUninstall(plugin)">
-            卸载
-          </TgButton>
+          <TgButton type="primary" size="small" @click="handleConfigure(plugin)" v-if="plugin.enabled"> 配置 </TgButton>
+          <TgButton type="danger" size="small" @click="handleUninstall(plugin)"> 卸载 </TgButton>
         </div>
       </TgCard>
     </TgSpace>
@@ -28,8 +24,11 @@ import { ref } from "vue"
 import { TgSpace, TgCard, TgSwitch, TgButton } from "@terwer/ui"
 import type { Plugin } from "@siyuan-publisher/common"
 
+// const props = defineProps<{
+//   plugins: Plugin[]
+// }>()
 const props = defineProps<{
-  plugins: Plugin[]
+  plugins: any[]
 }>()
 
 const emit = defineEmits<{
@@ -83,4 +82,4 @@ const handleUninstall = (plugin: Plugin) => {
     display flex
     gap $tg-spacing-sm
     justify-content flex-end
-</style> 
+</style>

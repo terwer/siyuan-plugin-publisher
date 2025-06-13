@@ -1,5 +1,6 @@
 <template>
   <div class="wordpress-config">
+    <!--
     <div class="form-group">
       <label for="apiUrl">API URL</label>
       <input
@@ -31,6 +32,7 @@
       />
     </div>
     <button @click="$emit('test')" class="test-btn">测试连接</button>
+    -->
   </div>
 </template>
 
