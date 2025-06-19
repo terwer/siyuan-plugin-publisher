@@ -171,6 +171,17 @@ const usePublish = () => {
           finalPost.wp_slug = postMeta[SiyuanAttr.Custom_slug]
         }
 
+        // 检查是否因为目录变更导致postid变化
+        if (finalPost.postid && finalPost.postid !== postid) {
+          logger.info(`文章目录已更改，更新postid从 ${postid} 到 ${finalPost.postid}`)
+          postMeta[cfg.posidKey] = finalPost.postid
+          setting[id] = postMeta
+          await updateSetting(setting)
+          // 更新当前使用的postid
+          postid = finalPost.postid
+          ElMessage.success(`文章目录已更改，发布信息已更新`)
+        }
+
         logger.info("edit post=>", result)
         logger.info("文章更新成功")
       }
@@ -402,7 +413,7 @@ const usePublish = () => {
         if (null !== yamlAdaptor) {
           // 有适配器
           if (StrUtil.isEmptyString(checkYaml)) {
-            const yamlFormatObj = yamlAdaptor.convertToYaml(post, undefined , cfg)
+            const yamlFormatObj = yamlAdaptor.convertToYaml(post, undefined, cfg)
             logger.info("YAML未保存，使用适配器生成默认的yamlFormatObj", { yamlFormatObj: toRaw(yamlFormatObj) })
             post = yamlAdaptor.convertToAttr(post, yamlFormatObj, cfg)
             post.yamlType = YamlStrategy.Yaml_custom_auto
