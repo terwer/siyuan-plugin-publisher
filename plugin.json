@@ -1,5 +1,5 @@
 {
-  "name": "siyuan-plugin-publisher",
+  "name": "siyuan-plugin-publisher-dev",
   "author": "terwer",
   "url": "https://github.com/terwer/siyuan-plugin-publisher",
   "version": "1.35.1",
@@ -21,7 +21,7 @@
   ],
   "displayName": {
     "default": "Publisher",
-    "zh_CN": "发布工具"
+    "zh_CN": "发布工具开发版"
   },
   "description": {
     "default": "Publish articles from siyuan-note to platforms like Yuque etc. <code class='fn__code'>Free</code> and <code class='fn__code'>open source</code>.",
