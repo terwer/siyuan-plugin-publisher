@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.36.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.35.1...siyuan-plugin-publisher-v1.36.0) (2025-06-24)
+
+
+### Features
+
+* update repo info ([a7d7f94](https://github.com/terwer/siyuan-plugin-publisher/commit/a7d7f941d502420ed79291628dd7215ff3ce9aff))
+
+
+### Bug Fixes
+
+* 修复quartz平台的更新发布目录失败的问题 ([5976b1c](https://github.com/terwer/siyuan-plugin-publisher/commit/5976b1c7456095a6f7300dde75411e0a8cf70073))
+
 ## [1.35.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.35.0...siyuan-plugin-publisher-v1.35.1) (2025-06-09)
 ### Code Refactoring
 * **adaptors/api/yuque:** adjust apifetch call for better compatibility ([74bc9e6](https://github.com/terwer/siyuan-plugin-publisher/commit/74bc9e61af0828689f95b8e8631056ec3d008501))
