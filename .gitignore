@@ -42,3 +42,4 @@ nginx
 coverage
 testdata
 .typora
+.tool-versions
