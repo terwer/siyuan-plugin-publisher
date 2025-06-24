@@ -23,7 +23,7 @@ brew install n
 n 22
 brew install corepack
 corepack enable pnpm
-corepack use pnpm@10.8.0
+corepack use pnpm@10.12.3
 
 pnpm install
 ```
