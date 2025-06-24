@@ -1,3 +1,14 @@
+# **注意**：本项目是根据思源笔记发布插件修改，由于部分代码我为了适配我自己的工作流，所以目前只专注于 Quartz、博客园，Github Page 三个平台的开发和 Bug 修复。
+
+## 如果你需要其他更多的平台的支持，建议使用 [siyuan-plugin-publisher](https://github.com/terwer/siyuan-plugin-publisher)。
+
+## TODO
+- [x] 适配 Quartz 静态博客平台
+- [x] Quartz 平台支持更改文章发布目录
+- [x] Quartz 平台支持更改文章发布目录
+- [ ] AI功能单独配置，不再使用思源笔记内的配置
+- [ ] 修复强制删除功能
+
 [English](README.md)
 
 # 发布工具

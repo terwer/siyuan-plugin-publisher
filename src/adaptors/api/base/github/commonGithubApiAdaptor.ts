@@ -32,6 +32,7 @@ import { StrUtil, YamlUtil } from "zhi-common"
 import { toRaw } from "vue"
 import { Base64 } from "js-base64"
 import sypIdUtil from "~/src/utils/sypIdUtil.ts"
+import { ElMessage } from "element-plus"
 
 /**
  * Github API 适配器
@@ -180,11 +181,45 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
   public async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
     this.logger.debug("start editPost =>", { postid: postid, post: toRaw(post) })
 
-    const res = await this.githubClient.updateGithubPage(post.postid, post.description)
-    if (!res?.content?.path) {
-      throw new Error("Github 调用API异常")
+    // 检查是否需要更改目录
+    const originalPath = postid
+    const originalDir = originalPath.substring(0, originalPath.lastIndexOf("/"))
+    const filename = originalPath.substring(originalPath.lastIndexOf("/") + 1)
+
+    // 获取新的目录路径
+    const newDir = post.cate_slugs?.[0] ?? originalDir
+    let newPath = StrUtil.pathJoin(newDir, filename)
+    if (newPath.startsWith("/")) {
+      newPath = newPath.substring(1)
     }
-    return true
+
+    // 如果目录发生变化，先删除原文件，再在新目录创建
+    if (originalDir !== newDir) {
+      this.logger.info(`目录已更改，从 ${originalDir} 移动到 ${newDir}`)
+      try {
+        // 删除原文件
+        await this.githubClient.deleteGithubPage(originalPath)
+        // 在新目录创建文件
+        const res = await this.githubClient.publishGithubPage(newPath, post.description)
+        if (!res?.content?.path) {
+          throw new Error("Github 调用API异常，无法在新目录创建文件")
+        }
+        // 更新post的postid为新路径
+        post.postid = newPath
+        ElMessage.success(`目录已成功从 ${originalDir} 移动到 ${newDir}`)
+        return true
+      } catch (e) {
+        this.logger.error("移动文件失败", e)
+        throw e
+      }
+    } else {
+      // 目录未变更，正常更新
+      const res = await this.githubClient.updateGithubPage(post.postid, post.description)
+      if (!res?.content?.path) {
+        throw new Error("Github 调用API异常")
+      }
+      return true
+    }
   }
 
   public async deletePost(postid: string): Promise<boolean> {

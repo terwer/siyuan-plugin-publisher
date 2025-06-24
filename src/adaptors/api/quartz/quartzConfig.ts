@@ -60,7 +60,7 @@ class QuartzConfig extends CommonGithubConfig {
     this.knowledgeSpaceEnabled = true
     this.allowKnowledgeSpaceChange = true
     this.placeholder.knowledgeSpaceReadonlyModeTip =
-      "Quartz 平台支持修改发布目录，如文章已发布过会先删除原来的再发布新的"
+      "Quartz 平台已支持修改发布目录，更改后会自动将文章从原目录移动到新目录"
     this.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Tree_Single
   }
 }
