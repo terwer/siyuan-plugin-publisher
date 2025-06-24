@@ -1,12 +1,8 @@
 # Changelog
 
 ## [1.36.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.36.0...siyuan-plugin-publisher-v1.36.1) (2025-06-24)
-
-
 ### Miscellaneous
-
 * update plugin name for production ([75e5616](https://github.com/terwer/siyuan-plugin-publisher/commit/75e56168fd6c257a603a274eb0cc8fb14b19bea6))
-
 ## [1.36.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.35.1...siyuan-plugin-publisher-v1.36.0) (2025-06-24)
 ### Features
 * update repo info ([a7d7f94](https://github.com/terwer/siyuan-plugin-publisher/commit/a7d7f941d502420ed79291628dd7215ff3ce9aff))
@@ -35,7 +31,6 @@
 * **deps:** bump pinia from 2.3.1 to 3.0.2 ([2956f75](https://github.com/terwer/siyuan-plugin-publisher/commit/2956f75709189506dfa572a53be6d07543c978e2))
 * **deps:** bump vue-i18n from 10.0.5 to 11.1.3 ([240ab76](https://github.com/terwer/siyuan-plugin-publisher/commit/240ab76379a106c5beaab19faa82612c9f4bb00d))
 * update iframe resize license to gpl v3 ([ae130d2](https://github.com/terwer/siyuan-plugin-publisher/commit/ae130d26ddb29c062ffde343be53df810260df7b))
-### Miscellaneous
 * **deps-dev:** bump @types/iframe-resizer from 3.5.13 to 4.0.0 ([dead367](https://github.com/terwer/siyuan-plugin-publisher/commit/dead3674e0230f55503483c4c1dc20201e8e6c2d))
 * **deps-dev:** bump @types/node from 18.19.68 to 22.14.1 ([33353ae](https://github.com/terwer/siyuan-plugin-publisher/commit/33353aeb554d339a5718598713942741004f5828))
 * **deps-dev:** bump jsdom from 25.0.1 to 26.1.0 ([9db0a41](https://github.com/terwer/siyuan-plugin-publisher/commit/9db0a413e03d739d43df46a681ebc9ea0cf4f19b))

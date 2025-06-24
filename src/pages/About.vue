@@ -44,7 +44,7 @@ const formData = reactive({
         <img src="../../icon.png" alt="logo" />
       </div>
       <div class="notice">
-        <p class="title">发布工具开发版 v{{ formData.v }}</p>
+        <p class="title">发布工具 v{{ formData.v }}</p>
 
         <div class="param slogan">
           <span>{{ t("slogan.make.written.fun") }}</span>
