@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.36.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.36.0...siyuan-plugin-publisher-v1.36.1) (2025-06-24)
+
+
+### Miscellaneous
+
+* update plugin name for production ([75e5616](https://github.com/terwer/siyuan-plugin-publisher/commit/75e56168fd6c257a603a274eb0cc8fb14b19bea6))
+
 ## [1.36.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.35.1...siyuan-plugin-publisher-v1.36.0) (2025-06-24)
 ### Features
 * update repo info ([a7d7f94](https://github.com/terwer/siyuan-plugin-publisher/commit/a7d7f941d502420ed79291628dd7215ff3ce9aff))
