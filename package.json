@@ -1,6 +1,6 @@
 {
   "name": "siyuan-plugin-publisher",
-  "version": "1.36.0",
+  "version": "1.36.1",
   "description": "Publish articles from Siyuan Notes to platforms such as Yuque, Notion, Cnblogs, WordPress, Typecho, Hexo, Zhihu and more",
   "repository": "terwer/siyuan-plugin-publisher",
   "homepage": "https://github.com/terwer/siyuan-plugin-publisher",
@@ -46,7 +46,7 @@
     "minimist": "^1.2.8",
     "rollup-plugin-livereload": "^2.0.5",
     "stylus": "^0.64.0",
-    "typescript": "5.8.3",
+    "typescript": "5.6.2",
     "unplugin-auto-import": "^19.1.2",
     "unplugin-vue-components": "^28.5.0",
     "vercel": "^41.6.0",
