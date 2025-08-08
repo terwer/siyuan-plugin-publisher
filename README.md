@@ -26,7 +26,7 @@ Please check the https://github.com/terwer/siyuan-plugin-publisher/blob/main/CHA
 
 ## Easter Egg
 
-[Other siyuan-note plugins developed by the author](https://github.com/terwer/zhi/blob/main/README_zh_CN.md#%E6%8F%92%E4%BB%B6)
+[Other siyuan-note plugins developed by the author](https://github.com/terwer/zhi/blob/main/README.md#plugins)
 
 ## Donate
 
