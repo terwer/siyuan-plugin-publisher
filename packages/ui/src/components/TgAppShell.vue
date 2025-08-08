@@ -66,7 +66,7 @@ const toggleCollapse = () => {
         <slot v-else name="nav-content"></slot>
       </div>
       <div v-if="showCollapseButton" class="tg-app-shell__collapse-handle" @click="toggleCollapse">
-        <span>{{ isCollapsed ? "→" : "←" }}</span>
+        <span>{{ isCollapsed ? "‹" : "›" }}</span>
       </div>
     </div>
 

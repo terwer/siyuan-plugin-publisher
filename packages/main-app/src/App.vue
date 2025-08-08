@@ -17,7 +17,10 @@
       @collapse-change="handleCollapseChange"
     >
       <template #nav-header>
-        <div class="tg-app-shell__logo">思源发布</div>
+        <div class="tg-app-shell__logo">
+          <span v-if="!isCollapsed" class="tg-app-shell__logo-text">思源发布</span>
+          <span v-else class="tg-app-shell__logo-icon">📝</span>
+        </div>
       </template>
       <template #header>
         <div class="tg-app-shell__header">
@@ -102,5 +105,11 @@ const navItems: AppShellNavItem[] = [
   font-size $tg-font-size-lg
   font-weight 500
   color var(--tg-color-text-1)
-  border-bottom 1px solid var(--tg-color-border)
+
+  .tg-app-shell__logo-text
+    font-size $tg-font-size-lg
+    font-weight 500
+
+  .tg-app-shell__logo-icon
+    font-size 24px
 </style>
