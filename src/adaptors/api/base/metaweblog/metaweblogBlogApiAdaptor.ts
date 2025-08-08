@@ -238,7 +238,11 @@ class MetaweblogBlogApiAdaptor extends BaseBlogApi {
         this.cfg.blogid,
         this.cfg.username,
         this.cfg.password,
-        mediaObject,
+        {
+          name: mediaObject.name,
+          type: mediaObject.type,
+          bits: mediaObject.bits
+        },
       ])
       this.logger.debug("上传媒体完成, ret =>", ret)
     } catch (e) {
