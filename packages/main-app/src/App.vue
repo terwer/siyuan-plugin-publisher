@@ -13,23 +13,18 @@
       :nav-items="navItems"
       :collapsed="isCollapsed"
       :current-route="currentRoute"
+      :logo="logo"
       @nav-change="handleNavChange"
       @collapse-change="handleCollapseChange"
     >
-      <template #nav-header>
-        <div class="tg-app-shell__logo">
-          <span v-if="!isCollapsed" class="tg-app-shell__logo-text">思源发布</span>
-          <span v-else class="tg-app-shell__logo-icon">📝</span>
-        </div>
-      </template>
       <template #header>
-        <div class="tg-app-shell__header">
-          <TgSpace>
-            <TgButton @click="toggleTheme">
-              {{ theme === "light" ? "🌙" : "☀️" }} {{ theme === "light" ? "暗色模式" : "亮色模式" }}
-            </TgButton>
-          </TgSpace>
-        </div>
+        <button
+          class="theme-toggle"
+          @click="toggleTheme"
+          :title="theme === 'light' ? '切换到暗色模式' : '切换到亮色模式'"
+        >
+          {{ theme === "light" ? "🌙" : "☀️" }}
+        </button>
       </template>
       <router-view v-slot="{ Component }">
         <component :is="Component" />
@@ -43,7 +38,7 @@
 import type { AppShellNavItem } from "@terwer/ui"
 
 // ================ 组件引入 ================
-import { TgAppShell, TgButton, TgSpace } from "@terwer/ui"
+import { TgAppShell } from "@terwer/ui"
 
 // ================ 组合式函数调用 ================
 import { ref, watch } from "vue"
@@ -56,8 +51,6 @@ const isCollapsed = ref(false)
 const router = useRouter()
 const route = useRoute()
 const currentRoute = ref(route.path)
-
-// ================ 计算属性 ================
 
 // ================ 方法 ================
 const handleNavChange = (route: string) => {
@@ -84,6 +77,12 @@ const navItems: AppShellNavItem[] = [
   { label: "设置", route: "/settings", icon: "⚙️" },
   { label: "UI测试", route: "/ui-test", icon: "🧪" },
 ]
+
+// ================ Logo 配置 ================
+const logo = {
+  icon: "📝",
+  text: "发布工具",
+}
 </script>
 
 <style lang="stylus">
@@ -96,20 +95,4 @@ const navItems: AppShellNavItem[] = [
   overflow hidden
   display flex
   flex-direction column
-
-.tg-app-shell__logo
-  height 64px
-  display flex
-  align-items center
-  justify-content center
-  font-size $tg-font-size-lg
-  font-weight 500
-  color var(--tg-color-text-1)
-
-  .tg-app-shell__logo-text
-    font-size $tg-font-size-lg
-    font-weight 500
-
-  .tg-app-shell__logo-icon
-    font-size 24px
 </style>

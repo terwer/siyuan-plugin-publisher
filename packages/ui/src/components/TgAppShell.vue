@@ -8,8 +8,8 @@
   -->
 
 <script setup lang="ts">
-import { ref, watch } from "vue";
-import type { AppShellEmits, AppShellProps } from "../types";
+import { ref, watch } from "vue"
+import type { AppShellEmits, AppShellProps } from "../types"
 
 const props = withDefaults(defineProps<AppShellProps>(), {
   collapsed: false,
@@ -18,6 +18,10 @@ const props = withDefaults(defineProps<AppShellProps>(), {
   fixed: false,
   showNav: true,
   currentRoute: "",
+  logo: () => ({
+    icon: "📝",
+    text: "发布工具",
+  }),
 })
 
 const emit = defineEmits<AppShellEmits>()
@@ -45,6 +49,10 @@ const toggleCollapse = () => {
   <div class="tg-app-shell" :class="{ 'tg-app-shell--collapsed': isCollapsed }">
     <div v-if="showNav" class="tg-app-shell__nav" :class="{ 'tg-app-shell__nav--collapsed': isCollapsed }">
       <div class="tg-app-shell__nav-header">
+        <div class="tg-app-shell__logo">
+          <span class="tg-app-shell__logo-icon">{{ logo?.icon || "📝" }}</span>
+          <span v-if="!isCollapsed" class="tg-app-shell__logo-text">{{ logo?.text || "发布工具" }}</span>
+        </div>
         <slot name="nav-header"></slot>
       </div>
       <div class="tg-app-shell__nav-content">

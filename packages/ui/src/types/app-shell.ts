@@ -1,4 +1,14 @@
 /**
+ * AppShell Logo 类型定义
+ */
+export interface AppShellLogo {
+  /** Logo 图标 */
+  icon: string
+  /** Logo 文字 */
+  text: string
+}
+
+/**
  * AppShell 导航项类型定义
  */
 export interface AppShellNavItem {
@@ -30,6 +40,8 @@ export interface AppShellProps {
   showNav?: boolean
   /** 当前路由（可选） */
   currentRoute?: string
+  /** Logo 配置（可选） */
+  logo?: AppShellLogo
 }
 
 /**

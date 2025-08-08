@@ -45,10 +45,27 @@
       transition all 0.3s ease-in-out
       flex-shrink 0
 
+    &-logo
+      height 64px
+      display flex
+      align-items center
+      justify-content center
+      font-size $tg-font-size-lg
+      font-weight 500
+      color var(--tg-color-text-1)
+
+      &-icon
+        font-size 24px
+        margin-right $tg-spacing-sm
+
+      &-text
+        font-size $tg-font-size-lg
+        font-weight 500
+
     &-content
       flex 1
       overflow-y auto
-      padding $tg-spacing-md
+      padding 8px
       transition all 0.3s ease-in-out
 
       &::-webkit-scrollbar
@@ -64,12 +81,13 @@
     &-item
       display flex
       align-items center
-      padding $tg-spacing-sm $tg-spacing-md
-      margin-bottom $tg-spacing-xs
+      padding 6px 12px
+      margin-bottom 2px
       border-radius $tg-border-radius-base
       cursor pointer
       transition all 0.3s ease-in-out
       color var(--tg-color-text-2)
+      height 32px
 
       &:hover
         background-color var(--tg-color-bg-hover)
@@ -85,8 +103,8 @@
         pointer-events none
 
       &-icon
-        margin-right $tg-spacing-sm
-        font-size $tg-font-size-lg
+        margin-right 8px
+        font-size 16px
         flex-shrink 0
 
       &-text
@@ -94,6 +112,7 @@
         white-space nowrap
         overflow hidden
         text-overflow ellipsis
+        font-size 14px
 
   &__collapse-handle
     position absolute
@@ -136,6 +155,26 @@
     border-bottom 1px solid #f0f0f0
     background-color var(--tg-color-bg)
     flex-shrink 0
+
+    .theme-toggle
+      margin-left auto
+      width 32px
+      height 32px
+      border none
+      background-color transparent
+      border-radius 50%
+      cursor pointer
+      font-size 16px
+      transition all 0.2s ease-in-out
+      color var(--tg-color-text-2)
+
+      &:hover
+        background-color var(--tg-color-bg-hover)
+        color var(--tg-color-text-1)
+        transform scale(1.1)
+
+      &:active
+        transform scale(0.95)
 
   &__content
     flex 1
