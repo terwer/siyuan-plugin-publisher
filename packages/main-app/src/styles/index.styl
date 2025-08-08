@@ -1,0 +1,93 @@
+// 思源笔记 commonMenu 容器样式修复
+// 通过 CSS 选择器修复 commonMenu 的滚动问题，不修改任何其他代码
+
+#commonMenu[data-name="publisherApp"]
+  height 400px
+  overflow hidden
+  display flex
+  flex-direction column
+  min-width 600px
+  width auto
+  margin-left 20px
+
+  // 修复思源笔记的菜单样式冲突
+  .b3-menu__items
+    flex 1
+    overflow hidden
+    display flex
+    flex-direction column
+    height 400px
+    min-width 600px
+
+    button.b3-menu__item
+      flex 1
+      height 400px
+      overflow hidden
+      display flex
+      flex-direction column
+      padding 0 !important
+      border none !important
+      background none !important
+      margin 0 !important
+      min-width 600px
+
+      // 确保我们的应用容器占满整个空间
+      #tg-app
+        flex 1
+        height 400px
+        overflow hidden
+        display flex
+        flex-direction column
+        margin 0
+        padding 0
+        min-width 600px
+
+        // 确保 TgAppShell 正确工作
+        .tg-app-shell
+          flex 1
+          height 400px
+          overflow hidden
+          display flex
+          min-width 600px
+
+          // 左侧导航栏绝对固定，不被右侧内容撑开
+          .tg-app-shell__nav
+            flex-shrink 0
+            flex-grow 0
+            height 400px
+            overflow hidden
+            width 200px
+            position relative
+            border-right 0.5px solid #e8e8e8
+            transition width 0.3s ease-in-out
+
+            // 折叠状态
+            &.tg-app-shell__nav--collapsed
+              width 64px
+
+          // 右侧内容区域独立滚动，不撑开整个应用
+          .tg-app-shell__main
+            flex 1
+            display flex
+            flex-direction column
+            overflow hidden
+            min-height 0
+            min-width 400px
+            height 400px
+
+            .tg-app-shell__content
+              flex 1
+              overflow-y auto
+              min-height 0
+              height 400px
+
+            .tg-app-shell__header
+              border-bottom 0.5px solid #e8e8e8
+
+          // 调整菜单间距，使其更紧凑
+          .tg-app-shell__nav-content
+            padding 8px
+
+            .tg-app-shell__nav-item
+              padding 8px 12px
+              margin-bottom 4px

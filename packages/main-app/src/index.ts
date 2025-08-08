@@ -1,6 +1,7 @@
-import { App, IObject, Plugin } from "siyuan"
-import { Topbar } from "@/topbar.ts"
 import { icons } from "@/icons.ts"
+import { Topbar } from "@/topbar.ts"
+import { App, IObject, Plugin } from "siyuan"
+import "./styles/index.styl"
 
 /**
  * 发布工具插件入口

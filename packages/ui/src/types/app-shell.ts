@@ -28,6 +28,8 @@ export interface AppShellProps {
   fixed?: boolean
   /** 是否显示导航栏（可选） */
   showNav?: boolean
+  /** 当前路由（可选） */
+  currentRoute?: string
 }
 
 /**

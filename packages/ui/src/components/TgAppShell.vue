@@ -8,8 +8,8 @@
   -->
 
 <script setup lang="ts">
-import { ref, watch } from "vue"
-import type { AppShellProps, AppShellEmits } from "../types"
+import { ref, watch } from "vue";
+import type { AppShellEmits, AppShellProps } from "../types";
 
 const props = withDefaults(defineProps<AppShellProps>(), {
   collapsed: false,
@@ -17,6 +17,7 @@ const props = withDefaults(defineProps<AppShellProps>(), {
   showCollapseButton: true,
   fixed: false,
   showNav: true,
+  currentRoute: "",
 })
 
 const emit = defineEmits<AppShellEmits>()
@@ -41,7 +42,7 @@ const toggleCollapse = () => {
 </script>
 
 <template>
-  <div class="tg-app-shell" :class="{ fixed }">
+  <div class="tg-app-shell" :class="{ 'tg-app-shell--collapsed': isCollapsed }">
     <div v-if="showNav" class="tg-app-shell__nav" :class="{ 'tg-app-shell__nav--collapsed': isCollapsed }">
       <div class="tg-app-shell__nav-header">
         <slot name="nav-header"></slot>
@@ -52,7 +53,10 @@ const toggleCollapse = () => {
             v-for="item in navItems"
             :key="item.route"
             class="tg-app-shell__nav-item"
-            :class="{ 'tg-app-shell__nav-item--disabled': item.disabled }"
+            :class="{
+              'tg-app-shell__nav-item--disabled': item.disabled,
+              'tg-app-shell__nav-item--active': currentRoute === item.route,
+            }"
             @click="!item.disabled && handleNavClick(item.route)"
           >
             <span class="tg-app-shell__nav-icon">{{ item.icon }}</span>
@@ -61,16 +65,18 @@ const toggleCollapse = () => {
         </template>
         <slot v-else name="nav-content"></slot>
       </div>
-      <div class="tg-app-shell__collapse-handle" @click="toggleCollapse">
+      <div v-if="showCollapseButton" class="tg-app-shell__collapse-handle" @click="toggleCollapse">
         <span>{{ isCollapsed ? "→" : "←" }}</span>
       </div>
     </div>
 
-    <div class="tg-app-shell__content" :class="{ 'tg-app-shell__content--collapsed': isCollapsed }">
+    <div class="tg-app-shell__main">
       <div v-if="$slots.header" class="tg-app-shell__header">
         <slot name="header"></slot>
       </div>
-      <slot></slot>
+      <div class="tg-app-shell__content">
+        <slot></slot>
+      </div>
     </div>
   </div>
 </template>

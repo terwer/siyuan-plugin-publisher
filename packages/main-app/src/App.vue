@@ -28,11 +28,9 @@
           </TgSpace>
         </div>
       </template>
-      <div class="tg-app-shell__content">
-        <router-view v-slot="{ Component }">
-          <component :is="Component" />
-        </router-view>
-      </div>
+      <router-view v-slot="{ Component }">
+        <component :is="Component" />
+      </router-view>
     </TgAppShell>
   </div>
 </template>
@@ -45,9 +43,9 @@ import type { AppShellNavItem } from "@terwer/ui"
 import { TgAppShell, TgButton, TgSpace } from "@terwer/ui"
 
 // ================ 组合式函数调用 ================
-import { useTheme } from "./composables/useTheme"
-import { useRouter, useRoute } from "vue-router"
 import { ref, watch } from "vue"
+import { useRoute, useRouter } from "vue-router"
+import { useTheme } from "./composables/useTheme"
 
 // ================ 响应式数据 ================
 const { theme, toggleTheme } = useTheme()
@@ -89,11 +87,12 @@ const navItems: AppShellNavItem[] = [
 @import "@terwer/ui/src/styles/index.styl"
 
 #tg-app
-  min-height 100vh
-  display flex
-  flex-direction column
+  height 100%
   background-color var(--tg-color-bg)
   color var(--tg-color-text)
+  overflow hidden
+  display flex
+  flex-direction column
 
 .tg-app-shell__logo
   height 64px
@@ -104,19 +103,4 @@ const navItems: AppShellNavItem[] = [
   font-weight 500
   color var(--tg-color-text-1)
   border-bottom 1px solid var(--tg-color-border)
-
-.tg-app-shell__header
-  height 64px
-  display flex
-  align-items center
-  padding 0 $tg-spacing-lg
-  font-size $tg-font-size-lg
-  font-weight 500
-  color var(--tg-color-text-1)
-  border-bottom 1px solid var(--tg-color-border)
-
-.tg-app-shell__content
-  flex 1
-  overflow-y auto
-  padding $tg-spacing-lg
 </style>

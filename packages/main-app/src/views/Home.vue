@@ -1,9 +1,11 @@
 <template>
   <div class="home">
-    <h1>思源笔记发布插件</h1>
-    <div class="content">
-      <p>欢迎使用思源笔记发布插件，这是一个帮助您将思源笔记内容发布到各种平台的工具。</p>
-    </div>
+    <h1>首页测试</h1>
+    <p>这是第1行测试文字</p>
+    <p>这是第2行测试文字</p>
+    <p>这是第3行测试文字</p>
+    <p>这是第4行测试文字</p>
+    <p>这是第5行测试文字</p>
   </div>
 </template>
 
@@ -14,9 +16,5 @@
 <style scoped>
 .home {
   padding: 20px;
-}
-
-.content {
-  margin-top: 20px;
 }
 </style>

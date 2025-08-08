@@ -3,37 +3,47 @@
   width 100%
   height 100%
   background-color var(--tg-color-bg)
-  border-radius $tg-border-radius-lg
-  box-shadow 0 2px 8px rgba(0, 0, 0, 0.15)
   overflow hidden
 
   &__nav
     width 200px
     height 100%
     background-color var(--tg-color-bg)
-    border-right 1px solid var(--tg-color-border)
+    border-right 1px solid #f0f0f0
     transition all 0.3s ease-in-out
     display flex
     flex-direction column
     position relative
     z-index 1
+    flex-shrink 0
+    overflow hidden
 
     &--collapsed
-      width 0
-      border-right none
+      width 64px
 
       .tg-app-shell__nav-header,
       .tg-app-shell__nav-content
-        visibility hidden
-        opacity 0
+        visibility visible
+        opacity 1
+
+      .tg-app-shell__nav-text
+        display none
+
+      .tg-app-shell__nav-item
+        justify-content center
+        padding $tg-spacing-sm
+
+      .tg-app-shell__nav-icon
+        margin-right 0
 
     &-header
       height 64px
       display flex
       align-items center
       padding 0 $tg-spacing-lg
-      border-bottom 1px solid var(--tg-color-border)
+      border-bottom 1px solid #f0f0f0
       transition all 0.3s ease-in-out
+      flex-shrink 0
 
     &-content
       flex 1
@@ -45,7 +55,7 @@
         width 6px
 
       &::-webkit-scrollbar-thumb
-        background-color var(--tg-color-border)
+        background-color #d9d9d9
         border-radius 3px
 
       &::-webkit-scrollbar-track
@@ -77,6 +87,7 @@
       &-icon
         margin-right $tg-spacing-sm
         font-size $tg-font-size-lg
+        flex-shrink 0
 
       &-text
         flex 1
@@ -92,7 +103,7 @@
     width 24px
     height 24px
     background-color var(--tg-color-bg)
-    border 1px solid var(--tg-color-border)
+    border 1px solid #f0f0f0
     border-radius 50%
     display flex
     align-items center
@@ -100,6 +111,7 @@
     cursor pointer
     z-index 2
     transition all 0.3s ease-in-out
+    box-shadow 0 2px 4px rgba(0, 0, 0, 0.1)
 
     &:hover
       background-color var(--tg-color-bg-hover)
@@ -112,85 +124,30 @@
     overflow hidden
     position relative
     z-index 0
+    min-height 0
 
   &__header
     height 64px
     display flex
     align-items center
     padding 0 $tg-spacing-lg
-    border-bottom 1px solid var(--tg-color-border)
+    border-bottom 1px solid #f0f0f0
     background-color var(--tg-color-bg)
+    flex-shrink 0
 
   &__content
     flex 1
     overflow-y auto
     padding $tg-spacing-lg
     background-color var(--tg-color-bg)
+    min-height 0
 
     &::-webkit-scrollbar
       width 6px
 
     &::-webkit-scrollbar-thumb
-      background-color var(--tg-color-border)
+      background-color #d9d9d9
       border-radius 3px
 
     &::-webkit-scrollbar-track
-      background-color transparent
-
-  &__content-item
-    flex 1
-    overflow-y auto
-
-  &__content-item-header
-    height 64px
-    padding 0 $tg-spacing-lg
-    display flex
-    align-items center
-    justify-content space-between
-    border-bottom 1px solid var(--tg-color-border)
-    background-color var(--tg-color-bg)
-
-  &__content-item-header-title
-    font-size $tg-font-size-lg
-    font-weight bold
-
-  &__content-item-header-actions
-    display flex
-    align-items center
-
-  &__content-item-header-action
-    margin-left $tg-spacing-md
-    cursor pointer
-
-  &__content-item-header-action-icon
-    font-size $tg-font-size-lg
-
-  &__content-item-body
-    padding $tg-spacing-lg
-    overflow-y auto
-
-  &__content-item-body-title
-    font-size $tg-font-size-lg
-    font-weight bold
-    margin-bottom $tg-spacing-md
-
-  &__content-item-body-description
-    color var(--tg-color-text-2)
-
-  &__content-item-body-actions
-    margin-top $tg-spacing-lg
-    display flex
-    justify-content space-between
-
-  &__content-item-body-action
-    cursor pointer
-
-  &__content-item-body-action-icon
-    font-size $tg-font-size-lg
-    margin-left $tg-spacing-md
-
-  &__content-item-body-action-text
-    color var(--tg-color-text-2)
-
-  &__content-item-body-action-text-highlight
-    color var(--tg-color-primary) 
+      background-color transparent 
