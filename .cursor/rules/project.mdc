@@ -11,7 +11,7 @@ alwaysApply: true
 ```
 siyuan-plugin-publisher-new-ui/
 ├── packages/
-│   ├── ui/                # UI 组件库
+│   ├── ui/               # UI 组件库
 │   ├── core/             # 核心功能包
 │   ├── common/           # 公共工具包
 │   ├── main-app/         # 主应用
@@ -19,20 +19,20 @@ siyuan-plugin-publisher-new-ui/
 │   ├── plugin-system/    # 插件系统
 │   └── docs/             # 项目文档
 │
-├── scripts/              # 构建脚本
+├── scripts/             # 构建脚本
 ├── prompts/             # 提示文档
 ├── .cursor/             # Cursor 配置
 │   └── rules/           # 项目规范
 │
 ├── package.json         # 根目录包配置
 ├── pnpm-workspace.yaml  # 工作空间配置
-├── turbo.json          # Turborepo 配置
-├── .gitignore          # Git 忽略配置
-├── README.md           # 项目说明
-├── README_zh_CN.md     # 中文项目说明
-├── DEVELOPMENT.md      # 开发指南
-├── DEVELOPMENT_zh_CN.md# 中文开发指南
-└── policy.md           # 项目政策
+├── turbo.json           # Turborepo 配置
+├── .gitignore           # Git 忽略配置
+├── README.md            # 项目说明
+├── README_zh_CN.md      # 中文项目说明
+├── DEVELOPMENT.md       # 开发指南
+├── DEVELOPMENT_zh_CN.md # 中文开发指南
+└── policy.md            # 项目政策
 ```
 
 ### 包管理规范
@@ -58,8 +58,6 @@ main-app
   └── platform-adaptors
 
 ui
-  ├── core
-  └── common
 
 core
   └── common
@@ -73,7 +71,6 @@ plugin-system
   └── common
 
 docs
-  └── common
 ```
 
 ## 开发规范

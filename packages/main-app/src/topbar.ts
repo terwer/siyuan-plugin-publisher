@@ -44,15 +44,5 @@ export class Topbar {
         isLeft: true,
       })
     })
-
-    // 添加组件测试入口
-    this.appInstance.addTopBar({
-      icon: "iconCode",
-      title: "组件测试",
-      position: "right",
-      callback: () => {
-        window.location.hash = "#/components"
-      },
-    })
   }
 }

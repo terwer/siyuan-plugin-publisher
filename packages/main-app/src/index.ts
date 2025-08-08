@@ -1,5 +1,6 @@
 import { App, IObject, Plugin } from "siyuan"
 import { Topbar } from "@/topbar.ts"
+import { icons } from "@/icons.ts"
 
 /**
  * 发布工具插件入口
@@ -18,6 +19,8 @@ export default class PublisherPlugin extends Plugin {
   }
 
   async onload() {
+    // 注册图标
+    this.addIcons(icons.iconPublish)
     // 初始化工具栏
     this.topbar.initTopbar()
   }
