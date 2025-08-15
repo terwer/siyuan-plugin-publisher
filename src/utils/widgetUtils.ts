@@ -182,44 +182,97 @@ const doOpenBrowserWindow = (
       newWindow.webContents.openDevTools()
     }
 
+    const readCookies = async () => {
+      const extraScript = dynCfg.extraScript
+      if (extraScript) {
+        try {
+          const result = await newWindow.webContents.executeJavaScript(extraScript)
+          logger.info(`执行额外脚本成功：${result}`)
+          await extraScriptCallback(result)
+        } catch (error) {
+          logger.error(`执行额外脚本失败：${error}`)
+          ElMessage.error(`执行额外脚本失败：${error}`)
+        }
+      }
+      // ============================================================================================
+
+      // https://www.electronjs.org/zh/docs/latest/api/session
+      const ses = newWindow.webContents.session
+      const targetDomain = dynCfg.domain
+      // 1. 获取所有 Cookie
+      const allCookies: any[] = await ses.cookies.get({})
+      // 2. 过滤出目标域名及其子域名的 Cookie
+      const domainCookies = allCookies.filter((cookie) => {
+        // Cookie 的 domain 可能是：
+        // - "example.com" (精确匹配)
+        // - ".example.com" (主域名及所有子域名)
+        // - "sub.example.com" (特定子域名)
+        return (
+          cookie.domain === targetDomain ||
+          cookie.domain === `.${targetDomain}` ||
+          cookie.domain.endsWith(`.${targetDomain}`)
+        )
+      })
+      if (domainCookies.length > 0) {
+        logger.info(`读取所有cookies成功`, domainCookies)
+        await cookieCallback(dynCfg, domainCookies)
+      } else {
+        logger.info(`未读取到Cookie`)
+      }
+    }
+
+    // const readCookies = () => {
+    //   // https://www.electronjs.org/zh/docs/latest/api/session
+    //   const ses = newWindow.webContents.session
+    //   const domain = dynCfg.domain
+    //   if (dynCfg.extraScript) {
+    //     newWindow.webContents
+    //       .executeJavaScript(dynCfg.extraScript)
+    //       .then((result: any) => {
+    //         logger.info(`执行额外脚本触发：${result}`)
+    //         extraScriptCallback(result)
+    //       })
+    //       .catch((error: any) => {
+    //         logger.error(`执行额外脚本失败：${error}`)
+    //         ElMessage.error("执行额外脚本失败：${error}")
+    //       })
+    //   }
+    //   ses.cookies
+    //     .get({ domain })
+    //     .then(async (cookies: any) => {
+    //       logger.info(`读取cookie事件触发，准备读取 ${domain} 下的所有 Cookie`, cookies)
+    //       await cookieCallback(dynCfg, cookies)
+    //     })
+    //     .catch(async (error: any) => {
+    //       logger.error(`读取 Cookie 失败：${error}`)
+    //       ElMessage.error(`读取 Cookie 失败：${error}`)
+    //       await cookieCallback(dynCfg, undefined)
+    //     })
+    // }
+
     // 监听 close 事件
     newWindow.on("close", (evt: any) => {
+      // readCookies()
       logger.info("窗口关闭事件触发")
     })
     newWindow.loadURL(url)
 
+    // newWindow.webContents.executeJavaScript("window.location.href").then((curUrl: string) => {
+    //   if (url != curUrl) {
+    //     alert("当前地址" + curUrl + "与" + url + "不一致，需要刷新页面，请稍后")
+    //     newWindow.loadURL(curUrl)
+    //   }
+    // })
+
     // 读取指定域的所有 Cookie
     if (cookieCallback) {
-      const readCookies = () => {
-        // https://www.electronjs.org/zh/docs/latest/api/session
-        const ses = newWindow.webContents.session
-        const domain = dynCfg.domain
-        if (dynCfg.extraScript) {
-          newWindow.webContents
-            .executeJavaScript(dynCfg.extraScript)
-            .then((result: any) => {
-              extraScriptCallback(result)
-            })
-            .catch((error: any) => {
-              console.error(`执行额外脚本失败：${error}`)
-              ElMessage.error("执行额外脚本失败：${error}")
-            })
-        }
-        ses.cookies
-          .get({ domain })
-          .then(async (cookies: any) => {
-            logger.info(`读取cookie事件触发，准备读取 ${domain} 下的所有 Cookie`)
-            await cookieCallback(dynCfg, cookies)
-          })
-          .catch(async (error: any) => {
-            console.error(`读取 Cookie 失败：${error}`)
-            ElMessage.error(`读取 Cookie 失败：${error}`)
-            await cookieCallback(dynCfg, undefined)
-          })
-      }
-      readCookies()
-      newWindow.hide()
-      newWindow.close()
+      readCookies().then(() => {
+        newWindow.hide()
+        newWindow.close()
+      })
+    } else {
+      logger.info("cookieCallback is undefined")
+      newWindow.show()
     }
   } catch (e) {
     logger.error("Open browser window failed", e)

@@ -38,7 +38,7 @@ import {
 import { svgIcons } from "~/src/utils/svgIcons.ts"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { JsonUtil, StrUtil } from "zhi-common"
-import { DYNAMIC_CONFIG_KEY, isDev } from "~/src/utils/constants.ts"
+import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useRouter } from "vue-router"
@@ -173,6 +173,15 @@ const _handleOpenBrowserAuth = async (cfg: DynamicConfig) => {
       } else {
         logger.info("未授权，准备开始授权")
       }
+
+      // // 设置将要读取的域名
+      // const cookieCb = async (dynCfg: DynamicConfig, cookies: ElectronCookie[]) => {
+      //   ElMessage.warning("授权信息自动保存中，请稍后...")
+      //   logger.debug("get cookie result when close=>", cookies)
+      //   ElMessage.success("授权信息保存成功")
+      // }
+      // const extraScriptCb = () => {}
+      // openBrowserWindow(cfg.authUrl, cfg, cookieCb, extraScriptCb)
       openBrowserWindow(cfg.authUrl)
     })
     .catch(() => {})
@@ -303,7 +312,7 @@ const handleValidateWebAuth = async (cfg: DynamicConfig) => {
 const _handleValidateOpenBrowserAuth = (dynCfg: DynamicConfig) => {
   // 设置将要读取的域名
   const cookieCb = async (dynCfg: DynamicConfig, cookies: ElectronCookie[]) => {
-    // ElMessage.info("验证中，请关注状态，没有授权表示不可用，已授权表示该平台可正常使用...")
+    ElMessage.info("验证中，请关注状态，没有授权表示不可用，已授权表示该平台可正常使用...")
     logger.debug("get cookie result=>", cookies)
     formData.webAuthLoadingMap[dynCfg.platformKey] = true
 
