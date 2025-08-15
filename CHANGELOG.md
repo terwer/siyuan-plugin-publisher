@@ -1,14 +1,9 @@
 # Changelog
 
 ## [1.36.3](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.36.2...siyuan-plugin-publisher-v1.36.3) (2025-08-15)
-
-
 ### Bug Fixes
-
 * wechat sub domain cannot read ([3d7f0fd](https://github.com/terwer/siyuan-plugin-publisher/commit/3d7f0fd317ad587655c45d4b4692e42bc4dd1da2))
-
 ## [1.36.2](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.36.1...siyuan-plugin-publisher-v1.36.2) (2025-06-24)
-### Bug Fixes
 * upload media error via cnblogs ([cfd0537](https://github.com/terwer/siyuan-plugin-publisher/commit/cfd05373cf34307777f46f10fca29883e21da6ca))
 ## [1.36.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.36.0...siyuan-plugin-publisher-v1.36.1) (2025-06-24)
 ### Miscellaneous
