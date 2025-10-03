@@ -1,24 +1,87 @@
 [中文](README_zh_CN.md)
-
-# Publisher
+# SiYuan Publisher
 
 <img alt="logo" width="160" height="160" src="./icon.png"/>
 
-Publish articles from siyuan-note to platforms like WordPress、Cnblogs、Yuque etc. `Free` and `open source`.
+Publish SiYuan notes to external platforms and repositories.  
+Convert notes to Markdown with front matter, upload images, and integrate with CI/CD workflows.
 
-> Please [click here to see the latest docs](https://siyuan.wiki/s/20240330142711-bc3gjg0), it updates in real
-> time.
+- ✍️ Write in SiYuan
+- 🔗 Publish to Git-based repos (GitHub, GitLab, Gitea, etc.)
+- 🖼️ Handle images (direct upload / PicGo)
+- ⚙️ Configure providers in the **Manage UI** (the SPA route at `/#/manage` inside the plugin panel)
 
+---
+
+## Features
+
+- Export notes as Markdown with Hugo/Hexo-style front matter (compatible with Hugo/Hexo and other static site generators).
+- Flexible repo/branch/content path configuration
+- Direct API upload (no local git required)
+- Optional PicGo support for object storage/CDN
+- Designed to work smoothly with common CI/CD workflows
+
+---
+
+## Installation
+
+1. Install the plugin in SiYuan (plugin marketplace or manual install).
+2. Open the plugin panel → **Manage** (internally this loads `/#/manage`).
+3. Select a provider and enter your credentials.
+
+---
+
+## Usage
+
+- **Open Manage UI:** from the plugin panel (routes internally to `/#/manage`).
+- **Configure providers:** set token, repo, branch, content directory, images directory.
+- **Publish notes:** choose a note in SiYuan → Publish → pick destination provider.
+
+For more details:
+- [docs/USER_GUIDE.md](docs/USER_GUIDE.md)
+- [docs/CONFIGURATION.md](docs/CONFIGURATION.md)
+- [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md)
+
+---
+
+## Troubleshooting
+
+See [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md).  
+Common issues:
+
+- **401/403 errors:** token missing or wrong scope.
+- **Wrong content path:** check `content/posts` and `static/img` exist.
+- **Images missing:** verify image pipeline (direct vs PicGo) and link paths.
+
+---
+
+## Contributing
+
+Contributions welcome!  
+See [DEVELOPMENT.md](DEVELOPMENT.md) for:
+
+- Dev environment setup
+- Provider architecture and adding new providers
+- Testing and release process
+
+---
+
+## License
+
+MIT
+
+---
+
+## Acknowledgements & Support
+
+We thank all contributors for their support and improvements.
+
+*(Credits and donation information below preserved from the original README.)*
+
+If you find this plugin useful, please consider supporting development:
+
+> Please [click here to see the latest docs](https://siyuan.wiki/s/20240330142711-bc3gjg0), it updates in real time
 **Encountered other issues or have suggestions? Group 1 is full, please join QQ Group 2 for discussion.**
-
-[![](https://img.shields.io/badge/QQ-722632752-blue)](https://qm.qq.com/cgi-bin/qm/qr?k=fYrA79XDvtr4JuEgez-dmj1h3tOef8pg&jump_from=webapi&authKey=DC+XcjkoTH762jxvkSgpt7V97QFETnaLVTZIWhd8PdZoX+MNSr+LsprWFYYELXu8)
-
-## Quick Start
-
-1. Click on the plugin marketplace, search for `Publisher`, and install the plugin.
-2. Enable the plugin, then click on the airplane button in the top-left toolbar of the siyuan-note window to start using it.  
-   ![](./docs/images/publisher-icon.png)
-3. Document menu (optional): Refer to [docs](https://siyuan.wiki/s/20230810132040-nn4q7vs) FAQ 12 to enable the document menu and start using it.
 
 ## Update History
 
@@ -90,4 +153,4 @@ https://afdian.com/a/terwer
     - 2023-06-14 *Jun Donated to [Document Roaming] Thanks for the Document Roaming feature.
     - 2023-01-16 *Zhan Donated to [Import Tool] Finally, we can import epub files.
 
-      If you do not want to display donation information, you can send an email directly to youweics@163.com.
+    If you do not want to display donation information, you can send an email directly to youweics@163.com.
