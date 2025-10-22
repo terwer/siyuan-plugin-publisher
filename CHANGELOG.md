@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.37.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.36.3...siyuan-plugin-publisher-v1.37.0) (2025-10-22)
+
+
+### Features
+
+* add Confluence API integration and configuration support ([89f9024](https://github.com/terwer/siyuan-plugin-publisher/commit/89f90248fd865d15f37dccf250f49a2bc5cf19b2))
+* add confluence support ([51104c1](https://github.com/terwer/siyuan-plugin-publisher/commit/51104c1d45185828ff91c4fd50ebef6740ef1c6d))
+* add confluence support ([e7af53f](https://github.com/terwer/siyuan-plugin-publisher/commit/e7af53f3757bf0e182541ef0d486370e6727ee81))
+* **confluence:** support creating subpages under specified parent page with related config, API and UI updates ([d76cdde](https://github.com/terwer/siyuan-plugin-publisher/commit/d76cdde2b9401ba181f859073c8521e227a5eeb5))
+
 ## [1.36.3](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.36.2...siyuan-plugin-publisher-v1.36.3) (2025-08-15)
 ### Bug Fixes
 * wechat sub domain cannot read ([3d7f0fd](https://github.com/terwer/siyuan-plugin-publisher/commit/3d7f0fd317ad587655c45d4b4692e42bc4dd1da2))
