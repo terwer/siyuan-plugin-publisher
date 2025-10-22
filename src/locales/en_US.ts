@@ -390,6 +390,8 @@ export default {
         "Personal Access Token for the Confluence platform, please create it in personal settings with read and write permissions for spaces",
     "setting.confluence.apiurl.tip": "The API address of the Confluence platform, usually same as the homepage",
     "setting.confluence.previewUrl.tip": "Article preview rules for the Confluence platform, usually: /wiki/spaces/[spaceKey]/pages/[postid]",
+    "setting.confluence.parentPageId.label": "Parent page ID",
+    "setting.confluence.parentPageId.tip": "Optional. When filled, new pages will be created under the specified parent page (e.g. 327683)",
 
     "setting.liandi.home.tip": "The homepage of the chain drop platform is usually fixed: https://ld246.com/",
     "setting.liandi.username.tip":

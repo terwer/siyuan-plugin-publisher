@@ -19,12 +19,27 @@
             margin-bottom: 5px;
             font-weight: bold;
         }
-        input, textarea {
+        input, textarea, select {
             width: 100%;
             padding: 8px;
             border: 1px solid #ddd;
             border-radius: 4px;
             box-sizing: border-box;
+        }
+        .inline-group {
+            display: flex;
+            gap: 10px;
+        }
+        .inline-group select {
+            flex: 1;
+        }
+        .inline-group button {
+            flex-shrink: 0;
+        }
+        .help-text {
+            margin-top: 6px;
+            font-size: 12px;
+            color: #666;
         }
         button {
             background-color: #4CAF50;
@@ -62,150 +77,225 @@
     </style>
 </head>
 <body>
-    <h1>🔍 Confluence API 测试工具</h1>
-    <p>用于测试 Cloudflare Tunnel + Confluence 的连接问题</p>
+<h1>🔍 Confluence API 测试工具</h1>
+<p>用于测试 Cloudflare Tunnel + Confluence 的连接问题</p>
 
-    <div class="form-group">
-        <label for="baseUrl">Confluence 地址:</label>
-        <input type="text" id="baseUrl" value="https://confluence.ocean-zhc.com.cn" placeholder="https://confluence.your-domain.com">
+<div class="form-group">
+    <label for="baseUrl">Confluence 地址:</label>
+    <input type="text" id="baseUrl" value="https://confluence.ocean-zhc.com.cn" placeholder="https://confluence.your-domain.com">
+</div>
+
+<div class="form-group">
+    <label for="token">Personal Access Token:</label>
+    <input type="password" id="token" placeholder="输入你的 Confluence Personal Access Token">
+</div>
+
+<div class="form-group">
+    <label for="spaceKey">空间 Key (可选，用于测试创建页面):</label>
+    <input type="text" id="spaceKey" placeholder="例如: DEV, TECH 等">
+</div>
+
+<div class="form-group">
+    <label for="parentPageId">父页面 ID (可选):</label>
+    <div class="inline-group">
+        <select id="parentPageId" disabled>
+            <option value="">不选择父页面</option>
+        </select>
+        <button type="button" onclick="loadParentPages()">刷新父页面</button>
     </div>
+    <div class="help-text">先填写空间 Key 后刷新，下拉列表会显示页面标题及 ID，例如 ocean-zhc+s 的知识库 (327683)。</div>
+</div>
 
-    <div class="form-group">
-        <label for="token">Personal Access Token:</label>
-        <input type="password" id="token" placeholder="输入你的 Confluence Personal Access Token">
-    </div>
+<h3>测试选项：</h3>
+<button onclick="testGetSpaces()">1. 测试获取空间列表 (GET)</button>
+<button onclick="testCreatePage()">2. 测试创建页面 (POST)</button>
+<button onclick="testHeaders()">3. 测试请求头是否完整</button>
 
-    <div class="form-group">
-        <label for="spaceKey">空间 Key (可选，用于测试创建页面):</label>
-        <input type="text" id="spaceKey" placeholder="例如: DEV, TECH 等">
-    </div>
+<div id="result" class="result" style="display: none;"></div>
 
-    <h3>测试选项：</h3>
-    <button onclick="testGetSpaces()">1. 测试获取空间列表 (GET)</button>
-    <button onclick="testCreatePage()">2. 测试创建页面 (POST)</button>
-    <button onclick="testHeaders()">3. 测试请求头是否完整</button>
+<script>
+    function getConfig(options = {}) {
+        const { requireSpaceKey = false, showError = true } = options;
+        const baseUrl = document.getElementById('baseUrl').value.trim();
+        const token = document.getElementById('token').value.trim();
+        const spaceKey = document.getElementById('spaceKey').value.trim();
+        const parentPageId = document.getElementById('parentPageId').value.trim();
 
-    <div id="result" class="result" style="display: none;"></div>
-
-    <script>
-        function getConfig() {
-            const baseUrl = document.getElementById('baseUrl').value.trim();
-            const token = document.getElementById('token').value.trim();
-            const spaceKey = document.getElementById('spaceKey').value.trim();
-            
-            if (!baseUrl || !token) {
+        if (!baseUrl || !token) {
+            if (showError) {
                 showResult('请填写 Confluence 地址和 Token！', 'error');
-                return null;
             }
-            
-            return { baseUrl, token, spaceKey };
+            return null;
         }
 
-        function showResult(message, type = 'success') {
-            const resultDiv = document.getElementById('result');
-            resultDiv.textContent = message;
-            resultDiv.className = 'result ' + type;
-            resultDiv.style.display = 'block';
-        }
-
-        async function testGetSpaces() {
-            const config = getConfig();
-            if (!config) return;
-
-            showResult('正在测试获取空间列表...', 'warning');
-
-            try {
-                const response = await fetch(`${config.baseUrl}/rest/api/space?limit=10`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${config.token}`,
-                        'X-Atlassian-Token': 'no-check',
-                        'Accept': 'application/json',
-                    }
-                });
-
-                const data = await response.text();
-                let result = `状态码: ${response.status} ${response.statusText}\n\n`;
-                result += `响应头:\n`;
-                response.headers.forEach((value, key) => {
-                    result += `  ${key}: ${value}\n`;
-                });
-                result += `\n响应体:\n${data}`;
-
-                if (response.ok) {
-                    showResult('✅ 成功！\n\n' + result, 'success');
-                } else {
-                    showResult('❌ 失败！\n\n' + result, 'error');
-                }
-            } catch (error) {
-                showResult(`❌ 请求异常：\n${error.message}\n\n可能是网络错误或 CORS 问题`, 'error');
-            }
-        }
-
-        async function testCreatePage() {
-            const config = getConfig();
-            if (!config) return;
-
-            if (!config.spaceKey) {
+        if (requireSpaceKey && !spaceKey) {
+            if (showError) {
                 showResult('请填写空间 Key！', 'error');
-                return;
             }
-
-            showResult('正在测试创建页面...', 'warning');
-
-            const testData = {
-                type: 'page',
-                title: `API 测试页面 - ${new Date().toISOString()}`,
-                space: {
-                    key: config.spaceKey
-                },
-                body: {
-                    storage: {
-                        value: '<p>这是一个测试页面，用于验证 API 功能。</p><p>如果你看到这个页面，说明 API 调用成功！</p>',
-                        representation: 'storage'
-                    }
-                }
-            };
-
-            try {
-                const response = await fetch(`${config.baseUrl}/rest/api/content`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${config.token}`,
-                        'X-Atlassian-Token': 'no-check',
-                        'Accept': 'application/json',
-                    },
-                    body: JSON.stringify(testData)
-                });
-
-                const data = await response.text();
-                let result = `状态码: ${response.status} ${response.statusText}\n\n`;
-                result += `响应头:\n`;
-                response.headers.forEach((value, key) => {
-                    result += `  ${key}: ${value}\n`;
-                });
-                result += `\n响应体:\n${data}`;
-
-                if (response.ok) {
-                    showResult('✅ 成功创建页面！\n\n' + result, 'success');
-                } else {
-                    showResult('❌ 创建失败！\n\n' + result, 'error');
-                }
-            } catch (error) {
-                showResult(`❌ 请求异常：\n${error.message}\n\n可能是网络错误或 CORS 问题`, 'error');
-            }
+            return null;
         }
 
-        async function testHeaders() {
-            const config = getConfig();
-            if (!config) return;
+        return { baseUrl, token, spaceKey, parentPageId };
+    }
 
-            showResult('正在测试请求头...', 'warning');
+    function showResult(message, type = 'success') {
+        const resultDiv = document.getElementById('result');
+        resultDiv.textContent = message;
+        resultDiv.className = 'result ' + type;
+        resultDiv.style.display = 'block';
+    }
 
-            // 使用 httpbin.org 的镜像服务来查看实际发送的请求头
-            showResult(`
+    async function testGetSpaces() {
+        const config = getConfig();
+        if (!config) return;
+
+        showResult('正在测试获取空间列表...', 'warning');
+
+        try {
+            const response = await fetch(`${config.baseUrl}/rest/api/space?limit=10`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${config.token}`,
+                    'X-Atlassian-Token': 'no-check',
+                    'Accept': 'application/json',
+                }
+            });
+
+            const data = await response.text();
+            let result = `状态码: ${response.status} ${response.statusText}\n\n`;
+            result += `响应头:\n`;
+            response.headers.forEach((value, key) => {
+                result += `  ${key}: ${value}\n`;
+            });
+            result += `\n响应体:\n${data}`;
+
+            if (response.ok) {
+                showResult('✅ 成功！\n\n' + result, 'success');
+            } else {
+                showResult('❌ 失败！\n\n' + result, 'error');
+            }
+        } catch (error) {
+            showResult(`❌ 请求异常：\n${error.message}\n\n可能是网络错误或 CORS 问题`, 'error');
+        }
+    }
+
+    async function loadParentPages(showError = true) {
+        const parentSelect = document.getElementById('parentPageId');
+        const config = getConfig({ requireSpaceKey: true, showError });
+        if (!config) {
+            parentSelect.innerHTML = '<option value="">不选择父页面</option>';
+            parentSelect.disabled = true;
+            return;
+        }
+
+        parentSelect.disabled = true;
+        parentSelect.innerHTML = '<option value="">加载中...</option>';
+
+        try {
+            const response = await fetch(`${config.baseUrl}/rest/api/content?spaceKey=${encodeURIComponent(config.spaceKey)}&type=page&limit=200&expand=ancestors`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${config.token}`,
+                    'X-Atlassian-Token': 'no-check',
+                    'Accept': 'application/json',
+                }
+            });
+
+            if (!response.ok) {
+                const text = await response.text();
+                throw new Error(`${response.status} ${response.statusText}: ${text}`);
+            }
+
+            const data = await response.json();
+            const currentValue = config.parentPageId;
+            const options = ['<option value="">不选择父页面</option>'];
+            (data.results || []).forEach((page) => {
+                const label = `${page.title} (${page.id})`;
+                options.push(`<option value="${page.id}">${label}</option>`);
+            });
+
+            parentSelect.innerHTML = options.join('');
+            parentSelect.disabled = false;
+            if (currentValue) {
+                parentSelect.value = currentValue;
+                if (parentSelect.value !== currentValue) {
+                    parentSelect.value = '';
+                }
+            }
+        } catch (error) {
+            parentSelect.innerHTML = '<option value="">加载失败，请重试</option>';
+            showResult(`❌ 父页面加载失败：\n${error.message}`, 'error');
+        }
+    }
+
+    async function testCreatePage() {
+        const config = getConfig({ requireSpaceKey: true });
+        if (!config) return;
+
+        showResult('正在测试创建页面...', 'warning');
+
+        const testData = {
+            type: 'page',
+            title: `API 测试页面 - ${new Date().toISOString()}`,
+            space: {
+                key: config.spaceKey
+            },
+            body: {
+                storage: {
+                    value: '<p>这是一个测试页面，用于验证 API 功能。</p><p>如果你看到这个页面，说明 API 调用成功！</p>',
+                    representation: 'storage'
+                }
+            }
+        };
+
+        if (config.parentPageId) {
+            testData.ancestors = [
+                {
+                    id: config.parentPageId
+                }
+            ];
+        }
+
+        try {
+            const response = await fetch(`${config.baseUrl}/rest/api/content`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${config.token}`,
+                    'X-Atlassian-Token': 'no-check',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify(testData)
+            });
+
+            const data = await response.text();
+            let result = `状态码: ${response.status} ${response.statusText}\n\n`;
+            result += `响应头:\n`;
+            response.headers.forEach((value, key) => {
+                result += `  ${key}: ${value}\n`;
+            });
+            result += `\n响应体:\n${data}`;
+
+            if (response.ok) {
+                showResult('✅ 成功创建页面！\n\n' + result, 'success');
+            } else {
+                showResult('❌ 创建失败！\n\n' + result, 'error');
+            }
+        } catch (error) {
+            showResult(`❌ 请求异常：\n${error.message}\n\n可能是网络错误或 CORS 问题`, 'error');
+        }
+    }
+
+    async function testHeaders() {
+        const config = getConfig();
+        if (!config) return;
+
+        showResult('正在测试请求头...', 'warning');
+
+        // 使用 httpbin.org 的镜像服务来查看实际发送的请求头
+        showResult(`
 📋 检查清单：
 
 1. 打开浏览器开发者工具 (F12)
@@ -235,11 +325,17 @@ A) 在 Cloudflare 控制台配置：
 B) 或者直接使用内网地址：
    在插件配置中使用 Confluence 的内网地址
    例如: http://192.168.x.x:8090
-   
+
 C) 或者配置 Cloudflare Tunnel 允许所有头部：
    在 cloudflared 配置中添加 originRequest 设置
             `, 'warning');
+    }
+
+    document.getElementById('spaceKey').addEventListener('blur', () => {
+        if (document.getElementById('spaceKey').value.trim()) {
+            loadParentPages(false);
         }
-    </script>
+    });
+</script>
 </body>
 </html>
