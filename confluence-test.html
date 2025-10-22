@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confluence API 测试工具</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .success {
+            border-color: #4CAF50;
+            background-color: #f0f9f0;
+        }
+        .error {
+            border-color: #f44336;
+            background-color: #fff0f0;
+        }
+        .warning {
+            border-color: #ff9800;
+            background-color: #fff8f0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Confluence API 测试工具</h1>
+    <p>用于测试 Cloudflare Tunnel + Confluence 的连接问题</p>
+
+    <div class="form-group">
+        <label for="baseUrl">Confluence 地址:</label>
+        <input type="text" id="baseUrl" value="https://confluence.ocean-zhc.com.cn" placeholder="https://confluence.your-domain.com">
+    </div>
+
+    <div class="form-group">
+        <label for="token">Personal Access Token:</label>
+        <input type="password" id="token" placeholder="输入你的 Confluence Personal Access Token">
+    </div>
+
+    <div class="form-group">
+        <label for="spaceKey">空间 Key (可选，用于测试创建页面):</label>
+        <input type="text" id="spaceKey" placeholder="例如: DEV, TECH 等">
+    </div>
+
+    <h3>测试选项：</h3>
+    <button onclick="testGetSpaces()">1. 测试获取空间列表 (GET)</button>
+    <button onclick="testCreatePage()">2. 测试创建页面 (POST)</button>
+    <button onclick="testHeaders()">3. 测试请求头是否完整</button>
+
+    <div id="result" class="result" style="display: none;"></div>
+
+    <script>
+        function getConfig() {
+            const baseUrl = document.getElementById('baseUrl').value.trim();
+            const token = document.getElementById('token').value.trim();
+            const spaceKey = document.getElementById('spaceKey').value.trim();
+            
+            if (!baseUrl || !token) {
+                showResult('请填写 Confluence 地址和 Token！', 'error');
+                return null;
+            }
+            
+            return { baseUrl, token, spaceKey };
+        }
+
+        function showResult(message, type = 'success') {
+            const resultDiv = document.getElementById('result');
+            resultDiv.textContent = message;
+            resultDiv.className = 'result ' + type;
+            resultDiv.style.display = 'block';
+        }
+
+        async function testGetSpaces() {
+            const config = getConfig();
+            if (!config) return;
+
+            showResult('正在测试获取空间列表...', 'warning');
+
+            try {
+                const response = await fetch(`${config.baseUrl}/rest/api/space?limit=10`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${config.token}`,
+                        'X-Atlassian-Token': 'no-check',
+                        'Accept': 'application/json',
+                    }
+                });
+
+                const data = await response.text();
+                let result = `状态码: ${response.status} ${response.statusText}\n\n`;
+                result += `响应头:\n`;
+                response.headers.forEach((value, key) => {
+                    result += `  ${key}: ${value}\n`;
+                });
+                result += `\n响应体:\n${data}`;
+
+                if (response.ok) {
+                    showResult('✅ 成功！\n\n' + result, 'success');
+                } else {
+                    showResult('❌ 失败！\n\n' + result, 'error');
+                }
+            } catch (error) {
+                showResult(`❌ 请求异常：\n${error.message}\n\n可能是网络错误或 CORS 问题`, 'error');
+            }
+        }
+
+        async function testCreatePage() {
+            const config = getConfig();
+            if (!config) return;
+
+            if (!config.spaceKey) {
+                showResult('请填写空间 Key！', 'error');
+                return;
+            }
+
+            showResult('正在测试创建页面...', 'warning');
+
+            const testData = {
+                type: 'page',
+                title: `API 测试页面 - ${new Date().toISOString()}`,
+                space: {
+                    key: config.spaceKey
+                },
+                body: {
+                    storage: {
+                        value: '<p>这是一个测试页面，用于验证 API 功能。</p><p>如果你看到这个页面，说明 API 调用成功！</p>',
+                        representation: 'storage'
+                    }
+                }
+            };
+
+            try {
+                const response = await fetch(`${config.baseUrl}/rest/api/content`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${config.token}`,
+                        'X-Atlassian-Token': 'no-check',
+                        'Accept': 'application/json',
+                    },
+                    body: JSON.stringify(testData)
+                });
+
+                const data = await response.text();
+                let result = `状态码: ${response.status} ${response.statusText}\n\n`;
+                result += `响应头:\n`;
+                response.headers.forEach((value, key) => {
+                    result += `  ${key}: ${value}\n`;
+                });
+                result += `\n响应体:\n${data}`;
+
+                if (response.ok) {
+                    showResult('✅ 成功创建页面！\n\n' + result, 'success');
+                } else {
+                    showResult('❌ 创建失败！\n\n' + result, 'error');
+                }
+            } catch (error) {
+                showResult(`❌ 请求异常：\n${error.message}\n\n可能是网络错误或 CORS 问题`, 'error');
+            }
+        }
+
+        async function testHeaders() {
+            const config = getConfig();
+            if (!config) return;
+
+            showResult('正在测试请求头...', 'warning');
+
+            // 使用 httpbin.org 的镜像服务来查看实际发送的请求头
+            showResult(`
+📋 检查清单：
+
+1. 打开浏览器开发者工具 (F12)
+2. 切换到 Network (网络) 标签
+3. 点击上面的 "测试获取空间列表" 按钮
+4. 找到 /rest/api/space 请求
+5. 点击查看 Headers (请求头)
+6. 检查 Request Headers 中是否包含：
+
+   ✓ Content-Type: application/json
+   ✓ Authorization: Bearer [你的token]
+   ✓ X-Atlassian-Token: no-check  ← 最关键！
+   ✓ Accept: application/json
+
+7. 如果缺少 X-Atlassian-Token，说明被 Cloudflare 过滤了
+
+💡 解决方案：
+
+如果 X-Atlassian-Token 被过滤：
+
+A) 在 Cloudflare 控制台配置：
+   1. 登录 Cloudflare Dashboard
+   2. 选择你的域名
+   3. 进入 Rules → Transform Rules → Modify Request Header
+   4. 添加规则允许 X-Atlassian-Token 通过
+
+B) 或者直接使用内网地址：
+   在插件配置中使用 Confluence 的内网地址
+   例如: http://192.168.x.x:8090
+   
+C) 或者配置 Cloudflare Tunnel 允许所有头部：
+   在 cloudflared 配置中添加 originRequest 设置
+            `, 'warning');
+        }
+    </script>
+</body>
+</html>
