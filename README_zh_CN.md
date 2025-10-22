@@ -1,24 +1,82 @@
 [English](README.md)
 
-# 发布工具
+# SiYuan Publisher（发布插件）
 
-<img alt="logo" width="160" height="160" src="./icon.png"/>
+将 SiYuan 笔记发布到外部平台和代码仓库。  
+支持 Markdown + Front Matter、图片上传，并可与 CI/CD 流程结合使用。
 
-将思源笔记的文章发布到语雀等平台，`开源`、`免费` 。
+- ✍️ 在 SiYuan 中写作
+- 🔗 发布到 Git 系列仓库（GitHub、GitLab、Gitea 等）
+- 🖼️ 图片处理（直传 / PicGo）
+- ⚙️ 在插件界面通过 **`/#/manage`** 路由统一配置
 
-> [猛击这里](https://siyuan.wiki/s/20230810132040-nn4q7vs)，查看最新帮助文档。
+---
 
-**遇到其他问题或者需求建议？1群已满，请加QQ2群讨论。**
+## 功能
 
-[![](https://img.shields.io/badge/QQ群-722632752-blue)](https://qm.qq.com/cgi-bin/qm/qr?k=fYrA79XDvtr4JuEgez-dmj1h3tOef8pg&jump_from=webapi&authKey=DC+XcjkoTH762jxvkSgpt7V97QFETnaLVTZIWhd8PdZoX+MNSr+LsprWFYYELXu8)
+- 将笔记导出为 Markdown，带有 YAML Front Matter（与 Hugo/Hexo 等静态站点生成器兼容）
+- 灵活的仓库 / 分支 / 内容路径配置
+- 支持通过 REST API 直接上传（无需本地 git）
+- 可选支持 PicGo 上传到对象存储或 CDN
+- 可与常见平台的 CI/CD 流程配合
 
-## 快速上手
+---
 
-1. 点击插件市场，搜索 `发布工具`，安装插件。
-2. 启用插件，然后在思源笔记窗口左上角工具栏有一个飞机按钮，点击，即可使用。
-   ![](./docs/images/publisher-icon.png) 
-3. 文档菜单（可选），参考 [帮助文档](https://siyuan.wiki/s/20230810132040-nn4q7vs) FAQ第12条，打开文档菜单，即可使用。
-    
+## 安装
+
+1. 在 SiYuan 中安装插件（插件市场或手动）。
+2. 打开插件面板 → **管理**（内部路由为 `/#/manage`）。
+3. 选择发布平台并填写凭据。
+
+---
+
+## 使用方法
+
+- **打开管理界面：** 在插件面板中（加载 SPA：`/#/manage`）
+- **配置发布平台：** 填写 Token、仓库、分支、内容目录、图片目录
+- **发布：** 在 SiYuan 中选择笔记 → 发布 → 选择目标平台
+
+详细说明请参见：
+- [docs/USER_GUIDE.zh-CN.md](docs/USER_GUIDE.zh-CN.md)
+- [docs/CONFIGURATION.zh-CN.md](docs/CONFIGURATION.zh-CN.md)
+- [docs/TROUBLESHOOTING.zh-CN.md](docs/TROUBLESHOOTING.zh-CN.md)
+
+---
+
+## 故障排查
+
+见 [docs/TROUBLESHOOTING.zh-CN.md](docs/TROUBLESHOOTING.zh-CN.md)。  
+常见问题：
+
+- **401/403 错误：** Token 缺失或权限不足
+- **路径错误：** 检查 `content/posts` 与 `static/img` 是否存在
+- **图片不显示：** 确认图片上传方式（直传 vs PicGo）与路径是否一致
+
+---
+
+## 参与贡献
+
+欢迎 PR！  
+开发环境与贡献规范请参见：
+- [DEVELOPMENT.zh-CN.md](DEVELOPMENT.zh-CN.md)
+
+---
+
+## 许可
+
+MIT
+
+---
+
+## 致谢与支持
+
+本项目由 **[原作者姓名/账号]** 创建并维护。  
+感谢所有贡献者的支持与改进。
+
+如果觉得插件有帮助，可以考虑支持开发工作：
+
+<!-- ✍️ Paste the original Chinese credits / donation links here from the current README -->
+
 
 ## 更新历史
 

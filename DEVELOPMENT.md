@@ -1,115 +1,133 @@
-# Development
+# DEVELOPMENT
 
-## Prerequisites
+This file is the single source of truth for contributors.  
+All developer information should live here.
 
-Prepare permissions
+---
 
-```
-sudo chown -R $USER /usr/local/lib/
-sudo chown -R $USER /usr/local/bin/
-sudo chown -R $USER /usr/local/share/
-```
+## Requirements
 
-or
+- **Node.js** (current LTS recommended)  
+- **pnpm** (package manager)  
 
-```
-sudo chown -R $USER /usr/local
-```
+Make sure both are installed before starting development.
 
-First install nodejs and pnpm
+---
 
-```bash
-brew install n
-n 22
-brew install corepack
-corepack enable pnpm
-corepack use pnpm@10.12.3
+## Tech Stack
 
-pnpm install
-```
+- Language: TypeScript  
+- Build: Vite + pnpm  
+- UI: Single-page app (hash-based routes like `/#/manage`)  
+- Host: SiYuan plugin framework  
 
-Update pnpm to latest
+---
 
-```
-sudo chown -R $USER /usr/local/lib/
-sudo chown -R $USER /usr/local/bin/
-sudo chown -R $USER /usr/local/share/
+## Getting Started
 
-npm install -g corepack@latest
+Run these commands in your dev environment:
 
-pnpm install
-```
+    pnpm install        # install dependencies
+    pnpm dev            # run dev server
+    # open http://localhost:5173/#/manage
+    pnpm build          # build for production
 
-## Development
+- During development, you can load the plugin in SiYuan by pointing it at your build output.  
+- The dev server shows the Manage UI outside of SiYuan for faster iteration.  
 
-serve
+---
 
-```bash
-pip install --upgrade setuptools
-pnpm serve
-```
+## Project Layout
 
-dev
+    src/
+      platforms/    # provider implementations (GitHub, GitLab, Gitea, etc.)
+      core/         # core logic: note → markdown, front matter
+      images/       # image upload adapters (direct / PicGo)
+      ui/           # SPA routes and components
+    docs/           # user documentation
 
-```bash
-pnpm dev -p siyuan
-# siyuan plugin
-# -d 默认 dist
-# -t 默认 plugin
-pnpm makeLink -p siyuan
+---
 
-# -d 默认 widget
-pnpm dev -p widget
-# siyuan widget 
-pnpm makeLink -p widget -d widget -t widget
+## Routes
 
-# chrome extension
-# -d 默认 chrome，实际地址是：extension/extension
-pnpm dev -p chrome
+- `/#/manage` → Management UI (provider setup, repo/token configuration, image pipeline).  
 
-# firefox extension
-# -d 默认 firefox，实际地址是：extension/firefox
-pnpm dev -p firefox
+---
 
-# nginx
-# -d 默认 nginx
-pnpm dev -p nginx
-# ================================================
-# serve nginx
-cd ./nginx
-# npm i -g serve
-serve -l 9000 -C
-```
+## Provider API
 
-## Build
+Providers must implement a common shape:
 
-```bash
-pnpm build
-```
+    interface PublishProvider {
+      id: string;
+      label: string;
+      supportsImages: boolean;
+      upsertText(opts): Promise<UpsertResult>;
+      uploadImage?(opts): Promise<UploadResult>;
+    }
 
-## Package
+- `upsertText`: create or update Markdown content.  
+- `uploadImage`: optional — upload images for posts.  
 
-```bash
-pnpm package
-```
+---
 
-artifacts structure
+## Image Handling
 
-```
-├── build
-  ├── package.zip
-  ├── package-widget.zip
-  ├── siyuan-plugin-publisher-1.23.5.zip
-  ├── siyuan-publisher-nginx-1.23.5
-  ├── sy-post-publisher-chrome-1.23.5.zip
-  ├── sy-post-publisher-firefox-1.23.5.zip
-  └── sy-post-publisher-widget-1.23.5.zip
-```
+- **Direct mode**: upload binary files into repo at `static/img/...`  
+- **PicGo mode**: delegate upload to PicGo for external storage/CDN  
 
-Note: vercel is also supported via `pnpm vercelBuild`
+---
 
-## Sync to legacy widget repo
+## Front Matter
 
-```bash
-pnpm syncWidgetRepo
-```
+By default, the plugin generates YAML front matter:
+
+    ---
+    title: "Post Title"
+    date: 2025-10-03T12:00:00-04:00
+    slug: "post-title"
+    draft: false
+    tags: []
+    categories: []
+    ---
+
+- Compatible with Hugo, Hexo, and most static site generators.  
+
+---
+
+## Contributing a New Provider
+
+1. Add `src/platforms/<provider>.ts`.  
+2. Register it in the provider registry.  
+3. Add a UI schema for configuration fields.  
+4. Document it in `docs/CONFIGURATION.md`.  
+
+---
+
+## Testing
+
+- Run unit tests for markdown/front matter conversion.  
+- Test publishing to a sandbox repo with your provider.  
+- Use lint/format scripts:
+
+      pnpm lint
+      pnpm test
+
+---
+
+## Release Process
+
+1. Update version in `package.json`.  
+2. Build assets:
+
+       pnpm build
+
+3. Update docs (README.md / README.zh-CN.md).  
+4. Commit and tag a release.  
+
+---
+
+## Documentation Maintenance
+
+- All developer info stays here.  
+- User docs live in `/docs`.  
