@@ -25,6 +25,7 @@
 
 import { CategoryTypeEnum, PageTypeEnum, PasswordType } from "zhi-blog-api"
 import { HexoConfig } from "~/src/adaptors/api/hexo/hexoConfig.ts"
+import { GITLAB_CONSTANTS } from "~/src/adaptors/api/base/gitlab/gitlabConstants.ts"
 
 /**
  * Hexo 配置
@@ -44,7 +45,7 @@ class GitlabhexoConfig extends HexoConfig {
 
     this.home = "[your-gitlab-home]"
     this.apiUrl = "[your-gitlab-api-url]"
-    this.tokenSettingUrl = "[your-gitlab-host]/-/profile/personal_access_tokens"
+    this.tokenSettingUrl = `[your-gitlab-host]/${GITLAB_CONSTANTS.TOKEN_SETTING_URL}`
     this.showTokenTip = true
     this.defaultPath = "source/_posts"
     this.previewUrl = "/[user]/[repo]/blob/[branch]/[docpath]"
