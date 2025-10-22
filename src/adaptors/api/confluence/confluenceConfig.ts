@@ -25,32 +25,33 @@
 
 import { PageTypeEnum, PasswordType } from "zhi-blog-api"
 import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
+import { StrUtil } from "zhi-common"
 
 /**
  * Confluence 配置
  */
 class ConfluenceConfig extends CommonBlogConfig {
-    public parentPageId?: string
+  public parentPageId?: string
 
-    constructor(home: string, apiUrl: string, password: string, middlewareUrl?: string) {
-        super(home, apiUrl, "", password, middlewareUrl)
+  constructor(home: string, apiUrl: string, password: string, middlewareUrl?: string) {
+    super(home, apiUrl, "", password, middlewareUrl)
 
-        this.tokenSettingUrl = home + "/wiki/users/viewmyprofile.action"
-        this.showTokenTip = true
-        this.previewUrl = "/wiki/spaces/[spaceKey]/pages/[postid]"
-        this.pageType = PageTypeEnum.Html
-        this.usernameEnabled = false
-        this.passwordType = PasswordType.PasswordType_Token
-        this.allowPreviewUrlChange = false
-        this.tagEnabled = false
-        this.cateEnabled = false
-        this.knowledgeSpaceEnabled = true
-        this.knowledgeSpaceTitle = "空间"
-        this.allowKnowledgeSpaceChange = true
-        this.parentPageId = ""
-        this.placeholder.knowledgeSpaceReadonlyModeTip =
-            "由于 Confluence 平台的限制，暂时不支持编辑所属空间。如果您想移动文档，请先点击取消删除该文档，然后重新选择新的空间发布"
-    }
+    this.tokenSettingUrl = "[your-confluence-host]/plugins/personalaccesstokens/usertokens.action"
+    this.showTokenTip = true
+    this.previewUrl = "/spaces/[spaceKey]/pages/[postid]"
+    this.pageType = PageTypeEnum.Html
+    this.usernameEnabled = false
+    this.passwordType = PasswordType.PasswordType_Token
+    this.allowPreviewUrlChange = false
+    this.tagEnabled = false
+    this.cateEnabled = false
+    this.knowledgeSpaceEnabled = true
+    this.knowledgeSpaceTitle = "空间"
+    this.allowKnowledgeSpaceChange = true
+    this.parentPageId = ""
+    this.placeholder.knowledgeSpaceReadonlyModeTip =
+      "由于 Confluence 平台的限制，暂时不支持编辑所属空间。如果您想移动文档，请先点击取消删除该文档，然后重新选择新的空间发布"
+  }
 }
 
 export { ConfluenceConfig }

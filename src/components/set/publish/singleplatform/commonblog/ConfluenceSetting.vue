@@ -31,6 +31,8 @@ import { ConfluenceConfig } from "~/src/adaptors/api/confluence/confluenceConfig
 import { ConfluencePlaceholder } from "~/src/adaptors/api/confluence/confluencePlaceholder.ts"
 import { ref, watch } from "vue"
 import { ConfluenceApiAdaptor } from "~/src/adaptors/api/confluence/confluenceApiAdaptor.ts"
+import { StrUtil } from "zhi-common"
+import { CONFLUENCE_CONSTANTS } from "~/src/adaptors/api/confluence/confluenceConstants.ts"
 
 const props = defineProps({
   apiType: {
@@ -52,6 +54,15 @@ confluenceCfg.placeholder = confluencePlaceholder
 const parentPageIdPlaceholder = (confluenceCfg.placeholder as any).parentPageIdPlaceholder as string
 const parentPageOptions = ref<{ label: string; value: string }[]>([])
 const parentPageLoading = ref(false)
+
+const onHomeChange = (value: string, cfg: ConfluenceConfig) => {
+  if (StrUtil.isEmptyString(cfg.home)) {
+    cfg.apiUrl = ""
+  } else {
+    cfg.apiUrl = cfg.home
+    cfg.tokenSettingUrl = StrUtil.pathJoin(cfg.home, CONFLUENCE_CONSTANTS.TOKEN_SETTING_URL)
+  }
+}
 
 const loadParentPages = async () => {
   if (!confluenceCfg.blogid) {
@@ -78,28 +89,28 @@ const loadParentPages = async () => {
 await loadParentPages()
 
 watch(
-    () => confluenceCfg.blogid,
-    async (newSpace, oldSpace) => {
-      if (newSpace !== oldSpace) {
-        confluenceCfg.parentPageId = ""
-        await loadParentPages()
-      }
+  () => confluenceCfg.blogid,
+  async (newSpace, oldSpace) => {
+    if (newSpace !== oldSpace) {
+      confluenceCfg.parentPageId = ""
+      await loadParentPages()
     }
+  }
 )
 </script>
 
 <template>
-  <common-blog-setting :api-type="props.apiType" :cfg="confluenceCfg">
+  <common-blog-setting :api-type="props.apiType" :cfg="confluenceCfg" @onHomeChange="onHomeChange">
     <template #main="main">
       <el-form-item :label="t('setting.confluence.parentPageId.label')">
         <el-select
-            v-model="(main.cfg as ConfluenceConfig).parentPageId"
-            :placeholder="parentPageIdPlaceholder"
-            clearable
-            filterable
-            :loading="parentPageLoading"
-            @focus="loadParentPages"
-            @change="(value: string) => ((main.cfg as ConfluenceConfig).parentPageId = value)"
+          v-model="(main.cfg as ConfluenceConfig).parentPageId"
+          :placeholder="parentPageIdPlaceholder"
+          clearable
+          filterable
+          :loading="parentPageLoading"
+          @focus="loadParentPages"
+          @change="(value: string) => ((main.cfg as ConfluenceConfig).parentPageId = value)"
         >
           <el-option v-for="item in parentPageOptions" :key="item.value" :label="item.label" :value="item.value" />
         </el-select>
