@@ -383,6 +383,8 @@ export default {
         "Confluence平台的Personal Access Token，请在个人设置中创建，需要有空间的读写权限",
     "setting.confluence.apiurl.tip": "Confluence平台的API地址，通常与首页地址相同",
     "setting.confluence.previewUrl.tip": "Confluence平台的文章预览规则，通常是：/wiki/spaces/[spaceKey]/pages/[postid]",
+    "setting.confluence.parentPageId.label": "父页面ID",
+    "setting.confluence.parentPageId.tip": "可选，填写后将在该父页面下创建新页面，例如 327683",
 
     "setting.liandi.home.tip": "链滴平台首页，通常固定是：https://ld246.com/",
     "setting.liandi.username.tip":
