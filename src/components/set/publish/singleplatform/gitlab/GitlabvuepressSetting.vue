@@ -29,6 +29,7 @@ import { StrUtil } from "zhi-common"
 import { useGitlabvuepressApi } from "~/src/adaptors/api/gitlab-vuepress/useGitlabvuepressApi.ts"
 import { GitlabvuepressConfig } from "~/src/adaptors/api/gitlab-vuepress/gitlabvuepressConfig.ts"
 import { GitlabvuepressPlaceholder } from "~/src/adaptors/api/gitlab-vuepress/gitlabvuepressPlaceholder.ts"
+import { GITLAB_CONSTANTS } from "~/src/adaptors/api/base/gitlab/gitlabConstants.ts"
 
 const props = defineProps({
   apiType: {
@@ -55,7 +56,7 @@ const onHomeChange = (value: string, cfg: GitlabvuepressConfig) => {
     cfg.apiUrl = ""
   } else {
     cfg.apiUrl = cfg.home
-    cfg.tokenSettingUrl = `${cfg.home}/-/profile/personal_access_tokens`
+    cfg.tokenSettingUrl = StrUtil.pathJoin(cfg.home, GITLAB_CONSTANTS.TOKEN_SETTING_URL)
   }
 
   // sync site

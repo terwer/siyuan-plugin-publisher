@@ -25,6 +25,7 @@
 
 import { CategoryTypeEnum, PageTypeEnum, PasswordType } from "zhi-blog-api"
 import { HexoConfig } from "~/src/adaptors/api/hexo/hexoConfig.ts"
+import { GITLAB_CONSTANTS } from "~/src/adaptors/api/base/gitlab/gitlabConstants.ts"
 
 /**
  * Gitlab Antora 配置
@@ -56,7 +57,7 @@ class GitlabantoraConfig extends HexoConfig {
     // Gitlab Antora的API URL
     this.apiUrl = "[your-gitlab-antora-api-url]"
     // Gitlab Antora令牌设置URL
-    this.tokenSettingUrl = "[your-gitlab-antora-host]/-/profile/personal_access_tokens"
+    this.tokenSettingUrl = `[your-gitlab-antora-host]/${GITLAB_CONSTANTS.TOKEN_SETTING_URL}`
     // 是否显示令牌提示
     this.showTokenTip = true
     // 设置默认发布路径

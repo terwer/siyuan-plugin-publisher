@@ -29,6 +29,7 @@ import { GitlabhexoConfig } from "~/src/adaptors/api/gitlab-hexo/gitlabhexoConfi
 import { GitlabhexoPlaceholder } from "~/src/adaptors/api/gitlab-hexo/gitlabhexoPlaceholder.ts"
 import { useGitlabhexoApi } from "~/src/adaptors/api/gitlab-hexo/useGitlabhexoApi.ts"
 import { StrUtil } from "zhi-common"
+import { GITLAB_CONSTANTS } from "~/src/adaptors/api/base/gitlab/gitlabConstants.ts"
 
 const props = defineProps({
   apiType: {
@@ -54,7 +55,7 @@ const onHomeChange = (value: string, cfg: GitlabhexoConfig) => {
     cfg.apiUrl = ""
   } else {
     cfg.apiUrl = cfg.home
-    cfg.tokenSettingUrl = `${cfg.home}/-/profile/personal_access_tokens`
+    cfg.tokenSettingUrl = StrUtil.pathJoin(cfg.home, GITLAB_CONSTANTS.TOKEN_SETTING_URL)
   }
 }
 </script>

@@ -25,6 +25,7 @@
 
 import { CategoryTypeEnum, PageTypeEnum, PasswordType } from "zhi-blog-api"
 import { CommonGithubConfig } from "~/src/adaptors/api/base/github/commonGithubConfig.ts"
+import { GITLAB_CONSTANTS } from "~/src/adaptors/api/base/gitlab/gitlabConstants.ts"
 
 /**
  * Gitlab Docsify 配置
@@ -41,7 +42,7 @@ class GitlabdocsifyConfig extends CommonGithubConfig {
 
     this.home = "[your-gitlab-home]"
     this.apiUrl = "[your-gitlab-api-url]"
-    this.tokenSettingUrl = "[your-gitlab-host]/-/profile/personal_access_tokens"
+    this.tokenSettingUrl = `[your-gitlab-host]/${GITLAB_CONSTANTS.TOKEN_SETTING_URL}`
     this.showTokenTip = true
     this.defaultPath = "source/_posts"
     this.previewUrl = "/[user]/[repo]/blob/[branch]/[docpath]"

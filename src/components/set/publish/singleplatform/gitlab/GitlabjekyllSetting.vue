@@ -29,6 +29,7 @@ import { StrUtil } from "zhi-common"
 import { useGitlabjekyllApi } from "~/src/adaptors/api/gitlab-jekyll/useGitlabjekyllApi.ts"
 import { GitlabjekyllConfig } from "~/src/adaptors/api/gitlab-jekyll/gitlabjekyllConfig.ts"
 import { GitlabjekyllPlaceholder } from "~/src/adaptors/api/gitlab-jekyll/gitlabjekyllPlaceholder.ts"
+import { GITLAB_CONSTANTS } from "~/src/adaptors/api/base/gitlab/gitlabConstants.ts"
 
 const props = defineProps({
   apiType: {
@@ -54,7 +55,7 @@ const onHomeChange = (value: string, cfg: GitlabjekyllConfig) => {
     cfg.apiUrl = ""
   } else {
     cfg.apiUrl = cfg.home
-    cfg.tokenSettingUrl = `${cfg.home}/-/profile/personal_access_tokens`
+    cfg.tokenSettingUrl = StrUtil.pathJoin(cfg.home, GITLAB_CONSTANTS.TOKEN_SETTING_URL)
   }
 }
 </script>
