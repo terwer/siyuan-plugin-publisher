@@ -25,6 +25,7 @@
 
 import { CategoryTypeEnum, PageTypeEnum, PasswordType } from "zhi-blog-api"
 import { VuepressConfig } from "~/src/adaptors/api/vuepress/vuepressConfig.ts"
+import { GITLAB_CONSTANTS } from "~/src/adaptors/api/base/gitlab/gitlabConstants.ts"
 
 /**
  * Gitlabvuepress 配置
@@ -44,7 +45,7 @@ class GitlabvuepressConfig extends VuepressConfig {
 
     this.home = "[your-gitlab-home]"
     this.apiUrl = "[your-gitlab-api-url]"
-    this.tokenSettingUrl = "[your-gitlab-host]/-/profile/personal_access_tokens"
+    this.tokenSettingUrl = `[your-gitlab-host]/${GITLAB_CONSTANTS.TOKEN_SETTING_URL}`
     this.showTokenTip = true
     this.defaultPath = "docs"
     this.previewUrl = "/[user]/[repo]/blob/[branch]/[docpath]"
@@ -59,7 +60,8 @@ class GitlabvuepressConfig extends VuepressConfig {
     this.categoryType = CategoryTypeEnum.CategoryType_Multi
     this.knowledgeSpaceEnabled = true
     this.allowKnowledgeSpaceChange = false
-    this.placeholder.knowledgeSpaceReadonlyModeTip = "Gitlabvuepress 平台暂不支持修改发布目录，如需修改，请删除之后重新发布"
+    this.placeholder.knowledgeSpaceReadonlyModeTip =
+      "Gitlabvuepress 平台暂不支持修改发布目录，如需修改，请删除之后重新发布"
     this.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Tree_Single
   }
 }
