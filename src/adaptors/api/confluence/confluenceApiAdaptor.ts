@@ -28,6 +28,7 @@ import { ConfluenceConfig } from "~/src/adaptors/api/confluence/confluenceConfig
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
 import { ObjectUtil } from "zhi-common"
+import { load } from "cheerio"
 
 /**
  * Confluence API 适配器
@@ -153,6 +154,7 @@ class ConfluenceApiAdaptor extends BaseBlogApi {
         const url = "/rest/api/content"
         const targetSpaceKey = spaceKey || this.cfg.blogid
         const parentPageId = this.cfg.parentPageId?.trim()
+        const storageContent = this.normalizeContentForConfluence(content, title)
 
         const params: Record<string, any> = {
             type: "page",
@@ -162,7 +164,7 @@ class ConfluenceApiAdaptor extends BaseBlogApi {
             },
             body: {
                 storage: {
-                    value: content,
+                    value: storageContent,
                     representation: "storage",
                 },
             },
@@ -224,6 +226,7 @@ class ConfluenceApiAdaptor extends BaseBlogApi {
         const currentVersion = page.version.number
 
         const url = `/rest/api/content/${pageId}`
+        const storageContent = this.normalizeContentForConfluence(content, title)
         const params = {
             id: pageId,
             type: "page",
@@ -233,7 +236,7 @@ class ConfluenceApiAdaptor extends BaseBlogApi {
             },
             body: {
                 storage: {
-                    value: content,
+                    value: storageContent,
                     representation: "storage",
                 },
             },
@@ -363,6 +366,84 @@ class ConfluenceApiAdaptor extends BaseBlogApi {
         } catch (error) {
             this.logger.error("Confluence API 请求异常 =>", error)
             throw error
+        }
+    }
+
+    private normalizeContentForConfluence(content: string, pageTitle?: string): string {
+        if (!content) {
+            return content
+        }
+
+        try {
+            const $ = load(content, { decodeEntities: false, xmlMode: true } as any)
+
+            if (pageTitle) {
+                const normalizedTitle = pageTitle.trim()
+                const headingSelectors = ["h1", "h2"]
+                for (const tag of headingSelectors) {
+                    const heading = $(tag)
+                        .filter((_, el) => $(el).text().trim() === normalizedTitle)
+                        .first()
+                    if (heading.length > 0) {
+                        heading.remove()
+                        break
+                    }
+                }
+            }
+
+            $("pre").each((_, element) => {
+                const pre = $(element)
+                const codeElem = pre.children("code").first()
+
+                const languageHints = [
+                    codeElem.attr("data-language"),
+                    codeElem.attr("data-subtype"),
+                    codeElem.attr("data-info"),
+                    pre.attr("data-language"),
+                    pre.attr("data-subtype"),
+                    pre.attr("data-info"),
+                    codeElem.attr("class"),
+                    pre.attr("class"),
+                ]
+
+                let language = ""
+                for (const hint of languageHints) {
+                    if (!hint) {
+                        continue
+                    }
+                    const match = hint.match(/language-([\w#+-]+)/i)
+                    if (match) {
+                        language = match[1]
+                        break
+                    }
+                    if (/^[\w#+-]+$/i.test(hint)) {
+                        language = hint
+                        break
+                    }
+                }
+
+                const codeText = (codeElem.length > 0 ? codeElem.text() : pre.text())?.replace(/\r\n/g, "\n") ?? ""
+                const sanitizedCode = codeText.replace(/]]>/g, "]]]]><![CDATA[>")
+
+                const macroParts = [
+                    "<ac:structured-macro ac:name=\"code\">",
+                    language ? `<ac:parameter ac:name="language">${language}</ac:parameter>` : "",
+                    `<ac:plain-text-body><![CDATA[${sanitizedCode}]]></ac:plain-text-body>`,
+                    "</ac:structured-macro>",
+                ]
+
+                pre.replaceWith(macroParts.join(""))
+            })
+
+            const normalized = $.root().html() ?? content
+            const restored = normalized
+                .replace(/&amp;/g, "&")
+                .replace(/&quot;/g, '"')
+                .replace(/&apos;/g, "'")
+            return restored.replace(/<br>/g, "<br />")
+        } catch (error) {
+            this.logger.warn("Failed to normalize Confluence content, fallback to original", error)
+            return content
         }
     }
 }
