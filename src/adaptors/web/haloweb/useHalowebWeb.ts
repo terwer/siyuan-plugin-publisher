@@ -32,14 +32,14 @@ import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { Utils } from "~/src/utils/utils.ts"
 import { DYNAMIC_CONFIG_KEY, LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
 import { DynamicJsonCfg, getDynCfgByKey, getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
-import { PRE_COMTANTS } from "~/src/platforms/PreConstants.ts"
+import { PRE_CONSTANTS } from "~/src/platforms/PreConstants.ts"
 import { ISypConfig } from "~/syp.config"
 import { CategoryTypeEnum, PicbedServiceTypeEnum } from "zhi-blog-api"
 
 const getHaloDynCfg = (setting: ISypConfig) => {
   const dynJsonCfg = JsonUtil.safeParse<DynamicJsonCfg>(setting[DYNAMIC_CONFIG_KEY], {} as DynamicJsonCfg)
   const dynamicConfigArray = dynJsonCfg?.totalCfg || []
-  return getDynCfgByKey(dynamicConfigArray, PRE_COMTANTS.PRE_CUSTOM_HALOWEB)
+  return getDynCfgByKey(dynamicConfigArray, PRE_CONSTANTS.PRE_CUSTOM_HALOWEB)
 }
 
 /**

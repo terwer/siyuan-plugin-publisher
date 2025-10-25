@@ -24,7 +24,7 @@
 
 **重大更新：**
 
-- `v1.38.0` 于 2025/10/25 发布，支持发布为`本地文件`了🎉
+- `v1.38.0` 于 2025/10/25 发布，支持发布到`文件系统`了，一期已经支持本地系统，后续会陆续支持ftp、sftp、各种网盘等🎉
 
 请直接查看 [CHANGELOG](https://github.com/terwer/siyuan-plugin-publisher/blob/main/CHANGELOG.md)
 

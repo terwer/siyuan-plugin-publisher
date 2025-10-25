@@ -30,6 +30,7 @@ import {
   isDynamicKeyExists,
   PlatformType,
   setDynamicJsonCfg,
+  SubPlatformType,
 } from "~/src/platforms/dynamicConfig.ts"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
 import { DateUtil, JsonUtil, StrUtil } from "zhi-common"
@@ -43,6 +44,7 @@ import { ElMessageBox } from "element-plus"
 import { Delete } from "@element-plus/icons-vue"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { usePlatformDefine } from "~/src/composables/usePlatformDefine.ts"
+import { PRE_CONSTANTS } from "~/src/platforms/PreConstants.ts"
 
 const logger = createAppLogger("publish-platform-import")
 
@@ -132,6 +134,7 @@ const doImportAll = async () => {
   totalImportCount += basicImport(pre.metaweblogCfg)
   totalImportCount += basicImport(pre.wordpressCfg)
   totalImportCount += basicImport(pre.customCfg)
+  totalImportCount += basicImport(pre.fsCfg)
 
   formData.isImportLoading = false
 
@@ -210,10 +213,26 @@ const customLoad = async (node: any, resolve: any) => {
       if (formData.dynamicConfigArray.some((x) => x.platformKey === item.platformKey)) {
         formData.customImport.path.push(item.platformKey)
       }
+
+      // // 加载完成默认导入
+      // // since v1.38.0
+      // void doImportBundledPlatform(formData.customImport.path)
     })
     resolve(treeNode)
   }
 }
+
+// // 默认导入
+// // since v1.38.0
+// const doImportBundledPlatform = async (paths: string[]) => {
+//   // 本地系统默认导入
+//   // since v1.38.0
+//   if (!paths.includes(PRE_CONSTANTS.PRE_FS_LOCAL_SYSTEM)) {
+//     paths.push(PRE_CONSTANTS.PRE_FS_LOCAL_SYSTEM)
+//     await doImportCustom()
+//     ElMessage.success("已默认导入本地系统")
+//   }
+// }
 
 const doImportCustom = async () => {
   const paths = formData.customImport.path

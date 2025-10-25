@@ -584,6 +584,8 @@ export default {
   "setting.platform.custom": "自定义 HTTP 协议",
   "setting.platform.custom.desc":
     "目前支持自定义HTTP协议的平台有：知乎等，采用网页授权。自定义HTTP协议通过类似 WeChatSync 的方式实现。",
+  "setting.platform.fs": "文件系统",
+  "setting.platform.fs.desc": "文件系统，直接调用文件系统。",
   "setting.platform.right.tips0": "特别提示：",
   "setting.platform.right.tips1": "1、在这里可以进行发布配置，直接点击 [设置图标] 即可进行配置。",
   "setting.platform.right.tips2": "2、如需新增平台，直接点击「平台导入」或者「插件商店」进行添加。",
@@ -719,4 +721,8 @@ export default {
   "setting.haloweb.apiUrl.tip": "通常和您的Halo2.20+博客首页地址相同",
   "setting.haloweb.previewUrl.tip": "Halo网页版平台文章预览规则",
   "common.help": "查看帮助文档",
+  "setting.blog.type.fs.store.path": "存储路径",
+  "setting.blog.type.fs.store.path.tip": "文档发布之后的存储位置，系统绝对路径，默认为：下载目录/syp",
+  "setting.blog.type.fs.media.path": "媒体存储路径",
+  "setting.blog.type.fs.media.path.tip": "图谱、附近等的存储位置，相对于存储位置，默认为：assets",
 }

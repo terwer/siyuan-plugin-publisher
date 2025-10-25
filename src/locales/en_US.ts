@@ -606,6 +606,9 @@ export default {
     "At present, the platforms that support Metaweblog are: Blog Park, Typecho, etc., using API authorization. The MetaWeblog API is an application programming interface created by software developer Dave Winer that allows writing, editing, and deletion using Web services. The API is implemented as an XML-RPC Web service with three methods whose names describe its functionality: metaweblog.newPost(), metaweblog.getPost(), and metaweblog.editPost(). These methods take parameters that specify the username and password of the blogger and information related to a single blog entry.",
   "setting.platform.custom": "Customization",
   "setting.platform.custom.desc": "Customize the HTTP protocol, stay tuned",
+  "setting.platform.fs": "File system",
+  "setting.platform.fs.desc":
+    "At present, the platforms that support File system are: Local, etc., using API authorization. File system is a platform and cloud-based service",
   "setting.platform.right.tips0": "Special Notes:",
   "setting.platform.right.tips1":
     "1. You can publish the configuration here, and you can directly click the menu or the following icons to configure it.",
@@ -752,4 +755,10 @@ export default {
   "setting.haloweb.apiUrl.tip": "Usually the same as the URL of your Halo 2.20+ blog homepage",
   "setting.haloweb.previewUrl.tip": "Article preview rule for the Halo web platform",
   "common.help": "View help document",
+  "setting.blog.type.fs.store.path": "Storage Path",
+  "setting.blog.type.fs.store.path.tip":
+    "Absolute system path where published documents will be stored. Default: Downloads/syp",
+  "setting.blog.type.fs.media.path": "Media Storage Path",
+  "setting.blog.type.fs.media.path.tip":
+    "Relative path (under Storage Path) for storing assets like images and attachments. Default: assets",
 }

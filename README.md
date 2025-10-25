@@ -24,7 +24,8 @@ Publish articles from siyuan-note to platforms like WordPress、Cnblogs、Yuque 
 
 Major Update:
 
-- `v1.38.0` was released on 10/25/2025, now supporting publishing as local files 🚀
+- `v1.38.0` was released on 10/25/2025, now supporting publishing to file system as local files 🚀
+- The initial release enables publishing to your local file system. Support for additional protocols and services—including FTP, SFTP, and various cloud drives is planned for future updates. 🎉
 
 Please check the https://github.com/terwer/siyuan-plugin-publisher/blob/main/CHANGELOG.md directly.
 
