@@ -118,3 +118,11 @@ watch(
     </template>
   </common-blog-setting>
 </template>
+
+
+<style scoped>
+/* 隐藏 Confluence 的 Markdown 选项，因为 Markdown 格式会导致 XHTML 解析错误 */
+:deep(.el-radio-group .el-radio:first-child) {
+  display: none !important;
+}
+</style>
