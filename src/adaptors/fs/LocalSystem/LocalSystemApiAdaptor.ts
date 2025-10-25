@@ -8,12 +8,13 @@
  */
 
 import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
-import { Post, UserBlog, YamlConvertAdaptor } from "zhi-blog-api"
+import { Attachment, MediaObject, Post, UserBlog, YamlConvertAdaptor } from "zhi-blog-api"
 import { LocalSystemYamlConvertAdaptor } from "~/src/adaptors/fs/LocalSystem/LocalSystemYamlConvertAdaptor.ts"
 import { LocalSystemConfig } from "~/src/adaptors/fs/LocalSystem/LocalSystemConfig.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { EnvUtil } from "~/src/utils/EnvUtil.ts"
 import { StrUtil } from "zhi-common"
+import sypIdUtil from "~/src/utils/sypIdUtil.ts"
 
 /**
  * 本地系统适配器
@@ -93,6 +94,52 @@ class LocalSystemApiAdaptor extends BaseBlogApi {
 
   public async deletePost(postid: string): Promise<boolean> {
     return EnvUtil.deleteFile(postid)
+  }
+
+  public async newMediaObject(mediaObject: MediaObject, customHandler?: any): Promise<Attachment> {
+    const bits = mediaObject.bits
+    const localFsCfg = this.cfg as LocalSystemConfig
+    // 确保保存路径存在
+    this.logger.debug("Ensure that the save path exists1...", localFsCfg)
+    const absStorePath = localFsCfg.storePath
+    const absImagePath = StrUtil.pathJoin(absStorePath, localFsCfg.imageStorePath ?? "assets")
+    let absMediaFilePath = StrUtil.pathJoin(absImagePath, mediaObject.name)
+    const fileDir = EnvUtil.dirname(absMediaFilePath)
+
+    let flag = false
+    if (EnvUtil.ensurePath(fileDir)) {
+      // 写入媒体文件
+      if (EnvUtil.writeBinaryFile(absMediaFilePath, bits)) {
+        flag = true
+        this.logger.info(`media saved: ${absMediaFilePath}`)
+      }
+    }
+    if (!flag) {
+      throw new Error(`媒体发布到文件系统失败: ${absMediaFilePath}，请打开开发者工具查看错误日志`)
+    }
+    const id = sypIdUtil.newUuid()
+    const url = absMediaFilePath.replace(absStorePath, ".")
+    return {
+      attachment_id: id,
+      date_created_gmt: new Date(),
+      parent: 0,
+      link: absStorePath,
+      title: mediaObject.name,
+      caption: "",
+      description: "",
+      metadata: {
+        width: 0,
+        height: 0,
+        file: url,
+        filesize: bits.length,
+        sizes: [],
+      },
+      type: mediaObject.type,
+      thumbnail: "",
+      id: id,
+      file: mediaObject.name,
+      url: url,
+    }
   }
 
   public async getPreviewUrl(postid: string): Promise<string> {

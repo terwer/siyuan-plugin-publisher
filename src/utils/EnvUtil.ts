@@ -10,6 +10,7 @@
 import { SiyuanDevice } from "zhi-device"
 import { StrUtil } from "zhi-common"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { Buffer } from "node:buffer"
 
 /**
  * 环境工具类
@@ -113,6 +114,60 @@ class EnvUtil {
     } catch (e) {
       this.logger.error(`failed to delete file "${filePath}":`, e)
       return false
+    }
+  }
+
+  /**
+   * 写入二进制文件
+   *
+   * @param filePath 文件完整路径
+   * @param data 二进制数据 (Uint8Array)
+   */
+  public static writeBinaryFile(filePath: string, data: Uint8Array): boolean {
+    try {
+      const win = SiyuanDevice.siyuanWindow()
+      if (!win?.fs) {
+        this.logger.warn("File system module not available")
+        return false
+      }
+
+      const fs = win.fs
+      const pathModule = win.require("path")
+      const normalizedPath = pathModule.normalize(filePath)
+
+      // 确保文件所在目录存在
+      const dir = this.dirname(normalizedPath)
+      if (!this.ensurePath(dir)) {
+        return false
+      }
+
+      // 将Uint8Array转换为Buffer
+      const buffer = Buffer.from(data)
+      fs.writeFileSync(normalizedPath, buffer)
+      this.logger.debug(`Binary file written: ${normalizedPath} (${buffer.length} bytes)`)
+      return true
+    } catch (e) {
+      this.logger.error(`Failed to write binary file "${filePath}":`, e)
+      return false
+    }
+  }
+
+  /**
+   * 获取文件所在目录
+   * @param filePath 文件路径
+   */
+  public static dirname(filePath: string): string {
+    try {
+      const win = SiyuanDevice.siyuanWindow()
+      if (!win?.require) {
+        return filePath.substring(0, filePath.lastIndexOf("/"))
+      }
+
+      const pathModule = win.require("path")
+      return pathModule.dirname(filePath)
+    } catch (e) {
+      this.logger.error("Path dirname failed, using fallback:", e)
+      return filePath.substring(0, filePath.lastIndexOf("/"))
     }
   }
 
