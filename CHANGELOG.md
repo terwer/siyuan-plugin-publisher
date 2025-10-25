@@ -1,20 +1,10 @@
 # Changelog
 
 ## [1.38.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.37.0...siyuan-plugin-publisher-v1.38.0) (2025-10-25)
-
-
 ### Features
-
-* [#1978](https://github.com/terwer/siyuan-plugin-publisher/issues/1978) support publish as local files ([361131d](https://github.com/terwer/siyuan-plugin-publisher/commit/361131d56a983a2bc21c548d436a7afa97f32f0d))
-* [#1978](https://github.com/terwer/siyuan-plugin-publisher/issues/1978) support publish as local files ([eb6913c](https://github.com/terwer/siyuan-plugin-publisher/commit/eb6913cae7213087c9827dc584cccd37919e8ed3))
-* [#1978](https://github.com/terwer/siyuan-plugin-publisher/issues/1978) support publish as local files ([dbfd2e3](https://github.com/terwer/siyuan-plugin-publisher/commit/dbfd2e358d57e60ecb2a9cb784028c10f4f43e97))
-* [#1978](https://github.com/terwer/siyuan-plugin-publisher/issues/1978) support publish as local files ([1db38e2](https://github.com/terwer/siyuan-plugin-publisher/commit/1db38e2d0c095d1a79a8675ea56265ee49cb9f49))
-* [#1978](https://github.com/terwer/siyuan-plugin-publisher/issues/1978) support publish as local files ([8c0b0fc](https://github.com/terwer/siyuan-plugin-publisher/commit/8c0b0fc6e9e0ae22bd2f868b77bb22dcc2eee445))
 * [#1978](https://github.com/terwer/siyuan-plugin-publisher/issues/1978) support publish as local files ([d8000f6](https://github.com/terwer/siyuan-plugin-publisher/commit/d8000f639cd1ba4b15d86872bc98cf9b74d55549))
-* **confluence:** implement content normalization and parent page selection in Confluence settings ([cc0f35e](https://github.com/terwer/siyuan-plugin-publisher/commit/cc0f35e6a7aea6d62cb9df5918f5f8e883dd0bfb))
-
+* **confluence:** implement content normalization and parent page selection in confluence settings ([cc0f35e](https://github.com/terwer/siyuan-plugin-publisher/commit/cc0f35e6a7aea6d62cb9df5918f5f8e883dd0bfb))
 ## [1.37.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.36.3...siyuan-plugin-publisher-v1.37.0) (2025-10-22)
-### Features
 * add confluence api integration and configuration support ([89f9024](https://github.com/terwer/siyuan-plugin-publisher/commit/89f90248fd865d15f37dccf250f49a2bc5cf19b2))
 * add confluence support ([e7af53f](https://github.com/terwer/siyuan-plugin-publisher/commit/e7af53f3757bf0e182541ef0d486370e6727ee81))
 * **confluence:** support creating subpages under specified parent page with related config, api and ui updates ([d76cdde](https://github.com/terwer/siyuan-plugin-publisher/commit/d76cdde2b9401ba181f859073c8521e227a5eeb5))
