@@ -1,0 +1,103 @@
+/*
+ *            GNU GENERAL PUBLIC LICENSE
+ *               Version 3, 29 June 2007
+ *
+ *  Copyright (C) 2025 Terwer, Inc. <https://terwer.space/>
+ *  Everyone is permitted to copy and distribute verbatim copies
+ *  of this license document, but changing it is not allowed.
+ */
+
+import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
+import { Post, UserBlog, YamlConvertAdaptor } from "zhi-blog-api"
+import { LocalSystemYamlConvertAdaptor } from "~/src/adaptors/fs/LocalSystem/LocalSystemYamlConvertAdaptor.ts"
+import { LocalSystemConfig } from "~/src/adaptors/fs/LocalSystem/LocalSystemConfig.ts"
+import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { EnvUtil } from "~/src/utils/EnvUtil.ts"
+import { StrUtil } from "zhi-common"
+
+/**
+ * 本地系统适配器
+ *
+ * @author terwer
+ * @since 1.38.0
+ */
+class LocalSystemApiAdaptor extends BaseBlogApi {
+  constructor(appInstance: any, cfg: LocalSystemConfig) {
+    super(appInstance, cfg)
+    this.logger = createAppLogger("local-system-adaptor")
+  }
+
+  /**
+   * 通用校验逻辑调用
+   *
+   * @param _keyword
+   */
+  public async getUsersBlogs(_keyword?: string): Promise<Array<UserBlog>> {
+    const localFsCfg = this.cfg as LocalSystemConfig
+    // 确保保存路径存在
+    this.logger.debug("Ensure that the save path exists1...", localFsCfg)
+    const absStorePath = localFsCfg.storePath
+    const absImageStorePath = StrUtil.pathJoin(absStorePath, localFsCfg.imageStorePath)
+    const isPathOk = EnvUtil.ensurePath(absStorePath)
+    const isImagePathOk = EnvUtil.ensurePath(absImageStorePath)
+    if (!isPathOk || !isImagePathOk) {
+      throw new Error("文件存储路径或媒体存储路径初始化失败！")
+    }
+    return Promise.resolve([])
+  }
+
+  /**
+   * 获取YAML适配器
+   */
+  public getYamlAdaptor(): YamlConvertAdaptor {
+    const localFsCfg = this.cfg as LocalSystemConfig
+    return new LocalSystemYamlConvertAdaptor(localFsCfg)
+  }
+
+  public async newPost(post: Post, _publish?: boolean): Promise<string> {
+    const localFsCfg = this.cfg as LocalSystemConfig
+
+    const title = post.title
+    // const slug = post.wp_slug
+    const content = post.description
+    // const yaml = post.yaml
+
+    // 保存到文件
+    // 文件路径是 localFsCfg.storePath
+    // 文件名是 title.md
+    // 文件内容是 content
+    // 清理文件名并添加扩展名
+    const fileName = `${EnvUtil.sanitizeFilename(title)}.md`
+    const filePath = EnvUtil.joinPath(localFsCfg.storePath, fileName)
+
+    let flag = false
+    // 确保存储目录存在
+    if (EnvUtil.ensurePath(localFsCfg.storePath)) {
+      // 直接写入文件
+      flag = EnvUtil.writeFile(filePath, content)
+      this.logger.info(`Post saved locally: ${filePath}`)
+    } else {
+      this.logger.error(`Failed to create directory: ${localFsCfg.storePath}`)
+    }
+
+    if (!flag) {
+      throw new Error(`文档发布到文件系统失败: ${filePath}，请打开开发者工具查看错误日志`)
+    }
+    return filePath
+  }
+
+  public async editPost(_postid: string, post: Post, publish?: boolean): Promise<boolean> {
+    await this.newPost(post, publish)
+    return true
+  }
+
+  public async deletePost(postid: string): Promise<boolean> {
+    return EnvUtil.deleteFile(postid)
+  }
+
+  public async getPreviewUrl(postid: string): Promise<string> {
+    return "file://" + postid
+  }
+}
+
+export { LocalSystemApiAdaptor }

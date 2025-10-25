@@ -23,12 +23,13 @@
  * questions.
  */
 
-const PRE_COMTANTS = {
+const PRE_CONSTANTS = {
   PRE_CUSTOM_HALOWEB: "custom_Haloweb",
   PRE_CUSTOM_BILIBILI: "custom_Bilibili",
   PRE_CUSTOM_XIAOHONGSHU: "custom_Xiaohongshu",
   // PRE_CUSTOM_WEIBO: "custom_Weibo",
   // PRE_CUSTOM_TOUTIAO: "custom_Toutiao",
+  PRE_FS_LOCAL_SYSTEM: "fs_LocalSystem",
 }
 
-export { PRE_COMTANTS }
+export { PRE_CONSTANTS }

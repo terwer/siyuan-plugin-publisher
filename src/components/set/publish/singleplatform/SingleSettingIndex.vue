@@ -35,15 +35,18 @@ import WordpressdotcomSetting from "~/src/components/set/publish/singleplatform/
 import HalowebSetting from "~/src/components/set/publish/singleplatform/web/HalowebSetting.vue"
 import BilibiliSetting from "~/src/components/set/publish/singleplatform/web/BilibiliSetting.vue"
 import QuartzSetting from "~/src/components/set/publish/singleplatform/github/QuartzSetting.vue"
+import LocalSystemSetting from "~/src/components/set/publish/singleplatform/fs/LocalSystemSetting.vue"
+import { EnvUtil } from "~/src/utils/EnvUtil.ts"
 
 // uses
 const { t } = useVueI18n()
 const route = useRoute()
 
 // datas
-const params = reactive(route.params)
+const params = reactive(route.params) as any
 const apiType = params.key as string
 const subtype = getSubPlatformTypeByKey(apiType)
+const hasElectronEnv = EnvUtil.isSiyuanElectron()
 </script>
 
 <template>
@@ -82,6 +85,10 @@ const subtype = getSubPlatformTypeByKey(apiType)
     -->
     <bilibili-setting v-else-if="subtype === SubPlatformType.Custom_Bilibili" :api-type="apiType" />
     <haloweb-setting v-else-if="subtype === SubPlatformType.Custom_Haloweb" :api-type="apiType" />
+    <local-system-setting
+      v-else-if="hasElectronEnv && subtype === SubPlatformType.Fs_LocalSystem"
+      :api-type="apiType"
+    />
     <span v-else>
       <el-alert :closable="false" :title="t('setting.entry.not.supported')" class="top-tip" type="error" />
     </span>

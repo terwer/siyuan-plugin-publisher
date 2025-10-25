@@ -34,6 +34,7 @@ import {
   DynamicJsonCfg,
   replacePlatformByKey,
   setDynamicJsonCfg,
+  SubPlatformType,
 } from "~/src/platforms/dynamicConfig.ts"
 import { svgIcons } from "~/src/utils/svgIcons.ts"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
