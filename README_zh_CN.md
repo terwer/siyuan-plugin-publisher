@@ -22,6 +22,10 @@
 
 ## 更新历史
 
+**重大更新：**
+
+- `v1.38.0` 于 2025/10/25 发布，支持发布为`本地文件`了🎉
+
 请直接查看 [CHANGELOG](https://github.com/terwer/siyuan-plugin-publisher/blob/main/CHANGELOG.md)
 
 ## 彩蛋

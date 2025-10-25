@@ -22,6 +22,10 @@ Publish articles from siyuan-note to platforms like WordPress、Cnblogs、Yuque 
 
 ## Update History
 
+Major Update:
+
+- `v1.38.0` was released on 10/25/2025, now supporting publishing as local files 🚀
+
 Please check the https://github.com/terwer/siyuan-plugin-publisher/blob/main/CHANGELOG.md directly.
 
 ## Easter Egg
