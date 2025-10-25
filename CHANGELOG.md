@@ -1,5 +1,8 @@
 # Changelog
 
+## [1.38.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.38.0...siyuan-plugin-publisher-v1.38.1) (2025-10-25)
+### Bug Fixes
+* support media for local system ([afa86cc](https://github.com/terwer/siyuan-plugin-publisher/commit/afa86cccd354970b02c8b88396f1e5a3cc479674))
 ## [1.38.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.37.0...siyuan-plugin-publisher-v1.38.0) (2025-10-25)
 ### Features
 * [#1978](https://github.com/terwer/siyuan-plugin-publisher/issues/1978) support publish as local files ([d8000f6](https://github.com/terwer/siyuan-plugin-publisher/commit/d8000f639cd1ba4b15d86872bc98cf9b74d55549))
@@ -9,7 +12,6 @@
 * add confluence support ([e7af53f](https://github.com/terwer/siyuan-plugin-publisher/commit/e7af53f3757bf0e182541ef0d486370e6727ee81))
 * **confluence:** support creating subpages under specified parent page with related config, api and ui updates ([d76cdde](https://github.com/terwer/siyuan-plugin-publisher/commit/d76cdde2b9401ba181f859073c8521e227a5eeb5))
 ## [1.36.3](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.36.2...siyuan-plugin-publisher-v1.36.3) (2025-08-15)
-### Bug Fixes
 * wechat sub domain cannot read ([3d7f0fd](https://github.com/terwer/siyuan-plugin-publisher/commit/3d7f0fd317ad587655c45d4b4692e42bc4dd1da2))
 ## [1.36.2](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.36.1...siyuan-plugin-publisher-v1.36.2) (2025-06-24)
 * upload media error via cnblogs ([cfd0537](https://github.com/terwer/siyuan-plugin-publisher/commit/cfd05373cf34307777f46f10fca29883e21da6ca))
