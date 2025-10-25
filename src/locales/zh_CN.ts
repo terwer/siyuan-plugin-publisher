@@ -724,5 +724,5 @@ export default {
   "setting.blog.type.fs.store.path": "存储路径",
   "setting.blog.type.fs.store.path.tip": "文档发布之后的存储位置，系统绝对路径，默认为：下载目录/syp",
   "setting.blog.type.fs.media.path": "媒体存储路径",
-  "setting.blog.type.fs.media.path.tip": "图谱、附近等的存储位置，相对于存储位置，默认为：assets",
+  "setting.blog.type.fs.media.path.tip": "图片、附件等的存储位置，相对于存储位置，默认为：assets",
 }
