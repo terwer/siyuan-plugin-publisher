@@ -8,10 +8,9 @@
  */
 
 import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
-import { UserBlog, YamlConvertAdaptor } from "zhi-blog-api"
+import { Post, UserBlog, YamlConvertAdaptor } from "zhi-blog-api"
 import { LocalSystemYamlConvertAdaptor } from "~/src/adaptors/fs/LocalSystem/LocalSystemYamlConvertAdaptor.ts"
 import { LocalSystemConfig } from "~/src/adaptors/fs/LocalSystem/LocalSystemConfig.ts"
-import { YuqueConfig } from "~/src/adaptors/api/yuque/yuqueConfig.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { EnvUtil } from "~/src/utils/EnvUtil.ts"
 import { StrUtil } from "zhi-common"
@@ -33,7 +32,7 @@ class LocalSystemApiAdaptor extends BaseBlogApi {
    *
    * @param _keyword
    */
-  getUsersBlogs(_keyword?: string): Promise<Array<UserBlog>> {
+  public async getUsersBlogs(_keyword?: string): Promise<Array<UserBlog>> {
     const localFsCfg = this.cfg as LocalSystemConfig
     // 确保保存路径存在
     this.logger.debug("Ensure that the save path exists1...", localFsCfg)
@@ -50,9 +49,54 @@ class LocalSystemApiAdaptor extends BaseBlogApi {
   /**
    * 获取YAML适配器
    */
-  getYamlAdaptor(): YamlConvertAdaptor {
+  public getYamlAdaptor(): YamlConvertAdaptor {
     const localFsCfg = this.cfg as LocalSystemConfig
     return new LocalSystemYamlConvertAdaptor(localFsCfg)
+  }
+
+  public async newPost(post: Post, _publish?: boolean): Promise<string> {
+    const localFsCfg = this.cfg as LocalSystemConfig
+
+    const title = post.title
+    // const slug = post.wp_slug
+    const content = post.description
+    // const yaml = post.yaml
+
+    // 保存到文件
+    // 文件路径是 localFsCfg.storePath
+    // 文件名是 title.md
+    // 文件内容是 content
+    // 清理文件名并添加扩展名
+    const fileName = `${EnvUtil.sanitizeFilename(title)}.md`
+    const filePath = EnvUtil.joinPath(localFsCfg.storePath, fileName)
+
+    let flag = false
+    // 确保存储目录存在
+    if (EnvUtil.ensurePath(localFsCfg.storePath)) {
+      // 直接写入文件
+      flag = EnvUtil.writeFile(filePath, content)
+      this.logger.info(`Post saved locally: ${filePath}`)
+    } else {
+      this.logger.error(`Failed to create directory: ${localFsCfg.storePath}`)
+    }
+
+    if (!flag) {
+      throw new Error(`文档发布到文件系统失败: ${filePath}，请打开开发者工具查看错误日志`)
+    }
+    return filePath
+  }
+
+  public async editPost(_postid: string, post: Post, publish?: boolean): Promise<boolean> {
+    await this.newPost(post, publish)
+    return true
+  }
+
+  public async deletePost(postid: string): Promise<boolean> {
+    return EnvUtil.deleteFile(postid)
+  }
+
+  public async getPreviewUrl(postid: string): Promise<string> {
+    return "file://" + postid
   }
 }
 

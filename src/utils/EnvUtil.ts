@@ -58,6 +58,93 @@ class EnvUtil {
       return false
     }
   }
+
+  /**
+   * 写入文件内容（假设目录已存在）
+   * @param filePath 文件完整路径
+   * @param content 文件内容
+   */
+  public static writeFile(filePath: string, content: string): boolean {
+    try {
+      const win = SiyuanDevice.siyuanWindow()
+      if (!win?.fs) {
+        this.logger.warn("file system module not available")
+        return false
+      }
+
+      const fs = win.fs
+      const pathModule = win.require("path")
+      const normalizedPath = pathModule.normalize(filePath)
+
+      // 直接写入文件
+      fs.writeFileSync(normalizedPath, content, "utf-8")
+      this.logger.debug(`file written: ${normalizedPath}`)
+      return true
+    } catch (e) {
+      this.logger.error(`failed to write file "${filePath}":`, e)
+      return false
+    }
+  }
+
+  /**
+   * 删除文件
+   * @param filePath 文件路径
+   */
+  public static deleteFile(filePath: string): boolean {
+    try {
+      const win = SiyuanDevice.siyuanWindow()
+      if (!win?.fs) {
+        this.logger.warn("file system module not available")
+        return false
+      }
+
+      const fs = win.fs
+      const pathModule = win.require("path")
+      const normalizedPath = pathModule.normalize(filePath)
+
+      if (fs.existsSync(normalizedPath)) {
+        fs.unlinkSync(normalizedPath)
+        this.logger.debug(`file deleted: ${normalizedPath}`)
+        return true
+      }
+
+      this.logger.warn(`file not found, skip deletion: ${normalizedPath}`)
+      return false
+    } catch (e) {
+      this.logger.error(`failed to delete file "${filePath}":`, e)
+      return false
+    }
+  }
+
+  /**
+   * 清理文件名中的非法字符
+   *
+   * @param filename 原始文件名
+   * @returns 安全的文件名
+   */
+  public static sanitizeFilename(filename: string): string {
+    return filename.replace(/[\\/:*?"<>|]/g, "_")
+  }
+
+  /**
+   * 拼接文件路径
+   *
+   * @param parts 路径组成部分
+   */
+  public static joinPath(...parts: string[]): string {
+    try {
+      const win = SiyuanDevice.siyuanWindow()
+      if (!win?.require) {
+        return parts.join("/")
+      }
+
+      const pathModule = win.require("path")
+      return pathModule.join(...parts)
+    } catch (e) {
+      this.logger.error("path join failed, using fallback:", e)
+      return parts.join("/")
+    }
+  }
 }
 
 export { EnvUtil }
