@@ -1,14 +1,9 @@
 # Changelog
 
 ## [1.38.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.37.0...siyuan-plugin-publisher-v1.38.0) (2025-10-23)
-
-
 ### Features
-
-* **confluence:** implement content normalization and parent page selection in Confluence settings ([cc0f35e](https://github.com/terwer/siyuan-plugin-publisher/commit/cc0f35e6a7aea6d62cb9df5918f5f8e883dd0bfb))
-
+* **confluence:** implement content normalization and parent page selection in confluence settings ([cc0f35e](https://github.com/terwer/siyuan-plugin-publisher/commit/cc0f35e6a7aea6d62cb9df5918f5f8e883dd0bfb))
 ## [1.37.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.36.3...siyuan-plugin-publisher-v1.37.0) (2025-10-22)
-### Features
 * add confluence api integration and configuration support ([89f9024](https://github.com/terwer/siyuan-plugin-publisher/commit/89f90248fd865d15f37dccf250f49a2bc5cf19b2))
 * add confluence support ([e7af53f](https://github.com/terwer/siyuan-plugin-publisher/commit/e7af53f3757bf0e182541ef0d486370e6727ee81))
 * **confluence:** support creating subpages under specified parent page with related config, api and ui updates ([d76cdde](https://github.com/terwer/siyuan-plugin-publisher/commit/d76cdde2b9401ba181f859073c8521e227a5eeb5))
