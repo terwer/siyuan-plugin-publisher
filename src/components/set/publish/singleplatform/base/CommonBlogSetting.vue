@@ -346,7 +346,7 @@ onMounted(async () => {
     />
     <slot name="header" :cfg="formData.cfg"></slot>
     <!-- 首页 -->
-    <el-form-item :label="t('setting.common.home')">
+    <el-form-item v-if="props.cfg?.homeEnabled != false" :label="t('setting.common.home')">
       <el-input
         v-model="formData.cfg.home"
         :placeholder="props.cfg?.placeholder.homePlaceholder"
@@ -354,7 +354,7 @@ onMounted(async () => {
       />
     </el-form-item>
     <!-- API 地址 -->
-    <el-form-item :label="t('setting.common.apiurl')">
+    <el-form-item v-if="props.cfg?.apiUrlEnabled != false" :label="t('setting.common.apiurl')">
       <el-input v-model="formData.cfg.apiUrl" :placeholder="props.cfg?.placeholder.apiUrlPlaceholder" />
     </el-form-item>
     <!-- 登录名 -->
@@ -398,7 +398,11 @@ onMounted(async () => {
       >
     </el-form-item>
     <!-- 平台cookie -->
-    <el-form-item v-else :label="formData.cfg.passwordLabel ?? '平台Cookie'" required>
+    <el-form-item
+      v-else-if="formData.cfg.passwordType === PasswordType.PasswordType_Cookie"
+      :label="formData.cfg.passwordLabel ?? '平台Cookie'"
+      required
+    >
       <el-input
         v-model="formData.cfg.password"
         style="width: 75%; margin-right: 16px"
@@ -416,7 +420,7 @@ onMounted(async () => {
     </el-form-item>
     <slot name="main" :cfg="formData.cfg" />
     <!-- 预览地址 -->
-    <el-form-item :label="t('setting.blog.previewUrl')">
+    <el-form-item v-if="props.cfg?.previewUrlEnabled != false" :label="t('setting.blog.previewUrl')">
       <el-input
         v-model="formData.cfg.previewUrl"
         :placeholder="props.cfg?.placeholder.previewUrlPlaceholder"

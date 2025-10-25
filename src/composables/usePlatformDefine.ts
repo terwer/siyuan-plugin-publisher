@@ -43,6 +43,7 @@ export const usePlatformDefine = () => {
     ...pre.metaweblogCfg,
     ...pre.wordpressCfg,
     ...pre.customCfg,
+    ...pre.fsCfg,
   ]
 
   /**

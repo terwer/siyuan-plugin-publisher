@@ -24,9 +24,10 @@
  */
 
 import CommonStorageAsync from "~/src/stores/common/commonStorageAsync.ts"
-import { StorageSerializers, toValue } from "@vueuse/core"
+import { StorageSerializers } from "@vueuse/core"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { ObjectUtil } from "zhi-common"
+import { toRaw } from "vue"
 
 /**
  * https://vueuse.org/core/useStorageAsync/
@@ -42,7 +43,7 @@ export const useCommonStorageAsync = <T extends string | number | boolean | obje
   const commonStorage = new CommonStorageAsync(storageKey)
 
   // 获取 initialValue 类型对应的序列化器，如果不存在则使用默认序列化器
-  const rawInit: T = toValue(initialValue)
+  const rawInit: T = toRaw(initialValue)
   const type = guessSerializerType<T>(rawInit) as
     | "boolean"
     | "object"
