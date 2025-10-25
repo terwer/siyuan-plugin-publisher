@@ -9,6 +9,7 @@
 
 import { SiyuanDevice } from "zhi-device"
 import { StrUtil } from "zhi-common"
+import { createAppLogger } from "~/src/utils/appLogger.ts"
 
 /**
  * 环境工具类
@@ -17,6 +18,8 @@ import { StrUtil } from "zhi-common"
  * @since 1.38.0
  */
 class EnvUtil {
+  private static logger = createAppLogger("env-util")
+
   /**
    * 是否是思源Electron环境
    */
@@ -30,6 +33,30 @@ class EnvUtil {
   public static getHomeFolder(): string {
     const win = SiyuanDevice.siyuanWindow()
     return win?.siyuan?.config?.system?.homeDir ?? ""
+  }
+
+  public static ensurePath(path: string): boolean {
+    try {
+      const win = SiyuanDevice.siyuanWindow()
+      if (!win?.fs) {
+        this.logger.warn("file system module not available")
+        return false
+      }
+      const fs = win.fs
+      const pathModule = win.require("path")
+      // 标准化路径
+      const normalizedPath = pathModule.normalize(path)
+      // 检查路径是否存在
+      if (!fs.existsSync(normalizedPath)) {
+        // 递归创建目录
+        fs.mkdirSync(normalizedPath, { recursive: true })
+        this.logger.debug(`created directory: ${normalizedPath}`)
+      }
+      return true
+    } catch (e) {
+      this.logger.error(`check path failed for "${path}":`, e)
+      return false
+    }
   }
 }
 

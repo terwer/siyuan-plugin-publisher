@@ -10,11 +10,11 @@
 import { LocalSystemConfig } from "~/src/adaptors/fs/LocalSystem/LocalSystemConfig.ts"
 import { LocalSystemApiAdaptor } from "~/src/adaptors/fs/LocalSystem/LocalSystemApiAdaptor.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
-import { YamlConvertAdaptor } from "zhi-blog-api"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
+import { LocalSystemYamlConvertAdaptor } from "~/src/adaptors/fs/LocalSystem/LocalSystemYamlConvertAdaptor.ts"
 
 /**
  * 本地系统适配器
@@ -52,7 +52,7 @@ const useLocalSystemApi = async (key: string, newCfg?: LocalSystemConfig) => {
   cfg.bundledPicbedSupported = true
 
   const blogApi = new LocalSystemApiAdaptor(appInstance, cfg)
-  const yamlAdaptor = new YamlConvertAdaptor()
+  const yamlAdaptor = new LocalSystemYamlConvertAdaptor(cfg)
 
   return {
     cfg,
