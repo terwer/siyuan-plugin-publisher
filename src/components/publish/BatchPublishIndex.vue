@@ -132,17 +132,17 @@ const handlePublish = async () => {
 
     // 思源笔记原始文章数据
     const siyuanPost = _.cloneDeep(formData.siyuanPost) as Post
+
     for (const key of formData.dynList) {
       let batchItemPost: Post
+      // 平台相关的配置，需要各自重新获取
+      const publishCfg = await getPublishCfg(key)
+      formData.publishCfg = publishCfg
       if (sysKeys.includes(key)) {
         logger.info(`开始发布 [${key}] 系统内置平台`)
         batchItemPost = siyuanPost
       } else {
         logger.info(`开始发布 [${key}] 自定义平台`)
-        // 平台相关的配置，需要各自重新获取
-        const publishCfg = await getPublishCfg(key)
-        formData.publishCfg = publishCfg
-
         // 平台相关的元数据初始化
         batchItemPost = await initPublishMethods.assignInitAttrs(siyuanPost, id, formData.publishCfg)
 
