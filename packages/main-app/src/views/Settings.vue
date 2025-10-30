@@ -1,3 +1,4 @@
+<!--suppress ALL -->
 <template>
   <div class="settings">
     <h1>设置</h1>
@@ -42,17 +43,25 @@
       <div class="section">
         <h2>发布设置</h2>
         <div class="form-group">
-          <TgCheckbox v-model="settings.autoSave">自动保存草稿</TgCheckbox>
+          <TgCheckbox :model-value="[settings.autoSave]" :options="[{ label: '自动保存草稿', value: true }]">
+            自动保存草稿
+          </TgCheckbox>
         </div>
         <div class="form-group">
-          <TgCheckbox v-model="settings.includeMetadata">包含元数据</TgCheckbox>
+          <TgCheckbox :model-value="[settings.includeMetadata]" :options="[{ label: '包含元数据', value: true }]">
+            包含元数据
+          </TgCheckbox>
         </div>
         <div class="form-group">
           <label>默认发布状态</label>
-          <TgSelect v-model="settings.defaultStatus">
-            <option value="draft">草稿</option>
-            <option value="publish">发布</option>
-            <option value="private">私有</option>
+          <TgSelect
+            :model-value="settings.defaultStatus"
+            :options="[
+              { label: '草稿', value: 'draft' },
+              { label: '发布', value: 'publish' },
+              { label: '私有', value: 'private' },
+            ]"
+          >
           </TgSelect>
         </div>
       </div>

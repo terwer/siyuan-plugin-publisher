@@ -88,12 +88,12 @@ const validate = async () => {
   const newErrors: Record<string, string[]> = {}
 
   props.config.groups.forEach((group) => {
-    group.items.forEach((item) => {
+    group.items.forEach((item: any) => {
       if (item.rules) {
         validationPromises.push(
           validateField(item.name, props.modelValue[item.name], item.rules).then((isValid) => {
             if (!isValid) {
-              newErrors[item.name] = errors.value[item.name]
+              newErrors[item.name] = errors.value[item.name] || []
             }
             return isValid
           }),
@@ -166,7 +166,7 @@ const getItemError = (name: string) => {
         v-for="(item, itemIndex) in group.items"
         :key="itemIndex"
         class="tg-form-item"
-        :class="{ 'tg-form-item-has-error': errors[item.name] }"
+        :class="{ 'tg-form-item-has-error': errors[item.name as keyof typeof errors] }"
         :style="getItemStyle(item)"
       >
         <label v-if="item.label" class="tg-form-item-label" :class="{ 'tg-form-item-required': item.required }">
@@ -247,7 +247,9 @@ const getItemError = (name: string) => {
               />
             </div>
           </div>
-          <div v-if="errors[item.name]" class="tg-form-item-explain">{{ getItemError(item.name) }}</div>
+          <div v-if="errors[item.name as keyof typeof errors]" class="tg-form-item-explain">
+            {{ getItemError(item.name) }}
+          </div>
         </div>
       </div>
     </div>

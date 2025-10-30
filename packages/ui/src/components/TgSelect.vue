@@ -69,7 +69,12 @@ const safeModelValue = computed(() => {
     <div class="tg-select__wrapper">
       <select class="tg-select__inner" :value="safeModelValue" :disabled="disabled" @change="handleChange">
         <option value="" disabled>{{ placeholder }}</option>
-        <option v-for="option in safeOptions" :key="option.value" :value="option.value" :disabled="option.disabled">
+        <option
+          v-for="option in safeOptions as Option[]"
+          :key="option.value"
+          :value="option.value"
+          :disabled="option.disabled"
+        >
           {{ option.label }}
         </option>
       </select>

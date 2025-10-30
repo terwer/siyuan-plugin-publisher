@@ -1,16 +1,21 @@
+<!--suppress CssUnresolvedCustomProperty -->
 <template>
   <div class="publish">
     <h1>发布内容</h1>
-    
+
     <div class="publish-content">
       <div class="section">
         <h2>选择平台</h2>
         <div class="platform-selector">
-          <TgSelect v-model="selectedPlatform" placeholder="请选择发布平台">
-            <option value="wordpress">WordPress</option>
-            <option value="github">GitHub</option>
-            <option value="blog">博客平台</option>
-          </TgSelect>
+          <TgSelect
+            :model-value="selectedPlatform"
+            placeholder="请选择发布平台"
+            :options="[
+              { label: 'WordPress', value: 'wordpress' },
+              { label: 'GitHub', value: 'github' },
+              { label: '博客平台', value: 'blog' },
+            ]"
+          />
         </div>
       </div>
 
@@ -33,16 +38,20 @@
       <div class="section">
         <h2>发布选项</h2>
         <div class="form-group">
-          <TgCheckbox v-model="publishAsDraft">发布为草稿</TgCheckbox>
+          <TgCheckbox :model-value="[publishAsDraft]" :options="[{ label: '发布为草稿', value: true }]">
+            发布为草稿
+          </TgCheckbox>
         </div>
         <div class="form-group">
-          <TgCheckbox v-model="includeImages">包含图片</TgCheckbox>
+          <TgCheckbox :model-value="[includeImages]" :options="[{ label: '包含图片', value: true }]">
+            包含图片
+          </TgCheckbox>
         </div>
       </div>
 
       <div class="section">
         <TgButton type="primary" @click="handlePublish" :loading="publishing">
-          {{ publishing ? '发布中...' : '发布' }}
+          {{ publishing ? "发布中..." : "发布" }}
         </TgButton>
       </div>
     </div>
@@ -50,14 +59,14 @@
 </template>
 
 <script setup lang="ts">
-import { TgButton, TgCheckbox, TgInput, TgSelect } from '@terwer/ui'
-import { ref } from 'vue'
+import { TgButton, TgCheckbox, TgInput, TgSelect } from "@terwer/ui"
+import { ref } from "vue"
 
 // 响应式数据
-const selectedPlatform = ref('')
-const postTitle = ref('')
-const postSummary = ref('')
-const postTags = ref('')
+const selectedPlatform = ref("")
+const postTitle = ref("")
+const postSummary = ref("")
+const postTags = ref("")
 const publishAsDraft = ref(false)
 const includeImages = ref(true)
 const publishing = ref(false)
@@ -65,33 +74,33 @@ const publishing = ref(false)
 // 发布处理
 const handlePublish = async () => {
   if (!selectedPlatform.value) {
-    alert('请选择发布平台')
+    alert("请选择发布平台")
     return
   }
-  
+
   if (!postTitle.value) {
-    alert('请输入文章标题')
+    alert("请输入文章标题")
     return
   }
 
   publishing.value = true
-  
+
   try {
     // 模拟发布过程
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    
-    console.log('发布信息:', {
+    await new Promise((resolve) => setTimeout(resolve, 2000))
+
+    console.log("发布信息:", {
       platform: selectedPlatform.value,
       title: postTitle.value,
       summary: postSummary.value,
       tags: postTags.value,
       asDraft: publishAsDraft.value,
-      includeImages: includeImages.value
+      includeImages: includeImages.value,
     })
-    
-    alert('发布成功！')
+
+    alert("发布成功！")
   } catch (error) {
-    alert('发布失败：' + error)
+    alert("发布失败：" + error)
   } finally {
     publishing.value = false
   }

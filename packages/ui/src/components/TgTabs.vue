@@ -29,7 +29,7 @@ const activeKey = computed({
 })
 
 // 初始化时设置默认值
-if (!props.modelValue && props.items.length > 0) {
+if (!props.modelValue && props.items.length > 0 && props.items[0]) {
   emit("update:modelValue", props.items[0].key)
 }
 
@@ -45,7 +45,7 @@ const handleTabClick = (key: string | number) => {
         v-for="item in items"
         :key="item.key"
         class="tg-tabs-tab"
-        :class="{ 'tg-tabs-tab-active': activeKey === item.key }"
+        :class="{ 'tg-tabs-tab-active': activeKey === (item.key as string | number) }"
         @click="handleTabClick(item.key)"
       >
         {{ item.label }}
@@ -56,7 +56,7 @@ const handleTabClick = (key: string | number) => {
         v-for="item in items"
         :key="item.key"
         class="tg-tabs-pane"
-        :class="{ 'tg-tabs-pane-active': activeKey === item.key }"
+        :class="{ 'tg-tabs-pane-active': activeKey === (item.key as string | number) }"
       >
         <slot :name="item.key">{{ item.content }}</slot>
       </div>

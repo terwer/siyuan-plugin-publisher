@@ -93,12 +93,13 @@ export const useComputedField = function <T, P extends Path<T>, D>(
       let current: any = newValue
 
       for (let i = 0; i < keys.length - 1; i++) {
-        const key = keys[i]
+        const key = keys[i] as keyof any
         current[key] = current[key] ? { ...current[key] } : {}
         current = current[key]
+        source.value = newValue
       }
-
-      current[keys[keys.length - 1]] = value
+      const lastKey = keys[keys.length - 1] as keyof any
+      current[lastKey] = value
       source.value = newValue
     },
   })
