@@ -1,7 +1,9 @@
 # Changelog
 
-## [1.38.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.38.0...siyuan-plugin-publisher-v1.38.1) (2025-10-25)
+## [1.38.2](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.38.1...siyuan-plugin-publisher-v1.38.2) (2025-10-30)
 ### Bug Fixes
+* [#1785](https://github.com/terwer/siyuan-plugin-publisher/issues/1785) 某些情况批量发布报错 ([fa43a2d](https://github.com/terwer/siyuan-plugin-publisher/commit/fa43a2d35f7abc2129ff03028d52666cf41fb4bc))
+## [1.38.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.38.0...siyuan-plugin-publisher-v1.38.1) (2025-10-25)
 * support media for local system ([afa86cc](https://github.com/terwer/siyuan-plugin-publisher/commit/afa86cccd354970b02c8b88396f1e5a3cc479674))
 ## [1.38.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.37.0...siyuan-plugin-publisher-v1.38.0) (2025-10-25)
 ### Features
