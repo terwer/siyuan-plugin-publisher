@@ -44,6 +44,8 @@ import { TgAppShell } from "@terwer/ui"
 import { ref, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useTheme } from "./composables/useTheme"
+import { useAppInstance } from "@/composables/useAppInstance.ts"
+const { getAppContext } = useAppInstance()
 
 // ================ 响应式数据 ================
 const { theme, toggleTheme } = useTheme()
@@ -51,6 +53,8 @@ const isCollapsed = ref(false)
 const router = useRouter()
 const route = useRoute()
 const currentRoute = ref(route.path)
+const ctx = getAppContext()
+console.log("ctx", ctx)
 
 // ================ 方法 ================
 const handleNavChange = (route: string) => {

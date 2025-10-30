@@ -1,4 +1,5 @@
 import { defineConfig, type ConfigEnv, type UserConfig } from "vite"
+// @ts-ignore
 import vue from "@vitejs/plugin-vue"
 import path from "node:path"
 import minimist from "minimist"
@@ -120,7 +121,7 @@ export default defineConfig((env: ConfigEnv): UserConfig => {
                 },
               ]
             : []),
-        ],
+        ] as any,
         output: {
           entryFileNames: "[name].js",
           assetFileNames: (assetInfo) => {

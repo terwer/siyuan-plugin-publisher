@@ -24,7 +24,7 @@ export class Topbar {
   public initTopbar() {
     const topBarElement = this.appInstance.addTopBar({
       icon: "iconPublish",
-      title: this.appInstance.i18n.publisher,
+      title: this.appInstance.i18n.publisher!,
       position: "left",
       callback: () => {},
     })
