@@ -112,38 +112,42 @@ class CsdnUtils {
   }
 
   public static processCsdnMath(html: string): string {
-    // 使用Cheerio加载HTML
     const $ = cheerio.load(html, {
       xml: {
         xmlMode: true,
         decodeEntities: false,
       },
-    })
+    });
 
-    // 处理两个$符号包裹的公式
-    const doubleDollarRegex = /\$\$([^$]+)\$\$/g
-    $("*:not(pre)").each((index, element) => {
-      const content = $(element).html()
-      const newContent = content.replace(doubleDollarRegex, (match, mathContent) => {
-        const mathHtml = KatexUtils.renderToString(mathContent)
-        return `<span class="katex--display">${mathHtml}</span>`
-      })
-      $(element).html(newContent)
-    })
+    // 选择除了代码块及其子元素之外的所有元素
+    $('body').find('*').not('pre, code, pre *, code *').each((index, element) => {
+      const $element = $(element);
+      const originalHtml = $element.html();
 
-    // 处理一个$符号包裹的公式
-    const singleDollarRegex = /\$([^$]+)\$/g
-    $("*:not(pre)").each((index, element) => {
-      const content = $(element).html()
-      const newContent = content.replace(singleDollarRegex, (match, mathContent) => {
-        const mathHtml = KatexUtils.renderToString(mathContent)
-        return `<span class="katex--inline">${mathHtml}</span>`
-      })
-      $(element).html(newContent)
-    })
+      if (!originalHtml) return;
 
-    // 输出修改后的HTML
-    return $.html()
+      // 处理数学公式
+      let processedHtml = originalHtml;
+
+      // 处理 $$...$$ 显示公式
+      processedHtml = processedHtml.replace(/\$\$([^$]+)\$\$/g, (match, mathContent) => {
+        const mathHtml = KatexUtils.renderToString(mathContent.trim());
+        return `<span class="katex--display">${mathHtml}</span>`;
+      });
+
+      // 处理 $...$ 行内公式
+      processedHtml = processedHtml.replace(/\$([^$]+)\$/g, (match, mathContent) => {
+        const mathHtml = KatexUtils.renderToString(mathContent.trim());
+        return `<span class="katex--inline">${mathHtml}</span>`;
+      });
+
+      // 只有当内容发生变化时才更新
+      if (processedHtml !== originalHtml) {
+        $element.html(processedHtml);
+      }
+    });
+
+    return $.html();
   }
 
   /**

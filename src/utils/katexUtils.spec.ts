@@ -12,7 +12,7 @@ import KatexUtils from "~/src/utils/katexUtils.ts"
 
 describe("test katexUtils", () => {
   it("test renderToString", () => {
-    const mathExpression = "./main \\nHello World!\\n^CSignal handler\\nReceived SI…Code/Embeed/ApplicationDevelop/MyImplement/Signal"
+    const mathExpression = "a=b+c"
     const mathHtml = KatexUtils.renderToString(mathExpression)
     console.log("mathHtml=>", mathHtml)
   })
