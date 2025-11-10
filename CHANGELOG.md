@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.38.3](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.38.2...siyuan-plugin-publisher-v1.38.3) (2025-11-10)
+
+
+### Bug Fixes
+
+* **csdn:** improve math formula processing in HTML content ([8076fc1](https://github.com/terwer/siyuan-plugin-publisher/commit/8076fc196f3fd5fc651a807c65ade57b9a98efd5))
+
+
+### Miscellaneous
+
+* **deps:** update pnpm to version 10.21.0 ([ac822be](https://github.com/terwer/siyuan-plugin-publisher/commit/ac822be84db8de299df6510bb7e532cbf4a7851e))
+* **license:** update license headers to GPL v3 ([aa05c2d](https://github.com/terwer/siyuan-plugin-publisher/commit/aa05c2dd7dc5aef2cf3068323563fa375d9cfa80))
+
 ## [1.38.2](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.38.1...siyuan-plugin-publisher-v1.38.2) (2025-10-30)
 ### Bug Fixes
 * [#1785](https://github.com/terwer/siyuan-plugin-publisher/issues/1785) 某些情况批量发布报错 ([fa43a2d](https://github.com/terwer/siyuan-plugin-publisher/commit/fa43a2d35f7abc2129ff03028d52666cf41fb4bc))
