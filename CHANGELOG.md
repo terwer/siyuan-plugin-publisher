@@ -1,7 +1,12 @@
 # Changelog
 
-## [1.38.2](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.38.1...siyuan-plugin-publisher-v1.38.2) (2025-10-30)
+## [1.38.3](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.38.2...siyuan-plugin-publisher-v1.38.3) (2025-11-10)
 ### Bug Fixes
+* **csdn:** improve math formula processing in html content ([8076fc1](https://github.com/terwer/siyuan-plugin-publisher/commit/8076fc196f3fd5fc651a807c65ade57b9a98efd5))
+### Miscellaneous
+* **deps:** update pnpm to version 10.21.0 ([ac822be](https://github.com/terwer/siyuan-plugin-publisher/commit/ac822be84db8de299df6510bb7e532cbf4a7851e))
+* **license:** update license headers to gpl v3 ([aa05c2d](https://github.com/terwer/siyuan-plugin-publisher/commit/aa05c2dd7dc5aef2cf3068323563fa375d9cfa80))
+## [1.38.2](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.38.1...siyuan-plugin-publisher-v1.38.2) (2025-10-30)
 * [#1785](https://github.com/terwer/siyuan-plugin-publisher/issues/1785) 某些情况批量发布报错 ([fa43a2d](https://github.com/terwer/siyuan-plugin-publisher/commit/fa43a2d35f7abc2129ff03028d52666cf41fb4bc))
 ## [1.38.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.38.0...siyuan-plugin-publisher-v1.38.1) (2025-10-25)
 * support media for local system ([afa86cc](https://github.com/terwer/siyuan-plugin-publisher/commit/afa86cccd354970b02c8b88396f1e5a3cc479674))
@@ -18,7 +23,6 @@
 ## [1.36.2](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.36.1...siyuan-plugin-publisher-v1.36.2) (2025-06-24)
 * upload media error via cnblogs ([cfd0537](https://github.com/terwer/siyuan-plugin-publisher/commit/cfd05373cf34307777f46f10fca29883e21da6ca))
 ## [1.36.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.36.0...siyuan-plugin-publisher-v1.36.1) (2025-06-24)
-### Miscellaneous
 * update plugin name for production ([75e5616](https://github.com/terwer/siyuan-plugin-publisher/commit/75e56168fd6c257a603a274eb0cc8fb14b19bea6))
 ## [1.36.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.35.1...siyuan-plugin-publisher-v1.36.0) (2025-06-24)
 * update repo info ([a7d7f94](https://github.com/terwer/siyuan-plugin-publisher/commit/a7d7f941d502420ed79291628dd7215ff3ce9aff))

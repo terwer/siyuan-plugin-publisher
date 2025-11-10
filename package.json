@@ -1,6 +1,6 @@
 {
   "name": "siyuan-plugin-publisher",
-  "version": "1.38.2",
+  "version": "1.38.3",
   "description": "Publish articles from Siyuan Notes to platforms such as Yuque, Notion, Cnblogs, WordPress, Typecho, Hexo, Zhihu and more",
   "repository": "terwer/siyuan-plugin-publisher",
   "homepage": "https://github.com/terwer/siyuan-plugin-publisher",
