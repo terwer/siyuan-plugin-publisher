@@ -1,26 +1,10 @@
 /*
- * Copyright (c) 2023, Terwer . All rights reserved.
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *            GNU GENERAL PUBLIC LICENSE
+ *               Version 3, 29 June 2007
  *
- * This code is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License version 2 only, as
- * published by the Free Software Foundation.  Terwer designates this
- * particular file as subject to the "Classpath" exception as provided
- * by Terwer in the LICENSE file that accompanied this code.
- *
- * This code is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
- * version 2 for more details (a copy is included in the LICENSE file that
- * accompanied this code).
- *
- * You should have received a copy of the GNU General Public License version
- * 2 along with this work; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- *
- * Please contact Terwer, Shenzhen, Guangdong, China, youweics@163.com
- * or visit www.terwer.space if you need additional information or have any
- * questions.
+ *  Copyright (C) 2025 Terwer, Inc. <https://terwer.space/>
+ *  Everyone is permitted to copy and distribute verbatim copies
+ *  of this license document, but changing it is not allowed.
  */
 
 import Utf8 from "crypto-js/enc-utf8"
@@ -128,38 +112,42 @@ class CsdnUtils {
   }
 
   public static processCsdnMath(html: string): string {
-    // 使用Cheerio加载HTML
     const $ = cheerio.load(html, {
       xml: {
         xmlMode: true,
         decodeEntities: false,
       },
-    })
+    });
 
-    // 处理两个$符号包裹的公式
-    const doubleDollarRegex = /\$\$([^$]+)\$\$/g
-    $("*:not(pre)").each((index, element) => {
-      const content = $(element).html()
-      const newContent = content.replace(doubleDollarRegex, (match, mathContent) => {
-        const mathHtml = KatexUtils.renderToString(mathContent)
-        return `<span class="katex--display">${mathHtml}</span>`
-      })
-      $(element).html(newContent)
-    })
+    // 选择除了代码块及其子元素之外的所有元素
+    $('body').find('*').not('pre, code, pre *, code *').each((index, element) => {
+      const $element = $(element);
+      const originalHtml = $element.html();
 
-    // 处理一个$符号包裹的公式
-    const singleDollarRegex = /\$([^$]+)\$/g
-    $("*:not(pre)").each((index, element) => {
-      const content = $(element).html()
-      const newContent = content.replace(singleDollarRegex, (match, mathContent) => {
-        const mathHtml = KatexUtils.renderToString(mathContent)
-        return `<span class="katex--inline">${mathHtml}</span>`
-      })
-      $(element).html(newContent)
-    })
+      if (!originalHtml) return;
 
-    // 输出修改后的HTML
-    return $.html()
+      // 处理数学公式
+      let processedHtml = originalHtml;
+
+      // 处理 $$...$$ 显示公式
+      processedHtml = processedHtml.replace(/\$\$([^$]+)\$\$/g, (match, mathContent) => {
+        const mathHtml = KatexUtils.renderToString(mathContent.trim());
+        return `<span class="katex--display">${mathHtml}</span>`;
+      });
+
+      // 处理 $...$ 行内公式
+      processedHtml = processedHtml.replace(/\$([^$]+)\$/g, (match, mathContent) => {
+        const mathHtml = KatexUtils.renderToString(mathContent.trim());
+        return `<span class="katex--inline">${mathHtml}</span>`;
+      });
+
+      // 只有当内容发生变化时才更新
+      if (processedHtml !== originalHtml) {
+        $element.html(processedHtml);
+      }
+    });
+
+    return $.html();
   }
 
   /**
