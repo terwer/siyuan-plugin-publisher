@@ -12,6 +12,13 @@
 - 支持多平台：windows, linux, darwin, docker, android, ios
 - 支持多前端：desktop, desktop-window, mobile, browser-desktop, browser-mobile
 
+## 重要开发说明
+**注意：必须使用 pnpm 进行开发和构建，并且必须使用 `pnpm dev -p siyuan` 命令来启动思源笔记插件的开发环境。**
+
+**特别强调：禁止使用 require 导入内部模块，必须使用 ES Module 的 import/export 语法。这是项目的强制要求，以确保代码的一致性和可维护性。**
+
+**重要提醒：大部分情况下禁止使用动态导入（dynamic import），除非有特殊说明和充分理由。在绝大多数场景下，必须使用显式的头部 ESM import 语句进行模块导入。**
+
 ## Project Conventions
 
 ### Code Style

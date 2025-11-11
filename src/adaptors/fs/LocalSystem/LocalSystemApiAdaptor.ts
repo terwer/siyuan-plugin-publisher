@@ -11,6 +11,14 @@ import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
 import { Attachment, MediaObject, Post, UserBlog, YamlConvertAdaptor } from "zhi-blog-api"
 import { LocalSystemYamlConvertAdaptor } from "~/src/adaptors/fs/LocalSystem/LocalSystemYamlConvertAdaptor.ts"
 import { LocalSystemConfig } from "~/src/adaptors/fs/LocalSystem/LocalSystemConfig.ts"
+import { FsYamlType } from "~/src/adaptors/fs/LocalSystem/FsYamlType.ts"
+import { HexoYamlConverterAdaptor } from "~/src/adaptors/api/hexo/hexoYamlConverterAdaptor.ts"
+import { HugoYamlConverterAdaptor } from "~/src/adaptors/api/hugo/hugoYamlConverterAdaptor.ts"
+import { JekyllYamlConverterAdaptor } from "~/src/adaptors/api/jekyll/jekyllYamlConverterAdaptor.ts"
+import { VuepressYamlConverterAdaptor } from "~/src/adaptors/api/vuepress/vuepressYamlConverterAdaptor.ts"
+import { Vuepress2YamlConverterAdaptor } from "~/src/adaptors/api/vuepress2/vuepress2YamlConverterAdaptor.ts"
+import { VitepressYamlConverterAdaptor } from "~/src/adaptors/api/vitepress/vitepressYamlConverterAdaptor.ts"
+import { QuartzYamlConverterAdaptor } from "~/src/adaptors/api/quartz/quartzYamlConverterAdaptor.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { EnvUtil } from "~/src/utils/EnvUtil.ts"
 import { StrUtil } from "zhi-common"
@@ -52,7 +60,35 @@ class LocalSystemApiAdaptor extends BaseBlogApi {
    */
   public getYamlAdaptor(): YamlConvertAdaptor {
     const localFsCfg = this.cfg as LocalSystemConfig
-    return new LocalSystemYamlConvertAdaptor(localFsCfg)
+    
+    // 根据fsYamlType动态选择YAML适配器
+    switch (localFsCfg.fsYamlType) {
+      case FsYamlType.Hexo:
+        this.logger.info("使用 Hexo YAML 适配器")
+        return new HexoYamlConverterAdaptor()
+      case FsYamlType.Hugo:
+        this.logger.info("使用 Hugo YAML 适配器")
+        return new HugoYamlConverterAdaptor()
+      case FsYamlType.Jekyll:
+        this.logger.info("使用 Jekyll YAML 适配器")
+        return new JekyllYamlConverterAdaptor()
+      case FsYamlType.Vuepress:
+        this.logger.info("使用 VuePress YAML 适配器")
+        return new VuepressYamlConverterAdaptor()
+      case FsYamlType.Vuepress2:
+        this.logger.info("使用 VuePress2 YAML 适配器")
+        return new Vuepress2YamlConverterAdaptor()
+      case FsYamlType.Vitepress:
+        this.logger.info("使用 VitePress YAML 适配器")
+        return new VitepressYamlConverterAdaptor()
+      case FsYamlType.Quartz:
+        this.logger.info("使用 Quartz YAML 适配器")
+        return new QuartzYamlConverterAdaptor()
+      case FsYamlType.Default:
+      default:
+        this.logger.info("使用默认 YAML 适配器")
+        return new LocalSystemYamlConvertAdaptor(localFsCfg)
+    }
   }
 
   public async newPost(post: Post, _publish?: boolean): Promise<string> {
