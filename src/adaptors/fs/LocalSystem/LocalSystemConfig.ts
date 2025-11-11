@@ -11,6 +11,7 @@ import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
 import { PasswordType, PicbedServiceTypeEnum } from "zhi-blog-api"
 import { EnvUtil } from "~/src/utils/EnvUtil.ts"
 import { StrUtil } from "zhi-common"
+import { FsYamlType } from "~/src/adaptors/fs/LocalSystem/FsYamlType.ts"
 
 /**
  * 本地系统配置
@@ -20,6 +21,7 @@ import { StrUtil } from "zhi-common"
  */
 class LocalSystemConfig extends CommonBlogConfig {
   public storePath: string
+  public fsYamlType: FsYamlType
 
   constructor() {
     super(null, null, null, null, null)
@@ -31,6 +33,7 @@ class LocalSystemConfig extends CommonBlogConfig {
     this.picbedService = PicbedServiceTypeEnum.Bundled
     this.storePath = StrUtil.pathJoin(EnvUtil.getHomeFolder(), "Downloads/syp")
     this.imageStorePath = "assets"
+    this.fsYamlType = FsYamlType.Default
   }
 }
 

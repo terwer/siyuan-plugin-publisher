@@ -745,4 +745,14 @@ export default {
   "setting.blog.type.fs.media.path": "Media Storage Path",
   "setting.blog.type.fs.media.path.tip":
     "Relative path (under Storage Path) for storing assets like images and attachments. Default: assets",
+  "setting.blog.type.fs.yaml.type": "YAML Type",
+  "setting.blog.type.fs.yaml.type.tip": "Select the YAML format for the local system storage",
+  "setting.blog.type.fs.yaml.type.default": "Default",
+  "setting.blog.type.fs.yaml.type.hexo": "Hexo",
+  "setting.blog.type.fs.yaml.type.hugo": "Hugo",
+  "setting.blog.type.fs.yaml.type.jekyll": "Jekyll",
+  "setting.blog.type.fs.yaml.type.vuepress": "Vuepress",
+  "setting.blog.type.fs.yaml.type.vuepress2": "Vuepress2",
+  "setting.blog.type.fs.yaml.type.vitepress": "Vitepress",
+  "setting.blog.type.fs.yaml.type.quartz": "Quartz",
 }

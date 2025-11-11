@@ -13,6 +13,7 @@ import CommonBlogSetting from "~/src/components/set/publish/singleplatform/base/
 import { useLocalSystemApi } from "~/src/adaptors/fs/LocalSystem/useLocalSystemApi.ts"
 import { LocalSystemConfig } from "~/src/adaptors/fs/LocalSystem/LocalSystemConfig.ts"
 import { LocalSystemPlaceholder } from "~/src/adaptors/fs/LocalSystem/LocalSystemPlaceholder.ts"
+import { FsYamlType } from "~/src/adaptors/fs/LocalSystem/FsYamlType.ts"
 
 const props = defineProps({
   apiType: {
@@ -49,6 +50,36 @@ localFsCfg.placeholder = localFsPlaceholder
           :placeholder="t('setting.blog.type.fs.media.path.tip')"
         />
       </el-form-item>
+
+      <!-- YAML类型 -->
+      <el-form-item :label="t('setting.blog.type.fs.yaml.type')">
+        <div class="yaml-type-radio-group">
+          <el-radio v-model="(main.cfg as LocalSystemConfig).fsYamlType" :label="FsYamlType.Default" size="default">
+            {{ t("setting.blog.type.fs.yaml.type.default") }}
+          </el-radio>
+          <el-radio v-model="(main.cfg as LocalSystemConfig).fsYamlType" :label="FsYamlType.Hexo" size="default">
+            {{ t("setting.blog.type.fs.yaml.type.hexo") }}
+          </el-radio>
+          <el-radio v-model="(main.cfg as LocalSystemConfig).fsYamlType" :label="FsYamlType.Hugo" size="default">
+            {{ t("setting.blog.type.fs.yaml.type.hugo") }}
+          </el-radio>
+          <el-radio v-model="(main.cfg as LocalSystemConfig).fsYamlType" :label="FsYamlType.Jekyll" size="default">
+            {{ t("setting.blog.type.fs.yaml.type.jekyll") }}
+          </el-radio>
+          <el-radio v-model="(main.cfg as LocalSystemConfig).fsYamlType" :label="FsYamlType.Vuepress" size="default">
+            {{ t("setting.blog.type.fs.yaml.type.vuepress") }}
+          </el-radio>
+          <el-radio v-model="(main.cfg as LocalSystemConfig).fsYamlType" :label="FsYamlType.Vuepress2" size="default">
+            {{ t("setting.blog.type.fs.yaml.type.vuepress2") }}
+          </el-radio>
+          <el-radio v-model="(main.cfg as LocalSystemConfig).fsYamlType" :label="FsYamlType.Vitepress" size="default">
+            {{ t("setting.blog.type.fs.yaml.type.vitepress") }}
+          </el-radio>
+          <el-radio v-model="(main.cfg as LocalSystemConfig).fsYamlType" :label="FsYamlType.Quartz" size="default">
+            {{ t("setting.blog.type.fs.yaml.type.quartz") }}
+          </el-radio>
+        </div>
+      </el-form-item>
     </template>
 
     <template #footer="footer">
@@ -56,3 +87,16 @@ localFsCfg.placeholder = localFsPlaceholder
     </template>
   </common-blog-setting>
 </template>
+
+<style scoped>
+.yaml-type-radio-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.yaml-type-radio-group .el-radio {
+  margin-bottom: 8px;
+}
+</style>

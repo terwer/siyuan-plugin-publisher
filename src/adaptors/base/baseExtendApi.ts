@@ -585,8 +585,12 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
       }
       this.logger.debug("readFileToBase64 proxyFetch response =>", response)
       const base64String = response.body
+      let imageName = "unknown-image"
+      if (url) {
+        imageName = url.substring(url.lastIndexOf("/") + 1)
+      }
       base64Info = {
-        imageName: url.substring(url.lastIndexOf("/") + 1),
+        imageName,
         mimeType: response.contentType,
         imageBase64: base64String,
       }

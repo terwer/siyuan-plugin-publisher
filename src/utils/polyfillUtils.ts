@@ -64,7 +64,10 @@ export const toBase64Info = (
   base64String: string
 ): { imageName: string; mimeType: string; imageBase64: string } => {
   const imageBase64 = base64String.split(";base64,").pop() || ""
-  const imageName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1)
+  let imageName = "unknown-image"
+  if (imageUrl) {
+    imageName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1)
+  }
   const mimeType = extractMimeType(base64String)
 
   return {

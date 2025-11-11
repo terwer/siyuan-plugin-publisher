@@ -451,7 +451,7 @@ class Adaptors {
    * @param newCfg
    */
   public static async getYamlAdaptor(key: string, newCfg?: any): Promise<YamlConvertAdaptor> {
-    let yamlAdp = null
+    let yamlAdp: YamlConvertAdaptor | null = null
     const type: SubPlatformType = getSubPlatformTypeByKey(key)
 
     switch (type) {
@@ -526,6 +526,9 @@ class Adaptors {
         break
       }
       default: {
+        // 对于没有特定YAML适配器的平台，返回null
+        this.logger.info(`No specific YAML adapter found for platform key: ${key}, using null`)
+        yamlAdp = null
         break
       }
     }

@@ -14,7 +14,7 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
-import { LocalSystemYamlConvertAdaptor } from "~/src/adaptors/fs/LocalSystem/LocalSystemYamlConvertAdaptor.ts"
+import { FsUtils } from "~/src/adaptors/fs/LocalSystem/FsUtils.ts"
 
 /**
  * 本地系统适配器
@@ -52,7 +52,7 @@ const useLocalSystemApi = async (key: string, newCfg?: LocalSystemConfig) => {
   cfg.bundledPicbedSupported = true
 
   const blogApi = new LocalSystemApiAdaptor(appInstance, cfg)
-  const yamlAdaptor = new LocalSystemYamlConvertAdaptor(cfg)
+  const yamlAdaptor = FsUtils.getYamlAdaptor(cfg)
 
   return {
     cfg,

@@ -159,6 +159,9 @@ class EnvUtil {
   public static dirname(filePath: string): string {
     try {
       const win = SiyuanDevice.siyuanWindow()
+      if (!filePath) {
+        return ""
+      }
       if (!win?.require) {
         return filePath.substring(0, filePath.lastIndexOf("/"))
       }
@@ -167,6 +170,9 @@ class EnvUtil {
       return pathModule.dirname(filePath)
     } catch (e) {
       this.logger.error("Path dirname failed, using fallback:", e)
+      if (!filePath) {
+        return ""
+      }
       return filePath.substring(0, filePath.lastIndexOf("/"))
     }
   }

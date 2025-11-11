@@ -24,8 +24,11 @@ import FormDataUtils from "~/src/utils/FormDataUtils.ts"
 class JianshuWebAdaptor extends BaseWebApi {
   public async getMetaData(): Promise<any> {
     const res = await this.jianshuFetch("https://www.jianshu.com/settings/basic.json")
-    const avatar = res.data.avatar
-    const uid = avatar.substring(avatar.lastIndexOf("/") + 1, avatar.lastIndexOf("."))
+    const avatar = res.data.avatar || ""
+    let uid = ""
+    if (avatar) {
+      uid = avatar.substring(avatar.lastIndexOf("/") + 1, avatar.lastIndexOf("."))
+    }
     const flag = !!uid
     this.logger.info(`get jianshu metadata finished, flag => ${flag}`)
     return {
