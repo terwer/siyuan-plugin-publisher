@@ -518,7 +518,8 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
             // =======
             debugger
             if (attachResult && attachResult.macro) {
-              urlMap[image.originUrl] = attachResult.macao
+              urlMap[image.originUrl] = attachResult.macro
+              debugger
               useMacro = true
             } else if (attachResult && attachResult.url) {
               urlMap[image.originUrl] = attachResult.url
