@@ -124,11 +124,13 @@ class VuepressYamlConverterAdaptor extends YamlConvertAdaptor {
 
     // 摘要
     const yamlMeta = yamlFormatObj.yamlObj.meta
-    for (let i = 0; i < yamlMeta.length; i++) {
-      const m = yamlMeta[i]
-      if (m.name === "description" && !StrUtil.isEmptyString(m.content)) {
-        post.shortDesc = m.content
-        break
+    if (yamlMeta && yamlMeta.length > 0) {
+      for (let i = 0; i < yamlMeta.length; i++) {
+        const m = yamlMeta[i]
+        if (m.name === "description" && !StrUtil.isEmptyString(m.content)) {
+          post.shortDesc = m.content
+          break
+        }
       }
     }
 

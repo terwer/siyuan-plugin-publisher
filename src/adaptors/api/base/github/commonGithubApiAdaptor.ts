@@ -167,6 +167,9 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
 
     // 检查是否需要更改目录
     const originalPath = postid
+    if (!originalPath) {
+      throw new Error("postid 不能为空")
+    }
     const originalDir = originalPath.substring(0, originalPath.lastIndexOf("/"))
     const filename = originalPath.substring(originalPath.lastIndexOf("/") + 1)
 
@@ -234,6 +237,9 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
 
   public override async getPostPreviewUrl(postid: string): Promise<string> {
     let previewUrl: string
+    if (!postid) {
+      throw new Error("postid 不能为空")
+    }
     const newPostid = postid.substring(postid.lastIndexOf("/") + 1).replace(".md", "")
     previewUrl = this.cfg.previewPostUrl.replace("[postid]", newPostid)
     // 路径组合

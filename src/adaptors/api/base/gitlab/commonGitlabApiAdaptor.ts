@@ -213,6 +213,9 @@ class CommonGitlabApiAdaptor extends BaseBlogApi {
 
   public async getPostPreviewUrl(postid: string): Promise<string> {
     let previewUrl: string
+    if (!postid) {
+      throw new Error("postid 不能为空")
+    }
     const newPostid = postid.substring(postid.lastIndexOf("/") + 1).replace(".md", "")
     previewUrl = this.cfg.previewPostUrl.replace("[postid]", newPostid)
     // 路径组合
