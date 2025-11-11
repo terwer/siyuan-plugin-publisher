@@ -43,6 +43,7 @@ import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStor
 import { SypConfig } from "~/syp.config.ts"
 import { usePlatformMetadataStore } from "~/src/stores/usePlatformMetadataStore.ts"
 import { MdUtils } from "~/src/utils/mdUtils.ts"
+import ImageUtils from "~/src/utils/ImageUtils.ts"
 
 /**
  * 各种模式共享的扩展基类
@@ -487,6 +488,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
         // 使用平台上传图片
         // ==========================
         this.logger.info("使用平台上传图片")
+        let useMacro = false
         // 找到所有的图片
         const images = await this.picgoBridge.getImageItemsFromMd(id, post.markdown)
         if (images.length === 0) {
@@ -495,7 +497,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
         }
         // 批量处理图片上传
         this.logger.info(`找到${images.length}张图片，开始上传`)
-        const urlMap = {}
+        const urlMap = {} as any
         try {
           for (const image of images) {
             const imageUrl = image.url
@@ -509,11 +511,21 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
             const mediaObject = new MediaObject(image.name, base64Info.mimeType, bits)
             mediaObject.post = post
             this.logger.debug("before upload, mediaObject =>", mediaObject)
-            const attachResult = await this.api.newMediaObject(mediaObject)
+            const attachResult = (await this.api.newMediaObject(mediaObject)) as any
             this.logger.debug("attachResult =>", attachResult)
-            if (attachResult && attachResult.url) {
+            // =======
+            // 旧版使用 URL，confluence 使用 macro，macro 优先
+            // =======
+            debugger
+            if (attachResult && attachResult.macro) {
+              urlMap[image.originUrl] = attachResult.macao
+              useMacro = true
+            } else if (attachResult && attachResult.url) {
               urlMap[image.originUrl] = attachResult.url
             }
+            // =======
+            // 旧版使用 URL，confluence 使用 macro，macro 优先
+            // =======
             const platformImageSuccessMsg = `使用平台自带的图片上传能力，已成功上传图片 ${image.name}`
             await this.kernelApi.pushMsg({
               msg: platformImageSuccessMsg,
@@ -531,16 +543,33 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
 
         // 图片替换
         this.logger.info("平台图片全部上传完成，将开始进行连接替换，urlMap =>", urlMap)
-        const pictureReplacePattern = new RegExp(
-          Object.keys(urlMap)
-            .map((key) => `\\b${key}\\b`)
-            .join("|"),
-          "g"
-        )
-        const replaceUrl = (match: string): string => {
-          return urlMap[match] || match
+        if (useMacro) {
+          this.logger.info("使用 Confluence 宏替换图片")
+          debugger
+          // Confluence宏替换
+          for (const key in urlMap) {
+            if (urlMap.hasOwnProperty(key)) {
+              const regex = ImageUtils.genMdImageRegex(key)
+              debugger
+              post.markdown = post.markdown.replace(regex, urlMap[key])
+            }
+          }
+        } else {
+          this.logger.info("使用链接替换图片")
+          // 其他链接替换
+          const pictureReplacePattern = new RegExp(
+            Object.keys(urlMap)
+              .map((key) => `\\b${key}\\b`)
+              .join("|"),
+            "g"
+          )
+          const replaceUrl = (match: string): string => {
+            return urlMap[match] || match
+          }
+          debugger
+          post.markdown = post.markdown.replace(pictureReplacePattern, replaceUrl)
         }
-        post.markdown = post.markdown.replace(pictureReplacePattern, replaceUrl)
+
         break
       }
       default: {
