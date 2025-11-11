@@ -94,5 +94,5 @@
     "zhi-siyuan-picgo": "^1.12.1",
     "zhi-xmlrpc-middleware": "^0.6.25"
   },
-  "packageManager": "pnpm@10.12.3"
+  "packageManager": "pnpm@10.21.0"
 }
