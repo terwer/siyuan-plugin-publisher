@@ -105,29 +105,84 @@ class Vuepress2YamlConverterAdaptor extends YamlConvertAdaptor {
    */
   public convertToAttr(post: Post, yamlFormatObj: YamlFormatObj, cfg?: BlogConfig): Post {
     this.logger.debug("开始转换YAML到Post", yamlFormatObj)
-
-    // 标题
-    if (yamlFormatObj.yamlObj?.title) {
-      post.title = yamlFormatObj.yamlObj?.title
+    
+    // 确保post对象存在
+    if (!post) {
+      this.logger.error("post对象为空，无法转换YAML属性")
+      return new Post()
+    }
+    
+    // 确保yamlFormatObj对象存在
+    if (!yamlFormatObj || !yamlFormatObj.yamlObj) {
+      this.logger.error("yamlFormatObj对象为空或yamlObj未定义，无法转换YAML属性")
+      return post
     }
 
-    // 发布时间
-    if (yamlFormatObj.yamlObj?.date) {
-      post.dateCreated = yamlFormatObj.yamlObj?.date
+    try {
+      // 标题
+      try {
+        if (typeof yamlFormatObj.yamlObj.title === "string" && !StrUtil.isEmptyString(yamlFormatObj.yamlObj.title)) {
+          post.title = yamlFormatObj.yamlObj.title
+        }
+      } catch (e) {
+        this.logger.error("标题解析失败", e)
+      }
+
+      // 发布时间
+      try {
+        if (yamlFormatObj.yamlObj.date) {
+          try {
+            post.dateCreated = yamlFormatObj.yamlObj.date
+          } catch (e) {
+            this.logger.error("日期解析失败", e)
+            // 使用当前日期作为后备
+            post.dateCreated = new Date()
+          }
+        }
+      } catch (e) {
+        this.logger.error("日期字段解析失败", e)
+      }
+
+      // 摘要
+      try {
+        post.shortDesc = yamlFormatObj.yamlObj.description
+      } catch (e) {
+        this.logger.error("摘要解析失败", e)
+      }
+
+      // 标签 - 兼容tag和tags两种格式
+      try {
+        if (Array.isArray(yamlFormatObj.yamlObj.tags) && yamlFormatObj.yamlObj.tags.length > 0) {
+          post.mt_keywords = yamlFormatObj.yamlObj.tags.join(",")
+        } else if (Array.isArray(yamlFormatObj.yamlObj.tag) && yamlFormatObj.yamlObj.tag.length > 0) {
+          post.mt_keywords = yamlFormatObj.yamlObj.tag.join(",")
+        }
+      } catch (e) {
+        this.logger.error("标签解析失败", e)
+      }
+
+      // 分类 - 兼容category和categories两种格式
+      try {
+        if (Array.isArray(yamlFormatObj.yamlObj.categories) && yamlFormatObj.yamlObj.categories.length > 0) {
+          post.categories = yamlFormatObj.yamlObj.categories
+        } else if (Array.isArray(yamlFormatObj.yamlObj.category) && yamlFormatObj.yamlObj.category.length > 0) {
+          post.categories = yamlFormatObj.yamlObj.category
+        }
+      } catch (e) {
+        this.logger.error("分类解析失败", e)
+      }
+
+      // 添加新的YAML
+      try {
+        const yaml = YamlUtil.obj2Yaml(yamlFormatObj.yamlObj)
+        post.yaml = this.removeTZ(yaml)
+      } catch (e) {
+        this.logger.error("YAML生成失败", e)
+        post.yaml = ""
+      }
+    } catch (e) {
+      this.logger.error("YAML属性转换过程中发生异常", e)
     }
-
-    // 摘要
-    post.shortDesc = yamlFormatObj.yamlObj?.description
-
-    // 标签
-    post.mt_keywords = yamlFormatObj.yamlObj?.tag?.join(",")
-
-    // 分类
-    post.categories = yamlFormatObj.yamlObj?.category
-
-    // 添加新的YAML
-    const yaml = YamlUtil.obj2Yaml(yamlFormatObj.yamlObj)
-    post.yaml = this.removeTZ(yaml)
 
     this.logger.debug("转换完成，post =>", post)
     return post
