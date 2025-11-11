@@ -25,73 +25,75 @@ class VuepressYamlConverterAdaptor extends YamlConvertAdaptor {
 
   public convertToYaml(post: Post, yamlFormatObj?: YamlFormatObj, cfg?: BlogConfig): YamlFormatObj {
     this.logger.debug("您正在使用 Vuepress Yaml Converter", { post: toRaw(post) })
-    // 没有的情况默认初始化一个
+    // 初始化yamlFormatObj
     if (!yamlFormatObj) {
       yamlFormatObj = new YamlFormatObj()
-      // title
-      yamlFormatObj.yamlObj.title = post.title
-
-      // date
-      yamlFormatObj.yamlObj.date = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true)
-
-      // meta
-      yamlFormatObj.yamlObj.meta = []
-      if (!StrUtil.isEmptyString(post.mt_keywords)) {
-        yamlFormatObj.yamlObj.meta.push({
-          name: "keywords",
-          content: post.mt_keywords.split(",").join(" ") || "",
-        })
-      }
-      if (!StrUtil.isEmptyString(post.shortDesc)) {
-        yamlFormatObj.yamlObj.meta.push({
-          name: "description",
-          content: post.shortDesc,
-        })
-      }
-
-      // tags
-      if (!StrUtil.isEmptyString(post.mt_keywords)) {
-        const tags = post.mt_keywords.split(",")
-        yamlFormatObj.yamlObj.tags = tags
-      }
-
-      // categories
-      if (post.categories?.length > 0) {
-        yamlFormatObj.yamlObj.categories = post.categories
-      }
-
-      // permalink
-      if (cfg.yamlLinkEnabled) {
-        let link = "/post/" + post.wp_slug + ".html"
-        yamlFormatObj.yamlObj.permalink = link
-      }
-
-      // author
-      const githubCfg = cfg as CommonGithubConfig
-      let githubUrl = githubCfg.site
-      if (StrUtil.isEmptyString(githubCfg.site)) {
-        githubUrl = StrUtil.pathJoin(githubCfg.home, "/" + githubCfg.username)
-      }
-      yamlFormatObj.yamlObj.author = {
-        name: githubCfg.author ?? "terwer",
-        link: githubUrl,
-      }
-
-      // 日记
-      if (post?.title?.includes("[日记]")) {
-        yamlFormatObj.yamlObj.article = false
-      }
-
-      // 上面是固定配置。下面是个性配置
-      const dynYamlCfg = JsonUtil.safeParse<any>(cfg?.dynYamlCfg ?? "{}", {})
-      if (ObjectUtil.isEmptyObject(dynYamlCfg)) {
-      } else {
-        Object.keys(dynYamlCfg).forEach((key) => {
-          yamlFormatObj.yamlObj[key] = dynYamlCfg[key]
-        })
-      }
     } else {
-      this.logger.info("yaml 已保存，不使用预设", { post: toRaw(post) })
+      this.logger.info("yaml 已存在，根据最新配置更新", { post: toRaw(post) })
+      // 清空原有内容，确保使用最新配置
+      yamlFormatObj.yamlObj = {}
+    }
+
+    // title
+    yamlFormatObj.yamlObj.title = post.title
+
+    // date
+    yamlFormatObj.yamlObj.date = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true)
+
+    // meta
+    yamlFormatObj.yamlObj.meta = []
+    if (!StrUtil.isEmptyString(post.mt_keywords)) {
+      yamlFormatObj.yamlObj.meta.push({
+        name: "keywords",
+        content: post.mt_keywords.split(",").join(" ") || "",
+      })
+    }
+    if (!StrUtil.isEmptyString(post.shortDesc)) {
+      yamlFormatObj.yamlObj.meta.push({
+        name: "description",
+        content: post.shortDesc,
+      })
+    }
+
+    // tags
+    if (!StrUtil.isEmptyString(post.mt_keywords)) {
+      const tags = post.mt_keywords.split(",")
+      yamlFormatObj.yamlObj.tags = tags
+    }
+
+    // categories
+    if (post.categories?.length > 0) {
+      yamlFormatObj.yamlObj.categories = post.categories
+    }
+
+    // permalink
+    if (cfg.yamlLinkEnabled) {
+      let link = "/post/" + post.wp_slug + ".html"
+      yamlFormatObj.yamlObj.permalink = link
+    }
+
+    // author
+    const githubCfg = cfg as CommonGithubConfig
+    let githubUrl = githubCfg.site
+    if (StrUtil.isEmptyString(githubCfg.site)) {
+      githubUrl = StrUtil.pathJoin(githubCfg.home, "/" + githubCfg.username)
+    }
+    yamlFormatObj.yamlObj.author = {
+      name: githubCfg.author ?? "terwer",
+      link: githubUrl,
+    }
+
+    // 日记
+    if (post?.title?.includes("[日记]")) {
+      yamlFormatObj.yamlObj.article = false
+    }
+
+    // 上面是固定配置。下面是个性配置
+    const dynYamlCfg = JsonUtil.safeParse<any>(cfg?.dynYamlCfg ?? "{}", {})
+    if (!ObjectUtil.isEmptyObject(dynYamlCfg)) {
+      Object.keys(dynYamlCfg).forEach((key) => {
+        yamlFormatObj.yamlObj[key] = dynYamlCfg[key]
+      })
     }
 
     // formatter
