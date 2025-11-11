@@ -11,11 +11,11 @@
 - [x] 2.5 确保与 super.yamlLinkEnabled 功能的兼容性
 
 ## 3. 前端界面开发
-- [ ] 3.1 在 LocalSystemSetting.vue 中添加 YAML 类型选择下拉框
-- [ ] 3.2 添加相应的国际化翻译
-- [ ] 3.3 实现配置保存和加载逻辑
+- [x] 3.1 在 LocalSystemSetting.vue 中添加 YAML 类型选择下拉框
+- [x] 3.2 添加相应的国际化翻译
+- [x] 3.3 实现配置保存和加载逻辑
 
 ## 4. 测试与文档
-- [ ] 4.1 测试不同 fsYamlType 设置下的 YAML 生成
-- [ ] 4.2 验证与 yamlLinkEnabled 的兼容性
-- [ ] 4.3 更新使用文档，说明如何配置 YAML 类型
+- [x] 4.1 测试不同 fsYamlType 设置下的 YAML 生成
+- [x] 4.2 验证与 yamlLinkEnabled 的兼容性
+- [x] 4.3 更新使用文档，说明如何配置 YAML 类型
