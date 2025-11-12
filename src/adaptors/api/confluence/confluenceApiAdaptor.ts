@@ -11,8 +11,10 @@ import { Attachment, CategoryInfo, MediaObject, Post, UserBlog } from "zhi-blog-
 import { ConfluenceConfig } from "~/src/adaptors/api/confluence/confluenceConfig.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
-import { ObjectUtil } from "zhi-common"
+import { ObjectUtil, StrUtil } from "zhi-common"
 import { load } from "cheerio"
+import ImageUtils from "~/src/utils/ImageUtils.ts"
+import { base64ToBuffer } from "~/src/utils/polyfillUtils.ts"
 
 /**
  * Confluence API 适配器
@@ -46,7 +48,47 @@ class ConfluenceApiAdaptor extends BaseBlogApi {
   public async newPost(post: Post, publish?: boolean): Promise<string> {
     // 确保最新的文章ID都包含了空间信息
     const spaceKey = post.cate_slugs?.[0] ?? this.cfg.blogid
-    return await this.createPage(post.title, post.description, spaceKey)
+    // 判断文章里面是否包含图片
+    const hasImage = ImageUtils.hasImageTag(post.description)
+    this.logger.debug(`new hasImage=>${hasImage}`)
+    debugger
+    if (!hasImage) {
+      // 如果没有图片，直接创建页面
+      return await this.createPage(post.title, post.description, spaceKey)
+    }
+    // 如果有图片
+    // 1、先创建页面
+    const postid = await this.createPage(post.title, post.description, spaceKey)
+    post.postid = postid
+    // 2、然后上传图片，图片需要从文章post.description中提取
+    // 2.0 从文章中提取图片URL
+    const imageUrls = ImageUtils.extractImageUrls(post.description)
+    this.logger.debug(`new imageUrls=>${imageUrls}`)
+    debugger
+    // 2.1 调用 newMediaObject 上传图片
+    for (const originUrl of imageUrls) {
+      // 忽略在线图片
+      if (originUrl.startsWith("http")) {
+        continue
+      }
+      const origin = window.location.origin
+      const imageUrl = StrUtil.pathJoin(origin, originUrl)
+      debugger
+      const base64Info = await this.baseExtendApi.readFileToBase64(imageUrl)
+      const bits = base64ToBuffer(base64Info.imageBase64)
+      const name = ImageUtils.getNameFromImageUrl(imageUrl)
+      const mediaObject = new MediaObject(name, base64Info.mimeType, bits)
+      mediaObject.post = post
+      // 2.2 调用 newMediaObject 上传图片
+      const attachment = await this.newMediaObject(mediaObject)
+      const regex = ImageUtils.genImageRegex(originUrl)
+      // 2.3 替换文章中的图片占位符
+      post.description = post.description.replace(regex, attachment.macro)
+    }
+    debugger
+    // 3、更新文章
+    await this.editPost(postid, post, publish)
+    return postid
   }
 
   public async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
@@ -201,7 +243,8 @@ class ConfluenceApiAdaptor extends BaseBlogApi {
   private async createPage(title: string, content: string, spaceKey?: string): Promise<string> {
     const url = "/rest/api/content"
     const targetSpaceKey = spaceKey || this.cfg.blogid
-    const parentPageId = this.cfg.parentPageId?.trim()
+    // 如果更换了空间，就不使用默认的父页面
+    const parentPageId = spaceKey == this.cfg.blogid ? this.cfg.parentPageId?.trim() : undefined
     const storageContent = this.normalizeContentForConfluence(content, title)
 
     const params: Record<string, any> = {

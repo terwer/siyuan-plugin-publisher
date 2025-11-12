@@ -141,6 +141,24 @@ class ImageUtils {
   //   const match = imgTag.match(srcRegex)
   //   return match ? match[1] : null
   // }
+  public static hasImageTag(html: string) {
+    const imgRegex = /<img\s[^>]*?src\s*=\s*["']?([^"'\s>]+)["']?[^>]*>/i
+    return imgRegex.test(html)
+  }
+
+  public static extractImageUrls(html: string): string[] {
+    const imgRegex = /<img[^>]+src\s*=\s*["']([^"']+)["'][^>]*>/gi
+    return Array.from(html.matchAll(imgRegex))
+      .map((match) => match[1])
+      .filter((src) => src && src.trim().length > 0)
+  }
+
+  public static getNameFromImageUrl(imageUrl: any) {
+    const fileName = imageUrl.split("/").pop()
+    // 还有去掉后缀
+    const fileNameWithoutExt = fileName.split(".")[0]
+    return fileNameWithoutExt || ""
+  }
 }
 
 // // 使用示例

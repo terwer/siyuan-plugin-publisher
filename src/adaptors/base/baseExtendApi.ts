@@ -490,7 +490,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
         this.logger.info("使用平台上传图片")
         let useMacro = false
         // 找到所有的图片
-        const images = await this.picgoBridge.getImageItemsFromMd(id, post.markdown)
+        const images = await this.getImagesFromMd(id, post.markdown)
         if (images.length === 0) {
           this.logger.info("未找到图片，不处理")
           return post
@@ -532,12 +532,22 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
             })
           }
         } catch (e) {
-          const errMsg2 = "文章可能已经发布成功，但是平台图片上传失败。请打开「开发者工具」查看错误日志"
-          this.logger.error(errMsg2, e)
-          await this.kernelApi.pushMsg({
-            msg: errMsg2,
-            timeout: 7000,
-          })
+          const message = e.message || e
+          let ignoreError = false
+          debugger
+          if (useMacro && message.includes("No content found with id")) {
+            ignoreError = true
+          }
+          if (!ignoreError) {
+            const errMsg2 = "文章可能已经发布成功，但是平台图片上传失败。请打开「开发者工具」查看错误日志"
+            this.logger.error(errMsg2, e)
+            await this.kernelApi.pushMsg({
+              msg: errMsg2,
+              timeout: 7000,
+            })
+          } else {
+            this.logger.info("ignore error in macro mode")
+          }
         }
 
         // 图片替换
@@ -565,7 +575,6 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
           }
           post.markdown = post.markdown.replace(pictureReplacePattern, replaceUrl)
         }
-
         break
       }
       default: {
@@ -586,12 +595,16 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     return post
   }
 
+  public async getImagesFromMd(id: string, markdown: string) {
+    return this.picgoBridge.getImageItemsFromMd(id, markdown)
+  }
+
   /**
    * 读取文件并将其转换为 Base64 编码
    *
    * @param url - 要读取的文件的 URL
    */
-  private async readFileToBase64(url: string): Promise<any> {
+  public async readFileToBase64(url: string): Promise<any> {
     let base64Info: any
     if (this.isSiyuanOrSiyuanNewWin) {
       this.logger.info("Inside Siyuan notes, use the built-in request to obtain base64")
