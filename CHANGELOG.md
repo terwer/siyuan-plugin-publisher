@@ -1,7 +1,18 @@
 # Changelog
 
-## [1.38.3](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.38.2...siyuan-plugin-publisher-v1.38.3) (2025-11-10)
+## [1.39.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.38.3...siyuan-plugin-publisher-v1.39.0) (2025-11-12)
+### Features
+* **fs:** add dynamic yaml adapter selection for local system ([7757f01](https://github.com/terwer/siyuan-plugin-publisher/commit/7757f012b263950e7c9b9f3c1cd954f91addfbd4))
+* **fs:** improve yaml type selection ui and handle missing adapters ([558474c](https://github.com/terwer/siyuan-plugin-publisher/commit/558474c8ce70d518f8e57b0f7b1a357723689dc0))
+* **localsystem:** support dynamic yaml adapter selection via fsyamltype ([1fd308d](https://github.com/terwer/siyuan-plugin-publisher/commit/1fd308db226a9c10f1a23a5b1acb889c57ed6693))
+* support media upload for confluence ([70c4c42](https://github.com/terwer/siyuan-plugin-publisher/commit/70c4c420697b2b26acb076355c58cc8fe73d029e))
+* **system-config:** add yaml configuration support for platforms ([90492d7](https://github.com/terwer/siyuan-plugin-publisher/commit/90492d78edeeb0679ca84987a41f5aaaa1e37370))
 ### Bug Fixes
+* add null checks for string operations ([b5feb91](https://github.com/terwer/siyuan-plugin-publisher/commit/b5feb91e2ba47ec11c7ed8f878657875ae8220f5))
+* **vuepress-adaptors:** add error handling and input validation ([f1f0d79](https://github.com/terwer/siyuan-plugin-publisher/commit/f1f0d7941e3f895359e16abf86bf764f013a1a1a))
+### Code Refactoring
+* **yaml-converters:** improve yaml conversion logic for all adaptors ([c1ceed4](https://github.com/terwer/siyuan-plugin-publisher/commit/c1ceed49245cb0253113a292de83d535d8d30afa))
+## [1.38.3](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.38.2...siyuan-plugin-publisher-v1.38.3) (2025-11-10)
 * **csdn:** improve math formula processing in html content ([8076fc1](https://github.com/terwer/siyuan-plugin-publisher/commit/8076fc196f3fd5fc651a807c65ade57b9a98efd5))
 ### Miscellaneous
 * **deps:** update pnpm to version 10.21.0 ([ac822be](https://github.com/terwer/siyuan-plugin-publisher/commit/ac822be84db8de299df6510bb7e532cbf4a7851e))
@@ -11,7 +22,6 @@
 ## [1.38.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.38.0...siyuan-plugin-publisher-v1.38.1) (2025-10-25)
 * support media for local system ([afa86cc](https://github.com/terwer/siyuan-plugin-publisher/commit/afa86cccd354970b02c8b88396f1e5a3cc479674))
 ## [1.38.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.37.0...siyuan-plugin-publisher-v1.38.0) (2025-10-25)
-### Features
 * [#1978](https://github.com/terwer/siyuan-plugin-publisher/issues/1978) support publish as local files ([d8000f6](https://github.com/terwer/siyuan-plugin-publisher/commit/d8000f639cd1ba4b15d86872bc98cf9b74d55549))
 * **confluence:** implement content normalization and parent page selection in confluence settings ([cc0f35e](https://github.com/terwer/siyuan-plugin-publisher/commit/cc0f35e6a7aea6d62cb9df5918f5f8e883dd0bfb))
 ## [1.37.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.36.3...siyuan-plugin-publisher-v1.37.0) (2025-10-22)
@@ -28,7 +38,6 @@
 * update repo info ([a7d7f94](https://github.com/terwer/siyuan-plugin-publisher/commit/a7d7f941d502420ed79291628dd7215ff3ce9aff))
 * 修复quartz平台的更新发布目录失败的问题 ([5976b1c](https://github.com/terwer/siyuan-plugin-publisher/commit/5976b1c7456095a6f7300dde75411e0a8cf70073))
 ## [1.35.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.35.0...siyuan-plugin-publisher-v1.35.1) (2025-06-09)
-### Code Refactoring
 * **adaptors/api/yuque:** adjust apifetch call for better compatibility ([74bc9e6](https://github.com/terwer/siyuan-plugin-publisher/commit/74bc9e61af0828689f95b8e8631056ec3d008501))
 ## [1.35.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.34.2...siyuan-plugin-publisher-v1.35.0) (2025-06-03)
 * add quartz support ([4ab5b70](https://github.com/terwer/siyuan-plugin-publisher/commit/4ab5b70a393a71960890dc4c9760fccafc759d67))
