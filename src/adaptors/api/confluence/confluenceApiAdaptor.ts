@@ -65,6 +65,7 @@ class ConfluenceApiAdaptor extends BaseBlogApi {
     const imageUrls = ImageUtils.extractImageUrls(post.description)
     this.logger.debug(`new imageUrls=>${imageUrls}`)
     // 2.1 调用 newMediaObject 上传图片
+    let imageCount = 0
     for (const originUrl of imageUrls) {
       // 忽略在线图片
       if (originUrl.startsWith("http")) {
@@ -82,7 +83,13 @@ class ConfluenceApiAdaptor extends BaseBlogApi {
       const regex = ImageUtils.genImageRegex(originUrl)
       // 2.3 替换文章中的图片占位符
       post.description = post.description.replace(regex, attachment.macro)
+      imageCount++
     }
+    const imageSuccessMsg = `使用Confluence自带的图片上传能力，已成功上传图片 ${imageCount} 张`
+    await this.baseExtendApi.pushMsg({
+      msg: imageSuccessMsg,
+      timeout: 3000,
+    })
     // 3、更新文章
     await this.editPost(postid, post, publish)
     return postid

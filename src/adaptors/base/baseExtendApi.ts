@@ -527,7 +527,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
             // 旧版使用 URL，confluence 使用 macro，macro 优先
             // =======
             const platformImageSuccessMsg = `使用平台自带的图片上传能力，已成功上传图片 ${image.name}`
-            await this.kernelApi.pushMsg({
+            await this.pushMsg({
               msg: platformImageSuccessMsg,
               timeout: 3000,
             })
@@ -636,6 +636,15 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
 
     this.logger.debug("readFileToBase64 proxyFetch base64Info =>", { base64Info })
     return base64Info
+  }
+
+  /**
+   * 推送消息
+   *
+   * @param param 参数
+   */
+  public async pushMsg(param: { msg: string; timeout: number }) {
+    await this.kernelApi.pushMsg(param)
   }
 
   /**
