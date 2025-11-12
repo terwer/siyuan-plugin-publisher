@@ -534,8 +534,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
         } catch (e) {
           const message = e.message || e
           let ignoreError = false
-          debugger
-          if (useMacro && message.includes("No content found with id")) {
+          if (useMacro && message.includes("no pageId found")) {
             ignoreError = true
           }
           if (!ignoreError) {

@@ -51,7 +51,6 @@ class ConfluenceApiAdaptor extends BaseBlogApi {
     // 判断文章里面是否包含图片
     const hasImage = ImageUtils.hasImageTag(post.description)
     this.logger.debug(`new hasImage=>${hasImage}`)
-    debugger
     if (!hasImage) {
       // 如果没有图片，直接创建页面
       return await this.createPage(post.title, post.description, spaceKey)
@@ -64,7 +63,6 @@ class ConfluenceApiAdaptor extends BaseBlogApi {
     // 2.0 从文章中提取图片URL
     const imageUrls = ImageUtils.extractImageUrls(post.description)
     this.logger.debug(`new imageUrls=>${imageUrls}`)
-    debugger
     // 2.1 调用 newMediaObject 上传图片
     for (const originUrl of imageUrls) {
       // 忽略在线图片
@@ -73,7 +71,6 @@ class ConfluenceApiAdaptor extends BaseBlogApi {
       }
       const origin = window.location.origin
       const imageUrl = StrUtil.pathJoin(origin, originUrl)
-      debugger
       const base64Info = await this.baseExtendApi.readFileToBase64(imageUrl)
       const bits = base64ToBuffer(base64Info.imageBase64)
       const name = ImageUtils.getNameFromImageUrl(imageUrl)
@@ -85,7 +82,6 @@ class ConfluenceApiAdaptor extends BaseBlogApi {
       // 2.3 替换文章中的图片占位符
       post.description = post.description.replace(regex, attachment.macro)
     }
-    debugger
     // 3、更新文章
     await this.editPost(postid, post, publish)
     return postid
