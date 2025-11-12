@@ -160,10 +160,9 @@ class ConfluenceApiAdaptor extends BaseBlogApi {
 
     // 构建图片宏
     const imageMacro = `<p><ac:image ac:height="250"><ri:attachment ri:filename="${fileName}" /></ac:image></p>`
-    debugger
     return {
       macro: imageMacro,
-    } as any
+    }
   }
 
   public async getPreviewUrl(postid: string): Promise<string> {

@@ -497,7 +497,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
         }
         // 批量处理图片上传
         this.logger.info(`找到${images.length}张图片，开始上传`)
-        const urlMap = {} as any
+        const urlMap = {}
         try {
           for (const image of images) {
             const imageUrl = image.url
@@ -511,15 +511,13 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
             const mediaObject = new MediaObject(image.name, base64Info.mimeType, bits)
             mediaObject.post = post
             this.logger.debug("before upload, mediaObject =>", mediaObject)
-            const attachResult = (await this.api.newMediaObject(mediaObject)) as any
+            const attachResult = await this.api.newMediaObject(mediaObject)
             this.logger.debug("attachResult =>", attachResult)
             // =======
             // 旧版使用 URL，confluence 使用 macro，macro 优先
             // =======
-            debugger
             if (attachResult && attachResult.macro) {
               urlMap[image.originUrl] = attachResult.macro
-              debugger
               useMacro = true
             } else if (attachResult && attachResult.url) {
               urlMap[image.originUrl] = attachResult.url
@@ -546,12 +544,10 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
         this.logger.info("平台图片全部上传完成，将开始进行连接替换，urlMap =>", urlMap)
         if (useMacro) {
           this.logger.info("使用 Confluence 宏替换图片")
-          debugger
           // Confluence宏替换
           for (const key in urlMap) {
             if (urlMap.hasOwnProperty(key)) {
               const regex = ImageUtils.genMdImageRegex(key)
-              debugger
               post.markdown = post.markdown.replace(regex, urlMap[key])
             }
           }
@@ -567,7 +563,6 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
           const replaceUrl = (match: string): string => {
             return urlMap[match] || match
           }
-          debugger
           post.markdown = post.markdown.replace(pictureReplacePattern, replaceUrl)
         }
 
