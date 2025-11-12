@@ -44,6 +44,7 @@ import { SypConfig } from "~/syp.config.ts"
 import { usePlatformMetadataStore } from "~/src/stores/usePlatformMetadataStore.ts"
 import { MdUtils } from "~/src/utils/mdUtils.ts"
 import ImageUtils from "~/src/utils/ImageUtils.ts"
+import { BaseError } from "~/src/utils/BaseErrors.ts"
 
 /**
  * 各种模式共享的扩展基类
@@ -534,7 +535,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
         } catch (e) {
           const message = e.message || e
           let ignoreError = false
-          if (useMacro && message.includes("no pageId found")) {
+          if (message.includes(BaseError.NO_PAGE_ID_FOUND_IN_MEDIA_MACRO_MODE)) {
             ignoreError = true
           }
           if (!ignoreError) {

@@ -15,6 +15,7 @@ import { ObjectUtil, StrUtil } from "zhi-common"
 import { load } from "cheerio"
 import ImageUtils from "~/src/utils/ImageUtils.ts"
 import { base64ToBuffer } from "~/src/utils/polyfillUtils.ts"
+import { BaseError } from "~/src/utils/BaseErrors.ts"
 
 /**
  * Confluence API 适配器
@@ -141,7 +142,7 @@ class ConfluenceApiAdaptor extends BaseBlogApi {
     const confluencePostidKey = this.getConfluencePostidKey(post.postid)
     const pageId = confluencePostidKey.pageId
     if (!pageId) {
-      throw new Error("Error uploading image to confluence: no pageId found")
+      throw new Error(`Error uploading image to confluence: ${BaseError.NO_PAGE_ID_FOUND_IN_MEDIA_MACRO_MODE}`)
     }
     // fileName
     let fileName: any
