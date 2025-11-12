@@ -24,7 +24,12 @@
 
 **重大更新：**
 
-- `v1.38.0` 于 2025/10/25 发布，支持发布到`文件系统`了，一期已经支持本地系统，后续会陆续支持ftp、sftp、各种网盘等🎉
+- `v1.39.0` 于 2025/11/12 发布，新增功能
+  - 本地系统支持动态选择YAML适配器（Hexo、HUGO、Vuepress2、VitePress 等）
+  - Confluence 平台也支持上传图片了😄
+- `v1.38.0` 于 2025/10/25 发布，新增功能
+  - 支持发布到`文件系统`了
+  - 一期已经支持本地系统，后续会陆续支持ftp、sftp、各种网盘等🎉
 
 请直接查看 [CHANGELOG](https://github.com/terwer/siyuan-plugin-publisher/blob/main/CHANGELOG.md)
 
