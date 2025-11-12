@@ -82,7 +82,7 @@
     "vue-i18n": "^11.1.7",
     "vue-router": "^4.5.1",
     "xmlbuilder2": "^3.1.1",
-    "zhi-blog-api": "^1.74.0",
+    "zhi-blog-api": "^1.74.1",
     "zhi-common": "^1.34.1",
     "zhi-device": "^2.12.0",
     "zhi-fetch-middleware": "^0.13.4",
@@ -90,7 +90,7 @@
     "zhi-gitlab-middleware": "^0.12.3",
     "zhi-lib-base": "^0.8.0",
     "zhi-notion-markdown": "^0.1.4",
-    "zhi-siyuan-api": "^2.29.1",
+    "zhi-siyuan-api": "^2.29.2",
     "zhi-siyuan-picgo": "^1.12.1",
     "zhi-xmlrpc-middleware": "^0.6.25"
   },

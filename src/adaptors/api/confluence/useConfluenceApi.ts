@@ -15,7 +15,7 @@ import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { ConfluenceApiAdaptor } from "~/src/adaptors/api/confluence/confluenceApiAdaptor.ts"
-import { CategoryTypeEnum } from "zhi-blog-api"
+import { CategoryTypeEnum, PicbedServiceTypeEnum } from "zhi-blog-api"
 import { LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
 import { CONFLUENCE_CONSTANTS } from "~/src/adaptors/api/confluence/confluenceConstants.ts"
 
@@ -46,6 +46,7 @@ const useConfluenceApi = async (key: string, newCfg?: ConfluenceConfig) => {
       const confluenceAuthToken = Utils.emptyOrDefault(process.env.VITE_CONFLUENCE_AUTH_TOKEN, "")
       const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, LEGENCY_SHARED_PROXT_MIDDLEWARE)
       cfg = new ConfluenceConfig(confluenceHome, confluenceHome, confluenceAuthToken, middlewareUrl)
+      cfg.picbedService = PicbedServiceTypeEnum.Bundled
       logger.info("Configuration is empty, using default environment variables.")
     } else {
       logger.info("Using configuration from settings...")
@@ -69,7 +70,7 @@ const useConfluenceApi = async (key: string, newCfg?: ConfluenceConfig) => {
   cfg.previewUrl = "/spaces/[spaceKey]/pages/[postid]"
   // picbed service
   cfg.picgoPicbedSupported = true
-  cfg.bundledPicbedSupported = false
+  cfg.bundledPicbedSupported = true
 
   // 创建 Confluence API 适配器
   const blogApi = new ConfluenceApiAdaptor(appInstance, cfg)

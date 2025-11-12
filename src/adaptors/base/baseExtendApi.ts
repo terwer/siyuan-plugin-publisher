@@ -43,6 +43,8 @@ import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStor
 import { SypConfig } from "~/syp.config.ts"
 import { usePlatformMetadataStore } from "~/src/stores/usePlatformMetadataStore.ts"
 import { MdUtils } from "~/src/utils/mdUtils.ts"
+import ImageUtils from "~/src/utils/ImageUtils.ts"
+import { BaseError } from "~/src/utils/BaseErrors.ts"
 
 /**
  * 各种模式共享的扩展基类
@@ -487,8 +489,9 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
         // 使用平台上传图片
         // ==========================
         this.logger.info("使用平台上传图片")
+        let useMacro = false
         // 找到所有的图片
-        const images = await this.picgoBridge.getImageItemsFromMd(id, post.markdown)
+        const images = await this.getImagesFromMd(id, post.markdown)
         if (images.length === 0) {
           this.logger.info("未找到图片，不处理")
           return post
@@ -511,36 +514,67 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
             this.logger.debug("before upload, mediaObject =>", mediaObject)
             const attachResult = await this.api.newMediaObject(mediaObject)
             this.logger.debug("attachResult =>", attachResult)
-            if (attachResult && attachResult.url) {
+            // =======
+            // 旧版使用 URL，confluence 使用 macro，macro 优先
+            // =======
+            if (attachResult && attachResult.macro) {
+              urlMap[image.originUrl] = attachResult.macro
+              useMacro = true
+            } else if (attachResult && attachResult.url) {
               urlMap[image.originUrl] = attachResult.url
             }
+            // =======
+            // 旧版使用 URL，confluence 使用 macro，macro 优先
+            // =======
             const platformImageSuccessMsg = `使用平台自带的图片上传能力，已成功上传图片 ${image.name}`
-            await this.kernelApi.pushMsg({
+            await this.pushMsg({
               msg: platformImageSuccessMsg,
               timeout: 3000,
             })
           }
         } catch (e) {
-          const errMsg2 = "文章可能已经发布成功，但是平台图片上传失败。请打开「开发者工具」查看错误日志"
-          this.logger.error(errMsg2, e)
-          await this.kernelApi.pushMsg({
-            msg: errMsg2,
-            timeout: 7000,
-          })
+          const message = e.message || e
+          let ignoreError = false
+          if (message.includes(BaseError.NO_PAGE_ID_FOUND_IN_MEDIA_MACRO_MODE)) {
+            ignoreError = true
+          }
+          if (!ignoreError) {
+            const errMsg2 = "文章可能已经发布成功，但是平台图片上传失败。请打开「开发者工具」查看错误日志"
+            this.logger.error(errMsg2, e)
+            await this.kernelApi.pushMsg({
+              msg: errMsg2,
+              timeout: 7000,
+            })
+          } else {
+            this.logger.info("ignore error in macro mode")
+          }
         }
 
         // 图片替换
         this.logger.info("平台图片全部上传完成，将开始进行连接替换，urlMap =>", urlMap)
-        const pictureReplacePattern = new RegExp(
-          Object.keys(urlMap)
-            .map((key) => `\\b${key}\\b`)
-            .join("|"),
-          "g"
-        )
-        const replaceUrl = (match: string): string => {
-          return urlMap[match] || match
+        if (useMacro) {
+          this.logger.info("使用 Confluence 宏替换图片")
+          // Confluence宏替换
+          for (const key in urlMap) {
+            if (urlMap.hasOwnProperty(key)) {
+              const regex = ImageUtils.genMdImageRegex(key)
+              post.markdown = post.markdown.replace(regex, urlMap[key])
+            }
+          }
+        } else {
+          this.logger.info("使用链接替换图片")
+          // 其他链接替换
+          const pictureReplacePattern = new RegExp(
+            Object.keys(urlMap)
+              .map((key) => `\\b${key}\\b`)
+              .join("|"),
+            "g"
+          )
+          const replaceUrl = (match: string): string => {
+            return urlMap[match] || match
+          }
+          post.markdown = post.markdown.replace(pictureReplacePattern, replaceUrl)
         }
-        post.markdown = post.markdown.replace(pictureReplacePattern, replaceUrl)
         break
       }
       default: {
@@ -561,12 +595,16 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     return post
   }
 
+  public async getImagesFromMd(id: string, markdown: string) {
+    return this.picgoBridge.getImageItemsFromMd(id, markdown)
+  }
+
   /**
    * 读取文件并将其转换为 Base64 编码
    *
    * @param url - 要读取的文件的 URL
    */
-  private async readFileToBase64(url: string): Promise<any> {
+  public async readFileToBase64(url: string): Promise<any> {
     let base64Info: any
     if (this.isSiyuanOrSiyuanNewWin) {
       this.logger.info("Inside Siyuan notes, use the built-in request to obtain base64")
@@ -598,6 +636,15 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
 
     this.logger.debug("readFileToBase64 proxyFetch base64Info =>", { base64Info })
     return base64Info
+  }
+
+  /**
+   * 推送消息
+   *
+   * @param param 参数
+   */
+  public async pushMsg(param: { msg: string; timeout: number }) {
+    await this.kernelApi.pushMsg(param)
   }
 
   /**

@@ -7,12 +7,15 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { CategoryInfo, Post, UserBlog } from "zhi-blog-api"
+import { Attachment, CategoryInfo, MediaObject, Post, UserBlog } from "zhi-blog-api"
 import { ConfluenceConfig } from "~/src/adaptors/api/confluence/confluenceConfig.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
-import { ObjectUtil } from "zhi-common"
+import { ObjectUtil, StrUtil } from "zhi-common"
 import { load } from "cheerio"
+import ImageUtils from "~/src/utils/ImageUtils.ts"
+import { base64ToBuffer } from "~/src/utils/polyfillUtils.ts"
+import { BaseError } from "~/src/utils/BaseErrors.ts"
 
 /**
  * Confluence API 适配器
@@ -46,7 +49,50 @@ class ConfluenceApiAdaptor extends BaseBlogApi {
   public async newPost(post: Post, publish?: boolean): Promise<string> {
     // 确保最新的文章ID都包含了空间信息
     const spaceKey = post.cate_slugs?.[0] ?? this.cfg.blogid
-    return await this.createPage(post.title, post.description, spaceKey)
+    // 判断文章里面是否包含图片
+    const hasImage = ImageUtils.hasImageTag(post.description)
+    this.logger.debug(`new hasImage=>${hasImage}`)
+    if (!hasImage) {
+      // 如果没有图片，直接创建页面
+      return await this.createPage(post.title, post.description, spaceKey)
+    }
+    // 如果有图片
+    // 1、先创建页面
+    const postid = await this.createPage(post.title, post.description, spaceKey)
+    post.postid = postid
+    // 2、然后上传图片，图片需要从文章post.description中提取
+    // 2.0 从文章中提取图片URL
+    const imageUrls = ImageUtils.extractImageUrls(post.description)
+    this.logger.debug(`new imageUrls=>${imageUrls}`)
+    // 2.1 调用 newMediaObject 上传图片
+    let imageCount = 0
+    for (const originUrl of imageUrls) {
+      // 忽略在线图片
+      if (originUrl.startsWith("http")) {
+        continue
+      }
+      const origin = window.location.origin
+      const imageUrl = StrUtil.pathJoin(origin, originUrl)
+      const base64Info = await this.baseExtendApi.readFileToBase64(imageUrl)
+      const bits = base64ToBuffer(base64Info.imageBase64)
+      const name = ImageUtils.getNameFromImageUrl(imageUrl)
+      const mediaObject = new MediaObject(name, base64Info.mimeType, bits)
+      mediaObject.post = post
+      // 2.2 调用 newMediaObject 上传图片
+      const attachment = await this.newMediaObject(mediaObject)
+      const regex = ImageUtils.genImageRegex(originUrl)
+      // 2.3 替换文章中的图片占位符
+      post.description = post.description.replace(regex, attachment.macro)
+      imageCount++
+    }
+    const imageSuccessMsg = `使用Confluence自带的图片上传能力，已成功上传图片 ${imageCount} 张`
+    await this.baseExtendApi.pushMsg({
+      msg: imageSuccessMsg,
+      timeout: 3000,
+    })
+    // 3、更新文章
+    await this.editPost(postid, post, publish)
+    return postid
   }
 
   public async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
@@ -96,6 +142,75 @@ class ConfluenceApiAdaptor extends BaseBlogApi {
     return cats
   }
 
+  public async newMediaObject(mediaObject: MediaObject, customHandler?: any): Promise<Attachment> {
+    let resJson: any
+    // pageId
+    const post = mediaObject.post
+    const confluencePostidKey = this.getConfluencePostidKey(post.postid)
+    const pageId = confluencePostidKey.pageId
+    if (!pageId) {
+      throw new Error(`Error uploading image to confluence: ${BaseError.NO_PAGE_ID_FOUND_IN_MEDIA_MACRO_MODE}`)
+    }
+    // fileName
+    let fileName: any
+    try {
+      // bits
+      const bits = mediaObject.bits
+      this.logger.debug("newMediaObject on confluence =>", mediaObject)
+      const url = `/rest/api/content/${pageId}/child/attachment`
+      // formData
+      const blob = new Blob([bits], { type: mediaObject.type })
+      const formData = new FormData()
+      formData.append("id", pageId)
+      formData.append("file", blob, mediaObject.name)
+      formData.append("minorEdit", "false")
+      resJson = await this.confluenceMediaFetch(url, formData)
+      this.logger.debug("confluence upload media finished=>", resJson)
+    } catch (e) {
+      // 检查message中是否包含重复文件的关键词
+      const errorMessage = e.message
+      if (errorMessage.includes("same file name as an existing attachment")) {
+        // 提取重复的文件名
+        const imageExtensions = ["png", "jpg", "jpeg", "gif", "bmp", "webp", "svg"]
+        // 在字符串中 \S 需要转义为 \\S
+        const pattern = new RegExp(`attachment: (\\S+\\.(?:${imageExtensions.join("|")}))`, "i")
+        const match = errorMessage.match(pattern)
+        // 如果上面的方法不行，尝试更简单直接的方法
+        if (!match) {
+          // 方法2：使用字符串分割
+          const startIndex = errorMessage.indexOf("attachment: ") + 12
+          const endIndex = errorMessage.indexOf(". Log referral")
+          if (startIndex > 11 && endIndex > startIndex) {
+            fileName = errorMessage.substring(startIndex, endIndex)
+          }
+        } else {
+          fileName = match[1]
+        }
+        this.logger.debug("get duplicate file：" + fileName)
+      } else {
+        this.logger.error("Error uploading image to confluence:", e)
+        throw new Error("Error uploading image to confluence:" + e.toString())
+      }
+    }
+    this.logger.debug("newMediaObject success, start update metadata to page=>", resJson)
+    // 正常情况从返回信息取图片
+    if (!fileName) {
+      const results = resJson.results || []
+      if (results.length <= 0) {
+        throw new Error("Error uploading image to confluence: no attachment id found")
+      }
+      const first = results[0]
+      // 从附件响应中提取文件名
+      fileName = first.title
+    }
+
+    // 构建图片宏
+    const imageMacro = `<p><ac:image ac:height="250"><ri:attachment ri:filename="${fileName}" /></ac:image></p>`
+    return {
+      macro: imageMacro,
+    }
+  }
+
   public async getPreviewUrl(postid: string): Promise<string> {
     const purl = this.cfg.previewUrl ?? ""
     const confluencePostidKey = this.getConfluencePostidKey(postid)
@@ -132,7 +247,8 @@ class ConfluenceApiAdaptor extends BaseBlogApi {
   private async createPage(title: string, content: string, spaceKey?: string): Promise<string> {
     const url = "/rest/api/content"
     const targetSpaceKey = spaceKey || this.cfg.blogid
-    const parentPageId = this.cfg.parentPageId?.trim()
+    // 如果更换了空间，就不使用默认的父页面
+    const parentPageId = spaceKey == this.cfg.blogid ? this.cfg.parentPageId?.trim() : undefined
     const storageContent = this.normalizeContentForConfluence(content, title)
 
     const params: Record<string, any> = {
@@ -350,6 +466,26 @@ class ConfluenceApiAdaptor extends BaseBlogApi {
       return resJson
     } catch (error) {
       this.logger.error("Confluence API 请求异常 =>", error)
+      throw error
+    }
+  }
+
+  public async confluenceMediaFetch(url: string, formData: any = undefined) {
+    try {
+      const contentType = "application/json"
+      const apiUrl = `${this.cfg.apiUrl}${url}`
+      const header = {
+        Authorization: `Bearer ${this.cfg.password}`,
+        // CF tunnels
+        "X-Atlassian-Token": "no-check",
+        // Origin: this.cfg.apiUrl,
+        // Referer: this.cfg.apiUrl,
+        // Accept: "application/json",
+      }
+      this.logger.debug(`向 Confluence 请求数据上传文件，apiUrl => header:${header}`, apiUrl)
+      return await this.apiFetch(apiUrl, [header], formData, "POST", contentType, true, "base64")
+    } catch (error) {
+      this.logger.error("Confluence 上传文件 API 请求异常 =>", error)
       throw error
     }
   }

@@ -33,8 +33,9 @@ class ConfluenceConfig extends CommonBlogConfig {
     this.knowledgeSpaceTitle = "空间"
     this.allowKnowledgeSpaceChange = true
     this.parentPageId = ""
-    this.placeholder.knowledgeSpaceReadonlyModeTip =
-      "由于 Confluence 平台的限制，暂时不支持编辑所属空间。如果您想移动文档，请先点击取消删除该文档，然后重新选择新的空间发布"
+    this.placeholder.knowledgeSpaceReadonlyModeTip = ""
+    this.picgoPicbedSupported = true
+    this.bundledPicbedSupported = true
   }
 }
 
