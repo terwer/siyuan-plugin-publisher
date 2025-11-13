@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.39.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.39.0...siyuan-plugin-publisher-v1.39.1) (2025-11-13)
+
+
+### Bug Fixes
+
+* compress icons ([4c29529](https://github.com/terwer/siyuan-plugin-publisher/commit/4c29529f05e4d7ac8a0948f3e660775e1fdfb31c))
+
 ## [1.39.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.38.3...siyuan-plugin-publisher-v1.39.0) (2025-11-12)
 ### Features
 * **fs:** add dynamic yaml adapter selection for local system ([7757f01](https://github.com/terwer/siyuan-plugin-publisher/commit/7757f012b263950e7c9b9f3c1cd954f91addfbd4))
