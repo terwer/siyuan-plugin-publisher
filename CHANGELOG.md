@@ -1,5 +1,8 @@
 # Changelog
 
+## [1.39.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.39.0...siyuan-plugin-publisher-v1.39.1) (2025-11-13)
+### Bug Fixes
+* compress icons ([4c29529](https://github.com/terwer/siyuan-plugin-publisher/commit/4c29529f05e4d7ac8a0948f3e660775e1fdfb31c))
 ## [1.39.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.38.3...siyuan-plugin-publisher-v1.39.0) (2025-11-12)
 ### Features
 * **fs:** add dynamic yaml adapter selection for local system ([7757f01](https://github.com/terwer/siyuan-plugin-publisher/commit/7757f012b263950e7c9b9f3c1cd954f91addfbd4))
@@ -7,7 +10,6 @@
 * **localsystem:** support dynamic yaml adapter selection via fsyamltype ([1fd308d](https://github.com/terwer/siyuan-plugin-publisher/commit/1fd308db226a9c10f1a23a5b1acb889c57ed6693))
 * support media upload for confluence ([70c4c42](https://github.com/terwer/siyuan-plugin-publisher/commit/70c4c420697b2b26acb076355c58cc8fe73d029e))
 * **system-config:** add yaml configuration support for platforms ([90492d7](https://github.com/terwer/siyuan-plugin-publisher/commit/90492d78edeeb0679ca84987a41f5aaaa1e37370))
-### Bug Fixes
 * add null checks for string operations ([b5feb91](https://github.com/terwer/siyuan-plugin-publisher/commit/b5feb91e2ba47ec11c7ed8f878657875ae8220f5))
 * **vuepress-adaptors:** add error handling and input validation ([f1f0d79](https://github.com/terwer/siyuan-plugin-publisher/commit/f1f0d7941e3f895359e16abf86bf764f013a1a1a))
 ### Code Refactoring
