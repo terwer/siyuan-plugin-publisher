@@ -24,7 +24,7 @@ Publish articles from siyuan-note to platforms like WordPress、Cnblogs、Yuque 
 
 Major Update:
 
-- `v1.39.2` was released on 11/17/2025, now has the following features:
+- `v1.40.0` was released on 11/17/2025, now has the following features:
   - Bug Fixes
     - fix: cnblogs publish is ok now
     - feat: local system support auto mapping path
