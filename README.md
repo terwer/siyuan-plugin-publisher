@@ -24,6 +24,11 @@ Publish articles from siyuan-note to platforms like WordPress、Cnblogs、Yuque 
 
 Major Update:
 
+- `v1.39.2` was released on 11/17/2025, now has the following features:
+  - Bug Fixes
+    - fix: cnblogs publish is ok now
+    - feat: local system support auto mapping path
+    - feat(localSystem): enable Picgo picbed support
 - `v1.39.0` was released on 11/12/2025, now has the following features:
   - supporting dynamic selection of YAML adapters (Hexo, HUGO, Vuepress2, VitePress, etc.) for local file system publishing. 🚀
   - Confluence platform now supports image uploads! 🎉
