@@ -20,7 +20,10 @@ import { FsYamlType } from "~/src/adaptors/fs/LocalSystem/FsYamlType.ts"
  * @since 1.38.0
  */
 class LocalSystemConfig extends CommonBlogConfig {
+  // 配置的存储路径，可能包含占位符，如果：/xxx/[auto]
   public storePath: string
+  // 真实的存储路径，占位符已替换，例如：/xxx/003.技术分享系统
+  public realStorePath: string
   public fsYamlType: FsYamlType
 
   constructor() {
@@ -32,6 +35,7 @@ class LocalSystemConfig extends CommonBlogConfig {
     this.picgoPicbedSupported = false
     this.picbedService = PicbedServiceTypeEnum.Bundled
     this.storePath = StrUtil.pathJoin(EnvUtil.getHomeFolder(), "Downloads/syp")
+    this.realStorePath = this.storePath
     this.imageStorePath = "assets"
     this.fsYamlType = FsYamlType.Default
   }

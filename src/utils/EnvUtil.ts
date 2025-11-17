@@ -36,7 +36,14 @@ class EnvUtil {
     return win?.siyuan?.config?.system?.homeDir ?? ""
   }
 
-  public static ensurePath(path: string): boolean {
+  /**
+   * 确保路径存在，不存在则递归创建
+   * 如果路径中包含忽略路径，则会被忽略
+   *
+   * @param path 路径
+   * @param ignorePath 忽略路径
+   */
+  public static ensurePath(path: string, ignorePath?: string): boolean {
     try {
       const win = SiyuanDevice.siyuanWindow()
       if (!win?.fs) {
@@ -45,8 +52,12 @@ class EnvUtil {
       }
       const fs = win.fs
       const pathModule = win.require("path")
+      // 忽略路径
+      if (ignorePath && path.includes(ignorePath)) {
+        path = path.replace(ignorePath, "")
+      }
       // 标准化路径
-      const normalizedPath = pathModule.normalize(path)
+      let normalizedPath = pathModule.normalize(path)
       // 检查路径是否存在
       if (!fs.existsSync(normalizedPath)) {
         // 递归创建目录

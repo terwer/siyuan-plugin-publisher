@@ -55,8 +55,8 @@ class LocalSystemApiAdaptor extends BaseBlogApi {
     this.logger.debug("Ensure that the save path exists1...", localFsCfg)
     const absStorePath = localFsCfg.storePath
     const absImageStorePath = StrUtil.pathJoin(absStorePath, localFsCfg.imageStorePath)
-    const isPathOk = EnvUtil.ensurePath(absStorePath)
-    const isImagePathOk = EnvUtil.ensurePath(absImageStorePath)
+    const isPathOk = EnvUtil.ensurePath(absStorePath, CATE_AUTO_NAME)
+    const isImagePathOk = EnvUtil.ensurePath(absImageStorePath, CATE_AUTO_NAME)
     if (!isPathOk || !isImagePathOk) {
       throw new Error("文件存储路径或媒体存储路径初始化失败！")
     }
@@ -153,7 +153,7 @@ class LocalSystemApiAdaptor extends BaseBlogApi {
     }
 
     if (updatedPost?.cate_slugs.length > 0) {
-      localFsCfg.storePath = localFsCfg.storePath.replace(CATE_AUTO_NAME, updatedPost.cate_slugs[0])
+      localFsCfg.realStorePath = localFsCfg.storePath.replace(CATE_AUTO_NAME, updatedPost.cate_slugs[0])
     }
 
     return updatedPost
@@ -163,26 +163,33 @@ class LocalSystemApiAdaptor extends BaseBlogApi {
     const localFsCfg = this.cfg as LocalSystemConfig
 
     const title = post.title
+    const originTitle = post.originalTitle
     // const slug = post.wp_slug
     const content = post.description
     // const yaml = post.yaml
 
+    // 存储基础路径
+    let storePath = localFsCfg.storePath
+    if (!StrUtil.isEmptyString(localFsCfg.realStorePath)) {
+      storePath = localFsCfg.realStorePath
+    }
+
     // 保存到文件
-    // 文件路径是 localFsCfg.storePath
-    // 文件名是 title.md
+    // 文件路径是 storePath
+    // 文件名是 originTitle.md
     // 文件内容是 content
     // 清理文件名并添加扩展名
-    const fileName = `${EnvUtil.sanitizeFilename(title)}.md`
-    const filePath = EnvUtil.joinPath(localFsCfg.storePath, fileName)
+    const fileName = `${EnvUtil.sanitizeFilename(originTitle)}.md`
+    const filePath = EnvUtil.joinPath(storePath, fileName)
 
     let flag = false
     // 确保存储目录存在
-    if (EnvUtil.ensurePath(localFsCfg.storePath)) {
+    if (EnvUtil.ensurePath(storePath)) {
       // 直接写入文件
       flag = EnvUtil.writeFile(filePath, content)
       this.logger.info(`Post saved locally: ${filePath}`)
     } else {
-      this.logger.error(`Failed to create directory: ${localFsCfg.storePath}`)
+      this.logger.error(`Failed to create directory: ${storePath}`)
     }
 
     if (!flag) {
@@ -200,12 +207,19 @@ class LocalSystemApiAdaptor extends BaseBlogApi {
     return EnvUtil.deleteFile(postid)
   }
 
-  public async newMediaObject(mediaObject: MediaObject, customHandler?: any): Promise<Attachment> {
+  public async newMediaObject(mediaObject: MediaObject): Promise<Attachment> {
     const bits = mediaObject.bits
     const localFsCfg = this.cfg as LocalSystemConfig
     // 确保保存路径存在
-    this.logger.debug("Ensure that the save path exists1...", localFsCfg)
-    const absStorePath = localFsCfg.storePath
+    this.logger.debug("Ensure that the save path exists...", localFsCfg)
+
+    // 存储基础路径
+    let storePath = localFsCfg.storePath
+    if (!StrUtil.isEmptyString(localFsCfg.realStorePath)) {
+      storePath = localFsCfg.realStorePath
+    }
+
+    const absStorePath = storePath
     const absImagePath = StrUtil.pathJoin(absStorePath, localFsCfg.imageStorePath ?? "assets")
     let absMediaFilePath = StrUtil.pathJoin(absImagePath, mediaObject.name)
     const fileDir = EnvUtil.dirname(absMediaFilePath)
