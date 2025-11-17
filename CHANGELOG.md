@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.40.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.39.1...siyuan-plugin-publisher-v1.40.0) (2025-11-17)
+
+
+### Features
+
+* **localSystem:** enable Picgo picbed support ([f3f40cf](https://github.com/terwer/siyuan-plugin-publisher/commit/f3f40cf30304a512431b439a1353d9ac12876c97))
+
+
+### Bug Fixes
+
+* **deps:** update dependencies and typings for compatibility and cnblogs publish error ([f25b33f](https://github.com/terwer/siyuan-plugin-publisher/commit/f25b33f4dd793f11ed734e7d59c22ca28ab27f6b))
+* local system support auto mapping path ([94fb664](https://github.com/terwer/siyuan-plugin-publisher/commit/94fb6644777a706117ddfc3358898bd0caf89fe0))
+* local system support auto mapping path ([b1514f7](https://github.com/terwer/siyuan-plugin-publisher/commit/b1514f7acad9390222c1f09c9f4e95702cdb6a59))
+* **localSystem:** enable Picgo picbed support ([1d095c4](https://github.com/terwer/siyuan-plugin-publisher/commit/1d095c466326cee28b6b957c8383f8a114f70943))
+
+
+### Miscellaneous
+
+* **ci:** update pnpm version to 10.22.0 ([43c3e40](https://github.com/terwer/siyuan-plugin-publisher/commit/43c3e403015634d6cc033e85cb038d76c1ec4764))
+
 ## [1.39.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.39.0...siyuan-plugin-publisher-v1.39.1) (2025-11-13)
 ### Bug Fixes
 * compress icons ([4c29529](https://github.com/terwer/siyuan-plugin-publisher/commit/4c29529f05e4d7ac8a0948f3e660775e1fdfb31c))
