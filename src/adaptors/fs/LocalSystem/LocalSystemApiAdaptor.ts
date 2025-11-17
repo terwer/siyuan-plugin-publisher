@@ -23,6 +23,14 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { EnvUtil } from "~/src/utils/EnvUtil.ts"
 import { StrUtil } from "zhi-common"
 import sypIdUtil from "~/src/utils/sypIdUtil.ts"
+import { CATE_AUTO_NAME } from "~/src/utils/constants.ts"
+import { VuepressApiAdaptor } from "~/src/adaptors/api/vuepress/vuepressApiAdaptor.ts"
+import { Vuepress2ApiAdaptor } from "~/src/adaptors/api/vuepress2/vuepress2ApiAdaptor.ts"
+import { HexoApiAdaptor } from "~/src/adaptors/api/hexo/hexoApiAdaptor.ts"
+import { HugoApiAdaptor } from "~/src/adaptors/api/hugo/hugoApiAdaptor.ts"
+import { JekyllApiAdaptor } from "~/src/adaptors/api/jekyll/jekyllApiAdaptor.ts"
+import { VitepressApiAdaptor } from "~/src/adaptors/api/vitepress/vitepressApiAdaptor.ts"
+import { QuartzApiAdaptor } from "~/src/adaptors/api/quartz/quartzApiAdaptor.ts"
 
 /**
  * 本地系统适配器
@@ -47,8 +55,8 @@ class LocalSystemApiAdaptor extends BaseBlogApi {
     this.logger.debug("Ensure that the save path exists1...", localFsCfg)
     const absStorePath = localFsCfg.storePath
     const absImageStorePath = StrUtil.pathJoin(absStorePath, localFsCfg.imageStorePath)
-    const isPathOk = EnvUtil.ensurePath(absStorePath)
-    const isImagePathOk = EnvUtil.ensurePath(absImageStorePath)
+    const isPathOk = EnvUtil.ensurePath(absStorePath, CATE_AUTO_NAME)
+    const isImagePathOk = EnvUtil.ensurePath(absImageStorePath, CATE_AUTO_NAME)
     if (!isPathOk || !isImagePathOk) {
       throw new Error("文件存储路径或媒体存储路径初始化失败！")
     }
@@ -60,7 +68,7 @@ class LocalSystemApiAdaptor extends BaseBlogApi {
    */
   public getYamlAdaptor(): YamlConvertAdaptor {
     const localFsCfg = this.cfg as LocalSystemConfig
-    
+
     // 根据fsYamlType动态选择YAML适配器
     switch (localFsCfg.fsYamlType) {
       case FsYamlType.Hexo:
@@ -91,30 +99,97 @@ class LocalSystemApiAdaptor extends BaseBlogApi {
     }
   }
 
+  public override async preEditPost(post: Post, id?: string, publishCfg?: any): Promise<Post> {
+    const localFsCfg = this.cfg as LocalSystemConfig
+
+    if (localFsCfg.storePath.includes(CATE_AUTO_NAME)) {
+      // 自动分类
+      post.cate_slugs = [CATE_AUTO_NAME]
+    }
+
+    let updatedPost: Post
+
+    // 自定义预处理
+    switch (localFsCfg.fsYamlType) {
+      case FsYamlType.Hexo: {
+        const hexoApiAdaptor = new HexoApiAdaptor(this.appInstance, localFsCfg as any)
+        updatedPost = await hexoApiAdaptor.preEditPost(post, id, publishCfg)
+        break
+      }
+      case FsYamlType.Hugo: {
+        const hugoApiAdaptor = new HugoApiAdaptor(this.appInstance, localFsCfg as any)
+        updatedPost = await hugoApiAdaptor.preEditPost(post, id, publishCfg)
+        break
+      }
+      case FsYamlType.Jekyll: {
+        const jekyllApiAdaptor = new JekyllApiAdaptor(this.appInstance, localFsCfg as any)
+        updatedPost = await jekyllApiAdaptor.preEditPost(post, id, publishCfg)
+        break
+      }
+      case FsYamlType.Vuepress: {
+        const vuepressApiAdaptor = new VuepressApiAdaptor(this.appInstance, localFsCfg as any)
+        updatedPost = await vuepressApiAdaptor.preEditPost(post, id, publishCfg)
+        break
+      }
+      case FsYamlType.Vuepress2: {
+        const vuepress2ApiAdaptor = new Vuepress2ApiAdaptor(this.appInstance, localFsCfg as any)
+        updatedPost = await vuepress2ApiAdaptor.preEditPost(post, id, publishCfg)
+        break
+      }
+      case FsYamlType.Vitepress: {
+        const vitepressApiAdaptor = new VitepressApiAdaptor(this.appInstance, localFsCfg as any)
+        updatedPost = await vitepressApiAdaptor.preEditPost(post, id, publishCfg)
+        break
+      }
+      case FsYamlType.Quartz: {
+        const quartzApiAdaptor = new QuartzApiAdaptor(this.appInstance, localFsCfg as any)
+        updatedPost = await quartzApiAdaptor.preEditPost(post, id, publishCfg)
+        break
+      }
+      default: {
+        updatedPost = await super.preEditPost(post, id, publishCfg)
+        break
+      }
+    }
+
+    if (updatedPost?.cate_slugs.length > 0) {
+      localFsCfg.realStorePath = localFsCfg.storePath.replace(CATE_AUTO_NAME, updatedPost.cate_slugs[0])
+    }
+
+    return updatedPost
+  }
+
   public async newPost(post: Post, _publish?: boolean): Promise<string> {
     const localFsCfg = this.cfg as LocalSystemConfig
 
     const title = post.title
+    const originTitle = post.originalTitle
     // const slug = post.wp_slug
     const content = post.description
     // const yaml = post.yaml
 
+    // 存储基础路径
+    let storePath = localFsCfg.storePath
+    if (!StrUtil.isEmptyString(localFsCfg.realStorePath)) {
+      storePath = localFsCfg.realStorePath
+    }
+
     // 保存到文件
-    // 文件路径是 localFsCfg.storePath
-    // 文件名是 title.md
+    // 文件路径是 storePath
+    // 文件名是 originTitle.md
     // 文件内容是 content
     // 清理文件名并添加扩展名
-    const fileName = `${EnvUtil.sanitizeFilename(title)}.md`
-    const filePath = EnvUtil.joinPath(localFsCfg.storePath, fileName)
+    const fileName = `${EnvUtil.sanitizeFilename(originTitle)}.md`
+    const filePath = EnvUtil.joinPath(storePath, fileName)
 
     let flag = false
     // 确保存储目录存在
-    if (EnvUtil.ensurePath(localFsCfg.storePath)) {
+    if (EnvUtil.ensurePath(storePath)) {
       // 直接写入文件
       flag = EnvUtil.writeFile(filePath, content)
       this.logger.info(`Post saved locally: ${filePath}`)
     } else {
-      this.logger.error(`Failed to create directory: ${localFsCfg.storePath}`)
+      this.logger.error(`Failed to create directory: ${storePath}`)
     }
 
     if (!flag) {
@@ -132,12 +207,19 @@ class LocalSystemApiAdaptor extends BaseBlogApi {
     return EnvUtil.deleteFile(postid)
   }
 
-  public async newMediaObject(mediaObject: MediaObject, customHandler?: any): Promise<Attachment> {
+  public async newMediaObject(mediaObject: MediaObject): Promise<Attachment> {
     const bits = mediaObject.bits
     const localFsCfg = this.cfg as LocalSystemConfig
     // 确保保存路径存在
-    this.logger.debug("Ensure that the save path exists1...", localFsCfg)
-    const absStorePath = localFsCfg.storePath
+    this.logger.debug("Ensure that the save path exists...", localFsCfg)
+
+    // 存储基础路径
+    let storePath = localFsCfg.storePath
+    if (!StrUtil.isEmptyString(localFsCfg.realStorePath)) {
+      storePath = localFsCfg.realStorePath
+    }
+
+    const absStorePath = storePath
     const absImagePath = StrUtil.pathJoin(absStorePath, localFsCfg.imageStorePath ?? "assets")
     let absMediaFilePath = StrUtil.pathJoin(absImagePath, mediaObject.name)
     const fileDir = EnvUtil.dirname(absMediaFilePath)

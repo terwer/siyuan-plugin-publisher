@@ -295,7 +295,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
         const token = fileResp.upload_token
         try {
           const client = getAliOssClient("https://zhihu-pics-upload.zhimg.com", "zhihu-pics", token)
-          const finalUrl = await client.put(upload_file.object_key, new Blob([bits]))
+          const finalUrl = await client.put(upload_file.object_key, new Blob([bits as any]))
           this.logger.debug("zhihu uploadFile finished", { client, finalUrl })
         } catch (e) {
           this.logger.error("知乎图片上传失败 =>", e)
