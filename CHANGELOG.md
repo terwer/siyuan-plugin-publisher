@@ -1,10 +1,16 @@
 # Changelog
 
-## [1.39.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.39.0...siyuan-plugin-publisher-v1.39.1) (2025-11-13)
+## [1.40.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.39.1...siyuan-plugin-publisher-v1.40.0) (2025-11-17)
+### Features
+* **localsystem:** enable picgo picbed support ([1d095c4](https://github.com/terwer/siyuan-plugin-publisher/commit/1d095c466326cee28b6b957c8383f8a114f70943))
 ### Bug Fixes
+* **deps:** update dependencies and typings for compatibility and cnblogs publish error ([f25b33f](https://github.com/terwer/siyuan-plugin-publisher/commit/f25b33f4dd793f11ed734e7d59c22ca28ab27f6b))
+* local system support auto mapping path ([b1514f7](https://github.com/terwer/siyuan-plugin-publisher/commit/b1514f7acad9390222c1f09c9f4e95702cdb6a59))
+### Miscellaneous
+* **ci:** update pnpm version to 10.22.0 ([43c3e40](https://github.com/terwer/siyuan-plugin-publisher/commit/43c3e403015634d6cc033e85cb038d76c1ec4764))
+## [1.39.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.39.0...siyuan-plugin-publisher-v1.39.1) (2025-11-13)
 * compress icons ([4c29529](https://github.com/terwer/siyuan-plugin-publisher/commit/4c29529f05e4d7ac8a0948f3e660775e1fdfb31c))
 ## [1.39.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.38.3...siyuan-plugin-publisher-v1.39.0) (2025-11-12)
-### Features
 * **fs:** add dynamic yaml adapter selection for local system ([7757f01](https://github.com/terwer/siyuan-plugin-publisher/commit/7757f012b263950e7c9b9f3c1cd954f91addfbd4))
 * **fs:** improve yaml type selection ui and handle missing adapters ([558474c](https://github.com/terwer/siyuan-plugin-publisher/commit/558474c8ce70d518f8e57b0f7b1a357723689dc0))
 * **localsystem:** support dynamic yaml adapter selection via fsyamltype ([1fd308d](https://github.com/terwer/siyuan-plugin-publisher/commit/1fd308db226a9c10f1a23a5b1acb889c57ed6693))
@@ -16,7 +22,6 @@
 * **yaml-converters:** improve yaml conversion logic for all adaptors ([c1ceed4](https://github.com/terwer/siyuan-plugin-publisher/commit/c1ceed49245cb0253113a292de83d535d8d30afa))
 ## [1.38.3](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.38.2...siyuan-plugin-publisher-v1.38.3) (2025-11-10)
 * **csdn:** improve math formula processing in html content ([8076fc1](https://github.com/terwer/siyuan-plugin-publisher/commit/8076fc196f3fd5fc651a807c65ade57b9a98efd5))
-### Miscellaneous
 * **deps:** update pnpm to version 10.21.0 ([ac822be](https://github.com/terwer/siyuan-plugin-publisher/commit/ac822be84db8de299df6510bb7e532cbf4a7851e))
 * **license:** update license headers to gpl v3 ([aa05c2d](https://github.com/terwer/siyuan-plugin-publisher/commit/aa05c2dd7dc5aef2cf3068323563fa375d9cfa80))
 ## [1.38.2](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.38.1...siyuan-plugin-publisher-v1.38.2) (2025-10-30)
