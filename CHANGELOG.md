@@ -1,6 +1,11 @@
 # Changelog
 
-## [1.39.2](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.39.1...siyuan-plugin-publisher-v1.39.2) (2025-11-17)
+## [1.40.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.39.1...siyuan-plugin-publisher-v1.40.0) (2025-11-17)
+
+
+### Features
+
+* **localSystem:** enable Picgo picbed support ([f3f40cf](https://github.com/terwer/siyuan-plugin-publisher/commit/f3f40cf30304a512431b439a1353d9ac12876c97))
 
 
 ### Bug Fixes
