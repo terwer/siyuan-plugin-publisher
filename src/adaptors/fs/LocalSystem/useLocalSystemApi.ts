@@ -48,7 +48,7 @@ const useLocalSystemApi = async (key: string, newCfg?: LocalSystemConfig) => {
   cfg.tagEnabled = true
   cfg.cateEnabled = true
   // picbed service
-  cfg.picgoPicbedSupported = false
+  cfg.picgoPicbedSupported = true
   cfg.bundledPicbedSupported = true
 
   const blogApi = new LocalSystemApiAdaptor(appInstance, cfg)

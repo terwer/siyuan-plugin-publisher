@@ -32,7 +32,7 @@ class LocalSystemConfig extends CommonBlogConfig {
     this.apiUrlEnabled = false
     this.previewUrlEnabled = false
     this.passwordType = PasswordType.PasswordType_None
-    this.picgoPicbedSupported = false
+    this.picgoPicbedSupported = true
     this.picbedService = PicbedServiceTypeEnum.Bundled
     this.storePath = StrUtil.pathJoin(EnvUtil.getHomeFolder(), "Downloads/syp")
     this.realStorePath = this.storePath
