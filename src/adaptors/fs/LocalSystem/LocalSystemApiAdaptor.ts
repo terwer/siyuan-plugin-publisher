@@ -23,6 +23,14 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { EnvUtil } from "~/src/utils/EnvUtil.ts"
 import { StrUtil } from "zhi-common"
 import sypIdUtil from "~/src/utils/sypIdUtil.ts"
+import { CATE_AUTO_NAME } from "~/src/utils/constants.ts"
+import { VuepressApiAdaptor } from "~/src/adaptors/api/vuepress/vuepressApiAdaptor.ts"
+import { Vuepress2ApiAdaptor } from "~/src/adaptors/api/vuepress2/vuepress2ApiAdaptor.ts"
+import { HexoApiAdaptor } from "~/src/adaptors/api/hexo/hexoApiAdaptor.ts"
+import { HugoApiAdaptor } from "~/src/adaptors/api/hugo/hugoApiAdaptor.ts"
+import { JekyllApiAdaptor } from "~/src/adaptors/api/jekyll/jekyllApiAdaptor.ts"
+import { VitepressApiAdaptor } from "~/src/adaptors/api/vitepress/vitepressApiAdaptor.ts"
+import { QuartzApiAdaptor } from "~/src/adaptors/api/quartz/quartzApiAdaptor.ts"
 
 /**
  * 本地系统适配器
@@ -60,7 +68,7 @@ class LocalSystemApiAdaptor extends BaseBlogApi {
    */
   public getYamlAdaptor(): YamlConvertAdaptor {
     const localFsCfg = this.cfg as LocalSystemConfig
-    
+
     // 根据fsYamlType动态选择YAML适配器
     switch (localFsCfg.fsYamlType) {
       case FsYamlType.Hexo:
@@ -89,6 +97,66 @@ class LocalSystemApiAdaptor extends BaseBlogApi {
         this.logger.info("使用默认 YAML 适配器")
         return new LocalSystemYamlConvertAdaptor(localFsCfg)
     }
+  }
+
+  public override async preEditPost(post: Post, id?: string, publishCfg?: any): Promise<Post> {
+    const localFsCfg = this.cfg as LocalSystemConfig
+
+    if (localFsCfg.storePath.includes(CATE_AUTO_NAME)) {
+      // 自动分类
+      post.cate_slugs = [CATE_AUTO_NAME]
+    }
+
+    let updatedPost: Post
+
+    // 自定义预处理
+    switch (localFsCfg.fsYamlType) {
+      case FsYamlType.Hexo: {
+        const hexoApiAdaptor = new HexoApiAdaptor(this.appInstance, localFsCfg as any)
+        updatedPost = await hexoApiAdaptor.preEditPost(post, id, publishCfg)
+        break
+      }
+      case FsYamlType.Hugo: {
+        const hugoApiAdaptor = new HugoApiAdaptor(this.appInstance, localFsCfg as any)
+        updatedPost = await hugoApiAdaptor.preEditPost(post, id, publishCfg)
+        break
+      }
+      case FsYamlType.Jekyll: {
+        const jekyllApiAdaptor = new JekyllApiAdaptor(this.appInstance, localFsCfg as any)
+        updatedPost = await jekyllApiAdaptor.preEditPost(post, id, publishCfg)
+        break
+      }
+      case FsYamlType.Vuepress: {
+        const vuepressApiAdaptor = new VuepressApiAdaptor(this.appInstance, localFsCfg as any)
+        updatedPost = await vuepressApiAdaptor.preEditPost(post, id, publishCfg)
+        break
+      }
+      case FsYamlType.Vuepress2: {
+        const vuepress2ApiAdaptor = new Vuepress2ApiAdaptor(this.appInstance, localFsCfg as any)
+        updatedPost = await vuepress2ApiAdaptor.preEditPost(post, id, publishCfg)
+        break
+      }
+      case FsYamlType.Vitepress: {
+        const vitepressApiAdaptor = new VitepressApiAdaptor(this.appInstance, localFsCfg as any)
+        updatedPost = await vitepressApiAdaptor.preEditPost(post, id, publishCfg)
+        break
+      }
+      case FsYamlType.Quartz: {
+        const quartzApiAdaptor = new QuartzApiAdaptor(this.appInstance, localFsCfg as any)
+        updatedPost = await quartzApiAdaptor.preEditPost(post, id, publishCfg)
+        break
+      }
+      default: {
+        updatedPost = await super.preEditPost(post, id, publishCfg)
+        break
+      }
+    }
+
+    if (updatedPost?.cate_slugs.length > 0) {
+      localFsCfg.storePath = localFsCfg.storePath.replace(CATE_AUTO_NAME, updatedPost.cate_slugs[0])
+    }
+
+    return updatedPost
   }
 
   public async newPost(post: Post, _publish?: boolean): Promise<string> {
