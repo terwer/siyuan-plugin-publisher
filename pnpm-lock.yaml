@@ -12,8 +12,8 @@ importers:
         specifier: ^2.3.2
         version: 2.3.2(vue@3.5.24(typescript@5.9.3))
       '@iconify/json':
-        specifier: ^2.2.408
-        version: 2.2.408
+        specifier: ^2.2.409
+        version: 2.2.409
       '@vueuse/components':
         specifier: ^14.0.0
         version: 14.0.0(vue@3.5.24(typescript@5.9.3))
@@ -857,8 +857,8 @@ packages:
     resolution: {integrity: sha512-93zYdMES/c1D69yZiKDBj0V24vqNzB/koF26KPaagAfd3P/4gUlh3Dys5ogAK+Exi9QyzlD8x/08Zt7wIKcDcA==}
     deprecated: Use @eslint/object-schema instead
 
-  '@iconify/json@2.2.408':
-    resolution: {integrity: sha512-xKr3eb3LWps/VCtnMJAcv7nf9e6i2IWcgtdq9b7bsJSyrqWc00SHdtA3pAH1hBI0z0SCY6rZFs+6h4B5gMOnTQ==}
+  '@iconify/json@2.2.409':
+    resolution: {integrity: sha512-PnTFu5JSM+GTL2mPwLBi6UDFiQvqG+OVITz9JNfZgSjFuWcF67LhedfjKd4jO/0EgLQLl0StjGbDEu1B19V5vw==}
 
   '@iconify/types@2.0.0':
     resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
@@ -1331,6 +1331,7 @@ packages:
   '@smithy/core@3.18.4':
     resolution: {integrity: sha512-o5tMqPZILBvvROfC8vC+dSVnWJl9a0u9ax1i1+Bq8515eYjUJqqk5XjjEsDLoeL5dSqGSh6WGdVx1eJ1E/Nwhw==}
     engines: {node: '>=18.0.0'}
+    deprecated: Please upgrade your lockfile to use the latest 3.x version of @smithy/core for various fixes, see https://github.com/smithy-lang/smithy-typescript/blob/main/packages/core/CHANGELOG.md
 
   '@smithy/credential-provider-imds@4.2.5':
     resolution: {integrity: sha512-BZwotjoZWn9+36nimwm/OLIcVe+KYRwzMjfhd4QT7QxPm9WY0HiOV8t/Wlh+HVUif0SBVV7ksq8//hPaBC/okQ==}
@@ -4299,6 +4300,7 @@ packages:
 
   path-match@1.2.4:
     resolution: {integrity: sha512-UWlehEdqu36jmh4h5CWJ7tARp1OEVKGHKm6+dg9qMq5RKUTV5WJrGgaZ3dN2m7WFAXDbjlHzvJvL/IUpy84Ktw==}
+    deprecated: This package is archived and no longer maintained. For support, visit https://github.com/expressjs/express/discussions
 
   path-parse@1.0.7:
     resolution: {integrity: sha512-LDJzPVEEEPR+y48z93A0Ed0yXb8pAByGWo/k5YYdYgpY2/2EsOsksJrq7lOHxryrVOn1ejG6oAp8ahvOIQD8sw==}
@@ -6435,7 +6437,7 @@ snapshots:
 
   '@humanwhocodes/object-schema@2.0.3': {}
 
-  '@iconify/json@2.2.408':
+  '@iconify/json@2.2.409':
     dependencies:
       '@iconify/types': 2.0.0
       pathe: 2.0.3

@@ -58,7 +58,7 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.2",
-    "@iconify/json": "^2.2.408",
+    "@iconify/json": "^2.2.409",
     "@vueuse/components": "^14.0.0",
     "@vueuse/core": "^14.0.0",
     "chatgpt": "^5.2.5",
