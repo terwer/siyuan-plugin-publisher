@@ -54,7 +54,7 @@
     "vite-plugin-html": "^3.2.2",
     "vite-plugin-node-polyfills": "^0.24.0",
     "vitest": "^4.0.9",
-    "vue-tsc": "^3.1.4"
+    "vue-tsc": "^3.1.5"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.2",
