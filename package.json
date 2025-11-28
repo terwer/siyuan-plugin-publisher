@@ -47,7 +47,7 @@
     "rollup-plugin-livereload": "^2.0.5",
     "stylus": "^0.64.0",
     "typescript": "5.9.3",
-    "unplugin-auto-import": "^20.2.0",
+    "unplugin-auto-import": "^20.3.0",
     "unplugin-vue-components": "^30.0.0",
     "vercel": "^48.10.2",
     "vite": "^7.2.2",
