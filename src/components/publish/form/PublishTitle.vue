@@ -91,12 +91,12 @@ const handleMakeTitle = async () => {
       systemMessage: getChatInput(formData?.md, formData.html),
     })
     if (StrUtil.isEmptyString(chatText)) {
-      ElMessage.error("请求错误，请在偏好设置配置请求地址和ChatGPT key！")
+      ElMessage.error(t("publish.error.ai.config"))
       return
     }
     const resJson = JsonUtil.safeParse<TitleAIResult>(chatText, {} as TitleAIResult)
     if (StrUtil.isEmptyString(resJson?.title)) {
-      throw new Error("文档信息量太少，未能抽取有效信息")
+      throw new Error(t("ai.error.insufficient.content"))
     }
 
     formData.postTitle = resJson.title
@@ -105,7 +105,7 @@ const handleMakeTitle = async () => {
       chatText: chatText,
     })
     emit("emitSyncPublishTitle", formData.postTitle)
-    ElMessage.success("使用人工智能提取标题成功")
+    ElMessage.success(t("publish.success.ai.title"))
   } catch (e) {
     logger.error(t("main.opt.failure") + "=>", e)
     ElMessage.error(t("main.opt.failure") + "=>" + e)

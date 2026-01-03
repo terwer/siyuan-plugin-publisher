@@ -95,7 +95,10 @@ const handleSinglePlatformSetting = async (cfg: DynamicConfig) => {
 }
 
 const handleSinglePlatformDelete = (cfg: DynamicConfig) => {
-  ElMessageBox.confirm(`确认要删除【${cfg.platformName}】吗，所有与此平台相关的配置都将永久删除？`, "温馨提示", {
+  ElMessageBox.confirm(
+    t("setting.platform.delete.confirm").replace("{platformName}", cfg.platformName),
+    t("main.opt.tip"),
+    {
     type: "error",
     icon: markRaw(Delete),
     confirmButtonText: t("main.opt.ok"),
@@ -136,8 +139,8 @@ const handleSinglePlatformWebAuth = async (cfg: DynamicConfig) => {
 
 const _handleOpenBrowserAuth = async (cfg: DynamicConfig) => {
   ElMessageBox.confirm(
-    `将打开 [${cfg.platformName}] 登录授权页面，您需要在新页面完成登录，然后点击验证查看授权结果，是否继续？`,
-    "网页授权",
+    t("setting.platform.auth.open.browser").replace("{platformName}", cfg.platformName),
+    t("setting.platform.auth.web"),
     {
       type: "warning",
       icon: markRaw(WarningFilled),
@@ -174,8 +177,8 @@ const _handleOpenBrowserAuth = async (cfg: DynamicConfig) => {
 
 const _handleChromeExtensionAuth = (cfg: DynamicConfig) => {
   ElMessageBox.confirm(
-    `将打开 [${cfg.platformName}] 登录授权页面，您需要在新页面完成登录，然后点击验证查看授权结果，是否继续？`,
-    "网页授权",
+    t("setting.platform.auth.open.browser").replace("{platformName}", cfg.platformName),
+    t("setting.platform.auth.web"),
     {
       type: "warning",
       icon: markRaw(WarningFilled),
@@ -297,7 +300,7 @@ const handleValidateWebAuth = async (cfg: DynamicConfig) => {
 const _handleValidateOpenBrowserAuth = (dynCfg: DynamicConfig) => {
   // 设置将要读取的域名
   const cookieCb = async (dynCfg: DynamicConfig, cookies: ElectronCookie[]) => {
-    ElMessage.info("验证中，请关注状态，没有授权表示不可用，已授权表示该平台可正常使用...")
+    ElMessage.info(t("setting.platform.auth.validating"))
     logger.debug("get cookie result=>", cookies)
     formData.webAuthLoadingMap[dynCfg.platformKey] = true
 
@@ -329,10 +332,10 @@ const _handleValidateOpenBrowserAuth = (dynCfg: DynamicConfig) => {
         // 更新metadata
         await updateSetting(formData.setting)
         logger.info("已更新最新的metadata")
-        ElMessage.success("验证成功，该平台可正常使用")
+        ElMessage.success(t("setting.platform.auth.validate.success"))
       } else {
         dynCfg.isAuth = false
-        ElMessage.error("验证失败，该平台将不可用")
+        ElMessage.error(t("setting.platform.auth.validate.failure"))
       }
     } catch (e) {
       dynCfg.isAuth = false
@@ -341,9 +344,7 @@ const _handleValidateOpenBrowserAuth = (dynCfg: DynamicConfig) => {
       // 过期之后，提醒用户是否需要重新认证
       const logoutUrl = dynCfg.logoutUrl ?? (cfg as any).logoutUrl
       if (!StrUtil.isEmptyString(logoutUrl)) {
-        const confurmMsg =
-          errMsg +
-          "，是否需要退出登录？注意：！！！本窗口只负责退出，登录信息填写无效！！！，需要稍后重新点击授权操作登录？"
+        const confurmMsg = errMsg + t("setting.platform.auth.logout.confirm")
         _handleClearAuthConfirm(confurmMsg, logoutUrl)
       } else {
         ElMessage.error(errMsg)
@@ -365,7 +366,7 @@ const _handleValidateOpenBrowserAuth = (dynCfg: DynamicConfig) => {
 }
 
 const _handleClearAuthConfirm = (msg, url: string) => {
-  ElMessageBox.confirm(msg, "温馨提示", {
+  ElMessageBox.confirm(msg, t("main.opt.tip"), {
     type: "error",
     icon: markRaw(Warning),
     confirmButtonText: t("main.opt.ok"),
@@ -397,19 +398,14 @@ const _handleValidateChromeExtensionAuth = async (dynCfg: DynamicConfig) => {
       // 更新metadata
       await updateSetting(formData.setting)
       logger.info("已更新最新的metadata")
-      ElMessage.success("验证成功，该平台可正常使用")
+      ElMessage.success(t("setting.platform.auth.validate.success"))
     } else {
       dynCfg.isAuth = false
-      ElMessage.error("验证失败，该平台将不可用")
+      ElMessage.error(t("setting.platform.auth.validate.failure"))
     }
   } catch (e) {
     dynCfg.isAuth = false
-    ElMessage.error(
-      t("main.opt.failure") +
-        "=>" +
-        e +
-        "，如果是登录过期，请在左侧点击「授权」修改新的 cookie 或者参考 https://siyuan.wiki/s/20230810132040-nn4q7vs FAQ4 解决"
-    )
+    ElMessage.error(t("main.opt.failure") + "=>" + e + t("setting.platform.auth.expired.tip"))
     logger.error(t("main.opt.failure") + "=>", e)
   }
 
@@ -509,7 +505,13 @@ onMounted(async () => {
               <div class="item-right">
                 <div class="text">
                   <el-badge
-                    :value="platform.isAuth ? '已授权' : platform.authMode === AuthMode.API ? '设置无效' : '没有授权'"
+                    :value="
+                      platform.isAuth
+                        ? t('setting.platform.auth.authorized')
+                        : platform.authMode === AuthMode.API
+                          ? t('setting.platform.auth.invalid')
+                          : t('setting.platform.auth.not.authorized')
+                    "
                     class="badge-item"
                     :type="platform.isAuth ? 'success' : 'danger'"
                   >
@@ -520,7 +522,7 @@ onMounted(async () => {
                       <el-icon> <span v-html="svgIcons.iconIFEdit"></span> </el-icon>
                     </span>
                     <el-text :type="platform.authMode === AuthMode.API ? 'primary' : 'info'" class="auth-mode-text">
-                      {{ platform.authMode === AuthMode.API ? "API授权" : "网页授权" }}
+                      {{ platform.authMode === AuthMode.API ? t("setting.platform.auth.api") : t("setting.platform.auth.web") }}
                     </el-text>
                   </el-badge>
                 </div>
@@ -530,8 +532,8 @@ onMounted(async () => {
                     inline-prompt
                     size="small"
                     class="action-btn action-switch"
-                    active-text="已启用"
-                    inactive-text="未启用"
+                    :active-text="t('setting.platform.enabled')"
+                    :inactive-text="t('setting.platform.disabled')"
                     @change="handlePlatformEnabled(platform)"
                   ></el-switch>
                   <!-- 通用平台设置 -->
@@ -543,7 +545,7 @@ onMounted(async () => {
                     <el-icon>
                       <Tools />
                     </el-icon>
-                    设置
+                    {{ t("setting.platform.setting") }}
                   </el-text>
                   <!-- 通用平台设置 -->
                   <el-text
@@ -554,7 +556,7 @@ onMounted(async () => {
                     <el-icon>
                       <Tools />
                     </el-icon>
-                    设置
+                    {{ t("setting.platform.setting") }}
                   </el-text>
                   <!-- 平台授权 -->
                   <el-text
@@ -565,7 +567,7 @@ onMounted(async () => {
                     <el-icon>
                       <Tools />
                     </el-icon>
-                    {{ platform.isAuth ? "再次授权" : "授权" }}
+                    {{ platform.isAuth ? t("setting.platform.auth.reauthorize") : t("setting.platform.auth.authorize") }}
                   </el-text>
                   <!-- 平台验证 -->
                   <el-button
@@ -578,7 +580,7 @@ onMounted(async () => {
                     <el-icon>
                       <Lock />
                     </el-icon>
-                    验证
+                    {{ t("setting.platform.auth.validate") }}
                   </el-button>
                   <el-text
                     v-if="!platform.isEnabled"
@@ -588,7 +590,7 @@ onMounted(async () => {
                     <el-icon>
                       <Delete />
                     </el-icon>
-                    删除
+                    {{ t("setting.platform.delete") }}
                   </el-text>
                 </div>
               </div>

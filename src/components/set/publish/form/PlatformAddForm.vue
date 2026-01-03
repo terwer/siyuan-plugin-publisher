@@ -81,7 +81,7 @@ const formValidateRules = reactive<FormRules>({
 
 const validateForm = (formEl) => {
   if (!formData.subtype) {
-    ElMessage.error("请选择子平台类型")
+    ElMessage.error(t("platform.add.subtype.required"))
     return false
   }
 
@@ -141,7 +141,7 @@ const initForm = async (ptype: PlatformType, subtype: SubPlatformType) => {
   formData.dynamicConfigArray = dynJsonCfg?.totalCfg || []
 
   if (!formData.ptype) {
-    ElMessage.error("平台类型不能为空")
+    ElMessage.error(t("platform.add.type.required"))
     return
   }
   const platform = getPlatformType(formData.ptype)
@@ -200,39 +200,39 @@ initPage()
 </script>
 
 <template>
-  <back-page :title="'新增自定义平台 - ' + ptype">
+  <back-page :title="t('platform.add.title') + ptype">
     <el-form class="add-form" ref="formRef" label-width="100px" :model="formData.dynCfg" :rules="formValidateRules">
       <el-alert
         v-if="formData.isPre"
         class="top-tip"
-        title="当前为初次添加，将导入该平台的预定义模板；如果再次添加，将生成可修改的新实例"
+        :title="t('platform.add.first.time.tip')"
         type="error"
         :closable="false"
       />
-      <el-alert class="top-tip" :title="'当前平台类型为=>' + ptype" type="info" :closable="false" />
+      <el-alert class="top-tip" :title="t('platform.add.current.type') + ptype" type="info" :closable="false" />
       <!-- 子平台名称 -->
-      <el-form-item v-if="formData.subtypeOptions.length > 0" label="子平台类型">
-        <el-select v-model="formData.subtype" class="m-2" placeholder="请选择" @change="handleSubPlatformTypeChange">
+      <el-form-item v-if="formData.subtypeOptions.length > 0" :label="t('platform.add.subtype.label')">
+        <el-select v-model="formData.subtype" class="m-2" :placeholder="t('main.opt.select')" @change="handleSubPlatformTypeChange">
           <el-option v-for="item in formData.subtypeOptions" :key="item" :label="item" :value="item" />
         </el-select>
       </el-form-item>
-      <el-alert v-else class="top-tip" :title="'子平台类型为=>' + formData.subtype" type="info" :closable="false" />
+      <el-alert v-else class="top-tip" :title="t('platform.add.subtype.value') + formData.subtype" type="info" :closable="false" />
       <!-- 平台key -->
       <el-form-item :label="t('dynamic.platform.key')" prop="platformKey">
         {{ formData.dynCfg.platformKey }}
       </el-form-item>
       <!-- 平台名称 -->
-      <el-form-item label="平台名称" prop="platformName">
+      <el-form-item :label="t('platform.add.name.label')" prop="platformName">
         <span v-if="formData.isPre">{{ formData.dynCfg.platformName }}</span>
         <el-input v-else v-model="formData.dynCfg.platformName" />
       </el-form-item>
       <!-- 平台图标 -->
-      <el-form-item label="平台图标" prop="platformIcon" class="cfg-icon">
+      <el-form-item :label="t('platform.add.icon.label')" prop="platformIcon" class="cfg-icon">
         <el-input
           v-if="!formData.isPre"
           v-model="formData.dynCfg.platformIcon"
           style="width: 75%; margin-right: 16px"
-          placeholder="直接粘贴svg代码或者img标签代码"
+          :placeholder="t('platform.add.icon.placeholder')"
           type="textarea"
           :rows="10"
         />
@@ -241,23 +241,23 @@ initPage()
         </el-icon>
       </el-form-item>
       <!-- 授权方式 -->
-      <el-form-item label="授权方式" prop="authMode">
-        <span v-if="formData.isPre">{{ formData.dynCfg.authMode === AuthMode.API ? "API授权" : "网页授权" }}</span>
-        <el-select v-else v-model="formData.dynCfg.authMode" placeholder="请选择" :disabled="true">
-          <el-option :value="AuthMode.API" label="API授权" />
-          <el-option :value="AuthMode.WEBSITE" label="网页授权" />
+      <el-form-item :label="t('platform.add.auth.mode.label')" prop="authMode">
+        <span v-if="formData.isPre">{{ formData.dynCfg.authMode === AuthMode.API ? t('setting.platform.update.auth.mode.api') : t('setting.platform.update.auth.mode.web') }}</span>
+        <el-select v-else v-model="formData.dynCfg.authMode" :placeholder="t('main.opt.select')" :disabled="true">
+          <el-option :value="AuthMode.API" :label="t('setting.platform.update.auth.mode.api')" />
+          <el-option :value="AuthMode.WEBSITE" :label="t('setting.platform.update.auth.mode.web')" />
         </el-select>
       </el-form-item>
       <!-- 登录地址 -->
-      <el-form-item v-if="formData.dynCfg.authMode === AuthMode.WEBSITE" label="登录地址" prop="authUrl" required>
-        <el-input v-model="formData.dynCfg.authUrl" placeholder="请输入该平台的网页登录地址" />
+      <el-form-item v-if="formData.dynCfg.authMode === AuthMode.WEBSITE" :label="t('platform.add.auth.url.label')" prop="authUrl" required>
+        <el-input v-model="formData.dynCfg.authUrl" :placeholder="t('platform.add.auth.url.placeholder')" />
       </el-form-item>
       <!-- 主域名 -->
-      <el-form-item v-if="formData.dynCfg.authMode === AuthMode.WEBSITE" label="主域名" prop="domain" required>
-        <el-input v-model="formData.dynCfg.domain" placeholder="请输入该平台的主域名" />
+      <el-form-item v-if="formData.dynCfg.authMode === AuthMode.WEBSITE" :label="t('platform.add.domain.label')" prop="domain" required>
+        <el-input v-model="formData.dynCfg.domain" :placeholder="t('platform.add.domain.placeholder')" />
       </el-form-item>
       <!-- 是否启用 -->
-      <el-form-item label="是否启用">
+      <el-form-item :label="t('platform.add.enabled.label')">
         <el-switch v-model="formData.dynCfg.isEnabled" />
       </el-form-item>
 

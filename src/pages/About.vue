@@ -22,13 +22,13 @@ const formData = reactive({
 </script>
 
 <template>
-  <back-page title="关于作者">
+  <back-page :title="t('page.about.author')">
     <div id="about-box">
       <div class="logo">
         <img src="../../icon.png" alt="logo" />
       </div>
       <div class="notice">
-        <p class="title">发布工具 v{{ formData.v }}</p>
+        <p class="title">{{ t("page.about.publish.tool") }} v{{ formData.v }}</p>
 
         <div class="param slogan">
           <span>{{ t("slogan.make.written.fun") }}</span>

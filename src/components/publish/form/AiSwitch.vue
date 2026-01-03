@@ -31,8 +31,8 @@ const emit = defineEmits(["emitSyncAiSwitch"])
 const onAiSwitchChange = (val: boolean) => {
   if (val) {
     ElMessageBox.confirm(
-      `由于运营成本关系，人工智能服务[内测版]相关服务会在内测结束后收费，是否仍然开启，不开启仍然可以使用基础功能？`,
-      "温馨提示",
+      t("publish.ai.beta.warning"),
+      t("main.opt.tip"),
       {
         type: "error",
         icon: markRaw(Warning),
@@ -42,14 +42,14 @@ const onAiSwitchChange = (val: boolean) => {
     )
       .then(async () => {
         emit("emitSyncAiSwitch", formData.useAi)
-        ElMessage.success("人工智能服务[内测版]已开启，目前可智能生成摘要和标签，感谢您的支持！")
+        ElMessage.success(t("publish.ai.beta.enabled"))
       })
       .catch(() => {
         formData.useAi = false
         emit("emitSyncAiSwitch", formData.useAi)
       })
   } else {
-    ElMessageBox.confirm(`人工智能服务关闭之后将使用基础功能，是否继续？`, "温馨提示", {
+    ElMessageBox.confirm(t("publish.ai.beta.close.confirm"), t("main.opt.tip"), {
       type: "error",
       icon: markRaw(Warning),
       confirmButtonText: t("main.opt.ok"),
@@ -57,7 +57,7 @@ const onAiSwitchChange = (val: boolean) => {
     })
       .then(async () => {
         emit("emitSyncAiSwitch", formData.useAi)
-        ElMessage.warning("人工智能服务[内测版]已关闭，将使用基础功能！")
+        ElMessage.warning(t("publish.ai.beta.disabled"))
       })
       .catch(() => {})
   }
@@ -66,7 +66,7 @@ const onAiSwitchChange = (val: boolean) => {
 
 <template>
   <div class="ai-switch">
-    <el-form-item label="使用人工智能">
+    <el-form-item :label="t('publish.ai.use.label')">
       <el-switch v-model="formData.useAi" @change="onAiSwitchChange"></el-switch>
     </el-form-item>
   </div>

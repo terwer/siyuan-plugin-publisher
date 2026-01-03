@@ -16,10 +16,12 @@ import { SypConfig } from "~/syp.config.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { usePlatformDefine } from "~/src/composables/usePlatformDefine.ts"
+import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 
 const logger = createAppLogger("publish-platform-import")
 
 // uses
+const { t } = useVueI18n()
 const { getSetting } = usePublishSettingStore()
 const { platformTypeList } = usePlatformDefine()
 
@@ -59,7 +61,7 @@ onMounted(async () => {
 <template>
   <div>
     <el-radio-group v-model="selectPlatformGroup" style="margin-bottom: 30px" :key="selectPlatformGroup">
-      <el-radio-button key="all" value="all" @click="handleSelectPlformGroup('all')">全部</el-radio-button>
+      <el-radio-button key="all" value="all" @click="handleSelectPlformGroup('all')">{{ t("setting.platform.store.all") }}</el-radio-button>
       <!--
       <el-popover
         v-for="item in platformTypeList"

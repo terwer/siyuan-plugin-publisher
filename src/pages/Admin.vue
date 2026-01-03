@@ -353,7 +353,7 @@ onBeforeMount(async () => {
           v-model="state"
           :fetch-suggestions="querySearch"
           popper-class="my-autocomplete"
-          placeholder="请输入关键字"
+          :placeholder="t('page.admin.search.placeholder')"
           @change="handleBtnSearch"
           @select="handleSelect"
         >
@@ -361,13 +361,13 @@ onBeforeMount(async () => {
             <div class="value">{{ item.value }}</div>
           </template>
         </el-autocomplete>
-        <el-button class="s-btn" type="primary" @click="handleBtnSearch">搜索</el-button>
+        <el-button class="s-btn" type="primary" @click="handleBtnSearch">{{ t("admin.search") }}</el-button>
         <el-checkbox
           class="s-filter-item s-filter-published"
           size="large"
           v-model="showPublished"
           @change="onIsPublishedChange"
-          >已发布
+              >{{ t("admin.published") }}
         </el-checkbox>
       </div>
 
@@ -390,16 +390,16 @@ onBeforeMount(async () => {
           <el-table-column type="expand">
             <template #default="props">
               <div m="4" style="padding-left: 10px" class="tb-extend">
-                <p m="t-0 b-2">ID: {{ props.row.postid }}</p>
-                <p m="t-0 b-2">发布时间: {{ props.row.dateCreated }}</p>
-                <p m="t-0 b-2">标题: {{ props.row.title }}</p>
+                <p m="t-0 b-2">{{ t("admin.post.id") }}: {{ props.row.postid }}</p>
+                <p m="t-0 b-2">{{ t("admin.post.publish.time") }}: {{ props.row.dateCreated }}</p>
+                <p m="t-0 b-2">{{ t("admin.post.title") }}: {{ props.row.title }}</p>
                 <p m="t-0 b-2">
-                  标签:
-                  {{ props.row.mt_keywords === "" ? "暂无标签" : props.row.mt_keywords }}
+                  {{ t("admin.post.tags") }}:
+                  {{ props.row.mt_keywords === "" ? t("main.tag.empty") : props.row.mt_keywords }}
                 </p>
-                <p m="t-0 b-2">摘要: {{ props.row.shortDesc }}</p>
+                <p m="t-0 b-2">{{ t("admin.post.summary") }}: {{ props.row.shortDesc }}</p>
                 <p m="t-0 b-2">
-                  平台:
+                  {{ t("admin.post.platform") }}:
                   <span v-if="props.row.yamlCount > 0">
                     <span v-for="(value, key) in props.row.yamlAttrs" :key="key" class="box-item">
                       <a @click="goToSingleEdit(key.toString(), props.row)">
@@ -407,24 +407,24 @@ onBeforeMount(async () => {
                           <i class="el-icon">
                             <span v-html="props.row.dynCfgs[key]?.platformIcon ?? svgIcons.iconOTRemove"></span>
                           </i>
-                          {{ props.row.dynCfgs[key]?.platformName ?? "[已删除]" }}
+                          {{ props.row.dynCfgs[key]?.platformName ?? t("admin.post.platform.deleted") }}
                         </el-text>
                       </a>
                     </span>
                   </span>
-                  <span v-else>暂无平台</span>
+                  <span v-else>{{ t("admin.post.no.platform") }}</span>
                 </p>
               </div>
             </template>
           </el-table-column>
           <el-table-column prop="title">
             <template #header>
-              <div style="text-align: center">标题</div>
+              <div style="text-align: center">{{ t("admin.post.title") }}</div>
             </template>
             <template #default="scope">
               <el-tooltip
                 :content="
-                  scope.row.yamlCount > 0 ? '文章已发布到：' + Object.keys(scope.row.yamlAttrs).toString() : '尚未发布'
+                  scope.row.yamlCount > 0 ? t('admin.post.published.to') + Object.keys(scope.row.yamlAttrs).toString() : t('admin.post.not.published')
                 "
                 class="box-item"
                 effect="light"
@@ -438,7 +438,7 @@ onBeforeMount(async () => {
           </el-table-column>
           <el-table-column align="center" width="420">
             <template #header>
-              <div style="text-align: center">操作</div>
+              <div style="text-align: center">{{ t("admin.action") }}</div>
             </template>
             <template #default="scope">
               <!-- 发布 -->

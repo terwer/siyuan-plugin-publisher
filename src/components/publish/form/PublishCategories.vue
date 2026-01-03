@@ -96,12 +96,12 @@ const fetchCate = async () => {
       systemMessage: getChatInput(formData?.md, formData.html),
     })
     if (StrUtil.isEmptyString(chatText)) {
-      ElMessage.error("请求错误，请在偏好设置配置请求地址和ChatGPT key！")
+      ElMessage.error(t("publish.error.ai.config"))
       return
     }
     const resJson = JsonUtil.safeParse<CategoryAIResult>(chatText, {} as CategoryAIResult)
     if (!resJson?.categories || resJson?.categories.length == 0) {
-      throw new Error("文档信息量太少，未能抽取有效信息")
+      throw new Error(t("ai.error.insufficient.content"))
     }
     formData.recommCates = resJson.categories
     logger.info("使用AI智能生成的分类结果 =>", {
@@ -129,7 +129,7 @@ const fetchCate = async () => {
     <div v-else></div>
     <div v-if="formData.useAi && formData.categoryConfig.cateEnabled">
       <el-form-item v-if="formData.recommCates.length > 0" class="recomm-show">
-        推荐的分类：
+        {{ t("publish.categories.recommended") }}
         <el-tag class="ml-2 recomm-cate" type="success" v-for="rtag in formData.recommCates">{{ rtag }}</el-tag>
       </el-form-item>
       <el-form-item class="cat-action">

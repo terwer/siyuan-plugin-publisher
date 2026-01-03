@@ -138,12 +138,12 @@ const tagMethods = {
         systemMessage: getChatInput(formData?.md, formData.html),
       })
       if (StrUtil.isEmptyString(chatText)) {
-        ElMessage.error("请求错误，请在偏好设置配置请求地址和ChatGPT key！")
+        ElMessage.error(t("publish.error.ai.config"))
         return
       }
       const resJson = JsonUtil.safeParse<TagAIResult>(chatText, {} as TagAIResult)
       if (!resJson?.tags || resJson?.tags.length == 0) {
-        throw new Error("文档信息量太少，未能抽取有效信息")
+        throw new Error(t("ai.error.insufficient.content"))
       }
       for (let i = 0; i < resJson.tags.length; i++) {
         if (!formData.tag.dynamicTags.includes(resJson.tags[i])) {
@@ -162,7 +162,7 @@ const tagMethods = {
       //   }
       // }
       emit("emitSyncTags", formData.tag.dynamicTags)
-      ElMessage.success("使用人工智能智能提取标签成功")
+      ElMessage.success(t("publish.success.ai.tag"))
     } catch (e: any) {
       logger.error(t("main.opt.failure") + "=>", e)
       ElMessage.error(t("main.opt.failure") + "=>" + e)

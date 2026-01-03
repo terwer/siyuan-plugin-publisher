@@ -45,7 +45,7 @@ const handlePostTypeChange = (val: UnwrapRef<TelegraphConfig>) => {
 <template>
   <common-blog-setting :api-type="props.apiType" :cfg="telegraphCfg">
     <template #header="header">
-      <el-form-item label="登录模式" required>
+      <el-form-item :label="t('setting.telegraph.login.mode')" required>
         <el-radio-group
           v-model="(header.cfg as TelegraphConfig).postType"
           class="ml-4"
@@ -87,7 +87,7 @@ const handlePostTypeChange = (val: UnwrapRef<TelegraphConfig>) => {
           show-password
         />
       </el-form-item>
-      <el-form-item label="刷新授权">
+      <el-form-item :label="t('setting.telegraph.refresh.auth')">
         <el-switch
           v-model="(main.cfg as TelegraphConfig).forceReAuth"
           :placeholder="t('setting.telegraph.forceReAuth.tip')"

@@ -41,12 +41,12 @@ const formData = reactive({
   dynamicConfigArray: [] as DynamicConfig[],
   postIdMap: {} as any,
 })
-const alertTitle = ref(`将对文档「${formData.pageId}」进行修复`)
+const alertTitle = ref(t("post.bind.fix.document").replace("{title}", formData.pageId))
 
 watch(
   () => formData.pageId,
   (newValue) => {
-    alertTitle.value = `将对文档「${newValue}」进行修复`
+    alertTitle.value = t("post.bind.fix.document").replace("{title}", newValue)
   }
 )
 
@@ -93,7 +93,7 @@ onMounted(async () => {
   if (!StrUtil.isEmptyString(formData.pageId)) {
     formData.siyuanPost = await kernelApi.getBlockByID(formData.pageId)
     const title = Utils.emptyOrDefault(formData.siyuanPost?.content, formData.pageId)
-    alertTitle.value = `将对文档「${title}」进行修复`
+    alertTitle.value = t("post.bind.fix.document").replace("{title}", title)
   }
 
   const publishCfg = await getPublishCfg()
@@ -117,7 +117,7 @@ onMounted(async () => {
   <div>
     <el-alert class="top-tip" :title="t('post.bind.auto.tips')" type="error" :closable="false" />
     <el-form-item>
-      <el-input v-model="formData.pageId" placeholder="请输入需要修复的文档根 ID" />
+      <el-input v-model="formData.pageId" :placeholder="t('post.bind.page.id.placeholder')" />
     </el-form-item>
     <el-divider border-style="dashed" />
 

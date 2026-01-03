@@ -8,12 +8,12 @@
   -->
 
 <template>
-  <back-page title="AI聊天">
+  <back-page :title="t('ai.chat.title')">
     <!-- Prompt 管理 -->
     <el-card class="prompt-management" v-show="formData.showPromptManagement">
       <div class="prompt-actions">
         <!-- 新增 Prompt 按钮 -->
-        <el-button type="primary" @click="toggleNewPrompt">新增 Prompt</el-button>
+        <el-button type="primary" @click="toggleNewPrompt">{{ t("ai.chat.add.prompt") }}</el-button>
       </div>
 
       <!-- 新增 Prompt 输入框 -->
@@ -23,28 +23,28 @@
             :autosize="{ minRows: 2, maxRows: 4 }"
             type="textarea"
             v-model="formData.newPrompt.value"
-            placeholder="输入新的 Prompt，注意：假如 prompt 包含 「当前上下文」 这个文本，会自动使用当前文档正文作为上下文进行提问"
+            :placeholder="t('ai.chat.new.prompt.placeholder')"
           />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="addPrompt" class="save-button">保存</el-button>
+          <el-button type="primary" @click="addPrompt" class="save-button">{{ t("ai.chat.save") }}</el-button>
         </el-form-item>
       </el-form>
 
       <!-- Prompt 列表 -->
       <el-table v-if="formData.prompts.length" :data="formData.prompts" border style="width: 100%" class="prompt-table">
-        <el-table-column label="Prompt 内容" prop="value" align="left">
+        <el-table-column :label="t('ai.chat.prompt.content')" prop="value" align="left">
           <template #default="scope">
             <el-input
               v-if="formData.editingIndex === scope.$index"
               v-model="scope.row.value"
-              placeholder="编辑 Prompt"
+              :placeholder="t('ai.chat.edit.prompt.placeholder')"
               :disabled="scope.row.isSys"
             />
             <span v-else>{{ scope.row.value }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center" width="160">
+        <el-table-column :label="t('ai.chat.action')" align="center" width="160">
           <template #default="scope">
             <el-button
               v-if="!scope.row.isSys && formData.editingIndex !== scope.$index"
@@ -52,7 +52,7 @@
               type="primary"
               @click="editPrompt(scope.$index)"
             >
-              编辑
+              {{ t("ai.chat.edit") }}
             </el-button>
             <el-button
               size="small"
@@ -60,10 +60,10 @@
               @click="updatePrompt(scope.$index, scope.row.value)"
               v-if="formData.editingIndex === scope.$index"
             >
-              保存
+              {{ t("ai.chat.save") }}
             </el-button>
             <el-button size="small" type="danger" @click="deletePrompt(scope.$index)" v-if="!scope.row.isSys">
-              删除
+              {{ t("ai.chat.delete") }}
             </el-button>
           </template>
         </el-table-column>
@@ -74,11 +74,11 @@
     <el-alert
       v-if="formData.usePage && formData.showPage && !StrUtil.isEmptyString(formData.siyuanPost.markdown)"
       :closable="false"
-      :title="`当前为上下文模式，文档上下文为《${formData.siyuanPost.title}》`"
+      :title="t('ai.chat.context.mode').replace('{title}', formData.siyuanPost.title)"
       class="top-tip"
       type="success"
     />
-    <el-alert v-else :closable="false" :title="`当前为自由聊天模式`" class="top-tip" type="info" />
+    <el-alert v-else :closable="false" :title="t('ai.chat.free.mode')" class="top-tip" type="info" />
     <el-form class="chatgpt-form">
       <el-form-item>
         <el-input
@@ -86,12 +86,12 @@
           :autosize="{ minRows: 4, maxRows: 16 }"
           type="textarea"
           class="chat-input"
-          placeholder="请输入文本..."
+          :placeholder="t('ai.chat.input.placeholder')"
         />
       </el-form-item>
       <el-form-item>
         <div v-if="formData.showPage && formData.siyuanPost.markdown">
-          <el-switch v-model="formData.usePage" class="use-context" /> &nbsp; 使用当前文档作为上下文
+          <el-switch v-model="formData.usePage" class="use-context" /> &nbsp; {{ t("ai.chat.use.context") }}
         </div>
       </el-form-item>
       <!-- Prompt 选择 -->
@@ -99,7 +99,7 @@
         <el-select
           v-model="formData.selectedPrompt"
           v-if="formData.prompts.length"
-          placeholder="选择一个 Prompt"
+          :placeholder="t('ai.chat.select.prompt')"
           @change="insertPromptToChat"
           class="props-select"
         >
@@ -112,9 +112,9 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="sendMessage" :loading="formData.isLoading">发送消息</el-button>
-        <el-button type="danger" @click="clearChatOutput">清屏</el-button>
-        <el-button type="warning" @click="togglePromptManagement">显示/隐藏 Prompt 管理</el-button>
+        <el-button type="primary" @click="sendMessage" :loading="formData.isLoading">{{ t("ai.chat.send.message") }}</el-button>
+        <el-button type="danger" @click="clearChatOutput">{{ t("ai.chat.clear") }}</el-button>
+        <el-button type="warning" @click="togglePromptManagement">{{ t("ai.chat.toggle.prompt.management") }}</el-button>
       </el-form-item>
       <el-form-item>
         <div class="chat-output">
@@ -147,7 +147,6 @@ const { blogApi } = useSiyuanApi()
 
 // datas
 const id = (query.id ?? getWidgetId()) as string
-const CURRENT_CONTEXT = "当前上下文"
 // 数据统一存储到 formData
 const formData = reactive({
   prompts: (() => {
@@ -197,7 +196,7 @@ const toggleNewPrompt = () => {
 // 添加新 Prompt
 const addPrompt = () => {
   if (!formData.newPrompt.value.trim()) {
-    ElMessage.error("Prompt 不能为空")
+    ElMessage.error(t("ai.chat.prompt.empty"))
     return
   }
 
@@ -208,14 +207,14 @@ const addPrompt = () => {
   formData.newPrompt = { key: "", value: "" }
   formData.showNewPromptInput = false
   formData.showPromptManagement = false
-  ElMessage.success("Prompt 已添加")
+  ElMessage.success(t("ai.chat.prompt.added"))
 }
 
 // 删除 Prompt
 const deletePrompt = (index: number) => {
   formData.prompts.splice(index, 1)
   localStorage.setItem("prompts", JSON.stringify(formData.prompts))
-  ElMessage.success("Prompt 已删除")
+  ElMessage.success(t("ai.chat.prompt.deleted"))
 }
 
 // 编辑 Prompt
@@ -226,20 +225,21 @@ const editPrompt = (index: number) => {
 // 更新 Prompt
 const updatePrompt = (index: number, newValue: string) => {
   if (!newValue.trim()) {
-    ElMessage.error("Prompt 不能为空")
+    ElMessage.error(t("ai.chat.prompt.empty"))
     return
   }
 
   formData.prompts[index].value = newValue
   localStorage.setItem("prompts", JSON.stringify(formData.prompts))
   formData.editingIndex = -1
-  ElMessage.success("Prompt 已更新")
+  ElMessage.success(t("ai.chat.prompt.updated"))
 }
 
 // 将 Prompt 插入到聊天输入框
 const insertPromptToChat = (prompt: string) => {
   if (!prompt) return
-  if (prompt.includes(CURRENT_CONTEXT)) {
+  const currentContext = t("ai.chat.current.context")
+  if (prompt.includes(currentContext)) {
     formData.usePage = true
   } else {
     formData.usePage = false
@@ -251,7 +251,7 @@ const insertPromptToChat = (prompt: string) => {
 // 发送聊天消息
 const sendMessage = async () => {
   if (formData.inputText.trim() === "") {
-    ElMessage.error("请输入文本")
+    ElMessage.error(t("ai.chat.input.empty"))
     return
   }
 
@@ -272,14 +272,14 @@ const sendMessage = async () => {
     }
 
     if (StrUtil.isEmptyString(chatText)) {
-      ElMessage.error("请求错误，请在偏好设置配置请求地址和 ChatGPT key！")
+      ElMessage.error(t("ai.chat.error.config"))
       return
     }
 
     formData.chatOutput = `> ${formData.inputText}\n${chatText}\n\n` + formData.chatOutput
   } catch (e) {
     logger.error("发送消息失败", e)
-    ElMessage.error("发送消息失败：" + e)
+    ElMessage.error(t("ai.chat.error.send.failed") + e)
   } finally {
     formData.isLoading = false
   }

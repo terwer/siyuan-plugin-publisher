@@ -125,10 +125,10 @@ const handlePublish = async () => {
     if (processResult.status) {
       // 如果是发布并且发布成功
       if (formData.method === MethodEnum.METHOD_ADD) {
-        ElMessage.success("文章发布成功！如需编辑请重新打开")
+        ElMessage.success(t("publish.success.published"))
       } else {
         formData.actionEnable = true
-        ElMessage.success("文章更新成功！")
+        ElMessage.success(t("publish.success.updated"))
       }
     } else {
       formData.actionEnable = true
@@ -149,9 +149,9 @@ const handlePublish = async () => {
 const handleDelete = async () => {
   const platformName = getPlatformName()
   const blogName = getBlogName()
-  ElMessageBox.confirm(
-    `确认要删除 [${platformName} - ${blogName}] 下的这篇文章吗，此平台的文章数据将永久删除 ？`,
-    "温馨提示",
+    ElMessageBox.confirm(
+    t("publish.single.delete.confirm").replace("{platformName}", platformName).replace("{blogName}", blogName),
+    t("main.opt.tip"),
     {
       type: "error",
       icon: markRaw(Delete),
@@ -176,7 +176,7 @@ const doDelete = async () => {
       // 刷新页面
       const platformName = getPlatformName()
       const blogName = getBlogName()
-      ElMessage.success(`[${platformName} - ${blogName}] 文章删除成功`)
+      ElMessage.success(t("publish.single.delete.success").replace("{platformName}", platformName).replace("{blogName}", blogName))
 
       // 如果是发布并且发布成功
       setTimeout(() => {
@@ -207,7 +207,7 @@ const handleForceDelete = async () => {
     await doForceSingleDelete(key, id, formData.publishCfg as IPublishCfg)
     const platformName = getPlatformName()
     const blogName = getBlogName()
-    ElMessage.success(`[${platformName} - ${blogName}] 文章信息已强制删除`)
+    ElMessage.success(t("publish.single.force.delete.success").replace("{platformName}", platformName).replace("{blogName}", blogName))
 
     // 如果是发布并且发布成功
     setTimeout(() => {
@@ -227,7 +227,7 @@ const handleForceDelete = async () => {
 const handleSyncToSiyuan = async () => {
   await handleSyncSiyuanAttrToSiyuan()
   await handleSyncPlatformAttrToSiyuan()
-  ElMessage.success("属性已经成功同步到思源")
+  ElMessage.success(t("publish.success.attr.synced"))
 }
 
 const handleSyncSiyuanAttrToSiyuan = async () => {
@@ -274,7 +274,7 @@ const topTitle = computed(() => {
   const platformName = getPlatformName()
   const blogName = getBlogName()
 
-  let title = "当前操作的平台为 - "
+  let title = t("publish.single.platform.title")
   const platName = platformName ? platformName : key
   title += PageUtils.longPlatformName(platName, 11)
   if (blogName) {
@@ -462,7 +462,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <back-page title="常规发布" :has-back-emit="true" @backEmit="onBack">
+  <back-page :title="t('publish.normal.title')" :has-back-emit="true" @backEmit="onBack">
     <el-skeleton class="placeholder" v-if="!formData.isInit" :rows="5" animated />
     <div v-else id="batch-publish-index">
       <!-- 显示加载计时器 -->
@@ -492,7 +492,7 @@ onMounted(async () => {
 
               <!--
               --------------------------------------
-              编辑模式开始
+              {{ t("publish.single.edit.mode.start") }}
               --------------------------------------
               -->
               <source-mode
@@ -536,7 +536,7 @@ onMounted(async () => {
                 <div v-if="formData.editType === PageEditMode.EditMode_complex" class="complex-mode">
                   <!-- AI开关 -->
                   <!--
-                  根据配置正确与否自动开启，不再提供手动设置
+                  {{ t("publish.single.auto.enable") }}
                   -->
                   <!--
                   <ai-switch v-if="formData.useAi" v-model:use-ai="formData.useAi" @emitSyncAiSwitch="syncAiSwitch" />
@@ -609,7 +609,7 @@ onMounted(async () => {
               </div>
               <!--
               --------------------------------------
-              编辑模式结束
+              {{ t("publish.single.edit.mode.end") }}
               --------------------------------------
               -->
 
@@ -647,7 +647,7 @@ onMounted(async () => {
                   @click="handleSyncToSiyuan"
                   :disabled="!formData.actionEnable && formData.editType !== PageEditMode.EditMode_source"
                 >
-                  同步修改到思源笔记
+                  {{ t("publish.single.sync.to.siyuan") }}
                 </el-button>
               </el-form-item>
 

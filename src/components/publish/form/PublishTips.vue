@@ -7,11 +7,17 @@
   -  of this license document, but changing it is not allowed.
   -->
 
+<script setup lang="ts">
+import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+
+const { t } = useVueI18n()
+</script>
+
 <template>
   <div class="publish-tips">
     <el-alert
       :closable="false"
-      title="多平台文章分发。其中思源笔记为内置平台，这里的修改发布后，也会同步更新思源笔记"
+      :title="t('publish.tips.multi.platform')"
       class="top-tip"
       type="info"
     />

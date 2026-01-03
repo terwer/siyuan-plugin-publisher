@@ -104,12 +104,12 @@ const handleMakeDesc = async () => {
         systemMessage: getChatInput(formData?.md, formData.html),
       })
       if (StrUtil.isEmptyString(chatText)) {
-        ElMessage.error("请求错误，请在偏好设置配置请求地址和ChatGPT key！")
+        ElMessage.error(t("publish.error.ai.config"))
         return
       }
       const resJson = JsonUtil.safeParse<ShortDescAIResult>(chatText, {} as ShortDescAIResult)
       if (StrUtil.isEmptyString(resJson?.desc)) {
-        throw new Error("文档信息量太少，未能抽取有效信息")
+        throw new Error(t("ai.error.insufficient.content"))
       }
       formData.desc = resJson.desc
       logger.info("使用AI智能生成的摘要结果 =>", {
@@ -135,7 +135,7 @@ const handleMakeDesc = async () => {
     //   ElMessage.success(`操作成功，未开启人工智能，直接截取文章前${MAX_PREVIEW_LENGTH}个字符作为摘要`)
     // }
     emit("emitSyncDesc", formData.desc)
-    ElMessage.success("使用人工智能提取摘要成功")
+    ElMessage.success(t("publish.success.ai.desc"))
   } catch (e) {
     logger.error(t("main.opt.failure") + "=>", e)
     ElMessage.error(t("main.opt.failure") + "=>" + e)
@@ -156,7 +156,7 @@ const onDescChange = () => {
         v-model="formData.desc"
         :autosize="{ minRows: 3, maxRows: 16 }"
         type="textarea"
-        placeholder="请输入文章摘要"
+        :placeholder="t('publish.desc.placeholder')"
         @input="onDescChange"
       />
     </el-form-item>

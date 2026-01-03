@@ -73,7 +73,7 @@ const getTooltipContent = computed(() => {
 <template>
   <div id="page-body">
     <div v-if="showBack" class="page-head">
-      <el-page-header :icon="ArrowLeft as any" title="返回" @click="onBack">
+      <el-page-header :icon="ArrowLeft as any" :title="t('common.back')" @click="onBack">
         <template #content>
           <div class="flex items-center">
             <span class="text-large font-600 mr-3">{{ props.title }}</span>

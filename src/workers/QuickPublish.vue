@@ -101,7 +101,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <back-page :title="'极速发布 - ' + key">
+  <back-page :title="t('publish.quick.title.prefix') + key">
     <div id="quick-publish-box">
       <div class="publish-tips">
         <div v-if="singleFormData.isPublishLoading" class="is-loading info-tips">
@@ -113,30 +113,30 @@ onMounted(async () => {
               ></path>
             </svg>
           </i>
-          发布中，请稍后...
+          {{ t("publish.quick.publishing") }}
         </div>
         <div v-else-if="singleFormData.publishProcessStatus" class="success-tips">
-          {{ singleFormData.isAdd ? "发布到" : "更新文章到" }}
+          {{ singleFormData.isAdd ? t("publish.quick.publish.to") : t("publish.quick.update.to") }}
           <span :title="formData.processResult.key">
             [{{ PageUtils.subPlatformName(formData.processResult.key, 6) }}]
           </span>
           <span :title="formData.processResult.name" v-if="!StrUtil.isEmptyString(formData.processResult.name)">
             {{ `[${StrUtil.getByLength(formData.processResult.name, 8)}]` }}
           </span>
-          成功，
-          <a :href="formData.processResult.previewUrl" target="_blank">查看文章</a>
+          {{ t("publish.quick.success") }}
+          <a :href="formData.processResult.previewUrl" target="_blank">{{ t("publish.batch.view.article") }}</a>
           <loading-timer :loading-time="loadingTime" style="padding: 0 10px 0 10px; display: inline-block" />
         </div>
         <div v-else class="fail-tips">
-          {{ singleFormData.isAdd ? "发布到" : "更新文章到" }}
+          {{ singleFormData.isAdd ? t("publish.quick.publish.to") : t("publish.quick.update.to") }}
           <span :title="formData.processResult.key">
             [{{ PageUtils.subPlatformName(formData.processResult.key, 6) }}]
           </span>
           <span :title="formData.processResult.name" v-if="!StrUtil.isEmptyString(formData.processResult.name)">
             {{ `[${StrUtil.getByLength(formData.processResult.name, 8)}]` }}
           </span>
-          失败！
-          <a href="javascript:;" @click="showDetailError(formData.processResult.errMsg)">详细错误</a>
+          {{ t("publish.quick.failed") }}
+          <a href="javascript:;" @click="showDetailError(formData.processResult.errMsg)">{{ t("publish.quick.detail.error") }}</a>
           <loading-timer :loading-time="loadingTime" style="padding: 0 10px 0 10px; display: inline-block" />
         </div>
       </div>

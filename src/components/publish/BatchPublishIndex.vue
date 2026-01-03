@@ -107,7 +107,7 @@ const handlePublish = async () => {
     isTimerInit.value = false
 
     if (formData.dynList.length === 0) {
-      throw new Error("必须选择一个分发平台")
+      throw new Error(t("publish.batch.platform.required"))
     }
 
     formData.errCount = 0
@@ -159,9 +159,9 @@ const handlePublish = async () => {
     formData.actionEnable = false
     formData.showProcessResult = true
     if (formData.errCount === 0) {
-      ElMessage.success("多平台文章分发成功")
+      ElMessage.success(t("publish.success.multi.distributed"))
     } else {
-      ElMessage.error(`多平台文章分发失败，失败个数：${formData.errCount}`)
+      ElMessage.error(t("publish.batch.multi.failed").replace("{count}", formData.errCount.toString()))
     }
   } catch (e) {
     const errMsg = t("main.opt.failure") + "=>" + e
@@ -178,10 +178,8 @@ const handlePublish = async () => {
 
 const handleDelete = async () => {
   ElMessageBox.confirm(
-    `确认要删除平台 ${formData.dynList.join(
-      "、"
-    )} 下的这篇文章吗，此平台文章数据也将永久删除 [注意：系统内置平台会忽略，不做删除] ？`,
-    "温馨提示",
+    t("publish.batch.delete.confirm").replace("{platforms}", formData.dynList.join("、")),
+    t("main.opt.tip"),
     {
       type: "error",
       icon: markRaw(Delete),
@@ -199,7 +197,7 @@ const doDelete = async () => {
   try {
     formData.isDeleteLoading = true
     if (formData.dynList.length === 0) {
-      throw new Error("必须选择一个分发平台")
+      throw new Error(t("publish.batch.platform.required"))
     }
 
     formData.errCount = 0
@@ -224,9 +222,9 @@ const doDelete = async () => {
     formData.actionEnable = false
     formData.showProcessResult = true
     if (formData.errCount === 0) {
-      ElMessage.success("多平台文章删除成功")
+      ElMessage.success(t("publish.success.multi.deleted"))
     } else {
-      ElMessage.error(`多平台文章删除失败，失败个数：${formData.errCount}`)
+      ElMessage.error(t("publish.batch.delete.failed").replace("{count}", formData.errCount.toString()))
     }
   } catch (e) {
     const errMsg = t("main.opt.failure") + "=>" + e
@@ -258,7 +256,7 @@ const handleSyncToSiyuan = async () => {
   }
   await kernelApi.setBlockAttrs(id, newAttrs)
   logger.info("内置平台，保存属性", newAttrs)
-  ElMessage.success("属性已经成功同步到思源")
+  ElMessage.success(t("publish.success.attr.synced"))
 }
 
 const syncAiSwitch = (val: boolean) => {
@@ -371,23 +369,23 @@ onMounted(async () => {
           v-if="formData.showProcessResult"
         >
           <div class="error-total-msg">
-            错误平台个数 [{{ formData.errCount }}] ，选择的总平台数 [{{ formData.dynList.length }}] 。
-            <a class="refresh-page" @click="handleRefresh">刷新页面</a>
+            {{ t("publish.batch.error.count").replace("{errCount}", formData.errCount.toString()).replace("{totalCount}", formData.dynList.length.toString()) }}
+            <a class="refresh-page" @click="handleRefresh">{{ t("publish.batch.refresh.page") }}</a>
           </div>
           <div v-for="errRet in formData.failBatchResults">
             [{{ errRet.key }}] {{ StrUtil.isEmptyString(errRet.name) ? "" : `[${errRet.name}]` }} {{ errRet.errMsg }}
             <a
               href="javascript:void(0)"
               @click="handleForceDelete(errRet.key, props.id, formData.publishCfg as IPublishCfg)"
-              >强制解除关联</a
+              >{{ t("publish.batch.force.unbind") }}</a
             >
           </div>
           <div v-if="formData.successBatchResults.length > 0" class="success-result success-tips">
-            已分发成功的结果如下：
+            {{ t("publish.batch.success.results") }}
             <p v-for="ret in formData.successBatchResults">
               <span class="platform">[{{ ret.key }}] {{ StrUtil.isEmptyString(ret.name) ? "" : `[${ret.name}]` }}</span>
               ，
-              <a :href="ret.previewUrl" target="_blank">查看文章</a>
+              <a :href="ret.previewUrl" target="_blank">{{ t("publish.batch.view.article") }}</a>
             </p>
           </div>
         </div>
@@ -407,7 +405,7 @@ onMounted(async () => {
 
             <!--
             --------------------------------------
-            编辑模式开始
+            {{ t("publish.batch.edit.mode.start") }}
             --------------------------------------
             -->
             <source-mode
@@ -427,10 +425,10 @@ onMounted(async () => {
 
               <!-- 分发模式 -->
               <div class="distri-type">
-                <el-form-item label="分发模式">
+                <el-form-item :label="t('publish.distri.mode.label')">
                   <el-radio-group v-model="formData.distriPattern" class="ml-4 distri-type-check">
-                    <el-radio :value="DistributionPattern.Override" size="large">覆盖</el-radio>
-                    <el-radio :value="DistributionPattern.Merge" size="large">合并</el-radio>
+                    <el-radio :value="DistributionPattern.Override" size="large">{{ t("publish.distri.mode.override") }}</el-radio>
+                    <el-radio :value="DistributionPattern.Merge" size="large">{{ t("publish.distri.mode.merge") }}</el-radio>
                   </el-radio-group>
                 </el-form-item>
                 <el-form-item class="distri-tip">
@@ -500,7 +498,7 @@ onMounted(async () => {
             </div>
             <!--
             --------------------------------------
-            编辑模式结束
+            {{ t("publish.batch.edit.mode.end") }}
             --------------------------------------
             -->
 
@@ -528,7 +526,7 @@ onMounted(async () => {
                 {{ t("main.publish.remove") }}
               </el-button>
               <el-button type="warning" @click="handleSyncToSiyuan" :disabled="!formData.actionEnable">
-                同步修改到思源笔记
+                {{ t("publish.batch.sync.to.siyuan") }}
               </el-button>
             </el-form-item>
           </el-form>

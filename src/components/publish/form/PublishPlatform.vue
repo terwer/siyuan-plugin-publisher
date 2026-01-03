@@ -17,8 +17,10 @@ import { svgIcons } from "../../../utils/svgIcons.ts"
 import { pre } from "~/src/platforms/pre.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import PageUtils from "~/common/pageUtils.ts"
+import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 
 const logger = createAppLogger("publish-platform")
+const { t } = useVueI18n()
 
 const props = defineProps({
   id: {
@@ -87,7 +89,7 @@ onMounted(async () => {
 
 <template>
   <div>
-    <p>请选择要发布的平台：</p>
+    <p>{{ t("publish.platform.select") }}</p>
     <div class="syp-distri-platform-container">
       <a v-for="cfg in formData.dynamicConfigArray" class="distri-item" @click="handleCheck(cfg.platformKey)">
         <el-tooltip :content="PageUtils.longPlatformName(cfg.platformName, 20)" placement="bottom">

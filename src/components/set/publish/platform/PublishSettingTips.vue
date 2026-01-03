@@ -30,7 +30,7 @@ const { t } = useVueI18n()
 
     <h2>FAQ:</h2>
     <div class="setting-help">
-      不会配置，或者配置遇到问题？ 请加QQ群
+      {{ t("setting.tips.faq.config.problem") }}
       <span style="font-weight: bold; color: red">
         <a
           href="https://qm.qq.com/cgi-bin/qm/qr?k=fYrA79XDvtr4JuEgez-dmj1h3tOef8pg&jump_from=webapi&authKey=DC+XcjkoTH762jxvkSgpt7V97QFETnaLVTZIWhd8PdZoX+MNSr+LsprWFYYELXu8"
@@ -39,25 +39,25 @@ const { t } = useVueI18n()
           722632752
         </a>
       </span>
-      讨论。
+      {{ t("setting.tips.faq.discuss") }}
     </div>
 
     <div class="setting-help">
-      需要详细的配置指导？请查看在线文档
-      <a href="https://siyuan.wiki/s/20230810132040-nn4q7vs" target="_blank">平台配置指南</a>
+      {{ t("setting.tips.faq.config.guide") }}
+      <a href="https://siyuan.wiki/s/20230810132040-nn4q7vs" target="_blank">{{ t("setting.tips.faq.config.guide.link") }}</a>
     </div>
 
     <div class="tips-form">
-      我想要的平台这里没有？<a
+      {{ t("setting.tips.faq.platform.missing") }}<a
         href="https://terwergreen.feishu.cn/share/base/form/shrcnGRdThUiqnhBg15xgclMM0c"
         target="_blank"
       >
-        点击这里提交发布工具平台适配跟踪表
+        {{ t("setting.tips.faq.platform.missing.link") }}
       </a>
     </div>
 
     <div class="tips-form">
-      我还有其他问题或者想私下沟通作者？<a href="mailto:youweics@163.com"> 直接发邮件到：youweics@163.com </a>
+      {{ t("setting.tips.faq.contact") }}<a href="mailto:youweics@163.com"> {{ t("setting.tips.faq.contact.email") }} </a>
     </div>
   </div>
 </template>

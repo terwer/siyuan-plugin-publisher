@@ -39,7 +39,7 @@
         </span>
 
         <span v-if="isDev" class="text">.</span>
-        <span v-if="isDev" class="text s-dark" @click="handleTest"> 组件测试 </span>
+        <span v-if="isDev" class="text s-dark" @click="handleTest"> {{ t("common.component.test") }} </span>
 
         <span v-if="isChromeExtension" class="text">.</span>
         <span v-if="isChromeExtension" class="text s-dark" @click="newWin()">
