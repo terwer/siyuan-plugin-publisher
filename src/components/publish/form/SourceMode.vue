@@ -250,7 +250,7 @@ await initPage()
   <div class="source-mode" v-else>
     <!-- YAML提示 -->
     <el-form-item v-if="!formData.isSaved" class="un-saved-tip">
-      检测到有未保存的更改，是否保存？<a @click="doSaveContentChange">马上保存</a>
+      {{ t("source.mode.unsaved.changes") }}<a @click="doSaveContentChange">{{ t("source.mode.save.now") }}</a>
     </el-form-item>
     <el-form-item v-if="!formData.readonlyMode">
       <el-alert
@@ -322,7 +322,7 @@ await initPage()
     <!--
     <div id="yaml-action">
       <el-form-item>
-        <el-button size="small" type="danger">保存YAML</el-button>
+        <el-button size="small" type="danger">{{ t("source.mode.save.yaml") }}</el-button>
       </el-form-item>
     </div>
     -->

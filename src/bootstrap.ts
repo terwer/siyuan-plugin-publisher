@@ -13,7 +13,8 @@ import { createAppLogger } from "./utils/appLogger.ts"
 import { useVueRouter } from "./composables/useVueRouter.ts"
 import i18n from "./locales"
 import { createPinia } from "pinia"
-import iframeResize from "./utils/directives/iframeResize.ts";
+import iframeResize from "./utils/directives/iframeResize.ts"
+import { usePublishSettingStore } from "./stores/usePublishSettingStore.ts"
 
 /**
  * Vue 入口
@@ -38,6 +39,18 @@ const createVueApp = async (isMount?: boolean) => {
   // router
   const router = useVueRouter()
   app.use(router)
+
+  // 初始化语言设置（从用户保存的配置中读取）
+  try {
+    const { getSetting } = usePublishSettingStore()
+    const setting = await getSetting()
+    if (setting?.lang && (setting.lang === "zh_CN" || setting.lang === "en_US")) {
+      i18n.global.locale.value = setting.lang
+      logger.info("Locale initialized from user preference:", setting.lang)
+    }
+  } catch (e) {
+    logger.warn("Failed to load locale from user preference, using default", e)
+  }
 
   // ElementPlus 包太大，需要改成按需引入
   // https://element-plus.org/zh-CN/guide/quickstart.html#%E6%8C%89%E9%9C%80%E5%AF%BC%E5%85%A5

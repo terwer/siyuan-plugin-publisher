@@ -73,17 +73,17 @@ const basicImport = (importCfgs: DynamicConfig[]) => {
   for (const importCfg of importCfgs) {
     const pkey = importCfg.platformKey
     if (isDynamicKeyExists(formData.dynamicConfigArray, pkey)) {
-      logAction(pkey, `${pkey} 已经存在，忽略导入`)
+      logAction(pkey, t("setting.platform.import.exists").replace("{platformKey}", pkey))
       continue
     }
 
     const newCfg = _.cloneDeep(importCfg)
     formData.dynamicConfigArray.push(newCfg)
-    logAction(pkey, "已加入导入列表")
+    logAction(pkey, t("setting.platform.import.added"))
 
     // 初始化一个空配置
     formData.setting[pkey] = {}
-    logAction(pkey, "已导入并初始化成功")
+    logAction(pkey, t("setting.platform.import.init.success"))
 
     importCount++
   }
@@ -92,7 +92,7 @@ const basicImport = (importCfgs: DynamicConfig[]) => {
 }
 
 const handleImportAll = () => {
-  ElMessageBox.confirm(`确认要导入全部内置平台吗？`, "温馨提示", {
+  ElMessageBox.confirm(t("setting.platform.import.all.confirm"), t("main.opt.tip"), {
     type: "warning",
     icon: markRaw(Delete),
     confirmButtonText: t("main.opt.ok"),
@@ -130,22 +130,22 @@ const doImportAll = async () => {
     // 刷新数据
     await initPage()
 
-    formData.logMessage += `全部导入成功并保存`
-    ElMessage.success("全部导入成功并保存")
+    formData.logMessage += t("setting.platform.import.all.success") + "\n"
+    ElMessage.success(t("setting.platform.import.all.success"))
   } else {
-    formData.logMessage += `未发现新平台，忽略导入`
-    ElMessage.warning("未发现新平台，忽略导入")
+    formData.logMessage += t("setting.platform.import.all.no.new") + "\n"
+    ElMessage.warning(t("setting.platform.import.all.no.new"))
   }
 }
 
 const handleImportCustom = () => {
   showCustomImportDrawer.value = true
-  customImportDrawerTitle.value = "自定义导入"
+  customImportDrawerTitle.value = t("setting.platform.import.custom.title")
 }
 
 const handleImportLegencySypWidget = () => {
   showWidgetImportDrawer.value = true
-  widgetImportDrawerTitle.value = "从「挂件版」 v0.8.1 导入"
+  widgetImportDrawerTitle.value = t("setting.platform.import.widget.title")
 }
 
 const customLoad = async (node: any, resolve: any) => {
@@ -221,8 +221,8 @@ const customLoad = async (node: any, resolve: any) => {
 const doImportCustom = async () => {
   const paths = formData.customImport.path
   if (paths.length === 0) {
-    formData.logMessage += `未选择平台，忽略导入`
-    ElMessage.warning("未选择平台，忽略导入")
+    formData.logMessage += t("setting.platform.import.custom.no.select") + "\n"
+    ElMessage.warning(t("setting.platform.import.custom.no.select"))
     return
   }
   const cfgs = []
@@ -252,11 +252,11 @@ const doImportCustom = async () => {
     // 刷新数据
     await initPage()
 
-    formData.logMessage += `选择的自定义平台已成功导入并保存`
-    ElMessage.success("选择的自定义平台已成功导入并保存")
+    formData.logMessage += t("setting.platform.import.custom.success") + "\n"
+    ElMessage.success(t("setting.platform.import.custom.success"))
   } else {
-    formData.logMessage += `未发现新平台，忽略导入`
-    ElMessage.warning("未发现新平台，忽略导入")
+    formData.logMessage += t("setting.platform.import.all.no.new") + "\n"
+    ElMessage.warning(t("setting.platform.import.all.no.new"))
   }
 }
 
@@ -279,10 +279,10 @@ onMounted(async () => {
 
 <template>
   <div class="flex flex-wrap gap-4 import-select">
-    <el-card shadow="always" class="select-item" @click="handleImportAll"> 一键全部导入</el-card>
-    <el-card shadow="hover" class="select-item" @click="handleImportCustom">自定义导入</el-card>
+    <el-card shadow="always" class="select-item" @click="handleImportAll"> {{ t("setting.platform.import.all.button") }} </el-card>
+    <el-card shadow="hover" class="select-item" @click="handleImportCustom">{{ t("setting.platform.import.custom.button") }}</el-card>
     <el-card shadow="hover" class="select-item" @click="handleImportLegencySypWidget">
-      从旧版 v0.8.1 版本「思源笔记挂件」导入
+      {{ t("setting.platform.import.widget.button") }}
     </el-card>
 
     <!--
@@ -295,7 +295,7 @@ onMounted(async () => {
         v-model="formData.logMessage"
         type="textarea"
         :rows="10"
-        placeholder="日志信息"
+        :placeholder="t('setting.platform.import.log.placeholder')"
       ></el-input>
     </div>
 
@@ -328,7 +328,7 @@ onMounted(async () => {
             />
           </el-form-item>
           <el-form-item>
-            <el-button @click="doImportCustom" type="primary">开始导入</el-button>
+            <el-button @click="doImportCustom" type="primary">{{ t("setting.platform.import.start") }}</el-button>
           </el-form-item>
         </el-form>
       </div>

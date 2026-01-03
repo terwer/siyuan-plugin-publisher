@@ -100,12 +100,12 @@ const handleAddPlatform = (cfg?: DynamicConfig) => {
   const subPlatformType = cfg?.subPlatformType ?? ""
   const url = `/setting/platform/add/${platformGroup}?showBack=trye&key=${platformKey}&sub=${subPlatformType}`
   const title = PageUtils.longPlatformName(cfg?.platformName ?? cfg?.platformType ?? "")
-  goToPublisherDrawer(`添加 ${title} 平台`, url)
+  goToPublisherDrawer(t("platform.add.title.format").replace("{title}", title), url)
 }
 
 const initPage = () => {
   if (type.value === "all") {
-    formData.platformGroup = { type: "all", title: "全部", img: "", description: "全部平台列表" }
+    formData.platformGroup = { type: "all", title: t("common.all"), img: "", description: t("common.all.platform.list") }
     formData.pre = getAllPrePlatformList()
   } else {
     formData.platformGroup = getPlatformType(type.value)
@@ -122,11 +122,11 @@ onMounted(() => {
 <template>
   <div>
     <el-card class="platform-add-card">
-      <div class="platform-title">{{ type === "all" ? "全部" : formData.platformGroup?.title ?? type }}</div>
+      <div class="platform-title">{{ type === "all" ? t("common.all") : formData.platformGroup?.title ?? type }}</div>
       <div class="platform-desc">
         <div class="text-desc">{{ formData.platformGroup?.description ?? "" }}</div>
         <p>
-          <el-alert class="desc-tip" type="info" title="点击图标快速添加，或者点击下方按钮自定义添加"></el-alert>
+          <el-alert class="desc-tip" type="info" :title="t('platform.quick.add.tip')"></el-alert>
         </p>
       </div>
       <div class="icon-list">
@@ -146,7 +146,7 @@ onMounted(() => {
       </div>
       <div class="add-action" v-if="type !== 'all'">
         <el-button type="primary" size="large" @click="handleAddPlatform({ platformType: type } as any)">
-          添加自定义 {{ formData.platformGroup?.title ?? type }} 对接
+          {{ t("platform.add.custom").replace("{platformType}", formData.platformGroup?.title ?? type) }}
         </el-button>
       </div>
     </el-card>

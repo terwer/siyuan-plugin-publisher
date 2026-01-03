@@ -19,7 +19,7 @@ const { t, locale } = useVueI18n()
 const langs = [
   {
     value: "zh_CN",
-    label: "简体中文",
+    label: t("lang.zh_CN.label"),
   },
   {
     value: "en_US",

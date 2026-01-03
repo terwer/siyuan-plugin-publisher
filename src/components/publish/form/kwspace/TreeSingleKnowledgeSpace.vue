@@ -80,7 +80,7 @@ const onSelectChange = (val: any) => {
   logger.debug("onSelectChange=>", val)
 
   if (val.isLeaf) {
-    ElMessage.error("您当前选择的是页面，请注意，页面必须发布在目录下")
+    ElMessage.error(t("knowledge.space.page.selected.error"))
     return
   }
 
@@ -96,8 +96,7 @@ onMounted(() => {
   // 自动映射分类模式只读
   if (formData.path.customPath.includes(CATE_AUTO_NAME)) {
     formData.knowledgeSpaceConfig.readonlyMode = true
-    formData.knowledgeSpaceConfig.cfg.placeholder.knowledgeSpaceReadonlyModeTip =
-      "当前为自动映射目录模式，将根据笔记层级自动生成目录😄"
+    formData.knowledgeSpaceConfig.cfg.placeholder.knowledgeSpaceReadonlyModeTip = t("knowledge.space.auto.map.tip")
   }
   logger.debug("init tree data, cateSlugs =>", { cateSlugs: toRaw(formData.cateSlugs) })
 })

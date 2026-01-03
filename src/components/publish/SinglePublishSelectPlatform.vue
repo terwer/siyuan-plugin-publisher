@@ -101,7 +101,7 @@ const handlePreview = async (event: any, key: string) => {
 }
 
 const handlePreviewAll = async (event: any) => {
-  ElMessageBox.confirm(`将在默认浏览器打开所有已发布平台的文章预览页面，是否继续？`, "温馨提示", {
+  ElMessageBox.confirm(t("publish.preview.all.confirm"), t("main.opt.tip"), {
     type: "error",
     icon: markRaw(Warning),
     confirmButtonText: t("main.opt.ok"),
@@ -115,7 +115,7 @@ const handlePreviewAll = async (event: any) => {
       if (formData.enabledConfigArray.length === 0 || formData.unpublishCount === formData.enabledConfigArray.length) {
         // 重置，准备下一次点击
         formData.unpublishCount = 0
-        ElMessage.error("文章未发布过，请至少发布到一个平台！")
+        ElMessage.error(t("publish.error.not.published"))
       }
     })
     .catch(() => {})
@@ -154,7 +154,7 @@ onBeforeMount(async () => {
   <loading-timer :loading-time="loadingTime" style="padding: 0 24px" />
   <el-skeleton v-if="!formData.isInit" class="placeholder platform-skt" :rows="12" animated />
   <div v-else>
-    <back-page title="单个文章发布">
+    <back-page :title="t('publish.single.title')">
       <div class="platform-title">
         {{ pageTitle }}
       </div>
@@ -163,12 +163,12 @@ onBeforeMount(async () => {
           <el-alert
             class="desc-tip"
             type="warning"
-            title="点击图标进入对应平台的发布页面，如果文章已发布，可点击 [预览] 直接在浏览器打开预览页面。"
+            :title="t('publish.single.tip')"
           ></el-alert>
         </p>
       </div>
       <div class="one-key-preview">
-        <el-button type="primary" size="small" @click="handlePreviewAll">一键预览</el-button>
+        <el-button type="primary" size="small" @click="handlePreviewAll">{{ t("common.oneclick.preview") }}</el-button>
       </div>
       <el-row :gutter="20" class="row-box">
         <el-col
@@ -186,7 +186,7 @@ onBeforeMount(async () => {
             <div class="icon-list">
               <el-badge
                 :type="checkHasPublished(cfg.platformKey) ? 'success' : 'danger'"
-                :value="checkHasPublished(cfg.platformKey) ? '预览' : '未发布'"
+                :value="checkHasPublished(cfg.platformKey) ? t('common.preview') : t('common.unpublished')"
                 @click.stop="handlePreview($event, cfg.platformKey)"
                 :class="checkHasPublished(cfg.platformKey) ? 'item published-item' : 'item'"
               >

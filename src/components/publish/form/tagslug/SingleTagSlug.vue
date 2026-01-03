@@ -97,11 +97,11 @@ onMounted(async () => {
 <template>
   <el-skeleton class="placeholder" v-if="!formData.isInit" :rows="1" animated />
   <div v-else class="single-tag-slug">
-    <el-form-item label="标签">
+    <el-form-item :label="t('publish.tag.label')">
       <el-select
         v-model="formData.tag.tagSelected"
-        placeholder="请选择"
-        no-data-text="暂无数据"
+        :placeholder="t('main.opt.select')"
+        :no-data-text="t('main.data.empty')"
         class="m-2"
         size="default"
         @change="handleCatNodeSingleCheck"

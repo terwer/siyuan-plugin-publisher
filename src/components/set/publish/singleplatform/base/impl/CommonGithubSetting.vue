@@ -32,16 +32,16 @@ const { t } = useVueI18n()
 
 const formData = reactive({
   showAdvancedConfig: false,
-  advanceBtnText: "显示更多配置",
+  advanceBtnText: t("setting.common.advance.show"),
 })
 
 const toggleAdvance = () => {
   if (formData.showAdvancedConfig) {
     formData.showAdvancedConfig = !formData.showAdvancedConfig
-    formData.advanceBtnText = "显示更多配置"
+    formData.advanceBtnText = t("setting.common.advance.show")
   } else {
     formData.showAdvancedConfig = !formData.showAdvancedConfig
-    formData.advanceBtnText = "隐藏更多配置"
+    formData.advanceBtnText = t("setting.common.advance.hide")
   }
 }
 

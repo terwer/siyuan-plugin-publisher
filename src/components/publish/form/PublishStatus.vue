@@ -42,7 +42,7 @@ const handleStatusChange = () => {
     <el-form-item :label="t('publisher.post.status')">
       <el-radio-group v-model="formData.status" class="ml-4" @change="handleStatusChange">
         <el-radio :value="PostStatusEnum.PostStatusEnum_Publish" size="large">
-          {{ t("publisher.post.status.pubish") }}
+          {{ t("publisher.post.status.publish") }}
         </el-radio>
         <el-radio :value="PostStatusEnum.PostStatusEnum_Draft" size="large">
           {{ t("publisher.post.status.draft") }}

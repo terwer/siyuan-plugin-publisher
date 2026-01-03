@@ -49,8 +49,9 @@ const emit = defineEmits(["emitSyncSingleCateSlugs"])
 
 // computes
 const cateTitle = computed(() => {
-  const cateTitle = formData?.knowledgeSpaceConfig?.cfg?.knowledgeSpaceTitle ?? t("main.cat")
-  return cateTitle
+  const title = formData?.knowledgeSpaceConfig?.cfg?.knowledgeSpaceTitle ?? t("main.cat")
+  // Translate "发布目录" if it matches
+  return title === "发布目录" ? t("common.publish.directory") : title
 })
 
 // methods
@@ -115,7 +116,7 @@ onMounted(async () => {
     // 自动映射分类模式只读
     if (formData?.cate?.categorySelected?.toString().includes(CATE_AUTO_NAME)) {
       formData.knowledgeSpaceConfig.readonlyMode = true
-      formData.knowledgeSpaceConfig.readonlyModeTip = "当前为自动映射目录模式，将根据笔记层级自动生成目录😄"
+      formData.knowledgeSpaceConfig.readonlyModeTip = t("knowledge.space.auto.map.tip")
     }
   } catch (e) {
     logger.error("知识空间加载失败", e)
@@ -131,26 +132,26 @@ onMounted(async () => {
   <div class="single-knowledge-space" v-else>
     <el-form-item
       class="cate-input"
-      label="搜索关键词"
+      :label="t('setting.common.search.keyword.label')"
       v-if="!formData.knowledgeSpaceConfig.readonlyMode && formData.knowledgeSpaceConfig?.cfg?.cateSearchEnabled"
     >
       <el-input
         v-model="formData.ksKeyword"
-        :placeholder="'请输入[' + cateTitle + ']搜索关键词，输入完成后请按Enter键或者移走光标'"
+        :placeholder="t('setting.common.search.keyword.placeholder').replace('{knowledgeSpaceTitle}', cateTitle)"
         @change="handleCateSearch"
       />
     </el-form-item>
     <el-form-item :label="cateTitle">
       <el-select
         v-model="formData.cate.categorySelected"
-        placeholder="请选择"
-        no-data-text="暂无数据"
+        :placeholder="t('main.opt.select')"
+        :no-data-text="t('main.data.empty')"
         class="m-2"
         size="default"
         @change="handleCatNodeSingleCheck"
         :disabled="formData.knowledgeSpaceConfig.readonlyMode"
         :loading="formData.isCateLoading"
-        loading-text="加载中..."
+        :loading-text="t('setting.common.loading.text')"
         ref="singleCateSelect"
       >
         <el-option

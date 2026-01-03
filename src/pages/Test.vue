@@ -9,48 +9,50 @@
 
 <script setup lang="ts">
 import { useRouter } from "vue-router"
+import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 
 const router = useRouter()
+const { t } = useVueI18n()
 
 const components = [
   {
-    title: "思源笔记测试",
+    titleKey: "test.siyuan",
     path: "/test/siyuan",
   },
   {
-    title: "博客园测试",
+    titleKey: "test.cnblogs",
     path: "/test/cnblogs",
   },
   {
-    title: "WordPress测试",
+    titleKey: "test.wordpress",
     path: "/test/wordpress",
   },
   {
-    title: "Typecho测试",
+    titleKey: "test.typecho",
     path: "/test/typecho",
   },
   {
-    title: "语雀测试",
+    titleKey: "test.yuque",
     path: "/test/yuque",
   },
   {
-    title: "知乎测试",
+    titleKey: "test.zhihu",
     path: "/test/zhihu",
   },
   {
-    title: "CSDN测试",
+    titleKey: "test.csdn",
     path: "/test/csdn",
   },
   {
-    title: "Picgo测试",
+    titleKey: "test.picgo",
     path: "/test/picgo",
   },
   {
-    title: "其他测试",
+    titleKey: "test.other",
     path: "/test/other",
   },
   {
-    title: "ChatGPT测试",
+    titleKey: "test.chatgpt",
     path: "/test/chat",
   },
 ]
@@ -64,10 +66,10 @@ const handleGoTest = async (item: any) => {
 </script>
 
 <template>
-  <back-page title="组件测试">
+  <back-page :title="t('page.test.title')">
     <div id="test-list" class="test-list-container">
       <el-button v-for="item in components" @click="handleGoTest(item)" type="primary" size="large" class="test-button">
-        {{ item.title }}
+        {{ t(item.titleKey) }}
       </el-button>
     </div>
   </back-page>
