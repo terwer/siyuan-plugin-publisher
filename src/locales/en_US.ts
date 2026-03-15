@@ -755,4 +755,17 @@ export default {
   "setting.blog.type.fs.yaml.type.vuepress2": "Vuepress2",
   "setting.blog.type.fs.yaml.type.vitepress": "Vitepress",
   "setting.blog.type.fs.yaml.type.quartz": "Quartz",
+  "setting.blog.type.fs.yaml.type.astro": "Astro",
+
+  // Astro platform related
+  "main.publish.to.astro": "Publish to Astro",
+  "setting.astro": "Astro",
+  "service.switch.astro": "Astro",
+  "post.bind.astro.slug": "Astro slug",
+
+  // Gitlab Astro platform related
+  "main.publish.to.gitlabastro": "Publish to Gitlab Astro",
+  "setting.gitlabastro": "Gitlab Astro",
+  "service.switch.gitlabastro": "Gitlab Astro",
+  "post.bind.gitlabastro.slug": "Gitlab Astro slug"
 }

@@ -18,9 +18,46 @@ import ConfluenceSetting from "~/src/components/set/publish/singleplatform/commo
 import WordpressdotcomSetting from "~/src/components/set/publish/singleplatform/metaweblog/WordpressdotcomSetting.vue"
 import HalowebSetting from "~/src/components/set/publish/singleplatform/web/HalowebSetting.vue"
 import BilibiliSetting from "~/src/components/set/publish/singleplatform/web/BilibiliSetting.vue"
-import QuartzSetting from "~/src/components/set/publish/singleplatform/github/QuartzSetting.vue"
 import LocalSystemSetting from "~/src/components/set/publish/singleplatform/fs/LocalSystemSetting.vue"
 import { EnvUtil } from "~/src/utils/EnvUtil.ts"
+
+// GitHub 平台设置组件
+import HexoSetting from "~/src/components/set/publish/singleplatform/github/HexoSetting.vue"
+import HugoSetting from "~/src/components/set/publish/singleplatform/github/HugoSetting.vue"
+import JekyllSetting from "~/src/components/set/publish/singleplatform/github/JekyllSetting.vue"
+import VuepressSetting from "~/src/components/set/publish/singleplatform/github/VuepressSetting.vue"
+import Vuepress2Setting from "~/src/components/set/publish/singleplatform/github/Vuepress2Setting.vue"
+import VitepressSetting from "~/src/components/set/publish/singleplatform/github/VitepressSetting.vue"
+import AstroSetting from "~/src/components/set/publish/singleplatform/github/AstroSetting.vue"
+import QuartzSetting from "~/src/components/set/publish/singleplatform/github/QuartzSetting.vue"
+
+// GitLab 平台设置组件
+import GitlabhexoSetting from "~/src/components/set/publish/singleplatform/gitlab/GitlabhexoSetting.vue"
+import GitlabhugoSetting from "~/src/components/set/publish/singleplatform/gitlab/GitlabhugoSetting.vue"
+import GitlabjekyllSetting from "~/src/components/set/publish/singleplatform/gitlab/GitlabjekyllSetting.vue"
+import GitlabvuepressSetting from "~/src/components/set/publish/singleplatform/gitlab/GitlabvuepressSetting.vue"
+import Gitlabvuepress2Setting from "~/src/components/set/publish/singleplatform/gitlab/Gitlabvuepress2Setting.vue"
+import GitlabvitepressSetting from "~/src/components/set/publish/singleplatform/gitlab/GitlabvitepressSetting.vue"
+import GitlabastroSetting from "~/src/components/set/publish/singleplatform/gitlab/GitlabastroSetting.vue"
+
+// CommonBlog 平台设置组件
+import YuqueSetting from "~/src/components/set/publish/singleplatform/commonblog/YuqueSetting.vue"
+import NotionSetting from "~/src/components/set/publish/singleplatform/commonblog/NotionSetting.vue"
+import HaloSetting from "~/src/components/set/publish/singleplatform/commonblog/HaloSetting.vue"
+
+// MetaWeblog 平台设置组件
+import OthermetaSetting from "~/src/components/set/publish/singleplatform/metaweblog/OthermetaSetting.vue"
+import CnblogsSetting from "~/src/components/set/publish/singleplatform/metaweblog/CnblogsSetting.vue"
+import TypechoSetting from "~/src/components/set/publish/singleplatform/metaweblog/TypechoSetting.vue"
+import JvueSetting from "~/src/components/set/publish/singleplatform/metaweblog/JvueSetting.vue"
+import WordpressSetting from "~/src/components/set/publish/singleplatform/metaweblog/WordpressSetting.vue"
+
+// Web 平台设置组件
+import ZhihuSetting from "~/src/components/set/publish/singleplatform/web/ZhihuSetting.vue"
+import CsdnSetting from "~/src/components/set/publish/singleplatform/web/CsdnSetting.vue"
+import WechatSetting from "~/src/components/set/publish/singleplatform/web/WechatSetting.vue"
+import JianshuSetting from "~/src/components/set/publish/singleplatform/web/JianshuSetting.vue"
+import JuejinSetting from "~/src/components/set/publish/singleplatform/web/JuejinSetting.vue"
 
 // uses
 const { t } = useVueI18n()
@@ -47,12 +84,14 @@ const hasElectronEnv = EnvUtil.isSiyuanElectron()
     <vuepress-setting v-else-if="subtype === SubPlatformType.Github_Vuepress" :api-type="apiType" />
     <vuepress2-setting v-else-if="subtype === SubPlatformType.Github_Vuepress2" :api-type="apiType" />
     <vitepress-setting v-else-if="subtype === SubPlatformType.Github_Vitepress" :api-type="apiType" />
+    <astro-setting v-else-if="subtype === SubPlatformType.Github_Astro" :api-type="apiType" />
     <gitlabhexo-setting v-else-if="subtype === SubPlatformType.Gitlab_Hexo" :api-type="apiType" />
     <gitlabhugo-setting v-else-if="subtype === SubPlatformType.Gitlab_Hugo" :api-type="apiType" />
     <gitlabjekyll-setting v-else-if="subtype === SubPlatformType.Gitlab_Jekyll" :api-type="apiType" />
     <gitlabvuepress-setting v-else-if="subtype === SubPlatformType.Gitlab_Vuepress" :api-type="apiType" />
     <gitlabvuepress2-setting v-else-if="subtype === SubPlatformType.Gitlab_Vuepress2" :api-type="apiType" />
     <gitlabvitepress-setting v-else-if="subtype === SubPlatformType.Gitlab_Vitepress" :api-type="apiType" />
+    <gitlabastro-setting v-else-if="subtype === SubPlatformType.Gitlab_Astro" :api-type="apiType" />
     <othermeta-setting v-else-if="subtype === SubPlatformType.Metaweblog_Metaweblog" :api-type="apiType" />
     <cnblogs-setting v-else-if="subtype === SubPlatformType.Metaweblog_Cnblogs" :api-type="apiType" />
     <typecho-setting v-else-if="subtype === SubPlatformType.Metaweblog_Typecho" :api-type="apiType" />

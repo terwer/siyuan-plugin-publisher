@@ -719,4 +719,17 @@ export default {
   "setting.blog.type.fs.yaml.type.vuepress2": "Vuepress2",
   "setting.blog.type.fs.yaml.type.vitepress": "Vitepress",
   "setting.blog.type.fs.yaml.type.quartz": "Quartz",
+  "setting.blog.type.fs.yaml.type.astro": "Astro",
+
+  // Astro 平台相关
+  "main.publish.to.astro": "发布到Astro",
+  "setting.astro": "Astro",
+  "service.switch.astro": "Astro",
+  "post.bind.astro.slug": "Astro别名",
+
+  // Gitlab Astro 平台相关
+  "main.publish.to.gitlabastro": "发布到Gitlab Astro",
+  "setting.gitlabastro": "Gitlab Astro",
+  "service.switch.gitlabastro": "Gitlab Astro",
+  "post.bind.gitlabastro.slug": "Gitlab Astro别名"
 }

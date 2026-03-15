@@ -31,6 +31,7 @@ import { HugoApiAdaptor } from "~/src/adaptors/api/hugo/hugoApiAdaptor.ts"
 import { JekyllApiAdaptor } from "~/src/adaptors/api/jekyll/jekyllApiAdaptor.ts"
 import { VitepressApiAdaptor } from "~/src/adaptors/api/vitepress/vitepressApiAdaptor.ts"
 import { QuartzApiAdaptor } from "~/src/adaptors/api/quartz/quartzApiAdaptor.ts"
+import {AstroYamlConverterAdaptor} from "~/src/adaptors/api/astro/astroYamlConverterAdaptor.ts";
 
 /**
  * 本地系统适配器
@@ -92,6 +93,9 @@ class LocalSystemApiAdaptor extends BaseBlogApi {
       case FsYamlType.Quartz:
         this.logger.info("使用 Quartz YAML 适配器")
         return new QuartzYamlConverterAdaptor()
+      case FsYamlType.Astro:
+        this.logger.info("使用 Astro YAML 适配器")
+        return new AstroYamlConverterAdaptor()
       case FsYamlType.Default:
       default:
         this.logger.info("使用默认 YAML 适配器")

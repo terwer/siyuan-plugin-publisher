@@ -17,7 +17,7 @@ class LocalSystemYamlConvertAdaptor extends YamlConvertAdaptor {
   }
 
   convertToYaml(post: Post, yamlFormatObj?: YamlFormatObj, cfg?: BlogConfig): YamlFormatObj {
-    const localFsCfg = cfg as LocalSystemConfig
+    // const localFsCfg = cfg as LocalSystemConfig
     if (!yamlFormatObj) {
       yamlFormatObj = new YamlFormatObj()
       yamlFormatObj = new YamlFormatObj()

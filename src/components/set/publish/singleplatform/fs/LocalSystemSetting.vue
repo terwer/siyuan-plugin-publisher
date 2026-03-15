@@ -78,6 +78,9 @@ localFsCfg.placeholder = localFsPlaceholder
           <el-radio v-model="(main.cfg as LocalSystemConfig).fsYamlType" :label="FsYamlType.Quartz" size="default">
             {{ t("setting.blog.type.fs.yaml.type.quartz") }}
           </el-radio>
+          <el-radio v-model="(main.cfg as LocalSystemConfig).fsYamlType" :label="FsYamlType.Astro" size="default">
+            {{ t("setting.blog.type.fs.yaml.type.astro") }}
+          </el-radio>
         </div>
       </el-form-item>
     </template>

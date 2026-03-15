@@ -187,6 +187,7 @@ export enum SubPlatformType {
   Github_Vuepress = "Vuepress",
   Github_Vuepress2 = "Vuepress2",
   Github_Vitepress = "Vitepress",
+  Github_Astro = "Astro",
 
   // Gitlab 子平台
   Gitlab_Hexo = "Gitlabhexo",
@@ -195,6 +196,7 @@ export enum SubPlatformType {
   Gitlab_Vuepress = "Gitlabvuepress",
   Gitlab_Vuepress2 = "Gitlabvuepress2",
   Gitlab_Vitepress = "Gitlabvitepress",
+  Gitlab_Astro = "Gitlabastro",
 
   // Metaweblog
   Metaweblog_Metaweblog = "Metaweblog",
@@ -272,6 +274,7 @@ export function getSubtypeList(ptype: PlatformType): SubPlatformType[] {
       subtypeList.push(SubPlatformType.Github_Vuepress)
       subtypeList.push(SubPlatformType.Github_Vuepress2)
       subtypeList.push(SubPlatformType.Github_Vitepress)
+      subtypeList.push(SubPlatformType.Github_Astro)
       break
     case PlatformType.Gitlab:
       subtypeList.push(SubPlatformType.Gitlab_Hexo)
@@ -280,6 +283,7 @@ export function getSubtypeList(ptype: PlatformType): SubPlatformType[] {
       subtypeList.push(SubPlatformType.Gitlab_Vuepress)
       subtypeList.push(SubPlatformType.Gitlab_Vuepress2)
       subtypeList.push(SubPlatformType.Gitlab_Vitepress)
+      subtypeList.push(SubPlatformType.Gitlab_Astro)
       break
     case PlatformType.Metaweblog:
       subtypeList.push(SubPlatformType.Metaweblog_Metaweblog)
