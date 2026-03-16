@@ -7,7 +7,7 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { CategoryTypeEnum, PageTypeEnum, PasswordType } from "zhi-blog-api"
+import { CategoryTypeEnum, PageTypeEnum, PasswordType, PicbedServiceTypeEnum } from "zhi-blog-api"
 import { CommonGithubConfig } from "~/src/adaptors/api/base/github/commonGithubConfig.ts"
 
 /**
@@ -46,6 +46,7 @@ class AstroConfig extends CommonGithubConfig {
     this.placeholder.knowledgeSpaceReadonlyModeTip =
       "Github Astro 平台暂不支持修改发布目录，如需修改，请删除之后重新发布"
     this.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Tree_Single
+    this.picbedService = PicbedServiceTypeEnum.Bundled
   }
 }
 

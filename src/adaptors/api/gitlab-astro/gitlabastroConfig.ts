@@ -7,7 +7,7 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { CategoryTypeEnum, PageTypeEnum, PasswordType } from "zhi-blog-api"
+import { CategoryTypeEnum, PageTypeEnum, PasswordType, PicbedServiceTypeEnum } from "zhi-blog-api"
 import { AstroConfig } from "~/src/adaptors/api/astro/astroConfig.ts"
 import { GITLAB_CONSTANTS } from "~/src/adaptors/api/base/gitlab/gitlabConstants.ts"
 
@@ -35,6 +35,8 @@ class GitlabastroConfig extends AstroConfig {
     this.previewUrl = "/[user]/[repo]/blob/[branch]/[docpath]"
     this.previewPostUrl = "/post/[postid].html"
     this.mdFilenameRule = "[slug].md"
+    this.imageStorePath = "public/images"
+    this.imageLinkPath = "/images"
     this.pageType = PageTypeEnum.Markdown
     this.passwordType = PasswordType.PasswordType_Token
     this.allowPreviewUrlChange = false
@@ -44,8 +46,10 @@ class GitlabastroConfig extends AstroConfig {
     this.categoryType = CategoryTypeEnum.CategoryType_Multi
     this.knowledgeSpaceEnabled = true
     this.allowKnowledgeSpaceChange = false
-    this.placeholder.knowledgeSpaceReadonlyModeTip = "Gitlab Astro 平台暂不支持修改发布目录，如需修改，请删除之后重新发布"
+    this.placeholder.knowledgeSpaceReadonlyModeTip =
+      "Gitlab Astro 平台暂不支持修改发布目录，如需修改，请删除之后重新发布"
     this.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Tree_Single
+    this.picbedService = PicbedServiceTypeEnum.Bundled
   }
 }
 
