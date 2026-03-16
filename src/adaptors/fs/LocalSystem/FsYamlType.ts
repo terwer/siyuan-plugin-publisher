@@ -52,7 +52,12 @@ enum FsYamlType {
   /**
    * Quartz类型
    */
-  Quartz = "quartz"
+  Quartz = "quartz",
+
+  /**
+   * Astro类型
+   */
+  Astro = "astro"
 }
 
 export { FsYamlType }

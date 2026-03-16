@@ -44,6 +44,8 @@ import { useHalowebWeb } from "~/src/adaptors/web/haloweb/useHalowebWeb.ts"
 import { useBilibiliWeb } from "~/src/adaptors/web/bilibili/useBilibiliWeb.ts"
 import { useXiaohongshuWeb } from "~/src/adaptors/web/xiaohongshu/useXiaohongshuWeb.ts"
 import { useLocalSystemApi } from "~/src/adaptors/fs/LocalSystem/useLocalSystemApi.ts"
+import { useAstroApi } from "~/src/adaptors/api/astro/useAstroApi.ts"
+import { useGitlabastroApi } from "~/src/adaptors/api/gitlab-astro/useGitlabastroApi.ts"
 
 /**
  * 适配器统一入口
@@ -125,6 +127,11 @@ class Adaptors {
         conf = cfg
         break
       }
+      case SubPlatformType.Github_Astro: {
+        const { cfg } = await useAstroApi(key, newCfg)
+        conf = cfg
+        break
+      }
       case SubPlatformType.Gitlab_Hexo: {
         const { cfg } = await useGitlabhexoApi(key, newCfg)
         conf = cfg
@@ -152,6 +159,11 @@ class Adaptors {
       }
       case SubPlatformType.Gitlab_Vitepress: {
         const { cfg } = await useGitlabvitepressApi(key, newCfg)
+        conf = cfg
+        break
+      }
+      case SubPlatformType.Gitlab_Astro: {
+        const { cfg } = await useGitlabastroApi(key, newCfg)
         conf = cfg
         break
       }
@@ -321,6 +333,11 @@ class Adaptors {
         blogAdaptor = blogApi
         break
       }
+      case SubPlatformType.Github_Astro: {
+        const { blogApi } = await useAstroApi(key, newCfg)
+        blogAdaptor = blogApi
+        break
+      }
       case SubPlatformType.Gitlab_Hexo: {
         const { blogApi } = await useGitlabhexoApi(key, newCfg)
         blogAdaptor = blogApi
@@ -348,6 +365,11 @@ class Adaptors {
       }
       case SubPlatformType.Gitlab_Vitepress: {
         const { blogApi } = await useGitlabvitepressApi(key, newCfg)
+        blogAdaptor = blogApi
+        break
+      }
+      case SubPlatformType.Gitlab_Astro: {
+        const { blogApi } = await useGitlabastroApi(key, newCfg)
         blogAdaptor = blogApi
         break
       }
@@ -490,6 +512,11 @@ class Adaptors {
         yamlAdp = yamlAdaptor
         break
       }
+      case SubPlatformType.Github_Astro: {
+        const { yamlAdaptor } = await useAstroApi(key, newCfg)
+        yamlAdp = yamlAdaptor
+        break
+      }
       case SubPlatformType.Gitlab_Hexo: {
         const { yamlAdaptor } = await useGitlabhexoApi(key, newCfg)
         yamlAdp = yamlAdaptor
@@ -517,6 +544,11 @@ class Adaptors {
       }
       case SubPlatformType.Gitlab_Vitepress: {
         const { yamlAdaptor } = await useGitlabvitepressApi(key, newCfg)
+        yamlAdp = yamlAdaptor
+        break
+      }
+      case SubPlatformType.Gitlab_Astro: {
+        const { yamlAdaptor } = await useGitlabastroApi(key, newCfg)
         yamlAdp = yamlAdaptor
         break
       }

@@ -19,6 +19,7 @@ import { VuepressYamlConverterAdaptor } from "~/src/adaptors/api/vuepress/vuepre
 import { VitepressYamlConverterAdaptor } from "~/src/adaptors/api/vitepress/vitepressYamlConverterAdaptor.ts"
 import { QuartzYamlConverterAdaptor } from "~/src/adaptors/api/quartz/quartzYamlConverterAdaptor.ts"
 import { Vuepress2YamlConverterAdaptor } from "~/src/adaptors/api/vuepress2/vuepress2YamlConverterAdaptor.ts"
+import { AstroYamlConverterAdaptor } from "~/src/adaptors/api/astro/astroYamlConverterAdaptor.ts"
 
 /**
  * 文件系统工具类
@@ -72,6 +73,10 @@ class FsUtils {
         case FsYamlType.Vuepress2:
           FsUtils.logger.info("Using Vuepress2 YAML adapter")
           yamlAdaptor = new Vuepress2YamlConverterAdaptor()
+          break
+        case FsYamlType.Astro:
+          FsUtils.logger.info("Using Astro YAML adapter")
+          yamlAdaptor = new AstroYamlConverterAdaptor()
           break
         case FsYamlType.Default:
         default:

@@ -210,6 +210,15 @@ export const pre = {
       authMode: AuthMode.API,
       isEnabled: false,
     },
+    {
+      platformType: PlatformType.Github,
+      subPlatformType: SubPlatformType.Github_Astro,
+      platformKey: "github_Astro",
+      platformName: "Astro",
+      platformIcon: svgIcons.iconIFAstro,
+      authMode: AuthMode.API,
+      isEnabled: false,
+    },
   ],
   gitlabCfg: <DynamicConfig[]>[
     {
@@ -263,6 +272,15 @@ export const pre = {
       platformKey: "gitlab_Gitlabvitepress",
       platformName: "Gitlabvitepress",
       platformIcon: svgIcons.iconIFVue,
+      authMode: AuthMode.API,
+      isEnabled: false,
+    },
+    {
+      platformType: PlatformType.Gitlab,
+      subPlatformType: SubPlatformType.Gitlab_Astro,
+      platformKey: "gitlab_Gitlabastro",
+      platformName: "Gitlabastro",
+      platformIcon: svgIcons.iconIFAstro,
       authMode: AuthMode.API,
       isEnabled: false,
     },
