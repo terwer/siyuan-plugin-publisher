@@ -1,22 +1,13 @@
 # Changelog
 
 ## [1.41.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.40.0...siyuan-plugin-publisher-v1.41.0) (2026-03-16)
-
-
 ### Features
-
-* **config:** add picbedService default to astro and gitlab astro configs ([49e4162](https://github.com/terwer/siyuan-plugin-publisher/commit/49e41626b489b570b3a9c54671567d68941cc3d6))
-* **openspec:** add OpenSpec commands and instructions ([bd88f59](https://github.com/terwer/siyuan-plugin-publisher/commit/bd88f5937634e389a4c3b429cc5a3d3dd1bf252a))
-* **platform:** add full Astro platform support ([e29cb2c](https://github.com/terwer/siyuan-plugin-publisher/commit/e29cb2c8a28bfeaab5df32e19061ce51ed423302))
-* **platform:** add full Astro platform support ([951b154](https://github.com/terwer/siyuan-plugin-publisher/commit/951b154284f7fde54300d9104b16e56db37a3a85))
-
-
+* **config:** add picbedservice default to astro and gitlab astro configs ([49e4162](https://github.com/terwer/siyuan-plugin-publisher/commit/49e41626b489b570b3a9c54671567d68941cc3d6))
+* **openspec:** add openspec commands and instructions ([bd88f59](https://github.com/terwer/siyuan-plugin-publisher/commit/bd88f5937634e389a4c3b429cc5a3d3dd1bf252a))
+* **platform:** add full astro platform support ([951b154](https://github.com/terwer/siyuan-plugin-publisher/commit/951b154284f7fde54300d9104b16e56db37a3a85))
 ### Code Refactoring
-
-* **astro:** update AstroConfig and improve YAML conversion ([5ac476e](https://github.com/terwer/siyuan-plugin-publisher/commit/5ac476e15b39ada7684f141a2f660cfab63e55e4))
-
+* **astro:** update astroconfig and improve yaml conversion ([5ac476e](https://github.com/terwer/siyuan-plugin-publisher/commit/5ac476e15b39ada7684f141a2f660cfab63e55e4))
 ## [1.40.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.39.1...siyuan-plugin-publisher-v1.40.0) (2025-11-17)
-### Features
 * **localsystem:** enable picgo picbed support ([1d095c4](https://github.com/terwer/siyuan-plugin-publisher/commit/1d095c466326cee28b6b957c8383f8a114f70943))
 ### Bug Fixes
 * **deps:** update dependencies and typings for compatibility and cnblogs publish error ([f25b33f](https://github.com/terwer/siyuan-plugin-publisher/commit/f25b33f4dd793f11ed734e7d59c22ca28ab27f6b))
@@ -33,7 +24,6 @@
 * **system-config:** add yaml configuration support for platforms ([90492d7](https://github.com/terwer/siyuan-plugin-publisher/commit/90492d78edeeb0679ca84987a41f5aaaa1e37370))
 * add null checks for string operations ([b5feb91](https://github.com/terwer/siyuan-plugin-publisher/commit/b5feb91e2ba47ec11c7ed8f878657875ae8220f5))
 * **vuepress-adaptors:** add error handling and input validation ([f1f0d79](https://github.com/terwer/siyuan-plugin-publisher/commit/f1f0d7941e3f895359e16abf86bf764f013a1a1a))
-### Code Refactoring
 * **yaml-converters:** improve yaml conversion logic for all adaptors ([c1ceed4](https://github.com/terwer/siyuan-plugin-publisher/commit/c1ceed49245cb0253113a292de83d535d8d30afa))
 ## [1.38.3](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.38.2...siyuan-plugin-publisher-v1.38.3) (2025-11-10)
 * **csdn:** improve math formula processing in html content ([8076fc1](https://github.com/terwer/siyuan-plugin-publisher/commit/8076fc196f3fd5fc651a807c65ade57b9a98efd5))
