@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.41.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.40.0...siyuan-plugin-publisher-v1.41.0) (2026-03-16)
+
+
+### Features
+
+* **config:** add picbedService default to astro and gitlab astro configs ([49e4162](https://github.com/terwer/siyuan-plugin-publisher/commit/49e41626b489b570b3a9c54671567d68941cc3d6))
+* **openspec:** add OpenSpec commands and instructions ([bd88f59](https://github.com/terwer/siyuan-plugin-publisher/commit/bd88f5937634e389a4c3b429cc5a3d3dd1bf252a))
+* **platform:** add full Astro platform support ([e29cb2c](https://github.com/terwer/siyuan-plugin-publisher/commit/e29cb2c8a28bfeaab5df32e19061ce51ed423302))
+* **platform:** add full Astro platform support ([951b154](https://github.com/terwer/siyuan-plugin-publisher/commit/951b154284f7fde54300d9104b16e56db37a3a85))
+
+
+### Code Refactoring
+
+* **astro:** update AstroConfig and improve YAML conversion ([5ac476e](https://github.com/terwer/siyuan-plugin-publisher/commit/5ac476e15b39ada7684f141a2f660cfab63e55e4))
+
 ## [1.40.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.39.1...siyuan-plugin-publisher-v1.40.0) (2025-11-17)
 ### Features
 * **localsystem:** enable picgo picbed support ([1d095c4](https://github.com/terwer/siyuan-plugin-publisher/commit/1d095c466326cee28b6b957c8383f8a114f70943))
