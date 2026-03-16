@@ -8,7 +8,7 @@
  */
 
 import { CategoryTypeEnum, PageTypeEnum, PasswordType } from "zhi-blog-api"
-import {CommonGithubConfig}  from "~/src/adaptors/api/base/github/commonGithubConfig.ts";
+import { CommonGithubConfig } from "~/src/adaptors/api/base/github/commonGithubConfig.ts"
 
 /**
  * Astro 配置
@@ -16,7 +16,7 @@ import {CommonGithubConfig}  from "~/src/adaptors/api/base/github/commonGithubCo
  * @author terwer
  * @since 1.40.0
  */
-class AstroConfig extends  CommonGithubConfig {
+class AstroConfig extends CommonGithubConfig {
   constructor(
     githubUsername: string,
     githubAuthToken: string,
@@ -26,14 +26,14 @@ class AstroConfig extends  CommonGithubConfig {
   ) {
     super(githubUsername, githubAuthToken, githubRepo, githubBranch, middlewareUrl)
 
-    this.home = "[your-github-home]"
-    this.apiUrl = "[your-github-api-url]"
-    this.tokenSettingUrl = `[your-github-host]/settings/tokens`
+    this.tokenSettingUrl = "https://github.com/settings/tokens"
     this.showTokenTip = true
     this.defaultPath = "src/content/blog"
     this.previewUrl = "/[user]/[repo]/blob/[branch]/[docpath]"
     this.previewPostUrl = "/post/[postid].html"
     this.mdFilenameRule = "[slug].md"
+    this.imageStorePath = "public/images"
+    this.imageLinkPath = "/images"
     this.pageType = PageTypeEnum.Markdown
     this.passwordType = PasswordType.PasswordType_Token
     this.allowPreviewUrlChange = false
@@ -43,7 +43,8 @@ class AstroConfig extends  CommonGithubConfig {
     this.categoryType = CategoryTypeEnum.CategoryType_Multi
     this.knowledgeSpaceEnabled = true
     this.allowKnowledgeSpaceChange = false
-    this.placeholder.knowledgeSpaceReadonlyModeTip = "Github Astro 平台暂不支持修改发布目录，如需修改，请删除之后重新发布"
+    this.placeholder.knowledgeSpaceReadonlyModeTip =
+      "Github Astro 平台暂不支持修改发布目录，如需修改，请删除之后重新发布"
     this.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Tree_Single
   }
 }

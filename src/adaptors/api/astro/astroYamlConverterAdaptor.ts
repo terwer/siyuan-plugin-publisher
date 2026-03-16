@@ -31,8 +31,10 @@ class AstroYamlConverterAdaptor extends YamlConvertAdaptor {
       yamlFormatObj.yamlObj.title = post.title
 
       // description
-      if (!StrUtil.isEmptyString(post.shortDesc)) {
-        yamlFormatObj.yamlObj.description = post.shortDesc
+      if (!StrUtil.isEmptyString(post.mt_excerpt)) {
+        yamlFormatObj.yamlObj.description = post.mt_excerpt
+      } else {
+        yamlFormatObj.yamlObj.description = ""
       }
 
       // pubDate
@@ -50,7 +52,7 @@ class AstroYamlConverterAdaptor extends YamlConvertAdaptor {
       // 暂不支持
 
       // draft
-      yamlFormatObj.yamlObj.draft = false
+      // yamlFormatObj.yamlObj.draft = false
 
       // tags
       if (!StrUtil.isEmptyString(post.mt_keywords)) {
@@ -108,7 +110,7 @@ class AstroYamlConverterAdaptor extends YamlConvertAdaptor {
     }
 
     // 摘要
-    post.shortDesc = yamlFormatObj.yamlObj?.description
+    post.mt_excerpt = yamlFormatObj.yamlObj?.description
 
     // 题图
     // 暂不支持
