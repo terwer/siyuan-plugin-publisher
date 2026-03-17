@@ -1,13 +1,9 @@
 # Changelog
 
 ## [1.41.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.41.0...siyuan-plugin-publisher-v1.41.1) (2026-03-17)
-
-
 ### Bug Fixes
-
-* **api:** simplify pubDate formatting in astroYamlConverterAdaptor ([b581139](https://github.com/terwer/siyuan-plugin-publisher/commit/b581139684cd4a3db2a0b762cde52eb62c9ce0ff))
+* **api:** simplify pubdate formatting in astroyamlconverteradaptor ([b581139](https://github.com/terwer/siyuan-plugin-publisher/commit/b581139684cd4a3db2a0b762cde52eb62c9ce0ff))
 * **preference:** [#1751](https://github.com/terwer/siyuan-plugin-publisher/issues/1751) add experimental AI settings inputs ([e145661](https://github.com/terwer/siyuan-plugin-publisher/commit/e1456618d69bcd711f77806dcf45adafb9b2dcf5))
-
 ## [1.41.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.40.0...siyuan-plugin-publisher-v1.41.0) (2026-03-16)
 ### Features
 * **config:** add picbedservice default to astro and gitlab astro configs ([49e4162](https://github.com/terwer/siyuan-plugin-publisher/commit/49e41626b489b570b3a9c54671567d68941cc3d6))
@@ -17,7 +13,6 @@
 * **astro:** update astroconfig and improve yaml conversion ([5ac476e](https://github.com/terwer/siyuan-plugin-publisher/commit/5ac476e15b39ada7684f141a2f660cfab63e55e4))
 ## [1.40.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.39.1...siyuan-plugin-publisher-v1.40.0) (2025-11-17)
 * **localsystem:** enable picgo picbed support ([1d095c4](https://github.com/terwer/siyuan-plugin-publisher/commit/1d095c466326cee28b6b957c8383f8a114f70943))
-### Bug Fixes
 * **deps:** update dependencies and typings for compatibility and cnblogs publish error ([f25b33f](https://github.com/terwer/siyuan-plugin-publisher/commit/f25b33f4dd793f11ed734e7d59c22ca28ab27f6b))
 * local system support auto mapping path ([b1514f7](https://github.com/terwer/siyuan-plugin-publisher/commit/b1514f7acad9390222c1f09c9f4e95702cdb6a59))
 ### Miscellaneous
