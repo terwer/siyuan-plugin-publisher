@@ -38,15 +38,17 @@ class AstroYamlConverterAdaptor extends YamlConvertAdaptor {
       }
 
       // pubDate
-      let tzstr = "+00:00"
-      const tz = new Date().getTimezoneOffset() / -60
-      const sign = tz > 0 ? "+" : "-"
-      if (tz.toString().length < 2) {
-        tzstr = `${sign}0${tz}:00`
-      } else {
-        tzstr = `${sign}${tz}:00`
-      }
-      yamlFormatObj.yamlObj.pubDate = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true) + tzstr
+      // let tzstr = "+00:00"
+      // const tz = new Date().getTimezoneOffset() / -60
+      // const sign = tz > 0 ? "+" : "-"
+      // if (tz.toString().length < 2) {
+      //   tzstr = `${sign}0${tz}:00`
+      // } else {
+      //   tzstr = `${sign}${tz}:00`
+      // }
+      // yamlFormatObj.yamlObj.pubDate = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true) + tzstr
+      // 精简格式：yyyy-MM-dd
+      yamlFormatObj.yamlObj.pubDate = DateUtil.formatIsoToZhDate(post.dateCreated.toISOString(), true)
 
       // heroImage
       // 暂不支持
