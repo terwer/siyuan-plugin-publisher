@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.41.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.41.0...siyuan-plugin-publisher-v1.41.1) (2026-03-17)
+
+
+### Bug Fixes
+
+* **api:** simplify pubDate formatting in astroYamlConverterAdaptor ([b581139](https://github.com/terwer/siyuan-plugin-publisher/commit/b581139684cd4a3db2a0b762cde52eb62c9ce0ff))
+* **preference:** [#1751](https://github.com/terwer/siyuan-plugin-publisher/issues/1751) add experimental AI settings inputs ([e145661](https://github.com/terwer/siyuan-plugin-publisher/commit/e1456618d69bcd711f77806dcf45adafb9b2dcf5))
+
 ## [1.41.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.40.0...siyuan-plugin-publisher-v1.41.0) (2026-03-16)
 ### Features
 * **config:** add picbedservice default to astro and gitlab astro configs ([49e4162](https://github.com/terwer/siyuan-plugin-publisher/commit/49e41626b489b570b3a9c54671567d68941cc3d6))
