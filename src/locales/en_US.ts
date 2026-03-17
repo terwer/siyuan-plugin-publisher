@@ -632,15 +632,20 @@ export default {
     "Due to the limitations of the Yuque platform, editing the knowledge base is not supported at the moment. If you want to move a document, click Undelete and then select the new knowledge base publication again",
   "main.commonn.cate.title": "Public category",
   "main.cate.new": "New category",
-  "pref.setting.aicode": "ChatGPT request key",
-  "pref.setting.aicode.tip":
-    "ChatGPT request key or third-party proxy key, if it is a proxy key, please set the request address",
-  "pref.setting.ai.baseurl": "ChatGPT request address",
-  "pref.setting.ai.baseurl.tip": "The ChatGPT request address, if it is official ChatGPT, can be left blank",
+  "pref.setting.aicode": "API Key",
+  "pref.setting.aicode.tip": "OpenAI API key or compatible third-party API key",
+  "pref.setting.ai.baseurl": "API Base URL",
+  "pref.setting.ai.baseurl.tip": "Base URL for AI service, leave blank to use official OpenAI service",
   "preference.setting.removeWidgetTag": "Remove the widget HTML",
-  "pref.setting.ai.proxy.url": "ChatGPT proxy address",
-  "pref.setting.ai.proxy.url.tip":
-    "Can be left blank, note: Filling in the proxy will ignore the ChatGPT request address",
+  "pref.setting.ai.proxy.url": "Proxy URL",
+  "pref.setting.ai.proxy.url.tip": "Optional API proxy URL, will be used with priority when configured",
+  "pref.setting.ai.model": "Model",
+  "pref.setting.ai.model.tip": "e.g.: gpt-3.5-turbo, gpt-4, etc.",
+  "pref.setting.ai.max.tokens": "Max Tokens",
+  "pref.setting.ai.max.tokens.tip": "Controls the maximum length of generated text, 0 means use default value",
+  "pref.setting.ai.temperature": "Temperature",
+  "pref.setting.ai.temperature.tip":
+    "Controls the randomness of generated text, between 0-2, higher values are more random",
   "main.auto.fetch.title": "Auto fetch title",
   "main.auto.fetch.cate": "Auto fetch category",
   "category.ai.hand":
@@ -767,5 +772,5 @@ export default {
   "main.publish.to.gitlabastro": "Publish to Gitlab Astro",
   "setting.gitlabastro": "Gitlab Astro",
   "service.switch.gitlabastro": "Gitlab Astro",
-  "post.bind.gitlabastro.slug": "Gitlab Astro slug"
+  "post.bind.gitlabastro.slug": "Gitlab Astro slug",
 }
