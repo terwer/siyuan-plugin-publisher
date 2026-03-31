@@ -18,7 +18,21 @@
 - [config.ts](file://siyuan/store/config.ts)
 - [preferenceConfigManager.ts](file://siyuan/store/preferenceConfigManager.ts)
 - [utils.ts](file://src/utils/utils.ts)
+- [pre.ts](file://src/platforms/pre.ts)
+- [docsifyApiAdaptor.ts](file://src/adaptors/api/docsify/docsifyApiAdaptor.ts)
+- [gitlabdocsifyApiAdaptor.ts](file://src/adaptors/api/gitlab-docsify/gitlabdocsifyApiAdaptor.ts)
+- [docsifyConfig.ts](file://src/adaptors/api/docsify/docsifyConfig.ts)
+- [gitlabdocsifyConfig.ts](file://src/adaptors/api/gitlab-docsify/gitlabdocsifyConfig.ts)
+- [adaptors/index.ts](file://src/adaptors/index.ts)
+- [svgIcons.ts](file://src/utils/svgIcons.ts)
 </cite>
+
+## 更新摘要
+**变更内容**
+- 新增 Docsify 子平台类型支持，包括 GitHub 和 GitLab 两个子平台
+- 添加 Docsify 平台的配置初始化和图标显示功能
+- 实现 Docsify 适配器的平台注册和 API 调用支持
+- 完善 Docsify 平台的配置管理和存储机制
 
 ## 目录
 1. [简介](#简介)
@@ -26,16 +40,19 @@
 3. [核心组件](#核心组件)
 4. [架构概览](#架构概览)
 5. [详细组件分析](#详细组件分析)
-6. [依赖关系分析](#依赖关系分析)
-7. [性能考虑](#性能考虑)
-8. [故障排除指南](#故障排除指南)
-9. [结论](#结论)
+6. [Docsify 子平台支持](#docsify-子平台支持)
+7. [依赖关系分析](#依赖关系分析)
+8. [性能考虑](#性能考虑)
+9. [故障排除指南](#故障排除指南)
+10. [结论](#结论)
 
 ## 简介
 
 平台配置系统是思源插件发布器的核心基础设施，负责管理各种发布平台的配置信息、用户偏好设置以及系统配置。该系统支持多种发布平台（如GitHub、GitLab、WordPress、自定义平台等），提供了统一的配置管理和存储机制。
 
 系统采用模块化设计，通过动态配置管理、存储抽象层和适配器模式，实现了对不同平台配置的灵活支持。配置数据既可以在思源笔记环境中持久化存储，也可以在浏览器环境中使用本地存储。
+
+**更新** 新增 Docsify 子平台类型支持，包括 GitHub Docsify 和 GitLab Docsify 两个子平台，为静态网站生成器提供完整的发布支持。
 
 ## 项目结构
 
@@ -63,8 +80,13 @@ subgraph "配置模型"
 Q[publishPreferenceCfg.ts] --> R[发布偏好配置]
 S[IPublishCfg.ts] --> T[发布配置接口]
 end
+subgraph "Docsify 支持"
+U[docsifyApiAdaptor.ts] --> V[Docsify API 适配器]
+W[gitlabdocsifyApiAdaptor.ts] --> X[GitLab Docsify 适配器]
+Y[docsifyConfig.ts] --> Z[Docsify 配置]
+end
 A --> K
-B --> U[平台配置操作]
+B --> U
 E --> U
 K --> U
 ```
@@ -73,6 +95,8 @@ K --> U
 - [syp.config.ts:1-52](file://syp.config.ts#L1-L52)
 - [dynamicConfig.ts:1-534](file://src/platforms/dynamicConfig.ts#L1-L534)
 - [usePublishSettingStore.ts:1-95](file://src/stores/usePublishSettingStore.ts#L1-L95)
+- [docsifyApiAdaptor.ts:1-63](file://src/adaptors/api/docsify/docsifyApiAdaptor.ts#L1-L63)
+- [gitlabdocsifyApiAdaptor.ts:1-63](file://src/adaptors/api/gitlab-docsify/gitlabdocsifyApiAdaptor.ts#L1-L63)
 
 **章节来源**
 - [syp.config.ts:1-52](file://syp.config.ts#L1-L52)
@@ -135,12 +159,14 @@ subgraph "平台支持层"
 L[GitHub平台] --> M[API适配器]
 N[WordPress平台] --> M
 O[自定义平台] --> M
+P[Docsify平台] --> M
 end
 A --> D
 D --> H
 E --> L
 E --> N
 E --> O
+E --> P
 ```
 
 **图表来源**
@@ -191,6 +217,8 @@ class SubPlatformType {
 Common_Yuque
 Github_Hexo
 Github_Hugo
+Github_Docsify
+Gitlab_Docsify
 Custom_Zhihu
 System_Siyuan
 }
@@ -210,9 +238,13 @@ DynamicConfig --> AuthMode : uses
 动态配置系统的主要功能：
 
 1. **平台类型管理**: 支持8种主要平台类型
-2. **子平台细分**: 每个平台类型下支持多个具体平台
+2. **子平台细分**: 每个平台类型下支持多个具体平台，包括新增的 Docsify 子平台
 3. **认证模式**: 支持API和WEBSITE两种认证方式
 4. **配置验证**: 提供配置完整性和有效性的验证机制
+
+**更新** 新增 Docsify 子平台类型，包括：
+- `Github_Docsify`: GitHub 上的 Docsify 静态站点
+- `Gitlab_Docsify`: GitLab 上的 Docsify 静态站点
 
 **章节来源**
 - [dynamicConfig.ts:1-534](file://src/platforms/dynamicConfig.ts#L1-L534)
@@ -341,6 +373,149 @@ L --> M[返回API对象]
 **章节来源**
 - [usePublishConfig.ts:1-99](file://src/composables/usePublishConfig.ts#L1-L99)
 
+## Docsify 子平台支持
+
+**新增** Docsify 子平台支持为静态网站生成器提供了完整的发布能力。
+
+### Docsify 平台类型定义
+
+Docsify 子平台类型在 `SubPlatformType` 枚举中定义：
+
+```mermaid
+classDiagram
+class SubPlatformType {
+<<enumeration>>
+// ... 其他平台类型
+Github_Docsify = "Docsify"
+Gitlab_Docsify = "Gitlabdocsify"
+// ... 其他平台类型
+}
+```
+
+**图表来源**
+- [dynamicConfig.ts:192](file://src/platforms/dynamicConfig.ts#L192)
+- [dynamicConfig.ts:203](file://src/platforms/dynamicConfig.ts#L203)
+
+### Docsify 平台预定义配置
+
+Docsify 平台在 `pre.ts` 文件中进行了预定义配置：
+
+```mermaid
+classDiagram
+class DocsifyConfig {
++platformType : PlatformType.Github
++subPlatformType : SubPlatformType.Github_Docsify
++platformKey : "github_Docsify"
++platformName : "Docsify"
++platformIcon : svgIcons.iconIFDocsify
++authMode : AuthMode.API
++isEnabled : false
+}
+class GitlabDocsifyConfig {
++platformType : PlatformType.Gitlab
++subPlatformType : SubPlatformType.Gitlab_Docsify
++platformKey : "gitlab_Gitlabdocsify"
++platformName : "Gitlabdocsify"
++platformIcon : svgIcons.iconIFDocsify
++authMode : AuthMode.API
++isEnabled : false
+}
+```
+
+**图表来源**
+- [pre.ts:224](file://src/platforms/pre.ts#L224)
+- [pre.ts:298](file://src/platforms/pre.ts#L298)
+
+### Docsify API 适配器实现
+
+Docsify 平台提供了专门的 API 适配器：
+
+```mermaid
+classDiagram
+class DocsifyApiAdaptor {
++getYamlAdaptor() YamlConvertAdaptor
++preEditPost(post, id, publishCfg) Promise~Post~
+}
+class GitlabdocsifyApiAdaptor {
++getYamlAdaptor() YamlConvertAdaptor
++preEditPost(post, id, publishCfg) Promise~Post~
+}
+class DocsifyConfig {
++tokenSettingUrl : "https : //github.com/settings/tokens"
++defaultPath : "docs"
++previewUrl : "/[user]/[repo]/blob/[branch]/[docpath]"
++previewPostUrl : "/#/post/[postid]"
++mdFilenameRule : "[slug].md"
++imageStorePath : "docs/images"
++imageLinkPath : "/images"
++knowledgeSpaceEnabled : true
++knowledgeSpaceType : CategoryType_Tree_Single
+}
+class GitlabdocsifyConfig {
++home : "[your-gitlab-home]"
++apiUrl : "[your-gitlab-api-url]"
++tokenSettingUrl : "[your-gitlab-host]/settings/access-tokens"
++defaultPath : "docs"
++previewUrl : "/[user]/[repo]/blob/[branch]/[docpath]"
++previewPostUrl : "/#/post/[postid]"
++mdFilenameRule : "[slug].md"
++imageStorePath : "docs/images"
++imageLinkPath : "/images"
++knowledgeSpaceEnabled : true
++knowledgeSpaceType : CategoryType_Tree_Single
+}
+DocsifyApiAdaptor --> DocsifyConfig : uses
+GitlabdocsifyApiAdaptor --> GitlabdocsifyConfig : uses
+```
+
+**图表来源**
+- [docsifyApiAdaptor.ts:23](file://src/adaptors/api/docsify/docsifyApiAdaptor.ts#L23)
+- [gitlabdocsifyApiAdaptor.ts:23](file://src/adaptors/api/gitlab-docsify/gitlabdocsifyApiAdaptor.ts#L23)
+- [docsifyConfig.ts:19](file://src/adaptors/api/docsify/docsifyConfig.ts#L19)
+- [gitlabdocsifyConfig.ts:20](file://src/adaptors/api/gitlab-docsify/gitlabdocsifyConfig.ts#L20)
+
+### Docsify 适配器索引配置
+
+Docsify 适配器在适配器索引中进行了注册：
+
+```mermaid
+flowchart TD
+A[平台类型判断] --> B{SubPlatformType.Github_Docsify}
+B --> C[useDocsifyApi]
+D[平台类型判断] --> E{SubPlatformType.Gitlab_Docsify}
+E --> F[useGitlabdocsifyApi]
+C --> G[YAML 适配器初始化]
+F --> G
+```
+
+**图表来源**
+- [adaptors/index.ts:542](file://src/adaptors/index.ts#L542)
+- [adaptors/index.ts:582](file://src/adaptors/index.ts#L582)
+
+### Docsify 图标支持
+
+Docsify 平台使用专门的 SVG 图标：
+
+```mermaid
+classDiagram
+class SvgIcons {
+iconIFDocsify : "<svg t='1773592921880' class='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http : //www.w3.org/2000/svg' p-id='7893' width='16' height='16'><path d='M128 128h768v64H192v672h-64V128z m128 128h512v64H320v608h544V256H256z m192 320h256v64H448v-64z m0-128h256v64H448v-64z m0 256h256v64H448v-64z' fill='#2E86DE' p-id='7894'></path></svg>"
+}
+```
+
+**图表来源**
+- [svgIcons.ts:53](file://src/utils/svgIcons.ts#L53)
+
+**章节来源**
+- [dynamicConfig.ts:174-242](file://src/platforms/dynamicConfig.ts#L174-L242)
+- [pre.ts:222-304](file://src/platforms/pre.ts#L222-L304)
+- [docsifyApiAdaptor.ts:1-63](file://src/adaptors/api/docsify/docsifyApiAdaptor.ts#L1-L63)
+- [gitlabdocsifyApiAdaptor.ts:1-63](file://src/adaptors/api/gitlab-docsify/gitlabdocsifyApiAdaptor.ts#L1-L63)
+- [docsifyConfig.ts:1-53](file://src/adaptors/api/docsify/docsifyConfig.ts#L1-L53)
+- [gitlabdocsifyConfig.ts:1-56](file://src/adaptors/api/gitlab-docsify/gitlabdocsifyConfig.ts#L1-L56)
+- [adaptors/index.ts:540-605](file://src/adaptors/index.ts#L540-L605)
+- [svgIcons.ts:50-55](file://src/utils/svgIcons.ts#L50-L55)
+
 ## 依赖关系分析
 
 平台配置系统的依赖关系体现了清晰的分层架构：
@@ -359,11 +534,13 @@ F[配置模型]
 G[存储层]
 H[配置管理]
 I[平台支持]
+J[Docsify 适配器]
 end
 subgraph "应用层"
-J[发布配置钩子]
-K[设置界面]
-L[平台适配器]
+K[发布配置钩子]
+L[设置界面]
+M[平台适配器]
+N[Docsify API]
 end
 A --> F
 B --> G
@@ -374,8 +551,10 @@ F --> G
 G --> H
 H --> I
 I --> J
-J --> K
-J --> L
+J --> N
+N --> K
+K --> L
+K --> M
 ```
 
 **图表来源**
@@ -446,6 +625,20 @@ J --> L
 2. 确认平台类型正确
 3. 测试网络连接
 
+#### Docsify 平台问题
+
+**问题症状**: Docsify 平台配置或发布失败
+
+**可能原因**:
+1. Docsify 配置路径错误
+2. YAML 前言元数据格式问题
+3. 知识空间配置不匹配
+
+**解决步骤**:
+1. 检查 Docsify 配置路径设置
+2. 验证 Markdown 文件的 YAML 前言格式
+3. 确认知识空间树形结构配置
+
 #### 性能问题
 
 **问题症状**: 应用响应缓慢
@@ -472,5 +665,13 @@ J --> L
 3. **类型安全**: 完整的TypeScript类型定义
 4. **性能优化**: 多层次的性能优化策略
 5. **易于使用**: 简洁的API设计和丰富的配置选项
+
+**更新** 新增的 Docsify 子平台支持进一步增强了系统的灵活性，为静态网站生成器提供了完整的发布能力。Docsify 平台支持包括：
+
+- **GitHub Docsify**: 支持 GitHub 仓库中的 Docsify 静态站点发布
+- **GitLab Docsify**: 支持 GitLab 仓库中的 Docsify 静态站点发布
+- **统一配置管理**: 通过适配器模式实现统一的配置和 API 调用
+- **图标支持**: 完整的 Docsify 图标和平台标识
+- **YAML 处理**: 专门的 YAML 前言元数据处理机制
 
 该系统为未来的功能扩展奠定了坚实的基础，能够支持更多发布平台的集成和更复杂的配置需求。通过持续的优化和改进，平台配置系统将继续为用户提供优秀的配置管理体验。
