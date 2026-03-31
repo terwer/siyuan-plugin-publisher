@@ -8,44 +8,46 @@
  */
 
 import { BlogAdaptor, BlogConfig, WebAdaptor, YamlConvertAdaptor } from "zhi-blog-api"
-import { getSubPlatformTypeByKey, SubPlatformType } from "~/src/platforms/dynamicConfig.ts"
+import { useAstroApi } from "~/src/adaptors/api/astro/useAstroApi.ts"
 import { useCnblogsApi } from "~/src/adaptors/api/cnblogs/useCnblogsApi.ts"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { useWordpressApi } from "~/src/adaptors/api/wordpress/useWordpressApi.ts"
-import { useTypechoApi } from "~/src/adaptors/api/typecho/useTypechoApi.ts"
-import { useYuqueApi } from "~/src/adaptors/api/yuque/useYuqueApi.ts"
-import { useZhihuWeb } from "~/src/adaptors/web/zhihu/useZhihuWeb.ts"
-import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
+import { useConfluenceApi } from "~/src/adaptors/api/confluence/useConfluenceApi.ts"
+import { useDocsifyApi } from "~/src/adaptors/api/docsify/useDocsifyApi.ts"
+import { useGitlabastroApi } from "~/src/adaptors/api/gitlab-astro/useGitlabastroApi.ts"
+import { useGitlabdocsifyApi } from "~/src/adaptors/api/gitlab-docsify/useGitlabdocsifyApi.ts"
+import { useGitlabhexoApi } from "~/src/adaptors/api/gitlab-hexo/useGitlabhexoApi.ts"
+import { useGitlabhugoApi } from "~/src/adaptors/api/gitlab-hugo/useGitlabhugoApi.ts"
+import { useGitlabjekyllApi } from "~/src/adaptors/api/gitlab-jekyll/useGitlabjekyllApi.ts"
+import { useGitlabvitepressApi } from "~/src/adaptors/api/gitlab-vitepress/useGitlabvitepressApi.ts"
+import { useGitlabvuepressApi } from "~/src/adaptors/api/gitlab-vuepress/useGitlabvuepressApi.ts"
+import { useGitlabvuepress2Api } from "~/src/adaptors/api/gitlab-vuepress2/useGitlabvuepress2Api.ts"
+import { useHaloApi } from "~/src/adaptors/api/halo/useHaloApi.ts"
+import { useHexoApi } from "~/src/adaptors/api/hexo/useHexoApi.ts"
+import { useHugoApi } from "~/src/adaptors/api/hugo/useHugoApi.ts"
+import { useJekyllApi } from "~/src/adaptors/api/jekyll/useJekyllApi.ts"
+import { useJvueApi } from "~/src/adaptors/api/jvue/useJvueApi.ts"
 import { useMetaweblogApi } from "~/src/adaptors/api/metaweblog/useMetaweblogApi.ts"
 import { useNotionApi } from "~/src/adaptors/api/notion/useNotionApi.ts"
-import { useHexoApi } from "~/src/adaptors/api/hexo/useHexoApi.ts"
-import { useGitlabhexoApi } from "~/src/adaptors/api/gitlab-hexo/useGitlabhexoApi.ts"
+import { useQuartzApi } from "~/src/adaptors/api/quartz/useQuartzApi.ts"
+import { useTelegraphApi } from "~/src/adaptors/api/telegraph/useTelegraphApi.ts"
+import { useTypechoApi } from "~/src/adaptors/api/typecho/useTypechoApi.ts"
+import { useVitepressApi } from "~/src/adaptors/api/vitepress/useVitepressApi.ts"
+import { useVuepressApi } from "~/src/adaptors/api/vuepress/useVuepressApi.ts"
+import { useVuepress2Api } from "~/src/adaptors/api/vuepress2/useVuepress2Api.ts"
+import { useWordpressdotcomApi } from "~/src/adaptors/api/wordpress-dot-com/useWordpressdotcomApi.ts"
+import { useWordpressApi } from "~/src/adaptors/api/wordpress/useWordpressApi.ts"
+import { useYuqueApi } from "~/src/adaptors/api/yuque/useYuqueApi.ts"
+import { useLocalSystemApi } from "~/src/adaptors/fs/LocalSystem/useLocalSystemApi.ts"
+import { useBilibiliWeb } from "~/src/adaptors/web/bilibili/useBilibiliWeb.ts"
 import { useCsdnWeb } from "~/src/adaptors/web/csdn/useCsdnWeb.ts"
-import { useWechatWeb } from "~/src/adaptors/web/wechat/useWechatWeb.ts"
+import { useHalowebWeb } from "~/src/adaptors/web/haloweb/useHalowebWeb.ts"
 import { useJianshuWeb } from "~/src/adaptors/web/jianshu/useJianshuWeb.ts"
 import { useJuejinWeb } from "~/src/adaptors/web/juejin/useJuejinWeb.ts"
-import { useHugoApi } from "~/src/adaptors/api/hugo/useHugoApi.ts"
-import { useGitlabhugoApi } from "~/src/adaptors/api/gitlab-hugo/useGitlabhugoApi.ts"
-import { useJekyllApi } from "~/src/adaptors/api/jekyll/useJekyllApi.ts"
-import { useGitlabjekyllApi } from "~/src/adaptors/api/gitlab-jekyll/useGitlabjekyllApi.ts"
-import { useQuartzApi } from "~/src/adaptors/api/quartz/useQuartzApi.ts"
-import { useVuepressApi } from "~/src/adaptors/api/vuepress/useVuepressApi.ts"
-import { useGitlabvuepressApi } from "~/src/adaptors/api/gitlab-vuepress/useGitlabvuepressApi.ts"
-import { useVuepress2Api } from "~/src/adaptors/api/vuepress2/useVuepress2Api.ts"
-import { useVitepressApi } from "~/src/adaptors/api/vitepress/useVitepressApi.ts"
-import { useGitlabvuepress2Api } from "~/src/adaptors/api/gitlab-vuepress2/useGitlabvuepress2Api.ts"
-import { useGitlabvitepressApi } from "~/src/adaptors/api/gitlab-vitepress/useGitlabvitepressApi.ts"
-import { useHaloApi } from "~/src/adaptors/api/halo/useHaloApi.ts"
-import { useTelegraphApi } from "~/src/adaptors/api/telegraph/useTelegraphApi.ts"
-import { useJvueApi } from "~/src/adaptors/api/jvue/useJvueApi.ts"
-import { useConfluenceApi } from "~/src/adaptors/api/confluence/useConfluenceApi.ts"
-import { useWordpressdotcomApi } from "~/src/adaptors/api/wordpress-dot-com/useWordpressdotcomApi.ts"
-import { useHalowebWeb } from "~/src/adaptors/web/haloweb/useHalowebWeb.ts"
-import { useBilibiliWeb } from "~/src/adaptors/web/bilibili/useBilibiliWeb.ts"
+import { useWechatWeb } from "~/src/adaptors/web/wechat/useWechatWeb.ts"
 import { useXiaohongshuWeb } from "~/src/adaptors/web/xiaohongshu/useXiaohongshuWeb.ts"
-import { useLocalSystemApi } from "~/src/adaptors/fs/LocalSystem/useLocalSystemApi.ts"
-import { useAstroApi } from "~/src/adaptors/api/astro/useAstroApi.ts"
-import { useGitlabastroApi } from "~/src/adaptors/api/gitlab-astro/useGitlabastroApi.ts"
+import { useZhihuWeb } from "~/src/adaptors/web/zhihu/useZhihuWeb.ts"
+import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
+import { getSubPlatformTypeByKey, SubPlatformType } from "~/src/platforms/dynamicConfig.ts"
+import { createAppLogger } from "~/src/utils/appLogger.ts"
 
 /**
  * 适配器统一入口
@@ -132,6 +134,11 @@ class Adaptors {
         conf = cfg
         break
       }
+      case SubPlatformType.Github_Docsify: {
+        const { cfg } = await useDocsifyApi(key, newCfg)
+        conf = cfg
+        break
+      }
       case SubPlatformType.Gitlab_Hexo: {
         const { cfg } = await useGitlabhexoApi(key, newCfg)
         conf = cfg
@@ -164,6 +171,11 @@ class Adaptors {
       }
       case SubPlatformType.Gitlab_Astro: {
         const { cfg } = await useGitlabastroApi(key, newCfg)
+        conf = cfg
+        break
+      }
+      case SubPlatformType.Gitlab_Docsify: {
+        const { cfg } = await useGitlabdocsifyApi(key, newCfg)
         conf = cfg
         break
       }
@@ -338,6 +350,11 @@ class Adaptors {
         blogAdaptor = blogApi
         break
       }
+      case SubPlatformType.Github_Docsify: {
+        const { blogApi } = await useDocsifyApi(key, newCfg)
+        blogAdaptor = blogApi
+        break
+      }
       case SubPlatformType.Gitlab_Hexo: {
         const { blogApi } = await useGitlabhexoApi(key, newCfg)
         blogAdaptor = blogApi
@@ -370,6 +387,11 @@ class Adaptors {
       }
       case SubPlatformType.Gitlab_Astro: {
         const { blogApi } = await useGitlabastroApi(key, newCfg)
+        blogAdaptor = blogApi
+        break
+      }
+      case SubPlatformType.Gitlab_Docsify: {
+        const { blogApi } = await useGitlabdocsifyApi(key, newCfg)
         blogAdaptor = blogApi
         break
       }
@@ -517,6 +539,11 @@ class Adaptors {
         yamlAdp = yamlAdaptor
         break
       }
+      case SubPlatformType.Github_Docsify: {
+        const { yamlAdaptor } = await useDocsifyApi(key, newCfg)
+        yamlAdp = yamlAdaptor
+        break
+      }
       case SubPlatformType.Gitlab_Hexo: {
         const { yamlAdaptor } = await useGitlabhexoApi(key, newCfg)
         yamlAdp = yamlAdaptor
@@ -549,6 +576,11 @@ class Adaptors {
       }
       case SubPlatformType.Gitlab_Astro: {
         const { yamlAdaptor } = await useGitlabastroApi(key, newCfg)
+        yamlAdp = yamlAdaptor
+        break
+      }
+      case SubPlatformType.Gitlab_Docsify: {
+        const { yamlAdaptor } = await useGitlabdocsifyApi(key, newCfg)
         yamlAdp = yamlAdaptor
         break
       }

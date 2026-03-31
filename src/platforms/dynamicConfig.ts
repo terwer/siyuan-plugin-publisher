@@ -7,8 +7,8 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import sypIdUtil from "~/src/utils/sypIdUtil.ts"
 import { StrUtil } from "zhi-common"
+import sypIdUtil from "~/src/utils/sypIdUtil.ts"
 
 export class DynamicConfig {
   /**
@@ -188,6 +188,8 @@ export enum SubPlatformType {
   Github_Vuepress2 = "Vuepress2",
   Github_Vitepress = "Vitepress",
   Github_Astro = "Astro",
+  
+    Github_Docsify = "Docsify",
 
   // Gitlab 子平台
   Gitlab_Hexo = "Gitlabhexo",
@@ -197,6 +199,8 @@ export enum SubPlatformType {
   Gitlab_Vuepress2 = "Gitlabvuepress2",
   Gitlab_Vitepress = "Gitlabvitepress",
   Gitlab_Astro = "Gitlabastro",
+  
+    Gitlab_Docsify = "Gitlabdocsify",
 
   // Metaweblog
   Metaweblog_Metaweblog = "Metaweblog",
@@ -275,6 +279,7 @@ export function getSubtypeList(ptype: PlatformType): SubPlatformType[] {
       subtypeList.push(SubPlatformType.Github_Vuepress2)
       subtypeList.push(SubPlatformType.Github_Vitepress)
       subtypeList.push(SubPlatformType.Github_Astro)
+      subtypeList.push(SubPlatformType.Github_Docsify)
       break
     case PlatformType.Gitlab:
       subtypeList.push(SubPlatformType.Gitlab_Hexo)
@@ -284,6 +289,7 @@ export function getSubtypeList(ptype: PlatformType): SubPlatformType[] {
       subtypeList.push(SubPlatformType.Gitlab_Vuepress2)
       subtypeList.push(SubPlatformType.Gitlab_Vitepress)
       subtypeList.push(SubPlatformType.Gitlab_Astro)
+      subtypeList.push(SubPlatformType.Gitlab_Docsify)
       break
     case PlatformType.Metaweblog:
       subtypeList.push(SubPlatformType.Metaweblog_Metaweblog)

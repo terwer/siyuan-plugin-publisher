@@ -219,6 +219,15 @@ export const pre = {
       authMode: AuthMode.API,
       isEnabled: false,
     },
+    {
+      platformType: PlatformType.Github,
+      subPlatformType: SubPlatformType.Github_Docsify,
+      platformKey: "github_Docsify",
+      platformName: "Docsify",
+      platformIcon: svgIcons.iconIFDocsify,
+      authMode: AuthMode.API,
+      isEnabled: false,
+    },
   ],
   gitlabCfg: <DynamicConfig[]>[
     {
@@ -281,6 +290,15 @@ export const pre = {
       platformKey: "gitlab_Gitlabastro",
       platformName: "Gitlabastro",
       platformIcon: svgIcons.iconIFAstro,
+      authMode: AuthMode.API,
+      isEnabled: false,
+    },
+    {
+      platformType: PlatformType.Gitlab,
+      subPlatformType: SubPlatformType.Gitlab_Docsify,
+      platformKey: "gitlab_Gitlabdocsify",
+      platformName: "Gitlabdocsify",
+      platformIcon: svgIcons.iconIFDocsify,
       authMode: AuthMode.API,
       isEnabled: false,
     },
