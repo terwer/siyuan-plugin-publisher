@@ -8,9 +8,9 @@
  */
 
 import { AuthMode, DynamicConfig, PlatformType, SubPlatformType } from "~/src/platforms/dynamicConfig.ts"
-import { svgIcons } from "~/src/utils/svgIcons.ts"
 import { PRE_CONSTANTS } from "~/src/platforms/PreConstants.ts"
 import { EnvUtil } from "~/src/utils/EnvUtil.ts"
+import { svgIcons } from "~/src/utils/svgIcons.ts"
 
 const hasElectronEnv = EnvUtil.isSiyuanElectron()
 
@@ -37,7 +37,7 @@ export const extraPreCfg = {
   },
   // 这里需要全路径匹配，没有使用默认的，只增加 UA
   headersMap: {
-    // "https://www.xiaohongshu.com/login": {
+    // "https://creator.xiaohongshu.com/login": {
     //   "User-Agent": MockBrowser.HEADERS.MACOS_CHROME["User-Agent"],
     //   Referer: "https://creator.xiaohongshu.com/publish/publish?from=menu",
     // },
@@ -426,11 +426,11 @@ export const pre = {
     // {
     //   platformType: PlatformType.Custom,
     //   subPlatformType: SubPlatformType.Custom_Xiaohongshu,
-    //   platformKey: PRE_COMTANTS.PRE_CUSTOM_XIAOHONGSHU,
+    //   platformKey: PRE_CONSTANTS.PRE_CUSTOM_XIAOHONGSHU,
     //   platformName: "小红书",
     //   platformIcon: svgIcons.iconIFXiaohongshu,
     //   authMode: AuthMode.WEBSITE,
-    //   authUrl: "https://www.xiaohongshu.com/login",
+    //   authUrl: "https://creator.xiaohongshu.com/login",
     //   domain: "xiaohongshu.com",
     //   isEnabled: false,
     //   extraScript: `(function() { console.log("xiaohongshu适配成功") })();`,

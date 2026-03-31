@@ -12,6 +12,7 @@ node_modules
 # api-extractor
 etc
 temp
+tmp
 tsdoc-metadata.json
 
 # env
