@@ -23,16 +23,16 @@
  * questions.
  */
 
-import PublisherPlugin from "./index"
-import { icons } from "./utils/svg"
 import { Menu, showMessage } from "siyuan"
-import { createSiyuanAppLogger } from "./appLogger"
-import { WidgetInvoke } from "./invoke/widgetInvoke"
-import { PluginInvoke } from "./invoke/pluginInvoke"
 import { ConfigManager } from "~/siyuan/store/config.ts"
-import MenuUtils from "~/siyuan/utils/menuUtils.ts"
 import { PreferenceConfigManager } from "~/siyuan/store/preferenceConfigManager.ts"
+import MenuUtils from "~/siyuan/utils/menuUtils.ts"
 import { V2Host } from "~/siyuan/v2/v2Host.ts"
+import { createSiyuanAppLogger } from "./appLogger"
+import PublisherPlugin from "./index"
+import { PluginInvoke } from "./invoke/pluginInvoke"
+import { WidgetInvoke } from "./invoke/widgetInvoke"
+import { icons } from "./utils/svg"
 
 /**
  * 顶部按钮
