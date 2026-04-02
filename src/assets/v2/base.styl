@@ -189,56 +189,10 @@
     min-height 440px
 
     &.is-quick-publish
-      grid-template-columns 176px minmax(0, 1fr)
+      grid-template-columns minmax(0, 1fr)
 
     &.is-settings
-      grid-template-columns 176px 196px minmax(0, 1fr) 248px
-
-  .syp-shell__brand
-    background linear-gradient(180deg, #79a8e6 0%, #4f84c8 42%, #315b93 100%)
-    color white
-    padding 18px
-    display flex
-    align-items stretch
-    position relative
-
-    &::after
-      content ""
-      position absolute
-      inset 0
-      background linear-gradient(180deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0) 38%)
-      pointer-events none
-
-  .syp-brand-card
-    display flex
-    flex-direction column
-    justify-content space-between
-    width 100%
-    min-height 100%
-
-  .syp-brand-chip
-    display inline-flex
-    align-items center
-    width fit-content
-    padding 5px 12px
-    border 1px solid rgba(255, 255, 255, 0.28)
-    border-radius 999px
-    font-size $syp-font-size-xs
-    letter-spacing 0.04em
-    background rgba(255, 255, 255, 0.1)
-
-  .syp-brand-title
-    margin-top auto
-    font-size 28px
-    line-height 1.08
-    font-weight 680
-    letter-spacing -0.02em
-    max-width 6ch
-
-  .syp-brand-meta
-    margin-top $syp-spacing-md
-    font-size $syp-font-size-xs
-    color rgba(255, 255, 255, 0.76)
+      grid-template-columns 196px minmax(0, 1fr)
 
   .syp-shell__nav
     padding $syp-spacing-lg
@@ -278,11 +232,6 @@
     background $syp-bg-primary
     min-width 0
 
-  .syp-shell__detail
-    padding $syp-spacing-xl
-    background linear-gradient(180deg, #fbfcfd 0%, #f3f6f9 100%)
-    border-left 1px solid $syp-border-secondary
-
   @media (max-width: 960px)
     .syp-shell
       &.is-quick-publish
@@ -291,9 +240,5 @@
       &.is-settings
         grid-template-columns 1fr
 
-    .syp-shell__nav,
-    .syp-shell__detail
+    .syp-shell__nav
       border none
-
-    .syp-brand-title
-      max-width none

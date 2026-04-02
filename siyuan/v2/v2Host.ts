@@ -27,9 +27,20 @@ export class V2Host {
     this.close()
 
     const menu = new Menu(this.menuId)
+    menu.element.style.padding = "0"
+    menu.element.style.border = "none"
+    menu.element.style.background = "transparent"
+    menu.element.style.boxShadow = "none"
+    menu.element.style.overflow = "visible"
     const mountPoint = Object.assign(document.createElement("div"), {
       className: "publisher-v2-menu-content",
     })
+    mountPoint.style.maxHeight = "none"
+    mountPoint.style.overflow = "visible"
+    if (!this.pluginInstance.isMobile) {
+      mountPoint.style.paddingLeft = "16px"
+      mountPoint.style.paddingBottom = "12px"
+    }
     menu.element.appendChild(mountPoint)
 
     const app = createV2VueApp({
