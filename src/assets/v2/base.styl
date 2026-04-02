@@ -1,0 +1,209 @@
+/*
+ * Copyright (c) 2023, Terwer . All rights reserved.
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * V2 UI 基础样式
+ * 所有样式都包裹在 .syp-v2 命名空间下，确保与思源笔记样式隔离
+ */
+
+@import "./variables.styl"
+
+// V2 UI 根容器
+.syp-v2
+  font-family $syp-font-family
+  font-size $syp-font-size-sm
+  color $syp-text-primary
+  line-height 1.5
+  -webkit-font-smoothing antialiased
+  -moz-osx-font-smoothing grayscale
+
+  // 重置盒模型
+  *, *::before, *::after
+    box-sizing border-box
+
+  // 按钮基础样式
+  .syp-btn
+    display inline-flex
+    align-items center
+    justify-content center
+    padding $syp-spacing-sm $syp-spacing-md
+    border none
+    border-radius $syp-radius-md
+    font-size $syp-font-size-sm
+    font-weight 500
+    cursor pointer
+    transition all 0.2s ease
+    outline none
+
+    &:hover
+      opacity 0.9
+
+    &:active
+      opacity 0.8
+
+    &.syp-btn-primary
+      background-color $syp-primary
+      color white
+
+    &.syp-btn-secondary
+      background-color $syp-bg-secondary
+      color $syp-text-primary
+
+    &.syp-btn-text
+      background-color transparent
+      color $syp-text-secondary
+
+      &:hover
+        background-color $syp-bg-secondary
+
+  // 卡片样式
+  .syp-card
+    background-color $syp-bg-primary
+    border-radius $syp-radius-lg
+    box-shadow $syp-shadow-sm
+    border 1px solid $syp-border-secondary
+    padding $syp-spacing-md
+    transition box-shadow 0.2s ease
+
+    &:hover
+      box-shadow $syp-shadow-md
+
+  // 输入框样式
+  .syp-input
+    width 100%
+    padding $syp-spacing-sm $syp-spacing-md
+    border 1px solid $syp-border-primary
+    border-radius $syp-radius-md
+    font-size $syp-font-size-sm
+    color $syp-text-primary
+    background-color $syp-bg-primary
+    transition border-color 0.2s ease
+
+    &:focus
+      outline none
+      border-color $syp-primary
+
+    &::placeholder
+      color $syp-text-tertiary
+
+  // 开关样式
+  .syp-toggle
+    position relative
+    display inline-block
+    width 44px
+    height 24px
+
+    input
+      opacity 0
+      width 0
+      height 0
+
+      &:checked + .syp-toggle-slider
+        background-color $syp-primary
+
+      &:checked + .syp-toggle-slider:before
+        transform translateX(20px)
+
+    .syp-toggle-slider
+      position absolute
+      cursor pointer
+      top 0
+      left 0
+      right 0
+      bottom 0
+      background-color $syp-border-primary
+      border-radius 24px
+      transition 0.3s
+
+      &:before
+        position absolute
+        content ""
+        height 18px
+        width 18px
+        left 3px
+        bottom 3px
+        background-color white
+        border-radius 50%
+        transition 0.3s
+
+  // 弹窗遮罩
+  .syp-modal-overlay
+    position fixed
+    top 0
+    left 0
+    right 0
+    bottom 0
+    background-color rgba(0, 0, 0, 0.3)
+    z-index 9998
+    display flex
+    align-items center
+    justify-content center
+
+  // 弹窗容器
+  .syp-modal
+    background-color $syp-bg-primary
+    border-radius $syp-radius-xl
+    box-shadow $syp-shadow-lg
+    z-index 9999
+    max-width 90vw
+    max-height 90vh
+    overflow hidden
+
+  // 顶部栏
+  .syp-header
+    display flex
+    align-items center
+    justify-content space-between
+    padding $syp-spacing-md $syp-spacing-lg
+    border-bottom 1px solid $syp-border-secondary
+
+    .syp-header-title
+      font-size $syp-font-size-lg
+      font-weight 600
+      color $syp-text-primary
+
+  // 内容区
+  .syp-content
+    padding $syp-spacing-lg
+    overflow-y auto
+
+  // 列表样式
+  .syp-list
+    list-style none
+    margin 0
+    padding 0
+
+    .syp-list-item
+      display flex
+      align-items center
+      padding $syp-spacing-md
+      border-bottom 1px solid $syp-border-secondary
+      cursor pointer
+      transition background-color 0.2s ease
+
+      &:hover
+        background-color $syp-bg-secondary
+
+      &:last-child
+        border-bottom none
+
+  // 空状态
+  .syp-empty
+    display flex
+    flex-direction column
+    align-items center
+    justify-content center
+    padding $syp-spacing-xl
+    color $syp-text-tertiary
+    text-align center
+
+    .syp-empty-icon
+      font-size 48px
+      margin-bottom $syp-spacing-md
+
+    .syp-empty-text
+      font-size $syp-font-size-md
+      margin-bottom $syp-spacing-sm
+
+    .syp-empty-subtext
+      font-size $syp-font-size-sm

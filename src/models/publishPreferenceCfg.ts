@@ -78,6 +78,9 @@ class PublishPreferenceCfg extends PreferenceConfig {
   // 是否允许修改别名
   public allowChangeSlug?: boolean
 
+  // V2 UI 开关
+  public useV2UI?: boolean
+
   constructor() {
     super()
     this.experimentalUseSiyuanNoteAIConfig = true
@@ -94,6 +97,8 @@ class PublishPreferenceCfg extends PreferenceConfig {
     this.showArticleManageMenu = true
     this.ignoreBlockRef = false
     this.allowChangeSlug = false
+
+    this.useV2UI = false
   }
 }
 

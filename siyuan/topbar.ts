@@ -25,13 +25,14 @@
 
 import PublisherPlugin from "./index"
 import { icons } from "./utils/svg"
-import {  Menu, showMessage } from "siyuan"
+import { Menu, showMessage } from "siyuan"
 import { createSiyuanAppLogger } from "./appLogger"
 import { WidgetInvoke } from "./invoke/widgetInvoke"
 import { PluginInvoke } from "./invoke/pluginInvoke"
 import { ConfigManager } from "~/siyuan/store/config.ts"
 import MenuUtils from "~/siyuan/utils/menuUtils.ts"
 import { PreferenceConfigManager } from "~/siyuan/store/preferenceConfigManager.ts"
+import { V2Host } from "~/siyuan/v2/v2Host.ts"
 
 /**
  * 顶部按钮
@@ -41,12 +42,14 @@ export class Topbar {
   private pluginInstance
   private widgetInvoke
   private pluginInvoke
+  private v2Host
 
   constructor(pluginInstance: PublisherPlugin) {
     this.logger = createSiyuanAppLogger("topbar")
     this.pluginInstance = pluginInstance
     this.pluginInvoke = new PluginInvoke(pluginInstance)
     this.widgetInvoke = new WidgetInvoke(pluginInstance)
+    this.v2Host = new V2Host(pluginInstance)
   }
 
   public initTopbar() {
@@ -57,25 +60,49 @@ export class Topbar {
       position: "left",
       callback: () => {},
     })
-    topBarElement.addEventListener("click", async () => {
-      // 预加载数据
-      const setting = await ConfigManager.loadConfig(self.pluginInstance)
-      const prefSetting = await PreferenceConfigManager.loadConfig(self.pluginInstance)
 
-      // 快速发布
-      const quickMenus =
-        prefSetting.showQuickMenu === false
-          ? []
-          : MenuUtils.getQuickMenus(this.pluginInstance, this.widgetInvoke, setting)
-      // 扩展菜单
-      const extendMenus =
-        prefSetting.showExtendMenu === false
-          ? []
-          : await MenuUtils.getExtendMenus(this.pluginInstance, this.pluginInvoke)
-      // 初始化菜单
-      await this.addMenu(topBarElement.getBoundingClientRect(), quickMenus, extendMenus, prefSetting)
-      self.logger.info("publisher menu loaded")
+    topBarElement.addEventListener("click", async () => {
+      const prefSetting = await PreferenceConfigManager.loadConfig(this.pluginInstance)
+
+      if (prefSetting.useV2UI) {
+        try {
+          self.logger.info("V2 UI enabled, showing quick publish panel")
+          await this.showV2QuickPublishPanel(topBarElement)
+          return
+        } catch (e) {
+          self.logger.error("V2 panel failed, falling back to legacy menu:", e)
+          showMessage("新版 UI 启动失败，已回退到旧版菜单", 3000, "error")
+        }
+      }
+
+      await this.showLegacyMenu(topBarElement, prefSetting)
     })
+  }
+
+  /**
+   * 显示 V2 快速发布面板
+   */
+  private async showV2QuickPublishPanel(topBarElement: HTMLElement) {
+    await this.v2Host.show({
+      anchorElement: topBarElement,
+      initialView: "quick_publish",
+    })
+  }
+
+  private async showLegacyMenu(topBarElement: HTMLElement, prefSetting: any) {
+    const setting = await ConfigManager.loadConfig(this.pluginInstance)
+
+    const quickMenus =
+      prefSetting.showQuickMenu === false
+        ? []
+        : MenuUtils.getQuickMenus(this.pluginInstance, this.widgetInvoke, setting)
+    const extendMenus =
+      prefSetting.showExtendMenu === false
+        ? []
+        : await MenuUtils.getExtendMenus(this.pluginInstance, this.pluginInvoke)
+
+    await this.addMenu(topBarElement.getBoundingClientRect(), quickMenus, extendMenus, prefSetting)
+    this.logger.info("publisher menu loaded")
   }
 
   private async addMenu(

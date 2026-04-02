@@ -102,6 +102,15 @@ const doBeforeChangeForAllowChangeSlug = async (): Promise<boolean> => {
           :before-change="onBeforeChangeForAllowChangeSlug"
         ></el-switch>
       </el-form-item>
+
+      <el-divider border-style="dashed" class="psd" />
+
+      <el-form-item label="使用新版 UI（实验性）">
+        <el-switch v-model="publishPreferenceSettingForm.useV2UI"></el-switch>
+        <div style="font-size: 12px; color: #999; margin-top: 4px;">
+          开启后将使用全新的 V2 版本界面，重启后生效
+        </div>
+      </el-form-item>
     </div>
   </el-form>
 </template>
