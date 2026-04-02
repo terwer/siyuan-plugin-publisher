@@ -1,5 +1,16 @@
 ## ADDED Requirements
 
+### Requirement: UI V2 SHALL prefer SiYuan native UI and styling primitives
+
+The V2 program SHALL prefer SiYuan native UI capabilities and the host-provided styling system before introducing custom visual components or custom styling layers.
+
+#### Scenario: A contributor implements a V2 UI element
+
+- **GIVEN** a contributor is implementing a V2 UI element
+- **WHEN** a SiYuan native UI pattern or host styling primitive is available
+- **THEN** the contributor should prefer the SiYuan native capability
+- **AND** they should avoid creating a new generic component layer unless the host capability is insufficient
+
 ### Requirement: UI V2 migration SHALL be managed as a full lifecycle program
 
 The system SHALL define UI V2 as a full lifecycle migration program rather than an isolated foundation task. The plan SHALL cover the complete sequence from entry foundation to stable release convergence.

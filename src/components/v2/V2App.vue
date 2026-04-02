@@ -1,11 +1,18 @@
 <template>
-  <div class="syp-v2" @click.stop @mousedown.stop @mouseup.stop @pointerdown.stop @touchstart.stop>
+  <div
+    class="syp-v2"
+    @click.stop
+    @mousedown.stop
+    @mouseup.stop
+    @pointerdown.stop
+    @touchstart.stop
+  >
     <div class="syp-panel">
       <div class="syp-header">
         <div class="syp-header-title-group">
           <div class="syp-header-chip">
             <LucideSend class="syp-header-chip__icon" />
-            <span>发布工具 V2</span>
+            <span>Publisher</span>
           </div>
           <div class="syp-header-title">{{ panelTitle }}</div>
         </div>
@@ -36,31 +43,49 @@
 
       <UnifiedWorkspaceShell :current-view="currentView">
         <section v-if="!isSettingsView" class="syp-quick-shell">
-          <div class="syp-quick-shell__eyebrow">Milestone 1 / Quick Publish Shell</div>
-          <h1 class="syp-quick-shell__title">Quick Publish Workspace</h1>
+          <div class="syp-quick-shell__eyebrow">Milestone 2 / Quick Publish</div>
+          <h1 class="syp-quick-shell__title">{{ quickPublish.state.docTitle }}</h1>
           <p class="syp-quick-shell__desc">快速发布态只保留主内容区，设置通过右上角低权重入口进入。</p>
 
-          <div class="syp-quick-shell__rail">
+          <div v-if="quickPublish.state.isLoading" class="syp-platform-skeleton-grid">
             <div class="syp-platform-skeleton">
-              <div class="syp-platform-skeleton__title">平台列表骨架</div>
+              <div class="syp-platform-skeleton__title">平台列表载入中</div>
               <div class="syp-platform-skeleton__row"></div>
               <div class="syp-platform-skeleton__row short"></div>
               <div class="syp-platform-skeleton__row"></div>
             </div>
             <div class="syp-platform-skeleton">
-              <div class="syp-platform-skeleton__title">发布状态骨架</div>
+              <div class="syp-platform-skeleton__title">状态载入中</div>
               <div class="syp-platform-skeleton__row short"></div>
               <div class="syp-platform-skeleton__row"></div>
             </div>
           </div>
+
+          <div v-else-if="!quickPublish.state.hasDocument" class="syp-empty-state">
+            <div class="syp-empty-state__title">请先打开一个文档</div>
+            <div class="syp-empty-state__desc">V2 主界面会读取当前文档上下文，用于展示可发布平台和后续发布状态。</div>
+          </div>
+
+          <div v-else-if="!hasPlatforms" class="syp-empty-state">
+            <div class="syp-empty-state__title">暂无已启用的平台</div>
+            <div class="syp-empty-state__desc">请从右上角进入设置，添加并启用至少一个平台后再使用快速发布。</div>
+          </div>
+
+          <div v-else class="syp-platform-grid">
+            <V2PlatformCard
+              v-for="item in quickPublish.state.platformItems"
+              :key="item.platformKey"
+              :platform-name="item.platformName"
+              :platform-icon="item.platformIcon"
+              :is-published="item.isPublished"
+            />
+          </div>
         </section>
 
         <section v-else class="syp-settings-shell">
-          <div class="syp-settings-shell__eyebrow">Milestone 1 / Settings Shell</div>
+          <div class="syp-settings-shell__eyebrow">Milestone 2 / Settings Entry</div>
           <h1 class="syp-settings-shell__title">Settings Workspace</h1>
-          <p class="syp-settings-shell__desc">
-            设置态只采用左导航 + 右内容区。更深一级页面将直接覆盖右侧内容区，并通过返回按钮返回。
-          </p>
+          <p class="syp-settings-shell__desc">设置态只采用左导航 + 右内容区。更深一级页面将直接覆盖右侧内容区，并通过返回按钮返回。</p>
 
           <div class="syp-settings-shell__content-card">
             <div class="syp-settings-shell__section-title">账号设置</div>
@@ -75,13 +100,15 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue"
+import { computed, onMounted, ref } from "vue"
 import "~/src/assets/v2/base.styl"
 import LucideArrowLeft from "~icons/lucide/arrow-left"
 import LucideSettings from "~icons/lucide/settings"
 import LucideSend from "~icons/lucide/send"
 import LucideX from "~icons/lucide/x"
 import UnifiedWorkspaceShell from "~/src/components/v2/layout/UnifiedWorkspaceShell.vue"
+import V2PlatformCard from "~/src/components/v2/publish/V2PlatformCard.vue"
+import { useV2QuickPublish } from "~/src/composables/v2/useV2QuickPublish.ts"
 
 const props = defineProps<{
   initialView?: "quick_publish" | "settings"
@@ -90,9 +117,15 @@ const props = defineProps<{
 
 const currentView = ref<"quick_publish" | "settings">(props.initialView ?? "quick_publish")
 const isSettingsView = computed(() => currentView.value === "settings")
+const quickPublish = useV2QuickPublish()
+const hasPlatforms = computed(() => quickPublish.hasPlatforms.value)
 
 const panelTitle = computed(() => {
-  return isSettingsView.value ? "偏好设置" : "快速发布"
+  return isSettingsView.value ? "发布工具设置" : "发布工具 V2 · 快速发布"
+})
+
+onMounted(async () => {
+  await quickPublish.init()
 })
 
 function openSettings() {
@@ -174,7 +207,8 @@ function close() {
   font-size 16px
   color #646a73
 
-.syp-quick-shell__rail
+.syp-platform-skeleton-grid,
+.syp-platform-grid
   display grid
   grid-template-columns repeat(2, minmax(0, 1fr))
   gap 16px
@@ -202,6 +236,24 @@ function close() {
   &.short
     width 62%
 
+.syp-empty-state
+  display flex
+  flex-direction column
+  gap 10px
+  padding 28px
+  border-radius 16px
+  background linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)
+  border 1px solid #e6ebf2
+
+.syp-empty-state__title
+  font-size 20px
+  font-weight 600
+  color #1f2329
+
+.syp-empty-state__desc
+  font-size 14px
+  color #667085
+
 .syp-settings-shell
   display flex
   flex-direction column
@@ -215,6 +267,7 @@ function close() {
   .syp-header-title-group
     gap 8px
 
-  .syp-quick-shell__rail
+  .syp-platform-skeleton-grid,
+  .syp-platform-grid
     grid-template-columns 1fr
 </style>
