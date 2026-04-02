@@ -11,7 +11,9 @@ export interface V2QuickPublishPlatformItem {
   platformKey: string
   platformName: string
   platformIcon?: string
+  isAuthorized: boolean
   isPublished: boolean
+  tooltipText?: string
 }
 
 export const useV2QuickPublish = () => {
@@ -39,18 +41,21 @@ export const useV2QuickPublish = () => {
     const setting = await getSetting()
     const dynJsonCfg = JsonUtil.safeParse<DynamicJsonCfg>(setting[DYNAMIC_CONFIG_KEY], {} as DynamicJsonCfg)
     const dynamicConfigArray = dynJsonCfg?.totalCfg || []
-    const enabledConfigArray = dynamicConfigArray.filter((item) => item.isEnabled && item.isAuth)
+    const enabledConfigArray = dynamicConfigArray.filter((item) => item.isEnabled)
     const postMeta = state.hasDocument ? ObjectUtil.getProperty(setting, pageId, {}) : {}
 
     state.platformItems = enabledConfigArray.map((item: DynamicConfig) => {
       const postidKey = getDynPostidKey(item.platformKey)
       const postMetaValue = ObjectUtil.getProperty(postMeta, postidKey)
+      const isAuthorized = item.isAuth === true
 
       return {
         platformKey: item.platformKey,
         platformName: item.platformName,
         platformIcon: item.platformIcon,
+        isAuthorized,
         isPublished: !StrUtil.isEmptyString(postMetaValue),
+        tooltipText: isAuthorized ? "" : "未授权，请点击右上角设置，进入账号设置完成授权后再使用快速发布。",
       }
     })
 

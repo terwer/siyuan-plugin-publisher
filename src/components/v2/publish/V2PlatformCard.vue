@@ -1,5 +1,10 @@
 <template>
-  <article class="syp-platform-card">
+  <article
+    class="syp-platform-card"
+    :class="{ 'is-disabled': !isAuthorized }"
+    :title="!isAuthorized ? tooltipText : ''"
+    :aria-disabled="!isAuthorized"
+  >
     <div class="syp-platform-card__icon">
       <span v-if="platformIcon" v-html="platformIcon"></span>
       <span v-else class="syp-platform-card__fallback">{{ platformName.slice(0, 1) }}</span>
@@ -7,7 +12,10 @@
     <div class="syp-platform-card__body">
       <div class="syp-platform-card__name">{{ platformName }}</div>
       <div class="syp-platform-card__meta">
-        <span class="syp-platform-card__status" :class="{ 'is-published': isPublished }">
+        <span class="syp-platform-card__status" :class="{ 'is-ready': isAuthorized, 'is-disabled': !isAuthorized }">
+          {{ isAuthorized ? "可快速发布" : "未授权" }}
+        </span>
+        <span v-if="isAuthorized" class="syp-platform-card__published">
           {{ isPublished ? "已发布" : "未发布" }}
         </span>
       </div>
@@ -19,7 +27,9 @@
 defineProps<{
   platformName: string
   platformIcon?: string
+  isAuthorized?: boolean
   isPublished?: boolean
+  tooltipText?: string
 }>()
 </script>
 
@@ -32,6 +42,9 @@ defineProps<{
   border 1px solid #e6ebf2
   border-radius 16px
   background linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)
+
+  &.is-disabled
+    opacity 0.72
 
 .syp-platform-card__icon
   width 44px
@@ -73,11 +86,17 @@ defineProps<{
   width fit-content
   padding 4px 9px
   border-radius 999px
-  background #f4f6f8
-  color #7b8490
   font-size 12px
 
-  &.is-published
+  &.is-ready
     background rgba(52, 199, 36, 0.12)
     color #2f8b24
+
+  &.is-disabled
+    background rgba(245, 74, 69, 0.12)
+    color #b33d39
+
+.syp-platform-card__published
+  font-size 12px
+  color #7b8490
 </style>

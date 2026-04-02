@@ -12,7 +12,7 @@
         <div class="syp-header-title-group">
           <div class="syp-header-chip">
             <LucideSend class="syp-header-chip__icon" />
-            <span>Publisher</span>
+            <span>发布工具</span>
           </div>
           <div class="syp-header-title">{{ panelTitle }}</div>
         </div>
@@ -43,7 +43,7 @@
 
       <UnifiedWorkspaceShell :current-view="currentView">
         <section v-if="!isSettingsView" class="syp-quick-shell">
-          <div class="syp-quick-shell__eyebrow">Milestone 2 / Quick Publish</div>
+          <div class="syp-quick-shell__eyebrow">当前文档</div>
           <h1 class="syp-quick-shell__title">{{ quickPublish.state.docTitle }}</h1>
           <p class="syp-quick-shell__desc">快速发布态只保留主内容区，设置通过右上角低权重入口进入。</p>
 
@@ -77,14 +77,16 @@
               :key="item.platformKey"
               :platform-name="item.platformName"
               :platform-icon="item.platformIcon"
+              :is-authorized="item.isAuthorized"
               :is-published="item.isPublished"
+              :tooltip-text="item.tooltipText"
             />
           </div>
         </section>
 
         <section v-else class="syp-settings-shell">
-          <div class="syp-settings-shell__eyebrow">Milestone 2 / Settings Entry</div>
-          <h1 class="syp-settings-shell__title">Settings Workspace</h1>
+          <div class="syp-settings-shell__eyebrow">发布设置</div>
+          <h1 class="syp-settings-shell__title">设置</h1>
           <p class="syp-settings-shell__desc">设置态只采用左导航 + 右内容区。更深一级页面将直接覆盖右侧内容区，并通过返回按钮返回。</p>
 
           <div class="syp-settings-shell__content-card">
@@ -121,7 +123,7 @@ const quickPublish = useV2QuickPublish()
 const hasPlatforms = computed(() => quickPublish.hasPlatforms.value)
 
 const panelTitle = computed(() => {
-  return isSettingsView.value ? "发布工具设置" : "发布工具 V2 · 快速发布"
+  return isSettingsView.value ? "发布设置" : "快速发布"
 })
 
 onMounted(async () => {
