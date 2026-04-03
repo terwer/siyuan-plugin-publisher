@@ -29,9 +29,9 @@
           <button
             v-else
             class="syp-btn syp-btn-quiet"
-            @click.stop="backToQuickPublish"
-            title="返回快速发布"
-            aria-label="返回快速发布"
+            @click.stop="handleSettingsBack"
+            :title="settingsBackTitle"
+            :aria-label="settingsBackTitle"
           >
             <LucideArrowLeft />
           </button>
@@ -41,7 +41,11 @@
         </div>
       </div>
 
-      <UnifiedWorkspaceShell :current-view="currentView">
+      <UnifiedWorkspaceShell
+        :current-view="currentView"
+        :active-section="settings.state.section"
+        @change-section="changeSettingsSection"
+      >
         <section v-if="!isSettingsView" class="syp-quick-shell">
           <div class="syp-quick-shell__eyebrow">当前文档</div>
           <h1 class="syp-quick-shell__title">{{ quickPublish.state.docTitle }}</h1>
@@ -100,16 +104,43 @@
         </section>
 
         <section v-else class="syp-settings-shell">
-          <div class="syp-settings-shell__eyebrow">发布设置</div>
-          <h1 class="syp-settings-shell__title">设置</h1>
-          <p class="syp-settings-shell__desc">设置态只采用左导航 + 右内容区。更深一级页面将直接覆盖右侧内容区，并通过返回按钮返回。</p>
+          <V2AccountList
+            v-if="settings.state.section === 'account' && settings.state.accountView === 'list'"
+            :items="settings.state.accountItems"
+            @add="settings.openPlatformSelect"
+            @configure="settings.openAccountConfig"
+            @toggle="handleToggleAccountEnabled"
+          />
 
-          <div class="syp-settings-shell__content-card">
-            <div class="syp-settings-shell__section-title">账号设置</div>
-            <div class="syp-settings-shell__placeholder"></div>
-            <div class="syp-settings-shell__placeholder short"></div>
-            <div class="syp-settings-shell__placeholder"></div>
-          </div>
+          <V2PlatformSelect
+            v-else-if="settings.state.section === 'account' && settings.state.accountView === 'select'"
+            :items="settings.selectablePlatforms.value"
+            @select="settings.createAccountDraft"
+          />
+
+          <section
+            v-else-if="settings.state.section === 'account' && settings.state.accountView === 'config'"
+            class="syp-settings-shell"
+          >
+            <div class="syp-settings-shell__eyebrow">账号设置</div>
+            <h1 class="syp-settings-shell__title">{{ settings.state.selectedPlatformName || "平台配置" }}</h1>
+            <p class="syp-settings-shell__desc">配置与授权将在下一阶段接入。当前已完成账号列表与平台选择流转。</p>
+
+            <div class="syp-settings-shell__content-card">
+              <div class="syp-settings-shell__section-title">当前平台</div>
+              <div class="syp-settings-shell__placeholder-line">{{ settings.state.selectedPlatformKey }}</div>
+            </div>
+          </section>
+
+          <section v-else class="syp-settings-shell">
+            <div class="syp-settings-shell__eyebrow">{{ settings.state.section === "picbed" ? "图床设置" : "偏好设置" }}</div>
+            <h1 class="syp-settings-shell__title">{{ settings.state.section === "picbed" ? "图床设置" : "偏好设置" }}</h1>
+            <p class="syp-settings-shell__desc">该分组将在后续 Phase 中接入，当前优先完成账号列表与平台选择。</p>
+            <div class="syp-settings-shell__content-card">
+              <div class="syp-settings-shell__section-title">当前阶段</div>
+              <div class="syp-settings-shell__placeholder-line">M4 Phase 1 已接入账号列表与平台选择。</div>
+            </div>
+          </section>
         </section>
       </UnifiedWorkspaceShell>
     </div>
@@ -126,6 +157,9 @@ import LucideX from "~icons/lucide/x"
 import UnifiedWorkspaceShell from "~/src/components/v2/layout/UnifiedWorkspaceShell.vue"
 import V2PlatformCard from "~/src/components/v2/publish/V2PlatformCard.vue"
 import { useV2QuickPublish } from "~/src/composables/v2/useV2QuickPublish.ts"
+import { useV2Settings } from "~/src/composables/v2/useV2Settings.ts"
+import V2AccountList from "~/src/components/v2/settings/V2AccountList.vue"
+import V2PlatformSelect from "~/src/components/v2/settings/V2PlatformSelect.vue"
 
 const props = defineProps<{
   initialView?: "quick_publish" | "settings"
@@ -135,12 +169,20 @@ const props = defineProps<{
 const currentView = ref<"quick_publish" | "settings">(props.initialView ?? "quick_publish")
 const isSettingsView = computed(() => currentView.value === "settings")
 const quickPublish = useV2QuickPublish()
+const settings = useV2Settings()
 const hasPlatforms = computed(() => quickPublish.hasPlatforms.value)
 const publishState = computed(() => quickPublish.state.publishState)
 const previewLinkMap = computed<Record<string, string>>(() => quickPublish.state.previewLinkMap)
 
 const panelTitle = computed(() => {
   return isSettingsView.value ? "发布设置" : "快速发布"
+})
+
+const settingsBackTitle = computed(() => {
+  if (settings.state.section === "account" && settings.state.accountView !== "list") {
+    return "返回账号列表"
+  }
+  return "返回快速发布"
 })
 
 const publishTitle = computed(() => {
@@ -225,14 +267,29 @@ const publishDescription = computed(() => {
 
 onMounted(async () => {
   await quickPublish.init()
+  await settings.loadAccountItems()
 })
 
-function openSettings() {
+async function openSettings() {
+  await settings.setSection("account")
   currentView.value = "settings"
 }
 
-function backToQuickPublish() {
+async function backToQuickPublish() {
   currentView.value = "quick_publish"
+  await quickPublish.init()
+}
+
+async function changeSettingsSection(section: "account" | "picbed" | "preference") {
+  await settings.setSection(section)
+}
+
+async function handleSettingsBack() {
+  if (settings.state.section === "account" && settings.state.accountView !== "list") {
+    await settings.backInAccountFlow()
+    return
+  }
+  await backToQuickPublish()
 }
 
 function close() {
@@ -253,6 +310,11 @@ function deletePlatform(item: typeof quickPublish.state.platformItems[number]) {
 
 function isFailed(item: typeof quickPublish.state.platformItems[number]) {
   return publishState.value.status === "failed" && publishState.value.platformKey === item.platformKey
+}
+
+async function handleToggleAccountEnabled(platformKey: string, nextEnabled: boolean) {
+  await settings.toggleAccountEnabled(platformKey, nextEnabled)
+  await quickPublish.init()
 }
 </script>
 
@@ -384,6 +446,12 @@ function isFailed(item: typeof quickPublish.state.platformItems[number]) {
   border-radius 14px
   background linear-gradient(180deg, #ffffff 0%, #f7f9fc 100%)
   border 1px solid #e6ebf2
+
+.syp-settings-shell__placeholder-line
+  margin-bottom 16px
+  font-size 14px
+  color #475467
+  word-break break-all
 
 .syp-platform-skeleton__title,
 .syp-settings-shell__section-title

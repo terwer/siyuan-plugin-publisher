@@ -8,6 +8,7 @@
         type="button"
         class="syp-shell__nav-item"
         :class="{ 'is-active': item.key === activeNavKey }"
+        @click="$emit('change-section', item.key as 'account' | 'picbed' | 'preference')"
       >
         {{ item.label }}
       </button>
@@ -24,6 +25,11 @@ import { computed } from "vue"
 
 const props = defineProps<{
   currentView?: "quick_publish" | "settings"
+  activeSection?: "account" | "picbed" | "preference"
+}>()
+
+defineEmits<{
+  (event: "change-section", section: "account" | "picbed" | "preference"): void
 }>()
 
 const isSettingsView = computed(() => props.currentView === "settings")
@@ -35,5 +41,5 @@ const navItems = [
   { key: "preference", label: "偏好设置" },
 ]
 
-const activeNavKey = computed(() => "account")
+const activeNavKey = computed(() => props.activeSection ?? "account")
 </script>

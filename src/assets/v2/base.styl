@@ -16,6 +16,8 @@
   -webkit-font-smoothing antialiased
   -moz-osx-font-smoothing grayscale
   min-width 0
+  height calc(100vh - 180px)
+  max-height calc(100vh - 180px)
 
   *, *::before, *::after
     box-sizing border-box
@@ -122,6 +124,9 @@
         transition 0.3s
 
   .syp-panel
+    display flex
+    flex-direction column
+    height 100%
     background linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 253, 0.98) 100%)
     border-radius $syp-radius-xl
     box-shadow $syp-shadow-lg
@@ -134,6 +139,7 @@
     justify-content space-between
     padding $syp-spacing-md $syp-spacing-lg
     border-bottom 1px solid $syp-border-secondary
+    flex-shrink 0
 
     .syp-header-title
       font-size $syp-font-size-lg
@@ -186,7 +192,8 @@
   .syp-shell
     display grid
     gap 0
-    min-height 440px
+    min-height 0
+    flex 1
 
     &.is-quick-publish
       grid-template-columns minmax(0, 1fr)
@@ -198,6 +205,8 @@
     padding $syp-spacing-lg
     background linear-gradient(180deg, #f7f9fc 0%, #eef2f6 100%)
     border-right 1px solid $syp-border-secondary
+    overflow-y auto
+    min-height 0
 
   .syp-shell__section-title
     margin-bottom $syp-spacing-md
@@ -228,11 +237,19 @@
       box-shadow $syp-shadow-sm
 
   .syp-shell__main
+    display flex
+    flex-direction column
     padding $syp-spacing-xl
     background $syp-bg-primary
     min-width 0
+    min-height 0
+    overflow hidden
 
   @media (max-width: 960px)
+    .syp-v2
+      height auto
+      max-height calc(100vh - 96px)
+
     .syp-shell
       &.is-quick-publish
         grid-template-columns 1fr

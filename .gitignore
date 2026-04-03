@@ -2,6 +2,7 @@
 .idea
 .DS_Store
 .turbo
+.omc
 
 # build
 dist
@@ -45,3 +46,7 @@ coverage
 testdata
 .typora
 .tool-versions
+.opencode
+
+# ReCode local database
+.recode
