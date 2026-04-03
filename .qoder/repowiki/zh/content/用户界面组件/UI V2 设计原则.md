@@ -14,6 +14,13 @@
 - [style.css](file://src/assets/style.css)
 </cite>
 
+## 更新摘要
+**变更内容**
+- 增强了base.styl样式系统，引入完整的响应式设计支持
+- 改进了灵活布局系统，支持移动端和桌面端的自适应布局
+- 优化了网格布局和弹性布局的响应式行为
+- 新增了媒体查询和断点管理系统
+
 ## 目录
 1. [引言](#引言)
 2. [项目结构](#项目结构)
@@ -30,6 +37,8 @@
 UI V2 设计原则是思源笔记发布工具插件的重要升级项目，旨在提供现代化、高效且用户友好的发布体验。该设计原则基于完整的生命周期管理理念，强调从传统iframe托管模式向真实DOM挂载的迁移，同时保持与现有系统的兼容性和回滚能力。
 
 该项目的核心目标是通过统一的工作空间壳层实现快速发布和完整设置工作流的无缝切换，同时优先使用思源笔记原生UI和样式基元，避免引入新的通用组件层。
+
+**更新** 本次更新重点增强了样式系统的响应式设计能力，通过灵活的布局系统确保在不同设备和屏幕尺寸下都能提供优质的用户体验。
 
 ## 项目结构
 
@@ -54,6 +63,7 @@ subgraph "样式层"
 BaseStyle[base.styl]
 Variables[variables.styl]
 Theme[主题变量]
+Responsive[响应式系统]
 end
 subgraph "配置层"
 MigrationSpec[UI V2迁移规范]
@@ -65,6 +75,7 @@ Shell --> PlatformCard
 Shell --> QuickPublish
 PlatformCard --> BaseStyle
 BaseStyle --> Variables
+BaseStyle --> Responsive
 V2App --> MigrationSpec
 QuickPublish --> Preferences
 ```
@@ -257,7 +268,7 @@ CardState --> PlatformItem : "映射状态"
 
 ### 样式系统设计
 
-UI V2采用基于变量的样式系统，确保设计的一致性和可维护性：
+UI V2采用基于变量的样式系统，确保设计的一致性和可维护性。**更新** 样式系统现已增强响应式设计能力：
 
 ```mermaid
 graph TB
@@ -274,6 +285,7 @@ SpacingXS[4px]
 SpacingSM[8px]
 SpacingMD[16px]
 SpacingLG[24px]
+SpacingXL[32px]
 end
 subgraph "圆角系统"
 RadiusSM[4px]
@@ -291,6 +303,7 @@ subgraph "基础样式"
 Base[base.styl]
 Components[组件样式]
 Utilities[工具类]
+Responsive[响应式系统]
 end
 Variables --> Primary
 Variables --> Secondary
@@ -303,16 +316,55 @@ RadiusSM --> Base
 ShadowSM --> Base
 Base --> Components
 Base --> Utilities
+Base --> Responsive
 ```
 
 **图表来源**
 - [variables.styl:8-58](file://src/assets/v2/variables.styl#L8-L58)
-- [base.styl:11-245](file://src/assets/v2/base.styl#L11-L245)
+- [base.styl:11-262](file://src/assets/v2/base.styl#L11-L262)
 
 **章节来源**
 - [V2PlatformCard.vue:36-103](file://src/components/v2/publish/V2PlatformCard.vue#L36-L103)
 - [variables.styl:1-58](file://src/assets/v2/variables.styl#L1-L58)
-- [base.styl:1-245](file://src/assets/v2/base.styl#L1-L245)
+- [base.styl:1-262](file://src/assets/v2/base.styl#L1-L262)
+
+### 响应式布局系统
+
+**新增** UI V2现在具备完整的响应式布局系统，支持多种设备和屏幕尺寸：
+
+```mermaid
+graph TB
+subgraph "响应式断点系统"
+Breakpoint960[960px断点]
+Breakpoint768[768px断点]
+Breakpoint480[480px断点]
+end
+subgraph "布局系统"
+GridLayout[网格布局]
+FlexLayout[弹性布局]
+ShellLayout[壳层布局]
+end
+subgraph "媒体查询"
+MediaQuery[@media(max-width: 960px)]
+MobileLayout[移动布局]
+DesktopLayout[桌面布局]
+end
+Breakpoint960 --> MediaQuery
+MediaQuery --> MobileLayout
+MediaQuery --> DesktopLayout
+GridLayout --> ShellLayout
+FlexLayout --> ShellLayout
+ShellLayout --> MobileLayout
+ShellLayout --> DesktopLayout
+```
+
+**图表来源**
+- [base.styl:248-262](file://src/assets/v2/base.styl#L248-L262)
+- [V2App.vue:501-512](file://src/components/v2/V2App.vue#L501-L512)
+
+**章节来源**
+- [base.styl:248-262](file://src/assets/v2/base.styl#L248-L262)
+- [V2App.vue:501-512](file://src/components/v2/V2App.vue#L501-L512)
 
 ### 数据流管理
 
@@ -361,6 +413,7 @@ Shell[UnifiedWorkspaceShell]
 PlatformCard[V2PlatformCard]
 QuickPublish[useV2QuickPublish]
 Styles[样式系统]
+Responsive[响应式系统]
 end
 subgraph "工具模块"
 Utils[工具函数]
@@ -380,6 +433,7 @@ QuickPublish --> Stores
 V2App --> Styles
 PlatformCard --> Styles
 Shell --> Styles
+Styles --> Responsive
 ```
 
 **图表来源**
@@ -395,6 +449,7 @@ Shell --> Styles
 - **高内聚**: 每个组件专注于单一职责，功能边界清晰
 - **可测试性**: 通过组合式API实现良好的可测试性
 - **可维护性**: 基于约定的目录结构和命名规范
+- **响应式兼容**: 全面支持移动端和桌面端的自适应布局
 
 **章节来源**
 - [createV2App.ts:15-36](file://src/v2/createV2App.ts#L15-L36)
@@ -408,6 +463,7 @@ UI V2在设计时充分考虑了性能优化：
 - 使用虚拟DOM减少直接DOM操作
 - 采用响应式状态避免不必要的重渲染
 - 图片懒加载和骨架屏提升用户体验
+- **更新** 响应式布局优化减少了不必要的重排重绘
 
 ### 内存管理
 - 合理的组件生命周期管理
@@ -418,6 +474,11 @@ UI V2在设计时充分考虑了性能优化：
 - 按需加载非关键资源
 - 缓存策略优化API请求
 - 减少HTTP请求数量
+
+### 响应式性能优化
+- **新增** 媒体查询优化，避免在不支持的设备上执行复杂计算
+- **新增** 移动端专用样式，减少桌面端不必要的样式计算
+- **新增** 灵活布局系统，根据设备能力调整布局复杂度
 
 ## 故障排除指南
 
@@ -437,6 +498,12 @@ UI V2在设计时充分考虑了性能优化：
    - 检查命名空间隔离
    - 验证CSS变量定义
    - 确认媒体查询适配
+   - **新增** 检查响应式断点是否正确应用
+
+4. **响应式布局问题**
+   - **新增** 检查设备断点配置
+   - **新增** 验证媒体查询语法
+   - **新增** 确认flex和grid布局兼容性
 
 **章节来源**
 - [createV2App.ts:15-36](file://src/v2/createV2App.ts#L15-L36)
@@ -444,11 +511,13 @@ UI V2在设计时充分考虑了性能优化：
 
 ## 结论
 
-UI V2设计原则体现了现代前端开发的最佳实践，通过统一的工作空间、清晰的组件架构和完善的样式系统，为用户提供了优秀的发布工具体验。该设计原则不仅关注当前的功能实现，更注重长期的可维护性和扩展性，为后续的功能迭代奠定了坚实的基础。
+UI V2设计原则体现了现代前端开发的最佳实践，通过统一的工作空间、清晰的组件架构和完善的样式系统，为用户提供了优秀的发布工具体验。**更新** 本次样式系统增强进一步提升了用户体验，特别是在移动设备上的表现。
+
+该设计原则不仅关注当前的功能实现，更注重长期的可维护性和扩展性，为后续的功能迭代奠定了坚实的基础。
 
 项目的核心价值在于：
-- **用户体验**: 通过统一界面减少学习成本
-- **技术先进性**: 采用最新的Vue 3技术和最佳实践
+- **用户体验**: 通过统一界面减少学习成本，**更新** 增强的响应式设计确保跨设备一致性
+- **技术先进性**: 采用最新的Vue 3技术和最佳实践，**更新** 包含完整的响应式布局系统
 - **可扩展性**: 模块化的架构便于功能扩展
 - **可维护性**: 清晰的代码结构和文档规范
 

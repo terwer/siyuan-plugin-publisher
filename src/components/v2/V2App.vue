@@ -33,7 +33,7 @@
             :title="settingsBackTitle"
             :aria-label="settingsBackTitle"
           >
-            <LucideArrowLeft />
+            <LucideChevronLeft />
           </button>
           <button class="syp-btn syp-btn-text" @click.stop="close" title="关闭" aria-label="关闭">
             <LucideX />
@@ -156,7 +156,7 @@ import V2AccountList from "~/src/components/v2/settings/V2AccountList.vue"
 import V2PlatformSelect from "~/src/components/v2/settings/V2PlatformSelect.vue"
 import { useV2QuickPublish } from "~/src/composables/v2/useV2QuickPublish.ts"
 import { useV2Settings } from "~/src/composables/v2/useV2Settings.ts"
-import LucideArrowLeft from "~icons/lucide/arrow-left"
+import LucideChevronLeft from "~icons/lucide/chevron-left"
 import LucideSend from "~icons/lucide/send"
 import LucideSettings from "~icons/lucide/settings"
 import LucideX from "~icons/lucide/x"

@@ -10,12 +10,9 @@
 - [commonGitlabApiAdaptor.ts](file://src/adaptors/api/base/gitlab/commonGitlabApiAdaptor.ts)
 - [astroConfig.ts](file://src/adaptors/api/astro/astroConfig.ts)
 - [astroYamlConverterAdaptor.ts](file://src/adaptors/api/astro/astroYamlConverterAdaptor.ts)
+- [commonGitlabConfig.ts](file://src/adaptors/api/base/gitlab/commonGitlabConfig.ts)
 - [gitlabConstants.ts](file://src/adaptors/api/base/gitlab/gitlabConstants.ts)
-- [commonGitlabPlaceholder.ts](file://src/adaptors/api/base/gitlab/commonGitlabPlaceholder.ts)
 - [GitlabastroSetting.vue](file://src/components/set/publish/singleplatform/gitlab/GitlabastroSetting.vue)
-- [spec.md](file://openspec/specs/gitlab-astro/spec.md)
-- [pre.ts](file://src/platforms/pre.ts)
-- [platformMetadata.ts](file://src/models/platformMetadata.ts)
 </cite>
 
 ## 目录
@@ -31,44 +28,46 @@
 
 ## 简介
 
-GitLab Astro 平台适配器是 Siyuan Publisher 插件中的一个重要组件，专门用于将思源笔记内容发布到 GitLab 上的 Astro 项目中。该适配器基于 GitLab 平台的特性，实现了完整的 Astro 内容发布功能，包括 Markdown 文件的 Frontmatter 处理、YAML 格式转换、图片上传等功能。
+GitLab Astro 平台适配器是 Siyuan Publisher 插件中的一个重要组件，专门用于将 Siyuan 笔记内容发布到 GitLab 托管的 Astro 静态网站平台。该适配器基于通用的 GitLab API 适配器构建，专门为 Astro 平台的 Markdown 和 YAML 前言元数据格式进行了优化。
 
-该适配器遵循了插件的整体架构设计，采用了模块化的组件结构，确保了代码的可维护性和扩展性。通过使用 Vue 3 Composition API 和 TypeScript，提供了类型安全的开发体验。
+该适配器的主要功能包括：
+- 将 Siyuan 内容转换为 Astro 兼容的 Markdown 格式
+- 处理 YAML 前言元数据的提取和注入
+- 支持标签、分类和知识空间的管理
+- 提供完整的发布、编辑、删除和预览功能
 
 ## 项目结构
 
-GitLab Astro 适配器位于插件的适配器层中，采用清晰的层次结构组织：
+GitLab Astro 适配器位于插件的适配器模块中，采用清晰的层次化组织结构：
 
 ```mermaid
 graph TB
 subgraph "适配器层"
-subgraph "GitLab 平台"
-GA[gitlabastroApiAdaptor.ts]
-GC[gitlabastroConfig.ts]
-GP[gitlabastroPlaceholder.ts]
-GY[gitlabastroYamlConverterAdaptor.ts]
-GU[useGitlabastroApi.ts]
+GA[GitlabastroApiAdaptor<br/>GitLab Astro API 适配器]
+GY[AstroYamlConverterAdaptor<br/>Astro YAML 转换器]
+GC[GitlabastroConfig<br/>GitLab Astro 配置]
+GP[GitlabastroPlaceholder<br/>占位符]
 end
-subgraph "基础组件"
-CG[commonGitlabApiAdaptor.ts]
-CC[gitlabConstants.ts]
-CP[commonGitlabPlaceholder.ts]
+subgraph "基础适配器层"
+CGA[CommonGitlabApiAdaptor<br/>通用 GitLab 适配器]
+CGC[CommonGitlabConfig<br/>通用 GitLab 配置]
+GCA[GitlabConstants<br/>GitLab 常量]
 end
-subgraph "Astro 支持"
-AC[astroConfig.ts]
-AY[astroYamlConverterAdaptor.ts]
+subgraph "平台配置层"
+AC[AstroConfig<br/>Astro 配置]
+AYA[AstroYamlConverterAdaptor<br/>Astro YAML 转换器]
 end
+subgraph "工具层"
+UGA[useGitlabastroApi<br/>API 工厂函数]
 end
-subgraph "UI 层"
-GS[GitlabastroSetting.vue]
-end
-GA --> CG
+GA --> CGA
+GY --> AYA
 GC --> AC
-GY --> AY
-GU --> GA
-GU --> GC
-GU --> GY
-GS --> GU
+CGA --> CGC
+CGA --> GCA
+UGA --> GA
+UGA --> GC
+UGA --> GY
 ```
 
 **图表来源**
@@ -81,158 +80,101 @@ GS --> GU
 
 ## 核心组件
 
-GitLab Astro 适配器由四个核心组件构成，形成了完整的适配器体系：
+### GitlabastroApiAdaptor（主适配器）
 
-### 组件架构图
+GitlabastroApiAdaptor 是整个适配器系统的核心，继承自通用 GitLab 适配器，专门处理 Astro 平台的特殊需求。
 
-```mermaid
-classDiagram
-class GitlabastroApiAdaptor {
-+getYamlAdaptor() YamlConvertAdaptor
-+preEditPost(post, id, publishCfg) Promise~Post~
-}
-class GitlabastroConfig {
-+home string
-+apiUrl string
-+defaultPath string
-+previewUrl string
-+imageStorePath string
-+pageType PageTypeEnum
-+tagEnabled boolean
-+cateEnabled boolean
-}
-class GitlabastroYamlConverterAdaptor {
-+convertToYaml(post, yamlFormatObj, cfg) YamlFormatObj
-+convertToAttr(post, yamlFormatObj, cfg) Post
-}
-class GitlabastroPlaceholder {
-+knowledgeSpaceReadonlyModeTip string
-}
-GitlabastroApiAdaptor --|> CommonGitlabApiAdaptor
-GitlabastroConfig --|> AstroConfig
-GitlabastroYamlConverterAdaptor --|> AstroYamlConverterAdaptor
-```
+**主要特性：**
+- 继承通用 GitLab 功能（文件操作、认证、媒体处理）
+- 重写 YAML 处理逻辑以适应 Astro 格式
+- 支持 Markdown 和 HTML 两种发布格式
+- 提供预编辑功能来处理 YAML 前言元数据
 
-**图表来源**
-- [gitlabastroApiAdaptor.ts:23-60](file://src/adaptors/api/gitlab-astro/gitlabastroApiAdaptor.ts#L23-L60)
-- [gitlabastroConfig.ts:20-54](file://src/adaptors/api/gitlab-astro/gitlabastroConfig.ts#L20-L54)
-- [gitlabastroYamlConverterAdaptor.ts:19-20](file://src/adaptors/api/gitlab-astro/gitlabastroYamlConverterAdaptor.ts#L19-L20)
+### GitlabastroConfig（配置管理）
 
-### 组件职责
+配置类负责管理 GitLab Astro 平台的所有配置参数，包括：
+- 基础连接信息（用户名、令牌、仓库、分支）
+- 平台特定路径规则（默认路径、文件命名规则）
+- 预览 URL 格式
+- 功能开关（标签、分类、知识空间支持）
 
-1. **API 适配器 (GitlabastroApiAdaptor)**: 负责与 GitLab API 的交互，处理文章的创建、编辑、删除等操作
-2. **配置类 (GitlabastroConfig)**: 定义 GitLab Astro 平台的特定配置参数
-3. **YAML 转换器 (GitlabastroYamlConverterAdaptor)**: 处理 Astro Frontmatter 的转换逻辑
-4. **占位符类 (GitlabastroPlaceholder)**: 提供用户界面的提示信息
+### GitlabastroYamlConverterAdaptor（YAML 处理器）
+
+专门处理 Astro 平台的 YAML 前言元数据转换，支持：
+- 标题、描述、发布时间等标准字段
+- 标签和分类的数组格式
+- SEO 关键字处理
+- 动态 YAML 配置支持
 
 **章节来源**
 - [gitlabastroApiAdaptor.ts:16-60](file://src/adaptors/api/gitlab-astro/gitlabastroApiAdaptor.ts#L16-L60)
 - [gitlabastroConfig.ts:14-54](file://src/adaptors/api/gitlab-astro/gitlabastroConfig.ts#L14-L54)
-- [gitlabastroYamlConverterAdaptor.ts:12-20](file://src/adaptors/api/gitlab-astro/gitlabastroYamlConverterAdaptor.ts#L12-L20)
+- [gitlabastroYamlConverterAdaptor.ts:12-21](file://src/adaptors/api/gitlab-astro/gitlabastroYamlConverterAdaptor.ts#L12-L21)
 
 ## 架构概览
 
-GitLab Astro 适配器采用了分层架构设计，确保了各组件之间的松耦合和高内聚。
-
-### 整体架构图
-
-```mermaid
-graph TB
-subgraph "应用层"
-UI[用户界面]
-Store[状态管理]
-end
-subgraph "适配器层"
-subgraph "GitLab Astro 适配器"
-API[API 适配器]
-CFG[配置管理]
-YAML[YAML 转换器]
-PH[占位符]
-end
-subgraph "基础 GitLab 组件"
-CGA[通用 GitLab API 适配器]
-GFC[GitLab 常量]
-GPH[GitLab 占位符]
-end
-subgraph "Astro 支持"
-AC[Astro 配置]
-AY[Astro YAML 转换器]
-end
-end
-subgraph "外部服务"
-GL[GitLab API]
-MW[中间件]
-end
-UI --> API
-Store --> API
-API --> CGA
-API --> CFG
-API --> YAML
-CFG --> AC
-YAML --> AY
-CGA --> GL
-CGA --> MW
-CGA --> GFC
-PH --> GPH
-```
-
-**图表来源**
-- [useGitlabastroApi.ts:22-94](file://src/adaptors/api/gitlab-astro/useGitlabastroApi.ts#L22-L94)
-- [commonGitlabApiAdaptor.ts:30-55](file://src/adaptors/api/base/gitlab/commonGitlabApiAdaptor.ts#L30-L55)
-
-### 数据流流程
+GitLab Astro 适配器采用了分层架构设计，确保了良好的可维护性和扩展性：
 
 ```mermaid
 sequenceDiagram
-participant U as 用户
-participant UI as 设置界面
-participant API as API 适配器
-participant CFG as 配置管理
-participant YAML as YAML 转换器
-participant GL as GitLab API
-U->>UI : 配置 GitLab Astro
-UI->>API : 初始化适配器
-API->>CFG : 加载配置
-API->>YAML : 获取 YAML 转换器
-API->>GL : 检查认证
-GL-->>API : 认证结果
-API-->>UI : 返回配置状态
-U->>API : 发布文章
-API->>YAML : 转换 Frontmatter
-YAML-->>API : 返回转换结果
-API->>GL : 上传文件
-GL-->>API : 返回结果
-API-->>UI : 显示发布状态
+participant Client as 客户端
+participant Factory as useGitlabastroApi
+participant Config as GitlabastroConfig
+participant Adapter as GitlabastroApiAdaptor
+participant BaseAdapter as CommonGitlabApiAdaptor
+participant GitLab as GitLab API
+Client->>Factory : 请求创建 API 实例
+Factory->>Config : 初始化配置
+Factory->>Adapter : 创建适配器实例
+Factory->>Adapter : 注入配置和 YAML 转换器
+Adapter->>BaseAdapter : 继承通用功能
+Adapter->>GitLab : 建立连接
+Client->>Adapter : 发布文章请求
+Adapter->>Adapter : 处理 YAML 前言元数据
+Adapter->>GitLab : 上传文件
+GitLab-->>Adapter : 返回结果
+Adapter-->>Client : 发布完成
 ```
 
 **图表来源**
-- [useGitlabastroApi.ts:22-94](file://src/adaptors/api/gitlab-astro/useGitlabastroApi.ts#L22-L94)
-- [gitlabastroApiAdaptor.ts:28-59](file://src/adaptors/api/gitlab-astro/gitlabastroApiAdaptor.ts#L28-L59)
+- [useGitlabastroApi.ts:22-96](file://src/adaptors/api/gitlab-astro/useGitlabastroApi.ts#L22-L96)
+- [gitlabastroApiAdaptor.ts:23-60](file://src/adaptors/api/gitlab-astro/gitlabastroApiAdaptor.ts#L23-L60)
 
-**章节来源**
-- [useGitlabastroApi.ts:22-94](file://src/adaptors/api/gitlab-astro/useGitlabastroApi.ts#L22-L94)
-- [commonGitlabApiAdaptor.ts:57-136](file://src/adaptors/api/base/gitlab/commonGitlabApiAdaptor.ts#L57-L136)
+### 数据流处理
+
+适配器在处理文章时遵循以下数据流：
+
+```mermaid
+flowchart TD
+Start([开始处理文章]) --> ExtractYAML[提取 YAML 前言元数据]
+ExtractYAML --> ProcessMD[处理 Markdown 内容]
+ProcessMD --> CheckFormat{检查发布格式}
+CheckFormat --> |Markdown| UseMarkdown[使用 Markdown 格式]
+CheckFormat --> |HTML| UseHTML[使用 HTML 格式]
+UseMarkdown --> CombineContent[合并 YAML 和 Markdown]
+UseHTML --> CombineContent
+CombineContent --> UploadFile[上传到 GitLab]
+UploadFile --> GenerateURL[生成预览链接]
+GenerateURL --> End([处理完成])
+```
+
+**图表来源**
+- [gitlabastroApiAdaptor.ts:28-59](file://src/adaptors/api/gitlab-astro/gitlabastroApiAdaptor.ts#L28-L59)
 
 ## 详细组件分析
 
-### API 适配器组件
-
-API 适配器是 GitLab Astro 适配器的核心组件，负责处理与 GitLab API 的所有交互。
-
-#### 类结构分析
+### API 适配器类结构
 
 ```mermaid
 classDiagram
 class CommonGitlabApiAdaptor {
--gitlabClient CommonGitlabClient
--gitlabCfg CommonGitlabConfig
+-gitlabClient : CommonGitlabClient
+-gitlabCfg : CommonGitlabConfig
 +checkAuth() Promise~boolean~
 +newPost(post, publish) Promise~string~
 +getPost(postid, useSlug) Promise~Post~
 +editPost(postid, post, publish) Promise~boolean~
 +deletePost(postid) Promise~boolean~
-+getUsersBlogs() Promise~UserBlog[]~
-+getCategoryTreeNodes(docPath) Promise~any[]~
 +getPreviewUrl(postid) Promise~string~
 +getPostPreviewUrl(postid) Promise~string~
 +newMediaObject(mediaObject) Promise~Attachment~
@@ -241,338 +183,271 @@ class GitlabastroApiAdaptor {
 +getYamlAdaptor() YamlConvertAdaptor
 +preEditPost(post, id, publishCfg) Promise~Post~
 }
-GitlabastroApiAdaptor --|> CommonGitlabApiAdaptor
+class AstroYamlConverterAdaptor {
++convertToYaml(post, yamlFormatObj, cfg) YamlFormatObj
++convertToAttr(post, yamlFormatObj, cfg) Post
+}
+class GitlabastroYamlConverterAdaptor {
+}
+class GitlabastroConfig {
++home : string
++apiUrl : string
++defaultPath : string
++previewUrl : string
++mdFilenameRule : string
++imageStorePath : string
++tagEnabled : boolean
++cateEnabled : boolean
++knowledgeSpaceEnabled : boolean
+}
+CommonGitlabApiAdaptor <|-- GitlabastroApiAdaptor
+AstroYamlConverterAdaptor <|-- GitlabastroYamlConverterAdaptor
+CommonGithubConfig <|-- GitlabastroConfig
+AstroConfig <|-- GitlabastroConfig
 ```
 
 **图表来源**
 - [commonGitlabApiAdaptor.ts:30-300](file://src/adaptors/api/base/gitlab/commonGitlabApiAdaptor.ts#L30-L300)
 - [gitlabastroApiAdaptor.ts:23-60](file://src/adaptors/api/gitlab-astro/gitlabastroApiAdaptor.ts#L23-L60)
+- [astroYamlConverterAdaptor.ts:22-135](file://src/adaptors/api/astro/astroYamlConverterAdaptor.ts#L22-L135)
+- [gitlabastroConfig.ts:20-54](file://src/adaptors/api/gitlab-astro/gitlabastroConfig.ts#L20-L54)
 
-#### 关键方法实现
+### 配置管理机制
 
-**预编辑文章方法**：
-- 处理文章的前置属性
-- 提取和处理 Frontmatter
-- 根据页面类型设置发布格式
-
-**章节来源**
-- [gitlabastroApiAdaptor.ts:28-59](file://src/adaptors/api/gitlab-astro/gitlabastroApiAdaptor.ts#L28-L59)
-
-### 配置管理系统
-
-配置管理系统负责管理 GitLab Astro 平台的所有配置参数。
-
-#### 配置类继承关系
+配置系统采用了灵活的设计模式，支持多种配置来源：
 
 ```mermaid
-classDiagram
-class CommonGithubConfig {
-+username string
-+password string
-+githubRepo string
-+githubBranch string
-+middlewareUrl string
-}
-class AstroConfig {
-+home string
-+apiUrl string
-+tokenSettingUrl string
-+showTokenTip boolean
-+defaultPath string
-+previewUrl string
-+previewPostUrl string
-+mdFilenameRule string
-+imageStorePath string
-+imageLinkPath string
-+pageType PageTypeEnum
-+passwordType PasswordType
-+allowPreviewUrlChange boolean
-+tagEnabled boolean
-+cateEnabled boolean
-+allowCateChange boolean
-+categoryType CategoryTypeEnum
-+knowledgeSpaceEnabled boolean
-+allowKnowledgeSpaceChange boolean
-+placeholder CommonBlogPlaceholder
-+picbedService PicbedServiceTypeEnum
-}
-class GitlabastroConfig {
-+home string
-+apiUrl string
-+tokenSettingUrl string
-+showTokenTip boolean
-+defaultPath string
-+previewUrl string
-+previewPostUrl string
-+mdFilenameRule string
-+imageStorePath string
-+imageLinkPath string
-+pageType PageTypeEnum
-+passwordType PasswordType
-+allowPreviewUrlChange boolean
-+tagEnabled boolean
-+cateEnabled boolean
-+allowCateChange boolean
-+categoryType CategoryTypeEnum
-+knowledgeSpaceEnabled boolean
-+allowKnowledgeSpaceChange boolean
-+placeholder GitlabastroPlaceholder
-+picbedService PicbedServiceTypeEnum
-}
-AstroConfig --|> CommonGithubConfig
-GitlabastroConfig --|> AstroConfig
+flowchart LR
+subgraph "配置来源"
+A[用户设置] --> B[useGitlabastroApi]
+C[环境变量] --> D[默认配置]
+E[动态配置] --> F[运行时配置]
+end
+subgraph "配置处理"
+B --> G{检查配置}
+G --> |有配置| H[使用用户配置]
+G --> |无配置| D
+D --> I[创建默认配置]
+H --> J[合并配置]
+I --> J
+J --> K[初始化适配器]
+end
+subgraph "配置参数"
+L[用户名] --> M[仓库信息]
+N[令牌] --> M
+O[分支] --> M
+P[中间件URL] --> M
+end
 ```
 
 **图表来源**
-- [astroConfig.ts:19-51](file://src/adaptors/api/astro/astroConfig.ts#L19-L51)
+- [useGitlabastroApi.ts:32-61](file://src/adaptors/api/gitlab-astro/useGitlabastroApi.ts#L32-L61)
 - [gitlabastroConfig.ts:20-54](file://src/adaptors/api/gitlab-astro/gitlabastroConfig.ts#L20-L54)
 
-#### 配置参数说明
-
-| 参数名称 | 类型 | 默认值 | 说明 |
-|---------|------|--------|------|
-| home | string | "[your-gitlab-home]" | GitLab 主页地址 |
-| apiUrl | string | "[your-gitlab-api-url]" | GitLab API 地址 |
-| tokenSettingUrl | string | "[your-gitlab-host]/-/user_settings/personal_access_tokens" | 访问令牌设置页面 |
-| defaultPath | string | "src/content/blog" | 默认文章存储路径 |
-| previewUrl | string | "/[user]/[repo]/blob/[branch]/[docpath]" | 预览 URL 模板 |
-| mdFilenameRule | string | "[slug].md" | Markdown 文件命名规则 |
-| imageStorePath | string | "public/images" | 图片存储路径 |
-| pageType | PageTypeEnum | PageTypeEnum.Markdown | 页面类型 |
-| tagEnabled | boolean | true | 标签功能开关 |
-| cateEnabled | boolean | true | 分类功能开关 |
-
 **章节来源**
-- [gitlabastroConfig.ts:30-53](file://src/adaptors/api/gitlab-astro/gitlabastroConfig.ts#L30-L53)
+- [commonGitlabApiAdaptor.ts:34-55](file://src/adaptors/api/base/gitlab/commonGitlabApiAdaptor.ts#L34-L55)
+- [useGitlabastroApi.ts:22-96](file://src/adaptors/api/gitlab-astro/useGitlabastroApi.ts#L22-L96)
 
-### YAML 转换器组件
+### YAML 处理流程
 
-YAML 转换器负责处理 Astro Frontmatter 的转换逻辑，确保文章内容符合 Astro 的要求。
-
-#### 转换流程图
+YAML 处理是 Astro 平台适配器的核心功能之一，涉及复杂的元数据转换：
 
 ```mermaid
-flowchart TD
-Start([开始转换]) --> ExtractYaml["提取 YAML Frontmatter"]
-ExtractYaml --> CheckExisting{"是否已有 YAML?"}
-CheckExisting --> |是| UseExisting["使用现有 YAML"]
-CheckExisting --> |否| InitDefault["初始化默认配置"]
-InitDefault --> SetTitle["设置标题"]
-SetTitle --> SetDesc["设置描述"]
-SetDesc --> SetDate["设置发布日期"]
-SetDate --> SetTags["设置标签"]
-SetTags --> SetCats["设置分类"]
-SetCats --> SetSEO["设置 SEO 字段"]
-SetSEO --> AddCustom["添加自定义字段"]
-UseExisting --> GenerateYaml["生成 YAML 格式"]
-AddCustom --> GenerateYaml
-GenerateYaml --> CombineContent["合并 Markdown 内容"]
-CombineContent --> End([转换完成])
+sequenceDiagram
+participant Post as Post 对象
+participant YamlConv as YAML 转换器
+participant YamlObj as YAML 对象
+participant MD as Markdown 内容
+Post->>YamlConv : convertToYaml()
+YamlConv->>YamlObj : 初始化 YAML 对象
+YamlConv->>YamlObj : 设置标题、描述、发布时间
+YamlConv->>YamlObj : 处理标签和分类
+YamlConv->>YamlObj : 应用动态 YAML 配置
+YamlObj->>YamlConv : 返回格式化 YAML
+YamlConv->>MD : 合并 YAML 和 Markdown
+MD->>YamlConv : 返回完整内容
+YamlConv-->>Post : 完成转换
 ```
 
 **图表来源**
 - [astroYamlConverterAdaptor.ts:25-99](file://src/adaptors/api/astro/astroYamlConverterAdaptor.ts#L25-L99)
 
-#### 转换规则
-
-| 字段名称 | 来源 | 处理方式 |
-|---------|------|----------|
-| title | Post.title | 直接复制 |
-| description | Post.mt_excerpt | 空值时设置为空字符串 |
-| pubDate | Post.dateCreated | 格式化为 yyyy-MM-dd |
-| tags | Post.mt_keywords | 逗号分隔转换为数组 |
-| categories | Post.categories | 直接复制 |
-| keywords | Post.mt_keywords | SEO 关键词 |
-
 **章节来源**
 - [astroYamlConverterAdaptor.ts:101-131](file://src/adaptors/api/astro/astroYamlConverterAdaptor.ts#L101-L131)
 
-### 用户界面组件
-
-用户界面组件提供了 GitLab Astro 平台的配置界面。
-
-#### 设置界面结构
-
-```mermaid
-graph TB
-subgraph "GitlabastroSetting.vue"
-Props[组件属性]
-I18n[国际化处理]
-Config[配置管理]
-Placeholder[占位符处理]
-Event[事件处理]
-end
-Props --> Config
-I18n --> Placeholder
-Config --> Placeholder
-Placeholder --> Event
-```
-
-**图表来源**
-- [GitlabastroSetting.vue:18-44](file://src/components/set/publish/singleplatform/gitlab/GitlabastroSetting.vue#L18-L44)
-
-**章节来源**
-- [GitlabastroSetting.vue:25-34](file://src/components/set/publish/singleplatform/gitlab/GitlabastroSetting.vue#L25-L34)
-
 ## 依赖关系分析
 
-GitLab Astro 适配器的依赖关系体现了清晰的分层架构设计。
+### 外部依赖
 
-### 依赖关系图
+GitLab Astro 适配器依赖于多个外部库和内部模块：
 
 ```mermaid
 graph TB
 subgraph "外部依赖"
-ZBA[zhi-blog-api]
-ZGC[zhi-gitlab-middleware]
-ZC[zhi-common]
-Lodash[lodash-es]
+ZBA[zhi-blog-api<br/>博客 API 接口]
+ZGC[zhi-gitlab-middleware<br/>GitLab 中间件]
+ZC[zhi-common<br/>通用工具库]
+Lodash[lodash-es<br/>工具函数库]
 end
 subgraph "内部模块"
-subgraph "适配器层"
-GA[gitlabastroApiAdaptor]
-GC[gitlabastroConfig]
-GY[gitlabastroYamlConverterAdaptor]
-GU[useGitlabastroApi]
+BaseApi[baseBlogApi<br/>基础博客 API]
+Logger[appLogger<br/>应用日志]
+Utils[utils<br/>工具函数]
+Store[stores<br/>状态管理]
 end
-subgraph "基础组件"
-CGA[commonGitlabApiAdaptor]
-CC[gitlabConstants]
-CP[commonGitlabPlaceholder]
+subgraph "适配器实现"
+GA[GitlabastroApiAdaptor]
+GY[GitlabastroYamlConverterAdaptor]
+GC[GitlabastroConfig]
 end
-subgraph "Astro 支持"
-AC[astroConfig]
-AY[astroYamlConverterAdaptor]
-end
-end
-GA --> CGA
-GA --> GY
-GA --> ZBA
-CGA --> ZGC
-CGA --> ZC
-GC --> AC
-GY --> AY
-GU --> GA
-GU --> GC
-GU --> GY
-AY --> ZC
-GY --> AY
-CGA --> CC
-CGA --> CP
+ZBA --> GA
+ZGC --> GA
+ZC --> GA
+Lodash --> GA
+BaseApi --> GA
+Logger --> GA
+Utils --> GA
+Store --> GA
+ZC --> GY
+Logger --> GY
+BaseApi --> GY
+ZBA --> GY
 ```
 
 **图表来源**
 - [gitlabastroApiAdaptor.ts:10-14](file://src/adaptors/api/gitlab-astro/gitlabastroApiAdaptor.ts#L10-L14)
 - [useGitlabastroApi.ts:10-20](file://src/adaptors/api/gitlab-astro/useGitlabastroApi.ts#L10-L20)
 
-### 关键依赖说明
+### 内部模块依赖
 
-1. **zhi-blog-api**: 提供博客 API 的基础接口定义
-2. **zhi-gitlab-middleware**: 提供 GitLab API 的中间件封装
-3. **zhi-common**: 提供通用工具函数和实用程序
-4. **lodash-es**: 提供函数式编程工具函数
+适配器系统内部模块之间的依赖关系清晰明确：
+
+```mermaid
+graph LR
+subgraph "配置层"
+CGC[CommonGitlabConfig]
+AC[AstroConfig]
+GC[GitlabastroConfig]
+end
+subgraph "适配器层"
+CGA[CommonGitlabApiAdaptor]
+GA[GitlabastroApiAdaptor]
+end
+subgraph "工具层"
+GY[AstroYamlConverterAdaptor]
+GYA[GitlabastroYamlConverterAdaptor]
+UC[useGitlabastroApi]
+end
+CGC --> AC
+AC --> GC
+CGC --> CGA
+CGA --> GA
+GY --> GYA
+GA --> GY
+UC --> GA
+UC --> GC
+UC --> GYA
+```
+
+**图表来源**
+- [commonGitlabConfig.ts:10-15](file://src/adaptors/api/base/gitlab/commonGitlabConfig.ts#L10-L15)
+- [astroConfig.ts:19-50](file://src/adaptors/api/astro/astroConfig.ts#L19-L50)
+- [commonGitlabApiAdaptor.ts:30-55](file://src/adaptors/api/base/gitlab/commonGitlabApiAdaptor.ts#L30-L55)
 
 **章节来源**
-- [gitlabastroApiAdaptor.ts:10-14](file://src/adaptors/api/gitlab-astro/gitlabastroApiAdaptor.ts#L10-L14)
-- [useGitlabastroApi.ts:10-20](file://src/adaptors/api/gitlab-astro/useGitlabastroApi.ts#L10-L20)
+- [gitlabConstants.ts:16-21](file://src/adaptors/api/base/gitlab/gitlabConstants.ts#L16-L21)
+- [GitlabastroSetting.vue:10-35](file://src/components/set/publish/singleplatform/gitlab/GitlabastroSetting.vue#L10-L35)
 
 ## 性能考虑
 
-GitLab Astro 适配器在设计时充分考虑了性能优化和用户体验。
+### 缓存策略
 
-### 性能优化策略
+适配器系统采用了多层次的缓存策略来优化性能：
 
-1. **异步操作**: 所有网络请求都采用异步处理，避免阻塞主线程
-2. **缓存机制**: 合理使用浏览器缓存和内存缓存
-3. **错误重试**: 实现智能的错误重试机制
-4. **资源复用**: 复用连接和客户端实例
+1. **配置缓存**：配置信息在首次加载后会被缓存，避免重复解析
+2. **API 连接复用**：GitLab 客户端连接会在会话期间复用
+3. **日志缓存**：频繁的日志操作会被批量处理
 
-### 错误处理机制
+### 异步处理
 
-```mermaid
-flowchart TD
-Request[发起请求] --> Try[执行操作]
-Try --> Success{操作成功?}
-Success --> |是| ReturnSuccess[返回成功结果]
-Success --> |否| Retry{是否可重试?}
-Retry --> |是| RetryOp[执行重试操作]
-Retry --> |否| HandleError[处理错误]
-RetryOp --> Success2{重试成功?}
-Success2 --> |是| ReturnSuccess
-Success2 --> |否| HandleError
-HandleError --> LogError[记录错误日志]
-LogError --> ThrowError[抛出异常]
-```
+所有网络操作都采用异步处理模式：
+- 文件上传和下载使用 Promise 链式调用
+- YAML 解析采用异步方法避免阻塞主线程
+- 错误处理包含超时机制
 
-**图表来源**
-- [commonGitlabApiAdaptor.ts:112-133](file://src/adaptors/api/base/gitlab/commonGitlabApiAdaptor.ts#L112-L133)
+### 内存管理
+
+- 使用 `toRaw` 函数避免 Vue 响应式系统的性能开销
+- 及时清理临时对象和大对象引用
+- 合理使用深拷贝避免数据污染
 
 ## 故障排除指南
 
 ### 常见问题及解决方案
 
 #### 认证失败
+**症状**：无法连接到 GitLab 服务器
+**原因**：
+- 令牌无效或过期
+- 用户名或仓库名称错误
+- 网络连接问题
 
-**问题症状**:
-- 发布时提示认证失败
-- 预览链接无法访问
+**解决方法**：
+1. 验证 GitLab 访问令牌的有效性
+2. 检查用户名和仓库配置
+3. 确认网络连接正常
 
-**解决步骤**:
-1. 检查 GitLab 访问令牌是否有效
-2. 验证仓库权限设置
-3. 确认中间件配置正确
+#### 文件上传失败
+**症状**：文章发布后无法找到对应文件
+**原因**：
+- 文件路径格式错误
+- 权限不足
+- 仓库分支问题
+
+**解决方法**：
+1. 检查文件路径是否符合 Astro 规范
+2. 验证用户对仓库的写入权限
+3. 确认目标分支存在且可写
+
+#### YAML 解析错误
+**症状**：文章内容显示异常或元数据丢失
+**原因**：
+- YAML 格式不正确
+- 字段类型不匹配
+- 编码问题
+
+**解决方法**：
+1. 验证 YAML 格式的正确性
+2. 检查字段类型和值范围
+3. 确认文件编码为 UTF-8
 
 **章节来源**
 - [commonGitlabApiAdaptor.ts:57-72](file://src/adaptors/api/base/gitlab/commonGitlabApiAdaptor.ts#L57-L72)
+- [gitlabastroApiAdaptor.ts:28-59](file://src/adaptors/api/gitlab-astro/gitlabastroApiAdaptor.ts#L28-L59)
 
-#### 文件上传失败
+### 调试技巧
 
-**问题症状**:
-- 图片上传成功但文章无法发布
-- 文件路径错误
-
-**解决步骤**:
-1. 检查目标路径是否存在
-2. 验证文件权限设置
-3. 确认文件名规则符合要求
-
-**章节来源**
-- [commonGitlabApiAdaptor.ts:94-136](file://src/adaptors/api/base/gitlab/commonGitlabApiAdaptor.ts#L94-L136)
-
-#### YAML 转换错误
-
-**问题症状**:
-- Frontmatter 格式不正确
-- 文章属性丢失
-
-**解决步骤**:
-1. 检查 YAML 语法格式
-2. 验证必需字段完整性
-3. 确认字段类型正确性
-
-**章节来源**
-- [astroYamlConverterAdaptor.ts:25-99](file://src/adaptors/api/astro/astroYamlConverterAdaptor.ts#L25-L99)
+1. **启用详细日志**：通过配置日志级别获取详细的调试信息
+2. **检查网络请求**：使用浏览器开发者工具监控 API 调用
+3. **验证配置**：使用配置验证工具检查配置文件的正确性
+4. **测试连接**：使用认证检查功能验证连接状态
 
 ## 结论
 
-GitLab Astro 平台适配器是一个设计精良、功能完整的发布组件，具有以下特点：
+GitLab Astro 平台适配器是一个设计精良、功能完整的发布系统组件。它成功地将 Siyuan 笔记内容转换为 Astro 平台兼容的格式，提供了完整的发布生命周期管理。
 
-### 技术优势
+### 主要优势
 
-1. **模块化设计**: 清晰的组件分离，便于维护和扩展
-2. **类型安全**: 使用 TypeScript 提供完整的类型检查
-3. **异步处理**: 采用现代异步编程模式
-4. **错误处理**: 完善的错误处理和恢复机制
+1. **模块化设计**：清晰的分层架构便于维护和扩展
+2. **配置灵活**：支持多种配置来源和动态配置
+3. **功能完整**：涵盖发布、编辑、删除、预览等所有必要功能
+4. **性能优化**：采用异步处理和缓存策略提升用户体验
 
-### 功能特性
+### 技术特点
 
-1. **完整的 Astro 支持**: 符合 Astro Frontmatter 规范
-2. **灵活的配置管理**: 支持多种配置方式和环境变量
-3. **用户友好的界面**: 提供直观的配置和使用体验
-4. **强大的扩展性**: 易于添加新的平台支持
+- 基于 TypeScript 的强类型支持
+- 采用现代前端框架的最佳实践
+- 完善的错误处理和日志记录
+- 良好的可测试性和可维护性
 
-### 应用价值
-
-该适配器为思源笔记用户提供了便捷的 GitLab Astro 内容发布解决方案，简化了复杂的技术配置，让用户能够专注于内容创作。通过标准化的接口设计和完善的错误处理机制，确保了系统的稳定性和可靠性。
-
-在未来的发展中，该适配器可以进一步扩展支持更多的静态站点生成器，为用户提供更丰富的发布选项。
+该适配器为 Siyuan Publisher 插件提供了强大的 GitLab Astro 发布能力，是构建现代化知识管理和内容发布工作流的重要基础设施。

@@ -1,6 +1,6 @@
 import { computed, reactive } from "vue"
 import { JsonUtil } from "zhi-common"
-import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
+import { usePlatformDefine } from "~/src/composables/usePlatformDefine.ts"
 import {
   deletePlatformByKey,
   DynamicConfig,
@@ -10,8 +10,8 @@ import {
   setDynamicJsonCfg,
   SubPlatformType,
 } from "~/src/platforms/dynamicConfig.ts"
+import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
-import { usePlatformDefine } from "~/src/composables/usePlatformDefine.ts"
 
 export type V2SettingsSection = "account" | "picbed" | "preference"
 export type V2AccountView = "list" | "select" | "config"
@@ -23,6 +23,8 @@ export interface V2AccountItem {
   isEnabled: boolean
   isAuth: boolean
   statusText: string
+  statusType: "success" | "warning" | "error" | "neutral"
+  statusLabel: string
 }
 
 export interface V2SelectablePlatform {
@@ -80,20 +82,44 @@ export const useV2Settings = () => {
 
     state.accountItems = dynamicConfigArray
       .filter((item) => item.platformType !== PlatformType.System)
-      .map((item) => ({
-        platformKey: item.platformKey,
-        platformName: item.platformName,
-        platformIcon: item.platformIcon,
-        isEnabled: item.isEnabled === true,
-        isAuth: item.isAuth === true,
-        statusText: item.isEnabled
-          ? item.isAuth
-            ? "已启用 · 已授权"
-            : "已启用 · 未授权"
-          : item.isAuth
-          ? "未启用 · 已授权"
-          : "未启用 · 未授权",
-      }))
+      .map((item) => {
+        const isEnabled = item.isEnabled === true
+        const isAuth = item.isAuth === true
+        
+        // 根据状态确定类型和标签
+        let statusType: "success" | "warning" | "error" | "neutral" = "neutral"
+        let statusLabel = ""
+        let statusText = ""
+        
+        if (isEnabled && isAuth) {
+          statusType = "success"
+          statusLabel = "运行中"
+          statusText = "已启用 · 已授权"
+        } else if (isEnabled && !isAuth) {
+          statusType = "warning"
+          statusLabel = "需授权"
+          statusText = "已启用 · 未授权"
+        } else if (!isEnabled && isAuth) {
+          statusType = "neutral"
+          statusLabel = "已禁用"
+          statusText = "未启用 · 已授权"
+        } else {
+          statusType = "error"
+          statusLabel = "未启用"
+          statusText = "未启用 · 未授权"
+        }
+        
+        return {
+          platformKey: item.platformKey,
+          platformName: item.platformName,
+          platformIcon: item.platformIcon,
+          isEnabled,
+          isAuth,
+          statusText,
+          statusType,
+          statusLabel,
+        }
+      })
   }
 
   const setSection = async (section: V2SettingsSection) => {

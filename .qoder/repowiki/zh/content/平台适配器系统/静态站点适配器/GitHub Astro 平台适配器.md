@@ -6,15 +6,12 @@
 - [astroConfig.ts](file://src/adaptors/api/astro/astroConfig.ts)
 - [useAstroApi.ts](file://src/adaptors/api/astro/useAstroApi.ts)
 - [astroYamlConverterAdaptor.ts](file://src/adaptors/api/astro/astroYamlConverterAdaptor.ts)
+- [astroPlaceholder.ts](file://src/adaptors/api/astro/astroPlaceholder.ts)
 - [commonGithubApiAdaptor.ts](file://src/adaptors/api/base/github/commonGithubApiAdaptor.ts)
 - [commonGithubConfig.ts](file://src/adaptors/api/base/github/commonGithubConfig.ts)
 - [commonBlogConfig.ts](file://src/adaptors/api/base/commonBlogConfig.ts)
+- [baseBlogApi.ts](file://src/adaptors/api/base/baseBlogApi.ts)
 - [AstroSetting.vue](file://src/components/set/publish/singleplatform/github/AstroSetting.vue)
-- [README_zh_CN.md](file://README_zh_CN.md)
-- [spec.md](file://openspec/specs/github-astro/spec.md)
-- [design.md](file://openspec/changes/archive/2026-04-02-astro-full-support/design.md)
-- [proposal.md](file://openspec/changes/archive/2026-04-02-astro-full-support/proposal.md)
-- [tasks.md](file://openspec/changes/archive/2026-04-02-astro-full-support/tasks.md)
 - [package.json](file://package.json)
 </cite>
 
@@ -31,389 +28,329 @@
 
 ## 简介
 
-GitHub Astro 平台适配器是 Siyuan 笔记发布工具中的一个重要组件，专门用于将思源笔记内容发布到基于 GitHub 的 Astro 静态网站生成器项目中。该适配器实现了完整的 Astro Frontmatter 格式支持，包括 YAML 头信息的生成、解析和管理。
+GitHub Astro 平台适配器是 Siyuan Plugin Publisher 插件中的一个专门模块，用于将 Siyuan 笔记内容发布到基于 GitHub 的 Astro 博客平台。该适配器基于通用的 GitHub API 适配器构建，专门为 Astro 平台的 Markdown 和 YAML Front Matter 格式进行了优化。
 
-Astro 是一个现代化的静态站点生成器，以其出色的性能和开发体验而闻名。通过这个适配器，用户可以将思源笔记中的内容无缝发布到 Astro 项目中，享受其现代化的构建性能和开发体验。
+Astro 是一个静态站点生成器，支持多种内容格式，包括 Markdown 和 Astro 组件。该适配器通过 GitHub API 实现内容的创建、编辑、删除和预览功能，同时处理 YAML Front Matter 的转换和管理。
 
 ## 项目结构
 
-GitHub Astro 平台适配器位于项目的适配器模块中，采用清晰的分层架构设计：
+GitHub Astro 平台适配器位于插件的适配器架构中，采用模块化设计，遵循统一的适配器模式：
 
 ```mermaid
 graph TB
-subgraph "适配器核心模块"
-A[src/adaptors/api/astro/]
-B[src/adaptors/api/base/github/]
-C[src/adaptors/api/base/]
+subgraph "适配器架构"
+subgraph "基础层"
+BaseBlogApi[BaseBlogApi 基类]
+CommonBlogConfig[CommonBlogConfig]
 end
-subgraph "配置模块"
-D[src/components/set/publish/singleplatform/github/]
+subgraph "GitHub 基础层"
+CommonGithubApiAdaptor[CommonGithubApiAdaptor]
+CommonGithubConfig[CommonGithubConfig]
 end
-subgraph "规范文档"
-E[openspec/specs/github-astro/]
-F[openspec/changes/.../2026-04-02-astro-full-support/]
+subgraph "Astro 适配器层"
+AstroApiAdaptor[AstroApiAdaptor]
+AstroConfig[AstroConfig]
+AstroYamlConverterAdaptor[AstroYamlConverterAdaptor]
+AstroPlaceholder[AstroPlaceholder]
 end
-A --> B
-A --> C
-D --> A
-E --> A
-F --> A
+subgraph "前端界面层"
+AstroSetting[AstroSetting.vue]
+end
+end
+BaseBlogApi --> CommonBlogConfig
+CommonBlogConfig --> CommonGithubConfig
+CommonGithubApiAdaptor --> CommonGithubConfig
+AstroApiAdaptor --> CommonGithubApiAdaptor
+AstroConfig --> CommonGithubConfig
+AstroYamlConverterAdaptor --> AstroApiAdaptor
+AstroSetting --> AstroApiAdaptor
 ```
 
 **图表来源**
-- [astroApiAdaptor.ts:1-62](file://src/adaptors/api/astro/astroApiAdaptor.ts#L1-L62)
-- [commonGithubApiAdaptor.ts:1-352](file://src/adaptors/api/base/github/commonGithubApiAdaptor.ts#L1-L352)
+- [astroApiAdaptor.ts:23-62](file://src/adaptors/api/astro/astroApiAdaptor.ts#L23-L62)
+- [commonGithubApiAdaptor.ts:28-47](file://src/adaptors/api/base/github/commonGithubApiAdaptor.ts#L28-L47)
+- [astroConfig.ts:19-51](file://src/adaptors/api/astro/astroConfig.ts#L19-L51)
 
 **章节来源**
 - [astroApiAdaptor.ts:1-62](file://src/adaptors/api/astro/astroApiAdaptor.ts#L1-L62)
+- [commonGithubApiAdaptor.ts:1-352](file://src/adaptors/api/base/github/commonGithubApiAdaptor.ts#L1-L352)
 - [astroConfig.ts:1-54](file://src/adaptors/api/astro/astroConfig.ts#L1-L54)
-- [useAstroApi.ts:1-96](file://src/adaptors/api/astro/useAstroApi.ts#L1-L96)
 
 ## 核心组件
 
-GitHub Astro 平台适配器由四个核心组件构成，形成了完整的适配器体系：
+### Astro API 适配器
 
-### 1. API 适配器 (AstroApiAdaptor)
-负责处理与 GitHub API 的交互，包括文章的创建、编辑、删除和预览功能。
+Astro API 适配器继承自通用 GitHub API 适配器，专门处理 Astro 平台的特殊需求：
 
-### 2. 配置类 (AstroConfig)
-管理 Astro 平台特有的配置参数，包括仓库信息、分支设置、文件命名规则等。
+- **YAML 转换器集成**：重写 `getYamlAdaptor()` 方法，返回 Astro 专用的 YAML 转换器
+- **内容预处理**：在发布前自动处理 YAML Front Matter 和 Markdown 内容
+- **格式兼容性**：根据页面类型选择 Markdown 或 HTML 作为发布内容
 
-### 3. YAML 转换器 (AstroYamlConverterAdaptor)
-专门处理 Astro Frontmatter 格式的 YAML 内容，实现标题、描述、发布时间等字段的转换。
+### Astro 配置管理
 
-### 4. 使用函数 (useAstroApi)
-提供统一的初始化入口，负责配置加载、依赖注入和实例创建。
+Astro 配置类继承自通用 GitHub 配置，针对 Astro 平台设置了特定的默认值：
+
+- **默认存储路径**：`src/content/blog`
+- **文件命名规则**：`[slug].md`
+- **图像存储位置**：`public/images`
+- **标签和分类支持**：启用多分类和标签功能
+- **知识空间限制**：固定发布目录，不支持动态修改
+
+### YAML 转换器
+
+Astro YAML 转换器负责处理 YAML Front Matter 的转换：
+
+- **字段映射**：标题、描述、发布时间、标签、分类等字段的双向转换
+- **日期格式化**：支持 ISO 8601 格式的日期转换
+- **动态配置支持**：允许用户自定义额外的 YAML 字段
 
 **章节来源**
-- [astroApiAdaptor.ts:16-60](file://src/adaptors/api/astro/astroApiAdaptor.ts#L16-L60)
-- [astroConfig.ts:13-51](file://src/adaptors/api/astro/astroConfig.ts#L13-L51)
-- [astroYamlConverterAdaptor.ts:15-135](file://src/adaptors/api/astro/astroYamlConverterAdaptor.ts#L15-L135)
-- [useAstroApi.ts:22-96](file://src/adaptors/api/astro/useAstroApi.ts#L22-L96)
+- [astroApiAdaptor.ts:24-59](file://src/adaptors/api/astro/astroApiAdaptor.ts#L24-L59)
+- [astroConfig.ts:20-50](file://src/adaptors/api/astro/astroConfig.ts#L20-L50)
+- [astroYamlConverterAdaptor.ts:25-99](file://src/adaptors/api/astro/astroYamlConverterAdaptor.ts#L25-L99)
 
 ## 架构概览
 
-GitHub Astro 平台适配器采用了基于继承的设计模式，充分利用了现有的 GitHub 平台基础设施：
+GitHub Astro 平台适配器采用分层架构设计，确保了代码的可维护性和扩展性：
 
 ```mermaid
 classDiagram
 class BaseBlogApi {
-<<abstract>>
-+checkAuth() Promise~boolean~
-+getUsersBlogs() Promise~UserBlog[]~
-+newPost(post, publish) Promise~string~
-+getPost(postid, useSlug) Promise~Post~
-+editPost(postid, post, publish) Promise~boolean~
-+deletePost(postid) Promise~boolean~
-+getYamlAdaptor() YamlConvertAdaptor
++appInstance : PublisherAppInstance
++cfg : BlogConfig
++logger : ILogger
++checkAuth() : Promise~boolean~
++getYamlAdaptor() : YamlConvertAdaptor
++preEditPost(post, id, publishCfg) : Promise~Post~
++apiFetch() : Promise
++apiFormFetch() : Promise
+}
+class CommonBlogConfig {
++placeholder : CommonBlogPlaceholder
++home : string
++apiUrl : string
++username : string
++password : string
++pageType : PageTypeEnum
++middlewareUrl : string
 }
 class CommonGithubApiAdaptor {
--githubClient : CommonGithubClient
-+checkAuth() Promise~boolean~
-+newPost(post) Promise~string~
-+getPost(postid) Promise~Post~
-+editPost(postid, post) Promise~boolean~
-+deletePost(postid) Promise~boolean~
-+getCategoryTreeNodes(docPath) Promise~any[]~
-+getPreviewUrl(postid) Promise~string~
-+newMediaObject(mediaObject) Promise~Attachment~
++githubClient : CommonGithubClient
++checkAuth() : Promise~boolean~
++newPost(post, publish) : Promise~string~
++editPost(postid, post, publish) : Promise~boolean~
++deletePost(postid) : Promise~boolean~
++getPost(postid, useSlug) : Promise~Post~
++getUsersBlogs() : Promise~UserBlog[]~
++getPreviewUrl(postid) : Promise~string~
++newMediaObject(mediaObject) : Promise~Attachment~
 }
-class AstroApiAdaptor {
-+getYamlAdaptor() YamlConvertAdaptor
-+preEditPost(post, id, publishCfg) Promise~Post~
-}
-class AstroConfig {
+class CommonGithubConfig {
 +githubRepo : string
 +githubBranch : string
 +defaultPath : string
 +mdFilenameRule : string
-+imageStorePath : string
-+imageLinkPath : string
++previewUrl : string
++previewPostUrl : string
+}
+class AstroApiAdaptor {
++getYamlAdaptor() : YamlConvertAdaptor
++preEditPost(post, id, publishCfg) : Promise~Post~
+}
+class AstroConfig {
++defaultPath : "src/content/blog"
++mdFilenameRule : "[slug].md"
++imageStorePath : "public/images"
++tagEnabled : true
++cateEnabled : true
++knowledgeSpaceEnabled : true
 }
 class AstroYamlConverterAdaptor {
-+convertToYaml(post, yamlFormatObj, cfg) YamlFormatObj
-+convertToAttr(post, yamlFormatObj, cfg) Post
++convertToYaml(post, yamlFormatObj, cfg) : YamlFormatObj
++convertToAttr(post, yamlFormatObj, cfg) : Post
 }
 BaseBlogApi <|-- CommonGithubApiAdaptor
-CommonGithubApiAdaptor <|-- AstroApiAdaptor
 CommonBlogConfig <|-- CommonGithubConfig
+CommonGithubApiAdaptor <|-- AstroApiAdaptor
 CommonGithubConfig <|-- AstroConfig
-YamlConvertAdaptor <|-- AstroYamlConverterAdaptor
+AstroApiAdaptor --> AstroYamlConverterAdaptor
 ```
 
 **图表来源**
-- [commonGithubApiAdaptor.ts:28-352](file://src/adaptors/api/base/github/commonGithubApiAdaptor.ts#L28-L352)
-- [astroApiAdaptor.ts:23-60](file://src/adaptors/api/astro/astroApiAdaptor.ts#L23-L60)
-- [commonGithubConfig.ts:17-112](file://src/adaptors/api/base/github/commonGithubConfig.ts#L17-L112)
-- [astroConfig.ts:19-51](file://src/adaptors/api/astro/astroConfig.ts#L19-L51)
-- [astroYamlConverterAdaptor.ts:22-135](file://src/adaptors/api/astro/astroYamlConverterAdaptor.ts#L22-L135)
+- [baseBlogApi.ts:27-54](file://src/adaptors/api/base/baseBlogApi.ts#L27-L54)
+- [commonBlogConfig.ts:13-41](file://src/adaptors/api/base/commonBlogConfig.ts#L13-L41)
+- [commonGithubApiAdaptor.ts:28-47](file://src/adaptors/api/base/github/commonGithubApiAdaptor.ts#L28-L47)
+- [commonGithubConfig.ts:17-108](file://src/adaptors/api/base/github/commonGithubConfig.ts#L17-L108)
+- [astroApiAdaptor.ts:23-26](file://src/adaptors/api/astro/astroApiAdaptor.ts#L23-L26)
+- [astroConfig.ts:19-50](file://src/adaptors/api/astro/astroConfig.ts#L19-L50)
+- [astroYamlConverterAdaptor.ts:22-99](file://src/adaptors/api/astro/astroYamlConverterAdaptor.ts#L22-L99)
 
 ## 详细组件分析
 
-### Astro API 适配器分析
+### API 初始化流程
 
-Astro API 适配器继承自通用 GitHub API 适配器，主要扩展了对 Astro Frontmatter 格式的支持：
+当用户使用 Astro 平台进行内容发布时，系统会执行以下初始化流程：
 
 ```mermaid
 sequenceDiagram
-participant Client as 客户端
-participant Adapter as AstroApiAdaptor
-participant BaseAdapter as CommonGithubApiAdaptor
-participant GitHub as GitHub API
-participant YAML as AstroYamlConverterAdaptor
-Client->>Adapter : preEditPost(post, id, publishCfg)
-Adapter->>BaseAdapter : super.preEditPost(post, id, publishCfg)
-BaseAdapter-->>Adapter : 处理后的Post
-Adapter->>Adapter : 提取YAML Frontmatter
-Adapter->>YAML : 使用YamlUtil.extractFrontmatter()
-YAML-->>Adapter : 返回YFM和Markdown内容
-Adapter->>Adapter : 处理Astro特定内容
-Adapter->>Adapter : 更新Markdown格式
-Adapter->>Adapter : 设置发布格式
-Adapter->>Adapter : 根据PageTypeEnum选择Markdown或HTML
-Adapter-->>Client : 返回处理后的Post
+participant User as 用户
+participant AstroSetting as AstroSetting.vue
+participant useAstroApi as useAstroApi
+participant AstroConfig as AstroConfig
+participant AstroYamlConverterAdaptor as YAML转换器
+participant AstroApiAdaptor as API适配器
+User->>AstroSetting : 选择 Astro 平台
+AstroSetting->>useAstroApi : 调用 useAstroApi()
+useAstroApi->>useAstroApi : 读取配置或环境变量
+useAstroApi->>AstroConfig : 创建配置实例
+useAstroApi->>AstroYamlConverterAdaptor : 创建 YAML 转换器
+useAstroApi->>AstroApiAdaptor : 创建 API 适配器
+useAstroApi-->>AstroSetting : 返回配置、转换器和适配器
+AstroSetting-->>User : 显示配置界面
+```
+
+**图表来源**
+- [useAstroApi.ts:22-96](file://src/adaptors/api/astro/useAstroApi.ts#L22-L96)
+- [AstroSetting.vue:24-32](file://src/components/set/publish/singleplatform/github/AstroSetting.vue#L24-L32)
+
+### 内容发布流程
+
+Astro 平台的内容发布流程包含多个步骤，确保内容正确转换和发布：
+
+```mermaid
+flowchart TD
+Start([开始发布]) --> LoadConfig["加载 Astro 配置"]
+LoadConfig --> InitAdaptor["初始化 API 适配器"]
+InitAdaptor --> PreProcess["预处理内容<br/>提取 YAML Front Matter"]
+PreProcess --> ConvertYaml["转换 YAML 字段<br/>标题、描述、标签、分类"]
+ConvertYaml --> FormatContent["格式化发布内容<br/>Markdown 或 HTML"]
+FormatContent --> UploadMedia["上传媒体文件<br/>图片到 public/images"]
+UploadMedia --> CreateFile["创建 Markdown 文件<br/>src/content/blog/[slug].md"]
+CreateFile --> Success([发布成功])
+PreProcess --> ExtractYaml["提取现有 YAML"]
+ExtractYaml --> MergeContent["合并内容"]
+MergeContent --> ConvertYaml
 ```
 
 **图表来源**
 - [astroApiAdaptor.ts:28-59](file://src/adaptors/api/astro/astroApiAdaptor.ts#L28-L59)
+- [astroYamlConverterAdaptor.ts:25-99](file://src/adaptors/api/astro/astroYamlConverterAdaptor.ts#L25-L99)
 - [commonGithubApiAdaptor.ts:86-128](file://src/adaptors/api/base/github/commonGithubApiAdaptor.ts#L86-L128)
 
-#### 关键特性
+### 配置管理机制
 
-1. **YAML Frontmatter 处理**：自动提取和处理 Astro 格式的 YAML 头信息
-2. **智能内容重组**：确保 YAML 和 Markdown 内容的正确组合
-3. **格式适配**：根据页面类型动态选择 Markdown 或 HTML 格式
-4. **继承扩展**：利用父类的 GitHub 集成功能
+Astro 平台的配置管理采用了灵活的设计，支持多种配置来源：
 
-**章节来源**
-- [astroApiAdaptor.ts:16-60](file://src/adaptors/api/astro/astroApiAdaptor.ts#L16-L60)
-
-### Astro 配置类分析
-
-Astro 配置类提供了平台特定的配置参数，确保与 Astro 项目的兼容性：
-
-| 配置项 | 默认值 | 说明 |
-|--------|--------|------|
-| `defaultPath` | `"src/content/blog"` | 默认文章存储路径 |
-| `mdFilenameRule` | `"[slug].md"` | Markdown 文件命名规则 |
-| `imageStorePath` | `"public/images"` | 图片存储路径 |
-| `imageLinkPath` | `"/images"` | 图片链接路径 |
-| `pageType` | `PageTypeEnum.Markdown` | 页面类型设置 |
-| `tagEnabled` | `true` | 标签功能启用 |
-| `cateEnabled` | `true` | 分类功能启用 |
+| 配置来源 | 优先级 | 用途 | 示例 |
+|---------|--------|------|------|
+| 用户配置 | 最高 | 手动设置的平台配置 | GitHub 用户名、仓库名 |
+| 环境变量 | 中等 | 默认配置值 | VITE_GITHUB_USERNAME |
+| 默认值 | 最低 | 固定的平台特性 | 发布目录、文件命名规则 |
 
 **章节来源**
-- [astroConfig.ts:19-51](file://src/adaptors/api/astro/astroConfig.ts#L19-L51)
-
-### YAML 转换器分析
-
-Astro YAML 转换器实现了 Astro Frontmatter 格式的双向转换：
-
-```mermaid
-flowchart TD
-Start([开始转换]) --> CheckYaml{"是否有现有YAML?"}
-CheckYaml --> |否| InitYaml["初始化YamlFormatObj"]
-CheckYaml --> |是| UseExisting["使用现有YAML"]
-InitYaml --> SetTitle["设置标题"]
-SetTitle --> SetDesc["设置描述"]
-SetDesc --> SetPubDate["设置发布日期"]
-SetPubDate --> SetTags["设置标签"]
-SetTags --> SetCats["设置分类"]
-SetCats --> SetSEO["设置SEO关键词"]
-SetSEO --> AddDynYaml["添加动态YAML配置"]
-UseExisting --> ConvertBack["转换回Post对象"]
-AddDynYaml --> GenerateYaml["生成YAML字符串"]
-GenerateYaml --> CombineContent["组合Markdown内容"]
-CombineContent --> ReturnObj["返回YamlFormatObj"]
-ConvertBack --> UpdatePost["更新Post属性"]
-UpdatePost --> ReturnPost["返回Post对象"]
-```
-
-**图表来源**
-- [astroYamlConverterAdaptor.ts:25-99](file://src/adaptors/api/astro/astroYamlConverterAdaptor.ts#L25-L99)
-- [astroYamlConverterAdaptor.ts:101-131](file://src/adaptors/api/astro/astroYamlConverterAdaptor.ts#L101-L131)
-
-#### 字段映射规则
-
-| YAML 字段 | Post 属性 | 映射规则 |
-|-----------|-----------|----------|
-| `title` | `post.title` | 直接映射 |
-| `description` | `post.mt_excerpt` | 直接映射 |
-| `pubDate` | `post.dateCreated` | ISO 8601 格式转换 |
-| `tags` | `post.mt_keywords` | 数组转逗号分隔字符串 |
-| `categories` | `post.categories` | 直接映射 |
-| `keywords` | `post.mt_keywords` | SEO 关键词映射 |
-
-**章节来源**
-- [astroYamlConverterAdaptor.ts:15-135](file://src/adaptors/api/astro/astroYamlConverterAdaptor.ts#L15-L135)
-
-### 使用函数分析
-
-useAstroApi 函数提供了统一的初始化入口，负责配置管理和实例创建：
-
-```mermaid
-sequenceDiagram
-participant Caller as 调用者
-participant Hook as useAstroApi
-participant Store as usePublishSettingStore
-participant Config as AstroConfig
-participant YAML as AstroYamlConverterAdaptor
-participant Adapter as AstroApiAdaptor
-Caller->>Hook : 调用useAstroApi(key, newCfg?)
-Hook->>Hook : 创建应用日志记录器
-alt 使用传入配置
-Hook->>Hook : 使用newCfg参数
-else 从配置中获取
-Hook->>Store : getSetting()
-Store-->>Hook : 返回配置数据
-Hook->>Hook : 解析JSON配置
-alt 配置为空
-Hook->>Hook : 使用环境变量创建默认配置
-else 配置存在
-Hook->>Hook : 使用现有配置
-end
-end
-Hook->>Hook : 初始化posidKey
-Hook->>YAML : 创建AstroYamlConverterAdaptor实例
-Hook->>Adapter : 创建AstroApiAdaptor实例
-Hook-->>Caller : 返回{cfg, yamlAdaptor, blogApi}
-```
-
-**图表来源**
-- [useAstroApi.ts:22-96](file://src/adaptors/api/astro/useAstroApi.ts#L22-L96)
-
-**章节来源**
-- [useAstroApi.ts:22-96](file://src/adaptors/api/astro/useAstroApi.ts#L22-L96)
+- [useAstroApi.ts:32-61](file://src/adaptors/api/astro/useAstroApi.ts#L32-L61)
+- [astroConfig.ts:27-50](file://src/adaptors/api/astro/astroConfig.ts#L27-L50)
 
 ## 依赖关系分析
 
-GitHub Astro 平台适配器依赖于多个核心库和模块：
+GitHub Astro 平台适配器依赖于多个核心库和框架：
 
 ```mermaid
 graph TB
-subgraph "外部依赖"
-A[zhi-blog-api]
-B[zhi-common]
-C[zhi-github-middleware]
-D[lodash-es]
-E[element-plus]
+subgraph "核心依赖"
+ZhiBlogApi[zhi-blog-api]
+ZhiCommon[zhi-common]
+ZhiGithubMiddleware[zhi-github-middleware]
 end
-subgraph "内部模块"
-F[PublisherAppInstance]
-G[usePublishSettingStore]
-H[JsonUtil]
-I[StrUtil]
-J[YamlUtil]
+subgraph "前端框架"
+Vue3[vue@3.5.24]
+ElementPlus[element-plus@2.11.8]
+Pinia[pinia@3.0.4]
 end
-subgraph "适配器组件"
-K[AstroApiAdaptor]
-L[AstroConfig]
-M[AstroYamlConverterAdaptor]
-N[CommonGithubApiAdaptor]
+subgraph "工具库"
+Lodash[lodash-es@4.17.23]
+JsBase64[js-base64@3.7.8]
+CryptoJS[crypto-js@4.2.0]
 end
-A --> K
-B --> M
-C --> N
-D --> K
-E --> O[AstroSetting.vue]
-F --> K
-G --> O
-H --> O
-I --> O
-J --> M
-K --> N
-L --> N
-M --> K
+subgraph "Astro 特定"
+AstroYaml[Front Matter YAML]
+Markdown[Markdown 格式]
+end
+AstroApiAdaptor --> ZhiBlogApi
+AstroApiAdaptor --> ZhiGithubMiddleware
+AstroYamlConverterAdaptor --> ZhiCommon
+CommonGithubApiAdaptor --> Vue3
+CommonGithubApiAdaptor --> ElementPlus
 ```
 
 **图表来源**
 - [package.json:32-68](file://package.json#L32-L68)
 - [astroApiAdaptor.ts:10-14](file://src/adaptors/api/astro/astroApiAdaptor.ts#L10-L14)
-- [useAstroApi.ts:10-20](file://src/adaptors/api/astro/useAstroApi.ts#L10-L20)
-
-### 核心依赖说明
-
-1. **zhi-blog-api**: 提供博客 API 接口定义和基础类型
-2. **zhi-common**: 提供通用工具函数和实用程序
-3. **zhi-github-middleware**: 提供 GitHub API 客户端封装
-4. **lodash-es**: 提供函数式编程工具函数
-5. **element-plus**: 提供 Vue 3 组件库支持
+- [commonGithubApiAdaptor.ts:10-18](file://src/adaptors/api/base/github/commonGithubApiAdaptor.ts#L10-L18)
 
 **章节来源**
-- [package.json:32-68](file://package.json#L32-L68)
+- [package.json:1-102](file://package.json#L1-L102)
+- [astroApiAdaptor.ts:10-14](file://src/adaptors/api/astro/astroApiAdaptor.ts#L10-L14)
 
 ## 性能考虑
 
-GitHub Astro 平台适配器在设计时充分考虑了性能优化：
+### 缓存策略
 
-### 1. 缓存策略
-- 使用深拷贝避免意外的数据修改
-- 合理的配置缓存机制减少重复初始化
+- **日志缓存**：使用应用日志记录器减少重复的日志输出
+- **配置缓存**：配置对象在初始化后保持不变，避免重复解析
+- **媒体文件缓存**：GitHub API 支持文件去重，避免重复上传
 
-### 2. 异步处理
-- 所有网络请求都采用异步处理
-- 使用 Promise 链式调用提高代码可读性
+### 异步处理
 
-### 3. 内存管理
-- 及时释放不再使用的对象引用
-- 避免内存泄漏的常见陷阱
+- **并发操作**：文件上传和 API 调用采用异步处理，提高响应速度
+- **错误恢复**：提供重试机制，在网络不稳定时自动重试
+- **进度反馈**：通过日志系统提供实时的操作状态反馈
 
-### 4. 错误处理
-- 完善的错误捕获和处理机制
-- 提供详细的调试日志信息
+### 内存管理
+
+- **对象克隆**：使用深拷贝避免意外的数据污染
+- **资源清理**：及时释放不再使用的临时对象和缓冲区
 
 ## 故障排除指南
 
 ### 常见问题及解决方案
 
-#### 1. 认证失败
-**症状**: `checkAuth` 返回 false
-**解决方案**: 
-- 检查 GitHub 访问令牌的有效性
-- 确认仓库权限设置正确
-- 验证网络连接状态
+| 问题类型 | 症状 | 可能原因 | 解决方案 |
+|---------|------|----------|----------|
+| 认证失败 | 发布时提示权限不足 | GitHub Token 无效或过期 | 检查并更新 GitHub Personal Access Token |
+| 文件路径错误 | 发布到错误的目录 | 知识空间配置不正确 | 确认发布目录设置为固定值 |
+| YAML 解析错误 | 内容发布格式异常 | YAML Front Matter 格式错误 | 检查 YAML 字段格式和缩进 |
+| 图片上传失败 | 媒体文件无法访问 | 图片路径或权限问题 | 验证 public/images 目录权限 |
 
-#### 2. 文件发布失败
-**症状**: `newPost` 或 `editPost` 抛出异常
-**解决方案**:
-- 检查目标路径的写入权限
-- 验证文件名规则的合法性
-- 确认仓库分支状态
+### 调试方法
 
-#### 3. YAML 转换错误
-**症状**: YAML 解析或生成失败
-**解决方案**:
-- 检查 YAML 格式的正确性
-- 验证字段映射关系
-- 查看详细的错误日志
-
-#### 4. 预览链接无效
-**症状**: 预览 URL 无法访问
-**解决方案**:
-- 检查预览 URL 模板配置
-- 验证 GitHub Pages 设置
-- 确认部署状态
+1. **启用详细日志**：检查控制台输出的详细日志信息
+2. **验证配置**：确认所有必需的配置项都已正确设置
+3. **测试连接**：使用认证检查功能验证 GitHub 连接
+4. **查看网络请求**：监控 API 调用和响应状态
 
 **章节来源**
 - [commonGithubApiAdaptor.ts:49-64](file://src/adaptors/api/base/github/commonGithubApiAdaptor.ts#L49-L64)
-- [commonGithubApiAdaptor.ts:165-210](file://src/adaptors/api/base/github/commonGithubApiAdaptor.ts#L165-L210)
+- [useAstroApi.ts:22-96](file://src/adaptors/api/astro/useAstroApi.ts#L22-L96)
 
 ## 结论
 
-GitHub Astro 平台适配器是一个设计精良、功能完整的组件，它成功地将思源笔记与 Astro 静态网站生成器进行了无缝集成。通过采用清晰的分层架构和继承设计模式，该适配器不仅保持了代码的可维护性，还充分利用了现有的 GitHub 平台基础设施。
+GitHub Astro 平台适配器是一个高度模块化的发布组件，具有以下特点：
 
-### 主要优势
+### 设计优势
 
-1. **完整的 Astro 支持**: 提供了对 Astro Frontmatter 格式的全面支持
-2. **易于扩展**: 基于继承的设计使得新平台的添加变得简单
-3. **配置灵活**: 支持多种配置方式，包括环境变量和用户设置
-4. **错误处理完善**: 提供了健壮的错误处理和调试机制
+- **层次清晰**：采用分层架构，职责分离明确
+- **扩展性强**：基于接口设计，易于添加新的平台支持
+- **配置灵活**：支持多种配置来源，适应不同使用场景
+- **错误处理完善**：提供完整的错误处理和恢复机制
 
-### 技术亮点
+### 技术特色
 
-1. **模块化设计**: 清晰的职责分离和模块边界
-2. **类型安全**: 充分利用 TypeScript 的类型系统
-3. **异步编程**: 采用现代 JavaScript 异步编程模式
-4. **国际化支持**: 完整的多语言支持
+- **YAML 专精**：专门为 Astro 的 YAML Front Matter 格式优化
+- **GitHub 集成**：深度集成 GitHub API，充分利用平台特性
+- **前端友好**：提供直观的配置界面和实时反馈
+- **性能优化**：采用异步处理和缓存策略提升用户体验
 
-该适配器为用户提供了将思源笔记内容发布到 Astro 项目的能力，是 Siyuan 笔记发布工具生态系统中的重要组成部分。随着 Astro 生态系统的不断发展，这个适配器也将持续演进，为用户提供更好的使用体验。
+### 应用价值
+
+该适配器为 Siyuan 笔记用户提供了便捷的 Astro 博客发布解决方案，简化了从笔记到静态网站的发布流程，降低了技术门槛，提高了内容发布的效率和质量。
