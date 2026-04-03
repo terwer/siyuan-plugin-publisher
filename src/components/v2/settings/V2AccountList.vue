@@ -77,6 +77,7 @@ defineEmits<{
   gap 18px
   height 100%
   min-height 0
+  overflow hidden
 
 .syp-settings-page__header
   display flex

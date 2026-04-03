@@ -150,16 +150,16 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue"
 import "~/src/assets/v2/base.styl"
-import LucideArrowLeft from "~icons/lucide/arrow-left"
-import LucideSettings from "~icons/lucide/settings"
-import LucideSend from "~icons/lucide/send"
-import LucideX from "~icons/lucide/x"
 import UnifiedWorkspaceShell from "~/src/components/v2/layout/UnifiedWorkspaceShell.vue"
 import V2PlatformCard from "~/src/components/v2/publish/V2PlatformCard.vue"
-import { useV2QuickPublish } from "~/src/composables/v2/useV2QuickPublish.ts"
-import { useV2Settings } from "~/src/composables/v2/useV2Settings.ts"
 import V2AccountList from "~/src/components/v2/settings/V2AccountList.vue"
 import V2PlatformSelect from "~/src/components/v2/settings/V2PlatformSelect.vue"
+import { useV2QuickPublish } from "~/src/composables/v2/useV2QuickPublish.ts"
+import { useV2Settings } from "~/src/composables/v2/useV2Settings.ts"
+import LucideArrowLeft from "~icons/lucide/arrow-left"
+import LucideSend from "~icons/lucide/send"
+import LucideSettings from "~icons/lucide/settings"
+import LucideX from "~icons/lucide/x"
 
 const props = defineProps<{
   initialView?: "quick_publish" | "settings"
@@ -322,9 +322,15 @@ async function handleToggleAccountEnabled(platformKey: string, nextEnabled: bool
 .syp-v2
   width 860px
   max-width calc(100vw - 48px)
+  max-height calc(100vh - 48px)
+  display flex
+  flex-direction column
 
 .syp-panel
   min-height 520px
+  max-height 100%
+  display flex
+  flex-direction column
 
 .syp-header-title-group
   display flex

@@ -43,3 +43,17 @@ const navItems = [
 
 const activeNavKey = computed(() => props.activeSection ?? "account")
 </script>
+
+<style scoped lang="stylus">
+.syp-shell
+  display flex
+  flex 1
+  min-height 0
+  overflow hidden
+
+.syp-shell__main
+  flex 1
+  min-width 0
+  min-height 0
+  overflow-y auto
+</style>
