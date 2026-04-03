@@ -2,10 +2,10 @@
   <section class="syp-settings-page">
     <div class="syp-settings-page__header">
       <div>
-        <div class="syp-settings-page__eyebrow">偏好设置</div>
-        <h2 class="syp-settings-page__title">偏好设置</h2>
+        <div class="syp-settings-page__eyebrow">{{ t("v2.preference.eyebrow") }}</div>
+        <h2 class="syp-settings-page__title">{{ t("v2.preference.title") }}</h2>
         <p class="syp-settings-page__desc">
-          这里的开关会直接写入当前偏好配置。除“使用新版 UI”外，其余设置会立即生效。
+          {{ t("v2.preference.desc") }}
         </p>
       </div>
     </div>
@@ -23,8 +23,8 @@
             </div>
 
             <div class="syp-settings-form-control">
-              <span class="syp-settings-status-text">{{ getBooleanValue(item.key) ? "开启" : "关闭" }}</span>
-              <label class="syp-toggle" :title="getBooleanValue(item.key) ? '点击关闭' : '点击开启'">
+              <span class="syp-settings-status-text">{{ getBooleanValue(item.key) ? t("v2.common.enabled") : t("v2.common.disabled") }}</span>
+              <label class="syp-toggle" :title="getBooleanValue(item.key) ? t('v2.preference.toggle.disableHint') : t('v2.preference.toggle.enableHint')">
                 <input
                   type="checkbox"
                   :checked="getBooleanValue(item.key)"
@@ -33,6 +33,26 @@
                 />
                 <span class="syp-toggle-slider"></span>
               </label>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="syp-settings-group">
+        <div class="syp-settings-group__title">{{ t("v2.preference.group.testing.title") }}</div>
+        <div class="syp-settings-group__desc">{{ t("v2.preference.group.testing.desc") }}</div>
+
+        <div class="syp-settings-form-list">
+          <div class="syp-settings-form-row">
+            <div class="syp-settings-form-main">
+              <div class="syp-settings-form-label">{{ t("v2.preference.testing.title") }}</div>
+              <div class="syp-settings-form-desc">{{ t("v2.preference.testing.desc") }}</div>
+            </div>
+
+            <div class="syp-settings-form-control">
+              <button type="button" class="syp-btn syp-btn-secondary" @click="emit('open-i18n-test')">
+                {{ t("v2.preference.testing.action") }}
+              </button>
             </div>
           </div>
         </div>
@@ -47,7 +67,7 @@ import { ElMessageBox } from "element-plus"
 import { computed, markRaw } from "vue"
 import { StrUtil } from "zhi-common"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
 import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
 import { getSiyuanWidgetId } from "~/src/utils/siyuanUtils.ts"
 
@@ -80,10 +100,13 @@ interface PreferenceGroup {
   items: PreferenceItem[]
 }
 
-const { t } = useVueI18n()
+const { t } = useV2I18n()
 const { getPublishPreferenceSetting } = usePreferenceSettingStore()
 const { isInSiyuanWin, isInSiyuanWidget } = useSiyuanDevice()
 const preferenceForm = getPublishPreferenceSetting()
+const emit = defineEmits<{
+  (event: "open-i18n-test"): void
+}>()
 
 const isSiyuanPlugin = computed(() => {
   return isInSiyuanWin() || (isInSiyuanWidget() && StrUtil.isEmptyString(getSiyuanWidgetId()))
@@ -91,99 +114,99 @@ const isSiyuanPlugin = computed(() => {
 
 const groups: PreferenceGroup[] = [
   {
-    title: "内容处理",
-    description: "控制发布前对文档标题和内容的基础处理方式。",
+    title: t("v2.preference.group.content.title"),
+    description: t("v2.preference.group.content.desc"),
     items: [
       {
         key: "fixTitle",
-        label: "修正标题编号",
-        description: "发布前移除标题中的自动编号和冗余后缀。",
+        label: t("preference.setting.fixTitle"),
+        description: t("v2.preference.item.fixTitle.desc"),
       },
       {
         key: "keepTitle",
-        label: "保留原标题",
-        description: "尽量保留文档原始标题，不额外覆盖标题内容。",
+        label: t("preference.setting.keepTitle"),
+        description: t("v2.preference.item.keepTitle.desc"),
       },
       {
         key: "removeFirstH1",
-        label: "移除首个 H1",
-        description: "导出正文时去掉首个一级标题，避免重复标题。",
+        label: t("preference.setting.removeH1"),
+        description: t("v2.preference.item.removeFirstH1.desc"),
       },
       {
         key: "removeMdWidgetTag",
-        label: "移除挂件标记",
-        description: "发布前移除 Markdown 中的挂件标记内容。",
+        label: t("preference.setting.removeWidgetTag"),
+        description: t("v2.preference.item.removeMdWidgetTag.desc"),
       },
       {
         key: "ignoreBlockRef",
-        label: "忽略块引用",
-        description: "发布时忽略块引用，减少跨文档依赖内容进入正文。",
+        label: t("preference.setting.ignoreBlockRef"),
+        description: t("v2.preference.item.ignoreBlockRef.desc"),
         pluginOnly: true,
       },
       {
         key: "allowChangeSlug",
-        label: "允许修改别名",
-        description: "开启后允许修改文章别名。首次开启时会弹出确认提醒。",
+        label: t("preference.setting.allowChangeSlug"),
+        description: t("v2.preference.item.allowChangeSlug.desc"),
         pluginOnly: true,
       },
     ],
   },
   {
-    title: "菜单入口",
-    description: "控制思源插件环境中的菜单入口展示。",
+    title: t("v2.preference.group.menu.title"),
+    description: t("v2.preference.group.menu.desc"),
     items: [
       {
         key: "showDocQuickMenu",
-        label: "文档快捷菜单",
-        description: "在文档上下文中展示快捷发布入口。",
+        label: t("preference.setting.showDocQuickMenu"),
+        description: t("v2.preference.item.showDocQuickMenu.desc"),
         pluginOnly: true,
       },
       {
         key: "showQuickMenu",
-        label: "顶栏快捷发布",
-        description: "在顶栏菜单中展示快速发布入口。",
+        label: t("preference.setting.showQuickMenu"),
+        description: t("v2.preference.item.showQuickMenu.desc"),
         pluginOnly: true,
       },
       {
         key: "showSingleMenu",
-        label: "单篇发布菜单",
-        description: "在顶栏菜单中展示单篇发布入口。",
+        label: t("preference.setting.showSingleMenu"),
+        description: t("v2.preference.item.showSingleMenu.desc"),
         pluginOnly: true,
       },
       {
         key: "showBatchMenu",
-        label: "批量发布菜单",
-        description: "在顶栏菜单中展示批量发布入口。",
+        label: t("preference.setting.showBatchMenu"),
+        description: t("v2.preference.item.showBatchMenu.desc"),
         pluginOnly: true,
       },
       {
         key: "showAIMenu",
-        label: "AI 菜单",
-        description: "在顶栏菜单中展示 AI 工具入口。",
+        label: t("preference.setting.showAIMenu"),
+        description: t("v2.preference.item.showAIMenu.desc"),
         pluginOnly: true,
       },
       {
         key: "showExtendMenu",
-        label: "扩展菜单",
-        description: "在顶栏菜单中展示扩展功能入口。",
+        label: t("preference.setting.showExtendMenu"),
+        description: t("v2.preference.item.showExtendMenu.desc"),
         pluginOnly: true,
       },
       {
         key: "showArticleManageMenu",
-        label: "文章管理菜单",
-        description: "在插件菜单中展示文章管理入口。",
+        label: t("preference.setting.showArticleManageMenu"),
+        description: t("v2.preference.item.showArticleManageMenu.desc"),
         pluginOnly: true,
       },
     ],
   },
   {
-    title: "实验功能",
-    description: "实验功能会影响整体界面行为，请谨慎切换。",
+    title: t("v2.preference.group.experimental.title"),
+    description: t("v2.preference.group.experimental.desc"),
     items: [
       {
         key: "useV2UI",
-        label: "使用新版 UI",
-        description: "开启后将优先使用 V2 界面。重启插件后会完全生效。",
+        label: t("v2.preference.item.useV2UI.label"),
+        description: t("v2.preference.item.useV2UI.desc"),
         pluginOnly: true,
       },
     ],

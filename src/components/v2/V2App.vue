@@ -12,7 +12,7 @@
         <div class="syp-header-title-group">
           <div class="syp-header-chip">
             <LucideSend class="syp-header-chip__icon" />
-            <span>发布工具</span>
+            <span>{{ t("v2.app.brand") }}</span>
           </div>
           <div class="syp-header-title">{{ panelTitle }}</div>
         </div>
@@ -21,8 +21,8 @@
             v-if="!isSettingsView"
             class="syp-btn syp-btn-quiet"
             @click.stop="openSettings"
-            title="设置"
-            aria-label="设置"
+            :title="t('v2.app.action.openSettings')"
+            :aria-label="t('v2.app.action.openSettings')"
           >
             <LucideSettings />
           </button>
@@ -35,7 +35,12 @@
           >
             <LucideChevronLeft />
           </button>
-          <button class="syp-btn syp-btn-text" @click.stop="close" title="关闭" aria-label="关闭">
+          <button
+            class="syp-btn syp-btn-text"
+            @click.stop="close"
+            :title="t('v2.app.action.close')"
+            :aria-label="t('v2.app.action.close')"
+          >
             <LucideX />
           </button>
         </div>
@@ -47,41 +52,41 @@
         @change-section="changeSettingsSection"
       >
         <section v-if="!isSettingsView" class="syp-quick-shell">
-          <div class="syp-quick-shell__eyebrow">当前文档</div>
+          <div class="syp-quick-shell__eyebrow">{{ t("v2.quickPublish.currentDocument") }}</div>
           <h1 class="syp-quick-shell__title">{{ quickPublish.state.docTitle }}</h1>
-          <p class="syp-quick-shell__desc">快速发布态只保留主内容区，设置通过右上角低权重入口进入。</p>
+          <p class="syp-quick-shell__desc">{{ t("v2.quickPublish.desc") }}</p>
 
           <div class="syp-publish-status" :class="`is-${publishState.status}`">
             <div class="syp-publish-status__title">{{ publishTitle }}</div>
             <div class="syp-publish-status__desc">{{ publishDescription }}</div>
             <div v-if="publishState.status === 'failed' && publishState.errMsg" class="syp-publish-status__error">
-              <div class="syp-publish-status__error-title">错误详情</div>
+              <div class="syp-publish-status__error-title">{{ t("v2.quickPublish.errorDetails") }}</div>
               <pre class="syp-publish-status__error-text">{{ publishState.errMsg }}</pre>
             </div>
           </div>
 
           <div v-if="quickPublish.state.isLoading" class="syp-platform-skeleton-grid">
             <div class="syp-platform-skeleton">
-              <div class="syp-platform-skeleton__title">平台列表载入中</div>
+              <div class="syp-platform-skeleton__title">{{ t("v2.quickPublish.loading.platforms") }}</div>
               <div class="syp-platform-skeleton__row"></div>
               <div class="syp-platform-skeleton__row short"></div>
               <div class="syp-platform-skeleton__row"></div>
             </div>
             <div class="syp-platform-skeleton">
-              <div class="syp-platform-skeleton__title">状态载入中</div>
+              <div class="syp-platform-skeleton__title">{{ t("v2.quickPublish.loading.status") }}</div>
               <div class="syp-platform-skeleton__row short"></div>
               <div class="syp-platform-skeleton__row"></div>
             </div>
           </div>
 
           <div v-else-if="!quickPublish.state.hasDocument" class="syp-empty-state">
-            <div class="syp-empty-state__title">请先打开一个文档</div>
-            <div class="syp-empty-state__desc">V2 主界面会读取当前文档上下文，用于展示可发布平台和后续发布状态。</div>
+            <div class="syp-empty-state__title">{{ t("v2.quickPublish.empty.noDocument.title") }}</div>
+            <div class="syp-empty-state__desc">{{ t("v2.quickPublish.empty.noDocument.desc") }}</div>
           </div>
 
           <div v-else-if="!hasPlatforms" class="syp-empty-state">
-            <div class="syp-empty-state__title">暂无已启用的平台</div>
-            <div class="syp-empty-state__desc">请从右上角进入设置，添加并启用至少一个平台后再使用快速发布。</div>
+            <div class="syp-empty-state__title">{{ t("v2.quickPublish.empty.noPlatforms.title") }}</div>
+            <div class="syp-empty-state__desc">{{ t("v2.quickPublish.empty.noPlatforms.desc") }}</div>
           </div>
 
           <div v-else class="syp-platform-grid">
@@ -125,7 +130,14 @@
 
         <V2PicBedSettings v-else-if="settings.state.section === 'picbed'" />
 
-        <V2PreferenceSettings v-else />
+        <V2PreferenceSettings
+          v-else-if="settings.state.section === 'preference' && preferenceSubview === 'form'"
+          @open-i18n-test="openI18nTest"
+        />
+
+        <V2I18nTestPage v-else-if="settings.state.section === 'preference' && preferenceSubview === 'i18n_test'" />
+
+        <V2PreferenceSettings v-else @open-i18n-test="openI18nTest" />
       </UnifiedWorkspaceShell>
     </div>
   </div>
@@ -137,10 +149,12 @@ import "~/src/assets/v2/base.styl"
 import UnifiedWorkspaceShell from "~/src/components/v2/layout/UnifiedWorkspaceShell.vue"
 import V2PlatformCard from "~/src/components/v2/publish/V2PlatformCard.vue"
 import V2AccountList from "~/src/components/v2/settings/V2AccountList.vue"
+import V2I18nTestPage from "~/src/components/v2/settings/V2I18nTestPage.vue"
 import V2PicBedSettings from "~/src/components/v2/settings/V2PicBedSettings.vue"
 import V2PlatformSelect from "~/src/components/v2/settings/V2PlatformSelect.vue"
 import V2PlatformConfigBridge from "~/src/components/v2/settings/V2PlatformConfigBridge.vue"
 import V2PreferenceSettings from "~/src/components/v2/settings/V2PreferenceSettings.vue"
+import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
 import { useV2QuickPublish } from "~/src/composables/v2/useV2QuickPublish.ts"
 import { useV2Settings } from "~/src/composables/v2/useV2Settings.ts"
 import LucideChevronLeft from "~icons/lucide/chevron-left"
@@ -154,60 +168,65 @@ const props = defineProps<{
 }>()
 
 const currentView = ref<"quick_publish" | "settings">(props.initialView ?? "quick_publish")
+const preferenceSubview = ref<"form" | "i18n_test">("form")
 const isSettingsView = computed(() => currentView.value === "settings")
 const quickPublish = useV2QuickPublish()
 const settings = useV2Settings()
+const { t } = useV2I18n()
 const hasPlatforms = computed(() => quickPublish.hasPlatforms.value)
 const publishState = computed(() => quickPublish.state.publishState)
 const previewLinkMap = computed<Record<string, string>>(() => quickPublish.state.previewLinkMap)
 
 const panelTitle = computed(() => {
-  return isSettingsView.value ? "发布设置" : "快速发布"
+  return isSettingsView.value ? t("v2.app.panel.settings") : t("v2.app.panel.quickPublish")
 })
 
 const settingsBackTitle = computed(() => {
-  if (settings.state.section === "account" && settings.state.accountView !== "list") {
-    return "返回账号列表"
+  if (settings.state.section === "preference" && preferenceSubview.value === "i18n_test") {
+    return t("v2.app.back.preference")
   }
-  return "返回快速发布"
+  if (settings.state.section === "account" && settings.state.accountView !== "list") {
+    return t("v2.app.back.accountList")
+  }
+  return t("v2.app.back.quickPublish")
 })
 
 const publishTitle = computed(() => {
   const action = publishState.value.lastAction
   if (publishState.value.status === "preparing") {
-    return action === "delete" ? "正在准备删除" : "正在准备发布"
+    return action === "delete" ? t("v2.publish.title.preparingDelete") : t("v2.publish.title.preparing")
   }
   if (publishState.value.status === "publishing") {
     if (action === "update") {
-      return "正在更新"
+      return t("v2.publish.title.updating")
     }
     if (action === "delete") {
-      return "正在删除"
+      return t("v2.publish.title.deleting")
     }
-    return "正在发布"
+    return t("v2.publish.title.publishing")
   }
   if (publishState.value.status === "success") {
     if (action === "update") {
-      return "更新成功"
+      return t("v2.publish.title.updateSuccess")
     }
     if (action === "delete") {
-      return "删除成功"
+      return t("v2.publish.title.deleteSuccess")
     }
-    return "发布成功"
+    return t("v2.publish.title.publishSuccess")
   }
   if (publishState.value.status === "preview_ready") {
-    return "已发布，可查看"
+    return t("v2.publish.title.previewReady")
   }
   if (publishState.value.status === "failed") {
     if (action === "update") {
-      return "更新失败"
+      return t("v2.publish.title.updateFailed")
     }
     if (action === "delete") {
-      return "删除失败"
+      return t("v2.publish.title.deleteFailed")
     }
-    return "发布失败"
+    return t("v2.publish.title.publishFailed")
   }
-  return "等待发布"
+  return t("v2.publish.title.idle")
 })
 
 const publishDescription = computed(() => {
@@ -215,41 +234,43 @@ const publishDescription = computed(() => {
   const action = publishState.value.lastAction
   if (publishState.value.status === "preparing") {
     if (action === "delete") {
-      return name ? `正在准备删除 ${name} 的发布记录。` : "正在准备删除发布记录。"
+      return name
+        ? t("v2.publish.desc.preparingDelete.named", { name })
+        : t("v2.publish.desc.preparingDelete.default")
     }
-    return name ? `正在准备 ${name} 的发布任务。` : "正在准备发布任务。"
+    return name ? t("v2.publish.desc.preparing.named", { name }) : t("v2.publish.desc.preparing.default")
   }
   if (publishState.value.status === "publishing") {
     if (action === "update") {
-      return name ? `正在更新 ${name} 的内容，请稍候。` : "正在更新，请稍候。"
+      return name ? t("v2.publish.desc.updating.named", { name }) : t("v2.publish.desc.updating.default")
     }
     if (action === "delete") {
-      return name ? `正在删除 ${name} 的发布记录，请稍候。` : "正在删除，请稍候。"
+      return name ? t("v2.publish.desc.deleting.named", { name }) : t("v2.publish.desc.deleting.default")
     }
-    return name ? `正在发布到 ${name}，请稍候。` : "正在发布，请稍候。"
+    return name ? t("v2.publish.desc.publishing.named", { name }) : t("v2.publish.desc.publishing.default")
   }
   if (publishState.value.status === "success") {
     if (action === "update") {
-      return name ? `已完成 ${name} 的更新。` : "更新完成。"
+      return name ? t("v2.publish.desc.updateSuccess.named", { name }) : t("v2.publish.desc.updateSuccess.default")
     }
     if (action === "delete") {
-      return name ? `已完成 ${name} 的删除。` : "删除完成。"
+      return name ? t("v2.publish.desc.deleteSuccess.named", { name }) : t("v2.publish.desc.deleteSuccess.default")
     }
-    return name ? `已完成 ${name} 的发布。` : "发布完成。"
+    return name ? t("v2.publish.desc.publishSuccess.named", { name }) : t("v2.publish.desc.publishSuccess.default")
   }
   if (publishState.value.status === "preview_ready") {
-    return name ? `${name} 已有发布记录，可直接查看。` : "已有发布记录，可直接查看。"
+    return name ? t("v2.publish.desc.previewReady.named", { name }) : t("v2.publish.desc.previewReady.default")
   }
   if (publishState.value.status === "failed") {
     if (action === "update") {
-      return name ? `${name} 更新失败，请查看错误详情。` : "更新失败，请查看错误详情。"
+      return name ? t("v2.publish.desc.updateFailed.named", { name }) : t("v2.publish.desc.updateFailed.default")
     }
     if (action === "delete") {
-      return name ? `${name} 删除失败，请查看错误详情。` : "删除失败，请查看错误详情。"
+      return name ? t("v2.publish.desc.deleteFailed.named", { name }) : t("v2.publish.desc.deleteFailed.default")
     }
-    return name ? `${name} 发布失败，请查看错误详情。` : "发布失败，请查看错误详情。"
+    return name ? t("v2.publish.desc.publishFailed.named", { name }) : t("v2.publish.desc.publishFailed.default")
   }
-  return "选择一个平台开始发布。"
+  return t("v2.publish.desc.idle")
 })
 
 onMounted(async () => {
@@ -259,19 +280,28 @@ onMounted(async () => {
 
 async function openSettings() {
   await settings.setSection("account")
+  preferenceSubview.value = "form"
   currentView.value = "settings"
 }
 
 async function backToQuickPublish() {
   currentView.value = "quick_publish"
+  preferenceSubview.value = "form"
   await quickPublish.init()
 }
 
 async function changeSettingsSection(section: "account" | "picbed" | "preference") {
   await settings.setSection(section)
+  if (section !== "preference") {
+    preferenceSubview.value = "form"
+  }
 }
 
 async function handleSettingsBack() {
+  if (settings.state.section === "preference" && preferenceSubview.value === "i18n_test") {
+    preferenceSubview.value = "form"
+    return
+  }
   if (settings.state.section === "account" && settings.state.accountView !== "list") {
     await settings.backInAccountFlow()
     return
@@ -302,6 +332,10 @@ function isFailed(item: typeof quickPublish.state.platformItems[number]) {
 async function handleToggleAccountEnabled(platformKey: string, nextEnabled: boolean) {
   await settings.toggleAccountEnabled(platformKey, nextEnabled)
   await quickPublish.init()
+}
+
+function openI18nTest() {
+  preferenceSubview.value = "i18n_test"
 }
 </script>
 

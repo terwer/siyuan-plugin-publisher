@@ -2,27 +2,27 @@
   <section class="syp-settings-page">
     <div class="syp-settings-page__header">
       <div>
-        <div class="syp-settings-page__eyebrow">图床设置</div>
-        <h2 class="syp-settings-page__title">图床设置</h2>
+        <div class="syp-settings-page__eyebrow">{{ t("v2.picbed.eyebrow") }}</div>
+        <h2 class="syp-settings-page__title">{{ t("v2.picbed.title") }}</h2>
         <p class="syp-settings-page__desc">
-          图床服务按平台保存。这里不会再跳到外部设置页，所有修改都直接写入当前平台配置。
+          {{ t("v2.picbed.desc") }}
         </p>
       </div>
     </div>
 
     <div v-if="state.isLoading" class="syp-settings-empty">
-      <div class="syp-settings-empty__title">正在加载图床配置</div>
-      <div class="syp-settings-empty__desc">正在读取平台配置与图床能力。</div>
+      <div class="syp-settings-empty__title">{{ t("v2.picbed.loading.title") }}</div>
+      <div class="syp-settings-empty__desc">{{ t("v2.picbed.loading.desc") }}</div>
     </div>
 
     <div v-else-if="state.loadErrorMessage" class="syp-settings-empty">
-      <div class="syp-settings-empty__title">图床配置加载失败</div>
+      <div class="syp-settings-empty__title">{{ t("v2.picbed.error.title") }}</div>
       <div class="syp-settings-empty__desc">{{ state.loadErrorMessage }}</div>
     </div>
 
     <div v-else-if="state.rows.length === 0" class="syp-settings-empty">
-      <div class="syp-settings-empty__title">暂无可配置的平台</div>
-      <div class="syp-settings-empty__desc">请先在账号设置中新增至少一个平台账号。</div>
+      <div class="syp-settings-empty__title">{{ t("v2.picbed.empty.title") }}</div>
+      <div class="syp-settings-empty__desc">{{ t("v2.picbed.empty.desc") }}</div>
     </div>
 
     <div v-else class="syp-settings-group-list">
@@ -46,18 +46,13 @@
                 </option>
               </select>
 
-              <button
-                type="button"
-                class="syp-btn syp-btn-primary"
-                :disabled="item.saveState === 'saving'"
-                @click="savePicBedService(item.platformKey)"
-              >
-                {{ item.saveState === "saving" ? "保存中" : "保存" }}
+              <button type="button" class="syp-btn syp-btn-primary" :disabled="item.saveState === 'saving'" @click="savePicBedService(item.platformKey)">
+                {{ item.saveState === "saving" ? t("v2.common.saving") : t("save") }}
               </button>
 
-              <span v-if="item.saveState === 'saved'" class="syp-settings-status-text">已保存</span>
+              <span v-if="item.saveState === 'saved'" class="syp-settings-status-text">{{ t("v2.common.saved") }}</span>
               <span v-else-if="item.saveState === 'failed'" class="syp-settings-status-text is-error">
-                {{ item.errorMessage || "保存失败" }}
+                {{ item.errorMessage || t("v2.common.saveFailed") }}
               </span>
             </div>
           </div>
@@ -65,9 +60,13 @@
       </article>
 
       <div class="syp-picbed-note">
-        <div class="syp-picbed-note__title">当前环境</div>
+        <div class="syp-picbed-note__title">{{ t("v2.picbed.environment.title") }}</div>
         <div class="syp-picbed-note__desc">
-          PicGo 插件{{ state.isPicgoInstalled ? "已检测到，可作为可选图床服务。" : "未检测到，相关选项会保持禁用。" }}
+          {{
+            state.isPicgoInstalled
+              ? t("v2.picbed.environment.picgoAvailable")
+              : t("v2.picbed.environment.picgoUnavailable")
+          }}
         </div>
       </div>
     </div>
@@ -80,6 +79,7 @@ import { JsonUtil } from "zhi-common"
 import { BlogConfig, PicbedServiceTypeEnum as PicBedServiceTypeEnum } from "zhi-blog-api"
 import Adaptors from "~/src/adaptors"
 import { usePicgoBridge } from "~/src/composables/usePicgoBridge.ts"
+import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
 import { DynamicConfig, DynamicJsonCfg, PlatformType } from "~/src/platforms/dynamicConfig.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
@@ -104,6 +104,7 @@ interface PicBedRow {
 
 const { getSetting, updateSetting } = usePublishSettingStore()
 const { checkPicgoInstalled, getPicbedServiceType: getPicBedServiceType } = usePicgoBridge()
+const { t } = useV2I18n()
 
 const state = reactive({
   isLoading: true,
@@ -115,13 +116,13 @@ const state = reactive({
 const groupedRows = computed(() => {
   return [
     {
-      title: "已启用平台",
-      description: "这些平台当前已经可以参与发布，修改后会影响后续图片上传策略。",
+      title: t("v2.picbed.group.enabled.title"),
+      description: t("v2.picbed.group.enabled.desc"),
       items: state.rows.filter((item) => item.isEnabled),
     },
     {
-      title: "未启用平台",
-      description: "这些平台的图床策略会在账号启用后生效。",
+      title: t("v2.picbed.group.disabled.title"),
+      description: t("v2.picbed.group.disabled.desc"),
       items: state.rows.filter((item) => !item.isEnabled),
     },
   ].filter((group) => group.items.length > 0)
@@ -144,7 +145,7 @@ async function loadRows() {
 
     state.rows = await Promise.all(dynamicConfigArray.map((item) => buildRow(item, setting)))
   } catch (error) {
-    state.loadErrorMessage = error instanceof Error ? error.message : String(error ?? "未知错误")
+    state.loadErrorMessage = error instanceof Error ? error.message : String(error ?? t("v2.common.unknownError"))
   } finally {
     state.isLoading = false
   }
@@ -158,15 +159,15 @@ async function buildRow(item: DynamicConfig, setting: Record<string, any>) {
   const bundledSupported = cfg.bundledPicbedSupported === true
 
   const options: PicBedOption[] = [
-    { value: PicBedServiceTypeEnum.None, label: "不使用图床" },
+    { value: PicBedServiceTypeEnum.None, label: t("publisher.picbed.none") },
     {
       value: PicBedServiceTypeEnum.PicGo,
-      label: state.isPicgoInstalled ? "PicGo 插件" : "PicGo 插件（未安装）",
+      label: state.isPicgoInstalled ? t("publisher.picbed.picgo") : t("v2.picbed.option.picgoUnavailable"),
       disabled: !picgoSupported || !state.isPicgoInstalled,
     },
     {
       value: PicBedServiceTypeEnum.Bundled,
-      label: "内置图床",
+      label: t("v2.picbed.option.bundled"),
       disabled: !bundledSupported,
     },
   ].filter((option) => {
@@ -183,7 +184,7 @@ async function buildRow(item: DynamicConfig, setting: Record<string, any>) {
     platformKey: item.platformKey,
     platformName: item.platformName,
     isEnabled: item.isEnabled === true,
-    statusText: item.isEnabled ? "账号已启用" : "账号未启用",
+    statusText: item.isEnabled ? t("v2.account.toggle.enabled") : t("v2.account.toggle.disabled"),
     supportText: buildSupportText(picgoSupported, bundledSupported),
     picbedService: (cfg.picbedService as PicBedServiceTypeEnum) || resolvedService || PicBedServiceTypeEnum.None,
     options,
@@ -211,7 +212,7 @@ async function savePicBedService(platformKey: string) {
     target.saveState = "saved"
   } catch (error) {
     target.saveState = "failed"
-    target.errorMessage = error instanceof Error ? error.message : String(error ?? "未知错误")
+    target.errorMessage = error instanceof Error ? error.message : String(error ?? t("v2.common.unknownError"))
   }
 }
 
@@ -221,14 +222,14 @@ function buildSupportText(picgoSupported: boolean, bundledSupported: boolean) {
     supported.push("PicGo")
   }
   if (bundledSupported) {
-    supported.push("内置图床")
+    supported.push(t("v2.picbed.option.bundled"))
   }
 
   if (supported.length === 0) {
-    return "当前平台不支持额外图床服务"
+    return t("v2.picbed.support.none")
   }
 
-  return `支持 ${supported.join(" / ")}`
+  return t("v2.picbed.support.some", { services: supported.join(" / ") })
 }
 </script>
 

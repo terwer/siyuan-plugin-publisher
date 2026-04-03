@@ -18,6 +18,18 @@ export class V2Host {
   private app: VueApp<Element> | null = null
   private menu: Menu | null = null
   private mountPoint: HTMLElement | null = null
+  private readonly fallbackTestMessages = {
+    v2: {
+      i18nTest: {
+        probe: {
+          fallbackOnly: "V2 fallback-only probe",
+          nested: {
+            deep: "V2 nested fallback probe",
+          },
+        },
+      },
+    },
+  }
 
   constructor(private readonly pluginInstance: PublisherPlugin) {
     this.logger = createSiyuanAppLogger("v2-host")
@@ -49,6 +61,7 @@ export class V2Host {
       messages: {
         plugin: this.pluginInstance.i18n,
       },
+      fallbackResolve: (key: string) => this.resolvePluginI18nKey(key),
       onClose: () => {
         this.logger.info("V2 panel closed")
         this.close()
@@ -103,5 +116,37 @@ export class V2Host {
       y: rect.bottom,
       isLeft: true,
     })
+  }
+
+  private resolvePluginI18nKey(key: string) {
+    const messages = this.pluginInstance.i18n as Record<string, any> | undefined
+    if (!key) {
+      return undefined
+    }
+
+    return this.resolveKeyPath(messages, key) ?? this.resolveKeyPath(this.fallbackTestMessages, key)
+  }
+
+  private resolveKeyPath(source: Record<string, any> | undefined, key: string) {
+    if (!source) {
+      return undefined
+    }
+
+    if (Object.prototype.hasOwnProperty.call(source, key) && typeof source[key] === "string") {
+      return source[key]
+    }
+
+    if (!key.includes(".")) {
+      return undefined
+    }
+
+    const nestedValue = key.split(".").reduce<any>((current, part) => {
+      if (current && typeof current === "object" && Object.prototype.hasOwnProperty.call(current, part)) {
+        return current[part]
+      }
+      return undefined
+    }, source)
+
+    return typeof nestedValue === "string" ? nestedValue : undefined
   }
 }

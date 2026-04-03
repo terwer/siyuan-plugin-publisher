@@ -2,9 +2,9 @@
   <section class="syp-settings-page">
     <div class="syp-settings-page__header">
       <div>
-        <div class="syp-settings-page__eyebrow">账号设置</div>
-        <h2 class="syp-settings-page__title">选择平台</h2>
-        <p class="syp-settings-page__desc">选择要接入的预设平台，新增账号仍在当前工作壳内完成。</p>
+        <div class="syp-settings-page__eyebrow">{{ t("v2.platformSelect.eyebrow") }}</div>
+        <h2 class="syp-settings-page__title">{{ t("v2.platformSelect.title") }}</h2>
+        <p class="syp-settings-page__desc">{{ t("v2.platformSelect.desc") }}</p>
       </div>
     </div>
 
@@ -22,7 +22,7 @@
         </div>
         <div class="syp-platform-select-item__info">
           <div class="syp-platform-select-item__name">{{ item.platformName }}</div>
-          <div class="syp-platform-select-item__desc">第一次优先使用预设 key，已有预设时自动生成新 key。</div>
+          <div class="syp-platform-select-item__desc">{{ t("v2.platformSelect.itemDesc") }}</div>
         </div>
       </button>
     </div>
@@ -31,10 +31,12 @@
 
 <script setup lang="ts">
 import type { V2SelectablePlatform } from "~/src/composables/v2/useV2Settings.ts"
+import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
 
 defineProps<{
   items: V2SelectablePlatform[]
 }>()
+const { t } = useV2I18n()
 
 defineEmits<{
   (event: "select", item: V2SelectablePlatform): void

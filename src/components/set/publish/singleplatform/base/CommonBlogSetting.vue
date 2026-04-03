@@ -141,7 +141,7 @@ const valiConf = async () => {
         }
       } else {
         formData.cfg.apiStatus = false
-        errMsg = "校验失败，请检查平台配置"
+        errMsg = t("setting.blog.vali.failed.check")
       }
 
       logger.info("======校验修正结束======")
@@ -295,7 +295,7 @@ const initConf = async () => {
       await initKwSpaces(formData.ksKeyword)
     }
   } else {
-    ElMessage.error("Read init config error, your config may not work")
+    ElMessage.error(t("setting.blog.init.error"))
   }
 }
 
@@ -384,20 +384,20 @@ onMounted(async () => {
     <!-- 平台cookie -->
     <el-form-item
       v-else-if="formData.cfg.passwordType === PasswordType.PasswordType_Cookie"
-      :label="formData.cfg.passwordLabel ?? '平台Cookie'"
+      :label="formData.cfg.passwordLabel ?? t('setting.blog.cookie')"
       required
     >
       <el-input
         v-model="formData.cfg.password"
         style="width: 75%; margin-right: 16px"
-        placeholder="请直接粘贴平台cookie，为了您的隐私安全，请勿泄露cookie给任何人"
+        :placeholder="t('setting.blog.cookie.placeholder')"
         type="textarea"
         :rows="10"
         :disabled="true"
       />
       <el-alert
         :closable="false"
-        title="此处数据为网页授权自动生成，仅在您本地浏览器存储，不支持修改。为了您的安全，请勿泄露此处信息给任何人。"
+        :title="t('setting.blog.cookie.readonly.tip')"
         class="inline-tip"
         type="error"
       />
@@ -418,10 +418,10 @@ onMounted(async () => {
       </el-radio-group>
     </el-form-item>
     <!-- 知识空间 -->
-    <el-form-item class="cate-input" label="搜索关键词" v-if="props.cfg?.cateSearchEnabled">
+    <el-form-item class="cate-input" :label="t('setting.blog.searchKeyword')" v-if="props.cfg?.cateSearchEnabled">
       <el-input
         v-model="formData.ksKeyword"
-        :placeholder="'请输入[' + props.cfg?.knowledgeSpaceTitle + ']搜索关键词，输入完成后请按Enter键或者移走光标'"
+        :placeholder="t('setting.blog.searchKeyword.placeholder', { title: props.cfg?.knowledgeSpaceTitle })"
         @change="handleCateSearch"
       />
     </el-form-item>
@@ -432,7 +432,7 @@ onMounted(async () => {
         :placeholder="t('main.opt.select')"
         :no-data-text="t('main.data.empty')"
         :loading="formData.isCateLoading"
-        loading-text="加载中..."
+        :loading-text="t('main.loading')"
         ref="singleCateSelect"
       >
         <el-option v-for="item in formData.kwSpaces" :key="item.value" :label="item.label" :value="item.value" />

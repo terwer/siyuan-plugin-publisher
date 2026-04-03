@@ -2,6 +2,7 @@ import { computed, reactive } from "vue"
 import { HtmlUtil, JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
+import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
 import { DynamicConfig, DynamicJsonCfg, getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
@@ -27,6 +28,7 @@ export const useV2QuickPublish = () => {
   const { kernelApi } = useSiyuanApi()
   const { blogApi } = useSiyuanApi()
   const { getReadOnlyPublishPreferenceSetting } = usePreferenceSettingStore()
+  const { t } = useV2I18n()
   const { doSinglePublish, doSingleDelete, initPublishMethods, getPostPreviewUrl } = usePublish()
   const { getPublishCfg, getPublishApi } = usePublishConfig()
 
@@ -56,7 +58,7 @@ export const useV2QuickPublish = () => {
     if (error instanceof Error) {
       return error.message || String(error)
     }
-    return String(error ?? "未知错误")
+    return String(error ?? t("v2.common.unknownError"))
   }
 
   const setPublishState = (partial: Partial<typeof state.publishState>) => {
@@ -89,7 +91,7 @@ export const useV2QuickPublish = () => {
   const resolvePreviewUrl = async (platformKey: string) => {
     const publishCfg = await getPublishCfg(platformKey)
     if (!publishCfg?.cfg) {
-      throw new Error("平台配置缺失，无法获取预览链接")
+      throw new Error(t("v2.quickPublish.error.previewConfigMissing"))
     }
     const api = await getPublishApi(platformKey, publishCfg.cfg)
     return await getPostPreviewUrl(api, state.pageId, publishCfg.cfg)
@@ -124,16 +126,16 @@ export const useV2QuickPublish = () => {
         platformIcon: item.platformIcon,
         isAuthorized,
         isPublished: !StrUtil.isEmptyString(postMetaValue),
-        tooltipText: isAuthorized ? "" : "未授权，请点击右上角设置，进入账号设置完成授权后再使用快速发布。",
+        tooltipText: isAuthorized ? "" : t("v2.quickPublish.tooltip.unauthorized"),
       }
     })
 
     if (state.hasDocument) {
       const postInfo = await kernelApi.getBlockByID(pageId)
-      const rawTitle = postInfo?.content ?? "未命名文档"
+      const rawTitle = postInfo?.content ?? t("v2.quickPublish.docTitle.untitled")
       state.docTitle = pref.value.fixTitle ? HtmlUtil.removeTitleNumber(rawTitle).replace(/\.md/g, "") : rawTitle
     } else {
-      state.docTitle = "未检测到当前文档"
+      state.docTitle = t("v2.quickPublish.docTitle.notDetected")
     }
 
     state.isLoading = false
@@ -159,7 +161,7 @@ export const useV2QuickPublish = () => {
     try {
       const publishCfg = await getPublishCfg(item.platformKey)
       if (!publishCfg?.cfg || !publishCfg?.dynCfg) {
-        throw new Error("平台配置缺失，无法发布")
+        throw new Error(t("v2.quickPublish.error.publishConfigMissing"))
       }
 
       const siyuanPost = await blogApi.getPost(state.pageId)
@@ -182,7 +184,7 @@ export const useV2QuickPublish = () => {
       } else {
         setPublishState({
           status: "failed",
-          errMsg: result?.errMsg || "发布失败",
+          errMsg: result?.errMsg || t("v2.quickPublish.error.publishFailed"),
           previewUrl: "",
           isPublishing: false,
         })
@@ -214,7 +216,7 @@ export const useV2QuickPublish = () => {
     try {
       const previewUrl = await resolvePreviewUrl(item.platformKey)
       if (!previewUrl) {
-        throw new Error("未获取到预览链接")
+        throw new Error(t("v2.quickPublish.error.previewUrlMissing"))
       }
 
       setPreviewLink(item.platformKey, previewUrl)
@@ -266,7 +268,7 @@ export const useV2QuickPublish = () => {
     try {
       const publishCfg = await getPublishCfg(item.platformKey)
       if (!publishCfg?.cfg || !publishCfg?.dynCfg) {
-        throw new Error("平台配置缺失，无法删除")
+        throw new Error(t("v2.quickPublish.error.deleteConfigMissing"))
       }
 
       const result = await doSingleDelete(item.platformKey, state.pageId, publishCfg)
@@ -282,7 +284,7 @@ export const useV2QuickPublish = () => {
       } else {
         setPublishState({
           status: "failed",
-          errMsg: result?.errMsg || "删除失败",
+          errMsg: result?.errMsg || t("v2.quickPublish.error.deleteFailed"),
           previewUrl: "",
           isPublishing: false,
         })

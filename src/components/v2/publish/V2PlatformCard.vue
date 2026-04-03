@@ -13,10 +13,10 @@
       <div class="syp-platform-card__name">{{ platformName }}</div>
       <div class="syp-platform-card__meta">
         <span class="syp-platform-card__status" :class="{ 'is-ready': isAuthorized, 'is-disabled': !isAuthorized }">
-          {{ isAuthorized ? "可快速发布" : "未授权" }}
+          {{ isAuthorized ? t("v2.card.status.quickPublishReady") : t("v2.card.status.unauthorized") }}
         </span>
         <span v-if="isAuthorized" class="syp-platform-card__published">
-          {{ isPublished ? "已发布" : "未发布" }}
+          {{ isPublished ? t("v2.card.status.published") : t("v2.card.status.unpublished") }}
         </span>
       </div>
       <div class="syp-platform-card__actions">
@@ -35,10 +35,10 @@
           type="button"
           class="syp-platform-card__action"
           :disabled="isProcessing"
-          :aria-label="previewLink ? `查看文章：${previewLink}` : '查看文章'"
+          :aria-label="previewLink ? t('v2.card.action.previewAriaWithUrl', { url: previewLink }) : t('v2.card.action.preview')"
           @click.stop="handlePreview"
         >
-          查看文章
+          {{ t("v2.card.action.preview") }}
         </button>
         <button
           v-if="isPublished"
@@ -47,17 +47,17 @@
           :disabled="isProcessing"
           @click.stop="toggleDeleteConfirm"
         >
-          删除
+          {{ t("v2.card.action.delete") }}
         </button>
       </div>
       <div v-if="showDeleteConfirm" class="syp-platform-card__confirm" @click.stop>
-        <div class="syp-platform-card__confirm-text">确认删除这篇已发布内容？删除后需要重新发布。</div>
+        <div class="syp-platform-card__confirm-text">{{ t("v2.card.confirm.deleteText") }}</div>
         <div class="syp-platform-card__confirm-actions">
           <button type="button" class="syp-platform-card__confirm-btn" :disabled="isProcessing" @click="confirmDelete">
-            确认删除
+            {{ t("v2.card.confirm.delete") }}
           </button>
           <button type="button" class="syp-platform-card__confirm-btn ghost" @click="toggleDeleteConfirm">
-            取消
+            {{ t("v2.card.confirm.cancel") }}
           </button>
         </div>
       </div>
@@ -67,6 +67,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from "vue"
+import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
 
 const props = defineProps<{
   platformName: string
@@ -84,6 +85,7 @@ const emit = defineEmits<{
   (event: "preview"): void
   (event: "delete"): void
 }>()
+const { t } = useV2I18n()
 
 const showDeleteConfirm = ref(false)
 
@@ -109,9 +111,9 @@ const confirmDelete = () => {
 
 const primaryLabel = computed(() => {
   if (props.isFailed) {
-    return "重试"
+    return t("v2.card.action.retry")
   }
-  return props.isPublished ? "更新" : "发布"
+  return props.isPublished ? t("v2.card.action.update") : t("v2.card.action.publish")
 })
 </script>
 

@@ -173,9 +173,18 @@ export default {
   "setting.blog.vali.ok": "Available",
   "setting.blog.vali.ok.metaweblog": "The configuration has been saved and verified",
   "setting.blog.vali.error": "Validate error",
+  "setting.blog.vali.failed.check": "Validation failed, please check the platform configuration",
   "setting.blog.platform.support.github": "Current github supported platform:",
   "setting.blog.platform.support.metaweblog": "Current metaweblog supported platform:",
   "setting.blog.cancel": "Cancel",
+  "setting.blog.init.error": "Failed to read the initial configuration, your current config may not work properly",
+  "setting.blog.cookie": "Platform Cookie",
+  "setting.blog.cookie.placeholder": "Paste the platform cookie here. For your privacy and security, do not share it with anyone",
+  "setting.blog.cookie.readonly.tip":
+    "This data is generated automatically by web authorization and stored only in your local browser. It is read-only. For your security, do not share it with anyone.",
+  "setting.blog.searchKeyword": "Search Keyword",
+  "setting.blog.searchKeyword.placeholder":
+    "Enter a search keyword for [{title}], then press Enter or move focus away to continue",
   "setting.vuepress": "Vuepress",
   "setting.hugo": "Hugo",
   "setting.hexo": "Hexo",
@@ -271,6 +280,7 @@ export default {
   "blog.newwin.open": "Open in a new window",
   "blog.change.siyuan.api": "Modify Siyuan API address",
   "setting.blog.siyuan.current.apiurl": "Current apiUrl=>",
+  "setting.blog.middlewareUrl": "Cross-origin request proxy",
   "setting.blog.middlewareUrl.tip":
     "In certain scenarios, a necessity might arise (as seen in self-hosting environments, Nginx server setups, Vite development environments, etc.), while other situations could warrant overlooking this requirement.",
   "setting.blog.middlewareUrl.my.tip":
@@ -347,7 +357,7 @@ export default {
   "github.weight.placeholder": "Weight (decide to display the order, the smaller the display, the more upward)",
   "github.use.date": "Show date",
   "github.use.date.no.warn": "You have closed the date show that it will not generate the date field in Formatter",
-  "github.post.picgo.use": "Use picbed",
+  "github.post.picgo.use": "Use PicBed",
   "github.post.picgo.use.tip":
     "To enable this option, the local picture will be uploaded to the custom diagram bed (the remote picture is not uploaded), please make sure that the PICGO diagram bed configuration is correct",
   "github.post.picgo.start.upload":
@@ -490,7 +500,7 @@ export default {
 
   "setting.picgo.refer.to": "For details, please refer to:",
   "setting.picgo.refer.to.online.doc": "Picgo configuration online documentation",
-  "setting.picgo.picbed": "Picbed setting",
+  "setting.picgo.picbed": "PicBed Settings",
   "setting.picgo.picgo": "PicGo setting",
   "main.opt.edit": "Edit",
   "main.opt.delete": "Delete",
@@ -712,6 +722,8 @@ export default {
     "CORS Global Proxy, once configured, helps alleviate browser common-origin issues.",
   "setting.blog.middlewareUrl.my.new.tip":
     "Enhanced CORS proxy, enabling comprehensive common-origin requests. It is advisable to deploy independently. For deployment guidance, kindly refer to https://github.com/Zibri/cloudflare-cors-anywhere.",
+  "setting.blog.middlewareUrl.my.warn.tip":
+    "Special note: Request limits are set to 100,000/day and 1,000/10 minutes. Please avoid abusive traffic, or the shared proxy may be shut down.",
   "reminder.blog.middlewareUrl.my.warning":
     "A special note: Request limits are set at '100,000 times/day' and '1,000 times/10 minutes'. For the benefit of all, kindly refrain from malicious requests; otherwise, we reserve the right to terminate this proxy service.",
 
@@ -721,7 +733,7 @@ export default {
   "import.v081.warn":
     "Given that v0.8.1 is considered a significantly antiquated iteration, this feature may no longer be pertinent. Should you find yourself in need of this functionality, please direct your feedback to youweics@qq.com, and we shall deliberate on its implementation based on demand.",
 
-  "publisher.picbed.service": "Image Hosting Service",
+  "publisher.picbed.service": "PicBed Service",
   "publisher.picbed.none": "Not in use",
   "publisher.picbed.picgo": "PicGo Plugin",
   "publisher.picbed.picgo.not.install":

@@ -1,6 +1,7 @@
 import { computed, reactive } from "vue"
 import { JsonUtil } from "zhi-common"
 import { usePlatformDefine } from "~/src/composables/usePlatformDefine.ts"
+import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
 import {
   deletePlatformByKey,
   DynamicConfig,
@@ -42,6 +43,7 @@ const CNBLOGS_PRESET_KEY = "metaweblog_Cnblogs"
 export const useV2Settings = () => {
   const { getSetting, updateSetting } = usePublishSettingStore()
   const { getPrePlatform } = usePlatformDefine()
+  const { t } = useV2I18n()
 
   const state = reactive({
     section: "account" as V2SettingsSection,
@@ -68,7 +70,7 @@ export const useV2Settings = () => {
     {
       key: "cnblogs",
       platformKey: CNBLOGS_PRESET_KEY,
-      platformName: "博客园",
+      platformName: t("v2.platform.cnblogs"),
       platformIcon: getPrePlatform(CNBLOGS_PRESET_KEY)?.platformIcon,
       platformType: PlatformType.Metaweblog,
       subPlatformType: SubPlatformType.Metaweblog_Cnblogs,
@@ -86,27 +88,26 @@ export const useV2Settings = () => {
         const isEnabled = item.isEnabled === true
         const isAuth = item.isAuth === true
         
-        // 根据状态确定类型和标签
         let statusType: "success" | "warning" | "error" | "neutral" = "neutral"
         let statusLabel = ""
         let statusText = ""
         
         if (isEnabled && isAuth) {
           statusType = "success"
-          statusLabel = "运行中"
-          statusText = "已启用 · 已授权"
+          statusLabel = t("v2.account.status.running")
+          statusText = t("v2.account.statusText.enabledAuthorized")
         } else if (isEnabled && !isAuth) {
           statusType = "warning"
-          statusLabel = "需授权"
-          statusText = "已启用 · 未授权"
+          statusLabel = t("v2.account.status.needsAuthorization")
+          statusText = t("v2.account.statusText.enabledUnauthorized")
         } else if (!isEnabled && isAuth) {
           statusType = "neutral"
-          statusLabel = "已禁用"
-          statusText = "未启用 · 已授权"
+          statusLabel = t("v2.account.status.disabled")
+          statusText = t("v2.account.statusText.disabledAuthorized")
         } else {
           statusType = "error"
-          statusLabel = "未启用"
-          statusText = "未启用 · 未授权"
+          statusLabel = t("v2.account.status.inactive")
+          statusText = t("v2.account.statusText.disabledUnauthorized")
         }
         
         return {
@@ -181,7 +182,7 @@ export const useV2Settings = () => {
     )
 
     if (!base.platformKey) {
-      throw new Error("预设平台模板缺失")
+      throw new Error(t("v2.settings.error.presetTemplateMissing"))
     }
 
     if (existingPreset) {

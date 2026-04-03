@@ -2,18 +2,18 @@
   <section class="syp-settings-page">
     <div class="syp-settings-page__header">
       <div>
-        <div class="syp-settings-page__eyebrow">账号设置</div>
-        <h2 class="syp-settings-page__title">账号列表</h2>
-        <p class="syp-settings-page__desc">查看账号状态、启停平台，并进入平台配置。</p>
+        <div class="syp-settings-page__eyebrow">{{ t("v2.account.eyebrow") }}</div>
+        <h2 class="syp-settings-page__title">{{ t("v2.account.title") }}</h2>
+        <p class="syp-settings-page__desc">{{ t("v2.account.desc") }}</p>
       </div>
       <button type="button" class="syp-btn syp-btn-primary" @click="$emit('add')">
-        添加账号
+        {{ t("v2.account.action.add") }}
       </button>
     </div>
 
     <div v-if="items.length === 0" class="syp-settings-empty">
-      <div class="syp-settings-empty__title">暂无已配置账号</div>
-      <div class="syp-settings-empty__desc">点击右上角“添加账号”开始创建平台配置。</div>
+      <div class="syp-settings-empty__title">{{ t("v2.account.empty.title") }}</div>
+      <div class="syp-settings-empty__desc">{{ t("v2.account.empty.desc") }}</div>
     </div>
 
     <div v-else class="syp-account-list">
@@ -47,16 +47,18 @@
             :class="{ 'is-warning': !item.isAuth }"
             @click="$emit('configure', item.platformKey, item.platformName)"
           >
-            {{ item.isAuth ? "管理" : "去授权" }}
+            {{ item.isAuth ? t("v2.account.action.manage") : t("v2.account.action.authorize") }}
           </button>
 
           <div class="syp-account-item__toggle">
-            <span class="syp-account-item__toggle-label">{{ item.isEnabled ? "已启用" : "已禁用" }}</span>
-            <label class="syp-toggle" :title="item.isEnabled ? '点击禁用' : '点击启用'">
+            <span class="syp-account-item__toggle-label">
+              {{ item.isEnabled ? t("v2.account.toggle.enabled") : t("v2.account.toggle.disabled") }}
+            </span>
+            <label class="syp-toggle" :title="item.isEnabled ? t('v2.account.toggle.disableHint') : t('v2.account.toggle.enableHint')">
               <input
                 type="checkbox"
                 :checked="item.isEnabled"
-                :aria-label="item.isEnabled ? '禁用' : '启用'"
+                :aria-label="item.isEnabled ? t('v2.account.toggle.disable') : t('v2.account.toggle.enable')"
                 @change="handleToggle(item.platformKey, $event)"
               />
               <span class="syp-toggle-slider"></span>
@@ -67,9 +69,9 @@
             type="button"
             class="syp-btn syp-btn-text is-danger"
             disabled
-            title="删除清理将在后续阶段接入"
+            :title="t('v2.account.action.deletePending')"
           >
-            删除
+            {{ t("v2.account.action.delete") }}
           </button>
         </div>
       </article>
@@ -79,10 +81,12 @@
 
 <script setup lang="ts">
 import type { V2AccountItem } from "~/src/composables/v2/useV2Settings.ts"
+import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
 
 defineProps<{
   items: V2AccountItem[]
 }>()
+const { t } = useV2I18n()
 
 const emit = defineEmits<{
   (event: "add"): void

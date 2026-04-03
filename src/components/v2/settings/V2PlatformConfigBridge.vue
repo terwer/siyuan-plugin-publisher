@@ -2,50 +2,50 @@
   <section class="syp-settings-page">
     <div class="syp-settings-page__header">
       <div>
-        <div class="syp-settings-page__eyebrow">账号设置</div>
-        <h2 class="syp-settings-page__title">{{ platformName || "平台配置" }}</h2>
+        <div class="syp-settings-page__eyebrow">{{ t("v2.platformConfig.eyebrow") }}</div>
+        <h2 class="syp-settings-page__title">{{ platformName || t("v2.platformConfig.title") }}</h2>
         <p class="syp-settings-page__desc">
-          当前通过真实 DOM 直接桥接已有平台表单，不再依赖 iframe 设置页。
+          {{ t("v2.platformConfig.desc") }}
         </p>
       </div>
     </div>
 
     <div v-if="state.isLoading" class="syp-settings-empty">
-      <div class="syp-settings-empty__title">正在加载平台配置</div>
-      <div class="syp-settings-empty__desc">正在读取平台元数据和桥接组件。</div>
+      <div class="syp-settings-empty__title">{{ t("v2.platformConfig.loading.title") }}</div>
+      <div class="syp-settings-empty__desc">{{ t("v2.platformConfig.loading.desc") }}</div>
     </div>
 
     <div v-else-if="state.errorMessage" class="syp-settings-empty">
-      <div class="syp-settings-empty__title">平台配置加载失败</div>
+      <div class="syp-settings-empty__title">{{ t("v2.platformConfig.error.title") }}</div>
       <div class="syp-settings-empty__desc">{{ state.errorMessage }}</div>
     </div>
 
     <template v-else>
       <div class="syp-settings-detail-grid">
         <article class="syp-settings-detail-card">
-          <div class="syp-settings-detail-card__title">当前桥接</div>
+          <div class="syp-settings-detail-card__title">{{ t("v2.platformConfig.card.bridgeTitle") }}</div>
           <div class="syp-settings-detail-list">
             <div class="syp-settings-detail-row">
-              <div class="syp-settings-detail-label">平台 key</div>
+              <div class="syp-settings-detail-label">{{ t("v2.platformConfig.field.platformKey") }}</div>
               <div class="syp-settings-detail-value">{{ platformKey }}</div>
             </div>
             <div class="syp-settings-detail-row">
-              <div class="syp-settings-detail-label">平台类型</div>
+              <div class="syp-settings-detail-label">{{ t("v2.platformConfig.field.platformType") }}</div>
               <div class="syp-settings-detail-value">{{ bridgeLabel }}</div>
             </div>
           </div>
         </article>
 
         <article class="syp-settings-detail-card">
-          <div class="syp-settings-detail-card__title">当前能力</div>
+          <div class="syp-settings-detail-card__title">{{ t("v2.platformConfig.card.capabilityTitle") }}</div>
           <div class="syp-settings-detail-list">
             <div class="syp-settings-detail-row">
-              <div class="syp-settings-detail-label">配置保存</div>
-              <div class="syp-settings-detail-value">直接复用现有配置读取与保存链路</div>
+              <div class="syp-settings-detail-label">{{ t("v2.platformConfig.field.save") }}</div>
+              <div class="syp-settings-detail-value">{{ t("v2.platformConfig.value.save") }}</div>
             </div>
             <div class="syp-settings-detail-row">
-              <div class="syp-settings-detail-label">授权校验</div>
-              <div class="syp-settings-detail-value">直接复用现有验证逻辑与状态回写</div>
+              <div class="syp-settings-detail-label">{{ t("v2.platformConfig.field.validate") }}</div>
+              <div class="syp-settings-detail-value">{{ t("v2.platformConfig.value.validate") }}</div>
             </div>
           </div>
         </article>
@@ -56,17 +56,17 @@
           <component :is="bridgeComponent" :api-type="platformKey" />
           <template #fallback>
             <div class="syp-settings-empty">
-              <div class="syp-settings-empty__title">正在挂载桥接表单</div>
-              <div class="syp-settings-empty__desc">请稍候，正在加载平台配置表单。</div>
+              <div class="syp-settings-empty__title">{{ t("v2.platformConfig.mounting.title") }}</div>
+              <div class="syp-settings-empty__desc">{{ t("v2.platformConfig.mounting.desc") }}</div>
             </div>
           </template>
         </Suspense>
       </div>
 
       <div v-else class="syp-settings-empty">
-        <div class="syp-settings-empty__title">当前平台还未纳入 M4 桥接范围</div>
+        <div class="syp-settings-empty__title">{{ t("v2.platformConfig.unsupported.title") }}</div>
         <div class="syp-settings-empty__desc">
-          当前仅桥接 WordPress 和 博客园，后续会逐步扩展更多平台表单。
+          {{ t("v2.platformConfig.unsupported.desc") }}
         </div>
       </div>
     </template>
@@ -77,6 +77,7 @@
 import { computed, onMounted, reactive, watch, type Component } from "vue"
 import CnblogsSetting from "~/src/components/set/publish/singleplatform/metaweblog/CnblogsSetting.vue"
 import WordpressSetting from "~/src/components/set/publish/singleplatform/metaweblog/WordpressSetting.vue"
+import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
 import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
 import { SubPlatformType } from "~/src/platforms/dynamicConfig.ts"
 
@@ -85,6 +86,7 @@ const props = defineProps<{
   platformName?: string
 }>()
 
+const { t } = useV2I18n()
 const { getPublishCfg } = usePublishConfig()
 
 const state = reactive({
@@ -108,9 +110,9 @@ const bridgeLabel = computed(() => {
     return "WordPress"
   }
   if (state.subtype === SubPlatformType.Metaweblog_Cnblogs) {
-    return "博客园"
+    return t("v2.platform.cnblogs")
   }
-  return state.subtype || "未识别"
+  return state.subtype || t("v2.common.unknown")
 })
 
 watch(
@@ -127,7 +129,7 @@ onMounted(async () => {
 async function loadBridgeMeta() {
   if (!props.platformKey) {
     state.subtype = ""
-    state.errorMessage = "未提供平台 key"
+    state.errorMessage = t("v2.platformConfig.error.noPlatformKey")
     state.isLoading = false
     return
   }
@@ -139,10 +141,10 @@ async function loadBridgeMeta() {
     const publishCfg = await getPublishCfg(props.platformKey)
     state.subtype = publishCfg.dynCfg?.subPlatformType ?? ""
     if (!publishCfg.dynCfg) {
-      state.errorMessage = "未找到对应的平台配置"
+      state.errorMessage = t("v2.platformConfig.error.notFound")
     }
   } catch (error) {
-    state.errorMessage = error instanceof Error ? error.message : String(error ?? "未知错误")
+    state.errorMessage = error instanceof Error ? error.message : String(error ?? t("v2.common.unknownError"))
     state.subtype = ""
   } finally {
     state.isLoading = false

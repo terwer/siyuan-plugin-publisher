@@ -16,9 +16,19 @@ import { useI18n } from "vue-i18n"
 export const useVueI18n = () => {
   const { messages, locale } = useI18n()
 
-  const translate = (key) => {
+  const translate = (key, params?: Record<string, string | number | boolean | null | undefined>) => {
     const localeMessages = messages.value?.[locale.value]
-    return localeMessages[key] || key
+    let message = localeMessages[key] || key
+
+    if (!params) {
+      return message
+    }
+
+    for (const [paramKey, paramValue] of Object.entries(params)) {
+      message = message.split(`{${paramKey}}`).join(String(paramValue ?? ""))
+    }
+
+    return message
   }
 
   return { t: translate, locale }
