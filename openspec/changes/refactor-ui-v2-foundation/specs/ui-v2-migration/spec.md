@@ -189,6 +189,40 @@ The V2 migration SHALL preserve configuration compatibility and may bridge legac
 - **THEN** the bridge should prefer shared logic and shared configuration parsing
 - **AND** it should avoid introducing new long-term iframe dependencies
 
+### Requirement: UI V2 SHALL use one host-backed i18n source
+
+The V2-native UI SHALL use `siyuan/i18n/*` as its single i18n source of truth. V2-native components SHALL NOT introduce a second independent locale bundle for the same UI surface.
+
+#### Scenario: Contributor adds new V2-native copy
+
+- **GIVEN** a contributor adds or updates copy in a V2-native publish or settings view
+- **WHEN** they register the text
+- **THEN** the key must be added to the host-backed `siyuan/i18n/*`
+- **AND** the V2 component must read it through the V2 host-backed i18n path
+
+### Requirement: Legacy SPA keys required by V2 SHALL be mirrored before call-site migration
+
+When V2 needs text that previously existed only in the SPA locale bundle, the migration SHALL first mirror the needed key into `siyuan/i18n/*` before converting the V2 call site.
+
+#### Scenario: V2 needs a legacy SPA text key
+
+- **GIVEN** a V2 publish, settings, or bridge workflow still depends on a legacy SPA text key
+- **WHEN** that workflow is migrated toward host-backed i18n
+- **THEN** the required key must first be mirrored into `siyuan/i18n/*`
+- **AND** the migration must not rely on an unmapped key disappearing from `src/locales/*`
+
+### Requirement: Bridge i18n migration SHALL preserve V1 usability during coexistence
+
+While V1 and V2 coexist, shared bridge components SHALL preserve V1 usability. Contributors SHALL use compatibility layers, mirrored keys, or wrappers instead of directly rewriting shared bridge i18n in ways that break V1.
+
+#### Scenario: A bridge component is still used by both V1 and V2
+
+- **GIVEN** a bridge component is shared between the legacy V1 path and the V2 path
+- **WHEN** a contributor migrates its text handling
+- **THEN** the migration must preserve V1 usability
+- **AND** it must not leave the V1 path without valid i18n content
+- **AND** it may defer full in-place rewrite until V1 is retired or the bridge is fully split
+
 ### Requirement: UI V2 migration SHALL preserve rollback and coexistence until stable release
 
 The migration SHALL preserve rollback and coexistence with the legacy UI until the V2 workflow is stable enough for convergence decisions.
