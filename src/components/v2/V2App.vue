@@ -320,7 +320,7 @@ async function handleToggleAccountEnabled(platformKey: string, nextEnabled: bool
 
 <style scoped lang="stylus">
 .syp-v2
-  width 860px
+  width 960px
   max-width calc(100vw - 48px)
   max-height calc(100vh - 48px)
   display flex

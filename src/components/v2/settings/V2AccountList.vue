@@ -82,9 +82,11 @@ defineEmits<{
 .syp-settings-page__header
   display flex
   justify-content space-between
-  align-items flex-start
+  align-items center
   gap 12px
   flex-shrink 0
+  padding-bottom 16px
+  border-bottom 1px solid #e8eaed
 
 .syp-settings-page__eyebrow
   font-size 12px
