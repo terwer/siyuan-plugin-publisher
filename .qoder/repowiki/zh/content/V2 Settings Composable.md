@@ -14,6 +14,13 @@
 - [PublishSetting.vue](file://src/components/set/PublishSetting.vue)
 </cite>
 
+## 更新摘要
+**变更内容**
+- 更新了账号项目处理逻辑，增加了更详细的状态标签系统
+- 扩展了状态计算逻辑以处理四种不同状态（运行中、需授权、已禁用、未启用）
+- 增强了视觉表示和用户友好标签的显示
+- 改进了状态类型的分类和颜色编码
+
 ## 目录
 1. [简介](#简介)
 2. [项目结构](#项目结构)
@@ -30,6 +37,8 @@
 V2 设置组合式函数是 SiYuan 插件发布器中的核心功能模块，负责管理平台账户设置、配置管理和发布流程控制。该模块采用 Vue 3 的组合式 API 设计，提供了完整的账户生命周期管理、平台配置管理和快速发布功能。
 
 该系统支持多种发布平台（WordPress、博客园、GitHub Pages、GitLab Pages 等），并通过动态配置机制实现了灵活的平台扩展能力。通过组合式函数的设计，实现了状态管理、业务逻辑和 UI 组件的解耦，提高了代码的可维护性和可测试性。
+
+**更新** 新增了改进的账号项目处理逻辑，根据平台启用状态和授权状态生成更具描述性的状态标签，提供四种明确的状态分类和相应的视觉表示。
 
 ## 项目结构
 
@@ -132,6 +141,44 @@ V2SettingsState --> V2SelectablePlatform
 **章节来源**
 - [useV2Settings.ts:42-234](file://src/composables/v2/useV2Settings.ts#L42-L234)
 
+### 改进的账号状态处理逻辑
+
+**更新** 账号项目现在支持四种明确的状态分类，每种状态都有对应的视觉表示和用户友好标签：
+
+#### 状态分类系统
+
+```mermaid
+flowchart TD
+Start([开始]) --> Load[加载账户配置]
+Load --> Filter[过滤系统账户]
+Filter --> Map[映射状态信息]
+Map --> CheckAuth{检查授权状态}
+CheckAuth --> |已启用且已授权| Success[运行中<br/>success<br/>绿色]
+CheckAuth --> |已启用且未授权| Warning[需授权<br/>warning<br/>橙色]
+CheckAuth --> |未启用且已授权| Neutral[已禁用<br/>neutral<br/>灰色]
+CheckAuth --> |未启用且未授权| Error[未启用<br/>error<br/>红色]
+Success --> Display[显示账户信息]
+Warning --> Display
+Neutral --> Display
+Error --> Display
+Display --> End([结束])
+```
+
+**图表来源**
+- [useV2Settings.ts:89-122](file://src/composables/v2/useV2Settings.ts#L89-L122)
+
+#### 状态标签和视觉表示
+
+| 状态类型 | 状态标签 | 状态文本 | 视觉颜色 | 状态类型 |
+|---------|---------|---------|---------|---------|
+| 运行中 | 运行中 | 已启用 · 已授权 | 成功绿色 | success |
+| 需授权 | 需授权 | 已启用 · 未授权 | 警告橙色 | warning |
+| 已禁用 | 已禁用 | 未启用 · 已授权 | 中性灰色 | neutral |
+| 未启用 | 未启用 | 未启用 · 未授权 | 错误红色 | error |
+
+**章节来源**
+- [useV2Settings.ts:89-122](file://src/composables/v2/useV2Settings.ts#L89-L122)
+
 ### V2 快速发布组合式函数
 
 `useV2QuickPublish` 提供了快速发布功能，集成了发布状态跟踪和错误处理：
@@ -220,7 +267,9 @@ J --> L
 
 账户管理是 V2 设置系统的核心功能，提供了完整的账户生命周期管理：
 
-#### 账户状态转换
+#### 改进的账户状态转换流程
+
+**更新** 新增了四状态分类系统，替代了原有的二状态判断：
 
 ```mermaid
 flowchart TD
@@ -228,19 +277,19 @@ Start([开始]) --> Load[加载账户配置]
 Load --> Filter[过滤系统账户]
 Filter --> Map[映射状态信息]
 Map --> CheckAuth{检查授权状态}
-CheckAuth --> |已启用且已授权| Success[成功状态]
-CheckAuth --> |已启用且未授权| Warning[警告状态]
-CheckAuth --> |未启用且已授权| Neutral[中性状态]
-CheckAuth --> |未启用且未授权| Error[错误状态]
-Success --> Display[显示账户信息]
-Warning --> Display
-Neutral --> Display
-Error --> Display
+CheckAuth --> |isEnabled=true && isAuth=true| Running[运行中<br/>success<br/>绿色]
+CheckAuth --> |isEnabled=true && isAuth=false| NeedAuth[需授权<br/>warning<br/>橙色]
+CheckAuth --> |isEnabled=false && isAuth=true| Disabled[已禁用<br/>neutral<br/>灰色]
+CheckAuth --> |isEnabled=false && isAuth=false| NotEnabled[未启用<br/>error<br/>红色]
+Running --> Display[显示账户信息]
+NeedAuth --> Display
+Disabled --> Display
+NotEnabled --> Display
 Display --> End([结束])
 ```
 
 **图表来源**
-- [useV2Settings.ts:78-123](file://src/composables/v2/useV2Settings.ts#L78-L123)
+- [useV2Settings.ts:89-122](file://src/composables/v2/useV2Settings.ts#L89-L122)
 
 #### 账户操作流程
 
@@ -487,5 +536,7 @@ V2 设置组合式函数为 SiYuan 插件发布器提供了强大而灵活的设
 2. **良好的用户体验**：直观的界面设计和流畅的操作流程
 3. **可靠的稳定性**：完善的错误处理和状态管理机制
 4. **优秀的性能表现**：优化的数据访问和状态更新策略
+
+**更新** 新增的四状态分类系统显著提升了用户体验，用户现在可以更精确地了解每个平台账户的当前状态，并获得相应的视觉反馈。这种改进使得用户能够更有效地管理他们的发布平台配置，提高了整体的使用效率和满意度。
 
 该系统的成功实施为类似的内容发布工具提供了宝贵的参考经验，特别是在组合式 API 的应用、状态管理和平台扩展方面都具有重要的借鉴意义。

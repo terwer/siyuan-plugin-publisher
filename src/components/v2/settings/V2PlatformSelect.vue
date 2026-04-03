@@ -4,6 +4,7 @@
       <div>
         <div class="syp-settings-page__eyebrow">账号设置</div>
         <h2 class="syp-settings-page__title">选择平台</h2>
+        <p class="syp-settings-page__desc">选择要接入的预设平台，新增账号仍在当前工作壳内完成。</p>
       </div>
     </div>
 
@@ -42,29 +43,7 @@ defineEmits<{
 
 <style scoped lang="stylus">
 .syp-settings-page
-  display flex
-  flex-direction column
-  gap 18px
-  height 100%
-  min-height 0
-
-.syp-settings-page__header
-  display flex
-  justify-content space-between
-  align-items flex-start
-  gap 12px
-  flex-shrink 0
-
-.syp-settings-page__eyebrow
-  font-size 12px
-  color #7b8490
-  letter-spacing 0.08em
-  text-transform uppercase
-
-.syp-settings-page__title
-  margin 6px 0 0 0
-  font-size 28px
-  color #1f2329
+  overflow hidden
 
 .syp-platform-select-list
   display flex
@@ -86,10 +65,13 @@ defineEmits<{
   background linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)
   cursor pointer
   text-align left
+  transition border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease
 
   &:hover
     border-color #c8d6ea
     background #fff
+    box-shadow 0 2px 8px rgba(15, 23, 42, 0.04)
+    transform translateY(-1px)
 
 .syp-platform-select-item__icon
   width 44px
@@ -105,6 +87,9 @@ defineEmits<{
   :deep(svg), :deep(img)
     width 22px
     height 22px
+
+.syp-platform-select-item__info
+  min-width 0
 
 .syp-platform-select-item__name
   font-size 16px

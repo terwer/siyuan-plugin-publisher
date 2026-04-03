@@ -245,6 +245,161 @@
     min-height 0
     overflow hidden
 
+  .syp-settings-page
+    display flex
+    flex-direction column
+    gap 18px
+    height 100%
+    min-height 0
+
+  .syp-settings-page__header
+    display flex
+    justify-content space-between
+    align-items flex-start
+    gap $syp-spacing-md
+    flex-shrink 0
+
+  .syp-settings-page__eyebrow
+    font-size $syp-font-size-xs
+    color $syp-text-tertiary
+    letter-spacing 0.08em
+    text-transform uppercase
+
+  .syp-settings-page__title
+    margin 0
+    font-size 34px
+    line-height 1.1
+    color $syp-text-primary
+
+  .syp-settings-page__desc
+    margin 8px 0 0
+    max-width 640px
+    font-size $syp-font-size-sm
+    color $syp-text-secondary
+
+  .syp-settings-empty
+    display flex
+    flex-direction column
+    gap $syp-spacing-sm
+    padding $syp-spacing-lg
+    border 1px solid $syp-border-secondary
+    border-radius $syp-radius-lg
+    background linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)
+
+  .syp-settings-empty__title
+    font-size $syp-font-size-lg
+    font-weight 600
+    color $syp-text-primary
+
+  .syp-settings-empty__desc
+    font-size $syp-font-size-sm
+    color $syp-text-secondary
+
+  .syp-settings-group-list
+    display flex
+    flex-direction column
+    gap $syp-spacing-md
+    min-height 0
+    overflow-y auto
+    padding-right 4px
+
+  .syp-settings-group
+    padding 20px
+    border 1px solid $syp-border-secondary
+    border-radius 14px
+    background linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)
+
+  .syp-settings-group__title
+    font-size 13px
+    color $syp-text-tertiary
+
+  .syp-settings-group__desc
+    margin-top 8px
+    font-size $syp-font-size-sm
+    color $syp-text-secondary
+
+  .syp-settings-form-list
+    display flex
+    flex-direction column
+    gap 0
+    margin-top $syp-spacing-md
+
+  .syp-settings-form-row
+    display flex
+    align-items center
+    justify-content space-between
+    gap $syp-spacing-lg
+    padding 14px 0
+    border-bottom 1px solid $syp-border-secondary
+
+    &:first-child
+      padding-top 0
+
+    &:last-child
+      padding-bottom 0
+      border-bottom none
+
+  .syp-settings-form-main
+    min-width 0
+    flex 1
+
+  .syp-settings-form-label
+    font-size $syp-font-size-sm
+    font-weight 600
+    color $syp-text-primary
+
+  .syp-settings-form-desc
+    margin-top 4px
+    font-size 13px
+    color $syp-text-secondary
+
+  .syp-settings-form-control
+    display flex
+    align-items center
+    justify-content flex-end
+    gap $syp-spacing-sm
+    flex-shrink 0
+
+  .syp-settings-status-text
+    font-size $syp-font-size-xs
+    color $syp-text-tertiary
+
+  .syp-settings-detail-grid
+    display grid
+    grid-template-columns repeat(2, minmax(0, 1fr))
+    gap $syp-spacing-md
+
+  .syp-settings-detail-card
+    padding 20px
+    border-radius 14px
+    background linear-gradient(180deg, #ffffff 0%, #f7f9fc 100%)
+    border 1px solid $syp-border-secondary
+
+  .syp-settings-detail-card__title
+    margin-bottom 14px
+    font-size 13px
+    color $syp-text-tertiary
+
+  .syp-settings-detail-list
+    display flex
+    flex-direction column
+    gap 12px
+
+  .syp-settings-detail-row
+    display grid
+    grid-template-columns 72px minmax(0, 1fr)
+    gap 12px
+    align-items start
+
+  .syp-settings-detail-label
+    font-size $syp-font-size-xs
+    color $syp-text-tertiary
+
+  .syp-settings-detail-value
+    font-size $syp-font-size-sm
+    color #475467
+    word-break break-all
+
   @media (max-width: 960px)
     .syp-v2
       height auto
@@ -259,3 +414,21 @@
 
     .syp-shell__nav
       border none
+      padding $syp-spacing-md
+
+    .syp-shell__main
+      padding $syp-spacing-lg
+
+    .syp-settings-page__title
+      font-size 28px
+
+    .syp-settings-form-row
+      align-items flex-start
+      flex-direction column
+
+    .syp-settings-form-control
+      width 100%
+      justify-content flex-start
+
+    .syp-settings-detail-grid
+      grid-template-columns 1fr

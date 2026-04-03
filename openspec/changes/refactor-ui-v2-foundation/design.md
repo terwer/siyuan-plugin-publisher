@@ -167,7 +167,7 @@ V2 必须采用 `UnifiedWorkspaceShell`，由以下区域构成：
 ### 6.2 设置分类
 
 - `ACCOUNT`
-- `IMAGE_HOSTING`
+- `PICBED`
 - `PREFERENCE`
 
 ### 6.3 设置内部视图
@@ -175,8 +175,8 @@ V2 必须采用 `UnifiedWorkspaceShell`，由以下区域构成：
 - `ACCOUNT_LIST`
 - `PLATFORM_SELECT`
 - `PLATFORM_CONFIG`
-- `IMAGE_HOSTING_LIST`
-- `IMAGE_HOSTING_CONFIG`
+- `PICBED_LIST`
+- `PICBED_CONFIG`
 - `PREFERENCE_FORM`
 
 ## 7. 技术架构

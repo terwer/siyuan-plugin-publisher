@@ -103,45 +103,29 @@
           </div>
         </section>
 
-        <section v-else class="syp-settings-shell">
-          <V2AccountList
-            v-if="settings.state.section === 'account' && settings.state.accountView === 'list'"
-            :items="settings.state.accountItems"
-            @add="settings.openPlatformSelect"
-            @configure="settings.openAccountConfig"
-            @toggle="handleToggleAccountEnabled"
-          />
+        <V2AccountList
+          v-else-if="settings.state.section === 'account' && settings.state.accountView === 'list'"
+          :items="settings.state.accountItems"
+          @add="settings.openPlatformSelect"
+          @configure="settings.openAccountConfig"
+          @toggle="handleToggleAccountEnabled"
+        />
 
-          <V2PlatformSelect
-            v-else-if="settings.state.section === 'account' && settings.state.accountView === 'select'"
-            :items="settings.selectablePlatforms.value"
-            @select="settings.createAccountDraft"
-          />
+        <V2PlatformSelect
+          v-else-if="settings.state.section === 'account' && settings.state.accountView === 'select'"
+          :items="settings.selectablePlatforms.value"
+          @select="settings.createAccountDraft"
+        />
 
-          <section
-            v-else-if="settings.state.section === 'account' && settings.state.accountView === 'config'"
-            class="syp-settings-shell"
-          >
-            <div class="syp-settings-shell__eyebrow">账号设置</div>
-            <h1 class="syp-settings-shell__title">{{ settings.state.selectedPlatformName || "平台配置" }}</h1>
-            <p class="syp-settings-shell__desc">配置与授权将在下一阶段接入。当前已完成账号列表与平台选择流转。</p>
+        <V2PlatformConfigBridge
+          v-else-if="settings.state.section === 'account' && settings.state.accountView === 'config'"
+          :platform-key="settings.state.selectedPlatformKey"
+          :platform-name="settings.state.selectedPlatformName"
+        />
 
-            <div class="syp-settings-shell__content-card">
-              <div class="syp-settings-shell__section-title">当前平台</div>
-              <div class="syp-settings-shell__placeholder-line">{{ settings.state.selectedPlatformKey }}</div>
-            </div>
-          </section>
+        <V2PicBedSettings v-else-if="settings.state.section === 'picbed'" />
 
-          <section v-else class="syp-settings-shell">
-            <div class="syp-settings-shell__eyebrow">{{ settings.state.section === "picbed" ? "图床设置" : "偏好设置" }}</div>
-            <h1 class="syp-settings-shell__title">{{ settings.state.section === "picbed" ? "图床设置" : "偏好设置" }}</h1>
-            <p class="syp-settings-shell__desc">该分组将在后续 Phase 中接入，当前优先完成账号列表与平台选择。</p>
-            <div class="syp-settings-shell__content-card">
-              <div class="syp-settings-shell__section-title">当前阶段</div>
-              <div class="syp-settings-shell__placeholder-line">M4 Phase 1 已接入账号列表与平台选择。</div>
-            </div>
-          </section>
-        </section>
+        <V2PreferenceSettings v-else />
       </UnifiedWorkspaceShell>
     </div>
   </div>
@@ -153,7 +137,10 @@ import "~/src/assets/v2/base.styl"
 import UnifiedWorkspaceShell from "~/src/components/v2/layout/UnifiedWorkspaceShell.vue"
 import V2PlatformCard from "~/src/components/v2/publish/V2PlatformCard.vue"
 import V2AccountList from "~/src/components/v2/settings/V2AccountList.vue"
+import V2PicBedSettings from "~/src/components/v2/settings/V2PicBedSettings.vue"
 import V2PlatformSelect from "~/src/components/v2/settings/V2PlatformSelect.vue"
+import V2PlatformConfigBridge from "~/src/components/v2/settings/V2PlatformConfigBridge.vue"
+import V2PreferenceSettings from "~/src/components/v2/settings/V2PreferenceSettings.vue"
 import { useV2QuickPublish } from "~/src/composables/v2/useV2QuickPublish.ts"
 import { useV2Settings } from "~/src/composables/v2/useV2Settings.ts"
 import LucideChevronLeft from "~icons/lucide/chevron-left"
@@ -420,22 +407,19 @@ async function handleToggleAccountEnabled(platformKey: string, nextEnabled: bool
   color #8a1c0f
   white-space pre-wrap
 
-.syp-quick-shell__eyebrow,
-.syp-settings-shell__eyebrow
+.syp-quick-shell__eyebrow
   font-size 12px
   letter-spacing 0.08em
   text-transform uppercase
   color #7b8490
 
-.syp-quick-shell__title,
-.syp-settings-shell__title
+.syp-quick-shell__title
   margin 0
   font-size 42px
   line-height 1
   color #1f2329
 
-.syp-quick-shell__desc,
-.syp-settings-shell__desc
+.syp-quick-shell__desc
   margin 0
   font-size 16px
   color #646a73
@@ -446,27 +430,18 @@ async function handleToggleAccountEnabled(platformKey: string, nextEnabled: bool
   grid-template-columns repeat(2, minmax(0, 1fr))
   gap 16px
 
-.syp-platform-skeleton,
-.syp-settings-shell__content-card
+.syp-platform-skeleton
   padding 20px
   border-radius 14px
   background linear-gradient(180deg, #ffffff 0%, #f7f9fc 100%)
   border 1px solid #e6ebf2
 
-.syp-settings-shell__placeholder-line
-  margin-bottom 16px
-  font-size 14px
-  color #475467
-  word-break break-all
-
-.syp-platform-skeleton__title,
-.syp-settings-shell__section-title
+.syp-platform-skeleton__title
   font-size 13px
   color #7b8490
   margin-bottom 14px
 
-.syp-platform-skeleton__row,
-.syp-settings-shell__placeholder
+.syp-platform-skeleton__row
   height 44px
   border-radius 10px
   background linear-gradient(90deg, #eef2f7 0%, #f7f9fc 100%)
@@ -492,11 +467,6 @@ async function handleToggleAccountEnabled(platformKey: string, nextEnabled: bool
 .syp-empty-state__desc
   font-size 14px
   color #667085
-
-.syp-settings-shell
-  display flex
-  flex-direction column
-  gap 18px
 
 @media (max-width: 960px)
   .syp-v2

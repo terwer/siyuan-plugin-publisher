@@ -4,26 +4,20 @@
       <div>
         <div class="syp-settings-page__eyebrow">账号设置</div>
         <h2 class="syp-settings-page__title">账号列表</h2>
+        <p class="syp-settings-page__desc">查看账号状态、启停平台，并进入平台配置。</p>
       </div>
       <button type="button" class="syp-btn syp-btn-primary" @click="$emit('add')">
-        <span class="syp-btn__icon">+</span>
         添加账号
       </button>
     </div>
 
     <div v-if="items.length === 0" class="syp-settings-empty">
-      <div class="syp-settings-empty__icon">📭</div>
       <div class="syp-settings-empty__title">暂无已配置账号</div>
-      <div class="syp-settings-empty__desc">点击右上角"添加账号"开始创建平台配置。</div>
+      <div class="syp-settings-empty__desc">点击右上角“添加账号”开始创建平台配置。</div>
     </div>
 
     <div v-else class="syp-account-list">
-      <article
-        v-for="item in items"
-        :key="item.platformKey"
-        class="syp-account-item"
-        :class="`is-${item.statusType}`"
-      >
+      <article v-for="item in items" :key="item.platformKey" class="syp-account-item">
         <div class="syp-account-item__main">
           <div class="syp-account-item__icon">
             <span v-if="item.platformIcon" v-html="item.platformIcon"></span>
@@ -42,50 +36,40 @@
               </span>
             </div>
             <div class="syp-account-item__key">{{ item.platformKey }}</div>
+            <div class="syp-account-item__summary">{{ item.statusText }}</div>
           </div>
         </div>
 
         <div class="syp-account-item__actions">
-          <!-- 已禁用状态：始终显示删除（与授权状态无关） -->
           <button
-            v-if="!item.isEnabled"
             type="button"
-            class="syp-btn syp-btn-text is-danger"
-            @click="$emit('delete', item.platformKey, item.platformName)"
-          >
-            删除
-          </button>
-          <!-- 已启用 + 已授权：显示管理 -->
-          <button
-            v-else-if="item.isAuth"
-            type="button"
-            class="syp-btn syp-btn-text"
+            class="syp-btn syp-btn-secondary"
+            :class="{ 'is-warning': !item.isAuth }"
             @click="$emit('configure', item.platformKey, item.platformName)"
           >
-            管理
-          </button>
-          <!-- 已启用 + 未授权：显示去授权 -->
-          <button
-            v-else
-            type="button"
-            class="syp-btn syp-btn-text is-warning"
-            @click="$emit('configure', item.platformKey, item.platformName)"
-          >
-            去授权
+            {{ item.isAuth ? "管理" : "去授权" }}
           </button>
 
-          <!-- Toggle Switch - 纯图形化，无文字标签 -->
+          <div class="syp-account-item__toggle">
+            <span class="syp-account-item__toggle-label">{{ item.isEnabled ? "已启用" : "已禁用" }}</span>
+            <label class="syp-toggle" :title="item.isEnabled ? '点击禁用' : '点击启用'">
+              <input
+                type="checkbox"
+                :checked="item.isEnabled"
+                :aria-label="item.isEnabled ? '禁用' : '启用'"
+                @change="handleToggle(item.platformKey, $event)"
+              />
+              <span class="syp-toggle-slider"></span>
+            </label>
+          </div>
+
           <button
             type="button"
-            class="syp-switch"
-            :class="{ 'is-on': item.isEnabled }"
-            @click="$emit('toggle', item.platformKey, !item.isEnabled)"
-            :title="item.isEnabled ? '点击禁用' : '点击启用'"
-            aria-label="item.isEnabled ? '禁用' : '启用'"
+            class="syp-btn syp-btn-text is-danger"
+            disabled
+            title="删除清理将在后续阶段接入"
           >
-            <span class="syp-switch__track">
-              <span class="syp-switch__thumb"></span>
-            </span>
+            删除
           </button>
         </div>
       </article>
@@ -100,152 +84,27 @@ defineProps<{
   items: V2AccountItem[]
 }>()
 
-defineEmits<{
+const emit = defineEmits<{
   (event: "add"): void
   (event: "configure", platformKey: string, platformName: string): void
   (event: "toggle", platformKey: string, nextEnabled: boolean): void
-  (event: "delete", platformKey: string, platformName: string): void
 }>()
+
+function handleToggle(platformKey: string, event: Event) {
+  const target = event.target as HTMLInputElement | null
+  emit("toggle", platformKey, target?.checked === true)
+}
 </script>
 
 <style scoped lang="stylus">
-// ============================================
-// 飞书/字节设计令牌
-// ============================================
-// 状态颜色
-$color-success = #00B42A
-$color-success-bg = #E8FFEA
-$color-warning = #FF7D00
-$color-warning-bg = #FFF7E8
-$color-error = #F53F3F
-$color-error-bg = #FFECE8
-$color-neutral = #86909C
-$color-neutral-bg = #F2F3F5
-
-// 文字颜色
-$text-primary = #1D2129
-$text-secondary = #4E5969
-$text-tertiary = #86909C
-
-// 边框和背景
-$border-color = #E5E6EB
-$bg-hover = #F7F8FA
-$bg-card = #FFFFFF
-
-// 圆角和间距
-$radius-sm = 6px
-$radius-md = 8px
-$radius-lg = 12px
-$gap-sm = 8px
-$gap-md = 12px
-$gap-lg = 16px
-
-// ============================================
-// 页面布局
-// ============================================
 .syp-settings-page
-  display flex
-  flex-direction column
-  gap $gap-lg
-  height 100%
-  min-height 0
   overflow hidden
 
-// 统一头部样式 - 与发布态保持一致
-.syp-settings-page__header
-  display flex
-  justify-content space-between
-  align-items flex-start
-  gap $gap-md
-  flex-shrink 0
-  padding-bottom $gap-lg
-  border-bottom none
-
-.syp-settings-page__eyebrow
-  font-size 12px
-  color #7b8490
-  letter-spacing 0.08em
-  text-transform uppercase
-
-.syp-settings-page__title
-  margin 6px 0 0 0
-  font-size 28px
-  font-weight 600
-  color #1f2329
-
-// ============================================
-// 按钮组件
-// ============================================
-.syp-btn
-  display inline-flex
-  align-items center
-  gap 6px
-  padding 8px 16px
-  font-size 14px
-  font-weight 500
-  border-radius $radius-md
-  border none
-  cursor pointer
-  transition all 0.2s ease
-
-.syp-btn-primary
-  background $text-primary
-  color white
-  &:hover
-    background lighten($text-primary, 10%)
-
-.syp-btn__icon
-  font-size 16px
-  font-weight 300
-
-.syp-btn-text
-  background transparent
-  color $text-secondary
-  padding 6px 12px
-  &:hover
-    background $bg-hover
-    color $text-primary
-  &.is-warning
-    color $color-warning
-    &:hover
-      background $color-warning-bg
-  &.is-danger
-    color $color-error
-    &:hover
-      background $color-error-bg
-
-// ============================================
-// 空状态
-// ============================================
-.syp-settings-empty
-  display flex
-  flex-direction column
-  align-items center
-  padding 48px 24px
-  text-align center
-
-.syp-settings-empty__icon
-  font-size 48px
-  margin-bottom $gap-md
-
-.syp-settings-empty__title
-  font-size 18px
-  font-weight 600
-  color $text-primary
-
-.syp-settings-empty__desc
-  margin-top 8px
-  font-size 14px
-  color $text-tertiary
-
-// ============================================
-// 账号列表
-// ============================================
 .syp-account-list
   display flex
   flex-direction column
   flex 1
-  gap $gap-md
+  gap 12px
   min-height 0
   overflow-y auto
   padding-right 4px
@@ -254,31 +113,29 @@ $gap-lg = 16px
   display flex
   justify-content space-between
   align-items center
-  gap $gap-lg
-  padding $gap-md $gap-lg
-  border 1px solid $border-color
-  border-radius $radius-lg
-  background $bg-card
-  transition all 0.2s ease
-  
+  gap 16px
+  padding 18px
+  border 1px solid #e6ebf2
+  border-radius 16px
+  background linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)
+  transition border-color 0.2s ease, box-shadow 0.2s ease
+
   &:hover
-    border-color darken($border-color, 10%)
-    box-shadow 0 2px 8px rgba(0, 0, 0, 0.04)
-  
-  // 状态通过徽章展示，不使用边框
+    border-color #c8d6ea
+    box-shadow 0 2px 8px rgba(15, 23, 42, 0.04)
 
 .syp-account-item__main
   display flex
   align-items center
-  gap $gap-md
+  gap 14px
   min-width 0
   flex 1
 
 .syp-account-item__icon
-  width 40px
-  height 40px
-  border-radius $radius-md
-  background linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%)
+  width 44px
+  height 44px
+  border-radius 12px
+  background #f2f5fa
   display flex
   align-items center
   justify-content center
@@ -288,8 +145,8 @@ $gap-lg = 16px
   font-weight 600
 
   :deep(svg), :deep(img)
-    width 20px
-    height 20px
+    width 22px
+    height 22px
 
 .syp-account-item__info
   min-width 0
@@ -298,23 +155,25 @@ $gap-lg = 16px
 .syp-account-item__name-row
   display flex
   align-items center
-  gap $gap-sm
+  gap 8px
   flex-wrap wrap
 
 .syp-account-item__name
-  font-size 15px
+  font-size 16px
   font-weight 600
-  color $text-primary
+  color #1f2329
 
 .syp-account-item__key
-  margin-top 2px
+  margin-top 4px
   font-size 12px
-  color $text-tertiary
+  color #7b8490
   font-family monospace
 
-// ============================================
-// 状态徽章
-// ============================================
+.syp-account-item__summary
+  margin-top 6px
+  font-size 13px
+  color #475467
+
 .syp-status-badge
   display inline-flex
   align-items center
@@ -324,107 +183,88 @@ $gap-lg = 16px
   font-weight 500
   border-radius 999px
   white-space nowrap
-  
+
   &__dot
     width 6px
     height 6px
     border-radius 50%
-  
-  &.is-success
-    background $color-success-bg
-    color $color-success
-    .syp-status-badge__dot
-      background $color-success
-  
-  &.is-warning
-    background $color-warning-bg
-    color $color-warning
-    .syp-status-badge__dot
-      background $color-warning
-  
-  &.is-error
-    background $color-error-bg
-    color $color-error
-    .syp-status-badge__dot
-      background $color-error
-  
-  &.is-neutral
-    background $color-neutral-bg
-    color $color-neutral
-    .syp-status-badge__dot
-      background $color-neutral
 
-// ============================================
-// 操作区
-// ============================================
+  &.is-success
+    background #e8ffea
+    color #00b42a
+    .syp-status-badge__dot
+      background #00b42a
+
+  &.is-warning
+    background #fff7e8
+    color #ff7d00
+    .syp-status-badge__dot
+      background #ff7d00
+
+  &.is-error
+    background #ffece8
+    color #f53f3f
+    .syp-status-badge__dot
+      background #f53f3f
+
+  &.is-neutral
+    background #f2f3f5
+    color #86909c
+    .syp-status-badge__dot
+      background #86909c
+
 .syp-account-item__actions
   display flex
   align-items center
-  gap $gap-sm
+  justify-content flex-end
+  flex-wrap wrap
+  gap 10px
   flex-shrink 0
-  white-space nowrap
 
-// ============================================
-// Toggle Switch - 纯图形化 iOS 风格
-// ============================================
-.syp-switch
-  display inline-flex
+.syp-account-item__toggle
+  display flex
   align-items center
-  justify-content center
-  padding 4px
-  background transparent
-  border none
-  cursor pointer
-  user-select none
-  flex-shrink 0
-  outline none
-  -webkit-tap-highlight-color transparent
+  gap 8px
+  color #7b8490
 
-  &:focus-visible
-    .syp-switch__track
-      box-shadow 0 0 0 2px rgba($color-success, 0.3)
+.syp-account-item__toggle-label
+  font-size 12px
+  min-width 44px
+  text-align right
 
-.syp-switch__track
-  position relative
-  width 44px
-  height 24px
-  background $color-neutral-bg
-  border-radius 999px
-  transition background 0.25s cubic-bezier(0.4, 0, 0.2, 1)
-  flex-shrink 0
+.syp-btn.syp-btn-secondary
+  background #f7f9fc
+  color #355d90
+  box-shadow none
 
-.syp-switch__thumb
-  position absolute
-  top 2px
-  left 2px
-  width 20px
-  height 20px
-  background white
-  border-radius 50%
-  box-shadow 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.1)
-  transition transform 0.25s cubic-bezier(0.4, 0, 0.2, 1)
+  &:hover
+    background #eef2f7
 
-// Switch 开启状态
-.syp-switch.is-on
-  .syp-switch__track
-    background $color-success
+.syp-btn.is-warning.syp-btn-secondary
+  background #fff7e8
+  color #ad5b00
 
-  .syp-switch__thumb
-    transform translateX(20px)
+  &:hover
+    background #ffefcc
 
-// 悬停效果
-.syp-switch:hover
-  .syp-switch__track
-    background darken($color-neutral-bg, 5%)
+.syp-btn.is-danger
+  color #b42318
 
-  &.is-on .syp-switch__track
-    background darken($color-success, 5%)
+  &:hover
+    background #fff1f1
+    color #b42318
 
-// 点击效果
-.syp-switch:active
-  .syp-switch__thumb
-    width 22px
+  &:disabled
+    opacity 0.45
+    cursor not-allowed
+    background transparent
 
-  &.is-on .syp-switch__thumb
-    transform translateX(18px)
+@media (max-width: 960px)
+  .syp-account-item
+    align-items flex-start
+    flex-direction column
+
+  .syp-account-item__actions
+    width 100%
+    justify-content flex-start
 </style>

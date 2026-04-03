@@ -148,13 +148,13 @@ The V2 settings workflow SHALL support account management as part of the unified
 - **AND** the system must support platform selection for new accounts
 - **AND** the system must support entering platform configuration details
 
-### Requirement: UI V2 SHALL support grouped image hosting settings
+### Requirement: UI V2 SHALL support grouped PicBed settings
 
-The unified workspace settings content SHALL support grouped headings and aligned form rows for image hosting settings.
+The unified workspace settings content SHALL support grouped headings and aligned form rows for PicBed settings.
 
-#### Scenario: User opens image hosting settings
+#### Scenario: User opens PicBed settings
 
-- **GIVEN** the user selects the image hosting category
+- **GIVEN** the user selects the PicBed category
 - **WHEN** the content workspace renders
 - **THEN** the workspace must show the category title
 - **AND** the workspace must allow grouped configuration sections
