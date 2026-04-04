@@ -319,7 +319,7 @@ onMounted(async () => {
 
 <template>
   <el-skeleton class="placeholder" v-if="!formData.isInit" :rows="5" animated />
-  <el-form v-else label-width="120px">
+  <el-form v-else label-width="96px" class="legacy-setting-form">
     <el-alert :closable="false" :title="formData.settingTips" class="top-tip" type="info" />
     <el-alert
       v-if="props.cfg?.knowledgeSpaceEnabled"
@@ -528,12 +528,87 @@ onMounted(async () => {
 
 <style lang="stylus" scoped>
 .placeholder
-  margin-top 10px
+  margin-top 4px
 
 .top-tip
-  margin 10px 0
+  margin 4px 0
 
 .inline-tip
   margin 0
   padding-left 0
+
+.legacy-setting-form
+  :deep(.el-form-item)
+    margin-bottom 8px
+
+  :deep(.el-form-item__label)
+    align-items center
+    min-height 30px
+    line-height 16px
+    padding-right 10px
+    font-size 12px
+    color #5f6b7a
+
+  :deep(.el-form-item__content)
+    min-height 30px
+    line-height 16px
+    gap 6px
+
+  :deep(.el-input__wrapper),
+  :deep(.el-select__wrapper)
+    min-height 30px
+    padding 0 8px
+    border-radius 8px
+
+  :deep(.el-textarea__inner)
+    padding 6px 8px
+    border-radius 8px
+    line-height 1.35
+
+  :deep(.el-radio-group)
+    display flex
+    flex-wrap wrap
+    gap 4px 12px
+
+  :deep(.el-radio),
+  :deep(.el-checkbox)
+    margin-right 0
+    min-height 22px
+
+  :deep(.el-radio__label),
+  :deep(.el-checkbox__label)
+    padding-left 4px
+    font-size 12px
+
+  :deep(.el-radio__inner),
+  :deep(.el-checkbox__inner)
+    width 13px
+    height 13px
+
+  :deep(.el-alert)
+    --el-alert-padding 6px 8px
+    border-radius 8px
+
+  :deep(.el-alert__title)
+    font-size 12px
+    line-height 1.35
+
+  :deep(.el-button)
+    min-height 30px
+    padding 0 12px
+    border-radius 8px
+
+  :deep(a)
+    line-height 1.35
+    font-size 12px
+
+  :deep(.m-2),
+  :deep(.ml-4)
+    margin 0
+
+  :deep(.top-tip)
+    margin 4px 0
+
+  :deep(.el-form-item:last-child)
+    margin-bottom 2px
 </style>

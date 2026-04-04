@@ -150,5 +150,5 @@ const syncDefaultPath = (cfg: any) => {
 
 <style scoped lang="stylus">
 .top-tip
-  margin 10px 0
+  margin 4px 0
 </style>

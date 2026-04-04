@@ -114,8 +114,8 @@ async function loadBridgeMeta() {
 
 <style scoped lang="stylus">
 .syp-platform-bridge
-  padding 20px
-  border-radius 14px
+  padding 14px
+  border-radius 12px
   border 1px solid #e6ebf2
   background #fff
   overflow visible
@@ -136,6 +136,70 @@ async function loadBridgeMeta() {
   :deep(.el-textarea),
   :deep(.el-select)
     max-width 100%
+
+  :deep(.legacy-setting-form),
+  :deep(.legacy-cookie-form)
+    font-size 13px
+
+  :deep(.legacy-setting-form .el-form-item),
+  :deep(.legacy-cookie-form .el-form-item)
+    margin-bottom 8px
+
+  :deep(.legacy-setting-form .el-form-item__label),
+  :deep(.legacy-cookie-form .el-form-item__label)
+    min-height 30px
+    padding-right 10px
+    font-size 12px
+
+  :deep(.legacy-setting-form .el-form-item__content),
+  :deep(.legacy-cookie-form .el-form-item__content)
+    min-height 30px
+    gap 6px
+
+  :deep(.legacy-setting-form .el-input__wrapper),
+  :deep(.legacy-setting-form .el-select__wrapper),
+  :deep(.legacy-cookie-form .el-input__wrapper),
+  :deep(.legacy-cookie-form .el-select__wrapper)
+    min-height 30px
+    padding 0 8px
+
+  :deep(.legacy-setting-form .el-textarea__inner),
+  :deep(.legacy-cookie-form .el-textarea__inner)
+    padding 6px 8px
+    line-height 1.35
+
+  :deep(.legacy-setting-form .el-radio-group),
+  :deep(.legacy-cookie-form .el-radio-group)
+    gap 4px 12px
+
+  :deep(.legacy-setting-form .el-radio),
+  :deep(.legacy-setting-form .el-checkbox),
+  :deep(.legacy-cookie-form .el-radio),
+  :deep(.legacy-cookie-form .el-checkbox)
+    min-height 22px
+
+  :deep(.legacy-setting-form .el-radio__label),
+  :deep(.legacy-setting-form .el-checkbox__label),
+  :deep(.legacy-cookie-form .el-radio__label),
+  :deep(.legacy-cookie-form .el-checkbox__label)
+    padding-left 4px
+    font-size 12px
+
+  :deep(.legacy-setting-form .el-radio__inner),
+  :deep(.legacy-setting-form .el-checkbox__inner),
+  :deep(.legacy-cookie-form .el-radio__inner),
+  :deep(.legacy-cookie-form .el-checkbox__inner)
+    width 13px
+    height 13px
+
+  :deep(.legacy-setting-form .el-alert),
+  :deep(.legacy-cookie-form .el-alert)
+    --el-alert-padding 6px 8px
+
+  :deep(.legacy-setting-form .el-button),
+  :deep(.legacy-cookie-form .el-button)
+    min-height 30px
+    padding 0 12px
 
   :deep(.el-alert)
     margin-top 8px

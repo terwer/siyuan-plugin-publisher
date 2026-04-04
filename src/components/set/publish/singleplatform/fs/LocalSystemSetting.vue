@@ -95,11 +95,11 @@ localFsCfg.placeholder = localFsPlaceholder
 .yaml-type-radio-group {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 8px;
+  gap: 4px 12px;
+  margin-top: 4px;
 }
 
 .yaml-type-radio-group .el-radio {
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 </style>
