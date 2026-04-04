@@ -104,12 +104,12 @@ const forceWatchBlogId = (newBlogId: string) => {
 
   if (props.cfg?.knowledgeSpaceEnabled) {
     const kwSpace = formData.kwSpaces.find((item) => item.value === newBlogId)
-    console.log(kwSpace)
     blogName = kwSpace ? kwSpace.label : formData.cfg.blogid ?? formData.cfg.blogName
     formData.cfg.blogName = blogName
   }
 
-  formData.settingTips = apiTypeInfo + blogName
+  const normalizedBlogName = StrUtil.isEmptyString(blogName) ? "" : String(blogName).trim()
+  formData.settingTips = normalizedBlogName ? apiTypeInfo + normalizedBlogName : apiTypeInfo.trimEnd()
 }
 
 // methods

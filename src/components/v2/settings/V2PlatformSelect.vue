@@ -44,17 +44,10 @@ defineEmits<{
 </script>
 
 <style scoped lang="stylus">
-.syp-settings-page
-  overflow hidden
-
 .syp-platform-select-list
   display flex
   flex-direction column
-  flex 1
   gap 12px
-  min-height 0
-  overflow-y auto
-  padding-right 6px
 
 .syp-platform-select-item
   width 100%
@@ -72,8 +65,7 @@ defineEmits<{
   &:hover
     border-color #c8d6ea
     background #fff
-    box-shadow 0 2px 8px rgba(15, 23, 42, 0.04)
-    transform translateY(-1px)
+    box-shadow 0 6px 18px rgba(15, 23, 42, 0.08)
 
 .syp-platform-select-item__icon
   width 44px

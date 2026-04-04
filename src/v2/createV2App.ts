@@ -14,21 +14,10 @@ interface CreateV2AppOptions {
   onClose?: () => void
 }
 
-const V2_TEST_LOCALE_MESSAGES = {
-  "v2.i18nTest.probe.localeOnly": "V2 locale-only probe",
-}
-
 export const createV2VueApp = (options: CreateV2AppOptions = {}) => {
   const locale = options.locale ?? "plugin"
-  const baseMessages = options.messages ?? {
+  const messages = options.messages ?? {
     [locale]: {},
-  }
-  const messages = {
-    ...baseMessages,
-    [locale]: {
-      ...(baseMessages[locale] ?? {}),
-      ...V2_TEST_LOCALE_MESSAGES,
-    },
   }
 
   const app = createApp(V2App, {

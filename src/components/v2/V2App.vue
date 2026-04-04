@@ -130,14 +130,9 @@
 
         <V2PicBedSettings v-else-if="settings.state.section === 'picbed'" />
 
-        <V2PreferenceSettings
-          v-else-if="settings.state.section === 'preference' && preferenceSubview === 'form'"
-          @open-i18n-test="openI18nTest"
-        />
+        <V2PreferenceSettings v-else-if="settings.state.section === 'preference'" />
 
-        <V2I18nTestPage v-else-if="settings.state.section === 'preference' && preferenceSubview === 'i18n_test'" />
-
-        <V2PreferenceSettings v-else @open-i18n-test="openI18nTest" />
+        <V2PreferenceSettings v-else />
       </UnifiedWorkspaceShell>
     </div>
   </div>
@@ -149,7 +144,6 @@ import "~/src/assets/v2/base.styl"
 import UnifiedWorkspaceShell from "~/src/components/v2/layout/UnifiedWorkspaceShell.vue"
 import V2PlatformCard from "~/src/components/v2/publish/V2PlatformCard.vue"
 import V2AccountList from "~/src/components/v2/settings/V2AccountList.vue"
-import V2I18nTestPage from "~/src/components/v2/settings/V2I18nTestPage.vue"
 import V2PicBedSettings from "~/src/components/v2/settings/V2PicBedSettings.vue"
 import V2PlatformSelect from "~/src/components/v2/settings/V2PlatformSelect.vue"
 import V2PlatformConfigBridge from "~/src/components/v2/settings/V2PlatformConfigBridge.vue"
@@ -168,7 +162,6 @@ const props = defineProps<{
 }>()
 
 const currentView = ref<"quick_publish" | "settings">(props.initialView ?? "quick_publish")
-const preferenceSubview = ref<"form" | "i18n_test">("form")
 const isSettingsView = computed(() => currentView.value === "settings")
 const quickPublish = useV2QuickPublish()
 const settings = useV2Settings()
@@ -182,9 +175,6 @@ const panelTitle = computed(() => {
 })
 
 const settingsBackTitle = computed(() => {
-  if (settings.state.section === "preference" && preferenceSubview.value === "i18n_test") {
-    return t("v2.app.back.preference")
-  }
   if (settings.state.section === "account" && settings.state.accountView !== "list") {
     return t("v2.app.back.accountList")
   }
@@ -280,28 +270,19 @@ onMounted(async () => {
 
 async function openSettings() {
   await settings.setSection("account")
-  preferenceSubview.value = "form"
   currentView.value = "settings"
 }
 
 async function backToQuickPublish() {
   currentView.value = "quick_publish"
-  preferenceSubview.value = "form"
   await quickPublish.init()
 }
 
 async function changeSettingsSection(section: "account" | "picbed" | "preference") {
   await settings.setSection(section)
-  if (section !== "preference") {
-    preferenceSubview.value = "form"
-  }
 }
 
 async function handleSettingsBack() {
-  if (settings.state.section === "preference" && preferenceSubview.value === "i18n_test") {
-    preferenceSubview.value = "form"
-    return
-  }
   if (settings.state.section === "account" && settings.state.accountView !== "list") {
     await settings.backInAccountFlow()
     return
@@ -332,10 +313,6 @@ function isFailed(item: typeof quickPublish.state.platformItems[number]) {
 async function handleToggleAccountEnabled(platformKey: string, nextEnabled: boolean) {
   await settings.toggleAccountEnabled(platformKey, nextEnabled)
   await quickPublish.init()
-}
-
-function openI18nTest() {
-  preferenceSubview.value = "i18n_test"
 }
 </script>
 

@@ -18,18 +18,6 @@ export class V2Host {
   private app: VueApp<Element> | null = null
   private menu: Menu | null = null
   private mountPoint: HTMLElement | null = null
-  private readonly fallbackTestMessages = {
-    v2: {
-      i18nTest: {
-        probe: {
-          fallbackOnly: "V2 fallback-only probe",
-          nested: {
-            deep: "V2 nested fallback probe",
-          },
-        },
-      },
-    },
-  }
 
   constructor(private readonly pluginInstance: PublisherPlugin) {
     this.logger = createSiyuanAppLogger("v2-host")
@@ -124,7 +112,7 @@ export class V2Host {
       return undefined
     }
 
-    return this.resolveKeyPath(messages, key) ?? this.resolveKeyPath(this.fallbackTestMessages, key)
+    return this.resolveKeyPath(messages, key)
   }
 
   private resolveKeyPath(source: Record<string, any> | undefined, key: string) {

@@ -21,36 +21,6 @@
     </div>
 
     <template v-else>
-      <div class="syp-settings-detail-grid">
-        <article class="syp-settings-detail-card">
-          <div class="syp-settings-detail-card__title">{{ t("v2.platformConfig.card.bridgeTitle") }}</div>
-          <div class="syp-settings-detail-list">
-            <div class="syp-settings-detail-row">
-              <div class="syp-settings-detail-label">{{ t("v2.platformConfig.field.platformKey") }}</div>
-              <div class="syp-settings-detail-value">{{ platformKey }}</div>
-            </div>
-            <div class="syp-settings-detail-row">
-              <div class="syp-settings-detail-label">{{ t("v2.platformConfig.field.platformType") }}</div>
-              <div class="syp-settings-detail-value">{{ bridgeLabel }}</div>
-            </div>
-          </div>
-        </article>
-
-        <article class="syp-settings-detail-card">
-          <div class="syp-settings-detail-card__title">{{ t("v2.platformConfig.card.capabilityTitle") }}</div>
-          <div class="syp-settings-detail-list">
-            <div class="syp-settings-detail-row">
-              <div class="syp-settings-detail-label">{{ t("v2.platformConfig.field.save") }}</div>
-              <div class="syp-settings-detail-value">{{ t("v2.platformConfig.value.save") }}</div>
-            </div>
-            <div class="syp-settings-detail-row">
-              <div class="syp-settings-detail-label">{{ t("v2.platformConfig.field.validate") }}</div>
-              <div class="syp-settings-detail-value">{{ t("v2.platformConfig.value.validate") }}</div>
-            </div>
-          </div>
-        </article>
-      </div>
-
       <div v-if="bridgeComponent" class="syp-platform-bridge">
         <Suspense>
           <component :is="bridgeComponent" :api-type="platformKey" />
@@ -105,16 +75,6 @@ const bridgeComponent = computed<Component | null>(() => {
   return null
 })
 
-const bridgeLabel = computed(() => {
-  if (state.subtype === SubPlatformType.Wordpress_Wordpress) {
-    return "WordPress"
-  }
-  if (state.subtype === SubPlatformType.Metaweblog_Cnblogs) {
-    return t("v2.platform.cnblogs")
-  }
-  return state.subtype || t("v2.common.unknown")
-})
-
 watch(
   () => props.platformKey,
   async () => {
@@ -158,13 +118,24 @@ async function loadBridgeMeta() {
   border-radius 14px
   border 1px solid #e6ebf2
   background #fff
-  overflow auto
+  overflow visible
 
   :deep(.el-form)
     width 100%
+    max-width 100%
+    overflow visible
 
   :deep(.el-form-item)
     margin-right 0
+
+  :deep(.el-form-item__content)
+    min-width 0
+
+  :deep(.el-input),
+  :deep(.el-input__wrapper),
+  :deep(.el-textarea),
+  :deep(.el-select)
+    max-width 100%
 
   :deep(.el-alert)
     margin-top 8px

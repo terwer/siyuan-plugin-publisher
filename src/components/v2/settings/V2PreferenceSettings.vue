@@ -38,25 +38,6 @@
         </div>
       </article>
 
-      <article class="syp-settings-group">
-        <div class="syp-settings-group__title">{{ t("v2.preference.group.testing.title") }}</div>
-        <div class="syp-settings-group__desc">{{ t("v2.preference.group.testing.desc") }}</div>
-
-        <div class="syp-settings-form-list">
-          <div class="syp-settings-form-row">
-            <div class="syp-settings-form-main">
-              <div class="syp-settings-form-label">{{ t("v2.preference.testing.title") }}</div>
-              <div class="syp-settings-form-desc">{{ t("v2.preference.testing.desc") }}</div>
-            </div>
-
-            <div class="syp-settings-form-control">
-              <button type="button" class="syp-btn syp-btn-secondary" @click="emit('open-i18n-test')">
-                {{ t("v2.preference.testing.action") }}
-              </button>
-            </div>
-          </div>
-        </div>
-      </article>
     </div>
   </section>
 </template>
@@ -104,9 +85,6 @@ const { t } = useV2I18n()
 const { getPublishPreferenceSetting } = usePreferenceSettingStore()
 const { isInSiyuanWin, isInSiyuanWidget } = useSiyuanDevice()
 const preferenceForm = getPublishPreferenceSetting()
-const emit = defineEmits<{
-  (event: "open-i18n-test"): void
-}>()
 
 const isSiyuanPlugin = computed(() => {
   return isInSiyuanWin() || (isInSiyuanWidget() && StrUtil.isEmptyString(getSiyuanWidgetId()))

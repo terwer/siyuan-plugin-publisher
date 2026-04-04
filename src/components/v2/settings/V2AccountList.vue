@@ -101,17 +101,10 @@ function handleToggle(platformKey: string, event: Event) {
 </script>
 
 <style scoped lang="stylus">
-.syp-settings-page
-  overflow hidden
-
 .syp-account-list
   display flex
   flex-direction column
-  flex 1
   gap 12px
-  min-height 0
-  overflow-y auto
-  padding-right 4px
 
 .syp-account-item
   display flex
