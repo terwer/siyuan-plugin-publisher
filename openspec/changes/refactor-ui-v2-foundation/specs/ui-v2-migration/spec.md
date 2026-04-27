@@ -233,3 +233,54 @@ The migration SHALL preserve rollback and coexistence with the legacy UI until t
 - **WHEN** the issue affects a user-facing publish or settings workflow
 - **THEN** the system must still preserve a rollback-capable legacy path
 - **AND** the unstable milestone must not force removal of legacy UI prematurely
+
+### Requirement: SPA code retirement SHALL follow explicit acceptance criteria
+
+The system SHALL define and enforce explicit criteria for when legacy SPA code may be removed, must be removed, or must be retained as a compatibility layer. No SPA page SHALL be removed without passing the functional-equivalence checklist.
+
+#### Scenario: Contributor proposes removing a legacy SPA page
+
+- **GIVEN** a contributor proposes removing a legacy SPA page or route
+- **WHEN** the proposal is reviewed
+- **THEN** the V2 implementation must cover all user-visible functions of the SPA page
+- **AND** all entrypoints (`topbar.ts`, `widgetInvoke.ts`, document menus) must have switched to `V2Host.show()`
+- **AND** the data format and storage location must remain compatible with the SPA version
+- **AND** the V2 path must have been stable for at least one milestone cycle
+- **AND** closing `useV2UI` must still offer a viable fallback path
+
+#### Scenario: A SPA page is still required as a compatibility layer
+
+- **GIVEN** a legacy SPA page is under evaluation for removal
+- **WHEN** any of the following is true: V2 has no equivalent feature, bridge coverage is incomplete, the page is required for `useV2UI=false` rollback, or another unmigrated SPA page depends on it
+- **THEN** the SPA page must be retained
+- **AND** it must not be modified in ways that break its existing V1 usage
+
+#### Scenario: A SPA page meets mandatory-removal conditions
+
+- **GIVEN** a legacy SPA page is under evaluation for removal
+- **WHEN** any of the following is true: its dependencies are unmaintained and pose security risks, it blocks V2 evolution through technical debt, dual-system maintenance cost exceeds retention value, or the V2 path has been universally available and stable for a full release cycle
+- **THEN** the SPA page must be scheduled for removal
+- **AND** the removal must be tracked through the page-retirement-rate metric
+
+### Requirement: UI V2 state layer SHALL use local composables instead of global Pinia stores
+
+The V2 UI state layer SHALL use Vue Composables with `reactive` rather than global Pinia stores, because V2 UI state is local to the `V2Host` lifecycle and must not persist after the panel is closed.
+
+#### Scenario: V2 panel is opened and closed
+
+- **GIVEN** the V2 panel is opened
+- **WHEN** it is later closed
+- **THEN** the UI state from that session must not leak into the next session
+- **AND** no global Pinia store must be used to hold V2-specific UI state
+- **AND** business configuration may continue to use existing shared stores
+
+### Requirement: V2 build chain SHALL reuse the existing Vite configuration
+
+The V2 program SHALL not introduce a separate build chain (such as `vite.v2.config.ts`). V2 source files SHALL be compiled as ordinary Vue SFCs through the existing `vite.config.ts`.
+
+#### Scenario: Contributor adds a new V2 component
+
+- **GIVEN** a contributor adds a new V2 component under `src/components/v2/`
+- **WHEN** the project is built or served
+- **THEN** the component must be compiled by the existing `vite.config.ts`
+- **AND** no additional build script or config file must be required for V2
