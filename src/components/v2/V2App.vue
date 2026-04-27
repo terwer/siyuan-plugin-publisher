@@ -114,6 +114,7 @@
           @add="settings.openPlatformSelect"
           @configure="settings.openAccountConfig"
           @toggle="handleToggleAccountEnabled"
+          @delete="handleDeleteAccount"
         />
 
         <V2PlatformSelect
@@ -139,6 +140,7 @@
 </template>
 
 <script setup lang="ts">
+import { ElMessage } from "element-plus"
 import { computed, onMounted, ref } from "vue"
 import "~/src/assets/v2/base.styl"
 import UnifiedWorkspaceShell from "~/src/components/v2/layout/UnifiedWorkspaceShell.vue"
@@ -313,6 +315,16 @@ function isFailed(item: typeof quickPublish.state.platformItems[number]) {
 async function handleToggleAccountEnabled(platformKey: string, nextEnabled: boolean) {
   await settings.toggleAccountEnabled(platformKey, nextEnabled)
   await quickPublish.init()
+}
+
+async function handleDeleteAccount(platformKey: string) {
+  try {
+    await settings.phase4DeleteDraft(platformKey)
+    await quickPublish.init()
+    ElMessage.success(t("main.opt.success"))
+  } catch (error) {
+    ElMessage.error(error instanceof Error ? error.message : t("main.opt.failure"))
+  }
 }
 </script>
 

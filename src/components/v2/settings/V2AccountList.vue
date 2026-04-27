@@ -68,8 +68,8 @@
           <button
             type="button"
             class="syp-btn syp-btn-text is-danger"
-            disabled
-            :title="t('v2.account.action.deletePending')"
+            :title="t('v2.account.action.delete')"
+            @click="handleDelete(item.platformKey)"
           >
             {{ t("v2.account.action.delete") }}
           </button>
@@ -80,10 +80,11 @@
 </template>
 
 <script setup lang="ts">
+import { ElMessageBox } from "element-plus"
 import type { V2AccountItem } from "~/src/composables/v2/useV2Settings.ts"
 import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
 
-defineProps<{
+const props = defineProps<{
   items: V2AccountItem[]
 }>()
 const { t } = useV2I18n()
@@ -92,11 +93,29 @@ const emit = defineEmits<{
   (event: "add"): void
   (event: "configure", platformKey: string, platformName: string): void
   (event: "toggle", platformKey: string, nextEnabled: boolean): void
+  (event: "delete", platformKey: string): void
 }>()
 
 function handleToggle(platformKey: string, event: Event) {
   const target = event.target as HTMLInputElement | null
   emit("toggle", platformKey, target?.checked === true)
+}
+
+async function handleDelete(platformKey: string) {
+  const item = props.items.find((candidate) => candidate.platformKey === platformKey)
+  const platformName = item?.platformName || platformKey
+
+  try {
+    await ElMessageBox.confirm(t("v2.account.action.deleteConfirmText", { name: platformName }), {
+      title: t("v2.account.action.deleteConfirmTitle"),
+      type: "warning",
+      confirmButtonText: t("main.opt.ok"),
+      cancelButtonText: t("main.opt.cancel"),
+    } as any)
+    emit("delete", platformKey)
+  } catch {
+    // noop
+  }
 }
 </script>
 

@@ -47,17 +47,17 @@
 - [x] 6.2 实现平台选择流程
 - [x] 6.3 实现图床设置内容区
 - [x] 6.4 实现偏好设置内容区
-- [x] 6.5 桥接平台配置（当前已覆盖 26 个子类型 via `bridgeRegistry.ts`）
-- [ ] 6.6 账号列表删除功能接入（`V2AccountList` 的 `@delete` 事件绑定到 `settings.phase4DeleteDraft`，目前按钮为 disabled 待接入）
+- [x] 6.5 桥接平台配置（当前已覆盖 26 个桥接子类型，外加 `Fs_LocalSystem` 条件桥接）
+- [x] 6.6 账号列表删除功能接入（`V2AccountList` 已绑定删除确认与 `settings.phase4DeleteDraft`，删除后同步刷新快速发布列表）
 - [x] 6.7 验证 M4 通过后才允许进入 M5
 
 ## 7. Milestone 5：设置展开态第二阶段
 
-- [ ] 7.1 扩展更多平台配置桥接（当前 26/30+，持续补充未覆盖子类型）
+- [ ] 7.1 扩展更多平台配置桥接（当前 26 个桥接子类型 + `Fs_LocalSystem`，持续补充未覆盖子类型）
 - [ ] 7.2 稳定高频设置路径
 - [x] 7.3 梳理发布态、设置态与桥接态当前使用的历史 i18n key（V2 新增 `v2.*` key 已全部在 `siyuan/i18n/*` 中完成）
-- [x] 7.4 将 V2 当前所需历史 key 镜像到 `siyuan/i18n/*`（已完成，`zh_CN.json` / `en_US.json` 已包含全部 V2 key）
-- [x] 7.5 为 V1 共存期建立桥接 i18n 兼容层（已实现 `useV2I18n` 双层 fallback：Vue i18n → pluginInstance.i18n → key 回退）
+- [x] 7.4 将 V2 当前所需历史 key 镜像到 `siyuan/i18n/*`（已完成，`zh_CN.json` / `en_US.json` 已补齐当前桥接组件所需历史 key 与平台分组 key）
+- [x] 7.5 为 V1 共存期建立桥接 i18n 兼容层（已实现 V2 宿主 i18n 优先、历史 `src/locales/*` 兜底的兼容层，确保 V1/V2 共存）
 - [ ] 7.6 评估哪些旧设置能力仍需保留（基于 `design.md` 8.1 SPA 退役标准分类评估）
 - [ ] 7.7 验证 M5 通过后才允许进入 M6
 
