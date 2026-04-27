@@ -1,5 +1,6 @@
 import { computed, reactive } from "vue"
 import { JsonUtil } from "zhi-common"
+import { SUPPORTED_V2_BRIDGE_SUBTYPES } from "~/src/components/v2/settings/bridge/bridgeRegistry.ts"
 import { usePlatformDefine } from "~/src/composables/usePlatformDefine.ts"
 import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
 import {
@@ -13,6 +14,7 @@ import {
 } from "~/src/platforms/dynamicConfig.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
+import { EnvUtil } from "~/src/utils/EnvUtil.ts"
 
 export type V2SettingsSection = "account" | "picbed" | "preference"
 export type V2AccountView = "list" | "select" | "config"
@@ -29,7 +31,7 @@ export interface V2AccountItem {
 }
 
 export interface V2SelectablePlatform {
-  key: "wordpress" | "cnblogs"
+  key: string
   platformKey: string
   platformName: string
   platformIcon?: string
@@ -37,12 +39,9 @@ export interface V2SelectablePlatform {
   subPlatformType: SubPlatformType
 }
 
-const WORDPRESS_PRESET_KEY = "wordpress_Wordpress"
-const CNBLOGS_PRESET_KEY = "metaweblog_Cnblogs"
-
 export const useV2Settings = () => {
   const { getSetting, updateSetting } = usePublishSettingStore()
-  const { getPrePlatform } = usePlatformDefine()
+  const { getAllPrePlatformList, getPrePlatform } = usePlatformDefine()
   const { t } = useV2I18n()
 
   const state = reactive({
@@ -58,24 +57,39 @@ export const useV2Settings = () => {
     pendingConfigItem: null as DynamicConfig | null,
   })
 
-  const selectablePlatforms = computed<V2SelectablePlatform[]>(() => [
-    {
-      key: "wordpress",
-      platformKey: WORDPRESS_PRESET_KEY,
-      platformName: "WordPress",
-      platformIcon: getPrePlatform(WORDPRESS_PRESET_KEY)?.platformIcon,
-      platformType: PlatformType.Wordpress,
-      subPlatformType: SubPlatformType.Wordpress_Wordpress,
-    },
-    {
-      key: "cnblogs",
-      platformKey: CNBLOGS_PRESET_KEY,
-      platformName: t("v2.platform.cnblogs"),
-      platformIcon: getPrePlatform(CNBLOGS_PRESET_KEY)?.platformIcon,
-      platformType: PlatformType.Metaweblog,
-      subPlatformType: SubPlatformType.Metaweblog_Cnblogs,
-    },
-  ])
+  const selectablePlatforms = computed<V2SelectablePlatform[]>(() => {
+    const isElectron = EnvUtil.isSiyuanElectron()
+
+    return getAllPrePlatformList()
+      .filter((platform) => {
+        if (!platform.subPlatformType) {
+          return false
+        }
+
+        if (platform.platformType === PlatformType.System) {
+          return false
+        }
+
+        if (!SUPPORTED_V2_BRIDGE_SUBTYPES.has(platform.subPlatformType)) {
+          return false
+        }
+
+        if (platform.subPlatformType === SubPlatformType.Fs_LocalSystem && !isElectron) {
+          return false
+        }
+
+        return true
+      })
+      .map((platform) => ({
+        key: platform.platformKey,
+        platformKey: platform.platformKey,
+        platformName:
+          platform.subPlatformType === SubPlatformType.Metaweblog_Cnblogs ? t("v2.platform.cnblogs") : platform.platformName,
+        platformIcon: platform.platformIcon,
+        platformType: platform.platformType,
+        subPlatformType: platform.subPlatformType as SubPlatformType,
+      }))
+  })
 
   const loadAccountItems = async () => {
     const setting = await getSetting()

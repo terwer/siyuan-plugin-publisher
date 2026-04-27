@@ -75,12 +75,12 @@ E --> K
 ```
 
 **图表来源**
-- [useV2Settings.ts:1-235](file://src/composables/v2/useV2Settings.ts#L1-L235)
-- [useV2QuickPublish.ts:1-310](file://src/composables/v2/useV2QuickPublish.ts#L1-L310)
+- [useV2Settings.ts:1-250](file://src/composables/v2/useV2Settings.ts#L1-L250)
+- [useV2QuickPublish.ts:1-312](file://src/composables/v2/useV2QuickPublish.ts#L1-L312)
 
 **章节来源**
-- [useV2Settings.ts:1-235](file://src/composables/v2/useV2Settings.ts#L1-L235)
-- [useV2QuickPublish.ts:1-310](file://src/composables/v2/useV2QuickPublish.ts#L1-L310)
+- [useV2Settings.ts:1-250](file://src/composables/v2/useV2Settings.ts#L1-L250)
+- [useV2QuickPublish.ts:1-312](file://src/composables/v2/useV2QuickPublish.ts#L1-L312)
 
 ## 核心组件
 
@@ -134,12 +134,12 @@ V2SettingsState --> V2SelectablePlatform
 ```
 
 **图表来源**
-- [useV2Settings.ts:46-57](file://src/composables/v2/useV2Settings.ts#L46-L57)
-- [useV2Settings.ts:19-28](file://src/composables/v2/useV2Settings.ts#L19-L28)
-- [useV2Settings.ts:30-37](file://src/composables/v2/useV2Settings.ts#L30-L37)
+- [useV2Settings.ts:22-40](file://src/composables/v2/useV2Settings.ts#L22-L40)
+- [useV2Settings.ts:19-21](file://src/composables/v2/useV2Settings.ts#L19-L21)
+- [useV2Settings.ts:41-41](file://src/composables/v2/useV2Settings.ts#L41-L41)
 
 **章节来源**
-- [useV2Settings.ts:42-234](file://src/composables/v2/useV2Settings.ts#L42-L234)
+- [useV2Settings.ts:42-250](file://src/composables/v2/useV2Settings.ts#L42-L250)
 
 ### 改进的账号状态处理逻辑
 
@@ -165,7 +165,7 @@ Display --> End([结束])
 ```
 
 **图表来源**
-- [useV2Settings.ts:89-122](file://src/composables/v2/useV2Settings.ts#L89-L122)
+- [useV2Settings.ts:99-138](file://src/composables/v2/useV2Settings.ts#L99-L138)
 
 #### 状态标签和视觉表示
 
@@ -177,7 +177,7 @@ Display --> End([结束])
 | 未启用 | 未启用 | 未启用 · 未授权 | 错误红色 | error |
 
 **章节来源**
-- [useV2Settings.ts:89-122](file://src/composables/v2/useV2Settings.ts#L89-L122)
+- [useV2Settings.ts:99-138](file://src/composables/v2/useV2Settings.ts#L99-L138)
 
 ### V2 快速发布组合式函数
 
@@ -206,10 +206,10 @@ preview_ready --> [*] : 预览完成
 ```
 
 **图表来源**
-- [useV2QuickPublish.ts:22-24](file://src/composables/v2/useV2QuickPublish.ts#L22-L24)
+- [useV2QuickPublish.ts:23-24](file://src/composables/v2/useV2QuickPublish.ts#L23-L24)
 
 **章节来源**
-- [useV2QuickPublish.ts:25-309](file://src/composables/v2/useV2QuickPublish.ts#L25-L309)
+- [useV2QuickPublish.ts:26-312](file://src/composables/v2/useV2QuickPublish.ts#L26-L312)
 
 ## 架构概览
 
@@ -258,7 +258,7 @@ J --> L
 ```
 
 **图表来源**
-- [useV2Settings.ts:1-15](file://src/composables/v2/useV2Settings.ts#L1-L15)
+- [useV2Settings.ts:1-17](file://src/composables/v2/useV2Settings.ts#L1-L17)
 - [useV2QuickPublish.ts:1-12](file://src/composables/v2/useV2QuickPublish.ts#L1-L12)
 
 ## 详细组件分析
@@ -289,7 +289,7 @@ Display --> End([结束])
 ```
 
 **图表来源**
-- [useV2Settings.ts:89-122](file://src/composables/v2/useV2Settings.ts#L89-L122)
+- [useV2Settings.ts:99-138](file://src/composables/v2/useV2Settings.ts#L99-L138)
 
 #### 账户操作流程
 
@@ -302,7 +302,7 @@ Display --> End([结束])
 5. **账户删除**：删除不需要的账户配置
 
 **章节来源**
-- [useV2Settings.ts:125-220](file://src/composables/v2/useV2Settings.ts#L125-L220)
+- [useV2Settings.ts:150-235](file://src/composables/v2/useV2Settings.ts#L150-L235)
 
 ### 快速发布组件
 
@@ -329,7 +329,7 @@ Note over QuickPub,User : 支持预览和重试功能
 ```
 
 **图表来源**
-- [useV2QuickPublish.ts:145-198](file://src/composables/v2/useV2QuickPublish.ts#L145-L198)
+- [useV2QuickPublish.ts:147-200](file://src/composables/v2/useV2QuickPublish.ts#L147-L200)
 
 #### 错误处理机制
 
@@ -341,7 +341,7 @@ Note over QuickPub,User : 支持预览和重试功能
 4. **用户反馈**：提供清晰的错误信息和解决方案
 
 **章节来源**
-- [useV2QuickPublish.ts:190-197](file://src/composables/v2/useV2QuickPublish.ts#L190-L197)
+- [useV2QuickPublish.ts:192-200](file://src/composables/v2/useV2QuickPublish.ts#L192-L200)
 
 ### 平台配置管理
 
@@ -451,7 +451,7 @@ I --> F
 ```
 
 **图表来源**
-- [useV2Settings.ts:1-15](file://src/composables/v2/useV2Settings.ts#L1-L15)
+- [useV2Settings.ts:1-17](file://src/composables/v2/useV2Settings.ts#L1-L17)
 - [useV2QuickPublish.ts:1-12](file://src/composables/v2/useV2QuickPublish.ts#L1-L12)
 
 ### 核心依赖关系
@@ -525,8 +525,8 @@ V2 设置系统在设计时充分考虑了性能优化：
 3. 验证存储权限设置
 
 **章节来源**
-- [useV2QuickPublish.ts:55-60](file://src/composables/v2/useV2QuickPublish.ts#L55-L60)
-- [useV2Settings.ts:157-170](file://src/composables/v2/useV2Settings.ts#L157-L170)
+- [useV2QuickPublish.ts:57-62](file://src/composables/v2/useV2QuickPublish.ts#L57-L62)
+- [useV2Settings.ts:172-185](file://src/composables/v2/useV2Settings.ts#L172-L185)
 
 ## 结论
 

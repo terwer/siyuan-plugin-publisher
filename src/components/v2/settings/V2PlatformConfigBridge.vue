@@ -45,11 +45,11 @@
 
 <script setup lang="ts">
 import { computed, onMounted, reactive, watch, type Component } from "vue"
-import CnblogsSetting from "~/src/components/set/publish/singleplatform/metaweblog/CnblogsSetting.vue"
-import WordpressSetting from "~/src/components/set/publish/singleplatform/metaweblog/WordpressSetting.vue"
+import { getV2BridgeComponent } from "~/src/components/v2/settings/bridge/bridgeRegistry.ts"
 import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
 import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
 import { SubPlatformType } from "~/src/platforms/dynamicConfig.ts"
+import { EnvUtil } from "~/src/utils/EnvUtil.ts"
 
 const props = defineProps<{
   platformKey: string
@@ -66,13 +66,9 @@ const state = reactive({
 })
 
 const bridgeComponent = computed<Component | null>(() => {
-  if (state.subtype === SubPlatformType.Wordpress_Wordpress) {
-    return WordpressSetting
-  }
-  if (state.subtype === SubPlatformType.Metaweblog_Cnblogs) {
-    return CnblogsSetting
-  }
-  return null
+  return getV2BridgeComponent(state.subtype, {
+    electron: EnvUtil.isSiyuanElectron(),
+  })
 })
 
 watch(
