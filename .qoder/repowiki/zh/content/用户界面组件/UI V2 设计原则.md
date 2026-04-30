@@ -17,7 +17,8 @@
 
 ## 更新摘要
 **变更内容**
-- 图标从LucideArrowLeft改为LucideChevronLeft，提供更简洁的导航指示
+- 新增40+个CSS自定义属性，涵盖状态背景、芯片样式、强调色等完整设计系统
+- 导航系统从LucideArrowLeft改为LucideChevronLeft，提供更简洁的导航指示
 - UnifiedWorkspaceShell.vue简化了导航样式系统，从复杂的多色方案简化为仅使用两种文本颜色(#1F2329和#8F959E)和两种背景颜色(#FFFFFF和#F5F5F5)
 - 导航过渡时间从0.25s改为0.15s ease，增加了微妙的悬停效果
 - 增强了整体的视觉层次和交互反馈
@@ -28,10 +29,11 @@
 3. [核心组件](#核心组件)
 4. [架构概览](#架构概览)
 5. [详细组件分析](#详细组件分析)
-6. [依赖关系分析](#依赖关系分析)
-7. [性能考虑](#性能考虑)
-8. [故障排除指南](#故障排除指南)
-9. [结论](#结论)
+6. [样式系统设计](#样式系统设计)
+7. [依赖关系分析](#依赖关系分析)
+8. [性能考虑](#性能考虑)
+9. [故障排除指南](#故障排除指南)
+10. [结论](#结论)
 
 ## 引言
 
@@ -304,9 +306,15 @@ BgColor2 --> HoverState
 - [UnifiedWorkspaceShell.vue:47-121](file://src/components/v2/layout/UnifiedWorkspaceShell.vue#L47-L121)
 - [V2App.vue:36-41](file://src/components/v2/V2App.vue#L36-L41)
 
-### 样式系统设计
+**章节来源**
+- [UnifiedWorkspaceShell.vue:48-121](file://src/components/v2/layout/UnifiedWorkspaceShell.vue#L48-L121)
+- [V2App.vue:36-41](file://src/components/v2/V2App.vue#L36-L41)
 
-UI V2采用基于变量的样式系统，确保设计的一致性和可维护性。**更新** 样式系统现已简化为更精简的颜色方案：
+## 样式系统设计
+
+UI V2采用基于变量的样式系统，确保设计的一致性和可维护性。**更新** 样式系统现已包含40+个CSS自定义属性，建立了完整的视觉设计系统：
+
+### 完整的CSS变量系统
 
 ```mermaid
 graph TB
@@ -336,6 +344,33 @@ subgraph "阴影系统"
 ShadowSM[轻阴影]
 ShadowMD[中阴影]
 ShadowLG[重阴影]
+ShadowCardHover[卡片悬停阴影]
+end
+subgraph "操作色系统"
+ActionPrimary[主要操作色]
+ActionDanger[危险操作色]
+Accent[强调色]
+EndState[最终状态]
+end
+subgraph "状态背景系统"
+StatusInfoBg[信息状态背景]
+StatusSuccessBg[成功状态背景]
+StatusErrorBg[错误状态背景]
+StatusErrorDeepBg[深色错误背景]
+EndState[最终状态]
+end
+subgraph "标签和徽章系统"
+ChipBg[芯片背景]
+ChipText[芯片文字]
+BadgeReady[就绪徽章]
+BadgeDisabled[禁用徽章]
+EndState[最终状态]
+end
+subgraph "图标和卡片系统"
+IconBg[图标背景]
+IconColor[图标颜色]
+CardBgGradient[卡片渐变背景]
+EndState[最终状态]
 end
 end
 subgraph "基础样式"
@@ -343,31 +378,85 @@ Base[base.styl]
 Components[组件样式]
 Utilities[工具类]
 Navigation[导航样式]
+EndState[最终状态]
 end
 Variables --> Primary
 Variables --> Secondary
 Variables --> Neutral
 Variables --> Status
+Variables --> ActionPrimary
+Variables --> ActionDanger
+Variables --> Accent
+Variables --> StatusInfoBg
+Variables --> StatusSuccessBg
+Variables --> StatusErrorBg
+Variables --> StatusErrorDeepBg
+Variables --> ChipBg
+Variables --> ChipText
+Variables --> BadgeReady
+Variables --> BadgeDisabled
+Variables --> IconBg
+Variables --> IconColor
+Variables --> CardBgGradient
 Primary --> Base
 Secondary --> Base
 SpacingXS --> Base
 RadiusSM --> Base
 ShadowSM --> Base
+ActionPrimary --> Base
+ActionDanger --> Base
+Accent --> Base
+StatusInfoBg --> Base
+StatusSuccessBg --> Base
+StatusErrorBg --> Base
+StatusErrorDeepBg --> Base
+ChipBg --> Base
+ChipText --> Base
+BadgeReady --> Base
+BadgeDisabled --> Base
+IconBg --> Base
+IconColor --> Base
+CardBgGradient --> Base
 Base --> Components
 Base --> Utilities
 Base --> Navigation
 ```
 
 **图表来源**
-- [variables.styl:8-58](file://src/assets/v2/variables.styl#L8-L58)
-- [base.styl:11-262](file://src/assets/v2/base.styl#L11-L262)
-- [UnifiedWorkspaceShell.vue:48-121](file://src/components/v2/layout/UnifiedWorkspaceShell.vue#L48-L121)
+- [variables.styl:8-117](file://src/assets/v2/variables.styl#L8-L117)
+- [base.styl:11-433](file://src/assets/v2/base.styl#L11-L433)
 
-**章节来源**
-- [V2PlatformCard.vue:36-103](file://src/components/v2/publish/V2PlatformCard.vue#L36-L103)
-- [variables.styl:1-58](file://src/assets/v2/variables.styl#L1-L58)
-- [base.styl:1-262](file://src/assets/v2/base.styl#L1-L262)
-- [UnifiedWorkspaceShell.vue:48-121](file://src/components/v2/layout/UnifiedWorkspaceShell.vue#L48-L121)
+### 状态背景系统
+
+**更新** 新增的状态背景系统提供了完整的状态反馈机制：
+
+- **信息状态背景**: `#f7fbff` (状态信息背景) 和 `#d6e4f5` (状态信息边框)
+- **成功状态背景**: `#f3fbf5` (状态成功背景) 和 `#d7f0df` (状态成功边框)  
+- **错误状态背景**: `#fff5f5` (状态错误背景) 和 `#f2d6d6` (状态错误边框)
+- **深色错误背景**: `#fff1f1` (用于错误详情的深色背景)
+
+### 芯片和徽章系统
+
+**更新** 新增的芯片和徽章系统提供了丰富的UI元素：
+
+- **芯片样式**: `$syp-chip-bg = #f3f6fa` 和 `$syp-chip-text = #6a7788`
+- **就绪徽章**: `$syp-badge-ready-bg = rgba(52, 199, 36, 0.12)` 和 `$syp-badge-ready-text = #2f8b24`
+- **禁用徽章**: `$syp-badge-disabled-bg = rgba(245, 74, 69, 0.12)` 和 `$syp-badge-disabled-text = #b33d39`
+
+### 操作色系统
+
+**更新** 新增的操作色系统提供了完整的交互反馈：
+
+- **主要操作色**: `$syp-action-primary = #2f6dd5` 和 `$syp-action-primary-hover = #2b62c0`
+- **危险操作色**: `$syp-action-danger = #d92d20` 和 `$syp-action-danger-hover = #c6281d`
+- **强调色**: `$syp-accent = #355d90` 和 `$syp-accent-hover-bg = rgba(53, 93, 144, 0.08)`
+
+### 图标和卡片系统
+
+**更新** 新增的图标和卡片系统提供了统一的视觉元素：
+
+- **图标区域**: `$syp-icon-bg = #f2f5fa` 和 `$syp-icon-color = #355d90`
+- **渐变卡片背景**: `$syp-card-bg-gradient = linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)`
 
 ### 响应式布局系统
 
@@ -400,12 +489,13 @@ ShellLayout --> DesktopLayout
 ```
 
 **图表来源**
-- [base.styl:248-262](file://src/assets/v2/base.styl#L248-L262)
-- [V2App.vue:501-512](file://src/components/v2/V2App.vue#L501-L512)
+- [base.styl:401-433](file://src/assets/v2/base.styl#L401-L433)
+- [V2App.vue:538-550](file://src/components/v2/V2App.vue#L538-L550)
 
 **章节来源**
-- [base.styl:248-262](file://src/assets/v2/base.styl#L248-L262)
-- [V2App.vue:501-512](file://src/components/v2/V2App.vue#L501-L512)
+- [variables.styl:1-117](file://src/assets/v2/variables.styl#L1-L117)
+- [base.styl:1-433](file://src/assets/v2/base.styl#L1-L433)
+- [V2PlatformCard.vue:119-247](file://src/components/v2/publish/V2PlatformCard.vue#L119-L247)
 
 ### 数据流管理
 
@@ -462,6 +552,11 @@ Utils[工具函数]
 Stores[存储管理]
 Types[类型定义]
 end
+subgraph "样式变量"
+Variables[variables.styl]
+Base[base.styl]
+EndState[最终状态]
+end
 Vue --> CreateApp
 Pinia --> CreateApp
 I18n --> CreateApp
@@ -477,7 +572,9 @@ QuickPublish --> Stores
 V2App --> Styles
 PlatformCard --> Styles
 Shell --> Styles
-Styles --> Navigation
+Styles --> Variables
+Styles --> Base
+Variables --> Navigation
 ```
 
 **图表来源**
@@ -508,6 +605,7 @@ UI V2在设计时充分考虑了性能优化：
 - 采用响应式状态避免不必要的重渲染
 - 图片懒加载和骨架屏提升用户体验
 - **更新** 简化的导航样式减少了CSS复杂度，提升了渲染性能
+- **更新** 40+个CSS变量的预定义减少了运行时计算开销
 
 ### 内存管理
 - 合理的组件生命周期管理
@@ -523,6 +621,7 @@ UI V2在设计时充分考虑了性能优化：
 - **新增** 0.15s的快速过渡动画提升了用户反馈的即时性
 - **新增** 简化的颜色系统减少了样式计算的复杂度
 - **新增** 更快的导航响应提升了整体交互流畅度
+- **新增** CSS变量系统减少了重复样式的计算和传输
 
 ## 故障排除指南
 
@@ -543,11 +642,13 @@ UI V2在设计时充分考虑了性能优化：
    - 验证CSS变量定义
    - 确认媒体查询适配
    - **更新** 检查简化的导航样式变量
+   - **更新** 验证40+个新CSS变量的正确应用
 
 4. **导航交互问题**
    - **更新** 检查图标导入是否正确（LucideChevronLeft）
    - **更新** 验证颜色变量是否正确应用
    - **更新** 确认过渡动画是否正常执行
+   - **更新** 检查状态背景变量的使用
 
 **章节来源**
 - [createV2App.ts:15-36](file://src/v2/createV2App.ts#L15-L36)
@@ -555,14 +656,14 @@ UI V2在设计时充分考虑了性能优化：
 
 ## 结论
 
-UI V2设计原则体现了现代前端开发的最佳实践，通过统一的工作空间、清晰的组件架构和完善的样式系统，为用户提供了优秀的发布工具体验。**更新** 本次导航系统优化进一步提升了用户体验，通过简化的颜色方案和更快的过渡动画，确保了跨设备的一致性和流畅性。
+UI V2设计原则体现了现代前端开发的最佳实践，通过统一的工作空间、清晰的组件架构和完善的样式系统，为用户提供了优秀的发布工具体验。**更新** 本次样式系统重构显著增强了设计的一致性和可维护性，通过40+个CSS自定义属性建立了完整的视觉设计系统，包括状态背景、芯片样式、强调色等。
 
 该设计原则不仅关注当前的功能实现，更注重长期的可维护性和扩展性，为后续的功能迭代奠定了坚实的基础。
 
 项目的核心价值在于：
 - **用户体验**: 通过统一界面减少学习成本，**更新** 简化的导航系统提供更直观的操作反馈
-- **技术先进性**: 采用最新的Vue 3技术和最佳实践，**更新** 包含优化的导航交互设计
+- **技术先进性**: 采用最新的Vue 3技术和最佳实践，**更新** 包含优化的导航交互设计和完整的CSS变量系统
 - **可扩展性**: 模块化的架构便于功能扩展
-- **可维护性**: 清晰的代码结构和文档规范
+- **可维护性**: 清晰的代码结构和文档规范，**更新** 完善的样式变量系统便于维护和定制
 
 这些设计原则将指导未来UI V2功能的开发，确保系统在演进过程中保持一致性和高质量。

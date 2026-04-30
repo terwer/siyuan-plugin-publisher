@@ -3,6 +3,7 @@
 <cite>
 **本文档引用的文件**
 - [vite.config.ts](file://vite.config.ts)
+- [vite.v2.config.ts](file://vite.v2.config.ts)
 - [package.json](file://package.json)
 - [build.py](file://scripts/build.py)
 - [dev.py](file://scripts/dev.py)
@@ -14,7 +15,15 @@
 - [widget.json](file://widget.json)
 - [plugin.json](file://plugin.json)
 - [index.html](file://index.html)
+- [syp.config.ts](file://syp.config.ts)
 </cite>
+
+## 更新摘要
+**所做更改**
+- 更新了插件顺序配置，优化了Vue插件加载顺序
+- 改进了依赖管理策略，增强了插件间的协调性
+- 新增了Vite v2配置文件的详细说明
+- 完善了构建类型差异化的配置说明
 
 ## 目录
 1. [简介](#简介)
@@ -31,12 +40,15 @@
 
 这是一个基于 Vite 的现代前端构建配置项目，专门为思源笔记发布工具设计。该项目支持多种构建类型，包括思源插件构建、Widget 构建、静态网站构建等，并集成了丰富的第三方库和工具链。
 
+**重大更新**：构建配置经过重大重组，改进了插件顺序和依赖管理，确保Vue插件加载顺序的正确处理，提升了整体构建性能和稳定性。
+
 该构建配置的核心特点包括：
 - 支持多种构建目标（思源插件、Widget、静态网站）
 - 自动化的开发和生产环境配置
 - 第三方库的智能注入机制
 - 热重载和 Polyfill 支持
 - 完整的测试配置
+- 优化的插件加载顺序
 
 ## 项目结构
 
@@ -45,35 +57,39 @@
 ```mermaid
 graph TB
 subgraph "根目录"
-A[vite.config.ts] --> B[构建配置]
-C[package.json] --> D[依赖管理]
-E[index.html] --> F[入口页面]
+A[vite.config.ts] --> B[主构建配置]
+C[vite.v2.config.ts] --> D[Vite v2配置]
+E[package.json] --> F[依赖管理]
+G[index.html] --> H[入口页面]
 end
 subgraph "脚本目录"
-G[scripts/] --> H[构建脚本]
-I[dev.py] --> J[开发服务器]
-K[build.py] --> L[打包脚本]
-M[siyuan_build.py] --> N[思源构建]
-O[widget_build.py] --> P[Widget构建]
+I[scripts/] --> J[构建脚本]
+K[dev.py] --> L[开发服务器]
+M[build.py] --> N[打包脚本]
+O[siyuan_build.py] --> P[思源构建]
+Q[widget_build.py] --> R[Widget构建]
 end
 subgraph "公共资源"
-Q[public/] --> R[第三方库]
-S[lute-1.7.5-20230410.min.js] --> T[Markdown解析器]
-U[aliyun-oss-sdk-6.16.0.min.js] --> V[阿里云存储SDK]
+S[public/] --> T[第三方库]
+U[lute-1.7.5-20230410.min.js] --> V[Markdown解析器]
+W[aliyun-oss-sdk-6.16.0.min.js] --> X[阿里云存储SDK]
 end
 subgraph "配置文件"
-W[plugin.json] --> X[插件元数据]
-Y[widget.json] --> Z[Widget元数据]
+Y[plugin.json] --> Z[插件元数据]
+AA[widget.json] --> AB[Widget元数据]
+AC[syp.config.ts] --> AD[应用配置]
 end
 ```
 
 **图表来源**
 - [vite.config.ts:1-275](file://vite.config.ts#L1-L275)
-- [package.json:1-99](file://package.json#L1-L99)
+- [vite.v2.config.ts:1-146](file://vite.v2.config.ts#L1-L146)
+- [package.json:1-102](file://package.json#L1-L102)
 
 **章节来源**
 - [vite.config.ts:1-275](file://vite.config.ts#L1-L275)
-- [package.json:1-99](file://package.json#L1-L99)
+- [vite.v2.config.ts:1-146](file://vite.v2.config.ts#L1-L146)
+- [package.json:1-102](file://package.json#L1-L102)
 
 ## 核心组件
 
@@ -99,15 +115,24 @@ F --> J[输出到./dist]
 - [vite.config.ts:66-71](file://vite.config.ts#L66-L71)
 
 #### 2. 插件系统集成
-项目集成了多个 Vite 插件来增强开发体验：
+项目集成了多个 Vite 插件来增强开发体验，**插件顺序已优化**：
 
-| 插件名称 | 功能描述 | 配置位置 |
-|---------|----------|----------|
-| @vitejs/plugin-vue | Vue 3 单文件组件支持 | 第82行 |
-| vite-plugin-html | HTML 模板注入 | 第96行 |
-| unplugin-auto-import | 自动导入 Vue 组件 | 第89行 |
-| unplugin-vue-components | 自动注册组件 | 第92行 |
-| vite-plugin-node-polyfills | Node.js Polyfill | 第171行 |
+**优化后的插件加载顺序**：
+1. Vue 插件 (`@vitejs/plugin-vue`)
+2. 图标插件 (`unplugin-icons`)
+3. 自动导入插件 (`unplugin-auto-import`)
+4. 组件注册插件 (`unplugin-vue-components`)
+5. HTML 模板插件 (`vite-plugin-html`)
+6. Polyfill 插件 (`vite-plugin-node-polyfills`)
+
+| 插件名称 | 功能描述 | 配置位置 | 重要性 |
+|---------|----------|----------|--------|
+| @vitejs/plugin-vue | Vue 3 单文件组件支持 | 第82行 | 核心插件 |
+| unplugin-icons | 图标系统支持 | 第85-87行 | 基础功能 |
+| unplugin-auto-import | 自动导入 Vue 组件 | 第89-91行 | 重要功能 |
+| unplugin-vue-components | 自动注册组件 | 第92-94行 | 重要功能 |
+| vite-plugin-html | HTML 模板注入 | 第96-149行 | 核心功能 |
+| vite-plugin-node-polyfills | Node.js Polyfill | 第171-180行 | 兼容性 |
 
 **章节来源**
 - [vite.config.ts:82-181](file://vite.config.ts#L82-L181)
@@ -132,17 +157,21 @@ subgraph "插件系统"
 I[Vue插件] --> J[自动导入]
 I --> K[组件注册]
 I --> L[图标系统]
+M[HTML插件] --> N[第三方库注入]
+O[Polyfill插件] --> P[浏览器兼容]
 end
 subgraph "第三方集成"
-M[Lute Markdown] --> N[内容解析]
-O[阿里云OSS] --> P[文件上传]
-Q[Node Polyfills] --> R[浏览器兼容]
+Q[Lute Markdown] --> R[内容解析]
+S[阿里云OSS] --> T[文件上传]
+U[Node Polyfills] --> V[浏览器兼容]
 end
 A --> F
 F --> I
 F --> M
 F --> O
 F --> Q
+F --> S
+F --> U
 ```
 
 **图表来源**
@@ -151,12 +180,12 @@ F --> Q
 
 ### 构建类型差异化配置
 
-| 构建类型 | 输出目录 | 基础路径 | 特殊配置 |
-|---------|----------|----------|----------|
-| 思源插件 (siyuan) | ./dist | `/plugins/siyuan-plugin-publisher/` | 标准插件构建 |
-| Widget | widget | `/widgets/sy-post-publisher/` | 包含Widget元数据 |
-| Nginx静态 | ./dist | `/` | 静态网站部署 |
-| 默认 | ./dist | `/` | 开发环境构建 |
+| 构建类型 | 输出目录 | 基础路径 | 特殊配置 | 适用场景 |
+|---------|----------|----------|----------|----------|
+| 思源插件 (siyuan) | ./dist | `/plugins/siyuan-plugin-publisher/` | 标准插件构建 | 思源笔记插件 |
+| Widget | widget | `/widgets/sy-post-publisher/` | 包含Widget元数据 | 思源Widget |
+| Nginx静态 | ./dist | `/` | 静态网站部署 | Web发布 |
+| 默认 | ./dist | `/` | 开发环境构建 | 本地开发 |
 
 **章节来源**
 - [vite.config.ts:15-25](file://vite.config.ts#L15-L25)
@@ -166,7 +195,7 @@ F --> Q
 
 ### 1. Vue 插件配置
 
-Vue 插件提供了完整的单文件组件支持，包括模板、脚本和样式的统一处理。
+Vue 插件提供了完整的单文件组件支持，包括模板、脚本和样式的统一处理。**插件顺序已优化**，确保Vue SFC支持在其他功能之前加载。
 
 ```mermaid
 classDiagram
@@ -185,8 +214,13 @@ class ComponentsPlugin {
 +dirs Array
 +extensions Array
 }
+class IconsPlugin {
++autoInstall boolean
++resolver Function
+}
 VuePlugin --> AutoImportPlugin : "集成"
 VuePlugin --> ComponentsPlugin : "集成"
+VuePlugin --> IconsPlugin : "集成"
 ```
 
 **图表来源**
@@ -197,7 +231,7 @@ VuePlugin --> ComponentsPlugin : "集成"
 
 ### 2. HTML 模板注入系统
 
-HTML 插件实现了智能的第三方库注入机制，根据构建模式动态加载必要的资源。
+HTML 插件实现了智能的第三方库注入机制，根据构建模式动态加载必要的资源。**注入顺序已优化**，确保第三方库在页面加载时正确初始化。
 
 ```mermaid
 sequenceDiagram
@@ -240,7 +274,7 @@ HTML->>Vite : 返回处理后的HTML
 
 ### 4. 构建输出配置
 
-构建输出配置实现了精细化的文件管理和缓存策略：
+构建输出配置实现了精细化的文件管理和缓存策略。**代码分割策略已优化**，支持更智能的依赖管理。
 
 ```mermaid
 flowchart LR
@@ -261,7 +295,7 @@ G --> H[优化文件大小]
 
 ### 5. Rollup 选项配置
 
-Rollup 选项提供了强大的打包和优化能力：
+Rollup 选项提供了强大的打包和优化能力。**插件顺序优化**确保Rollup插件按正确顺序执行。
 
 | 配置项 | 值 | 说明 |
 |--------|----|------|
@@ -296,6 +330,30 @@ E --> I[src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}]
 
 **章节来源**
 - [vite.config.ts:258-273](file://vite.config.ts#L258-L273)
+
+### 7. Vite v2 配置
+
+新增的Vite v2配置文件提供了专门的构建支持：
+
+```mermaid
+graph TB
+A[Vite v2配置] --> B[Vue插件]
+A --> C[图标插件]
+A --> D[自动导入插件]
+A --> E[组件注册插件]
+A --> F[Polyfill插件]
+A --> G[静态资源复制]
+B --> H[lib模式构建]
+I[静态资产复制] --> J[plugin.json]
+I --> K[README文件]
+I --> L[i18n文件]
+```
+
+**图表来源**
+- [vite.v2.config.ts:68-90](file://vite.v2.config.ts#L68-L90)
+
+**章节来源**
+- [vite.v2.config.ts:1-146](file://vite.v2.config.ts#L1-L146)
 
 ## 依赖关系分析
 
@@ -364,6 +422,11 @@ end
    - 条件加载第三方库
    - 智能的热重载配置
 
+4. **插件顺序优化**
+   - Vue 插件优先加载确保SFC支持
+   - 自动导入和组件注册紧随其后
+   - HTML 模板和 Polyfill 插件最后加载
+
 ### 缓存策略实现
 
 ```mermaid
@@ -397,7 +460,7 @@ F --> G[返回处理结果]
 - 验证 `package.json` 中的版本兼容性
 
 **章节来源**
-- [package.json:97-99](file://package.json#L97-L99)
+- [package.json:97-102](file://package.json#L97-L102)
 
 #### 2. 热重载失效问题
 
@@ -432,6 +495,17 @@ F --> G[返回处理结果]
 **章节来源**
 - [vite.config.ts:66-71](file://vite.config.ts#L66-L71)
 
+#### 5. 插件顺序问题
+
+**问题**: Vue组件或自动导入功能异常
+**解决方案**:
+- 验证插件加载顺序是否正确
+- 检查 `vite.config.ts` 中插件数组顺序
+- 确保 Vue 插件在自动导入之前加载
+
+**章节来源**
+- [vite.config.ts:82-94](file://vite.config.ts#L82-L94)
+
 ### 调试技巧
 
 1. **启用详细日志**
@@ -451,15 +525,28 @@ F --> G[返回处理结果]
    npx vite --config vite.config.ts --mode development
    ```
 
+4. **检查插件顺序**
+   ```bash
+   npx vite --debug
+   ```
+
 ## 结论
 
-该 Vite 构建配置展现了现代前端工程的最佳实践，具有以下优势：
+该 Vite 构建配置展现了现代前端工程的最佳实践，**经过重大重组后**具有以下优势：
 
 1. **高度可配置性**: 支持多种构建类型和环境配置
-2. **开发体验优秀**: 完善的热重载和调试支持
-3. **性能优化到位**: 智能的代码分割和缓存策略
-4. **扩展性强**: 易于添加新的插件和工具
-5. **维护友好**: 清晰的配置结构和注释
+2. **优化的插件顺序**: 确保Vue插件加载顺序正确，提升构建稳定性
+3. **改进的依赖管理**: 更好的插件间协调性和兼容性
+4. **开发体验优秀**: 完善的热重载和调试支持
+5. **性能优化到位**: 智能的代码分割和缓存策略
+6. **扩展性强**: 易于添加新的插件和工具
+7. **维护友好**: 清晰的配置结构和注释
+
+**重大改进**：
+- 插件加载顺序已优化，确保Vue SFC支持优先加载
+- 依赖管理得到改善，减少插件冲突
+- 新增Vite v2配置支持，提供更专业的构建选项
+- 构建类型差异化配置更加完善
 
 通过合理的配置和优化，该项目能够高效地支持思源笔记发布工具的各种使用场景，从开发调试到生产部署都能提供稳定可靠的服务。
 
@@ -468,3 +555,4 @@ F --> G[返回处理结果]
 - 定期更新依赖包以获得最新功能和安全修复
 - 建立完善的测试覆盖以确保代码质量
 - 优化构建时间以提升开发效率
+- 注意插件顺序的重要性，避免不必要的配置改动

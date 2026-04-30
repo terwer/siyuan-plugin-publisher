@@ -7,44 +7,44 @@
  *  of this license document, but changing it is not allowed.
  */
 
+import * as _ from "lodash-es"
+import { toRaw } from "vue"
+import {
+    BlogConfig,
+    CategoryInfo,
+    MediaObject,
+    PageEditMode,
+    PageTypeEnum,
+    PicbedServiceTypeEnum,
+    Post,
+    PostUtil,
+    TagInfo,
+    WebApi,
+    WebConfig,
+    YamlConvertAdaptor,
+    YamlFormatObj,
+    YamlStrategy,
+} from "zhi-blog-api"
 import { IBlogApi } from "zhi-blog-api/dist/lib/IBlogApi"
 import { IWebApi } from "zhi-blog-api/dist/lib/IWebApi"
+import { DateUtil, HtmlUtil, ObjectUtil, StrUtil, YamlUtil } from "zhi-common"
+import { SiyuanAttr, SiyuanKernelApi } from "zhi-siyuan-api"
 import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
 import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
-import {
-  BlogConfig,
-  CategoryInfo,
-  MediaObject,
-  PageEditMode,
-  PageTypeEnum,
-  PicbedServiceTypeEnum,
-  Post,
-  PostUtil,
-  TagInfo,
-  WebApi,
-  WebConfig,
-  YamlConvertAdaptor,
-  YamlFormatObj,
-  YamlStrategy,
-} from "zhi-blog-api"
-import { createAppLogger, ILogger } from "~/src/utils/appLogger.ts"
-import { LuteUtil } from "~/src/utils/luteUtil.ts"
 import { usePicgoBridge } from "~/src/composables/usePicgoBridge.ts"
-import { base64ToBuffer, path, remoteImageToBase64Info } from "~/src/utils/polyfillUtils.ts"
-import { DateUtil, HtmlUtil, ObjectUtil, StrUtil, YamlUtil } from "zhi-common"
-import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
-import { SiyuanAttr, SiyuanKernelApi } from "zhi-siyuan-api"
+import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import { DynamicConfig, getDynPlatformKeyFromPostidKey } from "~/src/platforms/dynamicConfig.ts"
-import { CATE_AUTO_NAME } from "~/src/utils/constants.ts"
-import { toRaw } from "vue"
-import * as _ from "lodash-es"
-import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
-import { SypConfig } from "~/syp.config.ts"
 import { usePlatformMetadataStore } from "~/src/stores/usePlatformMetadataStore.ts"
-import { MdUtils } from "~/src/utils/mdUtils.ts"
-import ImageUtils from "~/src/utils/ImageUtils.ts"
+import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
+import { createAppLogger, ILogger } from "~/src/utils/appLogger.ts"
 import { BaseError } from "~/src/utils/BaseErrors.ts"
+import { CATE_AUTO_NAME } from "~/src/utils/constants.ts"
+import ImageUtils from "~/src/utils/ImageUtils.ts"
+import { LuteUtil } from "~/src/utils/luteUtil.ts"
+import { MdUtils } from "~/src/utils/mdUtils.ts"
+import { base64ToBuffer, path, remoteImageToBase64Info } from "~/src/utils/polyfillUtils.ts"
+import { SypConfig } from "~/syp.config.ts"
 
 /**
  * 各种模式共享的扩展基类
@@ -539,12 +539,13 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
             ignoreError = true
           }
           if (!ignoreError) {
-            const errMsg2 = "文章可能已经发布成功，但是平台图片上传失败。请打开「开发者工具」查看错误日志"
-            this.logger.error(errMsg2, e)
-            await this.kernelApi.pushMsg({
-              msg: errMsg2,
-              timeout: 7000,
-            })
+            const imgErrMsg = `图片上传失败: ${message}`
+            this.logger.error(imgErrMsg, e)
+            // 将图片上传错误收集到post自定义属性上，以便上层调用方能感知到
+            if (!(post as any).imageUploadErrors) {
+              (post as any).imageUploadErrors = []
+            }
+            (post as any).imageUploadErrors.push(imgErrMsg)
           } else {
             this.logger.info("ignore error in macro mode")
           }

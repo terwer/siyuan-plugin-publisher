@@ -66,6 +66,10 @@
           <div class="syp-publish-status" :class="`is-${publishState.status}`">
             <div class="syp-publish-status__title">{{ publishTitle }}</div>
             <div class="syp-publish-status__desc">{{ publishDescription }}</div>
+            <div v-if="publishState.status === 'success_with_warnings' && publishState.errMsg" class="syp-publish-status__warning">
+              <div class="syp-publish-status__warning-title">{{ t("v2.quickPublish.warning.imageUploadFailed") }}</div>
+              <pre class="syp-publish-status__warning-text">{{ publishState.errMsg }}</pre>
+            </div>
             <div v-if="publishState.status === 'failed' && publishState.errMsg" class="syp-publish-status__error">
               <div class="syp-publish-status__error-title">{{ t("v2.quickPublish.errorDetails") }}</div>
               <pre class="syp-publish-status__error-text">{{ publishState.errMsg }}</pre>
@@ -214,6 +218,12 @@ const publishTitle = computed(() => {
     }
     return t("v2.publish.title.publishSuccess")
   }
+  if (publishState.value.status === "success_with_warnings") {
+    if (action === "update") {
+      return t("v2.publish.title.updateSuccessWithWarnings")
+    }
+    return t("v2.publish.title.publishSuccessWithWarnings")
+  }
   if (publishState.value.status === "preview_ready") {
     return t("v2.publish.title.previewReady")
   }
@@ -257,6 +267,12 @@ const publishDescription = computed(() => {
       return name ? t("v2.publish.desc.deleteSuccess.named", { name }) : t("v2.publish.desc.deleteSuccess.default")
     }
     return name ? t("v2.publish.desc.publishSuccess.named", { name }) : t("v2.publish.desc.publishSuccess.default")
+  }
+  if (publishState.value.status === "success_with_warnings") {
+    if (action === "update") {
+      return name ? t("v2.publish.desc.updateSuccessWithWarnings.named", { name }) : t("v2.publish.desc.updateSuccessWithWarnings.default")
+    }
+    return name ? t("v2.publish.desc.publishSuccessWithWarnings.named", { name }) : t("v2.publish.desc.publishSuccessWithWarnings.default")
   }
   if (publishState.value.status === "preview_ready") {
     return name ? t("v2.publish.desc.previewReady.named", { name }) : t("v2.publish.desc.previewReady.default")
@@ -443,6 +459,10 @@ async function retryInit() {
     background linear-gradient(180deg, $syp-bg-primary 0%, $syp-status-success-bg 100%)
     border-color $syp-status-success-border
 
+  &.is-success_with_warnings
+    background linear-gradient(180deg, $syp-bg-primary 0%, $syp-status-warning-bg 100%)
+    border-color $syp-status-warning-border
+
   &.is-failed
     background linear-gradient(180deg, $syp-bg-primary 0%, $syp-status-error-bg 100%)
     border-color $syp-status-error-border
@@ -455,6 +475,24 @@ async function retryInit() {
 .syp-publish-status__desc
   font-size 13px
   color $syp-text-secondary
+
+.syp-publish-status__warning
+  border-radius 10px
+  background $syp-status-warning-deep-bg
+  padding 12px
+  border 1px solid $syp-status-warning-border
+
+.syp-publish-status__warning-title
+  font-size 12px
+  font-weight 600
+  color $syp-warning
+  margin-bottom 6px
+
+.syp-publish-status__warning-text
+  margin 0
+  font-size 12px
+  color #b37400
+  white-space pre-wrap
 
 .syp-publish-status__error
   border-radius 10px

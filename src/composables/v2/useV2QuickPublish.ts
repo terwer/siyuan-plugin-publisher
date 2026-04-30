@@ -1,14 +1,14 @@
 import { computed, reactive } from "vue"
 import { HtmlUtil, JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
-import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
-import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
-import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
-import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
-import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
-import { DynamicConfig, DynamicJsonCfg, getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import WidgetPageUtils from "~/siyuan/utils/widgetPageUtils.ts"
 import { usePublish } from "~/src/composables/usePublish.ts"
 import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
+import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
+import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
+import { DynamicConfig, DynamicJsonCfg, getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
+import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
+import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
+import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
 import { openPathOrUrl } from "~/src/utils/pathUtils.ts"
 
 export interface V2QuickPublishPlatformItem {
@@ -20,7 +20,7 @@ export interface V2QuickPublishPlatformItem {
   tooltipText?: string
 }
 
-type V2PublishStatus = "idle" | "preparing" | "publishing" | "success" | "failed" | "preview_ready"
+type V2PublishStatus = "idle" | "preparing" | "publishing" | "success" | "success_with_warnings" | "failed" | "preview_ready"
 type V2PublishAction = "" | "publish" | "update" | "delete" | "preview"
 
 export const useV2QuickPublish = () => {
@@ -184,10 +184,12 @@ export const useV2QuickPublish = () => {
           setPreviewLink(item.platformKey, result.previewUrl)
         }
         updatePlatformPublishFlag(item.platformKey, true)
+        // 发布成功但有图片上传错误时，设置为 success_with_warnings 状态
+        const hasWarnings = !StrUtil.isEmptyString(result?.errMsg)
         setPublishState({
-          status: "success",
+          status: hasWarnings ? "success_with_warnings" : "success",
           previewUrl: result.previewUrl ?? "",
-          errMsg: "",
+          errMsg: result?.errMsg ?? "",
           isPublishing: false,
         })
       } else {
