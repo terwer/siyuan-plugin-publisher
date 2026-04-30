@@ -10,20 +10,20 @@
 import * as _ from "lodash-es"
 import { toRaw } from "vue"
 import {
-    BlogConfig,
-    CategoryInfo,
-    MediaObject,
-    PageEditMode,
-    PageTypeEnum,
-    PicbedServiceTypeEnum,
-    Post,
-    PostUtil,
-    TagInfo,
-    WebApi,
-    WebConfig,
-    YamlConvertAdaptor,
-    YamlFormatObj,
-    YamlStrategy,
+  BlogConfig,
+  CategoryInfo,
+  MediaObject,
+  PageEditMode,
+  PageTypeEnum,
+  PicbedServiceTypeEnum,
+  Post,
+  PostUtil,
+  TagInfo,
+  WebApi,
+  WebConfig,
+  YamlConvertAdaptor,
+  YamlFormatObj,
+  YamlStrategy,
 } from "zhi-blog-api"
 import { IBlogApi } from "zhi-blog-api/dist/lib/IBlogApi"
 import { IWebApi } from "zhi-blog-api/dist/lib/IWebApi"
@@ -499,8 +499,9 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
         // 批量处理图片上传
         this.logger.info(`找到${images.length}张图片，开始上传`)
         const urlMap = {}
-        try {
-          for (const image of images) {
+        const picbedName = this.getPicbedServiceName(cfg)
+        for (const image of images) {
+          try {
             const imageUrl = image.url
             // 忽略在线图片
             if (imageUrl.startsWith("http") && !imageUrl.startsWith(window.location.origin)) {
@@ -523,31 +524,23 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
             } else if (attachResult && attachResult.url) {
               urlMap[image.originUrl] = attachResult.url
             }
-            // =======
-            // 旧版使用 URL，confluence 使用 macro，macro 优先
-            // =======
-            const platformImageSuccessMsg = `使用平台自带的图片上传能力，已成功上传图片 ${image.name}`
-            await this.pushMsg({
-              msg: platformImageSuccessMsg,
-              timeout: 3000,
-            })
-          }
-        } catch (e) {
-          const message = e.message || e
-          let ignoreError = false
-          if (message.includes(BaseError.NO_PAGE_ID_FOUND_IN_MEDIA_MACRO_MODE)) {
-            ignoreError = true
-          }
-          if (!ignoreError) {
-            const imgErrMsg = `图片上传失败: ${message}`
-            this.logger.error(imgErrMsg, e)
-            // 将图片上传错误收集到post自定义属性上，以便上层调用方能感知到
-            if (!(post as any).imageUploadErrors) {
-              (post as any).imageUploadErrors = []
+          } catch (e) {
+            const message = e.message || e
+            let ignoreError = false
+            if (message.includes(BaseError.NO_PAGE_ID_FOUND_IN_MEDIA_MACRO_MODE)) {
+              ignoreError = true
             }
-            (post as any).imageUploadErrors.push(imgErrMsg)
-          } else {
-            this.logger.info("ignore error in macro mode")
+            if (!ignoreError) {
+              const imgErrMsg = `${image.name} 同步失败(使用${picbedName}): ${message}`
+              this.logger.error(imgErrMsg, e)
+              // 将图片上传错误收集到post自定义属性上，以便上层调用方能感知到
+              if (!(post as any).imageUploadErrors) {
+                (post as any).imageUploadErrors = []
+              }
+              (post as any).imageUploadErrors.push(imgErrMsg)
+            } else {
+              this.logger.info("ignore error in macro mode")
+            }
           }
         }
 
@@ -579,11 +572,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
         break
       }
       default: {
-        await this.kernelApi.pushMsg({
-          msg: "未指定上传图片服务，不处理图片",
-          timeout: 7000,
-        })
-        this.logger.warn("未指定上传图片服务，不处理图片")
+        this.logger.info("图片图床服务未指定，跳过图片处理")
         break
       }
     }
@@ -594,6 +583,18 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     this.logger.info("图片预处理全部完成")
     this.logger.debug("图片处理之后，post", { post: toRaw(post) })
     return post
+  }
+
+  /**
+   * 获取图床服务名称（用于错误信息）
+   */
+  private getPicbedServiceName(cfg: BlogConfig): string {
+    switch (cfg.picbedService) {
+      case PicbedServiceTypeEnum.Bundled: return "平台图床"
+      case PicbedServiceTypeEnum.PicGo: return "PicGo"
+      case PicbedServiceTypeEnum.None: return "无"
+      default: return String(cfg.picbedService || "未知")
+    }
   }
 
   public async getImagesFromMd(id: string, markdown: string) {
