@@ -284,3 +284,48 @@ The V2 program SHALL not introduce a separate build chain (such as `vite.v2.conf
 - **WHEN** the project is built or served
 - **THEN** the component must be compiled by the existing `vite.config.ts`
 - **AND** no additional build script or config file must be required for V2
+
+### Requirement: V2 UI SHALL only target the SiYuan plugin runtime
+
+The V2 UI architecture SHALL only target the SiYuan plugin runtime (PC Electron and Docker browser access). Chrome Extension, Nginx, Vercel, and Widget deployments SHALL continue using the SPA path. V2 components SHALL NOT be expected to function outside the SiYuan plugin runtime.
+
+#### Scenario: V2 UI is used in the SiYuan plugin runtime
+
+- **GIVEN** the plugin is running inside SiYuan (PC Electron or Docker browser access)
+- **WHEN** the user enables `useV2UI` and invokes a publish or settings entry
+- **THEN** the V2 Host must render the unified workspace shell
+- **AND** `V2Host.show()` must work correctly in both PC Electron and Docker browser environments
+
+#### Scenario: A non-plugin build target is compiled
+
+- **GIVEN** the project is built for Chrome Extension, Nginx, Vercel, or Widget
+- **WHEN** the build output is deployed
+- **THEN** the V2 Host and V2 components must not be included in the critical rendering path
+- **AND** the SPA routing system (`src/pages/*` + Vue Router) must remain functional
+
+#### Scenario: SPA code retirement is proposed for a page used by non-plugin builds
+
+- **GIVEN** a contributor proposes retiring a SPA page from the plugin runtime path
+- **WHEN** the SPA page is still referenced by Chrome Extension, Nginx, or Vercel builds
+- **THEN** the retirement must only remove the plugin runtime's dependency on that SPA page
+- **AND** the SPA page code must be retained in the codebase for non-plugin builds
+
+### Requirement: V2 components SHALL NOT directly call Node.js APIs
+
+V2 components SHALL NOT directly invoke Node.js APIs (such as `fs`, `path`, `child_process`) or Electron APIs (such as `BrowserWindow`, `@electron/remote`). Environment-specific capabilities SHALL be guarded by `EnvUtil.isSiyuanElectron()` with graceful degradation for non-Electron environments.
+
+#### Scenario: V2 component uses an Electron-only feature
+
+- **GIVEN** a V2 component needs to expose a feature that requires Node.js or Electron APIs
+- **WHEN** the component is rendered in a Docker browser environment
+- **THEN** the feature must be guarded by `EnvUtil.isSiyuanElectron()`
+- **AND** the component must gracefully degrade (hide the feature, provide an alternative, or show a descriptive message)
+- **AND** the component must not throw an uncaught exception
+
+#### Scenario: A new Electron-only platform subtype is added
+
+- **GIVEN** a contributor adds a new platform subtype that requires Electron APIs
+- **WHEN** the platform is registered in the V2 selectable platforms list
+- **THEN** the contributor must add an `EnvUtil.isSiyuanElectron()` guard in `useV2Settings.selectablePlatforms`
+- **AND** the platform must be filtered out in Docker browser environments
+- **AND** the bridge registry must return `null` for the subtype in non-Electron environments

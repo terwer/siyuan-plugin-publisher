@@ -1,5 +1,14 @@
-import { createApp } from "vue"
+/*
+ *            GNU GENERAL PUBLIC LICENSE
+ *               Version 3, 29 June 2007
+ *
+ *  Copyright (C) 2026 Terwer, Inc. <https://terwer.space/>
+ *  Everyone is permitted to copy and distribute verbatim copies
+ *  of this license document, but changing it is not allowed.
+ */
+
 import { createPinia } from "pinia"
+import { createApp } from "vue"
 import { createI18n } from "vue-i18n"
 import V2App from "~/src/components/v2/V2App.vue"
 import { V2_I18N_FALLBACK_KEY } from "~/src/composables/v2/useV2I18n.ts"

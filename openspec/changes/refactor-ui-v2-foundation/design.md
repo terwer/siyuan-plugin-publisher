@@ -379,6 +379,62 @@ V1 共存期建议采用以下顺序：
 - 不需要在 `src/locales/*` 中维护第二套 key
 - `V2Host` 在创建 Vue 应用时注入 `fallbackResolve`，桥接组件即使使用旧 key 也能通过 fallback 正常显示
 
+### 7.8 V2 运行环境范围与适配策略
+
+#### 7.8.1 环境范围定义
+
+V2 仅服务于**思源插件运行时**，不支持以下构建目标：
+
+- Chrome Extension / Edge Extension / Firefox Extension
+- Nginx 静态部署
+- Vercel 部署
+- 思源 Widget（iframe 挂件模式）
+
+这些构建目标继续使用 SPA 路径（`src/pages/*` + Vue Router + iframe），不受 V2 迁移影响。
+
+#### 7.8.2 插件运行时子环境
+
+在思源插件运行时内部，存在两个子环境，能力差异显著：
+
+| 子环境 | 访问方式 | Node.js API | Electron API | `siyuan.Menu` | 示例限制 |
+|--------|----------|-------------|--------------|---------------|----------|
+| **PC Electron** | 桌面客户端 | 可用（`fs`、`path`、`child_process`） | 可用（`BrowserWindow`、`@electron/remote`） | 可用 | 无 |
+| **Docker 浏览器端** | 浏览器访问 `http://host:6806` | 不可用（客户端无 Node 运行时） | 不可用 | 可用（由 SiYuan 内核渲染） | 无 `Fs_LocalSystem`、无 `BrowserWindow` 弹窗 |
+
+关键区别：
+
+- Docker 浏览器端中，插件代码运行在 SiYuan 内核（服务端），但客户端浏览器无法直接调用 Node.js API
+- `siyuan.Menu` 在 Docker 浏览器端可用（它由 SiYuan 内核渲染后发送到浏览器），因此 `V2Host.show()` 在 Docker 下可正常工作
+- `Fs_LocalSystem`（本地文件系统适配器）依赖 Electron 的 `fs` 模块，在 Docker 浏览器端不可用
+- `BrowserWindow` 弹窗（用于 OAuth 授权等）依赖 Electron，在 Docker 浏览器端不可用
+
+#### 7.8.3 环境适配原则
+
+1. **V2 组件不直接调用 Node.js API**：所有环境敏感的能力必须通过守卫函数保护
+2. **守卫函数统一使用 `EnvUtil.isSiyuanElectron()`**：禁止在 V2 组件中散写 `BrowserUtil.isElectron()` 或 `SiyuanDevice.siyuanWindow().process?.versions?.electron` 等异构检测
+3. **非 Electron 环境降级处理**：功能不可用时静默隐藏或提供替代路径，不允许抛出未捕获异常
+4. **平台列表动态过滤**：`useV2Settings.selectablePlatforms` 已实现 `Fs_LocalSystem` 的 Electron 守卫，新增 Electron-only 平台子类型时必须同步添加守卫
+
+#### 7.8.4 当前已有守卫点
+
+| 守卫位置 | 守卫内容 | 行为 |
+|----------|----------|------|
+| `src/composables/v2/useV2Settings.ts:61,77` | `Fs_LocalSystem` 过滤 | 非 Electron 环境下从可选平台列表中排除本地文件系统 |
+| `src/components/v2/settings/bridge/bridgeRegistry.ts:74-76` | `Fs_LocalSystem` 桥接守卫 | 非 Electron 环境下返回 `null`，不渲染本地文件系统配置表单 |
+| `src/utils/widgetUtils.ts:95` | `BrowserWindow` 拦截 | 非 Electron 环境下跳过 BrowserWindow 创建，改用 `window.open()` |
+| `src/platforms/pre.ts:15` | `hasElectronEnv` 全局标记 | 影响 Electron-only 平台子类型的注册 |
+
+#### 7.8.5 对 SPA 退役的影响
+
+由于 Chrome Extension / Nginx / Vercel 继续使用 SPA，**SPA 代码不能被完全删除**。退役标准中的"移除"指：
+
+> 从思源插件运行时路径中移除 SPA 依赖，而非从代码库中删除 SPA 代码。
+
+具体含义：
+- `src/pages/*`、`src/routes/*`、`src/layouts/*` 必须保留给非插件构建目标
+- `widgetInvoke.ts` 中指向旧 SPA 的 `showPage()` 调用必须保留（非 V2 回退路径仍需使用）
+- SPA 退役进度衡量应区分"插件路径退役率"和"代码库删除率"两个指标
+
 ## 8. 全生命周期路线图
 
 ### Milestone 0: 入口与治理基座
@@ -582,6 +638,9 @@ V1 共存期建议采用以下顺序：
 3. **调用链替换**：所有调用该 SPA 页面的入口（`topbar.ts`、`widgetInvoke.ts`、文档菜单）已切换到 V2 路径（`V2Host.show()`）
 4. **稳定性验证**：该 V2 功能已在至少一个完整里程碑周期内稳定运行，无阻断性 bug
 5. **回退可行性**：即使移除该 SPA 代码，关闭 `useV2UI` 开关后，用户仍能通过其他 SPA 路径或降级方案完成相同任务
+6. **非插件构建目标引用检查**：该 SPA 页面/路由未被 Chrome Extension / Nginx / Vercel 等非插件构建目标引用；若仍被引用，则仅从插件运行时路径退役（隐藏入口、替换调用），代码保留
+
+> **"退役"定义**：在本标准中，"退役"指从思源插件运行时路径中移除 SPA 依赖（隐藏 iframe 入口、替换为 `V2Host.show()` 调用），而非从代码库中删除 SPA 代码。由于 Chrome Extension / Nginx / Vercel 继续使用 SPA，代码库删除仅在所有构建目标均已迁移后方可进行（参见 7.8.5）。
 
 ### 8.1.4 必须移除条件
 
@@ -601,6 +660,7 @@ V1 共存期建议采用以下顺序：
 3. **回退依赖**：V2 功能开关（`useV2UI`）关闭后，用户必须能完整回退到旧体验，此时被回退依赖的 SPA 页面不可移除
 4. **外部依赖**：其他尚未迁移的 SPA 页面通过路由跳转、组件引用或共享状态依赖该页面
 5. **测试依赖**：自动化测试或手工 smoke 测试仍依赖该 SPA 路径验证旧功能
+6. **非插件构建目标依赖**：该 SPA 页面/路由仍被 Chrome Extension / Nginx / Vercel 等非插件构建目标引用（此时仅从插件运行时路径退役，代码保留）
 
 ### 8.1.6 转换边界定义
 
@@ -638,6 +698,7 @@ V1 共存期建议采用以下顺序：
 - [ ] 该功能在至少一个发布周期内未收到 V2 路径的阻断性 bug 反馈
 - [ ] 该功能的 V2 实现有明确的回退策略（关闭 `useV2UI` 后仍可回退到 SPA 或其他可用路径）
 - [ ] 该功能对应的 SPA 路由在 `routeConfig.ts` 中已被标记为废弃或已移除
+- [ ] 该 SPA 页面/路由未被非插件构建目标（Chrome Extension / Nginx / Vercel）引用，或仅完成插件路径退役（代码保留）
 
 ### 8.1.8 进度衡量指标
 

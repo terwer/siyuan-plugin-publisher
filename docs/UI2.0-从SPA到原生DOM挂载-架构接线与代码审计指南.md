@@ -19,7 +19,7 @@
 siyuan/index.ts
   -> siyuan/topbar.ts / siyuan/invoke/widgetInvoke.ts
   -> siyuan/v2/v2Host.ts
-  -> src/v2/createV2App.ts
+  -> siyuan/v2/createV2App.ts
   -> src/components/v2/V2App.vue
   -> src/composables/v2/useV2QuickPublish.ts / useV2Settings.ts
   -> src/composables/usePublish.ts / usePublishConfig.ts / useSiyuanApi.ts
@@ -39,7 +39,7 @@ siyuan/index.ts
 4. V2 原生 DOM 宿主
    - [`../siyuan/v2/v2Host.ts`](../siyuan/v2/v2Host.ts)
 5. V2 Vue 工厂
-   - [`../src/v2/createV2App.ts`](../src/v2/createV2App.ts)
+   - [`../siyuan/v2/createV2App.ts`](../siyuan/v2/createV2App.ts)
 6. V2 根组件
    - [`../src/components/v2/V2App.vue`](../src/components/v2/V2App.vue)
 7. V2 工作壳
@@ -136,7 +136,7 @@ siyuan/index.ts
           │                               │
           ▼                               ▼
 ┌──────────────────────┐      ┌──────────────────────────────┐
-│ src/main.ts          │      │ src/v2/createV2App.ts        │
+│ src/main.ts          │      │ siyuan/v2/createV2App.ts   │
 │ bootstrap.ts         │      │ V2App.vue                    │
 │ vue-router           │      │ UnifiedWorkspaceShell        │
 │ routeConfig.ts       │      │ useV2QuickPublish            │
@@ -201,7 +201,7 @@ siyuan/index.ts
 
 ### Vue 工厂层
 
-- `src/v2/createV2App.ts:17-40`
+- `siyuan/v2/createV2App.ts:17-40`
 
 职责：
 
@@ -362,7 +362,7 @@ WidgetInvoke.showPublisherPublishSettingDialog()
 2. V2 宿主  
    - [`../siyuan/v2/v2Host.ts`](../siyuan/v2/v2Host.ts)
 3. V2 Vue 工厂  
-   - [`../src/v2/createV2App.ts`](../src/v2/createV2App.ts)
+   - [`../siyuan/v2/createV2App.ts`](../siyuan/v2/createV2App.ts)
 4. V2 根组件  
    - [`../src/components/v2/V2App.vue`](../src/components/v2/V2App.vue)
 5. V2 快速发布状态  
@@ -406,7 +406,7 @@ WidgetInvoke.showPublisherPublishSettingDialog()
 主看：
 
 - `../siyuan/v2/v2Host.ts`
-- `../src/v2/createV2App.ts`
+- `../siyuan/v2/createV2App.ts`
 - `siyuan/v2/v2Host.ts:26-70`
 
 这里先审三个问题：
@@ -707,7 +707,7 @@ WidgetInvoke.showPublisherPublishSettingDialog()
 见：
 
 - `siyuan/v2/v2Host.ts:29-65`
-- `src/v2/createV2App.ts:17-40`
+- `siyuan/v2/createV2App.ts:17-40`
 - `src/components/v2/V2App.vue:49-137`
 
 但平台配置页还不是“完全原生化”，因为它复用了旧 SFC 表单。
@@ -858,7 +858,7 @@ V2 当前文档 ID 来自：
 2. [`../siyuan/topbar.ts`](../siyuan/topbar.ts)
 3. [`../siyuan/invoke/widgetInvoke.ts`](../siyuan/invoke/widgetInvoke.ts)
 4. [`../siyuan/v2/v2Host.ts`](../siyuan/v2/v2Host.ts)
-5. [`../src/v2/createV2App.ts`](../src/v2/createV2App.ts)
+5. [`../siyuan/v2/createV2App.ts`](../siyuan/v2/createV2App.ts)
 6. [`../src/components/v2/V2App.vue`](../src/components/v2/V2App.vue)
 
 ### 第二轮：再看 V2 状态和共享业务
