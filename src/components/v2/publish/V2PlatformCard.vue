@@ -50,24 +50,23 @@
           {{ t("v2.card.action.delete") }}
         </button>
       </div>
-      <div v-if="showDeleteConfirm" class="syp-platform-card__confirm" @click.stop>
-        <div class="syp-platform-card__confirm-text">{{ t("v2.card.confirm.deleteText") }}</div>
-        <div class="syp-platform-card__confirm-actions">
-          <button type="button" class="syp-platform-card__confirm-btn" :disabled="isProcessing" @click="confirmDelete">
-            {{ t("v2.card.confirm.delete") }}
-          </button>
-          <button type="button" class="syp-platform-card__confirm-btn ghost" @click="toggleDeleteConfirm">
-            {{ t("v2.card.confirm.cancel") }}
-          </button>
-        </div>
-      </div>
+      <SypConfirmBar
+        :visible="showDeleteConfirm"
+        :message="t('v2.card.confirm.deleteText')"
+        :confirm-text="t('v2.card.confirm.delete')"
+        :cancel-text="t('v2.card.confirm.cancel')"
+        :loading="isProcessing"
+        @confirm="confirmDelete"
+        @cancel="toggleDeleteConfirm"
+      />
     </div>
   </article>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue"
-import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
+import { computed, ref } from "vue";
+import SypConfirmBar from "~/src/components/v2/common/SypConfirmBar.vue";
+import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts";
 
 const props = defineProps<{
   platformName: string
@@ -118,82 +117,84 @@ const primaryLabel = computed(() => {
 </script>
 
 <style scoped lang="stylus">
+@import "../../../assets/v2/variables.styl"
+
 .syp-platform-card
   display flex
   align-items center
-  gap 14px
-  padding 18px
-  border 1px solid #e6ebf2
-  border-radius 16px
-  background linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)
+  gap 10px
+  padding 10px
+  border 1px solid $syp-border-primary
+  border-radius $syp-sm-card-radius
+  background $syp-card-bg-gradient
   &.is-disabled
     opacity 0.72
 
 .syp-platform-card__icon
-  width 44px
-  height 44px
-  border-radius 12px
-  background #f2f5fa
+  width $syp-sm-icon-size
+  height $syp-sm-icon-size
+  border-radius $syp-sm-icon-radius
+  background $syp-icon-bg
   display flex
   align-items center
   justify-content center
-  color #355d90
+  color $syp-icon-color
 
   :deep(svg)
-    width 22px
-    height 22px
+    width $syp-sm-icon-inner
+    height $syp-sm-icon-inner
 
   :deep(img)
-    width 22px
-    height 22px
+    width $syp-sm-icon-inner
+    height $syp-sm-icon-inner
     object-fit contain
 
 .syp-platform-card__fallback
-  font-size 18px
+  font-size 14px
   font-weight 700
 
 .syp-platform-card__body
   min-width 0
   display flex
   flex-direction column
-  gap 6px
+  gap 4px
 
 .syp-platform-card__name
-  font-size 16px
+  font-size $syp-sm-name-size
   font-weight 600
-  color #1f2329
+  color $syp-text-primary
 
 .syp-platform-card__status
   display inline-flex
   align-items center
   width fit-content
-  padding 4px 9px
+  padding 2px 7px
   border-radius 999px
-  font-size 12px
+  font-size $syp-sm-badge-font
 
   &.is-ready
-    background rgba(52, 199, 36, 0.12)
-    color #2f8b24
+    background $syp-badge-ready-bg
+    color $syp-badge-ready-text
 
   &.is-disabled
-    background rgba(245, 74, 69, 0.12)
-    color #b33d39
+    background $syp-badge-disabled-bg
+    color $syp-badge-disabled-text
 
 .syp-platform-card__published
   font-size 12px
-  color #7b8490
+  color $syp-text-tertiary
 
 .syp-platform-card__actions
-  margin-top 6px
+  margin-top 4px
   display flex
   flex-wrap wrap
-  gap 8px
+  gap 6px
 
 .syp-platform-card__action
   padding 0
   border none
   background transparent
-  color #2f6dd5
+  color $syp-action-primary
   font-size 12px
   cursor pointer
 
@@ -201,79 +202,45 @@ const primaryLabel = computed(() => {
     text-decoration underline
 
   &:disabled
-    color #98a2b3
+    color $syp-text-disabled
     cursor not-allowed
     text-decoration none
 
 .syp-platform-card__action--danger
-  color #d92d20
+  color $syp-action-danger
 
 .syp-platform-card__action--primary
-  padding 4px 10px
-  border-radius 999px
-  border 1px solid #2f6dd5
-  background #2f6dd5
+  padding 2px 8px
+  border-radius $syp-radius-sm
+  border 1px solid $syp-action-primary
+  background $syp-action-primary
   color #fff
   font-size 12px
+  line-height 1.4
 
   &:hover
     text-decoration none
-    background #2b62c0
-    border-color #2b62c0
+    background $syp-action-primary-hover
+    border-color $syp-action-primary-hover
 
   &:disabled
     opacity 0.6
     cursor not-allowed
 
   &.is-danger
-    border-color #d92d20
-    background #d92d20
+    border-color $syp-action-danger
+    background $syp-action-danger
 
     &:hover
-      background #c6281d
-      border-color #c6281d
+      background $syp-action-danger-hover
+      border-color $syp-action-danger-hover
 
   &.is-outline
     background transparent
-    color #2f6dd5
-    border-color #2f6dd5
+    color $syp-action-primary
+    border-color $syp-action-primary
 
     &:hover
       background rgba(47, 109, 213, 0.1)
-      border-color #2b62c0
-
-.syp-platform-card__confirm
-  margin-top 10px
-  padding 10px
-  border-radius 10px
-  border 1px solid #f2d6d6
-  background #fff5f5
-  display flex
-  flex-direction column
-  gap 8px
-
-.syp-platform-card__confirm-text
-  font-size 12px
-  color #912018
-
-.syp-platform-card__confirm-actions
-  display flex
-  gap 8px
-
-.syp-platform-card__confirm-btn
-  padding 4px 10px
-  border-radius 8px
-  border 1px solid #d92d20
-  background #d92d20
-  color #fff
-  font-size 12px
-  cursor pointer
-
-  &.ghost
-    background transparent
-    color #d92d20
-
-  &:disabled
-    opacity 0.6
-    cursor not-allowed
+      border-color $syp-action-primary-hover
 </style>

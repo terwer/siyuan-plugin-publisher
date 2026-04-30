@@ -80,9 +80,9 @@
 </template>
 
 <script setup lang="ts">
-import { ElMessageBox } from "element-plus"
-import type { V2AccountItem } from "~/src/composables/v2/useV2Settings.ts"
-import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
+import { ElMessageBox } from "element-plus";
+import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts";
+import type { V2AccountItem } from "~/src/composables/v2/useV2Settings.ts";
 
 const props = defineProps<{
   items: V2AccountItem[]
@@ -120,49 +120,51 @@ async function handleDelete(platformKey: string) {
 </script>
 
 <style scoped lang="stylus">
+@import "../../../assets/v2/variables.styl"
+
 .syp-account-list
   display flex
   flex-direction column
-  gap 12px
+  gap 8px
 
 .syp-account-item
   display flex
   justify-content space-between
   align-items center
-  gap 16px
-  padding 18px
-  border 1px solid #e6ebf2
-  border-radius 16px
-  background linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)
+  gap 10px
+  padding $syp-sm-card-padding
+  border 1px solid $syp-border-primary
+  border-radius $syp-sm-card-radius
+  background $syp-card-bg-gradient
   transition border-color 0.2s ease, box-shadow 0.2s ease
 
   &:hover
     border-color #c8d6ea
-    box-shadow 0 2px 8px rgba(15, 23, 42, 0.04)
+    box-shadow $syp-shadow-card-hover
 
 .syp-account-item__main
   display flex
   align-items center
-  gap 14px
+  gap 10px
   min-width 0
   flex 1
 
 .syp-account-item__icon
-  width 44px
-  height 44px
-  border-radius 12px
-  background #f2f5fa
+  width $syp-sm-icon-size
+  height $syp-sm-icon-size
+  border-radius $syp-sm-icon-radius
+  background $syp-icon-bg
   display flex
   align-items center
   justify-content center
-  color #355d90
+  color $syp-icon-color
   flex-shrink 0
-  font-size 18px
+  font-size 14px
   font-weight 600
 
   :deep(svg), :deep(img)
-    width 22px
-    height 22px
+    width $syp-sm-icon-inner
+    height $syp-sm-icon-inner
 
 .syp-account-item__info
   min-width 0
@@ -175,27 +177,27 @@ async function handleDelete(platformKey: string) {
   flex-wrap wrap
 
 .syp-account-item__name
-  font-size 16px
+  font-size $syp-sm-name-size
   font-weight 600
-  color #1f2329
+  color $syp-text-primary
 
 .syp-account-item__key
-  margin-top 4px
-  font-size 12px
-  color #7b8490
+  margin-top 2px
+  font-size 11px
+  color $syp-text-tertiary
   font-family monospace
 
 .syp-account-item__summary
-  margin-top 6px
-  font-size 13px
-  color #475467
+  margin-top 3px
+  font-size 12px
+  color $syp-text-secondary
 
 .syp-status-badge
   display inline-flex
   align-items center
-  gap 4px
-  padding 2px 8px
-  font-size 12px
+  gap 3px
+  padding $syp-sm-badge-padding
+  font-size $syp-sm-badge-font
   font-weight 500
   border-radius 999px
   white-space nowrap
@@ -234,23 +236,23 @@ async function handleDelete(platformKey: string) {
   align-items center
   justify-content flex-end
   flex-wrap wrap
-  gap 10px
+  gap 6px
   flex-shrink 0
 
 .syp-account-item__toggle
   display flex
   align-items center
-  gap 8px
-  color #7b8490
+  gap 4px
+  color $syp-text-tertiary
 
 .syp-account-item__toggle-label
-  font-size 12px
-  min-width 44px
+  font-size 11px
+  min-width 32px
   text-align right
 
 .syp-btn.syp-btn-secondary
-  background #f7f9fc
-  color #355d90
+  background $syp-bg-secondary
+  color $syp-accent
   box-shadow none
 
   &:hover
@@ -264,11 +266,11 @@ async function handleDelete(platformKey: string) {
     background #ffefcc
 
 .syp-btn.is-danger
-  color #b42318
+  color $syp-action-danger-hover
 
   &:hover
-    background #fff1f1
-    color #b42318
+    background $syp-status-error-bg
+    color $syp-action-danger-hover
 
   &:disabled
     opacity 0.45

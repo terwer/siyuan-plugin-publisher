@@ -16,7 +16,6 @@
   -webkit-font-smoothing antialiased
   -moz-osx-font-smoothing grayscale
   min-width 0
-  height calc(100vh - 180px)
   max-height calc(100vh - 180px)
 
   *, *::before, *::after
@@ -26,10 +25,11 @@
     display inline-flex
     align-items center
     justify-content center
-    padding $syp-spacing-sm $syp-spacing-md
+    height $syp-sm-btn-height
+    padding $syp-sm-btn-padding-y $syp-sm-btn-padding-x
     border none
-    border-radius $syp-radius-md
-    font-size $syp-font-size-sm
+    border-radius $syp-radius-sm
+    font-size $syp-sm-btn-font-size
     font-weight 500
     cursor pointer
     transition all 0.2s ease
@@ -69,12 +69,13 @@
 
   .syp-input
     width 100%
-    padding $syp-spacing-sm $syp-spacing-md
+    padding $syp-sm-input-padding-y $syp-sm-input-padding-x
     border 1px solid $syp-border-primary
-    border-radius $syp-radius-md
-    font-size $syp-font-size-sm
+    border-radius $syp-radius-sm
+    font-size $syp-sm-btn-font-size
     color $syp-text-primary
     background-color $syp-bg-primary
+    line-height 1.5
     transition border-color 0.2s ease
 
     &:focus
@@ -87,8 +88,8 @@
   .syp-toggle
     position relative
     display inline-block
-    width 44px
-    height 24px
+    width $syp-sm-toggle-width
+    height $syp-sm-toggle-height
 
     input
       opacity 0
@@ -99,7 +100,7 @@
         background-color $syp-primary
 
       &:checked + .syp-toggle-slider:before
-        transform translateX(20px)
+        transform translateX($syp-sm-toggle-translate)
 
     .syp-toggle-slider
       position absolute
@@ -109,14 +110,14 @@
       right 0
       bottom 0
       background-color $syp-border-primary
-      border-radius 24px
+      border-radius $syp-sm-toggle-height
       transition 0.3s
 
       &:before
         position absolute
         content ""
-        height 18px
-        width 18px
+        height $syp-sm-toggle-dot
+        width $syp-sm-toggle-dot
         left 3px
         bottom 3px
         background-color white
@@ -199,17 +200,17 @@
       grid-template-columns minmax(0, 1fr)
 
     &.is-settings
-      grid-template-columns 196px minmax(0, 1fr)
+      grid-template-columns 140px minmax(0, 1fr)
 
   .syp-shell__nav
-    padding $syp-spacing-lg
+    padding 12px
     background linear-gradient(180deg, #f7f9fc 0%, #eef2f6 100%)
     border-right 1px solid $syp-border-secondary
     overflow-y auto
     min-height 0
 
   .syp-shell__section-title
-    margin-bottom $syp-spacing-md
+    margin-bottom 8px
     font-size $syp-font-size-xs
     color $syp-text-tertiary
     letter-spacing 0.08em
@@ -221,9 +222,10 @@
     border none
     background transparent
     color $syp-text-secondary
-    padding 12px 14px
-    border-radius $syp-radius-lg
-    margin-bottom $syp-spacing-sm
+    padding 6px 10px
+    border-radius $syp-radius-sm
+    font-size 13px
+    margin-bottom 4px
     cursor pointer
     transition all 0.2s ease
 
@@ -266,8 +268,8 @@
 
   .syp-settings-page__title
     margin 0
-    font-size 34px
-    line-height 1.1
+    font-size $syp-sm-title-size
+    line-height 1.3
     color $syp-text-primary
 
   .syp-settings-page__desc
@@ -300,9 +302,9 @@
     gap $syp-spacing-md
 
   .syp-settings-group
-    padding 20px
+    padding $syp-sm-card-padding
     border 1px solid $syp-border-secondary
-    border-radius 14px
+    border-radius $syp-sm-card-radius
     background linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)
 
   .syp-settings-group__title
@@ -324,8 +326,8 @@
     display flex
     align-items center
     justify-content space-between
-    gap $syp-spacing-lg
-    padding 14px 0
+    gap $syp-spacing-md
+    padding $syp-sm-row-padding 0
     border-bottom 1px solid $syp-border-secondary
 
     &:first-child
@@ -366,8 +368,8 @@
     gap $syp-spacing-md
 
   .syp-settings-detail-card
-    padding 20px
-    border-radius 14px
+    padding $syp-sm-card-padding
+    border-radius $syp-sm-card-radius
     background linear-gradient(180deg, #ffffff 0%, #f7f9fc 100%)
     border 1px solid $syp-border-secondary
 
@@ -416,7 +418,7 @@
       padding $syp-spacing-lg
 
     .syp-settings-page__title
-      font-size 28px
+      font-size 18px
 
     .syp-settings-form-row
       align-items flex-start

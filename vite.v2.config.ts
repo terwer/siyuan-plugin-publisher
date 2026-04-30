@@ -7,18 +7,18 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import fg from "fast-glob"
-import minimist from "minimist"
-import { cpSync, existsSync, mkdirSync } from "fs"
-import { defineConfig, loadEnv } from "vite"
 import vue from "@vitejs/plugin-vue"
-import AutoImport from "unplugin-auto-import/vite"
-import Components from "unplugin-vue-components/vite"
-import { ElementPlusResolver } from "unplugin-vue-components/resolvers"
-import Icons from "unplugin-icons/vite"
-import { nodePolyfills } from "vite-plugin-node-polyfills"
+import fg from "fast-glob"
+import { cpSync, existsSync, mkdirSync } from "fs"
+import minimist from "minimist"
 import { resolve } from "path"
 import livereload from "rollup-plugin-livereload"
+import AutoImport from "unplugin-auto-import/vite"
+import Icons from "unplugin-icons/vite"
+import { ElementPlusResolver } from "unplugin-vue-components/resolvers"
+import Components from "unplugin-vue-components/vite"
+import { defineConfig, loadEnv } from "vite"
+import { nodePolyfills } from "vite-plugin-node-polyfills"
 
 const args = minimist(process.argv.slice(2))
 const isWatch = args.watch || args.w || false

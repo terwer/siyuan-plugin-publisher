@@ -28,12 +28,13 @@
           </button>
           <button
             v-else
-            class="syp-btn syp-btn-quiet"
+            class="syp-btn syp-btn-back"
             @click.stop="handleSettingsBack"
             :title="settingsBackTitle"
             :aria-label="settingsBackTitle"
           >
             <LucideChevronLeft />
+            <span class="syp-btn-back__label">{{ settingsBackTitle }}</span>
           </button>
           <button
             class="syp-btn syp-btn-text"
@@ -51,7 +52,13 @@
         :active-section="settings.state.section"
         @change-section="changeSettingsSection"
       >
-        <section v-if="!isSettingsView" class="syp-quick-shell">
+        <div v-if="initError && !isSettingsView" class="syp-publish-status is-failed">
+          <div class="syp-publish-status__title">{{ t("v2.quickPublish.error.initFailed") }}</div>
+          <div class="syp-publish-status__desc">{{ initError }}</div>
+          <button type="button" class="syp-btn syp-btn-primary" @click="retryInit">{{ t("v2.common.retry") }}</button>
+        </div>
+
+        <section v-else-if="!isSettingsView" class="syp-quick-shell">
           <div class="syp-quick-shell__eyebrow">{{ t("v2.quickPublish.currentDocument") }}</div>
           <h1 class="syp-quick-shell__title">{{ quickPublish.state.docTitle }}</h1>
           <p class="syp-quick-shell__desc">{{ t("v2.quickPublish.desc") }}</p>
@@ -147,8 +154,8 @@ import UnifiedWorkspaceShell from "~/src/components/v2/layout/UnifiedWorkspaceSh
 import V2PlatformCard from "~/src/components/v2/publish/V2PlatformCard.vue"
 import V2AccountList from "~/src/components/v2/settings/V2AccountList.vue"
 import V2PicBedSettings from "~/src/components/v2/settings/V2PicBedSettings.vue"
-import V2PlatformSelect from "~/src/components/v2/settings/V2PlatformSelect.vue"
 import V2PlatformConfigBridge from "~/src/components/v2/settings/V2PlatformConfigBridge.vue"
+import V2PlatformSelect from "~/src/components/v2/settings/V2PlatformSelect.vue"
 import V2PreferenceSettings from "~/src/components/v2/settings/V2PreferenceSettings.vue"
 import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
 import { useV2QuickPublish } from "~/src/composables/v2/useV2QuickPublish.ts"
@@ -163,8 +170,9 @@ const props = defineProps<{
   onClose?: () => void
 }>()
 
-const currentView = ref<"quick_publish" | "settings">(props.initialView ?? "quick_publish")
+const currentView = ref<("quick_publish" | "settings")>(props.initialView ?? "quick_publish")
 const isSettingsView = computed(() => currentView.value === "settings")
+const initError = ref("")
 const quickPublish = useV2QuickPublish()
 const settings = useV2Settings()
 const { t } = useV2I18n()
@@ -266,8 +274,16 @@ const publishDescription = computed(() => {
 })
 
 onMounted(async () => {
-  await quickPublish.init()
-  await settings.loadAccountItems()
+  try {
+    await quickPublish.init()
+  } catch (e) {
+    initError.value = e instanceof Error ? e.message : String(e ?? t("v2.common.unknownError"))
+  }
+  try {
+    await settings.loadAccountItems()
+  } catch {
+    // Settings error is handled internally by the component
+  }
 })
 
 async function openSettings() {
@@ -326,18 +342,28 @@ async function handleDeleteAccount(platformKey: string) {
     ElMessage.error(error instanceof Error ? error.message : t("main.opt.failure"))
   }
 }
+
+async function retryInit() {
+  initError.value = ""
+  try {
+    await quickPublish.init()
+  } catch (e) {
+    initError.value = e instanceof Error ? e.message : String(e ?? t("v2.common.unknownError"))
+  }
+}
 </script>
 
 <style scoped lang="stylus">
+@import "../../assets/v2/variables.styl"
+
 .syp-v2
   width 960px
   max-width calc(100vw - 48px)
-  max-height calc(100vh - 48px)
+  max-height calc(100vh - 180px)
   display flex
   flex-direction column
 
 .syp-panel
-  min-height 520px
   max-height 100%
   display flex
   flex-direction column
@@ -354,8 +380,8 @@ async function handleDeleteAccount(platformKey: string) {
   gap 8px
   padding 4px 10px
   border-radius 999px
-  background #f3f6fa
-  color #6a7788
+  background $syp-chip-bg
+  color $syp-chip-text
   font-size 12px
   letter-spacing 0.04em
 
@@ -364,111 +390,129 @@ async function handleDeleteAccount(platformKey: string) {
   height 14px
 
 .syp-btn-quiet
-  min-width 34px
-  height 34px
+  min-width 28px
+  height 28px
   padding 0
   background transparent
-  color #7b8794
+  color $syp-text-tertiary
   border-radius 999px
 
   &:hover
-    color #355d90
-    background rgba(53, 93, 144, 0.08)
+    color $syp-accent
+    background $syp-accent-hover-bg
+
+.syp-btn-back
+  display inline-flex
+  align-items center
+  gap 4px
+  height 28px
+  padding 0 8px
+  background transparent
+  color $syp-text-tertiary
+  border-radius 999px
+  font-size 12px
+
+  &:hover
+    color $syp-accent
+    background $syp-accent-hover-bg
+
+.syp-btn-back__label
+  white-space nowrap
 
 .syp-quick-shell
   display flex
   flex-direction column
-  gap 18px
+  gap 12px
 
 .syp-publish-status
-  padding 18px
-  border-radius 14px
-  border 1px solid #e6ebf2
-  background #ffffff
+  padding 12px
+  border-radius $syp-sm-card-radius
+  border 1px solid $syp-border-primary
+  background $syp-bg-primary
   display flex
   flex-direction column
-  gap 10px
+  gap 6px
 
   &.is-preparing,
   &.is-publishing
-    background linear-gradient(180deg, #ffffff 0%, #f7fbff 100%)
-    border-color #d6e4f5
+    background linear-gradient(180deg, $syp-bg-primary 0%, $syp-status-info-bg 100%)
+    border-color $syp-status-info-border
 
   &.is-success,
   &.is-preview_ready
-    background linear-gradient(180deg, #ffffff 0%, #f3fbf5 100%)
-    border-color #d7f0df
+    background linear-gradient(180deg, $syp-bg-primary 0%, $syp-status-success-bg 100%)
+    border-color $syp-status-success-border
 
   &.is-failed
-    background linear-gradient(180deg, #ffffff 0%, #fff5f5 100%)
-    border-color #f2d6d6
+    background linear-gradient(180deg, $syp-bg-primary 0%, $syp-status-error-bg 100%)
+    border-color $syp-status-error-border
 
 .syp-publish-status__title
   font-size 14px
   font-weight 600
-  color #1f2329
+  color $syp-text-primary
 
 .syp-publish-status__desc
   font-size 13px
-  color #626a73
+  color $syp-text-secondary
 
 .syp-publish-status__error
   border-radius 10px
-  background #fff1f1
+  background $syp-status-error-deep-bg
   padding 12px
-  border 1px solid #f0caca
+  border 1px solid $syp-status-error-border
 
 .syp-publish-status__error-title
   font-size 12px
   font-weight 600
-  color #b42318
+  color $syp-error
   margin-bottom 6px
 
 .syp-publish-status__error-text
   margin 0
   font-size 12px
-  color #8a1c0f
+  color $syp-action-danger-hover
   white-space pre-wrap
 
 .syp-quick-shell__eyebrow
   font-size 12px
   letter-spacing 0.08em
   text-transform uppercase
-  color #7b8490
+  color $syp-text-tertiary
 
 .syp-quick-shell__title
   margin 0
-  font-size 42px
-  line-height 1
-  color #1f2329
+  font-size 20px
+  line-height 1.3
+  color $syp-text-primary
 
 .syp-quick-shell__desc
   margin 0
-  font-size 16px
-  color #646a73
+  font-size 13px
+  color $syp-text-secondary
 
 .syp-platform-skeleton-grid,
 .syp-platform-grid
   display grid
   grid-template-columns repeat(2, minmax(0, 1fr))
-  gap 16px
+  gap 10px
 
 .syp-platform-skeleton
-  padding 20px
-  border-radius 14px
-  background linear-gradient(180deg, #ffffff 0%, #f7f9fc 100%)
-  border 1px solid #e6ebf2
+  padding $syp-sm-card-padding
+  border-radius $syp-sm-card-radius
+  background $syp-card-bg-gradient
+  border 1px solid $syp-border-primary
 
 .syp-platform-skeleton__title
   font-size 13px
-  color #7b8490
+  color $syp-text-tertiary
   margin-bottom 14px
 
 .syp-platform-skeleton__row
-  height 44px
-  border-radius 10px
+  height 32px
+  border-radius 6px
   background linear-gradient(90deg, #eef2f7 0%, #f7f9fc 100%)
-  margin-bottom 12px
+  margin-bottom 8px
 
   &.short
     width 62%
@@ -476,20 +520,20 @@ async function handleDeleteAccount(platformKey: string) {
 .syp-empty-state
   display flex
   flex-direction column
-  gap 10px
-  padding 28px
-  border-radius 16px
-  background linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)
-  border 1px solid #e6ebf2
+  gap 6px
+  padding 16px
+  border-radius $syp-sm-card-radius
+  background $syp-card-bg-gradient
+  border 1px solid $syp-border-primary
 
 .syp-empty-state__title
-  font-size 20px
+  font-size 16px
   font-weight 600
-  color #1f2329
+  color $syp-text-primary
 
 .syp-empty-state__desc
-  font-size 14px
-  color #667085
+  font-size 13px
+  color $syp-text-secondary
 
 @media (max-width: 960px)
   .syp-v2

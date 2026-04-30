@@ -23,7 +23,10 @@
             </div>
 
             <div class="syp-settings-form-control">
-              <span class="syp-settings-status-text">{{ getBooleanValue(item.key) ? t("v2.common.enabled") : t("v2.common.disabled") }}</span>
+              <span v-if="saveStateMap[item.key] === 'saved'" class="syp-settings-status-text is-saved">✓ {{ t("v2.common.saved") }}</span>
+              <span v-else-if="saveStateMap[item.key] === 'failed'" class="syp-settings-status-text is-error">{{ t("v2.common.saveFailed") }}</span>
+              <span v-else-if="saveStateMap[item.key] === 'saving'" class="syp-settings-status-text is-saving">{{ t("v2.common.saving") }}</span>
+              <span v-else class="syp-settings-status-text">{{ getBooleanValue(item.key) ? t("v2.common.enabled") : t("v2.common.disabled") }}</span>
               <label class="syp-toggle" :title="getBooleanValue(item.key) ? t('v2.preference.toggle.disableHint') : t('v2.preference.toggle.enableHint')">
                 <input
                   type="checkbox"
@@ -45,7 +48,7 @@
 <script setup lang="ts">
 import { WarnTriangleFilled } from "@element-plus/icons-vue"
 import { ElMessageBox } from "element-plus"
-import { computed, markRaw } from "vue"
+import { computed, markRaw, reactive } from "vue"
 import { StrUtil } from "zhi-common"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
@@ -85,6 +88,8 @@ const { t } = useV2I18n()
 const { getPublishPreferenceSetting } = usePreferenceSettingStore()
 const { isInSiyuanWin, isInSiyuanWidget } = useSiyuanDevice()
 const preferenceForm = getPublishPreferenceSetting()
+
+const saveStateMap = reactive<Record<PreferenceKey, "idle" | "saving" | "saved" | "failed">>({} as any)
 
 const isSiyuanPlugin = computed(() => {
   return isInSiyuanWin() || (isInSiyuanWidget() && StrUtil.isEmptyString(getSiyuanWidgetId()))
@@ -218,7 +223,18 @@ async function handleToggle(key: PreferenceKey, event: Event) {
     }
   }
 
-  preferenceForm.value[key] = nextValue as never
+  saveStateMap[key] = "saving"
+  try {
+    preferenceForm.value[key] = nextValue as never
+    saveStateMap[key] = "saved"
+    setTimeout(() => {
+      if (saveStateMap[key] === "saved") {
+        saveStateMap[key] = "idle"
+      }
+    }, 2000)
+  } catch {
+    saveStateMap[key] = "failed"
+  }
 }
 
 async function confirmAllowChangeSlug() {
@@ -236,3 +252,16 @@ async function confirmAllowChangeSlug() {
   }
 }
 </script>
+
+<style scoped lang="stylus">
+@import "../../../assets/v2/variables.styl"
+
+.syp-settings-status-text.is-saved
+  color $syp-badge-ready-text
+
+.syp-settings-status-text.is-saving
+  color $syp-text-tertiary
+
+.syp-settings-status-text.is-error
+  color $syp-action-danger
+</style>

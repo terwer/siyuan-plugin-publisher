@@ -11,6 +11,7 @@ import { CategoryTypeEnum } from "zhi-blog-api"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { DocsifyApiAdaptor } from "~/src/adaptors/api/docsify/docsifyApiAdaptor.ts"
 import { DocsifyConfig } from "~/src/adaptors/api/docsify/docsifyConfig.ts"
+import { safeMergeConfig } from "~/src/adaptors/api/base/configMergeUtil.ts"
 import { DocsifyYamlConverterAdaptor } from "~/src/adaptors/api/docsify/docsifyYamlConverterAdaptor.ts"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
@@ -37,7 +38,7 @@ const useDocsifyApi = async (key: string, newCfg?: DocsifyConfig) => {
     // 从配置中获取数据
     const { getSetting } = usePublishSettingStore()
     const setting = await getSetting()
-    cfg = JsonUtil.safeParse<DocsifyConfig>(setting[key], {} as DocsifyConfig)
+    cfg = safeMergeConfig<DocsifyConfig>(setting[key], DocsifyConfig, ["","","","",""])
 
     // 如果配置为空，则使用默认的环境变量值，并记录日志
     if (ObjectUtil.isEmptyObject(cfg)) {
@@ -71,7 +72,6 @@ const useDocsifyApi = async (key: string, newCfg?: DocsifyConfig) => {
   cfg.knowledgeSpaceEnabled = true
   cfg.knowledgeSpaceTitle = "发布目录"
   cfg.allowKnowledgeSpaceChange = false
-  cfg.placeholder.knowledgeSpaceReadonlyModeTip = "Docsify 平台暂不支持修改发布目录，如需修改，请删除之后重新发布"
   cfg.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Tree_Single
   // picbed service
   cfg.picgoPicbedSupported = true

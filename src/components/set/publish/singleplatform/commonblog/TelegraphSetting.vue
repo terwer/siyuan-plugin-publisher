@@ -8,12 +8,12 @@
   -->
 
 <script setup lang="ts">
-import CommonBlogSetting from "~/src/components/set/publish/singleplatform/base/CommonBlogSetting.vue"
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import { useTelegraphApi } from "~/src/adaptors/api/telegraph/useTelegraphApi.ts"
+import { UnwrapRef } from "vue"
 import { TelegraphConfig, TelegraphPostType } from "~/src/adaptors/api/telegraph/telegraphConfig.ts"
 import { TelegraphPlaceholder } from "~/src/adaptors/api/telegraph/telegraphPlaceholder.ts"
-import { UnwrapRef } from "vue"
+import { useTelegraphApi } from "~/src/adaptors/api/telegraph/useTelegraphApi.ts"
+import CommonBlogSetting from "~/src/components/set/publish/singleplatform/base/CommonBlogSetting.vue"
+import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 
 const props = defineProps({
   apiType: {
@@ -55,10 +55,10 @@ const handlePostTypeChange = (val: UnwrapRef<TelegraphConfig>) => {
             }
           "
         >
-          <el-radio :value="TelegraphPostType.ANONYMOUS" size="large">
+          <el-radio :value="TelegraphPostType.ANONYMOUS" size="small">
             {{ t("setting.telegraph.login.anonymous") }}
           </el-radio>
-          <el-radio :value="TelegraphPostType.LOGIN_USER" size="large">
+          <el-radio :value="TelegraphPostType.LOGIN_USER" size="small">
             {{ t("setting.telegraph.login.user") }}
           </el-radio>
         </el-radio-group>

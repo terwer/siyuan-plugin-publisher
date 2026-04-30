@@ -8,23 +8,23 @@
   -->
 
 <script lang="ts" setup>
-import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
-import { onMounted, reactive, ref, toRaw, watch } from "vue"
-import { DynamicConfig, DynamicJsonCfg, getDynCfgByKey, setDynamicJsonCfg } from "~/src/platforms/dynamicConfig.ts"
-import { SypConfig } from "~/syp.config.ts"
-import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
-import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
-import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
-import { BlogAdaptor, PageTypeEnum, PasswordType, PicbedServiceTypeEnum, UserBlog } from "zhi-blog-api"
-import Adaptors from "~/src/adaptors"
-import { Utils } from "~/src/utils/utils.ts"
 import { ElMessage } from "element-plus"
-import { useProxy } from "~/src/composables/useProxy.ts"
+import { onMounted, reactive, ref, toRaw, watch } from "vue"
+import { BlogAdaptor, PageTypeEnum, PasswordType, PicbedServiceTypeEnum, UserBlog } from "zhi-blog-api"
+import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
+import Adaptors from "~/src/adaptors"
+import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
 import { usePicgoBridge } from "~/src/composables/usePicgoBridge.ts"
+import { useProxy } from "~/src/composables/useProxy.ts"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
+import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { DynamicConfig, DynamicJsonCfg, getDynCfgByKey, setDynamicJsonCfg } from "~/src/platforms/dynamicConfig.ts"
+import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
+import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
+import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
+import { Utils } from "~/src/utils/utils.ts"
+import { SypConfig } from "~/syp.config.ts"
 
 const logger = createAppLogger("commonblog-setting")
 // appInstance
@@ -320,11 +320,11 @@ onMounted(async () => {
 <template>
   <el-skeleton class="placeholder" v-if="!formData.isInit" :rows="5" animated />
   <el-form v-else label-width="96px" class="legacy-setting-form">
-    <el-alert :closable="false" :title="formData.settingTips" class="top-tip" type="info" />
+    <el-alert v-if="formData.settingTips" :closable="false" :title="formData.settingTips" class="top-tip" type="info" />
     <el-alert
       v-if="props.cfg?.knowledgeSpaceEnabled"
       :closable="false"
-      :title="t('knowledgeSpaceEnabled.Tips').replace(/\[knowledge-space-title\]/g, props.cfg?.knowledgeSpaceTitle)"
+      :title="t('knowledgeSpaceEnabled.Tips').replace(/\[knowledge-space-title\]/g, props.cfg?.knowledgeSpaceTitle || t('setting.blog.knowledge.space'))"
       class="top-tip"
       type="info"
     />
@@ -333,19 +333,19 @@ onMounted(async () => {
     <el-form-item v-if="props.cfg?.homeEnabled != false" :label="t('setting.common.home')">
       <el-input
         v-model="formData.cfg.home"
-        :placeholder="props.cfg?.placeholder.homePlaceholder"
+        :placeholder="props.cfg?.placeholder?.homePlaceholder || ''"
         @input="handleHomeChange"
       />
     </el-form-item>
     <!-- API 地址 -->
     <el-form-item v-if="props.cfg?.apiUrlEnabled != false" :label="t('setting.common.apiurl')">
-      <el-input v-model="formData.cfg.apiUrl" :placeholder="props.cfg?.placeholder.apiUrlPlaceholder" />
+      <el-input v-model="formData.cfg.apiUrl" :placeholder="props.cfg?.placeholder?.apiUrlPlaceholder || ''" />
     </el-form-item>
     <!-- 登录名 -->
     <el-form-item :label="formData.cfg.usernameLabel ?? t('setting.common.username')" v-if="props.cfg.usernameEnabled">
       <el-input
         v-model="formData.cfg.username"
-        :placeholder="props.cfg?.placeholder.usernamePlaceholder"
+        :placeholder="props.cfg?.placeholder?.usernamePlaceholder || ''"
         @input="handleUsernameChange"
       />
     </el-form-item>
@@ -359,7 +359,7 @@ onMounted(async () => {
         type="password"
         v-model="formData.cfg.password"
         show-password
-        :placeholder="props.cfg.placeholder.passwordPlaceholder"
+        :placeholder="props.cfg?.placeholder?.passwordPlaceholder || ''"
       />
       <a v-if="formData.cfg.showTokenTip" :href="formData.cfg.tokenSettingUrl" target="_blank"
         >{{ t("setting.common.username.gen") }}：{{ formData.cfg.tokenSettingUrl }}</a
@@ -375,7 +375,7 @@ onMounted(async () => {
         type="password"
         v-model="formData.cfg.password"
         show-password
-        :placeholder="props.cfg.placeholder.passwordPlaceholder"
+        :placeholder="props.cfg?.placeholder?.passwordPlaceholder || ''"
       />
       <a v-if="formData.cfg.showTokenTip" :href="formData.cfg.tokenSettingUrl" target="_blank"
         >{{ t("setting.common.token.gen") }}：{{ formData.cfg.tokenSettingUrl }}</a
@@ -407,25 +407,25 @@ onMounted(async () => {
     <el-form-item v-if="props.cfg?.previewUrlEnabled != false" :label="t('setting.blog.previewUrl')">
       <el-input
         v-model="formData.cfg.previewUrl"
-        :placeholder="props.cfg?.placeholder.previewUrlPlaceholder"
+        :placeholder="props.cfg?.placeholder?.previewUrlPlaceholder || ''"
         :disabled="!props.cfg.allowPreviewUrlChange"
       />
     </el-form-item>
     <el-form-item :label="t('setting.blog.pageType')">
       <el-radio-group v-model="formData.cfg.pageType" class="ml-4">
-        <el-radio :value="PageTypeEnum.Markdown" size="large">Markdown</el-radio>
-        <el-radio :value="PageTypeEnum.Html" size="large">HTML</el-radio>
+        <el-radio :value="PageTypeEnum.Markdown" size="small">Markdown</el-radio>
+        <el-radio :value="PageTypeEnum.Html" size="small">HTML</el-radio>
       </el-radio-group>
     </el-form-item>
     <!-- 知识空间 -->
     <el-form-item class="cate-input" :label="t('setting.blog.searchKeyword')" v-if="props.cfg?.cateSearchEnabled">
       <el-input
         v-model="formData.ksKeyword"
-        :placeholder="t('setting.blog.searchKeyword.placeholder', { title: props.cfg?.knowledgeSpaceTitle })"
+        :placeholder="t('setting.blog.searchKeyword.placeholder', { title: props.cfg?.knowledgeSpaceTitle || t('setting.blog.knowledge.space') })"
         @change="handleCateSearch"
       />
     </el-form-item>
-    <el-form-item :label="props.cfg?.knowledgeSpaceTitle" v-if="props.cfg?.knowledgeSpaceEnabled">
+    <el-form-item :label="props.cfg?.knowledgeSpaceTitle || t('setting.blog.knowledge.space')" v-if="props.cfg?.knowledgeSpaceEnabled">
       <el-select
         v-model="formData.cfg.blogid"
         class="m-2"
@@ -440,17 +440,17 @@ onMounted(async () => {
     </el-form-item>
     <el-form-item :label="t('publisher.picbed.service')">
       <el-radio-group v-model="formData.cfg.picbedService" class="ml-4">
-        <el-radio :value="PicbedServiceTypeEnum.None" size="large">{{ t("publisher.picbed.none") }}</el-radio>
+        <el-radio :value="PicbedServiceTypeEnum.None" size="small">{{ t("publisher.picbed.none") }}</el-radio>
         <el-radio
           v-if="formData.cfg.picgoPicbedSupported"
           :value="PicbedServiceTypeEnum.PicGo"
-          size="large"
+          size="small"
           @click="handleSelectPicGoService"
         >
           {{ t("publisher.picbed.picgo") }}
           <sup>{{ t("publisher.picbed.recom1") }}</sup>
         </el-radio>
-        <el-radio v-if="formData.cfg.bundledPicbedSupported" :value="PicbedServiceTypeEnum.Bundled" size="large">
+        <el-radio v-if="formData.cfg.bundledPicbedSupported" :value="PicbedServiceTypeEnum.Bundled" size="small">
           {{ t("publisher.picbed.bundled") }}
           <sup>{{ t("publisher.picbed.recom2") }}</sup>
         </el-radio>
@@ -501,7 +501,7 @@ onMounted(async () => {
     </el-form-item>
     <!-- 校验 -->
     <el-form-item>
-      <el-button type="primary" :loading="isLoading" @click="valiConf">
+      <el-button type="primary" size="small" :loading="isLoading" @click="valiConf">
         {{ isLoading ? t("setting.blog.vali.ing") : t("setting.blog.vali") }}
       </el-button>
       <el-alert
@@ -519,8 +519,8 @@ onMounted(async () => {
     </el-form-item>
     <!-- 保存 -->
     <el-form-item>
-      <el-button type="primary" @click="saveConf">{{ t("setting.blog.save") }}</el-button>
-      <el-button>{{ t("setting.blog.cancel") }}</el-button>
+      <el-button type="primary" size="small" @click="saveConf">{{ t("setting.blog.save") }}</el-button>
+      <el-button size="small">{{ t("setting.blog.cancel") }}</el-button>
     </el-form-item>
     <slot name="footer" :cfg="formData.cfg" />
   </el-form>

@@ -36,10 +36,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue"
-import type { V2SelectablePlatform } from "~/src/composables/v2/useV2Settings.ts"
-import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
-import { PlatformType } from "~/src/platforms/dynamicConfig.ts"
+import { computed } from "vue";
+import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts";
+import type { V2SelectablePlatform } from "~/src/composables/v2/useV2Settings.ts";
+import { PlatformType } from "~/src/platforms/dynamicConfig.ts";
 
 const props = defineProps<{
   items: V2SelectablePlatform[]
@@ -71,73 +71,75 @@ defineEmits<{
 </script>
 
 <style scoped lang="stylus">
+@import "../../../assets/v2/variables.styl"
+
 .syp-platform-select-list
   display flex
   flex-direction column
-  gap 18px
+  gap 12px
 
 .syp-platform-select-group
   display flex
   flex-direction column
-  gap 10px
+  gap 6px
 
 .syp-platform-select-group__title
   font-size 13px
   font-weight 600
-  color #667085
+  color $syp-text-secondary
   letter-spacing 0.04em
   text-transform uppercase
 
 .syp-platform-select-group__grid
   display grid
   grid-template-columns repeat(2, minmax(0, 1fr))
-  gap 12px
+  gap 8px
 
 .syp-platform-select-item
   width 100%
   display flex
-  gap 14px
+  gap 10px
   align-items center
-  padding 18px
-  border 1px solid #e6ebf2
-  border-radius 16px
-  background linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)
+  padding 10px
+  border 1px solid $syp-border-primary
+  border-radius $syp-sm-card-radius
+  background $syp-card-bg-gradient
   cursor pointer
   text-align left
   transition border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease
 
   &:hover
     border-color #c8d6ea
-    background #fff
+    background $syp-bg-primary
     box-shadow 0 6px 18px rgba(15, 23, 42, 0.08)
 
 .syp-platform-select-item__icon
-  width 44px
-  height 44px
-  border-radius 12px
-  background #f2f5fa
+  width $syp-sm-icon-size
+  height $syp-sm-icon-size
+  border-radius $syp-sm-icon-radius
+  background $syp-icon-bg
   display flex
   align-items center
   justify-content center
-  color #355d90
+  color $syp-icon-color
   flex-shrink 0
 
   :deep(svg), :deep(img)
-    width 22px
-    height 22px
+    width $syp-sm-icon-inner
+    height $syp-sm-icon-inner
 
 .syp-platform-select-item__info
   min-width 0
 
 .syp-platform-select-item__name
-  font-size 16px
+  font-size $syp-sm-name-size
   font-weight 600
-  color #1f2329
+  color $syp-text-primary
 
 .syp-platform-select-item__desc
-  margin-top 4px
-  font-size 13px
-  color #667085
+  margin-top 2px
+  font-size 12px
+  color $syp-text-secondary
 
 @media (max-width: 960px)
   .syp-platform-select-group__grid

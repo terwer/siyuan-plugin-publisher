@@ -11,6 +11,7 @@ import { CategoryTypeEnum } from "zhi-blog-api"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { GitlabdocsifyApiAdaptor } from "~/src/adaptors/api/gitlab-docsify/gitlabdocsifyApiAdaptor.ts"
 import { GitlabdocsifyConfig } from "~/src/adaptors/api/gitlab-docsify/gitlabdocsifyConfig.ts"
+import { safeMergeConfig } from "~/src/adaptors/api/base/configMergeUtil.ts"
 import { GitlabdocsifyYamlConverterAdaptor } from "~/src/adaptors/api/gitlab-docsify/gitlabdocsifyYamlConverterAdaptor.ts"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
@@ -37,7 +38,7 @@ const useGitlabdocsifyApi = async (key: string, newCfg?: GitlabdocsifyConfig) =>
     // 从配置中获取数据
     const { getSetting } = usePublishSettingStore()
     const setting = await getSetting()
-    cfg = JsonUtil.safeParse<GitlabdocsifyConfig>(setting[key], {} as GitlabdocsifyConfig)
+    cfg = safeMergeConfig<GitlabdocsifyConfig>(setting[key], GitlabdocsifyConfig, ["","","","",""])
 
     // 如果配置为空，则使用默认的环境变量值，并记录日志
     if (ObjectUtil.isEmptyObject(cfg)) {
@@ -71,7 +72,6 @@ const useGitlabdocsifyApi = async (key: string, newCfg?: GitlabdocsifyConfig) =>
   cfg.knowledgeSpaceEnabled = true
   cfg.knowledgeSpaceTitle = "发布目录"
   cfg.allowKnowledgeSpaceChange = false
-  cfg.placeholder.knowledgeSpaceReadonlyModeTip = "Gitlab Docsify 平台暂不支持修改发布目录，如需修改，请删除之后重新发布"
   cfg.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Tree_Single
   // picbed service
   cfg.picgoPicbedSupported = true

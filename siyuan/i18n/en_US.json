@@ -63,6 +63,7 @@
   "setting.blog.cookie.readonly.tip": "This data is generated automatically by web authorization and stored only in your local browser. It is read-only. For your security, do not share it with anyone.",
   "setting.blog.searchKeyword": "Search Keyword",
   "setting.blog.searchKeyword.placeholder": "Enter a search keyword for [{title}], then press Enter or move focus away to continue",
+  "setting.blog.knowledgeSpace": "Knowledge Space",
   "knowledgeSpaceEnabled.Tips": "After validation succeeds, the available [[knowledge-space-title]] list will be loaded. You can then change the default [[knowledge-space-title]] and save it.",
   "publisher.picbed.service": "PicBed Service",
   "publisher.picbed.none": "Do Not Use",

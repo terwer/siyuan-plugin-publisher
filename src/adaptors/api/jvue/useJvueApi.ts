@@ -8,6 +8,7 @@
  */
 
 import { JvueConfig } from "~/src/adaptors/api/jvue/jvueConfig.ts"
+import { safeMergeConfig } from "~/src/adaptors/api/base/configMergeUtil.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
@@ -45,7 +46,7 @@ export const useJvueApi = async (key?: string, newCfg?: JvueConfig) => {
     // 从配置中获取数据
     const { getSetting } = usePublishSettingStore()
     const setting = await getSetting()
-    cfg = JsonUtil.safeParse<JvueConfig>(setting[key], {} as JvueConfig)
+    cfg = safeMergeConfig<JvueConfig>(setting[key], JvueConfig, ["","","","",""])
     // 如果配置为空，则使用默认的环境变量值，并记录日志
     if (ObjectUtil.isEmptyObject(cfg)) {
       // 从环境变量获取Jvue API的URL、用户名、认证令牌和中间件URL

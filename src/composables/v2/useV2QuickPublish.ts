@@ -101,44 +101,53 @@ export const useV2QuickPublish = () => {
   const init = async () => {
     state.isLoading = true
 
-    const pageId = WidgetPageUtils.getPageId() ?? ""
-    state.pageId = pageId
-    state.hasDocument = !StrUtil.isEmptyString(pageId)
+    try {
+      const pageId = WidgetPageUtils.getPageId() ?? ""
+      state.pageId = pageId
+      state.hasDocument = !StrUtil.isEmptyString(pageId)
 
-    const setting = await getSetting()
-    const dynJsonCfg = JsonUtil.safeParse<DynamicJsonCfg>(setting[DYNAMIC_CONFIG_KEY], {} as DynamicJsonCfg)
-    const dynamicConfigArray = dynJsonCfg?.totalCfg || []
-    const enabledConfigArray = dynamicConfigArray.filter((item) => item.isEnabled)
-    const postMeta = state.hasDocument ? ObjectUtil.getProperty(setting, pageId, {}) : {}
+      const setting = await getSetting()
+      const dynJsonCfg = JsonUtil.safeParse<DynamicJsonCfg>(setting[DYNAMIC_CONFIG_KEY], {} as DynamicJsonCfg)
+      const dynamicConfigArray = dynJsonCfg?.totalCfg || []
+      const enabledConfigArray = dynamicConfigArray.filter((item) => item.isEnabled)
+      const postMeta = state.hasDocument ? ObjectUtil.getProperty(setting, pageId, {}) : {}
 
-    state.platformItems = enabledConfigArray.map((item: DynamicConfig) => {
-      const postidKey = getDynPostidKey(item.platformKey)
-      const postMetaValue = ObjectUtil.getProperty(postMeta, postidKey)
-      const isAuthorized = item.isAuth === true
+      state.platformItems = enabledConfigArray.map((item: DynamicConfig) => {
+        const postidKey = getDynPostidKey(item.platformKey)
+        const postMetaValue = ObjectUtil.getProperty(postMeta, postidKey)
+        const isAuthorized = item.isAuth === true
 
-      if (!StrUtil.isEmptyString(postMetaValue)) {
-        setPreviewLink(item.platformKey, String(postMetaValue))
+        if (!StrUtil.isEmptyString(postMetaValue)) {
+          setPreviewLink(item.platformKey, String(postMetaValue))
+        }
+
+        return {
+          platformKey: item.platformKey,
+          platformName: item.platformName,
+          platformIcon: item.platformIcon,
+          isAuthorized,
+          isPublished: !StrUtil.isEmptyString(postMetaValue),
+          tooltipText: isAuthorized ? "" : t("v2.quickPublish.tooltip.unauthorized"),
+        }
+      })
+
+      if (state.hasDocument) {
+        try {
+          const postInfo = await kernelApi.getBlockByID(pageId)
+          const rawTitle = postInfo?.content ?? t("v2.quickPublish.docTitle.untitled")
+          state.docTitle = pref.value.fixTitle ? HtmlUtil.removeTitleNumber(rawTitle).replace(/\.md/g, "") : rawTitle
+        } catch (e) {
+          state.docTitle = t("v2.quickPublish.docTitle.untitled")
+        }
+      } else {
+        state.docTitle = t("v2.quickPublish.docTitle.notDetected")
       }
-
-      return {
-        platformKey: item.platformKey,
-        platformName: item.platformName,
-        platformIcon: item.platformIcon,
-        isAuthorized,
-        isPublished: !StrUtil.isEmptyString(postMetaValue),
-        tooltipText: isAuthorized ? "" : t("v2.quickPublish.tooltip.unauthorized"),
-      }
-    })
-
-    if (state.hasDocument) {
-      const postInfo = await kernelApi.getBlockByID(pageId)
-      const rawTitle = postInfo?.content ?? t("v2.quickPublish.docTitle.untitled")
-      state.docTitle = pref.value.fixTitle ? HtmlUtil.removeTitleNumber(rawTitle).replace(/\.md/g, "") : rawTitle
-    } else {
+    } catch (e) {
       state.docTitle = t("v2.quickPublish.docTitle.notDetected")
+      state.hasDocument = false
+    } finally {
+      state.isLoading = false
     }
-
-    state.isLoading = false
   }
 
   const hasPlatforms = computed(() => state.platformItems.length > 0)

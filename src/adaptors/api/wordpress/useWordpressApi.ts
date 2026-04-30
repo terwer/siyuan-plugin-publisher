@@ -13,6 +13,7 @@ import { Utils } from "~/src/utils/utils.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { WordpressConfig } from "~/src/adaptors/api/wordpress/wordpressConfig.ts"
+import { safeMergeConfig } from "~/src/adaptors/api/base/configMergeUtil.ts"
 import { WordpressApiAdaptor } from "~/src/adaptors/api/wordpress/wordpressApiAdaptor.ts"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { CategoryTypeEnum } from "zhi-blog-api"
@@ -45,7 +46,7 @@ export const useWordpressApi = async (key?: string, newCfg?: WordpressConfig) =>
     // 从配置中获取数据
     const { getSetting } = usePublishSettingStore()
     const setting = await getSetting()
-    cfg = JsonUtil.safeParse<WordpressConfig>(setting[key], {} as WordpressConfig)
+    cfg = safeMergeConfig<WordpressConfig>(setting[key], WordpressConfig, ["","","",""])
     // 如果配置为空，则使用默认的环境变量值，并记录日志
     if (ObjectUtil.isEmptyObject(cfg)) {
       // 从环境变量获取Wordpress API的URL、用户名、认证令牌和中间件URL
