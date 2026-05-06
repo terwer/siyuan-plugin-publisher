@@ -17,6 +17,7 @@ import { toRaw } from "vue"
 import { Base64 } from "js-base64"
 import sypIdUtil from "~/src/utils/sypIdUtil.ts"
 import { ElMessage } from "element-plus"
+import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 
 /**
  * Github API 适配器
@@ -209,7 +210,7 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
     }
   }
 
-  public async deletePost(postid: string): Promise<boolean> {
+  public async deletePost(postid: string, id?: string, publishCfg?: IPublishCfg): Promise<boolean> {
     const res = await this.githubClient.deleteGithubPage(postid)
     if (!res?.commit?.sha) {
       throw new Error("Github 调用API异常")

@@ -16,6 +16,7 @@ import { load } from "cheerio"
 import ImageUtils from "~/src/utils/ImageUtils.ts"
 import { base64ToBuffer } from "~/src/utils/polyfillUtils.ts"
 import { BaseError } from "~/src/utils/BaseErrors.ts"
+import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 
 /**
  * Confluence API 适配器
@@ -100,7 +101,7 @@ class ConfluenceApiAdaptor extends BaseBlogApi {
     return await this.updatePage(confluencePostidKey.pageId, post.title, post.description, confluencePostidKey.spaceKey)
   }
 
-  public async deletePost(postid: string): Promise<boolean> {
+  public async deletePost(postid: string, id?: string, publishCfg?: IPublishCfg): Promise<boolean> {
     const confluencePostidKey = this.getConfluencePostidKey(postid)
     return await this.deletePage(confluencePostidKey.pageId)
   }

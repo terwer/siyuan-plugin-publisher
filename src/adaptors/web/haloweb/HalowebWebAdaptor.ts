@@ -14,6 +14,7 @@ import { HalowebPostMeta } from "~/src/adaptors/web/haloweb/HalowebPostMeta.ts"
 import sypIdUtil from "~/src/utils/sypIdUtil"
 import FormDataUtils from "~/src/utils/FormDataUtils.ts"
 import HaloUtils from "~/src/adaptors/api/halo/haloUtils.ts"
+import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 
 /**
  * Halo 网页授权适配器
@@ -244,7 +245,7 @@ class HalowebWebAdaptor extends BaseWebApi {
     // return StrUtil.pathJoin(this.cfg.home ?? "", postUrl)
   }
 
-  public async deletePost(postid: string): Promise<boolean> {
+  public async deletePost(postid: string, id?: string, publishCfg?: IPublishCfg): Promise<boolean> {
     const haloPostKey = this.getHaloPostidKey(postid)
     // const unPublishUrl = `/apis/api.console.halo.run/v1alpha1/posts/${haloPostKey.name}/unpublish`
     const recycleUrl = `/apis/api.console.halo.run/v1alpha1/posts/${haloPostKey.name}/recycle`

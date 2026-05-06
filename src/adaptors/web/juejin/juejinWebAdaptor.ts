@@ -10,6 +10,7 @@
 import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
 import { CategoryInfo, Post, TagInfo, UserBlog } from "zhi-blog-api"
 import { StrUtil } from "zhi-common"
+import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 
 /**
  * 掘金网页授权适配器
@@ -186,7 +187,7 @@ class JuejinWebAdaptor extends BaseWebApi {
     // return StrUtil.pathJoin(this.cfg.home ?? "", postUrl)
   }
 
-  public async deletePost(postid: string): Promise<boolean> {
+  public async deletePost(postid: string, id?: string, publishCfg?: IPublishCfg): Promise<boolean> {
     const url = "https://api.juejin.cn/content_api/v1/article/delete"
     const juejinPostKey = this.getJuejinPostidKey(postid)
     const pageId = juejinPostKey.pageId

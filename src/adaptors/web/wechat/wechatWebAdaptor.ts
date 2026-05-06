@@ -15,6 +15,7 @@ import { toRaw } from "vue"
 import * as _ from "lodash-es"
 import { fileToBuffer } from "~/src/utils/polyfillUtils.ts"
 import {MockBrowser} from "~/src/utils/MockBrowser.ts";
+import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 
 /**
  * 微信公众号网页授权适配器
@@ -408,7 +409,7 @@ class WechatWebAdaptor extends BaseWebApi {
     return post
   }
 
-  public async deletePost(postid: string): Promise<boolean> {
+  public async deletePost(postid: string, id?: string, publishCfg?: IPublishCfg): Promise<boolean> {
     let flag = false
 
     const url = "https://mp.weixin.qq.com/cgi-bin/operate_appmsg?sub=del&t=ajax-response"

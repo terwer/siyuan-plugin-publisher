@@ -274,7 +274,7 @@ class BilibiliWebAdaptor extends BaseWebApi {
     return true
   }
 
-  public async deletePost(postid: string): Promise<boolean> {
+  public async deletePost(postid: string, id?: string, publishCfg?: IPublishCfg): Promise<boolean> {
     const postMeta = this.getPostMeta(postid)
     const params = JSON.stringify({
       dyn_id_str: postMeta.dyn_id_str,

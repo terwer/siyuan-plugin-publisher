@@ -18,6 +18,7 @@ import { PostRequest } from "@halo-dev/api-client"
 import { HaloPostMeta } from "~/src/adaptors/api/halo/HaloPostMeta.ts"
 import FormDataUtils from "~/src/utils/FormDataUtils.ts"
 import HaloUtils from "~/src/adaptors/api/halo/haloUtils.ts"
+import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 
 /**
  * Halo API 适配器 V2.9.0
@@ -234,7 +235,7 @@ class HaloApiAdaptor extends BaseBlogApi {
     // return StrUtil.pathJoin(this.cfg.home ?? "", postUrl)
   }
 
-  public async deletePost(postid: string): Promise<boolean> {
+  public async deletePost(postid: string, id?: string, publishCfg?: IPublishCfg): Promise<boolean> {
     const haloPostKey = this.getHaloPostidKey(postid)
     // const unPublishUrl = `/apis/api.console.halo.run/v1alpha1/posts/${haloPostKey.name}/unpublish`
     const recycleUrl = `/apis/api.console.halo.run/v1alpha1/posts/${haloPostKey.name}/recycle`

@@ -17,6 +17,7 @@ import { getAliOssClient } from "~/src/vendors/alioss/s3oss.ts"
 import * as _ from "lodash-es"
 import ZhihuUtils from "~/src/adaptors/web/zhihu/zhihuUtils.ts"
 import { MockBrowser } from "~/src/utils/MockBrowser.ts"
+import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 
 /**
  * 知乎网页授权适配器
@@ -201,7 +202,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
     return `https://zhuanlan.zhihu.com/p/${postid}`
   }
 
-  public async deletePost(postid: string): Promise<boolean> {
+  public async deletePost(postid: string, id?: string, publishCfg?: IPublishCfg): Promise<boolean> {
     let flag = false
     try {
       const res = await this.zhihuFetch(`https://www.zhihu.com/api/v4/articles/${postid}`, undefined, "DELETE")

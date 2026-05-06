@@ -35,6 +35,7 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { CATE_AUTO_NAME } from "~/src/utils/constants.ts"
 import { EnvUtil } from "~/src/utils/EnvUtil.ts"
 import sypIdUtil from "~/src/utils/sypIdUtil.ts"
+import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 
 /**
  * 本地系统适配器
@@ -233,20 +234,21 @@ class LocalSystemApiAdaptor extends BaseBlogApi {
     return true
   }
 
-  public async deletePost(postid: string, options?: { id?: string }): Promise<boolean> {
+  public async deletePost(postid: string, id?: string, publishCfg?: IPublishCfg): Promise<boolean> {
     const localFsCfg = this.cfg as LocalSystemConfig
 
     // 仅在 Bundled 图床模式且拿到思源文档 ID 时，通过正式识别管线清理本地资源
-    if (localFsCfg.picbedService === PicbedServiceTypeEnum.Bundled && options?.id) {
+    if (localFsCfg.picbedService === PicbedServiceTypeEnum.Bundled && id) {
       const { blogApi } = useSiyuanApi()
       const { getImageItemsFromMd } = usePicgoBridge()
 
       try {
-        const siyuanPost = await blogApi.getPost(options.id)
+        const siyuanPost = await blogApi.getPost(id)
         if (siyuanPost?.markdown) {
           // 复用与发布链路 handlePictures 完全一致的图片识别管线
-          const imageItems = await getImageItemsFromMd(options.id, siyuanPost.markdown)
+          const imageItems = await getImageItemsFromMd(id, siyuanPost.markdown)
           const imageStorePath = localFsCfg.imageStorePath ?? "assets"
+          this.logger.debug("will delete assets", imageItems)
 
           for (const item of imageItems) {
             if (!item.name) continue

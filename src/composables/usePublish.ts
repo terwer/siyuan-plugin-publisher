@@ -246,8 +246,7 @@ const usePublish = () => {
       const api = await getPublishApi(key, cfg)
 
       // 处理删除
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      singleFormData.publishProcessStatus = await (api as any).deletePost(postid, { id })
+      singleFormData.publishProcessStatus = await api.deletePost(postid, id, publishCfg)
 
       // 删除成功才去移除文章发布信息
       if (singleFormData.publishProcessStatus) {
