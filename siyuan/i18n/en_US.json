@@ -397,6 +397,8 @@
   "setting.platform.wordpress.desc": "WordPress is a free and open source blog software and Content management system based on PHP and MySQL. WordPress has a plugin architecture and template system. As of April 2018, over 30.6% of the top 10 million websites used WordPress. WordPress is the most popular website Content management system. Approximately 40% of global websites (7500 million) are built using WordPress. WordPress is currently the most popular blog system on the Internet. WordPress stands out in the most famous stage of online publishing. Today, it is used on over 70 million sites.",
   "setting.platform.fs": "File system",
   "setting.platform.fs.desc": "At present, the platforms that support File system are: Local, etc., using API authorization. File system is a platform and cloud-based service",
+  "v2.quickPublish.error.initFailed": "Initialization failed",
+  "v2.common.retry": "Retry",
   "v2.account.action.deleteConfirmTitle": "Confirm Delete",
   "v2.account.action.deleteConfirmText": "Delete [{name}]? All configuration related to this platform will be removed."
 }

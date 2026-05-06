@@ -399,6 +399,8 @@
   "setting.platform.wordpress.desc": "Wordpress 通过Xmlrpc API支持，采用 API 授权。WordPress是一个自由开源的博客软件和内容管理系统，具有数量众多的优质插件和主题。",
   "setting.platform.fs": "文件系统",
   "setting.platform.fs.desc": "文件系统，直接调用文件系统。",
+  "v2.quickPublish.error.initFailed": "初始化失败",
+  "v2.common.retry": "重试",
   "v2.account.action.deleteConfirmTitle": "确认删除",
   "v2.account.action.deleteConfirmText": "确认删除【{name}】吗？与该平台相关的配置将一并删除。"
 }
