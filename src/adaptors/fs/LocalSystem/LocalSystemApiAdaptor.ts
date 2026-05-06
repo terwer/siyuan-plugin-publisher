@@ -7,7 +7,7 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { Attachment, MediaObject, Post, UserBlog, YamlConvertAdaptor } from "zhi-blog-api"
+import { Attachment, MediaObject, PicbedServiceTypeEnum, Post, UserBlog, YamlConvertAdaptor } from "zhi-blog-api"
 import { StrUtil } from "zhi-common"
 import { AstroApiAdaptor } from "~/src/adaptors/api/astro/astroApiAdaptor.ts"
 import { AstroYamlConverterAdaptor } from "~/src/adaptors/api/astro/astroYamlConverterAdaptor.ts"
@@ -29,6 +29,8 @@ import { Vuepress2YamlConverterAdaptor } from "~/src/adaptors/api/vuepress2/vuep
 import { FsYamlType } from "~/src/adaptors/fs/LocalSystem/FsYamlType.ts"
 import { LocalSystemConfig } from "~/src/adaptors/fs/LocalSystem/LocalSystemConfig.ts"
 import { LocalSystemYamlConvertAdaptor } from "~/src/adaptors/fs/LocalSystem/LocalSystemYamlConvertAdaptor.ts"
+import { usePicgoBridge } from "~/src/composables/usePicgoBridge.ts"
+import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { CATE_AUTO_NAME } from "~/src/utils/constants.ts"
 import { EnvUtil } from "~/src/utils/EnvUtil.ts"
@@ -231,7 +233,34 @@ class LocalSystemApiAdaptor extends BaseBlogApi {
     return true
   }
 
-  public async deletePost(postid: string): Promise<boolean> {
+  public async deletePost(postid: string, options?: { id?: string }): Promise<boolean> {
+    const localFsCfg = this.cfg as LocalSystemConfig
+
+    // 仅在 Bundled 图床模式且拿到思源文档 ID 时，通过正式识别管线清理本地资源
+    if (localFsCfg.picbedService === PicbedServiceTypeEnum.Bundled && options?.id) {
+      const { blogApi } = useSiyuanApi()
+      const { getImageItemsFromMd } = usePicgoBridge()
+
+      try {
+        const siyuanPost = await blogApi.getPost(options.id)
+        if (siyuanPost?.markdown) {
+          // 复用与发布链路 handlePictures 完全一致的图片识别管线
+          const imageItems = await getImageItemsFromMd(options.id, siyuanPost.markdown)
+          const imageStorePath = localFsCfg.imageStorePath ?? "assets"
+
+          for (const item of imageItems) {
+            if (!item.name) continue
+            const absImgPath = StrUtil.pathJoin(StrUtil.pathJoin(localFsCfg.storePath, imageStorePath), item.name)
+            this.logger.info(`deleting asset: ${absImgPath}`)
+            EnvUtil.deleteFile(absImgPath)
+          }
+        }
+      } catch (e) {
+        this.logger.warn("failed to clean up local assets, will still delete .md file", e)
+      }
+    }
+
+    // 最后删除 .md 文件
     return EnvUtil.deleteFile(postid)
   }
 

@@ -10,20 +10,20 @@
 import * as _ from "lodash-es"
 import { toRaw } from "vue"
 import {
-  BlogConfig,
-  CategoryInfo,
-  MediaObject,
-  PageEditMode,
-  PageTypeEnum,
-  PicbedServiceTypeEnum,
-  Post,
-  PostUtil,
-  TagInfo,
-  WebApi,
-  WebConfig,
-  YamlConvertAdaptor,
-  YamlFormatObj,
-  YamlStrategy,
+    BlogConfig,
+    CategoryInfo,
+    MediaObject,
+    PageEditMode,
+    PageTypeEnum,
+    PicbedServiceTypeEnum,
+    Post,
+    PostUtil,
+    TagInfo,
+    WebApi,
+    WebConfig,
+    YamlConvertAdaptor,
+    YamlFormatObj,
+    YamlStrategy,
 } from "zhi-blog-api"
 import { IBlogApi } from "zhi-blog-api/dist/lib/IBlogApi"
 import { IWebApi } from "zhi-blog-api/dist/lib/IWebApi"
@@ -103,6 +103,17 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     // 处理其他
     post = await this.handleOther(post, id, publishCfg)
     return post
+  }
+
+  /**
+   * 删除文章
+   *
+   * @param postid - 平台文章 ID
+   * @param options - 可选上下文，如 { id: 思源文档ID }，由各平台 adaptor 按需消费
+   */
+  public async deletePost(postid: string, options?: { id?: string }): Promise<boolean> {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (this.api as any).deletePost(postid, options)
   }
 
   public async getCategories(keyword?: string): Promise<CategoryInfo[]> {

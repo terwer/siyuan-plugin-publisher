@@ -11,13 +11,13 @@ import { ElMessage } from "element-plus"
 import * as _ from "lodash-es"
 import { reactive, toRaw } from "vue"
 import {
-    BlogConfig,
-    Post,
-    PostStatusEnum,
-    PostUtil,
-    YamlConvertAdaptor,
-    YamlFormatObj,
-    YamlStrategy,
+  BlogConfig,
+  Post,
+  PostStatusEnum,
+  PostUtil,
+  YamlConvertAdaptor,
+  YamlFormatObj,
+  YamlStrategy,
 } from "zhi-blog-api"
 import { AliasTranslator, ObjectUtil, StrUtil, YamlUtil } from "zhi-common"
 import { SiyuanAttr } from "zhi-siyuan-api"
@@ -246,7 +246,8 @@ const usePublish = () => {
       const api = await getPublishApi(key, cfg)
 
       // 处理删除
-      singleFormData.publishProcessStatus = await api.deletePost(postid)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      singleFormData.publishProcessStatus = await (api as any).deletePost(postid, { id })
 
       // 删除成功才去移除文章发布信息
       if (singleFormData.publishProcessStatus) {

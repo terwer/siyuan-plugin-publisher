@@ -51,6 +51,7 @@
         </button>
       </div>
       <SypConfirmBar
+        ref="confirmBarRef"
         :visible="showDeleteConfirm"
         :message="t('v2.card.confirm.deleteText')"
         :confirm-text="t('v2.card.confirm.delete')"
@@ -64,9 +65,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
-import SypConfirmBar from "~/src/components/v2/common/SypConfirmBar.vue";
-import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts";
+import { computed, nextTick, ref, watch } from "vue"
+import SypConfirmBar from "~/src/components/v2/common/SypConfirmBar.vue"
+import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
 
 const props = defineProps<{
   platformName: string
@@ -87,6 +88,15 @@ const emit = defineEmits<{
 const { t } = useV2I18n()
 
 const showDeleteConfirm = ref(false)
+const confirmBarRef = ref<InstanceType<typeof SypConfirmBar> | null>(null)
+
+watch(showDeleteConfirm, async (visible) => {
+  if (visible) {
+    await nextTick()
+    const el = confirmBarRef.value?.$el as HTMLElement | undefined
+    el?.scrollIntoView({ behavior: "smooth", block: "center" })
+  }
+})
 
 const handlePrimary = () => {
   if (props.isAuthorized === false) {

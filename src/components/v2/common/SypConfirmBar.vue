@@ -52,6 +52,7 @@ defineEmits<{
   display flex
   flex-direction column
   gap 6px
+  scroll-margin-bottom 24px
 
 .syp-confirm-bar__text
   font-size 12px
