@@ -48,6 +48,7 @@ export const useV2Settings = () => {
     section: "account" as V2SettingsSection,
     accountView: "list" as V2AccountView,
     accountHistoryStack: [] as V2AccountView[],
+    configReturnTarget: null as "quick_publish" | "account_list" | null,
     requestState: "idle" as "idle" | "saving" | "failed" | "success",
     errorMessage: "",
     accountItems: [] as V2AccountItem[],
@@ -141,6 +142,7 @@ export const useV2Settings = () => {
     state.section = section
     state.errorMessage = ""
     state.accountHistoryStack = []
+    state.configReturnTarget = null
     if (section === "account") {
       state.accountView = "list"
       await loadAccountItems()
@@ -153,8 +155,13 @@ export const useV2Settings = () => {
     state.errorMessage = ""
   }
 
-  const openAccountConfig = async (platformKey: string, platformName: string) => {
-    state.accountHistoryStack.push(state.accountView)
+  const openAccountConfig = async (platformKey: string, platformName: string, returnTarget?: "quick_publish" | "account_list") => {
+    if (returnTarget === "quick_publish") {
+      state.configReturnTarget = "quick_publish"
+    } else {
+      state.configReturnTarget = null
+      state.accountHistoryStack.push(state.accountView)
+    }
     state.selectedPlatformKey = platformKey
     state.selectedPlatformName = platformName
     state.configMode = "edit"
@@ -167,6 +174,14 @@ export const useV2Settings = () => {
     if (state.accountView === "list") {
       await loadAccountItems()
     }
+  }
+
+  const getConfigReturnTarget = () => {
+    return state.configReturnTarget
+  }
+
+  const clearConfigReturnTarget = () => {
+    state.configReturnTarget = null
   }
 
   const toggleAccountEnabled = async (platformKey: string, nextEnabled: boolean) => {
@@ -242,6 +257,8 @@ export const useV2Settings = () => {
     openPlatformSelect,
     openAccountConfig,
     backInAccountFlow,
+    getConfigReturnTarget,
+    clearConfigReturnTarget,
     toggleAccountEnabled,
     createAccountDraft,
     phase4DeleteDraft,

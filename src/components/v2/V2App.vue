@@ -115,6 +115,7 @@
               @primary="publishToPlatform(item)"
               @preview="previewPlatform(item)"
               @delete="deletePlatform(item)"
+              @configure="configurePlatform(item)"
             />
           </div>
         </section>
@@ -189,6 +190,13 @@ const panelTitle = computed(() => {
 })
 
 const settingsBackTitle = computed(() => {
+  if (settings.state.section === "account" && settings.state.accountView === "config") {
+    const returnTarget = settings.getConfigReturnTarget()
+    if (returnTarget === "quick_publish") {
+      return t("v2.app.back.quickPublish")
+    }
+    return t("v2.app.back.accountList")
+  }
   if (settings.state.section === "account" && settings.state.accountView !== "list") {
     return t("v2.app.back.accountList")
   }
@@ -317,10 +325,19 @@ async function changeSettingsSection(section: "account" | "picbed" | "preference
 }
 
 async function handleSettingsBack() {
+  if (settings.state.section === "account" && settings.state.accountView === "config") {
+    const returnTarget = settings.getConfigReturnTarget()
+    if (returnTarget === "quick_publish") {
+      await backToQuickPublish()
+      return
+    }
+  }
+
   if (settings.state.section === "account" && settings.state.accountView !== "list") {
     await settings.backInAccountFlow()
     return
   }
+
   await backToQuickPublish()
 }
 
@@ -338,6 +355,12 @@ function previewPlatform(item: typeof quickPublish.state.platformItems[number]) 
 
 function deletePlatform(item: typeof quickPublish.state.platformItems[number]) {
   quickPublish.deletePlatform(item)
+}
+
+async function configurePlatform(item: typeof quickPublish.state.platformItems[number]) {
+  currentView.value = "settings"
+  await settings.setSection("account")
+  await settings.openAccountConfig(item.platformKey, item.platformName, "quick_publish")
 }
 
 function isFailed(item: typeof quickPublish.state.platformItems[number]) {

@@ -1,7 +1,7 @@
 <template>
   <article
     class="syp-platform-card"
-    :class="{ 'is-disabled': !isAuthorized }"
+    :class="{ 'is-disabled': !isAuthorized, 'is-processing': isProcessing }"
     :aria-disabled="!isAuthorized"
     :title="!isAuthorized ? tooltipText : ''"
   >
@@ -11,17 +11,31 @@
     </div>
     <div class="syp-platform-card__body">
       <div class="syp-platform-card__name">{{ platformName }}</div>
-      <div class="syp-platform-card__meta">
-        <span class="syp-platform-card__status" :class="{ 'is-ready': isAuthorized, 'is-disabled': !isAuthorized }">
-          {{ isAuthorized ? t("v2.card.status.quickPublishReady") : t("v2.card.status.unauthorized") }}
+
+      <div v-if="!isAuthorized" class="syp-platform-card__meta-row">
+        <span class="syp-platform-card__status is-disabled">
+          {{ t("v2.card.status.unauthorized") }}
         </span>
-        <span v-if="isAuthorized" class="syp-platform-card__published">
+        <button
+          type="button"
+          class="syp-platform-card__action syp-platform-card__action--primary"
+          @click.stop="handleConfigure"
+        >
+          {{ t("v2.card.action.configure") }}
+        </button>
+      </div>
+
+      <div v-else class="syp-platform-card__meta">
+        <span class="syp-platform-card__status is-ready">
+          {{ t("v2.card.status.quickPublishReady") }}
+        </span>
+        <span class="syp-platform-card__published">
           {{ isPublished ? t("v2.card.status.published") : t("v2.card.status.unpublished") }}
         </span>
       </div>
-      <div class="syp-platform-card__actions">
+
+      <div v-if="isAuthorized" class="syp-platform-card__actions">
         <button
-          v-if="isAuthorized"
           type="button"
           class="syp-platform-card__action syp-platform-card__action--primary"
           :class="{ 'is-danger': isFailed, 'is-outline': isPublished && !isFailed }"
@@ -50,6 +64,7 @@
           {{ t("v2.card.action.delete") }}
         </button>
       </div>
+
       <SypConfirmBar
         ref="confirmBarRef"
         :visible="showDeleteConfirm"
@@ -84,6 +99,7 @@ const emit = defineEmits<{
   (event: "primary"): void
   (event: "preview"): void
   (event: "delete"): void
+  (event: "configure"): void
 }>()
 const { t } = useV2I18n()
 
@@ -107,6 +123,10 @@ const handlePrimary = () => {
 
 const handlePreview = () => {
   emit("preview")
+}
+
+const handleConfigure = () => {
+  emit("configure")
 }
 
 const toggleDeleteConfirm = () => {
@@ -139,6 +159,9 @@ const primaryLabel = computed(() => {
   background $syp-card-bg-gradient
   &.is-disabled
     opacity 0.72
+
+  &.is-processing
+    opacity 0.7
 
 .syp-platform-card__icon
   width $syp-sm-icon-size
@@ -193,6 +216,12 @@ const primaryLabel = computed(() => {
 .syp-platform-card__published
   font-size 12px
   color $syp-text-tertiary
+
+.syp-platform-card__meta-row
+  display flex
+  align-items center
+  gap 8px
+  flex-wrap wrap
 
 .syp-platform-card__actions
   margin-top 4px
