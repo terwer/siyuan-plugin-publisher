@@ -7,10 +7,9 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { ElMessage } from "element-plus"
+import * as _ from "lodash-es"
 import { reactive, toRaw } from "vue"
-import { SypConfig } from "~/syp.config.ts"
-import { AliasTranslator, ObjectUtil, StrUtil, YamlUtil } from "zhi-common"
 import {
   BlogConfig,
   Post,
@@ -20,19 +19,20 @@ import {
   YamlFormatObj,
   YamlStrategy,
 } from "zhi-blog-api"
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
+import { AliasTranslator, ObjectUtil, StrUtil, YamlUtil } from "zhi-common"
+import { SiyuanAttr } from "zhi-siyuan-api"
+import Adaptors from "~/src/adaptors"
+import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
-import { pre } from "~/src/platforms/pre.ts"
+import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { MethodEnum } from "~/src/models/methodEnum.ts"
 import { DynamicConfig, getDynYamlKey } from "~/src/platforms/dynamicConfig.ts"
-import { IPublishCfg } from "~/src/types/IPublishCfg.ts"
-import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
-import { ElMessage } from "element-plus"
-import { SiyuanAttr } from "zhi-siyuan-api"
-import * as _ from "lodash-es"
-import Adaptors from "~/src/adaptors"
+import { pre } from "~/src/platforms/pre.ts"
 import { usePlatformMetadataStore } from "~/src/stores/usePlatformMetadataStore.ts"
+import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
+import { IPublishCfg } from "~/src/types/IPublishCfg.ts"
+import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { SypConfig } from "~/syp.config.ts"
 
 /**
  * 通用发布组件
@@ -113,6 +113,12 @@ const usePublish = () => {
       const finalPost = await api.preEditPost(post, id, publishCfg)
       logger.info(`文章全部预处理完毕，id=${id},key=${key}`)
       logger.debug(`最终结果 =>`, { finalPost: toRaw(finalPost) })
+      // 检查图片上传错误（preEditPost内部图片上传失败时不抛异常，而是收集到post自定义属性上）
+      const imageErrors = (finalPost as any).imageUploadErrors as string[] | undefined
+      if (imageErrors && imageErrors.length > 0) {
+        singleFormData.errMsg = imageErrors.join("\n")
+        logger.warn(`图片上传存在${imageErrors.length}个错误，已记录到errMsg`)
+      }
       // ===================================
       // 文章预处理结束
       // ===================================
@@ -240,7 +246,7 @@ const usePublish = () => {
       const api = await getPublishApi(key, cfg)
 
       // 处理删除
-      singleFormData.publishProcessStatus = await api.deletePost(postid)
+      singleFormData.publishProcessStatus = await api.deletePost(postid, id, publishCfg)
 
       // 删除成功才去移除文章发布信息
       if (singleFormData.publishProcessStatus) {

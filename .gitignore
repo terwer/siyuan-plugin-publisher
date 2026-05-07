@@ -2,9 +2,11 @@
 .idea
 .DS_Store
 .turbo
+.omc
 
 # build
 dist
+dist-v2
 lib
 !src/lib
 node_modules
@@ -12,6 +14,7 @@ node_modules
 # api-extractor
 etc
 temp
+tmp
 tsdoc-metadata.json
 
 # env
@@ -43,3 +46,10 @@ coverage
 testdata
 .typora
 .tool-versions
+.opencode
+
+# ReCode local database
+.recode
+
+# Claude config
+.claude

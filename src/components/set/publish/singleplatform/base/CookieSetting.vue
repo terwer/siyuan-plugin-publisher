@@ -83,9 +83,9 @@ const submitForm = async (formEl) => {
 <template>
   <div>
     <el-form
-      class="add-form"
+      class="add-form legacy-cookie-form"
       ref="formRef"
-      label-width="100px"
+      label-width="92px"
       :model="formData.settingCfgData"
       :rules="formValidateRules"
     >
@@ -124,5 +124,43 @@ const submitForm = async (formEl) => {
 
 <style scoped lang="stylus">
 .top-tip
-  margin 10px 0
+  margin 4px 0
+
+.legacy-cookie-form
+  :deep(.el-form-item)
+    margin-bottom 8px
+
+  :deep(.el-form-item__label)
+    min-height 30px
+    line-height 16px
+    padding-right 10px
+    font-size 12px
+    color #5f6b7a
+
+  :deep(.el-form-item__content)
+    min-height 30px
+    line-height 16px
+    gap 6px
+
+  :deep(.el-textarea__inner)
+    padding 6px 8px
+    border-radius 8px
+    line-height 1.35
+
+  :deep(.el-alert)
+    --el-alert-padding 6px 8px
+    border-radius 8px
+
+  :deep(.el-alert__title)
+    font-size 12px
+    line-height 1.35
+
+  :deep(.el-button)
+    min-height 30px
+    padding 0 12px
+    border-radius 8px
+
+  :deep(a)
+    line-height 1.35
+    font-size 12px
 </style>

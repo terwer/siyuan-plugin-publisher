@@ -13,6 +13,7 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
+import { safeMergeConfig } from "~/src/adaptors/api/base/configMergeUtil.ts"
 import { Utils } from "~/src/utils/utils.ts"
 import { DYNAMIC_CONFIG_KEY, LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
 import { DynamicJsonCfg, getDynCfgByKey, getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
@@ -47,7 +48,7 @@ const useHalowebWeb = async (key?: string, newCfg?: HalowebConfig) => {
     const { getSetting } = usePublishSettingStore()
     const setting = await getSetting()
     const dynCfg = getHaloDynCfg(setting)
-    cfg = JsonUtil.safeParse<HalowebConfig>(setting[key], {} as HalowebConfig)
+    cfg = safeMergeConfig<HalowebConfig>(setting[key], HalowebConfig, ["", ""])
     // 如果配置为空，则使用默认的环境变量值，并记录日志
     const url = new URL(dynCfg.authUrl)
     if (ObjectUtil.isEmptyObject(cfg)) {

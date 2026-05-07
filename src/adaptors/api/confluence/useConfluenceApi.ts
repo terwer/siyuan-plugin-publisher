@@ -7,17 +7,18 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
-import { Utils } from "~/src/utils/utils.ts"
-import { ConfluenceConfig } from "~/src/adaptors/api/confluence/confluenceConfig.ts"
-import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
-import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
-import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
-import { ConfluenceApiAdaptor } from "~/src/adaptors/api/confluence/confluenceApiAdaptor.ts"
 import { CategoryTypeEnum, PicbedServiceTypeEnum } from "zhi-blog-api"
-import { LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
+import { ObjectUtil, StrUtil } from "zhi-common"
+import { safeMergeConfig } from "~/src/adaptors/api/base/configMergeUtil.ts"
+import { ConfluenceApiAdaptor } from "~/src/adaptors/api/confluence/confluenceApiAdaptor.ts"
+import { ConfluenceConfig } from "~/src/adaptors/api/confluence/confluenceConfig.ts"
 import { CONFLUENCE_CONSTANTS } from "~/src/adaptors/api/confluence/confluenceConstants.ts"
+import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
+import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
+import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
+import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
+import { Utils } from "~/src/utils/utils.ts"
 
 const useConfluenceApi = async (key: string, newCfg?: ConfluenceConfig) => {
   // 创建应用日志记录器
@@ -37,7 +38,7 @@ const useConfluenceApi = async (key: string, newCfg?: ConfluenceConfig) => {
     // 从配置中获取数据
     const { getSetting } = usePublishSettingStore()
     const setting = await getSetting()
-    cfg = JsonUtil.safeParse<ConfluenceConfig>(setting[key], {} as ConfluenceConfig)
+    cfg = safeMergeConfig<ConfluenceConfig>(setting[key], ConfluenceConfig, ["", "", "", ""])
 
     // 如果配置为空，则使用默认的环境变量值，并记录日志
     if (ObjectUtil.isEmptyObject(cfg)) {

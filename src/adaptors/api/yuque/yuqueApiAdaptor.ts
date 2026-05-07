@@ -12,6 +12,7 @@ import { YuqueConfig } from "~/src/adaptors/api/yuque/yuqueConfig.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
 import { ObjectUtil, StrUtil } from "zhi-common"
+import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 
 /**
  * Yuque API 适配器
@@ -56,7 +57,7 @@ class YuqueApiAdaptor extends BaseBlogApi {
     )
   }
 
-  public async deletePost(postid: string): Promise<boolean> {
+  public async deletePost(postid: string, id?: string, publishCfg?: IPublishCfg): Promise<boolean> {
     const yuquePostidKey = this.getYuquePostidKey(postid)
     return await this.delDoc(yuquePostidKey.docId, yuquePostidKey.docRepo)
   }

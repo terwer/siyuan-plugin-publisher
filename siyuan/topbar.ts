@@ -1,37 +1,22 @@
 /*
- * Copyright (c) 2023, Terwer . All rights reserved.
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *            GNU GENERAL PUBLIC LICENSE
+ *               Version 3, 29 June 2007
  *
- * This code is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License version 2 only, as
- * published by the Free Software Foundation.  Terwer designates this
- * particular file as subject to the "Classpath" exception as provided
- * by Terwer in the LICENSE file that accompanied this code.
- *
- * This code is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
- * version 2 for more details (a copy is included in the LICENSE file that
- * accompanied this code).
- *
- * You should have received a copy of the GNU General Public License version
- * 2 along with this work; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- *
- * Please contact Terwer, Shenzhen, Guangdong, China, youweics@163.com
- * or visit www.terwer.space if you need additional information or have any
- * questions.
+ *  Copyright (C) 2023-2026 Terwer, Inc. <https://terwer.space/>
+ *  Everyone is permitted to copy and distribute verbatim copies
+ *  of this license document, but changing it is not allowed.
  */
 
-import PublisherPlugin from "./index"
-import { icons } from "./utils/svg"
-import {  Menu, showMessage } from "siyuan"
-import { createSiyuanAppLogger } from "./appLogger"
-import { WidgetInvoke } from "./invoke/widgetInvoke"
-import { PluginInvoke } from "./invoke/pluginInvoke"
+import { Menu, showMessage } from "siyuan"
 import { ConfigManager } from "~/siyuan/store/config.ts"
-import MenuUtils from "~/siyuan/utils/menuUtils.ts"
 import { PreferenceConfigManager } from "~/siyuan/store/preferenceConfigManager.ts"
+import MenuUtils from "~/siyuan/utils/menuUtils.ts"
+import { V2Host } from "~/siyuan/v2/v2Host.ts"
+import { createSiyuanAppLogger } from "./appLogger"
+import PublisherPlugin from "./index"
+import { PluginInvoke } from "./invoke/pluginInvoke"
+import { WidgetInvoke } from "./invoke/widgetInvoke"
+import { icons } from "./utils/svg"
 
 /**
  * 顶部按钮
@@ -41,12 +26,14 @@ export class Topbar {
   private pluginInstance
   private widgetInvoke
   private pluginInvoke
+  private v2Host
 
   constructor(pluginInstance: PublisherPlugin) {
     this.logger = createSiyuanAppLogger("topbar")
     this.pluginInstance = pluginInstance
     this.pluginInvoke = new PluginInvoke(pluginInstance)
     this.widgetInvoke = new WidgetInvoke(pluginInstance)
+    this.v2Host = new V2Host(pluginInstance)
   }
 
   public initTopbar() {
@@ -57,33 +44,50 @@ export class Topbar {
       position: "left",
       callback: () => {},
     })
-    topBarElement.addEventListener("click", async () => {
-      // 预加载数据
-      const setting = await ConfigManager.loadConfig(self.pluginInstance)
-      const prefSetting = await PreferenceConfigManager.loadConfig(self.pluginInstance)
 
-      // 快速发布
-      const quickMenus =
-        prefSetting.showQuickMenu === false
-          ? []
-          : MenuUtils.getQuickMenus(this.pluginInstance, this.widgetInvoke, setting)
-      // 扩展菜单
-      const extendMenus =
-        prefSetting.showExtendMenu === false
-          ? []
-          : await MenuUtils.getExtendMenus(this.pluginInstance, this.pluginInvoke)
-      // 初始化菜单
-      await this.addMenu(topBarElement.getBoundingClientRect(), quickMenus, extendMenus, prefSetting)
-      self.logger.info("publisher menu loaded")
+    topBarElement.addEventListener("click", async () => {
+      const prefSetting = await PreferenceConfigManager.loadConfig(this.pluginInstance)
+
+      if (prefSetting.useV2UI) {
+        try {
+          self.logger.info("V2 UI enabled, showing quick publish panel")
+          await this.showV2QuickPublishPanel(topBarElement)
+          return
+        } catch (e) {
+          self.logger.error("V2 panel failed, falling back to legacy menu:", e)
+          showMessage("新版 UI 启动失败，已回退到旧版菜单", 3000, "error")
+        }
+      }
+
+      await this.showLegacyMenu(topBarElement, prefSetting)
     })
   }
 
-  private async addMenu(
-    rect: DOMRect,
-    quickMenus: any[],
-    extendMenus: any[],
-    prefSetting: any
-  ) {
+  /**
+   * 显示 V2 快速发布面板
+   */
+  private async showV2QuickPublishPanel(topBarElement: HTMLElement) {
+    await this.v2Host.show({
+      anchorElement: topBarElement,
+      initialView: "quick_publish",
+    })
+  }
+
+  private async showLegacyMenu(topBarElement: HTMLElement, prefSetting: any) {
+    const setting = await ConfigManager.loadConfig(this.pluginInstance)
+
+    const quickMenus =
+      prefSetting.showQuickMenu === false
+        ? []
+        : MenuUtils.getQuickMenus(this.pluginInstance, this.widgetInvoke, setting)
+    const extendMenus =
+      prefSetting.showExtendMenu === false ? [] : await MenuUtils.getExtendMenus(this.pluginInstance, this.pluginInvoke)
+
+    await this.addMenu(topBarElement.getBoundingClientRect(), quickMenus, extendMenus, prefSetting)
+    this.logger.info("publisher menu loaded")
+  }
+
+  private async addMenu(rect: DOMRect, quickMenus: any[], extendMenus: any[], prefSetting: any) {
     const menu = new Menu("publisherMenu")
 
     // 仪表盘

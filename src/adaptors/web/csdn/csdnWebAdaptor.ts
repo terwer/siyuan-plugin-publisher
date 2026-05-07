@@ -13,6 +13,7 @@ import { BlogConfig, CategoryInfo, MediaObject, PageTypeEnum, Post, UserBlog } f
 import WebUtils from "~/src/adaptors/web/base/webUtils.ts"
 import * as _ from "lodash-es"
 import FormDataUtils from "~/src/utils/FormDataUtils.ts"
+import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 
 /**
  * CSDN网页授权适配器
@@ -265,7 +266,7 @@ class CsdnWebAdaptor extends BaseWebApi {
     return post
   }
 
-  public async deletePost(postid: string): Promise<boolean> {
+  public async deletePost(postid: string, id?: string, publishCfg?: IPublishCfg): Promise<boolean> {
     let flag = false
     try {
       const params = JSON.stringify({

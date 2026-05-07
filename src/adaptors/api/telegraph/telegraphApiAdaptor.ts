@@ -13,6 +13,7 @@ import { TelegraphConfig, TelegraphPostType } from "~/src/adaptors/api/telegraph
 import { JsonUtil, StrUtil } from "zhi-common"
 import CookieUtils from "~/src/utils/cookieUtils.ts"
 import md from "telegraph.md"
+import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 
 /**
  * Telegraph API 适配器
@@ -232,7 +233,7 @@ class TelegraphApiAdaptor extends BaseBlogApi {
     return true
   }
 
-  public async deletePost(postid: string): Promise<boolean> {
+  public async deletePost(postid: string, id?: string, publishCfg?: IPublishCfg): Promise<boolean> {
     throw new Error("telegra.ph 暂不支持删除文章功能")
   }
 

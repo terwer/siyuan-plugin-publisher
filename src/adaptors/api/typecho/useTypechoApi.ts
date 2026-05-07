@@ -12,6 +12,7 @@ import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { Utils } from "~/src/utils/utils.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { TypechoConfig } from "~/src/adaptors/api/typecho/typechoConfig.ts"
+import { safeMergeConfig } from "~/src/adaptors/api/base/configMergeUtil.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { TypechoApiAdaptor } from "~/src/adaptors/api/typecho/typechoApiAdaptor.ts"
@@ -45,7 +46,7 @@ export const useTypechoApi = async (key?: string, newCfg?: TypechoConfig) => {
     // 从配置中获取数据
     const { getSetting } = usePublishSettingStore()
     const setting = await getSetting()
-    cfg = JsonUtil.safeParse<TypechoConfig>(setting[key], {} as TypechoConfig)
+    cfg = safeMergeConfig<TypechoConfig>(setting[key], TypechoConfig, ["","","",""])
     // 如果配置为空，则使用默认的环境变量值，并记录日志
     if (ObjectUtil.isEmptyObject(cfg)) {
       // 从环境变量获取Typecho API的URL、用户名、认证令牌和中间件URL

@@ -9,15 +9,15 @@
 
 <!--suppress ALL -->
 <script setup lang="ts">
+import { WarnTriangleFilled } from "@element-plus/icons-vue"
+import { ElMessageBox } from "element-plus"
+import { markRaw } from "vue"
+import { StrUtil } from "zhi-common"
+import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
-import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
-import { StrUtil } from "zhi-common"
-import { getSiyuanWidgetId } from "~/src/utils/siyuanUtils.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { ElMessageBox, type MessageBoxData } from "element-plus"
-import { markRaw } from "vue"
-import { WarnTriangleFilled } from "@element-plus/icons-vue"
+import { getSiyuanWidgetId } from "~/src/utils/siyuanUtils.ts"
 
 const logger = createAppLogger("preference-setting")
 const { t } = useVueI18n()
@@ -101,6 +101,15 @@ const doBeforeChangeForAllowChangeSlug = async (): Promise<boolean> => {
           v-model="publishPreferenceSettingForm.allowChangeSlug"
           :before-change="onBeforeChangeForAllowChangeSlug"
         ></el-switch>
+      </el-form-item>
+
+      <el-divider border-style="dashed" class="psd" />
+
+      <el-form-item label="使用新版 UI（实验性）">
+        <el-switch v-model="publishPreferenceSettingForm.useV2UI"></el-switch>
+        <div style="font-size: 12px; color: #999; margin-top: 4px;">
+          开启后将使用全新的 V2 版本界面，重启后生效
+        </div>
       </el-form-item>
     </div>
   </el-form>

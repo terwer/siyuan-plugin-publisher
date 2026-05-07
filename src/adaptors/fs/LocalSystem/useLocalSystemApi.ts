@@ -7,14 +7,15 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { LocalSystemConfig } from "~/src/adaptors/fs/LocalSystem/LocalSystemConfig.ts"
-import { LocalSystemApiAdaptor } from "~/src/adaptors/fs/LocalSystem/LocalSystemApiAdaptor.ts"
-import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
-import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
-import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
+import { StrUtil } from "zhi-common"
+import { safeMergeConfig } from "~/src/adaptors/api/base/configMergeUtil.ts"
 import { FsUtils } from "~/src/adaptors/fs/LocalSystem/FsUtils.ts"
+import { LocalSystemApiAdaptor } from "~/src/adaptors/fs/LocalSystem/LocalSystemApiAdaptor.ts"
+import { LocalSystemConfig } from "~/src/adaptors/fs/LocalSystem/LocalSystemConfig.ts"
+import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
+import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
+import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
+import { createAppLogger } from "~/src/utils/appLogger.ts"
 
 /**
  * 本地系统适配器
@@ -32,12 +33,8 @@ const useLocalSystemApi = async (key: string, newCfg?: LocalSystemConfig) => {
   } else {
     const { getSetting } = usePublishSettingStore()
     const setting = await getSetting()
-    cfg = JsonUtil.safeParse<LocalSystemConfig>(setting[key], {} as LocalSystemConfig)
-    if (ObjectUtil.isEmptyObject(cfg)) {
-      cfg = new LocalSystemConfig()
-    } else {
-      logger.info("Using configuration from settings...")
-    }
+    cfg = safeMergeConfig<LocalSystemConfig>(setting[key], LocalSystemConfig, [])
+    logger.info("Using configuration from settings...")
     if (StrUtil.isEmptyString(cfg.posidKey)) {
       cfg.posidKey = getDynPostidKey(key)
     }

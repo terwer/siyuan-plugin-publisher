@@ -7,10 +7,8 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { IBlogApi } from "zhi-blog-api/dist/lib/IBlogApi"
-import { IWebApi } from "zhi-blog-api/dist/lib/IWebApi"
-import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
-import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
+import * as _ from "lodash-es"
+import { toRaw } from "vue"
 import {
   BlogConfig,
   CategoryInfo,
@@ -27,24 +25,27 @@ import {
   YamlFormatObj,
   YamlStrategy,
 } from "zhi-blog-api"
-import { createAppLogger, ILogger } from "~/src/utils/appLogger.ts"
-import { LuteUtil } from "~/src/utils/luteUtil.ts"
-import { usePicgoBridge } from "~/src/composables/usePicgoBridge.ts"
-import { base64ToBuffer, path, remoteImageToBase64Info } from "~/src/utils/polyfillUtils.ts"
+import { IBlogApi } from "zhi-blog-api/dist/lib/IBlogApi"
+import { IWebApi } from "zhi-blog-api/dist/lib/IWebApi"
 import { DateUtil, HtmlUtil, ObjectUtil, StrUtil, YamlUtil } from "zhi-common"
-import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
-import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { SiyuanAttr, SiyuanKernelApi } from "zhi-siyuan-api"
+import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
+import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
+import { usePicgoBridge } from "~/src/composables/usePicgoBridge.ts"
+import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
+import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import { DynamicConfig, getDynPlatformKeyFromPostidKey } from "~/src/platforms/dynamicConfig.ts"
-import { CATE_AUTO_NAME } from "~/src/utils/constants.ts"
-import { toRaw } from "vue"
-import * as _ from "lodash-es"
-import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
-import { SypConfig } from "~/syp.config.ts"
 import { usePlatformMetadataStore } from "~/src/stores/usePlatformMetadataStore.ts"
-import { MdUtils } from "~/src/utils/mdUtils.ts"
-import ImageUtils from "~/src/utils/ImageUtils.ts"
+import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
+import { createAppLogger, ILogger } from "~/src/utils/appLogger.ts"
 import { BaseError } from "~/src/utils/BaseErrors.ts"
+import { CATE_AUTO_NAME } from "~/src/utils/constants.ts"
+import ImageUtils from "~/src/utils/ImageUtils.ts"
+import { LuteUtil } from "~/src/utils/luteUtil.ts"
+import { MdUtils } from "~/src/utils/mdUtils.ts"
+import { base64ToBuffer, path, remoteImageToBase64Info } from "~/src/utils/polyfillUtils.ts"
+import { SypConfig } from "~/syp.config.ts"
+import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 
 /**
  * 各种模式共享的扩展基类
@@ -103,6 +104,17 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     // 处理其他
     post = await this.handleOther(post, id, publishCfg)
     return post
+  }
+
+  /**
+   * 删除文章
+   *
+   * @param postid - 平台文章 ID
+   * @param id - 思源文档ID（可选）
+   * @param publishCfg - 发布配置（可选）
+   */
+  public async deletePost(postid: string, id?: string, publishCfg?: IPublishCfg): Promise<boolean> {
+    return this.api.deletePost(postid, id, publishCfg)
   }
 
   public async getCategories(keyword?: string): Promise<CategoryInfo[]> {
@@ -499,8 +511,9 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
         // 批量处理图片上传
         this.logger.info(`找到${images.length}张图片，开始上传`)
         const urlMap = {}
-        try {
-          for (const image of images) {
+        const picbedName = this.getPicbedServiceName(cfg)
+        for (const image of images) {
+          try {
             const imageUrl = image.url
             // 忽略在线图片
             if (imageUrl.startsWith("http") && !imageUrl.startsWith(window.location.origin)) {
@@ -523,30 +536,23 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
             } else if (attachResult && attachResult.url) {
               urlMap[image.originUrl] = attachResult.url
             }
-            // =======
-            // 旧版使用 URL，confluence 使用 macro，macro 优先
-            // =======
-            const platformImageSuccessMsg = `使用平台自带的图片上传能力，已成功上传图片 ${image.name}`
-            await this.pushMsg({
-              msg: platformImageSuccessMsg,
-              timeout: 3000,
-            })
-          }
-        } catch (e) {
-          const message = e.message || e
-          let ignoreError = false
-          if (message.includes(BaseError.NO_PAGE_ID_FOUND_IN_MEDIA_MACRO_MODE)) {
-            ignoreError = true
-          }
-          if (!ignoreError) {
-            const errMsg2 = "文章可能已经发布成功，但是平台图片上传失败。请打开「开发者工具」查看错误日志"
-            this.logger.error(errMsg2, e)
-            await this.kernelApi.pushMsg({
-              msg: errMsg2,
-              timeout: 7000,
-            })
-          } else {
-            this.logger.info("ignore error in macro mode")
+          } catch (e) {
+            const message = e.message || e
+            let ignoreError = false
+            if (message.includes(BaseError.NO_PAGE_ID_FOUND_IN_MEDIA_MACRO_MODE)) {
+              ignoreError = true
+            }
+            if (!ignoreError) {
+              const imgErrMsg = `${image.name} 同步失败(使用${picbedName}): ${message}`
+              this.logger.error(imgErrMsg, e)
+              // 将图片上传错误收集到post自定义属性上，以便上层调用方能感知到
+              if (!(post as any).imageUploadErrors) {
+                (post as any).imageUploadErrors = []
+              }
+              (post as any).imageUploadErrors.push(imgErrMsg)
+            } else {
+              this.logger.info("ignore error in macro mode")
+            }
           }
         }
 
@@ -578,11 +584,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
         break
       }
       default: {
-        await this.kernelApi.pushMsg({
-          msg: "未指定上传图片服务，不处理图片",
-          timeout: 7000,
-        })
-        this.logger.warn("未指定上传图片服务，不处理图片")
+        this.logger.info("图片图床服务未指定，跳过图片处理")
         break
       }
     }
@@ -593,6 +595,18 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     this.logger.info("图片预处理全部完成")
     this.logger.debug("图片处理之后，post", { post: toRaw(post) })
     return post
+  }
+
+  /**
+   * 获取图床服务名称（用于错误信息）
+   */
+  private getPicbedServiceName(cfg: BlogConfig): string {
+    switch (cfg.picbedService) {
+      case PicbedServiceTypeEnum.Bundled: return "平台图床"
+      case PicbedServiceTypeEnum.PicGo: return "PicGo"
+      case PicbedServiceTypeEnum.None: return "无"
+      default: return String(cfg.picbedService || "未知")
+    }
   }
 
   public async getImagesFromMd(id: string, markdown: string) {

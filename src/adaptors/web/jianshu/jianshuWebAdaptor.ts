@@ -12,6 +12,7 @@ import { CategoryInfo, MediaObject, Post, UserBlog } from "zhi-blog-api"
 import { ElMessage } from "element-plus"
 import { fileToBuffer } from "~/src/utils/polyfillUtils.ts"
 import FormDataUtils from "~/src/utils/FormDataUtils.ts"
+import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 
 /**
  * 简书网页授权适配器
@@ -125,7 +126,7 @@ class JianshuWebAdaptor extends BaseWebApi {
     // return StrUtil.pathJoin(this.cfg.home ?? "", postUrl)
   }
 
-  public async deletePost(postid: string): Promise<boolean> {
+  public async deletePost(postid: string, id?: string, publishCfg?: IPublishCfg): Promise<boolean> {
     const jianshuPostKey = this.getJianshuPostidKey(postid)
     const pageId = jianshuPostKey.pageId
 
