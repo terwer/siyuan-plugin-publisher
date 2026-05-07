@@ -171,6 +171,91 @@ The V2 settings workflow SHALL support preference settings within the unified wo
 - **THEN** the preference content must be shown within the unified workspace shell
 - **AND** the workflow must remain part of the same settings navigation model
 
+### Requirement: UI V2 SHALL bridge batch distribution functionality
+
+The V2 workflow SHALL bridge the existing batch distribution implementation (`BatchPublishIndex.vue`) to provide multi-platform publishing capability. Native rewrite SHALL be evaluated in M6 based on user feedback, performance, and maintenance cost.
+
+#### Scenario: User accesses batch distribution from V2
+
+- **GIVEN** the user has enabled V2 UI
+- **WHEN** the user accesses batch distribution entry
+- **THEN** the system must bridge to the existing `BatchPublishIndex.vue` component
+- **AND** the bridged functionality must preserve all existing batch distribution features
+- **AND** the bridged implementation must not affect V1 batch distribution behavior
+
+#### Scenario: User performs batch publish via bridge
+
+- **GIVEN** the user has accessed batch distribution through V2 bridge
+- **WHEN** the user selects multiple platforms and initiates batch publish
+- **THEN** the system must execute batch publish using the existing logic
+- **AND** the system must support both merge and override distribution modes
+- **AND** the system must display success/failure results for each platform
+
+#### Scenario: Evaluation of native rewrite in M6
+
+- **GIVEN** batch distribution has been bridged in M5
+- **WHEN** M6 convergence phase is reached
+- **THEN** the team must evaluate whether native rewrite is necessary
+- **AND** the evaluation must consider user feedback, performance metrics, and maintenance cost
+- **AND** if native rewrite is not justified, the bridge SHALL remain as the stable implementation
+
+### Requirement: UI V2 SHALL bridge article management dashboard functionality
+
+The V2 workflow SHALL bridge the existing article management dashboard implementation (`Admin.vue`) to provide article listing, search, and filtering capability. Native rewrite SHALL be evaluated in M9 based on user feedback, performance, and maintenance cost.
+
+#### Scenario: User accesses article management dashboard from V2
+
+- **GIVEN** the user has enabled V2 UI
+- **WHEN** the user accesses article management dashboard entry
+- **THEN** the system must bridge to the existing `Admin.vue` component
+- **AND** the bridged functionality must preserve all existing article management features
+- **AND** the bridged implementation must not affect V1 article management behavior
+
+#### Scenario: User manages articles via bridge
+
+- **GIVEN** the user has accessed article management dashboard through V2 bridge
+- **WHEN** the user views article list, searches, or filters by platform
+- **THEN** the system must execute article management using the existing logic
+- **AND** the system must support pagination and search functionality
+- **AND** the system must display article metadata correctly
+
+#### Scenario: Evaluation of native rewrite in M9
+
+- **GIVEN** article management dashboard has been bridged in M7
+- **WHEN** M9 convergence phase is reached
+- **THEN** the team must evaluate whether native rewrite is necessary
+- **AND** the evaluation must consider user feedback, performance metrics, and maintenance cost
+- **AND** if native rewrite is not justified, the bridge SHALL remain as the stable implementation
+
+### Requirement: UI V2 SHALL integrate detailed publish mode into quick publish
+
+The V2 quick publish workflow SHALL integrate detailed publish mode, allowing users to configure advanced fields (alias, description, tags, categories, publish status, publish time) before publishing. The implementation SHALL prioritize bridging existing detailed mode components, and only implement natively if bridging is not feasible.
+
+#### Scenario: User accesses detailed settings from quick publish
+
+- **GIVEN** the user is on V2 quick publish page
+- **WHEN** the user clicks the "detailed settings" entry
+- **THEN** the system must display a detailed settings panel
+- **AND** the panel must support editing alias, description, tags, categories, publish status, and publish time
+- **AND** the panel must be dismissible without publishing
+
+#### Scenario: User publishes with detailed settings
+
+- **GIVEN** the user has configured detailed settings
+- **WHEN** the user initiates publish
+- **THEN** the system must publish with the configured advanced fields
+- **AND** the system must preserve the detailed settings for future edits
+- **AND** the system must not affect quick publish default behavior when detailed settings are not used
+
+#### Scenario: Bridging evaluation for detailed mode components
+
+- **GIVEN** the team is implementing M8 detailed publish mode integration
+- **WHEN** evaluating whether to bridge existing components (PublishDescription, PublishTags, PublishCategories, etc.)
+- **THEN** the team must first attempt bridging
+- **AND** if bridging fails due to component dependencies, style conflicts, or state management issues, the team must document the reasons
+- **AND** if bridging is not feasible, the team must implement a native detailed settings panel
+- **AND** the technical decision (bridge or native) must be documented
+
 ### Requirement: UI V2 SHALL preserve compatibility while bridging legacy configuration forms
 
 The V2 migration SHALL preserve configuration compatibility and may bridge legacy platform configuration forms until new abstractions are ready.

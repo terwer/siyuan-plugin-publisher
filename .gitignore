@@ -50,3 +50,6 @@ testdata
 
 # ReCode local database
 .recode
+
+# Claude config
+.claude
