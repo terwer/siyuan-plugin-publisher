@@ -368,7 +368,7 @@ curl http://127.0.0.1:9222/json/list
 4. 开启 `Network.enable`、`Runtime.enable`、`Page.enable`。
 5. 只记录语雀接口请求和响应摘要，所有敏感字段先脱敏再落文档。
 
-### 7. 错误处理：适配器内集中映射
+### 7.2 错误处理：适配器内集中映射
 
 新增私有请求封装 `yuquewebFetch()` / `yuquewebFormFetch()`，负责：
 
@@ -385,6 +385,82 @@ curl http://127.0.0.1:9222/json/list
 - 429：`语雀请求过于频繁，请稍后重试。`
 - 422 图片：`语雀无法处理该图片地址，请确认图片已上传或改用本地图片重新发布。`
 - 网络失败：`无法连接语雀，请检查网络或稍后重试。`
+
+
+
+### 7.3 CDP 脱敏复核（2026-05-08）
+
+本轮实施使用用户手动登录的远程调试 Chrome：
+
+- 启动参数：`--remote-debugging-port=9222 --user-data-dir=/tmp/chrome-yuque-debug`
+- `http://127.0.0.1:9222/json/list` 可见 `type: "page"` 且 URL 为 `https://www.yuque.com/dashboard` 的语雀页面。
+- CDP 只在语雀同源页面执行 `fetch(..., { credentials: "include" })`，输出前脱敏；没有读取或落盘 Cookie、Authorization、ctoken、token、csrf、ticket、协同 token。
+
+复核结果摘要：
+
+```json
+{
+  "pageUrl": "https://www.yuque.com/dashboard",
+  "mine": {
+    "endpoint": "GET /api/mine",
+    "status": 200,
+    "fields": ["id", "login", "name", "avatar_url"],
+    "login": "terwer"
+  },
+  "books": [
+    {
+      "endpoint": "GET /api/mine/user_books?user_type=User&offset=0&limit=100",
+      "status": 200,
+      "count": 5,
+      "sampleFields": ["id", "slug", "name", "type", "user.login", "abilities.create_doc"]
+    },
+    {
+      "endpoint": "GET /api/mine/user_books?user_type=Group&offset=0&limit=100",
+      "status": 200,
+      "count": 0
+    }
+  ],
+  "targetBook": {
+    "id": 25033491,
+    "slug": "note",
+    "name": "学习笔记",
+    "login": "terwer",
+    "abilities": { "create_doc": true, "destroy": true }
+  },
+  "createMarkdown": {
+    "endpoint": "POST /api/docs",
+    "status": 200,
+    "requestKeys": ["book_id", "type", "format", "title", "slug", "body", "status", "insert_to_catalog", "action"],
+    "responseFields": { "id": 268885663, "book_id": 25033491, "format": "markdown", "status": 0 }
+  },
+  "updateMarkdown": {
+    "endpoint": "PUT /api/docs/{id}",
+    "status": 200,
+    "requestKeys": ["book_id", "type", "format", "title", "slug", "body", "status", "insert_to_catalog", "action"],
+    "responseFields": { "sameId": true, "format": "markdown", "status": 1 }
+  },
+  "uploadImage": {
+    "endpoint": "POST /api/upload/attach?type=image",
+    "status": 200,
+    "formFields": ["file"],
+    "responseUrlField": "data.url",
+    "urlHost": "cdn.nlark.com"
+  },
+  "uploadFailure": {
+    "endpoint": "POST /api/upload/attach?type=image",
+    "status": 400,
+    "message": "Can't found upload file"
+  },
+  "deleteDoc": {
+    "endpoint": "DELETE /api/docs/{id}",
+    "status": 200,
+    "verifyAfterDelete": { "endpoint": "GET /api/docs/{slug}?book_id=25033491", "status": 404, "message": "Not Found" }
+  }
+}
+```
+
+结论：Markdown 更新最终采用 `PUT /api/docs/{id}`；知识库列表采用个人与组织 `user_books` 两条接口合并，按 `abilities.create_doc` 过滤；图片上传采用 `POST /api/upload/attach?type=image`，multipart 字段为 `file`，成功 URL 位于 `data.url`。失败响应已验证无文件场景为 `400`，实现侧统一映射为用户化图片上传失败提示。
+
 
 ### 8. V2 桥接：复用已有桥接注册
 

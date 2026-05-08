@@ -38,6 +38,7 @@ import { Utils } from "~/src/utils/utils.ts"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import PageUtils from "~/common/pageUtils.ts"
 import { extraPreCfg } from "~/src/platforms/pre.ts"
+import { sanitizeCookieArrayForLog } from "~/src/utils/sensitiveLogSanitizer.ts"
 
 const logger = createAppLogger("publish-platform-setting-list")
 
@@ -298,7 +299,7 @@ const _handleValidateOpenBrowserAuth = (dynCfg: DynamicConfig) => {
   // 设置将要读取的域名
   const cookieCb = async (dynCfg: DynamicConfig, cookies: ElectronCookie[]) => {
     ElMessage.info("验证中，请关注状态，没有授权表示不可用，已授权表示该平台可正常使用...")
-    logger.debug("get cookie result=>", cookies)
+    logger.debug("get cookie result=>", sanitizeCookieArrayForLog(cookies))
     formData.webAuthLoadingMap[dynCfg.platformKey] = true
 
     const appInstance = new PublisherAppInstance()

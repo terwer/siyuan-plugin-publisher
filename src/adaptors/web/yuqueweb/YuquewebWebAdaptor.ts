@@ -13,6 +13,7 @@ import FormDataUtils from "~/src/utils/FormDataUtils.ts"
 import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 import { Attachment, CategoryInfo, MediaObject, Post, UserBlog } from "zhi-blog-api"
 import { AliasTranslator, JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
+import { Base64 } from "js-base64"
 
 interface YuquewebBookMeta {
   bookId: string
@@ -118,14 +119,7 @@ class YuquewebWebAdaptor extends BaseWebApi {
       throw new Error("语雀文档创建失败，请稍后重试。")
     }
 
-    // `POST /api/docs` 会创建 Markdown 文档；实测 `PUT /api/docs/{id}` 会将 Markdown 正文发布为正式文档。
-    const publishPayload = {
-      ...payload,
-      slug: createdDoc.slug || payload.slug,
-    }
-    const publishedDoc = await this.yuquewebFetch(`/api/docs/${createdDoc.id}`, publishPayload, "PUT")
-    const doc = publishedDoc?.id ? publishedDoc : createdDoc
-    const meta = this.buildPostMeta(doc, bookMeta)
+    const meta = this.buildPostMeta(createdDoc, bookMeta)
     this.logger.debug("yuqueweb newPost meta =>", meta)
     return meta.toPostid()
   }
@@ -211,7 +205,7 @@ class YuquewebWebAdaptor extends BaseWebApi {
   public async newMediaObject(mediaObject: MediaObject, customHandler?: any): Promise<Attachment> {
     try {
       const { FormData, Blob } = FormDataUtils.getFormData(this.appInstance)
-      const blob = new Blob([mediaObject.bits], { type: mediaObject.type })
+      const blob = new Blob([this.toUploadBits(mediaObject.bits)], { type: mediaObject.type })
       const formData = new FormData()
       formData.append("file", blob, mediaObject.name)
 
@@ -223,7 +217,7 @@ class YuquewebWebAdaptor extends BaseWebApi {
       }
 
       return {
-        attachment_id: upload?.attachment_id ? String(upload.attachment_id) : upload?.filekey ?? mediaObject.name,
+        attachment_id: upload?.attachment_id ? String(upload.attachment_id) : (upload?.filekey ?? mediaObject.name),
         date_created_gmt: new Date(),
         parent: 0,
         link: imageUrl,
@@ -239,7 +233,7 @@ class YuquewebWebAdaptor extends BaseWebApi {
         },
         type: mediaObject.type,
         thumbnail: "",
-        id: upload?.attachment_id ? String(upload.attachment_id) : upload?.filekey ?? mediaObject.name,
+        id: upload?.attachment_id ? String(upload.attachment_id) : (upload?.filekey ?? mediaObject.name),
         file: upload?.filename ?? mediaObject.name,
         url: imageUrl,
       }
@@ -351,6 +345,13 @@ class YuquewebWebAdaptor extends BaseWebApi {
 
   private serializeBookMeta(meta: YuquewebBookMeta): string {
     return JSON.stringify({ bookId: meta.bookId, bookSlug: meta.bookSlug, login: meta.login })
+  }
+
+  private toUploadBits(bits: any): any {
+    if (typeof bits === "string") {
+      return Base64.toUint8Array(bits)
+    }
+    return bits
   }
 
   private async buildDocPayload(bookMeta: YuquewebBookMeta, post: Post) {

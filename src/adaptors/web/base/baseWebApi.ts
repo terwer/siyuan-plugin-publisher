@@ -25,6 +25,7 @@ import { JsonUtil, StrUtil } from "zhi-common"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import { Base64 } from "js-base64"
 import FormDataUtils from "~/src/utils/FormDataUtils.ts"
+import { sanitizeSensitiveForLog } from "~/src/utils/sensitiveLogSanitizer.ts"
 
 /**
  * 网页授权统一封装基类
@@ -225,7 +226,7 @@ class BaseWebApi extends WebApi {
         )
         const resText = Base64.fromBase64(fetchResult.body)
         const resJson = JsonUtil.safeParse<any>(resText, {} as any)
-        this.logger.debug("apiForm doFetch success, resJson=>", resJson)
+        this.logger.debug("apiForm doFetch success, resJson=>", sanitizeSensitiveForLog(resJson))
         return resJson
       } else {
         // get formata fetch
@@ -233,11 +234,11 @@ class BaseWebApi extends WebApi {
 
         // headers
         const header = headers.length > 0 ? headers[0] : {}
-        this.logger.debug("before zhi-formdata-fetch, header =>", header)
+        this.logger.debug("before zhi-formdata-fetch, header =>", sanitizeSensitiveForLog(header))
         this.logger.debug("before zhi-formdata-fetch, url =>", url)
 
         const resText = await doFetch(this.appInstance.moduleBase, url, header, formData)
-        this.logger.debug("apiForm doFetch success, resText =>", resText)
+        this.logger.debug("apiForm doFetch success, resText =>", sanitizeSensitiveForLog(resText))
         const resJson = JsonUtil.safeParse<any>(resText, {} as any)
         return resJson
       }

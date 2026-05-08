@@ -13,6 +13,7 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { DynamicConfig } from "~/src/platforms/dynamicConfig.ts"
 import { MockBrowser } from "~/src/utils/MockBrowser.ts"
 import { extraPreCfg } from "~/src/platforms/pre.ts"
+import { sanitizeCookieArrayForLog } from "~/src/utils/sensitiveLogSanitizer.ts"
 
 const logger = createAppLogger("widget-utils")
 
@@ -198,7 +199,7 @@ const doOpenBrowserWindow = (
         )
       })
       if (domainCookies.length > 0) {
-        logger.info(`读取所有cookies成功`, domainCookies)
+        logger.info(`读取所有cookies成功`, sanitizeCookieArrayForLog(domainCookies))
         await cookieCallback(dynCfg, domainCookies)
       } else {
         logger.info(`未读取到Cookie`)

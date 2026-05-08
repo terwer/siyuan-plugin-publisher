@@ -14,6 +14,7 @@ import { isDev, LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { Deserializer, Serializer, XmlrpcUtil } from "simple-xmlrpc"
+import { sanitizeSensitiveForLog } from "~/src/utils/sensitiveLogSanitizer.ts"
 
 /**
  * 用于处理代理请求的自定义 hook
@@ -91,9 +92,9 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
         body: params,
       }
       logger.info("commonFetchClient url in proxyFetch =>", url)
-      logger.info("commonFetchClient fetchOptions in proxyFetch =>", fetchOptions)
+      logger.info("commonFetchClient fetchOptions in proxyFetch =>", sanitizeSensitiveForLog(fetchOptions))
       const res = await commonFetchClient.fetchCall(url, fetchOptions, forceProxy)
-      logger.debug("Result of proxyFetch in commonFetchClient =>", res)
+      logger.debug("Result of proxyFetch in commonFetchClient =>", sanitizeSensitiveForLog(res))
       return res
     }
   }
@@ -157,7 +158,7 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
     }
 
     logger.debug("corsFetch url =>", apiUrl)
-    logger.debug("corsFetch options =>", options)
+    logger.debug("corsFetch options =>", sanitizeSensitiveForLog(options))
 
     const res = await fetch(apiUrl, options)
 
@@ -175,14 +176,14 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
         corsRespHeaders[resp_key] = resp_value
       }
     }
-    logger.debug("corsFetch corsRespHeaders =>", corsRespHeaders)
+    logger.debug("corsFetch corsRespHeaders =>", sanitizeSensitiveForLog(corsRespHeaders))
 
     const resText = await res.text()
-    logger.debug("corsFetch resText =>", resText)
+    logger.debug("corsFetch resText =>", sanitizeSensitiveForLog(resText))
 
     const resJson = JsonUtil.safeParse<any>(resText, {})
     resJson["cors-received-headers"] = JSON.stringify(corsRespHeaders)
-    logger.debug("corsFetch resJson =>", resJson)
+    logger.debug("corsFetch resJson =>", sanitizeSensitiveForLog(resJson))
 
     return resJson
   }
@@ -263,12 +264,15 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
 
     const proxyHeaders = [header]
     logger.debug("siyuan forwardProxy url =>", reqUrl)
-    logger.debug("siyuan forwardProxy fetchOptions =>", {
-      headers,
-      payload,
-      method,
-      contentType,
-    })
+    logger.debug(
+      "siyuan forwardProxy fetchOptions =>",
+      sanitizeSensitiveForLog({
+        headers,
+        payload,
+        method,
+        contentType,
+      })
+    )
     const fetchResult = await kernelApi.forwardProxy(
       reqUrl,
       proxyHeaders,
@@ -279,7 +283,7 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
       responseEncoding,
       30000
     )
-    logger.debug("proxyFetch result =>", fetchResult)
+    logger.debug("proxyFetch result =>", sanitizeSensitiveForLog(fetchResult))
 
     if (!(fetchResult.status >= 200 && fetchResult.status < 300)) {
       // 兼容 CSDN 错误提示
