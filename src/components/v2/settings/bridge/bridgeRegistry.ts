@@ -5,6 +5,8 @@ import NotionSetting from "~/src/components/set/publish/singleplatform/commonblo
 import TelegraphSetting from "~/src/components/set/publish/singleplatform/commonblog/TelegraphSetting.vue"
 import YuqueSetting from "~/src/components/set/publish/singleplatform/commonblog/YuqueSetting.vue"
 import LocalSystemSetting from "~/src/components/set/publish/singleplatform/fs/LocalSystemSetting.vue"
+import HalowebSetting from "~/src/components/set/publish/singleplatform/web/HalowebSetting.vue"
+import YuquewebSetting from "~/src/components/set/publish/singleplatform/web/YuquewebSetting.vue"
 import AstroSetting from "~/src/components/set/publish/singleplatform/github/AstroSetting.vue"
 import HexoSetting from "~/src/components/set/publish/singleplatform/github/HexoSetting.vue"
 import HugoSetting from "~/src/components/set/publish/singleplatform/github/HugoSetting.vue"
@@ -59,6 +61,9 @@ const BRIDGE_COMPONENTS: Partial<Record<SubPlatformType, Component>> = {
 
   [SubPlatformType.Wordpress_Wordpress]: WordpressSetting,
   [SubPlatformType.Wordpress_Wordpressdotcom]: WordpressdotcomSetting,
+
+  [SubPlatformType.Custom_Haloweb]: HalowebSetting,
+  [SubPlatformType.Custom_Yuqueweb]: YuquewebSetting,
 }
 
 export const SUPPORTED_V2_BRIDGE_SUBTYPES = new Set<SubPlatformType>([

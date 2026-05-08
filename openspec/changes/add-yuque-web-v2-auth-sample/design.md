@@ -333,6 +333,41 @@ class YuquewebPostMeta {
 
 只有确认接口、字段、响应 URL 后，才能实现 `newMediaObject`。
 
+
+### 7.1 Chrome DevTools 远程调试连接要求
+
+实施阶段抓语雀网页登录态和接口证据时，必须连接用户手动登录过的远程调试 Chrome。不要使用默认隔离的 DevTools/浏览器会话，因为默认会话没有用户登录态，语雀登录校验会失败。
+
+推荐启动方式（macOS）：
+
+```bash
+/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome \
+  --remote-debugging-port=9222 \
+  --user-data-dir=/tmp/chrome-yuque-debug
+```
+
+注意：
+
+- Chrome 不允许只用默认用户目录开启远程调试；如果使用 `--profile-directory="Default"` 而不指定非默认 `--user-data-dir`，会报 `DevTools remote debugging requires a non-default data directory`。
+- 使用 `/tmp/chrome-yuque-debug` 后，需要用户在该调试 Chrome 中手动登录语雀一次；手机号、验证码、滑块验证均由用户手工完成，实施者不得尝试绕过验证。
+- 登录后用 `http://127.0.0.1:9222/json/list` 找到 `yuque.com` 页面，再取 `webSocketDebuggerUrl` 连接 CDP。
+- 在 Codex/受限沙箱里连接 `127.0.0.1:9222` 可能需要提权执行本地 Node 脚本；如果普通连接出现 `EPERM`，必须按工具规则请求 `sandbox_permissions: require_escalated`。
+- 抓包输出必须脱敏：`Cookie`、`Authorization`、`X-Auth-Token`、`ctoken`、`token`、`csrf`、`ticket`、协同 token 均不得写入文档或日志。
+
+最小验证命令：
+
+```bash
+curl http://127.0.0.1:9222/json/list
+```
+
+最小 CDP 连接流程：
+
+1. 请求 `http://127.0.0.1:9222/json/list`。
+2. 选择 `type === "page"` 且 `url` 包含 `yuque.com` 的页面。
+3. 连接该页面的 `webSocketDebuggerUrl`。
+4. 开启 `Network.enable`、`Runtime.enable`、`Page.enable`。
+5. 只记录语雀接口请求和响应摘要，所有敏感字段先脱敏再落文档。
+
 ### 7. 错误处理：适配器内集中映射
 
 新增私有请求封装 `yuquewebFetch()` / `yuquewebFormFetch()`，负责：

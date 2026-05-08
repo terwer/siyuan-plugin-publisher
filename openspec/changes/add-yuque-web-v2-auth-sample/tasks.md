@@ -1,9 +1,12 @@
 ## 1. 证据补齐与实现门禁
 
-- [ ] 1.1 用 Chrome DevTools 在语雀 Markdown 测试文档上抓取真实更新请求，确认更新接口、body 字段和响应结构
-- [ ] 1.2 用 Chrome DevTools 抓取语雀图片上传真实请求，确认上传 URL、表单字段、响应 URL 字段和失败响应
-- [ ] 1.3 用 Chrome DevTools 或同源 fetch 确认个人知识库与组织知识库列表接口，记录可用字段
-- [ ] 1.4 将抓包证据脱敏记录到本变更文档或实现注释中，禁止记录 Cookie、ctoken、Authorization、token
+- [ ] 1.1 使用远程调试 Chrome 连接用户手动登录过的语雀会话：`--remote-debugging-port=9222 --user-data-dir=/tmp/chrome-yuque-debug`，禁止使用默认隔离 DevTools 会话抓包
+- [ ] 1.2 验证 `http://127.0.0.1:9222/json/list` 能看到 `yuque.com` 页面，并通过 `webSocketDebuggerUrl` 连接 CDP
+- [ ] 1.3 确认抓包日志已脱敏 Cookie、Authorization、ctoken、token、csrf、ticket、协同 token 等敏感字段
+- [ ] 1.4 用 Chrome DevTools 在语雀 Markdown 测试文档上抓取真实更新请求，确认更新接口、body 字段和响应结构
+- [ ] 1.5 用 Chrome DevTools 抓取语雀图片上传真实请求，确认上传 URL、表单字段、响应 URL 字段和失败响应
+- [ ] 1.6 用 Chrome DevTools 或同源 fetch 确认个人知识库与组织知识库列表接口，记录可用字段
+- [ ] 1.7 将抓包证据脱敏记录到本变更文档或实现注释中，禁止记录 Cookie、ctoken、Authorization、token
 
 ## 2. 平台注册
 

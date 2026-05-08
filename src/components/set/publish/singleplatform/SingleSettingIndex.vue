@@ -17,6 +17,7 @@ import TelegraphSetting from "~/src/components/set/publish/singleplatform/common
 import ConfluenceSetting from "~/src/components/set/publish/singleplatform/commonblog/ConfluenceSetting.vue"
 import WordpressdotcomSetting from "~/src/components/set/publish/singleplatform/metaweblog/WordpressdotcomSetting.vue"
 import HalowebSetting from "~/src/components/set/publish/singleplatform/web/HalowebSetting.vue"
+import YuquewebSetting from "~/src/components/set/publish/singleplatform/web/YuquewebSetting.vue"
 import BilibiliSetting from "~/src/components/set/publish/singleplatform/web/BilibiliSetting.vue"
 import LocalSystemSetting from "~/src/components/set/publish/singleplatform/fs/LocalSystemSetting.vue"
 import { EnvUtil } from "~/src/utils/EnvUtil.ts"
@@ -108,6 +109,7 @@ const hasElectronEnv = EnvUtil.isSiyuanElectron()
     -->
     <bilibili-setting v-else-if="subtype === SubPlatformType.Custom_Bilibili" :api-type="apiType" />
     <haloweb-setting v-else-if="subtype === SubPlatformType.Custom_Haloweb" :api-type="apiType" />
+    <yuqueweb-setting v-else-if="subtype === SubPlatformType.Custom_Yuqueweb" :api-type="apiType" />
     <local-system-setting
       v-else-if="hasElectronEnv && subtype === SubPlatformType.Fs_LocalSystem"
       :api-type="apiType"

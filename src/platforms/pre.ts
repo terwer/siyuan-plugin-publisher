@@ -432,6 +432,17 @@ export const pre = {
     },
     {
       platformType: PlatformType.Custom,
+      subPlatformType: SubPlatformType.Custom_Yuqueweb,
+      platformKey: PRE_CONSTANTS.PRE_CUSTOM_YUQUEWEB,
+      platformName: "语雀网页版",
+      platformIcon: svgIcons.iconIFYuque,
+      authMode: AuthMode.WEBSITE,
+      authUrl: "https://www.yuque.com/login",
+      domain: "yuque.com",
+      isEnabled: false,
+    },
+    {
+      platformType: PlatformType.Custom,
       subPlatformType: SubPlatformType.Custom_Bilibili,
       platformKey: PRE_CONSTANTS.PRE_CUSTOM_BILIBILI,
       platformName: "哔哩哔哩",

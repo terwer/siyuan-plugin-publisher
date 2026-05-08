@@ -40,6 +40,7 @@ import { useLocalSystemApi } from "~/src/adaptors/fs/LocalSystem/useLocalSystemA
 import { useBilibiliWeb } from "~/src/adaptors/web/bilibili/useBilibiliWeb.ts"
 import { useCsdnWeb } from "~/src/adaptors/web/csdn/useCsdnWeb.ts"
 import { useHalowebWeb } from "~/src/adaptors/web/haloweb/useHalowebWeb.ts"
+import { useYuquewebWeb } from "~/src/adaptors/web/yuqueweb/useYuquewebWeb.ts"
 import { useJianshuWeb } from "~/src/adaptors/web/jianshu/useJianshuWeb.ts"
 import { useJuejinWeb } from "~/src/adaptors/web/juejin/useJuejinWeb.ts"
 import { useWechatWeb } from "~/src/adaptors/web/wechat/useWechatWeb.ts"
@@ -242,6 +243,11 @@ class Adaptors {
       // }
       case SubPlatformType.Custom_Haloweb: {
         const { cfg } = await useHalowebWeb(key)
+        conf = cfg
+        break
+      }
+      case SubPlatformType.Custom_Yuqueweb: {
+        const { cfg } = await useYuquewebWeb(key)
         conf = cfg
         break
       }
@@ -457,6 +463,11 @@ class Adaptors {
       // }
       case SubPlatformType.Custom_Haloweb: {
         const { webApi } = await useHalowebWeb(key, newCfg)
+        blogAdaptor = webApi
+        break
+      }
+      case SubPlatformType.Custom_Yuqueweb: {
+        const { webApi } = await useYuquewebWeb(key, newCfg)
         blogAdaptor = webApi
         break
       }
