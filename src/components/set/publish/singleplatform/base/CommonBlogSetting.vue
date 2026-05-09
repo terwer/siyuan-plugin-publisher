@@ -393,13 +393,12 @@ onMounted(async () => {
         :placeholder="t('setting.blog.cookie.placeholder')"
         type="textarea"
         :rows="10"
-        :disabled="true"
       />
       <el-alert
         :closable="false"
-        :title="t('setting.blog.cookie.readonly.tip')"
+        :title="t('setting.blog.cookie.editable.tip')"
         class="inline-tip"
-        type="error"
+        type="warning"
       />
     </el-form-item>
     <slot name="main" :cfg="formData.cfg" />

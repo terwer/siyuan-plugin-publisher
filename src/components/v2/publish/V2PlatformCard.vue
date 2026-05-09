@@ -3,19 +3,27 @@
     class="syp-platform-card"
     :class="{ 'is-disabled': !isAuthorized, 'is-processing': isProcessing }"
     :aria-disabled="!isAuthorized"
-    :title="!isAuthorized ? tooltipText : ''"
   >
     <div class="syp-platform-card__icon">
       <span v-if="platformIcon" v-html="platformIcon"></span>
       <span v-else class="syp-platform-card__fallback">{{ platformName.slice(0, 1) }}</span>
     </div>
     <div class="syp-platform-card__body">
-      <div class="syp-platform-card__name">{{ platformName }}</div>
-
+      <SypTooltip
+        :content="platformName"
+        ellipsis
+        block
+        trigger-class="syp-platform-card__name"
+      />
       <div v-if="!isAuthorized" class="syp-platform-card__meta-row">
-        <span class="syp-platform-card__status is-disabled">
+        <SypTooltip
+          tag="span"
+          :content="tooltipText"
+          inline-flex
+          trigger-class="syp-platform-card__status is-disabled"
+        >
           {{ t("v2.card.status.unauthorized") }}
-        </span>
+        </SypTooltip>
         <button
           type="button"
           class="syp-platform-card__action syp-platform-card__action--primary"
@@ -82,6 +90,7 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, watch } from "vue"
 import SypConfirmBar from "~/src/components/v2/common/SypConfirmBar.vue"
+import SypTooltip from "~/src/components/v2/common/SypTooltip.vue"
 import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
 
 const props = defineProps<{
@@ -188,11 +197,13 @@ const primaryLabel = computed(() => {
 
 .syp-platform-card__body
   min-width 0
+  flex 1
   display flex
   flex-direction column
   gap 4px
 
 .syp-platform-card__name
+  max-width 180px
   font-size $syp-sm-name-size
   font-weight 600
   color $syp-text-primary

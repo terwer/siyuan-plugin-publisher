@@ -31,7 +31,6 @@ export const useV2QuickPublish = () => {
   const { t } = useV2I18n()
   const { doSinglePublish, doSingleDelete, initPublishMethods, getPostPreviewUrl } = usePublish()
   const { getPublishCfg, getPublishApi } = usePublishConfig()
-
   const state = reactive({
     isLoading: true,
     pageId: "",

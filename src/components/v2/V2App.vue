@@ -17,33 +17,45 @@
           <div class="syp-header-title">{{ panelTitle }}</div>
         </div>
         <div class="syp-header-actions">
-          <button
+          <SypTooltip
             v-if="!isSettingsView"
+            :content="t('v2.app.action.openSettings')"
+            ellipsis
+            inline-flex
+            tag="button"
             class="syp-btn syp-btn-quiet"
-            @click.stop="openSettings"
-            :title="t('v2.app.action.openSettings')"
+            type="button"
             :aria-label="t('v2.app.action.openSettings')"
+            @click.stop="openSettings"
           >
             <LucideSettings />
-          </button>
-          <button
+          </SypTooltip>
+          <SypTooltip
             v-else
+            :content="settingsBackTitle"
+            ellipsis
+            inline-flex
+            tag="button"
             class="syp-btn syp-btn-back"
-            @click.stop="handleSettingsBack"
-            :title="settingsBackTitle"
+            type="button"
             :aria-label="settingsBackTitle"
+            @click.stop="handleSettingsBack"
           >
             <LucideChevronLeft />
             <span class="syp-btn-back__label">{{ settingsBackTitle }}</span>
-          </button>
-          <button
+          </SypTooltip>
+          <SypTooltip
+            :content="t('v2.app.action.close')"
+            ellipsis
+            inline-flex
+            tag="button"
             class="syp-btn syp-btn-text"
-            @click.stop="close"
-            :title="t('v2.app.action.close')"
+            type="button"
             :aria-label="t('v2.app.action.close')"
+            @click.stop="close"
           >
             <LucideX />
-          </button>
+          </SypTooltip>
         </div>
       </div>
 
@@ -155,6 +167,7 @@
 import { ElMessage } from "element-plus"
 import { computed, onMounted, ref } from "vue"
 import "~/src/assets/v2/base.styl"
+import SypTooltip from "~/src/components/v2/common/SypTooltip.vue"
 import UnifiedWorkspaceShell from "~/src/components/v2/layout/UnifiedWorkspaceShell.vue"
 import V2PlatformCard from "~/src/components/v2/publish/V2PlatformCard.vue"
 import V2AccountList from "~/src/components/v2/settings/V2AccountList.vue"
@@ -427,6 +440,12 @@ async function retryInit() {
 .syp-header-chip__icon
   width 14px
   height 14px
+
+.syp-header-actions
+  display flex
+  align-items center
+  gap 6px
+  flex-shrink 0
 
 .syp-btn-quiet
   min-width 28px

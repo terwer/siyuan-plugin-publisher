@@ -25,18 +25,28 @@
           </div>
           <div class="syp-account-item__info">
             <div class="syp-account-item__name-row">
-              <span class="syp-account-item__name">{{ item.platformName }}</span>
-              <span
-                class="syp-status-badge"
-                :class="`is-${item.statusType}`"
-                :title="item.statusText"
+              <SypTooltip
+                :content="item.platformName"
+                ellipsis
+                inline-flex
+                trigger-class="syp-account-item__name"
+              />
+              <SypTooltip
+                tag="span"
+                :content="item.statusText"
+                inline-flex
+                :trigger-class="`syp-status-badge is-${item.statusType}`"
               >
                 <span class="syp-status-badge__dot"></span>
                 {{ item.statusLabel }}
-              </span>
+              </SypTooltip>
             </div>
-            <div class="syp-account-item__key">{{ item.platformKey }}</div>
-            <div class="syp-account-item__summary">{{ item.statusText }}</div>
+            <SypTooltip
+              :content="item.platformKey"
+              ellipsis
+              block
+              trigger-class="syp-account-item__key"
+            />
           </div>
         </div>
 
@@ -54,7 +64,12 @@
             <span class="syp-account-item__toggle-label">
               {{ item.isEnabled ? t("v2.account.toggle.enabled") : t("v2.account.toggle.disabled") }}
             </span>
-            <label class="syp-toggle" :title="item.isEnabled ? t('v2.account.toggle.disableHint') : t('v2.account.toggle.enableHint')">
+            <SypTooltip
+              tag="label"
+              :content="item.isEnabled ? t('v2.account.toggle.disableHint') : t('v2.account.toggle.enableHint')"
+              inline-flex
+              trigger-class="syp-toggle"
+            >
               <input
                 type="checkbox"
                 :checked="item.isEnabled"
@@ -62,17 +77,19 @@
                 @change="handleToggle(item.platformKey, $event)"
               />
               <span class="syp-toggle-slider"></span>
-            </label>
+            </SypTooltip>
           </div>
 
-          <button
+          <SypTooltip
+            tag="button"
+            :content="t('v2.account.action.delete')"
+            inline-flex
             type="button"
             class="syp-btn syp-btn-text is-danger"
-            :title="t('v2.account.action.delete')"
             @click="handleDelete(item.platformKey)"
           >
             {{ t("v2.account.action.delete") }}
-          </button>
+          </SypTooltip>
         </div>
       </article>
     </div>
@@ -80,9 +97,10 @@
 </template>
 
 <script setup lang="ts">
-import { ElMessageBox } from "element-plus";
-import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts";
-import type { V2AccountItem } from "~/src/composables/v2/useV2Settings.ts";
+import { ElMessageBox } from "element-plus"
+import SypTooltip from "~/src/components/v2/common/SypTooltip.vue"
+import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
+import type { V2AccountItem } from "~/src/composables/v2/useV2Settings.ts"
 
 const props = defineProps<{
   items: V2AccountItem[]
@@ -177,20 +195,17 @@ async function handleDelete(platformKey: string) {
   flex-wrap wrap
 
 .syp-account-item__name
+  max-width 180px
   font-size $syp-sm-name-size
   font-weight 600
   color $syp-text-primary
 
 .syp-account-item__key
+  max-width 240px
   margin-top 2px
   font-size 11px
   color $syp-text-tertiary
   font-family monospace
-
-.syp-account-item__summary
-  margin-top 3px
-  font-size 12px
-  color $syp-text-secondary
 
 .syp-status-badge
   display inline-flex

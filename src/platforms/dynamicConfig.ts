@@ -41,6 +41,25 @@ export class DynamicConfig {
   platformIcon?: string
 
   /**
+   * 平台描述，用于平台选择、账号列表、配置决策等需要理解平台用途的入口。
+   *
+   * 运行时可由 i18n.description 翻译得到；已保存的历史配置也可能直接携带该字段。
+   *
+   * @since 1.41.1+
+   */
+  description?: string
+
+  /**
+   * 平台展示字段的国际化 key 映射。
+   *
+   * key 是目标字段名，例如 description / platformName / tooltip；value 是 i18n key。
+   * 预置数据只维护 i18n key，显示层统一本地化到对应目标字段。
+   *
+   * @since 1.41.1+
+   */
+  i18n?: Record<string, string>
+
+  /**
    * 是否授权
    */
   isEnabled: boolean
@@ -93,7 +112,9 @@ export class DynamicConfig {
     platformKey: string,
     platformName: string,
     subPlatformType?: SubPlatformType,
-    platformIcon?: string
+    platformIcon?: string,
+    description?: string,
+    i18n?: Record<string, string>
   ) {
     this.platformType = platformType
     this.platformKey = platformKey
@@ -109,6 +130,8 @@ export class DynamicConfig {
 
     this.subPlatformType = subPlatformType
     this.platformIcon = platformIcon
+    this.description = description
+    this.i18n = i18n
   }
 }
 

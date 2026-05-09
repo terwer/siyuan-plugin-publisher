@@ -27,7 +27,12 @@
               <span v-else-if="saveStateMap[item.key] === 'failed'" class="syp-settings-status-text is-error">{{ t("v2.common.saveFailed") }}</span>
               <span v-else-if="saveStateMap[item.key] === 'saving'" class="syp-settings-status-text is-saving">{{ t("v2.common.saving") }}</span>
               <span v-else class="syp-settings-status-text">{{ getBooleanValue(item.key) ? t("v2.common.enabled") : t("v2.common.disabled") }}</span>
-              <label class="syp-toggle" :title="getBooleanValue(item.key) ? t('v2.preference.toggle.disableHint') : t('v2.preference.toggle.enableHint')">
+              <SypTooltip
+                tag="label"
+                :content="getBooleanValue(item.key) ? t('v2.preference.toggle.disableHint') : t('v2.preference.toggle.enableHint')"
+                inline-flex
+                trigger-class="syp-toggle"
+              >
                 <input
                   type="checkbox"
                   :checked="getBooleanValue(item.key)"
@@ -35,7 +40,7 @@
                   @change="handleToggle(item.key, $event)"
                 />
                 <span class="syp-toggle-slider"></span>
-              </label>
+              </SypTooltip>
             </div>
           </div>
         </div>
@@ -50,6 +55,7 @@ import { WarnTriangleFilled } from "@element-plus/icons-vue"
 import { ElMessageBox } from "element-plus"
 import { computed, markRaw, reactive } from "vue"
 import { StrUtil } from "zhi-common"
+import SypTooltip from "~/src/components/v2/common/SypTooltip.vue"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
 import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"

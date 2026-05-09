@@ -1,7 +1,7 @@
 import { computed, reactive } from "vue"
 import { JsonUtil } from "zhi-common"
 import { SUPPORTED_V2_BRIDGE_SUBTYPES } from "~/src/components/v2/settings/bridge/bridgeRegistry.ts"
-import { usePlatformDefine } from "~/src/composables/usePlatformDefine.ts"
+import { resolvePrePlatformI18nField, usePlatformDefine } from "~/src/composables/usePlatformDefine.ts"
 import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
 import {
   deletePlatformByKey,
@@ -28,12 +28,14 @@ export interface V2AccountItem {
   statusText: string
   statusType: "success" | "warning" | "error" | "neutral"
   statusLabel: string
+  description: string
 }
 
 export interface V2SelectablePlatform {
   key: string
   platformKey: string
   platformName: string
+  description: string
   platformIcon?: string
   platformType: PlatformType
   subPlatformType: SubPlatformType
@@ -41,7 +43,7 @@ export interface V2SelectablePlatform {
 
 export const useV2Settings = () => {
   const { getSetting, updateSetting } = usePublishSettingStore()
-  const { getAllPrePlatformList, getPrePlatform } = usePlatformDefine()
+  const { getAllPrePlatformList, getPrePlatform, getPrePlatformByKeyOrSubtype } = usePlatformDefine()
   const { t } = useV2I18n()
 
   const state = reactive({
@@ -57,6 +59,27 @@ export const useV2Settings = () => {
     configMode: "create" as "create" | "edit",
     pendingConfigItem: null as DynamicConfig | null,
   })
+
+  const resolvePlatformDescription = (item: Pick<DynamicConfig, "description" | "i18n" | "platformKey" | "subPlatformType" | "platformName">, fallbackName?: string) => {
+    const translatedDescription = resolvePrePlatformI18nField(item, "description", t)
+    if (translatedDescription) {
+      return translatedDescription
+    }
+
+    const description = item.description?.trim()
+    if (description) {
+      return description
+    }
+
+    const preset = getPrePlatformByKeyOrSubtype(item.platformKey, item.subPlatformType)
+    const presetDescription = preset?.description?.trim()
+    if (presetDescription) {
+      return presetDescription
+    }
+
+    const platformName = fallbackName || item.platformName || item.platformKey
+    return t("v2.platformSelect.platformDesc.fallback", { name: platformName })
+  }
 
   const selectablePlatforms = computed<V2SelectablePlatform[]>(() => {
     const isElectron = EnvUtil.isSiyuanElectron()
@@ -81,15 +104,20 @@ export const useV2Settings = () => {
 
         return true
       })
-      .map((platform) => ({
-        key: platform.platformKey,
-        platformKey: platform.platformKey,
-        platformName:
-          platform.subPlatformType === SubPlatformType.Metaweblog_Cnblogs ? t("v2.platform.cnblogs") : platform.platformName,
-        platformIcon: platform.platformIcon,
-        platformType: platform.platformType,
-        subPlatformType: platform.subPlatformType as SubPlatformType,
-      }))
+      .map((platform) => {
+        const platformName =
+          platform.subPlatformType === SubPlatformType.Metaweblog_Cnblogs ? t("v2.platform.cnblogs") : platform.platformName
+
+        return {
+          key: platform.platformKey,
+          platformKey: platform.platformKey,
+          platformName,
+          description: resolvePlatformDescription(platform, platformName),
+          platformIcon: platform.platformIcon,
+          platformType: platform.platformType,
+          subPlatformType: platform.subPlatformType as SubPlatformType,
+        }
+      })
   })
 
   const loadAccountItems = async () => {
@@ -129,6 +157,7 @@ export const useV2Settings = () => {
           platformKey: item.platformKey,
           platformName: item.platformName,
           platformIcon: item.platformIcon,
+          description: resolvePlatformDescription(item),
           isEnabled,
           isAuth,
           statusText,

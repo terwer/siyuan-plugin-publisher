@@ -18,6 +18,7 @@
             :key="item.key"
             type="button"
             class="syp-platform-select-item"
+            :aria-label="`${item.platformName}，${item.description}`"
             @click="$emit('select', item)"
           >
             <div class="syp-platform-select-item__icon">
@@ -25,8 +26,18 @@
               <span v-else>{{ item.platformName.slice(0, 1) }}</span>
             </div>
             <div class="syp-platform-select-item__info">
-              <div class="syp-platform-select-item__name">{{ item.platformName }}</div>
-              <div class="syp-platform-select-item__desc">{{ t("v2.platformSelect.itemDesc") }}</div>
+              <SypTooltip
+                :content="item.platformName"
+                ellipsis
+                block
+                trigger-class="syp-platform-select-item__name"
+              />
+              <SypTooltip
+                :content="item.description"
+                ellipsis
+                block
+                trigger-class="syp-platform-select-item__desc"
+              />
             </div>
           </button>
         </div>
@@ -36,24 +47,18 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
-import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts";
-import type { V2SelectablePlatform } from "~/src/composables/v2/useV2Settings.ts";
-import { PlatformType } from "~/src/platforms/dynamicConfig.ts";
+import { computed } from "vue"
+import SypTooltip from "~/src/components/v2/common/SypTooltip.vue"
+import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
+import type { V2SelectablePlatform } from "~/src/composables/v2/useV2Settings.ts"
+import { V2_PLATFORM_SELECT_GROUP_DEFS } from "~/src/components/v2/settings/v2PlatformSelectGroups.ts"
 
 const props = defineProps<{
   items: V2SelectablePlatform[]
 }>()
 const { t } = useV2I18n()
 
-const groupDefs: Array<{ key: PlatformType; labelKey: string }> = [
-  { key: PlatformType.Common, labelKey: "setting.platform.universal" },
-  { key: PlatformType.Github, labelKey: "setting.platform.github" },
-  { key: PlatformType.Gitlab, labelKey: "setting.platform.gitlab" },
-  { key: PlatformType.Metaweblog, labelKey: "setting.platform.metaweblog" },
-  { key: PlatformType.Wordpress, labelKey: "setting.platform.wordpress" },
-  { key: PlatformType.Fs, labelKey: "setting.platform.fs" },
-]
+const groupDefs = V2_PLATFORM_SELECT_GROUP_DEFS
 
 const groupedItems = computed(() => {
   return groupDefs
@@ -130,6 +135,7 @@ defineEmits<{
 
 .syp-platform-select-item__info
   min-width 0
+  flex 1
 
 .syp-platform-select-item__name
   font-size $syp-sm-name-size
