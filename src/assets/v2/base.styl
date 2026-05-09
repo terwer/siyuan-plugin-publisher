@@ -430,3 +430,76 @@
 
     .syp-settings-detail-grid
       grid-template-columns 1fr
+
+
+// V2 统一确认弹窗（Element Plus MessageBox 包装）
+.syp-v2-message-box
+  width 360px
+  max-width calc(100vw - 48px)
+  padding 0
+  border-radius 12px
+  border 1px solid rgba(222, 224, 227, 0.95)
+  box-shadow 0 16px 48px rgba(15, 23, 42, 0.18)
+  overflow hidden
+
+  .el-message-box__header
+    padding 14px 16px 8px
+
+  .el-message-box__title
+    color #1f2329
+    font-size 15px
+    font-weight 700
+    line-height 1.35
+
+  .el-message-box__headerbtn
+    top 10px
+    right 10px
+    width 28px
+    height 28px
+    border-radius 8px
+
+    &:hover
+      background #f2f3f5
+
+  .el-message-box__content
+    padding 4px 16px 12px
+    color #4e5969
+    font-size 13px
+    line-height 1.55
+
+  .el-message-box__status
+    font-size 18px !important
+
+  .el-message-box__btns
+    padding 10px 16px 14px
+    display flex
+    justify-content flex-end
+    gap 8px
+
+    .el-button
+      min-height 28px
+      padding 0 12px
+      border-radius 8px
+      font-size 12px
+      font-weight 600
+      margin-left 0
+
+    .el-button--primary
+      background #4080ff
+      border-color #4080ff
+
+      &:hover
+        background #2f6ff0
+        border-color #2f6ff0
+
+    .syp-v2-message-box__confirm-danger.el-button--primary
+      background #d92d20
+      border-color #d92d20
+
+      &:hover
+        background #c6281d
+        border-color #c6281d
+
+.syp-v2-message-box-modal
+  background rgba(15, 23, 42, 0.18)
+  backdrop-filter blur(1px)

@@ -38,6 +38,15 @@ yuquewebCfg.placeholder = yuquewebPlaceholder
     <template #header>
       <el-alert :closable="false" :title="t('setting.yuqueweb.auth.tip')" class="top-tip" type="info" />
     </template>
+    <template #cookie-actions="cookieActions">
+      <slot
+        name="cookie-actions"
+        :cfg="cookieActions.cfg"
+        :dyn-cfg="cookieActions.dynCfg"
+        :setting="cookieActions.setting"
+        :dynamic-config-array="cookieActions.dynamicConfigArray"
+      />
+    </template>
   </custom-web-setting>
 </template>
 

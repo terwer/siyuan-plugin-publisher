@@ -400,6 +400,13 @@ onMounted(async () => {
         class="inline-tip"
         type="warning"
       />
+      <slot
+        name="cookie-actions"
+        :cfg="formData.cfg"
+        :dyn-cfg="formData.dynCfg"
+        :setting="formData.setting"
+        :dynamic-config-array="formData.dynamicConfigArray"
+      />
     </el-form-item>
     <slot name="main" :cfg="formData.cfg" />
     <!-- 预览地址 -->

@@ -51,10 +51,9 @@
 </template>
 
 <script setup lang="ts">
-import { WarnTriangleFilled } from "@element-plus/icons-vue"
-import { ElMessageBox } from "element-plus"
-import { computed, markRaw, reactive } from "vue"
+import { computed, reactive, ref } from "vue"
 import { StrUtil } from "zhi-common"
+import { sypConfirm } from "~/src/components/v2/common/SypMessageBox.ts"
 import SypTooltip from "~/src/components/v2/common/SypTooltip.vue"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
@@ -96,6 +95,7 @@ const { isInSiyuanWin, isInSiyuanWidget } = useSiyuanDevice()
 const preferenceForm = getPublishPreferenceSetting()
 
 const saveStateMap = reactive<Record<PreferenceKey, "idle" | "saving" | "saved" | "failed">>({} as any)
+const allowChangeSlugConfirming = ref(false)
 
 const isSiyuanPlugin = computed(() => {
   return isInSiyuanWin() || (isInSiyuanWidget() && StrUtil.isEmptyString(getSiyuanWidgetId()))
@@ -244,17 +244,22 @@ async function handleToggle(key: PreferenceKey, event: Event) {
 }
 
 async function confirmAllowChangeSlug() {
+  if (allowChangeSlugConfirming.value) {
+    return false
+  }
+
+  allowChangeSlugConfirming.value = true
   try {
-    const result = await ElMessageBox.confirm(t("preference.setting.allowChangeSlug.tips"), {
-      type: "error",
-      icon: markRaw(WarnTriangleFilled),
+    return await sypConfirm({
+      title: t("v2.preference.confirm.allowChangeSlug.title"),
+      message: t("preference.setting.allowChangeSlug.tips"),
+      type: "warning",
       confirmButtonText: t("main.opt.ok"),
       cancelButtonText: t("main.opt.cancel"),
-    } as any)
-
-    return result === "confirm"
-  } catch {
-    return false
+      confirmButtonClass: "syp-v2-message-box__confirm-danger",
+    })
+  } finally {
+    allowChangeSlugConfirming.value = false
   }
 }
 </script>

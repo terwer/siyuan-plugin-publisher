@@ -151,6 +151,7 @@
           v-else-if="settings.state.section === 'account' && settings.state.accountView === 'config'"
           :platform-key="settings.state.selectedPlatformKey"
           :platform-name="settings.state.selectedPlatformName"
+          @cookie-authorized="handleCookieAuthorized"
         />
 
         <V2PicBedSettings v-else-if="settings.state.section === 'picbed'" />
@@ -393,6 +394,11 @@ async function handleDeleteAccount(platformKey: string) {
   } catch (error) {
     ElMessage.error(error instanceof Error ? error.message : t("main.opt.failure"))
   }
+}
+
+async function handleCookieAuthorized(result: { ok: boolean }) {
+  await settings.loadAccountItems()
+  await quickPublish.init()
 }
 
 async function retryInit() {

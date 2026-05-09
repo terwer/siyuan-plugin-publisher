@@ -124,4 +124,92 @@ describe("CommonBlogSetting Cookie field", () => {
     expect(wrapper.text()).toContain(zhCN["setting.blog.cookie.editable.tip"])
     expect(wrapper.find(".alert-stub").attributes("data-type")).toBe("warning")
   })
+
+  it("exposes a cookie-actions slot near the editable Cookie field without rendering V2 UI by default", async () => {
+    mockGetSetting.mockResolvedValue({})
+    mockUpdateSetting.mockResolvedValue(undefined)
+
+    const mountOptions = {
+      props: {
+        apiType: "custom_Yuqueweb",
+        cfg: {
+          homeEnabled: false,
+          apiUrlEnabled: false,
+          usernameEnabled: false,
+          passwordType: PasswordType.PasswordType_Cookie,
+          password: "",
+          placeholder: {},
+          previewUrlEnabled: false,
+          knowledgeSpaceEnabled: false,
+          picgoPicbedSupported: false,
+          bundledPicbedSupported: false,
+          apiStatus: false,
+        },
+      },
+      global: {
+        plugins: [
+          createI18n({
+            legacy: false,
+            locale: "zh_CN",
+            messages: {
+              zh_CN: zhCN,
+            },
+          }),
+        ],
+        stubs: {
+          "el-skeleton": { template: "<div class='skeleton-stub' />" },
+          "el-form": { template: "<form><slot /></form>" },
+          "el-form-item": { template: "<div class='form-item'><slot /></div>" },
+          "el-input": {
+            props: ["modelValue", "placeholder", "type", "rows", "disabled"],
+            emits: ["update:modelValue"],
+            template: `
+              <textarea
+                v-if="type === 'textarea'"
+                class="input-stub textarea-stub"
+                :disabled="disabled"
+                :placeholder="placeholder"
+                :rows="rows"
+                :value="modelValue"
+                @input="$emit('update:modelValue', $event.target.value)"
+              />
+              <input
+                v-else
+                class="input-stub"
+                :disabled="disabled"
+                :placeholder="placeholder"
+                :value="modelValue"
+                @input="$emit('update:modelValue', $event.target.value)"
+              />
+            `,
+          },
+          "el-alert": {
+            props: ["title", "type"],
+            template: '<div class="alert-stub" :data-type="type">{{ title }}</div>',
+          },
+          "el-radio-group": { template: "<div><slot /></div>" },
+          "el-radio": { template: "<label><slot /></label>" },
+          "el-select": { template: "<select><slot /></select>" },
+          "el-option": { template: "<option />" },
+          "el-button": { template: "<button type='button'><slot /></button>" },
+        },
+      },
+    }
+
+    const plainWrapper = mount(CommonBlogSetting, mountOptions)
+    await flushPromises()
+    expect(plainWrapper.find(".cookie-actions-slot").exists()).toBe(false)
+
+    const slotWrapper = mount(CommonBlogSetting, {
+      ...mountOptions,
+      slots: {
+        "cookie-actions": `<div class="cookie-actions-slot">Cookie actions slot</div>`,
+      },
+    })
+    await flushPromises()
+
+    expect(slotWrapper.find("textarea.textarea-stub").exists()).toBe(true)
+    expect(slotWrapper.find(".cookie-actions-slot").exists()).toBe(true)
+    expect(slotWrapper.text()).toContain("Cookie actions slot")
+  })
 })

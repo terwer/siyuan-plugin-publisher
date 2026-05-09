@@ -97,7 +97,7 @@
 </template>
 
 <script setup lang="ts">
-import { ElMessageBox } from "element-plus"
+import { sypConfirm } from "~/src/components/v2/common/SypMessageBox.ts"
 import SypTooltip from "~/src/components/v2/common/SypTooltip.vue"
 import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
 import type { V2AccountItem } from "~/src/composables/v2/useV2Settings.ts"
@@ -122,17 +122,17 @@ function handleToggle(platformKey: string, event: Event) {
 async function handleDelete(platformKey: string) {
   const item = props.items.find((candidate) => candidate.platformKey === platformKey)
   const platformName = item?.platformName || platformKey
+  const confirmed = await sypConfirm({
+    title: t("v2.account.action.deleteConfirmTitle"),
+    message: t("v2.account.action.deleteConfirmText", { name: platformName }),
+    type: "warning",
+    confirmButtonText: t("main.opt.ok"),
+    cancelButtonText: t("main.opt.cancel"),
+    confirmButtonClass: "syp-v2-message-box__confirm-danger",
+  })
 
-  try {
-    await ElMessageBox.confirm(t("v2.account.action.deleteConfirmText", { name: platformName }), {
-      title: t("v2.account.action.deleteConfirmTitle"),
-      type: "warning",
-      confirmButtonText: t("main.opt.ok"),
-      cancelButtonText: t("main.opt.cancel"),
-    } as any)
+  if (confirmed) {
     emit("delete", platformKey)
-  } catch {
-    // noop
   }
 }
 </script>
@@ -207,44 +207,58 @@ async function handleDelete(platformKey: string) {
   color $syp-text-tertiary
   font-family monospace
 
-.syp-status-badge
+:deep(.syp-status-badge)
   display inline-flex
   align-items center
-  gap 3px
-  padding $syp-sm-badge-padding
+  justify-content center
+  gap 4px
+  min-height 20px
+  padding 2px 8px
   font-size $syp-sm-badge-font
-  font-weight 500
+  font-weight 700
+  line-height 16px
   border-radius 999px
   white-space nowrap
+  border 1px solid transparent
+  box-shadow inset 0 0 0 1px rgba(255, 255, 255, 0.46)
 
-  &__dot
-    width 6px
-    height 6px
-    border-radius 50%
+:deep(.syp-status-badge__dot)
+  width 6px
+  height 6px
+  border-radius 50%
+  box-shadow 0 0 0 2px rgba(255, 255, 255, 0.7)
 
-  &.is-success
-    background #e8ffea
-    color #00b42a
-    .syp-status-badge__dot
-      background #00b42a
+:deep(.syp-status-badge.is-success)
+  background #e8ffea
+  border-color #a9efb2
+  color #008a22 !important
 
-  &.is-warning
-    background #fff7e8
-    color #ff7d00
-    .syp-status-badge__dot
-      background #ff7d00
+:deep(.syp-status-badge.is-success .syp-status-badge__dot)
+  background #00b42a
 
-  &.is-error
-    background #ffece8
-    color #f53f3f
-    .syp-status-badge__dot
-      background #f53f3f
+:deep(.syp-status-badge.is-warning)
+  background #fff7e8
+  border-color #ffd59a
+  color #d25f00 !important
 
-  &.is-neutral
-    background #f2f3f5
-    color #86909c
-    .syp-status-badge__dot
-      background #86909c
+:deep(.syp-status-badge.is-warning .syp-status-badge__dot)
+  background #ff7d00
+
+:deep(.syp-status-badge.is-error)
+  background #ffece8
+  border-color #ffb8ad
+  color #cf2a2a !important
+
+:deep(.syp-status-badge.is-error .syp-status-badge__dot)
+  background #f53f3f
+
+:deep(.syp-status-badge.is-neutral)
+  background #f2f3f5
+  border-color #d9dde4
+  color #5f6b7a !important
+
+:deep(.syp-status-badge.is-neutral .syp-status-badge__dot)
+  background #86909c
 
 .syp-account-item__actions
   display flex
@@ -253,6 +267,7 @@ async function handleDelete(platformKey: string) {
   flex-wrap wrap
   gap 6px
   flex-shrink 0
+
 
 .syp-account-item__toggle
   display flex

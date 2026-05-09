@@ -1,0 +1,208 @@
+/*
+ *            GNU GENERAL PUBLIC LICENSE
+ *               Version 3, 29 June 2007
+ *
+ *  Copyright (C) 2026 Terwer, Inc. <https://terwer.space/>
+ *  Everyone is permitted to copy and distribute verbatim copies
+ *  of this license document, but changing it is not allowed.
+ */
+
+import { describe, expect, it, vi } from "vitest"
+import { PasswordType } from "zhi-blog-api"
+import { authorizeWebCookie } from "~/src/composables/useWebCookieAuthorization.ts"
+import { AuthMode, PlatformType, setDynamicJsonCfg, SubPlatformType, type DynamicConfig } from "~/src/platforms/dynamicConfig.ts"
+import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
+
+const createDynCfg = (overrides: Partial<DynamicConfig> = {}) =>
+  ({
+    platformType: PlatformType.Custom,
+    subPlatformType: SubPlatformType.Custom_Yuqueweb,
+    platformKey: "custom_Yuqueweb-test",
+    platformName: "语雀网页版",
+    authMode: AuthMode.WEBSITE,
+    authUrl: "https://www.yuque.com/login",
+    domain: "www.yuque.com",
+    isEnabled: true,
+    isAuth: false,
+    isSys: false,
+    ...overrides,
+  }) as DynamicConfig
+
+const createCfg = (overrides: Record<string, any> = {}) =>
+  ({
+    passwordType: PasswordType.PasswordType_Cookie,
+    password: "",
+    metadata: {},
+    apiStatus: false,
+    ...overrides,
+  }) as any
+
+const createCookie = (name: string, value: string) =>
+  ({
+    name,
+    value,
+    domain: ".yuque.com",
+    hostOnly: false,
+    path: "/",
+    secure: true,
+    httpOnly: true,
+    session: false,
+    expirationDate: 9999999999,
+    sameSite: "no_restriction",
+  }) as any
+
+describe("authorizeWebCookie", () => {
+  it("reads Cookie, builds it with platform api, validates metadata, and persists auth state", async () => {
+    const dynCfg = createDynCfg()
+    const cfg = createCfg()
+    const setting: Record<string, any> = {
+      [DYNAMIC_CONFIG_KEY]: setDynamicJsonCfg([dynCfg]),
+      [dynCfg.platformKey]: { keepMe: "keep", password: "old" },
+    }
+    const updateSetting = vi.fn().mockResolvedValue(undefined)
+    const buildCookie = vi.fn().mockResolvedValue("yuque_session=***;ctoken=***")
+    const updateCfg = vi.fn()
+    const getMetaData = vi.fn().mockResolvedValue({ flag: true, displayName: "Terwer" })
+    const onCookieChange = vi.fn()
+
+    const result = await authorizeWebCookie(
+      {
+        platformKey: dynCfg.platformKey,
+        currentCfg: cfg,
+        dynCfg,
+        setting,
+        dynamicConfigArray: [dynCfg],
+        onCookieChange,
+      },
+      {
+        getSetting: vi.fn(),
+        updateSetting,
+        captureCookies: vi.fn().mockResolvedValue([createCookie("yuque_session", "secret-value")]),
+        getWebApi: vi.fn().mockResolvedValue({ buildCookie, updateCfg, getMetaData }),
+        isAutoCaptureSupported: () => true,
+      }
+    )
+
+    expect(result).toMatchObject({ status: "success", ok: true })
+    expect(buildCookie).toHaveBeenCalledWith([expect.objectContaining({ name: "yuque_session" })])
+    expect(updateCfg).toHaveBeenCalledWith(expect.objectContaining({ password: "yuque_session=***;ctoken=***" }))
+    expect(onCookieChange).toHaveBeenCalledWith("yuque_session=***;ctoken=***")
+    expect(setting[dynCfg.platformKey]).toMatchObject({
+      keepMe: "keep",
+      password: "yuque_session=***;ctoken=***",
+      metadata: { flag: true, displayName: "Terwer" },
+    })
+    expect(setting[DYNAMIC_CONFIG_KEY].totalCfg[0].isAuth).toBe(true)
+    expect(updateSetting).toHaveBeenCalledWith(setting)
+  })
+
+  it("does not authorize when no Cookie is captured", async () => {
+    const dynCfg = createDynCfg({ isAuth: true })
+    const setting: Record<string, any> = {
+      [DYNAMIC_CONFIG_KEY]: setDynamicJsonCfg([dynCfg]),
+      [dynCfg.platformKey]: { password: "manual-cookie" },
+    }
+    const updateSetting = vi.fn().mockResolvedValue(undefined)
+
+    const result = await authorizeWebCookie(
+      {
+        platformKey: dynCfg.platformKey,
+        currentCfg: createCfg({ password: "manual-cookie" }),
+        dynCfg,
+        setting,
+        dynamicConfigArray: [dynCfg],
+      },
+      {
+        getSetting: vi.fn(),
+        updateSetting,
+        captureCookies: vi.fn().mockResolvedValue([]),
+        isAutoCaptureSupported: () => true,
+      }
+    )
+
+    expect(result).toMatchObject({ status: "no_cookie", ok: false })
+    expect(setting[dynCfg.platformKey].password).toBe("manual-cookie")
+    expect(setting[DYNAMIC_CONFIG_KEY].totalCfg[0].isAuth).toBe(false)
+    expect(updateSetting).toHaveBeenCalledWith(setting)
+  })
+
+  it("keeps the captured Cookie editable but does not authorize when metadata validation fails", async () => {
+    const dynCfg = createDynCfg({ isAuth: true })
+    const cfg = createCfg({ password: "old" })
+    const setting: Record<string, any> = {
+      [DYNAMIC_CONFIG_KEY]: setDynamicJsonCfg([dynCfg]),
+      [dynCfg.platformKey]: { password: "old" },
+    }
+    const updateSetting = vi.fn().mockResolvedValue(undefined)
+    const onCookieChange = vi.fn()
+
+    const result = await authorizeWebCookie(
+      {
+        platformKey: dynCfg.platformKey,
+        currentCfg: cfg,
+        dynCfg,
+        setting,
+        dynamicConfigArray: [dynCfg],
+        onCookieChange,
+      },
+      {
+        getSetting: vi.fn(),
+        updateSetting,
+        captureCookies: vi.fn().mockResolvedValue([createCookie("yuque_session", "secret-value")]),
+        getWebApi: vi.fn().mockResolvedValue({
+          buildCookie: vi.fn().mockResolvedValue("yuque_session=secret-value"),
+          updateCfg: vi.fn(),
+          getMetaData: vi.fn().mockResolvedValue({ flag: false }),
+        }),
+        isAutoCaptureSupported: () => true,
+      }
+    )
+
+    expect(result).toMatchObject({ status: "validation_failed", ok: false, cookie: "yuque_session=secret-value" })
+    expect(cfg.password).toBe("yuque_session=secret-value")
+    expect(onCookieChange).toHaveBeenCalledWith("yuque_session=secret-value")
+    expect(setting[DYNAMIC_CONFIG_KEY].totalCfg[0].isAuth).toBe(false)
+    expect(setting[dynCfg.platformKey].password).toBe("old")
+  })
+
+  it("does not write raw Cookie values into logs", async () => {
+    const dynCfg = createDynCfg()
+    const setting: Record<string, any> = {
+      [DYNAMIC_CONFIG_KEY]: setDynamicJsonCfg([dynCfg]),
+      [dynCfg.platformKey]: {},
+    }
+    const log = {
+      info: vi.fn(),
+      warn: vi.fn(),
+      error: vi.fn(),
+      debug: vi.fn(),
+    }
+
+    await authorizeWebCookie(
+      {
+        platformKey: dynCfg.platformKey,
+        currentCfg: createCfg(),
+        dynCfg,
+        setting,
+        dynamicConfigArray: [dynCfg],
+      },
+      {
+        getSetting: vi.fn(),
+        updateSetting: vi.fn().mockResolvedValue(undefined),
+        captureCookies: vi.fn().mockResolvedValue([createCookie("ctoken", "raw-secret-token")]),
+        getWebApi: vi.fn().mockResolvedValue({
+          buildCookie: vi.fn().mockResolvedValue("ctoken=raw-secret-token"),
+          updateCfg: vi.fn(),
+          getMetaData: vi.fn().mockResolvedValue({ flag: true }),
+        }),
+        isAutoCaptureSupported: () => true,
+        log,
+      }
+    )
+
+    const serializedLogs = JSON.stringify(log.info.mock.calls)
+    expect(serializedLogs).not.toContain("raw-secret-token")
+    expect(serializedLogs).not.toContain("ctoken=raw-secret-token")
+    expect(serializedLogs).toContain("cookieCount")
+  })
+})

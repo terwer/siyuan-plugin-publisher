@@ -14,6 +14,7 @@ import { DynamicConfig } from "~/src/platforms/dynamicConfig.ts"
 import { MockBrowser } from "~/src/utils/MockBrowser.ts"
 import { extraPreCfg } from "~/src/platforms/pre.ts"
 import { sanitizeCookieArrayForLog } from "~/src/utils/sensitiveLogSanitizer.ts"
+import { EnvUtil } from "~/src/utils/EnvUtil.ts"
 
 const logger = createAppLogger("widget-utils")
 
@@ -37,11 +38,13 @@ export const openBrowserWindow = (
   dynCfg?: DynamicConfig,
   cookieCb?: any,
   extraScriptCb?: any,
-  isDevMode?: boolean
+  isDevMode?: boolean,
+  forceElectronWindow?: boolean
 ) => {
   const { isInSiyuanWidget } = useSiyuanDevice()
 
-  if (isInSiyuanWidget()) {
+  const shouldUseElectronWindow = isInSiyuanWidget() || (!!cookieCb && EnvUtil.isSiyuanElectron()) || (!!forceElectronWindow && EnvUtil.isSiyuanElectron())
+  if (shouldUseElectronWindow) {
     const isDev = isDevMode ?? false
     const isModel = false
     const isShow = !cookieCb
@@ -168,7 +171,7 @@ const doOpenBrowserWindow = (
     }
 
     const readCookies = async () => {
-      const extraScript = dynCfg.extraScript
+      const extraScript = dynCfg?.extraScript
       if (extraScript) {
         try {
           const result = await newWindow.webContents.executeJavaScript(extraScript)
@@ -203,6 +206,7 @@ const doOpenBrowserWindow = (
         await cookieCallback(dynCfg, domainCookies)
       } else {
         logger.info(`未读取到Cookie`)
+        await cookieCallback(dynCfg, [])
       }
     }
 

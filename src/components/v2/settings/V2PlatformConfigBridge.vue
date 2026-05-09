@@ -23,7 +23,18 @@
     <template v-else>
       <div v-if="bridgeComponent" class="syp-platform-bridge">
         <Suspense>
-          <component :is="bridgeComponent" :api-type="platformKey" />
+          <component :is="bridgeComponent" :api-type="platformKey">
+            <template #cookie-actions="cookieActions">
+              <V2WebCookieAuthPanel
+                :platform-key="platformKey"
+                :cfg="cookieActions.cfg"
+                :dyn-cfg="cookieActions.dynCfg"
+                :setting="cookieActions.setting"
+                :dynamic-config-array="cookieActions.dynamicConfigArray"
+                @authorized="handleCookieAuthorized"
+              />
+            </template>
+          </component>
           <template #fallback>
             <div class="syp-settings-empty">
               <div class="syp-settings-empty__title">{{ t("v2.platformConfig.mounting.title") }}</div>
@@ -46,6 +57,8 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, watch, type Component } from "vue"
 import { getV2BridgeComponent } from "~/src/components/v2/settings/bridge/bridgeRegistry.ts"
+import V2WebCookieAuthPanel from "~/src/components/v2/settings/V2WebCookieAuthPanel.vue"
+import type { WebCookieAuthorizationStatus } from "~/src/composables/useWebCookieAuthorization.ts"
 import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
 import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
 import { SubPlatformType } from "~/src/platforms/dynamicConfig.ts"
@@ -54,6 +67,10 @@ import { EnvUtil } from "~/src/utils/EnvUtil.ts"
 const props = defineProps<{
   platformKey: string
   platformName?: string
+}>()
+
+const emit = defineEmits<{
+  (event: "cookie-authorized", result: { status: WebCookieAuthorizationStatus; ok: boolean }): void
 }>()
 
 const { t } = useV2I18n()
@@ -105,6 +122,10 @@ async function loadBridgeMeta() {
   } finally {
     state.isLoading = false
   }
+}
+
+function handleCookieAuthorized(result: { status: WebCookieAuthorizationStatus; ok: boolean }) {
+  emit("cookie-authorized", result)
 }
 </script>
 
