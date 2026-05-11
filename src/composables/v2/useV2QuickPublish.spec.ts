@@ -187,4 +187,172 @@ describe("useV2QuickPublish", () => {
       tooltipText: "请选择知识库",
     })
   })
+
+  it("renders quick publish cards by persisted displayOrder", async () => {
+    let quickPublish!: ReturnType<typeof useV2QuickPublish>
+
+    const Harness = defineComponent({
+      setup() {
+        quickPublish = useV2QuickPublish()
+        return () => h("div")
+      },
+    })
+
+    const late = {
+      platformType: PlatformType.Common,
+      subPlatformType: SubPlatformType.Common_Yuque,
+      platformKey: "common_Late",
+      platformName: "靠后",
+      authMode: AuthMode.API,
+      isEnabled: true,
+      isAuth: true,
+      isSys: false,
+      displayOrder: 20,
+    } as DynamicConfig
+    const early = {
+      ...late,
+      platformKey: "common_Early",
+      platformName: "靠前",
+      displayOrder: 1,
+    } as DynamicConfig
+
+    const store = usePublishSettingStore()
+    store.getSetting = vi.fn().mockResolvedValue({
+      [DYNAMIC_CONFIG_KEY]: setDynamicJsonCfg([late, early]),
+      "20260509120000-test": {},
+    } as any)
+
+    mount(Harness, {
+      global: {
+        plugins: [
+          createI18n({
+            legacy: false,
+            locale: "zh_CN",
+            messages: { zh_CN: zhCN },
+          }),
+        ],
+      },
+    })
+
+    await quickPublish.init()
+
+    expect(quickPublish.state.platformItems.map((item) => item.platformKey)).toEqual(["common_Early", "common_Late"])
+  })
+
+  it("falls back to historical config order when displayOrder is missing", async () => {
+    let quickPublish!: ReturnType<typeof useV2QuickPublish>
+
+    const Harness = defineComponent({
+      setup() {
+        quickPublish = useV2QuickPublish()
+        return () => h("div")
+      },
+    })
+
+    const first = {
+      platformType: PlatformType.Common,
+      subPlatformType: SubPlatformType.Common_Yuque,
+      platformKey: "common_First",
+      platformName: "第一个",
+      authMode: AuthMode.API,
+      isEnabled: true,
+      isAuth: true,
+      isSys: false,
+    } as DynamicConfig
+    const second = {
+      ...first,
+      platformKey: "common_Second",
+      platformName: "第二个",
+    } as DynamicConfig
+
+    const store = usePublishSettingStore()
+    store.getSetting = vi.fn().mockResolvedValue({
+      [DYNAMIC_CONFIG_KEY]: setDynamicJsonCfg([first, second]),
+      "20260509120000-test": {},
+    } as any)
+
+    mount(Harness, {
+      global: {
+        plugins: [
+          createI18n({
+            legacy: false,
+            locale: "zh_CN",
+            messages: { zh_CN: zhCN },
+          }),
+        ],
+      },
+    })
+
+    await quickPublish.init()
+
+    expect(quickPublish.state.platformItems.map((item) => item.platformKey)).toEqual(["common_First", "common_Second"])
+  })
+
+  it("keeps blocked enabled platforms visible but behind publish-ready cards", async () => {
+    let quickPublish!: ReturnType<typeof useV2QuickPublish>
+
+    const Harness = defineComponent({
+      setup() {
+        quickPublish = useV2QuickPublish()
+        return () => h("div")
+      },
+    })
+
+    const blockedEarly = {
+      platformType: PlatformType.Custom,
+      subPlatformType: SubPlatformType.Custom_Yuqueweb,
+      platformKey: "custom_BlockedEarly",
+      platformName: "阻塞靠前",
+      authMode: AuthMode.WEBSITE,
+      isEnabled: true,
+      isAuth: true,
+      isSys: false,
+      displayOrder: 0,
+    } as DynamicConfig
+    const readyLate = {
+      ...blockedEarly,
+      platformType: PlatformType.Common,
+      subPlatformType: SubPlatformType.Common_Yuque,
+      platformKey: "common_ReadyLate",
+      platformName: "可发布靠后",
+      authMode: AuthMode.API,
+      displayOrder: 10,
+    } as DynamicConfig
+
+    mockValidatePlatformPublish.mockImplementation(async (platformKey: string) => {
+      if (platformKey === "custom_BlockedEarly") {
+        return { canPublish: false, reason: "请选择知识库" }
+      }
+      return { canPublish: true }
+    })
+
+    const store = usePublishSettingStore()
+    store.getSetting = vi.fn().mockResolvedValue({
+      [DYNAMIC_CONFIG_KEY]: setDynamicJsonCfg([blockedEarly, readyLate]),
+      "20260509120000-test": {},
+    } as any)
+
+    mount(Harness, {
+      global: {
+        plugins: [
+          createI18n({
+            legacy: false,
+            locale: "zh_CN",
+            messages: { zh_CN: zhCN },
+          }),
+        ],
+      },
+    })
+
+    await quickPublish.init()
+
+    expect(quickPublish.state.platformItems.map((item) => item.platformKey)).toEqual([
+      "common_ReadyLate",
+      "custom_BlockedEarly",
+    ])
+    expect(quickPublish.state.platformItems[1]).toMatchObject({
+      isAuthorized: false,
+      tooltipText: "请选择知识库",
+    })
+  })
 })

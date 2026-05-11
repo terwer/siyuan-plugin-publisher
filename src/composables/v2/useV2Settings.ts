@@ -1,6 +1,7 @@
 import { computed, reactive } from "vue"
 import { JsonUtil } from "zhi-common"
 import { SUPPORTED_V2_BRIDGE_SUBTYPES } from "~/src/components/v2/settings/bridge/bridgeRegistry.ts"
+import { assignDisplayOrders, getNextDisplayOrder, sortV2Accounts } from "~/src/composables/v2/platformOrdering.ts"
 import { resolvePrePlatformI18nField, usePlatformDefine } from "~/src/composables/usePlatformDefine.ts"
 import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
 import {
@@ -29,6 +30,7 @@ export interface V2AccountItem {
   statusType: "success" | "warning" | "error" | "neutral"
   statusLabel: string
   description: string
+  displayOrder?: number
 }
 
 export interface V2SelectablePlatform {
@@ -125,7 +127,7 @@ export const useV2Settings = () => {
     const dynJsonCfg = JsonUtil.safeParse<DynamicJsonCfg>(setting[DYNAMIC_CONFIG_KEY], {} as DynamicJsonCfg)
     const dynamicConfigArray = dynJsonCfg?.totalCfg || []
 
-    state.accountItems = dynamicConfigArray
+    const accountConfigs = dynamicConfigArray
       .filter((item) => item.platformType !== PlatformType.System)
       .map((item) => {
         const isEnabled = item.isEnabled === true
@@ -163,8 +165,11 @@ export const useV2Settings = () => {
           statusText,
           statusType,
           statusLabel,
+          displayOrder: item.displayOrder,
         }
       })
+
+    state.accountItems = sortV2Accounts(accountConfigs)
   }
 
   const setSection = async (section: V2SettingsSection) => {
@@ -237,6 +242,16 @@ export const useV2Settings = () => {
     await loadAccountItems()
   }
 
+  const reorderAccounts = async (orderedPlatformKeys: string[]) => {
+    const setting = await getSetting()
+    const dynJsonCfg = JsonUtil.safeParse<DynamicJsonCfg>(setting[DYNAMIC_CONFIG_KEY], {} as DynamicJsonCfg)
+    const dynamicConfigArray = dynJsonCfg?.totalCfg || []
+    const nextConfigArray = assignDisplayOrders(dynamicConfigArray, orderedPlatformKeys)
+    setting[DYNAMIC_CONFIG_KEY] = setDynamicJsonCfg(nextConfigArray)
+    await updateSetting(setting)
+    await loadAccountItems()
+  }
+
   const createAccountDraft = async (platform: V2SelectablePlatform) => {
     const setting = await getSetting()
     const dynJsonCfg = JsonUtil.safeParse<DynamicJsonCfg>(setting[DYNAMIC_CONFIG_KEY], {} as DynamicJsonCfg)
@@ -261,6 +276,7 @@ export const useV2Settings = () => {
     base.subPlatformType = platform.subPlatformType
     base.isEnabled = false
     base.isAuth = false
+    base.displayOrder = getNextDisplayOrder(dynamicConfigArray)
 
     dynamicConfigArray.push(base)
     setting[DYNAMIC_CONFIG_KEY] = setDynamicJsonCfg(dynamicConfigArray)
@@ -299,6 +315,7 @@ export const useV2Settings = () => {
     clearConfigReturnTarget,
     finishAccountConfig,
     toggleAccountEnabled,
+    reorderAccounts,
     createAccountDraft,
     phase4DeleteDraft,
   }

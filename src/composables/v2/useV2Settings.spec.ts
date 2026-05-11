@@ -38,7 +38,9 @@ describe("useV2Settings", () => {
     }
     const store = usePublishSettingStore()
     store.getSetting = vi.fn().mockResolvedValue(setting as any)
-    store.updateSetting = vi.fn().mockResolvedValue(undefined as any)
+    store.updateSetting = vi.fn().mockImplementation(async (nextSetting: any) => {
+      Object.assign(setting, nextSetting)
+    })
 
     mount(Harness, {
       global: {
@@ -56,11 +58,15 @@ describe("useV2Settings", () => {
     })
 
     await exposed!.loadAccountItems()
-    return exposed!
+    return {
+      settings: exposed!,
+      setting,
+      store,
+    }
   }
 
   it("builds selectable platforms from pre.ts i18n field mappings", async () => {
-    const settings = await mountHarness([])
+    const { settings } = await mountHarness([])
     const yuque = settings.selectablePlatforms.value.find((item) => item.platformKey === "common_Yuque")
     const preset = pre.commonCfg.find((item) => item.platformKey === "common_Yuque")!
 
@@ -81,7 +87,7 @@ describe("useV2Settings", () => {
       isSys: false,
     } as DynamicConfig
 
-    const settings = await mountHarness([legacyYuque])
+    const { settings } = await mountHarness([legacyYuque])
     const account = settings.state.accountItems[0]
 
     expect(account.description).toBe(zhCN[preset.i18n!.description])
@@ -101,7 +107,7 @@ describe("useV2Settings", () => {
       isSys: false,
     } as DynamicConfig
 
-    const settings = await mountHarness([legacyYuque])
+    const { settings } = await mountHarness([legacyYuque])
     const account = settings.state.accountItems[0]
 
     expect(account.description).toBe(zhCN["setting.platform.common.yuque.desc"])
@@ -120,7 +126,7 @@ describe("useV2Settings", () => {
       isSys: false,
     } as DynamicConfig
 
-    const settings = await mountHarness([legacyYuque])
+    const { settings } = await mountHarness([legacyYuque])
     await settings.openAccountConfig(legacyYuque.platformKey, legacyYuque.platformName, "quick_publish")
     expect(settings.state.accountView).toBe("config")
     expect(settings.getConfigReturnTarget()).toBe("quick_publish")
@@ -131,5 +137,146 @@ describe("useV2Settings", () => {
     expect(settings.getConfigReturnTarget()).toBeNull()
     expect(settings.state.pendingConfigItem).toBeNull()
     expect(settings.state.accountItems[0].platformKey).toBe(legacyYuque.platformKey)
+  })
+
+  it("sorts account items with enabled accounts first and displayOrder inside each group", async () => {
+    const disabledEarly = {
+      platformType: PlatformType.Common,
+      subPlatformType: SubPlatformType.Common_Yuque,
+      platformKey: "common_DisabledEarly",
+      platformName: "禁用靠前",
+      isEnabled: false,
+      isAuth: false,
+      displayOrder: 0,
+      authMode: pre.commonCfg[0].authMode,
+      isSys: false,
+    } as DynamicConfig
+    const enabledLate = {
+      ...disabledEarly,
+      platformKey: "common_EnabledLate",
+      platformName: "启用靠后",
+      isEnabled: true,
+      isAuth: true,
+      displayOrder: 20,
+    } as DynamicConfig
+    const enabledEarly = {
+      ...disabledEarly,
+      platformKey: "common_EnabledEarly",
+      platformName: "启用靠前",
+      isEnabled: true,
+      isAuth: true,
+      displayOrder: 5,
+    } as DynamicConfig
+
+    const { settings } = await mountHarness([disabledEarly, enabledLate, enabledEarly])
+
+    expect(settings.state.accountItems.map((item) => item.platformKey)).toEqual([
+      "common_EnabledEarly",
+      "common_EnabledLate",
+      "common_DisabledEarly",
+    ])
+  })
+
+  it("persists reordered displayOrder without changing auth or enablement fields", async () => {
+    const first = {
+      platformType: PlatformType.Common,
+      subPlatformType: SubPlatformType.Common_Yuque,
+      platformKey: "common_First",
+      platformName: "第一个",
+      isEnabled: true,
+      isAuth: true,
+      displayOrder: 0,
+      authMode: pre.commonCfg[0].authMode,
+      isSys: false,
+    } as DynamicConfig
+    const second = {
+      ...first,
+      platformKey: "common_Second",
+      platformName: "第二个",
+      isEnabled: false,
+      isAuth: false,
+      displayOrder: 1,
+    } as DynamicConfig
+
+    const { settings, setting, store } = await mountHarness([first, second])
+
+    await settings.reorderAccounts(["common_Second", "common_First"])
+
+    const stored = JSON.parse(JSON.stringify(setting[DYNAMIC_CONFIG_KEY])) as ReturnType<typeof setDynamicJsonCfg>
+    expect(stored.totalCfg.map((item) => [item.platformKey, item.displayOrder])).toEqual([
+      ["common_Second", 0],
+      ["common_First", 1],
+    ])
+    expect(stored.totalCfg.find((item) => item.platformKey === "common_First")?.isAuth).toBe(true)
+    expect(stored.totalCfg.find((item) => item.platformKey === "common_Second")?.isEnabled).toBe(false)
+    expect(store.updateSetting).toHaveBeenCalled()
+  })
+
+  it("keeps displayOrder when toggling enablement so the account moves by group only", async () => {
+    const enabled = {
+      platformType: PlatformType.Common,
+      subPlatformType: SubPlatformType.Common_Yuque,
+      platformKey: "common_Enabled",
+      platformName: "启用账号",
+      isEnabled: true,
+      isAuth: true,
+      displayOrder: 2,
+      authMode: pre.commonCfg[0].authMode,
+      isSys: false,
+    } as DynamicConfig
+    const disabled = {
+      ...enabled,
+      platformKey: "common_Disabled",
+      platformName: "禁用账号",
+      isEnabled: false,
+      isAuth: false,
+      displayOrder: 0,
+    } as DynamicConfig
+
+    const { settings, setting } = await mountHarness([enabled, disabled])
+
+    await settings.toggleAccountEnabled("common_Disabled", true)
+
+    const stored = setting[DYNAMIC_CONFIG_KEY].totalCfg as DynamicConfig[]
+    expect(stored.find((item) => item.platformKey === "common_Disabled")?.displayOrder).toBe(0)
+    expect(settings.state.accountItems.map((item) => item.platformKey)).toEqual([
+      "common_Disabled",
+      "common_Enabled",
+    ])
+  })
+
+  it("assigns a new account to the next displayOrder and removes deleted account order with the account", async () => {
+    const preset = pre.commonCfg.find((item) => item.platformKey === "common_Yuque")!
+    const existing = {
+      ...preset,
+      platformKey: preset.platformKey,
+      platformName: preset.platformName,
+      isEnabled: true,
+      isAuth: true,
+      displayOrder: 7,
+      isSys: false,
+    } as DynamicConfig
+
+    const { settings, setting } = await mountHarness([existing])
+
+    await settings.createAccountDraft({
+      key: preset.platformKey,
+      platformKey: preset.platformKey,
+      platformName: preset.platformName,
+      description: "",
+      platformIcon: preset.platformIcon,
+      platformType: preset.platformType,
+      subPlatformType: preset.subPlatformType!,
+    })
+
+    let stored = setting[DYNAMIC_CONFIG_KEY].totalCfg as DynamicConfig[]
+    const created = stored.find((item) => item.platformKey !== preset.platformKey)!
+    expect(created.displayOrder).toBe(8)
+    expect(created.isEnabled).toBe(false)
+
+    await settings.phase4DeleteDraft(created.platformKey)
+
+    stored = setting[DYNAMIC_CONFIG_KEY].totalCfg as DynamicConfig[]
+    expect(stored.map((item) => item.platformKey)).toEqual([preset.platformKey])
   })
 })

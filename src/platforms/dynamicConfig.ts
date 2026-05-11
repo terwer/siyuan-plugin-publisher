@@ -60,6 +60,15 @@ export class DynamicConfig {
   i18n?: Record<string, string>
 
   /**
+   * V2 展示排序，仅用于账号列表和快速发布的展示顺序。
+   *
+   * 数字越小越靠前；不代表发布执行顺序，也不影响授权、配置或发布校验。
+   *
+   * @since 1.41.1+
+   */
+  displayOrder?: number
+
+  /**
    * 是否授权
    */
   isEnabled: boolean

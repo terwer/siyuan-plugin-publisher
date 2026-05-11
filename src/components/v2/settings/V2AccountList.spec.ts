@@ -159,4 +159,107 @@ describe("V2AccountList", () => {
     expect(wrapper.emitted("delete")).toBeUndefined()
   })
 
+  it("emits the final platform order after keyboard reordering", async () => {
+    const wrapper = mount(V2AccountList, {
+      props: {
+        items: [
+          {
+            platformKey: "common_A",
+            platformName: "语雀 A",
+            platformIcon: "",
+            description: "",
+            isEnabled: true,
+            isAuth: true,
+            statusText: "已启用 · 已授权",
+            statusType: "success",
+            statusLabel: "运行中",
+          },
+          {
+            platformKey: "common_B",
+            platformName: "语雀 B",
+            platformIcon: "",
+            description: "",
+            isEnabled: true,
+            isAuth: true,
+            statusText: "已启用 · 已授权",
+            statusType: "success",
+            statusLabel: "运行中",
+          },
+        ],
+      },
+      global: {
+        plugins: [
+          createI18n({
+            legacy: false,
+            locale: "zh_CN",
+            messages: { zh_CN: zhCN },
+          }),
+        ],
+        stubs: {
+          SypTooltip: {
+            props: ["content", "triggerClass"],
+            template: '<button v-if="$attrs.type === `button`" type="button" :class="[$attrs.class, triggerClass]" :disabled="$attrs.disabled" @click="$emit(`click`, $event)"><slot>{{ content }}</slot></button><span v-else :class="triggerClass"><slot>{{ content }}</slot></span>',
+          },
+        },
+      },
+    })
+
+    const moveDownButtons = wrapper.findAll(".syp-account-item__order-button").filter((button) => button.text() === "↓")
+    await moveDownButtons[0].trigger("click")
+
+    expect(wrapper.emitted("reorder")?.[0]).toEqual([["common_B", "common_A"]])
+  })
+
+  it("emits the final platform order after drag and drop", async () => {
+    const wrapper = mount(V2AccountList, {
+      props: {
+        items: [
+          {
+            platformKey: "common_A",
+            platformName: "语雀 A",
+            platformIcon: "",
+            description: "",
+            isEnabled: true,
+            isAuth: true,
+            statusText: "已启用 · 已授权",
+            statusType: "success",
+            statusLabel: "运行中",
+          },
+          {
+            platformKey: "common_B",
+            platformName: "语雀 B",
+            platformIcon: "",
+            description: "",
+            isEnabled: true,
+            isAuth: true,
+            statusText: "已启用 · 已授权",
+            statusType: "success",
+            statusLabel: "运行中",
+          },
+        ],
+      },
+      global: {
+        plugins: [
+          createI18n({
+            legacy: false,
+            locale: "zh_CN",
+            messages: { zh_CN: zhCN },
+          }),
+        ],
+        stubs: {
+          SypTooltip: {
+            props: ["content", "triggerClass"],
+            template: '<button v-if="$attrs.type === `button`" type="button" :class="[$attrs.class, triggerClass]" draggable="true" @dragstart="$emit(`dragstart`, $event)" @click="$emit(`click`, $event)"><slot>{{ content }}</slot></button><span v-else :class="triggerClass"><slot>{{ content }}</slot></span>',
+          },
+        },
+      },
+    })
+
+    const handles = wrapper.findAll(".syp-account-item__drag-handle")
+    const rows = wrapper.findAll(".syp-account-item")
+    await handles[1].trigger("dragstart", { dataTransfer: { setData: vi.fn(), effectAllowed: "" } })
+    await rows[0].trigger("drop")
+
+    expect(wrapper.emitted("reorder")?.[0]).toEqual([["common_B", "common_A"]])
+  })
 })

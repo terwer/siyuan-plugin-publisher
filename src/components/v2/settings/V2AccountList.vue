@@ -17,7 +17,55 @@
     </div>
 
     <div v-else class="syp-account-list">
-      <article v-for="item in items" :key="item.platformKey" class="syp-account-item">
+      <article
+        v-for="(item, index) in orderedItems"
+        :key="item.platformKey"
+        class="syp-account-item"
+        :class="{ 'is-dragging': draggingPlatformKey === item.platformKey, 'is-drag-over': dragOverPlatformKey === item.platformKey }"
+        @dragover.prevent="handleDragOver(item.platformKey)"
+        @drop.prevent="handleDrop(item.platformKey)"
+        @dragend="handleDragEnd"
+      >
+        <div class="syp-account-item__order">
+          <SypTooltip
+            tag="button"
+            :content="t('v2.account.order.dragHandle')"
+            inline-flex
+            type="button"
+            class="syp-account-item__drag-handle"
+            draggable="true"
+            :aria-label="t('v2.account.order.dragHandle')"
+            @dragstart="handleDragStart(item.platformKey, $event)"
+          >
+            <span aria-hidden="true">⋮⋮</span>
+          </SypTooltip>
+          <div class="syp-account-item__order-buttons">
+            <SypTooltip
+              tag="button"
+              :content="t('v2.account.order.moveUp')"
+              inline-flex
+              type="button"
+              class="syp-account-item__order-button"
+              :disabled="index === 0"
+              :aria-label="t('v2.account.order.moveUp')"
+              @click="moveItem(item.platformKey, -1)"
+            >
+              ↑
+            </SypTooltip>
+            <SypTooltip
+              tag="button"
+              :content="t('v2.account.order.moveDown')"
+              inline-flex
+              type="button"
+              class="syp-account-item__order-button"
+              :disabled="index === orderedItems.length - 1"
+              :aria-label="t('v2.account.order.moveDown')"
+              @click="moveItem(item.platformKey, 1)"
+            >
+              ↓
+            </SypTooltip>
+          </div>
+        </div>
         <div class="syp-account-item__main">
           <div class="syp-account-item__icon">
             <span v-if="item.platformIcon" v-html="item.platformIcon"></span>
@@ -97,6 +145,7 @@
 </template>
 
 <script setup lang="ts">
+import { computed, ref, watch } from "vue"
 import { sypConfirm } from "~/src/components/v2/common/SypMessageBox.ts"
 import SypTooltip from "~/src/components/v2/common/SypTooltip.vue"
 import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
@@ -112,7 +161,29 @@ const emit = defineEmits<{
   (event: "configure", platformKey: string, platformName: string): void
   (event: "toggle", platformKey: string, nextEnabled: boolean): void
   (event: "delete", platformKey: string): void
+  (event: "reorder", orderedPlatformKeys: string[]): void
 }>()
+
+const localPlatformKeys = ref<string[]>([])
+const draggingPlatformKey = ref("")
+const dragOverPlatformKey = ref("")
+
+const orderedItems = computed(() => {
+  const itemMap = new Map(props.items.map((item) => [item.platformKey, item]))
+  const knownItems = localPlatformKeys.value.map((key) => itemMap.get(key)).filter(Boolean) as V2AccountItem[]
+  const knownKeySet = new Set(knownItems.map((item) => item.platformKey))
+  const newItems = props.items.filter((item) => !knownKeySet.has(item.platformKey))
+
+  return [...knownItems, ...newItems]
+})
+
+watch(
+  () => props.items.map((item) => item.platformKey).join("\u0000"),
+  () => {
+    localPlatformKeys.value = props.items.map((item) => item.platformKey)
+  },
+  { immediate: true }
+)
 
 function handleToggle(platformKey: string, event: Event) {
   const target = event.target as HTMLInputElement | null
@@ -134,6 +205,75 @@ async function handleDelete(platformKey: string) {
   if (confirmed) {
     emit("delete", platformKey)
   }
+}
+
+function moveKeyToDropTarget(keys: string[], sourceKey: string, targetKey: string) {
+  if (sourceKey === targetKey) {
+    return keys
+  }
+
+  const sourceIndex = keys.indexOf(sourceKey)
+  const targetIndex = keys.indexOf(targetKey)
+  if (sourceIndex < 0 || targetIndex < 0) {
+    return keys
+  }
+
+  const nextKeys = keys.filter((key) => key !== sourceKey)
+  const nextTargetIndex = nextKeys.indexOf(targetKey)
+  const insertIndex = sourceIndex < targetIndex ? nextTargetIndex + 1 : nextTargetIndex
+  nextKeys.splice(insertIndex, 0, sourceKey)
+  return nextKeys
+}
+
+function emitReorder(nextKeys = localPlatformKeys.value) {
+  localPlatformKeys.value = [...nextKeys]
+  emit("reorder", [...nextKeys])
+}
+
+function handleDragStart(platformKey: string, event: DragEvent) {
+  draggingPlatformKey.value = platformKey
+  dragOverPlatformKey.value = ""
+  event.dataTransfer?.setData("text/plain", platformKey)
+  if (event.dataTransfer) {
+    event.dataTransfer.effectAllowed = "move"
+  }
+}
+
+function handleDragOver(platformKey: string) {
+  if (!draggingPlatformKey.value || draggingPlatformKey.value === platformKey) {
+    return
+  }
+  dragOverPlatformKey.value = platformKey
+}
+
+function handleDrop(targetPlatformKey: string) {
+  const sourcePlatformKey = draggingPlatformKey.value
+  if (!sourcePlatformKey) {
+    return
+  }
+
+  const nextKeys = moveKeyToDropTarget(localPlatformKeys.value, sourcePlatformKey, targetPlatformKey)
+  draggingPlatformKey.value = ""
+  dragOverPlatformKey.value = ""
+  emitReorder(nextKeys)
+}
+
+function handleDragEnd() {
+  draggingPlatformKey.value = ""
+  dragOverPlatformKey.value = ""
+}
+
+function moveItem(platformKey: string, direction: -1 | 1) {
+  const currentIndex = localPlatformKeys.value.indexOf(platformKey)
+  const targetIndex = currentIndex + direction
+  if (currentIndex < 0 || targetIndex < 0 || targetIndex >= localPlatformKeys.value.length) {
+    return
+  }
+
+  const nextKeys = [...localPlatformKeys.value]
+  const [target] = nextKeys.splice(currentIndex, 1)
+  nextKeys.splice(targetIndex, 0, target)
+  emitReorder(nextKeys)
 }
 </script>
 
@@ -159,6 +299,64 @@ async function handleDelete(platformKey: string) {
   &:hover
     border-color #c8d6ea
     box-shadow $syp-shadow-card-hover
+
+  &.is-dragging
+    opacity 0.72
+
+  &.is-drag-over
+    border-color $syp-action-primary
+    box-shadow 0 0 0 2px rgba(64, 128, 255, 0.14)
+
+.syp-account-item__order
+  display flex
+  align-items center
+  gap 3px
+  flex-shrink 0
+
+:deep(.syp-account-item__drag-handle)
+  width 22px
+  height 32px
+  padding 0
+  border 0
+  border-radius 7px
+  background transparent
+  color #9aa4b2
+  cursor grab
+  font-size 13px
+  line-height 1
+  justify-content center
+
+  &:hover
+    background #eef3fb
+    color #4f6f9f
+
+  &:active
+    cursor grabbing
+
+.syp-account-item__order-buttons
+  display flex
+  flex-direction column
+  gap 2px
+
+:deep(.syp-account-item__order-button)
+  width 18px
+  height 15px
+  padding 0
+  border 0
+  border-radius 5px
+  background transparent
+  color #9aa4b2
+  font-size 10px
+  line-height 1
+  justify-content center
+
+  &:hover:not(:disabled)
+    background #eef3fb
+    color #4f6f9f
+
+  &:disabled
+    opacity 0.26
+    cursor not-allowed
 
 .syp-account-item__main
   display flex

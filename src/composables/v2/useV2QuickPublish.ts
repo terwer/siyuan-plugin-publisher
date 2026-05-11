@@ -5,6 +5,7 @@ import { usePublish } from "~/src/composables/usePublish.ts"
 import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
+import { sortV2QuickPublish } from "~/src/composables/v2/platformOrdering.ts"
 import { useV2PublishValidation } from "~/src/composables/v2/useV2PublishValidation.ts"
 import { DynamicConfig, DynamicJsonCfg, getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
@@ -19,6 +20,8 @@ export interface V2QuickPublishPlatformItem {
   isAuthorized: boolean
   isPublished: boolean
   tooltipText?: string
+  displayOrder?: number
+  isPublishReady?: boolean
 }
 
 type V2PublishStatus = "idle" | "preparing" | "publishing" | "success" | "success_with_warnings" | "failed" | "preview_ready"
@@ -135,10 +138,12 @@ export const useV2QuickPublish = () => {
           isAuthorized: isPublishReady,
           isPublished: isPublishReady && !StrUtil.isEmptyString(postMetaValue),
           tooltipText: isPublishReady ? "" : validation.reason || t("v2.publishValidation.incomplete"),
+          displayOrder: item.displayOrder,
+          isPublishReady,
         })
       }
 
-      state.platformItems = platformItems
+      state.platformItems = sortV2QuickPublish(platformItems)
 
       if (state.hasDocument) {
         try {

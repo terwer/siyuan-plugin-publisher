@@ -139,6 +139,7 @@
           @configure="settings.openAccountConfig"
           @toggle="handleToggleAccountEnabled"
           @delete="handleDeleteAccount"
+          @reorder="handleReorderAccounts"
         />
 
         <V2PlatformSelect
@@ -397,6 +398,16 @@ async function handleDeleteAccount(platformKey: string) {
     ElMessage.success(t("main.opt.success"))
   } catch (error) {
     ElMessage.error(error instanceof Error ? error.message : t("main.opt.failure"))
+  }
+}
+
+async function handleReorderAccounts(orderedPlatformKeys: string[]) {
+  try {
+    await settings.reorderAccounts(orderedPlatformKeys)
+    await quickPublish.init()
+  } catch (error) {
+    await settings.loadAccountItems()
+    ElMessage.error(error instanceof Error ? error.message : t("v2.account.order.saveFailed"))
   }
 }
 
