@@ -148,28 +148,37 @@ const usePublish = () => {
         const result = await api.editPost(postid, finalPost)
 
         // 写入属性到配置
-        // 这里更新 slug 的原因是历史文章有可能没有生成过别名
         const postMeta = ObjectUtil.getProperty(setting, id, {})
+        let shouldUpdateSetting = false
+
+        // 这里更新 slug 的原因是历史文章有可能没有生成过别名；如果用户在发布页修改了别名，也要以本次成功发布后的别名为准。
         // eslint-disable-next-line no-prototype-builtins
-        if (!postMeta.hasOwnProperty(SiyuanAttr.Custom_slug)) {
+        if (!postMeta.hasOwnProperty(SiyuanAttr.Custom_slug) && !StrUtil.isEmptyString(finalPost.wp_slug)) {
           logger.info("检测到未生成过别名，准备更新别名")
           postMeta[SiyuanAttr.Custom_slug] = finalPost.wp_slug
-          setting[id] = postMeta
-          await updateSetting(setting)
-        } else {
-          // 确保别名不被修改
-          finalPost.wp_slug = postMeta[SiyuanAttr.Custom_slug]
+          shouldUpdateSetting = true
+        } else if (
+          !StrUtil.isEmptyString(finalPost.wp_slug) &&
+          postMeta[SiyuanAttr.Custom_slug] !== finalPost.wp_slug
+        ) {
+          logger.info(`检测到别名已更新，从 ${postMeta[SiyuanAttr.Custom_slug]} 更新为 ${finalPost.wp_slug}`)
+          postMeta[SiyuanAttr.Custom_slug] = finalPost.wp_slug
+          shouldUpdateSetting = true
         }
 
         // 检查是否因为目录变更导致postid变化
         if (finalPost.postid && finalPost.postid !== postid) {
           logger.info(`文章目录已更改，更新postid从 ${postid} 到 ${finalPost.postid}`)
           postMeta[cfg.posidKey] = finalPost.postid
-          setting[id] = postMeta
-          await updateSetting(setting)
+          shouldUpdateSetting = true
           // 更新当前使用的postid
           postid = finalPost.postid
           ElMessage.success(`文章目录已更改，发布信息已更新`)
+        }
+
+        if (shouldUpdateSetting) {
+          setting[id] = postMeta
+          await updateSetting(setting)
         }
 
         logger.info("edit post=>", result)

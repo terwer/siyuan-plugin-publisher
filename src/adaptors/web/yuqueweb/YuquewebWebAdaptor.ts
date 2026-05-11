@@ -42,6 +42,8 @@ class YuquewebRequestError extends Error {
  * - `GET /api/mine/user_books?user_type=Group&offset=0&limit=20` 可用于组织知识库；当前测试账号返回空数组。
  * - `POST /api/docs` + `format: "markdown"` + `book_id/type/title/slug/body/status/insert_to_catalog/action` 可创建 Markdown 文档。
  * - `PUT /api/docs/{id}` + `format: "markdown"` + `book_id/type/title/slug/body/status/insert_to_catalog/action` 可更新标题、slug、正文并发布。
+ * - `GET /api/docs/{id}?book_id={bookId}` 才是按 id 读取文档详情的正确路径；裸 `GET /api/docs/{id}` 返回 404。
+ * - `PUT /api/docs/{id}` 响应的 Markdown 正文字段为 `body`；详情回读响应的正式内容字段为 `content`。
  * - `DELETE /api/docs/{id}` 可删除文档。
  * - `POST /api/upload/attach?type=image`，multipart 字段 `file`，响应 `data.url` 为图片 URL。
  *
@@ -151,9 +153,10 @@ class YuquewebWebAdaptor extends BaseWebApi {
     const payload = await this.buildDocPayload(bookMeta, post)
     const updatedDoc = await this.yuquewebFetch(`/api/docs/${meta.id}`, payload, "PUT")
 
-    if (!updatedDoc?.id) {
-      throw new Error("语雀文档更新失败，请稍后重试。")
-    }
+    this.assertUpdatedDoc(updatedDoc, meta, payload)
+
+    const confirmedDoc = await this.getDocById(meta)
+    this.assertConfirmedDoc(confirmedDoc, meta, payload)
 
     const updatedMeta = this.buildPostMeta(updatedDoc, bookMeta)
     post.postid = updatedMeta.toPostid()
@@ -184,20 +187,14 @@ class YuquewebWebAdaptor extends BaseWebApi {
       throw new Error("语雀文档绑定信息不完整，请解除绑定后重新发布。")
     }
 
-    let doc: any
-    try {
-      doc = await this.yuquewebFetch(`/api/docs/${meta.id}`)
-    } catch (e) {
-      doc = await this.yuquewebFetch(
-        `/api/docs/${encodeURIComponent(meta.slug)}?book_id=${encodeURIComponent(meta.bookId)}&include_contributors=true&include_like=true&include_hits=true&merge_dynamic_data=false`
-      )
-    }
+    const doc = await this.getReadableDoc(meta)
+    const content = this.getDocContent(doc)
 
     const commonPost = new Post()
     commonPost.title = doc?.title ?? ""
     commonPost.wp_slug = doc?.slug ?? meta.slug
-    commonPost.markdown = doc?.body ?? doc?.body_draft ?? ""
-    commonPost.description = commonPost.markdown || doc?.content || ""
+    commonPost.markdown = content
+    commonPost.description = content
     commonPost.cate_slugs = [this.serializeBookMeta({ bookId: meta.bookId, bookSlug: meta.bookSlug, login: meta.login })]
     return commonPost
   }
@@ -387,6 +384,115 @@ class YuquewebWebAdaptor extends BaseWebApi {
       insert_to_catalog: true,
       action: "prependChild",
     }
+  }
+
+  private async getReadableDoc(meta: YuquewebPostMeta) {
+    if (!StrUtil.isEmptyString(meta.id)) {
+      try {
+        return await this.getDocById(meta)
+      } catch (e) {
+        if (StrUtil.isEmptyString(meta.slug)) {
+          throw e
+        }
+        this.logger.warn("yuqueweb getPost by id failed, fallback to slug", {
+          id: meta.id,
+          err: this.sanitizeForLog(e?.toString?.() ?? e),
+        })
+      }
+    }
+
+    if (StrUtil.isEmptyString(meta.slug)) {
+      throw new Error("语雀文档绑定信息不完整，请解除绑定后重新发布。")
+    }
+    return await this.getDocBySlug(meta)
+  }
+
+  private async getDocById(meta: YuquewebPostMeta) {
+    if (StrUtil.isEmptyString(meta.id) || StrUtil.isEmptyString(meta.bookId)) {
+      throw new Error("语雀文档绑定信息不完整，请解除绑定后重新发布。")
+    }
+    return await this.yuquewebFetch(this.buildDocDetailPath(meta.id, meta.bookId))
+  }
+
+  private async getDocBySlug(meta: YuquewebPostMeta) {
+    if (StrUtil.isEmptyString(meta.slug) || StrUtil.isEmptyString(meta.bookId)) {
+      throw new Error("语雀文档绑定信息不完整，请解除绑定后重新发布。")
+    }
+    return await this.yuquewebFetch(this.buildDocDetailPath(meta.slug, meta.bookId))
+  }
+
+  private buildDocDetailPath(docKey: string, bookId: string) {
+    return `/api/docs/${encodeURIComponent(docKey)}?book_id=${encodeURIComponent(bookId)}&include_contributors=true&include_like=true&include_hits=true&merge_dynamic_data=false`
+  }
+
+  private getDocContent(doc: any): string {
+    return doc?.body ?? doc?.body_draft ?? doc?.content ?? ""
+  }
+
+  private assertUpdatedDoc(updatedDoc: any, meta: YuquewebPostMeta, payload: any) {
+    if (!updatedDoc?.id) {
+      throw new Error("语雀文档更新失败，请稍后重试。")
+    }
+
+    if (String(updatedDoc.id) !== String(meta.id)) {
+      throw new Error("语雀文档更新结果异常：返回文档与原文档不一致，请刷新后重试。")
+    }
+
+    if (updatedDoc?.title !== payload.title) {
+      throw new Error("语雀文档更新结果异常：标题未确认更新，请刷新后重试。")
+    }
+
+    if (updatedDoc?.slug !== payload.slug) {
+      throw new Error("语雀文档更新结果异常：别名未确认更新，请刷新后重试。")
+    }
+
+    if (!StrUtil.isEmptyString(payload.body) && updatedDoc?.body !== payload.body) {
+      throw new Error("语雀文档更新结果异常：正文未确认更新，请刷新后重试。")
+    }
+  }
+
+  private assertConfirmedDoc(confirmedDoc: any, meta: YuquewebPostMeta, payload: any) {
+    if (String(confirmedDoc?.id ?? "") !== String(meta.id)) {
+      throw new Error("语雀文档更新后回读失败：未读取到同一文档，请刷新后重试。")
+    }
+
+    if (confirmedDoc?.title !== payload.title) {
+      throw new Error("语雀文档更新后回读失败：标题未同步，请刷新后重试。")
+    }
+
+    if (confirmedDoc?.slug !== payload.slug) {
+      throw new Error("语雀文档更新后回读失败：别名未同步，请刷新后重试。")
+    }
+
+    const probe = this.getBodyProbe(payload.body, payload.title)
+    if (!StrUtil.isEmptyString(probe) && !this.getDocContent(confirmedDoc).includes(probe)) {
+      throw new Error("语雀文档更新后回读失败：正文未同步，请刷新后重试。")
+    }
+  }
+
+  private getBodyProbe(body: string, title = ""): string {
+    const normalizedTitle = title.trim()
+    const lines = String(body ?? "")
+      .split(/\r?\n/)
+      .map((line) =>
+        line
+          .trim()
+          .replace(/^#{1,6}\s+/, "")
+          .replace(/^[-*+]\s+/, "")
+          .replace(/^\d+\.\s+/, "")
+          .replace(/^>\s+/, "")
+          .replace(/!\[([^\]]*)]\([^)]+\)/g, "$1")
+          .replace(/\[([^\]]+)]\([^)]+\)/g, "$1")
+          .replace(/[`*_~]/g, "")
+          .trim()
+      )
+      .filter((line) => line.length >= 2)
+      .filter((line) => !/^-{3,}$/.test(line))
+      .filter((line) => !/^:{3,}$/.test(line))
+      .filter((line) => /[\p{L}\p{N}]/u.test(line))
+      .filter((line) => line !== normalizedTitle)
+
+    return lines[0] ?? ""
   }
 
   private async resolveSlug(post: Post): Promise<string> {
