@@ -38,6 +38,8 @@ const bridgePayload = vi.hoisted(() => ({
   } as any,
   setting: {} as Record<string, any>,
   dynamicConfigArray: [] as any[],
+  expandManualEditor: vi.fn(),
+  toggleManualEditor: vi.fn(),
 }))
 
 vi.mock("~/src/composables/usePublishConfig.ts", () => ({
@@ -68,15 +70,18 @@ vi.mock("element-plus", () => ({
 vi.mock("~/src/components/v2/settings/bridge/bridgeRegistry.ts", () => ({
   getV2BridgeComponent: () => ({
     name: "FakeCookieBridge",
-    props: ["apiType"],
+    props: ["apiType", "enableOnValidated"],
     template: `
-      <div class="fake-cookie-bridge">
+      <div class="fake-cookie-bridge" :data-enable-on-validated="enableOnValidated === '' || enableOnValidated === true ? 'true' : 'false'">
         <slot
           name="cookie-actions"
           :cfg="payload.cfg"
           :dyn-cfg="payload.dynCfg"
           :setting="payload.setting"
           :dynamic-config-array="payload.dynamicConfigArray"
+          :is-manual-expanded="false"
+          :toggle-manual-editor="payload.toggleManualEditor"
+          :expand-manual-editor="payload.expandManualEditor"
         />
       </div>
     `,
@@ -159,5 +164,19 @@ describe("V2PlatformConfigBridge Cookie actions slot", () => {
 
     expect(wrapper.find(".fake-cookie-bridge").exists()).toBe(true)
     expect(wrapper.find(".syp-web-cookie-auth").exists()).toBe(false)
+  })
+
+  it("forwards successful validation from the bridged form", async () => {
+    const wrapper = await mountBridge()
+
+    await wrapper.findComponent({ name: "FakeCookieBridge" }).vm.$emit("validated", { ok: true, apiStatus: true })
+
+    expect(wrapper.emitted("validated")?.[0]).toEqual([{ ok: true, apiStatus: true }])
+  })
+
+  it("enables the bridged form to turn on the account after V2 validation", async () => {
+    const wrapper = await mountBridge()
+
+    expect(wrapper.find(".fake-cookie-bridge").attributes("data-enable-on-validated")).toBe("true")
   })
 })
