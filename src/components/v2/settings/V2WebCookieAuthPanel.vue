@@ -199,7 +199,6 @@ async function handleAutoCapture() {
       dynCfg: props.dynCfg,
       setting: props.setting,
       dynamicConfigArray: props.dynamicConfigArray,
-      enableOnSuccess: true,
       onCookieChange: (cookie) => {
         props.cfg.password = cookie
       },

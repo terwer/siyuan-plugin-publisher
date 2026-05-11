@@ -11,9 +11,10 @@ import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
 import { YuquewebPostMeta } from "~/src/adaptors/web/yuqueweb/YuquewebPostMeta.ts"
 import FormDataUtils from "~/src/utils/FormDataUtils.ts"
 import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
-import { Attachment, CategoryInfo, MediaObject, Post, UserBlog } from "zhi-blog-api"
+import { Attachment, CategoryInfo, MediaObject, Post, UserBlog, type PublishValidationResult } from "zhi-blog-api"
 import { AliasTranslator, JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { Base64 } from "js-base64"
+import { translateNonVueI18n } from "~/src/utils/nonVueI18n.ts"
 
 interface YuquewebBookMeta {
   bookId: string
@@ -50,6 +51,18 @@ class YuquewebWebAdaptor extends BaseWebApi {
   public async checkAuth(): Promise<boolean> {
     const metadata = await this.getMetaData()
     return metadata.flag === true
+  }
+
+  public async validatePublish(): Promise<PublishValidationResult> {
+    const bookMeta = this.parseBookMeta(this.cfg.blogid)
+    if (!this.isCompleteBookMeta(bookMeta)) {
+      return {
+        canPublish: false,
+        reason: translateNonVueI18n("setting.yuqueweb.publishValidation.selectKnowledgeBase"),
+      }
+    }
+
+    return { canPublish: true }
   }
 
   public async getMetaData(): Promise<any> {
@@ -315,10 +328,14 @@ class YuquewebWebAdaptor extends BaseWebApi {
   private resolveTargetBook(post?: Post): YuquewebBookMeta {
     const rawValue = post?.cate_slugs?.[0] ?? this.cfg.blogid
     const meta = this.parseBookMeta(rawValue)
-    if (StrUtil.isEmptyString(meta.bookId) || StrUtil.isEmptyString(meta.bookSlug) || StrUtil.isEmptyString(meta.login)) {
-      throw new Error("请选择可发布的语雀知识库后再发布。")
+    if (!this.isCompleteBookMeta(meta)) {
+      throw new Error(translateNonVueI18n("setting.yuqueweb.publishValidation.selectKnowledgeBase"))
     }
     return meta
+  }
+
+  private isCompleteBookMeta(meta: YuquewebBookMeta): boolean {
+    return !StrUtil.isEmptyString(meta.bookId) && !StrUtil.isEmptyString(meta.bookSlug) && !StrUtil.isEmptyString(meta.login)
   }
 
   private parseBookMeta(value: any): YuquewebBookMeta {

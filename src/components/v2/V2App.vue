@@ -153,6 +153,7 @@
           :platform-name="settings.state.selectedPlatformName"
           @cookie-authorized="handleCookieAuthorized"
           @validated="handleConfigValidated"
+          @saved="handleConfigSaved"
         />
 
         <V2PicBedSettings v-else-if="settings.state.section === 'picbed'" />
@@ -179,6 +180,7 @@ import V2PlatformSelect from "~/src/components/v2/settings/V2PlatformSelect.vue"
 import V2PreferenceSettings from "~/src/components/v2/settings/V2PreferenceSettings.vue"
 import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
 import { useV2QuickPublish } from "~/src/composables/v2/useV2QuickPublish.ts"
+import { useV2PublishValidation } from "~/src/composables/v2/useV2PublishValidation.ts"
 import { useV2Settings } from "~/src/composables/v2/useV2Settings.ts"
 import LucideChevronLeft from "~icons/lucide/chevron-left"
 import LucideSend from "~icons/lucide/send"
@@ -195,6 +197,7 @@ const isSettingsView = computed(() => currentView.value === "settings")
 const initError = ref("")
 const quickPublish = useV2QuickPublish()
 const settings = useV2Settings()
+const publishValidation = useV2PublishValidation()
 const { t } = useV2I18n()
 const hasPlatforms = computed(() => quickPublish.hasPlatforms.value)
 const publishState = computed(() => quickPublish.state.publishState)
@@ -397,21 +400,47 @@ async function handleDeleteAccount(platformKey: string) {
   }
 }
 
-async function handleCookieAuthorized(result: { ok: boolean }) {
+async function handleCookieAuthorized(_result: { ok: boolean }) {
   await settings.loadAccountItems()
   await quickPublish.init()
-  if (result.ok) {
-    await settings.finishAccountConfig()
-    await backToQuickPublish()
+}
+
+async function completeConfigIfPublishReady() {
+  const platformKey = settings.state.selectedPlatformKey
+  if (!platformKey) {
+    return
   }
+
+  const validation = await publishValidation.validatePlatformPublish(platformKey)
+  if (validation.isAuth === true && validation.canPublish === true && validation.dynCfg) {
+    await publishValidation.enableAccountAfterPublishValidation(platformKey, validation.dynCfg)
+    const returnTarget = settings.getConfigReturnTarget()
+    await settings.finishAccountConfig()
+    await quickPublish.init()
+    if (returnTarget === "quick_publish") {
+      currentView.value = "quick_publish"
+    }
+    return
+  }
+
+  await settings.loadAccountItems()
+  await quickPublish.init()
+  ElMessage.warning(validation.reason || t("v2.publishValidation.incomplete"))
 }
 
 async function handleConfigValidated(result: { ok: boolean }) {
   await settings.loadAccountItems()
   await quickPublish.init()
   if (result.ok) {
-    await settings.finishAccountConfig()
-    await backToQuickPublish()
+    await completeConfigIfPublishReady()
+  }
+}
+
+async function handleConfigSaved(result: { ok: boolean }) {
+  await settings.loadAccountItems()
+  await quickPublish.init()
+  if (result.ok) {
+    await completeConfigIfPublishReady()
   }
 }
 

@@ -73,6 +73,7 @@ vi.mock("~/src/components/v2/settings/bridge/bridgeRegistry.ts", () => ({
     props: ["apiType", "enableOnValidated"],
     template: `
       <div class="fake-cookie-bridge" :data-enable-on-validated="enableOnValidated === '' || enableOnValidated === true ? 'true' : 'false'">
+        <button class="fake-save" type="button" @click="$emit('saved', { ok: true })">save</button>
         <slot
           name="cookie-actions"
           :cfg="payload.cfg"
@@ -174,9 +175,17 @@ describe("V2PlatformConfigBridge Cookie actions slot", () => {
     expect(wrapper.emitted("validated")?.[0]).toEqual([{ ok: true, apiStatus: true }])
   })
 
-  it("enables the bridged form to turn on the account after V2 validation", async () => {
+  it("does not ask the bridged form to enable the account after validation", async () => {
     const wrapper = await mountBridge()
 
-    expect(wrapper.find(".fake-cookie-bridge").attributes("data-enable-on-validated")).toBe("true")
+    expect(wrapper.find(".fake-cookie-bridge").attributes("data-enable-on-validated")).toBe("false")
+  })
+
+  it("forwards explicit save completion from the bridged form", async () => {
+    const wrapper = await mountBridge()
+
+    await wrapper.findComponent({ name: "FakeCookieBridge" }).vm.$emit("saved", { ok: true })
+
+    expect(wrapper.emitted("saved")?.[0]).toEqual([{ ok: true }])
   })
 })

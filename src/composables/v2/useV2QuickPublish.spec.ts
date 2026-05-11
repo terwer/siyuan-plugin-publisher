@@ -18,6 +18,14 @@ import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
 import zhCN from "~/siyuan/i18n/zh_CN.json"
 
+const mockValidatePlatformPublish = vi.hoisted(() => vi.fn())
+
+vi.mock("~/src/composables/v2/useV2PublishValidation.ts", () => ({
+  useV2PublishValidation: () => ({
+    validatePlatformPublish: mockValidatePlatformPublish,
+  }),
+}))
+
 vi.mock("~/siyuan/utils/widgetPageUtils.ts", () => ({
   default: {
     getPageId: vi.fn(() => "20260509120000-test"),
@@ -67,6 +75,7 @@ vi.mock("~/src/stores/usePreferenceSettingStore.ts", () => ({
 describe("useV2QuickPublish", () => {
   beforeEach(() => {
     setActivePinia(createPinia())
+    mockValidatePlatformPublish.mockResolvedValue({ canPublish: true })
   })
 
   it("keeps quick publish platform items focused on direct actions without platform descriptions", async () => {
@@ -123,5 +132,59 @@ describe("useV2QuickPublish", () => {
       isPublished: false,
     })
     expect("description" in quickPublish.state.platformItems[0]).toBe(false)
+  })
+
+  it("keeps enabled historical accounts visible but not publishable when publish validation fails", async () => {
+    let quickPublish!: ReturnType<typeof useV2QuickPublish>
+
+    const Harness = defineComponent({
+      setup() {
+        quickPublish = useV2QuickPublish()
+        return () => h("div")
+      },
+    })
+
+    const platform = {
+      platformType: PlatformType.Custom,
+      subPlatformType: SubPlatformType.Custom_Yuqueweb,
+      platformKey: "custom_Yuqueweb-test",
+      platformName: "语雀网页版",
+      platformIcon: "<svg></svg>",
+      authMode: AuthMode.WEBSITE,
+      isEnabled: true,
+      isAuth: true,
+      isSys: false,
+    } as DynamicConfig
+
+    mockValidatePlatformPublish.mockResolvedValue({ canPublish: false, reason: "请选择知识库" })
+
+    const store = usePublishSettingStore()
+    store.getSetting = vi.fn().mockResolvedValue({
+      [DYNAMIC_CONFIG_KEY]: setDynamicJsonCfg([platform]),
+      "20260509120000-test": {},
+    } as any)
+
+    mount(Harness, {
+      global: {
+        plugins: [
+          createI18n({
+            legacy: false,
+            locale: "zh_CN",
+            messages: {
+              zh_CN: zhCN,
+            },
+          }),
+        ],
+      },
+    })
+
+    await quickPublish.init()
+
+    expect(quickPublish.state.platformItems).toHaveLength(1)
+    expect(quickPublish.state.platformItems[0]).toMatchObject({
+      platformKey: "custom_Yuqueweb-test",
+      isAuthorized: false,
+      tooltipText: "请选择知识库",
+    })
   })
 })

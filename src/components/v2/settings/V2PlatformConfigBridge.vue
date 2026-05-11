@@ -26,8 +26,8 @@
           <component
             :is="bridgeComponent"
             :api-type="platformKey"
-            enable-on-validated
             @validated="handleFormValidated"
+            @saved="handleFormSaved"
           >
             <template #cookie-actions="cookieActions">
               <V2WebCookieAuthPanel
@@ -63,8 +63,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, reactive, watch, type Component } from "vue"
+import { computed, onMounted, provide, reactive, watch, type Component } from "vue"
 import { getV2BridgeComponent } from "~/src/components/v2/settings/bridge/bridgeRegistry.ts"
+import { V2_PLATFORM_CONFIG_ACTION_BRIDGE_KEY } from "~/src/components/v2/settings/bridge/platformConfigActionBridge.ts"
 import V2WebCookieAuthPanel from "~/src/components/v2/settings/V2WebCookieAuthPanel.vue"
 import type { WebCookieAuthorizationStatus } from "~/src/composables/useWebCookieAuthorization.ts"
 import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
@@ -80,10 +81,16 @@ const props = defineProps<{
 const emit = defineEmits<{
   (event: "cookie-authorized", result: { status: WebCookieAuthorizationStatus; ok: boolean }): void
   (event: "validated", result: { ok: boolean; apiStatus?: boolean }): void
+  (event: "saved", result: { ok: boolean }): void
 }>()
 
 const { t } = useV2I18n()
 const { getPublishCfg } = usePublishConfig()
+
+provide(V2_PLATFORM_CONFIG_ACTION_BRIDGE_KEY, {
+  onValidated: (result) => emit("validated", result),
+  onSaved: (result) => emit("saved", result),
+})
 
 const state = reactive({
   isLoading: true,
@@ -139,6 +146,10 @@ function handleCookieAuthorized(result: { status: WebCookieAuthorizationStatus; 
 
 function handleFormValidated(result: { ok: boolean; apiStatus?: boolean }) {
   emit("validated", result)
+}
+
+function handleFormSaved(result: { ok: boolean }) {
+  emit("saved", result)
 }
 </script>
 

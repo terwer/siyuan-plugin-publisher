@@ -97,7 +97,7 @@ describe("authorizeWebCookie", () => {
     expect(updateSetting).toHaveBeenCalledWith(setting)
   })
 
-  it("can enable the platform after successful V2 authorization", async () => {
+  it("does not enable the platform after successful V2 Cookie authorization", async () => {
     const dynCfg = createDynCfg({ isEnabled: false })
     const cfg = createCfg()
     const setting: Record<string, any> = {
@@ -113,7 +113,6 @@ describe("authorizeWebCookie", () => {
         dynCfg,
         setting,
         dynamicConfigArray: [dynCfg],
-        enableOnSuccess: true,
       },
       {
         getSetting: vi.fn(),
@@ -130,7 +129,7 @@ describe("authorizeWebCookie", () => {
 
     expect(result).toMatchObject({ status: "success", ok: true })
     expect(setting[DYNAMIC_CONFIG_KEY].totalCfg[0].isAuth).toBe(true)
-    expect(setting[DYNAMIC_CONFIG_KEY].totalCfg[0].isEnabled).toBe(true)
+    expect(setting[DYNAMIC_CONFIG_KEY].totalCfg[0].isEnabled).toBe(false)
   })
 
   it("does not authorize when no Cookie is captured", async () => {

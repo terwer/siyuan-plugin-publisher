@@ -147,7 +147,6 @@ describe("V2WebCookieAuthPanel", () => {
     expect(mockAuthorize).toHaveBeenCalledWith(
       expect.objectContaining({
         platformKey: "custom_Yuqueweb-test",
-        enableOnSuccess: true,
       })
     )
     expect(cfg.password).toBe("cookie-from-desktop")

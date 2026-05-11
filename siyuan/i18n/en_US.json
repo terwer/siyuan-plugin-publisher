@@ -449,6 +449,8 @@
   "v2.common.retry": "Retry",
   "v2.account.action.deleteConfirmTitle": "Confirm Delete",
   "v2.account.action.deleteConfirmText": "Delete [{name}]? All configuration related to this platform will be removed.",
+  "v2.publishValidation.incomplete": "Finish the required publish settings, then save or validate again.",
+  "setting.yuqueweb.publishValidation.selectKnowledgeBase": "Select a Yuque knowledge base that can be published to before continuing.",
   "v2.webCookieAuth.title": "Cookie authorization",
   "v2.webCookieAuth.action.autoRead": "Auto-read Cookie",
   "v2.webCookieAuth.action.reading": "Reading...",

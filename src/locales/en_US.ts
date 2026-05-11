@@ -824,6 +824,8 @@ export default {
   "service.switch.gitlabastro": "Gitlab Astro",
   "post.bind.gitlabastro.slug": "Gitlab Astro slug",
   "v2.preference.confirm.allowChangeSlug.title": "Confirm slug editing",
+  "v2.publishValidation.incomplete": "Finish the required publish settings, then save or validate again.",
+  "setting.yuqueweb.publishValidation.selectKnowledgeBase": "Select a Yuque knowledge base that can be published to before continuing.",
   "v2.webCookieAuth.title": "Cookie authorization",
   "v2.webCookieAuth.action.autoRead": "Auto-read Cookie",
   "v2.webCookieAuth.action.reading": "Reading...",

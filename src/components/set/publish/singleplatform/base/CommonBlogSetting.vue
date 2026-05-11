@@ -9,7 +9,7 @@
 
 <script lang="ts" setup>
 import { ElMessage } from "element-plus"
-import { onMounted, reactive, ref, toRaw, watch } from "vue"
+import { inject, onMounted, reactive, ref, toRaw, watch } from "vue"
 import { BlogAdaptor, PageTypeEnum, PasswordType, PicbedServiceTypeEnum, UserBlog } from "zhi-blog-api"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import Adaptors from "~/src/adaptors"
@@ -24,6 +24,7 @@ import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
 import { Utils } from "~/src/utils/utils.ts"
+import { V2_PLATFORM_CONFIG_ACTION_BRIDGE_KEY } from "~/src/components/v2/settings/bridge/platformConfigActionBridge.ts"
 import { SypConfig } from "~/syp.config.ts"
 
 const logger = createAppLogger("commonblog-setting")
@@ -53,7 +54,24 @@ const props = defineProps({
 })
 
 // emits
-const emit = defineEmits(["onHomeChange", "onApiUrlChange", "onUsernameChange", "validated"])
+const emit = defineEmits(["onHomeChange", "onApiUrlChange", "onUsernameChange", "validated", "saved"])
+const v2ActionBridge = inject(V2_PLATFORM_CONFIG_ACTION_BRIDGE_KEY, null)
+
+const emitValidated = (result: any) => {
+  if (v2ActionBridge?.onValidated) {
+    v2ActionBridge.onValidated(result)
+    return
+  }
+  emit("validated", result)
+}
+
+const emitSaved = (result: any) => {
+  if (v2ActionBridge?.onSaved) {
+    v2ActionBridge.onSaved(result)
+    return
+  }
+  emit("saved", result)
+}
 const handleHomeChange = (value: string | number): void => {
   if (emit) {
     emit("onHomeChange", value, formData.cfg)
@@ -175,13 +193,10 @@ const valiConf = async () => {
   // isAuth和apiStatus同步
   if (formData.dynCfg) {
     formData.dynCfg.isAuth = formData.cfg.apiStatus
-    if (props.enableOnValidated && formData.cfg.apiStatus) {
-      formData.dynCfg.isEnabled = true
-    }
   }
   // 刷新状态
   await saveConf(true)
-  emit("validated", {
+  emitValidated({
     ok: validationOk,
     apiStatus: formData.cfg.apiStatus,
     cfg: formData.cfg,
@@ -237,6 +252,11 @@ const saveConf = async (hideTip?: any) => {
 
   if (hideTip !== true) {
     ElMessage.success(t("main.opt.success"))
+    emitSaved({
+      ok: true,
+      cfg: formData.cfg,
+      dynCfg: formData.dynCfg,
+    })
   }
 }
 

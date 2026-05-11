@@ -53,7 +53,6 @@ export interface WebCookieAuthorizationInput {
   setting?: Partial<ISypConfig>
   dynamicConfigArray?: DynamicConfig[]
   onCookieChange?: (cookie: string) => void
-  enableOnSuccess?: boolean
 }
 
 export interface WebCookieAuthorizationDeps {
@@ -180,9 +179,6 @@ export const authorizeWebCookie = async (
         ...cfg,
       }
       dynCfg.isAuth = true
-      if (input.enableOnSuccess === true) {
-        dynCfg.isEnabled = true
-      }
       const nextDynamicConfigArray = replacePlatformByKey(dynamicConfigArray, dynCfg.platformKey, dynCfg)
       setting[DYNAMIC_CONFIG_KEY] = setDynamicJsonCfg(nextDynamicConfigArray)
       await deps.updateSetting(setting)

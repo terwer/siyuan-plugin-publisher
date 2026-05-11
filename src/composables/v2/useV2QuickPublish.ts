@@ -5,6 +5,7 @@ import { usePublish } from "~/src/composables/usePublish.ts"
 import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
+import { useV2PublishValidation } from "~/src/composables/v2/useV2PublishValidation.ts"
 import { DynamicConfig, DynamicJsonCfg, getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
@@ -31,6 +32,7 @@ export const useV2QuickPublish = () => {
   const { t } = useV2I18n()
   const { doSinglePublish, doSingleDelete, initPublishMethods, getPostPreviewUrl } = usePublish()
   const { getPublishCfg, getPublishApi } = usePublishConfig()
+  const publishValidation = useV2PublishValidation()
   const state = reactive({
     isLoading: true,
     pageId: "",
@@ -110,25 +112,33 @@ export const useV2QuickPublish = () => {
       const dynamicConfigArray = dynJsonCfg?.totalCfg || []
       const enabledConfigArray = dynamicConfigArray.filter((item) => item.isEnabled)
       const postMeta = state.hasDocument ? ObjectUtil.getProperty(setting, pageId, {}) : {}
+      const platformItems: V2QuickPublishPlatformItem[] = []
 
-      state.platformItems = enabledConfigArray.map((item: DynamicConfig) => {
+      for (const item of enabledConfigArray) {
         const postidKey = getDynPostidKey(item.platformKey)
         const postMetaValue = ObjectUtil.getProperty(postMeta, postidKey)
         const isAuthorized = item.isAuth === true
+        const validation = isAuthorized
+          ? await publishValidation.validatePlatformPublish(item.platformKey)
+          : { canPublish: false, reason: t("v2.quickPublish.tooltip.unauthorized") }
 
-        if (!StrUtil.isEmptyString(postMetaValue)) {
+        if (isAuthorized && validation.canPublish === true && !StrUtil.isEmptyString(postMetaValue)) {
           setPreviewLink(item.platformKey, String(postMetaValue))
         }
 
-        return {
+        const isPublishReady = isAuthorized && validation.canPublish === true
+
+        platformItems.push({
           platformKey: item.platformKey,
           platformName: item.platformName,
           platformIcon: item.platformIcon,
-          isAuthorized,
-          isPublished: !StrUtil.isEmptyString(postMetaValue),
-          tooltipText: isAuthorized ? "" : t("v2.quickPublish.tooltip.unauthorized"),
-        }
-      })
+          isAuthorized: isPublishReady,
+          isPublished: isPublishReady && !StrUtil.isEmptyString(postMetaValue),
+          tooltipText: isPublishReady ? "" : validation.reason || t("v2.publishValidation.incomplete"),
+        })
+      }
+
+      state.platformItems = platformItems
 
       if (state.hasDocument) {
         try {
@@ -170,6 +180,10 @@ export const useV2QuickPublish = () => {
       const publishCfg = await getPublishCfg(item.platformKey)
       if (!publishCfg?.cfg || !publishCfg?.dynCfg) {
         throw new Error(t("v2.quickPublish.error.publishConfigMissing"))
+      }
+      const validation = await publishValidation.validatePlatformPublish(item.platformKey)
+      if (validation.canPublish !== true) {
+        throw new Error(validation.reason || t("v2.publishValidation.incomplete"))
       }
 
       const siyuanPost = await blogApi.getPost(state.pageId)
