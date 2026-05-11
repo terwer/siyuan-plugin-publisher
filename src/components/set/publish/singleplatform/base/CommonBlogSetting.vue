@@ -46,10 +46,14 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  enableOnValidated: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 // emits
-const emit = defineEmits(["onHomeChange", "onApiUrlChange", "onUsernameChange"])
+const emit = defineEmits(["onHomeChange", "onApiUrlChange", "onUsernameChange", "validated"])
 const handleHomeChange = (value: string | number): void => {
   if (emit) {
     emit("onHomeChange", value, formData.cfg)
@@ -64,6 +68,7 @@ const handleUsernameChange = (value: string | number): void => {
 // datas
 const isLoading = ref(false)
 const singleCateSelect = ref(null)
+const isCookieManuallyExpanded = ref(false)
 const formData = reactive({
   cfg: {} as CommonBlogConfig,
   ksKeyword: "",
@@ -112,11 +117,16 @@ const forceWatchBlogId = (newBlogId: string) => {
   formData.settingTips = normalizedBlogName ? apiTypeInfo + normalizedBlogName : apiTypeInfo.trimEnd()
 }
 
+const toggleCookieManualEditor = () => {
+  isCookieManuallyExpanded.value = !isCookieManuallyExpanded.value
+}
+
 // methods
 const valiConf = async () => {
   isLoading.value = true
 
   let errMsg: any
+  let validationOk = false
   const commonblogApiAdaptor = await Adaptors.getAdaptor(props.apiType, formData.cfg as any)
   const api = Utils.blogApi(appInstance, commonblogApiAdaptor) as BlogAdaptor
   try {
@@ -124,6 +134,7 @@ const valiConf = async () => {
     try {
       await afterValid(api)
       formData.cfg.apiStatus = true
+      validationOk = true
     } catch (e2) {
       formData.cfg.apiStatus = false
       errMsg = e2.toString()
@@ -135,6 +146,7 @@ const valiConf = async () => {
         try {
           await afterValid(api)
           formData.cfg.apiStatus = true
+          validationOk = true
         } catch (e2) {
           formData.cfg.apiStatus = false
           errMsg = e2.toString()
@@ -163,9 +175,19 @@ const valiConf = async () => {
   // isAuth和apiStatus同步
   if (formData.dynCfg) {
     formData.dynCfg.isAuth = formData.cfg.apiStatus
+    if (props.enableOnValidated && formData.cfg.apiStatus) {
+      formData.dynCfg.isEnabled = true
+    }
   }
   // 刷新状态
   await saveConf(true)
+  emit("validated", {
+    ok: validationOk,
+    apiStatus: formData.cfg.apiStatus,
+    cfg: formData.cfg,
+    dynCfg: formData.dynCfg,
+    errorMessage: errMsg ? errMsg.toString() : "",
+  })
 
   isLoading.value = false
   logger.debug("Commonblog通用Setting验证完毕")
@@ -386,27 +408,34 @@ onMounted(async () => {
       v-else-if="formData.cfg.passwordType === PasswordType.PasswordType_Cookie"
       :label="formData.cfg.passwordLabel ?? t('setting.blog.cookie')"
       required
+      class="cookie-form-item"
     >
-      <el-input
-        v-model="formData.cfg.password"
-        style="width: 75%; margin-right: 16px"
-        :placeholder="t('setting.blog.cookie.placeholder')"
-        type="textarea"
-        :rows="10"
-      />
-      <el-alert
-        :closable="false"
-        :title="t('setting.blog.cookie.editable.tip')"
-        class="inline-tip"
-        type="warning"
-      />
       <slot
+        v-if="$slots['cookie-actions']"
         name="cookie-actions"
         :cfg="formData.cfg"
         :dyn-cfg="formData.dynCfg"
         :setting="formData.setting"
         :dynamic-config-array="formData.dynamicConfigArray"
+        :is-manual-expanded="isCookieManuallyExpanded"
+        :toggle-manual-editor="toggleCookieManualEditor"
+        :expand-manual-editor="toggleCookieManualEditor"
       />
+      <template v-if="isCookieManuallyExpanded || !$slots['cookie-actions']">
+        <el-input
+          v-model="formData.cfg.password"
+          class="cookie-textarea"
+          :placeholder="t('setting.blog.cookie.placeholder')"
+          type="textarea"
+          :rows="10"
+        />
+        <el-alert
+          :closable="false"
+          :title="t('setting.blog.cookie.editable.tip')"
+          class="inline-tip cookie-editable-tip"
+          type="warning"
+        />
+      </template>
     </el-form-item>
     <slot name="main" :cfg="formData.cfg" />
     <!-- 预览地址 -->
@@ -559,6 +588,14 @@ onMounted(async () => {
     min-height 30px
     line-height 16px
     gap 6px
+
+  :deep(.cookie-form-item .el-form-item__content)
+    display flex
+    flex-direction column
+    align-items stretch
+
+  :deep(.cookie-textarea)
+    width 100%
 
   :deep(.el-input__wrapper),
   :deep(.el-select__wrapper)

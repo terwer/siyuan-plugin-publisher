@@ -208,8 +208,101 @@ describe("CommonBlogSetting Cookie field", () => {
     })
     await flushPromises()
 
-    expect(slotWrapper.find("textarea.textarea-stub").exists()).toBe(true)
+    expect(slotWrapper.find("textarea.textarea-stub").exists()).toBe(false)
     expect(slotWrapper.find(".cookie-actions-slot").exists()).toBe(true)
     expect(slotWrapper.text()).toContain("Cookie actions slot")
+  })
+
+  it("lets the injected V2 cookie slot toggle the manual Cookie editor on demand", async () => {
+    mockGetSetting.mockResolvedValue({})
+    mockUpdateSetting.mockResolvedValue(undefined)
+
+    const wrapper = mount(CommonBlogSetting, {
+      props: {
+        apiType: "custom_Yuqueweb",
+        cfg: {
+          homeEnabled: false,
+          apiUrlEnabled: false,
+          usernameEnabled: false,
+          passwordType: PasswordType.PasswordType_Cookie,
+          password: "",
+          placeholder: {},
+          previewUrlEnabled: false,
+          knowledgeSpaceEnabled: false,
+          picgoPicbedSupported: false,
+          bundledPicbedSupported: false,
+          apiStatus: false,
+        },
+      },
+      slots: {
+        "cookie-actions": `
+          <template #default="slotProps">
+            <button class="toggle-cookie" type="button" @click="slotProps.toggleManualEditor()">toggle</button>
+          </template>
+        `,
+      },
+      global: {
+        plugins: [
+          createI18n({
+            legacy: false,
+            locale: "zh_CN",
+            messages: {
+              zh_CN: zhCN,
+            },
+          }),
+        ],
+        stubs: {
+          "el-skeleton": { template: "<div class='skeleton-stub' />" },
+          "el-form": { template: "<form><slot /></form>" },
+          "el-form-item": { template: "<div class='form-item'><slot /></div>" },
+          "el-input": {
+            props: ["modelValue", "placeholder", "type", "rows", "disabled"],
+            emits: ["update:modelValue"],
+            template: `
+              <textarea
+                v-if="type === 'textarea'"
+                class="input-stub textarea-stub"
+                :disabled="disabled"
+                :placeholder="placeholder"
+                :rows="rows"
+                :value="modelValue"
+                @input="$emit('update:modelValue', $event.target.value)"
+              />
+              <input
+                v-else
+                class="input-stub"
+                :disabled="disabled"
+                :placeholder="placeholder"
+                :value="modelValue"
+                @input="$emit('update:modelValue', $event.target.value)"
+              />
+            `,
+          },
+          "el-alert": {
+            props: ["title", "type"],
+            template: '<div class="alert-stub" :data-type="type">{{ title }}</div>',
+          },
+          "el-radio-group": { template: "<div><slot /></div>" },
+          "el-radio": { template: "<label><slot /></label>" },
+          "el-select": { template: "<select><slot /></select>" },
+          "el-option": { template: "<option />" },
+          "el-button": { template: "<button type='button'><slot /></button>" },
+        },
+      },
+    })
+
+    await flushPromises()
+    expect(wrapper.find("textarea.textarea-stub").exists()).toBe(false)
+
+    await wrapper.find(".toggle-cookie").trigger("click")
+    await flushPromises()
+
+    expect(wrapper.find("textarea.textarea-stub").exists()).toBe(true)
+    expect(wrapper.find("textarea.textarea-stub").attributes("placeholder")).toBe(zhCN["setting.blog.cookie.placeholder"])
+
+    await wrapper.find(".toggle-cookie").trigger("click")
+    await flushPromises()
+
+    expect(wrapper.find("textarea.textarea-stub").exists()).toBe(false)
   })
 })

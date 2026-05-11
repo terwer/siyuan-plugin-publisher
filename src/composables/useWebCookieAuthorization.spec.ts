@@ -93,7 +93,44 @@ describe("authorizeWebCookie", () => {
       metadata: { flag: true, displayName: "Terwer" },
     })
     expect(setting[DYNAMIC_CONFIG_KEY].totalCfg[0].isAuth).toBe(true)
+    expect(setting[DYNAMIC_CONFIG_KEY].totalCfg[0].isEnabled).toBe(true)
     expect(updateSetting).toHaveBeenCalledWith(setting)
+  })
+
+  it("can enable the platform after successful V2 authorization", async () => {
+    const dynCfg = createDynCfg({ isEnabled: false })
+    const cfg = createCfg()
+    const setting: Record<string, any> = {
+      [DYNAMIC_CONFIG_KEY]: setDynamicJsonCfg([dynCfg]),
+      [dynCfg.platformKey]: {},
+    }
+    const updateSetting = vi.fn().mockResolvedValue(undefined)
+
+    const result = await authorizeWebCookie(
+      {
+        platformKey: dynCfg.platformKey,
+        currentCfg: cfg,
+        dynCfg,
+        setting,
+        dynamicConfigArray: [dynCfg],
+        enableOnSuccess: true,
+      },
+      {
+        getSetting: vi.fn(),
+        updateSetting,
+        captureCookies: vi.fn().mockResolvedValue([createCookie("yuque_session", "secret-value")]),
+        getWebApi: vi.fn().mockResolvedValue({
+          buildCookie: vi.fn().mockResolvedValue("yuque_session=secret-value"),
+          updateCfg: vi.fn(),
+          getMetaData: vi.fn().mockResolvedValue({ flag: true }),
+        }),
+        isAutoCaptureSupported: () => true,
+      }
+    )
+
+    expect(result).toMatchObject({ status: "success", ok: true })
+    expect(setting[DYNAMIC_CONFIG_KEY].totalCfg[0].isAuth).toBe(true)
+    expect(setting[DYNAMIC_CONFIG_KEY].totalCfg[0].isEnabled).toBe(true)
   })
 
   it("does not authorize when no Cookie is captured", async () => {

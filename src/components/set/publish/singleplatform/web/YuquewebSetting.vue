@@ -19,10 +19,15 @@ const props = defineProps({
     type: String,
     default: "",
   },
+  enableOnValidated: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const { t } = useVueI18n()
 const { cfg } = await useYuquewebWeb(props.apiType)
+const emit = defineEmits(["validated"])
 
 const yuquewebCfg = cfg as YuquewebConfig
 const yuquewebPlaceholder = new YuquewebWebPlaceholder()
@@ -34,17 +39,25 @@ yuquewebCfg.placeholder = yuquewebPlaceholder
 </script>
 
 <template>
-  <custom-web-setting :api-type="props.apiType" :cfg="yuquewebCfg">
+  <custom-web-setting
+    :api-type="props.apiType"
+    :cfg="yuquewebCfg"
+    :enable-on-validated="props.enableOnValidated"
+    @validated="(result) => emit('validated', result)"
+  >
     <template #header>
       <el-alert :closable="false" :title="t('setting.yuqueweb.auth.tip')" class="top-tip" type="info" />
     </template>
-    <template #cookie-actions="cookieActions">
+    <template v-if="$slots['cookie-actions']" #cookie-actions="cookieActions">
       <slot
         name="cookie-actions"
         :cfg="cookieActions.cfg"
         :dyn-cfg="cookieActions.dynCfg"
         :setting="cookieActions.setting"
         :dynamic-config-array="cookieActions.dynamicConfigArray"
+        :is-manual-expanded="cookieActions.isManualExpanded"
+        :toggle-manual-editor="cookieActions.toggleManualEditor"
+        :expand-manual-editor="cookieActions.expandManualEditor"
       />
     </template>
   </custom-web-setting>

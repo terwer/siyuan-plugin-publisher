@@ -76,7 +76,14 @@ const createDynCfg = (overrides: Partial<DynamicConfig> = {}) =>
     ...overrides,
   }) as DynamicConfig
 
-const mountPanel = (options?: { supported?: boolean; dynCfg?: DynamicConfig; cfg?: Record<string, any> }) => {
+const mountPanel = (options?: {
+  supported?: boolean
+  dynCfg?: DynamicConfig
+  cfg?: Record<string, any>
+  isManualExpanded?: boolean
+  toggleManualEditor?: () => void
+  expandManualEditor?: () => void
+}) => {
   mockIsAutoCaptureSupported.mockReturnValue(options?.supported ?? true)
   const cfg = {
     passwordType: PasswordType.PasswordType_Cookie,
@@ -92,6 +99,9 @@ const mountPanel = (options?: { supported?: boolean; dynCfg?: DynamicConfig; cfg
       dynCfg: options?.dynCfg ?? createDynCfg(),
       setting: {},
       dynamicConfigArray: [options?.dynCfg ?? createDynCfg()],
+      isManualExpanded: options?.isManualExpanded,
+      toggleManualEditor: options?.toggleManualEditor,
+      expandManualEditor: options?.expandManualEditor,
     },
     global: {
       plugins: [
@@ -134,7 +144,12 @@ describe("V2WebCookieAuthPanel", () => {
       .trigger("click")
     await flushPromises()
 
-    expect(mockAuthorize).toHaveBeenCalledWith(expect.objectContaining({ platformKey: "custom_Yuqueweb-test" }))
+    expect(mockAuthorize).toHaveBeenCalledWith(
+      expect.objectContaining({
+        platformKey: "custom_Yuqueweb-test",
+        enableOnSuccess: true,
+      })
+    )
     expect(cfg.password).toBe("cookie-from-desktop")
     expect(mockElMessage.success).toHaveBeenCalledWith(zhCN["v2.webCookieAuth.message.success"])
     expect(wrapper.emitted("authorized")?.[0]).toEqual([{ status: "success", ok: true }])
@@ -145,13 +160,13 @@ describe("V2WebCookieAuthPanel", () => {
     const dynCfg = createDynCfg()
     const { wrapper } = mountPanel({ supported: true, dynCfg })
 
-    const buttons = wrapper.findAll("button")
-    expect(buttons.map((button) => button.text())).toEqual([
+    const actionButtons = wrapper.findAll(".syp-web-cookie-auth__action")
+    expect(actionButtons.map((button) => button.text())).toEqual([
       `1 ${zhCN["v2.webCookieAuth.action.openLogin"]}`,
       `2 ${zhCN["v2.webCookieAuth.action.autoRead"]}`,
     ])
 
-    await buttons
+    await actionButtons
       .find((button) => button.text().includes(zhCN["v2.webCookieAuth.action.autoRead"]))!
       .trigger("click")
     await flushPromises()
@@ -173,12 +188,25 @@ describe("V2WebCookieAuthPanel", () => {
 
     expect(wrapper.text()).toContain(zhCN["v2.webCookieAuth.status.manual"])
     expect(wrapper.text()).toContain(zhCN["v2.webCookieAuth.desc.unsupported"])
-    expect(wrapper.text()).toContain(zhCN["v2.webCookieAuth.manual.enabled"])
-    expect(wrapper.find("button").exists()).toBe(false)
+    expect(wrapper.text()).toContain(zhCN["v2.webCookieAuth.manual.collapsed"])
+    expect(wrapper.findAll("button")).toHaveLength(1)
 
     await wrapper.find(".syp-web-cookie-auth__action.is-static").trigger("click")
     await flushPromises()
     expect(mockAuthorize).not.toHaveBeenCalled()
+  })
+
+  it("toggles the manual Cookie editor without showing the textarea itself", async () => {
+    const toggleManualEditor = vi.fn()
+    const { wrapper } = mountPanel({ supported: true, toggleManualEditor })
+
+    const manualButton = wrapper.find(".syp-web-cookie-auth__manual-button")
+    expect(manualButton.exists()).toBe(true)
+    expect(manualButton.text()).toContain(zhCN["v2.webCookieAuth.manual.collapsed"])
+
+    await manualButton.trigger("click")
+    expect(toggleManualEditor).toHaveBeenCalledTimes(1)
+    expect(wrapper.find("textarea").exists()).toBe(false)
   })
 
   it("does not render on non web-cookie platforms", () => {

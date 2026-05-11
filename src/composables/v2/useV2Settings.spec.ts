@@ -106,4 +106,30 @@ describe("useV2Settings", () => {
 
     expect(account.description).toBe(zhCN["setting.platform.common.yuque.desc"])
   })
+
+  it("resets config flow state after a successful account configuration", async () => {
+    const preset = pre.commonCfg.find((item) => item.platformKey === "common_Yuque")!
+    const legacyYuque = {
+      platformType: PlatformType.Common,
+      subPlatformType: SubPlatformType.Common_Yuque,
+      platformKey: "common_Yuque-legacy",
+      platformName: "语雀旧账号",
+      isEnabled: true,
+      isAuth: true,
+      authMode: preset.authMode,
+      isSys: false,
+    } as DynamicConfig
+
+    const settings = await mountHarness([legacyYuque])
+    await settings.openAccountConfig(legacyYuque.platformKey, legacyYuque.platformName, "quick_publish")
+    expect(settings.state.accountView).toBe("config")
+    expect(settings.getConfigReturnTarget()).toBe("quick_publish")
+
+    await settings.finishAccountConfig()
+
+    expect(settings.state.accountView).toBe("list")
+    expect(settings.getConfigReturnTarget()).toBeNull()
+    expect(settings.state.pendingConfigItem).toBeNull()
+    expect(settings.state.accountItems[0].platformKey).toBe(legacyYuque.platformKey)
+  })
 })

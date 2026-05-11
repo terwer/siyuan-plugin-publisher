@@ -7,11 +7,20 @@
       </div>
       <SypTooltip
         tag="span"
-        :content="t('v2.webCookieAuth.tooltip.manual')"
+        :content="manualTooltip"
         inline-flex
         trigger-class="syp-web-cookie-auth__manual"
       >
-        {{ t("v2.webCookieAuth.manual.enabled") }}
+        <button
+          type="button"
+          class="syp-web-cookie-auth__manual-button"
+          :class="{ 'is-expanded': props.isManualExpanded === true }"
+          :aria-expanded="props.isManualExpanded === true"
+          @click="handleToggleManual"
+        >
+          <span class="syp-web-cookie-auth__manual-icon">i</span>
+          {{ manualLabel }}
+        </button>
       </SypTooltip>
     </div>
 
@@ -75,6 +84,9 @@ const props = defineProps<{
   dynCfg?: DynamicConfig
   setting?: Partial<ISypConfig>
   dynamicConfigArray?: DynamicConfig[]
+  isManualExpanded?: boolean
+  toggleManualEditor?: () => void
+  expandManualEditor?: () => void
 }>()
 
 const emit = defineEmits<{
@@ -143,6 +155,12 @@ const autoCaptureTooltip = computed(() => {
   }
   return t("v2.webCookieAuth.tooltip.unsupported")
 })
+const manualLabel = computed(() => {
+  return props.isManualExpanded ? t("v2.webCookieAuth.manual.expanded") : t("v2.webCookieAuth.manual.collapsed")
+})
+const manualTooltip = computed(() => {
+  return props.isManualExpanded ? t("v2.webCookieAuth.tooltip.manualExpanded") : t("v2.webCookieAuth.tooltip.manual")
+})
 
 const messageByStatus = (status: WebCookieAuthorizationStatus) => {
   switch (status) {
@@ -181,6 +199,7 @@ async function handleAutoCapture() {
       dynCfg: props.dynCfg,
       setting: props.setting,
       dynamicConfigArray: props.dynamicConfigArray,
+      enableOnSuccess: true,
       onCookieChange: (cookie) => {
         props.cfg.password = cookie
       },
@@ -208,6 +227,14 @@ function handleOpenLogin() {
 
   openBrowserWindow(props.dynCfg.authUrl, props.dynCfg, undefined, undefined, false, true)
 }
+
+function handleToggleManual() {
+  if (props.toggleManualEditor) {
+    props.toggleManualEditor()
+    return
+  }
+  props.expandManualEditor?.()
+}
 </script>
 
 <style scoped lang="stylus">
@@ -215,7 +242,6 @@ function handleOpenLogin() {
 
 .syp-web-cookie-auth
   width 100%
-  max-width 680px
   display flex
   flex-direction column
   gap 6px
@@ -288,13 +314,45 @@ function handleOpenLogin() {
     border 1px solid #d9dde4
 
 :deep(.syp-web-cookie-auth__manual)
+  display inline-flex
+  align-items center
+  min-width 0
+
+.syp-web-cookie-auth__manual-button
+  display inline-flex
+  align-items center
+  gap 4px
   padding 1px 7px
+  border 0
   border-radius 999px
   background #f2f5fa
   color #64748b
   font-size 11px
+  font-weight 600
   line-height 18px
   white-space nowrap
+  cursor pointer
+
+  &:hover
+    background #e8edf5
+    color #334155
+
+  &.is-expanded
+    background #eef5ff
+    color #1d5fd6
+
+.syp-web-cookie-auth__manual-icon
+  width 13px
+  height 13px
+  display inline-flex
+  align-items center
+  justify-content center
+  border-radius 50%
+  background #ffffff
+  color #4080ff
+  font-size 10px
+  font-weight 800
+  font-family serif
 
 .syp-web-cookie-auth__body
   display flex

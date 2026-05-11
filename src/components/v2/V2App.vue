@@ -152,6 +152,7 @@
           :platform-key="settings.state.selectedPlatformKey"
           :platform-name="settings.state.selectedPlatformName"
           @cookie-authorized="handleCookieAuthorized"
+          @validated="handleConfigValidated"
         />
 
         <V2PicBedSettings v-else-if="settings.state.section === 'picbed'" />
@@ -399,6 +400,19 @@ async function handleDeleteAccount(platformKey: string) {
 async function handleCookieAuthorized(result: { ok: boolean }) {
   await settings.loadAccountItems()
   await quickPublish.init()
+  if (result.ok) {
+    await settings.finishAccountConfig()
+    await backToQuickPublish()
+  }
+}
+
+async function handleConfigValidated(result: { ok: boolean }) {
+  await settings.loadAccountItems()
+  await quickPublish.init()
+  if (result.ok) {
+    await settings.finishAccountConfig()
+    await backToQuickPublish()
+  }
 }
 
 async function retryInit() {

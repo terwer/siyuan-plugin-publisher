@@ -23,7 +23,12 @@
     <template v-else>
       <div v-if="bridgeComponent" class="syp-platform-bridge">
         <Suspense>
-          <component :is="bridgeComponent" :api-type="platformKey">
+          <component
+            :is="bridgeComponent"
+            :api-type="platformKey"
+            enable-on-validated
+            @validated="handleFormValidated"
+          >
             <template #cookie-actions="cookieActions">
               <V2WebCookieAuthPanel
                 :platform-key="platformKey"
@@ -31,6 +36,9 @@
                 :dyn-cfg="cookieActions.dynCfg"
                 :setting="cookieActions.setting"
                 :dynamic-config-array="cookieActions.dynamicConfigArray"
+                :is-manual-expanded="cookieActions.isManualExpanded"
+                :toggle-manual-editor="cookieActions.toggleManualEditor"
+                :expand-manual-editor="cookieActions.expandManualEditor"
                 @authorized="handleCookieAuthorized"
               />
             </template>
@@ -71,6 +79,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (event: "cookie-authorized", result: { status: WebCookieAuthorizationStatus; ok: boolean }): void
+  (event: "validated", result: { ok: boolean; apiStatus?: boolean }): void
 }>()
 
 const { t } = useV2I18n()
@@ -126,6 +135,10 @@ async function loadBridgeMeta() {
 
 function handleCookieAuthorized(result: { status: WebCookieAuthorizationStatus; ok: boolean }) {
   emit("cookie-authorized", result)
+}
+
+function handleFormValidated(result: { ok: boolean; apiStatus?: boolean }) {
+  emit("validated", result)
 }
 </script>
 

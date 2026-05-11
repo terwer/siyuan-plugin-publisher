@@ -19,10 +19,15 @@ const props = defineProps({
     type: String,
     default: "",
   },
+  enableOnValidated: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const { t } = useVueI18n()
 const { cfg } = await useHalowebWeb(props.apiType)
+const emit = defineEmits(["validated"])
 
 const halowebCfg = cfg as HalowebConfig
 const halowebPlaceholder = new HalowebWebPlaceholder()
@@ -34,14 +39,22 @@ halowebCfg.placeholder = halowebPlaceholder
 </script>
 
 <template>
-  <custom-web-setting :api-type="props.apiType" :cfg="halowebCfg">
-    <template #cookie-actions="cookieActions">
+  <custom-web-setting
+    :api-type="props.apiType"
+    :cfg="halowebCfg"
+    :enable-on-validated="props.enableOnValidated"
+    @validated="(result) => emit('validated', result)"
+  >
+    <template v-if="$slots['cookie-actions']" #cookie-actions="cookieActions">
       <slot
         name="cookie-actions"
         :cfg="cookieActions.cfg"
         :dyn-cfg="cookieActions.dynCfg"
         :setting="cookieActions.setting"
         :dynamic-config-array="cookieActions.dynamicConfigArray"
+        :is-manual-expanded="cookieActions.isManualExpanded"
+        :toggle-manual-editor="cookieActions.toggleManualEditor"
+        :expand-manual-editor="cookieActions.expandManualEditor"
       />
     </template>
   </custom-web-setting>

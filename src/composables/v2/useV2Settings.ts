@@ -213,6 +213,15 @@ export const useV2Settings = () => {
     state.configReturnTarget = null
   }
 
+  const finishAccountConfig = async () => {
+    state.accountView = "list"
+    state.accountHistoryStack = []
+    state.configReturnTarget = null
+    state.configMode = "edit"
+    state.pendingConfigItem = null
+    await loadAccountItems()
+  }
+
   const toggleAccountEnabled = async (platformKey: string, nextEnabled: boolean) => {
     const setting = await getSetting()
     const dynJsonCfg = JsonUtil.safeParse<DynamicJsonCfg>(setting[DYNAMIC_CONFIG_KEY], {} as DynamicJsonCfg)
@@ -288,6 +297,7 @@ export const useV2Settings = () => {
     backInAccountFlow,
     getConfigReturnTarget,
     clearConfigReturnTarget,
+    finishAccountConfig,
     toggleAccountEnabled,
     createAccountDraft,
     phase4DeleteDraft,
