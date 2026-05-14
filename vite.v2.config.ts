@@ -23,6 +23,7 @@ import { nodePolyfills } from "vite-plugin-node-polyfills"
 const args = minimist(process.argv.slice(2))
 const isWatch = args.watch || args.w || false
 const distDir = "dist-v2"
+const v2PluginAppBase = "/plugins/siyuan-plugin-publisher/"
 
 const getDefineEnv = () => {
   const mode = process.env.NODE_ENV ?? "development"
@@ -30,11 +31,11 @@ const getDefineEnv = () => {
 
   return {
     "process.env": {
+      ...env,
       DEV_MODE: "true",
-      APP_BASE: "/",
+      APP_BASE: v2PluginAppBase,
       NODE_ENV: mode,
       VITE_DEFAULT_TYPE: "siyuan",
-      ...env,
     },
   }
 }

@@ -79,12 +79,20 @@
             <div class="syp-publish-status__title">{{ publishTitle }}</div>
             <div class="syp-publish-status__desc">{{ publishDescription }}</div>
             <div v-if="publishState.status === 'success_with_warnings' && publishState.errMsg" class="syp-publish-status__warning">
-              <div class="syp-publish-status__warning-title">{{ t("v2.quickPublish.warning.imageUploadFailed") }}</div>
-              <pre class="syp-publish-status__warning-text">{{ publishState.errMsg }}</pre>
+              <div class="syp-publish-status__warning-head">
+                <div class="syp-publish-status__warning-title">{{ t("v2.quickPublish.warning.imageUploadFailed") }}</div>
+                <button type="button" class="syp-publish-status__detail-btn" @click="showPublishErrorDetails">
+                  {{ t("v2.quickPublish.action.viewErrorDetails") }}
+                </button>
+              </div>
             </div>
             <div v-if="publishState.status === 'failed' && publishState.errMsg" class="syp-publish-status__error">
-              <div class="syp-publish-status__error-title">{{ t("v2.quickPublish.errorDetails") }}</div>
-              <pre class="syp-publish-status__error-text">{{ publishState.errMsg }}</pre>
+              <div class="syp-publish-status__error-head">
+                <div class="syp-publish-status__error-title">{{ t("v2.quickPublish.errorDetails") }}</div>
+                <button type="button" class="syp-publish-status__detail-btn is-error" @click="showPublishErrorDetails">
+                  {{ t("v2.quickPublish.action.viewErrorDetails") }}
+                </button>
+              </div>
             </div>
           </div>
 
@@ -171,6 +179,7 @@
 import { ElMessage } from "element-plus"
 import { computed, onMounted, ref } from "vue"
 import "~/src/assets/v2/base.styl"
+import { sypShowErrorDetails } from "~/src/components/v2/common/SypMessageBox.ts"
 import SypTooltip from "~/src/components/v2/common/SypTooltip.vue"
 import UnifiedWorkspaceShell from "~/src/components/v2/layout/UnifiedWorkspaceShell.vue"
 import V2PlatformCard from "~/src/components/v2/publish/V2PlatformCard.vue"
@@ -386,6 +395,14 @@ function isFailed(item: typeof quickPublish.state.platformItems[number]) {
   return publishState.value.status === "failed" && publishState.value.platformKey === item.platformKey
 }
 
+async function showPublishErrorDetails() {
+  await sypShowErrorDetails({
+    title: t("v2.quickPublish.errorDetails"),
+    message: publishState.value.errDetails || publishState.value.errMsg || t("v2.common.unknownError"),
+    confirmButtonText: t("main.opt.ok"),
+  })
+}
+
 async function handleToggleAccountEnabled(platformKey: string, nextEnabled: boolean) {
   await settings.toggleAccountEnabled(platformKey, nextEnabled)
   await quickPublish.init()
@@ -581,38 +598,55 @@ async function retryInit() {
 .syp-publish-status__warning
   border-radius 10px
   background $syp-status-warning-deep-bg
-  padding 12px
+  padding 10px 12px
   border 1px solid $syp-status-warning-border
+
+.syp-publish-status__warning-head,
+.syp-publish-status__error-head
+  display flex
+  align-items center
+  justify-content space-between
+  gap 10px
 
 .syp-publish-status__warning-title
   font-size 12px
   font-weight 600
   color $syp-warning
-  margin-bottom 6px
+  margin-bottom 0
 
-.syp-publish-status__warning-text
-  margin 0
-  font-size 12px
+.syp-publish-status__detail-btn
+  min-height 24px
+  padding 0 8px
+  border-radius 7px
+  border 1px solid rgba(245, 158, 11, 0.35)
+  background rgba(255, 255, 255, 0.86)
   color #b37400
-  white-space pre-wrap
+  font-size 12px
+  font-weight 600
+  cursor pointer
+
+  &:hover
+    background #fff
+    border-color rgba(245, 158, 11, 0.6)
+
+  &.is-error
+    border-color rgba(217, 45, 32, 0.28)
+    color $syp-error
+
+    &:hover
+      border-color rgba(217, 45, 32, 0.52)
 
 .syp-publish-status__error
   border-radius 10px
   background $syp-status-error-deep-bg
-  padding 12px
+  padding 10px 12px
   border 1px solid $syp-status-error-border
 
 .syp-publish-status__error-title
   font-size 12px
   font-weight 600
   color $syp-error
-  margin-bottom 6px
-
-.syp-publish-status__error-text
-  margin 0
-  font-size 12px
-  color $syp-action-danger-hover
-  white-space pre-wrap
+  margin-bottom 0
 
 .syp-quick-shell__eyebrow
   font-size 12px

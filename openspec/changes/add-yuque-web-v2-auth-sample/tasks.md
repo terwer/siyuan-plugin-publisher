@@ -75,3 +75,4 @@
 
 - 8.5 已由用户确认测试通过。
 - 8.6 仍等待用户人工复测后才能打勾。2026-05-14 已用 9222 Chrome + 思源 `forwardProxy` 取证：图片上传、创建 Markdown 文档、正式页面图片渲染均成功；根因修复为本地图片 URL 替换正则不应使用 `\b` 包裹路径，同时详情回读中的语雀 Lake image card 会保存 URL 编码后的图片地址，确认逻辑需解码后匹配。
+- 2026-05-14 V2 宿主插件复测发现 `APP_BASE="/"` 会把 Electron 运行时依赖拼成 `.../data/libs/node-fetch-cjs/...`，导致图片上传前 FormData 依赖加载失败；已修正为 `/plugins/siyuan-plugin-publisher/`，并补充“查看详情”按钮显示脱敏真实错误，等待用户重新人工验证 8.6。

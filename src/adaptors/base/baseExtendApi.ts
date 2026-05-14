@@ -44,6 +44,7 @@ import ImageUtils from "~/src/utils/ImageUtils.ts"
 import { LuteUtil } from "~/src/utils/luteUtil.ts"
 import { MdUtils } from "~/src/utils/mdUtils.ts"
 import { base64ToBuffer, path, remoteImageToBase64Info } from "~/src/utils/polyfillUtils.ts"
+import { sanitizeSensitiveForLog } from "~/src/utils/sensitiveLogSanitizer.ts"
 import { SypConfig } from "~/syp.config.ts"
 import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 
@@ -538,6 +539,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
             }
           } catch (e) {
             const message = e.message || e
+            const diagnosticMessage = this.formatDiagnosticError(e)
             let ignoreError = false
             if (message.includes(BaseError.NO_PAGE_ID_FOUND_IN_MEDIA_MACRO_MODE)) {
               ignoreError = true
@@ -550,6 +552,10 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
                 (post as any).imageUploadErrors = []
               }
               (post as any).imageUploadErrors.push(imgErrMsg)
+              if (!(post as any).imageUploadErrorDetails) {
+                (post as any).imageUploadErrorDetails = []
+              }
+              ;(post as any).imageUploadErrorDetails.push(`${image.name} 同步失败(使用${picbedName}): ${diagnosticMessage}`)
             } else {
               this.logger.info("ignore error in macro mode")
             }
@@ -607,6 +613,12 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
       case PicbedServiceTypeEnum.None: return "无"
       default: return String(cfg.picbedService || "未知")
     }
+  }
+
+  private formatDiagnosticError(error: any): string {
+    const diagnostic = error?.diagnosticMessage || error?.cause?.stack || error?.stack || error?.message || error
+    const sanitized = sanitizeSensitiveForLog(diagnostic)
+    return typeof sanitized === "string" ? sanitized : JSON.stringify(sanitized)
   }
 
   public async getImagesFromMd(id: string, markdown: string) {

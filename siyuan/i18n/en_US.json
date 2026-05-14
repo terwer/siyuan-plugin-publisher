@@ -121,6 +121,7 @@
   "v2.quickPublish.currentDocument": "Current Document",
   "v2.quickPublish.desc": "Pick a target platform, then publish, update, or open the article directly.",
   "v2.quickPublish.errorDetails": "Error Details",
+  "v2.quickPublish.action.viewErrorDetails": "View Details",
   "v2.quickPublish.warning.imageUploadFailed": "Image sync details",
   "v2.quickPublish.loading.platforms": "Loading Platform List",
   "v2.quickPublish.loading.status": "Loading Status",

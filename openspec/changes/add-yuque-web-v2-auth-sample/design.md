@@ -501,6 +501,36 @@ curl http://127.0.0.1:9222/json/list
 
 结论：语雀侧图片上传、Markdown 发布、正式文档页图片渲染均可用。API 详情回读会把 Markdown 图片转换为 Lake image card，URL 在 card 的 `value` 中被 URL 编码；因此 8.6 的“正文 URL 正确替换”验证不能只查 raw URL，适配器回读确认逻辑需要同时匹配解码后的详情内容。另一个独立证据是：只用 `document.cookie` 缺少 HttpOnly `_yuque_session/acw_tc` 等 Cookie，会在 `forwardProxy` 下 401；自动读取 Cookie 必须继续保留完整 Electron/CDP Cookie，不可退化为页面 JS 可见 Cookie。
 
+### 7.5 V2 宿主插件 APP_BASE 修正（2026-05-14）
+
+用户在 V2 宿主插件真实运行时复测 8.6，控制台报错：
+
+```text
+Cannot find module '/Volumes/workspace/mydocs/SiYuanWorkspace/test/data/libs/node-fetch-cjs/dist/index.js'
+Require stack:
+- electron/js2c/renderer_init
+```
+
+取证结论：V2 不是站点根路径应用，而是思源宿主插件。`PublisherAppInstance.moduleBase` 的计算规则为：
+
+```ts
+workspaceDir + "/data" + process.env.APP_BASE
+```
+
+因此 V2 的 `APP_BASE` 必须与旧 `SiyuanBuild` 一致，为：
+
+```text
+/plugins/siyuan-plugin-publisher/
+```
+
+错误的 `APP_BASE="/"` 会把运行时依赖路径拼成 `.../data/libs/...`，导致 Electron `require` 找不到随插件分发的 `libs/node-fetch-cjs` 和 `libs/zhi-formdata-fetch`。修复后路径应为：
+
+```text
+.../data/plugins/siyuan-plugin-publisher/libs/node-fetch-cjs/dist/index.js
+```
+
+同时 V2 的图片未同步/发布失败提示必须保持用户可读摘要，但界面必须提供“查看详情”按钮打开完整脱敏错误，便于用户和开发者按真实报错排查。
+
 
 ### 8. V2 桥接：复用已有桥接注册
 

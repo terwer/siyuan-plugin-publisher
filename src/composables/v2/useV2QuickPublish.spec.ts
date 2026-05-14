@@ -19,6 +19,10 @@ import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
 import zhCN from "~/siyuan/i18n/zh_CN.json"
 
 const mockValidatePlatformPublish = vi.hoisted(() => vi.fn())
+const mockDoSinglePublish = vi.hoisted(() => vi.fn())
+const mockAssignInitAttrs = vi.hoisted(() => vi.fn())
+const mockGetPublishCfg = vi.hoisted(() => vi.fn())
+const mockBlogGetPost = vi.hoisted(() => vi.fn())
 
 vi.mock("~/src/composables/v2/useV2PublishValidation.ts", () => ({
   useV2PublishValidation: () => ({
@@ -39,25 +43,25 @@ vi.mock("~/src/composables/useSiyuanApi.ts", () => ({
       getBlockByID: vi.fn().mockResolvedValue({ content: "快速发布测试文档" }),
     },
     blogApi: {
-      getPost: vi.fn(),
+      getPost: mockBlogGetPost,
     },
   }),
 }))
 
 vi.mock("~/src/composables/usePublish.ts", () => ({
   usePublish: () => ({
-    doSinglePublish: vi.fn(),
+    doSinglePublish: mockDoSinglePublish,
     doSingleDelete: vi.fn(),
     getPostPreviewUrl: vi.fn(),
     initPublishMethods: {
-      assignInitAttrs: vi.fn(),
+      assignInitAttrs: mockAssignInitAttrs,
     },
   }),
 }))
 
 vi.mock("~/src/composables/usePublishConfig.ts", () => ({
   usePublishConfig: () => ({
-    getPublishCfg: vi.fn(),
+    getPublishCfg: mockGetPublishCfg,
     getPublishApi: vi.fn(),
   }),
 }))
@@ -75,7 +79,17 @@ vi.mock("~/src/stores/usePreferenceSettingStore.ts", () => ({
 describe("useV2QuickPublish", () => {
   beforeEach(() => {
     setActivePinia(createPinia())
+    vi.clearAllMocks()
     mockValidatePlatformPublish.mockResolvedValue({ canPublish: true })
+    mockBlogGetPost.mockResolvedValue({ title: "快速发布测试文档", markdown: "正文" })
+    mockAssignInitAttrs.mockImplementation(async (post) => post)
+    mockGetPublishCfg.mockResolvedValue({
+      cfg: { posidKey: "custom-custom_Yuqueweb-post-id", blogName: "语雀网页版" },
+      dynCfg: { platformKey: "custom_Yuqueweb", platformName: "语雀网页版" },
+      setting: {
+        "20260509120000-test": {},
+      },
+    })
   })
 
   it("keeps quick publish platform items focused on direct actions without platform descriptions", async () => {
@@ -354,5 +368,61 @@ describe("useV2QuickPublish", () => {
       isAuthorized: false,
       tooltipText: "请选择知识库",
     })
+  })
+
+  it("keeps compact warning text while preserving diagnostic details for the details button", async () => {
+    let quickPublish!: ReturnType<typeof useV2QuickPublish>
+
+    const Harness = defineComponent({
+      setup() {
+        quickPublish = useV2QuickPublish()
+        return () => h("div")
+      },
+    })
+
+    const platform = {
+      platformType: PlatformType.Custom,
+      subPlatformType: SubPlatformType.Custom_Yuqueweb,
+      platformKey: "custom_Yuqueweb",
+      platformName: "语雀网页版",
+      authMode: AuthMode.WEBSITE,
+      isEnabled: true,
+      isAuth: true,
+      isSys: false,
+    } as DynamicConfig
+
+    const store = usePublishSettingStore()
+    store.getSetting = vi.fn().mockResolvedValue({
+      [DYNAMIC_CONFIG_KEY]: setDynamicJsonCfg([platform]),
+      "20260509120000-test": {},
+    } as any)
+
+    mockDoSinglePublish.mockResolvedValue({
+      status: true,
+      previewUrl: "https://www.yuque.com/terwer/note/image-test",
+      errMsg: "image.png 同步失败(使用平台图床): 语雀图片上传失败，请确认 Cookie 有效。",
+      errDetails:
+        "image.png 同步失败(使用平台图床): Error: Cannot find module '/plugins/siyuan-plugin-publisher/libs/node-fetch-cjs/dist/index.js'",
+    })
+
+    mount(Harness, {
+      global: {
+        plugins: [
+          createI18n({
+            legacy: false,
+            locale: "zh_CN",
+            messages: { zh_CN: zhCN },
+          }),
+        ],
+      },
+    })
+
+    await quickPublish.init()
+    await quickPublish.publishToPlatform(quickPublish.state.platformItems[0])
+
+    expect(quickPublish.state.publishState.status).toBe("success_with_warnings")
+    expect(quickPublish.state.publishState.errMsg).toContain("语雀图片上传失败")
+    expect(quickPublish.state.publishState.errDetails).toContain("Cannot find module")
+    expect(quickPublish.state.publishState.errDetails).toContain("/plugins/siyuan-plugin-publisher/")
   })
 })

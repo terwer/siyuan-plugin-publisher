@@ -51,6 +51,7 @@ export const useV2QuickPublish = () => {
       platformName: "",
       previewUrl: "",
       errMsg: "",
+      errDetails: "",
       isPublishing: false,
       lastAction: "" as V2PublishAction,
     },
@@ -176,6 +177,7 @@ export const useV2QuickPublish = () => {
     setPublishState({
       status: "preparing",
       errMsg: "",
+      errDetails: "",
       previewUrl: "",
       isPublishing: true,
       lastAction: item.isPublished ? "update" : "publish",
@@ -208,20 +210,24 @@ export const useV2QuickPublish = () => {
           status: hasWarnings ? "success_with_warnings" : "success",
           previewUrl: result.previewUrl ?? "",
           errMsg: result?.errMsg ?? "",
+          errDetails: result?.errDetails || result?.errMsg || "",
           isPublishing: false,
         })
       } else {
         setPublishState({
           status: "failed",
           errMsg: result?.errMsg || t("v2.quickPublish.error.publishFailed"),
+          errDetails: result?.errDetails || result?.errMsg || t("v2.quickPublish.error.publishFailed"),
           previewUrl: "",
           isPublishing: false,
         })
       }
     } catch (error) {
+      const errorText = normalizeError(error)
       setPublishState({
         status: "failed",
-        errMsg: normalizeError(error),
+        errMsg: errorText,
+        errDetails: errorText,
         previewUrl: "",
         isPublishing: false,
       })
@@ -237,6 +243,7 @@ export const useV2QuickPublish = () => {
     setPublishState({
       status: "preparing",
       errMsg: "",
+      errDetails: "",
       previewUrl: "",
       isPublishing: true,
       lastAction: "preview",
@@ -253,6 +260,7 @@ export const useV2QuickPublish = () => {
         status: "preview_ready",
         previewUrl,
         errMsg: "",
+        errDetails: "",
         isPublishing: false,
       })
 
@@ -260,9 +268,11 @@ export const useV2QuickPublish = () => {
         await openPathOrUrl(previewUrl, kernelApi)
       }
     } catch (error) {
+      const errorText = normalizeError(error)
       setPublishState({
         status: "failed",
-        errMsg: normalizeError(error),
+        errMsg: errorText,
+        errDetails: errorText,
         previewUrl: "",
         isPublishing: false,
       })
@@ -289,6 +299,7 @@ export const useV2QuickPublish = () => {
     setPublishState({
       status: "preparing",
       errMsg: "",
+      errDetails: "",
       previewUrl: "",
       isPublishing: true,
       lastAction: "delete",
@@ -308,20 +319,24 @@ export const useV2QuickPublish = () => {
           status: "success",
           previewUrl: "",
           errMsg: "",
+          errDetails: "",
           isPublishing: false,
         })
       } else {
         setPublishState({
           status: "failed",
           errMsg: result?.errMsg || t("v2.quickPublish.error.deleteFailed"),
+          errDetails: result?.errDetails || result?.errMsg || t("v2.quickPublish.error.deleteFailed"),
           previewUrl: "",
           isPublishing: false,
         })
       }
     } catch (error) {
+      const errorText = normalizeError(error)
       setPublishState({
         status: "failed",
-        errMsg: normalizeError(error),
+        errMsg: errorText,
+        errDetails: errorText,
         previewUrl: "",
         isPublishing: false,
       })

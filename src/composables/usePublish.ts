@@ -32,6 +32,7 @@ import { usePlatformMetadataStore } from "~/src/stores/usePlatformMetadataStore.
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { sanitizeSensitiveForLog } from "~/src/utils/sensitiveLogSanitizer.ts"
 import { SypConfig } from "~/syp.config.ts"
 
 /**
@@ -75,6 +76,9 @@ const usePublish = () => {
     // vars
     let postid: string
     let postPreviewUrl: string
+    let publishErrorDetails = ""
+    singleFormData.errMsg = ""
+    singleFormData.publishProcessStatus = false
     try {
       // 系统内置
       const isSys = pre.systemCfg.some((item) => item.platformKey === key)
@@ -119,6 +123,8 @@ const usePublish = () => {
         singleFormData.errMsg = imageErrors.join("\n")
         logger.warn(`图片上传存在${imageErrors.length}个错误，已记录到errMsg`)
       }
+      const imageErrorDetails = (finalPost as any).imageUploadErrorDetails as string[] | undefined
+      publishErrorDetails = imageErrorDetails?.join("\n\n") || singleFormData.errMsg
       // ===================================
       // 文章预处理结束
       // ===================================
@@ -209,6 +215,7 @@ const usePublish = () => {
       singleFormData.publishProcessStatus = true
     } catch (e) {
       singleFormData.errMsg = t("main.opt.failure") + "=>" + e
+      publishErrorDetails = formatPublishDiagnosticError(e)
       // logger.error(t("main.opt.failure") + "=>", e)
       await kernelApi.pushErrMsg({
         msg: singleFormData.errMsg,
@@ -223,6 +230,7 @@ const usePublish = () => {
       name: cfg?.blogName,
       previewUrl: postPreviewUrl,
       errMsg: singleFormData.errMsg,
+      errDetails: publishErrorDetails || singleFormData.errMsg,
     }
   }
 
@@ -237,6 +245,9 @@ const usePublish = () => {
     const setting: typeof SypConfig = publishCfg.setting
     const cfg: BlogConfig = publishCfg.cfg
     const dynCfg: DynamicConfig = publishCfg.dynCfg
+    let deleteErrorDetails = ""
+    singleFormData.errMsg = ""
+    singleFormData.publishProcessStatus = false
 
     try {
       // 检测是否发布
@@ -279,6 +290,7 @@ const usePublish = () => {
       }
     } catch (e) {
       singleFormData.errMsg = t("main.opt.failure") + "=>" + e
+      deleteErrorDetails = formatPublishDiagnosticError(e)
       // logger.error(t("main.opt.failure") + "=>", e)
       // ElMessage.error(singleFormData.errMsg)
       await kernelApi.pushErrMsg({
@@ -291,6 +303,7 @@ const usePublish = () => {
       key: key,
       status: singleFormData.publishProcessStatus,
       errMsg: singleFormData.errMsg,
+      errDetails: deleteErrorDetails || singleFormData.errMsg,
     }
   }
 
@@ -355,6 +368,12 @@ const usePublish = () => {
     let previewUrl = await api.getPreviewUrl(newPostid)
     const isAbsoluteUrl = /^[a-z]+:\/\//.test(previewUrl)
     return isAbsoluteUrl ? previewUrl : StrUtil.pathJoin(cfg?.home ?? "", previewUrl)
+  }
+
+  const formatPublishDiagnosticError = (error: any): string => {
+    const diagnostic = error?.diagnosticMessage || error?.cause?.stack || error?.stack || error?.message || error
+    const sanitized = sanitizeSensitiveForLog(diagnostic)
+    return typeof sanitized === "string" ? sanitized : JSON.stringify(sanitized)
   }
 
   /**

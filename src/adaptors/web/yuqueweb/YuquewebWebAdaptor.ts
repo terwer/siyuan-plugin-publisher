@@ -253,7 +253,9 @@ class YuquewebWebAdaptor extends BaseWebApi {
       }
     } catch (e) {
       this.logger.error("yuqueweb image upload failed", this.sanitizeForLog(e?.toString?.() ?? e))
-      throw new Error("语雀图片上传失败，请确认 Cookie 有效、图片文件可读取后重试。")
+      const error = new Error("语雀图片上传失败，请确认 Cookie 有效、图片文件可读取后重试。")
+      ;(error as any).diagnosticMessage = this.sanitizeForLog(e?.stack || e?.toString?.() || e)
+      throw error
     }
   }
 

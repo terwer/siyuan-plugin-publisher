@@ -786,6 +786,7 @@ export default {
   "post.bind.gitlabastro.slug": "Gitlab Astro别名",
   "v2.preference.confirm.allowChangeSlug.title": "确认开启别名修改",
   "v2.publishValidation.incomplete": "请先完成发布所需配置，再保存或验证。",
+  "v2.quickPublish.action.viewErrorDetails": "查看详情",
   "setting.yuqueweb.publishValidation.selectKnowledgeBase": "请选择可发布的语雀知识库后再继续。",
   "v2.webCookieAuth.title": "Cookie 授权",
   "v2.webCookieAuth.action.autoRead": "自动读取 Cookie",

@@ -17,6 +17,10 @@ import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
  * @since 1.20.2
  */
 class FormDataUtils {
+  private static pluginLibPath(appInstance: PublisherAppInstance, relativePath: string) {
+    return `${appInstance.moduleBase}${relativePath}`
+  }
+
   /**
    * 获取 FormData
    */
@@ -25,7 +29,7 @@ class FormDataUtils {
     let FormData = win.FormData
     let Blob = win.Blob
     if (win.require) {
-      const nfc = win.require(`${appInstance.moduleBase}libs/node-fetch-cjs/dist/index.js`)
+      const nfc = win.require(this.pluginLibPath(appInstance, "libs/node-fetch-cjs/dist/index.js"))
       FormData = nfc.FormData
       Blob = nfc.Blob
     }
@@ -41,7 +45,7 @@ class FormDataUtils {
    */
   public static getFormDataFetch(appInstance: PublisherAppInstance) {
     const win = appInstance.win
-    const doFetch = win.require(`${appInstance.moduleBase}libs/zhi-formdata-fetch/index.cjs`)
+    const doFetch = win.require(this.pluginLibPath(appInstance, "libs/zhi-formdata-fetch/index.cjs"))
     return doFetch
   }
 }

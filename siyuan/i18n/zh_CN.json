@@ -121,6 +121,7 @@
   "v2.quickPublish.currentDocument": "当前文档",
   "v2.quickPublish.desc": "选择目标平台后可直接发布、更新或查看文章。",
   "v2.quickPublish.errorDetails": "错误详情",
+  "v2.quickPublish.action.viewErrorDetails": "查看详情",
   "v2.quickPublish.warning.imageUploadFailed": "图片未同步详情",
   "v2.quickPublish.loading.platforms": "平台列表载入中",
   "v2.quickPublish.loading.status": "状态载入中",

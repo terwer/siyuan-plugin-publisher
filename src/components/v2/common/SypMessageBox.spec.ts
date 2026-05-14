@@ -8,13 +8,16 @@
  */
 
 import { describe, expect, it, vi, beforeEach } from "vitest"
-import { sypConfirm } from "~/src/components/v2/common/SypMessageBox.ts"
+import { isVNode } from "vue"
+import { sypConfirm, sypShowErrorDetails } from "~/src/components/v2/common/SypMessageBox.ts"
 
 const mockConfirm = vi.hoisted(() => vi.fn())
+const mockAlert = vi.hoisted(() => vi.fn())
 
 vi.mock("element-plus", () => ({
   ElMessageBox: {
     confirm: mockConfirm,
+    alert: mockAlert,
   },
 }))
 
@@ -51,5 +54,28 @@ describe("SypMessageBox", () => {
     mockConfirm.mockRejectedValue(new Error("cancel"))
 
     await expect(sypConfirm({ title: "提示", message: "确认？" })).resolves.toBe(false)
+  })
+
+  it("shows diagnostic error details in the V2 message box", async () => {
+    mockAlert.mockResolvedValue("confirm")
+
+    await sypShowErrorDetails({
+      title: "错误详情",
+      message: "Error: Cannot find module '/plugins/siyuan-plugin-publisher/libs/node-fetch-cjs/dist/index.js'",
+      confirmButtonText: "确认",
+    })
+
+    const [message, title, options] = mockAlert.mock.calls[0]
+    expect(isVNode(message)).toBe(true)
+    expect(message.type).toBe("pre")
+    expect(message.props).toMatchObject({
+      class: "syp-v2-message-box__error-details",
+    })
+    expect(title).toBe("错误详情")
+    expect(options).toMatchObject({
+      customClass: "syp-v2-message-box syp-v2-message-box--details",
+      modalClass: "syp-v2-message-box-modal",
+      confirmButtonText: "确认",
+    })
   })
 })
