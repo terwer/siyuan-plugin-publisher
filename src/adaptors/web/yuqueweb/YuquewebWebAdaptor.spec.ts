@@ -166,6 +166,7 @@ describe("YuquewebWebAdaptor document read/update", () => {
       title: "新标题",
       slug: "new-slug",
       body: "# 新标题\n\n正文 marker",
+      status: 1,
     })
     expect(webFetch.mock.calls[1][0]).toBe(
       "https://www.yuque.com/api/docs/269293899?book_id=25033491&include_contributors=true&include_like=true&include_hits=true&merge_dynamic_data=false"

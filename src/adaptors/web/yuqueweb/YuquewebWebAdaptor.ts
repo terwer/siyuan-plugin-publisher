@@ -42,6 +42,7 @@ class YuquewebRequestError extends Error {
  * - `GET /api/mine/user_books?user_type=Group&offset=0&limit=20` 可用于组织知识库；当前测试账号返回空数组。
  * - `POST /api/docs` + `format: "markdown"` + `book_id/type/title/slug/body/status/insert_to_catalog/action` 可创建 Markdown 文档。
  * - `PUT /api/docs/{id}` + `format: "markdown"` + `book_id/type/title/slug/body/status/insert_to_catalog/action` 可更新标题、slug、正文并发布。
+ * - 2026-05-14 实测：更新已发布 Markdown 文档时，`status: 0` 只更新 `title/slug`，不会更新正文；`status: 1` 或不传 `status` 才会更新正文。
  * - `GET /api/docs/{id}?book_id={bookId}` 才是按 id 读取文档详情的正确路径；裸 `GET /api/docs/{id}` 返回 404。
  * - `PUT /api/docs/{id}` 响应的 Markdown 正文字段为 `body`；详情回读响应的正式内容字段为 `content`。
  * - `DELETE /api/docs/{id}` 可删除文档。
@@ -151,6 +152,7 @@ class YuquewebWebAdaptor extends BaseWebApi {
       login: meta.login,
     }
     const payload = await this.buildDocPayload(bookMeta, post)
+    payload.status = 1
     const updatedDoc = await this.yuquewebFetch(`/api/docs/${meta.id}`, payload, "PUT")
 
     this.assertUpdatedDoc(updatedDoc, meta, payload)
