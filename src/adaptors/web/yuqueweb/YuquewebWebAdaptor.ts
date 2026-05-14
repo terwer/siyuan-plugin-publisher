@@ -45,6 +45,8 @@ class YuquewebRequestError extends Error {
  * - 2026-05-14 实测：更新已发布 Markdown 文档时，`status: 0` 只更新 `title/slug`，不会更新正文；`status: 1` 或不传 `status` 才会更新正文。
  * - `GET /api/docs/{id}?book_id={bookId}` 才是按 id 读取文档详情的正确路径；裸 `GET /api/docs/{id}` 返回 404。
  * - `PUT /api/docs/{id}` 响应的 Markdown 正文字段为 `body`；详情回读响应的正式内容字段为 `content`。
+ * - Markdown 图片在详情 `content` 里会被语雀转换成 Lake card，图片 URL 位于 URL 编码后的
+ *   `value="data:%7B%22src%22..."` 中；正式文档页会还原为可访问的 `<img src="https://cdn.nlark.com/...">`。
  * - `DELETE /api/docs/{id}` 可删除文档。
  * - `POST /api/upload/attach?type=image`，multipart 字段 `file`，响应 `data.url` 为图片 URL。
  *
@@ -431,6 +433,11 @@ class YuquewebWebAdaptor extends BaseWebApi {
     return doc?.body ?? doc?.body_draft ?? doc?.content ?? ""
   }
 
+  private getSearchableDocContent(doc: any): string {
+    const content = this.getDocContent(doc)
+    return `${content}\n${this.safeDecodeURIComponent(content)}`
+  }
+
   private assertUpdatedDoc(updatedDoc: any, meta: YuquewebPostMeta, payload: any) {
     if (!updatedDoc?.id) {
       throw new Error("语雀文档更新失败，请稍后重试。")
@@ -466,9 +473,15 @@ class YuquewebWebAdaptor extends BaseWebApi {
       throw new Error("语雀文档更新后回读失败：别名未同步，请刷新后重试。")
     }
 
+    const searchableContent = this.getSearchableDocContent(confirmedDoc)
     const probe = this.getBodyProbe(payload.body, payload.title)
-    if (!StrUtil.isEmptyString(probe) && !this.getDocContent(confirmedDoc).includes(probe)) {
+    if (!StrUtil.isEmptyString(probe) && !searchableContent.includes(probe)) {
       throw new Error("语雀文档更新后回读失败：正文未同步，请刷新后重试。")
+    }
+
+    const missingImageUrls = this.getMarkdownImageUrls(payload.body).filter((url) => !searchableContent.includes(url))
+    if (missingImageUrls.length > 0) {
+      throw new Error("语雀文档更新后回读失败：正文图片未同步，请刷新后重试。")
     }
   }
 
@@ -483,7 +496,7 @@ class YuquewebWebAdaptor extends BaseWebApi {
           .replace(/^[-*+]\s+/, "")
           .replace(/^\d+\.\s+/, "")
           .replace(/^>\s+/, "")
-          .replace(/!\[([^\]]*)]\([^)]+\)/g, "$1")
+          .replace(/!\[([^\]]*)]\([^)]+\)/g, "")
           .replace(/\[([^\]]+)]\([^)]+\)/g, "$1")
           .replace(/[`*_~]/g, "")
           .trim()
@@ -495,6 +508,29 @@ class YuquewebWebAdaptor extends BaseWebApi {
       .filter((line) => line !== normalizedTitle)
 
     return lines[0] ?? ""
+  }
+
+  private getMarkdownImageUrls(body: string): string[] {
+    const urls = new Set<string>()
+    const markdown = String(body ?? "")
+    const imageRegex = /!\[[^\]]*]\(\s*<?([^)\s>]+)>?(?:\s+["'][^)]*["'])?\s*\)/g
+    let match: RegExpExecArray | null
+    while ((match = imageRegex.exec(markdown)) !== null) {
+      const url = match[1]?.trim()
+      if (!StrUtil.isEmptyString(url)) {
+        urls.add(url)
+      }
+    }
+    return Array.from(urls)
+  }
+
+  private safeDecodeURIComponent(content: string): string {
+    try {
+      return decodeURIComponent(content)
+    } catch (e) {
+      this.logger.warn("yuqueweb decode confirmed content failed", this.sanitizeForLog(e?.toString?.() ?? e))
+      return content
+    }
   }
 
   private async resolveSlug(post: Post): Promise<string> {

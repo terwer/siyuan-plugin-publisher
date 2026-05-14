@@ -572,7 +572,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
           // 其他链接替换
           const pictureReplacePattern = new RegExp(
             Object.keys(urlMap)
-              .map((key) => `\\b${key}\\b`)
+              .map((key) => ImageUtils.escapeRegExp(key))
               .join("|"),
             "g"
           )

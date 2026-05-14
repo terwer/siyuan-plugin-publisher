@@ -181,4 +181,51 @@ describe("YuquewebWebAdaptor document read/update", () => {
       url: "https://www.yuque.com/terwer/note/new-slug",
     })
   })
+
+  it("confirms updated images when Yuque detail content stores image URL inside encoded Lake card data", async () => {
+    const imageUrl = "https://cdn.nlark.com/yuque/0/2026/png/26260900/test.png"
+    const encodedImageUrl = encodeURIComponent(imageUrl)
+    const adaptor = createAdaptor()
+    const webFetch = vi
+      .fn()
+      .mockResolvedValueOnce({
+        data: {
+          id: "269293899",
+          book_id: "25033491",
+          title: "图片标题",
+          slug: "image-slug",
+          body: `# 图片标题\n\n![测试图片](${imageUrl})`,
+          format: "markdown",
+        },
+      })
+      .mockResolvedValueOnce({
+        data: {
+          id: "269293899",
+          title: "图片标题",
+          slug: "image-slug",
+          content: `<!doctype lake><p><card type="inline" name="image" value="data:%7B%22src%22%3A%22${encodedImageUrl}%22%7D"></card></p>`,
+          format: "lake",
+        },
+      })
+    vi.spyOn(adaptor as any, "webFetch").mockImplementation(webFetch)
+
+    const post = new Post()
+    post.title = "图片标题"
+    post.wp_slug = "image-slug"
+    post.markdown = `# 图片标题\n\n![测试图片](${imageUrl})`
+
+    await expect(
+      adaptor.editPost(
+        JSON.stringify({
+          id: "269293899",
+          slug: "old-slug",
+          bookId: "25033491",
+          bookSlug: "note",
+          login: "terwer",
+          format: "markdown",
+        }),
+        post
+      )
+    ).resolves.toBe(true)
+  })
 })

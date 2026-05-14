@@ -461,6 +461,46 @@ curl http://127.0.0.1:9222/json/list
 
 结论：Markdown 更新最终采用 `PUT /api/docs/{id}`；知识库列表采用个人与组织 `user_books` 两条接口合并，按 `abilities.create_doc` 过滤；图片上传采用 `POST /api/upload/attach?type=image`，multipart 字段为 `file`，成功 URL 位于 `data.url`。失败响应已验证无文件场景为 `400`，实现侧统一映射为用户化图片上传失败提示。
 
+### 7.4 图片发布链路复核（2026-05-14）
+
+8.6 失败复核继续使用用户已登录的 9222 Chrome 和本机思源 `forwardProxy`，只创建并删除“可删除”测试文档，未修改历史文档。脱敏证据：
+
+```json
+{
+  "cookie": { "fullCookiePairs": 11, "documentCookiePairs": 7, "hasHttpOnly": true },
+  "documentCookieViaForwardProxy": { "GET /api/mine": 401, "GET /api/mine/user_books": 401 },
+  "fullCookieViaForwardProxy": { "GET /api/mine": 200, "login": "terwer", "GET /api/mine/user_books": 200 },
+  "uploadViaForwardProxy": {
+    "endpoint": "POST /api/upload/attach?type=image",
+    "status": 200,
+    "responseUrlField": "data.url",
+    "urlHost": "cdn.nlark.com"
+  },
+  "createMarkdownWithImageViaForwardProxy": {
+    "endpoint": "POST /api/docs",
+    "status": 200,
+    "responseFields": { "format": "markdown", "status": 0, "bodyContainsRawImageUrl": true }
+  },
+  "detailReadback": {
+    "endpoint": "GET /api/docs/{id}?book_id=25033491",
+    "status": 200,
+    "format": "lake",
+    "contentContainsRawImageUrl": false,
+    "contentContainsEncodedImageUrl": true,
+    "contentShape": "<card type=\"inline\" name=\"image\" value=\"data:%7B%22src%22%3A%22https%3A%2F%2Fcdn.nlark.com%2F...%22%7D\">"
+  },
+  "renderedDocPage": {
+    "url": "https://www.yuque.com/terwer/note/{slug}",
+    "imageStatus": 200,
+    "imageContentType": "image/png",
+    "documentImageNaturalSize": "819x819"
+  },
+  "deleteDoc": { "endpoint": "DELETE /api/docs/{id}", "status": 200 }
+}
+```
+
+结论：语雀侧图片上传、Markdown 发布、正式文档页图片渲染均可用。API 详情回读会把 Markdown 图片转换为 Lake image card，URL 在 card 的 `value` 中被 URL 编码；因此 8.6 的“正文 URL 正确替换”验证不能只查 raw URL，适配器回读确认逻辑需要同时匹配解码后的详情内容。另一个独立证据是：只用 `document.cookie` 缺少 HttpOnly `_yuque_session/acw_tc` 等 Cookie，会在 `forwardProxy` 下 401；自动读取 Cookie 必须继续保留完整 Electron/CDP Cookie，不可退化为页面 JS 可见 Cookie。
+
 
 ### 8. V2 桥接：复用已有桥接注册
 
