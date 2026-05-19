@@ -27,6 +27,23 @@ import { Base64 } from "js-base64"
 import FormDataUtils from "~/src/utils/FormDataUtils.ts"
 import { sanitizeSensitiveForLog } from "~/src/utils/sensitiveLogSanitizer.ts"
 
+interface WebRequestDiagnostic {
+  stage: string
+  transport?: string
+  url?: string
+  status?: number
+  responseBodyPreview?: string
+  errorName?: string
+  errorMessage?: string
+  fileName?: string
+  fileType?: string
+  fileSize?: number
+}
+
+interface WebFormFetchOptions {
+  diagnostic?: WebRequestDiagnostic
+}
+
 /**
  * 网页授权统一封装基类
  *
@@ -207,27 +224,46 @@ class BaseWebApi extends WebApi {
    * @param formData - 表单数据
    * @param forceProxy - 是否强制使用代理
    * */
-  public async webFormFetch(url: string, headers: any[], formData: BodyInit, forceProxy: boolean = false) {
+  public async webFormFetch(
+    url: string,
+    headers: any[],
+    formData: BodyInit,
+    forceProxy: boolean = false,
+    options: WebFormFetchOptions = {}
+  ) {
     // 如果没有可用的 CORS 代理或者没有强制使用代理，使用默认的自动检测机制
     if (this.isUseSiyuanProxy || (!this.isUseSiyuanProxy && forceProxy) || !forceProxy) {
       this.logger.info("Using legency web formFetch")
 
       const { isInSiyuanOrSiyuanNewWin } = useSiyuanDevice()
       if (!isInSiyuanOrSiyuanNewWin() || forceProxy) {
-        const fetchResult = await this.webFetch(
+        options.diagnostic = {
+          ...options.diagnostic,
+          stage: "forward-proxy",
+          transport: "siyuan-forward-proxy",
           url,
-          headers,
-          formData,
-          "POST",
-          undefined,
-          forceProxy,
-          "base64",
-          "base64"
-        )
-        const resText = Base64.fromBase64(fetchResult.body)
-        const resJson = JsonUtil.safeParse<any>(resText, {} as any)
-        this.logger.debug("apiForm doFetch success, resJson=>", sanitizeSensitiveForLog(resJson))
-        return resJson
+        }
+        try {
+          const fetchResult = await this.webFetch(
+            url,
+            headers,
+            formData,
+            "POST",
+            undefined,
+            forceProxy,
+            "base64",
+            "base64"
+          )
+          options.diagnostic.status = Number(fetchResult?.status)
+          const resText = Base64.fromBase64(fetchResult.body)
+          options.diagnostic.responseBodyPreview = this.buildDiagnosticPreview(resText)
+          const resJson = JsonUtil.safeParse<any>(resText, {} as any)
+          this.logger.debug("apiForm doFetch success, resJson=>", sanitizeSensitiveForLog(resJson))
+          return resJson
+        } catch (e) {
+          this.attachDiagnosticError(e, options.diagnostic)
+          throw e
+        }
       } else {
         // get formata fetch
         const doFetch = FormDataUtils.getFormDataFetch(this.appInstance)
@@ -237,15 +273,66 @@ class BaseWebApi extends WebApi {
         this.logger.debug("before zhi-formdata-fetch, header =>", sanitizeSensitiveForLog(header))
         this.logger.debug("before zhi-formdata-fetch, url =>", url)
 
-        const resText = await doFetch(this.appInstance.moduleBase, url, header, formData)
-        this.logger.debug("apiForm doFetch success, resText =>", sanitizeSensitiveForLog(resText))
-        const resJson = JsonUtil.safeParse<any>(resText, {} as any)
-        return resJson
+        options.diagnostic = {
+          ...options.diagnostic,
+          stage: "zhi-formdata-fetch",
+          transport: "zhi-formdata-fetch",
+          url,
+        }
+        try {
+          const resText = await doFetch(this.appInstance.moduleBase, url, header, formData)
+          options.diagnostic.responseBodyPreview = this.buildDiagnosticPreview(resText)
+          this.logger.debug("apiForm doFetch success, resText =>", sanitizeSensitiveForLog(resText))
+          const resJson = JsonUtil.safeParse<any>(resText, {} as any)
+          return resJson
+        } catch (e) {
+          this.attachDiagnosticError(e, options.diagnostic)
+          throw e
+        }
       }
     } else {
       this.logger.info("Using cors-anywhere web formFetch")
-      return this.corsFetch(url, headers, formData, "POST")
+      options.diagnostic = {
+        ...options.diagnostic,
+        stage: "cors",
+        transport: "cors",
+        url,
+      }
+      try {
+        const resJson = await this.corsFetch(url, headers, formData, "POST")
+        options.diagnostic.responseBodyPreview = this.buildDiagnosticPreview(resJson)
+        return resJson
+      } catch (e) {
+        this.attachDiagnosticError(e, options.diagnostic)
+        throw e
+      }
     }
+  }
+
+  protected buildDiagnosticPreview(input: any, limit = 1000): string {
+    const raw = typeof input === "string" ? input : JSON.stringify(input)
+    const sanitized = sanitizeSensitiveForLog(raw ?? "")
+    return String(sanitized).slice(0, limit)
+  }
+
+  protected formatDiagnosticMessage(diagnostic?: WebRequestDiagnostic): string {
+    if (!diagnostic) {
+      return ""
+    }
+    return JSON.stringify(sanitizeSensitiveForLog(diagnostic), null, 2)
+  }
+
+  private attachDiagnosticError(error: any, diagnostic?: WebRequestDiagnostic) {
+    if (!error || typeof error !== "object" || !diagnostic) {
+      return
+    }
+    const errorDiagnostic = {
+      ...diagnostic,
+      errorName: error?.name,
+      errorMessage: sanitizeSensitiveForLog(error?.message || error?.toString?.() || ""),
+    }
+    ;(error as any).diagnostic = errorDiagnostic
+    ;(error as any).diagnosticMessage = this.formatDiagnosticMessage(errorDiagnostic)
   }
 
   // ================
@@ -254,3 +341,4 @@ class BaseWebApi extends WebApi {
 }
 
 export { BaseWebApi }
+export type { WebFormFetchOptions, WebRequestDiagnostic }

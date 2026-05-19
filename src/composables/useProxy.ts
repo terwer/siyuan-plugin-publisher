@@ -288,14 +288,22 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
     if (!(fetchResult.status >= 200 && fetchResult.status < 300)) {
       // 兼容 CSDN 错误提示
       const bodyJson = JsonUtil.safeParse<any>(fetchResult?.body, {})
-      if (!StrUtil.isEmptyString(bodyJson?.msg)) {
-        throw new Error(bodyJson?.msg)
+      const proxyMessage = !StrUtil.isEmptyString(bodyJson?.msg)
+        ? bodyJson?.msg
+        : StrUtil.decodeUnicodeToChinese(
+            StrUtil.isEmptyString(fetchResult?.body) ? `请求异常：${fetchResult.status}` : fetchResult?.body
+          )
+      const proxyError = new Error(proxyMessage)
+      ;(proxyError as any).status = fetchResult?.status
+      ;(proxyError as any).diagnostic = {
+        stage: "forward-proxy",
+        transport: "siyuan-forward-proxy",
+        url: reqUrl,
+        status: fetchResult?.status,
+        responseBodyPreview: sanitizeSensitiveForLog(String(fetchResult?.body ?? "")).slice(0, 1000),
       }
-      throw new Error(
-        StrUtil.decodeUnicodeToChinese(
-          StrUtil.isEmptyString(fetchResult?.body) ? `请求异常：${fetchResult.status}` : fetchResult?.body
-        )
-      )
+      ;(proxyError as any).diagnosticMessage = JSON.stringify((proxyError as any).diagnostic, null, 2)
+      throw proxyError
     }
 
     if (responseEncoding === "text") {

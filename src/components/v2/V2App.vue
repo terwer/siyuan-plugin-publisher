@@ -1,12 +1,5 @@
 <template>
-  <div
-    class="syp-v2"
-    @click.stop
-    @mousedown.stop
-    @mouseup.stop
-    @pointerdown.stop
-    @touchstart.stop
-  >
+  <div class="syp-v2" @click.stop @mousedown.stop @mouseup.stop @pointerdown.stop @touchstart.stop>
     <div class="syp-panel">
       <div class="syp-header">
         <div class="syp-header-title-group">
@@ -78,9 +71,14 @@
           <div class="syp-publish-status" :class="`is-${publishState.status}`">
             <div class="syp-publish-status__title">{{ publishTitle }}</div>
             <div class="syp-publish-status__desc">{{ publishDescription }}</div>
-            <div v-if="publishState.status === 'success_with_warnings' && publishState.errMsg" class="syp-publish-status__warning">
+            <div
+              v-if="publishState.status === 'success_with_warnings' && publishState.errMsg"
+              class="syp-publish-status__warning"
+            >
               <div class="syp-publish-status__warning-head">
-                <div class="syp-publish-status__warning-title">{{ t("v2.quickPublish.warning.imageUploadFailed") }}</div>
+                <div class="syp-publish-status__warning-title">
+                  {{ t("v2.quickPublish.warning.imageUploadFailed") }}
+                </div>
                 <button type="button" class="syp-publish-status__detail-btn" @click="showPublishErrorDetails">
                   {{ t("v2.quickPublish.action.viewErrorDetails") }}
                 </button>
@@ -171,6 +169,18 @@
 
         <V2PreferenceSettings v-else />
       </UnifiedWorkspaceShell>
+
+      <SypErrorDetailsPanel
+        :visible="errorDetailsState.visible"
+        :title="errorDetailsState.title"
+        :summary="errorDetailsState.summary"
+        :details="errorDetailsState.details"
+        :copy-label="t('main.copy')"
+        :copy-success-text="t('main.copy.success')"
+        :copy-failure-text="t('main.copy.failure')"
+        :close-label="t('main.opt.ok')"
+        @close="hidePublishErrorDetails"
+      />
     </div>
   </div>
 </template>
@@ -179,7 +189,7 @@
 import { ElMessage } from "element-plus"
 import { computed, onMounted, ref } from "vue"
 import "~/src/assets/v2/base.styl"
-import { sypShowErrorDetails } from "~/src/components/v2/common/SypMessageBox.ts"
+import SypErrorDetailsPanel from "~/src/components/v2/common/SypErrorDetailsPanel.vue"
 import SypTooltip from "~/src/components/v2/common/SypTooltip.vue"
 import UnifiedWorkspaceShell from "~/src/components/v2/layout/UnifiedWorkspaceShell.vue"
 import V2PlatformCard from "~/src/components/v2/publish/V2PlatformCard.vue"
@@ -202,7 +212,7 @@ const props = defineProps<{
   onClose?: () => void
 }>()
 
-const currentView = ref<("quick_publish" | "settings")>(props.initialView ?? "quick_publish")
+const currentView = ref<"quick_publish" | "settings">(props.initialView ?? "quick_publish")
 const isSettingsView = computed(() => currentView.value === "settings")
 const initError = ref("")
 const quickPublish = useV2QuickPublish()
@@ -212,6 +222,12 @@ const { t } = useV2I18n()
 const hasPlatforms = computed(() => quickPublish.hasPlatforms.value)
 const publishState = computed(() => quickPublish.state.publishState)
 const previewLinkMap = computed<Record<string, string>>(() => quickPublish.state.previewLinkMap)
+const errorDetailsState = ref({
+  visible: false,
+  title: "",
+  summary: "",
+  details: "",
+})
 
 const panelTitle = computed(() => {
   return isSettingsView.value ? t("v2.app.panel.settings") : t("v2.app.panel.quickPublish")
@@ -280,9 +296,7 @@ const publishDescription = computed(() => {
   const action = publishState.value.lastAction
   if (publishState.value.status === "preparing") {
     if (action === "delete") {
-      return name
-        ? t("v2.publish.desc.preparingDelete.named", { name })
-        : t("v2.publish.desc.preparingDelete.default")
+      return name ? t("v2.publish.desc.preparingDelete.named", { name }) : t("v2.publish.desc.preparingDelete.default")
     }
     return name ? t("v2.publish.desc.preparing.named", { name }) : t("v2.publish.desc.preparing.default")
   }
@@ -306,9 +320,13 @@ const publishDescription = computed(() => {
   }
   if (publishState.value.status === "success_with_warnings") {
     if (action === "update") {
-      return name ? t("v2.publish.desc.updateSuccessWithWarnings.named", { name }) : t("v2.publish.desc.updateSuccessWithWarnings.default")
+      return name
+        ? t("v2.publish.desc.updateSuccessWithWarnings.named", { name })
+        : t("v2.publish.desc.updateSuccessWithWarnings.default")
     }
-    return name ? t("v2.publish.desc.publishSuccessWithWarnings.named", { name }) : t("v2.publish.desc.publishSuccessWithWarnings.default")
+    return name
+      ? t("v2.publish.desc.publishSuccessWithWarnings.named", { name })
+      : t("v2.publish.desc.publishSuccessWithWarnings.default")
   }
   if (publishState.value.status === "preview_ready") {
     return name ? t("v2.publish.desc.previewReady.named", { name }) : t("v2.publish.desc.previewReady.default")
@@ -373,34 +391,39 @@ function close() {
   props.onClose?.()
 }
 
-function publishToPlatform(item: typeof quickPublish.state.platformItems[number]) {
+function publishToPlatform(item: (typeof quickPublish.state.platformItems)[number]) {
   quickPublish.publishToPlatform(item)
 }
 
-function previewPlatform(item: typeof quickPublish.state.platformItems[number]) {
+function previewPlatform(item: (typeof quickPublish.state.platformItems)[number]) {
   quickPublish.previewPlatform(item, true)
 }
 
-function deletePlatform(item: typeof quickPublish.state.platformItems[number]) {
+function deletePlatform(item: (typeof quickPublish.state.platformItems)[number]) {
   quickPublish.deletePlatform(item)
 }
 
-async function configurePlatform(item: typeof quickPublish.state.platformItems[number]) {
+async function configurePlatform(item: (typeof quickPublish.state.platformItems)[number]) {
   currentView.value = "settings"
   await settings.setSection("account")
   await settings.openAccountConfig(item.platformKey, item.platformName, "quick_publish")
 }
 
-function isFailed(item: typeof quickPublish.state.platformItems[number]) {
+function isFailed(item: (typeof quickPublish.state.platformItems)[number]) {
   return publishState.value.status === "failed" && publishState.value.platformKey === item.platformKey
 }
 
-async function showPublishErrorDetails() {
-  await sypShowErrorDetails({
+function showPublishErrorDetails() {
+  errorDetailsState.value = {
+    visible: true,
     title: t("v2.quickPublish.errorDetails"),
-    message: publishState.value.errDetails || publishState.value.errMsg || t("v2.common.unknownError"),
-    confirmButtonText: t("main.opt.ok"),
-  })
+    summary: publishState.value.errMsg || t("v2.common.unknownError"),
+    details: publishState.value.errDetails || publishState.value.errMsg || t("v2.common.unknownError"),
+  }
+}
+
+function hidePublishErrorDetails() {
+  errorDetailsState.value.visible = false
 }
 
 async function handleToggleAccountEnabled(platformKey: string, nextEnabled: boolean) {
@@ -493,6 +516,7 @@ async function retryInit() {
   flex-direction column
 
 .syp-panel
+  position relative
   max-height 100%
   display flex
   flex-direction column

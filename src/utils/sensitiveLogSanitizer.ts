@@ -12,10 +12,10 @@ const REDACTED = "<redacted>"
 const SENSITIVE_KEY_RE = /(cookie|authorization|x-auth-token|x-csrf-token|ctoken|csrf|ticket|token)/i
 const SENSITIVE_QUERY_RE = /([?&](?:ctoken|csrf|ticket|token|access_token|refresh_token)=)[^&\s]+/gi
 const SENSITIVE_PAIR_RE =
-  /(^|[;,\s{])((?:cookie|authorization|x-auth-token|x-csrf-token|ctoken|csrf|ticket|token)\s*[:=]\s*)[^;,\s}]+/gi
+  /(^|[;,\s{])(["']?)((?:cookie|authorization|x-auth-token|x-csrf-token|ctoken|csrf|ticket|token)\2?\s*[:=]\s*["']?)(?:Bearer\s+)?[^;,\s}"']+/gi
 
 const redactSensitiveString = (input: string): string => {
-  return input.replace(SENSITIVE_QUERY_RE, `$1${REDACTED}`).replace(SENSITIVE_PAIR_RE, `$1$2${REDACTED}`)
+  return input.replace(SENSITIVE_QUERY_RE, `$1${REDACTED}`).replace(SENSITIVE_PAIR_RE, `$1$2$3${REDACTED}`)
 }
 
 /**

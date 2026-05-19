@@ -8,11 +8,11 @@
  */
 
 import { ElMessageBox, type ElMessageBoxOptions } from "element-plus"
-import { h } from "vue"
 
 export type SypMessageBoxType = "info" | "success" | "warning" | "error"
 
-export interface SypConfirmOptions extends Omit<ElMessageBoxOptions, "message" | "title" | "type" | "customClass" | "modalClass"> {
+export interface SypConfirmOptions
+  extends Omit<ElMessageBoxOptions, "message" | "title" | "type" | "customClass" | "modalClass"> {
   title?: string
   message: string
   type?: SypMessageBoxType
@@ -44,30 +44,4 @@ export const sypConfirm = async (options: SypConfirmOptions) => {
   } catch {
     return false
   }
-}
-
-export interface SypErrorDetailsOptions extends Omit<ElMessageBoxOptions, "message" | "title" | "type" | "customClass" | "modalClass"> {
-  title?: string
-  message: string
-  confirmButtonText?: string
-  customClass?: string
-  modalClass?: string
-}
-
-export const sypShowErrorDetails = async (options: SypErrorDetailsOptions) => {
-  await ElMessageBox.alert(
-    h("pre", { class: "syp-v2-message-box__error-details" }, options.message),
-    options.title ?? "",
-    {
-      autofocus: false,
-      closeOnClickModal: false,
-      closeOnPressEscape: true,
-      showClose: true,
-      buttonSize: "small",
-      confirmButtonText: options.confirmButtonText,
-      ...options,
-      customClass: mergeClass(V2_MESSAGE_BOX_CLASS, "syp-v2-message-box--details", options.customClass),
-      modalClass: mergeClass(V2_MESSAGE_BOX_MODAL_CLASS, options.modalClass),
-    } as ElMessageBoxOptions
-  )
 }

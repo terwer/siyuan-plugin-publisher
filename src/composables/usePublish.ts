@@ -120,11 +120,11 @@ const usePublish = () => {
       // 检查图片上传错误（preEditPost内部图片上传失败时不抛异常，而是收集到post自定义属性上）
       const imageErrors = (finalPost as any).imageUploadErrors as string[] | undefined
       if (imageErrors && imageErrors.length > 0) {
-        singleFormData.errMsg = imageErrors.join("\n")
+        singleFormData.errMsg = sanitizePublishText(imageErrors.join("\n"))
         logger.warn(`图片上传存在${imageErrors.length}个错误，已记录到errMsg`)
       }
       const imageErrorDetails = (finalPost as any).imageUploadErrorDetails as string[] | undefined
-      publishErrorDetails = imageErrorDetails?.join("\n\n") || singleFormData.errMsg
+      publishErrorDetails = sanitizePublishText(imageErrorDetails?.join("\n\n") || singleFormData.errMsg)
       // ===================================
       // 文章预处理结束
       // ===================================
@@ -214,7 +214,7 @@ const usePublish = () => {
 
       singleFormData.publishProcessStatus = true
     } catch (e) {
-      singleFormData.errMsg = t("main.opt.failure") + "=>" + e
+      singleFormData.errMsg = sanitizePublishText(t("main.opt.failure") + "=>" + e)
       publishErrorDetails = formatPublishDiagnosticError(e)
       // logger.error(t("main.opt.failure") + "=>", e)
       await kernelApi.pushErrMsg({
@@ -229,8 +229,8 @@ const usePublish = () => {
       status: singleFormData.publishProcessStatus,
       name: cfg?.blogName,
       previewUrl: postPreviewUrl,
-      errMsg: singleFormData.errMsg,
-      errDetails: publishErrorDetails || singleFormData.errMsg,
+      errMsg: sanitizePublishText(singleFormData.errMsg),
+      errDetails: sanitizePublishText(publishErrorDetails || singleFormData.errMsg),
     }
   }
 
@@ -302,8 +302,8 @@ const usePublish = () => {
     return {
       key: key,
       status: singleFormData.publishProcessStatus,
-      errMsg: singleFormData.errMsg,
-      errDetails: deleteErrorDetails || singleFormData.errMsg,
+      errMsg: sanitizePublishText(singleFormData.errMsg),
+      errDetails: sanitizePublishText(deleteErrorDetails || singleFormData.errMsg),
     }
   }
 
@@ -370,10 +370,17 @@ const usePublish = () => {
     return isAbsoluteUrl ? previewUrl : StrUtil.pathJoin(cfg?.home ?? "", previewUrl)
   }
 
+  const sanitizePublishText = (input: any): string => {
+    const sanitized = sanitizeSensitiveForLog(input)
+    if (sanitized === null || sanitized === undefined) {
+      return ""
+    }
+    return typeof sanitized === "string" ? sanitized : JSON.stringify(sanitized)
+  }
+
   const formatPublishDiagnosticError = (error: any): string => {
     const diagnostic = error?.diagnosticMessage || error?.cause?.stack || error?.stack || error?.message || error
-    const sanitized = sanitizeSensitiveForLog(diagnostic)
-    return typeof sanitized === "string" ? sanitized : JSON.stringify(sanitized)
+    return sanitizePublishText(diagnostic)
   }
 
   /**

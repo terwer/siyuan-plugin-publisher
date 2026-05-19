@@ -195,4 +195,50 @@ describe("usePublish.doSinglePublish", () => {
     expect(result.errDetails).toContain("Cannot find module")
     expect(result.errDetails).toContain("/plugins/siyuan-plugin-publisher/libs/node-fetch-cjs/dist/index.js")
   })
+
+  it("redacts sensitive diagnostic fields in publish failure details", async () => {
+    const setting: Record<string, any> = {
+      "20260511000000-test": {},
+    }
+    const store = usePublishSettingStore()
+    store.getSetting = vi.fn().mockResolvedValue(setting as any)
+    store.updateSetting = vi.fn()
+
+    const sensitiveError = new Error(
+      "Cookie=session-secret Authorization=Bearer secret-token ctoken=secret-ctoken token=secret-token csrf=secret-csrf ticket=secret-ticket"
+    )
+    ;(sensitiveError as any).diagnosticMessage = JSON.stringify({
+      Cookie: "session-secret",
+      Authorization: "Bearer secret-token",
+      ctoken: "secret-ctoken",
+      token: "secret-token",
+      csrf: "secret-csrf",
+      ticket: "secret-ticket",
+      message: "forbidden",
+    })
+
+    mockGetPublishApi.mockResolvedValue({
+      preEditPost: vi.fn(async () => {
+        throw sensitiveError
+      }),
+    })
+
+    const doc = new Post()
+    doc.title = "脱敏测试"
+
+    const result = await usePublish().doSinglePublish(
+      "custom_Yuqueweb",
+      "20260511000000-test",
+      createPublishCfg(setting),
+      doc
+    )
+
+    expect(result.status).toBe(false)
+    expect(result.errDetails).toContain("<redacted>")
+    expect(result.errDetails).not.toContain("session-secret")
+    expect(result.errDetails).not.toContain("secret-token")
+    expect(result.errDetails).not.toContain("secret-ctoken")
+    expect(result.errDetails).not.toContain("secret-csrf")
+    expect(result.errDetails).not.toContain("secret-ticket")
+  })
 })

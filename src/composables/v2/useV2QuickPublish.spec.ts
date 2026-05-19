@@ -13,7 +13,13 @@ import { defineComponent, h } from "vue"
 import { mount } from "@vue/test-utils"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import { useV2QuickPublish } from "~/src/composables/v2/useV2QuickPublish.ts"
-import { AuthMode, PlatformType, setDynamicJsonCfg, SubPlatformType, type DynamicConfig } from "~/src/platforms/dynamicConfig.ts"
+import {
+  AuthMode,
+  PlatformType,
+  setDynamicJsonCfg,
+  SubPlatformType,
+  type DynamicConfig,
+} from "~/src/platforms/dynamicConfig.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
 import zhCN from "~/siyuan/i18n/zh_CN.json"
@@ -424,5 +430,61 @@ describe("useV2QuickPublish", () => {
     expect(quickPublish.state.publishState.errMsg).toContain("语雀图片上传失败")
     expect(quickPublish.state.publishState.errDetails).toContain("Cannot find module")
     expect(quickPublish.state.publishState.errDetails).toContain("/plugins/siyuan-plugin-publisher/")
+  })
+
+  it("keeps failed publish diagnostics available for the local details panel", async () => {
+    let quickPublish!: ReturnType<typeof useV2QuickPublish>
+
+    const Harness = defineComponent({
+      setup() {
+        quickPublish = useV2QuickPublish()
+        return () => h("div")
+      },
+    })
+
+    const platform = {
+      platformType: PlatformType.Custom,
+      subPlatformType: SubPlatformType.Custom_Yuqueweb,
+      platformKey: "custom_Yuqueweb",
+      platformName: "语雀网页版",
+      authMode: AuthMode.WEBSITE,
+      isEnabled: true,
+      isAuth: true,
+      isSys: false,
+    } as DynamicConfig
+
+    const store = usePublishSettingStore()
+    store.getSetting = vi.fn().mockResolvedValue({
+      [DYNAMIC_CONFIG_KEY]: setDynamicJsonCfg([platform]),
+      "20260509120000-test": {},
+    } as any)
+
+    mockDoSinglePublish.mockResolvedValue({
+      status: false,
+      errMsg: "main.opt.failure=>YuquewebRequestError: 语雀图片上传失败，请确认 Cookie 有效。",
+      errDetails:
+        '{"stage":"forward-proxy","transport":"siyuan-forward-proxy","status":403,"responseBodyPreview":"{\\"message\\":\\"forbidden\\"}"}',
+    })
+
+    mount(Harness, {
+      global: {
+        plugins: [
+          createI18n({
+            legacy: false,
+            locale: "zh_CN",
+            messages: { zh_CN: zhCN },
+          }),
+        ],
+      },
+    })
+
+    await quickPublish.init()
+    await quickPublish.publishToPlatform(quickPublish.state.platformItems[0])
+
+    expect(quickPublish.state.publishState.status).toBe("failed")
+    expect(quickPublish.state.publishState.errMsg).toContain("语雀图片上传失败")
+    expect(quickPublish.state.publishState.errDetails).toContain("forward-proxy")
+    expect(quickPublish.state.publishState.errDetails).toContain("siyuan-forward-proxy")
+    expect(quickPublish.state.publishState.errDetails).toContain("403")
   })
 })

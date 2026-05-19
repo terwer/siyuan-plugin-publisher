@@ -12,6 +12,7 @@ import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStor
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
 import { openPathOrUrl } from "~/src/utils/pathUtils.ts"
+import { sanitizeSensitiveForLog } from "~/src/utils/sensitiveLogSanitizer.ts"
 
 export interface V2QuickPublishPlatformItem {
   platformKey: string
@@ -24,7 +25,14 @@ export interface V2QuickPublishPlatformItem {
   isPublishReady?: boolean
 }
 
-type V2PublishStatus = "idle" | "preparing" | "publishing" | "success" | "success_with_warnings" | "failed" | "preview_ready"
+type V2PublishStatus =
+  | "idle"
+  | "preparing"
+  | "publishing"
+  | "success"
+  | "success_with_warnings"
+  | "failed"
+  | "preview_ready"
 type V2PublishAction = "" | "publish" | "update" | "delete" | "preview"
 
 export const useV2QuickPublish = () => {
@@ -59,11 +67,19 @@ export const useV2QuickPublish = () => {
 
   const pref = getReadOnlyPublishPreferenceSetting()
 
+  const sanitizeText = (input: unknown): string => {
+    const sanitized = sanitizeSensitiveForLog(input)
+    if (sanitized === null || sanitized === undefined) {
+      return ""
+    }
+    return typeof sanitized === "string" ? sanitized : JSON.stringify(sanitized)
+  }
+
   const normalizeError = (error: unknown) => {
     if (error instanceof Error) {
-      return error.message || String(error)
+      return sanitizeText(error.message || String(error))
     }
-    return String(error ?? t("v2.common.unknownError"))
+    return sanitizeText(String(error ?? t("v2.common.unknownError")))
   }
 
   const setPublishState = (partial: Partial<typeof state.publishState>) => {
@@ -101,7 +117,6 @@ export const useV2QuickPublish = () => {
     const api = await getPublishApi(platformKey, publishCfg.cfg)
     return await getPostPreviewUrl(api, state.pageId, publishCfg.cfg)
   }
-
 
   const init = async () => {
     state.isLoading = true
@@ -205,19 +220,25 @@ export const useV2QuickPublish = () => {
         }
         updatePlatformPublishFlag(item.platformKey, true)
         // 发布成功但有图片上传错误时，设置为 success_with_warnings 状态
-        const hasWarnings = !StrUtil.isEmptyString(result?.errMsg)
+        const warningMsg = sanitizeText(result?.errMsg ?? "")
+        const warningDetails = sanitizeText(result?.errDetails || result?.errMsg || "")
+        const hasWarnings = !StrUtil.isEmptyString(warningMsg)
         setPublishState({
           status: hasWarnings ? "success_with_warnings" : "success",
           previewUrl: result.previewUrl ?? "",
-          errMsg: result?.errMsg ?? "",
-          errDetails: result?.errDetails || result?.errMsg || "",
+          errMsg: warningMsg,
+          errDetails: warningDetails,
           isPublishing: false,
         })
       } else {
+        const errMsg = sanitizeText(result?.errMsg || t("v2.quickPublish.error.publishFailed"))
+        const errDetails = sanitizeText(
+          result?.errDetails || result?.errMsg || t("v2.quickPublish.error.publishFailed")
+        )
         setPublishState({
           status: "failed",
-          errMsg: result?.errMsg || t("v2.quickPublish.error.publishFailed"),
-          errDetails: result?.errDetails || result?.errMsg || t("v2.quickPublish.error.publishFailed"),
+          errMsg,
+          errDetails,
           previewUrl: "",
           isPublishing: false,
         })
@@ -323,10 +344,12 @@ export const useV2QuickPublish = () => {
           isPublishing: false,
         })
       } else {
+        const errMsg = sanitizeText(result?.errMsg || t("v2.quickPublish.error.deleteFailed"))
+        const errDetails = sanitizeText(result?.errDetails || result?.errMsg || t("v2.quickPublish.error.deleteFailed"))
         setPublishState({
           status: "failed",
-          errMsg: result?.errMsg || t("v2.quickPublish.error.deleteFailed"),
-          errDetails: result?.errDetails || result?.errMsg || t("v2.quickPublish.error.deleteFailed"),
+          errMsg,
+          errDetails,
           previewUrl: "",
           isPublishing: false,
         })

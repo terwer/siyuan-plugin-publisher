@@ -7,7 +7,7 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
+import { BaseWebApi, type WebRequestDiagnostic } from "~/src/adaptors/web/base/baseWebApi.ts"
 import { YuquewebPostMeta } from "~/src/adaptors/web/yuqueweb/YuquewebPostMeta.ts"
 import FormDataUtils from "~/src/utils/FormDataUtils.ts"
 import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
@@ -15,6 +15,7 @@ import { Attachment, CategoryInfo, MediaObject, Post, UserBlog, type PublishVali
 import { AliasTranslator, JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { Base64 } from "js-base64"
 import { translateNonVueI18n } from "~/src/utils/nonVueI18n.ts"
+import { sanitizeSensitiveForLog } from "~/src/utils/sensitiveLogSanitizer.ts"
 
 interface YuquewebBookMeta {
   bookId: string
@@ -25,11 +26,19 @@ interface YuquewebBookMeta {
 
 class YuquewebRequestError extends Error {
   public status?: number
+  public cause?: unknown
+  public diagnostic?: WebRequestDiagnostic
+  public diagnosticMessage?: string
 
-  constructor(message: string, status?: number) {
+  constructor(message: string, status?: number, options: { cause?: unknown; diagnostic?: WebRequestDiagnostic } = {}) {
     super(message)
     this.name = "YuquewebRequestError"
     this.status = status
+    this.cause = options.cause
+    this.diagnostic = options.diagnostic
+      ? (sanitizeSensitiveForLog(options.diagnostic) as WebRequestDiagnostic)
+      : undefined
+    this.diagnosticMessage = this.diagnostic ? JSON.stringify(this.diagnostic, null, 2) : undefined
   }
 }
 
@@ -111,7 +120,10 @@ class YuquewebWebAdaptor extends BaseWebApi {
       throw new Error("未获取到可发布的语雀知识库，请确认当前语雀账号已有知识库写入权限。")
     }
 
-    this.logger.debug("get yuqueweb books =>", result.map((item) => ({ blogid: item.blogid, blogName: item.blogName })))
+    this.logger.debug(
+      "get yuqueweb books =>",
+      result.map((item) => ({ blogid: item.blogid, blogName: item.blogName }))
+    )
     return result
   }
 
@@ -199,7 +211,13 @@ class YuquewebWebAdaptor extends BaseWebApi {
     commonPost.wp_slug = doc?.slug ?? meta.slug
     commonPost.markdown = content
     commonPost.description = content
-    commonPost.cate_slugs = [this.serializeBookMeta({ bookId: meta.bookId, bookSlug: meta.bookSlug, login: meta.login })]
+    commonPost.cate_slugs = [
+      this.serializeBookMeta({
+        bookId: meta.bookId,
+        bookSlug: meta.bookSlug,
+        login: meta.login,
+      }),
+    ]
     return commonPost
   }
 
@@ -217,13 +235,23 @@ class YuquewebWebAdaptor extends BaseWebApi {
   }
 
   public async newMediaObject(mediaObject: MediaObject, customHandler?: any): Promise<Attachment> {
+    const fileMeta = this.buildFileDiagnostic(mediaObject)
+    const diagnostic: WebRequestDiagnostic = {
+      stage: "build-formdata",
+      transport: "siyuan-forward-proxy",
+      url: `${this.cfg.apiUrl}/api/upload/attach?type=image`,
+      fileName: fileMeta.fileName,
+      fileType: fileMeta.fileType,
+      fileSize: fileMeta.fileSize,
+    } as WebRequestDiagnostic
+
     try {
       const { FormData, Blob } = FormDataUtils.getFormData(this.appInstance)
       const blob = new Blob([this.toUploadBits(mediaObject.bits)], { type: mediaObject.type })
       const formData = new FormData()
       formData.append("file", blob, mediaObject.name)
 
-      const res = await this.yuquewebFormFetch("/api/upload/attach?type=image", formData)
+      const res = await this.yuquewebFormFetch("/api/upload/attach?type=image", formData, {}, diagnostic)
       const upload = res?.data ?? res
       const imageUrl = upload?.url
       if (StrUtil.isEmptyString(imageUrl)) {
@@ -231,7 +259,7 @@ class YuquewebWebAdaptor extends BaseWebApi {
       }
 
       return {
-        attachment_id: upload?.attachment_id ? String(upload.attachment_id) : (upload?.filekey ?? mediaObject.name),
+        attachment_id: upload?.attachment_id ? String(upload.attachment_id) : upload?.filekey ?? mediaObject.name,
         date_created_gmt: new Date(),
         parent: 0,
         link: imageUrl,
@@ -247,14 +275,19 @@ class YuquewebWebAdaptor extends BaseWebApi {
         },
         type: mediaObject.type,
         thumbnail: "",
-        id: upload?.attachment_id ? String(upload.attachment_id) : (upload?.filekey ?? mediaObject.name),
+        id: upload?.attachment_id ? String(upload.attachment_id) : upload?.filekey ?? mediaObject.name,
         file: upload?.filename ?? mediaObject.name,
         url: imageUrl,
       }
     } catch (e) {
-      this.logger.error("yuqueweb image upload failed", this.sanitizeForLog(e?.toString?.() ?? e))
-      const error = new Error("语雀图片上传失败，请确认 Cookie 有效、图片文件可读取后重试。")
-      ;(error as any).diagnosticMessage = this.sanitizeForLog(e?.stack || e?.toString?.() || e)
+      const errorDiagnostic = this.mergeUploadDiagnostic(diagnostic, e)
+      this.logger.error("yuqueweb image upload failed", this.formatYuqueDiagnostic(errorDiagnostic))
+      const userMessage =
+        e instanceof YuquewebRequestError ? e.message : "语雀图片上传失败，请确认 Cookie 有效、图片文件可读取后重试。"
+      const error = new YuquewebRequestError(userMessage, this.getErrorStatus(e), {
+        cause: e,
+        diagnostic: errorDiagnostic,
+      })
       throw error
     }
   }
@@ -338,7 +371,9 @@ class YuquewebWebAdaptor extends BaseWebApi {
   }
 
   private isCompleteBookMeta(meta: YuquewebBookMeta): boolean {
-    return !StrUtil.isEmptyString(meta.bookId) && !StrUtil.isEmptyString(meta.bookSlug) && !StrUtil.isEmptyString(meta.login)
+    return (
+      !StrUtil.isEmptyString(meta.bookId) && !StrUtil.isEmptyString(meta.bookSlug) && !StrUtil.isEmptyString(meta.login)
+    )
   }
 
   private parseBookMeta(value: any): YuquewebBookMeta {
@@ -372,6 +407,55 @@ class YuquewebWebAdaptor extends BaseWebApi {
       return Base64.toUint8Array(bits)
     }
     return bits
+  }
+
+  private buildFileDiagnostic(mediaObject: MediaObject) {
+    return {
+      fileName: mediaObject?.name ?? "",
+      fileType: mediaObject?.type ?? "",
+      fileSize: this.getUploadSize(mediaObject?.bits),
+    }
+  }
+
+  private getUploadSize(bits: any): number {
+    if (!bits) {
+      return 0
+    }
+    if (typeof bits === "string") {
+      return Base64.toUint8Array(bits).byteLength
+    }
+    if (typeof bits.byteLength === "number") {
+      return bits.byteLength
+    }
+    if (typeof bits.length === "number") {
+      return bits.length
+    }
+    return 0
+  }
+
+  private mergeUploadDiagnostic(diagnostic: WebRequestDiagnostic, error: any): WebRequestDiagnostic {
+    const errorDiagnostic = error?.diagnostic && typeof error.diagnostic === "object" ? error.diagnostic : {}
+    const status = this.getErrorStatus(error)
+    const merged = {
+      ...diagnostic,
+      ...errorDiagnostic,
+      status: status ?? errorDiagnostic.status ?? diagnostic.status,
+      errorName: error?.name ?? errorDiagnostic.errorName,
+      errorMessage: this.sanitizeForLog(error?.message || error?.toString?.() || errorDiagnostic.errorMessage || ""),
+    }
+    return sanitizeSensitiveForLog(merged) as WebRequestDiagnostic
+  }
+
+  private getErrorStatus(error: any): number | undefined {
+    const status = Number(error?.status ?? error?.diagnostic?.status)
+    return Number.isFinite(status) ? status : undefined
+  }
+
+  private formatYuqueDiagnostic(diagnostic?: WebRequestDiagnostic): string {
+    if (!diagnostic) {
+      return ""
+    }
+    return this.sanitizeForLog(JSON.stringify(diagnostic, null, 2))
   }
 
   private async buildDocPayload(bookMeta: YuquewebBookMeta, post: Post) {
@@ -428,7 +512,9 @@ class YuquewebWebAdaptor extends BaseWebApi {
   }
 
   private buildDocDetailPath(docKey: string, bookId: string) {
-    return `/api/docs/${encodeURIComponent(docKey)}?book_id=${encodeURIComponent(bookId)}&include_contributors=true&include_like=true&include_hits=true&merge_dynamic_data=false`
+    return `/api/docs/${encodeURIComponent(docKey)}?book_id=${encodeURIComponent(
+      bookId
+    )}&include_contributors=true&include_like=true&include_hits=true&merge_dynamic_data=false`
   }
 
   private getDocContent(doc: any): string {
@@ -568,7 +654,8 @@ class YuquewebWebAdaptor extends BaseWebApi {
   ) {
     const apiUrl = url.startsWith("http") ? url : `${this.cfg.apiUrl}${url}`
     const mergedHeaders = this.buildRequestHeaders(headers)
-    const body = method === "GET" || method === "DELETE" || ObjectUtil.isEmptyObject(params) ? "" : JSON.stringify(params)
+    const body =
+      method === "GET" || method === "DELETE" || ObjectUtil.isEmptyObject(params) ? "" : JSON.stringify(params)
 
     this.logger.debug("yuqueweb request", {
       method,
@@ -576,30 +663,58 @@ class YuquewebWebAdaptor extends BaseWebApi {
       bodyKeys: params && typeof params === "object" ? Object.keys(params) : [],
     })
 
+    const diagnostic: WebRequestDiagnostic = {
+      stage: "forward-proxy",
+      transport: "siyuan-forward-proxy",
+      url: apiUrl,
+    }
+
     try {
       const resJson = await this.webFetch(apiUrl, [mergedHeaders], body, method, contentType, true, "base64")
-      return this.unwrapYuquewebResponse(resJson, apiUrl)
+      return this.unwrapYuquewebResponse(resJson, apiUrl, undefined, diagnostic)
     } catch (e) {
+      const errorDiagnostic = this.mergeUploadDiagnostic(diagnostic, e)
       if (e instanceof YuquewebRequestError) {
+        e.diagnostic = errorDiagnostic
+        e.diagnosticMessage = this.formatYuqueDiagnostic(errorDiagnostic)
         throw e
       }
-      throw new YuquewebRequestError("无法连接语雀，请检查网络或稍后重试。")
+      throw new YuquewebRequestError("无法连接语雀，请检查网络或稍后重试。", this.getErrorStatus(e), {
+        cause: e,
+        diagnostic: errorDiagnostic,
+      })
     }
   }
 
-  private async yuquewebFormFetch(url: string, formData: BodyInit, headers: Record<any, any> = {}) {
+  private async yuquewebFormFetch(
+    url: string,
+    formData: BodyInit,
+    headers: Record<any, any> = {},
+    diagnostic: WebRequestDiagnostic = { stage: "web-form-fetch" }
+  ) {
     const apiUrl = url.startsWith("http") ? url : `${this.cfg.apiUrl}${url}`
     const mergedHeaders = this.buildRequestHeaders(headers)
+    Object.assign(diagnostic, {
+      stage: "web-form-fetch",
+      url: apiUrl,
+      transport: diagnostic.transport ?? "siyuan-forward-proxy",
+    })
     this.logger.debug("yuqueweb form request", { apiUrl: this.sanitizeForLog(apiUrl) })
 
     try {
-      const resJson = await this.webFormFetch(apiUrl, [mergedHeaders], formData, true)
-      return this.unwrapYuquewebResponse(resJson, apiUrl, "upload")
+      const resJson = await this.webFormFetch(apiUrl, [mergedHeaders], formData, true, { diagnostic })
+      return this.unwrapYuquewebResponse(resJson, apiUrl, "upload", diagnostic)
     } catch (e) {
+      const errorDiagnostic = this.mergeUploadDiagnostic(diagnostic, e)
       if (e instanceof YuquewebRequestError) {
+        e.diagnostic = errorDiagnostic
+        e.diagnosticMessage = this.formatYuqueDiagnostic(errorDiagnostic)
         throw e
       }
-      throw new YuquewebRequestError("语雀图片上传失败，请检查网络或稍后重试。")
+      throw new YuquewebRequestError("语雀图片上传失败，请检查网络或稍后重试。", this.getErrorStatus(e), {
+        cause: e,
+        diagnostic: errorDiagnostic,
+      })
     }
   }
 
@@ -613,14 +728,25 @@ class YuquewebWebAdaptor extends BaseWebApi {
     }
   }
 
-  private unwrapYuquewebResponse(resJson: any, apiUrl: string, context?: "upload") {
+  private unwrapYuquewebResponse(resJson: any, apiUrl: string, context?: "upload", diagnostic?: WebRequestDiagnostic) {
     const normalized = this.normalizeProxyResponse(resJson)
     const status = Number(normalized?.status)
     const hasErrorStatus = Number.isFinite(status) && status >= 400
     const hasYuqueError = !normalized?.data && (normalized?.code || normalized?.key) && normalized?.message
 
+    if (diagnostic) {
+      diagnostic.stage = hasErrorStatus || hasYuqueError ? "yuque-business" : "unwrap-response"
+      diagnostic.url = apiUrl
+      if (Number.isFinite(status)) {
+        diagnostic.status = status
+      }
+      diagnostic.responseBodyPreview = this.buildDiagnosticPreview(normalized)
+    }
+
     if (hasErrorStatus || hasYuqueError) {
-      throw new YuquewebRequestError(this.toUserErrorMessage(status, normalized?.message, context), status)
+      throw new YuquewebRequestError(this.toUserErrorMessage(status, normalized?.message, context), status, {
+        diagnostic,
+      })
     }
 
     return normalized?.data ?? normalized
@@ -652,10 +778,15 @@ class YuquewebWebAdaptor extends BaseWebApi {
   }
 
   private sanitizeForLog(input: any): string {
-    const text = typeof input === "string" ? input : JSON.stringify(input)
-    return text
-      .replace(/([?&](?:ctoken|token|csrf|ticket)=)[^&\s]+/gi, "$1<redacted>")
-      .replace(/(cookie|authorization|x-auth-token|ctoken|token|csrf|ticket)(["'=:\s]+)[^"'&\s,}]+/gi, "$1$2<redacted>")
+    const sanitized = sanitizeSensitiveForLog(input)
+    if (typeof sanitized === "string") {
+      return sanitized
+    }
+    try {
+      return JSON.stringify(sanitized)
+    } catch {
+      return String(sanitized)
+    }
   }
 }
 
