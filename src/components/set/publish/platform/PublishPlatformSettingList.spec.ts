@@ -21,6 +21,10 @@ const mockDeleteKey = vi.hoisted(() => vi.fn())
 const mockIsInSiyuanOrSiyuanNewWin = vi.hoisted(() => vi.fn())
 const mockIsInChromeExtension = vi.hoisted(() => vi.fn())
 const mockOpenBrowserWindow = vi.hoisted(() => vi.fn())
+const mockLogout = vi.hoisted(() => vi.fn())
+const mockBuildCookie = vi.hoisted(() => vi.fn())
+const mockGetMetaData = vi.hoisted(() => vi.fn())
+const mockApiUpdateCfg = vi.hoisted(() => vi.fn())
 const mockConfirm = vi.hoisted(() => vi.fn())
 
 vi.mock("~/src/stores/usePublishSettingStore.ts", () => ({
@@ -46,6 +50,35 @@ vi.mock("~/src/composables/useSiyuanDevice.ts", () => ({
 
 vi.mock("~/src/utils/widgetUtils.ts", () => ({
   openBrowserWindow: mockOpenBrowserWindow,
+}))
+
+vi.mock("~/src/composables/useWebCookieAuthorization.ts", () => ({
+  useWebCookieAuthorization: () => ({
+    logout: mockLogout,
+  }),
+}))
+
+vi.mock("~/src/adaptors", () => ({
+  __esModule: true,
+  default: {
+    getCfg: vi.fn(async (_key: string, storedCfg?: any) => ({
+      passwordType: 2,
+      password: storedCfg?.password ?? "",
+      metadata: storedCfg?.metadata ?? {},
+    })),
+    getAdaptor: vi.fn(async () => ({
+      buildCookie: mockBuildCookie,
+      getMetaData: mockGetMetaData,
+      updateCfg: mockApiUpdateCfg,
+    })),
+  },
+}))
+
+vi.mock("~/src/utils/utils.ts", () => ({
+  __esModule: true,
+  Utils: {
+    webApi: (_appInstance: any, apiAdaptor: any) => apiAdaptor,
+  },
 }))
 
 vi.mock("element-plus", async (importOriginal) => {
@@ -86,12 +119,14 @@ const createDynCfg = () =>
     isSys: false,
   }) as DynamicConfig
 
-const mountList = async () => {
+const mountList = async (settingOverride?: Record<string, any>) => {
   const dynCfg = createDynCfg()
-  mockGetSetting.mockResolvedValue({
-    [DYNAMIC_CONFIG_KEY]: setDynamicJsonCfg([dynCfg]),
-    [dynCfg.platformKey]: {},
-  })
+  mockGetSetting.mockResolvedValue(
+    settingOverride ?? {
+      [DYNAMIC_CONFIG_KEY]: setDynamicJsonCfg([dynCfg]),
+      [dynCfg.platformKey]: {},
+    }
+  )
 
   const wrapper = mount(PublishPlatformSettingList, {
     global: {
@@ -125,6 +160,10 @@ describe("PublishPlatformSettingList V1 web authorization", () => {
     vi.clearAllMocks()
     mockConfirm.mockResolvedValue(undefined)
     mockUpdateSetting.mockResolvedValue(undefined)
+    mockLogout.mockResolvedValue({ status: "logout_success", ok: true, mode: "remote_action", dynamicConfigArray: [], setting: {} })
+    mockBuildCookie.mockResolvedValue("yuque_session=test-session; yuque_ctoken=test-ctoken")
+    mockGetMetaData.mockResolvedValue({ flag: true, login: "test-login" })
+    mockApiUpdateCfg.mockReset()
     mockIsInSiyuanOrSiyuanNewWin.mockReturnValue(true)
     mockIsInChromeExtension.mockReturnValue(false)
   })
@@ -142,4 +181,39 @@ describe("PublishPlatformSettingList V1 web authorization", () => {
     expect(mockConfirm).toHaveBeenCalled()
     expect(mockOpenBrowserWindow).toHaveBeenCalledWith("https://www.yuque.com/login")
   })
+
+  it("uses unified logout service instead of opening stale Yuque logout URL when validation fails", async () => {
+    const dynCfg = createDynCfg()
+    const setting = {
+      [DYNAMIC_CONFIG_KEY]: setDynamicJsonCfg([dynCfg]),
+      [dynCfg.platformKey]: { password: "old-cookie" },
+    }
+    mockBuildCookie.mockResolvedValue("yuque_session=test-session; yuque_ctoken=test-ctoken")
+    mockGetMetaData.mockRejectedValue(new Error("expired cookie token=synthetic-token"))
+    mockLogout.mockResolvedValue({
+      status: "logout_success",
+      ok: true,
+      mode: "remote_action",
+      dynamicConfigArray: [Object.assign({}, dynCfg, { isAuth: false })],
+      setting: {
+        [DYNAMIC_CONFIG_KEY]: setDynamicJsonCfg([Object.assign({}, dynCfg, { isAuth: false })]),
+        [dynCfg.platformKey]: { password: "" },
+      },
+    })
+
+    const wrapper = await mountList(setting)
+
+    await wrapper.findAll("button").find((button) => button.text() === "验证")!.trigger("click")
+    const cookieCallback = mockOpenBrowserWindow.mock.calls[0][2]
+    await cookieCallback(dynCfg, [{ name: "yuque_session", value: "test-session" }])
+    await flushPromises()
+
+    expect(mockLogout).toHaveBeenCalledWith(
+      expect.objectContaining({
+        platformKey: dynCfg.platformKey,
+      })
+    )
+    expect(mockOpenBrowserWindow).not.toHaveBeenCalledWith("https://www.yuque.com/logout")
+  })
+
 })

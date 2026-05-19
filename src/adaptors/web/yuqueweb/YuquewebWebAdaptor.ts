@@ -98,6 +98,27 @@ class YuquewebWebAdaptor extends BaseWebApi {
     }
   }
 
+  public async logoutWebAuth(): Promise<boolean> {
+    const csrfToken = this.extractYuqueCtoken(this.cfg.password)
+    if (StrUtil.isEmptyString(csrfToken)) {
+      throw new Error("语雀退出失败：当前 Cookie 缺少 yuque_ctoken，请重新登录语雀后重新读取 Cookie。")
+    }
+
+    const login = await this.resolveLogoutLogin()
+    if (StrUtil.isEmptyString(login)) {
+      throw new Error("语雀退出失败：无法获取当前登录名，请重新登录语雀后重新读取 Cookie。")
+    }
+
+    await this.yuquewebFetch("/api/accounts/logout", {}, "DELETE", {
+      Referer: `${this.cfg.home}/logout`,
+      "X-Requested-With": "XMLHttpRequest",
+      "x-csrf-token": csrfToken,
+      "x-login": login,
+    })
+    this.logger.info("yuqueweb logout finished", { login })
+    return true
+  }
+
   public async getUsersBlogs(keyword?: string): Promise<UserBlog[]> {
     const books = await this.getYuquewebBooks(keyword)
     const result = books.map((book) => {
@@ -283,7 +304,9 @@ class YuquewebWebAdaptor extends BaseWebApi {
       const errorDiagnostic = this.mergeUploadDiagnostic(diagnostic, e)
       this.logger.error("yuqueweb image upload failed", this.formatYuqueDiagnostic(errorDiagnostic))
       const userMessage =
-        e instanceof YuquewebRequestError ? e.message : "语雀图片上传失败，请确认 Cookie 有效、图片文件可读取后重试。"
+        e instanceof YuquewebRequestError && e.diagnostic?.stage === "yuque-business"
+          ? e.message
+          : "语雀图片上传失败，请确认 Cookie 有效、图片文件可读取后重试。"
       const error = new YuquewebRequestError(userMessage, this.getErrorStatus(e), {
         cause: e,
         diagnostic: errorDiagnostic,
@@ -335,6 +358,43 @@ class YuquewebWebAdaptor extends BaseWebApi {
       const meta = this.toBookMeta(book)
       return [meta.name, meta.bookSlug, meta.login].some((value) => value?.toLowerCase?.().includes(normalizedKeyword))
     })
+  }
+
+  private extractYuqueCtoken(cookie: string): string {
+    if (StrUtil.isEmptyString(cookie)) {
+      return ""
+    }
+
+    const cookieParts = String(cookie)
+      .split(";")
+      .map((item) => item.trim())
+      .filter((item) => item.length > 0)
+
+    for (const part of cookieParts) {
+      const separatorIndex = part.indexOf("=")
+      if (separatorIndex <= 0) {
+        continue
+      }
+
+      const name = part.slice(0, separatorIndex).trim()
+      if (name !== "yuque_ctoken") {
+        continue
+      }
+
+      return part.slice(separatorIndex + 1).trim()
+    }
+
+    return ""
+  }
+
+  private async resolveLogoutLogin(): Promise<string> {
+    const metadataLogin = this.cfg?.metadata?.login
+    if (!StrUtil.isEmptyString(metadataLogin)) {
+      return String(metadataLogin)
+    }
+
+    const metadata = await this.getMetaData()
+    return StrUtil.isEmptyString(metadata?.login) ? "" : String(metadata.login)
   }
 
   private isWritableBook(book: any): boolean {

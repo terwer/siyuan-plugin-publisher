@@ -53,6 +53,77 @@ describe("YuquewebWebAdaptor.validatePublish", () => {
   })
 })
 
+
+describe("YuquewebWebAdaptor.logoutWebAuth", () => {
+  it("sends DELETE /api/accounts/logout with csrf token, login, Cookie, ajax header, and logout Referer", async () => {
+    const adaptor = createAdaptor(undefined, {
+      password: "yuque_session=test-session; yuque_ctoken=test-ctoken",
+      metadata: { login: "test-login" },
+    })
+    const webFetch = vi.fn().mockResolvedValue({ data: true })
+    vi.spyOn(adaptor as any, "webFetch").mockImplementation(webFetch)
+
+    await expect(adaptor.logoutWebAuth()).resolves.toBe(true)
+
+    expect(webFetch).toHaveBeenCalledTimes(1)
+    expect(webFetch.mock.calls[0][0]).toBe("https://www.yuque.com/api/accounts/logout")
+    expect(webFetch.mock.calls[0][2]).toBe("")
+    expect(webFetch.mock.calls[0][3]).toBe("DELETE")
+    expect(webFetch.mock.calls[0][1][0]).toMatchObject({
+      Cookie: "yuque_session=test-session; yuque_ctoken=test-ctoken",
+      Accept: "application/json",
+      Origin: "https://www.yuque.com",
+      Referer: "https://www.yuque.com/logout",
+      "X-Requested-With": "XMLHttpRequest",
+      "x-csrf-token": "test-ctoken",
+      "x-login": "test-login",
+    })
+  })
+
+  it("loads login from metadata request when cfg.metadata.login is missing", async () => {
+    const adaptor = createAdaptor(undefined, {
+      password: "yuque_session=test-session; yuque_ctoken=test-ctoken",
+      metadata: {},
+    })
+    const webFetch = vi
+      .fn()
+      .mockResolvedValueOnce({ data: { id: 1, login: "loaded-login", name: "Loaded" } })
+      .mockResolvedValueOnce({ data: true })
+    vi.spyOn(adaptor as any, "webFetch").mockImplementation(webFetch)
+
+    await expect(adaptor.logoutWebAuth()).resolves.toBe(true)
+
+    expect(webFetch.mock.calls[0][0]).toBe("https://www.yuque.com/api/mine")
+    expect(webFetch.mock.calls[1][0]).toBe("https://www.yuque.com/api/accounts/logout")
+    expect(webFetch.mock.calls[1][1][0]).toMatchObject({ "x-login": "loaded-login" })
+  })
+
+  it("fails clearly when yuque_ctoken is missing and does not send logout request", async () => {
+    const adaptor = createAdaptor(undefined, {
+      password: "yuque_session=test-session",
+      metadata: { login: "test-login" },
+    })
+    const webFetch = vi.fn()
+    vi.spyOn(adaptor as any, "webFetch").mockImplementation(webFetch)
+
+    await expect(adaptor.logoutWebAuth()).rejects.toThrow("当前 Cookie 缺少 yuque_ctoken")
+    expect(webFetch).not.toHaveBeenCalled()
+  })
+
+  it("fails clearly when login cannot be resolved and does not fake x-login", async () => {
+    const adaptor = createAdaptor(undefined, {
+      password: "yuque_session=test-session; yuque_ctoken=test-ctoken",
+      metadata: {},
+    })
+    const webFetch = vi.fn().mockResolvedValue({ data: { id: 1, login: "" } })
+    vi.spyOn(adaptor as any, "webFetch").mockImplementation(webFetch)
+
+    await expect(adaptor.logoutWebAuth()).rejects.toThrow("无法获取当前登录名")
+    expect(webFetch).toHaveBeenCalledTimes(1)
+    expect(webFetch.mock.calls[0][0]).toBe("https://www.yuque.com/api/mine")
+  })
+})
+
 describe("YuquewebWebAdaptor image upload diagnostics", () => {
   it("keeps sanitized forwardProxy diagnostics when image upload fails", async () => {
     const adaptor = createAdaptor(undefined, { password: "cookie=session-secret; ctoken=secret-token" })

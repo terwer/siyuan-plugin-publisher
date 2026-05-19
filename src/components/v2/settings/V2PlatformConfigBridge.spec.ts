@@ -18,6 +18,7 @@ import zhCN from "~/siyuan/i18n/zh_CN.json"
 const mockGetPublishCfg = vi.hoisted(() => vi.fn())
 const mockIsAutoCaptureSupported = vi.hoisted(() => vi.fn())
 const mockAuthorize = vi.hoisted(() => vi.fn())
+const mockLogout = vi.hoisted(() => vi.fn())
 const bridgePayload = vi.hoisted(() => ({
   cfg: {
     passwordType: 2,
@@ -52,6 +53,7 @@ vi.mock("~/src/composables/useWebCookieAuthorization.ts", () => ({
   useWebCookieAuthorization: () => ({
     isAutoCaptureSupported: mockIsAutoCaptureSupported,
     authorize: mockAuthorize,
+    logout: mockLogout,
   }),
 }))
 

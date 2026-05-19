@@ -105,6 +105,10 @@ class BaseWebApi extends WebApi {
     return cookies.map((cookie) => `${cookie.name}=${cookie.value}`).join(";")
   }
 
+  public async logoutWebAuth(): Promise<boolean> {
+    return false
+  }
+
   public getYamlAdaptor(): YamlConvertAdaptor {
     return null
   }

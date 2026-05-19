@@ -62,6 +62,19 @@
         >
           {{ t("v2.webCookieAuth.action.autoRead") }}
         </SypTooltip>
+        <SypTooltip
+          v-if="canLogout"
+          tag="button"
+          type="button"
+          class="syp-web-cookie-auth__action is-logout"
+          :class="{ 'is-disabled': isLogoutLoading }"
+          :content="logoutTooltip"
+          inline-flex
+          :aria-disabled="isLogoutLoading"
+          @click="handleLogout"
+        >
+          {{ isLogoutLoading ? t("v2.webCookieAuth.action.loggingOut") : t("v2.webCookieAuth.action.logout") }}
+        </SypTooltip>
       </div>
     </div>
   </div>
@@ -69,10 +82,15 @@
 
 <script setup lang="ts">
 import { computed, ref } from "vue"
-import { ElMessage } from "element-plus"
+import { ElMessage, ElMessageBox } from "element-plus"
 import SypTooltip from "~/src/components/v2/common/SypTooltip.vue"
 import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
-import { useWebCookieAuthorization, type WebCookieAuthorizationStatus } from "~/src/composables/useWebCookieAuthorization.ts"
+import {
+  useWebCookieAuthorization,
+  type WebCookieAuthEventStatus,
+  type WebCookieAuthorizationStatus,
+  type WebCookieLogoutStatus,
+} from "~/src/composables/useWebCookieAuthorization.ts"
 import { AuthMode, DynamicConfig } from "~/src/platforms/dynamicConfig.ts"
 import { openBrowserWindow } from "~/src/utils/widgetUtils.ts"
 import { PasswordType, WebConfig } from "zhi-blog-api"
@@ -90,12 +108,13 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (event: "authorized", result: { status: WebCookieAuthorizationStatus; ok: boolean }): void
+  (event: "authorized", result: { status: WebCookieAuthEventStatus; ok: boolean }): void
 }>()
 
 const { t } = useV2I18n()
 const webCookieAuthorization = useWebCookieAuthorization()
 const isLoading = ref(false)
+const isLogoutLoading = ref(false)
 const lastStatus = ref<WebCookieAuthorizationStatus | "idle">("idle")
 
 const isCookieWebPlatform = computed(() => {
@@ -103,6 +122,7 @@ const isCookieWebPlatform = computed(() => {
 })
 const canAutoCapture = computed(() => isCookieWebPlatform.value && webCookieAuthorization.isAutoCaptureSupported())
 const canOpenLogin = computed(() => canAutoCapture.value && !!props.dynCfg?.authUrl)
+const canLogout = computed(() => isCookieWebPlatform.value && (props.dynCfg?.isAuth === true || !!props.cfg?.password))
 
 const statusType = computed(() => {
   if (lastStatus.value === "success") {
@@ -161,6 +181,9 @@ const manualLabel = computed(() => {
 const manualTooltip = computed(() => {
   return props.isManualExpanded ? t("v2.webCookieAuth.tooltip.manualExpanded") : t("v2.webCookieAuth.tooltip.manual")
 })
+const logoutTooltip = computed(() => {
+  return t("v2.webCookieAuth.tooltip.logout")
+})
 
 const messageByStatus = (status: WebCookieAuthorizationStatus) => {
   switch (status) {
@@ -178,6 +201,27 @@ const messageByStatus = (status: WebCookieAuthorizationStatus) => {
       return t("v2.webCookieAuth.message.platformNotFound")
     default:
       return t("v2.webCookieAuth.message.error")
+  }
+}
+
+const logoutMessageByStatus = (status: WebCookieLogoutStatus) => {
+  switch (status) {
+    case "logout_success":
+      return t("v2.webCookieAuth.message.logoutSuccess")
+    case "url_fallback":
+      return t("v2.webCookieAuth.message.logoutFallback")
+    case "platform_not_found":
+      return t("v2.webCookieAuth.message.platformNotFound")
+    case "not_cookie_platform":
+      return t("v2.webCookieAuth.message.notCookiePlatform")
+    case "no_logout_method":
+      return t("v2.webCookieAuth.message.noLogoutMethod")
+    case "persist_failed":
+      return t("v2.webCookieAuth.message.logoutPersistFailed")
+    case "logout_failed":
+      return t("v2.webCookieAuth.message.logoutFailed")
+    default:
+      return t("v2.webCookieAuth.message.logoutFailed")
   }
 }
 
@@ -216,6 +260,51 @@ async function handleAutoCapture() {
     emit("authorized", { status: "error", ok: false })
   } finally {
     isLoading.value = false
+  }
+}
+
+async function handleLogout() {
+  if (!canLogout.value || isLogoutLoading.value) {
+    return
+  }
+
+  try {
+    await ElMessageBox.confirm(t("v2.webCookieAuth.confirm.logout.message"), t("v2.webCookieAuth.confirm.logout.title"), {
+      type: "warning",
+      confirmButtonText: t("main.opt.ok"),
+      cancelButtonText: t("main.opt.cancel"),
+    } as any)
+  } catch {
+    return
+  }
+
+  isLogoutLoading.value = true
+  try {
+    const result = await webCookieAuthorization.logout({
+      platformKey: props.platformKey,
+      currentCfg: props.cfg,
+      dynCfg: props.dynCfg,
+      setting: props.setting,
+      dynamicConfigArray: props.dynamicConfigArray,
+    })
+
+    if (result.status === "logout_success") {
+      props.cfg.password = ""
+      if (props.dynCfg) {
+        props.dynCfg.isAuth = false
+      }
+      ElMessage.success(logoutMessageByStatus(result.status))
+    } else if (result.status === "url_fallback") {
+      ElMessage.warning(logoutMessageByStatus(result.status))
+    } else {
+      ElMessage.error(logoutMessageByStatus(result.status))
+    }
+    emit("authorized", { status: result.status, ok: result.ok })
+  } catch {
+    ElMessage.error(logoutMessageByStatus("logout_failed"))
+    emit("authorized", { status: "logout_failed", ok: false })
+  } finally {
+    isLogoutLoading.value = false
   }
 }
 
@@ -398,6 +487,15 @@ function handleToggleManual() {
 :deep(.syp-web-cookie-auth__action.is-login:hover)
   background #e3eeff
   border-color #a9c6ff
+
+:deep(.syp-web-cookie-auth__action.is-logout)
+  color #d25f00
+  background #fff7e8
+  border-color #ffd59a
+
+:deep(.syp-web-cookie-auth__action.is-logout:hover)
+  background #ffefcf
+  border-color #ffc46f
 
 :deep(.syp-web-cookie-auth__action.is-primary)
   color #ffffff

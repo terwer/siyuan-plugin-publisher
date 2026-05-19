@@ -14,12 +14,9 @@ import { CategoryTypeEnum, PageTypeEnum, PasswordType, PicbedServiceTypeEnum } f
  * 语雀网页版配置
  */
 class YuquewebConfig extends CommonWebConfig {
-  public logoutUrl: string
-
   constructor(password = "", middlewareUrl?: string) {
     super("https://www.yuque.com", "https://www.yuque.com", "", password, middlewareUrl)
 
-    this.logoutUrl = "https://www.yuque.com/logout"
     this.previewUrl = "/{login}/{bookSlug}/{slug}"
     this.pageType = PageTypeEnum.Markdown
     this.usernameEnabled = false

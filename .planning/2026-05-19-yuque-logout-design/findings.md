@@ -36,3 +36,8 @@
 ## 2026-05-19 上游依赖确认
 - 当前插件提案 `fix-yuqueweb-logout-action` 已确认依赖 zhi 仓库的 `add-web-auth-logout-spi` 提案。
 - 只有在 `zhi-blog-api` 完成该提案、发布新 npm 包并在插件仓库升级依赖后，插件侧才可继续实现语雀退出能力。
+
+## 2026-05-19 实施前代码确认
+- `zhi-blog-api@1.78.0` 已在类型中提供 `IWebApi/WebApi/WebAdaptor.logoutWebAuth(): Promise<boolean>`。
+- 上游 `WebApi.logoutWebAuth()` 默认实现会抛 `NotImplementedException`；插件内 `BaseWebApi` 需要给非专有平台提供安全默认返回 `false`，使统一服务能继续走非语雀 `logoutUrl` fallback。
+- V2 文案同时存在于 `src/locales/*` 与 `siyuan/i18n/*`，测试读取 `siyuan/i18n/zh_CN.json`。

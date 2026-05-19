@@ -18,3 +18,5 @@
 - [x] 阶段 5：生成 OpenSpec 提案 `fix-yuqueweb-logout-action`
 
 - [x] 阶段 6：创建 zhi-blog-api `logoutWebAuth` SPI 提案并回写当前提案依赖
+
+- [x] 阶段 7：实施 OpenSpec 变更 `fix-yuqueweb-logout-action` 并完成验证

@@ -67,7 +67,7 @@ import { computed, onMounted, provide, reactive, watch, type Component } from "v
 import { getV2BridgeComponent } from "~/src/components/v2/settings/bridge/bridgeRegistry.ts"
 import { V2_PLATFORM_CONFIG_ACTION_BRIDGE_KEY } from "~/src/components/v2/settings/bridge/platformConfigActionBridge.ts"
 import V2WebCookieAuthPanel from "~/src/components/v2/settings/V2WebCookieAuthPanel.vue"
-import type { WebCookieAuthorizationStatus } from "~/src/composables/useWebCookieAuthorization.ts"
+import type { WebCookieAuthEventStatus } from "~/src/composables/useWebCookieAuthorization.ts"
 import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
 import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
 import { SubPlatformType } from "~/src/platforms/dynamicConfig.ts"
@@ -79,7 +79,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (event: "cookie-authorized", result: { status: WebCookieAuthorizationStatus; ok: boolean }): void
+  (event: "cookie-authorized", result: { status: WebCookieAuthEventStatus; ok: boolean }): void
   (event: "validated", result: { ok: boolean; apiStatus?: boolean }): void
   (event: "saved", result: { ok: boolean }): void
 }>()
@@ -140,7 +140,7 @@ async function loadBridgeMeta() {
   }
 }
 
-function handleCookieAuthorized(result: { status: WebCookieAuthorizationStatus; ok: boolean }) {
+function handleCookieAuthorized(result: { status: WebCookieAuthEventStatus; ok: boolean }) {
   emit("cookie-authorized", result)
 }
 
