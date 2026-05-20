@@ -369,6 +369,19 @@ export default {
     "The user name of the spark platform, note that the user name is fixed in [account settings], not the user nickname (*^▽^*)",
   "setting.yuque.password.tip":
     "For the token of the spark platform, please follow the link to get it. You only need to grant the document to read and modify the two permissions.",
+  "setting.yuque.membership.bannerTitle": "Yuque API (token) requires Professional membership",
+  "setting.yuque.membership.tip":
+    "If Verify shows 429 / Too Many Requests, that is Yuque billing/quota — not a plugin misconfiguration.",
+  "setting.yuque.membership.bannerLink": "Yuque personal pricing and membership",
+  "setting.yuque.vali.error429":
+    "[Not a plugin bug] Yuque API returned 429 (Too Many Requests): Professional membership required (Super VIP token), or switch to Yuque Web. Pricing: {priceUrl}",
+  "setting.yuque.error.auth": "Yuque token is invalid or expired. Regenerate the token and try again.",
+  "setting.yuque.error.membershipRequired":
+    "This account cannot use Yuque Open API (token requires Professional / Super VIP). Subscribe or renew, then retry. Pricing: {priceUrl}",
+  "setting.yuque.error.quotaOrMembership":
+    "[Not a plugin bug] Yuque API returned 429: subscribe or use Yuque Web. Pricing: {priceUrl}",
+  "setting.yuque.error.notfound": "Yuque document or repo was not found. Check postid and repo settings.",
+  "setting.yuque.error.generic": "Yuque API request failed. Retry later or check token and membership.",
   "setting.yuque.apiurl.tip":
     "The API address of the language bird platform is usually fixed: https://www.yuque.com/api/v2",
   "setting.yuque.previewUrl.tip": "Article preview rules for the Yuque platform, Usually: /[notebook]/[postid]",

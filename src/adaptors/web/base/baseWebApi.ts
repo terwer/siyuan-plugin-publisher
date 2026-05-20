@@ -240,7 +240,12 @@ class BaseWebApi extends WebApi {
       this.logger.info("Using legency web formFetch")
 
       const { isInSiyuanOrSiyuanNewWin } = useSiyuanDevice()
-      if (!isInSiyuanOrSiyuanNewWin() || forceProxy) {
+      const transport = FormDataUtils.resolveFormUploadTransport(this.appInstance, {
+        isInSiyuanOrSiyuanNewWin: isInSiyuanOrSiyuanNewWin(),
+        forceProxy,
+      })
+      this.logger.info("webFormFetch transport =>", transport)
+      if (transport === "siyuan-forward-proxy") {
         options.diagnostic = {
           ...options.diagnostic,
           stage: "forward-proxy",

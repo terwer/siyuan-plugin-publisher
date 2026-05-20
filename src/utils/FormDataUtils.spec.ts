@@ -39,4 +39,34 @@ describe("FormDataUtils", () => {
       "/Volumes/workspace/mydocs/SiYuanWorkspace/test/data/libs/node-fetch-cjs/dist/index.js"
     )
   })
+
+  it("prefers plugin node-fetch for multipart even when forceProxy is true", () => {
+    const appInstance = { win: { require: vi.fn() } } as any
+    expect(
+      FormDataUtils.resolveFormUploadTransport(appInstance, {
+        isInSiyuanOrSiyuanNewWin: true,
+        forceProxy: true,
+      })
+    ).toBe("plugin-node-fetch")
+  })
+
+  it("falls back to forwardProxy outside siyuan when forceProxy is true", () => {
+    const appInstance = { win: {} } as any
+    expect(
+      FormDataUtils.resolveFormUploadTransport(appInstance, {
+        isInSiyuanOrSiyuanNewWin: false,
+        forceProxy: true,
+      })
+    ).toBe("siyuan-forward-proxy")
+  })
+
+  it("uses plugin node-fetch inside siyuan when forceProxy is false", () => {
+    const appInstance = { win: { require: vi.fn() } } as any
+    expect(
+      FormDataUtils.resolveFormUploadTransport(appInstance, {
+        isInSiyuanOrSiyuanNewWin: true,
+        forceProxy: false,
+      })
+    ).toBe("plugin-node-fetch")
+  })
 })

@@ -500,6 +500,10 @@ class YuquewebWebAdaptor extends BaseWebApi {
       ...diagnostic,
       ...errorDiagnostic,
       status: status ?? errorDiagnostic.status ?? diagnostic.status,
+      responseBodyPreview:
+        errorDiagnostic.responseBodyPreview ??
+        diagnostic.responseBodyPreview ??
+        this.buildDiagnosticPreview(error?.cause?.diagnostic?.responseBodyPreview ?? error?.cause?.message),
       errorName: error?.name ?? errorDiagnostic.errorName,
       errorMessage: this.sanitizeForLog(error?.message || error?.toString?.() || errorDiagnostic.errorMessage || ""),
     }

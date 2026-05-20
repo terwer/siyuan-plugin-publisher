@@ -162,8 +162,12 @@ export class BaseBlogApi extends BlogApi {
     if (this.isUseSiyuanProxy || (!this.isUseSiyuanProxy && forceProxy) || !forceProxy) {
       this.logger.info("Using legency api formFetch")
       const { isInSiyuanOrSiyuanNewWin } = useSiyuanDevice()
-
-      if (!isInSiyuanOrSiyuanNewWin() || forceProxy) {
+      const transport = FormDataUtils.resolveFormUploadTransport(this.appInstance, {
+        isInSiyuanOrSiyuanNewWin: isInSiyuanOrSiyuanNewWin(),
+        forceProxy,
+      })
+      this.logger.info("apiFormFetch transport =>", transport)
+      if (transport === "siyuan-forward-proxy") {
         const fetchResult = await this.apiFetch(
           url,
           headers,

@@ -361,6 +361,18 @@ export default {
   "setting.yuque.username.tip": "语雀平台用户名，注意是【账户设置】里面固定连接里面的用户名，不是用户昵称哦(*^▽^*)",
   "setting.yuque.password.tip":
     "语雀平台的Token，请按照链接点击获取，只需要勾选【读取你的知识库】和【修改和读取你的文档】两个权限即可",
+  "setting.yuque.membership.bannerTitle": "语雀 API（Token）需专业会员",
+  "setting.yuque.membership.tip": "点「验证」若出现 429 / Too Many Requests：这是语雀收费与配额限制，不是插件配置错误。",
+  "setting.yuque.membership.bannerLink": "查看语雀个人定价与会员说明",
+  "setting.yuque.vali.error429":
+    "【非插件问题】语雀 API 返回 429（Too Many Requests）：需开通/续费专业会员（Token 要超级会员），或改用语雀网页版发布。定价：{priceUrl}",
+  "setting.yuque.error.auth": "语雀 Token 无效或已失效，请重新生成 Token 后重试。",
+  "setting.yuque.error.membershipRequired":
+    "当前账号无权使用语雀 Open API（Token 需专业会员/超级会员）。请开通或续费后重试。定价：{priceUrl}",
+  "setting.yuque.error.quotaOrMembership":
+    "【非插件问题】语雀 API 返回 429：需专业会员或改用语雀网页版。定价：{priceUrl}",
+  "setting.yuque.error.notfound": "语雀文档或知识库不存在，请确认 postid 与知识库配置。",
+  "setting.yuque.error.generic": "语雀 API 请求失败，请稍后重试或检查 Token 与会员状态。",
   "setting.yuque.apiurl.tip": "语雀平台的API地址，通常固定是：https://www.yuque.com/api/v2",
   "setting.yuque.previewUrl.tip": "语雀平台的文章预览规则，通常是：/[notebook]/[postid]",
 

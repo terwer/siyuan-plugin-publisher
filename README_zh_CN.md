@@ -18,7 +18,11 @@
 2. 启用插件，然后在思源笔记窗口左上角工具栏有一个飞机按钮，点击，即可使用。
    ![](./docs/images/publisher-icon.png) 
 3. 文档菜单（可选），参考 [帮助文档](https://siyuan.wiki/s/20230810132040-nn4q7vs) FAQ第12条，打开文档菜单，即可使用。
-    
+
+### 语雀说明
+
+- **语雀（Open API / Token）**：需[专业会员](https://www.yuque.com/about/price#personal)；未续费或免费配额用尽时配置/发布常见 **429**，并非插件故障。建议改用 **语雀网页版**（Cookie）发布。
+- **语雀网页版**：Cookie 授权，不依赖 Token 会员，适合 V2 快速发布。
 
 ## 更新历史
 

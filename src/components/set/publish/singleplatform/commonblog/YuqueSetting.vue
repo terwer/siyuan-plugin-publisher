@@ -13,6 +13,8 @@ import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useYuqueApi } from "~/src/adaptors/api/yuque/useYuqueApi.ts"
 import { YuqueConfig } from "~/src/adaptors/api/yuque/yuqueConfig.ts"
 import { YuquePlaceholder } from "~/src/adaptors/api/yuque/yuquePlaceholder.ts"
+import { YUQUE_PRICE_URL } from "~/src/adaptors/api/yuque/yuqueApiError.ts"
+import { showYuqueValidateFeedback, type YuqueValidateResult } from "~/src/adaptors/api/yuque/useYuqueValidateFeedback.ts"
 
 const props = defineProps({
   apiType: {
@@ -31,8 +33,35 @@ yuquePlaceholder.passwordPlaceholder = t("setting.yuque.password.tip")
 yuquePlaceholder.apiUrlPlaceholder = t("setting.yuque.apiurl.tip")
 yuquePlaceholder.previewUrlPlaceholder = t("setting.yuque.previewUrl.tip")
 yuqueCfg.placeholder = yuquePlaceholder
+const membershipTip = t("setting.yuque.membership.tip")
+
+const onValidated = (result: YuqueValidateResult) => {
+  showYuqueValidateFeedback(result)
+}
 </script>
 
 <template>
-  <common-blog-setting :api-type="props.apiType" :cfg="yuqueCfg" />
+  <el-alert class="yuque-api-membership-hint" type="error" :closable="false" show-icon>
+    <template #title>{{ t("setting.yuque.membership.bannerTitle") }}</template>
+    <p class="yuque-api-membership-hint__body">{{ membershipTip }}</p>
+    <a class="yuque-api-membership-hint__link" :href="YUQUE_PRICE_URL" target="_blank" rel="noopener noreferrer">
+      {{ t("setting.yuque.membership.bannerLink") }}
+    </a>
+  </el-alert>
+  <common-blog-setting :api-type="props.apiType" :cfg="yuqueCfg" @validated="onValidated" />
 </template>
+
+<style scoped>
+.yuque-api-membership-hint {
+  margin-bottom: 10px;
+}
+.yuque-api-membership-hint__body {
+  margin: 4px 0 6px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.yuque-api-membership-hint__link {
+  font-size: 13px;
+  font-weight: 600;
+}
+</style>

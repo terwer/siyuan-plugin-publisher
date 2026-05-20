@@ -13,6 +13,7 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
 import { ObjectUtil, StrUtil } from "zhi-common"
 import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
+import { assertYuqueApiResponse, toYuqueApiUserError } from "~/src/adaptors/api/yuque/yuqueApiError.ts"
 
 /**
  * Yuque API 适配器
@@ -282,16 +283,17 @@ class YuqueApiAdaptor extends BaseBlogApi {
     this.logger.debug("向语雀请求数据，apiUrl =>", apiUrl)
     this.logger.debug("向语雀请求数据，params =>", params)
 
-    // 使用兼容的fetch调用并返回统一的JSON数据
-    const body = ObjectUtil.isEmptyObject(params) ? "" : JSON.stringify(params)
-    const resJson = await this.apiFetch(apiUrl, [headers], body, method, contentType, false, "base64")
-    this.logger.debug("向语雀请求数据，resJson =>", resJson)
+    try {
+      const body = ObjectUtil.isEmptyObject(params) ? "" : JSON.stringify(params)
+      const resJson = await this.apiFetch(apiUrl, [headers], body, method, contentType, false, "base64")
+      this.logger.debug("向语雀请求数据，resJson =>", resJson)
 
-    if (resJson?.status === 401) {
-      throw new Error(resJson?.message)
+      assertYuqueApiResponse(resJson)
+
+      return resJson.data ? resJson.data : null
+    } catch (e) {
+      throw toYuqueApiUserError(e)
     }
-
-    return resJson.data ? resJson.data : null
   }
 }
 
