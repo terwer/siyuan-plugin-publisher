@@ -24,7 +24,7 @@
 ## 2026-05-19 实施恢复
 - 使用 `openspec-apply-change` 继续 `fix-yuqueweb-logout-action`。
 - 确认 OpenSpec 当前 25/25 待完成；用户已确认上游发布与依赖升级完成。
-- 当前依赖为 `zhi-blog-api@^1.78.0`、`zhi-siyuan-api@^2.35.4`；工作区已有非本次待确认状态 `AD src/utils/staticI18n.ts`，后续不主动覆盖。
+- 当前依赖为 `zhi-blog-api@^1.78.0`、`zhi-siyuan-api@^2.35.4`。
 - 已实现统一 `logoutWebCookieAuthorization` 服务，新增结构化退出状态、适配器能力检测、语雀禁用 URL fallback、远端退出成功后的本地 Cookie/isAuth 持久化清理。
 - 已为 `BaseWebApi` 增加默认 `logoutWebAuth=false`，避免非专有平台被上游 NotImplemented 阻断 fallback。
 - 已移除 `YuquewebConfig.logoutUrl`，并在 `YuquewebWebAdaptor.logoutWebAuth()` 中实现 `DELETE /api/accounts/logout`、`yuque_ctoken` 提取和 login 解析。
@@ -33,4 +33,3 @@
 - 验证完成：`pnpm exec vitest run src/composables/useWebCookieAuthorization.spec.ts src/adaptors/web/yuqueweb/YuquewebWebAdaptor.spec.ts src/components/v2/settings/V2WebCookieAuthPanel.spec.ts src/components/set/publish/platform/PublishPlatformSettingList.spec.ts src/components/v2/settings/V2PlatformConfigBridge.spec.ts` 通过，35 tests。
 - 验证完成：`pnpm exec vue-tsc --noEmit` 通过。
 - 验证完成：`git diff --check` 通过；`openspec status --change fix-yuqueweb-logout-action --json` 显示 tasks done。
-- 注意：仓库仍存在先前非本次创建的 `AD src/utils/staticI18n.ts` 状态，本次未处理该文件。

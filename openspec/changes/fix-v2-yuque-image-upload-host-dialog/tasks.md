@@ -1,6 +1,6 @@
 ## 1. 真实取证与边界确认
 
-- [x] 1.1 复核当前工作区差异，只记录与图片上传、APP_BASE、错误详情相关的已改动，不触碰 `src/utils/staticI18n.ts` 遗留状态
+- [x] 1.1 复核当前工作区差异，只记录与图片上传、APP_BASE、错误详情相关的已改动
 - [ ] 1.2 在思源 Electron V2 宿主插件中复现语雀图片发布失败，记录当前错误详情截图对应的调用时间和平台账号，不修改历史文章
 - [x] 1.3 对 `newMediaObject -> yuquewebFormFetch -> BaseWebApi.webFormFetch -> useProxy.forwardProxy/zhi-formdata-fetch` 增加最小脱敏诊断，确保不输出 Cookie/token
 - [ ] 1.4 使用真实图片文件和真实语雀登录态重新触发上传，取得脱敏证据：实际分支、目标 URL、状态码、响应摘要、错误类型、文件安全元信息
