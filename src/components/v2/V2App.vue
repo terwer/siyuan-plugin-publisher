@@ -68,7 +68,13 @@
           <h1 class="syp-quick-shell__title">{{ quickPublish.state.docTitle }}</h1>
           <p class="syp-quick-shell__desc">{{ t("v2.quickPublish.desc") }}</p>
 
-          <div class="syp-publish-status" :class="`is-${publishState.status}`">
+          <div
+            class="syp-publish-status"
+            :class="`is-${publishState.status}`"
+            role="status"
+            aria-live="polite"
+            :aria-busy="publishState.isPublishing"
+          >
             <div class="syp-publish-status__title">{{ publishTitle }}</div>
             <div class="syp-publish-status__desc">{{ publishDescription }}</div>
             <div
@@ -583,41 +589,95 @@ async function retryInit() {
   flex-direction column
   gap 12px
 
+// Ant Design Alert 色板：统一 1px 描边 + 浅色底，不用左侧粗色条
+$syp-alert-default-bg = #fafafa
+$syp-alert-default-border = #d9d9d9
+$syp-alert-info-bg = #e6f4ff
+$syp-alert-info-border = #91caff
+$syp-alert-info-text = #0958d9
+$syp-alert-success-bg = #f6ffed
+$syp-alert-success-border = #b7eb8f
+$syp-alert-success-text = #389e0d
+$syp-alert-warning-bg = #fffbe6
+$syp-alert-warning-border = #ffe58f
+$syp-alert-warning-text = #d48806
+$syp-alert-error-bg = #fff2f0
+$syp-alert-error-border = #ffccc7
+$syp-alert-error-text = #cf1322
+
 .syp-publish-status
-  padding 12px
-  border-radius $syp-sm-card-radius
-  border 1px solid $syp-border-primary
-  background $syp-bg-primary
+  padding 8px 12px
+  border-radius $syp-radius-md
+  border 1px solid $syp-alert-default-border
+  background $syp-alert-default-bg
   display flex
   flex-direction column
-  gap 6px
+  gap 4px
+  transition background 0.2s ease, border-color 0.2s ease
+
+  &.is-idle
+    background $syp-alert-default-bg
+    border 1px dashed $syp-alert-default-border
+
+    .syp-publish-status__title
+      font-weight 500
+      color $syp-text-secondary
+
+    .syp-publish-status__desc
+      color $syp-text-tertiary
 
   &.is-preparing,
   &.is-publishing
-    background linear-gradient(180deg, $syp-bg-primary 0%, $syp-status-info-bg 100%)
-    border-color $syp-status-info-border
+    background $syp-alert-info-bg
+    border 1px solid $syp-alert-info-border
+
+    .syp-publish-status__title
+      color $syp-alert-info-text
+
+    .syp-publish-status__desc
+      color rgba(9, 88, 217, 0.75)
 
   &.is-success,
   &.is-preview_ready
-    background linear-gradient(180deg, $syp-bg-primary 0%, $syp-status-success-bg 100%)
-    border-color $syp-status-success-border
+    background $syp-alert-success-bg
+    border 1px solid $syp-alert-success-border
+
+    .syp-publish-status__title
+      color $syp-alert-success-text
+
+    .syp-publish-status__desc
+      color rgba(56, 158, 13, 0.85)
 
   &.is-success_with_warnings
-    background linear-gradient(180deg, $syp-bg-primary 0%, $syp-status-warning-bg 100%)
-    border-color $syp-status-warning-border
+    background $syp-alert-warning-bg
+    border 1px solid $syp-alert-warning-border
+
+    .syp-publish-status__title
+      color $syp-alert-warning-text
+
+    .syp-publish-status__desc
+      color rgba(212, 136, 6, 0.85)
 
   &.is-failed
-    background linear-gradient(180deg, $syp-bg-primary 0%, $syp-status-error-bg 100%)
-    border-color $syp-status-error-border
+    background $syp-alert-error-bg
+    border 1px solid $syp-alert-error-border
+
+    .syp-publish-status__title
+      color $syp-alert-error-text
+
+    .syp-publish-status__desc
+      color rgba(207, 19, 34, 0.85)
 
 .syp-publish-status__title
   font-size 14px
   font-weight 600
+  line-height 1.5
   color $syp-text-primary
 
 .syp-publish-status__desc
   font-size 13px
   color $syp-text-secondary
+  line-height 1.5
 
 .syp-publish-status__warning
   border-radius 10px

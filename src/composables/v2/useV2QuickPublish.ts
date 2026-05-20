@@ -6,6 +6,7 @@ import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
 import { sortV2QuickPublish } from "~/src/composables/v2/platformOrdering.ts"
+import { notifyV2QuickPublishResult } from "~/src/composables/v2/useV2QuickPublishToast.ts"
 import { useV2PublishValidation } from "~/src/composables/v2/useV2PublishValidation.ts"
 import { DynamicConfig, DynamicJsonCfg, getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
@@ -84,6 +85,15 @@ export const useV2QuickPublish = () => {
 
   const setPublishState = (partial: Partial<typeof state.publishState>) => {
     Object.assign(state.publishState, partial)
+  }
+
+  const emitPublishFeedback = () => {
+    notifyV2QuickPublishResult(t, {
+      status: state.publishState.status,
+      platformName: state.publishState.platformName,
+      lastAction: state.publishState.lastAction,
+      errMsg: state.publishState.errMsg,
+    })
   }
 
   const setActivePlatform = (item: V2QuickPublishPlatformItem) => {
@@ -230,6 +240,7 @@ export const useV2QuickPublish = () => {
           errDetails: warningDetails,
           isPublishing: false,
         })
+        emitPublishFeedback()
       } else {
         const errMsg = sanitizeText(result?.errMsg || t("v2.quickPublish.error.publishFailed"))
         const errDetails = sanitizeText(
@@ -242,6 +253,7 @@ export const useV2QuickPublish = () => {
           previewUrl: "",
           isPublishing: false,
         })
+        emitPublishFeedback()
       }
     } catch (error) {
       const errorText = normalizeError(error)
@@ -252,6 +264,7 @@ export const useV2QuickPublish = () => {
         previewUrl: "",
         isPublishing: false,
       })
+      emitPublishFeedback()
     }
   }
 
@@ -284,6 +297,7 @@ export const useV2QuickPublish = () => {
         errDetails: "",
         isPublishing: false,
       })
+      emitPublishFeedback()
 
       if (openImmediately) {
         await openPathOrUrl(previewUrl, kernelApi)
@@ -297,6 +311,7 @@ export const useV2QuickPublish = () => {
         previewUrl: "",
         isPublishing: false,
       })
+      emitPublishFeedback()
     }
   }
 
@@ -343,6 +358,7 @@ export const useV2QuickPublish = () => {
           errDetails: "",
           isPublishing: false,
         })
+        emitPublishFeedback()
       } else {
         const errMsg = sanitizeText(result?.errMsg || t("v2.quickPublish.error.deleteFailed"))
         const errDetails = sanitizeText(result?.errDetails || result?.errMsg || t("v2.quickPublish.error.deleteFailed"))
@@ -353,6 +369,7 @@ export const useV2QuickPublish = () => {
           previewUrl: "",
           isPublishing: false,
         })
+        emitPublishFeedback()
       }
     } catch (error) {
       const errorText = normalizeError(error)
@@ -363,6 +380,7 @@ export const useV2QuickPublish = () => {
         previewUrl: "",
         isPublishing: false,
       })
+      emitPublishFeedback()
     }
   }
 

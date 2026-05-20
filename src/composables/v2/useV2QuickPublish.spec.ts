@@ -24,11 +24,16 @@ import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
 import zhCN from "~/siyuan/i18n/zh_CN.json"
 
+const mockNotifyQuickPublish = vi.hoisted(() => vi.fn())
 const mockValidatePlatformPublish = vi.hoisted(() => vi.fn())
 const mockDoSinglePublish = vi.hoisted(() => vi.fn())
 const mockAssignInitAttrs = vi.hoisted(() => vi.fn())
 const mockGetPublishCfg = vi.hoisted(() => vi.fn())
 const mockBlogGetPost = vi.hoisted(() => vi.fn())
+
+vi.mock("~/src/composables/v2/useV2QuickPublishToast.ts", () => ({
+  notifyV2QuickPublishResult: mockNotifyQuickPublish,
+}))
 
 vi.mock("~/src/composables/v2/useV2PublishValidation.ts", () => ({
   useV2PublishValidation: () => ({
@@ -427,6 +432,7 @@ describe("useV2QuickPublish", () => {
     await quickPublish.publishToPlatform(quickPublish.state.platformItems[0])
 
     expect(quickPublish.state.publishState.status).toBe("success_with_warnings")
+    expect(mockNotifyQuickPublish).toHaveBeenCalled()
     expect(quickPublish.state.publishState.errMsg).toContain("语雀图片上传失败")
     expect(quickPublish.state.publishState.errDetails).toContain("Cannot find module")
     expect(quickPublish.state.publishState.errDetails).toContain("/plugins/siyuan-plugin-publisher/")
@@ -482,6 +488,7 @@ describe("useV2QuickPublish", () => {
     await quickPublish.publishToPlatform(quickPublish.state.platformItems[0])
 
     expect(quickPublish.state.publishState.status).toBe("failed")
+    expect(mockNotifyQuickPublish).toHaveBeenCalled()
     expect(quickPublish.state.publishState.errMsg).toContain("语雀图片上传失败")
     expect(quickPublish.state.publishState.errDetails).toContain("forward-proxy")
     expect(quickPublish.state.publishState.errDetails).toContain("siyuan-forward-proxy")
