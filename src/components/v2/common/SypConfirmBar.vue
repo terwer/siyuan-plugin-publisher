@@ -47,8 +47,8 @@ defineEmits<{
   margin-top 6px
   padding 8px
   border-radius $syp-radius-sm
-  border 1px solid $syp-status-error-border
-  background $syp-status-error-bg
+  border 1px solid var(--b3-theme-error, $syp-status-error-border)
+  background var(--b3-theme-surface-light, $syp-status-error-bg)
   display flex
   flex-direction column
   gap 6px
@@ -56,7 +56,7 @@ defineEmits<{
 
 .syp-confirm-bar__text
   font-size 12px
-  color $syp-action-danger-hover
+  color var(--b3-theme-error, $syp-action-danger-hover)
 
 .syp-confirm-bar__actions
   display flex

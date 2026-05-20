@@ -31,20 +31,20 @@ import { showIframeDialog } from "../iframeDialog"
 import PublisherPlugin from "../index"
 import { PreferenceConfigManager } from "../store/preferenceConfigManager"
 import WidgetPageUtils from "../utils/widgetPageUtils.ts"
-import { V2Host } from "../v2/v2Host"
-
 /**
  * 挂件相关
  */
 export class WidgetInvoke {
   private logger
   private readonly pluginInstance
-  private readonly v2Host
 
   constructor(pluginInstance: PublisherPlugin) {
     this.logger = createSiyuanAppLogger("widget-invoke")
     this.pluginInstance = pluginInstance
-    this.v2Host = new V2Host(pluginInstance)
+  }
+
+  private get v2Host() {
+    return this.pluginInstance.v2Host
   }
 
   public async showPublisherBatchPublishDialog() {

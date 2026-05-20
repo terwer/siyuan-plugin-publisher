@@ -42,9 +42,9 @@ $syp-status-warning-bg = #fffbf0
 $syp-status-warning-border = #f5e6c8
 $syp-status-warning-deep-bg = #fff8e6
 
-// Chip / 标签
-$syp-chip-bg = #f3f6fa
-$syp-chip-text = #6a7788
+// Chip / 标签（随思源 --b3-* 变化）
+$syp-chip-bg = var(--b3-theme-surface-light, #f3f6fa)
+$syp-chip-text = var(--b3-theme-on-surface-light, #6a7788)
 
 // 强调色
 $syp-accent = #355d90
@@ -57,17 +57,17 @@ $syp-action-danger = #d92d20
 $syp-action-danger-hover = #c6281d
 
 // 图标区域
-$syp-icon-bg = #f2f5fa
-$syp-icon-color = #355d90
+$syp-icon-bg = var(--b3-theme-surface-light, #f2f5fa)
+$syp-icon-color = var(--b3-theme-primary, #355d90)
 
-// 状态徽章
-$syp-badge-ready-bg = rgba(52, 199, 36, 0.12)
-$syp-badge-ready-text = #2f8b24
-$syp-badge-disabled-bg = rgba(245, 74, 69, 0.35)
-$syp-badge-disabled-text = #c62828
+// 状态徽章（随思源主题）
+$syp-badge-ready-bg = var(--b3-theme-primary-lightest, rgba(52, 199, 36, 0.12))
+$syp-badge-ready-text = var(--b3-theme-primary, #2f8b24)
+$syp-badge-disabled-bg = var(--b3-theme-error-lightest, rgba(245, 74, 69, 0.2))
+$syp-badge-disabled-text = var(--b3-theme-error, #c62828)
 
-// 渐变卡片背景
-$syp-card-bg-gradient = linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)
+// 渐变卡片背景（思源表面色）
+$syp-card-bg-gradient = linear-gradient(180deg, var(--b3-theme-surface, #ffffff) 0%, var(--b3-theme-surface-light, #f8fafc) 100%)
 
 // 间距系统（基于 8px）
 $syp-spacing-xs = 4px
@@ -117,3 +117,7 @@ $syp-sm-title-size = 22px
 $syp-sm-name-size = 14px
 $syp-sm-badge-padding = 1px 6px
 $syp-sm-badge-font = 11px
+
+// Stylus 会把裸 `color-mix(in srgb, …)` 里的 `in` 当成一元运算符，须经此函数输出 CSS
+syp-color-mix(percent, colorA, colorB)
+  unquote('color-mix(in srgb, ' + colorA + ' ' + percent + ', ' + colorB + ')')

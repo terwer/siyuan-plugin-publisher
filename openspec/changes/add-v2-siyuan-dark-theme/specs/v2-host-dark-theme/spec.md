@@ -47,9 +47,11 @@ Brand accent colors (`$syp-primary`, primary buttons) MAY remain plugin-defined.
 
 The quick-publish status strip (`.syp-publish-status` and modifiers `is-idle`, `is-publishing`, `is-success`, `is-success_with_warnings`, `is-failed`) MUST keep distinct success / warning / error / info meaning in dark mode.
 
-Light-mode Ant Design–style hues and layout MUST remain unchanged when the host is not in dark mode.
+Publish status styling MUST use Siyuan semantic variables (`--b3-theme-primary`, `--b3-theme-success`, `--b3-theme-warning`, `--b3-theme-error`, `--b3-theme-surface`, etc.) with `color-mix` where needed, not a parallel Ant Design hex palette.
 
-In dark mode, the plugin MUST adapt alert backgrounds and borders via `html[data-theme-mode="dark"] .syp-v2` overrides (translucent semantic tints or `color-mix` with `--b3-theme-surface`), and MUST NOT leave large light-yellow or near-white inner panels (e.g. warning detail buttons with white fill).
+The plugin MUST NOT add `html[data-theme-mode="dark"]` override blocks solely to patch hardcoded light colors; host `--b3-*` variables MUST drive both light and dark appearance.
+
+Inner panels (e.g. warning detail buttons) MUST use `--b3-theme-surface` / `--b3-theme-surface-light`, not near-white fills.
 
 #### Scenario: Failed publish in dark mode
 
@@ -61,14 +63,14 @@ In dark mode, the plugin MUST adapt alert backgrounds and borders via `html[data
 - **WHEN** host is in light mode and publish succeeds
 - **THEN** the success status strip MUST match pre-change light appearance (regression guard)
 
-### Requirement: V2Host cleans up any temporary host class it adds
+### Requirement: V2Host must not mutate Siyuan host documentElement
 
-If implementation adds temporary `dark` class to `document.documentElement` because host dark lacks `html.dark`, the V2 host MUST remove only classes it added when `close()` runs, and MUST NOT leave host DOM mutated after the panel closes.
+The V2 host MUST NOT add, remove, or toggle classes or attributes on `document.documentElement` for theming. Only the menu `mountPoint` may receive the `dark` class for Element Plus.
 
-#### Scenario: Panel closed after temporary html.dark
+#### Scenario: Panel closed
 
-- **WHEN** V2Host added `dark` to `document.documentElement` during `show()` and the user closes the panel
-- **THEN** that class MUST be removed if and only if it was added by this plugin instance
+- **WHEN** the user closes the V2 panel
+- **THEN** `document.documentElement` MUST remain unchanged by this plugin
 
 ### Requirement: Optional ElMessage anchoring only after failed dark verification
 

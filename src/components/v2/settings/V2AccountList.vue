@@ -291,13 +291,13 @@ function moveItem(platformKey: string, direction: -1 | 1) {
   align-items center
   gap 10px
   padding $syp-sm-card-padding
-  border 1px solid $syp-border-primary
+  border 1px solid var(--b3-border-color, $syp-border-primary)
   border-radius $syp-sm-card-radius
   background $syp-card-bg-gradient
   transition border-color 0.2s ease, box-shadow 0.2s ease
 
   &:hover
-    border-color #c8d6ea
+    border-color var(--b3-theme-primary, #c8d6ea)
     box-shadow $syp-shadow-card-hover
 
   &.is-dragging
@@ -396,13 +396,13 @@ function moveItem(platformKey: string, direction: -1 | 1) {
   max-width 180px
   font-size $syp-sm-name-size
   font-weight 600
-  color $syp-text-primary
+  color var(--b3-theme-on-surface, $syp-text-primary)
 
 .syp-account-item__key
   max-width 240px
   margin-top 2px
   font-size 11px
-  color $syp-text-tertiary
+  color var(--b3-theme-on-surface-light, $syp-text-tertiary)
   font-family monospace
 
 :deep(.syp-status-badge)
@@ -427,36 +427,36 @@ function moveItem(platformKey: string, direction: -1 | 1) {
   box-shadow 0 0 0 2px rgba(255, 255, 255, 0.7)
 
 :deep(.syp-status-badge.is-success)
-  background #e8ffea
-  border-color #a9efb2
-  color #008a22 !important
+  background var(--b3-theme-primary-lightest, $syp-badge-ready-bg)
+  border-color var(--b3-theme-success, $syp-success)
+  color var(--b3-theme-success, $syp-success)
 
 :deep(.syp-status-badge.is-success .syp-status-badge__dot)
-  background #00b42a
+  background var(--b3-theme-success, $syp-success)
 
 :deep(.syp-status-badge.is-warning)
-  background #fff7e8
-  border-color #ffd59a
-  color #d25f00 !important
+  background var(--b3-theme-surface-light, $syp-status-warning-bg)
+  border-color var(--b3-theme-warning, $syp-warning)
+  color var(--b3-theme-warning, $syp-warning)
 
 :deep(.syp-status-badge.is-warning .syp-status-badge__dot)
-  background #ff7d00
+  background var(--b3-theme-warning, $syp-warning)
 
 :deep(.syp-status-badge.is-error)
-  background #ffece8
-  border-color #ffb8ad
-  color #cf2a2a !important
+  background var(--b3-theme-surface-light, $syp-status-error-bg)
+  border-color var(--b3-theme-error, $syp-error)
+  color var(--b3-theme-error, $syp-error)
 
 :deep(.syp-status-badge.is-error .syp-status-badge__dot)
-  background #f53f3f
+  background var(--b3-theme-error, $syp-error)
 
 :deep(.syp-status-badge.is-neutral)
-  background #f2f3f5
-  border-color #d9dde4
-  color #5f6b7a !important
+  background var(--b3-theme-surface-light, $syp-bg-secondary)
+  border-color var(--b3-border-color, $syp-border-primary)
+  color var(--b3-theme-on-surface-light, $syp-text-secondary)
 
 :deep(.syp-status-badge.is-neutral .syp-status-badge__dot)
-  background #86909c
+  background var(--b3-theme-on-surface-light, #86909c)
 
 .syp-account-item__actions
   display flex
@@ -479,19 +479,19 @@ function moveItem(platformKey: string, direction: -1 | 1) {
   text-align right
 
 .syp-btn.syp-btn-secondary
-  background $syp-bg-secondary
-  color $syp-accent
+  background var(--b3-theme-surface-light, $syp-bg-secondary)
+  color var(--b3-theme-primary, $syp-accent)
   box-shadow none
 
   &:hover
-    background #eef2f7
+    background var(--b3-theme-surface-light, #eef2f7)
 
 .syp-btn.is-warning.syp-btn-secondary
-  background #fff7e8
-  color #ad5b00
+  background var(--b3-theme-surface-light, $syp-status-warning-bg)
+  color var(--b3-theme-warning, $syp-warning)
 
   &:hover
-    background #ffefcc
+    background var(--b3-theme-surface, $syp-bg-primary)
 
 .syp-btn.is-danger
   color $syp-action-danger-hover

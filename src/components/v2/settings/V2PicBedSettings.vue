@@ -243,17 +243,17 @@ function buildSupportText(picgoSupported: boolean, bundledSupported: boolean) {
 .syp-picbed-note
   padding 16px 18px
   border-radius 12px
-  border 1px solid #e6ebf2
-  background #fff
+  border 1px solid var(--b3-border-color, #e6ebf2)
+  background var(--b3-theme-surface, #fff)
 
 .syp-picbed-note__title
   font-size 13px
-  color #7b8490
+  color var(--b3-theme-on-surface-light, #7b8490)
 
 .syp-picbed-note__desc
   margin-top 6px
   font-size 14px
-  color #475467
+  color var(--b3-theme-on-surface, #475467)
 
 .syp-settings-status-text.is-error
   color #b42318

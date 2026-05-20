@@ -183,8 +183,8 @@ const copyDetails = async () => {
   flex-direction column
   gap 10px
   border-radius 14px
-  border 1px solid rgba(222, 224, 227, 0.96)
-  background linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)
+  border 1px solid var(--b3-border-color, rgba(222, 224, 227, 0.96))
+  background $syp-card-bg-gradient
   box-shadow 0 18px 42px rgba(15, 23, 42, 0.18)
 
 .syp-error-details-panel__header
@@ -202,12 +202,12 @@ const copyDetails = async () => {
 .syp-error-details-panel__title
   font-size 14px
   font-weight 700
-  color $syp-text-primary
+  color var(--b3-theme-on-background, $syp-text-primary)
   line-height 1.35
 
 .syp-error-details-panel__summary
   margin 0
-  color $syp-text-secondary
+  color var(--b3-theme-on-surface-light, $syp-text-secondary)
   font-size 12px
   line-height 1.5
   word-break break-word
@@ -222,25 +222,25 @@ const copyDetails = async () => {
   min-height 24px
   padding 0 8px
   border-radius 7px
-  border 1px solid rgba(64, 128, 255, 0.28)
-  background rgba(255, 255, 255, 0.92)
-  color $syp-action-primary
+  border 1px solid var(--b3-border-color, $syp-border-primary)
+  background var(--b3-theme-surface, $syp-bg-primary)
+  color var(--b3-theme-primary, $syp-action-primary)
   font-size 12px
   font-weight 600
   cursor pointer
   transition background 0.15s ease, border-color 0.15s ease, color 0.15s ease
 
   &:hover
-    background #fff
-    border-color rgba(64, 128, 255, 0.48)
+    background var(--b3-theme-surface-light, $syp-bg-secondary)
+    border-color var(--b3-theme-primary, $syp-action-primary)
 
   &.is-close
-    color $syp-text-secondary
-    border-color rgba(222, 224, 227, 0.96)
+    color var(--b3-theme-on-surface-light, $syp-text-secondary)
+    border-color var(--b3-border-color, rgba(222, 224, 227, 0.96))
 
     &:hover
-      color $syp-text-primary
-      border-color rgba(143, 149, 158, 0.55)
+      color var(--b3-theme-on-surface, $syp-text-primary)
+      border-color var(--b3-border-color, $syp-border-primary)
 
 .syp-error-details-panel__details
   max-height min(42vh, 320px)
@@ -248,9 +248,9 @@ const copyDetails = async () => {
   margin 0
   padding 10px 12px
   border-radius 10px
-  border 1px solid rgba(222, 224, 227, 0.96)
-  background #f7f8fa
-  color $syp-text-primary
+  border 1px solid var(--b3-border-color, rgba(222, 224, 227, 0.96))
+  background var(--b3-theme-surface-light, #f7f8fa)
+  color var(--b3-theme-on-surface, $syp-text-primary)
   font-size 12px
   line-height 1.55
   white-space pre-wrap

@@ -91,7 +91,7 @@ defineEmits<{
 .syp-platform-select-group__title
   font-size 13px
   font-weight 600
-  color $syp-text-secondary
+  color var(--b3-theme-on-surface-light, $syp-text-secondary)
   letter-spacing 0.04em
   text-transform uppercase
 
@@ -106,17 +106,25 @@ defineEmits<{
   gap 10px
   align-items center
   padding 10px
-  border 1px solid $syp-border-primary
+  border 1px solid var(--b3-border-color, $syp-border-primary)
   border-radius $syp-sm-card-radius
   background $syp-card-bg-gradient
+  color var(--b3-theme-on-surface, $syp-text-primary)
   cursor pointer
   text-align left
-  transition border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease
+  transition border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease
 
   &:hover
-    border-color #c8d6ea
-    background $syp-bg-primary
-    box-shadow 0 6px 18px rgba(15, 23, 42, 0.08)
+    border-color var(--b3-theme-primary, $syp-primary)
+    background var(--b3-theme-surface-light, $syp-bg-secondary)
+    box-shadow 0 4px 12px rgba(0, 0, 0, 0.12)
+
+  &:focus-visible
+    border-color var(--b3-theme-primary, $syp-primary)
+    background var(--b3-theme-surface-light, $syp-bg-secondary)
+    box-shadow 0 4px 12px rgba(0, 0, 0, 0.12)
+    outline 2px solid var(--b3-theme-primary, $syp-primary)
+    outline-offset 2px
 
 .syp-platform-select-item__icon
   width $syp-sm-icon-size
@@ -140,12 +148,12 @@ defineEmits<{
 .syp-platform-select-item__name
   font-size $syp-sm-name-size
   font-weight 600
-  color $syp-text-primary
+  color var(--b3-theme-on-surface, $syp-text-primary)
 
 .syp-platform-select-item__desc
   margin-top 2px
   font-size 12px
-  color $syp-text-secondary
+  color var(--b3-theme-on-surface-light, $syp-text-secondary)
 
 @media (max-width: 960px)
   .syp-platform-select-group__grid

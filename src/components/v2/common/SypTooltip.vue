@@ -31,7 +31,6 @@
 <script setup lang="ts">
 import { ElTooltip } from "element-plus"
 import { computed, useAttrs } from "vue"
-
 defineOptions({
   inheritAttrs: false,
 })
@@ -75,6 +74,7 @@ const displayText = computed(() => tooltipContent.value || props.content)
 const isDisabled = computed(
   () => props.disabled || tooltipContent.value.length === 0 || (props.ellipsis && props.ellipsisWhen === "overflow")
 )
+
 </script>
 
 <style scoped lang="stylus">
@@ -92,19 +92,4 @@ const isDisabled = computed(
     overflow hidden
     text-overflow ellipsis
     white-space nowrap
-</style>
-
-<style lang="stylus">
-.syp-v2-tooltip-popper.is-dark
-  max-width 360px
-  padding 7px 9px
-  border-radius 6px
-  background #111827
-  color #ffffff
-  font-size 12px
-  line-height 1.5
-  word-break break-word
-
-  .el-popper__arrow::before
-    background #111827
 </style>

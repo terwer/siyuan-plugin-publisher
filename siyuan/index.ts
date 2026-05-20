@@ -18,6 +18,7 @@ import MenuUtils from "~/siyuan/utils/menuUtils.ts"
 import { PluginInvoke } from "~/siyuan/invoke/pluginInvoke.ts"
 import { icons } from "~/siyuan/utils/svg.ts"
 import { PreferenceConfigManager } from "~/siyuan/store/preferenceConfigManager.ts"
+import { V2Host } from "~/siyuan/v2/v2Host.ts"
 
 import "./index.styl"
 
@@ -34,6 +35,8 @@ export default class PublisherPlugin extends Plugin {
   public isMobile: boolean
   public kernelApi: SiyuanKernelApi
   private readonly widgetInvoke: WidgetInvoke
+  /** 全插件唯一 V2 宿主，避免 Topbar / WidgetInvoke 各建实例导致双 Menu 与卸载竞态 */
+  public readonly v2Host: V2Host
 
   customTabObject: () => Model
   public tabInstance: any
@@ -52,6 +55,7 @@ export default class PublisherPlugin extends Plugin {
     const siyuanConfig = new SiyuanConfig("", "")
     this.kernelApi = new SiyuanKernelApi(siyuanConfig)
 
+    this.v2Host = new V2Host(this)
     this.topbar = new Topbar(this)
     this.widgetInvoke = new WidgetInvoke(this)
   }
@@ -75,6 +79,7 @@ export default class PublisherPlugin extends Plugin {
   }
 
   onunload() {
+    void this.v2Host.close()
     // unmountFn
     this.unmountFn()
     // offEvent

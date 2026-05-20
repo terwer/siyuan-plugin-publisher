@@ -163,7 +163,7 @@ const primaryLabel = computed(() => {
   align-items center
   gap 10px
   padding 10px
-  border 1px solid $syp-border-primary
+  border 1px solid var(--b3-border-color, $syp-border-primary)
   border-radius $syp-sm-card-radius
   background $syp-card-bg-gradient
   &.is-disabled
@@ -206,7 +206,7 @@ const primaryLabel = computed(() => {
   max-width 180px
   font-size $syp-sm-name-size
   font-weight 600
-  color $syp-text-primary
+  color var(--b3-theme-on-surface, $syp-text-primary)
 
 .syp-platform-card__status
   display inline-flex
@@ -226,7 +226,7 @@ const primaryLabel = computed(() => {
 
 .syp-platform-card__published
   font-size 12px
-  color $syp-text-tertiary
+  color var(--b3-theme-on-surface-light, $syp-text-tertiary)
 
 .syp-platform-card__meta-row
   display flex

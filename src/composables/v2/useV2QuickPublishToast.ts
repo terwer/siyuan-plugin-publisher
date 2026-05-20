@@ -5,7 +5,12 @@
  *  Copyright (C) 2026 Terwer, Inc. <https://terwer.space/>
  */
 
-import { ElMessage } from "element-plus"
+import {
+  v2MessageError,
+  v2MessageInfo,
+  v2MessageSuccess,
+  v2MessageWarning,
+} from "~/src/composables/v2/v2FloatingUi.ts"
 
 export type V2QuickPublishToastStatus =
   | "idle"
@@ -141,16 +146,16 @@ export const notifyV2QuickPublishResult = (
   }
 
   if (payload.type === "warning") {
-    ElMessage.warning(options)
+    v2MessageWarning(options)
     return
   }
   if (payload.type === "error") {
-    ElMessage.error(options)
+    v2MessageError(options)
     return
   }
   if (payload.type === "info") {
-    ElMessage.info(options)
+    v2MessageInfo(options)
     return
   }
-  ElMessage.success(options)
+  v2MessageSuccess(options)
 }

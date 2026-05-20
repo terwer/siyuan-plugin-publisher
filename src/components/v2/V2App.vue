@@ -192,7 +192,7 @@
 </template>
 
 <script setup lang="ts">
-import { ElMessage } from "element-plus"
+import { v2MessageError, v2MessageSuccess, v2MessageWarning } from "~/src/composables/v2/v2FloatingUi.ts"
 import { computed, onMounted, ref } from "vue"
 import "~/src/assets/v2/base.styl"
 import SypErrorDetailsPanel from "~/src/components/v2/common/SypErrorDetailsPanel.vue"
@@ -441,9 +441,9 @@ async function handleDeleteAccount(platformKey: string) {
   try {
     await settings.phase4DeleteDraft(platformKey)
     await quickPublish.init()
-    ElMessage.success(t("main.opt.success"))
+    v2MessageSuccess(t("main.opt.success"))
   } catch (error) {
-    ElMessage.error(error instanceof Error ? error.message : t("main.opt.failure"))
+    v2MessageError(error instanceof Error ? error.message : t("main.opt.failure"))
   }
 }
 
@@ -453,7 +453,7 @@ async function handleReorderAccounts(orderedPlatformKeys: string[]) {
     await quickPublish.init()
   } catch (error) {
     await settings.loadAccountItems()
-    ElMessage.error(error instanceof Error ? error.message : t("v2.account.order.saveFailed"))
+    v2MessageError(error instanceof Error ? error.message : t("v2.account.order.saveFailed"))
   }
 }
 
@@ -482,7 +482,7 @@ async function completeConfigIfPublishReady() {
 
   await settings.loadAccountItems()
   await quickPublish.init()
-  ElMessage.warning(validation.reason || t("v2.publishValidation.incomplete"))
+  v2MessageWarning(validation.reason || t("v2.publishValidation.incomplete"))
 }
 
 async function handleConfigValidated(result: { ok: boolean }) {
@@ -539,8 +539,8 @@ async function retryInit() {
   gap 8px
   padding 4px 10px
   border-radius 999px
-  background $syp-chip-bg
-  color $syp-chip-text
+  background var(--b3-theme-surface-light, $syp-chip-bg)
+  color var(--b3-theme-on-surface-light, $syp-chip-text)
   font-size 12px
   letter-spacing 0.04em
 
@@ -559,12 +559,12 @@ async function retryInit() {
   height 28px
   padding 0
   background transparent
-  color $syp-text-tertiary
+  color var(--b3-theme-on-surface-light, $syp-text-tertiary)
   border-radius 999px
 
   &:hover
-    color $syp-accent
-    background $syp-accent-hover-bg
+    color var(--b3-theme-primary, $syp-accent)
+    background var(--b3-theme-surface-light, $syp-accent-hover-bg)
 
 .syp-btn-back
   display inline-flex
@@ -572,14 +572,15 @@ async function retryInit() {
   gap 4px
   height 28px
   padding 0 8px
-  background transparent
-  color $syp-text-tertiary
+  background var(--b3-theme-surface-light, transparent)
+  border 1px solid var(--b3-border-color, transparent)
+  color var(--b3-theme-on-surface, $syp-text-tertiary)
   border-radius 999px
   font-size 12px
 
   &:hover
-    color $syp-accent
-    background $syp-accent-hover-bg
+    color var(--b3-theme-primary, $syp-accent)
+    background var(--b3-theme-surface-light, $syp-accent-hover-bg)
 
 .syp-btn-back__label
   white-space nowrap
@@ -589,101 +590,86 @@ async function retryInit() {
   flex-direction column
   gap 12px
 
-// Ant Design Alert 色板：统一 1px 描边 + 浅色底，不用左侧粗色条
-$syp-alert-default-bg = #fafafa
-$syp-alert-default-border = #d9d9d9
-$syp-alert-info-bg = #e6f4ff
-$syp-alert-info-border = #91caff
-$syp-alert-info-text = #0958d9
-$syp-alert-success-bg = #f6ffed
-$syp-alert-success-border = #b7eb8f
-$syp-alert-success-text = #389e0d
-$syp-alert-warning-bg = #fffbe6
-$syp-alert-warning-border = #ffe58f
-$syp-alert-warning-text = #d48806
-$syp-alert-error-bg = #fff2f0
-$syp-alert-error-border = #ffccc7
-$syp-alert-error-text = #cf1322
-
+// 发布状态条：思源语义色（--b3-theme-*），明/暗由宿主变量驱动
 .syp-publish-status
   padding 8px 12px
   border-radius $syp-radius-md
-  border 1px solid $syp-alert-default-border
-  background $syp-alert-default-bg
+  border 1px solid var(--b3-border-color, $syp-border-primary)
+  background var(--b3-theme-surface, $syp-bg-primary)
   display flex
   flex-direction column
   gap 4px
   transition background 0.2s ease, border-color 0.2s ease
 
   &.is-idle
-    background $syp-alert-default-bg
-    border 1px dashed $syp-alert-default-border
+    background var(--b3-theme-surface-light, $syp-bg-secondary)
+    border 1px dashed var(--b3-border-color, $syp-border-primary)
 
     .syp-publish-status__title
       font-weight 500
-      color $syp-text-secondary
+      color var(--b3-theme-on-surface-light, $syp-text-secondary)
 
     .syp-publish-status__desc
-      color $syp-text-tertiary
+      color var(--b3-theme-on-surface-light, $syp-text-tertiary)
 
   &.is-preparing,
   &.is-publishing
-    background $syp-alert-info-bg
-    border 1px solid $syp-alert-info-border
+    background var(--b3-theme-primary-lightest, $syp-status-info-bg)
+    border 1px solid var(--b3-theme-primary, $syp-primary)
 
     .syp-publish-status__title
-      color $syp-alert-info-text
+      color var(--b3-theme-primary, $syp-primary)
 
     .syp-publish-status__desc
-      color rgba(9, 88, 217, 0.75)
+      color var(--b3-theme-on-surface, $syp-text-secondary)
 
   &.is-success,
   &.is-preview_ready
-    background $syp-alert-success-bg
-    border 1px solid $syp-alert-success-border
+    background var(--b3-theme-surface-light, $syp-status-success-bg)
+    border 1px solid var(--b3-theme-success, $syp-success)
 
     .syp-publish-status__title
-      color $syp-alert-success-text
+      color var(--b3-theme-success, $syp-success)
 
     .syp-publish-status__desc
-      color rgba(56, 158, 13, 0.85)
+      color var(--b3-theme-on-surface, $syp-text-secondary)
 
   &.is-success_with_warnings
-    background $syp-alert-warning-bg
-    border 1px solid $syp-alert-warning-border
+    background var(--b3-theme-surface-light, $syp-status-warning-bg)
+    border 1px solid var(--b3-theme-warning, $syp-warning)
 
     .syp-publish-status__title
-      color $syp-alert-warning-text
+      color var(--b3-theme-warning, $syp-warning)
 
     .syp-publish-status__desc
-      color rgba(212, 136, 6, 0.85)
+      color var(--b3-theme-on-surface, $syp-text-secondary)
 
   &.is-failed
-    background $syp-alert-error-bg
-    border 1px solid $syp-alert-error-border
+    background var(--b3-theme-surface-light, $syp-status-error-bg)
+    border 1px solid var(--b3-theme-error, $syp-error)
 
     .syp-publish-status__title
-      color $syp-alert-error-text
+      color var(--b3-theme-error, $syp-error)
 
     .syp-publish-status__desc
-      color rgba(207, 19, 34, 0.85)
+      color var(--b3-theme-on-surface, $syp-text-secondary)
 
 .syp-publish-status__title
   font-size 14px
   font-weight 600
   line-height 1.5
-  color $syp-text-primary
+  color var(--b3-theme-on-background, $syp-text-primary)
 
 .syp-publish-status__desc
   font-size 13px
-  color $syp-text-secondary
+  color var(--b3-theme-on-surface-light, $syp-text-secondary)
   line-height 1.5
 
 .syp-publish-status__warning
   border-radius 10px
-  background $syp-status-warning-deep-bg
+  background var(--b3-theme-surface-light, $syp-status-warning-deep-bg)
   padding 10px 12px
-  border 1px solid $syp-status-warning-border
+  border 1px solid var(--b3-border-color, $syp-status-warning-border)
 
 .syp-publish-status__warning-head,
 .syp-publish-status__error-head
@@ -695,59 +681,59 @@ $syp-alert-error-text = #cf1322
 .syp-publish-status__warning-title
   font-size 12px
   font-weight 600
-  color $syp-warning
+  color var(--b3-theme-warning, $syp-warning)
   margin-bottom 0
 
 .syp-publish-status__detail-btn
   min-height 24px
   padding 0 8px
   border-radius 7px
-  border 1px solid rgba(245, 158, 11, 0.35)
-  background rgba(255, 255, 255, 0.86)
-  color #b37400
+  border 1px solid var(--b3-border-color, $syp-status-warning-border)
+  background var(--b3-theme-surface, $syp-bg-primary)
+  color var(--b3-theme-warning, $syp-warning)
   font-size 12px
   font-weight 600
   cursor pointer
 
   &:hover
-    background #fff
-    border-color rgba(245, 158, 11, 0.6)
+    background var(--b3-theme-surface-light, $syp-bg-secondary)
+    border-color var(--b3-theme-warning, $syp-warning)
 
   &.is-error
-    border-color rgba(217, 45, 32, 0.28)
-    color $syp-error
+    border-color var(--b3-border-color, $syp-status-error-border)
+    color var(--b3-theme-error, $syp-error)
 
     &:hover
-      border-color rgba(217, 45, 32, 0.52)
+      border-color var(--b3-theme-error, $syp-error)
 
 .syp-publish-status__error
   border-radius 10px
-  background $syp-status-error-deep-bg
+  background var(--b3-theme-surface-light, $syp-status-error-deep-bg)
   padding 10px 12px
-  border 1px solid $syp-status-error-border
+  border 1px solid var(--b3-border-color, $syp-status-error-border)
 
 .syp-publish-status__error-title
   font-size 12px
   font-weight 600
-  color $syp-error
+  color var(--b3-theme-error, $syp-error)
   margin-bottom 0
 
 .syp-quick-shell__eyebrow
   font-size 12px
   letter-spacing 0.08em
   text-transform uppercase
-  color $syp-text-tertiary
+  color var(--b3-theme-on-surface-light, $syp-text-tertiary)
 
 .syp-quick-shell__title
   margin 0
   font-size 20px
   line-height 1.3
-  color $syp-text-primary
+  color var(--b3-theme-on-background, $syp-text-primary)
 
 .syp-quick-shell__desc
   margin 0
   font-size 13px
-  color $syp-text-secondary
+  color var(--b3-theme-on-surface-light, $syp-text-secondary)
 
 .syp-platform-skeleton-grid,
 .syp-platform-grid
@@ -759,17 +745,17 @@ $syp-alert-error-text = #cf1322
   padding $syp-sm-card-padding
   border-radius $syp-sm-card-radius
   background $syp-card-bg-gradient
-  border 1px solid $syp-border-primary
+  border 1px solid var(--b3-border-color, $syp-border-primary)
 
 .syp-platform-skeleton__title
   font-size 13px
-  color $syp-text-tertiary
+  color var(--b3-theme-on-surface-light, $syp-text-tertiary)
   margin-bottom 14px
 
 .syp-platform-skeleton__row
   height 32px
   border-radius 6px
-  background linear-gradient(90deg, #eef2f7 0%, #f7f9fc 100%)
+  background linear-gradient(90deg, var(--b3-theme-surface-light, #eef2f7) 0%, var(--b3-theme-surface, #f7f9fc) 100%)
   margin-bottom 8px
 
   &.short
@@ -782,16 +768,16 @@ $syp-alert-error-text = #cf1322
   padding 16px
   border-radius $syp-sm-card-radius
   background $syp-card-bg-gradient
-  border 1px solid $syp-border-primary
+  border 1px solid var(--b3-border-color, $syp-border-primary)
 
 .syp-empty-state__title
   font-size 16px
   font-weight 600
-  color $syp-text-primary
+  color var(--b3-theme-on-background, $syp-text-primary)
 
 .syp-empty-state__desc
   font-size 13px
-  color $syp-text-secondary
+  color var(--b3-theme-on-surface-light, $syp-text-secondary)
 
 @media (max-width: 960px)
   .syp-v2

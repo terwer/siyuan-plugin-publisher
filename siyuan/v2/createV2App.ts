@@ -10,6 +10,9 @@
 import { createPinia } from "pinia"
 import { createApp } from "vue"
 import { createI18n } from "vue-i18n"
+import "element-plus/dist/index.css"
+import "element-plus/theme-chalk/dark/css-vars.css"
+import "~/src/assets/v2/base.styl"
 import V2App from "~/src/components/v2/V2App.vue"
 import { V2_I18N_FALLBACK_KEY } from "~/src/composables/v2/useV2I18n.ts"
 

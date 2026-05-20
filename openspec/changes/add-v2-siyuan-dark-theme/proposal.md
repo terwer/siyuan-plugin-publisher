@@ -6,10 +6,10 @@ V2 发布面板通过思源 `Menu` 挂在**宿主页 DOM** 内，而非 V1 ifram
 
 ## What Changes
 
-- **宿主主题管道**：以 `document.documentElement.getAttribute("data-theme-mode")` 为唯一暗黑判定源（对齐 `siyuan-plugin-share-pro`），不新增 V2 内主题开关。
-- **Element Plus 层**：在 `siyuan/v2/createV2App.ts` 引入与 V1 SPA 相同的 `element-plus/dist/index.css` 与 `theme-chalk/dark/css-vars.css`；在 `V2Host` 挂载点对 `mountPoint` 同步 `dark` 类（与 EP 机制一致）。
-- **自定义 `.syp-v2` 层**：在 `base.styl` / `V2App.vue` 块级样式中，将背景、边框、正文色桥接到 `var(--b3-theme-*)` / `var(--b3-border-color)`，保留品牌色 `$syp-primary` 与现有 Ant Design 式状态条结构；暗黑下对语义色块做 `html[data-theme-mode="dark"] .syp-v2` 覆盖（参考 share-pro 的半透明语义色，而非整表重写 `variables.styl`）。
-- **条件加固（须实测后启用）**：若宿主暗黑时 `html` 无 `dark` 类，仅在面板打开期间临时补 `html.dark`；若 `ElMessage` / `ElMessageBox` 仍发白，再为 V2 调用点增加 `appendTo: mountPoint`。
+- **宿主主题管道**：`data-theme-mode="dark"` 为**唯一**暗黑判定源；不新增 V2 内主题开关；**不修改** `document.documentElement`。
+- **Element Plus 层**：在 `createV2App.ts` 引入 EP 明/暗 CSS；在 `mountPoint` 上同步 `dark` 类（思源无 `html.dark`，EP 仅认挂载点子树）。
+- **自定义 `.syp-v2` 层**：`base.styl`、`V2App.vue` 及主要 V2 子组件**全量**改用 `var(--b3-theme-*)` / `var(--b3-border-color)`，保留 `$syp-*` 作浅色回退；发布状态条使用思源语义色（primary/success/warning/error），不再维护 Ant Design 平行色板。
+- **条件加固**：仅当实测 `ElMessage` 仍发白时增加 `appendTo: mountPoint`（task 4.2）。
 - **明确不做**：V2 内 `useDark()`、页脚手动暗黑切换、复制整份 `variables.styl` 暗色表、改动 V1 iframe `style.dark.css` 路径。
 
 ## Capabilities

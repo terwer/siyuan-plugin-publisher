@@ -11,7 +11,6 @@ import { Menu, showMessage } from "siyuan"
 import { ConfigManager } from "~/siyuan/store/config.ts"
 import { PreferenceConfigManager } from "~/siyuan/store/preferenceConfigManager.ts"
 import MenuUtils from "~/siyuan/utils/menuUtils.ts"
-import { V2Host } from "~/siyuan/v2/v2Host.ts"
 import { createSiyuanAppLogger } from "./appLogger"
 import PublisherPlugin from "./index"
 import { PluginInvoke } from "./invoke/pluginInvoke"
@@ -26,14 +25,15 @@ export class Topbar {
   private pluginInstance
   private widgetInvoke
   private pluginInvoke
-  private v2Host
-
   constructor(pluginInstance: PublisherPlugin) {
     this.logger = createSiyuanAppLogger("topbar")
     this.pluginInstance = pluginInstance
     this.pluginInvoke = new PluginInvoke(pluginInstance)
     this.widgetInvoke = new WidgetInvoke(pluginInstance)
-    this.v2Host = new V2Host(pluginInstance)
+  }
+
+  private get v2Host() {
+    return this.pluginInstance.v2Host
   }
 
   public initTopbar() {

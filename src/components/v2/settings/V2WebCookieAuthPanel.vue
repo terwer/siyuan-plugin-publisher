@@ -82,7 +82,8 @@
 
 <script setup lang="ts">
 import { computed, ref } from "vue"
-import { ElMessage, ElMessageBox } from "element-plus"
+import { ElMessageBox } from "element-plus"
+import { v2MessageError, v2MessageSuccess, v2MessageWarning } from "~/src/composables/v2/v2FloatingUi.ts"
 import SypTooltip from "~/src/components/v2/common/SypTooltip.vue"
 import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
 import {
@@ -229,7 +230,7 @@ async function handleAutoCapture() {
   if (!canAutoCapture.value || isLoading.value) {
     if (!canAutoCapture.value) {
       lastStatus.value = "unsupported"
-      ElMessage.warning(messageByStatus("unsupported"))
+      v2MessageWarning(messageByStatus("unsupported"))
       emit("authorized", { status: "unsupported", ok: false })
     }
     return
@@ -249,14 +250,14 @@ async function handleAutoCapture() {
     })
     lastStatus.value = result.status
     if (result.ok) {
-      ElMessage.success(messageByStatus(result.status))
+      v2MessageSuccess(messageByStatus(result.status))
     } else {
-      ElMessage.warning(messageByStatus(result.status))
+      v2MessageWarning(messageByStatus(result.status))
     }
     emit("authorized", { status: result.status, ok: result.ok })
   } catch {
     lastStatus.value = "error"
-    ElMessage.error(messageByStatus("error"))
+    v2MessageError(messageByStatus("error"))
     emit("authorized", { status: "error", ok: false })
   } finally {
     isLoading.value = false
@@ -295,13 +296,13 @@ async function handleLogout() {
       }
       ElMessage.success(logoutMessageByStatus(result.status))
     } else if (result.status === "url_fallback") {
-      ElMessage.warning(logoutMessageByStatus(result.status))
+      v2MessageWarning(logoutMessageByStatus(result.status))
     } else {
-      ElMessage.error(logoutMessageByStatus(result.status))
+      v2MessageError(logoutMessageByStatus(result.status))
     }
     emit("authorized", { status: result.status, ok: result.ok })
   } catch {
-    ElMessage.error(logoutMessageByStatus("logout_failed"))
+    v2MessageError(logoutMessageByStatus("logout_failed"))
     emit("authorized", { status: "logout_failed", ok: false })
   } finally {
     isLogoutLoading.value = false
@@ -335,22 +336,22 @@ function handleToggleManual() {
   gap 6px
   margin-top 6px
   padding 9px 10px
-  border 1px solid #d8e4f5
+  border 1px solid var(--b3-border-color, #d8e4f5)
   border-radius 10px
-  background linear-gradient(180deg, #fbfdff 0%, #f6f9ff 100%)
+  background $syp-card-bg-gradient
   box-shadow 0 1px 2px rgba(15, 23, 42, 0.04)
 
   &.is-success
-    border-color #bfecc8
-    background linear-gradient(180deg, #fbfffc 0%, #f2fbf4 100%)
+    border-color var(--b3-theme-success, $syp-success)
+    background var(--b3-theme-surface-light, $syp-status-success-bg)
 
   &.is-warning
-    border-color #ffd8a8
-    background linear-gradient(180deg, #fffdf8 0%, #fff8ec 100%)
+    border-color var(--b3-theme-warning, $syp-warning)
+    background var(--b3-theme-surface-light, $syp-status-warning-bg)
 
   &.is-neutral
-    border-color #e1e5eb
-    background linear-gradient(180deg, #ffffff 0%, #f7f8fa 100%)
+    border-color var(--b3-border-color, #e1e5eb)
+    background $syp-card-bg-gradient
 
 .syp-web-cookie-auth__header
   display flex
@@ -368,7 +369,7 @@ function handleToggleManual() {
 .syp-web-cookie-auth__title
   font-size 12px
   font-weight 700
-  color $syp-text-primary
+  color var(--b3-theme-on-background, $syp-text-primary)
   white-space nowrap
 
 .syp-web-cookie-auth__badge
@@ -382,24 +383,24 @@ function handleToggleManual() {
   white-space nowrap
 
   &.is-success
-    color #008a22
-    background #e8ffea
-    border 1px solid #a9efb2
+    color var(--b3-theme-success, $syp-success)
+    background var(--b3-theme-surface-light, $syp-badge-ready-bg)
+    border 1px solid var(--b3-theme-success, $syp-success)
 
   &.is-warning
-    color #d25f00
-    background #fff7e8
-    border 1px solid #ffd59a
+    color var(--b3-theme-warning, $syp-warning)
+    background var(--b3-theme-surface-light, $syp-status-warning-bg)
+    border 1px solid var(--b3-theme-warning, $syp-warning)
 
   &.is-ready
-    color #1d5fd6
-    background #eef5ff
-    border 1px solid #cfe0ff
+    color var(--b3-theme-primary, $syp-primary)
+    background var(--b3-theme-primary-lightest, #eef5ff)
+    border 1px solid var(--b3-border-color, $syp-border-primary)
 
   &.is-neutral
-    color #5f6b7a
-    background #f2f3f5
-    border 1px solid #d9dde4
+    color var(--b3-theme-on-surface-light, #5f6b7a)
+    background var(--b3-theme-surface-light, #f2f3f5)
+    border 1px solid var(--b3-border-color, #d9dde4)
 
 :deep(.syp-web-cookie-auth__manual)
   display inline-flex
@@ -413,8 +414,8 @@ function handleToggleManual() {
   padding 1px 7px
   border 0
   border-radius 999px
-  background #f2f5fa
-  color #64748b
+  background var(--b3-theme-surface-light, #f2f5fa)
+  color var(--b3-theme-on-surface-light, #64748b)
   font-size 11px
   font-weight 600
   line-height 18px
@@ -422,12 +423,12 @@ function handleToggleManual() {
   cursor pointer
 
   &:hover
-    background #e8edf5
-    color #334155
+    background var(--b3-theme-surface, $syp-bg-primary)
+    color var(--b3-theme-on-surface, $syp-text-primary)
 
   &.is-expanded
-    background #eef5ff
-    color #1d5fd6
+    background var(--b3-theme-primary-lightest, #eef5ff)
+    color var(--b3-theme-primary, $syp-primary)
 
 .syp-web-cookie-auth__manual-icon
   width 13px
@@ -436,8 +437,8 @@ function handleToggleManual() {
   align-items center
   justify-content center
   border-radius 50%
-  background #ffffff
-  color #4080ff
+  background var(--b3-theme-surface, $syp-bg-primary)
+  color var(--b3-theme-primary, #4080ff)
   font-size 10px
   font-weight 800
   font-family serif
@@ -451,7 +452,7 @@ function handleToggleManual() {
 
 .syp-web-cookie-auth__desc
   min-width 140px
-  color $syp-text-secondary
+  color var(--b3-theme-on-surface-light, $syp-text-secondary)
   font-size 11px
   line-height 1.45
   word-break break-word
@@ -480,32 +481,32 @@ function handleToggleManual() {
   transition all 0.18s ease
 
 :deep(.syp-web-cookie-auth__action.is-login)
-  color #1d5fd6
-  background #eef5ff
-  border-color #cfe0ff
+  color var(--b3-theme-primary, $syp-primary)
+  background var(--b3-theme-primary-lightest, #eef5ff)
+  border-color var(--b3-border-color, $syp-border-primary)
 
 :deep(.syp-web-cookie-auth__action.is-login:hover)
-  background #e3eeff
-  border-color #a9c6ff
+  background var(--b3-theme-surface, $syp-bg-primary)
+  border-color var(--b3-theme-primary, $syp-primary)
 
 :deep(.syp-web-cookie-auth__action.is-logout)
-  color #d25f00
-  background #fff7e8
-  border-color #ffd59a
+  color var(--b3-theme-warning, $syp-warning)
+  background var(--b3-theme-surface-light, $syp-status-warning-bg)
+  border-color var(--b3-theme-warning, $syp-warning)
 
 :deep(.syp-web-cookie-auth__action.is-logout:hover)
-  background #ffefcf
-  border-color #ffc46f
+  background var(--b3-theme-surface, $syp-bg-primary)
+  border-color var(--b3-theme-warning, $syp-warning)
 
 :deep(.syp-web-cookie-auth__action.is-primary)
-  color #ffffff
-  background #4080ff
-  border-color #4080ff
+  color var(--b3-theme-on-primary, #ffffff)
+  background var(--b3-theme-primary, $syp-primary)
+  border-color var(--b3-theme-primary, $syp-primary)
   box-shadow 0 2px 6px rgba(64, 128, 255, 0.22)
 
 :deep(.syp-web-cookie-auth__action.is-primary:hover)
-  background #2f6ff0
-  border-color #2f6ff0
+  background var(--b3-theme-primary, $syp-action-primary-hover)
+  border-color var(--b3-theme-primary, $syp-action-primary-hover)
 
 :deep(.syp-web-cookie-auth__action.is-disabled)
   opacity 0.55
@@ -530,12 +531,12 @@ function handleToggleManual() {
   line-height 16px
 
 :deep(.syp-web-cookie-auth__action.is-primary .syp-web-cookie-auth__step)
-  color #4080ff
-  background #ffffff
+  color var(--b3-theme-primary, $syp-primary)
+  background var(--b3-theme-surface, $syp-bg-primary)
 
 :deep(.syp-web-cookie-auth__action.is-login .syp-web-cookie-auth__step)
-  color #1d5fd6
-  background #ffffff
+  color var(--b3-theme-primary, $syp-primary)
+  background var(--b3-theme-surface, $syp-bg-primary)
 
 @media (max-width: 720px)
   .syp-web-cookie-auth__header,

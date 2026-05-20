@@ -159,8 +159,7 @@ function handleFormSaved(result: { ok: boolean }) {
 .syp-platform-bridge
   padding 10px
   border-radius $syp-sm-card-radius
-  border 1px solid $syp-border-primary
-  background $syp-bg-primary
+  border 1px solid var(--b3-border-color, $syp-border-primary)
   overflow visible
 
   :deep(.el-form)

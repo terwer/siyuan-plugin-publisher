@@ -108,10 +108,21 @@
 3. 无数据迁移；无配置项。
 4. 回滚：revert 4 个文件即可恢复浅色行为。
 
-## Open Questions（实现前须确认，禁止 mock）
+## 已决事项（2026-05-20，产品确认）
 
-以下项**不能**在 apply 阶段凭假设写死逻辑；若评审时无法确认，由实现者在对应 task 打勾前向产品负责人确认：
+1. **Q1 — 暗黑信号**：`data-theme-mode="dark"` **唯一**；不兼容其它判定。
+2. **Q2 — Element Plus**：官方 `dark/css-vars.css` 仅认 `html.dark`。思源暗黑时**无**原生 `html.dark` → V2 面板打开期间按 `data-theme-mode` **同步** `document.documentElement.classList`（仅增删 `dark`，不写其它属性；关闭面板时若由本插件添加则移除）。**禁止**把 `--el-*` 映射到 `--b3-*`（易与 EP/思源升级冲突）。
+3. **Q3 — 自定义壳**：`.syp-v2` 与桥接区壳层/标签仍用 `--b3-theme-*`；表单项交给 `html.dark` + EP 变量。
 
-1. **Q1**：当前主力测试的思源版本（如 3.1.x）在暗黑下，`document.documentElement` 是否**同时**存在 `class="dark"` 与 `data-theme-mode="dark"`？（决定是否需要 `html.dark` 临时兜底 task）
-2. **Q2**：移动端 `Menu.fullscreen` 下 EP/Message 是否仍挂 `body`？（决定 `appendTo` 是否纳入必做而非可选）
-3. **Q3**：状态条暗黑下是否接受「Ant Design 色相 + b3 底」的混合风格，还是要求完全使用 `--b3-theme-error` 等思源语义色？（默认提案为前者，与现有 V2 快速发布 UI 一致）
+## 核对清单（禁止非根源修复）
+
+| 允许 | 禁止 |
+|------|------|
+| `data-theme-mode` → 监听 → 同步 `html.dark`（仅 class，可逆） | `--el-*` ← `--b3-*` 映射文件 |
+| `.syp-v2` 原生块用 `var(--b3-theme-*, $syp-*)` 消费宿主 token | 桥接区 `:deep(.el-input__wrapper)` 等盖 EP |
+| 桥接 `.syp-platform-bridge` 只设容器 background/border | `!important` 压主题（V2 目录已清零） |
+| EP 表单/输入/标签完全交给 `html.dark` + 官方 `dark/css-vars.css` | `color-mix` 手工调语义色（易与思源皮肤漂移；已改用语义变量直读） |
+
+## Open Questions（剩余）
+
+- **Q2 实测**：暗黑下 `ElMessage` 若仍挂 `body` 发白，再启用 `appendTo: mountPoint`。

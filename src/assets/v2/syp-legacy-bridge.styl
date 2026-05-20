@@ -1,0 +1,10 @@
+/*
+ * 桥接区仅负责外层容器随思源表面色；表单/输入/标签一律交给 html.dark + Element Plus。
+ * 禁止在此 :deep 覆盖 .el-* 或映射 --el-*。
+ */
+
+@import "./variables.styl"
+
+.syp-v2 .syp-platform-bridge
+  background var(--b3-theme-surface, $syp-bg-primary)
+  border-color var(--b3-border-color, $syp-border-primary)
