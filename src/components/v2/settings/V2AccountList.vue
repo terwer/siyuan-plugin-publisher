@@ -129,16 +129,28 @@
           </div>
 
           <SypTooltip
+            v-if="confirmDeleteKey !== item.platformKey"
             tag="button"
             :content="t('v2.account.action.delete')"
             inline-flex
             type="button"
             class="syp-btn syp-btn-text is-danger"
-            @click="handleDelete(item.platformKey)"
+            @click.stop="requestDelete(item.platformKey)"
           >
             {{ t("v2.account.action.delete") }}
           </SypTooltip>
         </div>
+
+        <SypConfirmBar
+          v-if="confirmDeleteKey === item.platformKey"
+          :visible="true"
+          class="syp-account-item__delete-confirm"
+          :message="deleteConfirmMessage(item.platformName, item.platformKey)"
+          :confirm-text="t('main.opt.ok')"
+          :cancel-text="t('main.opt.cancel')"
+          @confirm="confirmDelete(item.platformKey)"
+          @cancel="cancelDelete"
+        />
       </article>
     </div>
   </section>
@@ -146,7 +158,7 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from "vue"
-import { sypConfirm } from "~/src/components/v2/common/SypMessageBox.ts"
+import SypConfirmBar from "~/src/components/v2/common/SypConfirmBar.vue"
 import SypTooltip from "~/src/components/v2/common/SypTooltip.vue"
 import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
 import type { V2AccountItem } from "~/src/composables/v2/useV2Settings.ts"
@@ -167,6 +179,7 @@ const emit = defineEmits<{
 const localPlatformKeys = ref<string[]>([])
 const draggingPlatformKey = ref("")
 const dragOverPlatformKey = ref("")
+const confirmDeleteKey = ref("")
 
 const orderedItems = computed(() => {
   const itemMap = new Map(props.items.map((item) => [item.platformKey, item]))
@@ -190,21 +203,22 @@ function handleToggle(platformKey: string, event: Event) {
   emit("toggle", platformKey, target?.checked === true)
 }
 
-async function handleDelete(platformKey: string) {
-  const item = props.items.find((candidate) => candidate.platformKey === platformKey)
-  const platformName = item?.platformName || platformKey
-  const confirmed = await sypConfirm({
-    title: t("v2.account.action.deleteConfirmTitle"),
-    message: t("v2.account.action.deleteConfirmText", { name: platformName }),
-    type: "warning",
-    confirmButtonText: t("main.opt.ok"),
-    cancelButtonText: t("main.opt.cancel"),
-    confirmButtonClass: "syp-v2-message-box__confirm-danger",
-  })
+function deleteConfirmMessage(platformName: string, platformKey: string) {
+  const name = platformName || platformKey
+  return `${t("v2.account.action.deleteConfirmTitle")} ${t("v2.account.action.deleteConfirmText", { name })}`
+}
 
-  if (confirmed) {
-    emit("delete", platformKey)
-  }
+function requestDelete(platformKey: string) {
+  confirmDeleteKey.value = platformKey
+}
+
+function cancelDelete() {
+  confirmDeleteKey.value = ""
+}
+
+function confirmDelete(platformKey: string) {
+  emit("delete", platformKey)
+  confirmDeleteKey.value = ""
 }
 
 function moveKeyToDropTarget(keys: string[], sourceKey: string, targetKey: string) {
@@ -287,6 +301,7 @@ function moveItem(platformKey: string, direction: -1 | 1) {
 
 .syp-account-item
   display flex
+  flex-wrap wrap
   justify-content space-between
   align-items center
   gap 10px
@@ -466,6 +481,9 @@ function moveItem(platformKey: string, direction: -1 | 1) {
   gap 6px
   flex-shrink 0
 
+.syp-account-item__delete-confirm
+  width 100%
+  flex-basis 100%
 
 .syp-account-item__toggle
   display flex

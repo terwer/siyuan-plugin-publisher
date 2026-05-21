@@ -55,3 +55,26 @@ html[data-theme-mode="dark"] .el-message
 html.dark .el-message .el-message__content,
 html[data-theme-mode="dark"] .el-message .el-message__content
   color var(--b3-theme-on-surface, #cccccc)
+
+// --- P5 ElMessageBox（teleport 到 body；偏好设置等仍用 sypConfirm）---
+html.dark .el-overlay.syp-v2-message-box-modal,
+html[data-theme-mode="dark"] .el-overlay.syp-v2-message-box-modal
+  background var(--b3-theme-background, rgba(0, 0, 0, 0.55))
+  opacity 1
+  z-index 5000
+
+html.dark .el-message-box.syp-v2-message-box,
+html[data-theme-mode="dark"] .el-message-box.syp-v2-message-box,
+.publisher-v2-menu-content.dark .el-message-box.syp-v2-message-box
+  z-index 5001
+  background var(--b3-theme-surface, #252526)
+  border 1px solid var(--b3-border-color, rgba(255, 255, 255, 0.08))
+  box-shadow var(--b3-dialog-shadow, 0 16px 48px rgba(0, 0, 0, 0.45))
+
+html.dark .el-message-box.syp-v2-message-box .el-message-box__title,
+html[data-theme-mode="dark"] .el-message-box.syp-v2-message-box .el-message-box__title
+  color var(--b3-theme-on-background, #e8e8e8)
+
+html.dark .el-message-box.syp-v2-message-box .el-message-box__content,
+html[data-theme-mode="dark"] .el-message-box.syp-v2-message-box .el-message-box__content
+  color var(--b3-theme-on-surface-light, #b0b0b0)

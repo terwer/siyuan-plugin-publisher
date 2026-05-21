@@ -13,16 +13,9 @@ import { beforeEach, describe, expect, it, vi } from "vitest"
 import V2AccountList from "~/src/components/v2/settings/V2AccountList.vue"
 import zhCN from "~/siyuan/i18n/zh_CN.json"
 
-const mockSypConfirm = vi.hoisted(() => vi.fn())
-
-vi.mock("~/src/components/v2/common/SypMessageBox.ts", () => ({
-  sypConfirm: mockSypConfirm,
-}))
-
 describe("V2AccountList", () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    mockSypConfirm.mockResolvedValue(false)
   })
   it("keeps account rows focused on identity and status without platform descriptions", () => {
     const description = "发布到语雀知识库，适合沉淀团队文档和个人笔记。"
@@ -70,8 +63,7 @@ describe("V2AccountList", () => {
     expect(wrapper.find(".syp-status-badge__dot").exists()).toBe(true)
   })
 
-  it("uses the unified V2 message box before deleting an account", async () => {
-    mockSypConfirm.mockResolvedValue(true)
+  it("shows inline confirm bar before deleting an account", async () => {
     const wrapper = mount(V2AccountList, {
       props: {
         items: [
@@ -108,18 +100,17 @@ describe("V2AccountList", () => {
     await wrapper.find(".syp-btn.is-danger").trigger("click")
     await flushPromises()
 
-    expect(mockSypConfirm).toHaveBeenCalledWith(
-      expect.objectContaining({
-        title: zhCN["v2.account.action.deleteConfirmTitle"],
-        message: zhCN["v2.account.action.deleteConfirmText"].replace("{name}", "语雀网页版"),
-        confirmButtonClass: "syp-v2-message-box__confirm-danger",
-      })
-    )
+    expect(wrapper.find(".syp-confirm-bar").exists()).toBe(true)
+    expect(wrapper.find(".syp-confirm-bar").text()).toContain("语雀网页版")
+
+    const confirmButtons = wrapper.findAll(".syp-confirm-bar__btn")
+    await confirmButtons[0].trigger("click")
+    await flushPromises()
+
     expect(wrapper.emitted("delete")?.[0]).toEqual(["custom_Yuqueweb"])
   })
 
-  it("does not delete when the unified V2 message box is cancelled", async () => {
-    mockSypConfirm.mockResolvedValue(false)
+  it("does not delete when inline confirm is cancelled", async () => {
     const wrapper = mount(V2AccountList, {
       props: {
         items: [
@@ -156,7 +147,13 @@ describe("V2AccountList", () => {
     await wrapper.find(".syp-btn.is-danger").trigger("click")
     await flushPromises()
 
+    const cancelButton = wrapper.findAll(".syp-confirm-bar__btn").find((btn) => btn.classes().includes("is-ghost"))
+    expect(cancelButton).toBeTruthy()
+    await cancelButton!.trigger("click")
+    await flushPromises()
+
     expect(wrapper.emitted("delete")).toBeUndefined()
+    expect(wrapper.find(".syp-confirm-bar").exists()).toBe(false)
   })
 
   it("emits the final platform order after keyboard reordering", async () => {
