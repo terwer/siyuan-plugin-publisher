@@ -8,6 +8,7 @@
  */
 
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
+import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { CommonFetchClient } from "zhi-fetch-middleware"
 import { isDev, LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
@@ -29,6 +30,7 @@ import { normalizeXmlrpcResponseText } from "~/src/utils/xmlrpcResponseUtil.ts"
 const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
   const logger = createAppLogger("use-proxy")
   const { kernelApi, isUseSiyuanProxy } = useSiyuanApi()
+  const { isInSiyuanOrSiyuanNewWin } = useSiyuanDevice()
 
   /**
    * 创建应用程序实例和通用的 fetch 客户端实例
@@ -110,7 +112,11 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
    */
   const proxyXmlrpc = async (url: string, reqMethod: string, reqParams: any[], forceProxy: boolean = false) => {
     const body = serializer.serializeMethodCall(reqMethod, reqParams)
-    const rawResponse = await proxyFetch(url, [], body, "POST", "text/xml", forceProxy, "base64", "text")
+    // MetaWeblog XML 在思源插件内优先走 forwardProxy，避免 middleware 将 XML 当 JSON 解析成 {}
+    const useSiyuanForwardProxy = isUseSiyuanProxy || isInSiyuanOrSiyuanNewWin() || forceProxy
+    const rawResponse = useSiyuanForwardProxy
+      ? await siyuanProxyFetch(url, [], body, "POST", "text/xml", "base64", "text")
+      : await proxyFetch(url, [], body, "POST", "text/xml", forceProxy, "base64", "text")
     let resText = normalizeXmlrpcResponseText(rawResponse)
     resText = XmlrpcUtil.removeXmlHeader(resText)
     const deserializer = new Deserializer()
@@ -287,38 +293,40 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
     )
     logger.debug("proxyFetch result =>", sanitizeSensitiveForLog(fetchResult))
 
-    if (!(fetchResult.status >= 200 && fetchResult.status < 300)) {
+    const proxyStatus = Number(fetchResult?.status ?? fetchResult?.StatusCode)
+    const proxyBodyRaw = fetchResult?.body ?? fetchResult?.Body
+
+    if (!(proxyStatus >= 200 && proxyStatus < 300)) {
       // 兼容 CSDN 错误提示
-      const bodyJson = JsonUtil.safeParse<any>(fetchResult?.body, {})
+      const bodyJson = JsonUtil.safeParse<any>(proxyBodyRaw, {})
       const proxyMessage = !StrUtil.isEmptyString(bodyJson?.msg)
         ? bodyJson?.msg
         : StrUtil.decodeUnicodeToChinese(
-            StrUtil.isEmptyString(fetchResult?.body) ? `请求异常：${fetchResult.status}` : fetchResult?.body
+            StrUtil.isEmptyString(proxyBodyRaw) ? `请求异常：${proxyStatus}` : String(proxyBodyRaw)
           )
       const proxyError = new Error(proxyMessage)
-      ;(proxyError as any).status = fetchResult?.status
+      ;(proxyError as any).status = proxyStatus
       ;(proxyError as any).diagnostic = {
         stage: "forward-proxy",
         transport: "siyuan-forward-proxy",
         url: reqUrl,
-        status: fetchResult?.status,
-        responseBodyPreview: sanitizeSensitiveForLog(String(fetchResult?.body ?? "")).slice(0, 1000),
+        status: proxyStatus,
+        responseBodyPreview: sanitizeSensitiveForLog(String(proxyBodyRaw ?? "")).slice(0, 1000),
       }
       ;(proxyError as any).diagnosticMessage = JSON.stringify((proxyError as any).diagnostic, null, 2)
       throw proxyError
     }
 
+    // 通用 forwardProxy 出口：保持历史返回形态，避免影响 JSON/表单/base64 等 apiFetch 调用方。
+    // XML-RPC 响应规范化仅在 proxyXmlrpc 入口调用 normalizeXmlrpcResponseText。
     if (responseEncoding === "text") {
       if (contentType === "application/json") {
-        const resText = fetchResult?.body
-        const resJson = JsonUtil.safeParse<any>(resText, {} as any)
+        const resJson = JsonUtil.safeParse<any>(proxyBodyRaw, {} as any)
         return resJson
       } else if (contentType === "text/html") {
-        const resText = fetchResult?.body
-        return resText
+        return proxyBodyRaw
       } else if (contentType === "text/xml") {
-        const resText = fetchResult?.body
-        return resText
+        return proxyBodyRaw
       } else {
         logger.info("SiYuan proxy directly response fetchResult for content type:", contentType)
         return fetchResult

@@ -11,6 +11,20 @@ import { Buffer } from "node:buffer"
 
 const XML_MARKERS = ["<?xml", "<methodResponse", "<fault>"]
 
+const FORWARD_PROXY_TEXT_KEYS = [
+  "body",
+  "Body",
+  "data",
+  "Data",
+  "text",
+  "content",
+  "result",
+  "response",
+  "payload",
+] as const
+
+const FORWARD_PROXY_ENCODING_KEYS = ["bodyEncoding", "BodyEncoding", "encoding"] as const
+
 const looksLikeXml = (text: string) => {
   const trimmed = text.trim()
   return XML_MARKERS.some((marker) => trimmed.includes(marker))
@@ -38,14 +52,70 @@ const maybeDecodeBase64Xml = (text: string): string => {
   return trimmed
 }
 
-const extractTextField = (record: Record<string, unknown>): string | undefined => {
-  for (const key of ["body", "data", "text", "content", "result"] as const) {
+const getForwardProxyEncoding = (record: Record<string, unknown>): string | undefined => {
+  for (const key of FORWARD_PROXY_ENCODING_KEYS) {
     const candidate = record[key]
-    if (typeof candidate === "string") {
+    if (typeof candidate === "string" && candidate.trim() !== "") {
       return candidate
+    }
+  }
+  return undefined
+}
+
+const decodeByBodyEncoding = (text: string, encoding?: string): string => {
+  const enc = encoding?.toLowerCase() ?? ""
+  if (enc.includes("base64")) {
+    try {
+      const decoded = Buffer.from(text.replace(/\s/g, ""), "base64").toString("utf8")
+      return maybeDecodeBase64Xml(decoded)
+    } catch {
+      return maybeDecodeBase64Xml(text)
+    }
+  }
+  return maybeDecodeBase64Xml(text)
+}
+
+const extractTextField = (record: Record<string, unknown>): string | undefined => {
+  const encoding = getForwardProxyEncoding(record)
+
+  for (const key of FORWARD_PROXY_TEXT_KEYS) {
+    const candidate = record[key]
+    if (typeof candidate === "string" && candidate.length > 0) {
+      return decodeByBodyEncoding(candidate, encoding)
     }
     if (candidate != null && (typeof candidate === "number" || typeof candidate === "boolean")) {
       return String(candidate)
+    }
+    if (candidate != null && typeof candidate === "object") {
+      const nested = extractTextField(candidate as Record<string, unknown>)
+      if (nested != null) {
+        return nested
+      }
+    }
+  }
+  return undefined
+}
+
+const findXmlTextDeep = (value: unknown, depth = 0): string | undefined => {
+  if (depth > 6) {
+    return undefined
+  }
+  if (typeof value === "string" && value.trim() !== "") {
+    const decoded = maybeDecodeBase64Xml(value)
+    if (looksLikeXml(decoded)) {
+      return decoded
+    }
+  }
+  if (value != null && typeof value === "object") {
+    const fromFields = extractTextField(value as Record<string, unknown>)
+    if (fromFields != null) {
+      return fromFields
+    }
+    for (const child of Object.values(value as Record<string, unknown>)) {
+      const found = findXmlTextDeep(child, depth + 1)
+      if (found != null) {
+        return found
+      }
     }
   }
   return undefined
@@ -62,9 +132,15 @@ export function normalizeXmlrpcResponseText(raw: unknown): string {
 
   if (raw != null && typeof raw === "object") {
     const record = raw as Record<string, unknown>
-    const extracted = extractTextField(record)
+    const extracted = extractTextField(record) ?? findXmlTextDeep(record)
     if (extracted != null) {
-      return maybeDecodeBase64Xml(extracted)
+      return extracted
+    }
+
+    if (Object.keys(record).length === 0) {
+      throw new Error(
+        "XML-RPC proxy returned an empty response object (middleware may have parsed XML as JSON instead of text)."
+      )
     }
   }
 

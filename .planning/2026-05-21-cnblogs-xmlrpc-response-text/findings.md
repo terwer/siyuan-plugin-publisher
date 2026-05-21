@@ -1,42 +1,63 @@
-## 发现
+## 分层边界（修改必须有理由）
 
-### A. `indexOf` 崩溃（可独立修，与 BlogAdaptor 无关）
+### 层 0：共享基建（禁止为单平台随意改）
 
-- 复现：`XmlrpcUtil.removeXmlHeader({})` → `i.indexOf is not a function`
-- 链路：`afterValid` → `api.getUsersBlogs` → `metaweblogCall` → `proxyXmlrpc` → `removeXmlHeader(非字符串)`
-- **根因修复（认可）**：`normalizeXmlrpcResponseText` + `proxyXmlrpc` 先规范化再解析
-- 与是否走 `BlogAdaptor.checkAuth` 无关
+| 模块 | 职责 | 谁在用 |
+|------|------|--------|
+| `proxyFetch` / `siyuanProxyFetch` | 通用 HTTP/forwardProxy | 语雀、Halo、Notion、Confluence、Web、**以及** MetaWeblog |
+| `proxyXmlrpc` | **仅** XML-RPC 序列化/反序列化 | **仅** MetaWeblog 系 |
 
-### B. `BlogAdaptor.checkAuth` 契约（用户要求必须经 BlogAdaptor，禁止绕过）
+### 层 1：MetaWeblog 专用（博客园等）
 
-- `zhi-blog-api` 中 `BlogAdaptor.checkAuth()` 实现为：`throw await this.apiAdaptor.checkAuth()`
-- 当子类返回 `true` 时，Promise resolve 为 `true`，但被 **throw** 出去，在 `valiConf` 里表现为 `catch (e)` 且 `typeof e === "boolean"`
-- 原 `CommonBlogSetting.valiConf` **刻意**用 `boolean` 分支处理该契约（日志 `======校验修正结束======` 即此路径），随后再 `afterValid`
-- **用户否决的方案（回避，禁止）**：`commonblogApiAdaptor.checkAuth()` 直连，跳过 `api.checkAuth()` / BlogAdaptor
-- **用户原则**：校验必须经 `Utils.blogApi` → `BlogAdaptor` 抽血（校验）链路，不能为省事改调用面
+**唯一入口**：`MetaweblogBlogApiAdaptor.metaweblogCall` → `proxyXmlrpc`
 
-### C. 根因修复路径（审计结论，待实现前确认）
+**受影响平台（全部走同一入口，无单独博客园分支）**：
 
-| 层级 | 做法 | 是否根因 | 用户可接受 |
-|------|------|----------|------------|
-| 1 | 升级/修补 `zhi-blog-api`：`checkAuth` 改为 `return await` 而非 `throw await` | 是 | 首选（若可发版） |
-| 2 | 本仓库 `Utils.blogApi` 子类包装器：对外 `checkAuth` 正常 return，内部仍委托 adaptor | 是 | 可接受（统一入口） |
-| 3 | 恢复 `valiConf` 的 `await api.checkAuth()` + `boolean` 分支，仅修 `proxyXmlrpc` | 部分 | 可接受（保留历史契约，indexOf 仍要修） |
-| 4 | `valiConf` 直连 `commonblogApiAdaptor.checkAuth()` | **否** | **禁止** |
+- 博客园 `CnblogsApiAdaptor`
+- WordPress / WordPress.com（.com 另 `forceProxy=true`）
+- Typecho、Jvue、通用 Metaweblog
 
-### D. 「页面提示通过」误解
+**不受影响**（不经 `proxyXmlrpc`）：
 
-- 非 API 真通过：`checkAuth` 抛 `true` 进入「修正」分支后仍可能 `afterValid` 失败
-- 绿色成功条仅应在 `apiStatus === true` 时出现；与 BlogAdaptor 绕过无关
+- 语雀、Halo、Notion、Confluence、Telegraph、各 Web 适配器
 
-## 遇到的错误
+---
 
-| 错误 | 尝试 | 结论 |
-|------|------|------|
-| `i.indexOf is not a function` | proxy 规范化 | 保留 |
-| 绕过 BlogAdaptor.checkAuth | 直连 adaptor | **用户否决，需回滚该 diff** |
+## 已确认事实
 
-## 审计模式约束（用户 2026-05-21）
+### A. 原崩溃 `indexOf`
 
-- **禁止改代码**，仅更新规划/审计文档
-- 实现前须用户确认：回滚 `valiConf` 直连方案 + 选定 B 层根因修复（1 或 2）+ 保留 A
+- 非字符串传入 `XmlrpcUtil.removeXmlHeader`
+- 与 BlogAdaptor 无关
+
+### B. 上游 `checkAuth`
+
+- `zhi-blog-api@1.79.0` 已 `return await`
+
+### C. `non-text response object`
+
+- 插件内 middleware 可能把 XML 响应解析成 `{}`
+- forwardProxy 包装字段可能是 `Body` / base64
+
+### D. 手测
+
+- 博客园验证通过（用户提供的 halo-picture-test 文档场景）
+
+---
+
+## 修改划分（收窄后）
+
+| # | 位置 | 理由 | 影响面 |
+|---|------|------|--------|
+| 1 | `proxyXmlrpc` 内：思源宿主走 `siyuanProxyFetch` | middleware 对 XML-RPC 响应形态不兼容；forwardProxy 是思源官方 XML 代理路径 | **仅** MetaWeblog |
+| 2 | `proxyXmlrpc` 内：`normalizeXmlrpcResponseText` | 仅在 XML-RPC 反序列化前把代理结果收成 XML 字符串 | **仅** MetaWeblog |
+| 3 | `siyuanProxyFetch`：`status`/`Body` 字段兼容 | 错误分支读 body 更稳；**成功出口保持历史返回**（json→对象、xml→字符串、base64→整包 fetchResult） | 错误提示略好；**不改变**语雀等 JSON/base64 成功路径 |
+| 4 | ~~`siyuanProxyFetch` 成功路径调用 normalize~~ | **已回退** — 会误伤 `responseEncoding=base64` 的 apiFetch | — |
+
+---
+
+## 风险与验证缺口（诚实）
+
+- 单测只覆盖 `normalizeXmlrpcResponseText` 纯函数，**没有**各平台 E2E
+- MetaWeblog 系平台应做「验证配置」冒烟；语雀/Halo 应确认图片上传/发布未回归
+- 若要坚持「第一刀只修博客园」：只能加 `CnblogsApiAdaptor` 覆盖 `metaweblogCall` — **违反 DRY，且其它 MetaWeblog 平台仍有 `{}` 风险**，故采用 **proxyXmlrpc 单入口** 而非平台特例

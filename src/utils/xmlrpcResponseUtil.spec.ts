@@ -22,13 +22,33 @@ describe("normalizeXmlrpcResponseText", () => {
     expect(normalizeXmlrpcResponseText({ status: 200, body: xml })).toBe(xml)
   })
 
+  it("extracts PascalCase Body from SiYuan forwardProxy data", () => {
+    const xml = `<?xml version="1.0"?><methodResponse></methodResponse>`
+    expect(normalizeXmlrpcResponseText({ StatusCode: 200, Body: xml, BodyEncoding: "text" })).toBe(xml)
+  })
+
+  it("decodes base64 body when bodyEncoding is base64-std", () => {
+    const xml = `<?xml version="1.0"?><methodResponse><params></params></methodResponse>`
+    const encoded = Buffer.from(xml, "utf8").toString("base64")
+    expect(normalizeXmlrpcResponseText({ status: 200, body: encoded, bodyEncoding: "base64-std" })).toBe(xml)
+  })
+
   it("extracts data field when body is missing", () => {
     const xml = `<?xml version="1.0"?><methodResponse></methodResponse>`
     expect(normalizeXmlrpcResponseText({ data: xml })).toBe(xml)
   })
 
+  it("finds XML nested in wrapper objects", () => {
+    const xml = `<?xml version="1.0"?><methodResponse><fault></fault></methodResponse>`
+    expect(normalizeXmlrpcResponseText({ status: 200, headers: {}, payload: { nested: xml } })).toBe(xml)
+  })
+
   it("throws a clear error for plain objects without text fields", () => {
     expect(() => normalizeXmlrpcResponseText({ status: 200, headers: {} })).toThrow(/non-text response/)
+  })
+
+  it("throws when middleware returns empty object", () => {
+    expect(() => normalizeXmlrpcResponseText({})).toThrow(/empty response object/)
   })
 
   it("does not throw when passed to removeXmlHeader after normalization", () => {
