@@ -32,11 +32,14 @@
 - [platformConfigActionBridge.ts](file://src/components/v2/settings/bridge/platformConfigActionBridge.ts)
 - [CommonBlogSetting.vue](file://src/components/set/publish/singleplatform/base/CommonBlogSetting.vue)
 - [sensitiveLogSanitizer.ts](file://src/utils/sensitiveLogSanitizer.ts)
+- [useV2ErrorDetails.ts](file://src/composables/v2/useV2ErrorDetails.ts)
+- [v2ConfigValidatedFlow.spec.ts](file://src/components/v2/v2ConfigValidatedFlow.spec.ts)
 - [design.md](file://openspec/changes/expose-v2-platform-config-validation-errors/design.md)
 - [proposal.md](file://openspec/changes/expose-v2-platform-config-validation-errors/proposal.md)
 - [tasks.md](file://openspec/changes/expose-v2-platform-config-validation-errors/tasks.md)
 - [v2-hosted-error-details/spec.md](file://openspec/changes/expose-v2-platform-config-validation-errors/specs/v2-hosted-error-details/spec.md)
 - [v2-platform-config-validation-feedback/spec.md](file://openspec/changes/expose-v2-platform-config-validation-errors/specs/v2-platform-config-validation-feedback/spec.md)
+- [bridgeRegistry.ts](file://src/components/v2/settings/bridge/bridgeRegistry.ts)
 </cite>
 
 ## 更新摘要
@@ -45,6 +48,8 @@
 - 替代之前的简单错误消息，实现统一的错误展示机制
 - 引入敏感信息脱敏处理，确保安全的错误信息展示
 - 建立完整的错误验证契约和事件透传机制
+- 实现 V2 错误详情面板的统一调度和管理
+- 增强 V1 表单与 V2 桥接的错误处理集成
 
 ## 目录
 1. [简介](#简介)
@@ -65,7 +70,7 @@
 
 系统采用模块化设计，通过动态配置管理、存储抽象层和适配器模式，实现了对不同平台配置的灵活支持。配置数据既可以在思源笔记环境中持久化存储，也可以在浏览器环境中使用本地存储。
 
-**更新** 新增平台配置验证错误详情面板功能，提供更详细的错误诊断信息，替代之前的简单错误消息。该功能基于 `SypErrorDetailsPanel` 组件，实现了统一的错误展示机制，支持敏感信息脱敏和可复制的诊断信息。
+**更新** 新增平台配置验证错误详情面板功能，提供更详细的错误诊断信息，替代之前的简单错误消息。该功能基于 `SypErrorDetailsPanel` 组件，实现了统一的错误展示机制，支持敏感信息脱敏和可复制的诊断信息，并通过 `useV2ErrorDetails` 组合式函数提供完整的错误状态管理。
 
 ## 项目结构
 
@@ -103,14 +108,15 @@ AA[SypErrorDetailsPanel.vue] --> BB[V2App.vue]
 CC[V2PlatformConfigBridge.vue] --> AA
 DD[platformConfigActionBridge.ts] --> CC
 EE[CommonBlogSetting.vue] --> DD
+FF[useV2ErrorDetails.ts] --> AA
+GG[sensitiveLogSanitizer.ts] --> FF
+HH[v2ConfigValidatedFlow.spec.ts] --> BB
+II[bridgeRegistry.ts] --> CC
 end
-subgraph "脱敏工具"
-FF[sensitiveLogSanitizer.ts] --> AA
+subgraph "验证契约"
+JJ[V2PlatformConfigValidationResult] --> BB
+KK[TypeScript 类型定义] --> JJ
 end
-A --> K
-B --> U
-E --> U
-K --> U
 ```
 
 **图表来源**
@@ -121,6 +127,10 @@ K --> U
 - [gitlabdocsifyApiAdaptor.ts:1-63](file://src/adaptors/api/gitlab-docsify/gitlabdocsifyApiAdaptor.ts#L1-L63)
 - [SypErrorDetailsPanel.vue:1-267](file://src/components/v2/common/SypErrorDetailsPanel.vue#L1-L267)
 - [V2App.vue:178-190](file://src/components/v2/V2App.vue#L178-L190)
+- [platformConfigActionBridge.ts:12-17](file://src/components/v2/settings/bridge/platformConfigActionBridge.ts#L12-L17)
+- [useV2ErrorDetails.ts:20-67](file://src/composables/v2/useV2ErrorDetails.ts#L20-L67)
+- [sensitiveLogSanitizer.ts:12-62](file://src/utils/sensitiveLogSanitizer.ts#L12-L62)
+- [v2ConfigValidatedFlow.spec.ts:40-63](file://src/components/v2/v2ConfigValidatedFlow.spec.ts#L40-L63)
 
 **章节来源**
 - [syp.config.ts:1-52](file://syp.config.ts#L1-L52)
@@ -189,6 +199,9 @@ subgraph "错误处理层"
 Q[平台配置验证] --> R[V2平台配置桥接]
 R --> S[错误详情面板]
 S --> T[敏感信息脱敏]
+U[验证契约定义] --> Q
+V[错误状态管理] --> S
+W[V1表单集成] --> Q
 end
 A --> D
 D --> H
@@ -198,6 +211,8 @@ E --> O
 E --> P
 R --> Q
 S --> A
+X[组合式函数] --> V
+Y[桥接注册表] --> R
 ```
 
 **图表来源**
@@ -206,6 +221,9 @@ S --> A
 - [dynamicConfig.ts:1-534](file://src/platforms/dynamicConfig.ts#L1-L534)
 - [V2PlatformConfigBridge.vue:1-264](file://src/components/v2/settings/V2PlatformConfigBridge.vue#L1-L264)
 - [SypErrorDetailsPanel.vue:1-267](file://src/components/v2/common/SypErrorDetailsPanel.vue#L1-L267)
+- [platformConfigActionBridge.ts:12-17](file://src/components/v2/settings/bridge/platformConfigActionBridge.ts#L12-L17)
+- [useV2ErrorDetails.ts:20-67](file://src/composables/v2/useV2ErrorDetails.ts#L20-L67)
+- [bridgeRegistry.ts:1-85](file://src/components/v2/settings/bridge/bridgeRegistry.ts#L1-L85)
 
 系统架构特点：
 
@@ -214,6 +232,8 @@ S --> A
 3. **平台无关**: 通过适配器模式支持多种发布平台
 4. **响应式更新**: 基于Vue响应式的配置管理
 5. **错误处理**: 完整的错误处理和诊断机制
+6. **契约约束**: 通过 TypeScript 接口确保类型安全
+7. **状态管理**: 通过组合式函数提供集中式状态管理
 
 ## 详细组件分析
 
@@ -493,6 +513,7 @@ class V2PlatformConfigBridge {
 +platformName : string
 +state : BridgeState
 +bridgeComponent : Component
++validationError : string
 +handleFormValidated(result) void
 +handleFormSaved(result) void
 +loadBridgeMeta() Promise~void~
@@ -520,6 +541,7 @@ V2PlatformConfigBridge --> V2PlatformConfigActionBridge : provides
 2. **事件透传**: 完整转发验证和保存事件，不剥离任何字段
 3. **状态管理**: 管理加载状态和错误信息显示
 4. **注入提供**: 通过依赖注入提供 V2 平台配置动作桥接
+5. **内联错误显示**: 在配置区域显示友好的错误摘要和查看详情按钮
 
 ### V1 表单集成
 
@@ -610,6 +632,66 @@ V2PlatformConfigValidationResult --> ValidationContract : implements
 3. **类型安全**: TypeScript 接口确保类型一致性
 4. **向后兼容**: 保持与现有代码的兼容性
 
+### 错误状态管理
+
+系统通过 `useV2ErrorDetails` 组合式函数提供统一的错误状态管理：
+
+```mermaid
+classDiagram
+class useV2ErrorDetails {
++errorDetailsState : Ref~ErrorDetailsState~
++showErrorDetails(title, summary, details) void
++hideErrorDetails() void
++clearErrorDetails() void
++reopenErrorDetails() void
+}
+class ErrorDetailsState {
++visible : boolean
++title : string
++summary : string
++details : string
+}
+useV2ErrorDetails --> ErrorDetailsState : manages
+```
+
+**图表来源**
+- [useV2ErrorDetails.ts:20-67](file://src/composables/v2/useV2ErrorDetails.ts#L20-L67)
+
+状态管理功能：
+
+1. **集中状态**: 统一管理错误详情的状态
+2. **脱敏处理**: 自动对错误信息进行敏感信息脱敏
+3. **生命周期管理**: 提供显示、隐藏、清理和重新打开功能
+4. **响应式更新**: 基于 Vue 响应式系统的状态管理
+
+### 验证流程测试
+
+系统包含完整的测试覆盖，确保验证流程的正确性：
+
+```mermaid
+sequenceDiagram
+participant Test as 测试用例
+participant Flow as 验证流程
+participant App as V2App
+participant Panel as 错误详情面板
+Test->>Flow : runHandleConfigValidated({ok : false, errorMessage})
+Flow->>App : handleConfigValidated
+App->>Panel : showErrorDetails
+Test->>Flow : runHandleConfigValidated({ok : true})
+Flow->>App : handleConfigValidated
+App->>Panel : hideErrorDetails + clearErrorDetails
+```
+
+**图表来源**
+- [v2ConfigValidatedFlow.spec.ts:40-63](file://src/components/v2/v2ConfigValidatedFlow.spec.ts#L40-L63)
+
+测试覆盖范围：
+
+1. **失败场景**: 验证失败时显示错误详情面板
+2. **成功场景**: 验证成功时隐藏并清理错误状态
+3. **状态保持**: 隐藏时保留标题以便重新打开
+4. **完整性**: 确保所有状态都被正确清理
+
 **章节来源**
 - [SypErrorDetailsPanel.vue:1-267](file://src/components/v2/common/SypErrorDetailsPanel.vue#L1-L267)
 - [V2App.vue:178-190](file://src/components/v2/V2App.vue#L178-L190)
@@ -617,6 +699,8 @@ V2PlatformConfigValidationResult --> ValidationContract : implements
 - [platformConfigActionBridge.ts:1-20](file://src/components/v2/settings/bridge/platformConfigActionBridge.ts#L1-L20)
 - [CommonBlogSetting.vue:1-200](file://src/components/set/publish/singleplatform/base/CommonBlogSetting.vue#L1-L200)
 - [sensitiveLogSanitizer.ts:1-63](file://src/utils/sensitiveLogSanitizer.ts#L1-L63)
+- [useV2ErrorDetails.ts:1-67](file://src/composables/v2/useV2ErrorDetails.ts#L1-L67)
+- [v2ConfigValidatedFlow.spec.ts:1-82](file://src/components/v2/v2ConfigValidatedFlow.spec.ts#L1-L82)
 - [design.md:16-31](file://openspec/changes/expose-v2-platform-config-validation-errors/design.md#L16-L31)
 - [proposal.md:13-31](file://openspec/changes/expose-v2-platform-config-validation-errors/proposal.md#L13-L31)
 - [tasks.md:1-30](file://openspec/changes/expose-v2-platform-config-validation-errors/tasks.md#L1-L30)
@@ -789,14 +873,20 @@ K[错误详情面板]
 L[脱敏工具]
 M[平台配置桥接]
 N[V1表单集成]
+O[错误状态管理]
+P[验证契约]
+Q[桥接注册表]
+R[测试覆盖]
 end
 subgraph "应用层"
-O[发布配置钩子]
-P[设置界面]
-Q[平台适配器]
-R[Docsify API]
-S[V2应用程序]
-T[错误处理]
+S[发布配置钩子]
+T[设置界面]
+U[平台适配器]
+V[Docsify API]
+W[V2应用程序]
+X[错误处理]
+Y[V1表单]
+Z[V2桥接]
 end
 A --> F
 B --> G
@@ -807,15 +897,18 @@ F --> G
 G --> H
 H --> I
 I --> J
-J --> R
-R --> O
-O --> P
-O --> Q
-Q --> S
-S --> K
-K --> L
+J --> V
+V --> S
+S --> T
+S --> U
+U --> W
+W --> K
+K --> O
 M --> N
-N --> T
+N --> X
+P --> X
+Q --> M
+R --> W
 ```
 
 **图表来源**
@@ -823,6 +916,7 @@ N --> T
 - [usePublishSettingStore.ts:1-95](file://src/stores/usePublishSettingStore.ts#L1-L95)
 - [SypErrorDetailsPanel.vue:1-267](file://src/components/v2/common/SypErrorDetailsPanel.vue#L1-L267)
 - [platformConfigActionBridge.ts:1-20](file://src/components/v2/settings/bridge/platformConfigActionBridge.ts#L1-L20)
+- [bridgeRegistry.ts:1-85](file://src/components/v2/settings/bridge/bridgeRegistry.ts#L1-L85)
 
 依赖关系特点：
 
@@ -831,6 +925,8 @@ N --> T
 3. **循环依赖避免**: 设计上避免了循环依赖问题
 4. **可测试性**: 清晰的依赖关系便于单元测试
 5. **错误处理**: 新增的错误处理层提供完整的依赖关系
+6. **类型安全**: 通过 TypeScript 接口确保类型一致性
+7. **状态管理**: 通过组合式函数提供集中式状态管理
 
 **章节来源**
 - [constants.ts:1-54](file://src/utils/constants.ts#L1-L54)
@@ -863,6 +959,7 @@ N --> T
 2. **虚拟滚动**: 错误详情内容使用虚拟滚动，支持大量文本的高效显示
 3. **防抖处理**: 错误状态切换使用防抖，避免频繁的UI更新
 4. **内存清理**: 错误状态自动清理，防止内存泄漏
+5. **脱敏优化**: 敏感信息脱敏使用高效的正则表达式，避免性能瓶颈
 
 ## 故障排除指南
 
@@ -938,6 +1035,32 @@ N --> T
 2. 验证 `emitValidated` 的事件载荷
 3. 确认错误信息符合 `V2PlatformConfigValidationResult` 契约
 
+#### V1 表单 Toast 重复
+
+**问题症状**: V1 表单在 V2 桥接模式下出现重复的 Toast 提示
+
+**可能原因**:
+1. V1 表单未正确检测 V2 桥接的存在
+2. 错误的条件判断逻辑
+
+**解决步骤**:
+1. 检查 `v2ActionBridge` 的注入状态
+2. 验证条件 Toast 的逻辑判断
+3. 确认仅在 V2 桥接不存在时显示 Toast
+
+#### 错误状态管理问题
+
+**问题症状**: 错误状态无法正确清理或重新打开
+
+**可能原因**:
+1. `useV2ErrorDetails` 组合式函数使用不当
+2. 错误状态生命周期管理问题
+
+**解决步骤**:
+1. 检查 `clearErrorDetails` 的调用时机
+2. 验证 `reopenErrorDetails` 的使用场景
+3. 确认错误状态的响应式更新
+
 #### 性能问题
 
 **问题症状**: 应用响应缓慢
@@ -947,12 +1070,14 @@ N --> T
 2. 存储操作频繁
 3. 内存泄漏
 4. 错误详情面板渲染性能问题
+5. 敏感信息脱敏性能瓶颈
 
 **解决步骤**:
 1. 清理不必要的配置
 2. 减少存储操作频率
 3. 检查内存使用情况
 4. 优化错误详情面板的渲染
+5. 检查脱敏算法的性能表现
 
 **章节来源**
 - [utils.ts:1-97](file://src/utils/utils.ts#L1-L97)
@@ -975,6 +1100,9 @@ N --> T
 - **敏感信息脱敏**: 自动识别和脱敏 Cookie、Authorization、Token 等敏感字段
 - **V2 桥接集成**: 与现有的 V2 平台配置桥接无缝集成
 - **向后兼容**: 保持与 V1 表单的兼容性，逐步迁移
+- **类型安全**: 通过 `V2PlatformConfigValidationResult` 接口确保契约一致性
+- **状态管理**: 通过 `useV2ErrorDetails` 提供集中式的错误状态管理
+- **测试覆盖**: 完整的单元测试确保验证流程的正确性
 
 该系统为未来的功能扩展奠定了坚实的基础，能够支持更多发布平台的集成和更复杂的配置需求。通过持续的优化和改进，平台配置系统将继续为用户提供优秀的配置管理体验。
 
@@ -988,5 +1116,7 @@ N --> T
 6. **性能优化**: 按需渲染和虚拟滚动，支持大量错误信息的高效展示
 7. **类型安全**: 完整的 TypeScript 类型定义，确保契约的一致性
 8. **向后兼容**: 保持与现有代码的兼容性，支持渐进式迁移
+9. **状态管理**: 通过组合式函数提供集中式的错误状态管理
+10. **测试保障**: 完整的单元测试覆盖验证流程的各个方面
 
 这些改进显著提升了平台配置系统的用户体验和诊断能力，为用户提供了更好的问题排查和故障排除体验。

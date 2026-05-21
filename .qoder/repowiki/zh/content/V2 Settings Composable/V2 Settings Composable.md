@@ -5,6 +5,8 @@
 - [useV2Settings.ts](file://src/composables/v2/useV2Settings.ts)
 - [useV2QuickPublish.ts](file://src/composables/v2/useV2QuickPublish.ts)
 - [useV2PublishValidation.ts](file://src/composables/v2/useV2PublishValidation.ts)
+- [useV2ErrorDetails.ts](file://src/composables/v2/useV2ErrorDetails.ts)
+- [useV2ErrorDetails.spec.ts](file://src/composables/v2/useV2ErrorDetails.spec.ts)
 - [usePublishSettingStore.ts](file://src/stores/usePublishSettingStore.ts)
 - [usePreferenceSettingStore.ts](file://src/stores/usePreferenceSettingStore.ts)
 - [dynamicConfig.ts](file://src/platforms/dynamicConfig.ts)
@@ -21,15 +23,16 @@
 - [design.md](file://openspec/changes/expose-v2-platform-config-validation-errors/design.md)
 - [spec.md](file://openspec/changes/expose-v2-platform-config-validation-errors/specs/v2-platform-config-validation-feedback/spec.md)
 - [spec.md](file://openspec/changes/expose-v2-platform-config-validation-errors/specs/v2-hosted-error-details/spec.md)
+- [v2ConfigValidatedFlow.spec.ts](file://src/components/v2/v2ConfigValidatedFlow.spec.ts)
 </cite>
 
 ## 更新摘要
 **变更内容**
-- 新增平台配置验证和错误处理能力，增强了 V2 设置组合式函数的功能
-- 扩展了桥接验证事件契约，支持完整的错误信息传递
-- 集成了 SypErrorDetailsPanel 错误详情展示组件
-- 增强了配置验证失败时的用户反馈和诊断能力
-- 实现了敏感信息脱敏处理机制
+- 新增 useV2ErrorDetails 组合式函数，提供统一的错误详情管理能力
+- 改进的验证错误处理流程，支持完整的错误信息传递和脱敏处理
+- 增强的类型安全，完善了 V2PlatformConfigValidationResult 接口定义
+- 扩展的测试覆盖，包含 useV2ErrorDetails 的完整单元测试
+- 优化的错误处理架构，实现了配置验证与发布失败的统一错误详情处理
 
 ## 目录
 1. [简介](#简介)
@@ -37,12 +40,13 @@
 3. [核心组件](#核心组件)
 4. [架构概览](#架构概览)
 5. [详细组件分析](#详细组件分析)
-6. [平台配置验证增强](#平台配置验证增强)
-7. [错误处理机制](#错误处理机制)
-8. [依赖关系分析](#依赖关系分析)
-9. [性能考虑](#性能考虑)
-10. [故障排除指南](#故障排除指南)
-11. [结论](#结论)
+6. [新增的 useV2ErrorDetails 组合式函数](#新增的-usev2errordetails-组合式函数)
+7. [改进的平台配置验证增强](#改进的平台配置验证增强)
+8. [错误处理机制](#错误处理机制)
+9. [依赖关系分析](#依赖关系分析)
+10. [性能考虑](#性能考虑)
+11. [故障排除指南](#故障排除指南)
+12. [结论](#结论)
 
 ## 简介
 
@@ -50,7 +54,7 @@ V2 设置组合式函数是 SiYuan 插件发布器中的核心功能模块，负
 
 该系统支持多种发布平台（WordPress、博客园、GitHub Pages、GitLab Pages 等），并通过动态配置机制实现了灵活的平台扩展能力。通过组合式函数的设计，实现了状态管理、业务逻辑和 UI 组件的解耦，提高了代码的可维护性和可测试性。
 
-**更新** 新增了增强的平台配置验证和错误处理能力，包括完整的错误信息传递、用户友好的错误详情展示、敏感信息脱敏处理等功能，显著提升了用户体验和故障排查能力。
+**更新** 新增了 useV2ErrorDetails 组合式函数，提供了统一的错误详情管理能力，增强了 V2 设置组合式函数的功能。该函数封装了 SypErrorDetailsPanel 的显示/隐藏逻辑，并集成了敏感信息脱敏处理，为配置验证和发布失败提供了统一的错误处理体验。
 
 ## 项目结构
 
@@ -67,45 +71,49 @@ E --> G[状态跟踪]
 E --> H[错误处理]
 I[useV2PublishValidation.ts] --> J[发布验证]
 I --> K[授权管理]
+L[useV2ErrorDetails.ts] --> M[错误详情管理]
+L --> N[脱敏处理]
 end
 subgraph "存储层"
-L[usePublishSettingStore.ts] --> M[设置持久化]
-N[usePreferenceSettingStore.ts] --> O[偏好设置]
+O[usePublishSettingStore.ts] --> P[设置持久化]
+Q[usePreferenceSettingStore.ts] --> R[偏好设置]
 end
 subgraph "平台定义"
-P[dynamicConfig.ts] --> Q[动态配置]
-R[usePlatformDefine.ts] --> S[平台预设]
+S[dynamicConfig.ts] --> T[动态配置]
+U[usePlatformDefine.ts] --> V[平台预设]
 end
 subgraph "UI 组件"
-T[V2AccountList.vue] --> U[账户列表]
-V[V2PlatformSelect.vue] --> W[平台选择]
-X[V2PlatformConfigBridge.vue] --> Y[配置桥接]
-Z[SypErrorDetailsPanel.vue] --> AA[错误详情]
+W[V2AccountList.vue] --> X[账户列表]
+Y[V2PlatformSelect.vue] --> Z[平台选择]
+AA[V2PlatformConfigBridge.vue] --> BB[配置桥接]
+CC[SypErrorDetailsPanel.vue] --> DD[错误详情]
 end
 subgraph "错误处理"
-AB[sensitiveLogSanitizer.ts] --> AC[敏感信息脱敏]
-AD[platformConfigActionBridge.ts] --> AE[验证事件契约]
+EE[sensitiveLogSanitizer.ts] --> FF[敏感信息脱敏]
+GG[platformConfigActionBridge.ts] --> HH[验证事件契约]
+II[V2App.vue] --> JJ[错误详情集成]
 end
-A --> L
-A --> P
-E --> L
-E --> P
-I --> L
-I --> P
-X --> AD
-V2App.vue --> Z
-V2App.vue --> AB
+A --> O
+A --> S
+E --> O
+E --> S
+I --> O
+I --> S
+L --> EE
+CC --> II
 ```
 
 **图表来源**
 - [useV2Settings.ts:1-323](file://src/composables/v2/useV2Settings.ts#L1-L323)
 - [useV2QuickPublish.ts:1-312](file://src/composables/v2/useV2QuickPublish.ts#L1-L312)
 - [useV2PublishValidation.ts:1-86](file://src/composables/v2/useV2PublishValidation.ts#L1-L86)
+- [useV2ErrorDetails.ts:1-67](file://src/composables/v2/useV2ErrorDetails.ts#L1-L67)
 
 **章节来源**
 - [useV2Settings.ts:1-323](file://src/composables/v2/useV2Settings.ts#L1-L323)
 - [useV2QuickPublish.ts:1-312](file://src/composables/v2/useV2QuickPublish.ts#L1-L312)
 - [useV2PublishValidation.ts:1-86](file://src/composables/v2/useV2PublishValidation.ts#L1-L86)
+- [useV2ErrorDetails.ts:1-67](file://src/composables/v2/useV2ErrorDetails.ts#L1-L67)
 
 ## 核心组件
 
@@ -299,45 +307,50 @@ F[useV2Settings]
 G[useV2QuickPublish]
 H[useV2PublishValidation]
 I[usePlatformDefine]
+J[useV2ErrorDetails]
 end
 subgraph "数据访问层 (Stores)"
-J[usePublishSettingStore]
-K[usePreferenceSettingStore]
-L[useSiyuanSettingStore]
+K[usePublishSettingStore]
+L[usePreferenceSettingStore]
+M[useSiyuanSettingStore]
 end
 subgraph "平台配置层"
-M[DynamicConfig]
-N[PlatformType]
-O[SubPlatformType]
+N[DynamicConfig]
+O[PlatformType]
+P[SubPlatformType]
 end
 subgraph "错误处理层"
-P[sensitiveLogSanitizer]
-Q[platformConfigActionBridge]
-R[V2PlatformConfigValidationResult]
+Q[sensitiveLogSanitizer]
+R[platformConfigActionBridge]
+S[V2PlatformConfigValidationResult]
+T[ErrorDetailsState]
 end
 A --> F
 B --> F
 C --> F
-C --> Q
+C --> R
 D --> E
-E --> R
-F --> J
-F --> M
-G --> J
-G --> M
-H --> J
-H --> M
-I --> M
-J --> N
-M --> O
-P --> R
-Q --> R
+E --> S
+F --> K
+F --> N
+G --> K
+G --> N
+H --> K
+H --> N
+I --> N
+J --> T
+J --> Q
+K --> O
+N --> P
+Q --> S
+R --> S
 ```
 
 **图表来源**
 - [useV2Settings.ts:1-18](file://src/composables/v2/useV2Settings.ts#L1-L18)
 - [useV2QuickPublish.ts:1-12](file://src/composables/v2/useV2QuickPublish.ts#L1-L12)
 - [useV2PublishValidation.ts:1-19](file://src/composables/v2/useV2PublishValidation.ts#L1-L19)
+- [useV2ErrorDetails.ts:1-18](file://src/composables/v2/useV2ErrorDetails.ts#L1-L18)
 
 ## 详细组件分析
 
@@ -488,9 +501,125 @@ DynamicConfig --> SubPlatformType
 **章节来源**
 - [dynamicConfig.ts:1-540](file://src/platforms/dynamicConfig.ts#L1-L540)
 
-## 平台配置验证增强
+## 新增的 useV2ErrorDetails 组合式函数
 
-**新增** 平台配置验证功能是本次更新的核心改进，提供了完整的配置验证和错误处理能力：
+**新增** `useV2ErrorDetails` 是本次更新的核心组件，提供了统一的错误详情管理能力：
+
+### 组合式函数设计
+
+#### 核心功能特性
+
+1. **错误详情状态管理**：集中管理错误详情的显示状态和内容
+2. **敏感信息脱敏**：自动脱敏错误详情中的敏感信息
+3. **生命周期控制**：提供显示、隐藏、清理和重新打开功能
+4. **类型安全**：完整的 TypeScript 接口定义和类型约束
+
+#### 数据结构设计
+
+```mermaid
+classDiagram
+class ErrorDetailsState {
++visible : boolean
++title : string
++summary : string
++details : string
+}
+class useV2ErrorDetails {
++errorDetailsState : Ref~ErrorDetailsState~
++showErrorDetails(title, summary, details?) : void
++hideErrorDetails() : void
++clearErrorDetails() : void
++reopenErrorDetails() : void
+}
+ErrorDetailsState --> useV2ErrorDetails
+```
+
+**图表来源**
+- [useV2ErrorDetails.ts:13-18](file://src/composables/v2/useV2ErrorDetails.ts#L13-L18)
+- [useV2ErrorDetails.ts:20-66](file://src/composables/v2/useV2ErrorDetails.ts#L20-L66)
+
+#### 错误详情状态管理
+
+```mermaid
+stateDiagram-v2
+[*] --> hidden : 初始状态
+hidden --> visible : showErrorDetails
+visible --> hidden : hideErrorDetails
+visible --> hidden : clearErrorDetails
+hidden --> visible : reopenErrorDetails (when title exists)
+```
+
+**图表来源**
+- [useV2ErrorDetails.ts:28-57](file://src/composables/v2/useV2ErrorDetails.ts#L28-L57)
+
+### 错误详情脱敏处理
+
+#### 脱敏策略实现
+
+**更新** 错误详情现在支持自动脱敏敏感信息：
+
+```mermaid
+flowchart TD
+Input[原始错误信息] --> CheckType{检查类型}
+CheckType --> |字符串| StringSanitize[字符串脱敏]
+CheckType --> |空值| EmptySanitize[空值处理]
+StringSanitize --> RedactSensitive[脱敏敏感字段]
+EmptySanitize --> DefaultEmpty[默认空字符串]
+RedactSensitive --> Output[脱敏后的错误详情]
+DefaultEmpty --> Output
+```
+
+**图表来源**
+- [useV2ErrorDetails.ts:28-38](file://src/composables/v2/useV2ErrorDetails.ts#L28-L38)
+
+#### 脱敏规则
+
+| 敏感字段类型 | 匹配正则 | 脱敏示例 |
+|-------------|----------|----------|
+| Cookie | `(cookie)` | `<redacted>` |
+| Authorization | `(authorization)` | `<redacted>` |
+| Token | `(token)` | `<redacted>` |
+| CSRF | `(csrf)` | `<redacted>` |
+| Ticket | `(ticket)` | `<redacted>` |
+| CToken | `(ctoken)` | `<redacted>` |
+
+**章节来源**
+- [useV2ErrorDetails.ts:1-67](file://src/composables/v2/useV2ErrorDetails.ts#L1-L67)
+
+### 测试覆盖
+
+#### 单元测试设计
+
+**新增** 完整的单元测试确保了错误详情管理功能的可靠性：
+
+```mermaid
+flowchart TD
+Start([测试开始]) --> Init[初始化 useV2ErrorDetails]
+Init --> Test1[测试初始状态]
+Test1 --> Test2[测试错误详情显示]
+Test2 --> Test3[测试隐藏功能]
+Test3 --> Test4[测试重新打开]
+Test4 --> Test5[测试状态清理]
+Test5 --> End([测试完成])
+```
+
+**图表来源**
+- [useV2ErrorDetails.spec.ts:13-82](file://src/composables/v2/useV2ErrorDetails.spec.ts#L13-L82)
+
+#### 测试场景覆盖
+
+1. **初始化测试**：验证错误详情初始状态为隐藏且内容为空
+2. **显示测试**：验证错误详情显示时的脱敏处理和内容传递
+3. **隐藏测试**：验证错误详情隐藏时的状态保持
+4. **重新打开测试**：验证标题存在时的重新打开功能
+5. **清理测试**：验证错误详情状态的完全清理
+
+**章节来源**
+- [useV2ErrorDetails.spec.ts:1-83](file://src/composables/v2/useV2ErrorDetails.spec.ts#L1-L83)
+
+## 改进的平台配置验证增强
+
+**更新** 平台配置验证功能得到了全面增强，新增了 useV2ErrorDetails 组合式函数的支持：
 
 ### 验证事件契约扩展
 
@@ -512,7 +641,7 @@ V2PlatformConfigValidationResult --> PlatformConfigActionBridge
 ```
 
 **图表来源**
-- [platformConfigActionBridge.ts:12-15](file://src/components/v2/settings/bridge/platformConfigActionBridge.ts#L12-L15)
+- [platformConfigActionBridge.ts:12-17](file://src/components/v2/settings/bridge/platformConfigActionBridge.ts#L12-L17)
 
 #### 验证流程增强
 
@@ -527,6 +656,7 @@ Bridge->>Form : 触发验证
 Form->>Form : 执行配置验证
 Form->>Bridge : 返回验证结果
 Bridge->>Host : 传递完整结果
+Host->>Host : 使用 useV2ErrorDetails 处理
 Host->>Host : 展示错误详情
 Note over Bridge,Host : 支持完整错误信息传递
 ```
@@ -538,7 +668,7 @@ Note over Bridge,Host : 支持完整错误信息传递
 
 #### SypErrorDetailsPanel 集成
 
-**新增** 错误详情面板组件提供了完整的错误信息展示和复制功能：
+**更新** 错误详情面板组件现在通过 useV2ErrorDetails 统一管理：
 
 ```mermaid
 classDiagram
@@ -560,11 +690,21 @@ class ErrorDetailsState {
 +summary : string
 +details : string
 }
+class useV2ErrorDetails {
++errorDetailsState : Ref~ErrorDetailsState~
++showErrorDetails(title, summary, details?) : void
++hideErrorDetails() : void
++clearErrorDetails() : void
++reopenErrorDetails() : void
+}
 SypErrorDetailsPanel --> ErrorDetailsState
+useV2ErrorDetails --> ErrorDetailsState
 ```
 
 **图表来源**
 - [SypErrorDetailsPanel.vue:59-72](file://src/components/v2/common/SypErrorDetailsPanel.vue#L59-L72)
+- [useV2ErrorDetails.ts:13-18](file://src/composables/v2/useV2ErrorDetails.ts#L13-L18)
+- [useV2ErrorDetails.ts:20-66](file://src/composables/v2/useV2ErrorDetails.ts#L20-L66)
 
 #### 错误详情展示流程
 
@@ -588,7 +728,7 @@ CopyDetails --> End([完成])
 
 #### 脱敏策略实现
 
-**新增** 敏感信息脱敏工具确保错误详情中的敏感信息得到适当处理：
+**更新** 敏感信息脱敏工具确保错误详情中的敏感信息得到适当处理：
 
 ```mermaid
 flowchart TD
@@ -621,7 +761,7 @@ RedactSensitive --> Output[脱敏后的错误详情]
 
 ## 错误处理机制
 
-**新增** 完善的错误处理机制确保了用户能够获得清晰、可操作的错误反馈：
+**更新** 完善的错误处理机制确保了用户能够获得清晰、可操作的错误反馈，新增了 useV2ErrorDetails 的集成：
 
 ### 错误处理架构
 
@@ -637,27 +777,28 @@ end
 subgraph "错误处理层"
 D[V2PlatformConfigBridge]
 E[V2App.handleConfigValidated]
-F[SypErrorDetailsPanel]
+F[useV2ErrorDetails]
 G[sensitiveLogSanitizer]
+H[SypErrorDetailsPanel]
 end
 subgraph "用户反馈"
-H[内联摘要]
-I[错误详情面板]
-J[可复制诊断]
+I[内联摘要]
+J[错误详情面板]
+K[可复制诊断]
 end
 A --> D
 B --> D
 C --> D
 D --> E
 E --> F
-E --> G
+F --> G
+G --> H
+H --> J
 F --> I
-G --> J
-D --> H
 ```
 
 **图表来源**
-- [V2App.vue:488-502](file://src/components/v2/V2App.vue#L488-L502)
+- [V2App.vue:486-501](file://src/components/v2/V2App.vue#L486-L501)
 
 ### 错误处理流程
 
@@ -668,10 +809,10 @@ flowchart TD
 Start([配置验证开始]) --> Validate[执行平台验证]
 Validate --> CheckResult{验证结果}
 CheckResult --> |成功| Success[设置配置完成]
-CheckResult --> |失败| ShowError[显示错误摘要]
-ShowError --> OpenPanel[打开错误详情面板]
-OpenPanel --> Sanitize[脱敏敏感信息]
-Sanitize --> Copy[用户复制详情]
+CheckResult --> |失败| ShowError[使用 useV2ErrorDetails 显示错误]
+ShowError --> Sanitize[脱敏敏感信息]
+Sanitize --> OpenPanel[打开错误详情面板]
+OpenPanel --> Copy[用户复制详情]
 Copy --> End([等待用户修复])
 Success --> End
 ```
@@ -681,13 +822,14 @@ Success --> End
 
 #### 错误详情展示规范
 
-**新增** 错误详情展示遵循 v2-hosted-error-details 规范：
+**更新** 错误详情展示遵循 v2-hosted-error-details 规范：
 
 1. **友好摘要**：提供用户友好的错误摘要信息
 2. **详细诊断**：展示完整的错误详情和诊断信息
 3. **敏感信息脱敏**：自动脱敏所有敏感字段
 4. **可复制功能**：支持一键复制完整的错误详情
 5. **一致性设计**：与发布失败详情面板保持一致的用户体验
+6. **统一管理**：通过 useV2ErrorDetails 统一管理错误详情状态
 
 **章节来源**
 - [spec.md:32-43](file://openspec/changes/expose-v2-platform-config-validation-errors/specs/v2-hosted-error-details/spec.md#L32-L43)
@@ -709,43 +851,51 @@ subgraph "内部模块"
 F[useV2Settings]
 G[useV2QuickPublish]
 H[useV2PublishValidation]
-I[stores]
-J[platforms]
-K[components]
-L[utils]
+I[useV2ErrorDetails]
+J[stores]
+K[platforms]
+L[components]
+M[utils]
 end
 subgraph "工具模块"
-M[sensitiveLogSanitizer]
-N[platformConfigActionBridge]
-O[JsonUtil]
-P[ObjectUtil]
+N[sensitiveLogSanitizer]
+O[platformConfigActionBridge]
+P[JsonUtil]
+Q[ObjectUtil]
+R[ErrorDetailsState]
+S[V2PlatformConfigValidationResult]
 end
 A --> F
 A --> G
 A --> H
-B --> I
-C --> K
-F --> I
+A --> I
+B --> J
+C --> L
 F --> J
-F --> L
-G --> I
+F --> K
+F --> M
 G --> J
-G --> L
-H --> I
+G --> K
+G --> M
 H --> J
-H --> L
-I --> O
+H --> K
+H --> M
+I --> M
+I --> R
 J --> P
-K --> N
-L --> M
-N --> F
-O --> P
+K --> Q
+L --> N
+M --> N
+N --> S
+O --> S
+R --> S
 ```
 
 **图表来源**
 - [useV2Settings.ts:1-18](file://src/composables/v2/useV2Settings.ts#L1-L18)
 - [useV2QuickPublish.ts:1-12](file://src/composables/v2/useV2QuickPublish.ts#L1-L12)
 - [useV2PublishValidation.ts:1-19](file://src/composables/v2/useV2PublishValidation.ts#L1-L19)
+- [useV2ErrorDetails.ts:1-18](file://src/composables/v2/useV2ErrorDetails.ts#L1-L18)
 
 ### 核心依赖关系
 
@@ -754,6 +904,7 @@ O --> P
 3. **存储层依赖**：设置存储提供持久化功能
 4. **UI 组件依赖**：Vue 组件提供用户界面交互
 5. **错误处理依赖**：错误详情面板和脱敏工具提供错误处理能力
+6. **类型安全依赖**：完整的 TypeScript 接口定义确保类型安全
 
 **章节来源**
 - [usePublishSettingStore.ts:10-25](file://src/stores/usePublishSettingStore.ts#L10-L25)
@@ -768,6 +919,7 @@ V2 设置系统在设计时充分考虑了性能优化：
 1. **响应式状态**：使用 Vue 3 的响应式系统实现高效的状态更新
 2. **计算属性缓存**：利用 computed 属性避免不必要的重新计算
 3. **按需加载**：只在需要时加载和解析配置数据
+4. **错误详情状态优化**：useV2ErrorDetails 仅在需要时更新错误详情状态
 
 ### 数据访问优化
 
@@ -781,12 +933,14 @@ V2 设置系统在设计时充分考虑了性能优化：
 2. **懒加载组件**：非关键组件采用懒加载策略
 3. **事件防抖**：输入事件采用防抖处理减少重绘
 4. **条件渲染**：错误详情面板采用条件渲染避免不必要的 DOM 操作
+5. **状态复用**：useV2ErrorDetails 提供状态复用避免重复创建
 
 ### 错误处理性能优化
 
 1. **延迟初始化**：错误详情面板采用延迟初始化
 2. **内存管理**：及时清理错误详情状态避免内存泄漏
 3. **脱敏优化**：敏感信息脱敏采用高效的正则表达式匹配
+4. **统一管理**：通过 useV2ErrorDetails 统一管理错误详情状态，避免重复实例化
 
 ## 故障排除指南
 
@@ -834,6 +988,7 @@ V2 设置系统在设计时充分考虑了性能优化：
 2. 验证平台 API 凭据是否正确
 3. 查看错误详情面板中的完整诊断信息
 4. 复制错误详情并反馈给开发者
+5. 确认 useV2ErrorDetails 是否正确初始化和使用
 
 #### 错误详情无法复制
 
@@ -843,11 +998,24 @@ V2 设置系统在设计时充分考虑了性能优化：
 1. 检查浏览器的剪贴板权限设置
 2. 尝试刷新页面后重新打开错误详情
 3. 确认错误详情中没有包含被脱敏的敏感信息
-4. 联系技术支持获取进一步帮助
+4. 检查 useV2ErrorDetails 的 showErrorDetails 方法是否正确调用
+5. 联系技术支持获取进一步帮助
+
+#### useV2ErrorDetails 功能异常
+
+**问题描述**：useV2ErrorDetails 组合式函数工作不正常
+
+**解决步骤**：
+1. 检查 useV2ErrorDetails 是否正确导入和初始化
+2. 验证 showErrorDetails 方法的参数传递
+3. 确认敏感信息脱敏功能正常工作
+4. 检查错误详情状态的生命周期管理
+5. 查看相关单元测试是否通过
 
 **章节来源**
 - [useV2QuickPublish.ts:57-62](file://src/composables/v2/useV2QuickPublish.ts#L57-L62)
 - [useV2Settings.ts:172-185](file://src/composables/v2/useV2Settings.ts#L172-L185)
+- [useV2ErrorDetails.spec.ts:13-82](file://src/composables/v2/useV2ErrorDetails.spec.ts#L13-L82)
 
 ## 结论
 
@@ -859,8 +1027,8 @@ V2 设置组合式函数为 SiYuan 插件发布器提供了强大而灵活的设
 4. **优秀的性能表现**：优化的数据访问和状态更新策略
 5. **强大的诊断能力**：完整的错误详情展示和敏感信息脱敏处理
 
-**更新** 新增的平台配置验证和错误处理能力显著提升了系统的可用性和可靠性。通过完整的错误信息传递、用户友好的错误详情展示、以及敏感信息脱敏处理，用户现在可以获得更加准确和有用的错误反馈，大大提高了故障排查的效率。
+**更新** 新增的 useV2ErrorDetails 组合式函数显著提升了系统的错误处理能力和用户体验。该函数提供了统一的错误详情管理能力，集成了敏感信息脱敏处理，并通过完整的单元测试确保了功能的可靠性。
 
-这些改进不仅增强了用户体验，也为开发者提供了更好的调试和问题定位能力。完整的错误处理机制确保了系统在面对各种异常情况时都能保持稳定运行，并为用户提供清晰的故障信息和解决方案指导。
+通过 useV2ErrorDetails 的集成，平台配置验证和发布失败处理现在拥有了统一的错误详情展示机制，用户可以获取更加准确和有用的错误反馈，大大提高了故障排查的效率。完整的错误处理机制确保了系统在面对各种异常情况时都能保持稳定运行，并为用户提供清晰的故障信息和解决方案指导。
 
-该系统的成功实施为类似的内容发布工具提供了宝贵的参考经验，特别是在组合式 API 的应用、状态管理、平台扩展以及错误处理方面都具有重要的借鉴意义。
+这些改进不仅增强了用户体验，也为开发者提供了更好的调试和问题定位能力。统一的错误详情管理为类似的内容发布工具提供了宝贵的参考经验，特别是在组合式 API 的应用、状态管理、平台扩展以及错误处理方面都具有重要的借鉴意义。

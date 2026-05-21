@@ -15,6 +15,7 @@ import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { Deserializer, Serializer, XmlrpcUtil } from "simple-xmlrpc"
 import { sanitizeSensitiveForLog } from "~/src/utils/sensitiveLogSanitizer.ts"
+import { normalizeXmlrpcResponseText } from "~/src/utils/xmlrpcResponseUtil.ts"
 
 /**
  * 用于处理代理请求的自定义 hook
@@ -109,7 +110,8 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
    */
   const proxyXmlrpc = async (url: string, reqMethod: string, reqParams: any[], forceProxy: boolean = false) => {
     const body = serializer.serializeMethodCall(reqMethod, reqParams)
-    let resText: string = await proxyFetch(url, [], body, "POST", "text/xml", forceProxy, "base64")
+    const rawResponse = await proxyFetch(url, [], body, "POST", "text/xml", forceProxy, "base64", "text")
+    let resText = normalizeXmlrpcResponseText(rawResponse)
     resText = XmlrpcUtil.removeXmlHeader(resText)
     const deserializer = new Deserializer()
     const resJson = await deserializer.deserializeMethodResponse(resText)
