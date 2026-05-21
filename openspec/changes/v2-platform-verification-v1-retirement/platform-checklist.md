@@ -1,7 +1,7 @@
 # V2 全平台验证 Checklist（SSOT）
 
 > **唯一维护位置**：本文件（`openspec/changes/v2-platform-verification-v1-retirement/platform-checklist.md`）  
-> **更新**：2026-05-20  
+> **更新**：2026-05-21  
 > **代码依据**：`src/platforms/pre.ts`、`src/components/v2/settings/bridge/bridgeRegistry.ts`
 
 **状态图例**：`⬜` 未测 · `🟡` 进行中/部分 · `✅` 通过 · `⛔` 阻塞(插件) · `❌` 失败待修
@@ -71,7 +71,7 @@
 
 | # | 平台 | platformKey | subPlatformType | V2C | Pub | Upd | Del | Img | 备注 |
 |---|------|-------------|-----------------|-----|-----|-----|-----|-----|------|
-| 21 | 博客园 | `metaweblog_Cnblogs` | `Metaweblog_Cnblogs` | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | |
+| 21 | 博客园 | `metaweblog_Cnblogs` | `Metaweblog_Cnblogs` | ✅ | ✅ | ✅ | ✅ | ✅ | V2 全链路已验（2026-05-21）；XML-RPC `proxyXmlrpc` |
 | 22 | Typecho | `metaweblog_Typecho` | `Metaweblog_Typecho` | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | |
 | 23 | Jvue | `metaweblog_Jvue` | `Metaweblog_Jvue` | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | |
 | 24 | Metaweblog 通用 | `metaweblog_*` | `Metaweblog_Metaweblog` | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | 有 V2 bridge |
@@ -96,7 +96,7 @@
 |---|------|-------------|-----------------|-----|-----|-----|-----|-----|------|
 | 29 | 本地系统 | `fs_LocalSystem` | `Fs_LocalSystem` | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | 仅 Electron |
 
-**T1 小结**：29 项 · 通过 `1` · 阻塞 `0` · 未测 `28`
+**T1 小结**：29 项 · 全链路 ✅ `3`（#1 #21 #27）· 阻塞 `0` · 未测 `26`
 
 ---
 
@@ -143,3 +143,4 @@
 | 日期 | 说明 |
 |------|------|
 | 2026-05-20 | OpenSpec SSOT 初版；#1 语雀 API、#27 语雀网页版 已 ✅ |
+| 2026-05-21 | #21 博客园 T1 全链路 ✅（V2C/Pub/Upd/Del/Img，用户手测） |

@@ -19,6 +19,8 @@
 - [ ] 1.3 #6–#13 Github 八项
 - [ ] 1.4 #14–#20 Gitlab 七项
 - [ ] 1.5 #21–#24 Metaweblog 四项
+  - [x] 1.5a #21 博客园 `metaweblog_Cnblogs` — T1 全链路 ✅（2026-05-21，用户手测）
+  - [ ] 1.5b #22–#24 Typecho、Jvue、Metaweblog 通用
 - [ ] 1.6 #25–#26 Wordpress 两项
 - [x] 1.7a #27 语雀网页版 `custom_Yuqueweb`（V2C/Pub/Upd/Del/Img 已验通过）
 - [ ] 1.7b #28 Halo网页版
@@ -46,4 +48,6 @@
 ## 修复 backlog（按需追加）
 
 _验收中发现的问题在此登记，完成后勾选并回写 checklist。_
+
+- [x] **#21 博客园 V2C**：MetaWeblog XML-RPC — `indexOf` / `non-text response`；`zhi-blog-api@1.79.0` + `proxyXmlrpc` 专用层（见 `.planning/2026-05-21-cnblogs-xmlrpc-response-text/`）
 
