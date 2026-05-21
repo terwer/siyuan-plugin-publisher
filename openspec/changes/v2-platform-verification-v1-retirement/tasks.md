@@ -22,6 +22,8 @@
   - [x] 1.5a #21 博客园 `metaweblog_Cnblogs` — T1 全链路 ✅（2026-05-21，用户手测）
   - [ ] 1.5b #22–#24 Typecho、Jvue、Metaweblog 通用
 - [ ] 1.6 #25–#26 Wordpress 两项
+  - [x] 1.6a #25 Wordpress `wordpress_Wordpress` — T1 全链路 ✅（2026-05-21，本地 WP，用户手测）
+  - [ ] 1.6b #26 Wordpress.com
 - [x] 1.7a #27 语雀网页版 `custom_Yuqueweb`（V2C/Pub/Upd/Del/Img 已验通过）
 - [ ] 1.7b #28 Halo网页版
 - [ ] 1.8 #29 本地系统（Electron）

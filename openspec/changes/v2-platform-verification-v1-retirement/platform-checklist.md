@@ -80,7 +80,7 @@
 
 | # | 平台 | platformKey | subPlatformType | V2C | Pub | Upd | Del | Img | 备注 |
 |---|------|-------------|-----------------|-----|-----|-----|-----|-----|------|
-| 25 | Wordpress | `wordpress_Wordpress` | `Wordpress_Wordpress` | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | |
+| 25 | Wordpress | `wordpress_Wordpress` | `Wordpress_Wordpress` | ✅ | ✅ | ✅ | ✅ | ✅ | 本地 WP V2 全链路已验（2026-05-21）；`plugin-node-fetch` |
 | 26 | Wordpress.com | `wordpress_Wordpressdotcom` | `Wordpress_Wordpressdotcom` | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | |
 
 ### Custom — V2 网页样板（2）
@@ -96,7 +96,7 @@
 |---|------|-------------|-----------------|-----|-----|-----|-----|-----|------|
 | 29 | 本地系统 | `fs_LocalSystem` | `Fs_LocalSystem` | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | 仅 Electron |
 
-**T1 小结**：29 项 · 全链路 ✅ `3`（#1 #21 #27）· 阻塞 `0` · 未测 `26`
+**T1 小结**：29 项 · 全链路 ✅ `4`（#1 #21 #25 #27）· 阻塞 `0` · 未测 `25`
 
 ---
 
@@ -144,3 +144,4 @@
 |------|------|
 | 2026-05-20 | OpenSpec SSOT 初版；#1 语雀 API、#27 语雀网页版 已 ✅ |
 | 2026-05-21 | #21 博客园 T1 全链路 ✅（V2C/Pub/Upd/Del/Img，用户手测） |
+| 2026-05-21 | #25 Wordpress 本地 T1 全链路 ✅；XML-RPC `plugin-node-fetch` |

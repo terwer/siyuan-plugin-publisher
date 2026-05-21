@@ -13,6 +13,8 @@
 - [useVueI18n.ts](file://src/composables/useVueI18n.ts)
 - [useVueRouter.ts](file://src/composables/useVueRouter.ts)
 - [useSiyuanDevice.ts](file://src/composables/useSiyuanDevice.ts)
+- [xmlrpcTransport.ts](file://src/utils/xmlrpcTransport.ts)
+- [xmlrpcResponseUtil.ts](file://src/utils/xmlrpcResponseUtil.ts)
 - [IPublishCfg.ts](file://src/types/IPublishCfg.ts)
 - [methodEnum.ts](file://src/models/methodEnum.ts)
 - [dynamicConfig.ts](file://src/platforms/dynamicConfig.ts)
@@ -36,6 +38,7 @@
 
 ## 项目结构
 - Composables 位于 src/composables，按功能域划分：发布、配置、思源 API、AI、图片桥接、平台定义、代理、计时器、国际化、路由、设备检测等。
+- 工具模块位于 src/utils，包含新的三层XML-RPC传输架构：xmlrpcTransport.ts、xmlrpcResponseUtil.ts。
 - 类型与模型位于 src/types 与 src/models，平台动态配置位于 src/platforms。
 - 状态存储位于 src/stores，如发布设置存储。
 
@@ -53,6 +56,10 @@ H["useLoadingTimer.ts"]
 I["useVueI18n.ts"]
 J["useVueRouter.ts"]
 K["useSiyuanDevice.ts"]
+end
+subgraph "工具模块"
+UT["xmlrpcTransport.ts"]
+UR["xmlrpcResponseUtil.ts"]
 end
 subgraph "类型与模型"
 T1["IPublishCfg.ts"]
@@ -76,74 +83,48 @@ D --> S1
 E --> C
 F --> T3
 G --> C
+G --> UT
+G --> UR
 H --> A
 I --> A
 J --> A
 K --> C
 ```
 
-图表来源
+**图表来源**
 - [usePublish.ts:1-560](file://src/composables/usePublish.ts#L1-L560)
 - [usePublishConfig.ts:1-99](file://src/composables/usePublishConfig.ts#L1-L99)
 - [useSiyuanApi.ts:1-76](file://src/composables/useSiyuanApi.ts#L1-L76)
 - [useChatGPT.ts:1-130](file://src/composables/useChatGPT.ts#L1-L130)
 - [usePicgoBridge.ts:1-153](file://src/composables/usePicgoBridge.ts#L1-L153)
 - [usePlatformDefine.ts:1-83](file://src/composables/usePlatformDefine.ts#L1-L83)
-- [useProxy.ts:1-321](file://src/composables/useProxy.ts#L1-L321)
+- [useProxy.ts:1-359](file://src/composables/useProxy.ts#L1-L359)
 - [useLoadingTimer.ts:1-56](file://src/composables/useLoadingTimer.ts#L1-L56)
 - [useVueI18n.ts:1-26](file://src/composables/useVueI18n.ts#L1-L26)
 - [useVueRouter.ts:1-19](file://src/composables/useVueRouter.ts#L1-L19)
 - [useSiyuanDevice.ts:1-83](file://src/composables/useSiyuanDevice.ts#L1-L83)
-- [IPublishCfg.ts:1-50](file://src/types/IPublishCfg.ts#L1-L50)
-- [methodEnum.ts:1-24](file://src/models/methodEnum.ts#L1-L24)
-- [dynamicConfig.ts:1-534](file://src/platforms/dynamicConfig.ts#L1-L534)
-- [usePublishSettingStore.ts:1-95](file://src/stores/usePublishSettingStore.ts#L1-L95)
-
-章节来源
-- [usePublish.ts:1-560](file://src/composables/usePublish.ts#L1-L560)
-- [usePublishConfig.ts:1-99](file://src/composables/usePublishConfig.ts#L1-L99)
-- [useSiyuanApi.ts:1-76](file://src/composables/useSiyuanApi.ts#L1-L76)
-- [useChatGPT.ts:1-130](file://src/composables/useChatGPT.ts#L1-L130)
-- [usePicgoBridge.ts:1-153](file://src/composables/usePicgoBridge.ts#L1-L153)
-- [usePlatformDefine.ts:1-83](file://src/composables/usePlatformDefine.ts#L1-L83)
-- [useProxy.ts:1-321](file://src/composables/useProxy.ts#L1-L321)
-- [useLoadingTimer.ts:1-56](file://src/composables/useLoadingTimer.ts#L1-L56)
-- [useVueI18n.ts:1-26](file://src/composables/useVueI18n.ts#L1-L26)
-- [useVueRouter.ts:1-19](file://src/composables/useVueRouter.ts#L1-L19)
-- [useSiyuanDevice.ts:1-83](file://src/composables/useSiyuanDevice.ts#L1-L83)
+- [xmlrpcTransport.ts:1-80](file://src/utils/xmlrpcTransport.ts#L1-L80)
+- [xmlrpcResponseUtil.ts:1-188](file://src/utils/xmlrpcResponseUtil.ts#L1-L188)
 - [IPublishCfg.ts:1-50](file://src/types/IPublishCfg.ts#L1-L50)
 - [methodEnum.ts:1-24](file://src/models/methodEnum.ts#L1-L24)
 - [dynamicConfig.ts:1-534](file://src/platforms/dynamicConfig.ts#L1-L534)
 - [usePublishSettingStore.ts:1-95](file://src/stores/usePublishSettingStore.ts#L1-L95)
 
 ## 核心组件
-- 发布流程 Composable：统一处理“新增/编辑/删除/强制删除”、预处理、属性写入、元数据更新、预览链接生成与初始化合并。
+- 发布流程 Composable：统一处理"新增/编辑/删除/强制删除"、预处理、属性写入、元数据更新、预览链接生成与初始化合并。
 - 配置管理 Composable：加载发布配置、获取适配器 API、构建博客/网站适配器。
 - 思源 API Composable：封装 Siyuan Kernel/Blog API、设备检测、代理策略判断。
 - AI 相关 Composable：封装 ChatGPT 客户端、流式/非流式对话、输入裁剪与 HTML 转换。
 - 图片桥接 Composable：基于 PicGo 的图片上传与替换、图片项解析、图床服务类型判定。
 - 平台定义 Composable：平台类型与预设平台列表、平台键集合、平台类型查询。
-- 代理 Composable：通用代理 fetch、XML-RPC、CORS 代理、Siyuan 转发代理。
+- 代理 Composable：通用代理 fetch、XML-RPC、CORS 代理、Siyuan 转发代理。**已重构为三层XML-RPC传输架构**。
 - 计时器 Composable：组件加载计时器，配合响应式控制。
 - 国际化 Composable：CSP 友好翻译封装。
 - 路由 Composable：创建路由实例。
 - 设备检测 Composable：识别运行环境（主窗、挂件、浏览器、扩展）。
 
-章节来源
-- [usePublish.ts:44-557](file://src/composables/usePublish.ts#L44-L557)
-- [usePublishConfig.ts:26-95](file://src/composables/usePublishConfig.ts#L26-L95)
-- [useSiyuanApi.ts:20-75](file://src/composables/useSiyuanApi.ts#L20-L75)
-- [useChatGPT.ts:26-127](file://src/composables/useChatGPT.ts#L26-L127)
-- [usePicgoBridge.ts:25-150](file://src/composables/usePicgoBridge.ts#L25-L150)
-- [usePlatformDefine.ts:18-82](file://src/composables/usePlatformDefine.ts#L18-L82)
-- [useProxy.ts:27-318](file://src/composables/useProxy.ts#L27-L318)
-- [useLoadingTimer.ts:20-55](file://src/composables/useLoadingTimer.ts#L20-L55)
-- [useVueI18n.ts:16-25](file://src/composables/useVueI18n.ts#L16-L25)
-- [useVueRouter.ts:13-18](file://src/composables/useVueRouter.ts#L13-L18)
-- [useSiyuanDevice.ts:16-82](file://src/composables/useSiyuanDevice.ts#L16-L82)
-
 ## 架构总览
-下图展示 Composables 间的主要依赖与协作关系，以及与外部系统的交互（适配器、平台动态配置、Pinia 存储、设备检测、代理层）。
+下图展示 Composables 间的主要依赖与协作关系，以及与外部系统的交互（适配器、平台动态配置、Pinia 存储、设备检测、代理层）。**新增三层XML-RPC传输架构**。
 
 ```mermaid
 graph TB
@@ -167,6 +148,10 @@ UVI["useVueI18n"]
 UVR["useVueRouter"]
 USD["useSiyuanDevice"]
 ULT["useLoadingTimer"]
+end
+subgraph "XML-RPC传输层"
+XRT["xmlrpcTransport"]
+XRU["xmlrpcResponseUtil"]
 end
 subgraph "外部系统"
 AD["适配器(Adaptors)"]
@@ -195,17 +180,21 @@ USY --> USD
 UPB --> USY
 UCGPT --> UPS
 UPR --> USY
+UPR --> XRT
+UPR --> XRU
 UPL --> DC
 ```
 
-图表来源
+**图表来源**
 - [usePublish.ts:44-557](file://src/composables/usePublish.ts#L44-L557)
 - [usePublishConfig.ts:26-95](file://src/composables/usePublishConfig.ts#L26-L95)
 - [useSiyuanApi.ts:20-75](file://src/composables/useSiyuanApi.ts#L20-L75)
 - [useChatGPT.ts:26-127](file://src/composables/useChatGPT.ts#L26-L127)
 - [usePicgoBridge.ts:25-150](file://src/composables/usePicgoBridge.ts#L25-L150)
 - [usePlatformDefine.ts:18-82](file://src/composables/usePlatformDefine.ts#L18-L82)
-- [useProxy.ts:27-318](file://src/composables/useProxy.ts#L27-L318)
+- [useProxy.ts:27-359](file://src/composables/useProxy.ts#L27-L359)
+- [xmlrpcTransport.ts:12-80](file://src/utils/xmlrpcTransport.ts#L12-L80)
+- [xmlrpcResponseUtil.ts:124-188](file://src/utils/xmlrpcResponseUtil.ts#L124-L188)
 - [useLoadingTimer.ts:20-55](file://src/composables/useLoadingTimer.ts#L20-L55)
 - [useVueI18n.ts:16-25](file://src/composables/useVueI18n.ts#L16-L25)
 - [useVueRouter.ts:13-18](file://src/composables/useVueRouter.ts#L13-L18)
@@ -267,13 +256,13 @@ UP->>API : getPreviewUrl(newPostid)
 UP-->>Comp : 返回 {status, previewUrl, name, errMsg}
 ```
 
-图表来源
+**图表来源**
 - [usePublish.ts:70-212](file://src/composables/usePublish.ts#L70-L212)
 - [usePublishConfig.ts:73-78](file://src/composables/usePublishConfig.ts#L73-L78)
 - [useSiyuanApi.ts:42-43](file://src/composables/useSiyuanApi.ts#L42-L43)
 - [usePublishSettingStore.ts:55-59](file://src/stores/usePublishSettingStore.ts#L55-L59)
 
-章节来源
+**章节来源**
 - [usePublish.ts:44-557](file://src/composables/usePublish.ts#L44-L557)
 - [IPublishCfg.ts:21-47](file://src/types/IPublishCfg.ts#L21-L47)
 - [methodEnum.ts:13-23](file://src/models/methodEnum.ts#L13-L23)
@@ -305,12 +294,12 @@ ReturnBase --> End(["返回"])
 BuildRet --> End
 ```
 
-图表来源
+**图表来源**
 - [usePublishConfig.ts:36-64](file://src/composables/usePublishConfig.ts#L36-L64)
 - [IPublishCfg.ts:21-47](file://src/types/IPublishCfg.ts#L21-L47)
 - [dynamicConfig.ts:336-392](file://src/platforms/dynamicConfig.ts#L336-L392)
 
-章节来源
+**章节来源**
 - [usePublishConfig.ts:26-95](file://src/composables/usePublishConfig.ts#L26-L95)
 - [IPublishCfg.ts:14-47](file://src/types/IPublishCfg.ts#L14-L47)
 - [dynamicConfig.ts:456-463](file://src/platforms/dynamicConfig.ts#L456-L463)
@@ -330,7 +319,7 @@ BuildRet --> End
   - 优先使用 Kernel API 进行属性读写，Blog API 用于文章读取。
   - 根据 isUseSiyuanProxy 决定是否走代理。
 
-章节来源
+**章节来源**
 - [useSiyuanApi.ts:20-75](file://src/composables/useSiyuanApi.ts#L20-L75)
 - [useSiyuanDevice.ts:16-82](file://src/composables/useSiyuanDevice.ts#L16-L82)
 
@@ -349,7 +338,7 @@ BuildRet --> End
   - 流式传输时处理 stream 场景，非流式时取 text 字段。
   - 参数优先使用偏好设置，必要时通过 opts 覆盖。
 
-章节来源
+**章节来源**
 - [useChatGPT.ts:26-127](file://src/composables/useChatGPT.ts#L26-L127)
 
 ### 图片桥接 Composable：usePicgoBridge
@@ -368,7 +357,7 @@ BuildRet --> End
   - 仅当存在图片时才触发上传，避免无效请求。
   - 优先使用已安装的 PicGo 插件，否则回退到内置图床。
 
-章节来源
+**章节来源**
 - [usePicgoBridge.ts:25-150](file://src/composables/usePicgoBridge.ts#L25-L150)
 
 ### 平台定义 Composable：usePlatformDefine
@@ -385,28 +374,66 @@ BuildRet --> End
   - 通过 getPrePlatformList 按类型筛选平台。
   - 使用 getAllPrePlatformList 构建全量平台列表。
 
-章节来源
+**章节来源**
 - [usePlatformDefine.ts:18-82](file://src/composables/usePlatformDefine.ts#L18-L82)
 - [dynamicConfig.ts:13-534](file://src/platforms/dynamicConfig.ts#L13-L534)
 
-### 代理 Composable：useProxy
-- 作用：统一代理请求，支持 Siyuan 转发代理、中间件代理、CORS 代理、XML-RPC。
+### 代理 Composable：useProxy **（已重构）**
+- 作用：统一代理请求，支持 Siyuan 转发代理、中间件代理、CORS 代理、XML-RPC。**采用三层XML-RPC传输架构**。
 - 关键函数
   - proxyFetch(url, headers, params, method, contentType, forceProxy, payloadEncoding, responseEncoding)：通用代理 fetch。
-  - proxyXmlrpc(url, reqMethod, reqParams, forceProxy)：XML-RPC 调用。
+  - **proxyXmlrpc(url, reqMethod, reqParams, forceProxy)**：**重构为三层XML-RPC传输架构**。
   - corsFetch(url, headers, params, method)：CORS 代理。
   - siyuanProxyFetch(...)：Siyuan 转发代理实现。
+- **XML-RPC传输架构**（三层设计）
+  - **选型层**：resolveXmlrpcTransport - 仅决定走哪条通道
+  - **执行层**：executeXmlrpcTransport - 注入 handler，统一出口为 XML 字符串
+  - **响应层**：normalizeXmlrpcResponseText - 仅处理包装对象/base64，不掺路由逻辑
+- **通道优先级**
+  1. plugin-node-fetch — canUsePluginFetch（win.require）
+  2. siyuan-forward-proxy — 无直传 + 需代理 + 非回环
+  3. middleware-fetch — 浏览器 CORS 回退
 - 依赖
   - useSiyuanApi：获取 isUseSiyuanProxy 与 kernelApi。
   - CommonFetchClient：中间件代理。
+  - **xmlrpcTransport.ts**：**新增** 三层XML-RPC传输选型。
+  - **xmlrpcResponseUtil.ts**：**新增** XML-RPC响应规范化。
 - 使用模式
   - 在 Metaweblog/WordPress 等需要跨域或反爬的场景使用。
+  - **XML-RPC调用通过proxyXmlrpc自动选择最优传输通道**。
 - 最佳实践
   - 根据 isUseSiyuanProxy 自动切换代理路径。
-  - XML-RPC 使用 proxyXmlrpc，避免手动序列化。
+  - **XML-RPC使用proxyXmlrpc，内部通过resolveXmlrpcTransport和executeXmlrpcTransport自动处理**。
+  - **回环/私网目标永不走forwardProxy（内核禁止[::1]等）**。
 
-章节来源
-- [useProxy.ts:27-318](file://src/composables/useProxy.ts#L27-L318)
+```mermaid
+flowchart TD
+subgraph "XML-RPC三层传输架构"
+A["resolveXmlrpcTransport<br/>选型层"] --> B["executeXmlrpcTransport<br/>执行层"]
+B --> C["normalizeXmlrpcResponseText<br/>响应层"]
+end
+subgraph "传输通道"
+D["plugin-node-fetch<br/>直传"]
+E["siyuan-forward-proxy<br/>思源转发"]
+F["middleware-fetch<br/>中间件回退"]
+end
+A --> D
+A --> E
+A --> F
+B --> D
+B --> E
+B --> F
+C --> G["XML字符串"]
+```
+
+**图表来源**
+- [xmlrpcTransport.ts:38-76](file://src/utils/xmlrpcTransport.ts#L38-L76)
+- [xmlrpcResponseUtil.ts:124-157](file://src/utils/xmlrpcResponseUtil.ts#L124-L157)
+
+**章节来源**
+- [useProxy.ts:27-359](file://src/composables/useProxy.ts#L27-L359)
+- [xmlrpcTransport.ts:12-80](file://src/utils/xmlrpcTransport.ts#L12-L80)
+- [xmlrpcResponseUtil.ts:124-188](file://src/utils/xmlrpcResponseUtil.ts#L124-L188)
 
 ### 计时器 Composable：useLoadingTimer
 - 作用：组件加载计时器，配合响应式控制开始/停止。
@@ -418,7 +445,7 @@ BuildRet --> End
 - 最佳实践
   - 与 isTimerInit 响应式绑定，避免重复计时。
 
-章节来源
+**章节来源**
 - [useLoadingTimer.ts:20-55](file://src/composables/useLoadingTimer.ts#L20-L55)
 
 ### 国际化 Composable：useVueI18n
@@ -430,7 +457,7 @@ BuildRet --> End
 - 最佳实践
   - 作为 i18n 的轻量封装，避免在模板中直接访问 messages。
 
-章节来源
+**章节来源**
 - [useVueI18n.ts:16-25](file://src/composables/useVueI18n.ts#L16-L25)
 
 ### 路由 Composable：useVueRouter
@@ -442,7 +469,7 @@ BuildRet --> End
 - 最佳实践
   - 与 Hash History 配合，适配不同运行环境。
 
-章节来源
+**章节来源**
 - [useVueRouter.ts:13-18](file://src/composables/useVueRouter.ts#L13-L18)
 
 ### 设备检测 Composable：useSiyuanDevice
@@ -454,18 +481,20 @@ BuildRet --> End
 - 最佳实践
   - 在条件渲染与代理开关中统一使用。
 
-章节来源
+**章节来源**
 - [useSiyuanDevice.ts:16-82](file://src/composables/useSiyuanDevice.ts#L16-L82)
 
 ## 依赖分析
 - 组件耦合
   - usePublish 与 usePublishConfig、useSiyuanApi、usePublishSettingStore 高度耦合，构成发布主干。
   - usePicgoBridge 依赖 useSiyuanApi，形成媒体处理链路。
-  - useProxy 为底层代理能力，被 useSiyuanApi 与部分平台适配器间接使用。
+  - **useProxy 为底层代理能力，被 useSiyuanApi 与部分平台适配器间接使用**。
+  - **useProxy 现在依赖新的 xmlrpcTransport 和 xmlrpcResponseUtil 工具模块**。
 - 外部依赖
   - 适配器工厂（Adaptors）：动态创建平台 API。
   - Pinia 存储：发布设置、偏好设置、平台元数据。
   - 设备检测库：运行环境识别。
+  - **XML-RPC传输工具：xmlrpcTransport、xmlrpcResponseUtil**。
 - 循环依赖
   - 当前设计未见循环依赖，各 Composable 通过明确的依赖注入与返回值解耦。
 
@@ -478,26 +507,32 @@ UPC --> UPS
 USY --> USD["useSiyuanDevice"]
 UPB["usePicgoBridge"] --> USY
 UPR["useProxy"] --> USY
+UPR --> XRT["xmlrpcTransport"]
+UPR --> XRU["xmlrpcResponseUtil"]
 UCGPT["useChatGPT"] --> UPS
 UPL["usePlatformDefine"] --> DC["dynamicConfig"]
 ```
 
-图表来源
+**图表来源**
 - [usePublish.ts:48-52](file://src/composables/usePublish.ts#L48-L52)
 - [usePublishConfig.ts:27-28](file://src/composables/usePublishConfig.ts#L27-L28)
 - [useSiyuanApi.ts:22-23](file://src/composables/useSiyuanApi.ts#L22-L23)
 - [usePicgoBridge.ts:27](file://src/composables/usePicgoBridge.ts#L27)
-- [useProxy.ts:29](file://src/composables/useProxy.ts#L29)
+- [useProxy.ts:19](file://src/composables/useProxy.ts#L19)
+- [xmlrpcTransport.ts:10](file://src/utils/xmlrpcTransport.ts#L10)
+- [xmlrpcResponseUtil.ts:10](file://src/utils/xmlrpcResponseUtil.ts#L10)
 - [useSiyuanDevice.ts:16](file://src/composables/useSiyuanDevice.ts#L16)
 - [usePlatformDefine.ts:19](file://src/composables/usePlatformDefine.ts#L19)
 - [dynamicConfig.ts:13](file://src/platforms/dynamicConfig.ts#L13)
 
-章节来源
+**章节来源**
 - [usePublish.ts:44-557](file://src/composables/usePublish.ts#L44-L557)
 - [usePublishConfig.ts:26-95](file://src/composables/usePublishConfig.ts#L26-L95)
 - [useSiyuanApi.ts:20-75](file://src/composables/useSiyuanApi.ts#L20-L75)
 - [usePicgoBridge.ts:25-150](file://src/composables/usePicgoBridge.ts#L25-L150)
-- [useProxy.ts:27-318](file://src/composables/useProxy.ts#L27-L318)
+- [useProxy.ts:27-359](file://src/composables/useProxy.ts#L27-L359)
+- [xmlrpcTransport.ts:12-80](file://src/utils/xmlrpcTransport.ts#L12-L80)
+- [xmlrpcResponseUtil.ts:124-188](file://src/utils/xmlrpcResponseUtil.ts#L124-L188)
 - [usePlatformDefine.ts:18-82](file://src/composables/usePlatformDefine.ts#L18-L82)
 - [dynamicConfig.ts:13-534](file://src/platforms/dynamicConfig.ts#L13-L534)
 
@@ -506,6 +541,8 @@ UPL["usePlatformDefine"] --> DC["dynamicConfig"]
 - 数据克隆：发布前深拷贝 Post，避免副作用影响原始数据。
 - 去重与最小化请求：批量合并标签/分类时去重，仅在存在图片时触发上传。
 - 代理策略：根据 isUseSiyuanProxy 自动选择最优代理路径，减少跨域问题。
+- **XML-RPC传输优化**：**三层架构自动选择最优传输通道，避免手动if-chain逻辑**。
+- **直传优先**：**有插件直传能力时一律直连，避免套思源forwardProxy**。
 - 计时器：使用 useLoadingTimer 监控关键阶段耗时，定位性能瓶颈。
 - 存储缓存：usePublishSettingStore 对设置进行缓存，减少频繁 IO。
 
@@ -522,19 +559,25 @@ UPL["usePlatformDefine"] --> DC["dynamicConfig"]
 - 代理异常
   - 切换 isUseSiyuanProxy 或使用 corsFetch/proxyXmlrpc。
   - 核对环境变量与中间件配置。
+  - **检查XML-RPC传输通道选择**：查看日志中的XML-RPC transport => 通道名。
+- **XML-RPC传输异常**
+  - **检查回环/私网目标**：内核forwardProxy阻止loopback/private targets。
+  - **验证直传能力**：canUsePluginFetch是否为true。
+  - **查看normalizeXmlrpcResponseText错误**：检查响应对象形状。
 - AI 对话异常
   - 检查 OPENAI_* 环境变量与 experimental* 偏好设置。
   - 流式传输时注意处理 stream 场景。
 
-章节来源
+**章节来源**
 - [usePublish.ts:195-203](file://src/composables/usePublish.ts#L195-L203)
 - [usePublish.ts:265-273](file://src/composables/usePublish.ts#L265-L273)
 - [usePicgoBridge.ts:71-74](file://src/composables/usePicgoBridge.ts#L71-L74)
-- [useProxy.ts:79-98](file://src/composables/useProxy.ts#L79-L98)
+- [useProxy.ts:116-142](file://src/composables/useProxy.ts#L116-L142)
+- [xmlrpcResponseUtil.ts:140-157](file://src/utils/xmlrpcResponseUtil.ts#L140-L157)
 - [useChatGPT.ts:105-109](file://src/composables/useChatGPT.ts#L105-L109)
 
 ## 结论
-本项目的 Composables API 以“发布主干 + 配置/适配器 + 思源 API + 代理/媒体/AI 工具”的分层设计实现，既保证了发布流程的统一与可扩展，又提供了灵活的平台适配与运行环境适配能力。通过 Pinia 存储与设备检测等工具，进一步提升了跨环境一致性与可维护性。建议在实际使用中遵循“延迟初始化、最小化副作用、合理缓存与去重”的原则，以获得更优的性能与稳定性。
+本项目的 Composables API 以"发布主干 + 配置/适配器 + 思源 API + 代理/媒体/AI 工具"的分层设计实现，既保证了发布流程的统一与可扩展，又提供了灵活的平台适配与运行环境适配能力。**最新的XML-RPC传输架构重构实现了三层传输选型、执行和响应处理，显著提升了代码可维护性和传输效率**。通过 Pinia 存储与设备检测等工具，进一步提升了跨环境一致性与可维护性。建议在实际使用中遵循"延迟初始化、最小化副作用、合理缓存与去重、利用三层传输架构"的原则，以获得更优的性能与稳定性。
 
 ## 附录
 - 类型与模型
@@ -543,9 +586,14 @@ UPL["usePlatformDefine"] --> DC["dynamicConfig"]
   - DynamicConfig/PlatformType/SubPlatformType：平台动态配置与类型体系。
 - 存储
   - usePublishSettingStore：发布设置持久化与读写。
+- **XML-RPC传输工具**
+  - **xmlrpcTransport.ts**：三层XML-RPC传输选型与执行。
+  - **xmlrpcResponseUtil.ts**：XML-RPC响应规范化处理。
 
-章节来源
+**章节来源**
 - [IPublishCfg.ts:21-47](file://src/types/IPublishCfg.ts#L21-L47)
 - [methodEnum.ts:13-23](file://src/models/methodEnum.ts#L13-L23)
 - [dynamicConfig.ts:13-534](file://src/platforms/dynamicConfig.ts#L13-L534)
 - [usePublishSettingStore.ts:21-94](file://src/stores/usePublishSettingStore.ts#L21-L94)
+- [xmlrpcTransport.ts:12-80](file://src/utils/xmlrpcTransport.ts#L12-L80)
+- [xmlrpcResponseUtil.ts:124-188](file://src/utils/xmlrpcResponseUtil.ts#L124-L188)
