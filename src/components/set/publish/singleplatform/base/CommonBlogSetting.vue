@@ -14,6 +14,7 @@ import { BlogAdaptor, PageTypeEnum, PasswordType, PicbedServiceTypeEnum, UserBlo
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import Adaptors from "~/src/adaptors"
 import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
+import { V2_PLATFORM_CONFIG_ACTION_BRIDGE_KEY } from "~/src/components/v2/settings/bridge/platformConfigActionBridge.ts"
 import { usePicgoBridge } from "~/src/composables/usePicgoBridge.ts"
 import { useProxy } from "~/src/composables/useProxy.ts"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
@@ -24,7 +25,6 @@ import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
 import { Utils } from "~/src/utils/utils.ts"
-import { V2_PLATFORM_CONFIG_ACTION_BRIDGE_KEY } from "~/src/components/v2/settings/bridge/platformConfigActionBridge.ts"
 import { SypConfig } from "~/syp.config.ts"
 
 const logger = createAppLogger("commonblog-setting")
@@ -182,12 +182,19 @@ const valiConf = async () => {
     }
   }
 
+  const validationErrorDetail =
+    errMsg != null && String(errMsg).trim() !== "" ? String(errMsg) : t("setting.blog.vali.failed.check")
+
   if (!formData.cfg.apiStatus) {
-    const errMsg2 = t("setting.blog.vali.error") + `=>${errMsg.toString()}`
+    const errMsg2 = t("setting.blog.vali.error") + `=>${validationErrorDetail}`
     logger.error(errMsg2)
-    ElMessage.error(errMsg2)
+    if (!v2ActionBridge) {
+      ElMessage.error(errMsg2)
+    }
   } else {
-    ElMessage.success(t("main.opt.success"))
+    if (!v2ActionBridge) {
+      ElMessage.success(t("main.opt.success"))
+    }
   }
 
   // isAuth和apiStatus同步
@@ -201,7 +208,9 @@ const valiConf = async () => {
     apiStatus: formData.cfg.apiStatus,
     cfg: formData.cfg,
     dynCfg: formData.dynCfg,
-    errorMessage: errMsg ? errMsg.toString() : "",
+    errorMessage: !formData.cfg.apiStatus
+      ? t("setting.blog.vali.error") + `=>${validationErrorDetail}`
+      : "",
   })
 
   isLoading.value = false

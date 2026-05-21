@@ -167,6 +167,7 @@
           @cookie-authorized="handleCookieAuthorized"
           @validated="handleConfigValidated"
           @saved="handleConfigSaved"
+          @show-error-details="showLastConfigValidationError"
         />
 
         <V2PicBedSettings v-else-if="settings.state.section === 'picbed'" />
@@ -185,29 +186,31 @@
         :copy-success-text="t('main.copy.success')"
         :copy-failure-text="t('main.copy.failure')"
         :close-label="t('main.opt.ok')"
-        @close="hidePublishErrorDetails"
+        @close="hideErrorDetails"
       />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { v2MessageError, v2MessageSuccess, v2MessageWarning } from "~/src/composables/v2/v2FloatingUi.ts"
 import { computed, onMounted, ref } from "vue"
 import "~/src/assets/v2/base.styl"
 import SypErrorDetailsPanel from "~/src/components/v2/common/SypErrorDetailsPanel.vue"
 import SypTooltip from "~/src/components/v2/common/SypTooltip.vue"
 import UnifiedWorkspaceShell from "~/src/components/v2/layout/UnifiedWorkspaceShell.vue"
 import V2PlatformCard from "~/src/components/v2/publish/V2PlatformCard.vue"
+import { type V2PlatformConfigValidationResult } from "~/src/components/v2/settings/bridge/platformConfigActionBridge.ts"
 import V2AccountList from "~/src/components/v2/settings/V2AccountList.vue"
 import V2PicBedSettings from "~/src/components/v2/settings/V2PicBedSettings.vue"
 import V2PlatformConfigBridge from "~/src/components/v2/settings/V2PlatformConfigBridge.vue"
 import V2PlatformSelect from "~/src/components/v2/settings/V2PlatformSelect.vue"
 import V2PreferenceSettings from "~/src/components/v2/settings/V2PreferenceSettings.vue"
+import { useV2ErrorDetails } from "~/src/composables/v2/useV2ErrorDetails.ts"
 import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
-import { useV2QuickPublish } from "~/src/composables/v2/useV2QuickPublish.ts"
 import { useV2PublishValidation } from "~/src/composables/v2/useV2PublishValidation.ts"
+import { useV2QuickPublish } from "~/src/composables/v2/useV2QuickPublish.ts"
 import { useV2Settings } from "~/src/composables/v2/useV2Settings.ts"
+import { v2MessageError, v2MessageSuccess, v2MessageWarning } from "~/src/composables/v2/v2FloatingUi.ts"
 import LucideChevronLeft from "~icons/lucide/chevron-left"
 import LucideSend from "~icons/lucide/send"
 import LucideSettings from "~icons/lucide/settings"
@@ -228,12 +231,8 @@ const { t } = useV2I18n()
 const hasPlatforms = computed(() => quickPublish.hasPlatforms.value)
 const publishState = computed(() => quickPublish.state.publishState)
 const previewLinkMap = computed<Record<string, string>>(() => quickPublish.state.previewLinkMap)
-const errorDetailsState = ref({
-  visible: false,
-  title: "",
-  summary: "",
-  details: "",
-})
+const { errorDetailsState, showErrorDetails, hideErrorDetails, clearErrorDetails, reopenErrorDetails } =
+  useV2ErrorDetails()
 
 const panelTitle = computed(() => {
   return isSettingsView.value ? t("v2.app.panel.settings") : t("v2.app.panel.quickPublish")
@@ -420,16 +419,15 @@ function isFailed(item: (typeof quickPublish.state.platformItems)[number]) {
 }
 
 function showPublishErrorDetails() {
-  errorDetailsState.value = {
-    visible: true,
-    title: t("v2.quickPublish.errorDetails"),
-    summary: publishState.value.errMsg || t("v2.common.unknownError"),
-    details: publishState.value.errDetails || publishState.value.errMsg || t("v2.common.unknownError"),
-  }
+  showErrorDetails(
+    t("v2.quickPublish.errorDetails"),
+    publishState.value.errMsg || t("v2.common.unknownError"),
+    publishState.value.errDetails || publishState.value.errMsg || t("v2.common.unknownError")
+  )
 }
 
-function hidePublishErrorDetails() {
-  errorDetailsState.value.visible = false
+function showLastConfigValidationError() {
+  reopenErrorDetails()
 }
 
 async function handleToggleAccountEnabled(platformKey: string, nextEnabled: boolean) {
@@ -485,11 +483,20 @@ async function completeConfigIfPublishReady() {
   v2MessageWarning(validation.reason || t("v2.publishValidation.incomplete"))
 }
 
-async function handleConfigValidated(result: { ok: boolean }) {
+async function handleConfigValidated(result: V2PlatformConfigValidationResult) {
   await settings.loadAccountItems()
   await quickPublish.init()
   if (result.ok) {
+    hideErrorDetails()
+    clearErrorDetails()
     await completeConfigIfPublishReady()
+  } else {
+    const summary = result.errorMessage || t("v2.platformConfig.validation.failedGeneric")
+    showErrorDetails(
+      t("v2.platformConfig.validation.errorTitle"),
+      summary,
+      result.errorDetails || result.errorMessage || summary
+    )
   }
 }
 

@@ -25,14 +25,26 @@
 - [gitlabdocsifyConfig.ts](file://src/adaptors/api/gitlab-docsify/gitlabdocsifyConfig.ts)
 - [adaptors/index.ts](file://src/adaptors/index.ts)
 - [svgIcons.ts](file://src/utils/svgIcons.ts)
+- [SypErrorDetailsPanel.vue](file://src/components/v2/common/SypErrorDetailsPanel.vue)
+- [SypErrorDetailsPanel.spec.ts](file://src/components/v2/common/SypErrorDetailsPanel.spec.ts)
+- [V2App.vue](file://src/components/v2/V2App.vue)
+- [V2PlatformConfigBridge.vue](file://src/components/v2/settings/V2PlatformConfigBridge.vue)
+- [platformConfigActionBridge.ts](file://src/components/v2/settings/bridge/platformConfigActionBridge.ts)
+- [CommonBlogSetting.vue](file://src/components/set/publish/singleplatform/base/CommonBlogSetting.vue)
+- [sensitiveLogSanitizer.ts](file://src/utils/sensitiveLogSanitizer.ts)
+- [design.md](file://openspec/changes/expose-v2-platform-config-validation-errors/design.md)
+- [proposal.md](file://openspec/changes/expose-v2-platform-config-validation-errors/proposal.md)
+- [tasks.md](file://openspec/changes/expose-v2-platform-config-validation-errors/tasks.md)
+- [v2-hosted-error-details/spec.md](file://openspec/changes/expose-v2-platform-config-validation-errors/specs/v2-hosted-error-details/spec.md)
+- [v2-platform-config-validation-feedback/spec.md](file://openspec/changes/expose-v2-platform-config-validation-errors/specs/v2-platform-config-validation-feedback/spec.md)
 </cite>
 
 ## 更新摘要
 **变更内容**
-- 新增 Docsify 子平台类型支持，包括 GitHub 和 GitLab 两个子平台
-- 添加 Docsify 平台的配置初始化和图标显示功能
-- 实现 Docsify 适配器的平台注册和 API 调用支持
-- 完善 Docsify 平台的配置管理和存储机制
+- 新增平台配置验证错误详情面板，提供更详细的错误诊断信息
+- 替代之前的简单错误消息，实现统一的错误展示机制
+- 引入敏感信息脱敏处理，确保安全的错误信息展示
+- 建立完整的错误验证契约和事件透传机制
 
 ## 目录
 1. [简介](#简介)
@@ -40,11 +52,12 @@
 3. [核心组件](#核心组件)
 4. [架构概览](#架构概览)
 5. [详细组件分析](#详细组件分析)
-6. [Docsify 子平台支持](#docsify-子平台支持)
-7. [依赖关系分析](#依赖关系分析)
-8. [性能考虑](#性能考虑)
-9. [故障排除指南](#故障排除指南)
-10. [结论](#结论)
+6. [平台配置验证错误详情面板](#平台配置验证错误详情面板)
+7. [Docsify 子平台支持](#docsify-子平台支持)
+8. [依赖关系分析](#依赖关系分析)
+9. [性能考虑](#性能考虑)
+10. [故障排除指南](#故障排除指南)
+11. [结论](#结论)
 
 ## 简介
 
@@ -52,7 +65,7 @@
 
 系统采用模块化设计，通过动态配置管理、存储抽象层和适配器模式，实现了对不同平台配置的灵活支持。配置数据既可以在思源笔记环境中持久化存储，也可以在浏览器环境中使用本地存储。
 
-**更新** 新增 Docsify 子平台类型支持，包括 GitHub Docsify 和 GitLab Docsify 两个子平台，为静态网站生成器提供完整的发布支持。
+**更新** 新增平台配置验证错误详情面板功能，提供更详细的错误诊断信息，替代之前的简单错误消息。该功能基于 `SypErrorDetailsPanel` 组件，实现了统一的错误展示机制，支持敏感信息脱敏和可复制的诊断信息。
 
 ## 项目结构
 
@@ -85,6 +98,15 @@ U[docsifyApiAdaptor.ts] --> V[Docsify API 适配器]
 W[gitlabdocsifyApiAdaptor.ts] --> X[GitLab Docsify 适配器]
 Y[docsifyConfig.ts] --> Z[Docsify 配置]
 end
+subgraph "错误详情面板"
+AA[SypErrorDetailsPanel.vue] --> BB[V2App.vue]
+CC[V2PlatformConfigBridge.vue] --> AA
+DD[platformConfigActionBridge.ts] --> CC
+EE[CommonBlogSetting.vue] --> DD
+end
+subgraph "脱敏工具"
+FF[sensitiveLogSanitizer.ts] --> AA
+end
 A --> K
 B --> U
 E --> U
@@ -97,6 +119,8 @@ K --> U
 - [usePublishSettingStore.ts:1-95](file://src/stores/usePublishSettingStore.ts#L1-L95)
 - [docsifyApiAdaptor.ts:1-63](file://src/adaptors/api/docsify/docsifyApiAdaptor.ts#L1-L63)
 - [gitlabdocsifyApiAdaptor.ts:1-63](file://src/adaptors/api/gitlab-docsify/gitlabdocsifyApiAdaptor.ts#L1-L63)
+- [SypErrorDetailsPanel.vue:1-267](file://src/components/v2/common/SypErrorDetailsPanel.vue#L1-L267)
+- [V2App.vue:178-190](file://src/components/v2/V2App.vue#L178-L190)
 
 **章节来源**
 - [syp.config.ts:1-52](file://syp.config.ts#L1-L52)
@@ -161,18 +185,27 @@ N[WordPress平台] --> M
 O[自定义平台] --> M
 P[Docsify平台] --> M
 end
+subgraph "错误处理层"
+Q[平台配置验证] --> R[V2平台配置桥接]
+R --> S[错误详情面板]
+S --> T[敏感信息脱敏]
+end
 A --> D
 D --> H
 E --> L
 E --> N
 E --> O
 E --> P
+R --> Q
+S --> A
 ```
 
 **图表来源**
 - [usePublishConfig.ts:1-99](file://src/composables/usePublishConfig.ts#L1-L99)
 - [usePublishSettingStore.ts:1-95](file://src/stores/usePublishSettingStore.ts#L1-L95)
 - [dynamicConfig.ts:1-534](file://src/platforms/dynamicConfig.ts#L1-L534)
+- [V2PlatformConfigBridge.vue:1-264](file://src/components/v2/settings/V2PlatformConfigBridge.vue#L1-L264)
+- [SypErrorDetailsPanel.vue:1-267](file://src/components/v2/common/SypErrorDetailsPanel.vue#L1-L267)
 
 系统架构特点：
 
@@ -180,6 +213,7 @@ E --> P
 2. **抽象接口**: 统一的存储接口，支持多种存储后端
 3. **平台无关**: 通过适配器模式支持多种发布平台
 4. **响应式更新**: 基于Vue响应式的配置管理
+5. **错误处理**: 完整的错误处理和诊断机制
 
 ## 详细组件分析
 
@@ -373,6 +407,222 @@ L --> M[返回API对象]
 **章节来源**
 - [usePublishConfig.ts:1-99](file://src/composables/usePublishConfig.ts#L1-L99)
 
+## 平台配置验证错误详情面板
+
+**新增** 平台配置验证错误详情面板功能，提供详细的错误诊断信息，替代之前的简单错误消息。
+
+### 错误详情面板组件
+
+`SypErrorDetailsPanel` 是一个功能完整的错误详情展示组件，支持友好的错误摘要和详细的诊断信息：
+
+```mermaid
+classDiagram
+class SypErrorDetailsPanel {
++visible : boolean
++title : string
++summary : string
++details : string
++copyLabel : string
++copySuccessText : string
++copyFailureText : string
++closeLabel : string
++copyDetails() void
++copyWithFallback(text) Promise~void~
++resetCopyState() void
++markCopyState(state) void
+}
+class ErrorDetailsState {
++visible : boolean
++title : string
++summary : string
++details : string
+}
+SypErrorDetailsPanel --> ErrorDetailsState : manages
+```
+
+**图表来源**
+- [SypErrorDetailsPanel.vue:56-161](file://src/components/v2/common/SypErrorDetailsPanel.vue#L56-L161)
+
+错误详情面板的主要特性：
+
+1. **友好的用户界面**: 支持标题、摘要和详细信息的分层展示
+2. **可复制的诊断信息**: 提供一键复制功能，支持现代 Clipboard API 和回退方案
+3. **敏感信息脱敏**: 自动识别和脱敏 Cookie、Authorization、Token 等敏感字段
+4. **无障碍支持**: 支持键盘导航和屏幕阅读器
+5. **动画过渡**: 提供平滑的显示和隐藏动画效果
+
+### V2 应用程序集成
+
+`V2App` 组件集成了错误详情面板，作为统一的错误处理中心：
+
+```mermaid
+sequenceDiagram
+participant V2App as V2App组件
+participant ErrorPanel as 错误详情面板
+participant ConfigBridge as 平台配置桥接
+participant CommonBlog as V1表单
+V2App->>ErrorPanel : 设置可见状态
+ConfigBridge->>V2App : 验证结果
+V2App->>V2App : 处理失败结果
+V2App->>ErrorPanel : 设置错误详情
+ConfigBridge->>CommonBlog : 触发验证
+CommonBlog->>ConfigBridge : 返回错误信息
+ConfigBridge->>V2App : 转发完整结果
+V2App->>ErrorPanel : 打开详情面板
+```
+
+**图表来源**
+- [V2App.vue:178-190](file://src/components/v2/V2App.vue#L178-L190)
+- [V2PlatformConfigBridge.vue:147-153](file://src/components/v2/settings/V2PlatformConfigBridge.vue#L147-L153)
+
+V2 应用程序的错误处理流程：
+
+1. **统一调度**: 所有验证失败都由 `V2App` 统一处理
+2. **状态管理**: 维护 `errorDetailsState` 来跟踪错误状态
+3. **面板展示**: 自动打开共享的错误详情面板
+4. **生命周期管理**: 自动清理和重置错误状态
+
+### 平台配置桥接层
+
+`V2PlatformConfigBridge` 负责桥接 V1 表单和 V2 应用程序：
+
+```mermaid
+classDiagram
+class V2PlatformConfigBridge {
++platformKey : string
++platformName : string
++state : BridgeState
++bridgeComponent : Component
++handleFormValidated(result) void
++handleFormSaved(result) void
++loadBridgeMeta() Promise~void~
+}
+class BridgeState {
++isLoading : boolean
++errorMessage : string
++subtype : SubPlatformType
+}
+class V2PlatformConfigActionBridge {
++onValidated(result) void
++onSaved(result) void
+}
+V2PlatformConfigBridge --> BridgeState : manages
+V2PlatformConfigBridge --> V2PlatformConfigActionBridge : provides
+```
+
+**图表来源**
+- [V2PlatformConfigBridge.vue:65-154](file://src/components/v2/settings/V2PlatformConfigBridge.vue#L65-L154)
+- [platformConfigActionBridge.ts:12-19](file://src/components/v2/settings/bridge/platformConfigActionBridge.ts#L12-L19)
+
+桥接层的关键功能：
+
+1. **动态组件加载**: 根据平台类型动态加载对应的 V1 表单组件
+2. **事件透传**: 完整转发验证和保存事件，不剥离任何字段
+3. **状态管理**: 管理加载状态和错误信息显示
+4. **注入提供**: 通过依赖注入提供 V2 平台配置动作桥接
+
+### V1 表单集成
+
+`CommonBlogSetting` 组件集成了新的验证事件契约：
+
+```mermaid
+flowchart TD
+A[表单验证开始] --> B[执行认证检查]
+B --> C{验证成功?}
+C --> |是| D[标记成功状态]
+C --> |否| E[收集错误信息]
+E --> F[抑制全局Toast]
+F --> G[触发验证事件]
+G --> H{V2桥接存在?}
+H --> |是| I[通过桥接转发]
+H --> |否| J[直接触发事件]
+I --> K[等待V2处理]
+J --> K
+K --> L[更新表单状态]
+L --> M[保存配置]
+```
+
+**图表来源**
+- [CommonBlogSetting.vue:143-200](file://src/components/set/publish/singleplatform/base/CommonBlogSetting.vue#L143-L200)
+
+V1 表单的改进：
+
+1. **完整事件载荷**: 传递 `errorMessage` 和 `errorDetails` 字段
+2. **条件 Toast**: 在 V2 桥接模式下抑制全局 Toast
+3. **双向兼容**: 保持与 V1 独立设置页面的兼容性
+4. **错误状态同步**: 同步 `apiStatus` 和 `isAuth` 状态
+
+### 敏感信息脱敏
+
+系统使用 `sensitiveLogSanitizer` 工具进行敏感信息脱敏：
+
+```mermaid
+classDiagram
+class SensitiveLogSanitizer {
++sanitizeSensitiveForLog(input) any
++sanitizeCookieArrayForLog(cookies) any[]
+}
+class RedactionPatterns {
++SENSITIVE_KEY_RE : RegExp
++SENSITIVE_QUERY_RE : RegExp
++SENSITIVE_PAIR_RE : RegExp
+}
+SensitiveLogSanitizer --> RedactionPatterns : uses
+```
+
+**图表来源**
+- [sensitiveLogSanitizer.ts:12-62](file://src/utils/sensitiveLogSanitizer.ts#L12-L62)
+
+脱敏策略：
+
+1. **多层脱敏**: 支持查询参数、头部字段和 JSON 对象的递归脱敏
+2. **安全保护**: 自动识别 Cookie、Authorization、Token 等敏感字段
+3. **一致性**: 与发布链路的脱敏策略保持一致
+4. **性能优化**: 避免不必要的字符串操作
+
+### 错误验证契约
+
+系统定义了标准的 `V2PlatformConfigValidationResult` 契约：
+
+```mermaid
+classDiagram
+class V2PlatformConfigValidationResult {
++ok : boolean
++apiStatus? : boolean
++errorMessage? : string
++errorDetails? : string
+}
+class ValidationContract {
++defineContract() V2PlatformConfigValidationResult
++validatePayload(result) boolean
++extractErrorMessage(result) string
+}
+V2PlatformConfigValidationResult --> ValidationContract : implements
+```
+
+**图表来源**
+- [platformConfigActionBridge.ts:12-15](file://src/components/v2/settings/bridge/platformConfigActionBridge.ts#L12-L15)
+
+契约要求：
+
+1. **必需字段**: `ok` 字段必须始终存在
+2. **可选字段**: `apiStatus`、`errorMessage`、`errorDetails` 可选
+3. **类型安全**: TypeScript 接口确保类型一致性
+4. **向后兼容**: 保持与现有代码的兼容性
+
+**章节来源**
+- [SypErrorDetailsPanel.vue:1-267](file://src/components/v2/common/SypErrorDetailsPanel.vue#L1-L267)
+- [V2App.vue:178-190](file://src/components/v2/V2App.vue#L178-L190)
+- [V2PlatformConfigBridge.vue:1-264](file://src/components/v2/settings/V2PlatformConfigBridge.vue#L1-L264)
+- [platformConfigActionBridge.ts:1-20](file://src/components/v2/settings/bridge/platformConfigActionBridge.ts#L1-L20)
+- [CommonBlogSetting.vue:1-200](file://src/components/set/publish/singleplatform/base/CommonBlogSetting.vue#L1-L200)
+- [sensitiveLogSanitizer.ts:1-63](file://src/utils/sensitiveLogSanitizer.ts#L1-L63)
+- [design.md:16-31](file://openspec/changes/expose-v2-platform-config-validation-errors/design.md#L16-L31)
+- [proposal.md:13-31](file://openspec/changes/expose-v2-platform-config-validation-errors/proposal.md#L13-L31)
+- [tasks.md:1-30](file://openspec/changes/expose-v2-platform-config-validation-errors/tasks.md#L1-L30)
+- [v2-hosted-error-details/spec.md:1-52](file://openspec/changes/expose-v2-platform-config-validation-errors/specs/v2-hosted-error-details/spec.md#L1-L52)
+- [v2-platform-config-validation-feedback/spec.md:31-52](file://openspec/changes/expose-v2-platform-config-validation-errors/specs/v2-platform-config-validation-feedback/spec.md#L31-L52)
+
 ## Docsify 子平台支持
 
 **新增** Docsify 子平台支持为静态网站生成器提供了完整的发布能力。
@@ -535,12 +785,18 @@ G[存储层]
 H[配置管理]
 I[平台支持]
 J[Docsify 适配器]
+K[错误详情面板]
+L[脱敏工具]
+M[平台配置桥接]
+N[V1表单集成]
 end
 subgraph "应用层"
-K[发布配置钩子]
-L[设置界面]
-M[平台适配器]
-N[Docsify API]
+O[发布配置钩子]
+P[设置界面]
+Q[平台适配器]
+R[Docsify API]
+S[V2应用程序]
+T[错误处理]
 end
 A --> F
 B --> G
@@ -551,15 +807,22 @@ F --> G
 G --> H
 H --> I
 I --> J
-J --> N
-N --> K
+J --> R
+R --> O
+O --> P
+O --> Q
+Q --> S
+S --> K
 K --> L
-K --> M
+M --> N
+N --> T
 ```
 
 **图表来源**
 - [dynamicConfig.ts:1-534](file://src/platforms/dynamicConfig.ts#L1-L534)
 - [usePublishSettingStore.ts:1-95](file://src/stores/usePublishSettingStore.ts#L1-L95)
+- [SypErrorDetailsPanel.vue:1-267](file://src/components/v2/common/SypErrorDetailsPanel.vue#L1-L267)
+- [platformConfigActionBridge.ts:1-20](file://src/components/v2/settings/bridge/platformConfigActionBridge.ts#L1-L20)
 
 依赖关系特点：
 
@@ -567,6 +830,7 @@ K --> M
 2. **接口隔离**: 通过接口定义明确模块边界
 3. **循环依赖避免**: 设计上避免了循环依赖问题
 4. **可测试性**: 清晰的依赖关系便于单元测试
+5. **错误处理**: 新增的错误处理层提供完整的依赖关系
 
 **章节来源**
 - [constants.ts:1-54](file://src/utils/constants.ts#L1-L54)
@@ -592,6 +856,13 @@ K --> M
 1. **异步操作**: 所有网络请求都是异步的，不阻塞主线程
 2. **错误重试**: 网络错误有适当的重试机制
 3. **超时控制**: 请求超时和取消机制防止资源泄露
+
+### 错误处理性能
+
+1. **延迟初始化**: 错误详情面板按需初始化，避免不必要的渲染
+2. **虚拟滚动**: 错误详情内容使用虚拟滚动，支持大量文本的高效显示
+3. **防抖处理**: 错误状态切换使用防抖，避免频繁的UI更新
+4. **内存清理**: 错误状态自动清理，防止内存泄漏
 
 ## 故障排除指南
 
@@ -639,6 +910,34 @@ K --> M
 2. 验证 Markdown 文件的 YAML 前言格式
 3. 确认知识空间树形结构配置
 
+#### 错误详情面板问题
+
+**问题症状**: 错误详情面板无法显示或显示异常
+
+**可能原因**:
+1. 错误状态未正确设置
+2. 敏感信息脱敏导致内容异常
+3. 面板组件渲染问题
+
+**解决步骤**:
+1. 检查 `errorDetailsState` 的设置
+2. 验证错误信息的格式和内容
+3. 确认面板组件的依赖注入
+
+#### 平台配置验证失败
+
+**问题症状**: 平台配置验证失败但无详细错误信息
+
+**可能原因**:
+1. V2 桥接未正确配置
+2. 验证事件未正确透传
+3. 错误信息格式不符合契约
+
+**解决步骤**:
+1. 检查 V2 平台配置桥接的注入
+2. 验证 `emitValidated` 的事件载荷
+3. 确认错误信息符合 `V2PlatformConfigValidationResult` 契约
+
 #### 性能问题
 
 **问题症状**: 应用响应缓慢
@@ -647,14 +946,17 @@ K --> M
 1. 配置数据过大
 2. 存储操作频繁
 3. 内存泄漏
+4. 错误详情面板渲染性能问题
 
 **解决步骤**:
 1. 清理不必要的配置
 2. 减少存储操作频率
 3. 检查内存使用情况
+4. 优化错误详情面板的渲染
 
 **章节来源**
 - [utils.ts:1-97](file://src/utils/utils.ts#L1-L97)
+- [SypErrorDetailsPanel.spec.ts:1-62](file://src/components/v2/common/SypErrorDetailsPanel.spec.ts#L1-L62)
 
 ## 结论
 
@@ -666,12 +968,25 @@ K --> M
 4. **性能优化**: 多层次的性能优化策略
 5. **易于使用**: 简洁的API设计和丰富的配置选项
 
-**更新** 新增的 Docsify 子平台支持进一步增强了系统的灵活性，为静态网站生成器提供了完整的发布能力。Docsify 平台支持包括：
+**更新** 新增的平台配置验证错误详情面板功能进一步增强了系统的用户体验和诊断能力。该功能的主要改进包括：
 
-- **GitHub Docsify**: 支持 GitHub 仓库中的 Docsify 静态站点发布
-- **GitLab Docsify**: 支持 GitLab 仓库中的 Docsify 静态站点发布
-- **统一配置管理**: 通过适配器模式实现统一的配置和 API 调用
-- **图标支持**: 完整的 Docsify 图标和平台标识
-- **YAML 处理**: 专门的 YAML 前言元数据处理机制
+- **统一错误展示**: 基于 `SypErrorDetailsPanel` 组件提供一致的错误展示体验
+- **详细诊断信息**: 支持完整的错误摘要和可复制的详细诊断
+- **敏感信息脱敏**: 自动识别和脱敏 Cookie、Authorization、Token 等敏感字段
+- **V2 桥接集成**: 与现有的 V2 平台配置桥接无缝集成
+- **向后兼容**: 保持与 V1 表单的兼容性，逐步迁移
 
 该系统为未来的功能扩展奠定了坚实的基础，能够支持更多发布平台的集成和更复杂的配置需求。通过持续的优化和改进，平台配置系统将继续为用户提供优秀的配置管理体验。
+
+**新增功能特性总结**:
+
+1. **错误详情面板**: 提供详细的错误诊断信息，替代简单的错误消息
+2. **统一错误处理**: 在 `.syp-v2` 容器内展示错误详情，避免全局 Toast 的限制
+3. **敏感信息保护**: 自动脱敏敏感字段，确保安全的错误信息展示
+4. **可复制诊断**: 支持一键复制完整的错误详情，便于用户反馈问题
+5. **无障碍支持**: 支持键盘导航和屏幕阅读器，提升可访问性
+6. **性能优化**: 按需渲染和虚拟滚动，支持大量错误信息的高效展示
+7. **类型安全**: 完整的 TypeScript 类型定义，确保契约的一致性
+8. **向后兼容**: 保持与现有代码的兼容性，支持渐进式迁移
+
+这些改进显著提升了平台配置系统的用户体验和诊断能力，为用户提供了更好的问题排查和故障排除体验。

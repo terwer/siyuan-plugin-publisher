@@ -26,7 +26,7 @@
           <component
             :is="bridgeComponent"
             :api-type="platformKey"
-            @validated="handleFormValidated"
+            @validated="handleValidationResult"
             @saved="handleFormSaved"
           >
             <template #cookie-actions="cookieActions">
@@ -50,6 +50,19 @@
             </div>
           </template>
         </Suspense>
+
+        <!-- Inline validation failure bar -->
+        <div v-if="validationError" class="syp-validation-error-bar" data-testid="syp-validation-error-bar">
+          <span class="syp-validation-error-bar__text">{{ validationError }}</span>
+          <button
+            type="button"
+            class="syp-validation-error-bar__action"
+            data-testid="syp-validation-error-view-details"
+            @click="emit('show-error-details')"
+          >
+            {{ t("v2.platformConfig.validation.viewDetails") }}
+          </button>
+        </div>
       </div>
 
       <div v-else class="syp-settings-empty">
@@ -63,15 +76,19 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, provide, reactive, watch, type Component } from "vue"
+import { computed, onMounted, provide, reactive, ref, watch, type Component } from "vue"
 import { getV2BridgeComponent } from "~/src/components/v2/settings/bridge/bridgeRegistry.ts"
-import { V2_PLATFORM_CONFIG_ACTION_BRIDGE_KEY } from "~/src/components/v2/settings/bridge/platformConfigActionBridge.ts"
+import {
+    V2_PLATFORM_CONFIG_ACTION_BRIDGE_KEY,
+    type V2PlatformConfigValidationResult,
+} from "~/src/components/v2/settings/bridge/platformConfigActionBridge.ts"
 import V2WebCookieAuthPanel from "~/src/components/v2/settings/V2WebCookieAuthPanel.vue"
-import type { WebCookieAuthEventStatus } from "~/src/composables/useWebCookieAuthorization.ts"
 import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
+import type { WebCookieAuthEventStatus } from "~/src/composables/useWebCookieAuthorization.ts"
 import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
 import { SubPlatformType } from "~/src/platforms/dynamicConfig.ts"
 import { EnvUtil } from "~/src/utils/EnvUtil.ts"
+import { sanitizeSensitiveForLog } from "~/src/utils/sensitiveLogSanitizer.ts"
 
 const props = defineProps<{
   platformKey: string
@@ -80,15 +97,16 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (event: "cookie-authorized", result: { status: WebCookieAuthEventStatus; ok: boolean }): void
-  (event: "validated", result: { ok: boolean; apiStatus?: boolean }): void
+  (event: "validated", result: V2PlatformConfigValidationResult): void
   (event: "saved", result: { ok: boolean }): void
+  (event: "show-error-details"): void
 }>()
 
 const { t } = useV2I18n()
 const { getPublishCfg } = usePublishConfig()
 
 provide(V2_PLATFORM_CONFIG_ACTION_BRIDGE_KEY, {
-  onValidated: (result) => emit("validated", result),
+  onValidated: handleValidationResult,
   onSaved: (result) => emit("saved", result),
 })
 
@@ -97,6 +115,8 @@ const state = reactive({
   errorMessage: "",
   subtype: "" as SubPlatformType | "",
 })
+
+const validationError = ref<string>("")
 
 const bridgeComponent = computed<Component | null>(() => {
   return getV2BridgeComponent(state.subtype, {
@@ -144,7 +164,13 @@ function handleCookieAuthorized(result: { status: WebCookieAuthEventStatus; ok: 
   emit("cookie-authorized", result)
 }
 
-function handleFormValidated(result: { ok: boolean; apiStatus?: boolean }) {
+function handleValidationResult(result: V2PlatformConfigValidationResult) {
+  if (!result.ok) {
+    const raw = result.errorMessage || t("v2.platformConfig.validation.failedGeneric")
+    validationError.value = sanitizeSensitiveForLog(raw)
+  } else {
+    validationError.value = ""
+  }
   emit("validated", result)
 }
 
@@ -260,4 +286,36 @@ function handleFormSaved(result: { ok: boolean }) {
 
   :deep(.el-button + .el-button)
     margin-left 6px
+
+.syp-validation-error-bar
+  display flex
+  align-items center
+  justify-content space-between
+  gap 8px
+  margin-top 8px
+  padding 6px 10px
+  border-radius $syp-radius-sm
+  background-color var(--b3-card-error-background, #fdecea)
+  color var(--b3-theme-error, #d32f2f)
+  font-size 12px
+  line-height 1.5
+
+  &__text
+    flex 1 1 0
+    min-width 0
+    word-break break-word
+
+  &__action
+    flex 0 0 auto
+    padding 2px 8px
+    border none
+    border-radius $syp-radius-sm
+    background-color var(--b3-theme-error, #d32f2f)
+    color #fff
+    font-size 12px
+    cursor pointer
+    white-space nowrap
+
+    &:hover
+      opacity 0.85
 </style>

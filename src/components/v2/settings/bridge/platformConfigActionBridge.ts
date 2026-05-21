@@ -9,8 +9,15 @@
 
 import type { InjectionKey } from "vue"
 
+export interface V2PlatformConfigValidationResult {
+  ok: boolean
+  apiStatus?: boolean
+  errorMessage?: string
+  errorDetails?: string
+}
+
 export interface V2PlatformConfigActionBridge {
-  onValidated?: (result: any) => void
+  onValidated?: (result: V2PlatformConfigValidationResult) => void
   onSaved?: (result: any) => void
 }
 

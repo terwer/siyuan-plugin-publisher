@@ -4,6 +4,7 @@
 **本文档引用的文件**
 - [useV2Settings.ts](file://src/composables/v2/useV2Settings.ts)
 - [useV2QuickPublish.ts](file://src/composables/v2/useV2QuickPublish.ts)
+- [useV2PublishValidation.ts](file://src/composables/v2/useV2PublishValidation.ts)
 - [usePublishSettingStore.ts](file://src/stores/usePublishSettingStore.ts)
 - [usePreferenceSettingStore.ts](file://src/stores/usePreferenceSettingStore.ts)
 - [dynamicConfig.ts](file://src/platforms/dynamicConfig.ts)
@@ -11,15 +12,24 @@
 - [usePlatformDefine.ts](file://src/composables/usePlatformDefine.ts)
 - [V2AccountList.vue](file://src/components/v2/settings/V2AccountList.vue)
 - [V2PlatformSelect.vue](file://src/components/v2/settings/V2PlatformSelect.vue)
-- [PublishSetting.vue](file://src/components/set/PublishSetting.vue)
+- [V2PlatformConfigBridge.vue](file://src/components/v2/settings/V2PlatformConfigBridge.vue)
+- [platformConfigActionBridge.ts](file://src/components/v2/settings/bridge/platformConfigActionBridge.ts)
+- [V2App.vue](file://src/components/v2/V2App.vue)
+- [SypErrorDetailsPanel.vue](file://src/components/v2/common/SypErrorDetailsPanel.vue)
+- [sensitiveLogSanitizer.ts](file://src/utils/sensitiveLogSanitizer.ts)
+- [proposal.md](file://openspec/changes/expose-v2-platform-config-validation-errors/proposal.md)
+- [design.md](file://openspec/changes/expose-v2-platform-config-validation-errors/design.md)
+- [spec.md](file://openspec/changes/expose-v2-platform-config-validation-errors/specs/v2-platform-config-validation-feedback/spec.md)
+- [spec.md](file://openspec/changes/expose-v2-platform-config-validation-errors/specs/v2-hosted-error-details/spec.md)
 </cite>
 
 ## 更新摘要
 **变更内容**
-- 更新了账号项目处理逻辑，增加了更详细的状态标签系统
-- 扩展了状态计算逻辑以处理四种不同状态（运行中、需授权、已禁用、未启用）
-- 增强了视觉表示和用户友好标签的显示
-- 改进了状态类型的分类和颜色编码
+- 新增平台配置验证和错误处理能力，增强了 V2 设置组合式函数的功能
+- 扩展了桥接验证事件契约，支持完整的错误信息传递
+- 集成了 SypErrorDetailsPanel 错误详情展示组件
+- 增强了配置验证失败时的用户反馈和诊断能力
+- 实现了敏感信息脱敏处理机制
 
 ## 目录
 1. [简介](#简介)
@@ -27,10 +37,12 @@
 3. [核心组件](#核心组件)
 4. [架构概览](#架构概览)
 5. [详细组件分析](#详细组件分析)
-6. [依赖关系分析](#依赖关系分析)
-7. [性能考虑](#性能考虑)
-8. [故障排除指南](#故障排除指南)
-9. [结论](#结论)
+6. [平台配置验证增强](#平台配置验证增强)
+7. [错误处理机制](#错误处理机制)
+8. [依赖关系分析](#依赖关系分析)
+9. [性能考虑](#性能考虑)
+10. [故障排除指南](#故障排除指南)
+11. [结论](#结论)
 
 ## 简介
 
@@ -38,7 +50,7 @@ V2 设置组合式函数是 SiYuan 插件发布器中的核心功能模块，负
 
 该系统支持多种发布平台（WordPress、博客园、GitHub Pages、GitLab Pages 等），并通过动态配置机制实现了灵活的平台扩展能力。通过组合式函数的设计，实现了状态管理、业务逻辑和 UI 组件的解耦，提高了代码的可维护性和可测试性。
 
-**更新** 新增了改进的账号项目处理逻辑，根据平台启用状态和授权状态生成更具描述性的状态标签，提供四种明确的状态分类和相应的视觉表示。
+**更新** 新增了增强的平台配置验证和错误处理能力，包括完整的错误信息传递、用户友好的错误详情展示、敏感信息脱敏处理等功能，显著提升了用户体验和故障排查能力。
 
 ## 项目结构
 
@@ -53,34 +65,47 @@ A --> D[配置管理]
 E[useV2QuickPublish.ts] --> F[快速发布]
 E --> G[状态跟踪]
 E --> H[错误处理]
+I[useV2PublishValidation.ts] --> J[发布验证]
+I --> K[授权管理]
 end
 subgraph "存储层"
-I[usePublishSettingStore.ts] --> J[设置持久化]
-K[usePreferenceSettingStore.ts] --> L[偏好设置]
+L[usePublishSettingStore.ts] --> M[设置持久化]
+N[usePreferenceSettingStore.ts] --> O[偏好设置]
 end
 subgraph "平台定义"
-M[dynamicConfig.ts] --> N[动态配置]
-O[usePlatformDefine.ts] --> P[平台预设]
+P[dynamicConfig.ts] --> Q[动态配置]
+R[usePlatformDefine.ts] --> S[平台预设]
 end
 subgraph "UI 组件"
-Q[V2AccountList.vue] --> R[账户列表]
-S[V2PlatformSelect.vue] --> T[平台选择]
+T[V2AccountList.vue] --> U[账户列表]
+V[V2PlatformSelect.vue] --> W[平台选择]
+X[V2PlatformConfigBridge.vue] --> Y[配置桥接]
+Z[SypErrorDetailsPanel.vue] --> AA[错误详情]
 end
-A --> I
-A --> M
-E --> I
-E --> M
-A --> O
-E --> K
+subgraph "错误处理"
+AB[sensitiveLogSanitizer.ts] --> AC[敏感信息脱敏]
+AD[platformConfigActionBridge.ts] --> AE[验证事件契约]
+end
+A --> L
+A --> P
+E --> L
+E --> P
+I --> L
+I --> P
+X --> AD
+V2App.vue --> Z
+V2App.vue --> AB
 ```
 
 **图表来源**
-- [useV2Settings.ts:1-250](file://src/composables/v2/useV2Settings.ts#L1-L250)
+- [useV2Settings.ts:1-323](file://src/composables/v2/useV2Settings.ts#L1-L323)
 - [useV2QuickPublish.ts:1-312](file://src/composables/v2/useV2QuickPublish.ts#L1-L312)
+- [useV2PublishValidation.ts:1-86](file://src/composables/v2/useV2PublishValidation.ts#L1-L86)
 
 **章节来源**
-- [useV2Settings.ts:1-250](file://src/composables/v2/useV2Settings.ts#L1-L250)
+- [useV2Settings.ts:1-323](file://src/composables/v2/useV2Settings.ts#L1-L323)
 - [useV2QuickPublish.ts:1-312](file://src/composables/v2/useV2QuickPublish.ts#L1-L312)
+- [useV2PublishValidation.ts:1-86](file://src/composables/v2/useV2PublishValidation.ts#L1-L86)
 
 ## 核心组件
 
@@ -94,6 +119,7 @@ E --> K
 2. **平台选择**：支持 WordPress 和博客园等平台的选择
 3. **配置创建**：基于预设模板创建新的平台配置
 4. **状态跟踪**：提供详细的账户状态信息和视觉反馈
+5. **配置验证**：集成平台配置验证和错误处理能力
 
 #### 数据结构设计
 
@@ -120,26 +146,35 @@ class V2AccountItem {
 +statusText : string
 +statusType : StatusType
 +statusLabel : string
++description : string
++displayOrder : number
 }
 class V2SelectablePlatform {
 +key : string
 +platformKey : string
 +platformName : string
++description : string
 +platformIcon : string
 +platformType : PlatformType
 +subPlatformType : SubPlatformType
 }
+class V2PlatformConfigValidationResult {
++ok : boolean
++apiStatus : boolean
++errorMessage : string
++errorDetails : string
+}
 V2SettingsState --> V2AccountItem
 V2SettingsState --> V2SelectablePlatform
+V2SettingsState --> V2PlatformConfigValidationResult
 ```
 
 **图表来源**
-- [useV2Settings.ts:22-40](file://src/composables/v2/useV2Settings.ts#L22-L40)
-- [useV2Settings.ts:19-21](file://src/composables/v2/useV2Settings.ts#L19-L21)
-- [useV2Settings.ts:41-41](file://src/composables/v2/useV2Settings.ts#L41-L41)
+- [useV2Settings.ts:23-44](file://src/composables/v2/useV2Settings.ts#L23-L44)
+- [useV2Settings.ts:125-173](file://src/composables/v2/useV2Settings.ts#L125-L173)
 
 **章节来源**
-- [useV2Settings.ts:42-250](file://src/composables/v2/useV2Settings.ts#L42-L250)
+- [useV2Settings.ts:46-323](file://src/composables/v2/useV2Settings.ts#L46-L323)
 
 ### 改进的账号状态处理逻辑
 
@@ -153,10 +188,10 @@ Start([开始]) --> Load[加载账户配置]
 Load --> Filter[过滤系统账户]
 Filter --> Map[映射状态信息]
 Map --> CheckAuth{检查授权状态}
-CheckAuth --> |已启用且已授权| Success[运行中<br/>success<br/>绿色]
-CheckAuth --> |已启用且未授权| Warning[需授权<br/>warning<br/>橙色]
-CheckAuth --> |未启用且已授权| Neutral[已禁用<br/>neutral<br/>灰色]
-CheckAuth --> |未启用且未授权| Error[未启用<br/>error<br/>红色]
+CheckAuth --> |isEnabled=true && isAuth=true| Success[运行中<br/>success<br/>绿色]
+CheckAuth --> |isEnabled=true && isAuth=false| Warning[需授权<br/>warning<br/>橙色]
+CheckAuth --> |isEnabled=false && isAuth=true| Neutral[已禁用<br/>neutral<br/>灰色]
+CheckAuth --> |isEnabled=false && isAuth=false| Error[未启用<br/>error<br/>红色]
 Success --> Display[显示账户信息]
 Warning --> Display
 Neutral --> Display
@@ -165,7 +200,7 @@ Display --> End([结束])
 ```
 
 **图表来源**
-- [useV2Settings.ts:99-138](file://src/composables/v2/useV2Settings.ts#L99-L138)
+- [useV2Settings.ts:136-156](file://src/composables/v2/useV2Settings.ts#L136-L156)
 
 #### 状态标签和视觉表示
 
@@ -177,7 +212,7 @@ Display --> End([结束])
 | 未启用 | 未启用 | 未启用 · 未授权 | 错误红色 | error |
 
 **章节来源**
-- [useV2Settings.ts:99-138](file://src/composables/v2/useV2Settings.ts#L99-L138)
+- [useV2Settings.ts:136-156](file://src/composables/v2/useV2Settings.ts#L136-L156)
 
 ### V2 快速发布组合式函数
 
@@ -189,6 +224,7 @@ Display --> End([结束])
 2. **平台集成**：支持多个平台的统一发布接口
 3. **预览功能**：提供文章预览链接生成功能
 4. **重试机制**：支持发布失败后的自动重试
+5. **验证集成**：与发布验证功能无缝集成
 
 #### 发布流程状态
 
@@ -211,6 +247,40 @@ preview_ready --> [*] : 预览完成
 **章节来源**
 - [useV2QuickPublish.ts:26-312](file://src/composables/v2/useV2QuickPublish.ts#L26-L312)
 
+### V2 发布验证组合式函数
+
+**新增** `useV2PublishValidation` 提供了发布验证功能，与配置验证形成完整的验证体系：
+
+#### 核心功能
+
+1. **发布验证**：验证平台配置是否满足发布要求
+2. **授权检查**：检查平台授权状态
+3. **配置验证**：验证配置的完整性和有效性
+4. **错误聚合**：收集和报告验证失败的原因
+
+#### 验证结果结构
+
+```mermaid
+classDiagram
+class V2PublishValidationGateResult {
++canPublish : boolean
++isAuth : boolean
++reason : string
++dynCfg : DynamicConfig
+}
+class PublishValidationResult {
++canPublish : boolean
++reason : string
+}
+V2PublishValidationGateResult --|> PublishValidationResult
+```
+
+**图表来源**
+- [useV2PublishValidation.ts:21-24](file://src/composables/v2/useV2PublishValidation.ts#L21-L24)
+
+**章节来源**
+- [useV2PublishValidation.ts:26-86](file://src/composables/v2/useV2PublishValidation.ts#L26-L86)
+
 ## 架构概览
 
 V2 设置系统采用了分层架构设计，确保了各组件间的职责分离和松耦合：
@@ -220,46 +290,54 @@ graph TB
 subgraph "表现层 (UI Layer)"
 A[V2AccountList.vue]
 B[V2PlatformSelect.vue]
-C[PublishSetting.vue]
+C[V2PlatformConfigBridge.vue]
+D[SypErrorDetailsPanel.vue]
+E[V2App.vue]
 end
 subgraph "业务逻辑层 (Composables)"
-D[useV2Settings]
-E[useV2QuickPublish]
-F[usePlatformDefine]
+F[useV2Settings]
+G[useV2QuickPublish]
+H[useV2PublishValidation]
+I[usePlatformDefine]
 end
 subgraph "数据访问层 (Stores)"
-G[usePublishSettingStore]
-H[usePreferenceSettingStore]
-I[useSiyuanSettingStore]
+J[usePublishSettingStore]
+K[usePreferenceSettingStore]
+L[useSiyuanSettingStore]
 end
 subgraph "平台配置层"
-J[DynamicConfig]
-K[PlatformType]
-L[SubPlatformType]
+M[DynamicConfig]
+N[PlatformType]
+O[SubPlatformType]
 end
-subgraph "工具层"
-M[constants.ts]
-N[JsonUtil]
-O[ObjectUtil]
+subgraph "错误处理层"
+P[sensitiveLogSanitizer]
+Q[platformConfigActionBridge]
+R[V2PlatformConfigValidationResult]
 end
-A --> D
-B --> D
-C --> D
-D --> G
-D --> J
-D --> F
-E --> G
-E --> J
-E --> H
+A --> F
+B --> F
+C --> F
+C --> Q
+D --> E
+E --> R
 F --> J
+F --> M
+G --> J
 G --> M
-J --> K
-J --> L
+H --> J
+H --> M
+I --> M
+J --> N
+M --> O
+P --> R
+Q --> R
 ```
 
 **图表来源**
-- [useV2Settings.ts:1-17](file://src/composables/v2/useV2Settings.ts#L1-L17)
+- [useV2Settings.ts:1-18](file://src/composables/v2/useV2Settings.ts#L1-L18)
 - [useV2QuickPublish.ts:1-12](file://src/composables/v2/useV2QuickPublish.ts#L1-L12)
+- [useV2PublishValidation.ts:1-19](file://src/composables/v2/useV2PublishValidation.ts#L1-L19)
 
 ## 详细组件分析
 
@@ -289,7 +367,7 @@ Display --> End([结束])
 ```
 
 **图表来源**
-- [useV2Settings.ts:99-138](file://src/composables/v2/useV2Settings.ts#L99-L138)
+- [useV2Settings.ts:136-156](file://src/composables/v2/useV2Settings.ts#L136-L156)
 
 #### 账户操作流程
 
@@ -302,7 +380,7 @@ Display --> End([结束])
 5. **账户删除**：删除不需要的账户配置
 
 **章节来源**
-- [useV2Settings.ts:150-235](file://src/composables/v2/useV2Settings.ts#L150-L235)
+- [useV2Settings.ts:192-304](file://src/composables/v2/useV2Settings.ts#L192-L304)
 
 ### 快速发布组件
 
@@ -410,6 +488,210 @@ DynamicConfig --> SubPlatformType
 **章节来源**
 - [dynamicConfig.ts:1-540](file://src/platforms/dynamicConfig.ts#L1-L540)
 
+## 平台配置验证增强
+
+**新增** 平台配置验证功能是本次更新的核心改进，提供了完整的配置验证和错误处理能力：
+
+### 验证事件契约扩展
+
+#### V2 平台配置验证结果
+
+```mermaid
+classDiagram
+class V2PlatformConfigValidationResult {
++ok : boolean
++apiStatus : boolean
++errorMessage : string
++errorDetails : string
+}
+class PlatformConfigActionBridge {
++onValidated(result : V2PlatformConfigValidationResult) : void
++onSaved(result : any) : void
+}
+V2PlatformConfigValidationResult --> PlatformConfigActionBridge
+```
+
+**图表来源**
+- [platformConfigActionBridge.ts:12-15](file://src/components/v2/settings/bridge/platformConfigActionBridge.ts#L12-L15)
+
+#### 验证流程增强
+
+```mermaid
+sequenceDiagram
+participant User as 用户
+participant Bridge as 配置桥接
+participant Form as 平台表单
+participant Host as V2宿主
+User->>Bridge : 点击验证
+Bridge->>Form : 触发验证
+Form->>Form : 执行配置验证
+Form->>Bridge : 返回验证结果
+Bridge->>Host : 传递完整结果
+Host->>Host : 展示错误详情
+Note over Bridge,Host : 支持完整错误信息传递
+```
+
+**图表来源**
+- [proposal.md:3-11](file://openspec/changes/expose-v2-platform-config-validation-errors/proposal.md#L3-L11)
+
+### 错误详情展示系统
+
+#### SypErrorDetailsPanel 集成
+
+**新增** 错误详情面板组件提供了完整的错误信息展示和复制功能：
+
+```mermaid
+classDiagram
+class SypErrorDetailsPanel {
++visible : boolean
++title : string
++summary : string
++details : string
++copyLabel : string
++copySuccessText : string
++copyFailureText : string
++closeLabel : string
++copyDetails() : void
++emitClose() : void
+}
+class ErrorDetailsState {
++visible : boolean
++title : string
++summary : string
++details : string
+}
+SypErrorDetailsPanel --> ErrorDetailsState
+```
+
+**图表来源**
+- [SypErrorDetailsPanel.vue:59-72](file://src/components/v2/common/SypErrorDetailsPanel.vue#L59-L72)
+
+#### 错误详情展示流程
+
+```mermaid
+flowchart TD
+Start([验证失败]) --> CheckBridge{桥接存在?}
+CheckBridge --> |是| ShowInline[显示内联摘要]
+CheckBridge --> |否| ShowGlobal[显示全局提示]
+ShowInline --> ShowDetails[显示查看详情按钮]
+ShowDetails --> ClickDetails[用户点击查看详情]
+ClickDetails --> OpenPanel[打开错误详情面板]
+OpenPanel --> SanitizeDetails[脱敏敏感信息]
+SanitizeDetails --> CopyDetails[用户复制详情]
+CopyDetails --> End([完成])
+```
+
+**图表来源**
+- [design.md:34-54](file://openspec/changes/expose-v2-platform-config-validation-errors/design.md#L34-L54)
+
+### 敏感信息脱敏处理
+
+#### 脱敏策略实现
+
+**新增** 敏感信息脱敏工具确保错误详情中的敏感信息得到适当处理：
+
+```mermaid
+flowchart TD
+Input[原始错误信息] --> CheckType{检查类型}
+CheckType --> |字符串| StringSanitize[字符串脱敏]
+CheckType --> |对象| ObjectSanitize[对象递归脱敏]
+CheckType --> |数组| ArraySanitize[数组递归脱敏]
+StringSanitize --> RedactSensitive[脱敏敏感字段]
+ObjectSanitize --> RedactSensitive
+ArraySanitize --> RedactSensitive
+RedactSensitive --> Output[脱敏后的错误详情]
+```
+
+**图表来源**
+- [sensitiveLogSanitizer.ts:24-46](file://src/utils/sensitiveLogSanitizer.ts#L24-L46)
+
+#### 脱敏规则
+
+| 敏感字段类型 | 匹配正则 | 脱敏示例 |
+|-------------|----------|----------|
+| Cookie | `(cookie)` | `<redacted>` |
+| Authorization | `(authorization)` | `<redacted>` |
+| Token | `(token)` | `<redacted>` |
+| CSRF | `(csrf)` | `<redacted>` |
+| Ticket | `(ticket)` | `<redacted>` |
+| CToken | `(ctoken)` | `<redacted>` |
+
+**章节来源**
+- [sensitiveLogSanitizer.ts:12-19](file://src/utils/sensitiveLogSanitizer.ts#L12-L19)
+
+## 错误处理机制
+
+**新增** 完善的错误处理机制确保了用户能够获得清晰、可操作的错误反馈：
+
+### 错误处理架构
+
+#### 错误传播路径
+
+```mermaid
+graph TB
+subgraph "错误来源"
+A[平台适配器]
+B[配置表单]
+C[网络请求]
+end
+subgraph "错误处理层"
+D[V2PlatformConfigBridge]
+E[V2App.handleConfigValidated]
+F[SypErrorDetailsPanel]
+G[sensitiveLogSanitizer]
+end
+subgraph "用户反馈"
+H[内联摘要]
+I[错误详情面板]
+J[可复制诊断]
+end
+A --> D
+B --> D
+C --> D
+D --> E
+E --> F
+E --> G
+F --> I
+G --> J
+D --> H
+```
+
+**图表来源**
+- [V2App.vue:488-502](file://src/components/v2/V2App.vue#L488-L502)
+
+### 错误处理流程
+
+#### 配置验证错误处理
+
+```mermaid
+flowchart TD
+Start([配置验证开始]) --> Validate[执行平台验证]
+Validate --> CheckResult{验证结果}
+CheckResult --> |成功| Success[设置配置完成]
+CheckResult --> |失败| ShowError[显示错误摘要]
+ShowError --> OpenPanel[打开错误详情面板]
+OpenPanel --> Sanitize[脱敏敏感信息]
+Sanitize --> Copy[用户复制详情]
+Copy --> End([等待用户修复])
+Success --> End
+```
+
+**图表来源**
+- [spec.md:6-15](file://openspec/changes/expose-v2-platform-config-validation-errors/specs/v2-platform-config-validation-feedback/spec.md#L6-L15)
+
+#### 错误详情展示规范
+
+**新增** 错误详情展示遵循 v2-hosted-error-details 规范：
+
+1. **友好摘要**：提供用户友好的错误摘要信息
+2. **详细诊断**：展示完整的错误详情和诊断信息
+3. **敏感信息脱敏**：自动脱敏所有敏感字段
+4. **可复制功能**：支持一键复制完整的错误详情
+5. **一致性设计**：与发布失败详情面板保持一致的用户体验
+
+**章节来源**
+- [spec.md:32-43](file://openspec/changes/expose-v2-platform-config-validation-errors/specs/v2-hosted-error-details/spec.md#L32-L43)
+
 ## 依赖关系分析
 
 V2 设置系统具有清晰的依赖关系层次结构：
@@ -421,38 +703,49 @@ A[Vue 3]
 B[Pinia]
 C[Element Plus]
 D[Zhi-Common]
+E[Node Fetch]
 end
 subgraph "内部模块"
-E[useV2Settings]
-F[useV2QuickPublish]
-G[stores]
-H[platforms]
-I[components]
+F[useV2Settings]
+G[useV2QuickPublish]
+H[useV2PublishValidation]
+I[stores]
+J[platforms]
+K[components]
+L[utils]
 end
 subgraph "工具模块"
-J[constants]
-K[utils]
-L[models]
+M[sensitiveLogSanitizer]
+N[platformConfigActionBridge]
+O[JsonUtil]
+P[ObjectUtil]
 end
-A --> E
 A --> F
-B --> G
-C --> I
-E --> G
-E --> H
-E --> J
-F --> G
-F --> H
+A --> G
+A --> H
+B --> I
+C --> K
+F --> I
+F --> J
 F --> L
+G --> I
 G --> J
-H --> K
-I --> E
-I --> F
+G --> L
+H --> I
+H --> J
+H --> L
+I --> O
+J --> P
+K --> N
+L --> M
+N --> F
+O --> P
 ```
 
 **图表来源**
-- [useV2Settings.ts:1-17](file://src/composables/v2/useV2Settings.ts#L1-L17)
+- [useV2Settings.ts:1-18](file://src/composables/v2/useV2Settings.ts#L1-L18)
 - [useV2QuickPublish.ts:1-12](file://src/composables/v2/useV2QuickPublish.ts#L1-L12)
+- [useV2PublishValidation.ts:1-19](file://src/composables/v2/useV2PublishValidation.ts#L1-L19)
 
 ### 核心依赖关系
 
@@ -460,6 +753,7 @@ I --> F
 2. **平台配置依赖**：动态配置系统提供平台类型定义
 3. **存储层依赖**：设置存储提供持久化功能
 4. **UI 组件依赖**：Vue 组件提供用户界面交互
+5. **错误处理依赖**：错误详情面板和脱敏工具提供错误处理能力
 
 **章节来源**
 - [usePublishSettingStore.ts:10-25](file://src/stores/usePublishSettingStore.ts#L10-L25)
@@ -486,6 +780,13 @@ V2 设置系统在设计时充分考虑了性能优化：
 1. **虚拟滚动**：账户列表支持大量数据的虚拟滚动
 2. **懒加载组件**：非关键组件采用懒加载策略
 3. **事件防抖**：输入事件采用防抖处理减少重绘
+4. **条件渲染**：错误详情面板采用条件渲染避免不必要的 DOM 操作
+
+### 错误处理性能优化
+
+1. **延迟初始化**：错误详情面板采用延迟初始化
+2. **内存管理**：及时清理错误详情状态避免内存泄漏
+3. **脱敏优化**：敏感信息脱敏采用高效的正则表达式匹配
 
 ## 故障排除指南
 
@@ -524,6 +825,26 @@ V2 设置系统在设计时充分考虑了性能优化：
 2. 使用云同步服务
 3. 验证存储权限设置
 
+#### 配置验证错误
+
+**问题描述**：平台配置验证失败但没有详细错误信息
+
+**解决步骤**：
+1. 检查浏览器控制台是否有 JavaScript 错误
+2. 验证平台 API 凭据是否正确
+3. 查看错误详情面板中的完整诊断信息
+4. 复制错误详情并反馈给开发者
+
+#### 错误详情无法复制
+
+**问题描述**：错误详情面板中的内容无法复制
+
+**解决方法**：
+1. 检查浏览器的剪贴板权限设置
+2. 尝试刷新页面后重新打开错误详情
+3. 确认错误详情中没有包含被脱敏的敏感信息
+4. 联系技术支持获取进一步帮助
+
 **章节来源**
 - [useV2QuickPublish.ts:57-62](file://src/composables/v2/useV2QuickPublish.ts#L57-L62)
 - [useV2Settings.ts:172-185](file://src/composables/v2/useV2Settings.ts#L172-L185)
@@ -536,7 +857,10 @@ V2 设置组合式函数为 SiYuan 插件发布器提供了强大而灵活的设
 2. **良好的用户体验**：直观的界面设计和流畅的操作流程
 3. **可靠的稳定性**：完善的错误处理和状态管理机制
 4. **优秀的性能表现**：优化的数据访问和状态更新策略
+5. **强大的诊断能力**：完整的错误详情展示和敏感信息脱敏处理
 
-**更新** 新增的四状态分类系统显著提升了用户体验，用户现在可以更精确地了解每个平台账户的当前状态，并获得相应的视觉反馈。这种改进使得用户能够更有效地管理他们的发布平台配置，提高了整体的使用效率和满意度。
+**更新** 新增的平台配置验证和错误处理能力显著提升了系统的可用性和可靠性。通过完整的错误信息传递、用户友好的错误详情展示、以及敏感信息脱敏处理，用户现在可以获得更加准确和有用的错误反馈，大大提高了故障排查的效率。
 
-该系统的成功实施为类似的内容发布工具提供了宝贵的参考经验，特别是在组合式 API 的应用、状态管理和平台扩展方面都具有重要的借鉴意义。
+这些改进不仅增强了用户体验，也为开发者提供了更好的调试和问题定位能力。完整的错误处理机制确保了系统在面对各种异常情况时都能保持稳定运行，并为用户提供清晰的故障信息和解决方案指导。
+
+该系统的成功实施为类似的内容发布工具提供了宝贵的参考经验，特别是在组合式 API 的应用、状态管理、平台扩展以及错误处理方面都具有重要的借鉴意义。
