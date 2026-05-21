@@ -2,11 +2,11 @@
 
 <cite>
 **本文档引用的文件**
+- [package.json](file://package.json)
 - [src/adaptors/index.ts](file://src/adaptors/index.ts)
 - [src/adaptors/base/baseExtendApi.ts](file://src/adaptors/base/baseExtendApi.ts)
 - [src/adaptors/api/base/baseBlogApi.ts](file://src/adaptors/api/base/baseBlogApi.ts)
 - [src/adaptors/web/base/baseWebApi.ts](file://src/adaptors/web/base/baseWebApi.ts)
-- [src/adaptors/fs/LocalSystem/LocalSystemApiAdaptor.ts](file://src/adaptors/fs/LocalSystem/LocalSystemApiAdaptor.ts)
 - [src/adaptors/api/base/metaweblog/metaweblogBlogApiAdaptor.ts](file://src/adaptors/api/base/metaweblog/metaweblogBlogApiAdaptor.ts)
 - [src/adaptors/api/cnblogs/cnblogsApiAdaptor.ts](file://src/adaptors/api/cnblogs/cnblogsApiAdaptor.ts)
 - [src/adaptors/api/cnblogs/cnblogsConfig.ts](file://src/adaptors/api/cnblogs/cnblogsConfig.ts)
@@ -15,6 +15,13 @@
 - [src/platforms/dynamicConfig.ts](file://src/platforms/dynamicConfig.ts)
 - [README.md](file://README.md)
 </cite>
+
+## 更新摘要
+**所做更改**
+- 更新了依赖版本信息，反映 zhi-blog-api 从 1.78.0 升级到 1.79.0，zhi-siyuan-api 从 2.35.4 升级到 2.35.5
+- 增强了认证处理和平台兼容性支持
+- 改进了 XML-RPC 响应处理机制
+- 优化了代理中间件的使用
 
 ## 目录
 1. [简介](#简介)
@@ -30,6 +37,8 @@
 
 ## 简介
 本文件为 Publisher 插件的适配器API文档，详细记录了所有平台适配器的公共接口，包括博客平台适配器、静态站点适配器、内容平台适配器、Web平台适配器等。文档涵盖每个适配器的完整API接口说明（方法签名、参数类型、返回值、错误处理）、配置选项、认证方式、请求格式和响应格式，并提供具体的使用示例和集成指南。同时说明适配器的生命周期、初始化过程、状态管理和错误恢复机制。
+
+**更新** 本次更新反映了依赖版本升级带来的改进，包括 zhi-blog-api 1.79.0 和 zhi-siyuan-api 2.35.5 的认证处理增强和平台兼容性提升。
 
 ## 项目结构
 该项目采用模块化设计，适配器按平台类型组织在不同的目录中：
@@ -63,13 +72,13 @@ K --> F
 ```
 
 **图表来源**
-- [src/adaptors/index.ts:1-573](file://src/adaptors/index.ts#L1-L573)
-- [src/adaptors/api/base/baseBlogApi.ts:1-205](file://src/adaptors/api/base/baseBlogApi.ts#L1-L205)
-- [src/adaptors/web/base/baseWebApi.ts:1-256](file://src/adaptors/web/base/baseWebApi.ts#L1-L256)
+- [src/adaptors/index.ts:1-616](file://src/adaptors/index.ts#L1-L616)
+- [src/adaptors/api/base/baseBlogApi.ts:1-209](file://src/adaptors/api/base/baseBlogApi.ts#L1-L209)
+- [src/adaptors/web/base/baseWebApi.ts:1-354](file://src/adaptors/web/base/baseWebApi.ts#L1-L354)
 
 **章节来源**
-- [src/adaptors/index.ts:1-573](file://src/adaptors/index.ts#L1-L573)
-- [src/platforms/dynamicConfig.ts:1-534](file://src/platforms/dynamicConfig.ts#L1-L534)
+- [src/adaptors/index.ts:1-616](file://src/adaptors/index.ts#L1-L616)
+- [src/platforms/dynamicConfig.ts:1-200](file://src/platforms/dynamicConfig.ts#L1-L200)
 
 ## 核心组件
 本节介绍适配器系统的核心组件及其职责。
@@ -89,22 +98,25 @@ Adaptors 类提供统一的适配器获取接口，根据平台key动态选择�
 - 继承自 zhi-blog-api 的 BlogApi
 - 提供统一的认证检查、YAML适配器获取、预处理等功能
 - 实现了代理请求和表单请求的统一封装
+- **更新** 增强了 XML-RPC 响应处理机制，支持更稳定的非文本响应处理
 
 #### BaseWebApi（Web API基类）
 - 继承自 zhi-blog-api 的 WebApi
 - 提供网页授权的统一封装
 - 实现了Cookie处理、媒体对象上传等功能
+- **更新** 改进了诊断信息收集和错误处理机制
 
 #### BaseExtendApi（扩展基类）
 - 实现 IBlogApi 和 IWebApi 接口
 - 提供文章预处理的完整流程
 - 包含图片处理、YAML处理、外链替换等高级功能
+- **更新** 优化了图片上传错误处理和诊断信息输出
 
 **章节来源**
-- [src/adaptors/index.ts:56-573](file://src/adaptors/index.ts#L56-L573)
-- [src/adaptors/api/base/baseBlogApi.ts:27-205](file://src/adaptors/api/base/baseBlogApi.ts#L27-L205)
-- [src/adaptors/web/base/baseWebApi.ts:36-256](file://src/adaptors/web/base/baseWebApi.ts#L36-L256)
-- [src/adaptors/base/baseExtendApi.ts:55-739](file://src/adaptors/base/baseExtendApi.ts#L55-L739)
+- [src/adaptors/index.ts:59-616](file://src/adaptors/index.ts#L59-L616)
+- [src/adaptors/api/base/baseBlogApi.ts:27-209](file://src/adaptors/api/base/baseBlogApi.ts#L27-L209)
+- [src/adaptors/web/base/baseWebApi.ts:54-354](file://src/adaptors/web/base/baseWebApi.ts#L54-L354)
+- [src/adaptors/base/baseExtendApi.ts:57-765](file://src/adaptors/base/baseExtendApi.ts#L57-L765)
 
 ## 架构概览
 适配器系统采用分层架构设计，支持多种平台类型的统一管理：
@@ -160,13 +172,12 @@ LocalSystemApiAdaptor --|> BaseBlogApi
 ```
 
 **图表来源**
-- [src/adaptors/index.ts:56-573](file://src/adaptors/index.ts#L56-L573)
-- [src/adaptors/api/base/baseBlogApi.ts:27-205](file://src/adaptors/api/base/baseBlogApi.ts#L27-L205)
-- [src/adaptors/web/base/baseWebApi.ts:36-256](file://src/adaptors/web/base/baseWebApi.ts#L36-L256)
-- [src/adaptors/base/baseExtendApi.ts:55-739](file://src/adaptors/base/baseExtendApi.ts#L55-L739)
-- [src/adaptors/api/cnblogs/cnblogsApiAdaptor.ts:27-131](file://src/adaptors/api/cnblogs/cnblogsApiAdaptor.ts#L27-L131)
-- [src/adaptors/web/zhihu/zhihuWebAdaptor.ts:29-459](file://src/adaptors/web/zhihu/zhihuWebAdaptor.ts#L29-L459)
-- [src/adaptors/fs/LocalSystem/LocalSystemApiAdaptor.ts:42-273](file://src/adaptors/fs/LocalSystem/LocalSystemApiAdaptor.ts#L42-L273)
+- [src/adaptors/index.ts:59-616](file://src/adaptors/index.ts#L59-L616)
+- [src/adaptors/api/base/baseBlogApi.ts:27-209](file://src/adaptors/api/base/baseBlogApi.ts#L27-L209)
+- [src/adaptors/web/base/baseWebApi.ts:54-354](file://src/adaptors/web/base/baseWebApi.ts#L54-L354)
+- [src/adaptors/base/baseExtendApi.ts:57-765](file://src/adaptors/base/baseExtendApi.ts#L57-L765)
+- [src/adaptors/api/cnblogs/cnblogsApiAdaptor.ts:28-132](file://src/adaptors/api/cnblogs/cnblogsApiAdaptor.ts#L28-L132)
+- [src/adaptors/web/zhihu/zhihuWebAdaptor.ts:30-460](file://src/adaptors/web/zhihu/zhihuWebAdaptor.ts#L30-L460)
 
 ## 详细组件分析
 
@@ -185,6 +196,7 @@ LocalSystemApiAdaptor --|> BaseBlogApi
 **特殊功能：**
 - 自动添加 Markdown 分类标签
 - 支持博客园特有的分类过滤
+- **更新** 改进了 XML-RPC 响应处理，增强了稳定性
 
 **配置选项：**
 - `apiUrl`: API 地址
@@ -193,8 +205,8 @@ LocalSystemApiAdaptor --|> BaseBlogApi
 - `previewUrl`: 预览URL模板
 
 **章节来源**
-- [src/adaptors/api/cnblogs/cnblogsApiAdaptor.ts:27-131](file://src/adaptors/api/cnblogs/cnblogsApiAdaptor.ts#L27-L131)
-- [src/adaptors/api/cnblogs/cnblogsConfig.ts:19-47](file://src/adaptors/api/cnblogs/cnblogsConfig.ts#L19-L47)
+- [src/adaptors/api/cnblogs/cnblogsApiAdaptor.ts:28-132](file://src/adaptors/api/cnblogs/cnblogsApiAdaptor.ts#L28-L132)
+- [src/adaptors/api/cnblogs/cnblogsConfig.ts:19-46](file://src/adaptors/api/cnblogs/cnblogsConfig.ts#L19-L46)
 
 #### MetaweblogBlogApiAdaptor（MetaWeblog基类）
 提供 MetaWeblog 协议的通用实现，支持多种基于 MetaWeblog 的博客平台。
@@ -213,13 +225,14 @@ LocalSystemApiAdaptor --|> BaseBlogApi
 - XML-RPC 协议
 - 支持代理转发
 - 自动处理认证头
+- **更新** 增强了 proxyXmlrpc 中间件支持，改进了响应处理
 
 **响应格式：**
 - 标准 MetaWeblog 数据结构
 - 统一的 Post 对象映射
 
 **章节来源**
-- [src/adaptors/api/base/metaweblog/metaweblogBlogApiAdaptor.ts:26-321](file://src/adaptors/api/base/metaweblog/metaweblogBlogApiAdaptor.ts#L26-L321)
+- [src/adaptors/api/base/metaweblog/metaweblogBlogApiAdaptor.ts:27-200](file://src/adaptors/api/base/metaweblog/metaweblogBlogApiAdaptor.ts#L27-L200)
 
 ### 静态站点适配器
 
@@ -304,7 +317,7 @@ OSS-->>Client : 返回图片URL
 ```
 
 **图表来源**
-- [src/adaptors/web/zhihu/zhihuWebAdaptor.ts:131-198](file://src/adaptors/web/zhihu/zhihuWebAdaptor.ts#L131-L198)
+- [src/adaptors/web/zhihu/zhihuWebAdaptor.ts:132-166](file://src/adaptors/web/zhihu/zhihuWebAdaptor.ts#L132-L166)
 
 **配置选项：**
 - `username`: 用户名
@@ -313,8 +326,8 @@ OSS-->>Client : 返回图片URL
 - `logoutUrl`: 登出URL
 
 **章节来源**
-- [src/adaptors/web/zhihu/zhihuWebAdaptor.ts:29-459](file://src/adaptors/web/zhihu/zhihuWebAdaptor.ts#L29-L459)
-- [src/adaptors/web/zhihu/zhihuConfig.ts:16-39](file://src/adaptors/web/zhihu/zhihuConfig.ts#L16-L39)
+- [src/adaptors/web/zhihu/zhihuWebAdaptor.ts:30-460](file://src/adaptors/web/zhihu/zhihuWebAdaptor.ts#L30-L460)
+- [src/adaptors/web/zhihu/zhihuConfig.ts:16-35](file://src/adaptors/web/zhihu/zhihuConfig.ts#L16-L35)
 
 ### 基础适配器功能
 
@@ -340,8 +353,10 @@ OSS-->>Client : 返回图片URL
 - 自定义手动模式
 - 默认模式生成
 
+**更新** 增强了图片上传错误处理，改进了诊断信息收集机制
+
 **章节来源**
-- [src/adaptors/base/baseExtendApi.ts:82-596](file://src/adaptors/base/baseExtendApi.ts#L82-L596)
+- [src/adaptors/base/baseExtendApi.ts:92-765](file://src/adaptors/base/baseExtendApi.ts#L92-L765)
 
 ## 依赖关系分析
 
@@ -354,8 +369,8 @@ subgraph "平台类型"
 A[Common - 通用平台]
 B[Metaweblog - MetaWeblog]
 C[Wordpress - WordPress]
-D[Github - GitHub]
-E[Gitlab - GitLab]
+D[GitHub - GitHub]
+E[GitLab - GitLab]
 F[Custom - 自定义Web]
 G[Fs - 文件系统]
 H[System - 系统平台]
@@ -405,7 +420,7 @@ F --> F8
 ```
 
 **图表来源**
-- [src/platforms/dynamicConfig.ts:174-238](file://src/platforms/dynamicConfig.ts#L174-L238)
+- [src/platforms/dynamicConfig.ts:158-198](file://src/platforms/dynamicConfig.ts#L158-L198)
 
 ### 适配器依赖关系
 ```mermaid
@@ -432,12 +447,12 @@ G --> B
 ```
 
 **图表来源**
-- [src/adaptors/index.ts:56-573](file://src/adaptors/index.ts#L56-L573)
-- [src/adaptors/api/base/baseBlogApi.ts:27-205](file://src/adaptors/api/base/baseBlogApi.ts#L27-L205)
-- [src/adaptors/web/base/baseWebApi.ts:36-256](file://src/adaptors/web/base/baseWebApi.ts#L36-L256)
+- [src/adaptors/index.ts:59-616](file://src/adaptors/index.ts#L59-L616)
+- [src/adaptors/api/base/baseBlogApi.ts:27-209](file://src/adaptors/api/base/baseBlogApi.ts#L27-L209)
+- [src/adaptors/web/base/baseWebApi.ts:54-354](file://src/adaptors/web/base/baseWebApi.ts#L54-L354)
 
 **章节来源**
-- [src/platforms/dynamicConfig.ts:1-534](file://src/platforms/dynamicConfig.ts#L1-L534)
+- [src/platforms/dynamicConfig.ts:1-200](file://src/platforms/dynamicConfig.ts#L1-L200)
 
 ## 性能考虑
 1. **代理优化**: 自动选择最优的代理方式（SiYuan代理 vs CORS代理）
@@ -445,6 +460,7 @@ G --> B
 3. **批量处理**: 图片上传支持批量处理，减少网络请求次数
 4. **异步操作**: 所有网络请求采用异步处理，避免阻塞UI
 5. **内存管理**: 大文件上传使用流式处理，避免内存溢出
+6. **更新** 优化了代理中间件的使用效率，减少了不必要的请求开销
 
 ## 故障排除指南
 
@@ -454,11 +470,13 @@ G --> B
 - 检查用户名密码是否正确
 - 确认平台API地址是否可用
 - 验证代理配置是否正确
+- **更新** 检查 zhi-blog-api 1.79.0 的认证处理改进
 
 #### 图片上传失败
 - 检查图片格式是否受支持
 - 确认平台配额限制
 - 验证网络连接状态
+- **更新** 查看增强的诊断信息收集
 
 #### YAML生成错误
 - 检查YAML格式是否正确
@@ -469,6 +487,11 @@ G --> B
 - 检查预览URL模板配置
 - 确认文章ID是否正确
 - 验证平台权限设置
+
+#### XML-RPC 响应问题
+- **新增** 检查响应格式是否符合标准
+- 验证 proxyXmlrpc 中间件配置
+- 查看 zhi-blog-api 1.79.0 的响应处理改进
 
 **章节来源**
 - [src/adaptors/base/baseExtendApi.ts:535-551](file://src/adaptors/base/baseExtendApi.ts#L535-L551)
@@ -481,6 +504,7 @@ G --> B
 3. **强大功能**: 内置丰富的预处理和转换功能
 4. **易于使用**: 提供清晰的配置和使用指南
 5. **稳定可靠**: 完善的错误处理和恢复机制
+6. **更新** 依赖版本升级带来了更好的认证处理和平台兼容性
 
 系统支持从博客平台到静态站点生成器的广泛平台覆盖，满足不同用户的需求。
 
@@ -520,11 +544,14 @@ const zhihuCfg = new ZhihuConfig(
 ```
 
 ### 集成指南
-1. **安装依赖**: 确保安装 zhi-blog-api 和相关依赖包
+1. **安装依赖**: 确保安装 zhi-blog-api 1.79.0 和 zhi-siyuan-api 2.35.5
 2. **配置平台**: 在设置界面添加平台配置
 3. **测试连接**: 使用测试按钮验证连接状态
 4. **发布测试**: 发布测试文章验证功能正常
 5. **正式使用**: 配置完成后即可正常使用
 
+**更新** 依赖版本升级后，建议重新测试所有平台的认证和发布功能
+
 **章节来源**
 - [README.md:1-102](file://README.md#L1-L102)
+- [package.json:58-66](file://package.json#L58-L66)

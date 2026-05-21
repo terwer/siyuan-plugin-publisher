@@ -9,7 +9,7 @@
 
 import { describe, expect, it } from "vitest"
 import { XmlrpcUtil } from "simple-xmlrpc"
-import { normalizeXmlrpcResponseText } from "~/src/utils/xmlrpcResponseUtil.ts"
+import { isLoopbackOrLocalTargetUrl, normalizeXmlrpcResponseText } from "~/src/utils/xmlrpcResponseUtil.ts"
 
 describe("normalizeXmlrpcResponseText", () => {
   it("passes through XML strings", () => {
@@ -58,5 +58,17 @@ describe("normalizeXmlrpcResponseText", () => {
 
   it("removeXmlHeader throws on raw object (regression guard)", () => {
     expect(() => XmlrpcUtil.removeXmlHeader({ body: "<x/>" } as unknown as string)).toThrow(/indexOf/)
+  })
+})
+
+describe("isLoopbackOrLocalTargetUrl", () => {
+  it("detects localhost and loopback", () => {
+    expect(isLoopbackOrLocalTargetUrl("http://localhost:8090/xmlrpc.php")).toBe(true)
+    expect(isLoopbackOrLocalTargetUrl("http://127.0.0.1:8090/xmlrpc.php")).toBe(true)
+    expect(isLoopbackOrLocalTargetUrl("http://[::1]:8090/xmlrpc.php")).toBe(true)
+  })
+
+  it("allows public MetaWeblog hosts", () => {
+    expect(isLoopbackOrLocalTargetUrl("https://rpc.cnblogs.com/metaweblog/")).toBe(false)
   })
 })

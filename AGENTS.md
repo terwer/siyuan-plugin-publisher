@@ -5,6 +5,9 @@
 - Do not commit unused or orphan files to clear git diff noise; delete the file and clean references instead.
 - Require `.planning/` or OpenSpec planning before non-trivial code changes; do not make unplanned global edits.
 - Before OpenSpec archive, run a strict audit (real fix vs mock, best practice, design integrity, unrelated modes); block archive if any criterion fails.
+- Blog/platform config validation must go through `BlogAdaptor` / `api.checkAuth()` — never bypass with direct adaptor calls.
+- Reject ad-hoc transport if-chains in `useProxy`; extend MetaWeblog/XML-RPC via `resolveXmlrpcTransport` + `executeXmlrpcTransport` (same layering idea as `FormDataUtils`).
+- V2 platform verification: prioritize high-frequency platforms first; still record pass/fail in the OpenSpec checklist SSOT.
 
 ## Learned Workspace Facts
 
@@ -14,3 +17,6 @@
 - Metaweblog-style platforms (e.g. Cnblogs) should default picbed to `Bundled` in the platform `*Config` constructor (like `YuquewebConfig`), not via global `usePicgoBridge` overrides.
 - Agent skills: project `.cursor/skills/` or `.claude/skills/`; global `~/.cursor/skills/` or `~/.claude/skills/`; repo OpenSpec skills under `.claude/skills/`. Do not put custom skills in `~/.cursor/skills-cursor/`.
 - V2 platform config validation failures must surface `errorMessage` via `SypErrorDetailsPanel` (and an inline summary), not only generic alerts or `ElMessage`.
+- MetaWeblog XML-RPC in plugin/Electron host: when `PluginFetchUtil.canUsePluginFetch`, use bundled `plugin-node-fetch` via `PluginFetchUtil.postText`; do not route through SiYuan `forwardProxy` (local/loopback targets never use forwardProxy).
+- V2 platform verification SSOT: `openspec/changes/v2-platform-verification-v1-retirement/platform-checklist.md`.
+- Require `zhi-blog-api@^1.79.0` (or newer) so `BlogAdaptor.checkAuth()` returns instead of throwing adaptor results.

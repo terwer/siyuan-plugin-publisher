@@ -15,7 +15,19 @@
 - [svgIcons.ts](file://src/utils/svgIcons.ts)
 - [sypIdUtil.ts](file://src/utils/sypIdUtil.ts)
 - [widgetUtils.ts](file://src/utils/widgetUtils.ts)
+- [xmlrpcResponseUtil.ts](file://src/utils/xmlrpcResponseUtil.ts)
+- [xmlrpcResponseUtil.spec.ts](file://src/utils/xmlrpcResponseUtil.spec.ts)
+- [FormDataUtils.ts](file://src/utils/FormDataUtils.ts)
+- [FormDataUtils.spec.ts](file://src/utils/FormDataUtils.spec.ts)
 </cite>
+
+## 更新摘要
+**变更内容**
+- 新增XML-RPC响应规范化工具函数模块
+- 添加normalizeXmlrpcResponseText函数用于处理MetaWeblog XML-RPC响应标准化
+- 添加isLoopbackOrLocalTargetUrl函数用于目标URL地址判断
+- 更新工具函数架构概览以包含XML-RPC处理工具
+- 增强错误处理和代理兼容性支持
 
 ## 目录
 1. [简介](#简介)
@@ -30,7 +42,7 @@
 
 ## 简介
 
-本文档详细记录了思源笔记发布插件中的工具函数API，涵盖了文档处理、图片处理、字符串处理、数组操作、Cookie管理、环境工具等多个功能模块。每个工具函数都提供了完整的函数签名、参数类型、返回值、使用示例、功能描述、适用场景、性能特性和注意事项。
+本文档详细记录了思源笔记发布插件中的工具函数API，涵盖了文档处理、图片处理、字符串处理、数组操作、Cookie管理、环境工具、XML-RPC响应处理等多个功能模块。每个工具函数都提供了完整的函数签名、参数类型、返回值、使用示例、功能描述、适用场景、性能特性和注意事项。
 
 ## 项目结构
 
@@ -52,6 +64,8 @@ J[常量定义<br/>constants.ts]
 K[图标集合<br/>svgIcons.ts]
 L[Lute渲染工具<br/>luteUtil.ts]
 M[思源工具<br/>siyuanUtils.ts]
+N[XML-RPC响应处理<br/>xmlrpcResponseUtil.ts]
+O[表单数据处理<br/>FormDataUtils.ts]
 end
 ```
 
@@ -59,6 +73,7 @@ end
 - [utils.ts:1-97](file://src/utils/utils.ts#L1-L97)
 - [mdUtils.ts:1-161](file://src/utils/mdUtils.ts#L1-L161)
 - [ImageUtils.ts:1-209](file://src/utils/ImageUtils.ts#L1-L209)
+- [xmlrpcResponseUtil.ts:1-188](file://src/utils/xmlrpcResponseUtil.ts#L1-L188)
 
 ## 核心组件
 
@@ -401,6 +416,73 @@ ID生成工具提供了多种ID生成方法。
    - 功能：获取挂件所在的块ID
    - 适用场景：挂件识别、页面定位
 
+### XML-RPC响应处理工具 (xmlrpcResponseUtil)
+
+XML-RPC响应处理工具提供了XML-RPC响应规范化和代理兼容性处理功能。
+
+**函数列表：**
+
+1. **normalizeXmlrpcResponseText**
+   - 函数签名：`normalizeXmlrpcResponseText(raw: unknown): string`
+   - 参数：`raw`: 原始响应数据（字符串或对象）
+   - 返回值：标准化的XML字符串
+   - 功能：将代理返回的包装对象转换为标准XML文本，处理base64编码和不一致字段命名
+   - 适用场景：MetaWeblog XML-RPC响应处理、代理兼容性
+
+2. **isLoopbackOrLocalTargetUrl**
+   - 函数签名：`isLoopbackOrLocalTargetUrl(url: string): boolean`
+   - 参数：`url`: 目标URL
+   - 返回值：是否为本地或回环地址
+   - 功能：判断目标URL是否为localhost、127.0.0.1、::1或私有IP地址范围
+   - 适用场景：XML-RPC代理选择、网络地址判断
+
+**更新** 新增XML-RPC响应处理工具模块，专门处理MetaWeblog XML-RPC响应的标准化和代理兼容性问题
+
+**章节来源**
+- [xmlrpcResponseUtil.ts:124-157](file://src/utils/xmlrpcResponseUtil.ts#L124-L157)
+- [xmlrpcResponseUtil.ts:163-187](file://src/utils/xmlrpcResponseUtil.ts#L163-L187)
+
+### 表单数据处理工具 (FormDataUtils)
+
+表单数据处理工具提供了FormData上传传输方式选择和依赖管理功能。
+
+**函数列表：**
+
+1. **canUsePluginFormFetch**
+   - 函数签名：`canUsePluginFormFetch(appInstance: PublisherAppInstance): boolean`
+   - 参数：`appInstance`: 应用实例
+   - 返回值：是否可以使用插件内置的node-fetch
+   - 功能：检测插件宿主是否具备bundled node-fetch直传multipart的能力
+   - 适用场景：表单上传策略选择、环境检测
+
+2. **resolveFormUploadTransport**
+   - 函数签名：`resolveFormUploadTransport(appInstance: PublisherAppInstance, context: FormUploadTransportContext): FormUploadTransport`
+   - 参数：
+     - `appInstance`: 应用实例
+     - `context`: 传输上下文
+   - 返回值：表单上传传输方式
+   - 功能：根据环境和配置选择合适的表单上传传输方式
+   - 适用场景：跨平台表单上传、传输策略优化
+
+3. **getFormData**
+   - 函数签名：`getFormData(appInstance: PublisherAppInstance)`
+   - 参数：`appInstance`: 应用实例
+   - 返回值：FormData和Blob构造函数
+   - 功能：获取可用的FormData和Blob实现，优先使用插件内置实现
+   - 适用场景：表单数据创建、文件上传
+
+4. **getFormDataFetch**
+   - 函数签名：`getFormDataFetch(appInstance: PublisherAppInstance)`
+   - 参数：`appInstance`: 应用实例
+   - 返回值：FormData fetch函数
+   - 功能：获取插件内置的FormData fetch实现
+   - 适用场景：跨平台表单上传、fetch封装
+
+**更新** 新增表单数据处理工具模块，专门处理FormData上传的跨平台兼容性问题
+
+**章节来源**
+- [FormDataUtils.ts:37-86](file://src/utils/FormDataUtils.ts#L37-L86)
+
 ### 常量定义 (constants.ts)
 
 提供了系统常量和配置项。
@@ -453,29 +535,41 @@ G[KatexUtils<br/>公式渲染]
 H[luteUtil<br/>Lute渲染]
 I[siyuanUtils<br/>思源工具]
 J[widgetUtils<br/>窗口工具]
+K[xmlrpcResponseUtil<br/>XML-RPC处理]
+L[FormDataUtils<br/>表单数据处理]
 end
 subgraph "外部依赖"
-K[zhi-common<br/>通用工具]
-L[zhi-device<br/>设备信息]
-M[zhi-blog-api<br/>博客API]
-N[katex<br/>公式渲染]
-O[lute<br/>Markdown引擎]
+M[zhi-common<br/>通用工具]
+N[zhi-device<br/>设备信息]
+O[zhi-blog-api<br/>博客API]
+P[katex<br/>公式渲染]
+Q[lute<br/>Markdown引擎]
+R[node-buffer<br/>Buffer处理]
+S[simple-xmlrpc<br/>XML-RPC工具]
+T[uuid<br/>UUID生成]
+U[shorthash2<br/>短哈希]
 end
-A --> K
-B --> K
-C --> K
-D --> L
-F --> L
-G --> N
-H --> O
-I --> L
-J --> L
+A --> M
+B --> M
+C --> M
+D --> N
+F --> N
+G --> P
+H --> Q
+I --> N
+J --> N
+K --> R
+K --> S
+L --> T
+L --> U
 ```
 
 **图表来源**
-- [utils.ts:10-14](file://src/utils/utils.ts#L10-L14)
+- [utils.ts:10-15](file://src/utils/utils.ts#L10-L15)
 - [mdUtils.ts:10-16](file://src/utils/mdUtils.ts#L10-L16)
 - [ImageUtils.ts:10-13](file://src/utils/ImageUtils.ts#L10-L13)
+- [xmlrpcResponseUtil.ts:10](file://src/utils/xmlrpcResponseUtil.ts#L10)
+- [FormDataUtils.ts:10-11](file://src/utils/FormDataUtils.ts#L10-L11)
 
 ## 详细组件分析
 
@@ -508,6 +602,32 @@ CookieUtils --> CookieResult : "返回"
 - [ImageUtils.ts:20-85](file://src/utils/ImageUtils.ts#L20-L85)
 - [cookieUtils.ts:28-58](file://src/utils/cookieUtils.ts#L28-L58)
 
+### XML-RPC响应处理详细分析
+
+```mermaid
+classDiagram
+class XmlrpcResponseUtil {
++normalizeXmlrpcResponseText(raw) string
++isLoopbackOrLocalTargetUrl(url) boolean
+-private looksLikeXml(text) boolean
+-private maybeDecodeBase64Xml(text) string
+-private extractTextField(record) string
+-private findXmlTextDeep(value, depth) string
+-private getForwardProxyEncoding(record) string
+-private decodeByBodyEncoding(text, encoding) string
+}
+class ForwardProxyConfig {
++string[] FORWARD_PROXY_TEXT_KEYS
++string[] FORWARD_PROXY_ENCODING_KEYS
++string[] XML_MARKERS
+}
+XmlrpcResponseUtil --> ForwardProxyConfig : "使用"
+```
+
+**图表来源**
+- [xmlrpcResponseUtil.ts:14-26](file://src/utils/xmlrpcResponseUtil.ts#L14-L26)
+- [xmlrpcResponseUtil.ts:124-157](file://src/utils/xmlrpcResponseUtil.ts#L124-L157)
+
 ### API调用流程图
 
 ```mermaid
@@ -527,6 +647,35 @@ Utils-->>Client : 返回BlogAdaptor
 
 **图表来源**
 - [utils.ts:26-50](file://src/utils/utils.ts#L26-L50)
+
+### XML-RPC响应处理流程图
+
+```mermaid
+flowchart TD
+Start([开始]) --> CheckType{"响应类型检查"}
+CheckType --> |字符串| DecodeBase64["Base64解码检查"]
+CheckType --> |对象| ExtractFields["提取文本字段"]
+CheckType --> |null| ReturnEmpty["返回空字符串"]
+CheckType --> |其他| Fallback["字符串化并解码"]
+DecodeBase64 --> LooksLikeXml{"看起来像XML?"}
+LooksLikeXml --> |是| ReturnText["返回原文本"]
+LooksLikeXml --> |否| TryBase64["尝试Base64解码"]
+TryBase64 --> ReturnDecoded["返回解码文本"]
+ExtractFields --> FoundText{"找到XML文本?"}
+FoundText --> |是| ReturnExtracted["返回提取文本"]
+FoundText --> |否| DeepSearch["深度搜索嵌套对象"]
+DeepSearch --> FoundNested{"找到嵌套XML?"}
+FoundNested --> |是| ReturnNested["返回嵌套文本"]
+FoundNested --> |否| ThrowError["抛出错误"]
+Fallback --> CheckObject{"对象为空?"}
+CheckObject --> |是| ThrowEmpty["抛出空对象错误"]
+CheckObject --> |否| CheckStringified{"字符串化为[object Object]?"}
+CheckStringified --> |是| ThrowNonText["抛出非文本错误"]
+CheckStringified --> |否| ReturnFallback["返回字符串化文本"]
+```
+
+**图表来源**
+- [xmlrpcResponseUtil.ts:128-157](file://src/utils/xmlrpcResponseUtil.ts#L128-L157)
 
 ### 错误处理流程
 
@@ -557,18 +706,20 @@ subgraph "内部依赖"
 A[src/utils/*.ts]
 B[src/platforms/*.ts]
 C[src/composables/*.ts]
+D[src/adaptors/api/base/metaweblog/*.ts]
 end
 subgraph "外部依赖"
-D[zhi-common]
-E[zhi-device]
-F[zhi-blog-api]
-G[electron]
-H[katex]
-I[lute]
-J[uuid]
-K[shorthash2]
+E[zhi-common]
+F[zhi-device]
+G[zhi-blog-api]
+H[electron]
+I[katex]
+J[lute]
+K[node-buffer]
+L[simple-xmlrpc]
+M[uuid]
+N[shorthash2]
 end
-A --> D
 A --> E
 A --> F
 A --> G
@@ -576,13 +727,18 @@ A --> H
 A --> I
 A --> J
 A --> K
+A --> L
+A --> M
+A --> N
 B --> A
 C --> A
+D --> A
 ```
 
 **图表来源**
 - [utils.ts:10-15](file://src/utils/utils.ts#L10-L15)
 - [widgetUtils.ts:9-16](file://src/utils/widgetUtils.ts#L9-L16)
+- [xmlrpcResponseUtil.ts:10](file://src/utils/xmlrpcResponseUtil.ts#L10)
 
 ### 组件耦合度分析
 
@@ -597,6 +753,7 @@ C --> A
 - [utils.ts:16-93](file://src/utils/utils.ts#L16-L93)
 - [mdUtils.ts:17-158](file://src/utils/mdUtils.ts#L17-L158)
 - [ImageUtils.ts:13-162](file://src/utils/ImageUtils.ts#L13-L162)
+- [xmlrpcResponseUtil.ts:1-188](file://src/utils/xmlrpcResponseUtil.ts#L1-L188)
 
 ## 性能考虑
 
@@ -606,6 +763,8 @@ C --> A
 2. **正则表达式匹配**：取决于输入大小和正则复杂度
 3. **文件系统操作**：O(1)到O(log n)，取决于文件系统实现
 4. **Cookie处理**：线性扫描数组，O(n)时间复杂度
+5. **XML-RPC响应处理**：最坏情况下为O(n×m)，其中n为对象深度，m为字段数量
+6. **Base64解码**：O(k)，其中k为字符串长度
 
 ### 内存使用优化
 
@@ -613,6 +772,7 @@ C --> A
 2. **字符串缓冲区**：使用模板字符串减少中间对象创建
 3. **异步操作**：文件操作采用异步方式避免阻塞主线程
 4. **缓存策略**：对频繁使用的配置进行缓存
+5. **深度搜索限制**：XML-RPC处理中限制最大搜索深度防止栈溢出
 
 ### 最佳实践建议
 
@@ -621,6 +781,7 @@ C --> A
 3. **资源管理**：及时释放文件句柄和网络连接
 4. **日志记录**：适当的日志级别和信息量
 5. **性能监控**：对关键路径进行性能监控
+6. **代理兼容性**：在XML-RPC处理中考虑不同代理的响应格式差异
 
 ## 故障排除指南
 
@@ -642,21 +803,31 @@ C --> A
    - 症状：图片URL匹配不准确
    - 解决方案：验证正则表达式和转义字符
 
+5. **XML-RPC响应处理错误**
+   - 症状：`XML-RPC proxy returned an empty response object`
+   - 解决方案：检查代理配置和目标URL是否为本地地址
+
+6. **表单上传失败**
+   - 症状：multipart上传在某些环境下失败
+   - 解决方案：使用`resolveFormUploadTransport`选择合适的传输方式
+
 ### 调试技巧
 
 1. **启用详细日志**：使用调试模式查看详细执行信息
 2. **参数验证**：打印关键参数值确认正确性
 3. **分步执行**：将复杂操作分解为多个简单步骤
 4. **边界测试**：测试空值、特殊字符等边界情况
+5. **代理兼容性测试**：验证不同代理环境下的响应格式
 
 **章节来源**
 - [utils.ts:31-36](file://src/utils/utils.ts#L31-L36)
 - [cookieUtils.ts:105-115](file://src/utils/cookieUtils.ts#L105-L115)
 - [EnvUtil.ts:68-71](file://src/utils/EnvUtil.ts#L68-L71)
+- [xmlrpcResponseUtil.ts:140-154](file://src/utils/xmlrpcResponseUtil.ts#L140-L154)
 
 ## 结论
 
-本文档全面介绍了思源笔记发布插件中的工具函数API，涵盖了从基础字符串处理到复杂的文件系统操作等各个层面。每个工具函数都经过精心设计，具有明确的职责分工、良好的错误处理机制和完善的性能考虑。
+本文档全面介绍了思源笔记发布插件中的工具函数API，涵盖了从基础字符串处理到复杂的文件系统操作、XML-RPC响应处理等各个层面。每个工具函数都经过精心设计，具有明确的职责分工、良好的错误处理机制和完善的性能考虑。
 
 工具函数的设计遵循了以下原则：
 - **单一职责**：每个函数专注于特定功能
@@ -664,5 +835,6 @@ C --> A
 - **错误处理**：完善的异常处理和回退机制
 - **性能优化**：考虑时间复杂度和内存使用
 - **可扩展性**：易于添加新功能和修改现有功能
+- **代理兼容性**：特别关注XML-RPC响应的多代理环境兼容性
 
-通过合理使用这些工具函数，开发者可以高效地构建和维护复杂的发布系统，同时确保代码的可维护性和可靠性。
+通过合理使用这些工具函数，开发者可以高效地构建和维护复杂的发布系统，同时确保代码的可维护性和可靠性。新增的XML-RPC响应处理工具特别解决了MetaWeblog平台在不同代理环境下的响应格式差异问题，提高了系统的稳定性和兼容性。

@@ -8,7 +8,6 @@
  */
 
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
-import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { CommonFetchClient } from "zhi-fetch-middleware"
 import { isDev, LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
@@ -16,7 +15,8 @@ import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { Deserializer, Serializer, XmlrpcUtil } from "simple-xmlrpc"
 import { sanitizeSensitiveForLog } from "~/src/utils/sensitiveLogSanitizer.ts"
-import { normalizeXmlrpcResponseText } from "~/src/utils/xmlrpcResponseUtil.ts"
+import PluginFetchUtil from "~/src/utils/PluginFetchUtil.ts"
+import { executeXmlrpcTransport, resolveXmlrpcTransport } from "~/src/utils/xmlrpcTransport.ts"
 
 /**
  * 用于处理代理请求的自定义 hook
@@ -30,7 +30,6 @@ import { normalizeXmlrpcResponseText } from "~/src/utils/xmlrpcResponseUtil.ts"
 const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
   const logger = createAppLogger("use-proxy")
   const { kernelApi, isUseSiyuanProxy } = useSiyuanApi()
-  const { isInSiyuanOrSiyuanNewWin } = useSiyuanDevice()
 
   /**
    * 创建应用程序实例和通用的 fetch 客户端实例
@@ -86,12 +85,16 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
     } else {
       logger.info("Using middleware proxy fetch")
       const header = headers.length > 0 ? headers[0] : {}
+      const fetchHeaders: Record<string, string> = {
+        ...header,
+        "Content-Type": contentType,
+      }
+      if (contentType.toLowerCase().includes("xml")) {
+        fetchHeaders["content-type"] = contentType
+      }
       const fetchOptions = {
         method: method,
-        headers: {
-          ...header,
-          "Content-Type": contentType,
-        },
+        headers: fetchHeaders,
         body: params,
       }
       logger.info("commonFetchClient url in proxyFetch =>", url)
@@ -111,13 +114,26 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
    * @param forceProxy - 是否强制使用代理
    */
   const proxyXmlrpc = async (url: string, reqMethod: string, reqParams: any[], forceProxy: boolean = false) => {
-    const body = serializer.serializeMethodCall(reqMethod, reqParams)
-    // MetaWeblog XML 在思源插件内优先走 forwardProxy，避免 middleware 将 XML 当 JSON 解析成 {}
-    const useSiyuanForwardProxy = isUseSiyuanProxy || isInSiyuanOrSiyuanNewWin() || forceProxy
-    const rawResponse = useSiyuanForwardProxy
-      ? await siyuanProxyFetch(url, [], body, "POST", "text/xml", "base64", "text")
-      : await proxyFetch(url, [], body, "POST", "text/xml", forceProxy, "base64", "text")
-    let resText = normalizeXmlrpcResponseText(rawResponse)
+    const xmlBody = serializer.serializeMethodCall(reqMethod, reqParams)
+    const transport = resolveXmlrpcTransport({
+      url,
+      forceProxy,
+      isUseSiyuanProxy,
+      canUsePluginFetch: PluginFetchUtil.canUsePluginFetch(appInstance),
+    })
+    logger.info(`XML-RPC transport => ${transport}`, url)
+    let resText = await executeXmlrpcTransport(
+      transport,
+      {
+        pluginNodeFetch: (endpoint, body) =>
+          PluginFetchUtil.postText(appInstance, endpoint, body, "text/xml; charset=utf-8", logger),
+        siyuanForwardProxy: (endpoint, body) =>
+          siyuanProxyFetch(endpoint, [], body, "POST", "text/xml", "base64", "text"),
+        middlewareFetch: (endpoint, body, fp) =>
+          proxyFetch(endpoint, [], body, "POST", "text/xml", fp, "base64", "text"),
+      },
+      { url, xmlBody, forceProxy }
+    )
     resText = XmlrpcUtil.removeXmlHeader(resText)
     const deserializer = new Deserializer()
     const resJson = await deserializer.deserializeMethodResponse(resText)

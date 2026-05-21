@@ -9,12 +9,23 @@
 - [metaweblogPlaceholder.ts](file://src/adaptors/api/base/metaweblog/metaweblogPlaceholder.ts)
 - [wordpressApiAdaptor.ts](file://src/adaptors/api/wordpress/wordpressApiAdaptor.ts)
 - [wordpressConfig.ts](file://src/adaptors/api/wordpress/wordpressConfig.ts)
+- [wordpressdotcomApiAdaptor.ts](file://src/adaptors/api/wordpress-dot-com/wordpressdotcomApiAdaptor.ts)
 - [typechoApiAdaptor.ts](file://src/adaptors/api/typecho/typechoApiAdaptor.ts)
 - [typechoConfig.ts](file://src/adaptors/api/typecho/typechoConfig.ts)
 - [cnblogsApiAdaptor.ts](file://src/adaptors/api/cnblogs/cnblogsApiAdaptor.ts)
 - [cnblogsConfig.ts](file://src/adaptors/api/cnblogs/cnblogsConfig.ts)
 - [jvueApiAdaptor.ts](file://src/adaptors/api/jvue/jvueApiAdaptor.ts)
+- [useProxy.ts](file://src/composables/useProxy.ts)
+- [xmlrpcResponseUtil.ts](file://src/utils/xmlrpcResponseUtil.ts)
 </cite>
+
+## 更新摘要
+**变更内容**
+- 更新代理系统架构，引入增强的siyuanProxyFetch路由机制
+- 新增XML-RPC响应规范化处理流程
+- 添加本地目标URL检测与特殊处理逻辑
+- 优化WordPress.com平台的代理配置策略
+- 增强错误处理与诊断信息收集
 
 ## 目录
 1. [简介](#简介)
@@ -22,19 +33,23 @@
 3. [核心组件](#核心组件)
 4. [架构总览](#架构总览)
 5. [详细组件分析](#详细组件分析)
-6. [依赖关系分析](#依赖关系分析)
-7. [性能考量](#性能考量)
-8. [故障排除指南](#故障排除指南)
-9. [结论](#结论)
-10. [附录](#附录)
+6. [代理系统增强](#代理系统增强)
+7. [依赖关系分析](#依赖关系分析)
+8. [性能考量](#性能考量)
+9. [故障排除指南](#故障排除指南)
+10. [结论](#结论)
+11. [附录](#附录)
 
 ## 简介
 本文件系统性阐述基于Metaweblog协议的适配器设计与实现，覆盖协议工作原理、认证与API调用流程、各平台适配差异（WordPress.com、WordPress.org、Typecho、Jvue、Cnblogs），以及配置模板、认证配置指南、发布参数设置、错误处理策略与故障排除方法。文档面向开发者与运维人员，既提供高层概览也包含代码级细节映射。
 
+**更新** 本版本重点介绍了代理系统的增强功能，包括XML-RPC请求的siyuanProxyFetch路由机制、响应规范化处理和本地目标URL的特殊处理逻辑。
+
 ## 项目结构
-Metaweblog适配器位于适配层目录，采用“通用基类 + 平台特化”的分层设计：
+Metaweblog适配器位于适配层目录，采用"通用基类 + 平台特化"的分层设计：
 - 通用层：通用配置、常量、占位符、通用适配器
 - 平台层：WordPress、Typecho、Cnblogs、Jvue等平台特化适配器
+- 代理层：增强的代理系统，专门处理XML-RPC请求的特殊路由需求
 - 工厂/入口：useMetaweblogApi钩子负责加载配置、初始化适配器并注入平台特性
 
 ```mermaid
@@ -48,11 +63,16 @@ end
 subgraph "平台层"
 WConf["WordpressConfig<br/>WordPress配置"]
 WApi["WordpressApiAdaptor<br/>WordPress适配器"]
+WDotCom["WordpressdotcomApiAdaptor<br/>WordPress.com适配器"]
 TConf["TypechoConfig<br/>Typecho配置"]
 TApi["TypechoApiAdaptor<br/>Typecho适配器"]
 CConf["CnblogsConfig<br/>Cnblogs配置"]
 CApi["CnblogsApiAdaptor<br/>Cnblogs适配器"]
 JApi["JvueApiAdaptor<br/>Jvue适配器"]
+end
+subgraph "代理层"
+Proxy["useProxy<br/>增强代理系统"]
+XmlrpcUtil["xmlrpcResponseUtil<br/>XML响应规范化"]
 end
 subgraph "入口"
 Hook["useMetaweblogApi<br/>工厂钩子"]
@@ -61,8 +81,11 @@ Hook --> MBase
 MBase --> MConf
 MBase --> MConst
 MBase --> MPlace
+MBase --> Proxy
+Proxy --> XmlrpcUtil
 WApi --> MBase
 WConf --> MConf
+WDotCom --> MBase
 TApi --> MBase
 TConf --> MConf
 CApi --> MBase
@@ -70,38 +93,34 @@ CConf --> MConf
 JApi --> MBase
 ```
 
-图表来源
+**图表来源**
 - [useMetaweblogApi.ts:30-89](file://src/adaptors/api/metaweblog/useMetaweblogApi.ts#L30-L89)
 - [metaweblogBlogApiAdaptor.ts:26-42](file://src/adaptors/api/base/metaweblog/metaweblogBlogApiAdaptor.ts#L26-L42)
-- [metaweblogConfig.ts:17-99](file://src/adaptors/api/base/metaweblog/metaweblogConfig.ts#L17-L99)
-- [metaweblogConstants.ts:17-26](file://src/adaptors/api/base/metaweblog/metaweblogConstants.ts#L17-L26)
-- [wordpressApiAdaptor.ts:22-34](file://src/adaptors/api/wordpress/wordpressApiAdaptor.ts#L22-L34)
-- [wordpressConfig.ts:20-45](file://src/adaptors/api/wordpress/wordpressConfig.ts#L20-L45)
-- [typechoApiAdaptor.ts:22-33](file://src/adaptors/api/typecho/typechoApiAdaptor.ts#L22-L33)
-- [typechoConfig.ts:20-44](file://src/adaptors/api/typecho/typechoConfig.ts#L20-L44)
-- [cnblogsApiAdaptor.ts:27-40](file://src/adaptors/api/cnblogs/cnblogsApiAdaptor.ts#L27-L40)
-- [cnblogsConfig.ts:19-43](file://src/adaptors/api/cnblogs/cnblogsConfig.ts#L19-L43)
-- [jvueApiAdaptor.ts:22-33](file://src/adaptors/api/jvue/jvueApiAdaptor.ts#L22-L33)
+- [useProxy.ts:113-132](file://src/composables/useProxy.ts#L113-L132)
+- [xmlrpcResponseUtil.ts:128-157](file://src/utils/xmlrpcResponseUtil.ts#L128-L157)
 
-章节来源
+**章节来源**
 - [useMetaweblogApi.ts:30-89](file://src/adaptors/api/metaweblog/useMetaweblogApi.ts#L30-L89)
 - [metaweblogBlogApiAdaptor.ts:26-42](file://src/adaptors/api/base/metaweblog/metaweblogBlogApiAdaptor.ts#L26-L42)
+- [useProxy.ts:113-132](file://src/composables/useProxy.ts#L113-L132)
 
 ## 核心组件
 - 通用配置类：承载通用元数据（首页、API地址、用户名、密码、博客ID、文章别名key、预览URL、页面类型、跨域代理等），并统一平台占位符与能力开关。
 - 通用常量：定义Metaweblog协议方法名，如获取博客列表、新建/编辑/删除文章、最近文章、文章详情、分类、媒体对象等。
 - 通用适配器：封装XML-RPC代理调用、文章字段适配、分类/媒体对象处理、预览URL生成等通用逻辑。
 - 平台特化适配器：在通用适配器基础上覆写特定行为（如博客园自动添加Markdown分类、预览URL拼接用户ID）。
+- 增强代理系统：专门处理XML-RPC请求的特殊路由需求，包括siyuanProxyFetch路由、响应规范化和本地目标URL检测。
 - 工厂钩子：根据配置或环境变量初始化MetaweblogConfig，设置平台能力开关与默认参数，返回适配器实例。
 
-章节来源
+**章节来源**
 - [metaweblogConfig.ts:17-99](file://src/adaptors/api/base/metaweblog/metaweblogConfig.ts#L17-L99)
 - [metaweblogConstants.ts:17-26](file://src/adaptors/api/base/metaweblog/metaweblogConstants.ts#L17-L26)
 - [metaweblogBlogApiAdaptor.ts:26-42](file://src/adaptors/api/base/metaweblog/metaweblogBlogApiAdaptor.ts#L26-L42)
+- [useProxy.ts:113-132](file://src/composables/useProxy.ts#L113-L132)
 - [useMetaweblogApi.ts:30-89](file://src/adaptors/api/metaweblog/useMetaweblogApi.ts#L30-L89)
 
 ## 架构总览
-Metaweblog适配器通过工厂钩子加载配置，构造通用适配器，再由平台特化适配器扩展能力。所有协议调用经由XML-RPC代理转发，确保浏览器端跨域安全。
+Metaweblog适配器通过工厂钩子加载配置，构造通用适配器，再由平台特化适配器扩展能力。所有协议调用经由增强的XML-RPC代理转发，确保浏览器端跨域安全，并通过siyuanProxyFetch路由避免中间件JSON解析问题。
 
 ```mermaid
 sequenceDiagram
@@ -109,21 +128,38 @@ participant Caller as "调用方"
 participant Hook as "useMetaweblogApi"
 participant Adapter as "MetaweblogBlogApiAdaptor"
 participant Proxy as "proxyXmlrpc(XML-RPC)"
+participant SiyuanProxy as "siyuanProxyFetch"
+participant Middleware as "middleware"
+participant XmlrpcUtil as "normalizeXmlrpcResponseText"
 participant Blog as "目标博客服务"
 Caller->>Hook : "传入配置键或直接new MetaweblogConfig"
 Hook->>Hook : "解析配置/环境变量/默认值"
 Hook->>Adapter : "new MetaweblogBlogApiAdaptor(appInstance, cfg)"
 Caller->>Adapter : "调用API方法(如newPost/editPost)"
 Adapter->>Proxy : "proxyXmlrpc(apiUrl, method, params)"
+Proxy->>Proxy : "检测目标URL是否为本地/回环"
+alt 本地/回环目标
+Proxy->>Blog : "直接发送XML-RPC请求"
+else 公网目标
+Proxy->>SiyuanProxy : "siyuanProxyFetch(url, body, 'text/xml', 'base64', 'text')"
+SiyuanProxy->>Blog : "通过思源forwardProxy发送请求"
+Blog-->>SiyuanProxy : "返回XML响应"
+SiyuanProxy-->>Proxy : "返回规范化后的XML文本"
+end
+Proxy->>XmlrpcUtil : "normalizeXmlrpcResponseText(rawResponse)"
+XmlrpcUtil->>XmlrpcUtil : "提取XML文本并去除XML头"
 Proxy->>Blog : "发送XML-RPC请求"
 Blog-->>Proxy : "返回响应"
 Proxy-->>Adapter : "返回结果"
 Adapter-->>Caller : "返回业务结果"
 ```
 
-图表来源
+**图表来源**
 - [useMetaweblogApi.ts:30-89](file://src/adaptors/api/metaweblog/useMetaweblogApi.ts#L30-L89)
 - [metaweblogBlogApiAdaptor.ts:239-241](file://src/adaptors/api/base/metaweblog/metaweblogBlogApiAdaptor.ts#L239-L241)
+- [useProxy.ts:113-132](file://src/composables/useProxy.ts#L113-L132)
+- [useProxy.ts:218-343](file://src/composables/useProxy.ts#L218-L343)
+- [xmlrpcResponseUtil.ts:128-157](file://src/utils/xmlrpcResponseUtil.ts#L128-L157)
 
 ## 详细组件分析
 
@@ -134,7 +170,8 @@ Adapter-->>Caller : "返回业务结果"
   - newPost/editPost/deletePost：构建postStruct并调用对应方法；支持发布/草稿状态切换。
   - getPreviewUrl：根据平台配置替换占位符生成预览URL。
   - createPostStruct：将Post对象的关键字段映射到协议期望的结构。
-- 安全与跨域：通过proxyXmlrpc代理XML-RPC请求，避免浏览器同源限制。
+  - metaweblogCall：重写为使用增强的proxyXmlrpc方法。
+- 安全与跨域：通过增强的proxyXmlrpc代理XML-RPC请求，避免浏览器同源限制。
 
 ```mermaid
 classDiagram
@@ -150,14 +187,14 @@ class MetaweblogBlogApiAdaptor {
 +newMediaObject(media) Attachment
 +getPreviewUrl(id) string
 -createPostStruct(post) object
--metaweblogCall(method, params) any
++metaweblogCall(method, params) any
 }
 ```
 
-图表来源
+**图表来源**
 - [metaweblogBlogApiAdaptor.ts:26-321](file://src/adaptors/api/base/metaweblog/metaweblogBlogApiAdaptor.ts#L26-L321)
 
-章节来源
+**章节来源**
 - [metaweblogBlogApiAdaptor.ts:48-186](file://src/adaptors/api/base/metaweblog/metaweblogBlogApiAdaptor.ts#L48-L186)
 - [metaweblogBlogApiAdaptor.ts:239-317](file://src/adaptors/api/base/metaweblog/metaweblogBlogApiAdaptor.ts#L239-L317)
 
@@ -166,20 +203,20 @@ class MetaweblogBlogApiAdaptor {
 - 能力开关：tagEnabled、cateEnabled、categoryType、allowCateChange、knowledgeSpaceEnabled、usernameEnabled、showTokenTip、allowPreviewUrlChange。
 - 默认行为：页面类型默认Html，分类类型多选，标签启用，知识空间禁用。
 
-章节来源
+**章节来源**
 - [metaweblogConfig.ts:17-99](file://src/adaptors/api/base/metaweblog/metaweblogConfig.ts#L17-L99)
 
 ### 协议常量：MetaweblogConstants
 - 方法名：metaWeblog.getUsersBlogs、metaWeblog.newPost、metaWeblog.editPost、metaWeblog.deletePost、metaWeblog.getRecentPosts、metaWeblog.getPost、metaWeblog.getCategories、metaWeblog.newMediaObject。
 
-章节来源
+**章节来源**
 - [metaweblogConstants.ts:17-26](file://src/adaptors/api/base/metaweblog/metaweblogConstants.ts#L17-L26)
 
 ### 工厂钩子：useMetaweblogApi
 - 功能：优先使用传入配置，否则从设置存储读取；若为空则回退到环境变量与默认值；初始化posidKey；设置平台能力开关（标签/分类/多选分类/图片库支持等）；返回cfg与blogApi。
 - 入口：new MetaweblogBlogApiAdaptor(appInstance, cfg)。
 
-章节来源
+**章节来源**
 - [useMetaweblogApi.ts:30-89](file://src/adaptors/api/metaweblog/useMetaweblogApi.ts#L30-L89)
 
 ### 平台适配器与配置
@@ -188,15 +225,23 @@ class MetaweblogBlogApiAdaptor {
 - 适配器：继承通用适配器，设置blogid为"wordpress"。
 - 配置：解析主页与API地址，设置预览URL为?p=[postid]，页面类型Html，启用多选分类与标签。
 
-章节来源
+**章节来源**
 - [wordpressApiAdaptor.ts:22-34](file://src/adaptors/api/wordpress/wordpressApiAdaptor.ts#L22-L34)
 - [wordpressConfig.ts:20-45](file://src/adaptors/api/wordpress/wordpressConfig.ts#L20-L45)
+
+#### WordPress.com适配器与配置
+- 适配器：继承通用适配器，设置blogid为"wordpress-dot-com"。
+- 特殊处理：重写metaweblogCall方法，强制使用siyuanProxyFetch路由，避免中间件JSON解析问题。
+- 配置：解析主页与API地址，设置预览URL为?p=[postid]，页面类型Html，启用多选分类与标签。
+
+**章节来源**
+- [wordpressdotcomApiAdaptor.ts:25-71](file://src/adaptors/api/wordpress-dot-com/wordpressdotcomApiAdaptor.ts#L25-L71)
 
 #### Typecho适配器与配置
 - 适配器：继承通用适配器，设置blogid为"typecho"。
 - 配置：解析主页与API地址，设置预览URL为/index.php/archives/[postid]，页面类型Html，启用多选分类与标签。
 
-章节来源
+**章节来源**
 - [typechoApiAdaptor.ts:22-33](file://src/adaptors/api/typecho/typechoApiAdaptor.ts#L22-L33)
 - [typechoConfig.ts:20-44](file://src/adaptors/api/typecho/typechoConfig.ts#L20-L44)
 
@@ -204,14 +249,14 @@ class MetaweblogBlogApiAdaptor {
 - 适配器：继承通用适配器，设置blogid为"cnblogs"；覆写getUsersBlogs、deletePost、getCategories、getPreviewUrl；新增assignMdCategory逻辑，自动为文章添加Markdown分类且不展示该分类。
 - 配置：固定主页为https://www.cnblogs.com/；token设置页URL；预览URL含[userid]与[postid]占位符；密码类型为Token；页面类型Markdown；启用多选分类与标签。
 
-章节来源
+**章节来源**
 - [cnblogsApiAdaptor.ts:27-131](file://src/adaptors/api/cnblogs/cnblogsApiAdaptor.ts#L27-L131)
 - [cnblogsConfig.ts:19-43](file://src/adaptors/api/cnblogs/cnblogsConfig.ts#L19-L43)
 
 #### Jvue适配器
 - 适配器：继承通用适配器，设置blogid为"jvue"。
 
-章节来源
+**章节来源**
 - [jvueApiAdaptor.ts:22-33](file://src/adaptors/api/jvue/jvueApiAdaptor.ts#L22-L33)
 
 ### API调用流程（以新建文章为例）
@@ -230,18 +275,83 @@ Adapter->>Proxy : "proxyXmlrpc(apiUrl, metaWeblog.newPost, params)"
 Proxy->>RPC : "发送XML-RPC请求"
 RPC-->>Proxy : "返回postid"
 Proxy-->>Adapter : "返回postid"
-Adapter-->>UI : "返回postid"
 ```
 
-图表来源
+**图表来源**
 - [useMetaweblogApi.ts:30-89](file://src/adaptors/api/metaweblog/useMetaweblogApi.ts#L30-L89)
 - [metaweblogBlogApiAdaptor.ts:111-136](file://src/adaptors/api/base/metaweblog/metaweblogBlogApiAdaptor.ts#L111-L136)
 - [metaweblogBlogApiAdaptor.ts:239-241](file://src/adaptors/api/base/metaweblog/metaweblogBlogApiAdaptor.ts#L239-L241)
 
+## 代理系统增强
+
+### 增强代理系统概述
+增强的代理系统专门处理XML-RPC请求的特殊需求，通过siyuanProxyFetch路由避免中间件JSON解析问题，同时保持对其他内容类型的向后兼容性。
+
+### 核心功能特性
+- **XML-RPC专用路由**：MetaWeblog XML-RPC请求优先通过siyuanProxyFetch路由
+- **响应规范化**：在proxyXmlrpc入口调用normalizeXmlrpcResponseText进行XML响应规范化
+- **本地目标检测**：使用isLoopbackOrLocalTargetUrl检测本地/回环地址
+- **向后兼容性**：保持对JSON、HTML、XML等其他内容类型的正常处理
+- **错误诊断**：提供详细的诊断信息，包括阶段、传输方式、URL、状态码等
+
+### 代理调用流程
+
+```mermaid
+flowchart TD
+A[proxyXmlrpc调用] --> B{检测目标URL}
+B --> |本地/回环| C[直接发送XML-RPC请求]
+B --> |公网| D[siyuanProxyFetch路由]
+D --> E[siyuanProxyFetch执行]
+E --> F[normalizeXmlrpcResponseText]
+F --> G[XmlrpcUtil.removeXmlHeader]
+G --> H[反序列化XML响应]
+C --> H
+H --> I[返回结果]
+```
+
+**图表来源**
+- [useProxy.ts:113-132](file://src/composables/useProxy.ts#L113-L132)
+- [useProxy.ts:218-343](file://src/composables/useProxy.ts#L218-L343)
+- [xmlrpcResponseUtil.ts:128-157](file://src/utils/xmlrpcResponseUtil.ts#L128-L157)
+
+### 本地目标URL检测
+系统能够智能识别本地/回环地址，避免使用思源forwardProxy：
+- localhost:8090/xmlrpc.php
+- 127.0.0.1:8090/xmlrpc.php  
+- [::1]:8090/xmlrpc.php
+- 10.x.x.x网段
+- 192.168.x.x网段
+- 172.16-31.x.x网段
+
+**章节来源**
+- [useProxy.ts:113-132](file://src/composables/useProxy.ts#L113-L132)
+- [useProxy.ts:163-187](file://src/utils/xmlrpcResponseUtil.ts#L163-L187)
+
+### XML响应规范化
+normalizeXmlrpcResponseText函数处理各种代理响应格式：
+- 提取wrapper对象中的XML文本
+- 解码base64编码的XML响应
+- 处理不同大小写的字段名（body/Body/data/Data等）
+- 移除XML声明头
+- 提供清晰的错误信息
+
+**章节来源**
+- [xmlrpcResponseUtil.ts:128-157](file://src/utils/xmlrpcResponseUtil.ts#L128-L157)
+
+### WordPress.com特殊处理
+WordPress.com平台强制使用siyuanProxyFetch路由：
+- 通过forceProxy参数强制使用代理
+- 避免中间件将XML响应解析为JSON对象
+- 确保XML-RPC请求的正确传输
+
+**章节来源**
+- [wordpressdotcomApiAdaptor.ts:69-71](file://src/adaptors/api/wordpress-dot-com/wordpressdotcomApiAdaptor.ts#L69-L71)
+
 ## 依赖关系分析
 - 继承关系：各平台适配器均继承自通用适配器，复用协议调用与字段适配逻辑。
 - 配置依赖：平台配置类在通用配置基础上补充平台特定参数（API地址解析、预览URL、页面类型、密码类型等）。
-- 外部依赖：XML-RPC代理用于跨域请求；日志工具用于调试与错误追踪。
+- 代理依赖：增强代理系统为所有XML-RPC请求提供统一的路由和处理机制。
+- 外部依赖：XML-RPC代理用于跨域请求；日志工具用于调试与错误追踪；XML响应规范化工具处理代理响应格式。
 
 ```mermaid
 classDiagram
@@ -249,25 +359,32 @@ MetaweblogConfig <|-- WordpressConfig
 MetaweblogConfig <|-- TypechoConfig
 MetaweblogConfig <|-- CnblogsConfig
 MetaweblogBlogApiAdaptor <|-- WordpressApiAdaptor
+MetaweblogBlogApiAdaptor <|-- WordpressdotcomApiAdaptor
 MetaweblogBlogApiAdaptor <|-- TypechoApiAdaptor
 MetaweblogBlogApiAdaptor <|-- CnblogsApiAdaptor
 MetaweblogBlogApiAdaptor <|-- JvueApiAdaptor
+useProxy --> xmlrpcResponseUtil
 ```
 
-图表来源
+**图表来源**
 - [metaweblogConfig.ts:17-99](file://src/adaptors/api/base/metaweblog/metaweblogConfig.ts#L17-L99)
 - [wordpressConfig.ts:20-45](file://src/adaptors/api/wordpress/wordpressConfig.ts#L20-L45)
 - [typechoConfig.ts:20-44](file://src/adaptors/api/typecho/typechoConfig.ts#L20-L44)
 - [cnblogsConfig.ts:19-43](file://src/adaptors/api/cnblogs/cnblogsConfig.ts#L19-L43)
 - [wordpressApiAdaptor.ts:22-34](file://src/adaptors/api/wordpress/wordpressApiAdaptor.ts#L22-L34)
+- [wordpressdotcomApiAdaptor.ts:25-71](file://src/adaptors/api/wordpress-dot-com/wordpressdotcomApiAdaptor.ts#L25-L71)
 - [typechoApiAdaptor.ts:22-33](file://src/adaptors/api/typecho/typechoApiAdaptor.ts#L22-L33)
 - [cnblogsApiAdaptor.ts:27-40](file://src/adaptors/api/cnblogs/cnblogsApiAdaptor.ts#L27-L40)
 - [jvueApiAdaptor.ts:22-33](file://src/adaptors/api/jvue/jvueApiAdaptor.ts#L22-L33)
+- [useProxy.ts:113-132](file://src/composables/useProxy.ts#L113-L132)
+- [xmlrpcResponseUtil.ts:128-157](file://src/utils/xmlrpcResponseUtil.ts#L128-L157)
 
 ## 性能考量
 - 请求聚合：批量获取最近文章时建议控制numOfPosts数量，避免单次请求过大。
 - 字段映射：createPostStruct仅映射非空字段，减少冗余传输。
 - 代理开销：XML-RPC代理增加一次网络往返，应尽量合并调用或缓存必要数据（如分类列表）。
+- 本地目标优化：本地/回环地址直接连接，避免forwardProxy的额外开销。
+- 响应处理：XML响应规范化操作在必要时进行，避免不必要的字符串处理。
 - 图片上传：媒体对象上传可能较大，建议在前端压缩与分块上传策略（如适用）。
 
 ## 故障排除指南
@@ -276,20 +393,29 @@ MetaweblogBlogApiAdaptor <|-- JvueApiAdaptor
   - 确认预览URL与API地址配置正确，尤其是占位符替换。
 - 跨域与代理
   - 若XML-RPC调用失败，检查middlewareUrl与代理可用性；确认代理支持XML-RPC。
+  - 对于本地/回环地址，检查是否被错误地通过forwardProxy路由。
+- XML响应问题
+  - 如果收到空对象{}，检查是否使用了正确的siyuanProxyFetch路由。
+  - 查看代理诊断信息，确认请求是否正确到达目标服务器。
 - 分类/标签不可见
   - 某些平台（如博客园）会隐藏特定分类（如Markdown分类），请在平台侧确认。
 - 发布状态异常
   - 发布/草稿切换由publish参数控制；若需要强制使用Post对象自身状态，请确保post.post_status已正确设置。
 - 预览URL错误
   - Cnblogs预览URL包含[userid]，需确保API地址中包含用户标识；其他平台请核对预览URL模板。
+- 代理配置问题
+  - 对于WordPress.com等平台，确保强制使用代理路由。
+  - 检查isLoopbackOrLocalTargetUrl检测逻辑，确认本地目标的正确识别。
 
-章节来源
+**章节来源**
 - [cnblogsConfig.ts:31-32](file://src/adaptors/api/cnblogs/cnblogsConfig.ts#L31-L32)
 - [cnblogsApiAdaptor.ts:111-116](file://src/adaptors/api/cnblogs/cnblogsApiAdaptor.ts#L111-L116)
 - [metaweblogBlogApiAdaptor.ts:111-136](file://src/adaptors/api/base/metaweblog/metaweblogBlogApiAdaptor.ts#L111-L136)
+- [useProxy.ts:113-132](file://src/composables/useProxy.ts#L113-L132)
+- [xmlrpcResponseUtil.ts:128-157](file://src/utils/xmlrpcResponseUtil.ts#L128-L157)
 
 ## 结论
-本适配器以通用基类为核心，通过平台特化适配器实现差异化行为，结合工厂钩子完成配置注入与能力开关设置。其遵循Metaweblog协议标准方法，借助XML-RPC代理实现跨域安全访问。针对不同平台（WordPress、Typecho、Cnblogs、Jvue）提供了清晰的配置与适配路径，便于扩展与维护。
+本适配器以通用基类为核心，通过平台特化适配器实现差异化行为，结合增强的代理系统完成配置注入与能力开关设置。新的代理系统通过siyuanProxyFetch路由专门处理XML-RPC请求，避免中间件JSON解析问题，同时保持对其他内容类型的向后兼容性。其遵循Metaweblog协议标准方法，借助增强的XML-RPC代理实现跨域安全访问。针对不同平台（WordPress、Typecho、Cnblogs、Jvue、WordPress.com）提供了清晰的配置与适配路径，便于扩展与维护。
 
 ## 附录
 
@@ -306,34 +432,39 @@ MetaweblogBlogApiAdaptor <|-- JvueApiAdaptor
   - 能力开关：tagEnabled、cateEnabled、categoryType、allowCateChange、knowledgeSpaceEnabled、usernameEnabled、showTokenTip、allowPreviewUrlChange
 - 平台特化配置
   - WordPress：解析主页与API地址，预览URL?p=[postid]，页面类型Html
+  - WordPress.com：解析主页与API地址，预览URL?p=[postid]，页面类型Html，强制使用代理路由
   - Typecho：解析主页与API地址，预览URL/index.php/archives/[postid]，页面类型Html
   - Cnblogs：固定主页，Token类型，预览URL含[userid]，页面类型Markdown
 
-章节来源
+**章节来源**
 - [metaweblogConfig.ts:17-99](file://src/adaptors/api/base/metaweblog/metaweblogConfig.ts#L17-L99)
 - [wordpressConfig.ts:20-45](file://src/adaptors/api/wordpress/wordpressConfig.ts#L20-L45)
+- [wordpressdotcomApiAdaptor.ts:25-71](file://src/adaptors/api/wordpress-dot-com/wordpressdotcomApiAdaptor.ts#L25-L71)
 - [typechoConfig.ts:20-44](file://src/adaptors/api/typecho/typechoConfig.ts#L20-L44)
 - [cnblogsConfig.ts:19-43](file://src/adaptors/api/cnblogs/cnblogsConfig.ts#L19-L43)
 
 ### 认证配置指南
 - WordPress：提供主页地址，内部解析API地址；用户名必填，密码为应用密码或登录密码。
+- WordPress.com：提供主页地址，内部解析API地址；用户名必填，密码为应用密码或登录密码。
 - Typecho：提供主页地址，内部解析API地址；用户名必填，密码为登录密码。
 - Cnblogs：提供API地址（包含用户标识），用户名必填，密码类型为Token，需在个人设置页获取。
 
-章节来源
+**章节来源**
 - [wordpressConfig.ts:29-35](file://src/adaptors/api/wordpress/wordpressConfig.ts#L29-L35)
+- [wordpressdotcomApiAdaptor.ts:32-36](file://src/adaptors/api/wordpress-dot-com/wordpressdotcomApiAdaptor.ts#L32-L36)
 - [typechoConfig.ts:29-35](file://src/adaptors/api/typecho/typechoConfig.ts#L29-L35)
 - [cnblogsConfig.ts:28-32](file://src/adaptors/api/cnblogs/cnblogsConfig.ts#L28-L32)
 
 ### 发布参数设置
 - 发布/草稿：newPost/editPost支持publish参数控制；也可直接设置Post对象的post_status。
 - 分类/标签：默认启用多选分类与标签；允许在UI层选择多个分类。
-- 页面类型：WordPress/Typecho默认Html；Cnblogs默认Markdown。
+- 页面类型：WordPress/Typecho默认Html；WordPress.com默认Html；Cnblogs默认Markdown。
 
-章节来源
+**章节来源**
 - [useMetaweblogApi.ts:69-77](file://src/adaptors/api/metaweblog/useMetaweblogApi.ts#L69-L77)
 - [metaweblogBlogApiAdaptor.ts:111-167](file://src/adaptors/api/base/metaweblog/metaweblogBlogApiAdaptor.ts#L111-L167)
 - [wordpressConfig.ts:36-36](file://src/adaptors/api/wordpress/wordpressConfig.ts#L36-L36)
+- [wordpressdotcomApiAdaptor.ts:35](file://src/adaptors/api/wordpress-dot-com/wordpressdotcomApiAdaptor.ts#L35)
 - [typechoConfig.ts:36-36](file://src/adaptors/api/typecho/typechoConfig.ts#L36-L36)
 - [cnblogsConfig.ts:33-33](file://src/adaptors/api/cnblogs/cnblogsConfig.ts#L33-L33)
 
@@ -341,7 +472,11 @@ MetaweblogBlogApiAdaptor <|-- JvueApiAdaptor
 - 通用错误：捕获XML-RPC调用异常，记录日志并返回空结果或布尔false。
 - 分类获取：在getCategories中捕获异常并记录错误日志，保证不影响整体流程。
 - 媒体上传：在newMediaObject中捕获异常并记录错误日志，返回空附件对象。
+- 代理错误：提供详细的诊断信息，包括阶段、传输方式、URL、状态码、响应体预览等。
+- XML响应错误：通过normalizeXmlrpcResponseText提供清晰的错误信息，避免中间件JSON解析问题。
 
-章节来源
+**章节来源**
 - [metaweblogBlogApiAdaptor.ts:218-237](file://src/adaptors/api/base/metaweblog/metaweblogBlogApiAdaptor.ts#L218-L237)
 - [metaweblogBlogApiAdaptor.ts:188-216](file://src/adaptors/api/base/metaweblog/metaweblogBlogApiAdaptor.ts#L188-L216)
+- [useProxy.ts:305-324](file://src/composables/useProxy.ts#L305-L324)
+- [xmlrpcResponseUtil.ts:140-157](file://src/utils/xmlrpcResponseUtil.ts#L140-L157)

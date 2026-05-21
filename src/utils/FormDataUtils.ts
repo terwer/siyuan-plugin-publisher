@@ -8,6 +8,7 @@
  */
 
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
+import PluginFetchUtil from "~/src/utils/PluginFetchUtil.ts"
 
 /** 表单上传传输方式（与 JSON 请求的 forceProxy 策略解耦） */
 type FormUploadTransport = "plugin-node-fetch" | "siyuan-forward-proxy"
@@ -30,13 +31,9 @@ interface FormUploadTransportContext {
  * @since 1.20.2
  */
 class FormDataUtils {
-  private static pluginLibPath(appInstance: PublisherAppInstance, relativePath: string) {
-    return `${appInstance.moduleBase}${relativePath}`
-  }
-
   /** 插件宿主是否具备 bundled node-fetch 直传 multipart 的能力 */
   public static canUsePluginFormFetch(appInstance: PublisherAppInstance): boolean {
-    return typeof appInstance?.win?.require === "function"
+    return PluginFetchUtil.canUsePluginFetch(appInstance)
   }
 
   /**
@@ -65,7 +62,7 @@ class FormDataUtils {
     let FormData = win.FormData
     let Blob = win.Blob
     if (win.require) {
-      const nfc = win.require(this.pluginLibPath(appInstance, "libs/node-fetch-cjs/dist/index.js"))
+      const nfc = win.require(PluginFetchUtil.pluginLibPath(appInstance, "libs/node-fetch-cjs/dist/index.js"))
       FormData = nfc.FormData
       Blob = nfc.Blob
     }
@@ -81,7 +78,7 @@ class FormDataUtils {
    */
   public static getFormDataFetch(appInstance: PublisherAppInstance) {
     const win = appInstance.win
-    const doFetch = win.require(this.pluginLibPath(appInstance, "libs/zhi-formdata-fetch/index.cjs"))
+    const doFetch = win.require(PluginFetchUtil.pluginLibPath(appInstance, "libs/zhi-formdata-fetch/index.cjs"))
     return doFetch
   }
 }

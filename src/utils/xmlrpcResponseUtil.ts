@@ -155,3 +155,33 @@ export function normalizeXmlrpcResponseText(raw: unknown): string {
 
   return maybeDecodeBase64Xml(fallback)
 }
+
+/**
+ * Whether the XML-RPC target must not use SiYuan forwardProxy.
+ * Kernel forwardProxy blocks loopback/private targets (e.g. local WordPress).
+ */
+export function isLoopbackOrLocalTargetUrl(url: string): boolean {
+  try {
+    const { hostname } = new URL(url)
+    const host = hostname.toLowerCase().replace(/^\[|\]$/g, "")
+    if (host === "localhost" || host === "127.0.0.1" || host === "::1" || host === "0.0.0.0") {
+      return true
+    }
+    if (/^10\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(host)) {
+      return true
+    }
+    if (/^192\.168\.\d{1,3}\.\d{1,3}$/.test(host)) {
+      return true
+    }
+    const m = host.match(/^172\.(\d{1,3})\.\d{1,3}\.\d{1,3}$/)
+    if (m) {
+      const second = Number(m[1])
+      if (second >= 16 && second <= 31) {
+        return true
+      }
+    }
+  } catch {
+    return false
+  }
+  return false
+}
