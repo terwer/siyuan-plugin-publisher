@@ -125,6 +125,46 @@ describe("YuquewebWebAdaptor.logoutWebAuth", () => {
   })
 })
 
+describe("YuquewebWebAdaptor JSON fetch diagnostics", () => {
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
+  it("does not preset transport before webFetch delegates to jsonFetchClient", async () => {
+    const adaptor = createAdaptor(undefined, { password: "cookie=session-secret; ctoken=secret-token" })
+    let diagnosticAtWebFetch: Record<string, unknown> | undefined
+    vi.spyOn(adaptor as any, "webFetch").mockImplementation(
+      async (
+        _url: string,
+        _headers: any[],
+        _params: any,
+        _method: any,
+        _contentType: any,
+        _forceProxy: any,
+        _pe: any,
+        _re: any,
+        options: any
+      ) => {
+        diagnosticAtWebFetch = { ...options.diagnostic }
+        Object.assign(options.diagnostic, {
+          stage: "forward-proxy",
+          transport: "siyuan-forward-proxy",
+          status: 403,
+        })
+        const error = new Error("forbidden")
+        ;(error as any).status = 403
+        ;(error as any).diagnostic = options.diagnostic
+        throw error
+      }
+    )
+
+    await expect((adaptor as any).getMetaData()).rejects.toThrow()
+
+    expect(diagnosticAtWebFetch?.stage).toBe("web-fetch")
+    expect(diagnosticAtWebFetch?.transport).toBeUndefined()
+  })
+})
+
 describe("YuquewebWebAdaptor image upload diagnostics", () => {
   afterEach(() => {
     vi.restoreAllMocks()

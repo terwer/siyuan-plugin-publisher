@@ -727,13 +727,14 @@ class YuquewebWebAdaptor extends BaseWebApi {
     })
 
     const diagnostic: WebRequestDiagnostic = {
-      stage: "forward-proxy",
-      transport: "siyuan-forward-proxy",
+      stage: "web-fetch",
       url: apiUrl,
     }
 
     try {
-      const resJson = await this.webFetch(apiUrl, [mergedHeaders], body, method, contentType, true, "base64")
+      const resJson = await this.webFetch(apiUrl, [mergedHeaders], body, method, contentType, true, "base64", "text", {
+        diagnostic,
+      })
       return this.unwrapYuquewebResponse(resJson, apiUrl, undefined, diagnostic)
     } catch (e) {
       const errorDiagnostic = this.mergeUploadDiagnostic(diagnostic, e)

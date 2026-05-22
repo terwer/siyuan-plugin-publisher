@@ -25,6 +25,7 @@ import { JsonUtil, StrUtil } from "zhi-common"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import { Base64 } from "js-base64"
 import { createFormUploadClient } from "~/src/utils/formUploadClient.ts"
+import { createJsonFetchClient } from "~/src/utils/jsonFetchClient.ts"
 import { sanitizeSensitiveForLog } from "~/src/utils/sensitiveLogSanitizer.ts"
 
 interface WebRequestDiagnostic {
@@ -44,6 +45,10 @@ interface WebFormFetchOptions {
   diagnostic?: WebRequestDiagnostic
 }
 
+interface WebFetchOptions {
+  diagnostic?: WebRequestDiagnostic
+}
+
 /**
  * 网页授权统一封装基类
  *
@@ -60,6 +65,7 @@ class BaseWebApi extends WebApi {
   private readonly proxyFetch: any
   private readonly corsFetch: any
   private readonly formUploadClient: ReturnType<typeof createFormUploadClient>
+  private readonly jsonFetchClient: ReturnType<typeof createJsonFetchClient>
 
   /**
    * 初始化网页授权 API 适配器
@@ -86,13 +92,34 @@ class BaseWebApi extends WebApi {
       isUseSiyuanProxy: this.isUseSiyuanProxy,
       isInSiyuanOrSiyuanNewWin,
       forwardProxyFormPost: async (reqUrl, reqHeaders, body, fp) => {
-        const fetchResult = await this.webFetch(reqUrl, reqHeaders, body, "POST", undefined, fp, "base64", "base64")
+        const fetchResult = await this.proxyFetch(
+          reqUrl,
+          reqHeaders,
+          body,
+          "POST",
+          undefined,
+          fp,
+          "base64",
+          "base64"
+        )
         return {
           status: Number(fetchResult?.status),
           body: Base64.fromBase64(fetchResult.body),
         }
       },
       middlewareFormPost: (reqUrl, reqHeaders, body) => this.corsFetch(reqUrl, reqHeaders, body, "POST"),
+      buildDiagnosticPreview: (input) => this.buildDiagnosticPreview(input),
+      attachDiagnosticError: (e, d) => this.attachDiagnosticError(e, d as WebRequestDiagnostic | undefined),
+    })
+    this.jsonFetchClient = createJsonFetchClient({
+      appInstance: this.appInstance,
+      logger: this.logger,
+      isUseSiyuanProxy: this.isUseSiyuanProxy,
+      isInSiyuanOrSiyuanNewWin,
+      siyuanForwardProxyFetch: (reqUrl, reqHeaders, params, method, contentType, fp, pe, re) =>
+        this.proxyFetch(reqUrl, reqHeaders, params, method, contentType, fp, pe, re),
+      middlewareFetch: (reqUrl, reqHeaders, params, method) =>
+        this.corsFetch(reqUrl, reqHeaders, params, method),
       buildDiagnosticPreview: (input) => this.buildDiagnosticPreview(input),
       attachDiagnosticError: (e, d) => this.attachDiagnosticError(e, d as WebRequestDiagnostic | undefined),
     })
@@ -211,31 +238,24 @@ class BaseWebApi extends WebApi {
       | "base32"
       | "base32-std"
       | "base32-hex"
-      | "hex" = "text"
+      | "hex" = "text",
+    options: WebFetchOptions = {}
   ) {
     const header = headers.length > 0 ? headers[0] : {}
-    const body = method === "GET" || method === "HEAD" ? undefined : params
-    // 如果没有可用的 CORS 代理或者没有强制使用代理，使用默认的自动检测机制
-    if (this.isUseSiyuanProxy || (!this.isUseSiyuanProxy && forceProxy) || !forceProxy) {
-      this.logger.info("Using legency web fetch")
-      // remove cors fetch header
-      delete header["x-cors-headers"]
-      const webHeaders = [header]
-      return await this.proxyFetch(
-        url,
-        webHeaders,
-        body,
-        method,
-        contentType,
-        forceProxy,
-        payloadEncoding,
-        responseEncoding
-      )
-    } else {
-      this.logger.info("Using cors web fetch")
-      const webHeaders = [header]
-      return this.corsFetch(url, webHeaders, body, method)
-    }
+    delete header["x-cors-headers"]
+    const result = await this.jsonFetchClient.fetch({
+      url,
+      headers: [header],
+      params: method === "GET" || method === "HEAD" ? undefined : params,
+      method,
+      contentType,
+      forceProxy,
+      payloadEncoding,
+      responseEncoding,
+      diagnostic: options.diagnostic,
+    })
+    this.logger.debug("webFetch success =>", sanitizeSensitiveForLog(result))
+    return result
   }
 
   /**
@@ -296,4 +316,4 @@ class BaseWebApi extends WebApi {
 }
 
 export { BaseWebApi }
-export type { WebFormFetchOptions, WebRequestDiagnostic }
+export type { WebFetchOptions, WebFormFetchOptions, WebRequestDiagnostic }

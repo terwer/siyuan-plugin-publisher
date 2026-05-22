@@ -11,8 +11,7 @@ import { JsonUtil } from "zhi-common"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import FormDataHostUtil from "~/src/utils/FormDataHostUtil.ts"
 import PluginFetchUtil from "~/src/utils/PluginFetchUtil.ts"
-import { shouldUseSiyuanForwardProxy } from "~/src/utils/publishTransport/resolveRules.ts"
-import { isLoopbackOrLocalTargetUrl } from "~/src/utils/publishTransport/publishTargetUtil.ts"
+import { resolvePublishTransport } from "~/src/utils/publishTransport/resolveTransport.ts"
 import type {
   FormUploadResult,
   FormUploadTransport,
@@ -53,27 +52,8 @@ interface FormUploadResolveContext {
   canUsePluginFetch: boolean
 }
 
-/**
- * Multipart 通道解析（plugin-first；loopback 禁 forwardProxy；无插件禁假 plugin 路径）。
- */
 function resolveFormUploadTransport(ctx: FormUploadResolveContext): FormUploadTransport {
-  if (ctx.canUsePluginFetch) {
-    return "plugin-node-fetch"
-  }
-  if (isLoopbackOrLocalTargetUrl(ctx.url)) {
-    return "middleware-fetch"
-  }
-  if (
-    shouldUseSiyuanForwardProxy({
-      url: ctx.url,
-      forceProxy: ctx.forceProxy,
-      isUseSiyuanProxy: ctx.isUseSiyuanProxy,
-      canUsePluginFetch: false,
-    })
-  ) {
-    return "siyuan-forward-proxy"
-  }
-  return "middleware-fetch"
+  return resolvePublishTransport(ctx)
 }
 
 async function runFormUploadTransport(

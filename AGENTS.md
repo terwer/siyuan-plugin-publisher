@@ -2,7 +2,7 @@
 
 ### 1. 大胆重构，小心求证
 
-- **大胆**：以业界当前最佳实践为准，架构上不必保守；宁可一次把抽象立对（如 `formUploadClient.postJson` 单入口），不留双轨和垫片债。
+- **大胆**：以业界当前最佳实践为准，架构上不必保守；宁可一次把抽象立对（如 `formUploadClient.postJson`、`jsonFetchClient.fetch` 单入口），不留双轨和垫片债。
 - **小心求证**：每次改动必须有证据链——单测、构建、V2 宿主手验、checklist；禁止 mock/占位糊弄通过。
 - **全局触发**：规则与行为改在**共用层**落地（`publishTransport`、`formUploadClient`、`xmlrpcTransport`、基类），禁止在多个适配器各打补丁；改一处，全链路一致。
 - **功能 100% 保留**：用户可见行为、平台契约、诊断语义不能悄悄退化；重构的是结构，不是砍能力。
@@ -12,7 +12,7 @@
 
 - **对外接口简单**：使用层只认少量入口（如 `webFormFetch`、`postJson`、`getFormData`），不必理解 resolve/handler/`PluginFetchUtil` 组合。
 - **对内高内聚**：传输解析、执行、懒加载、`win.require` 检测集中在 facade/transport 模块内部。
-- **低耦合**：平台适配器不依赖具体通道实现；XML 与 multipart 共用规则、分离实现；后续 JSON 走同一 `publishTransport` 扩展，不在 `useProxy` 再长平行 if 树。
+- **低耦合**：平台适配器不依赖具体通道实现；XML、multipart、JSON 共用 `publishTransport` 规则、分离实现；不在 `useProxy` 再长平行 if 树。
 
 ---
 
@@ -27,6 +27,7 @@
 - 禁止在 `useProxy` 与平台适配器里临时堆传输 if 链。V2 发布 HTTP：
   - XML-RPC → `xmlrpcTransport`
   - multipart → **仅** `createFormUploadClient(...).postJson(...)`（`formUploadClient.ts`）；基类不得拼装 resolve/execute/handlers
+  - JSON/API → **仅** `createJsonFetchClient(...).fetch(...)`（`jsonFetchClient.ts`）；`BaseWebApi.webFetch` / `BaseBlogApi.apiFetch` 仅委托 facade
   - FormData 构造 → **仅** `FormDataHostUtil`
   - V2 允许 break change；禁止 deprecated 再导出、双轨垫片
 - V2 平台验证：**高频优先**（当前批次 #21→#25→#3→#28，可与 `tasks.md` 表号不同）；每站五格 **V2C / Pub / Upd / Del / Img**；通过/失败均记入 checklist SSOT。
@@ -39,7 +40,7 @@
 - MetaWeblog 类平台（如博客园）应在平台 `*Config` 构造函数里默认图床为 `Bundled`（参考 `YuquewebConfig`），不要用全局 `usePicgoBridge` 覆盖。
 - Agent Skills：项目 `.cursor/skills/` 或 `.claude/skills/`；全局 `~/.cursor/skills/` 或 `~/.claude/skills/`；本仓库 OpenSpec 技能在 `.claude/skills/`。自定义技能**不要**放在 `~/.cursor/skills-cursor/`。
 - V2 平台配置校验失败须通过 `SypErrorDetailsPanel`（及行内摘要）展示 `errorMessage`，不要只靠通用 alert 或 `ElMessage`。
-- **发布传输**（XML-RPC / multipart）：插件宿主优先 `plugin-node-fetch`；本机/回环不走 forwardProxy；multipart 仅经 `formUploadClient`；语雀等 Web 带图不在 build-formdata 预设 transport（由 client 解析后写入）；日志示例：`[form-upload-transport] transport => plugin-node-fetch`。
+- **发布传输**（XML-RPC / multipart / JSON）：插件宿主优先 `plugin-node-fetch`；本机/回环不走 forwardProxy；multipart 经 `formUploadClient`、JSON 经 `jsonFetchClient`；语雀 Web 不在请求前预设 transport（由 facade 解析后写入 diagnostic）；日志：`[form-upload-transport]`、`[json-fetch-transport]`。
 - V2 平台验证 SSOT：`openspec/changes/v2-platform-verification-v1-retirement/platform-checklist.md`。
 - **Halo**：`common_Halo`（API）与 `custom_Haloweb`（网页 Cookie）是两套适配器，须分别验收。
 - **`refactor-form-upload-transport`**：归档前须在 V2 宿主手验 checklist **#27、#28 的 Img**（见 checklist 修订记录）。
@@ -48,11 +49,11 @@
 ## 发布传输架构（V2，简要）
 
 ```text
-平台适配器 → FormDataHostUtil.getFormData()
-           → BaseWebApi.webFormFetch / BaseBlogApi.apiFormFetch
-           → formUploadClient.postJson()   ← multipart 唯一对外入口
+multipart：平台适配器 → FormDataHostUtil → webFormFetch/apiFormFetch → formUploadClient.postJson()
+JSON/API：平台适配器 → webFetch/apiFetch → jsonFetchClient.fetch()
+XML-RPC：proxyXmlrpc → xmlrpcTransport
 
-XML-RPC：proxyXmlrpc → xmlrpcTransport（与 multipart 共用 publishTransport 规则，实现分离）
+三者共用 publishTransport/resolveTransport 规则，实现分离。
 ```
 
 通道对外命名：`plugin-node-fetch` | `siyuan-forward-proxy` | `middleware-fetch`（无 `cors-middleware` 对外名）。
