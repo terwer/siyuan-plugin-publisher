@@ -8,7 +8,7 @@
  */
 
 import { describe, expect, it, vi } from "vitest"
-import FormDataUtils from "~/src/utils/FormDataUtils.ts"
+import FormDataHostUtil from "~/src/utils/FormDataHostUtil.ts"
 import viteV2ConfigSource from "~/vite.v2.config.ts?raw"
 
 describe("vite.v2.config APP_BASE", () => {
@@ -32,7 +32,7 @@ describe("vite.v2.config APP_BASE", () => {
       },
     } as any
 
-    FormDataUtils.getFormData(appInstance)
+    FormDataHostUtil.getFormData(appInstance)
 
     expect(requireMock).toHaveBeenCalledWith("/data/plugins/siyuan-plugin-publisher/libs/node-fetch-cjs/dist/index.js")
     expect(requireMock).not.toHaveBeenCalledWith("/data/libs/node-fetch-cjs/dist/index.js")

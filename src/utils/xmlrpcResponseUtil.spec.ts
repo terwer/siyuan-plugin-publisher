@@ -9,7 +9,8 @@
 
 import { describe, expect, it } from "vitest"
 import { XmlrpcUtil } from "simple-xmlrpc"
-import { isLoopbackOrLocalTargetUrl, normalizeXmlrpcResponseText } from "~/src/utils/xmlrpcResponseUtil.ts"
+import { isLoopbackOrLocalTargetUrl } from "~/src/utils/publishTransport/publishTargetUtil.ts"
+import { normalizeXmlrpcResponseText } from "~/src/utils/xmlrpcResponseUtil.ts"
 
 describe("normalizeXmlrpcResponseText", () => {
   it("passes through XML strings", () => {

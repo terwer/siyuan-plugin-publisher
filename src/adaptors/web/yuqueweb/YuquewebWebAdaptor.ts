@@ -9,7 +9,7 @@
 
 import { BaseWebApi, type WebRequestDiagnostic } from "~/src/adaptors/web/base/baseWebApi.ts"
 import { YuquewebPostMeta } from "~/src/adaptors/web/yuqueweb/YuquewebPostMeta.ts"
-import FormDataUtils from "~/src/utils/FormDataUtils.ts"
+import FormDataHostUtil from "~/src/utils/FormDataHostUtil.ts"
 import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 import { Attachment, CategoryInfo, MediaObject, Post, UserBlog, type PublishValidationResult } from "zhi-blog-api"
 import { AliasTranslator, JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
@@ -259,7 +259,6 @@ class YuquewebWebAdaptor extends BaseWebApi {
     const fileMeta = this.buildFileDiagnostic(mediaObject)
     const diagnostic: WebRequestDiagnostic = {
       stage: "build-formdata",
-      transport: "siyuan-forward-proxy",
       url: `${this.cfg.apiUrl}/api/upload/attach?type=image`,
       fileName: fileMeta.fileName,
       fileType: fileMeta.fileType,
@@ -267,7 +266,7 @@ class YuquewebWebAdaptor extends BaseWebApi {
     } as WebRequestDiagnostic
 
     try {
-      const { FormData, Blob } = FormDataUtils.getFormData(this.appInstance)
+      const { FormData, Blob } = FormDataHostUtil.getFormData(this.appInstance)
       const blob = new Blob([this.toUploadBits(mediaObject.bits)], { type: mediaObject.type })
       const formData = new FormData()
       formData.append("file", blob, mediaObject.name)
@@ -761,7 +760,6 @@ class YuquewebWebAdaptor extends BaseWebApi {
     Object.assign(diagnostic, {
       stage: "web-form-fetch",
       url: apiUrl,
-      transport: diagnostic.transport ?? "siyuan-forward-proxy",
     })
     this.logger.debug("yuqueweb form request", { apiUrl: this.sanitizeForLog(apiUrl) })
 

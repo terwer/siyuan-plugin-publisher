@@ -24,7 +24,7 @@ import { BaseExtendApi } from "~/src/adaptors/base/baseExtendApi.ts"
 import { JsonUtil, StrUtil } from "zhi-common"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import { Base64 } from "js-base64"
-import FormDataUtils from "~/src/utils/FormDataUtils.ts"
+import { createFormUploadClient } from "~/src/utils/formUploadClient.ts"
 import { sanitizeSensitiveForLog } from "~/src/utils/sensitiveLogSanitizer.ts"
 
 interface WebRequestDiagnostic {
@@ -59,6 +59,7 @@ class BaseWebApi extends WebApi {
   private readonly isUseSiyuanProxy: boolean
   private readonly proxyFetch: any
   private readonly corsFetch: any
+  private readonly formUploadClient: ReturnType<typeof createFormUploadClient>
 
   /**
    * 初始化网页授权 API 适配器
@@ -78,6 +79,23 @@ class BaseWebApi extends WebApi {
     this.isUseSiyuanProxy = isUseSiyuanProxy
     this.proxyFetch = proxyFetch
     this.corsFetch = corsFetch
+    const { isInSiyuanOrSiyuanNewWin } = useSiyuanDevice()
+    this.formUploadClient = createFormUploadClient({
+      appInstance: this.appInstance,
+      logger: this.logger,
+      isUseSiyuanProxy: this.isUseSiyuanProxy,
+      isInSiyuanOrSiyuanNewWin,
+      forwardProxyFormPost: async (reqUrl, reqHeaders, body, fp) => {
+        const fetchResult = await this.webFetch(reqUrl, reqHeaders, body, "POST", undefined, fp, "base64", "base64")
+        return {
+          status: Number(fetchResult?.status),
+          body: Base64.fromBase64(fetchResult.body),
+        }
+      },
+      middlewareFormPost: (reqUrl, reqHeaders, body) => this.corsFetch(reqUrl, reqHeaders, body, "POST"),
+      buildDiagnosticPreview: (input) => this.buildDiagnosticPreview(input),
+      attachDiagnosticError: (e, d) => this.attachDiagnosticError(e, d as WebRequestDiagnostic | undefined),
+    })
   }
 
   public async checkAuth(): Promise<boolean> {
@@ -235,87 +253,15 @@ class BaseWebApi extends WebApi {
     forceProxy: boolean = false,
     options: WebFormFetchOptions = {}
   ) {
-    // 如果没有可用的 CORS 代理或者没有强制使用代理，使用默认的自动检测机制
-    if (this.isUseSiyuanProxy || (!this.isUseSiyuanProxy && forceProxy) || !forceProxy) {
-      this.logger.info("Using legency web formFetch")
-
-      const { isInSiyuanOrSiyuanNewWin } = useSiyuanDevice()
-      const transport = FormDataUtils.resolveFormUploadTransport(this.appInstance, {
-        isInSiyuanOrSiyuanNewWin: isInSiyuanOrSiyuanNewWin(),
-        forceProxy,
-      })
-      this.logger.info("webFormFetch transport =>", transport)
-      if (transport === "siyuan-forward-proxy") {
-        options.diagnostic = {
-          ...options.diagnostic,
-          stage: "forward-proxy",
-          transport: "siyuan-forward-proxy",
-          url,
-        }
-        try {
-          const fetchResult = await this.webFetch(
-            url,
-            headers,
-            formData,
-            "POST",
-            undefined,
-            forceProxy,
-            "base64",
-            "base64"
-          )
-          options.diagnostic.status = Number(fetchResult?.status)
-          const resText = Base64.fromBase64(fetchResult.body)
-          options.diagnostic.responseBodyPreview = this.buildDiagnosticPreview(resText)
-          const resJson = JsonUtil.safeParse<any>(resText, {} as any)
-          this.logger.debug("apiForm doFetch success, resJson=>", sanitizeSensitiveForLog(resJson))
-          return resJson
-        } catch (e) {
-          this.attachDiagnosticError(e, options.diagnostic)
-          throw e
-        }
-      } else {
-        // get formata fetch
-        const doFetch = FormDataUtils.getFormDataFetch(this.appInstance)
-
-        // headers
-        const header = headers.length > 0 ? headers[0] : {}
-        this.logger.debug("before zhi-formdata-fetch, header =>", sanitizeSensitiveForLog(header))
-        this.logger.debug("before zhi-formdata-fetch, url =>", url)
-
-        options.diagnostic = {
-          ...options.diagnostic,
-          stage: "zhi-formdata-fetch",
-          transport: "zhi-formdata-fetch",
-          url,
-        }
-        try {
-          const resText = await doFetch(this.appInstance.moduleBase, url, header, formData)
-          options.diagnostic.responseBodyPreview = this.buildDiagnosticPreview(resText)
-          this.logger.debug("apiForm doFetch success, resText =>", sanitizeSensitiveForLog(resText))
-          const resJson = JsonUtil.safeParse<any>(resText, {} as any)
-          return resJson
-        } catch (e) {
-          this.attachDiagnosticError(e, options.diagnostic)
-          throw e
-        }
-      }
-    } else {
-      this.logger.info("Using cors-anywhere web formFetch")
-      options.diagnostic = {
-        ...options.diagnostic,
-        stage: "cors",
-        transport: "cors",
-        url,
-      }
-      try {
-        const resJson = await this.corsFetch(url, headers, formData, "POST")
-        options.diagnostic.responseBodyPreview = this.buildDiagnosticPreview(resJson)
-        return resJson
-      } catch (e) {
-        this.attachDiagnosticError(e, options.diagnostic)
-        throw e
-      }
-    }
+    const json = await this.formUploadClient.postJson({
+      url,
+      headers,
+      formData,
+      forceProxy,
+      diagnostic: options.diagnostic,
+    })
+    this.logger.debug("webFormFetch success, resJson=>", sanitizeSensitiveForLog(json))
+    return json as any
   }
 
   protected buildDiagnosticPreview(input: any, limit = 1000): string {

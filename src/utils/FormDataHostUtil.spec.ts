@@ -8,9 +8,9 @@
  */
 
 import { describe, expect, it, vi } from "vitest"
-import FormDataUtils from "~/src/utils/FormDataUtils.ts"
+import FormDataHostUtil from "~/src/utils/FormDataHostUtil.ts"
 
-describe("FormDataUtils", () => {
+describe("FormDataHostUtil", () => {
   it("loads bundled form-data dependencies from the plugin APP_BASE path", () => {
     const requireMock = vi.fn((path: string) => {
       if (path.endsWith("node-fetch-cjs/dist/index.js")) {
@@ -30,7 +30,7 @@ describe("FormDataUtils", () => {
       },
     } as any
 
-    FormDataUtils.getFormData(appInstance)
+    FormDataHostUtil.getFormData(appInstance)
 
     expect(requireMock).toHaveBeenCalledWith(
       "/Volumes/workspace/mydocs/SiYuanWorkspace/test/data/plugins/siyuan-plugin-publisher/libs/node-fetch-cjs/dist/index.js"
@@ -38,35 +38,5 @@ describe("FormDataUtils", () => {
     expect(requireMock).not.toHaveBeenCalledWith(
       "/Volumes/workspace/mydocs/SiYuanWorkspace/test/data/libs/node-fetch-cjs/dist/index.js"
     )
-  })
-
-  it("prefers plugin node-fetch for multipart even when forceProxy is true", () => {
-    const appInstance = { win: { require: vi.fn() } } as any
-    expect(
-      FormDataUtils.resolveFormUploadTransport(appInstance, {
-        isInSiyuanOrSiyuanNewWin: true,
-        forceProxy: true,
-      })
-    ).toBe("plugin-node-fetch")
-  })
-
-  it("falls back to forwardProxy outside siyuan when forceProxy is true", () => {
-    const appInstance = { win: {} } as any
-    expect(
-      FormDataUtils.resolveFormUploadTransport(appInstance, {
-        isInSiyuanOrSiyuanNewWin: false,
-        forceProxy: true,
-      })
-    ).toBe("siyuan-forward-proxy")
-  })
-
-  it("uses plugin node-fetch inside siyuan when forceProxy is false", () => {
-    const appInstance = { win: { require: vi.fn() } } as any
-    expect(
-      FormDataUtils.resolveFormUploadTransport(appInstance, {
-        isInSiyuanOrSiyuanNewWin: true,
-        forceProxy: false,
-      })
-    ).toBe("plugin-node-fetch")
   })
 })

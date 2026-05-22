@@ -155,7 +155,7 @@ class TelegraphApiAdaptor extends BaseBlogApi {
     }
 
     // 这里不用这个，因为 telegraph 必须强制代理
-    // const { FormData, Blob } = FormDataUtils.getFormData(this.appInstance)
+    // const { FormData, Blob } = FormDataHostUtil.getFormData(this.appInstance)
 
     const formData = new FormData()
     const content = md(post.description)
@@ -210,7 +210,7 @@ class TelegraphApiAdaptor extends BaseBlogApi {
     }
 
     // 这里不用这个，因为 telegraph 必须强制代理
-    // const { FormData, Blob } = FormDataUtils.getFormData(this.appInstance)
+    // const { FormData, Blob } = FormDataHostUtil.getFormData(this.appInstance)
 
     const formData = new FormData()
     const content = md(post.description)

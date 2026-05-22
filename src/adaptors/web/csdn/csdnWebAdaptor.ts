@@ -12,7 +12,7 @@ import CsdnUtils from "~/src/adaptors/web/csdn/csdnUtils.ts"
 import { BlogConfig, CategoryInfo, MediaObject, PageTypeEnum, Post, UserBlog } from "zhi-blog-api"
 import WebUtils from "~/src/adaptors/web/base/webUtils.ts"
 import * as _ from "lodash-es"
-import FormDataUtils from "~/src/utils/FormDataUtils.ts"
+import FormDataHostUtil from "~/src/utils/FormDataHostUtil.ts"
 import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 
 /**
@@ -304,7 +304,7 @@ class CsdnWebAdaptor extends BaseWebApi {
   }
 
   public async uploadFile(mediaObject: MediaObject): Promise<any> {
-    const { FormData, Blob } = FormDataUtils.getFormData(this.appInstance)
+    const { FormData, Blob } = FormDataHostUtil.getFormData(this.appInstance)
     const file = new Blob([mediaObject.bits], { type: mediaObject.type })
     const filename = mediaObject.name
 
@@ -347,7 +347,7 @@ class CsdnWebAdaptor extends BaseWebApi {
     }
 
     const uploadUrl = uploadData.host
-    const { FormData, Blob } = FormDataUtils.getFormData(this.appInstance)
+    const { FormData, Blob } = FormDataHostUtil.getFormData(this.appInstance)
 
     const formData = new FormData()
     formData.append("key", uploadData.filePath)
@@ -405,7 +405,7 @@ class CsdnWebAdaptor extends BaseWebApi {
     }
 
     const uploadUrl = uploadData.host
-    const { FormData, Blob } = FormDataUtils.getFormData(this.appInstance)
+    const { FormData, Blob } = FormDataHostUtil.getFormData(this.appInstance)
 
     const formData = new FormData()
     formData.append("key", uploadData.filePath)

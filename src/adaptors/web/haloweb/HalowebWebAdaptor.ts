@@ -12,7 +12,7 @@ import { Attachment, CategoryInfo, MediaObject, Post, TagInfo, UserBlog } from "
 import { AliasTranslator, JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { HalowebPostMeta } from "~/src/adaptors/web/haloweb/HalowebPostMeta.ts"
 import sypIdUtil from "~/src/utils/sypIdUtil"
-import FormDataUtils from "~/src/utils/FormDataUtils.ts"
+import FormDataHostUtil from "~/src/utils/FormDataHostUtil.ts"
 import HaloUtils from "~/src/adaptors/api/halo/haloUtils.ts"
 import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 
@@ -297,7 +297,7 @@ class HalowebWebAdaptor extends BaseWebApi {
       this.logger.debug("newMediaObject on halo =>", mediaObject)
 
       // get formData and Blob
-      const { FormData, Blob } = FormDataUtils.getFormData(this.appInstance)
+      const { FormData, Blob } = FormDataHostUtil.getFormData(this.appInstance)
 
       // uploadUrl
       const uploadUrl = `/apis/api.console.halo.run/v1alpha1/attachments/upload`

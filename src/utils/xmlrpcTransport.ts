@@ -7,7 +7,8 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { isLoopbackOrLocalTargetUrl, normalizeXmlrpcResponseText } from "~/src/utils/xmlrpcResponseUtil.ts"
+import { shouldUseSiyuanForwardProxy } from "~/src/utils/publishTransport/resolveRules.ts"
+import { normalizeXmlrpcResponseText } from "~/src/utils/xmlrpcResponseUtil.ts"
 
 /** MetaWeblog XML-RPC 传输通道（与 JSON `apiFetch`、multipart `FormUploadTransport` 解耦） */
 type XmlrpcTransport = "plugin-node-fetch" | "siyuan-forward-proxy" | "middleware-fetch"
@@ -38,7 +39,7 @@ interface XmlrpcTransportHandlers {
 /**
  * MetaWeblog XML-RPC 传输选型。
  *
- * 优先级（与 {@link FormDataUtils.resolveFormUploadTransport} 同理念，独立维护）：
+ * 优先级（与 {@link createFormUploadClient} 共用 publishTransport 规则）：
  * 1. **plugin-node-fetch** — 有插件直传能力时一律直连，禁止套思源 forwardProxy（Electron/V2、本地 WP、公网博客园均适用）
  * 2. **siyuan-forward-proxy** — 无直传能力且需跨域/外链访问思源时
  * 3. **middleware-fetch** — 浏览器 + CORS 中间件回退
@@ -49,7 +50,14 @@ function resolveXmlrpcTransport(ctx: XmlrpcTransportContext): XmlrpcTransport {
   if (ctx.canUsePluginFetch) {
     return "plugin-node-fetch"
   }
-  if (!isLoopbackOrLocalTargetUrl(ctx.url) && (ctx.isUseSiyuanProxy || ctx.forceProxy)) {
+  if (
+    shouldUseSiyuanForwardProxy({
+      url: ctx.url,
+      forceProxy: ctx.forceProxy,
+      isUseSiyuanProxy: ctx.isUseSiyuanProxy,
+      canUsePluginFetch: ctx.canUsePluginFetch,
+    })
+  ) {
     return "siyuan-forward-proxy"
   }
   return "middleware-fetch"

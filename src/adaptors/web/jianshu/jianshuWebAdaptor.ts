@@ -11,7 +11,6 @@ import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
 import { CategoryInfo, MediaObject, Post, UserBlog } from "zhi-blog-api"
 import { ElMessage } from "element-plus"
 import { fileToBuffer } from "~/src/utils/polyfillUtils.ts"
-import FormDataUtils from "~/src/utils/FormDataUtils.ts"
 import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 
 /**

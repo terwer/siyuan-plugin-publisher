@@ -16,7 +16,7 @@ import { Base64 } from "js-base64"
 import sypIdUtil from "~/src/utils/sypIdUtil.ts"
 import { PostRequest } from "@halo-dev/api-client"
 import { HaloPostMeta } from "~/src/adaptors/api/halo/HaloPostMeta.ts"
-import FormDataUtils from "~/src/utils/FormDataUtils.ts"
+import FormDataHostUtil from "~/src/utils/FormDataHostUtil.ts"
 import HaloUtils from "~/src/adaptors/api/halo/haloUtils.ts"
 import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 
@@ -287,7 +287,7 @@ class HaloApiAdaptor extends BaseBlogApi {
       this.logger.debug("newMediaObject on halo =>", mediaObject)
 
       // get formData and Blob
-      const { FormData, Blob } = FormDataUtils.getFormData(this.appInstance)
+      const { FormData, Blob } = FormDataHostUtil.getFormData(this.appInstance)
 
       // uploadUrl
       const uploadUrl = `${this.cfg.apiUrl}/apis/api.console.halo.run/v1alpha1/attachments/upload`

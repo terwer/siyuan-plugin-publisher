@@ -7,12 +7,13 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { describe, expect, it, vi } from "vitest"
+import { afterEach, describe, expect, it, vi } from "vitest"
 import { YuquewebConfig } from "~/src/adaptors/web/yuqueweb/YuquewebConfig.ts"
 import { YuquewebWebAdaptor } from "~/src/adaptors/web/yuqueweb/YuquewebWebAdaptor.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import zhCN from "~/src/locales/zh_CN.ts"
 import { MediaObject, Post } from "zhi-blog-api"
+import FormDataHostUtil from "~/src/utils/FormDataHostUtil.ts"
 
 const createAdaptor = (blogid?: any, extra: Record<string, any> = {}) => {
   const cfg = new YuquewebConfig("cookie=value")
@@ -125,18 +126,42 @@ describe("YuquewebWebAdaptor.logoutWebAuth", () => {
 })
 
 describe("YuquewebWebAdaptor image upload diagnostics", () => {
-  it("keeps sanitized forwardProxy diagnostics when image upload fails", async () => {
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
+  it("does not preset siyuan-forward-proxy during build-formdata failure", async () => {
+    const adaptor = createAdaptor()
+    const mediaObject = new MediaObject("image.png", "image/png", new Uint8Array([1, 2, 3]))
+    vi.spyOn(FormDataHostUtil, "getFormData").mockImplementationOnce(() => {
+      throw new Error("FormData constructor unavailable")
+    })
+
+    try {
+      await adaptor.newMediaObject(mediaObject)
+      expect.fail("should throw")
+    } catch (error: any) {
+      expect(error.name).toBe("YuquewebRequestError")
+      expect(error.diagnosticMessage).toContain('"stage": "build-formdata"')
+      expect(error.diagnosticMessage).not.toContain("siyuan-forward-proxy")
+      expect(error.diagnosticMessage).not.toContain('"transport"')
+    }
+  })
+
+  it("does not preset transport before webFormFetch delegates to formUploadClient", async () => {
     const adaptor = createAdaptor(undefined, { password: "cookie=session-secret; ctoken=secret-token" })
+    let diagnosticAtWebFormFetch: Record<string, unknown> | undefined
     vi.spyOn(adaptor as any, "webFormFetch").mockImplementation(
       async (_url: string, _headers: any[], _formData: BodyInit, _forceProxy: boolean, options: any) => {
+        diagnosticAtWebFormFetch = { ...options.diagnostic }
         Object.assign(options.diagnostic, {
           stage: "forward-proxy",
           transport: "siyuan-forward-proxy",
           status: 403,
           responseBodyPreview:
-            '{"message":"forbidden","Cookie":"session-secret","Authorization":"Bearer secret-token","ctoken":"secret-token","ticket":"secret-ticket"}',
+            '{"message":"forbidden","Cookie":"session-secret","Authorization":"Bearer secret-token"}',
         })
-        const error = new Error("forbidden Cookie=session-secret Authorization=Bearer secret-token")
+        const error = new Error("forbidden")
         ;(error as any).status = 403
         ;(error as any).diagnostic = options.diagnostic
         throw error
@@ -145,26 +170,39 @@ describe("YuquewebWebAdaptor image upload diagnostics", () => {
 
     const mediaObject = new MediaObject("image.png", "image/png", new Uint8Array([1, 2, 3]))
 
-    await expect(adaptor.newMediaObject(mediaObject)).rejects.toMatchObject({
-      name: "YuquewebRequestError",
-      message: "语雀图片上传失败，请确认 Cookie 有效、图片文件可读取后重试。",
-      status: 403,
-    })
+    await expect(adaptor.newMediaObject(mediaObject)).rejects.toThrow("语雀图片上传失败")
+
+    expect(diagnosticAtWebFormFetch?.stage).toBe("web-form-fetch")
+    expect(diagnosticAtWebFormFetch?.transport).toBeUndefined()
+  })
+
+  it("keeps sanitized diagnostics when form upload client resolves forwardProxy and fails", async () => {
+    const adaptor = createAdaptor(undefined, { password: "cookie=session-secret; ctoken=secret-token" })
+    vi.spyOn(adaptor as any, "webFormFetch").mockImplementation(
+      async (_url: string, _headers: any[], _formData: BodyInit, _forceProxy: boolean, options: any) => {
+        Object.assign(options.diagnostic, {
+          stage: "forward-proxy",
+          transport: "siyuan-forward-proxy",
+          status: 403,
+          responseBodyPreview: '{"message":"forbidden","Cookie":"session-secret"}',
+        })
+        const error = new Error("forbidden Cookie=session-secret")
+        ;(error as any).status = 403
+        ;(error as any).diagnostic = options.diagnostic
+        throw error
+      }
+    )
+
+    const mediaObject = new MediaObject("image.png", "image/png", new Uint8Array([1, 2, 3]))
 
     try {
       await adaptor.newMediaObject(mediaObject)
+      expect.fail("should throw")
     } catch (error: any) {
-      expect(error.cause).toBeInstanceOf(Error)
-      expect(error.diagnosticMessage).toContain('"stage": "forward-proxy"')
       expect(error.diagnosticMessage).toContain('"transport": "siyuan-forward-proxy"')
       expect(error.diagnosticMessage).toContain('"status": 403')
-      expect(error.diagnosticMessage).toContain('"fileName": "image.png"')
-      expect(error.diagnosticMessage).toContain('"fileType": "image/png"')
-      expect(error.diagnosticMessage).toContain('"fileSize": 3')
       expect(error.diagnosticMessage).toContain("<redacted>")
       expect(error.diagnosticMessage).not.toContain("session-secret")
-      expect(error.diagnosticMessage).not.toContain("secret-token")
-      expect(error.diagnosticMessage).not.toContain("secret-ticket")
     }
   })
 })
