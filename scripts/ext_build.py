@@ -127,7 +127,7 @@ if __name__ == "__main__":
         os.environ["BUILD_TYPE"] = args.type
         os.environ["VITE_SIYUAN_API_URL"] = "http://127.0.0.1:6806"
         print(f"BUILD_TYPE=>{args.type}")
-        build_cmd = "vue-tsc --noEmit && vite build --outDir " + dist_name
+        build_cmd = "vue-tsc --noEmit && vite build --config vite.v1.app.config.ts --outDir " + dist_name
         print("Build command: " + build_cmd)
         os.system(build_cmd)
         print("Build finished")

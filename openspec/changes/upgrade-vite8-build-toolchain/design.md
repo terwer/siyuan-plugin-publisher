@@ -1,9 +1,16 @@
 ## Context
 
-项目当前使用 Vite 7（`vite@^7.2.2`），并存在两套主要构建配置：
+项目升级前使用 Vite 7（`vite@^7.2.2`），并存在两套主要构建配置：
 
 - `vite.v2.config.ts`：V2 SiYuan 插件宿主构建。`pnpm dev:v2` 使用 `vite build --watch --config vite.v2.config.ts`，`pnpm build:v2` 使用 `vue-tsc --noEmit && vite build --config vite.v2.config.ts`。
 - `vite.config.ts`：旧版/V1、widget、nginx、浏览器扩展等构建路径，由 Python 构建脚本间接调用。
+
+实施中用户进一步确认：`@terwer/esbuild-config-custom` 是 V1 历史产物，迁移到 Vite 后 esbuild 相关 direct build chain 不再保留。因此本变更将旧 `vite.config.ts` 拆分为命名清晰的 Vite 配置，并删除 `@terwer/esbuild-config-custom`、direct `esbuild*` 依赖和 `esbuild.config.cjs`：
+
+- `vite.v1.app.config.ts`：V1 iframe/app、widget、nginx、extension、vercel app build。
+- `vite.v1.siyuan.config.ts`：V1 legacy SiYuan plugin CJS entry build，替代旧 `zhi-build`。
+- `vite.v2.config.ts`：V2 SiYuan plugin host build，保持 `pnpm dev:v2` / `pnpm build:v2` 不变。
+- `vitest.config.ts`：删除默认 `vite.config.ts` 后的独立 test-time Vite plugin parity 配置。
 
 V2 是本次升级的优先路径。用户已明确要求 V2 开发与验证必须使用 `pnpm dev:v2` 和 `pnpm makeLink:v2`；不得把 `pnpm dev -p siyuan` 当作 V2 验证路径。
 
@@ -82,10 +89,22 @@ Alternatives considered:
 
 - 只更新依赖并依赖现有测试：拒绝，因为当前测试没有覆盖全部宿主运行时行为。
 
+### 6. 移除 V1 historical esbuild direct build chain
+
+Decision: 本变更迁移完成后不保留 `@terwer/esbuild-config-custom`、direct `esbuild`、`esbuild-plugin-copy`、`esbuild-style-plugin` 或 `zhi-build` 兼容入口。V1 legacy SiYuan plugin CJS 输出由 `vite.v1.siyuan.config.ts` 承接。
+
+Rationale: 用户确认该 esbuild 链路属于 V1 历史产物；如 V2 表现好，V1 可能提前退役。继续保留旧 direct esbuild 链路会扩大 Vite 8 peer 冲突面，并让构建入口命名不清晰。
+
+Alternatives considered:
+
+- 保留 `@terwer/esbuild-config-custom` 作为 fallback：拒绝，因为它与 Vite 8 `esbuild` peer 范围冲突，且用户明确要求迁移后直接移除。
+- 新增 root `esbuild` 继续兼容旧链路：拒绝，因为 root direct `esbuild` 会违背“esbuild 相关直接移除”的决策；Vite 自身的 optional/transitive esbuild resolution 不属于旧 direct build chain。
+
 ## Risks / Trade-offs
 
 - [Risk] Rolldown 改变 chunk 输出或 CJS interop，导致 SiYuan 无法加载 → Mitigation: 检查 `dist-v2/index.js`，运行 `pnpm makeLink:v2`，并在完成前验证 SiYuan 内插件激活。
-- [Risk] `vite.config.ts` 中的 `manualChunks(id)` function form 在 Vite 8 下被 deprecated，可能需要迁移 → Mitigation: 本变更中立即迁移，不创建 release 前 follow-up，也不得静默忽略 warning。
+- [Risk] 旧 `vite.config.ts` 中的 `manualChunks(id)` function form 在 Vite 8 下被 deprecated，可能需要迁移 → Mitigation: 本变更中立即迁移到 `vite.v1.app.config.ts` 的 Rolldown `output.codeSplitting.groups`，不创建 release 前 follow-up，也不得静默忽略 warning。
+- [Risk] 删除 `@terwer/esbuild-config-custom` 影响 V1 legacy plugin build → Mitigation: 用 `vite.v1.siyuan.config.ts` 替代 `zhi-build`，并运行 V1 SiYuan CJS smoke build；V1/package/widget/nginx/ext 仍作为 release packaging 前 mandatory gate。
 - [Risk] Lightning CSS 改变 CSS 输出或压缩结果 → Mitigation: 验证 `index.css`、V2 设置 UI、深浅色主题、Element Plus 组件渲染和关键页面。
 - [Risk] `vite-plugin-node-polyfills` 在 Vite 8 下行为变化 → Mitigation: 运行 transport 单测，并在 Electron/plugin 宿主中手测 XML-RPC/multipart 流程。
 - [Risk] Vite plugin 生态 peer 依赖滞后于 Vite 8 → Mitigation: 只升级必要插件，记录 peer warning，避免无关依赖大范围漂移。

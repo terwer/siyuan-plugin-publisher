@@ -27,11 +27,19 @@ V2 build SHALL 生成与 Vite 7 build 相同 public output contract 的 SiYuan-c
 - **THEN** SiYuan host API 按 `external: ["siyuan"]` 保持 externalized，且不会被意外 bundle 到 plugin output 中
 
 ### Requirement: Vite config migration is explicit
-项目 SHALL 明确 Vite 8 迁移选择，覆盖 Rollup/Rolldown、CJS/ESM interop、CSS minification 和 output splitting behavior。
+项目 SHALL 明确 Vite 8 迁移选择，覆盖 Rollup/Rolldown、CJS/ESM interop、CSS minification、output splitting behavior，以及 V1/V2 构建入口命名边界。
 
 #### Scenario: Deprecated output splitting is addressed
-- **WHEN** `vite.config.ts` 或 `vite.v2.config.ts` 使用 output chunking configuration
+- **WHEN** Vite 8 迁移后的 `vite.v1.app.config.ts`、`vite.v1.siyuan.config.ts` 或 `vite.v2.config.ts` 使用 output chunking configuration
 - **THEN** 任何 Vite 8 deprecated `manualChunks` function usage 都已在本变更中迁移，并记录 chunking strategy 与预期输出差异
+
+#### Scenario: V1 and V2 config boundaries are explicit
+- **WHEN** 开发者查看 build scripts 或 Vite configs
+- **THEN** V1 iframe/app、V1 legacy SiYuan plugin CJS entry 与 V2 SiYuan plugin host 分别指向命名清晰的 `vite.v1.app.config.ts`、`vite.v1.siyuan.config.ts`、`vite.v2.config.ts`
+
+#### Scenario: Historical esbuild direct chain is removed
+- **WHEN** V1 legacy SiYuan plugin build 已迁移到 Vite config
+- **THEN** root package 不再直接依赖 `@terwer/esbuild-config-custom`、`esbuild`、`esbuild-plugin-copy` 或 `esbuild-style-plugin`，且 scripts 不再调用 `zhi-build`
 
 #### Scenario: CSS output contract is verified
 - **WHEN** 使用 Vite 8 构建 V2

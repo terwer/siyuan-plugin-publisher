@@ -203,12 +203,10 @@ export default defineConfig(() => ({
     sourcemap: false,
 
     // 设置为 false 可以禁用最小化混淆
-    // 或是用来指定是应用哪种混淆器
-    // boolean | 'terser' | 'esbuild'
     // 不压缩，用于调试
     minify: !isDev,
 
-    rollupOptions: {
+    rolldownOptions: {
       plugins: [
         ...(isWatch
           ? [
@@ -235,21 +233,28 @@ export default defineConfig(() => ({
         chunkFileNames: "chunks/chunk.[name].js",
         entryFileNames: "entry.[name].js",
         assetFileNames: "assets/[name].[ext]",
-        manualChunks(id) {
-          if (id.includes("node_modules")) {
-            let arr = id.toString().split("node_modules/")[1].split("/")
-            // pnpm单独处理
-            if (id.includes(".pnpm")) {
-              arr = id.toString().split(".pnpm/")[1].split("/")
-            }
-            const dep = arr[0].split("@")[0].replace(/\./g, "-")
-            // console.log("id=>", id)
-            // console.log("dep=>", dep)
-            if (dep !== "") {
-              return "vendor_" + dep
-            }
-            return "vendor"
-          }
+        codeSplitting: {
+          groups: [
+            {
+              name(id) {
+                if (!id.includes("node_modules")) {
+                  return null
+                }
+                let arr = id.toString().split("node_modules/")[1].split("/")
+                // pnpm单独处理
+                if (id.includes(".pnpm")) {
+                  arr = id.toString().split(".pnpm/")[1].split("/")
+                }
+                const dep = arr[0].split("@")[0].replace(/\./g, "-")
+                // console.log("id=>", id)
+                // console.log("dep=>", dep)
+                if (dep !== "") {
+                  return "vendor_" + dep
+                }
+                return "vendor"
+              },
+            },
+          ],
         },
       },
     },

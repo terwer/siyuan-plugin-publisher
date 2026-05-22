@@ -24,7 +24,7 @@
 ## Impact
 
 - 依赖与锁文件：`package.json`、`pnpm-lock.yaml` 中的 `vite` 及必要 Vite 生态插件版本。
-- 构建配置：`vite.v2.config.ts`、`vite.config.ts`，必要时补充迁移注释或兼容配置。
+- 构建配置：`vite.v2.config.ts`、`vite.v1.app.config.ts`、`vite.v1.siyuan.config.ts`、`vitest.config.ts`，并移除旧 `vite.config.ts` 与 V1 historical esbuild direct build chain。
 - 验证命令：`pnpm test`、`pnpm lint`、`pnpm build:v2`、`pnpm dev:v2`、`pnpm makeLink:v2`；必要时补充 V1 `pnpm build`、widget/nginx/ext 构建抽样。
 - 宿主验证：SiYuan Electron 中 V2 插件加载、设置页、快速发布、图片上传、XML-RPC 传输与 Web/API 传输；固定覆盖 #21 Cnblogs、#25 本地 WordPress、Yuque API/web、本地系统。
 - 风险区域：V2 `build.lib.formats: ["cjs"]` 输出、`nodePolyfills`、静态资源复制、CSS 单文件输出、external `siyuan`、V1 `manualChunks`、`vite-plugin-html` 与 livereload 插件。
