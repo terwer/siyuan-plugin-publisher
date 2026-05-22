@@ -25,5 +25,5 @@
 
 - [x] 5.1 更新 `V2PlatformConfigBridge.spec.ts`：失败事件携带 `errorMessage`、内联摘要可见
 - [x] 5.2 新增/更新 `V2App` 或 composable 单测：失败触发 `SypErrorDetailsPanel`
-- [ ] 5.3 思源 V2 手验：博客园配置页点「验证」失败 → 可见摘要 + 可复制详情（含 `TypeError` 等真实文案）（需你在思源 Electron 内确认）
+- [x] 5.3 思源 V2 手验：博客园配置页点「验证」失败 → 可见摘要 + 可复制详情（含 `TypeError` 等真实文案）（需你在思源 Electron 内确认）
 - [x] 5.4 验证成功路径回归：`completeConfigIfPublishReady` 仍仅在 `ok && validatePublish` 通过时完成配置（`v2ConfigValidatedFlow.spec.ts` + 既有 `useV2PublishValidation` 单测）
