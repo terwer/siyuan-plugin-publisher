@@ -157,14 +157,22 @@ def _myfetch(url, options):
 
 
 def _cmp_path(path1, path2):
-    path1 = path1.replace('\\', '/')
-    path2 = path2.replace('\\', '/')
-    # 尾部添加分隔符
-    if path1[-1] != '/':
-        path1 += '/'
-    if path2[-1] != '/':
-        path2 += '/'
-    return path1 == path2
+    def _normalize(path):
+        if path is None:
+            return ''
+
+        normalized = str(path).strip()
+        if normalized.startswith('\\\\?\\'):
+            normalized = normalized[4:]
+
+        normalized = os.path.abspath(normalized)
+        normalized = os.path.normpath(normalized)
+        normalized = normalized.replace('\\', '/')
+
+        # 尾部统一去掉分隔符，避免不同 API 形态引入假阴性
+        return normalized.rstrip('/')
+
+    return _normalize(path1) == _normalize(path2)
 
 
 if __name__ == "__main__":

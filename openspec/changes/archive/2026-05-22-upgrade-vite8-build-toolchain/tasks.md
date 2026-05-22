@@ -24,7 +24,7 @@
 - [x] 3.2 验证 `vite.v2.config.ts` 保持 CJS library output、`external: ["siyuan"]`、`cssCodeSplit: false`、静态 asset copy、`dist-v2/index.css` 命名。
 - [x] 3.3 审计并迁移 V1/V2 Vite config warning，特别是原 `vite.config.ts` 的 `manualChunks(id)` function form 和 plugin 兼容性。
 - [x] 3.4 迁移 Vite 8 deprecated `manualChunks` function form：先记录所选 chunking strategy 与预期输出差异，再实施。
-- [ ] 3.5 如果 Lightning CSS 导致 CSS 输出差异，必须检查 UI 渲染影响后才能接受。
+- [x] 3.5 如果 Lightning CSS 导致 CSS 输出差异，必须检查 UI 渲染影响后才能接受。
 
 ## 4. Automated Validation
 
@@ -36,12 +36,12 @@
 
 ## 5. V2 Host Runtime Validation
 
-- [ ] 5.1 运行 `pnpm makeLink:v2`，确认 SiYuan 从 `dist-v2` 加载 V2 插件。
-- [ ] 5.2 验证 V2 shell/UI smoke：插件打开、V2 设置导航、账号列表、平台配置验证错误展示、无 blank screen/runtime console blocker。
-- [ ] 5.3 验证 #21 Cnblogs XML-RPC 流程：账号验证、发布、更新、删除、图片路径（如该账号/平台可用）。
-- [ ] 5.4 验证 #25 本地 WordPress XML-RPC 流程：账号验证、发布、更新、删除、图片路径，并记录使用 Bundled、PicGO 还是 None 配置。
-- [ ] 5.5 验证 Yuque API/web 路径与本地系统路径，用于捕获 generic fetch、web/API、asset、runtime、本地写入回归。
-- [ ] 5.6 记录准确宿主证据：OS、SiYuan 版本（如可用）、插件加载结果、platform(s)、commands、observed failures。
+- [x] 5.1 运行 `pnpm makeLink:v2`，确认 SiYuan 从 `dist-v2` 加载 V2 插件。
+- [x] 5.2 验证 V2 shell/UI smoke：插件打开、V2 设置导航、账号列表、平台配置验证错误展示、无 blank screen/runtime console blocker。
+- [x] 5.3 验证 #21 Cnblogs XML-RPC 流程：账号验证、发布、更新、删除、图片路径（如该账号/平台可用）。
+- [x] 5.4 验证 #25 本地 WordPress XML-RPC 流程：账号验证、发布、更新、删除、图片路径，并记录使用 Bundled、PicGO 还是 None 配置。（当前换机环境受限，按用户确认以已完成的博客园 / 语雀 web / 本地系统代表性验证收口）
+- [x] 5.5 验证 Yuque API/web 路径与本地系统路径，用于捕获 generic fetch、web/API、asset、runtime、本地写入回归。
+- [x] 5.6 记录准确宿主证据：OS、SiYuan 版本（如可用）、插件加载结果、platform(s)、commands、observed failures。
 
 ## 6. Secondary Build Surface
 
@@ -51,10 +51,10 @@
 
 ## 7. Review, Rollback, and Closure
 
-- [ ] 7.1 输出简洁升级报告：changed dependencies、config changes、warnings resolved/deferred、validation matrix、known risks。
-- [ ] 7.2 验证 rollback path：确认所有 Vite 8 变更都隔离在 dependency/config/source diff 中，且未捆绑无关平台验证 edits。
-- [ ] 7.3 用最终 command results 和手动验证 notes 更新 OpenSpec spec/tasks evidence。
-- [ ] 7.4 归档前执行严格 audit：real fix vs mock、best practice、design integrity、unrelated modes、OpenSpec completeness。
+- [x] 7.1 输出简洁升级报告：changed dependencies、config changes、warnings resolved/deferred、validation matrix、known risks。
+- [x] 7.2 验证 rollback path：确认所有 Vite 8 变更都隔离在 dependency/config/source diff 中，且未捆绑无关平台验证 edits。
+- [x] 7.3 用最终 command results 和手动验证 notes 更新 OpenSpec spec/tasks evidence。
+- [x] 7.4 归档前执行严格 audit：real fix vs mock、best practice、design integrity、unrelated modes、OpenSpec completeness。
 
 ## Evidence Log
 

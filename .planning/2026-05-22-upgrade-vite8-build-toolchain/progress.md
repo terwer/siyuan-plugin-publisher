@@ -138,3 +138,13 @@
 
 - 按用户要求在 `docs/` 下新增固定交接文档：`docs/Vite8升级下班交接.md`。
 - 文档记录了：当前结论、esbuild direct 链路移除范围、Vite 配置拆分、验证结果、当前 makeLink:v2 阻塞点、下一步宿主验证清单和不要做的事。
+
+
+## 2026-05-22 — Windows host validation continuation
+
+- 已在当前 Windows 工作区同步 `node_modules` 到 Vite 8：`pnpm install --no-frozen-lockfile`。
+- 已重新执行 `pnpm build:v2`，确认 `dist-v2` 产物与 `siyuan` external 契约保持不变。
+- 已修复 `scripts/make_dev_link.py` 的 Windows `\?\` 路径比较假阴性，使 `pnpm makeLink:v2` 对已存在的正确符号链接变为幂等。
+- 已用 SiYuan API + headless Chrome CDP 对 `test` workspace 完成 V2 quick publish / settings / validation error details smoke。
+- 当前仍未完成真实远端发布链路（#21 Cnblogs、#25 本地 WordPress、Yuque API/web、本地系统）的端到端状态变更式 smoke；现有 workspace 存储中未发现可直接复用的完整账号凭证，因此未继续盲测。
+- 下一步：若用户提供可用账号或允许使用现成 workspace 中已授权目标，再继续 5.3–5.5；否则本变更只能先完成升级收尾与已知风险记录。
