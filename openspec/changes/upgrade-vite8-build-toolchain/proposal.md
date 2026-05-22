@@ -11,6 +11,7 @@
 - 明确 Vite 8 迁移风险点并建立验证矩阵：Rolldown 输出差异、CJS/ESM interop、CSS minify、Node polyfill、`rollupOptions.output.manualChunks` function form、V1/V2 双构建配置差异。
 - 保持业务逻辑不变；除构建配置、依赖版本与必要兼容修复外，不混入平台适配器或 UI 功能变更。
 - 建立回滚机制：若 V2 插件加载或高价值发布链路失败，应能回退到 Vite 7 依赖与配置。
+- 将 `manualChunks` function form 迁移纳入本变更；V1/package/widget/nginx/ext 构建作为 release packaging 前 mandatory gate。
 
 ## Capabilities
 
@@ -25,11 +26,11 @@
 - 依赖与锁文件：`package.json`、`pnpm-lock.yaml` 中的 `vite` 及必要 Vite 生态插件版本。
 - 构建配置：`vite.v2.config.ts`、`vite.config.ts`，必要时补充迁移注释或兼容配置。
 - 验证命令：`pnpm test`、`pnpm lint`、`pnpm build:v2`、`pnpm dev:v2`、`pnpm makeLink:v2`；必要时补充 V1 `pnpm build`、widget/nginx/ext 构建抽样。
-- 宿主验证：SiYuan Electron 中 V2 插件加载、设置页、快速发布、图片上传、XML-RPC 传输与 Web/API 传输抽样。
+- 宿主验证：SiYuan Electron 中 V2 插件加载、设置页、快速发布、图片上传、XML-RPC 传输与 Web/API 传输；固定覆盖 #21 Cnblogs、#25 本地 WordPress、Yuque API/web、本地系统。
 - 风险区域：V2 `build.lib.formats: ["cjs"]` 输出、`nodePolyfills`、静态资源复制、CSS 单文件输出、external `siyuan`、V1 `manualChunks`、`vite-plugin-html` 与 livereload 插件。
 
 ## References
 
-- Vite 8 announcement: https://vite.dev/blog/announcing-vite8
-- Vite 7 → 8 migration guide: https://vite.dev/guide/migration
-- Vite version support policy: https://vite.dev/releases
+- Vite 8 发布说明：https://vite.dev/blog/announcing-vite8
+- Vite 7 → 8 迁移指南：https://vite.dev/guide/migration
+- Vite 版本支持策略：https://vite.dev/releases

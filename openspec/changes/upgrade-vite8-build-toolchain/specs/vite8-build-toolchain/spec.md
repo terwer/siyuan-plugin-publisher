@@ -1,57 +1,57 @@
 ## ADDED Requirements
 
 ### Requirement: Vite 8 dependency baseline
-The project SHALL use Vite 8 as the primary Vite dependency and SHALL keep related Vite ecosystem packages at compatible versions required by the installed Vite 8 release.
+项目 SHALL 使用 Vite 8 作为主要 Vite 依赖，并 SHALL 保持相关 Vite 生态包版本与已安装 Vite 8 release 兼容。
 
 #### Scenario: Dependency versions are aligned
-- **WHEN** `pnpm install` completes after the upgrade
-- **THEN** the lockfile resolves Vite to a Vite 8 release and no Vite peer dependency conflict remains unresolved
+- **WHEN** 升级后完成 `pnpm install`
+- **THEN** lockfile 将 Vite 解析为 Vite 8 release，且不存在未解决的 Vite peer dependency conflict
 
 #### Scenario: Runtime baseline is documented
-- **WHEN** a developer reviews the upgrade notes
-- **THEN** the supported Node.js baseline for Vite 8 is documented and incompatible local Node versions are called out before build validation
+- **WHEN** 开发者查看升级说明
+- **THEN** Vite 8 支持的 Node.js baseline 已记录，且 incompatible local Node versions 会在 build validation 前被明确指出
 
 ### Requirement: V2 build output remains SiYuan plugin compatible
-The V2 build SHALL produce a SiYuan-compatible plugin bundle with the same public output contract as the Vite 7 build.
+V2 build SHALL 生成与 Vite 7 build 相同 public output contract 的 SiYuan-compatible plugin bundle。
 
 #### Scenario: V2 production build succeeds
-- **WHEN** `pnpm build:v2` is executed
-- **THEN** `dist-v2/index.js`, `dist-v2/index.css`, `dist-v2/plugin.json`, i18n files, license/readme files, and icon assets are generated in their expected locations
+- **WHEN** 执行 `pnpm build:v2`
+- **THEN** `dist-v2/index.js`、`dist-v2/index.css`、`dist-v2/plugin.json`、i18n files、license/readme files 和 icon assets 会生成在预期位置
 
 #### Scenario: V2 watch build remains usable
-- **WHEN** `pnpm dev:v2` is executed during development
-- **THEN** the V2 build watch process emits valid `dist-v2` output without requiring the deprecated V1 command `pnpm dev -p siyuan`
+- **WHEN** 开发时执行 `pnpm dev:v2`
+- **THEN** V2 build watch process 会输出有效 `dist-v2` 产物，且不需要使用已弃用的 V1 命令 `pnpm dev -p siyuan`
 
 #### Scenario: SiYuan external remains external
-- **WHEN** `dist-v2/index.js` is inspected after build
-- **THEN** the SiYuan host API remains externalized according to `external: ["siyuan"]` and is not accidentally bundled into the plugin output
+- **WHEN** build 后检查 `dist-v2/index.js`
+- **THEN** SiYuan host API 按 `external: ["siyuan"]` 保持 externalized，且不会被意外 bundle 到 plugin output 中
 
 ### Requirement: Vite config migration is explicit
-The project SHALL make Vite 8 migration choices explicit for Rollup/Rolldown, CJS/ESM interop, CSS minification, and output splitting behavior.
+项目 SHALL 明确 Vite 8 迁移选择，覆盖 Rollup/Rolldown、CJS/ESM interop、CSS minification 和 output splitting behavior。
 
 #### Scenario: Deprecated output splitting is addressed
-- **WHEN** `vite.config.ts` or `vite.v2.config.ts` uses output chunking configuration
-- **THEN** any Vite 8 deprecated `manualChunks` function usage is either migrated, intentionally retained with rationale, or tracked as a follow-up before release
+- **WHEN** `vite.config.ts` 或 `vite.v2.config.ts` 使用 output chunking configuration
+- **THEN** 任何 Vite 8 deprecated `manualChunks` function usage 都已在本变更中迁移，并记录 chunking strategy 与预期输出差异
 
 #### Scenario: CSS output contract is verified
-- **WHEN** V2 is built with Vite 8
-- **THEN** the single CSS output contract for V2 remains `dist-v2/index.css` or an explicitly approved replacement is documented
+- **WHEN** 使用 Vite 8 构建 V2
+- **THEN** V2 的单 CSS 输出契约仍为 `dist-v2/index.css`，或已记录一个明确批准的替代方案
 
 #### Scenario: CJS library output is verified
-- **WHEN** V2 is built with `build.lib.formats: ["cjs"]`
-- **THEN** the generated entry can be loaded by the SiYuan Electron plugin host without import/export runtime errors
+- **WHEN** V2 使用 `build.lib.formats: ["cjs"]` 构建
+- **THEN** 生成的 entry 能被 SiYuan Electron plugin host 加载，且不会出现 import/export runtime errors
 
 ### Requirement: Validation gate for upgrade completion
-The Vite 8 upgrade SHALL NOT be considered complete until automated and manual validation gates have passed or their exceptions are explicitly recorded.
+Vite 8 upgrade SHALL NOT 被视为完成，直到 automated 和 manual validation gates 已通过，或其 exceptions 被明确记录。
 
 #### Scenario: Automated validation gate passes
-- **WHEN** the upgrade is prepared for review
-- **THEN** `pnpm test`, `pnpm lint`, and `pnpm build:v2` have passed under the Vite 8 dependency set
+- **WHEN** 升级准备进入 review
+- **THEN** `pnpm test`、`pnpm lint` 和 `pnpm build:v2` 已在 Vite 8 dependency set 下通过
 
 #### Scenario: Manual V2 host validation passes
-- **WHEN** the upgrade is prepared for review
-- **THEN** `pnpm makeLink:v2` has been used to load the V2 plugin in SiYuan and smoke tests for plugin load, settings navigation, quick publish, update/delete, and image publish have been recorded
+- **WHEN** 升级准备进入 review
+- **THEN** 已使用 `pnpm makeLink:v2` 在 SiYuan 中加载 V2 plugin，并记录 plugin load、settings navigation，以及 #21 Cnblogs、#25 本地 WordPress、Yuque API/web、本地系统的 quick publish、update/delete、image publish 或对应等价验证
 
 #### Scenario: Rollback path exists
-- **WHEN** a blocking Vite 8 runtime regression is found
-- **THEN** the change can be reverted by restoring Vite 7 dependency/configuration changes without reverting unrelated platform verification work
+- **WHEN** 发现 blocking Vite 8 runtime regression
+- **THEN** 本变更可以通过恢复 Vite 7 dependency/configuration changes 来回退，且不会回退无关 platform verification work
