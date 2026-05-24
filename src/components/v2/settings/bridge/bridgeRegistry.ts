@@ -5,8 +5,14 @@ import NotionSetting from "~/src/components/set/publish/singleplatform/commonblo
 import TelegraphSetting from "~/src/components/set/publish/singleplatform/commonblog/TelegraphSetting.vue"
 import YuqueSetting from "~/src/components/set/publish/singleplatform/commonblog/YuqueSetting.vue"
 import LocalSystemSetting from "~/src/components/set/publish/singleplatform/fs/LocalSystemSetting.vue"
+import BilibiliSetting from "~/src/components/set/publish/singleplatform/web/BilibiliSetting.vue"
+import CsdnSetting from "~/src/components/set/publish/singleplatform/web/CsdnSetting.vue"
 import HalowebSetting from "~/src/components/set/publish/singleplatform/web/HalowebSetting.vue"
+import JianshuSetting from "~/src/components/set/publish/singleplatform/web/JianshuSetting.vue"
+import JuejinSetting from "~/src/components/set/publish/singleplatform/web/JuejinSetting.vue"
+import WechatSetting from "~/src/components/set/publish/singleplatform/web/WechatSetting.vue"
 import YuquewebSetting from "~/src/components/set/publish/singleplatform/web/YuquewebSetting.vue"
+import ZhihuSetting from "~/src/components/set/publish/singleplatform/web/ZhihuSetting.vue"
 import AstroSetting from "~/src/components/set/publish/singleplatform/github/AstroSetting.vue"
 import HexoSetting from "~/src/components/set/publish/singleplatform/github/HexoSetting.vue"
 import HugoSetting from "~/src/components/set/publish/singleplatform/github/HugoSetting.vue"
@@ -62,8 +68,14 @@ const BRIDGE_COMPONENTS: Partial<Record<SubPlatformType, Component>> = {
   [SubPlatformType.Wordpress_Wordpress]: WordpressSetting,
   [SubPlatformType.Wordpress_Wordpressdotcom]: WordpressdotcomSetting,
 
+  [SubPlatformType.Custom_Zhihu]: ZhihuSetting,
+  [SubPlatformType.Custom_CSDN]: CsdnSetting,
+  [SubPlatformType.Custom_Wechat]: WechatSetting,
+  [SubPlatformType.Custom_Jianshu]: JianshuSetting,
+  [SubPlatformType.Custom_Juejin]: JuejinSetting,
   [SubPlatformType.Custom_Haloweb]: HalowebSetting,
   [SubPlatformType.Custom_Yuqueweb]: YuquewebSetting,
+  [SubPlatformType.Custom_Bilibili]: BilibiliSetting,
 }
 
 export const SUPPORTED_V2_BRIDGE_SUBTYPES = new Set<SubPlatformType>([

@@ -34,6 +34,19 @@ describe("yuqueweb platform registration", () => {
     expect(getV2BridgeComponent(SubPlatformType.Custom_Yuqueweb)).toBeTruthy()
   })
 
+  it("registers V2 bridge components for enabled custom web presets", () => {
+    const enabledCustomSubtypes = pre.customCfg.map((item) => item.subPlatformType!)
+
+    expect(enabledCustomSubtypes).toEqual(
+      expect.arrayContaining([SubPlatformType.Custom_Zhihu, SubPlatformType.Custom_CSDN])
+    )
+
+    for (const subtype of enabledCustomSubtypes) {
+      expect(SUPPORTED_V2_BRIDGE_SUBTYPES.has(subtype)).toBe(true)
+      expect(getV2BridgeComponent(subtype)).toBeTruthy()
+    }
+  })
+
   it("keeps custom web platforms visible in the V2 add-account platform selector", () => {
     const visibleGroups = V2_PLATFORM_SELECT_GROUP_DEFS.map((group) => group.key)
 

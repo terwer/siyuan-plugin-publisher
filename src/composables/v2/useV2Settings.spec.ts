@@ -74,6 +74,17 @@ describe("useV2Settings", () => {
     expect(yuque?.description).toBe(zhCN[preset.i18n!.description])
   })
 
+  it("exposes every enabled custom web preset in the V2 bridge selector", async () => {
+    const { settings } = await mountHarness([])
+    const selectableCustomKeys = settings.selectablePlatforms.value
+      .filter((item) => item.platformType === PlatformType.Custom)
+      .map((item) => item.platformKey)
+
+    expect(selectableCustomKeys).toEqual(expect.arrayContaining(pre.customCfg.map((item) => item.platformKey)))
+    expect(selectableCustomKeys).toContain("custom_Zhihu")
+    expect(selectableCustomKeys).toContain("custom_Csdn")
+  })
+
   it("falls back to translated preset descriptions for legacy account configs without description", async () => {
     const preset = pre.commonCfg.find((item) => item.platformKey === "common_Yuque")!
     const legacyYuque = {

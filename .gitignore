@@ -48,6 +48,9 @@ testdata
 .tool-versions
 .opencode
 
+# log
+*.log
+
 # ReCode local database
 .recode
 

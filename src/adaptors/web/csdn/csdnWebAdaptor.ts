@@ -452,7 +452,7 @@ class CsdnWebAdaptor extends BaseWebApi {
     const accept = "*/*"
     const xcakey = CsdnUtils.X_CA_KEY
     const xCaNonce = CsdnUtils.generateXCaNonce()
-    const xCaSignature = CsdnUtils.generateXCaSignature(url, method, accept, xCaNonce, contentType)
+    const xCaSignature = await CsdnUtils.generateXCaSignature(url, method, accept, xCaNonce, contentType)
 
     const reqHeaderMap = new Map<string, string>()
     reqHeaderMap.set("accept", accept)
@@ -494,7 +494,14 @@ class CsdnWebAdaptor extends BaseWebApi {
     const xcakey = CsdnUtils.X_CA_KEY_MEDIA
     const xCaNonce = CsdnUtils.generateXCaNonce()
     const timestamp = new Date().getTime().toString()
-    const xCaSignature = CsdnUtils.generateXCaSignatureForMedia(url, method, accept, xCaNonce, contentType, timestamp)
+    const xCaSignature = await CsdnUtils.generateXCaSignatureForMedia(
+      url,
+      method,
+      accept,
+      xCaNonce,
+      contentType,
+      timestamp
+    )
 
     const reqHeaderMap = new Map<string, string>()
     reqHeaderMap.set("accept", accept)

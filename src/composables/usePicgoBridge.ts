@@ -16,6 +16,13 @@ import { isDev } from "~/src/utils/constants.ts"
 import { BlogConfig, PicbedServiceTypeEnum } from "zhi-blog-api"
 import { isFileExists } from "~/src/utils/siyuanUtils.ts"
 
+type SiyuanConfigBridge = {
+  apiUrl?: string
+  password?: string
+  cookie?: string
+  [key: string]: unknown
+}
+
 /**
  * Picgo 桥接 API，用于上传并替换图片链接
  *
@@ -50,7 +57,7 @@ const usePicgoBridge = () => {
       }
 
       // 通用方法获取，保证单例
-      const picgoPostApi = await SiyuanPicGo.getInstance(siyuanConfig, isDev)
+      const picgoPostApi = await SiyuanPicGo.getInstance(siyuanConfig as unknown as SiyuanConfigBridge, isDev)
       const picgoPostResult = await picgoPostApi.uploadPostImagesToBed(siyuanData.pageId, siyuanData.meta, md)
       // 有图片才上传
       if (picgoPostResult.hasImages) {
@@ -94,7 +101,7 @@ const usePicgoBridge = () => {
     const attrs = await kernelApi.getBlockAttrs(pageId)
     const baseUrl = siyuanConfig.apiUrl ?? ""
     // 通用方法获取，保证单例
-    const picgoPostApi = await SiyuanPicGo.getInstance(siyuanConfig, isDev)
+    const picgoPostApi = await SiyuanPicGo.getInstance(siyuanConfig as unknown as SiyuanConfigBridge, isDev)
     const imageItemArray = await picgoPostApi.doConvertImagesToImagesItemArray(attrs, retImgs, baseUrl)
     logger.debug("imageItemArray=>", imageItemArray)
     return imageItemArray
