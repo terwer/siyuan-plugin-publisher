@@ -66,13 +66,7 @@ const toastKeyFor = (input: V2QuickPublishToastInput): string | null => {
     return lastAction === "update" ? "v2.quickPublish.toast.updateWarn" : "v2.quickPublish.toast.publishWarn"
   }
   if (status === "failed") {
-    if (lastAction === "update") {
-      return "v2.quickPublish.toast.updateFailed"
-    }
-    if (lastAction === "delete") {
-      return "v2.quickPublish.toast.deleteFailed"
-    }
-    return "v2.quickPublish.toast.publishFailed"
+    return null
   }
   if (status === "preview_ready") {
     return "v2.quickPublish.toast.previewReady"

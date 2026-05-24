@@ -27,7 +27,7 @@ const props = defineProps({
 
 const { t } = useVueI18n()
 const { cfg } = await useHalowebWeb(props.apiType)
-const emit = defineEmits(["validated"])
+const emit = defineEmits(["validated", "saved"])
 
 const halowebCfg = cfg as HalowebConfig
 const halowebPlaceholder = new HalowebWebPlaceholder()
@@ -44,6 +44,7 @@ halowebCfg.placeholder = halowebPlaceholder
     :cfg="halowebCfg"
     :enable-on-validated="props.enableOnValidated"
     @validated="(result) => emit('validated', result)"
+    @saved="(result) => emit('saved', result)"
   >
     <template v-if="$slots['cookie-actions']" #cookie-actions="cookieActions">
       <slot

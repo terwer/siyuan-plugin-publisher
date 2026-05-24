@@ -494,4 +494,75 @@ describe("useV2QuickPublish", () => {
     expect(quickPublish.state.publishState.errDetails).toContain("siyuan-forward-proxy")
     expect(quickPublish.state.publishState.errDetails).toContain("403")
   })
+
+  it("extracts remote JSON business errors into friendly summaries while preserving details", async () => {
+    let quickPublish!: ReturnType<typeof useV2QuickPublish>
+
+    const Harness = defineComponent({
+      setup() {
+        quickPublish = useV2QuickPublish()
+        return () => h("div")
+      },
+    })
+
+    const platform = {
+      platformType: PlatformType.Custom,
+      subPlatformType: SubPlatformType.Custom_CSDN,
+      platformKey: "custom_CSDN",
+      platformName: "CSDN",
+      authMode: AuthMode.WEBSITE,
+      isEnabled: true,
+      isAuth: true,
+      isSys: false,
+    } as DynamicConfig
+
+    const store = usePublishSettingStore()
+    store.getSetting = vi.fn().mockResolvedValue({
+      [DYNAMIC_CONFIG_KEY]: setDynamicJsonCfg([platform]),
+      "20260509120000-test": {},
+    } as any)
+
+    mockGetPublishCfg.mockResolvedValue({
+      cfg: { posidKey: "custom-custom_CSDN-post-id", blogName: "CSDN" },
+      dynCfg: { platformKey: "custom_CSDN", platformName: "CSDN" },
+      setting: {
+        "20260509120000-test": {},
+      },
+    })
+    mockDoSinglePublish.mockResolvedValue({
+      status: false,
+      errMsg:
+        'main.opt.failure=>Error: {"code":400,"traceId":"9195dc6c-ed82-4cc0-b1c3-f653e5743b26","data":null,"msg":"标题过短"}',
+      errDetails:
+        'Error: {"code":400,"traceId":"9195dc6c-ed82-4cc0-b1c3-f653e5743b26","data":null,"msg":"标题过短"}\n    at CsdnWebAdaptor.addPost',
+    })
+
+    mount(Harness, {
+      global: {
+        plugins: [
+          createI18n({
+            legacy: false,
+            locale: "zh_CN",
+            messages: { zh_CN: zhCN },
+          }),
+        ],
+      },
+    })
+
+    await quickPublish.init()
+    await quickPublish.publishToPlatform(quickPublish.state.platformItems[0])
+
+    expect(quickPublish.state.publishState.status).toBe("failed")
+    expect(mockNotifyQuickPublish).toHaveBeenCalledWith(
+      expect.any(Function),
+      expect.objectContaining({
+        status: "failed",
+        platformName: "CSDN",
+        errMsg: "标题过短",
+      })
+    )
+    expect(quickPublish.state.publishState.errMsg).toBe("标题过短")
+    expect(quickPublish.state.publishState.errDetails).toContain("9195dc6c-ed82-4cc0-b1c3-f653e5743b26")
+    expect(quickPublish.state.publishState.errDetails).toContain("CsdnWebAdaptor.addPost")
+  })
 })

@@ -27,7 +27,7 @@ const props = defineProps({
 
 const { t } = useVueI18n()
 const { cfg } = await useYuquewebWeb(props.apiType)
-const emit = defineEmits(["validated"])
+const emit = defineEmits(["validated", "saved"])
 
 const yuquewebCfg = cfg as YuquewebConfig
 const yuquewebPlaceholder = new YuquewebWebPlaceholder()
@@ -44,6 +44,7 @@ yuquewebCfg.placeholder = yuquewebPlaceholder
     :cfg="yuquewebCfg"
     :enable-on-validated="props.enableOnValidated"
     @validated="(result) => emit('validated', result)"
+    @saved="(result) => emit('saved', result)"
   >
     <template #header>
       <el-alert :closable="false" :title="t('setting.yuqueweb.auth.tip')" class="top-tip" type="info" />

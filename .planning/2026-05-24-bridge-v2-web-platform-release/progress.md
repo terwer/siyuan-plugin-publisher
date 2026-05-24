@@ -26,3 +26,25 @@
   - `openspec/changes/generalize-web-cookie-auth/specs/web-cookie-logout/spec.md`
   - `openspec/changes/generalize-web-cookie-auth/tasks.md`
 - `openspec status --change generalize-web-cookie-auth` 显示 `4/4 artifacts complete`，可进入 apply 实施。
+
+## 2026-05-24 — CSDN 真实发布链路触达远端但测试标题过短
+
+- 用户提供 CSDN 发布失败日志：`Error: {"code":400,"traceId":"9195dc6c-ed82-4cc0-b1c3-f653e5743b26","data":null,"msg":"标题过短"}`。
+- 关键栈：`runPluginJsonFetch` → `runJsonFetchTransport` → `CsdnWebAdaptor.webFetch` → `CsdnWebAdaptor.csdnFetch` → `CsdnWebAdaptor.addPost` → `doSinglePublish`。
+- 结论：这证明 CSDN V2 发布已进入真实 CSDN addPost 业务接口，当前失败是平台业务输入校验，不是 Cookie Bridge、授权面板、JSON transport 或适配器路由未接通。
+- 决策：不在 CSDN 适配器里专修/自动扩充标题；重跑手验时使用统一的足够长测试标题，避免用平台专属补丁掩盖真实输入约束。
+
+## 2026-05-24 — V2 快速发布失败反馈共用层优化
+
+- 用户进一步确认：CSDN“标题过短”不是 CSDN 单个平台问题，而是 V2 快速发布失败提示共用层问题；toast 重复且详情摘要混乱。
+- 已按“大更改先 OpenSpec”新增 change：`improve-v2-quick-publish-error-feedback`，产物：proposal/design/specs/tasks 全部完成。
+- 共用层结论：
+  - 不做 CSDN 专修，也不自动扩充标题；平台业务校验仍由真实远端决定。
+  - V2 快速发布失败不再弹全局失败 toast，失败入口收敛到页面状态卡 + `SypErrorDetailsPanel`。
+  - 在 `src/composables/v2/quickPublishErrorText.ts` 统一提取错误摘要：优先 `msg` / `message` / `error.message` / string `error`，例如 CSDN JSON 错误提取为“标题过短”。
+  - 原始 JSON、traceId、HTTP 摘要、stack 等保留在详情里，并继续脱敏 Cookie、Authorization、ctoken、csrf、ticket、token。
+  - 页面内失败描述改为 `{平台} 发布/更新/删除失败：{短摘要}`，错误卡标题也显示短摘要，按钮仍打开详情。
+- 自动化验证：
+  - `pnpm exec vitest run src/composables/v2/quickPublishErrorText.spec.ts src/composables/v2/useV2QuickPublish.spec.ts src/composables/v2/useV2QuickPublishToast.spec.ts src/components/v2/v2QuickPublishFailureFeedback.spec.ts` ✅，`4 passed / 18 tests passed`。
+  - `pnpm lint` ✅。
+  - `pnpm build:v2` ✅。

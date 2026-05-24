@@ -53,15 +53,13 @@ describe("buildV2QuickPublishToast", () => {
     expect(payload?.message).not.toContain("image.png")
   })
 
-  it("uses failed copy that points to page details instead of raw errors", () => {
+  it("returns null for failed statuses because page details own failure feedback", () => {
     const payload = buildV2QuickPublishToast(t, {
       status: "failed",
       platformName: "知乎",
       lastAction: "publish",
       errMsg: "main.opt.failure=>YuquewebRequestError",
     })
-    expect(payload?.type).toBe("error")
-    expect(payload?.message).toBe("发布到「知乎」失败，请查看页面上的错误详情")
-    expect(payload?.message).not.toContain("YuquewebRequestError")
+    expect(payload).toBeNull()
   })
 })

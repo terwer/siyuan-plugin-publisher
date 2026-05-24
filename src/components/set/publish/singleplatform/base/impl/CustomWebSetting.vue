@@ -23,7 +23,7 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(["validated"])
+const emit = defineEmits(["validated", "saved"])
 </script>
 
 <template>
@@ -32,6 +32,7 @@ const emit = defineEmits(["validated"])
     :cfg="props.cfg"
     :enable-on-validated="props.enableOnValidated"
     @validated="(result) => emit('validated', result)"
+    @saved="(result) => emit('saved', result)"
   >
     <template #header="header">
       <slot name="header" :cfg="header.cfg" />

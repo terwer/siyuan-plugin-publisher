@@ -51,6 +51,17 @@ const createCookie = (name: string, value: string) =>
     sameSite: "no_restriction",
   }) as any
 
+const createWebDynCfg = (subPlatformType: SubPlatformType, platformKey: string, platformName: string) =>
+  createDynCfg({
+    subPlatformType,
+    platformKey,
+    platformName,
+    authUrl: platformKey.toLowerCase().includes("csdn")
+      ? "https://passport.csdn.net/login"
+      : "https://www.zhihu.com/signin",
+    domain: platformKey.toLowerCase().includes("csdn") ? "csdn.net" : "zhihu.com",
+  })
+
 describe("authorizeWebCookie", () => {
   it("reads Cookie, builds it with platform api, validates metadata, and persists auth state", async () => {
     const dynCfg = createDynCfg()
@@ -241,6 +252,55 @@ describe("authorizeWebCookie", () => {
     expect(serializedLogs).not.toContain("ctoken=raw-secret-token")
     expect(serializedLogs).toContain("cookieCount")
   })
+
+  it.each([
+    [SubPlatformType.Custom_CSDN, "custom_Csdn-test", "CSDN", "UserName=csdn-user; UserToken=secret"],
+    [SubPlatformType.Custom_Zhihu, "custom_Zhihu-test", "知乎", "z_c0=secret; q_c1=token"],
+  ])(
+    "uses the shared WebAdaptor authorization flow for %s",
+    async (subPlatformType, platformKey, platformName, builtCookie) => {
+      const dynCfg = createWebDynCfg(subPlatformType, platformKey, platformName)
+      const cfg = createCfg()
+      const setting: Record<string, any> = {
+        [DYNAMIC_CONFIG_KEY]: setDynamicJsonCfg([dynCfg]),
+        [dynCfg.platformKey]: { keepMe: "keep" },
+      }
+      const updateSetting = vi.fn().mockResolvedValue(undefined)
+      const buildCookie = vi.fn().mockResolvedValue(builtCookie)
+      const updateCfg = vi.fn()
+      const getMetaData = vi.fn().mockResolvedValue({ flag: true, displayName: platformName })
+
+      const result = await authorizeWebCookie(
+        {
+          platformKey: dynCfg.platformKey,
+          currentCfg: cfg,
+          dynCfg,
+          setting,
+          dynamicConfigArray: [dynCfg],
+        },
+        {
+          getSetting: vi.fn(),
+          updateSetting,
+          captureCookies: vi.fn().mockResolvedValue([createCookie("session", "secret-value")]),
+          getWebApi: vi.fn().mockResolvedValue({ buildCookie, updateCfg, getMetaData }),
+          isAutoCaptureSupported: () => true,
+        }
+      )
+
+      expect(result).toMatchObject({ status: "success", ok: true })
+      expect(buildCookie).toHaveBeenCalledWith([expect.objectContaining({ name: "session" })])
+      expect(getMetaData).toHaveBeenCalledTimes(1)
+      expect(updateCfg).toHaveBeenCalledWith(expect.objectContaining({ password: builtCookie }))
+      expect(setting[dynCfg.platformKey]).toMatchObject({
+        keepMe: "keep",
+        password: builtCookie,
+        metadata: { flag: true, displayName: platformName },
+      })
+      expect(setting[DYNAMIC_CONFIG_KEY].totalCfg[0].isAuth).toBe(true)
+      expect(setting[DYNAMIC_CONFIG_KEY].totalCfg[0].isEnabled).toBe(true)
+      expect(updateSetting).toHaveBeenCalledWith(setting)
+    }
+  )
 })
 
 describe("logoutWebCookieAuthorization", () => {
@@ -325,6 +385,55 @@ describe("logoutWebCookieAuthorization", () => {
     expect(openLogoutUrl).toHaveBeenCalledWith("https://www.zhihu.com/logout")
     expect(setting[dynCfg.platformKey].password).toBe("zhihu-cookie=synthetic")
   })
+
+  it.each([
+    [
+      SubPlatformType.Custom_CSDN,
+      "custom_Csdn-test",
+      "CSDN",
+      "https://passport.csdn.net/account/logout",
+      "UserName=csdn-user",
+    ],
+    [SubPlatformType.Custom_Zhihu, "custom_Zhihu-test", "知乎", "https://www.zhihu.com/logout", "z_c0=secret"],
+  ])(
+    "uses the shared logout fallback for %s without platform-specific UI logic",
+    async (subPlatformType, platformKey, platformName, logoutUrl, password) => {
+      const dynCfg = createDynCfg({
+        subPlatformType,
+        platformKey,
+        platformName,
+        logoutUrl,
+        isAuth: true,
+      })
+      const setting: Record<string, any> = {
+        [DYNAMIC_CONFIG_KEY]: setDynamicJsonCfg([dynCfg]),
+        [dynCfg.platformKey]: { password },
+      }
+      const openLogoutUrl = vi.fn()
+
+      const result = await logoutWebCookieAuthorization(
+        {
+          platformKey: dynCfg.platformKey,
+          currentCfg: createCfg({ password }),
+          dynCfg,
+          setting,
+          dynamicConfigArray: [dynCfg],
+        },
+        {
+          getSetting: vi.fn(),
+          updateSetting: vi.fn().mockResolvedValue(undefined),
+          getWebApi: vi.fn().mockResolvedValue({
+            logoutWebAuth: vi.fn().mockResolvedValue(false),
+          }),
+          openLogoutUrl,
+        }
+      )
+
+      expect(result).toMatchObject({ status: "url_fallback", ok: true, mode: "url_fallback", logoutUrl })
+      expect(openLogoutUrl).toHaveBeenCalledWith(logoutUrl)
+      expect(setting[dynCfg.platformKey].password).toBe(password)
+    }
+  )
 
   it("returns no_logout_method for Yuque when adapter logout is unavailable and never falls back to logout URL", async () => {
     const dynCfg = createDynCfg({ isAuth: true, logoutUrl: "https://www.yuque.com/logout" })

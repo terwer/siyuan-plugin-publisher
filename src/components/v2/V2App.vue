@@ -92,7 +92,7 @@
             </div>
             <div v-if="publishState.status === 'failed' && publishState.errMsg" class="syp-publish-status__error">
               <div class="syp-publish-status__error-head">
-                <div class="syp-publish-status__error-title">{{ t("v2.quickPublish.errorDetails") }}</div>
+                <div class="syp-publish-status__error-title">{{ publishState.errMsg }}</div>
                 <button type="button" class="syp-publish-status__detail-btn is-error" @click="showPublishErrorDetails">
                   {{ t("v2.quickPublish.action.viewErrorDetails") }}
                 </button>
@@ -337,6 +337,21 @@ const publishDescription = computed(() => {
     return name ? t("v2.publish.desc.previewReady.named", { name }) : t("v2.publish.desc.previewReady.default")
   }
   if (publishState.value.status === "failed") {
+    if (publishState.value.errMsg) {
+      if (action === "update") {
+        return name
+          ? t("v2.publish.desc.updateFailedWithReason.named", { name, reason: publishState.value.errMsg })
+          : t("v2.publish.desc.updateFailedWithReason.default", { reason: publishState.value.errMsg })
+      }
+      if (action === "delete") {
+        return name
+          ? t("v2.publish.desc.deleteFailedWithReason.named", { name, reason: publishState.value.errMsg })
+          : t("v2.publish.desc.deleteFailedWithReason.default", { reason: publishState.value.errMsg })
+      }
+      return name
+        ? t("v2.publish.desc.publishFailedWithReason.named", { name, reason: publishState.value.errMsg })
+        : t("v2.publish.desc.publishFailedWithReason.default", { reason: publishState.value.errMsg })
+    }
     if (action === "update") {
       return name ? t("v2.publish.desc.updateFailed.named", { name }) : t("v2.publish.desc.updateFailed.default")
     }

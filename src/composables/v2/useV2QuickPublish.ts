@@ -6,6 +6,11 @@ import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
 import { sortV2QuickPublish } from "~/src/composables/v2/platformOrdering.ts"
+import {
+  buildV2QuickPublishCaughtErrorText,
+  buildV2QuickPublishErrorText,
+  sanitizeV2QuickPublishText,
+} from "~/src/composables/v2/quickPublishErrorText.ts"
 import { notifyV2QuickPublishResult } from "~/src/composables/v2/useV2QuickPublishToast.ts"
 import { useV2PublishValidation } from "~/src/composables/v2/useV2PublishValidation.ts"
 import { DynamicConfig, DynamicJsonCfg, getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
@@ -13,7 +18,6 @@ import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStor
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
 import { openPathOrUrl } from "~/src/utils/pathUtils.ts"
-import { sanitizeSensitiveForLog } from "~/src/utils/sensitiveLogSanitizer.ts"
 
 export interface V2QuickPublishPlatformItem {
   platformKey: string
@@ -67,21 +71,6 @@ export const useV2QuickPublish = () => {
   })
 
   const pref = getReadOnlyPublishPreferenceSetting()
-
-  const sanitizeText = (input: unknown): string => {
-    const sanitized = sanitizeSensitiveForLog(input)
-    if (sanitized === null || sanitized === undefined) {
-      return ""
-    }
-    return typeof sanitized === "string" ? sanitized : JSON.stringify(sanitized)
-  }
-
-  const normalizeError = (error: unknown) => {
-    if (error instanceof Error) {
-      return sanitizeText(error.message || String(error))
-    }
-    return sanitizeText(String(error ?? t("v2.common.unknownError")))
-  }
 
   const setPublishState = (partial: Partial<typeof state.publishState>) => {
     Object.assign(state.publishState, partial)
@@ -230,8 +219,8 @@ export const useV2QuickPublish = () => {
         }
         updatePlatformPublishFlag(item.platformKey, true)
         // 发布成功但有图片上传错误时，设置为 success_with_warnings 状态
-        const warningMsg = sanitizeText(result?.errMsg ?? "")
-        const warningDetails = sanitizeText(result?.errDetails || result?.errMsg || "")
+        const warningMsg = sanitizeV2QuickPublishText(result?.errMsg ?? "")
+        const warningDetails = sanitizeV2QuickPublishText(result?.errDetails || result?.errMsg || "")
         const hasWarnings = !StrUtil.isEmptyString(warningMsg)
         setPublishState({
           status: hasWarnings ? "success_with_warnings" : "success",
@@ -242,25 +231,26 @@ export const useV2QuickPublish = () => {
         })
         emitPublishFeedback()
       } else {
-        const errMsg = sanitizeText(result?.errMsg || t("v2.quickPublish.error.publishFailed"))
-        const errDetails = sanitizeText(
-          result?.errDetails || result?.errMsg || t("v2.quickPublish.error.publishFailed")
-        )
+        const errorText = buildV2QuickPublishErrorText({
+          errMsg: result?.errMsg,
+          errDetails: result?.errDetails,
+          fallback: t("v2.quickPublish.error.publishFailed"),
+        })
         setPublishState({
           status: "failed",
-          errMsg,
-          errDetails,
+          errMsg: errorText.summary,
+          errDetails: errorText.details,
           previewUrl: "",
           isPublishing: false,
         })
         emitPublishFeedback()
       }
     } catch (error) {
-      const errorText = normalizeError(error)
+      const errorText = buildV2QuickPublishCaughtErrorText(error, t("v2.quickPublish.error.publishFailed"))
       setPublishState({
         status: "failed",
-        errMsg: errorText,
-        errDetails: errorText,
+        errMsg: errorText.summary,
+        errDetails: errorText.details,
         previewUrl: "",
         isPublishing: false,
       })
@@ -303,11 +293,11 @@ export const useV2QuickPublish = () => {
         await openPathOrUrl(previewUrl, kernelApi)
       }
     } catch (error) {
-      const errorText = normalizeError(error)
+      const errorText = buildV2QuickPublishCaughtErrorText(error, t("v2.quickPublish.error.previewUrlMissing"))
       setPublishState({
         status: "failed",
-        errMsg: errorText,
-        errDetails: errorText,
+        errMsg: errorText.summary,
+        errDetails: errorText.details,
         previewUrl: "",
         isPublishing: false,
       })
@@ -360,23 +350,26 @@ export const useV2QuickPublish = () => {
         })
         emitPublishFeedback()
       } else {
-        const errMsg = sanitizeText(result?.errMsg || t("v2.quickPublish.error.deleteFailed"))
-        const errDetails = sanitizeText(result?.errDetails || result?.errMsg || t("v2.quickPublish.error.deleteFailed"))
+        const errorText = buildV2QuickPublishErrorText({
+          errMsg: result?.errMsg,
+          errDetails: result?.errDetails,
+          fallback: t("v2.quickPublish.error.deleteFailed"),
+        })
         setPublishState({
           status: "failed",
-          errMsg,
-          errDetails,
+          errMsg: errorText.summary,
+          errDetails: errorText.details,
           previewUrl: "",
           isPublishing: false,
         })
         emitPublishFeedback()
       }
     } catch (error) {
-      const errorText = normalizeError(error)
+      const errorText = buildV2QuickPublishCaughtErrorText(error, t("v2.quickPublish.error.deleteFailed"))
       setPublishState({
         status: "failed",
-        errMsg: errorText,
-        errDetails: errorText,
+        errMsg: errorText.summary,
+        errDetails: errorText.details,
         previewUrl: "",
         isPublishing: false,
       })

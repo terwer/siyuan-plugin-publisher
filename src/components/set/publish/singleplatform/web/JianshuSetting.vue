@@ -10,19 +10,24 @@
 <script setup lang="ts">
 import CustomWebSetting from "~/src/components/set/publish/singleplatform/base/impl/CustomWebSetting.vue"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import {useJianshuWeb} from "~/src/adaptors/web/jianshu/useJianshuWeb.ts";
-import {JianshuConfig} from "~/src/adaptors/web/jianshu/jianshuConfig.ts";
-import {JianshuPlaceholder} from "~/src/adaptors/web/jianshu/jianshuPlaceholder.ts";
+import { useJianshuWeb } from "~/src/adaptors/web/jianshu/useJianshuWeb.ts"
+import { JianshuConfig } from "~/src/adaptors/web/jianshu/jianshuConfig.ts"
+import { JianshuPlaceholder } from "~/src/adaptors/web/jianshu/jianshuPlaceholder.ts"
 
 const props = defineProps({
   apiType: {
     type: String,
     default: "",
   },
+  enableOnValidated: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const { t } = useVueI18n()
 const { cfg } = await useJianshuWeb(props.apiType)
+const emit = defineEmits(["validated", "saved"])
 
 const jianshuCfg = cfg as JianshuConfig
 const jianshuPlaceholder = new JianshuPlaceholder()
@@ -34,5 +39,24 @@ jianshuCfg.placeholder = jianshuPlaceholder
 </script>
 
 <template>
-  <custom-web-setting :api-type="props.apiType" :cfg="jianshuCfg" />
+  <custom-web-setting
+    :api-type="props.apiType"
+    :cfg="jianshuCfg"
+    :enable-on-validated="props.enableOnValidated"
+    @validated="(result) => emit('validated', result)"
+    @saved="(result) => emit('saved', result)"
+  >
+    <template v-if="$slots['cookie-actions']" #cookie-actions="cookieActions">
+      <slot
+        name="cookie-actions"
+        :cfg="cookieActions.cfg"
+        :dyn-cfg="cookieActions.dynCfg"
+        :setting="cookieActions.setting"
+        :dynamic-config-array="cookieActions.dynamicConfigArray"
+        :is-manual-expanded="cookieActions.isManualExpanded"
+        :toggle-manual-editor="cookieActions.toggleManualEditor"
+        :expand-manual-editor="cookieActions.expandManualEditor"
+      />
+    </template>
+  </custom-web-setting>
 </template>
