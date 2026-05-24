@@ -34,8 +34,8 @@
 
 ### 2. 验收分层
 
-- **T1（29）**：`SUPPORTED_V2_BRIDGE_SUBTYPES` 内平台，必须 V2 全链路。
-- **T2a（6）**：仅 V1 网页平台；V2 Inv 必须为预期；Pub/Upd 仍要可用。
+- **T1（35）**：`SUPPORTED_V2_BRIDGE_SUBTYPES` 内平台，必须 V2 全链路；CSDN、知乎等已桥接网页 Cookie 平台纳入本层。
+- **T2a（0）**：原仅 V1 网页平台已进入 V2 Bridge 后迁入 T1；V1 回退路径保留至 Gate D，但 Inv 不再作为这些平台的预期。
 - **T2b/T3**：可见性/占位/孤儿，不做完整发布链。
 
 ### 3. 语雀 API 口径

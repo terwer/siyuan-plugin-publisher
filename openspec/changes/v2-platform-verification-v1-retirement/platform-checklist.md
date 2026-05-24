@@ -1,7 +1,7 @@
 # V2 全平台验证 Checklist（SSOT）
 
 > **唯一维护位置**：本文件（`openspec/changes/v2-platform-verification-v1-retirement/platform-checklist.md`）  
-> **更新**：2026-05-21  
+> **更新**：2026-05-24  
 > **代码依据**：`src/platforms/pre.ts`、`src/components/v2/settings/bridge/bridgeRegistry.ts`
 
 **状态图例**：`⬜` 未测 · `🟡` 进行中/部分 · `✅` 通过 · `⛔` 阻塞(插件) · `❌` 失败待修
@@ -28,7 +28,7 @@
 
 ---
 
-## T1 — V2 完整链路（29 平台）
+## T1 — V2 完整链路（35 平台）
 
 > 须在 V2 快速发布 + V2 配置中验证；`pnpm build:v2` 通过。
 
@@ -83,33 +83,32 @@
 | 25 | Wordpress | `wordpress_Wordpress` | `Wordpress_Wordpress` | ✅ | ✅ | ✅ | ✅ | ✅ | 本地 WP V2 全链路已验（2026-05-21）；`plugin-node-fetch` |
 | 26 | Wordpress.com | `wordpress_Wordpressdotcom` | `Wordpress_Wordpressdotcom` | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | |
 
-### Custom — V2 网页样板（2）
+### Custom — V2 网页 Cookie Bridge（8）
 
 | # | 平台 | platformKey | subPlatformType | V2C | Pub | Upd | Del | Img | 备注 |
 |---|------|-------------|-----------------|-----|-----|-----|-----|-----|------|
 | 27 | 语雀网页版 | `custom_Yuqueweb` | `Custom_Yuqueweb` | ✅ | ✅ | ✅ | ✅ | ✅ | V2 已验：Cookie 授权、带图发布、错误详情（2026-05-20）；2026-05-22 复验带图通过 |
 | 28 | Halo网页版 | `custom_Haloweb` | `Custom_Haloweb` | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | |
+| 30 | 知乎 | `custom_Zhihu` | `Custom_Zhihu` | ✅ | ✅ | ✅ | ✅ | ✅ | V2 Bridge 全链路已验（2026-05-24，用户手测）；平台图床 Img 通过；OSS SDK 显式加载修复 |
+| 31 | CSDN | `custom_Csdn` | `Custom_CSDN` | ✅ | ✅ | ✅ | ✅ | ✅ | V2 Bridge 全链路已验（2026-05-24，用户手测）；平台图床 Img 通过；默认 Bundled 图床修复 |
+| 32 | 简书 | `custom_Jianshu` | `Custom_Jianshu` | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | 已进入 V2 Bridge，待验 |
+| 33 | 掘金 | `custom_Juejin` | `Custom_Juejin` | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | 已进入 V2 Bridge，待验 |
+| 34 | 微信公众号 | `custom_Wechat` | `Custom_Wechat` | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | 已进入 V2 Bridge，待验 |
+| 35 | 哔哩哔哩 | `custom_Bilibili` | `Custom_Bilibili` | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | 已进入 V2 Bridge，待验 |
 
 ### Fs（1）
 
 | # | 平台 | platformKey | subPlatformType | V2C | Pub | Upd | Del | Img | 备注 |
 |---|------|-------------|-----------------|-----|-----|-----|-----|-----|------|
-| 29 | 本地系统 | `fs_LocalSystem` | `Fs_LocalSystem` | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | 仅 Electron |
+| 29 | 本地系统 | `fs_LocalSystem` | `Fs_LocalSystem` | ✅ | ✅ | ✅ | ✅ | ✅ | Electron V2 全链路已验（2026-05-24，用户手测） |
 
-**T1 小结**：29 项 · 全链路 ✅ `4`（#1 #21 #25 #27）· 阻塞 `0` · 未测 `25`
+**T1 小结**：35 项 · 全链路 ✅ `7`（#1 #21 #25 #27 #29 #30 #31）· 阻塞 `0` · 未测 `28`
 
 ---
 
-## T2a — 仅 V1 配置 + 发布（6 平台）
+## T2a — 仅 V1 配置 + 发布（0 平台）
 
-| # | 平台 | platformKey | Pub | Upd | V1C | Inv | 备注 |
-|---|------|-------------|-----|-----|-----|-----|------|
-| 30 | 知乎 | `custom_Zhihu` | ⬜ | ⬜ | ⬜ | ⬜ | |
-| 31 | CSDN | `custom_Csdn` | ⬜ | ⬜ | ⬜ | ⬜ | |
-| 32 | 简书 | `custom_Jianshu` | ⬜ | ⬜ | ⬜ | ⬜ | |
-| 33 | 掘金 | `custom_Juejin` | ⬜ | ⬜ | ⬜ | ⬜ | |
-| 34 | 微信公众号 | `custom_Wechat` | ⬜ | ⬜ | ⬜ | ⬜ | |
-| 35 | 哔哩哔哩 | `custom_Bilibili` | ⬜ | ⬜ | ⬜ | ⬜ | |
+原 #30–#35 网页 Cookie 平台已进入 V2 Bridge；验证进度统一迁入 T1「Custom — V2 网页 Cookie Bridge」表。V1 回退路径在 Gate D 前仍保留，不再以 Inv（V2 不可见）作为预期。
 
 ---
 
@@ -131,7 +130,7 @@
 
 ## V1 退役门禁
 
-- [ ] **Gate A**：T1 表 29 项全部为 `✅`（平台政策类限制已文档化且持条件可过，**不记 ⛔ 阻塞**）
+- [ ] **Gate A**：T1 表 35 项全部为 `✅`（平台政策类限制已文档化且持条件可过，**不记 ⛔ 阻塞**）
 - [ ] **Gate B**：T2a 发布链路无回归
 - [ ] **Gate C**：偏好/文档标记 V1 废弃，默认 V2
 - [ ] **Gate D**：连续 **3 个发行版本** 后删除 iframe/SPA 路径
@@ -148,3 +147,5 @@
 | 2026-05-21 | `refactor-form-upload-transport` 合入后须复验 #27/#28 **Img**（日志 `[form-upload-transport] transport => plugin-node-fetch`） |
 | 2026-05-22 | `refactor-form-upload-transport` 归档前复验：#27 语雀网页版 Img 通过；#21 博客园带图文章通过；#28 Halo网页版因尚未进入远征，继续后续跟踪 |
 | 2026-05-22 | `refactor-json-fetch-transport` 归档前复验通过：#27 语雀网页版 JSON 链路通过（日志 `[json-fetch-transport]`）；#21 博客园相关链路无回归，走 `apiFetch`→`jsonFetchClient` |
+| 2026-05-24 | #30 知乎、#31 CSDN 已进入 V2 Bridge 并完成 V2C/Pub/Upd/Del/Img 用户手测；CSDN/知乎平台图床通过 |
+| 2026-05-24 | #29 本地系统 `fs_LocalSystem` Electron V2 全链路用户手测通过 |

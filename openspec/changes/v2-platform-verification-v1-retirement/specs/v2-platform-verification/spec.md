@@ -70,12 +70,13 @@ The project SHALL NOT mark V1 deprecated until Gate A is satisfied. The project 
 - **THEN** V2 covers all user-visible functions required by `ui-v2-migration`
 - **AND** the checklist change is archived with final verification notes
 
-### Requirement: T2a platforms SHALL remain V1-configurable and invisible in V2 picker
+### Requirement: Web Cookie platforms promoted to V2 Bridge SHALL be tracked in the T1 matrix
 
-Platforms in T2a SHALL remain publishable via legacy paths, SHALL pass V1C while V1 exists, and SHALL NOT appear in the V2 platform selection list (Inv ✅).
+When a formerly T2a Web Cookie platform is wired into `bridgeRegistry.ts` and becomes selectable in V2, it SHALL move from the T2a invisibility matrix into the T1 full-path matrix. Its V1 fallback path SHALL remain available until Gate D, but `Inv ✅` is no longer the expected result for that platform.
 
-#### Scenario: Zhihu in V2 account picker
+#### Scenario: Zhihu and CSDN in V2 account picker
 
 - **WHEN** a user opens V2 «add platform»
-- **THEN** `custom_Zhihu` is not offered
-- **AND** V1 configuration for Zhihu remains functional until Gate D
+- **THEN** `custom_Zhihu` and `custom_Csdn` are offered via V2 Bridge
+- **AND** their V2C/Pub/Upd/Del/Img results are tracked in the T1 checklist
+- **AND** V1 configuration fallback remains functional until Gate D

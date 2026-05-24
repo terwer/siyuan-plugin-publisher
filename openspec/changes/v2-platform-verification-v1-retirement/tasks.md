@@ -26,11 +26,14 @@
   - [ ] 1.6b #26 Wordpress.com
 - [x] 1.7a #27 语雀网页版 `custom_Yuqueweb`（V2C/Pub/Upd/Del/Img 已验通过）
 - [ ] 1.7b #28 Halo网页版
-- [ ] 1.8 #29 本地系统（Electron）
+  - [x] 1.7c #30 知乎 `custom_Zhihu` — V2 Bridge 全链路 ✅（2026-05-24，用户手测：V2C/Pub/Upd/Del/Img）
+  - [x] 1.7d #31 CSDN `custom_Csdn` — V2 Bridge 全链路 ✅（2026-05-24，用户手测：V2C/Pub/Upd/Del/Img）
+  - [ ] 1.7e #32–#35 简书、掘金、微信公众号、哔哩哔哩 V2 Bridge 全链路
+- [x] 1.8 #29 本地系统（Electron）— V2 全链路 ✅（2026-05-24，用户手测）
 
 ## 2. T2a / T2b / T3
 
-- [ ] 2.1 T2a #30–#35：V1C + Pub/Upd + V2 Inv
+- [x] 2.1 T2a #30–#35：已迁入 T1 V2 Bridge；V1 回退保留至 Gate D，不再要求 V2 Inv
 - [ ] 2.2 T2b #36–#38：Vis/Add
 - [ ] 2.3 T3 #39–#54：孤儿与 Fs 占位确认
 

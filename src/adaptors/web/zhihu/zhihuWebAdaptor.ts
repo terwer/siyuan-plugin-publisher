@@ -292,7 +292,9 @@ class ZhihuWebAdaptor extends BaseWebApi {
       } else {
         const token = fileResp.upload_token
         try {
-          const client = getAliOssClient("https://zhihu-pics-upload.zhimg.com", "zhihu-pics", token)
+          const client = await getAliOssClient("https://zhihu-pics-upload.zhimg.com", "zhihu-pics", token, {
+            appInstance: this.appInstance,
+          })
           const finalUrl = await client.put(upload_file.object_key, new Blob([bits]))
           this.logger.debug("zhihu uploadFile finished", { client, finalUrl })
         } catch (e) {
@@ -383,6 +385,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
 
     const reqHeaderMap = new Map<string, string>()
     reqHeaderMap.set("Cookie", this.cfg.password)
+    reqHeaderMap.set("Content-Type", "application/json")
 
     const mergedHeaders = {
       ...Object.fromEntries(reqHeaderMap),
