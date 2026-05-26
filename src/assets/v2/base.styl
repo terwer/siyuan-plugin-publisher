@@ -206,7 +206,7 @@
 
   .syp-shell__nav
     padding 12px
-    background linear-gradient(180deg, var(--b3-theme-surface-light, #f7f9fc) 0%, var(--b3-theme-background, #eef2f6) 100%)
+    background linear-gradient(180deg, #fbfdff 0%, #f6f9ff 100%)
     border-right 1px solid var(--b3-border-color, $syp-border-secondary)
     overflow-y auto
     min-height 0
@@ -219,26 +219,38 @@
     text-transform uppercase
 
   .syp-shell__nav-item
+    position relative
     width 100%
     text-align left
     border none
     background transparent
-    color var(--b3-theme-on-surface-light, $syp-text-secondary)
-    padding 6px 10px
-    border-radius $syp-radius-sm
+    color #667085
+    padding 7px 10px 7px 14px
+    border-radius 8px
     font-size 13px
     margin-bottom 4px
     cursor pointer
     transition all 0.2s ease
 
     &:hover
-      background var(--b3-theme-surface-light, $syp-bg-secondary)
-      color var(--b3-theme-on-surface, $syp-text-primary)
+      background #f0f6ff
+      color #2563eb
 
     &.is-active
-      background var(--b3-theme-surface, $syp-bg-primary)
-      color var(--b3-theme-on-surface, $syp-text-primary)
-      box-shadow $syp-shadow-sm
+      background #ffffff
+      color #1d4ed8
+      font-weight 700
+      box-shadow 0 4px 14px rgba(22, 119, 255, 0.10)
+
+      &::before
+        content ""
+        position absolute
+        left 5px
+        top 8px
+        bottom 8px
+        width 3px
+        border-radius 999px
+        background #1677ff
 
   .syp-shell__main
     display flex

@@ -27,7 +27,6 @@ vi.mock("~/src/stores/usePublishSettingStore.ts", () => ({
 vi.mock("~/src/composables/usePicgoBridge.ts", () => ({
   usePicgoBridge: () => ({
     getPicbedServiceType: vi.fn().mockResolvedValue(0),
-    checkPicgoInstalled: vi.fn().mockResolvedValue(false),
   }),
 }))
 

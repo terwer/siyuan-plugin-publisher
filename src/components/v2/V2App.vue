@@ -57,6 +57,11 @@
         :active-section="settings.state.section"
         @change-section="changeSettingsSection"
       >
+        <div v-if="settingsSwitchLoading" class="syp-settings-switch-loading" role="status" aria-live="polite">
+          <span class="syp-settings-switch-loading__dot"></span>
+          <span>{{ t("main.loading") }}</span>
+        </div>
+
         <div v-if="initError && !isSettingsView" class="syp-publish-status is-failed">
           <div class="syp-publish-status__title">{{ t("v2.quickPublish.error.initFailed") }}</div>
           <div class="syp-publish-status__desc">{{ initError }}</div>
@@ -233,6 +238,8 @@ const publishState = computed(() => quickPublish.state.publishState)
 const previewLinkMap = computed<Record<string, string>>(() => quickPublish.state.previewLinkMap)
 const { errorDetailsState, showErrorDetails, hideErrorDetails, clearErrorDetails, reopenErrorDetails } =
   useV2ErrorDetails()
+const settingsSwitchLoading = ref(false)
+let settingsSwitchLoadingTimer: number | undefined
 
 const panelTitle = computed(() => {
   return isSettingsView.value ? t("v2.app.panel.settings") : t("v2.app.panel.quickPublish")
@@ -387,7 +394,28 @@ async function backToQuickPublish() {
 }
 
 async function changeSettingsSection(section: "account" | "picbed" | "preference") {
-  await settings.setSection(section)
+  if (settings.state.section === section && settings.state.accountView === "list") {
+    return
+  }
+
+  clearSettingsSwitchLoadingTimer()
+  settingsSwitchLoadingTimer = window.setTimeout(() => {
+    settingsSwitchLoading.value = true
+  }, 50)
+
+  try {
+    await settings.setSection(section)
+  } finally {
+    clearSettingsSwitchLoadingTimer()
+    settingsSwitchLoading.value = false
+  }
+}
+
+function clearSettingsSwitchLoadingTimer() {
+  if (settingsSwitchLoadingTimer) {
+    window.clearTimeout(settingsSwitchLoadingTimer)
+    settingsSwitchLoadingTimer = undefined
+  }
 }
 
 async function handleSettingsBack() {
@@ -606,6 +634,39 @@ async function retryInit() {
 
 .syp-btn-back__label
   white-space nowrap
+
+.syp-settings-switch-loading
+  position sticky
+  top 0
+  z-index 20
+  display inline-flex
+  align-self flex-end
+  align-items center
+  gap 6px
+  margin-bottom 8px
+  padding 6px 10px
+  border-radius 999px
+  border 1px solid #d8e7ff
+  background #f5f9ff
+  color #2563eb
+  font-size 12px
+  font-weight 600
+  box-shadow 0 4px 14px rgba(22, 119, 255, 0.10)
+
+.syp-settings-switch-loading__dot
+  width 7px
+  height 7px
+  border-radius 999px
+  background #1677ff
+  animation syp-settings-loading-pulse 0.9s ease-in-out infinite alternate
+
+@keyframes syp-settings-loading-pulse
+  from
+    opacity 0.35
+    transform scale(0.82)
+  to
+    opacity 1
+    transform scale(1)
 
 .syp-quick-shell
   display flex

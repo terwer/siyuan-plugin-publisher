@@ -64,7 +64,7 @@
     "zhi-lib-base": "^0.8.0",
     "zhi-notion-markdown": "^0.1.4",
     "zhi-siyuan-api": "^2.35.5",
-    "zhi-siyuan-picgo": "D:/Users/Administrator/Documents/mydocs/siyuan-plugins/siyuan-plugin-picgo/libs/zhi-siyuan-picgo",
+    "zhi-siyuan-picgo": "^2.0.1",
     "zhi-xmlrpc-middleware": "^0.6.26"
   },
   "devDependencies": {

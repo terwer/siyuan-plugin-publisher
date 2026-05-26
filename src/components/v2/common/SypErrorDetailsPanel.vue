@@ -164,9 +164,9 @@ const copyDetails = async () => {
 @import "../../../assets/v2/variables.styl"
 
 .syp-error-details-panel
-  position absolute
+  position fixed
   inset 0
-  z-index 30
+  z-index 10000
   display flex
   align-items center
   justify-content center

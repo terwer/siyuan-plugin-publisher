@@ -9,12 +9,14 @@
 
 import { ImageItem, ImageParser, ParsedImage, SiyuanPicGo } from "zhi-siyuan-picgo"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
-import { ElMessage } from "element-plus"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { StrUtil } from "zhi-common"
 import { isDev } from "~/src/utils/constants.ts"
 import { BlogConfig, PicbedServiceTypeEnum } from "zhi-blog-api"
-import { isFileExists } from "~/src/utils/siyuanUtils.ts"
+import {
+  formatPublisherPicgoError,
+  getPublisherPicgoManager,
+} from "~/src/composables/usePublisherPicgoManager.ts"
 
 type SiyuanConfigBridge = {
   apiUrl?: string
@@ -41,7 +43,7 @@ const usePicgoBridge = () => {
    */
   const handlePicgo = async (pageId: string, mdContent?: string) => {
     let md: string = mdContent
-    const picgoErrMsg = "文档可能已经成功发布，但是图片上传失败或者当前场景不支持图片上传，详细信息=>"
+    const picgoErrMsg = "文档可能已经成功发布，但是 PicGo 图床内核上传失败，详细信息=>"
 
     try {
       const attrs = await kernelApi.getBlockAttrs(pageId)
@@ -56,9 +58,8 @@ const usePicgoBridge = () => {
         md = siyuanPost.markdown
       }
 
-      // 通用方法获取，保证单例
-      const picgoPostApi = await SiyuanPicGo.getInstance(siyuanConfig as unknown as SiyuanConfigBridge, isDev)
-      const picgoPostResult = await picgoPostApi.uploadPostImagesToBed(siyuanData.pageId, siyuanData.meta, md)
+      const picgoManager = await getPublisherPicgoManager()
+      const picgoPostResult = await picgoManager.uploadMarkdownImages(siyuanData.pageId, siyuanData.meta, md)
       // 有图片才上传
       if (picgoPostResult.hasImages) {
         // const picgoImageTip = `检测到图片，将使用 PicGo 自动上传图片，若图片较多可能会较慢请耐心等待`
@@ -69,15 +70,18 @@ const usePicgoBridge = () => {
         if (picgoPostResult.flag) {
           md = picgoPostResult.mdContent
         } else {
-          logger.warn(picgoErrMsg + picgoPostResult.errmsg)
-          ElMessage.warning(picgoErrMsg + picgoPostResult.errmsg)
+          throw new Error(picgoPostResult.errmsg || "PicGo headless upload failed")
         }
       } else {
         logger.info(picgoErrMsg + picgoPostResult.errmsg)
       }
     } catch (e) {
-      logger.error(picgoErrMsg, e)
-      ElMessage.error("文档可能已经成功发布，但是图片上传失败或者当前场景不支持图片上传，详细信息=>" + e)
+      const formatted = formatPublisherPicgoError(e)
+      const error = new Error(`${picgoErrMsg}${formatted.summary}`)
+      ;(error as any).diagnosticMessage = formatted.details
+      ;(error as any).errors = formatted.fieldErrors
+      logger.error(picgoErrMsg, formatted.details)
+      throw error
     }
 
     return md
@@ -116,9 +120,7 @@ const usePicgoBridge = () => {
     let s: PicbedServiceTypeEnum = PicbedServiceTypeEnum.None
     // 如果没有选择，使用默认的
     if (StrUtil.isEmptyString(cfg.picbedService)) {
-      // 如果安装了 PicGo 插件，优先使用 PicGo 插件
-      const isPicgoInstalled: boolean = await checkPicgoInstalled()
-      if (isPicgoInstalled && cfg.picgoPicbedSupported) {
+      if (cfg.picgoPicbedSupported) {
         s = PicbedServiceTypeEnum.PicGo
       } else if (cfg.bundledPicbedSupported) {
         // 如果支持自有的，使用自有的
@@ -137,15 +139,17 @@ const usePicgoBridge = () => {
   }
 
   /**
-   * 检查 Picgo 是否已安装
-   *
-   *
-   * @returns 一个 Promise，解析为布尔值，表示是否已安装 Picgo
+   * 检查 Publisher 可用的 PicGo headless lib/runtime 是否就绪。
+   * 注意：这里不再检查 `siyuan-plugin-picgo` 插件产品是否安装。
    */
-  const checkPicgoInstalled = async () => {
-    const { kernelApi } = useSiyuanApi()
-    // 检测是否安装 picgo 插件
-    return await isFileExists(kernelApi, "/data/plugins/siyuan-plugin-picgo/plugin.json", "text")
+  const checkPicgoInstalled = async (): Promise<boolean> => {
+    try {
+      await getPublisherPicgoManager()
+      return true
+    } catch (e) {
+      logger.error("PicGo headless runtime is unavailable", formatPublisherPicgoError(e).details)
+      return false
+    }
   }
 
   return {

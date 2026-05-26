@@ -207,7 +207,7 @@ export class Topbar {
         click: () => {
           if (!extendMenus) {
             showMessage(
-              "扩展功能需配合其他插件使用，目前支持在线分享、PicGo插件。请先下载在并启用扩展插件。",
+              "扩展功能需配合其他插件产品使用，目前支持在线分享和独立 PicGo 产品。请先下载安装并启用对应扩展插件。",
               7000,
               "error"
             )

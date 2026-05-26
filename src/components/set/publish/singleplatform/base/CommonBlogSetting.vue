@@ -34,7 +34,7 @@ const appInstance = new PublisherAppInstance()
 // uses
 const { t } = useVueI18n()
 const { getSetting, updateSetting } = usePublishSettingStore()
-const { getPicbedServiceType, checkPicgoInstalled } = usePicgoBridge()
+const { getPicbedServiceType } = usePicgoBridge()
 const { isInSiyuanOrSiyuanNewWin } = useSiyuanDevice()
 
 const props = defineProps({
@@ -315,14 +315,6 @@ const handleCateSearch = async () => {
   }
 }
 
-const handleSelectPicGoService = async () => {
-  const picgoInstalled = await checkPicgoInstalled()
-  if (!picgoInstalled) {
-    ElMessage.error(t("publisher.picbed.picgo.not.install"))
-    formData.cfg.picbedService = PicbedServiceTypeEnum.None
-  }
-}
-
 const initConf = async () => {
   formData.setting = await getSetting()
   const dynJsonCfg = JsonUtil.safeParse<DynamicJsonCfg>(formData.setting[DYNAMIC_CONFIG_KEY], {} as DynamicJsonCfg)
@@ -509,7 +501,6 @@ onMounted(async () => {
           v-if="formData.cfg.picgoPicbedSupported"
           :value="PicbedServiceTypeEnum.PicGo"
           size="small"
-          @click="handleSelectPicGoService"
         >
           {{ t("publisher.picbed.picgo") }}
           <sup>{{ t("publisher.picbed.recom1") }}</sup>

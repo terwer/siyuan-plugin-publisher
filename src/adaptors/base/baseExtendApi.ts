@@ -488,13 +488,26 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     switch (picbedService) {
       case PicbedServiceTypeEnum.PicGo: {
         // ==========================
-        // 使用 PicGO上传图片
+        // 使用 PicGo headless lib 上传图片
         // ==========================
         // 图片替换
-        this.logger.info("使用 PicGO上传图片")
+        this.logger.info("使用 PicGo 图床内核上传图片")
         this.logger.debug("开始图片处理, post =>", { post: toRaw(post) })
-        post.markdown = await this.picgoBridge.handlePicgo(id, post.markdown)
-        this.logger.debug("图片处理完毕, post.markdown =>", { md: post.markdown })
+        try {
+          post.markdown = await this.picgoBridge.handlePicgo(id, post.markdown)
+          this.logger.debug("图片处理完毕, post.markdown =>", { md: post.markdown })
+        } catch (e: any) {
+          const message = e?.message || e
+          const diagnosticMessage = this.formatDiagnosticError(e)
+          const picbedName = this.getPicbedServiceName(cfg)
+          const imgErrMsg = `PicGo 图床内核上传失败(使用${picbedName}): ${message}`
+          this.logger.error(imgErrMsg, e)
+          ;(post as any).imageUploadErrors = [...((post as any).imageUploadErrors ?? []), imgErrMsg]
+          ;(post as any).imageUploadErrorDetails = [
+            ...((post as any).imageUploadErrorDetails ?? []),
+            `PicGo 图床内核上传失败(使用${picbedName}): ${diagnosticMessage}`,
+          ]
+        }
         break
       }
       case PicbedServiceTypeEnum.Bundled: {
