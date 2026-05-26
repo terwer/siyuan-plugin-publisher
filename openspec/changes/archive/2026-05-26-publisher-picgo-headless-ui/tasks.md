@@ -45,9 +45,9 @@
 ## 7. 验证
 
 - [x] 7.1 使用升级后的 PicGo lib 运行 Publisher V2 typecheck/build。
-- [ ] 7.2 在 SiYuan `test` 工作空间验证：未依赖已安装 `siyuan-plugin-picgo` 插件产品时，V2 图床设置仍能打开。
-- [ ] 7.3 验证新增/编辑 PicGo-lib uploader 配置会通过 lib 持久化，并在重载后保持。
-- [ ] 7.4 验证平台设置为 `PicGo` 时，发布过程中会上传并替换 Markdown 图片。
-- [ ] 7.5 验证平台设置为 `Bundled` 时仍使用平台上传，不调用 PicGo-lib 上传。
-- [ ] 7.6 验证平台设置为 `None` 时不上传图片。
-- [ ] 7.7 验证 V2 流程中不存在旧 PicGo 插件安装提示和 iframe 设置路径。
+- [x] 7.2 在 SiYuan `test` 工作空间验证：未依赖已安装 `siyuan-plugin-picgo` 插件产品时，V2 图床设置仍能打开。
+- [x] 7.3 验证新增/编辑 PicGo-lib uploader 配置会通过 lib 持久化，并在重载后保持。
+- [x] 7.4 验证平台设置为 `PicGo` 时，发布过程中会上传并替换 Markdown 图片。
+- [x] 7.5 验证平台设置为 `Bundled` 时仍使用平台上传，不调用 PicGo-lib 上传。
+- [x] 7.6 验证平台设置为 `None` 时不上传图片。
+- [x] 7.7 验证 V2 流程中不存在旧 PicGo 插件安装提示和 iframe 设置路径。

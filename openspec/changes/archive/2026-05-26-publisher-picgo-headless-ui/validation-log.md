@@ -80,3 +80,14 @@ Publisher now creates PicGo through `src/composables/usePublisherPicgoManager.ts
   - `pnpm test src/components/v2/settings/V2PicBedSettings.spec.ts` — passed, 5 tests.
   - `pnpm test src/components/v2/settings/V2PicBedSettings.spec.ts src/components/set/publish/singleplatform/base/CommonBlogSetting.spec.ts src/composables/usePublish.spec.ts src/adaptors/web/webPicbedDefaults.spec.ts src/adaptors/api/cnblogs/cnblogsConfig.spec.ts` — passed, 5 files / 15 tests.
   - `pnpm build:v2` — passed.
+
+## Manual V2 host acceptance
+
+- 2026-05-26 user confirmation: `publisher-picgo-headless-ui` V2 host verification passed and the change is ready to archive.
+- Covered checklist items:
+  - V2 PicBed settings open without depending on installed standalone `siyuan-plugin-picgo` plugin product.
+  - PicGo-lib uploader add/edit persists through the lib and survives reload.
+  - `PicGo` platform preference uploads and replaces Markdown images during publish.
+  - `Bundled` platform preference still uses platform upload and does not call PicGo-lib upload.
+  - `None` platform preference does not upload images.
+  - V2 flow no longer shows the old PicGo plugin install prompt or iframe settings path.
