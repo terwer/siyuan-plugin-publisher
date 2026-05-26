@@ -28,6 +28,7 @@ import { JsonUtil, StrUtil } from "zhi-common"
 import { ElectronCookie, PasswordType, WebConfig } from "zhi-blog-api"
 import type { ISypConfig } from "~/syp.config.ts"
 import { sanitizeSensitiveForLog } from "~/src/utils/sensitiveLogSanitizer.ts"
+import { buildWebCookieRequestDynCfg } from "~/src/composables/webCookieAuthUrl.ts"
 
 const logger = createAppLogger("web-cookie-authorization")
 
@@ -142,6 +143,13 @@ const persistDynamicAuthState = async (
   await deps.updateSetting(setting)
 }
 
+const syncInputDynAuthState = (inputDynCfg: DynamicConfig | undefined, isAuth: boolean) => {
+  if (!inputDynCfg) {
+    return
+  }
+  inputDynCfg.isAuth = isAuth
+}
+
 export const isCookieWebPlatform = (dynCfg: DynamicConfig, cfg: WebConfig) => {
   return dynCfg.authMode === AuthMode.WEBSITE && cfg.passwordType === PasswordType.PasswordType_Cookie
 }
@@ -205,12 +213,13 @@ export const authorizeWebCookie = async (
       return { status: "not_cookie_platform", ok: false }
     }
 
-    if (StrUtil.isEmptyString(dynCfg.authUrl)) {
+    const requestDynCfg = buildWebCookieRequestDynCfg(dynCfg, cfg) ?? dynCfg
+    if (StrUtil.isEmptyString(requestDynCfg.authUrl)) {
       log.warn("web cookie authorization skipped because authUrl is empty", { platformKey: input.platformKey })
       return { status: "error", ok: false, error: new Error("authUrl is empty") }
     }
 
-    const cookies = await captureCookies(dynCfg.authUrl, dynCfg)
+    const cookies = await captureCookies(requestDynCfg.authUrl, requestDynCfg)
     log.info("web cookie capture finished", {
       platformKey: input.platformKey,
       cookieCount: cookies?.length ?? 0,
@@ -218,6 +227,7 @@ export const authorizeWebCookie = async (
 
     if (!cookies || cookies.length === 0) {
       await persistDynamicAuthState(deps, setting, dynamicConfigArray, dynCfg, false)
+      syncInputDynAuthState(dynCfg, false)
       return { status: "no_cookie", ok: false }
     }
 
@@ -239,10 +249,12 @@ export const authorizeWebCookie = async (
       const nextDynamicConfigArray = replacePlatformByKey(dynamicConfigArray, dynCfg.platformKey, dynCfg)
       setting[DYNAMIC_CONFIG_KEY] = setDynamicJsonCfg(nextDynamicConfigArray)
       await deps.updateSetting(setting)
+      syncInputDynAuthState(dynCfg, true)
       return { status: "success", ok: true, cookie, metadata }
     }
 
     await persistDynamicAuthState(deps, setting, dynamicConfigArray, dynCfg, false)
+    syncInputDynAuthState(dynCfg, false)
     return { status: "validation_failed", ok: false, cookie, metadata }
   } catch (error) {
     log.error("web cookie authorization failed", {
@@ -278,8 +290,9 @@ export const logoutWebCookieAuthorization = async (
       return { status: "not_cookie_platform", ok: false }
     }
 
-    const isYuqueweb = isYuqueWebCookiePlatform(dynCfg, input.platformKey)
-    const logoutUrl = dynCfg.logoutUrl ?? (cfg as any).logoutUrl
+    const requestDynCfg = buildWebCookieRequestDynCfg(dynCfg, cfg) ?? dynCfg
+    const isYuqueweb = isYuqueWebCookiePlatform(requestDynCfg, input.platformKey)
+    const logoutUrl = requestDynCfg.logoutUrl ?? (cfg as any).logoutUrl
 
     let api: any
     try {
@@ -339,6 +352,7 @@ export const logoutWebCookieAuthorization = async (
             platformKey: input.platformKey,
             mode: "remote_action",
           })
+          syncInputDynAuthState(dynCfg, false)
           return {
             status: "logout_success",
             ok: true,

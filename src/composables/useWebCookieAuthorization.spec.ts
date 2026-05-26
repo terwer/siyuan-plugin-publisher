@@ -253,6 +253,63 @@ describe("authorizeWebCookie", () => {
     expect(serializedLogs).toContain("cookieCount")
   })
 
+  it("resolves relative web Cookie authUrl from cfg home without rewriting the stored dynamic config", async () => {
+    const dynCfg = createDynCfg({
+      subPlatformType: SubPlatformType.Custom_Haloweb,
+      platformKey: "custom_Haloweb",
+      platformName: "Halo网页版",
+      authUrl: "/login",
+      domain: "",
+    })
+    const cfg = createCfg({
+      home: "https://halo.example.com",
+      apiUrl: "https://halo.example.com",
+    })
+    const setting: Record<string, any> = {
+      [DYNAMIC_CONFIG_KEY]: setDynamicJsonCfg([dynCfg]),
+      [dynCfg.platformKey]: {},
+    }
+    const captureCookies = vi.fn().mockResolvedValue([createCookie("halo_session", "secret-value")])
+
+    const result = await authorizeWebCookie(
+      {
+        platformKey: dynCfg.platformKey,
+        currentCfg: cfg,
+        dynCfg,
+        setting,
+        dynamicConfigArray: [dynCfg],
+      },
+      {
+        getSetting: vi.fn(),
+        updateSetting: vi.fn().mockResolvedValue(undefined),
+        captureCookies,
+        getWebApi: vi.fn().mockResolvedValue({
+          buildCookie: vi.fn().mockResolvedValue("halo_session=secret-value"),
+          updateCfg: vi.fn(),
+          getMetaData: vi.fn().mockResolvedValue({ flag: true, displayName: "Halo网页版" }),
+        }),
+        isAutoCaptureSupported: () => true,
+      }
+    )
+
+    expect(result).toMatchObject({ status: "success", ok: true })
+    expect(captureCookies).toHaveBeenCalledWith(
+      "https://halo.example.com/login",
+      expect.objectContaining({
+        authUrl: "https://halo.example.com/login",
+        domain: "halo.example.com",
+      })
+    )
+    expect(dynCfg.authUrl).toBe("/login")
+    expect(dynCfg.domain).toBe("")
+    expect(setting[DYNAMIC_CONFIG_KEY].totalCfg[0]).toMatchObject({
+      platformKey: "custom_Haloweb",
+      authUrl: "/login",
+      domain: "",
+      isAuth: true,
+    })
+  })
+
   it.each([
     [SubPlatformType.Custom_CSDN, "custom_Csdn-test", "CSDN", "UserName=csdn-user; UserToken=secret"],
     [SubPlatformType.Custom_Zhihu, "custom_Zhihu-test", "知乎", "z_c0=secret; q_c1=token"],

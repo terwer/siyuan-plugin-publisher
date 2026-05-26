@@ -20,6 +20,7 @@ import { DynamicJsonCfg, getDynCfgByKey, getDynPostidKey } from "~/src/platforms
 import { PRE_CONSTANTS } from "~/src/platforms/PreConstants.ts"
 import { ISypConfig } from "~/syp.config"
 import { CategoryTypeEnum, PicbedServiceTypeEnum } from "zhi-blog-api"
+import { resolveWebCookieAuthOrigin, resolveWebCookieUrl } from "~/src/composables/webCookieAuthUrl.ts"
 
 const getHaloDynCfg = (setting: ISypConfig) => {
   const dynJsonCfg = JsonUtil.safeParse<DynamicJsonCfg>(setting[DYNAMIC_CONFIG_KEY], {} as DynamicJsonCfg)
@@ -49,19 +50,21 @@ const useHalowebWeb = async (key?: string, newCfg?: HalowebConfig) => {
     const setting = await getSetting()
     const dynCfg = getHaloDynCfg(setting)
     cfg = safeMergeConfig<HalowebConfig>(setting[key], HalowebConfig, ["", ""])
+    const authOrigin = resolveWebCookieAuthOrigin(dynCfg?.authUrl, cfg.home, cfg.apiUrl)
+    const storedCfg = setting[key]
+    const isStoredCfgEmpty = ObjectUtil.isEmptyObject(storedCfg) || String(storedCfg ?? "").trim() === "{}"
     // 如果配置为空，则使用默认的环境变量值，并记录日志
-    const url = new URL(dynCfg.authUrl)
-    if (ObjectUtil.isEmptyObject(cfg)) {
+    if (isStoredCfgEmpty) {
       // 从环境变量获取Csdn的cookie
       const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, LEGENCY_SHARED_PROXT_MIDDLEWARE)
-      cfg = new HalowebConfig(url.origin, middlewareUrl)
+      cfg = new HalowebConfig(authOrigin, middlewareUrl)
       cfg.picbedService = PicbedServiceTypeEnum.Bundled
       logger.debug("Configuration is empty, using default environment variables.")
     } else {
-      if (url.origin !== cfg.home || url.origin !== cfg.apiUrl) {
+      if (!StrUtil.isEmptyString(authOrigin) && (authOrigin !== cfg.home || authOrigin !== cfg.apiUrl)) {
         // 说明已经改变了
-        cfg.home = url.origin
-        cfg.apiUrl = url.origin
+        cfg.home = authOrigin
+        cfg.apiUrl = authOrigin
         logger.info("authUrl has changed, update cfg.home and cfg.apiUrl")
       }
       logger.info("Using configuration from settings...")
@@ -88,6 +91,7 @@ const useHalowebWeb = async (key?: string, newCfg?: HalowebConfig) => {
   // picbed service
   cfg.picgoPicbedSupported = true
   cfg.bundledPicbedSupported = true
+  cfg.logoutUrl = resolveWebCookieUrl("/logout", cfg.home, cfg.apiUrl)
   const webApi = new HalowebWebAdaptor(appInstance, cfg)
 
   return {

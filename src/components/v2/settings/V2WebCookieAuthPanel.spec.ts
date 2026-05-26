@@ -190,17 +190,113 @@ describe("V2WebCookieAuthPanel", () => {
     expect(mockOpenBrowserWindow).toHaveBeenCalledWith(dynCfg.authUrl, dynCfg, undefined, undefined, false, true)
   })
 
+  it("resolves relative login URLs from cfg home before opening the Cookie login window", async () => {
+    const dynCfg = createDynCfg({
+      subPlatformType: SubPlatformType.Custom_Haloweb,
+      platformKey: "custom_Haloweb",
+      platformName: "Halo网页版",
+      authUrl: "/login",
+      domain: "",
+    })
+    const { wrapper } = mountPanel({
+      supported: true,
+      dynCfg,
+      cfg: {
+        home: "https://halo.example.com",
+        apiUrl: "https://halo.example.com",
+      },
+    })
+
+    await wrapper
+      .findAll("button")
+      .find((button) => button.text().includes(zhCN["v2.webCookieAuth.action.openLogin"]))!
+      .trigger("click")
+
+    expect(mockOpenBrowserWindow).toHaveBeenCalledWith(
+      "https://halo.example.com/login",
+      expect.objectContaining({
+        authUrl: "https://halo.example.com/login",
+        domain: "halo.example.com",
+      }),
+      undefined,
+      undefined,
+      false,
+      true
+    )
+    expect(dynCfg.authUrl).toBe("/login")
+    expect(dynCfg.domain).toBe("")
+  })
+
+  it("keeps Halo Cookie actions visible and prompts for site URL before it can resolve the login URL", async () => {
+    const dynCfg = createDynCfg({
+      subPlatformType: SubPlatformType.Custom_Haloweb,
+      platformKey: "custom_Haloweb",
+      platformName: "Halo网页版",
+      authUrl: "/login",
+      domain: "",
+    })
+    const { wrapper } = mountPanel({
+      supported: true,
+      dynCfg,
+      cfg: {
+        home: "",
+        apiUrl: "",
+      },
+    })
+
+    expect(wrapper.find(".syp-web-cookie-auth").exists()).toBe(true)
+    expect(wrapper.text()).toContain(zhCN["v2.webCookieAuth.title"])
+    expect(wrapper.text()).toContain(zhCN["v2.webCookieAuth.status.needSiteUrl"])
+    expect(wrapper.text()).toContain(zhCN["v2.webCookieAuth.desc.needSiteUrl"])
+    expect(wrapper.text()).not.toContain(zhCN["v2.webCookieAuth.status.manual"])
+    expect(wrapper.text()).not.toContain(zhCN["v2.webCookieAuth.desc.unsupported"])
+    expect(wrapper.text()).toContain(zhCN["v2.webCookieAuth.manual.collapsed"])
+
+    const loginButton = wrapper
+      .findAll("button")
+      .find((button) => button.text().includes(zhCN["v2.webCookieAuth.action.openLogin"]))!
+    const autoReadButton = wrapper
+      .findAll("button")
+      .find((button) => button.text().includes(zhCN["v2.webCookieAuth.action.autoRead"]))!
+
+    expect(loginButton.exists()).toBe(true)
+    expect(autoReadButton.exists()).toBe(true)
+    expect(loginButton.attributes("aria-disabled")).toBe("true")
+    expect(autoReadButton.attributes("aria-disabled")).toBe("true")
+
+    await loginButton.trigger("click")
+    await autoReadButton.trigger("click")
+    await flushPromises()
+
+    expect(mockOpenBrowserWindow).not.toHaveBeenCalled()
+    expect(mockAuthorize).not.toHaveBeenCalled()
+    expect(mockElMessage.warning).toHaveBeenCalledWith(zhCN["v2.webCookieAuth.message.needSiteUrl"])
+  })
+
   it("uses a low-noise manual path when auto-read is unavailable", async () => {
     const { wrapper } = mountPanel({ supported: false })
 
     expect(wrapper.text()).toContain(zhCN["v2.webCookieAuth.status.manual"])
     expect(wrapper.text()).toContain(zhCN["v2.webCookieAuth.desc.unsupported"])
     expect(wrapper.text()).toContain(zhCN["v2.webCookieAuth.manual.collapsed"])
-    expect(wrapper.findAll("button")).toHaveLength(1)
+    expect(
+      wrapper
+        .findAll("button")
+        .some((button) => button.text().includes(zhCN["v2.webCookieAuth.action.openLogin"]))
+    ).toBe(true)
+    expect(
+      wrapper
+        .findAll("button")
+        .some((button) => button.text().includes(zhCN["v2.webCookieAuth.action.autoRead"]))
+    ).toBe(true)
 
-    await wrapper.find(".syp-web-cookie-auth__action.is-static").trigger("click")
+    await wrapper
+      .findAll("button")
+      .find((button) => button.text().includes(zhCN["v2.webCookieAuth.action.autoRead"]))!
+      .trigger("click")
     await flushPromises()
     expect(mockAuthorize).not.toHaveBeenCalled()
+    expect(mockElMessage.warning).toHaveBeenCalledWith(zhCN["v2.webCookieAuth.message.unsupported"])
   })
 
   it("toggles the manual Cookie editor without showing the textarea itself", async () => {

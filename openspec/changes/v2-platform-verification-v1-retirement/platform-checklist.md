@@ -1,7 +1,7 @@
 # V2 全平台验证 Checklist（SSOT）
 
 > **唯一维护位置**：本文件（`openspec/changes/v2-platform-verification-v1-retirement/platform-checklist.md`）  
-> **更新**：2026-05-24  
+> **更新**：2026-05-27  
 > **代码依据**：`src/platforms/pre.ts`、`src/components/v2/settings/bridge/bridgeRegistry.ts`
 
 **状态图例**：`⬜` 未测 · `🟡` 进行中/部分 · `✅` 通过 · `⛔` 阻塞(插件) · `❌` 失败待修
@@ -88,7 +88,7 @@
 | # | 平台 | platformKey | subPlatformType | V2C | Pub | Upd | Del | Img | 备注 |
 |---|------|-------------|-----------------|-----|-----|-----|-----|-----|------|
 | 27 | 语雀网页版 | `custom_Yuqueweb` | `Custom_Yuqueweb` | ✅ | ✅ | ✅ | ✅ | ✅ | V2 已验：Cookie 授权、带图发布、错误详情（2026-05-20）；2026-05-22 复验带图通过 |
-| 28 | Halo网页版 | `custom_Haloweb` | `Custom_Haloweb` | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | |
+| 28 | Halo网页版 | `custom_Haloweb` | `Custom_Haloweb` | 🟡 | ⬜ | ⬜ | ⬜ | ⬜ | 2026-05-26/27 V2C 配置页初始化曾失败：默认 `authUrl=/login` 被直接 `new URL()` 导致 `Invalid URL`；已改为 Web Cookie 共用相对 URL 解析，并保留 Cookie 授权入口，未填站点地址时点击登录/读取给提示，待用户手验配置页 |
 | 30 | 知乎 | `custom_Zhihu` | `Custom_Zhihu` | ✅ | ✅ | ✅ | ✅ | ✅ | V2 Bridge 全链路已验（2026-05-24，用户手测）；平台图床 Img 通过；OSS SDK 显式加载修复 |
 | 31 | CSDN | `custom_Csdn` | `Custom_CSDN` | ✅ | ✅ | ✅ | ✅ | ✅ | V2 Bridge 全链路已验（2026-05-24，用户手测）；平台图床 Img 通过；默认 Bundled 图床修复 |
 | 32 | 简书 | `custom_Jianshu` | `Custom_Jianshu` | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | 已进入 V2 Bridge，待验 |
@@ -102,7 +102,7 @@
 |---|------|-------------|-----------------|-----|-----|-----|-----|-----|------|
 | 29 | 本地系统 | `fs_LocalSystem` | `Fs_LocalSystem` | ✅ | ✅ | ✅ | ✅ | ✅ | Electron V2 全链路已验（2026-05-24，用户手测） |
 
-**T1 小结**：35 项 · 全链路 ✅ `7`（#1 #21 #25 #27 #29 #30 #31）· 阻塞 `0` · 未测 `28`
+**T1 小结**：35 项 · 全链路 ✅ `7`（#1 #21 #25 #27 #29 #30 #31）· 进行中 `1`（#28）· 阻塞 `0` · 未测 `27`
 
 ---
 
@@ -149,3 +149,6 @@
 | 2026-05-22 | `refactor-json-fetch-transport` 归档前复验通过：#27 语雀网页版 JSON 链路通过（日志 `[json-fetch-transport]`）；#21 博客园相关链路无回归，走 `apiFetch`→`jsonFetchClient` |
 | 2026-05-24 | #30 知乎、#31 CSDN 已进入 V2 Bridge 并完成 V2C/Pub/Upd/Del/Img 用户手测；CSDN/知乎平台图床通过 |
 | 2026-05-24 | #29 本地系统 `fs_LocalSystem` Electron V2 全链路用户手测通过 |
+| 2026-05-26 | #28 Halo网页版 V2C 鸡蛋问题修复：配置页不再因预置相对 `authUrl=/login` 抛 `Invalid URL`；确认 Halo Web Cookie 能力保留，未填 `home/apiUrl` 时入口仍展示且点击提示先填站点地址，填入后登录/抓取共用解析 `home/apiUrl + authUrl`，待用户手验 |
+
+

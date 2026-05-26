@@ -28,39 +28,30 @@
       <div class="syp-web-cookie-auth__desc">{{ statusDescription }}</div>
       <div class="syp-web-cookie-auth__actions">
         <SypTooltip
-          v-if="canOpenLogin"
           tag="button"
           type="button"
           class="syp-web-cookie-auth__action is-login"
-          :content="t('v2.webCookieAuth.tooltip.openLogin')"
+          :class="{ 'is-disabled': !isLoginActionReady }"
+          :content="openLoginTooltip"
           inline-flex
+          :aria-disabled="!isLoginActionReady"
           @click="handleOpenLogin"
         >
           <span class="syp-web-cookie-auth__step">1</span>
           {{ t("v2.webCookieAuth.action.openLogin") }}
         </SypTooltip>
         <SypTooltip
-          v-if="canAutoCapture"
           tag="button"
           type="button"
           class="syp-web-cookie-auth__action is-primary"
-          :class="{ 'is-disabled': isLoading }"
+          :class="{ 'is-disabled': isLoading || !isAutoCaptureReady }"
           :content="autoCaptureTooltip"
           inline-flex
-          :aria-disabled="isLoading"
+          :aria-disabled="isLoading || !isAutoCaptureReady"
           @click="handleAutoCapture"
         >
           <span class="syp-web-cookie-auth__step">2</span>
           {{ isLoading ? t("v2.webCookieAuth.action.reading") : t("v2.webCookieAuth.action.autoRead") }}
-        </SypTooltip>
-        <SypTooltip
-          v-else
-          tag="span"
-          class="syp-web-cookie-auth__action is-disabled is-static"
-          :content="autoCaptureTooltip"
-          inline-flex
-        >
-          {{ t("v2.webCookieAuth.action.autoRead") }}
         </SypTooltip>
         <SypTooltip
           v-if="canLogout"
@@ -96,6 +87,7 @@ import { AuthMode, DynamicConfig } from "~/src/platforms/dynamicConfig.ts"
 import { openBrowserWindow } from "~/src/utils/widgetUtils.ts"
 import { PasswordType, WebConfig } from "zhi-blog-api"
 import type { ISypConfig } from "~/syp.config.ts"
+import { buildWebCookieRequestDynCfg } from "~/src/composables/webCookieAuthUrl.ts"
 
 const props = defineProps<{
   platformKey: string
@@ -121,15 +113,24 @@ const lastStatus = ref<WebCookieAuthorizationStatus | "idle">("idle")
 const isCookieWebPlatform = computed(() => {
   return props.dynCfg?.authMode === AuthMode.WEBSITE && props.cfg?.passwordType === PasswordType.PasswordType_Cookie
 })
-const canAutoCapture = computed(() => isCookieWebPlatform.value && webCookieAuthorization.isAutoCaptureSupported())
-const canOpenLogin = computed(() => canAutoCapture.value && !!props.dynCfg?.authUrl)
+const requestDynCfg = computed(() => buildWebCookieRequestDynCfg(props.dynCfg, props.cfg))
+const isAutoCaptureSupportedByHost = computed(
+  () => isCookieWebPlatform.value && webCookieAuthorization.isAutoCaptureSupported()
+)
+const hasResolvableAuthUrl = computed(() => !!requestDynCfg.value?.authUrl)
+const needsSiteUrl = computed(() => isCookieWebPlatform.value && isAutoCaptureSupportedByHost.value && !hasResolvableAuthUrl.value)
+const isAutoCaptureReady = computed(() => isAutoCaptureSupportedByHost.value && hasResolvableAuthUrl.value)
+const isLoginActionReady = computed(() => isAutoCaptureSupportedByHost.value && hasResolvableAuthUrl.value)
 const canLogout = computed(() => isCookieWebPlatform.value && (props.dynCfg?.isAuth === true || !!props.cfg?.password))
 
 const statusType = computed(() => {
   if (lastStatus.value === "success") {
     return "success"
   }
-  if (!canAutoCapture.value) {
+  if (needsSiteUrl.value) {
+    return "warning"
+  }
+  if (!isAutoCaptureSupportedByHost.value) {
     return "neutral"
   }
   if (["no_cookie", "validation_failed", "error"].includes(lastStatus.value)) {
@@ -142,7 +143,10 @@ const statusLabel = computed(() => {
   if (lastStatus.value === "success") {
     return t("v2.webCookieAuth.status.success")
   }
-  if (!canAutoCapture.value) {
+  if (needsSiteUrl.value) {
+    return t("v2.webCookieAuth.status.needSiteUrl")
+  }
+  if (!isAutoCaptureSupportedByHost.value) {
     return t("v2.webCookieAuth.status.manual")
   }
   if (["no_cookie", "validation_failed", "error"].includes(lastStatus.value)) {
@@ -152,7 +156,10 @@ const statusLabel = computed(() => {
 })
 
 const statusDescription = computed(() => {
-  if (!canAutoCapture.value) {
+  if (needsSiteUrl.value) {
+    return t("v2.webCookieAuth.desc.needSiteUrl")
+  }
+  if (!isAutoCaptureSupportedByHost.value) {
     return t("v2.webCookieAuth.desc.unsupported")
   }
   if (lastStatus.value === "success") {
@@ -171,8 +178,20 @@ const statusDescription = computed(() => {
 })
 
 const autoCaptureTooltip = computed(() => {
-  if (canAutoCapture.value) {
+  if (needsSiteUrl.value) {
+    return t("v2.webCookieAuth.tooltip.needSiteUrl")
+  }
+  if (isAutoCaptureSupportedByHost.value) {
     return t("v2.webCookieAuth.tooltip.autoRead")
+  }
+  return t("v2.webCookieAuth.tooltip.unsupported")
+})
+const openLoginTooltip = computed(() => {
+  if (needsSiteUrl.value) {
+    return t("v2.webCookieAuth.tooltip.needSiteUrl")
+  }
+  if (isAutoCaptureSupportedByHost.value) {
+    return t("v2.webCookieAuth.tooltip.openLogin")
   }
   return t("v2.webCookieAuth.tooltip.unsupported")
 })
@@ -227,11 +246,16 @@ const logoutMessageByStatus = (status: WebCookieLogoutStatus) => {
 }
 
 async function handleAutoCapture() {
-  if (!canAutoCapture.value || isLoading.value) {
-    if (!canAutoCapture.value) {
+  if (isLoading.value) {
+    return
+  }
+  if (!isAutoCaptureReady.value) {
+    if (!isAutoCaptureSupportedByHost.value) {
       lastStatus.value = "unsupported"
       v2MessageWarning(messageByStatus("unsupported"))
       emit("authorized", { status: "unsupported", ok: false })
+    } else if (!hasResolvableAuthUrl.value) {
+      v2MessageWarning(t("v2.webCookieAuth.message.needSiteUrl"))
     }
     return
   }
@@ -310,11 +334,17 @@ async function handleLogout() {
 }
 
 function handleOpenLogin() {
-  if (!canOpenLogin.value || !props.dynCfg?.authUrl) {
+  if (!isLoginActionReady.value || !requestDynCfg.value?.authUrl) {
+    if (!isAutoCaptureSupportedByHost.value) {
+      lastStatus.value = "unsupported"
+      v2MessageWarning(messageByStatus("unsupported"))
+    } else if (!hasResolvableAuthUrl.value) {
+      v2MessageWarning(t("v2.webCookieAuth.message.needSiteUrl"))
+    }
     return
   }
 
-  openBrowserWindow(props.dynCfg.authUrl, props.dynCfg, undefined, undefined, false, true)
+  openBrowserWindow(requestDynCfg.value.authUrl, requestDynCfg.value, undefined, undefined, false, true)
 }
 
 function handleToggleManual() {
@@ -512,10 +542,6 @@ function handleToggleManual() {
   opacity 0.55
   cursor not-allowed
   box-shadow none
-
-:deep(.syp-web-cookie-auth__action.is-static:hover),
-:deep(.syp-web-cookie-auth__action.is-static:active)
-  opacity 0.55
 
 :deep(.syp-web-cookie-auth__step)
   width 16px
