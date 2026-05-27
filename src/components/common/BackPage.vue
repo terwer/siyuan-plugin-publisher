@@ -14,7 +14,7 @@ import { useRoute, useRouter } from "vue-router"
 import { ref, computed } from "vue"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { ArrowLeft, QuestionFilled } from "@element-plus/icons-vue"
-import { help } from "~/src/platforms/help.ts"
+import { helpRegistry } from "~/src/helpConfigs/registry"
 import { StrUtil } from "zhi-common"
 
 const logger = createAppLogger("back-page")
@@ -56,7 +56,7 @@ const onBack = () => {
 }
 
 const onHelp = () => {
-  const helpUrl = help[props.helpKey]
+  const helpUrl = helpRegistry.getHelpUrl(props.helpKey)
   if (!StrUtil.isEmptyString(helpUrl)) {
     window.open(helpUrl, "_blank")
   } else {

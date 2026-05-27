@@ -1,5 +1,14 @@
 ## 核心设计原则（必须牢记）
 
+### 0. 插件宿主容器约束（最高优先级）
+
+- **V2 插件挂载在思源宿主 DOM 的 popup/面板区域内**，不是独立网页，不是整个浏览器窗口。
+- **禁止** `position: fixed` 全屏遮罩、`append-to-body`、`Teleport to="body"` —— 它们会脱离插件容器，跑到思源主窗口层级。
+- **禁止** 使用 `el-drawer`（默认 append-to-body）。替代：`position: absolute` 的 popover 卡片。
+- **禁止** 使用 `el-dialog` 不做 `:append-to-body="false"`。
+- **所有 UI 必须看起来属于插件设置页面**，不能出现在思源主窗口右侧或覆盖全局遮罩。
+- `.syp-panel` 已有 `position: relative`，可作为 `position: absolute` 弹窗的定位容器。
+
 ### 1. 大胆重构，小心求证
 
 - **大胆**：以业界当前最佳实践为准，架构上不必保守；宁可一次把抽象立对（如 `formUploadClient.postJson`、`jsonFetchClient.fetch` 单入口），不留双轨和垫片债。

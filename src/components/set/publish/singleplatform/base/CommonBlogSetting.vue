@@ -373,7 +373,7 @@ onMounted(async () => {
     />
     <slot name="header" :cfg="formData.cfg"></slot>
     <!-- 首页 -->
-    <el-form-item v-if="props.cfg?.homeEnabled != false" :label="t('setting.common.home')">
+    <el-form-item v-if="props.cfg?.homeEnabled != false" :label="t('setting.common.home')" data-syp-tour="home">
       <el-input
         v-model="formData.cfg.home"
         :placeholder="props.cfg?.placeholder?.homePlaceholder || ''"
@@ -381,11 +381,11 @@ onMounted(async () => {
       />
     </el-form-item>
     <!-- API 地址 -->
-    <el-form-item v-if="props.cfg?.apiUrlEnabled != false" :label="t('setting.common.apiurl')">
+    <el-form-item v-if="props.cfg?.apiUrlEnabled != false" :label="t('setting.common.apiurl')" data-syp-tour="apiUrl">
       <el-input v-model="formData.cfg.apiUrl" :placeholder="props.cfg?.placeholder?.apiUrlPlaceholder || ''" />
     </el-form-item>
     <!-- 登录名 -->
-    <el-form-item :label="formData.cfg.usernameLabel ?? t('setting.common.username')" v-if="props.cfg.usernameEnabled">
+    <el-form-item :label="formData.cfg.usernameLabel ?? t('setting.common.username')" v-if="props.cfg.usernameEnabled" data-syp-tour="username">
       <el-input
         v-model="formData.cfg.username"
         :placeholder="props.cfg?.placeholder?.usernamePlaceholder || ''"
@@ -397,6 +397,7 @@ onMounted(async () => {
       :label="formData.cfg.passwordLabel ?? t('setting.common.password')"
       v-if="formData.cfg.passwordType === PasswordType.PasswordType_Password"
       required
+      data-syp-tour="password"
     >
       <el-input
         type="password"
@@ -555,7 +556,7 @@ onMounted(async () => {
       </a>
     </el-form-item>
     <!-- 校验 -->
-    <el-form-item>
+    <el-form-item data-syp-tour="validate">
       <el-button type="primary" size="small" :loading="isLoading" @click="valiConf">
         {{ isLoading ? t("setting.blog.vali.ing") : t("setting.blog.vali") }}
       </el-button>

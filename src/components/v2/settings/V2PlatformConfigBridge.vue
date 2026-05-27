@@ -3,7 +3,10 @@
     <div class="syp-settings-page__header">
       <div>
         <div class="syp-settings-page__eyebrow">{{ t("v2.platformConfig.eyebrow") }}</div>
-        <h2 class="syp-settings-page__title">{{ platformName || t("v2.platformConfig.title") }}</h2>
+        <h2 class="syp-settings-page__title">
+          {{ platformName || t("v2.platformConfig.title") }}
+          <HelpButton :page-id="'platform-config/' + platformKey" :page-title="platformName" />
+        </h2>
         <p class="syp-settings-page__desc">
           {{ t("v2.platformConfig.desc") }}
         </p>
@@ -89,6 +92,10 @@ import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
 import { SubPlatformType } from "~/src/platforms/dynamicConfig.ts"
 import { EnvUtil } from "~/src/utils/EnvUtil.ts"
 import { sanitizeSensitiveForLog } from "~/src/utils/sensitiveLogSanitizer.ts"
+import HelpButton from "~/src/components/common/help/HelpButton.vue"
+
+// 确保 page configs 已注册
+import "~/src/helpConfigs/pages/index"
 
 const props = defineProps<{
   platformKey: string

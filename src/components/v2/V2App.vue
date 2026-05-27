@@ -565,6 +565,7 @@ async function retryInit() {
 @import "../../assets/v2/variables.styl"
 
 .syp-v2
+  position relative
   width 960px
   max-width calc(100vw - 48px)
   max-height calc(100vh - 180px)
