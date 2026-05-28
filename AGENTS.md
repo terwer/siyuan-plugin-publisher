@@ -41,6 +41,46 @@
   - V2 允许 break change；禁止 deprecated 再导出、双轨垫片
 - V2 平台验证：**高频优先**（当前批次 #21→#25→#3→#28，可与 `tasks.md` 表号不同）；每站五格 **V2C / Pub / Upd / Del / Img**；通过/失败均记入 checklist SSOT。
 
+## Hermes / Agent 项目隔离
+
+- 先纠正一个容易误导的点：Hermes **没有**内置“进入某个目录就自动切 profile”的项目隔离机制；profile 只会通过以下入口生效：
+  1. 显式启动参数：`hermes --profile siyuan-plugin-publisher ...` / `hermes -p siyuan-plugin-publisher ...`
+  2. 进程环境：`HERMES_HOME=~/.hermes/profiles/siyuan-plugin-publisher`
+  3. 全局 sticky：`hermes profile use ...`（本项目禁止用它做隔离）
+- 本仓库固定 profile 名称为 `siyuan-plugin-publisher`，profile home 为 `~/.hermes/profiles/siyuan-plugin-publisher`。
+- **最可靠用法**：在本仓库中启动 Hermes 时显式加 profile：
+  ```bash
+  hermes --profile siyuan-plugin-publisher
+  hermes --profile siyuan-plugin-publisher chat -q "/profile"
+  ```
+- `.envrc` + `direnv` 只是把 `HERMES_HOME` 自动注入 shell 的辅助方案；它要求你的 shell 已安装 direnv hook。仅执行 `direnv allow` 不等于当前 shell 已自动加载环境。
+- zsh 需要在 `~/.zshrc` 中有：
+  ```bash
+  eval "$(direnv hook zsh)"
+  ```
+  加完后重开终端，或执行 `source ~/.zshrc`，再 `cd` 回本仓库。
+- 本仓库根目录 `.envrc` 内容：
+  ```bash
+  export HERMES_PROFILE="siyuan-plugin-publisher"
+  export HERMES_HOME="$HOME/.hermes/profiles/$HERMES_PROFILE"
+  ```
+- 验证必须看 Hermes 自己解析到的 profile，而不只看 `direnv allow`：
+  ```bash
+  cd /Volumes/workspace/mydocs/siyuan-plugins/siyuan-plugin-publisher
+  echo "$HERMES_HOME"
+  hermes chat -q "/profile" --quiet
+  hermes config path
+  ```
+  期望 profile 是 `siyuan-plugin-publisher`，config path 是 `/Users/terwer/.hermes/profiles/siyuan-plugin-publisher/config.yaml`。
+- 如果你的 shell hook 暂时没生效，用这个命令可强制按 `.envrc` 执行并验证：
+  ```bash
+  direnv exec . hermes chat -q "/profile" --quiet
+  direnv exec . hermes config path
+  ```
+- 不要用 `hermes profile use siyuan-plugin-publisher` 做本项目隔离；它会修改全局 sticky default，离开目录后仍影响 Hermes。
+- 飞书/Lark gateway 是后台服务，不会随终端 `cd` 到本仓库而自动切 profile；上述规则只影响从本仓库终端启动的 Hermes 命令。
+- 密钥、token、连接串只放 profile 的 `.env`：`~/.hermes/profiles/siyuan-plugin-publisher/.env`；不要提交到仓库或写入 AGENTS/DEVELOPMENT 文档。
+
 ## 工作区事实（已学习）
 
 - **V2 宿主**：`pnpm dev:v2`（watch）、`pnpm makeLink:v2`（软链到思源）；产物在 `dist-v2/`。

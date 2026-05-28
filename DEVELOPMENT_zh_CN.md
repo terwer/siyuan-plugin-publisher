@@ -14,6 +14,116 @@ corepack use pnpm@10.22.0
 pnpm install
 ```
 
+## Hermes Agent 项目级 Profile
+
+目标：这个仓库要像 Claude/Codex 的项目隔离一样使用：进入项目目录，直接运行 `hermes`，自动使用本项目独立的 Hermes 状态。不要靠全局 sticky profile 切换。
+
+### 当前 profile
+
+- Profile 名称：`siyuan-plugin-publisher`
+- Profile Home：`~/.hermes/profiles/siyuan-plugin-publisher`
+- 项目环境文件：`.envrc`
+
+本仓库提交的 `.envrc` 内容为：
+
+```bash
+export HERMES_PROFILE="siyuan-plugin-publisher"
+export HERMES_HOME="$HOME/.hermes/profiles/$HERMES_PROFILE"
+```
+
+真正起隔离作用的是 `HERMES_HOME`：Hermes 会从这个目录读取 `config.yaml`、`.env`、skills、memory、sessions、cron 等状态。`HERMES_PROFILE` 只是可读标记。
+
+### 每台机器只配置一次
+
+只在你已经使用的 shell profile 里配置一次 direnv hook。之后任何项目只要有自己的 `.envrc`，都复用同一套工作流。
+
+macOS / 本机 zsh：
+
+```bash
+# ~/my_profile.sh，这个文件由 ~/.zshrc 自动 source
+if command -v direnv >/dev/null 2>&1; then
+  eval "$(direnv hook zsh)"
+fi
+```
+
+Windows 的 WSL2 或 Git Bash：
+
+```bash
+# ~/.bashrc、~/.zshrc，或你自己自动 source 的 my_profile.sh
+if command -v direnv >/dev/null 2>&1; then
+  eval "$(direnv hook bash)"   # 如果用 zsh，就把 bash 改成 zsh
+fi
+```
+
+Windows PowerShell：
+
+```powershell
+# 只需要加一次到 $PROFILE
+Invoke-Expression "$(direnv hook pwsh)"
+```
+
+这套配置是通用的。不要为每个项目创建 `hermes-syp` 这种专用 alias/function；换项目后不可复用。
+
+### 本仓库只配置一次
+
+```bash
+# 如果 profile 不存在，先创建本项目独立 profile。
+# --clone 会把当前 default 的 config/.env/SOUL.md/skills 复制一份作为起点。
+hermes profile create siyuan-plugin-publisher --clone
+
+# 信任本仓库的 .envrc。
+cd /Volumes/workspace/mydocs/siyuan-plugins/siyuan-plugin-publisher
+direnv allow
+```
+
+如果希望完全干净，不继承 default profile，可以改用：
+
+```bash
+hermes profile create siyuan-plugin-publisher
+```
+
+### 日常使用
+
+```bash
+cd /Volumes/workspace/mydocs/siyuan-plugins/siyuan-plugin-publisher
+hermes
+```
+
+预期行为：direnv 自动加载 `.envrc`，所以 `hermes` 不需要额外参数就会使用 `~/.hermes/profiles/siyuan-plugin-publisher`。
+
+### 验证
+
+```bash
+cd /Volumes/workspace/mydocs/siyuan-plugins/siyuan-plugin-publisher
+
+echo "$HERMES_PROFILE"
+echo "$HERMES_HOME"
+hermes config path
+```
+
+macOS/Linux/WSL/Git Bash 上期望输出：
+
+```text
+siyuan-plugin-publisher
+/Users/terwer/.hermes/profiles/siyuan-plugin-publisher
+/Users/terwer/.hermes/profiles/siyuan-plugin-publisher/config.yaml
+```
+
+Windows PowerShell 中 `$HOME` 是 Windows 用户目录，所以完整路径会不同，但必须以这个结尾：
+
+```text
+.hermes\profiles\siyuan-plugin-publisher\config.yaml
+```
+
+如果输出仍然指向 `~/.hermes/config.yaml`，说明当前 shell 没有加载 direnv。改完 shell profile 后重新打开终端，再 `cd` 回仓库。
+
+### 使用注意
+
+- 不要用 `hermes profile use siyuan-plugin-publisher` 作为本项目隔离方案；它会修改全局 sticky default profile，离开目录后仍然污染其他项目。
+- 不要指望在已经启动的 Hermes 会话里执行 `direnv allow` 就能切换当前 Hermes 的 profile；必须从已经加载 direnv 环境的 shell 里重新启动 Hermes。
+- 飞书/Lark gateway 是后台服务，不会跟随某个终端的当前目录自动切换 profile；这里的配置只影响在本仓库终端里启动的 Hermes 命令。
+- 密钥和凭据放到 profile 自己的 `.env`：`~/.hermes/profiles/siyuan-plugin-publisher/.env`，不要提交到仓库。
+
 ## V2 开发（主力模式）
 
 V2 输出到 `dist-v2/`，通过 `vite.config.v2.ts` 构建。
