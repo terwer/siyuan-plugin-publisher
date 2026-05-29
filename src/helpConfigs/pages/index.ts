@@ -27,6 +27,9 @@ import { yuqueHelpConfig } from "./platform-config/common-yuque"
 import { haloHelpConfig } from "./platform-config/common-halo"
 import { yuquewebHelpConfig } from "./platform-config/custom-yuqueweb"
 import { halowebHelpConfig } from "./platform-config/custom-haloweb"
+import { localSystemHelpConfig } from "./platform-config/fs-local-system"
+import { zhihuHelpConfig } from "./platform-config/custom-zhihu"
+import { csdnHelpConfig } from "./platform-config/custom-csdn"
 import { remainingT1HelpConfigs } from "./platform-config/remaining-t1"
 
 /**
@@ -53,6 +56,9 @@ export function registerAllHelpConfigs(): void {
   helpRegistry.register(haloHelpConfig)
   helpRegistry.register(yuquewebHelpConfig)
   helpRegistry.register(halowebHelpConfig)
+  helpRegistry.register(localSystemHelpConfig)
+  helpRegistry.register(zhihuHelpConfig)
+  helpRegistry.register(csdnHelpConfig)
 
   // 其余 T1 平台
   for (const cfg of remainingT1HelpConfigs) {

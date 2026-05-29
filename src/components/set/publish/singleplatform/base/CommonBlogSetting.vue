@@ -414,6 +414,7 @@ onMounted(async () => {
       v-else-if="formData.cfg.passwordType === PasswordType.PasswordType_Token"
       :label="formData.cfg.passwordLabel ?? t('setting.common.token')"
       required
+      data-syp-tour="token"
     >
       <el-input
         type="password"
@@ -431,6 +432,7 @@ onMounted(async () => {
       :label="formData.cfg.passwordLabel ?? t('setting.blog.cookie')"
       required
       class="cookie-form-item"
+      data-syp-tour="cookie"
     >
       <slot
         v-if="$slots['cookie-actions']"
@@ -461,28 +463,28 @@ onMounted(async () => {
     </el-form-item>
     <slot name="main" :cfg="formData.cfg" />
     <!-- 预览地址 -->
-    <el-form-item v-if="props.cfg?.previewUrlEnabled != false" :label="t('setting.blog.previewUrl')">
+    <el-form-item v-if="props.cfg?.previewUrlEnabled != false" :label="t('setting.blog.previewUrl')" data-syp-tour="previewUrl">
       <el-input
         v-model="formData.cfg.previewUrl"
         :placeholder="props.cfg?.placeholder?.previewUrlPlaceholder || ''"
         :disabled="!props.cfg.allowPreviewUrlChange"
       />
     </el-form-item>
-    <el-form-item :label="t('setting.blog.pageType')">
+    <el-form-item :label="t('setting.blog.pageType')" data-syp-tour="pageType">
       <el-radio-group v-model="formData.cfg.pageType" class="ml-4">
         <el-radio :value="PageTypeEnum.Markdown" size="small">Markdown</el-radio>
         <el-radio :value="PageTypeEnum.Html" size="small">HTML</el-radio>
       </el-radio-group>
     </el-form-item>
     <!-- 知识空间 -->
-    <el-form-item class="cate-input" :label="t('setting.blog.searchKeyword')" v-if="props.cfg?.cateSearchEnabled">
+    <el-form-item class="cate-input" :label="t('setting.blog.searchKeyword')" v-if="props.cfg?.cateSearchEnabled" data-syp-tour="knowledgeSpaceSearch">
       <el-input
         v-model="formData.ksKeyword"
         :placeholder="t('setting.blog.searchKeyword.placeholder', { title: props.cfg?.knowledgeSpaceTitle || t('setting.blog.knowledge.space') })"
         @change="handleCateSearch"
       />
     </el-form-item>
-    <el-form-item :label="props.cfg?.knowledgeSpaceTitle || t('setting.blog.knowledge.space')" v-if="props.cfg?.knowledgeSpaceEnabled">
+    <el-form-item :label="props.cfg?.knowledgeSpaceTitle || t('setting.blog.knowledge.space')" v-if="props.cfg?.knowledgeSpaceEnabled" data-syp-tour="knowledgeSpace">
       <el-select
         v-model="formData.cfg.blogid"
         class="m-2"
@@ -495,7 +497,7 @@ onMounted(async () => {
         <el-option v-for="item in formData.kwSpaces" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
     </el-form-item>
-    <el-form-item :label="t('publisher.picbed.service')">
+    <el-form-item :label="t('publisher.picbed.service')" data-syp-tour="picbedService">
       <el-radio-group v-model="formData.cfg.picbedService" class="ml-4">
         <el-radio :value="PicbedServiceTypeEnum.None" size="small">{{ t("publisher.picbed.none") }}</el-radio>
         <el-radio

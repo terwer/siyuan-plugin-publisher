@@ -10,6 +10,13 @@
 import { describe, it, expect, beforeEach } from "vitest"
 import { helpRegistry } from "~/src/helpConfigs/registry"
 import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
+import { yuqueHelpConfig } from "~/src/helpConfigs/pages/platform-config/common-yuque"
+import { wordpressHelpConfig } from "~/src/helpConfigs/pages/platform-config/wordpress-wordpress"
+import { yuquewebHelpConfig } from "~/src/helpConfigs/pages/platform-config/custom-yuqueweb"
+import { localSystemHelpConfig } from "~/src/helpConfigs/pages/platform-config/fs-local-system"
+import { zhihuHelpConfig } from "~/src/helpConfigs/pages/platform-config/custom-zhihu"
+import { csdnHelpConfig } from "~/src/helpConfigs/pages/platform-config/custom-csdn"
+import { remainingT1HelpConfigs } from "~/src/helpConfigs/pages/platform-config/remaining-t1"
 
 // 测试用配置
 const testConfig: PageHelpConfig = {
@@ -110,5 +117,39 @@ describe("HelpRegistry", () => {
     it("should return false for unregistered pageId", () => {
       expect(helpRegistry.hasConfig("unknown")).toBe(false)
     })
+  })
+})
+
+describe("verified platform help configs", () => {
+  const verifiedConfigs = [
+    yuqueHelpConfig,
+    wordpressHelpConfig,
+    yuquewebHelpConfig,
+    localSystemHelpConfig,
+    zhihuHelpConfig,
+    csdnHelpConfig,
+  ]
+
+  it("should provide complete panel, field, faq, and tour coverage for verified platforms", () => {
+    for (const config of verifiedConfigs) {
+      expect(config.summary, `${config.pageId} summary`).toBeTruthy()
+      expect(Object.keys(config.fields ?? {}), `${config.pageId} fields`).not.toHaveLength(0)
+      expect(config.faq, `${config.pageId} faq`).toBeDefined()
+      expect(config.faq?.length, `${config.pageId} faq length`).toBeGreaterThan(0)
+      expect(config.tour, `${config.pageId} tour`).toBeDefined()
+      expect(config.tour?.length, `${config.pageId} tour length`).toBeGreaterThan(0)
+
+      for (const step of config.tour ?? []) {
+        expect(step.target, `${config.pageId} tour target`).toMatch(/^\[data-syp-tour='[^']+'\]$/)
+      }
+    }
+  })
+
+  it("should move verified split-out platforms out of remaining T1 help configs", () => {
+    const remainingPageIds = remainingT1HelpConfigs.map((config) => config.pageId)
+
+    expect(remainingPageIds).not.toContain("platform-config/fs_LocalSystem")
+    expect(remainingPageIds).not.toContain("platform-config/custom_Zhihu")
+    expect(remainingPageIds).not.toContain("platform-config/custom_Csdn")
   })
 })

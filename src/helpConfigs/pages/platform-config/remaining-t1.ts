@@ -49,13 +49,8 @@ export const remainingT1HelpConfigs: PageHelpConfig[] = [
   { pageId: "platform-config/wordpress_Wordpressdotcom", helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0" },
 
   // === Custom V2 Bridge ===
-  { pageId: "platform-config/custom_Zhihu", helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0" },
-  { pageId: "platform-config/custom_Csdn", helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0" },
   { pageId: "platform-config/custom_Jianshu", helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0" },
   { pageId: "platform-config/custom_Juejin", helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0" },
   { pageId: "platform-config/custom_Wechat", helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0" },
   { pageId: "platform-config/custom_Bilibili", helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0" },
-
-  // === Fs ===
-  { pageId: "platform-config/fs_LocalSystem", helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0" },
 ]

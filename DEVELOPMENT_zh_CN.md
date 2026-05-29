@@ -86,7 +86,7 @@ hermes profile create siyuan-plugin-publisher
 
 ```bash
 cd /Volumes/workspace/mydocs/siyuan-plugins/siyuan-plugin-publisher
-hermes
+hermes --profile siyuan-plugin-publisher gateway start
 ```
 
 预期行为：direnv 自动加载 `.envrc`，所以 `hermes` 不需要额外参数就会使用 `~/.hermes/profiles/siyuan-plugin-publisher`。
