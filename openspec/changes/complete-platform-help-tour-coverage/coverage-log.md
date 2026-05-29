@@ -39,3 +39,12 @@ A platform help config is considered complete for this change when it has:
 - `fields` for high-risk inputs, even if inline FieldGuide rendering is not wired yet.
 - `faq` for verification-derived pitfalls.
 - `tour` steps only for existing stable anchors, or after a minimal `data-syp-tour` anchor task is completed.
+
+## Review notes
+
+### 2026-05-29 user review
+
+- Score: about 70/100; first batch is basically accepted but still has flaws.
+- Known issue: platform config pageIds may include a dynamic instance id/hash, such as `platform-config/common_Yuque-z2jom6d`. Help matching must not create a separate help-only example/hash scheme; it should reuse `src/platforms/dynamicConfig.ts` and normalize dynamic instance keys back to preset platform keys such as `platform-config/common_Yuque`.
+- Follow-up: specific platform guide wording/content still needs per-platform polish. The user will discuss those one by one later, so do not pre-emptively rewrite all guide text now.
+- Linked change: `normalize-platform-guide-example-matching` now owns the runtime normalization and tests for dynamic platform-config instance keys.

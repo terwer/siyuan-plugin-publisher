@@ -9,6 +9,7 @@
 
 import { type PageHelpConfig, type FieldHelp, type TourStep } from "~/src/types/IPageHelpConfig"
 import { DEFAULT_PAGE_HELP_CONFIG } from "~/src/helpConfigs/pages/_default"
+import { getSubPlatformTypeByKey } from "~/src/platforms/dynamicConfig"
 
 /**
  * 通用帮助注册中心
@@ -42,7 +43,12 @@ class HelpRegistry {
     const exact = this.pageConfigs.get(pageId)
     if (exact) return exact
 
-    // 2. 目录级 _default（取 pageId 最后 / 前的部分 + "/_default"）
+    // 2. 平台配置页支持动态实例 key 回落到预置平台 key。
+    // 例如 platform-config/common_Yuque-z2jom6d -> platform-config/common_Yuque。
+    const platformConfig = this.getPresetPlatformConfig(pageId)
+    if (platformConfig) return platformConfig
+
+    // 3. 目录级 _default（取 pageId 最后 / 前的部分 + "/_default"）
     const lastSlash = pageId.lastIndexOf("/")
     if (lastSlash > 0) {
       const dirDefault = pageId.substring(0, lastSlash) + "/_default"
@@ -50,15 +56,46 @@ class HelpRegistry {
       if (dirConfig) return dirConfig
     }
 
-    // 3. 全局兜底
+    // 4. 全局兜底
     return DEFAULT_PAGE_HELP_CONFIG
+  }
+
+  private getPresetPlatformConfig(pageId: string): PageHelpConfig | undefined {
+    const platformConfigPrefix = "platform-config/"
+    if (!pageId.startsWith(platformConfigPrefix)) return undefined
+
+    const platformKey = pageId.substring(platformConfigPrefix.length)
+    let subPlatformType: ReturnType<typeof getSubPlatformTypeByKey>
+    try {
+      subPlatformType = getSubPlatformTypeByKey(platformKey)
+    } catch {
+      return undefined
+    }
+
+    let matchedConfig: PageHelpConfig | undefined
+    this.pageConfigs.forEach((config, presetPageId) => {
+      if (matchedConfig) return
+      if (!presetPageId.startsWith(platformConfigPrefix)) return
+      if (presetPageId === pageId) return
+
+      const presetPlatformKey = presetPageId.substring(platformConfigPrefix.length)
+      if (presetPlatformKey === "_default") return
+      if (presetPlatformKey.includes("-")) return
+      try {
+        if (getSubPlatformTypeByKey(presetPlatformKey) === subPlatformType) matchedConfig = config
+      } catch {
+        // Ignore non-platform defaults or malformed page ids and keep fallback chain intact.
+      }
+    })
+
+    return matchedConfig
   }
 
   /**
    * 按 pageId + field 查询字段帮助
    */
   getField(pageId: string, fieldName: string): FieldHelp | undefined {
-    const config = this.pageConfigs.get(pageId)
+    const config = this.get(pageId)
     return config?.fields?.[fieldName]
   }
 
@@ -66,7 +103,7 @@ class HelpRegistry {
    * 按 pageId 获取可视化引导步骤
    */
   getTour(pageId: string): TourStep[] | undefined {
-    const config = this.pageConfigs.get(pageId)
+    const config = this.get(pageId)
     return config?.tour
   }
 

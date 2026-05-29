@@ -60,6 +60,14 @@ describe("HelpRegistry", () => {
       expect(result.helpUrl).toBe("https://example.com/platform-help")
     })
 
+    it("should normalize dynamic platform-config instance keys to preset platform help configs", () => {
+      helpRegistry.register(yuqueHelpConfig)
+      helpRegistry.register(yuquewebHelpConfig)
+
+      expect(helpRegistry.get("platform-config/common_Yuque-z2jom6d").pageId).toBe("platform-config/common_Yuque")
+      expect(helpRegistry.get("platform-config/custom_Yuqueweb-z2jom6d").pageId).toBe("platform-config/custom_Yuqueweb")
+    })
+
     it("should fallback to global _default when no directory match either", () => {
       const result = helpRegistry.get("unknown-page-xyz")
       expect(result.pageId).toBe("_default")
@@ -73,6 +81,13 @@ describe("HelpRegistry", () => {
       expect(field?.tip).toBe("Enter your username")
     })
 
+    it("should return preset platform field help for dynamic platform-config instance keys", () => {
+      helpRegistry.register(yuqueHelpConfig)
+
+      const field = helpRegistry.getField("platform-config/common_Yuque-z2jom6d", "token")
+      expect(field?.tip).toBe(yuqueHelpConfig.fields?.token.tip)
+    })
+
     it("should return undefined for missing field", () => {
       const field = helpRegistry.getField("test-page", "nonexistent")
       expect(field).toBeUndefined()
@@ -84,6 +99,13 @@ describe("HelpRegistry", () => {
       const tour = helpRegistry.getTour("test-page")
       expect(tour).toHaveLength(2)
       expect(tour![0].target).toBe(".field-username")
+    })
+
+    it("should return preset platform tour for dynamic platform-config instance keys", () => {
+      helpRegistry.register(yuquewebHelpConfig)
+
+      const tour = helpRegistry.getTour("platform-config/custom_Yuqueweb-z2jom6d")
+      expect(tour).toEqual(yuquewebHelpConfig.tour)
     })
 
     it("should return undefined for page without tour", () => {
@@ -101,6 +123,13 @@ describe("HelpRegistry", () => {
     it("should return directory fallback helpUrl", () => {
       const url = helpRegistry.getHelpUrl("platform-config/metaweblog_Cnblogs")
       expect(url).toBe("https://example.com/platform-help")
+    })
+
+    it("should return preset helpUrl for dynamic platform-config instance keys", () => {
+      helpRegistry.register(yuqueHelpConfig)
+
+      const url = helpRegistry.getHelpUrl("platform-config/common_Yuque-z2jom6d")
+      expect(url).toBe(yuqueHelpConfig.helpUrl)
     })
 
     it("should return global default helpUrl for unknown page", () => {

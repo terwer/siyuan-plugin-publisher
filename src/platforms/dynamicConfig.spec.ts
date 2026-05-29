@@ -17,11 +17,9 @@ import { describe, it, expect } from "vitest"
 
 describe("test dynamicConfig", () => {
   it("test getSubPlatformTypeByKey", () => {
-    // const key = "custom_Zhihu-z2jom6d"
-    const key = "custom_Zhihu"
-    const result = getSubPlatformTypeByKey(key)
-    console.log("result=>", result)
-    expect(result).toBe(SubPlatformType.Custom_Zhihu)
+    expect(getSubPlatformTypeByKey("custom_Zhihu")).toBe(SubPlatformType.Custom_Zhihu)
+    expect(getSubPlatformTypeByKey("custom_Zhihu-z2jom6d")).toBe(SubPlatformType.Custom_Zhihu)
+    expect(getSubPlatformTypeByKey("common_Yuque-z2jom6d")).toBe(SubPlatformType.Common_Yuque)
   })
 
   it("test getNewPlatformKey", () => {
@@ -31,4 +29,5 @@ describe("test dynamicConfig", () => {
     console.log("result=>", result)
     expect(result).toMatch(/common_Yuque-\w+/)
   })
+
 })
