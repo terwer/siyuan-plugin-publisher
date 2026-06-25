@@ -236,7 +236,7 @@ const { t } = useV2I18n()
 const hasPlatforms = computed(() => quickPublish.hasPlatforms.value)
 const publishState = computed(() => quickPublish.state.publishState)
 const previewLinkMap = computed<Record<string, string>>(() => quickPublish.state.previewLinkMap)
-const { errorDetailsState, showErrorDetails, hideErrorDetails, clearErrorDetails, reopenErrorDetails } =
+const { errorDetailsState, showErrorDetails, storeErrorDetails, hideErrorDetails, clearErrorDetails, reopenErrorDetails } =
   useV2ErrorDetails()
 const settingsSwitchLoading = ref(false)
 let settingsSwitchLoadingTimer: number | undefined
@@ -535,7 +535,7 @@ async function handleConfigValidated(result: V2PlatformConfigValidationResult) {
     await completeConfigIfPublishReady()
   } else {
     const summary = result.errorMessage || t("v2.platformConfig.validation.failedGeneric")
-    showErrorDetails(
+    storeErrorDetails(
       t("v2.platformConfig.validation.errorTitle"),
       summary,
       result.errorDetails || result.errorMessage || summary

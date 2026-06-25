@@ -24,7 +24,7 @@
         <header class="syp-error-details-panel__header">
           <div class="syp-error-details-panel__title-group">
             <div class="syp-error-details-panel__title">{{ title }}</div>
-            <p v-if="summary" class="syp-error-details-panel__summary">{{ summary }}</p>
+            <p v-if="showSummary" class="syp-error-details-panel__summary">{{ summary }}</p>
           </div>
           <div class="syp-error-details-panel__actions">
             <button
@@ -76,6 +76,13 @@ const copyState = ref<"idle" | "success" | "failure">("idle")
 let copyStateTimer: number | undefined
 
 const detailsText = computed(() => props.details || props.summary || "")
+const showSummary = computed(() => {
+  const s = (props.summary || "").trim()
+  if (!s) return false
+  // Hide summary when it's identical to the details box content —
+  // the full details already show the same text.
+  return s !== detailsText.value.trim()
+})
 const copyButtonText = computed(() => {
   if (copyState.value === "success") {
     return props.copySuccessText

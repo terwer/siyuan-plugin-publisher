@@ -26,11 +26,16 @@ export const useV2ErrorDetails = () => {
   })
 
   const showErrorDetails = (title: string, summary: string, details?: string) => {
+    storeErrorDetails(title, summary, details)
+    errorDetailsState.value.visible = true
+  }
+
+  const storeErrorDetails = (title: string, summary: string, details?: string) => {
     const sanitizedSummary = typeof summary === "string" ? sanitizeSensitiveForLog(summary) : ""
     const sanitizedDetails = typeof details === "string" ? sanitizeSensitiveForLog(details) : sanitizedSummary
 
     errorDetailsState.value = {
-      visible: true,
+      visible: false,
       title,
       summary: sanitizedSummary,
       details: sanitizedDetails,
@@ -59,6 +64,7 @@ export const useV2ErrorDetails = () => {
   return {
     errorDetailsState,
     showErrorDetails,
+    storeErrorDetails,
     hideErrorDetails,
     clearErrorDetails,
     reopenErrorDetails,

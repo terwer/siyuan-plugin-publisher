@@ -41,7 +41,7 @@ const onValidated = (result: YuqueValidateResult) => {
 </script>
 
 <template>
-  <el-alert class="yuque-api-membership-hint" type="error" :closable="false" show-icon>
+  <el-alert class="yuque-api-membership-hint" type="warning" :closable="false" show-icon>
     <template #title>{{ t("setting.yuque.membership.bannerTitle") }}</template>
     <p class="yuque-api-membership-hint__body">{{ membershipTip }}</p>
     <a class="yuque-api-membership-hint__link" :href="YUQUE_PRICE_URL" target="_blank" rel="noopener noreferrer">

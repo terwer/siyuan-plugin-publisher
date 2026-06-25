@@ -451,7 +451,7 @@ async function loadPicgoRuntime() {
     }
 
     state.uploaders = picgoManager.listUploaders().filter((uploader) => uploader.schemaAvailable)
-    state.currentUploaderId = picgoManager.getCurrentUploader()
+    state.currentUploaderId = await picgoManager.getCurrentUploader()
     const selectedUploaderId = state.uploaders.some((uploader) => uploader.id === state.currentUploaderId)
       ? state.currentUploaderId
       : state.uploaders[0]?.id || ""
@@ -530,7 +530,7 @@ async function saveUploaderConfig() {
   state.validationErrors = []
 
   try {
-    const validation = picgoManager.saveUploaderConfig(state.selectedUploaderId, state.uploaderForm, { setCurrent: true })
+    const validation = await picgoManager.saveUploaderConfig(state.selectedUploaderId, state.uploaderForm, { setCurrent: true })
     if (!validation.ok) {
       state.validationErrors = validation.errors
       state.uploaderSaveState = "failed"
@@ -539,7 +539,7 @@ async function saveUploaderConfig() {
       return
     }
 
-    state.currentUploaderId = picgoManager.getCurrentUploader()
+    state.currentUploaderId = await picgoManager.getCurrentUploader()
     state.uploaderSaveState = "saved"
   } catch (error) {
     const formatted = formatPublisherPicgoError(error)

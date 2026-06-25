@@ -79,7 +79,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, provide, reactive, ref, watch, type Component } from "vue"
+import { computed, nextTick, onMounted, provide, reactive, ref, watch, type Component } from "vue"
 import { getV2BridgeComponent } from "~/src/components/v2/settings/bridge/bridgeRegistry.ts"
 import {
     V2_PLATFORM_CONFIG_ACTION_BRIDGE_KEY,
@@ -124,6 +124,14 @@ const state = reactive({
 })
 
 const validationError = ref<string>("")
+
+watch(validationError, async (nextError) => {
+  if (nextError) {
+    await nextTick()
+    const el = document.querySelector(".syp-validation-error-bar") as HTMLElement | null
+    el?.scrollIntoView({ behavior: "smooth", block: "nearest" })
+  }
+})
 
 const bridgeComponent = computed<Component | null>(() => {
   return getV2BridgeComponent(state.subtype, {
