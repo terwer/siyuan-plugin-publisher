@@ -240,23 +240,11 @@
         </template>
       </article>
     </div>
-
-    <SypErrorDetailsPanel
-      :visible="state.errorDetails.visible"
-      :title="state.errorDetails.title"
-      :summary="state.errorDetails.summary"
-      :details="state.errorDetails.details"
-      :copy-label="t('main.copy')"
-      :copy-success-text="t('main.copy.success')"
-      :copy-failure-text="t('main.copy.failure')"
-      :close-label="t('main.opt.ok')"
-      @close="state.errorDetails.visible = false"
-    />
   </section>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, reactive } from "vue"
+import { computed, inject, onMounted, reactive } from "vue"
 import {
   type ISiyuanPicGoHeadlessManager,
   type PicGoUploaderConfigSchema,
@@ -266,7 +254,6 @@ import {
 import { JsonUtil } from "zhi-common"
 import { BlogConfig, PicbedServiceTypeEnum as PicBedServiceTypeEnum } from "zhi-blog-api"
 import Adaptors from "~/src/adaptors"
-import SypErrorDetailsPanel from "~/src/components/v2/common/SypErrorDetailsPanel.vue"
 import {
   checkPublisherPicgoRuntime,
   formatPublisherPicgoError,
@@ -306,6 +293,7 @@ interface PicgoRuntimeState {
 const { getSetting, updateSetting } = usePublishSettingStore()
 const { getPicbedServiceType: getPicBedServiceType } = usePicgoBridge()
 const { t } = useV2I18n()
+const showErrorDetailsGlobally = inject<(title: string, summary: string, details?: string) => void>("v2-show-error-details", () => {})
 
 let picgoManager: ISiyuanPicGoHeadlessManager | null = null
 
@@ -334,12 +322,6 @@ const state = reactive({
   uploaderSaveState: "idle" as "idle" | "saving" | "saved" | "failed",
   uploaderSaveError: "",
   uploaderSaveDetails: "",
-  errorDetails: {
-    visible: false,
-    title: "",
-    summary: "",
-    details: "",
-  },
 })
 
 const sortedUploaders = computed(() => {
@@ -647,7 +629,7 @@ function buildSupportText(picgoSupported: boolean, bundledSupported: boolean) {
 }
 
 function showPicgoRuntimeDetails() {
-  showErrorDetails(
+  showErrorDetailsGlobally(
     t("v2.picbed.picgoConfig.runtimeError"),
     state.picgoRuntime.summary,
     state.picgoRuntime.details || stringifyDetails({ errors: state.picgoRuntime.fieldErrors })
@@ -655,7 +637,7 @@ function showPicgoRuntimeDetails() {
 }
 
 function showUploaderSaveDetails() {
-  showErrorDetails(
+  showErrorDetailsGlobally(
     t("v2.picbed.picgoConfig.validationFailed"),
     state.uploaderSaveError,
     state.uploaderSaveDetails || stringifyDetails({ errors: state.validationErrors })
@@ -663,20 +645,11 @@ function showUploaderSaveDetails() {
 }
 
 function showPlatformLoadDetails() {
-  showErrorDetails(
+  showErrorDetailsGlobally(
     t("v2.picbed.platformPreference.partialLoadFailedTitle"),
     state.platformLoadError,
     state.platformLoadDetails
   )
-}
-
-function showErrorDetails(title: string, summary: string, details: string) {
-  state.errorDetails = {
-    visible: true,
-    title,
-    summary,
-    details,
-  }
 }
 
 function resetPicgoFormState() {

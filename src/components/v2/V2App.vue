@@ -198,7 +198,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue"
+import { computed, onMounted, provide, ref } from "vue"
 import "~/src/assets/v2/base.styl"
 import SypErrorDetailsPanel from "~/src/components/v2/common/SypErrorDetailsPanel.vue"
 import SypTooltip from "~/src/components/v2/common/SypTooltip.vue"
@@ -238,6 +238,7 @@ const publishState = computed(() => quickPublish.state.publishState)
 const previewLinkMap = computed<Record<string, string>>(() => quickPublish.state.previewLinkMap)
 const { errorDetailsState, showErrorDetails, storeErrorDetails, hideErrorDetails, clearErrorDetails, reopenErrorDetails } =
   useV2ErrorDetails()
+provide("v2-show-error-details", showErrorDetails)
 const settingsSwitchLoading = ref(false)
 let settingsSwitchLoadingTimer: number | undefined
 
