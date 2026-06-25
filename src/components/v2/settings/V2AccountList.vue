@@ -157,7 +157,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from "vue"
+import { computed, nextTick, ref, watch } from "vue"
 import SypConfirmBar from "~/src/components/v2/common/SypConfirmBar.vue"
 import SypTooltip from "~/src/components/v2/common/SypTooltip.vue"
 import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
@@ -180,6 +180,14 @@ const localPlatformKeys = ref<string[]>([])
 const draggingPlatformKey = ref("")
 const dragOverPlatformKey = ref("")
 const confirmDeleteKey = ref("")
+
+watch(confirmDeleteKey, async (nextKey) => {
+  if (nextKey) {
+    await nextTick()
+    const el = document.querySelector(".syp-account-item__delete-confirm") as HTMLElement | null
+    el?.scrollIntoView({ behavior: "smooth", block: "nearest" })
+  }
+})
 
 const orderedItems = computed(() => {
   const itemMap = new Map(props.items.map((item) => [item.platformKey, item]))
