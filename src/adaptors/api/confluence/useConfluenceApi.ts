@@ -8,8 +8,7 @@
  */
 
 import { CategoryTypeEnum, PicbedServiceTypeEnum } from "zhi-blog-api"
-import { ObjectUtil, StrUtil } from "zhi-common"
-import { safeMergeConfig } from "~/src/adaptors/api/base/configMergeUtil.ts"
+import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { ConfluenceApiAdaptor } from "~/src/adaptors/api/confluence/confluenceApiAdaptor.ts"
 import { ConfluenceConfig } from "~/src/adaptors/api/confluence/confluenceConfig.ts"
 import { CONFLUENCE_CONSTANTS } from "~/src/adaptors/api/confluence/confluenceConstants.ts"
@@ -30,18 +29,22 @@ const useConfluenceApi = async (key: string, newCfg?: ConfluenceConfig) => {
   // 创建应用实例
   const appInstance = new PublisherAppInstance()
 
+  // 始终从构造函数默认值出发，只构造一次
+  const defaults = new ConfluenceConfig("", "", "", "")
+
   let cfg: ConfluenceConfig
   if (newCfg) {
-    logger.info("Initialize with the latest newCfg passed in...")
-    cfg = newCfg
+    logger.info("Merge the latest newCfg with constructor defaults...")
+    cfg = Object.assign(defaults, newCfg)
   } else {
     // 从配置中获取数据
     const { getSetting } = usePublishSettingStore()
     const setting = await getSetting()
-    cfg = safeMergeConfig<ConfluenceConfig>(setting[key], ConfluenceConfig, ["", "", "", ""])
+    const stored = JsonUtil.safeParse<Partial<ConfluenceConfig>>(setting[key], {} as Partial<ConfluenceConfig>)
+    cfg = stored ? Object.assign(defaults, stored) : defaults
 
     // 如果配置为空，则使用默认的环境变量值，并记录日志
-    if (ObjectUtil.isEmptyObject(cfg)) {
+    if (ObjectUtil.isEmptyObject(cfg) || (!cfg.home && !cfg.apiUrl)) {
       // 从环境变量获取 Confluence API 的 URL、认证令牌和其他配置信息
       const confluenceHome = Utils.emptyOrDefault(process.env.VITE_CONFLUENCE_HOME, "")
       const confluenceAuthToken = Utils.emptyOrDefault(process.env.VITE_CONFLUENCE_AUTH_TOKEN, "")
