@@ -3,17 +3,15 @@
 ### 0. 插件宿主容器约束（最高优先级）
 
 - **V2 插件挂载在思源宿主 DOM 的 popup/面板区域内**，不是独立网页，不是整个浏览器窗口。
-- **禁止** `position: fixed` 全屏遮罩、`append-to-body`、`Teleport to="body"` —— 它们会脱离插件容器，跑到思源主窗口层级。
-- **禁止** 使用 `el-drawer`（默认 append-to-body）。替代：`position: absolute` 的 popover 卡片。
-- **禁止** 使用 `el-dialog` 不做 `:append-to-body="false"`。
-- **所有 UI 必须看起来属于插件设置页面**，不能出现在思源主窗口右侧或覆盖全局遮罩。
+- 所有 UI 锚定在 `.syp-panel` 容器内。弹窗用 `position: absolute` 的 popover 卡片而非 `el-drawer`。
+- `el-dialog` 必须设置 `:append-to-body="false"`。
 - `.syp-panel` 已有 `position: relative`，可作为 `position: absolute` 弹窗的定位容器。
 
 ### 1. 大胆重构，小心求证
 
 - **大胆**：以业界当前最佳实践为准，架构上不必保守；宁可一次把抽象立对（如 `formUploadClient.postJson`、`jsonFetchClient.fetch` 单入口），不留双轨和垫片债。
-- **小心求证**：每次改动必须有证据链——单测、构建、V2 宿主手验、checklist；禁止 mock/占位糊弄通过。
-- **全局触发**：规则与行为改在**共用层**落地（`publishTransport`、`formUploadClient`、`xmlrpcTransport`、基类），禁止在多个适配器各打补丁；改一处，全链路一致。
+- **小心求证**：每次改动以单测、构建、V2 宿主手验、checklist 为证据链。
+- **全局触发**：规则与行为统一在**共用层**落地（`publishTransport`、`formUploadClient`、`xmlrpcTransport`、基类）；改一处，全链路一致。
 - **功能 100% 保留**：用户可见行为、平台契约、诊断语义不能悄悄退化；重构的是结构，不是砍能力。
 - **优化目标排序**：**最大扩展性** > **可用性/用户体验** > **维护成本**；V2 允许结构性 break change，但不牺牲上述行为保留。
 
@@ -21,74 +19,41 @@
 
 - **对外接口简单**：使用层只认少量入口（如 `webFormFetch`、`postJson`、`getFormData`），不必理解 resolve/handler/`PluginFetchUtil` 组合。
 - **对内高内聚**：传输解析、执行、懒加载、`win.require` 检测集中在 facade/transport 模块内部。
-- **低耦合**：平台适配器不依赖具体通道实现；XML、multipart、JSON 共用 `publishTransport` 规则、分离实现；不在 `useProxy` 再长平行 if 树。
+- **低耦合**：平台适配器不依赖具体通道实现；XML、multipart、JSON 共用 `publishTransport` 规则、分离实现。
 
 ---
 
 ## 用户偏好（已学习）
 
 - 助手回复使用**简体中文**；Git 提交说明使用**英文**。
-- V2 宿主开发/验证：使用 `pnpm dev:v2` 与 `pnpm makeLink:v2`；不要建议用 `pnpm dev -p siyuan` 做 V2 验证或开发。
-- 不要用「提交未使用/孤儿文件」来清 diff；应删除文件并清理引用。
-- 非琐碎代码改动前需有 `.planning/` 或 OpenSpec 规划；禁止无计划的全局大改。
-- OpenSpec archive 前严格审计：**根本修复**（非 mock）、**最佳实践**、**不破坏底层设计**、**不影响无关模式**；第三方交付代码同样适用；任一不达标禁止 archive。
-- 博客/平台配置校验必须走 `BlogAdaptor` / `api.checkAuth()`，禁止绕过、直接调适配器。
-- 禁止在 `useProxy` 与平台适配器里临时堆传输 if 链。V2 发布 HTTP：
+- V2 宿主开发/验证：使用 `pnpm dev:v2` 与 `pnpm makeLink:v2`。
+- 清 diff 时直接删除文件并清理引用。
+- 非琐碎代码改动前写 `.planning/` 或 OpenSpec 规划。
+- OpenSpec archive 前严格审计：**根本修复**（非 mock）、**最佳实践**、**不破坏底层设计**、**不影响无关模式**，四项全部达标才 archive。
+- 博客/平台配置校验走 `BlogAdaptor` / `api.checkAuth()`。
+- V2 发布 HTTP 通道规范：
   - XML-RPC → `xmlrpcTransport`
-  - multipart → **仅** `createFormUploadClient(...).postJson(...)`（`formUploadClient.ts`）；基类不得拼装 resolve/execute/handlers
-  - JSON/API → **仅** `createJsonFetchClient(...).fetch(...)`（`jsonFetchClient.ts`）；`BaseWebApi.webFetch` / `BaseBlogApi.apiFetch` 仅委托 facade
-  - FormData 构造 → **仅** `FormDataHostUtil`
-  - V2 允许 break change；禁止 deprecated 再导出、双轨垫片
+  - multipart → `createFormUploadClient(...).postJson(...)`（`formUploadClient.ts`）
+  - JSON/API → `createJsonFetchClient(...).fetch(...)`（`jsonFetchClient.ts`）；`BaseWebApi.webFetch` / `BaseBlogApi.apiFetch` 仅委托 facade
+  - FormData 构造 → `FormDataHostUtil`
+  - V2 允许 break change，直接重构到位
 - V2 平台验证：**高频优先**（当前批次 #21→#25→#3→#28，可与 `tasks.md` 表号不同）；每站五格 **V2C / Pub / Upd / Del / Img**；通过/失败均记入 checklist SSOT。
 
 ## Hermes / Agent 项目隔离
 
-- 先纠正一个容易误导的点：Hermes **没有**内置“进入某个目录就自动切 profile”的项目隔离机制；profile 只会通过以下入口生效：
-  1. 显式启动参数：`hermes --profile siyuan-plugin-publisher ...` / `hermes -p siyuan-plugin-publisher ...`
-  2. 进程环境：`HERMES_HOME=~/.hermes/profiles/siyuan-plugin-publisher`
-  3. 全局 sticky：`hermes profile use ...`（本项目禁止用它做隔离）
-- 本仓库固定 profile 名称为 `siyuan-plugin-publisher`，profile home 为 `~/.hermes/profiles/siyuan-plugin-publisher`。
-- **最可靠用法**：在本仓库中启动 Hermes 时显式加 profile：
+- 本仓库固定 profile 名称 `siyuan-plugin-publisher`，启动时显式指定：
   ```bash
-  hermes --profile siyuan-plugin-publisher
-  hermes --profile siyuan-plugin-publisher chat -q "/profile"
+  hermes -p siyuan-plugin-publisher
   ```
-- `.envrc` + `direnv` 只是把 `HERMES_HOME` 自动注入 shell 的辅助方案；它要求你的 shell 已安装 direnv hook。仅执行 `direnv allow` 不等于当前 shell 已自动加载环境。
-- zsh 需要在 `~/.zshrc` 中有：
-  ```bash
-  eval "$(direnv hook zsh)"
-  ```
-  加完后重开终端，或执行 `source ~/.zshrc`，再 `cd` 回本仓库。
-- 本仓库根目录 `.envrc` 内容：
-  ```bash
-  export HERMES_PROFILE="siyuan-plugin-publisher"
-  export HERMES_HOME="$HOME/.hermes/profiles/$HERMES_PROFILE"
-  ```
-- 验证必须看 Hermes 自己解析到的 profile，而不只看 `direnv allow`：
-  ```bash
-  cd /Volumes/workspace/mydocs/siyuan-plugins/siyuan-plugin-publisher
-  echo "$HERMES_HOME"
-  hermes chat -q "/profile" --quiet
-  hermes config path
-  ```
-  期望 profile 是 `siyuan-plugin-publisher`，config path 是 `/Users/terwer/.hermes/profiles/siyuan-plugin-publisher/config.yaml`。
-- 如果你的 shell hook 暂时没生效，用这个命令可强制按 `.envrc` 执行并验证：
-  ```bash
-  direnv exec . hermes chat -q "/profile" --quiet
-  direnv exec . hermes config path
-  ```
-- 不要用 `hermes profile use siyuan-plugin-publisher` 做本项目隔离；它会修改全局 sticky default，离开目录后仍影响 Hermes。
-- 飞书/Lark gateway 是后台服务，不会随终端 `cd` 到本仓库而自动切 profile；上述规则只影响从本仓库终端启动的 Hermes 命令。
-- 密钥、token、连接串只放 profile 的 `.env`：`~/.hermes/profiles/siyuan-plugin-publisher/.env`；不要提交到仓库或写入 AGENTS/DEVELOPMENT 文档。
 
 ## 工作区事实（已学习）
 
 - **V2 宿主**：`pnpm dev:v2`（watch）、`pnpm makeLink:v2`（软链到思源）；产物在 `dist-v2/`。
 - **V1**：`pnpm dev -p siyuan`、`pnpm makeLink -p siyuan`；产物在 `dist/`。该链路**不会**启动 V2 的 Vite 配置。
-- `PicbedServiceTypeEnum.None` 表示用户明确选择「无图床」；在 `getPicbedServiceType` 等全局逻辑里**不要**把 `None` 当成未设置。
-- MetaWeblog 类平台（如博客园）应在平台 `*Config` 构造函数里默认图床为 `Bundled`（参考 `YuquewebConfig`），不要用全局 `usePicgoBridge` 覆盖。
-- Agent Skills：项目 `.cursor/skills/` 或 `.claude/skills/`；全局 `~/.cursor/skills/` 或 `~/.claude/skills/`；本仓库 OpenSpec 技能在 `.claude/skills/`。自定义技能**不要**放在 `~/.cursor/skills-cursor/`。
-- V2 平台配置校验失败须通过 `SypErrorDetailsPanel`（及行内摘要）展示 `errorMessage`，不要只靠通用 alert 或 `ElMessage`。
+- `PicbedServiceTypeEnum.None` 是用户明确选择「无图床」，视为有效值，不是未设置。
+- MetaWeblog 类平台（如博客园）在平台 `*Config` 构造函数里设图床为 `Bundled`（参考 `YuquewebConfig`）。
+- Agent Skills：项目 `.cursor/skills/` 或 `.claude/skills/`；全局 `~/.cursor/skills/` 或 `~/.claude/skills/`。
+- V2 平台配置校验失败通过 `SypErrorDetailsPanel`（及行内摘要）展示 `errorMessage`。
 - **发布传输**（XML-RPC / multipart / JSON）：插件宿主优先 `plugin-node-fetch`；本机/回环不走 forwardProxy；multipart 经 `formUploadClient`、JSON 经 `jsonFetchClient`；语雀 Web 不在请求前预设 transport（由 facade 解析后写入 diagnostic）；日志：`[form-upload-transport]`、`[json-fetch-transport]`。
 - V2 平台验证 SSOT：`openspec/changes/v2-platform-verification-v1-retirement/platform-checklist.md`。
 - **Halo**：`common_Halo`（API）与 `custom_Haloweb`（网页 Cookie）是两套适配器，须分别验收。
