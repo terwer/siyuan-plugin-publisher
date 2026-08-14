@@ -445,6 +445,10 @@ class HalowebWebAdaptor extends BaseWebApi {
 
   private async getHaloCategories(): Promise<any[]> {
     const hcs = await this.halowebFetch("/apis/content.halo.run/v1alpha1/categories", {}, "GET")
+    if (!hcs || typeof hcs !== "object" || !Array.isArray(hcs.items)) {
+      this.logger.error("get haloweb categories failed, unexpected response =>", hcs)
+      throw new Error("Halo 网页版接口返回异常，登录状态可能已失效，请重新授权后再试")
+    }
     return hcs.items
   }
 
@@ -469,6 +473,10 @@ class HalowebWebAdaptor extends BaseWebApi {
 
   private async getHaloTags() {
     const tags = await this.halowebFetch("/apis/content.halo.run/v1alpha1/tags", {}, "GET")
+    if (!tags || typeof tags !== "object" || !Array.isArray(tags.items)) {
+      this.logger.error("get haloweb tags failed, unexpected response =>", tags)
+      throw new Error("Halo 网页版接口返回异常，登录状态可能已失效，请重新授权后再试")
+    }
     const allTags = tags.items
     return allTags
   }

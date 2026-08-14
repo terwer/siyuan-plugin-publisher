@@ -13,9 +13,11 @@ import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
 import { yuqueHelpConfig } from "~/src/helpConfigs/pages/platform-config/common-yuque"
 import { wordpressHelpConfig } from "~/src/helpConfigs/pages/platform-config/wordpress-wordpress"
 import { yuquewebHelpConfig } from "~/src/helpConfigs/pages/platform-config/custom-yuqueweb"
+import { halowebHelpConfig } from "~/src/helpConfigs/pages/platform-config/custom-haloweb"
 import { localSystemHelpConfig } from "~/src/helpConfigs/pages/platform-config/fs-local-system"
 import { zhihuHelpConfig } from "~/src/helpConfigs/pages/platform-config/custom-zhihu"
 import { csdnHelpConfig } from "~/src/helpConfigs/pages/platform-config/custom-csdn"
+import { cnblogsHelpConfig } from "~/src/helpConfigs/pages/platform-config/metaweblog-cnblogs"
 import { remainingT1HelpConfigs } from "~/src/helpConfigs/pages/platform-config/remaining-t1"
 
 // 测试用配置
@@ -152,8 +154,10 @@ describe("HelpRegistry", () => {
 describe("verified platform help configs", () => {
   const verifiedConfigs = [
     yuqueHelpConfig,
+    cnblogsHelpConfig,
     wordpressHelpConfig,
     yuquewebHelpConfig,
+    halowebHelpConfig,
     localSystemHelpConfig,
     zhihuHelpConfig,
     csdnHelpConfig,
@@ -177,8 +181,8 @@ describe("verified platform help configs", () => {
   it("should move verified split-out platforms out of remaining T1 help configs", () => {
     const remainingPageIds = remainingT1HelpConfigs.map((config) => config.pageId)
 
-    expect(remainingPageIds).not.toContain("platform-config/fs_LocalSystem")
-    expect(remainingPageIds).not.toContain("platform-config/custom_Zhihu")
-    expect(remainingPageIds).not.toContain("platform-config/custom_Csdn")
+    for (const config of verifiedConfigs) {
+      expect(remainingPageIds, `${config.pageId} should not stay in remaining T1`).not.toContain(config.pageId)
+    }
   })
 })
